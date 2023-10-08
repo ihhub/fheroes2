@@ -44,11 +44,10 @@ void fheroes2::drawMiniMonsters( const Troops & troops, int32_t cx, const int32_
         count = troops.GetOccupiedSlotCount();
     }
 
-    int chunk = static_cast<int32_t>( width / count );
+    int32_t chunk = width / static_cast<int32_t>( count );
     size_t slots = troops.Size();
-    int slotsToSkip = 1;
-
-    int slotOffset = 1;
+    int32_t slotsToSkip = 1;
+    int32_t slotOffset = 1;
 
     if ( !isCompact ) {
         if ( count <= 2 ) {
@@ -58,10 +57,10 @@ void fheroes2::drawMiniMonsters( const Troops & troops, int32_t cx, const int32_
             slotsToSkip = 0;
         }
 
-        int marginLeft = 18;
-        chunk = static_cast<int32_t>( ( width - marginLeft ) / ( count + ( slotsToSkip * 2 ) ) );
+        int32_t marginLeft = 18;
+        chunk = ( width - marginLeft ) / ( static_cast<int32_t>( count ) + ( slotsToSkip * 2 ) );
 
-        slots = troops.Size() + slotsToSkip;
+        slots += static_cast<size_t>( slotsToSkip );
 
         cx -= chunk / 2;
         cx += width;
@@ -121,16 +120,16 @@ void fheroes2::drawMiniMonsters( const Troops & troops, int32_t cx, const int32_
             text.draw( cx + chunk - text.width() - offset, cy + 23, output );
         }
         else if ( slotsToSkip == 0 ) {
-            const int offsetY = 28 - monster.height();
-            int offsetX = -14;
+            const int32_t offsetY = 28 - monster.height();
+            int32_t offsetX = -14;
 
             // Center the monster if there is only one
             if ( count == 1 && slot == 1 ) {
                 offsetX = -10;
             }
 
-            int x = ( cx - ( monster.width() / 2 ) ) + offsetX;
-            int y = cy + offsetY + monster.y();
+            int32_t x = ( cx - ( monster.width() / 2 ) ) + offsetX;
+            int32_t y = cy + offsetY + monster.y();
             fheroes2::Blit( monster, output, x, y );
             text.draw( ( cx - text.width() / 2 ) + offsetX, cy + 29, output );
         }
