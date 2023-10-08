@@ -40,6 +40,8 @@
 #include "audio_manager.h"
 #include "castle.h"
 #include "color.h"
+#include "difficulty.h"
+#include "game.h"
 #include "game_interface.h"
 #include "ground.h"
 #include "heroes.h"
@@ -122,10 +124,19 @@ namespace
         std::vector<Heroes *> _heroes;
     };
 
-    void setHeroRoles( VecHeroes & heroes )
+    void setHeroRoles( VecHeroes & heroes, const int difficulty )
     {
         if ( heroes.empty() ) {
             // No heroes exist.
+            return;
+        }
+
+        if ( !Difficulty::areAIHeroRolesAllowed( difficulty ) ) {
+            // All heroes are equal.
+            for ( Heroes * hero : heroes ) {
+                hero->setAIRole( Heroes::Role::HUNTER );
+            }
+
             return;
         }
 
@@ -822,7 +833,7 @@ namespace AI
             }
 
             // Step 3. Reassign heroes roles
-            setHeroRoles( heroes );
+            setHeroRoles( heroes, Game::getDifficulty() );
 
             castlesInDanger = findCastlesInDanger( kingdom );
             for ( Heroes * hero : heroes ) {

@@ -41,7 +41,9 @@
 #include "artifact.h"
 #include "castle.h"
 #include "color.h"
+#include "difficulty.h"
 #include "direction.h"
+#include "game.h"
 #include "game_interface.h"
 #include "game_over.h"
 #include "game_static.h"
@@ -965,7 +967,9 @@ namespace AI
                     // The other hero has a lower role. Do not waste time for meeting. Let him to come.
                     return valueToIgnore;
                 }
-                if ( hero.getAIRole() == otherHero->getAIRole() && hero.getStatsValue() + 2 > otherHero->getStatsValue() ) {
+
+                if ( hero.getAIRole() == otherHero->getAIRole()
+                     && hero.getStatsValue() + Difficulty::getMinStatDiffBetweenAIRoles( Game::getDifficulty() ) > otherHero->getStatsValue() ) {
                     // Two heroes are almost identical. No reason to meet.
                     return valueToIgnore;
                 }
@@ -1487,7 +1491,8 @@ namespace AI
                     // The other hero has a lower role. Do not waste time for meeting. Let him to come.
                     return valueToIgnore;
                 }
-                if ( hero.getAIRole() == otherHero->getAIRole() && hero.getStatsValue() + 3 > otherHero->getStatsValue() ) {
+                if ( hero.getAIRole() == otherHero->getAIRole()
+                     && hero.getStatsValue() + Difficulty::getMinStatDiffBetweenAIRoles( Game::getDifficulty() ) + 1 > otherHero->getStatsValue() ) {
                     // Two heroes are almost identical. No reason to meet.
                     return valueToIgnore;
                 }

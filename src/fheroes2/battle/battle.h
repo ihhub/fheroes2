@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -45,19 +45,11 @@ namespace Battle
 
     struct Result
     {
-        uint32_t army1;
-        uint32_t army2;
-        uint32_t exp1;
-        uint32_t exp2;
-        uint32_t killed;
-
-        Result()
-            : army1( 0 )
-            , army2( 0 )
-            , exp1( 0 )
-            , exp2( 0 )
-            , killed( 0 )
-        {}
+        uint32_t army1{ 0 };
+        uint32_t army2{ 0 };
+        uint32_t exp1{ 0 };
+        uint32_t exp2{ 0 };
+        uint32_t killed{ 0 };
 
         bool AttackerWins() const;
         bool DefenderWins() const;
@@ -128,14 +120,12 @@ namespace Battle
         SP_PARALYZE = 0x40000000,
         SP_STONE = 0x80000000,
 
-        IS_GOOD_MAGIC = 0x00FE0000,
-        IS_PARALYZE_MAGIC = 0xC0000000,
-        IS_MIND_MAGIC = 0x78000000,
-        IS_BAD_MAGIC = 0xFE000000,
-        IS_MAGIC = 0xFFFE0000,
+        IS_GOOD_MAGIC = SP_BLOODLUST | SP_BLESS | SP_HASTE | SP_SHIELD | SP_STONESKIN | SP_DRAGONSLAYER | SP_STEELSKIN,
+        IS_BAD_MAGIC = SP_CURSE | SP_SLOW | SP_BERSERKER | SP_HYPNOTIZE | SP_BLIND | SP_PARALYZE | SP_STONE,
+        IS_MAGIC = IS_GOOD_MAGIC | IS_BAD_MAGIC | SP_ANTIMAGIC,
 
-        IS_RED_STATUS = IS_BAD_MAGIC,
-        IS_GREEN_STATUS = SP_SHIELD | SP_STEELSKIN | SP_STONESKIN | SP_DRAGONSLAYER | SP_BLOODLUST | SP_BLESS | SP_HASTE | SP_ANTIMAGIC
+        IS_PARALYZE_MAGIC = SP_PARALYZE | SP_STONE,
+        IS_MIND_MAGIC = SP_BERSERKER | SP_HYPNOTIZE | SP_BLIND | SP_PARALYZE,
     };
 }
 

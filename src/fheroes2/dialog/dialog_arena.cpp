@@ -21,7 +21,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <memory>
+#include <cstdint>
+#include <string>
 
 #include "agg_image.h"
 #include "cursor.h"
@@ -34,10 +35,10 @@
 #include "screen.h"
 #include "settings.h"
 #include "skill.h"
-#include "text.h"
 #include "translations.h"
 #include "ui_button.h"
 #include "ui_dialog.h"
+#include "ui_text.h"
 
 namespace
 {
@@ -106,24 +107,24 @@ int Dialog::SelectSkillFromArena()
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
-    TextBox title( _( "Arena" ), Font::YELLOW_BIG, BOXAREA_WIDTH );
+    fheroes2::Text title( _( "Arena" ), fheroes2::FontType::normalYellow() );
 
-    TextBox textbox(
+    fheroes2::Text textbox(
         _( "You enter the arena and face a pack of vicious lions. You handily defeat them, to the wild cheers of the crowd. Impressed by your skill, the aged trainer of gladiators agrees to train you in a skill of your choice." ),
-        Font::BIG, BOXAREA_WIDTH );
+        fheroes2::FontType::normalWhite() );
     const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::XPRIMARY, 0 );
     const int spacer = 10;
 
-    Dialog::FrameBox box( title.h() + textbox.h() + 2 * spacer + sprite.height() + 15, true );
+    Dialog::FrameBox box( title.height( BOXAREA_WIDTH ) + textbox.height( BOXAREA_WIDTH ) + 2 * spacer + sprite.height() + 15, true );
 
     const fheroes2::Rect & box_rt = box.GetArea();
     fheroes2::Point dst_pt( box_rt.x, box_rt.y );
 
-    title.Blit( dst_pt.x, dst_pt.y );
-    dst_pt.y += title.h() + spacer;
+    title.draw( dst_pt.x, dst_pt.y + 2, BOXAREA_WIDTH, display );
+    dst_pt.y += title.height( BOXAREA_WIDTH ) + spacer;
 
-    textbox.Blit( dst_pt.x, dst_pt.y );
-    dst_pt.y += textbox.h() + spacer;
+    textbox.draw( dst_pt.x, dst_pt.y + 2, BOXAREA_WIDTH, display );
+    dst_pt.y += textbox.height( BOXAREA_WIDTH ) + spacer;
 
     int res = Skill::Primary::ATTACK;
 
@@ -137,20 +138,22 @@ int Dialog::SelectSkillFromArena()
     InfoSkillSelect( res, rect1, rect2, rect3 );
 
     // info texts
-    TextBox text( Skill::Primary::String( Skill::Primary::ATTACK ), Font::SMALL, 60 );
-    dst_pt.x = rect1.x + ( rect1.width - text.w() ) / 2;
+    const int32_t skillTextWidth = 60;
+
+    fheroes2::Text text( Skill::Primary::String( Skill::Primary::ATTACK ), fheroes2::FontType::smallWhite() );
+    dst_pt.x = rect1.x + ( rect1.width - skillTextWidth ) / 2;
     dst_pt.y = rect1.y + rect1.height + 5;
-    text.Blit( dst_pt.x, dst_pt.y );
+    text.draw( dst_pt.x, dst_pt.y + 2, skillTextWidth, display );
 
-    text.Set( Skill::Primary::String( Skill::Primary::DEFENSE ), Font::SMALL, 60 );
-    dst_pt.x = rect2.x + ( rect2.width - text.w() ) / 2;
+    text.set( Skill::Primary::String( Skill::Primary::DEFENSE ), fheroes2::FontType::smallWhite() );
+    dst_pt.x = rect2.x + ( rect2.width - skillTextWidth ) / 2;
     dst_pt.y = rect2.y + rect2.height + 5;
-    text.Blit( dst_pt.x, dst_pt.y );
+    text.draw( dst_pt.x, dst_pt.y + 2, skillTextWidth, display );
 
-    text.Set( Skill::Primary::String( Skill::Primary::POWER ), Font::SMALL, 60 );
-    dst_pt.x = rect3.x + ( rect3.width - text.w() ) / 2;
+    text.set( Skill::Primary::String( Skill::Primary::POWER ), fheroes2::FontType::smallWhite() );
+    dst_pt.x = rect3.x + ( rect3.width - skillTextWidth ) / 2;
     dst_pt.y = rect3.y + rect3.height + 5;
-    text.Blit( dst_pt.x, dst_pt.y );
+    text.draw( dst_pt.x, dst_pt.y + 2, skillTextWidth, display );
 
     // buttons
     dst_pt.x = box_rt.x + ( box_rt.width - fheroes2::AGG::GetICN( system, 1 ).width() ) / 2;

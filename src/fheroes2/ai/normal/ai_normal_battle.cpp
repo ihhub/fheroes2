@@ -432,7 +432,7 @@ namespace AI
             const double unitStr = unit.GetStrength();
 
             _enemyArmyStrength += unitStr;
-            if ( unit.canShoot() ) {
+            if ( unit.isArchers() && !unit.isImmovable() ) {
                 _enemyRangedUnitsOnly += unitStr;
             }
 
@@ -476,7 +476,7 @@ namespace AI
                 continue;
             }
             _myArmyStrength += unitStr;
-            if ( unit.canShoot() ) {
+            if ( unit.isArchers() && !unit.isImmovable() ) {
                 _myShooterStr += unitStr;
             }
         }
