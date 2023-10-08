@@ -186,7 +186,7 @@ std::string Battle::Tower::GetInfo( const Castle & castle )
         }
 
         if ( ( it + 1 ) != towerTypes.end() ) {
-            msg.append( "\n \n" );
+            msg.append( "\n\n" );
         }
     }
 

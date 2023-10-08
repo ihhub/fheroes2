@@ -2560,10 +2560,13 @@ namespace Maps
     {
         tile.SetObject( MP2::OBJ_MONSTER );
 
-        // If there was another object sprite here (shadow for example) push it down to Addons,
-        // except when there is already MONS32.ICN here.
-        if ( tile.getObjectIcnType() != MP2::OBJ_ICN_TYPE_UNKNOWN && tile.getObjectIcnType() != MP2::OBJ_ICN_TYPE_MONS32 && tile.GetObjectSpriteIndex() != 255 ) {
-            // Push object sprite to Level 1 Addons preserving the Layer Type.
+        if ( tile.getObjectIcnType() == MP2::OBJ_ICN_TYPE_UNKNOWN ) {
+            // No object exists on this tile. Add one.
+            tile.setObjectUID( getNewObjectUID() );
+            tile.setObjectIcnType( MP2::OBJ_ICN_TYPE_MONS32 );
+        }
+        else if ( tile.getObjectIcnType() != MP2::OBJ_ICN_TYPE_MONS32 ) {
+            // If there is another object sprite here (shadow for example) push it down to add-ons.
             tile.pushBottomLayerAddon( TilesAddon( tile.getLayerType(), tile.GetObjectUID(), tile.getObjectIcnType(), tile.GetObjectSpriteIndex() ) );
 
             // Set unique UID for placed monster.
@@ -2993,5 +2996,46 @@ namespace Maps
                 }
             }
         }
+    }
+
+    void setRandomMonsterOnTile( Tiles & tile, const Monster & mons )
+    {
+        switch ( mons.GetID() ) {
+        case Monster::RANDOM_MONSTER:
+            tile.SetObject( MP2::OBJ_RANDOM_MONSTER );
+            break;
+        case Monster::RANDOM_MONSTER_LEVEL_1:
+            tile.SetObject( MP2::OBJ_RANDOM_MONSTER_WEAK );
+            break;
+        case Monster::RANDOM_MONSTER_LEVEL_2:
+            tile.SetObject( MP2::OBJ_RANDOM_MONSTER_MEDIUM );
+            break;
+        case Monster::RANDOM_MONSTER_LEVEL_3:
+            tile.SetObject( MP2::OBJ_RANDOM_MONSTER_STRONG );
+            break;
+        case Monster::RANDOM_MONSTER_LEVEL_4:
+            tile.SetObject( MP2::OBJ_RANDOM_MONSTER_VERY_STRONG );
+            break;
+        default:
+            // It is not even a random monster!
+            assert( 0 );
+            return;
+        }
+
+        if ( tile.getObjectIcnType() != MP2::OBJ_ICN_TYPE_UNKNOWN ) {
+            // If there is another object sprite here (shadow for example) push it down to add-ons.
+            tile.pushBottomLayerAddon( TilesAddon( tile.getLayerType(), tile.GetObjectUID(), tile.getObjectIcnType(), tile.GetObjectSpriteIndex() ) );
+        }
+
+        tile.setObjectUID( getNewObjectUID() );
+        tile.setObjectIcnType( MP2::OBJ_ICN_TYPE_MONS32 );
+
+        using TileImageIndexType = decltype( tile.GetObjectSpriteIndex() );
+        static_assert( std::is_same_v<TileImageIndexType, uint8_t>, "Type of GetObjectSpriteIndex() has been changed, check the logic below" );
+
+        const uint32_t monsSpriteIndex = static_cast<uint32_t>( mons.GetID() - 1 );
+        assert( monsSpriteIndex >= std::numeric_limits<TileImageIndexType>::min() && monsSpriteIndex <= std::numeric_limits<TileImageIndexType>::max() );
+
+        tile.setObjectSpriteIndex( static_cast<TileImageIndexType>( monsSpriteIndex ) );
     }
 }

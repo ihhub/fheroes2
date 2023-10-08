@@ -451,7 +451,7 @@ bool ArmyBar::ActionBarLeftMouseSingleClick( ArmyTroop & troop )
                     break;
                 }
 
-            const Monster mons = Dialog::selectMonster( cur );
+            const Monster mons = Dialog::selectMonster( cur, false );
 
             if ( mons.isValid() ) {
                 uint32_t count = 1;
@@ -577,18 +577,27 @@ bool ArmyBar::ActionBarLeftMouseDoubleClick( ArmyTroop & troop )
 
 bool ArmyBar::ActionBarLeftMouseRelease( ArmyTroop & troop )
 {
-    if ( !read_only ) {
-        // drag drop - redistribute troops
-        ArmyTroop * troopPress = GetItem( LocalEvent::Get().GetMousePressLeft() );
-        const bool isTroopPressValid = troopPress && troopPress->isValid();
+    if ( read_only ) {
+        return true;
+    }
 
-        if ( isTroopPressValid && ( !troop.isValid() || troop.GetID() == troopPress->GetID() ) ) {
-            RedistributeArmy( *troopPress, troop, _army );
+    ArmyTroop * srcTroop = GetItem( LocalEvent::Get().GetMousePressLeft() );
+    if ( srcTroop == nullptr || !srcTroop->isValid() ) {
+        return true;
+    }
 
-            if ( isSelected() ) {
-                ResetSelected();
-            }
-        }
+    if ( &troop == srcTroop ) {
+        return true;
+    }
+
+    if ( troop.isValid() && troop.GetID() != srcTroop->GetID() ) {
+        return true;
+    }
+
+    RedistributeArmy( *srcTroop, troop, _army );
+
+    if ( isSelected() ) {
+        ResetSelected();
     }
 
     return true;
@@ -596,16 +605,25 @@ bool ArmyBar::ActionBarLeftMouseRelease( ArmyTroop & troop )
 
 bool ArmyBar::ActionBarLeftMouseRelease( ArmyTroop & destTroop, ArmyTroop & selectedTroop )
 {
-    if ( isSelected() )
-        ResetSelected();
+    assert( !read_only );
 
-    // cross-army drag split
-    if ( selectedTroop.isValid() && ( !destTroop.isValid() || selectedTroop.GetID() == destTroop.GetID() ) ) {
-        RedistributeArmy( selectedTroop, destTroop, _army );
-        return true;
+    if ( isSelected() ) {
+        ResetSelected();
     }
 
-    return false;
+    if ( !selectedTroop.isValid() ) {
+        return false;
+    }
+
+    if ( destTroop.isValid() && selectedTroop.GetID() != destTroop.GetID() ) {
+        return false;
+    }
+
+    assert( &selectedTroop != &destTroop );
+
+    RedistributeArmy( selectedTroop, destTroop, _army );
+
+    return true;
 }
 
 bool ArmyBar::ActionBarRightMouseHold( ArmyTroop & troop )

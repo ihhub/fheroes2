@@ -51,18 +51,39 @@
 
 namespace
 {
+    const fheroes2::Point monsterImageOffset{ 16, 30 };
+
     bool contains( const int base, const int value )
     {
         return ( base & value ) == value;
     }
 
-    bool isDirectRenderingRestricted( const int icnId )
+    bool isTileDirectRenderingRestricted( const int icnId, const MP2::MapObjectType objectType )
     {
         switch ( icnId ) {
         case ICN::UNKNOWN:
-        case ICN::MONS32:
         case ICN::BOAT32:
         case ICN::MINIHERO:
+            // Either it is an invalid sprite or a sprite which needs to be divided into tiles in order to properly render it.
+            return true;
+        case ICN::MONS32:
+            // Random monsters must be displayed for the Editor.
+            return objectType != MP2::OBJ_RANDOM_MONSTER && objectType != MP2::OBJ_RANDOM_MONSTER_WEAK && objectType != MP2::OBJ_RANDOM_MONSTER_MEDIUM
+                   && objectType != MP2::OBJ_RANDOM_MONSTER_STRONG && objectType != MP2::OBJ_RANDOM_MONSTER_VERY_STRONG;
+        default:
+            break;
+        }
+
+        return false;
+    }
+
+    bool isAddonDirectRenderingRestricted( const int icnId )
+    {
+        switch ( icnId ) {
+        case ICN::UNKNOWN:
+        case ICN::BOAT32:
+        case ICN::MINIHERO:
+        case ICN::MONS32:
             // Either it is an invalid sprite or a sprite which needs to be divided into tiles in order to properly render it.
             return true;
         default:
@@ -77,7 +98,7 @@ namespace
         assert( addon._objectIcnType != MP2::OBJ_ICN_TYPE_UNKNOWN && addon._imageIndex != 255 );
 
         const int icn = MP2::getIcnIdFromObjectIcnType( addon._objectIcnType );
-        if ( isDirectRenderingRestricted( icn ) ) {
+        if ( isAddonDirectRenderingRestricted( icn ) ) {
             return;
         }
 
@@ -112,7 +133,7 @@ namespace
         assert( tile.getObjectIcnType() != MP2::OBJ_ICN_TYPE_UNKNOWN && tile.GetObjectSpriteIndex() != 255 );
 
         const int mainObjectIcn = MP2::getIcnIdFromObjectIcnType( tile.getObjectIcnType() );
-        if ( isDirectRenderingRestricted( mainObjectIcn ) ) {
+        if ( isTileDirectRenderingRestricted( mainObjectIcn, tile.GetObject() ) ) {
             return;
         }
 
@@ -679,12 +700,12 @@ namespace Maps
     {
         assert( tile.GetObject() == MP2::OBJ_MONSTER );
 
-        const Monster & monster = getMonsterFromTile( tile );
+        const Monster monster = getMonsterFromTile( tile );
         const std::pair<uint32_t, uint32_t> spriteIndices = GetMonsterSpriteIndices( tile, monster.GetSpriteIndex() );
 
         const int icnId{ ICN::MINI_MONSTER_IMAGE };
         const fheroes2::Sprite & monsterSprite = fheroes2::AGG::GetICN( icnId, spriteIndices.first );
-        const fheroes2::Point monsterSpriteOffset( monsterSprite.x() + 16, monsterSprite.y() + 30 );
+        const fheroes2::Point monsterSpriteOffset( monsterSprite.x() + monsterImageOffset.x, monsterSprite.y() + monsterImageOffset.y );
 
         std::vector<fheroes2::Point> outputSquareInfo;
         std::vector<std::pair<fheroes2::Point, fheroes2::Rect>> outputImageInfo;
@@ -703,7 +724,7 @@ namespace Maps
 
         if ( spriteIndices.second > 0 ) {
             const fheroes2::Sprite & secondaryMonsterSprite = fheroes2::AGG::GetICN( icnId, spriteIndices.second );
-            const fheroes2::Point secondaryMonsterSpriteOffset( secondaryMonsterSprite.x() + 16, secondaryMonsterSprite.y() + 30 );
+            const fheroes2::Point secondaryMonsterSpriteOffset( secondaryMonsterSprite.x() + monsterImageOffset.x, secondaryMonsterSprite.y() + monsterImageOffset.y );
 
             fheroes2::DivideImageBySquares( secondaryMonsterSpriteOffset, secondaryMonsterSprite, TILEWIDTH, outputSquareInfo, outputImageInfo );
 
@@ -722,12 +743,12 @@ namespace Maps
     {
         assert( tile.GetObject() == MP2::OBJ_MONSTER );
 
-        const Monster & monster = getMonsterFromTile( tile );
+        const Monster monster = getMonsterFromTile( tile );
         const std::pair<uint32_t, uint32_t> spriteIndices = GetMonsterSpriteIndices( tile, monster.GetSpriteIndex() );
 
         const int icnId{ ICN::MINI_MONSTER_SHADOW };
         const fheroes2::Sprite & monsterSprite = fheroes2::AGG::GetICN( icnId, spriteIndices.first );
-        const fheroes2::Point monsterSpriteOffset( monsterSprite.x() + 16, monsterSprite.y() + 30 );
+        const fheroes2::Point monsterSpriteOffset( monsterSprite.x() + monsterImageOffset.x, monsterSprite.y() + monsterImageOffset.y );
 
         std::vector<fheroes2::Point> outputSquareInfo;
         std::vector<std::pair<fheroes2::Point, fheroes2::Rect>> outputImageInfo;
@@ -746,7 +767,7 @@ namespace Maps
 
         if ( spriteIndices.second > 0 ) {
             const fheroes2::Sprite & secondaryMonsterSprite = fheroes2::AGG::GetICN( icnId, spriteIndices.second );
-            const fheroes2::Point secondaryMonsterSpriteOffset( secondaryMonsterSprite.x() + 16, secondaryMonsterSprite.y() + 30 );
+            const fheroes2::Point secondaryMonsterSpriteOffset( secondaryMonsterSprite.x() + monsterImageOffset.x, secondaryMonsterSprite.y() + monsterImageOffset.y );
 
             fheroes2::DivideImageBySquares( secondaryMonsterSpriteOffset, secondaryMonsterSprite, TILEWIDTH, outputSquareInfo, outputImageInfo );
 

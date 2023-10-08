@@ -187,6 +187,7 @@ public:
     bool isBattleShowDamageInfoEnabled() const;
     bool isHideInterfaceEnabled() const;
     bool isEvilInterfaceEnabled() const;
+    bool isEditorEnabled() const;
 
     bool LoadedGameVersion() const
     {
