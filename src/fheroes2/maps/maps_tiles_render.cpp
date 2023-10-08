@@ -477,7 +477,8 @@ namespace
         icnIndex = icnIndex + frameId;
 
         if ( !hero.isMoveEnabled() ) {
-            static const fheroes2::Point offsetTop[Heroes::heroFrameCountPerTile] = { { 0, 0 }, { 0, 2 }, { 0, 3 }, { 0, 2 }, { 0, 0 }, { 0, 1 }, { 0, 3 }, { 0, 2 }, { 0, 1 } };
+            static const fheroes2::Point offsetTop[Heroes::heroFrameCountPerTile]
+                = { { 0, 0 }, { 0, 2 }, { 0, 3 }, { 0, 2 }, { 0, 0 }, { 0, 1 }, { 0, 3 }, { 0, 2 }, { 0, 1 } };
             static const fheroes2::Point offsetBottom[Heroes::heroFrameCountPerTile]
                 = { { 0, 0 }, { 0, -1 }, { 0, -2 }, { 0, 0 }, { 0, -1 }, { 0, -2 }, { 0, -3 }, { 0, 0 }, { 0, -1 } };
             static const fheroes2::Point offsetSideways[Heroes::heroFrameCountPerTile]
@@ -1224,7 +1225,8 @@ namespace Maps
         getFlagSpriteInfo( hero, flagFrameID, false, flagOffset, icnId, icnIndex );
 
         const fheroes2::Sprite & spriteFlag = fheroes2::AGG::GetICN( icnId, icnIndex );
-        const fheroes2::Point flagSpriteOffset( offset.x + ( reflect ? ( TILEWIDTH - spriteFlag.x() - flagOffset.x - spriteFlag.width() ) : spriteFlag.x() + flagOffset.x ),
+        const fheroes2::Point flagSpriteOffset( offset.x
+                                                    + ( reflect ? ( TILEWIDTH - spriteFlag.x() - flagOffset.x - spriteFlag.width() ) : spriteFlag.x() + flagOffset.x ),
                                                 offset.y + spriteFlag.y() + flagOffset.y + TILEWIDTH );
 
         fheroes2::DivideImageBySquares( flagSpriteOffset, spriteFlag, TILEWIDTH, outputSquareInfo, outputImageInfo );
@@ -1248,7 +1250,8 @@ namespace Maps
             fheroes2::DivideImageBySquares( frothSpriteOffset, spriteFroth, TILEWIDTH, outputSquareInfo, outputImageInfo );
 
             for ( size_t i = 0; i < outputSquareInfo.size(); ++i ) {
-                objectInfo.emplace_back( outputSquareInfo[i], outputImageInfo[i].first, outputImageInfo[i].second, icnId, icnIndex, reflect, static_cast<uint8_t>( 255 ) );
+                objectInfo.emplace_back( outputSquareInfo[i], outputImageInfo[i].first, outputImageInfo[i].second, icnId, icnIndex, reflect,
+                                         static_cast<uint8_t>( 255 ) );
             }
         }
 
@@ -1306,8 +1309,7 @@ namespace Maps
 
         std::vector<fheroes2::ObjectRenderingInfo> objectInfo;
         for ( size_t i = 0; i < outputSquareInfo.size(); ++i ) {
-            objectInfo.emplace_back( outputSquareInfo[i], outputImageInfo[i].first, outputImageInfo[i].second, icnId, icnIndex, false,
-                                     static_cast<uint8_t>( 255 ) );
+            objectInfo.emplace_back( outputSquareInfo[i], outputImageInfo[i].first, outputImageInfo[i].second, icnId, icnIndex, false, static_cast<uint8_t>( 255 ) );
         }
 
         return objectInfo;
