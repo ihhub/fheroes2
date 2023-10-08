@@ -170,8 +170,8 @@ namespace
         const uint8_t heroAlphaValue = hero->getAlphaValue();
         const int32_t worldHeight = world.h();
 
-        auto spriteInfo = hero->getHeroSpritesPerTile();
-        auto spriteShadowInfo = hero->getHeroShadowSpritesPerTile();
+        auto spriteInfo = Maps::getHeroSpritesPerTile( *hero );
+        auto spriteShadowInfo = Maps::getHeroShadowSpritesPerTile( *hero );
 
         for ( auto & objectInfo : spriteInfo ) {
             const fheroes2::Point imagePos = objectInfo.tileOffset;
@@ -494,6 +494,16 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 
             switch ( objectType ) {
             case MP2::OBJ_HEROES: {
+                if ( _interface.isEditor() ) {
+                    const uint8_t alphaValue = getObjectAlphaValue( tile.GetIndex(), MP2::OBJ_HEROES );
+
+                    auto spriteInfo = getEditorHeroSpritesPerTile( tile );
+
+                    std::vector<fheroes2::ObjectRenderingInfo> temp;
+                    populateStaticTileUnfitObjectInfo( tileUnfit, spriteInfo, temp, tile.GetCenter(), alphaValue );
+                    continue;
+                }
+
                 if ( !drawHeroes ) {
                     continue;
                 }
@@ -531,8 +541,8 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 
                 const uint8_t alphaValue = getObjectAlphaValue( tile.GetIndex(), MP2::OBJ_MONSTER );
 
-                auto spriteInfo = getMonsterSpritesPerTile( tile );
-                auto spriteShadowInfo = getMonsterShadowSpritesPerTile( tile );
+                auto spriteInfo = getMonsterSpritesPerTile( tile, _interface.isEditor() );
+                auto spriteShadowInfo = getMonsterShadowSpritesPerTile( tile, _interface.isEditor() );
 
                 populateStaticTileUnfitObjectInfo( tileUnfit, spriteInfo, spriteShadowInfo, tile.GetCenter(), alphaValue );
 

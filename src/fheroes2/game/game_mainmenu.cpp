@@ -373,7 +373,11 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
             return fheroes2::GameMode::MAIN_MENU;
         }
         else if ( conf.isEditorEnabled() && HotKeyPressEvent( HotKeyEvent::EDITOR_MAIN_MENU ) ) {
-            return fheroes2::GameMode::EDITOR_MAIN_MENU;
+            if ( Game::isPriceOfLoyaltyCampaignPresent() ) {
+                return fheroes2::GameMode::EDITOR_MAIN_MENU;
+            }
+
+            fheroes2::showStandardTextMessage( _( "Editor" ), _( "The Editor requires \"The Price of Loyalty\" expansion files to work." ), Dialog::OK );
         }
 
         // right info
