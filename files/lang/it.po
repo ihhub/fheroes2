@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-07 13:24+0000\n"
+"POT-Creation-Date: 2023-10-08 07:12+0000\n"
 "PO-Revision-Date: 2022-12-03 04:36+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <it@li.org>\n"
@@ -4461,6 +4461,14 @@ msgid ""
 "\n"
 "Enjoy the game!"
 msgstr ""
+
+msgid "Editor"
+msgstr ""
+
+#, fuzzy
+msgid "The Editor requires \"The Price of Loyalty\" expansion files to work."
+msgstr ""
+"Una delle quattro nuove campagne dalla espansione 'The Price of Loyalty\"."
 
 #, fuzzy
 msgid "Quit Heroes of Might and Magic II and return to the operating system."
