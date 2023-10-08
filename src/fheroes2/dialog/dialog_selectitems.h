@@ -42,7 +42,7 @@ namespace Dialog
 
     Skill::Secondary selectSecondarySkill( const Heroes & hero, const int skillId = Skill::Secondary::UNKNOWN );
 
-    int selectMiniHero( const int heroId );
+    int selectHeroType( const int heroType );
 }
 
 #endif

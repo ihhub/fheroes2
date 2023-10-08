@@ -406,10 +406,10 @@ public:
 
 namespace
 {
-    class MiniHeroSelection : public SelectEnum
+    class HeroTypeSelection : public SelectEnum
     {
     public:
-        explicit MiniHeroSelection( const fheroes2::Size & size )
+        explicit HeroTypeSelection( const fheroes2::Size & size )
             : SelectEnum( size )
         {
             const int offset = fheroes2::AGG::GetICN( ICN::MINIHERO, 0 ).height() + 2;
@@ -421,28 +421,28 @@ namespace
         void RedrawItem( const int & id, int32_t offsetX, int32_t offsetY, bool isSelected ) override
         {
             const fheroes2::Sprite & image = fheroes2::AGG::GetICN( ICN::MINIHERO, id );
-            renderItem( image, getMiniHeroName( id ), { offsetX, offsetY }, { 32, 50 }, isSelected );
+            renderItem( image, getHeroName( id ), { offsetX, offsetY }, { 32, 50 }, isSelected );
         }
 
-        void ActionListPressRight( int & id ) override
+        void ActionListPressRight( int & type ) override
         {
-            fheroes2::showStandardTextMessage( getMiniHeroName( id ), "", Dialog::ZERO );
+            fheroes2::showStandardTextMessage( getHeroName( type ), "", Dialog::ZERO );
         }
 
     private:
-        static std::string getMiniHeroName( const int id )
+        static std::string getHeroName( const int type )
         {
             // The game has only 6 races plus random, totaling in 7 races.
             // Also the game has only 6 colors.
             // As a result only 42 mini-heroes can exist.
-            if ( id >= 42 ) {
+            if ( type >= 42 ) {
                 // Did you add a new hero?
                 assert( 0 );
                 return _( "Unknown Hero" );
             }
 
-            const int color{ id / 7 };
-            int race{ id % 7 };
+            const int color{ type / 7 };
+            int race{ type % 7 };
 
             if ( race == 6 ) {
                 ++race;
@@ -567,15 +567,15 @@ int Dialog::selectHeroes( const int heroId /* = Heroes::UNKNOWN */ )
     return result == Dialog::OK || listbox.ok ? listbox.GetCurrent() : Heroes::UNKNOWN;
 }
 
-int Dialog::selectMiniHero( const int heroId )
+int Dialog::selectHeroType( const int heroType )
 {
     std::vector<int> heroes( 42, 0 );
     std::iota( heroes.begin(), heroes.end(), 0 );
 
-    MiniHeroSelection listbox( { 350, fheroes2::Display::instance().height() - 200 } );
+    HeroTypeSelection listbox( { 350, fheroes2::Display::instance().height() - 200 } );
 
     listbox.SetListContent( heroes );
-    listbox.SetCurrent( heroId );
+    listbox.SetCurrent( heroType );
 
     const int32_t result = listbox.selectItemsEventProcessing( _( "Select Hero:" ) );
     return result == Dialog::OK || listbox.ok ? listbox.GetCurrent() : -1;

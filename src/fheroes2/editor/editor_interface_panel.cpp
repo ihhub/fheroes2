@@ -458,7 +458,7 @@ namespace Interface
                 }
             }
             else if ( le.MouseClickLeft( _objectButtonsRect[Brush::HEROES] ) ) {
-                const int32_t heroType = Dialog::selectMiniHero( _heroType );
+                const int32_t heroType = Dialog::selectHeroType( _heroType );
                 if ( heroType >= 0 ) {
                     _heroType = heroType;
 
