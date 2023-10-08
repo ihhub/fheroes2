@@ -531,21 +531,20 @@ void Maps::Tiles::setTerrain( const uint16_t terrainImageIndex, const bool horiz
 {
     _terrainFlags = ( verticalFlip ? 1 : 0 ) + ( horizontalFlip ? 2 : 0 );
 
-    if ( _isTileMarkedAsRoad || isStream() ) {
-        if ( Ground::getGroundByImageIndex( terrainImageIndex ) == Ground::WATER ) {
-            // Road or stream can not be on the water. Remove it.
-            updateRoadOnTile( *this, false );
-            updateStreamOnTile( *this, false );
-        }
-        else {
-            // There can not be extra objects under the roads and streams.
-            if ( Maps::Ground::doesTerrainImageIndexContainEmbeddedObjects( terrainImageIndex ) ) {
-                // We need to set terrain image without extra objects under the road.
-                _terrainImageIndex = Ground::getRandomTerrainImageIndex( Ground::getGroundByImageIndex( terrainImageIndex ), false );
+    const int newGround = Ground::getGroundByImageIndex( terrainImageIndex );
+    const bool isNewGroundWater = newGround == Ground::WATER;
+    const int oldGround = GetGround();
 
-                return;
-            }
-        }
+    if ( ( isNewGroundWater || oldGround == Ground::WATER ) && oldGround != newGround ) {
+        // When changing water to land and vice-versa we should remove all objects from the tile.
+        eraseOjects( *this, 255U );
+    }
+
+    if ( ( _isTileMarkedAsRoad || isStream() ) && !isNewGroundWater && Maps::Ground::doesTerrainImageIndexContainEmbeddedObjects( terrainImageIndex ) ) {
+        // There can not be extra objects under the roads and streams.
+        _terrainImageIndex = Ground::getRandomTerrainImageIndex( Ground::getGroundByImageIndex( terrainImageIndex ), false );
+
+        return;
     }
 
     _terrainImageIndex = terrainImageIndex;
