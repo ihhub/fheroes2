@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-08 07:12+0000\n"
-"PO-Revision-Date: 2023-09-15 21:53+0300\n"
+"PO-Revision-Date: 2023-10-08 10:40+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
 "Language: ru\n"
@@ -4578,11 +4578,11 @@ msgstr ""
 "Наслаждайтесь игрой!"
 
 msgid "Editor"
-msgstr ""
+msgstr "Редактор"
 
-#, fuzzy
 msgid "The Editor requires \"The Price of Loyalty\" expansion files to work."
-msgstr "Одна из четырёх новых кампаний из набора дополнений \"Цена верности\"."
+msgstr ""
+"Редактору карт необходимы файлы из набора дополнений \"Цена верности\"."
 
 msgid "Quit Heroes of Might and Magic II and return to the operating system."
 msgstr "Завершить игру Heroes of Might and Magic II и вернуться в систему."
