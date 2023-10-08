@@ -425,23 +425,31 @@ void Heroes::LoadFromMP2( const int32_t mapIndex, const int colorType, const int
     SetIndex( mapIndex );
     SetColor( colorType );
 
-    const bool hasHeroRaceChanged = ( _race != raceType );
-    if ( hasHeroRaceChanged ) {
+    // The hero's race can be changed if the portrait that was specified using the map editor does not match the initial race of this hero, or if there are no free heroes
+    // of the desired race
+    if ( _race != raceType ) {
+        SetModes( CUSTOM );
+
         _race = raceType;
-
-        // Since the hero's race has been changed, the previous initial spell is no longer relevant
-        spell_book.clear();
-        bag_artifacts.RemoveArtifact( Artifact::MAGIC_BOOK );
-
-        // Bring the primary skills and the initial spell in line with the new race
-        HeroBase::LoadDefaults( HeroBase::HEROES, _race );
-
-        // Bring the secondary skills in line with the new race
-        secondary_skills = Skill::SecSkills( _race );
-
-        // Assign a default army according to the new hero's race
-        army.Reset( true );
     }
+
+    //
+    // Campaign heroes have a non-standard amount of experience by default, so if they are used on the map, then we have to reset their properties to the default values
+    // corresponding to their race. The same must be done if the hero's race has been changed.
+    //
+
+    // Clear the initial spell
+    spell_book.clear();
+    bag_artifacts.RemoveArtifact( Artifact::MAGIC_BOOK );
+
+    // Reset primary skills and initial spell to defaults
+    HeroBase::LoadDefaults( HeroBase::HEROES, _race );
+
+    // Reset secondary skills to defaults
+    secondary_skills = Skill::SecSkills( _race );
+
+    // Reset the army to default
+    army.Reset( true );
 
     StreamBuf dataStream( data );
 
@@ -569,11 +577,13 @@ void Heroes::LoadFromMP2( const int32_t mapIndex, const int colorType, const int
     assert( _objectTypeUnderHero == MP2::OBJ_NONE );
 
     // Level up if needed
-    int level = GetLevel();
-    while ( 1 < level-- ) {
+    const int level = GetLevel();
+    if ( level > 1 ) {
         SetModes( CUSTOM );
 
-        LevelUp( doesHeroHaveCustomSecondarySkills, true );
+        for ( int i = 1; i < level; ++i ) {
+            LevelUp( doesHeroHaveCustomSecondarySkills, true );
+        }
     }
 
     SetSpellPoints( GetMaxSpellPoints() );
