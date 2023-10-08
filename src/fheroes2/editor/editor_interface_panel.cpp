@@ -463,9 +463,10 @@ namespace Interface
                     _heroId = heroId;
 
                     _interface.setCursorUpdater( [heroId]( const int32_t /*tileIndex*/ ) {
+                        // TODO: render ICN::MINIHERO from the existing hero images.
                         const fheroes2::Sprite & image = fheroes2::AGG::GetICN( ICN::MINIHERO, heroId );
 
-                        // Mini-hero images contain a pool with a flag.
+                        // Mini-hero images contain a pole with a flag.
                         // This causes a situation that a selected tile does not properly correspond to the position of cursor.
                         // We need to add a hardcoded correction.
                         const int32_t heroCorrectionY{ 12 };

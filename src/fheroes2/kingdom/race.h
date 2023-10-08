@@ -45,7 +45,7 @@ namespace Race
     const char * DoubleLinedString( int race );
     int Rand();
 
-    uint8_t IndexToRace( const int byte );
+    uint8_t IndexToRace( const int index );
 }
 
 #endif

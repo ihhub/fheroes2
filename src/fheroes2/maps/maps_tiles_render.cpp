@@ -32,6 +32,7 @@
 #include <utility>
 
 #include "agg_image.h"
+#include "color.h"
 #include "direction.h"
 #include "game.h"
 #include "heroes.h"

@@ -106,9 +106,9 @@ int Race::Rand()
     return Race::NECR;
 }
 
-uint8_t Race::IndexToRace( const int byte )
+uint8_t Race::IndexToRace( const int index )
 {
-    switch ( byte ) {
+    switch ( index ) {
     case 0:
         return Race::KNGT;
     case 1:
@@ -125,7 +125,6 @@ uint8_t Race::IndexToRace( const int byte )
         return Race::MULT;
     case 7:
         return Race::RAND;
-
     default:
         break;
     }

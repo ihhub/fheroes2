@@ -24,6 +24,7 @@
 #include "dialog_selectitems.h"
 
 #include <algorithm>
+#include <cassert>
 #include <cstddef>
 #include <cstdint>
 #include <memory>
@@ -33,6 +34,7 @@
 
 #include "agg_image.h"
 #include "army_troop.h"
+#include "color.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game_hotkeys.h"
@@ -568,7 +570,6 @@ int Dialog::selectHeroes( const int heroId /* = Heroes::UNKNOWN */ )
 int Dialog::selectMiniHero( const int heroId )
 {
     std::vector<int> heroes( 42, 0 );
-
     std::iota( heroes.begin(), heroes.end(), 0 );
 
     MiniHeroSelection listbox( { 350, fheroes2::Display::instance().height() - 200 } );
@@ -577,6 +578,5 @@ int Dialog::selectMiniHero( const int heroId )
     listbox.SetCurrent( heroId );
 
     const int32_t result = listbox.selectItemsEventProcessing( _( "Select Hero:" ) );
-
     return result == Dialog::OK || listbox.ok ? listbox.GetCurrent() : -1;
 }

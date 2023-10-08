@@ -115,9 +115,9 @@ int Color::GetFirst( int colors )
     return NONE;
 }
 
-uint8_t Color::IndexToColor( const int byte )
+uint8_t Color::IndexToColor( const int index )
 {
-    switch ( byte ) {
+    switch ( index ) {
     case 0:
         return BLUE;
     case 1:
@@ -130,7 +130,6 @@ uint8_t Color::IndexToColor( const int byte )
         return ORANGE;
     case 5:
         return PURPLE;
-
     default:
         break;
     }

@@ -68,7 +68,7 @@ namespace Color
     int GetFirst( int colors );
     int FromInt( int col );
 
-    uint8_t IndexToColor( const int byte );
+    uint8_t IndexToColor( const int index );
 }
 
 class Colors : public std::vector<int>

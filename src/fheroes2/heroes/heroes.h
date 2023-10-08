@@ -63,7 +63,6 @@ namespace fheroes2
 {
     class Image;
     class Sprite;
-    struct ObjectRenderingInfo;
 }
 
 struct HeroSeedsForLevelUp
