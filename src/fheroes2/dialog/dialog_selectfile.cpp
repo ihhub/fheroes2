@@ -538,7 +538,7 @@ namespace
 
             if ( !isEditing && le.KeyPress( fheroes2::Key::KEY_DELETE ) && isListboxSelected ) {
                 std::string msg( _( "Are you sure you want to delete file:" ) );
-                msg.append( "\n \n" );
+                msg.append( "\n\n" );
                 msg.append( System::GetBasename( listbox.GetCurrent().file ) );
                 if ( Dialog::YES == fheroes2::showStandardTextMessage( _( "Warning!" ), msg, Dialog::YES | Dialog::NO ) ) {
                     System::Unlink( listbox.GetCurrent().file );

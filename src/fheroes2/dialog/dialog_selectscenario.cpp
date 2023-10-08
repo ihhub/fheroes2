@@ -514,25 +514,48 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & allMaps 
     display.render();
 
     while ( le.HandleEvents() ) {
-        if ( buttonOk.isEnabled() )
-            le.MousePressLeft( buttonOk.area() ) ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
+        le.MousePressLeft( buttonOk.area() ) ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
 
-        if ( le.MousePressLeft( buttonSelectSmall.area() ) )
+        if ( le.MousePressLeft( buttonSelectSmall.area() ) ) {
             buttonSelectSmall.drawOnPress();
-        if ( le.MousePressLeft( buttonSelectMedium.area() ) )
+        }
+        else if ( currentPressedButton != &buttonSelectSmall ) {
+            buttonSelectSmall.drawOnRelease();
+        }
+
+        if ( le.MousePressLeft( buttonSelectMedium.area() ) ) {
             buttonSelectMedium.drawOnPress();
-        if ( le.MousePressLeft( buttonSelectLarge.area() ) )
+        }
+        else if ( currentPressedButton != &buttonSelectMedium ) {
+            buttonSelectMedium.drawOnRelease();
+        }
+
+        if ( le.MousePressLeft( buttonSelectLarge.area() ) ) {
             buttonSelectLarge.drawOnPress();
-        if ( le.MousePressLeft( buttonSelectXLarge.area() ) )
+        }
+        else if ( currentPressedButton != &buttonSelectLarge ) {
+            buttonSelectLarge.drawOnRelease();
+        }
+
+        if ( le.MousePressLeft( buttonSelectXLarge.area() ) ) {
             buttonSelectXLarge.drawOnPress();
-        if ( le.MousePressLeft( buttonSelectAll.area() ) )
+        }
+        else if ( currentPressedButton != &buttonSelectXLarge ) {
+            buttonSelectXLarge.drawOnRelease();
+        }
+
+        if ( le.MousePressLeft( buttonSelectAll.area() ) ) {
             buttonSelectAll.drawOnPress();
+        }
+        else if ( currentPressedButton != &buttonSelectAll ) {
+            buttonSelectAll.drawOnRelease();
+        }
 
         listbox.QueueEventProcessing();
 
         bool needRedraw = false;
 
-        if ( ( buttonOk.isEnabled() && le.MouseClickLeft( buttonOk.area() ) ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) || listbox.selectOk ) {
+        if ( le.MouseClickLeft( buttonOk.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) || listbox.selectOk ) {
             MapsFileInfoList::const_iterator it = std::find( allMaps.begin(), allMaps.end(), listbox.GetCurrent() );
             return ( it != allMaps.end() ) ? &( *it ) : nullptr;
         }
@@ -541,7 +564,7 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & allMaps 
             return nullptr;
         }
 
-        if ( le.MouseClickLeft( buttonSelectSmall.area() ) || HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_MAP_SIZE_SMALL ) /*&& buttonSelectSmall.isEnabled()*/ ) {
+        if ( le.MouseClickLeft( buttonSelectSmall.area() ) || HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_MAP_SIZE_SMALL ) ) {
             if ( small.empty() ) {
                 fheroes2::showStandardTextMessage( "", _( "No maps exist at that size" ), Dialog::OK );
                 currentPressedButton->drawOnPress();
@@ -554,8 +577,7 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & allMaps 
 
             needRedraw = true;
         }
-        else if ( le.MouseClickLeft( buttonSelectMedium.area() )
-                  || HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_MAP_SIZE_MEDIUM ) /*&& buttonSelectMedium.isEnabled()*/ ) {
+        else if ( le.MouseClickLeft( buttonSelectMedium.area() ) || HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_MAP_SIZE_MEDIUM ) ) {
             if ( medium.empty() ) {
                 fheroes2::showStandardTextMessage( "", _( "No maps exist at that size" ), Dialog::OK );
                 currentPressedButton->drawOnPress();
@@ -568,8 +590,7 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & allMaps 
 
             needRedraw = true;
         }
-        else if ( le.MouseClickLeft( buttonSelectLarge.area() )
-                  || HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_MAP_SIZE_LARGE ) /*&& buttonSelectLarge.isEnabled()*/ ) {
+        else if ( le.MouseClickLeft( buttonSelectLarge.area() ) || HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_MAP_SIZE_LARGE ) ) {
             if ( large.empty() ) {
                 fheroes2::showStandardTextMessage( "", _( "No maps exist at that size" ), Dialog::OK );
                 currentPressedButton->drawOnPress();
@@ -582,8 +603,7 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & allMaps 
 
             needRedraw = true;
         }
-        else if ( le.MouseClickLeft( buttonSelectXLarge.area() )
-                  || HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_MAP_SIZE_EXTRA_LARGE ) /*&& buttonSelectXLarge.isEnabled()*/ ) {
+        else if ( le.MouseClickLeft( buttonSelectXLarge.area() ) || HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_MAP_SIZE_EXTRA_LARGE ) ) {
             if ( xlarge.empty() ) {
                 fheroes2::showStandardTextMessage( "", _( "No maps exist at that size" ), Dialog::OK );
                 currentPressedButton->drawOnPress();
@@ -604,7 +624,6 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & allMaps 
             needRedraw = true;
         }
 
-        // right info
         if ( le.MousePressRight( buttonSelectSmall.area() ) )
             ShowToolTip( _( "Small Maps" ), _( "View only maps of size small (36 x 36)." ) );
         else if ( le.MousePressRight( buttonSelectMedium.area() ) )

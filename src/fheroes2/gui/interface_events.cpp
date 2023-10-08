@@ -161,13 +161,32 @@ void Interface::AdventureMap::EventNextHero()
     RedrawFocus();
 }
 
-void Interface::AdventureMap::EventContinueMovement() const
+fheroes2::GameMode Interface::AdventureMap::EventHeroMovement()
 {
     Heroes * hero = GetFocusHeroes();
 
-    if ( hero && hero->GetPath().isValidForMovement() && hero->MayStillMove( false, true ) ) {
-        hero->SetMove( true );
+    if ( hero ) {
+        if ( hero->GetPath().isValidForMovement() && hero->MayStillMove( false, true ) ) {
+            hero->SetMove( true );
+        }
+        else if ( MP2::isActionObject( hero->getObjectTypeUnderHero(), hero->isShipMaster() ) ) {
+            return EventDefaultAction();
+        }
     }
+
+    return fheroes2::GameMode::CANCEL;
+}
+
+void Interface::AdventureMap::EventResetHeroPath()
+{
+    Heroes * hero = GetFocusHeroes();
+    if ( hero == nullptr ) {
+        return;
+    }
+
+    hero->GetPath().Reset();
+
+    setRedraw( REDRAW_GAMEAREA | REDRAW_BUTTONS );
 }
 
 void Interface::AdventureMap::EventKingdomInfo() const
@@ -445,12 +464,11 @@ fheroes2::GameMode Interface::AdventureMap::EventDigArtifact()
     return fheroes2::GameMode::CANCEL;
 }
 
-fheroes2::GameMode Interface::AdventureMap::EventDefaultAction( const fheroes2::GameMode gameMode )
+fheroes2::GameMode Interface::AdventureMap::EventDefaultAction()
 {
     Heroes * hero = GetFocusHeroes();
 
     if ( hero ) {
-        // 1. action object
         if ( MP2::isActionObject( hero->getObjectTypeUnderHero(), hero->isShipMaster() ) ) {
             hero->Action( hero->GetIndex() );
 
@@ -459,20 +477,20 @@ fheroes2::GameMode Interface::AdventureMap::EventDefaultAction( const fheroes2::
             ResetFocus( GameFocus::HEROES, true );
             RedrawFocus();
 
-            // If a hero completed an action we must verify the condition for the scenario.
+            // If the hero has performed an action, we have to check the completion condition
+            // of the scenario
             if ( hero->isAction() ) {
                 hero->ResetAction();
-                // check if the game is over after the hero's action
+
                 return GameOver::Result::Get().checkGameOver();
             }
         }
     }
     else if ( GetFocusCastle() ) {
-        // 2. town dialog
         Game::OpenCastleDialog( *GetFocusCastle() );
     }
 
-    return gameMode;
+    return fheroes2::GameMode::CANCEL;
 }
 
 void Interface::AdventureMap::EventOpenFocus() const

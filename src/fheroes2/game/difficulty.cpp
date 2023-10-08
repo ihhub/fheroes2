@@ -158,3 +158,54 @@ uint32_t Difficulty::GetDimensionDoorLimit( int difficulty )
     }
     return UINT32_MAX;
 }
+
+bool Difficulty::areAIHeroRolesAllowed( const int difficulty )
+{
+    switch ( difficulty ) {
+    case Difficulty::EASY:
+        return false;
+    case Difficulty::NORMAL:
+    case Difficulty::HARD:
+    case Difficulty::EXPERT:
+    case Difficulty::IMPOSSIBLE:
+        return true;
+    default:
+        // Did you add a new difficulty level? Add the logic above!
+        assert( 0 );
+        break;
+    }
+
+    return true;
+}
+
+int Difficulty::getMinStatDiffBetweenAIRoles( const int difficulty )
+{
+    switch ( difficulty ) {
+    case Difficulty::EASY:
+        // Easy difficulty still allows to merge armies but only if the difference in stats is huge.
+        return 10;
+    case Difficulty::NORMAL:
+    case Difficulty::HARD:
+    case Difficulty::EXPERT:
+    case Difficulty::IMPOSSIBLE:
+        return 2;
+    default:
+        // Did you add a new difficulty level? Add the logic above!
+        assert( 0 );
+        break;
+    }
+
+    return 2;
+}
+
+bool Difficulty::allowAIToSplitWeakStacks( const int difficulty )
+{
+    switch ( difficulty ) {
+    case Difficulty::EASY:
+    case Difficulty::NORMAL:
+        return false;
+    default:
+        break;
+    }
+    return true;
+}
