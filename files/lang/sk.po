@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-08 07:12+0000\n"
+"POT-Creation-Date: 2023-10-08 14:08+0000\n"
 "PO-Revision-Date: 2023-09-11 20:22+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3287,6 +3287,13 @@ msgstr "Nahrať súbor:"
 msgid "Accept the choice made."
 msgstr "Prijať uskutočnený výber."
 
+msgid "Unknown Hero"
+msgstr "Neznámy hrdina"
+
+#, fuzzy
+msgid "%{color} %{race} hero"
+msgstr "%{color} hráč"
+
 msgid "Select Skill:"
 msgstr "Zvoľ zručnosť:"
 
@@ -3608,6 +3615,12 @@ msgstr ""
 msgid "Choose a tile which does not contain any objects."
 msgstr ""
 
+msgid "Heroes"
+msgstr "Hrdinovia"
+
+msgid "Heroes cannot be placed on water."
+msgstr ""
+
 msgid "Ocean Objects"
 msgstr "Objekty oceánu"
 
@@ -3637,9 +3650,6 @@ msgstr "Objekty pláže"
 
 msgid "Towns"
 msgstr "Mestá"
-
-msgid "Heroes"
-msgstr "Hrdinovia"
 
 msgid "Artifacts"
 msgstr "Artefakty"
@@ -4108,9 +4118,6 @@ msgstr "Dizajn balíkov"
 
 msgid "Your Name"
 msgstr "Tvoje meno"
-
-msgid "Unknown Hero"
-msgstr "Neznámy hrdina"
 
 msgid "Standard"
 msgstr "Štandard"
