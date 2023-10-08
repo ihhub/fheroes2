@@ -2831,7 +2831,7 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
             std::string ballistaMessage = Tower::GetInfo( *cstl );
 
             if ( cstl->isBuild( BUILD_MOAT ) ) {
-                ballistaMessage.append( "\n \n" );
+                ballistaMessage.append( "\n\n" );
                 ballistaMessage.append( Battle::Board::GetMoatInfo() );
             }
 
