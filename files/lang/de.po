@@ -3646,10 +3646,10 @@ msgid "Monster"
 msgstr "Monster"
 
 msgid "Monsters cannot be placed on water."
-msgstr ""
+msgstr "Monster können nicht auf Wasser plaziert werden."
 
 msgid "Choose a tile which does not contain any objects."
-msgstr ""
+msgstr "Ein Feld wählen, das keine Objekt enthält."
 
 msgid "Ocean Objects"
 msgstr "Ozean-Objekte"
