@@ -233,7 +233,7 @@ fheroes2::GameMode Game::DisplayHighScores( const bool isCampaign )
 
 #ifdef WITH_DEBUG
     if ( IS_DEVEL() && ( gameResult.GetResult() & GameOver::WINS ) ) {
-        std::string msg = "Developer mode is active, the result will not be saved! \n \n Your result: ";
+        std::string msg = "Developer mode is active, the result will not be saved! \n\n Your result: ";
         if ( isCampaign ) {
             msg += std::to_string( Campaign::CampaignSaveData::Get().getDaysPassed() );
         }

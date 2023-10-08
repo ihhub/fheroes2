@@ -2851,12 +2851,12 @@ std::string Castle::GetDescriptionBuilding( uint32_t build ) const
         StringReplace( res, "%{count}", ProfitConditions::FromBuilding( BUILD_CASTLE, race ).gold );
 
         if ( isBuild( BUILD_CASTLE ) ) {
-            res.append( "\n \n" );
+            res.append( "\n\n" );
             res.append( Battle::Tower::GetInfo( *this ) );
         }
 
         if ( isBuild( BUILD_MOAT ) ) {
-            res.append( "\n \n" );
+            res.append( "\n\n" );
             res.append( Battle::Board::GetMoatInfo() );
         }
         break;
