@@ -179,7 +179,7 @@ namespace Battle
             return shots;
         }
 
-        bool canShoot() const;
+        bool isImmovable() const;
 
         uint32_t ApplyDamage( Unit & enemy, const uint32_t dmg, uint32_t & killed, uint32_t * ptrResurrected );
 
