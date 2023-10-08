@@ -65,8 +65,6 @@ namespace Game
         MAIN_MENU_NEW_ORIGINAL_CAMPAIGN,
         MAIN_MENU_NEW_EXPANSION_CAMPAIGN,
 
-#if defined( WITH_DEBUG )
-        // Editor is still in development.
         EDITOR_MAIN_MENU,
         EDITOR_NEW_MAP_MENU,
         EDITOR_LOAD_MAP_MENU,
@@ -74,7 +72,6 @@ namespace Game
         EDITOR_RANDOM_MAP_MENU,
         EDITOR_UNDO_LAST_ACTION,
         EDITOR_REDO_LAST_ACTION,
-#endif
 
         CAMPAIGN_ROLAND,
         CAMPAIGN_ARCHIBALD,
