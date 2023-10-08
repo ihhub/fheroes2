@@ -4623,12 +4623,10 @@ msgstr ""
 "Viel Spaß mit dem Spiel!"
 
 msgid "Editor"
-msgstr ""
+msgstr "Editor"
 
-#, fuzzy
 msgid "The Editor requires \"The Price of Loyalty\" expansion files to work."
-msgstr ""
-"Ein der vier neuen Feldzüge aus dem Erweiterungsset \"The Price of Loyalty\"."
+msgstr "Der Editor benötigt Dateien des Erweiterungspacks \"The Price of Loyalty\"."
 
 msgid "Quit Heroes of Might and Magic II and return to the operating system."
 msgstr ""
