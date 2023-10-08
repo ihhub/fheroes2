@@ -563,7 +563,7 @@ public:
 
     bool isPoLPortrait() const
     {
-        return ( portrait > BRAX );
+        return ( portrait >= SOLMYR && portrait <= JARKONAS );
     }
 
     static int GetLevelFromExperience( uint32_t );
