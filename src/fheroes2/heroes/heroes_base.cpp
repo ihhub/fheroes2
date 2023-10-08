@@ -457,7 +457,7 @@ bool HeroBase::CanCastSpell( const Spell & spell, std::string * res /* = nullptr
             bool hasCastles = std::any_of( castles.begin(), castles.end(), []( const Castle * castle ) { return castle && castle->GetHero() == nullptr; } );
             if ( !hasCastles ) {
                 if ( res != nullptr ) {
-                    *res = _( "You do not own any town or castle that is not currently occupied by a hero. You cannot cast this spell." );
+                    *res = _( "You do not own any town or castle that is not currently occupied by a hero. This spell will have no effect." );
                 }
                 return false;
             }
@@ -469,7 +469,7 @@ bool HeroBase::CanCastSpell( const Spell & spell, std::string * res /* = nullptr
 
             if ( castle->GetIndex() == hero->GetIndex() ) {
                 if ( res != nullptr ) {
-                    *res = _( "This hero is already in a town, so you cannot cast this spell." );
+                    *res = _( "This hero is already in a town, so this spell will have no effect." );
                 }
                 return false;
             }
