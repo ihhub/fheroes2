@@ -460,6 +460,16 @@ namespace
                         offset->x = 0;
                         offset->y += rowHeight;
                     }
+
+                    // This is a new line. getMultiRowInfo() function does estimations while ignoring whitespace characters at the start and end of lines.
+                    // If the next line starts from a whitespace character it is important to skip it.
+                    while ( data != dataEnd ) {
+                        if ( !isSpaceChar( *data ) ) {
+                            break;
+                        }
+
+                        ++data;
+                    }
                 }
                 else {
                     ++data;

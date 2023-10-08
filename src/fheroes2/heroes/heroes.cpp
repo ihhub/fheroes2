@@ -804,6 +804,10 @@ int Heroes::GetMoraleWithModificators( std::string * strs ) const
         }
         result = Morale::BLOOD;
     }
+    else if ( strs != nullptr && !strs->empty() && strs->back() == '\n' ) {
+        // Remove the possible empty line at the end of the string.
+        strs->pop_back();
+    }
 
     return Morale::Normalize( result );
 }
@@ -834,6 +838,10 @@ int Heroes::GetLuckWithModificators( std::string * strs ) const
             *strs += _( " gives you maximum luck" );
         }
         result = Luck::IRISH;
+    }
+    else if ( strs != nullptr && !strs->empty() && strs->back() == '\n' ) {
+        // Remove the possible empty line at the end of the string.
+        strs->pop_back();
     }
 
     return Luck::Normalize( result );

@@ -2831,7 +2831,7 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
             std::string ballistaMessage = Tower::GetInfo( *cstl );
 
             if ( cstl->isBuild( BUILD_MOAT ) ) {
-                ballistaMessage.append( "\n \n" );
+                ballistaMessage.append( "\n\n" );
                 ballistaMessage.append( Battle::Board::GetMoatInfo() );
             }
 
@@ -3092,8 +3092,8 @@ void Battle::Interface::FadeArena( const bool clearMessageLog )
 
 int Battle::GetIndexIndicator( const Unit & unit )
 {
-    if ( unit.Modes( IS_GREEN_STATUS ) ) {
-        if ( unit.Modes( IS_RED_STATUS ) ) {
+    if ( unit.Modes( IS_GOOD_MAGIC | SP_ANTIMAGIC ) ) {
+        if ( unit.Modes( IS_BAD_MAGIC ) ) {
             // ICN::TEXTBAR index for yellow indicator background color.
             return 13;
         }
@@ -3102,7 +3102,7 @@ int Battle::GetIndexIndicator( const Unit & unit )
         return 12;
     }
 
-    if ( unit.Modes( IS_RED_STATUS ) ) {
+    if ( unit.Modes( IS_BAD_MAGIC ) ) {
         // ICN::TEXTBAR index for red indicator background color.
         return 14;
     }

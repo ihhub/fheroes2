@@ -375,7 +375,7 @@ void Battle::Arena::ApplyActionAttack( Command & cmd )
                     defender->SetResponse();
                 }
 
-                if ( doubleAttack && attacker->isValid() && !attacker->Modes( SP_BLIND | IS_PARALYZE_MAGIC ) ) {
+                if ( doubleAttack && attacker->isValid() && !attacker->isImmovable() ) {
                     DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "double attack" )
                     BattleProcess( *attacker, *defender, dst, dir );
                 }

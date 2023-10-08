@@ -26,6 +26,7 @@
 #include "game_mode.h"
 #include "ground.h"
 #include "math_base.h"
+#include "monster.h"
 #include "ui_button.h"
 
 namespace Interface
@@ -71,10 +72,20 @@ namespace Interface
             return _selectedInstrument == Instrument::ERASE;
         }
 
+        bool isMonsterSettingMode() const
+        {
+            return ( _selectedInstrument == OBJECT ) && ( _selectedObject == MONSTERS );
+        }
+
+        int32_t getMonsterId() const
+        {
+            return _monsterId;
+        }
+
         bool showAreaSelectRect() const
         {
             return _selectedInstrument == Instrument::TERRAIN || _selectedInstrument == Instrument::STREAM || _selectedInstrument == Instrument::ROAD
-                   || _selectedInstrument == Instrument::ERASE;
+                   || _selectedInstrument == Instrument::ERASE || isMonsterSettingMode();
         }
 
         bool useMouseDragMovement() const
@@ -186,8 +197,12 @@ namespace Interface
         std::array<fheroes2::Rect, BrushSize::BRUSH_SIZE_COUNT> _brushSizeButtonsRect;
 
         uint8_t _selectedInstrument{ Instrument::TERRAIN };
-        uint8_t _selectedTerrain{ Brush::WATER };
+
+        // A brand new map is always filled with Water so there is no need to make Water terrain brush as a default terrain selection.
+        uint8_t _selectedTerrain{ Brush::GRASS };
         uint8_t _selectedObject{ Brush::WATER };
         uint8_t _selectedBrushSize{ BrushSize::MEDIUM };
+
+        int32_t _monsterId{ Monster::UNKNOWN };
     };
 }
