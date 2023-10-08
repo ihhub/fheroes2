@@ -561,6 +561,11 @@ public:
         return portrait;
     }
 
+    bool isPoLPortrait() const
+    {
+        return ( portrait > BRAX );
+    }
+
     static int GetLevelFromExperience( uint32_t );
     static uint32_t GetExperienceFromLevel( int );
 

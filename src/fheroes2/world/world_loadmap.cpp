@@ -892,6 +892,11 @@ bool World::updateTileMetadata( Maps::Tiles & tile, const MP2::MapObjectType obj
         if ( checkPoLObjects ) {
             Heroes * hero = tile.getHero();
             assert( hero );
+
+            if ( hero->isPoLPortrait() ) {
+                return false;
+            }
+
             const BagArtifacts & artifacts = hero->GetBagArtifacts();
             for ( const Artifact & artifact : artifacts ) {
                 if ( fheroes2::isPriceOfLoyaltyArtifact( artifact.GetID() ) ) {
