@@ -72,7 +72,7 @@ void HeroesIndicator::SetPos( const fheroes2::Point & pt )
 {
     area.x = pt.x;
     area.y = pt.y;
-    back.update( area.x, area.y, area.width, area.height );
+    _back.update( area.x, area.y, area.width, area.height );
 }
 
 void LuckIndicator::Redraw()
@@ -82,14 +82,13 @@ void LuckIndicator::Redraw()
     }
 
     std::string modificators;
-    modificators.reserve( 256 );
     luck = _hero->GetLuckWithModificators( &modificators );
 
     descriptions.clear();
     descriptions.append( Luck::Description( luck ) );
-    descriptions.append( "\n \n" );
+    descriptions.append( "\n\n" );
     descriptions.append( _( "Current Luck Modifiers:" ) );
-    descriptions.append( "\n \n" );
+    descriptions.append( "\n\n" );
 
     const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::HSICONS, ( 0 > luck ? 3 : ( 0 < luck ? 2 : 6 ) ) );
     const int32_t inter = 6;
@@ -104,7 +103,7 @@ void LuckIndicator::Redraw()
         descriptions.append( modificators );
     }
 
-    back.restore();
+    _back.restore();
     fheroes2::Display & display = fheroes2::Display::instance();
 
     while ( count-- ) {
@@ -132,14 +131,13 @@ void MoraleIndicator::Redraw()
     }
 
     std::string modificators;
-    modificators.reserve( 256 );
     morale = _hero->GetMoraleWithModificators( &modificators );
 
     descriptions.clear();
     descriptions.append( Morale::Description( morale ) );
-    descriptions.append( "\n \n" );
+    descriptions.append( "\n\n" );
     descriptions.append( _( "Current Morale Modifiers:" ) );
-    descriptions.append( "\n \n" );
+    descriptions.append( "\n\n" );
 
     if ( modificators.empty() ) {
         descriptions.append( _( "None" ) );
@@ -149,7 +147,7 @@ void MoraleIndicator::Redraw()
     }
 
     if ( _hero->GetArmy().AllTroopsAreUndead() ) {
-        descriptions.append( "\n \n" );
+        descriptions.append( "\n\n" );
         descriptions.append( _( "Entire army is undead, so morale does not apply." ) );
     }
 
@@ -159,7 +157,7 @@ void MoraleIndicator::Redraw()
     int32_t cx = area.x + ( area.width - ( sprite.width() + inter * ( count - 1 ) ) ) / 2;
     const int32_t cy = area.y + ( area.height - sprite.height() ) / 2;
 
-    back.restore();
+    _back.restore();
     fheroes2::Display & display = fheroes2::Display::instance();
 
     while ( count-- ) {

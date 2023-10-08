@@ -45,8 +45,9 @@ class HeroesIndicator
 public:
     explicit HeroesIndicator( const Heroes * hero = nullptr )
         : _hero( hero )
+        , _back( fheroes2::Display::instance() )
     {
-        descriptions.reserve( 256 );
+        // Do nothing.
     }
 
     const fheroes2::Rect & GetArea() const;
@@ -56,7 +57,7 @@ public:
 protected:
     const Heroes * _hero;
     fheroes2::Rect area;
-    fheroes2::ImageRestorer back{ fheroes2::Display::instance() };
+    fheroes2::ImageRestorer _back;
     std::string descriptions;
 };
 
