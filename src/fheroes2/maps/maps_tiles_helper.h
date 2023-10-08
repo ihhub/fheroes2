@@ -167,7 +167,7 @@ namespace Maps
     void setRandomMonsterOnTile( Tiles & tile, const Monster & mons );
     void setEditorHeroOnTile( Tiles & tile, const int32_t heroType );
 
-    bool removeMonsterFromTile( Tiles & tile );
+    bool removeObjectFromTile( Tiles & tile, const MP2::ObjectIcnType objectIcnType );
     bool eraseObjectsOnTiles( const int32_t startTileId, const int32_t endTileId, const uint8_t objectsToErase );
     bool eraseOjects( Tiles & tile, const uint8_t objectsToErase );
 }

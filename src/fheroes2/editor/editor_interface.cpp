@@ -661,6 +661,9 @@ namespace Interface
             if ( heroes ) {
                 Dialog::QuickInfo( *heroes );
             }
+            else if ( tile.getObjectIcnType() == MP2::OBJ_ICN_TYPE_MINIHERO ) {
+                fheroes2::showStandardTextMessage( _( "Heroes" ), "", Dialog::ZERO );
+            }
 
             break;
         }

@@ -3060,14 +3060,13 @@ namespace Maps
         tile.setObjectSpriteIndex( static_cast<TileImageIndexType>( heroType ) );
     }
 
-    bool removeMonsterFromTile( Tiles & tile )
+    bool removeObjectFromTile( Tiles & tile, const MP2::ObjectIcnType objectIcnType )
     {
-        if ( tile.getObjectIcnType() != MP2::OBJ_ICN_TYPE_MONS32 ) {
+        if ( tile.getObjectIcnType() != objectIcnType ) {
             return false;
         }
 
-        setMonsterCountOnTile( tile, 0 );
-        tile.removeObjects( MP2::OBJ_ICN_TYPE_MONS32 );
+        tile.removeObjects( objectIcnType );
         resetObjectMetadata( tile );
         tile.setAsEmpty();
 
@@ -3110,7 +3109,9 @@ namespace Maps
 
         needRedraw |= updateStreamOnTile( tile, false );
 
-        needRedraw |= removeMonsterFromTile( tile );
+        needRedraw |= removeObjectFromTile( tile, MP2::OBJ_ICN_TYPE_MONS32 );
+
+        needRedraw |= removeObjectFromTile( tile, MP2::OBJ_ICN_TYPE_MINIHERO );
 
         return needRedraw;
     }
