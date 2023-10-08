@@ -60,6 +60,15 @@ namespace Interface
     class BaseInterface
     {
     public:
+        explicit BaseInterface( const bool isEditor_ )
+            : _gameArea( *this )
+            , _radar( *this )
+            , _statusWindow( *this )
+            , _isEditor( isEditor_ )
+        {
+            // Do nothing
+        }
+
         virtual ~BaseInterface() = default;
 
         virtual void redraw( const uint32_t force ) = 0;
@@ -133,9 +142,12 @@ namespace Interface
 
         virtual void updateCursor( const int32_t tileIndex ) = 0;
 
-    protected:
-        BaseInterface();
+        bool isEditor() const
+        {
+            return _isEditor;
+        }
 
+    protected:
         // If display fade-in state is set reset it to false and fade-in the full display image. Otherwise render full display image without fade-in.
         void validateFadeInAndRender();
 
@@ -144,5 +156,7 @@ namespace Interface
         StatusWindow _statusWindow;
 
         uint32_t _redraw{ 0 };
+
+        const bool _isEditor{ false };
     };
 }

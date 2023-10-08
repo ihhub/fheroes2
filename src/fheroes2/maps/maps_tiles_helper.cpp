@@ -3039,6 +3039,27 @@ namespace Maps
         tile.setObjectSpriteIndex( static_cast<TileImageIndexType>( monsSpriteIndex ) );
     }
 
+    void setEditorHeroOnTile( Tiles & tile, const int32_t heroType )
+    {
+        tile.SetObject( MP2::OBJ_HEROES );
+
+        if ( tile.getObjectIcnType() != MP2::OBJ_ICN_TYPE_UNKNOWN ) {
+            // If there is another object sprite here (shadow for example) push it down to add-ons.
+            tile.pushBottomLayerAddon( TilesAddon( tile.getLayerType(), tile.GetObjectUID(), tile.getObjectIcnType(), tile.GetObjectSpriteIndex() ) );
+        }
+
+        // No object exists on this tile. Add one.
+        tile.setObjectUID( getNewObjectUID() );
+        tile.setObjectIcnType( MP2::OBJ_ICN_TYPE_MINIHERO );
+
+        using TileImageIndexType = decltype( tile.GetObjectSpriteIndex() );
+        static_assert( std::is_same_v<TileImageIndexType, uint8_t>, "Type of GetObjectSpriteIndex() has been changed, check the logic below" );
+
+        assert( heroType >= std::numeric_limits<TileImageIndexType>::min() && heroType <= std::numeric_limits<TileImageIndexType>::max() );
+
+        tile.setObjectSpriteIndex( static_cast<TileImageIndexType>( heroType ) );
+    }
+
     bool removeMonsterFromTile( Tiles & tile )
     {
         if ( tile.getObjectIcnType() != MP2::OBJ_ICN_TYPE_MONS32 ) {

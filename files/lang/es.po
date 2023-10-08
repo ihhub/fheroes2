@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-07 13:24+0000\n"
+"POT-Creation-Date: 2023-10-08 14:08+0000\n"
 "PO-Revision-Date: 2023-06-27 18:17+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -2770,11 +2770,11 @@ msgstr ""
 msgid ""
 "The creatures are swayed by your diplomatic\n"
 "tongue, and make you an offer:\n"
-" \n"
+"\n"
 msgstr ""
 "Las criaturas, influidas por tu diplomacia,\n"
 "te hacen una oferta:\n"
-" \n"
+"\n"
 
 msgid ""
 "%{offer} of the %{total} %{monster} will join your army, and the rest will "
@@ -3301,6 +3301,13 @@ msgstr "Archivo a Cargar:"
 msgid "Accept the choice made."
 msgstr "Aceptar la elección realizada."
 
+msgid "Unknown Hero"
+msgstr ""
+
+#, fuzzy
+msgid "%{color} %{race} hero"
+msgstr "%{color} jugador"
+
 #, fuzzy
 msgid "Select Skill:"
 msgstr "Defensa"
@@ -3639,6 +3646,12 @@ msgstr ""
 msgid "Choose a tile which does not contain any objects."
 msgstr ""
 
+msgid "Heroes"
+msgstr "Héroes"
+
+msgid "Heroes cannot be placed on water."
+msgstr ""
+
 msgid "Ocean Objects"
 msgstr ""
 
@@ -3671,9 +3684,6 @@ msgstr ""
 #, fuzzy
 msgid "Towns"
 msgstr "Pueblo"
-
-msgid "Heroes"
-msgstr "Héroes"
 
 msgid "Artifacts"
 msgstr "Artefactos"
@@ -4141,9 +4151,6 @@ msgstr ""
 msgid "Your Name"
 msgstr ""
 
-msgid "Unknown Hero"
-msgstr ""
-
 #, fuzzy
 msgid "Standard"
 msgstr "Juego estandar"
@@ -4607,6 +4614,12 @@ msgid ""
 " on the left side of main menu or by clicking on the configuration button. \n"
 "\n"
 "Enjoy the game!"
+msgstr ""
+
+msgid "Editor"
+msgstr ""
+
+msgid "The Editor requires \"The Price of Loyalty\" expansion files to work."
 msgstr ""
 
 #, fuzzy
@@ -5743,11 +5756,11 @@ msgstr ""
 msgid ""
 "You approach the hut and observe a witch inside studying an ancient tome on "
 "%{skill}.\n"
-" \n"
+"\n"
 msgstr ""
 "Te aproximas a la cabaña y observas dentro a una bruja estudiando un antiguo "
 "tomo de %{skill}.\n"
-" \n"
+"\n"
 
 msgid ""
 "As you approach, she turns and focuses her one glass eye on you.\n"
@@ -6843,15 +6856,15 @@ msgstr ""
 
 msgid ""
 "The Sphinx asks you the following riddle:\n"
-" \n"
+"\n"
 "'%{riddle}'\n"
-" \n"
+"\n"
 "Your answer?"
 msgstr ""
 "La Esfinge te pregunta el siguiente acertijo:\n"
-" \n"
+"\n"
 "%{riddle}\n"
-" \n"
+"\n"
 "¿Tú respuesta?"
 
 msgid ""
@@ -6973,7 +6986,7 @@ msgstr ""
 
 msgid ""
 "The nearest town is %{town}.\n"
-" \n"
+"\n"
 "This town is occupied by your hero %{hero}."
 msgstr ""
 

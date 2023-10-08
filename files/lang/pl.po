@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-07 13:24+0000\n"
+"POT-Creation-Date: 2023-10-08 14:08+0000\n"
 "PO-Revision-Date: 2023-08-26 23:09+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: https://discord.com/"
@@ -2779,11 +2779,11 @@ msgstr ""
 msgid ""
 "The creatures are swayed by your diplomatic\n"
 "tongue, and make you an offer:\n"
-" \n"
+"\n"
 msgstr ""
 "Przeciwnicy są pod wrażeniem twej dyplomatycznej przemowy i składają ci "
 "ofertę:\n"
-" \n"
+"\n"
 
 msgid ""
 "%{offer} of the %{total} %{monster} will join your army, and the rest will "
@@ -3302,6 +3302,13 @@ msgstr "Wczytaj plik:"
 msgid "Accept the choice made."
 msgstr "Zastosuj wprowadzone zmiany."
 
+msgid "Unknown Hero"
+msgstr "Nieznany bohater"
+
+#, fuzzy
+msgid "%{color} %{race} hero"
+msgstr "%{color} gracz"
+
 msgid "Select Skill:"
 msgstr "Wybierz umiejętność:"
 
@@ -3626,6 +3633,12 @@ msgstr ""
 msgid "Choose a tile which does not contain any objects."
 msgstr ""
 
+msgid "Heroes"
+msgstr "Bohaterowie"
+
+msgid "Heroes cannot be placed on water."
+msgstr ""
+
 msgid "Ocean Objects"
 msgstr ""
 
@@ -3658,9 +3671,6 @@ msgstr ""
 
 msgid "Towns"
 msgstr "Miasta"
-
-msgid "Heroes"
-msgstr "Bohaterowie"
 
 msgid "Artifacts"
 msgstr "Artefakty"
@@ -4128,9 +4138,6 @@ msgstr "Projekt opakowania"
 msgid "Your Name"
 msgstr "Twoje imię"
 
-msgid "Unknown Hero"
-msgstr "Nieznany bohater"
-
 msgid "Standard"
 msgstr "Standard"
 
@@ -4578,6 +4585,13 @@ msgstr ""
 " po lewej stronie na ekranie głównym lub klikając przycisk Konfiguruj. \n"
 "\n"
 "Przyjemnej gry!"
+
+msgid "Editor"
+msgstr ""
+
+#, fuzzy
+msgid "The Editor requires \"The Price of Loyalty\" expansion files to work."
+msgstr "Jedna z czterech kampani z rozszerzenia Cena Lojalności."
 
 msgid "Quit Heroes of Might and Magic II and return to the operating system."
 msgstr ""
@@ -5686,10 +5700,10 @@ msgstr ""
 msgid ""
 "You approach the hut and observe a witch inside studying an ancient tome on "
 "%{skill}.\n"
-" \n"
+"\n"
 msgstr ""
 "Wchodzisz do chaty i widzisz wiedźmę uczącą umiejętności %{skill}.\n"
-" \n"
+"\n"
 
 msgid ""
 "As you approach, she turns and focuses her one glass eye on you.\n"
@@ -6801,15 +6815,15 @@ msgstr ""
 
 msgid ""
 "The Sphinx asks you the following riddle:\n"
-" \n"
+"\n"
 "'%{riddle}'\n"
-" \n"
+"\n"
 "Your answer?"
 msgstr ""
 "Sfinks zadaje ci następującą zagadkę: \n"
-" \n"
+"\n"
 "'%{riddle}'\n"
-" \n"
+"\n"
 " Twoja odpowiedź?"
 
 msgid ""
@@ -6924,11 +6938,11 @@ msgstr "Ten bohater znajduje się już w zamku, więc nie możesz rzucić zaklę
 
 msgid ""
 "The nearest town is %{town}.\n"
-" \n"
+"\n"
 "This town is occupied by your hero %{hero}."
 msgstr ""
 "Najbliższym miastem jest %{town}.\n"
-" \n"
+"\n"
 "To miasto jest zajęte przez twojego bohatera %{hero}."
 
 msgid "This spell is already in effect."

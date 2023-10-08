@@ -163,7 +163,10 @@ namespace Maps
     void setTerrainOnTiles( const int32_t startTileId, const int32_t endTileId, const int groundId );
     bool updateRoadOnTile( Tiles & tile, const bool setRoad );
     bool updateStreamOnTile( Tiles & tile, const bool setStream );
+
     void setRandomMonsterOnTile( Tiles & tile, const Monster & mons );
+    void setEditorHeroOnTile( Tiles & tile, const int32_t heroType );
+
     bool removeMonsterFromTile( Tiles & tile );
     bool eraseObjectsOnTiles( const int32_t startTileId, const int32_t endTileId, const uint8_t objectsToErase );
     bool eraseOjects( Tiles & tile, const uint8_t objectsToErase );

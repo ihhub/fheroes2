@@ -381,7 +381,7 @@ void ShowNewWeekDialog()
     // head
     std::string message = isNewMonth ? _( "Astrologers proclaim the Month of the %{name}." ) : _( "Astrologers proclaim the Week of the %{name}." );
     StringReplace( message, "%{name}", week.GetName() );
-    message += "\n \n";
+    message += "\n\n";
 
     if ( week.GetType() == WeekName::MONSTERS ) {
         const Monster monster( week.GetMonster() );
@@ -396,7 +396,7 @@ void ShowNewWeekDialog()
                 message += _( "%{monster} growth +%{count}." );
             StringReplaceWithLowercase( message, "%{monster}", monster.GetMultiName() );
             StringReplace( message, "%{count}", count );
-            message += "\n \n";
+            message += "\n\n";
         }
     }
 
