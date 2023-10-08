@@ -32,6 +32,7 @@
 #include <utility>
 
 #include "agg_image.h"
+#include "color.h"
 #include "direction.h"
 #include "game.h"
 #include "heroes.h"
@@ -44,6 +45,7 @@
 #include "maps_tiles_helper.h"
 #include "monster.h"
 #include "monster_anim.h"
+#include "race.h"
 #include "spell.h"
 #include "til.h"
 #include "ui_object_rendering.h"
@@ -264,20 +266,22 @@ namespace
     }
 #endif
 
-    std::pair<uint32_t, uint32_t> GetMonsterSpriteIndices( const Maps::Tiles & tile, uint32_t monsterIndex )
+    std::pair<uint32_t, uint32_t> GetMonsterSpriteIndices( const Maps::Tiles & tile, uint32_t monsterIndex, const bool isEditorMode )
     {
         const int tileIndex = tile.GetIndex();
         int attackerIndex = -1;
 
         // scan for a hero around
-        for ( const int32_t idx : Maps::ScanAroundObject( tileIndex, MP2::OBJ_HEROES, false ) ) {
-            const Heroes * hero = world.GetTiles( idx ).getHero();
-            assert( hero != nullptr );
+        if ( !isEditorMode ) {
+            for ( const int32_t idx : Maps::ScanAroundObject( tileIndex, MP2::OBJ_HEROES, false ) ) {
+                const Heroes * hero = world.GetTiles( idx ).getHero();
+                assert( hero != nullptr );
 
-            // hero is going to attack monsters on this tile
-            if ( hero->GetAttackedMonsterTileIndex() == tileIndex ) {
-                attackerIndex = idx;
-                break;
+                // hero is going to attack monsters on this tile
+                if ( hero->GetAttackedMonsterTileIndex() == tileIndex ) {
+                    attackerIndex = idx;
+                    break;
+                }
             }
         }
 
@@ -304,6 +308,302 @@ namespace
                 = monsterIndex * 9 + 1 + monsterAnimationSequence[( Game::getAdventureMapAnimationIndex() + mp.x * mp.y ) % monsterAnimationSequence.size()];
         }
         return spriteIndices;
+    }
+
+    bool doesHeroImageNeedToBeReflected( const int directionFrom )
+    {
+        switch ( directionFrom ) {
+        case Direction::TOP_LEFT:
+        case Direction::LEFT:
+        case Direction::BOTTOM_LEFT:
+            return true;
+
+        default:
+            break;
+        }
+
+        return false;
+    }
+
+    void getHeroSpriteInfo( const Heroes & hero, const int heroMovementIndex, const bool isHeroChangingDirection, int & icnId, uint32_t & icnIndex )
+    {
+        icnId = ICN::UNKNOWN;
+
+        if ( hero.isShipMaster() ) {
+            icnId = ICN::BOAT32;
+        }
+        else {
+            const int raceId = hero.GetRace();
+            switch ( raceId ) {
+            case Race::KNGT:
+                icnId = ICN::KNGT32;
+                break;
+            case Race::BARB:
+                icnId = ICN::BARB32;
+                break;
+            case Race::SORC:
+                icnId = ICN::SORC32;
+                break;
+            case Race::WRLK:
+                icnId = ICN::WRLK32;
+                break;
+            case Race::WZRD:
+                icnId = ICN::WZRD32;
+                break;
+            case Race::NECR:
+                icnId = ICN::NECR32;
+                break;
+
+            default:
+                // Did you add a new race? Add logic above!
+                assert( 0 );
+                DEBUG_LOG( DBG_GAME, DBG_WARN, "Unknown hero race " << raceId )
+                break;
+            }
+        }
+
+        icnIndex = 0;
+
+        if ( isHeroChangingDirection ) {
+            icnIndex = 45;
+        }
+        else {
+            const int heroDirection = hero.GetDirection();
+            switch ( heroDirection ) {
+            case Direction::TOP:
+                icnIndex = 0;
+                break;
+            case Direction::TOP_RIGHT:
+                icnIndex = 9;
+                break;
+            case Direction::RIGHT:
+                icnIndex = 18;
+                break;
+            case Direction::BOTTOM_RIGHT:
+                icnIndex = 27;
+                break;
+            case Direction::BOTTOM:
+                icnIndex = 36;
+                break;
+            case Direction::BOTTOM_LEFT:
+                icnIndex = 27;
+                break;
+            case Direction::LEFT:
+                icnIndex = 18;
+                break;
+            case Direction::TOP_LEFT:
+                icnIndex = 9;
+                break;
+
+            default:
+                DEBUG_LOG( DBG_GAME, DBG_WARN, "Unknown hero direction" << heroDirection )
+                break;
+            }
+        }
+
+        icnIndex = icnIndex + ( heroMovementIndex % Heroes::heroFrameCountPerTile );
+    }
+
+    void getFlagSpriteInfo( const Heroes & hero, const int heroMovementIndex, const bool isHeroChangingDirection, fheroes2::Point & flagOffset, int & icnId,
+                            uint32_t & icnIndex )
+    {
+        icnId = ICN::UNKNOWN;
+
+        const int heroColor = hero.GetColor();
+        switch ( heroColor ) {
+        case Color::BLUE:
+            icnId = hero.isShipMaster() ? ICN::B_BFLG32 : ICN::B_FLAG32;
+            break;
+        case Color::GREEN:
+            icnId = hero.isShipMaster() ? ICN::G_BFLG32 : ICN::G_FLAG32;
+            break;
+        case Color::RED:
+            icnId = hero.isShipMaster() ? ICN::R_BFLG32 : ICN::R_FLAG32;
+            break;
+        case Color::YELLOW:
+            icnId = hero.isShipMaster() ? ICN::Y_BFLG32 : ICN::Y_FLAG32;
+            break;
+        case Color::ORANGE:
+            icnId = hero.isShipMaster() ? ICN::O_BFLG32 : ICN::O_FLAG32;
+            break;
+        case Color::PURPLE:
+            icnId = hero.isShipMaster() ? ICN::P_BFLG32 : ICN::P_FLAG32;
+            break;
+
+        default:
+            DEBUG_LOG( DBG_GAME, DBG_WARN, "Unknown hero color " << heroColor )
+            break;
+        }
+
+        icnIndex = 0;
+
+        if ( isHeroChangingDirection ) {
+            icnIndex = 45;
+        }
+        else {
+            const int heroDirection = hero.GetDirection();
+            switch ( heroDirection ) {
+            case Direction::TOP:
+                icnIndex = 0;
+                break;
+            case Direction::TOP_RIGHT:
+                icnIndex = 9;
+                break;
+            case Direction::RIGHT:
+                icnIndex = 18;
+                break;
+            case Direction::BOTTOM_RIGHT:
+                icnIndex = 27;
+                break;
+            case Direction::BOTTOM:
+                icnIndex = 36;
+                break;
+            case Direction::BOTTOM_LEFT:
+                icnIndex = 27;
+                break;
+            case Direction::LEFT:
+                icnIndex = 18;
+                break;
+            case Direction::TOP_LEFT:
+                icnIndex = 9;
+                break;
+
+            default:
+                DEBUG_LOG( DBG_GAME, DBG_WARN, "Unknown hero direction " << heroDirection )
+                break;
+            }
+        }
+
+        const int frameId = heroMovementIndex % Heroes::heroFrameCountPerTile;
+        icnIndex = icnIndex + frameId;
+
+        if ( !hero.isMoveEnabled() ) {
+            static const fheroes2::Point offsetTop[Heroes::heroFrameCountPerTile]
+                = { { 0, 0 }, { 0, 2 }, { 0, 3 }, { 0, 2 }, { 0, 0 }, { 0, 1 }, { 0, 3 }, { 0, 2 }, { 0, 1 } };
+            static const fheroes2::Point offsetBottom[Heroes::heroFrameCountPerTile]
+                = { { 0, 0 }, { 0, -1 }, { 0, -2 }, { 0, 0 }, { 0, -1 }, { 0, -2 }, { 0, -3 }, { 0, 0 }, { 0, -1 } };
+            static const fheroes2::Point offsetSideways[Heroes::heroFrameCountPerTile]
+                = { { 0, 0 }, { -1, 0 }, { 0, 0 }, { 1, 0 }, { 1, -1 }, { 2, -1 }, { 1, 0 }, { 0, 0 }, { 1, 0 } };
+            static const fheroes2::Point offsetTopSideways[Heroes::heroFrameCountPerTile]
+                = { { 0, 0 }, { -1, 0 }, { 0, 0 }, { -1, -1 }, { -2, -1 }, { -2, 0 }, { -1, 0 }, { 0, 0 }, { 1, 0 } };
+            static const fheroes2::Point offsetBottomSideways[Heroes::heroFrameCountPerTile]
+                = { { 0, 0 }, { -1, 0 }, { 0, -1 }, { 2, -2 }, { 0, -2 }, { -1, -3 }, { -1, -2 }, { -1, -1 }, { 1, 0 } };
+
+            static const fheroes2::Point offsetShipTopBottom[Heroes::heroFrameCountPerTile]
+                = { { 0, -1 }, { 0, 0 }, { 0, 1 }, { 0, 1 }, { 0, 1 }, { 0, 0 }, { 0, 1 }, { 0, 1 }, { 0, 1 } };
+            static const fheroes2::Point offsetShipSideways[Heroes::heroFrameCountPerTile]
+                = { { 0, -2 }, { 0, -1 }, { 0, 0 }, { 0, 1 }, { 0, 0 }, { 0, -1 }, { 0, 0 }, { 0, -1 }, { 0, 1 } };
+            static const fheroes2::Point offsetShipTopSideways[Heroes::heroFrameCountPerTile]
+                = { { 0, 0 }, { 0, -1 }, { 0, 0 }, { 0, 1 }, { 0, 0 }, { 0, -1 }, { 0, 0 }, { 0, -1 }, { 0, 1 } };
+            static const fheroes2::Point offsetShipBottomSideways[Heroes::heroFrameCountPerTile]
+                = { { 0, -2 }, { 0, 0 }, { 0, 0 }, { 0, 0 }, { 0, 0 }, { 0, 0 }, { 0, 0 }, { 0, 0 }, { 0, 0 } };
+
+            const int heroDirection = hero.GetDirection();
+            switch ( heroDirection ) {
+            case Direction::TOP:
+                flagOffset = hero.isShipMaster() ? offsetShipTopBottom[frameId] : offsetTop[frameId];
+                break;
+            case Direction::BOTTOM:
+                flagOffset = hero.isShipMaster() ? offsetShipTopBottom[frameId] : offsetBottom[frameId];
+                break;
+            case Direction::RIGHT:
+            case Direction::LEFT:
+                flagOffset = hero.isShipMaster() ? offsetShipSideways[frameId] : offsetSideways[frameId];
+                break;
+            case Direction::TOP_RIGHT:
+            case Direction::TOP_LEFT:
+                flagOffset = hero.isShipMaster() ? offsetShipTopSideways[frameId] : offsetTopSideways[frameId];
+                break;
+            case Direction::BOTTOM_RIGHT:
+            case Direction::BOTTOM_LEFT:
+                flagOffset = hero.isShipMaster() ? offsetShipBottomSideways[frameId] : offsetBottomSideways[frameId];
+                break;
+
+            default:
+                DEBUG_LOG( DBG_GAME, DBG_WARN, "Unknown hero direction " << heroDirection )
+                break;
+            }
+        }
+    }
+
+    void getShadowSpriteInfo( const Heroes & hero, const int heroMovementIndex, int & icnId, uint32_t & icnIndex )
+    {
+        const int32_t heroDirection = hero.GetDirection();
+        const bool isOnBoat = hero.isShipMaster();
+
+        switch ( heroDirection ) {
+        case Direction::TOP:
+            icnIndex = 0;
+            break;
+        case Direction::TOP_RIGHT:
+            icnIndex = 9;
+            break;
+        case Direction::RIGHT:
+            icnIndex = 18;
+            break;
+        case Direction::BOTTOM_RIGHT:
+            icnIndex = 27;
+            break;
+        case Direction::BOTTOM:
+            icnIndex = 36;
+            break;
+        case Direction::BOTTOM_LEFT:
+            icnIndex = isOnBoat ? 45 : 77;
+            break;
+        case Direction::LEFT:
+            icnIndex = isOnBoat ? 54 : 68;
+            break;
+        case Direction::TOP_LEFT:
+            icnIndex = isOnBoat ? 63 : 59;
+            break;
+        default:
+            DEBUG_LOG( DBG_GAME, DBG_WARN, "Unknown hero direction " << heroDirection )
+            break;
+        }
+
+        icnId = isOnBoat ? ICN::BOATSHAD : ICN::SHADOW32;
+
+        icnIndex += ( heroMovementIndex % Heroes::heroFrameCountPerTile );
+    }
+
+    void getFrothSpriteInfo( const Heroes & hero, const int heroMovementIndex, int & icnId, uint32_t & icnIndex )
+    {
+        icnIndex = 0;
+
+        const int heroDirection = hero.GetDirection();
+        switch ( heroDirection ) {
+        case Direction::TOP:
+            icnIndex = 0;
+            break;
+        case Direction::TOP_RIGHT:
+            icnIndex = 9;
+            break;
+        case Direction::RIGHT:
+            icnIndex = 18;
+            break;
+        case Direction::BOTTOM_RIGHT:
+            icnIndex = 27;
+            break;
+        case Direction::BOTTOM:
+            icnIndex = 36;
+            break;
+        case Direction::BOTTOM_LEFT:
+            icnIndex = 27;
+            break;
+        case Direction::LEFT:
+            icnIndex = 18;
+            break;
+        case Direction::TOP_LEFT:
+            icnIndex = 9;
+            break;
+
+        default:
+            DEBUG_LOG( DBG_GAME, DBG_WARN, "Unknown hero direction " << heroDirection )
+            break;
+        }
+
+        icnId = ICN::FROTH;
+        icnIndex = icnIndex + ( heroMovementIndex % Heroes::heroFrameCountPerTile );
     }
 }
 
@@ -696,12 +996,12 @@ namespace Maps
         }
     }
 
-    std::vector<fheroes2::ObjectRenderingInfo> getMonsterSpritesPerTile( const Tiles & tile )
+    std::vector<fheroes2::ObjectRenderingInfo> getMonsterSpritesPerTile( const Tiles & tile, const bool isEditorMode )
     {
         assert( tile.GetObject() == MP2::OBJ_MONSTER );
 
         const Monster monster = getMonsterFromTile( tile );
-        const std::pair<uint32_t, uint32_t> spriteIndices = GetMonsterSpriteIndices( tile, monster.GetSpriteIndex() );
+        const std::pair<uint32_t, uint32_t> spriteIndices = GetMonsterSpriteIndices( tile, monster.GetSpriteIndex(), isEditorMode );
 
         const int icnId{ ICN::MINI_MONSTER_IMAGE };
         const fheroes2::Sprite & monsterSprite = fheroes2::AGG::GetICN( icnId, spriteIndices.first );
@@ -739,12 +1039,12 @@ namespace Maps
         return objectInfo;
     }
 
-    std::vector<fheroes2::ObjectRenderingInfo> getMonsterShadowSpritesPerTile( const Tiles & tile )
+    std::vector<fheroes2::ObjectRenderingInfo> getMonsterShadowSpritesPerTile( const Tiles & tile, const bool isEditorMode )
     {
         assert( tile.GetObject() == MP2::OBJ_MONSTER );
 
         const Monster monster = getMonsterFromTile( tile );
-        const std::pair<uint32_t, uint32_t> spriteIndices = GetMonsterSpriteIndices( tile, monster.GetSpriteIndex() );
+        const std::pair<uint32_t, uint32_t> spriteIndices = GetMonsterSpriteIndices( tile, monster.GetSpriteIndex(), isEditorMode );
 
         const int icnId{ ICN::MINI_MONSTER_SHADOW };
         const fheroes2::Sprite & monsterSprite = fheroes2::AGG::GetICN( icnId, spriteIndices.first );
@@ -873,6 +1173,144 @@ namespace Maps
         }
         default:
             break;
+        }
+
+        return objectInfo;
+    }
+
+    std::vector<fheroes2::ObjectRenderingInfo> getHeroSpritesPerTile( const Heroes & hero )
+    {
+        // Reflected hero sprite should be shifted by 1 pixel to right.
+        const bool reflect = doesHeroImageNeedToBeReflected( hero.GetDirection() );
+
+        int flagFrameID = hero.GetSpriteIndex();
+        if ( !hero.isMoveEnabled() ) {
+            flagFrameID = hero.isShipMaster() ? 0 : static_cast<int>( Game::getAdventureMapAnimationIndex() );
+        }
+
+        fheroes2::Point offset;
+        // Boat sprite has to be shifted so it matches other boats.
+        if ( hero.isShipMaster() ) {
+            offset.y -= 11;
+        }
+        else {
+            offset.y -= 1;
+        }
+
+        // Apply hero offset when he moves from one tile to another.
+        offset += hero.getCurrentPixelOffset();
+
+        int icnId{ 0 };
+        uint32_t icnIndex{ 0 };
+        getHeroSpriteInfo( hero, hero.GetSpriteIndex(), false, icnId, icnIndex );
+
+        const fheroes2::Sprite & spriteHero = fheroes2::AGG::GetICN( icnId, icnIndex );
+        const fheroes2::Point heroSpriteOffset( offset.x + ( reflect ? ( TILEWIDTH + 1 - spriteHero.x() - spriteHero.width() ) : spriteHero.x() ),
+                                                offset.y + spriteHero.y() + TILEWIDTH );
+
+        std::vector<fheroes2::Point> outputSquareInfo;
+        std::vector<std::pair<fheroes2::Point, fheroes2::Rect>> outputImageInfo;
+        fheroes2::DivideImageBySquares( heroSpriteOffset, spriteHero, TILEWIDTH, outputSquareInfo, outputImageInfo );
+
+        assert( outputSquareInfo.size() == outputImageInfo.size() );
+
+        std::vector<fheroes2::ObjectRenderingInfo> objectInfo;
+        for ( size_t i = 0; i < outputSquareInfo.size(); ++i ) {
+            objectInfo.emplace_back( outputSquareInfo[i], outputImageInfo[i].first, outputImageInfo[i].second, icnId, icnIndex, reflect, static_cast<uint8_t>( 255 ) );
+        }
+
+        outputSquareInfo.clear();
+        outputImageInfo.clear();
+
+        fheroes2::Point flagOffset;
+        getFlagSpriteInfo( hero, flagFrameID, false, flagOffset, icnId, icnIndex );
+
+        const fheroes2::Sprite & spriteFlag = fheroes2::AGG::GetICN( icnId, icnIndex );
+        const fheroes2::Point flagSpriteOffset( offset.x
+                                                    + ( reflect ? ( TILEWIDTH - spriteFlag.x() - flagOffset.x - spriteFlag.width() ) : spriteFlag.x() + flagOffset.x ),
+                                                offset.y + spriteFlag.y() + flagOffset.y + TILEWIDTH );
+
+        fheroes2::DivideImageBySquares( flagSpriteOffset, spriteFlag, TILEWIDTH, outputSquareInfo, outputImageInfo );
+
+        assert( outputSquareInfo.size() == outputImageInfo.size() );
+
+        for ( size_t i = 0; i < outputSquareInfo.size(); ++i ) {
+            objectInfo.emplace_back( outputSquareInfo[i], outputImageInfo[i].first, outputImageInfo[i].second, icnId, icnIndex, reflect, static_cast<uint8_t>( 255 ) );
+        }
+
+        outputSquareInfo.clear();
+        outputImageInfo.clear();
+
+        if ( hero.isShipMaster() && hero.isMoveEnabled() && hero.isInDeepOcean() ) {
+            // TODO: draw froth for all boats in deep water, not only for a moving boat.
+            getFrothSpriteInfo( hero, hero.GetSpriteIndex(), icnId, icnIndex );
+            const fheroes2::Sprite & spriteFroth = fheroes2::AGG::GetICN( icnId, icnIndex );
+            const fheroes2::Point frothSpriteOffset( offset.x + ( reflect ? TILEWIDTH - spriteFroth.x() - spriteFroth.width() : spriteFroth.x() ),
+                                                     offset.y + spriteFroth.y() + TILEWIDTH );
+
+            fheroes2::DivideImageBySquares( frothSpriteOffset, spriteFroth, TILEWIDTH, outputSquareInfo, outputImageInfo );
+
+            for ( size_t i = 0; i < outputSquareInfo.size(); ++i ) {
+                objectInfo.emplace_back( outputSquareInfo[i], outputImageInfo[i].first, outputImageInfo[i].second, icnId, icnIndex, reflect,
+                                         static_cast<uint8_t>( 255 ) );
+            }
+        }
+
+        return objectInfo;
+    }
+
+    std::vector<fheroes2::ObjectRenderingInfo> getHeroShadowSpritesPerTile( const Heroes & hero )
+    {
+        fheroes2::Point offset;
+        // Boat sprite has to be shifted so it matches other boats.
+        if ( hero.isShipMaster() ) {
+            offset.y -= 11;
+        }
+
+        // Apply hero offset when he moves from one tile to another.
+        offset += hero.getCurrentPixelOffset();
+
+        int icnId{ 0 };
+        uint32_t icnIndex{ 0 };
+        getShadowSpriteInfo( hero, hero.GetSpriteIndex(), icnId, icnIndex );
+
+        const fheroes2::Sprite & spriteShadow = fheroes2::AGG::GetICN( icnId, icnIndex );
+        const fheroes2::Point shadowSpriteOffset( offset.x + spriteShadow.x(), offset.y + spriteShadow.y() + TILEWIDTH );
+
+        std::vector<fheroes2::Point> outputSquareInfo;
+        std::vector<std::pair<fheroes2::Point, fheroes2::Rect>> outputImageInfo;
+        fheroes2::DivideImageBySquares( shadowSpriteOffset, spriteShadow, TILEWIDTH, outputSquareInfo, outputImageInfo );
+
+        assert( outputSquareInfo.size() == outputImageInfo.size() );
+
+        std::vector<fheroes2::ObjectRenderingInfo> objectInfo;
+        for ( size_t i = 0; i < outputSquareInfo.size(); ++i ) {
+            objectInfo.emplace_back( outputSquareInfo[i], outputImageInfo[i].first, outputImageInfo[i].second, icnId, icnIndex, false, static_cast<uint8_t>( 255 ) );
+        }
+
+        return objectInfo;
+    }
+
+    std::vector<fheroes2::ObjectRenderingInfo> getEditorHeroSpritesPerTile( const Tiles & tile )
+    {
+        assert( tile.GetObject() == MP2::OBJ_HEROES );
+
+        const uint32_t icnIndex = tile.GetObjectSpriteIndex();
+        const int icnId{ ICN::MINIHERO };
+
+        const fheroes2::Sprite & boatSprite = fheroes2::AGG::GetICN( icnId, icnIndex );
+
+        const fheroes2::Point boatSpriteOffset{ 0, 32 - 50 };
+
+        std::vector<fheroes2::Point> outputSquareInfo;
+        std::vector<std::pair<fheroes2::Point, fheroes2::Rect>> outputImageInfo;
+        fheroes2::DivideImageBySquares( boatSpriteOffset, boatSprite, TILEWIDTH, outputSquareInfo, outputImageInfo );
+
+        assert( outputSquareInfo.size() == outputImageInfo.size() );
+
+        std::vector<fheroes2::ObjectRenderingInfo> objectInfo;
+        for ( size_t i = 0; i < outputSquareInfo.size(); ++i ) {
+            objectInfo.emplace_back( outputSquareInfo[i], outputImageInfo[i].first, outputImageInfo[i].second, icnId, icnIndex, false, static_cast<uint8_t>( 255 ) );
         }
 
         return objectInfo;
