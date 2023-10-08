@@ -110,9 +110,9 @@ namespace Interface
             return _monsterId;
         }
 
-        int32_t getHeroId() const
+        int32_t getHeroType() const
         {
-            return _heroId;
+            return _heroType;
         }
 
     private:
@@ -215,6 +215,6 @@ namespace Interface
 
         int32_t _monsterId{ Monster::UNKNOWN };
 
-        int32_t _heroId{ -1 };
+        int32_t _heroType{ -1 };
     };
 }

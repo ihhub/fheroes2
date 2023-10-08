@@ -3039,7 +3039,7 @@ namespace Maps
         tile.setObjectSpriteIndex( static_cast<TileImageIndexType>( monsSpriteIndex ) );
     }
 
-    void setEditorHeroOnTile( Tiles & tile, const int32_t heroId )
+    void setEditorHeroOnTile( Tiles & tile, const int32_t heroType )
     {
         tile.SetObject( MP2::OBJ_HEROES );
 
@@ -3055,8 +3055,8 @@ namespace Maps
         using TileImageIndexType = decltype( tile.GetObjectSpriteIndex() );
         static_assert( std::is_same_v<TileImageIndexType, uint8_t>, "Type of GetObjectSpriteIndex() has been changed, check the logic below" );
 
-        assert( heroId >= std::numeric_limits<TileImageIndexType>::min() && heroId <= std::numeric_limits<TileImageIndexType>::max() );
+        assert( heroType >= std::numeric_limits<TileImageIndexType>::min() && heroType <= std::numeric_limits<TileImageIndexType>::max() );
 
-        tile.setObjectSpriteIndex( static_cast<TileImageIndexType>( heroId ) );
+        tile.setObjectSpriteIndex( static_cast<TileImageIndexType>( heroType ) );
     }
 }

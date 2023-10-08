@@ -617,10 +617,10 @@ namespace Interface
             else if ( !Maps::isClearGround( tile ) ) {
                 fheroes2::showStandardTextMessage( _( "Heroes" ), _( "Choose a tile which does not contain any objects." ), Dialog::OK );
             }
-            else if ( _editorPanel.getHeroId() >= 0 ) {
+            else if ( _editorPanel.getHeroType() >= 0 ) {
                 const fheroes2::ActionCreator action( _historyManager );
 
-                Maps::setEditorHeroOnTile( tile, _editorPanel.getHeroId() );
+                Maps::setEditorHeroOnTile( tile, _editorPanel.getHeroType() );
 
                 _redraw |= mapUpdateFlags;
             }

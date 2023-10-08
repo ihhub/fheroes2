@@ -166,5 +166,5 @@ namespace Maps
 
     void setRandomMonsterOnTile( Tiles & tile, const Monster & mons );
 
-    void setEditorHeroOnTile( Tiles & tile, const int32_t heroId );
+    void setEditorHeroOnTile( Tiles & tile, const int32_t heroType );
 }

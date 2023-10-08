@@ -458,13 +458,13 @@ namespace Interface
                 }
             }
             else if ( le.MouseClickLeft( _objectButtonsRect[Brush::HEROES] ) ) {
-                const int32_t heroId = Dialog::selectMiniHero( _heroId );
-                if ( heroId >= 0 ) {
-                    _heroId = heroId;
+                const int32_t heroType = Dialog::selectMiniHero( _heroType );
+                if ( heroType >= 0 ) {
+                    _heroType = heroType;
 
-                    _interface.setCursorUpdater( [heroId]( const int32_t /*tileIndex*/ ) {
+                    _interface.setCursorUpdater( [heroType]( const int32_t /*tileIndex*/ ) {
                         // TODO: render ICN::MINIHERO from the existing hero images.
-                        const fheroes2::Sprite & image = fheroes2::AGG::GetICN( ICN::MINIHERO, heroId );
+                        const fheroes2::Sprite & image = fheroes2::AGG::GetICN( ICN::MINIHERO, heroType );
 
                         // Mini-hero images contain a pole with a flag.
                         // This causes a situation that a selected tile does not properly correspond to the position of cursor.
