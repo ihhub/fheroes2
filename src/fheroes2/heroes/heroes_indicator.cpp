@@ -103,9 +103,9 @@ void LuckIndicator::Redraw()
 
     descriptions.clear();
     descriptions.append( Luck::Description( luck ) );
-    descriptions.append( "\n \n" );
+    descriptions.append( "\n\n" );
     descriptions.append( _( "Current Luck Modifiers:" ) );
-    descriptions.append( "\n \n" );
+    descriptions.append( "\n\n" );
 
     const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::HSICONS, ( 0 > luck ? 3 : ( 0 < luck ? 2 : 6 ) ) );
     const int inter = 6;
@@ -154,16 +154,16 @@ void MoraleIndicator::Redraw()
 
     descriptions.clear();
     descriptions.append( Morale::Description( morale ) );
-    descriptions.append( "\n \n" );
+    descriptions.append( "\n\n" );
     descriptions.append( _( "Current Morale Modifiers:" ) );
-    descriptions.append( "\n \n" );
+    descriptions.append( "\n\n" );
 
     if ( modificators.empty() )
         descriptions.append( _( "None" ) );
     else
         descriptions.append( modificators );
 
-    descriptions.append( "\n \n" );
+    descriptions.append( "\n\n" );
     if ( hero->GetArmy().AllTroopsAreUndead() ) {
         descriptions.append( _( "Entire army is undead, so morale does not apply." ) );
     }
