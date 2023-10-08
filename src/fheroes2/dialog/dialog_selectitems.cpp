@@ -574,9 +574,7 @@ int Dialog::selectMiniHero( const int heroId )
     MiniHeroSelection listbox( { 350, fheroes2::Display::instance().height() - 200 } );
 
     listbox.SetListContent( heroes );
-    if ( heroId != Heroes::UNKNOWN ) {
-        listbox.SetCurrent( heroId );
-    }
+    listbox.SetCurrent( heroId );
 
     const int32_t result = listbox.selectItemsEventProcessing( _( "Select Hero:" ) );
 
