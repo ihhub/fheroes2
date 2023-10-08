@@ -66,8 +66,6 @@ namespace Maps
 
         ~TilesAddon() = default;
 
-        TilesAddon & operator=( const TilesAddon & ) = delete;
-
         bool operator==( const TilesAddon & addon ) const
         {
             return ( _uid == addon._uid ) && ( _layerType == addon._layerType ) && ( _objectIcnType == addon._objectIcnType ) && ( _imageIndex == addon._imageIndex );
@@ -96,8 +94,7 @@ namespace Maps
         bool operator==( const Tiles & tile ) const
         {
             return ( _addonBottomLayer == tile._addonBottomLayer ) && ( _addonTopLayer == tile._addonTopLayer ) && ( _index == tile._index )
-                   && ( _terrainImageIndex == tile._terrainImageIndex ) && ( _terrainFlags == tile._terrainFlags ) && ( _uid == tile._uid )
-                   && ( _layerType == tile._layerType ) && ( _objectIcnType == tile._objectIcnType ) && ( _imageIndex == tile._imageIndex )
+                   && ( _terrainImageIndex == tile._terrainImageIndex ) && ( _terrainFlags == tile._terrainFlags ) && ( _mainAddon == tile._mainAddon )
                    && ( _mainObjectType == tile._mainObjectType ) && ( _metadata == tile._metadata ) && ( _tilePassabilityDirections == tile._tilePassabilityDirections )
                    && ( _isTileMarkedAsRoad == tile._isTileMarkedAsRoad ) && ( _occupantHeroId == tile._occupantHeroId );
         }
@@ -120,37 +117,37 @@ namespace Maps
 
         MP2::ObjectIcnType getObjectIcnType() const
         {
-            return _objectIcnType;
+            return _mainAddon._objectIcnType;
         }
 
         void setObjectIcnType( const MP2::ObjectIcnType type )
         {
-            _objectIcnType = type;
+            _mainAddon._objectIcnType = type;
         }
 
         uint8_t GetObjectSpriteIndex() const
         {
-            return _imageIndex;
+            return _mainAddon._imageIndex;
         }
 
         void setObjectSpriteIndex( const uint8_t index )
         {
-            _imageIndex = index;
+            _mainAddon._imageIndex = index;
         }
 
         uint32_t GetObjectUID() const
         {
-            return _uid;
+            return _mainAddon._uid;
         }
 
         void setObjectUID( const uint32_t uid )
         {
-            _uid = uid;
+            _mainAddon._uid = uid;
         }
 
         uint8_t getLayerType() const
         {
-            return _layerType;
+            return _mainAddon._layerType;
         }
 
         uint16_t GetPassable() const
@@ -222,8 +219,8 @@ namespace Maps
 
         void resetObjectSprite()
         {
-            _objectIcnType = MP2::OBJ_ICN_TYPE_UNKNOWN;
-            _imageIndex = 255;
+            _mainAddon._objectIcnType = MP2::OBJ_ICN_TYPE_UNKNOWN;
+            _mainAddon._imageIndex = 255;
         }
 
         void FixObject();
@@ -389,17 +386,7 @@ namespace Maps
 
         uint8_t _terrainFlags{ 0 };
 
-        // Unique identifier of an object. UID can be shared among multiple object parts if an object is bigger than 1 tile.
-        uint32_t _uid{ 0 };
-
-        // Layer type shows how the object is rendered on Adventure Map. See ObjectLayerType enumeration.
-        uint8_t _layerType{ OBJECT_LAYER };
-
-        // The type of object which correlates to ICN id. See MP2::getIcnIdFromObjectIcnType() function for more details.
-        MP2::ObjectIcnType _objectIcnType{ MP2::OBJ_ICN_TYPE_UNKNOWN };
-
-        // Image index to define which part of the object is. This index corresponds to an index in ICN objects storing multiple sprites (images).
-        uint8_t _imageIndex{ 255 };
+        TilesAddon _mainAddon;
 
         MP2::MapObjectType _mainObjectType{ MP2::OBJ_NONE };
 
