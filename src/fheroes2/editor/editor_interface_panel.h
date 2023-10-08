@@ -215,6 +215,6 @@ namespace Interface
 
         int32_t _monsterId{ Monster::UNKNOWN };
 
-        int32_t _heroId{ 0 };
+        int32_t _heroId{ -1 };
     };
 }
