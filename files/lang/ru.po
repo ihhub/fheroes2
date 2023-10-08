@@ -3635,7 +3635,7 @@ msgid "Monsters cannot be placed on water."
 msgstr "Монстров нельзя размещать на воде."
 
 msgid "Choose a tile which does not contain any objects."
-msgstr "Выберите ячейку карты, не содержащую никаких объектов."
+msgstr "Выберите ячейку карты, на которой нет никаких объектов."
 
 msgid "Ocean Objects"
 msgstr "Объекты океана"
