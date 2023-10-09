@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-08 14:08+0000\n"
+"POT-Creation-Date: 2023-10-09 14:08+0000\n"
 "PO-Revision-Date: 2023-09-12 11:08+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
@@ -6995,14 +6995,16 @@ msgid "There is no ocean adjacent to the hero where this spell will work."
 msgstr ""
 "Der er intet hav ved siden af helten, hvor denne besværgelse vil virke."
 
+#, fuzzy
 msgid ""
 "You do not own any town or castle that is not currently occupied by a hero. "
-"You cannot cast this spell."
+"This spell will have no effect."
 msgstr ""
 "Du ejer ikke nogen by eller en borg, der ikke i øjeblikket er besat af en "
 "helt. Du kan ikke kaste denne besværgelse."
 
-msgid "This hero is already in a town, so you cannot cast this spell."
+#, fuzzy
+msgid "This hero is already in a town, so this spell will have no effect."
 msgstr "Denne helt er allerede i en by, så du kan ikke kaste besværgelsen."
 
 msgid ""

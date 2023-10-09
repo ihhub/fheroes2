@@ -1502,12 +1502,12 @@ bool Army::isMeleeDominantArmy() const
     return meleeInfantry > other;
 }
 
-void Army::drawSingleDetailedMonsterLine( const Troops & troops, int32_t cx, int32_t cy, uint32_t width )
+void Army::drawSingleDetailedMonsterLine( const Troops & troops, int32_t cx, int32_t cy, int32_t width )
 {
     fheroes2::drawMiniMonsters( troops, cx, cy, width, 0, 0, false, true, false, 0, fheroes2::Display::instance() );
 }
 
-void Army::drawMultipleMonsterLines( const Troops & troops, int32_t posX, int32_t posY, uint32_t lineWidth, bool isCompact, const bool isDetailedView,
+void Army::drawMultipleMonsterLines( const Troops & troops, int32_t posX, int32_t posY, int32_t lineWidth, bool isCompact, const bool isDetailedView,
                                      const bool isGarrisonView /* = false */, const uint32_t thievesGuildsCount /* = 0 */ )
 {
     const uint32_t count = troops.GetOccupiedSlotCount();
