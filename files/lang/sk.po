@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-08 14:08+0000\n"
+"POT-Creation-Date: 2023-10-09 14:08+0000\n"
 "PO-Revision-Date: 2023-09-11 20:22+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -6867,13 +6867,15 @@ msgstr "Na zoslanie tohto kúzla už nie je k dispozícii žiadna loď."
 msgid "There is no ocean adjacent to the hero where this spell will work."
 msgstr "Vedľa hrdinu nie je miesto v oceáne, kde by toto kúzlo fungovalo."
 
+#, fuzzy
 msgid ""
 "You do not own any town or castle that is not currently occupied by a hero. "
-"You cannot cast this spell."
+"This spell will have no effect."
 msgstr ""
 "Momentálne nevlastníš žiadne mesto ani hrad, takže toto kúzlo nemôžeš zoslať."
 
-msgid "This hero is already in a town, so you cannot cast this spell."
+#, fuzzy
+msgid "This hero is already in a town, so this spell will have no effect."
 msgstr ""
 "Tento hrdina sa už v meste nachádza, takže toto kúzlo nie je možné zoslať."
 

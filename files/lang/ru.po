@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-08 14:08+0000\n"
+"POT-Creation-Date: 2023-10-09 14:08+0000\n"
 "PO-Revision-Date: 2023-10-08 13:59+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -6915,14 +6915,16 @@ msgid "There is no ocean adjacent to the hero where this spell will work."
 msgstr ""
 "Рядом с героем нет океана или места в океане, где сработает это заклинание."
 
+#, fuzzy
 msgid ""
 "You do not own any town or castle that is not currently occupied by a hero. "
-"You cannot cast this spell."
+"This spell will have no effect."
 msgstr ""
 "У Вас нет ни одного свободного города или замка. Потому это заклинание не "
 "сработает."
 
-msgid "This hero is already in a town, so you cannot cast this spell."
+#, fuzzy
+msgid "This hero is already in a town, so this spell will have no effect."
 msgstr "Этот герой уже в замке, поэтому Вам не произнести данное заклинание."
 
 msgid ""
