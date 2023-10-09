@@ -330,10 +330,15 @@ namespace
         return str;
     }
 
-    std::string showBarrierInfo( const Maps::Tiles & tile )
+    std::string showBarrierInfo( const Maps::Tiles & tile, const Kingdom & kingdom )
     {
         std::string str = _( "%{color} Barrier" );
         StringReplace( str, "%{color}", fheroes2::getBarrierColorName( getColorFromTile( tile ) ) );
+        const int32_t tentColor = getColorFromTile( tile );
+        if ( kingdom.IsVisitTravelersTent( tentColor ) ) {
+            str.append( "\n\n" );
+            str.append( _( "(tent visited)" ) );
+        }
 
         return str;
     }
@@ -538,7 +543,7 @@ namespace
             return showWitchHutInfo( tile, kingdom.isVisited( tile ) );
 
         case MP2::OBJ_BARRIER:
-            return showBarrierInfo( tile );
+            return showBarrierInfo( tile, kingdom );
 
         case MP2::OBJ_TRAVELLER_TENT:
             return showTentInfo( tile, kingdom );
