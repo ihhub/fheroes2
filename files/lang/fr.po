@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-08 07:12+0000\n"
+"POT-Creation-Date: 2023-10-08 14:08+0000\n"
 "PO-Revision-Date: 2022-12-18 13:48+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -3344,6 +3344,13 @@ msgstr "Fichier à charger :"
 msgid "Accept the choice made."
 msgstr "Confirmez le choix."
 
+msgid "Unknown Hero"
+msgstr "Héros inconnu"
+
+#, fuzzy
+msgid "%{color} %{race} hero"
+msgstr "Joueur %{color}"
+
 msgid "Select Skill:"
 msgstr "Choisir compétence :"
 
@@ -3684,6 +3691,12 @@ msgstr ""
 msgid "Choose a tile which does not contain any objects."
 msgstr ""
 
+msgid "Heroes"
+msgstr "Héros"
+
+msgid "Heroes cannot be placed on water."
+msgstr ""
+
 msgid "Ocean Objects"
 msgstr ""
 
@@ -3717,9 +3730,6 @@ msgstr ""
 #, fuzzy
 msgid "Towns"
 msgstr "Village"
-
-msgid "Heroes"
-msgstr "Héros"
 
 msgid "Artifacts"
 msgstr "Artéfacts"
@@ -4183,9 +4193,6 @@ msgstr "Conception du conditionnement"
 
 msgid "Your Name"
 msgstr "Votre nom"
-
-msgid "Unknown Hero"
-msgstr "Héros inconnu"
 
 msgid "Standard"
 msgstr "Jeu standard"

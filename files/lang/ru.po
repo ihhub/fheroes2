@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-08 07:12+0000\n"
+"POT-Creation-Date: 2023-10-08 14:08+0000\n"
 "PO-Revision-Date: 2023-10-08 13:59+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -3314,6 +3314,13 @@ msgstr "Загрузить файл:"
 msgid "Accept the choice made."
 msgstr "Подтвердить Ваш выбор."
 
+msgid "Unknown Hero"
+msgstr "Неизвестный герой"
+
+#, fuzzy
+msgid "%{color} %{race} hero"
+msgstr "%{color} игрок"
+
 msgid "Select Skill:"
 msgstr "Выберите навык:"
 
@@ -3637,6 +3644,13 @@ msgstr "Монстров нельзя размещать на воде."
 msgid "Choose a tile which does not contain any objects."
 msgstr "Выберите ячейку карты, на которой нет никаких объектов."
 
+msgid "Heroes"
+msgstr "Герои"
+
+#, fuzzy
+msgid "Heroes cannot be placed on water."
+msgstr "Монстров нельзя размещать на воде."
+
 msgid "Ocean Objects"
 msgstr "Объекты океана"
 
@@ -3666,9 +3680,6 @@ msgstr "Объекты побережья"
 
 msgid "Towns"
 msgstr "Города"
-
-msgid "Heroes"
-msgstr "Герои"
 
 msgid "Artifacts"
 msgstr "Артефакты"
@@ -4136,9 +4147,6 @@ msgstr "Дизайн упаковки"
 
 msgid "Your Name"
 msgstr "Ваше имя"
-
-msgid "Unknown Hero"
-msgstr "Неизвестный герой"
 
 msgid "Standard"
 msgstr "Обычная игра"

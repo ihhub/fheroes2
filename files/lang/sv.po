@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-08 07:12+0000\n"
+"POT-Creation-Date: 2023-10-08 14:08+0000\n"
 "PO-Revision-Date: 2023-09-17 19:00+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -3305,6 +3305,13 @@ msgstr "Fil att Ladda:"
 msgid "Accept the choice made."
 msgstr "Acceptera alla ändringar."
 
+msgid "Unknown Hero"
+msgstr "Okänd Hjälte"
+
+#, fuzzy
+msgid "%{color} %{race} hero"
+msgstr "%{color} spelare"
+
 msgid "Select Skill:"
 msgstr "Välj Förmåga:"
 
@@ -3633,6 +3640,12 @@ msgstr ""
 msgid "Choose a tile which does not contain any objects."
 msgstr ""
 
+msgid "Heroes"
+msgstr "Hjältar"
+
+msgid "Heroes cannot be placed on water."
+msgstr ""
+
 msgid "Ocean Objects"
 msgstr "Havsföremål"
 
@@ -3662,9 +3675,6 @@ msgstr "Strandföremål"
 
 msgid "Towns"
 msgstr "Städer"
-
-msgid "Heroes"
-msgstr "Hjältar"
 
 msgid "Artifacts"
 msgstr "Artefakter"
@@ -4127,9 +4137,6 @@ msgstr "Paketdesign"
 
 msgid "Your Name"
 msgstr "Ditt Namn"
-
-msgid "Unknown Hero"
-msgstr "Okänd Hjälte"
 
 msgid "Standard"
 msgstr "Standardspel"

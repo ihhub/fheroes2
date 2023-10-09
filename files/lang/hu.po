@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-08 07:12+0000\n"
+"POT-Creation-Date: 2023-10-08 14:08+0000\n"
 "PO-Revision-Date: 2023-09-04 21:55+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -3213,6 +3213,14 @@ msgid "Accept the choice made."
 msgstr "A választás elfogadása."
 
 #, fuzzy
+msgid "Unknown Hero"
+msgstr "Ismeretlen"
+
+#, fuzzy
+msgid "%{color} %{race} hero"
+msgstr "%{color} játékos köre"
+
+#, fuzzy
 msgid "Select Skill:"
 msgstr "Védőerő"
 
@@ -3547,6 +3555,12 @@ msgstr ""
 msgid "Choose a tile which does not contain any objects."
 msgstr ""
 
+msgid "Heroes"
+msgstr "Hősök"
+
+msgid "Heroes cannot be placed on water."
+msgstr ""
+
 msgid "Ocean Objects"
 msgstr ""
 
@@ -3579,9 +3593,6 @@ msgstr ""
 #, fuzzy
 msgid "Towns"
 msgstr "Város"
-
-msgid "Heroes"
-msgstr "Hősök"
 
 #, fuzzy
 msgid "Artifacts"
@@ -4045,10 +4056,6 @@ msgstr ""
 
 msgid "Your Name"
 msgstr ""
-
-#, fuzzy
-msgid "Unknown Hero"
-msgstr "Ismeretlen"
 
 #, fuzzy
 msgid "Standard"

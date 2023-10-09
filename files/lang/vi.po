@@ -3293,6 +3293,12 @@ msgstr "Tệp để Tải:"
 msgid "Accept the choice made."
 msgstr "Chấp nhận sự lựa chọn được thực hiện."
 
+msgid "Unknown Hero"
+msgstr ""
+
+msgid "%{color} %{race} hero"
+msgstr ""
+
 msgid "Select Skill:"
 msgstr "Chọn Kỹ năng:"
 
@@ -3619,6 +3625,12 @@ msgstr ""
 msgid "Choose a tile which does not contain any objects."
 msgstr ""
 
+msgid "Heroes"
+msgstr "Tướng"
+
+msgid "Heroes cannot be placed on water."
+msgstr ""
+
 msgid "Ocean Objects"
 msgstr "Đối tượng Đại dương"
 
@@ -3649,9 +3661,6 @@ msgstr "Đối tượng Biển"
 #, fuzzy
 msgid "Towns"
 msgstr "Thị trấn"
-
-msgid "Heroes"
-msgstr "Tướng"
 
 msgid "Artifacts"
 msgstr "Bảo vật"
@@ -4110,9 +4119,6 @@ msgid "Package Design"
 msgstr ""
 
 msgid "Your Name"
-msgstr ""
-
-msgid "Unknown Hero"
 msgstr ""
 
 msgid "Standard"
