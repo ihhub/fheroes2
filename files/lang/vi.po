@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-08 14:08+0000\n"
+"POT-Creation-Date: 2023-10-09 14:08+0000\n"
 "PO-Revision-Date: 2023-09-04 09:26+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -6378,11 +6378,12 @@ msgstr "Không có đại dương nào gần tướng để cho phép này thự
 
 msgid ""
 "You do not own any town or castle that is not currently occupied by a hero. "
-"You cannot cast this spell."
+"This spell will have no effect."
 msgstr ""
 
-msgid "This hero is already in a town, so you cannot cast this spell."
-msgstr ""
+#, fuzzy
+msgid "This hero is already in a town, so this spell will have no effect."
+msgstr "Phép này sẽ không ảnh hưởng đến ai!"
 
 msgid ""
 "The nearest town is %{town}.\n"

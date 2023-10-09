@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-08 14:08+0000\n"
+"POT-Creation-Date: 2023-10-09 14:08+0000\n"
 "PO-Revision-Date: 2022-10-01 20:20+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Turkish <tr@li.org>\n"
@@ -6122,11 +6122,12 @@ msgstr "Kahramanınızın yanında bir Elemental çağırmak için açık bir al
 
 msgid ""
 "You do not own any town or castle that is not currently occupied by a hero. "
-"You cannot cast this spell."
+"This spell will have no effect."
 msgstr ""
 
-msgid "This hero is already in a town, so you cannot cast this spell."
-msgstr ""
+#, fuzzy
+msgid "This hero is already in a town, so this spell will have no effect."
+msgstr "Bu büyü hiç kimseyi etkilemeyecek!"
 
 msgid ""
 "The nearest town is %{town}.\n"
