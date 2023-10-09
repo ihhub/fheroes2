@@ -333,9 +333,10 @@ namespace
     std::string showBarrierInfo( const Maps::Tiles & tile, const Kingdom & kingdom )
     {
         std::string str = _( "%{color} Barrier" );
-        StringReplace( str, "%{color}", fheroes2::getBarrierColorName( getColorFromTile( tile ) ) );
-        const int32_t tentColor = getColorFromTile( tile );
-        if ( kingdom.IsVisitTravelersTent( tentColor ) ) {
+        const int32_t barrierColor = getColorFromTile( tile );
+        StringReplace( str, "%{color}", fheroes2::getBarrierColorName( barrierColor ) );
+
+        if ( kingdom.IsVisitTravelersTent( barrierColor ) ) {
             str.append( "\n\n" );
             str.append( _( "(tent visited)" ) );
         }
