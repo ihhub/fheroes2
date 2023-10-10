@@ -3190,6 +3190,10 @@ msgstr "(chưa tới)"
 msgid "%{color} Barrier"
 msgstr "%{color} Rào chắn"
 
+#, fuzzy
+msgid "(tent visited)"
+msgstr "(chưa tới)"
+
 msgid "%{color} Tent"
 msgstr "%{color} Lều"
 
@@ -10029,3 +10033,6 @@ msgstr ""
 "Kiểm tra phiên bản mới nhất của trò chơi tại\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Undo your last action. Press again to redo the action."
+#~ msgstr "Hoàn tác thao tác cuối cùng. Nhấn lại để thực hiện lại thao tác."
