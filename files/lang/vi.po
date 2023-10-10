@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-15 15:37+0000\n"
+"POT-Creation-Date: 2023-10-10 00:20+0000\n"
 "PO-Revision-Date: 2023-10-09 22:16+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3161,6 +3161,10 @@ msgstr "(chưa tới)"
 msgid "%{color} Barrier"
 msgstr ""
 
+#, fuzzy
+msgid "(tent visited)"
+msgstr "(chưa tới)"
+
 msgid "%{color} Tent"
 msgstr "%{color} Lều"
 
@@ -3792,8 +3796,8 @@ msgstr "Phóng đại"
 msgid "Undo"
 msgstr "Hoàn tác"
 
-msgid "Undo your last action. Press again to redo the action."
-msgstr "Hoàn tác thao tác cuối cùng. Nhấn lại để thực hiện lại thao tác."
+msgid "Undo your last action."
+msgstr ""
 
 msgid "Create a new map either from scratch or using the random map generator."
 msgstr "Tạo bản đồ mới từ đầu hoặc sử dụng trình tạo bản đồ ngẫu nhiên."
@@ -9872,3 +9876,6 @@ msgstr ""
 "Kiểm tra phiên bản mới nhất của trò chơi tại\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Undo your last action. Press again to redo the action."
+#~ msgstr "Hoàn tác thao tác cuối cùng. Nhấn lại để thực hiện lại thao tác."
