@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-10 00:20+0000\n"
-"PO-Revision-Date: 2023-10-08 13:59+0300\n"
+"PO-Revision-Date: 2023-10-10 06:12+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
 "Language: ru\n"
@@ -3180,9 +3180,8 @@ msgstr "(не посещено)"
 msgid "%{color} Barrier"
 msgstr "%{color} барьер"
 
-#, fuzzy
 msgid "(tent visited)"
-msgstr "(не посещено)"
+msgstr "(шатёр посещён)"
 
 msgid "%{color} Tent"
 msgstr ""
@@ -3322,7 +3321,7 @@ msgid "Unknown Hero"
 msgstr "Неизвестный герой"
 
 msgid "%{color} %{race} hero"
-msgstr "%{race} - %{color} герой"
+msgstr "%{color} герой - %{race}"
 
 msgid "Select Skill:"
 msgstr "Выберите навык:"
