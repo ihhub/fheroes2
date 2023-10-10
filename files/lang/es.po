@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-08 07:12+0000\n"
+"POT-Creation-Date: 2023-10-10 00:20+0000\n"
 "PO-Revision-Date: 2023-06-27 18:17+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -3169,6 +3169,10 @@ msgid "%{color} Barrier"
 msgstr "%{color} jugador"
 
 #, fuzzy
+msgid "(tent visited)"
+msgstr "(no visitado)"
+
+#, fuzzy
 msgid "%{color} Tent"
 msgstr "%{color} jugador"
 
@@ -3300,6 +3304,13 @@ msgstr "Archivo a Cargar:"
 
 msgid "Accept the choice made."
 msgstr "Aceptar la elección realizada."
+
+msgid "Unknown Hero"
+msgstr ""
+
+#, fuzzy
+msgid "%{color} %{race} hero"
+msgstr "%{color} jugador"
 
 #, fuzzy
 msgid "Select Skill:"
@@ -3639,6 +3650,12 @@ msgstr ""
 msgid "Choose a tile which does not contain any objects."
 msgstr ""
 
+msgid "Heroes"
+msgstr "Héroes"
+
+msgid "Heroes cannot be placed on water."
+msgstr ""
+
 msgid "Ocean Objects"
 msgstr ""
 
@@ -3671,9 +3688,6 @@ msgstr ""
 #, fuzzy
 msgid "Towns"
 msgstr "Pueblo"
-
-msgid "Heroes"
-msgstr "Héroes"
 
 msgid "Artifacts"
 msgstr "Artefactos"
@@ -4139,9 +4153,6 @@ msgid "Package Design"
 msgstr ""
 
 msgid "Your Name"
-msgstr ""
-
-msgid "Unknown Hero"
 msgstr ""
 
 #, fuzzy
@@ -6968,11 +6979,11 @@ msgstr ""
 
 msgid ""
 "You do not own any town or castle that is not currently occupied by a hero. "
-"You cannot cast this spell."
+"This spell will have no effect."
 msgstr ""
 
 #, fuzzy
-msgid "This hero is already in a town, so you cannot cast this spell."
+msgid "This hero is already in a town, so this spell will have no effect."
 msgstr ""
 "No puedes usar ese hechizo. Cuesta %{mana} puntos de Maná y sólo tienes "
 "&{point}."

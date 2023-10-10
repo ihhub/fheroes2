@@ -76,7 +76,7 @@ namespace Interface
     int32_t EditorPanel::getBrushSize() const
     {
         // Roads and streams are placed using only 1x1 brush.
-        if ( _selectedInstrument == Instrument::STREAM || _selectedInstrument == Instrument::ROAD || isMonsterSettingMode() ) {
+        if ( _selectedInstrument == Instrument::STREAM || _selectedInstrument == Instrument::ROAD || isMonsterSettingMode() || isHeroSettingMode() ) {
             return 1;
         }
 
@@ -451,6 +451,26 @@ namespace Interface
                         const fheroes2::Sprite & image = fheroes2::AGG::GetICN( ICN::MONS32, monster.GetSpriteIndex() );
 
                         Cursor::Get().setCustomImage( image, { -image.width() / 2, -image.height() / 2 } );
+                    } );
+
+                    _interface.updateCursor( 0 );
+                    return res;
+                }
+            }
+            else if ( le.MouseClickLeft( _objectButtonsRect[Brush::HEROES] ) ) {
+                const int32_t heroType = Dialog::selectHeroType( _heroType );
+                if ( heroType >= 0 ) {
+                    _heroType = heroType;
+
+                    _interface.setCursorUpdater( [heroType]( const int32_t /*tileIndex*/ ) {
+                        // TODO: render ICN::MINIHERO from the existing hero images.
+                        const fheroes2::Sprite & image = fheroes2::AGG::GetICN( ICN::MINIHERO, heroType );
+
+                        // Mini-hero images contain a pole with a flag.
+                        // This causes a situation that a selected tile does not properly correspond to the position of cursor.
+                        // We need to add a hardcoded correction.
+                        const int32_t heroCorrectionY{ 12 };
+                        Cursor::Get().setCustomImage( image, { -image.width() / 2, -image.height() / 2 - heroCorrectionY } );
                     } );
 
                     _interface.updateCursor( 0 );

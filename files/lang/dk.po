@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-08 07:12+0000\n"
+"POT-Creation-Date: 2023-10-10 00:20+0000\n"
 "PO-Revision-Date: 2023-09-12 11:08+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
@@ -3216,6 +3216,10 @@ msgstr "(ikke besøgt)"
 msgid "%{color} Barrier"
 msgstr "%{color} barriere"
 
+#, fuzzy
+msgid "(tent visited)"
+msgstr "(ikke besøgt)"
+
 msgid "%{color} Tent"
 msgstr "%{color} telt"
 
@@ -3347,6 +3351,13 @@ msgstr "Fil som skal indlæses:"
 
 msgid "Accept the choice made."
 msgstr "Acceptér de trufne valg."
+
+msgid "Unknown Hero"
+msgstr "Ukendt helt"
+
+#, fuzzy
+msgid "%{color} %{race} hero"
+msgstr "%{color} spiller"
 
 msgid "Select Skill:"
 msgstr "Vælg evne:"
@@ -3675,6 +3686,12 @@ msgstr ""
 msgid "Choose a tile which does not contain any objects."
 msgstr ""
 
+msgid "Heroes"
+msgstr "Helte"
+
+msgid "Heroes cannot be placed on water."
+msgstr ""
+
 msgid "Ocean Objects"
 msgstr "Hav-objekter"
 
@@ -3704,9 +3721,6 @@ msgstr "Strand-objekter"
 
 msgid "Towns"
 msgstr "Byer"
-
-msgid "Heroes"
-msgstr "Helte"
 
 msgid "Artifacts"
 msgstr "Artefakter"
@@ -4180,9 +4194,6 @@ msgstr "Pakkedesign"
 
 msgid "Your Name"
 msgstr "Dit navn"
-
-msgid "Unknown Hero"
-msgstr "Ukendt helt"
 
 msgid "Standard"
 msgstr "Standard"
@@ -6988,14 +6999,16 @@ msgid "There is no ocean adjacent to the hero where this spell will work."
 msgstr ""
 "Der er intet hav ved siden af helten, hvor denne besværgelse vil virke."
 
+#, fuzzy
 msgid ""
 "You do not own any town or castle that is not currently occupied by a hero. "
-"You cannot cast this spell."
+"This spell will have no effect."
 msgstr ""
 "Du ejer ikke nogen by eller en borg, der ikke i øjeblikket er besat af en "
 "helt. Du kan ikke kaste denne besværgelse."
 
-msgid "This hero is already in a town, so you cannot cast this spell."
+#, fuzzy
+msgid "This hero is already in a town, so this spell will have no effect."
 msgstr "Denne helt er allerede i en by, så du kan ikke kaste besværgelsen."
 
 msgid ""

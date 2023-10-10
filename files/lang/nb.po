@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-08 07:12+0000\n"
+"POT-Creation-Date: 2023-10-10 00:20+0000\n"
 "PO-Revision-Date: 2023-09-03 18:42+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3220,6 +3220,10 @@ msgstr "(ikke besøkt)"
 msgid "%{color} Barrier"
 msgstr "%{color} barriere"
 
+#, fuzzy
+msgid "(tent visited)"
+msgstr "(ikke besøkt)"
+
 msgid "%{color} Tent"
 msgstr "%{color} telt"
 
@@ -3351,6 +3355,13 @@ msgstr "Lastingsfil:"
 
 msgid "Accept the choice made."
 msgstr "Bekreft valget og gå videre."
+
+msgid "Unknown Hero"
+msgstr "Ukjent helt"
+
+#, fuzzy
+msgid "%{color} %{race} hero"
+msgstr "%{color} spiller"
 
 msgid "Select Skill:"
 msgstr "Velg ferdighet:"
@@ -3678,6 +3689,12 @@ msgstr ""
 msgid "Choose a tile which does not contain any objects."
 msgstr ""
 
+msgid "Heroes"
+msgstr "Helter"
+
+msgid "Heroes cannot be placed on water."
+msgstr ""
+
 msgid "Ocean Objects"
 msgstr "Sjøting"
 
@@ -3707,9 +3724,6 @@ msgstr "Strandting"
 
 msgid "Towns"
 msgstr "Byer"
-
-msgid "Heroes"
-msgstr "Helter"
 
 msgid "Artifacts"
 msgstr "Gjenstander"
@@ -4187,9 +4201,6 @@ msgstr "Innpakningsdesign"
 
 msgid "Your Name"
 msgstr "Ditt navn"
-
-msgid "Unknown Hero"
-msgstr "Ukjent helt"
 
 msgid "Standard"
 msgstr "Standard"
@@ -7032,14 +7043,16 @@ msgstr ""
 "Det er ingen sjø i umiddelbar nærhet av helten hvor denne trolldommen kan "
 "brukes."
 
+#, fuzzy
 msgid ""
 "You do not own any town or castle that is not currently occupied by a hero. "
-"You cannot cast this spell."
+"This spell will have no effect."
 msgstr ""
 "Du eier ingen byer eller borger som ikke har besøk av andre helter for "
 "øyeblikket. Du kan ikke bruke denne trolldommen."
 
-msgid "This hero is already in a town, so you cannot cast this spell."
+#, fuzzy
+msgid "This hero is already in a town, so this spell will have no effect."
 msgstr ""
 "Denne helten befinner seg allerede i en by, og dermed kan ikke denne "
 "trolldommen brukes."

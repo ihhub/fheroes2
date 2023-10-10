@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-08 07:12+0000\n"
+"POT-Creation-Date: 2023-10-10 00:20+0000\n"
 "PO-Revision-Date: 2023-09-17 19:00+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -3173,6 +3173,10 @@ msgstr "(inte besökt)"
 msgid "%{color} Barrier"
 msgstr "%{color} Barriär."
 
+#, fuzzy
+msgid "(tent visited)"
+msgstr "(inte besökt)"
+
 msgid "%{color} Tent"
 msgstr "%{color} Tält"
 
@@ -3304,6 +3308,13 @@ msgstr "Fil att Ladda:"
 
 msgid "Accept the choice made."
 msgstr "Acceptera alla ändringar."
+
+msgid "Unknown Hero"
+msgstr "Okänd Hjälte"
+
+#, fuzzy
+msgid "%{color} %{race} hero"
+msgstr "%{color} spelare"
 
 msgid "Select Skill:"
 msgstr "Välj Förmåga:"
@@ -3633,6 +3644,12 @@ msgstr ""
 msgid "Choose a tile which does not contain any objects."
 msgstr ""
 
+msgid "Heroes"
+msgstr "Hjältar"
+
+msgid "Heroes cannot be placed on water."
+msgstr ""
+
 msgid "Ocean Objects"
 msgstr "Havsföremål"
 
@@ -3662,9 +3679,6 @@ msgstr "Strandföremål"
 
 msgid "Towns"
 msgstr "Städer"
-
-msgid "Heroes"
-msgstr "Hjältar"
 
 msgid "Artifacts"
 msgstr "Artefakter"
@@ -4127,9 +4141,6 @@ msgstr "Paketdesign"
 
 msgid "Your Name"
 msgstr "Ditt Namn"
-
-msgid "Unknown Hero"
-msgstr "Okänd Hjälte"
 
 msgid "Standard"
 msgstr "Standardspel"
@@ -6910,14 +6921,16 @@ msgstr ""
 "Det finns ingen ledig strand i närheten för att hjälten skall kunna kasta "
 "denna besvärjelse."
 
+#, fuzzy
 msgid ""
 "You do not own any town or castle that is not currently occupied by a hero. "
-"You cannot cast this spell."
+"This spell will have no effect."
 msgstr ""
 "Du äger för närvarande inte någon stad eller slott som inte är upptaget, så "
 "hjälten kan inte kasta besvärjelsen."
 
-msgid "This hero is already in a town, so you cannot cast this spell."
+#, fuzzy
+msgid "This hero is already in a town, so this spell will have no effect."
 msgstr "Hjälten är redan i en stad, så hjälten kan inte kasta besvärjelsen."
 
 msgid ""
