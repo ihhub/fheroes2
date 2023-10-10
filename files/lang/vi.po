@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-09-15 15:37+0000\n"
-"PO-Revision-Date: 2023-10-10 08:40+0700\n"
+"PO-Revision-Date: 2023-10-10 22:17+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: vi_VN\n"
@@ -3825,8 +3825,8 @@ msgstr "Phóng đại"
 msgid "Undo"
 msgstr "Hoàn tác"
 
-msgid "Undo your last action. Press again to redo the action."
-msgstr "Hoàn tác thao tác cuối cùng. Nhấn lại để thực hiện lại thao tác."
+msgid "Undo your last action."
+msgstr "Hoàn tác thao tác cuối cùng."
 
 msgid "Create a new map either from scratch or using the random map generator."
 msgstr "Tạo bản đồ mới từ đầu hoặc sử dụng trình tạo bản đồ ngẫu nhiên."
@@ -5440,70 +5440,70 @@ msgid "Sarakin"
 msgstr "Sarakin"
 
 msgid "Charity"
-msgstr "Charity"
+msgstr ""
 
 msgid "Darlana"
-msgstr "Darlana"
+msgstr ""
 
 msgid "Ranloo"
-msgstr "Ranloo"
+msgstr ""
 
 msgid "Rialdo"
-msgstr "Rialdo"
+msgstr ""
 
 msgid "Zam"
-msgstr "Zam"
+msgstr ""
 
 msgid "Zom"
-msgstr "Zom"
+msgstr ""
 
 msgid "Celia"
-msgstr "Celia"
+msgstr ""
 
 msgid "Roxana"
-msgstr "Roxana"
+msgstr ""
 
 msgid "Lord Corlagon"
-msgstr "Lord Corlagon"
+msgstr ""
 
 msgid "Lord Halton"
-msgstr "Lord Halton"
+msgstr ""
 
 msgid "Sister Eliza"
-msgstr "Sister Eliza"
+msgstr ""
 
 msgid "Brother Brax"
-msgstr "Brother Brax"
+msgstr ""
 
 msgid "Dainwin"
-msgstr "Dainwin"
+msgstr ""
 
 msgid "Joseph"
-msgstr "Joseph"
+msgstr ""
 
 msgid "Mog"
-msgstr "Mog"
+msgstr ""
 
 msgid "Solmyr"
-msgstr "Solmyr"
+msgstr ""
 
 msgid "Ceallach"
-msgstr "Ceallach"
+msgstr ""
 
 msgid "Drakonia"
-msgstr "Drakonia"
+msgstr ""
 
 msgid "Elderian"
-msgstr "Elderian"
+msgstr ""
 
 msgid "Gallavant"
-msgstr "Gallavant"
+msgstr ""
 
 msgid "Jarkonas"
-msgstr "Jarkonas"
+msgstr ""
 
 msgid "Martine"
-msgstr "Martine"
+msgstr ""
 
 msgid " gives you maximum morale"
 msgstr " cho ngươi tối đa tinh thần"
@@ -5640,22 +5640,21 @@ msgstr ""
 
 msgid "Unfortunately, others have found it first, and the wagon is empty."
 msgstr ""
-"Thật không may, những kẻ khác đã tìm thấy nó trước và toa xe trống rỗng."
 
 msgid "Searching inside, you find the %{artifact}."
-msgstr "Tìm kiếm bên trong, ngươi tìm thấy %{artifact}."
+msgstr ""
 
 msgid "Inside, you find some of the wagon's cargo still intact."
-msgstr "Bên trong, ngươi thấy một số hàng hóa của toa xe vẫn còn nguyên vẹn."
+msgstr ""
 
 msgid "You search through the flotsam, and find some wood and some gold."
-msgstr "Ngươi tìm kiếm khắp nơi và tìm thấy một ít gỗ và một ít vàng."
+msgstr ""
 
 msgid "You search through the flotsam, and find some wood."
-msgstr "Ngươi tìm kiếm khắp các vật trôi nổi và tìm thấy một ít gỗ."
+msgstr ""
 
 msgid "You search through the flotsam, but find nothing."
-msgstr "Ngươi tìm kiếm khắp các vật trôi nổi, nhưng không tìm thấy gì."
+msgstr ""
 
 msgid "Shrine of the 1st Circle"
 msgstr "Đền thờ Vòng 1"
@@ -5665,9 +5664,6 @@ msgid ""
 "In exchange for your protection, they agree to teach you a simple spell - "
 "'%{spell}'."
 msgstr ""
-"Ngươi đi ngang qua một ngôi đền nhỏ có một nhóm người mới tập sự tham dự.\n"
-"Để đổi lấy sự bảo vệ của ngươi, họ đồng ý dạy bạn một câu thần chú đơn giản "
-"- '%{spell}'."
 
 msgid "Shrine of the 2nd Circle"
 msgstr "Đền thờ Vòng 2"
@@ -5677,10 +5673,6 @@ msgid ""
 "In exchange for your protection, they agree to teach you a spell - "
 "'%{spell}'."
 msgstr ""
-"Ngươi đi ngang qua một ngôi đền được trang trí công phu với sự tham dự của "
-"một nhóm tu sĩ tròn trịa.\n"
-"Để đổi lấy sự bảo vệ của ngươi, họ đồng ý dạy ngươi một câu thần chú - "
-"'%{spell}'."
 
 msgid "Shrine of the 3rd Circle"
 msgstr "Đền thờ Vòng 3"
@@ -5690,10 +5682,6 @@ msgid ""
 "In exchange for your protection, they agree to teach you a sophisticated "
 "spell - '%{spell}'."
 msgstr ""
-"Ngươi đi ngang qua một ngôi đền xa hoa có sự tham dự của một nhóm linh mục "
-"cao cấp.\n"
-"Để đổi lấy sự bảo vệ của ngươi, họ đồng ý dạy ngươi một câu thần chú phức "
-"tạp - '%{spell}'."
 
 msgid ""
 "\n"
