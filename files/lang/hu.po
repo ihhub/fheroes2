@@ -235,6 +235,14 @@ msgid ""
 "G\n"
 "N"
 msgstr ""
+"H\n"
+"A\n"
+"D\n"
+"J\n"
+"Á\n"
+"R\n"
+"A\n"
+"T"
 
 msgid ""
 "S\n"
@@ -246,6 +254,12 @@ msgid ""
 "R\n"
 "D"
 msgstr ""
+"N\n"
+"O\n"
+"R\n"
+"M\n"
+"Á\n"
+"L"
 
 msgid "Warrior"
 msgstr "Harcos"
@@ -441,7 +455,7 @@ msgid "On"
 msgstr "Be"
 
 msgid "Turn Order"
-msgstr ""
+msgstr "Körsorrend"
 
 msgid "Auto Spell Casting"
 msgstr "Automata varázslás"
@@ -1422,7 +1436,7 @@ msgid " alliance"
 msgstr " szövetség"
 
 msgid "Carry-over forces"
-msgstr ""
+msgstr "Átvitt csapatok"
 
 msgid " bonus"
 msgstr " bónusz"
@@ -1516,7 +1530,7 @@ msgid "campaignBonus|Mirror Image"
 msgstr "Tükör képmás"
 
 msgid "campaignBonus|Resurrect"
-msgstr "Újraélesztés"
+msgstr "Újjáélesztés"
 
 msgid "campaignBonus|Steelskin"
 msgstr "Acélbőr"
@@ -1878,7 +1892,7 @@ msgid "Nightshadow"
 msgstr "Nightshadow"
 
 msgid "Olympus"
-msgstr "Olympus"
+msgstr "Olümposz"
 
 msgid "Sandcaster"
 msgstr "Sandcaster"
@@ -2483,9 +2497,8 @@ msgstr "%{count} varázstárggyal"
 msgid "with 1 artifact."
 msgstr "egy varázstárggyal"
 
-#, fuzzy
 msgid "without artifacts."
-msgstr " %{count} varázstárggyal"
+msgstr "varázstárgyak nélkül."
 
 msgid ""
 "'Spread' combat formation spreads your armies from the top to the bottom of "
@@ -2558,7 +2571,6 @@ msgstr "Szaporulat"
 msgid "week"
 msgstr "hét"
 
-#, fuzzy
 msgid "View World"
 msgstr "Világ mutatása"
 
@@ -2704,47 +2716,46 @@ msgid "MIDI"
 msgstr "MIDI"
 
 msgid "MIDI Expansion"
-msgstr ""
+msgstr "MIDI bővítmény"
 
 msgid "External"
-msgstr ""
+msgstr "Külső"
 
 msgid "Music Type"
-msgstr ""
+msgstr "Zene típusa"
 
 msgid "3D Audio"
-msgstr ""
+msgstr "3D hangzás"
 
 msgid "Toggle ambient music level."
-msgstr ""
+msgstr "Háttérzene jelszint kapcsolója."
 
 msgid "Toggle foreground sounds level."
-msgstr ""
+msgstr "Hanghatások jelszint kapcsolója."
 
 msgid "Change the type of music."
-msgstr ""
+msgstr "Zene típusának megváltoztatása."
 
 msgid "Toggle 3D effects of foreground sounds."
-msgstr ""
+msgstr "Hanghatások 3D kapcsolója."
 
 msgid "Build a new ship:"
 msgstr "Új hajó építése:"
 
 msgid "Resource cost:"
-msgstr "Fejlesztési költség:"
+msgstr "Erőforrás költség:"
 
 msgid "Total: "
-msgstr ""
+msgstr "Összesen:"
 
 msgid "Need: "
-msgstr ""
+msgstr "Szükséges:"
 
 msgid "Load Game"
 msgstr "Játék betöltése"
 
-#, fuzzy
 msgid "No save files to load."
-msgstr "Nincsenek varázslatai."
+msgstr "Nincsenek mentések a betöltéshez."
 
 msgid "New Game"
 msgstr "Új játék"
@@ -2755,58 +2766,56 @@ msgstr "Egy- vagy többszemélyes játék indítása."
 msgid "Load a previously saved game."
 msgstr "Mentett játék betöltése."
 
-#, fuzzy
 msgid "Save Game"
-msgstr "Új játék"
+msgstr "Játék mentése"
 
 msgid "Save the current game."
-msgstr ""
+msgstr "Aktuális játék mentése."
 
 msgid "Quit"
 msgstr "Kilépés"
 
 #, fuzzy
 msgid "Quit out of Heroes of Might and Magic II."
-msgstr "Kilépés a játékból és visszatérés az operációs rendszerhez."
+msgstr "Kilépés a Heroes of Might and Magic II-ből."
 
 msgid "Language"
-msgstr ""
+msgstr "Nyelv"
 
 msgid "Graphics"
-msgstr ""
+msgstr "Grafika"
 
-#, fuzzy
 msgid "Black & White"
-msgstr "Híd"
+msgstr "Fekete-fehér"
 
-#, fuzzy
 msgid "Mouse Cursor"
-msgstr "Teljes Átok"
+msgstr "Egér kurzor"
 
 msgid "Color"
-msgstr ""
+msgstr "Szín"
 
-#, fuzzy
 msgid "Text Support"
-msgstr "Teleportálás"
+msgstr "Szöveg támogatás"
 
 msgid "Change the language of the game."
-msgstr ""
+msgstr "A játék nyelvének megváltoztatása."
 
 #, fuzzy
 msgid "Select Game Language"
-msgstr "Kiválasztott Leírás"
+msgstr "Játék nyelvének kiválasztása"
 
 msgid "Change the graphics settings of the game."
-msgstr ""
+msgstr "Játék grafikai beállításainak módosítása."
 
 msgid "Toggle colored cursor on or off. This is only an aesthetic choice."
-msgstr ""
+msgstr "Színes kurzor be-/kikapcsolása. Ez csak egy esztétikai jellegű választás."
 
 msgid ""
 "Toggle text support mode to output extra information about windows and "
 "events in the game."
 msgstr ""
+"A szöveges támogatás kapcsolója, mellyel extra információkhoz juthatunk "
+"a játék párbeszédablakairól, illetve eseményeiről."
 
 msgid ""
 "Map\n"
@@ -2851,77 +2860,74 @@ msgstr ""
 "Feltételek"
 
 msgid "First select recipients!"
-msgstr ""
+msgstr "Először válaszd ki a kedvezményezetteket!"
 
 msgid "You cannot select %{resource}!"
-msgstr ""
+msgstr "Nem választhatod a(z) %{resource} erőforrást!"
 
-#, fuzzy
 msgid "Select count %{resource}:"
-msgstr "%{monster} kiválasztása"
+msgstr "A számításba veendő %{resource} kiválasztása:"
 
-#, fuzzy
 msgid "Select Recipients"
-msgstr "Kiválasztott Leírás"
+msgstr "Kedvezményezettek kiválasztása"
 
-#, fuzzy
 msgid "Your Funds"
-msgstr "500-999"
+msgstr "Forrásaid"
 
 msgid "Planned Gift"
-msgstr ""
+msgstr "Tervezett ajándék"
 
 #, fuzzy
 msgid "Gift from %{name}"
-msgstr "%{name} toborzása"
+msgstr "Ajándék %{name} játékostól"
 
-#, fuzzy
 msgid "Resolution"
-msgstr "Kiválasztott Leírás"
+msgstr "Felbontás"
 
 msgid "Fullscreen"
-msgstr ""
+msgstr "Teljes képernyő"
 
 msgid "window|Mode"
-msgstr ""
+msgstr "Mód"
 
 msgid "Windowed"
-msgstr ""
+msgstr "Ablakos"
 
 msgid "V-Sync"
-msgstr ""
+msgstr "V-Sync"
 
-#, fuzzy
 msgid "on"
-msgstr "egy"
+msgstr "be"
 
 msgid "FPS"
-msgstr ""
+msgstr "FPS"
 
-#, fuzzy
 msgid "System Info"
-msgstr "Rendszerbeállítások"
+msgstr ""
+"Rendszer-\n"
+"információk"
 
 msgid "Change the resolution of the game."
-msgstr ""
+msgstr "A játék felbontásának megváltoztatása."
 
-#, fuzzy
 msgid "Select Game Resolution"
-msgstr "Kiválasztott Leírás"
+msgstr "Játék felbontás kiválasztása"
 
 msgid "Toggle between fullscreen and windowed modes."
-msgstr ""
+msgstr "Váltás teljes képernyős és ablakos mód között."
 
 msgid ""
 "The V-Sync option can be enabled to resolve flickering issues on some "
 "monitors."
 msgstr ""
+"A V-Sync opciót akkor érdemes használni, amikor egyes monitorokon "
+"vibrálást tapasztalunk."
 
 msgid "Show extra information such as FPS and current time."
-msgstr ""
+msgstr "Extra információkat jelenít meg, mint például FPS, illetve pontos idő."
 
 msgid "Hot Keys:"
-msgstr ""
+msgstr "Billentyűfunkciók:"
 
 msgid "Evil"
 msgstr "Gonosz"
@@ -2929,58 +2935,53 @@ msgstr "Gonosz"
 msgid "Good"
 msgstr "Jó"
 
-#, fuzzy
 msgid "Interface Type"
-msgstr "Kezelőfelület"
+msgstr "Kezelőfelület típusa"
 
-#, fuzzy
 msgid "Hide"
-msgstr "50-99"
+msgstr "Elrejt"
 
-#, fuzzy
 msgid "Show"
-msgstr "Hó"
+msgstr "Mutat"
 
 msgid "Interface"
 msgstr "Kezelőfelület"
 
-#, fuzzy
 msgid "Slow"
-msgstr "Teljes Lassítás"
+msgstr "Lassítás"
 
 msgid "Normal"
 msgstr "Normál"
 
 msgid "Fast"
-msgstr ""
+msgstr "Gyors"
 
 msgid "Very Fast"
-msgstr ""
+msgstr "Nagyon gyors"
 
 msgid "Scroll Speed"
-msgstr ""
+msgstr "Képernyőgörgetés sebessége"
 
 msgid "Toggle the type of interface you want to use."
-msgstr ""
+msgstr "Kezelőfelület kívánt típusának kapcsolója."
 
 msgid "Toggle interface visibility."
-msgstr ""
+msgstr "Kezelőfelület láthatóságának kapcsolója."
 
 msgid "Toggle colored cursor on or off. This is only an esthetic choice."
-msgstr ""
+msgstr "Színes kurzor be-/kikapcsolása. Ez csak egy esztétikai jellegű választás."
 
 msgid "Sets the speed at which you scroll the window."
-msgstr ""
+msgstr "Beállítja az ablakok görgetésének sebességét."
 
 msgid "Select Game Language:"
-msgstr ""
+msgstr "Játék nyelvének kiválasztása:"
 
-#, fuzzy
 msgid "Click to choose the selected language."
-msgstr "Kattints a főmenübe való visszatéréshez."
+msgstr "Kattints a kijelölt nyelv kiválasztásához."
 
 msgid "%{name} has gained a level."
-msgstr "%{name} következő szintre lépett."
+msgstr "%{name} a következő szintre lépett."
 
 #, fuzzy
 msgid "%{skill} +1"
