@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-10 00:20+0000\n"
-"PO-Revision-Date: 2023-10-08 13:59+0300\n"
+"PO-Revision-Date: 2023-10-10 06:12+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
 "Language: ru\n"
@@ -3180,9 +3180,8 @@ msgstr "(не посещено)"
 msgid "%{color} Barrier"
 msgstr "%{color} барьер"
 
-#, fuzzy
 msgid "(tent visited)"
-msgstr "(не посещено)"
+msgstr "(шатёр посещён)"
 
 msgid "%{color} Tent"
 msgstr ""
@@ -3321,9 +3320,8 @@ msgstr "Подтвердить Ваш выбор."
 msgid "Unknown Hero"
 msgstr "Неизвестный герой"
 
-#, fuzzy
 msgid "%{color} %{race} hero"
-msgstr "%{color} игрок"
+msgstr "%{color} герой - %{race}"
 
 msgid "Select Skill:"
 msgstr "Выберите навык:"
@@ -3651,9 +3649,8 @@ msgstr "Выберите ячейку карты, на которой нет н�
 msgid "Heroes"
 msgstr "Герои"
 
-#, fuzzy
 msgid "Heroes cannot be placed on water."
-msgstr "Монстров нельзя размещать на воде."
+msgstr "Героев нельзя размещать на воде."
 
 msgid "Ocean Objects"
 msgstr "Объекты океана"
@@ -6919,7 +6916,6 @@ msgid "There is no ocean adjacent to the hero where this spell will work."
 msgstr ""
 "Рядом с героем нет океана или места в океане, где сработает это заклинание."
 
-#, fuzzy
 msgid ""
 "You do not own any town or castle that is not currently occupied by a hero. "
 "This spell will have no effect."
@@ -6927,9 +6923,8 @@ msgstr ""
 "У Вас нет ни одного свободного города или замка. Потому это заклинание не "
 "сработает."
 
-#, fuzzy
 msgid "This hero is already in a town, so this spell will have no effect."
-msgstr "Этот герой уже в замке, поэтому Вам не произнести данное заклинание."
+msgstr "Этот герой уже в замке, поэтому это заклинание не сработает."
 
 msgid ""
 "The nearest town is %{town}.\n"
