@@ -425,7 +425,7 @@ void Heroes::LoadFromMP2( const int32_t mapIndex, const int colorType, const int
     SetIndex( mapIndex );
     SetColor( colorType );
 
-    // The hero's race can be changed if the portrait that was specified using the map editor does not match the initial race of this hero, or if there are no free heroes
+    // The hero's race can be changed if the portrait that was specified using the map editor does not match the desired race of this hero, or if there are no free heroes
     // of the desired race
     if ( _race != raceType ) {
         SetModes( CUSTOM );
