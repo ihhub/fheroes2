@@ -44,49 +44,32 @@ void fheroes2::drawMiniMonsters( const Troops & troops, int32_t cx, const int32_
         count = troops.GetOccupiedSlotCount();
     }
 
-    int32_t chunk = width / static_cast<int32_t>( count );
-    size_t slots = troops.Size();
-    int32_t slotsToSkip = 1;
-    int32_t slotOffset = 1;
+    const double chunk = width / static_cast<double>( count );
+
+    // If troops are close to each other (it may occur if many troops were killed during the battle)
+    // we render them from right to left to make troop sprites overlapping more appealing.
+    const bool isRightToLeftRender = chunk < 25;
 
     if ( !isCompact ) {
-        if ( count <= 2 ) {
-            slotsToSkip = 2;
-        }
-        else if ( count >= 7 ) {
-            slotsToSkip = 0;
-        }
-
-        int32_t marginLeft = 18;
-        chunk = ( width - marginLeft ) / ( static_cast<int32_t>( count ) + ( slotsToSkip * 2 ) );
-
-        slots += static_cast<size_t>( slotsToSkip );
-
-        cx -= chunk / 2;
+        cx += static_cast<int32_t>( chunk / 2 );
+    }
+    if ( !isRightToLeftRender ) {
         cx += width;
-        slotOffset = slotsToSkip;
     }
 
+    const size_t slots = troops.Size();
     for ( size_t slot = 0; slot < slots; ++slot ) {
-        // Skip the monster handling when a slot is empty
-        if ( slotsToSkip > 0 && !isCompact ) {
-            --slotsToSkip;
-            cx -= chunk;
-            continue;
+        if ( count == 0 ) {
+            break;
         }
 
-        const Troop * troop = nullptr;
-        if ( isCompact ) {
-            troop = troops.GetTroop( slot );
-        }
-        else {
-            troop = troops.GetTroop( ( troops.Size() - 1 ) - slot + slotOffset );
-        }
+        const Troop * troop = troops.GetTroop( slot );
 
         if ( troop == nullptr || !troop->isValid() ) {
             continue;
         }
-        if ( first != 0 || count == 0 ) {
+
+        if ( first != 0 ) {
             --first;
             continue;
         }
@@ -108,37 +91,26 @@ void fheroes2::drawMiniMonsters( const Troops & troops, int32_t cx, const int32_
         }
 
         const fheroes2::Sprite & monster = fheroes2::AGG::GetICN( ICN::MONS32, troop->GetSpriteIndex() );
-        fheroes2::Text text( std::move( monstersCountRepresentation ), fheroes2::FontType::smallWhite() );
+        const fheroes2::Text text( std::move( monstersCountRepresentation ), fheroes2::FontType::smallWhite() );
+
+        const int32_t posX = isRightToLeftRender ? ( cx + static_cast<int32_t>( chunk * ( count - 1 ) ) ) : ( cx - static_cast<int32_t>( chunk * count ) );
 
         // This is the drawing of army troops in compact form in the small info window beneath resources
         if ( isCompact ) {
-            const int offsetY = ( monster.height() < 37 ) ? 37 - monster.height() : 0;
-            int offset = ( chunk - monster.width() - text.width() ) / 2;
-            if ( offset < 0 )
+            const int32_t offsetY = ( monster.height() < 37 ) ? 37 - monster.height() : 0;
+            int32_t offset = ( static_cast<int32_t>( chunk ) - monster.width() - text.width() ) / 2;
+            if ( offset < 0 ) {
                 offset = 0;
-            fheroes2::Blit( monster, output, cx + offset, cy + offsetY + monster.y() );
-            text.draw( cx + chunk - text.width() - offset, cy + 23, output );
-        }
-        else if ( slotsToSkip == 0 ) {
-            const int32_t offsetY = 28 - monster.height();
-            int32_t offsetX = -14;
-
-            // Center the monster if there is only one
-            if ( count == 1 && slot == 1 ) {
-                offsetX = -10;
             }
-
-            int32_t x = ( cx - ( monster.width() / 2 ) ) + offsetX;
-            int32_t y = cy + offsetY + monster.y();
-            fheroes2::Blit( monster, output, x, y );
-            text.draw( ( cx - text.width() / 2 ) + offsetX, cy + 29, output );
-        }
-        if ( isCompact ) {
-            cx += chunk;
+            fheroes2::Blit( monster, output, posX + offset, cy + offsetY + monster.y() );
+            text.draw( posX - text.width() - offset + static_cast<int32_t>( chunk ), cy + 23, output );
         }
         else {
-            cx -= chunk;
+            const int32_t offsetY = 28 - monster.height() + monster.y();
+            fheroes2::Blit( monster, output, posX - monster.width() / 2 + monster.x() + 2, cy + offsetY );
+            text.draw( posX - text.width() / 2, cy + 29, output );
         }
+
         --count;
     }
 }
