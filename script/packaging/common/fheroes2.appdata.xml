@@ -37,6 +37,63 @@
     <control>touch</control>
   </recommends>
   <releases>
+    <release date="2023-10-11" version="v1.0.9">
+      <url>https://github.com/ihhub/fheroes2/releases/tag/1.0.9</url>
+      <description>
+        <p>Changes in v1.0.9 (11 October 2023):</p>
+        <ul>
+          <li>add "tent visited" info to barrier quick info dialog</li>
+          <li>update Vietnamese translation</li>
+          <li>rework Hot-Keys dialog</li>
+          <li>fix combat victory window creature position</li>
+          <li>Town Gate and Town Portal spells: use depersonalized wording</li>
+          <li>add an ability to place heroes in the Editor</li>
+          <li>add an ability to place Random Monsters in the Editor</li>
+          <li>fix rendering of very long scenario names in the campaign briefing dialog</li>
+          <li>disable the not implemented Random Map option in the Editor</li>
+          <li>update German translation</li>
+          <li>make a long press on the "continue movement" button to reset a hero's path</li>
+          <li>use the "continue movement" button to interact with an object a hero is standing on</li>
+          <li>make Grass the default terrain for new maps in the Editor</li>
+          <li>restrict heroes' meetings and army merging on Easy difficulty</li>
+          <li>AI should avoid splitting troops on Easy difficulty</li>
+          <li>add functionality to place monsters in the Editor</li>
+          <li>add a mirror image check during spell evaluation</li>
+          <li>teach battle AI to use shield spells</li>
+          <li>implement streams' placing in the Editor</li>
+          <li>adjust AI combat spell heuristics</li>
+          <li>fix rendering of long text in the Hero screen status bar</li>
+          <li>update Ukrainian translation</li>
+          <li>implement roads' placing in the Editor</li>
+          <li>fix the AI first strike logic</li>
+          <li>update Hungarian translation</li>
+          <li>fix battle AI protecting paralyzed archers</li>
+          <li>properly display player's name in the New Game window</li>
+          <li>fix memorizing the position in the map list when changing the map size filter</li>
+          <li>adjust the position of luck and morale icons in the hero info window</li>
+          <li>update the followers window to support text mode</li>
+          <li>fix the logic of ALWAYS_RETALIATE regarding paralyzed units</li>
+          <li>add historical changes support for the Editor</li>
+          <li>add the ability to confirm actions in battle for touch devices</li>
+          <li>update Russian translation</li>
+          <li>fix Editor Main Menu hotkeys</li>
+          <li>update Swedish translation</li>
+          <li>speed up overall rendering for cycling animation</li>
+          <li>do not render text beyond the info and status bars during battles</li>
+          <li>rework game settings on the Adventure Map</li>
+          <li>remove double spaces in translatable texts</li>
+          <li>update Bulgarian translation</li>
+          <li>update Slovak translation</li>
+          <li>update Czech translations</li>
+          <li>update Danish translation</li>
+          <li>use Home and End hotkeys to navigate among items within a list</li>
+          <li>always use the nearest cell to attack the nearby unit if a monster is under the Berserker spell</li>
+          <li>fix an assertion when a hero starts moving and a player immediately mouse left clicks on the Adventure Map</li>
+          <li>improve path calculations by AIWorldPathfinder in planning mode</li>
+          <li>Wand of Negation should grant immunity against the Mass Dispel spell</li>
+        </ul>
+      </description>
+    </release>
     <release date="2023-09-11" version="v1.0.8">
       <url>https://github.com/ihhub/fheroes2/releases/tag/1.0.8</url>
       <description>
