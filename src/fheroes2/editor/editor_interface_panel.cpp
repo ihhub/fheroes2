@@ -146,6 +146,11 @@ namespace Interface
         // The last object button is located not next to previous one and needs to be shifted to the right.
         _objectButtonsRect[Brush::TREASURES].x += 29 * 2;
 
+        offsetY += 56;
+        for ( size_t i = 0; i < _eraseButtonsRect.size(); ++i ) {
+            _eraseButtonsRect[i] = { offsetX + static_cast<int32_t>( i % 4 ) * 29, offsetY + static_cast<int32_t>( i / 4 ) * 28, 27, 27 };
+        }
+
         displayY += _rectInstrumentPanel.height;
 
         // System buttons top row.
@@ -212,6 +217,17 @@ namespace Interface
 
             const fheroes2::Text terrainText( _getObjectTypeName( _selectedObject ), fheroes2::FontType::smallWhite() );
             terrainText.draw( _rectInstrumentPanel.x + 72 - terrainText.width() / 2, _rectInstrumentPanel.y + 135, display );
+        }
+        else if ( _selectedInstrument == Instrument::ERASE ) {
+            const fheroes2::Sprite & selection = fheroes2::AGG::GetICN( ICN::TERRAINS, 9 );
+            const fheroes2::Sprite & selectionMark = fheroes2::AGG::GetICN( ICN::TOWNWIND, 11 );
+            for ( size_t i = 0; i < _eraseButtonsRect.size(); ++i ) {
+                if ( ( 1U << i ) & _eraseMask ) {
+                    fheroes2::Blit( selection, 0, 0, display, _eraseButtonsRect[i].x - 2, _eraseButtonsRect[i].y - 2, selection.width(), selection.height() );
+                    fheroes2::Blit( selectionMark, 0, 0, display, _eraseButtonsRect[i].x + 12, _eraseButtonsRect[i].y + 12, selectionMark.width(),
+                                    selectionMark.height() );
+                }
+            }
         }
 
         _buttonMagnify.draw();

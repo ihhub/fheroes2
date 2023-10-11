@@ -224,6 +224,7 @@ namespace Interface
         std::array<fheroes2::Rect, Brush::TERRAIN_COUNT> _terrainButtonsRect;
         std::array<fheroes2::Rect, Brush::OBJECT_COUNT> _objectButtonsRect;
         std::array<fheroes2::Rect, BrushSize::BRUSH_SIZE_COUNT> _brushSizeButtonsRect;
+        std::array<fheroes2::Rect, 8> _eraseButtonsRect;
 
         uint8_t _selectedInstrument{ Instrument::TERRAIN };
 
