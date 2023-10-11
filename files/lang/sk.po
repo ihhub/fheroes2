@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-07 13:24+0000\n"
+"POT-Creation-Date: 2023-10-10 00:20+0000\n"
 "PO-Revision-Date: 2023-09-11 20:22+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -2767,7 +2767,7 @@ msgstr ""
 msgid ""
 "The creatures are swayed by your diplomatic\n"
 "tongue, and make you an offer:\n"
-" \n"
+"\n"
 msgstr ""
 "Bojovníci sú pohnutí tvojim diplomatickým\n"
 "jazykom a ponúkajú:\n"
@@ -3155,6 +3155,10 @@ msgstr "(nenavštívené)"
 msgid "%{color} Barrier"
 msgstr "%{color} bariéra"
 
+#, fuzzy
+msgid "(tent visited)"
+msgstr "(nenavštívené)"
+
 msgid "%{color} Tent"
 msgstr "%{color} stan"
 
@@ -3286,6 +3290,13 @@ msgstr "Nahrať súbor:"
 
 msgid "Accept the choice made."
 msgstr "Prijať uskutočnený výber."
+
+msgid "Unknown Hero"
+msgstr "Neznámy hrdina"
+
+#, fuzzy
+msgid "%{color} %{race} hero"
+msgstr "%{color} hráč"
 
 msgid "Select Skill:"
 msgstr "Zvoľ zručnosť:"
@@ -3608,6 +3619,12 @@ msgstr ""
 msgid "Choose a tile which does not contain any objects."
 msgstr ""
 
+msgid "Heroes"
+msgstr "Hrdinovia"
+
+msgid "Heroes cannot be placed on water."
+msgstr ""
+
 msgid "Ocean Objects"
 msgstr "Objekty oceánu"
 
@@ -3637,9 +3654,6 @@ msgstr "Objekty pláže"
 
 msgid "Towns"
 msgstr "Mestá"
-
-msgid "Heroes"
-msgstr "Hrdinovia"
 
 msgid "Artifacts"
 msgstr "Artefakty"
@@ -4109,9 +4123,6 @@ msgstr "Dizajn balíkov"
 msgid "Your Name"
 msgstr "Tvoje meno"
 
-msgid "Unknown Hero"
-msgstr "Neznámy hrdina"
-
 msgid "Standard"
 msgstr "Štandard"
 
@@ -4553,6 +4564,13 @@ msgstr ""
 " na ľavej strane hlavnej ponuky alebo kliknutím na tlačidlo nastavenia. \n"
 "\n"
 "Prajeme ti príjemnú hru!"
+
+msgid "Editor"
+msgstr ""
+
+#, fuzzy
+msgid "The Editor requires \"The Price of Loyalty\" expansion files to work."
+msgstr "Jedna zo štyroch nových kampaní z rozširujúcej sady Price of Loyalty."
 
 msgid "Quit Heroes of Might and Magic II and return to the operating system."
 msgstr ""
@@ -5655,7 +5673,7 @@ msgstr ""
 msgid ""
 "You approach the hut and observe a witch inside studying an ancient tome on "
 "%{skill}.\n"
-" \n"
+"\n"
 msgstr ""
 "Pristúpiš k chatrči a zbadáš čarodejnicu, ako vo vnútri študuje starobylý "
 "zväzok na tému %{skill}.\n"
@@ -6744,15 +6762,15 @@ msgstr ""
 
 msgid ""
 "The Sphinx asks you the following riddle:\n"
-" \n"
+"\n"
 "'%{riddle}'\n"
-" \n"
+"\n"
 "Your answer?"
 msgstr ""
 "Sfinga ti položí nasledujúcu hádanku:\n"
-" \n"
+"\n"
 "'%{riddle}'\n"
-" \n"
+"\n"
 "Tvoja odpoveď?"
 
 msgid ""
@@ -6853,23 +6871,25 @@ msgstr "Na zoslanie tohto kúzla už nie je k dispozícii žiadna loď."
 msgid "There is no ocean adjacent to the hero where this spell will work."
 msgstr "Vedľa hrdinu nie je miesto v oceáne, kde by toto kúzlo fungovalo."
 
+#, fuzzy
 msgid ""
 "You do not own any town or castle that is not currently occupied by a hero. "
-"You cannot cast this spell."
+"This spell will have no effect."
 msgstr ""
 "Momentálne nevlastníš žiadne mesto ani hrad, takže toto kúzlo nemôžeš zoslať."
 
-msgid "This hero is already in a town, so you cannot cast this spell."
+#, fuzzy
+msgid "This hero is already in a town, so this spell will have no effect."
 msgstr ""
 "Tento hrdina sa už v meste nachádza, takže toto kúzlo nie je možné zoslať."
 
 msgid ""
 "The nearest town is %{town}.\n"
-" \n"
+"\n"
 "This town is occupied by your hero %{hero}."
 msgstr ""
 "Najbližšie mesto je %{town}.\n"
-" \n"
+"\n"
 "V tomto meste sa však už nachádza hrdina %{hero}."
 
 msgid "This spell is already in effect."

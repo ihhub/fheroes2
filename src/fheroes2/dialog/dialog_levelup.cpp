@@ -46,7 +46,7 @@
 void DialogPrimaryOnly( const std::string & name, const int primarySkillType )
 {
     std::string message = _( "%{name} has gained a level." );
-    message.append( "\n \n" );
+    message.append( "\n\n" );
     message.append( _( "%{skill} +1" ) );
     StringReplace( message, "%{name}", name );
     StringReplace( message, "%{skill}", Skill::Primary::String( primarySkillType ) );
@@ -59,12 +59,12 @@ void DialogPrimaryOnly( const std::string & name, const int primarySkillType )
 int DialogOneSecondary( const Heroes & hero, const std::string & name, const int primarySkillType, const Skill::Secondary & sec )
 {
     std::string message = _( "%{name} has gained a level." );
-    message.append( "\n \n" );
+    message.append( "\n\n" );
     message.append( _( "%{skill} +1" ) );
     StringReplace( message, "%{name}", name );
     StringReplace( message, "%{skill}", Skill::Primary::String( primarySkillType ) );
 
-    message.append( "\n \n" );
+    message.append( "\n\n" );
     message.append( _( "You have learned %{skill}." ) );
     StringReplace( message, "%{skill}", sec.GetName() );
 

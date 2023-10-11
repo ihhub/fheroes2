@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-07 13:24+0000\n"
+"POT-Creation-Date: 2023-10-10 00:20+0000\n"
 "PO-Revision-Date: 2023-09-04 21:55+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -2664,11 +2664,11 @@ msgstr ""
 msgid ""
 "The creatures are swayed by your diplomatic\n"
 "tongue, and make you an offer:\n"
-" \n"
+"\n"
 msgstr ""
 "A diplomáciai képességed hatására a lények \n"
 "egy ajánlattal állnak elő:\n"
-" \n"
+"\n"
 
 msgid ""
 "%{offer} of the %{total} %{monster} will join your army, and the rest will "
@@ -3072,6 +3072,10 @@ msgid "%{color} Barrier"
 msgstr "%{color} játékos köre"
 
 #, fuzzy
+msgid "(tent visited)"
+msgstr "(nem látogatott)"
+
+#, fuzzy
 msgid "%{color} Tent"
 msgstr "%{color} játékos köre"
 
@@ -3211,6 +3215,14 @@ msgstr "Betöltés:"
 
 msgid "Accept the choice made."
 msgstr "A választás elfogadása."
+
+#, fuzzy
+msgid "Unknown Hero"
+msgstr "Ismeretlen"
+
+#, fuzzy
+msgid "%{color} %{race} hero"
+msgstr "%{color} játékos köre"
 
 #, fuzzy
 msgid "Select Skill:"
@@ -3547,6 +3559,12 @@ msgstr ""
 msgid "Choose a tile which does not contain any objects."
 msgstr ""
 
+msgid "Heroes"
+msgstr "Hősök"
+
+msgid "Heroes cannot be placed on water."
+msgstr ""
+
 msgid "Ocean Objects"
 msgstr ""
 
@@ -3579,9 +3597,6 @@ msgstr ""
 #, fuzzy
 msgid "Towns"
 msgstr "Város"
-
-msgid "Heroes"
-msgstr "Hősök"
 
 #, fuzzy
 msgid "Artifacts"
@@ -4047,10 +4062,6 @@ msgid "Your Name"
 msgstr ""
 
 #, fuzzy
-msgid "Unknown Hero"
-msgstr "Ismeretlen"
-
-#, fuzzy
 msgid "Standard"
 msgstr "Szimpla játék"
 
@@ -4510,6 +4521,12 @@ msgid ""
 " on the left side of main menu or by clicking on the configuration button. \n"
 "\n"
 "Enjoy the game!"
+msgstr ""
+
+msgid "Editor"
+msgstr ""
+
+msgid "The Editor requires \"The Price of Loyalty\" expansion files to work."
 msgstr ""
 
 #, fuzzy
@@ -5581,11 +5598,11 @@ msgstr ""
 msgid ""
 "You approach the hut and observe a witch inside studying an ancient tome on "
 "%{skill}.\n"
-" \n"
+"\n"
 msgstr ""
 "A kunyhóhoz érve meglátsz egy öreg banyát, aki egy %{skill}-könyvet "
 "olvasgat.\n"
-" \n"
+"\n"
 
 msgid ""
 "As you approach, she turns and focuses her one glass eye on you.\n"
@@ -6536,9 +6553,9 @@ msgstr ""
 #, fuzzy
 msgid ""
 "The Sphinx asks you the following riddle:\n"
-" \n"
+"\n"
 "'%{riddle}'\n"
-" \n"
+"\n"
 "Your answer?"
 msgstr "A Szfinx a következő rejtvényt adja fel:  %{riddle}. Mi a válaszod?"
 
@@ -6631,16 +6648,16 @@ msgstr "Nincs szabad helye a hősödnek, egy újabb Elementál idézésére."
 
 msgid ""
 "You do not own any town or castle that is not currently occupied by a hero. "
-"You cannot cast this spell."
+"This spell will have no effect."
 msgstr ""
 
 #, fuzzy
-msgid "This hero is already in a town, so you cannot cast this spell."
+msgid "This hero is already in a town, so this spell will have no effect."
 msgstr "Kalandozó varázslat elsütése."
 
 msgid ""
 "The nearest town is %{town}.\n"
-" \n"
+"\n"
 "This town is occupied by your hero %{hero}."
 msgstr ""
 

@@ -79,7 +79,8 @@ namespace Interface
 
     private:
         EditorInterface()
-            : _editorPanel( *this )
+            : BaseInterface( true )
+            , _editorPanel( *this )
         {
             // Do nothing.
         }

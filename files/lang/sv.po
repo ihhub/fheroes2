@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-07 13:24+0000\n"
+"POT-Creation-Date: 2023-10-10 00:20+0000\n"
 "PO-Revision-Date: 2023-09-17 19:00+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -2781,11 +2781,11 @@ msgstr ""
 msgid ""
 "The creatures are swayed by your diplomatic\n"
 "tongue, and make you an offer:\n"
-" \n"
+"\n"
 msgstr ""
 "Varelserna är tagna av din diplomatiska förmåga\n"
 "och kommer med ett förslag:\n"
-" \n"
+"\n"
 
 msgid ""
 "%{offer} of the %{total} %{monster} will join your army, and the rest will "
@@ -3173,6 +3173,10 @@ msgstr "(inte besökt)"
 msgid "%{color} Barrier"
 msgstr "%{color} Barriär."
 
+#, fuzzy
+msgid "(tent visited)"
+msgstr "(inte besökt)"
+
 msgid "%{color} Tent"
 msgstr "%{color} Tält"
 
@@ -3304,6 +3308,13 @@ msgstr "Fil att Ladda:"
 
 msgid "Accept the choice made."
 msgstr "Acceptera alla ändringar."
+
+msgid "Unknown Hero"
+msgstr "Okänd Hjälte"
+
+#, fuzzy
+msgid "%{color} %{race} hero"
+msgstr "%{color} spelare"
 
 msgid "Select Skill:"
 msgstr "Välj Förmåga:"
@@ -3633,6 +3644,12 @@ msgstr ""
 msgid "Choose a tile which does not contain any objects."
 msgstr ""
 
+msgid "Heroes"
+msgstr "Hjältar"
+
+msgid "Heroes cannot be placed on water."
+msgstr ""
+
 msgid "Ocean Objects"
 msgstr "Havsföremål"
 
@@ -3662,9 +3679,6 @@ msgstr "Strandföremål"
 
 msgid "Towns"
 msgstr "Städer"
-
-msgid "Heroes"
-msgstr "Hjältar"
 
 msgid "Artifacts"
 msgstr "Artefakter"
@@ -4128,9 +4142,6 @@ msgstr "Paketdesign"
 msgid "Your Name"
 msgstr "Ditt Namn"
 
-msgid "Unknown Hero"
-msgstr "Okänd Hjälte"
-
 msgid "Standard"
 msgstr "Standardspel"
 
@@ -4572,6 +4583,13 @@ msgid ""
 msgstr ""
 " på vänstersida om huvudmenyn eller genom att klicka på Anpassaknappen.\n"
 "Lycka till!"
+
+msgid "Editor"
+msgstr ""
+
+#, fuzzy
+msgid "The Editor requires \"The Price of Loyalty\" expansion files to work."
+msgstr "En av de fyra nya kampanjer från Lojalitetens Pris expansionen."
 
 msgid "Quit Heroes of Might and Magic II and return to the operating system."
 msgstr "Avsluta Heroes of Might and Magic II och återgå till operativsystemet."
@@ -5682,11 +5700,11 @@ msgstr ""
 msgid ""
 "You approach the hut and observe a witch inside studying an ancient tome on "
 "%{skill}.\n"
-" \n"
+"\n"
 msgstr ""
 "Du närmar dig hyddan och ser en häxa där inne som studerar en uråldrig volym "
 "av %{skill}.\n"
-" \n"
+"\n"
 
 msgid ""
 "As you approach, she turns and focuses her one glass eye on you.\n"
@@ -6791,9 +6809,9 @@ msgstr ""
 
 msgid ""
 "The Sphinx asks you the following riddle:\n"
-" \n"
+"\n"
 "'%{riddle}'\n"
-" \n"
+"\n"
 "Your answer?"
 msgstr ""
 "Sfinxen frågar dig följande gåta:\n"
@@ -6903,19 +6921,21 @@ msgstr ""
 "Det finns ingen ledig strand i närheten för att hjälten skall kunna kasta "
 "denna besvärjelse."
 
+#, fuzzy
 msgid ""
 "You do not own any town or castle that is not currently occupied by a hero. "
-"You cannot cast this spell."
+"This spell will have no effect."
 msgstr ""
 "Du äger för närvarande inte någon stad eller slott som inte är upptaget, så "
 "hjälten kan inte kasta besvärjelsen."
 
-msgid "This hero is already in a town, so you cannot cast this spell."
+#, fuzzy
+msgid "This hero is already in a town, so this spell will have no effect."
 msgstr "Hjälten är redan i en stad, så hjälten kan inte kasta besvärjelsen."
 
 msgid ""
 "The nearest town is %{town}.\n"
-" \n"
+"\n"
 "This town is occupied by your hero %{hero}."
 msgstr ""
 "Närmsta stad är %{town}.\n"

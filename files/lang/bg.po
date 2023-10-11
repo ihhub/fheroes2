@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-07 13:24+0000\n"
+"POT-Creation-Date: 2023-10-10 00:20+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -2799,7 +2799,7 @@ msgstr ""
 msgid ""
 "The creatures are swayed by your diplomatic\n"
 "tongue, and make you an offer:\n"
-" \n"
+"\n"
 msgstr ""
 "Създанията са повлияни от твоята дипломатичен\n"
 "език, и ти правят оферта:\n"
@@ -3190,6 +3190,10 @@ msgstr "(не посещаван)"
 msgid "%{color} Barrier"
 msgstr "%{color} Бариера"
 
+#, fuzzy
+msgid "(tent visited)"
+msgstr "(не посещаван)"
+
 msgid "%{color} Tent"
 msgstr "%{color} палатка"
 
@@ -3321,6 +3325,13 @@ msgstr "Файл за зареждане:"
 
 msgid "Accept the choice made."
 msgstr "Приемете направения избор."
+
+msgid "Unknown Hero"
+msgstr "Незнаен герой"
+
+#, fuzzy
+msgid "%{color} %{race} hero"
+msgstr "%{color} играч"
 
 msgid "Select Skill:"
 msgstr "Избери умение:"
@@ -3650,6 +3661,12 @@ msgstr ""
 msgid "Choose a tile which does not contain any objects."
 msgstr ""
 
+msgid "Heroes"
+msgstr "Герой"
+
+msgid "Heroes cannot be placed on water."
+msgstr ""
+
 msgid "Ocean Objects"
 msgstr "Океански обекти"
 
@@ -3679,9 +3696,6 @@ msgstr "Плажни обекти"
 
 msgid "Towns"
 msgstr "Градове"
-
-msgid "Heroes"
-msgstr "Герой"
 
 msgid "Artifacts"
 msgstr "Артефакти"
@@ -4161,9 +4175,6 @@ msgstr "Дизайн на опаковката"
 msgid "Your Name"
 msgstr "Твоето име"
 
-msgid "Unknown Hero"
-msgstr "Незнаен герой"
-
 msgid "Standard"
 msgstr "Стандарт"
 
@@ -4607,6 +4618,15 @@ msgstr ""
 "конфигурация.\n"
 "\n"
 "Приятна игра!"
+
+msgid "Editor"
+msgstr ""
+
+#, fuzzy
+msgid "The Editor requires \"The Price of Loyalty\" expansion files to work."
+msgstr ""
+"Една от четирите нови кампании от комплекта за разширение на \"Цената на "
+"Лоялността\"."
 
 msgid "Quit Heroes of Might and Magic II and return to the operating system."
 msgstr ""
@@ -5723,7 +5743,7 @@ msgstr ""
 msgid ""
 "You approach the hut and observe a witch inside studying an ancient tome on "
 "%{skill}.\n"
-" \n"
+"\n"
 msgstr ""
 "Приближаваш се до хижата и виждаш вътре вещица изучаваща древен том по "
 "%{skill}.\n"
@@ -6823,9 +6843,9 @@ msgstr ""
 
 msgid ""
 "The Sphinx asks you the following riddle:\n"
-" \n"
+"\n"
 "'%{riddle}'\n"
-" \n"
+"\n"
 "Your answer?"
 msgstr ""
 "Сфинксът ти задава следната гатанка:\n"
@@ -6933,24 +6953,26 @@ msgstr "Няма налични лодки за това заклинание."
 msgid "There is no ocean adjacent to the hero where this spell will work."
 msgstr "Няма океан в близост до героя, където това заклинание ще работи."
 
+#, fuzzy
 msgid ""
 "You do not own any town or castle that is not currently occupied by a hero. "
-"You cannot cast this spell."
+"This spell will have no effect."
 msgstr ""
 "Не притежаваш нито един град или замък, който в момента да не е зает от "
 "герой. Не можеш да направиш това заклинание."
 
-msgid "This hero is already in a town, so you cannot cast this spell."
+#, fuzzy
+msgid "This hero is already in a town, so this spell will have no effect."
 msgstr ""
 "Този герой вече е в град, така че не можеш да направиш това заклинание."
 
 msgid ""
 "The nearest town is %{town}.\n"
-" \n"
+"\n"
 "This town is occupied by your hero %{hero}."
 msgstr ""
 "Най-близкият град е %{town}.\n"
-" \n"
+"\n"
 "Този град е окупиран от твоя герой %{hero}."
 
 msgid "This spell is already in effect."

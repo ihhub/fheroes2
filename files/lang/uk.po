@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-07 13:24+0000\n"
+"POT-Creation-Date: 2023-10-10 00:20+0000\n"
 "PO-Revision-Date: 2023-09-06 08:41+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -2760,7 +2760,7 @@ msgstr ""
 msgid ""
 "The creatures are swayed by your diplomatic\n"
 "tongue, and make you an offer:\n"
-" \n"
+"\n"
 msgstr ""
 
 msgid ""
@@ -3126,6 +3126,9 @@ msgstr ""
 msgid "%{color} Barrier"
 msgstr ""
 
+msgid "(tent visited)"
+msgstr ""
+
 msgid "%{color} Tent"
 msgstr ""
 
@@ -3250,6 +3253,12 @@ msgid "File to Load:"
 msgstr ""
 
 msgid "Accept the choice made."
+msgstr ""
+
+msgid "Unknown Hero"
+msgstr ""
+
+msgid "%{color} %{race} hero"
 msgstr ""
 
 msgid "Select Skill:"
@@ -3556,6 +3565,12 @@ msgstr ""
 msgid "Choose a tile which does not contain any objects."
 msgstr ""
 
+msgid "Heroes"
+msgstr ""
+
+msgid "Heroes cannot be placed on water."
+msgstr ""
+
 msgid "Ocean Objects"
 msgstr ""
 
@@ -3585,9 +3600,6 @@ msgstr ""
 
 msgid "Towns"
 msgstr "Міста"
-
-msgid "Heroes"
-msgstr ""
 
 msgid "Artifacts"
 msgstr ""
@@ -4026,9 +4038,6 @@ msgstr ""
 msgid "Your Name"
 msgstr "Ваше Ім'я"
 
-msgid "Unknown Hero"
-msgstr ""
-
 msgid "Standard"
 msgstr ""
 
@@ -4454,6 +4463,12 @@ msgid ""
 " on the left side of main menu or by clicking on the configuration button. \n"
 "\n"
 "Enjoy the game!"
+msgstr ""
+
+msgid "Editor"
+msgstr ""
+
+msgid "The Editor requires \"The Price of Loyalty\" expansion files to work."
 msgstr ""
 
 msgid "Quit Heroes of Might and Magic II and return to the operating system."
@@ -5436,7 +5451,7 @@ msgstr ""
 msgid ""
 "You approach the hut and observe a witch inside studying an ancient tome on "
 "%{skill}.\n"
-" \n"
+"\n"
 msgstr ""
 
 msgid ""
@@ -6239,9 +6254,9 @@ msgstr ""
 
 msgid ""
 "The Sphinx asks you the following riddle:\n"
-" \n"
+"\n"
 "'%{riddle}'\n"
-" \n"
+"\n"
 "Your answer?"
 msgstr ""
 
@@ -6321,16 +6336,17 @@ msgstr "Біля героя немає водойми, то ж ви не мож�
 
 msgid ""
 "You do not own any town or castle that is not currently occupied by a hero. "
-"You cannot cast this spell."
+"This spell will have no effect."
 msgstr ""
 
-msgid "This hero is already in a town, so you cannot cast this spell."
+#, fuzzy
+msgid "This hero is already in a town, so this spell will have no effect."
 msgstr ""
 "Цей герой вже перебуває у місті, то ж ви не можете використати це закляття."
 
 msgid ""
 "The nearest town is %{town}.\n"
-" \n"
+"\n"
 "This town is occupied by your hero %{hero}."
 msgstr ""
 

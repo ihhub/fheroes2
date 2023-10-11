@@ -205,9 +205,9 @@ std::string Skill::Primary::StringDescription( int skill, const Heroes * hero )
     }
 
     if ( !ext.empty() ) {
-        res.append( "\n \n" );
+        res.append( "\n\n" );
         res.append( _( "Current Modifiers:" ) );
-        res.append( "\n \n" );
+        res.append( "\n\n" );
         res.append( ext );
     }
 

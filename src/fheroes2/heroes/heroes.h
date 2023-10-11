@@ -63,7 +63,6 @@ namespace fheroes2
 {
     class Image;
     class Sprite;
-    struct ObjectRenderingInfo;
 }
 
 struct HeroSeedsForLevelUp
@@ -262,6 +261,8 @@ public:
         Heroes & _hero;
         const double _initialArmyStrength;
     };
+
+    static const int heroFrameCountPerTile{ 9 };
 
     Heroes();
     Heroes( int heroid, int rc );
@@ -499,10 +500,6 @@ public:
 
     bool MayCastAdventureSpells() const;
 
-    // Since heroes sprite are much bigger than a tile we need to 'cut' the sprite and the shadow's sprite into pieces. Each piece is for a separate tile.
-    std::vector<fheroes2::ObjectRenderingInfo> getHeroSpritesPerTile() const;
-    std::vector<fheroes2::ObjectRenderingInfo> getHeroShadowSpritesPerTile() const;
-
     void PortraitRedraw( const int32_t px, const int32_t py, const PortraitType type, fheroes2::Image & dstsf ) const override;
 
     int GetSpriteIndex() const
@@ -610,6 +607,8 @@ public:
 
     uint32_t getDailyRestoredSpellPoints() const;
 
+    bool isInDeepOcean() const;
+
 private:
     friend StreamBase & operator<<( StreamBase &, const Heroes & );
     friend StreamBase & operator>>( StreamBase &, Heroes & );
@@ -631,8 +630,6 @@ private:
 
     // Daily replenishment of spell points
     void ReplenishSpellPoints();
-
-    bool isInDeepOcean() const;
 
     enum
     {
