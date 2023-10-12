@@ -70,7 +70,7 @@ void fheroes2::drawMiniMonsters( const Troops & troops, int32_t cx, const int32_
     for ( size_t slot = 0; slot < slots; ++slot ) {
         // Skip the monster handling when a slot is empty
         if ( slotsToSkip > 0 && !isCompact ) {
-            slotsToSkip--;
+            --slotsToSkip;
             cx -= chunk;
             continue;
         }
