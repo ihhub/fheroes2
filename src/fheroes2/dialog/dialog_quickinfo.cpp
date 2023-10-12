@@ -703,7 +703,7 @@ namespace
         const Settings & conf = Settings::Get();
 
         const bool isNeutralHero = ( hero.GetColor() == Color::NONE );
-        const bool isFullInfo = [&hero, &showFullInfo, &conf, isNeutralHero]() {
+        const bool isFullInfo = [&hero, showFullInfo, &conf, isNeutralHero]() {
             if ( showFullInfo ) {
                 return *showFullInfo;
             }
