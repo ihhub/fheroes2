@@ -7,16 +7,16 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-10 00:20+0000\n"
-"PO-Revision-Date: 2023-09-17 19:00+0200\n"
+"PO-Revision-Date: 2023-10-12 20:05+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Type: text/plain; charset=UTF.8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Launchpad-Export-Date: 2013-10-09 02:01+0000\n"
-"X-Generator: Poedit 3.3.1\n"
+"X-Generator: Poedit 3.4\n"
 
 msgid ""
 "BATTLE\n"
@@ -3090,20 +3090,25 @@ msgstr "%{skill} +1"
 msgid "You have learned %{skill}."
 msgstr "Du har lärt dig %{skill}."
 
-#, fuzzy
 msgid ""
 "%{name} has gained a level.\n"
 "\n"
 "%{skill} +1"
-msgstr "%{name} har gått upp en nivå."
+msgstr ""
+"%{name} har gått upp en nivå. \n"
+"\n"
+"%{skill} +1"
 
-#, fuzzy
 msgid ""
 "You may learn either:\n"
 "%{skill1}\n"
 "or\n"
 "%{skill2}"
-msgstr "Du kan lära dig antingen:"
+msgstr ""
+"Du kan lära dig antingen:\n"
+"%{skill1}\n"
+"eller\n"
+"%{skill2}"
 
 msgid ""
 "Please inspect our fine wares. If you feel like offering a trade, click on "
@@ -3173,9 +3178,8 @@ msgstr "(inte besökt)"
 msgid "%{color} Barrier"
 msgstr "%{color} Barriär."
 
-#, fuzzy
 msgid "(tent visited)"
-msgstr "(inte besökt)"
+msgstr "(tält besökt)"
 
 msgid "%{color} Tent"
 msgstr "%{color} Tält"
@@ -3312,9 +3316,8 @@ msgstr "Acceptera alla ändringar."
 msgid "Unknown Hero"
 msgstr "Okänd Hjälte"
 
-#, fuzzy
 msgid "%{color} %{race} hero"
-msgstr "%{color} spelare"
+msgstr "%{color} %{race}hjälte"
 
 msgid "Select Skill:"
 msgstr "Välj Förmåga:"
@@ -3639,16 +3642,16 @@ msgid "Monster"
 msgstr "Monster"
 
 msgid "Monsters cannot be placed on water."
-msgstr ""
+msgstr "Varelser kan inte placeras på vatten."
 
 msgid "Choose a tile which does not contain any objects."
-msgstr ""
+msgstr "Välj en ruta som inte har några objekt."
 
 msgid "Heroes"
 msgstr "Hjältar"
 
 msgid "Heroes cannot be placed on water."
-msgstr ""
+msgstr "Hjältar kan inte placeras på vatten."
 
 msgid "Ocean Objects"
 msgstr "Havsföremål"
@@ -4250,13 +4253,11 @@ msgstr "Ny blank karta"
 msgid "hotkey|new random map"
 msgstr "Ny slumpad karta"
 
-#, fuzzy
 msgid "hotkey|undo last action"
-msgstr "Nästa stad"
+msgstr "Ångra senaste handling"
 
-#, fuzzy
 msgid "hotkey|redo last action"
-msgstr "Rolands kampanj"
+msgstr "Gör om senaste handling"
 
 msgid "hotkey|roland campaign"
 msgstr "Rolands kampanj"
@@ -4324,9 +4325,8 @@ msgstr "Spara spel"
 msgid "hotkey|next hero"
 msgstr "Nästa hjälte"
 
-#, fuzzy
 msgid "hotkey|start hero movement"
-msgstr "Fortsätt förflyttning"
+msgstr "Påbörja hjälteförflyttning"
 
 msgid "hotkey|cast adventure spell"
 msgstr "Kasta en kartbesvärjelse."
@@ -4585,11 +4585,12 @@ msgstr ""
 "Lycka till!"
 
 msgid "Editor"
-msgstr ""
+msgstr "Redigerare"
 
-#, fuzzy
 msgid "The Editor requires \"The Price of Loyalty\" expansion files to work."
-msgstr "En av de fyra nya kampanjer från Lojalitetens Pris expansionen."
+msgstr ""
+"Kartredigeraren kräver \"The Price of Loyalty\"-expansionens filer för att "
+"fungera."
 
 msgid "Quit Heroes of Might and Magic II and return to the operating system."
 msgstr "Avsluta Heroes of Might and Magic II och återgå till operativsystemet."
@@ -5045,9 +5046,8 @@ msgstr "Nästa Hjälte"
 msgid "Select the next Hero."
 msgstr "Välj nästa Hjälte."
 
-#, fuzzy
 msgid "Hero Movement"
-msgstr "Skuggförflyttning"
+msgstr "Hjälteförflyttning"
 
 msgid ""
 "Start the Hero's movement along the current path or re-visit the object "
@@ -6921,17 +6921,16 @@ msgstr ""
 "Det finns ingen ledig strand i närheten för att hjälten skall kunna kasta "
 "denna besvärjelse."
 
-#, fuzzy
 msgid ""
 "You do not own any town or castle that is not currently occupied by a hero. "
 "This spell will have no effect."
 msgstr ""
-"Du äger för närvarande inte någon stad eller slott som inte är upptaget, så "
-"hjälten kan inte kasta besvärjelsen."
+"Du äger för närvarande inte någon stad eller slott som inte är upptaget,. "
+"Besvärjelsen har ingen verkan."
 
-#, fuzzy
 msgid "This hero is already in a town, so this spell will have no effect."
-msgstr "Hjälten är redan i en stad, så hjälten kan inte kasta besvärjelsen."
+msgstr ""
+"Hjälten är redan i en stad, så besvärjelsen kommer inte ha någon verkan."
 
 msgid ""
 "The nearest town is %{town}.\n"
