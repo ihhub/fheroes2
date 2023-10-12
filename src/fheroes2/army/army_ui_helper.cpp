@@ -40,7 +40,8 @@ void fheroes2::drawMiniMonsters( const Troops & troops, int32_t cx, const int32_
         return;
     }
 
-    if ( 0 == count ) {
+    if ( count == 0 ) {
+        // If this function was called with 'count == 0' than the count is determined by the number of troop slots.
         count = troops.GetOccupiedSlotCount();
     }
 
@@ -60,6 +61,7 @@ void fheroes2::drawMiniMonsters( const Troops & troops, int32_t cx, const int32_
     const size_t slots = troops.Size();
     for ( size_t slot = 0; slot < slots; ++slot ) {
         if ( count == 0 ) {
+            // We have rendered the given count of troops. There is nothing more to do.
             break;
         }
 
