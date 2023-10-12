@@ -260,7 +260,7 @@ void StatsHeroesList::ActionListSingleClick( HeroRow & row, const fheroes2::Poin
 void StatsHeroesList::ActionListPressRight( HeroRow & row, const fheroes2::Point & cursor, int32_t ox, int32_t oy )
 {
     if ( row.hero && ( fheroes2::Rect( ox + 5, oy + 4, Interface::IconsBar::GetItemWidth(), Interface::IconsBar::GetItemHeight() ) & cursor ) ) {
-        Dialog::QuickInfo( *row.hero, {}, true, _windowArea );
+        Dialog::QuickInfoWithIndicationOnRadar( *row.hero, _windowArea );
     }
 }
 
@@ -546,15 +546,15 @@ void StatsCastlesList::ActionListPressRight( CstlRow & row, const fheroes2::Poin
 {
     if ( row.castle ) {
         if ( fheroes2::Rect( ox + 17, oy + 19, Interface::IconsBar::GetItemWidth(), Interface::IconsBar::GetItemHeight() ) & cursor ) {
-            Dialog::QuickInfo( *row.castle, {}, true, _windowArea );
+            Dialog::QuickInfoWithIndicationOnRadar( *row.castle, _windowArea );
         }
         else if ( fheroes2::Rect( ox + 82, oy + 19, Interface::IconsBar::GetItemWidth(), Interface::IconsBar::GetItemHeight() ) & cursor ) {
             const Heroes * hero = row.castle->GetHero();
             if ( hero ) {
-                Dialog::QuickInfo( *hero, {}, true, _windowArea );
+                Dialog::QuickInfoWithIndicationOnRadar( *hero, _windowArea );
             }
             else if ( row.castle->isBuild( BUILD_CAPTAIN ) ) {
-                Dialog::QuickInfo( row.castle->GetCaptain(), {}, true, _windowArea );
+                Dialog::QuickInfoWithIndicationOnRadar( row.castle->GetCaptain(), _windowArea );
             }
         }
     }
