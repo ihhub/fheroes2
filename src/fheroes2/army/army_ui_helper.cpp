@@ -40,16 +40,21 @@ void fheroes2::drawMiniMonsters( const Troops & troops, int32_t cx, const int32_
         return;
     }
 
+    bool isRightToLeftRender = false;
+
     if ( count == 0 ) {
         // If this function was called with 'count == 0' than the count is determined by the number of troop slots.
         count = troops.GetOccupiedSlotCount();
+
+        if ( first == 0 ) {
+            // This is the case when we render all the troops and do it from left to right.
+            // It is done to make troop sprites overlapping more appealing when troops are close to each other.
+            // This case may occur if many troops were killed during the battle (lots of summoned elementals and/or mirror image troops).
+            isRightToLeftRender = true;
+        }
     }
 
     const double chunk = width / static_cast<double>( count );
-
-    // If troops are close to each other (it may occur if many troops were killed during the battle)
-    // we render them from right to left to make troop sprites overlapping more appealing.
-    const bool isRightToLeftRender = chunk < 25;
 
     if ( !isCompact ) {
         cx += static_cast<int32_t>( chunk / 2 );
@@ -65,7 +70,7 @@ void fheroes2::drawMiniMonsters( const Troops & troops, int32_t cx, const int32_
             break;
         }
 
-        const Troop * troop = troops.GetTroop( slot );
+        const Troop * troop = troops.GetTroop( isRightToLeftRender ? ( slots - slot - 1 ) : slot );
 
         if ( troop == nullptr || !troop->isValid() ) {
             continue;
