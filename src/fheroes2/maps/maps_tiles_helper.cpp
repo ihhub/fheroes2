@@ -1892,12 +1892,6 @@ namespace Maps
                 count += Rand::Get( 1, 3 );
             }
 
-            static_assert( LAST_SUPPORTED_FORMAT_VERSION <= FORMAT_VERSION_PRE1_1005_RELEASE, "Remove the check below." );
-            if ( count == 0 ) {
-                // The fix for the case when the Troll Bridge or City of Dead with NONE tile color, has 0 creatures (fixed in PR #7246).
-                count += Rand::Get( 1, 3 );
-            }
-
             break;
 
         case MP2::OBJ_DRAGON_CITY:
@@ -1906,12 +1900,6 @@ namespace Maps
             }
             else if ( getColorFromTile( tile ) != Color::NONE ) {
                 // If the Dragon City has been captured or has 0 creatures, its population is increased by 1 dragon per week.
-                ++count;
-            }
-
-            static_assert( LAST_SUPPORTED_FORMAT_VERSION <= FORMAT_VERSION_PRE1_1005_RELEASE, "Remove the check below." );
-            if ( count == 0 ) {
-                // The fix for the case when the Dragon City with NONE tile color, has 0 creatures (fixed in PR #7246).
                 ++count;
             }
 

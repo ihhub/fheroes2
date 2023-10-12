@@ -790,24 +790,6 @@ namespace Campaign
         return std::vector<Campaign::ScenarioBonusData>();
     }
 
-    StreamBase & operator>>( StreamBase & msg, Campaign::ScenarioBonusData & data )
-    {
-        static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1005_RELEASE, "Remove this operator." );
-
-        msg >> data._type >> data._subType;
-
-        static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE1_1005_RELEASE, "Remove the logic below." );
-        if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_PRE1_1005_RELEASE ) {
-            if ( data._type == ScenarioBonusData::BonusType::ARTIFACT ) {
-                // Old save formats contain different values for artifacts.
-                assert( data._subType < 103 );
-                ++data._subType;
-            }
-        }
-
-        return msg >> data._amount >> data._artifactSpellId;
-    }
-
     ScenarioData::ScenarioData( const ScenarioInfoId & scenarioInfo, std::vector<ScenarioInfoId> && nextScenarios, const std::string & fileName,
                                 const std::string & scenarioName, const std::string & description, const VideoSequence & startScenarioVideoPlayback,
                                 const VideoSequence & endScenarioVideoPlayback, const ScenarioVictoryCondition victoryCondition,
