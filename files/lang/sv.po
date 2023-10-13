@@ -4254,10 +4254,10 @@ msgid "hotkey|new random map"
 msgstr "Ny slumpad karta"
 
 msgid "hotkey|undo last action"
-msgstr "Ångra senaste handling"
+msgstr "Ångra senaste åtgärden"
 
 msgid "hotkey|redo last action"
-msgstr "Gör om senaste handling"
+msgstr "Gör om senaste åtgärden"
 
 msgid "hotkey|roland campaign"
 msgstr "Rolands kampanj"
