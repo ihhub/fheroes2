@@ -158,7 +158,7 @@ namespace AI
     void OptimizeTroopsOrder( Army & hero );
     bool CanPurchaseHero( const Kingdom & kingdom );
 
-    bool tradeAtMarketplace( Kingdom & kingdom, const payment_t requiredAmount );
+    bool tradeAtMarketplace( Kingdom & kingdom, const Funds & requiredAmount );
 
     StreamBase & operator<<( StreamBase &, const AI::Base & );
     StreamBase & operator>>( StreamBase &, AI::Base & );

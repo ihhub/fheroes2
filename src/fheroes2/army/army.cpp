@@ -52,7 +52,6 @@
 #include "maps_tiles_helper.h"
 #include "morale.h"
 #include "mp2.h"
-#include "payment.h"
 #include "race.h"
 #include "rand.h"
 #include "resource.h"
@@ -463,7 +462,7 @@ void Troops::UpgradeTroops( const Castle & castle ) const
             continue;
         }
 
-        const payment_t payment = troop->GetTotalUpgradeCost();
+        const Funds payment = troop->GetTotalUpgradeCost();
         if ( kingdom.AllowPayment( payment ) ) {
             kingdom.OddFundsResource( payment );
             troop->Upgrade();
@@ -1593,7 +1592,7 @@ NeutralMonsterJoiningCondition Army::GetJoinSolution( const Heroes & hero, const
 
             // The ability to hire the entire stack of monsters is a mandatory condition for their joining
             // due to hero's Diplomacy skill in accordance with the mechanics of the original game
-            if ( amountToJoin > 0 && hero.GetKingdom().AllowPayment( payment_t( Resource::GOLD, troop.GetTotalCost().gold ) ) ) {
+            if ( amountToJoin > 0 && hero.GetKingdom().AllowPayment( Funds( Resource::GOLD, troop.GetTotalCost().gold ) ) ) {
                 return { NeutralMonsterJoiningCondition::Reason::ForMoney, amountToJoin, nullptr, nullptr };
             }
         }

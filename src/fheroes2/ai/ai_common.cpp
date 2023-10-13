@@ -19,6 +19,7 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <cassert>
 #include <cstddef>
 #include <cstdint>
 #include <vector>
@@ -167,7 +168,7 @@ namespace AI
         return kingdom.AllowPayment( PaymentConditions::RecruitHero() - kingdom.GetIncome() );
     }
 
-    bool tradeAtMarketplace( Kingdom & kingdom, const payment_t requiredAmount )
+    bool tradeAtMarketplace( Kingdom & kingdom, const Funds & requiredAmount )
     {
         const uint32_t marketplaceCount = kingdom.GetCountMarketplace();
         if ( marketplaceCount == 0 ) {
@@ -181,7 +182,7 @@ namespace AI
 
         bool tradeFailed = false;
 
-        Resource::forEach( Resource::ALL, [&kingdom, marketplaceCount, &plannedBalance, &plannedPayment, &tradeFailed]( const int res ) {
+        Resource::forEach( Resource::ALL, [marketplaceCount, &plannedBalance, &plannedPayment, &tradeFailed]( const int res ) {
             int32_t & missingResAmount = *( plannedBalance.GetPtr( res ) );
             if ( missingResAmount >= 0 ) {
                 return;

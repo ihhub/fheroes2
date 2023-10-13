@@ -630,7 +630,7 @@ double Castle::getVisitValue( const Heroes & hero ) const
         }
 
         if ( !hero.HaveSpellBook() && spellValue > 0 ) {
-            const payment_t payment = PaymentConditions::BuySpellBook();
+            const Funds payment = PaymentConditions::BuySpellBook();
             if ( potentialFunds < payment || hero.GetBagArtifacts().isFull() ) {
                 // Since the hero does not have a magic book and cannot buy any then spells are useless.
                 spellValue = 0;
@@ -654,7 +654,7 @@ double Castle::getVisitValue( const Heroes & hero ) const
                 continue;
             }
 
-            const payment_t payment = troop->GetTotalUpgradeCost();
+            const Funds payment = troop->GetTotalUpgradeCost();
             if ( potentialFunds >= payment ) {
                 potentialFunds -= payment;
                 troop->Upgrade();
@@ -1080,7 +1080,7 @@ bool Castle::RecruitMonster( const Troop & troop, bool showDialog )
         count = dwelling[dwellingIndex];
     }
 
-    const payment_t paymentCosts = troop.GetTotalCost();
+    const Funds paymentCosts = troop.GetTotalCost();
     Kingdom & kingdom = GetKingdom();
 
     if ( !kingdom.AllowPayment( paymentCosts ) ) {
@@ -2863,7 +2863,7 @@ std::string Castle::GetDescriptionBuilding( uint32_t build ) const
 
     case BUILD_SPEC:
     case BUILD_STATUE: {
-        const payment_t profit = ProfitConditions::FromBuilding( build, GetRace() );
+        const Funds profit = ProfitConditions::FromBuilding( build, GetRace() );
         StringReplace( res, "%{count}", profit.gold );
         break;
     }

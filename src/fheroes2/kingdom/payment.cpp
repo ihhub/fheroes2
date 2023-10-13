@@ -24,27 +24,27 @@
 #include "payment.h"
 #include "buildinginfo.h"
 
-payment_t PaymentConditions::BuyBuilding( int race, uint32_t build )
+Funds PaymentConditions::BuyBuilding( int race, uint32_t build )
 {
     return BuildingInfo::GetCost( build, race );
 }
 
-payment_t PaymentConditions::BuyBoat()
+Funds PaymentConditions::BuyBoat()
 {
-    return payment_t( cost_t{ 1000, 10, 0, 0, 0, 0, 0 } );
+    return Funds( cost_t{ 1000, 10, 0, 0, 0, 0, 0 } );
 }
 
-payment_t PaymentConditions::BuySpellBook()
+Funds PaymentConditions::BuySpellBook()
 {
-    return payment_t( cost_t{ 500, 0, 0, 0, 0, 0, 0 } );
+    return Funds( cost_t{ 500, 0, 0, 0, 0, 0, 0 } );
 }
 
-payment_t PaymentConditions::RecruitHero()
+Funds PaymentConditions::RecruitHero()
 {
-    return payment_t( cost_t{ 2500, 0, 0, 0, 0, 0, 0 } );
+    return Funds( cost_t{ 2500, 0, 0, 0, 0, 0, 0 } );
 }
 
-payment_t PaymentConditions::ForAlchemist()
+Funds PaymentConditions::ForAlchemist()
 {
-    return payment_t( cost_t{ 750, 0, 0, 0, 0, 0, 0 } );
+    return Funds( cost_t{ 750, 0, 0, 0, 0, 0, 0 } );
 }

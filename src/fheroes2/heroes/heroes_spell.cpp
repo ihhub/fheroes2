@@ -57,7 +57,7 @@
 #include "math_base.h"
 #include "monster.h"
 #include "mp2.h"
-#include "payment.h"
+#include "resource.h"
 #include "route.h"
 #include "screen.h"
 #include "settings.h"
