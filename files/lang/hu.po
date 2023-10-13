@@ -2702,7 +2702,7 @@ msgid "MIDI"
 msgstr "MIDI"
 
 msgid "MIDI Expansion"
-msgstr "MIDI bővítmény"
+msgstr "MIDI kiegészítő"
 
 msgid "External"
 msgstr "Külső"
@@ -3346,7 +3346,7 @@ msgstr ""
 "foglalhatnak magukban."
 
 msgid "Selected Description"
-msgstr "A kiválasztott térkép leírása"
+msgstr "Kiválasztott leírás"
 
 msgid "The description of the currently selected map."
 msgstr "A kiválasztott térkép leírása."
