@@ -34,6 +34,7 @@
 #include "payment.h"
 #include "rand.h"
 #include "resource.h"
+#include "resource_trading.h"
 #include "settings.h"
 
 namespace AI
@@ -164,5 +165,71 @@ namespace AI
 
         // This is not the current turn for the AI so we need to roughly calculate the possible future income on the next day.
         return kingdom.AllowPayment( PaymentConditions::RecruitHero() - kingdom.GetIncome() );
+    }
+
+    bool tradeAtMarketplace( Kingdom & kingdom, const payment_t requiredAmount )
+    {
+        const uint32_t marketplaceCount = kingdom.GetCountMarketplace();
+        if ( marketplaceCount == 0 ) {
+            return false;
+        }
+
+        static const std::vector<int> resourcePriorities{ Resource::WOOD, Resource::ORE, Resource::MERCURY, Resource::SULFUR, Resource::CRYSTAL, Resource::GEMS };
+
+        Funds plannedBalance = kingdom.GetFunds() - requiredAmount;
+        Funds plannedPayment;
+
+        bool tradeFailed = false;
+
+        Resource::forEach( Resource::ALL, [&kingdom, marketplaceCount, &plannedBalance, &plannedPayment, &tradeFailed]( const int res ) {
+            int32_t & missingResAmount = *( plannedBalance.GetPtr( res ) );
+            if ( missingResAmount >= 0 ) {
+                return;
+            }
+
+            for ( const int resForSale : resourcePriorities ) {
+                int32_t & saleResAmount = *( plannedBalance.GetPtr( resForSale ) );
+
+                if ( saleResAmount <= 0 ) {
+                    continue;
+                }
+
+                const int32_t tradeCost = fheroes2::getTradeCost( marketplaceCount, resForSale, res );
+                assert( tradeCost > 0 );
+
+                const int32_t amountToBuy = std::min( -missingResAmount, saleResAmount / tradeCost );
+                assert( amountToBuy >= 0 );
+
+                if ( amountToBuy == 0 ) {
+                    continue;
+                }
+
+                saleResAmount -= amountToBuy * tradeCost;
+                missingResAmount += amountToBuy;
+
+                assert( saleResAmount >= 0 );
+
+                *( plannedPayment.GetPtr( resForSale ) ) += amountToBuy * tradeCost;
+                *( plannedPayment.GetPtr( res ) ) -= amountToBuy;
+
+                if ( missingResAmount >= 0 ) {
+                    assert( missingResAmount == 0 );
+
+                    return;
+                }
+            }
+
+            tradeFailed = true;
+        } );
+
+        if ( tradeFailed ) {
+            return false;
+        }
+
+        assert( kingdom.AllowPayment( plannedPayment ) );
+
+        kingdom.OddFundsResource( plannedPayment );
+
+        return true;
     }
 }

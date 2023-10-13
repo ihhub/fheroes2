@@ -25,6 +25,7 @@
 #define H2AI_H
 
 #include "mp2.h"
+#include "payment.h"
 #include "rand.h"
 
 class StreamBase;
@@ -156,6 +157,8 @@ namespace AI
     uint32_t GetResourceMultiplier( uint32_t min, uint32_t max );
     void OptimizeTroopsOrder( Army & hero );
     bool CanPurchaseHero( const Kingdom & kingdom );
+
+    bool tradeAtMarketplace( Kingdom & kingdom, const payment_t requiredAmount );
 
     StreamBase & operator<<( StreamBase &, const AI::Base & );
     StreamBase & operator>>( StreamBase &, AI::Base & );

@@ -1591,7 +1591,6 @@ bool Castle::AllowBuyBuilding( uint32_t build ) const
     return ALLOW_BUILD == CheckBuyBuilding( build );
 }
 
-/* buy building */
 bool Castle::BuyBuilding( uint32_t build )
 {
     if ( !AllowBuyBuilding( build ) )
