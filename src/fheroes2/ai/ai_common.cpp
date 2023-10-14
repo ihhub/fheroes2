@@ -336,17 +336,19 @@ namespace AI
     {
         const std::optional<Funds> transaction = calculateMarketplaceTransaction( kingdom, fundsToObtain );
         if ( !transaction ) {
-            DEBUG_LOG( DBG_AI, DBG_TRACE, Color::String( kingdom.GetColor() ) << " failed to obtain funds " << fundsToObtain.String() )
+            DEBUG_LOG( DBG_AI, DBG_TRACE,
+                       Color::String( kingdom.GetColor() ) << " having funds " << kingdom.GetFunds().String() << " failed to obtain funds " << fundsToObtain.String() )
 
             return false;
         }
 
         assert( kingdom.AllowPayment( *transaction ) );
 
-        kingdom.OddFundsResource( *transaction );
-
         DEBUG_LOG( DBG_AI, DBG_INFO,
-                   Color::String( kingdom.GetColor() ) << " obtained funds " << fundsToObtain.String() << " through a transaction " << transaction->String() )
+                   Color::String( kingdom.GetColor() ) << " having funds " << kingdom.GetFunds().String() << " obtains funds " << fundsToObtain.String()
+                                                       << " through a transaction " << transaction->String() )
+
+        kingdom.OddFundsResource( *transaction );
 
         return true;
     }
