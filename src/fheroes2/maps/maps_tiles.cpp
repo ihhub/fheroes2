@@ -1899,7 +1899,5 @@ StreamBase & Maps::operator>>( StreamBase & msg, Tiles & tile )
         std::copy_n( temp.begin(), tile._metadata.size(), tile._metadata.begin() );
     }
 
-    msg >> tile._occupantHeroId >> tile._isTileMarkedAsRoad >> tile._addonBottomLayer >> tile._addonTopLayer >> tile._layerType >> tile._boatOwnerColor;
-
-    return msg;
+    return msg >> tile._occupantHeroId >> tile._isTileMarkedAsRoad >> tile._addonBottomLayer >> tile._addonTopLayer >> tile._layerType >> tile._boatOwnerColor;
 }

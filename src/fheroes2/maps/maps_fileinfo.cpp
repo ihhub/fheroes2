@@ -520,9 +520,7 @@ StreamBase & Maps::operator>>( StreamBase & msg, FileInfo & fi )
 
     fi.version = static_cast<GameVersion>( version );
 
-    msg >> fi.worldDay >> fi.worldWeek >> fi.worldMonth;
-
-    return msg;
+    return msg >> fi.worldDay >> fi.worldWeek >> fi.worldMonth;
 }
 
 MapsFileInfoList Maps::PrepareMapsFileInfoList( const bool multi )

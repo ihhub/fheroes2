@@ -497,9 +497,7 @@ StreamBase & operator<<( StreamBase & msg, const Artifact & art )
 
 StreamBase & operator>>( StreamBase & msg, Artifact & art )
 {
-    msg >> art.id >> art.ext;
-
-    return msg;
+    return msg >> art.id >> art.ext;
 }
 
 BagArtifacts::BagArtifacts()
