@@ -33,13 +33,11 @@
 
 class StreamBase;
 class Funds;
-class Castle;
 class HeroBase;
 class Heroes;
 class Kingdom;
 class Army;
 class Spell;
-struct VecHeroes;
 
 namespace Maps
 {
