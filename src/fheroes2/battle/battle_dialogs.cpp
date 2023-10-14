@@ -579,7 +579,7 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
     text.draw( pos_rt.x + ( pos_rt.width - text.width() ) / 2, pos_rt.y + 287, display );
 
     if ( killed1.isValid() ) {
-        Army::drawSingleDetailedMonsterLine( killed1, pos_rt.x + 25, pos_rt.y + 308, 270 );
+        Army::drawSingleDetailedMonsterLine( killed1, pos_rt.x + 40, pos_rt.y + 308, 240 );
     }
     else {
         text.set( _( "None" ), fheroes2::FontType::smallWhite() );
@@ -591,7 +591,7 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
     text.draw( pos_rt.x + ( pos_rt.width - text.width() ) / 2, pos_rt.y + 347, display );
 
     if ( killed2.isValid() ) {
-        Army::drawSingleDetailedMonsterLine( killed2, pos_rt.x + 25, pos_rt.y + 368, 270 );
+        Army::drawSingleDetailedMonsterLine( killed2, pos_rt.x + 40, pos_rt.y + 368, 240 );
     }
     else {
         text.set( _( "None" ), fheroes2::FontType::smallWhite() );
