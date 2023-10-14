@@ -102,6 +102,11 @@ namespace AI
                 bool valid = true;
 
                 Resource::forEach( Resource::ALL, [&fundsRequiredAfterTransaction, &valid]( const int res ) {
+                    // When exchanging resources for gold, we can get a little more gold than we need. Since the resources that we buy are indicated with a minus sign in
+                    // the trade transaction, then we can get a negative amount of gold required to build a building after applying this transaction to the building
+                    // construction requirements. For example, if 500 gold is needed to build a building, the kingdom has 0 gold, but we sell 19 units of wood for 25 gold
+                    // per unit and 1 unit of mercury for 50 gold, then we will get 525 units of gold. Thus, after the construction of the building, we will have more
+                    // gold than before its construction (25 gold vs 0 gold).
                     if ( res == Resource::GOLD ) {
                         return;
                     }
@@ -243,6 +248,7 @@ namespace AI
             while ( missingResAmount < 0 ) {
                 bool wasTradeDeal = false;
 
+                // Sell the available resources evenly so that there are no distortions in favor of or to the detriment of any of the resources
                 Resource::forEach( Resource::ALL,
                                    [marketplaceCount, &plannedBalance, &plannedTransaction, missingRes, &missingResAmount, &wasTradeDeal]( const int saleRes ) {
                                        if ( missingResAmount >= 0 ) {
