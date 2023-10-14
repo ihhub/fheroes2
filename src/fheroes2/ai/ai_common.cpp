@@ -340,7 +340,7 @@ namespace AI
         kingdom.OddFundsResource( *transaction );
 
         DEBUG_LOG( DBG_AI, DBG_INFO,
-                   Color::String( kingdom.GetColor() ) << " obtained funds " << fundsToObtain.String() << " through a trading operation " << transaction->String() )
+                   Color::String( kingdom.GetColor() ) << " obtained funds " << fundsToObtain.String() << " through a transaction " << transaction->String() )
 
         return true;
     }
