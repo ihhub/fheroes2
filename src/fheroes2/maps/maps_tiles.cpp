@@ -537,7 +537,7 @@ void Maps::Tiles::setTerrain( const uint16_t terrainImageIndex, const bool horiz
 
     if ( ( isNewGroundWater || oldGround == Ground::WATER ) && oldGround != newGround ) {
         // When changing water to land and vice-versa we should remove all objects from the tile.
-        eraseOjects( *this, 255U );
+        eraseOjects( *this, ObjectEraseMask::ALL_OBJECTS );
     }
 
     if ( ( _isTileMarkedAsRoad || isStream() ) && !isNewGroundWater && Maps::Ground::doesTerrainImageIndexContainEmbeddedObjects( terrainImageIndex ) ) {

@@ -219,12 +219,12 @@ namespace Interface
             terrainText.draw( _rectInstrumentPanel.x + 72 - terrainText.width() / 2, _rectInstrumentPanel.y + 135, display );
         }
         else if ( _selectedInstrument == Instrument::ERASE ) {
-            const fheroes2::Sprite & selection = fheroes2::AGG::GetICN( ICN::TERRAINS, 9 );
+            // const fheroes2::Sprite & selection = fheroes2::AGG::GetICN( ICN::TERRAINS, 9 );
             const fheroes2::Sprite & selectionMark = fheroes2::AGG::GetICN( ICN::TOWNWIND, 11 );
             for ( size_t i = 0; i < _eraseButtonsRect.size(); ++i ) {
-                if ( ( 1U << i ) & _eraseMask ) {
-                    fheroes2::Blit( selection, 0, 0, display, _eraseButtonsRect[i].x - 2, _eraseButtonsRect[i].y - 2, selection.width(), selection.height() );
-                    fheroes2::Blit( selectionMark, 0, 0, display, _eraseButtonsRect[i].x + 12, _eraseButtonsRect[i].y + 12, selectionMark.width(),
+                if ( _eraseButtonsOrder[i] & _eraseMask ) {
+                    // fheroes2::Blit( selection, 0, 0, display, _eraseButtonsRect[i].x - 2, _eraseButtonsRect[i].y - 2, selection.width(), selection.height() );
+                    fheroes2::Blit( selectionMark, 0, 0, display, _eraseButtonsRect[i].x + 10, _eraseButtonsRect[i].y + 11, selectionMark.width(),
                                     selectionMark.height() );
                 }
             }
@@ -417,7 +417,7 @@ namespace Interface
             }
         }
 
-        if ( _selectedInstrument == Instrument::OBJECT ) {
+        else if ( _selectedInstrument == Instrument::OBJECT ) {
             for ( size_t i = 0; i < _objectButtonsRect.size(); ++i ) {
                 if ( ( _selectedObject != i ) && le.MousePressLeft( _objectButtonsRect[i] ) ) {
                     _selectedObject = static_cast<uint8_t>( i );
@@ -491,6 +491,22 @@ namespace Interface
 
                     _interface.updateCursor( 0 );
                     return res;
+                }
+            }
+        }
+
+        else if ( _selectedInstrument == Instrument::ERASE ) {
+            for ( size_t i = 0; i < _eraseButtonsRect.size(); ++i ) {
+                if ( le.MouseClickLeft( _eraseButtonsRect[i] ) ) {
+                    _eraseMask ^= _eraseButtonsOrder[i];
+                    setRedraw();
+                }
+                else if ( le.MousePressRight( _eraseButtonsRect[i] ) ) {
+                    fheroes2::showStandardTextMessage( _( "Select objects to erase" ),
+                                                       _eraseButtonsOrder[i] & _eraseMask
+                                                           ? _( "This object type will be erased by the Erase tool. Click here to disable its erase." )
+                                                           : _( "This object type will NOT be erased by the Erase tool. Click here to enable its erase." ),
+                                                       Dialog::ZERO );
                 }
             }
         }

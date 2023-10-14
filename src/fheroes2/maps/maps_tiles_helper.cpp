@@ -3101,17 +3101,22 @@ namespace Maps
         return needRedraw;
     }
 
-    bool eraseOjects( Tiles & tile, const uint8_t /*objectsToErase*/ )
+    bool eraseOjects( Tiles & tile, const uint8_t objectsToErase )
     {
         bool needRedraw = false;
 
-        needRedraw |= updateRoadOnTile( tile, false );
-
-        needRedraw |= updateStreamOnTile( tile, false );
-
-        needRedraw |= removeObjectFromTile( tile, MP2::OBJ_ICN_TYPE_MONS32 );
-
-        needRedraw |= removeObjectFromTile( tile, MP2::OBJ_ICN_TYPE_MINIHERO );
+        if ( objectsToErase & Maps::ObjectEraseMask::ROADS ) {
+            needRedraw |= updateRoadOnTile( tile, false );
+        }
+        if ( objectsToErase & Maps::ObjectEraseMask::STREAMS ) {
+            needRedraw |= updateStreamOnTile( tile, false );
+        }
+        if ( objectsToErase & Maps::ObjectEraseMask::MONSTERS ) {
+            needRedraw |= removeObjectFromTile( tile, MP2::OBJ_ICN_TYPE_MONS32 );
+        }
+        if ( objectsToErase & Maps::ObjectEraseMask::HEROES ) {
+            needRedraw |= removeObjectFromTile( tile, MP2::OBJ_ICN_TYPE_MINIHERO );
+        }
 
         return needRedraw;
     }

@@ -25,6 +25,7 @@
 
 #include "game_mode.h"
 #include "ground.h"
+#include "maps_tiles_helper.h"
 #include "math_base.h"
 #include "monster.h"
 #include "ui_button.h"
@@ -183,20 +184,6 @@ namespace Interface
             BRUSH_SIZE_COUNT = 4U
         };
 
-        enum EraseMask : uint8_t
-        {
-            ERASE_TERRAIN_OBJECTS = 0x01,
-            ERASE_CASTLES = 0x02,
-            ERASE_MONSTERS = 0x04,
-            ERASE_HEROES = 0x08,
-            ERASE_ARTIFACTS = 0x10,
-            ERASE_STREAMS = 0x20,
-            ERASE_ROADS = 0x40,
-            ERASE_TREASURES = 0x80,
-
-            ERASE_ALL_OBJECTS = ERASE_TERRAIN_OBJECTS | ERASE_CASTLES | ERASE_MONSTERS | ERASE_HEROES | ERASE_ARTIFACTS | ERASE_STREAMS | ERASE_ROADS | ERASE_TREASURES,
-        };
-
         EditorInterface & _interface;
 
         fheroes2::Button _buttonMagnify;
@@ -226,13 +213,18 @@ namespace Interface
         std::array<fheroes2::Rect, BrushSize::BRUSH_SIZE_COUNT> _brushSizeButtonsRect;
         std::array<fheroes2::Rect, 8> _eraseButtonsRect;
 
+        // This array represents the order of object-to-erase images on the erase tool panel (from left to right, from top to bottom).
+        std::array<uint8_t, 8> _eraseButtonsOrder{ Maps::ObjectEraseMask::TERRAIN_OBJECTS, Maps::ObjectEraseMask::CASTLES,   Maps::ObjectEraseMask::MONSTERS,
+                                                   Maps::ObjectEraseMask::HEROES,          Maps::ObjectEraseMask::ARTIFACTS, Maps::ObjectEraseMask::ROADS,
+                                                   Maps::ObjectEraseMask::STREAMS,         Maps::ObjectEraseMask::TREASURES };
+
         uint8_t _selectedInstrument{ Instrument::TERRAIN };
 
         // A brand new map is always filled with Water so there is no need to make Water terrain brush as a default terrain selection.
         uint8_t _selectedTerrain{ Brush::GRASS };
         uint8_t _selectedObject{ Brush::WATER };
         uint8_t _selectedBrushSize{ BrushSize::MEDIUM };
-        uint8_t _eraseMask{ EraseMask::ERASE_ALL_OBJECTS };
+        uint8_t _eraseMask{ Maps::ObjectEraseMask::ALL_OBJECTS };
 
         int32_t _monsterId{ Monster::UNKNOWN };
 

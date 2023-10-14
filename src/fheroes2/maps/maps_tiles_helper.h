@@ -76,6 +76,20 @@ namespace Maps
         FIGHT_50_GHOSTS_AND_GET_2000_GOLD_WITH_ARTIFACT = 4
     };
 
+    enum ObjectEraseMask : uint8_t
+    {
+        TERRAIN_OBJECTS = 0x01,
+        CASTLES = 0x02,
+        MONSTERS = 0x04,
+        HEROES = 0x08,
+        ARTIFACTS = 0x10,
+        STREAMS = 0x20,
+        ROADS = 0x40,
+        TREASURES = 0x80,
+
+        ALL_OBJECTS = TERRAIN_OBJECTS | CASTLES | MONSTERS | HEROES | ARTIFACTS | STREAMS | ROADS | TREASURES,
+    };
+
     // Only for MP2::OBJ_MINES.
     int32_t getMineSpellIdFromTile( const Tiles & tile );
     void setMineSpellOnTile( Tiles & tile, const int32_t spellId );
