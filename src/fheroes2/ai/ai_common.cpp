@@ -80,7 +80,6 @@ namespace AI
         }
 
         const Kingdom & kingdom = castle.GetKingdom();
-        const uint32_t marketplaceCount = kingdom.GetCountMarketplace();
 
         const Funds fundsAvailable = kingdom.GetFunds();
         const Funds fundsRequired = PaymentConditions::BuyBuilding( castle.GetRace(), building );
