@@ -95,6 +95,7 @@ public:
     int32_t * GetPtr( int rs );
 
     int getLowestQuotient( const Funds & ) const;
+
     int GetValidItems() const;
     uint32_t GetValidItemsCount() const;
     std::pair<int, int32_t> getFirstValidResource() const;
