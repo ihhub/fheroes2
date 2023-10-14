@@ -45,10 +45,10 @@ namespace
     struct BuildOrder
     {
         const building_t building = BUILD_NOTHING;
-        const int priority = 1;
+        const uint32_t priority = 1;
 
         BuildOrder() = default;
-        BuildOrder( const building_t b, const int p )
+        BuildOrder( const building_t b, const uint32_t p )
             : building( b )
             , priority( p )
         {}
@@ -134,10 +134,10 @@ namespace
 
 namespace AI
 {
-    bool Build( Castle & castle, const std::vector<BuildOrder> & buildOrderList, const int multiplier = 1 )
+    bool Build( Castle & castle, const std::vector<BuildOrder> & buildOrderList, const uint32_t multiplier = 1 )
     {
         for ( const BuildOrder & order : buildOrderList ) {
-            const int fundsMultiplier = order.priority * multiplier;
+            const uint32_t fundsMultiplier = order.priority * multiplier;
 
             if ( fundsMultiplier == 1 ) {
                 if ( BuildIfPossible( castle, order.building ) ) {
@@ -167,7 +167,7 @@ namespace AI
         const bool islandOrPeninsula = neighbourRegions < 3;
 
         // force building a shipyard, +1 to cost check since we can have 0 neighbours
-        if ( islandOrPeninsula && BuildIfEnoughFunds( castle, BUILD_SHIPYARD, static_cast<int>( neighbourRegions + 1 ) ) ) {
+        if ( islandOrPeninsula && BuildIfEnoughFunds( castle, BUILD_SHIPYARD, static_cast<uint32_t>( neighbourRegions + 1 ) ) ) {
             return true;
         }
 

@@ -50,7 +50,7 @@ namespace AI
         return normal;
     }
 
-    bool BuildIfPossible( Castle & castle, const int building )
+    bool BuildIfPossible( Castle & castle, const building_t building )
     {
         switch ( castle.CheckBuyBuilding( building ) ) {
         case LACK_RESOURCES: {
@@ -74,7 +74,7 @@ namespace AI
         return result;
     }
 
-    bool BuildIfEnoughFunds( Castle & castle, const int building, const int fundsMultiplier )
+    bool BuildIfEnoughFunds( Castle & castle, const building_t building, const uint32_t fundsMultiplier )
     {
         if ( fundsMultiplier < 1 || fundsMultiplier > 99 ) {
             return false;

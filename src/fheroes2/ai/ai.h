@@ -26,6 +26,7 @@
 
 #include <optional>
 
+#include "castle.h"
 #include "mp2.h"
 #include "payment.h"
 #include "rand.h"
@@ -158,13 +159,13 @@ namespace AI
     // Builds the given building in the given castle if possible. If possible and necessary, obtains the resources
     // that are missing for construction through trading on the marketplace. Returns true if the construction was
     // successful, otherwise returns false.
-    bool BuildIfPossible( Castle & castle, const int building );
+    bool BuildIfPossible( Castle & castle, const building_t building );
 
     // Builds the given building in the given castle if possible and if there is a sufficient supply of resources
     // (see the implementation for details). If possible and necessary, obtains the resources that are missing for
     // construction through trading on the marketplace. Returns true if the construction was successful, otherwise
     // returns false.
-    bool BuildIfEnoughFunds( Castle & castle, const int building, const int fundsMultiplier );
+    bool BuildIfEnoughFunds( Castle & castle, const building_t building, const uint32_t fundsMultiplier );
 
     void OptimizeTroopsOrder( Army & hero );
     bool CanPurchaseHero( const Kingdom & kingdom );
