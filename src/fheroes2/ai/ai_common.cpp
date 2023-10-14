@@ -102,9 +102,15 @@ namespace AI
                 bool valid = true;
 
                 Resource::forEach( Resource::ALL, [&fundsRequiredAfterTransaction, &valid]( const int res ) {
-                    if ( fundsRequiredAfterTransaction.Get( res ) < 0 ) {
-                        valid = false;
+                    if ( res == Resource::GOLD ) {
+                        return;
                     }
+
+                    if ( fundsRequiredAfterTransaction.Get( res ) >= 0 ) {
+                        return;
+                    }
+
+                    valid = false;
                 } );
 
                 return valid;
@@ -223,76 +229,76 @@ namespace AI
             return {};
         }
 
-        static const std::vector<int> resourcePriorities{ Resource::WOOD,    Resource::ORE,  Resource::MERCURY, Resource::SULFUR,
-                                                          Resource::CRYSTAL, Resource::GEMS, Resource::GOLD };
-
         Funds plannedBalance = kingdom.GetFunds() - fundsToObtain;
         Funds plannedTransaction;
 
         bool tradeFailed = false;
 
-        Resource::forEach( Resource::ALL, [marketplaceCount, &plannedBalance, &plannedTransaction, &tradeFailed]( const int res ) {
-            int32_t & missingResAmount = *( plannedBalance.GetPtr( res ) );
+        Resource::forEach( Resource::ALL, [marketplaceCount, &plannedBalance, &plannedTransaction, &tradeFailed]( const int missingRes ) {
+            int32_t & missingResAmount = *( plannedBalance.GetPtr( missingRes ) );
             if ( missingResAmount >= 0 ) {
                 return;
             }
 
-            for ( const int resForSale : resourcePriorities ) {
-                int32_t & saleResAmount = *( plannedBalance.GetPtr( resForSale ) );
+            while ( missingResAmount < 0 ) {
+                bool wasTradeDeal = false;
 
-                if ( saleResAmount <= 0 ) {
-                    continue;
-                }
+                Resource::forEach( Resource::ALL,
+                                   [marketplaceCount, &plannedBalance, &plannedTransaction, missingRes, &missingResAmount, &wasTradeDeal]( const int saleRes ) {
+                                       if ( missingResAmount >= 0 ) {
+                                           return;
+                                       }
 
-                const int32_t tradeCost = fheroes2::getTradeCost( marketplaceCount, resForSale, res );
-                assert( tradeCost > 0 );
+                                       if ( saleRes == missingRes ) {
+                                           return;
+                                       }
 
-                // If resources are sold for gold, then by giving away one unit of the resource we get several units of gold
-                if ( res == Resource::GOLD ) {
-                    const int32_t amountToSell
-                        = std::min( ( -missingResAmount ) % tradeCost == 0 ? ( -missingResAmount ) / tradeCost : ( -missingResAmount ) / tradeCost + 1, saleResAmount );
-                    assert( amountToSell > 0 );
+                                       int32_t & saleResAmount = *( plannedBalance.GetPtr( saleRes ) );
+                                       if ( saleResAmount <= 0 ) {
+                                           return;
+                                       }
 
-                    saleResAmount -= amountToSell;
-                    missingResAmount += amountToSell * tradeCost;
+                                       const int32_t tradeCost = fheroes2::getTradeCost( marketplaceCount, saleRes, missingRes );
+                                       assert( tradeCost > 0 );
 
-                    assert( saleResAmount >= 0 );
+                                       // If resources are sold for gold, then by giving away one unit of the resource we get several units of gold
+                                       if ( missingRes == Resource::GOLD ) {
+                                           saleResAmount -= 1;
+                                           missingResAmount += tradeCost;
 
-                    // Since the planned transaction must be deducted from the funds of the kingdom, the volume of resources sold should be positive, and the volume of
-                    // resources bought should be negative
-                    *( plannedTransaction.GetPtr( resForSale ) ) += amountToSell;
-                    *( plannedTransaction.GetPtr( res ) ) -= amountToSell * tradeCost;
-                }
-                // Otherwise (when exchanging gold for a resource or a resource for a resource) by giving away several units of a resource, we get only one unit of
-                // another resource
-                else {
-                    const int32_t amountToBuy = std::min( -missingResAmount, saleResAmount / tradeCost );
-                    assert( amountToBuy >= 0 );
+                                           // Since the planned transaction must be deducted from the funds of the kingdom, the volume of resources sold should be
+                                           // positive, and the volume of resources bought should be negative
+                                           *( plannedTransaction.GetPtr( saleRes ) ) += 1;
+                                           *( plannedTransaction.GetPtr( missingRes ) ) -= tradeCost;
+                                       }
+                                       // Otherwise (when exchanging gold for a resource or a resource for a resource) by giving away several units of a resource, we get
+                                       // only one unit of another resource
+                                       else {
+                                           if ( saleResAmount < tradeCost ) {
+                                               return;
+                                           }
 
-                    if ( amountToBuy == 0 ) {
-                        continue;
-                    }
+                                           saleResAmount -= tradeCost;
+                                           missingResAmount += 1;
 
-                    saleResAmount -= amountToBuy * tradeCost;
-                    missingResAmount += amountToBuy;
+                                           // Since the planned transaction must be deducted from the funds of the kingdom, the volume of resources sold should be
+                                           // positive, and the volume of resources bought should be negative
+                                           *( plannedTransaction.GetPtr( saleRes ) ) += tradeCost;
+                                           *( plannedTransaction.GetPtr( missingRes ) ) -= 1;
+                                       }
 
-                    assert( saleResAmount >= 0 );
+                                       wasTradeDeal = true;
+                                   } );
 
-                    // Since the planned transaction must be deducted from the funds of the kingdom, the volume of resources sold should be positive, and the volume of
-                    // resources bought should be negative
-                    *( plannedTransaction.GetPtr( resForSale ) ) += amountToBuy * tradeCost;
-                    *( plannedTransaction.GetPtr( res ) ) -= amountToBuy;
-                }
-
-                if ( missingResAmount >= 0 ) {
-                    // If we exchange resources for gold, we can get a little more than the amount we need. In other cases, we should get exactly the amount we need.
-                    assert( res == Resource::GOLD || missingResAmount == 0 );
+                if ( !wasTradeDeal ) {
+                    tradeFailed = true;
 
                     return;
                 }
             }
 
-            tradeFailed = true;
+            // If we exchange resources for gold, we can get a little more than the amount we need. In other cases, we should get exactly the amount we need.
+            assert( missingRes == Resource::GOLD ? missingResAmount >= 0 : missingResAmount == 0 );
         } );
 
         if ( tradeFailed ) {
@@ -304,9 +310,11 @@ namespace AI
             bool valid = true;
 
             Resource::forEach( Resource::ALL, [&plannedBalance, &valid]( const int res ) {
-                if ( plannedBalance.Get( res ) < 0 ) {
-                    valid = false;
+                if ( plannedBalance.Get( res ) >= 0 ) {
+                    return;
                 }
+
+                valid = false;
             } );
 
             return valid;
