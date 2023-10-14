@@ -233,7 +233,7 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
         }
         else {
             fheroes2::showStandardTextMessage(
-                _( "Greetings!" ), _( "Welcome to Heroes of Might and Magic II powered by fheroes2 engine!\nBefore starting the game please select game resolution." ),
+                _( "Greetings!" ), _( "Welcome to Heroes of Might and Magic II powered by the fheroes2 engine!\nBefore starting the game please select a game resolution." ),
                 Dialog::OK );
             const bool isResolutionChanged = Dialog::SelectResolution();
             if ( isResolutionChanged ) {
@@ -244,9 +244,9 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
         fheroes2::Text header( _( "Please Remember" ), fheroes2::FontType::normalYellow() );
 
         fheroes2::MultiFontText body;
-        body.add( { _( "You can always change language, resolution and settings of the game by clicking on the " ), fheroes2::FontType::normalWhite() } );
+        body.add( { _( "You can always change the language, resolution and settings of the game by clicking on the " ), fheroes2::FontType::normalWhite() } );
         body.add( { _( "door" ), fheroes2::FontType::normalYellow() } );
-        body.add( { _( " on the left side of main menu, or with the " ), fheroes2::FontType::normalWhite() } );
+        body.add( { _( " on the left side of Main Menu, or with the " ), fheroes2::FontType::normalWhite() } );
         body.add( { _( "CONFIG" ), fheroes2::FontType::normalYellow() } );
         body.add( { _( " button from the " ), fheroes2::FontType::normalWhite() } );
         body.add( { _( "NEW GAME" ), fheroes2::FontType::normalYellow() } );
