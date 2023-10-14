@@ -24,6 +24,8 @@
 #ifndef H2AI_H
 #define H2AI_H
 
+#include <optional>
+
 #include "mp2.h"
 #include "payment.h"
 #include "rand.h"
@@ -166,6 +168,12 @@ namespace AI
 
     void OptimizeTroopsOrder( Army & hero );
     bool CanPurchaseHero( const Kingdom & kingdom );
+
+    // Calculates a marketplace transaction, which will be enough for the kingdom to be able to make a payment in the
+    // amount of at least 'fundsToObtain'. Returns the corresponding transaction if it was found, otherwise returns an
+    // empty result. In order to receive the necessary funds, the returned transaction must be deducted from the funds
+    // of the kingdom.
+    std::optional<Funds> getMarketplaceTransaction( const Kingdom & kingdom, const Funds & fundsToObtain );
 
     // Performs operations on the marketplace necessary for the kingdom to be able to make a payment in the amount
     // of at least 'fundsToObtain'. If the necessary funds were not obtained as a result of trading, then the current
