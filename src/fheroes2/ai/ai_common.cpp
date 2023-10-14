@@ -22,12 +22,15 @@
 #include <cassert>
 #include <cstddef>
 #include <cstdint>
+#include <ostream>
+#include <string>
 #include <vector>
 
 #include "ai.h"
 #include "army.h"
 #include "army_troop.h"
 #include "castle.h"
+#include "color.h"
 #include "difficulty.h"
 #include "game.h"
 #include "kingdom.h"
