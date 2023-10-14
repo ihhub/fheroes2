@@ -86,7 +86,8 @@ namespace AI
         const Funds fundsRequired = PaymentConditions::BuyBuilding( castle.GetRace(), building );
 
         if ( fundsAvailable < fundsRequired * fundsMultiplier ) {
-            if ( fundsAvailable >= fundsRequired ) {
+            // It makes sense to try to trade on the market only if we currently do not have enough resources to build this building
+            if ( castle.CheckBuyBuilding( building ) != LACK_RESOURCES ) {
                 return false;
             }
 
@@ -121,6 +122,7 @@ namespace AI
                 return valid;
             }() );
 
+            // Make sure that after the construction of the building, taking into account its new cost, we still have a sufficient supply of resources
             if ( fundsAvailable < fundsRequiredAfterTransaction * fundsMultiplier ) {
                 return false;
             }
