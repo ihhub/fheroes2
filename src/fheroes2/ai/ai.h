@@ -173,7 +173,7 @@ namespace AI
     // amount of at least 'fundsToObtain'. Returns the corresponding transaction if it was found, otherwise returns an
     // empty result. In order to receive the necessary funds, the returned transaction must be deducted from the funds
     // of the kingdom.
-    std::optional<Funds> getMarketplaceTransaction( const Kingdom & kingdom, const Funds & fundsToObtain );
+    std::optional<Funds> calculateMarketplaceTransaction( const Kingdom & kingdom, const Funds & fundsToObtain );
 
     // Performs operations on the marketplace necessary for the kingdom to be able to make a payment in the amount
     // of at least 'fundsToObtain'. If the necessary funds were not obtained as a result of trading, then the current

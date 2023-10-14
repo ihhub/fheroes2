@@ -90,7 +90,7 @@ namespace AI
                 return false;
             }
 
-            const std::optional<Funds> marketplaceTransaction = getMarketplaceTransaction( kingdom, fundsRequired );
+            const std::optional<Funds> marketplaceTransaction = calculateMarketplaceTransaction( kingdom, fundsRequired );
             if ( !marketplaceTransaction ) {
                 return false;
             }
@@ -227,7 +227,7 @@ namespace AI
         return kingdom.AllowPayment( PaymentConditions::RecruitHero() - kingdom.GetIncome() );
     }
 
-    std::optional<Funds> getMarketplaceTransaction( const Kingdom & kingdom, const Funds & fundsToObtain )
+    std::optional<Funds> calculateMarketplaceTransaction( const Kingdom & kingdom, const Funds & fundsToObtain )
     {
         const uint32_t marketplaceCount = kingdom.GetCountMarketplace();
         if ( marketplaceCount == 0 ) {
@@ -334,7 +334,7 @@ namespace AI
 
     bool tradeAtMarketplace( Kingdom & kingdom, const Funds & fundsToObtain )
     {
-        const std::optional<Funds> transaction = getMarketplaceTransaction( kingdom, fundsToObtain );
+        const std::optional<Funds> transaction = calculateMarketplaceTransaction( kingdom, fundsToObtain );
         if ( !transaction ) {
             DEBUG_LOG( DBG_AI, DBG_TRACE, Color::String( kingdom.GetColor() ) << " failed to obtain funds " << fundsToObtain.String() )
 
