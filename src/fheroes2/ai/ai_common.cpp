@@ -31,43 +31,98 @@
 #include "difficulty.h"
 #include "game.h"
 #include "kingdom.h"
+#include "logging.h"
 #include "normal/ai_normal.h"
 #include "payment.h"
-#include "rand.h"
 #include "resource.h"
 #include "resource_trading.h"
 #include "settings.h"
 
 namespace AI
 {
-    // AI Selector here
-    Base & Get( AI_TYPE /*type*/ ) // type might be used sometime in the future
+    Base & Get( AI_TYPE /* type */ )
     {
         static AI::Normal normal;
         return normal;
     }
 
-    bool BuildIfAvailable( Castle & castle, int building )
+    bool BuildIfPossible( Castle & castle, const int building )
     {
-        if ( !castle.isBuild( building ) )
-            return castle.BuyBuilding( building );
-        return false;
+        switch ( castle.CheckBuyBuilding( building ) ) {
+        case LACK_RESOURCES: {
+            const Funds payment = PaymentConditions::BuyBuilding( castle.GetRace(), building );
+
+            if ( !tradeAtMarketplace( castle.GetKingdom(), payment ) ) {
+                return false;
+            }
+
+            break;
+        }
+        case ALLOW_BUILD:
+            break;
+        default:
+            return false;
+        }
+
+        const bool result = castle.BuyBuilding( building );
+        assert( result );
+
+        return result;
     }
 
-    bool BuildIfEnoughResources( Castle & castle, int building, uint32_t minimumMultiplicator )
+    bool BuildIfEnoughFunds( Castle & castle, const int building, const int fundsMultiplier )
     {
-        if ( minimumMultiplicator < 1 || minimumMultiplicator > 99 ) // can't be that we need more than 100 times resources
+        if ( fundsMultiplier < 1 || fundsMultiplier > 99 ) {
             return false;
+        }
 
         const Kingdom & kingdom = castle.GetKingdom();
-        if ( kingdom.GetFunds() >= PaymentConditions::BuyBuilding( castle.GetRace(), building ) * minimumMultiplicator )
-            return BuildIfAvailable( castle, building );
-        return false;
-    }
+        const uint32_t marketplaceCount = kingdom.GetCountMarketplace();
 
-    uint32_t GetResourceMultiplier( uint32_t min, uint32_t max )
-    {
-        return Rand::Get( min, max );
+        const Funds fundsAvailable = kingdom.GetFunds();
+        const Funds fundsRequired = PaymentConditions::BuyBuilding( castle.GetRace(), building );
+
+        if ( marketplaceCount == 0 ) {
+            // If there are no markets in the kingdom, then the exchange of resources is impossible. Compare resources directly.
+            if ( fundsAvailable < fundsRequired * fundsMultiplier ) {
+                return false;
+            }
+        }
+        else {
+            const auto fundsToGold = [marketplaceCount]( const Funds & funds, const bool useResourcePurchaseRate ) {
+                int32_t result = 0;
+
+                Resource::forEach( Resource::ALL, [marketplaceCount, &funds, useResourcePurchaseRate, &result]( const int res ) {
+                    const int32_t amount = funds.Get( res );
+                    if ( amount == 0 ) {
+                        return;
+                    }
+
+                    if ( res == Resource::GOLD ) {
+                        result += amount;
+
+                        return;
+                    }
+
+                    const int32_t tradeCost = useResourcePurchaseRate ? fheroes2::getTradeCost( marketplaceCount, Resource::GOLD, res )
+                                                                      : fheroes2::getTradeCost( marketplaceCount, res, Resource::GOLD );
+                    assert( tradeCost > 0 );
+
+                    result += amount * tradeCost;
+                } );
+
+                return result;
+            };
+
+            // If there are markets in the kingdom, then an exchange of resources is possible. For comparison, we convert resources into money as follows: the resources
+            // available to the kingdom are converted into money at the resource sale rate, and the resources needed to buy a building are converted into money at the
+            // resource purchase rate.
+            if ( fundsToGold( fundsAvailable, false ) < fundsToGold( fundsRequired, true ) * fundsMultiplier ) {
+                return false;
+            }
+        }
+
+        return BuildIfPossible( castle, building );
     }
 
     void OptimizeTroopsOrder( Army & army )
@@ -168,16 +223,17 @@ namespace AI
         return kingdom.AllowPayment( PaymentConditions::RecruitHero() - kingdom.GetIncome() );
     }
 
-    bool tradeAtMarketplace( Kingdom & kingdom, const Funds & requiredAmount )
+    bool tradeAtMarketplace( Kingdom & kingdom, const Funds & fundsToObtain )
     {
         const uint32_t marketplaceCount = kingdom.GetCountMarketplace();
         if ( marketplaceCount == 0 ) {
             return false;
         }
 
-        static const std::vector<int> resourcePriorities{ Resource::WOOD, Resource::ORE, Resource::MERCURY, Resource::SULFUR, Resource::CRYSTAL, Resource::GEMS };
+        static const std::vector<int> resourcePriorities{ Resource::WOOD,    Resource::ORE,  Resource::MERCURY, Resource::SULFUR,
+                                                          Resource::CRYSTAL, Resource::GEMS, Resource::GOLD };
 
-        Funds plannedBalance = kingdom.GetFunds() - requiredAmount;
+        Funds plannedBalance = kingdom.GetFunds() - fundsToObtain;
         Funds plannedPayment;
 
         bool tradeFailed = false;
@@ -198,23 +254,46 @@ namespace AI
                 const int32_t tradeCost = fheroes2::getTradeCost( marketplaceCount, resForSale, res );
                 assert( tradeCost > 0 );
 
-                const int32_t amountToBuy = std::min( -missingResAmount, saleResAmount / tradeCost );
-                assert( amountToBuy >= 0 );
+                // If resources are sold for gold, then by giving away one unit of the resource we get several units of gold
+                if ( res == Resource::GOLD ) {
+                    const int32_t amountToSell
+                        = std::min( ( -missingResAmount ) % tradeCost == 0 ? ( -missingResAmount ) / tradeCost : ( -missingResAmount ) / tradeCost + 1, saleResAmount );
+                    assert( amountToSell > 0 );
 
-                if ( amountToBuy == 0 ) {
-                    continue;
+                    saleResAmount -= amountToSell;
+                    missingResAmount += amountToSell * tradeCost;
+
+                    assert( saleResAmount >= 0 );
+
+                    // Since Kingdom::OddFundsResource() will be used, the volume of resources sold should be positive, and the volume of resources bought should be
+                    // negative
+                    *( plannedPayment.GetPtr( resForSale ) ) += amountToSell;
+                    *( plannedPayment.GetPtr( res ) ) -= amountToSell * tradeCost;
+                }
+                // Otherwise (when exchanging gold for a resource or a resource for a resource) by giving away several units of a resource, we get only one unit of
+                // another resource
+                else {
+                    const int32_t amountToBuy = std::min( -missingResAmount, saleResAmount / tradeCost );
+                    assert( amountToBuy >= 0 );
+
+                    if ( amountToBuy == 0 ) {
+                        continue;
+                    }
+
+                    saleResAmount -= amountToBuy * tradeCost;
+                    missingResAmount += amountToBuy;
+
+                    assert( saleResAmount >= 0 );
+
+                    // Since Kingdom::OddFundsResource() will be used, the volume of resources sold should be positive, and the volume of resources bought should be
+                    // negative
+                    *( plannedPayment.GetPtr( resForSale ) ) += amountToBuy * tradeCost;
+                    *( plannedPayment.GetPtr( res ) ) -= amountToBuy;
                 }
 
-                saleResAmount -= amountToBuy * tradeCost;
-                missingResAmount += amountToBuy;
-
-                assert( saleResAmount >= 0 );
-
-                *( plannedPayment.GetPtr( resForSale ) ) += amountToBuy * tradeCost;
-                *( plannedPayment.GetPtr( res ) ) -= amountToBuy;
-
                 if ( missingResAmount >= 0 ) {
-                    assert( missingResAmount == 0 );
+                    // If we exchange resources for gold, we can get a little more than the amount we need. In other cases, we should get exactly the amount we need.
+                    assert( res == Resource::GOLD || missingResAmount == 0 );
 
                     return;
                 }
@@ -224,10 +303,29 @@ namespace AI
         } );
 
         if ( tradeFailed ) {
+            DEBUG_LOG( DBG_AI, DBG_TRACE, Color::String( kingdom.GetColor() ) << " failed to obtain funds " << fundsToObtain.String() )
+
             return false;
         }
 
+        // If the trade is successful, then we should not have any "debts" in the planned balance...
+        assert( [&plannedBalance]() {
+            bool valid = true;
+
+            Resource::forEach( Resource::ALL, [&plannedBalance, &valid]( const int res ) {
+                if ( plannedBalance.Get( res ) < 0 ) {
+                    valid = false;
+                }
+            } );
+
+            return valid;
+        }() );
+
+        // ... and the kingdom should be able to conduct an appropriate financial transaction
         assert( kingdom.AllowPayment( plannedPayment ) );
+
+        DEBUG_LOG( DBG_AI, DBG_INFO,
+                   Color::String( kingdom.GetColor() ) << " obtained funds " << fundsToObtain.String() << " through a trading operation " << plannedPayment.String() )
 
         kingdom.OddFundsResource( plannedPayment );
 
