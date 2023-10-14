@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -113,6 +113,28 @@ int Color::GetFirst( int colors )
         return PURPLE;
 
     return NONE;
+}
+
+uint8_t Color::IndexToColor( const int index )
+{
+    switch ( index ) {
+    case 0:
+        return BLUE;
+    case 1:
+        return GREEN;
+    case 2:
+        return RED;
+    case 3:
+        return YELLOW;
+    case 4:
+        return ORANGE;
+    case 5:
+        return PURPLE;
+    default:
+        break;
+    }
+
+    return Color::NONE;
 }
 
 const char * fheroes2::getBarrierColorName( const int color )

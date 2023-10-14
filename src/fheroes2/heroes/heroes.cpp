@@ -79,6 +79,28 @@ namespace
 {
     const size_t maxHeroCount = 71;
 
+    std::pair<int, int> getHeroIdRangeForRace( const int race )
+    {
+        switch ( race ) {
+        case Race::KNGT:
+            return { Heroes::LORDKILBURN, Heroes::DIMITRY };
+        case Race::BARB:
+            return { Heroes::THUNDAX, Heroes::ATLAS };
+        case Race::SORC:
+            return { Heroes::ASTRA, Heroes::LUNA };
+        case Race::WRLK:
+            return { Heroes::ARIE, Heroes::WRATHMONT };
+        case Race::WZRD:
+            return { Heroes::MYRA, Heroes::MANDIGAL };
+        case Race::NECR:
+            return { Heroes::ZOM, Heroes::CELIA };
+        default:
+            break;
+        }
+
+        return { Heroes::LORDKILBURN, Heroes::CELIA };
+    }
+
     int ObjectVisitedModifiersResult( const std::vector<MP2::MapObjectType> & objectTypes, const Heroes & hero, std::string * strs )
     {
         int result = 0;
@@ -403,6 +425,32 @@ void Heroes::LoadFromMP2( const int32_t mapIndex, const int colorType, const int
     SetIndex( mapIndex );
     SetColor( colorType );
 
+    // The hero's race can be changed if the portrait that was specified using the map editor does not match the desired race of this hero, or if there are no free heroes
+    // of the desired race
+    if ( _race != raceType ) {
+        SetModes( CUSTOM );
+
+        _race = raceType;
+    }
+
+    //
+    // Campaign heroes have a non-standard amount of experience by default, so if they are used on the map, then we have to reset their properties to the default values
+    // corresponding to their race. The same must be done if the hero's race has been changed.
+    //
+
+    // Clear the initial spell
+    spell_book.clear();
+    bag_artifacts.RemoveArtifact( Artifact::MAGIC_BOOK );
+
+    // Reset primary skills and initial spell to defaults
+    HeroBase::LoadDefaults( HeroBase::HEROES, _race );
+
+    // Reset secondary skills to defaults
+    secondary_skills = Skill::SecSkills( _race );
+
+    // Reset the army to default
+    army.Reset( true );
+
     StreamBuf dataStream( data );
 
     // Skip first unused byte.
@@ -424,6 +472,11 @@ void Heroes::LoadFromMP2( const int32_t mapIndex, const int colorType, const int
         }
 
         army.Assign( troops, std::end( troops ) );
+
+        // On some maps, customized heroes don't have an army, give them a minimal army
+        if ( !army.isValid() ) {
+            army.Reset( false );
+        }
     }
     else {
         dataStream.skip( 15 );
@@ -431,7 +484,7 @@ void Heroes::LoadFromMP2( const int32_t mapIndex, const int colorType, const int
 
     const bool doesHeroHaveCustomPortrait = ( dataStream.get() != 0 );
     if ( doesHeroHaveCustomPortrait ) {
-        SetModes( NOTDEFAULTS );
+        SetModes( CUSTOM );
 
         // Portrait sprite index
         portrait = dataStream.get();
@@ -440,14 +493,6 @@ void Heroes::LoadFromMP2( const int32_t mapIndex, const int colorType, const int
             DEBUG_LOG( DBG_GAME, DBG_WARN, "Invalid MP2 file format: incorrect custom portrait ID: " << portrait )
             portrait = hid;
         }
-
-        // Hero's race may not match the custom portrait
-        _race = raceType;
-
-        // Since we changed the hero's race, we have to update the initial spell as well. Let's remove the
-        // existing spell and the spell book itself for now, the new one will be added later if necessary.
-        spell_book.clear();
-        bag_artifacts.RemoveArtifact( Artifact::MAGIC_BOOK );
     }
     else {
         dataStream.skip( 1 );
@@ -475,8 +520,8 @@ void Heroes::LoadFromMP2( const int32_t mapIndex, const int colorType, const int
 
     const bool doesHeroHaveCustomSecondarySkills = ( dataStream.get() != 0 );
     if ( doesHeroHaveCustomSecondarySkills ) {
-        SetModes( NOTDEFAULTS );
-        SetModes( CUSTOMSKILLS );
+        SetModes( CUSTOM );
+
         std::vector<Skill::Secondary> secs( 8 );
 
         for ( Skill::Secondary & skill : secs ) {
@@ -510,7 +555,8 @@ void Heroes::LoadFromMP2( const int32_t mapIndex, const int colorType, const int
 
     const bool doesHeroHaveCustomName = ( dataStream.get() != 0 );
     if ( doesHeroHaveCustomName ) {
-        SetModes( NOTDEFAULTS );
+        SetModes( CUSTOM );
+
         name = dataStream.toString( 13 );
     }
     else {
@@ -520,37 +566,24 @@ void Heroes::LoadFromMP2( const int32_t mapIndex, const int colorType, const int
     const bool doesAIHeroSetOnPatrol = ( dataStream.get() != 0 );
     if ( doesAIHeroSetOnPatrol ) {
         SetModes( PATROL );
+
         _patrolCenter = GetCenter();
     }
 
     // Patrol distance
     _patrolDistance = dataStream.get();
 
-    PostLoad();
-}
-
-void Heroes::PostLoad()
-{
-    // An object on which the hero currently stands
-    _objectTypeUnderHero = MP2::OBJ_NONE;
-
-    // Fix a custom hero without an army
-    if ( !army.isValid() ) {
-        army.Reset( false );
-    }
+    // TODO: remove this temporary assertion
+    assert( _objectTypeUnderHero == MP2::OBJ_NONE );
 
     // Level up if needed
-    int level = GetLevel();
-    while ( 1 < level-- ) {
-        SetModes( NOTDEFAULTS );
-        LevelUp( Modes( CUSTOMSKILLS ), true );
-    }
+    const int level = GetLevel();
+    if ( level > 1 ) {
+        SetModes( CUSTOM );
 
-    // Hero's race could be changed during load, so we may need to add an initial spell once again
-    const Spell spell = Skill::Primary::GetInitialSpell( _race );
-    if ( spell.isValid() ) {
-        SpellBookActivate();
-        AppendSpellToBook( spell, true );
+        for ( int i = 1; i < level; ++i ) {
+            LevelUp( doesHeroHaveCustomSecondarySkills, true );
+        }
     }
 
     SetSpellPoints( GetMaxSpellPoints() );
@@ -804,6 +837,10 @@ int Heroes::GetMoraleWithModificators( std::string * strs ) const
         }
         result = Morale::BLOOD;
     }
+    else if ( strs != nullptr && !strs->empty() && strs->back() == '\n' ) {
+        // Remove the possible empty line at the end of the string.
+        strs->pop_back();
+    }
 
     return Morale::Normalize( result );
 }
@@ -834,6 +871,10 @@ int Heroes::GetLuckWithModificators( std::string * strs ) const
             *strs += _( " gives you maximum luck" );
         }
         result = Luck::IRISH;
+    }
+    else if ( strs != nullptr && !strs->empty() && strs->back() == '\n' ) {
+        // Remove the possible empty line at the end of the string.
+        strs->pop_back();
     }
 
     return Luck::Normalize( result );
@@ -986,7 +1027,6 @@ void Heroes::calculatePath( int32_t dstIdx )
     }
 }
 
-/* if hero in castle */
 const Castle * Heroes::inCastle() const
 {
     return inCastleMutable();
@@ -1854,7 +1894,8 @@ std::string Heroes::String() const
        << "index sprite    : " << sprite_index << std::endl
        << "in castle       : " << ( inCastle() ? "true" : "false" ) << std::endl
        << "save object     : " << MP2::StringObject( world.GetTiles( GetIndex() ).GetObject( false ) ) << std::endl
-       << "flags           : " << ( Modes( SHIPMASTER ) ? "SHIPMASTER," : "" ) << ( Modes( PATROL ) ? "PATROL" : "" ) << std::endl;
+       << "flags           : " << ( Modes( SHIPMASTER ) ? "SHIPMASTER," : "" ) << ( Modes( CUSTOM ) ? "CUSTOM," : "" ) << ( Modes( PATROL ) ? "PATROL" : "" )
+       << std::endl;
 
     if ( Modes( PATROL ) ) {
         os << "patrol zone     : center: (" << _patrolCenter.x << ", " << _patrolCenter.y << "), distance " << _patrolDistance << std::endl;
@@ -1892,32 +1933,18 @@ AllHeroes::~AllHeroes()
 
 void AllHeroes::Init()
 {
-    if ( !empty() )
+    if ( !empty() ) {
         AllHeroes::clear();
+    }
 
-    // knight: LORDKILBURN, SIRGALLANTH, ECTOR, GVENNETH, TYRO, AMBROSE, RUBY, MAXIMUS, DIMITRY
-    for ( uint32_t hid = Heroes::LORDKILBURN; hid <= Heroes::DIMITRY; ++hid )
-        push_back( new Heroes( hid, Race::KNGT ) );
+    for ( const int race : std::array<int, 6>{ Race::KNGT, Race::BARB, Race::SORC, Race::WRLK, Race::WZRD, Race::NECR } ) {
+        const auto [minHeroId, maxHeroId] = getHeroIdRangeForRace( race );
+        assert( minHeroId <= maxHeroId );
 
-    // barbarian: THUNDAX, FINEOUS, JOJOSH, CRAGHACK, JEZEBEL, JACLYN, ERGON, TSABU, ATLAS
-    for ( uint32_t hid = Heroes::THUNDAX; hid <= Heroes::ATLAS; ++hid )
-        push_back( new Heroes( hid, Race::BARB ) );
-
-    // sorceress: ASTRA, NATASHA, TROYAN, VATAWNA, REBECCA, GEM, ARIEL, CARLAWN, LUNA
-    for ( uint32_t hid = Heroes::ASTRA; hid <= Heroes::LUNA; ++hid )
-        push_back( new Heroes( hid, Race::SORC ) );
-
-    // warlock: ARIE, ALAMAR, VESPER, CRODO, BAROK, KASTORE, AGAR, FALAGAR, WRATHMONT
-    for ( uint32_t hid = Heroes::ARIE; hid <= Heroes::WRATHMONT; ++hid )
-        push_back( new Heroes( hid, Race::WRLK ) );
-
-    // wizard: MYRA, FLINT, DAWN, HALON, MYRINI, WILFREY, SARAKIN, KALINDRA, MANDIGAL
-    for ( uint32_t hid = Heroes::MYRA; hid <= Heroes::MANDIGAL; ++hid )
-        push_back( new Heroes( hid, Race::WZRD ) );
-
-    // necromancer: ZOM, DARLANA, ZAM, RANLOO, CHARITY, RIALDO, ROXANA, SANDRO, CELIA
-    for ( uint32_t hid = Heroes::ZOM; hid <= Heroes::CELIA; ++hid )
-        push_back( new Heroes( hid, Race::NECR ) );
+        for ( int hid = minHeroId; hid <= maxHeroId; ++hid ) {
+            push_back( new Heroes( hid, race ) );
+        }
+    }
 
     // SW campaign
     push_back( new Heroes( Heroes::ROLAND, Race::WZRD, 5000 ) );
@@ -1943,8 +1970,9 @@ void AllHeroes::Init()
     }
     else {
         // for non-PoL maps, just add unknown heroes instead in place of the PoL-specific ones
-        for ( int i = Heroes::SOLMYR; i <= Heroes::JARKONAS; ++i )
+        for ( int i = Heroes::SOLMYR; i <= Heroes::JARKONAS; ++i ) {
             push_back( new Heroes( Heroes::UNKNOWN, Race::KNGT ) );
+        }
     }
 
     if ( IS_DEVEL() ) {
@@ -1959,8 +1987,12 @@ void AllHeroes::Init()
 
 void AllHeroes::clear()
 {
-    for ( iterator it = begin(); it != end(); ++it )
-        delete *it;
+    std::for_each( begin(), end(), []( Heroes * hero ) {
+        assert( hero != nullptr );
+
+        delete hero;
+    } );
+
     std::vector<Heroes *>::clear();
 }
 
@@ -1987,66 +2019,67 @@ Heroes * AllHeroes::GetHero( const Castle & castle ) const
 
 Heroes * AllHeroes::GetHeroForHire( const int race, const int heroIDToIgnore ) const
 {
-    int min = Heroes::UNKNOWN;
-    int max = Heroes::UNKNOWN;
+    const std::set<int> customHeroesPortraits = [this]() {
+        std::set<int> result;
 
-    switch ( race ) {
-    case Race::KNGT:
-        min = Heroes::LORDKILBURN;
-        max = Heroes::DIMITRY;
-        break;
+        for ( const Heroes * hero : *this ) {
+            assert( hero != nullptr );
 
-    case Race::BARB:
-        min = Heroes::THUNDAX;
-        max = Heroes::ATLAS;
-        break;
+            if ( !hero->Modes( Heroes::CUSTOM ) ) {
+                continue;
+            }
 
-    case Race::SORC:
-        min = Heroes::ASTRA;
-        max = Heroes::LUNA;
-        break;
+            result.insert( hero->getPortraitId() );
+        }
 
-    case Race::WRLK:
-        min = Heroes::ARIE;
-        max = Heroes::WRATHMONT;
-        break;
-
-    case Race::WZRD:
-        min = Heroes::MYRA;
-        max = Heroes::MANDIGAL;
-        break;
-
-    case Race::NECR:
-        min = Heroes::ZOM;
-        max = Heroes::CELIA;
-        break;
-
-    default:
-        min = Heroes::LORDKILBURN;
-        max = Heroes::CELIA;
-        break;
-    }
+        return result;
+    }();
 
     std::vector<int> heroesForHire;
     heroesForHire.reserve( maxHeroCount );
 
-    // First try to find a free hero of the specified race (skipping custom heroes)
-    for ( int i = min; i <= max; ++i ) {
-        if ( i != heroIDToIgnore && at( i )->isAvailableForHire() && !at( i )->Modes( Heroes::NOTDEFAULTS ) ) {
-            heroesForHire.push_back( i );
+    const auto fillHeroesForHire = [this, heroIDToIgnore, &customHeroesPortraits, &heroesForHire]( const int raceFilter, const bool avoidCustomHeroes ) {
+        const auto [minHeroId, maxHeroId] = getHeroIdRangeForRace( Race::NONE );
+
+        for ( const Heroes * hero : *this ) {
+            assert( hero != nullptr );
+
+            // Only regular (non-campaign) heroes are available for hire
+            if ( hero->GetID() > maxHeroId ) {
+                continue;
+            }
+
+            if ( hero->GetID() == heroIDToIgnore ) {
+                continue;
+            }
+
+            if ( raceFilter != Race::NONE && hero->GetRace() != raceFilter ) {
+                continue;
+            }
+
+            if ( !hero->isAvailableForHire() ) {
+                continue;
+            }
+
+            if ( avoidCustomHeroes && customHeroesPortraits.find( hero->getPortraitId() ) != customHeroesPortraits.end() ) {
+                continue;
+            }
+
+            heroesForHire.push_back( hero->GetID() );
         }
+    };
+
+    // First, try to find a free hero of the specified race (avoiding customized heroes, as well as heroes with non-unique portraits)
+    fillHeroesForHire( race, true );
+
+    // If no suitable heroes were found, then try to find a free hero of any race (avoiding customized heroes, as well as heroes with non-unique portraits)
+    if ( heroesForHire.empty() && race != Race::NONE ) {
+        fillHeroesForHire( Race::NONE, true );
     }
 
-    // If no heroes are found, then try to find a free hero of any race
-    if ( race != Race::NONE && heroesForHire.empty() ) {
-        min = Heroes::LORDKILBURN;
-        max = Heroes::CELIA;
-
-        for ( int i = min; i <= max; ++i ) {
-            if ( i != heroIDToIgnore && at( i )->isAvailableForHire() ) {
-                heroesForHire.push_back( i );
-            }
-        }
+    // No suitable heroes were found, any free hero will do
+    if ( heroesForHire.empty() ) {
+        fillHeroesForHire( Race::NONE, false );
     }
 
     // All the heroes are busy
@@ -2066,8 +2099,7 @@ Heroes * AllHeroes::GetHeroForHire( const int race, const int heroIDToIgnore ) c
         return at( Rand::Get( heroesForHireNotRecruits ) );
     }
 
-    // There are no heroes who are not yet available for recruitment, allow heroes
-    // to be available for recruitment in several kingdoms at the same time
+    // There are no heroes who are not yet available for recruitment, allow heroes to be available for recruitment in several kingdoms at the same time
     return at( Rand::Get( heroesForHire ) );
 }
 

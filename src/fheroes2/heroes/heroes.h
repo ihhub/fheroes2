@@ -63,7 +63,6 @@ namespace fheroes2
 {
     class Image;
     class Sprite;
-    struct ObjectRenderingInfo;
 }
 
 struct HeroSeedsForLevelUp
@@ -187,14 +186,11 @@ public:
 
         // UNUSED = 0x00000800,
 
-        NOTDEFAULTS = 0x00001000,
+        // Hero has non-standard properties that were set using the map editor
+        CUSTOM = 0x00001000,
         NOTDISMISS = 0x00002000,
         VISIONS = 0x00004000,
-        PATROL = 0x00008000,
-
-        // UNUSED = 0x00010000,
-
-        CUSTOMSKILLS = 0x00020000
+        PATROL = 0x00008000
     };
 
     // Types of hero roles. They are only for AI as humans are smart enough to manage heroes by themselves.
@@ -266,6 +262,8 @@ public:
         const double _initialArmyStrength;
     };
 
+    static const int heroFrameCountPerTile{ 9 };
+
     Heroes();
     Heroes( int heroid, int rc );
     Heroes( const int heroID, const int race, const uint32_t additionalExperience );
@@ -294,7 +292,6 @@ public:
     Castle * inCastleMutable() const;
 
     void LoadFromMP2( const int32_t mapIndex, const int colorType, const int raceType, const bool isInJail, const std::vector<uint8_t> & data );
-    void PostLoad();
 
     int GetRace() const override;
     const std::string & GetName() const override;
@@ -503,10 +500,6 @@ public:
 
     bool MayCastAdventureSpells() const;
 
-    // Since heroes sprite are much bigger than a tile we need to 'cut' the sprite and the shadow's sprite into pieces. Each piece is for a separate tile.
-    std::vector<fheroes2::ObjectRenderingInfo> getHeroSpritesPerTile() const;
-    std::vector<fheroes2::ObjectRenderingInfo> getHeroShadowSpritesPerTile() const;
-
     void PortraitRedraw( const int32_t px, const int32_t py, const PortraitType type, fheroes2::Image & dstsf ) const override;
 
     int GetSpriteIndex() const
@@ -565,6 +558,11 @@ public:
         return portrait;
     }
 
+    bool isPoLPortrait() const
+    {
+        return ( portrait >= SOLMYR && portrait <= JARKONAS );
+    }
+
     static int GetLevelFromExperience( uint32_t );
     static uint32_t GetExperienceFromLevel( int );
 
@@ -609,6 +607,8 @@ public:
 
     uint32_t getDailyRestoredSpellPoints() const;
 
+    bool isInDeepOcean() const;
+
 private:
     friend StreamBase & operator<<( StreamBase &, const Heroes & );
     friend StreamBase & operator>>( StreamBase &, Heroes & );
@@ -630,8 +630,6 @@ private:
 
     // Daily replenishment of spell points
     void ReplenishSpellPoints();
-
-    bool isInDeepOcean() const;
 
     enum
     {

@@ -24,6 +24,7 @@
 #include "dialog_selectitems.h"
 
 #include <algorithm>
+#include <cassert>
 #include <cstddef>
 #include <cstdint>
 #include <memory>
@@ -33,6 +34,7 @@
 
 #include "agg_image.h"
 #include "army_troop.h"
+#include "color.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game_hotkeys.h"
@@ -43,8 +45,10 @@
 #include "interface_list.h"
 #include "localevent.h"
 #include "math_base.h"
+#include "race.h"
 #include "screen.h"
 #include "settings.h"
+#include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
 #include "ui_dialog.h"
@@ -277,7 +281,13 @@ public:
 
     void ActionListPressRight( int & index ) override
     {
-        Dialog::ArmyInfo( Troop( Monster( index ), 0 ), Dialog::ZERO );
+        const Monster monster( index );
+        if ( !monster.isValid() ) {
+            fheroes2::showStandardTextMessage( monster.GetName(), "", Dialog::ZERO );
+            return;
+        }
+
+        Dialog::ArmyInfo( Troop( monster, 0 ), Dialog::ZERO );
     }
 };
 
@@ -394,6 +404,59 @@ public:
     }
 };
 
+namespace
+{
+    class HeroTypeSelection : public SelectEnum
+    {
+    public:
+        explicit HeroTypeSelection( const fheroes2::Size & size )
+            : SelectEnum( size )
+        {
+            const int offset = fheroes2::AGG::GetICN( ICN::MINIHERO, 0 ).height() + 2;
+            SetAreaMaxItems( ( rtAreaItems.height + offset ) / offset );
+        }
+
+        using SelectEnum::ActionListPressRight;
+
+        void RedrawItem( const int & id, int32_t offsetX, int32_t offsetY, bool isSelected ) override
+        {
+            const fheroes2::Sprite & image = fheroes2::AGG::GetICN( ICN::MINIHERO, id );
+            renderItem( image, getHeroName( id ), { offsetX, offsetY }, { 32, 50 }, isSelected );
+        }
+
+        void ActionListPressRight( int & type ) override
+        {
+            fheroes2::showStandardTextMessage( getHeroName( type ), "", Dialog::ZERO );
+        }
+
+    private:
+        static std::string getHeroName( const int type )
+        {
+            // The game has only 6 races plus random, totaling in 7 races.
+            // Also the game has only 6 colors.
+            // As a result only 42 mini-heroes can exist.
+            if ( type >= 42 ) {
+                // Did you add a new hero?
+                assert( 0 );
+                return _( "Unknown Hero" );
+            }
+
+            const int color{ type / 7 };
+            int race{ type % 7 };
+
+            if ( race == 6 ) {
+                ++race;
+            }
+
+            std::string name( _( "%{color} %{race} hero" ) );
+            StringReplace( name, "%{color}", Color::String( Color::IndexToColor( color ) ) );
+            StringReplace( name, "%{race}", Race::String( Race::IndexToRace( race ) ) );
+
+            return name;
+        }
+    };
+}
+
 Skill::Secondary Dialog::selectSecondarySkill( const Heroes & hero, const int skillId /* = Skill::Secondary::UNKNOWN */ )
 {
     std::vector<int> skills;
@@ -463,12 +526,16 @@ Artifact Dialog::selectArtifact( const int artifactId /* = Artifact::UNKNOWN */ 
     return ( result == Dialog::OK || listbox.ok ) ? Artifact( listbox.GetCurrent() ) : Artifact( Artifact::UNKNOWN );
 }
 
-Monster Dialog::selectMonster( const int monsterId /* = Monster::UNKNOWN */ )
+Monster Dialog::selectMonster( const int monsterId, const bool includeRandomMonsters )
 {
-    std::vector<int> monsters( static_cast<int>( Monster::WATER_ELEMENT ), Monster::UNKNOWN );
+    std::vector<int> monsters( Monster::MONSTER_COUNT - 1, Monster::UNKNOWN );
 
     // Skip Monster::UNKNOWN and start from the next one.
     std::iota( monsters.begin(), monsters.end(), Monster::UNKNOWN + 1 );
+
+    if ( !includeRandomMonsters ) {
+        monsters.erase( std::remove_if( monsters.begin(), monsters.end(), []( const int id ) { return Monster( id ).isRandomMonster(); } ), monsters.end() );
+    }
 
     SelectEnumMonster listbox( { 280, fheroes2::Display::instance().height() - 200 } );
 
@@ -498,4 +565,18 @@ int Dialog::selectHeroes( const int heroId /* = Heroes::UNKNOWN */ )
     const int32_t result = listbox.selectItemsEventProcessing( _( "Select Hero:" ) );
 
     return result == Dialog::OK || listbox.ok ? listbox.GetCurrent() : Heroes::UNKNOWN;
+}
+
+int Dialog::selectHeroType( const int heroType )
+{
+    std::vector<int> heroes( 42, 0 );
+    std::iota( heroes.begin(), heroes.end(), 0 );
+
+    HeroTypeSelection listbox( { 350, fheroes2::Display::instance().height() - 200 } );
+
+    listbox.SetListContent( heroes );
+    listbox.SetCurrent( heroType );
+
+    const int32_t result = listbox.selectItemsEventProcessing( _( "Select Hero:" ) );
+    return result == Dialog::OK || listbox.ok ? listbox.GetCurrent() : -1;
 }

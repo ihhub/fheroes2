@@ -1,3 +1,54 @@
+version 1.0.9 (11 October 2023)
+- add "tent visited" info to barrier quick info dialog
+- update Vietnamese translation
+- rework Hot-Keys dialog
+- fix combat victory window creature position
+- Town Gate and Town Portal spells: use depersonalized wording
+- add an ability to place heroes in the Editor
+- add an ability to place Random Monsters in the Editor
+- fix rendering of very long scenario names in the campaign briefing dialog
+- disable the not implemented Random Map option in the Editor
+- update German translation
+- make a long press on the "continue movement" button to reset a hero's path
+- use the "continue movement" button to interact with an object a hero is standing on
+- make Grass the default terrain for new maps in the Editor
+- restrict heroes' meetings and army merging on Easy difficulty
+- AI should avoid splitting troops on Easy difficulty
+- add functionality to place monsters in the Editor
+- add a mirror image check during spell evaluation
+- teach battle AI to use shield spells
+- implement streams' placing in the Editor
+- adjust AI combat spell heuristics
+- fix rendering of long text in the Hero screen status bar
+- update Ukrainian translation
+- implement roads' placing in the Editor
+- fix the AI first strike logic
+- update Hungarian translation
+- fix battle AI protecting paralyzed archers
+- properly display player's name in the New Game window
+- fix memorizing the position in the map list when changing the map size filter
+- adjust the position of luck and morale icons in the hero info window
+- update the followers window to support text mode
+- fix the logic of ALWAYS_RETALIATE regarding paralyzed units
+- add historical changes support for the Editor
+- add the ability to confirm actions in battle for touch devices
+- update Russian translation
+- fix Editor Main Menu hotkeys
+- update Swedish translation
+- speed up overall rendering for cycling animation
+- do not render text beyond the info and status bars during battles
+- rework game settings on the Adventure Map
+- remove double spaces in translatable texts
+- update Bulgarian translation
+- update Slovak translation
+- update Czech translations
+- update Danish translation
+- use Home and End hotkeys to navigate among items within a list
+- always use the nearest cell to attack the nearby unit if a monster is under the Berserker spell
+- fix an assertion when a hero starts moving and a player immediately mouse left clicks on the Adventure Map
+- improve path calculations by AIWorldPathfinder in planning mode
+- Wand of Negation should grant immunity against the Mass Dispel spell
+
 version 1.0.8 (11 September 2023)
 - fix number placeholders not being replaced in campaign spell bonus texts
 - fix spell rendering issues when words are divided in the middle

@@ -381,7 +381,7 @@ void ShowNewWeekDialog()
     // head
     std::string message = isNewMonth ? _( "Astrologers proclaim the Month of the %{name}." ) : _( "Astrologers proclaim the Week of the %{name}." );
     StringReplace( message, "%{name}", week.GetName() );
-    message += "\n \n";
+    message += "\n\n";
 
     if ( week.GetType() == WeekName::MONSTERS ) {
         const Monster monster( week.GetMonster() );
@@ -396,7 +396,7 @@ void ShowNewWeekDialog()
                 message += _( "%{monster} growth +%{count}." );
             StringReplaceWithLowercase( message, "%{monster}", monster.GetMultiName() );
             StringReplace( message, "%{count}", count );
-            message += "\n \n";
+            message += "\n\n";
         }
     }
 
@@ -1034,8 +1034,8 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
                 EventSwitchShowStatus();
             else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_TOGGLE_ICONS ) )
                 EventSwitchShowIcons();
-            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_CONTINUE_HERO_MOVEMENT ) )
-                EventContinueMovement();
+            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_START_HERO_MOVEMENT ) )
+                res = EventHeroMovement();
             else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_DIG_ARTIFACT ) )
                 res = EventDigArtifact();
             else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_SLEEP_HERO ) )
@@ -1068,7 +1068,7 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
                 _gameArea.SetScroll( SCROLL_BOTTOM );
             // default action
             else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_DEFAULT_ACTION ) )
-                res = EventDefaultAction( res );
+                res = EventDefaultAction();
             // open focus
             else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_OPEN_FOCUS ) )
                 EventOpenFocus();

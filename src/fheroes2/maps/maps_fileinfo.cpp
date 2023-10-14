@@ -81,56 +81,6 @@ namespace
         // we came to the end of either (or both) strings, left is "smaller" if it was shorter:
         return li == lhs.end() && ri != rhs.end();
     }
-
-    uint8_t ByteToColor( const int byte )
-    {
-        switch ( byte ) {
-        case 0:
-            return Color::BLUE;
-        case 1:
-            return Color::GREEN;
-        case 2:
-            return Color::RED;
-        case 3:
-            return Color::YELLOW;
-        case 4:
-            return Color::ORANGE;
-        case 5:
-            return Color::PURPLE;
-
-        default:
-            break;
-        }
-
-        return Color::NONE;
-    }
-
-    uint8_t ByteToRace( const int byte )
-    {
-        switch ( byte ) {
-        case 0x00:
-            return Race::KNGT;
-        case 0x01:
-            return Race::BARB;
-        case 0x02:
-            return Race::SORC;
-        case 0x03:
-            return Race::WRLK;
-        case 0x04:
-            return Race::WZRD;
-        case 0x05:
-            return Race::NECR;
-        case 0x06:
-            return Race::MULT;
-        case 0x07:
-            return Race::RAND;
-
-        default:
-            break;
-        }
-
-        return Race::NONE;
-    }
 }
 
 namespace Editor
@@ -173,7 +123,7 @@ void Maps::FileInfo::Reset()
 
     for ( int i = 0; i < KINGDOMMAX; ++i ) {
         races[i] = Race::NONE;
-        unions[i] = ByteToColor( i );
+        unions[i] = Color::IndexToColor( i );
     }
 
     kingdomColors = 0;
@@ -307,7 +257,7 @@ bool Maps::FileInfo::ReadMP2( const std::string & filePath )
 
     // Initial races
     for ( const int color : colors ) {
-        const uint8_t race = ByteToRace( fs.get() );
+        const uint8_t race = Race::IndexToRace( fs.get() );
         const int idx = Color::GetIndex( color );
         assert( idx < KINGDOMMAX );
 
@@ -402,7 +352,7 @@ void Maps::FileInfo::FillUnions( const int side1Colors, const int side2Colors )
     using UnionsItemType = decltype( unions )::value_type;
 
     for ( int i = 0; i < KINGDOMMAX; ++i ) {
-        const uint8_t color = ByteToColor( i );
+        const uint8_t color = Color::IndexToColor( i );
 
         if ( side1Colors & color ) {
             assert( side1Colors >= std::numeric_limits<UnionsItemType>::min() && side1Colors <= std::numeric_limits<UnionsItemType>::max() );

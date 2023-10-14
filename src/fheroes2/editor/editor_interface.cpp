@@ -202,12 +202,9 @@ namespace Interface
                 if ( HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_QUIT ) || HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
                     res = EventExit();
                 }
-                // TODO: remove this 'if defined' when Editor is ready for release.
-#if defined( WITH_DEBUG )
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::EDITOR_NEW_MAP_MENU ) ) {
                     res = eventNewMap();
                 }
-#endif
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_SAVE_GAME ) ) {
                     fheroes2::showStandardTextMessage( _( "Warning!" ), "The Map Editor is still in development. Save function is not implemented yet.", Dialog::OK );
                 }
@@ -246,15 +243,12 @@ namespace Interface
                     fheroes2::showStandardTextMessage( _( "Warning!" ), "The Map Editor is still in development. Open focused object dialog is not implemented yet.",
                                                        Dialog::OK );
                 }
-// TODO: remove this macro check once the Editor is ready for public.
-#if defined( WITH_DEBUG )
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::EDITOR_UNDO_LAST_ACTION ) ) {
                     undoAction();
                 }
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::EDITOR_REDO_LAST_ACTION ) ) {
                     redoAction();
                 }
-#endif
             }
 
             if ( res != fheroes2::GameMode::CANCEL ) {
@@ -467,12 +461,7 @@ namespace Interface
             le.MousePressLeft( buttonQuit.area() ) ? buttonQuit.drawOnPress() : buttonQuit.drawOnRelease();
             le.MousePressLeft( buttonCancel.area() ) ? buttonCancel.drawOnPress() : buttonCancel.drawOnRelease();
 
-            // TODO: remove this 'if defined' when Editor is ready for release.
-#if defined( WITH_DEBUG )
             if ( le.MouseClickLeft( buttonNew.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::EDITOR_NEW_MAP_MENU ) ) {
-#else
-            if ( le.MouseClickLeft( buttonNew.area() ) ) {
-#endif
                 if ( eventNewMap() == fheroes2::GameMode::EDITOR_NEW_MAP ) {
                     result = fheroes2::GameMode::EDITOR_NEW_MAP;
                     break;
@@ -608,6 +597,31 @@ namespace Interface
                 const fheroes2::ActionCreator action( _historyManager );
 
                 Maps::setMonsterOnTile( tile, _editorPanel.getMonsterId(), 0 );
+                // Since setMonsterOnTile() function interprets 0 as a random number of monsters it is important to set the correct value.
+                Maps::setMonsterCountOnTile( tile, 0 );
+
+                _redraw |= mapUpdateFlags;
+            }
+            else if ( Monster{ _editorPanel.getMonsterId() }.isRandomMonster() ) {
+                const fheroes2::ActionCreator action( _historyManager );
+
+                Maps::setRandomMonsterOnTile( tile, _editorPanel.getMonsterId() );
+
+                _redraw |= mapUpdateFlags;
+            }
+        }
+        else if ( _editorPanel.isHeroSettingMode() ) {
+            if ( tile.isWater() ) {
+                fheroes2::showStandardTextMessage( _( "Heroes" ), _( "Heroes cannot be placed on water." ), Dialog::OK );
+            }
+            else if ( !Maps::isClearGround( tile ) ) {
+                fheroes2::showStandardTextMessage( _( "Heroes" ), _( "Choose a tile which does not contain any objects." ), Dialog::OK );
+            }
+            else if ( _editorPanel.getHeroType() >= 0 ) {
+                const fheroes2::ActionCreator action( _historyManager );
+
+                Maps::setEditorHeroOnTile( tile, _editorPanel.getHeroType() );
+
                 _redraw |= mapUpdateFlags;
             }
         }

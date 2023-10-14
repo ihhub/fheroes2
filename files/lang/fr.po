@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-05 13:54+0000\n"
+"POT-Creation-Date: 2023-10-10 00:20+0000\n"
 "PO-Revision-Date: 2022-12-18 13:48+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -2811,11 +2811,11 @@ msgstr ""
 msgid ""
 "The creatures are swayed by your diplomatic\n"
 "tongue, and make you an offer:\n"
-" \n"
+"\n"
 msgstr ""
 "Les créatures sont charmées par votre habileté\n"
 "diplomatique, et vous propose ceci :\n"
-" \n"
+"\n"
 
 msgid ""
 "%{offer} of the %{total} %{monster} will join your army, and the rest will "
@@ -3128,11 +3128,20 @@ msgstr "%{skill} +1"
 msgid "You have learned %{skill}."
 msgstr "Vous avez appris %{skill}."
 
-msgid "You may learn either:"
-msgstr "Vous pouvez apprendre :"
+#, fuzzy
+msgid ""
+"%{name} has gained a level.\n"
+"\n"
+"%{skill} +1"
+msgstr "%{name} a gagné un niveau."
 
-msgid "or"
-msgstr "ou"
+#, fuzzy
+msgid ""
+"You may learn either:\n"
+"%{skill1}\n"
+"or\n"
+"%{skill2}"
+msgstr "Vous pouvez apprendre :"
 
 msgid ""
 "Please inspect our fine wares. If you feel like offering a trade, click on "
@@ -3204,6 +3213,10 @@ msgstr "(non visité)"
 
 msgid "%{color} Barrier"
 msgstr "Barrière magique %{color}"
+
+#, fuzzy
+msgid "(tent visited)"
+msgstr "(non visité)"
 
 msgid "%{color} Tent"
 msgstr "Tente %{color}"
@@ -3334,6 +3347,13 @@ msgstr "Fichier à charger :"
 
 msgid "Accept the choice made."
 msgstr "Confirmez le choix."
+
+msgid "Unknown Hero"
+msgstr "Héros inconnu"
+
+#, fuzzy
+msgid "%{color} %{race} hero"
+msgstr "Joueur %{color}"
 
 msgid "Select Skill:"
 msgstr "Choisir compétence :"
@@ -3675,6 +3695,12 @@ msgstr ""
 msgid "Choose a tile which does not contain any objects."
 msgstr ""
 
+msgid "Heroes"
+msgstr "Héros"
+
+msgid "Heroes cannot be placed on water."
+msgstr ""
+
 msgid "Ocean Objects"
 msgstr ""
 
@@ -3708,9 +3734,6 @@ msgstr ""
 #, fuzzy
 msgid "Towns"
 msgstr "Village"
-
-msgid "Heroes"
-msgstr "Héros"
 
 msgid "Artifacts"
 msgstr "Artéfacts"
@@ -4175,9 +4198,6 @@ msgstr "Conception du conditionnement"
 msgid "Your Name"
 msgstr "Votre nom"
 
-msgid "Unknown Hero"
-msgstr "Héros inconnu"
-
 msgid "Standard"
 msgstr "Jeu standard"
 
@@ -4372,7 +4392,7 @@ msgid "hotkey|next hero"
 msgstr "Afficher le héros suivant"
 
 #, fuzzy
-msgid "hotkey|continue hero movement"
+msgid "hotkey|start hero movement"
 msgstr "Continuer le mouvement"
 
 #, fuzzy
@@ -4652,6 +4672,14 @@ msgstr ""
 "configuration.\n"
 "\n"
 "Bon jeu !"
+
+msgid "Editor"
+msgstr ""
+
+#, fuzzy
+msgid "The Editor requires \"The Price of Loyalty\" expansion files to work."
+msgstr ""
+"L'une des quatre nouvelles campagnes de l'extension The Price of Loyalty."
 
 msgid "Quit Heroes of Might and Magic II and return to the operating system."
 msgstr ""
@@ -5121,11 +5149,14 @@ msgstr "Héros suivant"
 msgid "Select the next Hero."
 msgstr "Passer au héros suivant."
 
-msgid "Continue Movement"
-msgstr "Continuer le mouvement"
+#, fuzzy
+msgid "Hero Movement"
+msgstr "Ombre de portée"
 
-msgid "Continue the Hero's movement along the current path."
-msgstr "Continue le déplacement du héros le long du chemin actuel."
+msgid ""
+"Start the Hero's movement along the current path or re-visit the object "
+"occupied by the Hero. Press and hold this button to reset the Hero's path."
+msgstr ""
 
 msgid "Kingdom Summary"
 msgstr "Informations sur votre royaume"
@@ -5796,7 +5827,7 @@ msgstr ""
 msgid ""
 "You approach the hut and observe a witch inside studying an ancient tome on "
 "%{skill}.\n"
-" \n"
+"\n"
 msgstr ""
 "Vous vous approchez de la hutte et observez une sorcière à l'intérieur qui "
 "étudie un tome ancien sur %{skill}.\n"
@@ -6951,15 +6982,15 @@ msgstr ""
 
 msgid ""
 "The Sphinx asks you the following riddle:\n"
-" \n"
+"\n"
 "'%{riddle}'\n"
-" \n"
+"\n"
 "Your answer?"
 msgstr ""
 "Le Sphinx vous pose l'énigme suivante :\n"
-" \n"
+"\n"
 "\"%{riddle}\n"
-" \n"
+"\n"
 "Votre réponse ?"
 
 msgid ""
@@ -7074,18 +7105,18 @@ msgstr ""
 #, fuzzy
 msgid ""
 "You do not own any town or castle that is not currently occupied by a hero. "
-"You cannot cast this spell."
+"This spell will have no effect."
 msgstr ""
 "Vous ne possédez actuellement aucun village ou château, vous ne pouvez donc "
 "pas lancer le sort."
 
 #, fuzzy
-msgid "This hero is already in a town, so you cannot cast this spell."
+msgid "This hero is already in a town, so this spell will have no effect."
 msgstr "Ce héros est déjà dans un village, vous ne pouvez pas lancer le sort."
 
 msgid ""
 "The nearest town is %{town}.\n"
-" \n"
+"\n"
 "This town is occupied by your hero %{hero}."
 msgstr ""
 "Le village le plus proche est %{town}.\n"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-05 13:54+0000\n"
+"POT-Creation-Date: 2023-10-10 00:20+0000\n"
 "PO-Revision-Date: 2022-09-23 16:14+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Lithuanian <lt@li.org>\n"
@@ -2627,7 +2627,7 @@ msgstr ""
 msgid ""
 "The creatures are swayed by your diplomatic\n"
 "tongue, and make you an offer:\n"
-" \n"
+"\n"
 msgstr ""
 
 msgid ""
@@ -2924,10 +2924,17 @@ msgstr "Žiūrėti %{skill} informaciją"
 msgid "You have learned %{skill}."
 msgstr "Jūs išmokote %{skill}."
 
-msgid "You may learn either:"
+msgid ""
+"%{name} has gained a level.\n"
+"\n"
+"%{skill} +1"
 msgstr ""
 
-msgid "or"
+msgid ""
+"You may learn either:\n"
+"%{skill1}\n"
+"or\n"
+"%{skill2}"
 msgstr ""
 
 msgid ""
@@ -2993,6 +3000,9 @@ msgid "(not visited)"
 msgstr ""
 
 msgid "%{color} Barrier"
+msgstr ""
+
+msgid "(tent visited)"
 msgstr ""
 
 msgid "%{color} Tent"
@@ -3125,6 +3135,12 @@ msgid "File to Load:"
 msgstr "Failas įkėlimui:"
 
 msgid "Accept the choice made."
+msgstr ""
+
+msgid "Unknown Hero"
+msgstr ""
+
+msgid "%{color} %{race} hero"
 msgstr ""
 
 #, fuzzy
@@ -3453,6 +3469,12 @@ msgstr ""
 msgid "Choose a tile which does not contain any objects."
 msgstr ""
 
+msgid "Heroes"
+msgstr ""
+
+msgid "Heroes cannot be placed on water."
+msgstr ""
+
 msgid "Ocean Objects"
 msgstr ""
 
@@ -3483,9 +3505,6 @@ msgstr ""
 #, fuzzy
 msgid "Towns"
 msgstr "Miestelis"
-
-msgid "Heroes"
-msgstr ""
 
 msgid "Artifacts"
 msgstr ""
@@ -3937,9 +3956,6 @@ msgstr ""
 msgid "Your Name"
 msgstr ""
 
-msgid "Unknown Hero"
-msgstr ""
-
 msgid "Standard"
 msgstr ""
 
@@ -4128,8 +4144,9 @@ msgstr ""
 msgid "hotkey|next hero"
 msgstr "Rodyti kitą miestą"
 
-msgid "hotkey|continue hero movement"
-msgstr ""
+#, fuzzy
+msgid "hotkey|start hero movement"
+msgstr "Rodyti kitą miestą"
 
 msgid "hotkey|cast adventure spell"
 msgstr ""
@@ -4379,6 +4396,12 @@ msgid ""
 " on the left side of main menu or by clicking on the configuration button. \n"
 "\n"
 "Enjoy the game!"
+msgstr ""
+
+msgid "Editor"
+msgstr ""
+
+msgid "The Editor requires \"The Price of Loyalty\" expansion files to work."
 msgstr ""
 
 msgid "Quit Heroes of Might and Magic II and return to the operating system."
@@ -4796,10 +4819,13 @@ msgstr ""
 msgid "Select the next Hero."
 msgstr ""
 
-msgid "Continue Movement"
-msgstr ""
+#, fuzzy
+msgid "Hero Movement"
+msgstr "Greitis"
 
-msgid "Continue the Hero's movement along the current path."
+msgid ""
+"Start the Hero's movement along the current path or re-visit the object "
+"occupied by the Hero. Press and hold this button to reset the Hero's path."
 msgstr ""
 
 msgid "Kingdom Summary"
@@ -5383,7 +5409,7 @@ msgstr ""
 msgid ""
 "You approach the hut and observe a witch inside studying an ancient tome on "
 "%{skill}.\n"
-" \n"
+"\n"
 msgstr ""
 
 msgid ""
@@ -6200,9 +6226,9 @@ msgstr ""
 
 msgid ""
 "The Sphinx asks you the following riddle:\n"
-" \n"
+"\n"
 "'%{riddle}'\n"
-" \n"
+"\n"
 "Your answer?"
 msgstr ""
 
@@ -6282,15 +6308,15 @@ msgstr ""
 
 msgid ""
 "You do not own any town or castle that is not currently occupied by a hero. "
-"You cannot cast this spell."
+"This spell will have no effect."
 msgstr ""
 
-msgid "This hero is already in a town, so you cannot cast this spell."
+msgid "This hero is already in a town, so this spell will have no effect."
 msgstr ""
 
 msgid ""
 "The nearest town is %{town}.\n"
-" \n"
+"\n"
 "This town is occupied by your hero %{hero}."
 msgstr ""
 

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-05 13:54+0000\n"
+"POT-Creation-Date: 2023-10-10 00:20+0000\n"
 "PO-Revision-Date: 2023-09-12 11:08+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
@@ -2823,7 +2823,7 @@ msgstr ""
 msgid ""
 "The creatures are swayed by your diplomatic\n"
 "tongue, and make you an offer:\n"
-" \n"
+"\n"
 msgstr ""
 "Disse væsener lader sig overtale af din diplomatiske\n"
 "tunge. De giver dig et tilbud:\n"
@@ -3133,11 +3133,20 @@ msgstr "%{skill} +1"
 msgid "You have learned %{skill}."
 msgstr "Du har lært %{skill}"
 
-msgid "You may learn either:"
-msgstr "Du kan enten lære:"
+#, fuzzy
+msgid ""
+"%{name} has gained a level.\n"
+"\n"
+"%{skill} +1"
+msgstr "%{name} har opnået et nyt niveau."
 
-msgid "or"
-msgstr "eller"
+#, fuzzy
+msgid ""
+"You may learn either:\n"
+"%{skill1}\n"
+"or\n"
+"%{skill2}"
+msgstr "Du kan enten lære:"
 
 msgid ""
 "Please inspect our fine wares. If you feel like offering a trade, click on "
@@ -3206,6 +3215,10 @@ msgstr "(ikke besøgt)"
 
 msgid "%{color} Barrier"
 msgstr "%{color} barriere"
+
+#, fuzzy
+msgid "(tent visited)"
+msgstr "(ikke besøgt)"
 
 msgid "%{color} Tent"
 msgstr "%{color} telt"
@@ -3338,6 +3351,13 @@ msgstr "Fil som skal indlæses:"
 
 msgid "Accept the choice made."
 msgstr "Acceptér de trufne valg."
+
+msgid "Unknown Hero"
+msgstr "Ukendt helt"
+
+#, fuzzy
+msgid "%{color} %{race} hero"
+msgstr "%{color} spiller"
 
 msgid "Select Skill:"
 msgstr "Vælg evne:"
@@ -3666,6 +3686,12 @@ msgstr ""
 msgid "Choose a tile which does not contain any objects."
 msgstr ""
 
+msgid "Heroes"
+msgstr "Helte"
+
+msgid "Heroes cannot be placed on water."
+msgstr ""
+
 msgid "Ocean Objects"
 msgstr "Hav-objekter"
 
@@ -3695,9 +3721,6 @@ msgstr "Strand-objekter"
 
 msgid "Towns"
 msgstr "Byer"
-
-msgid "Heroes"
-msgstr "Helte"
 
 msgid "Artifacts"
 msgstr "Artefakter"
@@ -4172,9 +4195,6 @@ msgstr "Pakkedesign"
 msgid "Your Name"
 msgstr "Dit navn"
 
-msgid "Unknown Hero"
-msgstr "Ukendt helt"
-
 msgid "Standard"
 msgstr "Standard"
 
@@ -4357,7 +4377,8 @@ msgstr "Gem spil"
 msgid "hotkey|next hero"
 msgstr "Næste helt"
 
-msgid "hotkey|continue hero movement"
+#, fuzzy
+msgid "hotkey|start hero movement"
 msgstr "Fortsæt heltens ridning"
 
 msgid "hotkey|cast adventure spell"
@@ -4618,6 +4639,13 @@ msgstr ""
 "i venstre side af hovedmenuen eller ved at klikke på konfigurationsknappen.\n"
 "\n"
 "Nyd spillet!"
+
+msgid "Editor"
+msgstr ""
+
+#, fuzzy
+msgid "The Editor requires \"The Price of Loyalty\" expansion files to work."
+msgstr "En af de fire nye felttog fra Prisen for loyalitet-udvidelsessættet."
 
 msgid "Quit Heroes of Might and Magic II and return to the operating system."
 msgstr ""
@@ -5081,11 +5109,16 @@ msgstr "Næste helt"
 msgid "Select the next Hero."
 msgstr "Vælg næste helt."
 
-msgid "Continue Movement"
-msgstr "Fortsæt rejse."
+#, fuzzy
+msgid "Hero Movement"
+msgstr ""
+"Skygge-\n"
+"bevægelse"
 
-msgid "Continue the Hero's movement along the current path."
-msgstr "Fortsæt heltens rejse langs den nuværende sti."
+msgid ""
+"Start the Hero's movement along the current path or re-visit the object "
+"occupied by the Hero. Press and hold this button to reset the Hero's path."
+msgstr ""
 
 msgid "Kingdom Summary"
 msgstr "Oversigt over kongedømmet"
@@ -5732,7 +5765,7 @@ msgstr ""
 msgid ""
 "You approach the hut and observe a witch inside studying an ancient tome on "
 "%{skill}.\n"
-" \n"
+"\n"
 msgstr ""
 "Du nærmer dig hytten og observerer en heks indenfor, som studerer et "
 "ældgammelt bind om %{skill}.\n"
@@ -6854,15 +6887,15 @@ msgstr ""
 
 msgid ""
 "The Sphinx asks you the following riddle:\n"
-" \n"
+"\n"
 "'%{riddle}'\n"
-" \n"
+"\n"
 "Your answer?"
 msgstr ""
 "Sfinksen stiller dig følgende gåde:\n"
-" \n"
+"\n"
 "'%{riddle}'\n"
-" \n"
+"\n"
 "Dit svar?"
 
 msgid ""
@@ -6966,23 +6999,25 @@ msgid "There is no ocean adjacent to the hero where this spell will work."
 msgstr ""
 "Der er intet hav ved siden af helten, hvor denne besværgelse vil virke."
 
+#, fuzzy
 msgid ""
 "You do not own any town or castle that is not currently occupied by a hero. "
-"You cannot cast this spell."
+"This spell will have no effect."
 msgstr ""
 "Du ejer ikke nogen by eller en borg, der ikke i øjeblikket er besat af en "
 "helt. Du kan ikke kaste denne besværgelse."
 
-msgid "This hero is already in a town, so you cannot cast this spell."
+#, fuzzy
+msgid "This hero is already in a town, so this spell will have no effect."
 msgstr "Denne helt er allerede i en by, så du kan ikke kaste besværgelsen."
 
 msgid ""
 "The nearest town is %{town}.\n"
-" \n"
+"\n"
 "This town is occupied by your hero %{hero}."
 msgstr ""
 "Den nærmeste by er %{town}.\n"
-" \n"
+"\n"
 "Denne by er besat af din helt %{hero}."
 
 msgid "This spell is already in effect."
@@ -9978,7 +10013,7 @@ msgid ""
 "that you are suddenly wearing a gleaming, ornate breastplate."
 msgstr ""
 "Du støder på et skilt, hvorpå der står: \"Her ligger Andurans lig. Bøj dig "
-"og sværg troskab, og du skal blive belønnet.\" \n"
+"og sværg troskab, og du skal blive belønnet.\"\n"
 "Du beslutter dig for at gøre, som der står. Da du rejser dig op, mærker du "
 "en kulde mod din hud. Du kigger ned, og opdager, at du pludselig har en "
 "skinnende, udsmykket brynje på."
@@ -10923,6 +10958,3 @@ msgstr ""
 "Check den nyeste version af spillet på\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid "Undo your last action. Press again to redo the action."
-#~ msgstr "Fortryd din sidste handling. Tryk igen for at gentage handlingen."

@@ -50,9 +50,9 @@
 #include "resource.h"
 #include "screen.h"
 #include "settings.h"
-#include "text.h"
 #include "translations.h"
 #include "ui_button.h"
+#include "ui_text.h"
 #include "world.h"
 
 struct ValueColors : std::pair<int, int>
@@ -253,6 +253,8 @@ void DrawHeroIcons( const std::vector<ValueColors> & v, const fheroes2::Point & 
 
 void DrawHeroStats( const std::vector<ValueColors> & v, const fheroes2::Point & pos, int step )
 {
+    fheroes2::Display & display = fheroes2::Display::instance();
+
     for ( size_t i = 0; i < v.size(); ++i ) {
         const Heroes * hero = world.GetHeroes( v[i].first );
         if ( hero == nullptr ) {
@@ -260,31 +262,36 @@ void DrawHeroStats( const std::vector<ValueColors> & v, const fheroes2::Point & 
         }
         const int32_t px = pos.x - 25 + static_cast<int32_t>( i ) * step;
 
-        Text text( _( "Att." ), Font::SMALL );
-        text.Blit( px, pos.y );
-        text.Set( std::to_string( hero->GetAttack() ) );
-        text.Blit( px + 50 - text.w(), pos.y );
-        text.Set( _( "Def." ) );
-        text.Blit( px, pos.y + 11 );
-        text.Set( std::to_string( hero->GetDefense() ) );
-        text.Blit( px + 50 - text.w(), pos.y + 11 );
-        text.Set( _( "Power" ), Font::SMALL );
-        text.Blit( px, pos.y + 22 );
-        text.Set( std::to_string( hero->GetPower() ) );
-        text.Blit( px + 50 - text.w(), pos.y + 22 );
-        text.Set( _( "Knowl" ), Font::SMALL );
-        text.Blit( px, pos.y + 33 );
-        text.Set( std::to_string( hero->GetKnowledge() ) );
-        text.Blit( px + 50 - text.w(), pos.y + 33 );
+        fheroes2::Text text( _( "Att." ), fheroes2::FontType::smallWhite() );
+        text.draw( px, pos.y + 2, display );
+        text.set( std::to_string( hero->GetAttack() ), fheroes2::FontType::smallWhite() );
+        text.draw( px + 50 - text.width(), pos.y + 2, display );
+
+        text.set( _( "Def." ), fheroes2::FontType::smallWhite() );
+        text.draw( px, pos.y + 13, display );
+        text.set( std::to_string( hero->GetDefense() ), fheroes2::FontType::smallWhite() );
+        text.draw( px + 50 - text.width(), pos.y + 13, display );
+
+        text.set( _( "Power" ), fheroes2::FontType::smallWhite() );
+        text.draw( px, pos.y + 24, display );
+        text.set( std::to_string( hero->GetPower() ), fheroes2::FontType::smallWhite() );
+        text.draw( px + 50 - text.width(), pos.y + 24, display );
+
+        text.set( _( "Knowl" ), fheroes2::FontType::smallWhite() );
+        text.draw( px, pos.y + 35, display );
+        text.set( std::to_string( hero->GetKnowledge() ), fheroes2::FontType::smallWhite() );
+        text.draw( px + 50 - text.width(), pos.y + 35, display );
     }
 }
 
 void DrawPersonality( const Colors & colors, const fheroes2::Point & pos, int step )
 {
+    fheroes2::Display & display = fheroes2::Display::instance();
+
     for ( size_t i = 0; i < colors.size(); ++i ) {
         const Player * player = Players::Get( colors[i] );
-        const Text text( player->isControlHuman() ? _( "Human" ) : player->GetPersonalityString(), Font::SMALL );
-        text.Blit( pos.x - text.w() / 2 + step * static_cast<int32_t>( i ), pos.y );
+        const fheroes2::Text text( player->isControlHuman() ? _( "Human" ) : player->GetPersonalityString(), fheroes2::FontType::smallWhite() );
+        text.draw( pos.x - text.width() / 2 + step * static_cast<int32_t>( i ), pos.y + 2, display );
     }
 }
 
@@ -325,37 +332,37 @@ void Dialog::ThievesGuild( bool oracle )
     const int textx = 207;
     const int startx = 264;
     const int stepx = 68;
-    Text text;
+    fheroes2::Text text;
 
     // head 1
     int32_t ii = 0;
     for ( ii = 0; ii < static_cast<int32_t>( colors.size() ); ++ii ) {
         switch ( ii + 1 ) {
         case 1:
-            text.Set( _( "1st" ) );
+            text.set( _( "1st" ), fheroes2::FontType::normalWhite() );
             break;
         case 2:
-            text.Set( _( "2nd" ) );
+            text.set( _( "2nd" ), fheroes2::FontType::normalWhite() );
             break;
         case 3:
-            text.Set( _( "3rd" ) );
+            text.set( _( "3rd" ), fheroes2::FontType::normalWhite() );
             break;
         case 4:
-            text.Set( _( "4th" ) );
+            text.set( _( "4th" ), fheroes2::FontType::normalWhite() );
             break;
         case 5:
-            text.Set( _( "5th" ) );
+            text.set( _( "5th" ), fheroes2::FontType::normalWhite() );
             break;
         case 6:
-            text.Set( _( "6th" ) );
+            text.set( _( "6th" ), fheroes2::FontType::normalWhite() );
             break;
         default:
             break;
         }
 
-        dst_pt.x = cur_pt.x + startx + stepx * ii - text.w() / 2;
-        dst_pt.y = cur_pt.y + 1;
-        text.Blit( dst_pt.x, dst_pt.y );
+        dst_pt.x = cur_pt.x + startx + stepx * ii - text.width() / 2;
+        dst_pt.y = cur_pt.y + 3;
+        text.draw( dst_pt.x, dst_pt.y, display );
     }
 
     // status bar
@@ -373,87 +380,87 @@ void Dialog::ThievesGuild( bool oracle )
                     dst_pt.y, fheroes2::Display::DEFAULT_WIDTH / 2 - exitWidth + 1, barHeight );
 
     // text bar
-    text.Set( oracle ? _( "Oracle: Player Rankings" ) : _( "Thieves' Guild: Player Rankings" ), Font::BIG );
-    dst_pt.x = cur_pt.x + 290 - text.w() / 2;
-    dst_pt.y = cur_pt.y + 463;
-    text.Blit( dst_pt.x, dst_pt.y );
+    text.set( oracle ? _( "Oracle: Player Rankings" ) : _( "Thieves' Guild: Player Rankings" ), fheroes2::FontType::normalWhite() );
+    dst_pt.x = cur_pt.x + 290 - text.width() / 2;
+    dst_pt.y = cur_pt.y + 465;
+    text.draw( dst_pt.x, dst_pt.y, display );
 
     // button exit
     dst_pt.x = cur_pt.x + fheroes2::Display::DEFAULT_WIDTH - exitWidth;
     dst_pt.y = cur_pt.y + 461;
     fheroes2::Button buttonExit( dst_pt.x, dst_pt.y, ICN::BUTTON_GUILDWELL_EXIT, 0, 1 );
 
-    text.Set( _( "Number of Towns:" ) );
-    dst_pt.x = cur_pt.x + textx - text.w();
+    text.set( _( "Number of Towns:" ), fheroes2::FontType::normalWhite() );
+    dst_pt.x = cur_pt.x + textx - text.width();
     dst_pt.y = cur_pt.y + 29;
-    text.Blit( dst_pt.x, dst_pt.y );
+    text.draw( dst_pt.x, dst_pt.y + 2, display );
 
     dst_pt.x = cur_pt.x + startx;
     GetTownsInfo( v, colors );
     DrawFlags( v, dst_pt, stepx, colors.size() );
 
-    text.Set( _( "Number of Castles:" ) );
-    dst_pt.x = cur_pt.x + textx - text.w();
+    text.set( _( "Number of Castles:" ), fheroes2::FontType::normalWhite() );
+    dst_pt.x = cur_pt.x + textx - text.width();
     dst_pt.y = cur_pt.y + 53;
-    text.Blit( dst_pt.x, dst_pt.y );
+    text.draw( dst_pt.x, dst_pt.y + 2, display );
 
     dst_pt.x = cur_pt.x + startx;
     GetCastlesInfo( v, colors );
     DrawFlags( v, dst_pt, stepx, colors.size() );
 
-    text.Set( _( "Number of Heroes:" ) );
-    dst_pt.x = cur_pt.x + textx - text.w();
+    text.set( _( "Number of Heroes:" ), fheroes2::FontType::normalWhite() );
+    dst_pt.x = cur_pt.x + textx - text.width();
     dst_pt.y = cur_pt.y + 77;
-    text.Blit( dst_pt.x, dst_pt.y );
+    text.draw( dst_pt.x, dst_pt.y + 2, display );
 
     dst_pt.x = cur_pt.x + startx;
     GetHeroesInfo( v, colors );
     DrawFlags( v, dst_pt, stepx, colors.size() );
 
-    text.Set( _( "Gold in Treasury:" ) );
-    dst_pt.x = cur_pt.x + textx - text.w();
+    text.set( _( "Gold in Treasury:" ), fheroes2::FontType::normalWhite() );
+    dst_pt.x = cur_pt.x + textx - text.width();
     dst_pt.y = cur_pt.y + 101;
-    text.Blit( dst_pt.x, dst_pt.y );
+    text.draw( dst_pt.x, dst_pt.y + 2, display );
 
     dst_pt.x = cur_pt.x + startx;
     GetGoldsInfo( v, colors );
     if ( 1 < count )
         DrawFlags( v, dst_pt, stepx, colors.size() );
 
-    text.Set( _( "Wood & Ore:" ) );
-    dst_pt.x = cur_pt.x + textx - text.w();
+    text.set( _( "Wood & Ore:" ), fheroes2::FontType::normalWhite() );
+    dst_pt.x = cur_pt.x + textx - text.width();
     dst_pt.y = cur_pt.y + 125;
-    text.Blit( dst_pt.x, dst_pt.y );
+    text.draw( dst_pt.x, dst_pt.y + 2, display );
 
     dst_pt.x = cur_pt.x + startx;
     GetWoodOreInfo( v, colors );
     if ( 1 < count )
         DrawFlags( v, dst_pt, stepx, colors.size() );
 
-    text.Set( _( "Gems, Cr, Slf & Mer:" ) );
-    dst_pt.x = cur_pt.x + textx - text.w();
+    text.set( _( "Gems, Cr, Slf & Mer:" ), fheroes2::FontType::normalWhite() );
+    dst_pt.x = cur_pt.x + textx - text.width();
     dst_pt.y = cur_pt.y + 149;
-    text.Blit( dst_pt.x, dst_pt.y );
+    text.draw( dst_pt.x, dst_pt.y + 2, display );
 
     dst_pt.x = cur_pt.x + startx;
     GetGemsCrSlfMerInfo( v, colors );
     if ( 2 < count )
         DrawFlags( v, dst_pt, stepx, colors.size() );
 
-    text.Set( _( "Obelisks Found:" ) );
-    dst_pt.x = cur_pt.x + textx - text.w();
+    text.set( _( "Obelisks Found:" ), fheroes2::FontType::normalWhite() );
+    dst_pt.x = cur_pt.x + textx - text.width();
     dst_pt.y = cur_pt.y + 173;
-    text.Blit( dst_pt.x, dst_pt.y );
+    text.draw( dst_pt.x, dst_pt.y + 2, display );
 
     dst_pt.x = cur_pt.x + startx;
     GetObelisksInfo( v, colors );
     if ( 2 < count )
         DrawFlags( v, dst_pt, stepx, colors.size() );
 
-    text.Set( _( "Artifacts:" ) );
-    dst_pt.x = cur_pt.x + textx - text.w();
+    text.set( _( "Artifacts:" ), fheroes2::FontType::normalWhite() );
+    dst_pt.x = cur_pt.x + textx - text.width();
     dst_pt.y = cur_pt.y + 197;
-    text.Blit( dst_pt.x, dst_pt.y );
+    text.draw( dst_pt.x, dst_pt.y + 2, display );
 
     dst_pt.x = cur_pt.x + startx;
     GetArtifactsInfo( v, colors );
@@ -461,20 +468,20 @@ void Dialog::ThievesGuild( bool oracle )
         DrawFlags( v, dst_pt, stepx, colors.size() );
     }
 
-    text.Set( _( "Total Army Strength:" ) );
-    dst_pt.x = cur_pt.x + textx - text.w();
+    text.set( _( "Total Army Strength:" ), fheroes2::FontType::normalWhite() );
+    dst_pt.x = cur_pt.x + textx - text.width();
     dst_pt.y = cur_pt.y + 221;
-    text.Blit( dst_pt.x, dst_pt.y );
+    text.draw( dst_pt.x, dst_pt.y + 2, display );
 
     dst_pt.x = cur_pt.x + startx;
     GetArmyInfo( v, colors );
     if ( 3 < count )
         DrawFlags( v, dst_pt, stepx, colors.size() );
 
-    text.Set( _( "Income:" ) );
-    dst_pt.x = cur_pt.x + textx - text.w();
+    text.set( _( "Income:" ), fheroes2::FontType::normalWhite() );
+    dst_pt.x = cur_pt.x + textx - text.width();
     dst_pt.y = cur_pt.y + 245;
-    text.Blit( dst_pt.x, dst_pt.y );
+    text.draw( dst_pt.x, dst_pt.y + 2, display );
 
     dst_pt.x = cur_pt.x + startx;
     GetIncomesInfo( v, colors );
@@ -484,17 +491,17 @@ void Dialog::ThievesGuild( bool oracle )
     // head 2
     ii = 0;
     for ( Colors::const_iterator color = colors.begin(); color != colors.end(); ++color ) {
-        text.Set( Color::String( *color ) );
-        dst_pt.x = cur_pt.x + startx + ii * stepx - text.w() / 2;
+        text.set( Color::String( *color ), fheroes2::FontType::normalWhite() );
+        dst_pt.x = cur_pt.x + startx + ii * stepx - text.width() / 2;
         dst_pt.y = cur_pt.y + 278;
-        text.Blit( dst_pt.x, dst_pt.y );
+        text.draw( dst_pt.x, dst_pt.y + 2, display );
         ++ii;
     }
 
-    text.Set( _( "Best Hero:" ) );
-    dst_pt.x = cur_pt.x + textx - text.w();
+    text.set( _( "Best Hero:" ), fheroes2::FontType::normalWhite() );
+    dst_pt.x = cur_pt.x + textx - text.width();
     dst_pt.y = cur_pt.y + 307;
-    text.Blit( dst_pt.x, dst_pt.y );
+    text.draw( dst_pt.x, dst_pt.y + 2, display );
 
     dst_pt.x = cur_pt.x + startx + 1;
     dst_pt.y -= 2;
@@ -502,30 +509,30 @@ void Dialog::ThievesGuild( bool oracle )
     const int frameIcnID = isEvilInterfaceTown ? ICN::LOCATORE : ICN::LOCATORS;
     DrawHeroIcons( v, dst_pt, stepx, frameIcnID );
 
-    text.Set( _( "Best Hero Stats:" ) );
-    dst_pt.x = cur_pt.x + textx - text.w();
+    text.set( _( "Best Hero Stats:" ), fheroes2::FontType::normalWhite() );
+    dst_pt.x = cur_pt.x + textx - text.width();
     dst_pt.y = cur_pt.y + 350;
-    text.Blit( dst_pt.x, dst_pt.y );
+    text.draw( dst_pt.x, dst_pt.y + 2, display );
 
     dst_pt.x = cur_pt.x + startx;
     dst_pt.y -= 13;
     if ( 1 < count )
         DrawHeroStats( v, dst_pt, stepx );
 
-    text.Set( _( "Personality:" ) );
-    dst_pt.x = cur_pt.x + textx - text.w();
+    text.set( _( "Personality:" ), fheroes2::FontType::normalWhite() );
+    dst_pt.x = cur_pt.x + textx - text.width();
     dst_pt.y = cur_pt.y + 392;
-    text.Blit( dst_pt.x, dst_pt.y );
+    text.draw( dst_pt.x, dst_pt.y + 2, display );
 
     dst_pt.x = cur_pt.x + startx;
     dst_pt.y += 3;
     if ( 2 < count )
         DrawPersonality( colors, dst_pt, stepx );
 
-    text.Set( _( "Best Monster:" ) );
-    dst_pt.x = cur_pt.x + textx - text.w();
+    text.set( _( "Best Monster:" ), fheroes2::FontType::normalWhite() );
+    dst_pt.x = cur_pt.x + textx - text.width();
     dst_pt.y = cur_pt.y + 427;
-    text.Blit( dst_pt.x, dst_pt.y );
+    text.draw( dst_pt.x, dst_pt.y + 2, display );
 
     dst_pt.x = cur_pt.x + startx;
     dst_pt.y -= 9;
