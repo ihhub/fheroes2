@@ -27,8 +27,6 @@
 
 #include "army.h"
 #include "campaign_data.h"
-#include "game_io.h"
-#include "save_format_version.h"
 #include "serialize.h"
 
 namespace Campaign

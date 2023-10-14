@@ -35,7 +35,6 @@
 #include <utility>
 
 #include "army_troop.h"
-#include "artifact.h"
 #include "castle.h"
 #include "game_io.h"
 #include "heroes.h"
@@ -57,9 +56,6 @@
 #include "objwatr.h"
 #include "objxloc.h"
 #include "pairs.h"
-#include "payment.h"
-#include "profit.h"
-#include "resource.h"
 #include "save_format_version.h"
 #include "serialize.h"
 #include "trees.h"

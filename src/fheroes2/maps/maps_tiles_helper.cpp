@@ -52,7 +52,6 @@
 #include "race.h"
 #include "rand.h"
 #include "resource.h"
-#include "save_format_version.h"
 #include "skill.h"
 #include "spell.h"
 #include "tools.h"

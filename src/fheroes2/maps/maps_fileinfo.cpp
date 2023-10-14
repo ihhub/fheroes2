@@ -45,7 +45,6 @@
 #include "mp2.h"
 #include "mp2_helper.h"
 #include "race.h"
-#include "save_format_version.h"
 #include "serialize.h"
 #include "settings.h"
 #include "system.h"
