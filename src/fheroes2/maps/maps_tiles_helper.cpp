@@ -3136,8 +3136,8 @@ namespace Maps
             needRedraw |= removeObjectTypeFromTile( tile, MP2::OBJ_ICN_TYPE_MONS32 );
         }
         if ( objectTypesToErase & ObjectErasureType::HEROES ) {
-            // TODO: Implement heroes remove from other object (castles, windmills, mines, etc.)
-            // without corrupting this object data. Do this by 'OBJ_HEROES' (possibly like 'hero.Dismiss()').
+            // TODO: Implement hero removal from other objects (castles, windmills, mines, etc.)
+            // without corrupting their object data. Do this through 'OBJ_HEROES' (possibly like 'hero.Dismiss()').
             needRedraw |= removeObjectTypeFromTile( tile, MP2::OBJ_ICN_TYPE_MINIHERO );
         }
 

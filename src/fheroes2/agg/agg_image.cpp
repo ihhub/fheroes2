@@ -2955,7 +2955,7 @@ namespace fheroes2
                 LoadOriginalICN( id );
                 if ( _icnVsSprite[id].size() > 5 ) {
                     Sprite & erasePanel = _icnVsSprite[id][5];
-                    // To select object types for erase we copy object buttons.
+                    // To select object types for erasure we copy object buttons.
                     Copy( _icnVsSprite[id][1], 15, 68, erasePanel, 15, 68, 114, 55 );
 
                     // Make 3 empty buttons for terrain objects, roads and streams.

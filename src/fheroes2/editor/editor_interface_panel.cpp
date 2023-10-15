@@ -527,7 +527,7 @@ namespace Interface
                     setRedraw();
                 }
                 else if ( le.MousePressRight( _eraseButtonsRect[i] ) ) {
-                    std::string header = _( "Toggle the erase of %{type} objects." );
+                    std::string header = _( "Toggle the erasure of %{type} objects." );
                     StringReplaceWithLowercase( header, "%{type}", _getEraseObjectTypeName( _eraseButtonObjectTypes[i] ) );
 
                     fheroes2::showStandardTextMessage(
@@ -536,7 +536,7 @@ namespace Interface
                             ? _(
                                 "Objects of this type will be deleted with the Erase tool. Left-click here to deselect this type. Press and hold this button to deselect all other object types." )
                             : _(
-                                "Objects of this type will NOT be deleted with the Erase tool. Left-click here select this type. Press and hold this button to select all other object types." ),
+                                "Objects of this type will NOT be deleted with the Erase tool. Left-click here to select this type. Press and hold this button to select all other object types." ),
                         Dialog::ZERO );
                 }
                 else if ( le.MouseLongPressLeft( _eraseButtonsRect[i] ) ) {

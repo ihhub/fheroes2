@@ -541,7 +541,7 @@ void Maps::Tiles::setTerrain( const uint16_t terrainImageIndex, const bool horiz
     }
 
     if ( ( _isTileMarkedAsRoad || isStream() ) && !isNewGroundWater && Maps::Ground::doesTerrainImageIndexContainEmbeddedObjects( terrainImageIndex ) ) {
-        // There can not be extra objects under the roads and streams.
+        // There cannot be extra objects under the roads and streams.
         _terrainImageIndex = Ground::getRandomTerrainImageIndex( Ground::getGroundByImageIndex( terrainImageIndex ), false );
 
         return;
