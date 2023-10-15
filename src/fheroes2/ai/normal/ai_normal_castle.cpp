@@ -19,8 +19,10 @@
  ***************************************************************************/
 
 #include <array>
+#include <cassert>
 #include <cstddef>
 #include <cstdint>
+#include <optional>
 #include <vector>
 
 #include "ai.h"
