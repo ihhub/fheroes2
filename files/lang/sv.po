@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-15 05:23+0000\n"
-"PO-Revision-Date: 2023-10-12 20:05+0200\n"
+"PO-Revision-Date: 2023-10-15 12:58+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "Language: sv\n"
@@ -1291,9 +1291,8 @@ msgstr "Förräderiet"
 msgid "Corruption's Heart"
 msgstr "Korruptionens Hjärta"
 
-#, fuzzy
 msgid "The Giant's Pass"
-msgstr "Kungligt avfall"
+msgstr "Jättens Pass"
 
 msgid ""
 "Subdue the unruly local lords in order to provide the Empire with facilities "
@@ -1441,9 +1440,8 @@ msgstr ""
 msgid "Fount of Wizardry"
 msgstr "Trollkonstens Källa"
 
-#, fuzzy
 msgid "Power's End"
-msgstr "Effekt"
+msgstr "Maktens Slut"
 
 msgid "The Eternal Scrolls"
 msgstr "De Eviga Rullarna"
@@ -1532,7 +1530,7 @@ msgid " alliance"
 msgstr "allians"
 
 msgid "Carry-over forces"
-msgstr ""
+msgstr "Medföljande Styrkor"
 
 msgid " bonus"
 msgstr " bonus"
@@ -3067,7 +3065,7 @@ msgid "Toggle the type of interface you want to use."
 msgstr "Välj vilket gränssnitt du vill använda."
 
 msgid "Toggle interface visibility."
-msgstr ""
+msgstr "Aktivera gränssnittsynlighet"
 
 msgid "Toggle colored cursor on or off. This is only an esthetic choice."
 msgstr "Välj färglagd eller svartvit muspekare."
@@ -3260,7 +3258,7 @@ msgid "Open Virtual Keyboard"
 msgstr "Öppna virtuellt tangentbord."
 
 msgid "How many troops to move?"
-msgstr "Antal trupper som flyttas?"
+msgstr "Antal trupper att flytta?"
 
 msgid "Fast separation into slots:"
 msgstr "Snabbseparering till platser:"
@@ -3807,7 +3805,7 @@ msgid "Undo"
 msgstr "Ångra"
 
 msgid "Undo your last action."
-msgstr ""
+msgstr "Ångra din sista åtgärd."
 
 msgid "Create a new map either from scratch or using the random map generator."
 msgstr "Skapa en ny blank karta eller en slumpad karta med kartgeneratorn."
@@ -4362,10 +4360,10 @@ msgid "hotkey|kingdom summary"
 msgstr "Rikessammanfattning"
 
 msgid "hotkey|default action"
-msgstr ""
+msgstr "Standardåtgärd"
 
 msgid "hotkey|open focus"
-msgstr ""
+msgstr "Öppna markerat"
 
 msgid "hotkey|system options"
 msgstr "Systeminställningar"
@@ -4861,7 +4859,7 @@ msgid "%{color} player has been vanquished!"
 msgstr "%{color} har blivit besegrad!"
 
 msgid "Major Event!"
-msgstr ""
+msgstr "Stor Händelse!"
 
 msgid "Scenario:"
 msgstr "Scenario:"
@@ -5053,6 +5051,9 @@ msgid ""
 "Start the Hero's movement along the current path or re-visit the object "
 "occupied by the Hero. Press and hold this button to reset the Hero's path."
 msgstr ""
+"Påbörja Hjältens förflyttning längd den givna vägsträckan eller återbesök "
+"ett objekt som Hjälten står vid. Tryck och håll denna knapp för att "
+"återställa Hjältens vägsträcka."
 
 msgid "Kingdom Summary"
 msgstr "Rikessammanfattning"
