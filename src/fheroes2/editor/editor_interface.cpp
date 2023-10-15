@@ -361,7 +361,7 @@ namespace Interface
                         // Erase objects in the selected area.
                         const fheroes2::ActionCreator action( _historyManager );
 
-                        Maps::eraseObjectsOnTiles( _selectedTile, _tileUnderCursor, _editorPanel.getEraseMask() );
+                        Maps::eraseObjectsOnTiles( _selectedTile, _tileUnderCursor, _editorPanel.getEraseTypes() );
                     }
                 }
 
@@ -579,12 +579,12 @@ namespace Interface
             const fheroes2::ActionCreator action( _historyManager );
 
             if ( brushSize > 1 ) {
-                if ( Maps::eraseObjectsOnTiles( tileIndex, getBrushAreaEndIndex( brushSize, tileIndex ), _editorPanel.getEraseMask() ) ) {
+                if ( Maps::eraseObjectsOnTiles( tileIndex, getBrushAreaEndIndex( brushSize, tileIndex ), _editorPanel.getEraseTypes() ) ) {
                     _redraw |= mapUpdateFlags;
                 }
             }
             else {
-                if ( Maps::eraseOjects( tile, _editorPanel.getEraseMask() ) ) {
+                if ( Maps::eraseOjects( tile, _editorPanel.getEraseTypes() ) ) {
                     _redraw |= mapUpdateFlags;
                 }
 

@@ -222,7 +222,7 @@ namespace Interface
         else if ( _selectedInstrument == Instrument::ERASE ) {
             const fheroes2::Sprite & selectionMark = fheroes2::AGG::GetICN( ICN::TOWNWIND, 11 );
             for ( size_t i = 0; i < _eraseButtonsRect.size(); ++i ) {
-                if ( _eraseButtonObjectTypes[i] & _eraseMask ) {
+                if ( _eraseButtonObjectTypes[i] & _eraseTypes ) {
                     fheroes2::Blit( selectionMark, 0, 0, display, _eraseButtonsRect[i].x + 10, _eraseButtonsRect[i].y + 11, selectionMark.width(),
                                     selectionMark.height() );
                 }
@@ -308,7 +308,7 @@ namespace Interface
         return "Unknown object type";
     }
 
-    const char * EditorPanel::_getEraseObjectTypeName( const uint8_t eraseObjectType )
+    const char * EditorPanel::_getEraseObjectTypeName( const uint32_t eraseObjectType )
     {
         switch ( eraseObjectType ) {
         case Maps::ObjectErasureType::TERRAIN_OBJECTS:
@@ -523,7 +523,7 @@ namespace Interface
         else if ( _selectedInstrument == Instrument::ERASE ) {
             for ( size_t i = 0; i < _eraseButtonsRect.size(); ++i ) {
                 if ( le.MouseClickLeft( _eraseButtonsRect[i] ) ) {
-                    _eraseMask ^= _eraseButtonObjectTypes[i];
+                    _eraseTypes ^= _eraseButtonObjectTypes[i];
                     setRedraw();
                 }
                 else if ( le.MousePressRight( _eraseButtonsRect[i] ) ) {
@@ -532,7 +532,7 @@ namespace Interface
 
                     fheroes2::showStandardTextMessage(
                         std::move( header ),
-                        ( _eraseButtonObjectTypes[i] & _eraseMask )
+                        ( _eraseButtonObjectTypes[i] & _eraseTypes )
                             ? _(
                                 "Objects of this type will be deleted with the Erase tool. Left-click here to deselect this type. Press and hold this button to deselect all other object types." )
                             : _(
@@ -540,8 +540,8 @@ namespace Interface
                         Dialog::ZERO );
                 }
                 else if ( le.MouseLongPressLeft( _eraseButtonsRect[i] ) ) {
-                    _eraseMask = ( _eraseButtonObjectTypes[i] & _eraseMask ) ? _eraseButtonObjectTypes[i]
-                                                                             : ( Maps::ObjectErasureType::ALL_OBJECTS & ~_eraseButtonObjectTypes[i] );
+                    _eraseTypes = ( _eraseButtonObjectTypes[i] & _eraseTypes ) ? _eraseButtonObjectTypes[i]
+                                                                               : ( Maps::ObjectErasureType::ALL_OBJECTS & ~_eraseButtonObjectTypes[i] );
                     setRedraw();
                 }
             }
@@ -591,7 +591,7 @@ namespace Interface
             fheroes2::showStandardTextMessage( _( "Road Mode" ), _( "Allows you to draw roads by clicking and dragging." ), Dialog::ZERO );
         }
         else if ( le.MousePressRight( _instrumentButtonsRect[Instrument::ERASE] ) ) {
-            fheroes2::showStandardTextMessage( _( "Erase Mode" ), _( "Used to erase objects off the map." ), Dialog::ZERO );
+            fheroes2::showStandardTextMessage( _( "Erase Mode" ), _( "Used to erase objects from the map." ), Dialog::ZERO );
         }
         else if ( le.MousePressRight( _rectMagnify ) ) {
             fheroes2::showStandardTextMessage( _( "Magnify" ), _( "Change between zoom and normal view." ), Dialog::ZERO );

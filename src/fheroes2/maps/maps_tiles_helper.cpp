@@ -3084,8 +3084,13 @@ namespace Maps
         return true;
     }
 
-    bool eraseObjectsOnTiles( const int32_t startTileId, const int32_t endTileId, const uint8_t objectsToErase )
+    bool eraseObjectsOnTiles( const int32_t startTileId, const int32_t endTileId, const uint32_t objectTypesToErase )
     {
+        if ( objectTypesToErase == ObjectErasureType::NONE ) {
+            // Nothing to erase.
+            return false;
+        }
+
         const int32_t mapWidth = world.w();
         const int32_t maxTileId = mapWidth * world.h() - 1;
         if ( startTileId < 0 || startTileId > maxTileId || endTileId < 0 || endTileId > maxTileId ) {
@@ -3105,27 +3110,32 @@ namespace Maps
         for ( int32_t y = startY; y <= endY; ++y ) {
             const int32_t tileOffset = y * mapWidth;
             for ( int32_t x = startX; x <= endX; ++x ) {
-                needRedraw |= eraseOjects( world.GetTiles( x + tileOffset ), objectsToErase );
+                needRedraw |= eraseOjects( world.GetTiles( x + tileOffset ), objectTypesToErase );
             }
         }
 
         return needRedraw;
     }
 
-    bool eraseOjects( Tiles & tile, const uint8_t objectTypesToErase )
+    bool eraseOjects( Tiles & tile, const uint32_t objectTypesToErase )
     {
+        if ( objectTypesToErase == ObjectErasureType::NONE ) {
+            // Nothing to erase.
+            return false;
+        }
+
         bool needRedraw = false;
 
-        if ( objectTypesToErase & Maps::ObjectErasureType::ROADS ) {
+        if ( objectTypesToErase & ObjectErasureType::ROADS ) {
             needRedraw |= updateRoadOnTile( tile, false );
         }
-        if ( objectTypesToErase & Maps::ObjectErasureType::STREAMS ) {
+        if ( objectTypesToErase & ObjectErasureType::STREAMS ) {
             needRedraw |= updateStreamOnTile( tile, false );
         }
-        if ( objectTypesToErase & Maps::ObjectErasureType::MONSTERS ) {
+        if ( objectTypesToErase & ObjectErasureType::MONSTERS ) {
             needRedraw |= removeObjectTypeFromTile( tile, MP2::OBJ_ICN_TYPE_MONS32 );
         }
-        if ( objectTypesToErase & Maps::ObjectErasureType::HEROES ) {
+        if ( objectTypesToErase & ObjectErasureType::HEROES ) {
             // TODO: Implement heroes remove from other object (castles, windmills, mines, etc.)
             // without corrupting this object data. Do this by 'OBJ_HEROES' (possibly like 'hero.Dismiss()').
             needRedraw |= removeObjectTypeFromTile( tile, MP2::OBJ_ICN_TYPE_MINIHERO );
