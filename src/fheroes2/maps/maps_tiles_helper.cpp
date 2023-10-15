@@ -3060,7 +3060,7 @@ namespace Maps
         tile.setObjectSpriteIndex( static_cast<TileImageIndexType>( heroType ) );
     }
 
-    bool removeObjectFromTile( Tiles & tile, const MP2::ObjectIcnType objectIcnType )
+    bool removeObjectTypeFromTile( Tiles & tile, const MP2::ObjectIcnType objectIcnType )
     {
         if ( tile.getObjectIdByObjectIcnType( objectIcnType ) == 0 ) {
             // There is no such object on this tile.
@@ -3112,23 +3112,23 @@ namespace Maps
         return needRedraw;
     }
 
-    bool eraseOjects( Tiles & tile, const uint8_t objectsToErase )
+    bool eraseOjects( Tiles & tile, const uint8_t objectTypesToErase )
     {
         bool needRedraw = false;
 
-        if ( objectsToErase & Maps::ObjectEraseMask::ROADS ) {
+        if ( objectTypesToErase & Maps::ObjectErasureType::ROADS ) {
             needRedraw |= updateRoadOnTile( tile, false );
         }
-        if ( objectsToErase & Maps::ObjectEraseMask::STREAMS ) {
+        if ( objectTypesToErase & Maps::ObjectErasureType::STREAMS ) {
             needRedraw |= updateStreamOnTile( tile, false );
         }
-        if ( objectsToErase & Maps::ObjectEraseMask::MONSTERS ) {
-            needRedraw |= removeObjectFromTile( tile, MP2::OBJ_ICN_TYPE_MONS32 );
+        if ( objectTypesToErase & Maps::ObjectErasureType::MONSTERS ) {
+            needRedraw |= removeObjectTypeFromTile( tile, MP2::OBJ_ICN_TYPE_MONS32 );
         }
-        if ( objectsToErase & Maps::ObjectEraseMask::HEROES ) {
+        if ( objectTypesToErase & Maps::ObjectErasureType::HEROES ) {
             // TODO: Implement heroes remove from other object (castles, windmills, mines, etc.)
             // without corrupting this object data. Do this by 'OBJ_HEROES' (possibly like 'hero.Dismiss()').
-            needRedraw |= removeObjectFromTile( tile, MP2::OBJ_ICN_TYPE_MINIHERO );
+            needRedraw |= removeObjectTypeFromTile( tile, MP2::OBJ_ICN_TYPE_MINIHERO );
         }
 
         return needRedraw;

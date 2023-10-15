@@ -220,11 +220,9 @@ namespace Interface
             terrainText.draw( _rectInstrumentPanel.x + 72 - terrainText.width() / 2, _rectInstrumentPanel.y + 135, display );
         }
         else if ( _selectedInstrument == Instrument::ERASE ) {
-            // const fheroes2::Sprite & selection = fheroes2::AGG::GetICN( ICN::TERRAINS, 9 );
             const fheroes2::Sprite & selectionMark = fheroes2::AGG::GetICN( ICN::TOWNWIND, 11 );
             for ( size_t i = 0; i < _eraseButtonsRect.size(); ++i ) {
                 if ( _eraseButtonObjectTypes[i] & _eraseMask ) {
-                    // fheroes2::Blit( selection, 0, 0, display, _eraseButtonsRect[i].x - 2, _eraseButtonsRect[i].y - 2, selection.width(), selection.height() );
                     fheroes2::Blit( selectionMark, 0, 0, display, _eraseButtonsRect[i].x + 10, _eraseButtonsRect[i].y + 11, selectionMark.width(),
                                     selectionMark.height() );
                 }
@@ -313,21 +311,21 @@ namespace Interface
     const char * EditorPanel::_getEraseObjectTypeName( const uint8_t eraseObjectType )
     {
         switch ( eraseObjectType ) {
-        case Maps::ObjectEraseMask::TERRAIN_OBJECTS:
+        case Maps::ObjectErasureType::TERRAIN_OBJECTS:
             return _( "Terrain" );
-        case Maps::ObjectEraseMask::CASTLES:
+        case Maps::ObjectErasureType::CASTLES:
             return _( "Castles" );
-        case Maps::ObjectEraseMask::MONSTERS:
+        case Maps::ObjectErasureType::MONSTERS:
             return _( "Monsters" );
-        case Maps::ObjectEraseMask::HEROES:
+        case Maps::ObjectErasureType::HEROES:
             return _( "Heroes" );
-        case Maps::ObjectEraseMask::ARTIFACTS:
+        case Maps::ObjectErasureType::ARTIFACTS:
             return _( "Artifacts" );
-        case Maps::ObjectEraseMask::ROADS:
+        case Maps::ObjectErasureType::ROADS:
             return _( "Roads" );
-        case Maps::ObjectEraseMask::STREAMS:
+        case Maps::ObjectErasureType::STREAMS:
             return _( "Streams" );
-        case Maps::ObjectEraseMask::TREASURES:
+        case Maps::ObjectErasureType::TREASURES:
             return _( "Treasures" );
         default:
             // Have you added a new object type to erase? Add the logic above!
@@ -542,8 +540,8 @@ namespace Interface
                         Dialog::ZERO );
                 }
                 else if ( le.MouseLongPressLeft( _eraseButtonsRect[i] ) ) {
-                    _eraseMask
-                        = ( _eraseButtonObjectTypes[i] & _eraseMask ) ? _eraseButtonObjectTypes[i] : ( Maps::ObjectEraseMask::ALL_OBJECTS & ~_eraseButtonObjectTypes[i] );
+                    _eraseMask = ( _eraseButtonObjectTypes[i] & _eraseMask ) ? _eraseButtonObjectTypes[i]
+                                                                             : ( Maps::ObjectErasureType::ALL_OBJECTS & ~_eraseButtonObjectTypes[i] );
                     setRedraw();
                 }
             }

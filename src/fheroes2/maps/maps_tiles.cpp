@@ -532,12 +532,12 @@ void Maps::Tiles::setTerrain( const uint16_t terrainImageIndex, const bool horiz
     _terrainFlags = ( verticalFlip ? 1 : 0 ) + ( horizontalFlip ? 2 : 0 );
 
     const int newGround = Ground::getGroundByImageIndex( terrainImageIndex );
-    const bool isNewGroundWater = newGround == Ground::WATER;
+    const bool isNewGroundWater = ( newGround == Ground::WATER );
     const int oldGround = GetGround();
 
     if ( ( isNewGroundWater || oldGround == Ground::WATER ) && oldGround != newGround ) {
         // When changing water to land and vice-versa we should remove all objects from the tile.
-        eraseOjects( *this, ObjectEraseMask::ALL_OBJECTS );
+        eraseOjects( *this, ObjectErasureType::ALL_OBJECTS );
     }
 
     if ( ( _isTileMarkedAsRoad || isStream() ) && !isNewGroundWater && Maps::Ground::doesTerrainImageIndexContainEmbeddedObjects( terrainImageIndex ) ) {

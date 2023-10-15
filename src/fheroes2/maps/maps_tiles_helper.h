@@ -76,8 +76,9 @@ namespace Maps
         FIGHT_50_GHOSTS_AND_GET_2000_GOLD_WITH_ARTIFACT = 4
     };
 
-    enum ObjectEraseMask : uint8_t
+    enum ObjectErasureType : uint8_t
     {
+        // Terrain objects are objects that are placed in editor using a terrain palette in objects placing mode.
         TERRAIN_OBJECTS = 0x01,
         CASTLES = 0x02,
         MONSTERS = 0x04,
@@ -181,7 +182,7 @@ namespace Maps
     void setRandomMonsterOnTile( Tiles & tile, const Monster & mons );
     void setEditorHeroOnTile( Tiles & tile, const int32_t heroType );
 
-    bool removeObjectFromTile( Tiles & tile, const MP2::ObjectIcnType objectIcnType );
+    bool removeObjectTypeFromTile( Tiles & tile, const MP2::ObjectIcnType objectIcnType );
     bool eraseObjectsOnTiles( const int32_t startTileId, const int32_t endTileId, const uint8_t objectsToErase );
-    bool eraseOjects( Tiles & tile, const uint8_t objectsToErase );
+    bool eraseOjects( Tiles & tile, const uint8_t objectTypesToErase );
 }
