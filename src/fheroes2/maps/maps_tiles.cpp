@@ -1804,14 +1804,6 @@ bool Maps::Tiles::isDetachedObject() const
     return false;
 }
 
-void Maps::Tiles::swap( TilesAddon & addon ) noexcept
-{
-    std::swap( addon._objectIcnType, _mainAddon._objectIcnType );
-    std::swap( addon._imageIndex, _mainAddon._imageIndex );
-    std::swap( addon._uid, _mainAddon._uid );
-    std::swap( addon._layerType, _mainAddon._layerType );
-}
-
 StreamBase & Maps::operator<<( StreamBase & msg, const TilesAddon & ta )
 {
     using ObjectIcnTypeUnderlyingType = std::underlying_type_t<decltype( ta._objectIcnType )>;

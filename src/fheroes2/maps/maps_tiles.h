@@ -340,7 +340,10 @@ namespace Maps
 
         static int32_t getIndexOfMainTile( const Maps::Tiles & tile );
 
-        void swap( TilesAddon & addon ) noexcept;
+        void swap( TilesAddon & addon ) noexcept
+        {
+            std::swap( addon, _mainAddon );
+        }
 
         // Update tile or bottom layer object image index.
         static void updateTileObjectIcnIndex( Maps::Tiles & tile, const uint32_t uid, const uint8_t newIndex );
