@@ -1065,7 +1065,7 @@ bool Maps::Tiles::GoodForUltimateArtifact() const
         return false;
     }
 
-    if ( _mainAddon._objectIcnType != MP2::OBJ_ICN_TYPE_UNKNOWN && !isShadowSprite( _mainAddon._objectIcnType, _mainAddon._imageIndex ) ) {
+    if ( _mainAddon._objectIcnType != MP2::OBJ_ICN_TYPE_UNKNOWN && !isAddonShadow( _mainAddon ) ) {
         return false;
     }
 
@@ -1148,7 +1148,7 @@ bool Maps::Tiles::isStream() const
 
 bool Maps::Tiles::isShadow() const
 {
-    return isShadowSprite( _mainAddon._objectIcnType, _mainAddon._imageIndex )
+    return isAddonShadow( _mainAddon )
            && _addonBottomLayer.size() == static_cast<size_t>( std::count_if( _addonBottomLayer.begin(), _addonBottomLayer.end(), isAddonShadow ) );
 }
 
@@ -1700,7 +1700,7 @@ bool Maps::Tiles::isTallObject() const
 
     const Tiles & topTile = world.GetTiles( Maps::GetDirectionIndex( _index, Direction::TOP ) );
     for ( const uint32_t tileUID : tileUIDs ) {
-        if ( topTile._mainAddon._uid == tileUID && !isShadowSprite( topTile._mainAddon._objectIcnType, topTile._mainAddon._imageIndex ) ) {
+        if ( topTile._mainAddon._uid == tileUID && !isAddonShadow( topTile._mainAddon ) ) {
             return true;
         }
 
@@ -1846,6 +1846,7 @@ StreamBase & Maps::operator<<( StreamBase & msg, const Tiles & tile )
     using ObjectIcnTypeUnderlyingType = std::underlying_type_t<decltype( tile._mainAddon._objectIcnType )>;
     using MainObjectTypeUnderlyingType = std::underlying_type_t<decltype( tile._mainObjectType )>;
 
+    // TODO: use operator<<() for _mainAddon.
     return msg << tile._index << tile._terrainImageIndex << tile._terrainFlags << tile._tilePassabilityDirections << tile._mainAddon._uid
                << static_cast<ObjectIcnTypeUnderlyingType>( tile._mainAddon._objectIcnType ) << tile._mainAddon._imageIndex
                << static_cast<MainObjectTypeUnderlyingType>( tile._mainObjectType ) << tile._fogColors << tile._metadata << tile._occupantHeroId
