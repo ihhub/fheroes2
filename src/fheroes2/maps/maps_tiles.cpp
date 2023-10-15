@@ -926,11 +926,8 @@ void Maps::Tiles::AddonsSort()
     _addonBottomLayer.sort( []( const auto & left, const auto & right ) { return ( left._layerType > right._layerType ); } );
 
     if ( !_addonBottomLayer.empty() ) {
-        const TilesAddon & highestPriorityAddon = _addonBottomLayer.back();
-        _mainAddon._uid = highestPriorityAddon._uid;
-        _mainAddon._objectIcnType = highestPriorityAddon._objectIcnType;
-        _mainAddon._imageIndex = highestPriorityAddon._imageIndex;
-        _mainAddon._layerType = highestPriorityAddon._layerType;
+        TilesAddon & highestPriorityAddon = _addonBottomLayer.back();
+        std::swap( highestPriorityAddon, _mainAddon );
 
         // If this assertion blows up then you are not storing correct values for layer type!
         assert( _mainAddon._layerType <= TERRAIN_LAYER );
