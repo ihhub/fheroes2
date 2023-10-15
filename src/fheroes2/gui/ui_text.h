@@ -27,7 +27,6 @@
 namespace fheroes2
 {
     class Image;
-    // TODO: the old Text classes render text with 2 pixel shift by Y axis. We need to do something to keep the same drawings while replacing old code.
 
     enum class FontSize : uint8_t
     {
