@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-10 13:40+0000\n"
+"POT-Creation-Date: 2023-10-15 05:23+0000\n"
 "PO-Revision-Date: 2023-04-09 23:51+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3215,9 +3215,6 @@ msgstr "(graben unmöglich)"
 msgid "penalty: %{cost}"
 msgstr "Strafe: %{cost}"
 
-msgid "Uncharted Territory"
-msgstr "Unerforschtes Land"
-
 msgid "Defenders:"
 msgstr "Verteidiger:"
 
@@ -3244,6 +3241,9 @@ msgstr "Zauberpunkte:"
 
 msgid "Move Points:"
 msgstr "Bewegungspunkte:"
+
+msgid "Uncharted Territory"
+msgstr "Unerforschtes Land"
 
 msgid "Cost per troop:"
 msgstr "Kosten pro Truppe:"

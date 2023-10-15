@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-10 00:20+0000\n"
+"POT-Creation-Date: 2023-10-15 05:23+0000\n"
 "PO-Revision-Date: 2023-09-12 11:08+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
@@ -3235,9 +3235,6 @@ msgstr "(ingen gravning)"
 msgid "penalty: %{cost}"
 msgstr "Skridttab: %{cost}"
 
-msgid "Uncharted Territory"
-msgstr "Ukendt område"
-
 msgid "Defenders:"
 msgstr "Forsvarere:"
 
@@ -3264,6 +3261,9 @@ msgstr "Mana:"
 
 msgid "Move Points:"
 msgstr "Skridtpoint:"
+
+msgid "Uncharted Territory"
+msgstr "Ukendt område"
 
 msgid "Cost per troop:"
 msgstr "Pris per trop:"
