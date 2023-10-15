@@ -385,7 +385,7 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
 
         // right info
         if ( le.MousePressRight( portPos ) ) {
-            Dialog::QuickInfo( *this );
+            Dialog::QuickInfo( *this, true );
         }
         else if ( le.MousePressRight( rectSpreadArmyFormat ) ) {
             fheroes2::showStandardTextMessage( _( "Spread Formation" ), descriptionSpreadArmyFormat, Dialog::ZERO );
