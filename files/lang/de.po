@@ -6314,7 +6314,7 @@ msgstr ""
 
 msgid "You beat the Ghosts and are able to restore the mine to production."
 msgstr ""
-"Ihr habt die Geister besiegt und könn5 die Mine wieder in Betrieb nehmen."
+"Ihr habt die Geister besiegt und könnt die Mine wieder in Betrieb nehmen."
 
 msgid ""
 "A group of %{monster} with a desire for greater glory wish to join you. Do "
