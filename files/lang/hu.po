@@ -3108,10 +3108,6 @@ msgstr "Varázspontok:"
 msgid "Move Points:"
 msgstr "Mozgáspontok:"
 
-#, fuzzy
-msgid "Uncharted Territory"
-msgstr "Felderítettlen Terület"
-
 msgid "Cost per troop:"
 msgstr "Költség egységenként:"
 
