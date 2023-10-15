@@ -175,7 +175,7 @@ namespace AI
     std::optional<Funds> calculateMarketplaceTransaction( const Kingdom & kingdom, const Funds & fundsToObtain );
 
     // Performs operations on the marketplace necessary for the kingdom to be able to make a payment in the amount
-    // of at least 'fundsToObtain'. If the necessary funds were not obtained as a result of trading, then the current
+    // of at least 'fundsToObtain'. If the necessary funds cannot be obtained as a result of trading, then the current
     // funds of the kingdom remain unchanged. Returns true if the trade was successful, otherwise returns false.
     bool tradeAtMarketplace( Kingdom & kingdom, const Funds & fundsToObtain );
 
