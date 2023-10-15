@@ -118,7 +118,7 @@ namespace
             const Castle * castle = world.getCastleEntrance( Maps::GetPoint( index ) );
 
             if ( castle != nullptr ) {
-                Dialog::QuickInfo( *castle, {}, true, _windowArea );
+                Dialog::QuickInfoWithIndicationOnRadar( *castle, _windowArea );
             }
         }
 
