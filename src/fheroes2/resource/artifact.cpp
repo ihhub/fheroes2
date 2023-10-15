@@ -37,13 +37,11 @@
 #include "agg_image.h"
 #include "dialog.h"
 #include "dialog_selectitems.h"
-#include "game_io.h"
 #include "gamedefs.h"
 #include "heroes.h"
 #include "icn.h"
 #include "logging.h"
 #include "rand.h"
-#include "save_format_version.h"
 #include "serialize.h"
 #include "settings.h"
 #include "skill.h"
@@ -499,20 +497,7 @@ StreamBase & operator<<( StreamBase & msg, const Artifact & art )
 
 StreamBase & operator>>( StreamBase & msg, Artifact & art )
 {
-    msg >> art.id >> art.ext;
-
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE1_1005_RELEASE, "Remove the logic below." );
-    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_PRE1_1005_RELEASE ) {
-        // Old save formats contain different values for artifacts.
-        if ( art.id == 103 ) {
-            art.id = Artifact::UNKNOWN;
-        }
-        else {
-            ++art.id;
-        }
-    }
-
-    return msg;
+    return msg >> art.id >> art.ext;
 }
 
 BagArtifacts::BagArtifacts()

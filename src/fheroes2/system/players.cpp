@@ -574,13 +574,6 @@ StreamBase & operator>>( StreamBase & msg, Players & players )
     int current;
     msg >> colors >> current;
 
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1004_RELEASE, "Remove the logic below." );
-    // The old save files made at the end of a campaign scenario has player color set to '-1' which is not supported now.
-    // So we change the incorrect color '-1' to 'Color::NONE'.
-    if ( current == -1 ) {
-        current = Color::NONE;
-    }
-
     players.clear();
     players.setCurrentColor( current );
     const Colors vcolors( colors );

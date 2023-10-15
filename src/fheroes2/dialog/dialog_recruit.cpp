@@ -504,6 +504,15 @@ Troop Dialog::RecruitMonster( const Monster & monster0, const uint32_t available
             fheroes2::Copy( background, 0, 0, display, dialogOffset.x, dialogOffset.y, windowSize.width, windowSize.height );
 
             max = CalculateMax( monster, kingdom, available );
+
+            if ( max == 0 ) {
+                buttonMin.disable();
+                buttonMax.disable();
+            }
+            else if ( !buttonMax.isEnabled() && !buttonMin.isEnabled() ) {
+                buttonMin.enable();
+            }
+
             result = max;
             paymentMonster = monster.GetCost();
             paymentCosts = paymentMonster * result;
