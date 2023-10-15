@@ -938,19 +938,19 @@ void Maps::Tiles::AddonsSort()
         _addonBottomLayer.pop_back();
     }
 
-    // Level 2 objects don't have any rendering priorities so they should be rendered first in queue first to render.
+    // Top layer objects don't have any rendering priorities so they should be rendered first in queue first to render.
 }
 
-Maps::TilesAddon * Maps::Tiles::FindAddonLevel1( uint32_t uniq1 )
+Maps::TilesAddon * Maps::Tiles::getBottomLayerAddon( const uint32_t uid )
 {
-    Addons::iterator it = std::find_if( _addonBottomLayer.begin(), _addonBottomLayer.end(), [uniq1]( const TilesAddon & v ) { return v._uid == uniq1; } );
+    auto it = std::find_if( _addonBottomLayer.begin(), _addonBottomLayer.end(), [uid]( const TilesAddon & v ) { return v._uid == uid; } );
 
     return it != _addonBottomLayer.end() ? &( *it ) : nullptr;
 }
 
-Maps::TilesAddon * Maps::Tiles::FindAddonLevel2( uint32_t uniq2 )
+Maps::TilesAddon * Maps::Tiles::getTopLayerAddon( const uint32_t uid )
 {
-    Addons::iterator it = std::find_if( _addonTopLayer.begin(), _addonTopLayer.end(), [uniq2]( const TilesAddon & v ) { return v._uid == uniq2; } );
+    auto it = std::find_if( _addonTopLayer.begin(), _addonTopLayer.end(), [uid]( const TilesAddon & v ) { return v._uid == uid; } );
 
     return it != _addonTopLayer.end() ? &( *it ) : nullptr;
 }
@@ -1538,7 +1538,7 @@ void Maps::Tiles::ClearFog( const int colors )
 
 void Maps::Tiles::updateTileObjectIcnIndex( Maps::Tiles & tile, const uint32_t uid, const uint8_t newIndex )
 {
-    Maps::TilesAddon * addon = tile.FindAddonLevel1( uid );
+    Maps::TilesAddon * addon = tile.getBottomLayerAddon( uid );
     if ( addon != nullptr ) {
         addon->_imageIndex = newIndex;
     }

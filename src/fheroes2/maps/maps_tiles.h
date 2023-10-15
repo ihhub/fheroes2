@@ -84,8 +84,6 @@ namespace Maps
         uint8_t _imageIndex{ 255 };
     };
 
-    using Addons = std::list<TilesAddon>;
-
     class Tiles
     {
     public:
@@ -199,8 +197,8 @@ namespace Maps
         bool isShadow() const;
         bool GoodForUltimateArtifact() const;
 
-        TilesAddon * FindAddonLevel1( uint32_t uniq1 );
-        TilesAddon * FindAddonLevel2( uint32_t uniq2 );
+        TilesAddon * getBottomLayerAddon( const uint32_t uid );
+        TilesAddon * getTopLayerAddon( const uint32_t uid );
 
         void SetObject( const MP2::MapObjectType objectType );
 
@@ -254,17 +252,17 @@ namespace Maps
 
         void pushTopLayerAddon( const MP2::mp2addon_t & ma );
 
-        const Addons & getBottomLayerAddons() const
+        const std::list<TilesAddon> & getBottomLayerAddons() const
         {
             return _addonBottomLayer;
         }
 
-        Addons & getBottomLayerAddons()
+        std::list<TilesAddon> & getBottomLayerAddons()
         {
             return _addonBottomLayer;
         }
 
-        const Addons & getTopLayerAddons() const
+        const std::list<TilesAddon> & getTopLayerAddons() const
         {
             return _addonTopLayer;
         }
@@ -369,17 +367,17 @@ namespace Maps
 
         // The following members are used in the Editor and in the game.
 
-        Addons _addonBottomLayer;
+        TilesAddon _mainAddon;
 
-        Addons _addonTopLayer;
+        std::list<TilesAddon> _addonBottomLayer;
+
+        std::list<TilesAddon> _addonTopLayer;
 
         int32_t _index{ 0 };
 
         uint16_t _terrainImageIndex{ 0 };
 
         uint8_t _terrainFlags{ 0 };
-
-        TilesAddon _mainAddon;
 
         MP2::MapObjectType _mainObjectType{ MP2::OBJ_NONE };
 
