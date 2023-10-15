@@ -545,7 +545,7 @@ namespace Interface
                 }
                 else if ( le.MouseLongPressLeft( _eraseButtonsRect[i] ) ) {
                     _eraseMask
-                        = ( _eraseButtonObjectTypes[i] & _eraseMask ) ? _eraseButtonObjectTypes[i] : Maps::ObjectEraseMask::ALL_OBJECTS ^ _eraseButtonObjectTypes[i];
+                        = ( _eraseButtonObjectTypes[i] & _eraseMask ) ? _eraseButtonObjectTypes[i] : ( Maps::ObjectEraseMask::ALL_OBJECTS & ~_eraseButtonObjectTypes[i] );
                     setRedraw();
                 }
             }
