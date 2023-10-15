@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-08 07:12+0000\n"
+"POT-Creation-Date: 2023-10-15 05:23+0000\n"
 "PO-Revision-Date: 2023-08-26 23:09+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: https://discord.com/"
@@ -3170,6 +3170,10 @@ msgstr "(nie odwiedzono)"
 msgid "%{color} Barrier"
 msgstr "Bariera - kolor %{color}"
 
+#, fuzzy
+msgid "(tent visited)"
+msgstr "(nie odwiedzono)"
+
 msgid "%{color} Tent"
 msgstr "%{color} namiot podróżnika"
 
@@ -3184,9 +3188,6 @@ msgstr "(nie można kopać)"
 
 msgid "penalty: %{cost}"
 msgstr "pkt. ruchu: %{cost}"
-
-msgid "Uncharted Territory"
-msgstr "Niezbadane terytorium"
 
 msgid "Defenders:"
 msgstr "Obrońcy:"
@@ -3214,6 +3215,9 @@ msgstr "Pkt. magii:"
 
 msgid "Move Points:"
 msgstr "Pkt. ruchu:"
+
+msgid "Uncharted Territory"
+msgstr "Niezbadane terytorium"
 
 msgid "Cost per troop:"
 msgstr "Koszt jednostki:"
@@ -3301,6 +3305,13 @@ msgstr "Wczytaj plik:"
 
 msgid "Accept the choice made."
 msgstr "Zastosuj wprowadzone zmiany."
+
+msgid "Unknown Hero"
+msgstr "Nieznany bohater"
+
+#, fuzzy
+msgid "%{color} %{race} hero"
+msgstr "%{color} gracz"
 
 msgid "Select Skill:"
 msgstr "Wybierz umiejętność:"
@@ -3626,6 +3637,12 @@ msgstr ""
 msgid "Choose a tile which does not contain any objects."
 msgstr ""
 
+msgid "Heroes"
+msgstr "Bohaterowie"
+
+msgid "Heroes cannot be placed on water."
+msgstr ""
+
 msgid "Ocean Objects"
 msgstr ""
 
@@ -3658,9 +3675,6 @@ msgstr ""
 
 msgid "Towns"
 msgstr "Miasta"
-
-msgid "Heroes"
-msgstr "Bohaterowie"
 
 msgid "Artifacts"
 msgstr "Artefakty"
@@ -4127,9 +4141,6 @@ msgstr "Projekt opakowania"
 
 msgid "Your Name"
 msgstr "Twoje imię"
-
-msgid "Unknown Hero"
-msgstr "Nieznany bohater"
 
 msgid "Standard"
 msgstr "Standard"
@@ -6919,14 +6930,16 @@ msgstr ""
 "Nie możesz rzucić zaklęcia, ponieważ nie ma miejsca koło bohatera przy "
 "brzegu."
 
+#, fuzzy
 msgid ""
 "You do not own any town or castle that is not currently occupied by a hero. "
-"You cannot cast this spell."
+"This spell will have no effect."
 msgstr ""
 "Nie posiadasz w tym momencie żadnego miasta lub zamku, z tego powodu nie "
 "możesz rzucić tego zaklęcia."
 
-msgid "This hero is already in a town, so you cannot cast this spell."
+#, fuzzy
+msgid "This hero is already in a town, so this spell will have no effect."
 msgstr "Ten bohater znajduje się już w zamku, więc nie możesz rzucić zaklęcia."
 
 msgid ""

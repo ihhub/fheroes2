@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-08 07:12+0000\n"
+"POT-Creation-Date: 2023-10-15 05:23+0000\n"
 "PO-Revision-Date: 2022-12-03 04:36+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <it@li.org>\n"
@@ -3041,6 +3041,10 @@ msgstr "(non visitato/a)"
 msgid "%{color} Barrier"
 msgstr "Barriera %{color}"
 
+#, fuzzy
+msgid "(tent visited)"
+msgstr "(non visitato/a)"
+
 msgid "%{color} Tent"
 msgstr "Tenda %{color}"
 
@@ -3055,9 +3059,6 @@ msgstr "(scavo impossibile)"
 
 msgid "penalty: %{cost}"
 msgstr "penalità: %{cost}"
-
-msgid "Uncharted Territory"
-msgstr "Terra Ignota"
 
 msgid "Defenders:"
 msgstr "Difensori:"
@@ -3091,6 +3092,9 @@ msgstr "Pt. Magia"
 #, fuzzy
 msgid "Move Points:"
 msgstr "Pt. Movim."
+
+msgid "Uncharted Territory"
+msgstr "Terra Ignota"
 
 msgid "Cost per troop:"
 msgstr ""
@@ -3176,6 +3180,13 @@ msgstr "File da Caricare:"
 
 msgid "Accept the choice made."
 msgstr "Accetta la scelta."
+
+msgid "Unknown Hero"
+msgstr ""
+
+#, fuzzy
+msgid "%{color} %{race} hero"
+msgstr "Giocatore %{color}"
 
 msgid "Select Skill:"
 msgstr "Scegli dote:"
@@ -3508,6 +3519,12 @@ msgstr ""
 msgid "Choose a tile which does not contain any objects."
 msgstr ""
 
+msgid "Heroes"
+msgstr "Eroi"
+
+msgid "Heroes cannot be placed on water."
+msgstr ""
+
 msgid "Ocean Objects"
 msgstr ""
 
@@ -3541,9 +3558,6 @@ msgstr ""
 #, fuzzy
 msgid "Towns"
 msgstr "Castello"
-
-msgid "Heroes"
-msgstr "Eroi"
 
 msgid "Artifacts"
 msgstr "Artefatti"
@@ -4003,9 +4017,6 @@ msgid "Package Design"
 msgstr ""
 
 msgid "Your Name"
-msgstr ""
-
-msgid "Unknown Hero"
 msgstr ""
 
 msgid "Standard"
@@ -6411,11 +6422,11 @@ msgstr "Lancia una magia avventura."
 
 msgid ""
 "You do not own any town or castle that is not currently occupied by a hero. "
-"You cannot cast this spell."
+"This spell will have no effect."
 msgstr ""
 
 #, fuzzy
-msgid "This hero is already in a town, so you cannot cast this spell."
+msgid "This hero is already in a town, so this spell will have no effect."
 msgstr "Lancia una magia avventura."
 
 msgid ""

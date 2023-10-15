@@ -345,14 +345,6 @@ namespace Maps
         // Update tile or bottom layer object image index.
         static void updateTileObjectIcnIndex( Maps::Tiles & tile, const uint32_t uid, const uint8_t newIndex );
 
-        // The old code was using weird quantity based values which were very hard to understand.
-        // Since we must have backwards compatibility we need to do the conversion.
-        void quantityIntoMetadata( const uint8_t quantityValue1, const uint8_t quantityValue2, const uint32_t additionalMetadata );
-
-        // The old code stored an unknown artifact ID as 103. This prevented from adding new artifacts without breaking compatibility every time we do such.
-        // This method serves to fix incorrect artifact IDs.
-        void fixOldArtifactIDs();
-
     private:
         TilesAddon * getAddonWithFlag( const uint32_t uid );
 
@@ -371,8 +363,6 @@ namespace Maps
 
         friend StreamBase & operator<<( StreamBase &, const Tiles & );
         friend StreamBase & operator>>( StreamBase &, Tiles & );
-
-        static uint8_t convertOldMainObjectType( const uint8_t mainObjectType );
 
         // The following members are used in the Editor and in the game.
 

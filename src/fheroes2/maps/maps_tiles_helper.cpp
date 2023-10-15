@@ -52,7 +52,6 @@
 #include "race.h"
 #include "rand.h"
 #include "resource.h"
-#include "save_format_version.h"
 #include "skill.h"
 #include "spell.h"
 #include "tools.h"
@@ -1892,12 +1891,6 @@ namespace Maps
                 count += Rand::Get( 1, 3 );
             }
 
-            static_assert( LAST_SUPPORTED_FORMAT_VERSION <= FORMAT_VERSION_PRE1_1005_RELEASE, "Remove the check below." );
-            if ( count == 0 ) {
-                // The fix for the case when the Troll Bridge or City of Dead with NONE tile color, has 0 creatures (fixed in PR #7246).
-                count += Rand::Get( 1, 3 );
-            }
-
             break;
 
         case MP2::OBJ_DRAGON_CITY:
@@ -1906,12 +1899,6 @@ namespace Maps
             }
             else if ( getColorFromTile( tile ) != Color::NONE ) {
                 // If the Dragon City has been captured or has 0 creatures, its population is increased by 1 dragon per week.
-                ++count;
-            }
-
-            static_assert( LAST_SUPPORTED_FORMAT_VERSION <= FORMAT_VERSION_PRE1_1005_RELEASE, "Remove the check below." );
-            if ( count == 0 ) {
-                // The fix for the case when the Dragon City with NONE tile color, has 0 creatures (fixed in PR #7246).
                 ++count;
             }
 
@@ -3037,5 +3024,26 @@ namespace Maps
         assert( monsSpriteIndex >= std::numeric_limits<TileImageIndexType>::min() && monsSpriteIndex <= std::numeric_limits<TileImageIndexType>::max() );
 
         tile.setObjectSpriteIndex( static_cast<TileImageIndexType>( monsSpriteIndex ) );
+    }
+
+    void setEditorHeroOnTile( Tiles & tile, const int32_t heroType )
+    {
+        tile.SetObject( MP2::OBJ_HEROES );
+
+        if ( tile.getObjectIcnType() != MP2::OBJ_ICN_TYPE_UNKNOWN ) {
+            // If there is another object sprite here (shadow for example) push it down to add-ons.
+            tile.pushBottomLayerAddon( TilesAddon( tile.getLayerType(), tile.GetObjectUID(), tile.getObjectIcnType(), tile.GetObjectSpriteIndex() ) );
+        }
+
+        // No object exists on this tile. Add one.
+        tile.setObjectUID( getNewObjectUID() );
+        tile.setObjectIcnType( MP2::OBJ_ICN_TYPE_MINIHERO );
+
+        using TileImageIndexType = decltype( tile.GetObjectSpriteIndex() );
+        static_assert( std::is_same_v<TileImageIndexType, uint8_t>, "Type of GetObjectSpriteIndex() has been changed, check the logic below" );
+
+        assert( heroType >= std::numeric_limits<TileImageIndexType>::min() && heroType <= std::numeric_limits<TileImageIndexType>::max() );
+
+        tile.setObjectSpriteIndex( static_cast<TileImageIndexType>( heroType ) );
     }
 }

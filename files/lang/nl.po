@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-08 07:12+0000\n"
+"POT-Creation-Date: 2023-10-15 05:23+0000\n"
 "PO-Revision-Date: 2022-10-25 08:52+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Dutch <nl@li.org>\n"
@@ -3093,6 +3093,9 @@ msgstr ""
 msgid "%{color} Barrier"
 msgstr ""
 
+msgid "(tent visited)"
+msgstr ""
+
 msgid "%{color} Tent"
 msgstr ""
 
@@ -3106,9 +3109,6 @@ msgid "(no digging)"
 msgstr ""
 
 msgid "penalty: %{cost}"
-msgstr ""
-
-msgid "Uncharted Territory"
 msgstr ""
 
 msgid "Defenders:"
@@ -3136,6 +3136,9 @@ msgid "Spell Points:"
 msgstr ""
 
 msgid "Move Points:"
+msgstr ""
+
+msgid "Uncharted Territory"
 msgstr ""
 
 msgid "Cost per troop:"
@@ -3217,6 +3220,12 @@ msgid "File to Load:"
 msgstr ""
 
 msgid "Accept the choice made."
+msgstr ""
+
+msgid "Unknown Hero"
+msgstr ""
+
+msgid "%{color} %{race} hero"
 msgstr ""
 
 msgid "Select Skill:"
@@ -3523,6 +3532,12 @@ msgstr ""
 msgid "Choose a tile which does not contain any objects."
 msgstr ""
 
+msgid "Heroes"
+msgstr ""
+
+msgid "Heroes cannot be placed on water."
+msgstr ""
+
 msgid "Ocean Objects"
 msgstr ""
 
@@ -3551,9 +3566,6 @@ msgid "Beach Objects"
 msgstr ""
 
 msgid "Towns"
-msgstr ""
-
-msgid "Heroes"
 msgstr ""
 
 msgid "Artifacts"
@@ -3987,9 +3999,6 @@ msgid "Package Design"
 msgstr ""
 
 msgid "Your Name"
-msgstr ""
-
-msgid "Unknown Hero"
 msgstr ""
 
 msgid "Standard"
@@ -6295,11 +6304,12 @@ msgstr ""
 
 msgid ""
 "You do not own any town or castle that is not currently occupied by a hero. "
-"You cannot cast this spell."
+"This spell will have no effect."
 msgstr ""
 
-msgid "This hero is already in a town, so you cannot cast this spell."
-msgstr ""
+#, fuzzy
+msgid "This hero is already in a town, so this spell will have no effect."
+msgstr "Die spreuk zal niemand beïnvloeden!"
 
 msgid ""
 "The nearest town is %{town}.\n"

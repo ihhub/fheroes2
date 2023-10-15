@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-08 07:12+0000\n"
+"POT-Creation-Date: 2023-10-15 05:23+0000\n"
 "PO-Revision-Date: 2022-12-18 13:48+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -3214,6 +3214,10 @@ msgstr "(non visité)"
 msgid "%{color} Barrier"
 msgstr "Barrière magique %{color}"
 
+#, fuzzy
+msgid "(tent visited)"
+msgstr "(non visité)"
+
 msgid "%{color} Tent"
 msgstr "Tente %{color}"
 
@@ -3228,9 +3232,6 @@ msgstr "(fouille impossible)"
 
 msgid "penalty: %{cost}"
 msgstr "pénalité : %{cost}"
-
-msgid "Uncharted Territory"
-msgstr "Terra Incognita"
 
 msgid "Defenders:"
 msgstr "Défenseurs :"
@@ -3258,6 +3259,9 @@ msgstr "Mana :"
 
 msgid "Move Points:"
 msgstr "Mouvement :"
+
+msgid "Uncharted Territory"
+msgstr "Terra Incognita"
 
 msgid "Cost per troop:"
 msgstr "Coût par troupe :"
@@ -3343,6 +3347,13 @@ msgstr "Fichier à charger :"
 
 msgid "Accept the choice made."
 msgstr "Confirmez le choix."
+
+msgid "Unknown Hero"
+msgstr "Héros inconnu"
+
+#, fuzzy
+msgid "%{color} %{race} hero"
+msgstr "Joueur %{color}"
 
 msgid "Select Skill:"
 msgstr "Choisir compétence :"
@@ -3684,6 +3695,12 @@ msgstr ""
 msgid "Choose a tile which does not contain any objects."
 msgstr ""
 
+msgid "Heroes"
+msgstr "Héros"
+
+msgid "Heroes cannot be placed on water."
+msgstr ""
+
 msgid "Ocean Objects"
 msgstr ""
 
@@ -3717,9 +3734,6 @@ msgstr ""
 #, fuzzy
 msgid "Towns"
 msgstr "Village"
-
-msgid "Heroes"
-msgstr "Héros"
 
 msgid "Artifacts"
 msgstr "Artéfacts"
@@ -4183,9 +4197,6 @@ msgstr "Conception du conditionnement"
 
 msgid "Your Name"
 msgstr "Votre nom"
-
-msgid "Unknown Hero"
-msgstr "Héros inconnu"
 
 msgid "Standard"
 msgstr "Jeu standard"
@@ -7094,13 +7105,13 @@ msgstr ""
 #, fuzzy
 msgid ""
 "You do not own any town or castle that is not currently occupied by a hero. "
-"You cannot cast this spell."
+"This spell will have no effect."
 msgstr ""
 "Vous ne possédez actuellement aucun village ou château, vous ne pouvez donc "
 "pas lancer le sort."
 
 #, fuzzy
-msgid "This hero is already in a town, so you cannot cast this spell."
+msgid "This hero is already in a town, so this spell will have no effect."
 msgstr "Ce héros est déjà dans un village, vous ne pouvez pas lancer le sort."
 
 msgid ""

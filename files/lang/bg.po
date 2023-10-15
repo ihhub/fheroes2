@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-08 07:12+0000\n"
+"POT-Creation-Date: 2023-10-15 05:23+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3190,6 +3190,10 @@ msgstr "(не посещаван)"
 msgid "%{color} Barrier"
 msgstr "%{color} Бариера"
 
+#, fuzzy
+msgid "(tent visited)"
+msgstr "(не посещаван)"
+
 msgid "%{color} Tent"
 msgstr "%{color} палатка"
 
@@ -3204,9 +3208,6 @@ msgstr "(без копаене)"
 
 msgid "penalty: %{cost}"
 msgstr "неустойка: %{cost}"
-
-msgid "Uncharted Territory"
-msgstr "Неизследвана територия"
 
 msgid "Defenders:"
 msgstr "Защитници:"
@@ -3234,6 +3235,9 @@ msgstr "Магия:"
 
 msgid "Move Points:"
 msgstr "Ход:"
+
+msgid "Uncharted Territory"
+msgstr "Неизследвана територия"
 
 msgid "Cost per troop:"
 msgstr "Цена на единица:"
@@ -3321,6 +3325,13 @@ msgstr "Файл за зареждане:"
 
 msgid "Accept the choice made."
 msgstr "Приемете направения избор."
+
+msgid "Unknown Hero"
+msgstr "Незнаен герой"
+
+#, fuzzy
+msgid "%{color} %{race} hero"
+msgstr "%{color} играч"
 
 msgid "Select Skill:"
 msgstr "Избери умение:"
@@ -3650,6 +3661,12 @@ msgstr ""
 msgid "Choose a tile which does not contain any objects."
 msgstr ""
 
+msgid "Heroes"
+msgstr "Герой"
+
+msgid "Heroes cannot be placed on water."
+msgstr ""
+
 msgid "Ocean Objects"
 msgstr "Океански обекти"
 
@@ -3679,9 +3696,6 @@ msgstr "Плажни обекти"
 
 msgid "Towns"
 msgstr "Градове"
-
-msgid "Heroes"
-msgstr "Герой"
 
 msgid "Artifacts"
 msgstr "Артефакти"
@@ -4160,9 +4174,6 @@ msgstr "Дизайн на опаковката"
 
 msgid "Your Name"
 msgstr "Твоето име"
-
-msgid "Unknown Hero"
-msgstr "Незнаен герой"
 
 msgid "Standard"
 msgstr "Стандарт"
@@ -6942,14 +6953,16 @@ msgstr "Няма налични лодки за това заклинание."
 msgid "There is no ocean adjacent to the hero where this spell will work."
 msgstr "Няма океан в близост до героя, където това заклинание ще работи."
 
+#, fuzzy
 msgid ""
 "You do not own any town or castle that is not currently occupied by a hero. "
-"You cannot cast this spell."
+"This spell will have no effect."
 msgstr ""
 "Не притежаваш нито един град или замък, който в момента да не е зает от "
 "герой. Не можеш да направиш това заклинание."
 
-msgid "This hero is already in a town, so you cannot cast this spell."
+#, fuzzy
+msgid "This hero is already in a town, so this spell will have no effect."
 msgstr ""
 "Този герой вече е в град, така че не можеш да направиш това заклинание."
 

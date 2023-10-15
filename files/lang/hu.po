@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-08 07:12+0000\n"
+"POT-Creation-Date: 2023-10-15 05:23+0000\n"
 "PO-Revision-Date: 2023-09-04 21:55+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -3072,6 +3072,10 @@ msgid "%{color} Barrier"
 msgstr "%{color} játékos köre"
 
 #, fuzzy
+msgid "(tent visited)"
+msgstr "(nem látogatott)"
+
+#, fuzzy
 msgid "%{color} Tent"
 msgstr "%{color} játékos köre"
 
@@ -3087,10 +3091,6 @@ msgstr ""
 
 msgid "penalty: %{cost}"
 msgstr ""
-
-#, fuzzy
-msgid "Uncharted Territory"
-msgstr "Felderítettlen Terület"
 
 msgid "Defenders:"
 msgstr "Védők:"
@@ -3126,6 +3126,10 @@ msgstr "Varázspontok"
 #, fuzzy
 msgid "Move Points:"
 msgstr "%{name} ide lép."
+
+#, fuzzy
+msgid "Uncharted Territory"
+msgstr "Felderítettlen Terület"
 
 msgid "Cost per troop:"
 msgstr ""
@@ -3211,6 +3215,14 @@ msgstr "Betöltés:"
 
 msgid "Accept the choice made."
 msgstr "A választás elfogadása."
+
+#, fuzzy
+msgid "Unknown Hero"
+msgstr "Ismeretlen"
+
+#, fuzzy
+msgid "%{color} %{race} hero"
+msgstr "%{color} játékos köre"
 
 #, fuzzy
 msgid "Select Skill:"
@@ -3547,6 +3559,12 @@ msgstr ""
 msgid "Choose a tile which does not contain any objects."
 msgstr ""
 
+msgid "Heroes"
+msgstr "Hősök"
+
+msgid "Heroes cannot be placed on water."
+msgstr ""
+
 msgid "Ocean Objects"
 msgstr ""
 
@@ -3579,9 +3597,6 @@ msgstr ""
 #, fuzzy
 msgid "Towns"
 msgstr "Város"
-
-msgid "Heroes"
-msgstr "Hősök"
 
 #, fuzzy
 msgid "Artifacts"
@@ -4045,10 +4060,6 @@ msgstr ""
 
 msgid "Your Name"
 msgstr ""
-
-#, fuzzy
-msgid "Unknown Hero"
-msgstr "Ismeretlen"
 
 #, fuzzy
 msgid "Standard"
@@ -6637,11 +6648,11 @@ msgstr "Nincs szabad helye a hősödnek, egy újabb Elementál idézésére."
 
 msgid ""
 "You do not own any town or castle that is not currently occupied by a hero. "
-"You cannot cast this spell."
+"This spell will have no effect."
 msgstr ""
 
 #, fuzzy
-msgid "This hero is already in a town, so you cannot cast this spell."
+msgid "This hero is already in a town, so this spell will have no effect."
 msgstr "Kalandozó varázslat elsütése."
 
 msgid ""
