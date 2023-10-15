@@ -130,6 +130,7 @@ namespace Interface
         }
 
         static const char * _getObjectTypeName( const uint8_t brushId );
+        static const char * _getEraseObjectTypeName( const uint8_t eraseObjectType );
 
         enum Instrument : uint8_t
         {
@@ -214,9 +215,9 @@ namespace Interface
         std::array<fheroes2::Rect, 8> _eraseButtonsRect;
 
         // This array represents the order of object-to-erase images on the erase tool panel (from left to right, from top to bottom).
-        std::array<uint8_t, 8> _eraseButtonsOrder{ Maps::ObjectEraseMask::TERRAIN_OBJECTS, Maps::ObjectEraseMask::CASTLES,   Maps::ObjectEraseMask::MONSTERS,
-                                                   Maps::ObjectEraseMask::HEROES,          Maps::ObjectEraseMask::ARTIFACTS, Maps::ObjectEraseMask::ROADS,
-                                                   Maps::ObjectEraseMask::STREAMS,         Maps::ObjectEraseMask::TREASURES };
+        std::array<uint8_t, 8> _eraseButtonObjectTypes{ Maps::ObjectEraseMask::TERRAIN_OBJECTS, Maps::ObjectEraseMask::CASTLES,   Maps::ObjectEraseMask::MONSTERS,
+                                                        Maps::ObjectEraseMask::HEROES,          Maps::ObjectEraseMask::ARTIFACTS, Maps::ObjectEraseMask::ROADS,
+                                                        Maps::ObjectEraseMask::STREAMS,         Maps::ObjectEraseMask::TREASURES };
 
         uint8_t _selectedInstrument{ Instrument::TERRAIN };
 

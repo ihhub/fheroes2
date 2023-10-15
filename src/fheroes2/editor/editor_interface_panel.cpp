@@ -23,6 +23,7 @@
 #include <cassert>
 #include <cstddef>
 #include <string>
+#include <utility>
 
 #include "agg_image.h"
 #include "cursor.h"
@@ -222,7 +223,7 @@ namespace Interface
             // const fheroes2::Sprite & selection = fheroes2::AGG::GetICN( ICN::TERRAINS, 9 );
             const fheroes2::Sprite & selectionMark = fheroes2::AGG::GetICN( ICN::TOWNWIND, 11 );
             for ( size_t i = 0; i < _eraseButtonsRect.size(); ++i ) {
-                if ( _eraseButtonsOrder[i] & _eraseMask ) {
+                if ( _eraseButtonObjectTypes[i] & _eraseMask ) {
                     // fheroes2::Blit( selection, 0, 0, display, _eraseButtonsRect[i].x - 2, _eraseButtonsRect[i].y - 2, selection.width(), selection.height() );
                     fheroes2::Blit( selectionMark, 0, 0, display, _eraseButtonsRect[i].x + 10, _eraseButtonsRect[i].y + 11, selectionMark.width(),
                                     selectionMark.height() );
@@ -302,6 +303,34 @@ namespace Interface
             return _( "Treasures" );
         default:
             // Have you added a new object type? Add the logic above!
+            assert( 0 );
+            break;
+        }
+
+        return "Unknown object type";
+    }
+
+    const char * EditorPanel::_getEraseObjectTypeName( const uint8_t eraseObjectType )
+    {
+        switch ( eraseObjectType ) {
+        case Maps::ObjectEraseMask::TERRAIN_OBJECTS:
+            return _( "Terrain" );
+        case Maps::ObjectEraseMask::CASTLES:
+            return _( "Castles" );
+        case Maps::ObjectEraseMask::MONSTERS:
+            return _( "Monsters" );
+        case Maps::ObjectEraseMask::HEROES:
+            return _( "Heroes" );
+        case Maps::ObjectEraseMask::ARTIFACTS:
+            return _( "Artifacts" );
+        case Maps::ObjectEraseMask::ROADS:
+            return _( "Roads" );
+        case Maps::ObjectEraseMask::STREAMS:
+            return _( "Streams" );
+        case Maps::ObjectEraseMask::TREASURES:
+            return _( "Treasures" );
+        default:
+            // Have you added a new object type to erase? Add the logic above!
             assert( 0 );
             break;
         }
@@ -436,7 +465,7 @@ namespace Interface
                 if ( le.MousePressRight( _objectButtonsRect[objectId] ) ) {
                     std::string text = _( "Used to place objects most appropriate for use on %{terrain}." );
                     StringReplaceWithLowercase( text, "%{terrain}", _getTerrainTypeName( objectId ) );
-                    fheroes2::showStandardTextMessage( _getObjectTypeName( objectId ), text, Dialog::ZERO );
+                    fheroes2::showStandardTextMessage( _getObjectTypeName( objectId ), std::move( text ), Dialog::ZERO );
 
                     // There is no need to continue the loop as only one button can be pressed at one moment.
                     break;
@@ -498,15 +527,26 @@ namespace Interface
         else if ( _selectedInstrument == Instrument::ERASE ) {
             for ( size_t i = 0; i < _eraseButtonsRect.size(); ++i ) {
                 if ( le.MouseClickLeft( _eraseButtonsRect[i] ) ) {
-                    _eraseMask ^= _eraseButtonsOrder[i];
+                    _eraseMask ^= _eraseButtonObjectTypes[i];
                     setRedraw();
                 }
                 else if ( le.MousePressRight( _eraseButtonsRect[i] ) ) {
-                    fheroes2::showStandardTextMessage( _( "Select objects to erase" ),
-                                                       _eraseButtonsOrder[i] & _eraseMask
-                                                           ? _( "This object type will be erased by the Erase tool. Click here to disable its erase." )
-                                                           : _( "This object type will NOT be erased by the Erase tool. Click here to enable its erase." ),
-                                                       Dialog::ZERO );
+                    std::string header = _( "Toggle the erase of %{type} objects." );
+                    StringReplaceWithLowercase( header, "%{type}", _getEraseObjectTypeName( _eraseButtonObjectTypes[i] ) );
+
+                    fheroes2::showStandardTextMessage(
+                        std::move( header ),
+                        ( _eraseButtonObjectTypes[i] & _eraseMask )
+                            ? _(
+                                "Objects of this type will be deleted with the Erase tool. Left-click here to deselect this type. Press and hold this button to deselect all other object types." )
+                            : _(
+                                "Objects of this type will not be deleted with the Erase tool. Left-click here select this type. Press and hold this button to select all other object types." ),
+                        Dialog::ZERO );
+                }
+                else if ( le.MouseLongPressLeft( _eraseButtonsRect[i] ) ) {
+                    _eraseMask
+                        = ( _eraseButtonObjectTypes[i] & _eraseMask ) ? _eraseButtonObjectTypes[i] : Maps::ObjectEraseMask::ALL_OBJECTS ^ _eraseButtonObjectTypes[i];
+                    setRedraw();
                 }
             }
         }
