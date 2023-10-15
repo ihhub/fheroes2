@@ -3209,9 +3209,6 @@ msgstr "(không đào được)"
 msgid "penalty: %{cost}"
 msgstr "phạt: %{cost}"
 
-msgid "Uncharted Territory"
-msgstr "Lãnh thổ Chưa khám phá"
-
 msgid "Defenders:"
 msgstr "Bên thủ:"
 
@@ -3238,6 +3235,9 @@ msgstr ""
 
 msgid "Move Points:"
 msgstr ""
+
+msgid "Uncharted Territory"
+msgstr "Lãnh thổ Chưa khám phá"
 
 msgid "Cost per troop:"
 msgstr "Giá mỗi quân:"

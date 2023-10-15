@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-10 00:20+0000\n"
+"POT-Creation-Date: 2023-10-15 05:23+0000\n"
 "PO-Revision-Date: 2023-09-24 16:05+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Czech <cs@li.org>\n"
@@ -3168,9 +3168,6 @@ msgstr "(nelze kopat)"
 msgid "penalty: %{cost}"
 msgstr "odebere: %{cost}"
 
-msgid "Uncharted Territory"
-msgstr "Neprozkoumané území"
-
 msgid "Defenders:"
 msgstr "Obránci:"
 
@@ -3197,6 +3194,9 @@ msgstr "Body Kouzla:"
 
 msgid "Move Points:"
 msgstr "Body Pohybu:"
+
+msgid "Uncharted Territory"
+msgstr "Neprozkoumané území"
 
 msgid "Cost per troop:"
 msgstr "Cena za jedince:"

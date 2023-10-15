@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-10 00:20+0000\n"
+"POT-Creation-Date: 2023-10-15 05:23+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3209,9 +3209,6 @@ msgstr "(без копаене)"
 msgid "penalty: %{cost}"
 msgstr "неустойка: %{cost}"
 
-msgid "Uncharted Territory"
-msgstr "Неизследвана територия"
-
 msgid "Defenders:"
 msgstr "Защитници:"
 
@@ -3238,6 +3235,9 @@ msgstr "Магия:"
 
 msgid "Move Points:"
 msgstr "Ход:"
+
+msgid "Uncharted Territory"
+msgstr "Неизследвана територия"
 
 msgid "Cost per troop:"
 msgstr "Цена на единица:"
