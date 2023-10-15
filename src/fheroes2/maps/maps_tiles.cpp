@@ -751,7 +751,8 @@ void Maps::Tiles::updatePassability()
 
             // If a bottom tile has the same object ID then this tile is inaccessible.
             std::vector<uint32_t> tileUIDs;
-            if ( ( _mainAddon._objectIcnType != MP2::OBJ_ICN_TYPE_UNKNOWN ) && _mainAddon._imageIndex < 255 && _mainAddon._uid != 0 && ( ( _mainAddon._layerType >> 1 ) & 1 ) == 0 ) {
+            if ( ( _mainAddon._objectIcnType != MP2::OBJ_ICN_TYPE_UNKNOWN ) && _mainAddon._imageIndex < 255 && _mainAddon._uid != 0
+                 && ( ( _mainAddon._layerType >> 1 ) & 1 ) == 0 ) {
                 tileUIDs.emplace_back( _mainAddon._uid );
             }
 
