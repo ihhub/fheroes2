@@ -82,15 +82,13 @@ namespace AI
         }
 
         const Kingdom & kingdom = castle.GetKingdom();
-
-        const Funds fundsAvailable = kingdom.GetFunds();
-        const Funds fundsRequired = PaymentConditions::BuyBuilding( castle.GetRace(), building ) * fundsMultiplier;
+        const Funds requiredFunds = PaymentConditions::BuyBuilding( castle.GetRace(), building ) * fundsMultiplier;
 
         // Perhaps the kingdom already has the necessary supply of resources
-        if ( fundsAvailable < fundsRequired ) {
+        if ( !kingdom.AllowPayment( requiredFunds ) ) {
             // Even if the kingdom does not have the necessary supply of these resources right now, there may be enough resources of another type available to get the
             // missing resources as a result of resource exchange
-            if ( !calculateMarketplaceTransaction( kingdom, fundsRequired ) ) {
+            if ( !calculateMarketplaceTransaction( kingdom, requiredFunds ) ) {
                 return false;
             }
         }

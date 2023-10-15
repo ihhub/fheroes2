@@ -183,9 +183,48 @@ namespace AI
             }
         }
 
-        // Check if the kingdom has at least one hero and enough resources to buy a boat.
-        const Kingdom & kingdom = castle.GetKingdom();
-        if ( !kingdom.GetHeroes().empty() && kingdom.GetFunds() >= PaymentConditions::BuyBoat() * ( islandOrPeninsula ? 2 : 4 ) ) {
+        // Check whether it is worth buying a boat
+        const bool buyBoat = [&castle, islandOrPeninsula]() {
+            // Check if it is possible to build a boat in this castle at all (except for the solvency check)
+            if ( !castle.AllowBuyBoat( false ) ) {
+                return false;
+            }
+
+            Kingdom & kingdom = castle.GetKingdom();
+
+            // If there are no active heroes in the kingdom, then there will be no one to use the boat
+            if ( kingdom.GetHeroes().empty() ) {
+                return false;
+            }
+
+            // Perhaps the kingdom already has the necessary supply of resources
+            const Funds requiredFunds = PaymentConditions::BuyBoat() * ( islandOrPeninsula ? 2 : 4 );
+            if ( kingdom.AllowPayment( requiredFunds ) ) {
+                return true;
+            }
+
+            // Even if the kingdom does not have the necessary supply of these resources right now, there may be enough resources of another type available to get the
+            // missing resources as a result of resource exchange
+            if ( !calculateMarketplaceTransaction( kingdom, requiredFunds ) ) {
+                return false;
+            }
+
+            // There are resources available to buy a boat right now
+            if ( kingdom.AllowPayment( PaymentConditions::BuyBoat() ) ) {
+                return true;
+            }
+
+            // There are no available resources, but it is possible to make a resource exchange
+            if ( tradeAtMarketplace( kingdom, PaymentConditions::BuyBoat() ) ) {
+                return true;
+            }
+
+            assert( 0 );
+            return false;
+        }();
+
+        // If yes, then buy a boat
+        if ( buyBoat ) {
             castle.BuyBoat();
         }
 

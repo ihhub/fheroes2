@@ -2514,21 +2514,40 @@ double Castle::GetGarrisonStrength( const Heroes * attackingHero ) const
     return totalStrength;
 }
 
-bool Castle::AllowBuyBoat() const
+bool Castle::AllowBuyBoat( const bool checkPayment /* = true */ ) const
 {
-    // check payment and present other boat
-    return ( HaveNearlySea() && isBuild( BUILD_SHIPYARD ) && GetKingdom().AllowPayment( PaymentConditions::BuyBoat() ) && !PresentBoat() );
+    if ( !HaveNearlySea() ) {
+        return false;
+    }
+
+    if ( !isBuild( BUILD_SHIPYARD ) ) {
+        return false;
+    }
+
+    if ( PresentBoat() ) {
+        return false;
+    }
+
+    if ( checkPayment && !GetKingdom().AllowPayment( PaymentConditions::BuyBoat() ) ) {
+        return false;
+    }
+
+    return true;
 }
 
 bool Castle::BuyBoat() const
 {
-    if ( !AllowBuyBoat() )
+    if ( !AllowBuyBoat() ) {
         return false;
-    if ( isControlHuman() )
-        AudioManager::PlaySound( M82::BUILDTWN );
+    }
 
-    if ( !Maps::isValidAbsPoint( center.x, center.y + 2 ) )
+    if ( !Maps::isValidAbsPoint( center.x, center.y + 2 ) ) {
         return false;
+    }
+
+    if ( isControlHuman() ) {
+        AudioManager::PlaySound( M82::BUILDTWN );
+    }
 
     const int32_t index = Maps::GetIndexFromAbsPoint( center.x, center.y + 2 );
     Maps::Tiles & left = world.GetTiles( index - 1 );
