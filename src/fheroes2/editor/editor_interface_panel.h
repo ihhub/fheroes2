@@ -215,9 +215,9 @@ namespace Interface
         std::array<fheroes2::Rect, 8> _eraseButtonsRect;
 
         // This array represents the order of object-to-erase images on the erase tool panel (from left to right, from top to bottom).
-        std::array<uint8_t, 8> _eraseButtonObjectTypes{ Maps::ObjectEraseMask::TERRAIN_OBJECTS, Maps::ObjectEraseMask::CASTLES,   Maps::ObjectEraseMask::MONSTERS,
-                                                        Maps::ObjectEraseMask::HEROES,          Maps::ObjectEraseMask::ARTIFACTS, Maps::ObjectEraseMask::ROADS,
-                                                        Maps::ObjectEraseMask::STREAMS,         Maps::ObjectEraseMask::TREASURES };
+        const std::array<uint8_t, 8> _eraseButtonObjectTypes{ Maps::ObjectEraseMask::TERRAIN_OBJECTS, Maps::ObjectEraseMask::CASTLES,   Maps::ObjectEraseMask::MONSTERS,
+                                                              Maps::ObjectEraseMask::HEROES,          Maps::ObjectEraseMask::ARTIFACTS, Maps::ObjectEraseMask::ROADS,
+                                                              Maps::ObjectEraseMask::STREAMS,         Maps::ObjectEraseMask::TREASURES };
 
         uint8_t _selectedInstrument{ Instrument::TERRAIN };
 

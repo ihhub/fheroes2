@@ -445,7 +445,6 @@ namespace Interface
                 fheroes2::showStandardTextMessage( _getTerrainTypeName( Brush::BEACH ), movePenaltyText( "1.25" ), Dialog::ZERO );
             }
         }
-
         else if ( _selectedInstrument == Instrument::OBJECT ) {
             for ( size_t i = 0; i < _objectButtonsRect.size(); ++i ) {
                 if ( ( _selectedObject != i ) && le.MousePressLeft( _objectButtonsRect[i] ) ) {
@@ -523,7 +522,6 @@ namespace Interface
                 }
             }
         }
-
         else if ( _selectedInstrument == Instrument::ERASE ) {
             for ( size_t i = 0; i < _eraseButtonsRect.size(); ++i ) {
                 if ( le.MouseClickLeft( _eraseButtonsRect[i] ) ) {
@@ -540,7 +538,7 @@ namespace Interface
                             ? _(
                                 "Objects of this type will be deleted with the Erase tool. Left-click here to deselect this type. Press and hold this button to deselect all other object types." )
                             : _(
-                                "Objects of this type will not be deleted with the Erase tool. Left-click here select this type. Press and hold this button to select all other object types." ),
+                                "Objects of this type will NOT be deleted with the Erase tool. Left-click here select this type. Press and hold this button to select all other object types." ),
                         Dialog::ZERO );
                 }
                 else if ( le.MouseLongPressLeft( _eraseButtonsRect[i] ) ) {

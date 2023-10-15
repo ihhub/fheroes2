@@ -3062,13 +3062,24 @@ namespace Maps
 
     bool removeObjectFromTile( Tiles & tile, const MP2::ObjectIcnType objectIcnType )
     {
-        if ( tile.getObjectIcnType() != objectIcnType ) {
+        if ( tile.getObjectIdByObjectIcnType( objectIcnType ) == 0 ) {
+            // There is no such object on this tile.
             return false;
         }
 
+        // TODO: Improve this code to remove the multi-tile objects.
         tile.removeObjects( objectIcnType );
-        resetObjectMetadata( tile );
-        tile.setAsEmpty();
+
+        // For some objects we should set tile object type as empty and reset the metadata.
+        switch ( objectIcnType ) {
+        case MP2::OBJ_ICN_TYPE_MONS32:
+        case MP2::OBJ_ICN_TYPE_MINIHERO:
+            resetObjectMetadata( tile );
+            tile.setAsEmpty();
+            break;
+        default:
+            break;
+        }
 
         return true;
     }
@@ -3115,6 +3126,8 @@ namespace Maps
             needRedraw |= removeObjectFromTile( tile, MP2::OBJ_ICN_TYPE_MONS32 );
         }
         if ( objectsToErase & Maps::ObjectEraseMask::HEROES ) {
+            // TODO: Implement heroes remove from other object (castles, windmills, mines, etc.)
+            // without corrupting this object data. Do this by 'OBJ_HEROES' (possibly like 'hero.Dismiss()').
             needRedraw |= removeObjectFromTile( tile, MP2::OBJ_ICN_TYPE_MINIHERO );
         }
 
