@@ -2951,6 +2951,37 @@ namespace fheroes2
 
                 return true;
             }
+            case ICN::EDITPANL:
+                LoadOriginalICN( id );
+                if ( _icnVsSprite[id].size() > 5 ) {
+                    Sprite & erasePanel = _icnVsSprite[id][5];
+                    // To select object types for erasure we copy object buttons.
+                    Copy( _icnVsSprite[id][1], 15, 68, erasePanel, 15, 68, 114, 55 );
+
+                    // Make 3 empty buttons for terrain objects, roads and streams.
+                    Fill( erasePanel, 16, 69, 24, 24, 65U );
+                    Copy( erasePanel, 15, 68, erasePanel, 44, 96, 27, 27 );
+                    Copy( erasePanel, 15, 68, erasePanel, 73, 96, 27, 27 );
+
+                    // Make erase terrain objects button image.
+                    Image objectsImage( 24, 24 );
+                    Copy( GetICN( ICN::EDITBTNS, 2 ), 13, 4, objectsImage, 0, 0, 24, 24 );
+                    AddTransparency( objectsImage, 10U );
+                    AddTransparency( objectsImage, 38U );
+                    AddTransparency( objectsImage, 39U );
+                    AddTransparency( objectsImage, 40U );
+                    AddTransparency( objectsImage, 41U );
+                    AddTransparency( objectsImage, 46U );
+                    Blit( objectsImage, 0, 0, erasePanel, 16, 69, 24, 24 );
+
+                    // Make erase roads button image.
+                    Blit( GetICN( ICN::ROAD, 2 ), 0, 0, erasePanel, 45, 104, 24, 5 );
+                    Blit( GetICN( ICN::ROAD, 1 ), 1, 0, erasePanel, 45, 109, 24, 5 );
+
+                    // Make erase streams button image.
+                    Blit( GetICN( ICN::STREAM, 2 ), 0, 0, erasePanel, 74, 104, 24, 11 );
+                }
+                return true;
             case ICN::EDITOR:
                 LoadOriginalICN( id );
                 if ( !_icnVsSprite[id].empty() ) {

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-15 05:23+0000\n"
+"POT-Creation-Date: 2023-10-16 01:01+0000\n"
 "PO-Revision-Date: 2023-10-12 20:05+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -3689,6 +3689,22 @@ msgstr "Artefakter"
 msgid "Treasures"
 msgstr "Skatter"
 
+#, fuzzy
+msgid "Terrain"
+msgstr "Terrängläge"
+
+#, fuzzy
+msgid "Castles"
+msgstr "Slott"
+
+#, fuzzy
+msgid "Roads"
+msgstr "Väg"
+
+#, fuzzy
+msgid "Streams"
+msgstr "Älvläge"
+
 msgid ""
 "Draws terrain in\n"
 "%{size} by %{size} square increments."
@@ -3761,6 +3777,21 @@ msgid ""
 "a resource or treasure."
 msgstr "Används för att placera en resurs eller skatt."
 
+msgid "Toggle the erasure of %{type} objects."
+msgstr ""
+
+msgid ""
+"Objects of this type will be deleted with the Erase tool. Left-click here to "
+"deselect this type. Press and hold this button to deselect all other object "
+"types."
+msgstr ""
+
+msgid ""
+"Objects of this type will NOT be deleted with the Erase tool. Left-click "
+"here to select this type. Press and hold this button to select all other "
+"object types."
+msgstr ""
+
 msgid "Terrain Mode"
 msgstr "Terrängläge"
 
@@ -3794,7 +3825,8 @@ msgstr "Vägläge"
 msgid "Erase Mode"
 msgstr "Raderarläge"
 
-msgid "Used to erase objects off the map."
+#, fuzzy
+msgid "Used to erase objects from the map."
 msgstr "Använda för att radera föremål från kartan."
 
 msgid "Change between zoom and normal view."

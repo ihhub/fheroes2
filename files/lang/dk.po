@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-15 05:23+0000\n"
+"POT-Creation-Date: 2023-10-16 01:01+0000\n"
 "PO-Revision-Date: 2023-09-12 11:08+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
@@ -3728,6 +3728,22 @@ msgstr "Artefakter"
 msgid "Treasures"
 msgstr "Skatte"
 
+#, fuzzy
+msgid "Terrain"
+msgstr "Terræn-tilstand"
+
+#, fuzzy
+msgid "Castles"
+msgstr "Borg"
+
+#, fuzzy
+msgid "Roads"
+msgstr "Vej"
+
+#, fuzzy
+msgid "Streams"
+msgstr "Å-tilstand"
+
 msgid ""
 "Draws terrain in\n"
 "%{size} by %{size} square increments."
@@ -3809,6 +3825,21 @@ msgstr ""
 "Bruges til at placere\n"
 "en resurse eller skat"
 
+msgid "Toggle the erasure of %{type} objects."
+msgstr ""
+
+msgid ""
+"Objects of this type will be deleted with the Erase tool. Left-click here to "
+"deselect this type. Press and hold this button to deselect all other object "
+"types."
+msgstr ""
+
+msgid ""
+"Objects of this type will NOT be deleted with the Erase tool. Left-click "
+"here to select this type. Press and hold this button to select all other "
+"object types."
+msgstr ""
+
 msgid "Terrain Mode"
 msgstr "Terræn-tilstand"
 
@@ -3844,7 +3875,8 @@ msgstr "Vej-tilstand"
 msgid "Erase Mode"
 msgstr "Viskelæder"
 
-msgid "Used to erase objects off the map."
+#, fuzzy
+msgid "Used to erase objects from the map."
 msgstr "Bruges til at fjerne objekter af kortet."
 
 msgid "Change between zoom and normal view."

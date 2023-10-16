@@ -3046,4 +3046,88 @@ namespace Maps
 
         tile.setObjectSpriteIndex( static_cast<TileImageIndexType>( heroType ) );
     }
+
+    bool removeObjectTypeFromTile( Tiles & tile, const MP2::ObjectIcnType objectIcnType )
+    {
+        if ( tile.getObjectIdByObjectIcnType( objectIcnType ) == 0 ) {
+            // There is no such object on this tile.
+            return false;
+        }
+
+        // TODO: Improve this code to remove the multi-tile objects.
+        tile.removeObjects( objectIcnType );
+
+        // For some objects we should set tile object type as empty and reset the metadata.
+        switch ( objectIcnType ) {
+        case MP2::OBJ_ICN_TYPE_MONS32:
+        case MP2::OBJ_ICN_TYPE_MINIHERO:
+            resetObjectMetadata( tile );
+            tile.setAsEmpty();
+            break;
+        default:
+            break;
+        }
+
+        return true;
+    }
+
+    bool eraseObjectsOnTiles( const int32_t startTileId, const int32_t endTileId, const uint32_t objectTypesToErase )
+    {
+        if ( objectTypesToErase == ObjectErasureType::NONE ) {
+            // Nothing to erase.
+            return false;
+        }
+
+        const int32_t mapWidth = world.w();
+        const int32_t maxTileId = mapWidth * world.h() - 1;
+        if ( startTileId < 0 || startTileId > maxTileId || endTileId < 0 || endTileId > maxTileId ) {
+            return false;
+        }
+
+        const fheroes2::Point startTileOffset = GetPoint( startTileId );
+        const fheroes2::Point endTileOffset = GetPoint( endTileId );
+
+        const int32_t startX = std::min( startTileOffset.x, endTileOffset.x );
+        const int32_t startY = std::min( startTileOffset.y, endTileOffset.y );
+        const int32_t endX = std::max( startTileOffset.x, endTileOffset.x );
+        const int32_t endY = std::max( startTileOffset.y, endTileOffset.y );
+
+        bool needRedraw = false;
+
+        for ( int32_t y = startY; y <= endY; ++y ) {
+            const int32_t tileOffset = y * mapWidth;
+            for ( int32_t x = startX; x <= endX; ++x ) {
+                needRedraw |= eraseOjects( world.GetTiles( x + tileOffset ), objectTypesToErase );
+            }
+        }
+
+        return needRedraw;
+    }
+
+    bool eraseOjects( Tiles & tile, const uint32_t objectTypesToErase )
+    {
+        if ( objectTypesToErase == ObjectErasureType::NONE ) {
+            // Nothing to erase.
+            return false;
+        }
+
+        bool needRedraw = false;
+
+        if ( objectTypesToErase & ObjectErasureType::ROADS ) {
+            needRedraw |= updateRoadOnTile( tile, false );
+        }
+        if ( objectTypesToErase & ObjectErasureType::STREAMS ) {
+            needRedraw |= updateStreamOnTile( tile, false );
+        }
+        if ( objectTypesToErase & ObjectErasureType::MONSTERS ) {
+            needRedraw |= removeObjectTypeFromTile( tile, MP2::OBJ_ICN_TYPE_MONS32 );
+        }
+        if ( objectTypesToErase & ObjectErasureType::HEROES ) {
+            // TODO: Implement hero removal from other objects (castles, windmills, mines, etc.)
+            // without corrupting their object data. Do this through 'OBJ_HEROES' (possibly like 'hero.Dismiss()').
+            needRedraw |= removeObjectTypeFromTile( tile, MP2::OBJ_ICN_TYPE_MINIHERO );
+        }
+
+        return needRedraw;
+    }
 }
