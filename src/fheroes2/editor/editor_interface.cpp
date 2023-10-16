@@ -348,14 +348,21 @@ namespace Interface
                 _redraw |= REDRAW_GAMEAREA;
             }
 
-            // Fill the selected area in terrain edit mode.
-            if ( _selectedTile > -1 && le.MouseReleaseLeft() && _editorPanel.isTerrainEdit() ) {
+            if ( _selectedTile > -1 && le.MouseReleaseLeft() ) {
                 if ( isCursorOverGamearea && _editorPanel.getBrushSize() == 0 ) {
-                    const int groundId = _editorPanel.selectedGroundType();
+                    if ( _editorPanel.isTerrainEdit() ) {
+                        // Fill the selected area in terrain edit mode.
+                        const fheroes2::ActionCreator action( _historyManager );
 
-                    const fheroes2::ActionCreator action( _historyManager );
+                        const int groundId = _editorPanel.selectedGroundType();
+                        Maps::setTerrainOnTiles( _selectedTile, _tileUnderCursor, groundId );
+                    }
+                    else if ( _editorPanel.isEraseMode() ) {
+                        // Erase objects in the selected area.
+                        const fheroes2::ActionCreator action( _historyManager );
 
-                    Maps::setTerrainOnTiles( _selectedTile, _tileUnderCursor, groundId );
+                        Maps::eraseObjectsOnTiles( _selectedTile, _tileUnderCursor, _editorPanel.getEraseTypes() );
+                    }
                 }
 
                 // Reset the area start tile.
@@ -569,14 +576,15 @@ namespace Interface
         else if ( _editorPanel.isEraseMode() ) {
             const int32_t brushSize = _editorPanel.getBrushSize();
 
-            // TODO: implement other brush sizes.
-            if ( brushSize < 2 ) {
-                const fheroes2::ActionCreator action( _historyManager );
+            const fheroes2::ActionCreator action( _historyManager );
 
-                if ( Maps::updateRoadOnTile( tile, false ) ) {
+            if ( brushSize > 1 ) {
+                if ( Maps::eraseObjectsOnTiles( tileIndex, getBrushAreaEndIndex( brushSize, tileIndex ), _editorPanel.getEraseTypes() ) ) {
                     _redraw |= mapUpdateFlags;
                 }
-                if ( Maps::updateStreamOnTile( tile, false ) ) {
+            }
+            else {
+                if ( Maps::eraseOjects( tile, _editorPanel.getEraseTypes() ) ) {
                     _redraw |= mapUpdateFlags;
                 }
 
@@ -652,6 +660,9 @@ namespace Interface
 
             if ( heroes ) {
                 Dialog::QuickInfo( *heroes );
+            }
+            else if ( tile.getObjectIcnType() == MP2::OBJ_ICN_TYPE_MINIHERO ) {
+                fheroes2::showStandardTextMessage( _( "Heroes" ), "", Dialog::ZERO );
             }
 
             break;
