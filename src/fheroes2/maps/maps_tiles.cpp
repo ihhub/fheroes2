@@ -909,7 +909,7 @@ void Maps::Tiles::pushBottomLayerAddon( TilesAddon ta )
         _isTileMarkedAsRoad = true;
     }
 
-    _addonBottomLayer.emplace_back( std::move( ta ) );
+    _addonBottomLayer.emplace_back( ta );
 }
 
 void Maps::Tiles::AddonsSort()
