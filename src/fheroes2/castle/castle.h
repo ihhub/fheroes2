@@ -259,7 +259,7 @@ public:
     int CheckBuyBuilding( const uint32_t build ) const;
     static int GetAllBuildingStatus( const Castle & );
 
-    bool AllowBuyBoat( const bool checkPayment = true ) const;
+    bool AllowBuyBoat( const bool checkPayment ) const;
     bool BuyBoat() const;
 
     void Scout() const;

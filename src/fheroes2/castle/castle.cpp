@@ -2514,7 +2514,7 @@ double Castle::GetGarrisonStrength( const Heroes * attackingHero ) const
     return totalStrength;
 }
 
-bool Castle::AllowBuyBoat( const bool checkPayment /* = true */ ) const
+bool Castle::AllowBuyBoat( const bool checkPayment ) const
 {
     if ( !HaveNearlySea() ) {
         return false;
@@ -2537,7 +2537,7 @@ bool Castle::AllowBuyBoat( const bool checkPayment /* = true */ ) const
 
 bool Castle::BuyBoat() const
 {
-    if ( !AllowBuyBoat() ) {
+    if ( !AllowBuyBoat( true ) ) {
         return false;
     }
 
