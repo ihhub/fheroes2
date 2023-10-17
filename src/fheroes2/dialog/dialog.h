@@ -102,7 +102,7 @@ namespace Dialog
     int ArmyInfo( const Troop & troop, int flags, bool isReflected = false, const int32_t windowOffsetY = 0 );
     int ArmyJoinFree( const Troop & troop );
     int ArmyJoinWithCost( const Troop &, const uint32_t join, const uint32_t gold );
-    int ArmySplitTroop( uint32_t freeSlots, const uint32_t redistributeMax, uint32_t & redistributeCount, bool & useFastSplit );
+    int ArmySplitTroop( uint32_t freeSlots, const uint32_t redistributeMax, uint32_t & redistributeCount, bool & useFastSplit, const std::string & name );
     void Marketplace( Kingdom & kingdom, bool fromTradingPost );
     void MakeGiftResource( Kingdom & kingdom );
     int BuyBoat( bool enable );
