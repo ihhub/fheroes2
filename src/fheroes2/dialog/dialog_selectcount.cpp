@@ -402,7 +402,7 @@ int Dialog::ArmySplitTroop( uint32_t freeSlots, const uint32_t redistributeMax, 
     const uint32_t min = std::min( 1U, redistributeMax );
     const int spacer = 10;
 
-    std::string msg( _( "How many %{tropps} to move?22222" ) );
+    std::string msg( _( "How many %{tropps} to move?" ) );
     StringReplace( msg, "%{tropps}", name );
     fheroes2::Text text( msg, fheroes2::FontType::normalWhite() );
     const uint32_t textHeight = text.rows( BOXAREA_WIDTH ) * text.height();
