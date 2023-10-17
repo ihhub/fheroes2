@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-10 00:20+0000\n"
-"PO-Revision-Date: 2023-09-06 08:41+0300\n"
+"PO-Revision-Date: 2023-10-18 00:44+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: uk\n"
@@ -2153,16 +2153,16 @@ msgid "Sheltemburg"
 msgstr "Шелтембург"
 
 msgid "Cannot recruit - you already have a Hero in this town."
-msgstr ""
+msgstr "Неможливо найняти - у місті вже є Герой."
 
 msgid "Cannot recruit - you have too many Heroes."
-msgstr ""
+msgstr "Неможливо найняти - у вас забагато Героїв."
 
 msgid "Cannot afford a Hero"
-msgstr ""
+msgstr "Не вистачає коштів на Героя"
 
 msgid "There is no room in the garrison for this army."
-msgstr ""
+msgstr "Для цих військ немає місця у гарнізоні."
 
 msgid "Fortifications"
 msgstr "Укріплення"
@@ -2369,24 +2369,28 @@ msgid ""
 "The Fortifications increase the toughness of the walls, increasing the "
 "number of turns it takes to knock them down."
 msgstr ""
+"Укріплення збільшують міцність стін, завдяки чому для їх знищення "
+"знадобиться більше ходів."
 
 msgid "The Farm increases production of Peasants by %{count} per week."
-msgstr ""
+msgstr "Ферма збільшує приріст Селян на %{count} щотижня."
 
 msgid ""
 "The Coliseum provides inspiring spectacles to defending troops, raising "
 "their morale by two during combat."
 msgstr ""
+"У Колізеї проводяться надихаючі війська вистави, що піднімають мораль "
+"захисників міста на дві одиниці під час битви."
 
 msgid "The Garbage Heap increases production of Goblins by %{count} per week."
-msgstr ""
+msgstr "Смітник збільшує приріст Ґоблінів на %{count} щотижня."
 
 msgid "The Rainbow increases the luck of the defending units by two."
-msgstr ""
+msgstr "Райдуга збільшує удачу захисників на 2 одиниці."
 
 msgid ""
 "The Crystal Garden increases production of Sprites by %{count} per week."
-msgstr ""
+msgstr "Кришталевий Сад збільшує приріст Фей на %{count} щотижня."
 
 msgid "The Dungeon increases the income of the town by %{count} gold per day."
 msgstr "Підземелля підвищує прибуток міста на %{count} в день."
@@ -2402,13 +2406,13 @@ msgstr ""
 "гільдії."
 
 msgid "The Orchard increases production of Halflings by %{count} per week."
-msgstr ""
+msgstr "Фруктовий Сад збільшує приріст Напівросликів на %{count} щотижня."
 
 msgid "The Storm adds +2 to the power of spells of a defending spell caster."
-msgstr ""
+msgstr "Шторм збільшує Силу Магії Героя-захисника або Капітана на 2 одиниці."
 
 msgid "The Skull Pile increases production of Skeletons by %{count} per week."
-msgstr ""
+msgstr "Купа Черепів збільшує приріст Скелетів на %{count} щотижня."
 
 msgid "Thieves' Guild"
 msgstr "Гільдія Злодіїв"
@@ -2570,19 +2574,21 @@ msgid "Exit Town"
 msgstr "Вийти з Міста"
 
 msgid "Show Income"
-msgstr ""
+msgstr "Показати прибуток"
 
 msgid "View Hero"
-msgstr ""
+msgstr "Показати Героя"
 
 msgid "The above spells are available here."
-msgstr ""
+msgstr "Перелічені вище закляття доступні тут."
 
 msgid "The spells the hero can learn have been added to their book."
-msgstr ""
+msgstr "Закляття, що їх міг вивчити герой, були додані до його книги магії."
 
 msgid "A generous tip for the barkeep yields the following rumor:"
 msgstr ""
+"Щедрі чайові, отримані барменом за барною стійкою, спонукали його поділитися "
+"наступними чутками:"
 
 msgid "Recruit Hero"
 msgstr "Найняти Героя"
@@ -2603,41 +2609,47 @@ msgid ""
 "'Spread' combat formation spreads your armies from the top to the bottom of "
 "the battlefield, with at least one empty space between each army."
 msgstr ""
+"\"Нещільний\" бойовий стрій розподіляє ваше військо по всій ширині стартової "
+"позиції на полі бою так, щоб між ними залишалась щонайменше одна вільна "
+"клітина."
 
 msgid ""
 "'Grouped' combat formation bunches your army together in the center of your "
 "side of the battlefield."
 msgstr ""
+"\"Щільний\" бойовий стрій розміщує ваші війська разом, у центрі стартової "
+"позиції на полі бою."
 
 msgid "Spread Formation"
-msgstr ""
+msgstr "Нещільний Стрій"
 
 msgid "Grouped Formation"
-msgstr ""
+msgstr "Щільний Стрій"
 
 msgid "Recruit %{name} the %{race}"
-msgstr ""
+msgstr "Найняти %{name}, %{race}."
 
 msgid "Set garrison combat formation to 'Spread'"
-msgstr ""
+msgstr "Розташувати гарнізон у \"Нещільному\" бойовому строю."
 
 msgid "Set garrison combat formation to 'Grouped'"
-msgstr ""
+msgstr "Розташувати гарнізон у \"Щільному\" бойовому строю."
 
 msgid "Exit Castle Options"
-msgstr ""
+msgstr "Закрити Опції Замку"
 
 msgid "Castle Options"
-msgstr ""
+msgstr "Опції Замку"
 
 msgid "Not enough resources to recruit creatures."
-msgstr ""
+msgstr "Недостатньо ресурсів, щоб найняти істот."
 
 msgid "You are unable to recruit at this time, your ranks are full."
 msgstr ""
+"Наразі ви не можете наймати істот, ваше військо повністю укомплектоване."
 
 msgid "No creatures available for purchase."
-msgstr ""
+msgstr "Немає істот для найму."
 
 msgid "Recruit Creatures"
 msgstr "Найняти Створінь"
@@ -2646,61 +2658,64 @@ msgid "Max"
 msgstr "Макс"
 
 msgid "Hire all creatures in the town."
-msgstr ""
+msgstr "Найняти всіх істот у місті."
 
 msgid "Available"
-msgstr ""
+msgstr "Доступно"
 
 msgid "Town Population Information and Statistics"
 msgstr "Інформація та статистика по населенню міст"
 
 msgid "Damage"
-msgstr ""
+msgstr "Шкода"
 
 msgid "HP"
-msgstr ""
+msgstr "ОЗ"
 
 msgid "Growth"
-msgstr ""
+msgstr "Приріст"
 
 msgid "week"
 msgstr "тиждень"
 
 msgid "View World"
-msgstr ""
+msgstr "Показати Світ"
 
 msgid "View the entire world."
-msgstr ""
+msgstr "Показати весь світ."
 
 msgid "Puzzle"
-msgstr ""
+msgstr "Загадка"
 
 msgid "View the obelisk puzzle."
-msgstr ""
+msgstr "Показати загадку обелісків."
 
 msgid "Scenario Information"
 msgstr "Інформація по сценарію"
 
 msgid "View information on the scenario you are currently playing."
-msgstr ""
+msgstr "Показати інформацію про поточний сценарій."
 
 msgid "Dig for the Ultimate Artifact."
-msgstr ""
+msgstr "Копати у пошуках Унікального Артефакту."
 
 msgid "Digging"
-msgstr ""
+msgstr "Розкопки"
 
 msgid "Exit this menu without doing anything."
 msgstr "Вийти з меню без змін."
 
 msgid "Arena"
-msgstr ""
+msgstr "Арена"
 
 msgid ""
 "You enter the arena and face a pack of vicious lions. You handily defeat "
 "them, to the wild cheers of the crowd. Impressed by your skill, the aged "
 "trainer of gladiators agrees to train you in a skill of your choice."
 msgstr ""
+"Ви входите на арену, та постаєте перед зграєю лютих левів. Ви долаєте їх "
+"голіруч під дикі крики натовпу. Вражений вашим вмінням, старий наставник "
+"гладіаторів погоджується покращити одну з ваших навичок на вибір."
 
 msgid "Attack Skill"
 msgstr "Атака"
@@ -2709,77 +2724,90 @@ msgid "Defense Skill"
 msgstr "Захист"
 
 msgid "Shots"
-msgstr ""
+msgstr "Постріли"
 
 msgid "Shots Left"
-msgstr ""
+msgstr "Пострілів лишилось"
 
 msgid "Hit Points"
-msgstr ""
+msgstr "Здоров'я"
 
 msgid "Hit Points Left"
-msgstr ""
+msgstr "Здоров'я лишилось"
 
 msgid "You can't afford to upgrade your troops!"
-msgstr ""
+msgstr "Вам не вистачає ресурсів щоб покращити війська!"
 
 msgid ""
 "Your troops can be upgraded, but it will cost you dearly. Do you wish to "
 "upgrade them?"
 msgstr ""
+"Ваші війська можна покращити, однак це дорого коштуватиме. Ви бажаєте "
+"покращити їх?"
 
 msgid "Are you sure you want to dismiss this army?"
-msgstr ""
+msgstr "Ви певні, що хочете розпустити цей загін?"
 
 msgid "Upgrade"
-msgstr ""
+msgstr "Покращити"
 
 msgid "Upgrade your troops."
-msgstr ""
+msgstr "Покращити ваші війська."
 
 msgid "Dismiss"
-msgstr ""
+msgstr "Розпустити"
 
 msgid "Dismiss this army."
-msgstr ""
+msgstr "Розпустити цей загін."
 
 msgid ""
 "A group of %{monster} with a desire for greater glory wish to join you.\n"
 "Do you accept?"
-msgstr ""
+msgstr "Група монстрів "
 
 msgid "Followers"
-msgstr ""
+msgstr "Послідовники"
 
 msgid ""
 "The %{monster} is swayed by your diplomatic tongue, and offers to join your "
 "army for the sum of %{gold} gold.\n"
 "Do you accept?"
 msgstr ""
+"%{monster}, причаровані вашим дипломатичним хистом, пропонують приєднатися "
+"до вашого війська в обмін на %{gold} золота.\n"
+"Ви згодні?"
 
 msgid ""
 "The creatures are swayed by your diplomatic\n"
 "tongue, and make you an offer:\n"
 "\n"
 msgstr ""
+"Істоти, причаровані вашим дипломатичним\n"
+"хистом, роблять вам пропозицію:\n"
+"\n"
 
 msgid ""
 "%{offer} of the %{total} %{monster} will join your army, and the rest will "
 "leave you alone, for the sum of %{gold} gold.\n"
 "Do you accept?"
 msgstr ""
+"%{offer} з %{total} %{monster} приєднаються до вашого війська, решта за "
+"%{gold} золотих не чіпатимуть вас.\n"
+"Ви згодні?"
 
 msgid ""
 "All %{offer} of the %{monster} will join your army for the sum of %{gold} "
 "gold.\n"
 "Do you accept?"
 msgstr ""
+"%{offer} %{monster} приєднаються до вашого війська за %{gold} золотих.\n"
+"Ви згодні?"
 
 msgid "(Rate: %{percent})"
-msgstr ""
+msgstr "%{percent} від всіх істот"
 
 msgid "off"
-msgstr ""
+msgstr "вимкнено"
 
 msgid "Music"
 msgstr "Музика"
@@ -2788,43 +2816,43 @@ msgid "Effects"
 msgstr "Ефекти"
 
 msgid "MIDI"
-msgstr ""
+msgstr "МІДІ"
 
 msgid "MIDI Expansion"
-msgstr ""
+msgstr "МІДІ з доповнення"
 
 msgid "External"
-msgstr ""
+msgstr "Зовнішній"
 
 msgid "Music Type"
 msgstr "Тип музики"
 
 msgid "3D Audio"
-msgstr ""
+msgstr "3D Аудіо"
 
 msgid "Toggle ambient music level."
-msgstr ""
+msgstr "Гучність музичного супроводу."
 
 msgid "Toggle foreground sounds level."
-msgstr ""
+msgstr "Гучність ефектів."
 
 msgid "Change the type of music."
-msgstr ""
+msgstr "Змінити тип музики."
 
 msgid "Toggle 3D effects of foreground sounds."
-msgstr ""
+msgstr "Перемкнути 3D-ефекти для звукових ефектів."
 
 msgid "Build a new ship:"
 msgstr "Побудувати новий корабель:"
 
 msgid "Resource cost:"
-msgstr ""
+msgstr "Вартість:"
 
 msgid "Total: "
 msgstr "Загалом: "
 
 msgid "Need: "
-msgstr ""
+msgstr "Необхідно:"
 
 msgid "Load Game"
 msgstr "Завантажити Гру"
@@ -2836,7 +2864,7 @@ msgid "New Game"
 msgstr "Нова Гра"
 
 msgid "Start a single or multi-player game."
-msgstr ""
+msgstr "Почати одиночну або мережеву гру."
 
 msgid "Load a previously saved game."
 msgstr "Завантажити раніше збережену гру."
@@ -2857,19 +2885,19 @@ msgid "Language"
 msgstr "Мова"
 
 msgid "Graphics"
-msgstr ""
+msgstr "Графіка"
 
 msgid "Black & White"
-msgstr ""
+msgstr "Чорно-Білий"
 
 msgid "Mouse Cursor"
-msgstr ""
+msgstr "Курсор Миші"
 
 msgid "Color"
-msgstr ""
+msgstr "Кольоровий"
 
 msgid "Text Support"
-msgstr ""
+msgstr "Текстові Підказки"
 
 msgid "Change the language of the game."
 msgstr "Змінити мову гри."
@@ -2881,12 +2909,14 @@ msgid "Change the graphics settings of the game."
 msgstr "Змінити графічні налаштування гри."
 
 msgid "Toggle colored cursor on or off. This is only an aesthetic choice."
-msgstr ""
+msgstr "Ввімкнути або вимкнути кольоровий курсор - на свій смак."
 
 msgid ""
 "Toggle text support mode to output extra information about windows and "
 "events in the game."
 msgstr ""
+"Увімкнути або вимкнути режим текстових підказок, що виводить на екран "
+"додаткову інформацію про вікна та події у грі."
 
 msgid ""
 "Map\n"
@@ -2903,68 +2933,72 @@ msgstr ""
 "Гри"
 
 msgid "Rating"
-msgstr ""
+msgstr "Рейтинг"
 
 msgid "Map Size"
 msgstr "Розмір Мапи"
 
 msgid "Opponents"
-msgstr ""
+msgstr "Опоненти"
 
 msgid "Class"
-msgstr ""
+msgstr "Клас"
 
 msgid ""
 "Victory\n"
 "Conditions"
 msgstr ""
+"Умови\n"
+"Перемоги"
 
 msgid ""
 "Loss\n"
 "Conditions"
 msgstr ""
+"Умови\n"
+"Поразки"
 
 msgid "First select recipients!"
-msgstr ""
+msgstr "Спочатку оберіть адресатів!"
 
 msgid "You cannot select %{resource}!"
-msgstr ""
+msgstr "Ви не можете обрати: %{resource}!"
 
 msgid "Select count %{resource}:"
-msgstr ""
+msgstr "Оберіть кількість: %{resource}"
 
 msgid "Select Recipients"
-msgstr ""
+msgstr "Оберіть Адресатів"
 
 msgid "Your Funds"
-msgstr ""
+msgstr "Ваші Запаси"
 
 msgid "Planned Gift"
-msgstr ""
+msgstr "Обрані для відправки ресурси:"
 
 msgid "Gift from %{name}"
-msgstr ""
+msgstr "Подарунок від %{name}"
 
 msgid "Resolution"
-msgstr ""
+msgstr "Розділова Здатність"
 
 msgid "Fullscreen"
-msgstr ""
+msgstr "Повноекранний"
 
 msgid "window|Mode"
-msgstr ""
+msgstr "Режим"
 
 msgid "Windowed"
-msgstr ""
+msgstr "Віконний"
 
 msgid "V-Sync"
-msgstr ""
+msgstr "Вертикальна Синхронізація"
 
 msgid "on"
 msgstr "увімк."
 
 msgid "FPS"
-msgstr ""
+msgstr "FPS"
 
 msgid "System Info"
 msgstr "Системні Параметри"
@@ -2973,87 +3007,92 @@ msgid "Change the resolution of the game."
 msgstr "Змінити розділову здатність гри."
 
 msgid "Select Game Resolution"
-msgstr ""
+msgstr "Обрати Розділову Здатність"
 
 msgid "Toggle between fullscreen and windowed modes."
-msgstr ""
+msgstr "Перемкнути між повноекранним та віконним режимами."
 
 msgid ""
 "The V-Sync option can be enabled to resolve flickering issues on some "
 "monitors."
 msgstr ""
+"Функцію Вертикальної Синхронізації можна ввімкнути, щоб вирішити проблему з "
+"мерехтінням на деяких моніторах."
 
 msgid "Show extra information such as FPS and current time."
-msgstr ""
+msgstr "Вивести на екран інформацію про FPS та поточний час."
 
 msgid "Hot Keys:"
-msgstr ""
+msgstr "Гарячі Клавіші:"
 
 msgid "Evil"
-msgstr ""
+msgstr "Злий"
 
 msgid "Good"
-msgstr ""
+msgstr "Добрий"
 
 msgid "Interface Type"
 msgstr "Тип Інтерфейсу"
 
 msgid "Hide"
-msgstr ""
+msgstr "Приховати"
 
 msgid "Show"
-msgstr ""
+msgstr "Показати"
 
 msgid "Interface"
-msgstr ""
+msgstr "Інтерфейс"
 
 msgid "Slow"
-msgstr ""
+msgstr "Повільна"
 
 msgid "Normal"
 msgstr "Звичайна"
 
 msgid "Fast"
-msgstr ""
+msgstr "Швидка"
 
 msgid "Very Fast"
-msgstr ""
+msgstr "Дуже Швидка"
 
 msgid "Scroll Speed"
-msgstr ""
+msgstr "Швидкість прокрутки"
 
 msgid "Toggle the type of interface you want to use."
-msgstr ""
+msgstr "Перемкнути тип інтерфейсу, який ви хочете бачити."
 
 msgid "Toggle interface visibility."
-msgstr ""
+msgstr "Перемкнути видимість інтерфейсу."
 
 msgid "Toggle colored cursor on or off. This is only an esthetic choice."
-msgstr ""
+msgstr "Ввімкнути або вимкнути кольоровий курсор - на свій смак."
 
 msgid "Sets the speed at which you scroll the window."
-msgstr ""
+msgstr "Встановлює швидкість прокрутки вікна."
 
 msgid "Select Game Language:"
 msgstr "Обрати мову гри:"
 
 msgid "Click to choose the selected language."
-msgstr ""
+msgstr "Клікніть, щоб встановити обрану мову."
 
 msgid "%{name} has gained a level."
-msgstr ""
+msgstr "%{name} отримує новий рівень."
 
 msgid "%{skill} +1"
-msgstr ""
+msgstr "%{skill} +1"
 
 msgid "You have learned %{skill}."
-msgstr ""
+msgstr "Ви вивчили %{skill}."
 
 msgid ""
 "%{name} has gained a level.\n"
 "\n"
 "%{skill} +1"
 msgstr ""
+"%{name} отримав новий рівень.\n"
+"\n"
+"%{skill} +1"
 
 msgid ""
 "You may learn either:\n"
@@ -3061,6 +3100,10 @@ msgid ""
 "or\n"
 "%{skill2}"
 msgstr ""
+"Ви можете вивчити або:\n"
+"%{skill1}\n"
+"або\n"
+"%{skill2}"
 
 msgid ""
 "Please inspect our fine wares. If you feel like offering a trade, click on "
@@ -3136,10 +3179,10 @@ msgid "Road"
 msgstr ""
 
 msgid "(digging ok)"
-msgstr ""
+msgstr "(розкопки можливі)"
 
 msgid "(no digging)"
-msgstr ""
+msgstr "(розкопки неможливі)"
 
 msgid "penalty: %{cost}"
 msgstr ""
@@ -4218,9 +4261,8 @@ msgstr ""
 msgid "hotkey|next hero"
 msgstr ""
 
-#, fuzzy
 msgid "hotkey|start hero movement"
-msgstr "звичайна Гра"
+msgstr "почати рух героя"
 
 msgid "hotkey|cast adventure spell"
 msgstr ""
@@ -4874,14 +4916,15 @@ msgstr ""
 msgid "Select the next Hero."
 msgstr ""
 
-#, fuzzy
 msgid "Hero Movement"
-msgstr "Затінення Сітки"
+msgstr "Рух Героя"
 
 msgid ""
 "Start the Hero's movement along the current path or re-visit the object "
 "occupied by the Hero. Press and hold this button to reset the Hero's path."
 msgstr ""
+"Почати Рух героя по обраному шляху, або заново відвідати об'єкт, зайнятий "
+"Героєм. Затисніть та утримуйте цю клавішу, щоб скинути маршрут Героя."
 
 msgid "Kingdom Summary"
 msgstr ""
@@ -6339,10 +6382,8 @@ msgid ""
 "This spell will have no effect."
 msgstr ""
 
-#, fuzzy
 msgid "This hero is already in a town, so this spell will have no effect."
-msgstr ""
-"Цей герой вже перебуває у місті, то ж ви не можете використати це закляття."
+msgstr "Цей герой вже перебуває у місті, то ж закляття не матиме ефекту."
 
 msgid ""
 "The nearest town is %{town}.\n"
