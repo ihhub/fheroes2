@@ -717,7 +717,7 @@ void Maps::UpdateCastleSprite( const fheroes2::Point & center, int race, bool is
                 tile.updateObjectImageIndex( castleID, MP2::OBJ_ICN_TYPE_OBJNTOWN, -16 );
 
             if ( index == 0 ) {
-                TilesAddon * addon = tile.FindAddonLevel2( castleID );
+                TilesAddon * addon = tile.getTopLayerAddon( castleID );
                 if ( addon && addon->_objectIcnType == MP2::OBJ_ICN_TYPE_OBJNTWRD ) {
                     addon->_objectIcnType = MP2::OBJ_ICN_TYPE_OBJNTOWN;
                     addon->_imageIndex = fullTownIndex - 16;

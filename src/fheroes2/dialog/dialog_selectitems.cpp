@@ -575,7 +575,7 @@ int Dialog::selectHeroType( const int heroType )
     HeroTypeSelection listbox( { 350, fheroes2::Display::instance().height() - 200 } );
 
     listbox.SetListContent( heroes );
-    listbox.SetCurrent( heroType );
+    listbox.SetCurrent( std::max( heroType, 0 ) );
 
     const int32_t result = listbox.selectItemsEventProcessing( _( "Select Hero:" ) );
     return result == Dialog::OK || listbox.ok ? listbox.GetCurrent() : -1;

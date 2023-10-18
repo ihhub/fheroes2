@@ -577,7 +577,7 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
 
                         case BUILD_SHIPYARD: {
                             const fheroes2::ButtonRestorer exitRestorer( buttonExit );
-                            if ( Dialog::OK == Dialog::BuyBoat( AllowBuyBoat() ) ) {
+                            if ( Dialog::OK == Dialog::BuyBoat( AllowBuyBoat( true ) ) ) {
                                 BuyBoat();
                                 fadeBuilding.StartFadeBuilding( BUILD_SHIPYARD );
                             }

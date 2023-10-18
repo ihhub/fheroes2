@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-15 05:23+0000\n"
+"POT-Creation-Date: 2023-10-16 01:01+0000\n"
 "PO-Revision-Date: 2023-10-10 06:12+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -3688,6 +3688,22 @@ msgstr "Артефакты"
 msgid "Treasures"
 msgstr "Сокровища"
 
+#, fuzzy
+msgid "Terrain"
+msgstr "Почва"
+
+#, fuzzy
+msgid "Castles"
+msgstr "Замок"
+
+#, fuzzy
+msgid "Roads"
+msgstr "Дорога"
+
+#, fuzzy
+msgid "Streams"
+msgstr "Реки"
+
 msgid ""
 "Draws terrain in\n"
 "%{size} by %{size} square increments."
@@ -3758,6 +3774,21 @@ msgid ""
 "a resource or treasure."
 msgstr "Используется для размещения сокровищ или ресурсов."
 
+msgid "Toggle the erasure of %{type} objects."
+msgstr ""
+
+msgid ""
+"Objects of this type will be deleted with the Erase tool. Left-click here to "
+"deselect this type. Press and hold this button to deselect all other object "
+"types."
+msgstr ""
+
+msgid ""
+"Objects of this type will NOT be deleted with the Erase tool. Left-click "
+"here to select this type. Press and hold this button to select all other "
+"object types."
+msgstr ""
+
 msgid "Terrain Mode"
 msgstr "Почва"
 
@@ -3795,7 +3826,8 @@ msgstr "Дороги"
 msgid "Erase Mode"
 msgstr "Ластик"
 
-msgid "Used to erase objects off the map."
+#, fuzzy
+msgid "Used to erase objects from the map."
 msgstr "Используется для удаления объектов с карты."
 
 msgid "Change between zoom and normal view."

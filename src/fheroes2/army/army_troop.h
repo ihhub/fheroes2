@@ -28,7 +28,7 @@
 #include <string>
 
 #include "monster.h"
-#include "payment.h"
+#include "resource.h"
 
 class StreamBase;
 
@@ -57,11 +57,11 @@ public:
     uint32_t GetDamageMin() const;
     uint32_t GetDamageMax() const;
 
-    payment_t GetTotalCost() const;
+    Funds GetTotalCost() const;
 
     // Returns the cost of an upgrade if a monster has an upgrade. Otherwise returns no resources.
     // IMPORTANT!!! Make sure that you call this method after checking by isAllowUpgrade() method.
-    payment_t GetTotalUpgradeCost() const;
+    Funds GetTotalUpgradeCost() const;
 
     bool isEmpty() const;
 

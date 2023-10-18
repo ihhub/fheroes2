@@ -45,7 +45,6 @@
 #include "mp2.h"
 #include "mp2_helper.h"
 #include "race.h"
-#include "save_format_version.h"
 #include "serialize.h"
 #include "settings.h"
 #include "system.h"
@@ -521,12 +520,7 @@ StreamBase & Maps::operator>>( StreamBase & msg, FileInfo & fi )
 
     fi.version = static_cast<GameVersion>( version );
 
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE2_1002_RELEASE, "Remove the check below." );
-    if ( Game::GetVersionOfCurrentSaveFile() >= FORMAT_VERSION_PRE2_1002_RELEASE ) {
-        msg >> fi.worldDay >> fi.worldWeek >> fi.worldMonth;
-    }
-
-    return msg;
+    return msg >> fi.worldDay >> fi.worldWeek >> fi.worldMonth;
 }
 
 MapsFileInfoList Maps::PrepareMapsFileInfoList( const bool multi )

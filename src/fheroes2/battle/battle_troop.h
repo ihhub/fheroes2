@@ -35,8 +35,8 @@
 #include "battle_cell.h"
 #include "bitmodes.h"
 #include "math_base.h"
-#include "payment.h"
 #include "players.h"
+#include "resource.h"
 
 class Spell;
 class HeroBase;
@@ -172,7 +172,7 @@ namespace Battle
         uint32_t GetDead() const;
         uint32_t GetHitPoints() const;
 
-        payment_t GetSurrenderCost() const;
+        Funds GetSurrenderCost() const;
 
         uint32_t GetShots() const override
         {
