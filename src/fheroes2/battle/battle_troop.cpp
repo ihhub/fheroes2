@@ -1215,7 +1215,7 @@ uint32_t Battle::Unit::GetHitPoints() const
     return hp;
 }
 
-payment_t Battle::Unit::GetSurrenderCost() const
+Funds Battle::Unit::GetSurrenderCost() const
 {
     // Resurrected (not truly resurrected) units should not be taken into account when calculating the cost of surrender
     return GetCost() * ( GetDead() > GetInitialCount() ? 0 : GetInitialCount() - GetDead() );

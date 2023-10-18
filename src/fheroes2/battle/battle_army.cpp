@@ -36,7 +36,7 @@
 #include "heroes.h"
 #include "heroes_base.h"
 #include "monster_anim.h"
-#include "payment.h"
+#include "resource.h"
 #include "skill.h"
 
 namespace

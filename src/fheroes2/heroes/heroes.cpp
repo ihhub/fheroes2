@@ -64,6 +64,7 @@
 #include "players.h"
 #include "race.h"
 #include "rand.h"
+#include "resource.h"
 #include "save_format_version.h"
 #include "serialize.h"
 #include "settings.h"
@@ -1339,7 +1340,7 @@ bool Heroes::BuySpellBook( const Castle * castle )
         return false;
     }
 
-    const payment_t payment = PaymentConditions::BuySpellBook();
+    const Funds payment = PaymentConditions::BuySpellBook();
     Kingdom & kingdom = GetKingdom();
 
     std::string header = _( "To cast spells, you must first buy a spell book for %{gold} gold." );

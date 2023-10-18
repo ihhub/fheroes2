@@ -48,7 +48,7 @@
 #include "monster_anim.h"
 #include "monster_info.h"
 #include "morale.h"
-#include "payment.h"
+#include "resource.h"
 #include "screen.h"
 #include "settings.h"
 #include "spell.h"

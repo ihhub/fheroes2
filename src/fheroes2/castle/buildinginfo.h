@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -33,7 +33,7 @@
 #include "interface_itemsbar.h"
 #include "math_base.h"
 #include "monster.h"
-#include "payment.h"
+#include "resource.h"
 
 namespace fheroes2
 {
@@ -66,7 +66,7 @@ public:
     bool QueueEventProcessing( fheroes2::ButtonBase & exitButton ) const;
     bool DialogBuyBuilding( bool buttons ) const;
 
-    static payment_t GetCost( uint32_t, int );
+    static Funds GetCost( uint32_t, int );
 
 private:
     void RedrawCaptain() const;

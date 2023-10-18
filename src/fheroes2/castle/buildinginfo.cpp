@@ -38,6 +38,7 @@
 #include "m82.h"
 #include "monster.h"
 #include "pal.h"
+#include "payment.h"
 #include "profit.h"
 #include "race.h"
 #include "resource.h"
@@ -184,9 +185,9 @@ buildstats_t _builds[] = {
     { BUILD_NOTHING, Race::NONE, { 0, 0, 0, 0, 0, 0, 0 } },
 };
 
-payment_t BuildingInfo::GetCost( uint32_t build, int race )
+Funds BuildingInfo::GetCost( uint32_t build, int race )
 {
-    payment_t payment;
+    Funds payment;
     const buildstats_t * ptr = &_builds[0];
 
     while ( BUILD_NOTHING != ptr->id2 && !( ptr->id2 == build && ( !race || ( race & ptr->race ) ) ) )
@@ -311,7 +312,7 @@ BuildingInfo::BuildingInfo( const Castle & c, const building_t b )
     case BUILD_CASTLE:
     case BUILD_STATUE:
     case BUILD_SPEC: {
-        const payment_t profit = ProfitConditions::FromBuilding( building, castle.GetRace() );
+        const Funds profit = ProfitConditions::FromBuilding( building, castle.GetRace() );
         StringReplace( description, "%{count}", profit.gold );
         break;
     }
