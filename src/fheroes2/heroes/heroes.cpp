@@ -1827,7 +1827,7 @@ const fheroes2::Sprite & Heroes::GetPortrait( int id, int type )
             if ( id == Heroes::DEBUG_HERO ) {
                 return fheroes2::AGG::GetICN( ICN::MINIPORT, BRAX );
             }
-            
+
             // Since hero IDs start from 1 we have to deduct 1 from the ID.
             return fheroes2::AGG::GetICN( ICN::MINIPORT, id - 1 );
         default:
@@ -2017,10 +2017,6 @@ Heroes * VecHeroes::Get( int hid ) const
 
 Heroes * VecHeroes::Get( const fheroes2::Point & center ) const
 {
-    for ( Heroes * hero : * this ) {
-        assert( hero != nullptr );
-    }
-
     const_iterator it = begin();
     for ( ; it != end(); ++it )
         if ( ( *it )->isPosition( center ) )

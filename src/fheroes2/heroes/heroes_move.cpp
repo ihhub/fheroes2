@@ -50,7 +50,7 @@
 
 namespace
 {
-    const int32_t heroMoveStep{ 4 };// in pixels
+    const int32_t heroMoveStep{ 4 }; // in pixels
 
     void playHeroWalkingSound( const int groundType )
     {
