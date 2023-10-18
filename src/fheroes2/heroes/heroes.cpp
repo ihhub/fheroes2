@@ -2218,10 +2218,12 @@ StreamBase & operator>>( StreamBase & msg, VecHeroes & heroes )
 
         static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1010_RELEASE, "Remove the logic below." );
         if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1010_RELEASE ) {
-            ++hid;
+            // UNKNOWN was 72 before FORMAT_VERSION_1010_RELEASE.
+            *it = ( hid != 72 ? world.GetHeroes( hid + 1 ) : nullptr );
         }
-
-        *it = ( Heroes::isValidId( hid ) ? world.GetHeroes( hid ) : nullptr );
+        else {
+            *it = ( Heroes::isValidId( hid ) ? world.GetHeroes( hid ) : nullptr );
+        }
     }
 
     return msg;
@@ -2238,16 +2240,9 @@ StreamBase & operator<<( StreamBase & msg, const Heroes & hero )
     // Heroes
     using ObjectTypeUnderHeroType = std::underlying_type_t<decltype( hero._objectTypeUnderHero )>;
 
-    msg << hero.name << col << hero.experience << hero.secondary_skills << hero.army << hero._id << hero.portrait << hero._race
-        << static_cast<ObjectTypeUnderHeroType>( hero._objectTypeUnderHero ) << hero.path << hero.direction << hero.sprite_index;
-
-    // TODO: before 0.9.4 Point was int16_t type
-    const int16_t patrolX = static_cast<int16_t>( hero._patrolCenter.x );
-    const int16_t patrolY = static_cast<int16_t>( hero._patrolCenter.y );
-
-    msg << patrolX << patrolY << hero._patrolDistance << hero.visit_object << hero._lastGroundRegion;
-
-    return msg;
+    return msg << hero.name << col << hero.experience << hero.secondary_skills << hero.army << hero._id << hero.portrait << hero._race
+               << static_cast<ObjectTypeUnderHeroType>( hero._objectTypeUnderHero ) << hero.path << hero.direction << hero.sprite_index << hero._patrolCenter
+               << hero._patrolDistance << hero.visit_object << hero._lastGroundRegion;
 }
 
 StreamBase & operator>>( StreamBase & msg, Heroes & hero )
@@ -2287,12 +2282,17 @@ StreamBase & operator>>( StreamBase & msg, Heroes & hero )
 
     msg >> hero.path >> hero.direction >> hero.sprite_index;
 
-    // TODO: before 0.9.4 Point was int16_t type
-    int16_t patrolX = 0;
-    int16_t patrolY = 0;
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1010_RELEASE, "Remove the logic below." );
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1010_RELEASE ) {
+        int16_t patrolX = 0;
+        int16_t patrolY = 0;
 
-    msg >> patrolX >> patrolY;
-    hero._patrolCenter = fheroes2::Point( patrolX, patrolY );
+        msg >> patrolX >> patrolY;
+        hero._patrolCenter = fheroes2::Point( patrolX, patrolY );
+    }
+    else {
+        msg >> hero._patrolCenter;
+    }
 
     msg >> hero._patrolDistance >> hero.visit_object >> hero._lastGroundRegion;
 
