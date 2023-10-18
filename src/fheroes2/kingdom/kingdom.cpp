@@ -553,7 +553,6 @@ const Recruits & Kingdom::GetRecruits()
                 continue;
             }
 
-            // TODO: fix this.
             Heroes * hero = world.GetHeroes( obtainedAward._subType );
 
             if ( hero && hero->isAvailableForHire() ) {
