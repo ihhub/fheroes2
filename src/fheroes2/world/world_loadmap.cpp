@@ -517,6 +517,7 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
 
                     // Byte 17 determines whether the hero has a custom portrait, and byte 18 contains the custom portrait ID. If the hero has a custom portrait, then we
                     // should directly use the hero corresponding to this portrait, if possible.
+                    // MP2 format stores hero IDs start from 0, while fheroes2 engine starts from 1.
                     if ( pblock[17] && pblock[18] + 1 <= Heroes::JARKONAS ) {
                         hero = vec_heroes.Get( pblock[18] + 1 );
                     }
@@ -553,6 +554,7 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
 
                         // Byte 17 determines whether the hero has a custom portrait, and byte 18 contains the custom portrait ID. If the hero has a custom portrait, then
                         // we should directly use the hero corresponding to this portrait, if possible.
+                        // MP2 format stores hero IDs start from 0, while fheroes2 engine starts from 1.
                         if ( pblock[17] && pblock[18] + 1 <= Heroes::JARKONAS ) {
                             hero = vec_heroes.Get( pblock[18] + 1 );
                         }

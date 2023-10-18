@@ -2258,8 +2258,16 @@ StreamBase & operator>>( StreamBase & msg, Heroes & hero )
 
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1010_RELEASE, "Remove the logic below." );
     if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1010_RELEASE ) {
-        ++hero._id;
-        ++hero.portrait;
+        // Before FORMAT_VERSION_1010_RELEASE Heroes::UNKNOWN was 72.
+        if ( hero._id == 72 ) {
+            hero._id = Heroes::UNKNOWN;
+            hero.portrait = Heroes::UNKNOWN;
+        }
+        else
+        {
+            ++hero._id;
+            ++hero.portrait;
+        }
     }
 
     using ObjectTypeUnderHeroType = std::underlying_type_t<decltype( hero._objectTypeUnderHero )>;
