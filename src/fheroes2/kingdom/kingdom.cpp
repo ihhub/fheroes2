@@ -42,6 +42,7 @@
 #include "difficulty.h"
 #include "game.h"
 #include "game_interface.h"
+#include "game_io.h"
 #include "game_static.h"
 #include "interface_icons.h"
 #include "logging.h"
@@ -55,6 +56,7 @@
 #include "profit.h"
 #include "race.h"
 #include "route.h"
+#include "save_format_version.h"
 #include "serialize.h"
 #include "settings.h"
 #include "skill.h"
@@ -551,6 +553,7 @@ const Recruits & Kingdom::GetRecruits()
                 continue;
             }
 
+            // TODO: fix this.
             Heroes * hero = world.GetHeroes( obtainedAward._subType );
 
             if ( hero && hero->isAvailableForHire() ) {
@@ -1003,9 +1006,15 @@ StreamBase & operator<<( StreamBase & msg, const Kingdom & kingdom )
 
 StreamBase & operator>>( StreamBase & msg, Kingdom & kingdom )
 {
-    return msg >> kingdom.modes >> kingdom.color >> kingdom.resource >> kingdom.lost_town_days >> kingdom.castles >> kingdom.heroes >> kingdom.recruits
-           >> kingdom.visit_object >> kingdom.puzzle_maps >> kingdom.visited_tents_colors >> kingdom._lastBattleWinHeroID >> kingdom._topCastleInKingdomView
-           >> kingdom._topHeroInKingdomView;
+    msg >> kingdom.modes >> kingdom.color >> kingdom.resource >> kingdom.lost_town_days >> kingdom.castles >> kingdom.heroes >> kingdom.recruits
+           >> kingdom.visit_object >> kingdom.puzzle_maps >> kingdom.visited_tents_colors >> kingdom._lastBattleWinHeroID;
+    
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1010_RELEASE, "Remove the logic below." );
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1010_RELEASE ) {
+        ++kingdom._lastBattleWinHeroID;
+    }
+
+    return msg >> kingdom._topCastleInKingdomView >> kingdom._topHeroInKingdomView;
 }
 
 StreamBase & operator<<( StreamBase & msg, const Kingdoms & obj )

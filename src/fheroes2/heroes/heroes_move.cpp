@@ -50,6 +50,8 @@
 
 namespace
 {
+    const int32_t heroMoveStep{ 4 };// in pixels
+
     void playHeroWalkingSound( const int groundType )
     {
         const int heroMovementSpeed = Settings::Get().HeroesMoveSpeed();
@@ -465,17 +467,17 @@ fheroes2::Point Heroes::getCurrentPixelOffset() const
     fheroes2::Point realOffset{ _offset };
 
     if ( direction & DIRECTION_LEFT_COL ) {
-        realOffset.x -= HERO_MOVE_STEP * frame;
+        realOffset.x -= heroMoveStep * frame;
     }
     else if ( direction & DIRECTION_RIGHT_COL ) {
-        realOffset.x += HERO_MOVE_STEP * frame;
+        realOffset.x += heroMoveStep * frame;
     }
 
     if ( direction & DIRECTION_TOP_ROW ) {
-        realOffset.y -= HERO_MOVE_STEP * frame;
+        realOffset.y -= heroMoveStep * frame;
     }
     else if ( direction & DIRECTION_BOTTOM_ROW ) {
-        realOffset.y += HERO_MOVE_STEP * frame;
+        realOffset.y += heroMoveStep * frame;
     }
 
     return realOffset;
