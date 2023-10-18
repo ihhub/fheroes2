@@ -609,9 +609,8 @@ void Maps::Tiles::SetObject( const MP2::MapObjectType objectType )
 void Maps::Tiles::setBoat( const int direction, const int color )
 {
     if ( _mainAddon._objectIcnType != MP2::OBJ_ICN_TYPE_UNKNOWN ) {
-        // If this assertion blows up then we are pushing the main object to bottom layer queue making it as a non-main object.
-        assert( _addonBottomLayer.empty() );
-        pushBottomLayerAddon( _mainAddon );
+        // It is important to preserve the order of objects for rendering purposes. Therefore, the main object should go to the front of objects.
+        _addonBottomLayer.emplace_front( _mainAddon );
     }
 
     SetObject( MP2::OBJ_BOAT );
