@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-10 00:20+0000\n"
+"POT-Creation-Date: 2023-10-16 01:01+0000\n"
 "PO-Revision-Date: 2023-06-27 18:17+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -3189,10 +3189,6 @@ msgstr ""
 msgid "penalty: %{cost}"
 msgstr "Penalización: %{cost}"
 
-#, fuzzy
-msgid "Uncharted Territory"
-msgstr "Territorio Virgen"
-
 msgid "Defenders:"
 msgstr "Defensores:"
 
@@ -3219,6 +3215,10 @@ msgstr "Maná:"
 
 msgid "Move Points:"
 msgstr "Puntos de movimiento:"
+
+#, fuzzy
+msgid "Uncharted Territory"
+msgstr "Territorio Virgen"
 
 msgid "Cost per troop:"
 msgstr ""
@@ -3696,6 +3696,20 @@ msgstr "Artefactos"
 msgid "Treasures"
 msgstr "Tesoro"
 
+msgid "Terrain"
+msgstr ""
+
+#, fuzzy
+msgid "Castles"
+msgstr "Castillo"
+
+#, fuzzy
+msgid "Roads"
+msgstr "Fin del camino"
+
+msgid "Streams"
+msgstr ""
+
 msgid ""
 "Draws terrain in\n"
 "%{size} by %{size} square increments."
@@ -3766,6 +3780,21 @@ msgid ""
 "a resource or treasure."
 msgstr ""
 
+msgid "Toggle the erasure of %{type} objects."
+msgstr ""
+
+msgid ""
+"Objects of this type will be deleted with the Erase tool. Left-click here to "
+"deselect this type. Press and hold this button to deselect all other object "
+"types."
+msgstr ""
+
+msgid ""
+"Objects of this type will NOT be deleted with the Erase tool. Left-click "
+"here to select this type. Press and hold this button to select all other "
+"object types."
+msgstr ""
+
 msgid "Terrain Mode"
 msgstr ""
 
@@ -3801,7 +3830,7 @@ msgstr "Fin del camino"
 msgid "Erase Mode"
 msgstr ""
 
-msgid "Used to erase objects off the map."
+msgid "Used to erase objects from the map."
 msgstr ""
 
 msgid "Change between zoom and normal view."

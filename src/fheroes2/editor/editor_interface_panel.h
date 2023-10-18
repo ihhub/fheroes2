@@ -25,6 +25,7 @@
 
 #include "game_mode.h"
 #include "ground.h"
+#include "maps_tiles_helper.h"
 #include "math_base.h"
 #include "monster.h"
 #include "ui_button.h"
@@ -70,6 +71,11 @@ namespace Interface
         bool isEraseMode() const
         {
             return _selectedInstrument == Instrument::ERASE;
+        }
+
+        uint32_t getEraseTypes() const
+        {
+            return _eraseTypes;
         }
 
         bool isMonsterSettingMode() const
@@ -124,6 +130,7 @@ namespace Interface
         }
 
         static const char * _getObjectTypeName( const uint8_t brushId );
+        static const char * _getEraseObjectTypeName( const uint32_t eraseObjectType );
 
         enum Instrument : uint8_t
         {
@@ -178,6 +185,12 @@ namespace Interface
             BRUSH_SIZE_COUNT = 4U
         };
 
+        // This array represents the order of object-to-erase images on the erase tool panel (from left to right, from top to bottom).
+        const std::array<uint32_t, 8> _eraseButtonObjectTypes{ Maps::ObjectErasureType::TERRAIN_OBJECTS, Maps::ObjectErasureType::CASTLES,
+                                                               Maps::ObjectErasureType::MONSTERS,        Maps::ObjectErasureType::HEROES,
+                                                               Maps::ObjectErasureType::ARTIFACTS,       Maps::ObjectErasureType::ROADS,
+                                                               Maps::ObjectErasureType::STREAMS,         Maps::ObjectErasureType::TREASURES };
+
         EditorInterface & _interface;
 
         fheroes2::Button _buttonMagnify;
@@ -205,6 +218,7 @@ namespace Interface
         std::array<fheroes2::Rect, Brush::TERRAIN_COUNT> _terrainButtonsRect;
         std::array<fheroes2::Rect, Brush::OBJECT_COUNT> _objectButtonsRect;
         std::array<fheroes2::Rect, BrushSize::BRUSH_SIZE_COUNT> _brushSizeButtonsRect;
+        std::array<fheroes2::Rect, 8> _eraseButtonsRect;
 
         uint8_t _selectedInstrument{ Instrument::TERRAIN };
 
@@ -212,6 +226,7 @@ namespace Interface
         uint8_t _selectedTerrain{ Brush::GRASS };
         uint8_t _selectedObject{ Brush::WATER };
         uint8_t _selectedBrushSize{ BrushSize::MEDIUM };
+        uint32_t _eraseTypes{ Maps::ObjectErasureType::ALL_OBJECTS };
 
         int32_t _monsterId{ Monster::UNKNOWN };
 

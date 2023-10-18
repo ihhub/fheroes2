@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-10 00:20+0000\n"
+"POT-Creation-Date: 2023-10-16 01:01+0000\n"
 "PO-Revision-Date: 2023-09-11 20:22+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3174,9 +3174,6 @@ msgstr "(nedá sa kopať)"
 msgid "penalty: %{cost}"
 msgstr "penalta: %{cost}"
 
-msgid "Uncharted Territory"
-msgstr "Nepreskúmané územie"
-
 msgid "Defenders:"
 msgstr "Obrancovia:"
 
@@ -3203,6 +3200,9 @@ msgstr "Body kúziel:"
 
 msgid "Move Points:"
 msgstr "Body pohybu:"
+
+msgid "Uncharted Territory"
+msgstr "Nepreskúmané územie"
 
 msgid "Cost per troop:"
 msgstr "Cena za jednotku:"
@@ -3661,6 +3661,22 @@ msgstr "Artefakty"
 msgid "Treasures"
 msgstr "Poklady"
 
+#, fuzzy
+msgid "Terrain"
+msgstr "Režim terénu"
+
+#, fuzzy
+msgid "Castles"
+msgstr "Hrad"
+
+#, fuzzy
+msgid "Roads"
+msgstr "Cesta"
+
+#, fuzzy
+msgid "Streams"
+msgstr "Režim tokov"
+
 msgid ""
 "Draws terrain in\n"
 "%{size} by %{size} square increments."
@@ -3740,6 +3756,21 @@ msgstr ""
 "Slúži na umiestnenie\n"
 "zdroja alebo pokladu."
 
+msgid "Toggle the erasure of %{type} objects."
+msgstr ""
+
+msgid ""
+"Objects of this type will be deleted with the Erase tool. Left-click here to "
+"deselect this type. Press and hold this button to deselect all other object "
+"types."
+msgstr ""
+
+msgid ""
+"Objects of this type will NOT be deleted with the Erase tool. Left-click "
+"here to select this type. Press and hold this button to select all other "
+"object types."
+msgstr ""
+
 msgid "Terrain Mode"
 msgstr "Režim terénu"
 
@@ -3773,7 +3804,8 @@ msgstr "Cestný režim"
 msgid "Erase Mode"
 msgstr "Režim mazania"
 
-msgid "Used to erase objects off the map."
+#, fuzzy
+msgid "Used to erase objects from the map."
 msgstr "Slúži na vymazanie objektov z mapy."
 
 msgid "Change between zoom and normal view."

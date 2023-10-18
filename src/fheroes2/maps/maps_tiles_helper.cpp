@@ -52,7 +52,6 @@
 #include "race.h"
 #include "rand.h"
 #include "resource.h"
-#include "save_format_version.h"
 #include "skill.h"
 #include "spell.h"
 #include "tools.h"
@@ -1892,12 +1891,6 @@ namespace Maps
                 count += Rand::Get( 1, 3 );
             }
 
-            static_assert( LAST_SUPPORTED_FORMAT_VERSION <= FORMAT_VERSION_PRE1_1005_RELEASE, "Remove the check below." );
-            if ( count == 0 ) {
-                // The fix for the case when the Troll Bridge or City of Dead with NONE tile color, has 0 creatures (fixed in PR #7246).
-                count += Rand::Get( 1, 3 );
-            }
-
             break;
 
         case MP2::OBJ_DRAGON_CITY:
@@ -1906,12 +1899,6 @@ namespace Maps
             }
             else if ( getColorFromTile( tile ) != Color::NONE ) {
                 // If the Dragon City has been captured or has 0 creatures, its population is increased by 1 dragon per week.
-                ++count;
-            }
-
-            static_assert( LAST_SUPPORTED_FORMAT_VERSION <= FORMAT_VERSION_PRE1_1005_RELEASE, "Remove the check below." );
-            if ( count == 0 ) {
-                // The fix for the case when the Dragon City with NONE tile color, has 0 creatures (fixed in PR #7246).
                 ++count;
             }
 
@@ -2761,8 +2748,8 @@ namespace Maps
             if ( Maps::isValidDirection( tile.GetIndex(), directionVector ) ) {
                 Tiles & mineTile = world.GetTiles( Maps::GetDirectionIndex( tile.GetIndex(), directionVector ) );
                 if ( ( mineTile.GetObject() == MP2::OBJ_NON_ACTION_ABANDONED_MINE )
-                     && ( mineTile.GetObjectUID() == tile.GetObjectUID() || mineTile.FindAddonLevel1( tile.GetObjectUID() )
-                          || mineTile.FindAddonLevel2( tile.GetObjectUID() ) ) ) {
+                     && ( mineTile.GetObjectUID() == tile.GetObjectUID() || mineTile.getBottomLayerAddon( tile.GetObjectUID() )
+                          || mineTile.getTopLayerAddon( tile.GetObjectUID() ) ) ) {
                     mineTile.SetObject( MP2::OBJ_NON_ACTION_MINES );
                 }
             }
@@ -2793,7 +2780,7 @@ namespace Maps
                 rightTile.setObjectSpriteIndex( imageIndexTemp );
             }
 
-            TilesAddon * addon = rightTile.FindAddonLevel1( tile.GetObjectUID() );
+            TilesAddon * addon = rightTile.getBottomLayerAddon( tile.GetObjectUID() );
 
             if ( addon ) {
                 restoreRightSprite( addon->_objectIcnType, addon->_imageIndex );
@@ -3058,5 +3045,89 @@ namespace Maps
         assert( heroType >= std::numeric_limits<TileImageIndexType>::min() && heroType <= std::numeric_limits<TileImageIndexType>::max() );
 
         tile.setObjectSpriteIndex( static_cast<TileImageIndexType>( heroType ) );
+    }
+
+    bool removeObjectTypeFromTile( Tiles & tile, const MP2::ObjectIcnType objectIcnType )
+    {
+        if ( tile.getObjectIdByObjectIcnType( objectIcnType ) == 0 ) {
+            // There is no such object on this tile.
+            return false;
+        }
+
+        // TODO: Improve this code to remove the multi-tile objects.
+        tile.removeObjects( objectIcnType );
+
+        // For some objects we should set tile object type as empty and reset the metadata.
+        switch ( objectIcnType ) {
+        case MP2::OBJ_ICN_TYPE_MONS32:
+        case MP2::OBJ_ICN_TYPE_MINIHERO:
+            resetObjectMetadata( tile );
+            tile.setAsEmpty();
+            break;
+        default:
+            break;
+        }
+
+        return true;
+    }
+
+    bool eraseObjectsOnTiles( const int32_t startTileId, const int32_t endTileId, const uint32_t objectTypesToErase )
+    {
+        if ( objectTypesToErase == ObjectErasureType::NONE ) {
+            // Nothing to erase.
+            return false;
+        }
+
+        const int32_t mapWidth = world.w();
+        const int32_t maxTileId = mapWidth * world.h() - 1;
+        if ( startTileId < 0 || startTileId > maxTileId || endTileId < 0 || endTileId > maxTileId ) {
+            return false;
+        }
+
+        const fheroes2::Point startTileOffset = GetPoint( startTileId );
+        const fheroes2::Point endTileOffset = GetPoint( endTileId );
+
+        const int32_t startX = std::min( startTileOffset.x, endTileOffset.x );
+        const int32_t startY = std::min( startTileOffset.y, endTileOffset.y );
+        const int32_t endX = std::max( startTileOffset.x, endTileOffset.x );
+        const int32_t endY = std::max( startTileOffset.y, endTileOffset.y );
+
+        bool needRedraw = false;
+
+        for ( int32_t y = startY; y <= endY; ++y ) {
+            const int32_t tileOffset = y * mapWidth;
+            for ( int32_t x = startX; x <= endX; ++x ) {
+                needRedraw |= eraseOjects( world.GetTiles( x + tileOffset ), objectTypesToErase );
+            }
+        }
+
+        return needRedraw;
+    }
+
+    bool eraseOjects( Tiles & tile, const uint32_t objectTypesToErase )
+    {
+        if ( objectTypesToErase == ObjectErasureType::NONE ) {
+            // Nothing to erase.
+            return false;
+        }
+
+        bool needRedraw = false;
+
+        if ( objectTypesToErase & ObjectErasureType::ROADS ) {
+            needRedraw |= updateRoadOnTile( tile, false );
+        }
+        if ( objectTypesToErase & ObjectErasureType::STREAMS ) {
+            needRedraw |= updateStreamOnTile( tile, false );
+        }
+        if ( objectTypesToErase & ObjectErasureType::MONSTERS ) {
+            needRedraw |= removeObjectTypeFromTile( tile, MP2::OBJ_ICN_TYPE_MONS32 );
+        }
+        if ( objectTypesToErase & ObjectErasureType::HEROES ) {
+            // TODO: Implement hero removal from other objects (castles, windmills, mines, etc.)
+            // without corrupting their object data. Do this through 'OBJ_HEROES' (possibly like 'hero.Dismiss()').
+            needRedraw |= removeObjectTypeFromTile( tile, MP2::OBJ_ICN_TYPE_MINIHERO );
+        }
+
+        return needRedraw;
     }
 }
