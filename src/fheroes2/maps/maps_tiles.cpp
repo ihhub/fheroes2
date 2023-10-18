@@ -553,7 +553,7 @@ void Maps::Tiles::setTerrain( const uint16_t terrainImageIndex, const bool horiz
 
 Heroes * Maps::Tiles::getHero() const
 {
-    return MP2::OBJ_HEROES == _mainObjectType && _occupantHeroId ? world.GetHeroes( _occupantHeroId ) : nullptr;
+    return MP2::OBJ_HEROES == _mainObjectType && Heroes::isValidId( _occupantHeroId ) ? world.GetHeroes( _occupantHeroId ) : nullptr;
 }
 
 void Maps::Tiles::setHero( Heroes * hero )

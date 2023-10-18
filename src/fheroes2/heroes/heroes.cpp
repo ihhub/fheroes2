@@ -2326,9 +2326,21 @@ StreamBase & operator>>( StreamBase & msg, AllHeroes & heroes )
     heroes.clear();
     heroes.resize( size, nullptr );
 
-    for ( AllHeroes::iterator it = heroes.begin(); it != heroes.end(); ++it ) {
-        *it = new Heroes();
-        msg >> **it;
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1010_RELEASE, "Remove the logic below." );
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1010_RELEASE ) {
+        for ( size_t i = 1; i < heroes.size(); ++i ) {
+            heroes[i] = new Heroes();
+            msg >> *heroes[i];
+        }
+
+        heroes[0] = new Heroes();
+        msg >> *heroes[0];
+    }
+    else {
+        for ( AllHeroes::iterator it = heroes.begin(); it != heroes.end(); ++it ) {
+            *it = new Heroes();
+            msg >> **it;
+        }
     }
 
     return msg;
