@@ -2747,8 +2747,8 @@ namespace Maps
             if ( Maps::isValidDirection( tile.GetIndex(), directionVector ) ) {
                 Tiles & mineTile = world.GetTiles( Maps::GetDirectionIndex( tile.GetIndex(), directionVector ) );
                 if ( ( mineTile.GetObject() == MP2::OBJ_NON_ACTION_ABANDONED_MINE )
-                     && ( mineTile.GetObjectUID() == tile.GetObjectUID() || mineTile.FindAddonLevel1( tile.GetObjectUID() )
-                          || mineTile.FindAddonLevel2( tile.GetObjectUID() ) ) ) {
+                     && ( mineTile.GetObjectUID() == tile.GetObjectUID() || mineTile.getBottomLayerAddon( tile.GetObjectUID() )
+                          || mineTile.getTopLayerAddon( tile.GetObjectUID() ) ) ) {
                     mineTile.SetObject( MP2::OBJ_NON_ACTION_MINES );
                 }
             }
@@ -2779,7 +2779,7 @@ namespace Maps
                 rightTile.setObjectSpriteIndex( imageIndexTemp );
             }
 
-            TilesAddon * addon = rightTile.FindAddonLevel1( tile.GetObjectUID() );
+            TilesAddon * addon = rightTile.getBottomLayerAddon( tile.GetObjectUID() );
 
             if ( addon ) {
                 restoreRightSprite( addon->_objectIcnType, addon->_imageIndex );
