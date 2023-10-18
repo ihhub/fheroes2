@@ -2198,8 +2198,8 @@ StreamBase & operator<<( StreamBase & msg, const VecHeroes & heroes )
 {
     msg << static_cast<uint32_t>( heroes.size() );
 
-    for ( AllHeroes::const_iterator it = heroes.begin(); it != heroes.end(); ++it ) {
-        msg << ( *it ? ( *it )->GetID() : Heroes::UNKNOWN );
+    for ( const Heroes * hero : heroes ) {
+        msg << ( ( hero != nullptr ) ? hero->GetID() : Heroes::UNKNOWN );
     }
 
     return msg;
