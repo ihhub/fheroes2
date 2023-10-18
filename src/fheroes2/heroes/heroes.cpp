@@ -2263,8 +2263,7 @@ StreamBase & operator>>( StreamBase & msg, Heroes & hero )
             hero._id = Heroes::UNKNOWN;
             hero.portrait = Heroes::UNKNOWN;
         }
-        else
-        {
+        else {
             ++hero._id;
             ++hero.portrait;
         }
