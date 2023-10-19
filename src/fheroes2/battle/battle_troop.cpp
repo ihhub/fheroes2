@@ -335,29 +335,6 @@ bool Battle::Unit::OutOfWalls() const
     return Board::isOutOfWallsIndex( GetHeadIndex() ) || ( isWide() && Board::isOutOfWallsIndex( GetTailIndex() ) );
 }
 
-bool Battle::Unit::canReach( int index ) const
-{
-    if ( !Board::isValidIndex( index ) )
-        return false;
-
-    if ( isFlying() || ( isArchers() && !isHandFighting() ) )
-        return true;
-
-    const bool isIndirectAttack = isReflect() == Board::isNegativeDistance( GetHeadIndex(), index );
-    const int from = ( isWide() && isIndirectAttack ) ? GetTailIndex() : GetHeadIndex();
-    return Board::GetDistance( from, index ) <= GetSpeed( true, false );
-}
-
-bool Battle::Unit::canReach( const Unit & unit ) const
-{
-    if ( unit.Modes( CAP_TOWER ) )
-        return false;
-
-    const bool isIndirectAttack = isReflect() == Board::isNegativeDistance( GetHeadIndex(), unit.GetHeadIndex() );
-    const int target = ( unit.isWide() && isIndirectAttack ) ? unit.GetTailIndex() : unit.GetHeadIndex();
-    return canReach( target );
-}
-
 bool Battle::Unit::isHandFighting() const
 {
     assert( isValid() );
@@ -1125,8 +1102,19 @@ int32_t Battle::Unit::GetScoreQuality( const Unit & defender ) const
 
     double attackerThreat = CalculateDamageUnit( defender, ( static_cast<double>( GetDamageMin() ) + GetDamageMax() ) / 2.0 );
 
-    if ( !canReach( defender ) && !defender.Modes( CAP_TOWER ) && !attackerIsArchers ) {
-        // Can't reach, so unit is not dangerous to defender at the moment
+    const bool isAttackerDangerousToDefender = [&attacker, &defender]() {
+        if ( defender.Modes( CAP_TOWER ) ) {
+            return true;
+        }
+
+        if ( attacker.isFlying() || attacker.isArchers() ) {
+            return true;
+        }
+
+        const uint32_t attackRange = attacker.GetSpeed( true, false ) + 1;
+        return ( Board::GetDistance( attacker.GetPosition(), defender.GetPosition() ) <= attackRange );
+    }();
+    if ( !isAttackerDangerousToDefender ) {
         attackerThreat /= 2;
     }
 
@@ -1139,7 +1127,7 @@ int32_t Battle::Unit::GetScoreQuality( const Unit & defender ) const
             attackerThreat *= 2;
         }
         else {
-            // check how much we will lose to retaliation
+            // Check how much we will lose due to retaliation
             attackerThreat += attackerThreat * ( 1.0 - attackerPowerLost );
         }
     }
