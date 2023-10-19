@@ -413,7 +413,7 @@ void BuildingInfo::Redraw() const
     if ( BUILD_NOTHING == building ) {
         const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
         const fheroes2::Sprite & buildBackground = fheroes2::AGG::GetICN( isEvilInterface ? ICN::CASLXTRA_EVIL : ICN::CASLXTRA, 0 );
-        fheroes2::Blit( buildBackground, 0, 0, display, area.x, area.y, buildBackground.width(), buildBackground.height() );
+        fheroes2::Copy( buildBackground, 0, 0, display, area.x, area.y, buildBackground.width(), buildBackground.height() );
         return;
     }
 

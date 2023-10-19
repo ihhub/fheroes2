@@ -316,7 +316,7 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
     // Position of the captain/crest and hero portrait to the left of army bars.
     const fheroes2::Sprite & crest = fheroes2::AGG::GetICN( ICN::CREST, Color::GetIndex( GetColor() ) );
     const fheroes2::Rect rectSign1( dialogRoi.x + 5, dialogRoi.y + 262, crest.width(), crest.height() );
-    const fheroes2::Rect rectSign2( dialogRoi.x + 5, dialogRoi.y + 361, 100, 92 );
+    const fheroes2::Rect rectSign2( rectSign1.x, dialogRoi.y + 361, 100, 92 );
 
     // For the case when new hero is recruited we need to render bottom army bar
     // without hero and his army to properly perform hero fade-in.
@@ -330,12 +330,12 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
 
     // Castle army (top) bar.
     ArmyBar topArmyBar( &army, false, false );
-    setArmyBarParameters( topArmyBar, { dialogRoi.x + 112, dialogRoi.y + 262 } );
+    setArmyBarParameters( topArmyBar, { dialogRoi.x + 112, rectSign1.y } );
     topArmyBar.Redraw( display );
 
     // Hero army (bottom) bar.
     ArmyBar bottomArmyBar( hero ? &hero->GetArmy() : nullptr, false, false );
-    setArmyBarParameters( bottomArmyBar, { dialogRoi.x + 112, dialogRoi.y + 361 } );
+    setArmyBarParameters( bottomArmyBar, { dialogRoi.x + 112, rectSign2.y } );
 
     if ( hero && alphaHero != 0 ) {
         // Draw bottom bar only if no hero fading animation is going.
@@ -724,9 +724,9 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
         else if ( fadeBuilding.GetBuild() == BUILD_CAPTAIN ) {
             // Fade-in the captain image while fading-in his quarters.
             const fheroes2::Sprite & crestImage = fheroes2::AGG::GetICN( ICN::CREST, Color::GetIndex( GetColor() ) );
-            fheroes2::Copy( crestImage, 0, 0, display, dialogRoi.x + 5, dialogRoi.y + 262, crestImage.width(), crestImage.height() );
+            fheroes2::Copy( crestImage, 0, 0, display, rectSign1.x, rectSign1.y, crestImage.width(), crestImage.height() );
             const fheroes2::Sprite & captainImage = GetCaptain().GetPortrait( PORT_BIG );
-            fheroes2::AlphaBlit( captainImage, display, dialogRoi.x + 5, dialogRoi.y + 262, fadeBuilding.GetAlpha() );
+            fheroes2::AlphaBlit( captainImage, display, rectSign1.x, rectSign1.y, fadeBuilding.GetAlpha() );
         }
 
         // Castle dialog animation.
