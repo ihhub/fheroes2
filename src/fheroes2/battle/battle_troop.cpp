@@ -1103,6 +1103,7 @@ int32_t Battle::Unit::GetScoreQuality( const Unit & defender ) const
     double attackerThreat = CalculateDamageUnit( defender, ( static_cast<double>( GetDamageMin() ) + GetDamageMax() ) / 2.0 );
 
     const bool isAttackerDangerousToDefender = [&attacker, &defender]() {
+        // From the point of view of castle towers, any units are considered dangerous
         if ( defender.Modes( CAP_TOWER ) ) {
             return true;
         }
@@ -1170,30 +1171,35 @@ int32_t Battle::Unit::GetScoreQuality( const Unit & defender ) const
         }
     }
 
-    // force big priority on mirror images as they get destroyed in 1 hit
-    if ( attacker.Modes( CAP_MIRRORIMAGE ) )
+    // Give the mirror images a higher priority, as they can be destroyed in 1 hit
+    if ( attacker.Modes( CAP_MIRRORIMAGE ) ) {
         attackerThreat *= 10;
+    }
 
     // Negative value of units that changed the side
     if ( attacker.Modes( SP_BERSERKER ) || attacker.Modes( SP_HYPNOTIZE ) ) {
         attackerThreat *= -1;
     }
-    // Otherwise heavy penalty for hitting our own units
+    // Heavy penalty for hitting our own units
     else if ( attacker.GetArmyColor() == defender.GetArmyColor() ) {
-        const bool isTower = ( dynamic_cast<const Battle::Tower *>( this ) != nullptr );
-        if ( !isTower ) {
-            // Calculation score quality of tower should not effect units.
-            attackerThreat *= -2;
-        }
+        // TODO: remove this temporary assertion
+        assert( dynamic_cast<const Battle::Tower *>( this ) == nullptr );
+
+        attackerThreat *= -2;
     }
-    // Finally ignore disabled units (if belong to the enemy)
+    // Ignore disabled enemy units
     else if ( attacker.isImmovable() ) {
         attackerThreat = 0;
     }
+    // Increase the priority of those enemy units that have not yet got their turn
+    else if ( !attacker.Modes( TR_MOVED ) ) {
+        attackerThreat *= 1.25;
+    }
 
     // Avoid effectiveness scaling if we're dealing with archers
-    if ( !attackerIsArchers || defender.isArchers() )
+    if ( !attackerIsArchers || defender.isArchers() ) {
         attackerThreat *= attackerPowerLost;
+    }
 
     return static_cast<int>( attackerThreat * 100 );
 }
