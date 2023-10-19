@@ -1181,17 +1181,11 @@ bool ArtifactsBar::ActionBarLeftMouseSingleClick( Artifact & art )
     }
     else {
         if ( can_change ) {
-            const Artifact newArtifact = Dialog::selectArtifact();
+            art = Dialog::selectArtifact( Artifact::UNKNOWN, false );
 
-            if ( isMagicBook( newArtifact ) ) {
+            if ( isMagicBook( art ) ) {
+                art.Reset();
                 const_cast<Heroes *>( _hero )->SpellBookActivate();
-            }
-            else {
-                art = newArtifact;
-
-                if ( art.GetID() == Artifact::SPELL_SCROLL ) {
-                    art.SetSpell( Spell::RANDOM );
-                }
             }
         }
 

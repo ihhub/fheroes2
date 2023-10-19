@@ -77,7 +77,8 @@ namespace Interface
     int32_t EditorPanel::getBrushSize() const
     {
         // Roads and streams are placed using only 1x1 brush.
-        if ( _selectedInstrument == Instrument::STREAM || _selectedInstrument == Instrument::ROAD || isMonsterSettingMode() || isHeroSettingMode() ) {
+        if ( _selectedInstrument == Instrument::STREAM || _selectedInstrument == Instrument::ROAD || isMonsterSettingMode() || isHeroSettingMode()
+             || isArtifactSettingMode() ) {
             return 1;
         }
 
@@ -513,6 +514,35 @@ namespace Interface
                         // We need to add a hardcoded correction.
                         const int32_t heroCorrectionY{ 12 };
                         Cursor::Get().setCustomImage( image, { -image.width() / 2, -image.height() / 2 - heroCorrectionY } );
+                    } );
+
+                    _interface.updateCursor( 0 );
+                    return res;
+                }
+            }
+            else if ( le.MouseClickLeft( _objectButtonsRect[Brush::ARTIFACTS] ) ) {
+                const Artifact artifact = Dialog::selectArtifact( _artifact.GetID(), true );
+                if ( artifact.GetID() != Artifact::UNKNOWN ) {
+                    _artifact = artifact;
+
+                    _interface.setCursorUpdater( [artifact]( const int32_t /*tileIndex*/ ) {
+                        uint32_t imageIndex = artifact.IndexSprite32() * 2 + 1;
+                        if ( imageIndex < 9 ) {
+                            // First four ultimate artifacts have no map images. Show "Ult ART" image instead.
+                            imageIndex = 209;
+                        }
+                        else if ( imageIndex == 163 ) {
+                            // Magic Book has no map images. Show "ART" image instead.
+                            imageIndex = 207;
+                        }
+                        const fheroes2::Sprite & mainImage = fheroes2::AGG::GetICN( ICN::OBJNARTI, imageIndex );
+                        const fheroes2::Sprite & shadowImage = fheroes2::AGG::GetICN( ICN::OBJNARTI, imageIndex - 1 );
+                        fheroes2::Image image( mainImage.width() + shadowImage.width(), std::max( shadowImage.height(), mainImage.height() ) );
+                        image.reset();
+                        fheroes2::Copy( shadowImage, 0, 0, image, 0, shadowImage.y() - mainImage.y(), shadowImage.width(), shadowImage.height() );
+                        fheroes2::Copy( mainImage, 0, 0, image, shadowImage.width(), 0, mainImage.width(), mainImage.height() );
+
+                        Cursor::Get().setCustomImage( image, { -shadowImage.width() - mainImage.width() / 2, -image.height() / 2 } );
                     } );
 
                     _interface.updateCursor( 0 );

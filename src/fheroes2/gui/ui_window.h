@@ -32,8 +32,19 @@ namespace fheroes2
     class StandardWindow
     {
     public:
+        StandardWindow() = delete;
+        StandardWindow( const StandardWindow & ) = delete;
+        StandardWindow & operator=( const StandardWindow & ) = delete;
         StandardWindow( const int32_t width, const int32_t height, const bool renderBackground, Image & output = Display::instance() );
         StandardWindow( const int32_t x, const int32_t y, const int32_t width, const int32_t height, const bool renderBackground, Image & output = Display::instance() );
+        ~StandardWindow()
+        {
+            Display & display = Display::instance();
+            if ( &_output == &display ) {
+                // The screen area of the closed window should be updated during the next '.render()' call.
+                display.updateNextRenderRoi( _totalArea );
+            }
+        }
 
         // Returns the window background ROI.
         const Rect & activeArea() const

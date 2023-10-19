@@ -633,6 +633,25 @@ namespace Interface
                 _redraw |= mapUpdateFlags;
             }
         }
+        else if ( _editorPanel.isArtifactSettingMode() ) {
+            if ( tile.isWater() ) {
+                fheroes2::showStandardTextMessage( _( "Artifacts" ), _( "Artifacts cannot be placed on water." ), Dialog::OK );
+            }
+            else if ( !Maps::isClearGround( tile ) ) {
+                fheroes2::showStandardTextMessage( _( "Artifacts" ), _( "Choose a tile which does not contain any objects." ), Dialog::OK );
+            }
+            else {
+                const Artifact artifact( _editorPanel.getArtifact() );
+
+                if ( artifact.isValid() ) {
+                    const fheroes2::ActionCreator action( _historyManager );
+
+                    Maps::setArtifactOnTile( tile, artifact );
+
+                    _redraw |= mapUpdateFlags;
+                }
+            }
+        }
     }
 
     void EditorInterface::mouseCursorAreaPressRight( const int32_t tileIndex ) const

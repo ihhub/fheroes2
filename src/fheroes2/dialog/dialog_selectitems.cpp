@@ -485,9 +485,16 @@ Skill::Secondary Dialog::selectSecondarySkill( const Heroes & hero, const int sk
     return {};
 }
 
-Spell Dialog::selectSpell( const int spellId /* = Spell::NONE */ )
+Spell Dialog::selectSpell( const int spellId, const bool includeRandomSpells )
 {
     std::vector<int> spells = Spell::getAllSpellIdsSuitableForSpellBook();
+
+    if ( includeRandomSpells ) {
+        // We add random spells placeholders to the end of the list.
+        for ( int randomSpellId = Spell::RANDOM; randomSpellId <= Spell::RANDOM5; ++randomSpellId ) {
+            spells.push_back( randomSpellId );
+        }
+    }
 
     SelectEnumSpell listbox( { 340, fheroes2::Display::instance().height() - 200 } );
 
@@ -501,15 +508,22 @@ Spell Dialog::selectSpell( const int spellId /* = Spell::NONE */ )
     return result == Dialog::OK || listbox.ok ? Spell( listbox.GetCurrent() ) : Spell( Spell::NONE );
 }
 
-Artifact Dialog::selectArtifact( const int artifactId /* = Artifact::UNKNOWN */ )
+Artifact Dialog::selectArtifact( const int artifactId, const bool includeRandomArtifacts )
 {
     std::vector<int> artifacts;
     artifacts.reserve( Artifact::ARTIFACT_COUNT - 1 );
 
     const bool isPriceofLoyaltyArtifactAllowed = Settings::Get().isCurrentMapPriceOfLoyalty();
 
+    if ( !includeRandomArtifacts ) {
+        // When we do not show random artifacts it is not map editing then
+        // it is hero editing and we show the magic book at the first place.
+        artifacts.emplace_back( Artifact::MAGIC_BOOK );
+    }
+
     for ( int id = Artifact::UNKNOWN + 1; id < Artifact::ARTIFACT_COUNT; ++id ) {
-        if ( Artifact( id ).isValid() && ( isPriceofLoyaltyArtifactAllowed || !fheroes2::isPriceOfLoyaltyArtifact( id ) ) ) {
+        if ( id != Artifact::MAGIC_BOOK && Artifact( id ).isValid() && ( includeRandomArtifacts || id < Artifact::RANDOM_ALL_LEVELS || id > Artifact::RANDOM_3_LEVEL )
+             && ( isPriceofLoyaltyArtifactAllowed || !fheroes2::isPriceOfLoyaltyArtifact( id ) ) ) {
             artifacts.emplace_back( id );
         }
     }
@@ -521,9 +535,23 @@ Artifact Dialog::selectArtifact( const int artifactId /* = Artifact::UNKNOWN */ 
         listbox.SetCurrent( artifactId );
     }
 
-    const int32_t result = listbox.selectItemsEventProcessing( _( "Select Artifact:" ) );
+    if ( listbox.selectItemsEventProcessing( _( "Select Artifact:" ) ) == Dialog::OK || listbox.ok ) {
+        Artifact artifact( listbox.GetCurrent() );
 
-    return ( result == Dialog::OK || listbox.ok ) ? Artifact( listbox.GetCurrent() ) : Artifact( Artifact::UNKNOWN );
+        if ( artifact.GetID() == Artifact::SPELL_SCROLL ) {
+            const int spellId = Dialog::selectSpell( Spell::RANDOM, true ).GetID();
+
+            if ( spellId == Spell::NONE ) {
+                return { Artifact::UNKNOWN };
+            }
+
+            artifact.SetSpell( spellId );
+        }
+
+        return artifact;
+    }
+
+    return { Artifact::UNKNOWN };
 }
 
 Monster Dialog::selectMonster( const int monsterId, const bool includeRandomMonsters )

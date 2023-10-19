@@ -582,6 +582,13 @@ namespace
                   "A dirty shovel has been thrust into a dirt mound nearby. Upon investigation, you discover it to be the enchanted shovel of the Gravediggers, long thought lost by mortals." ),
               {},
               {} },
+            // These are random artifacts, used only for map editor.
+            { gettext_noop( "Random Artifact" ), gettext_noop( "Randomly selected artifact." ), nullptr, {}, {} },
+            { gettext_noop( "Random Ultimate Artifact" ), gettext_noop( "Randomly selected ultimate artifact." ), nullptr, {}, {} },
+            { gettext_noop( "Random Artifact - Treasure" ), gettext_noop( "Randomly selected Treasure Artifact." ), nullptr, {}, {} },
+            { gettext_noop( "Random Artifact - Minor" ), gettext_noop( "Randomly selected Minor Artifact." ), nullptr, {}, {} },
+            { gettext_noop( "Random Artifact - Major" ), gettext_noop( "Randomly selected Major Artifact." ), nullptr, {}, {} },
+
         };
 
         assert( artifactData.size() == ( Artifact::ARTIFACT_COUNT ) );
@@ -816,6 +823,12 @@ namespace
 
         artifactData[Artifact::SPADE_NECROMANCY].bonuses.emplace_back( fheroes2::ArtifactBonusType::NECROMANCY_SKILL, 10 );
 
+        artifactData[Artifact::RANDOM_ALL_LEVELS].bonuses.emplace_back( fheroes2::ArtifactBonusType::NONE );
+        artifactData[Artifact::RANDOM_ULTIMATE].bonuses.emplace_back( fheroes2::ArtifactBonusType::NONE );
+        artifactData[Artifact::RANDOM_1_LEVEL].bonuses.emplace_back( fheroes2::ArtifactBonusType::NONE );
+        artifactData[Artifact::RANDOM_2_LEVEL].bonuses.emplace_back( fheroes2::ArtifactBonusType::NONE );
+        artifactData[Artifact::RANDOM_3_LEVEL].bonuses.emplace_back( fheroes2::ArtifactBonusType::NONE );
+
         for ( const fheroes2::ArtifactData & artifact : artifactData ) {
             if ( artifact.bonuses.empty() && artifact.curses.empty() ) {
                 // Artifact info is not populated properly. An artifact with no effects cannot exist.
@@ -958,8 +971,13 @@ namespace fheroes2
         std::vector<ArtifactBonus>::const_iterator foundBonus = std::find( bonuses.begin(), bonuses.end(), ArtifactBonus( ArtifactBonusType::ADD_SPELL ) );
         if ( foundBonus != bonuses.end() ) {
             if ( foundBonus->value == Spell::NONE ) {
-                assert( extraParameter != Spell::NONE );
-                StringReplace( description, "%{spell}", Spell( extraParameter ).GetName() );
+                if ( extraParameter == Spell::NONE ) {
+                    // This is a case when artifact description is viewed from list in Battle Only mode or in Editor.
+                    StringReplace( description, "%{spell}", _( "spellBonus|selected by user" ) );
+                }
+                else {
+                    StringReplace( description, "%{spell}", Spell( extraParameter ).GetName() );
+                }
             }
             else {
                 StringReplace( description, "%{spell}", Spell( foundBonus->value ).GetName() );

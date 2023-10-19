@@ -1166,6 +1166,37 @@ namespace
             }
         }
     }
+
+    // Checks all layers of tiles around for given UID and if it is found removes this object part and initiates search around this tile.
+    void removeUidFromTilesAround( const int32_t centerTileIndex, const uint32_t uid )
+    {
+        const Maps::Indexes around = Maps::getAroundIndexes( centerTileIndex );
+
+        for ( const int32_t tileIndex : around ) {
+            Maps::Tiles & currentTile = world.GetTiles( tileIndex );
+
+            if ( currentTile.GetObjectUID() == uid ) {
+                currentTile.Remove( uid );
+                removeUidFromTilesAround( tileIndex, uid );
+                return;
+            }
+
+            for ( const Maps::TilesAddon & addon : currentTile.getBottomLayerAddons() ) {
+                if ( addon._uid == uid ) {
+                    currentTile.Remove( uid );
+                    removeUidFromTilesAround( tileIndex, uid );
+                    return;
+                }
+            }
+            for ( const Maps::TilesAddon & addon : currentTile.getTopLayerAddons() ) {
+                if ( addon._uid == uid ) {
+                    currentTile.Remove( uid );
+                    removeUidFromTilesAround( tileIndex, uid );
+                    return;
+                }
+            }
+        }
+    }
 }
 
 namespace Maps
@@ -3046,6 +3077,74 @@ namespace Maps
         tile.setObjectSpriteIndex( static_cast<TileImageIndexType>( heroType ) );
     }
 
+    void setArtifactOnTile( Tiles & tile, const Artifact & artifact )
+    {
+        if ( !artifact.isValid() ) {
+            DEBUG_LOG( DBG_GAME, DBG_WARN, "Failed to set an artifact on tile " << tile.GetIndex() )
+            return;
+        }
+
+        const int artifactId = artifact.GetID();
+        switch ( artifact.GetID() ) {
+        case Artifact::RANDOM_ALL_LEVELS:
+            tile.SetObject( MP2::OBJ_RANDOM_ARTIFACT );
+            break;
+        case Artifact::RANDOM_1_LEVEL:
+            tile.SetObject( MP2::OBJ_RANDOM_ARTIFACT_TREASURE );
+            break;
+        case Artifact::RANDOM_2_LEVEL:
+            tile.SetObject( MP2::OBJ_RANDOM_ARTIFACT_MINOR );
+            break;
+        case Artifact::RANDOM_3_LEVEL:
+            tile.SetObject( MP2::OBJ_RANDOM_ARTIFACT_MAJOR );
+            break;
+        case Artifact::RANDOM_ULTIMATE:
+            tile.SetObject( MP2::OBJ_RANDOM_ULTIMATE_ARTIFACT );
+            break;
+        default:
+            tile.SetObject( MP2::OBJ_ARTIFACT );
+            break;
+        }
+
+        if ( tile.getObjectIcnType() != MP2::OBJ_ICN_TYPE_UNKNOWN ) {
+            // If there is another object sprite here (shadow for example) push it down to add-ons.
+            tile.pushBottomLayerAddon( TilesAddon( tile.getLayerType(), tile.GetObjectUID(), tile.getObjectIcnType(), tile.GetObjectSpriteIndex() ) );
+        }
+
+        // No object exists on this tile. Add one.
+        tile.setObjectUID( getNewObjectUID() );
+        tile.setObjectIcnType( MP2::OBJ_ICN_TYPE_OBJNARTI );
+
+        // Please refer to ICN::OBJNARTI for artifact images.
+        uint32_t artSpriteIndex = artifact.IndexSprite32() * 2 + 1;
+
+        // A temporary fix for the first four ultimate artifacts.
+        if ( artSpriteIndex < 8 ) {
+            // TODO: Make map sprites for these four artifacts.
+            artSpriteIndex = 209;
+        }
+
+        using TileImageIndexType = decltype( tile.GetObjectSpriteIndex() );
+        static_assert( std::is_same_v<TileImageIndexType, uint8_t>, "Type of GetObjectSpriteIndex() has been changed, check the logic below" );
+
+        assert( artSpriteIndex > std::numeric_limits<uint8_t>::min() && artSpriteIndex <= std::numeric_limits<uint8_t>::max() );
+
+        tile.setObjectSpriteIndex( static_cast<TileImageIndexType>( artSpriteIndex ) );
+
+        // Set artifact shadow.
+        if ( isValidDirection( tile.GetIndex(), Direction::LEFT ) ) {
+            Tiles & leftTile = world.GetTiles( GetDirectionIndex( tile.GetIndex(), Direction::LEFT ) );
+            leftTile.pushBottomLayerAddon(
+                TilesAddon( SHADOW_LAYER, tile.GetObjectUID(), tile.getObjectIcnType(), static_cast<TileImageIndexType>( artSpriteIndex - 1 ) ) );
+        }
+
+        tile.metadata()[0] = static_cast<uint32_t>( artifactId );
+        if ( artifactId == Artifact::SPELL_SCROLL ) {
+            tile.metadata()[1] = static_cast<uint32_t>( artifact.getSpellId() );
+            tile.metadata()[2] = static_cast<uint32_t>( ArtifactCaptureCondition::CONTAINS_SPELL );
+        }
+    }
+
     bool removeObjectTypeFromTile( Tiles & tile, const MP2::ObjectIcnType objectIcnType )
     {
         if ( tile.getObjectIdByObjectIcnType( objectIcnType ) == 0 ) {
@@ -3066,6 +3165,22 @@ namespace Maps
         default:
             break;
         }
+
+        return true;
+    }
+
+    bool removeObject( Tiles & tile, const uint32_t uid )
+    {
+        if ( uid == 0 ) {
+            return false;
+        }
+
+        tile.Remove( uid );
+
+        removeUidFromTilesAround( tile.GetIndex(), uid );
+
+        resetObjectMetadata( tile );
+        tile.setAsEmpty();
 
         return true;
     }
@@ -3125,6 +3240,9 @@ namespace Maps
             // TODO: Implement hero removal from other objects (castles, windmills, mines, etc.)
             // without corrupting their object data. Do this through 'OBJ_HEROES' (possibly like 'hero.Dismiss()').
             needRedraw |= removeObjectTypeFromTile( tile, MP2::OBJ_ICN_TYPE_MINIHERO );
+        }
+        if ( objectTypesToErase & ObjectErasureType::ARTIFACTS && tile.getObjectIcnType() == MP2::OBJ_ICN_TYPE_OBJNARTI ) {
+            needRedraw |= removeObject( tile, tile.GetObjectUID() );
         }
 
         return needRedraw;

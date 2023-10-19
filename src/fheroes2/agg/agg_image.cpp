@@ -2414,39 +2414,72 @@ namespace fheroes2
                 return true;
             case ICN::SPELLS:
                 LoadOriginalICN( id );
-                _icnVsSprite[id].resize( 67 );
-                for ( uint32_t i = 60; i < 66; ++i ) {
-                    int originalIndex = 0;
-                    if ( i == 60 ) // Mass Cure
-                        originalIndex = 6;
-                    else if ( i == 61 ) // Mass Haste
-                        originalIndex = 14;
-                    else if ( i == 62 ) // Mass Slow
-                        originalIndex = 1;
-                    else if ( i == 63 ) // Mass Bless
-                        originalIndex = 7;
-                    else if ( i == 64 ) // Mass Curse
-                        originalIndex = 3;
-                    else if ( i == 65 ) // Mass Shield
-                        originalIndex = 15;
+                if ( _icnVsSprite[id].size() == 60 ) {
+                    _icnVsSprite[id].resize( 73 );
+                    for ( uint32_t i = 60; i < 66; ++i ) {
+                        // Mass Cure
+                        size_t originalIndex = 6;
+                        if ( i == 61 ) {
+                            // Mass Haste
+                            originalIndex = 14;
+                        }
+                        else if ( i == 62 ) {
+                            // Mass Slow
+                            originalIndex = 1;
+                        }
+                        else if ( i == 63 ) {
+                            // Mass Bless
+                            originalIndex = 7;
+                        }
+                        else if ( i == 64 ) {
+                            // Mass Curse
+                            originalIndex = 3;
+                        }
+                        else if ( i == 65 ) {
+                            // Mass Shield
+                            originalIndex = 15;
+                        }
 
-                    const Sprite & originalImage = _icnVsSprite[id][originalIndex];
-                    Sprite & image = _icnVsSprite[id][i];
+                        const Sprite & originalImage = _icnVsSprite[id][originalIndex];
+                        Sprite & image = _icnVsSprite[id][i];
 
-                    image.resize( originalImage.width() + 8, originalImage.height() + 8 );
-                    image.setPosition( originalImage.x() + 4, originalImage.y() + 4 );
-                    image.fill( 1 );
+                        image.resize( originalImage.width() + 8, originalImage.height() + 8 );
+                        image.setPosition( originalImage.x() + 4, originalImage.y() + 4 );
+                        image.fill( 1 );
 
-                    AlphaBlit( originalImage, image, 0, 0, 128 );
-                    AlphaBlit( originalImage, image, 4, 4, 192 );
-                    Blit( originalImage, image, 8, 8 );
+                        AlphaBlit( originalImage, image, 0, 0, 128 );
+                        AlphaBlit( originalImage, image, 4, 4, 192 );
+                        Blit( originalImage, image, 8, 8 );
 
-                    AddTransparency( image, 1 );
+                        AddTransparency( image, 1 );
+                    }
+
+                    // The Petrification spell does not have its own icon in the original game.
+                    h2d::readImage( "petrification_spell_icon.image", _icnVsSprite[id][66] );
+
+                    // Generate random spell images for Editor.
+                    Sprite randomSpellImage( _icnVsSprite[id][18] );
+                    int32_t imageWidth = randomSpellImage.width();
+                    // ApplyTransform( randomSpellImage, 0, 0, imageWidth, randomSpellImage.height(), 2U );
+                    ApplyPalette( randomSpellImage, PAL::GetPalette( PAL::PaletteType::BROWN ) );
+                    Blit( randomSpellImage, randomSpellImage, true );
+
+                    for ( uint32_t i = 1; i < 6; ++i ) {
+                        Sprite & originalImage = _icnVsSprite[id][i + 67];
+                        Copy( randomSpellImage, originalImage );
+
+                        Text text( "spell", FontType::smallWhite() );
+                        text.draw( ( imageWidth - text.width() ) / 2, 5, originalImage );
+                        text.set( "lv. " + std::to_string( i ), FontType::smallWhite() );
+                        text.draw( ( imageWidth - text.width() ) / 2, 17, originalImage );
+                    }
+
+                    _icnVsSprite[id][67] = std::move( randomSpellImage );
+                    Text text( "rand", FontType::smallWhite() );
+                    text.draw( ( imageWidth - text.width() ) / 2, 5, _icnVsSprite[id][67] );
+                    text.set( "spell", FontType::smallWhite() );
+                    text.draw( ( imageWidth - text.width() ) / 2, 17, _icnVsSprite[id][67] );
                 }
-
-                // The Petrification spell does not have its own icon in the original game.
-                h2d::readImage( "petrification_spell_icon.image", _icnVsSprite[id][66] );
-
                 return true;
             case ICN::CSLMARKER:
                 _icnVsSprite[id].resize( 3 );
@@ -3554,6 +3587,33 @@ namespace fheroes2
                 }
                 return true;
             }
+            case ICN::OBJNARTI:
+                LoadOriginalICN( id );
+                if ( _icnVsSprite[id].size() == 206 ) {
+                    // Move all random artifacts to the end. It is done for Editor (only for PoL assets).
+                    _icnVsSprite[id].resize( 216 );
+                    for ( size_t i = 162; i < 172; ++i ) {
+                        std::swap( _icnVsSprite[id][i], _icnVsSprite[id][i + 44] );
+                    }
+                    // All artifacts main images have odd indexes except the Ultimate Artifact. We fix it.
+                    std::swap( _icnVsSprite[id][208], _icnVsSprite[id][209] );
+                }
+                return true;
+            case ICN::ARTFX:
+                LoadOriginalICN( id );
+                if ( _icnVsSprite[id].size() == 103 ) {
+                    // Generate random artifact images for Editor.
+                    _icnVsSprite[id].resize( 108 );
+                    for ( uint32_t i = 0; i < 5; ++i ) {
+                        const Sprite & mapArtifactImage = GetICN( ICN::OBJNARTI, 2 * i + 207 );
+                        Sprite & originalImage = _icnVsSprite[id][i + 103];
+
+                        // Use background from the Black Pearl artifact.
+                        Copy( _icnVsSprite[id][80], originalImage );
+                        Blit( mapArtifactImage, originalImage );
+                    }
+                }
+                return true;
             case ICN::ARTIFACT:
                 LoadOriginalICN( id );
                 if ( _icnVsSprite[id].size() > 99 ) {
@@ -3568,6 +3628,19 @@ namespace fheroes2
                         originalImage = std::move( temp );
                     }
                 }
+                if ( _icnVsSprite[id].size() == 104 ) {
+                    // Generate random artifact images for Editor.
+                    _icnVsSprite[id].resize( 109 );
+                    for ( uint32_t i = 0; i < 5; ++i ) {
+                        const Sprite & mapArtifactImage = GetICN( ICN::OBJNARTI, 2 * i + 207 );
+                        Sprite & originalImage = _icnVsSprite[id][i + 104];
+
+                        // Use background from the Black Pearl artifact.
+                        Copy( _icnVsSprite[id][81], originalImage );
+                        Blit( mapArtifactImage, originalImage, 16, 16 );
+                    }
+                }
+
                 return true;
             case ICN::TWNSDW_5:
                 LoadOriginalICN( id );

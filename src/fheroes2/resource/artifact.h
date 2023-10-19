@@ -146,7 +146,7 @@ public:
 
         MAGIC_BOOK,
 
-        // Editor-related artifacts.
+        // Dummy artifacts for the compatibility with MP2 maps, used for random and ultimate artifacts there.
         DUMMY1,
         DUMMY2,
         DUMMY3,
@@ -170,6 +170,13 @@ public:
         SWORD_BREAKER,
         SWORD_ANDURAN,
         SPADE_NECROMANCY,
+
+        // Editor-related random artifacts.
+        RANDOM_ALL_LEVELS,
+        RANDOM_ULTIMATE,
+        RANDOM_1_LEVEL,
+        RANDOM_2_LEVEL,
+        RANDOM_3_LEVEL,
 
         // Resurrection artifacts.
 
