@@ -2130,8 +2130,14 @@ void AllHeroes::Scout( int colors ) const
 
 Heroes * AllHeroes::FromJail( int32_t index ) const
 {
-    const_iterator it = std::find_if( begin(), end(), [index]( const Heroes * hero ) { return hero->Modes( Heroes::JAIL ) && index == hero->GetIndex(); } );
-    return end() != it ? *it : nullptr;
+    for ( Heroes * hero : *this ) {
+        assert( hero != nullptr );
+        if ( hero->Modes( Heroes::JAIL ) && index == hero->GetIndex() ) {
+            return hero;
+        }
+    }
+
+    return nullptr;
 }
 
 Heroes::HeroSeedsForLevelUp Heroes::GetSeedsForLevelUp() const
@@ -2216,19 +2222,39 @@ StreamBase & operator>>( StreamBase & msg, VecHeroes & heroes )
     uint32_t size;
     msg >> size;
 
-    heroes.resize( size, nullptr );
+    heroes.clear();
 
-    for ( auto & hero : heroes ) {
+    for ( uint32_t i = 0; i < size; ++i ) {
         uint32_t hid;
         msg >> hid;
 
         static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1010_RELEASE, "Remove the logic below." );
         if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1010_RELEASE ) {
-            // UNKNOWN was 72 before FORMAT_VERSION_1010_RELEASE.
-            hero = ( hid != 72 ? world.GetHeroes( hid + 1 ) : nullptr );
+            // UNKNOWN was 72 before FORMAT_VERSION_1010_RELEASE. UNKNOWN hero shouldn't exist!
+            if ( hid == 72 || !Heroes::isValidId( hid + 1 ) ) {
+                continue;
+            }
+
+            Heroes * hero = world.GetHeroes( hid + 1 );
+            if ( hero == nullptr ) {
+                // Most likely save file is corrupted.
+                continue;
+            }
+
+            heroes.emplace_back( hero );
         }
         else {
-            hero = ( Heroes::isValidId( hid ) ? world.GetHeroes( hid ) : nullptr );
+            if ( Heroes::isValidId( hid ) ) {
+                continue;
+            }
+
+            Heroes * hero = world.GetHeroes( hid );
+            if ( hero == nullptr ) {
+                // Most likely save file is corrupted.
+                continue;
+            }
+
+            heroes.emplace_back( hero );
         }
     }
 
