@@ -445,7 +445,7 @@ Heroes * World::FromJailHeroes( int32_t index )
 
 Heroes * World::GetHero( const Castle & castle ) const
 {
-    return vec_heroes.GetHero( castle );
+    return vec_heroes.Get( castle.GetCenter() );
 }
 
 int World::GetDay() const

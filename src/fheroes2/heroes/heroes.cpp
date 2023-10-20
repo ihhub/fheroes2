@@ -1932,16 +1932,79 @@ std::string Heroes::String() const
     return os.str();
 }
 
+Heroes::HeroSeedsForLevelUp Heroes::GetSeedsForLevelUp() const
+{
+    /* We generate seeds based on the hero and global world map seed
+     * The idea is that, we want the skill selection to be randomized at each map restart,
+     * but deterministic for a given hero.
+     * We also want the available skills to change depending on current skills/stats of the hero,
+     * to avoid giving out the same skills/stats at each level up. We can't use the level field for this, as it
+     * doesn't change when we level up several levels at once.
+     * We also need to generate different seeds for each possible call to the random number generator,
+     * in order to avoid always drawing the same random number at level-up: otherwise this
+     * would mean that for all possible games, the 2nd secondary
+     * skill would always be the same once the 1st one is selected.
+     * */
+
+    uint32_t hash = world.GetMapSeed();
+    fheroes2::hashCombine( hash, _id );
+    fheroes2::hashCombine( hash, _race );
+    fheroes2::hashCombine( hash, attack );
+    fheroes2::hashCombine( hash, defense );
+    fheroes2::hashCombine( hash, power );
+    fheroes2::hashCombine( hash, knowledge );
+    for ( int skillId = Skill::Secondary::PATHFINDING; skillId <= Skill::Secondary::ESTATES; ++skillId ) {
+        fheroes2::hashCombine( hash, GetLevelSkill( skillId ) );
+    }
+
+    HeroSeedsForLevelUp seeds;
+    seeds.seedPrimarySkill = hash;
+    seeds.seedSecondarySkill1 = hash + 1;
+    seeds.seedSecondarySkill2 = hash + 2;
+    seeds.seedSecondarySkillRandomChoose = hash + 3;
+    return seeds;
+}
+
+double Heroes::getAIMinimumJoiningArmyStrength() const
+{
+    // Ideally we need to assert here that the hero is under AI control.
+    // But in cases when we regain a temporary control from the AI then the hero becomes non-AI.
+
+    double strengthThreshold = 0.05;
+
+    switch ( getAIRole() ) {
+    case Heroes::Role::SCOUT:
+        strengthThreshold = 0.01;
+        break;
+    case Heroes::Role::COURIER:
+        strengthThreshold = 0.015;
+        break;
+    case Heroes::Role::HUNTER:
+        strengthThreshold = 0.02;
+        break;
+    case Heroes::Role::FIGHTER:
+        strengthThreshold = 0.025;
+        break;
+    case Heroes::Role::CHAMPION:
+        strengthThreshold = 0.03;
+        break;
+    default:
+        // Did you add a new AI hero role? Add the logic above!
+        assert( 0 );
+        break;
+    }
+
+    return strengthThreshold * Troops( GetArmy().getTroops() ).GetStrength();
+}
+
 AllHeroes::~AllHeroes()
 {
-    AllHeroes::clear();
+    clear();
 }
 
 void AllHeroes::Init()
 {
-    if ( !empty() ) {
-        AllHeroes::clear();
-    }
+    clear();
 
     reserve( Heroes::HEROES_COUNT );
 
@@ -2025,11 +2088,6 @@ Heroes * VecHeroes::Get( const fheroes2::Point & center ) const
     }
 
     return nullptr;
-}
-
-Heroes * AllHeroes::GetHero( const Castle & castle ) const
-{
-    return Get ( castle.GetCenter() );
 }
 
 Heroes * AllHeroes::GetHeroForHire( const int race, const int heroIDToIgnore ) const
@@ -2138,71 +2196,6 @@ Heroes * AllHeroes::FromJail( int32_t index ) const
     }
 
     return nullptr;
-}
-
-Heroes::HeroSeedsForLevelUp Heroes::GetSeedsForLevelUp() const
-{
-    /* We generate seeds based on the hero and global world map seed
-     * The idea is that, we want the skill selection to be randomized at each map restart,
-     * but deterministic for a given hero.
-     * We also want the available skills to change depending on current skills/stats of the hero,
-     * to avoid giving out the same skills/stats at each level up. We can't use the level field for this, as it
-     * doesn't change when we level up several levels at once.
-     * We also need to generate different seeds for each possible call to the random number generator,
-     * in order to avoid always drawing the same random number at level-up: otherwise this
-     * would mean that for all possible games, the 2nd secondary
-     * skill would always be the same once the 1st one is selected.
-     * */
-
-    uint32_t hash = world.GetMapSeed();
-    fheroes2::hashCombine( hash, _id );
-    fheroes2::hashCombine( hash, _race );
-    fheroes2::hashCombine( hash, attack );
-    fheroes2::hashCombine( hash, defense );
-    fheroes2::hashCombine( hash, power );
-    fheroes2::hashCombine( hash, knowledge );
-    for ( int skillId = Skill::Secondary::PATHFINDING; skillId <= Skill::Secondary::ESTATES; ++skillId ) {
-        fheroes2::hashCombine( hash, GetLevelSkill( skillId ) );
-    }
-
-    HeroSeedsForLevelUp seeds;
-    seeds.seedPrimarySkill = hash;
-    seeds.seedSecondarySkill1 = hash + 1;
-    seeds.seedSecondarySkill2 = hash + 2;
-    seeds.seedSecondarySkillRandomChoose = hash + 3;
-    return seeds;
-}
-
-double Heroes::getAIMinimumJoiningArmyStrength() const
-{
-    // Ideally we need to assert here that the hero is under AI control.
-    // But in cases when we regain a temporary control from the AI then the hero becomes non-AI.
-
-    double strengthThreshold = 0.05;
-
-    switch ( getAIRole() ) {
-    case Heroes::Role::SCOUT:
-        strengthThreshold = 0.01;
-        break;
-    case Heroes::Role::COURIER:
-        strengthThreshold = 0.015;
-        break;
-    case Heroes::Role::HUNTER:
-        strengthThreshold = 0.02;
-        break;
-    case Heroes::Role::FIGHTER:
-        strengthThreshold = 0.025;
-        break;
-    case Heroes::Role::CHAMPION:
-        strengthThreshold = 0.03;
-        break;
-    default:
-        // Did you add a new AI hero role? Add the logic above!
-        assert( 0 );
-        break;
-    }
-
-    return strengthThreshold * Troops( GetArmy().getTroops() ).GetStrength();
 }
 
 StreamBase & operator<<( StreamBase & msg, const VecHeroes & heroes )
@@ -2360,6 +2353,8 @@ StreamBase & operator>>( StreamBase & msg, AllHeroes & heroes )
 
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1010_RELEASE, "Remove the logic below." );
     if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1010_RELEASE ) {
+        // Before FORMAT_VERSION_1010_RELEASE UNKNOWN hero was last while now it is first.
+        // In order to preserve the original order of heroes we have to do the below trick.
         for ( size_t i = 1; i < heroes.size(); ++i ) {
             heroes[i] = new Heroes();
             msg >> *heroes[i];

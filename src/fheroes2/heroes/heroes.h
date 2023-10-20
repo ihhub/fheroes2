@@ -714,7 +714,7 @@ struct AllHeroes : public VecHeroes
     void Init();
     void clear();
 
-    void Scout( int ) const;
+    void Scout( int colors ) const;
 
     void ResetModes( const uint32_t modes ) const
     {
@@ -736,9 +736,8 @@ struct AllHeroes : public VecHeroes
         std::for_each( begin(), end(), []( Heroes * hero ) { hero->ActionNewMonth(); } );
     }
 
-    Heroes * GetHero( const Castle & castle ) const;
     Heroes * GetHeroForHire( const int race, const int heroIDToIgnore ) const;
-    Heroes * FromJail( int32_t ) const;
+    Heroes * FromJail( int32_t index ) const;
 };
 
 StreamBase & operator<<( StreamBase &, const VecHeroes & );
