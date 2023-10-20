@@ -405,10 +405,10 @@ int Dialog::ArmySplitTroop( uint32_t freeSlots, const uint32_t redistributeMax, 
     std::string msg( _( "How many %{tropps} to move?" ) );
     StringReplace( msg, "%{tropps}", name );
     fheroes2::Text text( msg, fheroes2::FontType::normalWhite() );
-    const uint32_t textHeight = text.rows( BOXAREA_WIDTH ) * text.height();
+    const int32_t textHeight = text.rows( BOXAREA_WIDTH ) * text.height();
 
     fheroes2::Text text2( _( "Fast separation into slots:" ), fheroes2::FontType::normalWhite() );
-    const uint32_t text2Height = text2.rows( BOXAREA_WIDTH ) * text2.height();
+    const int32_t text2Height = text2.rows( BOXAREA_WIDTH ) * text2.height();
     
     const int defaultYPosition = 160;
     const int boxHeight = freeSlots > 1 ? 56 + spacer + textHeight + text2Height : 45;
