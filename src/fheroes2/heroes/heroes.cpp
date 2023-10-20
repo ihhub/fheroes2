@@ -2336,9 +2336,9 @@ StreamBase & operator>>( StreamBase & msg, AllHeroes & heroes )
         msg >> *heroes[0];
     }
     else {
-        for ( AllHeroes::iterator it = heroes.begin(); it != heroes.end(); ++it ) {
-            *it = new Heroes();
-            msg >> **it;
+        for ( Heroes * hero : heroes ) {
+            hero = new Heroes();
+            msg >> *hero;
         }
     }
 
