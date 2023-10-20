@@ -257,43 +257,43 @@ void Battle::Arena::BattleProcess( Unit & attacker, Unit & defender, int32_t dst
 void Battle::Arena::ApplyAction( Command & cmd )
 {
     switch ( cmd.GetType() ) {
-    case CommandType::MSG_BATTLE_CAST:
+    case CommandType::SPELLCAST:
         ApplyActionSpellCast( cmd );
         break;
-    case CommandType::MSG_BATTLE_ATTACK:
+    case CommandType::ATTACK:
         ApplyActionAttack( cmd );
         break;
-    case CommandType::MSG_BATTLE_MOVE:
+    case CommandType::MOVE:
         ApplyActionMove( cmd );
         break;
-    case CommandType::MSG_BATTLE_SKIP:
+    case CommandType::SKIP:
         ApplyActionSkip( cmd );
         break;
-    case CommandType::MSG_BATTLE_END_TURN:
+    case CommandType::END_TURN:
         ApplyActionEnd( cmd );
         break;
-    case CommandType::MSG_BATTLE_MORALE:
+    case CommandType::MORALE:
         ApplyActionMorale( cmd );
         break;
 
-    case CommandType::MSG_BATTLE_TOWER:
+    case CommandType::TOWER:
         ApplyActionTower( cmd );
         break;
-    case CommandType::MSG_BATTLE_CATAPULT:
+    case CommandType::CATAPULT:
         ApplyActionCatapult( cmd );
         break;
 
-    case CommandType::MSG_BATTLE_RETREAT:
+    case CommandType::RETREAT:
         ApplyActionRetreat( cmd );
         break;
-    case CommandType::MSG_BATTLE_SURRENDER:
+    case CommandType::SURRENDER:
         ApplyActionSurrender( cmd );
         break;
 
-    case CommandType::MSG_BATTLE_AUTO_SWITCH:
+    case CommandType::AUTO_SWITCH:
         ApplyActionAutoSwitch( cmd );
         break;
-    case CommandType::MSG_BATTLE_AUTO_FINISH:
+    case CommandType::AUTO_FINISH:
         ApplyActionAutoFinish( cmd );
         break;
 
@@ -1009,11 +1009,11 @@ void Battle::Arena::ApplyActionCatapult( Command & cmd )
         uint32_t shots = cmd.GetNextValue();
 
         while ( shots-- ) {
-            const CatapultTarget target = static_cast<CatapultTarget>( cmd.GetNextValue() );
+            const CastleDefenseElement target = static_cast<CastleDefenseElement>( cmd.GetNextValue() );
             const uint32_t damage = cmd.GetNextValue();
             const bool hit = cmd.GetNextValue() != 0;
 
-            if ( target != CatapultTarget::CAT_NONE ) {
+            if ( target != CastleDefenseElement::NONE ) {
                 if ( _interface ) {
                     _interface->RedrawActionCatapultPart1( target, hit );
                 }
@@ -1182,7 +1182,7 @@ void Battle::Arena::ApplyActionSpellEarthQuake( const Command & /*cmd*/ )
     const HeroBase * commander = GetCurrentCommander();
     assert( commander != nullptr );
 
-    std::vector<CatapultTarget> targets = GetCastleTargets();
+    std::vector<CastleDefenseElement> targets = GetCastleTargets();
 
     if ( _interface ) {
         _interface->RedrawActionSpellCastStatus( Spell( Spell::EARTHQUAKE ), -1, commander->GetName(), {} );

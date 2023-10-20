@@ -27,6 +27,7 @@
 #include <cstdint>
 #include <map>
 
+#include "battle.h"
 #include "math_base.h"
 
 class HeroBase;
@@ -38,19 +39,6 @@ namespace Rand
 
 namespace Battle
 {
-    enum class CatapultTarget : int
-    {
-        CAT_NONE = 0,
-        CAT_WALL1 = 1,
-        CAT_WALL2 = 2,
-        CAT_WALL3 = 3,
-        CAT_WALL4 = 4,
-        CAT_TOWER1 = 5,
-        CAT_TOWER2 = 6,
-        CAT_BRIDGE = 7,
-        CAT_CENTRAL_TOWER = 8
-    };
-
     class Catapult
     {
     public:
@@ -59,8 +47,9 @@ namespace Battle
 
         Catapult & operator=( const Catapult & ) = delete;
 
-        static CatapultTarget GetTarget( const std::map<CatapultTarget, uint32_t> & stateOfCatapultTargets, Rand::DeterministicRandomGenerator & randomGenerator );
-        static fheroes2::Point GetTargetPosition( const CatapultTarget target, const bool hit );
+        static CastleDefenseElement GetTarget( const std::map<CastleDefenseElement, uint32_t> & stateOfCatapultTargets,
+                                               Rand::DeterministicRandomGenerator & randomGenerator );
+        static fheroes2::Point GetTargetPosition( const CastleDefenseElement target, const bool hit );
 
         uint32_t GetShots() const
         {

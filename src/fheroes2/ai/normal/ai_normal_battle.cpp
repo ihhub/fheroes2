@@ -321,7 +321,7 @@ namespace AI
                 const SpellSelection & bestSpell = selectBestSpell( arena, currentUnit, true );
 
                 if ( bestSpell.spellID != -1 ) {
-                    actions.emplace_back( Command::CAST, bestSpell.spellID, bestSpell.cell );
+                    actions.emplace_back( Command::SPELLCAST, bestSpell.spellID, bestSpell.cell );
                 }
             }
 
@@ -334,7 +334,7 @@ namespace AI
             const SpellSelection & bestSpell = selectBestSpell( arena, currentUnit, false );
 
             if ( bestSpell.spellID != -1 ) {
-                actions.emplace_back( Command::CAST, bestSpell.spellID, bestSpell.cell );
+                actions.emplace_back( Command::SPELLCAST, bestSpell.spellID, bestSpell.cell );
                 return actions;
             }
         }
@@ -1248,7 +1248,7 @@ namespace AI
         actions.insert( actions.end(), plannedActions.begin(), plannedActions.end() );
 
         // Do not end the turn if we only cast a spell
-        if ( plannedActions.size() != 1 || !plannedActions.front().isType( CommandType::MSG_BATTLE_CAST ) ) {
+        if ( plannedActions.size() != 1 || !plannedActions.front().isType( CommandType::SPELLCAST ) ) {
             actions.emplace_back( Command::END_TURN, currentUnit.GetUID() );
         }
     }

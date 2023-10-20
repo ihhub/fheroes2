@@ -58,7 +58,7 @@ uint32_t Battle::Command::updateSeed( const uint32_t seed ) const
     uint32_t newSeed = seed;
 
     switch ( _type ) {
-    case CommandType::MSG_BATTLE_ATTACK:
+    case CommandType::ATTACK:
         assert( size() == 4 );
 
         fheroes2::hashCombine( newSeed, _type );
@@ -67,24 +67,24 @@ uint32_t Battle::Command::updateSeed( const uint32_t seed ) const
         fheroes2::hashCombine( newSeed, at( 3 ) );
         break;
 
-    case CommandType::MSG_BATTLE_MOVE:
-    case CommandType::MSG_BATTLE_CAST:
-    case CommandType::MSG_BATTLE_MORALE:
-    case CommandType::MSG_BATTLE_CATAPULT:
-    case CommandType::MSG_BATTLE_TOWER:
-    case CommandType::MSG_BATTLE_RETREAT:
-    case CommandType::MSG_BATTLE_SURRENDER:
-    case CommandType::MSG_BATTLE_SKIP:
+    case CommandType::MOVE:
+    case CommandType::SPELLCAST:
+    case CommandType::MORALE:
+    case CommandType::CATAPULT:
+    case CommandType::TOWER:
+    case CommandType::RETREAT:
+    case CommandType::SURRENDER:
+    case CommandType::SKIP:
         fheroes2::hashCombine( newSeed, _type );
         std::for_each( begin(), end(), [&newSeed]( const int param ) { fheroes2::hashCombine( newSeed, param ); } );
         break;
 
     // Ignore the end turn command, because the AI and the human player give them differently
     // TODO: eventually get rid of this command
-    case CommandType::MSG_BATTLE_END_TURN:
+    case CommandType::END_TURN:
     // These commands should never affect the seed generation
-    case CommandType::MSG_BATTLE_AUTO_SWITCH:
-    case CommandType::MSG_BATTLE_AUTO_FINISH:
+    case CommandType::AUTO_SWITCH:
+    case CommandType::AUTO_FINISH:
         break;
 
     default:

@@ -38,49 +38,49 @@ namespace Battle
 {
     enum class CommandType : int32_t
     {
-        MSG_BATTLE_MOVE,
-        MSG_BATTLE_ATTACK,
-        MSG_BATTLE_CAST,
-        MSG_BATTLE_MORALE,
-        MSG_BATTLE_CATAPULT,
-        MSG_BATTLE_TOWER,
-        MSG_BATTLE_RETREAT,
-        MSG_BATTLE_SURRENDER,
-        MSG_BATTLE_SKIP,
-        MSG_BATTLE_END_TURN,
-        MSG_BATTLE_AUTO_SWITCH,
-        MSG_BATTLE_AUTO_FINISH
+        MOVE,
+        ATTACK,
+        SPELLCAST,
+        MORALE,
+        CATAPULT,
+        TOWER,
+        RETREAT,
+        SURRENDER,
+        SKIP,
+        END_TURN,
+        AUTO_SWITCH,
+        AUTO_FINISH
     };
 
     class Command final : public std::vector<int>
     {
     public:
-        static constexpr std::integral_constant<CommandType, CommandType::MSG_BATTLE_MOVE> MOVE{};
-        static constexpr std::integral_constant<CommandType, CommandType::MSG_BATTLE_ATTACK> ATTACK{};
-        static constexpr std::integral_constant<CommandType, CommandType::MSG_BATTLE_CAST> CAST{};
-        static constexpr std::integral_constant<CommandType, CommandType::MSG_BATTLE_MORALE> MORALE{};
-        static constexpr std::integral_constant<CommandType, CommandType::MSG_BATTLE_CATAPULT> CATAPULT{};
-        static constexpr std::integral_constant<CommandType, CommandType::MSG_BATTLE_TOWER> TOWER{};
-        static constexpr std::integral_constant<CommandType, CommandType::MSG_BATTLE_RETREAT> RETREAT{};
-        static constexpr std::integral_constant<CommandType, CommandType::MSG_BATTLE_SURRENDER> SURRENDER{};
-        static constexpr std::integral_constant<CommandType, CommandType::MSG_BATTLE_SKIP> SKIP{};
-        static constexpr std::integral_constant<CommandType, CommandType::MSG_BATTLE_END_TURN> END_TURN{};
-        static constexpr std::integral_constant<CommandType, CommandType::MSG_BATTLE_AUTO_SWITCH> AUTO_SWITCH{};
-        static constexpr std::integral_constant<CommandType, CommandType::MSG_BATTLE_AUTO_FINISH> AUTO_FINISH{};
+        static constexpr std::integral_constant<CommandType, CommandType::MOVE> MOVE{};
+        static constexpr std::integral_constant<CommandType, CommandType::ATTACK> ATTACK{};
+        static constexpr std::integral_constant<CommandType, CommandType::SPELLCAST> SPELLCAST{};
+        static constexpr std::integral_constant<CommandType, CommandType::MORALE> MORALE{};
+        static constexpr std::integral_constant<CommandType, CommandType::CATAPULT> CATAPULT{};
+        static constexpr std::integral_constant<CommandType, CommandType::TOWER> TOWER{};
+        static constexpr std::integral_constant<CommandType, CommandType::RETREAT> RETREAT{};
+        static constexpr std::integral_constant<CommandType, CommandType::SURRENDER> SURRENDER{};
+        static constexpr std::integral_constant<CommandType, CommandType::SKIP> SKIP{};
+        static constexpr std::integral_constant<CommandType, CommandType::END_TURN> END_TURN{};
+        static constexpr std::integral_constant<CommandType, CommandType::AUTO_SWITCH> AUTO_SWITCH{};
+        static constexpr std::integral_constant<CommandType, CommandType::AUTO_FINISH> AUTO_FINISH{};
 
         template <CommandType cmd, typename... Types>
         Command( std::integral_constant<CommandType, cmd> /* tag */, const Types... params )
             : _type( cmd )
         {
-            if constexpr ( cmd == CommandType::MSG_BATTLE_MOVE ) {
+            if constexpr ( cmd == CommandType::MOVE ) {
                 // UID, cell index
                 static_assert( sizeof...( params ) == 2 );
             }
-            else if constexpr ( cmd == CommandType::MSG_BATTLE_ATTACK ) {
+            else if constexpr ( cmd == CommandType::ATTACK ) {
                 // Attacker UID, defender UID, cell index, direction
                 static_assert( sizeof...( params ) == 4 );
             }
-            else if constexpr ( cmd == CommandType::MSG_BATTLE_CAST ) {
+            else if constexpr ( cmd == CommandType::SPELLCAST ) {
                 static_assert( sizeof...( params ) > 0 );
 
                 const int spellId = std::get<0>( std::make_tuple( params... ) );
@@ -98,23 +98,23 @@ namespace Battle
                     assert( sizeof...( params ) == 2 );
                 }
             }
-            else if constexpr ( cmd == CommandType::MSG_BATTLE_MORALE ) {
+            else if constexpr ( cmd == CommandType::MORALE ) {
                 // UID, morale
                 static_assert( sizeof...( params ) == 2 );
             }
-            else if constexpr ( cmd == CommandType::MSG_BATTLE_TOWER ) {
+            else if constexpr ( cmd == CommandType::TOWER ) {
                 // Tower type, UID
                 static_assert( sizeof...( params ) == 2 );
             }
-            else if constexpr ( cmd == CommandType::MSG_BATTLE_SKIP ) {
+            else if constexpr ( cmd == CommandType::SKIP ) {
                 // UID
                 static_assert( sizeof...( params ) == 1 );
             }
-            else if constexpr ( cmd == CommandType::MSG_BATTLE_END_TURN ) {
+            else if constexpr ( cmd == CommandType::END_TURN ) {
                 // UID
                 static_assert( sizeof...( params ) == 1 );
             }
-            else if constexpr ( cmd == CommandType::MSG_BATTLE_AUTO_SWITCH ) {
+            else if constexpr ( cmd == CommandType::AUTO_SWITCH ) {
                 // Color
                 static_assert( sizeof...( params ) == 1 );
             }

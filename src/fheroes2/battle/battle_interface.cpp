@@ -3040,7 +3040,7 @@ void Battle::Interface::HumanCastSpellTurn( const Unit & /* unused */, Actions &
                     _teleportSpellSrcIdx = index_pos;
                 }
                 else {
-                    actions.emplace_back( Command::CAST, Spell::TELEPORT, _teleportSpellSrcIdx, index_pos );
+                    actions.emplace_back( Command::SPELLCAST, Spell::TELEPORT, _teleportSpellSrcIdx, index_pos );
 
                     humanturn_spell = Spell::NONE;
                     humanturn_exit = true;
@@ -3049,13 +3049,13 @@ void Battle::Interface::HumanCastSpellTurn( const Unit & /* unused */, Actions &
                 }
             }
             else if ( Cursor::SP_MIRRORIMAGE == cursor.Themes() ) {
-                actions.emplace_back( Command::CAST, Spell::MIRRORIMAGE, index_pos );
+                actions.emplace_back( Command::SPELLCAST, Spell::MIRRORIMAGE, index_pos );
 
                 humanturn_spell = Spell::NONE;
                 humanturn_exit = true;
             }
             else {
-                actions.emplace_back( Command::CAST, humanturn_spell.GetID(), index_pos );
+                actions.emplace_back( Command::SPELLCAST, humanturn_spell.GetID(), index_pos );
 
                 humanturn_spell = Spell::NONE;
                 humanturn_exit = true;
@@ -4865,7 +4865,7 @@ void Battle::Interface::RedrawActionTowerPart2( const Tower & tower, const Targe
     assert( _movingUnit == nullptr );
 }
 
-void Battle::Interface::RedrawActionCatapultPart1( const CatapultTarget catapultTarget, const bool isHit )
+void Battle::Interface::RedrawActionCatapultPart1( const CastleDefenseElement catapultTarget, const bool isHit )
 {
     // Reset the delay before rendering the first frame of catapult animation.
     Game::AnimateResetDelay( Game::DelayType::BATTLE_CATAPULT_DELAY );
@@ -4897,24 +4897,24 @@ void Battle::Interface::RedrawActionCatapultPart1( const CatapultTarget catapult
     // set the projectile arc height for each castle target and a formula for an unknown target
     int32_t boulderArcHeight;
     switch ( catapultTarget ) {
-    case CatapultTarget::CAT_WALL1:
+    case CastleDefenseElement::WALL1:
         boulderArcHeight = 220;
         break;
-    case CatapultTarget::CAT_WALL2:
-    case CatapultTarget::CAT_BRIDGE:
+    case CastleDefenseElement::WALL2:
+    case CastleDefenseElement::BRIDGE:
         boulderArcHeight = 216;
         break;
-    case CatapultTarget::CAT_WALL3:
+    case CastleDefenseElement::WALL3:
         boulderArcHeight = 204;
         break;
-    case CatapultTarget::CAT_WALL4:
+    case CastleDefenseElement::WALL4:
         boulderArcHeight = 208;
         break;
-    case CatapultTarget::CAT_TOWER1:
-    case CatapultTarget::CAT_TOWER2:
+    case CastleDefenseElement::TOWER1:
+    case CastleDefenseElement::TOWER2:
         boulderArcHeight = 206;
         break;
-    case CatapultTarget::CAT_CENTRAL_TOWER:
+    case CastleDefenseElement::CENTRAL_TOWER:
         boulderArcHeight = 290;
         break;
     default:
@@ -4958,7 +4958,7 @@ void Battle::Interface::RedrawActionCatapultPart1( const CatapultTarget catapult
     uint32_t frame = 0;
     // If the building is hit, end the animation on the 5th frame to change the building state (when the smoke cloud is largest).
     uint32_t maxFrame = isHit ? castleBuildingDestroyFrame : fheroes2::AGG::GetICNCount( icn );
-    const bool isBridgeDestroyed = isHit && ( catapultTarget == CatapultTarget::CAT_BRIDGE );
+    const bool isBridgeDestroyed = isHit && ( catapultTarget == CastleDefenseElement::BRIDGE );
     // If the bridge is destroyed - prepare parameters for the second smoke cloud.
     if ( isBridgeDestroyed ) {
         pt1 = pt2 + bridgeDestroySmokeOffset;
@@ -4991,7 +4991,7 @@ void Battle::Interface::RedrawActionCatapultPart1( const CatapultTarget catapult
     }
 }
 
-void Battle::Interface::RedrawActionCatapultPart2( const CatapultTarget catapultTarget )
+void Battle::Interface::RedrawActionCatapultPart2( const CastleDefenseElement catapultTarget )
 {
     // Finish the smoke cloud animation after the building's state has changed after the hit and it is drawn as demolished.
 
@@ -5003,7 +5003,7 @@ void Battle::Interface::RedrawActionCatapultPart2( const CatapultTarget catapult
     uint32_t frame = castleBuildingDestroyFrame;
     const uint32_t maxFrame = fheroes2::AGG::GetICNCount( icnId );
     uint32_t maxAnimationFrame = maxFrame;
-    const bool isBridgeDestroyed = ( catapultTarget == CatapultTarget::CAT_BRIDGE );
+    const bool isBridgeDestroyed = ( catapultTarget == CastleDefenseElement::BRIDGE );
     // If the bridge is destroyed - prepare parameters for the second smoke cloud.
     if ( isBridgeDestroyed ) {
         pt2 = pt1 + bridgeDestroySmokeOffset;
@@ -5848,7 +5848,7 @@ void Battle::Interface::RedrawActionArmageddonSpell()
     }
 }
 
-void Battle::Interface::RedrawActionEarthQuakeSpell( const std::vector<CatapultTarget> & targets )
+void Battle::Interface::RedrawActionEarthQuakeSpell( const std::vector<CastleDefenseElement> & targets )
 {
     Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
@@ -5915,7 +5915,7 @@ void Battle::Interface::RedrawActionEarthQuakeSpell( const std::vector<CatapultT
         if ( Game::validateAnimationDelay( Game::BATTLE_SPELL_DELAY ) ) {
             RedrawPartialStart();
 
-            for ( const CatapultTarget target : targets ) {
+            for ( const CastleDefenseElement target : targets ) {
                 fheroes2::Point pt2 = Catapult::GetTargetPosition( target, true );
 
                 pt2.x += area.x;
@@ -6394,7 +6394,7 @@ void Battle::Interface::ProcessingHeroDialogResult( const int result, Actions & 
 
                             if ( hero->CanCastSpell( spell, &error ) ) {
                                 if ( spell.isApplyWithoutFocusObject() ) {
-                                    actions.emplace_back( Command::CAST, spell.GetID(), -1 );
+                                    actions.emplace_back( Command::SPELLCAST, spell.GetID(), -1 );
 
                                     humanturn_redraw = true;
                                     humanturn_exit = true;

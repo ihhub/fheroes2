@@ -315,10 +315,10 @@ namespace Battle
         void RedrawActionLuck( const Unit & unit );
         void RedrawActionTowerPart1( const Tower & tower, const Unit & defender );
         void RedrawActionTowerPart2( const Tower & tower, const TargetInfo & target );
-        void RedrawActionCatapultPart1( const CatapultTarget catapultTarget, const bool isHit );
-        void RedrawActionCatapultPart2( const CatapultTarget catapultTarget );
+        void RedrawActionCatapultPart1( const CastleDefenseElement catapultTarget, const bool isHit );
+        void RedrawActionCatapultPart2( const CastleDefenseElement catapultTarget );
         void RedrawActionTeleportSpell( Unit & target, const int32_t dst );
-        void RedrawActionEarthQuakeSpell( const std::vector<CatapultTarget> & targets );
+        void RedrawActionEarthQuakeSpell( const std::vector<CastleDefenseElement> & targets );
         void RedrawActionSummonElementalSpell( Unit & target );
         void RedrawActionMirrorImageSpell( const Unit & target, const Position & pos );
         void RedrawActionSkipStatus( const Unit & unit );

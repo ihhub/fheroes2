@@ -200,7 +200,7 @@ namespace Battle
             return icn_covr;
         }
 
-        uint32_t GetCastleTargetValue( const CatapultTarget target ) const;
+        uint32_t GetCastleTargetValue( const CastleDefenseElement target ) const;
 
         int32_t GetFreePositionNearHero( const int heroColor ) const;
 
@@ -235,7 +235,7 @@ namespace Battle
         void TurnTroop( Unit * troop, const Units & orderHistory );
         void TowerAction( const Tower & );
 
-        void SetCastleTargetValue( const CatapultTarget target, const uint32_t value );
+        void SetCastleTargetValue( const CastleDefenseElement target, const uint32_t value );
         void CatapultAction();
 
         TargetsInfo GetTargetsForDamage( const Unit & attacker, Unit & defender, const int32_t dst, const int dir ) const;
@@ -243,7 +243,7 @@ namespace Battle
         static void TargetsApplyDamage( Unit & attacker, TargetsInfo & targets, uint32_t & resurrected );
         static void TargetsApplySpell( const HeroBase * hero, const Spell & spell, TargetsInfo & targets );
 
-        std::vector<CatapultTarget> GetCastleTargets() const;
+        std::vector<CastleDefenseElement> GetCastleTargets() const;
         TargetsInfo TargetsForChainLightning( const HeroBase * hero, int32_t attackedTroopIndex );
         std::vector<Unit *> FindChainLightningTargetIndexes( const HeroBase * hero, Unit * firstUnit );
 

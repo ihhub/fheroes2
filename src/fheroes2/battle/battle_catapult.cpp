@@ -73,24 +73,24 @@ uint32_t Battle::Catapult::GetDamage( Rand::DeterministicRandomGenerator & rando
     return 1;
 }
 
-fheroes2::Point Battle::Catapult::GetTargetPosition( const CatapultTarget target, const bool hit )
+fheroes2::Point Battle::Catapult::GetTargetPosition( const CastleDefenseElement target, const bool hit )
 {
     switch ( target ) {
-    case CatapultTarget::CAT_WALL1:
+    case CastleDefenseElement::WALL1:
         return hit ? fheroes2::Point( 475, 45 ) : fheroes2::Point( 495, 105 );
-    case CatapultTarget::CAT_WALL2:
+    case CastleDefenseElement::WALL2:
         return hit ? fheroes2::Point( 420, 115 ) : fheroes2::Point( 460, 175 );
-    case CatapultTarget::CAT_WALL3:
+    case CastleDefenseElement::WALL3:
         return hit ? fheroes2::Point( 415, 280 ) : fheroes2::Point( 455, 280 );
-    case CatapultTarget::CAT_WALL4:
+    case CastleDefenseElement::WALL4:
         return hit ? fheroes2::Point( 490, 390 ) : fheroes2::Point( 530, 390 );
-    case CatapultTarget::CAT_TOWER1:
+    case CastleDefenseElement::TOWER1:
         return hit ? fheroes2::Point( 430, 40 ) : fheroes2::Point( 490, 120 );
-    case CatapultTarget::CAT_TOWER2:
+    case CastleDefenseElement::TOWER2:
         return hit ? fheroes2::Point( 430, 300 ) : fheroes2::Point( 490, 340 );
-    case CatapultTarget::CAT_BRIDGE:
+    case CastleDefenseElement::BRIDGE:
         return hit ? fheroes2::Point( 400, 195 ) : fheroes2::Point( 450, 235 );
-    case CatapultTarget::CAT_CENTRAL_TOWER:
+    case CastleDefenseElement::CENTRAL_TOWER:
         return hit ? fheroes2::Point( 580, 160 ) : fheroes2::Point( 610, 320 );
     default:
         break;
@@ -99,54 +99,54 @@ fheroes2::Point Battle::Catapult::GetTargetPosition( const CatapultTarget target
     return fheroes2::Point();
 }
 
-Battle::CatapultTarget Battle::Catapult::GetTarget( const std::map<CatapultTarget, uint32_t> & stateOfCatapultTargets,
-                                                    Rand::DeterministicRandomGenerator & randomGenerator )
+Battle::CastleDefenseElement Battle::Catapult::GetTarget( const std::map<CastleDefenseElement, uint32_t> & stateOfCatapultTargets,
+                                                          Rand::DeterministicRandomGenerator & randomGenerator )
 {
-    const auto checkTargetState = [&stateOfCatapultTargets]( const CatapultTarget target ) {
+    const auto checkTargetState = [&stateOfCatapultTargets]( const CastleDefenseElement target ) {
         const auto iter = stateOfCatapultTargets.find( target );
         assert( iter != stateOfCatapultTargets.end() );
 
         return iter->second > 0;
     };
 
-    std::vector<CatapultTarget> targets;
+    std::vector<CastleDefenseElement> targets;
     targets.reserve( 4 );
 
     // Walls
-    if ( checkTargetState( CatapultTarget::CAT_WALL1 ) ) {
-        targets.push_back( CatapultTarget::CAT_WALL1 );
+    if ( checkTargetState( CastleDefenseElement::WALL1 ) ) {
+        targets.push_back( CastleDefenseElement::WALL1 );
     }
-    if ( checkTargetState( CatapultTarget::CAT_WALL2 ) ) {
-        targets.push_back( CatapultTarget::CAT_WALL2 );
+    if ( checkTargetState( CastleDefenseElement::WALL2 ) ) {
+        targets.push_back( CastleDefenseElement::WALL2 );
     }
-    if ( checkTargetState( CatapultTarget::CAT_WALL3 ) ) {
-        targets.push_back( CatapultTarget::CAT_WALL3 );
+    if ( checkTargetState( CastleDefenseElement::WALL3 ) ) {
+        targets.push_back( CastleDefenseElement::WALL3 );
     }
-    if ( checkTargetState( CatapultTarget::CAT_WALL4 ) ) {
-        targets.push_back( CatapultTarget::CAT_WALL4 );
+    if ( checkTargetState( CastleDefenseElement::WALL4 ) ) {
+        targets.push_back( CastleDefenseElement::WALL4 );
     }
 
     // Right/left towers
     if ( targets.empty() ) {
-        if ( checkTargetState( CatapultTarget::CAT_TOWER1 ) ) {
-            targets.push_back( CatapultTarget::CAT_TOWER1 );
+        if ( checkTargetState( CastleDefenseElement::TOWER1 ) ) {
+            targets.push_back( CastleDefenseElement::TOWER1 );
         }
-        if ( checkTargetState( CatapultTarget::CAT_TOWER2 ) ) {
-            targets.push_back( CatapultTarget::CAT_TOWER2 );
+        if ( checkTargetState( CastleDefenseElement::TOWER2 ) ) {
+            targets.push_back( CastleDefenseElement::TOWER2 );
         }
     }
 
     // Bridge
     if ( targets.empty() ) {
-        if ( checkTargetState( CatapultTarget::CAT_BRIDGE ) ) {
-            targets.push_back( CatapultTarget::CAT_BRIDGE );
+        if ( checkTargetState( CastleDefenseElement::BRIDGE ) ) {
+            targets.push_back( CastleDefenseElement::BRIDGE );
         }
     }
 
     // Central tower
     if ( targets.empty() ) {
-        if ( checkTargetState( CatapultTarget::CAT_CENTRAL_TOWER ) ) {
-            targets.push_back( CatapultTarget::CAT_CENTRAL_TOWER );
+        if ( checkTargetState( CastleDefenseElement::CENTRAL_TOWER ) ) {
+            targets.push_back( CastleDefenseElement::CENTRAL_TOWER );
         }
     }
 
@@ -156,7 +156,7 @@ Battle::CatapultTarget Battle::Catapult::GetTarget( const std::map<CatapultTarge
 
     DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "no target was found" )
 
-    return CatapultTarget::CAT_NONE;
+    return CastleDefenseElement::NONE;
 }
 
 bool Battle::Catapult::IsNextShotHit( Rand::DeterministicRandomGenerator & randomGenerator ) const
