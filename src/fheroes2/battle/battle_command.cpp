@@ -36,18 +36,16 @@ int Battle::Command::GetNextValue()
     return val;
 }
 
-uint32_t Battle::Command::updateSeed( const uint32_t seed ) const
+uint32_t Battle::Command::updateSeed( uint32_t seed ) const
 {
-    uint32_t newSeed = seed;
-
     switch ( _type ) {
     case CommandType::ATTACK:
         assert( size() == 4 );
 
-        fheroes2::hashCombine( newSeed, _type );
+        fheroes2::hashCombine( seed, _type );
         // Use only attacker & defender UIDs, because cell index and direction may differ depending on whether the AI or the human player gives the command
-        fheroes2::hashCombine( newSeed, at( 2 ) );
-        fheroes2::hashCombine( newSeed, at( 3 ) );
+        fheroes2::hashCombine( seed, at( 2 ) );
+        fheroes2::hashCombine( seed, at( 3 ) );
         break;
 
     case CommandType::MOVE:
@@ -58,8 +56,8 @@ uint32_t Battle::Command::updateSeed( const uint32_t seed ) const
     case CommandType::RETREAT:
     case CommandType::SURRENDER:
     case CommandType::SKIP:
-        fheroes2::hashCombine( newSeed, _type );
-        std::for_each( begin(), end(), [&newSeed]( const int param ) { fheroes2::hashCombine( newSeed, param ); } );
+        fheroes2::hashCombine( seed, _type );
+        std::for_each( begin(), end(), [&seed]( const int param ) { fheroes2::hashCombine( seed, param ); } );
         break;
 
     // Ignore the end turn command, because the AI and the human player give them differently
@@ -75,7 +73,7 @@ uint32_t Battle::Command::updateSeed( const uint32_t seed ) const
         break;
     }
 
-    return newSeed;
+    return seed;
 }
 
 Battle::Command & Battle::Command::operator<<( const int val )
