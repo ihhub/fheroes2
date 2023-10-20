@@ -138,36 +138,15 @@ namespace Battle
             return _type;
         }
 
-        int GetValue()
-        {
-            int val = 0;
-
-            *this >> val;
-
-            return val;
-        }
+        int GetNextValue();
 
         bool isType( const CommandType cmd ) const
         {
             return _type == cmd;
         }
 
-        Command & operator<<( const int val )
-        {
-            push_back( val );
-
-            return *this;
-        }
-
-        Command & operator>>( int & val )
-        {
-            if ( !empty() ) {
-                val = back();
-                pop_back();
-            }
-
-            return *this;
-        }
+        Command & operator<<( const int val );
+        Command & operator>>( int & val );
 
         uint32_t updateRandomSeed( const uint32_t seed ) const;
 

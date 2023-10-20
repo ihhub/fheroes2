@@ -304,7 +304,7 @@ void Battle::Arena::ApplyAction( Command & cmd )
 
 void Battle::Arena::ApplyActionSpellCast( Command & cmd )
 {
-    const Spell spell( cmd.GetValue() );
+    const Spell spell( cmd.GetNextValue() );
 
     HeroBase * commander = GetCurrentForce().GetCommander();
 
@@ -350,10 +350,10 @@ void Battle::Arena::ApplyActionSpellCast( Command & cmd )
 
 void Battle::Arena::ApplyActionAttack( Command & cmd )
 {
-    const uint32_t attackerUID = cmd.GetValue();
-    const uint32_t defenderUID = cmd.GetValue();
-    const int32_t dst = cmd.GetValue();
-    const int32_t dir = cmd.GetValue();
+    const uint32_t attackerUID = cmd.GetNextValue();
+    const uint32_t defenderUID = cmd.GetNextValue();
+    const int32_t dst = cmd.GetNextValue();
+    const int32_t dir = cmd.GetNextValue();
 
     Unit * attacker = GetTroopUID( attackerUID );
     Unit * defender = GetTroopUID( defenderUID );
@@ -409,8 +409,8 @@ void Battle::Arena::ApplyActionAttack( Command & cmd )
 
 void Battle::Arena::ApplyActionMove( Command & cmd )
 {
-    const uint32_t uid = cmd.GetValue();
-    const int32_t dst = cmd.GetValue();
+    const uint32_t uid = cmd.GetNextValue();
+    const int32_t dst = cmd.GetNextValue();
 
     Unit * unit = GetTroopUID( uid );
     const Cell * cell = Board::GetCell( dst );
@@ -511,7 +511,7 @@ void Battle::Arena::ApplyActionMove( Command & cmd )
 
 void Battle::Arena::ApplyActionSkip( Command & cmd )
 {
-    const uint32_t uid = cmd.GetValue();
+    const uint32_t uid = cmd.GetNextValue();
 
     Unit * unit = GetTroopUID( uid );
 
@@ -539,7 +539,7 @@ void Battle::Arena::ApplyActionSkip( Command & cmd )
 
 void Battle::Arena::ApplyActionEnd( Command & cmd )
 {
-    const uint32_t uid = cmd.GetValue();
+    const uint32_t uid = cmd.GetNextValue();
 
     Unit * unit = GetTroopUID( uid );
 
@@ -562,8 +562,8 @@ void Battle::Arena::ApplyActionEnd( Command & cmd )
 
 void Battle::Arena::ApplyActionMorale( Command & cmd )
 {
-    const uint32_t uid = cmd.GetValue();
-    const int32_t morale = cmd.GetValue();
+    const uint32_t uid = cmd.GetNextValue();
+    const int32_t morale = cmd.GetNextValue();
 
     Unit * unit = GetTroopUID( uid );
 
@@ -977,8 +977,8 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForSpells( const HeroBase * hero, c
 
 void Battle::Arena::ApplyActionTower( Command & cmd )
 {
-    const uint32_t type = cmd.GetValue();
-    const uint32_t uid = cmd.GetValue();
+    const uint32_t type = cmd.GetNextValue();
+    const uint32_t uid = cmd.GetNextValue();
 
     Tower * tower = GetTower( static_cast<TowerType>( type ) );
     Unit * unit = GetTroopUID( uid );
@@ -1006,12 +1006,12 @@ void Battle::Arena::ApplyActionTower( Command & cmd )
 void Battle::Arena::ApplyActionCatapult( Command & cmd )
 {
     if ( _catapult ) {
-        uint32_t shots = cmd.GetValue();
+        uint32_t shots = cmd.GetNextValue();
 
         while ( shots-- ) {
-            const int target = cmd.GetValue();
-            const uint32_t damage = cmd.GetValue();
-            const bool hit = cmd.GetValue() != 0;
+            const int target = cmd.GetNextValue();
+            const uint32_t damage = cmd.GetNextValue();
+            const bool hit = cmd.GetNextValue() != 0;
 
             if ( target ) {
                 if ( _interface ) {
@@ -1037,7 +1037,7 @@ void Battle::Arena::ApplyActionCatapult( Command & cmd )
 
 void Battle::Arena::ApplyActionAutoSwitch( Command & cmd )
 {
-    const int color = cmd.GetValue();
+    const int color = cmd.GetNextValue();
 
     if ( ( color != GetArmy1Color() && color != GetArmy2Color() ) || ( getForce( color ).GetControl() & CONTROL_AI ) ) {
         DEBUG_LOG( DBG_BATTLE, DBG_WARN,
@@ -1107,7 +1107,7 @@ void Battle::Arena::ApplyActionSpellDefaults( Command & cmd, const Spell & spell
     const HeroBase * commander = GetCurrentCommander();
     assert( commander != nullptr );
 
-    const int32_t dst = cmd.GetValue();
+    const int32_t dst = cmd.GetNextValue();
 
     bool playResistSound = false;
     TargetsInfo targets = GetTargetsForSpells( commander, spell, dst, &playResistSound );
@@ -1140,8 +1140,8 @@ void Battle::Arena::ApplyActionSpellDefaults( Command & cmd, const Spell & spell
 
 void Battle::Arena::ApplyActionSpellTeleport( Command & cmd )
 {
-    const int32_t src = cmd.GetValue();
-    const int32_t dst = cmd.GetValue();
+    const int32_t src = cmd.GetNextValue();
+    const int32_t dst = cmd.GetNextValue();
 
     Unit * unit = GetTroopBoard( src );
     const Cell * cell = Board::GetCell( dst );
@@ -1215,7 +1215,7 @@ void Battle::Arena::ApplyActionSpellEarthQuake( const Command & /*cmd*/ )
 
 void Battle::Arena::ApplyActionSpellMirrorImage( Command & cmd )
 {
-    const int32_t who = cmd.GetValue();
+    const int32_t who = cmd.GetNextValue();
     Unit * unit = GetTroopBoard( who );
 
     if ( unit && unit->isValid() ) {
