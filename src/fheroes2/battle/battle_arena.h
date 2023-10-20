@@ -241,7 +241,7 @@ namespace Battle
         TargetsInfo TargetsForChainLightning( const HeroBase * hero, const int32_t attackedTroopIndex, const bool applyRandomMagicResistance );
         std::vector<Unit *> FindChainLightningTargetIndexes( const HeroBase * hero, Unit * firstUnit, const bool applyRandomMagicResistance );
 
-        std::vector<CastleDefenseElement> GetCastleTargets() const;
+        std::vector<CastleDefenseElement> GetEarthQuakeTargets() const;
 
         void ApplyActionRetreat( const Command & );
         void ApplyActionSurrender( const Command & );

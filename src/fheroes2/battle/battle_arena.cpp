@@ -1059,7 +1059,7 @@ uint32_t Battle::Arena::GetCastleTargetValue( const CastleDefenseElement target 
     return 0;
 }
 
-std::vector<Battle::CastleDefenseElement> Battle::Arena::GetCastleTargets() const
+std::vector<Battle::CastleDefenseElement> Battle::Arena::GetEarthQuakeTargets() const
 {
     std::vector<CastleDefenseElement> targets;
     targets.reserve( 8 );

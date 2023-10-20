@@ -1194,7 +1194,7 @@ void Battle::Arena::ApplyActionSpellEarthQuake( const Command & /*cmd*/ )
     const HeroBase * commander = GetCurrentCommander();
     assert( commander != nullptr );
 
-    std::vector<CastleDefenseElement> targets = GetCastleTargets();
+    std::vector<CastleDefenseElement> targets = GetEarthQuakeTargets();
 
     if ( _interface ) {
         _interface->RedrawActionSpellCastStatus( Spell( Spell::EARTHQUAKE ), -1, commander->GetName(), {} );
