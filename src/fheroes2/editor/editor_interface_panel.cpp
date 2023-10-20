@@ -20,6 +20,7 @@
 
 #include "editor_interface_panel.h"
 
+#include <algorithm>
 #include <cassert>
 #include <cstddef>
 #include <string>
