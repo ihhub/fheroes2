@@ -2178,7 +2178,7 @@ Heroes * AllHeroes::GetHeroForHire( const int race, const int heroIDToIgnore ) c
 
 void AllHeroes::Scout( int colors ) const
 {
-    for ( Heroes * hero : *this ) {
+    for ( const Heroes * hero : *this ) {
         assert( hero != nullptr );
         if ( colors & hero->GetColor() ) {
             hero->Scout( hero->GetIndex() );
@@ -2336,7 +2336,7 @@ StreamBase & operator<<( StreamBase & msg, const AllHeroes & heroes )
 {
     msg << static_cast<uint32_t>( heroes.size() );
 
-    for ( const auto & hero : heroes ) {
+    for ( Heroes * const & hero : heroes ) {
         msg << *hero;
     }
 
@@ -2364,7 +2364,7 @@ StreamBase & operator>>( StreamBase & msg, AllHeroes & heroes )
         msg >> *heroes[0];
     }
     else {
-        for ( auto & hero : heroes ) {
+        for ( Heroes *& hero : heroes ) {
             hero = new Heroes();
             msg >> *hero;
         }
