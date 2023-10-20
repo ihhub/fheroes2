@@ -673,7 +673,7 @@ void Battle::Arena::CatapultAction()
         cmd << shots;
 
         while ( shots-- ) {
-            const int target = _catapult->GetTarget( stateOfCastleDefences, _randomGenerator );
+            const int target = Catapult::GetTarget( stateOfCastleDefences, _randomGenerator );
             const uint32_t damage = std::min( _catapult->GetDamage( _randomGenerator ), stateOfCastleDefences[target] );
             const bool hit = _catapult->IsNextShotHit( _randomGenerator );
 

@@ -99,7 +99,7 @@ fheroes2::Point Battle::Catapult::GetTargetPosition( int target, bool hit )
     return fheroes2::Point();
 }
 
-int Battle::Catapult::GetTarget( const std::vector<uint32_t> & stateOfCastleDefences, const Rand::DeterministicRandomGenerator & randomGenerator ) const
+int Battle::Catapult::GetTarget( const std::vector<uint32_t> & stateOfCastleDefences, const Rand::DeterministicRandomGenerator & randomGenerator )
 {
     std::vector<uint32_t> targets;
     targets.reserve( 4 );

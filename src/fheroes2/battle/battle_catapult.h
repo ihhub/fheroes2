@@ -64,7 +64,8 @@ namespace Battle
             return catShots;
         }
 
-        int GetTarget( const std::vector<uint32_t> & stateOfCastleDefences, const Rand::DeterministicRandomGenerator & randomGenerator ) const;
+        static int GetTarget( const std::vector<uint32_t> & stateOfCastleDefences, const Rand::DeterministicRandomGenerator & randomGenerator );
+
         uint32_t GetDamage( const Rand::DeterministicRandomGenerator & randomGenerator ) const;
         bool IsNextShotHit( const Rand::DeterministicRandomGenerator & randomGenerator ) const;
 
