@@ -36,6 +36,7 @@ uint32_t Battle::Command::updateRandomSeed( const uint32_t seed ) const
         assert( size() == 4 );
 
         fheroes2::hashCombine( newSeed, _type );
+        // Use only attacker & defender UIDs, because cell index and direction may differ depending on whether the AI or the human player gives the command
         fheroes2::hashCombine( newSeed, at( 2 ) );
         fheroes2::hashCombine( newSeed, at( 3 ) );
         break;
@@ -52,7 +53,10 @@ uint32_t Battle::Command::updateRandomSeed( const uint32_t seed ) const
         std::for_each( begin(), end(), [&newSeed]( const int param ) { fheroes2::hashCombine( newSeed, param ); } );
         break;
 
+    // Ignore the end turn command, because the AI and the human player give them differently
+    // TODO: eventually get rid of this command
     case CommandType::MSG_BATTLE_END_TURN:
+    // These commands should never affect the seed generation
     case CommandType::MSG_BATTLE_AUTO_SWITCH:
     case CommandType::MSG_BATTLE_AUTO_FINISH:
         break;
