@@ -108,7 +108,7 @@ Battle::CastleDefenseElement Battle::Catapult::GetTarget( const std::map<CastleD
         const auto iter = stateOfCatapultTargets.find( target );
         assert( iter != stateOfCatapultTargets.end() );
 
-        return iter->second > 0;
+        return ( iter->second > 0 );
     };
 
     std::vector<CastleDefenseElement> targets;
