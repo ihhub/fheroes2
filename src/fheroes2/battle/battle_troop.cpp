@@ -291,7 +291,7 @@ int32_t Battle::Unit::GetTailIndex() const
     return position.GetTail() ? position.GetTail()->GetIndex() : -1;
 }
 
-void Battle::Unit::SetRandomMorale( const Rand::DeterministicRandomGenerator & randomGenerator )
+void Battle::Unit::SetRandomMorale( Rand::DeterministicRandomGenerator & randomGenerator )
 {
     const int morale = GetMorale();
 
@@ -309,7 +309,7 @@ void Battle::Unit::SetRandomMorale( const Rand::DeterministicRandomGenerator & r
     }
 }
 
-void Battle::Unit::SetRandomLuck( const Rand::DeterministicRandomGenerator & randomGenerator )
+void Battle::Unit::SetRandomLuck( Rand::DeterministicRandomGenerator & randomGenerator )
 {
     const int32_t luck = GetLuck();
     const int32_t chance = static_cast<int32_t>( randomGenerator.Get( 1, 24 ) );
@@ -595,7 +595,7 @@ uint32_t Battle::Unit::CalculateDamageUnit( const Unit & enemy, double dmg ) con
     return static_cast<uint32_t>( dmg ) < 1 ? 1 : static_cast<uint32_t>( dmg );
 }
 
-uint32_t Battle::Unit::GetDamage( const Unit & enemy, const Rand::DeterministicRandomGenerator & randomGenerator ) const
+uint32_t Battle::Unit::GetDamage( const Unit & enemy, Rand::DeterministicRandomGenerator & randomGenerator ) const
 {
     uint32_t res = 0;
 
@@ -1606,7 +1606,7 @@ uint32_t Battle::Unit::GetMagicResist( const Spell & spell, const uint32_t attac
     return fheroes2::getSpellResistance( id, spell.GetID() );
 }
 
-int Battle::Unit::GetSpellMagic( const Rand::DeterministicRandomGenerator & randomGenerator ) const
+int Battle::Unit::GetSpellMagic( Rand::DeterministicRandomGenerator & randomGenerator ) const
 {
     const std::vector<fheroes2::MonsterAbility> & abilities = fheroes2::getMonsterData( GetID() ).battleStats.abilities;
     const auto foundAbility = std::find( abilities.begin(), abilities.end(), fheroes2::MonsterAbility( fheroes2::MonsterAbilityType::SPELL_CASTER ) );

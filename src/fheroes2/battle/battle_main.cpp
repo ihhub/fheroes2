@@ -164,7 +164,7 @@ namespace
         return 0;
     }
 
-    void eagleEyeSkillAction( HeroBase & hero, const SpellStorage & spells, bool local, const Rand::DeterministicRandomGenerator & randomGenerator )
+    void eagleEyeSkillAction( HeroBase & hero, const SpellStorage & spells, bool local, Rand::DeterministicRandomGenerator & randomGenerator )
     {
         if ( spells.empty() || !hero.HaveSpellBook() )
             return;

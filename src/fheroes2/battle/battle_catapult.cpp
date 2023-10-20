@@ -63,7 +63,7 @@ Battle::Catapult::Catapult( const HeroBase & hero )
     catShots += hero.GetBagArtifacts().getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::EXTRA_CATAPULT_SHOTS );
 }
 
-uint32_t Battle::Catapult::GetDamage( const Rand::DeterministicRandomGenerator & randomGenerator ) const
+uint32_t Battle::Catapult::GetDamage( Rand::DeterministicRandomGenerator & randomGenerator ) const
 {
     if ( doubleDamageChance == 100 || doubleDamageChance >= randomGenerator.Get( 1, 100 ) ) {
         DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "Catapult dealt double damage! (" << doubleDamageChance << "% chance)" )
@@ -99,7 +99,7 @@ fheroes2::Point Battle::Catapult::GetTargetPosition( int target, bool hit )
     return fheroes2::Point();
 }
 
-int Battle::Catapult::GetTarget( const std::vector<uint32_t> & stateOfCastleDefences, const Rand::DeterministicRandomGenerator & randomGenerator )
+int Battle::Catapult::GetTarget( const std::vector<uint32_t> & stateOfCastleDefences, Rand::DeterministicRandomGenerator & randomGenerator )
 {
     std::vector<uint32_t> targets;
     targets.reserve( 4 );
@@ -151,7 +151,7 @@ int Battle::Catapult::GetTarget( const std::vector<uint32_t> & stateOfCastleDefe
     return 0;
 }
 
-bool Battle::Catapult::IsNextShotHit( const Rand::DeterministicRandomGenerator & randomGenerator ) const
+bool Battle::Catapult::IsNextShotHit( Rand::DeterministicRandomGenerator & randomGenerator ) const
 {
     // Miss chance is 25%
     return !( canMiss && randomGenerator.Get( 1, 20 ) < 6 );

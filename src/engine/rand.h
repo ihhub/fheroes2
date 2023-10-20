@@ -125,10 +125,10 @@ namespace Rand
         uint32_t GetSeed() const;
         void UpdateSeed( const uint32_t seed );
 
-        uint32_t Get( const uint32_t from, const uint32_t to = 0 ) const;
+        uint32_t Get( const uint32_t from, const uint32_t to = 0 );
 
         template <typename T>
-        const T & Get( const std::vector<T> & vec ) const
+        const T & Get( const std::vector<T> & vec )
         {
             ++_currentSeed;
             std::mt19937 seededGen( _currentSeed );
@@ -136,7 +136,7 @@ namespace Rand
         }
 
     private:
-        mutable uint32_t _currentSeed;
+        uint32_t _currentSeed;
     };
 }
 
