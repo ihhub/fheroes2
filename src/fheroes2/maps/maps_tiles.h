@@ -38,7 +38,6 @@
 #include "mp2.h"
 #include "world_regions.h"
 
-class Heroes;
 class StreamBase;
 
 namespace Maps

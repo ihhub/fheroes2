@@ -22,6 +22,9 @@
  ***************************************************************************/
 
 #include "icn.h"
+
+#include <cassert>
+
 #include "color.h"
 #include "heroes.h"
 #include "race.h"
