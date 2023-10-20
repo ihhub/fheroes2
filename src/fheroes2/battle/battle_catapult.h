@@ -52,7 +52,7 @@ namespace Battle
     class Catapult
     {
     public:
-        explicit Catapult( const HeroBase & hero, const Rand::DeterministicRandomGenerator & randomGenerator );
+        explicit Catapult( const HeroBase & hero );
         Catapult( const Catapult & ) = delete;
 
         Catapult & operator=( const Catapult & ) = delete;
@@ -64,15 +64,14 @@ namespace Battle
             return catShots;
         }
 
-        int GetTarget( const std::vector<uint32_t> & ) const;
-        uint32_t GetDamage() const;
-        bool IsNextShotHit() const;
+        int GetTarget( const std::vector<uint32_t> & stateOfCastleDefences, const Rand::DeterministicRandomGenerator & randomGenerator ) const;
+        uint32_t GetDamage( const Rand::DeterministicRandomGenerator & randomGenerator ) const;
+        bool IsNextShotHit( const Rand::DeterministicRandomGenerator & randomGenerator ) const;
 
     private:
         uint32_t catShots;
         uint32_t doubleDamageChance;
         bool canMiss;
-        const Rand::DeterministicRandomGenerator & _randomGenerator;
     };
 }
 

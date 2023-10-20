@@ -21,22 +21,22 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "battle_catapult.h"
+
 #include <algorithm>
 #include <ostream>
 
 #include "artifact.h"
 #include "artifact_info.h"
-#include "battle_catapult.h"
 #include "heroes_base.h"
 #include "logging.h"
 #include "rand.h"
 #include "skill.h"
 
-Battle::Catapult::Catapult( const HeroBase & hero, const Rand::DeterministicRandomGenerator & randomGenerator )
+Battle::Catapult::Catapult( const HeroBase & hero )
     : catShots( 1 )
     , doubleDamageChance( 25 )
     , canMiss( true )
-    , _randomGenerator( randomGenerator )
 {
     switch ( hero.GetLevelSkill( Skill::Secondary::BALLISTICS ) ) {
     case Skill::Level::BASIC:
@@ -63,9 +63,9 @@ Battle::Catapult::Catapult( const HeroBase & hero, const Rand::DeterministicRand
     catShots += hero.GetBagArtifacts().getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::EXTRA_CATAPULT_SHOTS );
 }
 
-uint32_t Battle::Catapult::GetDamage() const
+uint32_t Battle::Catapult::GetDamage( const Rand::DeterministicRandomGenerator & randomGenerator ) const
 {
-    if ( doubleDamageChance == 100 || doubleDamageChance >= _randomGenerator.Get( 1, 100 ) ) {
+    if ( doubleDamageChance == 100 || doubleDamageChance >= randomGenerator.Get( 1, 100 ) ) {
         DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "Catapult dealt double damage! (" << doubleDamageChance << "% chance)" )
         return 2;
     }
@@ -99,52 +99,52 @@ fheroes2::Point Battle::Catapult::GetTargetPosition( int target, bool hit )
     return fheroes2::Point();
 }
 
-int Battle::Catapult::GetTarget( const std::vector<uint32_t> & values ) const
+int Battle::Catapult::GetTarget( const std::vector<uint32_t> & stateOfCastleDefences, const Rand::DeterministicRandomGenerator & randomGenerator ) const
 {
     std::vector<uint32_t> targets;
     targets.reserve( 4 );
 
     // check walls
-    if ( 0 != values[CAT_WALL1] )
+    if ( 0 != stateOfCastleDefences[CAT_WALL1] )
         targets.push_back( CAT_WALL1 );
-    if ( 0 != values[CAT_WALL2] )
+    if ( 0 != stateOfCastleDefences[CAT_WALL2] )
         targets.push_back( CAT_WALL2 );
-    if ( 0 != values[CAT_WALL3] )
+    if ( 0 != stateOfCastleDefences[CAT_WALL3] )
         targets.push_back( CAT_WALL3 );
-    if ( 0 != values[CAT_WALL4] )
+    if ( 0 != stateOfCastleDefences[CAT_WALL4] )
         targets.push_back( CAT_WALL4 );
 
     // check right/left towers
     if ( targets.empty() ) {
-        if ( values[CAT_TOWER1] )
+        if ( stateOfCastleDefences[CAT_TOWER1] )
             targets.push_back( CAT_TOWER1 );
-        if ( values[CAT_TOWER2] )
+        if ( stateOfCastleDefences[CAT_TOWER2] )
             targets.push_back( CAT_TOWER2 );
     }
 
     // check bridge
     if ( targets.empty() ) {
-        if ( values[CAT_BRIDGE] )
+        if ( stateOfCastleDefences[CAT_BRIDGE] )
             targets.push_back( CAT_BRIDGE );
     }
 
     // check general tower
     if ( targets.empty() ) {
-        if ( values[CAT_CENTRAL_TOWER] )
+        if ( stateOfCastleDefences[CAT_CENTRAL_TOWER] )
             targets.push_back( CAT_CENTRAL_TOWER );
     }
 
     if ( !targets.empty() ) {
-        return _randomGenerator.Get( targets );
+        return randomGenerator.Get( targets );
     }
 
-    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "target not found.." )
+    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "no target was found" )
 
     return 0;
 }
 
-bool Battle::Catapult::IsNextShotHit() const
+bool Battle::Catapult::IsNextShotHit( const Rand::DeterministicRandomGenerator & randomGenerator ) const
 {
     // Miss chance is 25%
-    return !( canMiss && _randomGenerator.Get( 1, 20 ) < 6 );
+    return !( canMiss && randomGenerator.Get( 1, 20 ) < 6 );
 }

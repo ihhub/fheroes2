@@ -118,9 +118,8 @@ namespace Rand
     {
     public:
         explicit DeterministicRandomGenerator( const uint32_t initialSeed );
-
-        // prevent accidental copies
         DeterministicRandomGenerator( const DeterministicRandomGenerator & ) = delete;
+
         DeterministicRandomGenerator & operator=( const DeterministicRandomGenerator & ) = delete;
 
         uint32_t GetSeed() const;
@@ -136,15 +135,8 @@ namespace Rand
             return Rand::GetWithGen( vec, seededGen );
         }
 
-        template <class T>
-        void Shuffle( std::vector<T> & vector ) const
-        {
-            ++_currentSeed;
-            Rand::ShuffleWithSeed( vector, _currentSeed );
-        }
-
     private:
-        mutable uint32_t _currentSeed; // this is mutable so clients that only call RNG method can receive a const instance
+        mutable uint32_t _currentSeed;
     };
 }
 

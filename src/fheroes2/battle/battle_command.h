@@ -24,11 +24,14 @@
 #ifndef H2BATTLE_COMMAND_H
 #define H2BATTLE_COMMAND_H
 
+#include <cassert>
 #include <cstddef>
 #include <cstdint>
 #include <functional>
 #include <type_traits>
 #include <vector>
+
+#include "spell.h"
 
 namespace Battle
 {
@@ -48,26 +51,125 @@ namespace Battle
         MSG_BATTLE_AUTO_FINISH
     };
 
-    class Command : public std::vector<int>
+    class Command final : public std::vector<int>
     {
     public:
-        explicit Command( const CommandType cmd );
-        Command( const CommandType cmd, const int param1, const int param2 = -1, const int param3 = -1, const int param4 = -1 );
+        static constexpr std::integral_constant<CommandType, CommandType::MSG_BATTLE_MOVE> MOVE{};
+        static constexpr std::integral_constant<CommandType, CommandType::MSG_BATTLE_ATTACK> ATTACK{};
+        static constexpr std::integral_constant<CommandType, CommandType::MSG_BATTLE_CAST> CAST{};
+        static constexpr std::integral_constant<CommandType, CommandType::MSG_BATTLE_MORALE> MORALE{};
+        static constexpr std::integral_constant<CommandType, CommandType::MSG_BATTLE_CATAPULT> CATAPULT{};
+        static constexpr std::integral_constant<CommandType, CommandType::MSG_BATTLE_TOWER> TOWER{};
+        static constexpr std::integral_constant<CommandType, CommandType::MSG_BATTLE_RETREAT> RETREAT{};
+        static constexpr std::integral_constant<CommandType, CommandType::MSG_BATTLE_SURRENDER> SURRENDER{};
+        static constexpr std::integral_constant<CommandType, CommandType::MSG_BATTLE_SKIP> SKIP{};
+        static constexpr std::integral_constant<CommandType, CommandType::MSG_BATTLE_END_TURN> END_TURN{};
+        static constexpr std::integral_constant<CommandType, CommandType::MSG_BATTLE_AUTO_SWITCH> AUTO_SWITCH{};
+        static constexpr std::integral_constant<CommandType, CommandType::MSG_BATTLE_AUTO_FINISH> AUTO_FINISH{};
+
+        template <CommandType cmd, typename... Types>
+        Command( std::integral_constant<CommandType, cmd>, const Types... params )
+            : _type( cmd )
+        {
+            if constexpr ( cmd == CommandType::MSG_BATTLE_MOVE ) {
+                // UID, cell index
+                static_assert( sizeof...( params ) == 2 );
+            }
+            else if constexpr ( cmd == CommandType::MSG_BATTLE_ATTACK ) {
+                // Attacker UID, defender UID, cell index, direction
+                static_assert( sizeof...( params ) == 4 );
+            }
+            else if constexpr ( cmd == CommandType::MSG_BATTLE_CAST ) {
+                static_assert( sizeof...( params ) > 0 );
+
+                const int spellId = std::get<0>( std::make_tuple( params... ) );
+
+                if ( spellId == Spell::MIRRORIMAGE ) {
+                    // Spell, UID
+                    assert( sizeof...( params ) == 2 );
+                }
+                else if ( spellId == Spell::TELEPORT ) {
+                    // Spell, src index, dst index
+                    assert( sizeof...( params ) == 3 );
+                }
+                else {
+                    // Spell, cell index
+                    assert( sizeof...( params ) == 2 );
+                }
+            }
+            else if constexpr ( cmd == CommandType::MSG_BATTLE_MORALE ) {
+                // UID, morale
+                static_assert( sizeof...( params ) == 2 );
+            }
+            else if constexpr ( cmd == CommandType::MSG_BATTLE_TOWER ) {
+                // Tower type, UID
+                static_assert( sizeof...( params ) == 2 );
+            }
+            else if constexpr ( cmd == CommandType::MSG_BATTLE_SKIP ) {
+                // UID
+                static_assert( sizeof...( params ) == 1 );
+            }
+            else if constexpr ( cmd == CommandType::MSG_BATTLE_END_TURN ) {
+                // UID
+                static_assert( sizeof...( params ) == 1 );
+            }
+            else if constexpr ( cmd == CommandType::MSG_BATTLE_AUTO_SWITCH ) {
+                // Color
+                static_assert( sizeof...( params ) == 1 );
+            }
+            else {
+                static_assert( sizeof...( params ) == 0 );
+            }
+
+            if constexpr ( sizeof...( params ) > 0 ) {
+                int dummy = 0;
+
+                // Put the elements of the parameter pack in reverse order using the right-to-left associativity of the assignment operator
+                ( ( *this << params, dummy ) = ... );
+            }
+        }
+
+        explicit Command( const CommandType cmd )
+            : _type( cmd )
+        {}
 
         CommandType GetType() const
         {
             return _type;
         }
 
-        int GetValue();
+        int GetValue()
+        {
+            int val = 0;
+
+            *this >> val;
+
+            return val;
+        }
 
         bool isType( const CommandType cmd ) const
         {
             return _type == cmd;
         }
 
-        Command & operator<<( const int );
-        Command & operator>>( int & );
+        Command & operator<<( const int val )
+        {
+            push_back( val );
+
+            return *this;
+        }
+
+        Command & operator>>( int & val )
+        {
+            if ( !empty() ) {
+                val = back();
+                pop_back();
+            }
+
+            return *this;
+        }
+
+        uint32_t updateRandomSeed( const uint32_t seed ) const;
 
     private:
         CommandType _type;

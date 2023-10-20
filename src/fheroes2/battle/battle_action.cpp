@@ -172,7 +172,7 @@ void Battle::Arena::BattleProcess( Unit & attacker, Unit & defender, int32_t dst
     }
 
     // Update the attacker's luck right before the attack
-    attacker.SetRandomLuck();
+    attacker.SetRandomLuck( _randomGenerator );
 
     // Do damage first
     TargetsInfo attackTargets = GetTargetsForDamage( attacker, defender, dst, dir );
@@ -189,7 +189,7 @@ void Battle::Arena::BattleProcess( Unit & attacker, Unit & defender, int32_t dst
     }
 
     // Then apply the attacker's built-in spell
-    const Spell spell = attacker.GetSpellMagic();
+    const Spell spell = attacker.GetSpellMagic( _randomGenerator );
 
     if ( spell.isValid() ) {
         // Only single target spells and special built-in only spells are allowed
@@ -674,7 +674,7 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForDamage( const Unit & attacker, U
 
     // first target
     res.defender = &defender;
-    res.damage = attacker.GetDamage( defender );
+    res.damage = attacker.GetDamage( defender, _randomGenerator );
 
     // Genie special attack
     if ( attacker.GetID() == Monster::GENIE && _randomGenerator.Get( 1, 10 ) == 2 && defender.GetHitPoints() / 2 > res.damage ) {
@@ -704,7 +704,7 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForDamage( const Unit & attacker, U
 
         if ( enemy && consideredTargets.insert( enemy ).second ) {
             res.defender = enemy;
-            res.damage = attacker.GetDamage( *enemy );
+            res.damage = attacker.GetDamage( *enemy, _randomGenerator );
 
             targets.push_back( res );
         }
@@ -718,7 +718,7 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForDamage( const Unit & attacker, U
 
             if ( enemy && enemy->GetColor() != attacker.GetCurrentColor() && consideredTargets.insert( enemy ).second ) {
                 res.defender = enemy;
-                res.damage = attacker.GetDamage( *enemy );
+                res.damage = attacker.GetDamage( *enemy, _randomGenerator );
 
                 targets.push_back( res );
             }
@@ -733,7 +733,7 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForDamage( const Unit & attacker, U
 
             if ( enemy && consideredTargets.insert( enemy ).second ) {
                 res.defender = enemy;
-                res.damage = attacker.GetDamage( *enemy );
+                res.damage = attacker.GetDamage( *enemy, _randomGenerator );
 
                 targets.push_back( res );
             }
@@ -988,7 +988,7 @@ void Battle::Arena::ApplyActionTower( Command & cmd )
 
         TargetInfo target;
         target.defender = unit;
-        target.damage = tower->GetDamage( *unit );
+        target.damage = tower->GetDamage( *unit, _randomGenerator );
 
         if ( _interface )
             _interface->RedrawActionTowerPart1( *tower, *unit );

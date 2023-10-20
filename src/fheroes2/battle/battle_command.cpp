@@ -22,91 +22,45 @@
  ***************************************************************************/
 
 #include "battle_command.h"
-#include "spell.h"
 
-Battle::Command::Command( const CommandType cmd )
-    : _type( cmd )
-{}
+#include <algorithm>
 
-Battle::Command & Battle::Command::operator<<( const int val )
+#include "tools.h"
+
+uint32_t Battle::Command::updateRandomSeed( const uint32_t seed ) const
 {
-    push_back( val );
-    return *this;
-}
+    uint32_t newSeed = seed;
 
-Battle::Command & Battle::Command::operator>>( int & val )
-{
-    if ( !empty() ) {
-        val = back();
-        pop_back();
-    }
-    return *this;
-}
-
-int Battle::Command::GetValue()
-{
-    int val = 0;
-    *this >> val;
-    return val;
-}
-
-Battle::Command::Command( const CommandType cmd, const int param1, const int param2 /* = -1 */, const int param3 /* = -1 */, const int param4 /* = -1 */ )
-    : _type( cmd )
-{
     switch ( _type ) {
-    case CommandType::MSG_BATTLE_AUTO_SWITCH:
-        *this << param1; // color
-        break;
+    case CommandType::MSG_BATTLE_ATTACK:
+        assert( size() == 4 );
 
-    case CommandType::MSG_BATTLE_SURRENDER:
-    case CommandType::MSG_BATTLE_RETREAT:
-    case CommandType::MSG_BATTLE_AUTO_FINISH:
-        break;
-
-    case CommandType::MSG_BATTLE_TOWER:
-        *this << param2 << param1; // enemy uid, type
-        break;
-
-    case CommandType::MSG_BATTLE_CATAPULT: // battle_arena.cpp
-        break;
-
-    case CommandType::MSG_BATTLE_CAST:
-        switch ( param1 ) {
-        case Spell::MIRRORIMAGE:
-            *this << param2 << param1; // who, spell
-            break;
-
-        case Spell::TELEPORT:
-            *this << param3 << param2 << param1; // dst, src, spell
-            break;
-
-        default:
-            *this << param2 << param1; // dst, spell
-            break;
-        }
-        break;
-
-    case CommandType::MSG_BATTLE_END_TURN:
-        *this << param1; // uid
-        break;
-
-    case CommandType::MSG_BATTLE_SKIP:
-        *this << param1; // uid
+        fheroes2::hashCombine( newSeed, _type );
+        fheroes2::hashCombine( newSeed, at( 2 ) );
+        fheroes2::hashCombine( newSeed, at( 3 ) );
         break;
 
     case CommandType::MSG_BATTLE_MOVE:
-        *this << param2 << param1; // dst, uid
-        break;
-
-    case CommandType::MSG_BATTLE_ATTACK:
-        *this << param4 << param3 << param2 << param1; // direction, dst, uid, uid
-        break;
-
+    case CommandType::MSG_BATTLE_CAST:
     case CommandType::MSG_BATTLE_MORALE:
-        *this << param2 << param1; // state, uid
+    case CommandType::MSG_BATTLE_CATAPULT:
+    case CommandType::MSG_BATTLE_TOWER:
+    case CommandType::MSG_BATTLE_RETREAT:
+    case CommandType::MSG_BATTLE_SURRENDER:
+    case CommandType::MSG_BATTLE_SKIP:
+        fheroes2::hashCombine( newSeed, _type );
+        std::for_each( begin(), end(), [&newSeed]( const int param ) { fheroes2::hashCombine( newSeed, param ); } );
+        break;
+
+    case CommandType::MSG_BATTLE_END_TURN:
+    case CommandType::MSG_BATTLE_AUTO_SWITCH:
+    case CommandType::MSG_BATTLE_AUTO_FINISH:
         break;
 
     default:
+        assert( 0 );
         break;
     }
+
+    return newSeed;
 }

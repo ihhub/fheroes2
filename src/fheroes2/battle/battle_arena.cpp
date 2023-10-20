@@ -27,6 +27,7 @@
 #include <cassert>
 #include <cstddef>
 #include <iterator>
+#include <numeric>
 #include <ostream>
 #include <random>
 #include <type_traits>
@@ -71,25 +72,6 @@
 namespace
 {
     Battle::Arena * arena = nullptr;
-
-    // Compute a new seed from a list of actions, so random actions happen differently depending on user inputs
-    uint32_t UpdateRandomSeed( const uint32_t seed, const Battle::Actions & actions )
-    {
-        uint32_t newSeed = seed;
-
-        for ( const Battle::Command & command : actions ) {
-            if ( command.GetType() == Battle::CommandType::MSG_BATTLE_AUTO_SWITCH || command.GetType() == Battle::CommandType::MSG_BATTLE_AUTO_FINISH ) {
-                continue; // Events related to the auto battle are ignored for the purpose of this hash
-            }
-
-            fheroes2::hashCombine( newSeed, command.GetType() );
-            for ( const int commandArg : command ) {
-                fheroes2::hashCombine( newSeed, commandArg );
-            }
-        }
-
-        return newSeed;
-    }
 
     int GetCovr( int ground, std::mt19937 & gen )
     {
@@ -302,8 +284,8 @@ Battle::Arena::Arena( Army & army1, Army & army2, const int32_t tileIndex, const
     assert( arena == nullptr );
     arena = this;
 
-    _army1 = std::make_unique<Force>( army1, false, _randomGenerator, _uidGenerator );
-    _army2 = std::make_unique<Force>( army2, true, _randomGenerator, _uidGenerator );
+    _army1 = std::make_unique<Force>( army1, false, _uidGenerator );
+    _army2 = std::make_unique<Force>( army2, true, _uidGenerator );
 
     // If this is a siege of a town, then there is in fact no castle
     if ( castle && !castle->isCastle() ) {
@@ -331,17 +313,17 @@ Battle::Arena::Arena( Army & army1, Army & army2, const int32_t tileIndex, const
 
     if ( castle ) {
         if ( castle->isBuild( BUILD_LEFTTURRET ) ) {
-            _towers[0] = std::make_unique<Tower>( *castle, TowerType::TWR_LEFT, _randomGenerator, _uidGenerator.GetUnique() );
+            _towers[0] = std::make_unique<Tower>( *castle, TowerType::TWR_LEFT, _uidGenerator.GetUnique() );
         }
 
-        _towers[1] = std::make_unique<Tower>( *castle, TowerType::TWR_CENTER, _randomGenerator, _uidGenerator.GetUnique() );
+        _towers[1] = std::make_unique<Tower>( *castle, TowerType::TWR_CENTER, _uidGenerator.GetUnique() );
 
         if ( castle->isBuild( BUILD_RIGHTTURRET ) ) {
-            _towers[2] = std::make_unique<Tower>( *castle, TowerType::TWR_RIGHT, _randomGenerator, _uidGenerator.GetUnique() );
+            _towers[2] = std::make_unique<Tower>( *castle, TowerType::TWR_RIGHT, _uidGenerator.GetUnique() );
         }
 
         if ( _army1->GetCommander() ) {
-            _catapult = std::make_unique<Catapult>( *_army1->GetCommander(), _randomGenerator );
+            _catapult = std::make_unique<Catapult>( *_army1->GetCommander() );
         }
 
         _bridge = std::make_unique<Bridge>();
@@ -407,7 +389,7 @@ void Battle::Arena::TurnTroop( Unit * troop, const Units & orderHistory )
     DEBUG_LOG( DBG_BATTLE, DBG_TRACE, troop->String( true ) )
 
     if ( troop->isAffectedByMorale() ) {
-        troop->SetRandomMorale();
+        troop->SetRandomMorale( _randomGenerator );
     }
 
     assert( !troop->AllModes( MORALE_GOOD | MORALE_BAD ) );
@@ -441,7 +423,7 @@ void Battle::Arena::TurnTroop( Unit * troop, const Units & orderHistory )
         }
         else if ( troop->Modes( MORALE_BAD ) ) {
             // Bad morale
-            actions.emplace_back( CommandType::MSG_BATTLE_MORALE, troop->GetUID(), false );
+            actions.emplace_back( Command::MORALE, troop->GetUID(), false );
         }
         else {
             // This unit will certainly perform at least one full-fledged action
@@ -459,7 +441,8 @@ void Battle::Arena::TurnTroop( Unit * troop, const Units & orderHistory )
             }
         }
 
-        const uint32_t newSeed = UpdateRandomSeed( _randomGenerator.GetSeed(), actions );
+        const uint32_t newSeed = std::accumulate( actions.cbegin(), actions.cend(), _randomGenerator.GetSeed(),
+                                                  []( const uint32_t seed, const Command & cmd ) { return cmd.updateRandomSeed( seed ); } );
         _randomGenerator.UpdateSeed( newSeed );
 
         while ( !actions.empty() ) {
@@ -483,7 +466,7 @@ void Battle::Arena::TurnTroop( Unit * troop, const Units & orderHistory )
 
             // Good morale
             if ( troop->isValid() && troop->Modes( TR_MOVED ) && troop->Modes( MORALE_GOOD ) && !troop->isImmovable() && !isSkipsMove ) {
-                actions.emplace_back( CommandType::MSG_BATTLE_MORALE, troop->GetUID(), true );
+                actions.emplace_back( Command::MORALE, troop->GetUID(), true );
             }
         }
 
@@ -663,7 +646,7 @@ void Battle::Arena::TowerAction( const Tower & twr )
     using TowerGetTypeUnderlyingType = typename std::underlying_type_t<decltype( twr.GetType() )>;
     static_assert( std::is_same_v<TowerGetTypeUnderlyingType, uint8_t>, "Type of Tower::GetType() has been changed, check the logic below" );
 
-    Command cmd( CommandType::MSG_BATTLE_TOWER, static_cast<TowerGetTypeUnderlyingType>( twr.GetType() ), targetInfo.first->GetUID() );
+    Command cmd( Command::TOWER, static_cast<TowerGetTypeUnderlyingType>( twr.GetType() ), targetInfo.first->GetUID() );
 
     ApplyAction( cmd );
 
@@ -674,34 +657,34 @@ void Battle::Arena::CatapultAction()
 {
     if ( _catapult ) {
         uint32_t shots = _catapult->GetShots();
-        std::vector<uint32_t> values( CAT_CENTRAL_TOWER + 1, 0 );
+        std::vector<uint32_t> stateOfCastleDefences( CAT_CENTRAL_TOWER + 1, 0 );
 
-        values[CAT_WALL1] = GetCastleTargetValue( CAT_WALL1 );
-        values[CAT_WALL2] = GetCastleTargetValue( CAT_WALL2 );
-        values[CAT_WALL3] = GetCastleTargetValue( CAT_WALL3 );
-        values[CAT_WALL4] = GetCastleTargetValue( CAT_WALL4 );
-        values[CAT_TOWER1] = GetCastleTargetValue( CAT_TOWER1 );
-        values[CAT_TOWER2] = GetCastleTargetValue( CAT_TOWER2 );
-        values[CAT_BRIDGE] = GetCastleTargetValue( CAT_BRIDGE );
-        values[CAT_CENTRAL_TOWER] = GetCastleTargetValue( CAT_CENTRAL_TOWER );
+        stateOfCastleDefences[CAT_WALL1] = GetCastleTargetValue( CAT_WALL1 );
+        stateOfCastleDefences[CAT_WALL2] = GetCastleTargetValue( CAT_WALL2 );
+        stateOfCastleDefences[CAT_WALL3] = GetCastleTargetValue( CAT_WALL3 );
+        stateOfCastleDefences[CAT_WALL4] = GetCastleTargetValue( CAT_WALL4 );
+        stateOfCastleDefences[CAT_TOWER1] = GetCastleTargetValue( CAT_TOWER1 );
+        stateOfCastleDefences[CAT_TOWER2] = GetCastleTargetValue( CAT_TOWER2 );
+        stateOfCastleDefences[CAT_BRIDGE] = GetCastleTargetValue( CAT_BRIDGE );
+        stateOfCastleDefences[CAT_CENTRAL_TOWER] = GetCastleTargetValue( CAT_CENTRAL_TOWER );
 
-        Command cmd( CommandType::MSG_BATTLE_CATAPULT );
+        Command cmd( Command::CATAPULT );
 
         cmd << shots;
 
         while ( shots-- ) {
-            const int target = _catapult->GetTarget( values );
-            const uint32_t damage = std::min( _catapult->GetDamage(), values[target] );
-            const bool hit = _catapult->IsNextShotHit();
+            const int target = _catapult->GetTarget( stateOfCastleDefences, _randomGenerator );
+            const uint32_t damage = std::min( _catapult->GetDamage( _randomGenerator ), stateOfCastleDefences[target] );
+            const bool hit = _catapult->IsNextShotHit( _randomGenerator );
 
             cmd << target << damage << ( hit ? 1 : 0 );
 
             if ( hit ) {
-                values[target] -= damage;
+                stateOfCastleDefences[target] -= damage;
             }
         }
 
-        // preserve the order of shots - command arguments will be extracted in reverse order
+        // Preserve the order of shots - command arguments will be extracted in reverse order
         std::reverse( cmd.begin(), cmd.end() );
 
         ApplyAction( cmd );
@@ -1134,7 +1117,7 @@ Battle::Unit * Battle::Arena::CreateElemental( const Spell & spell )
     // An elemental could not be a wide unit
     assert( pos.GetHead() != nullptr && pos.GetTail() == nullptr );
 
-    Unit * elem = new Unit( Troop( mons, count ), pos, reflect, _randomGenerator, _uidGenerator.GetUnique() );
+    Unit * elem = new Unit( Troop( mons, count ), pos, reflect, _uidGenerator.GetUnique() );
 
     elem->SetModes( CAP_SUMMONELEM );
     elem->SetArmy( hero->GetArmy() );
@@ -1146,7 +1129,7 @@ Battle::Unit * Battle::Arena::CreateElemental( const Spell & spell )
 
 Battle::Unit * Battle::Arena::CreateMirrorImage( Unit & unit )
 {
-    Unit * mirrorUnit = new Unit( unit, {}, unit.isReflect(), _randomGenerator, _uidGenerator.GetUnique() );
+    Unit * mirrorUnit = new Unit( unit, {}, unit.isReflect(), _uidGenerator.GetUnique() );
 
     mirrorUnit->SetArmy( *unit.GetArmy() );
     mirrorUnit->SetMirror( &unit );

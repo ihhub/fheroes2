@@ -293,7 +293,7 @@ namespace AI
             double possibleReinforcementStrength = possibleReinforcement.GetStrength();
 
             // A very rough estimation of strength. We measure the strength of possible army to hire with the strength of purchasing a turret.
-            const Battle::Tower tower( castle, Battle::TowerType::TWR_RIGHT, Rand::DeterministicRandomGenerator( 0 ), 0 );
+            const Battle::Tower tower( castle, Battle::TowerType::TWR_RIGHT, 0 );
             const Troop towerMonster( Monster::ARCHER, tower.GetCount() );
             const double towerStrength = towerMonster.GetStrength();
             if ( possibleReinforcementStrength > towerStrength ) {
