@@ -801,7 +801,18 @@ namespace AI
             const auto evaluateEnemyTarget = [&currentUnit, &target, &bestOutcome]( const Unit * enemy ) {
                 assert( enemy != nullptr );
 
-                const int archerMeleeDmg = currentUnit.CalculateMinDamage( *enemy );
+                const int archerMeleeDmg = [&currentUnit, enemy]() {
+                    if ( currentUnit.Modes( SP_CURSE ) ) {
+                        return currentUnit.CalculateMinDamage( *enemy );
+                    }
+
+                    if ( currentUnit.Modes( SP_BLESS ) ) {
+                        return currentUnit.CalculateMaxDamage( *enemy );
+                    }
+
+                    return ( currentUnit.CalculateMinDamage( *enemy ) + currentUnit.CalculateMaxDamage( *enemy ) ) / 2;
+                }();
+
                 const int damageDiff = archerMeleeDmg - enemy->EstimateRetaliatoryDamage( archerMeleeDmg );
 
                 if ( bestOutcome < damageDiff ) {
