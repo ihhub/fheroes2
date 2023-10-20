@@ -123,9 +123,10 @@ namespace Battle
             }
 
             if constexpr ( sizeof...( params ) > 0 ) {
-                int dummy = 0;
+                reserve( sizeof...( params ) );
 
                 // Put the elements of the parameter pack in reverse order using the right-to-left associativity of the assignment operator
+                int dummy = 0;
                 (void)( ( *this << params, dummy ) = ... );
             }
         }
