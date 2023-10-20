@@ -2417,26 +2417,26 @@ namespace fheroes2
                 if ( _icnVsSprite[id].size() == 60 ) {
                     _icnVsSprite[id].resize( 73 );
                     for ( uint32_t i = 60; i < 66; ++i ) {
-                        // Mass Cure
+                        // Mass Cure spell. ( when i == 60 ).
                         size_t originalIndex = 6;
                         if ( i == 61 ) {
-                            // Mass Haste
+                            // Mass Haste spell.
                             originalIndex = 14;
                         }
                         else if ( i == 62 ) {
-                            // Mass Slow
+                            // Mass Slow spell.
                             originalIndex = 1;
                         }
                         else if ( i == 63 ) {
-                            // Mass Bless
+                            // Mass Bless spell.
                             originalIndex = 7;
                         }
                         else if ( i == 64 ) {
-                            // Mass Curse
+                            // Mass Curse spell.
                             originalIndex = 3;
                         }
                         else if ( i == 65 ) {
-                            // Mass Shield
+                            // Mass Shield spell.
                             originalIndex = 15;
                         }
 
@@ -2457,13 +2457,13 @@ namespace fheroes2
                     // The Petrification spell does not have its own icon in the original game.
                     h2d::readImage( "petrification_spell_icon.image", _icnVsSprite[id][66] );
 
-                    // Generate random spell images for Editor.
+                    // Generate random spell image for Editor.
                     Sprite randomSpellImage( _icnVsSprite[id][18] );
                     int32_t imageWidth = randomSpellImage.width();
-                    // ApplyTransform( randomSpellImage, 0, 0, imageWidth, randomSpellImage.height(), 2U );
                     ApplyPalette( randomSpellImage, PAL::GetPalette( PAL::PaletteType::BROWN ) );
                     Blit( randomSpellImage, randomSpellImage, true );
 
+                    // Add text on random spell images.
                     for ( uint32_t i = 1; i < 6; ++i ) {
                         Sprite & originalImage = _icnVsSprite[id][i + 67];
                         Copy( randomSpellImage, originalImage );
@@ -3590,12 +3590,12 @@ namespace fheroes2
             case ICN::OBJNARTI:
                 LoadOriginalICN( id );
                 if ( _icnVsSprite[id].size() == 206 ) {
-                    // Move all random artifacts to the end. It is done for Editor (only for PoL assets).
+                    // Move all random artifacts to the end. This is done for Editor (only with PoL assets).
                     _icnVsSprite[id].resize( 216 );
                     for ( size_t i = 162; i < 172; ++i ) {
                         std::swap( _icnVsSprite[id][i], _icnVsSprite[id][i + 44] );
                     }
-                    // All artifacts main images have odd indexes except the Ultimate Artifact. We fix it.
+                    // All artifacts' main images have odd indexes except the Ultimate Artifact. We fix it.
                     std::swap( _icnVsSprite[id][208], _icnVsSprite[id][209] );
                 }
                 return true;

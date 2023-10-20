@@ -490,7 +490,7 @@ Spell Dialog::selectSpell( const int spellId, const bool includeRandomSpells )
     std::vector<int> spells = Spell::getAllSpellIdsSuitableForSpellBook();
 
     if ( includeRandomSpells ) {
-        // We add random spells placeholders to the end of the list.
+        // We add random spell items to the end of the list.
         for ( int randomSpellId = Spell::RANDOM; randomSpellId <= Spell::RANDOM5; ++randomSpellId ) {
             spells.push_back( randomSpellId );
         }
@@ -542,6 +542,7 @@ Artifact Dialog::selectArtifact( const int artifactId, const bool includeRandomA
             const int spellId = Dialog::selectSpell( Spell::RANDOM, true ).GetID();
 
             if ( spellId == Spell::NONE ) {
+                // No spell for the Spell Scroll artifact was selected - cancel the artifact selection.
                 return { Artifact::UNKNOWN };
             }
 

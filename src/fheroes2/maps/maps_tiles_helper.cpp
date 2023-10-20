@@ -1167,12 +1167,11 @@ namespace
         }
     }
 
-    // Checks all layers of tiles around for given UID and if it is found removes this object part and initiates search around this tile.
+    // Checks all layers in tiles around for given UID and if it is found removes this object part
+    // and initiates a new search around this tile using recursive call of this function.
     void removeUidFromTilesAround( const int32_t centerTileIndex, const uint32_t uid )
     {
-        const Maps::Indexes around = Maps::getAroundIndexes( centerTileIndex );
-
-        for ( const int32_t tileIndex : around ) {
+        for ( const int32_t tileIndex : Maps::getAroundIndexes( centerTileIndex ) ) {
             Maps::Tiles & currentTile = world.GetTiles( tileIndex );
 
             if ( currentTile.GetObjectUID() == uid ) {
@@ -3079,13 +3078,11 @@ namespace Maps
 
     void setArtifactOnTile( Tiles & tile, const Artifact & artifact )
     {
-        if ( !artifact.isValid() ) {
-            DEBUG_LOG( DBG_GAME, DBG_WARN, "Failed to set an artifact on tile " << tile.GetIndex() )
-            return;
-        }
+        // You can not place an invalid artifact.
+        assert( artifact.isValid() );
 
         const int artifactId = artifact.GetID();
-        switch ( artifact.GetID() ) {
+        switch ( artifactId ) {
         case Artifact::RANDOM_ALL_LEVELS:
             tile.SetObject( MP2::OBJ_RANDOM_ARTIFACT );
             break;
@@ -3115,33 +3112,42 @@ namespace Maps
         tile.setObjectUID( getNewObjectUID() );
         tile.setObjectIcnType( MP2::OBJ_ICN_TYPE_OBJNARTI );
 
-        // Please refer to ICN::OBJNARTI for artifact images.
-        uint32_t artSpriteIndex = artifact.IndexSprite32() * 2 + 1;
+        // Each artifact occupies two tiles with: shadow image to the left and main image to the right.
+        uint32_t artShadowImageIndex = artifact.IndexSprite32() * 2;
 
         // A temporary fix for the first four ultimate artifacts.
-        if ( artSpriteIndex < 8 ) {
-            // TODO: Make map sprites for these four artifacts.
-            artSpriteIndex = 209;
+        if ( artShadowImageIndex < 8 ) {
+            // TODO: Make sprites for these ultimate artifacts.
+            artShadowImageIndex = 208;
         }
+
+        // Main image index is the next after the shadow image index, please refer to ICN::OBJNARTI.
+        const uint32_t artMainImageIndex = artShadowImageIndex + 1;
 
         using TileImageIndexType = decltype( tile.GetObjectSpriteIndex() );
         static_assert( std::is_same_v<TileImageIndexType, uint8_t>, "Type of GetObjectSpriteIndex() has been changed, check the logic below" );
 
-        assert( artSpriteIndex > std::numeric_limits<uint8_t>::min() && artSpriteIndex <= std::numeric_limits<uint8_t>::max() );
+        assert( artShadowImageIndex > std::numeric_limits<uint8_t>::min() && artMainImageIndex <= std::numeric_limits<uint8_t>::max() );
 
-        tile.setObjectSpriteIndex( static_cast<TileImageIndexType>( artSpriteIndex ) );
+        tile.setObjectSpriteIndex( static_cast<TileImageIndexType>( artMainImageIndex ) );
 
-        // Set artifact shadow.
+        // Set artifact shadow part.
         if ( isValidDirection( tile.GetIndex(), Direction::LEFT ) ) {
             Tiles & leftTile = world.GetTiles( GetDirectionIndex( tile.GetIndex(), Direction::LEFT ) );
             leftTile.pushBottomLayerAddon(
-                TilesAddon( SHADOW_LAYER, tile.GetObjectUID(), tile.getObjectIcnType(), static_cast<TileImageIndexType>( artSpriteIndex - 1 ) ) );
+                TilesAddon( SHADOW_LAYER, tile.GetObjectUID(), tile.getObjectIcnType(), static_cast<TileImageIndexType>( artShadowImageIndex ) ) );
         }
 
+        // Artifact ID should be in the first metadata container.
         tile.metadata()[0] = static_cast<uint32_t>( artifactId );
+
         if ( artifactId == Artifact::SPELL_SCROLL ) {
             tile.metadata()[1] = static_cast<uint32_t>( artifact.getSpellId() );
             tile.metadata()[2] = static_cast<uint32_t>( ArtifactCaptureCondition::CONTAINS_SPELL );
+        }
+        else {
+            tile.metadata()[1] = 0U;
+            tile.metadata()[2] = static_cast<uint32_t>( ArtifactCaptureCondition::NO_CONDITIONS );
         }
     }
 
@@ -3172,11 +3178,13 @@ namespace Maps
     bool removeObject( Tiles & tile, const uint32_t uid )
     {
         if ( uid == 0 ) {
+            // There is no such object on this tile.
             return false;
         }
 
         tile.Remove( uid );
 
+        // An object may occupy several tiles, we recursively check all around tiles for its parts by UID.
         removeUidFromTilesAround( tile.GetIndex(), uid );
 
         resetObjectMetadata( tile );
