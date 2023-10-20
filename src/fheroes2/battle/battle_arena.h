@@ -173,6 +173,9 @@ namespace Battle
 
         void ApplyAction( Command & );
 
+        // Returns a list of targets that will be affected by the given spell applied to a cell with a given index
+        // (potentially by the given hero). This method can be used by external code to evaluate the applicability
+        // of a spell, and does not use probabilistic mechanisms to determine units resisting the given spell.
         TargetsInfo GetTargetsForSpell( const HeroBase * hero, const Spell & spell, const int32_t dst );
 
         bool isSpellcastDisabled() const;
@@ -308,6 +311,11 @@ namespace Battle
 
         Rand::DeterministicRandomGenerator & _randomGenerator;
 
+        // This random number generator should only be used in code that is equally used by both AI and the human
+        // player - that is, in code related to the processing of battle commands. It cannot be safely used in other
+        // places (for example, in code that performs situation assessment or AI decision-making) because in this
+        // case the battles performed by AI will not be reproducible by a human player when performing exactly the
+        // same actions.
         TroopsUidGenerator _uidGenerator;
 
         enum
