@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-19 13:17+0000\n"
+"POT-Creation-Date: 2023-10-20 13:35+0000\n"
 "PO-Revision-Date: 2022-12-03 04:36+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <it@li.org>\n"
@@ -1766,6 +1766,9 @@ msgstr "Il/la %{building} produce %{monster}."
 msgid "Requires:"
 msgstr "Richiede:"
 
+msgid "Exit this menu without doing anything."
+msgstr "Esci dal menù senza far nulla."
+
 #, fuzzy
 msgid "Cannot build. You have already built here today."
 msgstr "Costruzione impossibile. Già costruito qua questo turno."
@@ -2468,6 +2471,9 @@ msgstr "con 1 artefatto."
 msgid "without artifacts."
 msgstr "senza artefatti."
 
+msgid "Recruit %{name} the %{race}"
+msgstr "Recluta %{name}: %{race}"
+
 msgid ""
 "'Spread' combat formation spreads your armies from the top to the bottom of "
 "the battlefield, with at least one empty space between each army."
@@ -2483,9 +2489,6 @@ msgstr "Formazione sparsa"
 
 msgid "Grouped Formation"
 msgstr "Formazione chiusa"
-
-msgid "Recruit %{name} the %{race}"
-msgstr "Recluta %{name}: %{race}"
 
 msgid "Set garrison combat formation to 'Spread'"
 msgstr ""
@@ -2562,9 +2565,6 @@ msgstr "Scava alla ricerca dell'Estremo Artefatto."
 
 msgid "Digging"
 msgstr "Scavo"
-
-msgid "Exit this menu without doing anything."
-msgstr "Esci dal menù senza far nulla."
 
 msgid "Arena"
 msgstr "Arena"

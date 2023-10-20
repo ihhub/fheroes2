@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-19 13:17+0000\n"
+"POT-Creation-Date: 2023-10-20 13:35+0000\n"
 "PO-Revision-Date: 2023-09-04 21:55+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -1784,6 +1784,9 @@ msgstr "A(z) %{building} %{monster}-t hoz létre."
 msgid "Requires:"
 msgstr "Előfeltétel:"
 
+msgid "Exit this menu without doing anything."
+msgstr "Kilépés ebből a menüből, bármilyen cselekvés nélkül."
+
 msgid "Cannot build. You have already built here today."
 msgstr "Nem építhető. Már építettél ide ebben körben."
 
@@ -2487,6 +2490,9 @@ msgstr "egy varázstárggyal"
 msgid "without artifacts."
 msgstr " %{count} varázstárggyal"
 
+msgid "Recruit %{name} the %{race}"
+msgstr "%{name} a %{race} toborzása"
+
 msgid ""
 "'Spread' combat formation spreads your armies from the top to the bottom of "
 "the battlefield, with at least one empty space between each army."
@@ -2506,9 +2512,6 @@ msgstr "Laza felállás"
 
 msgid "Grouped Formation"
 msgstr "Szoros felállás"
-
-msgid "Recruit %{name} the %{race}"
-msgstr "%{name} a %{race} toborzása"
 
 msgid "Set garrison combat formation to 'Spread'"
 msgstr "A helyőrség csataalakzata legyen 'Laza'."
@@ -2582,9 +2585,6 @@ msgstr "A Szent Varázstárgy kiásása."
 
 msgid "Digging"
 msgstr "Ásás"
-
-msgid "Exit this menu without doing anything."
-msgstr "Kilépés ebből a menüből, bármilyen cselekvés nélkül."
 
 msgid "Arena"
 msgstr "Aréna"

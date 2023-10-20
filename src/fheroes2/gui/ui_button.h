@@ -196,11 +196,12 @@ namespace fheroes2
         std::vector<int> _value;
     };
 
-    // this class is used for a situations when we need to disabled a button for certain action and restore it within the scope of code
+    // This class is used for a situations when we need to disable a button for certain action
+    // and restore it within the scope of code. The changed button is immediately rendered on display.
     class ButtonRestorer
     {
     public:
-        explicit ButtonRestorer( ButtonBase & button, Image & area = Display::instance() );
+        explicit ButtonRestorer( ButtonBase & button );
         ButtonRestorer( const ButtonRestorer & ) = delete;
 
         ~ButtonRestorer();
@@ -209,8 +210,7 @@ namespace fheroes2
 
     private:
         ButtonBase & _button;
-        Image & _area;
-        bool _isDisabled;
+        bool _isEnabled;
     };
 
     class OptionButtonGroup : public ActionObject

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-19 13:17+0000\n"
+"POT-Creation-Date: 2023-10-20 13:35+0000\n"
 "PO-Revision-Date: 2023-08-26 23:09+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: https://discord.com/"
@@ -1901,6 +1901,9 @@ msgstr "%{building} - tu rekrutuje się: %{monster}."
 msgid "Requires:"
 msgstr "Wymagania:"
 
+msgid "Exit this menu without doing anything."
+msgstr "Wyjdź z menu nie wprowadzając żadnych zmian."
+
 msgid "Cannot build. You have already built here today."
 msgstr "Nie można budować. Już to robiono w tej turze."
 
@@ -2604,6 +2607,9 @@ msgstr "z jednym artefaktem."
 msgid "without artifacts."
 msgstr "bez artefaktów."
 
+msgid "Recruit %{name} the %{race}"
+msgstr "Rekrutuj: %{name} %{race}"
+
 msgid ""
 "'Spread' combat formation spreads your armies from the top to the bottom of "
 "the battlefield, with at least one empty space between each army."
@@ -2623,9 +2629,6 @@ msgstr "Luźna formacja"
 
 msgid "Grouped Formation"
 msgstr "Zwarta formacja"
-
-msgid "Recruit %{name} the %{race}"
-msgstr "Rekrutuj: %{name} %{race}"
 
 msgid "Set garrison combat formation to 'Spread'"
 msgstr "Ustaw szyk garnizonu na 'luźny'"
@@ -2698,9 +2701,6 @@ msgstr "Kop w poszukiwaniu Najpotężniejszego Artefaktu."
 
 msgid "Digging"
 msgstr "Poszukiwanie"
-
-msgid "Exit this menu without doing anything."
-msgstr "Wyjdź z menu nie wprowadzając żadnych zmian."
 
 msgid "Arena"
 msgstr "Arena"

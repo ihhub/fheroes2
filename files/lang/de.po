@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-19 13:17+0000\n"
+"POT-Creation-Date: 2023-10-20 13:35+0000\n"
 "PO-Revision-Date: 2023-04-09 23:51+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -1905,6 +1905,9 @@ msgstr "Der %{building} produziert %{monster}."
 msgid "Requires:"
 msgstr "Erfordert:"
 
+msgid "Exit this menu without doing anything."
+msgstr "Dieses Menü verlassen."
+
 msgid "Cannot build. You have already built here today."
 msgstr "Kann nicht gebaut werden. Ihr habt an diesem Tag hier bereits gebaut."
 
@@ -2616,6 +2619,9 @@ msgstr "mit 1 Artefakt."
 msgid "without artifacts."
 msgstr "ohne Artefakte."
 
+msgid "Recruit %{name} the %{race}"
+msgstr "%{name} (%{race}) rekrutieren"
+
 msgid ""
 "'Spread' combat formation spreads your armies from the top to the bottom of "
 "the battlefield, with at least one empty space between each army."
@@ -2635,9 +2641,6 @@ msgstr "Verstreute Formation"
 
 msgid "Grouped Formation"
 msgstr "Gruppierte Formation"
-
-msgid "Recruit %{name} the %{race}"
-msgstr "%{name} (%{race}) rekrutieren"
 
 msgid "Set garrison combat formation to 'Spread'"
 msgstr "Garnisonskampfformation auf \"Ausbreitend\" einstellen"
@@ -2710,9 +2713,6 @@ msgstr "Nach dem ultimativen Artefakt graben."
 
 msgid "Digging"
 msgstr "Graben"
-
-msgid "Exit this menu without doing anything."
-msgstr "Dieses Menü verlassen."
 
 msgid "Arena"
 msgstr "Arena"
