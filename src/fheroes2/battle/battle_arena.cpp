@@ -27,6 +27,7 @@
 #include <cassert>
 #include <cstddef>
 #include <iterator>
+#include <map>
 #include <numeric>
 #include <ostream>
 #include <random>

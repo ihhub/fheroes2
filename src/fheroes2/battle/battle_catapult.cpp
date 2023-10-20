@@ -23,8 +23,10 @@
 
 #include "battle_catapult.h"
 
-#include <algorithm>
+#include <cassert>
 #include <ostream>
+#include <utility>
+#include <vector>
 
 #include "artifact.h"
 #include "artifact_info.h"

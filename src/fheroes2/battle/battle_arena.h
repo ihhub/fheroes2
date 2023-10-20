@@ -33,7 +33,6 @@
 
 #include "battle.h"
 #include "battle_board.h"
-#include "battle_catapult.h"
 #include "battle_command.h"
 #include "battle_grave.h"
 #include "battle_pathfinding.h"

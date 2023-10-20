@@ -31,9 +31,9 @@
 #include <utility>
 #include <vector>
 
+#include "battle.h"
 #include "battle_animation.h"
 #include "battle_board.h"
-#include "battle_catapult.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "icn.h"
@@ -63,9 +63,6 @@ namespace Battle
     class Tower;
     class Unit;
     class Units;
-
-    struct TargetInfo;
-    struct TargetsInfo;
 
     void DialogBattleSettings();
     bool DialogBattleSurrender( const HeroBase & hero, uint32_t cost, Kingdom & kingdom );
