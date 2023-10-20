@@ -917,7 +917,7 @@ bool Heroes::Recruit( const int col, const fheroes2::Point & pt )
 
     world.GetTiles( pt.x, pt.y ).setHero( this );
 
-    kingdom.AddHeroes( this );
+    kingdom.AddHero( this );
     // Update the set of recruits in the kingdom
     kingdom.GetRecruits();
 
@@ -1720,7 +1720,7 @@ void Heroes::Dismiss( int reason )
     Kingdom & kingdom = GetKingdom();
 
     if ( heroColor != Color::NONE ) {
-        kingdom.RemoveHeroes( this );
+        kingdom.RemoveHero( this );
     }
     SetColor( Color::NONE );
 
@@ -2017,17 +2017,19 @@ Heroes * VecHeroes::Get( int hid ) const
 
 Heroes * VecHeroes::Get( const fheroes2::Point & center ) const
 {
-    const_iterator it = begin();
-    for ( ; it != end(); ++it )
-        if ( ( *it )->isPosition( center ) )
-            break;
-    return end() != it ? *it : nullptr;
+    for ( Heroes * hero : *this ) {
+        assert( hero != nullptr );
+        if ( hero->isPosition( center ) ) {
+            return hero;
+        }
+    }
+
+    return nullptr;
 }
 
 Heroes * AllHeroes::GetHero( const Castle & castle ) const
 {
-    const_iterator it = std::find_if( begin(), end(), [&castle]( const Heroes * hero ) { return castle.GetCenter() == hero->GetCenter(); } );
-    return end() != it ? *it : nullptr;
+    return Get ( castle.GetCenter() );
 }
 
 Heroes * AllHeroes::GetHeroForHire( const int race, const int heroIDToIgnore ) const
@@ -2118,9 +2120,12 @@ Heroes * AllHeroes::GetHeroForHire( const int race, const int heroIDToIgnore ) c
 
 void AllHeroes::Scout( int colors ) const
 {
-    for ( const_iterator it = begin(); it != end(); ++it )
-        if ( colors & ( *it )->GetColor() )
-            ( *it )->Scout( ( *it )->GetIndex() );
+    for ( Heroes * hero : *this ) {
+        assert( hero != nullptr );
+        if ( colors & hero->GetColor() ) {
+            hero->Scout( hero->GetIndex() );
+        }
+    }
 }
 
 Heroes * AllHeroes::FromJail( int32_t index ) const
@@ -2199,7 +2204,8 @@ StreamBase & operator<<( StreamBase & msg, const VecHeroes & heroes )
     msg << static_cast<uint32_t>( heroes.size() );
 
     for ( const Heroes * hero : heroes ) {
-        msg << ( ( hero != nullptr ) ? hero->GetID() : Heroes::UNKNOWN );
+        assert( hero != nullptr );
+        msg << hero->GetID();
     }
 
     return msg;
@@ -2311,8 +2317,9 @@ StreamBase & operator<<( StreamBase & msg, const AllHeroes & heroes )
 {
     msg << static_cast<uint32_t>( heroes.size() );
 
-    for ( AllHeroes::const_iterator it = heroes.begin(); it != heroes.end(); ++it )
-        msg << **it;
+    for ( const auto & hero : heroes ) {
+        msg << *hero;
+    }
 
     return msg;
 }
