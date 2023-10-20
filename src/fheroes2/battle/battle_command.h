@@ -125,7 +125,7 @@ namespace Battle
                 int dummy = 0;
 
                 // Put the elements of the parameter pack in reverse order using the right-to-left associativity of the assignment operator
-                ( ( *this << params, dummy ) = ... );
+                (void)( ( *this << params, dummy ) = ... );
             }
         }
 
