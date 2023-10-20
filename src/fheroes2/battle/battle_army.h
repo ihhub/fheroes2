@@ -33,11 +33,6 @@
 
 class HeroBase;
 
-namespace Rand
-{
-    class DeterministicRandomGenerator;
-}
-
 namespace Battle
 {
     class Unit;

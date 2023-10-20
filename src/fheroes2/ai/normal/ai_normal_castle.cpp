@@ -37,7 +37,6 @@
 #include "monster.h"
 #include "payment.h"
 #include "race.h"
-#include "rand.h"
 #include "resource.h"
 #include "world.h"
 #include "world_regions.h"

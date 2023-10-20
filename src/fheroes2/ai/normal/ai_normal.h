@@ -55,11 +55,6 @@ namespace Maps
     class Tiles;
 }
 
-namespace Rand
-{
-    class DeterministicRandomGenerator;
-}
-
 struct VecHeroes;
 struct VecCastles;
 

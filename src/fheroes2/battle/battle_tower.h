@@ -30,11 +30,6 @@
 #include "battle_troop.h"
 #include "math_base.h"
 
-namespace Rand
-{
-    class DeterministicRandomGenerator;
-}
-
 class Castle;
 
 namespace Battle

@@ -34,7 +34,6 @@
 #include "battle_cell.h"
 #include "castle.h"
 #include "monster.h"
-#include "rand.h"
 #include "tools.h"
 #include "translations.h"
 

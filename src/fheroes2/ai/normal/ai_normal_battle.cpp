@@ -55,7 +55,6 @@
 #include "heroes_base.h"
 #include "logging.h"
 #include "monster_info.h"
-#include "rand.h"
 #include "settings.h"
 #include "speed.h"
 
