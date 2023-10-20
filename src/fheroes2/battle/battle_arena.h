@@ -309,13 +309,13 @@ namespace Battle
         // A set of colors of players for whom the auto-battle mode is enabled
         int _autoBattleColors;
 
-        Rand::DeterministicRandomGenerator & _randomGenerator;
-
         // This random number generator should only be used in code that is equally used by both AI and the human
         // player - that is, in code related to the processing of battle commands. It cannot be safely used in other
         // places (for example, in code that performs situation assessment or AI decision-making) because in this
         // case the battles performed by AI will not be reproducible by a human player when performing exactly the
         // same actions.
+        Rand::DeterministicRandomGenerator & _randomGenerator;
+
         TroopsUidGenerator _uidGenerator;
 
         enum
