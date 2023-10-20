@@ -442,7 +442,7 @@ void Battle::Arena::TurnTroop( Unit * troop, const Units & orderHistory )
         }
 
         const uint32_t newSeed = std::accumulate( actions.cbegin(), actions.cend(), _randomGenerator.GetSeed(),
-                                                  []( const uint32_t seed, const Command & cmd ) { return cmd.updateRandomSeed( seed ); } );
+                                                  []( const uint32_t seed, const Command & cmd ) { return cmd.updateSeed( seed ); } );
         _randomGenerator.UpdateSeed( newSeed );
 
         while ( !actions.empty() ) {

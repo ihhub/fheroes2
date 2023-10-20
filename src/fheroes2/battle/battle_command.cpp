@@ -53,7 +53,7 @@ Battle::Command & Battle::Command::operator>>( int & val )
     return *this;
 }
 
-uint32_t Battle::Command::updateRandomSeed( const uint32_t seed ) const
+uint32_t Battle::Command::updateSeed( const uint32_t seed ) const
 {
     uint32_t newSeed = seed;
 

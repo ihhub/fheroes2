@@ -149,7 +149,7 @@ namespace Battle
         Command & operator<<( const int val );
         Command & operator>>( int & val );
 
-        uint32_t updateRandomSeed( const uint32_t seed ) const;
+        uint32_t updateSeed( const uint32_t seed ) const;
 
     private:
         CommandType _type;
