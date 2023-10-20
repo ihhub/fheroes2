@@ -28,7 +28,6 @@
 #include <cstdint>
 #include <cstdlib>
 #include <functional>
-#include <iterator>
 #include <list>
 #include <random>
 #include <type_traits>
@@ -86,16 +85,6 @@ namespace Rand
 
         const uint32_t id = Rand::GetWithGen( 0, static_cast<uint32_t>( vec.size() - 1 ), gen );
         return vec[id];
-    }
-
-    template <typename T>
-    const T & Get( const std::list<T> & list )
-    {
-        assert( !list.empty() );
-
-        typename std::list<T>::const_iterator it = list.begin();
-        std::advance( it, Rand::Get( static_cast<uint32_t>( list.size() - 1 ) ) );
-        return *it;
     }
 
     using ValuePercent = std::pair<int32_t, uint32_t>;
