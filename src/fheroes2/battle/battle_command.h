@@ -147,12 +147,13 @@ namespace Battle
             return _type == cmd;
         }
 
-        Command & operator<<( const int val );
-        Command & operator>>( int & val );
-
         uint32_t updateSeed( const uint32_t seed ) const;
 
+        Command & operator<<( const int val );
+
     private:
+        Command & operator>>( int & val );
+
         CommandType _type;
     };
 }

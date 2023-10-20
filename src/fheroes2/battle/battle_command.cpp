@@ -36,23 +36,6 @@ int Battle::Command::GetNextValue()
     return val;
 }
 
-Battle::Command & Battle::Command::operator<<( const int val )
-{
-    push_back( val );
-
-    return *this;
-}
-
-Battle::Command & Battle::Command::operator>>( int & val )
-{
-    if ( !empty() ) {
-        val = back();
-        pop_back();
-    }
-
-    return *this;
-}
-
 uint32_t Battle::Command::updateSeed( const uint32_t seed ) const
 {
     uint32_t newSeed = seed;
@@ -93,4 +76,21 @@ uint32_t Battle::Command::updateSeed( const uint32_t seed ) const
     }
 
     return newSeed;
+}
+
+Battle::Command & Battle::Command::operator<<( const int val )
+{
+    push_back( val );
+
+    return *this;
+}
+
+Battle::Command & Battle::Command::operator>>( int & val )
+{
+    if ( !empty() ) {
+        val = back();
+        pop_back();
+    }
+
+    return *this;
 }
