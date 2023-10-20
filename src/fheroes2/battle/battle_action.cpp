@@ -1009,11 +1009,11 @@ void Battle::Arena::ApplyActionCatapult( Command & cmd )
         uint32_t shots = cmd.GetNextValue();
 
         while ( shots-- ) {
-            const int target = cmd.GetNextValue();
+            const CatapultTarget target = static_cast<CatapultTarget>( cmd.GetNextValue() );
             const uint32_t damage = cmd.GetNextValue();
             const bool hit = cmd.GetNextValue() != 0;
 
-            if ( target ) {
+            if ( target != CatapultTarget::CAT_NONE ) {
                 if ( _interface ) {
                     _interface->RedrawActionCatapultPart1( target, hit );
                 }
@@ -1026,7 +1026,9 @@ void Battle::Arena::ApplyActionCatapult( Command & cmd )
                     }
                 }
 
-                DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "target: " << target << ", damage: " << damage << ", hit: " << hit )
+                using TargetUnderlyingType = std::underlying_type_t<decltype( target )>;
+
+                DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "target: " << static_cast<TargetUnderlyingType>( target ) << ", damage: " << damage << ", hit: " << hit )
             }
         }
     }
@@ -1180,7 +1182,7 @@ void Battle::Arena::ApplyActionSpellEarthQuake( const Command & /*cmd*/ )
     const HeroBase * commander = GetCurrentCommander();
     assert( commander != nullptr );
 
-    std::vector<int> targets = GetCastleTargets();
+    std::vector<CatapultTarget> targets = GetCastleTargets();
 
     if ( _interface ) {
         _interface->RedrawActionSpellCastStatus( Spell( Spell::EARTHQUAKE ), -1, commander->GetName(), {} );

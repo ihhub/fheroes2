@@ -33,6 +33,7 @@
 
 #include "battle.h"
 #include "battle_board.h"
+#include "battle_catapult.h"
 #include "battle_command.h"
 #include "battle_grave.h"
 #include "battle_pathfinding.h"
@@ -199,7 +200,7 @@ namespace Battle
             return icn_covr;
         }
 
-        uint32_t GetCastleTargetValue( int ) const;
+        uint32_t GetCastleTargetValue( const CatapultTarget target ) const;
 
         int32_t GetFreePositionNearHero( const int heroColor ) const;
 
@@ -234,7 +235,7 @@ namespace Battle
         void TurnTroop( Unit * troop, const Units & orderHistory );
         void TowerAction( const Tower & );
 
-        void SetCastleTargetValue( int, uint32_t );
+        void SetCastleTargetValue( const CatapultTarget target, const uint32_t value );
         void CatapultAction();
 
         TargetsInfo GetTargetsForDamage( const Unit & attacker, Unit & defender, const int32_t dst, const int dir ) const;
@@ -242,7 +243,7 @@ namespace Battle
         static void TargetsApplyDamage( Unit & attacker, TargetsInfo & targets, uint32_t & resurrected );
         static void TargetsApplySpell( const HeroBase * hero, const Spell & spell, TargetsInfo & targets );
 
-        std::vector<int> GetCastleTargets() const;
+        std::vector<CatapultTarget> GetCastleTargets() const;
         TargetsInfo TargetsForChainLightning( const HeroBase * hero, int32_t attackedTroopIndex );
         std::vector<Unit *> FindChainLightningTargetIndexes( const HeroBase * hero, Unit * firstUnit );
 

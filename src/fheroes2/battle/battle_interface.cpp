@@ -4865,7 +4865,7 @@ void Battle::Interface::RedrawActionTowerPart2( const Tower & tower, const Targe
     assert( _movingUnit == nullptr );
 }
 
-void Battle::Interface::RedrawActionCatapultPart1( const int catapultTargetId, const bool isHit )
+void Battle::Interface::RedrawActionCatapultPart1( const CatapultTarget catapultTarget, const bool isHit )
 {
     // Reset the delay before rendering the first frame of catapult animation.
     Game::AnimateResetDelay( Game::DelayType::BATTLE_CATAPULT_DELAY );
@@ -4891,30 +4891,30 @@ void Battle::Interface::RedrawActionCatapultPart1( const int catapultTargetId, c
 
     // boulder animation
     fheroes2::Point pt1( 30, 290 );
-    fheroes2::Point pt2 = Catapult::GetTargetPosition( catapultTargetId, isHit );
+    fheroes2::Point pt2 = Catapult::GetTargetPosition( catapultTarget, isHit );
     const int32_t boulderArcStep = ( pt2.x - pt1.x ) / 30;
 
     // set the projectile arc height for each castle target and a formula for an unknown target
     int32_t boulderArcHeight;
-    switch ( catapultTargetId ) {
-    case Battle::CAT_WALL1:
+    switch ( catapultTarget ) {
+    case CatapultTarget::CAT_WALL1:
         boulderArcHeight = 220;
         break;
-    case Battle::CAT_WALL2:
-    case Battle::CAT_BRIDGE:
+    case CatapultTarget::CAT_WALL2:
+    case CatapultTarget::CAT_BRIDGE:
         boulderArcHeight = 216;
         break;
-    case Battle::CAT_WALL3:
+    case CatapultTarget::CAT_WALL3:
         boulderArcHeight = 204;
         break;
-    case Battle::CAT_WALL4:
+    case CatapultTarget::CAT_WALL4:
         boulderArcHeight = 208;
         break;
-    case Battle::CAT_TOWER1:
-    case Battle::CAT_TOWER2:
+    case CatapultTarget::CAT_TOWER1:
+    case CatapultTarget::CAT_TOWER2:
         boulderArcHeight = 206;
         break;
-    case Battle::CAT_CENTRAL_TOWER:
+    case CatapultTarget::CAT_CENTRAL_TOWER:
         boulderArcHeight = 290;
         break;
     default:
@@ -4958,7 +4958,7 @@ void Battle::Interface::RedrawActionCatapultPart1( const int catapultTargetId, c
     uint32_t frame = 0;
     // If the building is hit, end the animation on the 5th frame to change the building state (when the smoke cloud is largest).
     uint32_t maxFrame = isHit ? castleBuildingDestroyFrame : fheroes2::AGG::GetICNCount( icn );
-    const bool isBridgeDestroyed = isHit && ( catapultTargetId == Battle::CAT_BRIDGE );
+    const bool isBridgeDestroyed = isHit && ( catapultTarget == CatapultTarget::CAT_BRIDGE );
     // If the bridge is destroyed - prepare parameters for the second smoke cloud.
     if ( isBridgeDestroyed ) {
         pt1 = pt2 + bridgeDestroySmokeOffset;
@@ -4991,11 +4991,11 @@ void Battle::Interface::RedrawActionCatapultPart1( const int catapultTargetId, c
     }
 }
 
-void Battle::Interface::RedrawActionCatapultPart2( const int catapultTargetId )
+void Battle::Interface::RedrawActionCatapultPart2( const CatapultTarget catapultTarget )
 {
     // Finish the smoke cloud animation after the building's state has changed after the hit and it is drawn as demolished.
 
-    const fheroes2::Point pt1 = Catapult::GetTargetPosition( catapultTargetId, true ) + GetArea().getPosition();
+    const fheroes2::Point pt1 = Catapult::GetTargetPosition( catapultTarget, true ) + GetArea().getPosition();
     fheroes2::Point pt2;
 
     // Continue the smoke cloud animation from the 6th frame.
@@ -5003,7 +5003,7 @@ void Battle::Interface::RedrawActionCatapultPart2( const int catapultTargetId )
     uint32_t frame = castleBuildingDestroyFrame;
     const uint32_t maxFrame = fheroes2::AGG::GetICNCount( icnId );
     uint32_t maxAnimationFrame = maxFrame;
-    const bool isBridgeDestroyed = ( catapultTargetId == Battle::CAT_BRIDGE );
+    const bool isBridgeDestroyed = ( catapultTarget == CatapultTarget::CAT_BRIDGE );
     // If the bridge is destroyed - prepare parameters for the second smoke cloud.
     if ( isBridgeDestroyed ) {
         pt2 = pt1 + bridgeDestroySmokeOffset;
@@ -5848,7 +5848,7 @@ void Battle::Interface::RedrawActionArmageddonSpell()
     }
 }
 
-void Battle::Interface::RedrawActionEarthQuakeSpell( const std::vector<int> & targets )
+void Battle::Interface::RedrawActionEarthQuakeSpell( const std::vector<CatapultTarget> & targets )
 {
     Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
@@ -5915,8 +5915,8 @@ void Battle::Interface::RedrawActionEarthQuakeSpell( const std::vector<int> & ta
         if ( Game::validateAnimationDelay( Game::BATTLE_SPELL_DELAY ) ) {
             RedrawPartialStart();
 
-            for ( std::vector<int>::const_iterator it = targets.begin(); it != targets.end(); ++it ) {
-                fheroes2::Point pt2 = Catapult::GetTargetPosition( *it, true );
+            for ( const CatapultTarget target : targets ) {
+                fheroes2::Point pt2 = Catapult::GetTargetPosition( target, true );
 
                 pt2.x += area.x;
                 pt2.y += area.y;

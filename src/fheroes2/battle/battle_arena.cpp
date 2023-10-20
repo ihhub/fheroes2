@@ -657,30 +657,31 @@ void Battle::Arena::CatapultAction()
 {
     if ( _catapult ) {
         uint32_t shots = _catapult->GetShots();
-        std::vector<uint32_t> stateOfCastleDefences( CAT_CENTRAL_TOWER + 1, 0 );
 
-        stateOfCastleDefences[CAT_WALL1] = GetCastleTargetValue( CAT_WALL1 );
-        stateOfCastleDefences[CAT_WALL2] = GetCastleTargetValue( CAT_WALL2 );
-        stateOfCastleDefences[CAT_WALL3] = GetCastleTargetValue( CAT_WALL3 );
-        stateOfCastleDefences[CAT_WALL4] = GetCastleTargetValue( CAT_WALL4 );
-        stateOfCastleDefences[CAT_TOWER1] = GetCastleTargetValue( CAT_TOWER1 );
-        stateOfCastleDefences[CAT_TOWER2] = GetCastleTargetValue( CAT_TOWER2 );
-        stateOfCastleDefences[CAT_BRIDGE] = GetCastleTargetValue( CAT_BRIDGE );
-        stateOfCastleDefences[CAT_CENTRAL_TOWER] = GetCastleTargetValue( CAT_CENTRAL_TOWER );
+        std::map<CatapultTarget, uint32_t> stateOfCatapultTargets = { { CatapultTarget::CAT_WALL1, GetCastleTargetValue( CatapultTarget::CAT_WALL1 ) },
+                                                                      { CatapultTarget::CAT_WALL2, GetCastleTargetValue( CatapultTarget::CAT_WALL2 ) },
+                                                                      { CatapultTarget::CAT_WALL3, GetCastleTargetValue( CatapultTarget::CAT_WALL3 ) },
+                                                                      { CatapultTarget::CAT_WALL4, GetCastleTargetValue( CatapultTarget::CAT_WALL4 ) },
+                                                                      { CatapultTarget::CAT_TOWER1, GetCastleTargetValue( CatapultTarget::CAT_TOWER1 ) },
+                                                                      { CatapultTarget::CAT_TOWER2, GetCastleTargetValue( CatapultTarget::CAT_TOWER2 ) },
+                                                                      { CatapultTarget::CAT_BRIDGE, GetCastleTargetValue( CatapultTarget::CAT_BRIDGE ) },
+                                                                      { CatapultTarget::CAT_CENTRAL_TOWER, GetCastleTargetValue( CatapultTarget::CAT_CENTRAL_TOWER ) } };
 
         Command cmd( Command::CATAPULT );
 
         cmd << shots;
 
         while ( shots-- ) {
-            const int target = Catapult::GetTarget( stateOfCastleDefences, _randomGenerator );
-            const uint32_t damage = std::min( _catapult->GetDamage( _randomGenerator ), stateOfCastleDefences[target] );
+            const CatapultTarget target = Catapult::GetTarget( stateOfCatapultTargets, _randomGenerator );
+            const uint32_t damage = std::min( _catapult->GetDamage( _randomGenerator ), stateOfCatapultTargets[target] );
             const bool hit = _catapult->IsNextShotHit( _randomGenerator );
 
-            cmd << target << damage << ( hit ? 1 : 0 );
+            using TargetUnderlyingType = std::underlying_type_t<decltype( target )>;
+
+            cmd << static_cast<TargetUnderlyingType>( target ) << damage << ( hit ? 1 : 0 );
 
             if ( hit ) {
-                stateOfCastleDefences[target] -= damage;
+                stateOfCatapultTargets[target] -= damage;
             }
         }
 
@@ -985,36 +986,39 @@ Battle::Indexes Battle::Arena::GraveyardOccupiedCells() const
     return graveyard.GetOccupiedCells();
 }
 
-void Battle::Arena::SetCastleTargetValue( int target, uint32_t value )
+void Battle::Arena::SetCastleTargetValue( const CatapultTarget target, const uint32_t value )
 {
     switch ( target ) {
-    case CAT_WALL1:
+    case CatapultTarget::CAT_WALL1:
         board[CASTLE_FIRST_TOP_WALL_POS].SetObject( value );
         break;
-    case CAT_WALL2:
+    case CatapultTarget::CAT_WALL2:
         board[CASTLE_SECOND_TOP_WALL_POS].SetObject( value );
         break;
-    case CAT_WALL3:
+    case CatapultTarget::CAT_WALL3:
         board[CASTLE_THIRD_TOP_WALL_POS].SetObject( value );
         break;
-    case CAT_WALL4:
+    case CatapultTarget::CAT_WALL4:
         board[CASTLE_FOURTH_TOP_WALL_POS].SetObject( value );
         break;
 
-    case CAT_TOWER1:
-        if ( _towers[0] && _towers[0]->isValid() )
+    case CatapultTarget::CAT_TOWER1:
+        if ( _towers[0] && _towers[0]->isValid() ) {
             _towers[0]->SetDestroy();
+        }
         break;
-    case CAT_TOWER2:
-        if ( _towers[2] && _towers[2]->isValid() )
+    case CatapultTarget::CAT_TOWER2:
+        if ( _towers[2] && _towers[2]->isValid() ) {
             _towers[2]->SetDestroy();
+        }
         break;
-    case CAT_CENTRAL_TOWER:
-        if ( _towers[1] && _towers[1]->isValid() )
+    case CatapultTarget::CAT_CENTRAL_TOWER:
+        if ( _towers[1] && _towers[1]->isValid() ) {
             _towers[1]->SetDestroy();
+        }
         break;
 
-    case CAT_BRIDGE:
+    case CatapultTarget::CAT_BRIDGE:
         if ( _bridge->isValid() ) {
             _bridge->SetDestroyed();
         }
@@ -1025,26 +1029,26 @@ void Battle::Arena::SetCastleTargetValue( int target, uint32_t value )
     }
 }
 
-uint32_t Battle::Arena::GetCastleTargetValue( int target ) const
+uint32_t Battle::Arena::GetCastleTargetValue( const CatapultTarget target ) const
 {
     switch ( target ) {
-    case CAT_WALL1:
+    case CatapultTarget::CAT_WALL1:
         return board[CASTLE_FIRST_TOP_WALL_POS].GetObject();
-    case CAT_WALL2:
+    case CatapultTarget::CAT_WALL2:
         return board[CASTLE_SECOND_TOP_WALL_POS].GetObject();
-    case CAT_WALL3:
+    case CatapultTarget::CAT_WALL3:
         return board[CASTLE_THIRD_TOP_WALL_POS].GetObject();
-    case CAT_WALL4:
+    case CatapultTarget::CAT_WALL4:
         return board[CASTLE_FOURTH_TOP_WALL_POS].GetObject();
 
-    case CAT_TOWER1:
+    case CatapultTarget::CAT_TOWER1:
         return _towers[0] && _towers[0]->isValid() ? 1 : 0;
-    case CAT_TOWER2:
+    case CatapultTarget::CAT_TOWER2:
         return _towers[2] && _towers[2]->isValid() ? 1 : 0;
-    case CAT_CENTRAL_TOWER:
+    case CatapultTarget::CAT_CENTRAL_TOWER:
         return _towers[1] && _towers[1]->isValid() ? 1 : 0;
 
-    case CAT_BRIDGE:
+    case CatapultTarget::CAT_BRIDGE:
         return _bridge->isValid() ? 1 : 0;
 
     default:
@@ -1053,26 +1057,30 @@ uint32_t Battle::Arena::GetCastleTargetValue( int target ) const
     return 0;
 }
 
-std::vector<int> Battle::Arena::GetCastleTargets() const
+std::vector<Battle::CatapultTarget> Battle::Arena::GetCastleTargets() const
 {
-    std::vector<int> targets;
+    std::vector<CatapultTarget> targets;
     targets.reserve( 8 );
 
-    // check walls
-    if ( 0 != board[CASTLE_FIRST_TOP_WALL_POS].GetObject() )
-        targets.push_back( CAT_WALL1 );
-    if ( 0 != board[CASTLE_SECOND_TOP_WALL_POS].GetObject() )
-        targets.push_back( CAT_WALL2 );
-    if ( 0 != board[CASTLE_THIRD_TOP_WALL_POS].GetObject() )
-        targets.push_back( CAT_WALL3 );
-    if ( 0 != board[CASTLE_FOURTH_TOP_WALL_POS].GetObject() )
-        targets.push_back( CAT_WALL4 );
+    if ( board[CASTLE_FIRST_TOP_WALL_POS].GetObject() > 0 ) {
+        targets.push_back( CatapultTarget::CAT_WALL1 );
+    }
+    if ( board[CASTLE_SECOND_TOP_WALL_POS].GetObject() > 0 ) {
+        targets.push_back( CatapultTarget::CAT_WALL2 );
+    }
+    if ( board[CASTLE_THIRD_TOP_WALL_POS].GetObject() > 0 ) {
+        targets.push_back( CatapultTarget::CAT_WALL3 );
+    }
+    if ( board[CASTLE_FOURTH_TOP_WALL_POS].GetObject() > 0 ) {
+        targets.push_back( CatapultTarget::CAT_WALL4 );
+    }
 
-    // check right/left towers
-    if ( _towers[0] && _towers[0]->isValid() )
-        targets.push_back( CAT_TOWER1 );
-    if ( _towers[2] && _towers[2]->isValid() )
-        targets.push_back( CAT_TOWER2 );
+    if ( _towers[0] && _towers[0]->isValid() ) {
+        targets.push_back( CatapultTarget::CAT_TOWER1 );
+    }
+    if ( _towers[2] && _towers[2]->isValid() ) {
+        targets.push_back( CatapultTarget::CAT_TOWER2 );
+    }
 
     return targets;
 }

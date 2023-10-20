@@ -25,11 +25,12 @@
 #define H2BATTLE_CATAPULT_H
 
 #include <cstdint>
-#include <vector>
+#include <map>
 
 #include "math_base.h"
 
 class HeroBase;
+
 namespace Rand
 {
     class DeterministicRandomGenerator;
@@ -37,8 +38,9 @@ namespace Rand
 
 namespace Battle
 {
-    enum
+    enum class CatapultTarget : int
     {
+        CAT_NONE = 0,
         CAT_WALL1 = 1,
         CAT_WALL2 = 2,
         CAT_WALL3 = 3,
@@ -57,14 +59,13 @@ namespace Battle
 
         Catapult & operator=( const Catapult & ) = delete;
 
-        static fheroes2::Point GetTargetPosition( int target, bool hit );
+        static CatapultTarget GetTarget( const std::map<CatapultTarget, uint32_t> & stateOfCatapultTargets, Rand::DeterministicRandomGenerator & randomGenerator );
+        static fheroes2::Point GetTargetPosition( const CatapultTarget target, const bool hit );
 
         uint32_t GetShots() const
         {
             return catShots;
         }
-
-        static int GetTarget( const std::vector<uint32_t> & stateOfCastleDefences, Rand::DeterministicRandomGenerator & randomGenerator );
 
         uint32_t GetDamage( Rand::DeterministicRandomGenerator & randomGenerator ) const;
         bool IsNextShotHit( Rand::DeterministicRandomGenerator & randomGenerator ) const;
