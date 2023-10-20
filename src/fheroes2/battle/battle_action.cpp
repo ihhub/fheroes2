@@ -1027,7 +1027,9 @@ void Battle::Arena::ApplyActionCatapult( Command & cmd )
                     }
                 }
 
+#ifdef WITH_DEBUG
                 using TargetUnderlyingType = std::underlying_type_t<decltype( target )>;
+#endif
 
                 DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "target: " << static_cast<TargetUnderlyingType>( target ) << ", damage: " << damage << ", hit: " << hit )
             }
