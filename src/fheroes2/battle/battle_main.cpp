@@ -57,12 +57,6 @@
 #include "ui_text.h"
 #include "world.h"
 
-namespace Battle
-{
-    void EagleEyeSkillAction( HeroBase &, const SpellStorage &, bool, const Rand::DeterministicRandomGenerator & randomGenerator );
-    void NecromancySkillAction( HeroBase & hero, const uint32_t enemyTroopsKilled, const bool isControlHuman );
-}
-
 namespace
 {
     std::vector<Artifact> planArtifactTransfer( const BagArtifacts & winnerBag, const BagArtifacts & loserBag )
@@ -168,6 +162,78 @@ namespace
             return Battle::RESULT_WINS;
 
         return 0;
+    }
+
+    void eagleEyeSkillAction( HeroBase & hero, const SpellStorage & spells, bool local, const Rand::DeterministicRandomGenerator & randomGenerator )
+    {
+        if ( spells.empty() || !hero.HaveSpellBook() )
+            return;
+
+        SpellStorage new_spells;
+        new_spells.reserve( 10 );
+
+        const Skill::Secondary eagleeye( Skill::Secondary::EAGLEEYE, hero.GetLevelSkill( Skill::Secondary::EAGLEEYE ) );
+
+        // filter spells
+        for ( SpellStorage::const_iterator it = spells.begin(); it != spells.end(); ++it ) {
+            const Spell & sp = *it;
+            if ( !hero.HaveSpell( sp ) ) {
+                switch ( eagleeye.Level() ) {
+                case Skill::Level::BASIC:
+                    // 20%
+                    if ( 3 > sp.Level() && eagleeye.GetValues() >= randomGenerator.Get( 1, 100 ) )
+                        new_spells.push_back( sp );
+                    break;
+                case Skill::Level::ADVANCED:
+                    // 30%
+                    if ( 4 > sp.Level() && eagleeye.GetValues() >= randomGenerator.Get( 1, 100 ) )
+                        new_spells.push_back( sp );
+                    break;
+                case Skill::Level::EXPERT:
+                    // 40%
+                    if ( 5 > sp.Level() && eagleeye.GetValues() >= randomGenerator.Get( 1, 100 ) )
+                        new_spells.push_back( sp );
+                    break;
+                default:
+                    break;
+                }
+            }
+        }
+
+        // add new spell
+        for ( SpellStorage::const_iterator it = new_spells.begin(); it != new_spells.end(); ++it ) {
+            const Spell & sp = *it;
+            if ( local ) {
+                std::string msg = _( "Through eagle-eyed observation, %{name} is able to learn the magic spell %{spell}." );
+                StringReplace( msg, "%{name}", hero.GetName() );
+                StringReplace( msg, "%{spell}", sp.GetName() );
+                Game::PlayPickupSound();
+
+                const fheroes2::SpellDialogElement spellUI( sp, &hero );
+                fheroes2::showMessage( fheroes2::Text( "", {} ), fheroes2::Text( msg, fheroes2::FontType::normalWhite() ), Dialog::OK, { &spellUI } );
+            }
+        }
+
+        hero.AppendSpellsToBook( new_spells, true );
+    }
+
+    void necromancySkillAction( HeroBase & hero, const uint32_t enemyTroopsKilled, const bool isControlHuman )
+    {
+        Army & army = hero.GetArmy();
+
+        if ( 0 == enemyTroopsKilled || ( army.isFullHouse() && !army.HasMonster( Monster::SKELETON ) ) )
+            return;
+
+        const uint32_t necromancyPercent = GetNecromancyPercent( hero );
+
+        uint32_t raiseCount = std::max( enemyTroopsKilled * necromancyPercent / 100, 1U );
+        army.JoinTroop( Monster::SKELETON, raiseCount, false );
+
+        if ( isControlHuman ) {
+            Battle::Arena::DialogBattleNecromancy( raiseCount );
+        }
+
+        DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "raise: " << raiseCount << " skeletons" )
     }
 }
 
@@ -335,11 +401,11 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, int32_t mapsindex )
 
         // eagle eye capability
         if ( winnerHero && loserHero && winnerHero->GetLevelSkill( Skill::Secondary::EAGLEEYE ) && loserHero->isHeroes() )
-            EagleEyeSkillAction( *winnerHero, arena.GetUsageSpells(), winnerHero->isControlHuman(), randomGenerator );
+            eagleEyeSkillAction( *winnerHero, arena.GetUsageSpells(), winnerHero->isControlHuman(), randomGenerator );
 
         // necromancy capability
         if ( winnerHero && winnerHero->GetLevelSkill( Skill::Secondary::NECROMANCY ) )
-            NecromancySkillAction( *winnerHero, result.killed, winnerHero->isControlHuman() );
+            necromancySkillAction( *winnerHero, result.killed, winnerHero->isControlHuman() );
 
         if ( winnerHero ) {
             const Heroes * kingdomHero = dynamic_cast<const Heroes *>( winnerHero );
@@ -368,77 +434,6 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, int32_t mapsindex )
     DEBUG_LOG( DBG_BATTLE, DBG_INFO, "army1: " << ( result.army1 & RESULT_WINS ? "wins" : "loss" ) << ", army2: " << ( result.army2 & RESULT_WINS ? "wins" : "loss" ) )
 
     return result;
-}
-
-void Battle::EagleEyeSkillAction( HeroBase & hero, const SpellStorage & spells, bool local, const Rand::DeterministicRandomGenerator & randomGenerator )
-{
-    if ( spells.empty() || !hero.HaveSpellBook() )
-        return;
-
-    SpellStorage new_spells;
-    new_spells.reserve( 10 );
-
-    const Skill::Secondary eagleeye( Skill::Secondary::EAGLEEYE, hero.GetLevelSkill( Skill::Secondary::EAGLEEYE ) );
-
-    // filter spells
-    for ( SpellStorage::const_iterator it = spells.begin(); it != spells.end(); ++it ) {
-        const Spell & sp = *it;
-        if ( !hero.HaveSpell( sp ) ) {
-            switch ( eagleeye.Level() ) {
-            case Skill::Level::BASIC:
-                // 20%
-                if ( 3 > sp.Level() && eagleeye.GetValues() >= randomGenerator.Get( 1, 100 ) )
-                    new_spells.push_back( sp );
-                break;
-            case Skill::Level::ADVANCED:
-                // 30%
-                if ( 4 > sp.Level() && eagleeye.GetValues() >= randomGenerator.Get( 1, 100 ) )
-                    new_spells.push_back( sp );
-                break;
-            case Skill::Level::EXPERT:
-                // 40%
-                if ( 5 > sp.Level() && eagleeye.GetValues() >= randomGenerator.Get( 1, 100 ) )
-                    new_spells.push_back( sp );
-                break;
-            default:
-                break;
-            }
-        }
-    }
-
-    // add new spell
-    for ( SpellStorage::const_iterator it = new_spells.begin(); it != new_spells.end(); ++it ) {
-        const Spell & sp = *it;
-        if ( local ) {
-            std::string msg = _( "Through eagle-eyed observation, %{name} is able to learn the magic spell %{spell}." );
-            StringReplace( msg, "%{name}", hero.GetName() );
-            StringReplace( msg, "%{spell}", sp.GetName() );
-            Game::PlayPickupSound();
-
-            const fheroes2::SpellDialogElement spellUI( sp, &hero );
-            fheroes2::showMessage( fheroes2::Text( "", {} ), fheroes2::Text( msg, fheroes2::FontType::normalWhite() ), Dialog::OK, { &spellUI } );
-        }
-    }
-
-    hero.AppendSpellsToBook( new_spells, true );
-}
-
-void Battle::NecromancySkillAction( HeroBase & hero, const uint32_t enemyTroopsKilled, const bool isControlHuman )
-{
-    Army & army = hero.GetArmy();
-
-    if ( 0 == enemyTroopsKilled || ( army.isFullHouse() && !army.HasMonster( Monster::SKELETON ) ) )
-        return;
-
-    const uint32_t necromancyPercent = GetNecromancyPercent( hero );
-
-    uint32_t raiseCount = std::max( enemyTroopsKilled * necromancyPercent / 100, 1U );
-    army.JoinTroop( Monster::SKELETON, raiseCount, false );
-
-    if ( isControlHuman )
-        Arena::DialogBattleNecromancy( raiseCount );
-
-    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "raise: " << raiseCount << " skeletons" )
 }
 
 uint32_t Battle::Result::AttackerResult() const
