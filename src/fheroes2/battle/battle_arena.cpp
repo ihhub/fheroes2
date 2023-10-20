@@ -1246,8 +1246,3 @@ bool Battle::Arena::CanToggleAutoBattle() const
 {
     return !( GetCurrentForce().GetControl() & CONTROL_AI );
 }
-
-const Rand::DeterministicRandomGenerator & Battle::Arena::GetRandomGenerator() const
-{
-    return _randomGenerator;
-}

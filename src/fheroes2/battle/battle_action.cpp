@@ -755,7 +755,7 @@ void Battle::Arena::TargetsApplySpell( const HeroBase * hero, const Spell & spel
     }
 }
 
-std::vector<Battle::Unit *> Battle::Arena::FindChainLightningTargetIndexes( const HeroBase * hero, Unit * firstUnit )
+std::vector<Battle::Unit *> Battle::Arena::FindChainLightningTargetIndexes( const HeroBase * hero, Unit * firstUnit, const bool applyRandomMagicResistance )
 {
     std::vector<Unit *> result = { firstUnit };
     std::vector<Unit *> ignoredTroops = { firstUnit };
@@ -778,9 +778,10 @@ std::vector<Battle::Unit *> Battle::Arena::FindChainLightningTargetIndexes( cons
     while ( result.size() != CHAIN_LIGHTNING_CREATURE_COUNT && !foundTroops.empty() ) {
         bool targetFound = false;
         for ( size_t i = 0; i < foundTroops.size(); ++i ) {
-            const int32_t resist = foundTroops[i]->GetMagicResist( Spell::CHAINLIGHTNING, heroSpellPower, hero );
-            assert( resist >= 0 );
-            if ( resist < static_cast<int32_t>( _randomGenerator.Get( 1, 100 ) ) ) {
+            const uint32_t resist = foundTroops[i]->GetMagicResist( Spell::CHAINLIGHTNING, heroSpellPower, hero );
+            assert( resist < 100 );
+
+            if ( !applyRandomMagicResistance || resist < _randomGenerator.Get( 1, 100 ) ) {
                 ignoredTroops.push_back( foundTroops[i] );
                 result.push_back( foundTroops[i] );
                 foundTroops.erase( foundTroops.begin() + i );
@@ -804,7 +805,7 @@ std::vector<Battle::Unit *> Battle::Arena::FindChainLightningTargetIndexes( cons
     return result;
 }
 
-Battle::TargetsInfo Battle::Arena::TargetsForChainLightning( const HeroBase * hero, int32_t attackedTroopIndex )
+Battle::TargetsInfo Battle::Arena::TargetsForChainLightning( const HeroBase * hero, const int32_t attackedTroopIndex, const bool applyRandomMagicResistance )
 {
     Unit * unit = GetTroopBoard( attackedTroopIndex );
     if ( unit == nullptr ) {
@@ -814,9 +815,10 @@ Battle::TargetsInfo Battle::Arena::TargetsForChainLightning( const HeroBase * he
 
     TargetsInfo targets;
 
-    const uint32_t firstUnitResist = unit->GetMagicResist( Spell::CHAINLIGHTNING, 0, hero );
+    const int heroSpellPower = hero ? hero->GetPower() : 0;
+    const uint32_t firstUnitResist = unit->GetMagicResist( Spell::CHAINLIGHTNING, heroSpellPower, hero );
 
-    if ( firstUnitResist >= _randomGenerator.Get( 1, 100 ) ) {
+    if ( firstUnitResist >= 100 || ( applyRandomMagicResistance && firstUnitResist >= _randomGenerator.Get( 1, 100 ) ) ) {
         targets.emplace_back();
         TargetInfo & res = targets.back();
         res.defender = unit;
@@ -824,7 +826,7 @@ Battle::TargetsInfo Battle::Arena::TargetsForChainLightning( const HeroBase * he
         return targets;
     }
 
-    const std::vector<Unit *> targetUnits = FindChainLightningTargetIndexes( hero, unit );
+    const std::vector<Unit *> targetUnits = FindChainLightningTargetIndexes( hero, unit, applyRandomMagicResistance );
     for ( size_t i = 0; i < targetUnits.size(); ++i ) {
         targets.emplace_back();
         TargetInfo & res = targets.back();
@@ -836,7 +838,8 @@ Battle::TargetsInfo Battle::Arena::TargetsForChainLightning( const HeroBase * he
     return targets;
 }
 
-Battle::TargetsInfo Battle::Arena::GetTargetsForSpells( const HeroBase * hero, const Spell & spell, int32_t dest, bool * playResistSound /* = nullptr */ )
+Battle::TargetsInfo Battle::Arena::GetTargetsForSpell( const HeroBase * hero, const Spell & spell, const int32_t dst, bool applyRandomMagicResistance,
+                                                       bool * playResistSound )
 {
     TargetsInfo targets;
     targets.reserve( 8 );
@@ -845,7 +848,7 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForSpells( const HeroBase * hero, c
         *playResistSound = true;
     }
 
-    Unit * target = GetTroopBoard( dest );
+    Unit * target = GetTroopBoard( dst );
 
     // from spells
     switch ( spell.GetID() ) {
@@ -870,11 +873,9 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForSpells( const HeroBase * hero, c
         targets.push_back( res );
     }
 
-    bool ignoreMagicResistance = false;
-
     // resurrect spell? get target from graveyard
-    if ( nullptr == target && GraveyardAllowResurrect( dest, spell ) ) {
-        target = GetTroopUID( graveyard.GetLastTroopUID( dest ) );
+    if ( nullptr == target && GraveyardAllowResurrect( dst, spell ) ) {
+        target = GetTroopUID( graveyard.GetLastTroopUID( dst ) );
 
         if ( target && target->AllowApplySpell( spell, hero ) && consideredTargets.insert( target ).second ) {
             res.defender = target;
@@ -886,7 +887,7 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForSpells( const HeroBase * hero, c
         // check other spells
         switch ( spell.GetID() ) {
         case Spell::CHAINLIGHTNING: {
-            for ( const TargetInfo & spellTarget : TargetsForChainLightning( hero, dest ) ) {
+            for ( const TargetInfo & spellTarget : TargetsForChainLightning( hero, dst, applyRandomMagicResistance ) ) {
                 assert( spellTarget.defender != nullptr );
 
                 if ( consideredTargets.insert( spellTarget.defender ).second ) {
@@ -898,10 +899,12 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForSpells( const HeroBase * hero, c
                 }
             }
 
-            ignoreMagicResistance = true;
+            // Magic resistance has already been applied in the process of selecting targets for Chain Lightning
+            applyRandomMagicResistance = false;
 
+            // TODO: remove this temporary assertion
             if ( playResistSound ) {
-                *playResistSound = true;
+                assert( *playResistSound );
             }
             break;
         }
@@ -911,7 +914,7 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForSpells( const HeroBase * hero, c
         case Spell::METEORSHOWER:
         case Spell::COLDRING:
         case Spell::FIREBLAST: {
-            for ( const int32_t index : Board::GetDistanceIndexes( dest, ( spell == Spell::FIREBLAST ? 2 : 1 ) ) ) {
+            for ( const int32_t index : Board::GetDistanceIndexes( dst, ( spell == Spell::FIREBLAST ? 2 : 1 ) ) ) {
                 Unit * targetUnit = GetTroopBoard( index );
 
                 if ( targetUnit && targetUnit->AllowApplySpell( spell, hero ) && consideredTargets.insert( targetUnit ).second ) {
@@ -962,18 +965,24 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForSpells( const HeroBase * hero, c
         }
     }
 
-    if ( !ignoreMagicResistance ) {
-        // Mark magically resistant troops
-        for ( auto & tgt : targets ) {
-            const uint32_t resist = tgt.defender->GetMagicResist( spell, hero ? hero->GetPower() : 0, hero );
+    // Mark magically resistant troops
+    for ( auto & tgt : targets ) {
+        const uint32_t resist = tgt.defender->GetMagicResist( spell, hero ? hero->GetPower() : 0, hero );
+        assert( resist < 100 );
 
-            if ( 0 < resist && 100 > resist && resist >= _randomGenerator.Get( 1, 100 ) ) {
-                tgt.resist = true;
-            }
+        if ( applyRandomMagicResistance && resist >= _randomGenerator.Get( 1, 100 ) ) {
+            tgt.resist = true;
         }
     }
 
     return targets;
+}
+
+Battle::TargetsInfo Battle::Arena::GetTargetsForSpell( const HeroBase * hero, const Spell & spell, const int32_t dst )
+{
+    // This method can be called by external code (e.g. AI code) to pre-evaluate the effect of a spell, so probabilistic mechanisms, in particular unit's magic
+    // resistance, cannot be used
+    return GetTargetsForSpell( hero, spell, dst, false, nullptr );
 }
 
 void Battle::Arena::ApplyActionTower( Command & cmd )
@@ -1115,7 +1124,7 @@ void Battle::Arena::ApplyActionSpellDefaults( Command & cmd, const Spell & spell
     const int32_t dst = cmd.GetNextValue();
 
     bool playResistSound = false;
-    TargetsInfo targets = GetTargetsForSpells( commander, spell, dst, &playResistSound );
+    TargetsInfo targets = GetTargetsForSpell( commander, spell, dst, true, &playResistSound );
     TargetsInfo resistTargets;
 
     if ( _interface ) {
