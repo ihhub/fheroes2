@@ -105,33 +105,41 @@ int Battle::Catapult::GetTarget( const std::vector<uint32_t> & stateOfCastleDefe
     targets.reserve( 4 );
 
     // check walls
-    if ( 0 != stateOfCastleDefences[CAT_WALL1] )
+    if ( 0 != stateOfCastleDefences[CAT_WALL1] ) {
         targets.push_back( CAT_WALL1 );
-    if ( 0 != stateOfCastleDefences[CAT_WALL2] )
+    }
+    if ( 0 != stateOfCastleDefences[CAT_WALL2] ) {
         targets.push_back( CAT_WALL2 );
-    if ( 0 != stateOfCastleDefences[CAT_WALL3] )
+    }
+    if ( 0 != stateOfCastleDefences[CAT_WALL3] ) {
         targets.push_back( CAT_WALL3 );
-    if ( 0 != stateOfCastleDefences[CAT_WALL4] )
+    }
+    if ( 0 != stateOfCastleDefences[CAT_WALL4] ) {
         targets.push_back( CAT_WALL4 );
+    }
 
     // check right/left towers
     if ( targets.empty() ) {
-        if ( stateOfCastleDefences[CAT_TOWER1] )
+        if ( stateOfCastleDefences[CAT_TOWER1] ) {
             targets.push_back( CAT_TOWER1 );
-        if ( stateOfCastleDefences[CAT_TOWER2] )
+        }
+        if ( stateOfCastleDefences[CAT_TOWER2] ) {
             targets.push_back( CAT_TOWER2 );
+        }
     }
 
     // check bridge
     if ( targets.empty() ) {
-        if ( stateOfCastleDefences[CAT_BRIDGE] )
+        if ( stateOfCastleDefences[CAT_BRIDGE] ) {
             targets.push_back( CAT_BRIDGE );
+        }
     }
 
     // check general tower
     if ( targets.empty() ) {
-        if ( stateOfCastleDefences[CAT_CENTRAL_TOWER] )
+        if ( stateOfCastleDefences[CAT_CENTRAL_TOWER] ) {
             targets.push_back( CAT_CENTRAL_TOWER );
+        }
     }
 
     if ( !targets.empty() ) {
