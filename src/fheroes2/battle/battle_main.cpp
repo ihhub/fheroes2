@@ -175,35 +175,35 @@ namespace
         const Skill::Secondary eagleeye( Skill::Secondary::EAGLEEYE, hero.GetLevelSkill( Skill::Secondary::EAGLEEYE ) );
 
         // filter spells
-        for ( SpellStorage::const_iterator it = spells.begin(); it != spells.end(); ++it ) {
-            const Spell & sp = *it;
-            if ( !hero.HaveSpell( sp ) ) {
-                switch ( eagleeye.Level() ) {
-                case Skill::Level::BASIC:
-                    // 20%
-                    if ( 3 > sp.Level() && eagleeye.GetValues() >= randomGenerator.Get( 1, 100 ) )
-                        new_spells.push_back( sp );
-                    break;
-                case Skill::Level::ADVANCED:
-                    // 30%
-                    if ( 4 > sp.Level() && eagleeye.GetValues() >= randomGenerator.Get( 1, 100 ) )
-                        new_spells.push_back( sp );
-                    break;
-                case Skill::Level::EXPERT:
-                    // 40%
-                    if ( 5 > sp.Level() && eagleeye.GetValues() >= randomGenerator.Get( 1, 100 ) )
-                        new_spells.push_back( sp );
-                    break;
-                default:
-                    break;
-                }
+        for ( const Spell & sp : spells ) {
+            if ( hero.HaveSpell( sp ) ) {
+                continue;
+            }
+
+            switch ( eagleeye.Level() ) {
+            case Skill::Level::BASIC:
+                // 20%
+                if ( 3 > sp.Level() && eagleeye.GetValues() >= randomGenerator.Get( 1, 100 ) )
+                    new_spells.push_back( sp );
+                break;
+            case Skill::Level::ADVANCED:
+                // 30%
+                if ( 4 > sp.Level() && eagleeye.GetValues() >= randomGenerator.Get( 1, 100 ) )
+                    new_spells.push_back( sp );
+                break;
+            case Skill::Level::EXPERT:
+                // 40%
+                if ( 5 > sp.Level() && eagleeye.GetValues() >= randomGenerator.Get( 1, 100 ) )
+                    new_spells.push_back( sp );
+                break;
+            default:
+                break;
             }
         }
 
         // add new spell
-        for ( SpellStorage::const_iterator it = new_spells.begin(); it != new_spells.end(); ++it ) {
-            const Spell & sp = *it;
-            if ( local ) {
+        if ( local ) {
+            for ( const Spell & sp : new_spells ) {
                 std::string msg = _( "Through eagle-eyed observation, %{name} is able to learn the magic spell %{spell}." );
                 StringReplace( msg, "%{name}", hero.GetName() );
                 StringReplace( msg, "%{spell}", sp.GetName() );
