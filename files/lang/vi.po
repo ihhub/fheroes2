@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-19 13:17+0000\n"
+"POT-Creation-Date: 2023-10-20 13:35+0000\n"
 "PO-Revision-Date: 2023-10-09 22:16+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -1912,6 +1912,9 @@ msgstr "Nhà %{building} sinh ra %{monster}."
 msgid "Requires:"
 msgstr "Yêu cầu:"
 
+msgid "Exit this menu without doing anything."
+msgstr "Thoát khỏi trình đơn này và không làm gì cả."
+
 msgid "Cannot build. You have already built here today."
 msgstr "Không thể xây dựng. Ngươi đã xây dựng ở đây ngày hôm nay."
 
@@ -2605,6 +2608,9 @@ msgstr "với 1 bảo vật."
 msgid "without artifacts."
 msgstr "không có bảo vật."
 
+msgid "Recruit %{name} the %{race}"
+msgstr "Chiêu mộ %{name} của chủng tộc %{race}"
+
 msgid ""
 "'Spread' combat formation spreads your armies from the top to the bottom of "
 "the battlefield, with at least one empty space between each army."
@@ -2624,9 +2630,6 @@ msgstr "Đội hình Dàn trải"
 
 msgid "Grouped Formation"
 msgstr "Đội hình Tập trung"
-
-msgid "Recruit %{name} the %{race}"
-msgstr "Chiêu mộ %{name} của chủng tộc %{race}"
 
 msgid "Set garrison combat formation to 'Spread'"
 msgstr "Đặt đội hình chiến đấu đồn trú thành 'Dàn trải'"
@@ -2699,9 +2702,6 @@ msgstr "Đào kiếm Bảo vật Tối thượng."
 
 msgid "Digging"
 msgstr "Đang đào"
-
-msgid "Exit this menu without doing anything."
-msgstr "Thoát khỏi trình đơn này và không làm gì cả."
 
 msgid "Arena"
 msgstr "Đấu trường"

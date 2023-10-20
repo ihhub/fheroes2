@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-19 13:17+0000\n"
+"POT-Creation-Date: 2023-10-20 13:35+0000\n"
 "PO-Revision-Date: 2022-10-25 08:56+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
@@ -1790,6 +1790,9 @@ msgstr "A %{building} produz %{monster}."
 msgid "Requires:"
 msgstr "Requer:"
 
+msgid "Exit this menu without doing anything."
+msgstr "Sair do menu sem fazer nada."
+
 #, fuzzy
 msgid "Cannot build. You have already built here today."
 msgstr "Não é possível construir. Já foi construída neste turno."
@@ -2510,6 +2513,9 @@ msgstr "Não é possível mover o último exército à fortaleza"
 msgid "without artifacts."
 msgstr ""
 
+msgid "Recruit %{name} the %{race}"
+msgstr "Recrutar %{name} da raça %{race}"
+
 msgid ""
 "'Spread' combat formation spreads your armies from the top to the bottom of "
 "the battlefield, with at least one empty space between each army."
@@ -2530,9 +2536,6 @@ msgstr "Formação Espalhada"
 
 msgid "Grouped Formation"
 msgstr "Formação Agrupada"
-
-msgid "Recruit %{name} the %{race}"
-msgstr "Recrutar %{name} da raça %{race}"
 
 msgid "Set garrison combat formation to 'Spread'"
 msgstr "Definir formação de combate na Fortaleza para \"Espalhada\""
@@ -2611,9 +2614,6 @@ msgstr "Escavar em busca do Artefato Supremo."
 
 msgid "Digging"
 msgstr ""
-
-msgid "Exit this menu without doing anything."
-msgstr "Sair do menu sem fazer nada."
 
 msgid "Arena"
 msgstr "Arena"

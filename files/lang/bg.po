@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-19 13:17+0000\n"
+"POT-Creation-Date: 2023-10-20 13:35+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -1917,6 +1917,9 @@ msgstr "%{building} произвежда %{monster}."
 msgid "Requires:"
 msgstr "Изисква:"
 
+msgid "Exit this menu without doing anything."
+msgstr "Излез от това меню, без да правиш нищо."
+
 msgid "Cannot build. You have already built here today."
 msgstr "Не може да се строи. Ти вече си построил тук днес."
 
@@ -2621,6 +2624,9 @@ msgstr "с 1 артефакт."
 msgid "without artifacts."
 msgstr "без артефакти."
 
+msgid "Recruit %{name} the %{race}"
+msgstr "Вербувай %{name} %{race}"
+
 msgid ""
 "'Spread' combat formation spreads your armies from the top to the bottom of "
 "the battlefield, with at least one empty space between each army."
@@ -2640,9 +2646,6 @@ msgstr "Формация Разпростиране"
 
 msgid "Grouped Formation"
 msgstr "Групирана формация"
-
-msgid "Recruit %{name} the %{race}"
-msgstr "Вербувай %{name} %{race}"
 
 msgid "Set garrison combat formation to 'Spread'"
 msgstr "Задай гарнизонна бойна формация \"Разпростиране\""
@@ -2715,9 +2718,6 @@ msgstr "Изкопай най-добрия артефакт."
 
 msgid "Digging"
 msgstr "Изкопаване"
-
-msgid "Exit this menu without doing anything."
-msgstr "Излез от това меню, без да правиш нищо."
 
 msgid "Arena"
 msgstr "Арена"

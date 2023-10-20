@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-19 13:17+0000\n"
+"POT-Creation-Date: 2023-10-20 13:35+0000\n"
 "PO-Revision-Date: 2023-10-10 06:12+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -1917,6 +1917,9 @@ msgstr ""
 msgid "Requires:"
 msgstr "Требует:"
 
+msgid "Exit this menu without doing anything."
+msgstr "Выход, без изменений."
+
 msgid "Cannot build. You have already built here today."
 msgstr "Невозможно построить. Вы уже строили здесь сегодня."
 
@@ -2607,6 +2610,9 @@ msgstr "с 1 артефактом."
 msgid "without artifacts."
 msgstr "без артефактов."
 
+msgid "Recruit %{name} the %{race}"
+msgstr "Нанять %{name}, %{race}"
+
 msgid ""
 "'Spread' combat formation spreads your armies from the top to the bottom of "
 "the battlefield, with at least one empty space between each army."
@@ -2626,9 +2632,6 @@ msgstr "Разомкнутый строй"
 
 msgid "Grouped Formation"
 msgstr "Сомкнутый строй"
-
-msgid "Recruit %{name} the %{race}"
-msgstr "Нанять %{name}, %{race}"
 
 msgid "Set garrison combat formation to 'Spread'"
 msgstr "Боевой порядок гарнизона - Разомкнутый"
@@ -2701,9 +2704,6 @@ msgstr "Копать в поисках великого артефакта."
 
 msgid "Digging"
 msgstr "Копать"
-
-msgid "Exit this menu without doing anything."
-msgstr "Выход, без изменений."
 
 msgid "Arena"
 msgstr "Арена"
