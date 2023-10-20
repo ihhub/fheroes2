@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-19 13:17+0000\n"
+"POT-Creation-Date: 2023-10-20 13:35+0000\n"
 "PO-Revision-Date: 2023-10-12 20:05+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -1910,6 +1910,9 @@ msgstr "%{building} producerar %{monster}."
 msgid "Requires:"
 msgstr "Kräver:"
 
+msgid "Exit this menu without doing anything."
+msgstr "Stäng denna meny utan att göra någonting."
+
 msgid "Cannot build. You have already built here today."
 msgstr "Kan inte byggas. Du har redan byggt här idag."
 
@@ -2606,6 +2609,9 @@ msgstr "med 1 artefakt."
 msgid "without artifacts."
 msgstr "utan artefakter."
 
+msgid "Recruit %{name} the %{race}"
+msgstr "Rekrytera %{race}n %{name}"
+
 msgid ""
 "'Spread' combat formation spreads your armies from the top to the bottom of "
 "the battlefield, with at least one empty space between each army."
@@ -2625,9 +2631,6 @@ msgstr "Utspridd formation"
 
 msgid "Grouped Formation"
 msgstr "Grupperad formation"
-
-msgid "Recruit %{name} the %{race}"
-msgstr "Rekrytera %{race}n %{name}"
 
 msgid "Set garrison combat formation to 'Spread'"
 msgstr "Ändra granisonstruppernas stridsformation till 'Utspridd'"
@@ -2700,9 +2703,6 @@ msgstr "Gräv efter den Främsta Artefakten."
 
 msgid "Digging"
 msgstr "Gräver"
-
-msgid "Exit this menu without doing anything."
-msgstr "Stäng denna meny utan att göra någonting."
 
 msgid "Arena"
 msgstr "Arena"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-19 13:17+0000\n"
+"POT-Creation-Date: 2023-10-20 13:35+0000\n"
 "PO-Revision-Date: 2023-09-24 16:05+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Czech <cs@li.org>\n"
@@ -1894,6 +1894,9 @@ msgstr "%{building} produkuje %{monster}."
 msgid "Requires:"
 msgstr "Požadováno:"
 
+msgid "Exit this menu without doing anything."
+msgstr "Odejít z menu bez provedení změm."
+
 msgid "Cannot build. You have already built here today."
 msgstr "Nelze postavit. Dnes si zde již stavěl."
 
@@ -2584,6 +2587,9 @@ msgstr "s 1 artefaktem."
 msgid "without artifacts."
 msgstr "bez artefaktů."
 
+msgid "Recruit %{name} the %{race}"
+msgstr "Najmout %{name} %{race}"
+
 msgid ""
 "'Spread' combat formation spreads your armies from the top to the bottom of "
 "the battlefield, with at least one empty space between each army."
@@ -2603,9 +2609,6 @@ msgstr "Rozvinutá formace"
 
 msgid "Grouped Formation"
 msgstr "Seskupená formace"
-
-msgid "Recruit %{name} the %{race}"
-msgstr "Najmout %{name} %{race}"
 
 msgid "Set garrison combat formation to 'Spread'"
 msgstr "Nastavit bojovou formaci pevnosti na 'Rozvinutá'"
@@ -2678,9 +2681,6 @@ msgstr "Vykopej ultimátní Artefakt."
 
 msgid "Digging"
 msgstr "Kopání"
-
-msgid "Exit this menu without doing anything."
-msgstr "Odejít z menu bez provedení změm."
 
 msgid "Arena"
 msgstr "Aréna"

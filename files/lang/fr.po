@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-19 13:17+0000\n"
+"POT-Creation-Date: 2023-10-20 13:35+0000\n"
 "PO-Revision-Date: 2022-12-18 13:48+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -1918,6 +1918,9 @@ msgstr "Le %{building} produit des %{monster}."
 msgid "Requires:"
 msgstr "Nécessite :"
 
+msgid "Exit this menu without doing anything."
+msgstr "Sortir de ce menu sans modification."
+
 msgid "Cannot build. You have already built here today."
 msgstr "Construction impossible. Une construction a déjà eu lieu aujourd'hui."
 
@@ -2631,6 +2634,9 @@ msgstr "avec un artéfact."
 msgid "without artifacts."
 msgstr "sans artéfact."
 
+msgid "Recruit %{name} the %{race}"
+msgstr "Recrutement de %{name} le %{race}"
+
 msgid ""
 "'Spread' combat formation spreads your armies from the top to the bottom of "
 "the battlefield, with at least one empty space between each army."
@@ -2650,9 +2656,6 @@ msgstr "Formation dispersée"
 
 msgid "Grouped Formation"
 msgstr "Formation groupée"
-
-msgid "Recruit %{name} the %{race}"
-msgstr "Recrutement de %{name} le %{race}"
 
 msgid "Set garrison combat formation to 'Spread'"
 msgstr "Utiliser la formation de combat 'dispersée' pour la garnison"
@@ -2726,9 +2729,6 @@ msgstr "Creuser pour l'ultime artéfact."
 
 msgid "Digging"
 msgstr "Fouille"
-
-msgid "Exit this menu without doing anything."
-msgstr "Sortir de ce menu sans modification."
 
 msgid "Arena"
 msgstr "Arène"

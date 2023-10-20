@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-19 13:17+0000\n"
+"POT-Creation-Date: 2023-10-20 13:35+0000\n"
 "PO-Revision-Date: 2023-09-11 20:22+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -1900,6 +1900,9 @@ msgstr "%{building} produkuje: %{monster}."
 msgid "Requires:"
 msgstr "Potrebuje:"
 
+msgid "Exit this menu without doing anything."
+msgstr "Opusti túto ponuku bez vykonania akcie."
+
 msgid "Cannot build. You have already built here today."
 msgstr "Nedá sa stavať. Dnes tu už bola budova postavená."
 
@@ -2592,6 +2595,9 @@ msgstr "s jedným artefaktom."
 msgid "without artifacts."
 msgstr "bez artefaktov."
 
+msgid "Recruit %{name} the %{race}"
+msgstr "Najmi: %{race} %{name}"
+
 msgid ""
 "'Spread' combat formation spreads your armies from the top to the bottom of "
 "the battlefield, with at least one empty space between each army."
@@ -2611,9 +2617,6 @@ msgstr "Široká formácia"
 
 msgid "Grouped Formation"
 msgstr "Zoskupená formácia"
-
-msgid "Recruit %{name} the %{race}"
-msgstr "Najmi: %{race} %{name}"
 
 msgid "Set garrison combat formation to 'Spread'"
 msgstr "Nastaviť bojovú formáciu posádky na 'Široká'"
@@ -2686,9 +2689,6 @@ msgstr "Kop za ultimátnym artefaktom."
 
 msgid "Digging"
 msgstr "Kopanie"
-
-msgid "Exit this menu without doing anything."
-msgstr "Opusti túto ponuku bez vykonania akcie."
 
 msgid "Arena"
 msgstr "Aréna"
