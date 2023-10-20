@@ -2212,17 +2212,17 @@ StreamBase & operator>>( StreamBase & msg, VecHeroes & heroes )
 
     heroes.resize( size, nullptr );
 
-    for ( AllHeroes::iterator it = heroes.begin(); it != heroes.end(); ++it ) {
+    for ( Heroes * hero : heroes ) {
         uint32_t hid;
         msg >> hid;
 
         static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1010_RELEASE, "Remove the logic below." );
         if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1010_RELEASE ) {
             // UNKNOWN was 72 before FORMAT_VERSION_1010_RELEASE.
-            *it = ( hid != 72 ? world.GetHeroes( hid + 1 ) : nullptr );
+            hero = ( hid != 72 ? world.GetHeroes( hid + 1 ) : nullptr );
         }
         else {
-            *it = ( Heroes::isValidId( hid ) ? world.GetHeroes( hid ) : nullptr );
+            hero = ( Heroes::isValidId( hid ) ? world.GetHeroes( hid ) : nullptr );
         }
     }
 
