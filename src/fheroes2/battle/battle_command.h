@@ -69,7 +69,7 @@ namespace Battle
         static constexpr std::integral_constant<CommandType, CommandType::AUTO_FINISH> AUTO_FINISH{};
 
         template <CommandType cmd, typename... Types>
-        Command( std::integral_constant<CommandType, cmd> /* tag */, const Types... params )
+        explicit Command( std::integral_constant<CommandType, cmd> /* tag */, const Types... params )
             : _type( cmd )
         {
             if constexpr ( cmd == CommandType::MOVE ) {
