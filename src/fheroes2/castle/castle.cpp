@@ -2230,7 +2230,7 @@ bool Castle::HasBoatNearby() const
     return false;
 }
 
-int Castle::getTileIndexToPlaceBoat() const
+int32_t Castle::getTileIndexToPlaceBoat() const
 {
     const fheroes2::Point possibleSeaTile{ center.x, center.y + 2 };
     if ( !Maps::isValidAbsPoint( possibleSeaTile.x, possibleSeaTile.y ) ) {
