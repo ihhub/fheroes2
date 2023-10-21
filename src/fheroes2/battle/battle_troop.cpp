@@ -1093,15 +1093,35 @@ uint32_t Battle::Unit::GetDefense() const
 
 int32_t Battle::Unit::GetScoreQuality( const Unit & defender ) const
 {
+    const auto getDefenderDamageAverage = [&defender]() {
+        if ( defender.Modes( SP_CURSE ) ) {
+            return defender.GetDamageMin();
+        }
+
+        if ( defender.Modes( SP_BLESS ) ) {
+            return defender.GetDamageMax();
+        }
+
+        return ( defender.GetDamageMin() + defender.GetDamageMax() ) / 2;
+    };
+
     const Unit & attacker = *this;
 
-    const double defendersDamage = CalculateDamageUnit( attacker, ( static_cast<double>( defender.GetDamageMin() ) + defender.GetDamageMax() ) / 2.0 );
-    const double attackerPowerLost = ( attacker.Modes( CAP_MIRRORIMAGE ) || defender.Modes( CAP_TOWER ) || defendersDamage >= hp ) ? 1.0 : defendersDamage / hp;
-    const bool attackerIsArchers = isArchers();
+    const uint32_t attackerDamageToDefender = [&defender, &attacker]() {
+        if ( attacker.Modes( SP_CURSE ) ) {
+            return attacker.CalculateMinDamage( defender );
+        }
 
-    double attackerThreat = CalculateDamageUnit( defender, ( static_cast<double>( GetDamageMin() ) + GetDamageMax() ) / 2.0 );
+        if ( attacker.Modes( SP_BLESS ) ) {
+            return attacker.CalculateMaxDamage( defender );
+        }
 
-    const bool isAttackerDangerousToDefender = [&attacker, &defender]() {
+        return ( attacker.CalculateMinDamage( defender ) + attacker.CalculateMaxDamage( defender ) ) / 2;
+    }();
+
+    double attackerThreat = attackerDamageToDefender;
+
+    const bool isAttackerDangerousToDefender = [&defender, &attacker]() {
         // From the point of view of castle towers, any units are considered dangerous
         if ( defender.Modes( CAP_TOWER ) ) {
             return true;
@@ -1118,50 +1138,62 @@ int32_t Battle::Unit::GetScoreQuality( const Unit & defender ) const
         attackerThreat /= 2;
     }
 
-    const std::vector<fheroes2::MonsterAbility> & abilities = fheroes2::getMonsterData( id ).battleStats.abilities;
+    const std::vector<fheroes2::MonsterAbility> & attackerAbilities = fheroes2::getMonsterData( id ).battleStats.abilities;
 
-    // Monster special abilities
-    auto foundAbility = std::find( abilities.begin(), abilities.end(), fheroes2::MonsterAbility( fheroes2::MonsterAbilityType::DOUBLE_MELEE_ATTACK ) );
-    if ( foundAbility != abilities.end() ) {
-        if ( attackerIsArchers || ignoreRetaliation() || defender.Modes( TR_RESPONDED ) ) {
-            attackerThreat *= 2;
+    if ( Unit::isHandFighting( attacker, defender ) ) {
+        if ( std::find( attackerAbilities.begin(), attackerAbilities.end(), fheroes2::MonsterAbility( fheroes2::MonsterAbilityType::DOUBLE_MELEE_ATTACK ) )
+             != attackerAbilities.end() ) {
+            if ( defender.Modes( TR_RESPONDED ) || defender.Modes( CAP_TOWER ) || attacker.ignoreRetaliation() ) {
+                attackerThreat *= 2;
+            }
+            else {
+                const uint32_t retaliatoryDamage = defender.EstimateRetaliatoryDamage( attackerDamageToDefender );
+
+                assert( attacker.GetHitPoints() > 0 );
+
+                attackerThreat += attackerThreat * ( 1.0 - static_cast<double>( retaliatoryDamage ) / static_cast<double>( attacker.GetHitPoints() ) );
+            }
         }
-        else {
-            // Check how much we will lose due to retaliation
-            attackerThreat += attackerThreat * ( 1.0 - attackerPowerLost );
+    }
+    else if ( attacker.isArchers() && !attacker.isHandFighting() ) {
+        if ( std::find( attackerAbilities.begin(), attackerAbilities.end(), fheroes2::MonsterAbility( fheroes2::MonsterAbilityType::DOUBLE_SHOOTING ) )
+             != attackerAbilities.end() ) {
+            attackerThreat *= 2;
         }
     }
 
-    foundAbility = std::find( abilities.begin(), abilities.end(), fheroes2::MonsterAbility( fheroes2::MonsterAbilityType::ENEMY_HALFING ) );
-    if ( foundAbility != abilities.end() ) {
+    if ( std::find( attackerAbilities.begin(), attackerAbilities.end(), fheroes2::MonsterAbility( fheroes2::MonsterAbilityType::ENEMY_HALFING ) )
+         != attackerAbilities.end() ) {
         attackerThreat *= 2;
     }
 
-    foundAbility = std::find( abilities.begin(), abilities.end(), fheroes2::MonsterAbility( fheroes2::MonsterAbilityType::SOUL_EATER ) );
-    if ( foundAbility != abilities.end() ) {
+    if ( std::find( attackerAbilities.begin(), attackerAbilities.end(), fheroes2::MonsterAbility( fheroes2::MonsterAbilityType::SOUL_EATER ) )
+         != attackerAbilities.end() ) {
         attackerThreat *= 3;
     }
 
-    foundAbility = std::find( abilities.begin(), abilities.end(), fheroes2::MonsterAbility( fheroes2::MonsterAbilityType::HP_DRAIN ) );
-    if ( foundAbility != abilities.end() ) {
+    if ( std::find( attackerAbilities.begin(), attackerAbilities.end(), fheroes2::MonsterAbility( fheroes2::MonsterAbilityType::HP_DRAIN ) )
+         != attackerAbilities.end() ) {
         attackerThreat *= 1.3;
     }
 
-    foundAbility = std::find( abilities.begin(), abilities.end(), fheroes2::MonsterAbility( fheroes2::MonsterAbilityType::SPELL_CASTER ) );
-    if ( foundAbility != abilities.end() ) {
-        switch ( foundAbility->value ) {
+    const auto spellCasterAbilityIter
+        = std::find( attackerAbilities.begin(), attackerAbilities.end(), fheroes2::MonsterAbility( fheroes2::MonsterAbilityType::SPELL_CASTER ) );
+    if ( spellCasterAbilityIter != attackerAbilities.end() ) {
+        switch ( spellCasterAbilityIter->value ) {
         case Spell::BLIND:
         case Spell::PARALYZE:
-        case Spell::PETRIFY:
-            attackerThreat
-                += defendersDamage * foundAbility->percentage / 100.0 * ( 100 - defender.GetMagicResist( foundAbility->value, DEFAULT_SPELL_DURATION, nullptr ) ) / 100.0;
+        case Spell::PETRIFY: {
+            attackerThreat += static_cast<double>( getDefenderDamageAverage() ) * spellCasterAbilityIter->percentage / 100.0
+                              * ( 100 - defender.GetMagicResist( spellCasterAbilityIter->value, DEFAULT_SPELL_DURATION, nullptr ) ) / 100.0;
             break;
+        }
         case Spell::DISPEL:
             // TODO: add the logic to evaluate this spell value.
             break;
         case Spell::CURSE:
-            attackerThreat += defendersDamage * foundAbility->percentage / 100.0 / 10.0
-                              * ( 100 - defender.GetMagicResist( foundAbility->value, DEFAULT_SPELL_DURATION, nullptr ) ) / 100.0;
+            attackerThreat += static_cast<double>( getDefenderDamageAverage() ) * spellCasterAbilityIter->percentage / 100.0 / 10.0
+                              * ( 100 - defender.GetMagicResist( spellCasterAbilityIter->value, DEFAULT_SPELL_DURATION, nullptr ) ) / 100.0;
             break;
         default:
             // Did you add a new spell casting ability? Add the logic above!
@@ -1195,12 +1227,7 @@ int32_t Battle::Unit::GetScoreQuality( const Unit & defender ) const
         attackerThreat *= 1.25;
     }
 
-    // Avoid effectiveness scaling if we're dealing with archers
-    if ( !attackerIsArchers || defender.isArchers() ) {
-        attackerThreat *= attackerPowerLost;
-    }
-
-    return static_cast<int>( attackerThreat * 100 );
+    return static_cast<int32_t>( attackerThreat * 100 );
 }
 
 uint32_t Battle::Unit::GetHitPoints() const
