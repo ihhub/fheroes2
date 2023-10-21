@@ -118,7 +118,7 @@ uint32_t Battle::ModesAffected::FindZeroDuration() const
     return it == end() ? 0 : ( *it ).first;
 }
 
-Battle::Unit::Unit( const Troop & t, const Position & pos, const bool ref, const Rand::DeterministicRandomGenerator & randomGenerator, const uint32_t uid )
+Battle::Unit::Unit( const Troop & t, const Position & pos, const bool ref, const uint32_t uid )
     : ArmyTroop( nullptr, t )
     , animation( id )
     , _uid( uid )
@@ -132,7 +132,6 @@ Battle::Unit::Unit( const Troop & t, const Position & pos, const bool ref, const
     , idleTimer( animation.getIdleDelay() )
     , _blindRetaliation( false )
     , customAlphaMask( 255 )
-    , _randomGenerator( randomGenerator )
 {
     SetPosition( pos );
 }
@@ -292,28 +291,28 @@ int32_t Battle::Unit::GetTailIndex() const
     return position.GetTail() ? position.GetTail()->GetIndex() : -1;
 }
 
-void Battle::Unit::SetRandomMorale()
+void Battle::Unit::SetRandomMorale( Rand::DeterministicRandomGenerator & randomGenerator )
 {
     const int morale = GetMorale();
 
-    if ( morale > 0 && static_cast<int32_t>( _randomGenerator.Get( 1, 24 ) ) <= morale ) {
+    if ( morale > 0 && static_cast<int32_t>( randomGenerator.Get( 1, 24 ) ) <= morale ) {
         SetModes( MORALE_GOOD );
     }
-    else if ( morale < 0 && static_cast<int32_t>( _randomGenerator.Get( 1, 12 ) ) <= -morale ) {
+    else if ( morale < 0 && static_cast<int32_t>( randomGenerator.Get( 1, 12 ) ) <= -morale ) {
         if ( isControlHuman() ) {
             SetModes( MORALE_BAD );
         }
         // AI is given a cheeky 25% chance to avoid it - because they build armies from random troops
-        else if ( _randomGenerator.Get( 1, 4 ) != 1 ) {
+        else if ( randomGenerator.Get( 1, 4 ) != 1 ) {
             SetModes( MORALE_BAD );
         }
     }
 }
 
-void Battle::Unit::SetRandomLuck()
+void Battle::Unit::SetRandomLuck( Rand::DeterministicRandomGenerator & randomGenerator )
 {
     const int32_t luck = GetLuck();
-    const int32_t chance = static_cast<int32_t>( _randomGenerator.Get( 1, 24 ) );
+    const int32_t chance = static_cast<int32_t>( randomGenerator.Get( 1, 24 ) );
 
     if ( luck > 0 && chance <= luck ) {
         SetModes( LUCK_GOOD );
@@ -596,7 +595,7 @@ uint32_t Battle::Unit::CalculateDamageUnit( const Unit & enemy, double dmg ) con
     return static_cast<uint32_t>( dmg ) < 1 ? 1 : static_cast<uint32_t>( dmg );
 }
 
-uint32_t Battle::Unit::GetDamage( const Unit & enemy ) const
+uint32_t Battle::Unit::GetDamage( const Unit & enemy, Rand::DeterministicRandomGenerator & randomGenerator ) const
 {
     uint32_t res = 0;
 
@@ -605,7 +604,7 @@ uint32_t Battle::Unit::GetDamage( const Unit & enemy ) const
     else if ( Modes( SP_CURSE ) )
         res = CalculateMinDamage( enemy );
     else
-        res = _randomGenerator.Get( CalculateMinDamage( enemy ), CalculateMaxDamage( enemy ) );
+        res = randomGenerator.Get( CalculateMinDamage( enemy ), CalculateMaxDamage( enemy ) );
 
     if ( Modes( LUCK_GOOD ) )
         res = res * 2;
@@ -1607,7 +1606,7 @@ uint32_t Battle::Unit::GetMagicResist( const Spell & spell, const uint32_t attac
     return fheroes2::getSpellResistance( id, spell.GetID() );
 }
 
-int Battle::Unit::GetSpellMagic() const
+int Battle::Unit::GetSpellMagic( Rand::DeterministicRandomGenerator & randomGenerator ) const
 {
     const std::vector<fheroes2::MonsterAbility> & abilities = fheroes2::getMonsterData( GetID() ).battleStats.abilities;
     const auto foundAbility = std::find( abilities.begin(), abilities.end(), fheroes2::MonsterAbility( fheroes2::MonsterAbilityType::SPELL_CASTER ) );
@@ -1616,7 +1615,7 @@ int Battle::Unit::GetSpellMagic() const
         return Spell::NONE;
     }
 
-    if ( _randomGenerator.Get( 1, 100 ) > foundAbility->percentage ) {
+    if ( randomGenerator.Get( 1, 100 ) > foundAbility->percentage ) {
         // No luck to cast the spell.
         return Spell::NONE;
     }

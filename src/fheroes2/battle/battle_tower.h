@@ -30,11 +30,6 @@
 #include "battle_troop.h"
 #include "math_base.h"
 
-namespace Rand
-{
-    class DeterministicRandomGenerator;
-}
-
 class Castle;
 
 namespace Battle
@@ -49,7 +44,7 @@ namespace Battle
     class Tower : public Unit
     {
     public:
-        Tower( const Castle & castle, const TowerType type, const Rand::DeterministicRandomGenerator & randomGenerator, const uint32_t uid );
+        Tower( const Castle & castle, const TowerType type, const uint32_t uid );
         Tower( const Tower & ) = delete;
 
         Tower & operator=( const Tower & ) = delete;
