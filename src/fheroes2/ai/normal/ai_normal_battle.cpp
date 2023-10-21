@@ -55,7 +55,6 @@
 #include "heroes_base.h"
 #include "logging.h"
 #include "monster_info.h"
-#include "rand.h"
 #include "settings.h"
 #include "speed.h"
 
@@ -92,16 +91,12 @@ namespace AI
                     && ValueHasImproved( newOutcome.positionValue, previous.positionValue, newOutcome.attackValue, previous.attackValue ) );
     }
 
-    MeleeAttackOutcome BestAttackOutcome( Arena & arena, const Unit & attacker, const Unit & defender, const Rand::DeterministicRandomGenerator & randomGenerator )
+    MeleeAttackOutcome BestAttackOutcome( Arena & arena, const Unit & attacker, const Unit & defender )
     {
         MeleeAttackOutcome bestOutcome;
 
-        Indexes nearbyIndexes = Board::GetAroundIndexes( defender );
-        // Shuffle to make equal quality moves a bit unpredictable
-        randomGenerator.Shuffle( nearbyIndexes );
-
         // Check if we can reach the target and pick best position to attack from
-        for ( const int32_t nearbyIdx : nearbyIndexes ) {
+        for ( const int32_t nearbyIdx : Board::GetAroundIndexes( defender ) ) {
             const Position pos = Position::GetPosition( attacker, nearbyIdx );
 
             if ( !arena.isPositionReachable( attacker, pos, false ) ) {
@@ -285,7 +280,7 @@ namespace AI
             if ( arena.AutoBattleInProgress() && Arena::GetInterface() != nullptr ) {
                 assert( arena.CanToggleAutoBattle() );
 
-                actions.emplace_back( CommandType::MSG_BATTLE_AUTO_SWITCH, currentColor );
+                actions.emplace_back( Command::AUTO_SWITCH, currentColor );
 
                 DEBUG_LOG( DBG_BATTLE, DBG_INFO, Color::String( currentColor ) << " has used up the limit of turns without deaths, auto battle is turned off" )
             }
@@ -293,7 +288,7 @@ namespace AI
             else {
                 assert( arena.CanRetreatOpponent( currentColor ) && arena.GetCurrentCommander() != nullptr );
 
-                actions.emplace_back( CommandType::MSG_BATTLE_RETREAT );
+                actions.emplace_back( Command::RETREAT );
 
                 DEBUG_LOG( DBG_BATTLE, DBG_INFO,
                            Color::String( currentColor ) << " has used up the limit of turns without deaths, " << arena.GetCurrentCommander()->GetName() << " retreats" )
@@ -326,11 +321,11 @@ namespace AI
                 const SpellSelection & bestSpell = selectBestSpell( arena, currentUnit, true );
 
                 if ( bestSpell.spellID != -1 ) {
-                    actions.emplace_back( CommandType::MSG_BATTLE_CAST, bestSpell.spellID, bestSpell.cell );
+                    actions.emplace_back( Command::SPELLCAST, bestSpell.spellID, bestSpell.cell );
                 }
             }
 
-            actions.emplace_back( CommandType::MSG_BATTLE_RETREAT );
+            actions.emplace_back( Command::RETREAT );
             return actions;
         }
 
@@ -339,7 +334,7 @@ namespace AI
             const SpellSelection & bestSpell = selectBestSpell( arena, currentUnit, false );
 
             if ( bestSpell.spellID != -1 ) {
-                actions.emplace_back( CommandType::MSG_BATTLE_CAST, bestSpell.spellID, bestSpell.cell );
+                actions.emplace_back( Command::SPELLCAST, bestSpell.spellID, bestSpell.cell );
                 return actions;
             }
         }
@@ -372,7 +367,7 @@ namespace AI
                 const int32_t moveTargetIdx = getUnitMovementTarget( currentUnit, target.cell );
 
                 if ( currentUnit.GetHeadIndex() != moveTargetIdx ) {
-                    actions.emplace_back( CommandType::MSG_BATTLE_MOVE, currentUnit.GetUID(), moveTargetIdx );
+                    actions.emplace_back( Command::MOVE, currentUnit.GetUID(), moveTargetIdx );
 
                     DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " moving to cell " << moveTargetIdx )
                 }
@@ -380,7 +375,7 @@ namespace AI
                 if ( target.unit ) {
                     const int32_t optimalTargetIdx = Board::OptimalAttackTarget( currentUnit, *target.unit, target.cell );
 
-                    actions.emplace_back( CommandType::MSG_BATTLE_ATTACK, currentUnit.GetUID(), target.unit->GetUID(), optimalTargetIdx,
+                    actions.emplace_back( Command::ATTACK, currentUnit.GetUID(), target.unit->GetUID(), optimalTargetIdx,
                                           Board::GetDirection( target.cell, optimalTargetIdx ) );
 
                     DEBUG_LOG( DBG_BATTLE, DBG_INFO,
@@ -393,7 +388,7 @@ namespace AI
 
         // No action was taken, skip the turn
         if ( actions.size() == actionsSize ) {
-            actions.emplace_back( CommandType::MSG_BATTLE_SKIP, currentUnit.GetUID() );
+            actions.emplace_back( Command::SKIP, currentUnit.GetUID() );
         }
 
         return actions;
@@ -416,9 +411,6 @@ namespace AI
         _enemyAverageSpeed = 0;
         _enemySpellStrength = 0;
         _considerRetreat = false;
-        _randomGenerator = &arena.GetRandomGenerator();
-        assert( _randomGenerator );
-        // TODO : this pointer will dangle as we don't set it to nullptr when the Battle instance is deleted
 
         if ( enemyForce.empty() )
             return;
@@ -791,7 +783,7 @@ namespace AI
             const int32_t moveTargetIdx = getUnitMovementTarget( currentUnit, retreatIdx );
 
             if ( currentUnit.GetHeadIndex() != moveTargetIdx ) {
-                actions.emplace_back( CommandType::MSG_BATTLE_MOVE, currentUnit.GetUID(), moveTargetIdx );
+                actions.emplace_back( Command::MOVE, currentUnit.GetUID(), moveTargetIdx );
 
                 DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " moving to cell " << moveTargetIdx )
             }
@@ -809,7 +801,18 @@ namespace AI
             const auto evaluateEnemyTarget = [&currentUnit, &target, &bestOutcome]( const Unit * enemy ) {
                 assert( enemy != nullptr );
 
-                const int archerMeleeDmg = currentUnit.GetDamage( *enemy );
+                const int archerMeleeDmg = [&currentUnit, enemy]() {
+                    if ( currentUnit.Modes( SP_CURSE ) ) {
+                        return currentUnit.CalculateMinDamage( *enemy );
+                    }
+
+                    if ( currentUnit.Modes( SP_BLESS ) ) {
+                        return currentUnit.CalculateMaxDamage( *enemy );
+                    }
+
+                    return ( currentUnit.CalculateMinDamage( *enemy ) + currentUnit.CalculateMaxDamage( *enemy ) ) / 2;
+                }();
+
                 const int damageDiff = archerMeleeDmg - enemy->EstimateRetaliatoryDamage( archerMeleeDmg );
 
                 if ( bestOutcome < damageDiff ) {
@@ -835,7 +838,7 @@ namespace AI
             }
 
             if ( target.unit ) {
-                actions.emplace_back( CommandType::MSG_BATTLE_ATTACK, currentUnit.GetUID(), target.unit->GetUID(), -1, -1 );
+                actions.emplace_back( Command::ATTACK, currentUnit.GetUID(), target.unit->GetUID(), -1, -1 );
 
                 DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " archer attacks enemy " << target.unit->GetName() << " in melee, outcome: " << bestOutcome )
             }
@@ -918,7 +921,7 @@ namespace AI
             }
 
             if ( target.unit ) {
-                actions.emplace_back( CommandType::MSG_BATTLE_ATTACK, currentUnit.GetUID(), target.unit->GetUID(), target.cell, 0 );
+                actions.emplace_back( Command::ATTACK, currentUnit.GetUID(), target.unit->GetUID(), target.cell, 0 );
 
                 DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " archer shoots at enemy " << target.unit->GetName() << " value: " << highestPriority )
             }
@@ -940,7 +943,7 @@ namespace AI
         double attackPositionValue = -_enemyArmyStrength;
 
         for ( const Unit * enemy : enemies ) {
-            const MeleeAttackOutcome & outcome = BestAttackOutcome( arena, currentUnit, *enemy, *_randomGenerator );
+            const MeleeAttackOutcome & outcome = BestAttackOutcome( arena, currentUnit, *enemy );
 
             if ( outcome.canAttackImmediately && ValueHasImproved( outcome.positionValue, attackPositionValue, outcome.attackValue, attackHighestValue ) ) {
                 attackHighestValue = outcome.attackValue;
@@ -1044,7 +1047,7 @@ namespace AI
         // 1. Check if there's a target within our half of the battlefield
         MeleeAttackOutcome attackOption;
         for ( const Unit * enemy : enemies ) {
-            const MeleeAttackOutcome & outcome = BestAttackOutcome( arena, currentUnit, *enemy, *_randomGenerator );
+            const MeleeAttackOutcome & outcome = BestAttackOutcome( arena, currentUnit, *enemy );
 
             // Allow to move only within our half of the battlefield. If in castle make sure to stay inside.
             if ( !isDefensivePosition( outcome.fromIndex ) )
@@ -1082,7 +1085,7 @@ namespace AI
                     continue;
                 }
 
-                MeleeAttackOutcome outcome = BestAttackOutcome( arena, currentUnit, *enemy, *_randomGenerator );
+                MeleeAttackOutcome outcome = BestAttackOutcome( arena, currentUnit, *enemy );
                 outcome.positionValue = archerValue;
 
                 DEBUG_LOG( DBG_BATTLE, DBG_TRACE, " - Found enemy, cell " << cell << " threat " << outcome.attackValue )
@@ -1146,7 +1149,7 @@ namespace AI
             const Unit * targetUnit = nearestUnits.front();
             assert( targetUnit != nullptr );
 
-            actions.emplace_back( CommandType::MSG_BATTLE_ATTACK, currentUnitUID, targetUnit->GetUID(), -1, 0 );
+            actions.emplace_back( Command::ATTACK, currentUnitUID, targetUnit->GetUID(), -1, 0 );
 
             DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " archer shoots at enemy " << targetUnit->GetName() )
 
@@ -1218,7 +1221,7 @@ namespace AI
 
         // There is no reachable unit in sight, skip the turn
         if ( targetInfo.cell == -1 ) {
-            actions.emplace_back( CommandType::MSG_BATTLE_SKIP, currentUnitUID );
+            actions.emplace_back( Command::SKIP, currentUnitUID );
 
             return actions;
         }
@@ -1229,7 +1232,7 @@ namespace AI
         const int32_t moveTargetIdx = getUnitMovementTarget( currentUnit, targetInfo.cell );
 
         if ( currentUnit.GetHeadIndex() != moveTargetIdx ) {
-            actions.emplace_back( CommandType::MSG_BATTLE_MOVE, currentUnitUID, moveTargetIdx );
+            actions.emplace_back( Command::MOVE, currentUnitUID, moveTargetIdx );
 
             DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " moving to cell " << moveTargetIdx )
         }
@@ -1237,7 +1240,7 @@ namespace AI
         if ( targetInfo.unit ) {
             const Unit * targetUnit = targetInfo.unit;
 
-            actions.emplace_back( CommandType::MSG_BATTLE_ATTACK, currentUnitUID, targetUnit->GetUID(), -1, -1 );
+            actions.emplace_back( Command::ATTACK, currentUnitUID, targetUnit->GetUID(), -1, -1 );
 
             DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " melee offense, focus enemy " << targetUnit->GetName() )
         }
@@ -1256,8 +1259,8 @@ namespace AI
         actions.insert( actions.end(), plannedActions.begin(), plannedActions.end() );
 
         // Do not end the turn if we only cast a spell
-        if ( plannedActions.size() != 1 || !plannedActions.front().isType( CommandType::MSG_BATTLE_CAST ) ) {
-            actions.emplace_back( CommandType::MSG_BATTLE_END_TURN, currentUnit.GetUID() );
+        if ( plannedActions.size() != 1 || !plannedActions.front().isType( CommandType::SPELLCAST ) ) {
+            actions.emplace_back( Command::END_TURN, currentUnit.GetUID() );
         }
     }
 

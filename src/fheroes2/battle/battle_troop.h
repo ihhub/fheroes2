@@ -74,7 +74,7 @@ namespace Battle
     class Unit : public ArmyTroop, public BitModes, public Control
     {
     public:
-        Unit( const Troop & t, const Position & pos, const bool ref, const Rand::DeterministicRandomGenerator & randomGenerator, const uint32_t uid );
+        Unit( const Troop & t, const Position & pos, const bool ref, const uint32_t uid );
         Unit( const Unit & ) = delete;
 
         Unit & operator=( const Unit & ) = delete;
@@ -99,8 +99,8 @@ namespace Battle
             mirror = ptr;
         }
 
-        void SetRandomMorale();
-        void SetRandomLuck();
+        void SetRandomMorale( Rand::DeterministicRandomGenerator & randomGenerator );
+        void SetRandomLuck( Rand::DeterministicRandomGenerator & randomGenerator );
         void NewTurn();
 
         bool isFlying() const;
@@ -164,7 +164,7 @@ namespace Battle
 
         uint32_t GetSpeed( const bool skipStandingCheck, const bool skipMovedCheck ) const;
 
-        uint32_t GetDamage( const Unit & ) const;
+        uint32_t GetDamage( const Unit & enemy, Rand::DeterministicRandomGenerator & randomGenerator ) const;
 
         int32_t GetScoreQuality( const Unit & ) const;
 
@@ -258,7 +258,7 @@ namespace Battle
         void PostKilledAction();
 
         uint32_t GetMagicResist( const Spell & spell, const uint32_t attackingArmySpellPower, const HeroBase * attackingHero ) const;
-        int GetSpellMagic() const;
+        int GetSpellMagic( Rand::DeterministicRandomGenerator & randomGenerator ) const;
 
         const HeroBase * GetCommander() const;
         const HeroBase * GetCurrentOrArmyCommander() const; // commander of the army with the current unit color (if valid), commander of the unit's army otherwise
@@ -319,8 +319,6 @@ namespace Battle
         bool _blindRetaliation;
 
         uint8_t customAlphaMask;
-
-        const Rand::DeterministicRandomGenerator & _randomGenerator;
     };
 }
 

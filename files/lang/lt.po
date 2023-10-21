@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-19 13:17+0000\n"
+"POT-Creation-Date: 2023-10-20 13:35+0000\n"
 "PO-Revision-Date: 2022-09-23 16:14+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Lithuanian <lt@li.org>\n"
@@ -1759,6 +1759,9 @@ msgstr ""
 msgid "Requires:"
 msgstr "Reikalauja:"
 
+msgid "Exit this menu without doing anything."
+msgstr ""
+
 msgid "Cannot build. You have already built here today."
 msgstr ""
 
@@ -2461,6 +2464,9 @@ msgstr " su vienu artefaktu"
 msgid "without artifacts."
 msgstr " su vienu artefaktu"
 
+msgid "Recruit %{name} the %{race}"
+msgstr ""
+
 msgid ""
 "'Spread' combat formation spreads your armies from the top to the bottom of "
 "the battlefield, with at least one empty space between each army."
@@ -2475,9 +2481,6 @@ msgid "Spread Formation"
 msgstr ""
 
 msgid "Grouped Formation"
-msgstr ""
-
-msgid "Recruit %{name} the %{race}"
 msgstr ""
 
 msgid "Set garrison combat formation to 'Spread'"
@@ -2554,9 +2557,6 @@ msgid "Dig for the Ultimate Artifact."
 msgstr ""
 
 msgid "Digging"
-msgstr ""
-
-msgid "Exit this menu without doing anything."
 msgstr ""
 
 msgid "Arena"

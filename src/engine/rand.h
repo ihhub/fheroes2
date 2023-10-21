@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -28,7 +28,6 @@
 #include <cstdint>
 #include <cstdlib>
 #include <functional>
-#include <list>
 #include <random>
 #include <type_traits>
 #include <utility>
@@ -87,16 +86,6 @@ namespace Rand
         return vec[id];
     }
 
-    template <typename T>
-    const T & Get( const std::list<T> & list )
-    {
-        assert( !list.empty() );
-
-        typename std::list<T>::const_iterator it = list.begin();
-        std::advance( it, Rand::Get( static_cast<uint32_t>( list.size() - 1 ) ) );
-        return *it;
-    }
-
     using ValuePercent = std::pair<int32_t, uint32_t>;
 
     class Queue : private std::vector<ValuePercent>
@@ -118,33 +107,25 @@ namespace Rand
     {
     public:
         explicit DeterministicRandomGenerator( const uint32_t initialSeed );
-
-        // prevent accidental copies
         DeterministicRandomGenerator( const DeterministicRandomGenerator & ) = delete;
+
         DeterministicRandomGenerator & operator=( const DeterministicRandomGenerator & ) = delete;
 
         uint32_t GetSeed() const;
         void UpdateSeed( const uint32_t seed );
 
-        uint32_t Get( const uint32_t from, const uint32_t to = 0 ) const;
+        uint32_t Get( const uint32_t from, const uint32_t to = 0 );
 
         template <typename T>
-        const T & Get( const std::vector<T> & vec ) const
+        const T & Get( const std::vector<T> & vec )
         {
             ++_currentSeed;
             std::mt19937 seededGen( _currentSeed );
             return Rand::GetWithGen( vec, seededGen );
         }
 
-        template <class T>
-        void Shuffle( std::vector<T> & vector ) const
-        {
-            ++_currentSeed;
-            Rand::ShuffleWithSeed( vector, _currentSeed );
-        }
-
     private:
-        mutable uint32_t _currentSeed; // this is mutable so clients that only call RNG method can receive a const instance
+        uint32_t _currentSeed;
     };
 }
 
