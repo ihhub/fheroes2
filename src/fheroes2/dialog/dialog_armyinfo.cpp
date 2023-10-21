@@ -149,8 +149,7 @@ namespace
         dst_pt.x = dst.x + offsetX;
         text.draw( dst_pt.x, dst_pt.y + 2, display );
 
-        // shot
-        if ( troop.isArchers() ) {
+        if ( Monster( troop ).GetShots() > 0 ) {
             std::string message = troop.isBattle() ? _( "Shots Left" ) : _( "Shots" );
             message += ':';
             text.set( std::move( message ), fheroes2::FontType::normalWhite() );
