@@ -56,13 +56,6 @@ namespace Rand
     }
 
     template <typename T>
-    void ShuffleWithSeed( std::vector<T> & vec, uint32_t seed )
-    {
-        std::mt19937 seededGen( seed );
-        std::shuffle( vec.begin(), vec.end(), seededGen );
-    }
-
-    template <typename T>
     void ShuffleWithGen( std::vector<T> & vec, std::mt19937 & gen )
     {
         std::shuffle( vec.begin(), vec.end(), gen );
