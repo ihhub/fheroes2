@@ -1093,7 +1093,7 @@ uint32_t Battle::Unit::GetDefense() const
 
 int32_t Battle::Unit::GetScoreQuality( const Unit & defender ) const
 {
-    const auto getDefenderDamageAverage = [&defender]() {
+    const auto getDefenderDamage = [&defender]() {
         if ( defender.Modes( SP_CURSE ) ) {
             return defender.GetDamageMin();
         }
@@ -1136,30 +1136,45 @@ int32_t Battle::Unit::GetScoreQuality( const Unit & defender ) const
         const uint32_t attackRange = attacker.GetSpeed( true, false ) + 1;
         return ( Board::GetDistance( attacker.GetPosition(), defender.GetPosition() ) <= attackRange );
     }();
+
     if ( !doesAttackerPoseImmediateDangerToDefender ) {
         attackerThreat /= 4;
     }
 
     const std::vector<fheroes2::MonsterAbility> & attackerAbilities = fheroes2::getMonsterData( id ).battleStats.abilities;
 
-    if ( Unit::isHandFighting( attacker, defender ) ) {
-        if ( std::find( attackerAbilities.begin(), attackerAbilities.end(), fheroes2::MonsterAbility( fheroes2::MonsterAbilityType::DOUBLE_MELEE_ATTACK ) )
-             != attackerAbilities.end() ) {
-            if ( defender.Modes( TR_RESPONDED ) || defender.Modes( CAP_TOWER ) || attacker.ignoreRetaliation() ) {
-                attackerThreat *= 2;
+    if ( attacker.isDoubleAttack() ) {
+        const bool isDefenderAbleToRetaliate = [&defender, &attacker]() {
+            if ( defender.Modes( CAP_TOWER ) ) {
+                return false;
             }
-            else {
-                const uint32_t retaliatoryDamage = defender.EstimateRetaliatoryDamage( attackerDamageToDefender );
 
-                assert( attacker.GetHitPoints() > 0 );
-
-                attackerThreat += attackerThreat * ( 1.0 - static_cast<double>( retaliatoryDamage ) / static_cast<double>( attacker.GetHitPoints() ) );
+            if ( defender.Modes( TR_RESPONDED ) ) {
+                return false;
             }
+
+            if ( attacker.ignoreRetaliation() ) {
+                return false;
+            }
+
+            if ( attacker.isArchers() && !attacker.isHandFighting() ) {
+                return false;
+            }
+
+            return true;
+        }();
+
+        // If the defender is able to retaliate the attacker after his first attack, then the attacker's second attack can cause less damage than the first
+        if ( isDefenderAbleToRetaliate ) {
+            const uint32_t retaliatoryDamage = defender.EstimateRetaliatoryDamage( attackerDamageToDefender );
+
+            assert( attacker.GetHitPoints() > 0 );
+
+            // Rough but quick estimation
+            attackerThreat += attackerThreat * ( 1.0 - static_cast<double>( retaliatoryDamage ) / static_cast<double>( attacker.GetHitPoints() ) );
         }
-    }
-    else if ( attacker.isArchers() && !attacker.isHandFighting() ) {
-        if ( std::find( attackerAbilities.begin(), attackerAbilities.end(), fheroes2::MonsterAbility( fheroes2::MonsterAbilityType::DOUBLE_SHOOTING ) )
-             != attackerAbilities.end() ) {
+        // Otherwise, estimate the second attack as approximately equal to the first in damage
+        else {
             attackerThreat *= 2;
         }
     }
@@ -1186,7 +1201,7 @@ int32_t Battle::Unit::GetScoreQuality( const Unit & defender ) const
         case Spell::BLIND:
         case Spell::PARALYZE:
         case Spell::PETRIFY: {
-            attackerThreat += static_cast<double>( getDefenderDamageAverage() ) * spellCasterAbilityIter->percentage / 100.0
+            attackerThreat += static_cast<double>( getDefenderDamage() ) * spellCasterAbilityIter->percentage / 100.0
                               * ( 100 - defender.GetMagicResist( spellCasterAbilityIter->value, DEFAULT_SPELL_DURATION, nullptr ) ) / 100.0;
             break;
         }
@@ -1194,7 +1209,7 @@ int32_t Battle::Unit::GetScoreQuality( const Unit & defender ) const
             // TODO: add the logic to evaluate this spell value.
             break;
         case Spell::CURSE:
-            attackerThreat += static_cast<double>( getDefenderDamageAverage() ) * spellCasterAbilityIter->percentage / 100.0 / 10.0
+            attackerThreat += static_cast<double>( getDefenderDamage() ) * spellCasterAbilityIter->percentage / 100.0 / 10.0
                               * ( 100 - defender.GetMagicResist( spellCasterAbilityIter->value, DEFAULT_SPELL_DURATION, nullptr ) ) / 100.0;
             break;
         default:
