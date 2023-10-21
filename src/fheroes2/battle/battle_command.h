@@ -131,10 +131,6 @@ namespace Battle
             }
         }
 
-        explicit Command( const CommandType cmd )
-            : _type( cmd )
-        {}
-
         CommandType GetType() const
         {
             return _type;
