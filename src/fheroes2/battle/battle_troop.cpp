@@ -1224,7 +1224,7 @@ int32_t Battle::Unit::GetScoreQuality( const Unit & defender ) const
     }
     // Increase the priority of those enemy units that have not yet got their turn
     else if ( !attacker.Modes( TR_MOVED ) ) {
-        attackerThreat *= 1.25;
+        attackerThreat *= 1.1;
     }
 
     return static_cast<int32_t>( attackerThreat * 100 );
