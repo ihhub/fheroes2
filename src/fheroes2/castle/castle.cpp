@@ -2612,7 +2612,7 @@ bool Castle::BuyBoat() const
     // If this assertion blows up then you didn't even check conditions to build a shipyard!
     assert( HasSeaAccess() );
 
-    const int index = getTileIndexToPlaceBoat();
+    const int32_t index = getTileIndexToPlaceBoat();
     if ( index < 0 ) {
         return false;
     }
