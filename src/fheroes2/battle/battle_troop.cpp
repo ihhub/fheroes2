@@ -1121,21 +1121,23 @@ int32_t Battle::Unit::GetScoreQuality( const Unit & defender ) const
 
     double attackerThreat = attackerDamageToDefender;
 
-    const bool isAttackerDangerousToDefender = [&defender, &attacker]() {
+    const bool doesAttackerPoseImmediateDangerToDefender = [&defender, &attacker]() {
         // From the point of view of castle towers, any units are considered dangerous
         if ( defender.Modes( CAP_TOWER ) ) {
             return true;
         }
 
+        // Flying units and archers are always considered dangerous
         if ( attacker.isFlying() || attacker.isArchers() ) {
             return true;
         }
 
+        // Remaining units are considered dangerous only if they are able to attack during their turn
         const uint32_t attackRange = attacker.GetSpeed( true, false ) + 1;
         return ( Board::GetDistance( attacker.GetPosition(), defender.GetPosition() ) <= attackRange );
     }();
-    if ( !isAttackerDangerousToDefender ) {
-        attackerThreat /= 2;
+    if ( !doesAttackerPoseImmediateDangerToDefender ) {
+        attackerThreat /= 4;
     }
 
     const std::vector<fheroes2::MonsterAbility> & attackerAbilities = fheroes2::getMonsterData( id ).battleStats.abilities;
@@ -1222,9 +1224,9 @@ int32_t Battle::Unit::GetScoreQuality( const Unit & defender ) const
     else if ( attacker.isImmovable() ) {
         attackerThreat = 0;
     }
-    // Increase the priority of those enemy units that have not yet got their turn
-    else if ( !attacker.Modes( TR_MOVED ) ) {
-        attackerThreat *= 1.25;
+    // Reduce the priority of those enemy units that have already got their turn
+    else if ( attacker.Modes( TR_MOVED ) ) {
+        attackerThreat /= 1.25;
     }
 
     return static_cast<int32_t>( attackerThreat * 100 );
