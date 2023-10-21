@@ -496,8 +496,9 @@ void Castle::PostLoad()
             JoinRNDArmy();
     }
 
-    // Remove shipyard if no sea terrain present.
+    
     if ( !HasSeaAccess() ) {
+        // Remove shipyard if no sea access
         building &= ~BUILD_SHIPYARD;
     }
 
