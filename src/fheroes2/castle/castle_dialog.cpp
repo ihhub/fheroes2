@@ -638,6 +638,9 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
             alphaHero += 10;
             if ( alphaHero >= 255 ) {
                 alphaHero = 255;
+
+                // Hero fade-in animation is finished, we can set up his army bar.
+                bottomArmyBar.SetArmy( &hero->GetArmy() );
             }
 
             fheroes2::AlphaBlit( surfaceHero, display, dialogRoi.x, dialogRoi.y + 356, static_cast<uint8_t>( alphaHero ) );
