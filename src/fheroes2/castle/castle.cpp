@@ -2185,16 +2185,12 @@ bool Castle::HasSeaAccess() const
         return true;
     }
 
-    if ( Maps::isValidAbsPoint( possibleSeaTile.x - 1, possibleSeaTile.y ) ) {
-        if ( doesTileAllowsToPutBoat( world.GetTiles( index - 1 ) ) ) {
-            return true;
-        }
+    if ( Maps::isValidAbsPoint( possibleSeaTile.x - 1, possibleSeaTile.y ) && doesTileAllowsToPutBoat( world.GetTiles( index - 1 ) ) ) {
+        return true;
     }
 
-    if ( Maps::isValidAbsPoint( possibleSeaTile.x + 1, possibleSeaTile.y ) ) {
-        if ( doesTileAllowsToPutBoat( world.GetTiles( index + 1 ) ) ) {
-            return true;
-        }
+    if ( Maps::isValidAbsPoint( possibleSeaTile.x + 1, possibleSeaTile.y ) && doesTileAllowsToPutBoat( world.GetTiles( index + 1 ) ) ) {
+        return true;
     }
 
     return false;
@@ -2223,16 +2219,12 @@ bool Castle::HasBoatNearby() const
         return true;
     }
 
-    if ( Maps::isValidAbsPoint( possibleSeaTile.x - 1, possibleSeaTile.y ) ) {
-        if ( doesTileHaveBoat( world.GetTiles( index - 1 ) ) ) {
-            return true;
-        }
+    if ( Maps::isValidAbsPoint( possibleSeaTile.x - 1, possibleSeaTile.y ) && doesTileHaveBoat( world.GetTiles( index - 1 ) ) ) {
+        return true;
     }
 
-    if ( Maps::isValidAbsPoint( possibleSeaTile.x + 1, possibleSeaTile.y ) ) {
-        if ( doesTileHaveBoat( world.GetTiles( index + 1 ) ) ) {
-            return true;
-        }
+    if ( Maps::isValidAbsPoint( possibleSeaTile.x + 1, possibleSeaTile.y ) && doesTileHaveBoat( world.GetTiles( index + 1 ) ) ) {
+        return true;
     }
 
     return false;
@@ -2262,16 +2254,12 @@ int Castle::getTileIndexToPlaceBoat() const
         return index;
     }
 
-    if ( Maps::isValidAbsPoint( possibleSeaTile.x - 1, possibleSeaTile.y ) ) {
-        if ( doesTileAllowsToPutBoat( world.GetTiles( index - 1 ) ) ) {
-            return index - 1;
-        }
+    if ( Maps::isValidAbsPoint( possibleSeaTile.x - 1, possibleSeaTile.y ) && doesTileAllowsToPutBoat( world.GetTiles( index - 1 ) ) ) {
+        return index - 1;
     }
 
-    if ( Maps::isValidAbsPoint( possibleSeaTile.x + 1, possibleSeaTile.y ) ) {
-        if ( doesTileAllowsToPutBoat( world.GetTiles( index + 1 ) ) ) {
-            return index + 1;
-        }
+    if ( Maps::isValidAbsPoint( possibleSeaTile.x + 1, possibleSeaTile.y ) && doesTileAllowsToPutBoat( world.GetTiles( index + 1 ) ) ) {
+        return index + 1;
     }
 
     return -1;
