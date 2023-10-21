@@ -978,13 +978,6 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForSpell( const HeroBase * hero, co
     return targets;
 }
 
-Battle::TargetsInfo Battle::Arena::GetTargetsForSpell( const HeroBase * hero, const Spell & spell, const int32_t dst )
-{
-    // This method can be called by external code (e.g. AI code) to pre-evaluate the effect of a spell, so probabilistic mechanisms, in particular unit's magic
-    // resistance, cannot be used
-    return GetTargetsForSpell( hero, spell, dst, false, nullptr );
-}
-
 void Battle::Arena::ApplyActionTower( Command & cmd )
 {
     const uint32_t type = cmd.GetNextValue();

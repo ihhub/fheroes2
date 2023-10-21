@@ -176,7 +176,10 @@ namespace Battle
         // Returns a list of targets that will be affected by the given spell applied to a cell with a given index
         // (potentially by the given hero). This method can be used by external code to evaluate the applicability
         // of a spell, and does not use probabilistic mechanisms to determine units resisting the given spell.
-        TargetsInfo GetTargetsForSpell( const HeroBase * hero, const Spell & spell, const int32_t dst );
+        TargetsInfo GetTargetsForSpell( const HeroBase * hero, const Spell & spell, const int32_t dst )
+        {
+            return GetTargetsForSpell( hero, spell, dst, false, nullptr );
+        }
 
         bool isSpellcastDisabled() const;
         bool isDisableCastSpell( const Spell &, std::string * msg = nullptr );
