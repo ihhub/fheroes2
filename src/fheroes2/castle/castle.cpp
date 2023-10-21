@@ -496,9 +496,10 @@ void Castle::PostLoad()
             JoinRNDArmy();
     }
 
-    // fix shipyard
-    if ( !HaveNearlySea() )
+    // Remove shipyard if no sea terrain present.
+    if ( !HasSeaAccess() ) {
         building &= ~BUILD_SHIPYARD;
+    }
 
     // remove tavern from necromancer castle
     if ( Race::NECR == race && ( building & BUILD_TAVERN ) ) {
@@ -1476,7 +1477,7 @@ int Castle::CheckBuyBuilding( const uint32_t build ) const
         }
         break;
     case BUILD_SHIPYARD:
-        if ( !HaveNearlySea() ) {
+        if ( !HasSeaAccess() ) {
             return BUILD_DISABLE;
         }
         break;
@@ -2155,42 +2156,125 @@ Heroes * Castle::GetHero() const
     return world.GetHero( *this );
 }
 
-bool Castle::HaveNearlySea() const
+bool Castle::HasSeaAccess() const
 {
-    // check nearest ocean
-    if ( Maps::isValidAbsPoint( center.x, center.y + 2 ) ) {
-        const int32_t index = Maps::GetIndexFromAbsPoint( center.x, center.y + 2 );
-        const Maps::Tiles & left = world.GetTiles( index - 1 );
-        const Maps::Tiles & right = world.GetTiles( index + 1 );
-        const Maps::Tiles & middle = world.GetTiles( index );
-
-        return left.isWater() || right.isWater() || middle.isWater();
+    const fheroes2::Point possibleSeaTile{ center.x, center.y + 2 };
+    if ( !Maps::isValidAbsPoint( possibleSeaTile.x, possibleSeaTile.y ) ) {
+        // If a tile below doesn't exist then no reason to check other tiles.
+        return false;
     }
-    return false;
-}
 
-bool TilePresentBoat( const Maps::Tiles & tile )
-{
-    return tile.isWater() && ( tile.GetObject() == MP2::OBJ_BOAT || tile.GetObject() == MP2::OBJ_HEROES );
-}
+    auto doesTileAllowsToPutBoat = []( const Maps::Tiles & tile ) {
+        if ( !tile.isWater() ) {
+            // No water, no boat.
+            return false;
+        }
 
-bool Castle::PresentBoat() const
-{
-    // 2 cell down
-    if ( Maps::isValidAbsPoint( center.x, center.y + 2 ) ) {
-        const int32_t index = Maps::GetIndexFromAbsPoint( center.x, center.y + 2 );
-        const int32_t max = world.w() * world.h();
+        if ( tile.getObjectIcnType() == MP2::OBJ_ICN_TYPE_UNKNOWN ) {
+            // The main addon does not exist on this tile.
+            // This means that all objects on this tile are not primary objects (like shadows or some parts of objects).
+            return true;
+        }
 
-        if ( index + 1 < max ) {
-            const Maps::Tiles & left = world.GetTiles( index - 1 );
-            const Maps::Tiles & right = world.GetTiles( index + 1 );
-            const Maps::Tiles & middle = world.GetTiles( index );
+        // If this is an action object and it can be removed then it is possible to put a boat here.
+        return MP2::isPickupObject( tile.GetObject() );
+    };
 
-            if ( TilePresentBoat( left ) || TilePresentBoat( right ) || TilePresentBoat( middle ) )
-                return true;
+    const int32_t index = Maps::GetIndexFromAbsPoint( possibleSeaTile.x, possibleSeaTile.y );
+    if ( doesTileAllowsToPutBoat( world.GetTiles( index ) ) ) {
+        return true;
+    }
+
+    if ( Maps::isValidAbsPoint( possibleSeaTile.x - 1, possibleSeaTile.y ) ) {
+        if ( doesTileAllowsToPutBoat( world.GetTiles( index - 1 ) ) ) {
+            return true;
         }
     }
+
+    if ( Maps::isValidAbsPoint( possibleSeaTile.x + 1, possibleSeaTile.y ) ) {
+        if ( doesTileAllowsToPutBoat( world.GetTiles( index + 1 ) ) ) {
+            return true;
+        }
+    }
+
     return false;
+}
+
+bool Castle::HasBoatNearby() const
+{
+    const fheroes2::Point possibleSeaTile{ center.x, center.y + 2 };
+    if ( !Maps::isValidAbsPoint( possibleSeaTile.x, possibleSeaTile.y ) ) {
+        // If a tile below doesn't exist then no reason to check other tiles.
+        return false;
+    }
+
+    auto doesTileHaveBoat = []( const Maps::Tiles & tile ) {
+        if ( !tile.isWater() ) {
+            // No water, no boat.
+            return false;
+        }
+
+        const MP2::MapObjectType objectType = tile.GetObject();
+        return ( objectType == MP2::OBJ_BOAT || objectType == MP2::OBJ_HEROES );
+    };
+
+    const int32_t index = Maps::GetIndexFromAbsPoint( possibleSeaTile.x, possibleSeaTile.y );
+    if ( doesTileHaveBoat( world.GetTiles( index ) ) ) {
+        return true;
+    }
+
+    if ( Maps::isValidAbsPoint( possibleSeaTile.x - 1, possibleSeaTile.y ) ) {
+        if ( doesTileHaveBoat( world.GetTiles( index - 1 ) ) ) {
+            return true;
+        }
+    }
+
+    if ( Maps::isValidAbsPoint( possibleSeaTile.x + 1, possibleSeaTile.y ) ) {
+        if ( doesTileHaveBoat( world.GetTiles( index + 1 ) ) ) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+int Castle::getTileIndexToPlaceBoat() const
+{
+    const fheroes2::Point possibleSeaTile{ center.x, center.y + 2 };
+    if ( !Maps::isValidAbsPoint( possibleSeaTile.x, possibleSeaTile.y ) ) {
+        // If a tile below doesn't exist then no reason to check other tiles.
+        return -1;
+    }
+
+    auto doesTileAllowsToPutBoat = []( const Maps::Tiles & tile ) {
+        if ( !tile.isWater() ) {
+            // No water, no boat.
+            return false;
+        }
+
+        // Mark the tile as worthy to a place a boat if the main addon does not exist on this tile.
+        // This means that all objects on this tile are not primary objects (like shadows or some parts of objects).
+        return ( tile.getObjectIcnType() == MP2::OBJ_ICN_TYPE_UNKNOWN );
+    };
+
+    const int32_t index = Maps::GetIndexFromAbsPoint( possibleSeaTile.x, possibleSeaTile.y );
+    if ( doesTileAllowsToPutBoat( world.GetTiles( index ) ) ) {
+        return index;
+    }
+
+    if ( Maps::isValidAbsPoint( possibleSeaTile.x - 1, possibleSeaTile.y ) ) {
+        if ( doesTileAllowsToPutBoat( world.GetTiles( index - 1 ) ) ) {
+            return index - 1;
+        }
+    }
+
+    if ( Maps::isValidAbsPoint( possibleSeaTile.x + 1, possibleSeaTile.y ) ) {
+        if ( doesTileAllowsToPutBoat( world.GetTiles( index + 1 ) ) ) {
+            return index + 1;
+        }
+    }
+
+    return -1;
 }
 
 uint32_t Castle::GetActualDwelling( const uint32_t buildId ) const
@@ -2356,7 +2440,7 @@ std::string Castle::String() const
     os << std::endl;
 
     os << "buildings       : " << CountBuildings() << " (mage guild: " << GetLevelMageGuild() << ")" << std::endl
-       << "coast/has boat  : " << ( HaveNearlySea() ? "yes" : "no" ) << " / " << ( PresentBoat() ? "yes" : "no" ) << std::endl
+       << "coast/has boat  : " << ( HasSeaAccess() ? "yes" : "no" ) << " / " << ( HasBoatNearby() ? "yes" : "no" ) << std::endl
        << "is castle       : " << ( isCastle() ? "yes" : "no" ) << " (" << getBuildingValue() << ")" << std::endl
        << "army            : " << army.String() << std::endl;
 
@@ -2516,15 +2600,7 @@ double Castle::GetGarrisonStrength( const Heroes * attackingHero ) const
 
 bool Castle::AllowBuyBoat( const bool checkPayment ) const
 {
-    if ( !HaveNearlySea() ) {
-        return false;
-    }
-
     if ( !isBuild( BUILD_SHIPYARD ) ) {
-        return false;
-    }
-
-    if ( PresentBoat() ) {
         return false;
     }
 
@@ -2532,7 +2608,11 @@ bool Castle::AllowBuyBoat( const bool checkPayment ) const
         return false;
     }
 
-    return true;
+    if ( HasBoatNearby() ) {
+        return false;
+    }
+
+    return getTileIndexToPlaceBoat() >= 0;
 }
 
 bool Castle::BuyBoat() const
@@ -2541,7 +2621,11 @@ bool Castle::BuyBoat() const
         return false;
     }
 
-    if ( !Maps::isValidAbsPoint( center.x, center.y + 2 ) ) {
+    // If this assertion blows up then you didn't even check conditions to build a shipyard!
+    assert( HasSeaAccess() );
+
+    const int index = getTileIndexToPlaceBoat();
+    if ( index < 0 ) {
         return false;
     }
 
@@ -2549,24 +2633,9 @@ bool Castle::BuyBoat() const
         AudioManager::PlaySound( M82::BUILDTWN );
     }
 
-    const int32_t index = Maps::GetIndexFromAbsPoint( center.x, center.y + 2 );
-    Maps::Tiles & left = world.GetTiles( index - 1 );
-    Maps::Tiles & right = world.GetTiles( index + 1 );
-    Maps::Tiles & middle = world.GetTiles( index );
     Kingdom & kingdom = GetKingdom();
-
-    if ( MP2::OBJ_NONE == left.GetObject() && left.isWater() ) {
-        kingdom.OddFundsResource( PaymentConditions::BuyBoat() );
-        left.setBoat( Direction::RIGHT, kingdom.GetColor() );
-    }
-    else if ( MP2::OBJ_NONE == right.GetObject() && right.isWater() ) {
-        kingdom.OddFundsResource( PaymentConditions::BuyBoat() );
-        right.setBoat( Direction::RIGHT, kingdom.GetColor() );
-    }
-    else if ( MP2::OBJ_NONE == middle.GetObject() && middle.isWater() ) {
-        kingdom.OddFundsResource( PaymentConditions::BuyBoat() );
-        middle.setBoat( Direction::RIGHT, kingdom.GetColor() );
-    }
+    kingdom.OddFundsResource( PaymentConditions::BuyBoat() );
+    world.GetTiles( index ).setBoat( Direction::RIGHT, kingdom.GetColor() );
 
     return true;
 }

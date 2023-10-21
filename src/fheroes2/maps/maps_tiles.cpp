@@ -613,6 +613,9 @@ void Maps::Tiles::setBoat( const int direction, const int color )
         _addonBottomLayer.emplace_front( _mainAddon );
     }
 
+    // If this assertion blows up then you are trying to put a boat on land!
+    assert( isWater() );
+
     SetObject( MP2::OBJ_BOAT );
     _mainAddon._objectIcnType = MP2::OBJ_ICN_TYPE_BOAT32;
 
