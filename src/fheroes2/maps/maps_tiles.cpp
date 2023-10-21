@@ -619,7 +619,6 @@ void Maps::Tiles::setBoat( const int direction, const int color )
     SetObject( MP2::OBJ_BOAT );
     _mainAddon._objectIcnType = MP2::OBJ_ICN_TYPE_BOAT32;
 
-    // Left-side sprites have to flipped, add 128 to index
     switch ( direction ) {
     case Direction::TOP:
         _mainAddon._imageIndex = 0;
@@ -636,6 +635,7 @@ void Maps::Tiles::setBoat( const int direction, const int color )
     case Direction::BOTTOM:
         _mainAddon._imageIndex = 36;
         break;
+    // Left-side sprites have to be flipped, add 128 to index.
     case Direction::BOTTOM_LEFT:
         _mainAddon._imageIndex = 27 + 128;
         break;
