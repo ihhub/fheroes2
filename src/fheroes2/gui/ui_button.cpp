@@ -286,6 +286,12 @@ namespace fheroes2
         _pressedIndex = pressedIndex;
     }
 
+    void Button::setICNIndexes( const uint32_t releasedIndex, const uint32_t pressedIndex )
+    {
+        _releasedIndex = releasedIndex;
+        _pressedIndex = pressedIndex;
+    }
+
     const Sprite & Button::_getPressed() const
     {
         return AGG::GetICN( _icnId, _pressedIndex );
