@@ -168,7 +168,7 @@ namespace Battle
 
         // Returns the threat level of this unit, calculated as if it attacked the 'defender' unit.
         // See the implementation for details.
-        int32_t GetScoreQuality( const Unit & defender ) const;
+        int32_t evaluateThreatForUnit( const Unit & defender ) const;
 
         uint32_t GetInitialCount() const;
         uint32_t GetDead() const;

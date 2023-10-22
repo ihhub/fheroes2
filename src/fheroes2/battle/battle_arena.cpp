@@ -607,7 +607,7 @@ void Battle::Arena::TowerAction( const Tower & twr )
     // There should be no dead units on the board at this moment
     assert( std::all_of( board.begin(), board.end(), []( const Cell & cell ) { return ( cell.GetUnit() == nullptr || cell.GetUnit()->isValid() ); } ) );
 
-    // Target unit and its quality
+    // Target unit and its threat level
     std::pair<const Unit *, int32_t> targetInfo{ nullptr, INT32_MIN };
 
     for ( const Cell & cell : board ) {
@@ -617,10 +617,10 @@ void Battle::Arena::TowerAction( const Tower & twr )
             continue;
         }
 
-        const int32_t unitScoreQuality = unit->GetScoreQuality( twr );
+        const int32_t unitThreatLevel = unit->evaluateThreatForUnit( twr );
 
-        if ( targetInfo.first == nullptr || targetInfo.second < unitScoreQuality ) {
-            targetInfo = { unit, unitScoreQuality };
+        if ( targetInfo.first == nullptr || targetInfo.second < unitThreatLevel ) {
+            targetInfo = { unit, unitThreatLevel };
         }
     }
 

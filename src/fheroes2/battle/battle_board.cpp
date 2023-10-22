@@ -210,7 +210,7 @@ int32_t Battle::Board::DoubleCellAttackValue( const Unit & attacker, const Unit 
     const Cell * behind = GetCell( targetCell, GetDirection( from, targetCell ) );
     const Unit * secondaryTarget = ( behind != nullptr ) ? behind->GetUnit() : nullptr;
     if ( secondaryTarget && secondaryTarget->GetUID() != target.GetUID() && secondaryTarget->GetUID() != attacker.GetUID() ) {
-        return secondaryTarget->GetScoreQuality( attacker );
+        return secondaryTarget->evaluateThreatForUnit( attacker );
     }
     return 0;
 }
@@ -236,7 +236,7 @@ int32_t Battle::Board::OptimalAttackValue( const Unit & attacker, const Unit & t
 {
     if ( attacker.isDoubleCellAttack() ) {
         const int32_t targetCell = OptimalAttackTarget( attacker, target, from );
-        return target.GetScoreQuality( attacker ) + DoubleCellAttackValue( attacker, target, from, targetCell );
+        return target.evaluateThreatForUnit( attacker ) + DoubleCellAttackValue( attacker, target, from, targetCell );
     }
 
     if ( attacker.isAllAdjacentCellsAttack() ) {
@@ -261,13 +261,13 @@ int32_t Battle::Board::OptimalAttackValue( const Unit & attacker, const Unit & t
 
         int32_t attackValue = 0;
         for ( const Unit * unit : unitsUnderAttack ) {
-            attackValue += unit->GetScoreQuality( attacker );
+            attackValue += unit->evaluateThreatForUnit( attacker );
         }
 
         return attackValue;
     }
 
-    return target.GetScoreQuality( attacker );
+    return target.evaluateThreatForUnit( attacker );
 }
 
 int Battle::Board::GetDirection( const int32_t index1, const int32_t index2 )

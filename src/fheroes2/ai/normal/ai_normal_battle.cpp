@@ -179,7 +179,7 @@ namespace AI
                 const uint32_t enemyAttackRange = enemy->GetSpeed( false, true ) + 1;
 
                 if ( Board::GetDistance( pos, enemy->GetPosition() ) <= enemyAttackRange ) {
-                    posThreatLevel += enemy->GetScoreQuality( currentUnit );
+                    posThreatLevel += enemy->evaluateThreatForUnit( currentUnit );
                 }
             }
 
@@ -411,7 +411,7 @@ namespace AI
 
                     DEBUG_LOG( DBG_BATTLE, DBG_INFO,
                                currentUnit.GetName() << " melee offense, focus enemy " << target.unit->GetName()
-                                                     << " threat level: " << target.unit->GetScoreQuality( currentUnit ) )
+                                                     << " threat level: " << target.unit->evaluateThreatForUnit( currentUnit ) )
                 }
             }
             // Else skip the turn
@@ -917,7 +917,7 @@ namespace AI
                             const Unit * unit = arena.GetTroopBoard( unitIdx );
                             assert( unit != nullptr );
 
-                            result += unit->GetScoreQuality( currentUnit );
+                            result += unit->evaluateThreatForUnit( currentUnit );
                         }
 
                         return result;
@@ -938,7 +938,7 @@ namespace AI
                     return;
                 }
 
-                updateBestTarget( enemy->GetScoreQuality( currentUnit ), -1 );
+                updateBestTarget( enemy->evaluateThreatForUnit( currentUnit ), -1 );
             };
 
             // There is a priority target, attack it
@@ -1002,7 +1002,7 @@ namespace AI
                 // Do not chase faster units that can move away and avoid an engagement
                 const uint32_t distance = ( !enemy->isArchers() && isUnitFaster( *enemy, currentUnit ) ? move.second + ARENAW + ARENAH : move.second );
 
-                const double unitPriority = enemy->GetScoreQuality( currentUnit ) - distance * attackDistanceModifier;
+                const double unitPriority = enemy->evaluateThreatForUnit( currentUnit ) - distance * attackDistanceModifier;
                 if ( unitPriority > maxMovePriority ) {
                     maxMovePriority = unitPriority;
 

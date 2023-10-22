@@ -1091,7 +1091,7 @@ uint32_t Battle::Unit::GetDefense() const
     return res;
 }
 
-int32_t Battle::Unit::GetScoreQuality( const Unit & defender ) const
+int32_t Battle::Unit::evaluateThreatForUnit( const Unit & defender ) const
 {
     const auto getDefenderDamage = [&defender]() {
         if ( defender.Modes( SP_CURSE ) ) {
