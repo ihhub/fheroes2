@@ -163,6 +163,12 @@ namespace Battle
         int GetControl() const override;
         int GetCurrentControl() const;
 
+        // Returns the current speed of the unit, optionally performing additional checks in accordance
+        // with the call arguments. If 'skipStandingCheck' is set to false, then the method returns
+        // Speed::STANDING if the unit is immovable due to spells cast on it or if this unit is dead
+        // (contains 0 fighters). Additionally, if 'skipMovedCheck' is set to false, then this method
+        // returns Speed::STANDING if the unit has already completed its turn. If 'skipStandingCheck'
+        // is set to true, then the value of 'skipMovedCheck' doesn't matter.
         uint32_t GetSpeed( const bool skipStandingCheck, const bool skipMovedCheck ) const;
 
         uint32_t GetDamage( const Unit & enemy, Rand::DeterministicRandomGenerator & randomGenerator ) const;
