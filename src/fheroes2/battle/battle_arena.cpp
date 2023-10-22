@@ -398,15 +398,8 @@ void Battle::Arena::TurnTroop( Unit * troop, const Units & orderHistory )
     bool endOfTurn = false;
 
     while ( !endOfTurn ) {
-        // All cells on the board should be properly reset at the beginning of each iteration
-        assert( std::all_of( board.begin(), board.end(), []( const Cell & cell ) {
-            const Unit * unit = cell.GetUnit();
-            if ( unit && !unit->isValid() ) {
-                return false;
-            }
-
-            return cell.GetQuality() == 0;
-        } ) );
+        // There should be no dead units on the board at the beginning of each iteration
+        assert( std::all_of( board.begin(), board.end(), []( const Cell & cell ) { return ( cell.GetUnit() == nullptr || cell.GetUnit()->isValid() ); } ) );
 
         Actions actions;
 
@@ -450,7 +443,7 @@ void Battle::Arena::TurnTroop( Unit * troop, const Units & orderHistory )
             ApplyAction( actions.front() );
             actions.pop_front();
 
-            board.Reset();
+            board.removeDeadUnits();
 
             if ( _orderOfUnits ) {
                 // Applied action could kill someone or affect the speed of some unit, update the order of units
@@ -475,7 +468,7 @@ void Battle::Arena::TurnTroop( Unit * troop, const Units & orderHistory )
             endOfTurn = true;
         }
 
-        board.Reset();
+        board.removeDeadUnits();
     }
 }
 
@@ -611,17 +604,8 @@ void Battle::Arena::HumanTurn( const Unit & b, Actions & a )
 
 void Battle::Arena::TowerAction( const Tower & twr )
 {
-    // All cells on the board should be properly reset here
-    assert( std::all_of( board.begin(), board.end(), []( const Cell & cell ) {
-        const Unit * unit = cell.GetUnit();
-        if ( unit && !unit->isValid() ) {
-            return false;
-        }
-
-        return cell.GetQuality() == 0;
-    } ) );
-
-    board.SetEnemyQuality( twr );
+    // There should be no dead units on the board at this moment
+    assert( std::all_of( board.begin(), board.end(), []( const Cell & cell ) { return ( cell.GetUnit() == nullptr || cell.GetUnit()->isValid() ); } ) );
 
     // Target unit and its quality
     std::pair<const Unit *, int32_t> targetInfo{ nullptr, INT32_MIN };
@@ -633,8 +617,10 @@ void Battle::Arena::TowerAction( const Tower & twr )
             continue;
         }
 
-        if ( targetInfo.first == nullptr || targetInfo.second < cell.GetQuality() ) {
-            targetInfo = { unit, cell.GetQuality() };
+        const int32_t unitScoreQuality = unit->GetScoreQuality( twr );
+
+        if ( targetInfo.first == nullptr || targetInfo.second < unitScoreQuality ) {
+            targetInfo = { unit, unitScoreQuality };
         }
     }
 
@@ -651,7 +637,7 @@ void Battle::Arena::TowerAction( const Tower & twr )
 
     ApplyAction( cmd );
 
-    board.Reset();
+    board.removeDeadUnits();
 }
 
 void Battle::Arena::CatapultAction()

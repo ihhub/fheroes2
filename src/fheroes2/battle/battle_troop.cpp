@@ -1121,25 +1121,26 @@ int32_t Battle::Unit::GetScoreQuality( const Unit & defender ) const
 
     double attackerThreat = attackerDamageToDefender;
 
-    const bool doesAttackerPoseImmediateDangerToDefender = [&defender, &attacker]() {
-        // From the point of view of castle towers, any units are considered dangerous
+    const double distanceModifier = [&defender, &attacker]() {
         if ( defender.Modes( CAP_TOWER ) ) {
-            return true;
+            return 1.0;
         }
 
-        // Flying units and archers are always considered dangerous
         if ( attacker.isFlying() || attacker.isArchers() ) {
-            return true;
+            return 1.0;
         }
 
-        // Remaining units are considered dangerous only if they are able to attack during their turn
+        const uint32_t distance = Board::GetDistance( attacker.GetPosition(), defender.GetPosition() );
         const uint32_t attackRange = attacker.GetSpeed( true, false ) + 1;
-        return ( Board::GetDistance( attacker.GetPosition(), defender.GetPosition() ) <= attackRange );
+
+        if ( distance <= attackRange ) {
+            return 1.0;
+        }
+
+        return 1.0 + 0.25 * ( distance - attackRange );
     }();
 
-    if ( !doesAttackerPoseImmediateDangerToDefender ) {
-        attackerThreat /= 4;
-    }
+    attackerThreat /= distanceModifier;
 
     const std::vector<fheroes2::MonsterAbility> & attackerAbilities = fheroes2::getMonsterData( id ).battleStats.abilities;
 

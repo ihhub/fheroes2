@@ -114,76 +114,13 @@ void Battle::Board::SetArea( const fheroes2::Rect & area )
         ( *it ).SetArea( area );
 }
 
-void Battle::Board::Reset()
+void Battle::Board::removeDeadUnits()
 {
     for ( Cell & cell : *this ) {
         Unit * unit = cell.GetUnit();
 
         if ( unit && !unit->isValid() ) {
             unit->PostKilledAction();
-        }
-
-        cell.ResetQuality();
-    }
-}
-
-void Battle::Board::SetPositionQuality( const Unit & b ) const
-{
-    const Arena * arena = GetArena();
-    assert( arena != nullptr );
-
-    Units enemies( arena->getEnemyForce( b.GetCurrentColor() ).getUnits(), true );
-
-    // Make sure archers are first here, so melee unit's score won't be double counted
-    enemies.SortArchers();
-
-    for ( const Unit * unit : enemies ) {
-        if ( !unit || !unit->isValid() ) {
-            continue;
-        }
-
-        const Indexes around = GetAroundIndexes( *unit );
-        for ( const int32_t index : around ) {
-            Cell * cell2 = GetCell( index );
-            if ( !cell2 || !cell2->isPassableForUnit( b ) )
-                continue;
-
-            const int32_t quality = cell2->GetQuality();
-            const int32_t attackValue = OptimalAttackValue( b, *unit, index );
-
-            // Only sum up quality score if it's archers; otherwise just pick the highest
-            if ( unit->isArchers() )
-                cell2->SetQuality( quality + attackValue );
-            else if ( attackValue > quality )
-                cell2->SetQuality( attackValue );
-        }
-    }
-}
-
-void Battle::Board::SetEnemyQuality( const Unit & unit ) const
-{
-    const Arena * arena = GetArena();
-    assert( arena != nullptr );
-
-    Units enemies( arena->getEnemyForce( unit.GetColor() ).getUnits(), true );
-    if ( unit.Modes( SP_BERSERKER ) ) {
-        Units allies( arena->getForce( unit.GetColor() ).getUnits(), true );
-        enemies.insert( enemies.end(), allies.begin(), allies.end() );
-    }
-
-    for ( Units::const_iterator it = enemies.begin(); it != enemies.end(); ++it ) {
-        const Unit * enemy = *it;
-
-        if ( enemy && enemy->isValid() ) {
-            const int32_t score = enemy->GetScoreQuality( unit );
-            Cell * cell = GetCell( enemy->GetHeadIndex() );
-
-            cell->SetQuality( score );
-
-            if ( enemy->isWide() )
-                GetCell( enemy->GetTailIndex() )->SetQuality( score );
-
-            DEBUG_LOG( DBG_BATTLE, DBG_TRACE, score << " for " << enemy->String() )
         }
     }
 }

@@ -65,15 +65,12 @@ namespace Battle
 
         Board & operator=( const Board & ) = delete;
 
-        void Reset();
+        void removeDeadUnits();
 
         void SetArea( const fheroes2::Rect & );
 
         int32_t GetIndexAbsPosition( const fheroes2::Point & ) const;
         std::vector<Unit *> GetNearestTroops( const Unit * startUnit, const std::vector<Unit *> & blackList );
-
-        void SetEnemyQuality( const Unit & ) const;
-        void SetPositionQuality( const Unit & ) const;
 
         void SetCobjObjects( const Maps::Tiles & tile, std::mt19937 & gen );
         void SetCovrObjects( int icn );
