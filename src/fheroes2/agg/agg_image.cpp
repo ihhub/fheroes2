@@ -2463,9 +2463,10 @@ namespace fheroes2
 
                 // Generate random spell image for Editor.
                 {
-                    Sprite randomSpellImage( _icnVsSprite[id][2] );
+                    const Sprite & randomSpellImage = _icnVsSprite[id][2];
                     int32_t imageWidth = randomSpellImage.width();
-                    Blit( randomSpellImage, randomSpellImage, true );
+
+                    Copy( randomSpellImage, _icnVsSprite[id][67] );
 
                     // Add text on random spell images.
                     for ( uint32_t i = 1; i < 6; ++i ) {
@@ -2475,8 +2476,6 @@ namespace fheroes2
                         const Text text( _( "spellIcon|lv." ) + std::string( "\n" ) + std::to_string( i ), FontType::smallWhite() );
                         text.draw( ( imageWidth - text.width() ) / 2, 18, imageWidth, originalImage );
                     }
-
-                    _icnVsSprite[id][67] = std::move( randomSpellImage );
                 }
                 return true;
             case ICN::CSLMARKER:
