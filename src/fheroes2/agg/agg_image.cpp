@@ -2473,8 +2473,8 @@ namespace fheroes2
                         Sprite & originalImage = _icnVsSprite[id][i + 67];
                         Copy( randomSpellImage, originalImage );
 
-                        const Text text( _( "spellIcon|lv." ) + std::string( "\n" ) + std::to_string( i ), FontType::smallWhite() );
-                        text.draw( ( imageWidth - text.width() ) / 2, 18, imageWidth, originalImage );
+                        const Text text( std::to_string( i ), FontType::normalWhite() );
+                        text.draw( ( imageWidth - text.width() ) / 2, 22, originalImage );
                     }
                 }
                 return true;
