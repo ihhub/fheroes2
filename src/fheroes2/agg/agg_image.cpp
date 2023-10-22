@@ -4252,6 +4252,15 @@ namespace fheroes2
 
                 return true;
             }
+            case ICN::WIZARD_CASTLE_BAY: {
+                _icnVsSprite[id].resize( 1 );
+                _icnVsSprite[id][0] = GetICN( ICN::TWNZDOCK, 0 );
+
+                Sprite temp;
+                h2d::readImage( "wizard_castle_bay.image", temp );
+                Blit( temp, _icnVsSprite[id][0] );
+                break;
+            }
             default:
                 break;
             }
