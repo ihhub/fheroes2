@@ -174,6 +174,24 @@ uint32_t Battle::Board::GetDistance( const Position & pos1, const Position & pos
     return distance;
 }
 
+uint32_t Battle::Board::GetDistance( const Position & pos, const int32_t index )
+{
+    if ( pos.GetHead() == nullptr || !isValidIndex( index ) ) {
+        return 0;
+    }
+
+    const int32_t headIdx = pos.GetHead()->GetIndex();
+    const int32_t tailIdx = pos.GetTail() ? pos.GetTail()->GetIndex() : -1;
+
+    uint32_t distance = Board::GetDistance( headIdx, index );
+
+    if ( tailIdx != -1 ) {
+        distance = std::min( distance, Board::GetDistance( tailIdx, index ) );
+    }
+
+    return distance;
+}
+
 std::vector<Battle::Unit *> Battle::Board::GetNearestTroops( const Unit * startUnit, const std::vector<Battle::Unit *> & blackList )
 {
     std::vector<std::pair<Battle::Unit *, uint32_t>> foundUnits;

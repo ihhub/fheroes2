@@ -1091,20 +1091,8 @@ uint32_t Battle::Unit::GetDefense() const
     return res;
 }
 
-int32_t Battle::Unit::evaluateThreatForUnit( const Unit & defender ) const
+int32_t Battle::Unit::evaluateThreatForUnit( const Unit & defender, const std::optional<Position> defenderPos /* = {} */ ) const
 {
-    const auto getDefenderDamage = [&defender]() {
-        if ( defender.Modes( SP_CURSE ) ) {
-            return defender.GetDamageMin();
-        }
-
-        if ( defender.Modes( SP_BLESS ) ) {
-            return defender.GetDamageMax();
-        }
-
-        return ( defender.GetDamageMin() + defender.GetDamageMax() ) / 2;
-    };
-
     const Unit & attacker = *this;
 
     const uint32_t attackerDamageToDefender = [&defender, &attacker]() {
@@ -1121,7 +1109,7 @@ int32_t Battle::Unit::evaluateThreatForUnit( const Unit & defender ) const
 
     double attackerThreat = attackerDamageToDefender;
 
-    const double distanceModifier = [&defender, &attacker]() {
+    const double distanceModifier = [&defender, defenderPos, &attacker]() {
         if ( defender.Modes( CAP_TOWER ) ) {
             return 1.0;
         }
@@ -1130,17 +1118,17 @@ int32_t Battle::Unit::evaluateThreatForUnit( const Unit & defender ) const
             return 1.0;
         }
 
-        const uint32_t speed = attacker.GetSpeed( true, false );
-        assert( speed > Speed::STANDING );
+        const uint32_t attackerSpeed = attacker.GetSpeed( true, false );
+        assert( attackerSpeed > Speed::STANDING );
 
-        const uint32_t distance = Board::GetDistance( attacker.GetPosition(), defender.GetPosition() );
-        const uint32_t attackRange = speed + 1;
+        const uint32_t distance = Board::GetDistance( attacker.GetPosition(), defenderPos.value_or( defender.GetPosition() ) );
+        const uint32_t attackRange = attackerSpeed + 1;
 
         if ( distance <= attackRange ) {
             return 1.0;
         }
 
-        return 1.5 * static_cast<double>( distance ) / static_cast<double>( speed );
+        return 1.5 * static_cast<double>( distance ) / static_cast<double>( attackerSpeed );
     }();
 
     attackerThreat /= distanceModifier;
@@ -1197,6 +1185,18 @@ int32_t Battle::Unit::evaluateThreatForUnit( const Unit & defender ) const
          != attackerAbilities.end() ) {
         attackerThreat *= 1.3;
     }
+
+    const auto getDefenderDamage = [&defender]() {
+        if ( defender.Modes( SP_CURSE ) ) {
+            return defender.GetDamageMin();
+        }
+
+        if ( defender.Modes( SP_BLESS ) ) {
+            return defender.GetDamageMax();
+        }
+
+        return ( defender.GetDamageMin() + defender.GetDamageMax() ) / 2;
+    };
 
     const auto spellCasterAbilityIter
         = std::find( attackerAbilities.begin(), attackerAbilities.end(), fheroes2::MonsterAbility( fheroes2::MonsterAbilityType::SPELL_CASTER ) );

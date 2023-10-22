@@ -98,6 +98,11 @@ namespace Battle
         // both positions closest to each other. If any of the positions is not valid, then returns 0.
         static uint32_t GetDistance( const Position & pos1, const Position & pos2 );
 
+        // Returns the distance between the given position and the cell with the given index. The distance is calculated as
+        // the distance between the cell with the given index and the cell closest to it, which is part of the given position.
+        // If either the position or the index is not valid, then returns 0.
+        static uint32_t GetDistance( const Position & pos, const int32_t index );
+
         static bool isValidDirection( const int32_t index, const int dir );
         static int32_t GetIndexDirection( const int32_t index, const int dir );
         static Indexes GetDistanceIndexes( const int32_t center, const uint32_t radius );

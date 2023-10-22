@@ -26,6 +26,7 @@
 
 #include <cstddef>
 #include <cstdint>
+#include <optional>
 #include <string>
 #include <utility>
 #include <vector>
@@ -167,8 +168,9 @@ namespace Battle
         uint32_t GetDamage( const Unit & enemy, Rand::DeterministicRandomGenerator & randomGenerator ) const;
 
         // Returns the threat level of this unit, calculated as if it attacked the 'defender' unit.
-        // See the implementation for details.
-        int32_t evaluateThreatForUnit( const Unit & defender ) const;
+        // If 'defenderPos' is set, then it will be used as the 'defender' unit's position, otherwise
+        // the actual position of this unit will be used. See the implementation for details.
+        int32_t evaluateThreatForUnit( const Unit & defender, const std::optional<Position> defenderPos = {} ) const;
 
         uint32_t GetInitialCount() const;
         uint32_t GetDead() const;

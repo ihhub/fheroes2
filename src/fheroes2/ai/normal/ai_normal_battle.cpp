@@ -98,7 +98,7 @@ namespace AI
 
         // For each cell, choose the maximum attack value among the nearby melee units and then add the sum of the attack values of nearby archers to encourage the use of
         // attack positions that block archers
-        std::sort( enemies.begin(), enemies.end(), []( const Troop * troop1, const Troop * troop2 ) { return !troop1->isArchers() && troop2->isArchers(); } );
+        std::sort( enemies.begin(), enemies.end(), []( const Unit * unit1, const Unit * unit2 ) { return !unit1->isArchers() && unit2->isArchers(); } );
 
         std::vector<int32_t> result( ARENASIZE, 0 );
 
@@ -133,8 +133,15 @@ namespace AI
     {
         MeleeAttackOutcome bestOutcome;
 
+        Indexes aroundDefender = Board::GetAroundIndexes( defender );
+
+        // Prefer the cells closest to the attacker
+        std::sort( aroundDefender.begin(), aroundDefender.end(), [&attacker]( const int32_t idx1, const int32_t idx2 ) {
+            return ( Board::GetDistance( attacker.GetPosition(), idx1 ) < Board::GetDistance( attacker.GetPosition(), idx2 ) );
+        } );
+
         // Check if we can reach the target and pick best position to attack from
-        for ( const int32_t nearbyIdx : Board::GetAroundIndexes( defender ) ) {
+        for ( const int32_t nearbyIdx : aroundDefender ) {
             assert( nearbyIdx >= 0 && static_cast<size_t>( nearbyIdx ) < positionValues.size() );
 
             const Position pos = Position::GetPosition( attacker, nearbyIdx );
@@ -187,7 +194,7 @@ namespace AI
                 const uint32_t enemyAttackRange = enemy->GetSpeed( false, true ) + 1;
 
                 if ( Board::GetDistance( pos, enemy->GetPosition() ) <= enemyAttackRange ) {
-                    posThreatLevel += enemy->evaluateThreatForUnit( currentUnit );
+                    posThreatLevel += enemy->evaluateThreatForUnit( currentUnit, pos );
                 }
             }
 
