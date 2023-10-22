@@ -33,9 +33,7 @@
 #include <set>
 #include <utility>
 
-#include "battle.h"
 #include "battle_arena.h"
-#include "battle_army.h"
 #include "battle_bridge.h"
 #include "battle_troop.h"
 #include "castle.h"
