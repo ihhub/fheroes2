@@ -2414,53 +2414,57 @@ namespace fheroes2
                 return true;
             case ICN::SPELLS:
                 LoadOriginalICN( id );
-                if ( _icnVsSprite[id].size() == 60 ) {
-                    _icnVsSprite[id].resize( 73 );
-                    for ( uint32_t i = 60; i < 66; ++i ) {
-                        // Mass Cure spell. ( when i == 60 ).
-                        size_t originalIndex = 6;
-                        if ( i == 61 ) {
-                            // Mass Haste spell.
-                            originalIndex = 14;
-                        }
-                        else if ( i == 62 ) {
-                            // Mass Slow spell.
-                            originalIndex = 1;
-                        }
-                        else if ( i == 63 ) {
-                            // Mass Bless spell.
-                            originalIndex = 7;
-                        }
-                        else if ( i == 64 ) {
-                            // Mass Curse spell.
-                            originalIndex = 3;
-                        }
-                        else if ( i == 65 ) {
-                            // Mass Shield spell.
-                            originalIndex = 15;
-                        }
+                if ( _icnVsSprite[id].size() != 60 ) {
+                    return true;
+                }
 
-                        const Sprite & originalImage = _icnVsSprite[id][originalIndex];
-                        Sprite & image = _icnVsSprite[id][i];
+                _icnVsSprite[id].resize( 73 );
 
-                        image.resize( originalImage.width() + 8, originalImage.height() + 8 );
-                        image.setPosition( originalImage.x() + 4, originalImage.y() + 4 );
-                        image.fill( 1 );
-
-                        AlphaBlit( originalImage, image, 0, 0, 128 );
-                        AlphaBlit( originalImage, image, 4, 4, 192 );
-                        Blit( originalImage, image, 8, 8 );
-
-                        AddTransparency( image, 1 );
+                for ( uint32_t i = 60; i < 66; ++i ) {
+                    // Mass Cure spell. ( when i == 60 ).
+                    size_t originalIndex = 6;
+                    if ( i == 61 ) {
+                        // Mass Haste spell.
+                        originalIndex = 14;
+                    }
+                    else if ( i == 62 ) {
+                        // Mass Slow spell.
+                        originalIndex = 1;
+                    }
+                    else if ( i == 63 ) {
+                        // Mass Bless spell.
+                        originalIndex = 7;
+                    }
+                    else if ( i == 64 ) {
+                        // Mass Curse spell.
+                        originalIndex = 3;
+                    }
+                    else if ( i == 65 ) {
+                        // Mass Shield spell.
+                        originalIndex = 15;
                     }
 
-                    // The Petrification spell does not have its own icon in the original game.
-                    h2d::readImage( "petrification_spell_icon.image", _icnVsSprite[id][66] );
+                    const Sprite & originalImage = _icnVsSprite[id][originalIndex];
+                    Sprite & image = _icnVsSprite[id][i];
 
-                    // Generate random spell image for Editor.
-                    Sprite randomSpellImage( _icnVsSprite[id][18] );
+                    image.resize( originalImage.width() + 8, originalImage.height() + 8 );
+                    image.setPosition( originalImage.x() + 4, originalImage.y() + 4 );
+                    image.fill( 1 );
+
+                    AlphaBlit( originalImage, image, 0, 0, 128 );
+                    AlphaBlit( originalImage, image, 4, 4, 192 );
+                    Blit( originalImage, image, 8, 8 );
+
+                    AddTransparency( image, 1 );
+                }
+
+                // The Petrification spell does not have its own icon in the original game.
+                h2d::readImage( "petrification_spell_icon.image", _icnVsSprite[id][66] );
+
+                // Generate random spell image for Editor.
+                {
+                    Sprite randomSpellImage( _icnVsSprite[id][2] );
                     int32_t imageWidth = randomSpellImage.width();
-                    ApplyPalette( randomSpellImage, PAL::GetPalette( PAL::PaletteType::BROWN ) );
                     Blit( randomSpellImage, randomSpellImage, true );
 
                     // Add text on random spell images.
@@ -2468,17 +2472,11 @@ namespace fheroes2
                         Sprite & originalImage = _icnVsSprite[id][i + 67];
                         Copy( randomSpellImage, originalImage );
 
-                        Text text( "spell", FontType::smallWhite() );
-                        text.draw( ( imageWidth - text.width() ) / 2, 5, originalImage );
-                        text.set( "lv. " + std::to_string( i ), FontType::smallWhite() );
-                        text.draw( ( imageWidth - text.width() ) / 2, 17, originalImage );
+                        const Text text( _( "spellIcon|lv." ) + std::string( "\n" ) + std::to_string( i ), FontType::smallWhite() );
+                        text.draw( ( imageWidth - text.width() ) / 2, 18, imageWidth, originalImage );
                     }
 
                     _icnVsSprite[id][67] = std::move( randomSpellImage );
-                    Text text( "rand", FontType::smallWhite() );
-                    text.draw( ( imageWidth - text.width() ) / 2, 5, _icnVsSprite[id][67] );
-                    text.set( "spell", FontType::smallWhite() );
-                    text.draw( ( imageWidth - text.width() ) / 2, 17, _icnVsSprite[id][67] );
                 }
                 return true;
             case ICN::CSLMARKER:

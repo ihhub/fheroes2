@@ -530,10 +530,13 @@ namespace Interface
                         uint32_t imageIndex = artifact.IndexSprite32() * 2 + 1;
 
                         if ( imageIndex < 9 ) {
-                            // First four ultimate artifacts have no map images. Show "Ult ART" image instead.
+                            // First four ultimate artifacts do not have map sprites. We show "Ult ART" image instead.
+                            // TODO: Make sprites for these ultimate artifacts.
                             imageIndex = 209;
                         }
 
+                        // Combine two sprites to get mouse cursor sprite.
+                        // TODO: Implement a function that glue multi-tile objects into one using given pattern.
                         const fheroes2::Sprite & mainImage = fheroes2::AGG::GetICN( ICN::OBJNARTI, imageIndex );
                         const fheroes2::Sprite & shadowImage = fheroes2::AGG::GetICN( ICN::OBJNARTI, imageIndex - 1 );
                         const int32_t shadowImageWidth = shadowImage.width();

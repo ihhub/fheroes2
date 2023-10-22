@@ -508,21 +508,21 @@ Spell Dialog::selectSpell( const int spellId, const bool includeRandomSpells )
     return result == Dialog::OK || listbox.ok ? Spell( listbox.GetCurrent() ) : Spell( Spell::NONE );
 }
 
-Artifact Dialog::selectArtifact( const int artifactId, const bool includeRandomArtifacts )
+Artifact Dialog::selectArtifact( const int artifactId, const bool onlyPlaceableOnMap )
 {
     std::vector<int> artifacts;
     artifacts.reserve( Artifact::ARTIFACT_COUNT - 1 );
 
     const bool isPriceofLoyaltyArtifactAllowed = Settings::Get().isCurrentMapPriceOfLoyalty();
 
-    if ( !includeRandomArtifacts ) {
+    if ( !onlyPlaceableOnMap ) {
         // When we do not show random artifacts it is not map editing then
         // it is hero editing and we show the magic book at the first place.
         artifacts.emplace_back( Artifact::MAGIC_BOOK );
     }
 
-    for ( int id = Artifact::UNKNOWN + 1; id < Artifact::ARTIFACT_COUNT; ++id ) {
-        if ( id != Artifact::MAGIC_BOOK && Artifact( id ).isValid() && ( includeRandomArtifacts || id < Artifact::RANDOM_ALL_LEVELS || id > Artifact::RANDOM_3_LEVEL )
+    for ( int id = onlyPlaceableOnMap ? Artifact::ARCANE_NECKLACE : ( Artifact::UNKNOWN + 1 ); id < Artifact::ARTIFACT_COUNT; ++id ) {
+        if ( id != Artifact::MAGIC_BOOK && Artifact( id ).isValid() && ( onlyPlaceableOnMap || id < Artifact::RANDOM_ALL_LEVELS || id > Artifact::RANDOM_3_LEVEL )
              && ( isPriceofLoyaltyArtifactAllowed || !fheroes2::isPriceOfLoyaltyArtifact( id ) ) ) {
             artifacts.emplace_back( id );
         }
