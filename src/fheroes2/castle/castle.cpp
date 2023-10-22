@@ -2177,7 +2177,8 @@ bool Castle::HasSeaAccess() const
         }
 
         // If this is an action object and it can be removed then it is possible to put a boat here.
-        return MP2::isPickupObject( tile.GetObject() );
+        const MP2::MapObjectType objectType = tile.GetObject();
+        return MP2::isPickupObject( objectType ) || objectType == MP2::OBJ_BOAT;
     };
 
     const int32_t index = Maps::GetIndexFromAbsPoint( possibleSeaTile.x, possibleSeaTile.y );
