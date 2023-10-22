@@ -1130,14 +1130,17 @@ int32_t Battle::Unit::evaluateThreatForUnit( const Unit & defender ) const
             return 1.0;
         }
 
+        const uint32_t speed = attacker.GetSpeed( true, false );
+        assert( speed > Speed::STANDING );
+
         const uint32_t distance = Board::GetDistance( attacker.GetPosition(), defender.GetPosition() );
-        const uint32_t attackRange = attacker.GetSpeed( true, false ) + 1;
+        const uint32_t attackRange = speed + 1;
 
         if ( distance <= attackRange ) {
             return 1.0;
         }
 
-        return 1.0 + 0.25 * ( distance - attackRange );
+        return 1.5 * static_cast<double>( distance ) / static_cast<double>( speed );
     }();
 
     attackerThreat /= distanceModifier;

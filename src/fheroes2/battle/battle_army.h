@@ -61,7 +61,6 @@ namespace Battle
         Unit * FindUID( uint32_t pid ) const;
 
         void SortFastest();
-        void SortArchers();
     };
 
     class Force : public Units, public BitModes
