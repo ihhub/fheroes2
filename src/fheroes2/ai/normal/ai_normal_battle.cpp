@@ -185,17 +185,18 @@ namespace AI
             for ( const Unit * enemy : enemies ) {
                 assert( enemy != nullptr );
 
-                // Archers and Flyers are always threatening, skip
+                // Archers and Flyers are always threatening
                 if ( enemy->isFlying() || ( enemy->isArchers() && !enemy->isHandFighting() ) ) {
                     continue;
                 }
 
                 // Also consider the next turn, even if the enemy unit has already acted during the current turn
                 const uint32_t enemyAttackRange = enemy->GetSpeed( false, true ) + 1;
-
-                if ( Board::GetDistance( pos, enemy->GetPosition() ) <= enemyAttackRange ) {
-                    posThreatLevel += enemy->evaluateThreatForUnit( currentUnit, pos );
+                if ( Board::GetDistance( pos, enemy->GetPosition() ) > enemyAttackRange ) {
+                    continue;
                 }
+
+                posThreatLevel += enemy->evaluateThreatForUnit( currentUnit, pos );
             }
 
             // We need to get as close to the target as possible (taking into account the threat level)
