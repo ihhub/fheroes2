@@ -3564,9 +3564,12 @@ namespace fheroes2
                     Copy( _icnVsSprite[id][2], _icnVsSprite[id][16] );
                     Copy( _icnVsSprite[id][3], _icnVsSprite[id][17] );
 
-                    // Get the button's icon colors.
+                    // Get the horse icon colors.
                     const uint8_t mainReleasedColor = _icnVsSprite[id][2].image()[7 * 36 + 26];
                     const uint8_t mainPressedColor = _icnVsSprite[id][3].image()[8 * 36 + 25];
+                    // const uint8_t leftReleasedColor = _icnVsSprite[id][2].image()[13 * 36 + 10];
+                    // const uint8_t topReleasedColor = _icnVsSprite[id][2].image()[5 * 36 + 26];
+                    // const uint8_t rightReleasedColor = _icnVsSprite[id][2].image()[6 * 36 + 26];
                     const uint8_t backgroundReleasedColor = _icnVsSprite[id][2].image()[1 * 36 + 5];
                     const uint8_t backgroundPressedColor = _icnVsSprite[id][3].image()[5 * 36 + 6];
 
@@ -3596,7 +3599,7 @@ namespace fheroes2
                             continue;
                         }
                         if ( actionCursor.image()[i] < 152U ) {
-                            // It is the contour color, make it transparent.
+                            // It is the contour color.
                             actionCursor.transform()[i] = 1U;
                         }
                         else {
@@ -3604,20 +3607,20 @@ namespace fheroes2
                         }
                     }
 
-                    // Add shadows to the horse image.
                     updateShadow( actionCursor, { 1, -1 }, 2, true );
                     updateShadow( actionCursor, { -1, 1 }, 6, true );
                     updateShadow( actionCursor, { 2, -2 }, 4, true );
                     Blit( actionCursor, _icnVsSprite[id][17], 4, 4 );
 
-                    // Replace colors for the released button.
+                    // Replace white transform ID with the white color.
                     for ( int32_t i = 0; i < actionCursorSize; ++i ) {
                         if ( actionCursor.transform()[i] == 6U ) {
-                            // Disable whitening transform and set white color.
                             actionCursor.transform()[i] = 0;
+                            // While color.
                             actionCursor.image()[i] = 10U;
                         }
                     }
+
                     ReplaceColorId( actionCursor, mainPressedColor, mainReleasedColor );
                     Blit( actionCursor, _icnVsSprite[id][16], 5, 3 );
                 }

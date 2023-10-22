@@ -223,12 +223,16 @@ void Interface::ButtonsArea::SetButtonStatus()
 {
     Heroes * currentHero = GetFocusHeroes();
 
-    if ( currentHero
-         && ( ( currentHero->GetPath().isValidForMovement() && currentHero->MayStillMove( false, true ) )
-              || MP2::isActionObject( currentHero->getObjectTypeUnderHero(), currentHero->isShipMaster() ) ) ) {
+    if ( currentHero && currentHero->GetPath().isValidForMovement() && currentHero->MayStillMove( false, true ) ) {
+        buttonHeroMovement.setICNIndexes( 2, 3 );
+        buttonHeroMovement.enable();
+    }
+    else if ( currentHero && MP2::isActionObject( currentHero->getObjectTypeUnderHero(), currentHero->isShipMaster() ) ) {
+        buttonHeroMovement.setICNIndexes( 16, 17 );
         buttonHeroMovement.enable();
     }
     else {
+        buttonHeroMovement.setICNIndexes( 2, 3 );
         buttonHeroMovement.disable();
     }
 
