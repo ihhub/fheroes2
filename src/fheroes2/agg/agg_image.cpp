@@ -3586,8 +3586,8 @@ namespace fheroes2
                     Copy( originalActionCursor, 1, 10, actionCursor, 1, 10, 12, 11 );
                     Copy( originalActionCursor, 14, 10, actionCursor, 13, 10, 1, 11 );
                     Copy( originalActionCursor, 16, 10, actionCursor, 14, 10, 13, 11 );
-                    Copy( originalActionCursor, 7, 22, actionCursor, 7, 19, 7, 7 );
-                    // Sprite actionCursor( GetICN( ICN::ADVMCO, 9 ) );
+                    Copy( originalActionCursor, 7, 22, actionCursor, 7, 20, 7, 7 );
+
                     // Make contour transparent and the horse figure filled with solid color.
                     const int32_t actionCursorSize = actionCursor.width() * actionCursor.height();
                     for ( int32_t i = 0; i < actionCursorSize; ++i ) {
