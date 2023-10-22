@@ -275,20 +275,27 @@ Battle::direction_t Battle::Cell::GetTriangleDirection( const fheroes2::Point & 
 {
     const fheroes2::Point pt( infl * dst.x, infl * dst.y );
 
-    if ( pt == _coord[0] )
+    if ( pt == _coord[0] ) {
         return CENTER;
-    else if ( inABC( pt, _coord[0], _coord[1], _coord[2] ) )
+    }
+    if ( inABC( pt, _coord[0], _coord[1], _coord[2] ) ) {
         return TOP_LEFT;
-    else if ( inABC( pt, _coord[0], _coord[2], _coord[3] ) )
+    }
+    if ( inABC( pt, _coord[0], _coord[2], _coord[3] ) ) {
         return TOP_RIGHT;
-    else if ( inABC( pt, _coord[0], _coord[3], _coord[4] ) )
+    }
+    if ( inABC( pt, _coord[0], _coord[3], _coord[4] ) ) {
         return RIGHT;
-    else if ( inABC( pt, _coord[0], _coord[4], _coord[5] ) )
+    }
+    if ( inABC( pt, _coord[0], _coord[4], _coord[5] ) ) {
         return BOTTOM_RIGHT;
-    else if ( inABC( pt, _coord[0], _coord[5], _coord[6] ) )
+    }
+    if ( inABC( pt, _coord[0], _coord[5], _coord[6] ) ) {
         return BOTTOM_LEFT;
-    else if ( inABC( pt, _coord[0], _coord[1], _coord[6] ) )
+    }
+    if ( inABC( pt, _coord[0], _coord[1], _coord[6] ) ) {
         return LEFT;
+    }
 
     return UNKNOWN;
 }

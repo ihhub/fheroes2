@@ -24,6 +24,7 @@
 #ifndef H2BATTLE_CELL_H
 #define H2BATTLE_CELL_H
 
+#include <array>
 #include <cstdint>
 #include <optional>
 #include <utility>
@@ -89,7 +90,7 @@ namespace Battle
         fheroes2::Rect _pos;
         int _object;
         Unit * _unit;
-        fheroes2::Point _coord[7];
+        std::array<fheroes2::Point, 7> _coord;
     };
 
     class Position : protected std::pair<Cell *, Cell *>
