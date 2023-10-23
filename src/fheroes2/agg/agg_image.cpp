@@ -3580,16 +3580,26 @@ namespace fheroes2
 
                     // Get the action cursor and prepare it for button. We make it a little smaller.
                     const Sprite & originalActionCursor = GetICN( ICN::ADVMCO, 9 );
-                    Sprite actionCursor( originalActionCursor.width() - 1, originalActionCursor.height() - 1 );
+                    const int32_t actionCursorWidth = originalActionCursor.width() - 1;
+                    const int32_t actionCursorHeight = originalActionCursor.height() - 3;
+                    Image actionCursor( actionCursorWidth, actionCursorHeight );
                     actionCursor.reset();
-                    Copy( originalActionCursor, 16, 1, actionCursor, 14, 2, 12, 8 );
-                    Copy( originalActionCursor, 1, 10, actionCursor, 1, 10, 12, 11 );
-                    Copy( originalActionCursor, 14, 10, actionCursor, 13, 10, 1, 11 );
-                    Copy( originalActionCursor, 16, 10, actionCursor, 14, 10, 13, 11 );
-                    Copy( originalActionCursor, 7, 22, actionCursor, 7, 20, 7, 7 );
+
+                    // Head.
+                    Copy( originalActionCursor, 19, 1, actionCursor, 17, 2, 8, 5 );
+                    Copy( originalActionCursor, 16, 7, actionCursor, 14, 7, 12, 2 );
+                    actionCursor.transform()[15 + 7 * actionCursorWidth] = 1U;
+                    // Tail.
+                    Copy( originalActionCursor, 1, 10, actionCursor, 1, 9, 12, 11 );
+                    // Middle part.
+                    Copy( originalActionCursor, 14, 10, actionCursor, 13, 9, 1, 11 );
+                    // Front legs.
+                    Copy( originalActionCursor, 16, 10, actionCursor, 14, 9, 13, 11 );
+                    // Hind legs.
+                    Copy( originalActionCursor, 7, 22, actionCursor, 7, 19, 7, 7 );
 
                     // Make contour transparent and the horse figure filled with solid color.
-                    const int32_t actionCursorSize = actionCursor.width() * actionCursor.height();
+                    const int32_t actionCursorSize = actionCursorWidth * actionCursorHeight;
                     for ( int32_t i = 0; i < actionCursorSize; ++i ) {
                         if ( actionCursor.transform()[i] == 1U ) {
                             // Skip transparent pixel.
@@ -3614,7 +3624,7 @@ namespace fheroes2
                     for ( int32_t i = 0; i < actionCursorSize; ++i ) {
                         if ( actionCursor.transform()[i] == 6U ) {
                             // Disable whitening transform and set white color.
-                            actionCursor.transform()[i] = 0;
+                            actionCursor.transform()[i] = 0U;
                             actionCursor.image()[i] = 10U;
                         }
                     }
