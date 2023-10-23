@@ -2237,7 +2237,7 @@ StreamBase & operator>>( StreamBase & msg, VecHeroes & heroes )
             heroes.emplace_back( hero );
         }
         else {
-            if ( Heroes::isValidId( hid ) ) {
+            if ( !Heroes::isValidId( hid ) ) {
                 continue;
             }
 
