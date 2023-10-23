@@ -1825,7 +1825,7 @@ const fheroes2::Sprite & Heroes::GetPortrait( int id, int type )
         }
         case PORT_SMALL:
             if ( id == Heroes::DEBUG_HERO ) {
-                return fheroes2::AGG::GetICN( ICN::MINIPORT, BRAX );
+                return fheroes2::AGG::GetICN( ICN::MINIPORT, BRAX - 1 );
             }
 
             // Since hero IDs start from 1 we have to deduct 1 from the ID.
