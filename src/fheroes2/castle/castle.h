@@ -254,12 +254,13 @@ public:
     }
 
     bool BuyBuilding( uint32_t );
-    bool AllowBuyBoat() const;
-    bool BuyBoat() const;
     uint32_t GetBuildingRequirement( uint32_t ) const;
 
     int CheckBuyBuilding( const uint32_t build ) const;
     static int GetAllBuildingStatus( const Castle & );
+
+    bool AllowBuyBoat( const bool checkPayment ) const;
+    bool BuyBoat() const;
 
     void Scout() const;
 

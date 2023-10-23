@@ -173,7 +173,13 @@ namespace Battle
 
         void ApplyAction( Command & );
 
-        TargetsInfo GetTargetsForSpells( const HeroBase * hero, const Spell & spell, int32_t dest, bool * playResistSound = nullptr );
+        // Returns a list of targets that will be affected by the given spell casted by the given hero and applied
+        // to a cell with a given index. This method can be used by external code to evaluate the applicability of
+        // a spell, and does not use probabilistic mechanisms to determine units resisting the given spell.
+        TargetsInfo GetTargetsForSpell( const HeroBase * hero, const Spell & spell, const int32_t dst )
+        {
+            return GetTargetsForSpell( hero, spell, dst, false, nullptr );
+        }
 
         bool isSpellcastDisabled() const;
         bool isDisableCastSpell( const Spell &, std::string * msg = nullptr );
@@ -186,12 +192,6 @@ namespace Battle
         bool CanSurrenderOpponent( int color ) const;
         bool CanRetreatOpponent( int color ) const;
 
-        void ApplyActionSpellSummonElemental( const Command &, const Spell & );
-        void ApplyActionSpellMirrorImage( Command & );
-        void ApplyActionSpellTeleport( Command & );
-        void ApplyActionSpellEarthQuake( const Command & );
-        void ApplyActionSpellDefaults( Command &, const Spell & );
-
         bool IsShootingPenalty( const Unit &, const Unit & ) const;
 
         int GetICNCovr() const
@@ -199,11 +199,9 @@ namespace Battle
             return icn_covr;
         }
 
-        uint32_t GetCastleTargetValue( int ) const;
+        uint32_t GetCastleTargetValue( const CastleDefenseElement target ) const;
 
         int32_t GetFreePositionNearHero( const int heroColor ) const;
-
-        const Rand::DeterministicRandomGenerator & GetRandomGenerator() const;
 
         static Board * GetBoard();
         static Tower * GetTower( const TowerType type );
@@ -234,17 +232,19 @@ namespace Battle
         void TurnTroop( Unit * troop, const Units & orderHistory );
         void TowerAction( const Tower & );
 
-        void SetCastleTargetValue( int, uint32_t );
+        void SetCastleTargetValue( const CastleDefenseElement target, const uint32_t value );
         void CatapultAction();
 
         TargetsInfo GetTargetsForDamage( const Unit & attacker, Unit & defender, const int32_t dst, const int dir ) const;
+        TargetsInfo GetTargetsForSpell( const HeroBase * hero, const Spell & spell, const int32_t dst, bool applyRandomMagicResistance, bool * playResistSound );
 
         static void TargetsApplyDamage( Unit & attacker, TargetsInfo & targets, uint32_t & resurrected );
         static void TargetsApplySpell( const HeroBase * hero, const Spell & spell, TargetsInfo & targets );
 
-        std::vector<int> GetCastleTargets() const;
-        TargetsInfo TargetsForChainLightning( const HeroBase * hero, int32_t attackedTroopIndex );
-        std::vector<Unit *> FindChainLightningTargetIndexes( const HeroBase * hero, Unit * firstUnit );
+        TargetsInfo TargetsForChainLightning( const HeroBase * hero, const int32_t attackedTroopIndex, const bool applyRandomMagicResistance );
+        std::vector<Unit *> FindChainLightningTargetIndexes( const HeroBase * hero, Unit * firstUnit, const bool applyRandomMagicResistance );
+
+        std::vector<CastleDefenseElement> GetEarthQuakeTargets() const;
 
         void ApplyActionRetreat( const Command & );
         void ApplyActionSurrender( const Command & );
@@ -258,6 +258,12 @@ namespace Battle
         void ApplyActionCatapult( Command & );
         void ApplyActionAutoSwitch( Command & cmd );
         void ApplyActionAutoFinish( const Command & cmd );
+
+        void ApplyActionSpellSummonElemental( const Command &, const Spell & );
+        void ApplyActionSpellMirrorImage( Command & );
+        void ApplyActionSpellTeleport( Command & );
+        void ApplyActionSpellEarthQuake( const Command & );
+        void ApplyActionSpellDefaults( Command &, const Spell & );
 
         // Performs an actual attack of one unit (defender) by another unit (attacker), applying the attacker's
         // built-in magic, if necessary. If the specified index of the target cell of the attack (dst) is negative,
@@ -306,6 +312,11 @@ namespace Battle
         // A set of colors of players for whom the auto-battle mode is enabled
         int _autoBattleColors;
 
+        // This random number generator should only be used in code that is equally used by both AI and the human
+        // player - that is, in code related to the processing of battle commands. It cannot be safely used in other
+        // places (for example, in code that performs situation assessment or AI decision-making) because in this
+        // case the battles performed by AI will not be reproducible by a human player when performing exactly the
+        // same actions.
         Rand::DeterministicRandomGenerator & _randomGenerator;
 
         TroopsUidGenerator _uidGenerator;

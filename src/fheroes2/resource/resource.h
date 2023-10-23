@@ -90,17 +90,20 @@ public:
     }
 
     Funds max( const Funds & ) const;
+
     int32_t Get( int rs ) const;
     int32_t * GetPtr( int rs );
 
     int getLowestQuotient( const Funds & ) const;
+
     int GetValidItems() const;
     uint32_t GetValidItemsCount() const;
-    void Trim(); // set all values to be >= 0
-
     std::pair<int, int32_t> getFirstValidResource() const;
 
+    // Sets all values to be >= 0
+    void Trim();
     void Reset();
+
     std::string String() const;
 
     int32_t wood;

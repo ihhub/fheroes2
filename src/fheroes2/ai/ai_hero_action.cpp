@@ -511,7 +511,7 @@ namespace
             DEBUG_LOG( DBG_AI, DBG_INFO, join.monsterCount << " " << troop.GetName() << " join " << hero.GetName() << " for " << joiningCost << " gold" )
 
             // These conditions must already be met if a group of monsters wants to join
-            assert( hero.GetArmy().CanJoinTroop( troop ) && hero.GetKingdom().AllowPayment( payment_t( Resource::GOLD, joiningCost ) ) );
+            assert( hero.GetArmy().CanJoinTroop( troop ) && hero.GetKingdom().AllowPayment( Funds( Resource::GOLD, joiningCost ) ) );
 
             hero.GetArmy().JoinTroop( troop.GetMonster(), join.monsterCount, false );
             hero.GetKingdom().OddFundsResource( Funds( Resource::GOLD, joiningCost ) );
@@ -1346,7 +1346,7 @@ namespace
         }
 
         Kingdom & kingdom = hero.GetKingdom();
-        const payment_t singleMonsterCost = troop.GetCost();
+        const Funds singleMonsterCost = troop.GetCost();
 
         uint32_t recruitTroopCount = kingdom.GetFunds().getLowestQuotient( singleMonsterCost );
         if ( recruitTroopCount <= 0 ) {
@@ -1667,7 +1667,7 @@ namespace
             return;
         }
 
-        const payment_t payment = PaymentConditions::ForAlchemist();
+        const Funds payment = PaymentConditions::ForAlchemist();
 
         if ( hero.GetKingdom().AllowPayment( payment ) ) {
             hero.GetKingdom().OddFundsResource( payment );

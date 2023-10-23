@@ -58,7 +58,6 @@
 #include "monster.h"
 #include "morale.h"
 #include "mus.h"
-#include "payment.h"
 #include "players.h"
 #include "race.h"
 #include "resource.h"
@@ -1054,12 +1053,12 @@ bool Battle::DialogBattleSurrender( const HeroBase & hero, uint32_t cost, Kingdo
     fheroes2::ButtonSprite btnMarket = fheroes2::makeButtonWithShadow( pos_rt.x + ( pos_rt.width - 16 ) / 2, pos_rt.y + 145, fheroes2::AGG::GetICN( icnMarket, 0 ),
                                                                        fheroes2::AGG::GetICN( icnMarket, 1 ), display );
 
-    if ( !kingdom.AllowPayment( payment_t( Resource::GOLD, cost ) ) ) {
+    if ( !kingdom.AllowPayment( Funds( Resource::GOLD, cost ) ) ) {
         btnAccept.disable();
     }
 
     if ( kingdom.GetCountMarketplace() ) {
-        if ( kingdom.AllowPayment( payment_t( Resource::GOLD, cost ) ) ) {
+        if ( kingdom.AllowPayment( Funds( Resource::GOLD, cost ) ) ) {
             btnMarket.disable();
         }
         else {
@@ -1104,7 +1103,7 @@ bool Battle::DialogBattleSurrender( const HeroBase & hero, uint32_t cost, Kingdo
 
     fheroes2::ImageRestorer back( display, pos_rt.x, pos_rt.y, pos_rt.width, pos_rt.height );
 
-    if ( !kingdom.AllowPayment( payment_t( Resource::GOLD, cost ) ) ) {
+    if ( !kingdom.AllowPayment( Funds( Resource::GOLD, cost ) ) ) {
         drawGoldMsg();
     }
 
@@ -1128,7 +1127,7 @@ bool Battle::DialogBattleSurrender( const HeroBase & hero, uint32_t cost, Kingdo
 
             back.restore();
 
-            if ( kingdom.AllowPayment( payment_t( Resource::GOLD, cost ) ) ) {
+            if ( kingdom.AllowPayment( Funds( Resource::GOLD, cost ) ) ) {
                 btnAccept.enable();
             }
             else {

@@ -55,11 +55,6 @@ namespace Maps
     class Tiles;
 }
 
-namespace Rand
-{
-    class DeterministicRandomGenerator;
-}
-
 struct VecHeroes;
 struct VecCastles;
 
@@ -227,8 +222,6 @@ namespace AI
         int32_t spellDurationMultiplier( const Battle::Unit & target ) const;
 
         static double commanderMaximumSpellDamageValue( const HeroBase & commander );
-
-        const Rand::DeterministicRandomGenerator * _randomGenerator = nullptr;
 
         // When this limit of turns without deaths is exceeded for an attacking AI-controlled hero,
         // the auto battle should be interrupted (one way or another)

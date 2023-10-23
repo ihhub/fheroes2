@@ -36,7 +36,7 @@
 #include "heroes.h"
 #include "heroes_base.h"
 #include "monster_anim.h"
-#include "payment.h"
+#include "resource.h"
 #include "skill.h"
 
 namespace
@@ -104,7 +104,7 @@ Battle::Unit * Battle::Units::FindMode( uint32_t mod ) const
     return it == end() ? nullptr : *it;
 }
 
-Battle::Force::Force( Army & parent, bool opposite, const Rand::DeterministicRandomGenerator & randomGenerator, TroopsUidGenerator & generator )
+Battle::Force::Force( Army & parent, bool opposite, TroopsUidGenerator & generator )
     : army( parent )
 {
     uids.reserve( army.Size() );
@@ -132,7 +132,7 @@ Battle::Force::Force( Army & parent, bool opposite, const Rand::DeterministicRan
 
         assert( pos.GetHead() != nullptr && ( !troop->isWide() || pos.GetTail() != nullptr ) );
 
-        push_back( new Unit( *troop, pos, opposite, randomGenerator, generator.GetUnique() ) );
+        push_back( new Unit( *troop, pos, opposite, generator.GetUnique() ) );
         back()->SetArmy( army );
 
         uids.push_back( back()->GetUID() );

@@ -33,11 +33,6 @@
 
 class HeroBase;
 
-namespace Rand
-{
-    class DeterministicRandomGenerator;
-}
-
 namespace Battle
 {
     class Unit;
@@ -72,7 +67,7 @@ namespace Battle
     class Force : public Units, public BitModes
     {
     public:
-        Force( Army & parent, bool opposite, const Rand::DeterministicRandomGenerator & randomGenerator, TroopsUidGenerator & generator );
+        Force( Army & parent, bool opposite, TroopsUidGenerator & generator );
         Force( const Force & ) = delete;
 
         ~Force() override;

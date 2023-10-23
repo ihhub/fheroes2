@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2012 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -24,52 +24,133 @@
 #ifndef H2BATTLE_COMMAND_H
 #define H2BATTLE_COMMAND_H
 
+#include <cassert>
 #include <cstddef>
 #include <cstdint>
 #include <functional>
+#include <tuple>
 #include <type_traits>
 #include <vector>
+
+#include "spell.h"
 
 namespace Battle
 {
     enum class CommandType : int32_t
     {
-        MSG_BATTLE_MOVE,
-        MSG_BATTLE_ATTACK,
-        MSG_BATTLE_CAST,
-        MSG_BATTLE_MORALE,
-        MSG_BATTLE_CATAPULT,
-        MSG_BATTLE_TOWER,
-        MSG_BATTLE_RETREAT,
-        MSG_BATTLE_SURRENDER,
-        MSG_BATTLE_SKIP,
-        MSG_BATTLE_END_TURN,
-        MSG_BATTLE_AUTO_SWITCH,
-        MSG_BATTLE_AUTO_FINISH
+        MOVE,
+        ATTACK,
+        SPELLCAST,
+        MORALE,
+        CATAPULT,
+        TOWER,
+        RETREAT,
+        SURRENDER,
+        SKIP,
+        END_TURN,
+        AUTO_SWITCH,
+        AUTO_FINISH
     };
 
-    class Command : public std::vector<int>
+    class Command final : public std::vector<int>
     {
     public:
-        explicit Command( const CommandType cmd );
-        Command( const CommandType cmd, const int param1, const int param2 = -1, const int param3 = -1, const int param4 = -1 );
+        static constexpr std::integral_constant<CommandType, CommandType::MOVE> MOVE{};
+        static constexpr std::integral_constant<CommandType, CommandType::ATTACK> ATTACK{};
+        static constexpr std::integral_constant<CommandType, CommandType::SPELLCAST> SPELLCAST{};
+        static constexpr std::integral_constant<CommandType, CommandType::MORALE> MORALE{};
+        static constexpr std::integral_constant<CommandType, CommandType::CATAPULT> CATAPULT{};
+        static constexpr std::integral_constant<CommandType, CommandType::TOWER> TOWER{};
+        static constexpr std::integral_constant<CommandType, CommandType::RETREAT> RETREAT{};
+        static constexpr std::integral_constant<CommandType, CommandType::SURRENDER> SURRENDER{};
+        static constexpr std::integral_constant<CommandType, CommandType::SKIP> SKIP{};
+        static constexpr std::integral_constant<CommandType, CommandType::END_TURN> END_TURN{};
+        static constexpr std::integral_constant<CommandType, CommandType::AUTO_SWITCH> AUTO_SWITCH{};
+        static constexpr std::integral_constant<CommandType, CommandType::AUTO_FINISH> AUTO_FINISH{};
+
+        template <CommandType cmd, typename... Types>
+        explicit Command( std::integral_constant<CommandType, cmd> /* tag */, const Types... params )
+            : _type( cmd )
+        {
+            if constexpr ( cmd == CommandType::MOVE ) {
+                // UID, cell index
+                static_assert( sizeof...( params ) == 2 );
+            }
+            else if constexpr ( cmd == CommandType::ATTACK ) {
+                // Attacker UID, defender UID, cell index, direction
+                static_assert( sizeof...( params ) == 4 );
+            }
+            else if constexpr ( cmd == CommandType::SPELLCAST ) {
+                static_assert( sizeof...( params ) > 0 );
+
+                const int spellId = std::get<0>( std::make_tuple( params... ) );
+
+                if ( spellId == Spell::MIRRORIMAGE ) {
+                    // Spell, UID
+                    assert( sizeof...( params ) == 2 );
+                }
+                else if ( spellId == Spell::TELEPORT ) {
+                    // Spell, src index, dst index
+                    assert( sizeof...( params ) == 3 );
+                }
+                else {
+                    // Spell, cell index
+                    assert( sizeof...( params ) == 2 );
+                }
+            }
+            else if constexpr ( cmd == CommandType::MORALE ) {
+                // UID, morale
+                static_assert( sizeof...( params ) == 2 );
+            }
+            else if constexpr ( cmd == CommandType::TOWER ) {
+                // Tower type, UID
+                static_assert( sizeof...( params ) == 2 );
+            }
+            else if constexpr ( cmd == CommandType::SKIP ) {
+                // UID
+                static_assert( sizeof...( params ) == 1 );
+            }
+            else if constexpr ( cmd == CommandType::END_TURN ) {
+                // UID
+                static_assert( sizeof...( params ) == 1 );
+            }
+            else if constexpr ( cmd == CommandType::AUTO_SWITCH ) {
+                // Color
+                static_assert( sizeof...( params ) == 1 );
+            }
+            else {
+                static_assert( sizeof...( params ) == 0 );
+            }
+
+            if constexpr ( sizeof...( params ) > 0 ) {
+                reserve( sizeof...( params ) );
+
+                // Put the elements of the parameter pack in reverse order using the right-to-left sequencing of the assignment operator
+                int dummy = 0;
+                (void)( ( *this << params, dummy ) = ... );
+            }
+        }
 
         CommandType GetType() const
         {
             return _type;
         }
 
-        int GetValue();
+        int GetNextValue();
 
         bool isType( const CommandType cmd ) const
         {
             return _type == cmd;
         }
 
-        Command & operator<<( const int );
-        Command & operator>>( int & );
+        // Updates the specified seed using the contents of this command. Returns the updated seed (or the original seed if this command is not suitable for seed update).
+        uint32_t updateSeed( uint32_t seed ) const;
+
+        Command & operator<<( const int val );
 
     private:
+        Command & operator>>( int & val );
+
         CommandType _type;
     };
 }

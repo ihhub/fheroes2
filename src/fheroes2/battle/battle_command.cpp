@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2012 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -22,15 +22,64 @@
  ***************************************************************************/
 
 #include "battle_command.h"
-#include "spell.h"
 
-Battle::Command::Command( const CommandType cmd )
-    : _type( cmd )
-{}
+#include <algorithm>
+
+#include "tools.h"
+
+int Battle::Command::GetNextValue()
+{
+    int val = 0;
+
+    *this >> val;
+
+    return val;
+}
+
+uint32_t Battle::Command::updateSeed( uint32_t seed ) const
+{
+    switch ( _type ) {
+    case CommandType::ATTACK:
+        assert( size() == 4 );
+
+        fheroes2::hashCombine( seed, _type );
+        // Use only attacker & defender UIDs, because cell index and direction may differ depending on whether the AI or the human player gives the command
+        fheroes2::hashCombine( seed, at( 2 ) );
+        fheroes2::hashCombine( seed, at( 3 ) );
+        break;
+
+    case CommandType::MOVE:
+    case CommandType::SPELLCAST:
+    case CommandType::MORALE:
+    case CommandType::CATAPULT:
+    case CommandType::TOWER:
+    case CommandType::RETREAT:
+    case CommandType::SURRENDER:
+    case CommandType::SKIP:
+        fheroes2::hashCombine( seed, _type );
+        std::for_each( begin(), end(), [&seed]( const int param ) { fheroes2::hashCombine( seed, param ); } );
+        break;
+
+    // Ignore the end turn command, because the AI and the human player give them differently
+    // TODO: eventually get rid of this command
+    case CommandType::END_TURN:
+    // These commands should never affect the seed generation
+    case CommandType::AUTO_SWITCH:
+    case CommandType::AUTO_FINISH:
+        break;
+
+    default:
+        assert( 0 );
+        break;
+    }
+
+    return seed;
+}
 
 Battle::Command & Battle::Command::operator<<( const int val )
 {
     push_back( val );
+
     return *this;
 }
 
@@ -40,73 +89,6 @@ Battle::Command & Battle::Command::operator>>( int & val )
         val = back();
         pop_back();
     }
+
     return *this;
-}
-
-int Battle::Command::GetValue()
-{
-    int val = 0;
-    *this >> val;
-    return val;
-}
-
-Battle::Command::Command( const CommandType cmd, const int param1, const int param2 /* = -1 */, const int param3 /* = -1 */, const int param4 /* = -1 */ )
-    : _type( cmd )
-{
-    switch ( _type ) {
-    case CommandType::MSG_BATTLE_AUTO_SWITCH:
-        *this << param1; // color
-        break;
-
-    case CommandType::MSG_BATTLE_SURRENDER:
-    case CommandType::MSG_BATTLE_RETREAT:
-    case CommandType::MSG_BATTLE_AUTO_FINISH:
-        break;
-
-    case CommandType::MSG_BATTLE_TOWER:
-        *this << param2 << param1; // enemy uid, type
-        break;
-
-    case CommandType::MSG_BATTLE_CATAPULT: // battle_arena.cpp
-        break;
-
-    case CommandType::MSG_BATTLE_CAST:
-        switch ( param1 ) {
-        case Spell::MIRRORIMAGE:
-            *this << param2 << param1; // who, spell
-            break;
-
-        case Spell::TELEPORT:
-            *this << param3 << param2 << param1; // dst, src, spell
-            break;
-
-        default:
-            *this << param2 << param1; // dst, spell
-            break;
-        }
-        break;
-
-    case CommandType::MSG_BATTLE_END_TURN:
-        *this << param1; // uid
-        break;
-
-    case CommandType::MSG_BATTLE_SKIP:
-        *this << param1; // uid
-        break;
-
-    case CommandType::MSG_BATTLE_MOVE:
-        *this << param2 << param1; // dst, uid
-        break;
-
-    case CommandType::MSG_BATTLE_ATTACK:
-        *this << param4 << param3 << param2 << param1; // direction, dst, uid, uid
-        break;
-
-    case CommandType::MSG_BATTLE_MORALE:
-        *this << param2 << param1; // state, uid
-        break;
-
-    default:
-        break;
-    }
 }

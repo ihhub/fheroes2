@@ -630,7 +630,7 @@ double Castle::getVisitValue( const Heroes & hero ) const
         }
 
         if ( !hero.HaveSpellBook() && spellValue > 0 ) {
-            const payment_t payment = PaymentConditions::BuySpellBook();
+            const Funds payment = PaymentConditions::BuySpellBook();
             if ( potentialFunds < payment || hero.GetBagArtifacts().isFull() ) {
                 // Since the hero does not have a magic book and cannot buy any then spells are useless.
                 spellValue = 0;
@@ -654,7 +654,7 @@ double Castle::getVisitValue( const Heroes & hero ) const
                 continue;
             }
 
-            const payment_t payment = troop->GetTotalUpgradeCost();
+            const Funds payment = troop->GetTotalUpgradeCost();
             if ( potentialFunds >= payment ) {
                 potentialFunds -= payment;
                 troop->Upgrade();
@@ -1080,7 +1080,7 @@ bool Castle::RecruitMonster( const Troop & troop, bool showDialog )
         count = dwelling[dwellingIndex];
     }
 
-    const payment_t paymentCosts = troop.GetTotalCost();
+    const Funds paymentCosts = troop.GetTotalCost();
     Kingdom & kingdom = GetKingdom();
 
     if ( !kingdom.AllowPayment( paymentCosts ) ) {
@@ -1591,7 +1591,6 @@ bool Castle::AllowBuyBuilding( uint32_t build ) const
     return ALLOW_BUILD == CheckBuyBuilding( build );
 }
 
-/* buy building */
 bool Castle::BuyBuilding( uint32_t build )
 {
     if ( !AllowBuyBuilding( build ) )
@@ -2492,7 +2491,7 @@ double Castle::GetGarrisonStrength( const Heroes * attackingHero ) const
 
     // Add castle bonuses if there are any troops defending the castle
     if ( isCastle() && totalStrength > 0.1 ) {
-        const Battle::Tower tower( *this, Battle::TowerType::TWR_CENTER, Rand::DeterministicRandomGenerator( 0 ), 0 );
+        const Battle::Tower tower( *this, Battle::TowerType::TWR_CENTER, 0 );
         const double towerStr = tower.GetStrengthWithBonus( tower.GetAttackBonus(), 0 );
 
         totalStrength += towerStr;
@@ -2515,21 +2514,40 @@ double Castle::GetGarrisonStrength( const Heroes * attackingHero ) const
     return totalStrength;
 }
 
-bool Castle::AllowBuyBoat() const
+bool Castle::AllowBuyBoat( const bool checkPayment ) const
 {
-    // check payment and present other boat
-    return ( HaveNearlySea() && isBuild( BUILD_SHIPYARD ) && GetKingdom().AllowPayment( PaymentConditions::BuyBoat() ) && !PresentBoat() );
+    if ( !HaveNearlySea() ) {
+        return false;
+    }
+
+    if ( !isBuild( BUILD_SHIPYARD ) ) {
+        return false;
+    }
+
+    if ( PresentBoat() ) {
+        return false;
+    }
+
+    if ( checkPayment && !GetKingdom().AllowPayment( PaymentConditions::BuyBoat() ) ) {
+        return false;
+    }
+
+    return true;
 }
 
 bool Castle::BuyBoat() const
 {
-    if ( !AllowBuyBoat() )
+    if ( !AllowBuyBoat( true ) ) {
         return false;
-    if ( isControlHuman() )
-        AudioManager::PlaySound( M82::BUILDTWN );
+    }
 
-    if ( !Maps::isValidAbsPoint( center.x, center.y + 2 ) )
+    if ( !Maps::isValidAbsPoint( center.x, center.y + 2 ) ) {
         return false;
+    }
+
+    if ( isControlHuman() ) {
+        AudioManager::PlaySound( M82::BUILDTWN );
+    }
 
     const int32_t index = Maps::GetIndexFromAbsPoint( center.x, center.y + 2 );
     Maps::Tiles & left = world.GetTiles( index - 1 );
@@ -2864,7 +2882,7 @@ std::string Castle::GetDescriptionBuilding( uint32_t build ) const
 
     case BUILD_SPEC:
     case BUILD_STATUE: {
-        const payment_t profit = ProfitConditions::FromBuilding( build, GetRace() );
+        const Funds profit = ProfitConditions::FromBuilding( build, GetRace() );
         StringReplace( res, "%{count}", profit.gold );
         break;
     }

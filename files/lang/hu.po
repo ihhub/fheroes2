@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-16 01:01+0000\n"
+"POT-Creation-Date: 2023-10-23 00:14+0000\n"
 "PO-Revision-Date: 2023-09-04 21:55+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -1373,8 +1373,8 @@ msgstr ""
 
 msgid ""
 "Find the Orb of negation, which is said to be buried in this land. There are "
-"clues inscribed on stone obelisks which will help lead you to your price. "
-"Find the orb before the first day of the sixth month, or your rivals will "
+"clues inscribed on stone obelisks which will help lead you to your prize. "
+"Find the Orb before the first day of the sixth month, or your rivals will "
 "surely have gotten to the fount before you."
 msgstr ""
 
@@ -1783,6 +1783,9 @@ msgstr "A(z) %{building} %{monster}-t hoz létre."
 
 msgid "Requires:"
 msgstr "Előfeltétel:"
+
+msgid "Exit this menu without doing anything."
+msgstr "Kilépés ebből a menüből, bármilyen cselekvés nélkül."
 
 msgid "Cannot build. You have already built here today."
 msgstr "Nem építhető. Már építettél ide ebben körben."
@@ -2487,6 +2490,9 @@ msgstr "egy varázstárggyal"
 msgid "without artifacts."
 msgstr " %{count} varázstárggyal"
 
+msgid "Recruit %{name} the %{race}"
+msgstr "%{name} a %{race} toborzása"
+
 msgid ""
 "'Spread' combat formation spreads your armies from the top to the bottom of "
 "the battlefield, with at least one empty space between each army."
@@ -2506,9 +2512,6 @@ msgstr "Laza felállás"
 
 msgid "Grouped Formation"
 msgstr "Szoros felállás"
-
-msgid "Recruit %{name} the %{race}"
-msgstr "%{name} a %{race} toborzása"
 
 msgid "Set garrison combat formation to 'Spread'"
 msgstr "A helyőrség csataalakzata legyen 'Laza'."
@@ -2582,9 +2585,6 @@ msgstr "A Szent Varázstárgy kiásása."
 
 msgid "Digging"
 msgstr "Ásás"
-
-msgid "Exit this menu without doing anything."
-msgstr "Kilépés ebből a menüből, bármilyen cselekvés nélkül."
 
 msgid "Arena"
 msgstr "Aréna"
@@ -4532,22 +4532,37 @@ msgstr "Beállítások"
 msgid "Welcome to Heroes of Might and Magic II powered by fheroes2 engine!"
 msgstr "Kilépés a játékból és visszatérés az operációs rendszerhez."
 
+#, fuzzy
 msgid ""
-"Welcome to Heroes of Might and Magic II powered by fheroes2 engine! Before "
-"starting the game please choose game resolution."
-msgstr ""
+"Welcome to Heroes of Might and Magic II powered by the fheroes2 engine!\n"
+"Before starting the game please select a game resolution."
+msgstr "Kilépés a játékból és visszatérés az operációs rendszerhez."
 
 msgid "Please Remember"
 msgstr ""
 
-msgid "You can always change game resolution by clicking on the "
+msgid ""
+"You can always change the language, resolution and settings of the game by "
+"clicking on the "
 msgstr ""
 
 msgid "door"
 msgstr ""
 
+msgid " on the left side of the Main Menu, or with the "
+msgstr ""
+
+msgid " button from the "
+msgstr ""
+
+#, fuzzy
+msgid "NEW GAME"
+msgstr ""
+"ÚJ\n"
+"JÁTÉK"
+
 msgid ""
-" on the left side of main menu or by clicking on the configuration button. \n"
+" menu. \n"
 "\n"
 "Enjoy the game!"
 msgstr ""

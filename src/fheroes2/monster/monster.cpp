@@ -801,7 +801,7 @@ int Monster::ICNMonh() const
     return id >= PEASANT && id <= WATER_ELEMENT ? ICN::MONH0000 + id - PEASANT : ICN::UNKNOWN;
 }
 
-payment_t Monster::GetUpgradeCost() const
+Funds Monster::GetUpgradeCost() const
 {
     const Monster upgr = GetUpgrade();
     if ( id == upgr.id ) {
