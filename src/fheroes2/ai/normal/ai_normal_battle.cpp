@@ -153,7 +153,7 @@ namespace AI
         }
 
         return false;
-    };
+    }
 
     MeleeAttackOutcome BestAttackOutcome( Arena & arena, const Unit & attacker, const Unit & defender, const std::vector<int32_t> & positionValues )
     {
