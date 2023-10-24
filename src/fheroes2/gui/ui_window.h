@@ -25,11 +25,13 @@
 #include "image.h"
 #include "math_base.h"
 #include "screen.h"
-#include "ui_button.h"
 
 namespace fheroes2
 {
-    // Standard window with shadow
+    class Button;
+    class ButtonSprite;
+
+    // Standard window with shadow.
     class StandardWindow
     {
     public:

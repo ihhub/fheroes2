@@ -27,6 +27,7 @@
 #include "gamedefs.h"
 #include "icn.h"
 #include "settings.h"
+#include "ui_button.h"
 
 namespace
 {
