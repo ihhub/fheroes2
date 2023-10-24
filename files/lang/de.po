@@ -9742,7 +9742,6 @@ msgstr ""
 msgid "Wand of Negation"
 msgstr "Stab der Aufhebung"
 
-#, fuzzy
 msgid "The %{name} makes all your troops immune to dispel magic spells."
 msgstr "Der %{name} macht alle Eure Truppen immun gegen Todeszauber."
 
