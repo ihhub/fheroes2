@@ -732,8 +732,22 @@ namespace AI
                     for ( auto & [position, characteristics] : potentialPositions ) {
                         assert( position.GetHead() != nullptr );
 
-                        // The potential event of enemy's good morale is not taken into account here
-                        if ( isUnitAbleToApproachPosition( enemy, position ) ) {
+                        const bool isPositionUnderEnemyThreat = [enemy]( const Position & pos ) {
+                            // Archers who not blocked by enemy units generally threaten any position, but for the purpose
+                            // of this assessment, it is assumed that they threaten only in melee, that is, in positions
+                            // directly adjacent to them
+                            if ( enemy->isArchers() && !enemy->isHandFighting() ) {
+                                const uint32_t distanceToEnemy = Board::GetDistance( pos, enemy->GetPosition() );
+                                assert( distanceToEnemy > 0 );
+
+                                return ( distanceToEnemy <= 1 );
+                            }
+
+                            // The potential event of enemy's good morale is not taken into account here
+                            return isUnitAbleToApproachPosition( enemy, pos );
+                        }( position );
+
+                        if ( isPositionUnderEnemyThreat ) {
                             characteristics.threateningEnemiesIndexes.insert( enemy->GetHeadIndex() );
                         }
 
