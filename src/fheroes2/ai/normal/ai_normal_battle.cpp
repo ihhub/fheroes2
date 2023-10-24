@@ -203,19 +203,21 @@ namespace AI
 
         {
             Position stepPos = currentUnitPos;
-            bool stepReflect = currentUnitPos.isReflect();
 
             for ( const int32_t stepIdx : path ) {
                 if ( currentUnit.isWide() ) {
                     const Cell * stepPosTailCell = stepPos.GetTail();
                     assert( stepPosTailCell != nullptr );
 
+                    // Reversal is not a movement
                     if ( stepIdx == stepPosTailCell->GetIndex() ) {
-                        stepReflect = !stepReflect;
+                        stepPos.Set( stepIdx, currentUnit.isWide(), !stepPos.isReflect() );
+
+                        continue;
                     }
                 }
 
-                stepPos.Set( stepIdx, currentUnit.isWide(), stepReflect );
+                stepPos.Set( stepIdx, currentUnit.isWide(), stepPos.isReflect() );
 
                 assert( arena.isPositionReachable( currentUnit, stepPos, true ) );
 
@@ -230,7 +232,7 @@ namespace AI
         for ( const Unit * enemy : enemies ) {
             assert( enemy != nullptr );
 
-            // Archers and Flyers are always threatening
+            // Archers and Flyers are always a threat
             if ( enemy->isFlying() || ( enemy->isArchers() && !enemy->isHandFighting() ) ) {
                 continue;
             }
@@ -253,6 +255,8 @@ namespace AI
                 assert( stepPos.GetHead() != nullptr && ( !currentUnit.isWide() || stepPos.GetTail() != nullptr ) );
 
                 lowestThreat = stepThreatLevel;
+                // When moving along the path, the direction of a wide unit at some steps may be reversed in relation to the target one. Detect this and use the proper
+                // index.
                 targetIdx
                     = ( !currentUnit.isWide() || stepPos.isReflect() == currentUnitPos.isReflect() ) ? stepPos.GetHead()->GetIndex() : stepPos.GetTail()->GetIndex();
             }

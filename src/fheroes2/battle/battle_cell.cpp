@@ -49,14 +49,21 @@ void Battle::Position::Set( const int32_t head, const bool wide, const bool refl
 {
     first = Board::GetCell( head );
 
-    if ( first && wide )
+    if ( first && wide ) {
         second = Board::GetCell( first->GetIndex(), reflect ? RIGHT : LEFT );
+    }
+    else {
+        second = nullptr;
+    }
 }
 
 void Battle::Position::Swap()
 {
-    if ( first && second )
-        std::swap( first, second );
+    if ( first == nullptr || second == nullptr ) {
+        return;
+    }
+
+    std::swap( first, second );
 }
 
 Battle::Cell * Battle::Position::GetHead()
