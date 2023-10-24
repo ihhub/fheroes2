@@ -129,6 +129,32 @@ namespace AI
         return result;
     }
 
+    bool isUnitAbleToApproachPosition( const Unit * unit, const Position & pos )
+    {
+        assert( unit != nullptr );
+
+        // Also consider the next turn, even if this unit has already acted during the current turn
+        const uint32_t speed = unit->GetSpeed( false, true );
+
+        // Immovable unit is not taken into account, even if it is already near the given position
+        if ( speed == Speed::STANDING ) {
+            return false;
+        }
+
+        for ( const int32_t nearbyIdx : Board::GetAroundIndexes( pos ) ) {
+            const Position nearbyPos = Position::GetReachable( *unit, nearbyIdx, speed );
+            if ( nearbyPos.GetHead() == nullptr ) {
+                continue;
+            }
+
+            assert( !unit->isWide() || nearbyPos.GetTail() != nullptr );
+
+            return true;
+        }
+
+        return false;
+    };
+
     MeleeAttackOutcome BestAttackOutcome( Arena & arena, const Unit & attacker, const Unit & defender, const std::vector<int32_t> & positionValues )
     {
         MeleeAttackOutcome bestOutcome;
@@ -170,38 +196,43 @@ namespace AI
 
     int32_t findOptimalPositionForSubsequentAttack( const Indexes & path, const Unit & currentUnit, const Battle::Units & enemies )
     {
-        double lowestThreat = 0.0;
-        int32_t targetIdx = -1;
+        std::vector<std::tuple<int32_t, Position, double>> pathStepsThreatLevels;
+        pathStepsThreatLevels.reserve( path.size() );
 
-        for ( const int stepIdx : path ) {
-            const Position pos = Position::GetReachable( currentUnit, stepIdx );
-            // If this step of the path is not reachable, then the following steps are also not reachable, there is no point in further checks
+        for ( const int32_t idx : path ) {
+            const Position pos = Position::GetReachable( currentUnit, idx );
+            // If this step of the path is not reachable on the current turn, then the following steps are also not reachable
             if ( pos.GetHead() == nullptr ) {
                 break;
             }
 
-            double posThreatLevel = 0.0;
+            pathStepsThreatLevels.emplace_back( idx, pos, 0.0 );
+        }
 
-            for ( const Unit * enemy : enemies ) {
-                assert( enemy != nullptr );
+        for ( const Unit * enemy : enemies ) {
+            assert( enemy != nullptr );
 
-                // Archers and Flyers are always threatening
-                if ( enemy->isFlying() || ( enemy->isArchers() && !enemy->isHandFighting() ) ) {
-                    continue;
-                }
-
-                // Also consider the next turn, even if the enemy unit has already acted during the current turn
-                const uint32_t enemyAttackRange = enemy->GetSpeed( false, true ) + 1;
-                if ( Board::GetDistance( pos, enemy->GetPosition() ) > enemyAttackRange ) {
-                    continue;
-                }
-
-                posThreatLevel += enemy->evaluateThreatForUnit( currentUnit, pos );
+            // Archers and Flyers are always threatening
+            if ( enemy->isFlying() || ( enemy->isArchers() && !enemy->isHandFighting() ) ) {
+                continue;
             }
 
+            for ( auto & [stepIdx, stepPos, stepThreatLevel] : pathStepsThreatLevels ) {
+                if ( !isUnitAbleToApproachPosition( enemy, stepPos ) ) {
+                    continue;
+                }
+
+                stepThreatLevel += enemy->evaluateThreatForUnit( currentUnit, stepPos );
+            }
+        }
+
+        double lowestThreat = 0.0;
+        int32_t targetIdx = -1;
+
+        for ( const auto & [stepIdx, stepPos, stepThreatLevel] : pathStepsThreatLevels ) {
             // We need to get as close to the target as possible (taking into account the threat level)
-            if ( targetIdx == -1 || posThreatLevel < lowestThreat || std::fabs( posThreatLevel - lowestThreat ) < 0.001 ) {
-                lowestThreat = posThreatLevel;
+            if ( targetIdx == -1 || stepThreatLevel < lowestThreat || std::fabs( stepThreatLevel - lowestThreat ) < 0.001 ) {
+                lowestThreat = stepThreatLevel;
                 targetIdx = stepIdx;
             }
         }
@@ -673,33 +704,11 @@ namespace AI
                 for ( const Unit * enemy : enemies ) {
                     assert( enemy != nullptr );
 
-                    const auto isPositionReachableForEnemy = [enemy]( const Position & position ) {
-                        const uint32_t enemySpeed = enemy->GetSpeed( false, true );
-
-                        // Blinded or paralyzed unit is considered harmless
-                        if ( enemySpeed == Speed::STANDING ) {
-                            return false;
-                        }
-
-                        // The potential event of enemy's good morale is not taken into account here
-                        for ( const int32_t idx : Board::GetAroundIndexes( position ) ) {
-                            const Position enemyPos = Position::GetReachable( *enemy, idx, enemySpeed );
-                            if ( enemyPos.GetHead() == nullptr ) {
-                                continue;
-                            }
-
-                            assert( !enemy->isWide() || enemyPos.GetTail() != nullptr );
-
-                            return true;
-                        }
-
-                        return false;
-                    };
-
                     for ( auto & [position, characteristics] : potentialPositions ) {
                         assert( position.GetHead() != nullptr );
 
-                        if ( isPositionReachableForEnemy( position ) ) {
+                        // The potential event of enemy's good morale is not taken into account here
+                        if ( isUnitAbleToApproachPosition( enemy, position ) ) {
                             characteristics.threateningEnemiesIndexes.insert( enemy->GetHeadIndex() );
                         }
 
