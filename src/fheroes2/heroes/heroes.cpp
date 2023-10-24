@@ -412,7 +412,7 @@ void Heroes::LoadFromMP2( const int32_t mapIndex, const int colorType, const int
     //     Is AI hero on patrol?
     //
     // - uint8_t (1 byte)
-    //     AI hero patrol distance.
+    //     Patrol distance of an AI hero, if this hero is placed on the map, or the race of this hero, if this hero is in Jail.
     //
     // - unused 15 bytes
     //    Always zeros.
@@ -569,10 +569,11 @@ void Heroes::LoadFromMP2( const int32_t mapIndex, const int colorType, const int
         SetModes( PATROL );
 
         _patrolCenter = GetCenter();
+        _patrolDistance = dataStream.get();
     }
-
-    // Patrol distance
-    _patrolDistance = dataStream.get();
+    else {
+        dataStream.skip( 1 );
+    }
 
     // TODO: remove this temporary assertion
     assert( _objectTypeUnderHero == MP2::OBJ_NONE );
