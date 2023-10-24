@@ -412,7 +412,7 @@ void Heroes::LoadFromMP2( const int32_t mapIndex, const int colorType, const int
     //     Is AI hero on patrol?
     //
     // - uint8_t (1 byte)
-    //     Patrol distance of an AI hero, if this hero is placed on the map, or the race of this hero, if this hero is in Jail.
+    //     Patrol distance of this hero, if this is an AI hero placed on the map, or the race of this hero, if this hero is in Jail.
     //
     // - unused 15 bytes
     //    Always zeros.
