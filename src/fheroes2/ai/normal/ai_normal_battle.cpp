@@ -194,19 +194,37 @@ namespace AI
         return bestOutcome;
     }
 
-    int32_t findOptimalPositionForSubsequentAttack( const Indexes & path, const Unit & currentUnit, const Battle::Units & enemies )
+    int32_t findOptimalPositionForSubsequentAttack( Arena & arena, const Indexes & path, const Unit & currentUnit, const Battle::Units & enemies )
     {
-        std::vector<std::tuple<int32_t, Position, double>> pathStepsThreatLevels;
+        const Position & currentUnitPos = currentUnit.GetPosition();
+
+        std::vector<std::tuple<Position, double>> pathStepsThreatLevels;
         pathStepsThreatLevels.reserve( path.size() );
 
-        for ( const int32_t idx : path ) {
-            const Position pos = Position::GetReachable( currentUnit, idx );
-            // If this step of the path is not reachable on the current turn, then the following steps are also not reachable
-            if ( pos.GetHead() == nullptr ) {
-                break;
-            }
+        {
+            Position stepPos = currentUnitPos;
+            bool stepReflect = currentUnitPos.isReflect();
 
-            pathStepsThreatLevels.emplace_back( idx, pos, 0.0 );
+            for ( const int32_t stepIdx : path ) {
+                if ( currentUnit.isWide() ) {
+                    const Cell * stepPosTailCell = stepPos.GetTail();
+                    assert( stepPosTailCell != nullptr );
+
+                    if ( stepIdx == stepPosTailCell->GetIndex() ) {
+                        stepReflect = !stepReflect;
+                    }
+                }
+
+                stepPos.Set( stepIdx, currentUnit.isWide(), stepReflect );
+
+                assert( arena.isPositionReachable( currentUnit, stepPos, true ) );
+
+#ifdef NDEBUG
+                (void)arena;
+#endif
+
+                pathStepsThreatLevels.emplace_back( stepPos, 0.0 );
+            }
         }
 
         for ( const Unit * enemy : enemies ) {
@@ -217,7 +235,7 @@ namespace AI
                 continue;
             }
 
-            for ( auto & [stepIdx, stepPos, stepThreatLevel] : pathStepsThreatLevels ) {
+            for ( auto & [stepPos, stepThreatLevel] : pathStepsThreatLevels ) {
                 if ( !isUnitAbleToApproachPosition( enemy, stepPos ) ) {
                     continue;
                 }
@@ -229,11 +247,14 @@ namespace AI
         double lowestThreat = 0.0;
         int32_t targetIdx = -1;
 
-        for ( const auto & [stepIdx, stepPos, stepThreatLevel] : pathStepsThreatLevels ) {
+        for ( const auto & [stepPos, stepThreatLevel] : pathStepsThreatLevels ) {
             // We need to get as close to the target as possible (taking into account the threat level)
             if ( targetIdx == -1 || stepThreatLevel < lowestThreat || std::fabs( stepThreatLevel - lowestThreat ) < 0.001 ) {
+                assert( stepPos.GetHead() != nullptr && ( !currentUnit.isWide() || stepPos.GetTail() != nullptr ) );
+
                 lowestThreat = stepThreatLevel;
-                targetIdx = stepIdx;
+                targetIdx
+                    = ( !currentUnit.isWide() || stepPos.isReflect() == currentUnitPos.isReflect() ) ? stepPos.GetHead()->GetIndex() : stepPos.GetTail()->GetIndex();
             }
         }
 
@@ -1048,7 +1069,7 @@ namespace AI
                         DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "- Going after target " << enemy->GetName() << " stopping in the moat at " << target.cell )
                     }
                     else {
-                        target.cell = findOptimalPositionForSubsequentAttack( path, currentUnit, enemies );
+                        target.cell = findOptimalPositionForSubsequentAttack( arena, path, currentUnit, enemies );
 
                         DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "- Going after target " << enemy->GetName() << " stopping at " << target.cell )
                     }
