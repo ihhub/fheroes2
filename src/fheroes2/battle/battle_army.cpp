@@ -85,11 +85,6 @@ void Battle::Units::SortFastest()
     std::stable_sort( begin(), end(), Army::FastestTroop );
 }
 
-void Battle::Units::SortArchers()
-{
-    std::sort( begin(), end(), []( const Troop * t1, const Troop * t2 ) { return t1->isArchers() && !t2->isArchers(); } );
-}
-
 Battle::Unit * Battle::Units::FindUID( uint32_t pid ) const
 {
     const_iterator it = std::find_if( begin(), end(), [pid]( const Unit * unit ) { return unit->isUID( pid ); } );

@@ -26,6 +26,7 @@
 
 #include <cstddef>
 #include <cstdint>
+#include <optional>
 #include <string>
 #include <utility>
 #include <vector>
@@ -162,11 +163,20 @@ namespace Battle
         int GetControl() const override;
         int GetCurrentControl() const;
 
+        // Returns the current speed of the unit, optionally performing additional checks in accordance
+        // with the call arguments. If 'skipStandingCheck' is set to false, then the method returns
+        // Speed::STANDING if the unit is immovable due to spells cast on it or if this unit is dead
+        // (contains 0 fighters). Additionally, if 'skipMovedCheck' is set to false, then this method
+        // returns Speed::STANDING if the unit has already completed its turn. If 'skipStandingCheck'
+        // is set to true, then the value of 'skipMovedCheck' doesn't matter.
         uint32_t GetSpeed( const bool skipStandingCheck, const bool skipMovedCheck ) const;
 
         uint32_t GetDamage( const Unit & enemy, Rand::DeterministicRandomGenerator & randomGenerator ) const;
 
-        int32_t GetScoreQuality( const Unit & ) const;
+        // Returns the threat level of this unit, calculated as if it attacked the 'defender' unit.
+        // If 'defenderPos' is set, then it will be used as the 'defender' unit's position, otherwise
+        // the actual position of this unit will be used. See the implementation for details.
+        int32_t evaluateThreatForUnit( const Unit & defender, const std::optional<Position> defenderPos = {} ) const;
 
         uint32_t GetInitialCount() const;
         uint32_t GetDead() const;
@@ -285,9 +295,6 @@ namespace Battle
         AnimationState animation;
 
     private:
-        bool canReach( int index ) const;
-        bool canReach( const Unit & unit ) const;
-
         uint32_t ApplyDamage( const uint32_t dmg );
         uint32_t Resurrect( const uint32_t points, const bool allow_overflow, const bool skip_dead );
 
