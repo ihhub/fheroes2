@@ -21,13 +21,15 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "battle_grave.h"
+
+// TODO: this header is redundant here, but detected as required by IWYU with older compilers
+// IWYU pragma: no_include <type_traits>
 #include <algorithm>
 #include <cassert>
-#include <type_traits>
 #include <utility>
 
 #include "battle_board.h"
-#include "battle_grave.h"
 #include "battle_troop.h"
 
 Battle::Indexes Battle::Graveyard::GetOccupiedCells() const
