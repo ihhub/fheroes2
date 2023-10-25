@@ -199,7 +199,7 @@ namespace AI
     {
         const Position & currentUnitPos = currentUnit.GetPosition();
 
-        std::vector<std::tuple<Position, double>> pathStepsThreatLevels;
+        std::vector<std::pair<Position, double>> pathStepsThreatLevels;
         pathStepsThreatLevels.reserve( path.size() );
 
         {
