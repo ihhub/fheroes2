@@ -901,7 +901,7 @@ void Kingdoms::AddHeroes( const AllHeroes & heroes )
     for ( Heroes * hero : heroes ) {
         assert( hero != nullptr );
 
-        if ( hero->GetColor() ) {
+        if ( hero->GetColor() != Color::NONE ) {
             GetKingdom( hero->GetColor() ).AddHero( hero );
         }
     }

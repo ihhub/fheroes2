@@ -1967,8 +1967,7 @@ Heroes::HeroSeedsForLevelUp Heroes::GetSeedsForLevelUp() const
 
 double Heroes::getAIMinimumJoiningArmyStrength() const
 {
-    // Ideally we need to assert here that the hero is under AI control.
-    // But in cases when we regain a temporary control from the AI then the hero becomes non-AI.
+    assert( isControlAI() );
 
     double strengthThreshold = 0.05;
 
