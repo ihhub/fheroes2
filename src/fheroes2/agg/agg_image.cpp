@@ -4346,7 +4346,7 @@ namespace fheroes2
                 return;
             }
 
-            if (!LoadModifiedICN( id ) ) {
+            if ( !LoadModifiedICN( id ) ) {
                 LoadOriginalICN( id );
             }
         }
