@@ -546,6 +546,8 @@ namespace fheroes2
 {
     namespace AGG
     {
+        void loadICN( const int id );
+
         void LoadOriginalICN( const int id )
         {
             const std::vector<uint8_t> & body = ::AGG::getDataFromAggFile( ICN::GetString( id ) );
@@ -2637,7 +2639,7 @@ namespace fheroes2
                 }
                 return true;
             case ICN::TROLL2MSL:
-                LoadModifiedICN( ICN::TROLLMSL );
+                loadICN( ICN::TROLLMSL );
                 if ( _icnVsSprite[ICN::TROLLMSL].size() == 1 ) {
                     _icnVsSprite[id].resize( 1 );
 
@@ -3391,7 +3393,7 @@ namespace fheroes2
             case ICN::GOOD_MARKET_BUTTON: {
                 _icnVsSprite[id].resize( 2 );
 
-                LoadModifiedICN( ICN::ADVBTNS );
+                loadICN( ICN::ADVBTNS );
 
                 const int releasedIndex = ( id == ICN::GOOD_ARMY_BUTTON ) ? 0 : 4;
                 Copy( GetICN( ICN::ADVBTNS, releasedIndex ), _icnVsSprite[id][0] );
@@ -3408,7 +3410,7 @@ namespace fheroes2
             case ICN::EVIL_MARKET_BUTTON: {
                 _icnVsSprite[id].resize( 2 );
 
-                LoadModifiedICN( ICN::ADVEBTNS );
+                loadICN( ICN::ADVEBTNS );
 
                 const int releasedIndex = ( id == ICN::EVIL_ARMY_BUTTON ) ? 0 : 4;
                 Copy( GetICN( ICN::ADVEBTNS, releasedIndex ), _icnVsSprite[id][0] );
@@ -3510,7 +3512,7 @@ namespace fheroes2
                 return true;
             }
             case ICN::MONO_CURSOR_ADVMBW: {
-                LoadModifiedICN( ICN::ADVMCO );
+                loadICN( ICN::ADVMCO );
 
                 _icnVsSprite[id].resize( _icnVsSprite[ICN::ADVMCO].size() );
                 for ( size_t i = 0; i < _icnVsSprite[id].size(); ++i ) {
@@ -3525,7 +3527,7 @@ namespace fheroes2
                 return true;
             }
             case ICN::MONO_CURSOR_SPELBW: {
-                LoadModifiedICN( ICN::SPELCO );
+                loadICN( ICN::SPELCO );
 
                 _icnVsSprite[id].resize( _icnVsSprite[ICN::SPELCO].size() );
                 for ( size_t i = 0; i < _icnVsSprite[id].size(); ++i ) {
@@ -3540,7 +3542,7 @@ namespace fheroes2
                 return true;
             }
             case ICN::MONO_CURSOR_CMSSBW: {
-                LoadModifiedICN( ICN::CMSECO );
+                loadICN( ICN::CMSECO );
 
                 _icnVsSprite[id].resize( _icnVsSprite[ICN::CMSECO].size() );
                 for ( size_t i = 0; i < _icnVsSprite[id].size(); ++i ) {
@@ -3964,7 +3966,7 @@ namespace fheroes2
             case ICN::MINI_MONSTER_IMAGE:
             case ICN::MINI_MONSTER_SHADOW: {
                 // It doesn't matter which image is being called. We are generating both of them at the same time.
-                LoadModifiedICN( ICN::MINIMON );
+                loadICN( ICN::MINIMON );
 
                 // Minotaur King original Adventure map sprite has blue armlets. We make them gold to correspond the ICN::MINOTAU2.
                 if ( _icnVsSprite[ICN::MINIMON].size() > 303 ) {
@@ -4069,7 +4071,7 @@ namespace fheroes2
             case ICN::EMPTY_EVIL_BUTTON: {
                 const bool isGoodInterface = ( id == ICN::EMPTY_GOOD_BUTTON );
                 const int32_t originalId = isGoodInterface ? ICN::SYSTEM : ICN::SYSTEME;
-                LoadOriginalICN( originalId );
+                loadICN( originalId );
 
                 if ( _icnVsSprite[originalId].size() < 13 ) {
                     return true;
@@ -4112,7 +4114,7 @@ namespace fheroes2
             }
             case ICN::EMPTY_POL_BUTTON: {
                 const int originalID = ICN::X_CMPBTN;
-                LoadOriginalICN( originalID );
+                loadICN( originalID );
 
                 if ( _icnVsSprite[originalID].size() < 8 ) {
                     return true;
@@ -4154,7 +4156,7 @@ namespace fheroes2
             }
             case ICN::EMPTY_GUILDWELL_BUTTON: {
                 const int originalID = ICN::WELLXTRA;
-                LoadOriginalICN( originalID );
+                loadICN( originalID );
 
                 if ( _icnVsSprite[originalID].size() < 3 ) {
                     return true;
@@ -4180,7 +4182,7 @@ namespace fheroes2
             case ICN::EMPTY_EVIL_MEDIUM_BUTTON: {
                 const bool isGoodInterface = ( id == ICN::EMPTY_GOOD_MEDIUM_BUTTON );
                 const int32_t originalId = isGoodInterface ? ICN::APANEL : ICN::APANELE;
-                LoadOriginalICN( originalId );
+                loadICN( originalId );
 
                 if ( _icnVsSprite[originalId].size() < 10 ) {
                     return true;
@@ -4204,7 +4206,7 @@ namespace fheroes2
             }
             case ICN::EMPTY_VERTICAL_GOOD_BUTTON: {
                 const int32_t originalId = ICN::HSBTNS;
-                LoadOriginalICN( originalId );
+                loadICN( originalId );
 
                 if ( _icnVsSprite[originalId].size() < 9 ) {
                     break;
@@ -4337,11 +4339,16 @@ namespace fheroes2
             return false;
         }
 
-        size_t GetMaximumICNIndex( int id )
+        void loadICN( const int id )
         {
             if ( _icnVsSprite[id].empty() && !LoadModifiedICN( id ) ) {
                 LoadOriginalICN( id );
             }
+        }
+
+        size_t GetMaximumICNIndex( int id )
+        {
+            loadICN( id );
 
             return _icnVsSprite[id].size();
         }
