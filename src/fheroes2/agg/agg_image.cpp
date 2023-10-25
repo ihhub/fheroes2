@@ -4341,7 +4341,12 @@ namespace fheroes2
 
         void loadICN( const int id )
         {
-            if ( _icnVsSprite[id].empty() && !LoadModifiedICN( id ) ) {
+            if ( !_icnVsSprite[id].empty() ) {
+                // The images have been loaded.
+                return;
+            }
+
+            if (!LoadModifiedICN( id ) ) {
                 LoadOriginalICN( id );
             }
         }
