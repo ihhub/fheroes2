@@ -866,9 +866,37 @@ namespace AI
                         return { -1, priorityTarget };
                     }
                 }
+
+                const uint32_t currentUnitSpeed = currentUnit.GetSpeed();
+                assert( currentUnitSpeed > Speed::STANDING );
+
+                // The current position is in danger, and there is no priority target, let's evaluate the possibility of a retreat
+                const bool isItWorthTryingToRetreat = std::all_of( characteristics.threateningEnemiesIndexes.begin(), characteristics.threateningEnemiesIndexes.end(),
+                                                                   [&arena, currentUnitSpeed]( const int32_t enemyIdx ) {
+                                                                       const Unit * enemy = arena.GetTroopBoard( enemyIdx );
+                                                                       assert( enemy != nullptr );
+
+                                                                       // There is no point in trying to retreat from flying units regardless of their speed
+                                                                       if ( enemy->isFlying() ) {
+                                                                           return false;
+                                                                       }
+
+                                                                       // Also consider the next turn, even if this unit has already acted during the current turn
+                                                                       const uint32_t enemySpeed = enemy->GetSpeed( false, true );
+                                                                       assert( enemySpeed > Speed::STANDING );
+
+                                                                       // In order for it to make sense to try to retreat from the enemy, the enemy should be somewhat
+                                                                       // slower
+                                                                       return ( enemySpeed + 2 < currentUnitSpeed );
+                                                                   } );
+
+                if ( !isItWorthTryingToRetreat ) {
+                    return {};
+                }
             }
 
-            // The current position is in danger, and there is no priority target, let's try to find a position to retreat
+            // The current position is in danger, and there is no priority target, but there is an opportunity to retreat. Let's try to find a
+            // position to retreat.
             int32_t safestIdx = -1;
             // Distance to the nearest enemy unit (the more, the better) and inverse of the distance to the central cell of the battlefield (1/x,
             // i.e. the smaller the x the better). The idea is that corner cells should be avoided whenever possible when retreating because they
