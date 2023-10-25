@@ -153,8 +153,12 @@ public:
         return ( building & BUILD_CASTLE ) != 0;
     }
 
-    bool HaveNearlySea() const;
-    bool PresentBoat() const;
+    bool HasSeaAccess() const;
+    bool HasBoatNearby() const;
+
+    // Returns a tile ID where it is possible to place a boat or -1 if it is not.
+    int32_t getTileIndexToPlaceBoat() const;
+
     bool AllowBuyHero( std::string * = nullptr ) const;
     bool isPosition( const fheroes2::Point & pt ) const override;
     bool isNecromancyShrineBuild() const;
