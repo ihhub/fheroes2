@@ -779,6 +779,38 @@ namespace AI
                     return {};
                 }
 
+                // The most pessimistic assessment. The event of bad luck is deliberately not taken into account here, so
+                // that it does not look like cheating, because a human player in a similar situation does not know about
+                // this event in advance.
+                const auto calculateGuaranteedDamage = []( const Unit & attacker, const Unit * defender ) {
+                    assert( attacker.isArchers() && defender != nullptr );
+
+                    const uint32_t damage = ( attacker.Modes( SP_BLESS ) ? attacker.CalculateMaxDamage( *defender ) : attacker.CalculateMinDamage( *defender ) );
+
+                    // For the purpose of the most pessimistic assessment, assume that a guaranteed double attack can only
+                    // be performed by shooting
+                    if ( !attacker.isHandFighting() && attacker.isDoubleAttack() ) {
+                        return damage * 2;
+                    }
+
+                    return damage;
+                };
+
+                // The most optimistic assesment. The potential event of attacker's good luck is not taken into account here.
+                const auto calculateMaxPossibleDamage = []( const Unit * attacker, const Unit & defender ) {
+                    assert( attacker != nullptr && ( !attacker->isArchers() || attacker->isHandFighting() ) );
+
+                    const uint32_t damage = attacker->CalculateMaxDamage( defender );
+
+                    // For the purpose of the most optimistic assesment, assume that with a double attack, the retaliatory
+                    // damage after the first attack can be neglected
+                    if ( attacker->isAbilityPresent( fheroes2::MonsterAbilityType::DOUBLE_MELEE_ATTACK ) ) {
+                        return damage * 2;
+                    }
+
+                    return damage;
+                };
+
                 // If the current position is in danger, then we need to see if we can completely destroy some threatening
                 // enemy stack to increase the field for maneuver in the future
                 const Unit * priorityTarget = nullptr;
@@ -799,9 +831,7 @@ namespace AI
                         assert( !Unit::isHandFighting( currentUnit, *enemy ) );
                     }
 
-                    // The event of bad luck is deliberately not taken into account here, so that it does not look like
-                    // cheating, because a human player in a similar situation does not know about this event in advance
-                    const uint32_t guaranteedDamage = currentUnit.Modes( SP_BLESS ) ? currentUnit.CalculateMaxDamage( *enemy ) : currentUnit.CalculateMinDamage( *enemy );
+                    const uint32_t guaranteedDamage = calculateGuaranteedDamage( currentUnit, enemy );
                     const uint32_t guaranteedKills = enemy->HowManyWillBeKilled( guaranteedDamage );
 
                     assert( guaranteedKills <= enemy->GetCount() );
@@ -811,7 +841,7 @@ namespace AI
                     }
 
                     // If we can completely destroy multiple enemy stacks, then we need to choose the one that is able to inflict maximum damage on us
-                    if ( priorityTarget != nullptr && enemy->CalculateMaxDamage( currentUnit ) < priorityTarget->CalculateMaxDamage( currentUnit ) ) {
+                    if ( priorityTarget != nullptr && calculateMaxPossibleDamage( enemy, currentUnit ) < calculateMaxPossibleDamage( priorityTarget, currentUnit ) ) {
                         continue;
                     }
 
@@ -823,12 +853,11 @@ namespace AI
                 if ( priorityTarget ) {
                     const uint32_t potentialEnemyDamage
                         = std::accumulate( characteristics.threateningEnemiesIndexes.begin(), characteristics.threateningEnemiesIndexes.end(), static_cast<uint32_t>( 0 ),
-                                           [&arena, &currentUnit, priorityTarget]( const uint32_t total, const int32_t enemyIdx ) {
+                                           [&arena, &currentUnit, &calculateMaxPossibleDamage, priorityTarget]( const uint32_t total, const int32_t enemyIdx ) {
                                                const Unit * enemy = arena.GetTroopBoard( enemyIdx );
                                                assert( enemy != nullptr );
 
-                                               // The potential event of enemy's good luck is not taken into account here
-                                               return enemy == priorityTarget ? total : total + enemy->CalculateMaxDamage( currentUnit );
+                                               return enemy == priorityTarget ? total : total + calculateMaxPossibleDamage( enemy, currentUnit );
                                            } );
 
                     // If we don't suffer any losses, then instead of retreating, we designate this enemy stack as a priority target
