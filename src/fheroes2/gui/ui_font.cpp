@@ -43,12 +43,12 @@ namespace
 
     void updateNormalFontLetterShadow( fheroes2::Image & letter )
     {
-        fheroes2::updateShadow( letter, { -1, 2 }, 2 );
+        fheroes2::updateShadow( letter, { -1, 2 }, 2, false );
     }
 
     void updateSmallFontLetterShadow( fheroes2::Image & letter )
     {
-        fheroes2::updateShadow( letter, { -1, 1 }, 2 );
+        fheroes2::updateShadow( letter, { -1, 1 }, 2, true );
     }
 
     fheroes2::Sprite addContour( fheroes2::Sprite & input, const fheroes2::Point & contourOffset, const uint8_t colorId )
@@ -61,14 +61,15 @@ namespace
 
         fheroes2::Sprite output = input;
 
-        const int32_t width = output.width() + contourOffset.x;
-        const int32_t height = output.height() - contourOffset.y;
-
         const int32_t imageWidth = output.width();
 
-        uint8_t * imageOutY = output.image() + imageWidth * contourOffset.y;
+        const int32_t width = imageWidth + contourOffset.x;
+        const int32_t height = output.height() - contourOffset.y;
+
+        const int32_t offsetY = imageWidth * contourOffset.y;
+        uint8_t * imageOutY = output.image() + offsetY;
         const uint8_t * transformInY = input.transform() - contourOffset.x;
-        uint8_t * transformOutY = output.transform() + imageWidth * contourOffset.y;
+        uint8_t * transformOutY = output.transform() + offsetY;
         const uint8_t * transformOutYEnd = transformOutY + imageWidth * height;
 
         for ( ; transformOutY != transformOutYEnd; transformInY += imageWidth, transformOutY += imageWidth, imageOutY += imageWidth ) {
@@ -78,7 +79,9 @@ namespace
             const uint8_t * transformOutXEnd = transformOutX + width;
 
             for ( ; transformOutX != transformOutXEnd; ++transformInX, ++transformOutX, ++imageOutX ) {
-                if ( *transformInX == 0 && *transformOutX == 1 ) {
+                if ( *transformOutX == 1 && ( *transformInX == 0 || ( *( transformInX + contourOffset.x ) == 0 && *( transformInX + offsetY ) == 0 ) ) ) {
+                    // When there are two pixels adjacent diagonally we create a contour pixel in the corner that is closer to the image.
+                    // Doing so there will be no "empty" pixels between the image and its shadow (for 1 pixel offset case).
                     *imageOutX = colorId;
                     *transformOutX = 0;
                 }
@@ -90,19 +93,19 @@ namespace
 
     void applyGoodButtonReleasedLetterEffects( fheroes2::Sprite & letter )
     {
-        updateShadow( letter, { 1, -1 }, 2 );
-        updateShadow( letter, { 2, -2 }, 4 );
+        updateShadow( letter, { 1, -1 }, 2, true );
+        updateShadow( letter, { 2, -2 }, 4, true );
         letter = addContour( letter, { -1, 1 }, buttonContourColor );
-        updateShadow( letter, { -1, 1 }, 7 );
+        updateShadow( letter, { -1, 1 }, 7, true );
     }
 
     void applyGoodButtonPressedLetterEffects( fheroes2::Sprite & letter )
     {
         ReplaceColorId( letter, buttonGoodReleasedColor, buttonGoodPressedColor );
 
-        fheroes2::updateShadow( letter, { 1, -1 }, 2 );
-        fheroes2::updateShadow( letter, { -1, 1 }, 7 );
-        fheroes2::updateShadow( letter, { -2, 2 }, 8 );
+        fheroes2::updateShadow( letter, { 1, -1 }, 2, true );
+        fheroes2::updateShadow( letter, { -1, 1 }, 7, true );
+        fheroes2::updateShadow( letter, { -2, 2 }, 8, true );
     }
 
     void applyEvilButtonReleasedLetterEffects( fheroes2::Sprite & letter )
@@ -5582,11 +5585,22 @@ namespace
         const int32_t offset = 2;
 
         // Change spacing relative to other characters.
+        released[65 - 32].setPosition( buttonFontOffset.x - 2, buttonFontOffset.y );
         released[192 - 32].setPosition( buttonFontOffset.x - 1, -3 );
         released[193 - 32].setPosition( buttonFontOffset.x - 1, -3 );
-        released[197 - 32].setPosition( buttonFontOffset.x - 1, -2 );
+        released[196 - 32].setPosition( buttonFontOffset.x - 2, -2 );
+        released[197 - 32].setPosition( buttonFontOffset.x - 2, -2 );
+        released[198 - 32].setPosition( buttonFontOffset.x - 2, buttonFontOffset.y );
         released[200 - 32].setPosition( buttonFontOffset.x, -3 );
         released[201 - 32].setPosition( buttonFontOffset.x, -3 );
+        released[214 - 32].setPosition( buttonFontOffset.x, -2 );
+
+        // A with diaeresis
+        released[196 - 32].resize( released[65 - 32].width(), released[65 - 32].height() + 2 );
+        released[196 - 32].reset();
+        fheroes2::Copy( released[65 - 32], 0, 0, released[196 - 32], 0, 2, released[65 - 32].width(), released[65 - 32].height() );
+        fheroes2::SetPixel( released[196 - 32], offset + 5, offset + 0, buttonGoodReleasedColor );
+        fheroes2::SetPixel( released[196 - 32], offset + 7, offset + 0, buttonGoodReleasedColor );
 
         // A with circle on top
         released[197 - 32].resize( 13 + offset * 2, 12 + offset * 2 );
@@ -5605,7 +5619,7 @@ namespace
         fheroes2::SetPixel( released[197 - 32], offset + 6, offset + 3, buttonGoodReleasedColor );
 
         // A attached to E.
-        released[198 - 32].resize( 18 + offset * 2, 12 + offset * 2 );
+        released[198 - 32].resize( 15 + offset * 2, 10 + offset * 2 );
         released[198 - 32].reset();
         fheroes2::DrawLine( released[198 - 32], { offset + 0, offset + 9 }, { offset + 4, offset + 9 }, buttonGoodReleasedColor );
         fheroes2::DrawLine( released[198 - 32], { offset + 8, offset + 9 }, { offset + 12, offset + 9 }, buttonGoodReleasedColor );
@@ -5648,6 +5662,13 @@ namespace
         released[201 - 32].reset();
         fheroes2::Copy( released[69 - 32], 0, 0, released[201 - 32], 0, 3, released[69 - 32].width(), released[69 - 32].height() );
         fheroes2::DrawLine( released[201 - 32], { offset + 5, offset + 1 }, { offset + 6, offset + 0 }, buttonGoodReleasedColor );
+
+        // O with diaeresis.
+        released[214 - 32].resize( released[79 - 32].width(), released[79 - 32].height() + 2 );
+        released[214 - 32].reset();
+        fheroes2::Copy( released[79 - 32], 0, 0, released[214 - 32], 0, 2, released[79 - 32].width(), released[79 - 32].height() );
+        fheroes2::SetPixel( released[214 - 32], offset + 3, offset + 0, buttonGoodReleasedColor );
+        fheroes2::SetPixel( released[214 - 32], offset + 6, offset + 0, buttonGoodReleasedColor );
     }
 }
 

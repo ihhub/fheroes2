@@ -32,12 +32,8 @@
 #include <utility>
 
 #include <SDL_events.h>
-#include <SDL_version.h>
-
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
 #include <SDL_gamecontroller.h>
 #include <SDL_touch.h>
-#endif
 
 #include "math_base.h"
 #include "timing.h"
@@ -221,6 +217,10 @@ public:
     bool MouseClickLeft( const fheroes2::Rect & rt );
     bool MouseClickRight( const fheroes2::Rect & rt );
 
+    // The long press event is triggered only once. If this event was triggered (i.e. this method was called
+    // and returned true), then after releasing the mouse button, the click event will not be triggered.
+    bool MouseLongPressLeft( const fheroes2::Rect & rt );
+
     bool MouseWheelUp() const;
     bool MouseWheelDn() const;
 
@@ -260,6 +260,15 @@ public:
         return rt & mouse_cu;
     }
 
+    // Returns true if the current mouse event is triggered by the touchpad and not the mouse (in other words,
+    // this event is emulated using the touchpad). It is assumed that there is only one mouse in the system,
+    // and touchpad events have priority in this sense - that is, as long as the touchpad emulates pressing any
+    // mouse button, it is assumed that all mouse events are triggered by the touchpad.
+    bool MouseEventFromTouchpad() const
+    {
+        return modes & MOUSE_TOUCH;
+    }
+
     bool KeyPress() const
     {
         return modes & KEY_PRESSED;
@@ -282,19 +291,10 @@ public:
 
     static int32_t getCurrentKeyModifiers();
 
-    static void RegisterCycling( void ( *preRenderDrawing )() = nullptr, void ( *postRenderDrawing )() = nullptr );
-
-    // These two methods are useful for video playback
-    static void PauseCycling();
-
-    static void ResumeCycling()
-    {
-        RegisterCycling();
-    }
-
     void OpenController();
     void CloseController();
-    void OpenTouchpad();
+
+    static void OpenTouchpad();
 
     void SetControllerPointerSpeed( const int newSpeed )
     {
@@ -313,7 +313,6 @@ private:
     static void StopSounds();
     static void ResumeSounds();
 
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
     void HandleMouseWheelEvent( const SDL_MouseWheelEvent & );
     void HandleControllerAxisEvent( const SDL_ControllerAxisEvent & motion );
     void HandleControllerButtonEvent( const SDL_ControllerButtonEvent & button );
@@ -324,20 +323,23 @@ private:
     static void HandleRenderDeviceResetEvent();
 
     void ProcessControllerAxisMotion();
-#else
-    // Returns true if frame rendering is required.
-    static bool HandleActiveEvent( const SDL_ActiveEvent & event );
-#endif
 
-    enum flag_t
+    enum : uint32_t
     {
-        KEY_PRESSED = 0x0001, // key on the keyboard has been pressed
-        MOUSE_MOTION = 0x0002, // mouse cursor has been moved
-        MOUSE_PRESSED = 0x0004, // mouse button is currently pressed
-        MOUSE_RELEASED = 0x0008, // mouse button has just been released
-        MOUSE_CLICKED = 0x0010, // mouse button has been clicked
-        MOUSE_WHEEL = 0x0020, // mouse wheel has been rotated
-        KEY_HOLD = 0x0040 // key on the keyboard is currently being held down
+        // Key on the keyboard has been pressed
+        KEY_PRESSED = 0x0001,
+        // Mouse cursor has been moved
+        MOUSE_MOTION = 0x0002,
+        // Mouse button is currently pressed
+        MOUSE_PRESSED = 0x0004,
+        // Mouse button has just been released
+        MOUSE_RELEASED = 0x0008,
+        // Mouse wheel has been rotated
+        MOUSE_WHEEL = 0x0010,
+        // Current mouse event has been triggered by the touchpad
+        MOUSE_TOUCH = 0x0020,
+        // Key on the keyboard is currently being held down
+        KEY_HOLD = 0x0040,
     };
 
     enum
@@ -346,17 +348,17 @@ private:
         CONTROLLER_R_DEADZONE = 25000
     };
 
-    void SetModes( flag_t f )
+    void SetModes( const uint32_t f )
     {
         modes |= f;
     }
 
-    void ResetModes( flag_t f )
+    void ResetModes( const uint32_t f )
     {
         modes &= ~f;
     }
 
-    int modes;
+    uint32_t modes;
     fheroes2::Key key_value;
     int mouse_button;
 
@@ -372,6 +374,34 @@ private:
 
     fheroes2::Point mouse_wm; // wheel movement
 
+    class LongPressDelay final : public fheroes2::TimeDelay
+    {
+    public:
+        using TimeDelay::TimeDelay;
+
+        void reset()
+        {
+            TimeDelay::reset();
+
+            _triggered = false;
+        }
+
+        bool isTriggered() const
+        {
+            return _triggered;
+        }
+
+        void setTriggered()
+        {
+            _triggered = true;
+        }
+
+    private:
+        bool _triggered{ false };
+    };
+
+    LongPressDelay _mouseButtonLongPressDelay;
+
     std::function<fheroes2::Rect( const int32_t, const int32_t )> _globalMouseMotionEventHook;
     std::function<void( const fheroes2::Key, const int32_t )> _globalKeyDownEventHook;
 
@@ -383,7 +413,6 @@ private:
     double _emulatedPointerPosX = 0;
     double _emulatedPointerPosY = 0;
 
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
     // bigger value corresponds to faster pointer movement speed with bigger stick axis values
     const double CONTROLLER_AXIS_SPEEDUP = 1.03;
     const double CONTROLLER_TRIGGER_CURSOR_SPEEDUP = 2.0;
@@ -400,7 +429,6 @@ private:
     std::pair<std::optional<SDL_FingerID>, std::optional<SDL_FingerID>> _fingerIds;
     // Is the two-finger gesture currently being processed
     bool _isTwoFingerGestureInProgress = false;
-#endif
 };
 
 #endif

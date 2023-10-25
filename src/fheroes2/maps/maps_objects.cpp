@@ -306,7 +306,7 @@ void MapSphinx::LoadFromMP2( const int32_t tileIndex, const std::vector<uint8_t>
 bool MapSphinx::AnswerCorrect( const std::string & answer )
 {
     const std::string ans = StringLower( answer ).substr( 0, 4 );
-    auto checkAnswer = [&ans]( const std::string & str ) { return StringLower( str ).substr( 0, 4 ) == ans; };
+    const auto checkAnswer = [&ans]( const std::string & str ) { return StringLower( str ).substr( 0, 4 ) == ans; };
     return std::any_of( answers.begin(), answers.end(), checkAnswer );
 }
 

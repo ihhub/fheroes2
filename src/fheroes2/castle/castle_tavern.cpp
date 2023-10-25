@@ -24,6 +24,7 @@
 #include <cstdint>
 #include <memory>
 #include <string>
+#include <utility>
 
 #include "castle.h"
 #include "dialog.h"
@@ -41,7 +42,7 @@ void Castle::OpenTavern() const
     body += world.getCurrentRumor();
 
     const fheroes2::AnimationDialogElement imageUI( ICN::TAVWIN, { 0, 1 }, 0, Game::getAnimationDelayValue( Game::CASTLE_TAVERN_DELAY ) );
-    const fheroes2::TextDialogElement textBodyUI( std::make_shared<fheroes2::Text>( body, fheroes2::FontType::normalWhite() ) );
+    const fheroes2::TextDialogElement textBodyUI( std::make_shared<fheroes2::Text>( std::move( body ), fheroes2::FontType::normalWhite() ) );
 
     fheroes2::showMessage( fheroes2::Text( GetStringBuilding( BUILD_TAVERN ), fheroes2::FontType::normalYellow() ), fheroes2::Text( "", {} ), Dialog::OK,
                            { &imageUI, &textBodyUI } );

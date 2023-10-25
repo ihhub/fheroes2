@@ -105,7 +105,7 @@ void MageGuild::initialize( const int race, const bool hasLibrary )
         }
     }
 
-    auto addSpell = [this, hasLibrary, &spellsInUse, &mageGuildLevels]( const Spell & spell ) {
+    const auto addSpell = [this, hasLibrary, &spellsInUse, &mageGuildLevels]( const Spell & spell ) {
         const size_t spellLevel = fheroes2::checkedCast<size_t>( spell.Level() ).value();
         assert( spellLevel > 0 && spellLevel <= mageGuildLevels.size() );
 

@@ -44,13 +44,14 @@
 #include "mp2.h"
 #include "players.h"
 #include "screen.h"
+#include "settings.h"
+#include "translations.h"
+#include "ui_dialog.h"
+#include "world.h"
+
 #ifdef WITH_DEBUG
 #include "logging.h"
 #endif
-#include "settings.h"
-#include "text.h"
-#include "translations.h"
-#include "world.h"
 
 namespace
 {
@@ -494,7 +495,7 @@ void Interface::Radar::QueueEventProcessing()
             }
         }
         else if ( le.MousePressRight( GetRect() ) ) {
-            Dialog::Message( _( "World Map" ), _( "A miniature view of the known world. Left click to move viewing area." ), Font::BIG );
+            fheroes2::showStandardTextMessage( _( "World Map" ), _( "A miniature view of the known world. Left click to move viewing area." ), Dialog::ZERO );
         }
     }
 }
@@ -521,7 +522,7 @@ bool Interface::Radar::QueueEventProcessingForWorldView( ViewWorld::ZoomROIs & r
             }
         }
         else if ( le.MousePressRight( GetRect() ) ) {
-            Dialog::Message( _( "World Map" ), _( "A miniature view of the known world. Left click to move viewing area." ), Font::BIG );
+            fheroes2::showStandardTextMessage( _( "World Map" ), _( "A miniature view of the known world. Left click to move viewing area." ), Dialog::ZERO );
         }
         else if ( le.MouseWheelUp() ) {
             return roi.zoomIn( false );

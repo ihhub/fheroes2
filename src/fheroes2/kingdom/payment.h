@@ -28,15 +28,13 @@
 
 #include "resource.h"
 
-using payment_t = Funds;
-
 namespace PaymentConditions
 {
-    payment_t BuyBuilding( int race, uint32_t build );
-    payment_t BuyBoat();
-    payment_t BuySpellBook();
-    payment_t RecruitHero();
-    payment_t ForAlchemist();
+    Funds BuyBuilding( int race, uint32_t build );
+    Funds BuyBoat();
+    Funds BuySpellBook();
+    Funds RecruitHero();
+    Funds ForAlchemist();
 }
 
 #endif

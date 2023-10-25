@@ -37,13 +37,11 @@
 #include "agg_image.h"
 #include "dialog.h"
 #include "dialog_selectitems.h"
-#include "game_io.h"
 #include "gamedefs.h"
 #include "heroes.h"
 #include "icn.h"
 #include "logging.h"
 #include "rand.h"
-#include "save_format_version.h"
 #include "serialize.h"
 #include "settings.h"
 #include "skill.h"
@@ -499,20 +497,7 @@ StreamBase & operator<<( StreamBase & msg, const Artifact & art )
 
 StreamBase & operator>>( StreamBase & msg, Artifact & art )
 {
-    msg >> art.id >> art.ext;
-
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE1_1005_RELEASE, "Remove the logic below." );
-    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_PRE1_1005_RELEASE ) {
-        // Old save formats contain different values for artifacts.
-        if ( art.id == 103 ) {
-            art.id = Artifact::UNKNOWN;
-        }
-        else {
-            ++art.id;
-        }
-    }
-
-    return msg;
+    return msg >> art.id >> art.ext;
 }
 
 BagArtifacts::BagArtifacts()
@@ -897,7 +882,7 @@ void BagArtifacts::exchangeArtifacts( BagArtifacts & giftBag, const Heroes & tak
         }
     }
 
-    auto isPureCursedArtifact = []( const Artifact & artifact ) {
+    const auto isPureCursedArtifact = []( const Artifact & artifact ) {
         const fheroes2::ArtifactData & data = fheroes2::getArtifactData( artifact.GetID() );
         return !data.curses.empty() && data.bonuses.empty();
     };
@@ -906,7 +891,7 @@ void BagArtifacts::exchangeArtifacts( BagArtifacts & giftBag, const Heroes & tak
     transferArtifactsByCondition( combined, giftBag, isPureCursedArtifact );
 
     if ( !taker.HasSecondarySkill( Skill::Secondary::NECROMANCY ) && giver.HasSecondarySkill( Skill::Secondary::NECROMANCY ) ) {
-        auto isNecromancyArtifact = []( const Artifact & artifact ) {
+        const auto isNecromancyArtifact = []( const Artifact & artifact ) {
             const fheroes2::ArtifactData & data = fheroes2::getArtifactData( artifact.GetID() );
             if ( data.bonuses.empty() ) {
                 return false;
@@ -927,7 +912,7 @@ void BagArtifacts::exchangeArtifacts( BagArtifacts & giftBag, const Heroes & tak
 
     // Scrolls are effective if they contain spells which are not present in the book.
     if ( taker.HaveSpellBook() ) {
-        auto isScrollSpellDuplicated = [&taker]( const Artifact & artifact ) {
+        const auto isScrollSpellDuplicated = [&taker]( const Artifact & artifact ) {
             const fheroes2::ArtifactData & data = fheroes2::getArtifactData( artifact.GetID() );
             if ( data.bonuses.empty() ) {
                 return false;
@@ -950,7 +935,7 @@ void BagArtifacts::exchangeArtifacts( BagArtifacts & giftBag, const Heroes & tak
     }
 
     // A unique artifact is an artifact with no curses and all its bonuses are unique.
-    auto isUniqueArtifact = []( const Artifact & artifact ) {
+    const auto isUniqueArtifact = []( const Artifact & artifact ) {
         const fheroes2::ArtifactData & data = fheroes2::getArtifactData( artifact.GetID() );
         if ( !data.curses.empty() ) {
             return false;
@@ -1167,7 +1152,7 @@ bool ArtifactsBar::ActionBarLeftMouseSingleClick( Artifact & art )
             }
             else if ( _allowOpeningMagicBook ) {
                 if ( _statusBar != nullptr ) {
-                    std::function<void( const std::string & )> statusCallback = [this]( const std::string & status ) { _statusBar->ShowMessage( status ); };
+                    const std::function<void( const std::string & )> statusCallback = [this]( const std::string & status ) { _statusBar->ShowMessage( status ); };
                     _hero->OpenSpellBook( SpellBook::Filter::ALL, false, false, &statusCallback );
                 }
                 else {
@@ -1196,7 +1181,7 @@ bool ArtifactsBar::ActionBarLeftMouseSingleClick( Artifact & art )
     }
     else {
         if ( can_change ) {
-            const Artifact newArtifact = Dialog::SelectArtifact();
+            const Artifact newArtifact = Dialog::selectArtifact();
 
             if ( isMagicBook( newArtifact ) ) {
                 const_cast<Heroes *>( _hero )->SpellBookActivate();

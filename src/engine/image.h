@@ -324,5 +324,5 @@ namespace fheroes2
 
     void Transpose( const Image & in, Image & out );
 
-    void updateShadow( Image & image, const Point & shadowOffset, const uint8_t transformId );
+    void updateShadow( Image & image, const Point & shadowOffset, const uint8_t transformId, const bool connectCorners );
 }

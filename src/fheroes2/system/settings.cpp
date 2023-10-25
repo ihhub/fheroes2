@@ -36,6 +36,7 @@
 #include "game.h"
 #include "gamedefs.h"
 #include "logging.h"
+#include "render_processor.h"
 #include "screen.h"
 #include "serialize.h"
 #include "settings.h"
@@ -70,14 +71,16 @@ namespace
         GLOBAL_EVIL_INTERFACE = 0x00080000,
         GLOBAL_HIDE_INTERFACE = 0x00100000,
         GLOBAL_BATTLE_SHOW_DAMAGE = 0x00200000,
-        GLOBAL_BATTLE_SHOW_ARMY_ORDER = 0x00400000,
+        GLOBAL_BATTLE_SHOW_TURN_ORDER = 0x00400000,
         GLOBAL_BATTLE_SHOW_GRID = 0x00800000,
         GLOBAL_BATTLE_SHOW_MOUSE_SHADOW = 0x01000000,
         GLOBAL_BATTLE_SHOW_MOVE_SHADOW = 0x02000000,
         GLOBAL_BATTLE_AUTO_RESOLVE = 0x04000000,
         GLOBAL_BATTLE_AUTO_SPELLCAST = 0x08000000,
         GLOBAL_AUTO_SAVE_AT_BEGINNING_OF_TURN = 0x10000000,
-        GLOBAL_SCREEN_SCALING_TYPE_NEAREST = 0x20000000
+        GLOBAL_SCREEN_SCALING_TYPE_NEAREST = 0x20000000,
+        // TODO: remove this setting once the Editor goes public.
+        GLOBAL_ENABLE_EDITOR = 0x40000000
     };
 }
 
@@ -219,8 +222,8 @@ bool Settings::Read( const std::string & filePath )
         setBattleAutoSpellcast( config.StrParams( "auto spell casting" ) == "on" );
     }
 
-    if ( config.Exists( "battle army order" ) ) {
-        setBattleShowArmyOrder( config.StrParams( "battle army order" ) == "on" );
+    if ( config.Exists( "battle turn order" ) ) {
+        setBattleShowTurnOrder( config.StrParams( "battle turn order" ) == "on" );
     }
 
     if ( config.Exists( "use evil interface" ) ) {
@@ -319,6 +322,10 @@ bool Settings::Read( const std::string & filePath )
         setScreenScalingTypeNearest( config.StrParams( "screen scaling type" ) == "nearest" );
     }
 
+    if ( config.Exists( "editor" ) && config.StrParams( "editor" ) == "beta" ) {
+        _optGlobal.SetModes( GLOBAL_ENABLE_EDITOR );
+    }
+
     return true;
 }
 
@@ -409,8 +416,8 @@ std::string Settings::String() const
     os << std::endl << "# auto combat spell casting: on/off" << std::endl;
     os << "auto spell casting = " << ( _optGlobal.Modes( GLOBAL_BATTLE_AUTO_SPELLCAST ) ? "on" : "off" ) << std::endl;
 
-    os << std::endl << "# show army order during battle: on/off" << std::endl;
-    os << "battle army order = " << ( _optGlobal.Modes( GLOBAL_BATTLE_SHOW_ARMY_ORDER ) ? "on" : "off" ) << std::endl;
+    os << std::endl << "# show turn order during battle: on/off" << std::endl;
+    os << "battle turn order = " << ( _optGlobal.Modes( GLOBAL_BATTLE_SHOW_TURN_ORDER ) ? "on" : "off" ) << std::endl;
 
     os << std::endl << "# use evil interface style: on/off" << std::endl;
     os << "use evil interface = " << ( _optGlobal.Modes( GLOBAL_EVIL_INTERFACE ) ? "on" : "off" ) << std::endl;
@@ -465,6 +472,10 @@ std::string Settings::String() const
 
     os << std::endl << "# scaling type: nearest or linear (set by default)" << std::endl;
     os << "screen scaling type = " << ( _optGlobal.Modes( GLOBAL_SCREEN_SCALING_TYPE_NEAREST ) ? "nearest" : "linear" ) << std::endl;
+
+    if ( _optGlobal.Modes( GLOBAL_ENABLE_EDITOR ) ) {
+        os << "editor = beta" << std::endl;
+    }
 
     return os.str();
 }
@@ -647,13 +658,13 @@ void Settings::setBattleAutoSpellcast( bool enable )
     }
 }
 
-void Settings::setBattleShowArmyOrder( const bool enable )
+void Settings::setBattleShowTurnOrder( const bool enable )
 {
     if ( enable ) {
-        _optGlobal.SetModes( GLOBAL_BATTLE_SHOW_ARMY_ORDER );
+        _optGlobal.SetModes( GLOBAL_BATTLE_SHOW_TURN_ORDER );
     }
     else {
-        _optGlobal.ResetModes( GLOBAL_BATTLE_SHOW_ARMY_ORDER );
+        _optGlobal.ResetModes( GLOBAL_BATTLE_SHOW_TURN_ORDER );
     }
 }
 
@@ -724,9 +735,11 @@ void Settings::setSystemInfo( const bool enable )
 {
     if ( enable ) {
         _optGlobal.SetModes( GLOBAL_SYSTEM_INFO );
+        fheroes2::RenderProcessor::instance().enableRenderers();
     }
     else {
         _optGlobal.ResetModes( GLOBAL_SYSTEM_INFO );
+        fheroes2::RenderProcessor::instance().disableRenderers();
     }
 }
 
@@ -832,6 +845,11 @@ bool Settings::isEvilInterfaceEnabled() const
     return _optGlobal.Modes( GLOBAL_EVIL_INTERFACE );
 }
 
+bool Settings::isEditorEnabled() const
+{
+    return _optGlobal.Modes( GLOBAL_ENABLE_EDITOR );
+}
+
 bool Settings::ShowControlPanel() const
 {
     return _optGlobal.Modes( GLOBAL_SHOW_CONTROL_PANEL );
@@ -882,9 +900,9 @@ bool Settings::BattleAutoSpellcast() const
     return _optGlobal.Modes( GLOBAL_BATTLE_AUTO_SPELLCAST );
 }
 
-bool Settings::BattleShowArmyOrder() const
+bool Settings::BattleShowTurnOrder() const
 {
-    return _optGlobal.Modes( GLOBAL_BATTLE_SHOW_ARMY_ORDER );
+    return _optGlobal.Modes( GLOBAL_BATTLE_SHOW_TURN_ORDER );
 }
 
 void Settings::setDebug( int debug )

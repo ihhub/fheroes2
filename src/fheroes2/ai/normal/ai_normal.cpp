@@ -28,7 +28,6 @@
 #include "kingdom.h"
 #include "maps_tiles.h"
 #include "pairs.h"
-#include "payment.h"
 #include "profit.h"
 #include "rand.h"
 #include "route.h"
@@ -59,7 +58,7 @@ namespace AI
 
         // If this is an action object and one of AI heroes is moving,
         // we have to stop him because the new object might be more valuable than the current target.
-        const KingdomHeroes & heroes = kingdom.GetHeroes();
+        const VecHeroes & heroes = kingdom.GetHeroes();
         for ( Heroes * hero : heroes ) {
             if ( hero == nullptr ) {
                 // How is it even possible?
@@ -68,8 +67,7 @@ namespace AI
             }
 
             if ( hero->isMoveEnabled() ) {
-                hero->SetMove( false );
-                hero->GetPath().Reset();
+                hero->GetPath().Truncate();
                 break;
             }
         }

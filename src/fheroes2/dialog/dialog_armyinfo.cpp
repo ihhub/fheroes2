@@ -48,11 +48,10 @@
 #include "monster_anim.h"
 #include "monster_info.h"
 #include "morale.h"
-#include "payment.h"
+#include "resource.h"
 #include "screen.h"
 #include "settings.h"
 #include "spell.h"
-#include "text.h"
 #include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
@@ -126,109 +125,110 @@ namespace
 
     void DrawMonsterStats( const fheroes2::Point & dst, const Troop & troop )
     {
-        fheroes2::Point dst_pt;
-        Text text;
+        fheroes2::Display & display = fheroes2::Display::instance();
 
         // attack
-        text.Set( std::string( _( "Attack Skill" ) ) + ":" );
-        dst_pt.x = dst.x - text.w();
-        dst_pt.y = dst.y;
-        text.Blit( dst_pt.x, dst_pt.y );
+        fheroes2::Text text( std::string( _( "Attack Skill" ) ) + ":", fheroes2::FontType::normalWhite() );
+        fheroes2::Point dst_pt{ dst.x - text.width(), dst.y };
+        text.draw( dst_pt.x, dst_pt.y + 2, display );
 
         const int offsetX = 6;
         const int offsetY = 16;
 
-        text.Set( troop.GetAttackString() );
+        text.set( troop.GetAttackString(), fheroes2::FontType::normalWhite() );
         dst_pt.x = dst.x + offsetX;
-        text.Blit( dst_pt.x, dst_pt.y );
+        text.draw( dst_pt.x, dst_pt.y + 2, display );
 
         // defense
-        text.Set( std::string( _( "Defense Skill" ) ) + ":" );
-        dst_pt.x = dst.x - text.w();
+        text.set( std::string( _( "Defense Skill" ) ) + ":", fheroes2::FontType::normalWhite() );
+        dst_pt.x = dst.x - text.width();
         dst_pt.y += offsetY;
-        text.Blit( dst_pt.x, dst_pt.y );
+        text.draw( dst_pt.x, dst_pt.y + 2, display );
 
-        text.Set( troop.GetDefenseString() );
+        text.set( troop.GetDefenseString(), fheroes2::FontType::normalWhite() );
         dst_pt.x = dst.x + offsetX;
-        text.Blit( dst_pt.x, dst_pt.y );
+        text.draw( dst_pt.x, dst_pt.y + 2, display );
 
-        // shot
-        if ( troop.isArchers() ) {
+        if ( fheroes2::getMonsterData( troop.GetID() ).battleStats.shots > 0 ) {
             std::string message = troop.isBattle() ? _( "Shots Left" ) : _( "Shots" );
             message += ':';
-            text.Set( message );
-            dst_pt.x = dst.x - text.w();
+            text.set( std::move( message ), fheroes2::FontType::normalWhite() );
+            dst_pt.x = dst.x - text.width();
             dst_pt.y += offsetY;
-            text.Blit( dst_pt.x, dst_pt.y );
+            text.draw( dst_pt.x, dst_pt.y + 2, display );
 
-            text.Set( troop.GetShotString() );
+            text.set( troop.GetShotString(), fheroes2::FontType::normalWhite() );
             dst_pt.x = dst.x + offsetX;
-            text.Blit( dst_pt.x, dst_pt.y );
+            text.draw( dst_pt.x, dst_pt.y + 2, display );
         }
 
         // damage
-        text.Set( std::string( _( "Damage" ) ) + ":" );
-        dst_pt.x = dst.x - text.w();
+        text.set( std::string( _( "Damage" ) ) + ":", fheroes2::FontType::normalWhite() );
+        dst_pt.x = dst.x - text.width();
         dst_pt.y += offsetY;
-        text.Blit( dst_pt.x, dst_pt.y );
+        text.draw( dst_pt.x, dst_pt.y + 2, display );
 
-        if ( troop.GetMonster().GetDamageMin() != troop.GetMonster().GetDamageMax() )
-            text.Set( std::to_string( troop.GetMonster().GetDamageMin() ) + "-" + std::to_string( troop.GetMonster().GetDamageMax() ) );
-        else
-            text.Set( std::to_string( troop.GetMonster().GetDamageMin() ) );
+        if ( troop.GetMonster().GetDamageMin() != troop.GetMonster().GetDamageMax() ) {
+            text.set( std::to_string( troop.GetMonster().GetDamageMin() ) + "-" + std::to_string( troop.GetMonster().GetDamageMax() ),
+                      fheroes2::FontType::normalWhite() );
+        }
+        else {
+            text.set( std::to_string( troop.GetMonster().GetDamageMin() ), fheroes2::FontType::normalWhite() );
+        }
+
         dst_pt.x = dst.x + offsetX;
-        text.Blit( dst_pt.x, dst_pt.y );
+        text.draw( dst_pt.x, dst_pt.y + 2, display );
 
         // hp
-        text.Set( std::string( _( "Hit Points" ) ) + ":" );
-        dst_pt.x = dst.x - text.w();
+        text.set( std::string( _( "Hit Points" ) ) + ":", fheroes2::FontType::normalWhite() );
+        dst_pt.x = dst.x - text.width();
         dst_pt.y += offsetY;
-        text.Blit( dst_pt.x, dst_pt.y );
+        text.draw( dst_pt.x, dst_pt.y + 2, display );
 
-        text.Set( std::to_string( troop.GetMonster().GetHitPoints() ) );
+        text.set( std::to_string( troop.GetMonster().GetHitPoints() ), fheroes2::FontType::normalWhite() );
         dst_pt.x = dst.x + offsetX;
-        text.Blit( dst_pt.x, dst_pt.y );
+        text.draw( dst_pt.x, dst_pt.y + 2, display );
 
         if ( troop.isBattle() && troop.GetCount() != 0 ) {
-            text.Set( std::string( _( "Hit Points Left" ) ) + ":" );
-            dst_pt.x = dst.x - text.w();
+            text.set( std::string( _( "Hit Points Left" ) ) + ":", fheroes2::FontType::normalWhite() );
+            dst_pt.x = dst.x - text.width();
             dst_pt.y += offsetY;
-            text.Blit( dst_pt.x, dst_pt.y );
+            text.draw( dst_pt.x, dst_pt.y + 2, display );
 
-            text.Set( std::to_string( troop.GetHitPointsLeft() ) );
+            text.set( std::to_string( troop.GetHitPointsLeft() ), fheroes2::FontType::normalWhite() );
             dst_pt.x = dst.x + offsetX;
-            text.Blit( dst_pt.x, dst_pt.y );
+            text.draw( dst_pt.x, dst_pt.y + 2, display );
         }
 
         // speed
-        text.Set( std::string( _( "Speed" ) ) + ":" );
-        dst_pt.x = dst.x - text.w();
+        text.set( std::string( _( "Speed" ) ) + ":", fheroes2::FontType::normalWhite() );
+        dst_pt.x = dst.x - text.width();
         dst_pt.y += offsetY;
-        text.Blit( dst_pt.x, dst_pt.y );
+        text.draw( dst_pt.x, dst_pt.y + 2, display );
 
-        text.Set( troop.GetSpeedString() );
+        text.set( troop.GetSpeedString(), fheroes2::FontType::normalWhite() );
         dst_pt.x = dst.x + offsetX;
-        text.Blit( dst_pt.x, dst_pt.y );
+        text.draw( dst_pt.x, dst_pt.y + 2, display );
 
         // morale
-        text.Set( std::string( _( "Morale" ) ) + ":" );
-        dst_pt.x = dst.x - text.w();
+        text.set( std::string( _( "Morale" ) ) + ":", fheroes2::FontType::normalWhite() );
+        dst_pt.x = dst.x - text.width();
         dst_pt.y += offsetY;
-        text.Blit( dst_pt.x, dst_pt.y );
+        text.draw( dst_pt.x, dst_pt.y + 2, display );
 
-        text.Set( Morale::String( troop.GetMorale() ) );
+        text.set( Morale::String( troop.GetMorale() ), fheroes2::FontType::normalWhite() );
         dst_pt.x = dst.x + offsetX;
-        text.Blit( dst_pt.x, dst_pt.y );
+        text.draw( dst_pt.x, dst_pt.y + 2, display );
 
         // luck
-        text.Set( std::string( _( "Luck" ) ) + ":" );
-        dst_pt.x = dst.x - text.w();
+        text.set( std::string( _( "Luck" ) ) + ":", fheroes2::FontType::normalWhite() );
+        dst_pt.x = dst.x - text.width();
         dst_pt.y += offsetY;
-        text.Blit( dst_pt.x, dst_pt.y );
+        text.draw( dst_pt.x, dst_pt.y + 2, display );
 
-        text.Set( Luck::String( troop.GetLuck() ) );
+        text.set( Luck::String( troop.GetLuck() ), fheroes2::FontType::normalWhite() );
         dst_pt.x = dst.x + offsetX;
-        text.Blit( dst_pt.x, dst_pt.y );
+        text.draw( dst_pt.x, dst_pt.y + 2, display );
     }
 
     fheroes2::Sprite GetModesSprite( uint32_t mod )
@@ -316,20 +316,21 @@ namespace
         const int maxSpritesWidth = 212;
         const int maxSpriteHeight = 32;
 
-        Text text;
+        fheroes2::Display & display = fheroes2::Display::instance();
+
         if ( ow <= maxSpritesWidth ) {
             ow = dst.x - ow / 2;
             for ( const auto & spell : spellsInfo ) {
                 const fheroes2::Sprite & sprite = GetModesSprite( spell.mode );
                 const fheroes2::Point imageOffset( ow, dst.y + maxSpriteHeight - sprite.height() );
 
-                fheroes2::Blit( sprite, fheroes2::Display::instance(), imageOffset.x, imageOffset.y );
+                fheroes2::Blit( sprite, display, imageOffset.x, imageOffset.y );
                 output.emplace_back( fheroes2::Rect( imageOffset.x, imageOffset.y, sprite.width(), sprite.height() ), modeToSpell( spell.mode ) );
 
                 if ( spell.duration > 0 ) {
-                    text.Set( std::to_string( spell.duration ), Font::SMALL );
+                    const fheroes2::Text text( std::to_string( spell.duration ), fheroes2::FontType::smallWhite() );
                     ow += sprite.width() + spell.offset;
-                    text.Blit( ow - text.w(), dst.y + maxSpriteHeight - text.h() + 1 );
+                    text.draw( ow - text.width(), dst.y + maxSpriteHeight - text.height() + 3, display );
                 }
                 ow += spell.space;
             }
@@ -351,12 +352,12 @@ namespace
                 const fheroes2::Sprite & sprite = GetModesSprite( spellIt->mode );
                 const fheroes2::Point imageOffset( ow - sprite.width(), dst.y + maxSpriteHeight - sprite.height() );
 
-                fheroes2::Blit( sprite, fheroes2::Display::instance(), imageOffset.x, imageOffset.y );
+                fheroes2::Blit( sprite, display, imageOffset.x, imageOffset.y );
                 output.emplace_back( fheroes2::Rect( imageOffset.x, imageOffset.y, sprite.width(), sprite.height() ), modeToSpell( spellIt->mode ) );
 
                 if ( spellIt->duration > 0 ) {
-                    text.Set( std::to_string( spellIt->duration ), Font::SMALL );
-                    text.Blit( ow - text.w(), dst.y + maxSpriteHeight - text.h() + 1 );
+                    const fheroes2::Text text( std::to_string( spellIt->duration ), fheroes2::FontType::smallWhite() );
+                    text.draw( ow - text.width(), dst.y + maxSpriteHeight - text.height() + 3, display );
                 }
                 ow -= sprite.width() + space;
             }
@@ -367,10 +368,12 @@ namespace
 
     void DrawMonsterInfo( const fheroes2::Point & offset, const Troop & troop )
     {
+        fheroes2::Display & display = fheroes2::Display::instance();
+
         // name
-        Text text( troop.GetName(), Font::YELLOW_BIG );
-        fheroes2::Point pos( offset.x + 140 - text.w() / 2, offset.y + 40 );
-        text.Blit( pos.x, pos.y );
+        fheroes2::Text text( troop.GetName(), fheroes2::FontType::normalYellow() );
+        fheroes2::Point pos( offset.x + 29 + ( 227 - text.width() ) / 2, offset.y + 37 );
+        text.draw( pos.x, pos.y + 2, display );
 
         // Description.
         const std::vector<std::string> descriptions = fheroes2::getMonsterPropertiesDescription( troop.GetID() );
@@ -403,14 +406,14 @@ namespace
                 const fheroes2::Text descriptionText( description, fheroes2::FontType::smallWhite() );
                 const int32_t rowCount = descriptionText.rows( descriptionWidth );
 
-                descriptionText.draw( offset.x + 37, offset.y + 185 + ( maximumRowCount - rowCount ) * rowHeight, descriptionWidth, fheroes2::Display::instance() );
+                descriptionText.draw( offset.x + 37, offset.y + 185 + ( maximumRowCount - rowCount ) * rowHeight, descriptionWidth, display );
             }
             else {
                 int32_t sentenceId = maximumRowCount - static_cast<int32_t>( descriptions.size() ); // safe to cast as we check the size before.
                 for ( const std::string & sentence : descriptions ) {
                     const fheroes2::Text descriptionText( sentence, fheroes2::FontType::smallWhite() );
 
-                    descriptionText.draw( offset.x + 37, offset.y + 185 + sentenceId * rowHeight, descriptionWidth, fheroes2::Display::instance() );
+                    descriptionText.draw( offset.x + 37, offset.y + 185 + sentenceId * rowHeight, descriptionWidth, display );
                     ++sentenceId;
                 }
             }
@@ -418,10 +421,10 @@ namespace
 
         // amount
         if ( troop.GetCount() != 0 ) {
-            text.Set( std::to_string( troop.GetCount() ), Font::BIG );
-            pos.x = offset.x + offsetXAmountBox + widthAmountBox / 2 - text.w() / 2;
-            pos.y = offset.y + offsetYAmountBox + heightAmountBox / 2 - text.h() / 2;
-            text.Blit( pos.x, pos.y );
+            text.set( std::to_string( troop.GetCount() ), fheroes2::FontType::normalWhite() );
+            pos.x = offset.x + offsetXAmountBox + widthAmountBox / 2 - text.width() / 2;
+            pos.y = offset.y + offsetYAmountBox + heightAmountBox / 2 - text.height() / 2;
+            text.draw( pos.x, pos.y + 2, display );
         }
     }
 
@@ -590,8 +593,8 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected, const in
 
         if ( buttonDismiss.isEnabled() && ( le.MouseClickLeft( buttonDismiss.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::ARMY_DISMISS ) )
              && Dialog::YES
-                    == Dialog::Message( troop.GetPluralName( troop.GetCount() ), _( "Are you sure you want to dismiss this army?" ), Font::BIG,
-                                        Dialog::YES | Dialog::NO ) ) {
+                    == fheroes2::showStandardTextMessage( troop.GetPluralName( troop.GetCount() ), _( "Are you sure you want to dismiss this army?" ),
+                                                          Dialog::YES | Dialog::NO ) ) {
             result = Dialog::DISMISS;
             break;
         }
@@ -651,43 +654,11 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected, const in
 
 int Dialog::ArmyJoinFree( const Troop & troop )
 {
-    fheroes2::Display & display = fheroes2::Display::instance();
-
-    // setup cursor
-    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
-
-    const Text title( _( "Followers" ), Font::YELLOW_BIG );
-
     std::string message = _( "A group of %{monster} with a desire for greater glory wish to join you.\nDo you accept?" );
     StringReplaceWithLowercase( message, "%{monster}", troop.GetMultiName() );
 
-    TextBox textbox( message, Font::BIG, BOXAREA_WIDTH );
-    const int buttons = Dialog::YES | Dialog::NO;
-    int posy = 0;
-
-    FrameBox box( 10 + 2 * title.h() + textbox.h() + 10, true );
-    const fheroes2::Rect & pos = box.GetArea();
-
-    title.Blit( pos.x + ( pos.width - title.w() ) / 2, pos.y );
-
-    posy = pos.y + 2 * title.h() - 3;
-    textbox.Blit( pos.x, posy );
-
-    fheroes2::ButtonGroup btnGroup( pos, buttons );
-    btnGroup.draw();
-
-    display.render();
-
-    LocalEvent & le = LocalEvent::Get();
-
-    // message loop
-    int result = Dialog::ZERO;
-
-    while ( result == Dialog::ZERO && le.HandleEvents() ) {
-        result = btnGroup.processEvents();
-    }
-
-    return result;
+    return fheroes2::showMessage( fheroes2::Text( _( "Followers" ), fheroes2::FontType::normalYellow() ),
+                                  fheroes2::Text( std::move( message ), fheroes2::FontType::normalWhite() ), Dialog::YES | Dialog::NO );
 }
 
 int Dialog::ArmyJoinWithCost( const Troop & troop, const uint32_t join, const uint32_t gold )
@@ -703,7 +674,7 @@ int Dialog::ArmyJoinWithCost( const Troop & troop, const uint32_t join, const ui
         message = _( "The %{monster} is swayed by your diplomatic tongue, and offers to join your army for the sum of %{gold} gold.\nDo you accept?" );
     }
     else {
-        message = _( "The creatures are swayed by your diplomatic\ntongue, and make you an offer:\n \n" );
+        message = _( "The creatures are swayed by your diplomatic\ntongue, and make you an offer:\n\n" );
 
         if ( join != troop.GetCount() )
             message += _( "%{offer} of the %{total} %{monster} will join your army, and the rest will leave you alone, for the sum of %{gold} gold.\nDo you accept?" );
@@ -716,26 +687,25 @@ int Dialog::ArmyJoinWithCost( const Troop & troop, const uint32_t join, const ui
     StringReplaceWithLowercase( message, "%{monster}", troop.GetPluralName( join ) );
     StringReplace( message, "%{gold}", gold );
 
-    TextBox textbox( message, Font::BIG, BOXAREA_WIDTH );
+    fheroes2::Text textbox( message, fheroes2::FontType::normalWhite() );
     const int buttons = Dialog::YES | Dialog::NO;
     const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::RESOURCE, 6 );
     int posy = 0;
-    Text text;
 
     message = _( "(Rate: %{percent})" );
     StringReplace( message, "%{percent}", troop.GetMonster().GetCost().gold * join * 100 / gold );
-    text.Set( message, Font::BIG );
+    fheroes2::Text text( message, fheroes2::FontType::normalWhite() );
 
-    FrameBox box( 10 + textbox.h() + 10 + text.h() + 40 + sprite.height() + 10, true );
+    FrameBox box( 10 + textbox.height( BOXAREA_WIDTH ) + 10 + text.height() + 40 + sprite.height() + 10, true );
     const fheroes2::Rect & pos = box.GetArea();
 
     posy = pos.y + 10;
-    textbox.Blit( pos.x, posy );
+    textbox.draw( pos.x, posy + 2, BOXAREA_WIDTH, display );
 
-    posy += textbox.h() + 10;
-    text.Blit( pos.x + ( pos.width - text.w() ) / 2, posy );
+    posy += textbox.height( BOXAREA_WIDTH ) + 10;
+    text.draw( pos.x + ( pos.width - text.width() ) / 2, posy + 2, display );
 
-    posy += text.h() + 40;
+    posy += text.height() + 40;
     fheroes2::Blit( sprite, display, pos.x + ( pos.width - sprite.width() ) / 2, posy );
 
     const fheroes2::Text goldText( std::to_string( gold ), fheroes2::FontType::smallWhite() );

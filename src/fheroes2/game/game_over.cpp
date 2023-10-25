@@ -64,7 +64,7 @@ namespace
         if ( conf.isCampaignGameType() ) {
             const Campaign::ScenarioVictoryCondition victoryCondition = Campaign::getCurrentScenarioVictoryCondition();
             if ( victoryCondition == Campaign::ScenarioVictoryCondition::CAPTURE_DRAGON_CITY ) {
-                body = _( "Dragon city has fallen!  You are now the Master of the Dragons." );
+                body = _( "Dragon city has fallen! You are now the Master of the Dragons." );
             }
         }
 
@@ -72,47 +72,65 @@ namespace
             switch ( cond ) {
             case GameOver::WINS_ALL:
                 break;
+
             case GameOver::WINS_TOWN: {
                 body = _( "You captured %{name}!\nYou are victorious." );
+
                 const Castle * town = world.getCastleEntrance( conf.WinsMapsPositionObject() );
-                if ( town )
+                assert( town != nullptr );
+
+                if ( town ) {
                     StringReplace( body, "%{name}", town->GetName() );
+                }
+
                 break;
             }
+
             case GameOver::WINS_HERO: {
                 body = _( "You have captured the enemy hero %{name}!\nYour quest is complete." );
+
                 const Heroes * hero = world.GetHeroesCondWins();
-                if ( hero )
+                assert( hero != nullptr );
+
+                if ( hero ) {
                     StringReplace( body, "%{name}", hero->GetName() );
+                }
+
                 break;
             }
-            case GameOver::WINS_ARTIFACT: {
+
+            case GameOver::WINS_ARTIFACT:
                 body = _( "You have found the %{name}.\nYour quest is complete." );
-                if ( conf.WinsFindUltimateArtifact() )
+
+                if ( conf.WinsFindUltimateArtifact() ) {
                     StringReplace( body, "%{name}", _( "Ultimate Artifact" ) );
+                }
                 else {
                     const Artifact art = conf.WinsFindArtifactID();
                     StringReplace( body, "%{name}", art.GetName() );
                 }
+
                 break;
-            }
+
             case GameOver::WINS_SIDE:
                 body = _( "The enemy is beaten.\nYour side has triumphed!" );
                 break;
-            case GameOver::WINS_GOLD: {
+
+            case GameOver::WINS_GOLD:
                 body = _( "You have built up over %{count} gold in your treasury.\nAll enemies bow before your wealth and power." );
                 StringReplace( body, "%{count}", conf.getWinningGoldAccumulationValue() );
                 break;
-            }
+
             default:
                 break;
             }
         }
 
-        AudioManager::PlayMusic( MUS::VICTORY, Music::PlaybackMode::PLAY_ONCE );
+        if ( !body.empty() ) {
+            AudioManager::PlayMusic( MUS::VICTORY, Music::PlaybackMode::PLAY_ONCE );
 
-        if ( !body.empty() )
-            fheroes2::showStandardTextMessage( "", body, Dialog::OK );
+            fheroes2::showStandardTextMessage( _( "Victory!" ), body, Dialog::OK );
+        }
     }
 
     void DialogLoss( uint32_t cond )
@@ -123,17 +141,21 @@ namespace
         switch ( cond ) {
         case GameOver::LOSS_ENEMY_WINS_TOWN: {
             body = _( "The enemy has captured %{name}!\nThey are triumphant." );
+
             const Castle * town = world.getCastleEntrance( conf.WinsMapsPositionObject() );
-            if ( town )
+            assert( town != nullptr );
+
+            if ( town ) {
                 StringReplace( body, "%{name}", town->GetName() );
+            }
+
             break;
         }
 
-        case GameOver::LOSS_ENEMY_WINS_GOLD: {
+        case GameOver::LOSS_ENEMY_WINS_GOLD:
             body = _( "The enemy has built up over %{count} gold in his treasury.\nYou must bow done in defeat before his wealth and power." );
             StringReplace( body, "%{count}", conf.getWinningGoldAccumulationValue() );
             break;
-        }
 
         case GameOver::LOSS_ALL:
             body = _( "You have been eliminated from the game!!!" );
@@ -141,19 +163,27 @@ namespace
 
         case GameOver::LOSS_TOWN: {
             body = _( "The enemy has captured %{name}!\nThey are triumphant." );
+
             const Castle * town = world.getCastleEntrance( conf.LossMapsPositionObject() );
-            if ( town )
+            assert( town != nullptr );
+
+            if ( town ) {
                 StringReplace( body, "%{name}", town->GetName() );
+            }
+
             break;
         }
 
         case GameOver::LOSS_HERO: {
             body = _( "You have lost the hero %{name}.\nYour quest is over." );
+
             const Heroes * hero = world.GetHeroesCondLoss();
-            if ( hero )
+            assert( hero != nullptr );
+
+            if ( hero ) {
                 StringReplace( body, "%{name}", hero->GetName() );
-            else
-                StringReplace( body, "%{name}", "" );
+            }
+
             break;
         }
 
@@ -165,10 +195,11 @@ namespace
             break;
         }
 
-        AudioManager::PlayMusic( MUS::LOSTGAME, Music::PlaybackMode::PLAY_ONCE );
+        if ( !body.empty() ) {
+            AudioManager::PlayMusic( MUS::LOSTGAME, Music::PlaybackMode::PLAY_ONCE );
 
-        if ( !body.empty() )
             fheroes2::showStandardTextMessage( _( "Defeat!" ), body, Dialog::OK );
+        }
     }
 
     Video::Subtitle standardGameResults()
@@ -246,7 +277,7 @@ std::string GameOver::GetActualDescription( uint32_t cond )
         const int currentColor = currentPlayer->GetColor();
         const int friendColors = currentPlayer->GetFriends();
 
-        auto makeListOfPlayers = []( const int colors ) {
+        const auto makeListOfPlayers = []( const int colors ) {
             std::pair<std::string, size_t> result{ {}, 0 };
 
             for ( const int col : Colors( colors ) ) {
@@ -283,6 +314,8 @@ std::string GameOver::GetActualDescription( uint32_t cond )
     }
     else if ( WINS_TOWN & cond ) {
         const Castle * town = world.getCastleEntrance( conf.WinsMapsPositionObject() );
+        assert( town != nullptr );
+
         if ( town ) {
             msg = town->isCastle() ? _( "Capture the castle '%{name}'." ) : _( "Capture the town '%{name}'." );
             StringReplace( msg, "%{name}", town->GetName() );
@@ -290,16 +323,20 @@ std::string GameOver::GetActualDescription( uint32_t cond )
     }
     else if ( WINS_HERO & cond ) {
         const Heroes * hero = world.GetHeroesCondWins();
+        assert( hero != nullptr );
+
         if ( hero ) {
             msg = _( "Defeat the hero '%{name}'." );
             StringReplace( msg, "%{name}", hero->GetName() );
         }
     }
     else if ( WINS_ARTIFACT & cond ) {
-        if ( conf.WinsFindUltimateArtifact() )
+        if ( conf.WinsFindUltimateArtifact() ) {
             msg = _( "Find the ultimate artifact." );
+        }
         else {
             const Artifact art = conf.WinsFindArtifactID();
+
             msg = _( "Find the '%{name}' artifact." );
             StringReplace( msg, "%{name}", art.GetName() );
         }
@@ -309,13 +346,17 @@ std::string GameOver::GetActualDescription( uint32_t cond )
         StringReplace( msg, "%{count}", conf.getWinningGoldAccumulationValue() );
     }
 
-    if ( WINS_ALL != cond && ( WINS_ALL & cond ) )
+    if ( WINS_ALL != cond && ( WINS_ALL & cond ) ) {
         msg.append( _( ", or you may win by defeating all enemy heroes and capturing all enemy towns and castles." ) );
+    }
 
-    if ( LOSS_ALL == cond )
+    if ( LOSS_ALL == cond ) {
         msg = GetString( LOSS_ALL );
+    }
     else if ( LOSS_TOWN & cond ) {
         const Castle * town = world.getCastleEntrance( conf.LossMapsPositionObject() );
+        assert( town != nullptr );
+
         if ( town ) {
             msg = town->isCastle() ? _( "Lose the castle '%{name}'." ) : _( "Lose the town '%{name}'." );
             StringReplace( msg, "%{name}", town->GetName() );
@@ -323,17 +364,20 @@ std::string GameOver::GetActualDescription( uint32_t cond )
     }
     else if ( LOSS_HERO & cond ) {
         const Heroes * hero = world.GetHeroesCondLoss();
+        assert( hero != nullptr );
+
         if ( hero ) {
             msg = _( "Lose the hero: %{name}." );
             StringReplace( msg, "%{name}", hero->GetName() );
         }
     }
     else if ( LOSS_TIME & cond ) {
-        msg = _( "Fail to win by the end of month %{month}, week %{week}, day %{day}." );
         const uint32_t dayCount = conf.LossCountDays() - 1;
         const uint32_t month = dayCount / ( DAYOFWEEK * WEEKOFMONTH );
         const uint32_t week = ( dayCount - month * ( DAYOFWEEK * WEEKOFMONTH ) ) / DAYOFWEEK;
         const uint32_t day = dayCount % DAYOFWEEK;
+
+        msg = _( "Fail to win by the end of month %{month}, week %{week}, day %{day}." );
         StringReplace( msg, "%{day}", day + 1 );
         StringReplace( msg, "%{week}", week + 1 );
         StringReplace( msg, "%{month}", month + 1 );
@@ -359,20 +403,27 @@ void GameOver::Result::Reset()
     result = GameOver::COND_NONE;
 }
 
-fheroes2::GameMode GameOver::Result::LocalCheckGameOver()
+fheroes2::GameMode GameOver::Result::checkGameOver()
 {
     fheroes2::GameMode res = fheroes2::GameMode::CANCEL;
 
-    const bool isSinglePlayer = ( Colors( Players::HumanColors() ).size() == 1 );
+    const Settings & conf = Settings::Get();
     const int humanColors = Players::HumanColors();
+    const int currentColor = conf.CurrentColor();
+    const bool isSinglePlayer = ( Color::Count( humanColors ) == 1 );
+    // Remembers whether the current player was considered active at the time of calling this function
+    const bool isCurrentPlayerWasActive = ( currentColor & colors );
 
     int activeHumanColors = 0;
 
     for ( const int color : Colors( colors ) ) {
         if ( !world.GetKingdom( color ).isPlay() ) {
-            if ( !isSinglePlayer || ( color & humanColors ) == 0 ) {
+            // This notification should always be displayed for the AI players. For human players, this should only be displayed in a multiplayer game for a
+            // human player who is not currently active - in all other cases, the "you have been eliminated" dialog should be displayed.
+            if ( !( color & humanColors ) || ( !isSinglePlayer && color != currentColor ) ) {
                 Game::DialogPlayers( color, _( "Major Event!" ), _( "%{color} player has been vanquished!" ) );
             }
+
             colors &= ( ~color );
         }
         else if ( color & humanColors ) {
@@ -383,23 +434,22 @@ fheroes2::GameMode GameOver::Result::LocalCheckGameOver()
     if ( isSinglePlayer ) {
         assert( activeHumanColors <= 1 );
 
-        const Kingdom & myKingdom = world.GetKingdom( humanColors );
+        const Kingdom & kingdom = world.GetKingdom( humanColors );
 
 #if defined( WITH_DEBUG )
-        const Player * humanPlayer = Players::Get( humanColors );
-        assert( humanPlayer != nullptr );
+        const Player * player = Players::Get( humanColors );
+        assert( player != nullptr );
 
-        const bool isAIAutoControlMode = humanPlayer->isAIAutoControlMode();
+        const bool isAIAutoControlMode = player->isAIAutoControlMode();
 #else
         const bool isAIAutoControlMode = false;
 #endif
 
-        if ( myKingdom.isControlHuman() || isAIAutoControlMode ) {
-            result = world.CheckKingdomWins( myKingdom );
+        if ( kingdom.isControlHuman() || isAIAutoControlMode ) {
+            result = world.CheckKingdomWins( kingdom );
+
             if ( result != GameOver::COND_NONE ) {
                 DialogWins( result );
-
-                const Settings & conf = Settings::Get();
 
                 if ( conf.isCampaignGameType() ) {
                     res = fheroes2::GameMode::COMPLETE_CAMPAIGN_SCENARIO;
@@ -417,17 +467,17 @@ fheroes2::GameMode GameOver::Result::LocalCheckGameOver()
             }
             else {
                 // If the player's kingdom has been vanquished, he loses regardless of other conditions
-                if ( !myKingdom.isPlay() ) {
+                if ( !kingdom.isPlay() ) {
                     result = GameOver::LOSS_ALL;
                 }
                 else {
-                    result = world.CheckKingdomLoss( myKingdom );
+                    result = world.CheckKingdomLoss( kingdom );
                 }
 
                 if ( result != GameOver::COND_NONE ) {
-                    // Don't show the loss dialog if player's kingdom has been vanquished due to the expired countdown of days since the loss of the last town
-                    // This case was already handled at the end of the Interface::Basic::HumanTurn()
-                    if ( !( result == GameOver::LOSS_ALL && myKingdom.GetCastles().empty() && myKingdom.GetLostTownDays() == 0 ) ) {
+                    // Don't show the loss dialog if player's kingdom has been vanquished due to the expired countdown of days since the loss of the last town.
+                    // This case was already handled at the end of the Interface::AdventureMap::HumanTurn().
+                    if ( !( result == GameOver::LOSS_ALL && kingdom.GetCastles().empty() && kingdom.GetLostTownDays() == 0 ) ) {
                         DialogLoss( result );
                     }
 
@@ -440,25 +490,73 @@ fheroes2::GameMode GameOver::Result::LocalCheckGameOver()
         }
     }
     else {
-        // There are no active human-controlled players left, game over
-        if ( activeHumanColors == 0 ) {
-            AudioManager::ResetAudio();
-            Video::ShowVideo( "LOSE.SMK", Video::VideoAction::LOOP_VIDEO );
+        result = [currentColor, activeHumanColors]() -> uint32_t {
+            // If all human-controlled players have been vanquished, then the game is over
+            if ( activeHumanColors == 0 ) {
+                return GameOver::LOSS_ALL;
+            }
 
-            res = fheroes2::GameMode::MAIN_MENU;
-        }
-        // Check the regular win/loss conditions
-        else {
-            auto checkWinLossConditions = []( const int color ) -> uint32_t {
-                const Kingdom & kingdom = world.GetKingdom( color );
+            // Do not perform other checks if there is no active kingdom at the moment
+            if ( !( currentColor & Color::ALL ) ) {
+                return GameOver::COND_NONE;
+            }
 
-                // Check the win/loss conditions for active players only
-                if ( !kingdom.isPlay() ) {
-                    return GameOver::COND_NONE;
-                }
+            const Kingdom & kingdom = world.GetKingdom( currentColor );
 
 #if defined( WITH_DEBUG )
-                const Player * player = Players::Get( color );
+            const Player * player = Players::Get( currentColor );
+            assert( player != nullptr );
+
+            const bool isAIAutoControlMode = player->isAIAutoControlMode();
+#else
+            const bool isAIAutoControlMode = false;
+#endif
+
+            // Check the win/loss conditions for human-controlled players only
+            if ( !kingdom.isControlHuman() && !isAIAutoControlMode ) {
+                return GameOver::COND_NONE;
+            }
+
+            // If the player's kingdom has been vanquished, this particular player loses regardless of other conditions
+            if ( !kingdom.isPlay() ) {
+                return GameOver::LOSS_ALL;
+            }
+
+            uint32_t condition = world.CheckKingdomWins( kingdom );
+
+            if ( condition != GameOver::COND_NONE ) {
+                return condition;
+            }
+
+            condition = world.CheckKingdomLoss( kingdom );
+
+            // LOSS_TOWN is currently not supported in multiplayer
+            if ( condition == GameOver::LOSS_HERO || condition == GameOver::LOSS_TIME || ( condition & GameOver::LOSS_ENEMY_WINS ) ) {
+                return condition;
+            }
+
+            return GameOver::COND_NONE;
+        }();
+
+        if ( result & GameOver::WINS ) {
+            DialogWins( result );
+
+            AudioManager::ResetAudio();
+            Video::ShowVideo( "WIN.SMK", Video::VideoAction::WAIT_FOR_USER_INPUT, { standardGameResults() }, true );
+
+            res = fheroes2::GameMode::HIGHSCORES_STANDARD;
+        }
+        else if ( result & GameOver::LOSS ) {
+            const bool showLossDialog = [currentColor, isCurrentPlayerWasActive, this]() {
+                // We shouldn't show the loss notification dialog if there is no active kingdom at the moment
+                if ( !( currentColor & Color::ALL ) ) {
+                    return false;
+                }
+
+                const Kingdom & kingdom = world.GetKingdom( currentColor );
+
+#if defined( WITH_DEBUG )
+                const Player * player = Players::Get( currentColor );
                 assert( player != nullptr );
 
                 const bool isAIAutoControlMode = player->isAIAutoControlMode();
@@ -466,45 +564,34 @@ fheroes2::GameMode GameOver::Result::LocalCheckGameOver()
                 const bool isAIAutoControlMode = false;
 #endif
 
-                // Check the win/loss conditions for human-controlled players only
+                // We shouldn't show the loss notification dialog to AI players
                 if ( !kingdom.isControlHuman() && !isAIAutoControlMode ) {
-                    return GameOver::COND_NONE;
+                    return false;
                 }
 
-                uint32_t condition = world.CheckKingdomWins( kingdom );
-
-                if ( condition != GameOver::COND_NONE ) {
-                    return condition;
+                // Don't show the loss dialog if player's kingdom has been vanquished due to the expired countdown of days since the loss of the last town.
+                // This case was already handled at the end of the Interface::AdventureMap::HumanTurn().
+                if ( result == GameOver::LOSS_ALL && kingdom.GetCastles().empty() && kingdom.GetLostTownDays() == 0 ) {
+                    return false;
                 }
 
-                condition = world.CheckKingdomLoss( kingdom );
-
-                // LOSS_ALL fulfillment is not a reason to end the game, only this player is vanquished
-                // LOSS_TOWN is currently not supported in multiplayer
-                if ( condition == GameOver::LOSS_HERO || condition == GameOver::LOSS_TIME || ( condition & GameOver::LOSS_ENEMY_WINS ) ) {
-                    return condition;
+                // LOSS_ALL fulfillment by itself is not a reason to end the multiplayer game, and in this case, this function can be called multiple times.
+                // Show the loss notification dialog just once.
+                if ( !isCurrentPlayerWasActive ) {
+                    return false;
                 }
 
-                return GameOver::COND_NONE;
-            };
+                return true;
+            }();
 
-            // Check the win/loss conditions for the current player
-            const int currentColor = Settings::Get().CurrentColor();
+            // LOSS_ALL fulfillment by itself is not a reason to end the multiplayer game, unless all human-controlled players are vanquished
+            const bool endGame = ( result != GameOver::LOSS_ALL || activeHumanColors == 0 );
 
-            // The result of the multiplayer game shouldn't be stored by this class
-            const uint32_t multiplayerResult = checkWinLossConditions( currentColor );
-
-            if ( multiplayerResult & GameOver::WINS ) {
-                DialogWins( multiplayerResult );
-
-                AudioManager::ResetAudio();
-                Video::ShowVideo( "WIN.SMK", Video::VideoAction::WAIT_FOR_USER_INPUT, { standardGameResults() }, true );
-
-                res = fheroes2::GameMode::MAIN_MENU;
+            if ( showLossDialog ) {
+                DialogLoss( result );
             }
-            else if ( multiplayerResult & GameOver::LOSS ) {
-                DialogLoss( multiplayerResult );
 
+            if ( endGame ) {
                 AudioManager::ResetAudio();
                 Video::ShowVideo( "LOSE.SMK", Video::VideoAction::LOOP_VIDEO );
 

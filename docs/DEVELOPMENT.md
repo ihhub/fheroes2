@@ -20,14 +20,13 @@ Please follow the instructions below to be able to build the project from source
 ### macOS and Linux
 
 * Depending on your OS, run the following scripts to install the dependencies required for the build:
-  * macOS: go to the directory `script/macos` and run the file `install_sdl_2.sh` (default setup) or `install_sdl_1.sh`.
-  * Linux: go to the directory `script/linux` and run the file `install_sdl_2_dev.sh` (default setup) or `install_sdl_1_dev.sh`.
+  * macOS: go to the directory `script/macos` and run the file `install_sdl2.sh`.
+  * Linux: go to the directory `script/linux` and run the file `install_sdl2_dev.sh`.
 * If you have the original game, then copy the subdirectories `ANIM`, `DATA`, `MAPS` and `MUSIC` (some of them may
   be missing depending on the version of the original game) to the project root directory.
 * Alternatively, go to the directory `script/demo` and run the file `download_demo_version.sh`.
   This script will download a demo version of the original game, which is the minimum required for development.
-* Run the `make` command in the root directory of the project to build it with **SDL2** or `make FHEROES2_WITH_SDL1="ON"`
-  to build it with **SDL1**.
+* Run the `make` command in the root directory of the project to build it.
 
 <a name="android"></a>
 ### Android

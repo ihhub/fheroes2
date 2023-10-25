@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -31,18 +31,6 @@ class StreamBase;
 
 namespace fheroes2
 {
-    enum ObjectColor
-    {
-        NONE = 0,
-        AQUA = 1,
-        BLUE = 2,
-        BROWN = 3,
-        GOLD = 4,
-        GREEN = 5,
-        ORANGE = 6,
-        PURPLE = 7,
-        RED = 8
-    };
     const char * getBarrierColorName( const int color );
     const char * getTentColorName( const int color );
 }
@@ -62,17 +50,19 @@ namespace Color
         ALL = BLUE | GREEN | RED | YELLOW | ORANGE | PURPLE
     };
 
-    std::string String( int );
-    int Count( int );
-    int GetIndex( int );
-    int GetFirst( int );
-    int FromInt( int );
+    std::string String( int color );
+    int Count( int colors );
+    int GetIndex( int color );
+    int GetFirst( int colors );
+    int FromInt( int col );
+
+    uint8_t IndexToColor( const int index );
 }
 
 class Colors : public std::vector<int>
 {
 public:
-    explicit Colors( int = Color::ALL );
+    explicit Colors( int colors = Color::ALL );
 };
 
 class Kingdom;

@@ -33,11 +33,6 @@
 
 class HeroBase;
 
-namespace Rand
-{
-    class DeterministicRandomGenerator;
-}
-
 namespace Battle
 {
     class Unit;
@@ -66,13 +61,12 @@ namespace Battle
         Unit * FindUID( uint32_t pid ) const;
 
         void SortFastest();
-        void SortArchers();
     };
 
     class Force : public Units, public BitModes
     {
     public:
-        Force( Army & parent, bool opposite, const Rand::DeterministicRandomGenerator & randomGenerator, TroopsUidGenerator & generator );
+        Force( Army & parent, bool opposite, TroopsUidGenerator & generator );
         Force( const Force & ) = delete;
 
         ~Force() override;

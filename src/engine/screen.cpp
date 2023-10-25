@@ -29,21 +29,15 @@
 #include <utility>
 
 #include <SDL_error.h>
-#include <SDL_stdinc.h>
-#include <SDL_version.h>
-#include <SDL_video.h>
-
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
 #include <SDL_events.h>
 #include <SDL_hints.h>
 #include <SDL_mouse.h>
 #include <SDL_pixels.h>
 #include <SDL_rect.h>
 #include <SDL_render.h>
+#include <SDL_stdinc.h>
 #include <SDL_surface.h>
-#else
-#include <SDL_active.h>
-#endif
+#include <SDL_video.h>
 
 #if defined( TARGET_PS_VITA )
 #include <vita2d.h>
@@ -142,8 +136,6 @@ namespace
             }
         }
 
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
-        // Scaling is available only on SDL 2.
         std::set<fheroes2::ResolutionInfo> scaledResolutions;
 
         {
@@ -179,7 +171,6 @@ namespace
         }
 
         resolutions.merge( scaledResolutions );
-#endif
 
         return resolutions;
     }
@@ -416,7 +407,6 @@ namespace
 
 namespace
 {
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
     class RenderCursor final : public fheroes2::Cursor
     {
     public:
@@ -556,7 +546,6 @@ namespace
         RenderCursor()
             : _cursor( nullptr )
         {
-            // SDL 2 handles mouse properly without any emulation.
             _emulation = false;
 
             const int returnCode = SDL_ShowCursor( _show ? SDL_ENABLE : SDL_DISABLE );
@@ -576,23 +565,6 @@ namespace
             }
         }
     };
-#else
-    // SDL 1 doesn't support hardware level cursor.
-    class RenderCursor final : public fheroes2::Cursor
-    {
-    public:
-        RenderCursor() = default;
-
-        RenderCursor( const RenderCursor & ) = delete;
-
-        RenderCursor & operator=( const RenderCursor & ) = delete;
-
-        static RenderCursor * create()
-        {
-            return new RenderCursor;
-        }
-    };
-#endif
 }
 
 namespace
@@ -809,7 +781,7 @@ namespace
             }
         }
     };
-#elif SDL_VERSION_ATLEAST( 2, 0, 0 )
+#else
     class RenderEngine final : public fheroes2::BaseRenderEngine, public BaseSDLRenderer
     {
     public:
@@ -1331,218 +1303,6 @@ namespace
             }
         }
     };
-#else
-    class RenderEngine final : public fheroes2::BaseRenderEngine, public BaseSDLRenderer
-    {
-    public:
-        RenderEngine( const RenderEngine & ) = delete;
-
-        ~RenderEngine() override
-        {
-            clear();
-        }
-
-        RenderEngine & operator=( const RenderEngine & ) = delete;
-
-        void toggleFullScreen() override
-        {
-            if ( _surface == nullptr ) { // nothing to render
-                BaseRenderEngine::toggleFullScreen();
-                return;
-            }
-
-            fheroes2::Display & display = fheroes2::Display::instance();
-            if ( _surface->format->BitsPerPixel == 8 && _surface->pixels == display.image() ) {
-                if ( display.width() == _surface->w && display.height() == _surface->h ) {
-                    linkRenderSurface( nullptr );
-                    memcpy( display.image(), _surface->pixels, static_cast<size_t>( display.width() * display.height() ) );
-                }
-            }
-
-            const uint32_t flags = _surface->flags;
-            clear();
-
-            _surface = SDL_SetVideoMode( 0, 0, _bitDepth, flags ^ SDL_FULLSCREEN );
-            if ( _surface == nullptr ) {
-                _surface = SDL_SetVideoMode( 0, 0, _bitDepth, flags );
-            }
-
-            _syncFullScreen();
-            _createPalette();
-        }
-
-        bool isFullScreen() const override
-        {
-            if ( _surface == nullptr )
-                return BaseRenderEngine::isFullScreen();
-
-            return ( ( _surface->flags & SDL_FULLSCREEN ) != 0 );
-        }
-
-        std::vector<fheroes2::ResolutionInfo> getAvailableResolutions() const override
-        {
-            static const std::vector<fheroes2::ResolutionInfo> filteredResolutions = []() {
-                std::set<fheroes2::ResolutionInfo> resolutionSet;
-                SDL_Rect ** modes = SDL_ListModes( nullptr, SDL_FULLSCREEN | SDL_HWSURFACE );
-                if ( modes != nullptr && modes != reinterpret_cast<SDL_Rect **>( -1 ) ) {
-                    for ( int i = 0; modes[i]; ++i ) {
-                        resolutionSet.emplace( modes[i]->w, modes[i]->h );
-                    }
-                }
-
-                resolutionSet = FilterResolutions( resolutionSet );
-
-                return std::vector<fheroes2::ResolutionInfo>{ resolutionSet.rbegin(), resolutionSet.rend() };
-            }();
-
-            return filteredResolutions;
-        }
-
-        void setTitle( const std::string & title ) override
-        {
-            SDL_WM_SetCaption( title.c_str(), nullptr );
-        }
-
-        void setIcon( const fheroes2::Image & icon ) override
-        {
-            SDL_Surface * surface = generateIconSurface( icon );
-            if ( surface == nullptr )
-                return;
-
-            SDL_WM_SetIcon( surface, nullptr );
-
-            SDL_FreeSurface( surface );
-        }
-
-        static RenderEngine * create()
-        {
-            return new RenderEngine;
-        }
-
-    protected:
-        RenderEngine()
-            : _surface( nullptr )
-            , _bitDepth( 8 )
-        {
-            // Do nothing.
-        }
-
-        void render( const fheroes2::Display & display, const fheroes2::Rect & roi ) override
-        {
-            if ( _surface == nullptr ) // nothing to render on
-                return;
-
-            copyImageToSurface( display, _surface, roi );
-
-            // Logically we should call SDL_UpdateRect but some systems have flickering effect with this function.
-            SDL_Flip( _surface );
-        }
-
-        void clear() override
-        {
-            linkRenderSurface( nullptr );
-
-            if ( _surface != nullptr ) {
-                SDL_FreeSurface( _surface );
-                _surface = nullptr;
-            }
-
-            _palette32Bit.clear();
-            _palette8Bit.clear();
-        }
-
-        bool allocate( fheroes2::ResolutionInfo & resolutionInfo, bool isFullScreen ) override
-        {
-            clear();
-
-            const std::vector<fheroes2::ResolutionInfo> resolutions = getAvailableResolutions();
-            assert( !resolutions.empty() );
-            if ( !resolutions.empty() ) {
-                resolutionInfo = GetNearestResolution( resolutionInfo, resolutions );
-            }
-
-            uint32_t flags = renderFlags();
-            if ( isFullScreen )
-                flags |= SDL_FULLSCREEN;
-
-            _surface = SDL_SetVideoMode( resolutionInfo.gameWidth, resolutionInfo.gameHeight, _bitDepth, flags );
-            if ( _surface == nullptr ) {
-                return false;
-            }
-
-            _syncFullScreen();
-
-            if ( _surface->w <= 0 || _surface->h <= 0 || _surface->w != resolutionInfo.gameWidth || _surface->h != resolutionInfo.gameHeight ) {
-                clear();
-                return false;
-            }
-
-            _createPalette();
-
-            return true;
-        }
-
-        void updatePalette( const std::vector<uint8_t> & colorIds ) override
-        {
-            if ( _surface == nullptr || colorIds.size() != 256 )
-                return;
-
-            generatePalette( colorIds, _surface );
-            if ( _surface->format->BitsPerPixel == 8 ) {
-                SDL_SetPalette( _surface, SDL_LOGPAL | SDL_PHYSPAL, _palette8Bit.data(), 0, 256 );
-            }
-        }
-
-        bool isMouseCursorActive() const override
-        {
-            return ( SDL_GetAppState() & SDL_APPMOUSEFOCUS ) == SDL_APPMOUSEFOCUS;
-        }
-
-    private:
-        SDL_Surface * _surface;
-        int _bitDepth;
-
-        uint32_t renderFlags() const
-        {
-#if defined( _WIN32 )
-            return SDL_HWSURFACE | SDL_HWPALETTE;
-#else
-            return SDL_SWSURFACE;
-#endif
-        }
-
-        void _createPalette()
-        {
-            if ( _surface == nullptr )
-                return;
-
-            updatePalette( StandardPaletteIndexes() );
-
-            if ( _surface->format->BitsPerPixel == 8 ) {
-                if ( !SDL_MUSTLOCK( _surface ) ) {
-                    // Copy the image from display buffer to SDL surface in case of fullscreen toggling
-                    fheroes2::Display & display = fheroes2::Display::instance();
-                    if ( _surface->w == display.width() && _surface->h == display.height() ) {
-                        memcpy( _surface->pixels, display.image(), static_cast<size_t>( display.width() * display.height() ) );
-                    }
-
-                    // Display class doesn't have support for image pitch so we mustn't link display to surface if width is not divisible by 4.
-                    if ( _surface->w % 4 == 0 ) {
-                        linkRenderSurface( static_cast<uint8_t *>( _surface->pixels ) );
-                    }
-                }
-            }
-        }
-
-        void _syncFullScreen()
-        {
-            if ( isFullScreen() != BaseRenderEngine::isFullScreen() ) {
-                BaseRenderEngine::toggleFullScreen();
-
-                assert( isFullScreen() == BaseRenderEngine::isFullScreen() );
-            }
-        }
-    };
 #endif
 }
 
@@ -1627,7 +1387,7 @@ namespace fheroes2
             // Previous position of cursor must be updated as well to avoid ghost effect.
             _renderFrame( getBoundaryRect( temp, _prevRoi ) );
 
-            if ( _postprocessing != nullptr ) {
+            if ( _postprocessing ) {
                 _postprocessing();
             }
 
@@ -1636,7 +1396,7 @@ namespace fheroes2
         else {
             _renderFrame( getBoundaryRect( temp, _prevRoi ) );
 
-            if ( _postprocessing != nullptr ) {
+            if ( _postprocessing ) {
                 _postprocessing();
             }
         }
@@ -1652,7 +1412,7 @@ namespace fheroes2
     void Display::_renderFrame( const Rect & roi ) const
     {
         bool updateImage = true;
-        if ( _preprocessing != nullptr ) {
+        if ( _preprocessing ) {
             std::vector<uint8_t> palette;
             if ( _preprocessing( palette ) ) {
                 _engine->updatePalette( palette );

@@ -8,22 +8,6 @@ jobs:
     strategy:
       matrix:
         config:
-        - name: SDL1 x86
-          platform: x86
-          build_config: Release-SDL1
-          deploy_config: SDL1
-          installer_package_name: fheroes2_windows_x86_SDL1_installer.exe
-          zip_package_name: fheroes2_windows_x86_SDL1.zip
-          release_name: Windows x86 build with SDL1 (latest commit)
-          release_tag: fheroes2-windows-x86-SDL1
-        - name: SDL1 x64
-          platform: x64
-          build_config: Release-SDL1
-          deploy_config: SDL1
-          installer_package_name: fheroes2_windows_x64_SDL1_installer.exe
-          zip_package_name: fheroes2_windows_x64_SDL1.zip
-          release_name: Windows x64 build with SDL1 (latest commit)
-          release_tag: fheroes2-windows-x64-SDL1
         - name: SDL2 x86
           platform: x86
           build_config: Release-SDL2
@@ -49,7 +33,7 @@ jobs:
       run:
         shell: bash
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Install dependencies
       run: |
         script/windows/install_packages.bat
@@ -111,13 +95,11 @@ jobs:
                                .\\docs\\README.txt \
                                files\\data\\*.h2d \
                                files\\lang\\*.mo \
+                               files\\soundfonts\\* \
                                .\\script\\demo\\*.bat \
                                .\\script\\demo\\*.ps1 \
                                .\\script\\homm2\\*.bat \
                                .\\script\\homm2\\*.ps1 
-        if [[ ${{ matrix.config.deploy_config }} == SDL2 ]]; then
-            7z.exe a -bb1 -tzip -- "$BUILD_DIR"\\${{ matrix.config.zip_package_name }} files\\soundfonts\\*
-        fi
       env:
         BUILD_DIR: build\${{ matrix.config.platform }}\${{ matrix.config.build_config }}
     - name: Create tools package

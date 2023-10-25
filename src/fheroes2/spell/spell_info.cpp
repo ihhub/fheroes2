@@ -185,7 +185,7 @@ namespace fheroes2
     const Castle * getNearestCastleTownGate( const Heroes & hero )
     {
         const Kingdom & kingdom = hero.GetKingdom();
-        const KingdomCastles & castles = kingdom.GetCastles();
+        const VecCastles & castles = kingdom.GetCastles();
 
         const Point & heroPosition = hero.GetCenter();
         int32_t minDistance = -1;
@@ -220,7 +220,7 @@ namespace fheroes2
         }
 
         if ( spell.isDamage() ) {
-            description += "\n \n";
+            description += "\n\n";
             description += _( "This spell does %{damage} points of damage." );
             StringReplace( description, "%{damage}", getSpellDamage( spell, hero->GetPower(), hero ) );
 
@@ -237,7 +237,7 @@ namespace fheroes2
 
             const uint32_t summonCount = getSummonMonsterCount( spell, hero->GetPower(), hero );
 
-            description += "\n \n";
+            description += "\n\n";
             description += _( "This spell summons\n%{count} %{monster}." );
             StringReplace( description, "%{count}", summonCount );
             StringReplace( description, "%{monster}", monster.GetPluralName( summonCount ) );
@@ -246,7 +246,7 @@ namespace fheroes2
         }
 
         if ( spell.isRestore() ) {
-            description += "\n \n";
+            description += "\n\n";
             description += _( "This spell restores %{hp} HP." );
             StringReplace( description, "%{hp}", getHPRestorePoints( spell, hero->GetPower(), hero ) );
 
@@ -254,7 +254,7 @@ namespace fheroes2
         }
 
         if ( spell.isResurrect() ) {
-            description += "\n \n";
+            description += "\n\n";
             description += _( "This spell restores %{hp} HP." );
             StringReplace( description, "%{hp}", getResurrectPoints( spell, hero->GetPower(), hero ) );
 
@@ -271,7 +271,7 @@ namespace fheroes2
 
             const uint32_t guardianCount = getGuardianMonsterCount( spell, hero->GetPower(), hero );
 
-            description += "\n \n";
+            description += "\n\n";
             description += _( "This spell summons %{count} %{monster} to guard the mine." );
             StringReplace( description, "%{count}", guardianCount );
             StringReplace( description, "%{monster}", monster.GetPluralName( guardianCount ) );
@@ -290,14 +290,14 @@ namespace fheroes2
                 return description;
             }
 
-            description += "\n \n";
+            description += "\n\n";
 
             description += _( "The nearest town is %{town}." );
             StringReplace( description, "%{town}", castle->GetName() );
 
             const Heroes * townHero = castle->GetHero();
             if ( townHero != nullptr ) {
-                description += "\n \n";
+                description += "\n\n";
                 std::string extraLine = _( "This town is occupied by your hero %{hero}." );
                 StringReplace( extraLine, "%{town}", castle->GetName() );
                 StringReplace( extraLine, "%{hero}", townHero->GetName() );
@@ -309,7 +309,7 @@ namespace fheroes2
         }
 
         if ( spell == Spell::HYPNOTIZE ) {
-            description += "\n \n";
+            description += "\n\n";
             description += _( "This spell controls up to\n%{hp} HP." );
             StringReplace( description, "%{hp}", getHypnotizeMonsterHPPoints( spell, hero->GetPower(), hero ) );
 

@@ -46,6 +46,19 @@
 
 namespace
 {
+    enum class SelectedWindow : int
+    {
+        Configuration,
+        Language,
+        Graphics,
+        AudioSettings,
+        HotKeys,
+        CursorType,
+        TextSupportMode,
+        UpdateSettings,
+        Exit
+    };
+
     const fheroes2::Size offsetBetweenOptions{ 92, 110 };
 
     const fheroes2::Point optionOffset{ 36, 47 };
@@ -107,19 +120,6 @@ namespace
         }
     }
 
-    enum class SelectedWindow : int
-    {
-        Configuration,
-        Graphics,
-        Language,
-        HotKeys,
-        CursorType,
-        TextSupportMode,
-        UpdateSettings,
-        AudioSettings,
-        Exit
-    };
-
     SelectedWindow showConfigurationWindow()
     {
         fheroes2::Display & display = fheroes2::Display::instance();
@@ -151,7 +151,7 @@ namespace
         const fheroes2::Rect windowCursorTypeRoi( cursorTypeRoi + windowRoi.getPosition() );
         const fheroes2::Rect windowTextSupportModeRoi( textSupportModeRoi + windowRoi.getPosition() );
 
-        auto drawOptions = [&windowLanguageRoi, &windowGraphicsRoi, &windowAudioRoi, &windowHotKeyRoi, &windowCursorTypeRoi, &windowTextSupportModeRoi]() {
+        const auto drawOptions = [&windowLanguageRoi, &windowGraphicsRoi, &windowAudioRoi, &windowHotKeyRoi, &windowCursorTypeRoi, &windowTextSupportModeRoi]() {
             drawLanguage( windowLanguageRoi );
             drawGraphics( windowGraphicsRoi );
             drawAudioOptions( windowAudioRoi );
@@ -213,7 +213,7 @@ namespace
                 fheroes2::showStandardTextMessage( _( "Hot Keys" ), _( "Check and configure all the hot keys present in the game." ), 0 );
             }
             else if ( le.MousePressRight( windowCursorTypeRoi ) ) {
-                fheroes2::showStandardTextMessage( _( "Mouse Cursor" ), _( "Toggle colored cursor on or off. This is only an esthetic choice." ), 0 );
+                fheroes2::showStandardTextMessage( _( "Mouse Cursor" ), _( "Toggle colored cursor on or off. This is only an aesthetic choice." ), 0 );
             }
             else if ( le.MousePressRight( windowTextSupportModeRoi ) ) {
                 fheroes2::showStandardTextMessage( _( "Text Support" ), _( "Toggle text support mode to output extra information about windows and events in the game." ),
@@ -246,15 +246,13 @@ namespace fheroes2
 
         Settings & conf = Settings::Get();
 
+        bool saveConfiguration = false;
+
         SelectedWindow windowType = SelectedWindow::Configuration;
         while ( windowType != SelectedWindow::Exit ) {
             switch ( windowType ) {
             case SelectedWindow::Configuration:
                 windowType = showConfigurationWindow();
-                break;
-            case SelectedWindow::Graphics:
-                fheroes2::openGraphicsSettingsDialog();
-                windowType = SelectedWindow::Configuration;
                 break;
             case SelectedWindow::Language: {
                 const std::vector<SupportedLanguage> supportedLanguages = getSupportedLanguages();
@@ -274,6 +272,14 @@ namespace fheroes2
                 windowType = SelectedWindow::UpdateSettings;
                 break;
             }
+            case SelectedWindow::Graphics:
+                fheroes2::openGraphicsSettingsDialog( []() { drawMainMenuScreen(); } );
+                windowType = SelectedWindow::Configuration;
+                break;
+            case SelectedWindow::AudioSettings:
+                Dialog::openAudioSettingsDialog( false );
+                windowType = SelectedWindow::Configuration;
+                break;
             case SelectedWindow::HotKeys:
                 fheroes2::openHotkeysDialog();
                 windowType = SelectedWindow::Configuration;
@@ -287,16 +293,16 @@ namespace fheroes2
                 windowType = SelectedWindow::UpdateSettings;
                 break;
             case SelectedWindow::UpdateSettings:
-                conf.Save( Settings::configFileName );
-                windowType = SelectedWindow::Configuration;
-                break;
-            case SelectedWindow::AudioSettings:
-                Dialog::openAudioSettingsDialog( false );
+                saveConfiguration = true;
                 windowType = SelectedWindow::Configuration;
                 break;
             default:
                 return;
             }
+        }
+
+        if ( saveConfiguration ) {
+            conf.Save( Settings::configFileName );
         }
     }
 }

@@ -24,6 +24,7 @@
 #include <algorithm>
 #include <cstdint>
 #include <iterator>
+#include <string>
 #include <vector>
 
 #include "agg_image.h"
@@ -42,7 +43,6 @@
 #include "settings.h"
 #include "spell.h"
 #include "spell_storage.h"
-#include "text.h"
 #include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
@@ -126,8 +126,8 @@ void RowSpells::Redraw( fheroes2::Image & output )
             const fheroes2::Sprite & icon = fheroes2::AGG::GetICN( ICN::SPELLS, spell.IndexSprite() );
             fheroes2::Blit( icon, output, dst.x + 3 + ( dst.width - icon.width() ) / 2, dst.y + 31 - icon.height() / 2 );
 
-            TextBox text( spell.GetName(), Font::SMALL, 78 );
-            text.Blit( dst.x + 18, dst.y + 55 );
+            const fheroes2::Text text( spell.GetName(), fheroes2::FontType::smallWhite() );
+            text.draw( dst.x + 18, dst.y + 57, 78, fheroes2::Display::instance() );
         }
     }
 }
@@ -182,14 +182,15 @@ void Castle::OpenMageGuild( const Heroes * hero ) const
                     dst_pt.y, fheroes2::Display::DEFAULT_WIDTH / 2 - exitWidth + 1, barHeight );
 
     // text bar
-    Text text;
+    const char * textAlternative;
     if ( hero == nullptr || !hero->HaveSpellBook() ) {
-        text.Set( _( "The above spells are available here." ), Font::BIG );
+        textAlternative = _( "The above spells are available here." );
     }
     else {
-        text.Set( _( "The above spells have been added to your book." ), Font::BIG );
+        textAlternative = _( "The spells the hero can learn have been added to their book." );
     }
-    text.Blit( cur_pt.x + 280 - text.w() / 2, cur_pt.y + 463 );
+    fheroes2::Text statusText( textAlternative, fheroes2::FontType::normalWhite() );
+    statusText.draw( cur_pt.x + ( fheroes2::Display::DEFAULT_WIDTH - exitWidth ) / 2 - statusText.width() / 2, cur_pt.y + 464, display );
 
     const int level = GetLevelMageGuild();
     // sprite

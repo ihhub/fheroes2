@@ -6,13 +6,13 @@ on:
 jobs:
   style:
     name: Code style check
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     timeout-minutes: 10
     defaults:
       run:
         shell: bash
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
       with:
         fetch-depth: 50
     - name: Setup clang-format

@@ -201,8 +201,10 @@ namespace Interface
         void SetRedraw() const;
 
         // Do not call this method directly if the rendering takes place on the screen, use
-        // Interface::Basic::Redraw() instead to avoid issues in the "no interface" mode
+        // Interface::BaseInterface::Redraw() instead to avoid issues in the "no interface" mode
         void Redraw( fheroes2::Image & dst, int flag, bool isPuzzleDraw = false ) const;
+
+        void renderTileAreaSelect( fheroes2::Image & dst, const int32_t startTile, const int32_t endTile ) const;
 
         void BlitOnTile( fheroes2::Image & dst, const fheroes2::Image & src, int32_t ox, int32_t oy, const fheroes2::Point & mp, bool flip, uint8_t alpha ) const;
 
@@ -232,7 +234,7 @@ namespace Interface
             _prevIndexPos = -1;
         }
 
-        void SetAreaPosition( int32_t, int32_t, int32_t, int32_t );
+        void SetAreaPosition( int32_t x, int32_t y, int32_t w, int32_t h );
 
         fheroes2::Point getCurrentCenterInPixels() const
         {

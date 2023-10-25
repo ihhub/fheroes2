@@ -571,9 +571,9 @@ bool MP2::isBattleLife( const MapObjectType objectType )
     return false;
 }
 
-bool MP2::isActionObject( const MapObjectType objectType, const bool locatesOnWater )
+bool MP2::isActionObject( const MapObjectType objectType, const bool accessedFromWater )
 {
-    if ( locatesOnWater ) {
+    if ( accessedFromWater ) {
         return isWaterActionObject( objectType );
     }
 
@@ -583,32 +583,36 @@ bool MP2::isActionObject( const MapObjectType objectType, const bool locatesOnWa
 bool MP2::isWaterActionObject( const MapObjectType objectType )
 {
     switch ( objectType ) {
+    // These are the types of objects that can be placed on water tiles by the original editor and,
+    // therefore, should be accessible to the hero who is on board the boat (yes, artifacts too).
     case OBJ_ARTIFACT:
-    case OBJ_BARRIER: // Can barriers be set on water?
     case OBJ_BOTTLE:
     case OBJ_BUOY:
-    case OBJ_COAST: // This is actually a land object.
+    case OBJ_COAST:
     case OBJ_DERELICT_SHIP:
     case OBJ_FLOTSAM:
+    // Heroes cannot be placed on water by the original editor, but they can board a boat
+    case OBJ_HEROES:
     case OBJ_MAGELLANS_MAPS:
     case OBJ_MERMAID:
-    case OBJ_MONSTER:
-    case OBJ_RESOURCE:
     case OBJ_SEA_CHEST:
     case OBJ_SHIPWRECK:
     case OBJ_SHIPWRECK_SURVIVOR:
     case OBJ_SIRENS:
     case OBJ_WHIRLPOOL:
         return true;
+
     case OBJ_BOAT:
     case OBJ_CASTLE:
         return false;
+
     default:
         break;
     }
 
-    // price loyalty: editor allow place other objects
-    return Settings::Get().isPriceOfLoyaltySupported() ? isActionObject( objectType ) : false;
+    // Here we would have to return false, but some map editors allow to place arbitrary objects
+    // on water tiles, so we have to work with this.
+    return isActionObject( objectType );
 }
 
 bool MP2::isActionObject( const MapObjectType objectType )
@@ -729,21 +733,13 @@ bool MP2::isArtifactObject( const MapObjectType objectType )
     return false;
 }
 
-bool MP2::isProtectedObject( const MapObjectType objectType )
+bool MP2::isBattleMandatoryifObjectIsProtected( const MapObjectType objectType )
 {
     // Sort things in alphabetical order for better readability.
     switch ( objectType ) {
-    case OBJ_ABANDONED_MINE:
+    // If the artifact is guarded by rogues, it is impossible to refuse a fight.
     case OBJ_ARTIFACT:
-    case OBJ_CITY_OF_DEAD:
-    case OBJ_DAEMON_CAVE:
-    case OBJ_DERELICT_SHIP:
-    case OBJ_DRAGON_CITY:
-    case OBJ_GRAVEYARD:
     case OBJ_MONSTER:
-    case OBJ_PYRAMID:
-    case OBJ_SHIPWRECK:
-    case OBJ_TROLL_BRIDGE:
         return true;
     default:
         break;
@@ -772,17 +768,18 @@ bool MP2::isSafeForFogDiscoveryObject( const MapObjectType objectType )
 
 bool MP2::isNeedStayFront( const MapObjectType objectType )
 {
+    // Sort things in alphabetical order for better readability.
     switch ( objectType ) {
-    case OBJ_MONSTER:
-    case OBJ_HEROES:
-    case OBJ_BOAT:
     case OBJ_BARRIER:
-    case OBJ_JAIL:
+    case OBJ_BOAT:
     case OBJ_BUOY:
-    case OBJ_SKELETON:
+    case OBJ_HEROES:
+    case OBJ_JAIL:
     case OBJ_MERMAID:
-    case OBJ_SIRENS:
+    case OBJ_MONSTER:
     case OBJ_SHIPWRECK:
+    case OBJ_SIRENS:
+    case OBJ_SKELETON:
         return true;
     default:
         break;
@@ -821,6 +818,7 @@ int MP2::getActionObjectDirection( const MapObjectType objectType )
     case OBJ_ARENA:
     case OBJ_ARTESIAN_SPRING:
     case OBJ_BARROW_MOUNDS:
+    case OBJ_CASTLE:
     case OBJ_CAVE:
     case OBJ_CITY_OF_DEAD:
     case OBJ_DAEMON_CAVE:
@@ -887,8 +885,6 @@ int MP2::getActionObjectDirection( const MapObjectType objectType )
     case OBJ_WITCHS_HUT:
     case OBJ_XANADU:
         return DIRECTION_CENTER_ROW | DIRECTION_BOTTOM_ROW;
-    case OBJ_CASTLE:
-        return Direction::CENTER | Direction::BOTTOM;
     default:
         // Did you add a new action object? Please add its passability!
         assert( 0 );

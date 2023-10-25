@@ -57,17 +57,18 @@
 #include "math_base.h"
 #include "monster.h"
 #include "mp2.h"
-#include "payment.h"
+#include "resource.h"
 #include "route.h"
 #include "screen.h"
 #include "settings.h"
 #include "spell.h"
 #include "spell_info.h"
-#include "text.h"
 #include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
+#include "ui_dialog.h"
 #include "ui_scrollbar.h"
+#include "ui_text.h"
 #include "ui_window.h"
 #include "view_world.h"
 #include "world.h"
@@ -117,7 +118,7 @@ namespace
             const Castle * castle = world.getCastleEntrance( Maps::GetPoint( index ) );
 
             if ( castle != nullptr ) {
-                Dialog::QuickInfo( *castle, {}, true, _windowArea );
+                Dialog::QuickInfoWithIndicationOnRadar( *castle, _windowArea );
             }
         }
 
@@ -134,17 +135,20 @@ namespace
         const Castle * castle = world.getCastleEntrance( Maps::GetPoint( index ) );
 
         if ( castle ) {
-            fheroes2::Blit( fheroes2::AGG::GetICN( _townFrameIcnId, 0 ), 481, 177, fheroes2::Display::instance(), dstx, dsty, 54, 30 );
+            fheroes2::Display & display = fheroes2::Display::instance();
+
+            fheroes2::Blit( fheroes2::AGG::GetICN( _townFrameIcnId, 0 ), 481, 177, display, dstx, dsty, 54, 30 );
             Interface::RedrawCastleIcon( *castle, dstx + 4, dsty + 4 );
-            Text text( castle->GetName(), ( current ? Font::YELLOW_BIG : Font::BIG ) );
+            fheroes2::Text text( castle->GetName(), ( current ? fheroes2::FontType::normalYellow() : fheroes2::FontType::normalWhite() ) );
+            text.fitToOneRow( 196 );
 
             if ( VisibleItemCount() > 0 ) {
                 const int32_t heightPerItem = ( rtAreaItems.height - VisibleItemCount() ) / VisibleItemCount();
-                text.Blit( dstx + 60, dsty + ( heightPerItem - text.h() ) / 2, 196 );
+                text.draw( dstx + 60, dsty + ( heightPerItem - text.height() ) / 2 + 2, display );
             }
             else {
                 assert( 0 ); // this should never happen!
-                text.Blit( dstx + 60, dsty, 196 );
+                text.draw( dstx + 60, dsty + 2, display );
             }
         }
     }
@@ -153,11 +157,11 @@ namespace
     {
         fheroes2::Display & display = fheroes2::Display::instance();
 
-        Text text( _( "Town Portal" ), Font::YELLOW_BIG );
-        text.Blit( dst.x + 145 - text.w() / 2, dst.y + 5 );
+        fheroes2::Text text( _( "Town Portal" ), fheroes2::FontType::normalYellow() );
+        text.draw( dst.x + 145 - text.width() / 2, dst.y + 7, display );
 
-        text.Set( _( "Select town to port to." ), Font::BIG );
-        text.Blit( dst.x + 145 - text.w() / 2, dst.y + 25 );
+        text.set( _( "Select town to port to." ), fheroes2::FontType::normalWhite() );
+        text.draw( dst.x + 145 - text.width() / 2, dst.y + 27, display );
 
         const fheroes2::Sprite & upperPart = fheroes2::AGG::GetICN( _listBoxIcnId, 0 );
         const fheroes2::Sprite & middlePart = fheroes2::AGG::GetICN( _listBoxIcnId, 1 );
@@ -220,14 +224,15 @@ namespace
         assert( Maps::isValidAbsIndex( dst ) );
 
         AudioManager::PlaySound( M82::KILLFADE );
-        hero.GetPath().Hide();
+        hero.ShowPath( false );
         hero.FadeOut();
 
+        hero.Scout( dst );
         hero.Move2Dest( dst );
+        hero.GetPath().Reset();
 
         // Clear previous hero position on radar.
         I.getRadar().SetRenderArea( fromRoi );
-
         I.redraw( Interface::REDRAW_RADAR );
 
         I.getGameArea().SetCenter( hero.GetCenter() );
@@ -238,9 +243,7 @@ namespace
 
         AudioManager::PlaySound( M82::KILLFADE );
         hero.FadeIn();
-        hero.GetPath().Reset();
-        // Path::Reset() puts the hero's path into the hidden mode, we have to make it visible again
-        hero.GetPath().Show();
+        hero.ShowPath( true );
 
         castle->MageGuildEducateHero( hero );
     }
@@ -286,7 +289,7 @@ namespace
         assert( !hero.GetKingdom().Modes( Kingdom::IDENTIFYHERO ) );
 
         hero.GetKingdom().SetModes( Kingdom::IDENTIFYHERO );
-        Message( _( "Identify Hero" ), _( "Enemy heroes are now fully identifiable." ), Font::BIG, Dialog::OK );
+        fheroes2::showStandardTextMessage( _( "Identify Hero" ), _( "Enemy heroes are now fully identifiable." ), Dialog::OK );
 
         return true;
     }
@@ -301,16 +304,18 @@ namespace
         const int32_t boatSource = fheroes2::getSummonableBoat( hero );
 
         // Player should have a summonable boat before calling this function.
-        assert( boatSource != -1 );
+        assert( Maps::isValidAbsIndex( boatSource ) );
 
         const int heroColor = hero.GetColor();
 
+        Interface::GameArea & gameArea = Interface::AdventureMap::Get().getGameArea();
+
         Maps::Tiles & tileSource = world.GetTiles( boatSource );
 
-        Interface::GameArea & gameArea = Interface::AdventureMap::Get().getGameArea();
         gameArea.runSingleObjectAnimation( std::make_shared<Interface::ObjectFadingOutInfo>( tileSource.GetObjectUID(), boatSource, MP2::OBJ_BOAT ) );
 
         Maps::Tiles & tileDest = world.GetTiles( boatDestination );
+
         tileDest.setBoat( Direction::RIGHT, heroColor );
         tileSource.resetBoatOwnerColor();
 
@@ -340,16 +345,16 @@ namespace
         }
 
         AudioManager::PlaySound( M82::KILLFADE );
-        hero.GetPath().Hide();
+        hero.ShowPath( false );
         hero.FadeOut();
 
-        hero.SpellCasted( Spell::DIMENSIONDOOR );
-
+        hero.Scout( dst );
         hero.Move2Dest( dst );
+        hero.SpellCasted( Spell::DIMENSIONDOOR );
+        hero.GetPath().Reset();
 
         // Clear previous hero position on radar.
         I.getRadar().SetRenderArea( fromRoi );
-
         I.redraw( Interface::REDRAW_RADAR );
 
         I.getGameArea().SetCenter( hero.GetCenter() );
@@ -360,9 +365,8 @@ namespace
 
         AudioManager::PlaySound( M82::KILLFADE );
         hero.FadeIn();
-        hero.GetPath().Reset();
-        // Path::Reset() puts the hero's path into the hidden mode, we have to make it visible again
-        hero.GetPath().Show();
+        hero.ShowPath( true );
+
         hero.ActionNewPosition( false );
 
         // SpellCasted() has already been called, we should not call it once again
@@ -542,7 +546,7 @@ namespace
                 break;
             }
 
-            Dialog::Message( hdr, msg, Font::BIG, Dialog::OK );
+            fheroes2::showStandardTextMessage( hdr, msg, Dialog::OK );
         }
 
         hero.SetModes( Heroes::VISIONS );

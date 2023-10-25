@@ -48,17 +48,19 @@
 #include "skill.h"
 #include "skill_bar.h"
 #include "statusbar.h"
-#include "text.h"
 #include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
+#include "ui_dialog.h"
+#include "ui_text.h"
 #include "ui_tool.h"
 #include "ui_window.h"
 
 int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disableDismiss, const bool disableSwitch, const bool renderBackgroundDialog )
 {
-    // setup cursor
-    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
+    // Set the cursor image.This dialog does not require a cursor restorer. It is called from other dialogs that have the same cursor
+    // or from the Game Area that will set the appropriate cursor after this dialog is closed.
+    Cursor::Get().SetThemes( Cursor::POINTER );
 
     fheroes2::Display & display = fheroes2::Display::instance();
 
@@ -102,8 +104,9 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
     StringReplace( message, "%{name}", name );
     StringReplace( message, "%{race}", Race::String( _race ) );
     StringReplace( message, "%{level}", GetLevel() );
-    const Text text( message, Font::BIG );
-    text.Blit( cur_pt.x + 320 - text.w() / 2, cur_pt.y + 1 );
+
+    const fheroes2::Text title( message, fheroes2::FontType::normalWhite() );
+    title.draw( cur_pt.x + 320 - title.width() / 2, cur_pt.y + 3, display );
 
     PrimarySkillsBar primskill_bar( this, false );
     primskill_bar.setTableSize( { 4, 1 } );
@@ -113,15 +116,15 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
 
     // morale
     dst_pt.x = cur_pt.x + 514;
-    dst_pt.y = cur_pt.y + 35;
+    dst_pt.y = cur_pt.y + 34;
 
     MoraleIndicator moraleIndicator( this );
     moraleIndicator.SetPos( dst_pt );
     moraleIndicator.Redraw();
 
     // luck
-    dst_pt.x = cur_pt.x + 552;
-    dst_pt.y = cur_pt.y + 35;
+    dst_pt.x = cur_pt.x + 550;
+    dst_pt.y = cur_pt.y + 34;
 
     LuckIndicator luckIndicator( this );
     luckIndicator.SetPos( dst_pt );
@@ -195,7 +198,8 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
     fheroes2::Blit( bar, display, dst_pt.x, dst_pt.y );
 
     StatusBar statusBar;
-    statusBar.SetCenter( dst_pt.x + bar.width() / 2, dst_pt.y + 13 );
+    // Status bar must be smaller due to extra art on both sides.
+    statusBar.setRoi( { dst_pt.x + 16, dst_pt.y + 3, bar.width() - 16 * 2, 0 } );
 
     // artifact bar
     dst_pt.x = cur_pt.x + 51;
@@ -223,15 +227,16 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
     buttonNextHero.subscribe( &timedButtonNextHero );
 
     // button dismiss
-    dst_pt.x = cur_pt.x + 4;
+    dst_pt.x = cur_pt.x + 9;
     dst_pt.y = cur_pt.y + 318;
-    fheroes2::ButtonSprite buttonDismiss( dst_pt.x, dst_pt.y, fheroes2::AGG::GetICN( ICN::HSBTNS, 0 ), fheroes2::AGG::GetICN( ICN::HSBTNS, 1 ),
-                                          fheroes2::AGG::GetICN( ICN::DISMISS_HERO_DISABLED_BUTTON, 0 ) );
+    fheroes2::ButtonSprite buttonDismiss( dst_pt.x, dst_pt.y, fheroes2::AGG::GetICN( ICN::BUTTON_VERTICAL_DISMISS, 0 ),
+                                          fheroes2::AGG::GetICN( ICN::BUTTON_VERTICAL_DISMISS, 1 ), fheroes2::AGG::GetICN( ICN::DISMISS_HERO_DISABLED_BUTTON, 0 ) );
+    fheroes2::addGradientShadow( fheroes2::AGG::GetICN( ICN::BUTTON_VERTICAL_DISMISS, 0 ), display, { cur_pt.x + 9, cur_pt.y + 318 }, { -3, 5 } );
 
     // button exit
-    dst_pt.x = cur_pt.x + 603;
+    dst_pt.x = cur_pt.x + 602;
     dst_pt.y = cur_pt.y + 318;
-    fheroes2::Button buttonExit( dst_pt.x, dst_pt.y, ICN::HSBTNS, 2, 3 );
+    fheroes2::Button buttonExit( dst_pt.x, dst_pt.y, ICN::BUTTON_VERTICAL_EXIT, 0, 1 );
 
     LocalEvent & le = LocalEvent::Get();
 
@@ -344,7 +349,7 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
         // dismiss
         if ( buttonDismiss.isEnabled() && buttonDismiss.isVisible()
              && ( le.MouseClickLeft( buttonDismiss.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::ARMY_DISMISS ) )
-             && Dialog::YES == Dialog::Message( GetName(), _( "Are you sure you want to dismiss this Hero?" ), Font::BIG, Dialog::YES | Dialog::NO ) ) {
+             && Dialog::YES == fheroes2::showStandardTextMessage( GetName(), _( "Are you sure you want to dismiss this Hero?" ), Dialog::YES | Dialog::NO ) ) {
             // Fade-out hero dialog.
             fheroes2::fadeOutDisplay( fadeRoi, !isDefaultScreenSize );
 
@@ -380,13 +385,13 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
 
         // right info
         if ( le.MousePressRight( portPos ) ) {
-            Dialog::QuickInfo( *this );
+            Dialog::QuickInfo( *this, true );
         }
         else if ( le.MousePressRight( rectSpreadArmyFormat ) ) {
-            Dialog::Message( _( "Spread Formation" ), descriptionSpreadArmyFormat, Font::BIG );
+            fheroes2::showStandardTextMessage( _( "Spread Formation" ), descriptionSpreadArmyFormat, Dialog::ZERO );
         }
         else if ( le.MousePressRight( rectGroupedArmyFormat ) ) {
-            Dialog::Message( _( "Grouped Formation" ), descriptionGroupedArmyFormat, Font::BIG );
+            fheroes2::showStandardTextMessage( _( "Grouped Formation" ), descriptionGroupedArmyFormat, Dialog::ZERO );
         }
 
         // status message

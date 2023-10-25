@@ -177,7 +177,7 @@ public:
     bool BattleShowMoveShadow() const;
     bool BattleAutoResolve() const;
     bool BattleAutoSpellcast() const;
-    bool BattleShowArmyOrder() const;
+    bool BattleShowTurnOrder() const;
     bool isPriceOfLoyaltySupported() const;
     bool isMonochromeCursorEnabled() const;
     bool isTextSupportModeEnabled() const;
@@ -187,6 +187,7 @@ public:
     bool isBattleShowDamageInfoEnabled() const;
     bool isHideInterfaceEnabled() const;
     bool isEvilInterfaceEnabled() const;
+    bool isEditorEnabled() const;
 
     bool LoadedGameVersion() const
     {
@@ -236,7 +237,7 @@ public:
     void SetBattleSpeed( int );
     void setBattleAutoResolve( bool enable );
     void setBattleAutoSpellcast( bool enable );
-    void setBattleShowArmyOrder( const bool enable );
+    void setBattleShowTurnOrder( const bool enable );
     void setFullScreen( const bool enable );
     void setMonochromeCursor( const bool enable );
     void setTextSupportMode( const bool enable );

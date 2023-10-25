@@ -25,6 +25,7 @@
 
 #include <cstdint>
 #include <string>
+#include <utility>
 
 #include "agg_image.h"
 #include "army_bar.h"
@@ -47,10 +48,10 @@
 #include "settings.h"
 #include "skill.h"
 #include "skill_bar.h"
-#include "text.h"
 #include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
+#include "ui_dialog.h"
 #include "ui_text.h"
 #include "ui_window.h"
 #include "world.h"
@@ -202,9 +203,9 @@ bool Battle::Only::ChangeSettings()
             exit = true;
 
         if ( allow1 && le.MouseClickLeft( rtPortrait1 ) ) {
-            int hid = Dialog::SelectHeroes( hero1 ? hero1->GetID() : Heroes::UNKNOWN );
+            int hid = Dialog::selectHeroes( hero1 ? hero1->GetID() : Heroes::UNKNOWN );
             if ( hero2 && hid == hero2->GetID() ) {
-                Dialog::Message( _( "Error" ), _( "Please select another hero." ), Font::BIG, Dialog::OK );
+                fheroes2::showStandardTextMessage( _( "Error" ), _( "Please select another hero." ), Dialog::OK );
             }
             else if ( Heroes::UNKNOWN != hid ) {
                 hero1 = world.GetHeroes( hid );
@@ -216,16 +217,16 @@ bool Battle::Only::ChangeSettings()
             redraw = true;
         }
         else if ( allow2 && le.MouseClickLeft( rtPortrait2 ) ) {
-            int hid = Dialog::SelectHeroes( hero2 ? hero2->GetID() : Heroes::UNKNOWN );
+            int hid = Dialog::selectHeroes( hero2 ? hero2->GetID() : Heroes::UNKNOWN );
             if ( hero1 && hid == hero1->GetID() ) {
-                Dialog::Message( _( "Error" ), _( "Please select another hero." ), Font::BIG, Dialog::OK );
+                fheroes2::showStandardTextMessage( _( "Error" ), _( "Please select another hero." ), Dialog::OK );
             }
             else if ( Heroes::UNKNOWN != hid ) {
                 hero2 = world.GetHeroes( hid );
                 if ( hero2 )
                     hero2->GetSecondarySkills().FillMax( Skill::Secondary() );
                 UpdateHero2( cur_pt );
-                if ( player2.isControlLocal() && nullptr == cinfo2 ) {
+                if ( nullptr == cinfo2 ) {
                     cinfo2.reset( new ControlInfo( { cur_pt.x + 500, cur_pt.y + 425 }, player2.GetControl() ) );
                 }
             }
@@ -350,10 +351,14 @@ bool Battle::Only::ChangeSettings()
                 MoraleIndicator::QueueEventProcessing( *moraleIndicator1 );
             else if ( le.MouseCursor( luckIndicator1->GetArea() ) )
                 LuckIndicator::QueueEventProcessing( *luckIndicator1 );
-            else if ( le.MouseCursor( primskill_bar1->GetArea() ) && primskill_bar1->QueueEventProcessing() )
+            else if ( le.MouseCursor( primskill_bar1->GetArea() ) ) {
+                primskill_bar1->QueueEventProcessing();
                 redraw = true;
-            else if ( le.MouseCursor( secskill_bar1->GetArea() ) && secskill_bar1->QueueEventProcessing() )
+            }
+            else if ( le.MouseCursor( secskill_bar1->GetArea() ) ) {
+                secskill_bar1->QueueEventProcessing();
                 redraw = true;
+            }
         }
 
         if ( hero2 && allow2 ) {
@@ -361,10 +366,14 @@ bool Battle::Only::ChangeSettings()
                 MoraleIndicator::QueueEventProcessing( *moraleIndicator2 );
             else if ( le.MouseCursor( luckIndicator2->GetArea() ) )
                 LuckIndicator::QueueEventProcessing( *luckIndicator2 );
-            else if ( le.MouseCursor( primskill_bar2->GetArea() ) && primskill_bar2->QueueEventProcessing() )
+            else if ( le.MouseCursor( primskill_bar2->GetArea() ) ) {
+                primskill_bar2->QueueEventProcessing();
                 redraw = true;
-            else if ( le.MouseCursor( secskill_bar2->GetArea() ) && secskill_bar2->QueueEventProcessing() )
+            }
+            else if ( le.MouseCursor( secskill_bar2->GetArea() ) ) {
+                secskill_bar2->QueueEventProcessing();
                 redraw = true;
+            }
         }
 
         if ( cinfo2 && allow1 ) {
@@ -565,7 +574,7 @@ void Battle::Only::RedrawBaseInfo( const fheroes2::Point & top ) const
         StringReplace( message, _( "%{race2} %{name2}" ), _( "Monsters" ) );
     }
 
-    fheroes2::Text text( message, fheroes2::FontType::normalWhite() );
+    fheroes2::Text text( std::move( message ), fheroes2::FontType::normalWhite() );
     text.draw( top.x + 320 - text.width() / 2, top.y + 29, display );
 
     // portrait

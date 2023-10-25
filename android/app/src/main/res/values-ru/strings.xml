@@ -22,7 +22,17 @@
     <string name="activity_save_file_manager_save_file_list_empty_lbl_text">Нет доступных файлов сохранений</string>
     <string name="activity_save_file_manager_select_all_btn_content_description">Выбрать все файлы сохранений</string>
     <string name="activity_save_file_manager_unselect_all_btn_content_description">Отменить выбор файлов сохранений</string>
+    <string name="activity_save_file_manager_import_btn_content_description">Импортировать файлы сохранений</string>
+    <string name="activity_save_file_manager_export_btn_content_description">Экспортировать выбранные файлы сохранений</string>
     <string name="activity_save_file_manager_delete_btn_content_description">Удалить выбранные файлы сохранений</string>
+    <string name="activity_save_file_manager_last_task_status_lbl_text_no_save_files_found">Операция успешно завершена, но никаких файлов сохранений найдено не было.</string>
+    <string name="activity_save_file_manager_last_task_status_lbl_text_failed">Во время операции произошла ошибка: %s</string>
+    <string name="activity_save_file_manager_no_files_selected_for_export_title">Файлы для экспорта не выбраны</string>
+    <string name="activity_save_file_manager_no_files_selected_for_export_message">Пожалуйста, выберите файлы сохранений для экспорта.</string>
+    <string name="activity_save_file_manager_no_files_selected_for_export_positive_btn_text">OK</string>
+    <string name="activity_save_file_manager_no_files_selected_for_deletion_title">Файлы для удаления не выбраны</string>
+    <string name="activity_save_file_manager_no_files_selected_for_deletion_message">Пожалуйста, выберите файлы сохранений для удаления.</string>
+    <string name="activity_save_file_manager_no_files_selected_for_deletion_positive_btn_text">OK</string>
     <plurals name="activity_save_file_manager_delete_confirmation_title" tools:ignore="MissingQuantity">
         <item quantity="other">Удалить файлы сохранений</item>
     </plurals>

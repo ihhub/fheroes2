@@ -352,31 +352,35 @@ namespace
             isInitialized = true;
             const uint32_t size = 64 * 64 * 64;
 
-            uint32_t r = 0;
-            uint32_t g = 0;
-            uint32_t b = 0;
+            int32_t r = 0;
+            int32_t g = 0;
+            int32_t b = 0;
 
             const uint8_t * gamePalette = fheroes2::getGamePalette();
 
             for ( uint32_t id = 0; id < size; ++id ) {
-                r = ( id % 64 );
-                g = ( id >> 6 ) % 64;
-                b = ( id >> 12 );
-                int32_t minDistance = 3 * 255 * 255;
+                r = static_cast<int32_t>( id % 64 );
+                g = static_cast<int32_t>( id >> 6 ) % 64;
+                b = static_cast<int32_t>( id >> 12 );
+                int32_t minDistance = INT32_MAX;
                 uint32_t bestPos = 0;
 
+                // Use the "No cycle" palette.
                 const uint8_t * correctorX = transformTable + 256 * 15;
 
                 for ( uint32_t i = 0; i < 256; ++i, ++correctorX ) {
                     const uint8_t * palette = gamePalette + static_cast<ptrdiff_t>( *correctorX ) * 3;
 
-                    const int32_t offsetRed = static_cast<int32_t>( *palette ) - static_cast<int32_t>( r );
+                    const int32_t sumRed = static_cast<int32_t>( *palette ) + r;
+                    const int32_t offsetRed = static_cast<int32_t>( *palette ) - r;
                     ++palette;
-                    const int32_t offsetGreen = static_cast<int32_t>( *palette ) - static_cast<int32_t>( g );
+                    const int32_t offsetGreen = static_cast<int32_t>( *palette ) - g;
                     ++palette;
-                    const int32_t offsetBlue = static_cast<int32_t>( *palette ) - static_cast<int32_t>( b );
+                    const int32_t offsetBlue = static_cast<int32_t>( *palette ) - b;
                     ++palette;
-                    const int32_t distance = offsetRed * offsetRed + offsetGreen * offsetGreen + offsetBlue * offsetBlue;
+                    // Based on "Redmean" color distance calculation (https://www.compuphase.com/cmetric.htm).
+                    const int32_t distance = ( 2 * 2 * 256 + sumRed ) * offsetRed * offsetRed + 4 * 2 * 256 * offsetGreen * offsetGreen
+                                             + ( 2 * ( 2 * 256 + 255 ) - sumRed ) * offsetBlue * offsetBlue;
                     if ( minDistance > distance ) {
                         minDistance = distance;
                         bestPos = *correctorX;
@@ -816,7 +820,7 @@ namespace fheroes2
 
         uint8_t * imageOut = out.image() + outStartOffset;
 
-        auto isTransparent = [inWidth, inHeight, transformIn]( const int32_t offsetX, const int32_t offsetY ) {
+        const auto isTransparent = [inWidth, inHeight, transformIn]( const int32_t offsetX, const int32_t offsetY ) {
             return ( ( offsetX < 0 ) || ( offsetY < 0 ) || ( offsetX >= inWidth ) || ( offsetY >= inHeight ) )
                    || ( transformIn && ( *( transformIn + offsetX + static_cast<ptrdiff_t>( offsetY ) * inWidth ) == 1 ) );
         };
@@ -3046,33 +3050,41 @@ namespace fheroes2
         }
     }
 
-    void updateShadow( Image & image, const Point & shadowOffset, const uint8_t transformId )
+    void updateShadow( Image & image, const Point & shadowOffset, const uint8_t transformId, const bool connectCorners )
     {
-        if ( image.empty() || image.singleLayer() || ( std::abs( shadowOffset.x ) >= image.width() ) || ( std::abs( shadowOffset.y ) >= image.height() )
+        const int32_t imageWidth = image.width();
+        const int32_t imageHeight = image.height();
+
+        if ( image.empty() || image.singleLayer() || ( std::abs( shadowOffset.x ) >= imageWidth ) || ( std::abs( shadowOffset.y ) >= imageHeight )
              || shadowOffset == Point() ) {
             return;
         }
 
-        const int32_t width = image.width() - std::abs( shadowOffset.x );
-        const int32_t height = image.height() - std::abs( shadowOffset.y );
-
-        const int32_t imageWidth = image.width();
+        const int32_t width = imageWidth - std::abs( shadowOffset.x );
+        const int32_t height = imageHeight - std::abs( shadowOffset.y );
 
         const uint8_t * transformInY = image.transform();
         uint8_t * transformOutY = image.transform();
 
+        int32_t cornerOffsetX;
+        int32_t cornerOffsetY;
+
         if ( shadowOffset.x > 0 ) {
             transformOutY += shadowOffset.x;
+            cornerOffsetX = 1;
         }
         else {
             transformInY -= shadowOffset.x;
+            cornerOffsetX = -1;
         }
 
         if ( shadowOffset.y > 0 ) {
             transformOutY += imageWidth * shadowOffset.y;
+            cornerOffsetY = imageWidth;
         }
         else {
             transformInY -= imageWidth * shadowOffset.y;
+            cornerOffsetY = -imageWidth;
         }
 
         const uint8_t * transformOutYEnd = transformOutY + imageWidth * height;
@@ -3083,7 +3095,11 @@ namespace fheroes2
             const uint8_t * transformOutXEnd = transformOutX + width;
 
             for ( ; transformOutX != transformOutXEnd; ++transformInX, ++transformOutX ) {
-                if ( *transformInX == 0 && *transformOutX == 1 ) {
+                if ( *transformOutX == 1
+                     && ( *transformInX == 0 || ( connectCorners && *( transformInX + cornerOffsetX ) == 0 && *( transformInX + cornerOffsetY ) == 0 ) ) ) {
+                    // If 'connectCorners' is 'true' and when there are two pixels adjacent diagonally,
+                    // we also create a "shadow" pixel in the corner that is closer to the image.
+                    // Doing so there will be no "empty" pixels between the image and its shadow (for 1 pixel offset case).
                     *transformOutX = transformId;
                 }
             }

@@ -24,23 +24,79 @@
 #include <cstdint>
 
 #include "game_mode.h"
+#include "ground.h"
+#include "maps_tiles_helper.h"
 #include "math_base.h"
+#include "monster.h"
 #include "ui_button.h"
 
 namespace Interface
 {
-    class Editor;
+    class EditorInterface;
 
     class EditorPanel
     {
     public:
-        explicit EditorPanel( Editor & interface_ );
+        explicit EditorPanel( EditorInterface & interface_ );
 
         ~EditorPanel() = default;
 
         const fheroes2::Rect & getRect() const
         {
             return _rectEditorPanel;
+        }
+
+        int32_t getBrushSize() const;
+
+        int selectedGroundType() const
+        {
+            return _getGroundId( _selectedTerrain );
+        }
+
+        bool isTerrainEdit() const
+        {
+            return _selectedInstrument == Instrument::TERRAIN;
+        }
+
+        bool isRoadDraw() const
+        {
+            return _selectedInstrument == Instrument::ROAD;
+        }
+
+        bool isStreamDraw() const
+        {
+            return _selectedInstrument == Instrument::STREAM;
+        }
+
+        bool isEraseMode() const
+        {
+            return _selectedInstrument == Instrument::ERASE;
+        }
+
+        uint32_t getEraseTypes() const
+        {
+            return _eraseTypes;
+        }
+
+        bool isMonsterSettingMode() const
+        {
+            return ( _selectedInstrument == OBJECT ) && ( _selectedObject == MONSTERS );
+        }
+
+        bool isHeroSettingMode() const
+        {
+            return ( _selectedInstrument == OBJECT ) && ( _selectedObject == HEROES );
+        }
+
+        bool showAreaSelectRect() const
+        {
+            return _selectedInstrument == Instrument::TERRAIN || _selectedInstrument == Instrument::STREAM || _selectedInstrument == Instrument::ROAD
+                   || _selectedInstrument == Instrument::ERASE || isMonsterSettingMode() || isHeroSettingMode();
+        }
+
+        bool useMouseDragMovement() const
+        {
+            return !( ( _selectedInstrument == Instrument::TERRAIN || _selectedInstrument == Instrument::ERASE ) && _selectedBrushSize == BrushSize::AREA );
         }
 
         // Set Editor panel positions on screen.
@@ -55,11 +111,26 @@ namespace Interface
         // The name of this method starts from _ on purpose to do not mix with other public methods.
         void _redraw() const;
 
-    private:
-        Editor & _interface;
+        int32_t getMonsterId() const
+        {
+            return _monsterId;
+        }
 
-        static const char * _getTerrainTypeName( const uint8_t brushId );
+        int32_t getHeroType() const
+        {
+            return _heroType;
+        }
+
+    private:
+        static int _getGroundId( const uint8_t brushId );
+
+        static const char * _getTerrainTypeName( const uint8_t brushId )
+        {
+            return Maps::Ground::String( _getGroundId( brushId ) );
+        }
+
         static const char * _getObjectTypeName( const uint8_t brushId );
+        static const char * _getEraseObjectTypeName( const uint32_t eraseObjectType );
 
         enum Instrument : uint8_t
         {
@@ -114,6 +185,14 @@ namespace Interface
             BRUSH_SIZE_COUNT = 4U
         };
 
+        // This array represents the order of object-to-erase images on the erase tool panel (from left to right, from top to bottom).
+        const std::array<uint32_t, 8> _eraseButtonObjectTypes{ Maps::ObjectErasureType::TERRAIN_OBJECTS, Maps::ObjectErasureType::CASTLES,
+                                                               Maps::ObjectErasureType::MONSTERS,        Maps::ObjectErasureType::HEROES,
+                                                               Maps::ObjectErasureType::ARTIFACTS,       Maps::ObjectErasureType::ROADS,
+                                                               Maps::ObjectErasureType::STREAMS,         Maps::ObjectErasureType::TREASURES };
+
+        EditorInterface & _interface;
+
         fheroes2::Button _buttonMagnify;
         fheroes2::Button _buttonUndo;
         fheroes2::Button _buttonNew;
@@ -139,10 +218,18 @@ namespace Interface
         std::array<fheroes2::Rect, Brush::TERRAIN_COUNT> _terrainButtonsRect;
         std::array<fheroes2::Rect, Brush::OBJECT_COUNT> _objectButtonsRect;
         std::array<fheroes2::Rect, BrushSize::BRUSH_SIZE_COUNT> _brushSizeButtonsRect;
+        std::array<fheroes2::Rect, 8> _eraseButtonsRect;
 
         uint8_t _selectedInstrument{ Instrument::TERRAIN };
-        uint8_t _selectedTerrain{ Brush::WATER };
+
+        // A brand new map is always filled with Water so there is no need to make Water terrain brush as a default terrain selection.
+        uint8_t _selectedTerrain{ Brush::GRASS };
         uint8_t _selectedObject{ Brush::WATER };
         uint8_t _selectedBrushSize{ BrushSize::MEDIUM };
+        uint32_t _eraseTypes{ Maps::ObjectErasureType::ALL_OBJECTS };
+
+        int32_t _monsterId{ Monster::UNKNOWN };
+
+        int32_t _heroType{ -1 };
     };
 }

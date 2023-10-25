@@ -26,6 +26,7 @@
 #include <cstddef>
 #include <cstdint>
 #include <string>
+#include <utility>
 #include <vector>
 
 #include "agg_image.h"
@@ -46,7 +47,6 @@
 #include "math_base.h"
 #include "monster.h"
 #include "monster_anim.h"
-#include "payment.h"
 #include "resource.h"
 #include "screen.h"
 #include "settings.h"
@@ -71,7 +71,7 @@ namespace
         }
 
         uint32_t count = castle.getMonstersInDwelling( dw );
-        payment_t payment;
+        Funds payment;
 
         const Kingdom & kingdom = castle.GetKingdom();
 
@@ -166,7 +166,7 @@ bool Castle::_recruitCastleMax( const Troops & currentCastleArmy )
         for ( const uint32_t dwellingType : castleDwellings ) {
             if ( getMonstersInDwelling( dwellingType ) > 0 ) {
                 const Monster monsters( race, dwellingType );
-                const payment_t payment = monsters.GetCost();
+                const Funds payment = monsters.GetCost();
 
                 if ( GetKingdom().AllowPayment( payment ) ) {
                     canAffordOneCreature = true;
@@ -189,7 +189,7 @@ bool Castle::_recruitCastleMax( const Troops & currentCastleArmy )
         }
     }
     else if ( fheroes2::showResourceMessage( fheroes2::Text( _( "Recruit Creatures" ), fheroes2::FontType::normalYellow() ),
-                                             fheroes2::Text( monstersRecruitedText, normalWhite ), Dialog::YES | Dialog::NO, totalMonstersCost )
+                                             fheroes2::Text( std::move( monstersRecruitedText ), normalWhite ), Dialog::YES | Dialog::NO, totalMonstersCost )
               == Dialog::YES ) {
         for ( const Troop & troop : totalRecruitmentResult ) {
             RecruitMonster( troop, false );
@@ -360,7 +360,7 @@ void Castle::_wellRedrawAvailableMonsters( const uint32_t dwellingType, const bo
     std::string textString = _( "Available" );
     textString += ": ";
 
-    fheroes2::Text text( textString, fheroes2::FontType::smallWhite() );
+    fheroes2::Text text( std::move( textString ), fheroes2::FontType::smallWhite() );
     text.draw( offset.x + 24, offset.y + 2, background );
 
     text.set( std::to_string( population ), fheroes2::FontType::normalYellow() );

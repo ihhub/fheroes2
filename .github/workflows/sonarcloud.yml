@@ -11,12 +11,12 @@ jobs:
     name: SonarCloud Analyzer
     if: ${{ github.repository == 'ihhub/fheroes2' && ( github.event_name == 'push' || ( github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository ) ) }}
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 60
     defaults:
       run:
         shell: bash
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
       with:
         fetch-depth: 0
     - uses: actions/setup-java@v3
@@ -28,7 +28,7 @@ jobs:
         bash script/android/install_packages.sh
         sudo apt-get -y update
         sudo apt-get -y install libsdl2-dev libsdl2-mixer-dev libsdl2-image-dev
-    - uses: SonarSource/sonarcloud-github-c-cpp@v1
+    - uses: SonarSource/sonarcloud-github-c-cpp@v2
     - name: Prepare SonarCloud cfamily cache
       uses: actions/cache@v3
       with:
@@ -45,7 +45,7 @@ jobs:
         ./gradlew compileDebugJavaWithJavac
     - name: Prepare compile_commands.json
       run: |
-        cmake -B build -DCMAKE_BUILD_TYPE=Debug -DENABLE_STRICT_COMPILATION=ON -DENABLE_IMAGE=ON -DENABLE_TOOLS=ON -DUSE_SDL_VERSION=SDL2 -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+        cmake -B build -DCMAKE_BUILD_TYPE=Debug -DENABLE_STRICT_COMPILATION=ON -DENABLE_IMAGE=ON -DENABLE_TOOLS=ON -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
     - name: Analyze
       run: |
         sonar-scanner -Dsonar.cfamily.compile-commands=build/compile_commands.json \

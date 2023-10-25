@@ -48,7 +48,8 @@
 #include "world.h"
 
 Interface::AdventureMap::AdventureMap()
-    : iconsPanel( *this )
+    : BaseInterface( false )
+    , iconsPanel( *this )
     , buttonsArea( *this )
     , controlPanel( *this )
     , _lockRedraw( false )
@@ -73,7 +74,7 @@ void Interface::AdventureMap::reset()
         fheroes2::Point iconPos = conf.PosIcons();
         fheroes2::Point statPos = conf.PosStatus();
 
-        auto isPosValid = []( const fheroes2::Point & pos ) { return pos.x >= 0 && pos.y >= 0; };
+        const auto isPosValid = []( const fheroes2::Point & pos ) { return pos.x >= 0 && pos.y >= 0; };
 
         if ( isPosValid( radrPos ) && isPosValid( bttnPos ) && isPosValid( iconPos ) && isPosValid( statPos ) ) {
             _radar.SetPos( radrPos.x, radrPos.y );
@@ -115,7 +116,7 @@ Interface::AdventureMap & Interface::AdventureMap::Get()
     return basic;
 }
 
-void Interface::AdventureMap::redraw( const uint32_t force /* = 0 */ )
+void Interface::AdventureMap::redraw( const uint32_t force )
 {
     if ( _lockRedraw ) {
         setRedraw( force );
@@ -180,9 +181,10 @@ int32_t Interface::AdventureMap::GetDimensionDoorDestination( const int32_t from
     const fheroes2::Rect & radarRect = _radar.GetRect();
     const fheroes2::Rect & radarArea = _radar.GetArea();
 
-    fheroes2::Button buttonExit( radarArea.x + 32, radarArea.y + radarArea.height - 37, ( isEvilInterface ? ICN::LGNDXTRE : ICN::LGNDXTRA ), 4, 5 );
+    fheroes2::Button buttonExit( radarArea.x + 32, radarArea.y + radarArea.height - 37,
+                                 ( isEvilInterface ? ICN::BUTTON_EXIT_PUZZLE_DDOOR_EVIL : ICN::BUTTON_EXIT_PUZZLE_DDOOR_GOOD ), 0, 1 );
 
-    auto drawControlPanel = [&display, isEvilInterface, isHideInterface, &radarRect, &radarArea, &buttonExit]() {
+    const auto drawControlPanel = [&display, isEvilInterface, isHideInterface, &radarRect, &radarArea, &buttonExit]() {
         if ( isHideInterface ) {
             Dialog::FrameBorder::RenderRegular( radarRect );
         }

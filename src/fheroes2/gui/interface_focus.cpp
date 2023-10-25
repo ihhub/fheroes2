@@ -63,9 +63,9 @@ void Interface::AdventureMap::SetFocus( Heroes * hero, const bool retainScrollBa
 
     Focus & focus = player->GetFocus();
 
-    if ( focus.GetHeroes() && focus.GetHeroes() != hero ) {
-        focus.GetHeroes()->SetMove( false );
-        focus.GetHeroes()->ShowPath( false );
+    Heroes * focusedHero = focus.GetHeroes();
+    if ( focusedHero && focusedHero != hero ) {
+        focusedHero->ShowPath( false );
     }
 
     // Heroes::calculatePath() uses PlayerWorldPathfinder and should not be used for an AI-controlled hero
@@ -113,9 +113,9 @@ void Interface::AdventureMap::SetFocus( Castle * castle )
 
     Focus & focus = player->GetFocus();
 
-    if ( focus.GetHeroes() ) {
-        focus.GetHeroes()->SetMove( false );
-        focus.GetHeroes()->ShowPath( false );
+    Heroes * focusedHero = focus.GetHeroes();
+    if ( focusedHero ) {
+        focusedHero->ShowPath( false );
     }
 
     focus.Set( castle );
@@ -174,9 +174,9 @@ void Interface::AdventureMap::ResetFocus( const int priority, const bool retainS
 
     switch ( priority ) {
     case GameFocus::FIRSTHERO: {
-        const KingdomHeroes & heroes = myKingdom.GetHeroes();
+        const VecHeroes & heroes = myKingdom.GetHeroes();
         // skip sleeping
-        KingdomHeroes::const_iterator it = std::find_if( heroes.begin(), heroes.end(), []( const Heroes * hero ) { return !hero->Modes( Heroes::SLEEPER ); } );
+        VecHeroes::const_iterator it = std::find_if( heroes.begin(), heroes.end(), []( const Heroes * hero ) { return !hero->Modes( Heroes::SLEEPER ); } );
 
         if ( it != heroes.end() )
             SetFocus( *it, false );

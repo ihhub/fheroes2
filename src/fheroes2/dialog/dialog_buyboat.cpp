@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -33,15 +33,15 @@
 #include "resource.h"
 #include "screen.h"
 #include "settings.h"
-#include "text.h"
 #include "translations.h"
 #include "ui_button.h"
+#include "ui_text.h"
 
 int Dialog::BuyBoat( bool enable )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
 
-    const int system = Settings::Get().isEvilInterfaceEnabled() ? ICN::SYSTEME : ICN::SYSTEM;
+    const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
 
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
@@ -49,43 +49,46 @@ int Dialog::BuyBoat( bool enable )
     Resource::BoxSprite rbs( PaymentConditions::BuyBoat(), BOXAREA_WIDTH );
 
     const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::BOATWIND, 0 );
-    Text text( _( "Build a new ship:" ), Font::BIG );
+    fheroes2::Text text{ _( "Build a new ship:" ), fheroes2::FontType::normalWhite() };
     const int spacer = 10;
 
-    Dialog::FrameBox box( text.h() + spacer + sprite.height() + spacer + text.h() + spacer + rbs.GetArea().height - 20, true );
+    Dialog::FrameBox box( text.height() + spacer + sprite.height() + spacer + text.height() + spacer + rbs.GetArea().height - 20, true );
 
     const fheroes2::Rect & box_rt = box.GetArea();
-    fheroes2::Point dst_pt( box_rt.x + ( box_rt.width - text.w() ) / 2, box_rt.y );
-    text.Blit( dst_pt.x, dst_pt.y );
+    fheroes2::Point dst_pt( box_rt.x + ( box_rt.width - text.width() ) / 2, box_rt.y );
+    text.draw( dst_pt.x, dst_pt.y + 2, display );
 
     dst_pt.x = box_rt.x + ( box_rt.width - sprite.width() ) / 2;
-    dst_pt.y = box_rt.y + text.h() + spacer;
+    dst_pt.y = box_rt.y + text.height() + spacer;
     fheroes2::Blit( sprite, display, dst_pt.x, dst_pt.y );
 
-    text.Set( _( "Resource cost:" ), Font::BIG );
-    dst_pt.x = box_rt.x + ( box_rt.width - text.w() ) / 2;
+    text.set( _( "Resource cost:" ), fheroes2::FontType::normalWhite() );
+    dst_pt.x = box_rt.x + ( box_rt.width - text.width() ) / 2;
     dst_pt.y = dst_pt.y + sprite.height() + spacer;
-    text.Blit( dst_pt.x, dst_pt.y );
+    text.draw( dst_pt.x, dst_pt.y + 2, display );
 
     rbs.SetPos( box_rt.x, dst_pt.y + spacer );
     rbs.Redraw();
 
     // buttons
+    const int buttonOkayICN = isEvilInterface ? ICN::UNIFORM_EVIL_OKAY_BUTTON : ICN::UNIFORM_GOOD_OKAY_BUTTON;
     dst_pt.x = box_rt.x;
-    dst_pt.y = box_rt.y + box_rt.height - fheroes2::AGG::GetICN( system, 1 ).height();
-    fheroes2::Button button1( dst_pt.x, dst_pt.y, system, 1, 2 );
+    dst_pt.y = box_rt.y + box_rt.height - fheroes2::AGG::GetICN( buttonOkayICN, 0 ).height();
+    fheroes2::Button buttonOkay( dst_pt.x, dst_pt.y, buttonOkayICN, 0, 1 );
 
-    dst_pt.x = box_rt.x + box_rt.width - fheroes2::AGG::GetICN( system, 3 ).width();
-    dst_pt.y = box_rt.y + box_rt.height - fheroes2::AGG::GetICN( system, 3 ).height();
-    fheroes2::Button button2( dst_pt.x, dst_pt.y, system, 3, 4 );
+    const int buttonCancelICN = isEvilInterface ? ICN::UNIFORM_EVIL_CANCEL_BUTTON : ICN::UNIFORM_GOOD_CANCEL_BUTTON;
+
+    dst_pt.x = box_rt.x + box_rt.width - fheroes2::AGG::GetICN( buttonCancelICN, 0 ).width();
+    dst_pt.y = box_rt.y + box_rt.height - fheroes2::AGG::GetICN( buttonCancelICN, 0 ).height();
+    fheroes2::Button buttonCancel( dst_pt.x, dst_pt.y, buttonCancelICN, 0, 1 );
 
     if ( !enable ) {
-        button1.press();
-        button1.disable();
+        buttonOkay.press();
+        buttonOkay.disable();
     }
 
-    button1.draw();
-    button2.draw();
+    buttonOkay.draw();
+    buttonCancel.draw();
 
     display.render();
 
@@ -93,14 +96,14 @@ int Dialog::BuyBoat( bool enable )
 
     // message loop
     while ( le.HandleEvents() ) {
-        if ( button1.isEnabled() )
-            le.MousePressLeft( button1.area() ) ? button1.drawOnPress() : button1.drawOnRelease();
-        le.MousePressLeft( button2.area() ) ? button2.drawOnPress() : button2.drawOnRelease();
+        if ( buttonOkay.isEnabled() )
+            le.MousePressLeft( buttonOkay.area() ) ? buttonOkay.drawOnPress() : buttonOkay.drawOnRelease();
+        le.MousePressLeft( buttonCancel.area() ) ? buttonCancel.drawOnPress() : buttonCancel.drawOnRelease();
 
-        if ( button1.isEnabled() && ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) || le.MouseClickLeft( button1.area() ) ) )
+        if ( buttonOkay.isEnabled() && ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) || le.MouseClickLeft( buttonOkay.area() ) ) )
             return Dialog::OK;
 
-        if ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) || le.MouseClickLeft( button2.area() ) )
+        if ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) || le.MouseClickLeft( buttonCancel.area() ) )
             return Dialog::CANCEL;
     }
 

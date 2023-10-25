@@ -24,6 +24,7 @@
 #include "interface_icons.h"
 
 #include "agg_image.h"
+#include "castle.h"
 #include "dialog.h"
 #include "game.h"
 #include "game_interface.h"
@@ -39,8 +40,6 @@
 #include "ui_castle.h"
 #include "ui_scrollbar.h"
 #include "world.h"
-
-class Castle;
 
 namespace
 {
@@ -155,7 +154,7 @@ void Interface::CastleIcons::ActionListSingleClick( CASTLE & item )
 void Interface::CastleIcons::ActionListPressRight( CASTLE & item )
 {
     if ( item ) {
-        Dialog::QuickInfo( *item, { _topLeftCorner.x - 1, _topLeftCorner.y }, true );
+        Dialog::QuickInfoAtPosition( *item, { _topLeftCorner.x - 1, _topLeftCorner.y } );
     }
 }
 
@@ -181,7 +180,7 @@ void Interface::CastleIcons::SetPos( int32_t px, int32_t py )
     SetTopLeft( _topLeftCorner );
     setScrollBarArea( { px + ICONS_CURSOR_WIDTH + 3, py + 19, 10, ICONS_CURSOR_HEIGHT * iconsCount - 38 } );
 
-    KingdomCastles & castles = world.GetKingdom( Settings::Get().CurrentColor() ).GetCastles();
+    VecCastles & castles = world.GetKingdom( Settings::Get().CurrentColor() ).GetCastles();
 
     const fheroes2::Sprite & originalSlider = fheroes2::AGG::GetICN( icnscroll, 4 );
     const fheroes2::Image scrollbarSlider
@@ -248,7 +247,7 @@ void Interface::HeroesIcons::ActionListSingleClick( HEROES & item )
 void Interface::HeroesIcons::ActionListPressRight( HEROES & item )
 {
     if ( item ) {
-        Dialog::QuickInfo( *item, { _topLeftCorner.x - 1, _topLeftCorner.y }, true );
+        Dialog::QuickInfoAtPosition( *item, { _topLeftCorner.x - 1, _topLeftCorner.y } );
     }
 }
 
@@ -274,7 +273,7 @@ void Interface::HeroesIcons::SetPos( int32_t px, int32_t py )
     SetTopLeft( _topLeftCorner );
     setScrollBarArea( { px + ICONS_CURSOR_WIDTH + 3, py + 19, 10, ICONS_CURSOR_HEIGHT * iconsCount - 38 } );
 
-    KingdomHeroes & heroes = world.GetKingdom( Settings::Get().CurrentColor() ).GetHeroes();
+    VecHeroes & heroes = world.GetKingdom( Settings::Get().CurrentColor() ).GetHeroes();
 
     const fheroes2::Sprite & originalSlider = fheroes2::AGG::GetICN( icnscroll, 4 );
     const fheroes2::Image scrollbarSlider

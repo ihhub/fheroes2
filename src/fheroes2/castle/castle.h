@@ -112,11 +112,11 @@ enum buildcond_t
 class Castle : public MapPosition, public BitModes, public ColorBase, public Control
 {
 public:
-    enum flags_t
+    enum : uint32_t
     {
-        ALLOWCASTLE = 0x0002,
-        CUSTOMARMY = 0x0004,
-        ALLOWBUILD = 0x0008
+        ALLOWCASTLE = 0x00000002,
+        CUSTOMARMY = 0x00000004,
+        ALLOWBUILD = 0x00000008
     };
 
     enum class CastleDialogReturnValue : int
@@ -153,8 +153,12 @@ public:
         return ( building & BUILD_CASTLE ) != 0;
     }
 
-    bool HaveNearlySea() const;
-    bool PresentBoat() const;
+    bool HasSeaAccess() const;
+    bool HasBoatNearby() const;
+
+    // Returns a tile ID where it is possible to place a boat or -1 if it is not.
+    int32_t getTileIndexToPlaceBoat() const;
+
     bool AllowBuyHero( std::string * = nullptr ) const;
     bool isPosition( const fheroes2::Point & pt ) const override;
     bool isNecromancyShrineBuild() const;
@@ -198,11 +202,15 @@ public:
     Army & GetActualArmy();
     uint32_t getMonstersInDwelling( uint32_t ) const;
 
-    // Returns the garrison strength estimation calculated as if the attacking hero really attacked this
-    // castle - including an estimate of the strength of the combined army consisting of the garrison and
-    // the hero's troops (if present), castle-specific bonuses from moat, towers and so on, relative to
-    // the attacking hero's abilities. See the implementation for details.
-    double GetGarrisonStrength( const Heroes & attackingHero ) const;
+    // Returns the garrison strength estimation calculated as if this castle had really been attacked, including
+    // an estimate of the strength of the combined army consisting of the garrison and the guest hero's troops
+    // (if present), castle-specific bonuses from moat, towers and so on, relative to the attacking hero's abilities
+    // (if the 'attackingHero' is not 'nullptr'). See the implementation for details.
+    double GetGarrisonStrength( const Heroes * attackingHero ) const;
+    double GetGarrisonStrength( const Heroes & attackingHero ) const
+    {
+        return GetGarrisonStrength( &attackingHero );
+    }
 
     // Returns the correct dwelling type available in the castle. BUILD_NOTHING is returned if this is not a dwelling.
     uint32_t GetActualDwelling( const uint32_t buildId ) const;
@@ -250,12 +258,13 @@ public:
     }
 
     bool BuyBuilding( uint32_t );
-    bool AllowBuyBoat() const;
-    bool BuyBoat() const;
     uint32_t GetBuildingRequirement( uint32_t ) const;
 
     int CheckBuyBuilding( const uint32_t build ) const;
     static int GetAllBuildingStatus( const Castle & );
+
+    bool AllowBuyBoat( const bool checkPayment ) const;
+    bool BuyBoat() const;
 
     void Scout() const;
 
@@ -447,7 +456,7 @@ public:
 
     void NewMonth()
     {
-        std::for_each( _castles.begin(), _castles.end(), []( Castle * castle ) { castle->ActionNewMonth(); } );
+        std::for_each( _castles.begin(), _castles.end(), []( const Castle * castle ) { castle->ActionNewMonth(); } );
     }
 
     // begin/end methods so we can iterate through the elements

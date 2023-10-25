@@ -23,9 +23,6 @@
 
 #include "maps_fileinfo.h"
 
-#if defined( _WIN32 )
-#include <locale>
-#endif
 #include <algorithm>
 #include <cassert>
 #include <cstring>
@@ -48,7 +45,6 @@
 #include "mp2.h"
 #include "mp2_helper.h"
 #include "race.h"
-#include "save_format_version.h"
 #include "serialize.h"
 #include "settings.h"
 #include "system.h"
@@ -83,56 +79,6 @@ namespace
 
         // we came to the end of either (or both) strings, left is "smaller" if it was shorter:
         return li == lhs.end() && ri != rhs.end();
-    }
-
-    uint8_t ByteToColor( const int byte )
-    {
-        switch ( byte ) {
-        case 0:
-            return Color::BLUE;
-        case 1:
-            return Color::GREEN;
-        case 2:
-            return Color::RED;
-        case 3:
-            return Color::YELLOW;
-        case 4:
-            return Color::ORANGE;
-        case 5:
-            return Color::PURPLE;
-
-        default:
-            break;
-        }
-
-        return Color::NONE;
-    }
-
-    uint8_t ByteToRace( const int byte )
-    {
-        switch ( byte ) {
-        case 0x00:
-            return Race::KNGT;
-        case 0x01:
-            return Race::BARB;
-        case 0x02:
-            return Race::SORC;
-        case 0x03:
-            return Race::WRLK;
-        case 0x04:
-            return Race::WZRD;
-        case 0x05:
-            return Race::NECR;
-        case 0x06:
-            return Race::MULT;
-        case 0x07:
-            return Race::RAND;
-
-        default:
-            break;
-        }
-
-        return Race::NONE;
     }
 }
 
@@ -176,7 +122,7 @@ void Maps::FileInfo::Reset()
 
     for ( int i = 0; i < KINGDOMMAX; ++i ) {
         races[i] = Race::NONE;
-        unions[i] = ByteToColor( i );
+        unions[i] = Color::IndexToColor( i );
     }
 
     kingdomColors = 0;
@@ -205,11 +151,11 @@ void Maps::FileInfo::Reset()
     worldMonth = 0;
 }
 
-bool Maps::FileInfo::ReadSAV( const std::string & filePath )
+bool Maps::FileInfo::ReadSAV( std::string filePath )
 {
     Reset();
 
-    return Game::LoadSAV2FileInfo( filePath, *this );
+    return Game::LoadSAV2FileInfo( std::move( filePath ), *this );
 }
 
 bool Maps::FileInfo::ReadMP2( const std::string & filePath )
@@ -310,7 +256,7 @@ bool Maps::FileInfo::ReadMP2( const std::string & filePath )
 
     // Initial races
     for ( const int color : colors ) {
-        const uint8_t race = ByteToRace( fs.get() );
+        const uint8_t race = Race::IndexToRace( fs.get() );
         const int idx = Color::GetIndex( color );
         assert( idx < KINGDOMMAX );
 
@@ -405,7 +351,7 @@ void Maps::FileInfo::FillUnions( const int side1Colors, const int side2Colors )
     using UnionsItemType = decltype( unions )::value_type;
 
     for ( int i = 0; i < KINGDOMMAX; ++i ) {
-        const uint8_t color = ByteToColor( i );
+        const uint8_t color = Color::IndexToColor( i );
 
         if ( side1Colors & color ) {
             assert( side1Colors >= std::numeric_limits<UnionsItemType>::min() && side1Colors <= std::numeric_limits<UnionsItemType>::max() );
@@ -574,12 +520,7 @@ StreamBase & Maps::operator>>( StreamBase & msg, FileInfo & fi )
 
     fi.version = static_cast<GameVersion>( version );
 
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE2_1002_RELEASE, "Remove the check below." );
-    if ( Game::GetVersionOfCurrentSaveFile() >= FORMAT_VERSION_PRE2_1002_RELEASE ) {
-        msg >> fi.worldDay >> fi.worldWeek >> fi.worldMonth;
-    }
-
-    return msg;
+    return msg >> fi.worldDay >> fi.worldWeek >> fi.worldMonth;
 }
 
 MapsFileInfoList Maps::PrepareMapsFileInfoList( const bool multi )
@@ -623,15 +564,14 @@ MapsFileInfoList Maps::PrepareMapsFileInfoList( const bool multi )
             }
         }
 
-        uniqueMaps[System::GetBasename( mapFile )] = fi;
+        uniqueMaps.try_emplace( System::GetBasename( mapFile ), std::move( fi ) );
     }
 
     MapsFileInfoList result;
-
     result.reserve( uniqueMaps.size() );
 
-    for ( const auto & item : uniqueMaps ) {
-        result.push_back( item.second );
+    for ( auto & [name, info] : uniqueMaps ) {
+        result.emplace_back( std::move( info ) );
     }
 
     std::sort( result.begin(), result.end(), Maps::FileInfo::NameSorting );
@@ -658,15 +598,14 @@ MapsFileInfoList Maps::prepareResurrectionMapsFileInfoList()
         fi.description = "Resurrection map test description.\nThe Map Editor is currently in development.";
         fi.difficulty = 3;
 
-        uniqueMaps[System::GetBasename( mapFile )] = fi;
+        uniqueMaps.try_emplace( System::GetBasename( mapFile ), std::move( fi ) );
     }
 
     MapsFileInfoList result;
-
     result.reserve( uniqueMaps.size() );
 
-    for ( const auto & item : uniqueMaps ) {
-        result.push_back( item.second );
+    for ( auto & [name, info] : uniqueMaps ) {
+        result.emplace_back( std::move( info ) );
     }
 
     std::sort( result.begin(), result.end(), Maps::FileInfo::NameSorting );

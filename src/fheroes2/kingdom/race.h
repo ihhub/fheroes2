@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -23,6 +23,8 @@
 #ifndef H2RACE_H
 #define H2RACE_H
 
+#include <cstdint>
+
 namespace Race
 {
     enum
@@ -39,9 +41,11 @@ namespace Race
         ALL = KNGT | BARB | SORC | WRLK | WZRD | NECR
     };
 
-    const char * String( int );
-    const char * DoubleLinedString( int );
+    const char * String( int race );
+    const char * DoubleLinedString( int race );
     int Rand();
+
+    uint8_t IndexToRace( const int index );
 }
 
 #endif

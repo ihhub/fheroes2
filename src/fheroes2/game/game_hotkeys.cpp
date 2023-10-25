@@ -57,7 +57,8 @@ namespace
         WORLD_MAP,
         BATTLE,
         TOWN,
-        ARMY
+        ARMY,
+        EDITOR,
     };
 
     const char * getHotKeyCategoryName( const HotKeyCategory category )
@@ -79,6 +80,8 @@ namespace
             return "Town";
         case HotKeyCategory::ARMY:
             return "Army";
+        case HotKeyCategory::EDITOR:
+            return "Editor";
         default:
             // Did you add a new category? Add the logic above!
             assert( 0 );
@@ -178,18 +181,20 @@ namespace
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::MAIN_MENU_NEW_EXPANSION_CAMPAIGN )]
             = { HotKeyCategory::MAIN_MENU, gettext_noop( "hotkey|choose the expansion campaign" ), fheroes2::Key::KEY_E };
 
-#if defined( WITH_DEBUG )
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::EDITOR_MAIN_MENU )]
-            = { HotKeyCategory::WORLD_MAP, gettext_noop( "hotkey|map editor main menu" ), fheroes2::Key::KEY_E };
+            = { HotKeyCategory::EDITOR, gettext_noop( "hotkey|map editor main menu" ), fheroes2::Key::KEY_E };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::EDITOR_NEW_MAP_MENU )]
-            = { HotKeyCategory::WORLD_MAP, gettext_noop( "hotkey|new map menu" ), fheroes2::Key::KEY_N };
+            = { HotKeyCategory::EDITOR, gettext_noop( "hotkey|new map menu" ), fheroes2::Key::KEY_N };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::EDITOR_LOAD_MAP_MENU )]
-            = { HotKeyCategory::WORLD_MAP, gettext_noop( "hotkey|load map menu" ), fheroes2::Key::KEY_L };
+            = { HotKeyCategory::EDITOR, gettext_noop( "hotkey|load map menu" ), fheroes2::Key::KEY_L };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::EDITOR_FROM_SCRATCH_MAP_MENU )]
-            = { HotKeyCategory::WORLD_MAP, gettext_noop( "hotkey|new map from scratch" ), fheroes2::Key::KEY_S };
+            = { HotKeyCategory::EDITOR, gettext_noop( "hotkey|new map from scratch" ), fheroes2::Key::KEY_S };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::EDITOR_RANDOM_MAP_MENU )]
-            = { HotKeyCategory::WORLD_MAP, gettext_noop( "hotkey|new random map" ), fheroes2::Key::KEY_R };
-#endif
+            = { HotKeyCategory::EDITOR, gettext_noop( "hotkey|new random map" ), fheroes2::Key::KEY_R };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::EDITOR_UNDO_LAST_ACTION )]
+            = { HotKeyCategory::EDITOR, gettext_noop( "hotkey|undo last action" ), fheroes2::Key::KEY_U };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::EDITOR_REDO_LAST_ACTION )]
+            = { HotKeyCategory::EDITOR, gettext_noop( "hotkey|redo last action" ), fheroes2::Key::KEY_R };
 
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::CAMPAIGN_ROLAND )]
             = { HotKeyCategory::CAMPAIGN, gettext_noop( "hotkey|roland campaign" ), fheroes2::Key::KEY_1 };
@@ -233,8 +238,8 @@ namespace
             = { HotKeyCategory::WORLD_MAP, gettext_noop( "hotkey|world map down right" ), fheroes2::Key::KEY_KP_3 };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::WORLD_SAVE_GAME )] = { HotKeyCategory::WORLD_MAP, gettext_noop( "hotkey|save game" ), fheroes2::Key::KEY_S };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::WORLD_NEXT_HERO )] = { HotKeyCategory::WORLD_MAP, gettext_noop( "hotkey|next hero" ), fheroes2::Key::KEY_H };
-        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::WORLD_CONTINUE_HERO_MOVEMENT )]
-            = { HotKeyCategory::WORLD_MAP, gettext_noop( "hotkey|continue hero movement" ), fheroes2::Key::KEY_M };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::WORLD_START_HERO_MOVEMENT )]
+            = { HotKeyCategory::WORLD_MAP, gettext_noop( "hotkey|start hero movement" ), fheroes2::Key::KEY_M };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::WORLD_CAST_SPELL )]
             = { HotKeyCategory::WORLD_MAP, gettext_noop( "hotkey|cast adventure spell" ), fheroes2::Key::KEY_C };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::WORLD_SLEEP_HERO )]

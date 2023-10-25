@@ -20,8 +20,7 @@ is required for proper suspend/resume support (only use one at a time).
 ### Prerequisites
 - VitaSDK
 - libSDL2
-- libSDL2-mixer (optional)
-- libSDL2-image (optional)
+- libSDL2-mixer
 
 To build the game just run
 ```

@@ -63,7 +63,6 @@ namespace fheroes2
 {
     class Image;
     class Sprite;
-    struct ObjectRenderingInfo;
 }
 
 struct HeroSeedsForLevelUp
@@ -77,6 +76,8 @@ struct HeroSeedsForLevelUp
 class Heroes final : public HeroBase, public ColorBase
 {
 public:
+    friend class Battle::Only;
+
     enum
     {
         // knight
@@ -145,7 +146,7 @@ public:
         ELIZA,
         ARCHIBALD,
         HALTON,
-        BAX,
+        BRAX,
         // From The Price of Loyalty expansion.
         SOLMYR,
         DAINWIN,
@@ -163,7 +164,7 @@ public:
         UNKNOWN
     };
 
-    enum flags_t : uint32_t
+    enum : uint32_t
     {
         SHIPMASTER = 0x00000001,
 
@@ -185,14 +186,11 @@ public:
 
         // UNUSED = 0x00000800,
 
-        NOTDEFAULTS = 0x00001000,
+        // Hero has non-standard properties that were set using the map editor
+        CUSTOM = 0x00001000,
         NOTDISMISS = 0x00002000,
         VISIONS = 0x00004000,
-        PATROL = 0x00008000,
-
-        // UNUSED = 0x00010000,
-
-        CUSTOMSKILLS = 0x00020000
+        PATROL = 0x00008000
     };
 
     // Types of hero roles. They are only for AI as humans are smart enough to manage heroes by themselves.
@@ -264,6 +262,8 @@ public:
         const double _initialArmyStrength;
     };
 
+    static const int heroFrameCountPerTile{ 9 };
+
     Heroes();
     Heroes( int heroid, int rc );
     Heroes( const int heroID, const int race, const uint32_t additionalExperience );
@@ -277,15 +277,21 @@ public:
     static const char * GetName( int heroid );
 
     bool isValid() const override;
-    bool isFreeman() const;
-    void SetFreeman( int reason );
+    // Returns true if the hero is active on the adventure map (i.e. has a valid ID, is not imprisoned, and is hired by
+    // some kingdom), otherwise returns false
+    bool isActive() const;
+
+    // Returns true if the hero is available for hire (i.e. has a valid ID, is not imprisoned, and is not hired by any
+    // kingdom), otherwise returns false
+    bool isAvailableForHire() const;
+    // Dismisses the hero (makes him available for hire) because of a 'reason'. See the implementation for details.
+    void Dismiss( int reason );
 
     bool isLosingGame() const;
     const Castle * inCastle() const override;
     Castle * inCastleMutable() const;
 
-    void LoadFromMP2( const int32_t mapIndex, const int colorType, const int raceType, const std::vector<uint8_t> & data );
-    void PostLoad();
+    void LoadFromMP2( const int32_t mapIndex, const int colorType, const int raceType, const bool isInJail, const std::vector<uint8_t> & data );
 
     int GetRace() const override;
     const std::string & GetName() const override;
@@ -327,8 +333,15 @@ public:
         return GetLevelFromExperience( experience );
     }
 
-    MP2::MapObjectType GetMapsObject() const;
-    void SetMapsObject( const MP2::MapObjectType objectType );
+    MP2::MapObjectType getObjectTypeUnderHero() const
+    {
+        return _objectTypeUnderHero;
+    }
+
+    void setObjectTypeUnderHero( const MP2::MapObjectType objectType )
+    {
+        _objectTypeUnderHero = ( ( objectType != MP2::OBJ_HEROES ) ? objectType : MP2::OBJ_NONE );
+    }
 
     const fheroes2::Point & GetPatrolCenter() const
     {
@@ -340,13 +353,17 @@ public:
         _patrolCenter = pos;
     }
 
-    int GetPatrolDistance() const
+    uint32_t GetPatrolDistance() const
     {
         return _patrolDistance;
     }
 
     uint32_t GetMaxSpellPoints() const override;
+
+    // Returns the maximum number of hero movement points, depending on the surface type on which the hero is currently located
     uint32_t GetMaxMovePoints() const;
+    // Returns the maximum number of hero movement points, depending on the specified surface type (water or land)
+    uint32_t GetMaxMovePoints( const bool onWater ) const;
 
     uint32_t GetMovePoints() const
     {
@@ -470,7 +487,7 @@ public:
     void Move2Dest( const int32_t destination );
     bool isMoveEnabled() const;
     bool CanMove() const;
-    void SetMove( bool );
+    void SetMove( const bool enable );
     bool isAction() const;
     void ResetAction();
     void Action( int tileIndex );
@@ -482,10 +499,6 @@ public:
     void ScoutRadar() const;
 
     bool MayCastAdventureSpells() const;
-
-    // Since heroes sprite are much bigger than a tile we need to 'cut' the sprite and the shadow's sprite into pieces. Each piece is for a separate tile.
-    std::vector<fheroes2::ObjectRenderingInfo> getHeroSpritesPerTile() const;
-    std::vector<fheroes2::ObjectRenderingInfo> getHeroShadowSpritesPerTile() const;
 
     void PortraitRedraw( const int32_t px, const int32_t py, const PortraitType type, fheroes2::Image & dstsf ) const override;
 
@@ -509,6 +522,7 @@ public:
 
     void FadeOut( const fheroes2::Point & offset = fheroes2::Point() ) const;
     void FadeIn( const fheroes2::Point & offset = fheroes2::Point() ) const;
+
     void Scout( const int tileIndex ) const;
     int GetScoutingDistance() const;
 
@@ -544,6 +558,11 @@ public:
         return portrait;
     }
 
+    bool isPoLPortrait() const
+    {
+        return ( portrait >= SOLMYR && portrait <= JARKONAS );
+    }
+
     static int GetLevelFromExperience( uint32_t );
     static uint32_t GetExperienceFromLevel( int );
 
@@ -569,6 +588,16 @@ public:
         return _aiRole;
     }
 
+    void setDimensionDoorUsage( const uint32_t newUsage )
+    {
+        _dimensionDoorsUsed = newUsage;
+    }
+
+    uint32_t getDimensionDoorUses() const
+    {
+        return _dimensionDoorsUsed;
+    }
+
     uint8_t getAlphaValue() const
     {
         return static_cast<uint8_t>( _alphaValue );
@@ -578,12 +607,11 @@ public:
 
     uint32_t getDailyRestoredSpellPoints() const;
 
+    bool isInDeepOcean() const;
+
 private:
     friend StreamBase & operator<<( StreamBase &, const Heroes & );
     friend StreamBase & operator>>( StreamBase &, Heroes & );
-
-    friend class Recruits;
-    friend class Battle::Only;
 
     HeroSeedsForLevelUp GetSeedsForLevelUp() const;
     void LevelUp( bool skipsecondary, bool autoselect = false );
@@ -603,8 +631,6 @@ private:
     // Daily replenishment of spell points
     void ReplenishSpellPoints();
 
-    bool isInDeepOcean() const;
-
     enum
     {
         SKILL_VALUE = 100
@@ -623,7 +649,8 @@ private:
     // ID of this hero, unless a custom portrait is applied.
     int portrait;
     int _race;
-    int save_maps_object;
+
+    MP2::MapObjectType _objectTypeUnderHero;
 
     Route::Path path;
 
@@ -632,10 +659,13 @@ private:
     fheroes2::Point _offset; // used only during hero's movement
 
     fheroes2::Point _patrolCenter;
-    int _patrolDistance;
+    uint32_t _patrolDistance;
 
     std::list<IndexObject> visit_object;
     uint32_t _lastGroundRegion = 0;
+
+    // Tracking how many spells this hero used this turn
+    uint32_t _dimensionDoorsUsed = 0;
 
     mutable int _alphaValue;
 
@@ -652,8 +682,8 @@ private:
 
 struct VecHeroes : public std::vector<Heroes *>
 {
-    Heroes * Get( int /* hero id */ ) const;
-    Heroes * Get( const fheroes2::Point & ) const;
+    Heroes * Get( int hid ) const;
+    Heroes * Get( const fheroes2::Point & center ) const;
 };
 
 struct AllHeroes : public VecHeroes
@@ -691,7 +721,7 @@ struct AllHeroes : public VecHeroes
     }
 
     Heroes * GetHero( const Castle & castle ) const;
-    Heroes * GetFreeman( const int race, const int heroIDToIgnore ) const;
+    Heroes * GetHeroForHire( const int race, const int heroIDToIgnore ) const;
     Heroes * FromJail( int32_t ) const;
 };
 

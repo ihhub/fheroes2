@@ -41,7 +41,6 @@
 #include "color.h"
 #include "direction.h"
 #include "game.h"
-#include "game_io.h"
 #include "game_over.h"
 #include "gamedefs.h"
 #include "heroes.h"
@@ -56,13 +55,12 @@
 #include "rand.h"
 #include "resource.h"
 #include "route.h"
-#include "save_format_version.h"
 #include "serialize.h"
 #include "settings.h"
-#include "spell.h"
 #include "tools.h"
 #include "translations.h"
 #include "week.h"
+#include "world_object_uid.h"
 
 namespace
 {
@@ -103,7 +101,7 @@ namespace
 
             const Maps::Tiles & indexedTile = mapTiles[indexId];
 
-            if ( indexedTile.isWater() || !indexedTile.isClearGround() ) {
+            if ( indexedTile.isWater() || !isClearGround( indexedTile ) ) {
                 continue;
             }
 
@@ -134,7 +132,7 @@ namespace
 
         for ( const int32_t indexId : indexes ) {
             const Maps::Tiles & indexedTile = mapTiles[indexId];
-            if ( indexedTile.isWater() || !indexedTile.isClearGround() ) {
+            if ( indexedTile.isWater() || !isClearGround( indexedTile ) ) {
                 continue;
             }
 
@@ -143,11 +141,6 @@ namespace
 
         return count;
     }
-}
-
-namespace GameStatic
-{
-    extern uint32_t uniq;
 }
 
 MapObjects::~MapObjects()
@@ -400,11 +393,11 @@ void World::NewMaps( int32_t sw, int32_t sh )
 
         mp2tile.terrainImageIndex = static_cast<uint16_t>( Rand::Get( 16, 19 ) ); // index sprite ground, see ground32.til
         mp2tile.objectName1 = 0; // object sprite level 1
-        mp2tile.level1IcnImageIndex = 0xff; // index sprite level 1
+        mp2tile.bottomIcnImageIndex = 0xff; // index sprite level 1
         mp2tile.quantity1 = 0;
         mp2tile.quantity2 = 0;
         mp2tile.objectName2 = 0; // object sprite level 2
-        mp2tile.level2IcnImageIndex = 0xff; // index sprite level 2
+        mp2tile.topIcnImageIndex = 0xff; // index sprite level 2
         mp2tile.terrainFlags = static_cast<uint8_t>( Rand::Get( 0, 3 ) ); // shape reflect % 4, 0 none, 1 vertical, 2 horizontal, 3 any
         mp2tile.mapObjectType = MP2::OBJ_NONE;
         mp2tile.nextAddonIndex = 0;
@@ -438,9 +431,9 @@ bool World::isValidCastleEntrance( const fheroes2::Point & tilePosition ) const
     return Maps::isValidAbsPoint( tilePosition.x, tilePosition.y ) && ( GetTiles( tilePosition.x, tilePosition.y ).GetObject( false ) == MP2::OBJ_CASTLE );
 }
 
-Heroes * World::GetFreemanHeroes( const int race, const int heroIDToIgnore /* = Heroes::UNKNOWN */ ) const
+Heroes * World::GetHeroForHire( const int race, const int heroIDToIgnore /* = Heroes::UNKNOWN */ ) const
 {
-    return vec_heroes.GetFreeman( race, heroIDToIgnore );
+    return vec_heroes.GetHeroForHire( race, heroIDToIgnore );
 }
 
 Heroes * World::FromJailHeroes( int32_t index )
@@ -640,7 +633,7 @@ void World::MonthOfMonstersAction( const Monster & mons )
                 excludeTiles.emplace( tileId );
             }
         }
-        else if ( tile.isClearGround() ) {
+        else if ( isClearGround( tile ) ) {
             if ( isTileBlockedForSettingMonster( vec_tiles, tileId, 4, excludeTiles ) ) {
                 continue;
             }
@@ -765,7 +758,7 @@ std::string World::getCurrentRumor() const
     case 6:
         return _( "A Black Dragon will take out a Titan any day of the week." );
     case 7:
-        return _( "He told her: Yada yada yada...  and then she said: Blah, blah, blah..." );
+        return _( "He told her: Yada yada yada... and then she said: Blah, blah, blah..." );
     case 8:
         return _( "An unknown force is being resurrected..." );
     case 9:
@@ -792,7 +785,7 @@ MapsIndexes World::GetTeleportEndPoints( const int32_t index ) const
     for ( const int32_t teleportIndex : _allTeleports.at( entranceTile.GetObjectSpriteIndex() ) ) {
         const Maps::Tiles & teleportTile = GetTiles( teleportIndex );
 
-        if ( teleportIndex == index || teleportTile.GetHeroes() != nullptr || teleportTile.isWater() != entranceTile.isWater() ) {
+        if ( teleportIndex == index || teleportTile.getHero() != nullptr || teleportTile.isWater() != entranceTile.isWater() ) {
             continue;
         }
 
@@ -827,7 +820,7 @@ MapsIndexes World::GetWhirlpoolEndPoints( const int32_t index ) const
     for ( const int32_t whirlpoolIndex : _allWhirlpools.at( entranceTile.GetObjectSpriteIndex() ) ) {
         const Maps::Tiles & whirlpoolTile = GetTiles( whirlpoolIndex );
 
-        if ( whirlpoolTile.GetObjectUID() == entranceTile.GetObjectUID() || whirlpoolTile.GetHeroes() != nullptr ) {
+        if ( whirlpoolTile.GetObjectUID() == entranceTile.GetObjectUID() || whirlpoolTile.getHero() != nullptr ) {
             continue;
         }
 
@@ -930,7 +923,7 @@ bool World::DiggingForUltimateArtifact( const fheroes2::Point & center )
         return false;
     }
 
-    tile.AddonsPushLevel1( Maps::TilesAddon( Maps::BACKGROUND_LAYER, GetUniq(), objectIcnType, imageIndex, false, false ) );
+    tile.pushBottomLayerAddon( Maps::TilesAddon( Maps::BACKGROUND_LAYER, Maps::getNewObjectUID(), objectIcnType, imageIndex ) );
 
     if ( ultimate_artifact.isPosition( tile.GetIndex() ) && !ultimate_artifact.isFound() ) {
         ultimate_artifact.markAsFound();
@@ -1057,15 +1050,15 @@ bool World::KingdomIsWins( const Kingdom & kingdom, const uint32_t wins ) const
         const Heroes * hero = GetHeroesCondWins();
         assert( hero != nullptr );
 
-        // The hero in question should be either a freeman or be hired by a human-controlled kingdom
-        return ( hero->isFreeman() || GetKingdom( hero->GetColor() ).isControlHuman() );
+        // The hero in question should either be available for hire or be hired by a human-controlled kingdom
+        return ( hero->isAvailableForHire() || GetKingdom( hero->GetColor() ).isControlHuman() );
     }
 
     case GameOver::WINS_ARTIFACT: {
         // This method should be called with this condition only for a human-controlled kingdom
         assert( kingdom.isControlHuman() || isKingdomInAIAutoControlMode );
 
-        const KingdomHeroes & heroes = kingdom.GetHeroes();
+        const VecHeroes & heroes = kingdom.GetHeroes();
         if ( conf.WinsFindUltimateArtifact() ) {
             return std::any_of( heroes.begin(), heroes.end(), []( const Heroes * hero ) { return hero->HasUltimateArtifact(); } );
         }
@@ -1127,8 +1120,8 @@ bool World::KingdomIsLoss( const Kingdom & kingdom, const uint32_t loss ) const
         const Heroes * hero = GetHeroesCondLoss();
         assert( hero != nullptr );
 
-        // The hero in question should be either a freeman...
-        if ( hero->isFreeman() ) {
+        // The hero in question should either be available for hire...
+        if ( hero->isAvailableForHire() ) {
             return true;
         }
 
@@ -1241,7 +1234,7 @@ uint32_t World::CheckKingdomLoss( const Kingdom & kingdom ) const
     if ( conf.isCampaignGameType() ) {
         const Campaign::ScenarioLossCondition lossCondition = Campaign::getCurrentScenarioLossCondition();
         if ( lossCondition == Campaign::ScenarioLossCondition::LOSE_ALL_SORCERESS_VILLAGES ) {
-            const KingdomCastles & castles = kingdom.GetCastles();
+            const VecCastles & castles = kingdom.GetCastles();
             bool hasSorceressVillage = false;
 
             for ( size_t i = 0; i < castles.size(); ++i ) {
@@ -1266,11 +1259,6 @@ uint32_t World::CheckKingdomLoss( const Kingdom & kingdom ) const
     }
 
     return GameOver::COND_NONE;
-}
-
-uint32_t World::GetUniq()
-{
-    return ++GameStatic::uniq;
 }
 
 uint32_t World::getDistance( const Heroes & hero, int targetIndex )
@@ -1348,12 +1336,6 @@ bool World::isAnyKingdomVisited( const MP2::MapObjectType objectType, const int3
         }
     }
     return false;
-}
-
-void World::setOldTileQuantityData( const int32_t tileIndex, const uint8_t quantityValue1, const uint8_t quantityValue2, const uint32_t additionalMetadata )
-{
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1004_RELEASE, "Remove this method and _oldTileQuantityData member." );
-    _oldTileQuantityData[tileIndex] = std::make_tuple( quantityValue1, quantityValue2, additionalMetadata );
 }
 
 StreamBase & operator<<( StreamBase & msg, const CapturedObject & obj )
@@ -1462,78 +1444,10 @@ StreamBase & operator>>( StreamBase & msg, World & w )
     w.width = width;
     w.height = height;
 
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1004_RELEASE, "Remove the logic below." );
-    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1004_RELEASE ) {
-        w._oldTileQuantityData.resize( static_cast<size_t>( width ) * height );
-    }
-
-    msg >> w.vec_tiles >> w.vec_heroes;
-
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1004_RELEASE, "Remove the logic below." );
-    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1004_RELEASE ) {
-        for ( Maps::Tiles & tile : w.vec_tiles ) {
-            const auto & oldMetadata = w._oldTileQuantityData[tile.GetIndex()];
-            tile.quantityIntoMetadata( std::get<0>( oldMetadata ), std::get<1>( oldMetadata ), std::get<2>( oldMetadata ) );
-        }
-
-        w._oldTileQuantityData.clear();
-    }
-
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE1_1005_RELEASE, "Remove the logic below." );
-    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_PRE1_1005_RELEASE ) {
-        for ( Maps::Tiles & tile : w.vec_tiles ) {
-            tile.fixOldArtifactIDs();
-        }
-    }
-
-    msg >> w.vec_castles >> w.vec_kingdoms >> w._rumors >> w.vec_eventsday >> w.map_captureobj >> w.ultimate_artifact >> w.day >> w.week >> w.month >> w.heroes_cond_wins
-        >> w.heroes_cond_loss;
-
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE1_1002_RELEASE, "Remove the logic below." );
-    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_PRE1_1002_RELEASE ) {
-        uint32_t dummy = 0xDEADBEEF;
-
-        msg >> dummy;
-
-        if ( dummy != 0 ) {
-            DEBUG_LOG( DBG_GAME, DBG_WARN, "Invalid number of MapActions items: " << dummy )
-        }
-    }
-
-    msg >> w.map_objects >> w._seed;
+    msg >> w.vec_tiles >> w.vec_heroes >> w.vec_castles >> w.vec_kingdoms >> w._rumors >> w.vec_eventsday >> w.map_captureobj >> w.ultimate_artifact >> w.day >> w.week
+        >> w.month >> w.heroes_cond_wins >> w.heroes_cond_loss >> w.map_objects >> w._seed;
 
     w.PostLoad( false );
-
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1003_RELEASE, "Remove the logic below." );
-    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1003_RELEASE ) {
-        for ( Maps::Tiles & tile : w.vec_tiles ) {
-            if ( tile.GetObject( false ) == MP2::OBJ_ABANDONED_MINE ) {
-                const int32_t spellId = static_cast<int32_t>( tile.metadata()[2] );
-
-                if ( spellId == Spell::HAUNT ) {
-                    const Funds rc{ static_cast<int32_t>( tile.metadata()[0] ), 1 };
-                    const int resource = ( rc.GetValidItemsCount() > 0 ) ? rc.getFirstValidResource().first : Resource::GOLD;
-
-                    Maps::restoreAbandonedMine( tile, resource );
-
-                    Heroes * hero = tile.GetHeroes();
-                    if ( hero ) {
-                        hero->SetMapsObject( MP2::OBJ_MINES );
-                    }
-                    else {
-                        tile.SetObject( MP2::OBJ_MINES );
-                    }
-                }
-                else {
-                    Troop & guardians = w.GetCapturedObject( tile.GetIndex() ).GetTroop();
-
-                    setMonsterCountOnTile( tile, guardians.isValid() ? guardians.GetCount() : 0 );
-
-                    guardians.Reset();
-                }
-            }
-        }
-    }
 
     return msg;
 }

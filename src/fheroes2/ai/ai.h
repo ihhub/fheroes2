@@ -24,18 +24,20 @@
 #ifndef H2AI_H
 #define H2AI_H
 
+#include <optional>
+
+#include "castle.h"
 #include "mp2.h"
+#include "payment.h"
 #include "rand.h"
 
 class StreamBase;
 class Funds;
-class Castle;
 class HeroBase;
 class Heroes;
 class Kingdom;
 class Army;
 class Spell;
-struct VecHeroes;
 
 namespace Maps
 {
@@ -91,12 +93,13 @@ namespace AI
 
         virtual void HeroesAdd( const Heroes & hero );
         virtual void HeroesRemove( const Heroes & hero );
+        virtual void HeroesBeginMovement( Heroes & hero );
+        virtual void HeroesFinishMovement( Heroes & hero );
         virtual void HeroesPreBattle( HeroBase & hero, bool isAttacking );
         virtual void HeroesAfterBattle( HeroBase & hero, bool wasAttacking );
         virtual void HeroesPostLoad( Heroes & hero );
         virtual void HeroesActionComplete( Heroes & hero, int32_t tileIndex, const MP2::MapObjectType objectType );
         virtual void HeroesActionNewPosition( Heroes & hero );
-        virtual void HeroesClearTask( const Heroes & hero );
         virtual void HeroesLevelUp( Heroes & hero );
         virtual std::string HeroesString( const Heroes & hero );
 
@@ -110,12 +113,15 @@ namespace AI
 
         virtual void Reset();
         virtual void resetPathfinder() = 0;
+        virtual bool isValidHeroObject( const Heroes & hero, const int32_t index, const bool underHero ) = 0;
 
         // Should be called at the beginning of the battle even if no AI-controlled players are
         // involved in the battle - because of the possibility of using instant or auto battle
         virtual void battleBegins() = 0;
 
         virtual ~Base() = default;
+
+        virtual void tradingPostVisitEvent( Kingdom & kingdom ) = 0;
 
     protected:
         int _personality = NONE;
@@ -127,20 +133,51 @@ namespace AI
         friend StreamBase & operator>>( StreamBase &, AI::Base & );
     };
 
+    // AI type selector, can be used sometime in the future
     Base & Get( AI_TYPE type = AI_TYPE::NORMAL );
 
-    // functionality in ai_hero_action.cpp
+    // Definitions are in the ai_hero_action.cpp
+
     void HeroesAction( Heroes & hero, const int32_t dst_index );
     void HeroesMove( Heroes & hero );
+
+    // Makes it so that the 'hero' casts the Dimension Door spell to the 'targetIndex'
     void HeroesCastDimensionDoor( Heroes & hero, const int32_t targetIndex );
+
+    // Makes it so that the 'hero' casts the Summon Boat spell, summoning the boat at the 'boatDestinationIndex'.
+    // Returns the index of the tile on which the boat was located before the summoning. It's the caller's
+    // responsibility to make sure that 'hero' may cast this spell and there is a summonable boat on the map
+    // before calling this function.
+    int32_t HeroesCastSummonBoat( Heroes & hero, const int32_t boatDestinationIndex );
+
     bool HeroesCastAdventureSpell( Heroes & hero, const Spell & spell );
 
-    // functionality in ai_common.cpp
-    bool BuildIfAvailable( Castle & castle, int building );
-    bool BuildIfEnoughResources( Castle & castle, int building, uint32_t minimumMultiplicator );
-    uint32_t GetResourceMultiplier( uint32_t min, uint32_t max );
+    // Definitions are in the ai_common.cpp
+
+    // Builds the given building in the given castle if possible. If possible and necessary, obtains the resources
+    // that are missing for construction through trading on the marketplace. Returns true if the construction was
+    // successful, otherwise returns false.
+    bool BuildIfPossible( Castle & castle, const building_t building );
+
+    // Builds the given building in the given castle if possible and if there is a sufficient supply of resources
+    // (see the implementation for details). If possible and necessary, obtains the resources that are missing for
+    // construction through trading on the marketplace. Returns true if the construction was successful, otherwise
+    // returns false.
+    bool BuildIfEnoughFunds( Castle & castle, const building_t building, const uint32_t fundsMultiplier );
+
     void OptimizeTroopsOrder( Army & hero );
     bool CanPurchaseHero( const Kingdom & kingdom );
+
+    // Calculates a marketplace transaction, after which the kingdom would be able to make a payment in the amount of
+    // at least 'fundsToObtain'. Returns the corresponding transaction if it was found, otherwise returns an empty
+    // result. In order to receive the necessary funds, the returned transaction must be deducted from the funds of
+    // the kingdom.
+    std::optional<Funds> calculateMarketplaceTransaction( const Kingdom & kingdom, const Funds & fundsToObtain );
+
+    // Performs operations on the marketplace necessary for the kingdom to be able to make a payment in the amount
+    // of at least 'fundsToObtain'. If the necessary funds cannot be obtained as a result of trading, then the current
+    // funds of the kingdom remain unchanged. Returns true if the trade was successful, otherwise returns false.
+    bool tradeAtMarketplace( Kingdom & kingdom, const Funds & fundsToObtain );
 
     StreamBase & operator<<( StreamBase &, const AI::Base & );
     StreamBase & operator>>( StreamBase &, AI::Base & );

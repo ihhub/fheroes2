@@ -26,8 +26,9 @@
 #include <algorithm>
 #include <cassert>
 #include <cstddef>
-#include <functional>
 #include <iterator>
+#include <map>
+#include <numeric>
 #include <ostream>
 #include <random>
 #include <type_traits>
@@ -72,25 +73,6 @@
 namespace
 {
     Battle::Arena * arena = nullptr;
-
-    // Compute a new seed from a list of actions, so random actions happen differently depending on user inputs
-    uint32_t UpdateRandomSeed( const uint32_t seed, const Battle::Actions & actions )
-    {
-        uint32_t newSeed = seed;
-
-        for ( const Battle::Command & command : actions ) {
-            if ( command.GetType() == Battle::CommandType::MSG_BATTLE_AUTO_SWITCH || command.GetType() == Battle::CommandType::MSG_BATTLE_AUTO_FINISH ) {
-                continue; // Events related to the auto battle are ignored for the purpose of this hash
-            }
-
-            fheroes2::hashCombine( newSeed, command.GetType() );
-            for ( const int commandArg : command ) {
-                fheroes2::hashCombine( newSeed, commandArg );
-            }
-        }
-
-        return newSeed;
-    }
 
     int GetCovr( int ground, std::mt19937 & gen )
     {
@@ -144,7 +126,7 @@ namespace
     {
         Battle::Unit * result = nullptr;
 
-        std::function<bool( const Battle::Unit * )> unitFilter = []( const Battle::Unit * unit ) { return unit->GetSpeed() > Speed::STANDING; };
+        const auto unitFilter = []( const Battle::Unit * unit ) { return unit->GetSpeed() > Speed::STANDING; };
 
         Battle::Units::iterator it1 = std::find_if( units1.begin(), units1.end(), unitFilter );
         Battle::Units::iterator it2 = std::find_if( units2.begin(), units2.end(), unitFilter );
@@ -303,8 +285,8 @@ Battle::Arena::Arena( Army & army1, Army & army2, const int32_t tileIndex, const
     assert( arena == nullptr );
     arena = this;
 
-    _army1 = std::make_unique<Force>( army1, false, _randomGenerator, _uidGenerator );
-    _army2 = std::make_unique<Force>( army2, true, _randomGenerator, _uidGenerator );
+    _army1 = std::make_unique<Force>( army1, false, _uidGenerator );
+    _army2 = std::make_unique<Force>( army2, true, _uidGenerator );
 
     // If this is a siege of a town, then there is in fact no castle
     if ( castle && !castle->isCastle() ) {
@@ -332,17 +314,17 @@ Battle::Arena::Arena( Army & army1, Army & army2, const int32_t tileIndex, const
 
     if ( castle ) {
         if ( castle->isBuild( BUILD_LEFTTURRET ) ) {
-            _towers[0] = std::make_unique<Tower>( *castle, TowerType::TWR_LEFT, _randomGenerator, _uidGenerator.GetUnique() );
+            _towers[0] = std::make_unique<Tower>( *castle, TowerType::TWR_LEFT, _uidGenerator.GetUnique() );
         }
 
-        _towers[1] = std::make_unique<Tower>( *castle, TowerType::TWR_CENTER, _randomGenerator, _uidGenerator.GetUnique() );
+        _towers[1] = std::make_unique<Tower>( *castle, TowerType::TWR_CENTER, _uidGenerator.GetUnique() );
 
         if ( castle->isBuild( BUILD_RIGHTTURRET ) ) {
-            _towers[2] = std::make_unique<Tower>( *castle, TowerType::TWR_RIGHT, _randomGenerator, _uidGenerator.GetUnique() );
+            _towers[2] = std::make_unique<Tower>( *castle, TowerType::TWR_RIGHT, _uidGenerator.GetUnique() );
         }
 
         if ( _army1->GetCommander() ) {
-            _catapult = std::make_unique<Catapult>( *_army1->GetCommander(), _randomGenerator );
+            _catapult = std::make_unique<Catapult>( *_army1->GetCommander() );
         }
 
         _bridge = std::make_unique<Bridge>();
@@ -408,7 +390,7 @@ void Battle::Arena::TurnTroop( Unit * troop, const Units & orderHistory )
     DEBUG_LOG( DBG_BATTLE, DBG_TRACE, troop->String( true ) )
 
     if ( troop->isAffectedByMorale() ) {
-        troop->SetRandomMorale();
+        troop->SetRandomMorale( _randomGenerator );
     }
 
     assert( !troop->AllModes( MORALE_GOOD | MORALE_BAD ) );
@@ -416,15 +398,8 @@ void Battle::Arena::TurnTroop( Unit * troop, const Units & orderHistory )
     bool endOfTurn = false;
 
     while ( !endOfTurn ) {
-        // All cells on the board should be properly reset at the beginning of each iteration
-        assert( std::all_of( board.begin(), board.end(), []( const Cell & cell ) {
-            const Unit * unit = cell.GetUnit();
-            if ( unit && !unit->isValid() ) {
-                return false;
-            }
-
-            return cell.GetQuality() == 0;
-        } ) );
+        // There should be no dead units on the board at the beginning of each iteration
+        assert( std::all_of( board.begin(), board.end(), []( const Cell & cell ) { return ( cell.GetUnit() == nullptr || cell.GetUnit()->isValid() ); } ) );
 
         Actions actions;
 
@@ -442,7 +417,7 @@ void Battle::Arena::TurnTroop( Unit * troop, const Units & orderHistory )
         }
         else if ( troop->Modes( MORALE_BAD ) ) {
             // Bad morale
-            actions.emplace_back( CommandType::MSG_BATTLE_MORALE, troop->GetUID(), false );
+            actions.emplace_back( Command::MORALE, troop->GetUID(), false );
         }
         else {
             // This unit will certainly perform at least one full-fledged action
@@ -452,10 +427,7 @@ void Battle::Arena::TurnTroop( Unit * troop, const Units & orderHistory )
                 _bridge->SetPassability( *troop );
             }
 
-            if ( troop->isControlRemote() ) {
-                RemoteTurn( *troop, actions );
-            }
-            else if ( ( troop->GetCurrentControl() & CONTROL_AI ) || ( troop->GetCurrentColor() & _autoBattleColors ) ) {
+            if ( ( troop->GetCurrentControl() & CONTROL_AI ) || ( troop->GetCurrentColor() & _autoBattleColors ) ) {
                 AI::Get().BattleTurn( *this, *troop, actions );
             }
             else {
@@ -463,14 +435,15 @@ void Battle::Arena::TurnTroop( Unit * troop, const Units & orderHistory )
             }
         }
 
-        const uint32_t newSeed = UpdateRandomSeed( _randomGenerator.GetSeed(), actions );
+        const uint32_t newSeed = std::accumulate( actions.cbegin(), actions.cend(), _randomGenerator.GetSeed(),
+                                                  []( const uint32_t seed, const Command & cmd ) { return cmd.updateSeed( seed ); } );
         _randomGenerator.UpdateSeed( newSeed );
 
         while ( !actions.empty() ) {
             ApplyAction( actions.front() );
             actions.pop_front();
 
-            board.Reset();
+            board.removeDeadUnits();
 
             if ( _orderOfUnits ) {
                 // Applied action could kill someone or affect the speed of some unit, update the order of units
@@ -483,12 +456,11 @@ void Battle::Arena::TurnTroop( Unit * troop, const Units & orderHistory )
                 break;
             }
 
-            const bool isImmovable = troop->Modes( SP_BLIND | IS_PARALYZE_MAGIC );
             const bool isSkipsMove = troop->Modes( TR_SKIP );
 
             // Good morale
-            if ( troop->isValid() && troop->Modes( TR_MOVED ) && troop->Modes( MORALE_GOOD ) && !isImmovable && !isSkipsMove ) {
-                actions.emplace_back( CommandType::MSG_BATTLE_MORALE, troop->GetUID(), true );
+            if ( troop->isValid() && troop->Modes( TR_MOVED ) && troop->Modes( MORALE_GOOD ) && !troop->isImmovable() && !isSkipsMove ) {
+                actions.emplace_back( Command::MORALE, troop->GetUID(), true );
             }
         }
 
@@ -496,7 +468,7 @@ void Battle::Arena::TurnTroop( Unit * troop, const Units & orderHistory )
             endOfTurn = true;
         }
 
-        board.Reset();
+        board.removeDeadUnits();
     }
 }
 
@@ -556,7 +528,7 @@ void Battle::Arena::Turns()
                 // Castle towers act either during the turn of the first unit from the defending army, or at the end of
                 // the turn if none of the units from the defending army are able to act (for example, all are blinded)
                 if ( !towersActed && ( troop == nullptr || troop->GetColor() == _army2->GetColor() ) ) {
-                    auto towerAction = [this, &orderHistory, troop]( const size_t idx ) {
+                    const auto towerAction = [this, &orderHistory, troop]( const size_t idx ) {
                         assert( idx < std::size( _towers ) );
 
                         if ( _towers[idx] == nullptr || !_towers[idx]->isValid() ) {
@@ -624,12 +596,6 @@ void Battle::Arena::Turns()
     }
 }
 
-void Battle::Arena::RemoteTurn( const Unit & b, Actions & a )
-{
-    DEBUG_LOG( DBG_BATTLE, DBG_WARN, "switching control to AI" )
-    AI::Get().BattleTurn( *this, b, a );
-}
-
 void Battle::Arena::HumanTurn( const Unit & b, Actions & a )
 {
     if ( _interface )
@@ -638,19 +604,10 @@ void Battle::Arena::HumanTurn( const Unit & b, Actions & a )
 
 void Battle::Arena::TowerAction( const Tower & twr )
 {
-    // All cells on the board should be properly reset here
-    assert( std::all_of( board.begin(), board.end(), []( const Cell & cell ) {
-        const Unit * unit = cell.GetUnit();
-        if ( unit && !unit->isValid() ) {
-            return false;
-        }
+    // There should be no dead units on the board at this moment
+    assert( std::all_of( board.begin(), board.end(), []( const Cell & cell ) { return ( cell.GetUnit() == nullptr || cell.GetUnit()->isValid() ); } ) );
 
-        return cell.GetQuality() == 0;
-    } ) );
-
-    board.SetEnemyQuality( twr );
-
-    // Target unit and its quality
+    // Target unit and its threat level
     std::pair<const Unit *, int32_t> targetInfo{ nullptr, INT32_MIN };
 
     for ( const Cell & cell : board ) {
@@ -660,8 +617,10 @@ void Battle::Arena::TowerAction( const Tower & twr )
             continue;
         }
 
-        if ( targetInfo.first == nullptr || targetInfo.second < cell.GetQuality() ) {
-            targetInfo = { unit, cell.GetQuality() };
+        const int32_t unitThreatLevel = unit->evaluateThreatForUnit( twr );
+
+        if ( targetInfo.first == nullptr || targetInfo.second < unitThreatLevel ) {
+            targetInfo = { unit, unitThreatLevel };
         }
     }
 
@@ -674,45 +633,47 @@ void Battle::Arena::TowerAction( const Tower & twr )
     using TowerGetTypeUnderlyingType = typename std::underlying_type_t<decltype( twr.GetType() )>;
     static_assert( std::is_same_v<TowerGetTypeUnderlyingType, uint8_t>, "Type of Tower::GetType() has been changed, check the logic below" );
 
-    Command cmd( CommandType::MSG_BATTLE_TOWER, static_cast<TowerGetTypeUnderlyingType>( twr.GetType() ), targetInfo.first->GetUID() );
+    Command cmd( Command::TOWER, static_cast<TowerGetTypeUnderlyingType>( twr.GetType() ), targetInfo.first->GetUID() );
 
     ApplyAction( cmd );
 
-    board.Reset();
+    board.removeDeadUnits();
 }
 
 void Battle::Arena::CatapultAction()
 {
     if ( _catapult ) {
         uint32_t shots = _catapult->GetShots();
-        std::vector<uint32_t> values( CAT_CENTRAL_TOWER + 1, 0 );
 
-        values[CAT_WALL1] = GetCastleTargetValue( CAT_WALL1 );
-        values[CAT_WALL2] = GetCastleTargetValue( CAT_WALL2 );
-        values[CAT_WALL3] = GetCastleTargetValue( CAT_WALL3 );
-        values[CAT_WALL4] = GetCastleTargetValue( CAT_WALL4 );
-        values[CAT_TOWER1] = GetCastleTargetValue( CAT_TOWER1 );
-        values[CAT_TOWER2] = GetCastleTargetValue( CAT_TOWER2 );
-        values[CAT_BRIDGE] = GetCastleTargetValue( CAT_BRIDGE );
-        values[CAT_CENTRAL_TOWER] = GetCastleTargetValue( CAT_CENTRAL_TOWER );
+        std::map<CastleDefenseElement, uint32_t> stateOfCatapultTargets
+            = { { CastleDefenseElement::WALL1, GetCastleTargetValue( CastleDefenseElement::WALL1 ) },
+                { CastleDefenseElement::WALL2, GetCastleTargetValue( CastleDefenseElement::WALL2 ) },
+                { CastleDefenseElement::WALL3, GetCastleTargetValue( CastleDefenseElement::WALL3 ) },
+                { CastleDefenseElement::WALL4, GetCastleTargetValue( CastleDefenseElement::WALL4 ) },
+                { CastleDefenseElement::TOWER1, GetCastleTargetValue( CastleDefenseElement::TOWER1 ) },
+                { CastleDefenseElement::TOWER2, GetCastleTargetValue( CastleDefenseElement::TOWER2 ) },
+                { CastleDefenseElement::BRIDGE, GetCastleTargetValue( CastleDefenseElement::BRIDGE ) },
+                { CastleDefenseElement::CENTRAL_TOWER, GetCastleTargetValue( CastleDefenseElement::CENTRAL_TOWER ) } };
 
-        Command cmd( CommandType::MSG_BATTLE_CATAPULT );
+        Command cmd( Command::CATAPULT );
 
         cmd << shots;
 
         while ( shots-- ) {
-            const int target = _catapult->GetTarget( values );
-            const uint32_t damage = std::min( _catapult->GetDamage(), values[target] );
-            const bool hit = _catapult->IsNextShotHit();
+            const CastleDefenseElement target = Catapult::GetTarget( stateOfCatapultTargets, _randomGenerator );
+            const uint32_t damage = std::min( _catapult->GetDamage( _randomGenerator ), stateOfCatapultTargets[target] );
+            const bool hit = _catapult->IsNextShotHit( _randomGenerator );
 
-            cmd << target << damage << ( hit ? 1 : 0 );
+            using TargetUnderlyingType = std::underlying_type_t<decltype( target )>;
+
+            cmd << static_cast<TargetUnderlyingType>( target ) << damage << ( hit ? 1 : 0 );
 
             if ( hit ) {
-                values[target] -= damage;
+                stateOfCatapultTargets[target] -= damage;
             }
         }
 
-        // preserve the order of shots - command arguments will be extracted in reverse order
+        // Preserve the order of shots - command arguments will be extracted in reverse order
         std::reverse( cmd.begin(), cmd.end() );
 
         ApplyAction( cmd );
@@ -892,7 +853,7 @@ bool Battle::Arena::isDisableCastSpell( const Spell & spell, std::string * msg /
 
         if ( spell == Spell::EARTHQUAKE && !castle ) {
             if ( msg ) {
-                *msg = _( "That spell will affect no one!" );
+                *msg = _( "That spell will have no effect!" );
             }
             return true;
         }
@@ -910,7 +871,7 @@ bool Battle::Arena::isDisableCastSpell( const Spell & spell, std::string * msg /
 
             if ( 0 > GetFreePositionNearHero( _currentColor ) ) {
                 if ( msg ) {
-                    *msg = _( "There is no open space adjacent to your hero to summon an Elemental to." );
+                    *msg = _( "There is no open space adjacent to your hero where you can summon an Elemental to." );
                 }
                 return true;
             }
@@ -934,7 +895,7 @@ bool Battle::Arena::isDisableCastSpell( const Spell & spell, std::string * msg /
             }
 
             if ( msg ) {
-                *msg = _( "That spell will affect no one!" );
+                *msg = _( "That spell will have no effect!" );
             }
             return true;
         }
@@ -1013,36 +974,39 @@ Battle::Indexes Battle::Arena::GraveyardOccupiedCells() const
     return graveyard.GetOccupiedCells();
 }
 
-void Battle::Arena::SetCastleTargetValue( int target, uint32_t value )
+void Battle::Arena::SetCastleTargetValue( const CastleDefenseElement target, const uint32_t value )
 {
     switch ( target ) {
-    case CAT_WALL1:
+    case CastleDefenseElement::WALL1:
         board[CASTLE_FIRST_TOP_WALL_POS].SetObject( value );
         break;
-    case CAT_WALL2:
+    case CastleDefenseElement::WALL2:
         board[CASTLE_SECOND_TOP_WALL_POS].SetObject( value );
         break;
-    case CAT_WALL3:
+    case CastleDefenseElement::WALL3:
         board[CASTLE_THIRD_TOP_WALL_POS].SetObject( value );
         break;
-    case CAT_WALL4:
+    case CastleDefenseElement::WALL4:
         board[CASTLE_FOURTH_TOP_WALL_POS].SetObject( value );
         break;
 
-    case CAT_TOWER1:
-        if ( _towers[0] && _towers[0]->isValid() )
+    case CastleDefenseElement::TOWER1:
+        if ( _towers[0] && _towers[0]->isValid() ) {
             _towers[0]->SetDestroy();
+        }
         break;
-    case CAT_TOWER2:
-        if ( _towers[2] && _towers[2]->isValid() )
+    case CastleDefenseElement::TOWER2:
+        if ( _towers[2] && _towers[2]->isValid() ) {
             _towers[2]->SetDestroy();
+        }
         break;
-    case CAT_CENTRAL_TOWER:
-        if ( _towers[1] && _towers[1]->isValid() )
+    case CastleDefenseElement::CENTRAL_TOWER:
+        if ( _towers[1] && _towers[1]->isValid() ) {
             _towers[1]->SetDestroy();
+        }
         break;
 
-    case CAT_BRIDGE:
+    case CastleDefenseElement::BRIDGE:
         if ( _bridge->isValid() ) {
             _bridge->SetDestroyed();
         }
@@ -1053,26 +1017,26 @@ void Battle::Arena::SetCastleTargetValue( int target, uint32_t value )
     }
 }
 
-uint32_t Battle::Arena::GetCastleTargetValue( int target ) const
+uint32_t Battle::Arena::GetCastleTargetValue( const CastleDefenseElement target ) const
 {
     switch ( target ) {
-    case CAT_WALL1:
+    case CastleDefenseElement::WALL1:
         return board[CASTLE_FIRST_TOP_WALL_POS].GetObject();
-    case CAT_WALL2:
+    case CastleDefenseElement::WALL2:
         return board[CASTLE_SECOND_TOP_WALL_POS].GetObject();
-    case CAT_WALL3:
+    case CastleDefenseElement::WALL3:
         return board[CASTLE_THIRD_TOP_WALL_POS].GetObject();
-    case CAT_WALL4:
+    case CastleDefenseElement::WALL4:
         return board[CASTLE_FOURTH_TOP_WALL_POS].GetObject();
 
-    case CAT_TOWER1:
+    case CastleDefenseElement::TOWER1:
         return _towers[0] && _towers[0]->isValid() ? 1 : 0;
-    case CAT_TOWER2:
+    case CastleDefenseElement::TOWER2:
         return _towers[2] && _towers[2]->isValid() ? 1 : 0;
-    case CAT_CENTRAL_TOWER:
+    case CastleDefenseElement::CENTRAL_TOWER:
         return _towers[1] && _towers[1]->isValid() ? 1 : 0;
 
-    case CAT_BRIDGE:
+    case CastleDefenseElement::BRIDGE:
         return _bridge->isValid() ? 1 : 0;
 
     default:
@@ -1081,26 +1045,30 @@ uint32_t Battle::Arena::GetCastleTargetValue( int target ) const
     return 0;
 }
 
-std::vector<int> Battle::Arena::GetCastleTargets() const
+std::vector<Battle::CastleDefenseElement> Battle::Arena::GetEarthQuakeTargets() const
 {
-    std::vector<int> targets;
+    std::vector<CastleDefenseElement> targets;
     targets.reserve( 8 );
 
-    // check walls
-    if ( 0 != board[CASTLE_FIRST_TOP_WALL_POS].GetObject() )
-        targets.push_back( CAT_WALL1 );
-    if ( 0 != board[CASTLE_SECOND_TOP_WALL_POS].GetObject() )
-        targets.push_back( CAT_WALL2 );
-    if ( 0 != board[CASTLE_THIRD_TOP_WALL_POS].GetObject() )
-        targets.push_back( CAT_WALL3 );
-    if ( 0 != board[CASTLE_FOURTH_TOP_WALL_POS].GetObject() )
-        targets.push_back( CAT_WALL4 );
+    if ( board[CASTLE_FIRST_TOP_WALL_POS].GetObject() > 0 ) {
+        targets.push_back( CastleDefenseElement::WALL1 );
+    }
+    if ( board[CASTLE_SECOND_TOP_WALL_POS].GetObject() > 0 ) {
+        targets.push_back( CastleDefenseElement::WALL2 );
+    }
+    if ( board[CASTLE_THIRD_TOP_WALL_POS].GetObject() > 0 ) {
+        targets.push_back( CastleDefenseElement::WALL3 );
+    }
+    if ( board[CASTLE_FOURTH_TOP_WALL_POS].GetObject() > 0 ) {
+        targets.push_back( CastleDefenseElement::WALL4 );
+    }
 
-    // check right/left towers
-    if ( _towers[0] && _towers[0]->isValid() )
-        targets.push_back( CAT_TOWER1 );
-    if ( _towers[2] && _towers[2]->isValid() )
-        targets.push_back( CAT_TOWER2 );
+    if ( _towers[0] && _towers[0]->isValid() ) {
+        targets.push_back( CastleDefenseElement::TOWER1 );
+    }
+    if ( _towers[2] && _towers[2]->isValid() ) {
+        targets.push_back( CastleDefenseElement::TOWER2 );
+    }
 
     return targets;
 }
@@ -1145,7 +1113,7 @@ Battle::Unit * Battle::Arena::CreateElemental( const Spell & spell )
     // An elemental could not be a wide unit
     assert( pos.GetHead() != nullptr && pos.GetTail() == nullptr );
 
-    Unit * elem = new Unit( Troop( mons, count ), pos, reflect, _randomGenerator, _uidGenerator.GetUnique() );
+    Unit * elem = new Unit( Troop( mons, count ), pos, reflect, _uidGenerator.GetUnique() );
 
     elem->SetModes( CAP_SUMMONELEM );
     elem->SetArmy( hero->GetArmy() );
@@ -1157,7 +1125,7 @@ Battle::Unit * Battle::Arena::CreateElemental( const Spell & spell )
 
 Battle::Unit * Battle::Arena::CreateMirrorImage( Unit & unit )
 {
-    Unit * mirrorUnit = new Unit( unit, {}, unit.isReflect(), _randomGenerator, _uidGenerator.GetUnique() );
+    Unit * mirrorUnit = new Unit( unit, {}, unit.isReflect(), _uidGenerator.GetUnique() );
 
     mirrorUnit->SetArmy( *unit.GetArmy() );
     mirrorUnit->SetMirror( &unit );
@@ -1263,9 +1231,4 @@ bool Battle::Arena::AutoBattleInProgress() const
 bool Battle::Arena::CanToggleAutoBattle() const
 {
     return !( GetCurrentForce().GetControl() & CONTROL_AI );
-}
-
-const Rand::DeterministicRandomGenerator & Battle::Arena::GetRandomGenerator() const
-{
-    return _randomGenerator;
 }
