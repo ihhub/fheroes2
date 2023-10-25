@@ -2637,7 +2637,7 @@ namespace fheroes2
                 }
                 return true;
             case ICN::TROLL2MSL:
-                LoadOriginalICN( ICN::TROLLMSL );
+                LoadModifiedICN( ICN::TROLLMSL );
                 if ( _icnVsSprite[ICN::TROLLMSL].size() == 1 ) {
                     _icnVsSprite[id].resize( 1 );
 
@@ -3391,7 +3391,7 @@ namespace fheroes2
             case ICN::GOOD_MARKET_BUTTON: {
                 _icnVsSprite[id].resize( 2 );
 
-                LoadOriginalICN( ICN::ADVBTNS );
+                LoadModifiedICN( ICN::ADVBTNS );
 
                 const int releasedIndex = ( id == ICN::GOOD_ARMY_BUTTON ) ? 0 : 4;
                 Copy( GetICN( ICN::ADVBTNS, releasedIndex ), _icnVsSprite[id][0] );
@@ -3408,7 +3408,7 @@ namespace fheroes2
             case ICN::EVIL_MARKET_BUTTON: {
                 _icnVsSprite[id].resize( 2 );
 
-                LoadOriginalICN( ICN::ADVEBTNS );
+                LoadModifiedICN( ICN::ADVEBTNS );
 
                 const int releasedIndex = ( id == ICN::EVIL_ARMY_BUTTON ) ? 0 : 4;
                 Copy( GetICN( ICN::ADVEBTNS, releasedIndex ), _icnVsSprite[id][0] );
@@ -3510,7 +3510,7 @@ namespace fheroes2
                 return true;
             }
             case ICN::MONO_CURSOR_ADVMBW: {
-                LoadOriginalICN( ICN::ADVMCO );
+                LoadModifiedICN( ICN::ADVMCO );
 
                 _icnVsSprite[id].resize( _icnVsSprite[ICN::ADVMCO].size() );
                 for ( size_t i = 0; i < _icnVsSprite[id].size(); ++i ) {
@@ -3525,7 +3525,7 @@ namespace fheroes2
                 return true;
             }
             case ICN::MONO_CURSOR_SPELBW: {
-                LoadOriginalICN( ICN::SPELCO );
+                LoadModifiedICN( ICN::SPELCO );
 
                 _icnVsSprite[id].resize( _icnVsSprite[ICN::SPELCO].size() );
                 for ( size_t i = 0; i < _icnVsSprite[id].size(); ++i ) {
@@ -3540,7 +3540,7 @@ namespace fheroes2
                 return true;
             }
             case ICN::MONO_CURSOR_CMSSBW: {
-                LoadOriginalICN( ICN::CMSECO );
+                LoadModifiedICN( ICN::CMSECO );
 
                 _icnVsSprite[id].resize( _icnVsSprite[ICN::CMSECO].size() );
                 for ( size_t i = 0; i < _icnVsSprite[id].size(); ++i ) {
@@ -3964,7 +3964,7 @@ namespace fheroes2
             case ICN::MINI_MONSTER_IMAGE:
             case ICN::MINI_MONSTER_SHADOW: {
                 // It doesn't matter which image is being called. We are generating both of them at the same time.
-                LoadOriginalICN( ICN::MINIMON );
+                LoadModifiedICN( ICN::MINIMON );
 
                 // Minotaur King original Adventure map sprite has blue armlets. We make them gold to correspond the ICN::MINOTAU2.
                 if ( _icnVsSprite[ICN::MINIMON].size() > 303 ) {
