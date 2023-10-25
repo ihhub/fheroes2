@@ -2217,7 +2217,7 @@ StreamBase & operator>>( StreamBase & msg, VecHeroes & heroes )
     heroes.clear();
 
     for ( uint32_t i = 0; i < size; ++i ) {
-        uint32_t hid;
+        int32_t hid;
         msg >> hid;
 
         static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1010_RELEASE, "Remove the logic below." );
