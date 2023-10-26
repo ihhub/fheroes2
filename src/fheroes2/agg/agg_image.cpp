@@ -550,6 +550,9 @@ namespace fheroes2
 
         void LoadOriginalICN( const int id )
         {
+            // If this assertion blows up then something wrong with your logic and you load resources more than once!
+            assert( _icnVsSprite[id].empty() );
+
             const std::vector<uint8_t> & body = ::AGG::getDataFromAggFile( ICN::GetString( id ) );
 
             if ( body.empty() ) {
@@ -4216,7 +4219,7 @@ namespace fheroes2
                 loadICN( originalId );
 
                 if ( _icnVsSprite[originalId].size() < 9 ) {
-                    break;
+                    return true;
                 }
 
                 _icnVsSprite[id].resize( 2 );
@@ -4274,7 +4277,7 @@ namespace fheroes2
                     FillTransform( pressed, pressed.width() - 1, 3, 1, pressed.height() - 6, 1 );
                 }
 
-                break;
+                return true;
             }
             case ICN::BRCREST: {
                 LoadOriginalICN( id );
