@@ -553,7 +553,7 @@ void Maps::Tiles::setTerrain( const uint16_t terrainImageIndex, const bool horiz
 
 Heroes * Maps::Tiles::getHero() const
 {
-    return MP2::OBJ_HEROES == _mainObjectType && _occupantHeroId ? world.GetHeroes( _occupantHeroId - 1 ) : nullptr;
+    return MP2::OBJ_HEROES == _mainObjectType && Heroes::isValidId( _occupantHeroId ) ? world.GetHeroes( _occupantHeroId ) : nullptr;
 }
 
 void Maps::Tiles::setHero( Heroes * hero )
@@ -565,7 +565,7 @@ void Maps::Tiles::setHero( Heroes * hero )
         hero->setObjectTypeUnderHero( _mainObjectType );
 
         assert( hero->GetID() >= std::numeric_limits<HeroIDType>::min() && hero->GetID() < std::numeric_limits<HeroIDType>::max() );
-        _occupantHeroId = static_cast<HeroIDType>( hero->GetID() + 1 );
+        _occupantHeroId = static_cast<HeroIDType>( hero->GetID() );
 
         SetObject( MP2::OBJ_HEROES );
     }
@@ -580,7 +580,7 @@ void Maps::Tiles::setHero( Heroes * hero )
             setAsEmpty();
         }
 
-        _occupantHeroId = 0;
+        _occupantHeroId = Heroes::UNKNOWN;
     }
 }
 

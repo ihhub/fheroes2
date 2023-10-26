@@ -33,11 +33,11 @@
 #include "color.h"
 #include "direction.h"
 #include "ground.h"
+#include "heroes.h"
 #include "math_base.h"
 #include "mp2.h"
 #include "world_regions.h"
 
-class Heroes;
 class StreamBase;
 
 namespace Maps
@@ -388,9 +388,7 @@ namespace Maps
 
         bool _isTileMarkedAsRoad{ false };
 
-        // This member holds Hero ID that is incremented by 1.
-        // TODO: once hero IDs are going to be updated change the logic for this member as well.
-        uint8_t _occupantHeroId{ 0 };
+        uint8_t _occupantHeroId{ Heroes::UNKNOWN };
 
         // The following members are only used in the game.
 
