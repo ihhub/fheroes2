@@ -2291,6 +2291,13 @@ namespace fheroes2
 
         bool LoadModifiedICN( int id )
         {
+            // If this assertion blows up then you are calling this function in a recursion. Check your code!
+            assert( _icnVsSprite[id].empty() );
+
+            // IMPORTANT!!!
+            // Call LoadOriginalICN() function only if you are handling the same ICN.
+            // If you need to load a different ICN use loadICN() function.
+
             switch ( id ) {
             case ICN::ROUTERED:
                 CopyICNWithPalette( id, ICN::ROUTE, PAL::PaletteType::RED );
