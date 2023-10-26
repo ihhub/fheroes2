@@ -1465,7 +1465,6 @@ msgstr ""
 "Det stora Bibliotekets plats har upptäckts. Du måste nå fram till det och "
 "återta staden Chronos som det ligger i."
 
-#, fuzzy
 msgid ""
 "Find the Orb of negation, which is said to be buried in this land. There are "
 "clues inscribed on stone obelisks which will help lead you to your prize. "
@@ -1474,7 +1473,7 @@ msgid ""
 msgstr ""
 "Hitta Upphävningsklotet som sägs vara begravet någonstans i detta land. Det "
 "finns ledtrådar inristade på stenobelisker som kan hjälpa dig finna det. "
-"Hitta klotet innan första dagen på den sjätte månaden, annars lär dina "
+"Hitta Klotet innan första dagen på den sjätte månaden, annars lär dina "
 "rivaler ha hittat det före dig."
 
 msgid ""
@@ -3688,21 +3687,17 @@ msgstr "Artefakter"
 msgid "Treasures"
 msgstr "Skatter"
 
-#, fuzzy
 msgid "Terrain"
-msgstr "Terrängläge"
+msgstr "Terräng"
 
-#, fuzzy
 msgid "Castles"
 msgstr "Slott"
 
-#, fuzzy
 msgid "Roads"
-msgstr "Väg"
+msgstr "Vägar"
 
-#, fuzzy
 msgid "Streams"
-msgstr "Älvläge"
+msgstr "Floder"
 
 msgid ""
 "Draws terrain in\n"
@@ -3813,7 +3808,7 @@ msgid "Allows you to draw streams by clicking and dragging."
 msgstr "Används för att dra älvar genom att klicka och dra."
 
 msgid "Stream Mode"
-msgstr "Älvläge"
+msgstr "Flodläge"
 
 msgid "Allows you to draw roads by clicking and dragging."
 msgstr "Används för att dra vägar genom att klicka och dra."
@@ -3824,9 +3819,8 @@ msgstr "Vägläge"
 msgid "Erase Mode"
 msgstr "Raderarläge"
 
-#, fuzzy
 msgid "Used to erase objects from the map."
-msgstr "Använda för att radera föremål från kartan."
+msgstr "Används för att radera föremål från kartan."
 
 msgid "Change between zoom and normal view."
 msgstr "Ändra mellan inzoomad vy eller normal vy."
@@ -4591,7 +4585,6 @@ msgstr "Var Hälsad!"
 msgid "Welcome to Heroes of Might and Magic II powered by fheroes2 engine!"
 msgstr "Välkommen till Heroes of Might and Magic II genom fheroes2 spelmotor!"
 
-#, fuzzy
 msgid ""
 "Welcome to Heroes of Might and Magic II powered by the fheroes2 engine!\n"
 "Before starting the game please select a game resolution."
@@ -4606,18 +4599,17 @@ msgstr "Kom ihåg"
 msgid ""
 "You can always change the language, resolution and settings of the game by "
 "clicking on the "
-msgstr "Du kan alltid ändra spelupplösning genom att klicka på "
+msgstr "Du kan alltid ändra språk, spelupplösning och inställningar genom att klicka på "
 
 msgid "door"
 msgstr "dörren"
 
 msgid " on the left side of the Main Menu, or with the "
-msgstr ""
+msgstr " vid vänster om huvudmenyn eller med "
 
 msgid " button from the "
-msgstr ""
+msgstr " knappen i "
 
-#, fuzzy
 msgid "NEW GAME"
 msgstr ""
 "NYTT\n"
@@ -4628,6 +4620,8 @@ msgid ""
 "\n"
 "Enjoy the game!"
 msgstr ""
+" menyn. \n"
+"Spela på!"
 
 msgid "Editor"
 msgstr "Redigerare"
