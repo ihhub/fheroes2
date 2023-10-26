@@ -2292,7 +2292,8 @@ namespace fheroes2
             generateDefaultImages( id );
         }
 
-        bool LoadModifiedICN( int id )
+        // This function must return true is resources have been modified, false otherwise.
+        bool LoadModifiedICN( const int id )
         {
             // If this assertion blows up then you are calling this function in a recursion. Check your code!
             assert( _icnVsSprite[id].empty() );
