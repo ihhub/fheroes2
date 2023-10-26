@@ -731,31 +731,18 @@ void Maps::Tiles::setInitialPassability()
 
 void Maps::Tiles::updatePassability()
 {
-    if ( !Maps::isValidDirection( _index, Direction::LEFT ) ) {
-        _tilePassabilityDirections &= ~( Direction::LEFT | Direction::TOP_LEFT | Direction::BOTTOM_LEFT );
-    }
-    if ( !Maps::isValidDirection( _index, Direction::RIGHT ) ) {
-        _tilePassabilityDirections &= ~( Direction::RIGHT | Direction::TOP_RIGHT | Direction::BOTTOM_RIGHT );
-    }
-    if ( !Maps::isValidDirection( _index, Direction::TOP ) ) {
-        _tilePassabilityDirections &= ~( Direction::TOP | Direction::TOP_LEFT | Direction::TOP_RIGHT );
-    }
-    if ( !Maps::isValidDirection( _index, Direction::BOTTOM ) ) {
-        _tilePassabilityDirections &= ~( Direction::BOTTOM | Direction::BOTTOM_LEFT | Direction::BOTTOM_RIGHT );
-    }
-
+    // Get object type but ignore heroes as they are "temporary" objects.
     const MP2::MapObjectType objectType = GetObject( false );
+
     const bool isActionObject = MP2::isActionObject( objectType );
-    if ( !isActionObject && ( _mainAddon._objectIcnType != MP2::OBJ_ICN_TYPE_UNKNOWN ) && _mainAddon._imageIndex < 255 && ( ( _mainAddon._layerType >> 1 ) & 1 ) == 0
-         && !isShadow() ) {
+    if ( !isActionObject && ( _mainAddon._objectIcnType != MP2::OBJ_ICN_TYPE_UNKNOWN ) && ( ( _mainAddon._layerType >> 1 ) & 1 ) == 0 && !isShadow() ) {
         // This is a non-action object.
         if ( Maps::isValidDirection( _index, Direction::BOTTOM ) ) {
             const Tiles & bottomTile = world.GetTiles( Maps::GetDirectionIndex( _index, Direction::BOTTOM ) );
 
             // If a bottom tile has the same object ID then this tile is inaccessible.
             std::vector<uint32_t> tileUIDs;
-            if ( ( _mainAddon._objectIcnType != MP2::OBJ_ICN_TYPE_UNKNOWN ) && _mainAddon._imageIndex < 255 && _mainAddon._uid != 0
-                 && ( ( _mainAddon._layerType >> 1 ) & 1 ) == 0 ) {
+            if ( ( _mainAddon._objectIcnType != MP2::OBJ_ICN_TYPE_UNKNOWN ) && _mainAddon._uid != 0 && ( ( _mainAddon._layerType >> 1 ) & 1 ) == 0 ) {
                 tileUIDs.emplace_back( _mainAddon._uid );
             }
 
@@ -792,8 +779,7 @@ void Maps::Tiles::updatePassability()
             const bool isBottomTileObject = ( ( bottomTile._mainAddon._layerType >> 1 ) & 1 ) == 0;
 
             // TODO: we might need to simplify the logic below as singleObjectTile might cover most of it.
-            if ( !singleObjectTile && !isDetachedObject() && isBottomTileObject && ( bottomTile._mainAddon._objectIcnType != MP2::OBJ_ICN_TYPE_UNKNOWN )
-                 && bottomTile._mainAddon._imageIndex < 255 ) {
+            if ( !singleObjectTile && !isDetachedObject() && isBottomTileObject && ( bottomTile._mainAddon._objectIcnType != MP2::OBJ_ICN_TYPE_UNKNOWN ) ) {
                 const MP2::MapObjectType bottomTileObjectType = bottomTile.GetObject( false );
                 const bool isBottomTileActionObject = MP2::isActionObject( bottomTileObjectType );
                 const MP2::MapObjectType correctedObjectType = MP2::getBaseActionObjectType( bottomTileObjectType );
@@ -1682,7 +1668,7 @@ bool Maps::Tiles::isTallObject() const
     }
 
     std::vector<uint32_t> tileUIDs;
-    if ( _mainAddon._objectIcnType != MP2::OBJ_ICN_TYPE_UNKNOWN && _mainAddon._imageIndex < 255 && _mainAddon._uid != 0 && ( ( _mainAddon._layerType >> 1 ) & 1 ) == 0 ) {
+    if ( _mainAddon._objectIcnType != MP2::OBJ_ICN_TYPE_UNKNOWN && _mainAddon._uid != 0 && ( ( _mainAddon._layerType >> 1 ) & 1 ) == 0 ) {
         tileUIDs.emplace_back( _mainAddon._uid );
     }
 
