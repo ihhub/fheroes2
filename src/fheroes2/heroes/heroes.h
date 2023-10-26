@@ -65,22 +65,17 @@ namespace fheroes2
     class Sprite;
 }
 
-struct HeroSeedsForLevelUp
-{
-    uint32_t seedPrimarySkill = 0;
-    uint32_t seedSecondarySkill1 = 0;
-    uint32_t seedSecondarySkill2 = 0;
-    uint32_t seedSecondarySkillRandomChoose = 0;
-};
-
 class Heroes final : public HeroBase, public ColorBase
 {
 public:
     friend class Battle::Only;
 
-    enum
+    enum : int32_t
     {
-        // knight
+        // Unknown / undefined hero.
+        UNKNOWN,
+
+        // Knight heroes from The Succession Wars.
         LORDKILBURN,
         SIRGALLANTH,
         ECTOR,
@@ -90,7 +85,8 @@ public:
         RUBY,
         MAXIMUS,
         DIMITRY,
-        // barbarian
+
+        // Barbarian heroes from The Succession Wars.
         THUNDAX,
         FINEOUS,
         JOJOSH,
@@ -100,7 +96,8 @@ public:
         ERGON,
         TSABU,
         ATLAS,
-        // sorceress
+
+        // Sorceress heroes from The Succession Wars.
         ASTRA,
         NATASHA,
         TROYAN,
@@ -110,7 +107,8 @@ public:
         ARIEL,
         CARLAWN,
         LUNA,
-        // warlock
+
+        // Warlock heroes from The Succession Wars.
         ARIE,
         ALAMAR,
         VESPER,
@@ -120,7 +118,8 @@ public:
         AGAR,
         FALAGAR,
         WRATHMONT,
-        // wizard
+
+        // Wizard heroes from The Succession Wars.
         MYRA,
         FLINT,
         DAWN,
@@ -130,7 +129,8 @@ public:
         SARAKIN,
         KALINDRA,
         MANDIGAL,
-        // necromancer
+
+        // Necromancer heroes from The Succession Wars.
         ZOM,
         DARLANA,
         ZAM,
@@ -140,14 +140,16 @@ public:
         ROXANA,
         SANDRO,
         CELIA,
-        // From The Succession Wars campaign.
+
+        // The Succession Wars campaign heroes.
         ROLAND,
         CORLAGON,
         ELIZA,
         ARCHIBALD,
         HALTON,
         BRAX,
-        // From The Price of Loyalty expansion.
+
+        // The Price of Loyalty expansion heroes.
         SOLMYR,
         DAINWIN,
         MOG,
@@ -159,9 +161,14 @@ public:
         DRAKONIA,
         MARTINE,
         JARKONAS,
-        // debugger
+
+        // Debug hero. Should not be used anywhere outside the development!
         DEBUG_HERO,
-        UNKNOWN
+
+        // Resurrection expansion heroes.
+
+        // IMPORTANT! Put all new heroes just above this line.
+        HEROES_COUNT
     };
 
     enum : uint32_t
@@ -273,9 +280,6 @@ public:
 
     Heroes & operator=( const Heroes & ) = delete;
 
-    static const fheroes2::Sprite & GetPortrait( int heroid, int type );
-    static const char * GetName( int heroid );
-
     bool isValid() const override;
     // Returns true if the hero is active on the adventure map (i.e. has a valid ID, is not imprisoned, and is hired by
     // some kingdom), otherwise returns false
@@ -304,7 +308,7 @@ public:
 
     int GetID() const
     {
-        return hid;
+        return _id;
     }
 
     double getMeetingValue( const Heroes & otherHero ) const;
@@ -393,7 +397,7 @@ public:
         return secondary_skills;
     }
 
-    bool PickupArtifact( const Artifact & );
+    bool PickupArtifact( const Artifact & art );
 
     bool HasUltimateArtifact() const
     {
@@ -563,9 +567,6 @@ public:
         return ( portrait >= SOLMYR && portrait <= JARKONAS );
     }
 
-    static int GetLevelFromExperience( uint32_t );
-    static uint32_t GetExperienceFromLevel( int );
-
     fheroes2::Point MovementDirection() const;
 
     int GetAttackedMonsterTileIndex() const
@@ -609,16 +610,39 @@ public:
 
     bool isInDeepOcean() const;
 
+    static int GetLevelFromExperience( uint32_t exp );
+    static uint32_t GetExperienceFromLevel( int lvl );
+
+    static const fheroes2::Sprite & GetPortrait( int heroid, int type );
+    static const char * GetName( int heroid );
+
+    static bool isValidId( const int32_t id )
+    {
+        return id > UNKNOWN && id < HEROES_COUNT;
+    }
+
 private:
     friend StreamBase & operator<<( StreamBase &, const Heroes & );
     friend StreamBase & operator>>( StreamBase &, Heroes & );
+
+    enum
+    {
+        SKILL_VALUE = 100
+    };
+
+    struct HeroSeedsForLevelUp
+    {
+        uint32_t seedPrimarySkill{ 0 };
+        uint32_t seedSecondarySkill1{ 0 };
+        uint32_t seedSecondarySkill2{ 0 };
+        uint32_t seedSecondarySkillRandomChoose{ 0 };
+    };
 
     HeroSeedsForLevelUp GetSeedsForLevelUp() const;
     void LevelUp( bool skipsecondary, bool autoselect = false );
     void LevelUpSecondarySkill( const HeroSeedsForLevelUp & seeds, int primary, bool autoselect = false );
     void AngleStep( int );
     bool MoveStep( const bool jumpToNextTile );
-    static uint32_t GetStartingXp();
     bool isInVisibleMapArea() const;
 
     // This function is useful only in a situation when AI hero moves out of the fog
@@ -631,10 +655,7 @@ private:
     // Daily replenishment of spell points
     void ReplenishSpellPoints();
 
-    enum
-    {
-        SKILL_VALUE = 100
-    };
+    static uint32_t GetStartingXp();
 
     std::string name;
     uint32_t experience;
@@ -644,7 +665,7 @@ private:
     Army army;
 
     // Hero ID
-    int hid;
+    int _id;
     // Corresponds to the ID of the hero whose portrait is applied. Usually equal to the
     // ID of this hero, unless a custom portrait is applied.
     int portrait;
@@ -673,11 +694,6 @@ private:
 
     // This value should NOT be saved in save file as it's dynamically set during AI turn.
     Role _aiRole;
-
-    enum
-    {
-        HERO_MOVE_STEP = 4 // in pixels
-    };
 };
 
 struct VecHeroes : public std::vector<Heroes *>
@@ -688,7 +704,7 @@ struct VecHeroes : public std::vector<Heroes *>
 
 struct AllHeroes : public VecHeroes
 {
-    AllHeroes();
+    AllHeroes() = default;
     AllHeroes( const AllHeroes & ) = delete;
 
     ~AllHeroes();
@@ -698,7 +714,7 @@ struct AllHeroes : public VecHeroes
     void Init();
     void clear();
 
-    void Scout( int ) const;
+    void Scout( int colors ) const;
 
     void ResetModes( const uint32_t modes ) const
     {
@@ -720,9 +736,8 @@ struct AllHeroes : public VecHeroes
         std::for_each( begin(), end(), []( Heroes * hero ) { hero->ActionNewMonth(); } );
     }
 
-    Heroes * GetHero( const Castle & castle ) const;
     Heroes * GetHeroForHire( const int race, const int heroIDToIgnore ) const;
-    Heroes * FromJail( int32_t ) const;
+    Heroes * FromJail( int32_t index ) const;
 };
 
 StreamBase & operator<<( StreamBase &, const VecHeroes & );

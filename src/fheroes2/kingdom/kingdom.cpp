@@ -42,6 +42,7 @@
 #include "difficulty.h"
 #include "game.h"
 #include "game_interface.h"
+#include "game_io.h"
 #include "game_static.h"
 #include "interface_icons.h"
 #include "logging.h"
@@ -55,6 +56,7 @@
 #include "profit.h"
 #include "race.h"
 #include "route.h"
+#include "save_format_version.h"
 #include "serialize.h"
 #include "settings.h"
 #include "skill.h"
@@ -184,7 +186,7 @@ void Kingdom::LossPostActions()
     if ( isPlay() ) {
         Players::SetPlayerInGame( color, false );
 
-        // Heroes::Dismiss() calls Kingdom::RemoveHeroes(), which eventually calls heroes.erase()
+        // Heroes::Dismiss() calls Kingdom::RemoveHero(), which eventually calls heroes.erase()
         while ( !heroes.empty() ) {
             Heroes * hero = heroes.back();
 
@@ -305,23 +307,27 @@ void Kingdom::ActionNewMonth()
     visit_object.remove_if( Visit::isMonthLife );
 }
 
-void Kingdom::AddHeroes( Heroes * hero )
+void Kingdom::AddHero( Heroes * hero )
 {
-    if ( hero ) {
-        if ( heroes.end() == std::find( heroes.begin(), heroes.end(), hero ) )
-            heroes.push_back( hero );
-
-        const Player * player = Settings::Get().GetPlayers().GetCurrent();
-        if ( player && player->isColor( GetColor() ) && player->isControlHuman() )
-            Interface::AdventureMap::Get().GetIconsPanel().ResetIcons( ICON_HEROES );
-
-        AI::Get().HeroesAdd( *hero );
+    if ( hero == nullptr ) {
+        // Why are you adding an empty hero?
+        assert( 0 );
+        return;
     }
+
+    if ( heroes.end() == std::find( heroes.begin(), heroes.end(), hero ) )
+        heroes.push_back( hero );
+
+    const Player * player = Settings::Get().GetPlayers().GetCurrent();
+    if ( player && player->isColor( GetColor() ) && player->isControlHuman() )
+        Interface::AdventureMap::Get().GetIconsPanel().ResetIcons( ICON_HEROES );
+
+    AI::Get().HeroesAdd( *hero );
 }
 
-void Kingdom::RemoveHeroes( const Heroes * hero )
+void Kingdom::RemoveHero( const Heroes * hero )
 {
-    if ( hero ) {
+    if ( hero != nullptr ) {
         if ( !heroes.empty() ) {
             auto it = std::find( heroes.begin(), heroes.end(), hero );
             assert( it != heroes.end() );
@@ -339,6 +345,10 @@ void Kingdom::RemoveHeroes( const Heroes * hero )
         assert( hero != nullptr );
 
         AI::Get().HeroesRemove( *hero );
+    }
+    else {
+        // Why are trying to delete a non existing hero?
+        assert( 0 );
     }
 
     if ( isLoss() )
@@ -888,10 +898,13 @@ int Kingdoms::FindWins( int cond ) const
 
 void Kingdoms::AddHeroes( const AllHeroes & heroes )
 {
-    for ( AllHeroes::const_iterator it = heroes.begin(); it != heroes.end(); ++it )
-        // skip gray color
-        if ( ( *it )->GetColor() )
-            GetKingdom( ( *it )->GetColor() ).AddHeroes( *it );
+    for ( Heroes * hero : heroes ) {
+        assert( hero != nullptr );
+
+        if ( hero->GetColor() != Color::NONE ) {
+            GetKingdom( hero->GetColor() ).AddHero( hero );
+        }
+    }
 }
 
 void Kingdoms::AddCastles( const AllCastles & castles )
@@ -1003,9 +1016,15 @@ StreamBase & operator<<( StreamBase & msg, const Kingdom & kingdom )
 
 StreamBase & operator>>( StreamBase & msg, Kingdom & kingdom )
 {
-    return msg >> kingdom.modes >> kingdom.color >> kingdom.resource >> kingdom.lost_town_days >> kingdom.castles >> kingdom.heroes >> kingdom.recruits
-           >> kingdom.visit_object >> kingdom.puzzle_maps >> kingdom.visited_tents_colors >> kingdom._lastBattleWinHeroID >> kingdom._topCastleInKingdomView
-           >> kingdom._topHeroInKingdomView;
+    msg >> kingdom.modes >> kingdom.color >> kingdom.resource >> kingdom.lost_town_days >> kingdom.castles >> kingdom.heroes >> kingdom.recruits >> kingdom.visit_object
+        >> kingdom.puzzle_maps >> kingdom.visited_tents_colors >> kingdom._lastBattleWinHeroID;
+
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1010_RELEASE, "Remove the logic below." );
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1010_RELEASE ) {
+        ++kingdom._lastBattleWinHeroID;
+    }
+
+    return msg >> kingdom._topCastleInKingdomView >> kingdom._topHeroInKingdomView;
 }
 
 StreamBase & operator<<( StreamBase & msg, const Kingdoms & obj )

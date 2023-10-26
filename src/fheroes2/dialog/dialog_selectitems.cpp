@@ -551,9 +551,9 @@ Monster Dialog::selectMonster( const int monsterId, const bool includeRandomMons
 
 int Dialog::selectHeroes( const int heroId /* = Heroes::UNKNOWN */ )
 {
-    std::vector<int> heroes( static_cast<int>( Settings::Get().isCurrentMapPriceOfLoyalty() ? Heroes::DEBUG_HERO : Heroes::SOLMYR ), Heroes::UNKNOWN );
+    std::vector<int> heroes( static_cast<int>( Settings::Get().isCurrentMapPriceOfLoyalty() ? Heroes::JARKONAS : Heroes::BRAX ), Heroes::UNKNOWN );
 
-    std::iota( heroes.begin(), heroes.end(), 0 );
+    std::iota( heroes.begin(), heroes.end(), Heroes::UNKNOWN + 1 );
 
     SelectEnumHeroes listbox( { 240, fheroes2::Display::instance().height() - 200 } );
 
