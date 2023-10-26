@@ -3772,19 +3772,19 @@ msgid ""
 msgstr "Används för att placera en resurs eller skatt."
 
 msgid "Toggle the erasure of %{type} objects."
-msgstr ""
+msgstr "Aktivera raderingen av %{type}objekt."
 
 msgid ""
 "Objects of this type will be deleted with the Erase tool. Left-click here to "
 "deselect this type. Press and hold this button to deselect all other object "
 "types."
-msgstr ""
+msgstr "Objekt av denna typ kommer raderas med Raderingsverktyget. Vänsterklicka här för att avmarkera denna objekttyp. Tryck och håll denna knapp för att avmarkera alla andra objekttyper."
 
 msgid ""
 "Objects of this type will NOT be deleted with the Erase tool. Left-click "
 "here to select this type. Press and hold this button to select all other "
 "object types."
-msgstr ""
+msgstr "Objekt av denna typ kommer INTE att raderas med Raderingsverktyget. Vänsterklicka här för att markera denna objekttyp. Tryck och håll denna knapp för att markera alla andra objektyper."
 
 msgid "Terrain Mode"
 msgstr "Terrängläge"
