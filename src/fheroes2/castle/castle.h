@@ -153,8 +153,12 @@ public:
         return ( building & BUILD_CASTLE ) != 0;
     }
 
-    bool HaveNearlySea() const;
-    bool PresentBoat() const;
+    bool HasSeaAccess() const;
+    bool HasBoatNearby() const;
+
+    // Returns a tile ID where it is possible to place a boat or -1 if it is not.
+    int32_t getTileIndexToPlaceBoat() const;
+
     bool AllowBuyHero( std::string * = nullptr ) const;
     bool isPosition( const fheroes2::Point & pt ) const override;
     bool isNecromancyShrineBuild() const;
@@ -254,12 +258,13 @@ public:
     }
 
     bool BuyBuilding( uint32_t );
-    bool AllowBuyBoat() const;
-    bool BuyBoat() const;
     uint32_t GetBuildingRequirement( uint32_t ) const;
 
     int CheckBuyBuilding( const uint32_t build ) const;
     static int GetAllBuildingStatus( const Castle & );
+
+    bool AllowBuyBoat( const bool checkPayment ) const;
+    bool BuyBoat() const;
 
     void Scout() const;
 

@@ -127,12 +127,12 @@ bool Troop::isEmpty() const
     return !isValid();
 }
 
-payment_t Troop::GetTotalCost() const
+Funds Troop::GetTotalCost() const
 {
     return GetCost() * count;
 }
 
-payment_t Troop::GetTotalUpgradeCost() const
+Funds Troop::GetTotalUpgradeCost() const
 {
     return GetUpgradeCost() * count;
 }

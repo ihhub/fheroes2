@@ -24,18 +24,20 @@
 #ifndef H2AI_H
 #define H2AI_H
 
+#include <optional>
+
+#include "castle.h"
 #include "mp2.h"
+#include "payment.h"
 #include "rand.h"
 
 class StreamBase;
 class Funds;
-class Castle;
 class HeroBase;
 class Heroes;
 class Kingdom;
 class Army;
 class Spell;
-struct VecHeroes;
 
 namespace Maps
 {
@@ -131,6 +133,7 @@ namespace AI
         friend StreamBase & operator>>( StreamBase &, AI::Base & );
     };
 
+    // AI type selector, can be used sometime in the future
     Base & Get( AI_TYPE type = AI_TYPE::NORMAL );
 
     // Definitions are in the ai_hero_action.cpp
@@ -151,11 +154,30 @@ namespace AI
 
     // Definitions are in the ai_common.cpp
 
-    bool BuildIfAvailable( Castle & castle, int building );
-    bool BuildIfEnoughResources( Castle & castle, int building, uint32_t minimumMultiplicator );
-    uint32_t GetResourceMultiplier( uint32_t min, uint32_t max );
+    // Builds the given building in the given castle if possible. If possible and necessary, obtains the resources
+    // that are missing for construction through trading on the marketplace. Returns true if the construction was
+    // successful, otherwise returns false.
+    bool BuildIfPossible( Castle & castle, const building_t building );
+
+    // Builds the given building in the given castle if possible and if there is a sufficient supply of resources
+    // (see the implementation for details). If possible and necessary, obtains the resources that are missing for
+    // construction through trading on the marketplace. Returns true if the construction was successful, otherwise
+    // returns false.
+    bool BuildIfEnoughFunds( Castle & castle, const building_t building, const uint32_t fundsMultiplier );
+
     void OptimizeTroopsOrder( Army & hero );
     bool CanPurchaseHero( const Kingdom & kingdom );
+
+    // Calculates a marketplace transaction, after which the kingdom would be able to make a payment in the amount of
+    // at least 'fundsToObtain'. Returns the corresponding transaction if it was found, otherwise returns an empty
+    // result. In order to receive the necessary funds, the returned transaction must be deducted from the funds of
+    // the kingdom.
+    std::optional<Funds> calculateMarketplaceTransaction( const Kingdom & kingdom, const Funds & fundsToObtain );
+
+    // Performs operations on the marketplace necessary for the kingdom to be able to make a payment in the amount
+    // of at least 'fundsToObtain'. If the necessary funds cannot be obtained as a result of trading, then the current
+    // funds of the kingdom remain unchanged. Returns true if the trade was successful, otherwise returns false.
+    bool tradeAtMarketplace( Kingdom & kingdom, const Funds & fundsToObtain );
 
     StreamBase & operator<<( StreamBase &, const AI::Base & );
     StreamBase & operator>>( StreamBase &, AI::Base & );

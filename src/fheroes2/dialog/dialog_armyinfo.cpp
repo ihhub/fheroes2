@@ -48,7 +48,7 @@
 #include "monster_anim.h"
 #include "monster_info.h"
 #include "morale.h"
-#include "payment.h"
+#include "resource.h"
 #include "screen.h"
 #include "settings.h"
 #include "spell.h"
@@ -149,8 +149,7 @@ namespace
         dst_pt.x = dst.x + offsetX;
         text.draw( dst_pt.x, dst_pt.y + 2, display );
 
-        // shot
-        if ( troop.isArchers() ) {
+        if ( fheroes2::getMonsterData( troop.GetID() ).battleStats.shots > 0 ) {
             std::string message = troop.isBattle() ? _( "Shots Left" ) : _( "Shots" );
             message += ':';
             text.set( std::move( message ), fheroes2::FontType::normalWhite() );

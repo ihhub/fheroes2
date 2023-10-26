@@ -297,9 +297,8 @@ namespace
 
         // There is a tile below the current.
         const Maps::Tiles & tileBelow = world.GetTiles( x, y + 1 );
-        const Maps::Addons & lowerTileAddons = tileBelow.getTopLayerAddons();
 
-        for ( const Maps::TilesAddon & lowerAddon : lowerTileAddons ) {
+        for ( const Maps::TilesAddon & lowerAddon : tileBelow.getTopLayerAddons() ) {
             if ( lowerAddon._uid == uid ) {
                 // This is a tall object.
                 return true;

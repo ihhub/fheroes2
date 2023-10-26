@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-15 05:23+0000\n"
+"POT-Creation-Date: 2023-10-23 00:14+0000\n"
 "PO-Revision-Date: 2023-10-09 22:16+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -1467,10 +1467,11 @@ msgstr ""
 "Vị trí của thư viện tuyệt vời đã được phát hiện! Bạn phải tìm đường đến đó "
 "và giành lại thành phố Chronos nơi nó tọa lạc."
 
+#, fuzzy
 msgid ""
 "Find the Orb of negation, which is said to be buried in this land. There are "
-"clues inscribed on stone obelisks which will help lead you to your price. "
-"Find the orb before the first day of the sixth month, or your rivals will "
+"clues inscribed on stone obelisks which will help lead you to your prize. "
+"Find the Orb before the first day of the sixth month, or your rivals will "
 "surely have gotten to the fount before you."
 msgstr ""
 "Tìm Orb of negation, được cho là bị chôn vùi ở vùng đất này. Có những manh "
@@ -1911,6 +1912,9 @@ msgstr "Nhà %{building} sinh ra %{monster}."
 
 msgid "Requires:"
 msgstr "Yêu cầu:"
+
+msgid "Exit this menu without doing anything."
+msgstr "Thoát khỏi trình đơn này và không làm gì cả."
 
 msgid "Cannot build. You have already built here today."
 msgstr "Không thể xây dựng. Ngươi đã xây dựng ở đây ngày hôm nay."
@@ -2605,6 +2609,9 @@ msgstr "với 1 bảo vật."
 msgid "without artifacts."
 msgstr "không có bảo vật."
 
+msgid "Recruit %{name} the %{race}"
+msgstr "Chiêu mộ %{name} của chủng tộc %{race}"
+
 msgid ""
 "'Spread' combat formation spreads your armies from the top to the bottom of "
 "the battlefield, with at least one empty space between each army."
@@ -2624,9 +2631,6 @@ msgstr "Đội hình Dàn trải"
 
 msgid "Grouped Formation"
 msgstr "Đội hình Tập trung"
-
-msgid "Recruit %{name} the %{race}"
-msgstr "Chiêu mộ %{name} của chủng tộc %{race}"
 
 msgid "Set garrison combat formation to 'Spread'"
 msgstr "Đặt đội hình chiến đấu đồn trú thành 'Dàn trải'"
@@ -2699,9 +2703,6 @@ msgstr "Đào kiếm Bảo vật Tối thượng."
 
 msgid "Digging"
 msgstr "Đang đào"
-
-msgid "Exit this menu without doing anything."
-msgstr "Thoát khỏi trình đơn này và không làm gì cả."
 
 msgid "Arena"
 msgstr "Đấu trường"
@@ -3673,6 +3674,22 @@ msgstr "Bảo vật"
 msgid "Treasures"
 msgstr "Kho báu"
 
+#, fuzzy
+msgid "Terrain"
+msgstr "Chế độ Địa hình"
+
+#, fuzzy
+msgid "Castles"
+msgstr "Lâu đài"
+
+#, fuzzy
+msgid "Roads"
+msgstr "Đường"
+
+#, fuzzy
+msgid "Streams"
+msgstr "Chế độ Suối"
+
 msgid ""
 "Draws terrain in\n"
 "%{size} by %{size} square increments."
@@ -3751,6 +3768,21 @@ msgstr ""
 "Dùng để đặt\n"
 "một tài nguyên hoặc kho báu."
 
+msgid "Toggle the erasure of %{type} objects."
+msgstr ""
+
+msgid ""
+"Objects of this type will be deleted with the Erase tool. Left-click here to "
+"deselect this type. Press and hold this button to deselect all other object "
+"types."
+msgstr ""
+
+msgid ""
+"Objects of this type will NOT be deleted with the Erase tool. Left-click "
+"here to select this type. Press and hold this button to select all other "
+"object types."
+msgstr ""
+
 msgid "Terrain Mode"
 msgstr "Chế độ Địa hình"
 
@@ -3784,7 +3816,8 @@ msgstr "Chế độ Đường"
 msgid "Erase Mode"
 msgstr "Chế độ Xóa"
 
-msgid "Used to erase objects off the map."
+#, fuzzy
+msgid "Used to erase objects from the map."
 msgstr "Dùng để xóa vật thể trên bản đồ."
 
 msgid "Change between zoom and normal view."
@@ -4538,9 +4571,10 @@ msgid "Welcome to Heroes of Might and Magic II powered by fheroes2 engine!"
 msgstr ""
 "Chào mừng tới Heroes of Might and Magic II cung cấp bởi mã nguồn fheroes2!"
 
+#, fuzzy
 msgid ""
-"Welcome to Heroes of Might and Magic II powered by fheroes2 engine! Before "
-"starting the game please choose game resolution."
+"Welcome to Heroes of Might and Magic II powered by the fheroes2 engine!\n"
+"Before starting the game please select a game resolution."
 msgstr ""
 "Chào mừng tới Heroes of Might and Magic II cung cấp bởi mã nguồn fheroes2! "
 "Trước khi bắt đầu hãy chọn độ phân giải của trò chơi."
@@ -4548,20 +4582,32 @@ msgstr ""
 msgid "Please Remember"
 msgstr "Hãy Nhớ"
 
-msgid "You can always change game resolution by clicking on the "
+#, fuzzy
+msgid ""
+"You can always change the language, resolution and settings of the game by "
+"clicking on the "
 msgstr "Ngươi có thể thay đổi độ phân giải bằng cách nhấp vào "
 
 msgid "door"
 msgstr "cửa"
 
+msgid " on the left side of the Main Menu, or with the "
+msgstr ""
+
+msgid " button from the "
+msgstr ""
+
+#, fuzzy
+msgid "NEW GAME"
+msgstr ""
+"TẠO\n"
+"GAME"
+
 msgid ""
-" on the left side of main menu or by clicking on the configuration button. \n"
+" menu. \n"
 "\n"
 "Enjoy the game!"
 msgstr ""
-" ở bên phía trái của màn hình chính hoặc kích vào nút điều chỉnh.\n"
-"\n"
-"Hãy tận hưởng trò chơi!"
 
 msgid "Editor"
 msgstr ""
@@ -9876,6 +9922,16 @@ msgstr ""
 "Kiểm tra phiên bản mới nhất của trò chơi tại\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid ""
+#~ " on the left side of main menu or by clicking on the configuration "
+#~ "button. \n"
+#~ "\n"
+#~ "Enjoy the game!"
+#~ msgstr ""
+#~ " ở bên phía trái của màn hình chính hoặc kích vào nút điều chỉnh.\n"
+#~ "\n"
+#~ "Hãy tận hưởng trò chơi!"
 
 #~ msgid "Undo your last action. Press again to redo the action."
 #~ msgstr "Hoàn tác thao tác cuối cùng. Nhấn lại để thực hiện lại thao tác."

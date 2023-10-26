@@ -2951,6 +2951,37 @@ namespace fheroes2
 
                 return true;
             }
+            case ICN::EDITPANL:
+                LoadOriginalICN( id );
+                if ( _icnVsSprite[id].size() > 5 ) {
+                    Sprite & erasePanel = _icnVsSprite[id][5];
+                    // To select object types for erasure we copy object buttons.
+                    Copy( _icnVsSprite[id][1], 15, 68, erasePanel, 15, 68, 114, 55 );
+
+                    // Make 3 empty buttons for terrain objects, roads and streams.
+                    Fill( erasePanel, 16, 69, 24, 24, 65U );
+                    Copy( erasePanel, 15, 68, erasePanel, 44, 96, 27, 27 );
+                    Copy( erasePanel, 15, 68, erasePanel, 73, 96, 27, 27 );
+
+                    // Make erase terrain objects button image.
+                    Image objectsImage( 24, 24 );
+                    Copy( GetICN( ICN::EDITBTNS, 2 ), 13, 4, objectsImage, 0, 0, 24, 24 );
+                    AddTransparency( objectsImage, 10U );
+                    AddTransparency( objectsImage, 38U );
+                    AddTransparency( objectsImage, 39U );
+                    AddTransparency( objectsImage, 40U );
+                    AddTransparency( objectsImage, 41U );
+                    AddTransparency( objectsImage, 46U );
+                    Blit( objectsImage, 0, 0, erasePanel, 16, 69, 24, 24 );
+
+                    // Make erase roads button image.
+                    Blit( GetICN( ICN::ROAD, 2 ), 0, 0, erasePanel, 45, 104, 24, 5 );
+                    Blit( GetICN( ICN::ROAD, 1 ), 1, 0, erasePanel, 45, 109, 24, 5 );
+
+                    // Make erase streams button image.
+                    Blit( GetICN( ICN::STREAM, 2 ), 0, 0, erasePanel, 74, 104, 24, 11 );
+                }
+                return true;
             case ICN::EDITOR:
                 LoadOriginalICN( id );
                 if ( !_icnVsSprite[id].empty() ) {
@@ -3523,6 +3554,84 @@ namespace fheroes2
                 }
                 return true;
             }
+            case ICN::ADVBTNS:
+            case ICN::ADVEBTNS:
+                LoadOriginalICN( id );
+                if ( _icnVsSprite[id].size() == 16 && _icnVsSprite[id][2].width() == 36 && _icnVsSprite[id][2].height() == 36 && _icnVsSprite[id][3].width() == 36
+                     && _icnVsSprite[id][3].height() == 36 ) {
+                    // Add hero action button released and pressed.
+                    _icnVsSprite[id].resize( 18 );
+                    Copy( _icnVsSprite[id][2], _icnVsSprite[id][16] );
+                    Copy( _icnVsSprite[id][3], _icnVsSprite[id][17] );
+
+                    // Get the button's icon colors.
+                    const uint8_t mainReleasedColor = _icnVsSprite[id][2].image()[7 * 36 + 26];
+                    const uint8_t mainPressedColor = _icnVsSprite[id][3].image()[8 * 36 + 25];
+                    const uint8_t backgroundReleasedColor = _icnVsSprite[id][2].image()[1 * 36 + 5];
+                    const uint8_t backgroundPressedColor = _icnVsSprite[id][3].image()[5 * 36 + 6];
+
+                    // Clean-up the buttons' background
+                    Fill( _icnVsSprite[id][16], 23, 5, 8, 5, backgroundReleasedColor );
+                    Fill( _icnVsSprite[id][16], 8, 10, 24, 8, backgroundReleasedColor );
+                    Fill( _icnVsSprite[id][16], 6, 18, 24, 10, backgroundReleasedColor );
+                    Fill( _icnVsSprite[id][17], 22, 6, 8, 5, backgroundPressedColor );
+                    Fill( _icnVsSprite[id][17], 7, 11, 24, 8, backgroundPressedColor );
+                    Fill( _icnVsSprite[id][17], 5, 19, 24, 10, backgroundPressedColor );
+
+                    // Get the action cursor and prepare it for button. We make it a little smaller.
+                    const Sprite & originalActionCursor = GetICN( ICN::ADVMCO, 9 );
+                    const int32_t actionCursorWidth = originalActionCursor.width() - 1;
+                    const int32_t actionCursorHeight = originalActionCursor.height() - 3;
+                    Image actionCursor( actionCursorWidth, actionCursorHeight );
+                    actionCursor.reset();
+
+                    // Head.
+                    Copy( originalActionCursor, 19, 1, actionCursor, 17, 2, 8, 5 );
+                    Copy( originalActionCursor, 16, 7, actionCursor, 14, 7, 12, 2 );
+                    actionCursor.transform()[15 + 7 * actionCursorWidth] = 1U;
+                    // Tail.
+                    Copy( originalActionCursor, 1, 10, actionCursor, 1, 9, 12, 11 );
+                    // Middle part.
+                    Copy( originalActionCursor, 14, 10, actionCursor, 13, 9, 1, 11 );
+                    // Front legs.
+                    Copy( originalActionCursor, 16, 10, actionCursor, 14, 9, 13, 11 );
+                    // Hind legs.
+                    Copy( originalActionCursor, 7, 22, actionCursor, 7, 19, 7, 7 );
+
+                    // Make contour transparent and the horse figure filled with solid color.
+                    const int32_t actionCursorSize = actionCursorWidth * actionCursorHeight;
+                    for ( int32_t i = 0; i < actionCursorSize; ++i ) {
+                        if ( actionCursor.transform()[i] == 1U ) {
+                            // Skip transparent pixel.
+                            continue;
+                        }
+                        if ( actionCursor.image()[i] < 152U ) {
+                            // It is the contour color, make it transparent.
+                            actionCursor.transform()[i] = 1U;
+                        }
+                        else {
+                            actionCursor.image()[i] = mainPressedColor;
+                        }
+                    }
+
+                    // Add shadows to the horse image.
+                    updateShadow( actionCursor, { 1, -1 }, 2, true );
+                    updateShadow( actionCursor, { -1, 1 }, 6, true );
+                    updateShadow( actionCursor, { 2, -2 }, 4, true );
+                    Blit( actionCursor, _icnVsSprite[id][17], 4, 4 );
+
+                    // Replace colors for the released button.
+                    for ( int32_t i = 0; i < actionCursorSize; ++i ) {
+                        if ( actionCursor.transform()[i] == 6U ) {
+                            // Disable whitening transform and set white color.
+                            actionCursor.transform()[i] = 0U;
+                            actionCursor.image()[i] = 10U;
+                        }
+                    }
+                    ReplaceColorId( actionCursor, mainPressedColor, mainReleasedColor );
+                    Blit( actionCursor, _icnVsSprite[id][16], 5, 3 );
+                }
+                return true;
             case ICN::ARTIFACT:
                 LoadOriginalICN( id );
                 if ( _icnVsSprite[id].size() > 99 ) {

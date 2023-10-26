@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-15 05:23+0000\n"
+"POT-Creation-Date: 2023-10-23 00:14+0000\n"
 "PO-Revision-Date: 2023-09-11 20:22+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -1455,10 +1455,11 @@ msgstr ""
 "Poloha veľkej knižnice bola odhalená! Musíš sa k nej dostať a získať mesto "
 "Chronos, v ktorom leží."
 
+#, fuzzy
 msgid ""
 "Find the Orb of negation, which is said to be buried in this land. There are "
-"clues inscribed on stone obelisks which will help lead you to your price. "
-"Find the orb before the first day of the sixth month, or your rivals will "
+"clues inscribed on stone obelisks which will help lead you to your prize. "
+"Find the Orb before the first day of the sixth month, or your rivals will "
 "surely have gotten to the fount before you."
 msgstr ""
 "Nájdi Orb negácie, ktorý je údajne zakopaný v tejto krajine. Na kamenných "
@@ -1899,6 +1900,9 @@ msgstr "%{building} produkuje: %{monster}."
 
 msgid "Requires:"
 msgstr "Potrebuje:"
+
+msgid "Exit this menu without doing anything."
+msgstr "Opusti túto ponuku bez vykonania akcie."
 
 msgid "Cannot build. You have already built here today."
 msgstr "Nedá sa stavať. Dnes tu už bola budova postavená."
@@ -2592,6 +2596,9 @@ msgstr "s jedným artefaktom."
 msgid "without artifacts."
 msgstr "bez artefaktov."
 
+msgid "Recruit %{name} the %{race}"
+msgstr "Najmi: %{race} %{name}"
+
 msgid ""
 "'Spread' combat formation spreads your armies from the top to the bottom of "
 "the battlefield, with at least one empty space between each army."
@@ -2611,9 +2618,6 @@ msgstr "Široká formácia"
 
 msgid "Grouped Formation"
 msgstr "Zoskupená formácia"
-
-msgid "Recruit %{name} the %{race}"
-msgstr "Najmi: %{race} %{name}"
 
 msgid "Set garrison combat formation to 'Spread'"
 msgstr "Nastaviť bojovú formáciu posádky na 'Široká'"
@@ -2686,9 +2690,6 @@ msgstr "Kop za ultimátnym artefaktom."
 
 msgid "Digging"
 msgstr "Kopanie"
-
-msgid "Exit this menu without doing anything."
-msgstr "Opusti túto ponuku bez vykonania akcie."
 
 msgid "Arena"
 msgstr "Aréna"
@@ -3661,6 +3662,22 @@ msgstr "Artefakty"
 msgid "Treasures"
 msgstr "Poklady"
 
+#, fuzzy
+msgid "Terrain"
+msgstr "Režim terénu"
+
+#, fuzzy
+msgid "Castles"
+msgstr "Hrad"
+
+#, fuzzy
+msgid "Roads"
+msgstr "Cesta"
+
+#, fuzzy
+msgid "Streams"
+msgstr "Režim tokov"
+
 msgid ""
 "Draws terrain in\n"
 "%{size} by %{size} square increments."
@@ -3740,6 +3757,21 @@ msgstr ""
 "Slúži na umiestnenie\n"
 "zdroja alebo pokladu."
 
+msgid "Toggle the erasure of %{type} objects."
+msgstr ""
+
+msgid ""
+"Objects of this type will be deleted with the Erase tool. Left-click here to "
+"deselect this type. Press and hold this button to deselect all other object "
+"types."
+msgstr ""
+
+msgid ""
+"Objects of this type will NOT be deleted with the Erase tool. Left-click "
+"here to select this type. Press and hold this button to select all other "
+"object types."
+msgstr ""
+
 msgid "Terrain Mode"
 msgstr "Režim terénu"
 
@@ -3773,7 +3805,8 @@ msgstr "Cestný režim"
 msgid "Erase Mode"
 msgstr "Režim mazania"
 
-msgid "Used to erase objects off the map."
+#, fuzzy
+msgid "Used to erase objects from the map."
 msgstr "Slúži na vymazanie objektov z mapy."
 
 msgid "Change between zoom and normal view."
@@ -4540,9 +4573,10 @@ msgstr "Zdravím ťa!"
 msgid "Welcome to Heroes of Might and Magic II powered by fheroes2 engine!"
 msgstr "Vitaj v hre Heroes of Might and Magic II poháňanej enginom fheroes2!"
 
+#, fuzzy
 msgid ""
-"Welcome to Heroes of Might and Magic II powered by fheroes2 engine! Before "
-"starting the game please choose game resolution."
+"Welcome to Heroes of Might and Magic II powered by the fheroes2 engine!\n"
+"Before starting the game please select a game resolution."
 msgstr ""
 "Vitaj v hre Heroes of Might and Magic II poháňanej enginom fheroes2! Pred "
 "spustením hry si vyber rozlíšenie."
@@ -4550,20 +4584,32 @@ msgstr ""
 msgid "Please Remember"
 msgstr "Nezabudni, prosím"
 
-msgid "You can always change game resolution by clicking on the "
+#, fuzzy
+msgid ""
+"You can always change the language, resolution and settings of the game by "
+"clicking on the "
 msgstr "Rozlíšenie hry si vždy môžeš zmeniť kliknutím na "
 
 msgid "door"
 msgstr "dvere"
 
+msgid " on the left side of the Main Menu, or with the "
+msgstr ""
+
+msgid " button from the "
+msgstr ""
+
+#, fuzzy
+msgid "NEW GAME"
+msgstr ""
+"NOVÁ\n"
+"HRA"
+
 msgid ""
-" on the left side of main menu or by clicking on the configuration button. \n"
+" menu. \n"
 "\n"
 "Enjoy the game!"
 msgstr ""
-" na ľavej strane hlavnej ponuky alebo kliknutím na tlačidlo nastavenia. \n"
-"\n"
-"Prajeme ti príjemnú hru!"
 
 msgid "Editor"
 msgstr ""
@@ -10741,3 +10787,13 @@ msgstr ""
 "Pozri si najnovšiu verziu hry na\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid ""
+#~ " on the left side of main menu or by clicking on the configuration "
+#~ "button. \n"
+#~ "\n"
+#~ "Enjoy the game!"
+#~ msgstr ""
+#~ " na ľavej strane hlavnej ponuky alebo kliknutím na tlačidlo nastavenia. \n"
+#~ "\n"
+#~ "Prajeme ti príjemnú hru!"

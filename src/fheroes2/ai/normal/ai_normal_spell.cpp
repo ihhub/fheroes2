@@ -217,14 +217,14 @@ namespace AI
                     }
 
                     const int32_t index = enemy->GetHeadIndex();
-                    areaOfEffectCheck( arena.GetTargetsForSpells( _commander, spell, index ), index, _myColor );
+                    areaOfEffectCheck( arena.GetTargetsForSpell( _commander, spell, index ), index, _myColor );
                 }
             }
             else {
                 const Board & board = *Arena::GetBoard();
                 for ( const Cell & cell : board ) {
                     const int32_t index = cell.GetIndex();
-                    areaOfEffectCheck( arena.GetTargetsForSpells( _commander, spell, index ), index, _myColor );
+                    areaOfEffectCheck( arena.GetTargetsForSpell( _commander, spell, index ), index, _myColor );
                 }
             }
         }

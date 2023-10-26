@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-15 05:23+0000\n"
+"POT-Creation-Date: 2023-10-23 00:14+0000\n"
 "PO-Revision-Date: 2023-09-12 11:08+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
@@ -1472,10 +1472,11 @@ msgstr ""
 "Placeringen af det store bibliotek er blevet opdaget! Du skal rejse hen til "
 "det og genindtage byen kaldet Chronos, hvori det ligger."
 
+#, fuzzy
 msgid ""
 "Find the Orb of negation, which is said to be buried in this land. There are "
-"clues inscribed on stone obelisks which will help lead you to your price. "
-"Find the orb before the first day of the sixth month, or your rivals will "
+"clues inscribed on stone obelisks which will help lead you to your prize. "
+"Find the Orb before the first day of the sixth month, or your rivals will "
 "surely have gotten to the fount before you."
 msgstr ""
 "Find Negationskuglen, som siges at være begravet i dette land. Der er spor "
@@ -1932,6 +1933,9 @@ msgstr "%{building} frembringer %{monster}."
 
 msgid "Requires:"
 msgstr "Kræver:"
+
+msgid "Exit this menu without doing anything."
+msgstr "Forlad denne menu, uden at gøre noget."
 
 msgid "Cannot build. You have already built here today."
 msgstr "Byggeri umuligt. Du har allerede bygget her i dag."
@@ -2641,6 +2645,9 @@ msgstr "med 1 artefakt."
 msgid "without artifacts."
 msgstr "uden artefakter."
 
+msgid "Recruit %{name} the %{race}"
+msgstr "Rekruttér %{race}en %{name}"
+
 msgid ""
 "'Spread' combat formation spreads your armies from the top to the bottom of "
 "the battlefield, with at least one empty space between each army."
@@ -2659,9 +2666,6 @@ msgstr "Spredt formation"
 
 msgid "Grouped Formation"
 msgstr "Gruppeformation"
-
-msgid "Recruit %{name} the %{race}"
-msgstr "Rekruttér %{race}en %{name}"
 
 msgid "Set garrison combat formation to 'Spread'"
 msgstr ""
@@ -2738,9 +2742,6 @@ msgstr "Grav efter Det Ultimative Artefakt."
 
 msgid "Digging"
 msgstr "Gravning"
-
-msgid "Exit this menu without doing anything."
-msgstr "Forlad denne menu, uden at gøre noget."
 
 msgid "Arena"
 msgstr "Arena"
@@ -3728,6 +3729,22 @@ msgstr "Artefakter"
 msgid "Treasures"
 msgstr "Skatte"
 
+#, fuzzy
+msgid "Terrain"
+msgstr "Terræn-tilstand"
+
+#, fuzzy
+msgid "Castles"
+msgstr "Borg"
+
+#, fuzzy
+msgid "Roads"
+msgstr "Vej"
+
+#, fuzzy
+msgid "Streams"
+msgstr "Å-tilstand"
+
 msgid ""
 "Draws terrain in\n"
 "%{size} by %{size} square increments."
@@ -3809,6 +3826,21 @@ msgstr ""
 "Bruges til at placere\n"
 "en resurse eller skat"
 
+msgid "Toggle the erasure of %{type} objects."
+msgstr ""
+
+msgid ""
+"Objects of this type will be deleted with the Erase tool. Left-click here to "
+"deselect this type. Press and hold this button to deselect all other object "
+"types."
+msgstr ""
+
+msgid ""
+"Objects of this type will NOT be deleted with the Erase tool. Left-click "
+"here to select this type. Press and hold this button to select all other "
+"object types."
+msgstr ""
+
 msgid "Terrain Mode"
 msgstr "Terræn-tilstand"
 
@@ -3844,7 +3876,8 @@ msgstr "Vej-tilstand"
 msgid "Erase Mode"
 msgstr "Viskelæder"
 
-msgid "Used to erase objects off the map."
+#, fuzzy
+msgid "Used to erase objects from the map."
 msgstr "Bruges til at fjerne objekter af kortet."
 
 msgid "Change between zoom and normal view."
@@ -4615,9 +4648,10 @@ msgid "Welcome to Heroes of Might and Magic II powered by fheroes2 engine!"
 msgstr ""
 "Velkommen til Heroes of Might and Magic II, drevet af fheroes2-motoren!"
 
+#, fuzzy
 msgid ""
-"Welcome to Heroes of Might and Magic II powered by fheroes2 engine! Before "
-"starting the game please choose game resolution."
+"Welcome to Heroes of Might and Magic II powered by the fheroes2 engine!\n"
+"Before starting the game please select a game resolution."
 msgstr ""
 "Velkommen til Heroes of Might and Magic II, drevet af fheroes2-motoren! "
 "Inden du starter spillet, skal du vælge spilopløsning."
@@ -4625,20 +4659,32 @@ msgstr ""
 msgid "Please Remember"
 msgstr "Husk venligst"
 
-msgid "You can always change game resolution by clicking on the "
+#, fuzzy
+msgid ""
+"You can always change the language, resolution and settings of the game by "
+"clicking on the "
 msgstr "Du kan altid ændre spilopløsningen, ved at klikke på "
 
 msgid "door"
 msgstr "døren"
 
+msgid " on the left side of the Main Menu, or with the "
+msgstr ""
+
+msgid " button from the "
+msgstr ""
+
+#, fuzzy
+msgid "NEW GAME"
+msgstr ""
+"NYT\n"
+"SPIL"
+
 msgid ""
-" on the left side of main menu or by clicking on the configuration button. \n"
+" menu. \n"
 "\n"
 "Enjoy the game!"
 msgstr ""
-"i venstre side af hovedmenuen eller ved at klikke på konfigurationsknappen.\n"
-"\n"
-"Nyd spillet!"
 
 msgid "Editor"
 msgstr ""
@@ -10958,3 +11004,14 @@ msgstr ""
 "Check den nyeste version af spillet på\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid ""
+#~ " on the left side of main menu or by clicking on the configuration "
+#~ "button. \n"
+#~ "\n"
+#~ "Enjoy the game!"
+#~ msgstr ""
+#~ "i venstre side af hovedmenuen eller ved at klikke på "
+#~ "konfigurationsknappen.\n"
+#~ "\n"
+#~ "Nyd spillet!"

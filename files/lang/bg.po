@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-15 05:23+0000\n"
+"POT-Creation-Date: 2023-10-23 00:14+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -1467,10 +1467,11 @@ msgstr ""
 "Местоположението на великата библиотека е открито! Трябва да стигнеш до него "
 "и да си върнеш града Хронос, в който се намира."
 
+#, fuzzy
 msgid ""
 "Find the Orb of negation, which is said to be buried in this land. There are "
-"clues inscribed on stone obelisks which will help lead you to your price. "
-"Find the orb before the first day of the sixth month, or your rivals will "
+"clues inscribed on stone obelisks which will help lead you to your prize. "
+"Find the Orb before the first day of the sixth month, or your rivals will "
 "surely have gotten to the fount before you."
 msgstr ""
 "Намери Кълбото на отрицанието, за което се казва, че е заровено в тази земя. "
@@ -1916,6 +1917,9 @@ msgstr "%{building} произвежда %{monster}."
 
 msgid "Requires:"
 msgstr "Изисква:"
+
+msgid "Exit this menu without doing anything."
+msgstr "Излез от това меню, без да правиш нищо."
 
 msgid "Cannot build. You have already built here today."
 msgstr "Не може да се строи. Ти вече си построил тук днес."
@@ -2621,6 +2625,9 @@ msgstr "с 1 артефакт."
 msgid "without artifacts."
 msgstr "без артефакти."
 
+msgid "Recruit %{name} the %{race}"
+msgstr "Вербувай %{name} %{race}"
+
 msgid ""
 "'Spread' combat formation spreads your armies from the top to the bottom of "
 "the battlefield, with at least one empty space between each army."
@@ -2640,9 +2647,6 @@ msgstr "Формация Разпростиране"
 
 msgid "Grouped Formation"
 msgstr "Групирана формация"
-
-msgid "Recruit %{name} the %{race}"
-msgstr "Вербувай %{name} %{race}"
 
 msgid "Set garrison combat formation to 'Spread'"
 msgstr "Задай гарнизонна бойна формация \"Разпростиране\""
@@ -2715,9 +2719,6 @@ msgstr "Изкопай най-добрия артефакт."
 
 msgid "Digging"
 msgstr "Изкопаване"
-
-msgid "Exit this menu without doing anything."
-msgstr "Излез от това меню, без да правиш нищо."
 
 msgid "Arena"
 msgstr "Арена"
@@ -3703,6 +3704,22 @@ msgstr "Артефакти"
 msgid "Treasures"
 msgstr "Съкровища"
 
+#, fuzzy
+msgid "Terrain"
+msgstr "Режим терен"
+
+#, fuzzy
+msgid "Castles"
+msgstr "Замък"
+
+#, fuzzy
+msgid "Roads"
+msgstr "Път"
+
+#, fuzzy
+msgid "Streams"
+msgstr "Режим на предаване"
+
 msgid ""
 "Draws terrain in\n"
 "%{size} by %{size} square increments."
@@ -3783,6 +3800,21 @@ msgstr ""
 "Използва се за поставяне\n"
 "на ресурс или съкровище."
 
+msgid "Toggle the erasure of %{type} objects."
+msgstr ""
+
+msgid ""
+"Objects of this type will be deleted with the Erase tool. Left-click here to "
+"deselect this type. Press and hold this button to deselect all other object "
+"types."
+msgstr ""
+
+msgid ""
+"Objects of this type will NOT be deleted with the Erase tool. Left-click "
+"here to select this type. Press and hold this button to select all other "
+"object types."
+msgstr ""
+
 msgid "Terrain Mode"
 msgstr "Режим терен"
 
@@ -3820,7 +3852,8 @@ msgstr "Пътен режим"
 msgid "Erase Mode"
 msgstr "Режим на изтриване"
 
-msgid "Used to erase objects off the map."
+#, fuzzy
+msgid "Used to erase objects from the map."
 msgstr "Използва се за изтриване на обекти от картата."
 
 msgid "Change between zoom and normal view."
@@ -4591,9 +4624,10 @@ msgid "Welcome to Heroes of Might and Magic II powered by fheroes2 engine!"
 msgstr ""
 "Добре дошъл в Heroes of Might and Magic II, задвижван от двигателя fheroes2!"
 
+#, fuzzy
 msgid ""
-"Welcome to Heroes of Might and Magic II powered by fheroes2 engine! Before "
-"starting the game please choose game resolution."
+"Welcome to Heroes of Might and Magic II powered by the fheroes2 engine!\n"
+"Before starting the game please select a game resolution."
 msgstr ""
 "Добре дошъл в Heroes of Might and Magic II, задвижван от двигателя fheroes2! "
 "Преди да започнеш играта, моля избери разделителна способност на играта."
@@ -4601,7 +4635,10 @@ msgstr ""
 msgid "Please Remember"
 msgstr "Моля, запомни"
 
-msgid "You can always change game resolution by clicking on the "
+#, fuzzy
+msgid ""
+"You can always change the language, resolution and settings of the game by "
+"clicking on the "
 msgstr ""
 "Винаги можеш да промениш разделителната способност на играта, като щракнеш "
 "върху "
@@ -4609,15 +4646,23 @@ msgstr ""
 msgid "door"
 msgstr "вратата"
 
+msgid " on the left side of the Main Menu, or with the "
+msgstr ""
+
+msgid " button from the "
+msgstr ""
+
+#, fuzzy
+msgid "NEW GAME"
+msgstr ""
+"НОВА\n"
+"ИГРА"
+
 msgid ""
-" on the left side of main menu or by clicking on the configuration button. \n"
+" menu. \n"
 "\n"
 "Enjoy the game!"
 msgstr ""
-" от лявата страна на главното меню или като цъкнеш на бутона за "
-"конфигурация.\n"
-"\n"
-"Приятна игра!"
 
 msgid "Editor"
 msgstr ""
@@ -10882,3 +10927,14 @@ msgstr ""
 "Проверете най-новата версия на играта на\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid ""
+#~ " on the left side of main menu or by clicking on the configuration "
+#~ "button. \n"
+#~ "\n"
+#~ "Enjoy the game!"
+#~ msgstr ""
+#~ " от лявата страна на главното меню или като цъкнеш на бутона за "
+#~ "конфигурация.\n"
+#~ "\n"
+#~ "Приятна игра!"

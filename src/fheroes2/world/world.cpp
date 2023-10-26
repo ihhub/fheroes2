@@ -59,7 +59,6 @@
 #include "save_format_version.h"
 #include "serialize.h"
 #include "settings.h"
-#include "spell.h"
 #include "tools.h"
 #include "translations.h"
 #include "week.h"
@@ -446,7 +445,7 @@ Heroes * World::FromJailHeroes( int32_t index )
 
 Heroes * World::GetHero( const Castle & castle ) const
 {
-    return vec_heroes.GetHero( castle );
+    return vec_heroes.Get( castle.GetCenter() );
 }
 
 int World::GetDay() const
@@ -1341,12 +1340,6 @@ bool World::isAnyKingdomVisited( const MP2::MapObjectType objectType, const int3
     return false;
 }
 
-void World::setOldTileQuantityData( const int32_t tileIndex, const uint8_t quantityValue1, const uint8_t quantityValue2, const uint32_t additionalMetadata )
-{
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1004_RELEASE, "Remove this method and _oldTileQuantityData member." );
-    _oldTileQuantityData[tileIndex] = std::make_tuple( quantityValue1, quantityValue2, additionalMetadata );
-}
-
 StreamBase & operator<<( StreamBase & msg, const CapturedObject & obj )
 {
     return msg << obj.objcol << obj.guardians;
@@ -1435,96 +1428,37 @@ StreamBase & operator>>( StreamBase & msg, MapObjects & objs )
 
 StreamBase & operator<<( StreamBase & msg, const World & w )
 {
-    // TODO: before 0.9.4 Size was uint16_t type
-    const uint16_t width = static_cast<uint16_t>( w.width );
-    const uint16_t height = static_cast<uint16_t>( w.height );
-
-    return msg << width << height << w.vec_tiles << w.vec_heroes << w.vec_castles << w.vec_kingdoms << w._rumors << w.vec_eventsday << w.map_captureobj
+    return msg << w.width << w.height << w.vec_tiles << w.vec_heroes << w.vec_castles << w.vec_kingdoms << w._rumors << w.vec_eventsday << w.map_captureobj
                << w.ultimate_artifact << w.day << w.week << w.month << w.heroes_cond_wins << w.heroes_cond_loss << w.map_objects << w._seed;
 }
 
 StreamBase & operator>>( StreamBase & msg, World & w )
 {
-    // TODO: before 0.9.4 Size was uint16_t type
-    uint16_t width = 0;
-    uint16_t height = 0;
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1010_RELEASE, "Remove the logic below." );
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1010_RELEASE ) {
+        uint16_t width = 0;
+        uint16_t height = 0;
 
-    msg >> width >> height;
-    w.width = width;
-    w.height = height;
-
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1004_RELEASE, "Remove the logic below." );
-    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1004_RELEASE ) {
-        w._oldTileQuantityData.resize( static_cast<size_t>( width ) * height );
+        msg >> width >> height;
+        w.width = width;
+        w.height = height;
+    }
+    else {
+        msg >> w.width >> w.height;
     }
 
-    msg >> w.vec_tiles >> w.vec_heroes;
+    msg >> w.vec_tiles >> w.vec_heroes >> w.vec_castles >> w.vec_kingdoms >> w._rumors >> w.vec_eventsday >> w.map_captureobj >> w.ultimate_artifact >> w.day >> w.week
+        >> w.month >> w.heroes_cond_wins >> w.heroes_cond_loss;
 
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1004_RELEASE, "Remove the logic below." );
-    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1004_RELEASE ) {
-        for ( Maps::Tiles & tile : w.vec_tiles ) {
-            const auto & oldMetadata = w._oldTileQuantityData[tile.GetIndex()];
-            tile.quantityIntoMetadata( std::get<0>( oldMetadata ), std::get<1>( oldMetadata ), std::get<2>( oldMetadata ) );
-        }
-
-        w._oldTileQuantityData.clear();
-    }
-
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE1_1005_RELEASE, "Remove the logic below." );
-    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_PRE1_1005_RELEASE ) {
-        for ( Maps::Tiles & tile : w.vec_tiles ) {
-            tile.fixOldArtifactIDs();
-        }
-    }
-
-    msg >> w.vec_castles >> w.vec_kingdoms >> w._rumors >> w.vec_eventsday >> w.map_captureobj >> w.ultimate_artifact >> w.day >> w.week >> w.month >> w.heroes_cond_wins
-        >> w.heroes_cond_loss;
-
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE1_1002_RELEASE, "Remove the logic below." );
-    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_PRE1_1002_RELEASE ) {
-        uint32_t dummy = 0xDEADBEEF;
-
-        msg >> dummy;
-
-        if ( dummy != 0 ) {
-            DEBUG_LOG( DBG_GAME, DBG_WARN, "Invalid number of MapActions items: " << dummy )
-        }
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1010_RELEASE, "Remove the logic below." );
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1010_RELEASE ) {
+        ++w.heroes_cond_wins;
+        ++w.heroes_cond_loss;
     }
 
     msg >> w.map_objects >> w._seed;
 
     w.PostLoad( false );
-
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1003_RELEASE, "Remove the logic below." );
-    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1003_RELEASE ) {
-        for ( Maps::Tiles & tile : w.vec_tiles ) {
-            if ( tile.GetObject( false ) == MP2::OBJ_ABANDONED_MINE ) {
-                const int32_t spellId = static_cast<int32_t>( tile.metadata()[2] );
-
-                if ( spellId == Spell::HAUNT ) {
-                    const Funds rc{ static_cast<int32_t>( tile.metadata()[0] ), 1 };
-                    const int resource = ( rc.GetValidItemsCount() > 0 ) ? rc.getFirstValidResource().first : Resource::GOLD;
-
-                    Maps::restoreAbandonedMine( tile, resource );
-
-                    Heroes * hero = tile.getHero();
-                    if ( hero ) {
-                        hero->setObjectTypeUnderHero( MP2::OBJ_MINES );
-                    }
-                    else {
-                        tile.SetObject( MP2::OBJ_MINES );
-                    }
-                }
-                else {
-                    Troop & guardians = w.GetCapturedObject( tile.GetIndex() ).GetTroop();
-
-                    setMonsterCountOnTile( tile, guardians.isValid() ? guardians.GetCount() : 0 );
-
-                    guardians.Reset();
-                }
-            }
-        }
-    }
 
     return msg;
 }
