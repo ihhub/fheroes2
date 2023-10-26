@@ -2822,7 +2822,7 @@ msgid "MIDI Expansion"
 msgstr "MIDI-expansion"
 
 msgid "External"
-msgstr ""
+msgstr "Extern"
 
 msgid "Music Type"
 msgstr "Musiktyp"
@@ -4595,7 +4595,6 @@ msgstr ""
 msgid "Please Remember"
 msgstr "Kom ihåg"
 
-#, fuzzy
 msgid ""
 "You can always change the language, resolution and settings of the game by "
 "clicking on the "
