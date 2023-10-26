@@ -3378,7 +3378,7 @@ msgid "Map difficulty:"
 msgstr "Kartsvårighet:"
 
 msgid "N"
-msgstr ""
+msgstr "N"
 
 msgid "No maps exist at that size"
 msgstr "Finns inga kartor av den storleken"
@@ -3745,7 +3745,7 @@ msgid "Traversable only by boat."
 msgstr "Endast farbar med skepp."
 
 msgid "No special modifiers."
-msgstr ""
+msgstr "Ger ingen bonus eller handikapp."
 
 msgid "Used to place objects most appropriate for use on %{terrain}."
 msgstr "Används för att placera de lämpligare objekten för %{terrain}."
@@ -9895,9 +9895,8 @@ msgstr "%{name}en låter hjälten att kasta besvärjelser."
 msgid "Dummy 1"
 msgstr "Atrapp 1"
 
-#, fuzzy
 msgid "The reserved artifact."
-msgstr " med en artefakt."
+msgstr "Reseverad artefakt."
 
 msgid "Dummy 2"
 msgstr "Atrapp 2"
