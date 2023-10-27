@@ -23,6 +23,8 @@
 
 #include "battle_interface.h"
 
+// TODO: this header is redundant here, but detected as required by IWYU with older compilers
+// IWYU pragma: no_include <type_traits>
 #include <algorithm>
 #include <array>
 #include <cassert>
@@ -35,7 +37,6 @@
 #include <iterator>
 #include <ostream>
 #include <set>
-#include <type_traits>
 
 #include "agg_image.h"
 #include "audio.h"
@@ -2677,7 +2678,7 @@ int Battle::Interface::GetBattleSpellCursor( std::string & statusMsg ) const
 void Battle::Interface::getPendingActions( Actions & actions )
 {
     if ( _interruptAutoBattleForColor ) {
-        actions.emplace_back( CommandType::MSG_BATTLE_AUTO_SWITCH, _interruptAutoBattleForColor );
+        actions.emplace_back( Command::AUTO_SWITCH, _interruptAutoBattleForColor );
 
         _interruptAutoBattleForColor = 0;
     }
@@ -2768,7 +2769,7 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
     if ( le.KeyPress() ) {
         // Skip the turn
         if ( Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_SKIP ) ) {
-            actions.emplace_back( CommandType::MSG_BATTLE_SKIP, unit.GetUID() );
+            actions.emplace_back( Command::SKIP, unit.GetUID() );
             humanturn_exit = true;
         }
         // Battle options
@@ -2803,14 +2804,14 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
                 // The attacker wins the battle instantly
                 arena.GetResult().army1 = RESULT_WINS;
                 humanturn_exit = true;
-                actions.emplace_back( CommandType::MSG_BATTLE_END_TURN, unit.GetUID() );
+                actions.emplace_back( Command::END_TURN, unit.GetUID() );
                 break;
 
             case fheroes2::Key::KEY_L:
                 // The attacker loses the battle instantly
                 arena.GetResult().army1 = RESULT_LOSS;
                 humanturn_exit = true;
-                actions.emplace_back( CommandType::MSG_BATTLE_END_TURN, unit.GetUID() );
+                actions.emplace_back( Command::END_TURN, unit.GetUID() );
                 break;
 
             default:
@@ -3040,7 +3041,7 @@ void Battle::Interface::HumanCastSpellTurn( const Unit & /* unused */, Actions &
                     _teleportSpellSrcIdx = index_pos;
                 }
                 else {
-                    actions.emplace_back( CommandType::MSG_BATTLE_CAST, Spell::TELEPORT, _teleportSpellSrcIdx, index_pos );
+                    actions.emplace_back( Command::SPELLCAST, Spell::TELEPORT, _teleportSpellSrcIdx, index_pos );
 
                     humanturn_spell = Spell::NONE;
                     humanturn_exit = true;
@@ -3049,13 +3050,13 @@ void Battle::Interface::HumanCastSpellTurn( const Unit & /* unused */, Actions &
                 }
             }
             else if ( Cursor::SP_MIRRORIMAGE == cursor.Themes() ) {
-                actions.emplace_back( CommandType::MSG_BATTLE_CAST, Spell::MIRRORIMAGE, index_pos );
+                actions.emplace_back( Command::SPELLCAST, Spell::MIRRORIMAGE, index_pos );
 
                 humanturn_spell = Spell::NONE;
                 humanturn_exit = true;
             }
             else {
-                actions.emplace_back( CommandType::MSG_BATTLE_CAST, humanturn_spell.GetID(), index_pos );
+                actions.emplace_back( Command::SPELLCAST, humanturn_spell.GetID(), index_pos );
 
                 humanturn_spell = Spell::NONE;
                 humanturn_exit = true;
@@ -3138,7 +3139,7 @@ void Battle::Interface::EventAutoSwitch( const Unit & unit, Actions & actions )
         return;
     }
 
-    actions.emplace_back( CommandType::MSG_BATTLE_AUTO_SWITCH, unit.GetCurrentOrArmyColor() );
+    actions.emplace_back( Command::AUTO_SWITCH, unit.GetCurrentOrArmyColor() );
 
     humanturn_redraw = true;
     humanturn_exit = true;
@@ -3153,7 +3154,7 @@ void Battle::Interface::EventAutoFinish( Actions & actions )
         return;
     }
 
-    actions.emplace_back( CommandType::MSG_BATTLE_AUTO_FINISH );
+    actions.emplace_back( Command::AUTO_FINISH );
 
     humanturn_redraw = true;
     humanturn_exit = true;
@@ -3196,7 +3197,7 @@ void Battle::Interface::ButtonSkipAction( Actions & actions )
     le.MousePressLeft( btn_skip.area() ) ? btn_skip.drawOnPress() : btn_skip.drawOnRelease();
 
     if ( le.MouseClickLeft( btn_skip.area() ) && _currentUnit ) {
-        actions.emplace_back( CommandType::MSG_BATTLE_SKIP, _currentUnit->GetUID() );
+        actions.emplace_back( Command::SKIP, _currentUnit->GetUID() );
         humanturn_exit = true;
     }
 }
@@ -3242,8 +3243,8 @@ void Battle::Interface::MouseLeftClickBoardAction( const int themes, const Cell 
                 break;
             }
 
-            actions.emplace_back( CommandType::MSG_BATTLE_MOVE, _currentUnit->GetUID(), fixupDestinationCell( *_currentUnit, index ) );
-            actions.emplace_back( CommandType::MSG_BATTLE_END_TURN, _currentUnit->GetUID() );
+            actions.emplace_back( Command::MOVE, _currentUnit->GetUID(), fixupDestinationCell( *_currentUnit, index ) );
+            actions.emplace_back( Command::END_TURN, _currentUnit->GetUID() );
 
             humanturn_exit = true;
             break;
@@ -3264,10 +3265,10 @@ void Battle::Interface::MouseLeftClickBoardAction( const int themes, const Cell 
                 const int32_t move = fixupDestinationCell( *_currentUnit, Board::GetIndexDirection( index, dir ) );
 
                 if ( _currentUnit->GetHeadIndex() != move ) {
-                    actions.emplace_back( CommandType::MSG_BATTLE_MOVE, _currentUnit->GetUID(), move );
+                    actions.emplace_back( Command::MOVE, _currentUnit->GetUID(), move );
                 }
-                actions.emplace_back( CommandType::MSG_BATTLE_ATTACK, _currentUnit->GetUID(), unitOnCell->GetUID(), index, Board::GetReflectDirection( dir ) );
-                actions.emplace_back( CommandType::MSG_BATTLE_END_TURN, _currentUnit->GetUID() );
+                actions.emplace_back( Command::ATTACK, _currentUnit->GetUID(), unitOnCell->GetUID(), index, Board::GetReflectDirection( dir ) );
+                actions.emplace_back( Command::END_TURN, _currentUnit->GetUID() );
 
                 humanturn_exit = true;
             }
@@ -3281,8 +3282,8 @@ void Battle::Interface::MouseLeftClickBoardAction( const int themes, const Cell 
             }
 
             if ( unitOnCell ) {
-                actions.emplace_back( CommandType::MSG_BATTLE_ATTACK, _currentUnit->GetUID(), unitOnCell->GetUID(), index, 0 );
-                actions.emplace_back( CommandType::MSG_BATTLE_END_TURN, _currentUnit->GetUID() );
+                actions.emplace_back( Command::ATTACK, _currentUnit->GetUID(), unitOnCell->GetUID(), index, 0 );
+                actions.emplace_back( Command::END_TURN, _currentUnit->GetUID() );
 
                 humanturn_exit = true;
             }
@@ -4865,7 +4866,7 @@ void Battle::Interface::RedrawActionTowerPart2( const Tower & tower, const Targe
     assert( _movingUnit == nullptr );
 }
 
-void Battle::Interface::RedrawActionCatapultPart1( const int catapultTargetId, const bool isHit )
+void Battle::Interface::RedrawActionCatapultPart1( const CastleDefenseElement catapultTarget, const bool isHit )
 {
     // Reset the delay before rendering the first frame of catapult animation.
     Game::AnimateResetDelay( Game::DelayType::BATTLE_CATAPULT_DELAY );
@@ -4891,30 +4892,30 @@ void Battle::Interface::RedrawActionCatapultPart1( const int catapultTargetId, c
 
     // boulder animation
     fheroes2::Point pt1( 30, 290 );
-    fheroes2::Point pt2 = Catapult::GetTargetPosition( catapultTargetId, isHit );
+    fheroes2::Point pt2 = Catapult::GetTargetPosition( catapultTarget, isHit );
     const int32_t boulderArcStep = ( pt2.x - pt1.x ) / 30;
 
     // set the projectile arc height for each castle target and a formula for an unknown target
     int32_t boulderArcHeight;
-    switch ( catapultTargetId ) {
-    case Battle::CAT_WALL1:
+    switch ( catapultTarget ) {
+    case CastleDefenseElement::WALL1:
         boulderArcHeight = 220;
         break;
-    case Battle::CAT_WALL2:
-    case Battle::CAT_BRIDGE:
+    case CastleDefenseElement::WALL2:
+    case CastleDefenseElement::BRIDGE:
         boulderArcHeight = 216;
         break;
-    case Battle::CAT_WALL3:
+    case CastleDefenseElement::WALL3:
         boulderArcHeight = 204;
         break;
-    case Battle::CAT_WALL4:
+    case CastleDefenseElement::WALL4:
         boulderArcHeight = 208;
         break;
-    case Battle::CAT_TOWER1:
-    case Battle::CAT_TOWER2:
+    case CastleDefenseElement::TOWER1:
+    case CastleDefenseElement::TOWER2:
         boulderArcHeight = 206;
         break;
-    case Battle::CAT_CENTRAL_TOWER:
+    case CastleDefenseElement::CENTRAL_TOWER:
         boulderArcHeight = 290;
         break;
     default:
@@ -4958,7 +4959,7 @@ void Battle::Interface::RedrawActionCatapultPart1( const int catapultTargetId, c
     uint32_t frame = 0;
     // If the building is hit, end the animation on the 5th frame to change the building state (when the smoke cloud is largest).
     uint32_t maxFrame = isHit ? castleBuildingDestroyFrame : fheroes2::AGG::GetICNCount( icn );
-    const bool isBridgeDestroyed = isHit && ( catapultTargetId == Battle::CAT_BRIDGE );
+    const bool isBridgeDestroyed = isHit && ( catapultTarget == CastleDefenseElement::BRIDGE );
     // If the bridge is destroyed - prepare parameters for the second smoke cloud.
     if ( isBridgeDestroyed ) {
         pt1 = pt2 + bridgeDestroySmokeOffset;
@@ -4991,11 +4992,11 @@ void Battle::Interface::RedrawActionCatapultPart1( const int catapultTargetId, c
     }
 }
 
-void Battle::Interface::RedrawActionCatapultPart2( const int catapultTargetId )
+void Battle::Interface::RedrawActionCatapultPart2( const CastleDefenseElement catapultTarget )
 {
     // Finish the smoke cloud animation after the building's state has changed after the hit and it is drawn as demolished.
 
-    const fheroes2::Point pt1 = Catapult::GetTargetPosition( catapultTargetId, true ) + GetArea().getPosition();
+    const fheroes2::Point pt1 = Catapult::GetTargetPosition( catapultTarget, true ) + GetArea().getPosition();
     fheroes2::Point pt2;
 
     // Continue the smoke cloud animation from the 6th frame.
@@ -5003,7 +5004,7 @@ void Battle::Interface::RedrawActionCatapultPart2( const int catapultTargetId )
     uint32_t frame = castleBuildingDestroyFrame;
     const uint32_t maxFrame = fheroes2::AGG::GetICNCount( icnId );
     uint32_t maxAnimationFrame = maxFrame;
-    const bool isBridgeDestroyed = ( catapultTargetId == Battle::CAT_BRIDGE );
+    const bool isBridgeDestroyed = ( catapultTarget == CastleDefenseElement::BRIDGE );
     // If the bridge is destroyed - prepare parameters for the second smoke cloud.
     if ( isBridgeDestroyed ) {
         pt2 = pt1 + bridgeDestroySmokeOffset;
@@ -5848,7 +5849,7 @@ void Battle::Interface::RedrawActionArmageddonSpell()
     }
 }
 
-void Battle::Interface::RedrawActionEarthQuakeSpell( const std::vector<int> & targets )
+void Battle::Interface::RedrawActionEarthQuakeSpell( const std::vector<CastleDefenseElement> & targets )
 {
     Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
@@ -5915,8 +5916,8 @@ void Battle::Interface::RedrawActionEarthQuakeSpell( const std::vector<int> & ta
         if ( Game::validateAnimationDelay( Game::BATTLE_SPELL_DELAY ) ) {
             RedrawPartialStart();
 
-            for ( std::vector<int>::const_iterator it = targets.begin(); it != targets.end(); ++it ) {
-                fheroes2::Point pt2 = Catapult::GetTargetPosition( *it, true );
+            for ( const CastleDefenseElement target : targets ) {
+                fheroes2::Point pt2 = Catapult::GetTargetPosition( target, true );
 
                 pt2.x += area.x;
                 pt2.y += area.y;
@@ -6394,7 +6395,7 @@ void Battle::Interface::ProcessingHeroDialogResult( const int result, Actions & 
 
                             if ( hero->CanCastSpell( spell, &error ) ) {
                                 if ( spell.isApplyWithoutFocusObject() ) {
-                                    actions.emplace_back( CommandType::MSG_BATTLE_CAST, spell.GetID(), -1 );
+                                    actions.emplace_back( Command::SPELLCAST, spell.GetID(), -1 );
 
                                     humanturn_redraw = true;
                                     humanturn_exit = true;
@@ -6420,8 +6421,8 @@ void Battle::Interface::ProcessingHeroDialogResult( const int result, Actions & 
     case 2: {
         if ( arena.CanRetreatOpponent( _currentUnit->GetCurrentOrArmyColor() ) ) {
             if ( Dialog::YES == fheroes2::showStandardTextMessage( "", _( "Are you sure you want to retreat?" ), Dialog::YES | Dialog::NO ) ) {
-                actions.emplace_back( CommandType::MSG_BATTLE_RETREAT );
-                actions.emplace_back( CommandType::MSG_BATTLE_END_TURN, _currentUnit->GetUID() );
+                actions.emplace_back( Command::RETREAT );
+                actions.emplace_back( Command::END_TURN, _currentUnit->GetUID() );
                 humanturn_exit = true;
             }
         }
@@ -6441,8 +6442,8 @@ void Battle::Interface::ProcessingHeroDialogResult( const int result, Actions & 
                 Kingdom & kingdom = world.GetKingdom( arena.GetCurrentColor() );
 
                 if ( DialogBattleSurrender( *enemy, cost, kingdom ) ) {
-                    actions.emplace_back( CommandType::MSG_BATTLE_SURRENDER );
-                    actions.emplace_back( CommandType::MSG_BATTLE_END_TURN, _currentUnit->GetUID() );
+                    actions.emplace_back( Command::SURRENDER );
+                    actions.emplace_back( Command::END_TURN, _currentUnit->GetUID() );
                     humanturn_exit = true;
                 }
             }

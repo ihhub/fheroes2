@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-16 01:01+0000\n"
+"POT-Creation-Date: 2023-10-23 00:14+0000\n"
 "PO-Revision-Date: 2022-10-25 08:56+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
@@ -1339,8 +1339,8 @@ msgstr ""
 
 msgid ""
 "Find the Orb of negation, which is said to be buried in this land. There are "
-"clues inscribed on stone obelisks which will help lead you to your price. "
-"Find the orb before the first day of the sixth month, or your rivals will "
+"clues inscribed on stone obelisks which will help lead you to your prize. "
+"Find the Orb before the first day of the sixth month, or your rivals will "
 "surely have gotten to the fount before you."
 msgstr ""
 
@@ -1789,6 +1789,9 @@ msgstr "A %{building} produz %{monster}."
 
 msgid "Requires:"
 msgstr "Requer:"
+
+msgid "Exit this menu without doing anything."
+msgstr "Sair do menu sem fazer nada."
 
 #, fuzzy
 msgid "Cannot build. You have already built here today."
@@ -2510,6 +2513,9 @@ msgstr "Não é possível mover o último exército à fortaleza"
 msgid "without artifacts."
 msgstr ""
 
+msgid "Recruit %{name} the %{race}"
+msgstr "Recrutar %{name} da raça %{race}"
+
 msgid ""
 "'Spread' combat formation spreads your armies from the top to the bottom of "
 "the battlefield, with at least one empty space between each army."
@@ -2530,9 +2536,6 @@ msgstr "Formação Espalhada"
 
 msgid "Grouped Formation"
 msgstr "Formação Agrupada"
-
-msgid "Recruit %{name} the %{race}"
-msgstr "Recrutar %{name} da raça %{race}"
 
 msgid "Set garrison combat formation to 'Spread'"
 msgstr "Definir formação de combate na Fortaleza para \"Espalhada\""
@@ -2611,9 +2614,6 @@ msgstr "Escavar em busca do Artefato Supremo."
 
 msgid "Digging"
 msgstr ""
-
-msgid "Exit this menu without doing anything."
-msgstr "Sair do menu sem fazer nada."
 
 msgid "Arena"
 msgstr "Arena"
@@ -4560,22 +4560,35 @@ msgstr ""
 msgid "Welcome to Heroes of Might and Magic II powered by fheroes2 engine!"
 msgstr "Sair do Jogo & retornar ao sistema operacional."
 
+#, fuzzy
 msgid ""
-"Welcome to Heroes of Might and Magic II powered by fheroes2 engine! Before "
-"starting the game please choose game resolution."
-msgstr ""
+"Welcome to Heroes of Might and Magic II powered by the fheroes2 engine!\n"
+"Before starting the game please select a game resolution."
+msgstr "Sair do Jogo & retornar ao sistema operacional."
 
 msgid "Please Remember"
 msgstr ""
 
-msgid "You can always change game resolution by clicking on the "
-msgstr ""
+#, fuzzy
+msgid ""
+"You can always change the language, resolution and settings of the game by "
+"clicking on the "
+msgstr "Mudar a resolução do jogo."
 
 msgid "door"
 msgstr ""
 
+msgid " on the left side of the Main Menu, or with the "
+msgstr ""
+
+msgid " button from the "
+msgstr ""
+
+msgid "NEW GAME"
+msgstr ""
+
 msgid ""
-" on the left side of main menu or by clicking on the configuration button. \n"
+" menu. \n"
 "\n"
 "Enjoy the game!"
 msgstr ""

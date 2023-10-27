@@ -553,7 +553,7 @@ void Maps::Tiles::setTerrain( const uint16_t terrainImageIndex, const bool horiz
 
 Heroes * Maps::Tiles::getHero() const
 {
-    return MP2::OBJ_HEROES == _mainObjectType && _occupantHeroId ? world.GetHeroes( _occupantHeroId - 1 ) : nullptr;
+    return MP2::OBJ_HEROES == _mainObjectType && Heroes::isValidId( _occupantHeroId ) ? world.GetHeroes( _occupantHeroId ) : nullptr;
 }
 
 void Maps::Tiles::setHero( Heroes * hero )
@@ -565,7 +565,7 @@ void Maps::Tiles::setHero( Heroes * hero )
         hero->setObjectTypeUnderHero( _mainObjectType );
 
         assert( hero->GetID() >= std::numeric_limits<HeroIDType>::min() && hero->GetID() < std::numeric_limits<HeroIDType>::max() );
-        _occupantHeroId = static_cast<HeroIDType>( hero->GetID() + 1 );
+        _occupantHeroId = static_cast<HeroIDType>( hero->GetID() );
 
         SetObject( MP2::OBJ_HEROES );
     }
@@ -580,7 +580,7 @@ void Maps::Tiles::setHero( Heroes * hero )
             setAsEmpty();
         }
 
-        _occupantHeroId = 0;
+        _occupantHeroId = Heroes::UNKNOWN;
     }
 }
 
@@ -609,15 +609,16 @@ void Maps::Tiles::SetObject( const MP2::MapObjectType objectType )
 void Maps::Tiles::setBoat( const int direction, const int color )
 {
     if ( _mainAddon._objectIcnType != MP2::OBJ_ICN_TYPE_UNKNOWN ) {
-        // If this assertion blows up then we are pushing the main object to bottom layer queue making it as a non-main object.
-        assert( _addonBottomLayer.empty() );
-        pushBottomLayerAddon( _mainAddon );
+        // It is important to preserve the order of objects for rendering purposes. Therefore, the main object should go to the front of objects.
+        _addonBottomLayer.emplace_front( _mainAddon );
     }
+
+    // If this assertion blows up then you are trying to put a boat on land!
+    assert( isWater() );
 
     SetObject( MP2::OBJ_BOAT );
     _mainAddon._objectIcnType = MP2::OBJ_ICN_TYPE_BOAT32;
 
-    // Left-side sprites have to flipped, add 128 to index
     switch ( direction ) {
     case Direction::TOP:
         _mainAddon._imageIndex = 0;
@@ -634,6 +635,7 @@ void Maps::Tiles::setBoat( const int direction, const int color )
     case Direction::BOTTOM:
         _mainAddon._imageIndex = 36;
         break;
+    // Left-side sprites have to be flipped, add 128 to index.
     case Direction::BOTTOM_LEFT:
         _mainAddon._imageIndex = 27 + 128;
         break;

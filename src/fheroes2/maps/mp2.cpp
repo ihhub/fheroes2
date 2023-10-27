@@ -818,6 +818,7 @@ int MP2::getActionObjectDirection( const MapObjectType objectType )
     case OBJ_ARENA:
     case OBJ_ARTESIAN_SPRING:
     case OBJ_BARROW_MOUNDS:
+    case OBJ_CASTLE:
     case OBJ_CAVE:
     case OBJ_CITY_OF_DEAD:
     case OBJ_DAEMON_CAVE:
@@ -884,8 +885,6 @@ int MP2::getActionObjectDirection( const MapObjectType objectType )
     case OBJ_WITCHS_HUT:
     case OBJ_XANADU:
         return DIRECTION_CENTER_ROW | DIRECTION_BOTTOM_ROW;
-    case OBJ_CASTLE:
-        return Direction::CENTER | Direction::BOTTOM;
     default:
         // Did you add a new action object? Please add its passability!
         assert( 0 );

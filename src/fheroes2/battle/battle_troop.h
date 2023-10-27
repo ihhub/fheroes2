@@ -26,6 +26,7 @@
 
 #include <cstddef>
 #include <cstdint>
+#include <optional>
 #include <string>
 #include <utility>
 #include <vector>
@@ -35,8 +36,8 @@
 #include "battle_cell.h"
 #include "bitmodes.h"
 #include "math_base.h"
-#include "payment.h"
 #include "players.h"
+#include "resource.h"
 
 class Spell;
 class HeroBase;
@@ -74,7 +75,7 @@ namespace Battle
     class Unit : public ArmyTroop, public BitModes, public Control
     {
     public:
-        Unit( const Troop & t, const Position & pos, const bool ref, const Rand::DeterministicRandomGenerator & randomGenerator, const uint32_t uid );
+        Unit( const Troop & t, const Position & pos, const bool ref, const uint32_t uid );
         Unit( const Unit & ) = delete;
 
         Unit & operator=( const Unit & ) = delete;
@@ -99,8 +100,8 @@ namespace Battle
             mirror = ptr;
         }
 
-        void SetRandomMorale();
-        void SetRandomLuck();
+        void SetRandomMorale( Rand::DeterministicRandomGenerator & randomGenerator );
+        void SetRandomLuck( Rand::DeterministicRandomGenerator & randomGenerator );
         void NewTurn();
 
         bool isFlying() const;
@@ -162,17 +163,26 @@ namespace Battle
         int GetControl() const override;
         int GetCurrentControl() const;
 
+        // Returns the current speed of the unit, optionally performing additional checks in accordance
+        // with the call arguments. If 'skipStandingCheck' is set to false, then the method returns
+        // Speed::STANDING if the unit is immovable due to spells cast on it or if this unit is dead
+        // (contains 0 fighters). Additionally, if 'skipMovedCheck' is set to false, then this method
+        // returns Speed::STANDING if the unit has already completed its turn. If 'skipStandingCheck'
+        // is set to true, then the value of 'skipMovedCheck' doesn't matter.
         uint32_t GetSpeed( const bool skipStandingCheck, const bool skipMovedCheck ) const;
 
-        uint32_t GetDamage( const Unit & ) const;
+        uint32_t GetDamage( const Unit & enemy, Rand::DeterministicRandomGenerator & randomGenerator ) const;
 
-        int32_t GetScoreQuality( const Unit & ) const;
+        // Returns the threat level of this unit, calculated as if it attacked the 'defender' unit.
+        // If 'defenderPos' is set, then it will be used as the 'defender' unit's position, otherwise
+        // the actual position of this unit will be used. See the implementation for details.
+        int32_t evaluateThreatForUnit( const Unit & defender, const std::optional<Position> defenderPos = {} ) const;
 
         uint32_t GetInitialCount() const;
         uint32_t GetDead() const;
         uint32_t GetHitPoints() const;
 
-        payment_t GetSurrenderCost() const;
+        Funds GetSurrenderCost() const;
 
         uint32_t GetShots() const override
         {
@@ -258,7 +268,7 @@ namespace Battle
         void PostKilledAction();
 
         uint32_t GetMagicResist( const Spell & spell, const uint32_t attackingArmySpellPower, const HeroBase * attackingHero ) const;
-        int GetSpellMagic() const;
+        int GetSpellMagic( Rand::DeterministicRandomGenerator & randomGenerator ) const;
 
         const HeroBase * GetCommander() const;
         const HeroBase * GetCurrentOrArmyCommander() const; // commander of the army with the current unit color (if valid), commander of the unit's army otherwise
@@ -285,9 +295,6 @@ namespace Battle
         AnimationState animation;
 
     private:
-        bool canReach( int index ) const;
-        bool canReach( const Unit & unit ) const;
-
         uint32_t ApplyDamage( const uint32_t dmg );
         uint32_t Resurrect( const uint32_t points, const bool allow_overflow, const bool skip_dead );
 
@@ -322,8 +329,6 @@ namespace Battle
         bool _blindRetaliation;
 
         uint8_t customAlphaMask;
-
-        const Rand::DeterministicRandomGenerator & _randomGenerator;
     };
 }
 

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-16 01:01+0000\n"
+"POT-Creation-Date: 2023-10-23 00:14+0000\n"
 "PO-Revision-Date: 2022-12-03 04:36+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <it@li.org>\n"
@@ -1305,8 +1305,8 @@ msgstr ""
 
 msgid ""
 "Find the Orb of negation, which is said to be buried in this land. There are "
-"clues inscribed on stone obelisks which will help lead you to your price. "
-"Find the orb before the first day of the sixth month, or your rivals will "
+"clues inscribed on stone obelisks which will help lead you to your prize. "
+"Find the Orb before the first day of the sixth month, or your rivals will "
 "surely have gotten to the fount before you."
 msgstr ""
 
@@ -1765,6 +1765,9 @@ msgstr "Il/la %{building} produce %{monster}."
 
 msgid "Requires:"
 msgstr "Richiede:"
+
+msgid "Exit this menu without doing anything."
+msgstr "Esci dal menù senza far nulla."
 
 #, fuzzy
 msgid "Cannot build. You have already built here today."
@@ -2468,6 +2471,9 @@ msgstr "con 1 artefatto."
 msgid "without artifacts."
 msgstr "senza artefatti."
 
+msgid "Recruit %{name} the %{race}"
+msgstr "Recluta %{name}: %{race}"
+
 msgid ""
 "'Spread' combat formation spreads your armies from the top to the bottom of "
 "the battlefield, with at least one empty space between each army."
@@ -2483,9 +2489,6 @@ msgstr "Formazione sparsa"
 
 msgid "Grouped Formation"
 msgstr "Formazione chiusa"
-
-msgid "Recruit %{name} the %{race}"
-msgstr "Recluta %{name}: %{race}"
 
 msgid "Set garrison combat formation to 'Spread'"
 msgstr ""
@@ -2562,9 +2565,6 @@ msgstr "Scava alla ricerca dell'Estremo Artefatto."
 
 msgid "Digging"
 msgstr "Scavo"
-
-msgid "Exit this menu without doing anything."
-msgstr "Esci dal menù senza far nulla."
 
 msgid "Arena"
 msgstr "Arena"
@@ -4479,9 +4479,10 @@ msgstr ""
 "Benvenuti a fheroes2! Gentilmente, prima di cominciare il gioco scegli una "
 "risoluzione per il gioco."
 
+#, fuzzy
 msgid ""
-"Welcome to Heroes of Might and Magic II powered by fheroes2 engine! Before "
-"starting the game please choose game resolution."
+"Welcome to Heroes of Might and Magic II powered by the fheroes2 engine!\n"
+"Before starting the game please select a game resolution."
 msgstr ""
 "Benvenuti a fheroes2! Gentilmente, prima di cominciare il gioco scegli una "
 "risoluzione per il gioco."
@@ -4490,14 +4491,26 @@ msgid "Please Remember"
 msgstr "Non Dimenticare"
 
 # Needs extra whitespace to avoid yellow word splitting
-msgid "You can always change game resolution by clicking on the "
+#, fuzzy
+msgid ""
+"You can always change the language, resolution and settings of the game by "
+"clicking on the "
 msgstr "Puoi sempre modificare la risoluzione cliccando sulla  "
 
 msgid "door"
 msgstr "porta"
 
+msgid " on the left side of the Main Menu, or with the "
+msgstr ""
+
+msgid " button from the "
+msgstr ""
+
+msgid "NEW GAME"
+msgstr ""
+
 msgid ""
-" on the left side of main menu or by clicking on the configuration button. \n"
+" menu. \n"
 "\n"
 "Enjoy the game!"
 msgstr ""

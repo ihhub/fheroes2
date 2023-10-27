@@ -47,7 +47,6 @@
 #include "math_base.h"
 #include "monster.h"
 #include "mp2.h"
-#include "payment.h"
 #include "profit.h"
 #include "race.h"
 #include "rand.h"
@@ -2673,7 +2672,7 @@ namespace Maps
         assert( tile.GetObject( false ) == MP2::OBJ_ABANDONED_MINE );
         assert( tile.GetObjectUID() != 0 );
 
-        const payment_t info = ProfitConditions::FromMine( resource );
+        const Funds info = ProfitConditions::FromMine( resource );
         std::optional<uint32_t> resourceCount;
 
         switch ( resource ) {

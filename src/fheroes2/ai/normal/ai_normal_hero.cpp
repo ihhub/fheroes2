@@ -482,7 +482,7 @@ namespace
                 return false;
             }
 
-            const payment_t singleMonsterCost = troop.GetCost();
+            const Funds singleMonsterCost = troop.GetCost();
 
             uint32_t recruitTroopCount = kingdom.GetFunds().getLowestQuotient( singleMonsterCost );
             if ( recruitTroopCount <= 0 ) {
@@ -518,7 +518,7 @@ namespace
                 return false;
             }
 
-            const payment_t & paymentCosts = troop.GetTotalCost();
+            const Funds & paymentCosts = troop.GetTotalCost();
             // TODO: even if AI does not have enough money it might still buy few monsters.
             if ( !kingdom.AllowPayment( paymentCosts ) ) {
                 return false;
@@ -623,7 +623,7 @@ namespace
                 return false;
             }
 
-            const payment_t payment = PaymentConditions::ForAlchemist();
+            const Funds payment = PaymentConditions::ForAlchemist();
             return kingdom.AllowPayment( payment );
         }
 

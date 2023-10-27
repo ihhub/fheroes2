@@ -41,6 +41,7 @@
 #include "color.h"
 #include "direction.h"
 #include "game.h"
+#include "game_io.h"
 #include "game_over.h"
 #include "gamedefs.h"
 #include "heroes.h"
@@ -55,6 +56,7 @@
 #include "rand.h"
 #include "resource.h"
 #include "route.h"
+#include "save_format_version.h"
 #include "serialize.h"
 #include "settings.h"
 #include "tools.h"
@@ -443,7 +445,7 @@ Heroes * World::FromJailHeroes( int32_t index )
 
 Heroes * World::GetHero( const Castle & castle ) const
 {
-    return vec_heroes.GetHero( castle );
+    return vec_heroes.Get( castle.GetCenter() );
 }
 
 int World::GetDay() const
@@ -1426,26 +1428,35 @@ StreamBase & operator>>( StreamBase & msg, MapObjects & objs )
 
 StreamBase & operator<<( StreamBase & msg, const World & w )
 {
-    // TODO: before 0.9.4 Size was uint16_t type
-    const uint16_t width = static_cast<uint16_t>( w.width );
-    const uint16_t height = static_cast<uint16_t>( w.height );
-
-    return msg << width << height << w.vec_tiles << w.vec_heroes << w.vec_castles << w.vec_kingdoms << w._rumors << w.vec_eventsday << w.map_captureobj
+    return msg << w.width << w.height << w.vec_tiles << w.vec_heroes << w.vec_castles << w.vec_kingdoms << w._rumors << w.vec_eventsday << w.map_captureobj
                << w.ultimate_artifact << w.day << w.week << w.month << w.heroes_cond_wins << w.heroes_cond_loss << w.map_objects << w._seed;
 }
 
 StreamBase & operator>>( StreamBase & msg, World & w )
 {
-    // TODO: before 0.9.4 Size was uint16_t type
-    uint16_t width = 0;
-    uint16_t height = 0;
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1010_RELEASE, "Remove the logic below." );
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1010_RELEASE ) {
+        uint16_t width = 0;
+        uint16_t height = 0;
 
-    msg >> width >> height;
-    w.width = width;
-    w.height = height;
+        msg >> width >> height;
+        w.width = width;
+        w.height = height;
+    }
+    else {
+        msg >> w.width >> w.height;
+    }
 
     msg >> w.vec_tiles >> w.vec_heroes >> w.vec_castles >> w.vec_kingdoms >> w._rumors >> w.vec_eventsday >> w.map_captureobj >> w.ultimate_artifact >> w.day >> w.week
-        >> w.month >> w.heroes_cond_wins >> w.heroes_cond_loss >> w.map_objects >> w._seed;
+        >> w.month >> w.heroes_cond_wins >> w.heroes_cond_loss;
+
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1010_RELEASE, "Remove the logic below." );
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1010_RELEASE ) {
+        ++w.heroes_cond_wins;
+        ++w.heroes_cond_loss;
+    }
+
+    msg >> w.map_objects >> w._seed;
 
     w.PostLoad( false );
 

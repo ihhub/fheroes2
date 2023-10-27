@@ -57,7 +57,6 @@
 #include "maps_tiles_helper.h"
 #include "math_base.h"
 #include "mp2.h"
-#include "payment.h"
 #include "profit.h"
 #include "resource.h"
 #include "screen.h"
@@ -129,7 +128,7 @@ namespace
 
     std::string getMinesIncomeString( const int32_t resourceType )
     {
-        const payment_t income = ProfitConditions::FromMine( resourceType );
+        const Funds income = ProfitConditions::FromMine( resourceType );
         const int32_t value = income.Get( resourceType );
 
         std::string res;
