@@ -754,12 +754,15 @@ void Maps::Tiles::updatePassability()
 
         // If a bottom tile has the same object ID then this tile must be marked as inaccessible because it is a continuation of the same object.
         std::vector<uint32_t> tileUIDs;
-        if ( _mainAddon._uid != 0 ) {
-            tileUIDs.emplace_back( _mainAddon._uid );
-        }
+
+        // If this assertion blows up then the object is not set properly. An object must have a valid UID!
+        assert( _mainAddon._uid != 0 );
+        tileUIDs.emplace_back( _mainAddon._uid );
 
         for ( const TilesAddon & addon : _addonBottomLayer ) {
-            if ( addon._uid != 0 && ( ( addon._layerType >> 1 ) & 1 ) == 0 ) {
+            if ( ( ( addon._layerType >> 1 ) & 1 ) == 0 ) {
+                // If this assertion blows up then the object is not set properly. An object must have a valid UID!
+                assert( addon._uid != 0 );
                 tileUIDs.emplace_back( addon._uid );
             }
         }
