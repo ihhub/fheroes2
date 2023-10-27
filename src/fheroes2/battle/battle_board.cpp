@@ -332,11 +332,6 @@ int Battle::Board::GetReflectDirection( const int dir )
     return UNKNOWN;
 }
 
-bool Battle::Board::isNegativeDistance( const int32_t index1, const int32_t index2 )
-{
-    return ( index1 % ARENAW ) - ( index2 % ARENAW ) < 0;
-}
-
 int Battle::Board::DistanceFromOriginX( const int32_t index, const bool reflect )
 {
     const int xPos = index % ARENAW;
