@@ -203,7 +203,7 @@ namespace Battle
         uint32_t EstimateRetaliatoryDamage( const uint32_t damageTaken ) const;
 
         bool ApplySpell( const Spell & spell, const HeroBase * applyingHero, TargetInfo & target );
-        bool AllowApplySpell( const Spell & spell, const HeroBase * applyingHero, std::string * msg = nullptr, const bool forceApplyToAlly = false ) const;
+        bool AllowApplySpell( const Spell & spell, const HeroBase * applyingHero, const bool forceApplyToAlly = false ) const;
         bool isUnderSpellEffect( const Spell & spell ) const;
         std::vector<Spell> getCurrentSpellEffects() const;
 

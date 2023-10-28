@@ -809,8 +809,7 @@ uint32_t Battle::Unit::ApplyDamage( Unit & enemy, const uint32_t dmg, uint32_t &
     return killed;
 }
 
-bool Battle::Unit::AllowApplySpell( const Spell & spell, const HeroBase * applyingHero, std::string * msg /* = nullptr */,
-                                    const bool forceApplyToAlly /* = false */ ) const
+bool Battle::Unit::AllowApplySpell( const Spell & spell, const HeroBase * applyingHero, const bool forceApplyToAlly /* = false */ ) const
 {
     if ( Modes( CAP_MIRRORIMAGE ) && ( spell == Spell::ANTIMAGIC || spell == Spell::MIRRORIMAGE ) ) {
         return false;
@@ -824,17 +823,6 @@ bool Battle::Unit::AllowApplySpell( const Spell & spell, const HeroBase * applyi
         return false;
     }
     if ( applyingHero && spell.isApplyToEnemies() && GetColor() == applyingHero->GetColor() && !forceApplyToAlly ) {
-        return false;
-    }
-
-    const Artifact spellImmunityArt = getImmunityArtifactForSpell( GetCommander(), spell );
-    if ( spellImmunityArt.isValid() ) {
-        if ( msg ) {
-            *msg = _( "The %{artifact} artifact is in effect for this battle, disabling %{spell} spell." );
-            StringReplace( *msg, "%{artifact}", spellImmunityArt.GetName() );
-            StringReplace( *msg, "%{spell}", spell.GetName() );
-        }
-
         return false;
     }
 
@@ -905,7 +893,7 @@ bool Battle::Unit::ApplySpell( const Spell & spell, const HeroBase * applyingHer
     // HACK!!! Chain lightning is the only spell which can't be cast on allies but could be applied on them
     const bool isForceApply = ( spell.GetID() == Spell::CHAINLIGHTNING );
 
-    if ( !AllowApplySpell( spell, applyingHero, nullptr, isForceApply ) ) {
+    if ( !AllowApplySpell( spell, applyingHero, isForceApply ) ) {
         return false;
     }
 
