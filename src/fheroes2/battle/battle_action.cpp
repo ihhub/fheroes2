@@ -206,7 +206,7 @@ void Battle::Arena::BattleProcess( Unit & attacker, Unit & defender, int32_t dst
             if ( !attackTarget.defender->isValid() ) {
                 continue;
             }
-            if ( !attackTarget.defender->AllowApplySpell( spell, attackTarget.defender->GetCommander(), nullptr, true ) ) {
+            if ( !attackTarget.defender->AllowApplySpell( spell, nullptr ) ) {
                 continue;
             }
 

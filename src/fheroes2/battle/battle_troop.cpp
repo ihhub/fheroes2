@@ -59,6 +59,43 @@
 #include "tools.h"
 #include "translations.h"
 
+namespace
+{
+    Artifact getImmunityArtifactForSpell( const HeroBase * hero, const Spell & spell )
+    {
+        if ( hero == nullptr ) {
+            return { Artifact::UNKNOWN };
+        }
+
+        switch ( spell.GetID() ) {
+        case Spell::CURSE:
+        case Spell::MASSCURSE:
+            return hero->GetBagArtifacts().getFirstArtifactWithBonus( fheroes2::ArtifactBonusType::CURSE_SPELL_IMMUNITY );
+        case Spell::HYPNOTIZE:
+            return hero->GetBagArtifacts().getFirstArtifactWithBonus( fheroes2::ArtifactBonusType::HYPNOTIZE_SPELL_IMMUNITY );
+        case Spell::DEATHRIPPLE:
+        case Spell::DEATHWAVE:
+            return hero->GetBagArtifacts().getFirstArtifactWithBonus( fheroes2::ArtifactBonusType::DEATH_SPELL_IMMUNITY );
+        case Spell::BERSERKER:
+            return hero->GetBagArtifacts().getFirstArtifactWithBonus( fheroes2::ArtifactBonusType::BERSERK_SPELL_IMMUNITY );
+        case Spell::BLIND:
+            return hero->GetBagArtifacts().getFirstArtifactWithBonus( fheroes2::ArtifactBonusType::BLIND_SPELL_IMMUNITY );
+        case Spell::PARALYZE:
+            return hero->GetBagArtifacts().getFirstArtifactWithBonus( fheroes2::ArtifactBonusType::PARALYZE_SPELL_IMMUNITY );
+        case Spell::HOLYWORD:
+        case Spell::HOLYSHOUT:
+            return hero->GetBagArtifacts().getFirstArtifactWithBonus( fheroes2::ArtifactBonusType::HOLY_SPELL_IMMUNITY );
+        case Spell::DISPEL:
+        case Spell::MASSDISPEL:
+            return hero->GetBagArtifacts().getFirstArtifactWithBonus( fheroes2::ArtifactBonusType::DISPEL_SPELL_IMMUNITY );
+        default:
+            break;
+        }
+
+        return { Artifact::UNKNOWN };
+    }
+}
+
 Battle::ModeDuration::ModeDuration( uint32_t mode, uint32_t duration )
     : std::pair<uint32_t, uint32_t>( mode, duration )
 {}
@@ -772,7 +809,8 @@ uint32_t Battle::Unit::ApplyDamage( Unit & enemy, const uint32_t dmg, uint32_t &
     return killed;
 }
 
-bool Battle::Unit::AllowApplySpell( const Spell & spell, const HeroBase * hero, std::string * msg, bool forceApplyToAlly ) const
+bool Battle::Unit::AllowApplySpell( const Spell & spell, const HeroBase * applyingHero, std::string * msg /* = nullptr */,
+                                    const bool forceApplyToAlly /* = false */ ) const
 {
     if ( Modes( CAP_MIRRORIMAGE ) && ( spell == Spell::ANTIMAGIC || spell == Spell::MIRRORIMAGE ) ) {
         return false;
@@ -782,64 +820,25 @@ bool Battle::Unit::AllowApplySpell( const Spell & spell, const HeroBase * hero, 
         return false;
     }
 
-    if ( hero && spell.isApplyToFriends() && GetColor() != hero->GetColor() ) {
+    if ( applyingHero && spell.isApplyToFriends() && GetColor() != applyingHero->GetColor() ) {
         return false;
     }
-    if ( hero && spell.isApplyToEnemies() && GetColor() == hero->GetColor() && !forceApplyToAlly ) {
-        return false;
-    }
-    if ( GetMagicResist( spell, ( hero ? hero->GetPower() : 0 ), hero ) >= 100 ) {
+    if ( applyingHero && spell.isApplyToEnemies() && GetColor() == applyingHero->GetColor() && !forceApplyToAlly ) {
         return false;
     }
 
-    const HeroBase * myhero = GetCommander();
-    if ( !myhero )
-        return true;
-
-    Artifact guard_art( Artifact::UNKNOWN );
-    switch ( spell.GetID() ) {
-    case Spell::CURSE:
-    case Spell::MASSCURSE:
-        guard_art = myhero->GetBagArtifacts().getFirstArtifactWithBonus( fheroes2::ArtifactBonusType::CURSE_SPELL_IMMUNITY );
-        break;
-    case Spell::HYPNOTIZE:
-        guard_art = myhero->GetBagArtifacts().getFirstArtifactWithBonus( fheroes2::ArtifactBonusType::HYPNOTIZE_SPELL_IMMUNITY );
-        break;
-    case Spell::DEATHRIPPLE:
-    case Spell::DEATHWAVE:
-        guard_art = myhero->GetBagArtifacts().getFirstArtifactWithBonus( fheroes2::ArtifactBonusType::DEATH_SPELL_IMMUNITY );
-        break;
-    case Spell::BERSERKER:
-        guard_art = myhero->GetBagArtifacts().getFirstArtifactWithBonus( fheroes2::ArtifactBonusType::BERSERK_SPELL_IMMUNITY );
-        break;
-    case Spell::BLIND:
-        guard_art = myhero->GetBagArtifacts().getFirstArtifactWithBonus( fheroes2::ArtifactBonusType::BLIND_SPELL_IMMUNITY );
-        break;
-    case Spell::PARALYZE:
-        guard_art = myhero->GetBagArtifacts().getFirstArtifactWithBonus( fheroes2::ArtifactBonusType::PARALYZE_SPELL_IMMUNITY );
-        break;
-    case Spell::HOLYWORD:
-    case Spell::HOLYSHOUT:
-        guard_art = myhero->GetBagArtifacts().getFirstArtifactWithBonus( fheroes2::ArtifactBonusType::HOLY_SPELL_IMMUNITY );
-        break;
-    case Spell::DISPEL:
-    case Spell::MASSDISPEL:
-        guard_art = myhero->GetBagArtifacts().getFirstArtifactWithBonus( fheroes2::ArtifactBonusType::DISPEL_SPELL_IMMUNITY );
-        break;
-    default:
-        break;
-    }
-
-    if ( guard_art.isValid() ) {
+    const Artifact spellImmunityArt = getImmunityArtifactForSpell( GetCommander(), spell );
+    if ( spellImmunityArt.isValid() ) {
         if ( msg ) {
             *msg = _( "The %{artifact} artifact is in effect for this battle, disabling %{spell} spell." );
-            StringReplace( *msg, "%{artifact}", guard_art.GetName() );
+            StringReplace( *msg, "%{artifact}", spellImmunityArt.GetName() );
             StringReplace( *msg, "%{spell}", spell.GetName() );
         }
+
         return false;
     }
 
-    return true;
+    return ( GetMagicResist( spell, ( applyingHero ? applyingHero->GetPower() : 0 ), applyingHero ) < 100 );
 }
 
 bool Battle::Unit::isUnderSpellEffect( const Spell & spell ) const
@@ -901,26 +900,27 @@ bool Battle::Unit::isUnderSpellEffect( const Spell & spell ) const
     return false;
 }
 
-bool Battle::Unit::ApplySpell( const Spell & spell, const HeroBase * hero, TargetInfo & target )
+bool Battle::Unit::ApplySpell( const Spell & spell, const HeroBase * applyingHero, TargetInfo & target )
 {
     // HACK!!! Chain lightning is the only spell which can't be cast on allies but could be applied on them
     const bool isForceApply = ( spell.GetID() == Spell::CHAINLIGHTNING );
 
-    if ( !AllowApplySpell( spell, hero, nullptr, isForceApply ) )
+    if ( !AllowApplySpell( spell, applyingHero, nullptr, isForceApply ) ) {
         return false;
+    }
 
     DEBUG_LOG( DBG_BATTLE, DBG_TRACE, spell.GetName() << " to " << String() )
 
-    const uint32_t spoint = hero ? hero->GetPower() : DEFAULT_SPELL_DURATION;
+    const uint32_t spoint = applyingHero ? applyingHero->GetPower() : DEFAULT_SPELL_DURATION;
 
     if ( spell.isDamage() ) {
-        SpellApplyDamage( spell, spoint, hero, target );
+        SpellApplyDamage( spell, spoint, applyingHero, target );
     }
     else if ( spell.isRestore() || spell.isResurrect() ) {
-        SpellRestoreAction( spell, spoint, hero );
+        SpellRestoreAction( spell, spoint, applyingHero );
     }
     else {
-        SpellModesAction( spell, spoint, hero );
+        SpellModesAction( spell, spoint, applyingHero );
     }
 
     return true;
@@ -1269,10 +1269,10 @@ int Battle::Unit::GetControl() const
     return !GetArmy() ? CONTROL_AI : GetArmy()->GetControl();
 }
 
-void Battle::Unit::SpellModesAction( const Spell & spell, uint32_t duration, const HeroBase * hero )
+void Battle::Unit::SpellModesAction( const Spell & spell, uint32_t duration, const HeroBase * applyingHero )
 {
-    if ( hero ) {
-        duration += hero->GetBagArtifacts().getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::EVERY_COMBAT_SPELL_DURATION );
+    if ( applyingHero ) {
+        duration += applyingHero->GetBagArtifacts().getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::EVERY_COMBAT_SPELL_DURATION );
     }
 
     switch ( spell.GetID() ) {
@@ -1363,11 +1363,11 @@ void Battle::Unit::SpellModesAction( const Spell & spell, uint32_t duration, con
     }
 }
 
-void Battle::Unit::SpellApplyDamage( const Spell & spell, const uint32_t spellPoints, const HeroBase * hero, TargetInfo & target )
+void Battle::Unit::SpellApplyDamage( const Spell & spell, const uint32_t spellPoints, const HeroBase * applyingHero, TargetInfo & target )
 {
     assert( spell.isDamage() );
 
-    const uint32_t dmg = CalculateSpellDamage( spell, spellPoints, hero, target.damage, false /* ignore defending hero */ );
+    const uint32_t dmg = CalculateSpellDamage( spell, spellPoints, applyingHero, target.damage, false /* ignore defending hero */ );
 
     // apply damage
     if ( dmg ) {
@@ -1376,7 +1376,8 @@ void Battle::Unit::SpellApplyDamage( const Spell & spell, const uint32_t spellPo
     }
 }
 
-uint32_t Battle::Unit::CalculateSpellDamage( const Spell & spell, uint32_t spellPoints, const HeroBase * hero, uint32_t targetDamage, bool ignoreDefendingHero ) const
+uint32_t Battle::Unit::CalculateSpellDamage( const Spell & spell, uint32_t spellPoints, const HeroBase * applyingHero, const uint32_t targetDamage,
+                                             const bool ignoreDefendingHero ) const
 {
     assert( spell.isDamage() );
 
@@ -1445,7 +1446,7 @@ uint32_t Battle::Unit::CalculateSpellDamage( const Spell & spell, uint32_t spell
     }
 
     // check artifact
-    if ( hero ) {
+    if ( applyingHero ) {
         const HeroBase * defendingHero = GetCommander();
         const bool useDefendingHeroArts = defendingHero && !ignoreDefendingHero;
 
@@ -1453,7 +1454,7 @@ uint32_t Battle::Unit::CalculateSpellDamage( const Spell & spell, uint32_t spell
         case Spell::COLDRAY:
         case Spell::COLDRING: {
             std::vector<int32_t> extraDamagePercent
-                = hero->GetBagArtifacts().getTotalArtifactMultipliedPercent( fheroes2::ArtifactBonusType::COLD_SPELL_EXTRA_EFFECTIVENESS_PERCENT );
+                = applyingHero->GetBagArtifacts().getTotalArtifactMultipliedPercent( fheroes2::ArtifactBonusType::COLD_SPELL_EXTRA_EFFECTIVENESS_PERCENT );
             for ( const int32_t value : extraDamagePercent ) {
                 dmg = dmg * ( 100 + value ) / 100;
             }
@@ -1476,7 +1477,7 @@ uint32_t Battle::Unit::CalculateSpellDamage( const Spell & spell, uint32_t spell
         case Spell::FIREBALL:
         case Spell::FIREBLAST: {
             std::vector<int32_t> extraDamagePercent
-                = hero->GetBagArtifacts().getTotalArtifactMultipliedPercent( fheroes2::ArtifactBonusType::FIRE_SPELL_EXTRA_EFFECTIVENESS_PERCENT );
+                = applyingHero->GetBagArtifacts().getTotalArtifactMultipliedPercent( fheroes2::ArtifactBonusType::FIRE_SPELL_EXTRA_EFFECTIVENESS_PERCENT );
             for ( const int32_t value : extraDamagePercent ) {
                 dmg = dmg * ( 100 + value ) / 100;
             }
@@ -1499,7 +1500,7 @@ uint32_t Battle::Unit::CalculateSpellDamage( const Spell & spell, uint32_t spell
         case Spell::LIGHTNINGBOLT:
         case Spell::CHAINLIGHTNING: {
             const std::vector<int32_t> extraDamagePercent
-                = hero->GetBagArtifacts().getTotalArtifactMultipliedPercent( fheroes2::ArtifactBonusType::LIGHTNING_SPELL_EXTRA_EFFECTIVENESS_PERCENT );
+                = applyingHero->GetBagArtifacts().getTotalArtifactMultipliedPercent( fheroes2::ArtifactBonusType::LIGHTNING_SPELL_EXTRA_EFFECTIVENESS_PERCENT );
             for ( const int32_t value : extraDamagePercent ) {
                 dmg = dmg * ( 100 + value ) / 100;
             }
@@ -1553,7 +1554,7 @@ uint32_t Battle::Unit::CalculateSpellDamage( const Spell & spell, uint32_t spell
     return dmg;
 }
 
-void Battle::Unit::SpellRestoreAction( const Spell & spell, const uint32_t spellPoints, const HeroBase * hero )
+void Battle::Unit::SpellRestoreAction( const Spell & spell, const uint32_t spellPoints, const HeroBase * applyingHero )
 {
     switch ( spell.GetID() ) {
     case Spell::CURE:
@@ -1562,7 +1563,7 @@ void Battle::Unit::SpellRestoreAction( const Spell & spell, const uint32_t spell
         removeAffection( IS_BAD_MAGIC );
 
         // restore
-        hp += fheroes2::getHPRestorePoints( spell, spellPoints, hero );
+        hp += fheroes2::getHPRestorePoints( spell, spellPoints, applyingHero );
         if ( hp > ArmyTroop::GetHitPoints() ) {
             hp = ArmyTroop::GetHitPoints();
         }
@@ -1578,7 +1579,7 @@ void Battle::Unit::SpellRestoreAction( const Spell & spell, const uint32_t spell
             graveyard->RemoveTroop( *this );
         }
 
-        const uint32_t restore = fheroes2::getResurrectPoints( spell, spellPoints, hero );
+        const uint32_t restore = fheroes2::getResurrectPoints( spell, spellPoints, applyingHero );
         const uint32_t resurrect = Resurrect( restore, false, ( spell == Spell::RESURRECT ) );
 
         // Put the unit back on the board
@@ -1613,38 +1614,48 @@ bool Battle::Unit::isDoubleAttack() const
     return false;
 }
 
-uint32_t Battle::Unit::GetMagicResist( const Spell & spell, const uint32_t attackingArmySpellPower, const HeroBase * attackingHero ) const
+uint32_t Battle::Unit::GetMagicResist( const Spell & spell, const uint32_t spellPower, const HeroBase * applyingHero ) const
 {
-    if ( Modes( SP_ANTIMAGIC ) )
+    if ( Modes( SP_ANTIMAGIC ) ) {
         return 100;
+    }
 
     switch ( spell.GetID() ) {
     case Spell::CURE:
     case Spell::MASSCURE:
-        if ( !isHaveDamage() && !( modes & IS_BAD_MAGIC ) )
+        if ( !isHaveDamage() && !( modes & IS_BAD_MAGIC ) ) {
             return 100;
+        }
         break;
 
     case Spell::RESURRECT:
     case Spell::RESURRECTTRUE:
     case Spell::ANIMATEDEAD:
-        if ( GetCount() == _initialCount )
+        if ( GetCount() == _initialCount ) {
             return 100;
+        }
         break;
 
     case Spell::DISPEL:
     case Spell::MASSDISPEL:
-        if ( !( modes & IS_MAGIC ) )
+        if ( !( modes & IS_MAGIC ) ) {
             return 100;
+        }
         break;
 
     case Spell::HYPNOTIZE:
-        if ( fheroes2::getHypnotizeMonsterHPPoints( spell, attackingArmySpellPower, attackingHero ) < hp )
+        if ( fheroes2::getHypnotizeMonsterHPPoints( spell, spellPower, applyingHero ) < hp ) {
             return 100;
+        }
         break;
 
     default:
         break;
+    }
+
+    const Artifact spellImmunityArt = getImmunityArtifactForSpell( GetCommander(), spell );
+    if ( spellImmunityArt.isValid() ) {
+        return 100;
     }
 
     return fheroes2::getSpellResistance( id, spell.GetID() );

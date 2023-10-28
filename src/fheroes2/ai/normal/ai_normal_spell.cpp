@@ -144,9 +144,11 @@ namespace AI
 
         const auto damageHeuristic = [this, &totalDamage, &spell, &spellPower, &retreating]( const Unit * unit, const double armyStrength, const double armySpeed ) {
             const uint32_t damage = totalDamage * ( 100 - unit->GetMagicResist( spell, spellPower, _commander ) ) / 100;
+
             // If we're retreating we don't care about partial damage, only actual units killed
-            if ( retreating )
+            if ( retreating ) {
                 return unit->GetMonsterStrength() * unit->HowManyWillBeKilled( damage );
+            }
 
             // Otherwise calculate amount of strength lost (% of unit times total strength)
             const uint32_t hitpoints = unit->Modes( CAP_MIRRORIMAGE ) ? 1 : unit->GetHitPoints();
@@ -162,6 +164,7 @@ namespace AI
             if ( unit->isImmovable() ) {
                 unitPercentageLost += unitPercentageLost - 1.0;
             }
+
             return unitPercentageLost * unit->GetStrength();
         };
 
@@ -192,6 +195,7 @@ namespace AI
             const auto areaOfEffectCheck
                 = [this, &damageHeuristic, &bestOutcome, &currentUnit, &retreating]( const TargetsInfo & targets, const int32_t index, int myColor ) {
                       double spellHeuristic = 0;
+
                       for ( const TargetInfo & target : targets ) {
                           if ( target.defender->GetCurrentColor() == myColor ) {
                               const double valueLost = damageHeuristic( target.defender, _myArmyStrength, _myArmyAverageSpeed );
