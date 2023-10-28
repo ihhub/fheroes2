@@ -20,8 +20,11 @@
 
 #include "map_object_info.h"
 
+#include <algorithm>
 #include <array>
-#include <cassert>
+#include <cstddef>
+#include <initializer_list>
+#include <utility>
 
 #include "artifact.h"
 
@@ -166,7 +169,7 @@ namespace
         {
             Maps::ObjectInfo object;
             object.objectType = MP2::OBJ_ROCK;
-            object.parts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNWAT2, 2, fheroes2::Point{ 0, 0 }, MP2::OBJ_ROCK, Maps::OBJECT_LAYER );
+            object.parts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNWAT2, 2, fheroes2::Point{ 0, 0 }, MP2::OBJ_ROCK, Maps::BACKGROUND_LAYER );
             object.parts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNWAT2, 1, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
             object.parts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNWAT2, 0, fheroes2::Point{ 0, -1 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
 

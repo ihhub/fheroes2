@@ -24,7 +24,14 @@
 #include <set>
 #endif
 
+#include <algorithm>
+#include <cassert>
+#include <cstdint>
+#include <memory>
+#include <vector>
+
 #include "agg_image.h"
+#include "math_base.h"
 #include "map_object_info.h"
 #include "mp2.h"
 
