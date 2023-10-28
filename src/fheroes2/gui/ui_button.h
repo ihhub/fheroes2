@@ -125,6 +125,7 @@ namespace fheroes2
         ~Button() override = default;
 
         void setICNInfo( int icnId, uint32_t releasedIndex, uint32_t pressedIndex );
+        void setICNIndexes( const uint32_t releasedIndex, const uint32_t pressedIndex );
 
     protected:
         const Sprite & _getPressed() const override;

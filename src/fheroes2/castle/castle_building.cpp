@@ -195,7 +195,7 @@ void CastleRedrawCurrentBuilding( const Castle & castle, const fheroes2::Point &
     }
 
     // Bay animation
-    if ( Race::WZRD == castle.GetRace() || ( !castle.isBuild( BUILD_SHIPYARD ) && castle.HaveNearlySea() ) ) {
+    if ( Race::WZRD == castle.GetRace() || ( !castle.isBuild( BUILD_SHIPYARD ) && castle.HasSeaAccess() ) ) {
         int bayIcnId = 0;
         const uint32_t bayExtraIndex = 1 + animationIndex % 5;
 
@@ -376,7 +376,7 @@ void CastleDialog::CastleRedrawBuildingExtended( const Castle & castle, const fh
 
     if ( build == BUILD_SHIPYARD ) {
         // boat
-        if ( castle.PresentBoat() ) {
+        if ( castle.HasBoatNearby() ) {
             const int icn2 = Castle::GetICNBoat( castle.GetRace() );
 
             fheroes2::drawCastleDialogBuilding( icn2, 0, castle, dst_pt, max, alpha );

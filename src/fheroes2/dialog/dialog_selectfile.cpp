@@ -298,7 +298,7 @@ namespace
         // Dialog height is also capped with the current screen height.
         fheroes2::StandardWindow background( maxFileNameWidth + 204, std::min( display.height() - 100, maxDialogHeight ), true, display );
 
-        const fheroes2::Rect area = background.activeArea();
+        const fheroes2::Rect area( background.activeArea() );
         const fheroes2::Rect listRoi( area.x + 24, area.y + 37, area.width - 75, area.height - listHeightDeduction );
         const fheroes2::Rect textInputRoi( listRoi.x, listRoi.y + listRoi.height + 12, maxFileNameWidth + 8, 21 );
         const int32_t dateTimeoffsetX = textInputRoi.x + textInputRoi.width;
@@ -316,20 +316,13 @@ namespace
         const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
 
         // Prepare OKAY and CANCEL buttons and render their shadows.
-        const int buttonOkIcn = isEvilInterface ? ICN::BUTTON_SMALL_OKAY_EVIL : ICN::BUTTON_SMALL_OKAY_GOOD;
-        const int32_t buttonOffsetY = area.y + area.height - 32;
-        fheroes2::Button buttonOk( area.x + 18, buttonOffsetY, buttonOkIcn, 0, 1 );
-        fheroes2::addGradientShadow( fheroes2::AGG::GetICN( buttonOkIcn, 0 ), display, buttonOk.area().getPosition(), { -5, 5 } );
+        fheroes2::Button buttonOk;
         if ( !isEditing && lists.empty() ) {
             buttonOk.disable();
         }
-        buttonOk.draw();
+        fheroes2::Button buttonCancel;
 
-        const int buttonCancelIcn = isEvilInterface ? ICN::BUTTON_SMALL_CANCEL_EVIL : ICN::BUTTON_SMALL_CANCEL_GOOD;
-        const fheroes2::Sprite & buttonCancelSprite = fheroes2::AGG::GetICN( buttonCancelIcn, 0 );
-        fheroes2::Button buttonCancel( area.x + area.width - buttonCancelSprite.width() - 18, buttonOffsetY, buttonCancelIcn, 0, 1 );
-        fheroes2::addGradientShadow( buttonCancelSprite, display, buttonCancel.area().getPosition(), { -5, 5 } );
-        buttonCancel.draw();
+        background.renderOkayCancelButtons( buttonOk, buttonCancel, isEvilInterface );
 
         // Virtual keyboard button is used only in save game mode (when 'isEditing' is true ).
         std::unique_ptr<fheroes2::ButtonSprite> buttonVirtualKB;
@@ -341,40 +334,12 @@ namespace
 
         listbox.SetAreaItems( { listRoi.x, listRoi.y + 3, listRoi.width - listAreaOffsetY, listRoi.height - listAreaHeightDeduction } );
 
-        // Render the scrollbar.
-        const fheroes2::Sprite & scrollBar = fheroes2::AGG::GetICN( isEvilInterface ? ICN::ADVBORDE : ICN::ADVBORD, 0 );
         int32_t scrollbarOffsetX = area.x + area.width - 35;
-
-        // Top part of scrollbar background.
-        const int32_t topPartHeight = 19;
-        const int32_t scrollBarWidth = 16;
-        fheroes2::Copy( scrollBar, 536, 176, display, scrollbarOffsetX, listRoi.y, scrollBarWidth, topPartHeight );
-
-        // Middle part of scrollbar background.
-        int32_t offsetY = topPartHeight;
-        const int32_t middlePartHeight = 88;
-        const int32_t middlePartCount = ( listRoi.height - 2 * topPartHeight + middlePartHeight - 1 ) / middlePartHeight;
-
-        for ( int32_t i = 0; i < middlePartCount; ++i ) {
-            fheroes2::Copy( scrollBar, 536, 196, display, scrollbarOffsetX, listRoi.y + offsetY, scrollBarWidth,
-                            std::min( middlePartHeight, listRoi.height - offsetY - topPartHeight ) );
-            offsetY += middlePartHeight;
-        }
-
-        // Bottom part of scrollbar background.
-        fheroes2::Copy( scrollBar, 536, 285, display, scrollbarOffsetX, listRoi.y + listRoi.height - topPartHeight, scrollBarWidth, topPartHeight );
+        background.renderScrollbarBackground( { scrollbarOffsetX, listRoi.y, listRoi.width, listRoi.height }, isEvilInterface );
 
         const int listIcnId = isEvilInterface ? ICN::SCROLLE : ICN::SCROLL;
-
+        const int32_t topPartHeight = 19;
         ++scrollbarOffsetX;
-
-        // Make scrollbar shadow.
-        for ( uint8_t i = 0; i < 4; ++i ) {
-            const uint8_t transformId = i + 2;
-            const int32_t sizeCorrection = i + 1;
-            fheroes2::ApplyTransform( display, scrollbarOffsetX - transformId, listRoi.y + sizeCorrection, 1, listRoi.height - sizeCorrection, transformId );
-            fheroes2::ApplyTransform( display, scrollbarOffsetX - transformId, listRoi.y + listRoi.height + i, scrollBarWidth, 1, transformId );
-        }
 
         listbox.SetScrollButtonUp( listIcnId, 0, 1, { scrollbarOffsetX, listRoi.y + 1 } );
         listbox.SetScrollButtonDn( listIcnId, 2, 3, { scrollbarOffsetX, listRoi.y + listRoi.height - 15 } );
@@ -422,17 +387,9 @@ namespace
         title.draw( area.x + ( area.width - title.width() ) / 2, area.y + 16, display );
 
         if ( isEditing ) {
-            // Generate and render a button to open the Virtual Keyboard window.
-            fheroes2::Sprite released;
-            fheroes2::Sprite pressed;
-
-            const int32_t buttonWidth = buttonCancelSprite.width() / 2;
-
-            makeButtonSprites( released, pressed, "...", buttonWidth, isEvilInterface, false );
-            buttonVirtualKB = std::make_unique<fheroes2::ButtonSprite>( area.x + ( area.width - buttonWidth ) / 2, buttonOffsetY, released, pressed );
-
-            fheroes2::addGradientShadow( released, display, buttonVirtualKB->area().getPosition(), { -5, 5 } );
-            buttonVirtualKB->draw();
+            // Render a button to open the Virtual Keyboard window.
+            buttonVirtualKB = std::make_unique<fheroes2::ButtonSprite>();
+            background.renderButtonSprite( *buttonVirtualKB, "...", 48, { 0, 7 }, isEvilInterface, fheroes2::StandardWindow::Padding::BOTTOM_CENTER );
 
             Game::passAnimationDelay( Game::DelayType::CURSOR_BLINK_DELAY );
         }

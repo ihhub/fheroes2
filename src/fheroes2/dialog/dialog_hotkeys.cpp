@@ -246,50 +246,20 @@ namespace fheroes2
         const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
 
         // Prepare OKAY button and render its shadow.
+        fheroes2::Button buttonOk;
         const int buttonOkIcn = isEvilInterface ? ICN::BUTTON_SMALL_OKAY_EVIL : ICN::BUTTON_SMALL_OKAY_GOOD;
-        const fheroes2::Sprite & buttonOkSprite = fheroes2::AGG::GetICN( buttonOkIcn, 0 );
-        fheroes2::Button buttonOk( roi.x + ( roi.width - buttonOkSprite.width() ) / 2, roi.y + roi.height - 32, buttonOkIcn, 0, 1 );
-        fheroes2::addGradientShadow( buttonOkSprite, display, buttonOk.area().getPosition(), { -5, 5 } );
-        buttonOk.draw();
+        background.renderButton( buttonOk, buttonOkIcn, 0, 1, { 0, 7 }, StandardWindow::Padding::BOTTOM_CENTER );
 
         HotKeyList listbox( roi.getPosition() );
         listbox.initListBackgroundRestorer( listRoi );
         listbox.SetAreaItems( { listRoi.x, listRoi.y + 3, listRoi.width - 3, listRoi.height - 4 } );
 
-        // Render the scrollbar.
-        const fheroes2::Sprite & scrollBar = fheroes2::AGG::GetICN( isEvilInterface ? ICN::ADVBORDE : ICN::ADVBORD, 0 );
         int32_t scrollbarOffsetX = roi.x + roi.width - 35;
+        background.renderScrollbarBackground( { scrollbarOffsetX, listRoi.y, listRoi.width, listRoi.height }, isEvilInterface );
 
-        // Top part of scrollbar background.
         const int32_t topPartHeight = 19;
-        const int32_t scrollBarWidth = 16;
-        fheroes2::Copy( scrollBar, 536, 176, display, scrollbarOffsetX, listRoi.y, scrollBarWidth, topPartHeight );
-
-        // Middle part of scrollbar background.
-        int32_t offsetY = topPartHeight;
-        const int32_t middlePartHeight = 88;
-        const int32_t middlePartCount = ( listRoi.height - 2 * topPartHeight + middlePartHeight - 1 ) / middlePartHeight;
-
-        for ( int32_t i = 0; i < middlePartCount; ++i ) {
-            fheroes2::Copy( scrollBar, 536, 196, display, scrollbarOffsetX, listRoi.y + offsetY, scrollBarWidth,
-                            std::min( middlePartHeight, listRoi.height - offsetY - topPartHeight ) );
-            offsetY += middlePartHeight;
-        }
-
-        // Bottom part of scrollbar background.
-        fheroes2::Copy( scrollBar, 536, 285, display, scrollbarOffsetX, listRoi.y + listRoi.height - topPartHeight, scrollBarWidth, topPartHeight );
-
         const int listIcnId = isEvilInterface ? ICN::SCROLLE : ICN::SCROLL;
-
         ++scrollbarOffsetX;
-
-        // Make scrollbar shadow.
-        for ( uint8_t i = 0; i < 4; ++i ) {
-            const uint8_t transformId = i + 2;
-            const int32_t sizeCorrection = i + 1;
-            fheroes2::ApplyTransform( display, scrollbarOffsetX - transformId, listRoi.y + sizeCorrection, 1, listRoi.height - sizeCorrection, transformId );
-            fheroes2::ApplyTransform( display, scrollbarOffsetX - transformId, listRoi.y + listRoi.height + i, scrollBarWidth, 1, transformId );
-        }
 
         listbox.SetScrollButtonUp( listIcnId, 0, 1, { scrollbarOffsetX, listRoi.y + 1 } );
         listbox.SetScrollButtonDn( listIcnId, 2, 3, { scrollbarOffsetX, listRoi.y + listRoi.height - 15 } );

@@ -162,8 +162,8 @@ public:
         return castles;
     }
 
-    void AddHeroes( Heroes * );
-    void RemoveHeroes( const Heroes * );
+    void AddHero( Heroes * hero );
+    void RemoveHero( const Heroes * hero );
     void ApplyPlayWithStartingHero();
 
     void AddCastle( const Castle * );

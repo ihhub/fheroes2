@@ -23,6 +23,8 @@
 
 #include "battle_interface.h"
 
+// TODO: this header is redundant here, but detected as required by IWYU with older compilers
+// IWYU pragma: no_include <type_traits>
 #include <algorithm>
 #include <array>
 #include <cassert>
@@ -35,7 +37,6 @@
 #include <iterator>
 #include <ostream>
 #include <set>
-#include <type_traits>
 
 #include "agg_image.h"
 #include "audio.h"
