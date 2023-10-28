@@ -20,8 +20,8 @@
 
 #include "map_object_info.h"
 
-#include <cassert>
 #include <array>
+#include <cassert>
 
 #include "artifact.h"
 

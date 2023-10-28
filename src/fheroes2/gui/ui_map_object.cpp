@@ -20,7 +20,7 @@
 
 #include "ui_map_object.h"
 
-#if defined ( WITH_DEBUG )
+#if defined( WITH_DEBUG )
 #include <set>
 #endif
 
@@ -50,7 +50,7 @@ namespace fheroes2
             return image;
         }
 
-#if defined ( WITH_DEBUG )
+#if defined( WITH_DEBUG )
         // Verify that all offsets are unique.
         std::set<fheroes2::Point> uniqueOffsets;
         for ( const auto & objectPart : object.parts ) {
