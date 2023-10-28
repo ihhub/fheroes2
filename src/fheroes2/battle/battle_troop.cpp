@@ -1206,17 +1206,22 @@ int32_t Battle::Unit::evaluateThreatForUnit( const Unit & defender, const std::o
         switch ( spellCasterAbilityIter->value ) {
         case Spell::BLIND:
         case Spell::PARALYZE:
-        case Spell::PETRIFY: {
-            attackerThreat += static_cast<double>( getDefenderDamage() ) * spellCasterAbilityIter->percentage / 100.0
-                              * ( 100 - defender.GetMagicResist( spellCasterAbilityIter->value, DEFAULT_SPELL_DURATION, nullptr ) ) / 100.0;
+        case Spell::PETRIFY:
+            // Creature's built-in magic resistance (not 100% immunity but resistance, as, for example, with Dwarves) never works against the built-in magic of another
+            // creature (for example, Unicorn's Blind ability). Only the probability of triggering the built-in magic matters.
+            if ( defender.AllowApplySpell( spellCasterAbilityIter->value, nullptr ) ) {
+                attackerThreat += static_cast<double>( getDefenderDamage() ) * spellCasterAbilityIter->percentage / 100.0;
+            }
             break;
-        }
         case Spell::DISPEL:
             // TODO: add the logic to evaluate this spell value.
             break;
         case Spell::CURSE:
-            attackerThreat += static_cast<double>( getDefenderDamage() ) * spellCasterAbilityIter->percentage / 100.0 / 10.0
-                              * ( 100 - defender.GetMagicResist( spellCasterAbilityIter->value, DEFAULT_SPELL_DURATION, nullptr ) ) / 100.0;
+            // Creature's built-in magic resistance (not 100% immunity but resistance, as, for example, with Dwarves) never works against the built-in magic of another
+            // creature (for example, Unicorn's Blind ability). Only the probability of triggering the built-in magic matters.
+            if ( defender.AllowApplySpell( spellCasterAbilityIter->value, nullptr ) ) {
+                attackerThreat += static_cast<double>( getDefenderDamage() ) * spellCasterAbilityIter->percentage / 100.0 / 10.0;
+            }
             break;
         default:
             // Did you add a new spell casting ability? Add the logic above!
