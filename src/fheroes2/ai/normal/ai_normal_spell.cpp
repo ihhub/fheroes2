@@ -83,7 +83,7 @@ namespace AI
             spellValueThreshold *= 2;
         }
 
-        const auto checkSelectBestSpell = [this, &retreating, &spellValueThreshold, &bestSpell]( const Spell & spell, const SpellcastOutcome & outcome ) {
+        const auto checkSelectBestSpell = [this, retreating, spellValueThreshold, &bestSpell]( const Spell & spell, const SpellcastOutcome & outcome ) {
             // Diminish spell effectiveness based on spell point cost
             // 1. Divide cost by 3 to make level 1 spells a baseline (1:1)
             // 2. Use square root to make sure relationship isn't linear for high-level spells
@@ -139,11 +139,10 @@ namespace AI
         if ( !spell.isDamage() )
             return bestOutcome;
 
-        const int spellPower = _commander->GetPower();
-        const uint32_t totalDamage = spell.Damage() * spellPower;
+        const uint32_t totalDamage = spell.Damage() * _commander->GetPower();
 
-        const auto damageHeuristic = [this, &totalDamage, &spell, &spellPower, &retreating]( const Unit * unit, const double armyStrength, const double armySpeed ) {
-            const uint32_t damage = totalDamage * ( 100 - unit->GetMagicResist( spell, spellPower, _commander ) ) / 100;
+        const auto damageHeuristic = [this, totalDamage, &spell, retreating]( const Unit * unit, const double armyStrength, const double armySpeed ) {
+            const uint32_t damage = totalDamage * ( 100 - unit->GetMagicResist( spell, _commander ) ) / 100;
 
             // If we're retreating we don't care about partial damage, only actual units killed
             if ( retreating ) {
@@ -193,7 +192,7 @@ namespace AI
         else {
             // Area of effect spells like Fireball
             const auto areaOfEffectCheck
-                = [this, &damageHeuristic, &bestOutcome, &currentUnit, &retreating]( const TargetsInfo & targets, const int32_t index, int myColor ) {
+                = [this, &damageHeuristic, &bestOutcome, &currentUnit, retreating]( const TargetsInfo & targets, const int32_t index, int myColor ) {
                       double spellHeuristic = 0;
 
                       for ( const TargetInfo & target : targets ) {

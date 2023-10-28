@@ -268,7 +268,7 @@ namespace Battle
         bool UpdateDirection( const fheroes2::Rect & );
         void PostKilledAction();
 
-        uint32_t GetMagicResist( const Spell & spell, const uint32_t spellPower, const HeroBase * applyingHero ) const;
+        uint32_t GetMagicResist( const Spell & spell, const HeroBase * applyingHero ) const;
         int GetSpellMagic( Rand::DeterministicRandomGenerator & randomGenerator ) const;
 
         const HeroBase * GetCommander() const;

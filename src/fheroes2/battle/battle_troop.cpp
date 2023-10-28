@@ -838,7 +838,7 @@ bool Battle::Unit::AllowApplySpell( const Spell & spell, const HeroBase * applyi
         return false;
     }
 
-    return ( GetMagicResist( spell, ( applyingHero ? applyingHero->GetPower() : 0 ), applyingHero ) < 100 );
+    return ( GetMagicResist( spell, applyingHero ) < 100 );
 }
 
 bool Battle::Unit::isUnderSpellEffect( const Spell & spell ) const
@@ -1619,7 +1619,7 @@ bool Battle::Unit::isDoubleAttack() const
     return false;
 }
 
-uint32_t Battle::Unit::GetMagicResist( const Spell & spell, const uint32_t spellPower, const HeroBase * applyingHero ) const
+uint32_t Battle::Unit::GetMagicResist( const Spell & spell, const HeroBase * applyingHero ) const
 {
     if ( Modes( SP_ANTIMAGIC ) ) {
         return 100;
@@ -1649,7 +1649,9 @@ uint32_t Battle::Unit::GetMagicResist( const Spell & spell, const uint32_t spell
         break;
 
     case Spell::HYPNOTIZE:
-        if ( fheroes2::getHypnotizeMonsterHPPoints( spell, spellPower, applyingHero ) < hp ) {
+        assert( applyingHero != nullptr );
+
+        if ( fheroes2::getHypnotizeMonsterHPPoints( spell, applyingHero->GetPower(), applyingHero ) < hp ) {
             return 100;
         }
         break;
