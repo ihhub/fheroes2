@@ -34,7 +34,7 @@ namespace
     //
     // All object information is based on The Price of Loyalty expansion of the original game since
     // the fheroes2 Editor requires to have resources from the expansion.
-    std::array<std::vector<Maps::ObjectInfo>, static_cast<size_t>( Maps::ObjectGroup::Group_Count )> objectData;
+    std::array<std::vector<Maps::ObjectInfo>, static_cast<size_t>( Maps::ObjectGroup::Group_Count ) + 1> objectData;
 
     void populateArtifactData( std::vector<Maps::ObjectInfo> & objects )
     {
