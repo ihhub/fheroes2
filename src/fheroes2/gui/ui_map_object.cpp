@@ -31,8 +31,8 @@
 #include <vector>
 
 #include "agg_image.h"
-#include "math_base.h"
 #include "map_object_info.h"
+#include "math_base.h"
 #include "mp2.h"
 
 namespace
