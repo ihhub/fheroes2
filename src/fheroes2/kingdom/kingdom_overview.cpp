@@ -908,6 +908,7 @@ void Kingdom::openOverviewDialog()
         // So, it's equivalent to check if hero list changed.
         if ( listHeroes.Refresh( heroes ) ) {
             worldMapRedrawMask |= Interface::AdventureMap::Get().getRedrawMask();
+            worldMapRedrawMask |= Interface::REDRAW_HEROES;
 
             // Update army bars in Castles.
             listCastles.updateHeroArmyBars();
@@ -938,7 +939,12 @@ void Kingdom::openOverviewDialog()
     _topHeroInKingdomView = listHeroes.getTopId();
 
     if ( worldMapRedrawMask != 0 ) {
+        Interface::AdventureMap & adventureMapInterface = Interface::AdventureMap::Get();
+
         // Force redraw of all UI elements that changed, that were masked by Kingdom window
-        Interface::AdventureMap::Get().setRedraw( worldMapRedrawMask );
+        adventureMapInterface.setRedraw( worldMapRedrawMask );
+
+        // Update focus because there were some changes made in the Kingdom overview dialog.
+        adventureMapInterface.ResetFocus( Interface::GetFocusType(), false );
     }
 }
