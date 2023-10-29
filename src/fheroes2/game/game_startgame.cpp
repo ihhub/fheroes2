@@ -524,6 +524,31 @@ int Interface::AdventureMap::GetCursorFocusShipmaster( const Heroes & hero, cons
     return Cursor::POINTER;
 }
 
+int Interface::AdventureMap::_getCursorNoFocus( const Maps::Tiles & tile )
+{
+    switch ( tile.GetObject() ) {
+    case MP2::OBJ_NON_ACTION_CASTLE:
+    case MP2::OBJ_CASTLE: {
+        const Castle * castle = world.getCastle( tile.GetCenter() );
+        if ( castle && castle->GetColor() == Settings::Get().CurrentColor() ) {
+            return Cursor::CASTLE;
+        }
+        break;
+    }
+    case MP2::OBJ_HEROES: {
+        const Heroes * hero = tile.getHero();
+        if ( hero && hero->GetColor() == Settings::Get().CurrentColor() ) {
+            return Cursor::HEROES;
+        }
+        break;
+    }
+    default:
+        break;
+    }
+
+    return Cursor::POINTER;
+}
+
 int Interface::AdventureMap::GetCursorFocusHeroes( const Heroes & hero, const Maps::Tiles & tile )
 {
     if ( hero.Modes( Heroes::ENABLEMOVE ) ) {
@@ -639,6 +664,9 @@ int Interface::AdventureMap::GetCursorTileIndex( int32_t dstIndex )
 
     case GameFocus::CASTLE:
         return GetCursorFocusCastle( *GetFocusCastle(), tile );
+
+    case GameFocus::UNSEL:
+        return _getCursorNoFocus( tile );
 
     default:
         break;
