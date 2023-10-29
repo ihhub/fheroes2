@@ -59,7 +59,7 @@ Files: files/soundfonts/*
 Copyright: 2017 S. Christian Collins <s_chriscollins@hotmail.com>
 License: GeneralUser-2.0
 
-Files: script/packaging/common/fheroes2.appdata.xml
+Files: script/packaging/common/fheroes2.metainfo.xml
 Copyright: 2022 fheroes2 team <fhomm2@gmail.com>
 License: CC0-1.0
 

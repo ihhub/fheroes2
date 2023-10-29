@@ -7,7 +7,7 @@ import sys
 from xml.sax.saxutils import escape
 
 #
-# Appstream file could be validated with 'appstream-util validate io.github.ihhub.Fheroes2.appdata.xml'
+# Appstream file could be validated with 'appstream-util validate io.github.ihhub.Fheroes2.metainfo.xml'
 #
 
 class CustomArgumentParser(argparse.ArgumentParser):
@@ -19,14 +19,14 @@ class CustomArgumentParser(argparse.ArgumentParser):
 def parse_arguments():
     parser = CustomArgumentParser()
     parser.add_argument("changelog_file", help="changelog.txt file")
-    parser.add_argument("appdata_file", help="*.appdata.xml file")
+    parser.add_argument("metainfo_file", help="*.metainfo.xml file")
     return parser.parse_args()
 
 def main():
     args = parse_arguments()
 
     changelog = open(args.changelog_file, encoding='utf-8').read()
-    appdata = open(args.appdata_file, encoding='utf-8').read()
+    metainfo = open(args.metainfo_file, encoding='utf-8').read()
 
     tpl = '''
     <release date="{}" version="v{}">
@@ -51,12 +51,12 @@ def main():
             re.sub(r'- (.*)', r'          <li>\1</li>', escape(match[2]))
         )
 
-    new_appdata = re.sub(r'<releases>(.*?)</releases>', r'<releases>\n' + tmp + '  </releases>',
-        appdata,
+    new_metainfo = re.sub(r'<releases>(.*?)</releases>', r'<releases>\n' + tmp + '  </releases>',
+        metainfo,
         flags=re.MULTILINE | re.DOTALL
     )
 
-    open(args.appdata_file, 'w', encoding='utf-8').write(new_appdata)
+    open(args.metainfo_file, 'w', encoding='utf-8').write(new_metainfo)
 
 if __name__ == "__main__":
     main()
