@@ -363,22 +363,11 @@ bool Battle::Unit::isHandFighting( const Unit & attacker, const Unit & defender 
         return false;
     }
 
-    // If the attacker and the defender are next to each other, then this is a melee attack
-    if ( Board::isNearIndexes( attacker.GetHeadIndex(), defender.GetHeadIndex() ) ) {
-        return true;
-    }
-    if ( defender.isWide() && Board::isNearIndexes( attacker.GetHeadIndex(), defender.GetTailIndex() ) ) {
-        return true;
-    }
-    if ( attacker.isWide() && Board::isNearIndexes( attacker.GetTailIndex(), defender.GetHeadIndex() ) ) {
-        return true;
-    }
-    if ( attacker.isWide() && defender.isWide() && Board::isNearIndexes( attacker.GetTailIndex(), defender.GetTailIndex() ) ) {
-        return true;
-    }
+    const uint32_t distance = Board::GetDistance( attacker.GetPosition(), defender.GetPosition() );
+    assert( distance > 0 );
 
-    // Otherwise it's a shot
-    return false;
+    // If the attacker and the defender are next to each other, then this is a melee attack, otherwise it's a shot
+    return ( distance == 1 );
 }
 
 bool Battle::Unit::isIdling() const

@@ -182,7 +182,7 @@ namespace Battle
         }
 
         bool isSpellcastDisabled() const;
-        bool isDisableCastSpell( const Spell &, std::string * msg = nullptr );
+        bool isDisableCastSpell( const Spell & spell, std::string * msg = nullptr ) const;
 
         bool GraveyardAllowResurrect( const int32_t index, const Spell & spell ) const;
         const Unit * GraveyardLastTroop( const int32_t index ) const;
@@ -246,31 +246,32 @@ namespace Battle
 
         std::vector<CastleDefenseElement> GetEarthQuakeTargets() const;
 
-        void ApplyActionRetreat( const Command & );
-        void ApplyActionSurrender( const Command & );
-        void ApplyActionAttack( Command & );
-        void ApplyActionMove( Command & );
-        void ApplyActionEnd( Command & );
-        void ApplyActionSkip( Command & );
-        void ApplyActionMorale( Command & );
-        void ApplyActionSpellCast( Command & );
-        void ApplyActionTower( Command & );
-        void ApplyActionCatapult( Command & );
+        void ApplyActionRetreat( const Command & cmd );
+        void ApplyActionSurrender( const Command & cmd );
+        void ApplyActionAttack( Command & cmd );
+        void ApplyActionMove( Command & cmd );
+        void ApplyActionSkip( Command & cmd );
+        void ApplyActionMorale( Command & cmd );
+        void ApplyActionSpellCast( Command & cmd );
+        void ApplyActionTower( Command & cmd );
+        void ApplyActionCatapult( Command & cmd );
         void ApplyActionAutoSwitch( Command & cmd );
         void ApplyActionAutoFinish( const Command & cmd );
 
-        void ApplyActionSpellSummonElemental( const Command &, const Spell & );
-        void ApplyActionSpellMirrorImage( Command & );
-        void ApplyActionSpellTeleport( Command & );
-        void ApplyActionSpellEarthQuake( const Command & );
-        void ApplyActionSpellDefaults( Command &, const Spell & );
+        void ApplyActionSpellSummonElemental( const Command & cmd, const Spell & spell );
+        void ApplyActionSpellMirrorImage( Command & cmd );
+        void ApplyActionSpellTeleport( Command & cmd );
+        void ApplyActionSpellEarthQuake( const Command & cmd );
+        void ApplyActionSpellDefaults( Command & cmd, const Spell & spell );
+
+        void moveUnit( Unit * unit, const int32_t dst );
 
         // Performs an actual attack of one unit (defender) by another unit (attacker), applying the attacker's
-        // built-in magic, if necessary. If the specified index of the target cell of the attack (dst) is negative,
+        // built-in magic, if necessary. If the specified index of the target cell of the attack (tgt) is negative,
         // then an attempt will be made to calculate it automatically based on the adjacency of the unit cells. If
         // the specified direction of the attack (dir) is negative, then an attempt will be made to calculate it
         // automatically. When an attack is made by firing a shot, the dir should be UNKNOWN (zero).
-        void BattleProcess( Unit & attacker, Unit & defender, int32_t dst = -1, int dir = -1 );
+        void BattleProcess( Unit & attacker, Unit & defender, int32_t tgt = -1, int dir = -1 );
 
         // Creates and returns a fully combat-ready elemental, which will be already placed on the board. It's
         // the caller's responsibility to make sure that a given spell is capable of creating an elemental
