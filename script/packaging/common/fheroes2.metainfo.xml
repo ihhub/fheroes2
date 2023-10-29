@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component type="desktop">
   <id>io.github.ihhub.Fheroes2</id>
+  <launchable type="desktop-id">fheroes2.desktop</launchable>
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-2.0</project_license>
   <name>fheroes2</name>
   <developer_name>fheroes2 Resurrection team</developer_name>
-  <summary>fheroes2 is a recreation of Heroes of Might and Magic II game engine</summary>
+  <summary>fheroes2 is a recreation of the Heroes of Might and Magic II game engine</summary>
   <description>
-    <p>fheroes2 is a recreation of Heroes of Might and Magic II game engine.</p>
-    <p>This open source multiplatform project, written from scratch, is designed to reproduce the original game with significant improvements in the gameplay, graphics and logic (including support for high-resolution graphics, improved AI, numerous fixes and UI improvements), breathing new life into one of the most addictive turn-based strategies.</p>
+    <p>This open source multiplatform project, written from scratch, is designed to reproduce the original game with significant improvements to the gameplay, graphics and logic (including support for high-resolution graphics, improved AI, numerous fixes and UI improvements), breathing new life into one of the most addictive turn-based strategies.</p>
   </description>
   <categories>
     <category>Game</category>
