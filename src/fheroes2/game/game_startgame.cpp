@@ -311,7 +311,7 @@ void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus, const bool renderB
             }
             break;
 
-        case Dialog::DISMISS: {
+        case Dialog::DISMISS:
             AudioManager::PlaySound( M82::KILLFADE );
 
             ( *it )->ShowPath( false );
@@ -330,29 +330,12 @@ void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus, const bool renderB
                 updateFocus = true;
             }
 
-            Heroes * selectedHero = Settings::Get().GetPlayers().GetCurrent()->GetFocus().GetHeroes();
-            const bool dismissedFocusedHero = ( selectedHero == *it );
-
             ( *it )->Dismiss( 0 );
             it = myHeroes.end();
 
-            // A hero was dismissed. Update hero icons list including the slider image.
-            adventureMapInterface.GetIconsPanel().ResetIcons( ICON_HEROES );
-
-            if ( selectedHero != nullptr ) {
-                if ( dismissedFocusedHero ) {
-                    // The selected hero was dismissed. Reset hero focus.
-                    adventureMapInterface.ResetFocus( GameFocus::HEROES, false );
-                }
-                else {
-                    // If other hero was in focus before the dismiss we should properly keep the focus.
-                    adventureMapInterface.SetFocus( selectedHero, false );
-                }
-            }
-
             result = Dialog::CANCEL;
             break;
-        }
+
         case Dialog::CANCEL:
             needFade = true;
             break;
@@ -365,10 +348,14 @@ void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus, const bool renderB
     // If Hero dialog background was not rendered than we have opened it from other dialog (Kingdom Overview or Castle dialog)
     // and there is no need update Adventure map interface at this time.
     if ( renderBackgroundDialog ) {
-        if ( updateFocus && it != myHeroes.end() ) {
-            adventureMapInterface.SetFocus( *it, false );
+        if ( updateFocus ) {
+            if ( it != myHeroes.end() ) {
+                adventureMapInterface.SetFocus( *it, false );
+            }
+            else {
+                adventureMapInterface.ResetFocus( GameFocus::HEROES, false );
+            }
         }
-
         // The hero's army can change
         adventureMapInterface.RedrawFocus();
 
