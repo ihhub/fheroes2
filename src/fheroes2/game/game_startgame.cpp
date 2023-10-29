@@ -311,7 +311,7 @@ void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus, const bool renderB
             }
             break;
 
-        case Dialog::DISMISS:
+        case Dialog::DISMISS: {
             AudioManager::PlaySound( M82::KILLFADE );
 
             ( *it )->ShowPath( false );
@@ -330,12 +330,25 @@ void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus, const bool renderB
                 updateFocus = true;
             }
 
+            Heroes * selectedHero = Settings::Get().GetPlayers().GetCurrent()->GetFocus().GetHeroes();
+            const bool dismissedFocusedHero = ( selectedHero == *it );
+
             ( *it )->Dismiss( 0 );
             it = myHeroes.end();
 
+            if ( selectedHero != nullptr ) {
+                if ( dismissedFocusedHero ) {
+                    adventureMapInterface.ResetFocus( GameFocus::HEROES, false );
+                }
+                else {
+                    // If other hero was in focus before the dismiss we should properly keep the focus.
+                    adventureMapInterface.SetFocus( selectedHero, false );
+                }
+            }
+
             result = Dialog::CANCEL;
             break;
-
+        }
         case Dialog::CANCEL:
             needFade = true;
             break;
@@ -351,9 +364,6 @@ void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus, const bool renderB
         if ( updateFocus ) {
             if ( it != myHeroes.end() ) {
                 adventureMapInterface.SetFocus( *it, false );
-            }
-            else {
-                adventureMapInterface.ResetFocus( GameFocus::HEROES, false );
             }
         }
 
