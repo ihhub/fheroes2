@@ -336,8 +336,12 @@ void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus, const bool renderB
             ( *it )->Dismiss( 0 );
             it = myHeroes.end();
 
+            // A hero was dismissed. Update hero icons list including the slider image.
+            adventureMapInterface.GetIconsPanel().ResetIcons( ICON_HEROES );
+
             if ( selectedHero != nullptr ) {
                 if ( dismissedFocusedHero ) {
+                    // The selected hero was dismissed. Reset hero focus.
                     adventureMapInterface.ResetFocus( GameFocus::HEROES, false );
                 }
                 else {
@@ -361,10 +365,8 @@ void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus, const bool renderB
     // If Hero dialog background was not rendered than we have opened it from other dialog (Kingdom Overview or Castle dialog)
     // and there is no need update Adventure map interface at this time.
     if ( renderBackgroundDialog ) {
-        if ( updateFocus ) {
-            if ( it != myHeroes.end() ) {
-                adventureMapInterface.SetFocus( *it, false );
-            }
+        if ( updateFocus && it != myHeroes.end() ) {
+            adventureMapInterface.SetFocus( *it, false );
         }
 
         // The hero's army can change
