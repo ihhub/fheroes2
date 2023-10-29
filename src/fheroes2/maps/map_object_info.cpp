@@ -34,15 +34,14 @@ namespace
     //
     // All object information is based on The Price of Loyalty expansion of the original game since
     // the fheroes2 Editor requires to have resources from the expansion.
-    std::array<std::vector<Maps::ObjectInfo>, static_cast<size_t>( Maps::ObjectGroup::Group_Count ) + 1> objectData;
+    std::array<std::vector<Maps::ObjectInfo>, static_cast<size_t>( Maps::ObjectGroup::Group_Count )> objectData;
 
     void populateArtifactData( std::vector<Maps::ObjectInfo> & objects )
     {
         // Put an unknown artifact.
         {
-            Maps::ObjectInfo object;
-            object.objectType = MP2::OBJ_ARTIFACT;
-            object.parts.emplace_back( MP2::OBJ_ICN_TYPE_UNKNOWN, 0, fheroes2::Point{ 0, 0 }, MP2::OBJ_ARTIFACT, Maps::OBJECT_LAYER );
+            Maps::ObjectInfo object{ MP2::OBJ_NONE };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_UNKNOWN, 0, fheroes2::Point{ 0, 0 }, MP2::OBJ_NONE, Maps::TERRAIN_LAYER );
 
             objects.emplace_back( std::move( object ) );
         }
@@ -52,67 +51,60 @@ namespace
         std::vector<uint32_t> imageIndices;
 
         for ( int artifactId = Artifact::UNKNOWN + 1; artifactId < Artifact::MAGIC_BOOK; ++artifactId ) {
-            Maps::ObjectInfo object;
-            object.objectType = MP2::OBJ_ARTIFACT;
-            object.parts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNARTI, artifactId * 2 - 1, fheroes2::Point{ 0, 0 }, MP2::OBJ_ARTIFACT, Maps::OBJECT_LAYER );
-            object.parts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNARTI, artifactId * 2, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            Maps::ObjectInfo object{ MP2::OBJ_ARTIFACT };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNARTI, artifactId * 2 - 1, fheroes2::Point{ 0, 0 }, MP2::OBJ_ARTIFACT, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNARTI, artifactId * 2, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
 
             objects.emplace_back( std::move( object ) );
         }
 
         // TODO: temporary assign Magic Book some values.
         {
-            Maps::ObjectInfo object;
-            object.objectType = MP2::OBJ_ARTIFACT;
-            object.parts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNARTI, 1, fheroes2::Point{ 0, 0 }, MP2::OBJ_ARTIFACT, Maps::OBJECT_LAYER );
-            object.parts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNARTI, 0, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            Maps::ObjectInfo object{ MP2::OBJ_ARTIFACT };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNARTI, 1, fheroes2::Point{ 0, 0 }, MP2::OBJ_ARTIFACT, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNARTI, 0, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
 
             objects.emplace_back( std::move( object ) );
         }
 
         // Random artifacts.
         {
-            Maps::ObjectInfo object;
-            object.objectType = MP2::OBJ_ARTIFACT;
-            object.parts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNARTI, 163, fheroes2::Point{ 0, 0 }, MP2::OBJ_RANDOM_ARTIFACT, Maps::OBJECT_LAYER );
-            object.parts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNARTI, 162, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            Maps::ObjectInfo object{ MP2::OBJ_RANDOM_ARTIFACT };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNARTI, 163, fheroes2::Point{ 0, 0 }, MP2::OBJ_RANDOM_ARTIFACT, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNARTI, 162, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
 
             objects.emplace_back( std::move( object ) );
         }
 
         {
-            Maps::ObjectInfo object;
-            object.objectType = MP2::OBJ_ARTIFACT;
-            object.parts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNARTI, 167, fheroes2::Point{ 0, 0 }, MP2::OBJ_RANDOM_ARTIFACT_MINOR, Maps::OBJECT_LAYER );
-            object.parts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNARTI, 166, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            Maps::ObjectInfo object{ MP2::OBJ_RANDOM_ARTIFACT_MINOR };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNARTI, 167, fheroes2::Point{ 0, 0 }, MP2::OBJ_RANDOM_ARTIFACT_MINOR, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNARTI, 166, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
 
             objects.emplace_back( std::move( object ) );
         }
 
         {
-            Maps::ObjectInfo object;
-            object.objectType = MP2::OBJ_ARTIFACT;
-            object.parts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNARTI, 169, fheroes2::Point{ 0, 0 }, MP2::OBJ_RANDOM_ARTIFACT_MAJOR, Maps::OBJECT_LAYER );
-            object.parts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNARTI, 168, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            Maps::ObjectInfo object{ MP2::OBJ_RANDOM_ARTIFACT_MAJOR };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNARTI, 169, fheroes2::Point{ 0, 0 }, MP2::OBJ_RANDOM_ARTIFACT_MAJOR, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNARTI, 168, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
 
             objects.emplace_back( std::move( object ) );
         }
 
         {
-            Maps::ObjectInfo object;
-            object.objectType = MP2::OBJ_ARTIFACT;
-            object.parts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNARTI, 171, fheroes2::Point{ 0, 0 }, MP2::OBJ_RANDOM_ARTIFACT_TREASURE, Maps::OBJECT_LAYER );
-            object.parts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNARTI, 170, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            Maps::ObjectInfo object{ MP2::OBJ_RANDOM_ARTIFACT_TREASURE };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNARTI, 171, fheroes2::Point{ 0, 0 }, MP2::OBJ_RANDOM_ARTIFACT_TREASURE, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNARTI, 170, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
 
             objects.emplace_back( std::move( object ) );
         }
 
         for ( int artifactId = Artifact::SPELL_SCROLL; artifactId < Artifact::ARTIFACT_COUNT; ++artifactId ) {
             const uint32_t imageIndex{ 173U + ( static_cast<uint32_t>( artifactId ) - Artifact::SPELL_SCROLL ) * 2 };
-            Maps::ObjectInfo object;
-            object.objectType = MP2::OBJ_ARTIFACT;
-            object.parts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNARTI, imageIndex, fheroes2::Point{ 0, 0 }, MP2::OBJ_ARTIFACT, Maps::OBJECT_LAYER );
-            object.parts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNARTI, imageIndex - 1, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            Maps::ObjectInfo object{ MP2::OBJ_ARTIFACT };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNARTI, imageIndex, fheroes2::Point{ 0, 0 }, MP2::OBJ_ARTIFACT, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNARTI, imageIndex - 1, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
 
             objects.emplace_back( std::move( object ) );
         }
@@ -122,40 +114,36 @@ namespace
     {
         // Normal resources.
         for ( const uint32_t imageIndex : { 1, 3, 5, 7, 9, 11, 13 } ) {
-            Maps::ObjectInfo object;
-            object.objectType = MP2::OBJ_RESOURCE;
-            object.parts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNRSRC, imageIndex, fheroes2::Point{ 0, 0 }, MP2::OBJ_RESOURCE, Maps::OBJECT_LAYER );
-            object.parts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNRSRC, imageIndex - 1, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            Maps::ObjectInfo object{ MP2::OBJ_RESOURCE };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNRSRC, imageIndex, fheroes2::Point{ 0, 0 }, MP2::OBJ_RESOURCE, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNRSRC, imageIndex - 1, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
 
             objects.emplace_back( std::move( object ) );
         }
 
         // Genie's Lamp.
         {
-            Maps::ObjectInfo object;
-            object.objectType = MP2::OBJ_GENIE_LAMP;
-            object.parts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNRSRC, 15, fheroes2::Point{ 0, 0 }, MP2::OBJ_GENIE_LAMP, Maps::OBJECT_LAYER );
-            object.parts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNRSRC, 14, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            Maps::ObjectInfo object{ MP2::OBJ_GENIE_LAMP };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNRSRC, 15, fheroes2::Point{ 0, 0 }, MP2::OBJ_GENIE_LAMP, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNRSRC, 14, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
 
             objects.emplace_back( std::move( object ) );
         }
 
         // Random resource.
         {
-            Maps::ObjectInfo object;
-            object.objectType = MP2::OBJ_GENIE_LAMP;
-            object.parts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNRSRC, 17, fheroes2::Point{ 0, 0 }, MP2::OBJ_RANDOM_RESOURCE, Maps::OBJECT_LAYER );
-            object.parts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNRSRC, 16, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            Maps::ObjectInfo object{ MP2::OBJ_GENIE_LAMP };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNRSRC, 17, fheroes2::Point{ 0, 0 }, MP2::OBJ_RANDOM_RESOURCE, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNRSRC, 16, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
 
             objects.emplace_back( std::move( object ) );
         }
 
         // Treasure chest.
         {
-            Maps::ObjectInfo object;
-            object.objectType = MP2::OBJ_GENIE_LAMP;
-            object.parts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNRSRC, 19, fheroes2::Point{ 0, 0 }, MP2::OBJ_TREASURE_CHEST, Maps::OBJECT_LAYER );
-            object.parts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNRSRC, 18, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            Maps::ObjectInfo object{ MP2::OBJ_GENIE_LAMP };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNRSRC, 19, fheroes2::Point{ 0, 0 }, MP2::OBJ_TREASURE_CHEST, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNRSRC, 18, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
 
             objects.emplace_back( std::move( object ) );
         }
@@ -167,11 +155,10 @@ namespace
 
         // Rock.
         {
-            Maps::ObjectInfo object;
-            object.objectType = MP2::OBJ_ROCK;
-            object.parts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNWAT2, 2, fheroes2::Point{ 0, 0 }, MP2::OBJ_ROCK, Maps::BACKGROUND_LAYER );
-            object.parts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNWAT2, 1, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
-            object.parts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNWAT2, 0, fheroes2::Point{ 0, -1 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            Maps::ObjectInfo object{ MP2::OBJ_ROCK };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNWAT2, 2, fheroes2::Point{ 0, 0 }, MP2::OBJ_ROCK, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNWAT2, 1, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNWAT2, 0, fheroes2::Point{ 0, -1 }, MP2::OBJ_NONE, Maps::OBJECT_LAYER );
 
             objects.emplace_back( std::move( object ) );
         }
@@ -201,6 +188,8 @@ namespace Maps
 {
     const std::vector<ObjectInfo> & getObjectsByGroup( const ObjectGroup group )
     {
+        assert( group != ObjectGroup::Group_Count );
+
         populateObjectData();
 
         return objectData[static_cast<size_t>( group )];

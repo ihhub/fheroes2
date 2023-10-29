@@ -44,14 +44,14 @@ namespace fheroes2
 {
     Sprite generateMapObjectImage( const Maps::ObjectInfo & object )
     {
-        if ( object.parts.empty() ) {
+        if ( object.groundLevelParts.empty() ) {
             // Why are you passing an empty object? Check your logic!
             assert( 0 );
             return {};
         }
 
-        if ( object.parts.size() == 1 ) {
-            fheroes2::Sprite image = AGG::GetICN( MP2::getIcnIdFromObjectIcnType( object.parts.front().icnType ), object.parts.front().icnIndex );
+        if ( object.groundLevelParts.size() == 1 && object.topLevelParts.empty() ) {
+            fheroes2::Sprite image = AGG::GetICN( MP2::getIcnIdFromObjectIcnType( object.groundLevelParts.front().icnType ), object.groundLevelParts.front().icnIndex );
             // If it is a one tile image make sure that the offset is in the middle of the image.
             image.setPosition( -image.width() / 2, -image.height() / 2 );
             return image;
@@ -60,7 +60,15 @@ namespace fheroes2
 #if defined( WITH_DEBUG )
         // Verify that all offsets are unique.
         std::set<fheroes2::Point> uniqueOffsets;
-        for ( const auto & objectPart : object.parts ) {
+        for ( const auto & objectPart : object.groundLevelParts ) {
+            const auto [dummy, inserted] = uniqueOffsets.emplace( objectPart.tileOffset );
+            if ( !inserted ) {
+                // The object hasn't formed properly!
+                assert( 0 );
+            }
+        }
+
+        for ( const auto & objectPart : object.topLevelParts ) {
             const auto [dummy, inserted] = uniqueOffsets.emplace( objectPart.tileOffset );
             if ( !inserted ) {
                 // The object hasn't formed properly!
@@ -72,7 +80,15 @@ namespace fheroes2
         // Calculate the required size of the object in tiles.
         fheroes2::Point minOffset;
         fheroes2::Point maxOffset;
-        for ( const auto & objectPart : object.parts ) {
+        for ( const auto & objectPart : object.groundLevelParts ) {
+            minOffset.x = std::min( minOffset.x, objectPart.tileOffset.x );
+            minOffset.y = std::min( minOffset.y, objectPart.tileOffset.y );
+
+            maxOffset.x = std::max( maxOffset.x, objectPart.tileOffset.x );
+            maxOffset.y = std::max( maxOffset.y, objectPart.tileOffset.y );
+        }
+
+        for ( const auto & objectPart : object.topLevelParts ) {
             minOffset.x = std::min( minOffset.x, objectPart.tileOffset.x );
             minOffset.y = std::min( minOffset.y, objectPart.tileOffset.y );
 
@@ -91,7 +107,13 @@ namespace fheroes2
         // Since we don't generate a pixel precise image make it transparent at first.
         image.reset();
 
-        for ( const auto & objectPart : object.parts ) {
+        for ( const auto & objectPart : object.groundLevelParts ) {
+            const fheroes2::Sprite & imagePart = AGG::GetICN( MP2::getIcnIdFromObjectIcnType( objectPart.icnType ), objectPart.icnIndex );
+            fheroes2::Blit( imagePart, 0, 0, image, ( objectPart.tileOffset.x - minOffset.x ) * tileSize + imagePart.x(),
+                            ( objectPart.tileOffset.y - minOffset.y ) * tileSize + imagePart.y(), imagePart.width(), imagePart.height() );
+        }
+
+        for ( const auto & objectPart : object.topLevelParts ) {
             const fheroes2::Sprite & imagePart = AGG::GetICN( MP2::getIcnIdFromObjectIcnType( objectPart.icnType ), objectPart.icnIndex );
             fheroes2::Blit( imagePart, 0, 0, image, ( objectPart.tileOffset.x - minOffset.x ) * tileSize + imagePart.x(),
                             ( objectPart.tileOffset.y - minOffset.y ) * tileSize + imagePart.y(), imagePart.width(), imagePart.height() );

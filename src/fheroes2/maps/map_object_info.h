@@ -65,18 +65,28 @@ namespace Maps
 
     struct ObjectInfo
     {
+        explicit ObjectInfo( const MP2::MapObjectType type )
+            : objectType( type )
+        {
+            // Do nothing.
+        }
+
         // A collection of object parts.
         // IMPORTANT!!!
         // - must not be empty
-        //  - the main object part must come first
+        // - the main object part must come first
         // IMPORTANT!!!
-        std::vector<ObjectPartInfo> parts;
+        std::vector<ObjectPartInfo> groundLevelParts;
+
+        // Top level parts. Can be empty and should never contain objects with Y value more or equal 0.
+        // It does not matter what layer is set here as it is going to be ignored. For consistency put OBJECT_LAYER to detect any bad logic.
+        std::vector<ObjectPartInfo> topLevelParts;
 
         // Object type. Some objects don't have it like cracks.
         MP2::MapObjectType objectType{ MP2::OBJ_NONE };
     };
 
-    // SOme objects use the same ICN resources and belong to the same object type
+    // Some objects use the same ICN resources and belong to the same object type
     // but the majority of them have different object types while using the same ICN
     // or use multiple ICN resource among the same object type.
     // Plus the fheroes2 Editor requires object type and index in order to save it,
@@ -88,7 +98,7 @@ namespace Maps
         Water_Object,
 
         // IMPORTANT!!!
-        // Put all new entries below this entry.
+        // Put all new entries just above this entry.
         Group_Count
     };
 
