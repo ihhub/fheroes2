@@ -123,6 +123,7 @@ namespace
     {
         assert( unit != nullptr && unit->isValid() );
 
+        // "Moving" a unit to its current position is not allowed
         if ( unit->GetHeadIndex() == dst ) {
             return false;
         }
@@ -134,6 +135,7 @@ namespace
 
         assert( !unit->isWide() || pos.GetTail() != nullptr );
 
+        // Value of 'dst' should correspond to the index of the head cell of the target position and nothing else
         if ( pos.GetHead()->GetIndex() != dst ) {
             return false;
         }
@@ -521,11 +523,13 @@ void Battle::Arena::ApplyActionAttack( Command & cmd )
             return false;
         }
 
+        // Attacker can attack from his current position without performing a move (in this case, 'dst' should be -1)
         if ( dst != -1 && !checkMoveParams( attacker, dst ) ) {
             return false;
         }
 
         if ( attacker->isArchers() && !attacker->isHandFighting() ) {
+            // Non-blocked archer can only attack by shooting from his current position
             if ( dst != -1 ) {
                 return false;
             }
@@ -542,6 +546,7 @@ void Battle::Arena::ApplyActionAttack( Command & cmd )
                 return false;
             }
 
+            // Non-blocked archers cannot attack "from a direction"
             if ( dir != UNKNOWN ) {
                 return false;
             }
@@ -568,6 +573,7 @@ void Battle::Arena::ApplyActionAttack( Command & cmd )
             return false;
         }
 
+        // Melee attacks are only possible from a certain direction
         if ( dir == UNKNOWN ) {
             return false;
         }
@@ -579,6 +585,7 @@ void Battle::Arena::ApplyActionAttack( Command & cmd )
             return false;
         }
 
+        // Attack from a specified cell may be prohibited - for example, if this cell belongs to a castle moat
         if ( !Board::CanAttackFromCell( *attacker, attackIdx ) ) {
             return false;
         }
@@ -1202,12 +1209,12 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForSpell( const HeroBase * hero, co
 
 void Battle::Arena::ApplyActionTower( Command & cmd )
 {
-    const auto checkParameters = []( const Unit * unit, const Tower * tower ) {
-        if ( unit == nullptr || !unit->isValid() ) {
+    const auto checkParameters = []( const Tower * tower, const Unit * unit ) {
+        if ( tower == nullptr || !tower->isValid() ) {
             return false;
         }
 
-        if ( tower == nullptr || !tower->isValid() ) {
+        if ( unit == nullptr || !unit->isValid() ) {
             return false;
         }
 
@@ -1220,7 +1227,7 @@ void Battle::Arena::ApplyActionTower( Command & cmd )
     Tower * tower = GetTower( static_cast<TowerType>( type ) );
     Unit * unit = GetTroopUID( uid );
 
-    if ( !checkParameters( unit, tower ) ) {
+    if ( !checkParameters( tower, unit ) ) {
         ERROR_LOG( "Invalid parameters: "
                    << "tower: " << type << ", uid: " << GetHexString( uid ) )
 

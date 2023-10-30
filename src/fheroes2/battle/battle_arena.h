@@ -264,6 +264,9 @@ namespace Battle
         void ApplyActionSpellEarthQuake( const Command & cmd );
         void ApplyActionSpellDefaults( Command & cmd, const Spell & spell );
 
+        // Moves the given unit to a position where the index of the head cell is equal to 'dst'. If 'dst' is -1,
+        // then this method does nothing. Otherwise, it's the caller's responsibility to make sure that this position
+        // is reachable for the given unit on the current turn before calling this method.
         void moveUnit( Unit * unit, const int32_t dst );
 
         // Performs an actual attack of one unit (defender) by another unit (attacker), applying the attacker's
