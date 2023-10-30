@@ -943,13 +943,16 @@ void Kingdom::openOverviewDialog()
 
     Game::SetUpdateSoundsOnFocusUpdate( true );
 
-    if ( worldMapRedrawMask != 0 ) {
-        Interface::AdventureMap & adventureMapInterface = Interface::AdventureMap::Get();
+    Interface::AdventureMap & adventureMapInterface = Interface::AdventureMap::Get();
 
+    if ( worldMapRedrawMask != 0 ) {
         // Force redraw of all UI elements that changed, that were masked by Kingdom window
         adventureMapInterface.setRedraw( worldMapRedrawMask );
 
         // Update focus because there were some changes made in the Kingdom overview dialog.
         adventureMapInterface.ResetFocus( Interface::GetFocusType(), false );
     }
+
+    // The army of the selected hero / castle may have been changed.
+    adventureMapInterface.RedrawFocus();
 }
