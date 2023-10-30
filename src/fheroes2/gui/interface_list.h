@@ -160,12 +160,8 @@ namespace Interface
                 _currentId = -1; // no selection
                 _topId = 0;
 
-                if ( maxItems < _size() ) {
-                    _scrollbar.setRange( 0, _size() - maxItems );
-                }
-                else {
-                    _scrollbar.setRange( 0, 0 );
-                }
+                const int newMaxValue = std::max( _size() - maxItems, 0 );
+                _scrollbar.setRange( 0, newMaxValue );
             }
         }
 

@@ -43,13 +43,11 @@
 
 namespace
 {
-    enum : int32_t
-    {
-        ICONS_WIDTH = 46,
-        ICONS_HEIGHT = 22,
-        ICONS_CURSOR_WIDTH = 56,
-        ICONS_CURSOR_HEIGHT = 32
-    };
+    const int32_t iconsWidth = 46;
+    const int32_t iconsHeight = 22;
+    const int32_t iconsCursorWidth = 56;
+    const int32_t iconsCursorHeight = 32;
+
 }
 
 bool Interface::IconsBar::IsVisible()
@@ -60,12 +58,12 @@ bool Interface::IconsBar::IsVisible()
 
 int32_t Interface::IconsBar::GetItemWidth()
 {
-    return ICONS_WIDTH;
+    return iconsWidth;
 }
 
 int32_t Interface::IconsBar::GetItemHeight()
 {
-    return ICONS_HEIGHT;
+    return iconsHeight;
 }
 
 void Interface::RedrawCastleIcon( const Castle & castle, int32_t sx, int32_t sy )
@@ -178,20 +176,20 @@ void Interface::CastleIcons::SetPos( int32_t px, int32_t py )
 
     _topLeftCorner = fheroes2::Point( px, py );
     SetTopLeft( _topLeftCorner );
-    setScrollBarArea( { px + ICONS_CURSOR_WIDTH + 3, py + 19, 10, ICONS_CURSOR_HEIGHT * iconsCount - 38 } );
+    setScrollBarArea( { px + iconsCursorWidth + 3, py + 19, 10, iconsCursorHeight * iconsCount - 38 } );
 
     VecCastles & castles = world.GetKingdom( Settings::Get().CurrentColor() ).GetCastles();
 
     const fheroes2::Sprite & originalSlider = fheroes2::AGG::GetICN( icnscroll, 4 );
     const fheroes2::Image scrollbarSlider
-        = fheroes2::generateScrollbarSlider( originalSlider, false, ICONS_CURSOR_HEIGHT * iconsCount - 38, iconsCount, static_cast<int32_t>( castles.size() ),
+        = fheroes2::generateScrollbarSlider( originalSlider, false, iconsCursorHeight * iconsCount - 38, iconsCount, static_cast<int32_t>( castles.size() ),
                                              { 0, 0, originalSlider.width(), 8 }, { 0, 7, originalSlider.width(), 8 } );
 
     setScrollBarImage( scrollbarSlider );
-    SetScrollButtonUp( icnscroll, 0, 1, { px + ICONS_CURSOR_WIDTH + 1, py + 1 } );
-    SetScrollButtonDn( icnscroll, 2, 3, { px + ICONS_CURSOR_WIDTH + 1, py + iconsCount * ICONS_CURSOR_HEIGHT - 15 } );
+    SetScrollButtonUp( icnscroll, 0, 1, { px + iconsCursorWidth + 1, py + 1 } );
+    SetScrollButtonDn( icnscroll, 2, 3, { px + iconsCursorWidth + 1, py + iconsCount * iconsCursorHeight - 15 } );
     SetAreaMaxItems( iconsCount );
-    SetAreaItems( { px, py, ICONS_CURSOR_WIDTH, iconsCount * ICONS_CURSOR_HEIGHT } );
+    SetAreaItems( { px, py, iconsCursorWidth, iconsCount * iconsCursorHeight } );
     DisableHotkeys( true );
 
     SetListContent( castles );
@@ -271,20 +269,20 @@ void Interface::HeroesIcons::SetPos( int32_t px, int32_t py )
 
     _topLeftCorner = fheroes2::Point( px, py );
     SetTopLeft( _topLeftCorner );
-    setScrollBarArea( { px + ICONS_CURSOR_WIDTH + 3, py + 19, 10, ICONS_CURSOR_HEIGHT * iconsCount - 38 } );
+    setScrollBarArea( { px + iconsCursorWidth + 3, py + 19, 10, iconsCursorHeight * iconsCount - 38 } );
 
     VecHeroes & heroes = world.GetKingdom( Settings::Get().CurrentColor() ).GetHeroes();
 
     const fheroes2::Sprite & originalSlider = fheroes2::AGG::GetICN( icnscroll, 4 );
     const fheroes2::Image scrollbarSlider
-        = fheroes2::generateScrollbarSlider( originalSlider, false, ICONS_CURSOR_HEIGHT * iconsCount - 38, iconsCount, static_cast<int32_t>( heroes.size() ),
+        = fheroes2::generateScrollbarSlider( originalSlider, false, iconsCursorHeight * iconsCount - 38, iconsCount, static_cast<int32_t>( heroes.size() ),
                                              { 0, 0, originalSlider.width(), 8 }, { 0, 7, originalSlider.width(), 8 } );
 
     setScrollBarImage( scrollbarSlider );
-    SetScrollButtonUp( icnscroll, 0, 1, { px + ICONS_CURSOR_WIDTH + 1, py + 1 } );
-    SetScrollButtonDn( icnscroll, 2, 3, { px + ICONS_CURSOR_WIDTH + 1, py + iconsCount * ICONS_CURSOR_HEIGHT - 15 } );
+    SetScrollButtonUp( icnscroll, 0, 1, { px + iconsCursorWidth + 1, py + 1 } );
+    SetScrollButtonDn( icnscroll, 2, 3, { px + iconsCursorWidth + 1, py + iconsCount * iconsCursorHeight - 15 } );
     SetAreaMaxItems( iconsCount );
-    SetAreaItems( { px, py, ICONS_CURSOR_WIDTH, iconsCount * ICONS_CURSOR_HEIGHT } );
+    SetAreaItems( { px, py, iconsCursorWidth, iconsCount * iconsCursorHeight } );
     DisableHotkeys( true );
 
     SetListContent( heroes );
@@ -301,7 +299,7 @@ Interface::IconsPanel::IconsPanel( AdventureMap & basic )
     , castleIcons( 4, sfMarker )
     , heroesIcons( 4, sfMarker )
 {
-    sfMarker.resize( ICONS_CURSOR_WIDTH, ICONS_CURSOR_HEIGHT );
+    sfMarker.resize( iconsCursorWidth, iconsCursorHeight );
     sfMarker.reset();
     fheroes2::DrawBorder( sfMarker, fheroes2::GetColorId( 0xA0, 0xE0, 0xE0 ) );
 }
@@ -316,20 +314,22 @@ void Interface::IconsPanel::SavePosition()
 
 void Interface::IconsPanel::SetRedraw( const icons_t type ) const
 {
-    // is visible
-    if ( IconsBar::IsVisible() ) {
-        switch ( type ) {
-        case ICON_HEROES:
-            interface.setRedraw( REDRAW_HEROES );
-            break;
-        case ICON_CASTLES:
-            interface.setRedraw( REDRAW_CASTLES );
-            break;
-        default:
-            break;
-        }
+    if ( !IconsBar::IsVisible() ) {
+        return;
+    }
 
+    switch ( type ) {
+    case ICON_HEROES:
+        interface.setRedraw( REDRAW_HEROES );
+        break;
+    case ICON_CASTLES:
+        interface.setRedraw( REDRAW_CASTLES );
+        break;
+    case ICON_ANY:
         interface.setRedraw( REDRAW_ICONS );
+        break;
+    default:
+        break;
     }
 }
 
@@ -350,7 +350,7 @@ void Interface::IconsPanel::SetPos( int32_t ox, int32_t oy )
         iconsCount = count_h > 3 ? 8 : ( count_h < 3 ? 4 : 7 );
     }
 
-    BorderWindow::SetPosition( ox, oy, 144, iconsCount * ICONS_CURSOR_HEIGHT );
+    BorderWindow::SetPosition( ox, oy, 144, iconsCount * iconsCursorHeight );
 
     heroesIcons.SetIconsCount( iconsCount );
     castleIcons.SetIconsCount( iconsCount );
@@ -363,15 +363,16 @@ void Interface::IconsPanel::SetPos( int32_t ox, int32_t oy )
 
 void Interface::IconsPanel::_redraw()
 {
-    // is visible
-    if ( IconsBar::IsVisible() ) {
-        // redraw border
-        if ( Settings::Get().isHideInterfaceEnabled() )
-            BorderWindow::Redraw();
-
-        heroesIcons.Redraw();
-        castleIcons.Redraw();
+    if ( !IconsBar::IsVisible() ) {
+        return;
     }
+
+    if ( Settings::Get().isHideInterfaceEnabled() ) {
+        BorderWindow::Redraw();
+    }
+
+    heroesIcons.Redraw();
+    castleIcons.Redraw();
 }
 
 void Interface::IconsPanel::QueueEventProcessing()
@@ -418,57 +419,67 @@ void Interface::IconsPanel::ResetIcons( const icons_t type )
         const fheroes2::Sprite & originalSlider = fheroes2::AGG::GetICN( icnscroll, 4 );
 
         if ( type & ICON_HEROES ) {
-            const fheroes2::Image scrollbarSlider = fheroes2::generateScrollbarSlider( originalSlider, false, ICONS_CURSOR_HEIGHT * heroesIcons.getIconsCount() - 38,
+            const fheroes2::Image scrollbarSlider = fheroes2::generateScrollbarSlider( originalSlider, false, iconsCursorHeight * heroesIcons.getIconsCount() - 38,
                                                                                        heroesIcons.getIconsCount(), static_cast<int32_t>( kingdom.GetHeroes().size() ),
                                                                                        { 0, 0, originalSlider.width(), 8 }, { 0, 7, originalSlider.width(), 8 } );
             heroesIcons.setScrollBarImage( scrollbarSlider );
-
             heroesIcons.SetListContent( kingdom.GetHeroes() );
-            heroesIcons.Reset();
+
+            // SetListContent() selects the first item (hero) in the list. We reset it by unselecting.
+            heroesIcons.Unselect();
         }
 
         if ( type & ICON_CASTLES ) {
-            const fheroes2::Image scrollbarSlider = fheroes2::generateScrollbarSlider( originalSlider, false, ICONS_CURSOR_HEIGHT * castleIcons.getIconsCount() - 38,
+            const fheroes2::Image scrollbarSlider = fheroes2::generateScrollbarSlider( originalSlider, false, iconsCursorHeight * castleIcons.getIconsCount() - 38,
                                                                                        castleIcons.getIconsCount(), static_cast<int32_t>( kingdom.GetCastles().size() ),
                                                                                        { 0, 0, originalSlider.width(), 8 }, { 0, 7, originalSlider.width(), 8 } );
             castleIcons.setScrollBarImage( scrollbarSlider );
-
             castleIcons.SetListContent( kingdom.GetCastles() );
-            castleIcons.Reset();
+
+            // SetListContent() selects the first item (castle/town) in the list. We reset it by unselecting.
+            castleIcons.Unselect();
         }
     }
 }
 
 void Interface::IconsPanel::HideIcons( const icons_t type )
 {
-    if ( type & ICON_HEROES )
+    if ( type & ICON_HEROES ) {
         heroesIcons.SetShow( false );
-    if ( type & ICON_CASTLES )
+    }
+    if ( type & ICON_CASTLES ) {
         castleIcons.SetShow( false );
+    }
 }
 
 void Interface::IconsPanel::ShowIcons( const icons_t type )
 {
-    if ( type & ICON_HEROES )
+    if ( type & ICON_HEROES ) {
         heroesIcons.SetShow( true );
-    if ( type & ICON_CASTLES )
+    }
+    if ( type & ICON_CASTLES ) {
         castleIcons.SetShow( true );
+    }
 }
 
 void Interface::IconsPanel::_redrawIcons( const icons_t type )
 {
-    if ( type & ICON_HEROES )
+    if ( type & ICON_HEROES ) {
         heroesIcons.Redraw();
-    if ( type & ICON_CASTLES )
+    }
+    if ( type & ICON_CASTLES ) {
         castleIcons.Redraw();
+    }
 }
 
 bool Interface::IconsPanel::IsSelected( const icons_t type ) const
 {
-    if ( type & ICON_HEROES )
+    if ( type & ICON_HEROES ) {
         return heroesIcons.isSelected();
-    else if ( type & ICON_CASTLES )
+    }
+    if ( type & ICON_CASTLES ) {
         return castleIcons.isSelected();
+    }
 
     return false;
 }

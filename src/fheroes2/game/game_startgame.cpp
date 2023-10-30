@@ -263,6 +263,7 @@ void Game::OpenCastleDialog( Castle & castle, bool updateFocus /* = true */, con
 
         // The castle garrison can change
         adventureMapInterface.RedrawFocus();
+        adventureMapInterface.ResetFocus( Interface::GetFocusType(), false );
 
         // Fade-in game screen only for 640x480 resolution.
         if ( fheroes2::Display::instance().isDefaultSize() ) {
@@ -1249,9 +1250,6 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
                             Interface::AdventureMap::RedrawLocker redrawLocker( Interface::AdventureMap::Get() );
 
                             _gameArea.SetCenter( hero->GetCenter() );
-                            ResetFocus( GameFocus::HEROES, true );
-
-                            RedrawFocus();
 
                             if ( stopHero ) {
                                 stopHero = false;
@@ -1270,9 +1268,6 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
                                 heroAnimationOffset = movement;
                                 _gameArea.ShiftCenter( movement );
 
-                                Game::SetUpdateSoundsOnFocusUpdate( false );
-                                ResetFocus( GameFocus::HEROES, true );
-                                Game::SetUpdateSoundsOnFocusUpdate( true );
                                 heroAnimationFrameCount = 32 - heroMovementSkipValue;
                                 heroAnimationSpriteId = hero->GetSpriteIndex();
                                 if ( heroMovementSkipValue < 4 ) {

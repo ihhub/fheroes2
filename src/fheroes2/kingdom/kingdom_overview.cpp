@@ -44,6 +44,7 @@
 #include "heroes_base.h"
 #include "icn.h"
 #include "image.h"
+#include "interface_base.h"
 #include "interface_icons.h"
 #include "interface_list.h"
 #include "kingdom.h"
@@ -759,6 +760,8 @@ void RedrawFundsInfo( const fheroes2::Point & pt, const Kingdom & myKingdom )
 
 void Kingdom::openOverviewDialog()
 {
+    Game::SetUpdateSoundsOnFocusUpdate( false );
+
     fheroes2::Display & display = fheroes2::Display::instance();
 
     // setup cursor
@@ -937,6 +940,8 @@ void Kingdom::openOverviewDialog()
 
     _topCastleInKingdomView = listCastles.getTopId();
     _topHeroInKingdomView = listHeroes.getTopId();
+
+    Game::SetUpdateSoundsOnFocusUpdate( true );
 
     if ( worldMapRedrawMask != 0 ) {
         Interface::AdventureMap & adventureMapInterface = Interface::AdventureMap::Get();
