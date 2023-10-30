@@ -47,7 +47,6 @@ namespace
     const int32_t iconsHeight = 22;
     const int32_t iconsCursorWidth = 56;
     const int32_t iconsCursorHeight = 32;
-
 }
 
 bool Interface::IconsBar::IsVisible()
