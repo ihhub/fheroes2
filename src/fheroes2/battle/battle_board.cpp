@@ -29,8 +29,6 @@
 #include <cstdint>
 #include <cstdlib>
 #include <memory>
-#include <ostream>
-#include <set>
 #include <utility>
 
 #include "battle_arena.h"
@@ -40,7 +38,6 @@
 #include "game_static.h"
 #include "ground.h"
 #include "icn.h"
-#include "logging.h"
 #include "maps_tiles.h"
 #include "mp2.h"
 #include "rand.h"

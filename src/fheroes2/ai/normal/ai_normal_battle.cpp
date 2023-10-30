@@ -21,6 +21,7 @@
 // TODO: this header is redundant here, but detected as required by IWYU with older compilers
 // IWYU pragma: no_include <type_traits>
 #include <algorithm>
+#include <array>
 #include <cassert>
 #include <cmath>
 #include <cstddef>
@@ -56,6 +57,7 @@
 #include "monster_info.h"
 #include "settings.h"
 #include "speed.h"
+#include "spell.h"
 
 using namespace Battle;
 
