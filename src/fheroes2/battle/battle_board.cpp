@@ -929,11 +929,6 @@ bool Battle::Board::CanAttackTargetFromPosition( const Unit & attacker, const Un
     // Get the actual position of the attacker before attacking
     const Position pos = Position::GetReachable( attacker, dst );
 
-    // This position should be near the target
-    if ( Board::GetDistance( pos, target.GetPosition() ) > 1 ) {
-        return false;
-    }
-
     // Check that the attacker is actually capable of attacking the target from this position
     const std::array<const Cell *, 2> cells = { pos.GetHead(), pos.GetTail() };
 
@@ -942,7 +937,13 @@ bool Battle::Board::CanAttackTargetFromPosition( const Unit & attacker, const Un
             continue;
         }
 
-        if ( !CanAttackFromCell( attacker, cell->GetIndex() ) ) {
+        const int32_t cellIdx = cell->GetIndex();
+
+        if ( Board::GetDistance( target.GetPosition(), cellIdx ) > 1 ) {
+            return false;
+        }
+
+        if ( !CanAttackFromCell( attacker, cellIdx ) ) {
             continue;
         }
 
