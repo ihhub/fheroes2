@@ -52,6 +52,7 @@
 #include "image.h"
 #include "interface_base.h"
 #include "interface_gamearea.h"
+#include "interface_icons.h"
 #include "interface_radar.h"
 #include "interface_status.h"
 #include "kingdom.h"
@@ -3270,6 +3271,8 @@ namespace
 
             if ( prisoner ) {
                 prisoner->Recruit( hero.GetColor(), Maps::GetPoint( dst_index ) );
+
+                // Update the kingdom heroes list including the scrollbar.
                 adventureMapInterface.GetIconsPanel().ResetIcons( ICON_HEROES );
             }
         }
