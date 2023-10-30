@@ -1362,16 +1362,20 @@ void Battle::Arena::ApplyActionAutoFinish( const Command & /* cmd */ )
     const int army1Control = GetForce1().GetControl();
     const int army2Control = GetForce2().GetControl();
 
-    const int army1Color = GetArmy1Color();
-    const int army2Color = GetArmy2Color();
-
     if ( !( army1Control & CONTROL_HUMAN ) && !( army2Control & CONTROL_HUMAN ) ) {
-        DEBUG_LOG( DBG_BATTLE, DBG_WARN, "no human-controlled player participates in the battle, auto finish disabled" )
+        ERROR_LOG( "Preconditions were not met" )
+
+#ifdef WITH_DEBUG
+        assert( 0 );
+#endif
 
         return;
     }
 
     DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "finishing the battle" )
+
+    const int army1Color = GetArmy1Color();
+    const int army2Color = GetArmy2Color();
 
     if ( army1Control & CONTROL_HUMAN ) {
         _autoBattleColors |= army1Color;
