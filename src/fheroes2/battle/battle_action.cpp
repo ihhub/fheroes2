@@ -135,7 +135,7 @@ namespace
 
         assert( !unit->isWide() || pos.GetTail() != nullptr );
 
-        // Value of 'dst' should correspond to the index of the head cell of the target position and nothing else
+        // Index of the destination cell should correspond to the index of the head cell of the target position and nothing else
         if ( pos.GetHead()->GetIndex() != dst ) {
             return false;
         }
@@ -523,7 +523,7 @@ void Battle::Arena::ApplyActionAttack( Command & cmd )
             return false;
         }
 
-        // Attacker can attack from his current position without performing a move (in this case, 'dst' should be -1)
+        // Attacker can attack from his current position without performing a move (in this case, the index of the destination cell should be -1)
         if ( dst != -1 && !checkMoveParams( attacker, dst ) ) {
             return false;
         }
