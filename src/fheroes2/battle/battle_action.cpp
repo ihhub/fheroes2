@@ -823,7 +823,7 @@ void Battle::Arena::ApplyActionSurrender( const Command & /* cmd */ )
             return false;
         }
 
-        if ( world.GetKingdom( arena->GetCurrentColor() ).AllowPayment( cost ) ) {
+        if ( !world.GetKingdom( arena->GetCurrentColor() ).AllowPayment( cost ) ) {
             return false;
         }
 
