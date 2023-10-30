@@ -940,7 +940,7 @@ bool Battle::Board::CanAttackTargetFromPosition( const Unit & attacker, const Un
         const int32_t cellIdx = cell->GetIndex();
 
         if ( Board::GetDistance( target.GetPosition(), cellIdx ) > 1 ) {
-            return false;
+            continue;
         }
 
         if ( !CanAttackFromCell( attacker, cellIdx ) ) {
