@@ -2610,7 +2610,7 @@ msgid "without artifacts."
 msgstr "без артефактів."
 
 msgid "Recruit %{name} the %{race}"
-msgstr ""
+msgstr "Найняти %{name}, %{race}."
 
 msgid ""
 "'Spread' combat formation spreads your armies from the top to the bottom of "
@@ -2632,9 +2632,6 @@ msgstr "Нещільний Стрій"
 
 msgid "Grouped Formation"
 msgstr "Щільний Стрій"
-
-msgid "Recruit %{name} the %{race}"
-msgstr "Найняти %{name}, %{race}."
 
 msgid "Set garrison combat formation to 'Spread'"
 msgstr "Розташувати гарнізон у \"Нещільному\" бойовому строю."
