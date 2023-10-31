@@ -33,6 +33,7 @@
 
 #include "battle.h"
 #include "battle_board.h"
+#include "battle_cell.h"
 #include "battle_command.h"
 #include "battle_grave.h"
 #include "battle_pathfinding.h"
@@ -55,7 +56,6 @@ namespace Battle
     class Bridge;
     class Catapult;
     class Force;
-    class Position;
     class Units;
     class Unit;
     class Interface;
