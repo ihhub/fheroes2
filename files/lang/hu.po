@@ -3074,9 +3074,6 @@ msgstr "(nem ásható)"
 msgid "penalty: %{cost}"
 msgstr "büntetés: %{cost}"
 
-msgid "Uncharted Territory"
-msgstr "Felderítetlen terület"
-
 msgid "Defenders:"
 msgstr "Védők:"
 
@@ -3103,6 +3100,9 @@ msgstr "Varázspontok:"
 
 msgid "Move Points:"
 msgstr "Mozgáspontok:"
+
+msgid "Uncharted Territory"
+msgstr "Felderítetlen terület"
 
 msgid "Cost per troop:"
 msgstr "Költség egységenként:"
