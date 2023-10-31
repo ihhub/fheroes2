@@ -171,6 +171,14 @@ namespace Battle
             return _battlePathfinder.getAllAvailableMoves( unit );
         }
 
+        // Returns the position on the path for the given unit to the given position, which is reachable on the current
+        // turn and is as close as possible to the destination (excluding the current position of the unit). If the given
+        // position is unreachable by the given unit, then an empty Position object is returned.
+        Position getClosestReachablePosition( const Unit & unit, const Position & position )
+        {
+            return _battlePathfinder.getClosestReachablePosition( unit, position );
+        }
+
         void ApplyAction( Command & );
 
         // Returns a list of targets that will be affected by the given spell casted by the given hero and applied

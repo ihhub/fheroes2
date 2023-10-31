@@ -313,20 +313,21 @@ namespace Battle
 
         reEvaluateIfNeeded( unit );
 
-        const BattleNodeIndex targetNodeIdx = { position.GetHead()->GetIndex(), position.GetTail() ? position.GetTail()->GetIndex() : -1 };
-
         Indexes result;
         result.reserve( Speed::INSTANT );
 
         BattleNodeIndex lastReachableNodeIdx{ -1, -1 };
-        BattleNodeIndex nodeIdx = targetNodeIdx;
+        BattleNodeIndex nodeIdx = { position.GetHead()->GetIndex(), position.GetTail() ? position.GetTail()->GetIndex() : -1 };
 
         for ( auto iter = _cache.find( nodeIdx ); iter != _cache.end(); iter = _cache.find( nodeIdx ) ) {
             const auto & [index, node] = *iter;
 
-            if ( index == _pathStart || node._from == BattleNodeIndex{ -1, -1 } ) {
+            if ( index == _pathStart ) {
                 break;
             }
+
+            // MSVC 2017 fails to properly expand the assert() macro without additional parentheses
+            assert( ( node._from != BattleNodeIndex{ -1, -1 } ) );
 
             nodeIdx = node._from;
 
@@ -363,5 +364,62 @@ namespace Battle
         }
 
         return result;
+    }
+
+    Position BattlePathfinder::getClosestReachablePosition( const Unit & unit, const Position & position )
+    {
+        assert( position.GetHead() != nullptr );
+
+        reEvaluateIfNeeded( unit );
+
+        BattleNodeIndex nodeIdx = { position.GetHead()->GetIndex(), position.GetTail() ? position.GetTail()->GetIndex() : -1 };
+
+        for ( auto iter = _cache.find( nodeIdx ); iter != _cache.end(); iter = _cache.find( nodeIdx ) ) {
+            const auto & [index, node] = *iter;
+
+            if ( index == _pathStart ) {
+                break;
+            }
+
+            // MSVC 2017 fails to properly expand the assert() macro without additional parentheses
+            assert( ( node._from != BattleNodeIndex{ -1, -1 } ) );
+
+            nodeIdx = node._from;
+
+            // A given position may be reachable in principle, but is not reachable on the current turn.
+            // Skip the steps that are not reachable on this turn.
+            if ( node._cost > _speed ) {
+                continue;
+            }
+
+            Position result;
+
+            if ( _isWide ) {
+                assert( index.first != -1 && index.second != -1 );
+
+                const bool isReflect = index.first < index.second;
+
+                result.Set( index.first, true, isReflect );
+
+                assert( result.GetHead() != nullptr && result.GetHead()->GetIndex() == index.first && result.GetTail() != nullptr
+                        && result.GetTail()->GetIndex() == index.second );
+
+                // If a given position is not reachable on the current turn, then the last reachable position of
+                // a wide unit may be reversed in regard to the target one. Detect this and turn it over.
+                if ( isReflect != position.isReflect() ) {
+                    // The last reachable position should not be a reversed version of the target position
+                    assert( !position.contains( index.first ) || !position.contains( index.second ) );
+
+                    result.Swap();
+                }
+            }
+            else {
+                result.Set( index.first, false, false );
+            }
+
+            return result;
+        }
+
+        return {};
     }
 }

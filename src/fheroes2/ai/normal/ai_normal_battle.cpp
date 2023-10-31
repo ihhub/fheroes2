@@ -421,10 +421,7 @@ namespace AI
         const Position dstPos = Position::GetPosition( currentUnit, idx );
         assert( dstPos.GetHead() != nullptr && ( !currentUnit.isWide() || dstPos.GetTail() != nullptr ) );
 
-        const Indexes path = arena.GetPath( currentUnit, dstPos );
-        assert( !path.empty() );
-
-        const Position pos = Position::GetReachable( currentUnit, path.back() );
+        const Position pos = arena.getClosestReachablePosition( currentUnit, dstPos );
         assert( pos.GetHead() != nullptr && ( !currentUnit.isWide() || pos.GetTail() != nullptr ) );
 
         return pos.GetHead()->GetIndex();
@@ -1176,18 +1173,18 @@ namespace AI
                     else if ( isMoatBuilt && Board::isMoatIndex( path.back(), currentUnit ) ) {
                         target.cell = path.back();
 
-                        DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "- Going after target " << enemy->GetName() << ", stopping in the moat at " << target.cell )
+                        DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "- Going after target " << enemy->GetName() << ", stopping in the moat at cell " << target.cell )
                     }
                     else {
                         target.cell = findOptimalPositionForSubsequentAttack( arena, path, currentUnit, enemies );
 
-                        DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "- Going after target " << enemy->GetName() << ", stopping at " << target.cell )
+                        DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "- Going after target " << enemy->GetName() << ", stopping at cell " << target.cell )
                     }
                 }
             }
         }
         else {
-            DEBUG_LOG( DBG_BATTLE, DBG_TRACE, currentUnit.GetName() << " attacking " << target.unit->GetName() << " at " << target.cell )
+            DEBUG_LOG( DBG_BATTLE, DBG_TRACE, currentUnit.GetName() << " attacking " << target.unit->GetName() << " from cell " << target.cell )
         }
 
         // Walkers: move closer to the castle walls during siege
@@ -1300,7 +1297,7 @@ namespace AI
             DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " defending against " << target.unit->GetName() << ", threat level: " << protectOption.attackValue )
         }
         else if ( target.cell != -1 ) {
-            DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " protecting friendly archer, moving to " << target.cell )
+            DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " protecting friendly archer, moving to cell " << target.cell )
         }
         else if ( !isDefensivePosition( currentUnit.GetHeadIndex() ) ) {
             // When there's nothing to do on our half; we're likely dealing with enemy's archers
