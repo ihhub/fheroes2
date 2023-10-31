@@ -161,9 +161,10 @@ namespace AI
                     return { targetCellIdx, Board::GetDirection( attackCellIdx, targetCellIdx ) };
                 }
 
-                double attackValue = doubleCellAttackValue( attacker, target, attackCellIdx, targetCellIdx );
+                const double attackValue = doubleCellAttackValue( attacker, target, attackCellIdx, targetCellIdx );
                 if ( bestAttackVector.first == -1 || bestAttackValue < attackValue ) {
                     bestAttackVector = { targetCellIdx, Board::GetDirection( attackCellIdx, targetCellIdx ) };
+                    bestAttackValue = attackValue;
                 }
             }
         }
