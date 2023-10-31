@@ -2732,10 +2732,10 @@ msgid "Resource cost:"
 msgstr "Erőforrás költség:"
 
 msgid "Total: "
-msgstr "Összesen:"
+msgstr "Összesen: "
 
 msgid "Need: "
-msgstr "Szükséges:"
+msgstr "Szükséges: "
 
 msgid "Load Game"
 msgstr "Játék betöltése"
@@ -2761,7 +2761,6 @@ msgstr "Aktuális játék mentése."
 msgid "Quit"
 msgstr "Kilépés"
 
-#, fuzzy
 msgid "Quit out of Heroes of Might and Magic II."
 msgstr "Kilépés a Heroes of Might and Magic II-ből."
 
@@ -2786,7 +2785,6 @@ msgstr "Szöveg támogatás"
 msgid "Change the language of the game."
 msgstr "A játék nyelvének megváltoztatása."
 
-#, fuzzy
 msgid "Select Game Language"
 msgstr "Játék nyelvének kiválasztása"
 
@@ -2863,7 +2861,6 @@ msgstr "Forrásaid"
 msgid "Planned Gift"
 msgstr "Tervezett ajándék"
 
-#, fuzzy
 msgid "Gift from %{name}"
 msgstr "Ajándék %{name} játékostól"
 
@@ -2975,7 +2972,6 @@ msgstr "%{skill} +1"
 msgid "You have learned %{skill}."
 msgstr "%{skill} képességre tettél szert."
 
-#, fuzzy
 msgid ""
 "%{name} has gained a level.\n"
 "\n"
@@ -3003,7 +2999,7 @@ msgid ""
 "You have received quite a bargain. I expect to make no profit on the deal. "
 "Can I interest you in any of my other wares?"
 msgstr ""
-"Jó alkut kötöttél. Nem várok el nyereséget az üzleten."
+"Jó alkut kötöttél. Nem várok el nyereséget az üzleten. "
 "Érdekel esetleg más áru is?"
 
 msgid "I can offer you %{count} for 1 unit of %{resfrom}."
@@ -3364,10 +3360,10 @@ msgid "Enemy Speed"
 msgstr "Ellenfél sebessége"
 
 msgid "Auto Resolve"
-msgstr "Automata döntéshozatal"
+msgstr "Auto. döntés"
 
 msgid "Auto, No Spells"
-msgstr "Automata döntéshozatal, de nem varázsol"
+msgstr "Auto, nincs varázslás"
 
 msgid "Battles"
 msgstr "Csaták"
