@@ -3745,7 +3745,7 @@ msgid "Traversable only by boat."
 msgstr "Endast farbar med skepp."
 
 msgid "No special modifiers."
-msgstr "Ger ingen bonus eller handikapp."
+msgstr "Ger inget förflyttningsstraff."
 
 msgid "Used to place objects most appropriate for use on %{terrain}."
 msgstr "Används för att placera de lämpligare objekten för %{terrain}."
