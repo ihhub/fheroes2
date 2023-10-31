@@ -159,7 +159,7 @@ namespace
             return { 1, 3 };
         }
 
-        DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "unexpected spellPower value: " << spellPower << " for commander " << commander )
+        DEBUG_LOG( DBG_BATTLE, DBG_WARN, "unexpected spellPower value: " << spellPower << " for commander " << commander )
         return { 0, 0 };
     }
 }
@@ -1547,7 +1547,7 @@ void Battle::Arena::ApplyActionSpellEarthQuake( const Command & /* cmd */ )
 
     std::vector<CastleDefenseElement> targets = GetEarthQuakeTargets();
 
-    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "targets: " << targets.size() )
+    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "number of targets: " << targets.size() )
 
     if ( _interface ) {
         _interface->RedrawActionSpellCastStatus( Spell( Spell::EARTHQUAKE ), -1, commander->GetName(), {} );

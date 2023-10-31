@@ -541,7 +541,7 @@ namespace AI
         // Step 1. Analyze current battle state and update variables
         analyzeBattleState( arena, currentUnit );
 
-        DEBUG_LOG( DBG_BATTLE, DBG_TRACE, currentUnit.GetName() << " begin the turn. Side: " << _myColor )
+        DEBUG_LOG( DBG_BATTLE, DBG_TRACE, currentUnit.GetName() << " begin the turn, color: " << Color::String( _myColor ) )
 
         // Step 2. Check retreat/surrender condition
         const Heroes * actualHero = dynamic_cast<const Heroes *>( _commander );
