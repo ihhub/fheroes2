@@ -492,15 +492,15 @@ namespace Interface
                 if ( monsterType >= 0 ) {
                     _monsterType = monsterType;
 
-                    _interface.setCursorUpdater( [monsterType = monsterType]( const int32_t /*tileIndex*/ ) {
+                    _interface.setCursorUpdater( [type = _monsterType]( const int32_t /*tileIndex*/ ) {
                         const auto & objectInfo = Maps::getObjectsByGroup( Maps::ObjectGroup::Monster );
-                        if ( monsterType < 0 || monsterType >= static_cast<int32_t>( objectInfo.size() ) ) {
+                        if ( type < 0 || type >= static_cast<int32_t>( objectInfo.size() ) ) {
                             // You are trying to render some unknown stuff!
                             assert( 0 );
                             return;
                         }
 
-                        const fheroes2::Sprite & image = fheroes2::generateMapObjectImage( objectInfo[monsterType] );
+                        const fheroes2::Sprite & image = fheroes2::generateMapObjectImage( objectInfo[type] );
 
                         Cursor::Get().setCustomImage( image, { image.x(), image.y() } );
                     } );
