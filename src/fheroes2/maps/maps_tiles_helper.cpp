@@ -1179,9 +1179,6 @@ namespace
         tile.SetObject( info.objectType );
         tile.moveMainAddonToBottomLayer();
 
-        // No object exists on this tile. Add one.
-        
-
         tile.setObjectUID( uid );
         tile.setObjectIcnType( info.groundLevelParts.front().icnType );
 
