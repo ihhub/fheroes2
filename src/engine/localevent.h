@@ -302,7 +302,6 @@ public:
             _controllerPointerSpeed = newSpeed / CONTROLLER_SPEED_MOD;
         }
     }
-    static void HandleRenderDeviceResetEvent();
 
 private:
     LocalEvent();
@@ -321,6 +320,7 @@ private:
 
     // Returns true if frame rendering is required.
     static bool HandleWindowEvent( const SDL_WindowEvent & event );
+    static void HandleRenderDeviceResetEvent();
 
     void ProcessControllerAxisMotion();
 

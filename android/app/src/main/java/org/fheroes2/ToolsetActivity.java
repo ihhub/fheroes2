@@ -38,7 +38,6 @@ import android.widget.TextView;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
@@ -71,14 +70,16 @@ public final class ToolsetActivity extends AppCompatActivity
                 this.backgroundTaskError = backgroundTaskError;
             }
 
-            Status setIsHoMM2AssetsPresent(final boolean isHoMM2AssetsPresent) {
+            private Status setIsHoMM2AssetsPresent( final boolean isHoMM2AssetsPresent )
+            {
                 this.isHoMM2AssetsPresent = isHoMM2AssetsPresent;
 
                 return this;
             }
 
-            @SuppressWarnings("SameParameterValue")
-            Status setIsBackgroundTaskExecuting(final boolean isBackgroundTaskExecuting) {
+            @SuppressWarnings( "SameParameterValue" )
+            private Status setIsBackgroundTaskExecuting( final boolean isBackgroundTaskExecuting )
+            {
                 this.isBackgroundTaskExecuting = isBackgroundTaskExecuting;
 
                 return this;
@@ -87,24 +88,22 @@ public final class ToolsetActivity extends AppCompatActivity
 
         private final MutableLiveData<Status> liveStatus = new MutableLiveData<>( new Status( false, false, BackgroundTaskResult.RESULT_NONE, "" ) );
 
-        public LiveData<Status> getLiveStatus() {
-            return liveStatus;
+        private void validateAssets( final File externalFilesDir )
+        {
+            final Status status = Objects.requireNonNull( liveStatus.getValue() );
+
+            liveStatus.setValue( status.setIsHoMM2AssetsPresent( HoMM2AssetManagement.isHoMM2AssetsPresent( externalFilesDir ) ) );
         }
 
-        public void validateAssets(final File externalFilesDir) {
-            final Status status = Objects.requireNonNull(liveStatus.getValue());
+        private void extractAssets( final File externalFilesDir, final File cacheDir, final Uri zipFileUri, final ContentResolver contentResolver )
+        {
+            final Status status = Objects.requireNonNull( liveStatus.getValue() );
 
-            liveStatus.setValue(status.setIsHoMM2AssetsPresent(HoMM2AssetManagement.isHoMM2AssetsPresent(externalFilesDir)));
-        }
-
-        private void extractAssets(final File externalFilesDir, final File cacheDir, final Uri zipFileUri, final ContentResolver contentResolver) {
-            final Status status = Objects.requireNonNull(liveStatus.getValue());
-
-            if (status.isBackgroundTaskExecuting) {
+            if ( status.isBackgroundTaskExecuting ) {
                 return;
             }
 
-            liveStatus.setValue(status.setIsBackgroundTaskExecuting(true));
+            liveStatus.setValue( status.setIsBackgroundTaskExecuting( true ) );
 
             new Thread( () -> {
                 try ( final InputStream in = contentResolver.openInputStream( zipFileUri ) ) {
@@ -123,41 +122,53 @@ public final class ToolsetActivity extends AppCompatActivity
                     liveStatus.postValue( new Status( HoMM2AssetManagement.isHoMM2AssetsPresent( externalFilesDir ), false, BackgroundTaskResult.RESULT_ERROR,
                                                       String.format( "%s", ex ) ) );
                 }
-            }).start();
+            } ).start();
         }
     }
 
     private ToolsetActivityViewModel viewModel = null;
 
-    private final ActivityResultLauncher<String> zipFileChooserLauncher = registerForActivityResult(new ActivityResultContracts.GetContent(), result -> {
+    private final ActivityResultLauncher<String> zipFileChooserLauncher = registerForActivityResult( new ActivityResultContracts.GetContent(), result -> {
         // No ZIP file was selected
-        if (result == null) {
+        if ( result == null ) {
             return;
         }
 
-        viewModel.extractAssets(getExternalFilesDir(null), getCacheDir(), result, getContentResolver());
-    });
+        viewModel.extractAssets( getExternalFilesDir( null ), getCacheDir(), result, getContentResolver() );
+    } );
 
     @Override
-    protected void onCreate(final Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    protected void onCreate( final Bundle savedInstanceState )
+    {
+        super.onCreate( savedInstanceState );
 
-        setContentView(R.layout.activity_toolset);
+        setContentView( R.layout.activity_toolset );
 
-        viewModel = new ViewModelProvider(this).get(ToolsetActivityViewModel.class);
-        viewModel.liveStatus.observe(this, this::updateUI);
+        viewModel = new ViewModelProvider( this ).get( ToolsetActivityViewModel.class );
+        viewModel.liveStatus.observe( this, this::updateUI );
     }
 
     @Override
-    protected void onResume() {
+    protected void onResume()
+    {
         super.onResume();
 
-        viewModel.validateAssets(getExternalFilesDir(null));
+        viewModel.validateAssets( getExternalFilesDir( null ) );
     }
 
-    @SuppressWarnings("java:S1172") // SonarQube warning "Remove unused method parameter"
-    public void extractHoMM2AssetsButtonClicked(final View view) {
-        zipFileChooserLauncher.launch("application/zip");
+    @SuppressWarnings( "java:S1172" ) // SonarQube warning "Remove unused method parameter"
+    public void startGameButtonClicked( final View view )
+    {
+        startActivity( new Intent( this, GameActivity.class ) );
+
+        // Replace this activity with the newly launched activity
+        finish();
+    }
+
+    @SuppressWarnings( "java:S1172" ) // SonarQube warning "Remove unused method parameter"
+    public void extractHoMM2AssetsButtonClicked( final View view )
+    {
+        zipFileChooserLauncher.launch( "application/zip" );
     }
 
     @SuppressWarnings( "java:S1172" ) // SonarQube warning "Remove unused method parameter"
@@ -178,23 +189,36 @@ public final class ToolsetActivity extends AppCompatActivity
         }
     }
 
-    public void wallpaperSettingsClicked(final View view) {
-        startActivity(new Intent(this, MainActivity.class));
+    @SuppressWarnings( "java:S1172" ) // SonarQube warning "Remove unused method parameter"
+    public void saveFileManagerButtonClicked( final View view )
+    {
+        startActivity( new Intent( this, SaveFileManagerActivity.class ) );
     }
 
-    private void updateUI(final ToolsetActivityViewModel.Status modelStatus) {
-        final Button extractHoMM2AssetsButton = findViewById(R.id.activity_toolset_extract_homm2_assets_btn);
-        final Button downloadHoMM2DemoButton = findViewById(R.id.activity_toolset_download_homm2_demo_btn);
-        final Button wallpaperSettingsButton = findViewById(R.id.activity_toolset_wallpaper_settings_btn);
+    @SuppressWarnings( "java:S1172" ) // SonarQube warning "Remove unused method parameter"
+    public void wallpaperSettingsClicked( final View view )
+    {
+        startActivity( new Intent( this, MainActivity.class ) );
+    }
 
-        final TextView gameStatusTextView = findViewById(R.id.activity_toolset_game_status_lbl);
-        final TextView lastTaskStatusTextView = findViewById(R.id.activity_toolset_last_task_status_lbl);
+    private void updateUI( final ToolsetActivityViewModel.Status modelStatus )
+    {
+        final Button startGameButton = findViewById( R.id.activity_toolset_start_game_btn );
+        final Button extractHoMM2AssetsButton = findViewById( R.id.activity_toolset_extract_homm2_assets_btn );
+        final Button downloadHoMM2DemoButton = findViewById( R.id.activity_toolset_download_homm2_demo_btn );
+        final Button saveFileManagerButton = findViewById( R.id.activity_toolset_save_file_manager_btn );
+        final Button wallpaperSettingsButton = findViewById( R.id.activity_toolset_wallpaper_settings_btn );
 
-        final ProgressBar backgroundTaskProgressBar = findViewById(R.id.activity_toolset_background_task_pb);
+        final TextView gameStatusTextView = findViewById( R.id.activity_toolset_game_status_lbl );
+        final TextView lastTaskStatusTextView = findViewById( R.id.activity_toolset_last_task_status_lbl );
 
-        extractHoMM2AssetsButton.setEnabled(!modelStatus.isBackgroundTaskExecuting);
-        downloadHoMM2DemoButton.setEnabled(!modelStatus.isBackgroundTaskExecuting);
-        wallpaperSettingsButton.setEnabled(modelStatus.isHoMM2AssetsPresent);
+        final ProgressBar backgroundTaskProgressBar = findViewById( R.id.activity_toolset_background_task_pb );
+
+        startGameButton.setEnabled( !modelStatus.isBackgroundTaskExecuting && modelStatus.isHoMM2AssetsPresent );
+        extractHoMM2AssetsButton.setEnabled( !modelStatus.isBackgroundTaskExecuting );
+        downloadHoMM2DemoButton.setEnabled( !modelStatus.isBackgroundTaskExecuting );
+        saveFileManagerButton.setEnabled( !modelStatus.isBackgroundTaskExecuting );
+        wallpaperSettingsButton.setEnabled( modelStatus.isHoMM2AssetsPresent );
 
         switch ( modelStatus.backgroundTaskResult ) {
         case RESULT_NONE:
