@@ -106,6 +106,7 @@ void Game::mainGameLoop( bool isFirstGameRun )
         switch ( result ) {
         case fheroes2::GameMode::WALLPAPER:
             result = Game::Wallpaper();
+            break;
         case fheroes2::GameMode::QUIT_GAME:
             exit = true;
             break;
