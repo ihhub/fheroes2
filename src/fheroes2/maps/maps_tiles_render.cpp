@@ -253,7 +253,7 @@ namespace
             }
         }
 
-        return imageMap.try_emplace( key, std::move( sf ) ).first->second;
+        return imageMap.try_emplace( std::move( key ), std::move( sf ) ).first->second;
     }
 
     const fheroes2::Image & getDebugFogImage()
