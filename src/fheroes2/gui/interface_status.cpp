@@ -25,6 +25,7 @@
 
 #include <cassert>
 #include <string>
+#include <utility>
 
 #include "agg_image.h"
 #include "army.h"
@@ -46,9 +47,10 @@
 #include "resource.h"
 #include "screen.h"
 #include "settings.h"
-#include "text.h"
 #include "tools.h"
 #include "translations.h"
+#include "ui_dialog.h"
+#include "ui_text.h"
 #include "world.h"
 
 namespace
@@ -234,35 +236,36 @@ void Interface::StatusWindow::DrawKingdomInfo( int oh ) const
     const Kingdom & myKingdom = world.GetKingdom( Settings::Get().CurrentColor() );
 
     // sprite all resource
-    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::RESSMALL, 0 ), fheroes2::Display::instance(), pos.x + 6, pos.y + 3 + oh );
+    fheroes2::Display & display = fheroes2::Display::instance();
+    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::RESSMALL, 0 ), display, pos.x + 6, pos.y + 3 + oh );
 
     // count castle
-    Text text( std::to_string( myKingdom.GetCountCastle() ), Font::SMALL );
-    text.Blit( pos.x + 26 - text.w() / 2, pos.y + 28 + oh );
+    fheroes2::Text text( std::to_string( myKingdom.GetCountCastle() ), fheroes2::FontType::smallWhite() );
+    text.draw( pos.x + 26 - text.width() / 2, pos.y + 30 + oh, display );
     // count town
-    text.Set( std::to_string( myKingdom.GetCountTown() ) );
-    text.Blit( pos.x + 78 - text.w() / 2, pos.y + 28 + oh );
+    text.set( std::to_string( myKingdom.GetCountTown() ), fheroes2::FontType::smallWhite() );
+    text.draw( pos.x + 78 - text.width() / 2, pos.y + 30 + oh, display );
     // count gold
-    text.Set( std::to_string( myKingdom.GetFunds().Get( Resource::GOLD ) ) );
-    text.Blit( pos.x + 122 - text.w() / 2, pos.y + 28 + oh );
+    text.set( std::to_string( myKingdom.GetFunds().Get( Resource::GOLD ) ), fheroes2::FontType::smallWhite() );
+    text.draw( pos.x + 122 - text.width() / 2, pos.y + 30 + oh, display );
     // count wood
-    text.Set( fheroes2::abbreviateNumber( myKingdom.GetFunds().Get( Resource::WOOD ) ) );
-    text.Blit( pos.x + 15 - text.w() / 2, pos.y + 58 + oh );
+    text.set( fheroes2::abbreviateNumber( myKingdom.GetFunds().Get( Resource::WOOD ) ), fheroes2::FontType::smallWhite() );
+    text.draw( pos.x + 15 - text.width() / 2, pos.y + 60 + oh, display );
     // count mercury
-    text.Set( fheroes2::abbreviateNumber( myKingdom.GetFunds().Get( Resource::MERCURY ) ) );
-    text.Blit( pos.x + 37 - text.w() / 2, pos.y + 58 + oh );
+    text.set( fheroes2::abbreviateNumber( myKingdom.GetFunds().Get( Resource::MERCURY ) ), fheroes2::FontType::smallWhite() );
+    text.draw( pos.x + 37 - text.width() / 2, pos.y + 60 + oh, display );
     // count ore
-    text.Set( fheroes2::abbreviateNumber( myKingdom.GetFunds().Get( Resource::ORE ) ) );
-    text.Blit( pos.x + 60 - text.w() / 2, pos.y + 58 + oh );
+    text.set( fheroes2::abbreviateNumber( myKingdom.GetFunds().Get( Resource::ORE ) ), fheroes2::FontType::smallWhite() );
+    text.draw( pos.x + 60 - text.width() / 2, pos.y + 60 + oh, display );
     // count sulfur
-    text.Set( fheroes2::abbreviateNumber( myKingdom.GetFunds().Get( Resource::SULFUR ) ) );
-    text.Blit( pos.x + 84 - text.w() / 2, pos.y + 58 + oh );
+    text.set( fheroes2::abbreviateNumber( myKingdom.GetFunds().Get( Resource::SULFUR ) ), fheroes2::FontType::smallWhite() );
+    text.draw( pos.x + 84 - text.width() / 2, pos.y + 60 + oh, display );
     // count crystal
-    text.Set( fheroes2::abbreviateNumber( myKingdom.GetFunds().Get( Resource::CRYSTAL ) ) );
-    text.Blit( pos.x + 108 - text.w() / 2, pos.y + 58 + oh );
+    text.set( fheroes2::abbreviateNumber( myKingdom.GetFunds().Get( Resource::CRYSTAL ) ), fheroes2::FontType::smallWhite() );
+    text.draw( pos.x + 108 - text.width() / 2, pos.y + 60 + oh, display );
     // count gems
-    text.Set( fheroes2::abbreviateNumber( myKingdom.GetFunds().Get( Resource::GEMS ) ) );
-    text.Blit( pos.x + 130 - text.w() / 2, pos.y + 58 + oh );
+    text.set( fheroes2::abbreviateNumber( myKingdom.GetFunds().Get( Resource::GEMS ) ), fheroes2::FontType::smallWhite() );
+    text.draw( pos.x + 130 - text.width() / 2, pos.y + 60 + oh, display );
 }
 
 void Interface::StatusWindow::DrawDayInfo( int oh ) const
@@ -280,18 +283,19 @@ void Interface::StatusWindow::DrawDayInfo( int oh ) const
         icnId = 0;
     }
 
-    fheroes2::Blit( fheroes2::AGG::GetICN( icnType, icnId ), fheroes2::Display::instance(), pos.x, pos.y + 1 + oh );
+    fheroes2::Display & display = fheroes2::Display::instance();
+    fheroes2::Blit( fheroes2::AGG::GetICN( icnType, icnId ), display, pos.x, pos.y + 1 + oh );
 
     std::string message = _( "Month: %{month} Week: %{week}" );
     StringReplace( message, "%{month}", month );
     StringReplace( message, "%{week}", weekOfMonth );
-    Text text( message, Font::SMALL );
-    text.Blit( pos.x + ( pos.width - text.w() ) / 2, pos.y + 30 + oh );
+    fheroes2::Text text( message, fheroes2::FontType::smallWhite() );
+    text.draw( pos.x + ( pos.width - text.width() ) / 2, pos.y + 32 + oh, display );
 
     message = _( "Day: %{day}" );
     StringReplace( message, "%{day}", dayOfWeek );
-    text.Set( message, Font::BIG );
-    text.Blit( pos.x + ( pos.width - text.w() ) / 2, pos.y + 46 + oh );
+    text.set( message, fheroes2::FontType::normalWhite() );
+    text.draw( pos.x + ( pos.width - text.width() ) / 2, pos.y + 48 + oh, display );
 }
 
 void Interface::StatusWindow::SetResource( int res, uint32_t count )
@@ -307,16 +311,18 @@ void Interface::StatusWindow::DrawResourceInfo( int oh ) const
 {
     const fheroes2::Rect & pos = GetArea();
 
+    fheroes2::Display & display = fheroes2::Display::instance();
+
     std::string message = _( "You find a small\nquantity of %{resource}." );
     StringReplace( message, "%{resource}", Resource::String( lastResource ) );
-    TextBox text( message, Font::SMALL, pos.width );
-    text.Blit( pos.x, pos.y + 4 + oh );
+    fheroes2::Text text{ std::move( message ), fheroes2::FontType::smallWhite() };
+    text.draw( pos.x, pos.y + 6 + oh, pos.width, display );
 
     const fheroes2::Sprite & spr = fheroes2::AGG::GetICN( ICN::RESOURCE, Resource::getIconIcnIndex( lastResource ) );
-    fheroes2::Blit( spr, fheroes2::Display::instance(), pos.x + ( pos.width - spr.width() ) / 2, pos.y + 6 + oh + text.h() );
+    fheroes2::Blit( spr, display, pos.x + ( pos.width - spr.width() ) / 2, pos.y + 6 + oh + text.height( pos.width ) );
 
-    text.Set( std::to_string( countLastResource ), Font::SMALL, pos.width );
-    text.Blit( pos.x + ( pos.width - text.w() ) / 2, pos.y + oh + text.h() * 2 + spr.height() + 8 );
+    text.set( std::to_string( countLastResource ), fheroes2::FontType::smallWhite() );
+    text.draw( pos.x + ( pos.width - text.width() ) / 2, pos.y + oh + text.height() * 2 + spr.height() + 10, display );
 }
 
 void Interface::StatusWindow::DrawArmyInfo( int oh ) const
@@ -442,13 +448,14 @@ void Interface::StatusWindow::QueueEventProcessing()
         const fheroes2::Rect & pos = GetArea();
         const bool isFullInfo = StatusType::STATUS_UNKNOWN != _state && pos.height >= ( ston.height() * 3 + 15 );
         if ( isFullInfo ) {
-            Dialog::Message( _( "Status Window" ), _( "This window provides information on the status of your hero or kingdom, and shows the date." ), Font::BIG );
+            fheroes2::showStandardTextMessage( _( "Status Window" ), _( "This window provides information on the status of your hero or kingdom, and shows the date." ),
+                                               Dialog::ZERO );
         }
         else {
-            Dialog::Message(
+            fheroes2::showStandardTextMessage(
                 _( "Status Window" ),
                 _( "This window provides information on the status of your hero or kingdom, and shows the date. Left click here to cycle through these windows." ),
-                Font::BIG );
+                Dialog::ZERO );
         }
     }
 }

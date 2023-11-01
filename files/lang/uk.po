@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-15 12:25+0000\n"
-"PO-Revision-Date: 2023-05-13 22:08+0300\n"
+"POT-Creation-Date: 2023-10-23 00:14+0000\n"
+"PO-Revision-Date: 2023-09-06 08:41+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: uk\n"
@@ -16,160 +16,250 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
-"X-Generator: Poedit 3.3\n"
+"X-Generator: Poedit 3.4\n"
 
 msgid ""
 "BATTLE\n"
 "ONLY"
 msgstr ""
+"ЛИШЕ\n"
+"БИТВА"
 
 msgid ""
 "NEW\n"
 "GAME"
 msgstr ""
+"НОВА\n"
+"ГРА"
 
 msgid ""
 "SAVE\n"
 "GAME"
 msgstr ""
+"ЗАПИС\n"
+"ГРИ"
 
 msgid ""
 "LOAD\n"
 "GAME"
 msgstr ""
+"ЗАВАН-\n"
+"ТАЖИТИ\n"
+"ГРУ"
 
 msgid "INFO"
-msgstr ""
+msgstr "ІНФО"
 
 msgid "QUIT"
-msgstr ""
+msgstr "ВИЙТИ"
 
 msgid "CANCEL"
-msgstr ""
+msgstr "ВІДМІНА"
 
 msgid "OKAY"
-msgstr "ГАРАЗД"
+msgstr "ДОБРЕ"
 
 msgid "smallerButton|OKAY"
-msgstr ""
+msgstr "ДОБРЕ"
 
 msgid "ACCEPT"
-msgstr ""
+msgstr "ПРИЙНЯТИ"
 
 msgid "DECLINE"
-msgstr ""
+msgstr "ВІДМІНИТИ"
 
 msgid "LEARN"
-msgstr ""
+msgstr "ВИВЧИТИ"
 
 msgid "TRADE"
-msgstr ""
+msgstr "ОБМІНЯТИ"
 
 msgid "YES"
-msgstr ""
+msgstr "ТАК"
 
 msgid "NO"
-msgstr ""
+msgstr "НІ"
 
 msgid "EXIT"
-msgstr ""
+msgstr "ВИХІД"
+
+msgid "smallerButton|EXIT"
+msgstr "ВИХІД"
 
 msgid "DISMISS"
-msgstr ""
+msgstr "ЗВІЛЬНИТИ"
 
 msgid "UPGRADE"
-msgstr ""
+msgstr "ПОКРАЩИТИ"
 
 msgid "RESTART"
-msgstr ""
+msgstr "РЕСТАРТ"
 
 msgid "HEROES"
-msgstr ""
+msgstr "ГЕРОЇ"
 
 msgid ""
 "TOWNS/\n"
 "CASTLES"
 msgstr ""
+"МІСТА/\n"
+"ЗАМКИ"
 
 msgid "S"
-msgstr ""
+msgstr "М"
 
 msgid "M"
-msgstr ""
+msgstr "С"
 
 msgid "L"
-msgstr ""
+msgstr "В"
 
 msgid "X-L"
-msgstr ""
+msgstr "НВ"
 
 msgid "ALL"
-msgstr ""
+msgstr "ВСІ"
 
 msgid "SELECT"
-msgstr ""
+msgstr "ОБРАТИ"
 
 msgid ""
 "STANDARD\n"
 "GAME"
 msgstr ""
+"ЗВИЧАЙНА\n"
+"ГРА"
 
 msgid ""
 "CAMPAIGN\n"
 "GAME"
-msgstr ""
+msgstr "КАМПАНІЯ"
 
 msgid ""
 "MULTI-\n"
 "PLAYER\n"
 "GAME"
 msgstr ""
+"ДЕКІЛЬКА\n"
+"ГРАВЦІВ"
 
 msgid "CONFIG"
-msgstr ""
+msgstr "ПАРАМЕТРИ"
 
 msgid ""
 "ORIGINAL\n"
 "CAMPAIGN"
 msgstr ""
+"ВІЙНИ ЗА\n"
+"СПАДЩИНУ"
 
 msgid ""
 "EXPANSION\n"
 "CAMPAIGN"
 msgstr ""
+"КАМПАНІЇ\n"
+"ДОПОВНЕННЯ"
 
 msgid "HOT SEAT"
 msgstr ""
+"ГАРЯЧИЙ \n"
+"СТІЛЕЦЬ"
 
 msgid "2 PLAYERS"
-msgstr ""
+msgstr "2 ГРАВЦІ"
 
 msgid "3 PLAYERS"
-msgstr ""
+msgstr "3 ГРАВЦЯ"
 
 msgid "4 PLAYERS"
-msgstr ""
+msgstr "4 ГРАВЦЯ"
 
 msgid "5 PLAYERS"
-msgstr ""
+msgstr "5 ГРАВЦІВ"
 
 msgid "6 PLAYERS"
-msgstr ""
+msgstr "6 ГРАВЦІВ"
 
 msgid "GIFT"
-msgstr ""
-
-msgid "guildWell|EXIT"
-msgstr ""
-
-msgid "DIFFICULTY"
-msgstr ""
-
-msgid "MIN"
-msgstr ""
+msgstr "ДАРУНОК"
 
 msgid "MAX"
 msgstr "МАКС"
+
+msgid "DIFFICULTY"
+msgstr "СКЛАДНІСТЬ"
+
+msgid "VIEW INTRO"
+msgstr "ПОВТОР ІНТРО"
+
+msgid "MIN"
+msgstr "МІН"
+
+msgid ""
+"D\n"
+"I\n"
+"S\n"
+"M\n"
+"I\n"
+"S\n"
+"S"
+msgstr ""
+"З\n"
+"В\n"
+"І\n"
+"Л\n"
+"Ь\n"
+"Н."
+
+msgid ""
+"E\n"
+"X\n"
+"I\n"
+"T"
+msgstr ""
+"В\n"
+"И\n"
+"Х\n"
+"І\n"
+"Д"
+
+msgid ""
+"C\n"
+"A\n"
+"M\n"
+"P\n"
+"A\n"
+"I\n"
+"G\n"
+"N"
+msgstr ""
+"К\n"
+"А\n"
+"М\n"
+"П\n"
+"А\n"
+"Н\n"
+"І\n"
+"Я"
+
+msgid ""
+"S\n"
+"T\n"
+"A\n"
+"N\n"
+"D\n"
+"A\n"
+"R\n"
+"D"
+msgstr ""
+"С\n"
+"Т\n"
+"А\n"
+"Н\n"
+"Д\n"
+"А\n"
+"Р\n"
+"Т"
 
 msgid "Warrior"
 msgstr "Воїн"
@@ -182,14 +272,6 @@ msgstr "Розвідник"
 
 msgid "None"
 msgstr "Відсутні"
-
-msgid "Warning"
-msgstr ""
-
-msgid ""
-"Do you want to regain control from AI? The effect will take place only on "
-"the next turn."
-msgstr ""
 
 msgid ""
 "A few\n"
@@ -241,7 +323,7 @@ msgstr ""
 "%{monster}"
 
 msgid ""
-"Zounds of\n"
+"Zounds...\n"
 "%{monster}"
 msgstr ""
 "Безліч\n"
@@ -278,11 +360,9 @@ msgstr "Купа"
 msgid "army|Zounds"
 msgstr "Безліч"
 
-#, fuzzy
 msgid "army|Legion"
 msgstr "Легіон"
 
-#, fuzzy
 msgid "All %{race} troops +1"
 msgstr "Усі війська фракції %{race} +1"
 
@@ -291,61 +371,50 @@ msgid "Multiple"
 msgstr "Різноманітні"
 
 msgid "Troops of %{count} alignments -%{penalty}"
-msgstr ""
+msgstr "Війська з %{count} рас - %{penalty}"
 
-#, fuzzy
 msgid "Some undead in group -1"
-msgstr "Деяка нежить в армії -1"
+msgstr "Наявність невмерлих в армії -1"
 
 msgid "View %{name}"
 msgstr "Переглянути %{name}"
 
 msgid "Move the %{name} "
-msgstr ""
+msgstr "%{name}: перемістити загін"
 
-#, fuzzy
 msgid "Move or right click to redistribute %{name}"
-msgstr "Пересуньте %{name} щоб розділити (або правий клік)"
+msgstr "Перемістити %{name}, правий клік щоб поділити"
 
 msgid "Combine %{name} armies"
-msgstr ""
+msgstr "%{name}: Поєднати загони"
 
-#, fuzzy
 msgid "Exchange %{name2} with %{name}"
 msgstr "Обміняти %{name2} на %{name}"
 
-#, fuzzy
 msgid "Select %{name}"
-msgstr "Вибрати %{name}"
+msgstr "Обрати %{name}"
 
-#, fuzzy
 msgid "Cannot move last troop"
 msgstr "Не вдалось перемістити останній загін"
 
-#, fuzzy
 msgid "Move the %{name}"
-msgstr "Найняти: %{name}"
+msgstr "Перемістити: %{name}"
 
-#, fuzzy
 msgid "Set Count"
-msgstr "Кількість"
+msgstr "Встановити Кількість"
 
-#, fuzzy
 msgid "%{name} destroys half the enemy troops!"
 msgid_plural "%{name} destroy half the enemy troops!"
 msgstr[0] "%{name} знищує половину ворожого загону!"
-msgstr[1] "%{name} знищує половину ворожого загону!"
-msgstr[2] "%{name} знищує половину ворожого загону!"
+msgstr[1] "%{name} знищують половину ворожого загону!"
+msgstr[2] "%{name} знищують половину ворожого загону!"
 
-#, fuzzy
 msgid "%{name} has turned off the auto battle"
 msgstr "%{name} вимкнув автобій"
 
-#, fuzzy
 msgid "%{name} has turned on the auto battle"
 msgstr "%{name} увімкнув автобій"
 
-#, fuzzy
 msgid "Spell failed!"
 msgstr "Чари не спрацювали!"
 
@@ -353,62 +422,53 @@ msgid ""
 "The Sphere of Negation artifact is in effect for this battle, disabling all "
 "combat spells."
 msgstr ""
+"На поле бою діє артефакт \"Сфера Заперечення. Використання бойової магії "
+"заборонене."
 
-#, fuzzy
 msgid "You have already cast a spell this round."
-msgstr "Ви вже використали чари протягом цього ходу."
+msgstr "Ви вже використали чари протягом цього раунду."
 
-#, fuzzy
-msgid "That spell will affect no one!"
-msgstr "Ці чари ні на кого не подіють!"
+msgid "That spell will have no effect!"
+msgstr "Ці чари не матимуть ефекту!"
 
-#, fuzzy
 msgid "You may only summon one type of elemental per combat."
-msgstr "Ви можете викликати елементалів тільки одного типу в цій битві."
+msgstr "Ви можете викликати елементалів лиш одного типу протягом битви."
 
-#, fuzzy
-msgid "There is no open space adjacent to your hero to summon an Elemental to."
-msgstr "Недостатньо місця поряд з вашим героєм для виклику Елементаля."
+msgid ""
+"There is no open space adjacent to your hero where you can summon an "
+"Elemental to."
+msgstr "Біля вашого герою нема вільного місця для виклику Елементалів."
 
-#, fuzzy
 msgid ""
 "The Moat reduces by -%{count} the defense skill of any unit and slows to "
 "half movement rate."
 msgstr ""
-"Рів зменшує захисну здатність будь-якого підрозділу на -%{count} і "
-"сповільнює його вдвічі."
+"Рів зменшує захисну здатність будь-якого загону на -%{count} і сповільнює "
+"його вдвічі."
 
-#, fuzzy
 msgid "Speed: %{speed}"
 msgstr "Швидкість: %{speed}"
 
-#, fuzzy
 msgid "Speed"
 msgstr "Швидкість"
 
-#, fuzzy
-msgid "Army Order"
-msgstr "Черговість армій"
-
-#, fuzzy
 msgid "Off"
 msgstr "Вимк."
 
-#, fuzzy
 msgid "On"
 msgstr "Увімк."
 
-#, fuzzy
-msgid "Auto Spell Casting"
-msgstr "Автоматичне чаклування"
+msgid "Turn Order"
+msgstr "Порядок Ходів"
 
-#, fuzzy
+msgid "Auto Spell Casting"
+msgstr "Автоматичне Чаклування"
+
 msgid "Grid"
 msgstr "Сітка"
 
-#, fuzzy
 msgid "Shadow Movement"
-msgstr "Тінь під час руху"
+msgstr "Затінення Сітки"
 
 msgid "Shadow Cursor"
 msgstr "Тінь курсора"
@@ -427,332 +487,289 @@ msgstr "Гарячі клавіші"
 
 msgid "Damage Info"
 msgstr ""
+"Інформація про\n"
+"пошкодження"
 
-#, fuzzy
 msgid "Set the speed of combat actions and animations."
 msgstr "Встановити швидкість бойових дій та анімації."
 
-msgid "Toggle to display army order during the battle."
-msgstr "Перемкнути відображення черговості ходів підрозділів під час битви."
+msgid "Toggle to display the turn order during the battle."
+msgstr "Перемкнути відображення черговості ходів загонів під час битви."
 
-#, fuzzy
 msgid ""
 "Toggle whether or not the computer will cast spells for you when auto combat "
 "is on. (Note: This does not affect spell casting for computer players in any "
 "way, nor does it affect quick combat.)"
 msgstr ""
-"Чи буде комп'ютер використовувати чари коли увімкнений автобій. (Пам'ятка: "
-"Це ніяк не впливає на виклик чар гравцем-комп'ютером чи режим автобою)"
+"Перемкнути використання комп'ютером магії під час автоматично проведених "
+"битв. (Примітка: Ця функція жодним чином не впливає на використання магії "
+"комп'ютерними гравцями, а також не впливає на швидкий бій)."
 
-#, fuzzy
 msgid ""
 "Toggle the hex grid on or off. The hex grid always underlies movement, even "
 "if turned off. This switch only determines if the grid is visible."
 msgstr ""
-"Чи показувати шестигранну сітка. Ця сітка завжди визначає можливості руху, "
-"навіть коли вимкнена. Перемикач лише робить її видимою."
+"Перемкнути відображення сітки поля бою. Сітка з шестигранних клітинок завжди "
+"визначає можливості руху, навіть якщо її відображення вимкнене. Перемикач "
+"лише робить її видимою."
 
-#, fuzzy
 msgid ""
 "Toggle on or off shadows showing where your creatures can move and attack."
-msgstr "Чи підсвічувати зони, в яких істоти можуть рухатись або атакувати."
+msgstr ""
+"Перемкнути відображення зони, в межах якої ваші істоти можуть пересуватися "
+"та атакувати."
 
-#, fuzzy
 msgid ""
 "Toggle on or off a shadow showing the current hex location of the mouse "
 "cursor."
-msgstr "Чи підсвічувати клітину, над якою знаходиться курсор миші."
+msgstr "Перемкнути затінення клітини, на яку наведений курсор миші."
 
 msgid "Change the audio settings of the game."
 msgstr "Змінити звукові налаштування гри."
 
 msgid "Check and configure all the hot keys present in the game."
-msgstr ""
+msgstr "Налаштування всіх гарячих клавіш у грі."
 
-#, fuzzy
 msgid "Toggle to display damage information during the battle."
-msgstr "Чи показувати черговість армій під час битви."
+msgstr ""
+"Перемкнути відображення інформації про пошкодження під час битви. Якщо "
+"функція працює, наведіть курсором на бажану ціль - через кілька секунд "
+"вирине вікно з розрахунком можливих пошкоджень, що завдасть ваш загін."
 
-#, fuzzy
 msgid "Exit this menu."
 msgstr "Вийти з цього меню."
 
-#, fuzzy
 msgid "Okay"
-msgstr "Окєй"
+msgstr "Добре"
 
-#, fuzzy
 msgid "The enemy has surrendered!"
-msgstr "Ворог здався!"
+msgstr "Ворог капітулював!"
 
-#, fuzzy
 msgid "The enemy has fled!"
 msgstr "Ворог втік!"
 
-#, fuzzy
 msgid "A glorious victory!"
 msgstr "Славетна перемога!"
 
-#, fuzzy
 msgid "For valor in combat, %{name} receives %{exp} experience."
 msgstr "За доблесть у бою, %{name} отримує %{exp} досвіду."
 
-#, fuzzy
 msgid "The cowardly %{name} flees from battle."
 msgstr "Боягузливий %{name} тікає від бою."
 
-#, fuzzy
 msgid "%{name} surrenders to the enemy, and departs in shame."
-msgstr "%{name} здається ворогові й відходить з ганьбою."
+msgstr "%{name} здається ворогу та відходить з ганьбою."
 
-#, fuzzy
 msgid "Your force suffer a bitter defeat, and %{name} abandons your cause."
-msgstr "Ваше військо зазнає значної поразки і %{name} полишає Вас."
+msgstr "Ваше військо зазнає гіркої поразки і %{name} полишає Вас."
 
-#, fuzzy
 msgid "Your force suffer a bitter defeat."
-msgstr "Ваше військо зазнає поразки."
+msgstr "Ваше військо зазнає гіркої поразки."
 
-#, fuzzy
 msgid "Battlefield Casualties"
 msgstr "Жертви на полі бою"
 
-#, fuzzy
 msgid "Attacker"
 msgstr "Нападник"
 
-#, fuzzy
 msgid "Defender"
 msgstr "Захисник"
 
-#, fuzzy
 msgid "As you reach for the %{name}, it mysteriously disappears."
-msgstr "Коли Ви досягли %{name}, воно загадково зникло."
+msgstr "%{name} загадково щезає, щойно ви спробували його забрати."
 
-#, fuzzy
 msgid "As your enemy reaches for the %{name}, it mysteriously disappears."
-msgstr "Коли Ваш ворог досяг %{name}, воно загадково зникло."
+msgstr "%{name} загадково щезає, щойно ваш ворог спробував його забрати."
 
-#, fuzzy
 msgid "You have captured an enemy artifact!"
 msgstr "Ви заволоділи артефактом ворога!"
 
-#, fuzzy
 msgid "Necromancy!"
 msgstr "Некромантія!"
 
-#, fuzzy
 msgid ""
 "Practicing the dark arts of necromancy, you are able to raise %{count} of "
 "the enemy's dead to return under your service as %{monster}."
 msgstr ""
-"Практикуючи темне мистецтво некромантії, Ви підняли %{count} мертвих "
-"ворогів, які тепер будуть слугувати Вам як %{monster}."
+"Практикуючи темне мистецтво некромантії, ви підняли %{count} мертвих "
+"ворогів, які тепер будуть слугувати вам як %{monster}."
 
-#, fuzzy
 msgid "%{name} the %{race}"
 msgstr "%{name} %{race}"
 
-#, fuzzy
 msgid "Captain of %{name}"
-msgstr "Капітан %{name}"
+msgstr "Капітан замку %{name}"
 
-#, fuzzy
 msgid "Attack"
 msgstr "Атака"
 
-#, fuzzy
 msgid "Defense"
 msgstr "Захист"
 
-#, fuzzy
 msgid "Spell Power"
 msgstr "Сила Магії"
 
-#, fuzzy
 msgid "Knowledge"
 msgstr "Знання"
 
-#, fuzzy
 msgid "Morale"
 msgstr "Мораль"
 
-#, fuzzy
 msgid "Luck"
-msgstr "Вдача"
+msgstr "Удача"
 
-#, fuzzy
 msgid "Spell Points"
 msgstr "Мана"
 
-#, fuzzy
 msgid "Hero's Options"
-msgstr "Вміння героя"
+msgstr "Дії Героя"
 
-#, fuzzy
 msgid "Cast Spell"
 msgstr "Накласти чари"
 
 msgid "Retreat"
 msgstr "Відступити"
 
-#, fuzzy
 msgid "Surrender"
 msgstr "Здатися"
 
-#, fuzzy
 msgid "Cancel"
 msgstr "Скасувати"
 
 msgid "Hero Screen"
-msgstr ""
+msgstr "Вікно Героя"
 
-#, fuzzy
 msgid "Captain's Options"
-msgstr "Капітанський штаб"
+msgstr "Дії Капітана"
 
 msgid ""
 "Cast a magical spell. You may only cast one spell per combat round. The "
 "round is reset when every creature has had a turn."
 msgstr ""
+"Застосувати магічне закляття. Ви можете наслати лиш одне закляття кожен "
+"раунд. Новий раунд настає щоразу, коли кожна істота робить (або пропускає) "
+"свій хід."
 
 msgid ""
 "Retreat your hero, abandoning your creatures. Your hero will be available "
 "for you to recruit again, however, the hero will have only a novice hero's "
 "forces."
 msgstr ""
+"Відступити героєм, кинувши війська напризволяще. Вашого героя можна буде "
+"негайно найняти знову, однак, герой матиме такі ж війська, як кожен "
+"новобранець."
 
 msgid ""
 "Surrendering costs gold. However if you pay the ransom, the hero and all of "
 "his or her surviving creatures will be available to recruit again."
 msgstr ""
+"Капітуляція вимагатиме оплати золотом. Однак, якщо ви сплатите викуп, герой "
+"разом з усіма своїми артефактами та вцілілими військами буде доступний для "
+"повторного найму."
 
 msgid "Open Hero Screen to view full information about the hero."
-msgstr ""
+msgstr "Відкрити Вікно Героя щоб переглянути повну інформацію про нього."
 
-#, fuzzy
 msgid "Return to the battle."
 msgstr "Повернутися до битви."
 
-#, fuzzy
 msgid "Not enough gold (%{gold})"
 msgstr "Недостатньо золота (%{gold})"
 
 msgid "%{name} states:"
-msgstr ""
+msgstr "%{name}, характеристики:"
 
 msgid "Captain of %{name} states:"
-msgstr ""
+msgstr "Капітан міста %{name}, характеристики:"
 
-#, fuzzy
 msgid ""
 "\"I will accept your surrender and grant you and your troops safe passage "
 "for the price of %{price} gold.\""
 msgstr ""
-"\"Я прийму твою капітуляцію і дам безпечний прохід твоїм військам за "
+"\"Я прийму вашу капітуляцію і дам безпечний прохід твоїм військам за "
 "%{price} золота.\""
 
-#, fuzzy
 msgid "View %{monster} info"
-msgstr "Дізнатися про %{monster}"
+msgstr "Переглянути інформацію про %{monster}"
 
-#, fuzzy
 msgid "Fly %{monster} here"
-msgstr "%{monster} летітиме сюди"
+msgstr "%{monster}: перелетіти сюди"
 
 msgid "Move %{monster} here"
-msgstr ""
+msgstr "%{monster} перемістяться сюди"
 
-#, fuzzy
 msgid "Shoot %{monster}"
-msgstr "Вистрілити у %{monster}"
+msgstr "Зробити постріл у %{monster}"
 
-#, fuzzy
 msgid "(1 shot left)"
 msgid_plural "(%{count} shots left)"
 msgstr[0] "(Залишився 1 постріл)"
 msgstr[1] "(Залишилося %{count} постріла)"
 msgstr[2] "(Залишилося %{count} пострілів)"
 
-#, fuzzy
 msgid "Attack %{monster}"
 msgstr "Атакувати %{monster}"
 
 msgid "Turn %{turn}"
-msgstr ""
+msgstr "Раунд %{turn}"
 
-#, fuzzy
 msgid "Teleport here"
 msgstr "Телепортуватися сюди"
 
-#, fuzzy
 msgid "Invalid teleport destination"
 msgstr "Телепортація сюди неможлива"
 
-#, fuzzy
 msgid "Cast %{spell} on %{monster}"
 msgstr "Накласти %{spell} на %{monster}"
 
-#, fuzzy
 msgid "Cast %{spell}"
 msgstr "Накласти %{spell}"
 
 msgid "Select spell target"
-msgstr ""
+msgstr "Обрати ціль закляття"
 
-#, fuzzy
 msgid "View Ballista info"
 msgstr "Дані по Балісті"
 
-#, fuzzy
 msgid "Ballista"
 msgstr "Баліста"
 
-#, fuzzy
 msgid "Enable auto combat"
 msgstr "Увімкнути автобій"
 
-#, fuzzy
 msgid "Allows the computer to fight out the battle for you."
 msgstr "Дозволяє комп'ютеру вести битву за вас."
 
-#, fuzzy
 msgid "Auto Combat"
 msgstr "Автобій"
 
-#, fuzzy
 msgid "Customize system options"
 msgstr "Налаштувати параметри системи"
 
-#, fuzzy
 msgid "Allows you to customize the combat screen."
 msgstr "Дозволяє налаштувати екран бою."
 
-#, fuzzy
 msgid "System Options"
 msgstr "Системні Параметри"
 
-#, fuzzy
 msgid "Skip this unit"
-msgstr "Пропустити чергу"
+msgstr "Пропустити хід"
 
-#, fuzzy
 msgid "Skip"
 msgstr "Пропустити"
 
-#, fuzzy
 msgid ""
 "Skips the current creature. The current creature ends its turn and does not "
 "get to go again until the next round."
 msgstr ""
-"Пропустити хід істоти. Поточна істота закінчить її хід і не отримає новий до "
+"Пропустити хід істоти. Поточна істота закінчить хід та не ходитиме до "
 "наступного раунду."
 
 msgid "View Captain's options"
-msgstr "Переглянути параметри Капітана"
+msgstr "Відкрити вікно дій Капітана"
 
 msgid "View Hero's options"
-msgstr "Переглянути параметри Героя"
+msgstr "Відкрити вікно дій Героя"
 
 msgid "View opposing Captain"
 msgstr "Переглянути ворожого Капітана"
@@ -760,11 +777,9 @@ msgstr "Переглянути ворожого Капітана"
 msgid "View opposing Hero"
 msgstr "Переглянути ворожого Героя"
 
-#, fuzzy
 msgid "Hide logs"
 msgstr "Сховати журнал"
 
-#, fuzzy
 msgid "Show logs"
 msgstr "Дивитися журнал"
 
@@ -772,185 +787,154 @@ msgid "Message Bar"
 msgstr "Табло повідомлень"
 
 msgid "Shows the results of individual monster's actions."
-msgstr ""
+msgstr "Відображує кожну дію та ефект, що мають місце на полі бою."
 
 msgid "Are you sure you want to finish the battle in auto mode?"
 msgstr "Ви впевнені, що хочете завершити бій в автоматичному режимі?"
 
-#, fuzzy
-msgid "%{name} skip their turn."
-msgstr "%{name} пропускає свою чергу."
+msgid "Are you sure you want to enable auto combat?"
+msgstr "Ви впевнені, що хочете ввімкнути автобитву?"
 
-#, fuzzy
+msgid "%{name} skip their turn."
+msgstr "%{name} пропускають свій хід."
+
 msgid "%{attacker} does %{damage} damage."
 msgid_plural "%{attacker} do %{damage} damage."
 msgstr[0] "%{attacker} завдає %{damage} шкоди."
-msgstr[1] "%{attacker} завдає %{damage} шкоди."
-msgstr[2] "%{attacker} завдає %{damage} шкоди."
+msgstr[1] "%{attacker} завдають %{damage} шкоди."
+msgstr[2] "%{attacker} завдають %{damage} шкоди."
 
-#, fuzzy
 msgid "1 creature perishes."
 msgid_plural "%{count} creatures perish."
 msgstr[0] "1 істота загинула."
 msgstr[1] "%{count} істоти загинули."
 msgstr[2] "%{count} істот загинуло."
 
-#, fuzzy
 msgid "1 %{defender} perishes."
 msgid_plural "%{count} %{defender} perish."
 msgstr[0] "1 %{defender} загинув."
 msgstr[1] "%{count} %{defender} загинули."
 msgstr[2] "%{count} %{defender} загинуло."
 
-#, fuzzy
 msgid "1 soul is incorporated."
 msgid_plural "%{count} souls are incorporated."
-msgstr[0] "Немає файлів збереження для завантаження."
-msgstr[1] "Немає файлів збереження для завантаження."
-msgstr[2] "Немає файлів збереження для завантаження."
+msgstr[0] "Одна душа поглинута."
+msgstr[1] "%{count} душі поглинуті."
+msgstr[2] "%{count} душ поглинуто."
 
 msgid "1 %{unit} is revived."
 msgid_plural "%{count} %{unit} are revived."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "1 %{unit} відродився."
+msgstr[1] "%{count} %{unit} відродилося."
+msgstr[2] "%{count} %{unit} відродилося."
 
 msgid "Moved %{monster}: from [%{src}] to [%{dst}]."
-msgstr ""
+msgstr "%{monster}: Переміщення з [%{src}] до [%{dst}]."
 
 msgid "The %{name} resist the spell!"
 msgstr "%{name} опираються чарам!"
 
-#, fuzzy
 msgid "%{name} casts %{spell} on the %{troop}."
 msgstr "%{name} чаклує %{spell} на %{troop}."
 
-#, fuzzy
 msgid "%{name} casts %{spell}."
 msgstr "%{name} чаклує %{spell}."
 
-#, fuzzy
 msgid "The %{spell} does %{damage} damage to one undead creature."
-msgstr "%{spell} завдає %{damage} шкоди однієї істоти нежиті."
+msgstr "%{spell} завдає %{damage} шкоди одній істоті невмерлих."
 
-#, fuzzy
 msgid "The %{spell} does %{damage} damage to all undead creatures."
-msgstr "%{spell} завдає %{damage} шкоди усім істотам нежиті."
+msgstr "%{spell} завдає %{damage} шкоди усім істотам невмерлих."
 
 msgid "The %{spell} does %{damage} damage, %{count} creatures perish."
 msgstr "%{spell} завдає %{damage} шкоди, %{count} істот загинуло."
 
-#, fuzzy
 msgid "The %{spell} does %{damage} damage."
 msgstr "%{spell} завдає %{damage} шкоди."
 
-#, fuzzy
 msgid "The %{spell} does %{damage} damage to one living creature."
 msgstr "%{spell} завдає %{damage} шкоди одній живій істоті."
 
-#, fuzzy
 msgid "The %{spell} does %{damage} damage to all living creatures."
 msgstr "%{spell} завдає %{damage} шкоди усім живим істотам."
 
-#, fuzzy
 msgid "The %{attacker}' attack blinds the %{target}!"
 msgstr "Атака %{attacker} осліплює %{target}!"
 
-#, fuzzy
 msgid "The %{attacker}' gaze turns the %{target} to stone!"
-msgstr "Погляд %{attacker} перетворює %{name} в камінь!"
+msgstr "Погляд %{attacker} перетворює %{target} на камінь!"
 
-#, fuzzy
 msgid "The %{attacker}' curse falls upon the %{target}!"
-msgstr "%{attacker} проклинає %{target}!"
+msgstr "%{attacker} насилає прокляття на %{target}!"
 
 msgid "The %{target} are paralyzed by the %{attacker}!"
 msgstr "%{attacker} паралізує %{target}!"
 
-#, fuzzy
 msgid "The %{attacker} dispel all good spells on your %{target}!"
-msgstr "%{attacker} розвіює всі добрі чари з загону %{target}!"
+msgstr "%{attacker} розвіює всі добрі чари, що були накладені на %{target}!"
 
 msgid "The %{attacker} cast %{spell} on %{target}!"
-msgstr ""
+msgstr "%{attacker} використав закляття \"%{spell}\"! Ціль: %{target}."
 
-#, fuzzy
 msgid "Bad luck descends on the %{attacker}."
-msgstr "Вдача відвернулась від %{attacker}."
+msgstr "Удача відвернулась від %{attacker}."
 
-#, fuzzy
 msgid "Good luck shines on the %{attacker}."
-msgstr "Вдача посміхнулась %{attacker}."
+msgstr "Удача посміхнулась %{attacker}."
 
-#, fuzzy
 msgid "High morale enables the %{monster} to attack again."
 msgstr "Завдяки високій моралі %{monster} атакує знову."
 
-#, fuzzy
 msgid "Low morale causes the %{monster} to freeze in panic."
 msgstr "Через низьку мораль %{monster} завмер у паніці."
 
-#, fuzzy
 msgid "%{tower} does %{damage} damage."
-msgstr "%{tower} спричиняє %{damage} шкоди."
+msgstr "%{tower} завдає %{damage} шкоди."
 
 msgid "The mirror image is created."
-msgstr ""
+msgstr "Створено Дзеркального Фантома."
 
-#, fuzzy
 msgid "The mirror image is destroyed!"
 msgstr "Фантомний загін знищений!"
 
 msgid "Are you sure you want to interrupt the auto battle?"
 msgstr "Ви впевнені, що хочете перервати автоматичний бій?"
 
-#, fuzzy
 msgid "Error"
 msgstr "Помилка"
 
-#, fuzzy
 msgid "No spells to cast."
 msgstr "Нема чар для використання."
 
-#, fuzzy
 msgid "Are you sure you want to retreat?"
 msgstr "Ви впевнені, що хочете відступити?"
 
-#, fuzzy
 msgid "Retreat disabled"
 msgstr "Відступ неможливий"
 
-#, fuzzy
 msgid "Surrender disabled"
-msgstr "Здача в полон неможлива"
+msgstr "Капітуляція неможлива"
 
-#, fuzzy
 msgid "Damage: %{max}"
 msgstr "Шкода: %{max}"
 
-#, fuzzy
 msgid "Damage: %{min} - %{max}"
 msgstr "Шкода: %{min} - %{max}"
 
-#, fuzzy
 msgid "Perish: %{max}"
-msgstr "Загинуло: %{max}"
+msgstr "Загине %{max}"
 
-#, fuzzy
 msgid "Perish: %{min} - %{max}"
-msgstr "Загинуло: %{min} - %{max}"
+msgstr "Загине %{min} - %{max}"
 
-#, fuzzy
 msgid ""
 "Through eagle-eyed observation, %{name} is able to learn the magic spell "
 "%{spell}."
-msgstr "Завдяки орлиному зору %{name} зміг вивчити магічні чари %{spell}."
+msgstr "Завдяки орлиному зору %{name} зміг вивчити магічне закляття %{spell}."
 
-#, fuzzy
 msgid "Human"
 msgstr "Людина"
 
-#, fuzzy
 msgid "AI"
 msgstr "Комп'ютер"
 
@@ -958,168 +942,167 @@ msgid "Please select another hero."
 msgstr "Будь ласка, оберіть іншого героя."
 
 msgid "Set Attack Skill"
-msgstr ""
+msgstr "Встановити Атаку"
 
 msgid "Set Defense Skill"
-msgstr ""
+msgstr "Встановити Захист"
 
 msgid "Set Power Skill"
-msgstr ""
+msgstr "Встановити Силу Магії"
 
 msgid "Set Knowledge Skill"
-msgstr ""
+msgstr "Встановити Знання"
 
-#, fuzzy
 msgid "%{race1} %{name1}"
 msgstr "%{race1} %{name1}"
 
-#, fuzzy
 msgid "vs"
 msgstr "проти"
 
-#, fuzzy
 msgid "%{race2} %{name2}"
 msgstr "%{race2} %{name2}"
 
-#, fuzzy
 msgid "Monsters"
-msgstr "Потвори"
+msgstr "Монстри"
 
-#, fuzzy
 msgid "N/A"
 msgstr "Н/Д"
 
-#, fuzzy
 msgid "Left Turret"
-msgstr "Ліва турель"
+msgstr "Ліва Вежа"
 
-#, fuzzy
 msgid "Right Turret"
-msgstr "Права турель"
+msgstr "Права Вежа"
 
-#, fuzzy
 msgid "The %{name} fires with the strength of %{count} Archers"
-msgstr "%{name} б'є із силою %{count} Стрільців"
+msgstr "%{name} б'є із силою %{count} Лучників"
 
-#, fuzzy
 msgid "each with a +%{attack} bonus to their attack skill."
-msgstr "кожен з бонусом +%{attack} до його вміння Атаки."
+msgstr "кожна з бонусом +%{attack} до вміння Атаки."
 
-#, fuzzy
 msgid "The %{name} is destroyed."
-msgstr "Фантомний загін знищений!"
+msgstr "%{name} знищено."
 
-#, fuzzy
 msgid ""
 "The %{artifact} artifact is in effect for this battle, disabling %{spell} "
 "spell."
-msgstr "Артефакт %{artifact} впливає на цю битву і відключає чари %{spell}."
+msgstr ""
+"Артефакт %{artifact} впливає на цю битву, не дозволяючи використати закляття "
+"%{spell}."
 
-#, fuzzy
 msgid "%{count} %{name} rises from the dead!"
 msgid_plural "%{count} %{name} rise from the dead!"
-msgstr[0] "%{count} %{name} піднялось з мертвих!"
-msgstr[1] "%{count} %{name} піднялось з мертвих!"
-msgstr[2] "%{count} %{name} піднялось з мертвих!"
+msgstr[0] "%{count} %{name} піднято з мертвих!"
+msgstr[1] "%{count} %{name} піднято з мертвих!"
+msgstr[2] "%{count} %{name} піднято з мертвих!"
 
-#, fuzzy
 msgid "Dwarven Alliance"
 msgstr "Альянс Гномів"
 
-#, fuzzy
 msgid "Sorceress Guild"
-msgstr "Гільдія Чаклунів"
+msgstr "Гільдія Чаклунок"
 
-#, fuzzy
 msgid "Necromancer Guild"
 msgstr "Гільдія Некромантів"
 
-#, fuzzy
 msgid "Ogre Alliance"
 msgstr "Альянс Огрів"
 
 msgid "Dwarfbane"
-msgstr ""
+msgstr "Гномогубець"
 
-#, fuzzy
 msgid "Dragon Alliance"
 msgstr "Альянс Драконів"
 
-#, fuzzy
 msgid "Elven Alliance"
-msgstr "Ельфійський альянс"
+msgstr "Ельфійський Альянс"
 
 msgid "Kraeger defeated"
-msgstr ""
+msgstr "Краегер подоланий"
 
 msgid "Wayward Son"
-msgstr ""
+msgstr "Син Вейварда"
 
 msgid "Uncle Ivan"
-msgstr ""
+msgstr "Дядько Іван"
 
 msgid "Annexation"
-msgstr ""
+msgstr "Аннексія"
 
 msgid "Force of Arms"
-msgstr ""
+msgstr "Сила Зброї"
 
 msgid "Save the Dwarves"
-msgstr ""
+msgstr "Порятунок Гномів"
 
 msgid "Carator Mines"
-msgstr ""
+msgstr "Караторські Копальні"
 
 msgid "Turning Point"
-msgstr ""
+msgstr "Поворотний Момент"
 
 msgid "scenarioName|Defender"
-msgstr ""
+msgstr "Оборонець"
 
 msgid "Corlagon's Defense"
-msgstr ""
+msgstr "Оборона Корлагона"
 
 msgid "The Crown"
-msgstr ""
+msgstr "Корона"
 
 msgid "The Gauntlet"
-msgstr ""
+msgstr "Рукавиця"
 
 msgid "Betrayal"
-msgstr ""
+msgstr "Зрада"
 
 msgid "Final Justice"
-msgstr ""
+msgstr "Остаточне Правосуддя"
 
 msgid ""
 "Roland needs you to defeat the lords near his castle to begin his war of "
-"rebellion against his brother.  They are not allied with each other, so they "
-"will spend most of their time fighting with one another.  Victory is yours "
+"rebellion against his brother. They are not allied with each other, so they "
+"will spend most of their time fighting with one another. Victory is yours "
 "when you have defeated all of their castles and heroes."
 msgstr ""
+"Ви потрібні Роландові щоб перемогти лордів біля його замку, тим самим "
+"почавши його повстання проти брата. Вони не укладали союзу, то ж переважно "
+"воюватимуть одне з одним. Ви переможете, коли захопите всі їх замки та "
+"переможете всіх їх героїв."
 
 msgid ""
 "The local lords refuse to swear allegiance to Roland, and must be subdued. "
 "They are wealthy and powerful, so be prepared for a tough fight. Capture all "
 "enemy castles to win."
 msgstr ""
+"Місцеві лорди відмовились присягнути Роландові на вірність, тому їх треба "
+"підкорити. Вони багаті та могутні, то ж приготуйтесь до запеклого спротиву. "
+"Захопіть всі їх замки, щоб перемогти."
 
 msgid ""
 "Your task is to defend the Dwarves against Archibald's forces. Capture all "
 "of the enemy towns and castles to win, and be sure not to lose all of the "
 "dwarf towns at once, or the enemy will have won."
 msgstr ""
+"Ваше завдання полягає у захисті Гномів від сил Арчибальда. Захопіть всі "
+"ворожі міста та замки щоб перемогти, та переконайтесь, що ворог не "
+"володітиме всіма містами гномів одночасно, інакше він виграє."
 
 msgid ""
 "You will face four allied enemies in a straightforward fight for resource "
 "and treasure. Capture all of the enemy castles for victory."
 msgstr ""
+"Ви зітнетесь з чотирма об'єднаними ворогами у відкритому протистоянні за "
+"ресурси та скарби. Захопіть всі ворожі замки, щоб перемогти."
 
 msgid ""
 "Your enemies are allied against you and start close by, so be ready to come "
 "out fighting. You will need to own all four castles in this small valley to "
 "win."
 msgstr ""
+"Ваші вороги об'єднались, та розташували свої сили неподалік від вас, то ж "
+"готуйтесь до запеклої боротьби. Вам треба захопити всі чотири замки цієї "
+"маленької долини, щоб перемогти."
 
 msgid ""
 "The Sorceress' guild of Noraston has requested Roland's aid against an "
@@ -1127,6 +1110,10 @@ msgid ""
 "don't lose Noraston, or you'll lose the scenario. (Hint: There is an enemy "
 "castle on an island in the ocean.)"
 msgstr ""
+"Гільдія Чаклунок Норастону надіслала Роландові запит про допомогу у боротьбі "
+"проти атакуючих союзників Арчибальда. Захопіть всі ворожі замки щоб "
+"перемогти, та не втратьте Норастон, інакше програєте. (Підказка: Один з "
+"ворожих замків розташований в океані)."
 
 msgid ""
 "Gather as large an army as possible and capture the enemy castle within 8 "
@@ -1134,11 +1121,17 @@ msgid ""
 "to the enemy castle. Any troops you have in your army at the end of this "
 "scenario will be with you in the final battle."
 msgstr ""
+"Зберіть якомога більше військо та захопіть ворожий замок протягом 8 тижнів. "
+"Вам протистоїть лише один ворог, однак ви маєте пройти довгий шлях, щоб "
+"досягти його замку. Всі війська, що залишаться з вами після завершення цього "
+"сценарію будуть з вами у фінальному сценарії."
 
 msgid ""
 "Find the Crown before Archibald's heroes find it. Roland will need the Crown "
 "for the final battle against Archibald."
 msgstr ""
+"Знайдіть Корону перш, ніж це зроблять герої Арчибальда. Роландові "
+"знадобиться Корона для фінального бою проти Арчибальда."
 
 msgid ""
 "Three allied enemies stand before you and victory, including Lord Corlagon. "
@@ -1146,51 +1139,64 @@ msgid ""
 "enemy. Remember that capturing Lord Corlagon will ensure that he will not "
 "fight against you in the final scenario."
 msgstr ""
+"Три об'єднані союзом вороги стоять між вами та перемогою. Серед них є і Лорд "
+"Корлагон. Роланд знаходиться у замку на північний захід, і ви програєте, "
+"якщо він потрапить до ворожих рук. Пам'ятайте, що захоплення Лорда Корлагона "
+"не дозволить йому битись проти вас у фінальному сценарії."
 
 msgid ""
 "This is the final battle. Both you and your enemy are armed to the teeth, "
 "and all are allied against you. Capture Archibald to end the war!"
 msgstr ""
+"Це фінальна битва. Як і ви, ваші вороги озброєні до зубів, і всі вони у "
+"союзі проти вас. Захопіть Арчибальда щоб скінчити війну, та не втратьте "
+"Роланда у бою!"
 
 msgid ""
-"Switching sides leaves you with three castles against the enemy's one.  This "
+"Switching sides leaves you with three castles against the enemy's one. This "
 "battle will be the easiest one you will face for the rest of the war..."
 "traitor."
 msgstr ""
+"Перехід на інший бік залишив вашого ворога з одним замком проти ваших трьох. "
+"Ця битва буде найлегшою з тих, що чекають на вас у цій війні... зраднику."
 
 msgid "Barbarian Wars"
-msgstr ""
+msgstr "Варварські Війни"
 
 msgid "First Blood"
-msgstr ""
+msgstr "Перша Кров"
 
 msgid "Necromancers"
-msgstr ""
+msgstr "Некроманти"
 
 msgid "Slay the Dwarves"
-msgstr ""
+msgstr "Винищення Гномів"
 
 msgid "Country Lords"
-msgstr ""
+msgstr "Землі Володарів"
 
 msgid "Dragon Master"
-msgstr ""
+msgstr "Повелитель Драконів"
 
 msgid "Rebellion"
-msgstr ""
+msgstr "Повстання"
 
 msgid "Apocalypse"
-msgstr ""
+msgstr "Апокаліпсис"
 
 msgid "Greater Glory"
-msgstr ""
+msgstr "Найбільша Слава"
 
 msgid ""
-"King Archibald requires you to defeat the three enemies in this region.  "
-"They are not allied with one another, so they will spend most of their "
-"energy fighting amongst themselves.  You will win when you own all of the "
-"enemy castles and there are no more heroes left to fight."
+"King Archibald requires you to defeat the three enemies in this region. They "
+"are not allied with one another, so they will spend most of their energy "
+"fighting amongst themselves. You will win when you own all of the enemy "
+"castles and there are no more heroes left to fight."
 msgstr ""
+"Король Арчибальд вимагає, щоб ви здолали трьох ворогів у цьому регіоні. Вони "
+"не поєднані союзом, то ж більшу частину своїх сил витратять на боротьбу одне "
+"з одним. Ви переможете, коли заволодієте усіма ворожими замками, та не "
+"залишиться героїв, з якими можна битися."
 
 msgid ""
 "You must unify the barbarian tribes of the north by conquering them. As in "
@@ -1198,6 +1204,10 @@ msgid ""
 "more resources at their disposal. You will win when you own all of the enemy "
 "castles and there are no more heroes left to fight."
 msgstr ""
+"Ви мусите об'єднати варварські племена півночі, завоювавши їх. Як і в "
+"попередньому завданні, вороги не об'єднані проти вас, однак у них в "
+"розпорядженні більше ресурсів. Ви переможете, коли заволодієте усіма "
+"ворожими замками, і коли не залишиться героїв, з якими можна битися."
 
 msgid ""
 "Do-gooder wizards have taken the Necromancers' castle. You must retake it to "
@@ -1205,6 +1215,11 @@ msgid ""
 "have no castle and must take one within 7 days, or lose this battle. (Hint: "
 "The nearest castle is to the southeast.)"
 msgstr ""
+"Добрі чарівники захопили замок Некромантів. Ви маєте повернути його, щоб "
+"досягти перемоги. Пам'ятайте, що хоча ви й починаєте з потужним військом, у "
+"вас не буде замку, то ж ви мусите захопити будь-який замок протягом 7 днів, "
+"інакше програєте. (Підказка: Найближчий замок знаходиться на північний схід "
+"від вас)."
 
 msgid ""
 "The dwarves need conquering before they can interfere in King Archibald's "
@@ -1212,18 +1227,28 @@ msgid ""
 "so be ready for attack from multiple directions. You must capture all of the "
 "enemy towns and castles to claim victory."
 msgstr ""
+"Гномів потрібно завоювати перш, ніж вони зможуть втрутитись у плани Короля "
+"Арчибальда. Сили Роланда мають більше ніж одного героя, та починають з "
+"багатьма містами, то ж будьте готові до нападів з різних напрямків. Ви "
+"мусите захопити всі ворожі міста та замки, щоб досягти перемоги."
 
 msgid ""
 "You must put down a peasant revolt led by Roland's forces. All are allied "
 "against you, but you have Lord Corlagon, an experienced hero, to help you. "
 "Capture all enemy castles to win."
 msgstr ""
+"Ви маєте покласти край селянському повстанню, очоленому силами Роланда. Всі "
+"об'єднані проти вас, однак на вашому боці Лорд Корлагон, досвідчений герой, "
+"що допоможе вам. Захопіть всі ворожі замки, щоб перемогти."
 
 msgid ""
 "There are two enemies allied against you in this mission. Both are well "
 "armed and seek to evict you from their island. Avoid them and capture Dragon "
 "City to win."
 msgstr ""
+"У цьому завданні проти вас об'єдналися двоє ворогів. Обидва вони добре "
+"озброєні, та шукають способу вигнати вас з їх острова. Уникайте їх, та "
+"захопіть Місто Драконів щоб перемогти."
 
 msgid ""
 "Your orders are to conquer the country lords that have sworn to serve "
@@ -1231,56 +1256,71 @@ msgid ""
 "without a castle, you must hurry to capture one before the end of the week. "
 "Capture all enemy castles for victory."
 msgstr ""
+"Вам наказано завоювати землі володарів, що поклялися служити Роланду. Всі "
+"ворожі замки об'єднані проти вас. Оскільки ви починаєте без замку, ви маєте "
+"поквапитися та захопити один перш, ніж мине тиждень. Захопіть всі ворожі "
+"замки задля перемоги."
 
 msgid ""
 "Find the Crown before Roland's heroes find it. Archibald will need the Crown "
 "for the final battle against Roland."
 msgstr ""
+"Знайдіть Корону перш, ніж це зроблять герої Роланда. Арчибальду знадобиться "
+"Корона у фінальній битві проти Роланда."
 
 msgid ""
 "This is the final battle. Both you and your enemy are armed to the teeth, "
 "and all are allied against you. Capture Roland to win the war, and be sure "
 "not to lose Archibald in the fight!"
 msgstr ""
+"Це фінальна битва. Як і ви, ваші вороги озброєні до зубів, і всі вони у "
+"союзі проти вас. Захопіть Роланда щоб скінчити війну, та переконайтесь, що "
+"ви не загубите Арчибальда у битві!"
 
 msgid "Arrow's Flight"
-msgstr ""
+msgstr "Політ Стріли"
 
 msgid "Island of Chaos"
-msgstr ""
+msgstr "Острів Хаосу"
 
 msgid "The Abyss"
-msgstr ""
+msgstr "Безодня"
 
 msgid "Uprising"
-msgstr ""
+msgstr "Повстання"
 
 msgid "Aurora Borealis"
-msgstr ""
+msgstr "Північне Сяйво"
 
 msgid "Betrayal's End"
-msgstr ""
+msgstr "Кінець Зради"
 
 msgid "Corruption's Heart"
-msgstr ""
+msgstr "Серце Скверни"
 
 msgid "The Giant's Pass"
-msgstr ""
+msgstr "Перевал Велетнів"
 
 msgid ""
 "Subdue the unruly local lords in order to provide the Empire with facilities "
 "to operate in this region."
 msgstr ""
+"Підкоріть непокірних місцевих лордів, щоб забезпечити Імперії можливості для "
+"діяльності у цьому регіоні."
 
 msgid ""
 "Eliminate all opposition in this area. Then the first piece of the artifact "
 "will be yours."
 msgstr ""
+"Усуньте весь спротив у цих землях. Тоді ви заволодієте першою частиною "
+"артефакту."
 
 msgid ""
 "The sorceresses to the northeast are rebelling! For the good of the empire "
 "you must quash their feeble uprising on your way to the mountains."
 msgstr ""
+"Чаклунки на північний схід повстали! Задля блага вашої імперії ви маєте "
+"придушити їх дрібне повстання на шляху до гір."
 
 msgid ""
 "Having prepared for your arrival, Kraeger has arranged for a force of "
@@ -1288,866 +1328,833 @@ msgid ""
 "before the first day of the third week, or the Necromancers will be too "
 "strong for you."
 msgstr ""
+"Підготувавшись до вашого прибуття, Краегер зібрав сили некромантів щоб "
+"перешкодити вашим пошукам. Ви маєте захопити замок Скабсдейл перш ніж "
+"настане перший день третього тижня, інакше Некроманти стануть надто "
+"могутніми для вас."
 
 msgid ""
 "The barbarian despot in this area is, as yet, ignorant of your presence. "
 "Quickly, build up your forces before you are discovered and attacked! Secure "
 "the region by subduing all enemy forces."
 msgstr ""
+"Варварський деспот, що править цими землями, досі не знає про вашу "
+"присутність. Якнайшвидше наростіть свої сили перш, ніж вас розкриють та "
+"атакують! Захистіть регіон, впокоривши всі ворожі сили."
 
 msgid ""
 "The Empire is weak in this region. You will be unable to completely subdue "
 "all forces in this area, so take what you can before reprisal strikes. "
 "Remember, your true goal is to claim the Helmet of Anduran."
 msgstr ""
+"Імперія слабка у цьому регіоні. Ви не зможете здолати всі наявні ворожі "
+"сили, тому хапайте все, що зможете перш, ніж вам завдадуть удару у "
+"відповідь. Пам'ятайте, що ваша головна мета - заволодіти Шоломом Андурана."
 
 msgid "For the good of the Empire, eliminate Kraeger."
-msgstr ""
+msgstr "На благо Імперії знищте Краегера."
 
 msgid ""
 "At last, you have the opportunity and the facilities to rid the Empire of "
 "the necromancer's evil. Eradicate them completely, and you will be sung as a "
 "hero for all time."
 msgstr ""
+"Нарешті, у вас є можливість та засоби щоб позбавити Імперію від зла "
+"некромантів. Викорініть їх, щоб і сліду не лишилось, і вас оспівуватимуть як "
+"героя всіх часів."
 
 msgid "Border Towns"
-msgstr ""
+msgstr "Прикордонні Міста"
 
 msgid "Conquer and Unify"
-msgstr ""
+msgstr "Завойовувати та Об'єднувати"
 
 msgid "Crazy Uncle Ivan"
-msgstr ""
+msgstr "Божевільний Дядько Іван"
 
 msgid "The Wayward Son"
-msgstr ""
+msgstr "Блудний Син"
 
 msgid "Ivory Gates"
-msgstr ""
+msgstr "Брама Слонової Кістки"
 
 msgid "The Elven Lands"
-msgstr ""
+msgstr "Ельфійські Землі"
 
 msgid "The Epic Battle"
-msgstr ""
+msgstr "Епічна Битва"
 
 msgid "The Southern War"
-msgstr ""
+msgstr "Південна Війна"
 
 msgid ""
 "Conquer and unite all the enemy tribes. Don't lose the hero Jarkonas, the "
 "forefather of all descendants."
 msgstr ""
+"Завоюйте та об'єднайте ворожі племена. Не втратьте героя Джарконаса, "
+"прабатька всіх нащадків."
 
 msgid ""
 "Your rival, the Kingdom of Harondale, is attacking weak towns on your "
 "border! Recover from their first strike and crush them completely!"
 msgstr ""
+"Ваш суперник, Королівство Харондейл, атакує слабкі міста на ваших кордонах! "
+"Оговтайтесь від їх першого удару та розбийте їх вщент!"
 
 msgid ""
 "Find your wayward son Joseph who is rumored to be living in the desolate "
 "lands. Do it before the first day of the third month or it will be of no "
 "help to your family."
 msgstr ""
+"Знайдіть вашого блудного сина Джозефа, що, за чутками, живе у спустошених "
+"землях. Зробіть це перш, ніж настане перший день третього місяця, інакше "
+"вашій родині вже не можна буде допомогти."
 
 msgid ""
 "Rescue your crazy uncle Ivan. Find him before the first day of the fourth "
 "month or it will be no help to your kingdom."
 msgstr ""
+"Врятуйте вашого божевільного дядька Івана. Знайдіть його до настання першого "
+"дня четвертого місяця, інакше вашому королівству вже не можна буде допомогти."
 
 msgid ""
 "Destroy the barbarians who are attacking the southern border of your "
 "kingdom! Recover your fallen towns, and then invade the jungle kingdom. "
 "Leave no enemy standing."
 msgstr ""
+"Знищте варварів, що атакують південні кордони вашого королівства! Відновіть "
+"ваші захоплені міста, а тоді наступайте на королівство у джунглях. Не "
+"лишайте жодного ворога в живих."
 
 msgid "Retake the castle of Ivory Gates, which has fallen due to treachery."
-msgstr ""
+msgstr "Поверніть замок Брама Слонової Кістки, що був втрачений через зраду."
 
 msgid ""
 "Gain the favor of the elves. They will not allow trees to be chopped down, "
 "so they will send you wood every 2 weeks. You must complete your mission "
 "before the first day of the seventh month, or the kingdom will surely fall."
 msgstr ""
+"Завоюйте прихильність ельфів. Вони не дозволяють рубати дерева, однак "
+"надсилатимуть вам деревину кожні 2 тижні. Ви маєте виконати вашу місію до "
+"першого дня сьомого місяця, інакше королівство напевне загине."
 
 msgid ""
 "This is the final battle against your rival kingdom of Harondale. Eliminate "
 "everyone, and don't lose the hero Jarkonas VI."
 msgstr ""
+"Це остання битва проти вашого суперника - королівства Харондейл. Винищте "
+"усіх, але не втратьте героя Джарконаса Шостого."
 
 msgid "Fount of Wizardry"
-msgstr ""
+msgstr "Джерело Магії"
 
 msgid "Power's End"
-msgstr ""
+msgstr "Кінець Могутності"
 
 msgid "The Eternal Scrolls"
-msgstr ""
+msgstr "Вічні Сувої"
 
 msgid "The Shrouded Isles"
-msgstr ""
+msgstr "Закутані Острови"
 
 msgid ""
 "Your mission is to vanquish the warring mages in the magical Shrouded Isles. "
 "The completion of this task will give you a fighting chance against your "
 "rivals."
 msgstr ""
+"Ваше завдання - знищити ворогуючих магів на магічних Закутаних Островах. "
+"Виконання цього завдання дасть вам шанс перемогти ваших суперників."
 
 msgid ""
 "The location of the great library has been discovered! You must make your "
 "way to it, and reclaim the city of Chronos in which it lies."
 msgstr ""
+"Місцезнаходження великої бібліотеки розкрите! Ви маєте прокласти свій шлях "
+"до неї, та повернути місто Хронос, в якому вона розташована."
 
+#, fuzzy
 msgid ""
 "Find the Orb of negation, which is said to be buried in this land. There are "
-"clues inscribed on stone obelisks which will help lead you to your price. "
-"Find the orb before the first day of the sixth month, or your rivals will "
+"clues inscribed on stone obelisks which will help lead you to your prize. "
+"Find the Orb before the first day of the sixth month, or your rivals will "
 "surely have gotten to the fount before you."
 msgstr ""
+"Знайдіть Сферу Заперечення, що, як кажуть, похована десь у цих землях. "
+"Підказки висічені на кам'яних обелісках, що допоможуть вам досягти мети. "
+"Знайдіть Сферу раніше, ніж мине шостий місяць, інакше ваші суперники точно "
+"знайдуть її раніше за вас."
 
 msgid ""
 "You must take control of the castle of Magic, where the fount of wizardry "
 "lies. Do this and your victory will be supreme."
 msgstr ""
+"Ви мусите захопити замок Магія, у якому знаходиться Джерело Магії. Зробіть "
+"це, і ваша перемога буде остаточною."
 
 msgid "Blood is Thicker"
-msgstr ""
+msgstr "Кров Густіша"
 
 msgid "King and Country"
-msgstr ""
+msgstr "Король та Країна"
 
 msgid "Pirate Isles"
-msgstr ""
+msgstr "Піратські Острови"
 
 msgid "Stranded"
-msgstr ""
+msgstr "На Мілині"
 
 msgid ""
 "Capture the town on the island off the southeast shore in order to construct "
 "a boat and travel back towards the mainland. Do not lose the hero Gallavant."
 msgstr ""
+"Захопіть місто на острові біля південно-східного берега, щоб збудувати "
+"корабель та відбути назад на материк. Не втратьте героя - Галлаванта."
 
 msgid ""
 "Find and defeat Martine, the pirate leader, who resides in Pirates Cove. Do "
 "not lose Gallavant or your quest will be over."
 msgstr ""
+"Знайдіть та здолайте Мартіна, піратського ватага, що мешкає у Піратській "
+"Бухті. Не втратьте Галлаванта, інакше ваші пошуки завершаться."
 
 msgid ""
 "Eliminate all the other forces who oppose the rule of Lord Alberon. "
 "Gallavant must not die."
 msgstr ""
+"Знищте всі сили, що протистоять Лорду Альберону. Галлавант мусить вціліти."
 
 msgid ""
 "Overthrow the entrenched monarchy of Lord Alberon, and claim all the land in "
 "your name. Gallavant must not die."
 msgstr ""
+"Поваліть усталену монархію Лорда Альберона, та захопіть цей край для себе. "
+"Галлавант мусить вціліти."
 
 msgid " bane"
-msgstr ""
+msgstr " згуба"
 
 msgid " alliance"
-msgstr ""
+msgstr " альянс"
 
 msgid "Carry-over forces"
-msgstr ""
+msgstr "Збережені війська"
 
 msgid " bonus"
-msgstr ""
+msgstr " бонус"
 
 msgid " defeated"
-msgstr ""
+msgstr " подоланий"
 
 msgid " will always run away from your army."
-msgstr ""
+msgstr " завжди тікатимуть від вашого війська."
 
 msgid " will be willing to join your army."
-msgstr ""
+msgstr " завжди волітимуть приєднатись до вашого війська."
 
 msgid "\"%{artifact}\" artifact will be carried over the scenario."
-msgstr ""
+msgstr "Артефакт \"%{artifact}\" буде перенесений до сценарію."
 
 msgid "The army will be carried over the scenario."
-msgstr ""
+msgstr "Військо буде перенесене до сценарію."
 
 msgid "The kingdom will have +%{count} %{resource} each day."
-msgstr ""
+msgstr "Королівство отримає додатковий прибуток: + %{count} %{resource} щодня."
 
 msgid "\"%{spell}\" spell will be carried over the scenario."
-msgstr ""
+msgstr "Закляття \"%{spell}\" буде перенесено до сценарію."
 
 msgid "%{hero} can be hired in the scenario."
-msgstr ""
+msgstr "Герой %{hero} буде доступним для найму у сценарії."
 
 msgid ""
 "%{hero} has been defeated and will not appear in the subsequent scenarios."
 msgstr ""
+"Герой %{hero} був подоланий, і не зможе з'явитися у подальших сценаріях."
 
 msgid "The dwarves recognize their allies and gladly join your forces."
 msgstr ""
+"Гноми розпізнали свого союзника, та з радістю приєднаються до ваших сил."
 
 msgid "The ogres recognize you as the Dwarfbane and lumber over to join you."
-msgstr ""
+msgstr "Огри впізнали у вас Гномогубця, і воліють приєднатись до вас."
 
 msgid ""
 "The dragons, snarling and growling, agree to join forces with you, their "
 "'Ally'."
 msgstr ""
+"З незадоволеним гарчанням дракони погоджуються приєднатись до вас, їх "
+"\"союзника\"."
 
 msgid ""
 "As you approach the group of elves, their leader calls them all to "
-"attention.  He shouts to them, \"Who of you is brave enough to join this "
-"fearless ally of ours?\"  The group explodes with cheers as they run to join "
+"attention. He shouts to them, \"Who of you is brave enough to join this "
+"fearless ally of ours?\" The group explodes with cheers as they run to join "
 "your ranks."
 msgstr ""
+"Коли ви наближаєтесь до групи ельфів, їх лідер просить уваги та звертається "
+"до них: \"Хто з вас достатньо хоробрий, щоб приєднатись до нашого "
+"безстрашного союзника?\" Група вибухає радісними вітаннями, вливаючись до "
+"ваших лав."
 
 msgid ""
-"The dwarves hail you, \"Any friend of Roland is a friend of ours.  You may "
+"The dwarves hail you, \"Any friend of Roland is a friend of ours. You may "
 "pass.\""
-msgstr ""
+msgstr "Гноми вітають вас: \"Друзі Роланда - наші друзі. Ви можете пройти\"."
 
 msgid ""
 "The ogres give you a grunt of recognition, \"Archibald's allies may pass.\""
 msgstr ""
+"Огри схвально рохкають, впізнавши вас: \"Союзники Арчібальда можуть пройти\"."
 
 msgid ""
-"The dragons see you and call out.  \"Our alliance with Archibald compels us "
-"to join you.  Unfortunately you have no room.  A pity!\"  They quickly "
-"scatter."
+"The dragons see you and call out. \"Our alliance with Archibald compels us "
+"to join you. Unfortunately you have no room. A pity!\" They quickly scatter."
 msgstr ""
+"Дракони, помітивши ваше військо, звернулись до вас: \"Наш альянс з "
+"Арчібальдом змушує нас приєднатись до вас. Шкода, що у вас немає місця. Як "
+"прикро!\" - з цими словами вони швидко розлітаються геть."
 
 msgid ""
-"The elves stand at attention as you approach.  Their leader calls to you and "
-"says, \"Let us not impede your progress, ally!  Move on, and may victory be "
+"The elves stand at attention as you approach. Their leader calls to you and "
+"says, \"Let us not impede your progress, ally! Move on, and may victory be "
 "yours.\""
 msgstr ""
+"Ельфи уважно дивляться на вас, поки ви наближаєтесь. Їх лідер звернувся до "
+"вас: \"Ми не заважатимемо вашому просуванню, союзнику! Йдіть вперед, і нехай "
+"перемога буде за вами\"."
 
-#, fuzzy
 msgid "\"The Dwarfbane!!!!, run for your lives.\""
-msgstr "\"Гноможер!!!!, рятуйтесь хто може.\""
+msgstr "\"Гномогубець!!!! Рятуйтесь хто може!\""
 
-#, fuzzy
 msgid "campaignBonus|Animate Dead"
-msgstr "Підняття немертвих"
+msgstr "Оживлення Мерців"
 
-#, fuzzy
 msgid "campaignBonus|Chain Lightning"
-msgstr "Цеп блискавок"
+msgstr "Ланцюгова Блискавка"
 
-#, fuzzy
 msgid "campaignBonus|Fireblast"
-msgstr "Вогняний вибух"
+msgstr "Вогняний Вибух"
 
-#, fuzzy
 msgid "campaignBonus|Mass Curse"
-msgstr "Масове прокляття"
+msgstr "Масове Прокляття"
 
-#, fuzzy
 msgid "campaignBonus|Mass Haste"
-msgstr "Масове прискорення"
+msgstr "Масовий Поспіх"
 
-#, fuzzy
 msgid "campaignBonus|Mirror Image"
-msgstr "Зеркальний фантом"
+msgstr "Дзеркальний Фантом"
 
-#, fuzzy
 msgid "campaignBonus|Resurrect"
 msgstr "Воскресіння"
 
-#, fuzzy
 msgid "campaignBonus|Steelskin"
-msgstr "Сталева кожа"
+msgstr "Сталева Шкіра"
 
-#, fuzzy
 msgid "campaignBonus|Summon Earth"
-msgstr "Клич Землі"
+msgstr "Виклик Землі"
 
-#, fuzzy
 msgid "campaignBonus|View Heroes"
-msgstr "Показ героїв"
+msgstr "Огляд Героїв"
 
-#, fuzzy
 msgid "campaignBonus|Ballista"
 msgstr "Баліста"
 
-#, fuzzy
 msgid "campaignBonus|Black Pearl"
-msgstr "Чорна перлина"
+msgstr "Чорна Перлина"
 
 msgid "campaignBonus|Caster's Bracelet"
-msgstr ""
+msgstr "Браслет Заклинателя"
 
-#, fuzzy
 msgid "campaignBonus|Defender Helm"
-msgstr "Шолом захисника"
+msgstr "Шолом Захисника"
 
-#, fuzzy
 msgid "campaignBonus|Breastplate"
 msgstr "Нагрудник"
 
-#, fuzzy
 msgid "campaignBonus|Dragon Sword"
-msgstr "Меч дракона"
+msgstr "Меч Дракона"
 
 msgid "campaignBonus|Fizbin Medal"
-msgstr ""
+msgstr "Медаль Фізбін"
 
-#, fuzzy
 msgid "campaignBonus|Foremost Scroll"
-msgstr "Вищий сувій"
+msgstr "Древній Сувій"
 
-#, fuzzy
 msgid "campaignBonus|Gauntlets"
-msgstr "Баліста"
+msgstr "Рукавиця"
 
-#, fuzzy
 msgid "campaignBonus|Hideous Mask"
-msgstr "Мерзенна маска"
+msgstr "Мерзенна Маска"
 
-#, fuzzy
 msgid "campaignBonus|Mage's Ring"
-msgstr "Кільце Мага"
+msgstr "Магічний Перстень"
 
-#, fuzzy
 msgid "campaignBonus|Major Scroll"
-msgstr "Великий сувій"
+msgstr "Великий Сувій"
 
-#, fuzzy
 msgid "campaignBonus|Medal of Honor"
-msgstr "Почесну медаль"
+msgstr "Медаль за Відзнаку"
 
-#, fuzzy
 msgid "campaignBonus|Medal of Valor"
-msgstr "Медаль за доблесть"
+msgstr "Медаль за Відвагу"
 
-#, fuzzy
 msgid "campaignBonus|Minor Scroll"
-msgstr "Малий сувій"
+msgstr "Малий Сувій"
 
-#, fuzzy
 msgid "campaignBonus|Nomad Boots"
-msgstr "Чоботи кочівника"
+msgstr "Чоботи Кочівника"
 
-#, fuzzy
 msgid "campaignBonus|Power Axe"
-msgstr "Сокира Сили"
+msgstr "Силова Сокира"
 
-#, fuzzy
 msgid "campaignBonus|Spiked Shield"
-msgstr "Щит із шипами"
+msgstr "Шпичастий Щит"
 
-#, fuzzy
 msgid "campaignBonus|Stealth Shield"
-msgstr "Незримий щит"
+msgstr "Незримий Щит"
 
-#, fuzzy
 msgid "campaignBonus|Tax Lien"
-msgstr "Податкова грамота"
+msgstr "Податкова Застава"
 
-#, fuzzy
 msgid "campaignBonus|Thunder Mace"
-msgstr "Громова булава"
+msgstr "Громова Булава"
 
-#, fuzzy
 msgid "campaignBonus|Traveler's Boots"
-msgstr "Чоботи мандрівника"
+msgstr "Чоботи Мандрівника"
 
-#, fuzzy
 msgid "campaignBonus|White Pearl"
-msgstr "Біла перлина"
+msgstr "Біла Перлина"
 
-#, fuzzy
 msgid "campaignBonus|Basic Archery"
 msgstr "Базова Стрільба"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Archery"
 msgstr "Просунута Стрільба"
 
-#, fuzzy
 msgid "campaignBonus|Expert Archery"
 msgstr "Експертна Стрільба"
 
-#, fuzzy
 msgid "campaignBonus|Basic Ballistics"
 msgstr "Базова Балістика"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Ballistics"
 msgstr "Просунута Балістика"
 
-#, fuzzy
 msgid "campaignBonus|Expert Ballistics"
 msgstr "Експертна Балістика"
 
-#, fuzzy
 msgid "campaignBonus|Basic Diplomacy"
 msgstr "Базова Дипломатія"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Diplomacy"
 msgstr "Просунута Дипломатія"
 
-#, fuzzy
 msgid "campaignBonus|Expert Diplomacy"
 msgstr "Експертна Дипломатія"
 
-#, fuzzy
 msgid "campaignBonus|Basic Eagle Eye"
-msgstr "Базовий Орлиний зір"
+msgstr "Базовий Орлиний Зір"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Eagle Eye"
-msgstr "Просунутий Орлиний зір"
+msgstr "Просунутий Орлиний Зір"
 
-#, fuzzy
 msgid "campaignBonus|Expert Eagle Eye"
-msgstr "Експертний Орлиний зір"
+msgstr "Експертний Орлиний Зір"
 
-#, fuzzy
 msgid "campaignBonus|Basic Estates"
 msgstr "Базова Шляхетність"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Estates"
 msgstr "Просунута Шляхетність"
 
-#, fuzzy
 msgid "campaignBonus|Expert Estates"
 msgstr "Експертна Шляхетність"
 
-#, fuzzy
 msgid "campaignBonus|Basic Leadership"
 msgstr "Базове Лідерство"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Leadership"
 msgstr "Просунуте Лідерство"
 
-#, fuzzy
 msgid "campaignBonus|Expert Leadership"
 msgstr "Експертне Лідерство"
 
-#, fuzzy
 msgid "campaignBonus|Basic Logistics"
 msgstr "Базова Логістика"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Logistics"
 msgstr "Просунута Логістика"
 
-#, fuzzy
 msgid "campaignBonus|Expert Logistics"
 msgstr "Експертна Логістика"
 
-#, fuzzy
 msgid "campaignBonus|Basic Luck"
 msgstr "Базова Удача"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Luck"
 msgstr "Просунута Удача"
 
-#, fuzzy
 msgid "campaignBonus|Expert Luck"
 msgstr "Еспертна Удача"
 
-#, fuzzy
 msgid "campaignBonus|Basic Mysticism"
 msgstr "Базовий Містицизм"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Mysticism"
 msgstr "Просунутий Містицизм"
 
-#, fuzzy
 msgid "campaignBonus|Expert Mysticism"
 msgstr "Експертний Містицизм"
 
-#, fuzzy
 msgid "campaignBonus|Basic Navigation"
 msgstr "Базова Навігація"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Navigation"
 msgstr "Просунута Навігація"
 
-#, fuzzy
 msgid "campaignBonus|Expert Navigation"
 msgstr "Експертна Навігація"
 
-#, fuzzy
 msgid "campaignBonus|Basic Necromancy"
 msgstr "Базова Некромантія"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Necromancy"
 msgstr "Просунута Некромантія"
 
-#, fuzzy
 msgid "campaignBonus|Expert Necromancy"
 msgstr "Експертна Некромантія"
 
-#, fuzzy
 msgid "campaignBonus|Basic Pathfinding"
 msgstr "Базовий Пошук шляху"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Pathfinding"
 msgstr "Просунутий Пошук шляху"
 
-#, fuzzy
 msgid "campaignBonus|Expert Pathfinding"
 msgstr "Експертний Пошук шляху"
 
-#, fuzzy
 msgid "campaignBonus|Basic Scouting"
 msgstr "Базова Розвідка"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Scouting"
 msgstr "Просунута Розвідка"
 
-#, fuzzy
 msgid "campaignBonus|Expert Scouting"
 msgstr "Експертна Розвідка"
 
-#, fuzzy
 msgid "campaignBonus|Basic Wisdom"
 msgstr "Базова Мудрість"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Wisdom"
 msgstr "Просунута Мудрість"
 
-#, fuzzy
 msgid "campaignBonus|Expert Wisdom"
 msgstr "Експертна Мудрість"
 
-#, fuzzy
 msgid ""
 "The main hero will have \"%{artifact}\" artifact at the start of the "
 "scenario."
-msgstr "У головного героя буде артефакт \"%{artifact}\" на початку сценарію."
+msgstr "Головний герой отримає артефакт \"%{artifact}\" на початку сценарію."
 
-#, fuzzy
 msgid ""
 "The kingdom will receive %{amount} additional %{resource} at the start of "
 "the scenario."
 msgstr ""
-"Королівство буде мати додатково %{amount} %{resource} на початку сценарію."
+"На початку сценарію королівство отримає на %{amount} од. більше ресурсу: "
+"%{resource}."
 
-#, fuzzy
 msgid ""
 "The kingdom will have %{amount} less %{resource} at the start of the "
 "scenario."
 msgstr ""
-"Королівство буде мати на %{amount} менше %{resource} на початку сценарію."
+"На початку сценарію королівство отримає на %{amount} од. менше ресурсу: "
+"%{resource}."
 
-#, fuzzy
 msgid ""
 "The main hero will have %{count} %{monster} at the start of the scenario."
-msgstr "Головний герой буде мати %{count} %{monster} на початку сценарію."
+msgstr "Головний герой отримає %{count} %{monster} на початку сценарію."
 
-#, fuzzy
 msgid ""
 "The main hero will have \"%{spell}\" spell at the start of the scenario."
 msgstr "Головний герой буде знати чари \"%{spell}\" на початку сценарію."
 
-#, fuzzy
 msgid "The starting race of the scenario will be %{race}."
 msgstr "Початковою расою сценарію буде %{race}."
 
-#, fuzzy
 msgid ""
 "The main hero will have additional %{count} %{skill} at the start of the "
 "scenario."
-msgstr ""
-"Головний герой буде мати додатково %{count} %{skill} на початку сценарію."
+msgstr "Головний герой матиме додатково %{count} %{skill} на початку сценарію."
 
-#, fuzzy
 msgid "The main hero will have %{skill} at the start of the scenario."
-msgstr "Головний герой буде мати %{skill} на початку сценарію."
+msgstr "Головний герой матиме %{skill} на початку сценарію."
 
-#, fuzzy
 msgid "Roland"
 msgstr "Роланд"
 
-#, fuzzy
 msgid "Archibald"
 msgstr "Арчібальд"
 
-#, fuzzy
 msgid "The Price of Loyalty"
 msgstr "Ціна Вірності"
 
-#, fuzzy
 msgid "Voyage Home"
 msgstr "Подорож Додому"
 
-#, fuzzy
 msgid "Wizard's Isle"
-msgstr "Острів Чаклуна"
+msgstr "Острів Мага"
 
-#, fuzzy
 msgid "Descendants"
-msgstr "Селяни"
+msgstr "Нащадки"
 
-#, fuzzy
 msgid "The %{building} produces %{monster}."
-msgstr "У %{building} можна придбати %{monster}."
+msgstr "%{building} - житло, в якому доступні для найму %{monster}."
 
-#, fuzzy
 msgid "Requires:"
 msgstr "Потрібно:"
 
-#, fuzzy
-msgid "Cannot build. You have already built here today."
-msgstr "Неможливо будувати. Ви вже будували сьогодні."
+msgid "Exit this menu without doing anything."
+msgstr "Вийти з меню без змін."
 
-#, fuzzy
+msgid "Cannot build. You have already built here today."
+msgstr "Неможливо будувати. Ви вже будували тут сьогодні."
+
 msgid "For this action it is necessary to build a castle first."
 msgstr "Для цієї дії треба спочатку побудувати замок."
 
-#, fuzzy
-msgid "Cannot build %{name} because castle is too far from water."
+msgid "Cannot build %{name} because the castle is too far away from an ocean."
 msgstr "Неможливо побудувати %{name}, бо замок далеко від води."
 
 msgid "disable build."
-msgstr ""
+msgstr "будівництво недоступне."
 
 msgid "Cannot afford %{name}."
-msgstr ""
+msgstr "%{name} - споруда потребує більше ресурсів."
 
 msgid "%{name} is already built."
-msgstr ""
+msgstr "У місті вже є %{name}."
 
 msgid "Cannot build %{name}."
-msgstr ""
+msgstr "%{name} - будівництво неможливе."
 
 msgid "Build %{name}."
-msgstr ""
+msgstr "Звести споруду: %{name}"
 
 msgid "Blackridge"
-msgstr ""
+msgstr "Блекрідж"
 
 msgid "Hillstone"
-msgstr ""
+msgstr "Хілстон"
 
 msgid "Pinehurst"
-msgstr ""
+msgstr "Пайнхерст"
 
 msgid "Whiteshield"
-msgstr ""
+msgstr "Вайтшилд"
 
 msgid "Woodhaven"
-msgstr ""
+msgstr "Вудхевен"
 
 msgid "Blackwind"
-msgstr ""
+msgstr "Блеквінд"
 
 msgid "Bloodreign"
-msgstr ""
+msgstr "Блодрейн"
 
 msgid "Dragontooth"
-msgstr ""
+msgstr "Драгонтуф"
 
 msgid "Greywind"
-msgstr ""
+msgstr "Грейвінд"
 
 msgid "Portsmith"
-msgstr ""
+msgstr "Портсміт"
 
 msgid "Atlantium"
-msgstr ""
+msgstr "Атлантіум"
 
 msgid "Middle Gate"
-msgstr ""
+msgstr "Мідлгейт"
 
 msgid "Sansobar"
-msgstr ""
+msgstr "Санзобар"
 
 msgid "Tundara"
-msgstr ""
+msgstr "Тундара"
 
 msgid "Vulcania"
-msgstr ""
+msgstr "Вулканія"
 
 msgid "Baywatch"
-msgstr ""
+msgstr "Бейвотч"
 
 msgid "Fountainhead"
-msgstr ""
+msgstr "Фаунтейнхед"
 
 msgid "Vertigo"
-msgstr ""
+msgstr "Вертіго"
 
 msgid "Wildabar"
-msgstr ""
+msgstr "Вайлдабар"
 
 msgid "Winterkill"
-msgstr ""
+msgstr "Вінтеркілл"
 
 msgid "Brindamoor"
-msgstr ""
+msgstr "Бріндамур"
 
 msgid "Lakeside"
-msgstr ""
+msgstr "Лейксайд"
 
 msgid "Nightshadow"
-msgstr ""
+msgstr "Найтшедоу"
 
 msgid "Olympus"
-msgstr ""
+msgstr "Олімпус"
 
 msgid "Sandcaster"
-msgstr ""
+msgstr "Сендкастер"
 
-#, fuzzy
 msgid "Alamar"
 msgstr "Аламар"
 
 msgid "Burlock"
-msgstr ""
+msgstr "Бурлок"
 
 msgid "Dragadune"
-msgstr ""
+msgstr "Драгадун"
 
-#, fuzzy
 msgid "Kalindra"
 msgstr "Каліндра"
 
-#, fuzzy
 msgid "Xabran"
 msgstr "Ксабран"
 
 msgid "Algary"
-msgstr ""
+msgstr "Алгарі"
 
 msgid "Basenji"
-msgstr ""
+msgstr "Басенджі"
 
 msgid "Blackfang"
-msgstr ""
+msgstr "Блекфанг"
 
 msgid "New Dawn"
-msgstr ""
+msgstr "Нью-Давн"
 
 msgid "Sorpigal"
-msgstr ""
+msgstr "Сорпігал"
 
 msgid "Avone"
-msgstr ""
+msgstr "Ейвон"
 
 msgid "Big Oak"
-msgstr ""
+msgstr "Біг-Оук"
 
-#, fuzzy
 msgid "Chandler"
 msgstr "Чандлер"
 
 msgid "Erliquin"
-msgstr ""
+msgstr "Ерліквін"
 
 msgid "Hampshire"
-msgstr ""
+msgstr "Гемпшир"
 
-#, fuzzy
 msgid "Antioch"
 msgstr "Антіох"
 
-#, fuzzy
 msgid "Avalon"
 msgstr "Авалон"
 
 msgid "Roc Haven"
-msgstr ""
+msgstr "Рокхевен"
 
 msgid "South Mill"
-msgstr ""
+msgstr "Сауфмілл"
 
 msgid "Weed Patch"
-msgstr ""
+msgstr "Уідпатч"
 
 msgid "Brownston"
-msgstr ""
+msgstr "Браунстон"
 
 msgid "Hilltop"
-msgstr ""
+msgstr "Хіллтоп"
 
 msgid "Weddington"
-msgstr ""
+msgstr "Веддінгтон"
 
 msgid "Westfork"
-msgstr ""
+msgstr "Вестфорк"
 
 msgid "Whittingham"
-msgstr ""
+msgstr "Уіттінгем"
 
 msgid "Cathcart"
-msgstr ""
+msgstr "Кеткарт"
 
 msgid "Elk's Head"
-msgstr ""
+msgstr "Елксхед"
 
 msgid "Roscomon"
-msgstr ""
+msgstr "Роскомон"
 
 msgid "Sherman"
-msgstr ""
+msgstr "Шерман"
 
 msgid "Yorksford"
-msgstr ""
+msgstr "Йорксфорд"
 
 msgid "Blackburn"
-msgstr ""
+msgstr "Блекбурн"
 
 msgid "Blacksford"
-msgstr ""
+msgstr "Блексфорд"
 
 msgid "Burton"
-msgstr ""
+msgstr "Бьортон"
 
 msgid "Pig's Eye"
-msgstr ""
+msgstr "Пігз-Ай"
 
 msgid "Viper's Nest"
-msgstr ""
+msgstr "Вайперснест"
 
 msgid "Fenton"
-msgstr ""
+msgstr "Фентон"
 
 msgid "Lankershire"
-msgstr ""
+msgstr "Ланкершир"
 
 msgid "Lombard"
-msgstr ""
+msgstr "Ломбардсбург"
 
 msgid "Timberhill"
-msgstr ""
+msgstr "Тімберхілл"
 
 msgid "Troy"
-msgstr ""
+msgstr "Троя"
 
 msgid "Forder Oaks"
-msgstr ""
+msgstr "Фордероукс"
 
 msgid "Meramec"
-msgstr ""
+msgstr "Мерамек"
 
 msgid "Quick Silver"
-msgstr ""
+msgstr "Квіксілвер"
 
 msgid "Westmoor"
-msgstr ""
+msgstr "Вестмур"
 
 msgid "Willow"
-msgstr ""
+msgstr "Віллоу"
 
 msgid "Corackston"
-msgstr ""
+msgstr "Коракстон"
 
 msgid "Sheltemburg"
-msgstr ""
+msgstr "Шелтембург"
 
 msgid "Cannot recruit - you already have a Hero in this town."
 msgstr ""
@@ -2161,248 +2168,204 @@ msgstr ""
 msgid "There is no room in the garrison for this army."
 msgstr ""
 
-#, fuzzy
 msgid "Fortifications"
 msgstr "Укріплення"
 
-#, fuzzy
 msgid "Farm"
 msgstr "Ферма"
 
-#, fuzzy
 msgid "Thatched Hut"
-msgstr "Солом'яна хата"
+msgstr "Солом'яна Хата"
 
-#, fuzzy
 msgid "Archery Range"
 msgstr "Стрільбище"
 
-#, fuzzy
 msgid "Upg. Archery Range"
 msgstr "Полігон"
 
-#, fuzzy
 msgid "Blacksmith"
-msgstr "Ковальня"
-
-#, fuzzy
-msgid "Upg. Blacksmith"
 msgstr "Майстерня"
 
-#, fuzzy
-msgid "Armory"
-msgstr "Збройниця"
+msgid "Upg. Blacksmith"
+msgstr "Майстерня Ветеранів"
 
-#, fuzzy
+msgid "Armory"
+msgstr "Зброярня"
+
 msgid "Upg. Armory"
-msgstr "Арсенал"
+msgstr "Зброярня Ветеранів"
 
 msgid "Jousting Arena"
-msgstr ""
+msgstr "Іподром"
 
 msgid "Upg. Jousting Arena"
-msgstr ""
+msgstr "Турнірна Арена"
 
 msgid "Cathedral"
-msgstr ""
+msgstr "Катедра"
 
 msgid "Upg. Cathedral"
-msgstr ""
+msgstr "Собор"
 
-#, fuzzy
 msgid "Coliseum"
 msgstr "Колізей"
 
-#, fuzzy
 msgid "Garbage Heap"
 msgstr "Смітник"
 
 msgid "Hut"
-msgstr ""
+msgstr "Хата"
 
 msgid "Stick Hut"
-msgstr ""
+msgstr "Хижка"
 
 msgid "Upg. Stick Hut"
-msgstr ""
+msgstr "Халупа"
 
 msgid "Den"
-msgstr ""
+msgstr "Лігво"
 
 msgid "Adobe"
-msgstr ""
+msgstr "Глинянка"
 
 msgid "Upg. Adobe"
-msgstr ""
+msgstr "Мазанка"
 
 msgid "Bridge"
-msgstr ""
+msgstr "Міст"
 
 msgid "Upg. Bridge"
-msgstr ""
+msgstr "Великий Міст"
 
 msgid "Pyramid"
-msgstr ""
+msgstr "Піраміда"
 
 msgid "Rainbow"
-msgstr ""
+msgstr "Райдуга"
 
 msgid "Crystal Garden"
-msgstr ""
+msgstr "Кришталевий сад"
 
 msgid "Treehouse"
-msgstr ""
+msgstr "Хатинка на Дереві"
 
 msgid "Cottage"
-msgstr ""
+msgstr "Хатинка"
 
 msgid "Upg. Cottage"
-msgstr ""
+msgstr "Котедж"
 
 msgid "Stonehenge"
-msgstr ""
+msgstr "Кромлех"
 
 msgid "Upg. Stonehenge"
-msgstr ""
+msgstr "Стоунгендж"
 
 msgid "Fenced Meadow"
-msgstr ""
+msgstr "Огороджена Галявина"
 
-#, fuzzy
 msgid "sorceress|Red Tower"
-msgstr "Червона вежа"
+msgstr "Червона Вежа"
 
-#, fuzzy
 msgid "Dungeon"
 msgstr "Підземелля"
 
-#, fuzzy
 msgid "Waterfall"
 msgstr "Водоспад"
 
-#, fuzzy
 msgid "Cave"
 msgstr "Печера"
 
-#, fuzzy
 msgid "Crypt"
-msgstr "Склеп"
+msgstr "Крипта"
 
-#, fuzzy
 msgid "Nest"
 msgstr "Гніздо"
 
-#, fuzzy
 msgid "Maze"
 msgstr "Лабіринт"
 
-#, fuzzy
 msgid "Upg. Maze"
-msgstr "Великий лабіринт"
+msgstr "Лабіринт Королів"
 
-#, fuzzy
 msgid "Swamp"
 msgstr "Болото"
 
-#, fuzzy
 msgid "Green Tower"
-msgstr "Зелена вежа"
+msgstr "Зелена Вежа"
 
-#, fuzzy
 msgid "warlock|Red Tower"
-msgstr "Червона вежа"
+msgstr "Червона Вежа"
 
-#, fuzzy
 msgid "Black Tower"
-msgstr "Чорна вежа"
+msgstr "Чорна Вежа"
 
-#, fuzzy
 msgid "Library"
 msgstr "Бібліотека"
 
-#, fuzzy
 msgid "Orchard"
-msgstr "Фруктовий сад"
+msgstr "Фруктовий Сад"
 
-#, fuzzy
 msgid "Habitat"
-msgstr "Хата"
+msgstr "Оселя"
 
-#, fuzzy
 msgid "Pen"
 msgstr "Хлів"
 
-#, fuzzy
 msgid "Foundry"
 msgstr "Ливарня"
 
-#, fuzzy
 msgid "Upg. Foundry"
-msgstr "Фабрика"
+msgstr "Ливарний Завод"
 
-#, fuzzy
 msgid "Cliff Nest"
-msgstr "Скельне гніздо"
+msgstr "Скельне Гніздо"
 
-#, fuzzy
 msgid "Ivory Tower"
-msgstr "Вежа слонової кістки"
+msgstr "Вежа Магів"
 
 msgid "Upg. Ivory Tower"
-msgstr ""
+msgstr "Вежа Архімагів"
 
-#, fuzzy
 msgid "Cloud Castle"
-msgstr "Хмарний замок"
+msgstr "Хмарна Фортеця"
 
 msgid "Upg. Cloud Castle"
-msgstr ""
+msgstr "Хмарний Замок"
 
-#, fuzzy
 msgid "Storm"
 msgstr "Шторм"
 
-#, fuzzy
 msgid "Skull Pile"
-msgstr "Купа черепів"
+msgstr "Купа Черепів"
 
-#, fuzzy
 msgid "Excavation"
 msgstr "Розкопки"
 
-#, fuzzy
 msgid "Graveyard"
-msgstr "Кладовище"
-
-#, fuzzy
-msgid "Upg. Graveyard"
 msgstr "Цвинтар"
 
-#, fuzzy
+msgid "Upg. Graveyard"
+msgstr "Кладовище"
+
 msgid "Upg. Pyramid"
-msgstr "Велика піраміда"
+msgstr "Проклята Піраміда"
 
-#, fuzzy
 msgid "Mansion"
-msgstr "Особняк"
+msgstr "Садиба"
 
-#, fuzzy
 msgid "Upg. Mansion"
 msgstr "Маєток"
 
-#, fuzzy
 msgid "Mausoleum"
 msgstr "Мавзолей"
 
-#, fuzzy
 msgid "Upg. Mausoleum"
-msgstr "Некрополь"
+msgstr "Проклятий Мавзолей"
 
-#, fuzzy
 msgid "Laboratory"
 msgstr "Лабораторія"
 
-#, fuzzy
 msgid "Shrine"
 msgstr "Святиня"
 
@@ -2429,20 +2392,17 @@ msgid ""
 "The Crystal Garden increases production of Sprites by %{count} per week."
 msgstr ""
 
-#, fuzzy
 msgid "The Dungeon increases the income of the town by %{count} gold per day."
 msgstr "Підземелля підвищує прибуток міста на %{count} в день."
 
-#, fuzzy
 msgid "The Waterfall increases production of Centaurs by %{count} per week."
 msgstr "Водоспад підвищує приріст Кентаврів на %{count} за тиждень."
 
-#, fuzzy
 msgid ""
 "The Library increases the number of spells in the Guild by one for each "
 "level of the guild."
 msgstr ""
-"Бібліотека підвищує кількість чарів в Гільдії на один за кожний рівень "
+"Бібліотека підвищує кількість заклинань в Гільдії на одне для кожного рівня "
 "гільдії."
 
 msgid "The Orchard increases production of Halflings by %{count} per week."
@@ -2454,204 +2414,164 @@ msgstr ""
 msgid "The Skull Pile increases production of Skeletons by %{count} per week."
 msgstr ""
 
-#, fuzzy
 msgid "Thieves' Guild"
-msgstr "Гільдія злодіїв"
+msgstr "Гільдія Злодіїв"
 
-#, fuzzy
 msgid "Tavern"
 msgstr "Таверна"
 
-#, fuzzy
 msgid "Shipyard"
 msgstr "Верф"
 
-#, fuzzy
 msgid "Well"
 msgstr "Колодязь"
 
-#, fuzzy
 msgid "Statue"
 msgstr "Статуя"
 
-#, fuzzy
 msgid "Marketplace"
 msgstr "Ринок"
 
-#, fuzzy
 msgid "Moat"
 msgstr "Рів"
 
-#, fuzzy
 msgid "Castle"
 msgstr "Замок"
 
-#, fuzzy
 msgid "Tent"
 msgstr "Намет"
 
-#, fuzzy
 msgid "Captain's Quarters"
-msgstr "Капітанський штаб"
+msgstr "Помешкання Капітана"
 
-#, fuzzy
 msgid "Mage Guild, Level 1"
 msgstr "Гільдія Магів, 1 рівень"
 
-#, fuzzy
 msgid "Mage Guild, Level 2"
 msgstr "Гільдія Магів, 2 рівень"
 
-#, fuzzy
 msgid "Mage Guild, Level 3"
 msgstr "Гільдія Магів, 3 рівень"
 
-#, fuzzy
 msgid "Mage Guild, Level 4"
 msgstr "Гільдія Магів, 4 рівень"
 
-#, fuzzy
 msgid "Mage Guild, Level 5"
 msgstr "Гільдія Магів, 5 рівень"
 
-#, fuzzy
 msgid ""
 "The Shrine increases the necromancy skill of all your necromancers by 10 "
 "percent."
-msgstr "Святиня підвищує вміння Некромантії усіх некромантів на 10 відсотків."
+msgstr "Святиня підвищує вміння Некромантії всіх некромантів на 10 відсотків."
 
-#, fuzzy
 msgid ""
 "The Thieves' Guild provides information on enemy players. Thieves' Guilds "
 "can also provide scouting information on enemy towns. Additional Guilds "
 "provide more information."
 msgstr ""
-"Гільдія злодіїв надає інформації щодо ворожих гравців. Гільдія злодіїв також "
-"надає розвідницьку інформацію про ворожі міста. Додаткові гільдії дають "
+"Гільдія злодіїв надає інформацію щодо ворожих гравців. Гільдія злодіїв також "
+"надає розвідницьку інформацію про ворожі міста. Додаткові Гільдії надають "
 "більше інформації."
 
-#, fuzzy
 msgid "The Tavern increases morale for troops defending the castle."
 msgstr "Таверна збільшує мораль захисників замка."
 
-#, fuzzy
 msgid "The Shipyard allows ships to be built."
 msgstr "Верф дозволяє будувати кораблі."
 
-#, fuzzy
 msgid ""
 "The Well increases the growth rate of all dwellings by %{count} creatures "
 "per week."
-msgstr "Колодязь підвищую приріст в усіх будівлях на %{count} істот у тиждень."
+msgstr "Колодязь підвищує приріст в усіх житлах на %{count} істот на тиждень."
 
-#, fuzzy
 msgid "The Statue increases your town's income by %{count} gold per day."
-msgstr "Статуя підвищує прибуток Вашого міста на %{count} в день."
+msgstr "Статуя підвищує прибуток Вашого міста на %{count} золота в день."
 
-#, fuzzy
 msgid "The Left Turret provides extra firepower during castle combat."
-msgstr "Ліва Турель завдає додаткову шкоду ворогові під час облоги."
+msgstr "Ліва Вежа завдає додаткову шкоду ворогові під час облоги."
 
-#, fuzzy
 msgid "The Right Turret provides extra firepower during castle combat."
-msgstr "Права Турель завдає додаткову шкоду ворогові під час облоги."
+msgstr "Права Вежа завдає додаткову шкоду ворогу під час облоги."
 
-#, fuzzy
 msgid ""
 "The Marketplace can be used to convert one type of resource into another. "
 "The more marketplaces you control, the better the exchange rate."
 msgstr ""
 "Ринок можна використовувати щоб обміняти один ресурс на інший. Чим більше "
-"ринків Ви контролюєте, тим краще курс обміну."
+"ринків ви контролюєте, тим краще курс обміну."
 
-#, fuzzy
 msgid ""
 "The Moat slows attacking units. Any unit entering the moat must end its turn "
 "there and becomes more vulnerable to attack."
 msgstr ""
-"Рів сповільнює ворожі загони. Кожний воїн, що зайде у рів, завершить хід у "
+"Рів сповільнює ворожі загони. Кожний загін, що зайде у рів, завершить хід у "
 "ньому і стане вразливішим до нападу."
 
-#, fuzzy
 msgid ""
 "The Castle improves town defense and increases income to %{count} gold per "
 "day."
-msgstr "Замок покращує захист міста та підвищує прибуток на %{count} в день."
+msgstr ""
+"Замок покращує захист міста та підвищує прибуток на %{count} золота в день."
 
-#, fuzzy
 msgid ""
 "The Tent provides workers to build a castle, provided the materials and the "
 "gold are available."
 msgstr ""
-"Намет надає робітників, що будуватимуть замок за умови вистачання матеріалів "
-"та золота."
+"Намет надає робітників, що будуватимуть замок, якщо надати матеріали та "
+"золото."
 
-#, fuzzy
 msgid ""
 "The Captain's Quarters provides a captain to assist in the castle's defense "
 "when no hero is present."
 msgstr ""
-"Капітанський штаб надає капітана, що допомагає захищати замок, коли герой "
-"відсутній."
+"Капітанський штаб надає капітана, що допомагає захищати замок за відсутності "
+"героя."
 
-#, fuzzy
 msgid ""
 "The Mage Guild allows heroes to learn spells and replenish their spell "
 "points."
 msgstr "Гільдія Магів дозволяє героям вивчати чари та відновлювати ману."
 
-#, fuzzy
 msgid "Recruit %{name}"
 msgstr "Найняти %{name}"
 
-#, fuzzy
 msgid "Month: %{month}, Week: %{week}, Day: %{day}"
 msgstr "Місяць: %{month}, Тиждень: %{week}, День: %{day}"
 
-#, fuzzy
 msgid ""
 "You must purchase a spell book to use the mage guild, but you currently have "
 "no room for a spell book. Try giving one of your artifacts to another hero."
 msgstr ""
-"Ви маєте придбати книгу чар, щоб використовувати гільдію магів, але у Вас "
-"немає вільного місця під книгу. Спробуйте передати один із артефактів іншому "
-"герою."
+"Ви маєте придбати книгу чарів, щоб використовувати гільдію магів, але наразі "
+"у Вас немає вільного місця під книгу. Спробуйте передати один із артефактів "
+"іншому герою."
 
-#, fuzzy
 msgid "Exit"
 msgstr "Вийти"
 
-#, fuzzy
 msgid "Click to show next town."
 msgstr "Натисніть щоб побачити наступне місто."
 
-#, fuzzy
 msgid "Show next town"
 msgstr "Показати наступне місто"
 
-#, fuzzy
 msgid "Click to show previous town."
 msgstr "Натисніть щоб побачити попереднє місто."
 
-#, fuzzy
 msgid "Show previous town"
 msgstr "Показати попереднє місто"
 
-#, fuzzy
 msgid "This town may not be upgraded to a castle."
-msgstr "Розбудова замку в цьому мiстi неможлива."
+msgstr "Це Місто не можна покращити до Замку."
 
-#, fuzzy
 msgid "Town"
 msgstr "Місто"
 
-#, fuzzy
 msgid "Exit Castle"
-msgstr "Полишити замок"
+msgstr "Вийти з Замку"
 
-#, fuzzy
 msgid "Exit Town"
-msgstr "Полишити місто"
+msgstr "Вийти з Міста"
 
 msgid "Show Income"
 msgstr ""
@@ -2662,31 +2582,29 @@ msgstr ""
 msgid "The above spells are available here."
 msgstr ""
 
-msgid "The above spells have been added to your book."
+msgid "The spells the hero can learn have been added to their book."
 msgstr ""
 
 msgid "A generous tip for the barkeep yields the following rumor:"
 msgstr ""
 
-#, fuzzy
 msgid "Recruit Hero"
-msgstr "Найняти героя"
+msgstr "Найняти Героя"
 
-#, fuzzy
 msgid "%{name} is a level %{value} %{race} "
 msgstr "%{name} - %{race} рівня %{value} "
 
-#, fuzzy
 msgid "with %{count} artifacts."
 msgstr "з %{count} артефактами."
 
-#, fuzzy
 msgid "with 1 artifact."
 msgstr "з одним артефактом."
 
-#, fuzzy
 msgid "without artifacts."
 msgstr "без артефактів."
+
+msgid "Recruit %{name} the %{race}"
+msgstr ""
 
 msgid ""
 "'Spread' combat formation spreads your armies from the top to the bottom of "
@@ -2702,9 +2620,6 @@ msgid "Spread Formation"
 msgstr ""
 
 msgid "Grouped Formation"
-msgstr ""
-
-msgid "Recruit %{name} the %{race}"
 msgstr ""
 
 msgid "Set garrison combat formation to 'Spread'"
@@ -2728,22 +2643,22 @@ msgstr ""
 msgid "No creatures available for purchase."
 msgstr ""
 
-#, fuzzy
 msgid "Recruit Creatures"
-msgstr "Купувати Створінь"
+msgstr "Найняти Створінь"
 
-#, fuzzy
 msgid "Max"
 msgstr "Макс"
 
 msgid "Hire all creatures in the town."
 msgstr ""
 
-#, fuzzy
+msgid "Available"
+msgstr ""
+
 msgid "Town Population Information and Statistics"
 msgstr "Інформація та статистика по населенню міст"
 
-msgid "Damg"
+msgid "Damage"
 msgstr ""
 
 msgid "HP"
@@ -2752,12 +2667,8 @@ msgstr ""
 msgid "Growth"
 msgstr ""
 
-#, fuzzy
 msgid "week"
-msgstr "неділя"
-
-msgid "Available"
-msgstr ""
+msgstr "тиждень"
 
 msgid "View World"
 msgstr ""
@@ -2771,7 +2682,6 @@ msgstr ""
 msgid "View the obelisk puzzle."
 msgstr ""
 
-#, fuzzy
 msgid "Scenario Information"
 msgstr "Інформація по сценарію"
 
@@ -2784,24 +2694,18 @@ msgstr ""
 msgid "Digging"
 msgstr ""
 
-#, fuzzy
-msgid "Exit this menu without doing anything."
-msgstr "Нічого не робити, натомість залишити це меню."
-
 msgid "Arena"
 msgstr ""
 
 msgid ""
 "You enter the arena and face a pack of vicious lions. You handily defeat "
-"them, to the wild cheers of the crowd.  Impressed by your skill, the aged "
+"them, to the wild cheers of the crowd. Impressed by your skill, the aged "
 "trainer of gladiators agrees to train you in a skill of your choice."
 msgstr ""
 
-#, fuzzy
 msgid "Attack Skill"
 msgstr "Атака"
 
-#, fuzzy
 msgid "Defense Skill"
 msgstr "Захист"
 
@@ -2809,9 +2713,6 @@ msgid "Shots"
 msgstr ""
 
 msgid "Shots Left"
-msgstr ""
-
-msgid "Damage"
 msgstr ""
 
 msgid "Hit Points"
@@ -2843,12 +2744,12 @@ msgstr ""
 msgid "Dismiss this army."
 msgstr ""
 
-msgid "Followers"
-msgstr ""
-
 msgid ""
 "A group of %{monster} with a desire for greater glory wish to join you.\n"
 "Do you accept?"
+msgstr ""
+
+msgid "Followers"
 msgstr ""
 
 msgid ""
@@ -2860,7 +2761,7 @@ msgstr ""
 msgid ""
 "The creatures are swayed by your diplomatic\n"
 "tongue, and make you an offer:\n"
-" \n"
+"\n"
 msgstr ""
 
 msgid ""
@@ -2881,11 +2782,9 @@ msgstr ""
 msgid "off"
 msgstr ""
 
-#, fuzzy
 msgid "Music"
 msgstr "Музика"
 
-#, fuzzy
 msgid "Effects"
 msgstr "Ефекти"
 
@@ -2898,7 +2797,6 @@ msgstr ""
 msgid "External"
 msgstr ""
 
-#, fuzzy
 msgid "Music Type"
 msgstr "Тип музики"
 
@@ -2917,55 +2815,45 @@ msgstr ""
 msgid "Toggle 3D effects of foreground sounds."
 msgstr ""
 
-#, fuzzy
 msgid "Build a new ship:"
 msgstr "Побудувати новий корабель:"
 
 msgid "Resource cost:"
 msgstr ""
 
-#, fuzzy
 msgid "Total: "
 msgstr "Загалом: "
 
 msgid "Need: "
 msgstr ""
 
-#, fuzzy
 msgid "Load Game"
 msgstr "Завантажити Гру"
 
-#, fuzzy
 msgid "No save files to load."
 msgstr "Немає файлів збереження для завантаження."
 
-#, fuzzy
 msgid "New Game"
 msgstr "Нова Гра"
 
 msgid "Start a single or multi-player game."
 msgstr ""
 
-#, fuzzy
 msgid "Load a previously saved game."
-msgstr "Завантажте раніше збережену гру."
+msgstr "Завантажити раніше збережену гру."
 
-#, fuzzy
 msgid "Save Game"
 msgstr "Зберегти Гру"
 
-#, fuzzy
 msgid "Save the current game."
 msgstr "Збережіть поточну гру."
 
-#, fuzzy
 msgid "Quit"
 msgstr "Вихід"
 
 msgid "Quit out of Heroes of Might and Magic II."
 msgstr "Залишити Heroes of Might and Magic II."
 
-#, fuzzy
 msgid "Language"
 msgstr "Мова"
 
@@ -2990,11 +2878,10 @@ msgstr "Змінити мову гри."
 msgid "Select Game Language"
 msgstr "Обрати мову гри"
 
-#, fuzzy
 msgid "Change the graphics settings of the game."
-msgstr "Змінити мову гри."
+msgstr "Змінити графічні налаштування гри."
 
-msgid "Toggle colored cursor on or off. This is only an esthetic choice."
+msgid "Toggle colored cursor on or off. This is only an aesthetic choice."
 msgstr ""
 
 msgid ""
@@ -3002,7 +2889,6 @@ msgid ""
 "events in the game."
 msgstr ""
 
-#, fuzzy
 msgid ""
 "Map\n"
 "Difficulty"
@@ -3010,7 +2896,6 @@ msgstr ""
 "Складність\n"
 "Мапи"
 
-#, fuzzy
 msgid ""
 "Game\n"
 "Difficulty"
@@ -3021,7 +2906,6 @@ msgstr ""
 msgid "Rating"
 msgstr ""
 
-#, fuzzy
 msgid "Map Size"
 msgstr "Розмір Мапи"
 
@@ -3077,20 +2961,17 @@ msgstr ""
 msgid "V-Sync"
 msgstr ""
 
-#, fuzzy
 msgid "on"
-msgstr "Відсутні"
+msgstr "увімк."
 
 msgid "FPS"
 msgstr ""
 
-#, fuzzy
 msgid "System Info"
 msgstr "Системні Параметри"
 
-#, fuzzy
 msgid "Change the resolution of the game."
-msgstr "Змінити мову гри."
+msgstr "Змінити розділову здатність гри."
 
 msgid "Select Game Resolution"
 msgstr ""
@@ -3109,6 +2990,51 @@ msgstr ""
 msgid "Hot Keys:"
 msgstr ""
 
+msgid "Evil"
+msgstr ""
+
+msgid "Good"
+msgstr ""
+
+msgid "Interface Type"
+msgstr "Тип Інтерфейсу"
+
+msgid "Hide"
+msgstr ""
+
+msgid "Show"
+msgstr ""
+
+msgid "Interface"
+msgstr ""
+
+msgid "Slow"
+msgstr ""
+
+msgid "Normal"
+msgstr "Звичайна"
+
+msgid "Fast"
+msgstr ""
+
+msgid "Very Fast"
+msgstr ""
+
+msgid "Scroll Speed"
+msgstr ""
+
+msgid "Toggle the type of interface you want to use."
+msgstr ""
+
+msgid "Toggle interface visibility."
+msgstr ""
+
+msgid "Toggle colored cursor on or off. This is only an esthetic choice."
+msgstr ""
+
+msgid "Sets the speed at which you scroll the window."
+msgstr ""
+
 msgid "Select Game Language:"
 msgstr "Обрати мову гри:"
 
@@ -3124,10 +3050,17 @@ msgstr ""
 msgid "You have learned %{skill}."
 msgstr ""
 
-msgid "You may learn either:"
+msgid ""
+"%{name} has gained a level.\n"
+"\n"
+"%{skill} +1"
 msgstr ""
 
-msgid "or"
+msgid ""
+"You may learn either:\n"
+"%{skill1}\n"
+"or\n"
+"%{skill2}"
 msgstr ""
 
 msgid ""
@@ -3146,7 +3079,6 @@ msgstr ""
 msgid "I can offer you 1 unit of %{resto} for %{count} units of %{resfrom}."
 msgstr ""
 
-#, fuzzy
 msgid "Min"
 msgstr "Мін"
 
@@ -3195,6 +3127,9 @@ msgstr ""
 msgid "%{color} Barrier"
 msgstr ""
 
+msgid "(tent visited)"
+msgstr ""
+
 msgid "%{color} Tent"
 msgstr ""
 
@@ -3210,12 +3145,8 @@ msgstr ""
 msgid "penalty: %{cost}"
 msgstr ""
 
-msgid "Uncharted Territory"
-msgstr ""
-
-#, fuzzy
 msgid "Defenders:"
-msgstr "Захистники:"
+msgstr "Захисники:"
 
 msgid "Unknown"
 msgstr ""
@@ -3223,28 +3154,26 @@ msgstr ""
 msgid "%{name} (Level %{level})"
 msgstr ""
 
-#, fuzzy
 msgid "Attack:"
 msgstr "Атака:"
 
-#, fuzzy
 msgid "Defense:"
 msgstr "Захист:"
 
-#, fuzzy
 msgid "Spell Power:"
 msgstr "Сила Чарів:"
 
-#, fuzzy
 msgid "Knowledge:"
 msgstr "Знання:"
 
 msgid "Spell Points:"
-msgstr "Одиниці Чар:"
+msgstr "Одиниці Мани:"
 
-#, fuzzy
 msgid "Move Points:"
-msgstr "Очки Переміщення:"
+msgstr "Очки Руху:"
+
+msgid "Uncharted Territory"
+msgstr ""
 
 msgid "Cost per troop:"
 msgstr ""
@@ -3264,9 +3193,8 @@ msgstr ""
 msgid "Select only 1 monster to be recruited."
 msgstr ""
 
-#, fuzzy
 msgid "Select Game Resolution:"
-msgstr "Обрати мову гри:"
+msgstr "Обрати Розділову Здатність:"
 
 msgid "Click to apply the selected resolution."
 msgstr ""
@@ -3286,7 +3214,6 @@ msgstr ""
 msgid "Fast separation into slots:"
 msgstr ""
 
-#, fuzzy
 msgid "Map: "
 msgstr "Мапа: "
 
@@ -3308,12 +3235,6 @@ msgid ""
 "Location: "
 msgstr ""
 
-msgid "File to Save:"
-msgstr ""
-
-msgid "File to Load:"
-msgstr ""
-
 msgid "Click to save the current game."
 msgstr ""
 
@@ -3326,26 +3247,41 @@ msgstr ""
 msgid "Warning!"
 msgstr ""
 
-msgid "Select Monster:"
+msgid "File to Save:"
 msgstr ""
 
-msgid "Select Hero:"
+msgid "File to Load:"
 msgstr ""
 
-msgid "Select Artifact:"
+msgid "Accept the choice made."
 msgstr ""
 
-msgid "Select Spell:"
+msgid "Unknown Hero"
+msgstr ""
+
+msgid "%{color} %{race} hero"
 msgstr ""
 
 msgid "Select Skill:"
-msgstr ""
+msgstr "Оберіть Навички:"
+
+msgid "Select Spell:"
+msgstr "Оберіть Закляття:"
+
+msgid "Select Artifact:"
+msgstr "Оберіть Артефакти:"
+
+msgid "Select Monster:"
+msgstr "Оберіть Монстра:"
+
+msgid "Select Hero:"
+msgstr "Оберіть Героя:"
 
 msgid "Map Type:\n"
 msgstr "Тип мапи:\n"
 
 msgid "The Succession Wars"
-msgstr ""
+msgstr "Війни за Спадщину"
 
 msgid "Lose all your heroes and towns."
 msgstr ""
@@ -3383,18 +3319,15 @@ msgstr ""
 msgid "Victory Condition"
 msgstr ""
 
-#, fuzzy
 msgid "Map difficulty:"
 msgstr "Складність мапи:"
 
 msgid "N"
 msgstr ""
 
-#, fuzzy
 msgid "No maps exist at that size"
 msgstr "Немає мап такого розміру"
 
-#, fuzzy
 msgid "Small Maps"
 msgstr "Маленькі Мапи"
 
@@ -3413,15 +3346,12 @@ msgstr ""
 msgid "View only maps of size large (108 x 108)."
 msgstr ""
 
-#, fuzzy
 msgid "Extra Large Maps"
-msgstr "Надвелики Мапи"
+msgstr "Надвеликі Мапи"
 
-#, fuzzy
 msgid "View only maps of size extra large (144 x 144)."
-msgstr "Дивитися лише мапи надвеликого розміру (144 x 144)."
+msgstr "Показати лише мапи надвеликого розміру (144 x 144)."
 
-#, fuzzy
 msgid "All Maps"
 msgstr "Усі мапи"
 
@@ -3451,7 +3381,6 @@ msgid ""
 "of Loyalty\" version of the game."
 msgstr ""
 
-#, fuzzy
 msgid "Map Type"
 msgstr "Тип мапи"
 
@@ -3465,7 +3394,7 @@ msgid "Selected Map Difficulty"
 msgstr ""
 
 msgid ""
-"The map difficulty of the currently selected map.  The map difficulty is "
+"The map difficulty of the currently selected map. The map difficulty is "
 "determined by the scenario designer. More difficult maps might include more "
 "or stronger enemies, fewer resources, or other special conditions making "
 "things tougher for the human player."
@@ -3475,9 +3404,6 @@ msgid "Selected Description"
 msgstr ""
 
 msgid "The description of the currently selected map."
-msgstr ""
-
-msgid "Accept the choice made."
 msgstr ""
 
 msgid "Jump"
@@ -3490,41 +3416,6 @@ msgid "Don't Show"
 msgstr ""
 
 msgid "Enemy Speed"
-msgstr ""
-
-msgid "Slow"
-msgstr ""
-
-#, fuzzy
-msgid "Normal"
-msgstr "Звичайна"
-
-msgid "Fast"
-msgstr ""
-
-msgid "Very Fast"
-msgstr ""
-
-msgid "Scroll Speed"
-msgstr ""
-
-msgid "Evil"
-msgstr ""
-
-msgid "Good"
-msgstr ""
-
-#, fuzzy
-msgid "Interface Type"
-msgstr "Тип Інтерфейсу"
-
-msgid "Hide"
-msgstr ""
-
-msgid "Show"
-msgstr ""
-
-msgid "Interface"
 msgstr ""
 
 msgid "Auto Resolve"
@@ -3543,18 +3434,15 @@ msgid "Change the speed at which your heroes move on the main screen."
 msgstr ""
 
 msgid ""
-"Sets the speed that A.I. heroes move at.  You can also elect not to view A."
-"I. movement at all."
+"Sets the speed that A.I. heroes move at. You can also elect not to view A.I. "
+"movement at all."
 msgstr ""
 
-msgid "Sets the speed at which you scroll the window."
-msgstr ""
+msgid "Change the interface settings of the game."
+msgstr "Змінити налаштування інтерфейсу гри."
 
-msgid "Toggle the type of interface you want to use."
-msgstr ""
-
-msgid "Toggle interface visibility."
-msgstr ""
+msgid "Interface Settings"
+msgstr "Налаштування Інтерфейсу"
 
 msgid "Toggle instant battle mode."
 msgstr ""
@@ -3651,26 +3539,167 @@ msgid ""
 "Create a new map, either from scratch or using the random map generator."
 msgstr ""
 
-#, fuzzy
 msgid "New Map"
 msgstr "Нова Гра"
 
-#, fuzzy
 msgid "Load Map"
 msgstr "Завантажити Гру"
 
 msgid "Load an existing map."
 msgstr ""
 
-#, fuzzy
 msgid "Save Map"
-msgstr "Зберегти Гру"
+msgstr "Зберегти Мапу"
 
-#, fuzzy
 msgid "Save the current map."
-msgstr "Збережіть поточну гру."
+msgstr "Збережіть поточну мапу."
 
 msgid "Quit out of the map editor."
+msgstr ""
+
+msgid "Monster"
+msgstr "Монстр"
+
+msgid "Monsters cannot be placed on water."
+msgstr ""
+
+msgid "Choose a tile which does not contain any objects."
+msgstr ""
+
+msgid "Heroes"
+msgstr ""
+
+msgid "Heroes cannot be placed on water."
+msgstr ""
+
+msgid "Ocean Objects"
+msgstr ""
+
+msgid "Grass Objects"
+msgstr ""
+
+msgid "Snow Objects"
+msgstr "Об'єкти Засніжених Полонин"
+
+msgid "Swamp Objects"
+msgstr ""
+
+msgid "Lava Objects"
+msgstr ""
+
+msgid "Desert Objects"
+msgstr "Об'єкти Пустелі"
+
+msgid "Dirt Objects"
+msgstr ""
+
+msgid "Wasteland Objects"
+msgstr "Об'єкти Пустки"
+
+msgid "Beach Objects"
+msgstr ""
+
+msgid "Towns"
+msgstr "Міста"
+
+msgid "Artifacts"
+msgstr ""
+
+msgid "Treasures"
+msgstr "Скарби"
+
+msgid "Terrain"
+msgstr ""
+
+#, fuzzy
+msgid "Castles"
+msgstr "Замок"
+
+msgid "Roads"
+msgstr ""
+
+msgid "Streams"
+msgstr ""
+
+msgid ""
+"Draws terrain in\n"
+"%{size} by %{size} square increments."
+msgstr ""
+
+msgid ""
+"Erases objects in\n"
+"%{size} by %{size} square increments."
+msgstr ""
+
+msgid "Small Brush"
+msgstr "Маленька кисть"
+
+msgid "Medium Brush"
+msgstr ""
+
+msgid "Large Brush"
+msgstr ""
+
+msgid "Area Fill"
+msgstr ""
+
+msgid "Used to click and drag for filling in large areas."
+msgstr ""
+
+msgid "Clear Area"
+msgstr ""
+
+msgid "Used to click and drag for clearing large areas."
+msgstr ""
+
+msgid ""
+"Costs %{rate} times normal movement for all heroes. (Pathfinding reduces or "
+"eliminates the penalty.)"
+msgstr ""
+
+msgid "Traversable only by boat."
+msgstr ""
+
+msgid "No special modifiers."
+msgstr ""
+
+msgid "Used to place objects most appropriate for use on %{terrain}."
+msgstr ""
+
+msgid ""
+"Used to place\n"
+"a town or castle."
+msgstr ""
+
+msgid ""
+"Used to place\n"
+"a monster group."
+msgstr ""
+
+msgid "Used to place a hero."
+msgstr ""
+
+msgid "Used to place an artifact."
+msgstr ""
+
+msgid ""
+"Used to place\n"
+"a resource or treasure."
+msgstr ""
+
+msgid "Toggle the erasure of %{type} objects."
+msgstr ""
+
+msgid ""
+"Objects of this type will be deleted with the Erase tool. Left-click here to "
+"deselect this type. Press and hold this button to deselect all other object "
+"types."
+msgstr ""
+
+msgid ""
+"Objects of this type will NOT be deleted with the Erase tool. Left-click "
+"here to select this type. Press and hold this button to select all other "
+"object types."
 msgstr ""
 
 msgid "Terrain Mode"
@@ -3706,7 +3735,7 @@ msgstr ""
 msgid "Erase Mode"
 msgstr ""
 
-msgid "Used to erase objects off the map."
+msgid "Used to erase objects from the map."
 msgstr ""
 
 msgid "Change between zoom and normal view."
@@ -3718,7 +3747,7 @@ msgstr ""
 msgid "Undo"
 msgstr ""
 
-msgid "Undo your last action.  Press again to redo the action."
+msgid "Undo your last action."
 msgstr ""
 
 msgid "Create a new map either from scratch or using the random map generator."
@@ -3727,9 +3756,8 @@ msgstr ""
 msgid "Edit map title, description, and other general information."
 msgstr ""
 
-#, fuzzy
 msgid "Specifications"
-msgstr "Скам'яніння"
+msgstr "Налаштування"
 
 msgid "File Options"
 msgstr ""
@@ -3760,7 +3788,6 @@ msgstr ""
 msgid "Create a randomly generated map."
 msgstr ""
 
-#, fuzzy
 msgid "Random"
 msgstr "Випадкове місто"
 
@@ -3768,6 +3795,9 @@ msgid "Cancel back to the Map Editor main menu."
 msgstr ""
 
 msgid "No maps available!"
+msgstr ""
+
+msgid "Warning"
 msgstr ""
 
 msgid "difficulty|Easy"
@@ -3794,11 +3824,10 @@ msgstr ""
 msgid "Hard"
 msgstr ""
 
-#, fuzzy
 msgid "Campaign Difficulty"
 msgstr ""
 "Складність\n"
-"Мапи"
+"Кампанії"
 
 msgid ""
 "Choose this difficulty if you want to prefer game story over challenge. AI "
@@ -3853,7 +3882,6 @@ msgstr ""
 msgid "Restart the current scenario."
 msgstr ""
 
-#, fuzzy
 msgid "Difficulty"
 msgstr ""
 "Складність\n"
@@ -3883,7 +3911,6 @@ msgstr ""
 msgid "Project Coordination and Core Development"
 msgstr ""
 
-#, fuzzy
 msgid "Development"
 msgstr "Розробка"
 
@@ -3923,10 +3950,8 @@ msgstr ""
 msgid "Original project before 0.7"
 msgstr ""
 
-#, fuzzy
 msgid "Heroes of Might and Magic II: The Succession Wars team"
-msgstr ""
-"Залишити Heroes of Might and Magic II і повернутися до операційної системи."
+msgstr "Команда розробки Героїв Меча та Магії 2: Війна за Спадщину"
 
 msgid "Designed and Directed"
 msgstr ""
@@ -3979,10 +4004,8 @@ msgstr ""
 msgid "Scenarios"
 msgstr ""
 
-#, fuzzy
 msgid "Heroes of Might and Magic II: The Price of Loyalty team"
-msgstr ""
-"Залишити Heroes of Might and Magic II і повернутися до операційної системи."
+msgstr "Команда розробки Героїв Меча та Магії 2: Ціна Вірності"
 
 msgid "Design Lead"
 msgstr ""
@@ -4005,9 +4028,8 @@ msgstr ""
 msgid "Producers"
 msgstr ""
 
-#, fuzzy
 msgid "QA Managers"
-msgstr "Лісники"
+msgstr "Менеджери із забезпечення якості"
 
 msgid "Sound Design"
 msgstr ""
@@ -4042,16 +4064,11 @@ msgstr ""
 msgid "Package Design"
 msgstr ""
 
-#, fuzzy
 msgid "Your Name"
 msgstr "Ваше Ім'я"
 
-msgid "Unknown Hero"
-msgstr ""
-
-#, fuzzy
 msgid "Standard"
-msgstr "Стандартна Гра"
+msgstr ""
 
 msgid "View High Scores for Standard Maps."
 msgstr ""
@@ -4098,9 +4115,8 @@ msgstr ""
 msgid "hotkey|credits"
 msgstr ""
 
-#, fuzzy
 msgid "hotkey|standard game"
-msgstr "Стандартна Гра"
+msgstr "звичайна Гра"
 
 msgid "hotkey|campaign game"
 msgstr ""
@@ -4147,13 +4163,11 @@ msgstr ""
 msgid "hotkey|map editor main menu"
 msgstr ""
 
-#, fuzzy
 msgid "hotkey|new map menu"
-msgstr "Показати наступне місто"
+msgstr "нова гра"
 
-#, fuzzy
 msgid "hotkey|load map menu"
-msgstr "Стандартна Гра"
+msgstr "завантажити гру"
 
 msgid "hotkey|new map from scratch"
 msgstr ""
@@ -4161,13 +4175,18 @@ msgstr ""
 msgid "hotkey|new random map"
 msgstr ""
 
+msgid "hotkey|undo last action"
+msgstr "відмінити останню дію"
+
+msgid "hotkey|redo last action"
+msgstr "повторити останню дію"
+
 msgid "hotkey|roland campaign"
 msgstr ""
 
 msgid "hotkey|archibald campaign"
 msgstr ""
 
-#, fuzzy
 msgid "hotkey|the price of loyalty campaign"
 msgstr "Ціна Вірності"
 
@@ -4192,11 +4211,8 @@ msgstr ""
 msgid "hotkey|view campaign intro"
 msgstr ""
 
-#, fuzzy
 msgid "hotkey|select campaign difficulty"
-msgstr ""
-"Складність\n"
-"Мапи"
+msgstr "Оберати складність кампанії"
 
 msgid "hotkey|restart campaign scenario"
 msgstr ""
@@ -4231,8 +4247,9 @@ msgstr ""
 msgid "hotkey|next hero"
 msgstr ""
 
-msgid "hotkey|continue hero movement"
-msgstr ""
+#, fuzzy
+msgid "hotkey|start hero movement"
+msgstr "звичайна Гра"
 
 msgid "hotkey|cast adventure spell"
 msgstr ""
@@ -4240,9 +4257,8 @@ msgstr ""
 msgid "hotkey|put hero to sleep"
 msgstr ""
 
-#, fuzzy
 msgid "hotkey|next town"
-msgstr "Показати наступне місто"
+msgstr "показати наступне місто"
 
 msgid "hotkey|end turn"
 msgstr ""
@@ -4256,9 +4272,8 @@ msgstr ""
 msgid "hotkey|puzzle map"
 msgstr ""
 
-#, fuzzy
 msgid "hotkey|scenario information"
-msgstr "Інформація по сценарію"
+msgstr "Інформація про сценарій"
 
 msgid "hotkey|dig for artifact"
 msgstr ""
@@ -4275,9 +4290,8 @@ msgstr ""
 msgid "hotkey|open focus"
 msgstr ""
 
-#, fuzzy
 msgid "hotkey|system options"
-msgstr "Налаштувати параметри системи"
+msgstr "параметри системи"
 
 msgid "hotkey|scroll left"
 msgstr ""
@@ -4313,7 +4327,7 @@ msgid "hotkey|retreat from battle"
 msgstr ""
 
 msgid "hotkey|surrender during battle"
-msgstr ""
+msgstr "капітулювати під час битви"
 
 msgid "hotkey|toggle battle auto mode"
 msgstr ""
@@ -4351,20 +4365,17 @@ msgstr ""
 msgid "hotkey|well"
 msgstr ""
 
-#, fuzzy
 msgid "hotkey|marketplace"
-msgstr "Ринок"
+msgstr "ринок"
 
 msgid "hotkey|mage guild"
 msgstr ""
 
-#, fuzzy
 msgid "hotkey|shipyard"
-msgstr "Верф"
+msgstr "верф"
 
-#, fuzzy
 msgid "hotkey|thieves guild"
-msgstr "Гільдія злодіїв"
+msgstr "гільдія злодіїв"
 
 msgid "hotkey|tavern"
 msgstr ""
@@ -4390,9 +4401,18 @@ msgstr ""
 msgid "hotkey|dismiss hero or troop"
 msgstr ""
 
-#, fuzzy
+msgid ""
+"Do you want to regain control from AI? The effect will take place only on "
+"the next turn."
+msgstr ""
+
+msgid ""
+"Do you want to transfer control from you to the AI? The effect will take "
+"place only on the next turn."
+msgstr ""
+
 msgid "The save file is corrupted."
-msgstr "Немає файлів збереження для завантаження."
+msgstr "Файл збереження пошкоджений."
 
 msgid "Unsupported save format: "
 msgstr ""
@@ -4428,7 +4448,6 @@ msgstr ""
 msgid "A single player game playing out a single map."
 msgstr ""
 
-#, fuzzy
 msgid "Standard Game"
 msgstr "Стандартна Гра"
 
@@ -4438,12 +4457,12 @@ msgstr ""
 msgid "Campaign Game"
 msgstr ""
 
+msgid "Multi-Player Game"
+msgstr ""
+
 msgid ""
 "A multi-player game, with several human players completing against each "
 "other on a single map."
-msgstr ""
-
-msgid "Multi-Player Game"
 msgstr ""
 
 msgid "fheroes2 Resurrection Team presents"
@@ -4452,29 +4471,48 @@ msgstr ""
 msgid "Greetings!"
 msgstr ""
 
-#, fuzzy
 msgid "Welcome to Heroes of Might and Magic II powered by fheroes2 engine!"
-msgstr ""
-"Залишити Heroes of Might and Magic II і повернутися до операційної системи."
+msgstr "Ласкаво просимо до Героїв Меча та Магії 2 на основі рушія fheroes2!"
 
+#, fuzzy
 msgid ""
-"Welcome to Heroes of Might and Magic II powered by fheroes2 engine! Before "
-"starting the game please choose game resolution."
-msgstr ""
+"Welcome to Heroes of Might and Magic II powered by the fheroes2 engine!\n"
+"Before starting the game please select a game resolution."
+msgstr "Ласкаво просимо до Героїв Меча та Магії 2 на основі рушія fheroes2!"
 
 msgid "Please Remember"
 msgstr ""
 
-msgid "You can always change game resolution by clicking on the "
+msgid ""
+"You can always change the language, resolution and settings of the game by "
+"clicking on the "
 msgstr ""
 
 msgid "door"
 msgstr ""
 
+msgid " on the left side of the Main Menu, or with the "
+msgstr ""
+
+msgid " button from the "
+msgstr ""
+
+#, fuzzy
+msgid "NEW GAME"
+msgstr ""
+"НОВА\n"
+"ГРА"
+
 msgid ""
-" on the left side of main menu or by clicking on the configuration button. \n"
+" menu. \n"
 "\n"
 "Enjoy the game!"
+msgstr ""
+
+msgid "Editor"
+msgstr ""
+
+msgid "The Editor requires \"The Price of Loyalty\" expansion files to work."
 msgstr ""
 
 msgid "Quit Heroes of Might and Magic II and return to the operating system."
@@ -4581,7 +4619,7 @@ msgstr ""
 msgid "Play with 6 human players."
 msgstr ""
 
-msgid "Dragon city has fallen!  You are now the Master of the Dragons."
+msgid "Dragon city has fallen! You are now the Master of the Dragons."
 msgstr ""
 
 msgid ""
@@ -4611,6 +4649,9 @@ msgid ""
 "You have built up over %{count} gold in your treasury.\n"
 "All enemies bow before your wealth and power."
 msgstr ""
+
+msgid "Victory!"
+msgstr "Перемога!"
 
 msgid ""
 "The enemy has captured %{name}!\n"
@@ -4779,6 +4820,9 @@ msgstr ""
 msgid " All dwellings increase population."
 msgstr ""
 
+msgid "New Month!"
+msgstr ""
+
 msgid "New Week!"
 msgstr ""
 
@@ -4799,11 +4843,6 @@ msgid "%{color} player's turn."
 msgstr ""
 
 msgid ""
-"Do you want to transfer control from you to the AI? The effect will take "
-"place only on the next turn."
-msgstr ""
-
-msgid ""
 "%{color} player, you have lost your last town. If you do not conquer another "
 "town in next week, you will be eliminated."
 msgstr ""
@@ -4819,9 +4858,8 @@ msgstr "Лорд Кілбурн"
 msgid "Tsabu"
 msgstr ""
 
-#, fuzzy
 msgid "Sir Galant"
-msgstr "Сір Галант"
+msgstr "Сір Галлант"
 
 msgid "Thundax"
 msgstr ""
@@ -4880,10 +4918,13 @@ msgstr ""
 msgid "Select the next Hero."
 msgstr ""
 
-msgid "Continue Movement"
-msgstr ""
+#, fuzzy
+msgid "Hero Movement"
+msgstr "Затінення Сітки"
 
-msgid "Continue the Hero's movement along the current path."
+msgid ""
+"Start the Hero's movement along the current path or re-visit the object "
+"occupied by the Hero. Press and hold this button to reset the Hero's path."
 msgstr ""
 
 msgid "Kingdom Summary"
@@ -5122,9 +5163,8 @@ msgstr ""
 msgid "Slovak"
 msgstr ""
 
-#, fuzzy
 msgid "Vietnamese"
-msgstr "Дивитися %{name}"
+msgstr ""
 
 msgid ", FPS: "
 msgstr ""
@@ -5142,7 +5182,7 @@ msgid "Gwenneth"
 msgstr ""
 
 msgid "Sir Gallant"
-msgstr "Сір Галант"
+msgstr "Сір Галлант"
 
 msgid "Tyro"
 msgstr ""
@@ -5374,7 +5414,6 @@ msgstr ""
 msgid "You come upon the remains of an unfortunate adventurer."
 msgstr ""
 
-#, fuzzy
 msgid "Treasure"
 msgstr "Скарб"
 
@@ -5450,11 +5489,13 @@ msgid ""
 "\n"
 "Unfortunately, you have no Magic Book to record the spell with."
 msgstr ""
+"\n"
+"Нажаль, ви не маєте Книги Магії щоб записати це закляття."
 
 msgid ""
 "You approach the hut and observe a witch inside studying an ancient tome on "
 "%{skill}.\n"
-" \n"
+"\n"
 msgstr ""
 
 msgid ""
@@ -5634,7 +5675,7 @@ msgstr ""
 
 msgid ""
 "A drink at the oasis fills your troops with strength and lifts their "
-"spirits.  You can travel a bit further today."
+"spirits. You can travel a bit further today."
 msgstr ""
 
 msgid ""
@@ -6257,9 +6298,9 @@ msgstr ""
 
 msgid ""
 "The Sphinx asks you the following riddle:\n"
-" \n"
+"\n"
 "'%{riddle}'\n"
-" \n"
+"\n"
 "Your answer?"
 msgstr ""
 
@@ -6295,16 +6336,17 @@ msgid ""
 "oracle taught me his skill. I have the answer you seek.\""
 msgstr ""
 
-msgid "Spell book is not present."
+msgid "No spell book is present."
+msgstr "Відсутня книга магії."
+
+msgid ""
+"This spell costs %{mana} spell points. You have no spell points, so you "
+"cannot cast it."
 msgstr ""
 
 msgid ""
-"That spell costs %{mana} mana. You have no mana, so you can't cast the spell."
-msgstr ""
-
-msgid ""
-"That spell costs %{mana} mana. You only have %{point} mana, so you can't "
-"cast the spell."
+"This spell costs %{mana} spell points. You only have %{point} spell points, "
+"so you cannot cast it."
 msgstr ""
 
 msgid "The spell was not found."
@@ -6319,47 +6361,50 @@ msgstr ""
 msgid "Your hero is too tired to cast this spell today. Try again tomorrow."
 msgstr ""
 
-msgid "This spell cannot be used on a boat."
+msgid "This spell cannot be cast on a boat."
 msgstr ""
 
-msgid "This spell can be casted only nearby ocean."
-msgstr ""
-
-msgid ""
-"There is no boat available and no free ocean location near the hero to cast "
-"this spell."
-msgstr ""
-
-msgid "There is no more boat available to cast this spell."
-msgstr ""
-
-msgid "There is no free ocean location near the hero to cast this spell."
+msgid "This spell can only be cast near an ocean."
 msgstr ""
 
 msgid ""
-"You do not currently own any town or castle, so you can't cast the spell."
+"There are no boats available and no ocean adjacent to the hero where this "
+"spell will work."
 msgstr ""
 
-msgid "This hero is already in a town, so you can't cast the spell."
+msgid "There are no boats available for this spell."
 msgstr ""
+
+msgid "There is no ocean adjacent to the hero where this spell will work."
+msgstr "Біля героя немає водойми, то ж ви не можете використати це закляття."
+
+msgid ""
+"You do not own any town or castle that is not currently occupied by a hero. "
+"This spell will have no effect."
+msgstr ""
+
+#, fuzzy
+msgid "This hero is already in a town, so this spell will have no effect."
+msgstr ""
+"Цей герой вже перебуває у місті, то ж ви не можете використати це закляття."
 
 msgid ""
 "The nearest town is %{town}.\n"
-" \n"
+"\n"
 "This town is occupied by your hero %{hero}."
 msgstr ""
 
-msgid "This spell is already in use."
+msgid "This spell is already in effect."
 msgstr ""
 
 msgid ""
-"No opponent can have heroes under his command anymore. Casting this spell "
-"will not bring any advantage."
+"No opponent neither has nor can have any hero under their command anymore. "
+"Casting this spell will have no effect."
 msgstr ""
 
 msgid ""
-"No opponent has a hero under his command at this time. Casting this spell "
-"will not bring any advantage."
+"No opponent has a hero under their command at this time. Casting this spell "
+"will have no effect."
 msgstr ""
 
 msgid ""
@@ -6368,16 +6413,16 @@ msgid ""
 msgstr ""
 
 msgid ""
-"You must be standing on the entrance to a mine (sawmills and alchemists "
-"don't count) to cast this spell."
+"You must be standing on the entrance to a mine (sawmills and alchemist labs "
+"do not count) to cast this spell."
 msgstr ""
 
 msgid "You must first defeat the ghosts guarding the mine to cast this spell."
 msgstr ""
 
 msgid ""
-"There are already at least as many elementals guarding the mine than the "
-"spell can generate. Casting this spell will not bring any advantage."
+"There are already at least as many elementals guarding the mine as this hero "
+"can generate. Casting this spell will have no effect."
 msgstr ""
 
 msgid "%{name} the %{race} (Level %{level})"
@@ -6503,252 +6548,191 @@ msgid ""
 msgstr ""
 
 msgid "Current Modifiers:"
-msgstr "Поточні модифікатори:"
+msgstr "Поточні Модифікатори:"
 
-#, fuzzy
 msgid "skill|Basic"
 msgstr "Базовий"
 
-#, fuzzy
 msgid "skill|Advanced"
 msgstr "Просунутий"
 
-#, fuzzy
 msgid "skill|Expert"
 msgstr "Експертний"
 
-#, fuzzy
 msgid "Pathfinding"
 msgstr "Пошук шляху"
 
-#, fuzzy
 msgid "Archery"
 msgstr "Стрільба"
 
-#, fuzzy
 msgid "Logistics"
 msgstr "Логістика"
 
-#, fuzzy
 msgid "Scouting"
 msgstr "Розвідка"
 
-#, fuzzy
 msgid "Diplomacy"
 msgstr "Дипломатія"
 
-#, fuzzy
 msgid "Navigation"
 msgstr "Навігація"
 
-#, fuzzy
 msgid "Leadership"
 msgstr "Лідерство"
 
-#, fuzzy
 msgid "Wisdom"
 msgstr "Мудрість"
 
-#, fuzzy
 msgid "Mysticism"
 msgstr "Містицизм"
 
-#, fuzzy
 msgid "Ballistics"
 msgstr "Балістика"
 
-#, fuzzy
 msgid "Eagle Eye"
 msgstr "Орлиний зір"
 
-#, fuzzy
 msgid "Necromancy"
 msgstr "Некромантія"
 
-#, fuzzy
 msgid "Estates"
-msgstr "Шляхетність"
+msgstr "Маєтки"
 
-#, fuzzy
 msgid "Advanced Archery"
 msgstr "Проснута Стрільба"
 
-#, fuzzy
 msgid "Advanced Pathfinding"
 msgstr "Просунутий Пошук шляху"
 
-#, fuzzy
 msgid "Basic Archery"
 msgstr "Базова Стрільба"
 
-#, fuzzy
 msgid "Basic Pathfinding"
 msgstr "Базовий Пошук шляху"
 
-#, fuzzy
 msgid "Expert Pathfinding"
 msgstr "Експертний Пошук шляху"
 
-#, fuzzy
 msgid "Advanced Logistics"
 msgstr "Просунута Логістика"
 
-#, fuzzy
 msgid "Basic Logistics"
 msgstr "Базова Логістика"
 
-#, fuzzy
 msgid "Basic Scouting"
 msgstr "Базова Розвідка"
 
-#, fuzzy
 msgid "Expert Archery"
 msgstr "Експертна Стрільба"
 
-#, fuzzy
 msgid "Expert Logistics"
 msgstr "Експертна Логістика"
 
-#, fuzzy
 msgid "Advanced Diplomacy"
 msgstr "Просунута Дипломатія"
 
-#, fuzzy
 msgid "Advanced Scouting"
 msgstr "Просунута Розвідка"
 
-#, fuzzy
 msgid "Basic Diplomacy"
 msgstr "Базова Дипломатія"
 
-#, fuzzy
 msgid "Expert Diplomacy"
 msgstr "Експертна Дипломатія"
 
-#, fuzzy
 msgid "Expert Scouting"
 msgstr "Експертна Розвідка"
 
-#, fuzzy
 msgid "Advanced Leadership"
 msgstr "Просунуте Лідерство"
 
-#, fuzzy
 msgid "Advanced Navigation"
 msgstr "Просунута Навігація"
 
-#, fuzzy
 msgid "Basic Leadership"
 msgstr "Базове Лідерство"
 
-#, fuzzy
 msgid "Basic Navigation"
 msgstr "Базова Навігація"
 
-#, fuzzy
 msgid "Expert Navigation"
 msgstr "Експертна Навігація"
 
-#, fuzzy
 msgid "Advanced Wisdom"
 msgstr "Просунута Мудрість"
 
-#, fuzzy
 msgid "Basic Mysticism"
 msgstr "Базовий Містицизм"
 
-#, fuzzy
 msgid "Basic Wisdom"
 msgstr "Базова Мудрість"
 
-#, fuzzy
 msgid "Expert Leadership"
 msgstr "Експертне Лідерство"
 
-#, fuzzy
 msgid "Expert Wisdom"
 msgstr "Експертна Мудрість"
 
-#, fuzzy
 msgid "Advanced Luck"
-msgstr "Просунута Вдача"
+msgstr "Просунута Удача"
 
-#, fuzzy
 msgid "Advanced Mysticism"
 msgstr "Просунутий Містицизм"
 
-#, fuzzy
 msgid "Basic Luck"
-msgstr "Базова Вдача"
+msgstr "Базова Удача"
 
-#, fuzzy
 msgid "Expert Luck"
-msgstr "Експертна Вдача"
+msgstr "Експертна Удача"
 
-#, fuzzy
 msgid "Expert Mysticism"
 msgstr "Експертний Містицизм"
 
-#, fuzzy
 msgid "Advanced Ballistics"
 msgstr "Просунута Балістика"
 
-#, fuzzy
 msgid "Advanced Eagle Eye"
 msgstr "Просунутий Орлиний Зір"
 
-#, fuzzy
 msgid "Basic Ballistics"
 msgstr "Базова Балістика"
 
-#, fuzzy
 msgid "Basic Eagle Eye"
 msgstr "Базовий Орлиний Зір"
 
-#, fuzzy
 msgid "Expert Ballistics"
 msgstr "Експертна Балістика"
 
-#, fuzzy
 msgid "Advanced Necromancy"
 msgstr "Просунута Некромантія"
 
-#, fuzzy
 msgid "Basic Estates"
-msgstr "Базова Шляхетність"
+msgstr "Базові Маєтки"
 
-#, fuzzy
 msgid "Basic Necromancy"
 msgstr "Базова Некромантія"
 
-#, fuzzy
 msgid "Expert Eagle Eye"
 msgstr "Експертний Орлиний Зір"
 
-#, fuzzy
 msgid "Expert Necromancy"
 msgstr "Експертна Некромантія"
 
-#, fuzzy
 msgid "Advanced Estates"
-msgstr "Просунута Шляхетність"
+msgstr "Просунуті Маєтки"
 
-#, fuzzy
 msgid "Expert Estates"
-msgstr "Експертна Шляхетність"
+msgstr "Експертні Маєтки"
 
-#, fuzzy
 msgid ""
 "%{skill} reduces the movement penalty for rough terrain by %{count} percent."
 msgstr ""
 "%{skill} знижує штраф за переміщення по нерівній території на %{count} "
 "відсотків."
 
-#, fuzzy
 msgid "%{skill} eliminates the movement penalty for rough terrain."
 msgstr "%{skill} усуває штраф за переміщення по нерівній території."
 
-#, fuzzy
 msgid ""
 "%{skill} increases the damage done by range attacking creatures by %{count} "
 "percent."
@@ -6756,11 +6740,9 @@ msgstr ""
 "%{skill} підвищує шкоду від істот, що атакують з відстані на %{count} "
 "відсотків."
 
-#, fuzzy
 msgid "%{skill} increases your hero's movement points by %{count} percent."
 msgstr "%{skill} підвищує одиниці руху Вашого героя на %{count} відсотків."
 
-#, fuzzy
 msgid "%{skill} increases your hero's viewable area by one square."
 msgid_plural ""
 "%{skill} increases your hero's viewable area by %{count} squares."
@@ -6768,45 +6750,37 @@ msgstr[0] "%{skill} підвищує радіус огляду героя на �
 msgstr[1] "%{skill} підвищує радіус огляду героя на %{count} квадрата."
 msgstr[2] "%{skill} підвищує радіус огляду героя на %{count} квадратів."
 
-#, fuzzy
 msgid ""
 "%{skill} allows you to negotiate with monsters who are weaker than your "
 "group. "
 msgstr ""
-"%{skill} дозволяє Вам домовлятися із потворами, що слабші за вашу групу. "
+"%{skill} дозволяє Вам домовлятися із істотами, що слабші за ваше військо. "
 
-#, fuzzy
 msgid "Approximately %{count} percent of the creatures may offer to join you."
-msgstr "Приблизно %{count} відсотків істот можуть захотіти приєднатись до Вас."
+msgstr ""
+"Приблизно %{count} відсотків істот можуть запропонувати приєднатись до Вас."
 
-#, fuzzy
 msgid "All of the creatures may offer to join you."
-msgstr "Всі істоти можуть захотіти приєднатись до Вас."
+msgstr "Всі істоти можуть запропонувати приєднатись до Вас."
 
-#, fuzzy
 msgid ""
 "%{skill} increases your hero's movement points over water by %{count} "
 "percent."
 msgstr ""
 "%{skill} підвищує одиниці руху Вашого героя по воді на %{count} відсотків."
 
-#, fuzzy
 msgid "%{skill} increases your hero's troops morale by %{count}."
 msgstr "%{skill} підвищує мораль військ Вашого героя на %{count}."
 
-#, fuzzy
 msgid "%{skill} allows your hero to learn third level spells."
-msgstr "%{skill} дозволяє Вашому герою вчити чари третього рівня."
+msgstr "%{skill} дозволяє Вашому герою вчити закляття третього рівня."
 
-#, fuzzy
 msgid "%{skill} allows your hero to learn fourth level spells."
-msgstr "%{skill} дозволяє Вашому герою вчити чари четвертого рівня."
+msgstr "%{skill} дозволяє Вашому герою вчити закляття четвертого рівня."
 
-#, fuzzy
 msgid "%{skill} allows your hero to learn fifth level spells."
-msgstr "%{skill} дозволяє Вашому герою вчити чари п'ятого рівня."
+msgstr "%{skill} дозволяє Вашому герою вчити закляття п'ятого рівня."
 
-#, fuzzy
 msgid "%{skill} regenerates one additional spell point per day to your hero."
 msgid_plural ""
 "%{skill} regenerates %{count} additional spell points per day to your hero."
@@ -6814,70 +6788,61 @@ msgstr[0] "%{skill} відновлює одину одиницю мани гер
 msgstr[1] "%{skill} відновлює %{count} одиниці мани героя щодня."
 msgstr[2] "%{skill} відновлює %{count} одиниць мани героя щодня."
 
-#, fuzzy
 msgid "%{skill} increases your hero's luck by %{count}."
-msgstr "%{skill} підвищує вдачу героя на %{count}."
+msgstr "%{skill} підвищує удачу героя на %{count}."
 
-#, fuzzy
 msgid ""
 "%{skill} gives your hero's catapult shots a greater chance to hit and do "
 "damage to castle walls."
 msgstr ""
-"%{skill} дає пострілам катапульти Вашого героя більший шанс влучити і "
+"%{skill} дає пострілам катапульти Вашого героя більший шанс влучити та "
 "пошкодити стіни замка."
 
-#, fuzzy
 msgid ""
 "%{skill} gives your hero's catapult an extra shot, and each shot has a "
 "greater chance to hit and do damage to castle walls."
 msgstr ""
-"%{skill} дає пострілам катапульти Вашого героя додатковий постріл і підвищує "
-"шанс пошкодження стін замка кожним пострілом."
+"%{skill} дає пострілам катапульти Вашого героя додатковий постріл, "
+"підвищуючи шанс пошкодження стін замка кожним пострілом."
 
-#, fuzzy
 msgid ""
 "%{skill} gives your hero's catapult an extra shot, and each shot "
 "automatically destroys any wall, except a fortified wall in a Knight castle."
 msgstr ""
 "%{skill} дає пострілам катапульти Вашого героя додатковий постріл і кожний "
-"постріл гарантовано руйнує будь-яку стіну окрім Лицарського замка."
+"постріл гарантовано руйнує будь-яку стіну, окрім укріплень Лицарського замка."
 
-#, fuzzy
 msgid ""
 "%{skill} gives your hero a %{count} percent chance to learn any given 1st or "
-"2nd level enemy spell used against him in a combat."
+"2nd level spell that was cast by an enemy during combat."
 msgstr ""
-"%{skill} дає герою %{count} відсотків шанс вивчити чари 1-го або 2-го рівня "
-"з тих, що ворог використовував проти нього в бою."
+"%{skill} дає герою %{count}% шанс вивчити чари 1-го або 2-го рівня з тих, що "
+"ворог використовував проти нього в бою."
 
-#, fuzzy
 msgid ""
 "%{skill} gives your hero a %{count} percent chance to learn any given 3rd "
-"level spell (or below) used against him in combat."
+"level spell (or below) that was cast by an enemy during combat."
 msgstr ""
-"%{skill} дає герою %{count} відсотків шанс вивчити чари 3-го або нижче рівня "
-"з тих, що ворог використовував проти нього в бою."
+"%{skill} дає герою %{count}% шанс вивчити чари 3-го (або нижчого рівня) з "
+"числа тих, що ворог використовував проти нього в бою."
 
-#, fuzzy
 msgid ""
 "%{skill} gives your hero a %{count} percent chance to learn any given 4th "
-"level spell (or below) used against him in combat."
+"level spell (or below) that was cast by an enemy during combat."
 msgstr ""
-"%{skill} дає герою %{count} відсотків шанс вивчити чари 4-го або нижче рівня "
-"з тих, що ворог використовував проти нього в бою."
+"%{skill} дає герою %{count}% шанс вивчити чари 4-го (або нижчого рівня) з "
+"числа тих, що ворог використовував проти нього в бою."
 
-#, fuzzy
 msgid ""
 "%{skill} allows %{count} percent of the creatures killed in combat to be "
 "brought back from the dead as Skeletons."
 msgstr ""
-"%{skill} дозволяє %{count} відсоткам істот вбитих у бою повернутися з "
-"мертвих у виді Скелетів."
+"%{skill} дозволяє повернути %{count} відсотків вбитих у бою істот у вигляді "
+"Скелетів."
 
-#, fuzzy
 msgid ""
 "Your hero produces %{count} gold pieces per day as tax revenue from estates."
-msgstr "Ваш герой збирає %{count} золота податків з маєтків."
+msgstr "Ваш герой збирає %{count} золота податків з маєтків щодня."
 
 msgid "Blue"
 msgstr "Синій"
@@ -6895,7 +6860,7 @@ msgid "Orange"
 msgstr "Помаранчевий"
 
 msgid "Purple"
-msgstr "Фіолетовий"
+msgstr "Ліловий"
 
 msgid "barrier|Aqua"
 msgstr "Бірюзовий"
@@ -6916,7 +6881,7 @@ msgid "barrier|Orange"
 msgstr "Помаранчевий"
 
 msgid "barrier|Purple"
-msgstr "Фіолетовий"
+msgstr "Ліловий"
 
 msgid "barrier|Red"
 msgstr "Червоний"
@@ -6940,7 +6905,7 @@ msgid "tent|Orange"
 msgstr "Помаранчевий"
 
 msgid "tent|Purple"
-msgstr "Фіолетовий"
+msgstr "Ліловий"
 
 msgid "tent|Red"
 msgstr "Червоний"
@@ -6959,9 +6924,6 @@ msgstr ""
 msgid "Skills"
 msgstr ""
 
-msgid "Artifacts"
-msgstr ""
-
 msgid "Town/Castle"
 msgstr ""
 
@@ -6969,9 +6931,6 @@ msgid "Garrison"
 msgstr ""
 
 msgid "Gold Per Day:"
-msgstr ""
-
-msgid "Heroes"
 msgstr ""
 
 msgid "View Heroes."
@@ -7019,7 +6978,6 @@ msgid ""
 "combat."
 msgstr ""
 
-#, fuzzy
 msgid "morale|Treason"
 msgstr "Зрада"
 
@@ -7059,14 +7017,13 @@ msgid "Barbarian"
 msgstr "Варвар"
 
 msgid "Sorceress"
-msgstr "Чарівниця"
+msgstr "Чаклунка"
 
 msgid "Warlock"
 msgstr "Чорнокнижник"
 
-#, fuzzy
 msgid "Wizard"
-msgstr "Чаклун"
+msgstr "Чарівник"
 
 msgid "Necromancer"
 msgstr "Некромант"
@@ -7083,13 +7040,11 @@ msgstr ""
 msgid "doubleLined|Knight"
 msgstr ""
 
-#, fuzzy
 msgid "doubleLined|Barbarian"
 msgstr "Варвар"
 
-#, fuzzy
 msgid "doubleLined|Sorceress"
-msgstr "Чарівниця"
+msgstr "Чаклунка"
 
 msgid "doubleLined|Warlock"
 msgstr ""
@@ -7097,11 +7052,12 @@ msgstr ""
 msgid "doubleLined|Wizard"
 msgstr ""
 
-#, fuzzy
 msgid ""
 "doubleLined|Necro-\n"
 "mancer"
-msgstr "Некромант"
+msgstr ""
+"Некро-\n"
+"мант"
 
 msgid "doubleLinedRace|Multi"
 msgstr ""
@@ -7113,117 +7069,115 @@ msgid "doubleLinedRace|Neutral"
 msgstr ""
 
 msgid "speed|Standing"
-msgstr ""
+msgstr "Непорушна"
 
 msgid "speed|Crawling"
-msgstr ""
+msgstr "Повзуча"
 
 msgid "speed|Very Slow"
-msgstr ""
+msgstr "Дуже Повільна"
 
 msgid "speed|Slow"
-msgstr ""
+msgstr "Повільна"
 
 msgid "speed|Average"
-msgstr ""
+msgstr "Середня"
 
 msgid "speed|Fast"
-msgstr ""
+msgstr "Швидка"
 
 msgid "speed|Very Fast"
-msgstr ""
+msgstr "Стрімка"
 
 msgid "speed|Ultra Fast"
-msgstr ""
+msgstr "Шалена"
 
 msgid "speed|Blazing"
-msgstr ""
+msgstr "Блискавична"
 
 msgid "speed|Instant"
-msgstr ""
+msgstr "Миттєва"
 
 msgid "week|Squirrel"
-msgstr ""
+msgstr "Білки"
 
 msgid "week|Rabbit"
-msgstr ""
+msgstr "Кролика"
 
 msgid "week|Gopher"
-msgstr ""
+msgstr "Ховрашка"
 
 msgid "week|Badger"
-msgstr ""
+msgstr "Борсука"
 
-#, fuzzy
 msgid "week|Rat"
-msgstr "неділя"
+msgstr "Пацюка"
 
 msgid "week|Eagle"
-msgstr ""
+msgstr "Орла"
 
 msgid "week|Weasel"
-msgstr ""
+msgstr "Ласки"
 
 msgid "week|Raven"
-msgstr ""
+msgstr "Ворона"
 
 msgid "week|Mongoose"
-msgstr ""
+msgstr "Мангуста"
 
-#, fuzzy
 msgid "week|Dog"
-msgstr "неділя"
+msgstr "Собаки"
 
 msgid "week|Aardvark"
-msgstr ""
+msgstr "Тхора"
 
 msgid "week|Lizard"
-msgstr ""
+msgstr "Ящірки"
 
 msgid "week|Tortoise"
-msgstr ""
+msgstr "Черепахи"
 
 msgid "week|Hedgehog"
-msgstr ""
+msgstr "Їжака"
 
 msgid "week|Condor"
-msgstr ""
+msgstr "Кондора"
 
 msgid "week|Ant"
-msgstr ""
+msgstr "Мурахи"
 
 msgid "week|Grasshopper"
-msgstr ""
+msgstr "Коника"
 
 msgid "week|Dragonfly"
-msgstr ""
+msgstr "Бабки"
 
 msgid "week|Spider"
-msgstr ""
+msgstr "Павука"
 
 msgid "week|Butterfly"
-msgstr ""
+msgstr "Метелика"
 
 msgid "week|Bumblebee"
-msgstr ""
+msgstr "Джмеля"
 
 msgid "week|Locust"
-msgstr ""
+msgstr "Сарани"
 
 msgid "week|Earthworm"
-msgstr ""
+msgstr "Дощового Черв'яка"
 
 msgid "week|Hornet"
-msgstr ""
+msgstr "Шешрня"
 
 msgid "week|Beetle"
-msgstr ""
+msgstr "Жука"
 
 msgid "week|PLAGUE"
-msgstr ""
+msgstr "ЧУМИ"
 
 msgid "week|Unnamed"
-msgstr ""
+msgstr "Безіменний"
 
 msgid "Desert"
 msgstr "Пустеля"
@@ -7259,41 +7213,34 @@ msgid "maps|Large"
 msgstr "Велика"
 
 msgid "maps|Extra Large"
-msgstr "надвелика"
+msgstr "Надвелика"
 
-#, fuzzy
 msgid "maps|Custom Size"
-msgstr "Вказати розмір"
+msgstr "Користувацький Розмір"
 
-#, fuzzy
 msgid "Ore Mine"
-msgstr "Рудник"
+msgstr "Рудна Копальня"
 
-#, fuzzy
 msgid "Sulfur Mine"
-msgstr "Сірчана шахта"
+msgstr "Сірчана Копальня"
 
-#, fuzzy
 msgid "Crystal Mine"
-msgstr "Кристальна шахта"
+msgstr "Кришталева Копальня"
 
-#, fuzzy
 msgid "Gems Mine"
-msgstr "Шахта Самоцвітів"
+msgstr "Копальня Самоцвітів"
 
-#, fuzzy
 msgid "Gold Mine"
-msgstr "Золота копальня"
+msgstr "Золота Копальня"
 
-#, fuzzy
 msgid "Mine"
-msgstr "Шахта"
+msgstr "Копальня"
 
 msgid "Burma shave."
 msgstr ""
 
 msgid "Next sign 50 miles."
-msgstr ""
+msgstr "Наступний знак за 50 миль"
 
 msgid "See Rock City."
 msgstr ""
@@ -7305,7 +7252,7 @@ msgid "No object"
 msgstr "Порожнє місце"
 
 msgid "Alchemist Lab"
-msgstr "Алхімічна лабораторія"
+msgstr "Алхімічна Лабораторія"
 
 msgid "Sign"
 msgstr "Вказівник"
@@ -7320,7 +7267,7 @@ msgid "Daemon Cave"
 msgstr "Печера Демона"
 
 msgid "Treasure Chest"
-msgstr "Скринька зі скарбом"
+msgstr "Скринька зі Скарбом"
 
 msgid "Faerie Ring"
 msgstr "Коло Фей"
@@ -7335,19 +7282,19 @@ msgid "Gazebo"
 msgstr "Альтанка"
 
 msgid "Genie Lamp"
-msgstr "Лампа джина"
+msgstr "Лампа Джина"
 
 msgid "Archer's House"
-msgstr "Дім лучників"
+msgstr "Дім Лучників"
 
 msgid "Goblin Hut"
-msgstr "Гоблінска хатина"
+msgstr "Гоблінська Хатина"
 
 msgid "Dwarf Cottage"
-msgstr "Хатинка гнома"
+msgstr "Хатинка Гнома"
 
 msgid "Peasant Hut"
-msgstr "Селянська хата"
+msgstr "Селянська Хата"
 
 msgid "Stables"
 msgstr "Стайні"
@@ -7369,16 +7316,12 @@ msgstr[2] "Маяк"
 
 msgid "Water Wheel"
 msgid_plural "Water Wheels"
-msgstr[0] "Водяне колесо"
-msgstr[1] "Водяні колеса"
-msgstr[2] "Водяні колеса"
+msgstr[0] "Водяне Колесо"
+msgstr[1] "Водяні Колеса"
+msgstr[2] "Водяні Колеса"
 
-#, fuzzy
 msgid "Mines"
-msgstr "Шахти"
-
-msgid "Monster"
-msgstr "Монстр"
+msgstr "Копальні"
 
 msgid "Obelisk"
 msgstr "Обеліск"
@@ -7390,34 +7333,31 @@ msgid "Resource"
 msgstr "Ресурс"
 
 msgid "Sawmill"
-msgstr "Лісопильня"
+msgstr "Тартак"
 
 msgid "Oracle"
 msgstr "Оракул"
 
 msgid "Shrine of the First Circle"
-msgstr "Cвятиня 1-го кола"
+msgstr "Cвятиня 1-го Кола"
 
 msgid "Shipwreck"
-msgstr "Уламки корабля"
+msgstr "Уламки Корабля"
 
 msgid "Sea Chest"
-msgstr "Морський сундук"
+msgstr "Морський Сундук"
 
 msgid "Desert Tent"
-msgstr "Пустельний намет"
+msgstr "Пустельний Намет"
 
-#, fuzzy
 msgid "Stone Liths"
-msgstr "Моноліти"
+msgstr "Моноліт"
 
-#, fuzzy
 msgid "Wagon Camp"
-msgstr "Вагонний табір"
+msgstr "Табір з Возів"
 
-#, fuzzy
 msgid "Hut of the Magi"
-msgstr "Хатина волхвів"
+msgstr "Хатина Мага"
 
 msgid "Whirlpool"
 msgstr "Водоверть"
@@ -7437,28 +7377,26 @@ msgstr "Русалка"
 msgid "Boat"
 msgstr "Човен"
 
-#, fuzzy
 msgid "Random Ultimate Artifact"
-msgstr "Випадковий Унікальний артефакт"
+msgstr "Випадковий Унікальний Артефакт"
 
 msgid "Random Artifact"
-msgstr "Випадковий артефакт"
+msgstr "Випадковий Артефакт"
 
 msgid "Random Resource"
-msgstr "Випадковий ресурс"
+msgstr "Випадковий Ресурс"
 
 msgid "Random Monster"
 msgstr "Випадковий Монстр"
 
 msgid "Random Town"
-msgstr "Випадкове місто"
+msgstr "Випадкове Місто"
 
 msgid "Random Castle"
-msgstr "Випадковий замок"
+msgstr "Випадковий Замок"
 
-#, fuzzy
 msgid "Eye of the Magi"
-msgstr "Око волхвів"
+msgstr "Око Магів"
 
 msgid "Random Monster - weak"
 msgstr "Випадковий Монстр - слабкий"
@@ -7473,19 +7411,19 @@ msgid "Random Monster - very strong"
 msgstr "Випадковий Монстр - могутній"
 
 msgid "Nothing Special"
-msgstr "Нічого особливого"
+msgstr "Нічого Особливого"
 
 msgid "Mossy Rock"
 msgstr ""
 
 msgid "Watch Tower"
-msgstr "Вартова вежа"
+msgstr "Вартова Вежа"
 
 msgid "Tree House"
-msgstr "Будинок на дереві"
+msgstr "Будинок на Дереві"
 
 msgid "Tree City"
-msgstr "Місто на дереві"
+msgstr "Місто на Дереві"
 
 msgid "Ruins"
 msgstr "Руїни"
@@ -7500,34 +7438,34 @@ msgid "Sirens"
 msgstr "Сирени"
 
 msgid "Standing Stones"
-msgstr "Стоячі камені"
+msgstr "Стоячі Камені"
 
 msgid "Idol"
 msgstr "Ідол"
 
 msgid "Tree of Knowledge"
-msgstr "Дерево знань"
+msgstr "Дерево Знань"
 
 msgid "Witch Doctor's Hut"
-msgstr "Хатина знахаря"
+msgstr "Хатина Знахаря"
 
 msgid "Temple"
 msgstr "Храм"
 
 msgid "Hill Fort"
-msgstr "Форт на пагорбі"
+msgstr "Форт на Пагорбі"
 
 msgid "Halfling Hole"
 msgstr "Нора Напівросликів"
 
 msgid "Mercenary Camp"
-msgstr "Табір найманців"
+msgstr "Табір Найманців"
 
 msgid "Shrine of the Second Circle"
-msgstr "Cвятиня 2-го кола"
+msgstr "Cвятиня 2-го Кола"
 
 msgid "Shrine of the Third Circle"
-msgstr "Cвятиня 3-го кола"
+msgstr "Cвятиня 3-го Кола"
 
 msgid "City of the Dead"
 msgstr "Місто Мертвих"
@@ -7539,19 +7477,19 @@ msgid "Wagon"
 msgstr "Віз"
 
 msgid "Tar Pit"
-msgstr "Смоляна яма"
+msgstr "Смоляна Яма"
 
 msgid "Artesian Spring"
-msgstr "Артезіанське джерело"
+msgstr "Артезіанське Джерело"
 
 msgid "Troll Bridge"
-msgstr "Тролиний міст"
+msgstr "Тролиний Міст"
 
 msgid "Watering Hole"
 msgstr "Джерело"
 
 msgid "Witch's Hut"
-msgstr "Хатина відьми"
+msgstr "Хатина Відьми"
 
 msgid "Xanadu"
 msgstr "Занду"
@@ -7566,27 +7504,26 @@ msgid "Flotsam"
 msgstr "Уламки"
 
 msgid "Derelict Ship"
-msgstr "Покинутий корабель"
+msgstr "Покинутий Корабель"
 
 msgid "Shipwreck Survivor"
-msgstr "Уцілілий з корабля"
+msgstr "Уцілілий з Корабля"
 
 msgid "Bottle"
 msgstr "Пляшка"
 
 msgid "Magic Well"
-msgstr "Чарівна криниця"
+msgstr "Чарівна Криниця"
 
 msgid "Magic Garden"
 msgid_plural "Magic Gardens"
-msgstr[0] "Чарівний сад"
-msgstr[1] "Чарівні сади"
-msgstr[2] "Чарівних садів"
+msgstr[0] "Чарівний Сад"
+msgstr[1] "Чарівні Сади"
+msgstr[2] "Чарівних Садів"
 
 msgid "Observation Tower"
-msgstr "Оглядова вежа"
+msgstr "Оглядова Вежа"
 
-#, fuzzy
 msgid "Freeman's Foundry"
 msgstr "Ливарня"
 
@@ -7615,7 +7552,7 @@ msgid "Mandrake"
 msgstr "Мандрагора"
 
 msgid "Dead Tree"
-msgstr "Мертве дерево"
+msgstr "Мертве Дерево"
 
 msgid "Stump"
 msgstr "Пень"
@@ -7633,13 +7570,13 @@ msgid "Dune"
 msgstr "Дюна"
 
 msgid "Lava Pool"
-msgstr "Лавовий басейн"
+msgstr "Лавовий Басейн"
 
 msgid "Shrub"
 msgstr "Кущі"
 
 msgid "Barrow Mounds"
-msgstr "Могильні кургани"
+msgstr "Могильні Кургани"
 
 msgid "Random Artifact - Treasure"
 msgstr "Випадковий артефакт - Реліквія"
@@ -7650,27 +7587,26 @@ msgstr "Випадковий артефакт - Малий"
 msgid "Random Artifact - Major"
 msgstr "Випадковий артефакт - Великий"
 
-#, fuzzy
 msgid "Barrier"
 msgstr "Бар'єр"
 
 msgid "Traveller's Tent"
-msgstr "Намет мандрівника"
+msgstr "Намет Мандрівника"
 
 msgid "Jail"
 msgstr "В'язниця"
 
 msgid "Fire Summoning Altar"
-msgstr "Вівтар виклику вогню"
+msgstr "Вівтар Виклику Вогню"
 
 msgid "Air Summoning Altar"
-msgstr "Вівтар виклику повітря"
+msgstr "Вівтар Виклику Повітря"
 
 msgid "Earth Summoning Altar"
-msgstr "Вівтар виклику землі"
+msgstr "Вівтар Виклику Землі"
 
 msgid "Water Summoning Altar"
-msgstr "Вівтар виклику води"
+msgstr "Вівтар Виклику Води"
 
 msgid "Unknown Monster"
 msgstr "Невідомий монстр"
@@ -8072,40 +8008,40 @@ msgid "Water Elementals"
 msgstr "Водні Елементалі"
 
 msgid "Random Monsters"
-msgstr "Випадкові монстри"
+msgstr "Випадкові Монстри"
 
 msgid "Random Monster 1"
-msgstr "Випадковий монстр 1"
+msgstr "Випадковий Монстр 1"
 
 msgid "Random Monsters 1"
-msgstr "Випадкові монстри 1"
+msgstr "Випадкові Монстри 1"
 
 msgid "Random Monster 2"
-msgstr "Випадковий монстр 2"
+msgstr "Випадковий Монстр 2"
 
 msgid "Random Monsters 2"
-msgstr "Випадкові монстри 2"
+msgstr "Випадкові Монстри 2"
 
 msgid "Random Monster 3"
-msgstr "Випадковий монстр 3"
+msgstr "Випадковий Монстр 3"
 
 msgid "Random Monsters 3"
-msgstr "Випадкові монстри 3"
+msgstr "Випадкові Монстри 3"
 
 msgid "Random Monster 4"
-msgstr "Випадковий монстр 4"
+msgstr "Випадковий Монстр 4"
 
 msgid "Random Monsters 4"
-msgstr "Випадкові монстри 4"
+msgstr "Випадкові Монстри 4"
 
 msgid "Double shot"
 msgstr ""
 
 msgid "2-hex monster"
-msgstr ""
+msgstr "2-клітинний монстр"
 
 msgid "Double strike"
-msgstr ""
+msgstr "Подвійний удар"
 
 msgid "Double damage to Undead"
 msgstr ""
@@ -8304,13 +8240,16 @@ msgid ""
 msgstr ""
 
 msgid "Mage's Ring of Power"
-msgstr ""
+msgstr "Магічний Перстень Могутності"
 
 msgid ""
 "A cry of pain leads you to a Centaur, caught in a trap. Upon setting the "
 "creature free, he hands you a small pouch. Emptying the contents, you find a "
 "dazzling jeweled ring."
 msgstr ""
+"Відчайдушний крик болю приводить вас до Кентавра, що потрапив у пастку. Ви "
+"звільняєте його, і він дарує вам маленький мішечок. Спорожнивши його, ви "
+"знаходите сліпучий, прикрашений коштовним камінням перстень."
 
 msgid "Witch's Broach of Magic"
 msgstr ""
@@ -8322,7 +8261,7 @@ msgid ""
 msgstr ""
 
 msgid "Medal of Valor"
-msgstr ""
+msgstr "Медаль за Відвагу"
 
 msgid "The %{name} increases your morale by %{count}."
 msgstr "%{name} підвищує мораль військ Вашого героя на %{count}."
@@ -8331,6 +8270,8 @@ msgid ""
 "Freeing a virtuous maiden from the clutches of an evil overlord, you are "
 "granted a Medal of Valor by the King's herald."
 msgstr ""
+"Звільнивши благородну леді з лещат злого володаря, ви отримуєте Медаль за "
+"Відвагу від королівського герольда."
 
 msgid "Medal of Courage"
 msgstr ""
@@ -8341,12 +8282,14 @@ msgid ""
 msgstr ""
 
 msgid "Medal of Honor"
-msgstr ""
+msgstr "Медаль за Честь"
 
 msgid ""
 "After freeing a princess of a neighboring kingdom from the evil clutches of "
 "despicable slavers, she awards you with a Medal of Honor."
 msgstr ""
+"Після звільнення принцеси сусіднього королівства із лабетів підлих "
+"работорговців, вона нагороджує вас Медаллю за Честь."
 
 msgid "Medal of Distinction"
 msgstr ""
@@ -8369,31 +8312,35 @@ msgid ""
 msgstr ""
 
 msgid "Thunder Mace of Dominion"
-msgstr ""
+msgstr "Громова Булава Панування"
 
 msgid ""
 "During a sudden storm, a bolt of lightning strikes a tree, splitting it. "
 "Inside the tree you find a mysterious mace."
 msgstr ""
+"Під час несподіваного шторму блискавка вдаряє у дерево, розколовши його. "
+"Всередині ви знаходите загадкову булаву."
 
 msgid "Armored Gauntlets of Protection"
-msgstr ""
+msgstr "Броньована Рукавиця Захисту"
 
 msgid "The %{name} increase your defense skill by %{count}."
-msgstr ""
+msgstr "%{name} підвищує ваш Захист на %{count}."
 
 msgid ""
-"You encounter the infamous Black Knight!  After a grueling duel ending in a "
+"You encounter the infamous Black Knight! After a grueling duel ending in a "
 "draw, the Knight, out of respect, offers you a pair of armored gauntlets."
 msgstr ""
 
 msgid "Defender Helm of Protection"
-msgstr ""
+msgstr "Шолом Захисника"
 
 msgid ""
 "A glint of golden light catches your eye. Upon further investigation, you "
 "find a golden helm hidden under a bush."
 msgstr ""
+"Золотий відблиск привертає вашу увагу. Придивившись уважніше, ви знаходите "
+"золотого шолома, що був схований під кущем."
 
 msgid "Giant Flail of Dominion"
 msgstr ""
@@ -8405,10 +8352,12 @@ msgid ""
 msgstr ""
 
 msgid "Ballista of Quickness"
-msgstr ""
+msgstr "Баліста Швидкості"
 
 msgid "The %{name} gives your catapult one extra shot per combat round."
 msgstr ""
+"%{name} надає вашій катапульті додатковий постріл у кожному раунді під час "
+"облоги."
 
 msgid ""
 "Walking through the ruins of an ancient walled city, you find the instrument "
@@ -8416,56 +8365,71 @@ msgid ""
 msgstr ""
 
 msgid "Stealth Shield of Protection"
-msgstr ""
+msgstr "Незримий Щит Захисту"
 
 msgid ""
 "A stone statue of a warrior holds a silver shield. As you remove the shield, "
 "the statue crumbles into dust."
 msgstr ""
+"Кам'яна статуя воїна тримає срібного щита. Щойно ви забираєте щит, статуя "
+"розпорошується на пил."
 
 msgid "Dragon Sword of Dominion"
-msgstr ""
+msgstr "Драконячий Меч Панування"
 
 msgid ""
 "As you are walking along a narrow path, a nearby bush suddenly bursts into "
 "flames. Before your eyes the flames become the image of a beautiful woman. "
 "She holds out a magnificent sword to you."
 msgstr ""
+"Поки ви йдете вузькою стежкою, кущ неподалік несподівано спалахує вогнем. "
+"Перед вашими очима постає образ вродливої жінки. Вона простягає вам чудового "
+"меча."
 
 msgid "Power Axe of Dominion"
-msgstr ""
+msgstr "Силова Сокира Панування"
 
 msgid ""
 "You see a silver axe embedded deeply in the ground. After several "
 "unsuccessful attempts by your army to remove the axe, you tightly grip the "
 "handle of the axe and effortlessly pull it free."
 msgstr ""
+"Ви бачите срібну сокиру, глибоко занурену у землю. Після кількох невдалих "
+"спроб ваших воїнів вийняти її, ви міцно хапаєтесь за руків'я сокири, та без "
+"зусиль висмикуєте її."
 
 msgid "Divine Breastplate of Protection"
-msgstr ""
+msgstr "Божествений Нагрудник Захисту"
 
 msgid ""
 "A gang of Rogues is sifting through the possessions of dead warriors. "
 "Scaring off the scavengers, you note the Rogues had overlooked a beautiful "
 "breastplate."
 msgstr ""
+"Банда Розбійників копирсається у речах загиблих воїнів. Відлякуючи "
+"мародерів, ви помічаєте, що Розбійники не помітили чудовий нагрудник."
 
 msgid "Minor Scroll of Knowledge"
-msgstr ""
+msgstr "Малий Сувій Знань"
 
 msgid ""
 "Before you appears a levitating glass case with a scroll, perched upon a bed "
 "of crimson velvet. At your touch, the lid opens and the scroll floats into "
 "your awaiting hands."
 msgstr ""
+"Перед вами з'являється левітуючий скляний футляр із сувоєм, що лежить на "
+"підстилці з червоного оксамиту. Від доторку футляр відкривається, а сувій "
+"лине до ваших простягнутих рук."
 
 msgid "Major Scroll of Knowledge"
-msgstr ""
+msgstr "Великий Сувій Знань"
 
 msgid ""
 "Visiting a local wiseman, you explain the intent of your journey. He reaches "
 "into a sack and withdraws a yellowed scroll and hands it to you."
 msgstr ""
+"Відвідавши місцевого мудреця, ви пояснюєте йому мету вашої подорожі. "
+"Покопирсавшись у мішку, він витягає пожовклий сувій та простягає його вам."
 
 msgid "Superior Scroll of Knowledge"
 msgstr ""
@@ -8477,12 +8441,14 @@ msgid ""
 msgstr ""
 
 msgid "Foremost Scroll of Knowledge"
-msgstr ""
+msgstr "Древній Сувій Знання"
 
 msgid ""
 "Mangled bones, yellowed with age, peer from the ragged folds of a dead "
 "Druid's robe. Searching the robe, you discover a scroll hidden within."
 msgstr ""
+"Пожовклі від часу та понівечені кістки визирають з-поміж пошарпаних складок "
+"мантії мертвого Друїда. Обшукуючи мантію, ви знаходите захований у ній сувій."
 
 msgid "Endless Sack of Gold"
 msgstr ""
@@ -8515,10 +8481,10 @@ msgid ""
 msgstr ""
 
 msgid "Nomad Boots of Mobility"
-msgstr ""
+msgstr "Чоботи Кочівника"
 
 msgid "The %{name} increase your movement on land."
-msgstr ""
+msgstr "%{name} дають вашому герою додаткові очки руху."
 
 msgid ""
 "A Nomad trader seeks protection from a tribe of Goblins. For your "
@@ -8526,15 +8492,21 @@ msgid ""
 "softest leather. Looking closely, you see fascinating ancient carvings "
 "engraved on the leather."
 msgstr ""
+"Кочівник-торговець шукає захисту від племені Гоблінів. За вашу допомогу він "
+"дає вам пару вишуканих чобіт, зроблених з найм'якішої шкіри. Придивившись, "
+"ви помічаєте вражаюче старовинне різьблення на шкірі."
 
 msgid "Traveler's Boots of Mobility"
-msgstr ""
+msgstr "Чоботи Мандрівника"
 
 msgid ""
 "Discovering a pair of beautifully beaded boots made from the finest and "
 "softest leather, you thank the anonymous donor and add the boots to your "
 "inventory."
 msgstr ""
+"Знайшовши пару прикрашених бісером та зроблених з найкращої та найм'якішої "
+"шкіри чобіт, ви дякуєте невідомому добродію та кладете чоботи до свого "
+"інвентаря."
 
 msgid "Lucky Rabbit's Foot"
 msgstr ""
@@ -8614,7 +8586,7 @@ msgid "The %{name} extends the duration of all your spells by %{count} turns."
 msgstr ""
 
 msgid ""
-"A surprise turn in the landscape finds you in the midst of a grisly scene:  "
+"A surprise turn in the landscape finds you in the midst of a grisly scene: "
 "Vultures picking at the aftermath of a terrible battle. Your cursory search "
 "of the remains turns up an enchanted hourglass."
 msgstr ""
@@ -8860,37 +8832,46 @@ msgid ""
 msgstr ""
 
 msgid "Wand of Negation"
-msgstr ""
+msgstr "Жезл Заперечення"
 
-msgid "The %{name} protects your troops from the Dispel Magic spell."
-msgstr ""
+msgid "The %{name} makes all your troops immune to dispel magic spells."
+msgstr "%{name} надає вашим військам імунітет до Розсіювання Магії."
 
 msgid ""
 "You meet an old Wizard friend of yours traveling in the opposite direction. "
-"He presents  you with a gift:  A wand that prevents the use of the dispel "
+"He presents  you with a gift: A wand that prevents the use of the dispel "
 "magic spell on your allies."
 msgstr ""
+"Ви зустрічаєте старого друга-Чарівника, що подорожував у протилежному "
+"напрямку. Він дає вам подарунок: жезл, що не дозволяє знімати чари з ваших "
+"військ."
 
 msgid "Golden Bow"
-msgstr ""
+msgstr "Золотий Лук"
 
 msgid ""
 "The %{name} eliminates the %{count} percent penalty for your troops shooting "
 "past obstacles (e.g. castle walls)."
 msgstr ""
+"%{name} прибирає %{count} відсотків штрафу, що накладається на ваші війська "
+"під час пострілів через перепони (подібні замковим стінам)."
 
 msgid ""
 "A chance meeting with a famous Archer finds you in a game of knucklebones "
 "pitting his bow against your horse. You win."
 msgstr ""
+"Після випадкової зустрічі з відомим Лучником ви й не помітили, як вже граєте "
+"з ним у кості. Його лук проти вашого коня. Ви виграли."
 
 msgid "Telescope"
-msgstr ""
+msgstr "Телескоп"
 
 msgid ""
 "The %{name} increases the amount of terrain your hero reveals when "
 "adventuring by %{count} extra square."
 msgstr ""
+"%{name} збільшує радіус огляду героя на стратегічній мапі на %{count} "
+"додаткову клітину."
 
 msgid ""
 "A merchant from far away lands trades you a new invention of his people for "
@@ -8899,26 +8880,36 @@ msgid ""
 "\n"
 "a telescope."
 msgstr ""
+"Торговець з дальніх країв продає вам новий винахід його народу, корисний для "
+"подорожей. З його допомогою віддалені об'єкти здаються ближчими, і він "
+"називає цю річ...\n"
+"\n"
+"телескопом."
 
 msgid "Statesman's Quill"
-msgstr ""
+msgstr "Перо Державника"
 
 msgid ""
 "The %{name} reduces the cost of surrender to %{count} percent of the total "
 "cost of troops you have in your army."
 msgstr ""
+"%{name} зменшує вартість капітуляції на %{count} відсотків від загальної "
+"вартості всіх військ, що є у вашій армії."
 
 msgid ""
 "You pause to help a diplomat with a broken axle fix his problem. In "
 "gratitude, he gives you a writing quill with magical properties which he "
 "says will \"help people see things your way\"."
 msgstr ""
+"Ви затримуєтесь, щоб допомогти дипломату полагодити колесо його карети. На "
+"подяку він дає вам перо з магічними властивостями, яке, за його словами: "
+"\"допоможе людям пристати на ваше слово\"."
 
 msgid "Wizard's Hat"
-msgstr ""
+msgstr "Капелюх Чарівника"
 
 msgid "The %{name} increases the duration of your spells by %{count} turns."
-msgstr ""
+msgstr "%{name} підвищує час дії ваших заклять на %{count} ходів."
 
 msgid ""
 "You see a Wizard fleeing from a Griffin and riding like the wind. The Wizard "
@@ -8926,12 +8917,16 @@ msgid ""
 "the gate. The Griffin follows; the gate closes. You pick the hat up, dust it "
 "off, and put it on."
 msgstr ""
+"Ви бачите, як Чарівник верхи тікає від Грифона, обганяючи вітер. Чарівник "
+"відкриває портал та проходить крізь нього, однак його капелюх чіпляється об "
+"край проходу та падає. Грифон пролітає слідом, і брама зачиняється. Ви "
+"підіймаєте капелюха, обтрушуєте його, та надягаєте."
 
 msgid "Power Ring"
-msgstr ""
+msgstr "Перстень Могутності"
 
 msgid "The %{name} returns %{count} extra spell points per day to your hero."
-msgstr ""
+msgstr "%{name} щодня відновлює очки мани у кількості: %{count} од."
 
 msgid ""
 "You find a small tree that closely resembles the great Warlock Carnauth with "
@@ -8939,23 +8934,30 @@ msgid ""
 "you to suspect that it IS Carnauth, transformed. Since you can't help him, "
 "you take the magic ring."
 msgstr ""
+"Ви знаходите невеличке дерево з перстнем на гілці. Рослина підозріло нагадує "
+"великого Чаклуна Карнаута. Залишки одягу та зогнилої шкіри підтверджують "
+"ваші підозри, що це і є обернений на дерево Карнаут. Ви вже не зможете йому "
+"допомогти, то ж забираєте його магічного перстня."
 
 msgid "Ammo Cart"
-msgstr ""
+msgstr "Візок з Боєприпасами"
 
 msgid "The %{name} provides endless ammunition for all your troops that shoot."
-msgstr ""
+msgstr "%{name} забезпечує ваші стрілецькі війська нескінченними боєприпасами."
 
 msgid ""
 "An ammunition cart in the middle of an old battlefield catches your eye. "
 "Inspection shows it to be in good working order, so  you take it along."
 msgstr ""
+"Ваш погляд затримується на візку з боєприпасами, що стоїть посеред старого "
+"бойовища. Перевірка встановлює, що він придатний для використання за "
+"призначенням, то ж ви забираєте його з собою."
 
 msgid "Tax Lien"
-msgstr ""
+msgstr "Податкова Застава"
 
 msgid "The %{name} costs you %{count} gold pieces per day."
-msgstr ""
+msgstr "%{name} коштує вам %{count} золотих щодня."
 
 msgid ""
 "Your big spending habits have earned you a massive tax bill that you can't "
@@ -8963,49 +8965,67 @@ msgid ""
 "from your account for life. Check here if you want one dollar to go to the "
 "presidential campaign election fund."
 msgstr ""
+"Ваша схильність до надмірних витрат призводить до вручення вам великого "
+"податкового рахунку, який ви ніколи не зможете сплатити. Податківець "
+"зглянувся, та погодився дозволити вам тихесенько втекти в ліс, а потім "
+"стягувати з вас лиш по 250 золотих щодня. Підпишіться тут, щоб передати "
+"частину цих грошей на придбання гречки під наступні вибори."
 
 msgid "Hideous Mask"
-msgstr ""
+msgstr "Мерзенна Маска"
 
 msgid "The %{name} prevents all 'wandering' armies from joining your hero."
 msgstr ""
+"%{name} не дозволяє всім \"нейтральним\" арміям приєднуватись до вашого "
+"героя."
 
 msgid ""
 "Your looting of the grave of Sinfilas Gardolad, the famous shapeshifting "
 "Warlock, unearths his fabled mask. Trembling, you put it on and it twists "
-"your visage into an awful grimace!  Oh no!  It's actually the hideous mask "
-"of Gromluck Greene, and you are stuck with it."
+"your visage into an awful grimace! Oh no! It's actually the hideous mask of "
+"Gromluck Greene, and you are stuck with it."
 msgstr ""
+"Ви грабуєте могилу Сінфіласа Гардолада, знаменитого Чаклуна-перевертня, та "
+"дістаєте з-під землі його легендарну маску. Ледве стримуючи тремтіння, ви "
+"вдягаєте її, і вона спотворює ваше обличчя, перетворивши його на жахливу "
+"гримасу!  О ні!  Насправді це жахлива маска Громлука Гріна, і ви застрягли в "
+"ній."
 
 msgid "Endless Pouch of Sulfur"
-msgstr ""
+msgstr "Нескінченний Мішечок з Сіркою"
 
 msgid "The %{name} provides %{count} unit of sulfur per day."
-msgstr ""
+msgstr "%{name} збільшує видобуток сірки на %{count} в день."
 
 msgid ""
 "You visit an alchemist who, upon seeing your army, is swayed by the "
 "righteousness of your cause. The newly loyal subject gives you his endless "
 "pouch of sulfur to help with the war effort."
 msgstr ""
+"Ви відвідуєте алхіміка, який, побачивши ваше військо, захопився праведністю "
+"вашої справи. Ваш новий підданий віддає вам нескінченний мішечок з сіркою, "
+"щоб допомогти у війні."
 
 msgid "Endless Vial of Mercury"
-msgstr ""
+msgstr "Нескінченний Флакон з Ртуттю"
 
 msgid "The %{name} provides %{count} unit of mercury per day."
-msgstr ""
+msgstr "%{name} збільшує видобуток ртуті на %{count} в день."
 
 msgid ""
 "A brief stop at a hastily abandoned Wizard's tower turns up a magical vial "
 "of mercury that always has a little left on the bottom. Recognizing a "
 "treasure when you see one, you cap it and slip it in your pocket."
 msgstr ""
+"Коротка зупинка біля поспіхом залишеної вежі Чарівника призводить до "
+"знахідки - флакон, в якому завжди залишається трохи ртуті на дні. Зрозумівши "
+"що те, що ви найшли - це скарб, ви закорковуєте його, та кладете до кишені."
 
 msgid "Endless Pouch of Gems"
-msgstr ""
+msgstr "Нескінченний Мішечок Самоцвітів"
 
 msgid "The %{name} provides %{count} unit of gems per day."
-msgstr ""
+msgstr "%{name} збільшує видобуток самоцвітів на %{count} в день."
 
 msgid ""
 "A short rainstorm brings forth a rainbow...and you can see the end of it. "
@@ -9013,12 +9033,16 @@ msgid ""
 "owns it, unable to stop you from taking it, offers an endless pouch of gems "
 "for the return of his gold. You accept."
 msgstr ""
+"Після короткої зливи з'являється райдуга... і ви бачите, звідки вона "
+"починається. Швидко їдучи верхи, ви знаходите глечик з золотом у тому місці. "
+"Лепрекон, якому належить горщик, не може завадити вам забрати його, то ж "
+"пропонує натомість нескінченний мішечок з самоцвітами. Ви погоджуєтесь."
 
 msgid "Endless Cord of Wood"
-msgstr ""
+msgstr "Нескінченна В'язанка Дров"
 
 msgid "The %{name} provides %{count} unit of wood per day."
-msgstr ""
+msgstr "%{name} збільшує видобуток дерева на %{count} в день."
 
 msgid ""
 "Pausing to rest and light a cook fire, you pull wood out of a nearby pile of "
@@ -9026,34 +9050,46 @@ msgid ""
 "doesn't shrink. You realize to your delight that the wood is enchanted, so "
 "you take it along."
 msgstr ""
+"Зупинившись відпочити та запаливши багаття, ви витягаєте шматок дерева з "
+"найближчої купи деревини. Підкидаючи дрова до багаття, ви помічаєте, що купа "
+"деревини не зменшується. Ви з радістю усвідомлюєте, що ця деревина "
+"зачарована, то ж збираєте її у в'язанку, та забираєте з собою."
 
 msgid "Endless Cart of Ore"
-msgstr ""
+msgstr "Нескінченний Візок Руди"
 
 msgid "The %{name} provides %{count} unit of ore per day."
-msgstr ""
+msgstr "%{name} збільшує видобуток руди на %{count} в день."
 
 msgid ""
 "You've found a Goblin weapon smithy making weapons for use against humans. "
 "With a tremendous yell you and your army descend upon their camp and drive "
 "them away. A search finds a magic ore cart that never runs out of iron."
 msgstr ""
+"Ви знаходите Гоблінську зброярню, де виготовляли зброю для використання "
+"проти людей. З гучним криком ви з вашим військом налітаєте на їх табір, "
+"виганяючи їх геть. Обшукавши табір, ви знаходите чарівний візок з рудою, в "
+"якому ніколи не скінчається залізо."
 
 msgid "Endless Pouch of Crystal"
-msgstr ""
+msgstr "Нескінченний Мішечок Кристалів"
 
 msgid "The %{name} provides %{count} unit of crystal per day."
-msgstr ""
+msgstr "%{name} збільшує видобуток кристалів на %{count} в день."
 
 msgid ""
-"Taking shelter from a storm in a small cave,  you notice a small patch of "
+"Taking shelter from a storm in a small cave, you notice a small patch of "
 "crystal in one corner. Curious, you break a piece off and notice that the "
 "original crystal grows the lost piece back. You decide to stuff the entire "
 "patch into a pouch and take it with you."
 msgstr ""
+"Ховаючись від буревію у маленькій печері, ви помічаєте в одному кутку "
+"невеличкий шматок кристалу. Зацікавившись, ви відламуєте шматочок, та "
+"помічаєте, що на його місці одразу ж з'являється новий кристал. Ви вирішуєте "
+"покласти весь шматок у мішечок, та забрати його з собою."
 
 msgid "Spiked Helm"
-msgstr ""
+msgstr "Шпичастий Шолом"
 
 msgid ""
 "Your army is ambushed by a small tribe of wild (and none too bright) Orcs. "
@@ -9061,9 +9097,13 @@ msgid ""
 "the Orcs was wearing a polished spiked helm. Figuring it will make a good "
 "souvenir, you take it."
 msgstr ""
+"Ваше військо втрапило у засідку невеличкого племені диких (та не надто "
+"розумних) Орків. Ви легко відбиваєте напад, вцілілі нападники розбігаються "
+"хто куди. Один з Орків носив на собі полірований шпичастий шолом. Зробивши "
+"висновок, що він стане чудовим сувеніром, ви забираєте його."
 
 msgid "Spiked Shield"
-msgstr ""
+msgstr "Шпичастий Щит"
 
 msgid ""
 "You come upon a bridge spanning a dry gully. Before you can cross, a Troll "
@@ -9071,52 +9111,63 @@ msgid ""
 "you to pass. You refuse, and the Troll charges, forcing you to slay it. You "
 "take its spiked shield as a trophy."
 msgstr ""
+"Ви приходите до мосту, перекинутого через сухий яр. Щойно ви збираєтесь "
+"перейти, з-під мосту виходить Троль, та вимагає у вас платні за прохід. Ви "
+"відмовляєтесь, і Троль нападає на вас. Ви не маєте іншого виходу ,окрім як "
+"вбити його. Його шпичастий щит ви забираєте собі за трофей."
 
 msgid "White Pearl"
-msgstr ""
+msgstr "Біла Перлина"
 
 msgid ""
-"A walk across a dry saltwater lake bed yields an unlikely prize:  A white "
+"A walk across a dry saltwater lake bed yields an unlikely prize: A white "
 "pearl amidst shattered shells and debris."
 msgstr ""
+"Прогулянка по сухому соленому озеру приносить вам неочікуваний подарунок: "
+"Білу перлину серед розбитих мушель та уламків."
 
 msgid "Black Pearl"
-msgstr ""
+msgstr "Чорна Перлина"
 
 msgid ""
 "Rumors of a Griffin of unusual size preying upon the countryside lead you to "
 "its cave lair. A quick, brutal fight dispatches the beast, and a search of "
 "its foul nest turns up a huge black pearl."
 msgstr ""
+"Чутки про незвично великого Грифона, що полює на околицях, приводять вас до "
+"його печерного лігва. Протягом швидкого, але жорстокого бою, ви вбиваєте "
+"монстра, а обшук його брудного гнізда приносить вам велику чорну перлину."
 
 msgid "Magic Book"
-msgstr ""
+msgstr "Книга Магії"
 
 msgid "The %{name} enables you to cast spells."
-msgstr ""
+msgstr "%{name} дозволяє вам використовувати закляття."
 
 msgid "Dummy 1"
-msgstr ""
+msgstr "Заповнювач 1"
 
 msgid "The reserved artifact."
-msgstr ""
+msgstr "Зарезервований артефакт."
 
 msgid "Dummy 2"
-msgstr ""
+msgstr "Заповнювач 2"
 
 msgid "Dummy 3"
-msgstr ""
+msgstr "Заповнювач 3"
 
 msgid "Dummy 4"
-msgstr ""
+msgstr "Заповнювач 4"
 
 msgid "Spell Scroll"
-msgstr ""
+msgstr "Чарівний Сувій"
 
 msgid ""
 "This %{name} gives your hero the ability to cast the %{spell} spell if your "
 "hero has a Magic Book."
 msgstr ""
+"Цей %{name} дозволяє вашому герою використовувати закляття %{spell}, якщо у "
+"вашого героя є Книга Магії."
 
 msgid ""
 "You find an elaborate container which houses an old vellum scroll. The runes "
@@ -9124,14 +9175,20 @@ msgid ""
 "together is stunning. As you pull the scroll out, you feel imbued with "
 "magical power."
 msgstr ""
+"Ви знаходите вишуканий контейнер, що містить старовинний пергаментний сувій. "
+"Руни на контейнері дуже старі, а майстерність, з якою вони були нанесені - "
+"вражаюча. Щойно ви дістаєте сувій з контейнера, ви відчуваєте, як вас "
+"сповнює магічна сила."
 
 msgid "Arm of the Martyr"
-msgstr ""
+msgstr "Рука Мученика"
 
 msgid ""
 "The %{name} increases your spell power by %{count} but adds the undead "
 "morale penalty."
 msgstr ""
+"%{name} збільшує вашу силу магії на %{count}, однак додає штраф до моралі за "
+"присутність невмерлих у війську."
 
 msgid ""
 "One of the less intelligent members of your party picks up an arm off of the "
@@ -9140,12 +9197,16 @@ msgid ""
 "seems to hold some sort of magical power that influences your decision "
 "making."
 msgstr ""
+"Один не надто розумний прислужник підіймає з землі руку. Хоча й відрубана "
+"від тіла, вона досі рухається. Ваші воїни відчувають відразу до відрізаної "
+"кінцівки, однак ви не можете змусити себе наказати викинути її. Схоже, вона "
+"має якусь магічну силу, що впливає на ваші рішення."
 
 msgid "Breastplate of Anduran"
-msgstr ""
+msgstr "Нагрудник Андурана"
 
 msgid "The %{name} increases your defense by %{count}."
-msgstr ""
+msgstr "%{name} збільшує ваш Захист на %{count}."
 
 msgid ""
 "You come upon a sign. It reads: \"Here lies the body of Anduran. Bow and "
@@ -9153,42 +9214,60 @@ msgid ""
 "you stand up, you feel a coldness against your skin. Looking down, you find "
 "that you are suddenly wearing a gleaming, ornate breastplate."
 msgstr ""
+"Ви наштовхуєтесь на знак. На ньому написано: \"Тут лежить тіло Андурана. "
+"Вклоніться та присягніть на вірність, і будете винагороджені\". Ви вирішуєте "
+"зробити так, як сказано. Щойно ви стаєте на ноги, ви відчуваєте холод на "
+"своїй шкірі. Подивившись донизу, ви помічаєте, що на вас надітий сяючий, "
+"багато прикрашений нагрудник."
 
 msgid "Broach of Shielding"
-msgstr ""
+msgstr "Захисна Брошка"
 
 msgid ""
 "The %{name} provides %{count} percent protection from Armageddon and "
 "Elemental Storm, but decreases spell power by 2."
 msgstr ""
+"%{name} надає %{count}-відсотковий захист від заклять Армагеддон та "
+"Стихійний Шторм, однак зменшує Силу Магії на 2."
 
 msgid ""
 "A kindly Sorceress thinks that your army's defenses could use a magical "
 "boost. She offers to enchant the Broach that you wear on your cloak, and you "
 "accept."
 msgstr ""
+"Добра Чаклунка вважає, що вашому війську буде не зайвим додатковий магічний "
+"захист. То ж вона пропонує вам зачаровану Брошку, яку можна носити на своїй "
+"мантії. Ви приймаєте пропозицію."
 
 msgid "Battle Garb of Anduran"
-msgstr ""
+msgstr "Бойове Вбрання Андурана"
 
 msgid ""
-"The %{name} combines the powers of the three Anduran artifacts.  It provides "
+"The %{name} combines the powers of the three Anduran artifacts. It provides "
 "maximum luck and morale for your troops and gives you the Town Portal spell."
 msgstr ""
+"%{name} поєднує у собі силу трьох артефактів Андурана. Воно надає вашим "
+"військам максимальну удачу та мораль, а також надає вам закляття Міського "
+"Порталу."
 
 msgid ""
 "Out of pity for a poor peasant, you purchase a chest of old junk they are "
 "hawking for too much gold. Later, as you search through it, you find it "
 "contains the 3 pieces of the legendary battle garb of Anduran!"
 msgstr ""
+"З жалю до бідного селянина, ви придбали в нього скриню старого лантуху, за "
+"яку він просив завелику кількість золота. Згодом, обшукавши її, ви знайшли "
+"три частини легендарного бойового спорядження Андурана!"
 
 msgid "Crystal Ball"
-msgstr ""
+msgstr "Кришталева Куля"
 
 msgid ""
 "The %{name} lets you get more specific information about monsters, enemy "
 "heroes, and castles nearby the hero who holds it."
 msgstr ""
+"%{name} надає вам більш детальну інформацію про монстрів, ворожих героїв та "
+"замки, що знаходяться неподалік від власника артефакту."
 
 msgid ""
 "You come upon a caravan of gypsies who are feasting and fortifying their "
@@ -9197,14 +9276,21 @@ msgid ""
 "anyway. They laugh hysterically, but admire your bravery, giving you a "
 "Crystal Ball."
 msgstr ""
+"Ви натикаєтесь на табір циган, що святкують та смакують медовуху. Вони "
+"заохочують вас підійти, та кажуть: \"Якщо ви доведете, що можете станцювати "
+"\"Рама-Буту\", ми нагородимо тебе\". Ви поняття не маєте, що це за танок, "
+"однак все одно намагаєтесь щось зобразити. Глядачі падають зі сміху від "
+"побаченого, однак визнають вашу хоробрість, та дарують вам Кришталеву Кулю."
 
 msgid "Heart of Fire"
-msgstr ""
+msgstr "Полум'яне Серце"
 
 msgid ""
 "The %{name} provides %{count} percent protection from fire, but doubles the "
 "damage taken from cold."
 msgstr ""
+"%{name} наділяє ваші війська %{count}-відсотковим захистом від вогню, однак "
+"збільшує вдвічі пошкодження, завдані холодом."
 
 msgid ""
 "You enter a recently burned glade and come upon a Fire Elemental sitting "
@@ -9212,25 +9298,36 @@ msgid ""
 "pain. It then tosses a glowing object at you. You put up your hands to block "
 "it, but it passes right through them and sears itself into your chest."
 msgstr ""
+"Ви входите до нещодавно випаленої галявини, та бачите Вогняного Елементаля, "
+"що сидить на скелі. Він здіймає погляд, його полум'яне обличчя спотворене "
+"виразом лютого болю. Тоді він кидає сяючий предмет у вас. Ви здіймаєте руки "
+"щоб захиститися, однак та річ проходить крізь них, та врізається у ваші "
+"груди."
 
 msgid "Heart of Ice"
-msgstr ""
+msgstr "Крижане Серце"
 
 msgid ""
 "The %{name} provides %{count} percent protection from cold, but doubles the "
 "damage taken from fire."
 msgstr ""
+"%{name} наділяє ваші війська %{count}-відсотковим захистом від холоду, однак "
+"збільшує вдвічі пошкодження, завдані вогнем."
 
 msgid ""
 "Suddenly, a biting coldness engulfs your body. You seize up, falling from "
 "your horse. The pain subsides, but you still feel as if your chest is "
-"frozen.  As you pick yourself up off of the ground, you hear hearty "
-"laughter. You turn around just in time to see a Frost Giant run off into the "
-"woods and disappear."
+"frozen. As you pick yourself up off of the ground, you hear hearty laughter. "
+"You turn around just in time to see a Frost Giant run off into the woods and "
+"disappear."
 msgstr ""
+"Раптово ваше тіло охоплює пронизлива холоднеча. Ви схоплюєтесь, падаючи з "
+"коня. Біль вщухає, та ви досі почуваєтесь так, наче ваші груди заморожені. "
+"Коли ви встаєте на ноги, ви чуєте оглушливий регіт. Ви обертаєтесь якраз "
+"вчасно, щоб помітити, як Крижаний Гігант втікає до лісу та зникає."
 
 msgid "Helmet of Anduran"
-msgstr ""
+msgstr "Шолом Андурана"
 
 msgid ""
 "You spy a gleaming object poking up out of the ground. You send a member of "
@@ -9238,22 +9335,31 @@ msgid ""
 "hands. You realize that it must be the helmet of the legendary Anduran, the "
 "only man who was known to wear solid gold armor."
 msgstr ""
+"Ви помітили блискучий предмет, що стирчав з землі. Ви послали одного зі "
+"своїх підручних обстежити його. Він повернувся із золотим шоломом у руках. "
+"Ви зрозуміли, що це, мабуть, і є той самий шолом легендарного Андурана, що "
+"був відомий своїм обладунком з чистого золота."
 
 msgid "Holy Hammer"
-msgstr ""
+msgstr "Святий Молот"
 
 msgid ""
 "You come upon a battle where a Paladin has been mortally wounded by a group "
-"of Zombies. He asks you to take his hammer and finish what he started.  As "
+"of Zombies. He asks you to take his hammer and finish what he started. As "
 "you pick it up, it begins to hum, and then everything becomes a blur. The "
 "Zombies lie dead, the hammer dripping with blood. You strap it to your belt."
 msgstr ""
+"На своєму шляху ви натрапляєте на бойовище, на якому група Зомбі смертельно "
+"поранили Паладина. Він попросив вас забрати його молот та завершити те, що "
+"він почав. Щойно ви взяли його до рук, він почав дзижчати, а ваш погляд "
+"затуманився. Зомбі знищені, а з молота скрапує їх гнила кров. Ви чіпляєте "
+"його до паска."
 
 msgid "Legendary Scepter"
-msgstr ""
+msgstr "Легендарний Скіпетр"
 
 msgid "The %{name} adds %{count} points to all attributes."
-msgstr ""
+msgstr "%{name} додає %{count} очок до всіх основних параметрів."
 
 msgid ""
 "Upon cresting a small hill, you come upon a ridiculous looking sight. A "
@@ -9262,12 +9368,11 @@ msgid ""
 "answers: \"You think this is funny? Fine. You can carry it. I much prefer "
 "flying anyway.\""
 msgstr ""
-
-msgid "Masthead"
-msgstr ""
-
-msgid "The %{name} boosts your luck and morale by %{count} each in sea combat."
-msgstr ""
+"Коли ви перетинали вершину невеличкого пагорба, вам відкрилося вкрай смішне "
+"видовище. Фея намагалася підняти Скіпетр, що був завбільшки майже як вона. "
+"Намагаючись не засміятися, ви питаєте: \"Потрібна допомога?\" Фея "
+"витріщається на вас та відповідає: \"Гадаєш це смішно? Гаразд. Можеш "
+"забирати собі. Мені однаково значно більше до вподоби літати\"."
 
 msgid ""
 "An old seaman tells you a tale of an enchanted masthead that he used in his "
@@ -9275,24 +9380,37 @@ msgid ""
 "map that shows where he hid it. After much exploring, you find it stashed "
 "underneath a nearby dock."
 msgstr ""
+"Старий моряк розповідає вам історію про зачарований вершечок щогли, який він "
+"використовував щоб згуртувати команду у час скрути. Тоді він передає вам "
+"вицвілу мапу, де вказане її місцезнаходження. Витративши чимало часу на "
+"дослідження, ви знайшли її у сховку під сусіднім доком."
+
+msgid "Masthead"
+msgstr "Вершечок Щогли"
+
+msgid "The %{name} boosts your luck and morale by %{count} each in sea combat."
+msgstr "%{name} піднімає ваші удачу та мораль на %{count} у морських битвах."
 
 msgid "Sphere of Negation"
-msgstr ""
+msgstr "Сфера Заперечення"
 
 msgid "The %{name} disables all spell casting, for both sides, in combat."
-msgstr ""
+msgstr "%{name} забороняє будь-яке застосування магії у бою."
 
 msgid ""
 "You stop to help a Peasant catch a runaway mare. To show his gratitude, he "
 "hands you a tiny sphere. As soon as you grasp it, you feel the magical "
 "energy drain from your limbs..."
 msgstr ""
+"Ви спинилися, щоб допомогти Селянину зловити кобилу-втікачку. На знак подяки "
+"він простягає вам невеличку сферу. Щойно ви взяли її до рук, ви відчули, як "
+"магічна енергія витікає з ваших кінцівок..."
 
 msgid "Staff of Wizardry"
-msgstr ""
+msgstr "Патериця Чаклунства"
 
 msgid "The %{name} boosts your spell power by %{count}."
-msgstr ""
+msgstr "%{name} посилює вашу Силу Магії на %{count}."
 
 msgid ""
 "While out scaring up game, your troops find a mysterious staff levitating "
@@ -9300,17 +9418,26 @@ msgid ""
 "inscription. It reads: \"Brains best brawn and magic beats might. Heed my "
 "words, and you'll win every fight.\""
 msgstr ""
+"Заганяючи дичину, ваші війська знайшли таємничу патерицю, що левітувала "
+"майже у метрі над землею. Вони передали її вам, і ви помітили примітку. В "
+"ній сказано: \"Мозок сильніший за м'язи, а магія перемагає меча. Дослухайся "
+"до цих слів, і перемагатимеш у кожному бою\"."
 
 msgid "Sword Breaker"
-msgstr ""
+msgstr "Мечолам"
 
 msgid "The %{name} increases your defense by %{count} and attack by 1."
-msgstr ""
+msgstr "%{name} збільшує ваш Захист на %{count} та Атаку на 1."
 
 msgid ""
 "A former Captain of the Guard admires your quest and gives you the enchanted "
 "Sword Breaker that he relied on during his tour of duty."
 msgstr ""
+"Колишній Капітан Варти захоплюється вашими діяннями, та дає вам зачарований "
+"Мечолам, на який він покладався на службі."
+
+msgid "Sword of Anduran"
+msgstr "Меч Андурана"
 
 msgid ""
 "A Troll stops you and says: \"Pay me 5,000 gold, or the Sword of Anduran "
@@ -9319,21 +9446,25 @@ msgid ""
 "sword, you give thanks that half-witted Trolls tend to grab the wrong end of "
 "sharp objects."
 msgstr ""
-
-msgid "Sword of Anduran"
-msgstr ""
+"Тролль спиняє вас, та каже: \"Плати мені 5,000 золотих, або Меч Андурана "
+"вб'є тебе на місці\". Ви відмовляєтесь. Троль хапає меча, що висить в нього "
+"на поясі, скрикує від болю та тікає геть. Піднімаючи уславленого меча, ви "
+"подумки дякуєте, що недоумкуваті тролі мають звичку хапати гострі предмети "
+"не за той кінець."
 
 msgid "Spade of Necromancy"
-msgstr ""
+msgstr "Лопата Некромантії"
 
 msgid "The %{name} gives you increased necromancy skill."
-msgstr ""
+msgstr "%{name} збільшує навичку Некромантії героя-власника."
 
 msgid ""
 "A dirty shovel has been thrust into a dirt mound nearby. Upon investigation, "
 "you discover it to be the enchanted shovel of the Gravediggers, long thought "
 "lost by mortals."
 msgstr ""
+"Брудна лопата стирчить з кургану неподалік. Обстеживши її, ви зрозуміли, що "
+"це зачарована лопата Гробарів, яку смертні давно вважали втраченою."
 
 msgid "Wood"
 msgstr "Дерево"
@@ -9363,346 +9494,393 @@ msgid ""
 "Mercury, Sulfur and Crystal are rare magical resources used for the most "
 "powerful creatures and buildings."
 msgstr ""
+"У Героях 2 існує сім видів ресурсів, що їх можна використати для зведення та "
+"покращення будівель у замках, придбання військ та найму героїв. Золото - "
+"найбільш поширений ресурс, потрібний практично для всього. Дерево та Руда "
+"використовуються для зведення більшості будівель. Самоцвіти, Ртуть, Сірка та "
+"Кристали - це рідкісні магічні ресурси, необхідні для найбільш могутніх "
+"істот та будівель."
 
 msgid ""
 "Causes a giant fireball to strike the selected area, damaging all nearby "
 "creatures."
 msgstr ""
+"Велика вогняна куля вражає обрану область, завдаючи шкоди всім створінням у "
+"полі дії."
 
 msgid "Fireball"
-msgstr ""
+msgstr "Вогняна Куля"
 
 msgid "Fireblast"
-msgstr ""
+msgstr "Вогняний Вибух"
 
 msgid ""
 "An improved version of fireball, fireblast affects two hexes around the "
 "center point of the spell, rather than one."
 msgstr ""
+"Покращена версія Вогняної Кулі, що завдає шкоду враженим загонам у радіусі "
+"двох клітин довкола епіцентру, замість однієї."
 
 msgid "Causes a bolt of electrical energy to strike the selected creature."
-msgstr ""
+msgstr "Вдаряє обраний ворожий загін розрядом електричної енергії."
 
 msgid "Lightning Bolt"
-msgstr ""
+msgstr "Блискавка"
 
 msgid "Chain Lightning"
-msgstr ""
+msgstr "Ланцюгова Блискавка"
 
 msgid ""
 "Causes a bolt of electrical energy to strike a selected creature, then "
 "strike the nearest creature with half damage, then strike the NEXT nearest "
 "creature with half again damage, and so on, until it becomes too weak to be "
-"harmful.  Warning:  This spell can hit your own creatures!"
+"harmful. Warning: This spell can hit your own creatures!"
 msgstr ""
+"Вдаряє розрядом електричної енергії обраний ворожий загін, після чого удар "
+"перекидається на наступну найближчу істоту, завдаючи половину шкоди і так "
+"далі, загалом пошкоджуючи 4 цілі, аж доки блискавка не стане заслабкою, щоб "
+"комусь зашкодити. Увага: Це закляття здатне зачепити ваші власні війська!"
 
 msgid "Teleport"
 msgstr "Телепорт"
 
 msgid ""
 "Teleports the creature you select to any open position on the battlefield."
-msgstr ""
+msgstr "Телепортує обраний дружній загін в будь-яку вільну точку поля бою."
 
 msgid "Cure"
-msgstr ""
+msgstr "Зцілення"
 
 msgid ""
 "Removes all negative spells cast upon one of your units, and restores up to "
 "%{count} HP per level of spell power."
 msgstr ""
+"Знімає всі негативні закляття з обраного дружнього загону, відновлюючи по "
+"%{count} ОЗ за кожен рівень Сили Магії."
 
 msgid "Mass Cure"
-msgstr ""
+msgstr "Масове Зцілення"
 
 msgid ""
 "Removes all negative spells cast upon your forces, and restores up to "
 "%{count} HP per level of spell power, per creature."
 msgstr ""
+"Знімає всі негативні закляття з ваших військ, відновлюючи у кожному загоні "
+"по %{count} ОЗ за кожен рівень Сили Магії."
 
 msgid "Resurrect"
-msgstr ""
+msgstr "Воскресіння"
 
 msgid "Resurrects creatures from a damaged or dead unit until end of combat."
-msgstr ""
+msgstr "Воскрешає істот у пошкодженому або знищеному загоні до кінця битви."
 
 msgid "Resurrect True"
-msgstr ""
+msgstr "Істинне Воскресіння"
 
 msgid "Resurrects creatures from a damaged or dead unit permanently."
-msgstr ""
+msgstr "Назавжди воскрешає істот у пошкодженому або знищеному загоні."
 
 msgid "Haste"
-msgstr ""
+msgstr "Поспіх"
 
 msgid "Increases the speed of any creature by %{count}."
-msgstr ""
+msgstr "Збільшує швидкість обраного дружнього загону на %{count}."
 
 msgid "Increases the speed of all of your creatures by %{count}."
-msgstr ""
+msgstr "Збільшує швидкість всіх ваших загонів на %{count}."
 
 msgid "Mass Haste"
-msgstr ""
+msgstr "Масовий Поспіх"
 
 msgid "Slows target to half movement rate."
-msgstr ""
+msgstr "Сповільнює обраний ворожий загін вдвічі."
 
 msgid "spell|Slow"
-msgstr ""
+msgstr "Уповільнення"
 
 msgid "Mass Slow"
-msgstr ""
+msgstr "Масове Уповільнення"
 
 msgid "Slows all enemies to half movement rate."
-msgstr ""
+msgstr "Зменшує швидкість пересування всіх ворожих загонів вдвічі."
 
 msgid "Clouds the affected creatures' eyes, preventing them from moving."
-msgstr ""
+msgstr "Затьмарює очі вражених істот, не дозволяючи їм рухатись."
 
 msgid "spell|Blind"
-msgstr ""
+msgstr "Сліпота"
 
 msgid "Bless"
-msgstr ""
+msgstr "Благословення"
 
 msgid "Causes the selected creatures to inflict maximum damage."
-msgstr ""
+msgstr "Дозволяє обраному дружньому загону завдавати максимальної шкоди."
 
 msgid "Causes all of your units to inflict maximum damage."
-msgstr ""
+msgstr "Дозволяє всім дружнім загонам завдавати максимальної шкоди."
 
 msgid "Mass Bless"
-msgstr ""
+msgstr "Масове Благословення"
 
 msgid "Magically increases the defense skill of the selected creatures."
-msgstr ""
+msgstr "Магічно збільшує навичку захисту обраного дружнього загону."
 
 msgid "Stoneskin"
-msgstr ""
+msgstr "Кам'яна Шкіра"
 
 msgid ""
-"Increases the defense skill of the targeted creatures.  This is an improved "
+"Increases the defense skill of the targeted creatures. This is an improved "
 "version of Stoneskin."
 msgstr ""
+"Збільшує навичку захисту обраного дружнього загону. Це закляття - покращена "
+"версія Кам'яної Шкіри."
 
 msgid "Steelskin"
-msgstr ""
+msgstr "Сталева Шкіра"
 
 msgid "Causes the selected creatures to inflict minimum damage."
-msgstr ""
+msgstr "Змушує обраний ворожий загон завдавати мінімальної шкоди."
 
 msgid "Curse"
-msgstr ""
+msgstr "Прокляття"
 
 msgid "Causes all enemy troops to inflict minimum damage."
-msgstr ""
+msgstr "Змушує всі ворожі загони завдавати мінімальної шкоди."
 
 msgid "Mass Curse"
-msgstr ""
+msgstr "Масове Прокляття"
 
 msgid "Damages all undead in the battle."
-msgstr ""
+msgstr "Завдає шкоди всім невмерлим на полі бою."
 
 msgid "Holy Word"
-msgstr ""
+msgstr "Святе Слово"
 
 msgid ""
-"Damages all undead in the battle.  This is an improved version of Holy Word."
+"Damages all undead in the battle. This is an improved version of Holy Word."
 msgstr ""
+"Завдає шкоди всім невмерлим на полі бою. Це закляття - покращена версія "
+"Святого Слова."
 
 msgid "Holy Shout"
-msgstr ""
+msgstr "Святий Клич"
 
 msgid "Anti-Magic"
-msgstr ""
+msgstr "Антимагія"
 
 msgid "Prevents harmful magic against the selected creatures."
-msgstr ""
+msgstr "Запобігає застосуванню магії проти обраного загону."
 
 msgid "Dispel Magic"
-msgstr ""
+msgstr "Розсіювання Магії"
 
 msgid "Removes all magic spells from a single target."
-msgstr ""
+msgstr "Знімає всі магічні ефекти з обраного загону."
 
 msgid "Mass Dispel"
-msgstr ""
+msgstr "Масове Розсіювання"
 
 msgid "Removes all magic spells from all creatures."
-msgstr ""
+msgstr "Знімає всі закляття з усіх істот."
 
 msgid "Causes a magic arrow to strike the selected target."
-msgstr ""
+msgstr "Запускає магічну стрілу в обраний ворожий загін."
 
 msgid "Magic Arrow"
-msgstr ""
+msgstr "Магічна Стріла"
 
 msgid "Berserker"
-msgstr ""
+msgstr "Берсерк"
 
 msgid "Causes a creature to attack its nearest neighbor."
-msgstr ""
+msgstr "Змушує зачарованих істот атакувати найближчі до нього загони."
 
 msgid "Armageddon"
-msgstr ""
+msgstr "Армагеддон"
 
 msgid ""
 "Holy terror strikes the battlefield, causing severe damage to all creatures."
-msgstr ""
+msgstr "Священний жах вражає поле бою, завдаючи значної шкоди всім істотам."
 
 msgid "Elemental Storm"
-msgstr ""
+msgstr "Стихійний Шторм"
 
 msgid "Magical elements pour down on the battlefield, damaging all creatures."
-msgstr ""
+msgstr "Магічні стихії проливаються на поле бою, завдаючи шкоди всім істотам."
 
 msgid ""
 "A rain of rocks strikes an area of the battlefield, damaging all nearby "
 "creatures."
 msgstr ""
+"Потоки каміння вдаряють по частині поля бою, завдаючи шкоди всім істотам у "
+"полі дії."
 
 msgid "Meteor Shower"
-msgstr ""
+msgstr "Метеоритний Дощ"
 
 msgid "Paralyze"
-msgstr ""
+msgstr "Параліч"
 
 msgid "The targeted creatures are paralyzed, unable to move or retaliate."
 msgstr ""
+"Паралізує вражених істот, не дозволяючи їм рухатись або завдавати удару в "
+"відповідь."
 
 msgid "Hypnotize"
-msgstr ""
+msgstr "Гіпноз"
 
 msgid ""
 "Brings a single enemy unit under your control if its hits are less than "
 "%{count} times the caster's spell power."
 msgstr ""
+"Переводить обраний ворожий загін під ваш контроль, якщо кількість його очок "
+"здоров'я менш ніж у %{count} разів перевищує Силу Магії заклинача."
 
 msgid "Cold Ray"
-msgstr ""
+msgstr "Крижаний Промінь"
 
 msgid "Drains body heat from a single enemy unit."
-msgstr ""
+msgstr "Всотує тепло тіла з обраного ворожого загону."
 
 msgid "Cold Ring"
-msgstr ""
+msgstr "Крижане Коло"
 
 msgid ""
 "Drains body heat from all units surrounding the center point, but not "
 "including the center point."
 msgstr ""
+"Всотує тепло тіла з усіх загонів довкола обраної клітинки, не завдаючи шкоди "
+"на ній."
 
 msgid "Disrupting Ray"
-msgstr ""
+msgstr "Розриваючий Промінь"
 
 msgid "Reduces the defense rating of an enemy unit by three."
 msgstr ""
+"Зменшує показник захисту ворожого загону на 3 одиниці. Закляття можна "
+"накладати багаторазово, його також неможливо зняти до кінця битви будь-яким "
+"чином."
 
 msgid "Damages all living (non-undead) units in the battle."
-msgstr ""
+msgstr "Пошкоджує всі живі (не невмерлі) загони на полі бою."
 
 msgid "Death Ripple"
-msgstr ""
+msgstr "Смертельне Тремтіння"
 
 msgid "Death Wave"
-msgstr ""
+msgstr "Смертельна Хвиля"
 
 msgid ""
-"Damages all living (non-undead) units in the battle.  This spell is an "
+"Damages all living (non-undead) units in the battle. This spell is an "
 "improved version of Death Ripple."
 msgstr ""
+"Пошкоджує всі живі (не невмерлі) загони на полі бою. Це закляття - покращена "
+"версія Смертельного Тремтіння."
 
 msgid "Dragon Slayer"
-msgstr ""
+msgstr "Драконовбивця"
 
 msgid "Greatly increases a unit's attack skill vs. Dragons."
 msgstr ""
+"Значно збільшує навичку атаки зачарованого загону у бою проти Драконів."
 
 msgid "Blood Lust"
-msgstr ""
+msgstr "Кровожерливість"
 
 msgid "Increases a unit's attack skill."
-msgstr ""
+msgstr "Збільшує навичку атаки обраного дружнього загону."
 
 msgid "Animate Dead"
-msgstr ""
+msgstr "Оживлення Мерців"
 
 msgid "Resurrects creatures from a damaged or dead undead unit permanently."
 msgstr ""
+"Назавжди відновлює істот у пошкодженому або знищеному загоні невмерлих."
 
 msgid "Mirror Image"
-msgstr ""
+msgstr "Дзеркальний Фантом"
 
 msgid ""
-"Creates an illusionary unit that duplicates one of your existing units.  "
-"This illusionary unit does the same damages as the original, but will vanish "
-"if it takes any damage."
+"Creates an illusionary unit that duplicates one of your existing units. This "
+"illusionary unit does the same damages as the original, but will vanish if "
+"it takes any damage."
 msgstr ""
-
-msgid "Halves damage received from ranged attacks for a single unit."
-msgstr ""
+"Створює ілюзорну копію обраного дружнього загону. Загін-ілюзія завдаватиме "
+"тої ж шкоди, що й оригінал, однак щезне, отримавши будь-яке пошкодження."
 
 msgid "Shield"
-msgstr ""
+msgstr "Щит"
 
-msgid "Halves damage received from ranged attacks for all of your units."
+msgid ""
+"Halves damage received from ranged attacks for a single unit. Does not "
+"affect damage received from Turrets or Ballistae."
 msgstr ""
+"Зменшує вдвічі пошкодження від дальніх атак для обраного дружнього загону. "
+"Не впливає на атаки з боку замкових веж."
 
 msgid "Mass Shield"
+msgstr "Масовий Щит"
+
+msgid ""
+"Halves damage received from ranged attacks for all of your units. Does not "
+"affect damage received from Turrets or Ballistae."
 msgstr ""
+"Зменшує вдвічі пошкодження від дальніх атак для всіх ваших загонів. Не "
+"впливає на атаки з боку замкових веж."
 
 msgid "Summon Earth Elemental"
-msgstr ""
+msgstr "Виклик Земних Елементалів"
 
 msgid "Summons Earth Elementals to fight for your army."
-msgstr ""
+msgstr "Викликає дружніх Земних Елементалів на поле бою."
 
 msgid "Summon Air Elemental"
-msgstr ""
+msgstr "Виклик Повітряних Елементалів"
 
 msgid "Summons Air Elementals to fight for your army."
-msgstr ""
+msgstr "Викликає дружніх Повітряних Елементалів на поле бою."
 
 msgid "Summon Fire Elemental"
-msgstr ""
+msgstr "Виклик Вогняних Елементалів"
 
 msgid "Summons Fire Elementals to fight for your army."
-msgstr ""
+msgstr "Викликає дружніх Вогняних Елементалів на поле бою."
 
 msgid "Summon Water Elemental"
-msgstr ""
+msgstr "Виклик Водних Елементалів"
 
 msgid "Summons Water Elementals to fight for your army."
-msgstr ""
+msgstr "Викликає дружніх Водних Елементалів на поле бою."
 
 msgid "Damages castle walls."
-msgstr ""
+msgstr "Пошкоджує стіни замку."
 
 msgid "Earthquake"
 msgstr "Землетрус"
 
 msgid "Causes all mines across the land to become visible."
-msgstr ""
+msgstr "Показує положення всіх копалень на мапі."
 
 msgid "View Mines"
-msgstr ""
+msgstr "Огляд Копалень"
 
 msgid "Causes all resources across the land to become visible."
-msgstr ""
+msgstr "Показує положення всіх ресурсів на мапі."
 
 msgid "View Resources"
-msgstr ""
+msgstr "Огляд Ресурсів"
 
 msgid "Causes all artifacts across the land to become visible."
-msgstr ""
+msgstr "Показує положення всіх артефактів на мапі."
 
 msgid "View Artifacts"
-msgstr ""
+msgstr "Огляд Артефактів"
 
 msgid "Causes all towns and castles across the land to become visible."
-msgstr ""
+msgstr "Показує положення всіх міст на мапі."
 
 msgid "View Towns"
-msgstr ""
+msgstr "Огляд Міст"
 
 msgid "Causes all Heroes across the land to become visible."
 msgstr "Показує всіх героїв на карті."
@@ -9720,13 +9898,16 @@ msgid "Allows the caster to view detailed information on enemy Heroes."
 msgstr "Дозволяє заклиначу побачити повну інформацію про ворожих Героїв."
 
 msgid "Summon Boat"
-msgstr ""
+msgstr "Виклик Корабля"
 
 msgid ""
-"Summons the nearest unoccupied, friendly boat to an adjacent shore "
-"location.  A friendly boat is one which you just built or were the most "
-"recent player to occupy."
+"Summons the nearest unoccupied, friendly boat to an adjacent shore location. "
+"A friendly boat is one which you just built or were the most recent player "
+"to occupy."
 msgstr ""
+"Викликає найближчий дружній незайнятий корабель на розташовану поруч з "
+"героєм водойму. Корабель вважається дружнім, якщо він був збудований вами, "
+"або якщо востаннє ним користався ваш герой."
 
 msgid "Allows the caster to magically transport to a nearby location."
 msgstr "Магічно переносить заклинача на невелику відстань."
@@ -9738,7 +9919,7 @@ msgid "Returns the caster to any town or castle currently owned."
 msgstr "Повертає заклинача до будь-якого міста або замку, що належить вам."
 
 msgid "Town Gate"
-msgstr "Міський портал"
+msgstr "Міський Портал"
 
 msgid ""
 "Returns the hero to the town or castle of choice, provided it is controlled "
@@ -9753,55 +9934,58 @@ msgid ""
 msgstr "Видіння передбачає ймовірний результат битви з нейтральною армією."
 
 msgid "Haunt"
-msgstr ""
+msgstr "Проклята Копальня"
 
 msgid ""
-"Haunts a mine you control with Ghosts.  This mine stops producing "
-"resources.  (If I can't keep it, nobody will!)"
+"Haunts a mine you control with Ghosts. This mine stops producing resources. "
+"(If I can't keep it, nobody will!)"
 msgstr ""
+"Проклинає підконтрольну вам копальню, населяючи її Привидами. Виробництво у "
+"копальні припиняється. (І сам не гам, і другому не дам!)"
 
 msgid "Set Earth Guardian"
-msgstr ""
+msgstr "Виклик Земних Вартових"
 
 msgid "Sets Earth Elementals to guard a mine against enemy armies."
-msgstr ""
+msgstr "Викликає Земних Елементалів для охорони копальні від ворожих військ."
 
 msgid "Set Air Guardian"
-msgstr ""
+msgstr "Виклик Повітряних Вартових"
 
 msgid "Sets Air Elementals to guard a mine against enemy armies."
 msgstr ""
+"Викликає Повітряних Елементалів для охорони копальні від ворожих військ."
 
 msgid "Set Fire Guardian"
-msgstr ""
+msgstr "Виклик Вогняних Вартових"
 
 msgid "Sets Fire Elementals to guard a mine against enemy armies."
-msgstr ""
+msgstr "Викликає Вогняних Елементалів для охорони копальні від ворожих військ."
 
 msgid "Set Water Guardian"
-msgstr ""
+msgstr "Виклик Водних Вартових"
 
 msgid "Sets Water Elementals to guard a mine against enemy armies."
-msgstr ""
+msgstr "Викликає Водних Елементалів для охорони копальні від ворожих військ."
 
 msgid "Petrification"
 msgstr "Скам'яніння"
 
 msgid ""
-"Turns the affected creature into stone.  A petrified creature receives half "
+"Turns the affected creature into stone. A petrified creature receives half "
 "damage from a direct attack."
 msgstr ""
 "Обертає уражену істоту на камінь. Скам'яніла істота отримує половину "
 "ушкоджень від безпосередньої атаки."
 
 msgid "You have no Magic Book, so you cannot cast a spell."
-msgstr "У вас немає Магічної Книги, то ж ви не можете вичаклувати закляття."
+msgstr "У вас немає Книги Магії, то ж ви не можете вичаклувати закляття."
 
 msgid "No spell to cast."
 msgstr "Немає чарів для застосування."
 
 msgid "Your hero has %{point} spell points remaining."
-msgstr ""
+msgstr "У вашого героя залишилось %{point} оч. мани."
 
 msgid "View Adventure Spells"
 msgstr "Показати Небойові Закляття"
@@ -9819,7 +10003,7 @@ msgid "Close Spellbook"
 msgstr "Закрити Книгу Заклять"
 
 msgid "View %{spell}"
-msgstr ""
+msgstr "Показати %{spell}"
 
 msgid "This spell does %{damage} points of damage."
 msgstr "Це закляття завдає %{damage} очок шкоди."
@@ -9832,7 +10016,7 @@ msgstr ""
 "%{count} %{monster}."
 
 msgid "This spell restores %{hp} HP."
-msgstr ""
+msgstr "Це закляття відновлює %{hp} ОЗ."
 
 msgid "This spell summons %{count} %{monster} to guard the mine."
 msgstr "Це закляття викликає %{count} %{monster} для охорони шахти."
@@ -9847,12 +10031,15 @@ msgid ""
 "This spell controls up to\n"
 "%{hp} HP."
 msgstr ""
+"Це закляття дозволяє керувати ворожим загоном, чиє сумарне здоров'я не "
+"перевищує \n"
+"%{hp} ОЗ."
 
 msgid "The ultimate artifact is really the %{name}."
-msgstr ""
+msgstr "Унікальний Артефакт це справді %{name}."
 
 msgid "The ultimate artifact may be found in the %{name} regions of the world."
-msgstr ""
+msgstr "Унікальний Артефакт можна знайти там, де %{name}."
 
 msgid "north-west"
 msgstr "північний захід"
@@ -9896,8 +10083,10 @@ msgstr "Кістки Лорда Слейера поховані у фундам�
 msgid "A Black Dragon will take out a Titan any day of the week."
 msgstr "Чорний Дракон залюбки здолає Титана."
 
-msgid "He told her: Yada yada yada...  and then she said: Blah, blah, blah..."
-msgstr "Він сказав їй: Тинди-ринди... А тоді вона відповіла: Тари та бари..."
+msgid "He told her: Yada yada yada... and then she said: Blah, blah, blah..."
+msgstr ""
+"Вона сказала йому: \"Бла-бла-бла...\" А тоді він відповів: Я не кажу: \"Бла-"
+"бла-бла!\""
 
 msgid "An unknown force is being resurrected..."
 msgstr "Невідома сила постає знов..."

@@ -31,6 +31,7 @@
 #include "ai.h"
 #include "castle.h"
 #include "game.h"
+#include "game_io.h"
 #include "gamedefs.h"
 #include "heroes.h"
 #include "logging.h"
@@ -99,25 +100,17 @@ bool Control::isControlHuman() const
     return ( CONTROL_HUMAN & GetControl() ) != 0;
 }
 
-bool Control::isControlLocal() const
-{
-    return !isControlRemote();
-}
-
-bool Control::isControlRemote() const
-{
-    return ( CONTROL_REMOTE & GetControl() ) != 0;
-}
-
 Player::Player( int col )
     : control( CONTROL_NONE )
     , color( col )
     , race( Race::NONE )
     , friends( col )
-    , id( World::GetUniq() )
     , _ai( std::make_shared<AI::Normal>() )
     , _handicapStatus( HandicapStatus::NONE )
+#if defined( WITH_DEBUG )
     , _isAIAutoControlMode( false )
+    , _isAIAutoControlModePlanned( false )
+#endif
 {
     // Do nothing.
 }
@@ -138,10 +131,12 @@ std::string Player::GetName() const
 
 int Player::GetControl() const
 {
+#if defined( WITH_DEBUG )
     if ( _isAIAutoControlMode ) {
         assert( ( control & CONTROL_HUMAN ) == CONTROL_HUMAN );
         return CONTROL_AI;
     }
+#endif
 
     return control;
 }
@@ -186,11 +181,33 @@ void Player::setHandicapStatus( const HandicapStatus status )
     _handicapStatus = status;
 }
 
+#if defined( WITH_DEBUG )
 void Player::setAIAutoControlMode( const bool enable )
 {
     assert( ( control & CONTROL_HUMAN ) == CONTROL_HUMAN );
-    _isAIAutoControlMode = enable;
+
+    // If this mode should be enabled, then it happens immediately
+    if ( enable ) {
+        _isAIAutoControlMode = enable;
+    }
+    // Otherwise, the change is first planned and then committed, in which case this mode should be actually enabled
+    else {
+        assert( _isAIAutoControlMode );
+    }
+
+    _isAIAutoControlModePlanned = enable;
 }
+
+void Player::commitAIAutoControlMode()
+{
+    assert( ( control & CONTROL_HUMAN ) == CONTROL_HUMAN );
+
+    // If this method has been called, then this mode should be actually enabled
+    assert( _isAIAutoControlMode );
+
+    _isAIAutoControlMode = _isAIAutoControlModePlanned;
+}
+#endif
 
 StreamBase & operator<<( StreamBase & msg, const Focus & focus )
 {
@@ -236,7 +253,7 @@ StreamBase & operator<<( StreamBase & msg, const Player & player )
     const BitModes & modes = player;
 
     assert( player._ai != nullptr );
-    msg << modes << player.id << player.control << player.color << player.race << player.friends << player.name << player.focus << *player._ai
+    msg << modes << player.control << player.color << player.race << player.friends << player.name << player.focus << *player._ai
         << static_cast<uint8_t>( player._handicapStatus );
     return msg;
 }
@@ -245,7 +262,15 @@ StreamBase & operator>>( StreamBase & msg, Player & player )
 {
     BitModes & modes = player;
 
-    msg >> modes >> player.id >> player.control >> player.color >> player.race >> player.friends >> player.name >> player.focus;
+    msg >> modes;
+
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1009_RELEASE, "Remove the logic below." );
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1009_RELEASE ) {
+        uint32_t temp;
+        msg >> temp;
+    }
+
+    msg >> player.control >> player.color >> player.race >> player.friends >> player.name >> player.focus;
 
     assert( player._ai );
     msg >> *player._ai;
@@ -521,10 +546,6 @@ std::string Players::String() const
             os << "human";
             break;
 
-        case CONTROL_REMOTE:
-            os << "remote";
-            break;
-
         default:
             os << "unknown";
             break;
@@ -552,13 +573,6 @@ StreamBase & operator>>( StreamBase & msg, Players & players )
     int colors;
     int current;
     msg >> colors >> current;
-
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1004_RELEASE, "Remove the logic below." );
-    // The old save files made at the end of a campaign scenario has player color set to '-1' which is not supported now.
-    // So we change the incorrect color '-1' to 'Color::NONE'.
-    if ( current == -1 ) {
-        current = Color::NONE;
-    }
 
     players.clear();
     players.setCurrentColor( current );

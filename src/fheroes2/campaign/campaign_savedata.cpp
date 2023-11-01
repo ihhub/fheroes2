@@ -27,8 +27,6 @@
 
 #include "army.h"
 #include "campaign_data.h"
-#include "game_io.h"
-#include "save_format_version.h"
 #include "serialize.h"
 
 namespace Campaign
@@ -166,34 +164,11 @@ namespace Campaign
 
     StreamBase & operator>>( StreamBase & msg, CampaignSaveData & data )
     {
-        msg >> data._currentScenarioInfoId.campaignId >> data._currentScenarioInfoId.scenarioId;
+        msg >> data._currentScenarioInfoId.campaignId >> data._currentScenarioInfoId.scenarioId >> data._currentScenarioBonusId >> data._finishedMaps
+            >> data._bonusesForFinishedMaps;
 
-        static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1005_RELEASE, "Remove the logic below." );
-        if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1005_RELEASE ) {
-            ScenarioBonusData dummy;
-
-            msg >> dummy;
-
-            // There is always a bonus in all the original HoMM2 campaign missions
-            data._currentScenarioBonusId = 0;
-        }
-        else {
-            msg >> data._currentScenarioBonusId;
-        }
-
-        msg >> data._finishedMaps;
-
-        static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1005_RELEASE, "Remove the logic below." );
-        if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1005_RELEASE ) {
-            // There is always a bonus in all the original HoMM2 campaign missions
-            data._bonusesForFinishedMaps.resize( data._finishedMaps.size(), 0 );
-        }
-        else {
-            msg >> data._bonusesForFinishedMaps;
-
-            // Make sure that the number of elements in the vector of map bonuses matches the number of elements in the vector of finished maps
-            data._bonusesForFinishedMaps.resize( data._finishedMaps.size(), -1 );
-        }
+        // Make sure that the number of elements in the vector of map bonuses matches the number of elements in the vector of finished maps
+        data._bonusesForFinishedMaps.resize( data._finishedMaps.size(), -1 );
 
         return msg >> data._daysPassed >> data._obtainedCampaignAwards >> data._carryOverTroops >> data._difficulty;
     }

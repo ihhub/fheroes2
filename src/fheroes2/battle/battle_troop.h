@@ -26,6 +26,7 @@
 
 #include <cstddef>
 #include <cstdint>
+#include <optional>
 #include <string>
 #include <utility>
 #include <vector>
@@ -35,8 +36,8 @@
 #include "battle_cell.h"
 #include "bitmodes.h"
 #include "math_base.h"
-#include "payment.h"
 #include "players.h"
+#include "resource.h"
 
 class Spell;
 class HeroBase;
@@ -74,7 +75,7 @@ namespace Battle
     class Unit : public ArmyTroop, public BitModes, public Control
     {
     public:
-        Unit( const Troop & t, const Position & pos, const bool ref, const Rand::DeterministicRandomGenerator & randomGenerator, const uint32_t uid );
+        Unit( const Troop & t, const Position & pos, const bool ref, const uint32_t uid );
         Unit( const Unit & ) = delete;
 
         Unit & operator=( const Unit & ) = delete;
@@ -99,8 +100,8 @@ namespace Battle
             mirror = ptr;
         }
 
-        void SetRandomMorale();
-        void SetRandomLuck();
+        void SetRandomMorale( Rand::DeterministicRandomGenerator & randomGenerator );
+        void SetRandomLuck( Rand::DeterministicRandomGenerator & randomGenerator );
         void NewTurn();
 
         bool isFlying() const;
@@ -118,8 +119,6 @@ namespace Battle
         bool isHaveDamage() const;
 
         bool OutOfWalls() const;
-        bool canReach( int index ) const;
-        bool canReach( const Unit & unit ) const;
 
         std::string String( bool more = false ) const;
 
@@ -154,35 +153,65 @@ namespace Battle
         }
 
         int GetColor() const override;
-        int GetCurrentColor() const; // the unit can be under spell what changes its affiliation
-        int GetCurrentOrArmyColor() const; // current unit color (if valid), color of the unit's army otherwise
-        int GetCurrentControl() const;
-        uint32_t GetMoveRange() const;
-        uint32_t GetSpeed( bool skipStandingCheck, bool skipMovedCheck ) const;
+        // Returns the current color of the unit according to its current combat state (the unit
+        // may be under a spell that changes its affiliation).
+        int GetCurrentColor() const;
+        // Returns the current unit color (if valid, the unit's color can be invalid if the unit
+        // is under the Berserker spell), otherwise returns the color of the unit's army.
+        int GetCurrentOrArmyColor() const;
+
         int GetControl() const override;
-        uint32_t GetDamage( const Unit & ) const;
-        int32_t GetScoreQuality( const Unit & ) const;
+        int GetCurrentControl() const;
+
+        // Returns the current speed of the unit, optionally performing additional checks in accordance
+        // with the call arguments. If 'skipStandingCheck' is set to false, then the method returns
+        // Speed::STANDING if the unit is immovable due to spells cast on it or if this unit is dead
+        // (contains 0 fighters). Additionally, if 'skipMovedCheck' is set to false, then this method
+        // returns Speed::STANDING if the unit has already completed its turn. If 'skipStandingCheck'
+        // is set to true, then the value of 'skipMovedCheck' doesn't matter.
+        uint32_t GetSpeed( const bool skipStandingCheck, const bool skipMovedCheck ) const;
+
+        uint32_t GetDamage( const Unit & enemy, Rand::DeterministicRandomGenerator & randomGenerator ) const;
+
+        // Returns the threat level of this unit, calculated as if it attacked the 'defender' unit.
+        // If 'defenderPos' is set, then it will be used as the 'defender' unit's position, otherwise
+        // the actual position of this unit will be used. See the implementation for details.
+        int32_t evaluateThreatForUnit( const Unit & defender, const std::optional<Position> defenderPos = {} ) const;
+
         uint32_t GetInitialCount() const;
         uint32_t GetDead() const;
         uint32_t GetHitPoints() const;
-        payment_t GetSurrenderCost() const;
+
+        Funds GetSurrenderCost() const;
 
         uint32_t GetShots() const override
         {
             return shots;
         }
 
+        bool isImmovable() const;
+
         uint32_t ApplyDamage( Unit & enemy, const uint32_t dmg, uint32_t & killed, uint32_t * ptrResurrected );
-        uint32_t CalculateRetaliationDamage( uint32_t damageTaken ) const;
+
         uint32_t CalculateMinDamage( const Unit & ) const;
         uint32_t CalculateMaxDamage( const Unit & ) const;
         uint32_t CalculateDamageUnit( const Unit & enemy, double dmg ) const;
+
+        // Returns a very rough estimate of the retaliatory damage after this unit receives the damage of the specified value.
+        // The returned value is not suitable for accurate calculations, but only for approximate comparison with other units
+        // in similar circumstances.
+        uint32_t EstimateRetaliatoryDamage( const uint32_t damageTaken ) const;
+
         bool ApplySpell( const Spell &, const HeroBase * hero, TargetInfo & );
         bool AllowApplySpell( const Spell &, const HeroBase * hero, std::string * msg = nullptr, bool forceApplyToAlly = false ) const;
         bool isUnderSpellEffect( const Spell & spell ) const;
         std::vector<Spell> getCurrentSpellEffects() const;
+
         void PostAttackAction();
-        void SetBlindAnswer( bool value );
+
+        // Sets whether a unit performs a retaliatory attack while being blinded (i.e. with reduced efficiency)
+        void SetBlindRetaliation( bool value );
+
         uint32_t CalculateSpellDamage( const Spell & spell, uint32_t spellPoints, const HeroBase * hero, uint32_t targetDamage, bool ignoreDefendingHero ) const;
 
         bool SwitchAnimation( int rule, bool reverse = false );
@@ -231,7 +260,7 @@ namespace Battle
             return position.GetRect();
         }
 
-        uint32_t HowManyWillKilled( uint32_t ) const;
+        uint32_t HowManyWillBeKilled( const uint32_t dmg ) const;
 
         void SetResponse();
         void UpdateDirection();
@@ -239,7 +268,7 @@ namespace Battle
         void PostKilledAction();
 
         uint32_t GetMagicResist( const Spell & spell, const uint32_t attackingArmySpellPower, const HeroBase * attackingHero ) const;
-        int GetSpellMagic() const;
+        int GetSpellMagic( Rand::DeterministicRandomGenerator & randomGenerator ) const;
 
         const HeroBase * GetCommander() const;
         const HeroBase * GetCurrentOrArmyCommander() const; // commander of the army with the current unit color (if valid), commander of the unit's army otherwise
@@ -296,10 +325,10 @@ namespace Battle
         Unit * mirror;
         RandomizedDelay idleTimer;
 
-        bool blindanswer;
-        uint8_t customAlphaMask;
+        // Whether a unit performs a retaliatory attack while being blinded (i.e. with reduced efficiency)
+        bool _blindRetaliation;
 
-        const Rand::DeterministicRandomGenerator & _randomGenerator;
+        uint8_t customAlphaMask;
     };
 }
 

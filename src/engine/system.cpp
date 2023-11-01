@@ -59,7 +59,7 @@
 
 #include <SDL_version.h>
 
-#if SDL_VERSION_ATLEAST( 2, 0, 0 ) && defined( ANDROID )
+#if defined( ANDROID )
 #include <SDL_error.h>
 #include <SDL_system.h>
 #endif
@@ -606,7 +606,7 @@ std::string System::FileNameToUTF8( const std::string & name )
     // In case of any issues, the original string will be returned, so let's put it to the cache right away
     acpToUtf8[name] = name;
 
-    auto getLastErrorStr = []() {
+    const auto getLastErrorStr = []() {
         LPTSTR msgBuf;
 
         if ( FormatMessage( FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS, nullptr, GetLastError(), 0,

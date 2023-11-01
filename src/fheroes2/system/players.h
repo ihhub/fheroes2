@@ -53,9 +53,10 @@ enum
 {
     CONTROL_NONE = 0,
     CONTROL_HUMAN = 1,
-    CONTROL_REMOTE = 2, /*, CONTROL_LOCAL = CONTROL_AI | CONTROL_HUMAN */
+    // CONTROL_REMOTE = 2,
     CONTROL_AI = 4
 };
+
 enum
 {
     FOCUS_UNSEL = 0,
@@ -102,8 +103,6 @@ struct Control
 
     bool isControlAI() const;
     bool isControlHuman() const;
-    bool isControlRemote() const;
-    bool isControlLocal() const;
 };
 
 class Player : public BitModes, public Control
@@ -184,13 +183,19 @@ public:
 
     void setHandicapStatus( const HandicapStatus status );
 
-    // This mode sets control from a human player to AI so the game will be continued by AI.
-    void setAIAutoControlMode( const bool enable );
-
+#if defined( WITH_DEBUG )
     bool isAIAutoControlMode() const
     {
         return _isAIAutoControlMode;
     }
+
+    // Sets whether a given human player is controlled by AI. See the implementation for details.
+    void setAIAutoControlMode( const bool enable );
+
+    // Turns the planned value of whether a given human player is controlled by AI into the actual value.
+    // Should be called only if this mode is actually enabled.
+    void commitAIAutoControlMode();
+#endif
 
 protected:
     friend StreamBase & operator<<( StreamBase &, const Player & );
@@ -201,13 +206,18 @@ protected:
     int race;
     int friends;
     std::string name;
-    uint32_t id;
     Focus focus;
     std::shared_ptr<AI::Base> _ai;
     HandicapStatus _handicapStatus;
 
-    // This member should not be saved anywhere.
+#if defined( WITH_DEBUG )
+    // These members should not be saved anywhere
+
+    // Actual value of whether a given human player is controlled by AI
     bool _isAIAutoControlMode;
+    // Planned value of whether a given human player is controlled by AI (will become actual upon committing it)
+    bool _isAIAutoControlModePlanned;
+#endif
 };
 
 StreamBase & operator<<( StreamBase &, const Player & );

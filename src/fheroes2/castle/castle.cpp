@@ -21,6 +21,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "castle.h"
+
 #include <algorithm>
 #include <array>
 #include <cassert>
@@ -34,7 +36,6 @@
 #include "audio_manager.h"
 #include "battle_board.h"
 #include "battle_tower.h"
-#include "castle.h"
 #include "castle_building_info.h"
 #include "dialog.h"
 #include "difficulty.h"
@@ -495,9 +496,10 @@ void Castle::PostLoad()
             JoinRNDArmy();
     }
 
-    // fix shipyard
-    if ( !HaveNearlySea() )
+    if ( !HasSeaAccess() ) {
+        // Remove shipyard if no sea access.
         building &= ~BUILD_SHIPYARD;
+    }
 
     // remove tavern from necromancer castle
     if ( Race::NECR == race && ( building & BUILD_TAVERN ) ) {
@@ -629,7 +631,7 @@ double Castle::getVisitValue( const Heroes & hero ) const
         }
 
         if ( !hero.HaveSpellBook() && spellValue > 0 ) {
-            const payment_t payment = PaymentConditions::BuySpellBook();
+            const Funds payment = PaymentConditions::BuySpellBook();
             if ( potentialFunds < payment || hero.GetBagArtifacts().isFull() ) {
                 // Since the hero does not have a magic book and cannot buy any then spells are useless.
                 spellValue = 0;
@@ -653,7 +655,7 @@ double Castle::getVisitValue( const Heroes & hero ) const
                 continue;
             }
 
-            const payment_t payment = troop->GetTotalUpgradeCost();
+            const Funds payment = troop->GetTotalUpgradeCost();
             if ( potentialFunds >= payment ) {
                 potentialFunds -= payment;
                 troop->Upgrade();
@@ -675,7 +677,7 @@ bool Castle::isExactBuildingBuilt( const uint32_t buildingToCheck ) const
         return false;
     }
 
-    auto checkBuilding = [this]( const uint32_t expectedLevels, const uint32_t allPossibleLevels ) {
+    const auto checkBuilding = [this]( const uint32_t expectedLevels, const uint32_t allPossibleLevels ) {
         // All expected levels should be built
         assert( ( building & expectedLevels ) == expectedLevels );
 
@@ -786,48 +788,42 @@ void Castle::ActionNewWeek()
         = { DWELLING_MONSTER1, DWELLING_MONSTER2, DWELLING_MONSTER3, DWELLING_MONSTER4, DWELLING_MONSTER5, DWELLING_MONSTER6,
             DWELLING_UPGRADE2, DWELLING_UPGRADE3, DWELLING_UPGRADE4, DWELLING_UPGRADE5, DWELLING_UPGRADE6, DWELLING_UPGRADE7 };
 
-    const bool isNeutral = GetColor() == Color::NONE;
+    const bool isNeutral = ( GetColor() == Color::NONE );
+    const bool isPlagueWeek = ( world.GetWeekType().GetType() == WeekName::PLAGUE );
+    const bool isMonsterWeek = ( world.GetWeekType().GetType() == WeekName::MONSTERS );
 
-    // Increase the population
-    if ( world.GetWeekType().GetType() != WeekName::PLAGUE ) {
+    if ( !isPlagueWeek ) {
         static const std::array<uint32_t, 6> basicDwellings
             = { DWELLING_MONSTER1, DWELLING_MONSTER2, DWELLING_MONSTER3, DWELLING_MONSTER4, DWELLING_MONSTER5, DWELLING_MONSTER6 };
 
         // Normal population growth
         for ( const uint32_t dwellingId : basicDwellings ) {
-            uint32_t * dwellingPtr = GetDwelling( dwellingId );
-
-            // Such dwelling (or its upgrade) has not been built
-            if ( dwellingPtr == nullptr ) {
+            uint32_t * dwellingMonsters = GetDwelling( dwellingId );
+            if ( dwellingMonsters == nullptr ) {
+                // Such dwelling (or its upgrade) has not been built
                 continue;
             }
 
             uint32_t growth = Monster( race, GetActualDwelling( dwellingId ) ).GetGrown();
 
-            // The well is built
             if ( building & BUILD_WELL ) {
+                // The well is built.
                 growth += GetGrownWell();
             }
 
-            // The Horde building is built
             if ( ( dwellingId == DWELLING_MONSTER1 ) && ( building & BUILD_WEL2 ) ) {
                 growth += GetGrownWel2();
             }
 
-            if ( isControlAI() && !isNeutral ) {
-                growth = static_cast<uint32_t>( growth * Difficulty::GetUnitGrowthBonusForAI( Game::getDifficulty() ) );
-            }
-
-            // Neutral towns always have 50% population growth
             if ( isNeutral ) {
+                // Neutral towns always have 50% population growth.
                 growth /= 2;
             }
 
-            *dwellingPtr += growth;
+            *dwellingMonsters += growth;
         }
 
-        // Week Of
-        if ( world.GetWeekType().GetType() == WeekName::MONSTERS && !world.BeginMonth() ) {
+        if ( isMonsterWeek && !world.BeginMonth() ) {
             for ( const uint32_t dwellingId : allDwellings ) {
                 // A building of exactly this level should be built (its upgraded versions should not be considered)
                 if ( !isExactBuildingBuilt( dwellingId ) ) {
@@ -840,18 +836,18 @@ void Castle::ActionNewWeek()
                     continue;
                 }
 
-                uint32_t * dwellingPtr = GetDwelling( dwellingId );
-                assert( dwellingPtr != nullptr );
+                uint32_t * dwellingMonsters = GetDwelling( dwellingId );
+                assert( dwellingMonsters != nullptr );
 
-                *dwellingPtr += GetGrownWeekOf();
-
+                *dwellingMonsters += GetGrownWeekOf();
                 break;
             }
         }
 
-        // Neutral town: increase the garrison
         if ( isNeutral ) {
+            // Neutral towns have additional increase in garrison army.
             JoinRNDArmy();
+
             // The probability that a town will get additional troops is 40%, castle always gets them
             if ( isCastle() || Rand::Get( 1, 100 ) <= 40 ) {
                 JoinRNDArmy();
@@ -863,14 +859,12 @@ void Castle::ActionNewWeek()
     if ( world.BeginMonth() ) {
         assert( world.GetMonth() > 1 );
 
-        // Population halved
-        if ( world.GetWeekType().GetType() == WeekName::PLAGUE ) {
+        if ( isPlagueWeek ) {
             for ( uint32_t & dwellingRef : dwelling ) {
                 dwellingRef /= 2;
             }
         }
-        // Month Of
-        else if ( world.GetWeekType().GetType() == WeekName::MONSTERS ) {
+        else if ( isMonsterWeek ) {
             for ( const uint32_t dwellingId : allDwellings ) {
                 // A building of exactly this level should be built (its upgraded versions should not be considered)
                 if ( !isExactBuildingBuilt( dwellingId ) ) {
@@ -883,14 +877,54 @@ void Castle::ActionNewWeek()
                     continue;
                 }
 
-                uint32_t * dwellingPtr = GetDwelling( dwellingId );
-                assert( dwellingPtr != nullptr );
+                uint32_t * dwellingMonsters = GetDwelling( dwellingId );
+                assert( dwellingMonsters != nullptr );
 
-                *dwellingPtr += *dwellingPtr * GetGrownMonthOf() / 100;
-
+                *dwellingMonsters += *dwellingMonsters * GetGrownMonthOf() / 100;
                 break;
             }
         }
+    }
+}
+
+void Castle::ActionNewWeekAIBonuses()
+{
+    if ( world.GetWeekType().GetType() == WeekName::PLAGUE ) {
+        // No growth bonus can be applied.
+        return;
+    }
+
+    if ( !isControlAI() ) {
+        // No AI - no perks!
+        return;
+    }
+
+    if ( GetColor() == Color::NONE ) {
+        // Neutrals aren't considered as AI players.
+        return;
+    }
+
+    static const std::array<uint32_t, 6> basicDwellings
+        = { DWELLING_MONSTER1, DWELLING_MONSTER2, DWELLING_MONSTER3, DWELLING_MONSTER4, DWELLING_MONSTER5, DWELLING_MONSTER6 };
+
+    for ( const uint32_t dwellingId : basicDwellings ) {
+        uint32_t * dwellingMonsters = GetDwelling( dwellingId );
+        if ( dwellingMonsters == nullptr ) {
+            // Such dwelling (or its upgrade) has not been built.
+            continue;
+        }
+
+        uint32_t originalGrowth = Monster( race, GetActualDwelling( dwellingId ) ).GetGrown();
+
+        if ( building & BUILD_WELL ) {
+            originalGrowth += GetGrownWell();
+        }
+
+        if ( ( dwellingId == DWELLING_MONSTER1 ) && ( building & BUILD_WEL2 ) ) {
+            originalGrowth += GetGrownWel2();
+        }
+
+        *dwellingMonsters += static_cast<uint32_t>( originalGrowth * Difficulty::GetUnitGrowthBonusForAI( Game::getDifficulty() ) );
     }
 }
 
@@ -1047,7 +1081,7 @@ bool Castle::RecruitMonster( const Troop & troop, bool showDialog )
         count = dwelling[dwellingIndex];
     }
 
-    const payment_t paymentCosts = troop.GetTotalCost();
+    const Funds paymentCosts = troop.GetTotalCost();
     Kingdom & kingdom = GetKingdom();
 
     if ( !kingdom.AllowPayment( paymentCosts ) ) {
@@ -1443,7 +1477,7 @@ int Castle::CheckBuyBuilding( const uint32_t build ) const
         }
         break;
     case BUILD_SHIPYARD:
-        if ( !HaveNearlySea() ) {
+        if ( !HasSeaAccess() ) {
             return BUILD_DISABLE;
         }
         break;
@@ -1558,7 +1592,6 @@ bool Castle::AllowBuyBuilding( uint32_t build ) const
     return ALLOW_BUILD == CheckBuyBuilding( build );
 }
 
-/* buy building */
 bool Castle::BuyBuilding( uint32_t build )
 {
     if ( !AllowBuyBuilding( build ) )
@@ -2123,42 +2156,114 @@ Heroes * Castle::GetHero() const
     return world.GetHero( *this );
 }
 
-bool Castle::HaveNearlySea() const
+bool Castle::HasSeaAccess() const
 {
-    // check nearest ocean
-    if ( Maps::isValidAbsPoint( center.x, center.y + 2 ) ) {
-        const int32_t index = Maps::GetIndexFromAbsPoint( center.x, center.y + 2 );
-        const Maps::Tiles & left = world.GetTiles( index - 1 );
-        const Maps::Tiles & right = world.GetTiles( index + 1 );
-        const Maps::Tiles & middle = world.GetTiles( index );
-
-        return left.isWater() || right.isWater() || middle.isWater();
+    const fheroes2::Point possibleSeaTile{ center.x, center.y + 2 };
+    if ( !Maps::isValidAbsPoint( possibleSeaTile.x, possibleSeaTile.y ) ) {
+        // If a tile below doesn't exist then no reason to check other tiles.
+        return false;
     }
-    return false;
-}
 
-bool TilePresentBoat( const Maps::Tiles & tile )
-{
-    return tile.isWater() && ( tile.GetObject() == MP2::OBJ_BOAT || tile.GetObject() == MP2::OBJ_HEROES );
-}
-
-bool Castle::PresentBoat() const
-{
-    // 2 cell down
-    if ( Maps::isValidAbsPoint( center.x, center.y + 2 ) ) {
-        const int32_t index = Maps::GetIndexFromAbsPoint( center.x, center.y + 2 );
-        const int32_t max = world.w() * world.h();
-
-        if ( index + 1 < max ) {
-            const Maps::Tiles & left = world.GetTiles( index - 1 );
-            const Maps::Tiles & right = world.GetTiles( index + 1 );
-            const Maps::Tiles & middle = world.GetTiles( index );
-
-            if ( TilePresentBoat( left ) || TilePresentBoat( right ) || TilePresentBoat( middle ) )
-                return true;
+    auto doesTileAllowsToPutBoat = []( const Maps::Tiles & tile ) {
+        if ( !tile.isWater() ) {
+            // No water, no boat.
+            return false;
         }
+
+        if ( tile.getObjectIcnType() == MP2::OBJ_ICN_TYPE_UNKNOWN ) {
+            // The main addon does not exist on this tile.
+            // This means that all objects on this tile are not primary objects (like shadows or some parts of objects).
+            return true;
+        }
+
+        // If this is an action object and it can be removed then it is possible to put a boat here.
+        const MP2::MapObjectType objectType = tile.GetObject();
+        return MP2::isPickupObject( objectType ) || objectType == MP2::OBJ_BOAT;
+    };
+
+    const int32_t index = Maps::GetIndexFromAbsPoint( possibleSeaTile.x, possibleSeaTile.y );
+    if ( doesTileAllowsToPutBoat( world.GetTiles( index ) ) ) {
+        return true;
     }
+
+    if ( Maps::isValidAbsPoint( possibleSeaTile.x - 1, possibleSeaTile.y ) && doesTileAllowsToPutBoat( world.GetTiles( index - 1 ) ) ) {
+        return true;
+    }
+
+    if ( Maps::isValidAbsPoint( possibleSeaTile.x + 1, possibleSeaTile.y ) && doesTileAllowsToPutBoat( world.GetTiles( index + 1 ) ) ) {
+        return true;
+    }
+
     return false;
+}
+
+bool Castle::HasBoatNearby() const
+{
+    const fheroes2::Point possibleSeaTile{ center.x, center.y + 2 };
+    if ( !Maps::isValidAbsPoint( possibleSeaTile.x, possibleSeaTile.y ) ) {
+        // If a tile below doesn't exist then no reason to check other tiles.
+        return false;
+    }
+
+    auto doesTileHaveBoat = []( const Maps::Tiles & tile ) {
+        if ( !tile.isWater() ) {
+            // No water, no boat.
+            return false;
+        }
+
+        const MP2::MapObjectType objectType = tile.GetObject();
+        return ( objectType == MP2::OBJ_BOAT || objectType == MP2::OBJ_HEROES );
+    };
+
+    const int32_t index = Maps::GetIndexFromAbsPoint( possibleSeaTile.x, possibleSeaTile.y );
+    if ( doesTileHaveBoat( world.GetTiles( index ) ) ) {
+        return true;
+    }
+
+    if ( Maps::isValidAbsPoint( possibleSeaTile.x - 1, possibleSeaTile.y ) && doesTileHaveBoat( world.GetTiles( index - 1 ) ) ) {
+        return true;
+    }
+
+    if ( Maps::isValidAbsPoint( possibleSeaTile.x + 1, possibleSeaTile.y ) && doesTileHaveBoat( world.GetTiles( index + 1 ) ) ) {
+        return true;
+    }
+
+    return false;
+}
+
+int32_t Castle::getTileIndexToPlaceBoat() const
+{
+    const fheroes2::Point possibleSeaTile{ center.x, center.y + 2 };
+    if ( !Maps::isValidAbsPoint( possibleSeaTile.x, possibleSeaTile.y ) ) {
+        // If a tile below doesn't exist then no reason to check other tiles.
+        return -1;
+    }
+
+    auto doesTileAllowsToPutBoat = []( const Maps::Tiles & tile ) {
+        if ( !tile.isWater() ) {
+            // No water, no boat.
+            return false;
+        }
+
+        // Mark the tile as worthy to a place a boat if the main addon does not exist on this tile.
+        // This means that all objects on this tile are not primary objects (like shadows or some parts of objects).
+        return ( tile.getObjectIcnType() == MP2::OBJ_ICN_TYPE_UNKNOWN );
+    };
+
+    const int32_t index = Maps::GetIndexFromAbsPoint( possibleSeaTile.x, possibleSeaTile.y );
+    if ( doesTileAllowsToPutBoat( world.GetTiles( index ) ) ) {
+        return index;
+    }
+
+    if ( Maps::isValidAbsPoint( possibleSeaTile.x - 1, possibleSeaTile.y ) && doesTileAllowsToPutBoat( world.GetTiles( index - 1 ) ) ) {
+        return index - 1;
+    }
+
+    if ( Maps::isValidAbsPoint( possibleSeaTile.x + 1, possibleSeaTile.y ) && doesTileAllowsToPutBoat( world.GetTiles( index + 1 ) ) ) {
+        return index + 1;
+    }
+
+    return -1;
 }
 
 uint32_t Castle::GetActualDwelling( const uint32_t buildId ) const
@@ -2324,7 +2429,7 @@ std::string Castle::String() const
     os << std::endl;
 
     os << "buildings       : " << CountBuildings() << " (mage guild: " << GetLevelMageGuild() << ")" << std::endl
-       << "coast/has boat  : " << ( HaveNearlySea() ? "yes" : "no" ) << " / " << ( PresentBoat() ? "yes" : "no" ) << std::endl
+       << "coast/has boat  : " << ( HasSeaAccess() ? "yes" : "no" ) << " / " << ( HasBoatNearby() ? "yes" : "no" ) << std::endl
        << "is castle       : " << ( isCastle() ? "yes" : "no" ) << " (" << getBuildingValue() << ")" << std::endl
        << "army            : " << army.String() << std::endl;
 
@@ -2459,7 +2564,7 @@ double Castle::GetGarrisonStrength( const Heroes * attackingHero ) const
 
     // Add castle bonuses if there are any troops defending the castle
     if ( isCastle() && totalStrength > 0.1 ) {
-        const Battle::Tower tower( *this, Battle::TowerType::TWR_CENTER, Rand::DeterministicRandomGenerator( 0 ), 0 );
+        const Battle::Tower tower( *this, Battle::TowerType::TWR_CENTER, 0 );
         const double towerStr = tower.GetStrengthWithBonus( tower.GetAttackBonus(), 0 );
 
         totalStrength += towerStr;
@@ -2470,52 +2575,56 @@ double Castle::GetGarrisonStrength( const Heroes * attackingHero ) const
             totalStrength += towerStr / 2;
         }
 
-        if ( attackingHero && ( !attackingHero->GetArmy().isMeleeDominantArmy() || attackingHero->HasSecondarySkill( Skill::Secondary::BALLISTICS ) ) ) {
-            totalStrength *= isBuild( BUILD_MOAT ) ? 1.2 : 1.15;
-        }
-        else {
+        if ( attackingHero && !attackingHero->HasSecondarySkill( Skill::Secondary::BALLISTICS ) && attackingHero->GetArmy().isMeleeDominantArmy() ) {
             // Heavy penalty if the attacking hero does not have a ballistic skill, and his army is based on melee infantry
             totalStrength *= isBuild( BUILD_MOAT ) ? 1.45 : 1.25;
+        }
+        else {
+            totalStrength *= isBuild( BUILD_MOAT ) ? 1.2 : 1.15;
         }
     }
 
     return totalStrength;
 }
 
-bool Castle::AllowBuyBoat() const
+bool Castle::AllowBuyBoat( const bool checkPayment ) const
 {
-    // check payment and present other boat
-    return ( HaveNearlySea() && isBuild( BUILD_SHIPYARD ) && GetKingdom().AllowPayment( PaymentConditions::BuyBoat() ) && !PresentBoat() );
+    if ( !isBuild( BUILD_SHIPYARD ) ) {
+        return false;
+    }
+
+    if ( checkPayment && !GetKingdom().AllowPayment( PaymentConditions::BuyBoat() ) ) {
+        return false;
+    }
+
+    if ( HasBoatNearby() ) {
+        return false;
+    }
+
+    return getTileIndexToPlaceBoat() >= 0;
 }
 
 bool Castle::BuyBoat() const
 {
-    if ( !AllowBuyBoat() )
+    if ( !AllowBuyBoat( true ) ) {
         return false;
-    if ( isControlHuman() )
+    }
+
+    // If this assertion blows up then you didn't even check conditions to build a shipyard!
+    assert( HasSeaAccess() );
+
+    const int32_t index = getTileIndexToPlaceBoat();
+    if ( index < 0 ) {
+        return false;
+    }
+
+    if ( isControlHuman() ) {
         AudioManager::PlaySound( M82::BUILDTWN );
+    }
 
-    if ( !Maps::isValidAbsPoint( center.x, center.y + 2 ) )
-        return false;
-
-    const int32_t index = Maps::GetIndexFromAbsPoint( center.x, center.y + 2 );
-    Maps::Tiles & left = world.GetTiles( index - 1 );
-    Maps::Tiles & right = world.GetTiles( index + 1 );
-    Maps::Tiles & middle = world.GetTiles( index );
     Kingdom & kingdom = GetKingdom();
-
-    if ( MP2::OBJ_NONE == left.GetObject() && left.isWater() ) {
-        kingdom.OddFundsResource( PaymentConditions::BuyBoat() );
-        left.setBoat( Direction::RIGHT, kingdom.GetColor() );
-    }
-    else if ( MP2::OBJ_NONE == right.GetObject() && right.isWater() ) {
-        kingdom.OddFundsResource( PaymentConditions::BuyBoat() );
-        right.setBoat( Direction::RIGHT, kingdom.GetColor() );
-    }
-    else if ( MP2::OBJ_NONE == middle.GetObject() && middle.isWater() ) {
-        kingdom.OddFundsResource( PaymentConditions::BuyBoat() );
-        middle.setBoat( Direction::RIGHT, kingdom.GetColor() );
-    }
+    kingdom.OddFundsResource( PaymentConditions::BuyBoat() );
+    world.GetTiles( index ).setBoat( Direction::RIGHT, kingdom.GetColor() );
 
     return true;
 }
@@ -2818,12 +2927,12 @@ std::string Castle::GetDescriptionBuilding( uint32_t build ) const
         StringReplace( res, "%{count}", ProfitConditions::FromBuilding( BUILD_CASTLE, race ).gold );
 
         if ( isBuild( BUILD_CASTLE ) ) {
-            res.append( "\n \n" );
+            res.append( "\n\n" );
             res.append( Battle::Tower::GetInfo( *this ) );
         }
 
         if ( isBuild( BUILD_MOAT ) ) {
-            res.append( "\n \n" );
+            res.append( "\n\n" );
             res.append( Battle::Board::GetMoatInfo() );
         }
         break;
@@ -2831,7 +2940,7 @@ std::string Castle::GetDescriptionBuilding( uint32_t build ) const
 
     case BUILD_SPEC:
     case BUILD_STATUE: {
-        const payment_t profit = ProfitConditions::FromBuilding( build, GetRace() );
+        const Funds profit = ProfitConditions::FromBuilding( build, GetRace() );
         StringReplace( res, "%{count}", profit.gold );
         break;
     }

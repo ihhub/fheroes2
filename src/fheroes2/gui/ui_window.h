@@ -21,6 +21,7 @@
 #pragma once
 
 #include <cstdint>
+#include <string>
 
 #include "image.h"
 #include "math_base.h"
@@ -28,12 +29,39 @@
 
 namespace fheroes2
 {
-    // Standard window with shadow
+    class Button;
+    class ButtonSprite;
+
+    // Standard window with shadow.
     class StandardWindow
     {
     public:
+        enum class Padding : uint8_t
+        {
+            TOP_LEFT,
+            TOP_CENTER,
+            TOP_RIGHT,
+            CENTER_LEFT,
+            CENTER_CENTER,
+            CENTER_RIGHT,
+            BOTTOM_LEFT,
+            BOTTOM_CENTER,
+            BOTTOM_RIGHT
+        };
+
+        StandardWindow() = delete;
+        StandardWindow( const StandardWindow & ) = delete;
+        StandardWindow & operator=( const StandardWindow & ) = delete;
         StandardWindow( const int32_t width, const int32_t height, const bool renderBackground, Image & output = Display::instance() );
         StandardWindow( const int32_t x, const int32_t y, const int32_t width, const int32_t height, const bool renderBackground, Image & output = Display::instance() );
+        ~StandardWindow()
+        {
+            Display & display = Display::instance();
+            if ( &_output == &display ) {
+                // The screen area of the closed window should be updated during the next '.render()' call.
+                display.updateNextRenderRoi( _totalArea );
+            }
+        }
 
         // Returns the window background ROI.
         const Rect & activeArea() const
@@ -55,6 +83,15 @@ namespace fheroes2
 
         void render();
 
+        void renderScrollbarBackground( const Rect & roi, const bool isEvilInterface );
+
+        void renderButtonSprite( ButtonSprite & button, const std::string & buttonText, const int32_t buttonWidth, const Point & offset, const bool isEvilInterface,
+                                 const Padding padding );
+        void renderButton( Button & button, const int icnId, const uint32_t releasedIndex, const uint32_t pressedIndex, const Point & offset, const Padding padding );
+        void renderOkayCancelButtons( Button & buttonOk, Button & buttonCancel, const bool isEvilInterface );
+
+        void applyTextBackgroundShading( const Rect & roi );
+
     private:
         Image & _output;
         const Rect _activeArea;
@@ -63,6 +100,7 @@ namespace fheroes2
         ImageRestorer _restorer;
         const bool _hasBackground{ true };
 
+        Point _getRenderPos( const Point & offset, const Size & itemSize, const Padding padding ) const;
         void _renderBackground( const bool isEvilInterface );
     };
 }

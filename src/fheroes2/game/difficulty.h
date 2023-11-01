@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -23,6 +23,7 @@
 #ifndef H2DIFFICULTY_H
 #define H2DIFFICULTY_H
 
+#include <cstdint>
 #include <string>
 
 namespace Difficulty
@@ -39,10 +40,24 @@ namespace Difficulty
     std::string String( int );
 
     int GetScoutingBonus( int difficulty );
-    double GetGoldIncomeBonus( int difficulty );
-    double GetUnitGrowthBonusForAI( int difficulty );
+
+    // Returns an extra gold bonus modifier for AI based on difficulty level.
+    double getGoldIncomeBonusForAI( const int difficulty );
+
+    // Returns an extra growth bonus modifier for AI based on difficulty level.
+    double GetUnitGrowthBonusForAI( const int difficulty );
+
     int GetHeroMovementBonus( int difficulty );
     double GetAIRetreatRatio( int difficulty );
+
+    uint32_t GetDimensionDoorLimit( int difficulty );
+
+    bool areAIHeroRolesAllowed( const int difficulty );
+
+    int getMinStatDiffBetweenAIRoles( const int difficulty );
+
+    // Returns true if AI should avoid having free slots in the army
+    bool allowAIToSplitWeakStacks( const int difficulty );
 }
 
 #endif

@@ -88,6 +88,16 @@ namespace AI
         // Do nothing.
     }
 
+    void Base::HeroesBeginMovement( Heroes & /* hero */ )
+    {
+        // Do nothing.
+    }
+
+    void Base::HeroesFinishMovement( Heroes & /* hero */ )
+    {
+        // Do nothing.
+    }
+
     void Base::HeroesPreBattle( HeroBase &, bool )
     {
         // Do nothing.
@@ -99,11 +109,6 @@ namespace AI
     }
 
     void Base::HeroesActionNewPosition( Heroes & )
-    {
-        // Do nothing.
-    }
-
-    void Base::HeroesClearTask( const Heroes & )
     {
         // Do nothing.
     }

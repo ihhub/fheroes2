@@ -46,6 +46,7 @@
 #include "maps_tiles.h"
 #include "maps_tiles_helper.h"
 #include "mp2.h"
+#include "render_processor.h"
 #include "resource.h"
 #include "screen.h"
 #include "settings.h"
@@ -267,7 +268,7 @@ namespace
         fheroes2::Copy( image, inPos.x, inPos.y, display, outPos.x, outPos.y, outSize.width, outSize.height );
 
         // Fill black pixels outside of the main view.
-        auto fillBlack = [&display]( const int32_t x, const int32_t y, const int32_t width, const int32_t height ) {
+        const auto fillBlack = [&display]( const int32_t x, const int32_t y, const int32_t width, const int32_t height ) {
             const int32_t displayWidth = display.width();
 
             assert( ( width > 0 ) && ( height > 0 ) && ( x >= 0 ) && ( y >= 0 ) && ( ( x + width ) < displayWidth ) && ( ( y + height ) < display.height() ) );
@@ -310,7 +311,7 @@ namespace
         assert( worldWidth >= 0 && worldHeight >= 0 );
 
         // Render two flags to the left and to the right of Castle/Town entrance.
-        auto renderCastleFlags = [&cache]( const uint32_t icnIndex, const int32_t posX, const int32_t posY ) {
+        const auto renderCastleFlags = [&cache]( const uint32_t icnIndex, const int32_t posX, const int32_t posY ) {
             for ( int32_t zoomLevelId = 0; zoomLevelId < zoomLevels; ++zoomLevelId ) {
                 const int32_t tileSize = tileSizePerZoomLevel[zoomLevelId];
 
@@ -328,7 +329,7 @@ namespace
         };
 
         // Render hero/artifact icon.
-        auto renderIcon = [&cache]( const uint32_t icnIndex, const int32_t posX, const int32_t posY ) {
+        const auto renderIcon = [&cache]( const uint32_t icnIndex, const int32_t posX, const int32_t posY ) {
             for ( int32_t zoomLevelId = 0; zoomLevelId < zoomLevels; ++zoomLevelId ) {
                 const int32_t tileSize = tileSizePerZoomLevel[zoomLevelId];
                 const int32_t dstx = posX * tileSize + tileSize / 2;
@@ -340,7 +341,7 @@ namespace
         };
 
         // Render resource/mine icon with letter inside.
-        auto renderResourceIcon = [&cache]( const uint32_t icnIndex, const uint32_t resource, const int32_t posX, const int32_t posY ) {
+        const auto renderResourceIcon = [&cache]( const uint32_t icnIndex, const uint32_t resource, const int32_t posX, const int32_t posY ) {
             const uint32_t letterIndex = resourceToOffsetICN( resource );
 
             if ( letterIndex == unknownIndex ) {
@@ -601,10 +602,11 @@ void ViewWorld::ViewWorldWindow( const int32_t color, const ViewWorldMode mode, 
         interface.reset();
     }
 
-    // setup cursor
-    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
+    // Set the cursor image. After this dialog the Game Area will be shown, so it does not require a cursor restorer.
+    Cursor::Get().SetThemes( Cursor::POINTER );
 
-    LocalEvent::PauseCycling();
+    fheroes2::RenderProcessor & renderProcessor = fheroes2::RenderProcessor::instance();
+    renderProcessor.stopColorCycling();
 
     // Creates fixed radar on top-right, suitable for the View World window
     Interface::Radar radar( interface.getRadar(), fheroes2::Display::instance() );
@@ -724,7 +726,7 @@ void ViewWorld::ViewWorldWindow( const int32_t color, const ViewWorldMode mode, 
     // Memorize the last zoom level value.
     conf.SetViewWorldZoomLevel( currentROI._zoomLevel );
 
-    LocalEvent::ResumeCycling();
+    renderProcessor.startColorCycling();
 
     // Fade-out View World screen and fade-in the Adventure map screen.
     fheroes2::fadeOutDisplay( fadeRoi, false );

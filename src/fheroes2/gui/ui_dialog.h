@@ -140,9 +140,7 @@ namespace fheroes2
     class ResourceDialogElement : public DialogElement
     {
     public:
-        ResourceDialogElement( const int32_t resourceType, const std::string & text );
-
-        ResourceDialogElement( const int32_t resourceType, std::string && text );
+        ResourceDialogElement( const int32_t resourceType, std::string text );
 
         ~ResourceDialogElement() override = default;
 
@@ -156,8 +154,6 @@ namespace fheroes2
         const int32_t _resourceType = 0;
         const uint32_t _icnIndex = 0;
         const std::string _text;
-
-        void init();
     };
 
     std::vector<ResourceDialogElement> getResourceDialogElements( const Funds & funds );
@@ -236,9 +232,7 @@ namespace fheroes2
     class PrimarySkillDialogElement : public DialogElement
     {
     public:
-        PrimarySkillDialogElement( const int32_t skillType, const std::string & text );
-
-        PrimarySkillDialogElement( const int32_t skillType, std::string && text );
+        PrimarySkillDialogElement( const int32_t skillType, std::string text );
 
         ~PrimarySkillDialogElement() override = default;
 
@@ -248,11 +242,22 @@ namespace fheroes2
 
         void showPopup( const int buttons ) const override;
 
-    private:
+    protected:
         const int32_t _skillType;
         const std::string _text;
+    };
 
-        void init();
+    class SmallPrimarySkillDialogElement : public PrimarySkillDialogElement
+    {
+    public:
+        SmallPrimarySkillDialogElement( const int32_t skillType, std::string text );
+
+        ~SmallPrimarySkillDialogElement() override = default;
+
+        void draw( Image & output, const Point & offset ) const override;
+
+    private:
+        const Size _iconSize{ 34, 34 };
     };
 
     class SecondarySkillDialogElement : public DialogElement

@@ -23,46 +23,34 @@
 
 #include <algorithm>
 #include <cassert>
-#include <cstddef>
 #include <cstdint>
-#include <memory>
-#include <ostream>
-#include <utility>
 #include <vector>
 
-#include "agg_image.h"
 #include "army.h"
 #include "audio_manager.h"
 #include "castle.h"
-#include "color.h"
 #include "direction.h"
-#include "game.h"
 #include "game_delays.h"
 #include "game_interface.h"
 #include "ground.h"
 #include "heroes.h"
-#include "icn.h"
-#include "image.h"
 #include "interface_base.h"
 #include "interface_gamearea.h"
 #include "kingdom.h"
 #include "localevent.h"
-#include "logging.h"
 #include "m82.h"
 #include "maps.h"
 #include "maps_tiles.h"
 #include "math_base.h"
 #include "mp2.h"
-#include "race.h"
 #include "route.h"
 #include "screen.h"
 #include "settings.h"
-#include "ui_object_rendering.h"
 #include "world.h"
 
 namespace
 {
-    const int heroFrameCountPerTile = 9;
+    const int32_t heroMoveStep{ 4 }; // in pixels
 
     void playHeroWalkingSound( const int groundType )
     {
@@ -170,301 +158,6 @@ namespace
         AudioManager::PlaySoundAsync( soundId );
     }
 
-    bool doesHeroImageNeedToBeReflected( const int directionFrom )
-    {
-        switch ( directionFrom ) {
-        case Direction::TOP_LEFT:
-        case Direction::LEFT:
-        case Direction::BOTTOM_LEFT:
-            return true;
-
-        default:
-            break;
-        }
-
-        return false;
-    }
-
-    void getHeroSpriteInfo( const Heroes & hero, const int heroMovementIndex, const bool isHeroChangingDirection, int & icnId, uint32_t & icnIndex )
-    {
-        icnId = ICN::UNKNOWN;
-
-        if ( hero.isShipMaster() ) {
-            icnId = ICN::BOAT32;
-        }
-        else {
-            const int raceId = hero.GetRace();
-            switch ( raceId ) {
-            case Race::KNGT:
-                icnId = ICN::KNGT32;
-                break;
-            case Race::BARB:
-                icnId = ICN::BARB32;
-                break;
-            case Race::SORC:
-                icnId = ICN::SORC32;
-                break;
-            case Race::WRLK:
-                icnId = ICN::WRLK32;
-                break;
-            case Race::WZRD:
-                icnId = ICN::WZRD32;
-                break;
-            case Race::NECR:
-                icnId = ICN::NECR32;
-                break;
-
-            default:
-                // Did you add a new race? Add logic above!
-                assert( 0 );
-                DEBUG_LOG( DBG_GAME, DBG_WARN, "Unknown hero race " << raceId )
-                break;
-            }
-        }
-
-        icnIndex = 0;
-
-        if ( isHeroChangingDirection ) {
-            icnIndex = 45;
-        }
-        else {
-            const int heroDirection = hero.GetDirection();
-            switch ( heroDirection ) {
-            case Direction::TOP:
-                icnIndex = 0;
-                break;
-            case Direction::TOP_RIGHT:
-                icnIndex = 9;
-                break;
-            case Direction::RIGHT:
-                icnIndex = 18;
-                break;
-            case Direction::BOTTOM_RIGHT:
-                icnIndex = 27;
-                break;
-            case Direction::BOTTOM:
-                icnIndex = 36;
-                break;
-            case Direction::BOTTOM_LEFT:
-                icnIndex = 27;
-                break;
-            case Direction::LEFT:
-                icnIndex = 18;
-                break;
-            case Direction::TOP_LEFT:
-                icnIndex = 9;
-                break;
-
-            default:
-                DEBUG_LOG( DBG_GAME, DBG_WARN, "Unknown hero direction" << heroDirection )
-                break;
-            }
-        }
-
-        icnIndex = icnIndex + ( heroMovementIndex % heroFrameCountPerTile );
-    }
-
-    void getFlagSpriteInfo( const Heroes & hero, const int heroMovementIndex, const bool isHeroChangingDirection, fheroes2::Point & flagOffset, int & icnId,
-                            uint32_t & icnIndex )
-    {
-        icnId = ICN::UNKNOWN;
-
-        const int heroColor = hero.GetColor();
-        switch ( heroColor ) {
-        case Color::BLUE:
-            icnId = hero.isShipMaster() ? ICN::B_BFLG32 : ICN::B_FLAG32;
-            break;
-        case Color::GREEN:
-            icnId = hero.isShipMaster() ? ICN::G_BFLG32 : ICN::G_FLAG32;
-            break;
-        case Color::RED:
-            icnId = hero.isShipMaster() ? ICN::R_BFLG32 : ICN::R_FLAG32;
-            break;
-        case Color::YELLOW:
-            icnId = hero.isShipMaster() ? ICN::Y_BFLG32 : ICN::Y_FLAG32;
-            break;
-        case Color::ORANGE:
-            icnId = hero.isShipMaster() ? ICN::O_BFLG32 : ICN::O_FLAG32;
-            break;
-        case Color::PURPLE:
-            icnId = hero.isShipMaster() ? ICN::P_BFLG32 : ICN::P_FLAG32;
-            break;
-
-        default:
-            DEBUG_LOG( DBG_GAME, DBG_WARN, "Unknown hero color " << heroColor )
-            break;
-        }
-
-        icnIndex = 0;
-
-        if ( isHeroChangingDirection ) {
-            icnIndex = 45;
-        }
-        else {
-            const int heroDirection = hero.GetDirection();
-            switch ( heroDirection ) {
-            case Direction::TOP:
-                icnIndex = 0;
-                break;
-            case Direction::TOP_RIGHT:
-                icnIndex = 9;
-                break;
-            case Direction::RIGHT:
-                icnIndex = 18;
-                break;
-            case Direction::BOTTOM_RIGHT:
-                icnIndex = 27;
-                break;
-            case Direction::BOTTOM:
-                icnIndex = 36;
-                break;
-            case Direction::BOTTOM_LEFT:
-                icnIndex = 27;
-                break;
-            case Direction::LEFT:
-                icnIndex = 18;
-                break;
-            case Direction::TOP_LEFT:
-                icnIndex = 9;
-                break;
-
-            default:
-                DEBUG_LOG( DBG_GAME, DBG_WARN, "Unknown hero direction " << heroDirection )
-                break;
-            }
-        }
-
-        const int frameId = heroMovementIndex % heroFrameCountPerTile;
-        icnIndex = icnIndex + frameId;
-
-        if ( !hero.isMoveEnabled() ) {
-            static const fheroes2::Point offsetTop[heroFrameCountPerTile] = { { 0, 0 }, { 0, 2 }, { 0, 3 }, { 0, 2 }, { 0, 0 }, { 0, 1 }, { 0, 3 }, { 0, 2 }, { 0, 1 } };
-            static const fheroes2::Point offsetBottom[heroFrameCountPerTile]
-                = { { 0, 0 }, { 0, -1 }, { 0, -2 }, { 0, 0 }, { 0, -1 }, { 0, -2 }, { 0, -3 }, { 0, 0 }, { 0, -1 } };
-            static const fheroes2::Point offsetSideways[heroFrameCountPerTile]
-                = { { 0, 0 }, { -1, 0 }, { 0, 0 }, { 1, 0 }, { 1, -1 }, { 2, -1 }, { 1, 0 }, { 0, 0 }, { 1, 0 } };
-            static const fheroes2::Point offsetTopSideways[heroFrameCountPerTile]
-                = { { 0, 0 }, { -1, 0 }, { 0, 0 }, { -1, -1 }, { -2, -1 }, { -2, 0 }, { -1, 0 }, { 0, 0 }, { 1, 0 } };
-            static const fheroes2::Point offsetBottomSideways[heroFrameCountPerTile]
-                = { { 0, 0 }, { -1, 0 }, { 0, -1 }, { 2, -2 }, { 0, -2 }, { -1, -3 }, { -1, -2 }, { -1, -1 }, { 1, 0 } };
-
-            static const fheroes2::Point offsetShipTopBottom[heroFrameCountPerTile]
-                = { { 0, -1 }, { 0, 0 }, { 0, 1 }, { 0, 1 }, { 0, 1 }, { 0, 0 }, { 0, 1 }, { 0, 1 }, { 0, 1 } };
-            static const fheroes2::Point offsetShipSideways[heroFrameCountPerTile]
-                = { { 0, -2 }, { 0, -1 }, { 0, 0 }, { 0, 1 }, { 0, 0 }, { 0, -1 }, { 0, 0 }, { 0, -1 }, { 0, 1 } };
-            static const fheroes2::Point offsetShipTopSideways[heroFrameCountPerTile]
-                = { { 0, 0 }, { 0, -1 }, { 0, 0 }, { 0, 1 }, { 0, 0 }, { 0, -1 }, { 0, 0 }, { 0, -1 }, { 0, 1 } };
-            static const fheroes2::Point offsetShipBottomSideways[heroFrameCountPerTile]
-                = { { 0, -2 }, { 0, 0 }, { 0, 0 }, { 0, 0 }, { 0, 0 }, { 0, 0 }, { 0, 0 }, { 0, 0 }, { 0, 0 } };
-
-            const int heroDirection = hero.GetDirection();
-            switch ( heroDirection ) {
-            case Direction::TOP:
-                flagOffset = hero.isShipMaster() ? offsetShipTopBottom[frameId] : offsetTop[frameId];
-                break;
-            case Direction::BOTTOM:
-                flagOffset = hero.isShipMaster() ? offsetShipTopBottom[frameId] : offsetBottom[frameId];
-                break;
-            case Direction::RIGHT:
-            case Direction::LEFT:
-                flagOffset = hero.isShipMaster() ? offsetShipSideways[frameId] : offsetSideways[frameId];
-                break;
-            case Direction::TOP_RIGHT:
-            case Direction::TOP_LEFT:
-                flagOffset = hero.isShipMaster() ? offsetShipTopSideways[frameId] : offsetTopSideways[frameId];
-                break;
-            case Direction::BOTTOM_RIGHT:
-            case Direction::BOTTOM_LEFT:
-                flagOffset = hero.isShipMaster() ? offsetShipBottomSideways[frameId] : offsetBottomSideways[frameId];
-                break;
-
-            default:
-                DEBUG_LOG( DBG_GAME, DBG_WARN, "Unknown hero direction " << heroDirection )
-                break;
-            }
-        }
-    }
-
-    void getShadowSpriteInfo( const Heroes & hero, const int heroMovementIndex, int & icnId, uint32_t & icnIndex )
-    {
-        const int32_t heroDirection = hero.GetDirection();
-        const bool isOnBoat = hero.isShipMaster();
-
-        switch ( heroDirection ) {
-        case Direction::TOP:
-            icnIndex = 0;
-            break;
-        case Direction::TOP_RIGHT:
-            icnIndex = 9;
-            break;
-        case Direction::RIGHT:
-            icnIndex = 18;
-            break;
-        case Direction::BOTTOM_RIGHT:
-            icnIndex = 27;
-            break;
-        case Direction::BOTTOM:
-            icnIndex = 36;
-            break;
-        case Direction::BOTTOM_LEFT:
-            icnIndex = isOnBoat ? 45 : 77;
-            break;
-        case Direction::LEFT:
-            icnIndex = isOnBoat ? 54 : 68;
-            break;
-        case Direction::TOP_LEFT:
-            icnIndex = isOnBoat ? 63 : 59;
-            break;
-        default:
-            DEBUG_LOG( DBG_GAME, DBG_WARN, "Unknown hero direction " << heroDirection )
-            break;
-        }
-
-        icnId = isOnBoat ? ICN::BOATSHAD : ICN::SHADOW32;
-
-        icnIndex += ( heroMovementIndex % heroFrameCountPerTile );
-    }
-
-    void getFrothSpriteInfo( const Heroes & hero, const int heroMovementIndex, int & icnId, uint32_t & icnIndex )
-    {
-        icnIndex = 0;
-
-        const int heroDirection = hero.GetDirection();
-        switch ( heroDirection ) {
-        case Direction::TOP:
-            icnIndex = 0;
-            break;
-        case Direction::TOP_RIGHT:
-            icnIndex = 9;
-            break;
-        case Direction::RIGHT:
-            icnIndex = 18;
-            break;
-        case Direction::BOTTOM_RIGHT:
-            icnIndex = 27;
-            break;
-        case Direction::BOTTOM:
-            icnIndex = 36;
-            break;
-        case Direction::BOTTOM_LEFT:
-            icnIndex = 27;
-            break;
-        case Direction::LEFT:
-            icnIndex = 18;
-            break;
-        case Direction::TOP_LEFT:
-            icnIndex = 9;
-            break;
-
-        default:
-            DEBUG_LOG( DBG_GAME, DBG_WARN, "Unknown hero direction " << heroDirection )
-            break;
-        }
-
-        icnId = ICN::FROTH;
-        icnIndex = icnIndex + ( heroMovementIndex % heroFrameCountPerTile );
-    }
-
     bool isNeedStayFrontObject( const Heroes & hero, const Maps::Tiles & next )
     {
         if ( next.GetObject() == MP2::OBJ_CASTLE ) {
@@ -511,135 +204,27 @@ bool Heroes::isInDeepOcean() const
     return true;
 }
 
-std::vector<fheroes2::ObjectRenderingInfo> Heroes::getHeroSpritesPerTile() const
-{
-    // Reflected hero sprite should be shifted by 1 pixel to right.
-    const bool reflect = doesHeroImageNeedToBeReflected( direction );
-
-    int flagFrameID = sprite_index;
-    if ( !isMoveEnabled() ) {
-        flagFrameID = isShipMaster() ? 0 : static_cast<int>( Game::getAdventureMapAnimationIndex() );
-    }
-
-    fheroes2::Point offset;
-    // Boat sprite has to be shifted so it matches other boats.
-    if ( isShipMaster() ) {
-        offset.y -= 11;
-    }
-    else {
-        offset.y -= 1;
-    }
-
-    // Apply hero offset when he moves from one tile to another.
-    offset += getCurrentPixelOffset();
-
-    int icnId{ 0 };
-    uint32_t icnIndex{ 0 };
-    getHeroSpriteInfo( *this, sprite_index, false, icnId, icnIndex );
-
-    const fheroes2::Sprite & spriteHero = fheroes2::AGG::GetICN( icnId, icnIndex );
-    const fheroes2::Point heroSpriteOffset( offset.x + ( reflect ? ( TILEWIDTH + 1 - spriteHero.x() - spriteHero.width() ) : spriteHero.x() ),
-                                            offset.y + spriteHero.y() + TILEWIDTH );
-
-    std::vector<fheroes2::Point> outputSquareInfo;
-    std::vector<std::pair<fheroes2::Point, fheroes2::Rect>> outputImageInfo;
-    fheroes2::DivideImageBySquares( heroSpriteOffset, spriteHero, TILEWIDTH, outputSquareInfo, outputImageInfo );
-
-    assert( outputSquareInfo.size() == outputImageInfo.size() );
-
-    std::vector<fheroes2::ObjectRenderingInfo> objectInfo;
-    for ( size_t i = 0; i < outputSquareInfo.size(); ++i ) {
-        objectInfo.emplace_back( outputSquareInfo[i], outputImageInfo[i].first, outputImageInfo[i].second, icnId, icnIndex, reflect, static_cast<uint8_t>( 255 ) );
-    }
-
-    outputSquareInfo.clear();
-    outputImageInfo.clear();
-
-    fheroes2::Point flagOffset;
-    getFlagSpriteInfo( *this, flagFrameID, false, flagOffset, icnId, icnIndex );
-
-    const fheroes2::Sprite & spriteFlag = fheroes2::AGG::GetICN( icnId, icnIndex );
-    const fheroes2::Point flagSpriteOffset( offset.x + ( reflect ? ( TILEWIDTH - spriteFlag.x() - flagOffset.x - spriteFlag.width() ) : spriteFlag.x() + flagOffset.x ),
-                                            offset.y + spriteFlag.y() + flagOffset.y + TILEWIDTH );
-
-    fheroes2::DivideImageBySquares( flagSpriteOffset, spriteFlag, TILEWIDTH, outputSquareInfo, outputImageInfo );
-
-    assert( outputSquareInfo.size() == outputImageInfo.size() );
-
-    for ( size_t i = 0; i < outputSquareInfo.size(); ++i ) {
-        objectInfo.emplace_back( outputSquareInfo[i], outputImageInfo[i].first, outputImageInfo[i].second, icnId, icnIndex, reflect, static_cast<uint8_t>( 255 ) );
-    }
-
-    outputSquareInfo.clear();
-    outputImageInfo.clear();
-
-    if ( isShipMaster() && isMoveEnabled() && isInDeepOcean() ) {
-        // TODO: draw froth for all boats in deep water, not only for a moving boat.
-        getFrothSpriteInfo( *this, sprite_index, icnId, icnIndex );
-        const fheroes2::Sprite & spriteFroth = fheroes2::AGG::GetICN( icnId, icnIndex );
-        const fheroes2::Point frothSpriteOffset( offset.x + ( reflect ? TILEWIDTH - spriteFroth.x() - spriteFroth.width() : spriteFroth.x() ),
-                                                 offset.y + spriteFroth.y() + TILEWIDTH );
-
-        fheroes2::DivideImageBySquares( frothSpriteOffset, spriteFroth, TILEWIDTH, outputSquareInfo, outputImageInfo );
-
-        for ( size_t i = 0; i < outputSquareInfo.size(); ++i ) {
-            objectInfo.emplace_back( outputSquareInfo[i], outputImageInfo[i].first, outputImageInfo[i].second, icnId, icnIndex, reflect, static_cast<uint8_t>( 255 ) );
-        }
-    }
-
-    return objectInfo;
-}
-
-std::vector<fheroes2::ObjectRenderingInfo> Heroes::getHeroShadowSpritesPerTile() const
-{
-    fheroes2::Point offset;
-    // Boat sprite has to be shifted so it matches other boats.
-    if ( isShipMaster() ) {
-        offset.y -= 11;
-    }
-
-    // Apply hero offset when he moves from one tile to another.
-    offset += getCurrentPixelOffset();
-
-    int icnId{ 0 };
-    uint32_t icnIndex{ 0 };
-    getShadowSpriteInfo( *this, sprite_index, icnId, icnIndex );
-
-    const fheroes2::Sprite & spriteShadow = fheroes2::AGG::GetICN( icnId, icnIndex );
-    const fheroes2::Point shadowSpriteOffset( offset.x + spriteShadow.x(), offset.y + spriteShadow.y() + TILEWIDTH );
-
-    std::vector<fheroes2::Point> outputSquareInfo;
-    std::vector<std::pair<fheroes2::Point, fheroes2::Rect>> outputImageInfo;
-    fheroes2::DivideImageBySquares( shadowSpriteOffset, spriteShadow, TILEWIDTH, outputSquareInfo, outputImageInfo );
-
-    assert( outputSquareInfo.size() == outputImageInfo.size() );
-
-    std::vector<fheroes2::ObjectRenderingInfo> objectInfo;
-    for ( size_t i = 0; i < outputSquareInfo.size(); ++i ) {
-        objectInfo.emplace_back( outputSquareInfo[i], outputImageInfo[i].first, outputImageInfo[i].second, icnId, icnIndex, false, static_cast<uint8_t>( 255 ) );
-    }
-
-    return objectInfo;
-}
-
 bool Heroes::MoveStep( const bool jumpToNextTile )
 {
     const int32_t heroIndex = GetIndex();
-    const int32_t indexTo = Maps::GetDirectionIndex( heroIndex, path.GetFrontDirection() );
-    const int32_t indexDest = path.GetDestinationIndex( true );
+    const int32_t nextStepIndex = Maps::GetDirectionIndex( heroIndex, path.GetFrontDirection() );
 
-    auto makeStep = [this, indexTo, indexDest]( const bool performMovement ) {
+    const auto makeStep = [this, nextStepIndex]( const bool performMovement ) {
         ApplyPenaltyMovement( path.GetFrontPenalty() );
 
         if ( !performMovement ) {
-            GetPath().Reset();
-            Action( indexTo );
-            SetMove( false );
+            // If we are accessing an object located on a tile that we cannot step on, then this should be the last step of the path
+            assert( nextStepIndex == path.GetDestinationIndex() );
+
+            path.PopFront();
+            assert( path.empty() );
+
+            Action( nextStepIndex );
 
             return;
         }
 
-        Move2Dest( indexTo );
+        Move2Dest( nextStepIndex );
 
         if ( isControlHuman() ) {
             // Update the radar map image in the area that is visible to the hero after his movement.
@@ -647,26 +232,22 @@ bool Heroes::MoveStep( const bool jumpToNextTile )
         }
 
         ActionNewPosition( true );
+
         path.PopFront();
 
         // It is possible that the hero in the new position will be attacked and lose the battle before he can perform the action
-        if ( !isFreeman() ) {
-            Action( indexTo );
-
-            if ( indexTo == indexDest ) {
-                GetPath().Reset();
-                SetMove( false );
-            }
+        if ( isActive() ) {
+            Action( nextStepIndex );
         }
     };
 
     if ( jumpToNextTile ) {
-        if ( indexTo == indexDest && isNeedStayFrontObject( *this, world.GetTiles( indexTo ) ) ) {
+        if ( isNeedStayFrontObject( *this, world.GetTiles( nextStepIndex ) ) ) {
             makeStep( false );
         }
         else {
             // Unveil fog before moving the hero.
-            Scout( indexTo );
+            Scout( nextStepIndex );
 
             makeStep( true );
         }
@@ -676,13 +257,12 @@ bool Heroes::MoveStep( const bool jumpToNextTile )
 
     const int currentHeroFrameIndex = ( sprite_index % heroFrameCountPerTile );
     if ( currentHeroFrameIndex == 0 ) {
-        if ( indexTo == indexDest && isNeedStayFrontObject( *this, world.GetTiles( indexTo ) ) ) {
+        if ( isNeedStayFrontObject( *this, world.GetTiles( nextStepIndex ) ) ) {
             makeStep( false );
 
             return true;
         }
 
-        // play sound
         if ( GetKingdom().isControlHuman() ) {
             const fheroes2::Point & mp = GetCenter();
 
@@ -691,7 +271,7 @@ bool Heroes::MoveStep( const bool jumpToNextTile )
     }
     else if ( currentHeroFrameIndex == 1 ) {
         // This is a start of hero's movement. We should clear fog around him.
-        Scout( indexTo );
+        Scout( nextStepIndex );
     }
     else if ( currentHeroFrameIndex == 8 ) {
         sprite_index -= 8;
@@ -699,7 +279,7 @@ bool Heroes::MoveStep( const bool jumpToNextTile )
         makeStep( true );
 
         // if we continue to move into the same direction we must skip first frame as it's for stand position only
-        if ( isMoveEnabled() && GetDirection() == path.GetFrontDirection() && !isNeedStayFrontObject( *this, world.GetTiles( path.front().GetIndex() ) ) ) {
+        if ( isMoveEnabled() && GetDirection() == path.GetFrontDirection() && !isNeedStayFrontObject( *this, world.GetTiles( path.GetFrontIndex() ) ) ) {
             if ( GetKingdom().isControlHuman() ) {
                 playHeroWalkingSound( world.GetTiles( heroIndex ).GetGround() );
             }
@@ -887,17 +467,17 @@ fheroes2::Point Heroes::getCurrentPixelOffset() const
     fheroes2::Point realOffset{ _offset };
 
     if ( direction & DIRECTION_LEFT_COL ) {
-        realOffset.x -= HERO_MOVE_STEP * frame;
+        realOffset.x -= heroMoveStep * frame;
     }
     else if ( direction & DIRECTION_RIGHT_COL ) {
-        realOffset.x += HERO_MOVE_STEP * frame;
+        realOffset.x += heroMoveStep * frame;
     }
 
     if ( direction & DIRECTION_TOP_ROW ) {
-        realOffset.y -= HERO_MOVE_STEP * frame;
+        realOffset.y -= heroMoveStep * frame;
     }
     else if ( direction & DIRECTION_BOTTOM_ROW ) {
-        realOffset.y += HERO_MOVE_STEP * frame;
+        realOffset.y += heroMoveStep * frame;
     }
 
     return realOffset;
@@ -975,17 +555,15 @@ void Heroes::FadeIn( const fheroes2::Point & offset ) const
 
 bool Heroes::Move( const bool jumpToNextTile /* = false */ )
 {
-    if ( Modes( ACTION ) )
-        ResetModes( ACTION );
+    ResetModes( ACTION );
 
-    // move hero
-    if ( path.isValid() && ( isMoveEnabled() || ( GetSpriteIndex() < 45 && ( GetSpriteIndex() % heroFrameCountPerTile ) > 0 ) || GetSpriteIndex() >= 45 ) ) {
+    if ( path.isValidForMovement() && ( isMoveEnabled() || ( GetSpriteIndex() < 45 && ( GetSpriteIndex() % heroFrameCountPerTile ) > 0 ) || GetSpriteIndex() >= 45 ) ) {
         // Jump to the next position.
         if ( jumpToNextTile ) {
             direction = path.GetFrontDirection();
             MoveStep( jumpToNextTile );
 
-            // TODO: why don't we check !isFreeman() like it is done for a normal movement?
+            // TODO: why don't we check isActive() like it is done for a normal movement?
             return true;
         }
 
@@ -1000,7 +578,7 @@ bool Heroes::Move( const bool jumpToNextTile /* = false */ )
             SetValidDirectionSprite();
 
             if ( MoveStep( jumpToNextTile ) ) {
-                return !isFreeman();
+                return isActive();
             }
         }
     }

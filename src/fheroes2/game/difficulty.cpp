@@ -21,9 +21,10 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "difficulty.h"
+
 #include <cassert>
 
-#include "difficulty.h"
 #include "translations.h"
 
 std::string Difficulty::String( int difficulty )
@@ -63,31 +64,32 @@ int Difficulty::GetScoutingBonus( int difficulty )
     return 0;
 }
 
-double Difficulty::GetGoldIncomeBonus( int difficulty )
+double Difficulty::getGoldIncomeBonusForAI( const int difficulty )
 {
     switch ( difficulty ) {
     case Difficulty::EASY:
-        return 0.75;
+        // It is deduction from the income.
+        return -0.25;
     case Difficulty::HARD:
-        return 1.29;
+        return 0.29;
     case Difficulty::EXPERT:
-        return 1.45;
+        return 0.45;
     case Difficulty::IMPOSSIBLE:
-        return 1.6;
+        return 0.6;
     default:
         break;
     }
-    return 1.0;
+    return 0;
 }
 
-double Difficulty::GetUnitGrowthBonusForAI( int difficulty )
+double Difficulty::GetUnitGrowthBonusForAI( const int difficulty )
 {
     // In the original game AI has a cheeky monster growth bonus depending on difficulty:
-    // Easy - 1.0 (no bonus)
-    // Normal - 1.0 (no bonus)
-    // Hard - 1.20 (or 20% extra)
-    // Expert - 1.32 (or 32% extra)
-    // Impossible - 1.44 (or 44% extra)
+    // Easy - 0.0 (no bonus)
+    // Normal - 0.0 (no bonus)
+    // Hard - 0.20 (or 20% extra)
+    // Expert - 0.32 (or 32% extra)
+    // Impossible - 0.44 (or 44% extra)
     // This bonus was introduced to compensate weak AI in the game.
     //
     // However, with introduction of proper AI in this engine AI has become much stronger and some maps are impossible to beat.
@@ -99,19 +101,19 @@ double Difficulty::GetUnitGrowthBonusForAI( int difficulty )
     switch ( difficulty ) {
     case Difficulty::EASY:
     case Difficulty::NORMAL:
-        return 1.0;
+        return 0;
     case Difficulty::HARD:
-        return 1.14;
+        return 0.14;
     case Difficulty::EXPERT:
-        return 1.254;
+        return 0.254;
     case Difficulty::IMPOSSIBLE:
-        return 1.368;
+        return 0.368;
     default:
         // Did you add a new difficulty level? Add the logic above!
         assert( 0 );
         break;
     }
-    return 1.0;
+    return 0;
 }
 
 int Difficulty::GetHeroMovementBonus( int difficulty )
@@ -140,4 +142,70 @@ double Difficulty::GetAIRetreatRatio( int difficulty )
         break;
     }
     return 100.0 / 6.0;
+}
+
+uint32_t Difficulty::GetDimensionDoorLimit( int difficulty )
+{
+    switch ( difficulty ) {
+    case Difficulty::EASY:
+        return 1;
+    case Difficulty::NORMAL:
+        return 2;
+    case Difficulty::HARD:
+        return 3;
+    default:
+        break;
+    }
+    return UINT32_MAX;
+}
+
+bool Difficulty::areAIHeroRolesAllowed( const int difficulty )
+{
+    switch ( difficulty ) {
+    case Difficulty::EASY:
+        return false;
+    case Difficulty::NORMAL:
+    case Difficulty::HARD:
+    case Difficulty::EXPERT:
+    case Difficulty::IMPOSSIBLE:
+        return true;
+    default:
+        // Did you add a new difficulty level? Add the logic above!
+        assert( 0 );
+        break;
+    }
+
+    return true;
+}
+
+int Difficulty::getMinStatDiffBetweenAIRoles( const int difficulty )
+{
+    switch ( difficulty ) {
+    case Difficulty::EASY:
+        // Easy difficulty still allows to merge armies but only if the difference in stats is huge.
+        return 10;
+    case Difficulty::NORMAL:
+    case Difficulty::HARD:
+    case Difficulty::EXPERT:
+    case Difficulty::IMPOSSIBLE:
+        return 2;
+    default:
+        // Did you add a new difficulty level? Add the logic above!
+        assert( 0 );
+        break;
+    }
+
+    return 2;
+}
+
+bool Difficulty::allowAIToSplitWeakStacks( const int difficulty )
+{
+    switch ( difficulty ) {
+    case Difficulty::EASY:
+    case Difficulty::NORMAL:
+        return false;
+    default:
+        break;
+    }
+    return true;
 }

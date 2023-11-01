@@ -4,7 +4,7 @@ apply plugin: 'org.jetbrains.kotlin.android'
 android {
     namespace 'com.ipapps.homm2.livewallpaper'
 
-    compileSdkVersion 33
+    compileSdk 34
 
     buildFeatures {
         compose true
@@ -14,7 +14,7 @@ android {
         applicationId 'com.ipapps.homm2.livewallpaper'
 
         minSdkVersion 22
-        targetSdkVersion 33
+        targetSdkVersion 34
 
         // These paths are set relative to the android project directory
         versionCode((new File('../version_code.txt')).getText('UTF-8').trim().toInteger())
@@ -90,7 +90,7 @@ dependencies {
     implementation project(':isotools')
 //    implementation project(':sdl2')
 
-    implementation group: 'commons-io', name: 'commons-io', version: '2.11.0'
+    implementation group: 'commons-io', name: 'commons-io', version: '2.13.0'
 
     implementation "androidx.core:core-ktx:1.7.0"
     implementation "androidx.compose.ui:ui:$compose_version"
@@ -115,14 +115,14 @@ dependencies {
     implementation 'com.google.android.material:material:1.9.0'
 }
 
-task copyH2D(type: Copy) {
+tasks.register('copyH2D', Copy) {
     from('../../files/data') {
         include '*.h2d'
     }
     into 'src/main/assets/files/data'
 }
 
-task copyTranslations(type: Copy) {
+tasks.register('copyTranslations', Copy) {
     from('../../files/lang') {
         include '*.mo'
     }

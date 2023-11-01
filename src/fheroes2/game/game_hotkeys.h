@@ -65,14 +65,13 @@ namespace Game
         MAIN_MENU_NEW_ORIGINAL_CAMPAIGN,
         MAIN_MENU_NEW_EXPANSION_CAMPAIGN,
 
-#if defined( WITH_DEBUG )
-        // Editor is still in development.
         EDITOR_MAIN_MENU,
         EDITOR_NEW_MAP_MENU,
         EDITOR_LOAD_MAP_MENU,
         EDITOR_FROM_SCRATCH_MAP_MENU,
         EDITOR_RANDOM_MAP_MENU,
-#endif
+        EDITOR_UNDO_LAST_ACTION,
+        EDITOR_REDO_LAST_ACTION,
 
         CAMPAIGN_ROLAND,
         CAMPAIGN_ARCHIBALD,
@@ -99,7 +98,7 @@ namespace Game
         //
         WORLD_SAVE_GAME,
         WORLD_NEXT_HERO,
-        WORLD_CONTINUE_HERO_MOVEMENT,
+        WORLD_START_HERO_MOVEMENT,
         WORLD_CAST_SPELL,
         WORLD_SLEEP_HERO,
         WORLD_NEXT_TOWN,

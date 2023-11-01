@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -22,11 +22,28 @@
  ***************************************************************************/
 
 #include "color.h"
+
 #include "players.h"
 #include "serialize.h"
 #include "tools.h"
 #include "translations.h"
 #include "world.h"
+
+namespace
+{
+    enum class BarrierColor : int
+    {
+        NONE = 0,
+        AQUA = 1,
+        BLUE = 2,
+        BROWN = 3,
+        GOLD = 4,
+        GREEN = 5,
+        ORANGE = 6,
+        PURPLE = 7,
+        RED = 8
+    };
+}
 
 std::string Color::String( int color )
 {
@@ -115,24 +132,46 @@ int Color::GetFirst( int colors )
     return NONE;
 }
 
+uint8_t Color::IndexToColor( const int index )
+{
+    switch ( index ) {
+    case 0:
+        return BLUE;
+    case 1:
+        return GREEN;
+    case 2:
+        return RED;
+    case 3:
+        return YELLOW;
+    case 4:
+        return ORANGE;
+    case 5:
+        return PURPLE;
+    default:
+        break;
+    }
+
+    return Color::NONE;
+}
+
 const char * fheroes2::getBarrierColorName( const int color )
 {
-    switch ( color ) {
-    case AQUA:
+    switch ( static_cast<BarrierColor>( color ) ) {
+    case BarrierColor::AQUA:
         return _( "barrier|Aqua" );
-    case BLUE:
+    case BarrierColor::BLUE:
         return _( "barrier|Blue" );
-    case BROWN:
+    case BarrierColor::BROWN:
         return _( "barrier|Brown" );
-    case GOLD:
+    case BarrierColor::GOLD:
         return _( "barrier|Gold" );
-    case GREEN:
+    case BarrierColor::GREEN:
         return _( "barrier|Green" );
-    case ORANGE:
+    case BarrierColor::ORANGE:
         return _( "barrier|Orange" );
-    case PURPLE:
+    case BarrierColor::PURPLE:
         return _( "barrier|Purple" );
-    case RED:
+    case BarrierColor::RED:
         return _( "barrier|Red" );
     default:
         break;
@@ -143,22 +182,22 @@ const char * fheroes2::getBarrierColorName( const int color )
 
 const char * fheroes2::getTentColorName( const int color )
 {
-    switch ( color ) {
-    case AQUA:
+    switch ( static_cast<BarrierColor>( color ) ) {
+    case BarrierColor::AQUA:
         return _( "tent|Aqua" );
-    case BLUE:
+    case BarrierColor::BLUE:
         return _( "tent|Blue" );
-    case BROWN:
+    case BarrierColor::BROWN:
         return _( "tent|Brown" );
-    case GOLD:
+    case BarrierColor::GOLD:
         return _( "tent|Gold" );
-    case GREEN:
+    case BarrierColor::GREEN:
         return _( "tent|Green" );
-    case ORANGE:
+    case BarrierColor::ORANGE:
         return _( "tent|Orange" );
-    case PURPLE:
+    case BarrierColor::PURPLE:
         return _( "tent|Purple" );
-    case RED:
+    case BarrierColor::RED:
         return _( "tent|Red" );
     default:
         break;

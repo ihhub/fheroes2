@@ -74,7 +74,7 @@ namespace
 
         switch ( scenarioID ) {
         case 2:
-            obtainableAwards.emplace_back( 1, Campaign::CampaignAwardData::TYPE_HIREABLE_HERO, Heroes::BAX, 0, 0, gettext_noop( "Necromancer Guild" ) );
+            obtainableAwards.emplace_back( 1, Campaign::CampaignAwardData::TYPE_HIREABLE_HERO, Heroes::BRAX, 0, 0, gettext_noop( "Necromancer Guild" ) );
             break;
         case 3:
             obtainableAwards.emplace_back( 2, Campaign::CampaignAwardData::TYPE_CREATURE_ALLIANCE, Monster::OGRE, gettext_noop( "Ogre Alliance" ) );
@@ -179,8 +179,8 @@ namespace
                 gettext_noop( "Final Justice" ), gettext_noop( "Betrayal" ) };
         const std::array<std::string, scenarioCount> scenarioDescription = {
             gettext_noop(
-                "Roland needs you to defeat the lords near his castle to begin his war of rebellion against his brother.  They are not allied with each other, so they will spend"
-                " most of their time fighting with one another.  Victory is yours when you have defeated all of their castles and heroes." ),
+                "Roland needs you to defeat the lords near his castle to begin his war of rebellion against his brother. They are not allied with each other, so they will spend"
+                " most of their time fighting with one another. Victory is yours when you have defeated all of their castles and heroes." ),
             gettext_noop(
                 "The local lords refuse to swear allegiance to Roland, and must be subdued. They are wealthy and powerful, so be prepared for a tough fight. Capture all enemy castles to win." ),
             gettext_noop(
@@ -197,7 +197,7 @@ namespace
                 "Three allied enemies stand before you and victory, including Lord Corlagon. Roland is in a castle to the northwest, and you will lose if he falls to the enemy. Remember that capturing Lord Corlagon will ensure that he will not fight against you in the final scenario." ),
             gettext_noop( "This is the final battle. Both you and your enemy are armed to the teeth, and all are allied against you. Capture Archibald to end the war!" ),
             gettext_noop(
-                "Switching sides leaves you with three castles against the enemy's one.  This battle will be the easiest one you will face for the rest of the war...traitor." ) };
+                "Switching sides leaves you with three castles against the enemy's one. This battle will be the easiest one you will face for the rest of the war...traitor." ) };
         std::vector<Campaign::ScenarioData> scenarioDatas;
         scenarioDatas.reserve( scenarioCount );
 
@@ -271,8 +271,8 @@ namespace
                 gettext_noop( "The Crown" ),     gettext_noop( "Greater Glory" ),  gettext_noop( "Apocalypse" ),    gettext_noop( "Betrayal" ) };
         const std::array<std::string, scenarioCount> scenarioDescription = {
             gettext_noop(
-                "King Archibald requires you to defeat the three enemies in this region.  They are not allied with one another, so they will spend most of their energy fighting"
-                " amongst themselves.  You will win when you own all of the enemy castles and there are no more heroes left to fight." ),
+                "King Archibald requires you to defeat the three enemies in this region. They are not allied with one another, so they will spend most of their energy fighting"
+                " amongst themselves. You will win when you own all of the enemy castles and there are no more heroes left to fight." ),
             gettext_noop(
                 "You must unify the barbarian tribes of the north by conquering them. As in the previous mission, the enemy is not allied against you, but they have more resources at their disposal. You will win when you own all of the enemy castles and there are no more heroes left to fight." ),
             gettext_noop(
@@ -293,7 +293,7 @@ namespace
             gettext_noop(
                 "This is the final battle. Both you and your enemy are armed to the teeth, and all are allied against you. Capture Roland to win the war, and be sure not to lose Archibald in the fight!" ),
             gettext_noop(
-                "Switching sides leaves you with three castles against the enemy's one.  This battle will be the easiest one you will face for the rest of the war...traitor." ) };
+                "Switching sides leaves you with three castles against the enemy's one. This battle will be the easiest one you will face for the rest of the war...traitor." ) };
 
         std::vector<Campaign::ScenarioData> scenarioDatas;
         scenarioDatas.reserve( scenarioCount );
@@ -508,7 +508,7 @@ namespace
                 "Your mission is to vanquish the warring mages in the magical Shrouded Isles. The completion of this task will give you a fighting chance against your rivals." ),
             gettext_noop( "The location of the great library has been discovered! You must make your way to it, and reclaim the city of Chronos in which it lies." ),
             gettext_noop(
-                "Find the Orb of negation, which is said to be buried in this land. There are clues inscribed on stone obelisks which will help lead you to your price. Find the orb before the first day of the sixth month, or your rivals will surely have gotten to the fount before you." ),
+                "Find the Orb of negation, which is said to be buried in this land. There are clues inscribed on stone obelisks which will help lead you to your prize. Find the Orb before the first day of the sixth month, or your rivals will surely have gotten to the fount before you." ),
             gettext_noop( "You must take control of the castle of Magic, where the fount of wizardry lies. Do this and your victory will be supreme." ) };
         std::vector<Campaign::ScenarioData> scenarioDatas;
         scenarioDatas.reserve( 4 );
@@ -945,7 +945,7 @@ namespace Campaign
         case Monster::ELF:
         case Monster::GRAND_ELF:
             return _(
-                "As you approach the group of elves, their leader calls them all to attention.  He shouts to them, \"Who of you is brave enough to join this fearless ally of ours?\"  The group explodes with cheers as they run to join your ranks." );
+                "As you approach the group of elves, their leader calls them all to attention. He shouts to them, \"Who of you is brave enough to join this fearless ally of ours?\" The group explodes with cheers as they run to join your ranks." );
         default:
             break;
         }
@@ -959,7 +959,7 @@ namespace Campaign
         switch ( monsterId ) {
         case Monster::DWARF:
         case Monster::BATTLE_DWARF:
-            return _( "The dwarves hail you, \"Any friend of Roland is a friend of ours.  You may pass.\"" );
+            return _( "The dwarves hail you, \"Any friend of Roland is a friend of ours. You may pass.\"" );
         case Monster::OGRE:
         case Monster::OGRE_LORD:
             return _( "The ogres give you a grunt of recognition, \"Archibald's allies may pass.\"" );
@@ -967,11 +967,11 @@ namespace Campaign
         case Monster::RED_DRAGON:
         case Monster::BLACK_DRAGON:
             return _(
-                "The dragons see you and call out.  \"Our alliance with Archibald compels us to join you.  Unfortunately you have no room.  A pity!\"  They quickly scatter." );
+                "The dragons see you and call out. \"Our alliance with Archibald compels us to join you. Unfortunately you have no room. A pity!\" They quickly scatter." );
         case Monster::ELF:
         case Monster::GRAND_ELF:
             return _(
-                "The elves stand at attention as you approach.  Their leader calls to you and says, \"Let us not impede your progress, ally!  Move on, and may victory be yours.\"" );
+                "The elves stand at attention as you approach. Their leader calls to you and says, \"Let us not impede your progress, ally! Move on, and may victory be yours.\"" );
         default:
             break;
         }

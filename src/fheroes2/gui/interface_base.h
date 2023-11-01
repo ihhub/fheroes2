@@ -60,6 +60,15 @@ namespace Interface
     class BaseInterface
     {
     public:
+        explicit BaseInterface( const bool isEditor_ )
+            : _gameArea( *this )
+            , _radar( *this )
+            , _statusWindow( *this )
+            , _isEditor( isEditor_ )
+        {
+            // Do nothing
+        }
+
         virtual ~BaseInterface() = default;
 
         virtual void redraw( const uint32_t force ) = 0;
@@ -120,15 +129,25 @@ namespace Interface
 
         static fheroes2::GameMode EventExit();
 
+        virtual bool useMouseDragMovement()
+        {
+            return true;
+        }
+
         virtual void mouseCursorAreaClickLeft( const int32_t tileIndex ) = 0;
         virtual void mouseCursorAreaPressRight( const int32_t tileIndex ) const = 0;
 
         // Regenerates the game area and updates the panel positions depending on the UI settings
         virtual void reset() = 0;
 
-    protected:
-        BaseInterface();
+        virtual void updateCursor( const int32_t tileIndex ) = 0;
 
+        bool isEditor() const
+        {
+            return _isEditor;
+        }
+
+    protected:
         // If display fade-in state is set reset it to false and fade-in the full display image. Otherwise render full display image without fade-in.
         void validateFadeInAndRender();
 
@@ -137,5 +156,7 @@ namespace Interface
         StatusWindow _statusWindow;
 
         uint32_t _redraw{ 0 };
+
+        const bool _isEditor{ false };
     };
 }

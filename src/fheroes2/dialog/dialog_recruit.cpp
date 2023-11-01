@@ -28,6 +28,7 @@
 #include <functional>
 #include <memory>
 #include <string>
+#include <utility>
 #include <vector>
 
 #include "agg_image.h"
@@ -44,7 +45,6 @@
 #include "math_base.h"
 #include "monster.h"
 #include "pal.h"
-#include "payment.h"
 #include "resource.h"
 #include "screen.h"
 #include "settings.h"
@@ -94,7 +94,7 @@ namespace
     }
 }
 
-void RedrawCurrentInfo( const fheroes2::Point & pos, const uint32_t result, const payment_t & paymentMonster, const payment_t & paymentCosts, const Funds & funds,
+void RedrawCurrentInfo( const fheroes2::Point & pos, const uint32_t result, const Funds & paymentMonster, const Funds & paymentCosts, const Funds & funds,
                         const std::string & label, const fheroes2::Image & background = {} )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
@@ -106,10 +106,10 @@ void RedrawCurrentInfo( const fheroes2::Point & pos, const uint32_t result, cons
 
     text.draw( pos.x + 151 - text.width() / 2, pos.y + 147, display );
 
-    const std::string sgold = std::to_string( paymentCosts.gold ) + " " + "(" + std::to_string( funds.gold - paymentCosts.gold ) + ")";
+    std::string sgold = std::to_string( paymentCosts.gold ) + " " + "(" + std::to_string( funds.gold - paymentCosts.gold ) + ")";
     const int rsext = paymentMonster.GetValidItems() & ~Resource::GOLD;
 
-    text.set( sgold, fheroes2::FontType::smallWhite() );
+    text.set( std::move( sgold ), fheroes2::FontType::smallWhite() );
 
     // Restore the background of the text before rendering it.
     fheroes2::Copy( background, 0, 214, display, pos.x, pos.y + 214, background.width(), text.height() );
@@ -156,7 +156,7 @@ void RedrawResourceInfo( const int resourceIcnIndex, const fheroes2::Point & pos
 void RedrawMonsterInfo( const fheroes2::Rect & pos, const Monster & monster, const uint32_t available, const bool showTotalSum )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
-    const payment_t paymentMonster = monster.GetCost();
+    const Funds paymentMonster = monster.GetCost();
     const bool needExtraResources = 2 == paymentMonster.GetValidItemsCount();
 
     // Recruit monster text.
@@ -211,7 +211,7 @@ void RedrawMonsterInfo( const fheroes2::Rect & pos, const Monster & monster, con
 
     str = _( "Available: %{count}" );
     StringReplace( str, "%{count}", available );
-    text.set( str, fheroes2::FontType::smallWhite() );
+    text.set( std::move( str ), fheroes2::FontType::smallWhite() );
     text.draw( pos.x + 64 - text.width() / 2, pos.y + 121, display );
 
     if ( showTotalSum ) {
@@ -261,13 +261,13 @@ Troop Dialog::RecruitMonster( const Monster & monster0, const uint32_t available
 
     // Calculate max count.
     Monster monster = monster0;
-    payment_t paymentMonster = monster.GetCost();
+    Funds paymentMonster = monster.GetCost();
     const Kingdom & kingdom = world.GetKingdom( Settings::Get().CurrentColor() );
 
     uint32_t max = CalculateMax( monster, kingdom, available );
     uint32_t result = max;
 
-    payment_t paymentCosts( paymentMonster * result );
+    Funds paymentCosts( paymentMonster * result );
 
     const fheroes2::Size windowSize{ 299, 272 };
     const fheroes2::Point dialogOffset( ( display.width() - windowSize.width ) / 2, ( display.height() - windowSize.height ) / 2 + windowOffsetY );
@@ -403,7 +403,7 @@ Troop Dialog::RecruitMonster( const Monster & monster0, const uint32_t available
 
     const fheroes2::Rect monsterArea( dialogOffset.x + 24, dialogOffset.y + 19, 75, 95 );
 
-    auto buttonReleaseRestore = [&display, &background, &dialogOffset]( fheroes2::ButtonBase & button ) {
+    const auto buttonReleaseRestore = [&display, &background, &dialogOffset]( fheroes2::ButtonBase & button ) {
         if ( button.isReleased() ) {
             return;
         }
@@ -504,6 +504,15 @@ Troop Dialog::RecruitMonster( const Monster & monster0, const uint32_t available
             fheroes2::Copy( background, 0, 0, display, dialogOffset.x, dialogOffset.y, windowSize.width, windowSize.height );
 
             max = CalculateMax( monster, kingdom, available );
+
+            if ( max == 0 ) {
+                buttonMin.disable();
+                buttonMax.disable();
+            }
+            else if ( !buttonMax.isEnabled() && !buttonMin.isEnabled() ) {
+                buttonMin.enable();
+            }
+
             result = max;
             paymentMonster = monster.GetCost();
             paymentCosts = paymentMonster * result;

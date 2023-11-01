@@ -38,6 +38,7 @@
 #include "agg.h"
 #include "agg_file.h"
 #include "battle_cell.h"
+#include "exception.h"
 #include "h2d.h"
 #include "icn.h"
 #include "image.h"
@@ -47,7 +48,6 @@
 #include "rand.h"
 #include "screen.h"
 #include "serialize.h"
-#include "text.h"
 #include "til.h"
 #include "tools.h"
 #include "translations.h"
@@ -71,7 +71,8 @@ namespace
     // Some resources are language dependent. These are mostly buttons with a text of them.
     // Once a user changes a language we have to update resources. To do this we need to clear the existing images.
 
-    const std::set<int> languageDependentIcnId{ ICN::BUTTON_NEW_GAME_GOOD,
+    const std::set<int> languageDependentIcnId{ ICN::BUYMAX,
+                                                ICN::BUTTON_NEW_GAME_GOOD,
                                                 ICN::BUTTON_NEW_GAME_EVIL,
                                                 ICN::BUTTON_SAVE_GAME_GOOD,
                                                 ICN::BUTTON_SAVE_GAME_EVIL,
@@ -101,8 +102,10 @@ namespace
                                                 ICN::BUTTON_SMALL_NO_EVIL,
                                                 ICN::BUTTON_SMALL_EXIT_GOOD,
                                                 ICN::BUTTON_SMALL_EXIT_EVIL,
-                                                ICN::BUTTON_SMALLER_EXIT_GOOD,
-                                                ICN::BUTTON_SMALLER_EXIT_EVIL,
+                                                ICN::BUTTON_EXIT_HEROES_MEETING,
+                                                ICN::BUTTON_EXIT_TOWN,
+                                                ICN::BUTTON_EXIT_PUZZLE_DDOOR_GOOD,
+                                                ICN::BUTTON_EXIT_PUZZLE_DDOOR_EVIL,
                                                 ICN::BUTTON_SMALL_DISMISS_GOOD,
                                                 ICN::BUTTON_SMALL_DISMISS_EVIL,
                                                 ICN::BUTTON_SMALL_UPGRADE_GOOD,
@@ -149,11 +152,18 @@ namespace
                                                 ICN::BUTTON_SMALL_MAX_GOOD,
                                                 ICN::BUTTON_SMALL_MAX_EVIL,
                                                 ICN::BUTTON_GUILDWELL_EXIT,
+                                                ICN::GOOD_CAMPAIGN_BUTTONS,
+                                                ICN::EVIL_CAMPAIGN_BUTTONS,
+                                                ICN::POL_CAMPAIGN_BUTTONS,
                                                 ICN::BUTTON_VIEWWORLD_EXIT_GOOD,
                                                 ICN::BUTTON_VIEWWORLD_EXIT_EVIL,
-                                                ICN::BUTTON_DIFFICULTY_ARCHIBALD,
-                                                ICN::BUTTON_DIFFICULTY_ROLAND,
-                                                ICN::BUTTON_DIFFICULTY_POL };
+                                                ICN::BUTTON_VERTICAL_DISMISS,
+                                                ICN::BUTTON_VERTICAL_EXIT,
+                                                ICN::BUTTON_HSCORES_VERTICAL_CAMPAIGN,
+                                                ICN::BUTTON_HSCORES_VERTICAL_EXIT,
+                                                ICN::BUTTON_HSCORES_VERTICAL_STANDARD,
+                                                ICN::DISMISS_HERO_DISABLED_BUTTON,
+                                                ICN::NEW_CAMPAIGN_DISABLED_BUTTON };
 
 #ifndef NDEBUG
     bool isLanguageDependentIcnId( const int id )
@@ -167,6 +177,7 @@ namespace
         const fheroes2::SupportedLanguage currentLanguage = fheroes2::getCurrentLanguage();
         const fheroes2::SupportedLanguage resourceLanguage = fheroes2::getResourceLanguage();
         return ( currentLanguage == fheroes2::SupportedLanguage::English && resourceLanguage == fheroes2::SupportedLanguage::English )
+               || ( currentLanguage == fheroes2::SupportedLanguage::Czech && resourceLanguage == fheroes2::SupportedLanguage::Czech )
                || ( currentLanguage == fheroes2::SupportedLanguage::Polish && resourceLanguage == fheroes2::SupportedLanguage::Polish )
                || ( currentLanguage == fheroes2::SupportedLanguage::French && resourceLanguage == fheroes2::SupportedLanguage::French )
                || ( currentLanguage == fheroes2::SupportedLanguage::German && resourceLanguage == fheroes2::SupportedLanguage::German )
@@ -213,15 +224,6 @@ namespace
         for ( const fheroes2::Image & digit : digits ) {
             output.emplace_back( addDigit( origin, digit, offset ) );
             output.back().setPosition( output.back().width() - origin.width(), output.back().height() - origin.height() );
-        }
-    }
-
-    void replaceTransformPixel( fheroes2::Image & image, const int32_t position, const uint8_t value )
-    {
-        assert( !image.singleLayer() );
-        if ( ( position < ( image.width() * image.height() ) ) && ( image.transform()[position] != 0 ) ) {
-            image.transform()[position] = 0;
-            image.image()[position] = value;
         }
     }
 
@@ -352,6 +354,47 @@ namespace
 
     OriginalAlphabetPreserver alphabetPreserver;
 
+    // This class is used for situations when we need to remove letter-specific offsets, like when we display single letters in a row,
+    // and then restore these offsets within the scope of the code
+    class ButtonFontOffsetRestorer
+    {
+    public:
+        ButtonFontOffsetRestorer( std::vector<fheroes2::Sprite> & font, const int32_t offsetX );
+        ButtonFontOffsetRestorer( const ButtonFontOffsetRestorer & ) = delete;
+
+        ~ButtonFontOffsetRestorer();
+
+        ButtonFontOffsetRestorer & operator=( const ButtonFontOffsetRestorer & ) = delete;
+
+    private:
+        std::vector<fheroes2::Sprite> & _font;
+        std::vector<int32_t> _originalXOffsets;
+    };
+
+    ButtonFontOffsetRestorer::ButtonFontOffsetRestorer( std::vector<fheroes2::Sprite> & font, const int32_t offsetX )
+        : _font( font )
+    {
+        _originalXOffsets.reserve( _font.size() );
+
+        for ( fheroes2::Sprite & characterSprite : _font ) {
+            _originalXOffsets.emplace_back( characterSprite.x() );
+            characterSprite.setPosition( offsetX, characterSprite.y() );
+        }
+    }
+
+    ButtonFontOffsetRestorer::~ButtonFontOffsetRestorer()
+    {
+        if ( _originalXOffsets.size() != _font.size() ) {
+            // If this assertion blows up then something is wrong with the fonts as they must have the same size.
+            assert( 0 );
+            return;
+        }
+
+        for ( size_t i = 0; i < _font.size(); ++i ) {
+            _font[i].setPosition( _originalXOffsets[i], _font[i].y() );
+        }
+    }
+
     void invertTransparency( fheroes2::Image & image )
     {
         if ( image.singleLayer() ) {
@@ -416,6 +459,36 @@ namespace
                             buttonFontColor );
     }
 
+    void createCampaignButtonSet( const int campaignSetIcnId, const std::array<const char *, 5> & texts )
+    {
+        int emptyButtonIcnID = 0;
+        int buttonBackgroundICN = ICN::UNKNOWN;
+        switch ( campaignSetIcnId ) {
+        case ICN::GOOD_CAMPAIGN_BUTTONS:
+            emptyButtonIcnID = ICN::EMPTY_GOOD_BUTTON;
+            buttonBackgroundICN = ICN::STONEBAK;
+            break;
+        case ICN::EVIL_CAMPAIGN_BUTTONS:
+            emptyButtonIcnID = ICN::EMPTY_EVIL_BUTTON;
+            buttonBackgroundICN = ICN::STONEBAK_EVIL;
+            break;
+        case ICN::POL_CAMPAIGN_BUTTONS:
+            emptyButtonIcnID = ICN::EMPTY_POL_BUTTON;
+            buttonBackgroundICN = ICN::STONEBAK_SMALL_POL;
+            break;
+        default:
+            // Was a new set of buttons added?
+            assert( 0 );
+            break;
+        }
+
+        for ( size_t i = 0; i < texts.size(); ++i ) {
+            const size_t icnIndex = 2 * i;
+            fheroes2::getTextAdaptedButton( _icnVsSprite[campaignSetIcnId][icnIndex], _icnVsSprite[campaignSetIcnId][icnIndex + 1], texts[i], emptyButtonIcnID,
+                                            buttonBackgroundICN );
+        }
+    }
+
     void convertToEvilInterface( fheroes2::Sprite & image, const fheroes2::Rect & roi )
     {
         fheroes2::ApplyPalette( image, roi.x, roi.y, image, roi.x, roi.y, roi.width, roi.height, PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_INTERFACE ) );
@@ -458,14 +531,14 @@ namespace
 
         uint8_t * imageTransform = buttonSprite.transform();
         const uint8_t transparencyValue = 1;
-        std::fill( imageTransform, imageTransform + 3, transparencyValue );
-        std::fill( imageTransform + imageWidth - 2, imageTransform + imageWidth + 2, transparencyValue );
-        std::fill( imageTransform + 2 * imageWidth - 1, imageTransform + 2 * imageWidth + 1, transparencyValue );
+        std::fill( imageTransform, imageTransform + 4, transparencyValue );
+        std::fill( imageTransform + imageWidth - 2, imageTransform + imageWidth + 3, transparencyValue );
+        std::fill( imageTransform + 2 * imageWidth - 1, imageTransform + 2 * imageWidth + 2, transparencyValue );
         *( imageTransform + 3 * imageWidth ) = transparencyValue;
         *( imageTransform + ( imageHeight - 3 ) * imageWidth - 1 ) = transparencyValue;
-        std::fill( imageTransform + ( imageHeight - 2 ) * imageWidth - 2, imageTransform + ( imageHeight - 2 ) * imageWidth - 1, transparencyValue );
-        std::fill( imageTransform + ( imageHeight - 1 ) * imageWidth - 3, imageTransform + ( imageHeight - 1 ) * imageWidth - 1, transparencyValue );
-        std::fill( imageTransform + imageHeight * imageWidth - 4, imageTransform + imageHeight * imageWidth - 1, transparencyValue );
+        std::fill( imageTransform + ( imageHeight - 2 ) * imageWidth - 2, imageTransform + ( imageHeight - 2 ) * imageWidth, transparencyValue );
+        std::fill( imageTransform + ( imageHeight - 1 ) * imageWidth - 3, imageTransform + ( imageHeight - 1 ) * imageWidth, transparencyValue );
+        std::fill( imageTransform + imageHeight * imageWidth - 4, imageTransform + imageHeight * imageWidth, transparencyValue );
     }
 }
 
@@ -473,8 +546,13 @@ namespace fheroes2
 {
     namespace AGG
     {
+        void loadICN( const int id );
+
         void LoadOriginalICN( const int id )
         {
+            // If this assertion blows up then something wrong with your logic and you load resources more than once!
+            assert( _icnVsSprite[id].empty() );
+
             const std::vector<uint8_t> & body = ::AGG::getDataFromAggFile( ICN::GetString( id ) );
 
             if ( body.empty() ) {
@@ -900,20 +978,78 @@ namespace fheroes2
 
                 break;
             }
-            case ICN::BUTTON_SMALLER_EXIT_GOOD:
-            case ICN::BUTTON_SMALLER_EXIT_EVIL: {
+            case ICN::BUTTON_EXIT_HEROES_MEETING: {
                 _icnVsSprite[id].resize( 2 );
 
-                const bool isEvilInterface = ( id == ICN::BUTTON_SMALLER_EXIT_EVIL );
-
                 if ( useOriginalResources() ) {
-                    _icnVsSprite[id][0] = GetICN( isEvilInterface ? ICN::LGNDXTRE : ICN::LGNDXTRA, 4 );
-                    _icnVsSprite[id][1] = GetICN( isEvilInterface ? ICN::LGNDXTRE : ICN::LGNDXTRA, 5 );
+                    _icnVsSprite[id][0] = GetICN( ICN::SWAPBTN, 0 );
+                    _icnVsSprite[id][1] = GetICN( ICN::SWAPBTN, 1 );
+                    // fix some wrong pixels in the original pressed state
+                    setButtonCornersTransparent( _icnVsSprite[id][1] );
                     break;
                 }
 
+                // The heroes meeting screen has an embedded shadow so the button needs to be fixed at the same size as the original one.
+                // TODO: Remove the embedded shadow and button in the heroes meeting screen and use getTextAdaptedButton() instead.
                 const int32_t textWidth = 70;
-                createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], textWidth, gettext_noop( "EXIT" ), isEvilInterface );
+                createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], textWidth, gettext_noop( "smallerButton|EXIT" ), false );
+
+                break;
+            }
+            case ICN::BUTTON_EXIT_TOWN: {
+                std::vector<fheroes2::Sprite> & buttonStates = _icnVsSprite[id];
+                buttonStates.resize( 2 );
+
+                if ( useOriginalResources() ) {
+                    buttonStates[0] = GetICN( ICN::TREASURY, 1 );
+                    buttonStates[1] = GetICN( ICN::TREASURY, 2 );
+                    break;
+                }
+
+                // Needs to be generated from original assets because it needs the black background from the pressed state.
+                // TODO: Make a way to generate buttons with black background since it is needed for MAX and EXIT in the Well and Guilds.
+                for ( int32_t i = 0; i < static_cast<int32_t>( buttonStates.size() ); ++i ) {
+                    Sprite & out = buttonStates[i];
+                    out = GetICN( ICN::TREASURY, 1 + i );
+
+                    // clean the button.
+                    Fill( out, 6 - i, 4 + i, 70, 17, getButtonFillingColor( i == 0 ) );
+                }
+
+                const int32_t textWidth = 70;
+                renderTextOnButton( buttonStates[0], buttonStates[1], gettext_noop( "smallerButton|EXIT" ), { 7, 5 }, { 6, 6 },
+                                    { textWidth, fheroes2::getFontHeight( fheroes2::FontSize::BUTTON_RELEASED ) }, fheroes2::FontColor::WHITE );
+
+                break;
+            }
+            case ICN::BUTTON_EXIT_PUZZLE_DDOOR_GOOD:
+            case ICN::BUTTON_EXIT_PUZZLE_DDOOR_EVIL: {
+                std::vector<fheroes2::Sprite> & buttonStates = _icnVsSprite[id];
+                buttonStates.resize( 2 );
+
+                const bool isEvilInterface = ( id == ICN::BUTTON_EXIT_PUZZLE_DDOOR_EVIL );
+                const int originalButtonICN = isEvilInterface ? ICN::LGNDXTRE : ICN::LGNDXTRA;
+
+                if ( useOriginalResources() ) {
+                    buttonStates[0] = GetICN( originalButtonICN, 4 );
+                    buttonStates[1] = GetICN( originalButtonICN, 5 );
+                    break;
+                }
+
+                // Needs to be generated from original assets because the background has a much darker shadow than normal.
+                // TODO: Make the button generated as normal after removing the embedded shadow on the background.
+                for ( int32_t i = 0; i < static_cast<int32_t>( buttonStates.size() ); ++i ) {
+                    Sprite & out = buttonStates[i];
+                    out = GetICN( originalButtonICN, 4 + i );
+
+                    // clean the button.
+                    Fill( out, 6 - i, 4 + i, 71 - i, 17, getButtonFillingColor( i == 0, !isEvilInterface ) );
+                }
+
+                const int32_t textWidth = 71;
+                renderTextOnButton( buttonStates[0], buttonStates[1], gettext_noop( "smallerButton|EXIT" ), { 6, 5 }, { 5, 6 },
+                                    { textWidth, fheroes2::getFontHeight( fheroes2::FontSize::BUTTON_RELEASED ) },
+                                    isEvilInterface ? fheroes2::FontColor::GRAY : fheroes2::FontColor::WHITE );
 
                 break;
             }
@@ -1431,6 +1567,13 @@ namespace fheroes2
 
                 break;
             }
+            case ICN::BUYMAX: {
+                _icnVsSprite[id].resize( 2 );
+
+                getTextAdaptedButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "MAX" ), ICN::EMPTY_GUILDWELL_BUTTON, ICN::UNKNOWN );
+
+                break;
+            }
             case ICN::BUTTON_GUILDWELL_EXIT: {
                 _icnVsSprite[id].resize( 2 );
 
@@ -1439,18 +1582,7 @@ namespace fheroes2
                     _icnVsSprite[id][1] = GetICN( ICN::WELLXTRA, 1 );
                     break;
                 }
-
-                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
-                    Sprite & out = _icnVsSprite[id][i];
-
-                    out = GetICN( ICN::WELLXTRA, 0 + i );
-
-                    // clean the button.
-                    Fill( out, 6 - 2 * i, 2 + i, 52, 14, getButtonFillingColor( i == 0 ) );
-                }
-
-                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "guildWell|EXIT" ), { 6, 3 }, { 5, 4 }, { 52, 14 },
-                                    fheroes2::FontColor::WHITE );
+                fheroes2::getTextAdaptedButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "EXIT" ), ICN::EMPTY_GUILDWELL_BUTTON, ICN::UNKNOWN );
 
                 break;
             }
@@ -1473,47 +1605,96 @@ namespace fheroes2
 
                 break;
             }
-            case ICN::BUTTON_DIFFICULTY_ARCHIBALD: {
-                _icnVsSprite[id].resize( 2 );
+            case ICN::GOOD_CAMPAIGN_BUTTONS:
+            case ICN::EVIL_CAMPAIGN_BUTTONS: {
+                _icnVsSprite[id].resize( 10 );
 
-                const int32_t textWidth = 140;
-                fheroes2::Point releasedOffset;
-                fheroes2::Point pressedOffset;
-                getCustomNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], true, textWidth, releasedOffset, pressedOffset );
+                if ( useOriginalResources() ) {
+                    const bool isEvilInterface = id == ICN::EVIL_CAMPAIGN_BUTTONS;
+                    const int originalIcnId = isEvilInterface ? ICN::CAMPXTRE : ICN::CAMPXTRG;
+                    const int buttonBackground = isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK;
 
-                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "DIFFICULTY" ), releasedOffset, pressedOffset, { textWidth, 16 },
-                                    fheroes2::FontColor::GRAY );
+                    // The evil buttons' released state are 2 pixels wider.
+                    const int offsetEvilX = isEvilInterface ? 2 : 0;
+                    // remove embedded shadows so that we can generate shadows with our own code later
+                    for ( uint32_t i = 0; i < 8; i += 2 ) {
+                        // released
+                        const Sprite & originalReleased = GetICN( originalIcnId, i );
 
-                break;
-            }
-            case ICN::BUTTON_DIFFICULTY_ROLAND: {
-                _icnVsSprite[id].resize( 2 );
+                        Sprite & released = _icnVsSprite[id][i];
+                        released.resize( originalReleased.width() - 6 + offsetEvilX, originalReleased.height() - 8 );
+                        released.reset();
 
-                const int32_t textWidth = 140;
-                fheroes2::Point releasedOffset;
-                fheroes2::Point pressedOffset;
-                getCustomNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], false, textWidth, releasedOffset, pressedOffset );
+                        Copy( originalReleased, 6 - offsetEvilX, 0, released, 0, 0, originalReleased.width() - 1, originalReleased.height() - 8 );
 
-                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "DIFFICULTY" ), releasedOffset, pressedOffset, { textWidth, 16 },
-                                    fheroes2::FontColor::WHITE );
+                        // pressed
+                        const Sprite & originalPressed = GetICN( originalIcnId, i + 1 );
 
-                break;
-            }
-            case ICN::BUTTON_DIFFICULTY_POL: {
-                _icnVsSprite[id].resize( 2 );
+                        Sprite & pressed = _icnVsSprite[id][i + 1];
+                        pressed.resize( originalPressed.width(), originalPressed.height() );
+                        pressed.reset();
 
-                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
-                    Sprite & out = _icnVsSprite[id][i];
-                    out = GetICN( ICN::X_CMPBTN, 0 + i );
-
-                    // clean the button.
-                    const int32_t pixelPosition = 5 * 132;
-                    if ( pixelPosition < ( out.width() * out.height() ) ) {
-                        Fill( out, 4, 3 + i, 132 - i, 16, out.image()[pixelPosition] );
+                        Copy( originalPressed, 0, 1, pressed, 0, 1, originalPressed.width() - 1, originalPressed.height() );
+                        setButtonCornersTransparent( released );
+                        fheroes2::makeTransparentBackground( released, pressed, buttonBackground );
                     }
+                    // Generate the DIFFICULTY button because it is not present in the original resources
+                    fheroes2::getTextAdaptedButton( _icnVsSprite[id][8], _icnVsSprite[id][9], gettext_noop( "DIFFICULTY" ),
+                                                    isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON, buttonBackground );
+                    break;
                 }
+                createCampaignButtonSet( id, { gettext_noop( "VIEW INTRO" ), gettext_noop( "RESTART" ), gettext_noop( "OKAY" ), gettext_noop( "CANCEL" ),
+                                               gettext_noop( "DIFFICULTY" ) } );
 
-                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "DIFFICULTY" ), { 5, 5 }, { 5, 5 }, { 132, 17 }, fheroes2::FontColor::GRAY );
+                break;
+            }
+            case ICN::POL_CAMPAIGN_BUTTONS: {
+                _icnVsSprite[id].resize( 10 );
+
+                const int baseIcnId = ICN::X_CMPBTN;
+
+                if ( useOriginalResources() ) {
+                    for ( uint32_t i = 0; i < 8; i += 2 ) {
+                        // released
+                        const Sprite & originalReleased = GetICN( baseIcnId, i );
+
+                        Sprite & released = _icnVsSprite[id][i];
+                        released.resize( originalReleased.width() + 1, originalReleased.height() + 1 );
+                        released.reset();
+
+                        Copy( originalReleased, 0, 0, released, 1, 0, originalReleased.width(), originalReleased.height() );
+                        const Sprite & originalPressed = GetICN( baseIcnId, i + 1 );
+                        // the released state is missing the darker borders of the pressed state
+                        Copy( originalPressed, 0, 0, released, 0, 1, 1, originalPressed.height() );
+                        Copy( originalPressed, 0, 2, released, 0, originalPressed.height() - 1, 1, 2 );
+                        Copy( originalPressed, 1, originalPressed.height() - 1, released, 1, originalPressed.height(), originalPressed.width(), 1 );
+                        Copy( originalPressed, 0, 2, released, 1, originalPressed.height(), 1, 1 );
+                        Copy( originalReleased, 0, 2, released, 1, originalPressed.height() - 2, 1, 1 );
+                        Copy( originalReleased, 0, 2, released, 2, originalPressed.height() - 1, 1, 1 );
+                        Copy( originalReleased, 0, 2, released, 1, originalPressed.height() - 1, 1, 1 );
+                        Copy( originalReleased, 1, 2, released, 2, originalPressed.height() - 2, 1, 1 );
+
+                        // pressed state
+                        Sprite & pressed = _icnVsSprite[id][i + 1];
+                        pressed.resize( originalPressed.width() + 1, originalPressed.height() + 1 );
+                        pressed.reset();
+
+                        Copy( originalPressed, 0, 0, pressed, 0, 1, originalPressed.width(), originalPressed.height() );
+                        // pressed state has incomplete lower left corner
+                        Copy( originalPressed, 0, 2, pressed, 0, originalPressed.height() - 1, 1, 2 );
+                        Copy( originalPressed, 0, 2, pressed, 1, originalPressed.height(), 1, 1 );
+                        Copy( originalPressed, 1, 2, pressed, 1, originalPressed.height() - 1, 1, 1 );
+                        _icnVsSprite[id][i + 1].setPosition( 0, 0 );
+
+                        fheroes2::makeTransparentBackground( released, pressed, ICN::STONEBAK_SMALL_POL );
+                    }
+                    // generate the DIFFICULTY button as it is not present in the original resources
+                    fheroes2::getTextAdaptedButton( _icnVsSprite[id][8], _icnVsSprite[id][9], gettext_noop( "DIFFICULTY" ), ICN::EMPTY_POL_BUTTON,
+                                                    ICN::STONEBAK_SMALL_POL );
+                    break;
+                }
+                createCampaignButtonSet( id, { gettext_noop( "VIEW INTRO" ), gettext_noop( "RESTART" ), gettext_noop( "OKAY" ), gettext_noop( "CANCEL" ),
+                                               gettext_noop( "DIFFICULTY" ) } );
 
                 break;
             }
@@ -1670,6 +1851,116 @@ namespace fheroes2
 
                 const fheroes2::FontColor buttonFontColor = isEvilInterface ? fheroes2::FontColor::GRAY : fheroes2::FontColor::WHITE;
                 renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "EXIT" ), { 7, 5 }, { 6, 6 }, { 86, 16 }, buttonFontColor );
+
+                break;
+            }
+            case ICN::BUTTON_VERTICAL_DISMISS: {
+                _icnVsSprite[id].resize( 2 );
+
+                if ( useOriginalResources() ) {
+                    // The original DISMISS button has a broken transform layer and thinner pressed state than released state,
+                    // so we use our empty vertical button as a template
+                    _icnVsSprite[id][0] = GetICN( ICN::EMPTY_VERTICAL_GOOD_BUTTON, 0 );
+                    _icnVsSprite[id][1] = GetICN( ICN::EMPTY_VERTICAL_GOOD_BUTTON, 1 );
+
+                    // Copy the DISMISS text back from the original button
+                    const Sprite & originalReleased = GetICN( ICN::HSBTNS, 0 );
+                    const Sprite & originalPressed = GetICN( ICN::HSBTNS, 1 );
+
+                    Copy( originalReleased, 9, 2, _icnVsSprite[id][0], 5, 2, 21, 112 );
+                    Copy( originalPressed, 9, 5, _icnVsSprite[id][1], 4, 5, 19, 111 );
+
+                    fheroes2::makeTransparentBackground( _icnVsSprite[id][0], _icnVsSprite[id][1], ICN::REDBAK_SMALL_VERTICAL );
+
+                    break;
+                }
+
+                // We need to temporarily remove the letter specific X offsets in the font because if not the letters will
+                // be off-centered when we are displaying one letter per line
+                const ButtonFontOffsetRestorer fontReleased( _icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED], -1 );
+                const ButtonFontOffsetRestorer fontPressed( _icnVsSprite[ICN::BUTTON_GOOD_FONT_PRESSED], -1 );
+                getTextAdaptedButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "D\nI\nS\nM\nI\nS\nS" ), ICN::EMPTY_VERTICAL_GOOD_BUTTON,
+                                      ICN::REDBAK_SMALL_VERTICAL );
+
+                break;
+            }
+            case ICN::BUTTON_VERTICAL_EXIT: {
+                _icnVsSprite[id].resize( 2 );
+
+                if ( useOriginalResources() ) {
+                    // The original EXIT button has a broken transform layer and we need to remove the shadows,
+                    // so we use our empty vertical button as a template
+                    _icnVsSprite[id][0] = GetICN( ICN::EMPTY_VERTICAL_GOOD_BUTTON, 0 );
+                    _icnVsSprite[id][1] = GetICN( ICN::EMPTY_VERTICAL_GOOD_BUTTON, 1 );
+
+                    // Copy the EXIT text back from the original button
+                    const Sprite & originalReleased = GetICN( ICN::HSBTNS, 2 );
+                    const Sprite & originalPressed = GetICN( ICN::HSBTNS, 3 );
+
+                    Copy( originalReleased, 4, 2, _icnVsSprite[id][0], 5, 2, 21, 112 );
+                    Copy( originalPressed, 3, 5, _icnVsSprite[id][1], 4, 5, 19, 111 );
+
+                    fheroes2::makeTransparentBackground( _icnVsSprite[id][0], _icnVsSprite[id][1], ICN::REDBAK_SMALL_VERTICAL );
+
+                    break;
+                }
+
+                // We need to temporarily remove the letter specific X offsets in the font because if not the letters will
+                // be off-centered when we are displaying one letter per line
+                const ButtonFontOffsetRestorer fontReleased( _icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED], -1 );
+                const ButtonFontOffsetRestorer fontPressed( _icnVsSprite[ICN::BUTTON_GOOD_FONT_PRESSED], -1 );
+                getTextAdaptedButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "E\nX\nI\nT" ), ICN::EMPTY_VERTICAL_GOOD_BUTTON,
+                                      ICN::REDBAK_SMALL_VERTICAL );
+
+                break;
+            }
+            case ICN::BUTTON_HSCORES_VERTICAL_CAMPAIGN:
+            case ICN::BUTTON_HSCORES_VERTICAL_EXIT:
+            case ICN::BUTTON_HSCORES_VERTICAL_STANDARD: {
+                _icnVsSprite[id].resize( 2 );
+
+                const int originalID = ICN::HISCORE;
+                uint32_t originalICNIndex = 0;
+                if ( id == ICN::BUTTON_HSCORES_VERTICAL_STANDARD ) {
+                    originalICNIndex = 2;
+                }
+                else if ( id == ICN::BUTTON_HSCORES_VERTICAL_EXIT ) {
+                    originalICNIndex = 4;
+                }
+                else {
+                    assert( id == ICN::BUTTON_HSCORES_VERTICAL_CAMPAIGN );
+                }
+
+                if ( useOriginalResources() ) {
+                    _icnVsSprite[id][0] = GetICN( originalID, originalICNIndex );
+                    _icnVsSprite[id][1] = GetICN( originalID, originalICNIndex + 1 );
+                    break;
+                }
+
+                for ( size_t i = 0; i < _icnVsSprite[id].size(); ++i ) {
+                    const Sprite & originalButton = GetICN( originalID, originalICNIndex + static_cast<uint32_t>( i ) );
+                    Sprite & out = _icnVsSprite[id][i];
+
+                    out = originalButton;
+                    // Clean the button
+                    Fill( out, 4 - static_cast<int32_t>( i ), 4 + static_cast<int32_t>( i ), 19, 123, getButtonFillingColor( i == 0 ) );
+                }
+
+                const char * buttonText;
+
+                if ( id == ICN::BUTTON_HSCORES_VERTICAL_CAMPAIGN ) {
+                    buttonText = gettext_noop( "C\nA\nM\nP\nA\nI\nG\nN" );
+                }
+                else if ( id == ICN::BUTTON_HSCORES_VERTICAL_STANDARD ) {
+                    buttonText = gettext_noop( "S\nT\nA\nN\nD\nA\nR\nD" );
+                }
+                else {
+                    buttonText = gettext_noop( "E\nX\nI\nT" );
+                }
+
+                ButtonFontOffsetRestorer fontRestorerReleased( _icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED], -1 );
+                ButtonFontOffsetRestorer fontRestorerPressed( _icnVsSprite[ICN::BUTTON_GOOD_FONT_PRESSED], -1 );
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], buttonText, { 4, 4 }, { 3, 5 }, { 21, 124 }, fheroes2::FontColor::WHITE );
 
                 break;
             }
@@ -2001,8 +2292,16 @@ namespace fheroes2
             generateDefaultImages( id );
         }
 
-        bool LoadModifiedICN( int id )
+        // This function must return true is resources have been modified, false otherwise.
+        bool LoadModifiedICN( const int id )
         {
+            // If this assertion blows up then you are calling this function in a recursion. Check your code!
+            assert( _icnVsSprite[id].empty() );
+
+            // IMPORTANT!!!
+            // Call LoadOriginalICN() function only if you are handling the same ICN.
+            // If you need to load a different ICN use loadICN() function.
+
             switch ( id ) {
             case ICN::ROUTERED:
                 CopyICNWithPalette( id, ICN::ROUTE, PAL::PaletteType::RED );
@@ -2188,18 +2487,6 @@ namespace fheroes2
                 }
                 return true;
             case ICN::BUYMAX:
-                _icnVsSprite[id].resize( 2 );
-                for ( uint32_t i = 0; i < 2; ++i ) {
-                    Sprite & out = _icnVsSprite[id][i];
-                    out = GetICN( ICN::WELLXTRA, i );
-
-                    // clean the button
-                    Blit( GetICN( ICN::SYSTEM, 11 + i ), 10, 6, out, 6, 2, 52, 14 );
-
-                    // add 'max'
-                    Blit( GetICN( ICN::RECRUIT, 4 + i ), 12, 6, out, 7, 3, 50, 12 );
-                }
-                return true;
             case ICN::BUTTON_NEW_GAME_GOOD:
             case ICN::BUTTON_NEW_GAME_EVIL:
             case ICN::BUTTON_SAVE_GAME_GOOD:
@@ -2230,8 +2517,10 @@ namespace fheroes2
             case ICN::BUTTON_SMALL_NO_EVIL:
             case ICN::BUTTON_SMALL_EXIT_GOOD:
             case ICN::BUTTON_SMALL_EXIT_EVIL:
-            case ICN::BUTTON_SMALLER_EXIT_GOOD:
-            case ICN::BUTTON_SMALLER_EXIT_EVIL:
+            case ICN::BUTTON_EXIT_HEROES_MEETING:
+            case ICN::BUTTON_EXIT_TOWN:
+            case ICN::BUTTON_EXIT_PUZZLE_DDOOR_EVIL:
+            case ICN::BUTTON_EXIT_PUZZLE_DDOOR_GOOD:
             case ICN::BUTTON_SMALL_DISMISS_GOOD:
             case ICN::BUTTON_SMALL_DISMISS_EVIL:
             case ICN::BUTTON_SMALL_UPGRADE_GOOD:
@@ -2278,11 +2567,16 @@ namespace fheroes2
             case ICN::BUTTON_SMALL_MAX_GOOD:
             case ICN::BUTTON_SMALL_MAX_EVIL:
             case ICN::BUTTON_GUILDWELL_EXIT:
+            case ICN::GOOD_CAMPAIGN_BUTTONS:
+            case ICN::EVIL_CAMPAIGN_BUTTONS:
+            case ICN::POL_CAMPAIGN_BUTTONS:
             case ICN::BUTTON_VIEWWORLD_EXIT_GOOD:
             case ICN::BUTTON_VIEWWORLD_EXIT_EVIL:
-            case ICN::BUTTON_DIFFICULTY_ARCHIBALD:
-            case ICN::BUTTON_DIFFICULTY_POL:
-            case ICN::BUTTON_DIFFICULTY_ROLAND:
+            case ICN::BUTTON_VERTICAL_DISMISS:
+            case ICN::BUTTON_VERTICAL_EXIT:
+            case ICN::BUTTON_HSCORES_VERTICAL_CAMPAIGN:
+            case ICN::BUTTON_HSCORES_VERTICAL_EXIT:
+            case ICN::BUTTON_HSCORES_VERTICAL_STANDARD:
                 generateLanguageSpecificImages( id );
                 return true;
             case ICN::PHOENIX:
@@ -2356,7 +2650,7 @@ namespace fheroes2
                 }
                 return true;
             case ICN::TROLL2MSL:
-                LoadOriginalICN( ICN::TROLLMSL );
+                loadICN( ICN::TROLLMSL );
                 if ( _icnVsSprite[ICN::TROLLMSL].size() == 1 ) {
                     _icnVsSprite[id].resize( 1 );
 
@@ -2454,9 +2748,9 @@ namespace fheroes2
                 LoadOriginalICN( id );
                 if ( _icnVsSprite[id].size() == 1 ) {
                     Sprite & out = _icnVsSprite[id][0];
-                    // The pixel pixel of the original sprite has a skip value
-                    if ( !out.empty() && out.transform()[0] == 1 ) {
-                        out.transform()[0] = 0;
+                    // The first pixel of the original sprite has incorrect color.
+                    if ( !out.empty() ) {
+                        out._disableTransformLayer();
                         out.image()[0] = 10;
                     }
                 }
@@ -2670,6 +2964,37 @@ namespace fheroes2
 
                 return true;
             }
+            case ICN::EDITPANL:
+                LoadOriginalICN( id );
+                if ( _icnVsSprite[id].size() > 5 ) {
+                    Sprite & erasePanel = _icnVsSprite[id][5];
+                    // To select object types for erasure we copy object buttons.
+                    Copy( _icnVsSprite[id][1], 15, 68, erasePanel, 15, 68, 114, 55 );
+
+                    // Make 3 empty buttons for terrain objects, roads and streams.
+                    Fill( erasePanel, 16, 69, 24, 24, 65U );
+                    Copy( erasePanel, 15, 68, erasePanel, 44, 96, 27, 27 );
+                    Copy( erasePanel, 15, 68, erasePanel, 73, 96, 27, 27 );
+
+                    // Make erase terrain objects button image.
+                    Image objectsImage( 24, 24 );
+                    Copy( GetICN( ICN::EDITBTNS, 2 ), 13, 4, objectsImage, 0, 0, 24, 24 );
+                    AddTransparency( objectsImage, 10U );
+                    AddTransparency( objectsImage, 38U );
+                    AddTransparency( objectsImage, 39U );
+                    AddTransparency( objectsImage, 40U );
+                    AddTransparency( objectsImage, 41U );
+                    AddTransparency( objectsImage, 46U );
+                    Blit( objectsImage, 0, 0, erasePanel, 16, 69, 24, 24 );
+
+                    // Make erase roads button image.
+                    Blit( GetICN( ICN::ROAD, 2 ), 0, 0, erasePanel, 45, 104, 24, 5 );
+                    Blit( GetICN( ICN::ROAD, 1 ), 1, 0, erasePanel, 45, 109, 24, 5 );
+
+                    // Make erase streams button image.
+                    Blit( GetICN( ICN::STREAM, 2 ), 0, 0, erasePanel, 74, 104, 24, 11 );
+                }
+                return true;
             case ICN::EDITOR:
                 LoadOriginalICN( id );
                 if ( !_icnVsSprite[id].empty() ) {
@@ -2681,12 +3006,12 @@ namespace fheroes2
                 LoadOriginalICN( id );
                 if ( !_icnVsSprite[id].empty() ) {
                     Sprite & original = _icnVsSprite[id][0];
-                    if ( original.width() == 640 && original.height() == 480 ) {
-                        // Fix incorrect pixel at position 260x305.
-                        replaceTransformPixel( original, 195460, 31 );
-                    }
                     // This is the main menu image which shouldn't have any transform layer.
                     original._disableTransformLayer();
+                    if ( original.width() == 640 && original.height() == 480 ) {
+                        // Fix incorrect pixel at position 260x305.
+                        original.image()[195460] = 31;
+                    }
                 }
                 return true;
             case ICN::TOWNBKG3:
@@ -2695,11 +3020,13 @@ namespace fheroes2
                 if ( !_icnVsSprite[id].empty() ) {
                     Sprite & original = _icnVsSprite[id][0];
                     if ( original.width() == 640 && original.height() == 256 ) {
-                        replaceTransformPixel( original, 51945, 17 );
-                        replaceTransformPixel( original, 61828, 25 );
-                        replaceTransformPixel( original, 64918, 164 );
-                        replaceTransformPixel( original, 77685, 18 );
-                        replaceTransformPixel( original, 84618, 19 );
+                        original._disableTransformLayer();
+                        uint8_t * imageData = original.image();
+                        imageData[51945] = 17;
+                        imageData[61828] = 25;
+                        imageData[64918] = 164;
+                        imageData[77685] = 18;
+                        imageData[84618] = 19;
                     }
                 }
                 return true;
@@ -2709,34 +3036,41 @@ namespace fheroes2
                 if ( _icnVsSprite[id].size() > 60 ) {
                     Sprite & original = _icnVsSprite[id][60];
                     if ( original.width() == 30 && original.height() == 22 ) {
-                        replaceTransformPixel( original, 5, 75 );
-                        replaceTransformPixel( original, 310, 48 );
-                        replaceTransformPixel( original, 358, 64 );
-                        replaceTransformPixel( original, 424, 65 );
+                        original._disableTransformLayer();
+                        uint8_t * imageData = original.image();
+                        imageData[5] = 75;
+                        imageData[310] = 48;
+                        imageData[358] = 64;
+                        imageData[424] = 65;
                     }
                 }
                 if ( _icnVsSprite[id].size() > 61 ) {
                     Sprite & original = _icnVsSprite[id][61];
                     if ( original.width() == 30 && original.height() == 22 ) {
-                        replaceTransformPixel( original, 51, 30 );
-                        replaceTransformPixel( original, 80, 28 );
-                        replaceTransformPixel( original, 81, 30 );
-                        replaceTransformPixel( original, 383, 24 );
-                        replaceTransformPixel( original, 445, 24 );
+                        original._disableTransformLayer();
+                        uint8_t * imageData = original.image();
+                        imageData[51] = 30;
+                        imageData[80] = 28;
+                        imageData[81] = 30;
+                        imageData[383] = 24;
+                        imageData[445] = 24;
                     }
                 }
                 if ( _icnVsSprite[id].size() > 65 ) {
                     Sprite & original = _icnVsSprite[id][65];
                     if ( original.width() == 30 && original.height() == 22 ) {
-                        replaceTransformPixel( original, 499, 60 );
-                        replaceTransformPixel( original, 601, 24 );
-                        replaceTransformPixel( original, 631, 28 );
+                        original._disableTransformLayer();
+                        uint8_t * imageData = original.image();
+                        imageData[499] = 60;
+                        imageData[601] = 24;
+                        imageData[631] = 28;
                     }
                 }
                 if ( _icnVsSprite[id].size() > 67 ) {
                     Sprite & original = _icnVsSprite[id][67];
                     if ( original.width() == 30 && original.height() == 22 ) {
-                        replaceTransformPixel( original, 42, 28 );
+                        original._disableTransformLayer();
+                        original.image()[42] = 28;
                     }
                 }
                 return true;
@@ -2746,7 +3080,8 @@ namespace fheroes2
                 if ( _icnVsSprite[id].size() > 1 ) {
                     Sprite & original = _icnVsSprite[id][1];
                     if ( original.width() == 30 && original.height() == 22 ) {
-                        replaceTransformPixel( original, 82, 244 );
+                        original._disableTransformLayer();
+                        original.image()[82] = 244;
                     }
                 }
                 return true;
@@ -2756,7 +3091,8 @@ namespace fheroes2
                 if ( !_icnVsSprite[id].empty() ) {
                     Sprite & original = _icnVsSprite[id][0];
                     if ( original.width() == 101 && original.height() == 93 ) {
-                        replaceTransformPixel( original, 9084, 77 );
+                        original._disableTransformLayer();
+                        original.image()[9084] = 77;
                     }
                 }
                 return true;
@@ -2766,10 +3102,12 @@ namespace fheroes2
                 if ( !_icnVsSprite[id].empty() ) {
                     Sprite & original = _icnVsSprite[id][0];
                     if ( original.width() == 101 && original.height() == 93 ) {
-                        replaceTransformPixel( original, 2314, 70 );
-                        replaceTransformPixel( original, 5160, 71 );
-                        replaceTransformPixel( original, 5827, 18 );
-                        replaceTransformPixel( original, 7474, 167 );
+                        original._disableTransformLayer();
+                        uint8_t * imageData = original.image();
+                        imageData[2314] = 70;
+                        imageData[5160] = 71;
+                        imageData[5827] = 18;
+                        imageData[7474] = 167;
                     }
                 }
                 return true;
@@ -2779,8 +3117,10 @@ namespace fheroes2
                 if ( !_icnVsSprite[id].empty() ) {
                     Sprite & original = _icnVsSprite[id][0];
                     if ( original.width() == 101 && original.height() == 93 ) {
-                        replaceTransformPixel( original, 2028, 42 );
-                        replaceTransformPixel( original, 6674, 100 );
+                        original._disableTransformLayer();
+                        uint8_t * imageData = original.image();
+                        imageData[2028] = 42;
+                        imageData[6674] = 100;
                     }
                 }
                 return true;
@@ -2790,7 +3130,8 @@ namespace fheroes2
                 if ( !_icnVsSprite[id].empty() ) {
                     Sprite & original = _icnVsSprite[id][0];
                     if ( original.width() == 101 && original.height() == 93 ) {
-                        replaceTransformPixel( original, 2230, 212 );
+                        original._disableTransformLayer();
+                        original.image()[2230] = 212;
                     }
                 }
                 return true;
@@ -2800,23 +3141,21 @@ namespace fheroes2
                     // Statue image has bad pixels.
                     Sprite & original = _icnVsSprite[id][7];
                     if ( original.width() == 135 && original.height() == 57 ) {
-                        replaceTransformPixel( original, 3687, 50 );
-                        replaceTransformPixel( original, 5159, 108 );
-                        replaceTransformPixel( original, 5294, 108 );
+                        original._disableTransformLayer();
+                        uint8_t * imageData = original.image();
+                        imageData[3687] = 50;
+                        imageData[5159] = 108;
+                        imageData[5294] = 108;
                     }
                 }
-                if ( _icnVsSprite[id].size() >= 24 ) {
+                if ( _icnVsSprite[id].size() > 28 ) {
                     // Mage tower image has a bad pixel.
-                    Sprite & original = _icnVsSprite[id][23];
-                    if ( original.width() == 135 && original.height() == 57 ) {
-                        replaceTransformPixel( original, 4333, 23 );
-                    }
-                }
-                if ( _icnVsSprite[id].size() >= 29 ) {
-                    // Mage tower image has a bad pixel.
-                    Sprite & original = _icnVsSprite[id][28];
-                    if ( original.width() == 135 && original.height() == 57 ) {
-                        replaceTransformPixel( original, 4333, 23 );
+                    for ( const uint32_t index : { 23, 28 } ) {
+                        Sprite & original = _icnVsSprite[id][index];
+                        if ( original.width() == 135 && original.height() == 57 ) {
+                            original._disableTransformLayer();
+                            original.image()[4333] = 23;
+                        }
                     }
                 }
                 return true;
@@ -2826,7 +3165,8 @@ namespace fheroes2
                 if ( _icnVsSprite[id].size() >= 2 ) {
                     Sprite & original = _icnVsSprite[id][1];
                     if ( original.width() == 84 && original.height() == 81 ) {
-                        replaceTransformPixel( original, 4934, 18 );
+                        original._disableTransformLayer();
+                        original.image()[4934] = 18;
                     }
                 }
                 return true;
@@ -2836,10 +3176,12 @@ namespace fheroes2
                 if ( !_icnVsSprite[id].empty() ) {
                     Sprite & original = _icnVsSprite[id][0];
                     if ( original.width() == 84 && original.height() == 81 ) {
-                        replaceTransformPixel( original, 1692, 26 );
-                        replaceTransformPixel( original, 2363, 32 );
-                        replaceTransformPixel( original, 2606, 21 );
-                        replaceTransformPixel( original, 2608, 21 );
+                        original._disableTransformLayer();
+                        uint8_t * imageData = original.image();
+                        imageData[1692] = 26;
+                        imageData[2363] = 32;
+                        imageData[2606] = 21;
+                        imageData[2608] = 21;
                     }
                 }
                 return true;
@@ -2849,31 +3191,35 @@ namespace fheroes2
                     // Rainbow has bad pixels.
                     Sprite & original = _icnVsSprite[id][13];
                     if ( original.width() == 135 && original.height() == 57 ) {
-                        replaceTransformPixel( original, 2047, 160 );
-                        replaceTransformPixel( original, 2052, 159 );
-                        replaceTransformPixel( original, 2055, 160 );
-                        replaceTransformPixel( original, 2060, 67 );
-                        replaceTransformPixel( original, 2063, 159 );
-                        replaceTransformPixel( original, 2067, 67 );
-                        replaceTransformPixel( original, 2184, 67 );
-                        replaceTransformPixel( original, 2192, 158 );
-                        replaceTransformPixel( original, 3508, 67 );
-                        replaceTransformPixel( original, 3641, 67 );
-                        replaceTransformPixel( original, 3773, 69 );
-                        replaceTransformPixel( original, 3910, 67 );
-                        replaceTransformPixel( original, 4039, 69 );
-                        replaceTransformPixel( original, 4041, 67 );
-                        replaceTransformPixel( original, 4172, 67 );
-                        replaceTransformPixel( original, 4578, 69 );
+                        original._disableTransformLayer();
+                        uint8_t * imageData = original.image();
+                        imageData[2047] = 160;
+                        imageData[2052] = 159;
+                        imageData[2055] = 160;
+                        imageData[2060] = 67;
+                        imageData[2063] = 159;
+                        imageData[2067] = 67;
+                        imageData[2184] = 67;
+                        imageData[2192] = 158;
+                        imageData[3508] = 67;
+                        imageData[3641] = 67;
+                        imageData[3773] = 69;
+                        imageData[3910] = 67;
+                        imageData[4039] = 69;
+                        imageData[4041] = 67;
+                        imageData[4172] = 67;
+                        imageData[4578] = 69;
                     }
                 }
                 if ( _icnVsSprite[id].size() >= 25 ) {
                     // Red tower has bad pixels.
                     Sprite & original = _icnVsSprite[id][24];
                     if ( original.width() == 135 && original.height() == 57 ) {
-                        replaceTransformPixel( original, 2830, 165 );
-                        replaceTransformPixel( original, 3101, 165 );
-                        replaceTransformPixel( original, 3221, 69 );
+                        original._disableTransformLayer();
+                        uint8_t * imageData = original.image();
+                        imageData[2830] = 165;
+                        imageData[3101] = 165;
+                        imageData[3221] = 69;
                     }
                 }
                 return true;
@@ -2916,31 +3262,15 @@ namespace fheroes2
                 return true;
             }
             case ICN::DISMISS_HERO_DISABLED_BUTTON:
-            case ICN::NEW_CAMPAIGN_DISABLED_BUTTON:
-            case ICN::MAX_DISABLED_BUTTON: {
+            case ICN::NEW_CAMPAIGN_DISABLED_BUTTON: {
                 _icnVsSprite[id].resize( 1 );
+
+                int buttonIcnId = ( id == ICN::DISMISS_HERO_DISABLED_BUTTON ) ? ICN::BUTTON_VERTICAL_DISMISS : ICN::BUTTON_CAMPAIGN_GAME;
+
+                const Sprite & released = GetICN( buttonIcnId, 0 );
+                const Sprite & pressed = GetICN( buttonIcnId, 1 );
+
                 Sprite & output = _icnVsSprite[id][0];
-
-                int buttonIcnId = ICN::UNKNOWN;
-                uint32_t startIcnId = 0;
-
-                if ( id == ICN::DISMISS_HERO_DISABLED_BUTTON ) {
-                    buttonIcnId = ICN::HSBTNS;
-                    startIcnId = 0;
-                }
-                else if ( id == ICN::NEW_CAMPAIGN_DISABLED_BUTTON ) {
-                    buttonIcnId = ICN::BTNNEWGM;
-                    startIcnId = 2;
-                }
-                else if ( id == ICN::MAX_DISABLED_BUTTON ) {
-                    buttonIcnId = ICN::RECRUIT;
-                    startIcnId = 4;
-                }
-
-                assert( buttonIcnId != ICN::UNKNOWN ); // Did you add a new disabled button and forget to add the condition above?
-
-                const Sprite & released = GetICN( buttonIcnId, startIcnId );
-                const Sprite & pressed = GetICN( buttonIcnId, startIcnId + 1 );
                 output = released;
 
                 ApplyPalette( output, PAL::GetPalette( PAL::PaletteType::DARKENING ) );
@@ -3010,6 +3340,7 @@ namespace fheroes2
                     // fix missing black border on the right side of the "up" button
                     Sprite & out = _icnVsSprite[id][4];
                     if ( out.width() == 16 && out.height() == 16 ) {
+                        out._disableTransformLayer();
                         Copy( out, 0, 0, out, 15, 0, 1, 16 );
                     }
                 }
@@ -3018,6 +3349,7 @@ namespace fheroes2
                 // TODO: add a new icon for the Resurrection add-on map type.
                 _icnVsSprite[id].resize( 2 );
                 for ( Sprite & icon : _icnVsSprite[id] ) {
+                    icon._disableTransformLayer();
                     icon.resize( 17, 17 );
                     icon.fill( 0 );
                 }
@@ -3072,10 +3404,11 @@ namespace fheroes2
             case ICN::GOOD_MARKET_BUTTON: {
                 _icnVsSprite[id].resize( 2 );
 
-                LoadOriginalICN( ICN::ADVBTNS );
+                loadICN( ICN::ADVBTNS );
+
                 const int releasedIndex = ( id == ICN::GOOD_ARMY_BUTTON ) ? 0 : 4;
-                _icnVsSprite[id][0] = GetICN( ICN::ADVBTNS, releasedIndex );
-                _icnVsSprite[id][1] = GetICN( ICN::ADVBTNS, releasedIndex + 1 );
+                Copy( GetICN( ICN::ADVBTNS, releasedIndex ), _icnVsSprite[id][0] );
+                Copy( GetICN( ICN::ADVBTNS, releasedIndex + 1 ), _icnVsSprite[id][1] );
 
                 // Make all black pixels transparent.
                 AddTransparency( _icnVsSprite[id][0], 36 );
@@ -3088,10 +3421,11 @@ namespace fheroes2
             case ICN::EVIL_MARKET_BUTTON: {
                 _icnVsSprite[id].resize( 2 );
 
-                LoadOriginalICN( ICN::ADVEBTNS );
+                loadICN( ICN::ADVEBTNS );
+
                 const int releasedIndex = ( id == ICN::EVIL_ARMY_BUTTON ) ? 0 : 4;
-                _icnVsSprite[id][0] = GetICN( ICN::ADVEBTNS, releasedIndex );
-                _icnVsSprite[id][1] = GetICN( ICN::ADVEBTNS, releasedIndex + 1 );
+                Copy( GetICN( ICN::ADVEBTNS, releasedIndex ), _icnVsSprite[id][0] );
+                Copy( GetICN( ICN::ADVEBTNS, releasedIndex + 1 ), _icnVsSprite[id][1] );
 
                 // Make all black pixels transparent.
                 AddTransparency( _icnVsSprite[id][0], 36 );
@@ -3179,40 +3513,6 @@ namespace fheroes2
                 }
                 return true;
             }
-            case ICN::HSBTNS: {
-                LoadOriginalICN( id );
-                if ( _icnVsSprite[id].size() >= 4 ) {
-                    // extract the EXIT button without background
-                    Sprite exitReleased = _icnVsSprite[id][2];
-                    Sprite exitPressed = _icnVsSprite[id][3];
-
-                    // make the border parts around EXIT button transparent
-                    Image exitCommonMask = ExtractCommonPattern( { &exitReleased, &exitPressed } );
-                    invertTransparency( exitCommonMask );
-
-                    CopyTransformLayer( exitCommonMask, exitReleased );
-                    CopyTransformLayer( exitCommonMask, exitPressed );
-
-                    // fix DISMISS button: get the EXIT button, then slap the text back
-                    Sprite & dismissReleased = _icnVsSprite[id][0];
-
-                    Sprite tmpReleased = dismissReleased;
-                    Blit( exitReleased, 0, 0, tmpReleased, 5, 0, 27, 120 );
-                    Blit( dismissReleased, 9, 4, tmpReleased, 9, 4, 19, 110 );
-
-                    dismissReleased = std::move( tmpReleased );
-
-                    Sprite & dismissPressed = _icnVsSprite[id][1];
-
-                    // start with the released state as well to capture more details
-                    Sprite tmpPressed = dismissReleased;
-                    Blit( exitPressed, 0, 0, tmpPressed, 5, 0, 27, 120 );
-                    Blit( dismissPressed, 9, 5, tmpPressed, 8, 5, 19, 110 );
-
-                    dismissPressed = std::move( tmpPressed );
-                }
-                return true;
-            }
             case ICN::TWNWUP_5: {
                 LoadOriginalICN( id );
                 if ( !_icnVsSprite[id].empty() && _icnVsSprite[id].front().width() == 84 && _icnVsSprite[id].front().height() == 256 ) {
@@ -3223,7 +3523,7 @@ namespace fheroes2
                 return true;
             }
             case ICN::MONO_CURSOR_ADVMBW: {
-                LoadOriginalICN( ICN::ADVMCO );
+                loadICN( ICN::ADVMCO );
 
                 _icnVsSprite[id].resize( _icnVsSprite[ICN::ADVMCO].size() );
                 for ( size_t i = 0; i < _icnVsSprite[id].size(); ++i ) {
@@ -3238,7 +3538,7 @@ namespace fheroes2
                 return true;
             }
             case ICN::MONO_CURSOR_SPELBW: {
-                LoadOriginalICN( ICN::SPELCO );
+                loadICN( ICN::SPELCO );
 
                 _icnVsSprite[id].resize( _icnVsSprite[ICN::SPELCO].size() );
                 for ( size_t i = 0; i < _icnVsSprite[id].size(); ++i ) {
@@ -3253,7 +3553,7 @@ namespace fheroes2
                 return true;
             }
             case ICN::MONO_CURSOR_CMSSBW: {
-                LoadOriginalICN( ICN::CMSECO );
+                loadICN( ICN::CMSECO );
 
                 _icnVsSprite[id].resize( _icnVsSprite[ICN::CMSECO].size() );
                 for ( size_t i = 0; i < _icnVsSprite[id].size(); ++i ) {
@@ -3267,6 +3567,84 @@ namespace fheroes2
                 }
                 return true;
             }
+            case ICN::ADVBTNS:
+            case ICN::ADVEBTNS:
+                LoadOriginalICN( id );
+                if ( _icnVsSprite[id].size() == 16 && _icnVsSprite[id][2].width() == 36 && _icnVsSprite[id][2].height() == 36 && _icnVsSprite[id][3].width() == 36
+                     && _icnVsSprite[id][3].height() == 36 ) {
+                    // Add hero action button released and pressed.
+                    _icnVsSprite[id].resize( 18 );
+                    Copy( _icnVsSprite[id][2], _icnVsSprite[id][16] );
+                    Copy( _icnVsSprite[id][3], _icnVsSprite[id][17] );
+
+                    // Get the button's icon colors.
+                    const uint8_t mainReleasedColor = _icnVsSprite[id][2].image()[7 * 36 + 26];
+                    const uint8_t mainPressedColor = _icnVsSprite[id][3].image()[8 * 36 + 25];
+                    const uint8_t backgroundReleasedColor = _icnVsSprite[id][2].image()[1 * 36 + 5];
+                    const uint8_t backgroundPressedColor = _icnVsSprite[id][3].image()[5 * 36 + 6];
+
+                    // Clean-up the buttons' background
+                    Fill( _icnVsSprite[id][16], 23, 5, 8, 5, backgroundReleasedColor );
+                    Fill( _icnVsSprite[id][16], 8, 10, 24, 8, backgroundReleasedColor );
+                    Fill( _icnVsSprite[id][16], 6, 18, 24, 10, backgroundReleasedColor );
+                    Fill( _icnVsSprite[id][17], 22, 6, 8, 5, backgroundPressedColor );
+                    Fill( _icnVsSprite[id][17], 7, 11, 24, 8, backgroundPressedColor );
+                    Fill( _icnVsSprite[id][17], 5, 19, 24, 10, backgroundPressedColor );
+
+                    // Get the action cursor and prepare it for button. We make it a little smaller.
+                    const Sprite & originalActionCursor = GetICN( ICN::ADVMCO, 9 );
+                    const int32_t actionCursorWidth = originalActionCursor.width() - 1;
+                    const int32_t actionCursorHeight = originalActionCursor.height() - 3;
+                    Image actionCursor( actionCursorWidth, actionCursorHeight );
+                    actionCursor.reset();
+
+                    // Head.
+                    Copy( originalActionCursor, 19, 1, actionCursor, 17, 2, 8, 5 );
+                    Copy( originalActionCursor, 16, 7, actionCursor, 14, 7, 12, 2 );
+                    actionCursor.transform()[15 + 7 * actionCursorWidth] = 1U;
+                    // Tail.
+                    Copy( originalActionCursor, 1, 10, actionCursor, 1, 9, 12, 11 );
+                    // Middle part.
+                    Copy( originalActionCursor, 14, 10, actionCursor, 13, 9, 1, 11 );
+                    // Front legs.
+                    Copy( originalActionCursor, 16, 10, actionCursor, 14, 9, 13, 11 );
+                    // Hind legs.
+                    Copy( originalActionCursor, 7, 22, actionCursor, 7, 19, 7, 7 );
+
+                    // Make contour transparent and the horse figure filled with solid color.
+                    const int32_t actionCursorSize = actionCursorWidth * actionCursorHeight;
+                    for ( int32_t i = 0; i < actionCursorSize; ++i ) {
+                        if ( actionCursor.transform()[i] == 1U ) {
+                            // Skip transparent pixel.
+                            continue;
+                        }
+                        if ( actionCursor.image()[i] < 152U ) {
+                            // It is the contour color, make it transparent.
+                            actionCursor.transform()[i] = 1U;
+                        }
+                        else {
+                            actionCursor.image()[i] = mainPressedColor;
+                        }
+                    }
+
+                    // Add shadows to the horse image.
+                    updateShadow( actionCursor, { 1, -1 }, 2, true );
+                    updateShadow( actionCursor, { -1, 1 }, 6, true );
+                    updateShadow( actionCursor, { 2, -2 }, 4, true );
+                    Blit( actionCursor, _icnVsSprite[id][17], 4, 4 );
+
+                    // Replace colors for the released button.
+                    for ( int32_t i = 0; i < actionCursorSize; ++i ) {
+                        if ( actionCursor.transform()[i] == 6U ) {
+                            // Disable whitening transform and set white color.
+                            actionCursor.transform()[i] = 0U;
+                            actionCursor.image()[i] = 10U;
+                        }
+                    }
+                    ReplaceColorId( actionCursor, mainPressedColor, mainReleasedColor );
+                    Blit( actionCursor, _icnVsSprite[id][16], 5, 3 );
+                }
+                return true;
             case ICN::ARTIFACT:
                 LoadOriginalICN( id );
                 if ( _icnVsSprite[id].size() > 99 ) {
@@ -3275,6 +3653,7 @@ namespace fheroes2
                         Sprite & originalImage = _icnVsSprite[id][index];
                         Sprite temp( originalImage.width(), originalImage.height() );
                         temp.setPosition( originalImage.x(), originalImage.y() );
+                        temp._disableTransformLayer();
                         temp.fill( 0 );
                         Blit( originalImage, temp );
                         originalImage = std::move( temp );
@@ -3464,6 +3843,22 @@ namespace fheroes2
 
                 return true;
             }
+            case ICN::STONEBAK_SMALL_POL: {
+                _icnVsSprite[id].resize( 1 );
+                const fheroes2::Sprite & original = GetICN( ICN::X_CMPBKG, 0 );
+                if ( !original.empty() ) {
+                    _icnVsSprite[id][0] = Crop( original, original.width() - 272, original.height() - 52, 244, 28 );
+                }
+                return true;
+            }
+            case ICN::REDBAK_SMALL_VERTICAL: {
+                _icnVsSprite[id].resize( 1 );
+                const fheroes2::Sprite & original = GetICN( ICN::HEROBKG, 0 );
+                if ( !original.empty() ) {
+                    _icnVsSprite[id][0] = Crop( original, 0, 0, 37, 230 );
+                }
+                return true;
+            }
             case ICN::WELLBKG_EVIL: {
                 GetICN( ICN::WELLBKG, 0 );
                 _icnVsSprite[id] = _icnVsSprite[ICN::WELLBKG];
@@ -3500,34 +3895,6 @@ namespace fheroes2
 
                 const Rect roi( 0, 0, _icnVsSprite[id][0].width(), _icnVsSprite[id][0].height() - 7 );
                 convertToEvilInterface( _icnVsSprite[id][0], roi );
-
-                return true;
-            }
-            case ICN::GOOD_CAMPAIGN_BUTTONS:
-            case ICN::EVIL_CAMPAIGN_BUTTONS: {
-                auto & image = _icnVsSprite[id];
-                image.resize( 8 );
-
-                const int originalIcnId = ( id == ICN::GOOD_CAMPAIGN_BUTTONS ) ? ICN::CAMPXTRG : ICN::CAMPXTRE;
-
-                // The evil buttons' pressed state need to be 2 pixels wider.
-                const int offsetEvilX = ( id == ICN::GOOD_CAMPAIGN_BUTTONS ) ? 0 : 2;
-
-                for ( int32_t i = 0; i < 4; ++i ) {
-                    // The released state image.
-                    image[2 * i] = GetICN( originalIcnId, 2 * i );
-
-                    // The pressed state image.
-                    const Sprite & original = GetICN( originalIcnId, 2 * i + 1 );
-
-                    Sprite & resized = image[2 * i + 1];
-                    // Change pressed state image to have same width and height as released image
-                    resized.resize( image[2 * i].width() + offsetEvilX, image[2 * i].height() );
-                    resized.reset();
-
-                    // Restore content of the pressed state image.
-                    Copy( original, 0, 0, resized, original.x(), original.y(), original.width() + offsetEvilX, original.height() );
-                }
 
                 return true;
             }
@@ -3610,7 +3977,7 @@ namespace fheroes2
             case ICN::MINI_MONSTER_IMAGE:
             case ICN::MINI_MONSTER_SHADOW: {
                 // It doesn't matter which image is being called. We are generating both of them at the same time.
-                LoadOriginalICN( ICN::MINIMON );
+                loadICN( ICN::MINIMON );
 
                 // Minotaur King original Adventure map sprite has blue armlets. We make them gold to correspond the ICN::MINOTAU2.
                 if ( _icnVsSprite[ICN::MINIMON].size() > 303 ) {
@@ -3713,11 +4080,12 @@ namespace fheroes2
             }
             case ICN::EMPTY_GOOD_BUTTON:
             case ICN::EMPTY_EVIL_BUTTON: {
-                const int32_t originalId = ( id == ICN::EMPTY_GOOD_BUTTON ) ? ICN::SYSTEM : ICN::SYSTEME;
-                LoadOriginalICN( originalId );
+                const bool isGoodInterface = ( id == ICN::EMPTY_GOOD_BUTTON );
+                const int32_t originalId = isGoodInterface ? ICN::SYSTEM : ICN::SYSTEME;
+                loadICN( originalId );
 
                 if ( _icnVsSprite[originalId].size() < 13 ) {
-                    break;
+                    return true;
                 }
 
                 _icnVsSprite[id].resize( 2 );
@@ -3726,34 +4094,109 @@ namespace fheroes2
                 Sprite & pressed = _icnVsSprite[id][1];
 
                 released = _icnVsSprite[originalId][11];
-                pressed = _icnVsSprite[originalId][12];
 
-                if ( pressed.width() > 2 && pressed.height() > 2 ) {
+                // fix single bright pixel in the left part of the text area of the released state buttons
+                Fill( released, 8, 7, 1, 1, getButtonFillingColor( true, isGoodInterface ) );
+
+                const Sprite & originalPressed = GetICN( originalId, 12 );
+
+                if ( originalPressed.width() > 2 && originalPressed.height() > 2 ) {
+                    pressed.resize( originalPressed.width(), originalPressed.height() );
+                    // copy the original pressed button but add the missing darker leftside border from the released state
+                    Copy( released, 0, 0, pressed, 0, 0, 1, released.height() );
+                    Copy( originalPressed, 0, 0, pressed, 1, 0, originalPressed.width() - 1, originalPressed.height() );
+
                     // Make the background transparent.
-                    FillTransform( pressed, 0, 0, pressed.width(), 1, 1 );
-                    FillTransform( pressed, pressed.width() - 2, 1, 2, pressed.height() - 1, 1 );
+                    FillTransform( pressed, 1, 0, pressed.width() - 1, 1, 1 );
+                    FillTransform( pressed, pressed.width() - 1, 1, 1, pressed.height() - 1, 1 );
 
-                    FillTransform( pressed, 0, 1, 2, 1, 1 );
-                    FillTransform( pressed, 0, 2, 1, 1, 1 );
+                    FillTransform( pressed, 1, 1, 2, 1, 1 );
+                    FillTransform( pressed, 1, 2, 1, 1, 1 );
 
-                    FillTransform( pressed, pressed.width() - 4, 1, 2, 1, 1 );
-                    FillTransform( pressed, pressed.width() - 3, 2, 1, 1, 1 );
+                    FillTransform( pressed, pressed.width() - 3, 1, 2, 1, 1 );
+                    FillTransform( pressed, pressed.width() - 2, 2, 1, 1, 1 );
 
-                    FillTransform( pressed, pressed.width() - 5, pressed.height() - 1, 3, 1, 1 );
-                    FillTransform( pressed, pressed.width() - 4, pressed.height() - 2, 2, 1, 1 );
-                    FillTransform( pressed, pressed.width() - 3, pressed.height() - 3, 1, 1, 1 );
+                    FillTransform( pressed, pressed.width() - 4, pressed.height() - 1, 3, 1, 1 );
+                    FillTransform( pressed, pressed.width() - 3, pressed.height() - 2, 2, 1, 1 );
+                    FillTransform( pressed, pressed.width() - 2, pressed.height() - 3, 1, 1, 1 );
                 }
 
-                break;
+                return true;
+            }
+            case ICN::EMPTY_POL_BUTTON: {
+                const int originalID = ICN::X_CMPBTN;
+                loadICN( originalID );
+
+                if ( _icnVsSprite[originalID].size() < 8 ) {
+                    return true;
+                }
+
+                _icnVsSprite[id].resize( 2 );
+                // move dark border to new released state from original pressed state button
+                const Sprite & originalReleased = GetICN( originalID, 4 );
+                const Sprite & originalPressed = GetICN( originalID, 5 );
+                if ( originalReleased.width() != 94 && originalPressed.width() != 94 && originalReleased.height() < 5 && originalPressed.height() < 5 ) {
+                    return true;
+                }
+                Sprite & releasedWithDarkBorder = _icnVsSprite[id][0];
+                releasedWithDarkBorder.resize( originalReleased.width() + 2, originalReleased.height() + 1 );
+                releasedWithDarkBorder.reset();
+
+                Copy( originalReleased, 0, 0, releasedWithDarkBorder, 1, 0, originalReleased.width(), originalReleased.height() );
+                Copy( originalReleased, 0, 2, releasedWithDarkBorder, 1, 21, 1, 1 );
+                Copy( originalReleased, 0, 2, releasedWithDarkBorder, 2, 22, 1, 1 );
+                Copy( originalPressed, 0, 2, releasedWithDarkBorder, 0, 3, 1, 19 );
+                Copy( originalPressed, 0, originalPressed.height() - 1, releasedWithDarkBorder, 0, originalPressed.height(), originalPressed.width(), 1 );
+                Copy( originalPressed, 0, 2, releasedWithDarkBorder, 1, 22, 1, 1 );
+
+                // pressed state
+                Sprite & pressed = _icnVsSprite[id][1];
+                pressed.resize( originalPressed.width() + 2, originalPressed.height() + 1 );
+                pressed.reset();
+                Copy( originalPressed, 0, 0, pressed, 0, 1, originalPressed.width(), originalPressed.height() );
+
+                // the empty buttons need to be widened by 1 px so that they can be evenly divided by 3 in resizeButton() in ui_tools.cpp
+                Copy( originalReleased, originalReleased.width() - 5, 0, releasedWithDarkBorder, releasedWithDarkBorder.width() - 5, 0, 5, originalReleased.height() );
+                Copy( originalPressed, originalPressed.width() - 5, 0, pressed, pressed.width() - 6, 1, 5, originalPressed.height() );
+
+                const int32_t pixelPosition = 4 * 94 + 6;
+                Fill( releasedWithDarkBorder, 5, 3, 88, 18, originalReleased.image()[pixelPosition] );
+                Fill( pressed, 4, 5, 87, 17, originalPressed.image()[pixelPosition] );
+
+                return true;
+            }
+            case ICN::EMPTY_GUILDWELL_BUTTON: {
+                const int originalID = ICN::WELLXTRA;
+                loadICN( originalID );
+
+                if ( _icnVsSprite[originalID].size() < 3 ) {
+                    return true;
+                }
+                _icnVsSprite[id].resize( 2 );
+
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    const Sprite & original = GetICN( originalID, 0 + i );
+
+                    Sprite & out = _icnVsSprite[id][i];
+                    // the empty button needs to shortened by 1 px so that when it is divided by 3 in resizeButton() in ui_tools.h it will give an integer result
+                    out.resize( original.width() - 1, original.height() );
+
+                    Copy( original, 0, 0, out, 0, 0, original.width() - 4, original.height() );
+                    Copy( original, original.width() - 3, 0, out, original.width() - 4, 0, 3, original.height() );
+
+                    Fill( out, 7 - i * 2, 2 + i, 50 + i, 14, getButtonFillingColor( i == 0 ) );
+                }
+
+                return true;
             }
             case ICN::EMPTY_GOOD_MEDIUM_BUTTON:
             case ICN::EMPTY_EVIL_MEDIUM_BUTTON: {
                 const bool isGoodInterface = ( id == ICN::EMPTY_GOOD_MEDIUM_BUTTON );
                 const int32_t originalId = isGoodInterface ? ICN::APANEL : ICN::APANELE;
-                LoadOriginalICN( originalId );
+                loadICN( originalId );
 
                 if ( _icnVsSprite[originalId].size() < 10 ) {
-                    break;
+                    return true;
                 }
 
                 _icnVsSprite[id].resize( 2 );
@@ -3770,7 +4213,72 @@ namespace fheroes2
                     Fill( pressed, 27, 16, 42, 27, getButtonFillingColor( false, isGoodInterface ) );
                 }
 
-                break;
+                return true;
+            }
+            case ICN::EMPTY_VERTICAL_GOOD_BUTTON: {
+                const int32_t originalId = ICN::HSBTNS;
+                loadICN( originalId );
+
+                if ( _icnVsSprite[originalId].size() < 9 ) {
+                    return true;
+                }
+
+                _icnVsSprite[id].resize( 2 );
+                const Sprite & originalReleased = GetICN( originalId, 2 );
+                const Sprite & originalPressed = GetICN( originalId, 3 );
+
+                Sprite & released = _icnVsSprite[id][0];
+                Sprite & pressed = _icnVsSprite[id][1];
+
+                if ( originalReleased.width() > 2 && originalReleased.height() > 2 && originalPressed.width() > 2 && originalPressed.height() > 2 ) {
+                    released.resize( originalReleased.width() + 1, originalReleased.height() + 1 );
+                    pressed.resize( originalPressed.width() + 1, originalPressed.height() + 1 );
+                    released.reset();
+                    pressed.reset();
+
+                    Copy( originalReleased, 0, 0, released, 1, 0, originalReleased.width(), originalReleased.height() );
+                    Copy( originalPressed, 0, 0, pressed, 1, 0, originalPressed.width(), originalPressed.height() );
+                    FillTransform( released, 1, 4, 1, released.height() - 4, 1 );
+
+                    // Fix the carried over broken transform layer of the original vertical button that is being used.
+                    Image exitCommonMask = ExtractCommonPattern( { &released, &pressed } );
+                    // Fix wrong non-transparent pixels of the transform layer that ExtractCommonPattern() missed.
+                    FillTransform( exitCommonMask, 4, 2, 1, 115, 1 );
+                    FillTransform( exitCommonMask, 5, 116, 1, 1, 1 );
+                    FillTransform( exitCommonMask, 5, 117, 18, 1, 1 );
+                    FillTransform( exitCommonMask, exitCommonMask.width() - 4, 114, 1, 2, 1 );
+
+                    invertTransparency( exitCommonMask );
+                    // Make the extended width and height lines transparent.
+                    FillTransform( exitCommonMask, 0, 0, 1, exitCommonMask.height(), 1 );
+                    FillTransform( exitCommonMask, exitCommonMask.width() - 4, exitCommonMask.height() - 1, 4, 1, 1 );
+
+                    CopyTransformLayer( exitCommonMask, released );
+                    CopyTransformLayer( exitCommonMask, pressed );
+
+                    // Restore dark-brown lines on the left and bottom borders of the button backgrounds.
+                    const Sprite & originalDismiss = GetICN( ICN::HSBTNS, 0 );
+
+                    Copy( originalReleased, 0, 4, released, 1, 4, 1, released.height() - 4 );
+                    Copy( originalDismiss, 6, originalDismiss.height() - 7, released, 2, released.height() - 1, 22, 1 );
+                    Copy( originalDismiss, 6, originalDismiss.height() - 7, released, 1, released.height() - 1, 1, 1 );
+
+                    Copy( originalPressed, 0, 4, pressed, 1, 4, 1, pressed.height() - 4 );
+                    Copy( originalDismiss, 6, originalDismiss.height() - 7, pressed, 2, pressed.height() - 1, 22, 1 );
+                    Copy( originalDismiss, 6, originalDismiss.height() - 7, pressed, 1, pressed.height() - 1, 1, 1 );
+
+                    // Clean the button states' text areas.
+                    Fill( released, 6, 4, 18, 111, getButtonFillingColor( true ) );
+                    Fill( pressed, 5, 5, 18, 111, getButtonFillingColor( false ) );
+
+                    // Make the background transparent by removing remaining red background pieces.
+                    FillTransform( pressed, 5, 0, 21, 1, 1 );
+                    FillTransform( pressed, pressed.width() - 3, 1, 2, 1, 1 );
+                    FillTransform( pressed, pressed.width() - 2, 2, 2, 1, 1 );
+                    FillTransform( pressed, pressed.width() - 1, 3, 1, pressed.height() - 6, 1 );
+                }
+
+                return true;
             }
             case ICN::BRCREST: {
                 LoadOriginalICN( id );
@@ -3778,7 +4286,8 @@ namespace fheroes2
                 if ( !_icnVsSprite[id].empty() ) {
                     Sprite & original = _icnVsSprite[id][0];
                     if ( original.width() == 50 && original.height() == 47 ) {
-                        replaceTransformPixel( original, 280, 117 );
+                        original._disableTransformLayer();
+                        original.image()[280] = 117;
                     }
                 }
                 return true;
@@ -3789,8 +4298,18 @@ namespace fheroes2
                 if ( !_icnVsSprite[id].empty() ) {
                     Sprite & original = _icnVsSprite[id][0];
                     if ( original.width() == 640 && original.height() == 443 ) {
-                        replaceTransformPixel( original, 23165, 24 );
+                        original._disableTransformLayer();
+                        original.image()[23165] = 24;
                     }
+                }
+                return true;
+            }
+            case ICN::SWAPWIN:
+            case ICN::WELLBKG: {
+                // Hero Meeting dialog and Castle Well images can be used with disabled transform layer.
+                LoadOriginalICN( id );
+                if ( !_icnVsSprite[id].empty() ) {
+                    _icnVsSprite[id][0]._disableTransformLayer();
                 }
                 return true;
             }
@@ -3799,7 +4318,30 @@ namespace fheroes2
 
                 h2d::readImage( "hotkeys_icon.image", _icnVsSprite[id][0] );
                 h2d::readImage( "graphics_icon.image", _icnVsSprite[id][1] );
-                break;
+
+                return true;
+            }
+            case ICN::COVR0010:
+            case ICN::COVR0011:
+            case ICN::COVR0012: {
+                // The original image contains some foreign pixels that do not belong to the image.
+                LoadOriginalICN( id );
+
+                if ( !_icnVsSprite[id].empty() ) {
+                    Sprite & sprite = _icnVsSprite[id][0];
+                    const uint8_t * image = sprite.image();
+                    const uint8_t * imageEnd = image + static_cast<size_t>( sprite.width() ) * sprite.height();
+                    uint8_t * transform = sprite.transform();
+
+                    for ( ; image != imageEnd; ++image, ++transform ) {
+                        // Mask all non white/black or brown pixels.
+                        if ( *transform == 0 && *image > 36 && ( *image < 108 || *image > 130 ) ) {
+                            *transform = 1;
+                        }
+                    }
+                }
+
+                return true;
             }
             default:
                 break;
@@ -3808,11 +4350,21 @@ namespace fheroes2
             return false;
         }
 
-        size_t GetMaximumICNIndex( int id )
+        void loadICN( const int id )
         {
-            if ( _icnVsSprite[id].empty() && !LoadModifiedICN( id ) ) {
+            if ( !_icnVsSprite[id].empty() ) {
+                // The images have been loaded.
+                return;
+            }
+
+            if ( !LoadModifiedICN( id ) ) {
                 LoadOriginalICN( id );
             }
+        }
+
+        size_t GetMaximumICNIndex( int id )
+        {
+            loadICN( id );
 
             return _icnVsSprite[id].size();
         }
@@ -3886,6 +4438,10 @@ namespace fheroes2
 
             Sprite & resizedIcn = _icnVsScaledSprite[icnId][index];
 
+            if ( originalIcn.singleLayer() && !resizedIcn.singleLayer() ) {
+                resizedIcn._disableTransformLayer();
+            }
+
             const double scaleFactorX = static_cast<double>( display.width() ) / Display::DEFAULT_WIDTH;
             const double scaleFactorY = static_cast<double>( display.height() ) / Display::DEFAULT_HEIGHT;
 
@@ -3954,48 +4510,6 @@ namespace fheroes2
             }
 
             return _tilVsImage[tilId][shapeId][index];
-        }
-
-        const Sprite & GetLetter( uint32_t character, uint32_t fontType )
-        {
-            if ( character < 0x21 ) {
-                return errorImage;
-            }
-
-            // TODO: correct naming and standardize the code
-            switch ( fontType ) {
-            case Font::GRAY_SMALL:
-                return GetICN( ICN::GRAY_SMALL_FONT, character - 0x20 );
-            case Font::YELLOW_BIG:
-                return GetICN( ICN::YELLOW_FONT, character - 0x20 );
-            case Font::YELLOW_SMALL:
-                return GetICN( ICN::YELLOW_SMALLFONT, character - 0x20 );
-            case Font::BIG:
-                return GetICN( ICN::FONT, character - 0x20 );
-            case Font::SMALL:
-                return GetICN( ICN::SMALFONT, character - 0x20 );
-            default:
-                assert( 0 );
-                break;
-            }
-
-            return GetICN( ICN::SMALFONT, character - 0x20 );
-        }
-
-        uint32_t ASCIILastSupportedCharacter( const uint32_t fontType )
-        {
-            switch ( fontType ) {
-            case Font::BIG:
-            case Font::YELLOW_BIG:
-                return static_cast<uint32_t>( GetMaximumICNIndex( ICN::FONT ) ) + 0x20 - 1;
-            case Font::SMALL:
-            case Font::GRAY_SMALL:
-            case Font::YELLOW_SMALL:
-                return static_cast<uint32_t>( GetMaximumICNIndex( ICN::SMALFONT ) ) + 0x20 - 1;
-            default:
-                assert( 0 );
-                return 0;
-            }
         }
 
         int32_t GetAbsoluteICNHeight( int icnId )

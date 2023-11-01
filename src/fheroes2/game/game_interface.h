@@ -89,7 +89,7 @@ namespace Interface
 
         static AdventureMap & Get();
 
-        void redraw( const uint32_t force = 0 ) override;
+        void redraw( const uint32_t force ) override;
 
         int32_t GetDimensionDoorDestination( const int32_t from, const int32_t distance, const bool water );
 
@@ -110,7 +110,7 @@ namespace Interface
         void updateFocus();
 
         void EventSwitchHeroSleeping();
-        fheroes2::GameMode EventDefaultAction( const fheroes2::GameMode gameMode );
+        fheroes2::GameMode EventDefaultAction();
         void EventOpenFocus() const;
         fheroes2::GameMode EventSaveGame() const;
         void EventPuzzleMaps() const;
@@ -118,7 +118,8 @@ namespace Interface
         void EventSystemDialog() const;
         void EventNextHero();
         void EventNextTown();
-        void EventContinueMovement() const;
+        fheroes2::GameMode EventHeroMovement();
+        void EventResetHeroPath();
         void EventKingdomInfo() const;
         void EventCastSpell();
         void EventSwitchShowRadar() const;
@@ -141,7 +142,7 @@ namespace Interface
         void mouseCursorAreaClickLeft( const int32_t tileIndex ) override;
         void mouseCursorAreaPressRight( const int32_t tileIndex ) const override;
 
-        static int GetCursorTileIndex( int32_t dstIndex );
+        void updateCursor( const int32_t tileIndex ) override;
 
         // Regenerates the game area and updates the panel positions depending on the UI settings
         void reset() override;
@@ -152,6 +153,7 @@ namespace Interface
         static int GetCursorFocusCastle( const Castle & castle, const Maps::Tiles & tile );
         static int GetCursorFocusHeroes( const Heroes & hero, const Maps::Tiles & tile );
         static int GetCursorFocusShipmaster( const Heroes & hero, const Maps::Tiles & tile );
+        static int GetCursorTileIndex( int32_t dstIndex );
 
         void ShowPathOrStartMoveHero( Heroes * hero, const int32_t destinationIdx );
         void MoveHeroFromArrowKeys( Heroes & hero, const int direction );

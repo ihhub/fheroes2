@@ -65,15 +65,12 @@ namespace Battle
 
         Board & operator=( const Board & ) = delete;
 
-        void Reset();
+        void removeDeadUnits();
 
         void SetArea( const fheroes2::Rect & );
 
         int32_t GetIndexAbsPosition( const fheroes2::Point & ) const;
         std::vector<Unit *> GetNearestTroops( const Unit * startUnit, const std::vector<Unit *> & blackList );
-
-        void SetEnemyQuality( const Unit & ) const;
-        void SetPositionQuality( const Unit & ) const;
 
         void SetCobjObjects( const Maps::Tiles & tile, std::mt19937 & gen );
         void SetCovrObjects( int icn );
@@ -93,7 +90,19 @@ namespace Battle
         static int32_t DoubleCellAttackValue( const Unit & attacker, const Unit & target, const int32_t from, const int32_t targetCell );
         static int32_t OptimalAttackTarget( const Unit & attacker, const Unit & target, const int32_t from );
         static int32_t OptimalAttackValue( const Unit & attacker, const Unit & target, const int32_t from );
-        static uint32_t GetDistance( int32_t, int32_t );
+
+        // Returns the distance between two cells with the given indexes. If any of the indexes is not valid, then returns 0.
+        static uint32_t GetDistance( const int32_t index1, const int32_t index2 );
+
+        // Returns the distance between two given positions. This distance is calculated as the distance between the cells of
+        // both positions closest to each other. If any of the positions is not valid, then returns 0.
+        static uint32_t GetDistance( const Position & pos1, const Position & pos2 );
+
+        // Returns the distance between the given position and the cell with the given index. The distance is calculated as
+        // the distance between the cell with the given index and the cell closest to it, which is part of the given position.
+        // If either the position or the index is not valid, then returns 0.
+        static uint32_t GetDistance( const Position & pos, const int32_t index );
+
         static bool isValidDirection( const int32_t index, const int dir );
         static int32_t GetIndexDirection( const int32_t index, const int dir );
         static Indexes GetDistanceIndexes( const int32_t center, const uint32_t radius );

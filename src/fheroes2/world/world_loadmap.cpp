@@ -56,6 +56,7 @@
 #include "serialize.h"
 #include "settings.h"
 #include "world.h"
+#include "world_object_uid.h"
 
 namespace
 {
@@ -110,11 +111,6 @@ namespace
     }
 }
 
-namespace GameStatic
-{
-    extern uint32_t uniq;
-}
-
 bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2File )
 {
     Reset();
@@ -140,7 +136,9 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
 
     // Go to the end of the file and read last 4 bytes which are used as a UID counter for all objects on the map.
     fs.seek( totalFileSize - 4 );
-    GameStatic::uniq = fs.getLE32();
+
+    // In theory, this counter can be smaller than the some object UIDs if the map is corrupted or modified manually.
+    Maps::setLastObjectUID( fs.getLE32() );
 
     // Go to the end of the map info section to read two 32-bit values representing width and height of the map.
     fs.seek( MP2::MP2_MAP_INFO_SIZE - 2 * 4 );
@@ -257,8 +255,8 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
                 DEBUG_LOG( DBG_GAME, DBG_WARN, "Invalid MP2 format: incorrect addon index " << addonIndex )
                 break;
             }
-            tile.AddonsPushLevel1( vec_mp2addons[addonIndex] );
-            tile.AddonsPushLevel2( vec_mp2addons[addonIndex] );
+            tile.pushBottomLayerAddon( vec_mp2addons[addonIndex] );
+            tile.pushTopLayerAddon( vec_mp2addons[addonIndex] );
             addonIndex = vec_mp2addons[addonIndex].nextAddonIndex;
         }
 
@@ -515,11 +513,21 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
                         break;
                     }
 
-                    Heroes * hero = GetFreemanHeroes( raceType );
+                    Heroes * hero = nullptr;
+
+                    // Byte 17 determines whether the hero has a custom portrait, and byte 18 contains the custom portrait ID. If the hero has a custom portrait, then we
+                    // should directly use the hero corresponding to this portrait, if possible.
+                    // MP2 format stores hero IDs start from 0, while fheroes2 engine starts from 1.
+                    if ( pblock[17] && pblock[18] + 1 <= Heroes::JARKONAS ) {
+                        hero = vec_heroes.Get( pblock[18] + 1 );
+                    }
+
+                    if ( !hero || !hero->isAvailableForHire() ) {
+                        hero = GetHeroForHire( raceType );
+                    }
 
                     if ( hero ) {
-                        hero->LoadFromMP2( objectTileId, Color::NONE, hero->GetRace(), pblock );
-                        hero->SetModes( Heroes::JAIL );
+                        hero->LoadFromMP2( objectTileId, Color::NONE, raceType, true, pblock );
                     }
                     else {
                         DEBUG_LOG( DBG_GAME, DBG_WARN, "MP2 file format: no free heroes are available from race " << Race::String( raceType ) )
@@ -536,21 +544,31 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
                     std::pair<int, int> colorRace = Maps::getColorRaceFromHeroSprite( tile.GetObjectSpriteIndex() );
                     const Kingdom & kingdom = GetKingdom( colorRace.first );
 
-                    if ( colorRace.second == Race::RAND && colorRace.first != Color::NONE )
+                    if ( colorRace.second == Race::RAND && colorRace.first != Color::NONE ) {
                         colorRace.second = kingdom.GetRace();
+                    }
 
-                    // check heroes max count
+                    // Check if the kingdom has exceeded the limit on hired heroes
                     if ( kingdom.AllowRecruitHero( false ) ) {
                         Heroes * hero = nullptr;
 
-                        if ( pblock[17] && pblock[18] < Heroes::BAX )
-                            hero = vec_heroes.Get( pblock[18] );
+                        // Byte 17 determines whether the hero has a custom portrait, and byte 18 contains the custom portrait ID. If the hero has a custom portrait, then
+                        // we should directly use the hero corresponding to this portrait, if possible.
+                        // MP2 format stores hero IDs start from 0, while fheroes2 engine starts from 1.
+                        if ( pblock[17] && pblock[18] + 1 <= Heroes::JARKONAS ) {
+                            hero = vec_heroes.Get( pblock[18] + 1 );
+                        }
 
-                        if ( !hero || !hero->isFreeman() )
-                            hero = GetFreemanHeroes( colorRace.second );
+                        if ( !hero || !hero->isAvailableForHire() ) {
+                            hero = GetHeroForHire( colorRace.second );
+                        }
 
-                        if ( hero )
-                            hero->LoadFromMP2( objectTileId, colorRace.first, colorRace.second, pblock );
+                        if ( hero ) {
+                            hero->LoadFromMP2( objectTileId, colorRace.first, colorRace.second, false, pblock );
+                        }
+                        else {
+                            DEBUG_LOG( DBG_GAME, DBG_WARN, "MP2 file format: no free heroes are available from race " << Race::String( colorRace.second ) )
+                        }
                     }
                     else {
                         DEBUG_LOG( DBG_GAME, DBG_WARN, "load heroes maximum" )
@@ -637,7 +655,7 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
         return false;
     }
 
-    DEBUG_LOG( DBG_GAME, DBG_INFO, "end load" )
+    DEBUG_LOG( DBG_GAME, DBG_INFO, "Loading of MP2 map is completed." )
     return true;
 }
 
@@ -663,15 +681,29 @@ bool World::ProcessNewMap( const std::string & filename, const bool checkPoLObje
 
     // update wins, loss conditions
     if ( GameOver::WINS_HERO & conf.ConditionWins() ) {
-        const Heroes * hero = GetHeroes( conf.WinsMapsPositionObject() );
-        heroes_cond_wins = hero ? hero->GetID() : Heroes::UNKNOWN;
-    }
-    if ( GameOver::LOSS_HERO & conf.ConditionLoss() ) {
-        Heroes * hero = GetHeroes( conf.LossMapsPositionObject() );
-        heroes_cond_loss = hero ? hero->GetID() : Heroes::UNKNOWN;
+        const fheroes2::Point & pos = conf.WinsMapsPositionObject();
 
-        if ( hero ) {
-            hero->SetModes( Heroes::NOTDISMISS | Heroes::NOTDEFAULTS );
+        const Heroes * hero = GetHeroes( pos );
+        if ( hero == nullptr ) {
+            heroes_cond_wins = Heroes::UNKNOWN;
+            ERROR_LOG( "A winning condition hero at location ['" << pos.x << ", " << pos.y << "'] is not found." )
+        }
+        else {
+            heroes_cond_wins = hero->GetID();
+        }
+    }
+
+    if ( GameOver::LOSS_HERO & conf.ConditionLoss() ) {
+        const fheroes2::Point & pos = conf.LossMapsPositionObject();
+
+        Heroes * hero = GetHeroes( pos );
+        if ( hero == nullptr ) {
+            heroes_cond_loss = Heroes::UNKNOWN;
+            ERROR_LOG( "A loosing condition hero at location ['" << pos.x << ", " << pos.y << "'] is not found." )
+        }
+        else {
+            heroes_cond_loss = hero->GetID();
+            hero->SetModes( Heroes::NOTDISMISS | Heroes::CUSTOM );
         }
     }
 
@@ -679,7 +711,7 @@ bool World::ProcessNewMap( const std::string & filename, const bool checkPoLObje
     const MapsTiles::iterator ultArtTileIter
         = std::find_if( vec_tiles.begin(), vec_tiles.end(), []( const Maps::Tiles & tile ) { return tile.isSameMainObject( MP2::OBJ_RANDOM_ULTIMATE_ARTIFACT ); } );
 
-    auto checkTileForSuitabilityForUltArt = [this]( const int32_t idx ) {
+    const auto checkTileForSuitabilityForUltArt = [this]( const int32_t idx ) {
         const int32_t x = idx % width;
         if ( x < ultimateArtifactOffset || x >= width - ultimateArtifactOffset ) {
             return false;
@@ -764,7 +796,7 @@ bool World::ProcessNewMap( const std::string & filename, const bool checkPoLObje
             const fheroes2::Point & cp = castle->GetCenter();
             Heroes * hero = vec_heroes.Get( Heroes::DEBUG_HERO );
 
-            if ( hero && !GetTiles( cp.x, cp.y + 1 ).GetHeroes() ) {
+            if ( hero && !GetTiles( cp.x, cp.y + 1 ).getHero() ) {
                 hero->Recruit( castle->GetColor(), { cp.x, cp.y + 1 } );
             }
         }
@@ -871,11 +903,16 @@ bool World::updateTileMetadata( Maps::Tiles & tile, const MP2::MapObjectType obj
         Heroes * chosenHero = GetHeroes( Maps::GetPoint( tile.GetIndex() ) );
         assert( chosenHero != nullptr );
 
-        tile.SetHeroes( chosenHero );
+        tile.setHero( chosenHero );
 
         if ( checkPoLObjects ) {
-            Heroes * hero = tile.GetHeroes();
+            Heroes * hero = tile.getHero();
             assert( hero );
+
+            if ( hero->isPoLPortrait() ) {
+                return false;
+            }
+
             const BagArtifacts & artifacts = hero->GetBagArtifacts();
             for ( const Artifact & artifact : artifacts ) {
                 if ( fheroes2::isPriceOfLoyaltyArtifact( artifact.GetID() ) ) {

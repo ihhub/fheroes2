@@ -125,6 +125,7 @@ namespace fheroes2
         ~Button() override = default;
 
         void setICNInfo( int icnId, uint32_t releasedIndex, uint32_t pressedIndex );
+        void setICNIndexes( const uint32_t releasedIndex, const uint32_t pressedIndex );
 
     protected:
         const Sprite & _getPressed() const override;
@@ -141,7 +142,7 @@ namespace fheroes2
     {
     public:
         ButtonSprite( int32_t offsetX = 0, int32_t offsetY = 0 );
-        ButtonSprite( int32_t offsetX, int32_t offsetY, const Sprite & released, const Sprite & pressed, const Sprite & disabled = Sprite() );
+        ButtonSprite( int32_t offsetX, int32_t offsetY, Sprite released, Sprite pressed, Sprite disabled = Sprite() );
         ButtonSprite( const ButtonSprite & ) = delete;
         ButtonSprite( ButtonSprite && ) noexcept = default;
 
@@ -196,11 +197,12 @@ namespace fheroes2
         std::vector<int> _value;
     };
 
-    // this class is used for a situations when we need to disabled a button for certain action and restore it within the scope of code
+    // This class is used for a situations when we need to disable a button for certain action
+    // and restore it within the scope of code. The changed button is immediately rendered on display.
     class ButtonRestorer
     {
     public:
-        explicit ButtonRestorer( ButtonBase & button, Image & area = Display::instance() );
+        explicit ButtonRestorer( ButtonBase & button );
         ButtonRestorer( const ButtonRestorer & ) = delete;
 
         ~ButtonRestorer();
@@ -209,8 +211,7 @@ namespace fheroes2
 
     private:
         ButtonBase & _button;
-        Image & _area;
-        bool _isDisabled;
+        bool _isEnabled;
     };
 
     class OptionButtonGroup : public ActionObject
@@ -230,6 +231,9 @@ namespace fheroes2
         void unsubscribeAll();
     };
 
+    // Make transparent edges around buttons making the pressed state appear without parts of the released state
+    void makeTransparentBackground( const Sprite & released, Sprite & pressed, const int backgroundIcnID );
+
     // Makes a button with the background (usually from display): it can be used when original button sprites do not contain pieces of background in the pressed state
     ButtonSprite makeButtonWithBackground( int32_t offsetX, int32_t offsetY, const Sprite & released, const Sprite & pressed, const Image & background );
 
@@ -241,6 +245,9 @@ namespace fheroes2
     // STONEBAK or STONEBAK_EVIL (for Evil interface). The pattern is the same for all buttons.
     void getCustomNormalButton( Sprite & released, Sprite & pressed, const bool isEvilInterface, int32_t width, Point & releasedOffset, Point & pressedOffset,
                                 const bool isTransparentBackground = false );
+
+    // Makes a button that has the width necessary to fit a provided text using an empty button template
+    void getTextAdaptedButton( Sprite & released, Sprite & pressed, const char * text, const int icnId, const int buttonBackgroundIcnID );
 
     // Generate released and pressed button sprites with the text on it over a transparent or a default (STONEBAK/STONEBAK_EVIL) background.
     void makeButtonSprites( Sprite & released, Sprite & pressed, const std::string & text, const int32_t buttonWidth, const bool isEvilInterface,

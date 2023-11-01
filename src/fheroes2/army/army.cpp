@@ -52,7 +52,6 @@
 #include "maps_tiles_helper.h"
 #include "morale.h"
 #include "mp2.h"
-#include "payment.h"
 #include "race.h"
 #include "rand.h"
 #include "resource.h"
@@ -131,7 +130,7 @@ std::string Army::TroopSizeString( const Troop & troop )
         str = _( "A swarm of\n%{monster}" );
         break;
     case ARMY_ZOUNDS:
-        str = _( "Zounds of\n%{monster}" );
+        str = _( "Zounds...\n%{monster}" );
         break;
     case ARMY_LEGION:
         str = _( "A legion of\n%{monster}" );
@@ -371,8 +370,8 @@ bool Troops::JoinTroop( const Monster & mons, uint32_t count, bool emptySlotFirs
         return false;
     }
 
-    auto findEmptySlot = []( const Troop * troop ) { return !troop->isValid(); };
-    auto findMonster = [&mons]( const Troop * troop ) { return troop->isValid() && troop->isMonster( mons.GetID() ); };
+    const auto findEmptySlot = []( const Troop * troop ) { return !troop->isValid(); };
+    const auto findMonster = [&mons]( const Troop * troop ) { return troop->isValid() && troop->isMonster( mons.GetID() ); };
 
     iterator it = emptySlotFirst ? std::find_if( begin(), end(), findEmptySlot ) : std::find_if( begin(), end(), findMonster );
     if ( it == end() ) {
@@ -463,7 +462,7 @@ void Troops::UpgradeTroops( const Castle & castle ) const
             continue;
         }
 
-        const payment_t payment = troop->GetTotalUpgradeCost();
+        const Funds payment = troop->GetTotalUpgradeCost();
         if ( kingdom.AllowPayment( payment ) ) {
             kingdom.OddFundsResource( payment );
             troop->Upgrade();
@@ -733,9 +732,6 @@ void Troops::JoinStrongest( Troops & giverArmy, const bool keepAtLeastOneSlotFor
 
         weakest->SetCount( weakest->GetCount() - acceptableCount );
     }
-
-    // Make sure that this hero can survive an attack by splitting a single stack of monsters into multiple.
-    splitWeakestTroopsIfPossible();
 }
 
 void Troops::SplitTroopIntoFreeSlots( const Troop & troop, const Troop & selectedSlot, const uint32_t slots )
@@ -765,7 +761,7 @@ void Troops::addNewTroopsToFreeSlots( const Troop & troop, uint32_t maxSlots )
     uint32_t remainingCount = troop.GetCount() % maxSlots;
     uint32_t remainingSlots = maxSlots;
 
-    auto TryCreateTroopChunk = [&remainingSlots, &remainingCount, chunk, &troop]( Troop & newTroop ) {
+    const auto TryCreateTroopChunk = [&remainingSlots, &remainingCount, chunk, &troop]( Troop & newTroop ) {
         if ( remainingSlots <= 0 )
             return;
 
@@ -850,29 +846,41 @@ bool Troops::mergeWeakestTroopsIfNeeded()
     return true;
 }
 
-void Troops::splitWeakestTroopsIfPossible()
+void Troops::splitStackOfWeakestUnitsIntoFreeSlots()
 {
-    if ( GetOccupiedSlotCount() == size() ) {
+    const uint32_t occupiedSlotCount = GetOccupiedSlotCount();
+
+    if ( occupiedSlotCount == size() ) {
         // Nothing to do as all slots are being occupied.
         return;
     }
 
-    Troop * weakestStack = GetWeakestTroop();
-    assert( weakestStack != nullptr );
+    // Look for a stack consisting of the weakest units
+    Troop * stackOfWeakestUnits = nullptr;
 
-    if ( weakestStack->GetCount() > 1 ) {
-        const uint32_t stackCount = std::min( static_cast<uint32_t>( size() + 1 - GetOccupiedSlotCount() ), weakestStack->GetCount() );
+    for ( Troop * troop : *this ) {
+        assert( troop != nullptr );
 
-        Troop temp( *weakestStack );
-        weakestStack->Reset();
+        if ( !troop->isValid() ) {
+            continue;
+        }
 
-        addNewTroopsToFreeSlots( temp, stackCount );
+        if ( stackOfWeakestUnits == nullptr || stackOfWeakestUnits->GetMonsterStrength() > troop->GetMonsterStrength() ) {
+            stackOfWeakestUnits = troop;
+        }
     }
 
-    // Make it less predictable to guess where troops would be. It makes human players to suffer by constantly adjusting the position of their troops.
-    if ( GetOccupiedSlotCount() < size() ) {
-        Rand::Shuffle( *this );
+    assert( stackOfWeakestUnits != nullptr );
+    assert( stackOfWeakestUnits->GetCount() > 0 );
+
+    const uint32_t count = std::min( static_cast<uint32_t>( size() ) - occupiedSlotCount, stackOfWeakestUnits->GetCount() - 1 );
+    if ( count == 0 ) {
+        return;
     }
+
+    stackOfWeakestUnits->SetCount( stackOfWeakestUnits->GetCount() - count );
+
+    addNewTroopsToFreeSlots( { stackOfWeakestUnits->GetMonster(), count }, count );
 }
 
 void Troops::AssignToFirstFreeSlot( const Troop & troopToAssign, const uint32_t count ) const
@@ -1306,7 +1314,8 @@ int Army::GetControl() const
 
 uint32_t Army::getTotalCount() const
 {
-    return std::accumulate( begin(), end(), 0u, []( const uint32_t count, const Troop * troop ) { return troop->isValid() ? count + troop->GetCount() : count; } );
+    return std::accumulate( begin(), end(), static_cast<uint32_t>( 0 ),
+                            []( const uint32_t count, const Troop * troop ) { return troop->isValid() ? count + troop->GetCount() : count; } );
 }
 
 std::string Army::String() const
@@ -1385,7 +1394,7 @@ void Army::MoveTroops( Army & from, const int monsterIdToKeep )
         }
     }
 
-    auto moveTroops = [this, &from, monsterIdToKeep, fromHero]( const bool ignoreMonstersToKeep ) {
+    const auto moveTroops = [this, &from, monsterIdToKeep, fromHero]( const bool ignoreMonstersToKeep ) {
         uint32_t stacksLeft = from.GetOccupiedSlotCount();
 
         for ( Troop * troop : from ) {
@@ -1492,12 +1501,12 @@ bool Army::isMeleeDominantArmy() const
     return meleeInfantry > other;
 }
 
-void Army::drawSingleDetailedMonsterLine( const Troops & troops, int32_t cx, int32_t cy, uint32_t width )
+void Army::drawSingleDetailedMonsterLine( const Troops & troops, int32_t cx, int32_t cy, int32_t width )
 {
     fheroes2::drawMiniMonsters( troops, cx, cy, width, 0, 0, false, true, false, 0, fheroes2::Display::instance() );
 }
 
-void Army::drawMultipleMonsterLines( const Troops & troops, int32_t posX, int32_t posY, uint32_t lineWidth, bool isCompact, const bool isDetailedView,
+void Army::drawMultipleMonsterLines( const Troops & troops, int32_t posX, int32_t posY, int32_t lineWidth, bool isCompact, const bool isDetailedView,
                                      const bool isGarrisonView /* = false */, const uint32_t thievesGuildsCount /* = 0 */ )
 {
     const uint32_t count = troops.GetOccupiedSlotCount();
@@ -1583,7 +1592,7 @@ NeutralMonsterJoiningCondition Army::GetJoinSolution( const Heroes & hero, const
 
             // The ability to hire the entire stack of monsters is a mandatory condition for their joining
             // due to hero's Diplomacy skill in accordance with the mechanics of the original game
-            if ( amountToJoin > 0 && hero.GetKingdom().AllowPayment( payment_t( Resource::GOLD, troop.GetTotalCost().gold ) ) ) {
+            if ( amountToJoin > 0 && hero.GetKingdom().AllowPayment( Funds( Resource::GOLD, troop.GetTotalCost().gold ) ) ) {
                 return { NeutralMonsterJoiningCondition::Reason::ForMoney, amountToJoin, nullptr, nullptr };
             }
         }
@@ -1792,7 +1801,8 @@ void Army::ArrangeForBattle( const Monster & monster, const uint32_t monstersCou
         at( i + shift )->Set( monster, i < remainder ? quotient + 1 : quotient );
     }
 
-    assert( std::accumulate( begin(), end(), 0U, []( const uint32_t count, const Troop * troop ) { return troop->isValid() ? count + troop->GetCount() : count; } )
+    assert( std::accumulate( begin(), end(), static_cast<uint32_t>( 0 ),
+                             []( const uint32_t count, const Troop * troop ) { return troop->isValid() ? count + troop->GetCount() : count; } )
             == monstersCount );
 }
 

@@ -21,8 +21,6 @@
 #pragma once
 
 #include <cstdint>
-#include <stdexcept>
-#include <string>
 
 namespace fheroes2
 {
@@ -39,10 +37,6 @@ namespace fheroes2
 
         // shapeId could be 0, 1, 2 or 3 only
         const Image & GetTIL( int tilId, uint32_t index, uint32_t shapeId );
-        const Sprite & GetLetter( uint32_t character, uint32_t fontType );
-
-        // Returns the last supported ASCII character in existing font.
-        uint32_t ASCIILastSupportedCharacter( const uint32_t fontType );
 
         int32_t GetAbsoluteICNHeight( int icnId );
 
@@ -52,9 +46,4 @@ namespace fheroes2
         // This function must be called only at the type of setting up a new language.
         void updateLanguageDependentResources( const SupportedLanguage language, const bool loadOriginalAlphabet );
     }
-
-    class InvalidDataResources : public std::logic_error
-    {
-        using std::logic_error::logic_error;
-    };
 }

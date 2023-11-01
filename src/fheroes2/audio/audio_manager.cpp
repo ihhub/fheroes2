@@ -116,7 +116,7 @@ namespace
             return iter->second;
         }
 
-        auto tryMusicFileType = [musicTrackId]( MusicFileType & musicFileType ) -> std::string {
+        const auto tryMusicFileType = [musicTrackId]( MusicFileType & musicFileType ) -> std::string {
             std::string fullPath;
 
             std::string fileName = MUS::getFileName( musicTrackId, musicFileType.type, musicFileType.extension[0].c_str() );
@@ -265,7 +265,7 @@ namespace
         {
             createWorker();
 
-            std::scoped_lock<std::mutex> lock( _mutex );
+            const std::scoped_lock<std::mutex> lock( _mutex );
 
             _musicTask.emplace( musicId, musicType, playbackMode );
 
@@ -276,7 +276,7 @@ namespace
         {
             createWorker();
 
-            std::scoped_lock<std::mutex> lock( _mutex );
+            const std::scoped_lock<std::mutex> lock( _mutex );
 
             _soundTasks.emplace_back( m82Sound, soundVolume );
 
@@ -287,7 +287,7 @@ namespace
         {
             createWorker();
 
-            std::scoped_lock<std::mutex> lock( _mutex );
+            const std::scoped_lock<std::mutex> lock( _mutex );
 
             _loopSoundTask.emplace( std::move( vols ), soundVolume, is3DAudioEnabled );
 
@@ -296,7 +296,7 @@ namespace
 
         void removeMusicTask()
         {
-            std::scoped_lock<std::mutex> lock( _mutex );
+            const std::scoped_lock<std::mutex> lock( _mutex );
 
             _musicTask.reset();
 
@@ -307,7 +307,7 @@ namespace
 
         void removeSoundTasks()
         {
-            std::scoped_lock<std::mutex> lock( _mutex );
+            const std::scoped_lock<std::mutex> lock( _mutex );
 
             _soundTasks.clear();
 
@@ -318,7 +318,7 @@ namespace
 
         void removeAllSoundTasks()
         {
-            std::scoped_lock<std::mutex> lock( _mutex );
+            const std::scoped_lock<std::mutex> lock( _mutex );
 
             _soundTasks.clear();
             _loopSoundTask.reset();
@@ -335,7 +335,7 @@ namespace
 
         void removeAllTasks()
         {
-            std::scoped_lock<std::mutex> lock( _mutex );
+            const std::scoped_lock<std::mutex> lock( _mutex );
 
             _musicTask.reset();
             _soundTasks.clear();
@@ -461,7 +461,7 @@ namespace
             // Do not allow the main thread to acquire this mutex in the interval between the
             // _taskToExecute was checked and the task was started executing. Release it only
             // when the task is fully completed.
-            std::scoped_lock<std::recursive_mutex> lock( _resourceMutex );
+            const std::scoped_lock<std::recursive_mutex> lock( _resourceMutex );
 
             switch ( _taskToExecute ) {
             case TaskType::None:
@@ -512,7 +512,7 @@ namespace
 
     int PlaySoundImp( const int m82, const int soundVolume )
     {
-        std::scoped_lock<std::recursive_mutex> lock( g_asyncSoundManager.resourceMutex() );
+        const std::scoped_lock<std::recursive_mutex> lock( g_asyncSoundManager.resourceMutex() );
 
         DEBUG_LOG( DBG_GAME, DBG_TRACE, "Try to play sound " << M82::GetString( m82 ) )
 
@@ -549,7 +549,7 @@ namespace
 
         const uint64_t musicUID = getMusicUID( trackId, musicType );
 
-        std::scoped_lock<std::recursive_mutex> lock( g_asyncSoundManager.resourceMutex() );
+        const std::scoped_lock<std::recursive_mutex> lock( g_asyncSoundManager.resourceMutex() );
 
         if ( currentMusicTrackId == trackId && Music::isPlaying() ) {
             return;
@@ -653,7 +653,7 @@ namespace
 
     void playLoopSoundsImp( std::map<M82::SoundType, std::vector<AudioManager::AudioLoopEffectInfo>> soundEffects, const int soundVolume, const bool is3DAudioEnabled )
     {
-        std::scoped_lock<std::recursive_mutex> lock( g_asyncSoundManager.resourceMutex() );
+        const std::scoped_lock<std::recursive_mutex> lock( g_asyncSoundManager.resourceMutex() );
 
         if ( soundVolume == 0 ) {
             // The volume is 0. Remove all existing sound effects.
@@ -951,7 +951,7 @@ namespace AudioManager
 
         g_asyncSoundManager.removeMusicTask();
 
-        std::scoped_lock<std::recursive_mutex> lock( g_asyncSoundManager.resourceMutex() );
+        const std::scoped_lock<std::recursive_mutex> lock( g_asyncSoundManager.resourceMutex() );
 
         if ( currentMusicTrackId == MUS::UNUSED || currentMusicTrackId == MUS::UNKNOWN ) {
             return;
@@ -970,7 +970,7 @@ namespace AudioManager
 
         g_asyncSoundManager.removeAllSoundTasks();
 
-        std::scoped_lock<std::recursive_mutex> lock( g_asyncSoundManager.resourceMutex() );
+        const std::scoped_lock<std::recursive_mutex> lock( g_asyncSoundManager.resourceMutex() );
 
         clearAllAudioLoopEffects();
 
@@ -985,7 +985,7 @@ namespace AudioManager
 
         g_asyncSoundManager.removeAllTasks();
 
-        std::scoped_lock<std::recursive_mutex> lock( g_asyncSoundManager.resourceMutex() );
+        const std::scoped_lock<std::recursive_mutex> lock( g_asyncSoundManager.resourceMutex() );
 
         clearAllAudioLoopEffects();
 

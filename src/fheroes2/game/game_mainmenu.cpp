@@ -22,6 +22,7 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <cassert>
 #include <cmath>
 #include <cstddef>
 #include <cstdint>
@@ -99,10 +100,14 @@ void Game::mainGameLoop( bool isFirstGameRun )
 {
     fheroes2::GameMode result = fheroes2::GameMode::WALLPAPER;
 
-    while ( result != fheroes2::GameMode::QUIT_GAME ) {
+    bool exit = false;
+
+    while ( !exit ) {
         switch ( result ) {
         case fheroes2::GameMode::WALLPAPER:
             result = Game::Wallpaper();
+        case fheroes2::GameMode::QUIT_GAME:
+            exit = true;
             break;
         case fheroes2::GameMode::MAIN_MENU:
             result = Game::MainMenu( isFirstGameRun );
@@ -177,7 +182,6 @@ void Game::mainGameLoop( bool isFirstGameRun )
                 result = Game::SelectCampaignScenario( fheroes2::GameMode::LOAD_CAMPAIGN, false );
             }
             break;
-#if defined( WITH_DEBUG )
         case fheroes2::GameMode::EDITOR_MAIN_MENU:
             result = Editor::menuMain();
             break;
@@ -187,9 +191,12 @@ void Game::mainGameLoop( bool isFirstGameRun )
         case fheroes2::GameMode::EDITOR_LOAD_MAP:
             result = Editor::menuLoadMap();
             break;
-#endif
 
         default:
+            // If this assertion blows up then you are entering an infinite loop!
+            // Add the logic for the newly added entry.
+            assert( 0 );
+            exit = true;
             break;
         }
     }
@@ -228,8 +235,8 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
         }
         else {
             fheroes2::showStandardTextMessage(
-                _( "Greetings!" ), _( "Welcome to Heroes of Might and Magic II powered by fheroes2 engine! Before starting the game please choose game resolution." ),
-                Dialog::OK );
+                _( "Greetings!" ),
+                _( "Welcome to Heroes of Might and Magic II powered by the fheroes2 engine!\nBefore starting the game please select a game resolution." ), Dialog::OK );
             const bool isResolutionChanged = Dialog::SelectResolution();
             if ( isResolutionChanged ) {
                 fheroes2::drawMainMenuScreen();
@@ -239,9 +246,13 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
         fheroes2::Text header( _( "Please Remember" ), fheroes2::FontType::normalYellow() );
 
         fheroes2::MultiFontText body;
-        body.add( { _( "You can always change game resolution by clicking on the " ), fheroes2::FontType::normalWhite() } );
+        body.add( { _( "You can always change the language, resolution and settings of the game by clicking on the " ), fheroes2::FontType::normalWhite() } );
         body.add( { _( "door" ), fheroes2::FontType::normalYellow() } );
-        body.add( { _( " on the left side of main menu or by clicking on the configuration button. \n\nEnjoy the game!" ), fheroes2::FontType::normalWhite() } );
+        body.add( { _( " on the left side of the Main Menu, or with the " ), fheroes2::FontType::normalWhite() } );
+        body.add( { _( "CONFIG" ), fheroes2::FontType::normalYellow() } );
+        body.add( { _( " button from the " ), fheroes2::FontType::normalWhite() } );
+        body.add( { _( "NEW GAME" ), fheroes2::FontType::normalYellow() } );
+        body.add( { _( " menu. \n\nEnjoy the game!" ), fheroes2::FontType::normalWhite() } );
 
         fheroes2::showMessage( header, body, Dialog::OK );
 
@@ -280,7 +291,7 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
     const int32_t offsetX = static_cast<int32_t>( std::lround( display.width() - fheroes2::Display::DEFAULT_WIDTH * scale ) ) / 2;
     const int32_t offsetY = static_cast<int32_t>( std::lround( display.height() - fheroes2::Display::DEFAULT_HEIGHT * scale ) ) / 2;
 
-    const fheroes2::Rect settingsArea( static_cast<int32_t>( 63 * scale ) + offsetX, static_cast<int32_t>( 202 * scale ) + offsetY, static_cast<int32_t>( 90 * scale ),
+    const fheroes2::Rect settingsArea( static_cast<int32_t>( 63 * scale ) + offsetX, static_cast<int32_t>( 202 * scale ) + offsetY, static_cast<int32_t>( 108 * scale ),
                                        static_cast<int32_t>( 160 * scale ) );
 
     uint32_t lantern_frame = 0;
@@ -367,12 +378,13 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
 
             return fheroes2::GameMode::MAIN_MENU;
         }
-#if defined( WITH_DEBUG )
-        // Editor is still in development.
-        else if ( HotKeyPressEvent( HotKeyEvent::EDITOR_MAIN_MENU ) ) {
-            return fheroes2::GameMode::EDITOR_MAIN_MENU;
+        else if ( conf.isEditorEnabled() && HotKeyPressEvent( HotKeyEvent::EDITOR_MAIN_MENU ) ) {
+            if ( Game::isPriceOfLoyaltyCampaignPresent() ) {
+                return fheroes2::GameMode::EDITOR_MAIN_MENU;
+            }
+
+            fheroes2::showStandardTextMessage( _( "Editor" ), _( "The Editor requires \"The Price of Loyalty\" expansion files to work." ), Dialog::OK );
         }
-#endif
 
         // right info
         if ( le.MousePressRight( buttonQuit.area() ) )

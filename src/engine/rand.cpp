@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -21,10 +21,11 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "rand.h"
+
 #include <cstdlib>
 
 #include "logging.h"
-#include "rand.h"
 
 std::mt19937 & Rand::CurrentThreadRandomDevice()
 {
@@ -142,7 +143,7 @@ void Rand::DeterministicRandomGenerator::UpdateSeed( const uint32_t seed )
     _currentSeed = seed;
 }
 
-uint32_t Rand::DeterministicRandomGenerator::Get( const uint32_t from, const uint32_t to /*= 0*/ ) const
+uint32_t Rand::DeterministicRandomGenerator::Get( const uint32_t from, const uint32_t to /* = 0 */ )
 {
     ++_currentSeed;
     return Rand::GetWithSeed( from, to, _currentSeed );

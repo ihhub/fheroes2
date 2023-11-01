@@ -22,6 +22,9 @@
  ***************************************************************************/
 
 #include "icn.h"
+
+#include <cassert>
+
 #include "color.h"
 #include "heroes.h"
 #include "race.h"
@@ -721,6 +724,8 @@ uint32_t ICN::AnimationFrame( int icn, uint32_t start, uint32_t ticket, bool qua
 int ICN::PORTxxxx( int heroId )
 {
     switch ( heroId ) {
+    case Heroes::UNKNOWN:
+        return ICN::UNKNOWN;
     case Heroes::LORDKILBURN:
         return ICN::PORT0000;
     case Heroes::SIRGALLANTH:
@@ -839,9 +844,8 @@ int ICN::PORTxxxx( int heroId )
         return ICN::PORT0057;
     case Heroes::HALTON:
         return ICN::PORT0058;
-    case Heroes::BAX:
+    case Heroes::BRAX:
         return ICN::PORT0059;
-
     case Heroes::SOLMYR:
         return ICN::PORT0060;
     case Heroes::DAINWIN:
@@ -864,11 +868,11 @@ int ICN::PORTxxxx( int heroId )
         return ICN::PORT0069;
     case Heroes::JARKONAS:
         return ICN::PORT0070;
-
     case Heroes::DEBUG_HERO:
         return ICN::PORT0059;
-
     default:
+        // Did you add a new hero? Add the logic above!
+        assert( 0 );
         break;
     }
 

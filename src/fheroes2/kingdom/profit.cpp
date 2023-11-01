@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -30,17 +30,17 @@
 #include "race.h"
 #include "resource.h"
 
-payment_t ProfitConditions::FromBuilding( uint32_t building, int race )
+Funds ProfitConditions::FromBuilding( uint32_t building, int race )
 {
     switch ( building ) {
     case BUILD_CASTLE:
-        return payment_t( cost_t{ 1000, 0, 0, 0, 0, 0, 0 } );
+        return Funds( cost_t{ 1000, 0, 0, 0, 0, 0, 0 } );
     case BUILD_TENT:
     case BUILD_STATUE:
-        return payment_t( cost_t{ 250, 0, 0, 0, 0, 0, 0 } );
+        return Funds( cost_t{ 250, 0, 0, 0, 0, 0, 0 } );
     case BUILD_SPEC:
         if ( race == Race::WRLK )
-            return payment_t( cost_t{ 500, 0, 0, 0, 0, 0, 0 } );
+            return Funds( cost_t{ 500, 0, 0, 0, 0, 0, 0 } );
         break;
     default:
         break;
@@ -49,10 +49,10 @@ payment_t ProfitConditions::FromBuilding( uint32_t building, int race )
     return {};
 }
 
-payment_t ProfitConditions::FromArtifact( int artifact )
+Funds ProfitConditions::FromArtifact( int artifact )
 {
     const fheroes2::ArtifactData & data = fheroes2::getArtifactData( artifact );
-    payment_t cost;
+    Funds cost;
 
     for ( const fheroes2::ArtifactBonus & bonus : data.bonuses ) {
         switch ( bonus.type ) {
@@ -95,23 +95,23 @@ payment_t ProfitConditions::FromArtifact( int artifact )
     return cost;
 }
 
-payment_t ProfitConditions::FromMine( int type )
+Funds ProfitConditions::FromMine( int type )
 {
     switch ( type ) {
     case Resource::ORE:
-        return payment_t( cost_t{ 0, 0, 0, 2, 0, 0, 0 } );
+        return Funds( cost_t{ 0, 0, 0, 2, 0, 0, 0 } );
     case Resource::WOOD:
-        return payment_t( cost_t{ 0, 2, 0, 0, 0, 0, 0 } );
+        return Funds( cost_t{ 0, 2, 0, 0, 0, 0, 0 } );
     case Resource::MERCURY:
-        return payment_t( cost_t{ 0, 0, 1, 0, 0, 0, 0 } );
+        return Funds( cost_t{ 0, 0, 1, 0, 0, 0, 0 } );
     case Resource::SULFUR:
-        return payment_t( cost_t{ 0, 0, 0, 0, 1, 0, 0 } );
+        return Funds( cost_t{ 0, 0, 0, 0, 1, 0, 0 } );
     case Resource::CRYSTAL:
-        return payment_t( cost_t{ 0, 0, 0, 0, 0, 1, 0 } );
+        return Funds( cost_t{ 0, 0, 0, 0, 0, 1, 0 } );
     case Resource::GEMS:
-        return payment_t( cost_t{ 0, 0, 0, 0, 0, 0, 1 } );
+        return Funds( cost_t{ 0, 0, 0, 0, 0, 0, 1 } );
     case Resource::GOLD:
-        return payment_t( cost_t{ 1000, 0, 0, 0, 0, 0, 0 } );
+        return Funds( cost_t{ 1000, 0, 0, 0, 0, 0, 0 } );
     default:
         // Did you add a new type of resources? Add the logic here!
         assert( 0 );

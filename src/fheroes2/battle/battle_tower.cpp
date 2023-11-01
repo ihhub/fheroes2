@@ -34,12 +34,11 @@
 #include "battle_cell.h"
 #include "castle.h"
 #include "monster.h"
-#include "rand.h"
 #include "tools.h"
 #include "translations.h"
 
-Battle::Tower::Tower( const Castle & castle, const TowerType type, const Rand::DeterministicRandomGenerator & randomGenerator, const uint32_t uid )
-    : Unit( Troop( Monster::ARCHER, castle.CountBuildings() ), {}, false, randomGenerator, uid )
+Battle::Tower::Tower( const Castle & castle, const TowerType type, const uint32_t uid )
+    : Unit( Troop( Monster::ARCHER, castle.CountBuildings() ), {}, false, uid )
     , _towerType( type )
     , _attackBonus( castle.GetLevelMageGuild() )
     , _isValid( true )
@@ -142,7 +141,7 @@ std::string Battle::Tower::GetInfo( const Castle & castle )
 
     // This method can be called both during combat and outside of it. In the
     // former case, we have to check if the tower was destroyed during the siege.
-    auto isTowerValid = []( const TowerType towerType ) {
+    const auto isTowerValid = []( const TowerType towerType ) {
         // If the siege is in progress, we need to check the current state of the tower
         if ( GetArena() ) {
             const Tower * tower = Arena::GetTower( towerType );
@@ -160,7 +159,7 @@ std::string Battle::Tower::GetInfo( const Castle & castle )
         const TowerType towerType = *it;
 
         if ( isTowerValid( towerType ) ) {
-            const Tower tower( castle, towerType, Rand::DeterministicRandomGenerator( 0 ), 0 );
+            const Tower tower( castle, towerType, 0 );
 
             msg.append( _( "The %{name} fires with the strength of %{count} Archers" ) );
             StringReplace( msg, "%{name}", tower.GetName() );
@@ -186,7 +185,7 @@ std::string Battle::Tower::GetInfo( const Castle & castle )
         }
 
         if ( ( it + 1 ) != towerTypes.end() ) {
-            msg.append( "\n \n" );
+            msg.append( "\n\n" );
         }
     }
 

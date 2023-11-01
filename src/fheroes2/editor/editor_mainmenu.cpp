@@ -18,8 +18,6 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#if defined( WITH_DEBUG )
-
 #include <array>
 #include <cstddef>
 #include <cstdint>
@@ -44,7 +42,6 @@
 #include "maps_fileinfo.h"
 #include "math_base.h"
 #include "mus.h"
-#include "text.h"
 #include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
@@ -143,7 +140,7 @@ namespace
                     std::string message = _( "Create a map that is %{size} squares wide and %{size} squares high." );
                     StringReplace( message, "%{size}", mapSize );
                     mapSize += " x " + mapSize;
-                    Dialog::Message( mapSize, message, Font::BIG );
+                    fheroes2::showStandardTextMessage( mapSize, message, Dialog::ZERO );
                 }
             }
 
@@ -154,7 +151,7 @@ namespace
             }
 
             if ( le.MousePressRight( cancel.area() ) ) {
-                Dialog::Message( _( "Cancel" ), _( "Cancel back to the New Map menu." ), Font::BIG );
+                fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Cancel back to the New Map menu." ), Dialog::ZERO );
             }
         }
 
@@ -208,13 +205,13 @@ namespace Editor
             }
 
             if ( le.MousePressRight( newMap.area() ) ) {
-                Dialog::Message( _( "New Map" ), _( "Create a new map either from scratch or using the random map generator." ), Font::BIG );
+                fheroes2::showStandardTextMessage( _( "New Map" ), _( "Create a new map either from scratch or using the random map generator." ), Dialog::ZERO );
             }
             else if ( le.MousePressRight( loadMap.area() ) ) {
-                Dialog::Message( _( "Load Map" ), _( "Load an existing map." ), Font::BIG );
+                fheroes2::showStandardTextMessage( _( "Load Map" ), _( "Load an existing map." ), Dialog::ZERO );
             }
             else if ( le.MousePressRight( cancel.area() ) ) {
-                Dialog::Message( _( "Cancel" ), _( "Cancel back to the main menu." ), Font::BIG );
+                fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Cancel back to the main menu." ), Dialog::ZERO );
             }
         }
 
@@ -235,6 +232,9 @@ namespace Editor
         fheroes2::Button randomMap( buttonPos.x, buttonPos.y + buttonYStep, ICN::BTNENEW, 2, 3 );
         fheroes2::Button cancel( buttonPos.x, buttonPos.y + 5 * buttonYStep, ICN::BUTTON_LARGE_CANCEL, 0, 1 );
 
+        // TODO: enable it back once random map generator is ready.
+        randomMap.disable();
+
         scratchMap.draw();
         randomMap.draw();
         cancel.draw();
@@ -245,10 +245,14 @@ namespace Editor
 
         while ( le.HandleEvents() ) {
             le.MousePressLeft( scratchMap.area() ) ? scratchMap.drawOnPress() : scratchMap.drawOnRelease();
-            le.MousePressLeft( randomMap.area() ) ? randomMap.drawOnPress() : randomMap.drawOnRelease();
+
+            if ( randomMap.isEnabled() ) {
+                le.MousePressLeft( randomMap.area() ) ? randomMap.drawOnPress() : randomMap.drawOnRelease();
+            }
+
             le.MousePressLeft( cancel.area() ) ? cancel.drawOnPress() : cancel.drawOnRelease();
 
-            if ( le.MouseClickLeft( scratchMap.area() ) ) {
+            if ( le.MouseClickLeft( scratchMap.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::EDITOR_FROM_SCRATCH_MAP_MENU ) ) {
                 const Maps::mapsize_t mapSize = selectMapSize();
                 if ( mapSize != Maps::ZERO ) {
                     // TODO: Put this call to the 'world' instance to a separate '.cpp' file were will be all map editing functions.
@@ -257,12 +261,12 @@ namespace Editor
                     fheroes2::fadeOutDisplay();
                     Game::setDisplayFadeIn();
 
-                    return Interface::Editor::Get().startEdit();
+                    return Interface::EditorInterface::Get().startEdit();
                 }
                 return fheroes2::GameMode::EDITOR_NEW_MAP;
             }
 
-            if ( le.MouseClickLeft( randomMap.area() ) ) {
+            if ( randomMap.isEnabled() && ( le.MouseClickLeft( randomMap.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::EDITOR_RANDOM_MAP_MENU ) ) ) {
                 if ( selectMapSize() != Maps::ZERO ) {
                     showWIPInfo();
                 }
@@ -273,14 +277,14 @@ namespace Editor
                 return fheroes2::GameMode::EDITOR_MAIN_MENU;
             }
 
-            if ( le.MousePressRight( scratchMap.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::EDITOR_FROM_SCRATCH_MAP_MENU ) ) {
-                Dialog::Message( _( "From Scratch" ), _( "Start from scratch with a blank map." ), Font::BIG );
+            if ( le.MousePressRight( scratchMap.area() ) ) {
+                fheroes2::showStandardTextMessage( _( "From Scratch" ), _( "Start from scratch with a blank map." ), Dialog::ZERO );
             }
-            else if ( le.MousePressRight( randomMap.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::EDITOR_RANDOM_MAP_MENU ) ) {
-                Dialog::Message( _( "Random" ), _( "Create a randomly generated map." ), Font::BIG );
+            else if ( le.MousePressRight( randomMap.area() ) ) {
+                fheroes2::showStandardTextMessage( _( "Random" ), _( "Create a randomly generated map." ), Dialog::ZERO );
             }
-            else if ( le.MousePressRight( cancel.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
-                Dialog::Message( _( "Cancel" ), _( "Cancel back to the Map Editor main menu." ), Font::BIG );
+            else if ( le.MousePressRight( cancel.area() ) ) {
+                fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Cancel back to the Map Editor main menu." ), Dialog::ZERO );
             }
         }
 
@@ -297,7 +301,7 @@ namespace Editor
 
         const MapsFileInfoList lists = Maps::prepareResurrectionMapsFileInfoList();
         if ( lists.empty() ) {
-            Dialog::Message( _( "Warning" ), _( "No maps available!" ), Font::BIG, Dialog::OK );
+            fheroes2::showStandardTextMessage( _( "Warning" ), _( "No maps available!" ), Dialog::OK );
             return fheroes2::GameMode::EDITOR_MAIN_MENU;
         }
 
@@ -313,4 +317,3 @@ namespace Editor
         return fheroes2::GameMode::EDITOR_MAIN_MENU;
     }
 }
-#endif

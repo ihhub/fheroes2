@@ -27,7 +27,7 @@
 #include <cstdint>
 
 #include "monster_info.h"
-#include "payment.h"
+#include "resource.h"
 
 class Spell;
 
@@ -50,7 +50,7 @@ public:
         LEVEL_4
     };
 
-    enum monster_t
+    enum monster_t : int32_t
     {
         UNKNOWN,
 
@@ -122,17 +122,22 @@ public:
         FIRE_ELEMENT,
         WATER_ELEMENT,
 
-        MONSTER_RND1,
-        MONSTER_RND2,
-        MONSTER_RND3,
-        MONSTER_RND4,
-        MONSTER_RND,
+        // Editor-related monsters.
+        RANDOM_MONSTER,
+        RANDOM_MONSTER_LEVEL_1,
+        RANDOM_MONSTER_LEVEL_2,
+        RANDOM_MONSTER_LEVEL_3,
+        RANDOM_MONSTER_LEVEL_4,
 
         // IMPORTANT! Put all new monsters just above this line.
         MONSTER_COUNT
     };
 
-    Monster( const int m = UNKNOWN );
+    Monster( const int m = UNKNOWN )
+        : id( m )
+    {
+        // Do nothing.
+    }
     explicit Monster( const Spell & );
     Monster( int race, uint32_t dw );
     virtual ~Monster() = default;
@@ -208,7 +213,12 @@ public:
 
     bool isValid() const
     {
-        return id != UNKNOWN;
+        return id != UNKNOWN && id < MONSTER_COUNT && !isRandomMonster();
+    }
+
+    bool isRandomMonster() const
+    {
+        return ( id >= RANDOM_MONSTER && id <= RANDOM_MONSTER_LEVEL_4 );
     }
 
     bool isElemental() const
@@ -283,9 +293,9 @@ public:
         return UNKNOWN < id ? id - 1 : 0;
     }
 
-    payment_t GetCost() const
+    Funds GetCost() const
     {
-        return payment_t( fheroes2::getMonsterData( id ).generalStats.cost );
+        return Funds( fheroes2::getMonsterData( id ).generalStats.cost );
     }
 
     uint32_t GetDwelling() const;
@@ -297,13 +307,13 @@ public:
 
     static Monster Rand( const LevelType type );
 
-    static uint32_t GetCountFromHitPoints( const Monster &, uint32_t );
+    static uint32_t GetCountFromHitPoints( const Monster & mons, const uint32_t hp );
 
     static uint32_t GetMissileICN( uint32_t monsterID );
 
 protected:
     // Returns the cost of an upgrade if a monster has an upgrade. Otherwise returns no resources.
-    payment_t GetUpgradeCost() const;
+    Funds GetUpgradeCost() const;
 
     static Monster FromDwelling( int race, uint32_t dw );
 

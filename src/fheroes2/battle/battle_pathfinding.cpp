@@ -20,13 +20,14 @@
 
 #include "battle_pathfinding.h"
 
+// TODO: this header is redundant here, but detected as required by IWYU with older compilers
+// IWYU pragma: no_include <type_traits>
 #include <algorithm>
 #include <cassert>
 #include <cstddef>
 #include <cstdint>
 #include <set>
 #include <tuple>
-#include <type_traits>
 #include <vector>
 
 #include "battle_arena.h"
@@ -95,7 +96,11 @@ namespace Battle
                     continue;
                 }
 
-                _cache.try_emplace( newNodeIdx, _pathStart, 1, 1 );
+                // Wide units can occupy overlapping positions, the distance between which is actually zero,
+                // but since the movement takes place, we will consider the distance equal to 1 in this case
+                const uint32_t distance = std::max( Board::GetDistance( unit.GetPosition(), pos ), 1U );
+
+                _cache.try_emplace( newNodeIdx, _pathStart, 1, distance );
             }
 
             return;
@@ -165,7 +170,7 @@ namespace Battle
                         continue;
                     }
 
-                    // Turning back is not a movement
+                    // Reversal is not a movement
                     const uint32_t cost = currentNode._cost + ( newNodeIdx == flippedCurrentNodeIdx ? 0 : movementPenalty );
                     const uint32_t distance = currentNode._distance + ( newNodeIdx == flippedCurrentNodeIdx ? 0 : 1 );
 
@@ -240,6 +245,24 @@ namespace Battle
         const auto & [index, node] = *iter;
 
         return ( index == _pathStart || node._from != BattleNodeIndex{ -1, -1 } ) && ( !isOnCurrentTurn || node._cost <= _speed );
+    }
+
+    uint32_t BattlePathfinder::getCost( const Unit & unit, const Position & position )
+    {
+        assert( position.GetHead() != nullptr );
+
+        reEvaluateIfNeeded( unit );
+
+        const BattleNodeIndex nodeIdx = { position.GetHead()->GetIndex(), position.GetTail() ? position.GetTail()->GetIndex() : -1 };
+
+        const auto iter = _cache.find( nodeIdx );
+        assert( iter != _cache.end() );
+
+        const auto & [index, node] = *iter;
+        // MSVC 2017 fails to properly expand the assert() macro without additional parentheses
+        assert( ( index == _pathStart || node._from != BattleNodeIndex{ -1, -1 } ) );
+
+        return node._cost;
     }
 
     uint32_t BattlePathfinder::getDistance( const Unit & unit, const Position & position )

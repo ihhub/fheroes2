@@ -23,8 +23,8 @@
 
 #include "interface_buttons.h"
 
-#include <cstddef>
-#include <vector>
+#include <algorithm>
+#include <cassert>
 
 #include "dialog.h"
 #include "game_interface.h"
@@ -33,6 +33,7 @@
 #include "interface_base.h"
 #include "kingdom.h"
 #include "localevent.h"
+#include "mp2.h"
 #include "route.h"
 #include "settings.h"
 #include "translations.h"
@@ -64,7 +65,7 @@ void Interface::ButtonsArea::SetPos( int32_t ox, int32_t oy )
     const int icnbtn = Settings::Get().isEvilInterfaceEnabled() ? ICN::ADVEBTNS : ICN::ADVBTNS;
 
     buttonNextHero.setICNInfo( icnbtn, 0, 1 );
-    buttonMovement.setICNInfo( icnbtn, 2, 3 );
+    buttonHeroMovement.setICNInfo( icnbtn, 2, 3 );
     buttonKingdom.setICNInfo( icnbtn, 4, 5 );
     buttonSpell.setICNInfo( icnbtn, 6, 7 );
     buttonEndTurn.setICNInfo( icnbtn, 8, 9 );
@@ -81,10 +82,10 @@ void Interface::ButtonsArea::SetPos( int32_t ox, int32_t oy )
     buttonNextHero.setPosition( ox, oy );
     nextHeroRect = buttonNextHero.area();
 
-    buttonMovement.setPosition( nextHeroRect.x + nextHeroRect.width, oy );
-    movementRect = buttonMovement.area();
+    buttonHeroMovement.setPosition( nextHeroRect.x + nextHeroRect.width, oy );
+    heroMovementRect = buttonHeroMovement.area();
 
-    buttonKingdom.setPosition( movementRect.x + movementRect.width, oy );
+    buttonKingdom.setPosition( heroMovementRect.x + heroMovementRect.width, oy );
     kingdomRect = buttonKingdom.area();
 
     buttonSpell.setPosition( kingdomRect.x + kingdomRect.width, oy );
@@ -117,7 +118,7 @@ void Interface::ButtonsArea::_redraw()
         SetButtonStatus();
 
         buttonNextHero.draw();
-        buttonMovement.draw();
+        buttonHeroMovement.draw();
         buttonKingdom.draw();
         buttonSpell.draw();
         buttonEndTurn.draw();
@@ -129,17 +130,10 @@ void Interface::ButtonsArea::_redraw()
 
 void Interface::ButtonsArea::ResetButtons()
 {
-    if ( buttonNextHero.isEnabled() ) {
-        buttonNextHero.drawOnRelease();
-    }
-
-    buttonMovement.drawOnRelease();
+    buttonNextHero.drawOnRelease();
+    buttonHeroMovement.drawOnRelease();
     buttonKingdom.drawOnRelease();
-
-    if ( buttonSpell.isEnabled() ) {
-        buttonSpell.drawOnRelease();
-    }
-
+    buttonSpell.drawOnRelease();
     buttonEndTurn.drawOnRelease();
     buttonAdventure.drawOnRelease();
     buttonFile.drawOnRelease();
@@ -149,18 +143,17 @@ void Interface::ButtonsArea::ResetButtons()
 fheroes2::GameMode Interface::ButtonsArea::QueueEventProcessing()
 {
     LocalEvent & le = LocalEvent::Get();
-    fheroes2::GameMode res = fheroes2::GameMode::CANCEL;
 
-    if ( buttonNextHero.isEnabled() )
-        le.MousePressLeft( nextHeroRect ) ? buttonNextHero.drawOnPress() : buttonNextHero.drawOnRelease();
-    le.MousePressLeft( movementRect ) ? buttonMovement.drawOnPress() : buttonMovement.drawOnRelease();
+    le.MousePressLeft( nextHeroRect ) ? buttonNextHero.drawOnPress() : buttonNextHero.drawOnRelease();
+    le.MousePressLeft( heroMovementRect ) ? buttonHeroMovement.drawOnPress() : buttonHeroMovement.drawOnRelease();
     le.MousePressLeft( kingdomRect ) ? buttonKingdom.drawOnPress() : buttonKingdom.drawOnRelease();
-    if ( buttonSpell.isEnabled() )
-        le.MousePressLeft( spellRect ) ? buttonSpell.drawOnPress() : buttonSpell.drawOnRelease();
+    le.MousePressLeft( spellRect ) ? buttonSpell.drawOnPress() : buttonSpell.drawOnRelease();
     le.MousePressLeft( endTurnRect ) ? buttonEndTurn.drawOnPress() : buttonEndTurn.drawOnRelease();
     le.MousePressLeft( adventureRect ) ? buttonAdventure.drawOnPress() : buttonAdventure.drawOnRelease();
     le.MousePressLeft( fileRect ) ? buttonFile.drawOnPress() : buttonFile.drawOnRelease();
     le.MousePressLeft( systemRect ) ? buttonSystem.drawOnPress() : buttonSystem.drawOnRelease();
+
+    fheroes2::GameMode res = fheroes2::GameMode::CANCEL;
 
     // Move border window
     if ( Settings::Get().ShowButtons() && BorderWindow::QueueEventProcessing() ) {
@@ -169,8 +162,11 @@ fheroes2::GameMode Interface::ButtonsArea::QueueEventProcessing()
     else if ( buttonNextHero.isEnabled() && le.MouseClickLeft( nextHeroRect ) ) {
         interface.EventNextHero();
     }
-    else if ( le.MouseClickLeft( movementRect ) ) {
-        interface.EventContinueMovement();
+    else if ( buttonHeroMovement.isEnabled() && le.MouseClickLeft( heroMovementRect ) ) {
+        res = interface.EventHeroMovement();
+    }
+    else if ( buttonHeroMovement.isEnabled() && le.MouseLongPressLeft( heroMovementRect ) ) {
+        interface.EventResetHeroPath();
     }
     else if ( le.MouseClickLeft( kingdomRect ) ) {
         interface.EventKingdomInfo();
@@ -191,23 +187,34 @@ fheroes2::GameMode Interface::ButtonsArea::QueueEventProcessing()
         interface.EventSystemDialog();
     }
 
-    if ( le.MousePressRight( nextHeroRect ) )
+    if ( le.MousePressRight( nextHeroRect ) ) {
         fheroes2::showStandardTextMessage( _( "Next Hero" ), _( "Select the next Hero." ), Dialog::ZERO );
-    else if ( le.MousePressRight( movementRect ) )
-        fheroes2::showStandardTextMessage( _( "Continue Movement" ), _( "Continue the Hero's movement along the current path." ), Dialog::ZERO );
-    else if ( le.MousePressRight( kingdomRect ) )
+    }
+    else if ( le.MousePressRight( heroMovementRect ) ) {
+        fheroes2::showStandardTextMessage(
+            _( "Hero Movement" ),
+            _( "Start the Hero's movement along the current path or re-visit the object occupied by the Hero. Press and hold this button to reset the Hero's path." ),
+            Dialog::ZERO );
+    }
+    else if ( le.MousePressRight( kingdomRect ) ) {
         fheroes2::showStandardTextMessage( _( "Kingdom Summary" ), _( "View a Summary of your Kingdom." ), Dialog::ZERO );
-    else if ( le.MousePressRight( spellRect ) )
+    }
+    else if ( le.MousePressRight( spellRect ) ) {
         fheroes2::showStandardTextMessage( _( "Cast Spell" ), _( "Cast an adventure spell." ), Dialog::ZERO );
-    else if ( le.MousePressRight( endTurnRect ) )
+    }
+    else if ( le.MousePressRight( endTurnRect ) ) {
         fheroes2::showStandardTextMessage( _( "End Turn" ), _( "End your turn and left the computer take its turn." ), Dialog::ZERO );
-    else if ( le.MousePressRight( adventureRect ) )
+    }
+    else if ( le.MousePressRight( adventureRect ) ) {
         fheroes2::showStandardTextMessage( _( "Adventure Options" ), _( "Bring up the adventure options menu." ), Dialog::ZERO );
-    else if ( le.MousePressRight( fileRect ) )
+    }
+    else if ( le.MousePressRight( fileRect ) ) {
         fheroes2::showStandardTextMessage( _( "File Options" ), _( "Bring up the file options menu, allowing you to load, save, start a new game or quit." ),
                                            Dialog::ZERO );
-    else if ( le.MousePressRight( systemRect ) )
+    }
+    else if ( le.MousePressRight( systemRect ) ) {
         fheroes2::showStandardTextMessage( _( "System Options" ), _( "Bring up the system options menu, allowing you to customize your game." ), Dialog::ZERO );
+    }
 
     return res;
 }
@@ -215,26 +222,35 @@ fheroes2::GameMode Interface::ButtonsArea::QueueEventProcessing()
 void Interface::ButtonsArea::SetButtonStatus()
 {
     Heroes * currentHero = GetFocusHeroes();
-    if ( currentHero == nullptr || !currentHero->GetPath().isValid() || !currentHero->MayStillMove( false, true ) )
-        buttonMovement.disable();
-    else
-        buttonMovement.enable();
 
-    if ( currentHero == nullptr || !currentHero->HaveSpellBook() || !currentHero->MayCastAdventureSpells() )
-        buttonSpell.disable();
-    else
+    if ( currentHero && currentHero->GetPath().isValidForMovement() && currentHero->MayStillMove( false, true ) ) {
+        buttonHeroMovement.setICNIndexes( 2, 3 );
+        buttonHeroMovement.enable();
+    }
+    else if ( currentHero && MP2::isActionObject( currentHero->getObjectTypeUnderHero(), currentHero->isShipMaster() ) ) {
+        buttonHeroMovement.setICNIndexes( 16, 17 );
+        buttonHeroMovement.enable();
+    }
+    else {
+        buttonHeroMovement.setICNIndexes( 2, 3 );
+        buttonHeroMovement.disable();
+    }
+
+    if ( currentHero && currentHero->HaveSpellBook() && currentHero->MayCastAdventureSpells() ) {
         buttonSpell.enable();
+    }
+    else {
+        buttonSpell.disable();
+    }
 
     const Kingdom & kingdom = world.GetKingdom( Settings::Get().CurrentColor() );
-    const KingdomHeroes & heroes = kingdom.GetHeroes();
+    const VecHeroes & heroes = kingdom.GetHeroes();
 
-    bool isMovableHeroPresent = false;
-    for ( size_t i = 0; i < heroes.size(); ++i ) {
-        if ( heroes[i]->MayStillMove( false, false ) ) {
-            isMovableHeroPresent = true;
-            break;
-        }
-    }
+    const bool isMovableHeroPresent = std::any_of( heroes.begin(), heroes.end(), []( const Heroes * hero ) {
+        assert( hero != nullptr );
+
+        return hero->MayStillMove( false, false );
+    } );
 
     if ( isMovableHeroPresent ) {
         buttonNextHero.enable();

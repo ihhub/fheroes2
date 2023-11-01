@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-15 12:25+0000\n"
+"POT-Creation-Date: 2023-10-23 00:14+0000\n"
 "PO-Revision-Date: 2022-10-01 20:20+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Turkish <tr@li.org>\n"
@@ -74,6 +74,9 @@ msgid "NO"
 msgstr ""
 
 msgid "EXIT"
+msgstr ""
+
+msgid "smallerButton|EXIT"
 msgstr ""
 
 msgid "DISMISS"
@@ -161,16 +164,55 @@ msgstr ""
 msgid "GIFT"
 msgstr "HEDİYE"
 
-msgid "guildWell|EXIT"
+msgid "MAX"
 msgstr ""
 
 msgid "DIFFICULTY"
 msgstr "ZORLUK"
 
+msgid "VIEW INTRO"
+msgstr ""
+
 msgid "MIN"
 msgstr "MİN"
 
-msgid "MAX"
+msgid ""
+"D\n"
+"I\n"
+"S\n"
+"M\n"
+"I\n"
+"S\n"
+"S"
+msgstr ""
+
+msgid ""
+"E\n"
+"X\n"
+"I\n"
+"T"
+msgstr ""
+
+msgid ""
+"C\n"
+"A\n"
+"M\n"
+"P\n"
+"A\n"
+"I\n"
+"G\n"
+"N"
+msgstr ""
+
+msgid ""
+"S\n"
+"T\n"
+"A\n"
+"N\n"
+"D\n"
+"A\n"
+"R\n"
+"D"
 msgstr ""
 
 msgid "Warrior"
@@ -184,16 +226,6 @@ msgstr "Kaşif"
 
 msgid "None"
 msgstr "Hiç"
-
-msgid "Warning"
-msgstr "Uyarı"
-
-msgid ""
-"Do you want to regain control from AI? The effect will take place only on "
-"the next turn."
-msgstr ""
-"Bilgisayardan kontrolü yeniden kazanmak istiyor musunuz? Etki bir sonraki "
-"tur'da gerçekleşecek."
 
 msgid ""
 "A few\n"
@@ -245,7 +277,7 @@ msgstr ""
 "%{monster}"
 
 msgid ""
-"Zounds of\n"
+"Zounds...\n"
 "%{monster}"
 msgstr ""
 "Aşırı fazla\n"
@@ -348,13 +380,17 @@ msgstr ""
 msgid "You have already cast a spell this round."
 msgstr "Bu turda zaten bir büyü yaptın."
 
-msgid "That spell will affect no one!"
+#, fuzzy
+msgid "That spell will have no effect!"
 msgstr "Bu büyü hiç kimseyi etkilemeyecek!"
 
 msgid "You may only summon one type of elemental per combat."
 msgstr "Savaş başına yalnızca bir tür elemental çağırabilirsiniz."
 
-msgid "There is no open space adjacent to your hero to summon an Elemental to."
+#, fuzzy
+msgid ""
+"There is no open space adjacent to your hero where you can summon an "
+"Elemental to."
 msgstr "Kahramanınızın yanında bir Elemental çağırmak için açık bir alan yok."
 
 msgid ""
@@ -370,14 +406,15 @@ msgstr "Hız: %{speed}"
 msgid "Speed"
 msgstr "Hız"
 
-msgid "Army Order"
-msgstr "Ordu Düzeni"
-
 msgid "Off"
 msgstr "Kapalı"
 
 msgid "On"
 msgstr "Açık"
+
+#, fuzzy
+msgid "Turn Order"
+msgstr "Ordu Düzeni"
 
 msgid "Auto Spell Casting"
 msgstr "Otomatik Büyü Yapma"
@@ -409,7 +446,8 @@ msgstr ""
 msgid "Set the speed of combat actions and animations."
 msgstr "Savaş eylemlerinin ve animasyonların hızını ayarlayın."
 
-msgid "Toggle to display army order during the battle."
+#, fuzzy
+msgid "Toggle to display the turn order during the battle."
 msgstr "Savaş sırasında ordu düzenini görüntülemek için geçiş yapın."
 
 msgid ""
@@ -706,6 +744,10 @@ msgstr "Bireysel canavar eylemlerinin sonuçlarını gösterir."
 msgid "Are you sure you want to finish the battle in auto mode?"
 msgstr "Savaşı otomatik modda bitirmek istediğinizden emin misiniz?"
 
+#, fuzzy
+msgid "Are you sure you want to enable auto combat?"
+msgstr "Geri çekilmek istediğine emin misin?"
+
 msgid "%{name} skip their turn."
 msgstr "%{name} sırasını geçti."
 
@@ -968,8 +1010,8 @@ msgstr ""
 
 msgid ""
 "Roland needs you to defeat the lords near his castle to begin his war of "
-"rebellion against his brother.  They are not allied with each other, so they "
-"will spend most of their time fighting with one another.  Victory is yours "
+"rebellion against his brother. They are not allied with each other, so they "
+"will spend most of their time fighting with one another. Victory is yours "
 "when you have defeated all of their castles and heroes."
 msgstr ""
 
@@ -1028,7 +1070,7 @@ msgid ""
 msgstr ""
 
 msgid ""
-"Switching sides leaves you with three castles against the enemy's one.  This "
+"Switching sides leaves you with three castles against the enemy's one. This "
 "battle will be the easiest one you will face for the rest of the war..."
 "traitor."
 msgstr ""
@@ -1061,10 +1103,10 @@ msgid "Greater Glory"
 msgstr ""
 
 msgid ""
-"King Archibald requires you to defeat the three enemies in this region.  "
-"They are not allied with one another, so they will spend most of their "
-"energy fighting amongst themselves.  You will win when you own all of the "
-"enemy castles and there are no more heroes left to fight."
+"King Archibald requires you to defeat the three enemies in this region. They "
+"are not allied with one another, so they will spend most of their energy "
+"fighting amongst themselves. You will win when you own all of the enemy "
+"castles and there are no more heroes left to fight."
 msgstr ""
 
 msgid ""
@@ -1275,8 +1317,8 @@ msgstr ""
 
 msgid ""
 "Find the Orb of negation, which is said to be buried in this land. There are "
-"clues inscribed on stone obelisks which will help lead you to your price. "
-"Find the orb before the first day of the sixth month, or your rivals will "
+"clues inscribed on stone obelisks which will help lead you to your prize. "
+"Find the Orb before the first day of the sixth month, or your rivals will "
 "surely have gotten to the fount before you."
 msgstr ""
 
@@ -1370,13 +1412,13 @@ msgstr ""
 
 msgid ""
 "As you approach the group of elves, their leader calls them all to "
-"attention.  He shouts to them, \"Who of you is brave enough to join this "
-"fearless ally of ours?\"  The group explodes with cheers as they run to join "
+"attention. He shouts to them, \"Who of you is brave enough to join this "
+"fearless ally of ours?\" The group explodes with cheers as they run to join "
 "your ranks."
 msgstr ""
 
 msgid ""
-"The dwarves hail you, \"Any friend of Roland is a friend of ours.  You may "
+"The dwarves hail you, \"Any friend of Roland is a friend of ours. You may "
 "pass.\""
 msgstr ""
 
@@ -1385,14 +1427,13 @@ msgid ""
 msgstr ""
 
 msgid ""
-"The dragons see you and call out.  \"Our alliance with Archibald compels us "
-"to join you.  Unfortunately you have no room.  A pity!\"  They quickly "
-"scatter."
+"The dragons see you and call out. \"Our alliance with Archibald compels us "
+"to join you. Unfortunately you have no room. A pity!\" They quickly scatter."
 msgstr ""
 
 msgid ""
-"The elves stand at attention as you approach.  Their leader calls to you and "
-"says, \"Let us not impede your progress, ally!  Move on, and may victory be "
+"The elves stand at attention as you approach. Their leader calls to you and "
+"says, \"Let us not impede your progress, ally! Move on, and may victory be "
 "yours.\""
 msgstr ""
 
@@ -1682,13 +1723,16 @@ msgstr ""
 msgid "Requires:"
 msgstr ""
 
+msgid "Exit this menu without doing anything."
+msgstr ""
+
 msgid "Cannot build. You have already built here today."
 msgstr ""
 
 msgid "For this action it is necessary to build a castle first."
 msgstr ""
 
-msgid "Cannot build %{name} because castle is too far from water."
+msgid "Cannot build %{name} because the castle is too far away from an ocean."
 msgstr ""
 
 msgid "disable build."
@@ -2331,7 +2375,7 @@ msgstr ""
 msgid "The above spells are available here."
 msgstr ""
 
-msgid "The above spells have been added to your book."
+msgid "The spells the hero can learn have been added to their book."
 msgstr ""
 
 msgid "A generous tip for the barkeep yields the following rumor:"
@@ -2352,6 +2396,9 @@ msgstr ""
 msgid "without artifacts."
 msgstr ""
 
+msgid "Recruit %{name} the %{race}"
+msgstr ""
+
 msgid ""
 "'Spread' combat formation spreads your armies from the top to the bottom of "
 "the battlefield, with at least one empty space between each army."
@@ -2366,9 +2413,6 @@ msgid "Spread Formation"
 msgstr ""
 
 msgid "Grouped Formation"
-msgstr ""
-
-msgid "Recruit %{name} the %{race}"
 msgstr ""
 
 msgid "Set garrison combat formation to 'Spread'"
@@ -2401,10 +2445,13 @@ msgstr ""
 msgid "Hire all creatures in the town."
 msgstr ""
 
+msgid "Available"
+msgstr ""
+
 msgid "Town Population Information and Statistics"
 msgstr ""
 
-msgid "Damg"
+msgid "Damage"
 msgstr ""
 
 msgid "HP"
@@ -2414,9 +2461,6 @@ msgid "Growth"
 msgstr ""
 
 msgid "week"
-msgstr ""
-
-msgid "Available"
 msgstr ""
 
 msgid "View World"
@@ -2443,15 +2487,12 @@ msgstr ""
 msgid "Digging"
 msgstr ""
 
-msgid "Exit this menu without doing anything."
-msgstr ""
-
 msgid "Arena"
 msgstr ""
 
 msgid ""
 "You enter the arena and face a pack of vicious lions. You handily defeat "
-"them, to the wild cheers of the crowd.  Impressed by your skill, the aged "
+"them, to the wild cheers of the crowd. Impressed by your skill, the aged "
 "trainer of gladiators agrees to train you in a skill of your choice."
 msgstr ""
 
@@ -2465,9 +2506,6 @@ msgid "Shots"
 msgstr ""
 
 msgid "Shots Left"
-msgstr ""
-
-msgid "Damage"
 msgstr ""
 
 msgid "Hit Points"
@@ -2499,12 +2537,12 @@ msgstr ""
 msgid "Dismiss this army."
 msgstr ""
 
-msgid "Followers"
-msgstr ""
-
 msgid ""
 "A group of %{monster} with a desire for greater glory wish to join you.\n"
 "Do you accept?"
+msgstr ""
+
+msgid "Followers"
 msgstr ""
 
 msgid ""
@@ -2516,7 +2554,7 @@ msgstr ""
 msgid ""
 "The creatures are swayed by your diplomatic\n"
 "tongue, and make you an offer:\n"
-" \n"
+"\n"
 msgstr ""
 
 msgid ""
@@ -2636,7 +2674,7 @@ msgstr ""
 msgid "Change the graphics settings of the game."
 msgstr ""
 
-msgid "Toggle colored cursor on or off. This is only an esthetic choice."
+msgid "Toggle colored cursor on or off. This is only an aesthetic choice."
 msgstr ""
 
 msgid ""
@@ -2743,6 +2781,51 @@ msgstr ""
 msgid "Hot Keys:"
 msgstr ""
 
+msgid "Evil"
+msgstr ""
+
+msgid "Good"
+msgstr ""
+
+msgid "Interface Type"
+msgstr ""
+
+msgid "Hide"
+msgstr ""
+
+msgid "Show"
+msgstr ""
+
+msgid "Interface"
+msgstr ""
+
+msgid "Slow"
+msgstr ""
+
+msgid "Normal"
+msgstr ""
+
+msgid "Fast"
+msgstr ""
+
+msgid "Very Fast"
+msgstr ""
+
+msgid "Scroll Speed"
+msgstr ""
+
+msgid "Toggle the type of interface you want to use."
+msgstr ""
+
+msgid "Toggle interface visibility."
+msgstr ""
+
+msgid "Toggle colored cursor on or off. This is only an esthetic choice."
+msgstr ""
+
+msgid "Sets the speed at which you scroll the window."
+msgstr ""
+
 msgid "Select Game Language:"
 msgstr ""
 
@@ -2758,10 +2841,17 @@ msgstr ""
 msgid "You have learned %{skill}."
 msgstr ""
 
-msgid "You may learn either:"
+msgid ""
+"%{name} has gained a level.\n"
+"\n"
+"%{skill} +1"
 msgstr ""
 
-msgid "or"
+msgid ""
+"You may learn either:\n"
+"%{skill1}\n"
+"or\n"
+"%{skill2}"
 msgstr ""
 
 msgid ""
@@ -2828,6 +2918,9 @@ msgstr ""
 msgid "%{color} Barrier"
 msgstr ""
 
+msgid "(tent visited)"
+msgstr ""
+
 msgid "%{color} Tent"
 msgstr ""
 
@@ -2841,9 +2934,6 @@ msgid "(no digging)"
 msgstr ""
 
 msgid "penalty: %{cost}"
-msgstr ""
-
-msgid "Uncharted Territory"
 msgstr ""
 
 msgid "Defenders:"
@@ -2871,6 +2961,9 @@ msgid "Spell Points:"
 msgstr ""
 
 msgid "Move Points:"
+msgstr ""
+
+msgid "Uncharted Territory"
 msgstr ""
 
 msgid "Cost per troop:"
@@ -2933,12 +3026,6 @@ msgid ""
 "Location: "
 msgstr ""
 
-msgid "File to Save:"
-msgstr ""
-
-msgid "File to Load:"
-msgstr ""
-
 msgid "Click to save the current game."
 msgstr ""
 
@@ -2951,19 +3038,34 @@ msgstr ""
 msgid "Warning!"
 msgstr ""
 
-msgid "Select Monster:"
+msgid "File to Save:"
 msgstr ""
 
-msgid "Select Hero:"
+msgid "File to Load:"
 msgstr ""
 
-msgid "Select Artifact:"
+msgid "Accept the choice made."
+msgstr ""
+
+msgid "Unknown Hero"
+msgstr ""
+
+msgid "%{color} %{race} hero"
+msgstr ""
+
+msgid "Select Skill:"
 msgstr ""
 
 msgid "Select Spell:"
 msgstr ""
 
-msgid "Select Skill:"
+msgid "Select Artifact:"
+msgstr ""
+
+msgid "Select Monster:"
+msgstr ""
+
+msgid "Select Hero:"
 msgstr ""
 
 msgid "Map Type:\n"
@@ -3083,7 +3185,7 @@ msgid "Selected Map Difficulty"
 msgstr ""
 
 msgid ""
-"The map difficulty of the currently selected map.  The map difficulty is "
+"The map difficulty of the currently selected map. The map difficulty is "
 "determined by the scenario designer. More difficult maps might include more "
 "or stronger enemies, fewer resources, or other special conditions making "
 "things tougher for the human player."
@@ -3093,9 +3195,6 @@ msgid "Selected Description"
 msgstr ""
 
 msgid "The description of the currently selected map."
-msgstr ""
-
-msgid "Accept the choice made."
 msgstr ""
 
 msgid "Jump"
@@ -3108,39 +3207,6 @@ msgid "Don't Show"
 msgstr ""
 
 msgid "Enemy Speed"
-msgstr ""
-
-msgid "Slow"
-msgstr ""
-
-msgid "Normal"
-msgstr ""
-
-msgid "Fast"
-msgstr ""
-
-msgid "Very Fast"
-msgstr ""
-
-msgid "Scroll Speed"
-msgstr ""
-
-msgid "Evil"
-msgstr ""
-
-msgid "Good"
-msgstr ""
-
-msgid "Interface Type"
-msgstr ""
-
-msgid "Hide"
-msgstr ""
-
-msgid "Show"
-msgstr ""
-
-msgid "Interface"
 msgstr ""
 
 msgid "Auto Resolve"
@@ -3159,17 +3225,14 @@ msgid "Change the speed at which your heroes move on the main screen."
 msgstr ""
 
 msgid ""
-"Sets the speed that A.I. heroes move at.  You can also elect not to view A."
-"I. movement at all."
+"Sets the speed that A.I. heroes move at. You can also elect not to view A.I. "
+"movement at all."
 msgstr ""
 
-msgid "Sets the speed at which you scroll the window."
+msgid "Change the interface settings of the game."
 msgstr ""
 
-msgid "Toggle the type of interface you want to use."
-msgstr ""
-
-msgid "Toggle interface visibility."
+msgid "Interface Settings"
 msgstr ""
 
 msgid "Toggle instant battle mode."
@@ -3285,6 +3348,150 @@ msgstr ""
 msgid "Quit out of the map editor."
 msgstr ""
 
+msgid "Monster"
+msgstr ""
+
+msgid "Monsters cannot be placed on water."
+msgstr ""
+
+msgid "Choose a tile which does not contain any objects."
+msgstr ""
+
+msgid "Heroes"
+msgstr ""
+
+msgid "Heroes cannot be placed on water."
+msgstr ""
+
+msgid "Ocean Objects"
+msgstr ""
+
+msgid "Grass Objects"
+msgstr ""
+
+msgid "Snow Objects"
+msgstr ""
+
+msgid "Swamp Objects"
+msgstr ""
+
+msgid "Lava Objects"
+msgstr ""
+
+msgid "Desert Objects"
+msgstr ""
+
+msgid "Dirt Objects"
+msgstr ""
+
+msgid "Wasteland Objects"
+msgstr ""
+
+msgid "Beach Objects"
+msgstr ""
+
+msgid "Towns"
+msgstr ""
+
+msgid "Artifacts"
+msgstr ""
+
+msgid "Treasures"
+msgstr ""
+
+msgid "Terrain"
+msgstr ""
+
+msgid "Castles"
+msgstr ""
+
+msgid "Roads"
+msgstr ""
+
+msgid "Streams"
+msgstr ""
+
+msgid ""
+"Draws terrain in\n"
+"%{size} by %{size} square increments."
+msgstr ""
+
+msgid ""
+"Erases objects in\n"
+"%{size} by %{size} square increments."
+msgstr ""
+
+msgid "Small Brush"
+msgstr ""
+
+msgid "Medium Brush"
+msgstr ""
+
+msgid "Large Brush"
+msgstr ""
+
+msgid "Area Fill"
+msgstr ""
+
+msgid "Used to click and drag for filling in large areas."
+msgstr ""
+
+msgid "Clear Area"
+msgstr ""
+
+msgid "Used to click and drag for clearing large areas."
+msgstr ""
+
+msgid ""
+"Costs %{rate} times normal movement for all heroes. (Pathfinding reduces or "
+"eliminates the penalty.)"
+msgstr ""
+
+msgid "Traversable only by boat."
+msgstr ""
+
+msgid "No special modifiers."
+msgstr ""
+
+msgid "Used to place objects most appropriate for use on %{terrain}."
+msgstr ""
+
+msgid ""
+"Used to place\n"
+"a town or castle."
+msgstr ""
+
+msgid ""
+"Used to place\n"
+"a monster group."
+msgstr ""
+
+msgid "Used to place a hero."
+msgstr ""
+
+msgid "Used to place an artifact."
+msgstr ""
+
+msgid ""
+"Used to place\n"
+"a resource or treasure."
+msgstr ""
+
+msgid "Toggle the erasure of %{type} objects."
+msgstr ""
+
+msgid ""
+"Objects of this type will be deleted with the Erase tool. Left-click here to "
+"deselect this type. Press and hold this button to deselect all other object "
+"types."
+msgstr ""
+
+msgid ""
+"Objects of this type will NOT be deleted with the Erase tool. Left-click "
+"here to select this type. Press and hold this button to select all other "
+"object types."
+msgstr ""
+
 msgid "Terrain Mode"
 msgstr ""
 
@@ -3318,7 +3525,7 @@ msgstr ""
 msgid "Erase Mode"
 msgstr ""
 
-msgid "Used to erase objects off the map."
+msgid "Used to erase objects from the map."
 msgstr ""
 
 msgid "Change between zoom and normal view."
@@ -3330,7 +3537,7 @@ msgstr ""
 msgid "Undo"
 msgstr ""
 
-msgid "Undo your last action.  Press again to redo the action."
+msgid "Undo your last action."
 msgstr ""
 
 msgid "Create a new map either from scratch or using the random map generator."
@@ -3379,6 +3586,9 @@ msgstr ""
 
 msgid "No maps available!"
 msgstr ""
+
+msgid "Warning"
+msgstr "Uyarı"
 
 msgid "difficulty|Easy"
 msgstr ""
@@ -3643,9 +3853,6 @@ msgstr ""
 msgid "Your Name"
 msgstr ""
 
-msgid "Unknown Hero"
-msgstr ""
-
 msgid "Standard"
 msgstr ""
 
@@ -3754,6 +3961,14 @@ msgstr ""
 msgid "hotkey|new random map"
 msgstr ""
 
+#, fuzzy
+msgid "hotkey|undo last action"
+msgstr "Sistem seçeneklerini özelleştirin"
+
+#, fuzzy
+msgid "hotkey|redo last action"
+msgstr "Sistem seçeneklerini özelleştirin"
+
 msgid "hotkey|roland campaign"
 msgstr ""
 
@@ -3820,7 +4035,7 @@ msgstr ""
 msgid "hotkey|next hero"
 msgstr ""
 
-msgid "hotkey|continue hero movement"
+msgid "hotkey|start hero movement"
 msgstr ""
 
 msgid "hotkey|cast adventure spell"
@@ -3975,6 +4190,18 @@ msgstr ""
 msgid "hotkey|dismiss hero or troop"
 msgstr ""
 
+msgid ""
+"Do you want to regain control from AI? The effect will take place only on "
+"the next turn."
+msgstr ""
+"Bilgisayardan kontrolü yeniden kazanmak istiyor musunuz? Etki bir sonraki "
+"tur'da gerçekleşecek."
+
+msgid ""
+"Do you want to transfer control from you to the AI? The effect will take "
+"place only on the next turn."
+msgstr ""
+
 #, fuzzy
 msgid "The save file is corrupted."
 msgstr "Ayna görüntüsü oluşturuldu."
@@ -4022,12 +4249,12 @@ msgstr ""
 msgid "Campaign Game"
 msgstr ""
 
+msgid "Multi-Player Game"
+msgstr ""
+
 msgid ""
 "A multi-player game, with several human players completing against each "
 "other on a single map."
-msgstr ""
-
-msgid "Multi-Player Game"
 msgstr ""
 
 msgid "fheroes2 Resurrection Team presents"
@@ -4040,23 +4267,40 @@ msgid "Welcome to Heroes of Might and Magic II powered by fheroes2 engine!"
 msgstr ""
 
 msgid ""
-"Welcome to Heroes of Might and Magic II powered by fheroes2 engine! Before "
-"starting the game please choose game resolution."
+"Welcome to Heroes of Might and Magic II powered by the fheroes2 engine!\n"
+"Before starting the game please select a game resolution."
 msgstr ""
 
 msgid "Please Remember"
 msgstr ""
 
-msgid "You can always change game resolution by clicking on the "
+msgid ""
+"You can always change the language, resolution and settings of the game by "
+"clicking on the "
 msgstr ""
 
 msgid "door"
 msgstr ""
 
+msgid " on the left side of the Main Menu, or with the "
+msgstr ""
+
+msgid " button from the "
+msgstr ""
+
+msgid "NEW GAME"
+msgstr ""
+
 msgid ""
-" on the left side of main menu or by clicking on the configuration button. \n"
+" menu. \n"
 "\n"
 "Enjoy the game!"
+msgstr ""
+
+msgid "Editor"
+msgstr ""
+
+msgid "The Editor requires \"The Price of Loyalty\" expansion files to work."
 msgstr ""
 
 msgid "Quit Heroes of Might and Magic II and return to the operating system."
@@ -4162,7 +4406,7 @@ msgstr ""
 msgid "Play with 6 human players."
 msgstr ""
 
-msgid "Dragon city has fallen!  You are now the Master of the Dragons."
+msgid "Dragon city has fallen! You are now the Master of the Dragons."
 msgstr ""
 
 msgid ""
@@ -4191,6 +4435,9 @@ msgstr ""
 msgid ""
 "You have built up over %{count} gold in your treasury.\n"
 "All enemies bow before your wealth and power."
+msgstr ""
+
+msgid "Victory!"
 msgstr ""
 
 msgid ""
@@ -4358,6 +4605,9 @@ msgstr ""
 msgid " All dwellings increase population."
 msgstr ""
 
+msgid "New Month!"
+msgstr ""
+
 msgid "New Week!"
 msgstr ""
 
@@ -4375,11 +4625,6 @@ msgid ""
 msgstr ""
 
 msgid "%{color} player's turn."
-msgstr ""
-
-msgid ""
-"Do you want to transfer control from you to the AI? The effect will take "
-"place only on the next turn."
 msgstr ""
 
 msgid ""
@@ -4458,10 +4703,13 @@ msgstr ""
 msgid "Select the next Hero."
 msgstr ""
 
-msgid "Continue Movement"
-msgstr ""
+#, fuzzy
+msgid "Hero Movement"
+msgstr "Gölge Hareketi"
 
-msgid "Continue the Hero's movement along the current path."
+msgid ""
+"Start the Hero's movement along the current path or re-visit the object "
+"occupied by the Hero. Press and hold this button to reset the Hero's path."
 msgstr ""
 
 msgid "Kingdom Summary"
@@ -5031,7 +5279,7 @@ msgstr ""
 msgid ""
 "You approach the hut and observe a witch inside studying an ancient tome on "
 "%{skill}.\n"
-" \n"
+"\n"
 msgstr ""
 
 msgid ""
@@ -5211,7 +5459,7 @@ msgstr ""
 
 msgid ""
 "A drink at the oasis fills your troops with strength and lifts their "
-"spirits.  You can travel a bit further today."
+"spirits. You can travel a bit further today."
 msgstr ""
 
 msgid ""
@@ -5831,9 +6079,9 @@ msgstr ""
 
 msgid ""
 "The Sphinx asks you the following riddle:\n"
-" \n"
+"\n"
 "'%{riddle}'\n"
-" \n"
+"\n"
 "Your answer?"
 msgstr ""
 
@@ -5869,16 +6117,18 @@ msgid ""
 "oracle taught me his skill. I have the answer you seek.\""
 msgstr ""
 
-msgid "Spell book is not present."
+#, fuzzy
+msgid "No spell book is present."
+msgstr "Yapılacak büyü yok."
+
+msgid ""
+"This spell costs %{mana} spell points. You have no spell points, so you "
+"cannot cast it."
 msgstr ""
 
 msgid ""
-"That spell costs %{mana} mana. You have no mana, so you can't cast the spell."
-msgstr ""
-
-msgid ""
-"That spell costs %{mana} mana. You only have %{point} mana, so you can't "
-"cast the spell."
+"This spell costs %{mana} spell points. You only have %{point} spell points, "
+"so you cannot cast it."
 msgstr ""
 
 msgid "The spell was not found."
@@ -5893,47 +6143,50 @@ msgstr ""
 msgid "Your hero is too tired to cast this spell today. Try again tomorrow."
 msgstr ""
 
-msgid "This spell cannot be used on a boat."
+msgid "This spell cannot be cast on a boat."
 msgstr ""
 
-msgid "This spell can be casted only nearby ocean."
-msgstr ""
-
-msgid ""
-"There is no boat available and no free ocean location near the hero to cast "
-"this spell."
-msgstr ""
-
-msgid "There is no more boat available to cast this spell."
-msgstr ""
-
-msgid "There is no free ocean location near the hero to cast this spell."
+msgid "This spell can only be cast near an ocean."
 msgstr ""
 
 msgid ""
-"You do not currently own any town or castle, so you can't cast the spell."
+"There are no boats available and no ocean adjacent to the hero where this "
+"spell will work."
 msgstr ""
 
-msgid "This hero is already in a town, so you can't cast the spell."
+msgid "There are no boats available for this spell."
 msgstr ""
+
+#, fuzzy
+msgid "There is no ocean adjacent to the hero where this spell will work."
+msgstr "Kahramanınızın yanında bir Elemental çağırmak için açık bir alan yok."
+
+msgid ""
+"You do not own any town or castle that is not currently occupied by a hero. "
+"This spell will have no effect."
+msgstr ""
+
+#, fuzzy
+msgid "This hero is already in a town, so this spell will have no effect."
+msgstr "Bu büyü hiç kimseyi etkilemeyecek!"
 
 msgid ""
 "The nearest town is %{town}.\n"
-" \n"
+"\n"
 "This town is occupied by your hero %{hero}."
 msgstr ""
 
-msgid "This spell is already in use."
+msgid "This spell is already in effect."
 msgstr ""
 
 msgid ""
-"No opponent can have heroes under his command anymore. Casting this spell "
-"will not bring any advantage."
+"No opponent neither has nor can have any hero under their command anymore. "
+"Casting this spell will have no effect."
 msgstr ""
 
 msgid ""
-"No opponent has a hero under his command at this time. Casting this spell "
-"will not bring any advantage."
+"No opponent has a hero under their command at this time. Casting this spell "
+"will have no effect."
 msgstr ""
 
 msgid ""
@@ -5942,16 +6195,16 @@ msgid ""
 msgstr ""
 
 msgid ""
-"You must be standing on the entrance to a mine (sawmills and alchemists "
-"don't count) to cast this spell."
+"You must be standing on the entrance to a mine (sawmills and alchemist labs "
+"do not count) to cast this spell."
 msgstr ""
 
 msgid "You must first defeat the ghosts guarding the mine to cast this spell."
 msgstr ""
 
 msgid ""
-"There are already at least as many elementals guarding the mine than the "
-"spell can generate. Casting this spell will not bring any advantage."
+"There are already at least as many elementals guarding the mine as this hero "
+"can generate. Casting this spell will have no effect."
 msgstr ""
 
 msgid "%{name} the %{race} (Level %{level})"
@@ -6327,17 +6580,17 @@ msgstr ""
 
 msgid ""
 "%{skill} gives your hero a %{count} percent chance to learn any given 1st or "
-"2nd level enemy spell used against him in a combat."
+"2nd level spell that was cast by an enemy during combat."
 msgstr ""
 
 msgid ""
 "%{skill} gives your hero a %{count} percent chance to learn any given 3rd "
-"level spell (or below) used against him in combat."
+"level spell (or below) that was cast by an enemy during combat."
 msgstr ""
 
 msgid ""
 "%{skill} gives your hero a %{count} percent chance to learn any given 4th "
-"level spell (or below) used against him in combat."
+"level spell (or below) that was cast by an enemy during combat."
 msgstr ""
 
 msgid ""
@@ -6429,9 +6682,6 @@ msgstr ""
 msgid "Skills"
 msgstr ""
 
-msgid "Artifacts"
-msgstr ""
-
 msgid "Town/Castle"
 msgstr ""
 
@@ -6439,9 +6689,6 @@ msgid "Garrison"
 msgstr ""
 
 msgid "Gold Per Day:"
-msgstr ""
-
-msgid "Heroes"
 msgstr ""
 
 msgid "View Heroes."
@@ -6828,9 +7075,6 @@ msgstr[0] ""
 msgstr[1] ""
 
 msgid "Mines"
-msgstr ""
-
-msgid "Monster"
 msgstr ""
 
 msgid "Obelisk"
@@ -7827,7 +8071,7 @@ msgid "The %{name} increase your defense skill by %{count}."
 msgstr ""
 
 msgid ""
-"You encounter the infamous Black Knight!  After a grueling duel ending in a "
+"You encounter the infamous Black Knight! After a grueling duel ending in a "
 "draw, the Knight, out of respect, offers you a pair of armored gauntlets."
 msgstr ""
 
@@ -8058,7 +8302,7 @@ msgid "The %{name} extends the duration of all your spells by %{count} turns."
 msgstr ""
 
 msgid ""
-"A surprise turn in the landscape finds you in the midst of a grisly scene:  "
+"A surprise turn in the landscape finds you in the midst of a grisly scene: "
 "Vultures picking at the aftermath of a terrible battle. Your cursory search "
 "of the remains turns up an enchanted hourglass."
 msgstr ""
@@ -8306,12 +8550,12 @@ msgstr ""
 msgid "Wand of Negation"
 msgstr ""
 
-msgid "The %{name} protects your troops from the Dispel Magic spell."
+msgid "The %{name} makes all your troops immune to dispel magic spells."
 msgstr ""
 
 msgid ""
 "You meet an old Wizard friend of yours traveling in the opposite direction. "
-"He presents  you with a gift:  A wand that prevents the use of the dispel "
+"He presents  you with a gift: A wand that prevents the use of the dispel "
 "magic spell on your allies."
 msgstr ""
 
@@ -8417,8 +8661,8 @@ msgstr ""
 msgid ""
 "Your looting of the grave of Sinfilas Gardolad, the famous shapeshifting "
 "Warlock, unearths his fabled mask. Trembling, you put it on and it twists "
-"your visage into an awful grimace!  Oh no!  It's actually the hideous mask "
-"of Gromluck Greene, and you are stuck with it."
+"your visage into an awful grimace! Oh no! It's actually the hideous mask of "
+"Gromluck Greene, and you are stuck with it."
 msgstr ""
 
 msgid "Endless Pouch of Sulfur"
@@ -8490,7 +8734,7 @@ msgid "The %{name} provides %{count} unit of crystal per day."
 msgstr ""
 
 msgid ""
-"Taking shelter from a storm in a small cave,  you notice a small patch of "
+"Taking shelter from a storm in a small cave, you notice a small patch of "
 "crystal in one corner. Curious, you break a piece off and notice that the "
 "original crystal grows the lost piece back. You decide to stuff the entire "
 "patch into a pouch and take it with you."
@@ -8520,7 +8764,7 @@ msgid "White Pearl"
 msgstr ""
 
 msgid ""
-"A walk across a dry saltwater lake bed yields an unlikely prize:  A white "
+"A walk across a dry saltwater lake bed yields an unlikely prize: A white "
 "pearl amidst shattered shells and debris."
 msgstr ""
 
@@ -8616,7 +8860,7 @@ msgid "Battle Garb of Anduran"
 msgstr ""
 
 msgid ""
-"The %{name} combines the powers of the three Anduran artifacts.  It provides "
+"The %{name} combines the powers of the three Anduran artifacts. It provides "
 "maximum luck and morale for your troops and gives you the Town Portal spell."
 msgstr ""
 
@@ -8668,9 +8912,9 @@ msgstr ""
 msgid ""
 "Suddenly, a biting coldness engulfs your body. You seize up, falling from "
 "your horse. The pain subsides, but you still feel as if your chest is "
-"frozen.  As you pick yourself up off of the ground, you hear hearty "
-"laughter. You turn around just in time to see a Frost Giant run off into the "
-"woods and disappear."
+"frozen. As you pick yourself up off of the ground, you hear hearty laughter. "
+"You turn around just in time to see a Frost Giant run off into the woods and "
+"disappear."
 msgstr ""
 
 msgid "Helmet of Anduran"
@@ -8688,7 +8932,7 @@ msgstr ""
 
 msgid ""
 "You come upon a battle where a Paladin has been mortally wounded by a group "
-"of Zombies. He asks you to take his hammer and finish what he started.  As "
+"of Zombies. He asks you to take his hammer and finish what he started. As "
 "you pick it up, it begins to hum, and then everything becomes a blur. The "
 "Zombies lie dead, the hammer dripping with blood. You strap it to your belt."
 msgstr ""
@@ -8707,17 +8951,17 @@ msgid ""
 "flying anyway.\""
 msgstr ""
 
-msgid "Masthead"
-msgstr ""
-
-msgid "The %{name} boosts your luck and morale by %{count} each in sea combat."
-msgstr ""
-
 msgid ""
 "An old seaman tells you a tale of an enchanted masthead that he used in his "
 "youth to rally his crew during times of trouble. He then hands you a faded "
 "map that shows where he hid it. After much exploring, you find it stashed "
 "underneath a nearby dock."
+msgstr ""
+
+msgid "Masthead"
+msgstr ""
+
+msgid "The %{name} boosts your luck and morale by %{count} each in sea combat."
 msgstr ""
 
 msgid "Sphere of Negation"
@@ -8756,15 +9000,15 @@ msgid ""
 "Sword Breaker that he relied on during his tour of duty."
 msgstr ""
 
+msgid "Sword of Anduran"
+msgstr ""
+
 msgid ""
 "A Troll stops you and says: \"Pay me 5,000 gold, or the Sword of Anduran "
 "will slay you where you stand.\" You refuse. The troll grabs the sword "
 "hanging from its belt, screams in pain, and runs away. Picking up the fabled "
 "sword, you give thanks that half-witted Trolls tend to grab the wrong end of "
 "sharp objects."
-msgstr ""
-
-msgid "Sword of Anduran"
 msgstr ""
 
 msgid "Spade of Necromancy"
@@ -8837,7 +9081,7 @@ msgid ""
 "Causes a bolt of electrical energy to strike a selected creature, then "
 "strike the nearest creature with half damage, then strike the NEXT nearest "
 "creature with half again damage, and so on, until it becomes too weak to be "
-"harmful.  Warning:  This spell can hit your own creatures!"
+"harmful. Warning: This spell can hit your own creatures!"
 msgstr ""
 
 msgid "Teleport"
@@ -8924,7 +9168,7 @@ msgid "Stoneskin"
 msgstr ""
 
 msgid ""
-"Increases the defense skill of the targeted creatures.  This is an improved "
+"Increases the defense skill of the targeted creatures. This is an improved "
 "version of Stoneskin."
 msgstr ""
 
@@ -8950,7 +9194,7 @@ msgid "Holy Word"
 msgstr ""
 
 msgid ""
-"Damages all undead in the battle.  This is an improved version of Holy Word."
+"Damages all undead in the battle. This is an improved version of Holy Word."
 msgstr ""
 
 msgid "Holy Shout"
@@ -9051,7 +9295,7 @@ msgid "Death Wave"
 msgstr ""
 
 msgid ""
-"Damages all living (non-undead) units in the battle.  This spell is an "
+"Damages all living (non-undead) units in the battle. This spell is an "
 "improved version of Death Ripple."
 msgstr ""
 
@@ -9077,21 +9321,25 @@ msgid "Mirror Image"
 msgstr ""
 
 msgid ""
-"Creates an illusionary unit that duplicates one of your existing units.  "
-"This illusionary unit does the same damages as the original, but will vanish "
-"if it takes any damage."
-msgstr ""
-
-msgid "Halves damage received from ranged attacks for a single unit."
+"Creates an illusionary unit that duplicates one of your existing units. This "
+"illusionary unit does the same damages as the original, but will vanish if "
+"it takes any damage."
 msgstr ""
 
 msgid "Shield"
 msgstr ""
 
-msgid "Halves damage received from ranged attacks for all of your units."
+msgid ""
+"Halves damage received from ranged attacks for a single unit. Does not "
+"affect damage received from Turrets or Ballistae."
 msgstr ""
 
 msgid "Mass Shield"
+msgstr ""
+
+msgid ""
+"Halves damage received from ranged attacks for all of your units. Does not "
+"affect damage received from Turrets or Ballistae."
 msgstr ""
 
 msgid "Summon Earth Elemental"
@@ -9167,9 +9415,9 @@ msgid "Summon Boat"
 msgstr ""
 
 msgid ""
-"Summons the nearest unoccupied, friendly boat to an adjacent shore "
-"location.  A friendly boat is one which you just built or were the most "
-"recent player to occupy."
+"Summons the nearest unoccupied, friendly boat to an adjacent shore location. "
+"A friendly boat is one which you just built or were the most recent player "
+"to occupy."
 msgstr ""
 
 msgid "Allows the caster to magically transport to a nearby location."
@@ -9200,8 +9448,8 @@ msgid "Haunt"
 msgstr ""
 
 msgid ""
-"Haunts a mine you control with Ghosts.  This mine stops producing "
-"resources.  (If I can't keep it, nobody will!)"
+"Haunts a mine you control with Ghosts. This mine stops producing resources. "
+"(If I can't keep it, nobody will!)"
 msgstr ""
 
 msgid "Set Earth Guardian"
@@ -9232,7 +9480,7 @@ msgid "Petrification"
 msgstr ""
 
 msgid ""
-"Turns the affected creature into stone.  A petrified creature receives half "
+"Turns the affected creature into stone. A petrified creature receives half "
 "damage from a direct attack."
 msgstr ""
 
@@ -9336,7 +9584,7 @@ msgstr ""
 msgid "A Black Dragon will take out a Titan any day of the week."
 msgstr ""
 
-msgid "He told her: Yada yada yada...  and then she said: Blah, blah, blah..."
+msgid "He told her: Yada yada yada... and then she said: Blah, blah, blah..."
 msgstr ""
 
 msgid "An unknown force is being resurrected..."

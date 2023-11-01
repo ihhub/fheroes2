@@ -23,6 +23,7 @@
 #include <cmath>
 #include <cstddef>
 #include <cstdint>
+#include <functional>
 #include <list>
 #include <map>
 #include <memory>
@@ -40,6 +41,9 @@
 #include "artifact.h"
 #include "castle.h"
 #include "color.h"
+#include "difficulty.h"
+#include "direction.h"
+#include "game.h"
 #include "game_interface.h"
 #include "game_over.h"
 #include "game_static.h"
@@ -131,7 +135,7 @@ namespace
             return dist;
         }
 
-        const uint32_t dimensionDoorDist = AIWorldPathfinder::calculatePathPenalty( dimensionDoorSteps );
+        const uint32_t dimensionDoorDist = Route::calculatePathPenalty( dimensionDoorSteps );
         assert( dimensionDoorDist > 0 );
 
         if ( dist == 0 || dimensionDoorDist < dist / 2 ) {
@@ -165,7 +169,7 @@ namespace
         }
 
         const double advantage = hero.isLosingGame() ? AI::ARMY_ADVANTAGE_DESPERATE : AI::ARMY_ADVANTAGE_MEDIUM;
-        const double castleStrength = castle->GetGarrisonStrength( &hero ) * advantage;
+        const double castleStrength = castle->GetGarrisonStrength( hero ) * advantage;
 
         return heroArmyStrength > castleStrength;
     }
@@ -214,10 +218,10 @@ namespace
     }
 
     bool HeroesValidObject( const Heroes & hero, const double heroArmyStrength, const int32_t index, const AIWorldPathfinder & pathfinder, AI::Normal & ai,
-                            const double armyStrengthThreshold )
+                            const double armyStrengthThreshold, const bool underHero )
     {
         const Maps::Tiles & tile = world.GetTiles( index );
-        const MP2::MapObjectType objectType = tile.GetObject();
+        const MP2::MapObjectType objectType = tile.GetObject( !underHero );
 
         // WINS_ARTIFACT victory condition does not apply to AI-controlled players, we should leave this artifact untouched for the human player
         if ( MP2::isArtifactObject( objectType ) ) {
@@ -255,7 +259,7 @@ namespace
         case MP2::OBJ_MINES:
         case MP2::OBJ_SAWMILL:
             if ( !hero.isFriends( getColorFromTile( tile ) ) ) {
-                if ( tile.isCaptureObjectProtected() ) {
+                if ( isCaptureObjectProtected( tile ) ) {
                     return isHeroStrongerThan( tile, objectType, ai, heroArmyStrength, AI::ARMY_ADVANTAGE_SMALL );
                 }
 
@@ -478,7 +482,7 @@ namespace
                 return false;
             }
 
-            const payment_t singleMonsterCost = troop.GetCost();
+            const Funds singleMonsterCost = troop.GetCost();
 
             uint32_t recruitTroopCount = kingdom.GetFunds().getLowestQuotient( singleMonsterCost );
             if ( recruitTroopCount <= 0 ) {
@@ -514,7 +518,7 @@ namespace
                 return false;
             }
 
-            const payment_t & paymentCosts = troop.GetTotalCost();
+            const Funds & paymentCosts = troop.GetTotalCost();
             // TODO: even if AI does not have enough money it might still buy few monsters.
             if ( !kingdom.AllowPayment( paymentCosts ) ) {
                 return false;
@@ -575,7 +579,7 @@ namespace
             return isHeroStrongerThan( tile, objectType, ai, heroArmyStrength, ( hero.isLosingGame() ? 1.0 : AI::ARMY_ADVANTAGE_MEDIUM ) );
 
         case MP2::OBJ_HEROES: {
-            const Heroes * otherHero = tile.GetHeroes();
+            const Heroes * otherHero = tile.getHero();
             assert( otherHero != nullptr );
 
             const bool otherHeroInCastle = ( otherHero->inCastle() != nullptr );
@@ -605,7 +609,7 @@ namespace
         }
 
         case MP2::OBJ_CASTLE:
-            return AIShouldVisitCastle( hero, index, heroArmyStrength ) || ai.isPriorityTask( index );
+            return AIShouldVisitCastle( hero, index, heroArmyStrength );
 
         case MP2::OBJ_JAIL:
             return kingdom.GetHeroes().size() < Kingdom::GetMaxHeroes();
@@ -619,7 +623,7 @@ namespace
                 return false;
             }
 
-            const payment_t payment = PaymentConditions::ForAlchemist();
+            const Funds payment = PaymentConditions::ForAlchemist();
             return kingdom.AllowPayment( payment );
         }
 
@@ -694,7 +698,7 @@ namespace
                 return iter->second;
             }
 
-            const bool valid = HeroesValidObject( _hero, _heroArmyStrength, index, _pathfinder, _ai, _armyStrengthThreshold );
+            const bool valid = HeroesValidObject( _hero, _heroArmyStrength, index, _pathfinder, _ai, _armyStrengthThreshold, false );
             _validObjects[index] = valid;
             return valid;
         }
@@ -791,6 +795,7 @@ namespace
         case MP2::OBJ_GENIE_LAMP:
         case MP2::OBJ_RESOURCE:
         case MP2::OBJ_SEA_CHEST:
+        case MP2::OBJ_TREASURE_CHEST:
             return 0.95;
         case MP2::OBJ_BUOY:
         case MP2::OBJ_TEMPLE:
@@ -852,6 +857,61 @@ namespace AI
         const Maps::Tiles & tile = world.GetTiles( index );
         const MP2::MapObjectType objectType = tile.GetObject();
 
+        const std::function<double( const Castle * )> calculateCastleValue = [this, &hero, &calculateCastleValue]( const Castle * castle ) {
+            assert( castle != nullptr );
+
+            double value = castle->getBuildingValue() * 150.0 + 3000;
+
+            if ( hero.isLosingGame() ) {
+                value += 15000;
+            }
+
+            if ( isCastleLossConditionForHuman( castle ) ) {
+                value += 20000;
+            }
+
+            // This modifier shouldn't be too high to avoid players baiting AI in
+            const double defenselessCastleModifier = 1.25;
+
+            // This is our own castle in need of protection, evaluate it no worse than a similar defenseless enemy castle
+            if ( hero.GetColor() == castle->GetColor() ) {
+                value *= defenselessCastleModifier;
+            }
+            else {
+                const int32_t castleIndex = castle->GetIndex();
+
+                // If this castle threatens our castles, then we should evaluate it no worse than the best of our castles that it threatens
+                // (as if our best castle had to be taken back from the enemy). If a threatening castle can be attacked right now, it is
+                // better to do it than wait until the hero hired in it captures one of our castles.
+                if ( isCriticalTask( castleIndex ) ) {
+                    const auto iter = _priorityTargets.find( castleIndex );
+                    assert( iter != _priorityTargets.end() );
+
+                    const PriorityTask & attackTask = iter->second;
+                    assert( attackTask.type == PriorityTaskType::ATTACK );
+
+                    for ( const int32_t secondaryTaskTileIdx : attackTask.secondaryTaskTileId ) {
+                        const Castle * castleUnderThreat = world.getCastleEntrance( Maps::GetPoint( secondaryTaskTileIdx ) );
+                        if ( castleUnderThreat == nullptr ) {
+                            continue;
+                        }
+
+                        assert( hero.GetColor() == castleUnderThreat->GetColor() );
+
+                        // Apply a bonus so that the AI prefers to eliminate the threat if possible instead of guarding its castle
+                        value = std::max( value, calculateCastleValue( castleUnderThreat ) * 2 );
+                    }
+                }
+
+                // This castle is defenseless
+                if ( !castle->GetActualArmy().isValid() ) {
+                    value *= defenselessCastleModifier;
+                }
+            }
+
+            return value;
+        };
+
         switch ( objectType ) {
         case MP2::OBJ_CASTLE: {
             const Castle * castle = world.getCastleEntrance( Maps::GetPoint( index ) );
@@ -861,15 +921,20 @@ namespace AI
                 return valueToIgnore;
             }
 
-            const bool priority = isPriorityTask( index );
-            const bool critical = isCriticalTask( index );
             if ( hero.GetColor() == castle->GetColor() ) {
-                double value = castle->getVisitValue( hero );
-                if ( critical )
-                    return 10000 + value;
+                // If our castle is in danger, then we should evaluate it not from the point of view of momentary benefits
+                // for the hero (for example, the presence of reinforcements), but from the point of view of the castle,
+                // which then will have to be taken back from the enemy, that is, according to approximately the same logic
+                // as enemy castles
+                if ( isCriticalTask( index ) ) {
+                    return calculateCastleValue( castle );
+                }
 
-                if ( !priority && value < 500 )
+                double value = castle->getVisitValue( hero );
+
+                if ( !isPriorityTask( index ) && value < 500 ) {
                     return valueToIgnore;
+                }
 
                 return value;
             }
@@ -887,23 +952,13 @@ namespace AI
                 return -dangerousTaskPenalty;
             }
 
-            double value = castle->getBuildingValue() * 150.0 + 3000;
-            if ( critical || hero.isLosingGame() )
-                value += 15000;
-            // If the castle is defenseless
-            if ( !castle->GetActualArmy().isValid() )
-                value *= 1.25;
-
-            if ( isCastleLossConditionForHuman( castle ) )
-                value += 20000;
-
-            return value;
+            return calculateCastleValue( castle );
         }
         case MP2::OBJ_HEROES: {
-            const Heroes * otherHero = tile.GetHeroes();
-            assert( otherHero );
+            const Heroes * otherHero = tile.getHero();
             if ( !otherHero ) {
                 // How is it even possible?
+                assert( 0 );
                 return valueToIgnore;
             }
 
@@ -912,7 +967,9 @@ namespace AI
                     // The other hero has a lower role. Do not waste time for meeting. Let him to come.
                     return valueToIgnore;
                 }
-                if ( hero.getAIRole() == otherHero->getAIRole() && hero.getStatsValue() + 2 > otherHero->getStatsValue() ) {
+
+                if ( hero.getAIRole() == otherHero->getAIRole()
+                     && hero.getStatsValue() + Difficulty::getMinStatDiffBetweenAIRoles( Game::getDifficulty() ) > otherHero->getStatsValue() ) {
                     // Two heroes are almost identical. No reason to meet.
                     return valueToIgnore;
                 }
@@ -934,8 +991,32 @@ namespace AI
                 return -dangerousTaskPenalty;
             }
 
-            // focus on enemy hero if there's priority set (i.e. hero is threatening our castle)
-            return isCriticalTask( index ) ? 12000.0 : 5000.0;
+            double value = 5000;
+
+            // If this hero threatens our castles, then we should evaluate him no worse than the best of our castles that he threatens
+            // (as if it had to be taken back from the enemy). If a threatening hero can be attacked in an open field, it is better to
+            // do it now than to attack him later in our castle occupied by him.
+            if ( isCriticalTask( index ) ) {
+                const auto iter = _priorityTargets.find( index );
+                assert( iter != _priorityTargets.end() );
+
+                const PriorityTask & attackTask = iter->second;
+                assert( attackTask.type == PriorityTaskType::ATTACK );
+
+                for ( const int32_t secondaryTaskTileIdx : attackTask.secondaryTaskTileId ) {
+                    const Castle * castle = world.getCastleEntrance( Maps::GetPoint( secondaryTaskTileIdx ) );
+                    if ( castle == nullptr ) {
+                        continue;
+                    }
+
+                    assert( hero.GetColor() == castle->GetColor() );
+
+                    // Apply a bonus so that the AI prefers to eliminate the threat if possible instead of guarding its castle
+                    value = std::max( value, calculateCastleValue( castle ) * 2 );
+                }
+            }
+
+            return value;
         }
         case MP2::OBJ_MONSTER: {
             const Army monsters( tile );
@@ -962,7 +1043,7 @@ namespace AI
             }
             else {
                 if ( getColorFromTile( tile ) == hero.GetColor() ) {
-                    return -valueToIgnore; // don't even attempt to go here
+                    return valueToIgnore; // don't even attempt to go here
                 }
 
                 std::tie( resourceType, resourceAmount ) = getDailyIncomeObjectResources( tile ).getFirstValidResource();
@@ -973,7 +1054,8 @@ namespace AI
             // Since mines constantly bring resources, they are valuable objects
             return resourceAmount * getResourcePriorityModifier( resourceType, true );
         }
-        case MP2::OBJ_ARTIFACT: {
+        case MP2::OBJ_ARTIFACT:
+        case MP2::OBJ_SHIPWRECK_SURVIVOR: {
             const Artifact art = getArtifactFromTile( tile );
             assert( art.isValid() );
 
@@ -986,23 +1068,16 @@ namespace AI
             return 1000.0 * art.getArtifactValue();
         }
         case MP2::OBJ_SEA_CHEST:
-        case MP2::OBJ_SHIPWRECK_SURVIVOR:
         case MP2::OBJ_TREASURE_CHEST: {
-            if ( getArtifactFromTile( tile ).isValid() ) {
-                const Artifact art = getArtifactFromTile( tile );
-
-                // WINS_ARTIFACT victory condition does not apply to AI-controlled players, we should leave this artifact untouched for the human player
-                if ( isFindArtifactVictoryConditionForHuman( art ) ) {
-                    assert( 0 );
-                    return -dangerousTaskPenalty;
-                }
-
-                return 1000.0 * art.getArtifactValue();
+            const Artifact art = getArtifactFromTile( tile );
+            if ( art.isValid() && isFindArtifactVictoryConditionForHuman( art ) ) {
+                // WINS_ARTIFACT victory condition does not apply to AI-controlled players, we should leave this object untouched for the human player.
+                assert( 0 );
+                return -dangerousTaskPenalty;
             }
 
-            const Funds funds = getFundsFromTile( tile );
-            assert( funds.gold > 0 || funds.GetValidItemsCount() == 0 );
-
+            // This is an average gold amount you can get from a treasure chest or sea chest.
+            const Funds funds{ Resource::GOLD, 1500 };
             return funds.gold * getResourcePriorityModifier( Resource::GOLD, false );
         }
         case MP2::OBJ_DAEMON_CAVE: {
@@ -1061,7 +1136,7 @@ namespace AI
 
             // This object could have already been visited
             if ( value < 1 ) {
-                return -valueToIgnore;
+                return valueToIgnore;
             }
 
             return value;
@@ -1305,25 +1380,85 @@ namespace AI
 
         const Maps::Tiles & tile = world.GetTiles( index );
         const MP2::MapObjectType objectType = tile.GetObject();
-        const bool anotherFriendlyHeroPresent = _regions[tile.GetRegion()].friendlyHeroes > 1;
+
+        const std::function<double( const Castle * )> calculateCastleValue = [this, &hero, &calculateCastleValue]( const Castle * castle ) {
+            assert( castle != nullptr );
+
+            double value = castle->getBuildingValue() * 500.0 + 15000;
+
+            if ( hero.isLosingGame() ) {
+                value += 15000;
+            }
+
+            if ( isCastleLossConditionForHuman( castle ) ) {
+                value += 20000;
+            }
+
+            // This modifier shouldn't be too high to avoid players baiting AI in
+            const double defenselessCastleModifier = 1.5;
+
+            // This is our own castle in need of protection, evaluate it no worse than a similar defenseless enemy castle
+            if ( hero.GetColor() == castle->GetColor() ) {
+                value *= defenselessCastleModifier;
+            }
+            else {
+                const int32_t castleIndex = castle->GetIndex();
+
+                // If this castle threatens our castles, then we should evaluate it no worse than the best of our castles that it threatens
+                // (as if our best castle had to be taken back from the enemy). If a threatening castle can be attacked right now, it is
+                // better to do it than wait until the hero hired in it captures one of our castles.
+                if ( isCriticalTask( castleIndex ) ) {
+                    const auto iter = _priorityTargets.find( castleIndex );
+                    assert( iter != _priorityTargets.end() );
+
+                    const PriorityTask & attackTask = iter->second;
+                    assert( attackTask.type == PriorityTaskType::ATTACK );
+
+                    for ( const int32_t secondaryTaskTileIdx : attackTask.secondaryTaskTileId ) {
+                        const Castle * castleUnderThreat = world.getCastleEntrance( Maps::GetPoint( secondaryTaskTileIdx ) );
+                        if ( castleUnderThreat == nullptr ) {
+                            continue;
+                        }
+
+                        assert( hero.GetColor() == castleUnderThreat->GetColor() );
+
+                        // Apply a bonus so that the AI prefers to eliminate the threat if possible instead of guarding its castle
+                        value = std::max( value, calculateCastleValue( castleUnderThreat ) * 2 );
+                    }
+                }
+
+                // This castle is defenseless
+                if ( !castle->GetActualArmy().isValid() ) {
+                    value *= defenselessCastleModifier;
+                }
+            }
+
+            return value;
+        };
 
         switch ( objectType ) {
         case MP2::OBJ_CASTLE: {
             const Castle * castle = world.getCastleEntrance( Maps::GetPoint( index ) );
             if ( !castle ) {
                 // How is it even possible?
+                assert( 0 );
                 return valueToIgnore;
             }
 
-            const bool priority = isPriorityTask( index );
-            const bool critical = isCriticalTask( index );
             if ( hero.GetColor() == castle->GetColor() ) {
-                double value = castle->getVisitValue( hero );
-                if ( critical )
-                    return 15000 + value;
+                // If our castle is in danger, then we should evaluate it not from the point of view of momentary benefits
+                // for the hero (for example, the presence of reinforcements), but from the point of view of the castle,
+                // which then will have to be taken back from the enemy, that is, according to approximately the same logic
+                // as enemy castles
+                if ( isCriticalTask( index ) ) {
+                    return calculateCastleValue( castle );
+                }
 
-                if ( !priority && value < 500 )
+                double value = castle->getVisitValue( hero );
+
+                if ( !isPriorityTask( index ) && value < 500 ) {
                     return valueToIgnore;
+                }
 
                 return value / 2;
             }
@@ -1341,23 +1476,13 @@ namespace AI
                 return -dangerousTaskPenalty;
             }
 
-            double value = castle->getBuildingValue() * 500.0 + 15000;
-            if ( critical || hero.isLosingGame() )
-                value += 15000;
-            // If the castle is defenseless
-            // This modifier shouldn't be too high to avoid players baiting AI in
-            if ( !castle->GetActualArmy().isValid() )
-                value *= 1.5;
-
-            if ( isCastleLossConditionForHuman( castle ) )
-                value += 20000;
-
-            return value;
+            return calculateCastleValue( castle );
         }
         case MP2::OBJ_HEROES: {
-            const Heroes * otherHero = tile.GetHeroes();
-            assert( otherHero );
+            const Heroes * otherHero = tile.getHero();
             if ( !otherHero ) {
+                // How is it even possible?
+                assert( 0 );
                 return valueToIgnore;
             }
 
@@ -1366,7 +1491,8 @@ namespace AI
                     // The other hero has a lower role. Do not waste time for meeting. Let him to come.
                     return valueToIgnore;
                 }
-                if ( hero.getAIRole() == otherHero->getAIRole() && hero.getStatsValue() + 3 > otherHero->getStatsValue() ) {
+                if ( hero.getAIRole() == otherHero->getAIRole()
+                     && hero.getStatsValue() + Difficulty::getMinStatDiffBetweenAIRoles( Game::getDifficulty() ) + 1 > otherHero->getStatsValue() ) {
                     // Two heroes are almost identical. No reason to meet.
                     return valueToIgnore;
                 }
@@ -1388,7 +1514,32 @@ namespace AI
                 return -dangerousTaskPenalty;
             }
 
-            return isCriticalTask( index ) ? 20000.0 : 12000.0;
+            double value = 12000;
+
+            // If this hero threatens our castles, then we should evaluate him no worse than the best of our castles that he threatens
+            // (as if it had to be taken back from the enemy). If a threatening hero can be attacked in an open field, it is better to
+            // do it now than to attack him later in our castle occupied by him.
+            if ( isCriticalTask( index ) ) {
+                const auto iter = _priorityTargets.find( index );
+                assert( iter != _priorityTargets.end() );
+
+                const PriorityTask & attackTask = iter->second;
+                assert( attackTask.type == PriorityTaskType::ATTACK );
+
+                for ( const int32_t secondaryTaskTileIdx : attackTask.secondaryTaskTileId ) {
+                    const Castle * castle = world.getCastleEntrance( Maps::GetPoint( secondaryTaskTileIdx ) );
+                    if ( castle == nullptr ) {
+                        continue;
+                    }
+
+                    assert( hero.GetColor() == castle->GetColor() );
+
+                    // Apply a bonus so that the AI prefers to eliminate the threat if possible instead of guarding its castle
+                    value = std::max( value, calculateCastleValue( castle ) * 2 );
+                }
+            }
+
+            return value;
         }
         case MP2::OBJ_MONSTER: {
             const Army monsters( tile );
@@ -1399,6 +1550,7 @@ namespace AI
             }
 
             // TODO: we should add logic to compare monsters and hero army strengths.
+            const bool anotherFriendlyHeroPresent = _regions[tile.GetRegion()].friendlyHeroes > 1;
             return ( anotherFriendlyHeroPresent ? 4000.0 : 1000.0 ) + monsters.getTotalHP() / 100.0;
         }
         case MP2::OBJ_ABANDONED_MINE: {
@@ -1423,6 +1575,7 @@ namespace AI
         case MP2::OBJ_RESOURCE:
         case MP2::OBJ_WATER_WHEEL:
         case MP2::OBJ_WINDMILL: {
+            const bool anotherFriendlyHeroPresent = _regions[tile.GetRegion()].friendlyHeroes > 1;
             if ( anotherFriendlyHeroPresent ) {
                 return 100.0;
             }
@@ -1524,9 +1677,10 @@ namespace AI
 
         switch ( objectType ) {
         case MP2::OBJ_HEROES: {
-            const Heroes * otherHero = tile.GetHeroes();
-            assert( otherHero );
+            const Heroes * otherHero = tile.getHero();
             if ( !otherHero ) {
+                // How is it even possible?
+                assert( 0 );
                 return valueToIgnore;
             }
 
@@ -1547,8 +1701,12 @@ namespace AI
                 return -dangerousTaskPenalty;
             }
 
-            // focus on enemy hero if there's priority set (i.e. hero is threatening our castle)
-            return isCriticalTask( index ) ? 10000.0 : tenTiles;
+            // This hero threatens our castles, use the general evaluation in this case
+            if ( isCriticalTask( index ) ) {
+                break;
+            }
+
+            return tenTiles;
         }
         case MP2::OBJ_MONSTER: {
             const Army monsters( tile );
@@ -1572,8 +1730,18 @@ namespace AI
         case MP2::OBJ_CAMPFIRE:
         case MP2::OBJ_FLOTSAM:
         case MP2::OBJ_GENIE_LAMP:
-        case MP2::OBJ_RESOURCE:
-        case MP2::OBJ_SEA_CHEST: {
+        case MP2::OBJ_RESOURCE: {
+            return twoTiles;
+        }
+        case MP2::OBJ_SEA_CHEST:
+        case MP2::OBJ_TREASURE_CHEST: {
+            const Artifact art = getArtifactFromTile( tile );
+            if ( art.isValid() && isFindArtifactVictoryConditionForHuman( art ) ) {
+                // WINS_ARTIFACT victory condition does not apply to AI-controlled players, we should leave this object untouched for the human player.
+                assert( 0 );
+                return -dangerousTaskPenalty;
+            }
+
             return twoTiles;
         }
         case MP2::OBJ_ARENA:
@@ -1613,6 +1781,10 @@ namespace AI
     {
         assert( objectType == world.GetTiles( index ).GetObject() );
 
+#ifdef NDEBUG
+        (void)objectType;
+#endif
+
         switch ( hero.getAIRole() ) {
         case Heroes::Role::HUNTER:
         case Heroes::Role::SCOUT:
@@ -1637,7 +1809,7 @@ namespace AI
         int targetIndex = -1;
 
         const Kingdom & kingdom = hero.GetKingdom();
-        const KingdomHeroes & allHeroes = kingdom.GetHeroes();
+        const VecHeroes & allHeroes = kingdom.GetHeroes();
 
         // Check if we have army and should bring it to friendly hero first
         double bestTargetValue = lowestPossibleValue;
@@ -1646,7 +1818,7 @@ namespace AI
             if ( !otherHero || hero.GetID() == otherHero->GetID() )
                 continue;
 
-            Heroes::Role role = otherHero->getAIRole();
+            const Heroes::Role role = otherHero->getAIRole();
             if ( role == Heroes::Role::COURIER || role == Heroes::Role::SCOUT )
                 continue;
 
@@ -1731,7 +1903,7 @@ namespace AI
 
         for ( const auto & actionObject : _mapActionObjects ) {
             if ( actionObject.second == MP2::OBJ_HEROES ) {
-                assert( world.GetTiles( actionObject.first ).GetHeroes() != nullptr );
+                assert( world.GetTiles( actionObject.first ).getHero() != nullptr );
             }
 
             const auto [dummy, inserted] = objectIndexes.emplace( actionObject.first );
@@ -1744,13 +1916,11 @@ namespace AI
         // pre-cache the pathfinder
         _pathfinder.reEvaluateIfNeeded( hero );
 
-        const uint32_t leftMovePoints = hero.GetMovePoints();
-
         ObjectValidator objectValidator( hero, _pathfinder, *this );
         ObjectValueStorage valueStorage( hero, *this, lowestPossibleValue );
 
-        auto getObjectValue = [&objectValidator, &valueStorage, this, heroStrength, &hero, leftMovePoints]( const int destination, uint32_t & distance, double & value,
-                                                                                                            const MP2::MapObjectType type, const bool isDimensionDoor ) {
+        const auto getObjectValue = [&objectValidator, &valueStorage, this, heroStrength, &hero]( const int destination, uint32_t & distance, double & value,
+                                                                                                  const MP2::MapObjectType type, const bool isDimensionDoor ) {
             if ( !isDimensionDoor ) {
                 // Dimension door path does not include any objects on the way.
                 std::vector<IndexObject> list = _pathfinder.getObjectsOnTheWay( destination );
@@ -1770,15 +1940,15 @@ namespace AI
             // TODO: check nearby enemy heroes and distance to them instead of relying on region stats.
             const RegionStats & regionStats = _regions[destinationTile.GetRegion()];
 
-            const bool isObjectReachableAtThisTurn = ( distance <= leftMovePoints );
+            const bool isObjectReachableAtThisTurn = ( distance <= hero.GetMovePoints() );
 
             // Go into "coward" mode only if the threat is real. Equal by strength heroes rarely attack each other.
             if ( heroStrength * AI::ARMY_ADVANTAGE_SMALL < regionStats.highestThreat ) {
                 switch ( type ) {
                 case MP2::OBJ_CASTLE: {
                     const Castle * castle = world.getCastleEntrance( Maps::GetPoint( destination ) );
-                    assert( castle != nullptr );
                     if ( castle == nullptr ) {
+                        assert( 0 );
                         break;
                     }
 
@@ -1788,14 +1958,14 @@ namespace AI
                     }
 
                     if ( isObjectReachableAtThisTurn ) {
-                        if ( castle->GetGarrisonStrength( &hero ) > heroStrength / 2 ) {
+                        if ( castle->GetGarrisonStrength( hero ) > heroStrength / 2 ) {
                             value -= dangerousTaskPenalty / 4;
                         }
                         else {
                             value -= dangerousTaskPenalty / 10;
                         }
                     }
-                    else if ( castle->GetGarrisonStrength( &hero ) > heroStrength / 2 ) {
+                    else if ( castle->GetGarrisonStrength( hero ) > heroStrength / 2 ) {
                         value -= dangerousTaskPenalty / 2;
                     }
                     else {
@@ -1805,9 +1975,9 @@ namespace AI
                     break;
                 }
                 case MP2::OBJ_HEROES: {
-                    const Heroes * anotherHero = destinationTile.GetHeroes();
-                    assert( anotherHero != nullptr );
+                    const Heroes * anotherHero = destinationTile.getHero();
                     if ( anotherHero == nullptr ) {
+                        assert( 0 );
                         break;
                     }
 
@@ -1839,7 +2009,7 @@ namespace AI
 
             if ( !isObjectReachableAtThisTurn ) {
                 // Distant object which is out of reach for the current turn must have lower priority.
-                distance = leftMovePoints + ( distance - leftMovePoints ) * 2;
+                distance = hero.GetMovePoints() + ( distance - hero.GetMovePoints() ) * 2;
             }
 
             value = ScaleWithDistance( value, distance, type );
@@ -1873,7 +2043,7 @@ namespace AI
                 uint32_t dist = _pathfinder.getDistance( node.first );
 
                 bool useDimensionDoor = false;
-                const uint32_t dimensionDoorDist = AIWorldPathfinder::calculatePathPenalty( _pathfinder.getDimensionDoorPath( hero, node.first ) );
+                const uint32_t dimensionDoorDist = Route::calculatePathPenalty( _pathfinder.getDimensionDoorPath( hero, node.first ) );
                 if ( dimensionDoorDist > 0 && ( dist == 0 || dimensionDoorDist < dist / 2 ) ) {
                     dist = dimensionDoorDist;
                     useDimensionDoor = true;
@@ -1908,7 +2078,7 @@ namespace AI
 
             // TODO: add logic to check fog discovery based on Dimension Door distance, not the nearest tile.
             bool useDimensionDoor = false;
-            const uint32_t dimensionDoorDist = AIWorldPathfinder::calculatePathPenalty( _pathfinder.getDimensionDoorPath( hero, fogDiscoveryTarget ) );
+            const uint32_t dimensionDoorDist = Route::calculatePathPenalty( _pathfinder.getDimensionDoorPath( hero, fogDiscoveryTarget ) );
             if ( dimensionDoorDist > 0 && ( distanceToFogDiscovery == 0 || dimensionDoorDist < distanceToFogDiscovery / 2 ) ) {
                 distanceToFogDiscovery = dimensionDoorDist;
                 useDimensionDoor = true;
@@ -1952,33 +2122,43 @@ namespace AI
             return;
         }
 
-        auto updateAttackPriorityTarget = [this, tileIndex, &hero, objectType]() {
-            if ( objectType == MP2::OBJ_CASTLE ) {
+        const auto updateTile = [this, &hero, tileIndex, objectType]() {
+            const auto updateCastle = [this, &hero, tileIndex]() {
                 const Castle * castle = world.getCastleEntrance( Maps::GetPoint( tileIndex ) );
                 if ( castle == nullptr ) {
                     // How is it possible?
                     assert( 0 );
 
-                    removeEnemyArmies( tileIndex );
+                    _enemyArmies.erase( tileIndex );
                     return;
                 }
 
                 if ( hero.isFriends( castle->GetColor() ) ) {
-                    removeEnemyArmies( tileIndex );
+                    _enemyArmies.erase( tileIndex );
 
                     updatePriorityForCastle( *castle );
                 }
                 else {
                     updatePriorityAttackTarget( hero.GetKingdom(), world.GetTiles( tileIndex ) );
                 }
+            };
+
+            if ( objectType == MP2::OBJ_CASTLE ) {
+                updateCastle();
             }
             else if ( objectType == MP2::OBJ_HEROES ) {
                 const Maps::Tiles & tile = world.GetTiles( tileIndex );
 
-                const Heroes * anotherHero = tile.GetHeroes();
+                const Heroes * anotherHero = tile.getHero();
                 if ( anotherHero == nullptr ) {
-                    // The hero died.
-                    removeEnemyArmies( tileIndex );
+                    // Another hero lost the battle, but he could defend a castle
+                    if ( tile.GetObject() == MP2::OBJ_CASTLE ) {
+                        updateCastle();
+                    }
+                    else {
+                        _enemyArmies.erase( tileIndex );
+                    }
+
                     return;
                 }
 
@@ -1996,7 +2176,7 @@ namespace AI
         if ( it == _priorityTargets.end() ) {
             // If the object is not a priority we have to update it after the battle as it can become the one.
             // Especially, when the opposite army has grown Skeletons or Ghosts.
-            updateAttackPriorityTarget();
+            updateTile();
 
             // If the update did not add any priorities then nothing more to do.
             it = _priorityTargets.find( tileIndex );
@@ -2010,11 +2190,15 @@ namespace AI
         switch ( task.type ) {
         case PriorityTaskType::DEFEND:
         case PriorityTaskType::REINFORCE: {
-            if ( objectType == MP2::OBJ_HEROES ) {
-                // The castle has just been captured. No task should be updated.
+            if ( hero.GetIndex() != tileIndex ) {
+                // Either the castle has just been captured, or the hero meets the guest hero of a friendly castle. No task should be updated.
+                // If any of these assertions blow up, then this is not one of these cases.
+#ifndef NDEBUG
+                const Maps::Tiles & tile = world.GetTiles( tileIndex );
+#endif
+                assert( tile.GetObject( false ) == MP2::OBJ_CASTLE && hero.GetColor() == Maps::getColorFromTile( tile ) );
+                assert( Maps::isValidDirection( tileIndex, Direction::BOTTOM ) && hero.GetIndex() == Maps::GetDirectionIndex( tileIndex, Direction::BOTTOM ) );
 
-                // If this assertion blows up then it is not the case described above.
-                assert( ( world.GetTiles( tileIndex ).GetObject() == MP2::OBJ_CASTLE ) && ( hero.GetIndex() != tileIndex ) );
                 return;
             }
 
@@ -2022,7 +2206,7 @@ namespace AI
             assert( objectType == MP2::OBJ_CASTLE );
 
             // How is it even possible that a hero died while simply moving into a castle?
-            assert( !hero.isFreeman() );
+            assert( hero.isActive() );
 
             // TODO: sort the army between the castle and hero to have maximum movement points for the next day
             // TODO: but also have enough army to defend the castle.
@@ -2035,7 +2219,7 @@ namespace AI
         case PriorityTaskType::ATTACK: {
             removePriorityAttackTarget( tileIndex );
 
-            updateAttackPriorityTarget();
+            updateTile();
             break;
         }
         default:
@@ -2045,15 +2229,50 @@ namespace AI
         }
     }
 
+    void Normal::HeroesBeginMovement( Heroes & hero )
+    {
+        assert( hero.isActive() );
+
+        const Route::Path & path = hero.GetPath();
+        if ( !path.isValidForMovement() ) {
+            return;
+        }
+
+        const int32_t heroIdx = hero.GetIndex();
+
+        const int frontDirection = path.GetFrontDirection();
+        assert( Maps::isValidDirection( heroIdx, frontDirection ) );
+
+        const int32_t nextTileIdx = Maps::GetDirectionIndex( heroIdx, frontDirection );
+
+        const Maps::Tiles & currTile = world.GetTiles( heroIdx );
+        const Maps::Tiles & nextTile = world.GetTiles( nextTileIdx );
+
+        if ( currTile.isWater() || !nextTile.isWater() || nextTile.GetObject() != MP2::OBJ_NONE ) {
+            return;
+        }
+
+        // If the hero goes to the water tile, then this should be his last movement
+        assert( path.size() == 1 );
+
+        const int32_t formerBoatIdx = HeroesCastSummonBoat( hero, nextTileIdx );
+
+        updateMapActionObjectCache( formerBoatIdx );
+        updateMapActionObjectCache( nextTileIdx );
+    }
+
     void Normal::HeroesActionComplete( Heroes & hero, const int32_t tileIndex, const MP2::MapObjectType objectType )
     {
         // This method is called upon action completion and the hero could no longer be available.
         // So it is to check if the hero is still present.
-        if ( !hero.isFreeman() ) {
+        if ( hero.isActive() ) {
             Castle * castle = hero.inCastleMutable();
+
             if ( castle ) {
-                // Reinforcement in a castle can lead to removing defense priority task for a castle.
                 reinforceHeroInCastle( hero, *castle, castle->GetKingdom().GetFunds() );
+            }
+            else {
+                OptimizeTroopsOrder( hero.GetArmy() );
             }
         }
 
@@ -2066,6 +2285,59 @@ namespace AI
         updateMapActionObjectCache( tileIndex );
     }
 
+    void Normal::HeroesActionNewPosition( Heroes & hero )
+    {
+        if ( !hero.isActive() ) {
+            return;
+        }
+
+        Route::Path & path = hero.GetPath();
+        if ( !path.isValidForMovement() ) {
+            return;
+        }
+
+        const int32_t heroIdx = hero.GetIndex();
+        assert( heroIdx == path.GetFrontIndex() );
+
+        const int nextStepDirection = path.GetNextStepDirection();
+        if ( !Maps::isValidDirection( heroIdx, nextStepDirection ) ) {
+            return;
+        }
+
+        const int32_t nextTileIdx = Maps::GetDirectionIndex( heroIdx, nextStepDirection );
+
+        const Maps::Tiles & currTile = world.GetTiles( heroIdx );
+        const Maps::Tiles & nextTile = world.GetTiles( nextTileIdx );
+
+        if ( currTile.isWater() || !nextTile.isWater() || nextTile.GetObject() != MP2::OBJ_NONE ) {
+            return;
+        }
+
+        // If the hero goes to the water tile, then this should be his last movement
+        // (not counting the current step, which is not yet completed at the moment)
+        assert( path.size() == 2 );
+
+        // It may happen that although the hero at the beginning of his path had enough spell points to
+        // summon a boat, but while moving through the guarded tiles, these spell points were spent. In
+        // this case, just stop.
+        if ( !hero.CanCastSpell( Spell::SUMMONBOAT ) ) {
+            path.Reset();
+            hero.SetMove( false );
+
+            return;
+        }
+
+        const int32_t formerBoatIdx = HeroesCastSummonBoat( hero, nextTileIdx );
+
+        updateMapActionObjectCache( formerBoatIdx );
+        updateMapActionObjectCache( nextTileIdx );
+    }
+
+    bool Normal::isValidHeroObject( const Heroes & hero, const int32_t index, const bool underHero )
+    {
+        return HeroesValidObject( hero, hero.GetArmy().GetStrength(), index, _pathfinder, *this, hero.getAIMinimumJoiningArmyStrength(), underHero );
+    }
+
     bool Normal::HeroesTurn( VecHeroes & heroes, const uint32_t startProgressValue, const uint32_t endProgressValue )
     {
         if ( heroes.empty() ) {
@@ -2076,52 +2348,75 @@ namespace AI
         std::vector<HeroToMove> availableHeroes;
 
         for ( Heroes * hero : heroes ) {
+            assert( hero != nullptr );
+
             addHeroToMove( hero, availableHeroes );
         }
-
-        const double originalMonsterStrengthMultiplier = _pathfinder.getCurrentArmyStrengthMultiplier();
-
-        const int monsterStrengthMultiplierCount = 2;
-        const double monsterStrengthMultipliers[monsterStrengthMultiplierCount] = { ARMY_ADVANTAGE_MEDIUM, ARMY_ADVANTAGE_SMALL };
 
         Interface::StatusWindow & status = Interface::AdventureMap::Get().getStatusWindow();
 
         uint32_t currentProgressValue = startProgressValue;
 
         while ( !availableHeroes.empty() ) {
+            class AIWorldPathfinderStateRestorer
+            {
+            public:
+                explicit AIWorldPathfinderStateRestorer( AIWorldPathfinder & pathfinder )
+                    : _pathfinder( pathfinder )
+                    , _originalMinimalArmyStrengthAdvantage( _pathfinder.getMinimalArmyStrengthAdvantage() )
+                    , _originalSpellPointsReserveRatio( _pathfinder.getSpellPointsReserveRatio() )
+                {}
+
+                AIWorldPathfinderStateRestorer( const AIWorldPathfinderStateRestorer & ) = delete;
+
+                ~AIWorldPathfinderStateRestorer()
+                {
+                    _pathfinder.setMinimalArmyStrengthAdvantage( _originalMinimalArmyStrengthAdvantage );
+                    _pathfinder.setSpellPointsReserveRatio( _originalSpellPointsReserveRatio );
+                }
+
+                AIWorldPathfinderStateRestorer & operator=( const AIWorldPathfinderStateRestorer & ) = delete;
+
+            private:
+                AIWorldPathfinder & _pathfinder;
+
+                const double _originalMinimalArmyStrengthAdvantage;
+                const double _originalSpellPointsReserveRatio;
+            };
+
+            const AIWorldPathfinderStateRestorer pathfinderStateRestorer( _pathfinder );
+
             Heroes * bestHero = availableHeroes.front().hero;
-            double maxPriority = 0;
             int bestTargetIndex = -1;
 
-            while ( true ) {
-                for ( const HeroToMove & heroInfo : availableHeroes ) {
-                    double priority = -1;
-                    const int targetIndex = getPriorityTarget( heroInfo, priority );
-                    if ( targetIndex != -1 && ( priority > maxPriority || bestTargetIndex == -1 ) ) {
-                        maxPriority = priority;
-                        bestTargetIndex = targetIndex;
-                        bestHero = heroInfo.hero;
+            {
+                const bool isLosingGame = bestHero->isLosingGame();
+
+                static const std::vector<std::pair<double, double>> commonPathfinderConfigurations{ { ARMY_ADVANTAGE_LARGE, 0.5 },
+                                                                                                    { ARMY_ADVANTAGE_MEDIUM, 0.25 },
+                                                                                                    { ARMY_ADVANTAGE_SMALL, 0.0 } };
+                static const std::vector<std::pair<double, double>> emergencyPathfinderConfigurations{ { ARMY_ADVANTAGE_DESPERATE, 0.0 } };
+
+                for ( const auto & [minStrengthAdvantage, spReserveRatio] : isLosingGame ? emergencyPathfinderConfigurations : commonPathfinderConfigurations ) {
+                    _pathfinder.setMinimalArmyStrengthAdvantage( minStrengthAdvantage );
+                    _pathfinder.setSpellPointsReserveRatio( spReserveRatio );
+
+                    double maxPriority = 0;
+
+                    for ( const HeroToMove & heroInfo : availableHeroes ) {
+                        double priority = -1;
+                        const int targetIndex = getPriorityTarget( heroInfo, priority );
+
+                        if ( targetIndex != -1 && ( priority > maxPriority || bestTargetIndex == -1 ) ) {
+                            maxPriority = priority;
+                            bestTargetIndex = targetIndex;
+                            bestHero = heroInfo.hero;
+                        }
                     }
-                }
 
-                if ( bestTargetIndex != -1 ) {
-                    break;
-                }
-
-                // If nowhere to move perhaps it's because of high monster estimation. Let's reduce it.
-                const double currentMonsterStrengthMultiplier = _pathfinder.getCurrentArmyStrengthMultiplier();
-                bool setNewMultiplier = false;
-                for ( int i = 0; i < monsterStrengthMultiplierCount; ++i ) {
-                    if ( currentMonsterStrengthMultiplier > monsterStrengthMultipliers[i] ) {
-                        _pathfinder.setArmyStrengthMultiplier( bestHero->isLosingGame() ? ARMY_ADVANTAGE_DESPERATE : monsterStrengthMultipliers[i] );
-                        _pathfinder.setSpellPointReserve( 0 );
-                        setNewMultiplier = true;
+                    if ( bestTargetIndex != -1 ) {
                         break;
                     }
-                }
-
-                if ( !setNewMultiplier ) {
-                    break;
                 }
             }
 
@@ -2149,12 +2444,11 @@ namespace AI
                         break;
                     }
                 }
+            }
 
-                if ( bestTargetIndex == -1 ) {
-                    // Nothing to do. Stop everything
-                    _pathfinder.setArmyStrengthMultiplier( originalMonsterStrengthMultiplier );
-                    break;
-                }
+            if ( bestTargetIndex == -1 ) {
+                // Nothing to do. Stop everything
+                break;
             }
 
             const size_t heroesBefore = heroes.size();
@@ -2164,7 +2458,7 @@ namespace AI
 
             // check if we want to use Dimension Door spell or move regularly
             std::list<Route::Step> dimensionPath = _pathfinder.getDimensionDoorPath( *bestHero, bestTargetIndex );
-            uint32_t dimensionDoorDistance = AIWorldPathfinder::calculatePathPenalty( dimensionPath );
+            uint32_t dimensionDoorDistance = Route::calculatePathPenalty( dimensionPath );
             uint32_t moveDistance = _pathfinder.getDistance( bestTargetIndex );
             if ( dimensionDoorDistance && ( !moveDistance || dimensionDoorDistance < moveDistance / 2 ) ) {
                 while ( ( !moveDistance || dimensionDoorDistance < moveDistance / 2 ) && !dimensionPath.empty() && bestHero->MayStillMove( false, false )
@@ -2179,7 +2473,7 @@ namespace AI
 
                     // Hero can jump straight into the fog using the Dimension Door spell, which triggers the mechanics of fog revealing for his new tile
                     // and this results in inserting a new hero position into the action object cache. Perform the necessary updates.
-                    assert( !bestHero->isFreeman() && bestHero->GetIndex() != prevHeroPosition );
+                    assert( bestHero->isActive() && bestHero->GetIndex() != prevHeroPosition );
 
                     updateMapActionObjectCache( prevHeroPosition );
                     updateMapActionObjectCache( bestHero->GetIndex() );
@@ -2189,22 +2483,22 @@ namespace AI
 
                 if ( dimensionDoorDistance > 0 ) {
                     // The rest of the path the hero should do by foot.
-                    bestHero->GetPath().setPath( _pathfinder.buildPath( bestTargetIndex ), bestTargetIndex );
+                    bestHero->GetPath().setPath( _pathfinder.buildPath( bestTargetIndex ) );
 
                     HeroesMove( *bestHero );
                 }
             }
             else {
-                bestHero->GetPath().setPath( _pathfinder.buildPath( bestTargetIndex ), bestTargetIndex );
+                bestHero->GetPath().setPath( _pathfinder.buildPath( bestTargetIndex ) );
 
                 HeroesMove( *bestHero );
             }
 
-            if ( bestHero->isFreeman() || bestHero->GetIndex() != prevHeroPosition ) {
+            if ( !bestHero->isActive() || bestHero->GetIndex() != prevHeroPosition ) {
                 // The hero died or moved to another position. We have to update the action object cache.
                 updateMapActionObjectCache( prevHeroPosition );
 
-                if ( !bestHero->isFreeman() ) {
+                if ( bestHero->isActive() ) {
                     // Hero moved to another position and is still alive.
                     updateMapActionObjectCache( bestHero->GetIndex() );
                 }
@@ -2214,17 +2508,9 @@ namespace AI
                 addHeroToMove( heroes.back(), availableHeroes );
             }
 
-            for ( size_t i = 0; i < availableHeroes.size(); ) {
-                if ( !availableHeroes[i].hero->MayStillMove( false, false ) ) {
-                    availableHeroes.erase( availableHeroes.begin() + i );
-                    continue;
-                }
-
-                ++i;
-            }
-
-            _pathfinder.setArmyStrengthMultiplier( originalMonsterStrengthMultiplier );
-            _pathfinder.setSpellPointReserve( 0.5 );
+            availableHeroes.erase( std::remove_if( availableHeroes.begin(), availableHeroes.end(),
+                                                   []( const HeroToMove & item ) { return !item.hero->MayStillMove( false, false ); } ),
+                                   availableHeroes.end() );
 
             // The size of heroes can be increased if a new hero is released from Jail.
             const size_t maxHeroCount = std::max( heroes.size(), availableHeroes.size() );
@@ -2239,13 +2525,8 @@ namespace AI
             }
         }
 
-        const bool allHeroesMoved = availableHeroes.empty();
-
-        _pathfinder.setArmyStrengthMultiplier( originalMonsterStrengthMultiplier );
-        _pathfinder.setSpellPointReserve( 0.5 );
-
         status.DrawAITurnProgress( endProgressValue );
 
-        return allHeroesMoved;
+        return availableHeroes.empty();
     }
 }

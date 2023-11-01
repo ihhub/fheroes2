@@ -31,6 +31,7 @@
 #include <utility>
 #include <vector>
 
+#include "battle.h"
 #include "battle_animation.h"
 #include "battle_board.h"
 #include "cursor.h"
@@ -39,8 +40,8 @@
 #include "image.h"
 #include "math_base.h"
 #include "spell.h"
-#include "text.h"
 #include "ui_button.h"
+#include "ui_text.h"
 
 class Castle;
 class HeroBase;
@@ -62,9 +63,6 @@ namespace Battle
     class Tower;
     class Unit;
     class Units;
-
-    struct TargetInfo;
-    struct TargetsInfo;
 
     void DialogBattleSettings();
     bool DialogBattleSurrender( const HeroBase & hero, uint32_t cost, Kingdom & kingdom );
@@ -190,27 +188,27 @@ namespace Battle
 
         const std::string & GetMessage() const
         {
-            return message;
+            return _lastMessage;
         }
 
         void clear();
 
     private:
-        Text bar1;
-        Text bar2;
+        fheroes2::Text _upperText;
+        fheroes2::Text _lowerText;
         const fheroes2::Sprite & back1;
         const fheroes2::Sprite & back2;
-        std::string message;
+        std::string _lastMessage;
         StatusListBox * listlog;
     };
 
-    class ArmiesOrder : public fheroes2::Rect
+    class TurnOrder : public fheroes2::Rect
     {
     public:
-        ArmiesOrder();
-        ArmiesOrder( const ArmiesOrder & ) = delete;
+        TurnOrder();
+        TurnOrder( const TurnOrder & ) = delete;
 
-        ArmiesOrder & operator=( const ArmiesOrder & ) = delete;
+        TurnOrder & operator=( const TurnOrder & ) = delete;
 
         void Set( const fheroes2::Rect & rt, const std::shared_ptr<const Units> & units, const int army2Color );
         void Redraw( const Unit * current, const uint8_t currentUnitColor, fheroes2::Image & output );
@@ -314,10 +312,10 @@ namespace Battle
         void RedrawActionLuck( const Unit & unit );
         void RedrawActionTowerPart1( const Tower & tower, const Unit & defender );
         void RedrawActionTowerPart2( const Tower & tower, const TargetInfo & target );
-        void RedrawActionCatapultPart1( const int catapultTargetId, const bool isHit );
-        void RedrawActionCatapultPart2( const int catapultTargetId );
+        void RedrawActionCatapultPart1( const CastleDefenseElement catapultTarget, const bool isHit );
+        void RedrawActionCatapultPart2( const CastleDefenseElement catapultTarget );
         void RedrawActionTeleportSpell( Unit & target, const int32_t dst );
-        void RedrawActionEarthQuakeSpell( const std::vector<int> & targets );
+        void RedrawActionEarthQuakeSpell( const std::vector<CastleDefenseElement> & targets );
         void RedrawActionSummonElementalSpell( Unit & target );
         void RedrawActionMirrorImageSpell( const Unit & target, const Position & pos );
         void RedrawActionSkipStatus( const Unit & unit );
@@ -376,7 +374,7 @@ namespace Battle
         // Use this if a function may be called from other functions with different render delay types.
         void WaitForAllActionDelays();
 
-        void AnimateOpponents( OpponentSprite * target );
+        void AnimateOpponents( OpponentSprite * hero );
         void AnimateUnitWithDelay( Unit & unit, const bool skipLastFrameRender = false );
         void RedrawTroopDefaultDelay( Unit & unit );
         void RedrawTroopWithFrameAnimation( Unit & unit, const int icn, const int m82, const CreatureSpellAnimation animation );
@@ -398,8 +396,8 @@ namespace Battle
         void EventShowOptions();
         void ButtonAutoAction( const Unit & unit, Actions & actions );
         void ButtonSettingsAction();
-        void ButtonSkipAction( Actions & acrions );
-        void MouseLeftClickBoardAction( const int themes, const Cell & cell, Actions & actions );
+        void ButtonSkipAction( Actions & actions );
+        void MouseLeftClickBoardAction( const int themes, const Cell & cell, const bool isConfirmed, Actions & actions );
         void MousePressRightBoardAction( const Cell & cell ) const;
 
         int GetBattleCursor( std::string & statusMsg ) const;
@@ -458,9 +456,8 @@ namespace Battle
         std::unique_ptr<StatusListBox> listlog;
 
         PopupDamageInfo popup;
-        ArmiesOrder armies_order;
+        TurnOrder _turnOrder;
 
-        CursorRestorer _cursorRestorer;
         std::unique_ptr<fheroes2::StandardWindow> _background;
 
         struct BridgeMovementAnimation
@@ -483,6 +480,60 @@ namespace Battle
         // this may be needed in the future (for example, in expansion) to display some sprites over
         // troops for some time (e.g. long duration spell effects or other permanent effects).
         std::vector<UnitSpellEffectInfo> _unitSpellEffectInfos;
+
+        struct BoardActionIntent
+        {
+            int cursorTheme = Cursor::NONE;
+            int32_t cellIndex = -1;
+
+            bool operator==( const BoardActionIntent & other ) const
+            {
+                return cursorTheme == other.cursorTheme && cellIndex == other.cellIndex;
+            }
+        };
+
+        // Intents are used to confirm actions in combat performed using touch gestures
+        BoardActionIntent _boardActionIntent;
+
+        class BoardActionIntentUpdater
+        {
+        public:
+            BoardActionIntentUpdater( BoardActionIntent & storedIntent, const bool isFromTouchpad )
+                : _storedIntent( storedIntent )
+                , _isFromTouchpad( isFromTouchpad )
+            {}
+
+            BoardActionIntentUpdater( const BoardActionIntentUpdater & ) = delete;
+
+            ~BoardActionIntentUpdater()
+            {
+                // Do not remember intermediate touch gestures as intents
+                if ( _isFromTouchpad ) {
+                    return;
+                }
+
+                _storedIntent = _intent.value_or( BoardActionIntent{} );
+            }
+
+            BoardActionIntentUpdater & operator=( const BoardActionIntentUpdater & ) = delete;
+
+            void setIntent( const BoardActionIntent & intent )
+            {
+                _intent = intent;
+            }
+
+            bool isConfirmed()
+            {
+                // If the mouse event has been triggered by the touchpad, it should be considered confirmed only if this event orders to
+                // perform the same action that is already indicated on the battle board with the mouse cursor.
+                return ( !_isFromTouchpad || _storedIntent == _intent );
+            }
+
+        private:
+            BoardActionIntent & _storedIntent;
+            const bool _isFromTouchpad;
+            std::optional<BoardActionIntent> _intent;
+        };
     };
 }
 

@@ -360,18 +360,18 @@ bool HeroBase::CanCastSpell( const Spell & spell, std::string * res /* = nullptr
         if ( res ) {
             // This should not happen for a human-controlled hero (for which this method is usually called with the non-null res)
             assert( 0 );
-            *res = _( "Spell book is not present." );
+            *res = _( "No spell book is present." );
         }
         return false;
     }
 
     if ( !HaveSpellPoints( spell ) ) {
         if ( GetSpellPoints() == 0 && res != nullptr ) {
-            *res = _( "That spell costs %{mana} mana. You have no mana, so you can't cast the spell." );
+            *res = _( "This spell costs %{mana} spell points. You have no spell points, so you cannot cast it." );
             StringReplace( *res, "%{mana}", spell.spellPoints( this ) );
         }
         else if ( res != nullptr ) {
-            *res = _( "That spell costs %{mana} mana. You only have %{point} mana, so you can't cast the spell." );
+            *res = _( "This spell costs %{mana} spell points. You only have %{point} spell points, so you cannot cast it." );
             StringReplace( *res, "%{mana}", spell.spellPoints( this ) );
             StringReplace( *res, "%{point}", GetSpellPoints() );
         }
@@ -416,7 +416,7 @@ bool HeroBase::CanCastSpell( const Spell & spell, std::string * res /* = nullptr
 
         if ( ( spell == Spell::SUMMONBOAT || spell == Spell::TOWNGATE || spell == Spell::TOWNPORTAL ) && hero->isShipMaster() ) {
             if ( res != nullptr ) {
-                *res = _( "This spell cannot be used on a boat." );
+                *res = _( "This spell cannot be cast on a boat." );
             }
             return false;
         }
@@ -424,7 +424,7 @@ bool HeroBase::CanCastSpell( const Spell & spell, std::string * res /* = nullptr
         if ( spell == Spell::SUMMONBOAT ) {
             if ( !fheroes2::isHeroNearWater( *hero ) ) {
                 if ( res != nullptr ) {
-                    *res = _( "This spell can be casted only nearby ocean." );
+                    *res = _( "This spell can only be cast near an ocean." );
                 }
                 return false;
             }
@@ -434,30 +434,30 @@ bool HeroBase::CanCastSpell( const Spell & spell, std::string * res /* = nullptr
             const bool validBoatDestination = Maps::isValidAbsIndex( boatDestination );
             if ( boatSource == -1 && !validBoatDestination ) {
                 if ( res != nullptr ) {
-                    *res = _( "There is no boat available and no free ocean location near the hero to cast this spell." );
+                    *res = _( "There are no boats available and no ocean adjacent to the hero where this spell will work." );
                 }
                 return false;
             }
             if ( boatSource == -1 ) {
                 if ( res != nullptr ) {
-                    *res = _( "There is no more boat available to cast this spell." );
+                    *res = _( "There are no boats available for this spell." );
                 }
                 return false;
             }
             if ( !validBoatDestination ) {
                 if ( res != nullptr ) {
-                    *res = _( "There is no free ocean location near the hero to cast this spell." );
+                    *res = _( "There is no ocean adjacent to the hero where this spell will work." );
                 }
                 return false;
             }
         }
 
         if ( spell == Spell::TOWNGATE || spell == Spell::TOWNPORTAL ) {
-            const KingdomCastles & castles = hero->GetKingdom().GetCastles();
+            const VecCastles & castles = hero->GetKingdom().GetCastles();
             bool hasCastles = std::any_of( castles.begin(), castles.end(), []( const Castle * castle ) { return castle && castle->GetHero() == nullptr; } );
             if ( !hasCastles ) {
                 if ( res != nullptr ) {
-                    *res = _( "You do not currently own any town or castle, so you can't cast the spell." );
+                    *res = _( "You do not own any town or castle that is not currently occupied by a hero. This spell will have no effect." );
                 }
                 return false;
             }
@@ -469,7 +469,7 @@ bool HeroBase::CanCastSpell( const Spell & spell, std::string * res /* = nullptr
 
             if ( castle->GetIndex() == hero->GetIndex() ) {
                 if ( res != nullptr ) {
-                    *res = _( "This hero is already in a town, so you can't cast the spell." );
+                    *res = _( "This hero is already in a town, so this spell will have no effect." );
                 }
                 return false;
             }
@@ -477,7 +477,7 @@ bool HeroBase::CanCastSpell( const Spell & spell, std::string * res /* = nullptr
             const Heroes * townHero = castle->GetHero();
             if ( townHero != nullptr ) {
                 if ( res != nullptr ) {
-                    *res = _( "The nearest town is %{town}.\n \nThis town is occupied by your hero %{hero}." );
+                    *res = _( "The nearest town is %{town}.\n\nThis town is occupied by your hero %{hero}." );
                     StringReplace( *res, "%{town}", castle->GetName() );
                     StringReplace( *res, "%{hero}", townHero->GetName() );
                 }
@@ -489,7 +489,7 @@ bool HeroBase::CanCastSpell( const Spell & spell, std::string * res /* = nullptr
             const Kingdom & kingdom = hero->GetKingdom();
             if ( kingdom.Modes( Kingdom::IDENTIFYHERO ) ) {
                 if ( res != nullptr ) {
-                    *res = _( "This spell is already in use." );
+                    *res = _( "This spell is already in effect." );
                 }
                 return false;
             }
@@ -504,7 +504,7 @@ bool HeroBase::CanCastSpell( const Spell & spell, std::string * res /* = nullptr
             // town opponent is not defeated yet.
             if ( !opponentsHaveHeroes && !opponentsCanRecruitHeroes ) {
                 if ( res != nullptr ) {
-                    *res = _( "No opponent can have heroes under his command anymore. Casting this spell will not bring any advantage." );
+                    *res = _( "No opponent neither has nor can have any hero under their command anymore. Casting this spell will have no effect." );
                 }
                 return false;
             }
@@ -512,7 +512,7 @@ bool HeroBase::CanCastSpell( const Spell & spell, std::string * res /* = nullptr
             // the moment and can recruit more.
             if ( !opponentsHaveHeroes && opponentsCanRecruitHeroes ) {
                 if ( res != nullptr ) {
-                    *res = _( "No opponent has a hero under his command at this time. Casting this spell will not bring any advantage." );
+                    *res = _( "No opponent has a hero under their command at this time. Casting this spell will have no effect." );
                 }
                 return false;
             }
@@ -536,7 +536,7 @@ bool HeroBase::CanCastSpell( const Spell & spell, std::string * res /* = nullptr
 
             if ( MP2::OBJ_MINES != object ) {
                 if ( res != nullptr ) {
-                    *res = _( "You must be standing on the entrance to a mine (sawmills and alchemists don't count) to cast this spell." );
+                    *res = _( "You must be standing on the entrance to a mine (sawmills and alchemist labs do not count) to cast this spell." );
                 }
                 return false;
             }
@@ -555,8 +555,7 @@ bool HeroBase::CanCastSpell( const Spell & spell, std::string * res /* = nullptr
                 const uint32_t currentCount = troop.GetCount();
                 if ( newCount <= currentCount ) {
                     if ( res != nullptr ) {
-                        *res = _(
-                            "There are already at least as many elementals guarding the mine than the spell can generate. Casting this spell will not bring any advantage." );
+                        *res = _( "There are already at least as many elementals guarding the mine as this hero can generate. Casting this spell will have no effect." );
                     }
                     return false;
                 }

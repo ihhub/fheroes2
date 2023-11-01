@@ -29,7 +29,6 @@
 #include <list>
 #include <map>
 #include <string>
-#include <tuple>
 #include <vector>
 
 #include "army_troop.h"
@@ -260,7 +259,7 @@ public:
     }
 
     Heroes * FromJailHeroes( int32_t );
-    Heroes * GetFreemanHeroes( const int race, const int heroIDToIgnore = Heroes::UNKNOWN ) const;
+    Heroes * GetHeroForHire( const int race, const int heroIDToIgnore = Heroes::UNKNOWN ) const;
 
     const Heroes * GetHeroesCondWins() const;
     const Heroes * GetHeroesCondLoss() const;
@@ -303,6 +302,7 @@ public:
     std::string DateString() const;
 
     void NewDay();
+    void NewDayAI();
     void NewWeek();
     void NewMonth();
 
@@ -345,14 +345,11 @@ public:
     void resetPathfinder();
 
     void ComputeStaticAnalysis();
-    static uint32_t GetUniq();
 
     uint32_t GetMapSeed() const;
     uint32_t GetWeekSeed() const;
 
     bool isAnyKingdomVisited( const MP2::MapObjectType objectType, const int32_t dstIndex ) const;
-
-    void setOldTileQuantityData( const int32_t tileIndex, const uint8_t quantityValue1, const uint8_t quantityValue2, const uint32_t additionalMetadata );
 
 private:
     World() = default;
@@ -401,8 +398,6 @@ private:
 
     std::vector<MapRegion> _regions;
     PlayerWorldPathfinder _pathfinder;
-
-    std::vector<std::tuple<uint8_t, uint8_t, uint32_t>> _oldTileQuantityData;
 };
 
 StreamBase & operator<<( StreamBase &, const CapturedObject & );

@@ -18,15 +18,15 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "dialog_graphics_settings.h"
+
 #include <cstdint>
 #include <string>
 #include <utility>
 
 #include "agg_image.h"
-#include "dialog_graphics_settings.h"
 #include "dialog_resolution.h"
 #include "game_hotkeys.h"
-#include "game_mainmenu_ui.h"
 #include "gamedefs.h"
 #include "icn.h"
 #include "image.h"
@@ -146,7 +146,7 @@ namespace
         const fheroes2::Rect windowVSyncRoi( vSyncRoi + windowRoi.getPosition() );
         const fheroes2::Rect windowSystemInfoRoi( systemInfoRoi + windowRoi.getPosition() );
 
-        auto drawOptions = [&windowResolutionRoi, &windowModeRoi, &windowVSyncRoi, &windowSystemInfoRoi]() {
+        const auto drawOptions = [&windowResolutionRoi, &windowModeRoi, &windowVSyncRoi, &windowSystemInfoRoi]() {
             drawResolution( windowResolutionRoi );
             drawMode( windowModeRoi );
             drawVSync( windowVSyncRoi );
@@ -221,10 +221,8 @@ namespace
 
 namespace fheroes2
 {
-    void openGraphicsSettingsDialog()
+    void openGraphicsSettingsDialog( const std::function<void()> & updateUI )
     {
-        drawMainMenuScreen();
-
         Settings & conf = Settings::Get();
 
         SelectedWindow windowType = SelectedWindow::Configuration;
@@ -237,7 +235,7 @@ namespace fheroes2
                 if ( Dialog::SelectResolution() ) {
                     conf.Save( Settings::configFileName );
                 }
-                drawMainMenuScreen();
+                updateUI();
                 windowType = SelectedWindow::Configuration;
                 break;
             case SelectedWindow::Mode:
