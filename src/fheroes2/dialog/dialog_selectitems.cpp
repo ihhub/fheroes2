@@ -377,7 +377,7 @@ namespace
         void RedrawItem( const int & objectId, int32_t offsetX, int32_t offsetY, bool isSelected ) override
         {
             // If this assertion blows up then you are setting different number of items.
-            assert( objectId >= 0 && objectId < _objectInfo.size() );
+            assert( objectId >= 0 && objectId < static_cast<int>( _objectInfo.size() ) );
 
             const fheroes2::Sprite & image = fheroes2::generateMapObjectImage( _objectInfo[objectId] );
             renderItem( image, getObjectName( _objectInfo[objectId] ), { offsetX, offsetY }, { 32, 50 }, isSelected );
@@ -386,7 +386,7 @@ namespace
         void ActionListPressRight( int & objectId ) override
         {
             // If this assertion blows up then you are setting different number of items.
-            assert( objectId >= 0 && objectId < _objectInfo.size() );
+            assert( objectId >= 0 && objectId < static_cast<int>( _objectInfo.size() ) );
 
             showPopupWindow( _objectInfo[objectId] );
         }

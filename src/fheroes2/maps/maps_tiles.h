@@ -268,6 +268,14 @@ namespace Maps
             return _addonTopLayer;
         }
 
+        void moveMainAddonToBottomLayer()
+        {
+            if ( _mainAddon._objectIcnType != MP2::OBJ_ICN_TYPE_UNKNOWN ) {
+                // It is important to preserve the order of objects for rendering purposes. Therefore, the main object should go to the front of objects.
+                _addonBottomLayer.emplace_front( _mainAddon );
+            }
+        }
+
         void AddonsSort();
         void Remove( uint32_t uniqID );
         // Use to remove object by ICN type only from this tile. Should be used only for 1 tile size objects and roads or streams.

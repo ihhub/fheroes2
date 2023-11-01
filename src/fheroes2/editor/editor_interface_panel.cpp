@@ -493,7 +493,7 @@ namespace Interface
 
                     _interface.setCursorUpdater( [monsterType = _monsterType]( const int32_t /*tileIndex*/ ) {
                         const auto objectInfo = Maps::getObjectsByGroup( Maps::ObjectGroup::Monster );
-                        if ( monsterType < 0 || monsterType >= objectInfo.size() ) {
+                        if ( monsterType < 0 || monsterType >= static_cast<int32_t>( objectInfo.size() ) ) {
                             // You are trying to render some unknown stuff!
                             assert( 0 );
                             return;

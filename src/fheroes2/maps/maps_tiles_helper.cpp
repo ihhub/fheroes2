@@ -1172,17 +1172,17 @@ namespace
     {
         assert( !info.empty() );
 
+        const uint32_t uid = Maps::getNewObjectUID();
+
         // TODO: add code to populate other tiles if an object is bigger than 1 tile.
 
         tile.SetObject( info.objectType );
-
-        if ( tile.getObjectIcnType() != MP2::OBJ_ICN_TYPE_UNKNOWN ) {
-            // If there is another object sprite here (shadow for example) push it down to add-ons.
-            tile.pushBottomLayerAddon( Maps::TilesAddon( tile.getLayerType(), tile.GetObjectUID(), tile.getObjectIcnType(), tile.GetObjectSpriteIndex() ) );
-        }
+        tile.moveMainAddonToBottomLayer();
 
         // No object exists on this tile. Add one.
-        tile.setObjectUID( Maps::getNewObjectUID() );
+        
+
+        tile.setObjectUID( uid );
         tile.setObjectIcnType( info.groundLevelParts.front().icnType );
 
         using TileImageIndexType = decltype( tile.GetObjectSpriteIndex() );
