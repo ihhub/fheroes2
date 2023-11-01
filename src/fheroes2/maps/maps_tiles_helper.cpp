@@ -3136,5 +3136,7 @@ namespace Maps
         }
 
         placeObjectOnTile( tile, info );
+
+        world.updatePassabilities();
     }
 }
