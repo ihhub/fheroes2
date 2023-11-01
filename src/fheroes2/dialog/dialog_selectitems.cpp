@@ -539,16 +539,13 @@ Artifact Dialog::selectArtifact( const int artifactId /* = Artifact::UNKNOWN */ 
     return ( result == Dialog::OK || listbox.ok ) ? Artifact( listbox.GetCurrent() ) : Artifact( Artifact::UNKNOWN );
 }
 
-Monster Dialog::selectMonster( const int monsterId, const bool includeRandomMonsters )
+Monster Dialog::selectMonster( const int monsterId )
 {
     std::vector<int> monsters( Monster::MONSTER_COUNT - 1, Monster::UNKNOWN );
 
     // Skip Monster::UNKNOWN and start from the next one.
     std::iota( monsters.begin(), monsters.end(), Monster::UNKNOWN + 1 );
-
-    if ( !includeRandomMonsters ) {
-        monsters.erase( std::remove_if( monsters.begin(), monsters.end(), []( const int id ) { return Monster( id ).isRandomMonster(); } ), monsters.end() );
-    }
+    monsters.erase( std::remove_if( monsters.begin(), monsters.end(), []( const int id ) { return Monster( id ).isRandomMonster(); } ), monsters.end() );
 
     SelectEnumMonster listbox( { 280, fheroes2::Display::instance().height() - 200 } );
 
