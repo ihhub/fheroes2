@@ -84,6 +84,15 @@ namespace Maps
 
         // Object type. Some objects don't have it like cracks.
         MP2::MapObjectType objectType{ MP2::OBJ_NONE };
+
+        // Some action objects require additional information to be stored.
+        // Information stored in this member should be interpret based on a group.
+        std::array<uint32_t, 2> metadata{ 0 };
+
+        bool empty() const
+        {
+            return groundLevelParts.empty();
+        }
     };
 
     // Some objects use the same ICN resources and belong to the same object type
@@ -94,6 +103,8 @@ namespace Maps
     enum class ObjectGroup : int32_t
     {
         Artifact,
+        Hero,
+        Monster,
         Resource,
         Water_Object,
 

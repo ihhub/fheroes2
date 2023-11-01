@@ -54,6 +54,7 @@ namespace
             Maps::ObjectInfo object{ MP2::OBJ_ARTIFACT };
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNARTI, artifactId * 2 - 1, fheroes2::Point{ 0, 0 }, MP2::OBJ_ARTIFACT, Maps::OBJECT_LAYER );
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNARTI, artifactId * 2, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            object.metadata[0] = artifactId;
 
             objects.emplace_back( std::move( object ) );
         }
@@ -63,6 +64,7 @@ namespace
             Maps::ObjectInfo object{ MP2::OBJ_ARTIFACT };
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNARTI, 1, fheroes2::Point{ 0, 0 }, MP2::OBJ_ARTIFACT, Maps::OBJECT_LAYER );
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNARTI, 0, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            object.metadata[0] = Artifact::MAGIC_BOOK;
 
             objects.emplace_back( std::move( object ) );
         }
@@ -105,6 +107,87 @@ namespace
             Maps::ObjectInfo object{ MP2::OBJ_ARTIFACT };
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNARTI, imageIndex, fheroes2::Point{ 0, 0 }, MP2::OBJ_ARTIFACT, Maps::OBJECT_LAYER );
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNARTI, imageIndex - 1, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            object.metadata[0] = artifactId;
+
+            objects.emplace_back( std::move( object ) );
+        }
+    }
+
+    void populateHeroData( std::vector<Maps::ObjectInfo> & objects )
+    {
+        // Only 7 races and 6 colors exist in the game.
+        for ( int32_t color = 0; color < 6; ++color ) {
+            for ( int32_t race = 0; race < 7; ++race ) {
+                Maps::ObjectInfo object{ MP2::OBJ_HEROES };
+                object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_MINIHERO, color * 7 + race, fheroes2::Point{ 0, 0 }, MP2::OBJ_HEROES, Maps::OBJECT_LAYER );
+                object.metadata[0] = color;
+
+                if ( race == 6 ) {
+                    // We need to set as a random race, not multi.
+                    ++race;
+                }
+
+                object.metadata[1] = race;
+
+                objects.emplace_back( std::move( object ) );
+            }
+        }
+    }
+
+    void populateMonsterData( std::vector<Maps::ObjectInfo> & objects )
+    {
+        // Monsters are "unique" objects in terms of their ICN resources.
+        // The Editor uses ICN::MON32 while the Adventure Map renderer uses modified ICN::MINIMON resources.
+        for ( int32_t monsterId = Monster::PEASANT; monsterId <= Monster::WATER_ELEMENT; ++monsterId ) {
+            Maps::ObjectInfo object{ MP2::OBJ_MONSTER };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_MONS32, monsterId - 1, fheroes2::Point{ 0, 0 }, MP2::OBJ_MONSTER, Maps::OBJECT_LAYER );
+            object.metadata[0] = monsterId;
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Random monsters.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_RANDOM_MONSTER };
+            object.groundLevelParts.emplace_back(
+                MP2::OBJ_ICN_TYPE_MONS32, Monster::RANDOM_MONSTER - 1, fheroes2::Point{ 0, 0 }, MP2::OBJ_RANDOM_MONSTER, Maps::OBJECT_LAYER );
+            object.metadata[0] = Monster::RANDOM_MONSTER;
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_RANDOM_MONSTER_WEAK };
+            object.groundLevelParts.emplace_back(
+                MP2::OBJ_ICN_TYPE_MONS32, Monster::RANDOM_MONSTER_LEVEL_1 - 1, fheroes2::Point{ 0, 0 }, MP2::OBJ_RANDOM_MONSTER_WEAK, Maps::OBJECT_LAYER );
+            object.metadata[0] = Monster::RANDOM_MONSTER_LEVEL_1;
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_RANDOM_MONSTER_MEDIUM };
+            object.groundLevelParts.emplace_back(
+                MP2::OBJ_ICN_TYPE_MONS32, Monster::RANDOM_MONSTER_LEVEL_2 - 1, fheroes2::Point{ 0, 0 }, MP2::OBJ_RANDOM_MONSTER_MEDIUM, Maps::OBJECT_LAYER );
+            object.metadata[0] = Monster::RANDOM_MONSTER_LEVEL_2;
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_RANDOM_MONSTER_STRONG };
+            object.groundLevelParts.emplace_back(
+                MP2::OBJ_ICN_TYPE_MONS32, Monster::RANDOM_MONSTER_LEVEL_3 - 1, fheroes2::Point{ 0, 0 }, MP2::OBJ_RANDOM_MONSTER_STRONG, Maps::OBJECT_LAYER );
+            object.metadata[0] = Monster::RANDOM_MONSTER_LEVEL_3;
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_RANDOM_MONSTER_VERY_STRONG };
+            object.groundLevelParts.emplace_back(
+                MP2::OBJ_ICN_TYPE_MONS32, Monster::RANDOM_MONSTER_LEVEL_4 - 1, fheroes2::Point{ 0, 0 }, MP2::OBJ_RANDOM_MONSTER_VERY_STRONG, Maps::OBJECT_LAYER );
+            object.metadata[0] = Monster::RANDOM_MONSTER_LEVEL_4;
 
             objects.emplace_back( std::move( object ) );
         }
@@ -175,9 +258,9 @@ namespace
         // IMPORTANT!!!
         // The order of objects must be preserved. If you want to add a new object add it to the end of the container.
         populateArtifactData( objectData[static_cast<size_t>( Maps::ObjectGroup::Artifact )] );
-
+        populateHeroData( objectData[static_cast<size_t>( Maps::ObjectGroup::Hero )] );
+        populateMonsterData( objectData[static_cast<size_t>( Maps::ObjectGroup::Monster )] );
         populateResourceData( objectData[static_cast<size_t>( Maps::ObjectGroup::Resource )] );
-
         populateWaterObjectData( objectData[static_cast<size_t>( Maps::ObjectGroup::Water_Object )] );
 
         isPopulated = true;

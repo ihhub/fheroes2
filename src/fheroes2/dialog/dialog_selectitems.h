@@ -42,7 +42,10 @@ namespace Dialog
 
     Skill::Secondary selectSecondarySkill( const Heroes & hero, const int skillId = Skill::Secondary::UNKNOWN );
 
+    // These functions should be called only from the Editor as they rely on Maps::ObjectInfo structures that are not the same as in-game items.
     int selectHeroType( const int heroType );
+
+    int selectMonsterType( const int monsterType );
 }
 
 #endif

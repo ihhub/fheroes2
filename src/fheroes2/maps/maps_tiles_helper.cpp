@@ -42,6 +42,7 @@
 #include "direction.h"
 #include "ground.h"
 #include "logging.h"
+#include "map_object_info.h"
 #include "maps.h"
 #include "maps_tiles.h"
 #include "math_base.h"
@@ -1165,6 +1166,29 @@ namespace
                 updateStreamSpriteOnTile( world.GetTiles( Maps::GetDirectionIndex( centerTileIndex, direction ) ), false );
             }
         }
+    }
+
+    void setActionObjectOnTile( Maps::Tiles & tile, const Maps::ObjectInfo & info )
+    {
+        assert( !info.empty() );
+
+        // TODO: add code to populate other tiles if an object is bigger than 1 tile.
+
+        tile.SetObject( info.objectType );
+
+        if ( tile.getObjectIcnType() != MP2::OBJ_ICN_TYPE_UNKNOWN ) {
+            // If there is another object sprite here (shadow for example) push it down to add-ons.
+            tile.pushBottomLayerAddon( Maps::TilesAddon( tile.getLayerType(), tile.GetObjectUID(), tile.getObjectIcnType(), tile.GetObjectSpriteIndex() ) );
+        }
+
+        // No object exists on this tile. Add one.
+        tile.setObjectUID( Maps::getNewObjectUID() );
+        tile.setObjectIcnType( info.groundLevelParts.front().icnType );
+
+        using TileImageIndexType = decltype( tile.GetObjectSpriteIndex() );
+        static_assert( std::is_same_v<TileImageIndexType, uint8_t>, "Type of GetObjectSpriteIndex() has been changed, check the logic below" );
+
+        tile.setObjectSpriteIndex( static_cast<uint8_t>( info.groundLevelParts.front().icnIndex ) );
     }
 }
 
@@ -2984,68 +3008,6 @@ namespace Maps
         }
     }
 
-    void setRandomMonsterOnTile( Tiles & tile, const Monster & mons )
-    {
-        switch ( mons.GetID() ) {
-        case Monster::RANDOM_MONSTER:
-            tile.SetObject( MP2::OBJ_RANDOM_MONSTER );
-            break;
-        case Monster::RANDOM_MONSTER_LEVEL_1:
-            tile.SetObject( MP2::OBJ_RANDOM_MONSTER_WEAK );
-            break;
-        case Monster::RANDOM_MONSTER_LEVEL_2:
-            tile.SetObject( MP2::OBJ_RANDOM_MONSTER_MEDIUM );
-            break;
-        case Monster::RANDOM_MONSTER_LEVEL_3:
-            tile.SetObject( MP2::OBJ_RANDOM_MONSTER_STRONG );
-            break;
-        case Monster::RANDOM_MONSTER_LEVEL_4:
-            tile.SetObject( MP2::OBJ_RANDOM_MONSTER_VERY_STRONG );
-            break;
-        default:
-            // It is not even a random monster!
-            assert( 0 );
-            return;
-        }
-
-        if ( tile.getObjectIcnType() != MP2::OBJ_ICN_TYPE_UNKNOWN ) {
-            // If there is another object sprite here (shadow for example) push it down to add-ons.
-            tile.pushBottomLayerAddon( TilesAddon( tile.getLayerType(), tile.GetObjectUID(), tile.getObjectIcnType(), tile.GetObjectSpriteIndex() ) );
-        }
-
-        tile.setObjectUID( getNewObjectUID() );
-        tile.setObjectIcnType( MP2::OBJ_ICN_TYPE_MONS32 );
-
-        using TileImageIndexType = decltype( tile.GetObjectSpriteIndex() );
-        static_assert( std::is_same_v<TileImageIndexType, uint8_t>, "Type of GetObjectSpriteIndex() has been changed, check the logic below" );
-
-        const uint32_t monsSpriteIndex = static_cast<uint32_t>( mons.GetID() - 1 );
-        assert( monsSpriteIndex >= std::numeric_limits<TileImageIndexType>::min() && monsSpriteIndex <= std::numeric_limits<TileImageIndexType>::max() );
-
-        tile.setObjectSpriteIndex( static_cast<TileImageIndexType>( monsSpriteIndex ) );
-    }
-
-    void setEditorHeroOnTile( Tiles & tile, const int32_t heroType )
-    {
-        tile.SetObject( MP2::OBJ_HEROES );
-
-        if ( tile.getObjectIcnType() != MP2::OBJ_ICN_TYPE_UNKNOWN ) {
-            // If there is another object sprite here (shadow for example) push it down to add-ons.
-            tile.pushBottomLayerAddon( TilesAddon( tile.getLayerType(), tile.GetObjectUID(), tile.getObjectIcnType(), tile.GetObjectSpriteIndex() ) );
-        }
-
-        // No object exists on this tile. Add one.
-        tile.setObjectUID( getNewObjectUID() );
-        tile.setObjectIcnType( MP2::OBJ_ICN_TYPE_MINIHERO );
-
-        using TileImageIndexType = decltype( tile.GetObjectSpriteIndex() );
-        static_assert( std::is_same_v<TileImageIndexType, uint8_t>, "Type of GetObjectSpriteIndex() has been changed, check the logic below" );
-
-        assert( heroType >= std::numeric_limits<TileImageIndexType>::min() && heroType <= std::numeric_limits<TileImageIndexType>::max() );
-
-        tile.setObjectSpriteIndex( static_cast<TileImageIndexType>( heroType ) );
-    }
-
     bool removeObjectTypeFromTile( Tiles & tile, const MP2::ObjectIcnType objectIcnType )
     {
         if ( tile.getObjectIdByObjectIcnType( objectIcnType ) == 0 ) {
@@ -3128,5 +3090,30 @@ namespace Maps
         }
 
         return needRedraw;
+    }
+
+    void setObjectOnTile( Tiles & tile, const ObjectInfo & info )
+    {
+        assert( !info.empty() );
+
+        switch ( info.objectType ) {
+        case MP2::OBJ_MONSTER:
+            setMonsterOnTile( tile, info.metadata[0], 0 );
+            // Since setMonsterOnTile() function interprets 0 as a random number of monsters it is important to set the correct value.
+            setMonsterCountOnTile( tile, 0 );
+            return;
+        case MP2::OBJ_HEROES:
+        case MP2::OBJ_RANDOM_MONSTER:
+        case MP2::OBJ_RANDOM_MONSTER_MEDIUM:
+        case MP2::OBJ_RANDOM_MONSTER_STRONG:
+        case MP2::OBJ_RANDOM_MONSTER_VERY_STRONG:
+        case MP2::OBJ_RANDOM_MONSTER_WEAK:
+            setActionObjectOnTile( tile, info );
+            return;
+        default:
+            // Add the logic above for your object!
+            assert( 0 );
+            break;
+        }
     }
 }
