@@ -149,8 +149,8 @@ namespace
         // Random monsters.
         {
             Maps::ObjectInfo object{ MP2::OBJ_RANDOM_MONSTER };
-            object.groundLevelParts.emplace_back(
-                MP2::OBJ_ICN_TYPE_MONS32, Monster::RANDOM_MONSTER - 1, fheroes2::Point{ 0, 0 }, MP2::OBJ_RANDOM_MONSTER, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_MONS32, Monster::RANDOM_MONSTER - 1, fheroes2::Point{ 0, 0 }, MP2::OBJ_RANDOM_MONSTER,
+                                                  Maps::OBJECT_LAYER );
             object.metadata[0] = Monster::RANDOM_MONSTER;
 
             objects.emplace_back( std::move( object ) );
@@ -158,8 +158,8 @@ namespace
 
         {
             Maps::ObjectInfo object{ MP2::OBJ_RANDOM_MONSTER_WEAK };
-            object.groundLevelParts.emplace_back(
-                MP2::OBJ_ICN_TYPE_MONS32, Monster::RANDOM_MONSTER_LEVEL_1 - 1, fheroes2::Point{ 0, 0 }, MP2::OBJ_RANDOM_MONSTER_WEAK, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_MONS32, Monster::RANDOM_MONSTER_LEVEL_1 - 1, fheroes2::Point{ 0, 0 }, MP2::OBJ_RANDOM_MONSTER_WEAK,
+                                                  Maps::OBJECT_LAYER );
             object.metadata[0] = Monster::RANDOM_MONSTER_LEVEL_1;
 
             objects.emplace_back( std::move( object ) );
@@ -167,8 +167,8 @@ namespace
 
         {
             Maps::ObjectInfo object{ MP2::OBJ_RANDOM_MONSTER_MEDIUM };
-            object.groundLevelParts.emplace_back(
-                MP2::OBJ_ICN_TYPE_MONS32, Monster::RANDOM_MONSTER_LEVEL_2 - 1, fheroes2::Point{ 0, 0 }, MP2::OBJ_RANDOM_MONSTER_MEDIUM, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_MONS32, Monster::RANDOM_MONSTER_LEVEL_2 - 1, fheroes2::Point{ 0, 0 }, MP2::OBJ_RANDOM_MONSTER_MEDIUM,
+                                                  Maps::OBJECT_LAYER );
             object.metadata[0] = Monster::RANDOM_MONSTER_LEVEL_2;
 
             objects.emplace_back( std::move( object ) );
@@ -176,8 +176,8 @@ namespace
 
         {
             Maps::ObjectInfo object{ MP2::OBJ_RANDOM_MONSTER_STRONG };
-            object.groundLevelParts.emplace_back(
-                MP2::OBJ_ICN_TYPE_MONS32, Monster::RANDOM_MONSTER_LEVEL_3 - 1, fheroes2::Point{ 0, 0 }, MP2::OBJ_RANDOM_MONSTER_STRONG, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_MONS32, Monster::RANDOM_MONSTER_LEVEL_3 - 1, fheroes2::Point{ 0, 0 }, MP2::OBJ_RANDOM_MONSTER_STRONG,
+                                                  Maps::OBJECT_LAYER );
             object.metadata[0] = Monster::RANDOM_MONSTER_LEVEL_3;
 
             objects.emplace_back( std::move( object ) );
@@ -185,8 +185,8 @@ namespace
 
         {
             Maps::ObjectInfo object{ MP2::OBJ_RANDOM_MONSTER_VERY_STRONG };
-            object.groundLevelParts.emplace_back(
-                MP2::OBJ_ICN_TYPE_MONS32, Monster::RANDOM_MONSTER_LEVEL_4 - 1, fheroes2::Point{ 0, 0 }, MP2::OBJ_RANDOM_MONSTER_VERY_STRONG, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_MONS32, Monster::RANDOM_MONSTER_LEVEL_4 - 1, fheroes2::Point{ 0, 0 },
+                                                  MP2::OBJ_RANDOM_MONSTER_VERY_STRONG, Maps::OBJECT_LAYER );
             object.metadata[0] = Monster::RANDOM_MONSTER_LEVEL_4;
 
             objects.emplace_back( std::move( object ) );
