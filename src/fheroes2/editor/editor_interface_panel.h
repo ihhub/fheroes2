@@ -22,12 +22,12 @@
 
 #include <array>
 #include <cstdint>
+#include <vector>
 
 #include "game_mode.h"
 #include "ground.h"
 #include "maps_tiles_helper.h"
 #include "math_base.h"
-#include "monster.h"
 #include "ui_button.h"
 
 namespace Interface

@@ -22,6 +22,7 @@
 
 #include <algorithm>
 #include <array>
+#include <cassert>
 #include <cstddef>
 #include <initializer_list>
 #include <utility>
@@ -256,7 +257,7 @@ namespace
         }
 
         // IMPORTANT!!!
-        // The order of objects must be preserved. If you want to add a new object add it to the end of the container.
+        // The order of objects must be preserved. If you want to add a new object, add it to the end of the corresponding container.
         populateArtifactData( objectData[static_cast<size_t>( Maps::ObjectGroup::Artifact )] );
         populateHeroData( objectData[static_cast<size_t>( Maps::ObjectGroup::Hero )] );
         populateMonsterData( objectData[static_cast<size_t>( Maps::ObjectGroup::Monster )] );

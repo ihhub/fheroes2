@@ -253,6 +253,11 @@ namespace Maps
 
         void pushTopLayerAddon( const MP2::mp2addon_t & ma );
 
+        void pushTopLayerAddon( TilesAddon ta )
+        {
+            _addonTopLayer.emplace_back( ta );
+        }
+
         const std::list<TilesAddon> & getBottomLayerAddons() const
         {
             return _addonBottomLayer;
@@ -271,8 +276,7 @@ namespace Maps
         void moveMainAddonToBottomLayer()
         {
             if ( _mainAddon._objectIcnType != MP2::OBJ_ICN_TYPE_UNKNOWN ) {
-                // It is important to preserve the order of objects for rendering purposes. Therefore, the main object should go to the front of objects.
-                _addonBottomLayer.emplace_front( _mainAddon );
+                _addonBottomLayer.emplace_back( _mainAddon );
             }
         }
 
