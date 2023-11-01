@@ -417,8 +417,8 @@ namespace
 
         std::string getObjectName( const Maps::ObjectInfo & info ) override
         {
-            const int32_t color = info.metadata[0];
-            const int32_t race = info.metadata[1];
+            const int color = static_cast<int>( info.metadata[0] );
+            const int race = static_cast<int>( info.metadata[1] );
 
             std::string name( _( "%{color} %{race} hero" ) );
             StringReplace( name, "%{color}", Color::String( Color::IndexToColor( color ) ) );
@@ -440,7 +440,7 @@ namespace
     private:
         void showPopupWindow( const Maps::ObjectInfo & info ) override
         {
-            const Monster monster( info.metadata[0] );
+            const Monster monster( static_cast<int32_t>( info.metadata[0] ) );
             if ( !monster.isValid() ) {
                 fheroes2::showStandardTextMessage( monster.GetName(), "", Dialog::ZERO );
                 return;
@@ -451,7 +451,7 @@ namespace
 
         std::string getObjectName( const Maps::ObjectInfo & info ) override
         {
-            return Monster( info.metadata[0] ).GetName();
+            return Monster( static_cast<int32_t>( info.metadata[0] ) ).GetName();
         }
     };
 

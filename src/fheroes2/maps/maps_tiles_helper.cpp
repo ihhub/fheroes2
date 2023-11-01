@@ -3127,7 +3127,7 @@ namespace Maps
 
         switch ( info.objectType ) {
         case MP2::OBJ_MONSTER:
-            setMonsterOnTile( tile, info.metadata[0], 0 );
+            setMonsterOnTile( tile, static_cast<int32_t>( info.metadata[0] ), 0 );
             // Since setMonsterOnTile() function interprets 0 as a random number of monsters it is important to set the correct value.
             setMonsterCountOnTile( tile, 0 );
             return;
