@@ -28,7 +28,6 @@
 #include <initializer_list>
 #include <limits>
 #include <list>
-#include <memory>
 #include <optional>
 #include <ostream>
 #include <string>
@@ -1169,7 +1168,7 @@ namespace
         }
     }
 
-    void placeObjectOnTile( Maps::Tiles & tile, const Maps::ObjectInfo & info )
+    void placeObjectOnTile( const Maps::Tiles & tile, const Maps::ObjectInfo & info )
     {
         assert( !info.empty() );
 

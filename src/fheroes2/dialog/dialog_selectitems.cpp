@@ -579,7 +579,7 @@ int Dialog::selectHeroes( const int heroId /* = Heroes::UNKNOWN */ )
 
 int Dialog::selectHeroType( const int heroType )
 {
-    auto objectInfo = Maps::getObjectsByGroup( Maps::ObjectGroup::Hero );
+    const auto & objectInfo = Maps::getObjectsByGroup( Maps::ObjectGroup::Hero );
     HeroTypeSelection listbox( objectInfo, { 350, fheroes2::Display::instance().height() - 200 } );
 
     return selectObjectType( heroType, objectInfo.size(), listbox, _( "Select Hero:" ) );
@@ -587,7 +587,7 @@ int Dialog::selectHeroType( const int heroType )
 
 int Dialog::selectMonsterType( const int monsterType )
 {
-    auto objectInfo = Maps::getObjectsByGroup( Maps::ObjectGroup::Monster );
+    const auto & objectInfo = Maps::getObjectsByGroup( Maps::ObjectGroup::Monster );
 
     MonsterTypeSelection listbox( objectInfo, { 280, fheroes2::Display::instance().height() - 200 } );
 

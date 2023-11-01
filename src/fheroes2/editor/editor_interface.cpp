@@ -668,7 +668,7 @@ namespace Interface
 
     void EditorInterface::setObjectOnTile( Maps::Tiles & tile, const Maps::ObjectGroup group, const int32_t objectType )
     {
-        const auto objectInfo = Maps::getObjectsByGroup( group );
+        const auto & objectInfo = Maps::getObjectsByGroup( group );
         if ( objectType < 0 || objectType >= static_cast<int32_t>( objectInfo.size() ) ) {
             return;
         }

@@ -24,6 +24,7 @@
 #include <cstddef>
 #include <string>
 #include <utility>
+#include <vector>
 
 #include "agg_image.h"
 #include "cursor.h"
@@ -491,8 +492,8 @@ namespace Interface
                 if ( monsterType >= 0 ) {
                     _monsterType = monsterType;
 
-                    _interface.setCursorUpdater( [monsterType = _monsterType]( const int32_t /*tileIndex*/ ) {
-                        const auto objectInfo = Maps::getObjectsByGroup( Maps::ObjectGroup::Monster );
+                    _interface.setCursorUpdater( [monsterType = monsterType]( const int32_t /*tileIndex*/ ) {
+                        const auto & objectInfo = Maps::getObjectsByGroup( Maps::ObjectGroup::Monster );
                         if ( monsterType < 0 || monsterType >= static_cast<int32_t>( objectInfo.size() ) ) {
                             // You are trying to render some unknown stuff!
                             assert( 0 );

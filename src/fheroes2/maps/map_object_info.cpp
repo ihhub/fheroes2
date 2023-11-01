@@ -28,6 +28,7 @@
 #include <utility>
 
 #include "artifact.h"
+#include "monster.h"
 
 namespace
 {

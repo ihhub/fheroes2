@@ -22,7 +22,6 @@
 
 #include <array>
 #include <cstdint>
-#include <vector>
 
 #include "game_mode.h"
 #include "ground.h"
