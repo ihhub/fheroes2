@@ -179,7 +179,6 @@ namespace
         const int32_t size = 31;
         const uint8_t red = 0xBA;
         const uint8_t green = isActionObject ? 115 : 90;
-        
 
         fheroes2::Image sf( size, size );
         sf.reset();
