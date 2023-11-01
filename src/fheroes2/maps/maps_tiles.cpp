@@ -608,7 +608,10 @@ void Maps::Tiles::SetObject( const MP2::MapObjectType objectType )
 
 void Maps::Tiles::setBoat( const int direction, const int color )
 {
-    moveMainAddonToBottomLayer();
+    if ( _mainAddon._objectIcnType != MP2::OBJ_ICN_TYPE_UNKNOWN ) {
+        // It is important to preserve the order of objects for rendering purposes. Therefore, the main object should go to the front of objects.
+        _addonBottomLayer.emplace_front( _mainAddon );
+    }
 
     // If this assertion blows up then you are trying to put a boat on land!
     assert( isWater() );
@@ -907,7 +910,9 @@ void Maps::Tiles::AddonsSort()
     }
 
     // Push everything to the container and sort it by level.
-    moveMainAddonToBottomLayer();
+    if ( _mainAddon._objectIcnType != MP2::OBJ_ICN_TYPE_UNKNOWN ) {
+        _addonBottomLayer.emplace_front( _mainAddon );
+    }
 
     // Sort by internal layers.
     _addonBottomLayer.sort( []( const auto & left, const auto & right ) { return ( left._layerType > right._layerType ); } );
