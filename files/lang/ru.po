@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-23 00:14+0000\n"
+"POT-Creation-Date: 2023-11-02 14:09+0000\n"
 "PO-Revision-Date: 2023-10-10 06:12+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -985,11 +985,6 @@ msgstr "каждый с бонусом +%{attack} к своему навыку �
 
 msgid "The %{name} is destroyed."
 msgstr "%{name} уничтожена!"
-
-msgid ""
-"The %{artifact} artifact is in effect for this battle, disabling %{spell} "
-"spell."
-msgstr "%{artifact} запрещает использовать \"%{spell}\"."
 
 msgid "%{count} %{name} rises from the dead!"
 msgid_plural "%{count} %{name} rise from the dead!"
@@ -10841,6 +10836,11 @@ msgstr ""
 "Новую версию игры можно найти на сайте:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid ""
+#~ "The %{artifact} artifact is in effect for this battle, disabling %{spell} "
+#~ "spell."
+#~ msgstr "%{artifact} запрещает использовать \"%{spell}\"."
 
 #~ msgid ""
 #~ " on the left side of main menu or by clicking on the configuration "
