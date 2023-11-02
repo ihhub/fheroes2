@@ -303,6 +303,8 @@ public:
         }
     }
 
+    static void HandleRenderDeviceResetEvent();
+
 private:
     LocalEvent();
 
@@ -320,7 +322,6 @@ private:
 
     // Returns true if frame rendering is required.
     static bool HandleWindowEvent( const SDL_WindowEvent & event );
-    static void HandleRenderDeviceResetEvent();
 
     void ProcessControllerAxisMotion();
 
