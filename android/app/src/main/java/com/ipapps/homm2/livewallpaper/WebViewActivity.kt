@@ -12,7 +12,6 @@ class WebViewActivity : AppCompatActivity() {
 
         val webView = findViewById<WebView>(R.id.activity_web_view)
         webView.loadUrl("file:///android_asset/www/index.html")
-        webView.settings.javaScriptEnabled = true
 
         val bridge = Bridge(applicationContext, webView)
         bridge.addJSInterface(AndroidNativeInterface())
