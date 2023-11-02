@@ -202,8 +202,8 @@ namespace Battle
         // in similar circumstances.
         uint32_t EstimateRetaliatoryDamage( const uint32_t damageTaken ) const;
 
-        bool ApplySpell( const Spell &, const HeroBase * hero, TargetInfo & );
-        bool AllowApplySpell( const Spell &, const HeroBase * hero, std::string * msg = nullptr, bool forceApplyToAlly = false ) const;
+        bool ApplySpell( const Spell & spell, const HeroBase * applyingHero, TargetInfo & target );
+        bool AllowApplySpell( const Spell & spell, const HeroBase * applyingHero, const bool forceApplyToAlly = false ) const;
         bool isUnderSpellEffect( const Spell & spell ) const;
         std::vector<Spell> getCurrentSpellEffects() const;
 
@@ -212,7 +212,8 @@ namespace Battle
         // Sets whether a unit performs a retaliatory attack while being blinded (i.e. with reduced efficiency)
         void SetBlindRetaliation( bool value );
 
-        uint32_t CalculateSpellDamage( const Spell & spell, uint32_t spellPoints, const HeroBase * hero, uint32_t targetDamage, bool ignoreDefendingHero ) const;
+        uint32_t CalculateSpellDamage( const Spell & spell, uint32_t spellPoints, const HeroBase * applyingHero, const uint32_t targetDamage,
+                                       const bool ignoreDefendingHero ) const;
 
         bool SwitchAnimation( int rule, bool reverse = false );
         bool SwitchAnimation( const std::vector<int> & animationList, bool reverse = false );
@@ -267,7 +268,7 @@ namespace Battle
         bool UpdateDirection( const fheroes2::Rect & );
         void PostKilledAction();
 
-        uint32_t GetMagicResist( const Spell & spell, const uint32_t attackingArmySpellPower, const HeroBase * attackingHero ) const;
+        uint32_t GetMagicResist( const Spell & spell, const HeroBase * applyingHero ) const;
         int GetSpellMagic( Rand::DeterministicRandomGenerator & randomGenerator ) const;
 
         const HeroBase * GetCommander() const;
@@ -299,11 +300,11 @@ namespace Battle
         uint32_t Resurrect( const uint32_t points, const bool allow_overflow, const bool skip_dead );
 
         // Applies a damage-causing spell to this unit
-        void SpellApplyDamage( const Spell & spell, const uint32_t spellPoints, const HeroBase * hero, TargetInfo & target );
+        void SpellApplyDamage( const Spell & spell, const uint32_t spellPoints, const HeroBase * applyingHero, TargetInfo & target );
         // Applies a restoring or reviving spell to this unit
-        void SpellRestoreAction( const Spell & spell, const uint32_t spellPoints, const HeroBase * hero );
+        void SpellRestoreAction( const Spell & spell, const uint32_t spellPoints, const HeroBase * applyingHero );
         // Applies a spell to this unit that changes its parameters
-        void SpellModesAction( const Spell & spell, uint32_t duration, const HeroBase * hero );
+        void SpellModesAction( const Spell & spell, uint32_t duration, const HeroBase * applyingHero );
 
         // Adds a temporary affection (usually a spell effect) with the specified duration. Only one affection can be added.
         void addAffection( const uint32_t mode, const uint32_t duration );

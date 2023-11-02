@@ -758,12 +758,12 @@ namespace AI
 
         // Calculate each hero spell strength and add it to shooter values after castle modifiers were applied
         if ( _commander && _myShooterStr > 1 ) {
-            _myShooterStr += BattlePlanner::commanderMaximumSpellDamageValue( *_commander );
+            _myShooterStr += commanderMaximumSpellDamageValue( *_commander );
         }
         const HeroBase * enemyCommander = arena.getEnemyCommander( _myColor );
         if ( enemyCommander ) {
             _enemySpellStrength = enemyCommander->GetMagicStrategicValue( _myArmyStrength );
-            _enemyShooterStr += BattlePlanner::commanderMaximumSpellDamageValue( *enemyCommander );
+            _enemyShooterStr += commanderMaximumSpellDamageValue( *enemyCommander );
         }
 
         double overPowerRatio = 10; // for melee creatures

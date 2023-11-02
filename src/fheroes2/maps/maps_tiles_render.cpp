@@ -943,7 +943,7 @@ namespace Maps
         size_t postRenderAddonCount = 0;
 
         for ( const TilesAddon & addon : tile.getBottomLayerAddons() ) {
-            if ( ( addon._layerType & 0x03 ) != level ) {
+            if ( addon._layerType != level ) {
                 continue;
             }
 
@@ -963,7 +963,7 @@ namespace Maps
             renderAddonObject( dst, area, mp, addon );
         }
 
-        if ( tile.getObjectIcnType() != MP2::OBJ_ICN_TYPE_UNKNOWN && ( tile.getLayerType() & 0x03 ) == level
+        if ( tile.getObjectIcnType() != MP2::OBJ_ICN_TYPE_UNKNOWN && tile.getLayerType() == level
              && ( !isPuzzleDraw || !MP2::isHiddenForPuzzle( tile.GetGround(), tile.getObjectIcnType(), tile.GetObjectSpriteIndex() ) ) ) {
             renderMainObject( dst, area, mp, tile );
         }

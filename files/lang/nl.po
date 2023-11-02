@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-23 00:14+0000\n"
+"POT-Creation-Date: 2023-11-02 14:09+0000\n"
 "PO-Revision-Date: 2022-10-25 08:52+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Dutch <nl@li.org>\n"
@@ -941,13 +941,6 @@ msgstr "elk met een +%{attack} bonus voor hun aanvalsvaardigheid."
 #, fuzzy
 msgid "The %{name} is destroyed."
 msgstr "Het spiegelbeeld is vernietigd!"
-
-msgid ""
-"The %{artifact} artifact is in effect for this battle, disabling %{spell} "
-"spell."
-msgstr ""
-"Het %{artefact}-artefact is van kracht voor dit gevecht, waardoor de "
-"%{spell}-spreuk wordt uitgeschakeld."
 
 #, fuzzy
 msgid "%{count} %{name} rises from the dead!"
