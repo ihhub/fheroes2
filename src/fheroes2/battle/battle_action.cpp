@@ -206,7 +206,7 @@ void Battle::Arena::BattleProcess( Unit & attacker, Unit & defender, int32_t dst
             if ( !attackTarget.defender->isValid() ) {
                 continue;
             }
-            if ( !attackTarget.defender->AllowApplySpell( spell, attackTarget.defender->GetCommander(), nullptr, true ) ) {
+            if ( !attackTarget.defender->AllowApplySpell( spell, nullptr ) ) {
                 continue;
             }
 
@@ -762,11 +762,9 @@ std::vector<Battle::Unit *> Battle::Arena::FindChainLightningTargetIndexes( cons
 
     std::vector<Unit *> foundTroops = board.GetNearestTroops( result.back(), ignoredTroops );
 
-    const int heroSpellPower = hero ? hero->GetPower() : 0;
-
     // Filter those which are fully immuned
     for ( size_t i = 0; i < foundTroops.size(); ) {
-        if ( foundTroops[i]->GetMagicResist( Spell::CHAINLIGHTNING, heroSpellPower, hero ) >= 100 ) {
+        if ( foundTroops[i]->GetMagicResist( Spell::CHAINLIGHTNING, hero ) >= 100 ) {
             ignoredTroops.push_back( foundTroops[i] );
             foundTroops.erase( foundTroops.begin() + i );
         }
@@ -778,7 +776,7 @@ std::vector<Battle::Unit *> Battle::Arena::FindChainLightningTargetIndexes( cons
     while ( result.size() != CHAIN_LIGHTNING_CREATURE_COUNT && !foundTroops.empty() ) {
         bool targetFound = false;
         for ( size_t i = 0; i < foundTroops.size(); ++i ) {
-            const uint32_t resist = foundTroops[i]->GetMagicResist( Spell::CHAINLIGHTNING, heroSpellPower, hero );
+            const uint32_t resist = foundTroops[i]->GetMagicResist( Spell::CHAINLIGHTNING, hero );
             assert( resist < 100 );
 
             if ( !applyRandomMagicResistance || resist < _randomGenerator.Get( 1, 100 ) ) {
@@ -815,8 +813,7 @@ Battle::TargetsInfo Battle::Arena::TargetsForChainLightning( const HeroBase * he
 
     TargetsInfo targets;
 
-    const int heroSpellPower = hero ? hero->GetPower() : 0;
-    const uint32_t firstUnitResist = unit->GetMagicResist( Spell::CHAINLIGHTNING, heroSpellPower, hero );
+    const uint32_t firstUnitResist = unit->GetMagicResist( Spell::CHAINLIGHTNING, hero );
 
     if ( firstUnitResist >= 100 || ( applyRandomMagicResistance && firstUnitResist >= _randomGenerator.Get( 1, 100 ) ) ) {
         targets.emplace_back();
@@ -967,7 +964,7 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForSpell( const HeroBase * hero, co
 
     // Mark magically resistant troops
     for ( auto & tgt : targets ) {
-        const uint32_t resist = tgt.defender->GetMagicResist( spell, hero ? hero->GetPower() : 0, hero );
+        const uint32_t resist = tgt.defender->GetMagicResist( spell, hero );
         assert( resist < 100 );
 
         if ( applyRandomMagicResistance && resist >= _randomGenerator.Get( 1, 100 ) ) {
