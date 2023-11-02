@@ -87,6 +87,8 @@ android {
 dependencies {
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs_nio:2.0.3'
 
+    implementation 'com.github.andycandy-de:simple-android-bridge:1.0.2'
+
     implementation project(':isotools')
 //    implementation project(':sdl2')
 
