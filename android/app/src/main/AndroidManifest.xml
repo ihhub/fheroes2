@@ -49,6 +49,14 @@
         </activity>
 
         <activity
+            android:name="com.ipapps.homm2.livewallpaper.WebViewActivity"
+            android:parentActivityName="org.fheroes2.ToolsetActivity"
+            android:exported="true"
+            android:icon="@mipmap/ic_launcher_toolset"
+            android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar">
+        </activity>
+
+        <activity
             android:name="org.fheroes2.ToolsetActivity"
             android:exported="true"
             android:icon="@mipmap/ic_launcher_toolset"

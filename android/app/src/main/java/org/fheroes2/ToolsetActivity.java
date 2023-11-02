@@ -43,6 +43,7 @@ import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.ipapps.homm2.livewallpaper.R;
+import com.ipapps.homm2.livewallpaper.WebViewActivity;
 import com.ipapps.homm2.livewallpaper.settings.MainActivity;
 
 public final class ToolsetActivity extends AppCompatActivity
@@ -201,7 +202,7 @@ public final class ToolsetActivity extends AppCompatActivity
     @SuppressWarnings( "java:S1172" ) // SonarQube warning "Remove unused method parameter"
     public void wallpaperSettingsClicked( final View view )
     {
-        startActivity( new Intent( this, MainActivity.class ) );
+        startActivity( new Intent( this, WebViewActivity.class ) );
     }
 
     private void updateUI( final ToolsetActivityViewModel.Status modelStatus )
