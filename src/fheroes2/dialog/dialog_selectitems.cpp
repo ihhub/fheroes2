@@ -465,7 +465,7 @@ namespace
 
         objectSelection.SetCurrent( std::max( objectType, 0 ) );
 
-        const int32_t result = objectSelection.selectItemsEventProcessing( _( "Select Monster:" ) );
+        const int32_t result = objectSelection.selectItemsEventProcessing( title );
         return result == Dialog::OK || objectSelection.ok ? objectSelection.GetCurrent() : -1;
     }
 }

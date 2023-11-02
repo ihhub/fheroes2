@@ -1183,8 +1183,7 @@ namespace
                 continue;
             }
 
-            const int32_t tileIndex = Maps::GetIndexFromAbsPoint( pos );
-            Maps::Tiles & currentTile = world.GetTiles( tileIndex );
+            Maps::Tiles & currentTile = world.GetTiles( pos.x, pos.y );
 
             if ( partInfo.layerType == Maps::SHADOW_LAYER || partInfo.layerType == Maps::TERRAIN_LAYER ) {
                 // Shadows and terrain object do not change main tile information.
@@ -1212,8 +1211,7 @@ namespace
                 continue;
             }
 
-            const int32_t tileIndex = Maps::GetIndexFromAbsPoint( pos );
-            Maps::Tiles & currentTile = world.GetTiles( tileIndex );
+            Maps::Tiles & currentTile = world.GetTiles( pos.x, pos.y );
 
             currentTile.pushTopLayerAddon( Maps::TilesAddon( partInfo.layerType, uid, partInfo.icnType, static_cast<uint8_t>( partInfo.icnIndex ) ) );
         }
