@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-23 00:14+0000\n"
+"POT-Creation-Date: 2023-11-02 14:09+0000\n"
 "PO-Revision-Date: 2023-11-01 22:53+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -966,13 +966,6 @@ msgstr "mỗi người có phần thưởng +%{attack} cho kỹ năng tấn côn
 
 msgid "The %{name} is destroyed."
 msgstr "%{name} bị phá hủy."
-
-msgid ""
-"The %{artifact} artifact is in effect for this battle, disabling %{spell} "
-"spell."
-msgstr ""
-"Bảo vật %{artifact} có tác dụng trong trận đấu này, vô hiệu hóa phép "
-"%{spell}."
 
 msgid "%{count} %{name} rises from the dead!"
 msgid_plural "%{count} %{name} rise from the dead!"
