@@ -42,6 +42,9 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.ipapps.homm2.livewallpaper.R;
+import com.ipapps.homm2.livewallpaper.settings.MainActivity;
+
 public final class ToolsetActivity extends AppCompatActivity
 {
     public static final class ToolsetActivityViewModel extends ViewModel
@@ -159,7 +162,7 @@ public final class ToolsetActivity extends AppCompatActivity
     @SuppressWarnings( "java:S1172" ) // SonarQube warning "Remove unused method parameter"
     public void startGameButtonClicked( final View view )
     {
-        startActivity( new Intent( this, GameActivity.class ) );
+//        startActivity( new Intent( this, GameActivity.class ) );
 
         // Replace this activity with the newly launched activity
         finish();
