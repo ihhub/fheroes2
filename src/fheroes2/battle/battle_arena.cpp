@@ -882,7 +882,7 @@ bool Battle::Arena::isDisableCastSpell( const Spell & spell, std::string * msg /
                 const Battle::Unit * b = ( *it ).GetUnit();
 
                 if ( b ) {
-                    if ( b->AllowApplySpell( spell, current_commander, nullptr ) ) {
+                    if ( b->AllowApplySpell( spell, current_commander ) ) {
                         return false;
                     }
                 }
