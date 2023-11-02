@@ -87,6 +87,7 @@
 #include "SDL_timer.h"
 #include "SDL_system.h"
 #include "SDL_thread.h"
+#include "jni.h"
 
 uint32_t lwpLastMapUpdate = 0;
 bool forceMapUpdate = true;
