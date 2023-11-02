@@ -85,6 +85,9 @@ void UpdateValuesColors( std::vector<ValueColors> & v, int value, int color )
 
 void getInfo( std::vector<ValueColors> & v, const Colors & colors, const std::function<int( const int )> & getValue )
 {
+    // 'getValue' should contain a callable function.
+    assert( getValue );
+
     v.clear();
 
     for ( const int color : colors ) {
@@ -171,10 +174,7 @@ void drawHeroIcons( const Colors & colors, const bool drawStats, const fheroes2:
         fheroes2::Blit( window, output, offsetX - window.width() / 2, pos.y - 4 );
 
         const fheroes2::Sprite & icon = hero->GetPortrait( PORT_SMALL );
-        if ( !icon.empty() ) {
-            const int32_t iconWidth = icon.width();
-            fheroes2::Copy( icon, 0, 0, output, offsetX - iconWidth / 2, pos.y, iconWidth, icon.height() );
-        }
+        fheroes2::Copy( icon, 0, 0, output, offsetX - icon.width() / 2, pos.y, icon.width(), icon.height() );
 
         if ( drawStats ) {
             drawHeroStats( hero, offsetX - 26, pos.y + 34, output );
