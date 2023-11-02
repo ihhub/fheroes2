@@ -200,6 +200,8 @@ namespace
         display.updateNextRenderRoi( radarArea );
         fheroes2::fadeInDisplay( back.rect(), false );
 
+        Interface::AdventureMap::Get().getGameArea().SetUpdateCursor();
+
         radar.SetRedraw( Interface::REDRAW_RADAR_CURSOR );
     }
 
@@ -207,7 +209,8 @@ namespace
     {
         fheroes2::Display & display = fheroes2::Display::instance();
 
-        const fheroes2::Rect & gameArea = Interface::AdventureMap::Get().getGameArea().GetROI();
+        Interface::GameArea & gameAreaInstance = Interface::AdventureMap::Get().getGameArea();
+        const fheroes2::Rect & gameArea = gameAreaInstance.GetROI();
 
         const fheroes2::StandardWindow border( gameArea.x + ( gameArea.width - sf.width() ) / 2, gameArea.y + ( gameArea.height - sf.height() ) / 2, sf.width(),
                                                sf.height(), false );
@@ -265,6 +268,8 @@ namespace
         }
 
         fheroes2::fadeOutDisplay( border.activeArea(), true );
+
+        gameAreaInstance.SetUpdateCursor();
 
         radar.SetRedraw( Interface::REDRAW_RADAR_CURSOR );
     }

@@ -253,12 +253,24 @@ CursorRestorer::CursorRestorer( const bool visible, const int theme )
 
 CursorRestorer::~CursorRestorer()
 {
+    if ( _isRestored ) {
+        return;
+    }
+
+    restore();
+}
+
+void CursorRestorer::restore()
+{
     fheroes2::Cursor & cursorRenderer = fheroes2::cursor();
-    Cursor & cursorIcon = Cursor::Get();
-
-    if ( cursorRenderer.isVisible() != _visible || cursorIcon.Themes() != _theme ) {
-        cursorIcon.SetThemes( _theme );
-
+    if ( cursorRenderer.isVisible() != _visible ) {
         cursorRenderer.show( _visible );
     }
+
+    Cursor & cursorIcon = Cursor::Get();
+    if ( cursorIcon.Themes() != _theme ) {
+        cursorIcon.SetThemes( _theme );
+    }
+
+    _isRestored = true;
 }

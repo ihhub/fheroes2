@@ -989,89 +989,129 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
 
         // hotkeys
         if ( le.KeyPress() ) {
-            // if the hero is currently moving, pressing any key should stop him
+            // If the hero is currently moving, pressing any key should stop him.
             if ( isMovingHero ) {
                 stopHero = true;
             }
-            // adventure map control
-            else if ( HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_QUIT ) || HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) )
+            // Process adventure map key press events.
+            else if ( HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_QUIT ) || HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
                 res = EventExit();
-            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_END_TURN ) )
+                _gameArea.SetUpdateCursor();
+            }
+            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_END_TURN ) ) {
                 res = EventEndTurn();
-            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_NEXT_HERO ) )
+                _gameArea.SetUpdateCursor();
+            }
+            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_NEXT_HERO ) ) {
                 EventNextHero();
-            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_NEXT_TOWN ) )
+            }
+            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_NEXT_TOWN ) ) {
                 EventNextTown();
-            else if ( HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_NEW_GAME ) )
+            }
+            else if ( HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_NEW_GAME ) ) {
                 res = EventNewGame();
-            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_SAVE_GAME ) )
+                //_gameArea.SetUpdateCursor();
+            }
+            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_SAVE_GAME ) ) {
                 EventSaveGame();
-            else if ( HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_LOAD_GAME ) )
+            }
+            else if ( HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_LOAD_GAME ) ) {
                 res = EventLoadGame();
-            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_FILE_OPTIONS ) )
+            }
+            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_FILE_OPTIONS ) ) {
                 res = EventFileDialog();
-            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_ADVENTURE_OPTIONS ) )
+            }
+            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_ADVENTURE_OPTIONS ) ) {
                 res = EventAdventureDialog();
-            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_SYSTEM_OPTIONS ) )
+            }
+            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_SYSTEM_OPTIONS ) ) {
                 EventSystemDialog();
-            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_PUZZLE_MAP ) )
+            }
+            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_PUZZLE_MAP ) ) {
                 EventPuzzleMaps();
-            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_SCENARIO_INFORMATION ) )
+            }
+            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_SCENARIO_INFORMATION ) ) {
                 res = EventScenarioInformation();
-            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_CAST_SPELL ) )
+            }
+            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_CAST_SPELL ) ) {
                 EventCastSpell();
-            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_KINGDOM_SUMMARY ) )
+            }
+            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_KINGDOM_SUMMARY ) ) {
                 EventKingdomInfo();
-            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_VIEW_WORLD ) )
+            }
+            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_VIEW_WORLD ) ) {
                 EventViewWorld();
-            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_TOGGLE_CONTROL_PANEL ) )
+            }
+            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_TOGGLE_CONTROL_PANEL ) ) {
                 EventSwitchShowControlPanel();
-            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_TOGGLE_RADAR ) )
+            }
+            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_TOGGLE_RADAR ) ) {
                 EventSwitchShowRadar();
-            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_TOGGLE_BUTTONS ) )
+            }
+            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_TOGGLE_BUTTONS ) ) {
                 EventSwitchShowButtons();
-            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_TOGGLE_STATUS ) )
+            }
+            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_TOGGLE_STATUS ) ) {
                 EventSwitchShowStatus();
-            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_TOGGLE_ICONS ) )
+            }
+            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_TOGGLE_ICONS ) ) {
                 EventSwitchShowIcons();
-            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_START_HERO_MOVEMENT ) )
+            }
+            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_START_HERO_MOVEMENT ) ) {
                 res = EventHeroMovement();
-            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_DIG_ARTIFACT ) )
+            }
+            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_DIG_ARTIFACT ) ) {
                 res = EventDigArtifact();
-            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_SLEEP_HERO ) )
+            }
+            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_SLEEP_HERO ) ) {
                 EventSwitchHeroSleeping();
-            // hero movement control
-            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_LEFT ) )
+            }
+            // Hero movement key press events processing.
+            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_LEFT ) ) {
                 EventKeyArrowPress( Direction::LEFT );
-            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_RIGHT ) )
+            }
+            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_RIGHT ) ) {
                 EventKeyArrowPress( Direction::RIGHT );
-            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_UP ) )
+            }
+            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_UP ) ) {
                 EventKeyArrowPress( Direction::TOP );
-            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_DOWN ) )
+            }
+            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_DOWN ) ) {
                 EventKeyArrowPress( Direction::BOTTOM );
-            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_UP_LEFT ) )
+            }
+            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_UP_LEFT ) ) {
                 EventKeyArrowPress( Direction::TOP_LEFT );
-            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_UP_RIGHT ) )
+            }
+            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_UP_RIGHT ) ) {
                 EventKeyArrowPress( Direction::TOP_RIGHT );
-            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_DOWN_LEFT ) )
+            }
+            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_DOWN_LEFT ) ) {
                 EventKeyArrowPress( Direction::BOTTOM_LEFT );
-            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_DOWN_RIGHT ) )
+            }
+            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_DOWN_RIGHT ) ) {
                 EventKeyArrowPress( Direction::BOTTOM_RIGHT );
-            // map scrolling control
-            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_SCROLL_LEFT ) )
+            }
+            // Map scrolling key press events processing.
+            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_SCROLL_LEFT ) ) {
                 _gameArea.SetScroll( SCROLL_LEFT );
-            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_SCROLL_RIGHT ) )
+            }
+            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_SCROLL_RIGHT ) ) {
                 _gameArea.SetScroll( SCROLL_RIGHT );
-            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_SCROLL_UP ) )
+            }
+            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_SCROLL_UP ) ) {
                 _gameArea.SetScroll( SCROLL_TOP );
-            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_SCROLL_DOWN ) )
+            }
+            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_SCROLL_DOWN ) ) {
                 _gameArea.SetScroll( SCROLL_BOTTOM );
-            // default action
-            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_DEFAULT_ACTION ) )
+            }
+            // Default action.
+            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_DEFAULT_ACTION ) ) {
                 res = EventDefaultAction();
-            // open focus
-            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_OPEN_FOCUS ) )
+            }
+            // Open focus.
+            else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_OPEN_FOCUS ) ) {
                 EventOpenFocus();
+            }
         }
 
         if ( res != fheroes2::GameMode::CANCEL ) {
@@ -1297,18 +1337,16 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
                         }
                     }
                     else {
-                        isMovingHero = false;
-                        stopHero = false;
-
-                        hero->SetMove( false );
-
-                        _gameArea.SetUpdateCursor();
+                        // TODO: remove this assertion after testing.
+                        // This should not happen. 'hero->isMoveEnabled()' is false so hero is not moving or stopping.
+                        assert( !isMovingHero && !stopHero );
                     }
                 }
             }
             else {
-                isMovingHero = false;
-                stopHero = false;
+                // TODO: remove this assertion after testing.
+                // This should not happen. No hero is selected, so there is no "moving" or "sopping" hero actions.
+                assert( !isMovingHero && !stopHero );
             }
         }
 

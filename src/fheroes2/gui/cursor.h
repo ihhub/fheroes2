@@ -224,9 +224,12 @@ public:
 
     CursorRestorer & operator=( const CursorRestorer & ) = delete;
 
+    void restore();
+
 private:
     const int _theme;
     const bool _visible;
+    bool _isRestored{ false };
 };
 
 #endif

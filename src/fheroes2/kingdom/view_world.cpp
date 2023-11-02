@@ -611,7 +611,7 @@ void ViewWorld::ViewWorldWindow( const int32_t color, const ViewWorldMode mode, 
     // Creates fixed radar on top-right, suitable for the View World window
     Interface::Radar radar( interface.getRadar(), fheroes2::Display::instance() );
 
-    const Interface::GameArea gameArea = interface.getGameArea();
+    Interface::GameArea & gameArea = interface.getGameArea();
     const fheroes2::Rect worldMapROI = gameArea.GetVisibleTileROI();
     const fheroes2::Rect visibleScreenInPixels = gameArea.GetROI();
 
@@ -736,6 +736,8 @@ void ViewWorld::ViewWorldWindow( const int32_t color, const ViewWorldMode mode, 
     display.updateNextRenderRoi( restorer.rect() );
 
     fheroes2::fadeInDisplay( fadeRoi, false );
+
+    gameArea.SetUpdateCursor();
 
     // Don't forget to reset the interface settings back if necessary
     if ( isHideInterface ) {

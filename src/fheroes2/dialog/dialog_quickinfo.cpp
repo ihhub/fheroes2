@@ -559,7 +559,11 @@ namespace
 
     void showQuickInfo( const Castle & castle, const fheroes2::Point & position, const bool showOnRadar, const fheroes2::Rect & areaToRestore )
     {
-        const CursorRestorer cursorRestorer( false, Cursor::POINTER );
+        CursorRestorer cursorRestorer( false, Cursor::Get().Themes() );
+
+        LocalEvent & le = LocalEvent::Get();
+        Interface::GameArea & gameArea = Interface::AdventureMap::Get().getGameArea();
+        const int32_t cursorTileIndex = gameArea.GetValidTileIdFromPoint( le.GetMouseCursor() );
 
         // Update radar if needed
         RadarUpdater radarUpdater( showOnRadar, castle.GetCenter(), areaToRestore );
@@ -567,7 +571,6 @@ namespace
         // image box
         const fheroes2::Sprite & box = fheroes2::AGG::GetICN( ICN::QWIKTOWN, 0 );
 
-        LocalEvent & le = LocalEvent::Get();
         fheroes2::Rect cur_rt = makeRectQuickInfo( le, box, position );
 
         fheroes2::Display & display = fheroes2::Display::instance();
@@ -663,7 +666,8 @@ namespace
             text.draw( dst_pt.x, dst_pt.y, display );
         }
 
-        display.render();
+        display.updateNextRenderRoi( areaToRestore );
+        display.render( back.rect() );
 
         // quick info loop
         while ( le.HandleEvents() && le.MousePressRight() )
@@ -675,13 +679,27 @@ namespace
         // Restore radar view
         radarUpdater.restore();
 
-        display.render();
+        if ( cursorTileIndex == gameArea.GetValidTileIdFromPoint( le.GetMouseCursor() ) ) {
+            // Cursor is above the same map tile we can restore it before the display render.
+            cursorRestorer.restore();
+        }
+        else {
+            // The cursor is above the other map tile. We will restore and update it later, before the next display render, so leave it hidden.
+            gameArea.SetUpdateCursor();
+        }
+
+        display.updateNextRenderRoi( areaToRestore );
+        display.render( back.rect() );
     }
 
     void showQuickInfo( const HeroBase & hero, const fheroes2::Point & position, const bool showOnRadar, const fheroes2::Rect & areaToRestore,
                         const std::optional<bool> showFullInfo )
     {
-        const CursorRestorer cursorRestorer( false, Cursor::POINTER );
+        CursorRestorer cursorRestorer( false, Cursor::Get().Themes() );
+
+        LocalEvent & le = LocalEvent::Get();
+        Interface::GameArea & gameArea = Interface::AdventureMap::Get().getGameArea();
+        const int32_t cursorTileIndex = gameArea.GetValidTileIdFromPoint( le.GetMouseCursor() );
 
         // Update radar if needed
         RadarUpdater radarUpdater( showOnRadar, hero.GetCenter(), areaToRestore );
@@ -689,7 +707,6 @@ namespace
         // image box
         const fheroes2::Sprite & box = fheroes2::AGG::GetICN( ICN::QWIKHERO, 0 );
 
-        LocalEvent & le = LocalEvent::Get();
         fheroes2::Rect cur_rt = makeRectQuickInfo( le, box, position );
 
         fheroes2::Display & display = fheroes2::Display::instance();
@@ -885,7 +902,8 @@ namespace
             Army::drawMultipleMonsterLines( hero.GetArmy(), cur_rt.x - 6, cur_rt.y + 60, 160, false, false );
         }
 
-        display.render();
+        display.updateNextRenderRoi( areaToRestore );
+        display.render( restorer.rect() );
 
         // quick info loop
         while ( le.HandleEvents() && le.MousePressRight() )
@@ -897,20 +915,32 @@ namespace
         // Restore radar view
         radarUpdater.restore();
 
-        display.render();
+        if ( cursorTileIndex == gameArea.GetValidTileIdFromPoint( le.GetMouseCursor() ) ) {
+            // Cursor is above the same map tile we can restore it before the display render.
+            cursorRestorer.restore();
+        }
+        else {
+            // The cursor is above the other map tile. We will restore and update it later, before the next display render, so leave it hidden.
+            gameArea.SetUpdateCursor();
+        }
+
+        display.updateNextRenderRoi( areaToRestore );
+        display.render( restorer.rect() );
     }
 }
 
 void Dialog::QuickInfo( const Maps::Tiles & tile )
 {
-    const CursorRestorer cursorRestorer( false, Cursor::POINTER );
+    CursorRestorer cursorRestorer( false, Cursor::Get().Themes() );
 
     fheroes2::Display & display = fheroes2::Display::instance();
+    LocalEvent & le = LocalEvent::Get();
+    Interface::GameArea & gameArea = Interface::AdventureMap::Get().getGameArea();
+    const int32_t cursorTileIndex = gameArea.GetValidTileIdFromPoint( le.GetMouseCursor() );
 
     // image box
     const fheroes2::Sprite & box = fheroes2::AGG::GetICN( ICN::QWIKINFO, 0 );
 
-    LocalEvent & le = LocalEvent::Get();
     const fheroes2::Rect pos = makeRectQuickInfo( le, box );
 
     fheroes2::ImageRestorer restorer( display, pos.x, pos.y, pos.width, pos.height );
@@ -948,6 +978,16 @@ void Dialog::QuickInfo( const Maps::Tiles & tile )
 
     // restore background
     restorer.restore();
+
+    if ( cursorTileIndex == gameArea.GetValidTileIdFromPoint( le.GetMouseCursor() ) ) {
+        // Cursor is above the same map tile we can restore it before the display render.
+        cursorRestorer.restore();
+    }
+    else {
+        // The cursor is above the other map tile. We will restore and update it later, before the next display render, so leave it hidden.
+        gameArea.SetUpdateCursor();
+    }
+
     display.render( restorer.rect() );
 }
 

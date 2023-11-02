@@ -977,7 +977,7 @@ void Interface::GameArea::QueueEventProcessing( bool isCursorOverGamearea )
     int32_t index = GetValidTileIdFromPoint( mousePosition );
 
     if ( !Maps::isValidAbsIndex( index ) ) {
-        // Change the cursor image when it gets out of the map boundaries or by 'updateCursor' flag.
+        // Change the cursor image when it gets out of the map boundaries.
         if ( updateCursor || index != _prevIndexPos ) {
             _interface.updateCursor( index );
             _prevIndexPos = index;
@@ -993,10 +993,8 @@ void Interface::GameArea::QueueEventProcessing( bool isCursorOverGamearea )
     }
 
     const fheroes2::Point tileOffset = _topLeftTileOffset + mousePosition - _windowROI.getPosition();
-    const fheroes2::Point tilePos( ( tileOffset.x / TILEWIDTH ) * TILEWIDTH - _topLeftTileOffset.x + _windowROI.x,
-                                   ( tileOffset.y / TILEWIDTH ) * TILEWIDTH - _topLeftTileOffset.y + _windowROI.x );
-
-    const fheroes2::Rect tileROI( tilePos.x, tilePos.y, TILEWIDTH, TILEWIDTH );
+    const fheroes2::Rect tileROI( ( tileOffset.x / TILEWIDTH ) * TILEWIDTH - _topLeftTileOffset.x + _windowROI.x,
+                                  ( tileOffset.y / TILEWIDTH ) * TILEWIDTH - _topLeftTileOffset.y + _windowROI.x, TILEWIDTH, TILEWIDTH );
 
     if ( le.MouseClickLeft( tileROI ) ) {
         _interface.mouseCursorAreaClickLeft( index );
@@ -1010,7 +1008,21 @@ void Interface::GameArea::QueueEventProcessing( bool isCursorOverGamearea )
 
     // Change the cursor image if needed.
     if ( updateCursor || index != _prevIndexPos ) {
-        _interface.updateCursor( index );
+        if ( updateCursor && fheroes2::cursor().isSoftwareEmulation() ) {
+            const Cursor & cursor = Cursor::Get();
+            const int previousCursor = cursor.Themes();
+
+            _interface.updateCursor( index );
+
+            if ( cursor.Themes() != previousCursor ) {
+                // Force software cursor render after the cursor icon change by 'updateCursor' condition.
+                fheroes2::Display::instance().render( { index % world.w(), index / world.w(), 1, 1 } );
+            }
+        }
+        else {
+            _interface.updateCursor( index );
+        }
+
         _prevIndexPos = index;
         updateCursor = false;
     }
