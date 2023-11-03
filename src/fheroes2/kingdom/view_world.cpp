@@ -32,7 +32,6 @@
 #include "color.h"
 #include "cursor.h"
 #include "game_hotkeys.h"
-#include "game_interface.h"
 #include "gamedefs.h"
 #include "heroes.h"
 #include "icn.h"
