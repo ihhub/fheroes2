@@ -36,6 +36,8 @@ namespace Maps
 {
     class Tiles;
 
+    struct ObjectInfo;
+
     // ATTENTION: If you add any new enumeration make sure that value 0 corresponds to empty / visited object
     //            so we don't need to write special logic in resetObjectInfoOnTile().
 
@@ -180,10 +182,9 @@ namespace Maps
     bool updateRoadOnTile( Tiles & tile, const bool setRoad );
     bool updateStreamOnTile( Tiles & tile, const bool setStream );
 
-    void setRandomMonsterOnTile( Tiles & tile, const Monster & mons );
-    void setEditorHeroOnTile( Tiles & tile, const int32_t heroType );
-
     bool removeObjectTypeFromTile( Tiles & tile, const MP2::ObjectIcnType objectIcnType );
     bool eraseObjectsOnTiles( const int32_t startTileId, const int32_t endTileId, const uint32_t objectTypesToErase );
     bool eraseOjects( Tiles & tile, const uint32_t objectTypesToErase );
+
+    void setObjectOnTile( Tiles & tile, const ObjectInfo & info );
 }

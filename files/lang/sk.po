@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-02 14:09+0000\n"
+"POT-Creation-Date: 2023-11-03 12:33+0000\n"
 "PO-Revision-Date: 2023-09-11 20:22+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3286,9 +3286,6 @@ msgstr "Nahrať súbor:"
 msgid "Accept the choice made."
 msgstr "Prijať uskutočnený výber."
 
-msgid "Unknown Hero"
-msgstr "Neznámy hrdina"
-
 #, fuzzy
 msgid "%{color} %{race} hero"
 msgstr "%{color} hráč"
@@ -4149,6 +4146,9 @@ msgstr "Dizajn balíkov"
 
 msgid "Your Name"
 msgstr "Tvoje meno"
+
+msgid "Unknown Hero"
+msgstr "Neznámy hrdina"
 
 msgid "Standard"
 msgstr "Štandard"

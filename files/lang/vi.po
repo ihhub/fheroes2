@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-02 14:09+0000\n"
-"PO-Revision-Date: 2023-11-02 22:29+0700\n"
+"POT-Creation-Date: 2023-11-03 12:33+0000\n"
+"PO-Revision-Date: 2023-11-01 22:53+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: vi_VN\n"
@@ -3324,9 +3324,6 @@ msgstr "Tệp để Tải:"
 msgid "Accept the choice made."
 msgstr "Chấp nhận sự lựa chọn được thực hiện."
 
-msgid "Unknown Hero"
-msgstr "Tướng Vô danh"
-
 msgid "%{color} %{race} hero"
 msgstr "%{color} %{race} tướng"
 
@@ -4199,6 +4196,9 @@ msgstr "Thiết kế Đóng gói"
 
 msgid "Your Name"
 msgstr "Tên của Ngươi"
+
+msgid "Unknown Hero"
+msgstr "Tướng Vô danh"
 
 msgid "Standard"
 msgstr "Tiêu chuẩn"
