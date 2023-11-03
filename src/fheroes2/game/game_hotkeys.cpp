@@ -333,7 +333,8 @@ namespace
             = { HotKeyCategory::ARMY, gettext_noop( "hotkey|split stack by half" ), fheroes2::Key::KEY_LEFT_SHIFT };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::ARMY_SPLIT_STACK_BY_ONE )]
             = { HotKeyCategory::ARMY, gettext_noop( "hotkey|split stack by one" ), fheroes2::Key::KEY_LEFT_CONTROL };
-        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::ARMY_JOIN_STACKS )] = { HotKeyCategory::ARMY, gettext_noop( "hotkey|join stacks" ), fheroes2::Key::KEY_ALT };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::ARMY_JOIN_STACKS )]
+            = { HotKeyCategory::ARMY, gettext_noop( "hotkey|join stacks" ), fheroes2::Key::KEY_LEFT_ALT };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::ARMY_UPGRADE_TROOP )]
             = { HotKeyCategory::ARMY, gettext_noop( "hotkey|upgrade troop" ), fheroes2::Key::KEY_U };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::ARMY_DISMISS )]
