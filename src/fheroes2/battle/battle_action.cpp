@@ -30,6 +30,7 @@
 #include <ostream>
 #include <set>
 #include <string>
+#include <type_traits>
 #include <utility>
 #include <vector>
 
@@ -172,7 +173,7 @@ void Battle::Arena::BattleProcess( Unit & attacker, Unit & defender, int32_t dst
     }
 
     // Update the attacker's luck right before the attack
-    attacker.SetRandomLuck();
+    attacker.SetRandomLuck( _randomGenerator );
 
     // Do damage first
     TargetsInfo attackTargets = GetTargetsForDamage( attacker, defender, dst, dir );
@@ -189,7 +190,7 @@ void Battle::Arena::BattleProcess( Unit & attacker, Unit & defender, int32_t dst
     }
 
     // Then apply the attacker's built-in spell
-    const Spell spell = attacker.GetSpellMagic();
+    const Spell spell = attacker.GetSpellMagic( _randomGenerator );
 
     if ( spell.isValid() ) {
         // Only single target spells and special built-in only spells are allowed
@@ -205,7 +206,7 @@ void Battle::Arena::BattleProcess( Unit & attacker, Unit & defender, int32_t dst
             if ( !attackTarget.defender->isValid() ) {
                 continue;
             }
-            if ( !attackTarget.defender->AllowApplySpell( spell, attackTarget.defender->GetCommander(), nullptr, true ) ) {
+            if ( !attackTarget.defender->AllowApplySpell( spell, nullptr ) ) {
                 continue;
             }
 
@@ -257,43 +258,43 @@ void Battle::Arena::BattleProcess( Unit & attacker, Unit & defender, int32_t dst
 void Battle::Arena::ApplyAction( Command & cmd )
 {
     switch ( cmd.GetType() ) {
-    case CommandType::MSG_BATTLE_CAST:
+    case CommandType::SPELLCAST:
         ApplyActionSpellCast( cmd );
         break;
-    case CommandType::MSG_BATTLE_ATTACK:
+    case CommandType::ATTACK:
         ApplyActionAttack( cmd );
         break;
-    case CommandType::MSG_BATTLE_MOVE:
+    case CommandType::MOVE:
         ApplyActionMove( cmd );
         break;
-    case CommandType::MSG_BATTLE_SKIP:
+    case CommandType::SKIP:
         ApplyActionSkip( cmd );
         break;
-    case CommandType::MSG_BATTLE_END_TURN:
+    case CommandType::END_TURN:
         ApplyActionEnd( cmd );
         break;
-    case CommandType::MSG_BATTLE_MORALE:
+    case CommandType::MORALE:
         ApplyActionMorale( cmd );
         break;
 
-    case CommandType::MSG_BATTLE_TOWER:
+    case CommandType::TOWER:
         ApplyActionTower( cmd );
         break;
-    case CommandType::MSG_BATTLE_CATAPULT:
+    case CommandType::CATAPULT:
         ApplyActionCatapult( cmd );
         break;
 
-    case CommandType::MSG_BATTLE_RETREAT:
+    case CommandType::RETREAT:
         ApplyActionRetreat( cmd );
         break;
-    case CommandType::MSG_BATTLE_SURRENDER:
+    case CommandType::SURRENDER:
         ApplyActionSurrender( cmd );
         break;
 
-    case CommandType::MSG_BATTLE_AUTO_SWITCH:
+    case CommandType::AUTO_SWITCH:
         ApplyActionAutoSwitch( cmd );
         break;
-    case CommandType::MSG_BATTLE_AUTO_FINISH:
+    case CommandType::AUTO_FINISH:
         ApplyActionAutoFinish( cmd );
         break;
 
@@ -304,7 +305,7 @@ void Battle::Arena::ApplyAction( Command & cmd )
 
 void Battle::Arena::ApplyActionSpellCast( Command & cmd )
 {
-    const Spell spell( cmd.GetValue() );
+    const Spell spell( cmd.GetNextValue() );
 
     HeroBase * commander = GetCurrentForce().GetCommander();
 
@@ -350,10 +351,10 @@ void Battle::Arena::ApplyActionSpellCast( Command & cmd )
 
 void Battle::Arena::ApplyActionAttack( Command & cmd )
 {
-    const uint32_t attackerUID = cmd.GetValue();
-    const uint32_t defenderUID = cmd.GetValue();
-    const int32_t dst = cmd.GetValue();
-    const int32_t dir = cmd.GetValue();
+    const uint32_t attackerUID = cmd.GetNextValue();
+    const uint32_t defenderUID = cmd.GetNextValue();
+    const int32_t dst = cmd.GetNextValue();
+    const int32_t dir = cmd.GetNextValue();
 
     Unit * attacker = GetTroopUID( attackerUID );
     Unit * defender = GetTroopUID( defenderUID );
@@ -409,8 +410,8 @@ void Battle::Arena::ApplyActionAttack( Command & cmd )
 
 void Battle::Arena::ApplyActionMove( Command & cmd )
 {
-    const uint32_t uid = cmd.GetValue();
-    const int32_t dst = cmd.GetValue();
+    const uint32_t uid = cmd.GetNextValue();
+    const int32_t dst = cmd.GetNextValue();
 
     Unit * unit = GetTroopUID( uid );
     const Cell * cell = Board::GetCell( dst );
@@ -511,7 +512,7 @@ void Battle::Arena::ApplyActionMove( Command & cmd )
 
 void Battle::Arena::ApplyActionSkip( Command & cmd )
 {
-    const uint32_t uid = cmd.GetValue();
+    const uint32_t uid = cmd.GetNextValue();
 
     Unit * unit = GetTroopUID( uid );
 
@@ -539,7 +540,7 @@ void Battle::Arena::ApplyActionSkip( Command & cmd )
 
 void Battle::Arena::ApplyActionEnd( Command & cmd )
 {
-    const uint32_t uid = cmd.GetValue();
+    const uint32_t uid = cmd.GetNextValue();
 
     Unit * unit = GetTroopUID( uid );
 
@@ -562,8 +563,8 @@ void Battle::Arena::ApplyActionEnd( Command & cmd )
 
 void Battle::Arena::ApplyActionMorale( Command & cmd )
 {
-    const uint32_t uid = cmd.GetValue();
-    const int32_t morale = cmd.GetValue();
+    const uint32_t uid = cmd.GetNextValue();
+    const int32_t morale = cmd.GetNextValue();
 
     Unit * unit = GetTroopUID( uid );
 
@@ -674,7 +675,7 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForDamage( const Unit & attacker, U
 
     // first target
     res.defender = &defender;
-    res.damage = attacker.GetDamage( defender );
+    res.damage = attacker.GetDamage( defender, _randomGenerator );
 
     // Genie special attack
     if ( attacker.GetID() == Monster::GENIE && _randomGenerator.Get( 1, 10 ) == 2 && defender.GetHitPoints() / 2 > res.damage ) {
@@ -704,7 +705,7 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForDamage( const Unit & attacker, U
 
         if ( enemy && consideredTargets.insert( enemy ).second ) {
             res.defender = enemy;
-            res.damage = attacker.GetDamage( *enemy );
+            res.damage = attacker.GetDamage( *enemy, _randomGenerator );
 
             targets.push_back( res );
         }
@@ -718,7 +719,7 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForDamage( const Unit & attacker, U
 
             if ( enemy && enemy->GetColor() != attacker.GetCurrentColor() && consideredTargets.insert( enemy ).second ) {
                 res.defender = enemy;
-                res.damage = attacker.GetDamage( *enemy );
+                res.damage = attacker.GetDamage( *enemy, _randomGenerator );
 
                 targets.push_back( res );
             }
@@ -733,7 +734,7 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForDamage( const Unit & attacker, U
 
             if ( enemy && consideredTargets.insert( enemy ).second ) {
                 res.defender = enemy;
-                res.damage = attacker.GetDamage( *enemy );
+                res.damage = attacker.GetDamage( *enemy, _randomGenerator );
 
                 targets.push_back( res );
             }
@@ -754,18 +755,16 @@ void Battle::Arena::TargetsApplySpell( const HeroBase * hero, const Spell & spel
     }
 }
 
-std::vector<Battle::Unit *> Battle::Arena::FindChainLightningTargetIndexes( const HeroBase * hero, Unit * firstUnit )
+std::vector<Battle::Unit *> Battle::Arena::FindChainLightningTargetIndexes( const HeroBase * hero, Unit * firstUnit, const bool applyRandomMagicResistance )
 {
     std::vector<Unit *> result = { firstUnit };
     std::vector<Unit *> ignoredTroops = { firstUnit };
 
     std::vector<Unit *> foundTroops = board.GetNearestTroops( result.back(), ignoredTroops );
 
-    const int heroSpellPower = hero ? hero->GetPower() : 0;
-
     // Filter those which are fully immuned
     for ( size_t i = 0; i < foundTroops.size(); ) {
-        if ( foundTroops[i]->GetMagicResist( Spell::CHAINLIGHTNING, heroSpellPower, hero ) >= 100 ) {
+        if ( foundTroops[i]->GetMagicResist( Spell::CHAINLIGHTNING, hero ) >= 100 ) {
             ignoredTroops.push_back( foundTroops[i] );
             foundTroops.erase( foundTroops.begin() + i );
         }
@@ -777,9 +776,10 @@ std::vector<Battle::Unit *> Battle::Arena::FindChainLightningTargetIndexes( cons
     while ( result.size() != CHAIN_LIGHTNING_CREATURE_COUNT && !foundTroops.empty() ) {
         bool targetFound = false;
         for ( size_t i = 0; i < foundTroops.size(); ++i ) {
-            const int32_t resist = foundTroops[i]->GetMagicResist( Spell::CHAINLIGHTNING, heroSpellPower, hero );
-            assert( resist >= 0 );
-            if ( resist < static_cast<int32_t>( _randomGenerator.Get( 1, 100 ) ) ) {
+            const uint32_t resist = foundTroops[i]->GetMagicResist( Spell::CHAINLIGHTNING, hero );
+            assert( resist < 100 );
+
+            if ( !applyRandomMagicResistance || resist < _randomGenerator.Get( 1, 100 ) ) {
                 ignoredTroops.push_back( foundTroops[i] );
                 result.push_back( foundTroops[i] );
                 foundTroops.erase( foundTroops.begin() + i );
@@ -803,7 +803,7 @@ std::vector<Battle::Unit *> Battle::Arena::FindChainLightningTargetIndexes( cons
     return result;
 }
 
-Battle::TargetsInfo Battle::Arena::TargetsForChainLightning( const HeroBase * hero, int32_t attackedTroopIndex )
+Battle::TargetsInfo Battle::Arena::TargetsForChainLightning( const HeroBase * hero, const int32_t attackedTroopIndex, const bool applyRandomMagicResistance )
 {
     Unit * unit = GetTroopBoard( attackedTroopIndex );
     if ( unit == nullptr ) {
@@ -813,9 +813,9 @@ Battle::TargetsInfo Battle::Arena::TargetsForChainLightning( const HeroBase * he
 
     TargetsInfo targets;
 
-    const uint32_t firstUnitResist = unit->GetMagicResist( Spell::CHAINLIGHTNING, 0, hero );
+    const uint32_t firstUnitResist = unit->GetMagicResist( Spell::CHAINLIGHTNING, hero );
 
-    if ( firstUnitResist >= _randomGenerator.Get( 1, 100 ) ) {
+    if ( firstUnitResist >= 100 || ( applyRandomMagicResistance && firstUnitResist >= _randomGenerator.Get( 1, 100 ) ) ) {
         targets.emplace_back();
         TargetInfo & res = targets.back();
         res.defender = unit;
@@ -823,7 +823,7 @@ Battle::TargetsInfo Battle::Arena::TargetsForChainLightning( const HeroBase * he
         return targets;
     }
 
-    const std::vector<Unit *> targetUnits = FindChainLightningTargetIndexes( hero, unit );
+    const std::vector<Unit *> targetUnits = FindChainLightningTargetIndexes( hero, unit, applyRandomMagicResistance );
     for ( size_t i = 0; i < targetUnits.size(); ++i ) {
         targets.emplace_back();
         TargetInfo & res = targets.back();
@@ -835,7 +835,8 @@ Battle::TargetsInfo Battle::Arena::TargetsForChainLightning( const HeroBase * he
     return targets;
 }
 
-Battle::TargetsInfo Battle::Arena::GetTargetsForSpells( const HeroBase * hero, const Spell & spell, int32_t dest, bool * playResistSound /* = nullptr */ )
+Battle::TargetsInfo Battle::Arena::GetTargetsForSpell( const HeroBase * hero, const Spell & spell, const int32_t dst, bool applyRandomMagicResistance,
+                                                       bool * playResistSound )
 {
     TargetsInfo targets;
     targets.reserve( 8 );
@@ -844,7 +845,7 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForSpells( const HeroBase * hero, c
         *playResistSound = true;
     }
 
-    Unit * target = GetTroopBoard( dest );
+    Unit * target = GetTroopBoard( dst );
 
     // from spells
     switch ( spell.GetID() ) {
@@ -869,11 +870,9 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForSpells( const HeroBase * hero, c
         targets.push_back( res );
     }
 
-    bool ignoreMagicResistance = false;
-
     // resurrect spell? get target from graveyard
-    if ( nullptr == target && GraveyardAllowResurrect( dest, spell ) ) {
-        target = GetTroopUID( graveyard.GetLastTroopUID( dest ) );
+    if ( nullptr == target && GraveyardAllowResurrect( dst, spell ) ) {
+        target = GetTroopUID( graveyard.GetLastTroopUID( dst ) );
 
         if ( target && target->AllowApplySpell( spell, hero ) && consideredTargets.insert( target ).second ) {
             res.defender = target;
@@ -885,7 +884,7 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForSpells( const HeroBase * hero, c
         // check other spells
         switch ( spell.GetID() ) {
         case Spell::CHAINLIGHTNING: {
-            for ( const TargetInfo & spellTarget : TargetsForChainLightning( hero, dest ) ) {
+            for ( const TargetInfo & spellTarget : TargetsForChainLightning( hero, dst, applyRandomMagicResistance ) ) {
                 assert( spellTarget.defender != nullptr );
 
                 if ( consideredTargets.insert( spellTarget.defender ).second ) {
@@ -897,10 +896,12 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForSpells( const HeroBase * hero, c
                 }
             }
 
-            ignoreMagicResistance = true;
+            // Magic resistance has already been applied in the process of selecting targets for Chain Lightning
+            applyRandomMagicResistance = false;
 
+            // TODO: remove this temporary assertion
             if ( playResistSound ) {
-                *playResistSound = true;
+                assert( *playResistSound );
             }
             break;
         }
@@ -910,7 +911,7 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForSpells( const HeroBase * hero, c
         case Spell::METEORSHOWER:
         case Spell::COLDRING:
         case Spell::FIREBLAST: {
-            for ( const int32_t index : Board::GetDistanceIndexes( dest, ( spell == Spell::FIREBLAST ? 2 : 1 ) ) ) {
+            for ( const int32_t index : Board::GetDistanceIndexes( dst, ( spell == Spell::FIREBLAST ? 2 : 1 ) ) ) {
                 Unit * targetUnit = GetTroopBoard( index );
 
                 if ( targetUnit && targetUnit->AllowApplySpell( spell, hero ) && consideredTargets.insert( targetUnit ).second ) {
@@ -961,14 +962,13 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForSpells( const HeroBase * hero, c
         }
     }
 
-    if ( !ignoreMagicResistance ) {
-        // Mark magically resistant troops
-        for ( auto & tgt : targets ) {
-            const uint32_t resist = tgt.defender->GetMagicResist( spell, hero ? hero->GetPower() : 0, hero );
+    // Mark magically resistant troops
+    for ( auto & tgt : targets ) {
+        const uint32_t resist = tgt.defender->GetMagicResist( spell, hero );
+        assert( resist < 100 );
 
-            if ( 0 < resist && 100 > resist && resist >= _randomGenerator.Get( 1, 100 ) ) {
-                tgt.resist = true;
-            }
+        if ( applyRandomMagicResistance && resist >= _randomGenerator.Get( 1, 100 ) ) {
+            tgt.resist = true;
         }
     }
 
@@ -977,8 +977,8 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForSpells( const HeroBase * hero, c
 
 void Battle::Arena::ApplyActionTower( Command & cmd )
 {
-    const uint32_t type = cmd.GetValue();
-    const uint32_t uid = cmd.GetValue();
+    const uint32_t type = cmd.GetNextValue();
+    const uint32_t uid = cmd.GetNextValue();
 
     Tower * tower = GetTower( static_cast<TowerType>( type ) );
     Unit * unit = GetTroopUID( uid );
@@ -988,7 +988,7 @@ void Battle::Arena::ApplyActionTower( Command & cmd )
 
         TargetInfo target;
         target.defender = unit;
-        target.damage = tower->GetDamage( *unit );
+        target.damage = tower->GetDamage( *unit, _randomGenerator );
 
         if ( _interface )
             _interface->RedrawActionTowerPart1( *tower, *unit );
@@ -1006,14 +1006,14 @@ void Battle::Arena::ApplyActionTower( Command & cmd )
 void Battle::Arena::ApplyActionCatapult( Command & cmd )
 {
     if ( _catapult ) {
-        uint32_t shots = cmd.GetValue();
+        uint32_t shots = cmd.GetNextValue();
 
         while ( shots-- ) {
-            const int target = cmd.GetValue();
-            const uint32_t damage = cmd.GetValue();
-            const bool hit = cmd.GetValue() != 0;
+            const CastleDefenseElement target = static_cast<CastleDefenseElement>( cmd.GetNextValue() );
+            const uint32_t damage = cmd.GetNextValue();
+            const bool hit = cmd.GetNextValue() != 0;
 
-            if ( target ) {
+            if ( target != CastleDefenseElement::NONE ) {
                 if ( _interface ) {
                     _interface->RedrawActionCatapultPart1( target, hit );
                 }
@@ -1026,7 +1026,11 @@ void Battle::Arena::ApplyActionCatapult( Command & cmd )
                     }
                 }
 
-                DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "target: " << target << ", damage: " << damage << ", hit: " << hit )
+#ifdef WITH_DEBUG
+                using TargetUnderlyingType = std::underlying_type_t<decltype( target )>;
+#endif
+
+                DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "target: " << static_cast<TargetUnderlyingType>( target ) << ", damage: " << damage << ", hit: " << hit )
             }
         }
     }
@@ -1037,7 +1041,7 @@ void Battle::Arena::ApplyActionCatapult( Command & cmd )
 
 void Battle::Arena::ApplyActionAutoSwitch( Command & cmd )
 {
-    const int color = cmd.GetValue();
+    const int color = cmd.GetNextValue();
 
     if ( ( color != GetArmy1Color() && color != GetArmy2Color() ) || ( getForce( color ).GetControl() & CONTROL_AI ) ) {
         DEBUG_LOG( DBG_BATTLE, DBG_WARN,
@@ -1107,10 +1111,10 @@ void Battle::Arena::ApplyActionSpellDefaults( Command & cmd, const Spell & spell
     const HeroBase * commander = GetCurrentCommander();
     assert( commander != nullptr );
 
-    const int32_t dst = cmd.GetValue();
+    const int32_t dst = cmd.GetNextValue();
 
     bool playResistSound = false;
-    TargetsInfo targets = GetTargetsForSpells( commander, spell, dst, &playResistSound );
+    TargetsInfo targets = GetTargetsForSpell( commander, spell, dst, true, &playResistSound );
     TargetsInfo resistTargets;
 
     if ( _interface ) {
@@ -1140,8 +1144,8 @@ void Battle::Arena::ApplyActionSpellDefaults( Command & cmd, const Spell & spell
 
 void Battle::Arena::ApplyActionSpellTeleport( Command & cmd )
 {
-    const int32_t src = cmd.GetValue();
-    const int32_t dst = cmd.GetValue();
+    const int32_t src = cmd.GetNextValue();
+    const int32_t dst = cmd.GetNextValue();
 
     Unit * unit = GetTroopBoard( src );
     const Cell * cell = Board::GetCell( dst );
@@ -1180,7 +1184,7 @@ void Battle::Arena::ApplyActionSpellEarthQuake( const Command & /*cmd*/ )
     const HeroBase * commander = GetCurrentCommander();
     assert( commander != nullptr );
 
-    std::vector<int> targets = GetCastleTargets();
+    std::vector<CastleDefenseElement> targets = GetEarthQuakeTargets();
 
     if ( _interface ) {
         _interface->RedrawActionSpellCastStatus( Spell( Spell::EARTHQUAKE ), -1, commander->GetName(), {} );
@@ -1215,7 +1219,7 @@ void Battle::Arena::ApplyActionSpellEarthQuake( const Command & /*cmd*/ )
 
 void Battle::Arena::ApplyActionSpellMirrorImage( Command & cmd )
 {
-    const int32_t who = cmd.GetValue();
+    const int32_t who = cmd.GetNextValue();
     Unit * unit = GetTroopBoard( who );
 
     if ( unit && unit->isValid() ) {

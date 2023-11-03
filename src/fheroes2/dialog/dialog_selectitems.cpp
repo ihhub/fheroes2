@@ -24,6 +24,7 @@
 #include "dialog_selectitems.h"
 
 #include <algorithm>
+#include <array>
 #include <cassert>
 #include <cstddef>
 #include <cstdint>
@@ -44,6 +45,7 @@
 #include "image.h"
 #include "interface_list.h"
 #include "localevent.h"
+#include "map_object_info.h"
 #include "math_base.h"
 #include "race.h"
 #include "screen.h"
@@ -52,6 +54,7 @@
 #include "translations.h"
 #include "ui_button.h"
 #include "ui_dialog.h"
+#include "ui_map_object.h"
 #include "ui_scrollbar.h"
 #include "ui_text.h"
 #include "ui_window.h"
@@ -71,8 +74,7 @@ public:
         fheroes2::Display & display = fheroes2::Display::instance();
         background = std::make_unique<fheroes2::StandardWindow>( dialogSize.width, dialogSize.height, true, display );
 
-        const fheroes2::Rect area = background->activeArea();
-
+        const fheroes2::Rect area( background->activeArea() );
         const fheroes2::Rect listRoi( area.x + 10, area.y + 30, area.width - 40, area.height - 70 );
 
         background->applyTextBackgroundShading( listRoi );
@@ -82,66 +84,20 @@ public:
         SetAreaItems( { listRoi.x + 5, listRoi.y + 5, listRoi.width - 10, listRoi.height - 10 } );
 
         const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
+        const int32_t scrollbarOffsetX = area.x + area.width - 25;
 
-        const fheroes2::Sprite & scrollBar = fheroes2::AGG::GetICN( isEvilInterface ? ICN::ADVBORDE : ICN::ADVBORD, 0 );
+        background->renderScrollbarBackground( { scrollbarOffsetX, listRoi.y, listRoi.width, listRoi.height }, isEvilInterface );
 
-        int32_t scrollbarOffsetX = area.x + area.width - 25;
-
-        // Top part of scrollbar background.
         const int32_t topPartHeight = 19;
-        const int32_t scrollBarWidth = 16;
-        fheroes2::Copy( scrollBar, 536, 176, display, scrollbarOffsetX, listRoi.y, scrollBarWidth, topPartHeight );
-
-        // Middle part of scrollbar background.
-        int32_t offsetY = topPartHeight;
-        const int32_t middlePartHeight = 88;
-        const int32_t middlePartCount = ( listRoi.height - 2 * topPartHeight + middlePartHeight - 1 ) / middlePartHeight;
-
-        for ( int32_t i = 0; i < middlePartCount; ++i ) {
-            fheroes2::Copy( scrollBar, 536, 196, display, scrollbarOffsetX, listRoi.y + offsetY, scrollBarWidth,
-                            std::min( middlePartHeight, listRoi.height - offsetY - topPartHeight ) );
-            offsetY += middlePartHeight;
-        }
-
-        // Bottom part of scrollbar background.
-        fheroes2::Copy( scrollBar, 536, 285, display, scrollbarOffsetX, listRoi.y + listRoi.height - topPartHeight, scrollBarWidth, topPartHeight );
-
         const int listIcnId = isEvilInterface ? ICN::SCROLLE : ICN::SCROLL;
 
-        ++scrollbarOffsetX;
-
-        SetScrollButtonUp( listIcnId, 0, 1, { scrollbarOffsetX, listRoi.y + 1 } );
-        SetScrollButtonDn( listIcnId, 2, 3, { scrollbarOffsetX, listRoi.y + listRoi.height - 15 } );
-
-        setScrollBarArea( { scrollbarOffsetX + 2, listRoi.y + topPartHeight, 10, listRoi.height - 2 * topPartHeight } );
-
+        SetScrollButtonUp( listIcnId, 0, 1, { scrollbarOffsetX + 1, listRoi.y + 1 } );
+        SetScrollButtonDn( listIcnId, 2, 3, { scrollbarOffsetX + 1, listRoi.y + listRoi.height - 15 } );
+        setScrollBarArea( { scrollbarOffsetX + 3, listRoi.y + topPartHeight, 10, listRoi.height - 2 * topPartHeight } );
         setScrollBarImage( fheroes2::AGG::GetICN( listIcnId, 4 ) );
 
-        // Make scrollbar shadow.
-        for ( uint8_t i = 0; i < 4; ++i ) {
-            const uint8_t transformId = i + 2;
-            const int32_t sizeCorrection = i + 1;
-            fheroes2::ApplyTransform( display, scrollbarOffsetX - transformId, listRoi.y + sizeCorrection, 1, listRoi.height - sizeCorrection, transformId );
-            fheroes2::ApplyTransform( display, scrollbarOffsetX - transformId, listRoi.y + listRoi.height + i, scrollBarWidth, 1, transformId );
-        }
-
-        // Dialog buttons.
-        const int32_t buttonFromBorderOffsetX = 20;
-        const int32_t buttonY = listRoi.y + listRoi.height + 7;
-
-        const int buttonOkIcn = isEvilInterface ? ICN::BUTTON_SMALL_OKAY_EVIL : ICN::BUTTON_SMALL_OKAY_GOOD;
-        buttonOk.setICNInfo( buttonOkIcn, 0, 1 );
-        buttonOk.setPosition( area.x + buttonFromBorderOffsetX, buttonY );
-        const fheroes2::Sprite & buttonOkSprite = fheroes2::AGG::GetICN( buttonOkIcn, 0 );
-        fheroes2::addGradientShadow( buttonOkSprite, display, buttonOk.area().getPosition(), { -5, 5 } );
-        buttonOk.draw();
-
-        const int buttonCancelIcn = isEvilInterface ? ICN::BUTTON_SMALL_CANCEL_EVIL : ICN::BUTTON_SMALL_CANCEL_GOOD;
-        buttonCancel.setICNInfo( buttonCancelIcn, 0, 1 );
-        const fheroes2::Sprite & buttonCancelSprite = fheroes2::AGG::GetICN( buttonCancelIcn, 0 );
-        buttonCancel.setPosition( area.x + area.width - buttonCancelSprite.width() - buttonFromBorderOffsetX, buttonY );
-        fheroes2::addGradientShadow( buttonCancelSprite, display, buttonCancel.area().getPosition(), { -5, 5 } );
-        buttonCancel.draw();
+        // Render dialog buttons.
+        background->renderOkayCancelButtons( buttonOk, buttonCancel, isEvilInterface );
     }
 
     void RedrawBackground( const fheroes2::Point & /* unused */ ) override
@@ -406,47 +362,63 @@ public:
 
 namespace
 {
-    class HeroTypeSelection : public SelectEnum
+    // This is a base class for items used in the Editor and they rely on Maps::ObjectInfo structures.
+    class ObjectTypeSelection : public SelectEnum
     {
     public:
-        explicit HeroTypeSelection( const fheroes2::Size & size )
+        ObjectTypeSelection( const std::vector<Maps::ObjectInfo> & objectInfo, const fheroes2::Size & size, const int32_t offset )
             : SelectEnum( size )
+            , _objectInfo( objectInfo )
         {
-            const int offset = fheroes2::AGG::GetICN( ICN::MINIHERO, 0 ).height() + 2;
             SetAreaMaxItems( ( rtAreaItems.height + offset ) / offset );
         }
 
         using SelectEnum::ActionListPressRight;
 
-        void RedrawItem( const int & id, int32_t offsetX, int32_t offsetY, bool isSelected ) override
+        void RedrawItem( const int & objectId, int32_t offsetX, int32_t offsetY, bool isSelected ) override
         {
-            const fheroes2::Sprite & image = fheroes2::AGG::GetICN( ICN::MINIHERO, id );
-            renderItem( image, getHeroName( id ), { offsetX, offsetY }, { 32, 50 }, isSelected );
+            // If this assertion blows up then you are setting different number of items.
+            assert( objectId >= 0 && objectId < static_cast<int>( _objectInfo.size() ) );
+
+            const fheroes2::Sprite & image = fheroes2::generateMapObjectImage( _objectInfo[objectId] );
+            renderItem( image, getObjectName( _objectInfo[objectId] ), { offsetX, offsetY }, { 32, 50 }, isSelected );
         }
 
-        void ActionListPressRight( int & type ) override
+        void ActionListPressRight( int & objectId ) override
         {
-            fheroes2::showStandardTextMessage( getHeroName( type ), "", Dialog::ZERO );
+            // If this assertion blows up then you are setting different number of items.
+            assert( objectId >= 0 && objectId < static_cast<int>( _objectInfo.size() ) );
+
+            showPopupWindow( _objectInfo[objectId] );
         }
 
     private:
-        static std::string getHeroName( const int type )
+        virtual void showPopupWindow( const Maps::ObjectInfo & info ) = 0;
+
+        virtual std::string getObjectName( const Maps::ObjectInfo & info ) = 0;
+
+        const std::vector<Maps::ObjectInfo> & _objectInfo;
+    };
+
+    class HeroTypeSelection : public ObjectTypeSelection
+    {
+    public:
+        HeroTypeSelection( const std::vector<Maps::ObjectInfo> & objectInfo, const fheroes2::Size & size )
+            : ObjectTypeSelection( objectInfo, size, fheroes2::AGG::GetICN( ICN::MINIHERO, 0 ).height() + 2 )
         {
-            // The game has only 6 races plus random, totaling in 7 races.
-            // Also the game has only 6 colors.
-            // As a result only 42 mini-heroes can exist.
-            if ( type >= 42 ) {
-                // Did you add a new hero?
-                assert( 0 );
-                return _( "Unknown Hero" );
-            }
+            // Do nothing.
+        }
 
-            const int color{ type / 7 };
-            int race{ type % 7 };
+    private:
+        void showPopupWindow( const Maps::ObjectInfo & info ) override
+        {
+            fheroes2::showStandardTextMessage( getObjectName( info ), "", Dialog::ZERO );
+        }
 
-            if ( race == 6 ) {
-                ++race;
-            }
+        std::string getObjectName( const Maps::ObjectInfo & info ) override
+        {
+            const int color = static_cast<int>( info.metadata[0] );
+            const int race = static_cast<int>( info.metadata[1] );
 
             std::string name( _( "%{color} %{race} hero" ) );
             StringReplace( name, "%{color}", Color::String( Color::IndexToColor( color ) ) );
@@ -455,6 +427,47 @@ namespace
             return name;
         }
     };
+
+    class MonsterTypeSelection : public ObjectTypeSelection
+    {
+    public:
+        MonsterTypeSelection( const std::vector<Maps::ObjectInfo> & objectInfo, const fheroes2::Size & size )
+            : ObjectTypeSelection( objectInfo, size, fheroes2::AGG::GetICN( ICN::MINIHERO, 0 ).height() + 2 )
+        {
+            // Do nothing.
+        }
+
+    private:
+        void showPopupWindow( const Maps::ObjectInfo & info ) override
+        {
+            const Monster monster( static_cast<int32_t>( info.metadata[0] ) );
+            if ( !monster.isValid() ) {
+                fheroes2::showStandardTextMessage( monster.GetName(), "", Dialog::ZERO );
+                return;
+            }
+
+            Dialog::ArmyInfo( Troop( monster, 0 ), Dialog::ZERO );
+        }
+
+        std::string getObjectName( const Maps::ObjectInfo & info ) override
+        {
+            return Monster( static_cast<int32_t>( info.metadata[0] ) ).GetName();
+        }
+    };
+
+    int selectObjectType( const int objectType, const size_t objectCount, ObjectTypeSelection & objectSelection, const char * title )
+    {
+        assert( title != nullptr );
+
+        std::vector<int> objects( objectCount, 0 );
+        std::iota( objects.begin(), objects.end(), 0 );
+        objectSelection.SetListContent( objects );
+
+        objectSelection.SetCurrent( std::max( objectType, 0 ) );
+
+        const int32_t result = objectSelection.selectItemsEventProcessing( title );
+        return result == Dialog::OK || objectSelection.ok ? objectSelection.GetCurrent() : -1;
+    }
 }
 
 Skill::Secondary Dialog::selectSecondarySkill( const Heroes & hero, const int skillId /* = Skill::Secondary::UNKNOWN */ )
@@ -555,16 +568,13 @@ Artifact Dialog::selectArtifact( const int artifactId, const bool onlyPlaceableO
     return { Artifact::UNKNOWN };
 }
 
-Monster Dialog::selectMonster( const int monsterId, const bool includeRandomMonsters )
+Monster Dialog::selectMonster( const int monsterId )
 {
     std::vector<int> monsters( Monster::MONSTER_COUNT - 1, Monster::UNKNOWN );
 
     // Skip Monster::UNKNOWN and start from the next one.
     std::iota( monsters.begin(), monsters.end(), Monster::UNKNOWN + 1 );
-
-    if ( !includeRandomMonsters ) {
-        monsters.erase( std::remove_if( monsters.begin(), monsters.end(), []( const int id ) { return Monster( id ).isRandomMonster(); } ), monsters.end() );
-    }
+    monsters.erase( std::remove_if( monsters.begin(), monsters.end(), []( const int id ) { return Monster( id ).isRandomMonster(); } ), monsters.end() );
 
     SelectEnumMonster listbox( { 280, fheroes2::Display::instance().height() - 200 } );
 
@@ -580,9 +590,9 @@ Monster Dialog::selectMonster( const int monsterId, const bool includeRandomMons
 
 int Dialog::selectHeroes( const int heroId /* = Heroes::UNKNOWN */ )
 {
-    std::vector<int> heroes( static_cast<int>( Settings::Get().isCurrentMapPriceOfLoyalty() ? Heroes::DEBUG_HERO : Heroes::SOLMYR ), Heroes::UNKNOWN );
+    std::vector<int> heroes( static_cast<int>( Settings::Get().isCurrentMapPriceOfLoyalty() ? Heroes::JARKONAS : Heroes::BRAX ), Heroes::UNKNOWN );
 
-    std::iota( heroes.begin(), heroes.end(), 0 );
+    std::iota( heroes.begin(), heroes.end(), Heroes::UNKNOWN + 1 );
 
     SelectEnumHeroes listbox( { 240, fheroes2::Display::instance().height() - 200 } );
 
@@ -598,14 +608,17 @@ int Dialog::selectHeroes( const int heroId /* = Heroes::UNKNOWN */ )
 
 int Dialog::selectHeroType( const int heroType )
 {
-    std::vector<int> heroes( 42, 0 );
-    std::iota( heroes.begin(), heroes.end(), 0 );
+    const auto & objectInfo = Maps::getObjectsByGroup( Maps::ObjectGroup::Hero );
+    HeroTypeSelection listbox( objectInfo, { 350, fheroes2::Display::instance().height() - 200 } );
 
-    HeroTypeSelection listbox( { 350, fheroes2::Display::instance().height() - 200 } );
+    return selectObjectType( heroType, objectInfo.size(), listbox, _( "Select Hero:" ) );
+}
 
-    listbox.SetListContent( heroes );
-    listbox.SetCurrent( std::max( heroType, 0 ) );
+int Dialog::selectMonsterType( const int monsterType )
+{
+    const auto & objectInfo = Maps::getObjectsByGroup( Maps::ObjectGroup::Monster );
 
-    const int32_t result = listbox.selectItemsEventProcessing( _( "Select Hero:" ) );
-    return result == Dialog::OK || listbox.ok ? listbox.GetCurrent() : -1;
+    MonsterTypeSelection listbox( objectInfo, { 280, fheroes2::Display::instance().height() - 200 } );
+
+    return selectObjectType( monsterType, objectInfo.size(), listbox, _( "Select Monster:" ) );
 }

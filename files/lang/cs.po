@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-16 01:01+0000\n"
+"POT-Creation-Date: 2023-11-03 12:33+0000\n"
 "PO-Revision-Date: 2023-09-24 16:05+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Czech <cs@li.org>\n"
@@ -973,13 +973,6 @@ msgstr "každý s +%{attack} bonusem k jejich útočné síle."
 msgid "The %{name} is destroyed."
 msgstr "%{name} byl zničen."
 
-msgid ""
-"The %{artifact} artifact is in effect for this battle, disabling %{spell} "
-"spell."
-msgstr ""
-"Tuhle bitvu ovlivňuje artefakt %{artifact} a znemožňuje použití kouzla "
-"%{spell}."
-
 msgid "%{count} %{name} rises from the dead!"
 msgid_plural "%{count} %{name} rise from the dead!"
 msgstr[0] "%{count} %{name} vstává z mrtvých!"
@@ -1458,10 +1451,11 @@ msgstr ""
 "Místo, kde se nachází velká knihovna, bylo objeveno! Musíš se za ní vydat a "
 "získat zpět město Chronos, ve kterém se nachází."
 
+#, fuzzy
 msgid ""
 "Find the Orb of negation, which is said to be buried in this land. There are "
-"clues inscribed on stone obelisks which will help lead you to your price. "
-"Find the orb before the first day of the sixth month, or your rivals will "
+"clues inscribed on stone obelisks which will help lead you to your prize. "
+"Find the Orb before the first day of the sixth month, or your rivals will "
 "surely have gotten to the fount before you."
 msgstr ""
 "Najdi Sféru negace, která je prý pohřbena někde v této zemi. Na kamenných "
@@ -1893,6 +1887,9 @@ msgstr "%{building} produkuje %{monster}."
 
 msgid "Requires:"
 msgstr "Požadováno:"
+
+msgid "Exit this menu without doing anything."
+msgstr "Odejít z menu bez provedení změm."
 
 msgid "Cannot build. You have already built here today."
 msgstr "Nelze postavit. Dnes si zde již stavěl."
@@ -2584,6 +2581,9 @@ msgstr "s 1 artefaktem."
 msgid "without artifacts."
 msgstr "bez artefaktů."
 
+msgid "Recruit %{name} the %{race}"
+msgstr "Najmout %{name} %{race}"
+
 msgid ""
 "'Spread' combat formation spreads your armies from the top to the bottom of "
 "the battlefield, with at least one empty space between each army."
@@ -2603,9 +2603,6 @@ msgstr "Rozvinutá formace"
 
 msgid "Grouped Formation"
 msgstr "Seskupená formace"
-
-msgid "Recruit %{name} the %{race}"
-msgstr "Najmout %{name} %{race}"
 
 msgid "Set garrison combat formation to 'Spread'"
 msgstr "Nastavit bojovou formaci pevnosti na 'Rozvinutá'"
@@ -2678,9 +2675,6 @@ msgstr "Vykopej ultimátní Artefakt."
 
 msgid "Digging"
 msgstr "Kopání"
-
-msgid "Exit this menu without doing anything."
-msgstr "Odejít z menu bez provedení změm."
 
 msgid "Arena"
 msgstr "Aréna"
@@ -3284,9 +3278,6 @@ msgid "File to Load:"
 msgstr "Soubor k načtení:"
 
 msgid "Accept the choice made."
-msgstr ""
-
-msgid "Unknown Hero"
 msgstr ""
 
 #, fuzzy
@@ -4144,6 +4135,9 @@ msgstr ""
 msgid "Your Name"
 msgstr ""
 
+msgid "Unknown Hero"
+msgstr ""
+
 msgid "Standard"
 msgstr ""
 
@@ -4571,9 +4565,10 @@ msgstr "Vítej!"
 msgid "Welcome to Heroes of Might and Magic II powered by fheroes2 engine!"
 msgstr "Vítej ve hře Heroes of Might and Magic II běžící na enginu fheroes2!"
 
+#, fuzzy
 msgid ""
-"Welcome to Heroes of Might and Magic II powered by fheroes2 engine! Before "
-"starting the game please choose game resolution."
+"Welcome to Heroes of Might and Magic II powered by the fheroes2 engine!\n"
+"Before starting the game please select a game resolution."
 msgstr ""
 "Vítej ve hře Heroes of Might and Magic II běžící na enginu fheroes2! Před "
 "samotným startem je potřeba nastavit rozlišení."
@@ -4581,20 +4576,32 @@ msgstr ""
 msgid "Please Remember"
 msgstr "Prosím pamatuj"
 
-msgid "You can always change game resolution by clicking on the "
+#, fuzzy
+msgid ""
+"You can always change the language, resolution and settings of the game by "
+"clicking on the "
 msgstr "Vždy můžeš změnit rozlišení hry klinutím na "
 
 msgid "door"
 msgstr "dveře"
 
+msgid " on the left side of the Main Menu, or with the "
+msgstr ""
+
+msgid " button from the "
+msgstr ""
+
+#, fuzzy
+msgid "NEW GAME"
+msgstr ""
+"NOVÁ\n"
+"HRA"
+
 msgid ""
-" on the left side of main menu or by clicking on the configuration button. \n"
+" menu. \n"
 "\n"
 "Enjoy the game!"
 msgstr ""
-" na levé straně hlavního menu nebo kliknutím na tlačítko CONFIG. \n"
-"\n"
-"Užívej hru!"
 
 msgid "Editor"
 msgstr ""

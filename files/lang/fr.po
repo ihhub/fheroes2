@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-16 01:01+0000\n"
+"POT-Creation-Date: 2023-11-03 12:33+0000\n"
 "PO-Revision-Date: 2022-12-18 13:48+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -958,13 +958,6 @@ msgstr "chacun avec un bonus de +%{attack} à sa compétence d'attaque."
 msgid "The %{name} is destroyed."
 msgstr "Le %{name} est détruit."
 
-msgid ""
-"The %{artifact} artifact is in effect for this battle, disabling %{spell} "
-"spell."
-msgstr ""
-"L'artéfact %{artifact} est en vigueur pour ce combat, désactivant le sort "
-"%{spell}."
-
 msgid "%{count} %{name} rises from the dead!"
 msgid_plural "%{count} %{name} rise from the dead!"
 msgstr[0] "%{count} %{name} revient à la vie !"
@@ -1463,10 +1456,11 @@ msgstr ""
 "L'emplacement de la grande bibliothèque a été découverte ! Vous devez vous y "
 "rendre, et reconquérir le village de Chronos dans lequel elle se trouve."
 
+#, fuzzy
 msgid ""
 "Find the Orb of negation, which is said to be buried in this land. There are "
-"clues inscribed on stone obelisks which will help lead you to your price. "
-"Find the orb before the first day of the sixth month, or your rivals will "
+"clues inscribed on stone obelisks which will help lead you to your prize. "
+"Find the Orb before the first day of the sixth month, or your rivals will "
 "surely have gotten to the fount before you."
 msgstr ""
 "Trouvez l'orbe de la négation, qui serait enterré dans ce pays. Il y a des "
@@ -1917,6 +1911,9 @@ msgstr "Le %{building} produit des %{monster}."
 
 msgid "Requires:"
 msgstr "Nécessite :"
+
+msgid "Exit this menu without doing anything."
+msgstr "Sortir de ce menu sans modification."
 
 msgid "Cannot build. You have already built here today."
 msgstr "Construction impossible. Une construction a déjà eu lieu aujourd'hui."
@@ -2631,6 +2628,9 @@ msgstr "avec un artéfact."
 msgid "without artifacts."
 msgstr "sans artéfact."
 
+msgid "Recruit %{name} the %{race}"
+msgstr "Recrutement de %{name} le %{race}"
+
 msgid ""
 "'Spread' combat formation spreads your armies from the top to the bottom of "
 "the battlefield, with at least one empty space between each army."
@@ -2650,9 +2650,6 @@ msgstr "Formation dispersée"
 
 msgid "Grouped Formation"
 msgstr "Formation groupée"
-
-msgid "Recruit %{name} the %{race}"
-msgstr "Recrutement de %{name} le %{race}"
 
 msgid "Set garrison combat formation to 'Spread'"
 msgstr "Utiliser la formation de combat 'dispersée' pour la garnison"
@@ -2726,9 +2723,6 @@ msgstr "Creuser pour l'ultime artéfact."
 
 msgid "Digging"
 msgstr "Fouille"
-
-msgid "Exit this menu without doing anything."
-msgstr "Sortir de ce menu sans modification."
 
 msgid "Arena"
 msgstr "Arène"
@@ -3347,9 +3341,6 @@ msgstr "Fichier à charger :"
 
 msgid "Accept the choice made."
 msgstr "Confirmez le choix."
-
-msgid "Unknown Hero"
-msgstr "Héros inconnu"
 
 #, fuzzy
 msgid "%{color} %{race} hero"
@@ -4227,6 +4218,9 @@ msgstr "Conception du conditionnement"
 msgid "Your Name"
 msgstr "Votre nom"
 
+msgid "Unknown Hero"
+msgstr "Héros inconnu"
+
 msgid "Standard"
 msgstr "Jeu standard"
 
@@ -4673,9 +4667,10 @@ msgstr ""
 "Bienvenue sur Heroes of Might and Magic II (amélioré par le moteur "
 "fheroes2) !"
 
+#, fuzzy
 msgid ""
-"Welcome to Heroes of Might and Magic II powered by fheroes2 engine! Before "
-"starting the game please choose game resolution."
+"Welcome to Heroes of Might and Magic II powered by the fheroes2 engine!\n"
+"Before starting the game please select a game resolution."
 msgstr ""
 "Bienvenue sur Heroes of Might and Magic II (amélioré par le moteur "
 "fheroes2) ! Avant de commencer le jeu choisissez la résolution du jeu."
@@ -4684,7 +4679,10 @@ msgid "Please Remember"
 msgstr "N'oubliez pas"
 
 # Needs extra whitespace to avoid yellow word splitting
-msgid "You can always change game resolution by clicking on the "
+#, fuzzy
+msgid ""
+"You can always change the language, resolution and settings of the game by "
+"clicking on the "
 msgstr ""
 "Vous pouvez toujours changer la résolution en cliquant sur la\n"
 " "
@@ -4692,15 +4690,23 @@ msgstr ""
 msgid "door"
 msgstr "porte"
 
+msgid " on the left side of the Main Menu, or with the "
+msgstr ""
+
+msgid " button from the "
+msgstr ""
+
+#, fuzzy
+msgid "NEW GAME"
+msgstr ""
+"NOU-\n"
+"VEAU"
+
 msgid ""
-" on the left side of main menu or by clicking on the configuration button. \n"
+" menu. \n"
 "\n"
 "Enjoy the game!"
 msgstr ""
-" située à gauche du menu principal ou en cliquant sur le bouton de "
-"configuration.\n"
-"\n"
-"Bon jeu !"
 
 msgid "Editor"
 msgstr ""

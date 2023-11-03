@@ -127,6 +127,19 @@ namespace Battle
         IS_PARALYZE_MAGIC = SP_PARALYZE | SP_STONE,
         IS_MIND_MAGIC = SP_BERSERKER | SP_HYPNOTIZE | SP_BLIND | SP_PARALYZE,
     };
+
+    enum class CastleDefenseElement : int
+    {
+        NONE = 0,
+        WALL1 = 1,
+        WALL2 = 2,
+        WALL3 = 3,
+        WALL4 = 4,
+        TOWER1 = 5,
+        TOWER2 = 6,
+        BRIDGE = 7,
+        CENTRAL_TOWER = 8
+    };
 }
 
 #endif

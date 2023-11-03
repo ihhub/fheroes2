@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-16 01:01+0000\n"
+"POT-Creation-Date: 2023-11-03 12:33+0000\n"
 "PO-Revision-Date: 2023-08-26 23:09+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: https://discord.com/"
@@ -962,13 +962,6 @@ msgstr "z których każdy ma +%{attack} premii do siły ataku."
 msgid "The %{name} is destroyed."
 msgstr "%{name} została zniszczona."
 
-msgid ""
-"The %{artifact} artifact is in effect for this battle, disabling %{spell} "
-"spell."
-msgstr ""
-"W czasie bitwy działa artefakt o nazwie %{artifact}, uniemożliwiający "
-"rzucenie czaru %{spell}."
-
 msgid "%{count} %{name} rises from the dead!"
 msgid_plural "%{count} %{name} rise from the dead!"
 msgstr[0] "%{count} %{name} powstaje z martwych!"
@@ -1451,10 +1444,11 @@ msgstr ""
 "Udało się odkryć miejsce położenia biblioteki! Musisz do niej wyruszyć i "
 "zająć miasto Chronos, w którym się znajduje."
 
+#, fuzzy
 msgid ""
 "Find the Orb of negation, which is said to be buried in this land. There are "
-"clues inscribed on stone obelisks which will help lead you to your price. "
-"Find the orb before the first day of the sixth month, or your rivals will "
+"clues inscribed on stone obelisks which will help lead you to your prize. "
+"Find the Orb before the first day of the sixth month, or your rivals will "
 "surely have gotten to the fount before you."
 msgstr ""
 "Znajdź Kulę Negacji, która podobno jest zakopana gdzieś w tej krainie. Na "
@@ -1900,6 +1894,9 @@ msgstr "%{building} - tu rekrutuje się: %{monster}."
 
 msgid "Requires:"
 msgstr "Wymagania:"
+
+msgid "Exit this menu without doing anything."
+msgstr "Wyjdź z menu nie wprowadzając żadnych zmian."
 
 msgid "Cannot build. You have already built here today."
 msgstr "Nie można budować. Już to robiono w tej turze."
@@ -2604,6 +2601,9 @@ msgstr "z jednym artefaktem."
 msgid "without artifacts."
 msgstr "bez artefaktów."
 
+msgid "Recruit %{name} the %{race}"
+msgstr "Rekrutuj: %{name} %{race}"
+
 msgid ""
 "'Spread' combat formation spreads your armies from the top to the bottom of "
 "the battlefield, with at least one empty space between each army."
@@ -2623,9 +2623,6 @@ msgstr "Luźna formacja"
 
 msgid "Grouped Formation"
 msgstr "Zwarta formacja"
-
-msgid "Recruit %{name} the %{race}"
-msgstr "Rekrutuj: %{name} %{race}"
 
 msgid "Set garrison combat formation to 'Spread'"
 msgstr "Ustaw szyk garnizonu na 'luźny'"
@@ -2698,9 +2695,6 @@ msgstr "Kop w poszukiwaniu Najpotężniejszego Artefaktu."
 
 msgid "Digging"
 msgstr "Poszukiwanie"
-
-msgid "Exit this menu without doing anything."
-msgstr "Wyjdź z menu nie wprowadzając żadnych zmian."
 
 msgid "Arena"
 msgstr "Arena"
@@ -3305,9 +3299,6 @@ msgstr "Wczytaj plik:"
 
 msgid "Accept the choice made."
 msgstr "Zastosuj wprowadzone zmiany."
-
-msgid "Unknown Hero"
-msgstr "Nieznany bohater"
 
 #, fuzzy
 msgid "%{color} %{race} hero"
@@ -4171,6 +4162,9 @@ msgstr "Projekt opakowania"
 msgid "Your Name"
 msgstr "Twoje imię"
 
+msgid "Unknown Hero"
+msgstr "Nieznany bohater"
+
 msgid "Standard"
 msgstr "Standard"
 
@@ -4591,9 +4585,10 @@ msgstr ""
 "Witamy w grze Heroes of Might and Magic II na silniku fheroes2! Przed "
 "rozpoczęciem wybierz rozdzielczość gry."
 
+#, fuzzy
 msgid ""
-"Welcome to Heroes of Might and Magic II powered by fheroes2 engine! Before "
-"starting the game please choose game resolution."
+"Welcome to Heroes of Might and Magic II powered by the fheroes2 engine!\n"
+"Before starting the game please select a game resolution."
 msgstr ""
 "Witamy w grze Heroes of Might and Magic II na silniku fheroes2! Przed "
 "rozpoczęciem wybierz rozdzielczość gry."
@@ -4602,7 +4597,10 @@ msgid "Please Remember"
 msgstr "Pamiętaj"
 
 # Needs extra whitespace to avoid yellow word splitting
-msgid "You can always change game resolution by clicking on the "
+#, fuzzy
+msgid ""
+"You can always change the language, resolution and settings of the game by "
+"clicking on the "
 msgstr ""
 "Możesz zawsze zmienić rozdzielczość klikając na\n"
 " "
@@ -4610,14 +4608,23 @@ msgstr ""
 msgid "door"
 msgstr "drzwi"
 
+msgid " on the left side of the Main Menu, or with the "
+msgstr ""
+
+msgid " button from the "
+msgstr ""
+
+#, fuzzy
+msgid "NEW GAME"
+msgstr ""
+"NOWA\n"
+"GRA"
+
 msgid ""
-" on the left side of main menu or by clicking on the configuration button. \n"
+" menu. \n"
 "\n"
 "Enjoy the game!"
 msgstr ""
-" po lewej stronie na ekranie głównym lub klikając przycisk Konfiguruj. \n"
-"\n"
-"Przyjemnej gry!"
 
 msgid "Editor"
 msgstr ""

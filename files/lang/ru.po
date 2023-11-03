@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-16 01:01+0000\n"
+"POT-Creation-Date: 2023-11-03 12:33+0000\n"
 "PO-Revision-Date: 2023-10-10 06:12+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -986,11 +986,6 @@ msgstr "каждый с бонусом +%{attack} к своему навыку �
 msgid "The %{name} is destroyed."
 msgstr "%{name} уничтожена!"
 
-msgid ""
-"The %{artifact} artifact is in effect for this battle, disabling %{spell} "
-"spell."
-msgstr "%{artifact} запрещает использовать \"%{spell}\"."
-
 msgid "%{count} %{name} rises from the dead!"
 msgid_plural "%{count} %{name} rise from the dead!"
 msgstr[0] "%{count} %{name} воскресает из мёртвых!"
@@ -1470,10 +1465,11 @@ msgstr ""
 "Местонахождение великой библиотеки было обнаружено! Вы должны добраться до "
 "нее и вернуть себе город Хронос, в котором она находится."
 
+#, fuzzy
 msgid ""
 "Find the Orb of negation, which is said to be buried in this land. There are "
-"clues inscribed on stone obelisks which will help lead you to your price. "
-"Find the orb before the first day of the sixth month, or your rivals will "
+"clues inscribed on stone obelisks which will help lead you to your prize. "
+"Find the Orb before the first day of the sixth month, or your rivals will "
 "surely have gotten to the fount before you."
 msgstr ""
 "Найдите Сферу Отрицания, которая, как говорят, похоронена в этой земле. На "
@@ -1916,6 +1912,9 @@ msgstr ""
 
 msgid "Requires:"
 msgstr "Требует:"
+
+msgid "Exit this menu without doing anything."
+msgstr "Выход, без изменений."
 
 msgid "Cannot build. You have already built here today."
 msgstr "Невозможно построить. Вы уже строили здесь сегодня."
@@ -2607,6 +2606,9 @@ msgstr "с 1 артефактом."
 msgid "without artifacts."
 msgstr "без артефактов."
 
+msgid "Recruit %{name} the %{race}"
+msgstr "Нанять %{name}, %{race}"
+
 msgid ""
 "'Spread' combat formation spreads your armies from the top to the bottom of "
 "the battlefield, with at least one empty space between each army."
@@ -2626,9 +2628,6 @@ msgstr "Разомкнутый строй"
 
 msgid "Grouped Formation"
 msgstr "Сомкнутый строй"
-
-msgid "Recruit %{name} the %{race}"
-msgstr "Нанять %{name}, %{race}"
 
 msgid "Set garrison combat formation to 'Spread'"
 msgstr "Боевой порядок гарнизона - Разомкнутый"
@@ -2701,9 +2700,6 @@ msgstr "Копать в поисках великого артефакта."
 
 msgid "Digging"
 msgstr "Копать"
-
-msgid "Exit this menu without doing anything."
-msgstr "Выход, без изменений."
 
 msgid "Arena"
 msgstr "Арена"
@@ -3316,9 +3312,6 @@ msgstr "Загрузить файл:"
 
 msgid "Accept the choice made."
 msgstr "Подтвердить Ваш выбор."
-
-msgid "Unknown Hero"
-msgstr "Неизвестный герой"
 
 msgid "%{color} %{race} hero"
 msgstr "%{color} герой - %{race}"
@@ -4181,6 +4174,9 @@ msgstr "Дизайн упаковки"
 msgid "Your Name"
 msgstr "Ваше имя"
 
+msgid "Unknown Hero"
+msgstr "Неизвестный герой"
+
 msgid "Standard"
 msgstr "Обычная игра"
 
@@ -4593,9 +4589,10 @@ msgstr "Добро пожаловать!"
 msgid "Welcome to Heroes of Might and Magic II powered by fheroes2 engine!"
 msgstr "Добро пожаловать в Heroes of Might and Magic II на движке fheroes2!"
 
+#, fuzzy
 msgid ""
-"Welcome to Heroes of Might and Magic II powered by fheroes2 engine! Before "
-"starting the game please choose game resolution."
+"Welcome to Heroes of Might and Magic II powered by the fheroes2 engine!\n"
+"Before starting the game please select a game resolution."
 msgstr ""
 "Добро пожаловать в Heroes of Might and Magic II на движке fheroes2! Перед "
 "началом игры, пожалуйста, выберите разрешение экрана."
@@ -4603,20 +4600,32 @@ msgstr ""
 msgid "Please Remember"
 msgstr "Запомните"
 
-msgid "You can always change game resolution by clicking on the "
+#, fuzzy
+msgid ""
+"You can always change the language, resolution and settings of the game by "
+"clicking on the "
 msgstr "Вы всегда можете изменить разрешение экрана, нажав на "
 
 msgid "door"
 msgstr "дверь"
 
+msgid " on the left side of the Main Menu, or with the "
+msgstr ""
+
+msgid " button from the "
+msgstr ""
+
+#, fuzzy
+msgid "NEW GAME"
+msgstr ""
+"НОВАЯ\n"
+"ИГРА"
+
 msgid ""
-" on the left side of main menu or by clicking on the configuration button. \n"
+" menu. \n"
 "\n"
 "Enjoy the game!"
 msgstr ""
-" на левой стороне основного меню или нажав на кнопку настройки игры.\n"
-"\n"
-"Наслаждайтесь игрой!"
 
 msgid "Editor"
 msgstr "Редактор"

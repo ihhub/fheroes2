@@ -33,11 +33,11 @@
 #include "color.h"
 #include "direction.h"
 #include "ground.h"
+#include "heroes.h"
 #include "math_base.h"
 #include "mp2.h"
 #include "world_regions.h"
 
-class Heroes;
 class StreamBase;
 
 namespace Maps
@@ -253,6 +253,11 @@ namespace Maps
 
         void pushTopLayerAddon( const MP2::mp2addon_t & ma );
 
+        void pushTopLayerAddon( TilesAddon ta )
+        {
+            _addonTopLayer.emplace_back( ta );
+        }
+
         const std::list<TilesAddon> & getBottomLayerAddons() const
         {
             return _addonBottomLayer;
@@ -266,6 +271,13 @@ namespace Maps
         const std::list<TilesAddon> & getTopLayerAddons() const
         {
             return _addonTopLayer;
+        }
+
+        void moveMainAddonToBottomLayer()
+        {
+            if ( _mainAddon._objectIcnType != MP2::OBJ_ICN_TYPE_UNKNOWN ) {
+                _addonBottomLayer.emplace_back( _mainAddon );
+            }
         }
 
         void AddonsSort();
@@ -388,9 +400,7 @@ namespace Maps
 
         bool _isTileMarkedAsRoad{ false };
 
-        // This member holds Hero ID that is incremented by 1.
-        // TODO: once hero IDs are going to be updated change the logic for this member as well.
-        uint8_t _occupantHeroId{ 0 };
+        uint8_t _occupantHeroId{ Heroes::UNKNOWN };
 
         // The following members are only used in the game.
 

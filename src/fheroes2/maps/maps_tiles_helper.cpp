@@ -42,6 +42,7 @@
 #include "direction.h"
 #include "ground.h"
 #include "logging.h"
+#include "map_object_info.h"
 #include "maps.h"
 #include "maps_tiles.h"
 #include "math_base.h"
@@ -1194,6 +1195,55 @@ namespace
                     return;
                 }
             }
+        }
+    }
+
+    void placeObjectOnTile( const Maps::Tiles & tile, const Maps::ObjectInfo & info )
+    {
+        assert( !info.empty() );
+
+        const uint32_t uid = Maps::getNewObjectUID();
+        const fheroes2::Point mainTilePos = tile.GetCenter();
+
+        for ( const auto & partInfo : info.groundLevelParts ) {
+            const fheroes2::Point pos = mainTilePos + partInfo.tileOffset;
+            if ( !Maps::isValidAbsPoint( pos.x, pos.y ) ) {
+                // This shouldn't happen as the object must be verified before placement.
+                assert( 0 );
+                continue;
+            }
+
+            Maps::Tiles & currentTile = world.GetTiles( pos.x, pos.y );
+
+            if ( partInfo.layerType == Maps::SHADOW_LAYER || partInfo.layerType == Maps::TERRAIN_LAYER ) {
+                // Shadows and terrain object do not change main tile information.
+                currentTile.pushBottomLayerAddon( Maps::TilesAddon( partInfo.layerType, uid, partInfo.icnType, static_cast<uint8_t>( partInfo.icnIndex ) ) );
+                continue;
+            }
+
+            currentTile.SetObject( partInfo.objectType );
+            currentTile.moveMainAddonToBottomLayer();
+
+            currentTile.setObjectUID( uid );
+            currentTile.setObjectIcnType( partInfo.icnType );
+
+            using TileImageIndexType = decltype( currentTile.GetObjectSpriteIndex() );
+            static_assert( std::is_same_v<TileImageIndexType, uint8_t>, "Type of GetObjectSpriteIndex() has been changed, check the logic below" );
+
+            currentTile.setObjectSpriteIndex( static_cast<uint8_t>( partInfo.icnIndex ) );
+        }
+
+        for ( const auto & partInfo : info.topLevelParts ) {
+            const fheroes2::Point pos = mainTilePos + partInfo.tileOffset;
+            if ( !Maps::isValidAbsPoint( pos.x, pos.y ) ) {
+                // This shouldn't happen as the object must be verified before placement.
+                assert( 0 );
+                continue;
+            }
+
+            Maps::Tiles & currentTile = world.GetTiles( pos.x, pos.y );
+
+            currentTile.pushTopLayerAddon( Maps::TilesAddon( partInfo.layerType, uid, partInfo.icnType, static_cast<uint8_t>( partInfo.icnIndex ) ) );
         }
     }
 }
@@ -3014,143 +3064,6 @@ namespace Maps
         }
     }
 
-    void setRandomMonsterOnTile( Tiles & tile, const Monster & mons )
-    {
-        switch ( mons.GetID() ) {
-        case Monster::RANDOM_MONSTER:
-            tile.SetObject( MP2::OBJ_RANDOM_MONSTER );
-            break;
-        case Monster::RANDOM_MONSTER_LEVEL_1:
-            tile.SetObject( MP2::OBJ_RANDOM_MONSTER_WEAK );
-            break;
-        case Monster::RANDOM_MONSTER_LEVEL_2:
-            tile.SetObject( MP2::OBJ_RANDOM_MONSTER_MEDIUM );
-            break;
-        case Monster::RANDOM_MONSTER_LEVEL_3:
-            tile.SetObject( MP2::OBJ_RANDOM_MONSTER_STRONG );
-            break;
-        case Monster::RANDOM_MONSTER_LEVEL_4:
-            tile.SetObject( MP2::OBJ_RANDOM_MONSTER_VERY_STRONG );
-            break;
-        default:
-            // It is not even a random monster!
-            assert( 0 );
-            return;
-        }
-
-        if ( tile.getObjectIcnType() != MP2::OBJ_ICN_TYPE_UNKNOWN ) {
-            // If there is another object sprite here (shadow for example) push it down to add-ons.
-            tile.pushBottomLayerAddon( TilesAddon( tile.getLayerType(), tile.GetObjectUID(), tile.getObjectIcnType(), tile.GetObjectSpriteIndex() ) );
-        }
-
-        tile.setObjectUID( getNewObjectUID() );
-        tile.setObjectIcnType( MP2::OBJ_ICN_TYPE_MONS32 );
-
-        using TileImageIndexType = decltype( tile.GetObjectSpriteIndex() );
-        static_assert( std::is_same_v<TileImageIndexType, uint8_t>, "Type of GetObjectSpriteIndex() has been changed, check the logic below" );
-
-        const uint32_t monsSpriteIndex = static_cast<uint32_t>( mons.GetID() - 1 );
-        assert( monsSpriteIndex >= std::numeric_limits<TileImageIndexType>::min() && monsSpriteIndex <= std::numeric_limits<TileImageIndexType>::max() );
-
-        tile.setObjectSpriteIndex( static_cast<TileImageIndexType>( monsSpriteIndex ) );
-    }
-
-    void setEditorHeroOnTile( Tiles & tile, const int32_t heroType )
-    {
-        tile.SetObject( MP2::OBJ_HEROES );
-
-        if ( tile.getObjectIcnType() != MP2::OBJ_ICN_TYPE_UNKNOWN ) {
-            // If there is another object sprite here (shadow for example) push it down to add-ons.
-            tile.pushBottomLayerAddon( TilesAddon( tile.getLayerType(), tile.GetObjectUID(), tile.getObjectIcnType(), tile.GetObjectSpriteIndex() ) );
-        }
-
-        // No object exists on this tile. Add one.
-        tile.setObjectUID( getNewObjectUID() );
-        tile.setObjectIcnType( MP2::OBJ_ICN_TYPE_MINIHERO );
-
-        using TileImageIndexType = decltype( tile.GetObjectSpriteIndex() );
-        static_assert( std::is_same_v<TileImageIndexType, uint8_t>, "Type of GetObjectSpriteIndex() has been changed, check the logic below" );
-
-        assert( heroType >= std::numeric_limits<TileImageIndexType>::min() && heroType <= std::numeric_limits<TileImageIndexType>::max() );
-
-        tile.setObjectSpriteIndex( static_cast<TileImageIndexType>( heroType ) );
-    }
-
-    void setArtifactOnTile( Tiles & tile, const Artifact & artifact )
-    {
-        // You can not place an invalid artifact.
-        assert( artifact.isValid() );
-
-        const int artifactId = artifact.GetID();
-        switch ( artifactId ) {
-        case Artifact::RANDOM_ALL_LEVELS:
-            tile.SetObject( MP2::OBJ_RANDOM_ARTIFACT );
-            break;
-        case Artifact::RANDOM_1_LEVEL:
-            tile.SetObject( MP2::OBJ_RANDOM_ARTIFACT_TREASURE );
-            break;
-        case Artifact::RANDOM_2_LEVEL:
-            tile.SetObject( MP2::OBJ_RANDOM_ARTIFACT_MINOR );
-            break;
-        case Artifact::RANDOM_3_LEVEL:
-            tile.SetObject( MP2::OBJ_RANDOM_ARTIFACT_MAJOR );
-            break;
-        case Artifact::RANDOM_ULTIMATE:
-            tile.SetObject( MP2::OBJ_RANDOM_ULTIMATE_ARTIFACT );
-            break;
-        default:
-            tile.SetObject( MP2::OBJ_ARTIFACT );
-            break;
-        }
-
-        if ( tile.getObjectIcnType() != MP2::OBJ_ICN_TYPE_UNKNOWN ) {
-            // If there is another object sprite here (shadow for example) push it down to add-ons.
-            tile.pushBottomLayerAddon( TilesAddon( tile.getLayerType(), tile.GetObjectUID(), tile.getObjectIcnType(), tile.GetObjectSpriteIndex() ) );
-        }
-
-        // No object exists on this tile. Add one.
-        tile.setObjectUID( getNewObjectUID() );
-        tile.setObjectIcnType( MP2::OBJ_ICN_TYPE_OBJNARTI );
-
-        // Each artifact occupies two tiles with: shadow image to the left and main image to the right.
-        uint32_t artShadowImageIndex = artifact.IndexSprite32() * 2;
-
-        // A temporary fix for the first four ultimate artifacts.
-        if ( artShadowImageIndex < 8 ) {
-            // TODO: Make sprites for these ultimate artifacts.
-            artShadowImageIndex = 208;
-        }
-
-        // Main image index is the next after the shadow image index, please refer to ICN::OBJNARTI.
-        const uint32_t artMainImageIndex = artShadowImageIndex + 1;
-
-        using TileImageIndexType = decltype( tile.GetObjectSpriteIndex() );
-        static_assert( std::is_same_v<TileImageIndexType, uint8_t>, "Type of GetObjectSpriteIndex() has been changed, check the logic below" );
-
-        assert( artShadowImageIndex > std::numeric_limits<uint8_t>::min() && artMainImageIndex <= std::numeric_limits<uint8_t>::max() );
-
-        tile.setObjectSpriteIndex( static_cast<TileImageIndexType>( artMainImageIndex ) );
-
-        // Set artifact shadow part.
-        if ( isValidDirection( tile.GetIndex(), Direction::LEFT ) ) {
-            Tiles & leftTile = world.GetTiles( GetDirectionIndex( tile.GetIndex(), Direction::LEFT ) );
-            leftTile.pushBottomLayerAddon(
-                TilesAddon( SHADOW_LAYER, tile.GetObjectUID(), tile.getObjectIcnType(), static_cast<TileImageIndexType>( artShadowImageIndex ) ) );
-        }
-
-        // Artifact ID should be in the first metadata container.
-        tile.metadata()[0] = static_cast<uint32_t>( artifactId );
-
-        if ( artifactId == Artifact::SPELL_SCROLL ) {
-            tile.metadata()[1] = static_cast<uint32_t>( artifact.getSpellId() );
-            tile.metadata()[2] = static_cast<uint32_t>( ArtifactCaptureCondition::CONTAINS_SPELL );
-        }
-        else {
-            tile.metadata()[1] = 0U;
-            tile.metadata()[2] = static_cast<uint32_t>( ArtifactCaptureCondition::NO_CONDITIONS );
-        }
-    }
-
     bool removeObjectTypeFromTile( Tiles & tile, const MP2::ObjectIcnType objectIcnType )
     {
         if ( tile.getObjectIdByObjectIcnType( objectIcnType ) == 0 ) {
@@ -3254,5 +3167,24 @@ namespace Maps
         }
 
         return needRedraw;
+    }
+
+    void setObjectOnTile( Tiles & tile, const ObjectInfo & info )
+    {
+        assert( !info.empty() );
+
+        switch ( info.objectType ) {
+        case MP2::OBJ_MONSTER:
+            setMonsterOnTile( tile, static_cast<int32_t>( info.metadata[0] ), 0 );
+            // Since setMonsterOnTile() function interprets 0 as a random number of monsters it is important to set the correct value.
+            setMonsterCountOnTile( tile, 0 );
+            return;
+        default:
+            break;
+        }
+
+        placeObjectOnTile( tile, info );
+
+        world.updatePassabilities();
     }
 }

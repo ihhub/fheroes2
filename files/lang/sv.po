@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-16 01:01+0000\n"
+"POT-Creation-Date: 2023-11-03 12:33+0000\n"
 "PO-Revision-Date: 2023-10-12 20:05+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -976,13 +976,6 @@ msgstr "varje med en +%{attack}bonus till deras Anfallsförmåga."
 msgid "The %{name} is destroyed."
 msgstr "%{name} förstörs."
 
-msgid ""
-"The %{artifact} artifact is in effect for this battle, disabling %{spell} "
-"spell."
-msgstr ""
-"%{artifact}-artefakten är i effekt för denna strid och inaktiverar %{spell}-"
-"besvärjelsen."
-
 msgid "%{count} %{name} rises from the dead!"
 msgid_plural "%{count} %{name} rise from the dead!"
 msgstr[0] "%{count} %{name} återuppstår från de döda!"
@@ -1467,10 +1460,11 @@ msgstr ""
 "Det stora Bibliotekets plats har upptäckts. Du måste nå fram till det och "
 "återta staden Chronos som det ligger i."
 
+#, fuzzy
 msgid ""
 "Find the Orb of negation, which is said to be buried in this land. There are "
-"clues inscribed on stone obelisks which will help lead you to your price. "
-"Find the orb before the first day of the sixth month, or your rivals will "
+"clues inscribed on stone obelisks which will help lead you to your prize. "
+"Find the Orb before the first day of the sixth month, or your rivals will "
 "surely have gotten to the fount before you."
 msgstr ""
 "Hitta Upphävningsklotet som sägs vara begravet någonstans i detta land. Det "
@@ -1909,6 +1903,9 @@ msgstr "%{building} producerar %{monster}."
 
 msgid "Requires:"
 msgstr "Kräver:"
+
+msgid "Exit this menu without doing anything."
+msgstr "Stäng denna meny utan att göra någonting."
 
 msgid "Cannot build. You have already built here today."
 msgstr "Kan inte byggas. Du har redan byggt här idag."
@@ -2606,6 +2603,9 @@ msgstr "med 1 artefakt."
 msgid "without artifacts."
 msgstr "utan artefakter."
 
+msgid "Recruit %{name} the %{race}"
+msgstr "Rekrytera %{race}n %{name}"
+
 msgid ""
 "'Spread' combat formation spreads your armies from the top to the bottom of "
 "the battlefield, with at least one empty space between each army."
@@ -2625,9 +2625,6 @@ msgstr "Utspridd formation"
 
 msgid "Grouped Formation"
 msgstr "Grupperad formation"
-
-msgid "Recruit %{name} the %{race}"
-msgstr "Rekrytera %{race}n %{name}"
 
 msgid "Set garrison combat formation to 'Spread'"
 msgstr "Ändra granisonstruppernas stridsformation till 'Utspridd'"
@@ -2700,9 +2697,6 @@ msgstr "Gräv efter den Främsta Artefakten."
 
 msgid "Digging"
 msgstr "Gräver"
-
-msgid "Exit this menu without doing anything."
-msgstr "Stäng denna meny utan att göra någonting."
 
 msgid "Arena"
 msgstr "Arena"
@@ -3312,9 +3306,6 @@ msgstr "Fil att Ladda:"
 
 msgid "Accept the choice made."
 msgstr "Acceptera alla ändringar."
-
-msgid "Unknown Hero"
-msgstr "Okänd Hjälte"
 
 msgid "%{color} %{race} hero"
 msgstr "%{color} %{race}hjälte"
@@ -4177,6 +4168,9 @@ msgstr "Paketdesign"
 msgid "Your Name"
 msgstr "Ditt Namn"
 
+msgid "Unknown Hero"
+msgstr "Okänd Hjälte"
+
 msgid "Standard"
 msgstr "Standardspel"
 
@@ -4592,9 +4586,10 @@ msgstr "Var Hälsad!"
 msgid "Welcome to Heroes of Might and Magic II powered by fheroes2 engine!"
 msgstr "Välkommen till Heroes of Might and Magic II genom fheroes2 spelmotor!"
 
+#, fuzzy
 msgid ""
-"Welcome to Heroes of Might and Magic II powered by fheroes2 engine! Before "
-"starting the game please choose game resolution."
+"Welcome to Heroes of Might and Magic II powered by the fheroes2 engine!\n"
+"Before starting the game please select a game resolution."
 msgstr ""
 "Välkommen till Heroes of Might and Magic II genom fheroes2 spelmotor. Välj "
 "spelupplösning innan du börjar spelet."
@@ -4602,19 +4597,32 @@ msgstr ""
 msgid "Please Remember"
 msgstr "Kom ihåg"
 
-msgid "You can always change game resolution by clicking on the "
+#, fuzzy
+msgid ""
+"You can always change the language, resolution and settings of the game by "
+"clicking on the "
 msgstr "Du kan alltid ändra spelupplösning genom att klicka på "
 
 msgid "door"
 msgstr "dörren"
 
+msgid " on the left side of the Main Menu, or with the "
+msgstr ""
+
+msgid " button from the "
+msgstr ""
+
+#, fuzzy
+msgid "NEW GAME"
+msgstr ""
+"NYTT\n"
+"SPEL"
+
 msgid ""
-" on the left side of main menu or by clicking on the configuration button. \n"
+" menu. \n"
 "\n"
 "Enjoy the game!"
 msgstr ""
-" på vänstersida om huvudmenyn eller genom att klicka på Anpassaknappen.\n"
-"Lycka till!"
 
 msgid "Editor"
 msgstr "Redigerare"
