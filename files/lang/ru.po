@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-02 14:09+0000\n"
+"POT-Creation-Date: 2023-11-03 12:33+0000\n"
 "PO-Revision-Date: 2023-10-10 06:12+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -3313,9 +3313,6 @@ msgstr "Загрузить файл:"
 msgid "Accept the choice made."
 msgstr "Подтвердить Ваш выбор."
 
-msgid "Unknown Hero"
-msgstr "Неизвестный герой"
-
 msgid "%{color} %{race} hero"
 msgstr "%{color} герой - %{race}"
 
@@ -4176,6 +4173,9 @@ msgstr "Дизайн упаковки"
 
 msgid "Your Name"
 msgstr "Ваше имя"
+
+msgid "Unknown Hero"
+msgstr "Неизвестный герой"
 
 msgid "Standard"
 msgstr "Обычная игра"

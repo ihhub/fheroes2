@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-02 14:09+0000\n"
+"POT-Creation-Date: 2023-11-03 12:33+0000\n"
 "PO-Revision-Date: 2023-08-26 23:09+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: https://discord.com/"
@@ -3300,9 +3300,6 @@ msgstr "Wczytaj plik:"
 msgid "Accept the choice made."
 msgstr "Zastosuj wprowadzone zmiany."
 
-msgid "Unknown Hero"
-msgstr "Nieznany bohater"
-
 #, fuzzy
 msgid "%{color} %{race} hero"
 msgstr "%{color} gracz"
@@ -4164,6 +4161,9 @@ msgstr "Projekt opakowania"
 
 msgid "Your Name"
 msgstr "Twoje imię"
+
+msgid "Unknown Hero"
+msgstr "Nieznany bohater"
 
 msgid "Standard"
 msgstr "Standard"

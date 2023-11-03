@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-02 14:09+0000\n"
+"POT-Creation-Date: 2023-11-03 12:33+0000\n"
 "PO-Revision-Date: 2022-12-18 13:48+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -3342,9 +3342,6 @@ msgstr "Fichier à charger :"
 msgid "Accept the choice made."
 msgstr "Confirmez le choix."
 
-msgid "Unknown Hero"
-msgstr "Héros inconnu"
-
 #, fuzzy
 msgid "%{color} %{race} hero"
 msgstr "Joueur %{color}"
@@ -4220,6 +4217,9 @@ msgstr "Conception du conditionnement"
 
 msgid "Your Name"
 msgstr "Votre nom"
+
+msgid "Unknown Hero"
+msgstr "Héros inconnu"
 
 msgid "Standard"
 msgstr "Jeu standard"
