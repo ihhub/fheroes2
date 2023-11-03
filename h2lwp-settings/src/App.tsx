@@ -1,33 +1,15 @@
-import React, { Suspense } from "react";
+import { Suspense } from "react";
 import logo from "./logo.svg";
 import "./App.css";
 import { suspend } from "suspend-react";
 
 const Child = () => {
-  const version = "v0";
-  const id = "1000";
-
-  const data = suspend(async () => {
-    // const res = await fetch(
-    //   `https://hacker-news.firebaseio.com/${version}/item/${id}.json`
-    // );
-
-    const res = new Promise(resolve => {
-      setTimeout(() => resolve({
-        title: 'loaded data',
-        by: 'by smthing'
-      }), 6000);
-    });
-
-    return res;
-  }, [id, version]);
-
-  return (
-    <div>
-    {/* @ts-ignore */}
-      {data.title} by {data.by}
-    </div>
+  const data = suspend(
+    async () => window.Android.helloFullPromise("helloFullPromise"),
+    []
   );
+
+  return <div>{data}</div>;
 };
 
 function App() {
