@@ -29,6 +29,7 @@
 
 #include "artifact.h"
 #include "monster.h"
+#include "resource.h"
 
 namespace
 {
@@ -195,15 +196,19 @@ namespace
         }
     }
 
-    void populateResourceData( std::vector<Maps::ObjectInfo> & objects )
+    void populateTreasureData( std::vector<Maps::ObjectInfo> & objects )
     {
         // Normal resources.
-        for ( const uint32_t imageIndex : { 1, 3, 5, 7, 9, 11, 13 } ) {
+        int32_t resourceImageIndex = 1;
+        for ( const uint32_t resource : { Resource::WOOD, Resource::MERCURY, Resource::ORE, Resource::SULFUR, Resource::CRYSTAL, Resource::GEMS, Resource::GOLD } ) {
             Maps::ObjectInfo object{ MP2::OBJ_RESOURCE };
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNRSRC, imageIndex, fheroes2::Point{ 0, 0 }, MP2::OBJ_RESOURCE, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNRSRC, imageIndex - 1, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNRSRC, resourceImageIndex, fheroes2::Point{ 0, 0 }, MP2::OBJ_RESOURCE, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNRSRC, resourceImageIndex - 1, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            object.metadata[0] = resource;
 
             objects.emplace_back( std::move( object ) );
+
+            resourceImageIndex += 2;
         }
 
         // Genie's Lamp.
@@ -217,7 +222,7 @@ namespace
 
         // Random resource.
         {
-            Maps::ObjectInfo object{ MP2::OBJ_GENIE_LAMP };
+            Maps::ObjectInfo object{ MP2::OBJ_RANDOM_RESOURCE };
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNRSRC, 17, fheroes2::Point{ 0, 0 }, MP2::OBJ_RANDOM_RESOURCE, Maps::OBJECT_LAYER );
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNRSRC, 16, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
 
@@ -226,7 +231,7 @@ namespace
 
         // Treasure chest.
         {
-            Maps::ObjectInfo object{ MP2::OBJ_GENIE_LAMP };
+            Maps::ObjectInfo object{ MP2::OBJ_TREASURE_CHEST };
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNRSRC, 19, fheroes2::Point{ 0, 0 }, MP2::OBJ_TREASURE_CHEST, Maps::OBJECT_LAYER );
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNRSRC, 18, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
 
@@ -262,7 +267,7 @@ namespace
         populateArtifactData( objectData[static_cast<size_t>( Maps::ObjectGroup::Artifact )] );
         populateHeroData( objectData[static_cast<size_t>( Maps::ObjectGroup::Hero )] );
         populateMonsterData( objectData[static_cast<size_t>( Maps::ObjectGroup::Monster )] );
-        populateResourceData( objectData[static_cast<size_t>( Maps::ObjectGroup::Resource )] );
+        populateTreasureData( objectData[static_cast<size_t>( Maps::ObjectGroup::Treasure )] );
         populateWaterObjectData( objectData[static_cast<size_t>( Maps::ObjectGroup::Water_Object )] );
 
         isPopulated = true;

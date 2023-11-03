@@ -3128,6 +3128,11 @@ namespace Maps
             // Since setMonsterOnTile() function interprets 0 as a random number of monsters it is important to set the correct value.
             setMonsterCountOnTile( tile, 0 );
             return;
+        case MP2::OBJ_RESOURCE:
+            // Setting just 1 resource is enough. It doesn't matter as we are not saving this value into the map format.
+            placeObjectOnTile( tile, info );
+            setResourceOnTile( tile, info.metadata[0], 1 );
+            return;
         default:
             break;
         }

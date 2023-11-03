@@ -48,6 +48,7 @@
 #include "map_object_info.h"
 #include "math_base.h"
 #include "race.h"
+#include "resource.h"
 #include "screen.h"
 #include "settings.h"
 #include "tools.h"
@@ -370,7 +371,7 @@ namespace
             : SelectEnum( size )
             , _objectInfo( objectInfo )
         {
-            SetAreaMaxItems( ( rtAreaItems.height + offset ) / offset );
+            SetAreaMaxItems( ( rtAreaItems.height + offset - 1 ) / offset );
         }
 
         using SelectEnum::ActionListPressRight;
@@ -381,7 +382,7 @@ namespace
             assert( objectId >= 0 && objectId < static_cast<int>( _objectInfo.size() ) );
 
             const fheroes2::Sprite & image = fheroes2::generateMapObjectImage( _objectInfo[objectId] );
-            renderItem( image, getObjectName( _objectInfo[objectId] ), { offsetX, offsetY }, { 32, 50 }, isSelected );
+            renderItem( image, getObjectName( _objectInfo[objectId] ), { offsetX, offsetY }, getImageOffset(), isSelected );
         }
 
         void ActionListPressRight( int & objectId ) override
@@ -396,6 +397,8 @@ namespace
         virtual void showPopupWindow( const Maps::ObjectInfo & info ) = 0;
 
         virtual std::string getObjectName( const Maps::ObjectInfo & info ) = 0;
+
+        virtual fheroes2::Point getImageOffset() = 0;
 
         const std::vector<Maps::ObjectInfo> & _objectInfo;
     };
@@ -426,13 +429,18 @@ namespace
 
             return name;
         }
+
+        fheroes2::Point getImageOffset() override
+        {
+            return { 40, 52 };
+        }
     };
 
     class MonsterTypeSelection : public ObjectTypeSelection
     {
     public:
         MonsterTypeSelection( const std::vector<Maps::ObjectInfo> & objectInfo, const fheroes2::Size & size )
-            : ObjectTypeSelection( objectInfo, size, fheroes2::AGG::GetICN( ICN::MINIHERO, 0 ).height() + 2 )
+            : ObjectTypeSelection( objectInfo, size, 43 )
         {
             // Do nothing.
         }
@@ -452,6 +460,64 @@ namespace
         std::string getObjectName( const Maps::ObjectInfo & info ) override
         {
             return Monster( static_cast<int32_t>( info.metadata[0] ) ).GetName();
+        }
+
+        fheroes2::Point getImageOffset() override
+        {
+            return { 45, 43 };
+        }
+    };
+
+    class TreasureTypeSelection : public ObjectTypeSelection
+    {
+    public:
+        TreasureTypeSelection( const std::vector<Maps::ObjectInfo> & objectInfo, const fheroes2::Size & size )
+            : ObjectTypeSelection( objectInfo, size, 40 )
+        {
+            // Do nothing.
+        }
+
+    private:
+        void showPopupWindow( const Maps::ObjectInfo & info ) override
+        {
+            switch ( info.objectType ) {
+            case MP2::OBJ_RESOURCE:
+                fheroes2::showResourceMessage( fheroes2::Text{ getObjectName( info ), fheroes2::FontType::normalYellow() },
+                    fheroes2::Text{ Resource::getDescription(), fheroes2::FontType::normalWhite() }, Dialog::ZERO, Funds{ static_cast<int>( info.metadata[0] ), 0 } );
+                break;
+            case MP2::OBJ_GENIE_LAMP:
+            case MP2::OBJ_RANDOM_RESOURCE:
+            case MP2::OBJ_TREASURE_CHEST:
+                fheroes2::showStandardTextMessage( getObjectName( info ), "", Dialog::ZERO );
+                break;
+            default:
+                // Did you expand the list of resources? Add the corresponding logic!
+                assert( 0 );
+                break;
+            }
+        }
+
+        std::string getObjectName( const Maps::ObjectInfo & info ) override
+        {
+            switch ( info.objectType ) {
+            case MP2::OBJ_RESOURCE:
+                return Resource::String( info.metadata[0] );
+            case MP2::OBJ_GENIE_LAMP:
+            case MP2::OBJ_RANDOM_RESOURCE:
+            case MP2::OBJ_TREASURE_CHEST:
+                return MP2::StringObject( info.objectType );
+            default:
+                // Did you expand the list of resources? Add the corresponding logic!
+                assert( 0 );
+                break;
+            }
+
+            return {};
+        }
+
+        fheroes2::Point getImageOffset() override
+        {
+            return { 32, 40 };
         }
     };
 
@@ -592,4 +658,13 @@ int Dialog::selectMonsterType( const int monsterType )
     MonsterTypeSelection listbox( objectInfo, { 280, fheroes2::Display::instance().height() - 200 } );
 
     return selectObjectType( monsterType, objectInfo.size(), listbox, _( "Select Monster:" ) );
+}
+
+int Dialog::selectTreasureType( const int resourceType )
+{
+    const auto & objectInfo = Maps::getObjectsByGroup( Maps::ObjectGroup::Treasure );
+
+    TreasureTypeSelection listbox( objectInfo, { 280, fheroes2::Display::instance().height() - 200 } );
+
+    return selectObjectType( resourceType, objectInfo.size(), listbox, _( "Select Treasure:" ) );
 }
