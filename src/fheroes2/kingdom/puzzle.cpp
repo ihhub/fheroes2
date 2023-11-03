@@ -163,8 +163,9 @@ namespace
 
         const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
 
-        const Interface::Radar & radar = Interface::AdventureMap::Get().getRadar();
-        const fheroes2::Rect & radarArea = radar.GetArea();
+        // Puzzle map is called only for the Adventure Map, not Editor.
+        Interface::AdventureMap & adventureMapInterface = Interface::AdventureMap::Get();
+        const fheroes2::Rect & radarArea = adventureMapInterface.getRadar().GetArea();
 
         fheroes2::ImageRestorer back( display, BORDERWIDTH, BORDERWIDTH, sf.width(), sf.height() );
         fheroes2::ImageRestorer radarRestorer( display, radarArea.x, radarArea.y, radarArea.width, radarArea.height );
@@ -200,20 +201,22 @@ namespace
         display.updateNextRenderRoi( radarArea );
         fheroes2::fadeInDisplay( back.rect(), false );
 
-        Interface::AdventureMap::Get().getGameArea().SetUpdateCursor();
+        adventureMapInterface.getGameArea().SetUpdateCursor();
 
-        radar.SetRedraw( Interface::REDRAW_RADAR_CURSOR );
+        adventureMapInterface.setRedraw( Interface::REDRAW_RADAR_CURSOR );
     }
 
     void ShowExtendedDialog( const Puzzle & pzl, const fheroes2::Image & sf )
     {
         fheroes2::Display & display = fheroes2::Display::instance();
 
-        Interface::GameArea & gameAreaInstance = Interface::AdventureMap::Get().getGameArea();
-        const fheroes2::Rect & gameArea = gameAreaInstance.GetROI();
+        // Puzzle map is called only for the Adventure Map, not Editor.
+        Interface::AdventureMap & adventureMapInterface = Interface::AdventureMap::Get();
+        Interface::GameArea & gameArea = adventureMapInterface.getGameArea();
+        const fheroes2::Rect & gameAreaRoi = gameArea.GetROI();
 
-        const fheroes2::StandardWindow border( gameArea.x + ( gameArea.width - sf.width() ) / 2, gameArea.y + ( gameArea.height - sf.height() ) / 2, sf.width(),
-                                               sf.height(), false );
+        const fheroes2::StandardWindow border( gameAreaRoi.x + ( gameAreaRoi.width - sf.width() ) / 2, gameAreaRoi.y + ( gameAreaRoi.height - sf.height() ) / 2,
+                                               sf.width(), sf.height(), false );
 
         fheroes2::Rect blitArea = border.activeArea();
 
@@ -232,7 +235,7 @@ namespace
 
         fheroes2::Blit( background, display, blitArea.x, blitArea.y );
 
-        const Interface::Radar & radar = Interface::AdventureMap::Get().getRadar();
+        const Interface::Radar & radar = adventureMapInterface.getRadar();
         const fheroes2::Rect & radarRect = radar.GetRect();
         const fheroes2::Rect & radarArea = radar.GetArea();
 
@@ -269,9 +272,9 @@ namespace
 
         fheroes2::fadeOutDisplay( border.activeArea(), true );
 
-        gameAreaInstance.SetUpdateCursor();
+        gameArea.SetUpdateCursor();
 
-        radar.SetRedraw( Interface::REDRAW_RADAR_CURSOR );
+        adventureMapInterface.setRedraw( Interface::REDRAW_RADAR_CURSOR );
     }
 }
 

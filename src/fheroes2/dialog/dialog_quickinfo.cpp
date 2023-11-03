@@ -405,10 +405,12 @@ namespace
             return { position.x - imageWidth, position.y, imageWidth, imageHeight };
         }
 
-        // place box next to mouse cursor
+        // Place info dialog next to mouse cursor.
         const fheroes2::Point & mp = le.GetMouseCursor();
 
         if ( gameArea == nullptr ) {
+            // If quick info is called not from the game area it should not get out of the screen.
+
             const fheroes2::Display & display = fheroes2::Display::instance();
             assert( display.width() >= imageWidth && display.height() >= imageHeight );
             return { std::clamp( mp.x - imageWidth / 2, 0, display.width() - imageWidth ), std::clamp( mp.y - imageHeight / 2, 0, display.height() - imageHeight ),
@@ -421,7 +423,7 @@ namespace
         int32_t xpos = mx + TILEWIDTH - ( imageWidth / 2 );
         int32_t ypos = my + TILEWIDTH - ( imageHeight / 2 );
 
-        // clamp box to edges of adventure screen game area
+        // Clamp quick info dialog to the edges of adventure screen game area.
         const fheroes2::Rect & ar = gameArea->GetROI();
         assert( ar.width >= imageWidth && ar.height >= imageHeight );
         xpos = std::clamp( xpos, BORDERWIDTH, ( ar.width - imageWidth ) + BORDERWIDTH );
@@ -688,11 +690,11 @@ namespace
         radarUpdater.restore();
 
         if ( gameArea && cursorTileIndex != gameArea->GetValidTileIdFromPoint( le.GetMouseCursor() ) ) {
-            // The cursor is above the other map tile. We will restore and update it later, before the next display render, so leave it hidden.
+            // The tile under the cursor has changed. We will restore and update the cursor later, before the next display render, so leave it hidden.
             gameArea->SetUpdateCursor();
         }
         else {
-            // Cursor is above the same map tile we can restore it before the display render.
+            // Cursor is above the same map tile or we have no game area. We can restore it before the display render.
             cursorRestorer.restore();
         }
 
@@ -901,11 +903,11 @@ namespace
         radarUpdater.restore();
 
         if ( gameArea && cursorTileIndex != gameArea->GetValidTileIdFromPoint( le.GetMouseCursor() ) ) {
-            // The cursor is above the other map tile. We will restore and update it later, before the next display render, so leave it hidden.
+            // The tile under the cursor has changed. We will restore and update the cursor later, before the next display render, so leave it hidden.
             gameArea->SetUpdateCursor();
         }
         else {
-            // Cursor is above the same map tile we can restore it before the display render.
+            // Cursor is above the same map tile or we have no game area. We can restore it before the display render.
             cursorRestorer.restore();
         }
 
@@ -966,7 +968,7 @@ void Dialog::QuickInfo( const Maps::Tiles & tile, Interface::GameArea & gameArea
         cursorRestorer.restore();
     }
     else {
-        // The cursor is above the other map tile. We will restore and update it later, before the next display render, so leave it hidden.
+        // The tile under the cursor has changed. We will restore and update the cursor later, before the next display render, so leave it hidden.
         gameArea.SetUpdateCursor();
     }
 

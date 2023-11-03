@@ -954,6 +954,11 @@ void Interface::GameArea::QueueEventProcessing( bool isCursorOverGamearea )
               && ( std::abs( _lastMouseDragPosition.x - mousePosition.x ) > minimalRequiredDraggingMovement
                    || std::abs( _lastMouseDragPosition.y - mousePosition.y ) > minimalRequiredDraggingMovement ) ) {
         _mouseDraggingMovement = true;
+
+        // Muse dragging started. Set the default pointer cursor to show that no action will be made
+        // after the mouse button is released. And plan cursor update after the dragging is over.
+        Cursor::Get().SetThemes( Cursor::POINTER );
+        updateCursor = true;
     }
 
     if ( _mouseDraggingMovement ) {
@@ -1009,13 +1014,15 @@ void Interface::GameArea::QueueEventProcessing( bool isCursorOverGamearea )
     // Change the cursor image if needed.
     if ( updateCursor || index != _prevIndexPos ) {
         if ( updateCursor && fheroes2::cursor().isSoftwareEmulation() ) {
+            // For the software cursor we check if it is needed to force its update on the screen.
+
             const Cursor & cursor = Cursor::Get();
             const int previousCursor = cursor.Themes();
 
             _interface.updateCursor( index );
 
             if ( cursor.Themes() != previousCursor ) {
-                // Force software cursor render after the cursor icon change by 'updateCursor' condition.
+                // Force software cursor render if the cursor icon is changed.
                 fheroes2::Display::instance().render( { index % world.w(), index / world.w(), 1, 1 } );
             }
         }
