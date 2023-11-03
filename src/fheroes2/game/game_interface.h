@@ -140,7 +140,7 @@ namespace Interface
         fheroes2::GameMode StartGame();
 
         void mouseCursorAreaClickLeft( const int32_t tileIndex ) override;
-        void mouseCursorAreaPressRight( const int32_t tileIndex ) const override;
+        void mouseCursorAreaPressRight( const int32_t tileIndex ) override;
 
         void updateCursor( const int32_t tileIndex ) override;
 

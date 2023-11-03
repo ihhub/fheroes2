@@ -52,7 +52,7 @@ public:
 
     struct ZoomROIs
     {
-        ZoomROIs( const ZoomLevel zoomLevel, const fheroes2::Point & centerInPixels );
+        ZoomROIs( const ZoomLevel zoomLevel, const fheroes2::Point & centerInPixels, const fheroes2::Rect & visibleScreenInPixels );
 
         bool zoomIn( const bool cycle );
         bool zoomOut( const bool cycle );
@@ -64,6 +64,7 @@ public:
         ZoomLevel _zoomLevel{ ZoomLevel::ZoomLevel1 };
         fheroes2::Point _center;
         std::array<fheroes2::Rect, 4> _roiForZoomLevels;
+        const fheroes2::Rect & _visibleROI;
 
     private:
         void _updateZoomLevels();

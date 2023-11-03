@@ -635,7 +635,7 @@ namespace Interface
         }
     }
 
-    void EditorInterface::mouseCursorAreaPressRight( const int32_t tileIndex ) const
+    void EditorInterface::mouseCursorAreaPressRight( const int32_t tileIndex )
     {
         const Maps::Tiles & tile = world.GetTiles( tileIndex );
 
@@ -647,10 +647,10 @@ namespace Interface
             const Castle * castle = world.getCastle( tile.GetCenter() );
 
             if ( castle ) {
-                Dialog::QuickInfo( *castle );
+                Dialog::QuickInfo( *castle, _gameArea );
             }
             else {
-                Dialog::QuickInfo( tile );
+                Dialog::QuickInfo( tile, _gameArea );
             }
 
             break;
@@ -659,7 +659,7 @@ namespace Interface
             const Heroes * heroes = tile.getHero();
 
             if ( heroes ) {
-                Dialog::QuickInfo( *heroes );
+                Dialog::QuickInfo( *heroes, {}, &_gameArea );
             }
             else if ( tile.getObjectIcnType() == MP2::OBJ_ICN_TYPE_MINIHERO ) {
                 fheroes2::showStandardTextMessage( _( "Heroes" ), "", Dialog::ZERO );
@@ -668,7 +668,7 @@ namespace Interface
             break;
         }
         default:
-            Dialog::QuickInfo( tile );
+            Dialog::QuickInfo( tile, _gameArea );
             break;
         }
     }

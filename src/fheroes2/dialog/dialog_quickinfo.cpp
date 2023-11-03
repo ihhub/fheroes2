@@ -398,30 +398,36 @@ namespace
         return str;
     }
 
-    fheroes2::Rect makeRectQuickInfo( const LocalEvent & le, const fheroes2::Sprite & imageBox, const fheroes2::Point & position = fheroes2::Point() )
+    fheroes2::Rect makeRectQuickInfo( const LocalEvent & le, const int32_t imageWidth, const int32_t imageHeight, const fheroes2::Point & position,
+                                      Interface::GameArea const * gameArea )
     {
         if ( position.x > 0 && position.y > 0 ) {
-            return { position.x - imageBox.width(), position.y, imageBox.width(), imageBox.height() };
+            return { position.x - imageWidth, position.y, imageWidth, imageHeight };
         }
 
         // place box next to mouse cursor
         const fheroes2::Point & mp = le.GetMouseCursor();
 
+        if ( gameArea == nullptr ) {
+            const fheroes2::Display & display = fheroes2::Display::instance();
+            assert( display.width() >= imageWidth && display.height() >= imageHeight );
+            return { std::clamp( mp.x - imageWidth / 2, 0, display.width() - imageWidth ), std::clamp( mp.y - imageHeight / 2, 0, display.height() - imageHeight ),
+                     imageWidth, imageHeight };
+        }
+
         const int32_t mx = ( ( mp.x - BORDERWIDTH ) / TILEWIDTH ) * TILEWIDTH;
         const int32_t my = ( ( mp.y - BORDERWIDTH ) / TILEWIDTH ) * TILEWIDTH;
 
-        const Interface::GameArea & gamearea = Interface::AdventureMap::Get().getGameArea();
-        const fheroes2::Rect & ar = gamearea.GetROI();
-
-        int32_t xpos = mx + TILEWIDTH - ( imageBox.width() / 2 );
-        int32_t ypos = my + TILEWIDTH - ( imageBox.height() / 2 );
+        int32_t xpos = mx + TILEWIDTH - ( imageWidth / 2 );
+        int32_t ypos = my + TILEWIDTH - ( imageHeight / 2 );
 
         // clamp box to edges of adventure screen game area
-        assert( ar.width >= imageBox.width() && ar.height >= imageBox.height() );
-        xpos = std::clamp( xpos, BORDERWIDTH, ( ar.width - imageBox.width() ) + BORDERWIDTH );
-        ypos = std::clamp( ypos, BORDERWIDTH, ( ar.height - imageBox.height() ) + BORDERWIDTH );
+        const fheroes2::Rect & ar = gameArea->GetROI();
+        assert( ar.width >= imageWidth && ar.height >= imageHeight );
+        xpos = std::clamp( xpos, BORDERWIDTH, ( ar.width - imageWidth ) + BORDERWIDTH );
+        ypos = std::clamp( ypos, BORDERWIDTH, ( ar.height - imageHeight ) + BORDERWIDTH );
 
-        return { xpos, ypos, imageBox.width(), imageBox.height() };
+        return { xpos, ypos, imageWidth, imageHeight };
     }
 
     std::string getQuickInfoText( const Maps::Tiles & tile )
@@ -557,13 +563,42 @@ namespace
         }
     }
 
-    void showQuickInfo( const Castle & castle, const fheroes2::Point & position, const bool showOnRadar, const fheroes2::Rect & areaToRestore )
+    uint32_t getFlagIcnIndex( const int color )
+    {
+        switch ( color ) {
+        case Color::BLUE:
+            return 0;
+        case Color::GREEN:
+            return 2;
+        case Color::RED:
+            return 4;
+        case Color::YELLOW:
+            return 6;
+        case Color::ORANGE:
+            return 8;
+        case Color::PURPLE:
+            return 10;
+        case Color::NONE:
+            return 12;
+        default:
+            // Have you added a new player color? Add the logic above.
+            assert( 0 );
+            break;
+        }
+
+        return 0;
+    }
+
+    void showQuickInfo( const Castle & castle, const fheroes2::Point & position, const bool showOnRadar, const fheroes2::Rect & areaToRestore,
+                        Interface::GameArea * gameArea )
     {
         CursorRestorer cursorRestorer( false, Cursor::Get().Themes() );
 
         LocalEvent & le = LocalEvent::Get();
-        Interface::GameArea & gameArea = Interface::AdventureMap::Get().getGameArea();
-        const int32_t cursorTileIndex = gameArea.GetValidTileIdFromPoint( le.GetMouseCursor() );
+        int32_t cursorTileIndex = 0;
+        if ( gameArea ) {
+            cursorTileIndex = gameArea->GetValidTileIdFromPoint( le.GetMouseCursor() );
+        }
 
         // Update radar if needed
         RadarUpdater radarUpdater( showOnRadar, castle.GetCenter(), areaToRestore );
@@ -571,7 +606,7 @@ namespace
         // image box
         const fheroes2::Sprite & box = fheroes2::AGG::GetICN( ICN::QWIKTOWN, 0 );
 
-        fheroes2::Rect cur_rt = makeRectQuickInfo( le, box, position );
+        fheroes2::Rect cur_rt = makeRectQuickInfo( le, box.width(), box.height(), position, gameArea );
 
         fheroes2::Display & display = fheroes2::Display::instance();
         fheroes2::ImageRestorer back( display, cur_rt.x, cur_rt.y, cur_rt.width, cur_rt.height );
@@ -596,33 +631,7 @@ namespace
         fheroes2::drawCastleIcon( castle, display, fheroes2::Point( dst_pt.x + 4, dst_pt.y + 4 ) );
 
         // color flags
-        uint32_t index = 0;
-        switch ( castle.GetColor() ) {
-        case Color::BLUE:
-            index = 0;
-            break;
-        case Color::GREEN:
-            index = 2;
-            break;
-        case Color::RED:
-            index = 4;
-            break;
-        case Color::YELLOW:
-            index = 6;
-            break;
-        case Color::ORANGE:
-            index = 8;
-            break;
-        case Color::PURPLE:
-            index = 10;
-            break;
-        case Color::NONE:
-            index = 12;
-            break;
-        default:
-            break;
-        }
-
+        const uint32_t index = getFlagIcnIndex( castle.GetColor() );
         const fheroes2::Point flagOffset( 5, 4 );
 
         const fheroes2::Sprite & l_flag = fheroes2::AGG::GetICN( ICN::FLAG32, index );
@@ -666,8 +675,7 @@ namespace
             text.draw( dst_pt.x, dst_pt.y, display );
         }
 
-        display.updateNextRenderRoi( areaToRestore );
-        display.render( back.rect() );
+        display.render();
 
         // quick info loop
         while ( le.HandleEvents() && le.MousePressRight() )
@@ -679,27 +687,28 @@ namespace
         // Restore radar view
         radarUpdater.restore();
 
-        if ( cursorTileIndex == gameArea.GetValidTileIdFromPoint( le.GetMouseCursor() ) ) {
+        if ( gameArea && cursorTileIndex != gameArea->GetValidTileIdFromPoint( le.GetMouseCursor() ) ) {
+            // The cursor is above the other map tile. We will restore and update it later, before the next display render, so leave it hidden.
+            gameArea->SetUpdateCursor();
+        }
+        else {
             // Cursor is above the same map tile we can restore it before the display render.
             cursorRestorer.restore();
         }
-        else {
-            // The cursor is above the other map tile. We will restore and update it later, before the next display render, so leave it hidden.
-            gameArea.SetUpdateCursor();
-        }
 
-        display.updateNextRenderRoi( areaToRestore );
-        display.render( back.rect() );
+        display.render();
     }
 
     void showQuickInfo( const HeroBase & hero, const fheroes2::Point & position, const bool showOnRadar, const fheroes2::Rect & areaToRestore,
-                        const std::optional<bool> showFullInfo )
+                        const std::optional<bool> showFullInfo, Interface::GameArea * gameArea )
     {
         CursorRestorer cursorRestorer( false, Cursor::Get().Themes() );
 
         LocalEvent & le = LocalEvent::Get();
-        Interface::GameArea & gameArea = Interface::AdventureMap::Get().getGameArea();
-        const int32_t cursorTileIndex = gameArea.GetValidTileIdFromPoint( le.GetMouseCursor() );
+        int32_t cursorTileIndex = 0;
+        if ( gameArea ) {
+            cursorTileIndex = gameArea->GetValidTileIdFromPoint( le.GetMouseCursor() );
+        }
 
         // Update radar if needed
         RadarUpdater radarUpdater( showOnRadar, hero.GetCenter(), areaToRestore );
@@ -707,7 +716,7 @@ namespace
         // image box
         const fheroes2::Sprite & box = fheroes2::AGG::GetICN( ICN::QWIKHERO, 0 );
 
-        fheroes2::Rect cur_rt = makeRectQuickInfo( le, box, position );
+        fheroes2::Rect cur_rt = makeRectQuickInfo( le, box.width(), box.height(), position, gameArea );
 
         fheroes2::Display & display = fheroes2::Display::instance();
         fheroes2::ImageRestorer restorer( display, cur_rt.x, cur_rt.y, cur_rt.width, cur_rt.height );
@@ -749,7 +758,7 @@ namespace
         }
 
         const fheroes2::FontType smallWhite = fheroes2::FontType::smallWhite();
-        fheroes2::Text text( message, smallWhite );
+        fheroes2::Text text( std::move( message ), smallWhite );
         dst_pt.x = cur_rt.x + ( cur_rt.width - text.width() ) / 2;
         dst_pt.y = cur_rt.y + 2;
         text.draw( dst_pt.x, dst_pt.y, display );
@@ -795,30 +804,7 @@ namespace
 
         // color flags, except for neutral heroes
         if ( !isNeutralHero ) {
-            uint32_t index = 0;
-
-            switch ( hero.GetColor() ) {
-            case Color::BLUE:
-                index = 0;
-                break;
-            case Color::GREEN:
-                index = 2;
-                break;
-            case Color::RED:
-                index = 4;
-                break;
-            case Color::YELLOW:
-                index = 6;
-                break;
-            case Color::ORANGE:
-                index = 8;
-                break;
-            case Color::PURPLE:
-                index = 10;
-                break;
-            default:
-                break;
-            }
+            const uint32_t index = getFlagIcnIndex( hero.GetColor() );
 
             const fheroes2::Sprite & l_flag = fheroes2::AGG::GetICN( ICN::FLAG32, index );
             dst_pt.x = cur_rt.x + ( cur_rt.width - 40 ) / 2 - l_flag.width();
@@ -902,8 +888,7 @@ namespace
             Army::drawMultipleMonsterLines( hero.GetArmy(), cur_rt.x - 6, cur_rt.y + 60, 160, false, false );
         }
 
-        display.updateNextRenderRoi( areaToRestore );
-        display.render( restorer.rect() );
+        display.render();
 
         // quick info loop
         while ( le.HandleEvents() && le.MousePressRight() )
@@ -915,33 +900,31 @@ namespace
         // Restore radar view
         radarUpdater.restore();
 
-        if ( cursorTileIndex == gameArea.GetValidTileIdFromPoint( le.GetMouseCursor() ) ) {
+        if ( gameArea && cursorTileIndex != gameArea->GetValidTileIdFromPoint( le.GetMouseCursor() ) ) {
+            // The cursor is above the other map tile. We will restore and update it later, before the next display render, so leave it hidden.
+            gameArea->SetUpdateCursor();
+        }
+        else {
             // Cursor is above the same map tile we can restore it before the display render.
             cursorRestorer.restore();
         }
-        else {
-            // The cursor is above the other map tile. We will restore and update it later, before the next display render, so leave it hidden.
-            gameArea.SetUpdateCursor();
-        }
 
-        display.updateNextRenderRoi( areaToRestore );
-        display.render( restorer.rect() );
+        display.render();
     }
 }
 
-void Dialog::QuickInfo( const Maps::Tiles & tile )
+void Dialog::QuickInfo( const Maps::Tiles & tile, Interface::GameArea & gameArea )
 {
     CursorRestorer cursorRestorer( false, Cursor::Get().Themes() );
 
     fheroes2::Display & display = fheroes2::Display::instance();
     LocalEvent & le = LocalEvent::Get();
-    Interface::GameArea & gameArea = Interface::AdventureMap::Get().getGameArea();
     const int32_t cursorTileIndex = gameArea.GetValidTileIdFromPoint( le.GetMouseCursor() );
 
     // image box
     const fheroes2::Sprite & box = fheroes2::AGG::GetICN( ICN::QWIKINFO, 0 );
 
-    const fheroes2::Rect pos = makeRectQuickInfo( le, box );
+    const fheroes2::Rect pos = makeRectQuickInfo( le, box.width(), box.height(), {}, nullptr );
 
     fheroes2::ImageRestorer restorer( display, pos.x, pos.y, pos.width, pos.height );
     fheroes2::Blit( box, display, pos.x, pos.y );
@@ -965,10 +948,9 @@ void Dialog::QuickInfo( const Maps::Tiles & tile )
     }
 
     const int32_t objectTextBorderedWidth = pos.width - 2 * BORDERWIDTH;
-    const fheroes2::Text text( infoString, fheroes2::FontType::smallWhite() );
-    text.draw( pos.x + 22, pos.y - 6 + ( ( pos.height - text.height( objectTextBorderedWidth ) ) / 2 ), objectTextBorderedWidth, display );
-
     outputInTextSupportMode( tile, infoString );
+    const fheroes2::Text text( std::move( infoString ), fheroes2::FontType::smallWhite() );
+    text.draw( pos.x + 22, pos.y - 6 + ( ( pos.height - text.height( objectTextBorderedWidth ) ) / 2 ), objectTextBorderedWidth, display );
 
     display.render( restorer.rect() );
 
@@ -991,32 +973,32 @@ void Dialog::QuickInfo( const Maps::Tiles & tile )
     display.render( restorer.rect() );
 }
 
-void Dialog::QuickInfo( const Castle & castle )
+void Dialog::QuickInfo( const Castle & castle, Interface::GameArea & gameArea )
 {
-    showQuickInfo( castle, {}, false, {} );
+    showQuickInfo( castle, {}, false, {}, &gameArea );
 }
 
-void Dialog::QuickInfo( const HeroBase & hero, const std::optional<bool> showFullInfo /* = {} */ )
+void Dialog::QuickInfo( const HeroBase & hero, const std::optional<bool> showFullInfo /* = {} */, Interface::GameArea * gameArea /* = nullptr */ )
 {
-    showQuickInfo( hero, {}, false, {}, showFullInfo );
+    showQuickInfo( hero, {}, false, {}, showFullInfo, gameArea );
 }
 
 void Dialog::QuickInfoWithIndicationOnRadar( const Castle & castle, const fheroes2::Rect & areaToRestore )
 {
-    showQuickInfo( castle, {}, true, areaToRestore );
+    showQuickInfo( castle, {}, true, areaToRestore, nullptr );
 }
 
 void Dialog::QuickInfoWithIndicationOnRadar( const HeroBase & hero, const fheroes2::Rect & areaToRestore )
 {
-    showQuickInfo( hero, {}, true, areaToRestore, {} );
+    showQuickInfo( hero, {}, true, areaToRestore, {}, nullptr );
 }
 
-void Dialog::QuickInfoAtPosition( const Castle & castle, const fheroes2::Point & position )
+void Dialog::QuickInfoAtPosition( const Castle & castle, const fheroes2::Point & position, Interface::GameArea & gameArea )
 {
-    showQuickInfo( castle, position, true, {} );
+    showQuickInfo( castle, position, true, {}, &gameArea );
 }
 
-void Dialog::QuickInfoAtPosition( const HeroBase & hero, const fheroes2::Point & position )
+void Dialog::QuickInfoAtPosition( const HeroBase & hero, const fheroes2::Point & position, Interface::GameArea & gameArea )
 {
-    showQuickInfo( hero, position, true, {}, {} );
+    showQuickInfo( hero, position, true, {}, {}, &gameArea );
 }

@@ -85,13 +85,11 @@ namespace
 
     // Compute a rectangle that defines which world pixels we can see in the "view world" window,
     // based on given zoom level and initial center
-    fheroes2::Rect computeROI( const fheroes2::Point & centerInPixel, const ZoomLevel zoomLevel )
+    fheroes2::Rect computeROI( const fheroes2::Point & centerInPixel, const ZoomLevel zoomLevel, const fheroes2::Rect & visibleROI )
     {
-        const fheroes2::Rect sizeInPixels = Interface::AdventureMap::Get().getGameArea().GetROI();
-
         // how many pixels from "world map" we can see in "view world" window, given current zoom
-        const int32_t pixelsW = sizeInPixels.width * TILEWIDTH / tileSizePerZoomLevel[static_cast<uint8_t>( zoomLevel )];
-        const int32_t pixelsH = sizeInPixels.height * TILEWIDTH / tileSizePerZoomLevel[static_cast<uint8_t>( zoomLevel )];
+        const int32_t pixelsW = visibleROI.width * TILEWIDTH / tileSizePerZoomLevel[static_cast<uint8_t>( zoomLevel )];
+        const int32_t pixelsH = visibleROI.height * TILEWIDTH / tileSizePerZoomLevel[static_cast<uint8_t>( zoomLevel )];
 
         const int32_t x = centerInPixel.x - pixelsW / 2;
         const int32_t y = centerInPixel.y - pixelsH / 2;
@@ -191,7 +189,7 @@ namespace
         CacheForMapWithResources() = delete;
 
         // Compute complete world map, and save it for all zoom levels
-        explicit CacheForMapWithResources( const ViewWorldMode viewMode )
+        explicit CacheForMapWithResources( const ViewWorldMode viewMode, Interface::GameArea & gameArea )
         {
             for ( int32_t i = 0; i < zoomLevels; ++i ) {
                 cachedImages[i].resize( world.w() * tileSizePerZoomLevel[i], world.h() * tileSizePerZoomLevel[i] );
@@ -217,8 +215,11 @@ namespace
             fheroes2::Image temporaryImg( redrawAreaWidth, redrawAreaHeight );
             temporaryImg._disableTransformLayer();
 
-            Interface::GameArea gamearea = Interface::AdventureMap::Get().getGameArea();
-            gamearea.SetAreaPosition( 0, 0, redrawAreaWidth, redrawAreaHeight );
+            // Remember the original game area ROI and center of the view.
+            const fheroes2::Rect gameAreaRoi( gameArea.GetROI() );
+            const fheroes2::Point gameAreaCenter( gameArea.getCurrentCenterInPixels() );
+
+            gameArea.SetAreaPosition( 0, 0, redrawAreaWidth, redrawAreaHeight );
 
             int32_t drawingFlags = Interface::RedrawLevelType::LEVEL_ALL & ~Interface::RedrawLevelType::LEVEL_ROUTES;
             if ( viewMode == ViewWorldMode::ViewAll ) {
@@ -235,8 +236,8 @@ namespace
             // Draw sub-blocks of the main map, and resize them to draw them on lower-res cached versions:
             for ( int32_t x = 0; x < worldWidth; x += blockSizeX ) {
                 for ( int32_t y = 0; y < worldHeight; y += blockSizeY ) {
-                    gamearea.SetCenterInPixels( { x * TILEWIDTH + redrawAreaCenterX, y * TILEWIDTH + redrawAreaCenterY } );
-                    gamearea.Redraw( temporaryImg, drawingFlags );
+                    gameArea.SetCenterInPixels( { x * TILEWIDTH + redrawAreaCenterX, y * TILEWIDTH + redrawAreaCenterY } );
+                    gameArea.Redraw( temporaryImg, drawingFlags );
 
                     for ( int32_t i = 0; i < zoomLevels; ++i ) {
                         fheroes2::Resize( temporaryImg, 0, 0, temporaryImg.width(), temporaryImg.height(), cachedImages[i], x * tileSizePerZoomLevel[i],
@@ -245,18 +246,20 @@ namespace
                 }
             }
 
+            // Restore the original game area ROI and center of the view.
+            gameArea.SetAreaPosition( gameAreaRoi.x, gameAreaRoi.y, gameAreaRoi.width, gameAreaRoi.height );
+            gameArea.SetCenterInPixels( gameAreaCenter );
+
 #if defined( SAVE_WORLD_MAP )
             fheroes2::Save( cachedImages[3], Settings::Get().MapsName() + saveFilePrefix + ".bmp" );
 #endif
         }
     };
 
-    void DrawWorld( const ViewWorld::ZoomROIs & ROI, CacheForMapWithResources & cache )
+    void DrawWorld( const ViewWorld::ZoomROIs & ROI, CacheForMapWithResources & cache, const fheroes2::Rect & roiScreen )
     {
         fheroes2::Display & display = fheroes2::Display::instance();
         const fheroes2::Image & image = cache.cachedImages[static_cast<uint8_t>( ROI._zoomLevel )];
-
-        const fheroes2::Rect roiScreen = Interface::AdventureMap::Get().getGameArea().GetROI();
 
         const int32_t offsetPixelsX = tileSizePerZoomLevel[static_cast<uint8_t>( ROI._zoomLevel )] * ROI.GetROIinPixels().x / TILEWIDTH;
         const int32_t offsetPixelsY = tileSizePerZoomLevel[static_cast<uint8_t>( ROI._zoomLevel )] * ROI.GetROIinPixels().y / TILEWIDTH;
@@ -488,9 +491,10 @@ namespace
     }
 }
 
-ViewWorld::ZoomROIs::ZoomROIs( const ZoomLevel zoomLevel, const fheroes2::Point & centerInPixels )
+ViewWorld::ZoomROIs::ZoomROIs( const ZoomLevel zoomLevel, const fheroes2::Point & centerInPixels, const fheroes2::Rect & visibleScreenInPixels )
     : _zoomLevel( zoomLevel )
     , _center( centerInPixels )
+    , _visibleROI( visibleScreenInPixels )
 {
     _updateZoomLevels();
     _updateCenter();
@@ -499,7 +503,7 @@ ViewWorld::ZoomROIs::ZoomROIs( const ZoomLevel zoomLevel, const fheroes2::Point 
 void ViewWorld::ZoomROIs::_updateZoomLevels()
 {
     for ( int32_t i = 0; i < zoomLevels; ++i ) {
-        _roiForZoomLevels[i] = computeROI( _center, static_cast<ZoomLevel>( i ) );
+        _roiForZoomLevels[i] = computeROI( _center, static_cast<ZoomLevel>( i ), _visibleROI );
     }
 }
 
@@ -626,9 +630,9 @@ void ViewWorld::ViewWorldWindow( const int32_t color, const ViewWorldMode mode, 
         viewCenterInPixels.y = world.h() * TILEWIDTH / 2;
     }
 
-    ZoomROIs currentROI( zoomLevel, viewCenterInPixels );
+    ZoomROIs currentROI( zoomLevel, viewCenterInPixels, visibleScreenInPixels );
 
-    CacheForMapWithResources cache( mode );
+    CacheForMapWithResources cache( mode, gameArea );
 
     DrawObjectsIcons( color, mode, cache );
 
@@ -661,7 +665,7 @@ void ViewWorld::ViewWorldWindow( const int32_t color, const ViewWorldMode mode, 
     }
 
     // Render the View World map image.
-    DrawWorld( currentROI, cache );
+    DrawWorld( currentROI, cache, visibleScreenInPixels );
 
     fheroes2::fadeInDisplay( fadeRoi, false );
 
@@ -717,7 +721,7 @@ void ViewWorld::ViewWorldWindow( const int32_t color, const ViewWorldMode mode, 
         }
 
         if ( changed ) {
-            DrawWorld( currentROI, cache );
+            DrawWorld( currentROI, cache, visibleScreenInPixels );
             radar.RedrawForViewWorld( currentROI, mode, false );
             display.render();
         }

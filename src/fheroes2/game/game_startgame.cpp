@@ -1489,7 +1489,7 @@ void Interface::AdventureMap::mouseCursorAreaClickLeft( const int32_t tileIndex 
     }
 }
 
-void Interface::AdventureMap::mouseCursorAreaPressRight( const int32_t tileIndex ) const
+void Interface::AdventureMap::mouseCursorAreaPressRight( const int32_t tileIndex )
 {
 #ifndef NDEBUG
     const Heroes * focusedHero = GetFocusHeroes();
@@ -1502,7 +1502,7 @@ void Interface::AdventureMap::mouseCursorAreaPressRight( const int32_t tileIndex
     DEBUG_LOG( DBG_DEVEL, DBG_INFO, std::endl << tile.String() )
 
     if ( !IS_DEVEL() && tile.isFog( conf.CurrentColor() ) ) {
-        Dialog::QuickInfo( tile );
+        Dialog::QuickInfo( tile, _gameArea );
     }
     else {
         switch ( tile.GetObject() ) {
@@ -1511,10 +1511,10 @@ void Interface::AdventureMap::mouseCursorAreaPressRight( const int32_t tileIndex
             const Castle * castle = world.getCastle( tile.GetCenter() );
 
             if ( castle ) {
-                Dialog::QuickInfo( *castle );
+                Dialog::QuickInfo( *castle, _gameArea );
             }
             else {
-                Dialog::QuickInfo( tile );
+                Dialog::QuickInfo( tile, _gameArea );
             }
 
             break;
@@ -1524,14 +1524,14 @@ void Interface::AdventureMap::mouseCursorAreaPressRight( const int32_t tileIndex
             const Heroes * heroes = tile.getHero();
 
             if ( heroes ) {
-                Dialog::QuickInfo( *heroes );
+                Dialog::QuickInfo( *heroes, {}, &_gameArea );
             }
 
             break;
         }
 
         default:
-            Dialog::QuickInfo( tile );
+            Dialog::QuickInfo( tile, _gameArea );
             break;
         }
     }

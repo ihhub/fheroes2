@@ -154,7 +154,7 @@ void Interface::CastleIcons::ActionListSingleClick( CASTLE & item )
 void Interface::CastleIcons::ActionListPressRight( CASTLE & item )
 {
     if ( item ) {
-        Dialog::QuickInfoAtPosition( *item, { _topLeftCorner.x - 1, _topLeftCorner.y } );
+        Dialog::QuickInfoAtPosition( *item, { _topLeftCorner.x - 1, _topLeftCorner.y }, Interface::AdventureMap::Get().getGameArea() );
     }
 }
 
@@ -247,7 +247,7 @@ void Interface::HeroesIcons::ActionListSingleClick( HEROES & item )
 void Interface::HeroesIcons::ActionListPressRight( HEROES & item )
 {
     if ( item ) {
-        Dialog::QuickInfoAtPosition( *item, { _topLeftCorner.x - 1, _topLeftCorner.y } );
+        Dialog::QuickInfoAtPosition( *item, { _topLeftCorner.x - 1, _topLeftCorner.y }, Interface::AdventureMap::Get().getGameArea() );
     }
 }
 
