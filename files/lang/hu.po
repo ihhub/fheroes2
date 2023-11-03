@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-02 14:09+0000\n"
+"POT-Creation-Date: 2023-11-03 12:33+0000\n"
 "PO-Revision-Date: 2023-09-04 21:55+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -3186,9 +3186,6 @@ msgstr "Fájl betöltése:"
 msgid "Accept the choice made."
 msgstr "A választás elfogadása."
 
-msgid "Unknown Hero"
-msgstr "Ismeretlen hős"
-
 msgid "%{color} %{race} hero"
 msgstr "%{color} %{race} hős"
 
@@ -4044,6 +4041,9 @@ msgstr ""
 
 msgid "Your Name"
 msgstr ""
+
+msgid "Unknown Hero"
+msgstr "Ismeretlen hős"
 
 #, fuzzy
 msgid "Standard"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-02 14:09+0000\n"
+"POT-Creation-Date: 2023-11-03 12:33+0000\n"
 "PO-Revision-Date: 2023-09-12 11:08+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
@@ -3346,9 +3346,6 @@ msgstr "Fil som skal indlæses:"
 msgid "Accept the choice made."
 msgstr "Acceptér de trufne valg."
 
-msgid "Unknown Hero"
-msgstr "Ukendt helt"
-
 #, fuzzy
 msgid "%{color} %{race} hero"
 msgstr "%{color} spiller"
@@ -4220,6 +4217,9 @@ msgstr "Pakkedesign"
 
 msgid "Your Name"
 msgstr "Dit navn"
+
+msgid "Unknown Hero"
+msgstr "Ukendt helt"
 
 msgid "Standard"
 msgstr "Standard"
