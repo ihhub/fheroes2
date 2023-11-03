@@ -24,6 +24,7 @@
 #include "dialog_selectitems.h"
 
 #include <algorithm>
+#include <array>
 #include <cassert>
 #include <cstddef>
 #include <cstdint>
@@ -44,6 +45,7 @@
 #include "image.h"
 #include "interface_list.h"
 #include "localevent.h"
+#include "map_object_info.h"
 #include "math_base.h"
 #include "race.h"
 #include "screen.h"
@@ -52,6 +54,7 @@
 #include "translations.h"
 #include "ui_button.h"
 #include "ui_dialog.h"
+#include "ui_map_object.h"
 #include "ui_scrollbar.h"
 #include "ui_text.h"
 #include "ui_window.h"
@@ -359,47 +362,63 @@ public:
 
 namespace
 {
-    class HeroTypeSelection : public SelectEnum
+    // This is a base class for items used in the Editor and they rely on Maps::ObjectInfo structures.
+    class ObjectTypeSelection : public SelectEnum
     {
     public:
-        explicit HeroTypeSelection( const fheroes2::Size & size )
+        ObjectTypeSelection( const std::vector<Maps::ObjectInfo> & objectInfo, const fheroes2::Size & size, const int32_t offset )
             : SelectEnum( size )
+            , _objectInfo( objectInfo )
         {
-            const int offset = fheroes2::AGG::GetICN( ICN::MINIHERO, 0 ).height() + 2;
             SetAreaMaxItems( ( rtAreaItems.height + offset ) / offset );
         }
 
         using SelectEnum::ActionListPressRight;
 
-        void RedrawItem( const int & id, int32_t offsetX, int32_t offsetY, bool isSelected ) override
+        void RedrawItem( const int & objectId, int32_t offsetX, int32_t offsetY, bool isSelected ) override
         {
-            const fheroes2::Sprite & image = fheroes2::AGG::GetICN( ICN::MINIHERO, id );
-            renderItem( image, getHeroName( id ), { offsetX, offsetY }, { 32, 50 }, isSelected );
+            // If this assertion blows up then you are setting different number of items.
+            assert( objectId >= 0 && objectId < static_cast<int>( _objectInfo.size() ) );
+
+            const fheroes2::Sprite & image = fheroes2::generateMapObjectImage( _objectInfo[objectId] );
+            renderItem( image, getObjectName( _objectInfo[objectId] ), { offsetX, offsetY }, { 32, 50 }, isSelected );
         }
 
-        void ActionListPressRight( int & type ) override
+        void ActionListPressRight( int & objectId ) override
         {
-            fheroes2::showStandardTextMessage( getHeroName( type ), "", Dialog::ZERO );
+            // If this assertion blows up then you are setting different number of items.
+            assert( objectId >= 0 && objectId < static_cast<int>( _objectInfo.size() ) );
+
+            showPopupWindow( _objectInfo[objectId] );
         }
 
     private:
-        static std::string getHeroName( const int type )
+        virtual void showPopupWindow( const Maps::ObjectInfo & info ) = 0;
+
+        virtual std::string getObjectName( const Maps::ObjectInfo & info ) = 0;
+
+        const std::vector<Maps::ObjectInfo> & _objectInfo;
+    };
+
+    class HeroTypeSelection : public ObjectTypeSelection
+    {
+    public:
+        HeroTypeSelection( const std::vector<Maps::ObjectInfo> & objectInfo, const fheroes2::Size & size )
+            : ObjectTypeSelection( objectInfo, size, fheroes2::AGG::GetICN( ICN::MINIHERO, 0 ).height() + 2 )
         {
-            // The game has only 6 races plus random, totaling in 7 races.
-            // Also the game has only 6 colors.
-            // As a result only 42 mini-heroes can exist.
-            if ( type >= 42 ) {
-                // Did you add a new hero?
-                assert( 0 );
-                return _( "Unknown Hero" );
-            }
+            // Do nothing.
+        }
 
-            const int color{ type / 7 };
-            int race{ type % 7 };
+    private:
+        void showPopupWindow( const Maps::ObjectInfo & info ) override
+        {
+            fheroes2::showStandardTextMessage( getObjectName( info ), "", Dialog::ZERO );
+        }
 
-            if ( race == 6 ) {
-                ++race;
-            }
+        std::string getObjectName( const Maps::ObjectInfo & info ) override
+        {
+            const int color = static_cast<int>( info.metadata[0] );
+            const int race = static_cast<int>( info.metadata[1] );
 
             std::string name( _( "%{color} %{race} hero" ) );
             StringReplace( name, "%{color}", Color::String( Color::IndexToColor( color ) ) );
@@ -408,6 +427,47 @@ namespace
             return name;
         }
     };
+
+    class MonsterTypeSelection : public ObjectTypeSelection
+    {
+    public:
+        MonsterTypeSelection( const std::vector<Maps::ObjectInfo> & objectInfo, const fheroes2::Size & size )
+            : ObjectTypeSelection( objectInfo, size, fheroes2::AGG::GetICN( ICN::MINIHERO, 0 ).height() + 2 )
+        {
+            // Do nothing.
+        }
+
+    private:
+        void showPopupWindow( const Maps::ObjectInfo & info ) override
+        {
+            const Monster monster( static_cast<int32_t>( info.metadata[0] ) );
+            if ( !monster.isValid() ) {
+                fheroes2::showStandardTextMessage( monster.GetName(), "", Dialog::ZERO );
+                return;
+            }
+
+            Dialog::ArmyInfo( Troop( monster, 0 ), Dialog::ZERO );
+        }
+
+        std::string getObjectName( const Maps::ObjectInfo & info ) override
+        {
+            return Monster( static_cast<int32_t>( info.metadata[0] ) ).GetName();
+        }
+    };
+
+    int selectObjectType( const int objectType, const size_t objectCount, ObjectTypeSelection & objectSelection, const char * title )
+    {
+        assert( title != nullptr );
+
+        std::vector<int> objects( objectCount, 0 );
+        std::iota( objects.begin(), objects.end(), 0 );
+        objectSelection.SetListContent( objects );
+
+        objectSelection.SetCurrent( std::max( objectType, 0 ) );
+
+        const int32_t result = objectSelection.selectItemsEventProcessing( title );
+        return result == Dialog::OK || objectSelection.ok ? objectSelection.GetCurrent() : -1;
+    }
 }
 
 Skill::Secondary Dialog::selectSecondarySkill( const Heroes & hero, const int skillId /* = Skill::Secondary::UNKNOWN */ )
@@ -479,16 +539,13 @@ Artifact Dialog::selectArtifact( const int artifactId /* = Artifact::UNKNOWN */ 
     return ( result == Dialog::OK || listbox.ok ) ? Artifact( listbox.GetCurrent() ) : Artifact( Artifact::UNKNOWN );
 }
 
-Monster Dialog::selectMonster( const int monsterId, const bool includeRandomMonsters )
+Monster Dialog::selectMonster( const int monsterId )
 {
     std::vector<int> monsters( Monster::MONSTER_COUNT - 1, Monster::UNKNOWN );
 
     // Skip Monster::UNKNOWN and start from the next one.
     std::iota( monsters.begin(), monsters.end(), Monster::UNKNOWN + 1 );
-
-    if ( !includeRandomMonsters ) {
-        monsters.erase( std::remove_if( monsters.begin(), monsters.end(), []( const int id ) { return Monster( id ).isRandomMonster(); } ), monsters.end() );
-    }
+    monsters.erase( std::remove_if( monsters.begin(), monsters.end(), []( const int id ) { return Monster( id ).isRandomMonster(); } ), monsters.end() );
 
     SelectEnumMonster listbox( { 280, fheroes2::Display::instance().height() - 200 } );
 
@@ -522,14 +579,17 @@ int Dialog::selectHeroes( const int heroId /* = Heroes::UNKNOWN */ )
 
 int Dialog::selectHeroType( const int heroType )
 {
-    std::vector<int> heroes( 42, 0 );
-    std::iota( heroes.begin(), heroes.end(), 0 );
+    const auto & objectInfo = Maps::getObjectsByGroup( Maps::ObjectGroup::Hero );
+    HeroTypeSelection listbox( objectInfo, { 350, fheroes2::Display::instance().height() - 200 } );
 
-    HeroTypeSelection listbox( { 350, fheroes2::Display::instance().height() - 200 } );
+    return selectObjectType( heroType, objectInfo.size(), listbox, _( "Select Hero:" ) );
+}
 
-    listbox.SetListContent( heroes );
-    listbox.SetCurrent( std::max( heroType, 0 ) );
+int Dialog::selectMonsterType( const int monsterType )
+{
+    const auto & objectInfo = Maps::getObjectsByGroup( Maps::ObjectGroup::Monster );
 
-    const int32_t result = listbox.selectItemsEventProcessing( _( "Select Hero:" ) );
-    return result == Dialog::OK || listbox.ok ? listbox.GetCurrent() : -1;
+    MonsterTypeSelection listbox( objectInfo, { 280, fheroes2::Display::instance().height() - 200 } );
+
+    return selectObjectType( monsterType, objectInfo.size(), listbox, _( "Select Monster:" ) );
 }

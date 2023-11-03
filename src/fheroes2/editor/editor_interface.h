@@ -27,6 +27,12 @@
 #include "game_mode.h"
 #include "history_manager.h"
 #include "interface_base.h"
+#include "map_object_info.h"
+
+namespace Maps
+{
+    class Tiles;
+}
 
 namespace Interface
 {
@@ -84,6 +90,8 @@ namespace Interface
         {
             // Do nothing.
         }
+
+        void setObjectOnTile( Maps::Tiles & tile, const Maps::ObjectGroup group, const int32_t objectType );
 
         EditorPanel _editorPanel;
 

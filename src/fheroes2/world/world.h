@@ -351,6 +351,8 @@ public:
 
     bool isAnyKingdomVisited( const MP2::MapObjectType objectType, const int32_t dstIndex ) const;
 
+    void updatePassabilities();
+
 private:
     World() = default;
 

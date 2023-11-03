@@ -45,10 +45,10 @@
 #include "interface_status.h"
 #include "localevent.h"
 #include "logging.h"
+#include "map_object_info.h"
 #include "maps_tiles.h"
 #include "maps_tiles_helper.h"
 #include "math_base.h"
-#include "monster.h"
 #include "mp2.h"
 #include "screen.h"
 #include "settings.h"
@@ -601,21 +601,8 @@ namespace Interface
             else if ( !Maps::isClearGround( tile ) ) {
                 fheroes2::showStandardTextMessage( _( "Monster" ), _( "Choose a tile which does not contain any objects." ), Dialog::OK );
             }
-            else if ( Monster{ _editorPanel.getMonsterId() }.isValid() ) {
-                const fheroes2::ActionCreator action( _historyManager );
-
-                Maps::setMonsterOnTile( tile, _editorPanel.getMonsterId(), 0 );
-                // Since setMonsterOnTile() function interprets 0 as a random number of monsters it is important to set the correct value.
-                Maps::setMonsterCountOnTile( tile, 0 );
-
-                _redraw |= mapUpdateFlags;
-            }
-            else if ( Monster{ _editorPanel.getMonsterId() }.isRandomMonster() ) {
-                const fheroes2::ActionCreator action( _historyManager );
-
-                Maps::setRandomMonsterOnTile( tile, _editorPanel.getMonsterId() );
-
-                _redraw |= mapUpdateFlags;
+            else {
+                setObjectOnTile( tile, Maps::ObjectGroup::Monster, _editorPanel.getMonsterType() );
             }
         }
         else if ( _editorPanel.isHeroSettingMode() ) {
@@ -625,12 +612,8 @@ namespace Interface
             else if ( !Maps::isClearGround( tile ) ) {
                 fheroes2::showStandardTextMessage( _( "Heroes" ), _( "Choose a tile which does not contain any objects." ), Dialog::OK );
             }
-            else if ( _editorPanel.getHeroType() >= 0 ) {
-                const fheroes2::ActionCreator action( _historyManager );
-
-                Maps::setEditorHeroOnTile( tile, _editorPanel.getHeroType() );
-
-                _redraw |= mapUpdateFlags;
+            else {
+                setObjectOnTile( tile, Maps::ObjectGroup::Hero, _editorPanel.getHeroType() );
             }
         }
     }
@@ -681,5 +664,19 @@ namespace Interface
         else {
             Cursor::Get().SetThemes( Cursor::POINTER );
         }
+    }
+
+    void EditorInterface::setObjectOnTile( Maps::Tiles & tile, const Maps::ObjectGroup group, const int32_t objectType )
+    {
+        const auto & objectInfo = Maps::getObjectsByGroup( group );
+        if ( objectType < 0 || objectType >= static_cast<int32_t>( objectInfo.size() ) ) {
+            return;
+        }
+
+        const fheroes2::ActionCreator action( _historyManager );
+
+        Maps::setObjectOnTile( tile, objectInfo[objectType] );
+
+        _redraw |= mapUpdateFlags;
     }
 }
