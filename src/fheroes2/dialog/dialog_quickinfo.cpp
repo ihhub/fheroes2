@@ -690,15 +690,23 @@ namespace
         radarUpdater.restore();
 
         if ( gameArea && cursorTileIndex != gameArea->GetValidTileIdFromPoint( le.GetMouseCursor() ) ) {
-            // The tile under the cursor has changed. We will restore and update the cursor later, before the next display render, so leave it hidden.
             gameArea->SetUpdateCursor();
+
+            if ( fheroes2::cursor().isSoftwareEmulation() ) {
+                // The tile under the cursor has changed. We will restore and update the cursor later, before the next display render, so leave it hidden.
+                display.updateNextRenderRoi( back.rect() );
+            }
+            else {
+                // For the hardware cursor we can render the screen now.
+                display.render();
+            }
         }
         else {
             // Cursor is above the same map tile or we have no game area. We can restore it before the display render.
             cursorRestorer.restore();
-        }
 
-        display.render();
+            display.render();
+        }
     }
 
     void showQuickInfo( const HeroBase & hero, const fheroes2::Point & position, const bool showOnRadar, const fheroes2::Rect & areaToRestore,
@@ -903,15 +911,23 @@ namespace
         radarUpdater.restore();
 
         if ( gameArea && cursorTileIndex != gameArea->GetValidTileIdFromPoint( le.GetMouseCursor() ) ) {
-            // The tile under the cursor has changed. We will restore and update the cursor later, before the next display render, so leave it hidden.
             gameArea->SetUpdateCursor();
+
+            if ( fheroes2::cursor().isSoftwareEmulation() ) {
+                // The tile under the cursor has changed. We will restore and update the cursor later, before the next display render, so leave it hidden.
+                display.updateNextRenderRoi( restorer.rect() );
+            }
+            else {
+                // For the hardware cursor we can render the screen now.
+                display.render();
+            }
         }
         else {
             // Cursor is above the same map tile or we have no game area. We can restore it before the display render.
             cursorRestorer.restore();
-        }
 
-        display.render();
+            display.render();
+        }
     }
 }
 
@@ -963,16 +979,24 @@ void Dialog::QuickInfo( const Maps::Tiles & tile, Interface::GameArea & gameArea
     // restore background
     restorer.restore();
 
-    if ( cursorTileIndex == gameArea.GetValidTileIdFromPoint( le.GetMouseCursor() ) ) {
-        // Cursor is above the same map tile we can restore it before the display render.
-        cursorRestorer.restore();
+    if ( cursorTileIndex != gameArea.GetValidTileIdFromPoint( le.GetMouseCursor() ) ) {
+        gameArea.SetUpdateCursor();
+
+        if ( fheroes2::cursor().isSoftwareEmulation() ) {
+            // The tile under the cursor has changed. We will restore and update the cursor later, before the next display render, so leave it hidden.
+            display.updateNextRenderRoi( restorer.rect() );
+        }
+        else {
+            // For the hardware cursor we can render the screen now.
+            display.render( restorer.rect() );
+        }
     }
     else {
-        // The tile under the cursor has changed. We will restore and update the cursor later, before the next display render, so leave it hidden.
-        gameArea.SetUpdateCursor();
-    }
+        // Cursor is above the same map tile we can restore it before the display render.
+        cursorRestorer.restore();
 
-    display.render( restorer.rect() );
+        display.render( restorer.rect() );
+    }
 }
 
 void Dialog::QuickInfo( const Castle & castle, Interface::GameArea & gameArea )

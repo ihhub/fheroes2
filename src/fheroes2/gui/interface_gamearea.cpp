@@ -955,7 +955,7 @@ void Interface::GameArea::QueueEventProcessing( bool isCursorOverGamearea )
                    || std::abs( _lastMouseDragPosition.y - mousePosition.y ) > minimalRequiredDraggingMovement ) ) {
         _mouseDraggingMovement = true;
 
-        // Muse dragging started. Set the default pointer cursor to show that no action will be made
+        // Mouse dragging started. Set the default pointer cursor to show that no action will be made
         // after the mouse button is released. And plan cursor update after the dragging is over.
         Cursor::Get().SetThemes( Cursor::POINTER );
         updateCursor = true;
