@@ -48,7 +48,8 @@
 
 namespace
 {
-    void setCustomCursor( const Maps::ObjectGroup group, const int32_t type ) {
+    void setCustomCursor( const Maps::ObjectGroup group, const int32_t type )
+    {
         const auto & objectInfo = Maps::getObjectsByGroup( group );
         if ( type < 0 || type >= static_cast<int32_t>( objectInfo.size() ) ) {
             // You are trying to render some unknown stuff!
@@ -509,9 +510,7 @@ namespace Interface
                 if ( monsterType >= 0 ) {
                     _monsterType = monsterType;
 
-                    _interface.setCursorUpdater( [type = _monsterType]( const int32_t /*tileIndex*/ ) {
-                        setCustomCursor( Maps::ObjectGroup::Monster, type );
-                    } );
+                    _interface.setCursorUpdater( [type = _monsterType]( const int32_t /*tileIndex*/ ) { setCustomCursor( Maps::ObjectGroup::Monster, type ); } );
 
                     _interface.updateCursor( 0 );
                     return res;
@@ -522,9 +521,7 @@ namespace Interface
                 if ( treasureType >= 0 ) {
                     _treasureType = treasureType;
 
-                    _interface.setCursorUpdater( [type = _treasureType]( const int32_t /*tileIndex*/ ) {
-                        setCustomCursor( Maps::ObjectGroup::Treasure, type );
-                    } );
+                    _interface.setCursorUpdater( [type = _treasureType]( const int32_t /*tileIndex*/ ) { setCustomCursor( Maps::ObjectGroup::Treasure, type ); } );
 
                     _interface.updateCursor( 0 );
                     return res;

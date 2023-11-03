@@ -483,7 +483,8 @@ namespace
             switch ( info.objectType ) {
             case MP2::OBJ_RESOURCE:
                 fheroes2::showResourceMessage( fheroes2::Text{ getObjectName( info ), fheroes2::FontType::normalYellow() },
-                    fheroes2::Text{ Resource::getDescription(), fheroes2::FontType::normalWhite() }, Dialog::ZERO, Funds{ static_cast<int>( info.metadata[0] ), 0 } );
+                                               fheroes2::Text{ Resource::getDescription(), fheroes2::FontType::normalWhite() }, Dialog::ZERO,
+                                               Funds{ static_cast<int>( info.metadata[0] ), 0 } );
                 break;
             case MP2::OBJ_GENIE_LAMP:
             case MP2::OBJ_RANDOM_RESOURCE:
