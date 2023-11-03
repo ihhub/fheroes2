@@ -122,6 +122,14 @@ class WallpaperPreferencesRepository(configFile: File?) {
         preferences.update { setParam(it, "screen scaling type", value) }
     }
 
+    fun setScaleTypeString(scaleType: String) {
+        if (scaleType == "nearest" || scaleType == "linear") {
+            preferences.update { setParam(it, "screen scaling type", scaleType) }
+        } else {
+            println("Unknown scale type: $scaleType")
+        }
+    }
+
     fun setMapUpdateInterval(interval: MapUpdateInterval) {
         preferences.update { setParam(it, "lwp map update interval", interval.value.toString()) }
     }

@@ -1,18 +1,28 @@
-import { Suspense } from "react";
+import { Suspense, useEffect } from "react";
 import logo from "./logo.svg";
 import "./App.css";
-import { suspend } from "suspend-react";
+import { useBridge } from "./useBridge";
+// import { suspend } from "suspend-react";
 
-const Child = () => {
-  const data = suspend(
-    async () => window.Android.helloFullPromise("helloFullPromise"),
-    []
-  );
+const Child: React.FC<{ state: unknown }> = ({ state }) => {
+  // const data = suspend(
+  //   async () => window.Android.helloFullPromise("helloFullPromise"),
+  //   []
+  // );
 
-  return <div>{data}</div>;
+  useEffect(() => {
+    setTimeout(() => {
+      console.log("setBrightness");
+      window.Android.setBrightness(Math.floor(Math.random() * 100));
+    }, 3000);
+  }, []);
+
+  return <pre>{JSON.stringify(state, null, 2)}</pre>;
 };
 
-function App() {
+export function App() {
+  const { state } = useBridge();
+
   return (
     <div className="App">
       <header className="App-header">
@@ -30,11 +40,9 @@ function App() {
         </a>
 
         <Suspense fallback={<div>Loading...</div>}>
-          <Child />
+          <Child state={state} />
         </Suspense>
       </header>
     </div>
   );
 }
-
-export default App;
