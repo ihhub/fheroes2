@@ -5,6 +5,7 @@ import { Scale } from "./Settings/Scale";
 import { ScaleType } from "./Settings/ScaleType";
 import { Brightness } from "./Settings/Brightness";
 import { UseScroll } from "./Settings/UseScroll";
+import { MapUpdateInterval } from "./Settings/MapUpdateInterval";
 
 export const Settings: React.FC<{ state: Record<string, string> }> = ({
   state,
@@ -19,6 +20,8 @@ export const Settings: React.FC<{ state: Record<string, string> }> = ({
       <ScaleType value={state.scaleType} />
 
       <Scale value={Number(state.scale)} />
+
+      <MapUpdateInterval value={Number(state.mapUpdateInterval)} />
 
       <Brightness value={Number(state.brightness)} />
 
