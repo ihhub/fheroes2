@@ -13,7 +13,7 @@ const Child: React.FC<{ state: unknown }> = ({ state }) => {
   useEffect(() => {
     setTimeout(() => {
       console.log("setBrightness");
-      window.Android.setBrightness(Math.floor(Math.random() * 100));
+      window.Android.setBrightness(80);
     }, 3000);
   }, []);
 
