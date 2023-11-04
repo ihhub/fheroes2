@@ -3131,7 +3131,7 @@ namespace Maps
         case MP2::OBJ_RESOURCE:
             // Setting just 1 resource is enough. It doesn't matter as we are not saving this value into the map format.
             placeObjectOnTile( tile, info );
-            setResourceOnTile( tile, info.metadata[0], 1 );
+            setResourceOnTile( tile, static_cast<int>( info.metadata[0] ), 1 );
             return;
         default:
             break;

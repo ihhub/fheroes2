@@ -514,7 +514,7 @@ namespace
         {
             switch ( info.objectType ) {
             case MP2::OBJ_RESOURCE:
-                return Resource::String( info.metadata[0] );
+                return Resource::String( static_cast<int>( info.metadata[0] ) );
             case MP2::OBJ_GENIE_LAMP:
             case MP2::OBJ_RANDOM_RESOURCE:
             case MP2::OBJ_TREASURE_CHEST:
