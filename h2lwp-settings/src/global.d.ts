@@ -7,7 +7,8 @@ declare global {
 
       setBrightness: (value: number) => void;
       setScale: (value: number) => void;
-      setScaleType: (value: "nearest" | "linear") => void;
+      setScaleType: (value: "NEAREST" | "LINEAR") => void;
+      setMapUpdateInterval: (value: number) => void;
       toggleUseScroll: () => void;
       setWallpaper: () => void;
     };

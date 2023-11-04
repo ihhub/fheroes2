@@ -17,7 +17,7 @@ type Props<T> = {
   onChange: (value: T) => void;
 };
 
-export const SimpleListMenu = <T extends number | string>({
+export const SimpleListMenu = <T extends string | number>({
   label,
   items,
   onChange,

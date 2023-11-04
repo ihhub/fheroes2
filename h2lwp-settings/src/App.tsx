@@ -1,25 +1,7 @@
-import { Suspense, useEffect } from "react";
 import "./App.css";
 import { useBridge } from "./useBridge";
-import { AppBar, Box, Button, Toolbar, Typography } from "@mui/material";
+import { AppBar, Button, Grid, Toolbar, Typography } from "@mui/material";
 import { Settings } from "./Settings";
-// import { suspend } from "suspend-react";
-
-const Child: React.FC<{ state: unknown }> = ({ state }) => {
-  // const data = suspend(
-  //   async () => window.Android.helloFullPromise("helloFullPromise"),
-  //   []
-  // );
-
-  useEffect(() => {
-    setTimeout(() => {
-      console.log("setBrightness");
-      window.Android?.setBrightness(80);
-    }, 3000);
-  }, []);
-
-  return <pre>{JSON.stringify(state, null, 2)}</pre>;
-};
 
 export function App() {
   const { state } = useBridge();
@@ -38,18 +20,20 @@ export function App() {
 
       <Settings state={state} />
 
-      <Box>
+      <Grid
+        container
+        alignContent="center"
+        justifyContent="center"
+        padding={2}
+        width="100%"
+      >
         <Button
           variant="contained"
           onClick={() => window.Android?.setWallpaper()}
         >
           Set wallpaper
         </Button>
-
-        <Suspense fallback={<div>Loading...</div>}>
-          <Child state={state} />
-        </Suspense>
-      </Box>
+      </Grid>
     </>
   );
 }

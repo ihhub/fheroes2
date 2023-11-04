@@ -19,6 +19,6 @@ export const Settings: React.FC<{ state: Record<string, unknown> }> = ({
 
     <Brightness value={Number(state.brightness)} />
 
-    <UseScroll value={Boolean(state.useMapScroll)} />
+    {/*<UseScroll value={Boolean(state.useMapScroll)} />*/}
   </List>
 );

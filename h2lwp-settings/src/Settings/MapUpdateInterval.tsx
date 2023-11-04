@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { SimpleListMenu } from "./SimpleListMenu";
 
 type Props = {
@@ -22,6 +22,9 @@ export const MapUpdateInterval: React.FC<Props> = ({ value: initialValue }) => {
   }, []);
 
   const [value, setValue] = useState(initialValue);
+  useEffect(() => {
+    window.Android?.setMapUpdateInterval(value);
+  }, [value]);
 
   return (
     <SimpleListMenu

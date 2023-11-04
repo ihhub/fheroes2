@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { SimpleListMenu } from "./SimpleListMenu";
 
 type Props = {
@@ -23,6 +23,9 @@ export const Scale: React.FC<Props> = ({ value: initialValue }) => {
   }, []);
 
   const [value, setValue] = useState(initialValue);
+  useEffect(() => {
+    window.Android?.setScale(value);
+  }, [value]);
 
   return (
     <SimpleListMenu

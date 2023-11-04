@@ -1,5 +1,5 @@
 import { Box, Grid, ListItem, Slider, Typography } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 type Props = {
   value: number;
@@ -7,6 +7,9 @@ type Props = {
 
 export const Brightness: React.FC<Props> = ({ value: initialValue }) => {
   const [value, setValue] = useState(initialValue);
+  useEffect(() => {
+    window.Android?.setBrightness(value);
+  }, [value]);
 
   return (
     <ListItem>
