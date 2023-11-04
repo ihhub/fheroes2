@@ -16,9 +16,17 @@ enum class MapUpdateInterval(val value: Int) {
     }
 }
 
-enum class ScaleType {
-    NEAREST,
-    LINEAR;
+enum class ScaleType(val value: Int) {
+    NEAREST(0),
+    LINEAR(1);
+
+    companion object {
+        fun fromInt(value: Int?): ScaleType {
+            return ScaleType.values()
+                .runCatching { first { it.value == value } }
+                .getOrDefault(WallpaperPreferences.defaultScaleType)
+        }
+    }
 }
 
 enum class Scale(val value: Int) {

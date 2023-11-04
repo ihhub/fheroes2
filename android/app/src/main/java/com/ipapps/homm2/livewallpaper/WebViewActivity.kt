@@ -49,16 +49,16 @@ class WebViewActivity : AppCompatActivity() {
         bridge.addAfterInitializeListener {
             settingsViewModel.subscribeToPreferences {
                 val obj = JSONObject()
-                obj.put("scale", it.scale)
-                obj.put("scaleType", it.scaleType)
-                obj.put("mapUpdateInterval", it.mapUpdateInterval)
+                obj.put("scale", it.scale.value)
+                obj.put("scaleType", it.scaleType.value)
+                obj.put("mapUpdateInterval", it.mapUpdateInterval.value)
                 obj.put("useScroll", it.useScroll)
                 obj.put("brightness", it.brightness)
                 val jsonString = obj.toString(2)
 
                 webView.evaluateJavascript(
                     """
-                if (typeof window.dispatch === 'function') {
+                if (typeof window.dispatchWebViewEvent === 'function') {
                     window.dispatchWebViewEvent(${jsonString});
                 } else {
                     console.error('no dispatchWebViewEvent', ${jsonString})
