@@ -47,6 +47,7 @@
 #include "localevent.h"
 #include "map_object_info.h"
 #include "math_base.h"
+#include "mp2.h"
 #include "race.h"
 #include "resource.h"
 #include "screen.h"
@@ -145,18 +146,20 @@ public:
         _scrollbar.moveToIndex( _topId );
     }
 
-    void renderItem( const fheroes2::Sprite & itemSprite, const std::string & itemText, const fheroes2::Point & destination, const fheroes2::Point & offset,
-                     const bool current ) const
+    // An image with text should have offset of 10 pixels from all left and right edges.
+    void renderItem( const fheroes2::Sprite & itemSprite, const std::string & itemText, const fheroes2::Point & destination, const int32_t middleImageOffsetX,
+                     const int32_t textOffsetX, const int32_t itemOffsetY, const bool current ) const
     {
         fheroes2::Display & display = fheroes2::Display::instance();
 
         if ( !itemSprite.empty() ) {
-            fheroes2::Blit( itemSprite, display, destination.x + ( offset.x - itemSprite.width() ) / 2, destination.y + ( offset.y - itemSprite.height() ) / 2 );
+            fheroes2::Blit(
+                itemSprite, display, destination.x + middleImageOffsetX - ( itemSprite.width() / 2 ), destination.y + itemOffsetY - ( itemSprite.height() / 2 ) );
         }
 
         fheroes2::Text text( itemText, current ? fheroes2::FontType::normalYellow() : fheroes2::FontType::normalWhite() );
-        text.fitToOneRow( background->activeArea().width - offset.x - 55 );
-        text.draw( destination.x + offset.x + 5, destination.y + ( offset.y - text.height() ) / 2 + 2, display );
+        text.fitToOneRow( background->activeArea().width - textOffsetX - 10 );
+        text.draw( destination.x + textOffsetX, destination.y + itemOffsetY - ( text.height() / 2 ) + 2, display );
     }
 
     int32_t selectItemsEventProcessing( const char * caption )
@@ -222,8 +225,7 @@ public:
     explicit SelectEnumMonster( const fheroes2::Size & rt )
         : SelectEnum( rt )
     {
-        const int offset = 43;
-        SetAreaMaxItems( ( rtAreaItems.height + offset ) / offset );
+        SetAreaMaxItems( ( rtAreaItems.height + _offsetY ) / _offsetY );
     }
 
     using SelectEnum::ActionListPressRight;
@@ -233,7 +235,7 @@ public:
         const Monster mons( index );
         const fheroes2::Sprite & monsterSprite = fheroes2::AGG::GetICN( ICN::MONS32, mons.GetSpriteIndex() );
 
-        renderItem( monsterSprite, mons.GetName(), { dstx, dsty }, { 45, 43 }, current );
+        renderItem( monsterSprite, mons.GetName(), { dstx, dsty }, 45 / 2, 50, _offsetY / 2, current );
     }
 
     void ActionListPressRight( int & index ) override
@@ -246,6 +248,9 @@ public:
 
         Dialog::ArmyInfo( Troop( monster, 0 ), Dialog::ZERO );
     }
+
+private:
+    const int32_t _offsetY{ 43 };
 };
 
 class SelectEnumHeroes : public SelectEnum
@@ -254,8 +259,7 @@ public:
     explicit SelectEnumHeroes( const fheroes2::Size & rt )
         : SelectEnum( rt )
     {
-        const int offset = 35;
-        SetAreaMaxItems( ( rtAreaItems.height + offset ) / offset );
+        SetAreaMaxItems( ( rtAreaItems.height + _offsetY ) / _offsetY );
     }
 
     using SelectEnum::ActionListPressRight;
@@ -264,13 +268,16 @@ public:
     {
         const fheroes2::Sprite & port = Heroes::GetPortrait( index, PORT_SMALL );
 
-        renderItem( port, Heroes::GetName( index ), { dstx, dsty }, { 45, 35 }, current );
+        renderItem( port, Heroes::GetName( index ), { dstx, dsty }, 45 / 2, 50, _offsetY / 2, current );
     }
 
     void ActionListPressRight( int & index ) override
     {
         Dialog::QuickInfo( *world.GetHeroes( index ) );
     }
+
+private:
+    const int32_t _offsetY{ 35 };
 };
 
 class SelectEnumArtifact : public SelectEnum
@@ -279,8 +286,7 @@ public:
     explicit SelectEnumArtifact( const fheroes2::Size & rt )
         : SelectEnum( rt )
     {
-        const int offset = 42;
-        SetAreaMaxItems( ( rtAreaItems.height + offset ) / offset );
+        SetAreaMaxItems( ( rtAreaItems.height + _offsetY ) / _offsetY );
     }
 
     using SelectEnum::ActionListPressRight;
@@ -290,13 +296,16 @@ public:
         const Artifact art( index );
         const fheroes2::Sprite & artifactSprite = fheroes2::AGG::GetICN( ICN::ARTFX, art.IndexSprite32() );
 
-        renderItem( artifactSprite, art.GetName(), { dstx, dsty }, { 45, 42 }, current );
+        renderItem( artifactSprite, art.GetName(), { dstx, dsty }, 45 / 2, 50, _offsetY / 2, current );
     }
 
     void ActionListPressRight( int & index ) override
     {
         fheroes2::ArtifactDialogElement( Artifact( index ) ).showPopup( Dialog::ZERO );
     }
+
+private:
+    const int32_t _offsetY{ 42 };
 };
 
 class SelectEnumSpell : public SelectEnum
@@ -305,8 +314,7 @@ public:
     explicit SelectEnumSpell( const fheroes2::Size & rt )
         : SelectEnum( rt )
     {
-        const int offset = 55;
-        SetAreaMaxItems( ( rtAreaItems.height + offset ) / offset );
+        SetAreaMaxItems( ( rtAreaItems.height + _offsetY ) / _offsetY );
     }
 
     using SelectEnum::ActionListPressRight;
@@ -316,13 +324,16 @@ public:
         const Spell spell( index );
         const fheroes2::Sprite & spellSprite = fheroes2::AGG::GetICN( ICN::SPELLS, spell.IndexSprite() );
 
-        renderItem( spellSprite, spell.GetName(), { dstx, dsty }, { 75, 55 }, current );
+        renderItem( spellSprite, spell.GetName(), { dstx, dsty }, 75 / 2, 80, _offsetY / 2, current );
     }
 
     void ActionListPressRight( int & index ) override
     {
         fheroes2::SpellDialogElement( Spell( index ), nullptr ).showPopup( Dialog::ZERO );
     }
+
+private:
+    const int32_t _offsetY{ 55 };
 };
 
 class SelectEnumSecSkill : public SelectEnum
@@ -352,13 +363,16 @@ public:
         const Skill::Secondary skill( getSkillFromListIndex( index ), getLevelFromListIndex( index ) );
         const fheroes2::Sprite & skillSprite = fheroes2::AGG::GetICN( ICN::MINISS, skill.GetIndexSprite2() );
 
-        renderItem( skillSprite, skill.GetName(), { dstx, dsty }, { 45, 42 }, current );
+        renderItem( skillSprite, skill.GetName(), { dstx, dsty }, 45 / 2, 50, _offsetY / 2, current );
     }
 
     void ActionListPressRight( int & index ) override
     {
         fheroes2::SecondarySkillDialogElement( Skill::Secondary( getSkillFromListIndex( index ), getLevelFromListIndex( index ) ), Heroes() ).showPopup( Dialog::ZERO );
     }
+
+private:
+    const int32_t _offsetY{ 42 };
 };
 
 namespace
@@ -367,22 +381,26 @@ namespace
     class ObjectTypeSelection : public SelectEnum
     {
     public:
-        ObjectTypeSelection( const std::vector<Maps::ObjectInfo> & objectInfo, const fheroes2::Size & size, const int32_t offset )
+        ObjectTypeSelection( const std::vector<Maps::ObjectInfo> & objectInfo, const fheroes2::Size & size, const int32_t imageOffsetX, const int32_t textOffsetX,
+                             const int32_t offsetY )
             : SelectEnum( size )
             , _objectInfo( objectInfo )
+            , _imageOffsetX( imageOffsetX )
+            , _textOffsetX( textOffsetX )
+            , _offsetY( offsetY )
         {
-            SetAreaMaxItems( ( rtAreaItems.height + offset - 1 ) / offset );
+            SetAreaMaxItems( ( rtAreaItems.height + _offsetY ) / _offsetY );
         }
 
         using SelectEnum::ActionListPressRight;
 
-        void RedrawItem( const int & objectId, int32_t offsetX, int32_t offsetY, bool isSelected ) override
+        void RedrawItem( const int & objectId, int32_t posX, int32_t posY, bool isSelected ) override
         {
             // If this assertion blows up then you are setting different number of items.
             assert( objectId >= 0 && objectId < static_cast<int>( _objectInfo.size() ) );
 
             const fheroes2::Sprite & image = fheroes2::generateMapObjectImage( _objectInfo[objectId] );
-            renderItem( image, getObjectName( _objectInfo[objectId] ), { offsetX, offsetY }, getImageOffset(), isSelected );
+            renderItem( image, getObjectName( _objectInfo[objectId] ), { posX, posY }, _imageOffsetX, _textOffsetX, _offsetY / 2, isSelected );
         }
 
         void ActionListPressRight( int & objectId ) override
@@ -398,16 +416,20 @@ namespace
 
         virtual std::string getObjectName( const Maps::ObjectInfo & info ) = 0;
 
-        virtual fheroes2::Point getImageOffset() = 0;
-
         const std::vector<Maps::ObjectInfo> & _objectInfo;
+
+        const int32_t _imageOffsetX{ 0 };
+
+        const int32_t _textOffsetX{ 0 };
+
+        const int32_t _offsetY{ 0 };
     };
 
     class HeroTypeSelection : public ObjectTypeSelection
     {
     public:
         HeroTypeSelection( const std::vector<Maps::ObjectInfo> & objectInfo, const fheroes2::Size & size )
-            : ObjectTypeSelection( objectInfo, size, fheroes2::AGG::GetICN( ICN::MINIHERO, 0 ).height() + 2 )
+            : ObjectTypeSelection( objectInfo, size, 21, 47, fheroes2::AGG::GetICN( ICN::MINIHERO, 0 ).height() + 2 )
         {
             // Do nothing.
         }
@@ -429,18 +451,13 @@ namespace
 
             return name;
         }
-
-        fheroes2::Point getImageOffset() override
-        {
-            return { 40, 52 };
-        }
     };
 
     class MonsterTypeSelection : public ObjectTypeSelection
     {
     public:
         MonsterTypeSelection( const std::vector<Maps::ObjectInfo> & objectInfo, const fheroes2::Size & size )
-            : ObjectTypeSelection( objectInfo, size, 43 )
+            : ObjectTypeSelection( objectInfo, size, 45 / 2, 50, 43 )
         {
             // Do nothing.
         }
@@ -461,18 +478,13 @@ namespace
         {
             return Monster( static_cast<int32_t>( info.metadata[0] ) ).GetName();
         }
-
-        fheroes2::Point getImageOffset() override
-        {
-            return { 45, 43 };
-        }
     };
 
     class TreasureTypeSelection : public ObjectTypeSelection
     {
     public:
         TreasureTypeSelection( const std::vector<Maps::ObjectInfo> & objectInfo, const fheroes2::Size & size )
-            : ObjectTypeSelection( objectInfo, size, 40 )
+            : ObjectTypeSelection( objectInfo, size, 17, 60, 40 )
         {
             // Do nothing.
         }
@@ -514,11 +526,6 @@ namespace
             }
 
             return {};
-        }
-
-        fheroes2::Point getImageOffset() override
-        {
-            return { 32, 40 };
         }
     };
 
