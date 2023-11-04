@@ -28,7 +28,7 @@ export const SimpleListMenu = <T extends number | string>({
 
   return (
     <div>
-      <List component="nav" sx={{ bgcolor: "background.paper" }}>
+      <List disablePadding component="nav" sx={{ bgcolor: "background.paper" }}>
         <ListItemButton
           aria-haspopup="listbox"
           aria-expanded={open ? "true" : undefined}

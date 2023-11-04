@@ -1,14 +1,7 @@
 import { Suspense, useEffect } from "react";
 import "./App.css";
 import { useBridge } from "./useBridge";
-import {
-  AppBar,
-  Box,
-  Button,
-  Container,
-  Toolbar,
-  Typography,
-} from "@mui/material";
+import { AppBar, Box, Button, Toolbar, Typography } from "@mui/material";
 import { Settings } from "./Settings";
 // import { suspend } from "suspend-react";
 
@@ -43,20 +36,20 @@ export function App() {
 
       <Toolbar />
 
-        <Settings state={state} />
+      <Settings state={state} />
 
-        <Box>
-          <Button
-            variant="contained"
-            onClick={() => window.Android?.setWallpaper()}
-          >
-            Set wallpaper
-          </Button>
+      <Box>
+        <Button
+          variant="contained"
+          onClick={() => window.Android?.setWallpaper()}
+        >
+          Set wallpaper
+        </Button>
 
-          <Suspense fallback={<div>Loading...</div>}>
-            <Child state={state} />
-          </Suspense>
-        </Box>
+        <Suspense fallback={<div>Loading...</div>}>
+          <Child state={state} />
+        </Suspense>
+      </Box>
     </>
   );
 }

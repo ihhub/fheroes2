@@ -14,7 +14,13 @@ function startApp(callback: () => void) {
 }
 
 export const useBridge = () => {
-  const [state, setState] = useState({});
+  const [state, setState] = useState({
+    scaleType: "NEAREST",
+    scale: 4,
+    mapUpdateInterval: 2,
+    brightness: 75,
+    useScroll: true,
+  });
 
   useEffect(() => {
     window.Bridge?.init();

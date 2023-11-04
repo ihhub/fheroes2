@@ -7,11 +7,11 @@ import { Brightness } from "./Settings/Brightness";
 import { UseScroll } from "./Settings/UseScroll";
 import { MapUpdateInterval } from "./Settings/MapUpdateInterval";
 
-export const Settings: React.FC<{ state: Record<string, string> }> = ({
+export const Settings: React.FC<{ state: Record<string, unknown> }> = ({
   state,
 }) => (
-  <List subheader={<ListSubheader>Settings</ListSubheader>}>
-    <ScaleType value={state.scaleType} />
+  <List subheader={<ListSubheader>Settings</ListSubheader>} disablePadding>
+    <ScaleType value={String(state.scaleType)} />
 
     <Scale value={Number(state.scale)} />
 
