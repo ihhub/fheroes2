@@ -9,23 +9,16 @@ import { MapUpdateInterval } from "./Settings/MapUpdateInterval";
 
 export const Settings: React.FC<{ state: Record<string, string> }> = ({
   state,
-}) => {
-  // Scale
-  // ScaleType
-  // Map update interval
-  // Brightness
+}) => (
+  <List subheader={<ListSubheader>Settings</ListSubheader>}>
+    <ScaleType value={state.scaleType} />
 
-  return (
-    <List subheader={<ListSubheader>Settings</ListSubheader>}>
-      <ScaleType value={state.scaleType} />
+    <Scale value={Number(state.scale)} />
 
-      <Scale value={Number(state.scale)} />
+    <MapUpdateInterval value={Number(state.mapUpdateInterval)} />
 
-      <MapUpdateInterval value={Number(state.mapUpdateInterval)} />
+    <Brightness value={Number(state.brightness)} />
 
-      <Brightness value={Number(state.brightness)} />
-
-      <UseScroll value={Boolean(state.useMapScroll)} />
-    </List>
-  );
-};
+    <UseScroll value={Boolean(state.useMapScroll)} />
+  </List>
+);
