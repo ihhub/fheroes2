@@ -33,11 +33,13 @@
             android:visibility="gone" />
 
         <Button
+
             android:id="@+id/activity_toolset_start_game_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
+            android:visibility="gone"
             android:enabled="false"
             android:minWidth="256dp"
             android:onClick="startGameButtonClicked"
@@ -74,6 +76,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
+            android:visibility="gone"
             android:enabled="false"
             android:minWidth="256dp"
             android:onClick="saveFileManagerButtonClicked"
