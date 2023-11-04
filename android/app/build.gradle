@@ -117,6 +117,11 @@ dependencies {
     implementation 'com.google.android.material:material:1.9.0'
 }
 
+tasks.register('buildJs', Exec) {
+    workingDir '../../h2lwp-settings'
+    commandLine 'npm', 'run', 'build'
+}
+
 tasks.register('copyH2D', Copy) {
     from('../../files/data') {
         include '*.h2d'
@@ -132,5 +137,5 @@ tasks.register('copyTranslations', Copy) {
 }
 
 preBuild {
-    dependsOn copyH2D, copyTranslations
+    dependsOn buildJs, copyH2D, copyTranslations
 }
