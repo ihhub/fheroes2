@@ -1,7 +1,15 @@
 import { Suspense, useEffect } from "react";
 import "./App.css";
 import { useBridge } from "./useBridge";
-import { Box, Button, Container, Typography } from "@mui/material";
+import {
+  AppBar,
+  Box,
+  Button,
+  Container,
+  Toolbar,
+  Typography,
+} from "@mui/material";
+import { Settings } from "./Settings";
 // import { suspend } from "suspend-react";
 
 const Child: React.FC<{ state: unknown }> = ({ state }) => {
@@ -24,20 +32,31 @@ export function App() {
   const { state } = useBridge();
 
   return (
-    <Container maxWidth="sm">
-      <Box sx={{ my: 4 }}>
-        <Typography variant="h4" component="h1" gutterBottom>
-          Material UI Create React App example in TypeScript
-        </Typography>
+    <>
+      <AppBar>
+        <Toolbar>
+          <Typography variant="h6" component="div">
+            Wallpaper settings
+          </Typography>
+        </Toolbar>
+      </AppBar>
 
-        <Button onClick={() => window.Android?.setWallpaper()}>
-          Set wallpaper
-        </Button>
+      <Toolbar />
 
-        <Suspense fallback={<div>Loading...</div>}>
-          <Child state={state} />
-        </Suspense>
-      </Box>
-    </Container>
+        <Settings state={state} />
+
+        <Box>
+          <Button
+            variant="contained"
+            onClick={() => window.Android?.setWallpaper()}
+          >
+            Set wallpaper
+          </Button>
+
+          <Suspense fallback={<div>Loading...</div>}>
+            <Child state={state} />
+          </Suspense>
+        </Box>
+    </>
   );
 }
