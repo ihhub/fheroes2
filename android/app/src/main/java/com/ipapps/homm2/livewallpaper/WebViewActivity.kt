@@ -43,30 +43,29 @@ class WebViewActivity : AppCompatActivity() {
         val settingsViewModel =
             SettingsViewModel(prefsRepository, ::setWallpaper, ::openIconAuthorUrl);
 
-
         val bridge = Bridge(applicationContext, webView)
-        bridge.addJSInterface(
-            AndroidNativeInterface(
-                settingsViewModel
-            )
-        )
-        settingsViewModel.subscribeToPreferences {
-            val obj = JSONObject()
-            obj.put("scale", it.scale)
-            obj.put("scaleType", it.scaleType)
-            obj.put("mapUpdateInterval", it.mapUpdateInterval)
-            obj.put("useScroll", it.useScroll)
-            obj.put("brightness", it.brightness)
-            val jsonString = obj.toString(2)
+        bridge.addJSInterface(AndroidNativeInterface(settingsViewModel))
 
-            println("send settings")
-            webView.evaluateJavascript(
-                "typeof window.dispatch === 'function' ? " + "window.dispatch(${jsonString}) : " + "console.error('no dispatch', ${jsonString})"
-            ) { }
-        }
         bridge.addAfterInitializeListener {
-            println("noop to trigger update")
-            prefsRepository.setBrightness(13)
+            settingsViewModel.subscribeToPreferences {
+                val obj = JSONObject()
+                obj.put("scale", it.scale)
+                obj.put("scaleType", it.scaleType)
+                obj.put("mapUpdateInterval", it.mapUpdateInterval)
+                obj.put("useScroll", it.useScroll)
+                obj.put("brightness", it.brightness)
+                val jsonString = obj.toString(2)
+
+                webView.evaluateJavascript(
+                    """
+                if (typeof window.dispatch === 'function') {
+                    window.dispatch(${jsonString});
+                } else {
+                    console.error('no dispatch', ${jsonString})
+                }
+                """
+                ) { }
+            }
         }
     }
 }
