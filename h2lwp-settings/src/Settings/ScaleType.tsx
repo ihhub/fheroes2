@@ -2,22 +2,18 @@ import { useMemo, useState } from "react";
 import { SimpleListMenu } from "./SimpleListMenu";
 
 type Props = {
-  value: number;
+  value: string;
 };
 
-const valueToText: Record<number, string> = {
-  0: "DPI",
-  1: "x1",
-  2: "x2",
-  3: "x3",
-  4: "x4",
-  5: "x5",
+const valueToText: Record<string, string> = {
+  NEAREST: "Nearest",
+  LINEAR: "Linear",
 };
 
-export const Scale: React.FC<Props> = ({ value: initialValue }) => {
+export const ScaleType: React.FC<Props> = ({ value: initialValue }) => {
   const items = useMemo(() => {
     return Object.entries(valueToText).map(([value, title]) => ({
-      value: Number(value),
+      value,
       title,
     }));
   }, []);
@@ -26,7 +22,7 @@ export const Scale: React.FC<Props> = ({ value: initialValue }) => {
 
   return (
     <SimpleListMenu
-      label="Scale"
+      label="Scale type"
       value={value}
       items={items}
       onChange={setValue}
