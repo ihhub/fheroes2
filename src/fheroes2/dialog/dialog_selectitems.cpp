@@ -503,7 +503,7 @@ namespace
                 fheroes2::showStandardTextMessage( getObjectName( info ), "", Dialog::ZERO );
                 break;
             default:
-                // Did you expand the list of resources? Add the corresponding logic!
+                // Did you expand the list of treasures? Add the corresponding logic!
                 assert( 0 );
                 break;
             }
@@ -519,7 +519,7 @@ namespace
             case MP2::OBJ_TREASURE_CHEST:
                 return MP2::StringObject( info.objectType );
             default:
-                // Did you expand the list of resources? Add the corresponding logic!
+                // Did you expand the list of treasures? Add the corresponding logic!
                 assert( 0 );
                 break;
             }
