@@ -1,4 +1,3 @@
-import { useEffect, useMemo, useState } from "react";
 import { SimpleListMenu } from "./SimpleListMenu";
 
 type Props = {
@@ -14,25 +13,16 @@ const valueToText: Record<number, string> = {
   5: "x5",
 };
 
-export const Scale: React.FC<Props> = ({ value: initialValue }) => {
-  const items = useMemo(() => {
-    return Object.entries(valueToText).map(([value, title]) => ({
-      value: Number(value),
-      title,
-    }));
-  }, []);
+const items = Object.entries(valueToText).map(([value, title]) => ({
+  value: Number(value),
+  title,
+}));
 
-  const [value, setValue] = useState(initialValue);
-  useEffect(() => {
-    window.Android?.setScale(value);
-  }, [value]);
-
-  return (
-    <SimpleListMenu
-      label="Scale"
-      value={value}
-      items={items}
-      onChange={setValue}
-    />
-  );
-};
+export const Scale: React.FC<Props> = ({ value }) => (
+  <SimpleListMenu
+    label="Scale"
+    value={value}
+    items={items}
+    onChange={(value) => window.Android?.setScale(value)}
+  />
+);

@@ -1,4 +1,3 @@
-import { useEffect, useMemo, useState } from "react";
 import { SimpleListMenu } from "./SimpleListMenu";
 
 type Props = {
@@ -13,25 +12,16 @@ const valueToText: Record<number, string> = {
   4: "24 hours",
 };
 
-export const MapUpdateInterval: React.FC<Props> = ({ value: initialValue }) => {
-  const items = useMemo(() => {
-    return Object.entries(valueToText).map(([value, title]) => ({
-      value: Number(value),
-      title,
-    }));
-  }, []);
+const items = Object.entries(valueToText).map(([value, title]) => ({
+  value: Number(value),
+  title,
+}));
 
-  const [value, setValue] = useState(initialValue);
-  useEffect(() => {
-    window.Android?.setMapUpdateInterval(value);
-  }, [value]);
-
-  return (
-    <SimpleListMenu
-      label="Map update interval"
-      value={value}
-      items={items}
-      onChange={setValue}
-    />
-  );
-};
+export const MapUpdateInterval: React.FC<Props> = ({ value }) => (
+  <SimpleListMenu
+    label="Map update interval"
+    value={value}
+    items={items}
+    onChange={(value) => window.Android?.setMapUpdateInterval(value)}
+  />
+);
