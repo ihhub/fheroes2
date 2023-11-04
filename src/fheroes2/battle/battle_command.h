@@ -47,7 +47,6 @@ namespace Battle
         RETREAT,
         SURRENDER,
         SKIP,
-        END_TURN,
         AUTO_SWITCH,
         AUTO_FINISH
     };
@@ -64,7 +63,6 @@ namespace Battle
         static constexpr std::integral_constant<CommandType, CommandType::RETREAT> RETREAT{};
         static constexpr std::integral_constant<CommandType, CommandType::SURRENDER> SURRENDER{};
         static constexpr std::integral_constant<CommandType, CommandType::SKIP> SKIP{};
-        static constexpr std::integral_constant<CommandType, CommandType::END_TURN> END_TURN{};
         static constexpr std::integral_constant<CommandType, CommandType::AUTO_SWITCH> AUTO_SWITCH{};
         static constexpr std::integral_constant<CommandType, CommandType::AUTO_FINISH> AUTO_FINISH{};
 
@@ -77,8 +75,8 @@ namespace Battle
                 static_assert( sizeof...( params ) == 2 );
             }
             else if constexpr ( cmd == CommandType::ATTACK ) {
-                // Attacker UID, defender UID, cell index, direction
-                static_assert( sizeof...( params ) == 4 );
+                // Attacker UID, defender UID, cell index to move, cell index to attack, attack direction
+                static_assert( sizeof...( params ) == 5 );
             }
             else if constexpr ( cmd == CommandType::SPELLCAST ) {
                 static_assert( sizeof...( params ) > 0 );
@@ -107,10 +105,6 @@ namespace Battle
                 static_assert( sizeof...( params ) == 2 );
             }
             else if constexpr ( cmd == CommandType::SKIP ) {
-                // UID
-                static_assert( sizeof...( params ) == 1 );
-            }
-            else if constexpr ( cmd == CommandType::END_TURN ) {
                 // UID
                 static_assert( sizeof...( params ) == 1 );
             }

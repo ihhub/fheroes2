@@ -21,6 +21,7 @@
 // TODO: this header is redundant here, but detected as required by IWYU with older compilers
 // IWYU pragma: no_include <type_traits>
 #include <algorithm>
+#include <array>
 #include <cassert>
 #include <cmath>
 #include <cstddef>
@@ -56,6 +57,7 @@
 #include "monster_info.h"
 #include "settings.h"
 #include "speed.h"
+#include "spell.h"
 
 using namespace Battle;
 
@@ -90,6 +92,124 @@ namespace AI
                     && ValueHasImproved( newOutcome.positionValue, previous.positionValue, newOutcome.attackValue, previous.attackValue ) );
     }
 
+    int32_t doubleCellAttackValue( const Unit & attacker, const Unit & target, const int32_t from, const int32_t targetCell )
+    {
+        const Cell * behind = Board::GetCell( targetCell, Board::GetDirection( from, targetCell ) );
+        const Unit * secondaryTarget = ( behind != nullptr ) ? behind->GetUnit() : nullptr;
+
+        if ( secondaryTarget && secondaryTarget->GetUID() != target.GetUID() && secondaryTarget->GetUID() != attacker.GetUID() ) {
+            return secondaryTarget->evaluateThreatForUnit( attacker );
+        }
+
+        return 0;
+    }
+
+    int32_t optimalAttackTarget( const Unit & attacker, const Unit & target, const int32_t from )
+    {
+        assert( Board::GetDistance( target.GetPosition(), from ) == 1 );
+
+        const int32_t headIndex = target.GetHeadIndex();
+        const int32_t tailIndex = target.GetTailIndex();
+
+        if ( !Board::isNearIndexes( from, tailIndex ) ) {
+            return headIndex;
+        }
+
+        if ( attacker.isDoubleCellAttack() && Board::isNearIndexes( from, headIndex )
+             && doubleCellAttackValue( attacker, target, from, headIndex ) > doubleCellAttackValue( attacker, target, from, tailIndex ) ) {
+            return headIndex;
+        }
+
+        return tailIndex;
+    }
+
+    std::pair<int32_t, int> optimalAttackVector( const Unit & attacker, const Unit & target, const Position & attackPos )
+    {
+        assert( attackPos.GetHead() != nullptr && Board::CanAttackTargetFromPosition( attacker, target, attackPos.GetHead()->GetIndex() ) );
+
+        const Position & targetPos = target.GetPosition();
+
+        const std::array<const Cell *, 2> attackCells = { attackPos.GetHead(), attackPos.GetTail() };
+        const std::array<const Cell *, 2> targetCells = { targetPos.GetHead(), targetPos.GetTail() };
+
+        std::pair<int32_t, int> bestAttackVector{ -1, UNKNOWN };
+        double bestAttackValue = 0.0;
+
+        for ( const Cell * attackCell : attackCells ) {
+            if ( attackCell == nullptr ) {
+                continue;
+            }
+
+            const int32_t attackCellIdx = attackCell->GetIndex();
+
+            if ( !Board::CanAttackFromCell( attacker, attackCellIdx ) ) {
+                continue;
+            }
+
+            for ( const Cell * targetCell : targetCells ) {
+                if ( targetCell == nullptr ) {
+                    continue;
+                }
+
+                const int32_t targetCellIdx = targetCell->GetIndex();
+
+                if ( !Board::isNearIndexes( attackCellIdx, targetCellIdx ) ) {
+                    continue;
+                }
+
+                if ( !attacker.isDoubleCellAttack() ) {
+                    return { targetCellIdx, Board::GetDirection( attackCellIdx, targetCellIdx ) };
+                }
+
+                const double attackValue = doubleCellAttackValue( attacker, target, attackCellIdx, targetCellIdx );
+                if ( bestAttackVector.first == -1 || bestAttackValue < attackValue ) {
+                    bestAttackVector = { targetCellIdx, Board::GetDirection( attackCellIdx, targetCellIdx ) };
+                    bestAttackValue = attackValue;
+                }
+            }
+        }
+
+        return bestAttackVector;
+    }
+
+    int32_t optimalAttackValue( const Unit & attacker, const Unit & target, const int32_t from )
+    {
+        if ( attacker.isDoubleCellAttack() ) {
+            const int32_t targetCell = optimalAttackTarget( attacker, target, from );
+            return target.evaluateThreatForUnit( attacker ) + doubleCellAttackValue( attacker, target, from, targetCell );
+        }
+
+        if ( attacker.isAllAdjacentCellsAttack() ) {
+            Position position = Position::GetPosition( attacker, from );
+
+            if ( position.GetHead() == nullptr || ( attacker.isWide() && position.GetTail() == nullptr ) ) {
+                DEBUG_LOG( DBG_BATTLE, DBG_WARN, "Invalid position for " << attacker.String() << ", target: " << target.String() << ", cell: " << from )
+
+                return 0;
+            }
+
+            Indexes aroundAttacker = Board::GetAroundIndexes( position );
+
+            std::set<const Unit *> unitsUnderAttack;
+            Board * board = Arena::GetBoard();
+            for ( const int32_t index : aroundAttacker ) {
+                const Unit * unit = board->at( index ).GetUnit();
+                if ( unit != nullptr && unit->GetColor() != attacker.GetCurrentColor() ) {
+                    unitsUnderAttack.insert( unit );
+                }
+            }
+
+            int32_t attackValue = 0;
+            for ( const Unit * unit : unitsUnderAttack ) {
+                attackValue += unit->evaluateThreatForUnit( attacker );
+            }
+
+            return attackValue;
+        }
+
+        return target.evaluateThreatForUnit( attacker );
+    }
+
     std::vector<int32_t> evaluatePotentialAttackPositions( const Arena & arena, const Unit & attacker )
     {
         // Attacking unit can be under the influence of the Hypnotize spell
@@ -114,7 +234,7 @@ namespace AI
                     continue;
                 }
 
-                const int32_t attackValue = Board::OptimalAttackValue( attacker, *enemyUnit, nearbyIdx );
+                const int32_t attackValue = optimalAttackValue( attacker, *enemyUnit, nearbyIdx );
 
                 if ( enemyUnit->isArchers() ) {
                     result[nearbyIdx] += attackValue;
@@ -178,7 +298,7 @@ namespace AI
 
             MeleeAttackOutcome current;
             current.positionValue = positionValues[nearbyIdx];
-            current.attackValue = Board::OptimalAttackValue( attacker, defender, nearbyIdx );
+            current.attackValue = optimalAttackValue( attacker, defender, nearbyIdx );
             current.canAttackImmediately = Board::CanAttackTargetFromPosition( attacker, defender, nearbyIdx );
 
             // Pick target if either position has improved or unit is higher value at the same position value
@@ -286,16 +406,23 @@ namespace AI
         return result;
     }
 
-    int32_t getUnitMovementTarget( const Unit & currentUnit, const int32_t idx )
+    int32_t getUnitMovementTarget( Arena & arena, const Unit & currentUnit, const int32_t idx )
     {
         // First try to find the position that is reachable on the current turn
-        Position pos = Position::GetReachable( currentUnit, idx );
+        {
+            const Position pos = Position::GetReachable( currentUnit, idx );
+            if ( pos.GetHead() != nullptr ) {
+                assert( pos.GetHead() != nullptr && ( !currentUnit.isWide() || pos.GetTail() != nullptr ) );
 
-        // If there is no such position, then use an abstract position corresponding to the specified index
-        if ( pos.GetHead() == nullptr ) {
-            pos = Position::GetPosition( currentUnit, idx );
+                return pos.GetHead()->GetIndex();
+            }
         }
 
+        // If there is no such position, then use the last position on the path to the cell with the specified index
+        const Position dstPos = Position::GetPosition( currentUnit, idx );
+        assert( dstPos.GetHead() != nullptr && ( !currentUnit.isWide() || dstPos.GetTail() != nullptr ) );
+
+        const Position pos = arena.getClosestReachablePosition( currentUnit, dstPos );
         assert( pos.GetHead() != nullptr && ( !currentUnit.isWide() || pos.GetTail() != nullptr ) );
 
         return pos.GetHead()->GetIndex();
@@ -414,7 +541,7 @@ namespace AI
         // Step 1. Analyze current battle state and update variables
         analyzeBattleState( arena, currentUnit );
 
-        DEBUG_LOG( DBG_BATTLE, DBG_TRACE, currentUnit.GetName() << " start their turn. Side: " << _myColor )
+        DEBUG_LOG( DBG_BATTLE, DBG_TRACE, currentUnit.GetName() << " begin the turn, color: " << Color::String( _myColor ) )
 
         // Step 2. Check retreat/surrender condition
         const Heroes * actualHero = dynamic_cast<const Heroes *>( _commander );
@@ -425,10 +552,16 @@ namespace AI
 
                 if ( bestSpell.spellID != -1 ) {
                     actions.emplace_back( Command::SPELLCAST, bestSpell.spellID, bestSpell.cell );
+
+                    DEBUG_LOG( DBG_BATTLE, DBG_INFO,
+                               arena.GetCurrentCommander()->GetName() << " casts " << Spell( bestSpell.spellID ).GetName() << " on cell " << bestSpell.cell )
                 }
             }
 
             actions.emplace_back( Command::RETREAT );
+
+            DEBUG_LOG( DBG_BATTLE, DBG_INFO, arena.GetCurrentCommander()->GetName() << " retreats" )
+
             return actions;
         }
 
@@ -438,6 +571,10 @@ namespace AI
 
             if ( bestSpell.spellID != -1 ) {
                 actions.emplace_back( Command::SPELLCAST, bestSpell.spellID, bestSpell.cell );
+
+                DEBUG_LOG( DBG_BATTLE, DBG_INFO,
+                           arena.GetCurrentCommander()->GetName() << " casts " << Spell( bestSpell.spellID ).GetName() << " on cell " << bestSpell.cell )
+
                 return actions;
             }
         }
@@ -462,28 +599,32 @@ namespace AI
             }
 
             // Melee unit final stage - add actions to the queue
-            DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " melee phase end, target cell is " << target.cell )
+            DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " melee phase end, target cell: " << target.cell )
 
             if ( target.cell != -1 ) {
                 // The target cell of the movement must be the cell that the unit's head will occupy
-                const int32_t moveTargetIdx = getUnitMovementTarget( currentUnit, target.cell );
+                const int32_t moveTargetIdx = getUnitMovementTarget( arena, currentUnit, target.cell );
 
-                if ( currentUnit.GetHeadIndex() != moveTargetIdx ) {
+                if ( target.unit ) {
+                    const Position attackPos = Position::GetReachable( currentUnit, moveTargetIdx );
+                    assert( attackPos.GetHead() != nullptr && ( !currentUnit.isWide() || attackPos.GetTail() != nullptr ) );
+
+                    const auto [attackTargetIdx, attackDirection] = optimalAttackVector( currentUnit, *target.unit, attackPos );
+
+                    actions.emplace_back( Command::ATTACK, currentUnit.GetUID(), target.unit->GetUID(),
+                                          ( currentUnit.GetHeadIndex() == moveTargetIdx ? -1 : moveTargetIdx ), attackTargetIdx, attackDirection );
+
+                    DEBUG_LOG( DBG_BATTLE, DBG_INFO,
+                               currentUnit.GetName() << " attacking enemy " << target.unit->GetName() << " from cell " << moveTargetIdx
+                                                     << ", attack vector: " << Board::GetIndexDirection( attackTargetIdx, Board::GetReflectDirection( attackDirection ) )
+                                                     << " -> " << attackTargetIdx << ", threat level: " << target.unit->evaluateThreatForUnit( currentUnit ) )
+                }
+                else if ( currentUnit.GetHeadIndex() != moveTargetIdx ) {
                     actions.emplace_back( Command::MOVE, currentUnit.GetUID(), moveTargetIdx );
 
                     DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " moving to cell " << moveTargetIdx )
                 }
-
-                if ( target.unit ) {
-                    const int32_t optimalTargetIdx = Board::OptimalAttackTarget( currentUnit, *target.unit, target.cell );
-
-                    actions.emplace_back( Command::ATTACK, currentUnit.GetUID(), target.unit->GetUID(), optimalTargetIdx,
-                                          Board::GetDirection( target.cell, optimalTargetIdx ) );
-
-                    DEBUG_LOG( DBG_BATTLE, DBG_INFO,
-                               currentUnit.GetName() << " melee offense, focus enemy " << target.unit->GetName()
-                                                     << " threat level: " << target.unit->evaluateThreatForUnit( currentUnit ) )
-                }
+                // Else skip the turn
             }
             // Else skip the turn
         }
@@ -491,6 +632,8 @@ namespace AI
         // No action was taken, skip the turn
         if ( actions.size() == actionsSize ) {
             actions.emplace_back( Command::SKIP, currentUnit.GetUID() );
+
+            DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " skipping the turn" )
         }
 
         return actions;
@@ -636,7 +779,8 @@ namespace AI
         _defensiveTactics = _myShooterStr > _enemyShooterStr && ( _defendingCastle || enemyArcherRatio < enemyArcherThreshold ) && !myOverpoweredArmy;
 
         DEBUG_LOG( DBG_BATTLE, DBG_TRACE,
-                   "Tactic " << _defensiveTactics << " chosen. Archers: " << _myShooterStr << ", vs enemy " << _enemyShooterStr << " ratio is " << enemyArcherRatio )
+                   ( _defensiveTactics ? "Defensive" : "Offensive" ) << " tactics have been chosen. Archers strength: " << _myShooterStr
+                                                                     << ", enemy archers strength: " << _enemyShooterStr << ", ratio: " << enemyArcherRatio )
     }
 
     Actions BattlePlanner::archerDecision( Arena & arena, const Unit & currentUnit ) const
@@ -747,7 +891,7 @@ namespace AI
                                 const uint32_t distanceToEnemy = Board::GetDistance( pos, enemy->GetPosition() );
                                 assert( distanceToEnemy > 0 );
 
-                                return ( distanceToEnemy <= 1 );
+                                return ( distanceToEnemy == 1 );
                             }
 
                             // The potential event of enemy's good morale is not taken into account here
@@ -841,10 +985,10 @@ namespace AI
 
         // The current position of the archers is not safe, but there is somewhere to retreat
         if ( retreatPositionIndex != -1 ) {
-            DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " archer retreats from enemy, target cell is " << retreatPositionIndex )
+            DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " retreating from enemy, target cell: " << retreatPositionIndex )
 
             // The target cell of the movement must be the cell that the unit's head will occupy
-            const int32_t moveTargetIdx = getUnitMovementTarget( currentUnit, retreatPositionIndex );
+            const int32_t moveTargetIdx = getUnitMovementTarget( arena, currentUnit, retreatPositionIndex );
 
             if ( currentUnit.GetHeadIndex() != moveTargetIdx ) {
                 actions.emplace_back( Command::MOVE, currentUnit.GetUID(), moveTargetIdx );
@@ -885,14 +1029,14 @@ namespace AI
 
                     target.unit = enemy;
 
-                    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "- Set melee attack priority on " << enemy->GetName() << " value " << damageDiff )
+                    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "- Set melee attack priority on " << enemy->GetName() << ", value: " << damageDiff )
                 }
             }
 
             if ( target.unit ) {
-                actions.emplace_back( Command::ATTACK, currentUnit.GetUID(), target.unit->GetUID(), -1, -1 );
+                actions.emplace_back( Command::ATTACK, currentUnit.GetUID(), target.unit->GetUID(), -1, -1, -1 );
 
-                DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " archer attacks enemy " << target.unit->GetName() << " in melee, outcome: " << bestOutcome )
+                DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " attacking enemy " << target.unit->GetName() << " in melee, outcome: " << bestOutcome )
             }
         }
         // Archers are able to shoot
@@ -910,7 +1054,7 @@ namespace AI
                         target.cell = targetIdx;
                         target.unit = enemy;
 
-                        DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "- Set distance attack priority on " << enemy->GetName() << " value " << priority )
+                        DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "- Set shooting attack priority on " << enemy->GetName() << ", value: " << priority )
                     }
                 };
 
@@ -962,9 +1106,9 @@ namespace AI
             }
 
             if ( target.unit ) {
-                actions.emplace_back( Command::ATTACK, currentUnit.GetUID(), target.unit->GetUID(), target.cell, 0 );
+                actions.emplace_back( Command::ATTACK, currentUnit.GetUID(), target.unit->GetUID(), -1, target.cell, 0 );
 
-                DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " archer shoots at enemy " << target.unit->GetName() << " value: " << highestPriority )
+                DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " shooting at enemy " << target.unit->GetName() << ", value: " << highestPriority )
             }
         }
 
@@ -1030,18 +1174,18 @@ namespace AI
                     else if ( isMoatBuilt && Board::isMoatIndex( path.back(), currentUnit ) ) {
                         target.cell = path.back();
 
-                        DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "- Going after target " << enemy->GetName() << " stopping in the moat at " << target.cell )
+                        DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "- Going after target " << enemy->GetName() << ", stopping in the moat at cell " << target.cell )
                     }
                     else {
                         target.cell = findOptimalPositionForSubsequentAttack( arena, path, currentUnit, enemies );
 
-                        DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "- Going after target " << enemy->GetName() << " stopping at " << target.cell )
+                        DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "- Going after target " << enemy->GetName() << ", stopping at cell " << target.cell )
                     }
                 }
             }
         }
         else {
-            DEBUG_LOG( DBG_BATTLE, DBG_TRACE, currentUnit.GetName() << " attacking " << target.unit->GetName() << " at " << target.cell )
+            DEBUG_LOG( DBG_BATTLE, DBG_TRACE, currentUnit.GetName() << " attacking " << target.unit->GetName() << " from cell " << target.cell )
         }
 
         // Walkers: move closer to the castle walls during siege
@@ -1064,7 +1208,7 @@ namespace AI
                 }
             }
 
-            DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " moving towards castle walls, target cell is " << target.cell )
+            DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " moving towards castle walls, target cell: " << target.cell )
         }
 
         return target;
@@ -1115,7 +1259,7 @@ namespace AI
             const uint32_t distanceToUnit = ( move.first != -1 ) ? move.second : Board::GetDistance( currentUnit.GetPosition(), unitToDefend->GetPosition() );
             const double archerValue = unitToDefend->GetStrength() - distanceToUnit * defenceDistanceModifier;
 
-            DEBUG_LOG( DBG_BATTLE, DBG_TRACE, unitToDefend->GetName() << " archer value " << archerValue << " distance: " << distanceToUnit )
+            DEBUG_LOG( DBG_BATTLE, DBG_TRACE, unitToDefend->GetName() << " archer value: " << archerValue << ", distance: " << distanceToUnit )
 
             // 3. Search for enemy units blocking our archers within range move
             const Indexes & adjacentEnemies = Board::GetAdjacentEnemies( *unitToDefend );
@@ -1130,7 +1274,7 @@ namespace AI
                 MeleeAttackOutcome outcome = BestAttackOutcome( arena, currentUnit, *enemy, positionValues );
                 outcome.positionValue = archerValue;
 
-                DEBUG_LOG( DBG_BATTLE, DBG_TRACE, " - Found enemy, cell " << cell << " threat " << outcome.attackValue )
+                DEBUG_LOG( DBG_BATTLE, DBG_TRACE, " - Found enemy, cell: " << cell << ", threat: " << outcome.attackValue )
 
                 if ( IsOutcomeImproved( outcome, protectOption ) ) {
                     protectOption.attackValue = outcome.attackValue;
@@ -1139,7 +1283,7 @@ namespace AI
                     target.cell = outcome.fromIndex;
                     target.unit = outcome.canAttackImmediately ? enemy : nullptr;
 
-                    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, " - Target selected " << enemy->GetName() << " cell " << target.cell << " archer value " << archerValue )
+                    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, " - Target selected: " << enemy->GetName() << ", cell: " << target.cell << ", archer value: " << archerValue )
                 }
             }
 
@@ -1151,14 +1295,15 @@ namespace AI
         }
 
         if ( target.unit ) {
-            DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " defending against " << target.unit->GetName() << " threat level: " << protectOption.attackValue )
+            DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " defending against " << target.unit->GetName() << ", threat level: " << protectOption.attackValue )
         }
         else if ( target.cell != -1 ) {
-            DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " protecting friendly archer, moving to " << target.cell )
+            DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " protecting friendly archer, moving to cell " << target.cell )
         }
         else if ( !isDefensivePosition( currentUnit.GetHeadIndex() ) ) {
             // When there's nothing to do on our half; we're likely dealing with enemy's archers
-            DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " on the enemy half of the battlefield; switch to offense" )
+            DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " on the enemy half of the battlefield, switching to offense" )
+
             target = meleeUnitOffense( arena, currentUnit );
         }
 
@@ -1191,9 +1336,9 @@ namespace AI
             const Unit * targetUnit = nearestUnits.front();
             assert( targetUnit != nullptr );
 
-            actions.emplace_back( Command::ATTACK, currentUnitUID, targetUnit->GetUID(), -1, 0 );
+            actions.emplace_back( Command::ATTACK, currentUnitUID, targetUnit->GetUID(), -1, -1, 0 );
 
-            DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " archer shoots at enemy " << targetUnit->GetName() )
+            DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " shooting at enemy " << targetUnit->GetName() )
 
             return actions;
         }
@@ -1265,26 +1410,27 @@ namespace AI
         if ( targetInfo.cell == -1 ) {
             actions.emplace_back( Command::SKIP, currentUnitUID );
 
+            DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " skipping the turn" )
+
             return actions;
         }
 
-        DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " under Berserk spell, target cell is " << targetInfo.cell )
+        DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " under Berserk spell, target cell: " << targetInfo.cell )
 
         // The target cell of the movement must be the cell that the unit's head will occupy
-        const int32_t moveTargetIdx = getUnitMovementTarget( currentUnit, targetInfo.cell );
-
-        if ( currentUnit.GetHeadIndex() != moveTargetIdx ) {
-            actions.emplace_back( Command::MOVE, currentUnitUID, moveTargetIdx );
-
-            DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " moving to cell " << moveTargetIdx )
-        }
+        const int32_t moveTargetIdx = getUnitMovementTarget( arena, currentUnit, targetInfo.cell );
 
         if ( targetInfo.unit ) {
             const Unit * targetUnit = targetInfo.unit;
 
-            actions.emplace_back( Command::ATTACK, currentUnitUID, targetUnit->GetUID(), -1, -1 );
+            actions.emplace_back( Command::ATTACK, currentUnitUID, targetUnit->GetUID(), ( currentUnit.GetHeadIndex() == moveTargetIdx ? -1 : moveTargetIdx ), -1, -1 );
 
-            DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " melee offense, focus enemy " << targetUnit->GetName() )
+            DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " attacking enemy " << targetUnit->GetName() << " from cell " << moveTargetIdx )
+        }
+        else {
+            actions.emplace_back( Command::MOVE, currentUnitUID, moveTargetIdx );
+
+            DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " moving to cell " << moveTargetIdx )
         }
 
         return actions;
@@ -1299,11 +1445,6 @@ namespace AI
 
         const Actions & plannedActions = _battlePlanner.planUnitTurn( arena, currentUnit );
         actions.insert( actions.end(), plannedActions.begin(), plannedActions.end() );
-
-        // Do not end the turn if we only cast a spell
-        if ( plannedActions.size() != 1 || !plannedActions.front().isType( CommandType::SPELLCAST ) ) {
-            actions.emplace_back( Command::END_TURN, currentUnit.GetUID() );
-        }
     }
 
     void Normal::battleBegins()
