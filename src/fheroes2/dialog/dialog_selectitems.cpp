@@ -158,7 +158,7 @@ public:
         }
 
         fheroes2::Text text( itemText, current ? fheroes2::FontType::normalYellow() : fheroes2::FontType::normalWhite() );
-        text.fitToOneRow( background->activeArea().width - textOffsetX - 10 );
+        text.fitToOneRow( background->activeArea().width - textOffsetX - 55 );
         text.draw( destination.x + textOffsetX, destination.y + itemOffsetY - ( text.height() / 2 ) + 2, display );
     }
 
@@ -225,7 +225,7 @@ public:
     explicit SelectEnumMonster( const fheroes2::Size & rt )
         : SelectEnum( rt )
     {
-        SetAreaMaxItems( ( rtAreaItems.height + _offsetY ) / _offsetY );
+        SetAreaMaxItems( rtAreaItems.height / _offsetY );
     }
 
     using SelectEnum::ActionListPressRight;
@@ -259,7 +259,7 @@ public:
     explicit SelectEnumHeroes( const fheroes2::Size & rt )
         : SelectEnum( rt )
     {
-        SetAreaMaxItems( ( rtAreaItems.height + _offsetY ) / _offsetY );
+        SetAreaMaxItems( rtAreaItems.height / _offsetY );
     }
 
     using SelectEnum::ActionListPressRight;
@@ -286,7 +286,7 @@ public:
     explicit SelectEnumArtifact( const fheroes2::Size & rt )
         : SelectEnum( rt )
     {
-        SetAreaMaxItems( ( rtAreaItems.height + _offsetY ) / _offsetY );
+        SetAreaMaxItems( rtAreaItems.height / _offsetY );
     }
 
     using SelectEnum::ActionListPressRight;
@@ -314,7 +314,7 @@ public:
     explicit SelectEnumSpell( const fheroes2::Size & rt )
         : SelectEnum( rt )
     {
-        SetAreaMaxItems( ( rtAreaItems.height + _offsetY ) / _offsetY );
+        SetAreaMaxItems( rtAreaItems.height / _offsetY );
     }
 
     using SelectEnum::ActionListPressRight;
@@ -352,8 +352,7 @@ public:
     explicit SelectEnumSecSkill( const fheroes2::Size & rt )
         : SelectEnum( rt )
     {
-        const int offset = 42;
-        SetAreaMaxItems( ( rtAreaItems.height + offset ) / offset );
+        SetAreaMaxItems( rtAreaItems.height / _offsetY );
     }
 
     using SelectEnum::ActionListPressRight;
@@ -389,7 +388,7 @@ namespace
             , _textOffsetX( textOffsetX )
             , _offsetY( offsetY )
         {
-            SetAreaMaxItems( ( rtAreaItems.height + _offsetY ) / _offsetY );
+            SetAreaMaxItems( rtAreaItems.height / _offsetY );
         }
 
         using SelectEnum::ActionListPressRight;
@@ -663,7 +662,7 @@ int Dialog::selectMonsterType( const int monsterType )
 {
     const auto & objectInfo = Maps::getObjectsByGroup( Maps::ObjectGroup::Monster );
 
-    MonsterTypeSelection listbox( objectInfo, { 280, fheroes2::Display::instance().height() - 200 } );
+    MonsterTypeSelection listbox( objectInfo, { 350, fheroes2::Display::instance().height() - 200 } );
 
     return selectObjectType( monsterType, objectInfo.size(), listbox, _( "Select Monster:" ) );
 }
@@ -672,7 +671,7 @@ int Dialog::selectTreasureType( const int resourceType )
 {
     const auto & objectInfo = Maps::getObjectsByGroup( Maps::ObjectGroup::Treasure );
 
-    TreasureTypeSelection listbox( objectInfo, { 280, fheroes2::Display::instance().height() - 200 } );
+    TreasureTypeSelection listbox( objectInfo, { 350, fheroes2::Display::instance().height() - 200 } );
 
     return selectObjectType( resourceType, objectInfo.size(), listbox, _( "Select Treasure:" ) );
 }
