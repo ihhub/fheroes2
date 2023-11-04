@@ -9,6 +9,7 @@ declare global {
       setScale: (value: number) => void;
       setScaleType: (value: "nearest" | "linear") => void;
       toggleUseScroll: () => void;
+      setWallpaper: () => void;
     };
 
     Bridge: {

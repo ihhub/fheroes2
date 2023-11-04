@@ -2,6 +2,7 @@ package com.ipapps.homm2.livewallpaper
 
 import androidx.compose.runtime.collectAsState
 import com.ipapps.homm2.livewallpaper.settings.data.Scale
+import com.ipapps.homm2.livewallpaper.settings.data.SettingsViewModel
 import com.ipapps.homm2.livewallpaper.settings.data.WallpaperPreferencesRepository
 import de.andycandy.android.bridge.CallType
 import de.andycandy.android.bridge.DefaultJSInterface
@@ -12,7 +13,9 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.json.JSONObject
 
-class AndroidNativeInterface(val prefs: WallpaperPreferencesRepository) :
+class AndroidNativeInterface(
+    private val viewModel: SettingsViewModel
+) :
     DefaultJSInterface("Android") {
     @NativeCall(CallType.FULL_SYNC)
     fun helloFullSync(name: String): String {
@@ -36,21 +39,26 @@ class AndroidNativeInterface(val prefs: WallpaperPreferencesRepository) :
 
     @NativeCall(CallType.FULL_SYNC)
     fun setBrightness(value: Int) {
-        prefs.setBrightness(value)
+        viewModel.setBrightness(value)
     }
 
     @NativeCall(CallType.FULL_SYNC)
     fun setScale(value: Int) {
-        prefs.setScale(Scale.fromInt(value))
+        viewModel.setScale(Scale.fromInt(value))
     }
 
     @NativeCall(CallType.FULL_SYNC)
     fun setScaleType(value: String) {
-        prefs.setScaleTypeString(value)
+        viewModel.setScaleTypeString(value)
     }
 
     @NativeCall(CallType.FULL_SYNC)
     fun toggleUseScroll() {
-        prefs.toggleUseScroll()
+        viewModel.toggleUseScroll()
+    }
+
+    @NativeCall(CallType.FULL_SYNC)
+    fun setWallpaper() {
+        viewModel.onSetWallpaper()
     }
 }
