@@ -1,6 +1,11 @@
 import { useEffect, useState } from "react";
 
 function startApp(callback: () => void) {
+  if (!window.Bridge) {
+    console.log("Bridge doesnt exists");
+    return;
+  }
+
   if (window.Bridge.initialized) {
     callback();
   } else {
@@ -12,16 +17,14 @@ export const useBridge = () => {
   const [state, setState] = useState({});
 
   useEffect(() => {
-    window.Bridge.init();
+    window.Bridge?.init();
 
     startApp(() => {
-      // @ts-ignore
-      window.Android = window.Bridge.interfaces.Android;
+      window.Android = window.Bridge?.interfaces.Android;
 
-      // @ts-ignore
-      window.dispatch = (msg: any) => {
-        console.log("Got message:", msg);
-        setState(msg);
+      window.dispatchWebViewEvent = (message: any) => {
+        console.log("dispatchWebViewEvent:", message);
+        setState(message);
       };
     });
   }, []);

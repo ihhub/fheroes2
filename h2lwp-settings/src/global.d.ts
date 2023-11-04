@@ -1,6 +1,6 @@
 declare global {
   interface Window {
-    Android: {
+    Android?: {
       helloFullSync: (name: string) => string;
       helloWebPromise: (name: string) => Promise<string>;
       helloFullPromise: (name: string) => Promise<string>;
@@ -12,12 +12,16 @@ declare global {
       setWallpaper: () => void;
     };
 
-    Bridge: {
+    Bridge?: {
       initialized: boolean;
       afterInitialize: () => void;
       init: () => void;
-      interfaces: Record<string, unknown>;
+      interfaces: {
+        Android?: Window["Android"];
+      };
     };
+
+    dispatchWebViewEvent: (message: any) => void;
   }
 }
 
