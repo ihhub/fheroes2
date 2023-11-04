@@ -491,7 +491,6 @@ public class SDLActivity extends WallpaperService implements View.OnSystemUiVisi
         @Override
         public void onDestroy() {
             Log.v(TAG, "onDestroy");
-            System.exit(0);
         }
         @Override
         public SurfaceHolder getSurfaceHolder() {
@@ -502,6 +501,7 @@ public class SDLActivity extends WallpaperService implements View.OnSystemUiVisi
         @Override
         public void onSurfaceCreated(SurfaceHolder holder) {
             super.onSurfaceCreated(holder);
+            SDLActivity.onNativeSurfaceCreated();
             Log.v(TAG, "Engine onSurfaceCreated");
             if (mHolder == null) {
                 mHolder = holder;
@@ -539,9 +539,6 @@ public class SDLActivity extends WallpaperService implements View.OnSystemUiVisi
             if (holder == SDLActivity.mEngine.mHolder) {
                 Log.v(TAG, "destroyed SDLActivity.mEngine.mHolder");
                 SDLActivity.nativePause();
-                SDLActivity.onNativeSurfaceDestroyed();
-                SDLActivity.nativeSendQuit();
-                SDLActivity.nativeQuit();
                 super.onSurfaceDestroyed(holder);
             } else {
                 Log.v(TAG, "Wrong destroyed");
