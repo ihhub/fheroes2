@@ -59,9 +59,9 @@ class WebViewActivity : AppCompatActivity() {
                 webView.evaluateJavascript(
                     """
                 if (typeof window.dispatch === 'function') {
-                    window.dispatch(${jsonString});
+                    window.dispatchWebViewEvent(${jsonString});
                 } else {
-                    console.error('no dispatch', ${jsonString})
+                    console.error('no dispatchWebViewEvent', ${jsonString})
                 }
                 """
                 ) { }

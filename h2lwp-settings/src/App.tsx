@@ -1,7 +1,7 @@
 import { Suspense, useEffect } from "react";
-import logo from "./logo.svg";
 import "./App.css";
 import { useBridge } from "./useBridge";
+import { Box, Button, Container, Typography } from "@mui/material";
 // import { suspend } from "suspend-react";
 
 const Child: React.FC<{ state: unknown }> = ({ state }) => {
@@ -24,18 +24,20 @@ export function App() {
   const { state } = useBridge();
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        
-        <button onClick={() => window.Android.setWallpaper()}>
+    <Container maxWidth="sm">
+      <Box sx={{ my: 4 }}>
+        <Typography variant="h4" component="h1" gutterBottom>
+          Material UI Create React App example in TypeScript
+        </Typography>
+
+        <Button onClick={() => window.Android?.setWallpaper()}>
           Set wallpaper
-        </button>
+        </Button>
 
         <Suspense fallback={<div>Loading...</div>}>
           <Child state={state} />
         </Suspense>
-      </header>
-    </div>
+      </Box>
+    </Container>
   );
 }
