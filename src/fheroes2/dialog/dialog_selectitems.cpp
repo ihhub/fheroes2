@@ -153,8 +153,8 @@ public:
         fheroes2::Display & display = fheroes2::Display::instance();
 
         if ( !itemSprite.empty() ) {
-            fheroes2::Blit(
-                itemSprite, display, destination.x + middleImageOffsetX - ( itemSprite.width() / 2 ), destination.y + itemOffsetY - ( itemSprite.height() / 2 ) );
+            fheroes2::Blit( itemSprite, display, destination.x + middleImageOffsetX - ( itemSprite.width() / 2 ),
+                            destination.y + itemOffsetY - ( itemSprite.height() / 2 ) );
         }
 
         fheroes2::Text text( itemText, current ? fheroes2::FontType::normalYellow() : fheroes2::FontType::normalWhite() );
