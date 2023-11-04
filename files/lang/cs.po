@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-11-02 14:09+0000\n"
-"PO-Revision-Date: 2023-09-24 16:05+0200\n"
+"PO-Revision-Date: 2023-11-04 19:42+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Czech <cs@li.org>\n"
 "Language: cs\n"
@@ -146,7 +146,7 @@ msgstr ""
 "HRA"
 
 msgid "CONFIG"
-msgstr "CONFIG"
+msgstr "NASTAVENÍ"
 
 msgid ""
 "ORIGINAL\n"
@@ -609,7 +609,7 @@ msgid "Luck"
 msgstr "Štěstí"
 
 msgid "Spell Points"
-msgstr "Body Kouzla"
+msgstr "Body magie"
 
 msgid "Hero's Options"
 msgstr "Hrdina Možnosti"
@@ -973,6 +973,13 @@ msgstr "každý s +%{attack} bonusem k jejich útočné síle."
 msgid "The %{name} is destroyed."
 msgstr "%{name} byl zničen."
 
+msgid ""
+"The %{artifact} artifact is in effect for this battle, disabling %{spell} "
+"spell."
+msgstr ""
+"Tuhle bitvu ovlivňuje artefakt %{artifact} a znemožňuje použití kouzla "
+"%{spell}."
+
 msgid "%{count} %{name} rises from the dead!"
 msgid_plural "%{count} %{name} rise from the dead!"
 msgstr[0] "%{count} %{name} vstává z mrtvých!"
@@ -980,7 +987,7 @@ msgstr[1] "%{count} %{name} vstájí z mrtvých!"
 msgstr[2] "%{count} %{name} vstájí z mrtvých!"
 
 msgid "Dwarven Alliance"
-msgstr "Škřítčí Aliance"
+msgstr "Aliance trpaslíků"
 
 msgid "Sorceress Guild"
 msgstr "Cech čarodějů"
@@ -992,7 +999,7 @@ msgid "Ogre Alliance"
 msgstr "Zlobří Aliance"
 
 msgid "Dwarfbane"
-msgstr "Škřítčí prokletí"
+msgstr "Trpasličí zhouba"
 
 msgid "Dragon Alliance"
 msgstr "Dračí Aliance"
@@ -1016,7 +1023,7 @@ msgid "Force of Arms"
 msgstr "Síla Armády"
 
 msgid "Save the Dwarves"
-msgstr "Zachraň Škřítky"
+msgstr "Zachraň trpaslíky"
 
 msgid "Carator Mines"
 msgstr "Caratrovy Doly"
@@ -1067,9 +1074,9 @@ msgid ""
 "of the enemy towns and castles to win, and be sure not to lose all of the "
 "dwarf towns at once, or the enemy will have won."
 msgstr ""
-"Tvým úkolem je ochránít Škřítky před Archibaldovými vojsky. Zmocni se všech "
+"Tvým úkolem je ochránít trpaslíky před Archibaldovými vojsky. Zmocni se všech "
 "nepřátelských hradů a vesnic, zároveň dej pozor abys neztratil všechny "
-"vesnice škřitků najednou, jinak zvítězí náš protivník."
+"vesnice trpaslíků najednou, jinak zvítězí náš protivník."
 
 msgid ""
 "You will face four allied enemies in a straightforward fight for resource "
@@ -1152,7 +1159,7 @@ msgid "Necromancers"
 msgstr "Nekromanti"
 
 msgid "Slay the Dwarves"
-msgstr "Znič Skřítky"
+msgstr "Znič trpaslíky"
 
 msgid "Country Lords"
 msgstr "Pánové Krajiny"
@@ -1208,7 +1215,7 @@ msgid ""
 "so be ready for attack from multiple directions. You must capture all of the "
 "enemy towns and castles to claim victory."
 msgstr ""
-"Je potřeba podrobit si Skřítky, než budou moci zasáhnout do plánů krále "
+"Je potřeba podrobit si trpaslíky, než budou moci zasáhnout do plánů krále "
 "Archibalda. Rolandova vojska mají víc než jednoho hrdinu a mnoho měst, takže "
 "buď připraven na útok z více směrů. Abys zvítězil, musíš dobýt všechna "
 "nepřátelská města a hrady."
@@ -1549,11 +1556,11 @@ msgid ""
 msgstr "%{hero} byl poražen a už se v dalších krocích kampaně neobjeví."
 
 msgid "The dwarves recognize their allies and gladly join your forces."
-msgstr "Skřítci poznají své spojence a rádi se připojí k Tvým silám."
+msgstr "Trpaslíci poznají své spojence a rádi se připojí k Tvým silám."
 
 msgid "The ogres recognize you as the Dwarfbane and lumber over to join you."
 msgstr ""
-"Zlobři poznávají, že jsi ten kdo porazil skřítky a přidávají se k tobě."
+"Zlobři poznávají, že jsi ten kdo porazil trpaslíky a přidávají se k tobě."
 
 msgid ""
 "The dragons, snarling and growling, agree to join forces with you, their "
@@ -1577,7 +1584,7 @@ msgid ""
 "The dwarves hail you, \"Any friend of Roland is a friend of ours. You may "
 "pass.\""
 msgstr ""
-"Skřítci tě vítají, \"Každý Rolandův přítel je i náš přítel. Můžeš projít.\""
+"Trpaslíci tě vítají, \"Každý Rolandův přítel je i náš přítel. Můžeš projít.\""
 
 msgid ""
 "The ogres give you a grunt of recognition, \"Archibald's allies may pass.\""
@@ -1601,7 +1608,7 @@ msgstr ""
 "\""
 
 msgid "\"The Dwarfbane!!!!, run for your lives.\""
-msgstr "\"Skřítkobijec!!!!, běžte jako o život.\""
+msgstr "\"Trpasličí zhouba!!!!, utíkejte jako o život.\""
 
 msgid "campaignBonus|Animate Dead"
 msgstr "Vzkříšení mrtvol"
@@ -2149,10 +2156,10 @@ msgid "Thatched Hut"
 msgstr "Došková Chatrč"
 
 msgid "Archery Range"
-msgstr "Lukostřelba"
+msgstr "Lukostřelnice"
 
 msgid "Upg. Archery Range"
-msgstr "Upg. Lukostřelba"
+msgstr "Vylepš. Lukostřelnice"
 
 msgid "Blacksmith"
 msgstr "Kovárna"
@@ -2224,7 +2231,7 @@ msgid "Cottage"
 msgstr "Chata"
 
 msgid "Upg. Cottage"
-msgstr "Upg. Chata"
+msgstr "Vylepš. chata"
 
 msgid "Stonehenge"
 msgstr "Stonehenge"
@@ -2416,19 +2423,19 @@ msgid "Captain's Quarters"
 msgstr "Kapitánovo obydlí"
 
 msgid "Mage Guild, Level 1"
-msgstr "Věž Kouzel, Level 1"
+msgstr "Věž kouzel, Level 1"
 
 msgid "Mage Guild, Level 2"
-msgstr "Věž Kouzel, Level 2"
+msgstr "Věž kouzel, Level 2"
 
 msgid "Mage Guild, Level 3"
-msgstr "Věž Kouzel, Level 3"
+msgstr "Věž kouzel, Level 3"
 
 msgid "Mage Guild, Level 4"
-msgstr "Věž Kouzel, Level 4"
+msgstr "Věž kouzel, Level 4"
 
 msgid "Mage Guild, Level 5"
-msgstr "Věž Kouzel, Level 5"
+msgstr "Věž kouzel, Level 5"
 
 msgid ""
 "The Shrine increases the necromancy skill of all your necromancers by 10 "
@@ -2504,7 +2511,7 @@ msgid ""
 "The Mage Guild allows heroes to learn spells and replenish their spell "
 "points."
 msgstr ""
-"Kouzelná Věž umožňuje hrdinům naučit se kouzla a doplnit jejich kouzelnou "
+"Věž kouzel umožňuje hrdinům naučit se kouzla a doplnit jejich kouzelnou "
 "energii."
 
 msgid "Recruit %{name}"
@@ -2518,7 +2525,7 @@ msgid ""
 "no room for a spell book. Try giving one of your artifacts to another hero."
 msgstr ""
 "Pro vstup do věže si musíš zakoupit knihu kouzel, teď ale nemáš pro ni "
-"místo. Zkus podarovat jeden ze svých artefaktů jinému hrdinovi."
+"místo. Zkus darovat jeden ze svých artefaktů jinému hrdinovi."
 
 msgid "Exit"
 msgstr "Pryč"
@@ -3185,7 +3192,7 @@ msgid "Knowledge:"
 msgstr "Znalosti:"
 
 msgid "Spell Points:"
-msgstr "Body Kouzla:"
+msgstr "Body magie:"
 
 msgid "Move Points:"
 msgstr "Body Pohybu:"
@@ -3320,7 +3327,7 @@ msgid "Run out of time. Fail to win by a certain point."
 msgstr ""
 
 msgid "Loss Condition"
-msgstr ""
+msgstr "Podmínka prohry"
 
 msgid "Defeat all enemy heroes and towns."
 msgstr ""
@@ -3341,7 +3348,7 @@ msgid "Accumulate a large amount of gold."
 msgstr ""
 
 msgid "Victory Condition"
-msgstr ""
+msgstr "Podmínka vítězství"
 
 msgid "Map difficulty:"
 msgstr "Obtížnost mapy:"
@@ -3409,13 +3416,13 @@ msgid "Map Type"
 msgstr "Typ mapy"
 
 msgid "Selected Name"
-msgstr ""
+msgstr "Jméno vybrané mapy"
 
 msgid "The name of the currently selected map."
 msgstr ""
 
 msgid "Selected Map Difficulty"
-msgstr ""
+msgstr "Obtížnost vybrané mapy"
 
 msgid ""
 "The map difficulty of the currently selected map. The map difficulty is "
@@ -3425,7 +3432,7 @@ msgid ""
 msgstr ""
 
 msgid "Selected Description"
-msgstr ""
+msgstr "Popis vybrané mapy"
 
 msgid "The description of the currently selected map."
 msgstr ""
@@ -4119,13 +4126,13 @@ msgid "hotkey|highscores"
 msgstr ""
 
 msgid "hotkey|credits"
-msgstr ""
+msgstr "Autoři"
 
 msgid "hotkey|standard game"
-msgstr ""
+msgstr "Standardní hra"
 
 msgid "hotkey|campaign game"
-msgstr ""
+msgstr "Hrát kampaň"
 
 msgid "hotkey|multi-player game"
 msgstr "Spusti hru pro více hráčů."
@@ -4134,25 +4141,25 @@ msgid "hotkey|settings"
 msgstr "Nastavení"
 
 msgid "hotkey|quit"
-msgstr ""
+msgstr "Ukončit"
 
 msgid "hotkey|select map"
-msgstr ""
+msgstr "Vybrat mapu"
 
 msgid "hotkey|select small map size"
-msgstr ""
+msgstr "Vybrat malé mapy"
 
 msgid "hotkey|select medium map size"
-msgstr ""
+msgstr "Vybrat střední mapy"
 
 msgid "hotkey|select large map size"
-msgstr ""
+msgstr "Vybrat velké mapy"
 
 msgid "hotkey|select extra large map size"
-msgstr ""
+msgstr "Vybrat velmi velké mapy"
 
 msgid "hotkey|select all map sizes"
-msgstr ""
+msgstr "Vybrat mapy všech velikostí"
 
 msgid "hotkey|hotseat game"
 msgstr ""
@@ -4167,7 +4174,7 @@ msgid "hotkey|choose the expansion campaign"
 msgstr ""
 
 msgid "hotkey|map editor main menu"
-msgstr ""
+msgstr "Hlavní menu editoru map"
 
 msgid "hotkey|new map menu"
 msgstr "Nová mapa"
@@ -4248,16 +4255,16 @@ msgid "hotkey|world map down right"
 msgstr ""
 
 msgid "hotkey|save game"
-msgstr ""
+msgstr "Uložit hru"
 
 msgid "hotkey|next hero"
-msgstr "Zobrazit následujícího hrdinu"
+msgstr "Další hrdina"
 
 msgid "hotkey|start hero movement"
 msgstr "Pokračovat v pohybu hrdiny"
 
 msgid "hotkey|cast adventure spell"
-msgstr "Seslat kouzlo."
+msgstr "Seslat kouzlo"
 
 msgid "hotkey|put hero to sleep"
 msgstr ""
@@ -4266,7 +4273,7 @@ msgid "hotkey|next town"
 msgstr "Následující město"
 
 msgid "hotkey|end turn"
-msgstr ""
+msgstr "Ukončit tah"
 
 #, fuzzy
 msgid "hotkey|file options"
@@ -4283,7 +4290,7 @@ msgid "hotkey|scenario information"
 msgstr "Informace o Hře"
 
 msgid "hotkey|dig for artifact"
-msgstr ""
+msgstr "Vykopat artefakt"
 
 msgid "hotkey|view world"
 msgstr ""
@@ -4292,7 +4299,7 @@ msgid "hotkey|kingdom summary"
 msgstr "Přehled království"
 
 msgid "hotkey|default action"
-msgstr ""
+msgstr "Výchozí akce"
 
 msgid "hotkey|open focus"
 msgstr ""
@@ -4331,52 +4338,52 @@ msgid "hotkey|transfer control to ai"
 msgstr ""
 
 msgid "hotkey|retreat from battle"
-msgstr ""
+msgstr "Utéct z bitvy"
 
 msgid "hotkey|surrender during battle"
-msgstr ""
+msgstr "Vzdát se během bitvy"
 
 msgid "hotkey|toggle battle auto mode"
-msgstr ""
+msgstr "Přepnout automatický boj"
 
 msgid "hotkey|finish the battle in auto mode"
-msgstr "Jsi si jist, že chceš dokončit boj v automatickém módu?"
+msgstr "Dokončit boj v automatickém módu"
 
 msgid "hotkey|battle options"
 msgstr "Možnosti bitvy"
 
 msgid "hotkey|skip turn in battle"
-msgstr ""
+msgstr "Přeskočit tah v bitvě"
 
 msgid "hotkey|cast battle spell"
-msgstr ""
+msgstr "Seslat kouzlo v bitvě"
 
 msgid "hotkey|dwelling level 1"
-msgstr ""
+msgstr "Obydlí úrovně 1"
 
 msgid "hotkey|dwelling level 2"
-msgstr ""
+msgstr "Obydlí úrovně 2"
 
 msgid "hotkey|dwelling level 3"
-msgstr ""
+msgstr "Obydlí úrovně 3"
 
 msgid "hotkey|dwelling level 4"
-msgstr ""
+msgstr "Obydlí úrovně 4"
 
 msgid "hotkey|dwelling level 5"
-msgstr ""
+msgstr "Obydlí úrovně 5"
 
 msgid "hotkey|dwelling level 6"
-msgstr ""
+msgstr "Obydlí úrovně 6"
 
 msgid "hotkey|well"
-msgstr ""
+msgstr "Studna"
 
 msgid "hotkey|marketplace"
 msgstr "Tržiště"
 
 msgid "hotkey|mage guild"
-msgstr ""
+msgstr "Věž kouzel"
 
 msgid "hotkey|shipyard"
 msgstr "Loděnice"
@@ -4385,7 +4392,7 @@ msgid "hotkey|thieves guild"
 msgstr "Cech zlodějů"
 
 msgid "hotkey|tavern"
-msgstr ""
+msgstr "Taverna"
 
 msgid "hotkey|construction screen"
 msgstr ""
@@ -4403,10 +4410,10 @@ msgid "hotkey|join stacks"
 msgstr ""
 
 msgid "hotkey|upgrade troop"
-msgstr ""
+msgstr "Vylepšit jednotky"
 
 msgid "hotkey|dismiss hero or troop"
-msgstr ""
+msgstr "Propustit hrdinu nebo jednotky"
 
 msgid ""
 "Do you want to regain control from AI? The effect will take place only on "
@@ -10019,3 +10026,5 @@ msgstr ""
 "Nejnovější verzi hry nalezneš na\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+
