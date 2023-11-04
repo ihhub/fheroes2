@@ -1,4 +1,4 @@
-package com.ipapps.homm2.livewallpaper.settings.data;
+package com.ipapps.homm2.livewallpaper.data;
 
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

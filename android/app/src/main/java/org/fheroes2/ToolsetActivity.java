@@ -44,7 +44,6 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.ipapps.homm2.livewallpaper.R;
 import com.ipapps.homm2.livewallpaper.WebViewActivity;
-import com.ipapps.homm2.livewallpaper.settings.MainActivity;
 
 public final class ToolsetActivity extends AppCompatActivity
 {

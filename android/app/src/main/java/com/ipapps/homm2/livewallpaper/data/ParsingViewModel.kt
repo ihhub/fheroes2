@@ -1,15 +1,13 @@
-package com.ipapps.homm2.livewallpaper.settings.data;
+package com.ipapps.homm2.livewallpaper.data
 
 import android.app.Application
 import android.net.Uri
-import android.provider.SyncStateContract
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import java.io.File
 import java.io.InputStream
-import kotlin.concurrent.thread
 
 sealed class ParsingState {
     object Initial : ParsingState()

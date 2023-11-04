@@ -1,19 +1,15 @@
 package com.ipapps.homm2.livewallpaper
 
-import androidx.compose.runtime.collectAsState
-import com.ipapps.homm2.livewallpaper.settings.data.MapUpdateInterval
-import com.ipapps.homm2.livewallpaper.settings.data.Scale
-import com.ipapps.homm2.livewallpaper.settings.data.ScaleType
-import com.ipapps.homm2.livewallpaper.settings.data.SettingsViewModel
-import com.ipapps.homm2.livewallpaper.settings.data.WallpaperPreferencesRepository
+import com.ipapps.homm2.livewallpaper.data.MapUpdateInterval
+import com.ipapps.homm2.livewallpaper.data.Scale
+import com.ipapps.homm2.livewallpaper.data.ScaleType
+import com.ipapps.homm2.livewallpaper.data.SettingsViewModel
 import de.andycandy.android.bridge.CallType
 import de.andycandy.android.bridge.DefaultJSInterface
 import de.andycandy.android.bridge.NativeCall
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import org.json.JSONObject
 
 class AndroidNativeInterface(
     private val viewModel: SettingsViewModel

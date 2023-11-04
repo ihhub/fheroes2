@@ -1,4 +1,4 @@
-package com.ipapps.homm2.livewallpaper.settings.data;
+package com.ipapps.homm2.livewallpaper.data
 
 enum class MapUpdateInterval(val value: Int) {
     EVERY_SWITCH(0),

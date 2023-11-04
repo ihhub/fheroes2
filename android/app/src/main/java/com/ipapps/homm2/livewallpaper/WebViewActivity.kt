@@ -6,14 +6,9 @@ import android.content.Intent
 import android.os.Bundle
 import android.webkit.WebView
 import androidx.appcompat.app.AppCompatActivity
-import com.ipapps.homm2.livewallpaper.settings.data.SettingsViewModel
-import com.ipapps.homm2.livewallpaper.settings.data.WallpaperPreferencesRepository
+import com.ipapps.homm2.livewallpaper.data.SettingsViewModel
+import com.ipapps.homm2.livewallpaper.data.WallpaperPreferencesRepository
 import de.andycandy.android.bridge.Bridge
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import org.json.JSONObject
 import org.libsdl.app.SDLActivity
 
@@ -38,7 +33,11 @@ class WebViewActivity : AppCompatActivity() {
         val webView = findViewById<WebView>(R.id.activity_web_view)
         webView.loadUrl("file:///android_asset/www/index.html")
 
-        val config = getExternalFilesDir(null)?.resolve("fheroes2.cfg")
+        var config = getExternalFilesDir(null)?.resolve("fheroes2.cfg")
+        if (config == null || !config.exists()) {
+            config?.createNewFile()
+        }
+
         val prefsRepository = WallpaperPreferencesRepository(config)
         val settingsViewModel =
             SettingsViewModel(prefsRepository, ::setWallpaper, ::openIconAuthorUrl);

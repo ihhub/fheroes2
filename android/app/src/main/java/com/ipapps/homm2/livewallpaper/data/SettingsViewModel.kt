@@ -1,4 +1,4 @@
-package com.ipapps.homm2.livewallpaper.settings.data;
+package com.ipapps.homm2.livewallpaper.data
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
@@ -9,7 +9,6 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import org.json.JSONObject
 
 class SettingsViewModel(
     private val wallpaperPreferencesRepository: WallpaperPreferencesRepository,
