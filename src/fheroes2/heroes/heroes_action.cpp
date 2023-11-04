@@ -52,6 +52,7 @@
 #include "image.h"
 #include "interface_base.h"
 #include "interface_gamearea.h"
+#include "interface_icons.h"
 #include "interface_radar.h"
 #include "interface_status.h"
 #include "kingdom.h"
@@ -3260,7 +3261,9 @@ namespace
                 _( "In a dazzling display of daring, you break into the local jail and free the hero imprisoned there, who, in return, pledges loyalty to your cause." ),
                 Dialog::OK );
 
-            Interface::AdventureMap::Get().getGameArea().runSingleObjectAnimation(
+            Interface::AdventureMap & adventureMapInterface = Interface::AdventureMap::Get();
+
+            adventureMapInterface.getGameArea().runSingleObjectAnimation(
                 std::make_shared<Interface::ObjectFadingOutInfo>( tile.GetObjectUID(), tile.GetIndex(), tile.GetObject() ) );
 
             // TODO: add hero fading in animation together with jail animation.
@@ -3268,6 +3271,9 @@ namespace
 
             if ( prisoner ) {
                 prisoner->Recruit( hero.GetColor(), Maps::GetPoint( dst_index ) );
+
+                // Update the kingdom heroes list including the scrollbar.
+                adventureMapInterface.GetIconsPanel().ResetIcons( ICON_HEROES );
             }
         }
         else {
