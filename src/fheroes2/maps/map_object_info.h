@@ -61,7 +61,9 @@ namespace Maps
         // The layer is used for passability calculations as well as an order of rendering objects.
         ObjectLayerType layerType{ OBJECT_LAYER };
 
-        // TODO: add information about animation.
+        // The number of following by index images is used to animate this object part.
+        // In most cases this value is 0 as the majority of object parts do not have animations.
+        uint8_t animationFrames{ 0 };
     };
 
     struct ObjectInfo
@@ -107,7 +109,7 @@ namespace Maps
         Hero,
         Monster,
         Resource,
-        Water_Object,
+        Ocean_Object,
 
         // IMPORTANT!!!
         // Put all new entries just above this entry.

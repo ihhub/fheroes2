@@ -234,7 +234,7 @@ namespace
         }
     }
 
-    void populateWaterObjectData( std::vector<Maps::ObjectInfo> & objects )
+    void populateOceanObjectData( std::vector<Maps::ObjectInfo> & objects )
     {
         // TODO: properly populate these objects.
 
@@ -263,7 +263,7 @@ namespace
         populateHeroData( objectData[static_cast<size_t>( Maps::ObjectGroup::Hero )] );
         populateMonsterData( objectData[static_cast<size_t>( Maps::ObjectGroup::Monster )] );
         populateResourceData( objectData[static_cast<size_t>( Maps::ObjectGroup::Resource )] );
-        populateWaterObjectData( objectData[static_cast<size_t>( Maps::ObjectGroup::Water_Object )] );
+        populateOceanObjectData( objectData[static_cast<size_t>( Maps::ObjectGroup::Ocean_Object )] );
 
         isPopulated = true;
     }

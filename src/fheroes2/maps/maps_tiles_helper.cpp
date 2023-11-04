@@ -1191,6 +1191,9 @@ namespace
                 continue;
             }
 
+            // It is important that the type of the object is set properly for this layer.
+            assert( partInfo.icnType != MP2::OBJ_NONE );
+
             currentTile.SetObject( partInfo.objectType );
             currentTile.moveMainAddonToBottomLayer();
 
