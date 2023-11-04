@@ -1319,7 +1319,7 @@ void Battle::Arena::ApplyActionAutoSwitch( Command & cmd )
             return false;
         }
 
-        if ( ( arena->getForce( color ).GetControl() & CONTROL_AI ) ) {
+        if ( arena->getForce( color ).GetControl() & CONTROL_AI ) {
             return false;
         }
 
