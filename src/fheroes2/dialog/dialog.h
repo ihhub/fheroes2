@@ -123,7 +123,7 @@ namespace Dialog
     void Marketplace( Kingdom & kingdom, bool fromTradingPost );
     void MakeGiftResource( Kingdom & kingdom );
     int BuyBoat( bool enable );
-    void ThievesGuild( bool oracle );
+    void ThievesGuild( const bool oracle );
     void GameInfo();
 
     // Displays a dialog box informing that an artifact set has been assembled
