@@ -37,3 +37,7 @@ export function App() {
     </>
   );
 }
+
+
+// "/storage/emulated/0/Android/data/com.ipapps.homm2.livewallpaper/files"
+// "/storage/emulated/0/Android/data/com.ipapps.homm2.livewallpaper/files/files/data/resurrection.h2d"
