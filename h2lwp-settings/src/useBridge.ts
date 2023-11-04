@@ -14,27 +14,20 @@ function startApp(callback: () => void) {
 }
 
 export const useBridge = () => {
-  const [state, setState] = useState(
-    {}
-    // {
-    //   scaleType: "NEAREST",
-    //   scale: 4,
-    //   mapUpdateInterval: 2,
-    //   brightness: 75,
-    //   useScroll: true,
-    // }
-  );
+  const [state, setState] = useState({});
+
+  console.log("STATE", JSON.stringify(state, null, 2));
 
   useEffect(() => {
     window.Bridge?.init();
 
+    window.dispatchWebViewEvent = (message: any) => {
+      console.log("dispatchWebViewEvent:", JSON.stringify(message, null, 2));
+      setState(message);
+    };
+
     startApp(() => {
       window.Android = window.Bridge?.interfaces.Android;
-
-      window.dispatchWebViewEvent = (message: any) => {
-        console.log("dispatchWebViewEvent:", JSON.stringify(message, null, 2));
-        setState(message);
-      };
     });
   }, []);
 
