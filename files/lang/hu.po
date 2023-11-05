@@ -3881,24 +3881,22 @@ msgid ""
 "able to revert this after this point. The high score will be calculated "
 "based solely on the new difficulty. Do you want to proceed?"
 msgstr ""
-"Alacsonyabb nehézségi szintre akarod állítani a hadjáratot. Innentől nem "
-"állíthatod újra vissza és a pontszámaid is az újonnan választott szintnek "
-"megfelelően számolódnak majd. Így is akarod?"
 
+#, fuzzy
 msgid "Are you sure you want to restart this scenario?"
-msgstr "Biztosan újra akarod indítani a küldetést?"
+msgstr "Biztos, hogy elbocsátod ezt a Hőst?"
 
 msgid "Campaign Scenario loading failure"
-msgstr "A hadjárat küldetés betöltése sikertelen"
+msgstr ""
 
 msgid "Please make sure that campaign files are correct and present."
-msgstr "Bizonyosodj meg róla, hogy a hadjárat fájljai épek és mind megvannak."
+msgstr ""
 
 msgid "Days spent"
-msgstr "Nap eltelt"
+msgstr ""
 
 msgid "The number of days spent on this campaign."
-msgstr "Az eltöltött napok száma ebben a hadjáratban"
+msgstr ""
 
 msgid "Project Coordination and Core Development"
 msgstr "Projekt-koordináció és fő fejlesztés"
