@@ -5,8 +5,8 @@ import { Settings } from "./Settings";
 import { Header } from "./Header";
 
 export function App() {
-  const { state } = useBridge();
-  const isLoading = Object.keys(state).length === 0;
+  const { settings } = useBridge();
+  const isLoading = Object.keys(settings).length === 0;
 
   return (
     <Grid container height="100%" width="100%" direction="column">
@@ -19,9 +19,9 @@ export function App() {
         flex="1"
         direction="column"
       >
-        {isLoading && <CircularProgress />}
+        {isLoading && <CircularProgress  />}
 
-        {!isLoading && <Settings state={state} />}
+        {!isLoading && <Settings settings={settings} />}
 
         {!isLoading && (
           <Grid

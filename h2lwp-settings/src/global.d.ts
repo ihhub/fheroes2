@@ -1,3 +1,45 @@
+export enum WallpaperMapUpdateInterval {
+  EVERY_SWITCH = 0,
+  MINUTES_10 = 1,
+  MINUTES_30 = 2,
+  HOURS_2 = 3,
+  HOURS_24 = 4,
+}
+
+export enum WallpaperScaleType {
+  NEAREST = 0,
+  LINEAR = 1,
+}
+
+export enum WallpaperScale {
+  DPI = 0,
+  X1 = 1,
+  X2 = 2,
+  X3 = 3,
+  X4 = 4,
+  X5 = 5,
+}
+
+export type WallpaperSettings = {
+  scale: WallpaperScale;
+  scaleType: WallpaperScaleType;
+  mapUpdateInterval: WallpaperMapUpdateInterval;
+  useScroll: boolean;
+  brightness: number;
+};
+
+export type WebViewSettingsEvent = {
+  type: "settings";
+  payload: WallpaperSettings;
+};
+
+export type WallpaperMapItem = {};
+
+export type WebViewMapsListEvent = {
+  type: "maps-list";
+  payload: WallpaperMapItem[];
+};
+
 declare global {
   interface Window {
     Android?: {
@@ -22,7 +64,9 @@ declare global {
       };
     };
 
-    dispatchWebViewEvent: (message: any) => void;
+    dispatchWebViewEvent: (
+      message: WebViewSettingsEvent | WebViewMapsListEvent
+    ) => void;
   }
 }
 

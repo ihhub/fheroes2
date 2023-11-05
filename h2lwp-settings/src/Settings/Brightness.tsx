@@ -27,7 +27,7 @@ export const Brightness: React.FC<Props> = ({ value }) => {
             value={localValue}
             onChange={(_, value) => {
               setLocalValue(Number(value));
-              window.Android?.setBrightness(Number(value) || 0);
+              window.Android?.setBrightness(value);
             }}
           />
         </Box>

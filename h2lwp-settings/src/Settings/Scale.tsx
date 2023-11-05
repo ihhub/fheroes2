@@ -1,10 +1,11 @@
+import { WallpaperScale } from "../global";
 import { SimpleListMenu } from "./SimpleListMenu";
 
 type Props = {
-  value: number;
+  value: WallpaperScale;
 };
 
-const valueToText: Record<number, string> = {
+const valueToText: Record<WallpaperScale, string> = {
   0: "DPI",
   1: "x1",
   2: "x2",
@@ -14,7 +15,7 @@ const valueToText: Record<number, string> = {
 };
 
 const items = Object.entries(valueToText).map(([value, title]) => ({
-  value: Number(value),
+  value: Number(value) as WallpaperScale,
   title,
 }));
 
@@ -23,6 +24,6 @@ export const Scale: React.FC<Props> = ({ value }) => (
     label="Scale"
     value={value}
     items={items}
-    onChange={(value) => window.Android?.setScale(Number(value) || 0)}
+    onChange={(value) => window.Android?.setScale(value)}
   />
 );

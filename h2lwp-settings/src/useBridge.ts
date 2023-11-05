@@ -14,16 +14,17 @@ function startApp(callback: () => void) {
 }
 
 export const useBridge = () => {
-  const [state, setState] = useState({});
-
-  console.log("STATE", JSON.stringify(state, null, 2));
+  const [settings, setSettings] = useState({});
 
   useEffect(() => {
     window.Bridge?.init();
 
-    window.dispatchWebViewEvent = (message: any) => {
+    window.dispatchWebViewEvent = (message) => {
       console.log("dispatchWebViewEvent:", JSON.stringify(message, null, 2));
-      setState(message);
+
+      if (message.type === "settings") {
+        setSettings(message);
+      }
     };
 
     startApp(() => {
@@ -31,5 +32,5 @@ export const useBridge = () => {
     });
   }, []);
 
-  return { state };
+  return { settings };
 };

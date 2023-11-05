@@ -5,19 +5,21 @@ import { Scale } from "./Settings/Scale";
 import { ScaleType } from "./Settings/ScaleType";
 import { Brightness } from "./Settings/Brightness";
 // import { UseScroll } from "./Settings/UseScroll";
-import { MapUpdateInterval } from "./Settings/MapUpdateInterval";
+import { WallpaperSettings } from "./global";
 
-export const Settings: React.FC<{ state: Record<string, unknown> }> = ({
-  state,
-}) => (
+type Props = {
+  settings: WallpaperSettings;
+};
+
+export const Settings: React.FC<Props> = ({ settings }) => (
   <List subheader={<ListSubheader>Settings</ListSubheader>} disablePadding>
-    <ScaleType value={Number(state.scaleType) || 0} />
+    <ScaleType value={settings.scaleType} />
 
-    <Scale value={Number(state.scale) || 0} />
+    <Scale value={settings.scale} />
 
-    <MapUpdateInterval value={Number(state.mapUpdateInterval) || 0} />
+    <MapUpdateInterval value={settings.mapUpdateInterval} />
 
-    <Brightness value={Number(state.brightness) || 0} />
+    <Brightness value={settings.brightness} />
 
     {/*<UseScroll value={Boolean(state.useMapScroll)} />*/}
   </List>

@@ -1,16 +1,17 @@
+import { WallpaperScaleType } from "../global";
 import { SimpleListMenu } from "./SimpleListMenu";
 
 type Props = {
-  value: number;
+  value: WallpaperScaleType;
 };
 
-const valueToText = {
+const valueToText: Record<WallpaperScaleType, string> = {
   0: "Nearest",
   1: "Linear",
-} as const;
+};
 
 const items = Object.entries(valueToText).map(([value, title]) => ({
-  value: Number(value),
+  value: Number(value) as WallpaperScaleType,
   title,
 }));
 
@@ -19,6 +20,6 @@ export const ScaleType: React.FC<Props> = ({ value }) => (
     label="Scale type"
     value={value}
     items={items}
-    onChange={(value) => window.Android?.setScaleType(Number(value) || 0)}
+    onChange={(value) => window.Android?.setScaleType(value)}
   />
 );

@@ -1,10 +1,11 @@
+import { WallpaperMapUpdateInterval } from "../global";
 import { SimpleListMenu } from "./SimpleListMenu";
 
 type Props = {
-  value: number;
+  value: WallpaperMapUpdateInterval;
 };
 
-const valueToText: Record<number, string> = {
+const valueToText: Record<WallpaperMapUpdateInterval, string> = {
   0: "Every switch to home screen",
   1: "10 minutes",
   2: "30 minutes",
@@ -13,7 +14,7 @@ const valueToText: Record<number, string> = {
 };
 
 const items = Object.entries(valueToText).map(([value, title]) => ({
-  value: Number(value),
+  value: Number(value) as WallpaperMapUpdateInterval,
   title,
 }));
 
@@ -22,6 +23,6 @@ export const MapUpdateInterval: React.FC<Props> = ({ value }) => (
     label="Map update interval"
     value={value}
     items={items}
-    onChange={(value) => window.Android?.setMapUpdateInterval(Number(value) || 0)}
+    onChange={(value) => window.Android?.setMapUpdateInterval(value)}
   />
 );
