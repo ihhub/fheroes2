@@ -250,7 +250,7 @@ public:
     }
 
 private:
-    const int32_t _offsetY{ 43 };
+    static const int32_t _offsetY{ 43 };
 };
 
 class SelectEnumHeroes : public SelectEnum
@@ -277,7 +277,7 @@ public:
     }
 
 private:
-    const int32_t _offsetY{ 35 };
+    static const int32_t _offsetY{ 35 };
 };
 
 class SelectEnumArtifact : public SelectEnum
@@ -305,7 +305,7 @@ public:
     }
 
 private:
-    const int32_t _offsetY{ 42 };
+    static const int32_t _offsetY{ 42 };
 };
 
 class SelectEnumSpell : public SelectEnum
@@ -333,7 +333,7 @@ public:
     }
 
 private:
-    const int32_t _offsetY{ 55 };
+    static const int32_t _offsetY{ 55 };
 };
 
 class SelectEnumSecSkill : public SelectEnum
@@ -371,7 +371,7 @@ public:
     }
 
 private:
-    const int32_t _offsetY{ 42 };
+    static const int32_t _offsetY{ 42 };
 };
 
 namespace
