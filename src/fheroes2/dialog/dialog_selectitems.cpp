@@ -528,6 +528,27 @@ namespace
         }
     };
 
+    class OceanObjectTypeSelection : public ObjectTypeSelection
+    {
+    public:
+        OceanObjectTypeSelection( const std::vector<Maps::ObjectInfo> & objectInfo, const fheroes2::Size & size )
+            : ObjectTypeSelection( objectInfo, size, 3 * 32 / 2, 3 * 32 + 5, 2 * 32 )
+        {
+            // Do nothing.
+        }
+
+    private:
+        void showPopupWindow( const Maps::ObjectInfo & info ) override
+        {
+            fheroes2::showStandardTextMessage( getObjectName( info ), "", Dialog::ZERO );
+        }
+
+        std::string getObjectName( const Maps::ObjectInfo & info ) override
+        {
+            return MP2::StringObject( info.objectType );
+        }
+    };
+
     int selectObjectType( const int objectType, const size_t objectCount, ObjectTypeSelection & objectSelection, const char * title )
     {
         assert( title != nullptr );
@@ -674,4 +695,13 @@ int Dialog::selectTreasureType( const int resourceType )
     TreasureTypeSelection listbox( objectInfo, { 350, fheroes2::Display::instance().height() - 200 } );
 
     return selectObjectType( resourceType, objectInfo.size(), listbox, _( "Select Treasure:" ) );
+}
+
+int Dialog::selectOceanObjectType( const int resourceType )
+{
+    const auto & objectInfo = Maps::getObjectsByGroup( Maps::ObjectGroup::Ocean_Object );
+
+    OceanObjectTypeSelection listbox( objectInfo, { 350, fheroes2::Display::instance().height() - 200 } );
+
+    return selectObjectType( resourceType, objectInfo.size(), listbox, _( "Select Ocean Object:" ) );
 }

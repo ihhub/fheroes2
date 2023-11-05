@@ -48,6 +48,8 @@ namespace Dialog
     int selectMonsterType( const int monsterType );
 
     int selectTreasureType( const int resourceType );
+
+    int selectOceanObjectType( const int resourceType );
 }
 
 #endif
