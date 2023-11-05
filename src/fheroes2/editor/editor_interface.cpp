@@ -31,6 +31,7 @@
 #include "audio_manager.h"
 #include "cursor.h"
 #include "dialog.h"
+#include "dialog_selectitems.h"
 #include "game.h"
 #include "game_delays.h"
 #include "game_hotkeys.h"
@@ -53,6 +54,7 @@
 #include "mp2.h"
 #include "screen.h"
 #include "settings.h"
+#include "spell.h"
 #include "translations.h"
 #include "ui_button.h"
 #include "ui_dialog.h"
@@ -636,7 +638,20 @@ namespace Interface
                 fheroes2::showStandardTextMessage( _( "Artifacts" ), _( "Choose a tile which does not contain any objects." ), Dialog::OK );
             }
             else {
-                setObjectOnTile( tile, Maps::ObjectGroup::Artifact, _editorPanel.getArtifactType() );
+                const int32_t artifactType = _editorPanel.getArtifactType();
+
+                // For each Spell Scroll artifact we select a spell.
+                if ( Maps::getObjectsByGroup( Maps::ObjectGroup::Artifact )[artifactType].metadata[0] == Artifact::SPELL_SCROLL ) {
+                    const int spellId = Dialog::selectSpell( Spell::RANDOM, true ).GetID();
+
+                    if ( spellId != Spell::NONE ) {
+                        setObjectOnTile( tile, Maps::ObjectGroup::Artifact, _editorPanel.getArtifactType() );
+                        Maps::setSpellScrollSpellId( tile, static_cast<uint32_t>( spellId ) );
+                    }
+                }
+                else {
+                    setObjectOnTile( tile, Maps::ObjectGroup::Artifact, _editorPanel.getArtifactType() );
+                }
             }
         }
     }

@@ -133,6 +133,8 @@ namespace Maps
 
     void setResourceOnTile( Tiles & tile, const int resourceType, uint32_t value );
 
+    void setSpellScrollSpellId( Tiles & tile, const uint32_t spellId );
+
     Funds getFundsFromTile( const Tiles & tile );
 
     Troop getTroopFromTile( const Tiles & tile );

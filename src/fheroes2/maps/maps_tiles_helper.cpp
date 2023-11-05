@@ -1709,6 +1709,17 @@ namespace Maps
         tile.metadata()[1] = value;
     }
 
+    void setSpellScrollSpellId( Tiles & tile, const uint32_t spellId )
+    {
+        if ( tile.GetObject() != MP2::OBJ_ARTIFACT || tile.metadata()[0] != Artifact::SPELL_SCROLL ) {
+            // This function should be used only for the Spell Scroll artifact.
+            assert( 0 );
+            return;
+        }
+
+        tile.metadata()[1] = spellId;
+    }
+
     Funds getFundsFromTile( const Tiles & tile )
     {
         switch ( tile.GetObject( false ) ) {
@@ -3162,6 +3173,9 @@ namespace Maps
             // without corrupting their object data. Do this through 'OBJ_HEROES' (possibly like 'hero.Dismiss()').
             needRedraw |= removeObjectTypeFromTile( tile, MP2::OBJ_ICN_TYPE_MINIHERO );
         }
+        if ( objectTypesToErase & ObjectErasureType::TREASURES && tile.getObjectIcnType() == MP2::OBJ_ICN_TYPE_OBJNRSRC ) {
+            needRedraw |= removeObject( tile, tile.GetObjectUID() );
+        }
         if ( objectTypesToErase & ObjectErasureType::ARTIFACTS && tile.getObjectIcnType() == MP2::OBJ_ICN_TYPE_OBJNARTI ) {
             needRedraw |= removeObject( tile, tile.GetObjectUID() );
         }
@@ -3183,6 +3197,11 @@ namespace Maps
             // Setting just 1 resource is enough. It doesn't matter as we are not saving this value into the map format.
             placeObjectOnTile( tile, info );
             setResourceOnTile( tile, static_cast<int>( info.metadata[0] ), 1 );
+            return;
+        case MP2::OBJ_ARTIFACT:
+            placeObjectOnTile( tile, info );
+            // The artifact ID is stored in metadata[0]. It is used by the other engine functions.
+            tile.metadata()[0] = info.metadata[0];
             return;
         default:
             break;

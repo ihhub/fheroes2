@@ -3695,10 +3695,10 @@ namespace fheroes2
             case ICN::OBJNARTI:
                 LoadOriginalICN( id );
                 if ( _icnVsSprite[id].size() == 206 ) {
-                    // If we have Price of Loyalty assets we prepare a map sprite for the magic book.
+                    // If we have the Price of Loyalty assets we nake a map sprite for the Magic Book artifact.
                     _icnVsSprite[id].resize( 208 );
 
-                    // MAgig book map sprite shadow.
+                    // Magic book sprite shadow.
                     _icnVsSprite[id][206] = _icnVsSprite[id][162];
                     FillTransform( _icnVsSprite[id][206], 0, 0, 5, 1, 1U );
                     FillTransform( _icnVsSprite[id][206], 0, 1, 2, 1, 1U );
@@ -3711,9 +3711,7 @@ namespace fheroes2
 
                     // Magic Book main sprite. We use sprite from the info dialog to make the map sprite.
                     _icnVsSprite[id][207].resize( 21, 32 );
-
                     Copy( GetICN( ICN::ARTFX, 81 ), 6, 0, _icnVsSprite[id][207], 0, 0, 21, 32 );
-                    // Make transparency around the Magic Book sprite.
                     FillTransform( _icnVsSprite[id][207], 0, 0, 12, 1, 1U );
                     FillTransform( _icnVsSprite[id][207], 15, 0, 6, 1, 1U );
                     FillTransform( _icnVsSprite[id][207], 0, 1, 9, 1, 1U );

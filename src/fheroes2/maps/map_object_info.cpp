@@ -109,7 +109,7 @@ namespace
 
         {
             Maps::ObjectInfo object{ MP2::OBJ_RANDOM_ULTIMATE_ARTIFACT };
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNARTI, 164, fheroes2::Point{ 0, 0 }, MP2::OBJ_RANDOM_ARTIFACT_TREASURE, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNARTI, 164, fheroes2::Point{ 0, 0 }, MP2::OBJ_RANDOM_ULTIMATE_ARTIFACT, Maps::OBJECT_LAYER );
 
             objects.emplace_back( std::move( object ) );
         }

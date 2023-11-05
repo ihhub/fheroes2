@@ -510,7 +510,7 @@ namespace
         {
             switch ( info.objectType ) {
             case MP2::OBJ_ARTIFACT:
-                return _( fheroes2::getArtifactData( info.metadata[0] ).name );
+                return Artifact( static_cast<int>( info.metadata[0] ) ).GetName();
             case MP2::OBJ_RANDOM_ARTIFACT:
             case MP2::OBJ_RANDOM_ARTIFACT_MINOR:
             case MP2::OBJ_RANDOM_ARTIFACT_MAJOR:
