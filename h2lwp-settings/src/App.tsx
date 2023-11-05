@@ -1,10 +1,19 @@
 import "./App.css";
 import { useBridge } from "./useBridge";
-import { AppBar, Button, Grid, Toolbar, Typography } from "@mui/material";
+import {
+  AppBar,
+  Button,
+  CircularProgress,
+  Grid,
+  Toolbar,
+  Typography,
+} from "@mui/material";
 import { Settings } from "./Settings";
 
 export function App() {
   const { state } = useBridge();
+
+  const isLoading = Object.keys(state).length === 0;
 
   return (
     <>
@@ -18,22 +27,37 @@ export function App() {
 
       <Toolbar />
 
-      <Settings state={state} />
-
-      <Grid
-        container
-        alignContent="center"
-        justifyContent="center"
-        padding={2}
-        width="100%"
-      >
-        <Button
-          variant="contained"
-          onClick={() => window.Android?.setWallpaper()}
+      {isLoading && (
+        <Grid
+          height="100%"
+          container
+          alignContent="center"
+          justifyContent="center"
         >
-          Set wallpaper
-        </Button>
-      </Grid>
+          <CircularProgress />
+        </Grid>
+      )}
+
+      {!isLoading && (
+        <Grid>
+          <Settings state={state} />
+
+          <Grid
+            container
+            alignContent="center"
+            justifyContent="center"
+            padding={2}
+            width="100%"
+          >
+            <Button
+              variant="contained"
+              onClick={() => window.Android?.setWallpaper()}
+            >
+              Set wallpaper
+            </Button>
+          </Grid>
+        </Grid>
+      )}
     </>
   );
 }
