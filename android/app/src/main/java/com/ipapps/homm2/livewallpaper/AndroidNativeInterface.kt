@@ -42,6 +42,21 @@ class AndroidNativeInterface(
         }
     }
 
+    @NativeCall(CallType.FULL_PROMISE)
+    fun uploadMap() = doInBackground { promise ->
+        runBlocking {
+            launch {
+                if (mapsFolder == null) {
+                    promise.resolve("[]")
+                } else {
+                    val list = mapsFolder.list { _, filename -> filename.endsWith(".mp2") }
+
+                    promise.resolve(JSONArray(list).toString(2))
+                }
+            }
+        }
+    }
+
     @NativeCall(CallType.FULL_SYNC)
     fun setBrightness(value: Int) {
         viewModel.setBrightness(value)

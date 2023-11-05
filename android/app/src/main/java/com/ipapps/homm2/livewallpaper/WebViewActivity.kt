@@ -1,10 +1,15 @@
 package com.ipapps.homm2.livewallpaper
 
+import android.app.Activity
 import android.app.WallpaperManager
 import android.content.ComponentName
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.webkit.ValueCallback
+import android.webkit.WebChromeClient
 import android.webkit.WebView
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.ipapps.homm2.livewallpaper.data.SettingsViewModel
 import com.ipapps.homm2.livewallpaper.data.WallpaperPreferencesRepository
@@ -33,6 +38,22 @@ class WebViewActivity : AppCompatActivity() {
         }
     }
 
+    private var filePathCallback: ValueCallback<Array<Uri>>? = null
+
+    private val fileChooserLauncher =
+        registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
+            val array = arrayOf<Uri>()
+            if (uri != null) {
+                println("selected url $uri")
+                array[0] = uri;
+            } else {
+                println("No uri")
+            }
+
+            filePathCallback?.onReceiveValue(arrayOf())
+            filePathCallback = null
+        }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_web_view)
@@ -47,10 +68,28 @@ class WebViewActivity : AppCompatActivity() {
 
         val webView = findViewById<WebView>(R.id.activity_web_view)
         val bridge = Bridge(applicationContext, webView)
-        bridge.addJSInterface(AndroidNativeInterface(settingsViewModel, getExternalFilesDir("maps")))
+        bridge.addJSInterface(
+            AndroidNativeInterface(
+                settingsViewModel,
+                getExternalFilesDir("maps")
+            )
+        )
         bridge.addAfterInitializeListener {
             settingsViewModel.subscribeToPreferences {
                 sendWebViewEvent(WebViewSettingsEvent(it), webView)
+            }
+        }
+
+        webView.webChromeClient = object : WebChromeClient() {
+            override fun onShowFileChooser(
+                webView: WebView?,
+                filePathCallback: ValueCallback<Array<Uri>>?,
+                fileChooserParams: FileChooserParams?
+            ): Boolean {
+                fileChooserLauncher.launch("*/*")
+                this@WebViewActivity.filePathCallback = filePathCallback
+
+                return true;
             }
         }
 
