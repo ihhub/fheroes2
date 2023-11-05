@@ -21,34 +21,27 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <algorithm>
 #include <cassert>
 #include <cstdint>
 #include <memory>
 #include <ostream>
 #include <string>
-#include <vector>
 
-#include "agg_image.h"
 #include "army.h"
 #include "army_troop.h"
 #include "audio_manager.h"
 #include "castle.h"
 #include "color.h"
-#include "cursor.h"
 #include "dialog.h"
+#include "dialog_selectitems.h"
 #include "direction.h"
 #include "game_interface.h"
 #include "heroes.h"
-#include "icn.h"
-#include "image.h"
 #include "interface_base.h"
 #include "interface_gamearea.h"
 #include "interface_icons.h"
-#include "interface_list.h"
 #include "interface_radar.h"
 #include "kingdom.h"
-#include "localevent.h"
 #include "logging.h"
 #include "m82.h"
 #include "maps.h"
@@ -59,153 +52,17 @@
 #include "mp2.h"
 #include "resource.h"
 #include "route.h"
-#include "screen.h"
 #include "settings.h"
 #include "spell.h"
 #include "spell_info.h"
 #include "tools.h"
 #include "translations.h"
-#include "ui_button.h"
 #include "ui_dialog.h"
-#include "ui_scrollbar.h"
-#include "ui_text.h"
-#include "ui_window.h"
 #include "view_world.h"
 #include "world.h"
 
 namespace
 {
-    class CastleIndexListBox : public Interface::ListBox<int32_t>
-    {
-    public:
-        using Interface::ListBox<int32_t>::ActionListDoubleClick;
-        using Interface::ListBox<int32_t>::ActionListSingleClick;
-        using Interface::ListBox<int32_t>::ActionListPressRight;
-
-        CastleIndexListBox( const fheroes2::Rect & windowArea, const fheroes2::Point & offset, int & res, const int townFrameIcnId, const int listBoxIcnId )
-            : Interface::ListBox<int32_t>( offset )
-            , result( res )
-            , _townFrameIcnId( townFrameIcnId )
-            , _listBoxIcnId( listBoxIcnId )
-            , _windowArea( windowArea )
-        {}
-
-        void RedrawItem( const int32_t & index, int32_t dstx, int32_t dsty, bool current ) override;
-        void RedrawBackground( const fheroes2::Point & dst ) override;
-
-        void ActionCurrentUp() override
-        {
-            // Do nothing.
-        }
-
-        void ActionCurrentDn() override
-        {
-            // Do nothing.
-        }
-
-        void ActionListDoubleClick( int32_t & /* unused */ ) override
-        {
-            result = Dialog::OK;
-        }
-
-        void ActionListSingleClick( int32_t & /* unused */ ) override
-        {
-            // Do nothing.
-        }
-
-        void ActionListPressRight( int32_t & index ) override
-        {
-            const Castle * castle = world.getCastleEntrance( Maps::GetPoint( index ) );
-
-            if ( castle != nullptr ) {
-                Dialog::QuickInfoWithIndicationOnRadar( *castle, _windowArea );
-            }
-        }
-
-        int & result;
-
-    private:
-        int _townFrameIcnId;
-        int _listBoxIcnId;
-        const fheroes2::Rect _windowArea;
-    };
-
-    void CastleIndexListBox::RedrawItem( const int32_t & index, int32_t dstx, int32_t dsty, bool current )
-    {
-        const Castle * castle = world.getCastleEntrance( Maps::GetPoint( index ) );
-
-        if ( castle ) {
-            fheroes2::Display & display = fheroes2::Display::instance();
-
-            fheroes2::Blit( fheroes2::AGG::GetICN( _townFrameIcnId, 0 ), 481, 177, display, dstx, dsty, 54, 30 );
-            Interface::RedrawCastleIcon( *castle, dstx + 4, dsty + 4 );
-            fheroes2::Text text( castle->GetName(), ( current ? fheroes2::FontType::normalYellow() : fheroes2::FontType::normalWhite() ) );
-            text.fitToOneRow( 196 );
-
-            if ( VisibleItemCount() > 0 ) {
-                const int32_t heightPerItem = ( rtAreaItems.height - VisibleItemCount() ) / VisibleItemCount();
-                text.draw( dstx + 60, dsty + ( heightPerItem - text.height() ) / 2 + 2, display );
-            }
-            else {
-                assert( 0 ); // this should never happen!
-                text.draw( dstx + 60, dsty + 2, display );
-            }
-        }
-    }
-
-    void CastleIndexListBox::RedrawBackground( const fheroes2::Point & dst )
-    {
-        fheroes2::Display & display = fheroes2::Display::instance();
-
-        fheroes2::Text text( _( "Town Portal" ), fheroes2::FontType::normalYellow() );
-        text.draw( dst.x + 145 - text.width() / 2, dst.y + 7, display );
-
-        text.set( _( "Select town to port to." ), fheroes2::FontType::normalWhite() );
-        text.draw( dst.x + 145 - text.width() / 2, dst.y + 27, display );
-
-        const fheroes2::Sprite & upperPart = fheroes2::AGG::GetICN( _listBoxIcnId, 0 );
-        const fheroes2::Sprite & middlePart = fheroes2::AGG::GetICN( _listBoxIcnId, 1 );
-        const fheroes2::Sprite & lowerPart = fheroes2::AGG::GetICN( _listBoxIcnId, 2 );
-
-        int32_t offsetY = 45;
-        fheroes2::Blit( upperPart, display, dst.x + 7, dst.y + offsetY );
-
-        offsetY += upperPart.height();
-
-        int32_t totalHeight = rtAreaItems.height + 6;
-        int32_t middlePartCount = ( totalHeight - upperPart.height() - lowerPart.height() + middlePart.height() - 1 ) / middlePart.height();
-
-        for ( int32_t i = 0; i < middlePartCount; ++i ) {
-            fheroes2::Blit( fheroes2::AGG::GetICN( _listBoxIcnId, 1 ), display, dst.x + 7, dst.y + offsetY );
-            offsetY += middlePart.height();
-        }
-
-        fheroes2::Blit( lowerPart, display, dst.x + 7, dst.y + totalHeight - lowerPart.height() + 45 );
-
-        const fheroes2::Sprite & upperScrollbarArrow = fheroes2::AGG::GetICN( _listBoxIcnId, 3 );
-        const fheroes2::Sprite & lowerScrollbarArrow = fheroes2::AGG::GetICN( _listBoxIcnId, 5 );
-
-        totalHeight = rtAreaItems.height + 8 - upperScrollbarArrow.height() - lowerScrollbarArrow.height();
-
-        const fheroes2::Sprite & upperScrollbar = fheroes2::AGG::GetICN( _listBoxIcnId, 7 );
-        const fheroes2::Sprite & middleScrollbar = fheroes2::AGG::GetICN( _listBoxIcnId, 8 );
-        const fheroes2::Sprite & lowerScrollbar = fheroes2::AGG::GetICN( _listBoxIcnId, 9 );
-
-        offsetY = upperScrollbarArrow.height() + 44;
-        fheroes2::Blit( upperScrollbar, display, dst.x + 262, dst.y + offsetY );
-        offsetY += upperScrollbar.height();
-
-        middlePartCount = ( totalHeight - upperScrollbar.height() - lowerScrollbar.height() + middleScrollbar.height() - 1 ) / middleScrollbar.height();
-
-        for ( int32_t i = 0; i < middlePartCount; ++i ) {
-            fheroes2::Blit( middleScrollbar, display, dst.x + 262, dst.y + offsetY );
-            offsetY += middleScrollbar.height();
-        }
-
-        offsetY = upperScrollbarArrow.height() + 44 + totalHeight - lowerScrollbar.height();
-        fheroes2::Blit( lowerScrollbar, display, dst.x + 262, dst.y + offsetY );
-    }
-
     void HeroesTownGate( Heroes & hero, const Castle * castle )
     {
         assert( castle && castle->GetHero() == nullptr );
@@ -399,110 +256,20 @@ namespace
     {
         assert( !hero.isShipMaster() );
 
-        const Kingdom & kingdom = hero.GetKingdom();
-        std::vector<int32_t> castles;
+        const int32_t townPositionIndex = Dialog::selectKingdomCastle( hero.GetKingdom(), true, _( "Town Portal" ), _( "Select town to port to." ) );
 
-        fheroes2::Display & display = fheroes2::Display::instance();
-
-        // setup cursor
-        const CursorRestorer cursorRestorer( true, Cursor::POINTER );
-
-        const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
-        LocalEvent & le = LocalEvent::Get();
-
-        for ( const Castle * castle : kingdom.GetCastles() ) {
-            assert( castle != nullptr );
-
-            if ( !castle->GetHero() ) {
-                castles.push_back( castle->GetIndex() );
-            }
-        }
-
-        if ( castles.empty() ) {
-            // This should never happen. The logic behind this must not allow to call this function.
-            assert( 0 );
+        if ( townPositionIndex == -1 ) {
             return false;
         }
 
-        std::unique_ptr<fheroes2::StandardWindow> frameborder = std::make_unique<fheroes2::StandardWindow>( 290, 252, true );
-        const fheroes2::Rect & windowArea = frameborder->windowArea();
-        const fheroes2::Rect & activeArea = frameborder->activeArea();
+        HeroesTownGate( hero, world.getCastleEntrance( Maps::GetPoint( townPositionIndex ) ) );
 
-        int result = Dialog::ZERO;
-
-        const int townIcnId = isEvilInterface ? ICN::ADVBORDE : ICN::ADVBORD;
-        const int listIcnId = isEvilInterface ? ICN::LISTBOX_EVIL : ICN::LISTBOX;
-        CastleIndexListBox listbox( windowArea, activeArea.getPosition(), result, townIcnId, listIcnId );
-
-        listbox.SetScrollButtonUp( listIcnId, 3, 4, { activeArea.x + 262, activeArea.y + 45 } );
-        listbox.SetScrollButtonDn( listIcnId, 5, 6, { activeArea.x + 262, activeArea.y + 190 } );
-        listbox.setScrollBarArea( { activeArea.x + 266, activeArea.y + 68, 14, 119 } );
-
-        const fheroes2::Sprite & originalSlider = fheroes2::AGG::GetICN( listIcnId, 10 );
-        const fheroes2::Image scrollbarSlider = fheroes2::generateScrollbarSlider( originalSlider, false, 119, 5, static_cast<int32_t>( castles.size() ),
-                                                                                   { 0, 0, originalSlider.width(), 4 }, { 0, 4, originalSlider.width(), 8 } );
-
-        listbox.setScrollBarImage( scrollbarSlider );
-        listbox.SetAreaMaxItems( 5 );
-        listbox.SetAreaItems( { activeArea.x + 11, activeArea.y + 49, 250, 160 } );
-        listbox.SetListContent( castles );
-        listbox.Unselect();
-        listbox.RedrawBackground( activeArea.getPosition() );
-        listbox.Redraw();
-
-        const int okIcnId = isEvilInterface ? ICN::BUTTON_SMALL_OKAY_EVIL : ICN::BUTTON_SMALL_OKAY_GOOD;
-        const int cancelIcnId = isEvilInterface ? ICN::BUTTON_SMALL_CANCEL_EVIL : ICN::BUTTON_SMALL_CANCEL_GOOD;
-        const fheroes2::Sprite & buttonOkSprite = fheroes2::AGG::GetICN( okIcnId, 0 );
-        const fheroes2::Sprite & buttonCancelSprite = fheroes2::AGG::GetICN( cancelIcnId, 0 );
-
-        const int32_t border = 10;
-        fheroes2::ButtonGroup btnGroup;
-        btnGroup.addButton( fheroes2::makeButtonWithShadow( activeArea.x + border, activeArea.y + activeArea.height - border - buttonOkSprite.height(), buttonOkSprite,
-                                                            fheroes2::AGG::GetICN( okIcnId, 1 ), display ),
-                            Dialog::OK );
-
-        btnGroup.button( 0 ).disable();
-
-        btnGroup.addButton( fheroes2::makeButtonWithShadow( activeArea.x + activeArea.width - border - buttonCancelSprite.width(),
-                                                            activeArea.y + activeArea.height - border - buttonCancelSprite.height(), buttonCancelSprite,
-                                                            fheroes2::AGG::GetICN( cancelIcnId, 1 ), display ),
-                            Dialog::CANCEL );
-        btnGroup.draw();
-
-        display.render();
-
-        while ( result == Dialog::ZERO && le.HandleEvents() ) {
-            result = btnGroup.processEvents();
-            listbox.QueueEventProcessing();
-
-            if ( !listbox.IsNeedRedraw() ) {
-                continue;
-            }
-
-            if ( listbox.isSelected() ) {
-                btnGroup.button( 0 ).enable();
-                btnGroup.draw();
-            }
-
-            listbox.Redraw();
-            display.render();
-        }
-
-        // restore background *before* the spell animation to avoid rendering issues
-        frameborder.reset();
-
-        if ( result == Dialog::OK ) {
-            HeroesTownGate( hero, world.getCastleEntrance( Maps::GetPoint( listbox.GetCurrent() ) ) );
-
-            return true;
-        }
-
-        return false;
+        return true;
     }
 
     bool ActionSpellVisions( Heroes & hero )
     {
-        MapsIndexes monsters = Maps::getVisibleMonstersAroundHero( hero );
+        const MapsIndexes monsters = Maps::getVisibleMonstersAroundHero( hero );
 
         assert( !monsters.empty() );
 

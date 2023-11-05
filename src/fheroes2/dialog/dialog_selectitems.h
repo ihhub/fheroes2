@@ -40,6 +40,9 @@ namespace Dialog
 
     Spell selectSpell( const int spellId = Spell::NONE );
 
+    int32_t selectKingdomCastle( const Kingdom & kingdom, const bool notOccupiedByHero, const char * title, const char * additionalText = nullptr,
+                                 int32_t castlePositionIndex = -1 );
+
     Skill::Secondary selectSecondarySkill( const Heroes & hero, const int skillId = Skill::Secondary::UNKNOWN );
 
     // These functions should be called only from the Editor as they rely on Maps::ObjectInfo structures that are not the same as in-game items.
