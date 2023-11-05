@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-03 12:33+0000\n"
+"POT-Creation-Date: 2023-11-05 08:25+0000\n"
 "PO-Revision-Date: 2023-10-12 20:05+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -3325,6 +3325,10 @@ msgstr "Välj Monster:"
 msgid "Select Hero:"
 msgstr "Välj Hjälte:"
 
+#, fuzzy
+msgid "Select Treasure:"
+msgstr "Välj Hjälte:"
+
 msgid "Map Type:\n"
 msgstr "Karttyp:\n"
 
@@ -3637,6 +3641,13 @@ msgstr "Varelser kan inte placeras på vatten."
 
 msgid "Choose a tile which does not contain any objects."
 msgstr "Välj en ruta som inte har några objekt."
+
+msgid "Treasure"
+msgstr "Skatt"
+
+#, fuzzy
+msgid "Treasures cannot be placed on water."
+msgstr "Hjältar kan inte placeras på vatten."
 
 msgid "Heroes"
 msgstr "Hjältar"
@@ -5642,9 +5653,6 @@ msgstr ""
 
 msgid "You come upon the remains of an unfortunate adventurer."
 msgstr "Du stöter på kvarlevorna av en olycklig äventyrare."
-
-msgid "Treasure"
-msgstr "Skatt"
 
 msgid "Searching through the tattered clothing, you find the %{artifact}."
 msgstr "När du söker igenom de trasiga kläderna hittar du %{artifact}."

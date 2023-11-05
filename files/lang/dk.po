@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-03 12:33+0000\n"
+"POT-Creation-Date: 2023-11-05 08:25+0000\n"
 "PO-Revision-Date: 2023-09-12 11:08+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
@@ -3365,6 +3365,10 @@ msgstr "Vælg væsen:"
 msgid "Select Hero:"
 msgstr "Vælg helt:"
 
+#, fuzzy
+msgid "Select Treasure:"
+msgstr "Vælg helt:"
+
 msgid "Map Type:\n"
 msgstr "Korttype:\n"
 
@@ -3676,6 +3680,13 @@ msgstr ""
 
 msgid "Choose a tile which does not contain any objects."
 msgstr ""
+
+msgid "Treasure"
+msgstr "Skat"
+
+#, fuzzy
+msgid "Treasures cannot be placed on water."
+msgstr "Denne besværgelse kan ikke kastes ombord på et skib."
 
 msgid "Heroes"
 msgstr "Helte"
@@ -5704,9 +5715,6 @@ msgstr ""
 
 msgid "You come upon the remains of an unfortunate adventurer."
 msgstr "Du støder på resterne af en uheldig eventyrer."
-
-msgid "Treasure"
-msgstr "Skat"
 
 msgid "Searching through the tattered clothing, you find the %{artifact}."
 msgstr "Du gennemsøger det lasede tøj og finder %{artifact}."

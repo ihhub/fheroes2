@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-03 12:33+0000\n"
+"POT-Creation-Date: 2023-11-05 08:25+0000\n"
 "PO-Revision-Date: 2023-11-01 22:53+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3342,6 +3342,10 @@ msgstr "Chọn Quái vật:"
 msgid "Select Hero:"
 msgstr "Chọn Tướng:"
 
+#, fuzzy
+msgid "Select Treasure:"
+msgstr "Chọn Tướng:"
+
 msgid "Map Type:\n"
 msgstr "Kiểu Bản đồ:\n"
 
@@ -3652,6 +3656,13 @@ msgstr "Quái vật không thể đặt trên nước."
 
 msgid "Choose a tile which does not contain any objects."
 msgstr "Chọn một ô mà không chứa bất kỳ đối tượng nào."
+
+msgid "Treasure"
+msgstr "Kho báu"
+
+#, fuzzy
+msgid "Treasures cannot be placed on water."
+msgstr "Tướng không thể đặt trên nước."
 
 msgid "Heroes"
 msgstr "Tướng"
@@ -5664,9 +5675,6 @@ msgstr ""
 
 msgid "You come upon the remains of an unfortunate adventurer."
 msgstr "Ngươi tình cờ gặp hài cốt của một nhà thám hiểm không may."
-
-msgid "Treasure"
-msgstr "Kho báu"
 
 msgid "Searching through the tattered clothing, you find the %{artifact}."
 msgstr "Lục lọi trong bộ quần áo rách rưới, ngươi tìm thấy %{artifact}."
