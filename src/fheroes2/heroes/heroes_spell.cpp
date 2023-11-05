@@ -26,7 +26,7 @@
 #include <memory>
 #include <ostream>
 #include <string>
-#include <vector> 
+#include <vector>
 
 #include "army.h"
 #include "army_troop.h"
