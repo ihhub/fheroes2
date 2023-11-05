@@ -27,18 +27,9 @@ class WebViewActivity : AppCompatActivity() {
     private fun openIconAuthorUrl() {
     }
 
-    private fun copyResurrectionH2d() {
-        val input = assets.open("files/data/resurrection.h2d")
-        val output = getExternalFilesDir("files/data")?.resolve("resurrection.h2d");
-
-        if (output != null && !output.exists() && output.createNewFile()) {
-            input.copyTo(output.outputStream())
-        }
-    }
-
-    private fun copyConfigFile() {
-        val input = assets.open("fheroes2.cfg")
-        val output = getExternalFilesDir(null)?.resolve("fheroes2.cfg");
+    private fun copyFile(from: String, to: String, path: String?) {
+        val input = assets.open(from)
+        val output = getExternalFilesDir(path)?.resolve(to);
 
         if (output != null && !output.exists() && output.createNewFile()) {
             input.copyTo(output.outputStream())
@@ -49,8 +40,8 @@ class WebViewActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_web_view)
 
-        copyResurrectionH2d()
-        copyConfigFile()
+        copyFile("files/data/resurrection.h2d", "resurrection.h2d", "files/data")
+        copyFile("fheroes2.cfg", "fheroes2.cfg", null)
 
         val config = getExternalFilesDir(null)?.resolve("fheroes2.cfg")
         val prefsRepository = WallpaperPreferencesRepository(config)
