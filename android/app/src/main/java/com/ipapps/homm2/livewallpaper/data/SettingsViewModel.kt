@@ -13,10 +13,7 @@ import kotlinx.coroutines.launch
 class SettingsViewModel(
     private val wallpaperPreferencesRepository: WallpaperPreferencesRepository,
     private val setWallpaper: () -> Unit,
-    private val openIconAuthorUrl: () -> Unit
 ) : ViewModel() {
-    val settingsUiModel = wallpaperPreferencesRepository.preferencesFlow.asLiveData()
-
     fun toggleUseScroll() {
         viewModelScope.launch {
             wallpaperPreferencesRepository.toggleUseScroll()
@@ -35,12 +32,6 @@ class SettingsViewModel(
         }
     }
 
-    fun setScaleTypeString(value: String) {
-        viewModelScope.launch {
-            wallpaperPreferencesRepository.setScaleTypeString(value)
-        }
-    }
-
     fun setMapUpdateInterval(value: MapUpdateInterval) {
         viewModelScope.launch {
             wallpaperPreferencesRepository.setMapUpdateInterval(value)
@@ -55,10 +46,6 @@ class SettingsViewModel(
 
     fun onSetWallpaper() {
         setWallpaper()
-    }
-
-    fun onOpenIconAuthorUrl() {
-        openIconAuthorUrl()
     }
 
     fun subscribeToPreferences(callback: (it: WallpaperPreferences) -> Unit) {

@@ -24,9 +24,6 @@ class WebViewActivity : AppCompatActivity() {
         )
     }
 
-    private fun openIconAuthorUrl() {
-    }
-
     private fun copyFile(from: String, to: String, path: String?) {
         val input = assets.open(from)
         val output = getExternalFilesDir(path)?.resolve(to);
@@ -46,7 +43,7 @@ class WebViewActivity : AppCompatActivity() {
         val config = getExternalFilesDir(null)?.resolve("fheroes2.cfg")
         val prefsRepository = WallpaperPreferencesRepository(config)
         val settingsViewModel =
-            SettingsViewModel(prefsRepository, ::setWallpaper, ::openIconAuthorUrl);
+            SettingsViewModel(prefsRepository, ::setWallpaper);
 
         val webView = findViewById<WebView>(R.id.activity_web_view)
         val bridge = Bridge(applicationContext, webView)
