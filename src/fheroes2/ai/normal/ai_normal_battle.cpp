@@ -18,8 +18,6 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-// TODO: this header is redundant here, but detected as required by IWYU with older compilers
-// IWYU pragma: no_include <type_traits>
 #include <algorithm>
 #include <array>
 #include <cassert>
