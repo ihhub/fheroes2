@@ -30,6 +30,11 @@ export const useBridge = () => {
 
     startApp(() => {
       window.Android = window.Bridge?.interfaces.Android;
+
+      console.log("getMapsList start")
+      window.Android?.getMapsList()
+        .then((result) => console.log("getMapsList", result))
+        .catch((e) => console.log("getMapsList err", e));
     });
   }, []);
 

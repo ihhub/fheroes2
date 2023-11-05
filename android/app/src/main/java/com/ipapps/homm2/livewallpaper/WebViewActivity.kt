@@ -47,7 +47,7 @@ class WebViewActivity : AppCompatActivity() {
 
         val webView = findViewById<WebView>(R.id.activity_web_view)
         val bridge = Bridge(applicationContext, webView)
-        bridge.addJSInterface(AndroidNativeInterface(settingsViewModel))
+        bridge.addJSInterface(AndroidNativeInterface(settingsViewModel, getExternalFilesDir("maps")))
         bridge.addAfterInitializeListener {
             settingsViewModel.subscribeToPreferences {
                 sendWebViewEvent(WebViewSettingsEvent(it), webView)

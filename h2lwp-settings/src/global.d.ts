@@ -47,6 +47,8 @@ declare global {
       helloWebPromise: (name: string) => Promise<string>;
       helloFullPromise: (name: string) => Promise<string>;
 
+      getMapsList: () => Promise<string[]>;
+
       setBrightness: (value: number) => void;
       setScale: (value: number) => void;
       setScaleType: (value: number) => void;

@@ -10,11 +10,12 @@ import de.andycandy.android.bridge.NativeCall
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import org.json.JSONArray
+import java.io.File
 
 class AndroidNativeInterface(
-    private val viewModel: SettingsViewModel
-) :
-    DefaultJSInterface("Android") {
+    private val viewModel: SettingsViewModel, private val mapsFolder: File?
+) : DefaultJSInterface("Android") {
 
     @NativeCall(CallType.FULL_PROMISE)
     fun helloFullPromise(name: String) = doInBackground { promise ->
@@ -22,6 +23,21 @@ class AndroidNativeInterface(
             launch {
                 delay(5000L)
                 promise.resolve("helloFullPromise return: $name")
+            }
+        }
+    }
+
+    @NativeCall(CallType.FULL_PROMISE)
+    fun getMapsList() = doInBackground { promise ->
+        runBlocking {
+            launch {
+                if (mapsFolder == null) {
+                    promise.resolve("[]")
+                } else {
+                    val list = mapsFolder.list { _, filename -> filename.endsWith(".mp2") }
+
+                    promise.resolve(JSONArray(list).toString(2))
+                }
             }
         }
     }
