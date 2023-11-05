@@ -3883,7 +3883,7 @@ msgid ""
 msgstr ""
 "Alacsonyabb nehézségi szintre akarod állítani a hadjáratot. Innentől nem "
 "állíthatod újra vissza és a pontszámaid is az újonnan választott szintnek "
-"megfelelően számolódnak majd. Így is végre akarod hajtani?"
+"megfelelően számolódnak majd. Így is akarod?"
 
 msgid "Are you sure you want to restart this scenario?"
 msgstr "Biztosan újra akarod indítani a küldetést?"
