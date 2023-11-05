@@ -24,7 +24,7 @@
 #ifndef H2EDITOR_DIALOGS_H
 #define H2EDITOR_DIALOGS_H
 
-#include <stdint.h>
+#include <cstdint>
 
 #include "artifact.h"
 #include "heroes.h"
