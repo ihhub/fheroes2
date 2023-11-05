@@ -23,8 +23,6 @@
 
 #include "battle_interface.h"
 
-// TODO: this header is redundant here, but detected as required by IWYU with older compilers
-// IWYU pragma: no_include <type_traits>
 #include <algorithm>
 #include <array>
 #include <cassert>
@@ -2796,28 +2794,6 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
         else if ( Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_SURRENDER ) ) {
             ProcessingHeroDialogResult( 3, actions );
         }
-
-#ifdef WITH_DEBUG
-        if ( IS_DEVEL() )
-            switch ( le.KeyValue() ) {
-            case fheroes2::Key::KEY_W:
-                // The attacker wins the battle instantly
-                arena.GetResult().army1 = RESULT_WINS;
-                humanturn_exit = true;
-                actions.emplace_back( Command::END_TURN, unit.GetUID() );
-                break;
-
-            case fheroes2::Key::KEY_L:
-                // The attacker loses the battle instantly
-                arena.GetResult().army1 = RESULT_LOSS;
-                humanturn_exit = true;
-                actions.emplace_back( Command::END_TURN, unit.GetUID() );
-                break;
-
-            default:
-                break;
-            }
-#endif
     }
 
     // Add offsets to inner objects
@@ -3244,7 +3220,6 @@ void Battle::Interface::MouseLeftClickBoardAction( const int themes, const Cell 
             }
 
             actions.emplace_back( Command::MOVE, _currentUnit->GetUID(), fixupDestinationCell( *_currentUnit, index ) );
-            actions.emplace_back( Command::END_TURN, _currentUnit->GetUID() );
 
             humanturn_exit = true;
             break;
@@ -3264,11 +3239,8 @@ void Battle::Interface::MouseLeftClickBoardAction( const int themes, const Cell 
             if ( unitOnCell && Board::isValidDirection( index, dir ) ) {
                 const int32_t move = fixupDestinationCell( *_currentUnit, Board::GetIndexDirection( index, dir ) );
 
-                if ( _currentUnit->GetHeadIndex() != move ) {
-                    actions.emplace_back( Command::MOVE, _currentUnit->GetUID(), move );
-                }
-                actions.emplace_back( Command::ATTACK, _currentUnit->GetUID(), unitOnCell->GetUID(), index, Board::GetReflectDirection( dir ) );
-                actions.emplace_back( Command::END_TURN, _currentUnit->GetUID() );
+                actions.emplace_back( Command::ATTACK, _currentUnit->GetUID(), unitOnCell->GetUID(), ( _currentUnit->GetHeadIndex() == move ? -1 : move ), index,
+                                      Board::GetReflectDirection( dir ) );
 
                 humanturn_exit = true;
             }
@@ -3282,8 +3254,7 @@ void Battle::Interface::MouseLeftClickBoardAction( const int themes, const Cell 
             }
 
             if ( unitOnCell ) {
-                actions.emplace_back( Command::ATTACK, _currentUnit->GetUID(), unitOnCell->GetUID(), index, 0 );
-                actions.emplace_back( Command::END_TURN, _currentUnit->GetUID() );
+                actions.emplace_back( Command::ATTACK, _currentUnit->GetUID(), unitOnCell->GetUID(), -1, index, 0 );
 
                 humanturn_exit = true;
             }
@@ -6422,7 +6393,7 @@ void Battle::Interface::ProcessingHeroDialogResult( const int result, Actions & 
         if ( arena.CanRetreatOpponent( _currentUnit->GetCurrentOrArmyColor() ) ) {
             if ( Dialog::YES == fheroes2::showStandardTextMessage( "", _( "Are you sure you want to retreat?" ), Dialog::YES | Dialog::NO ) ) {
                 actions.emplace_back( Command::RETREAT );
-                actions.emplace_back( Command::END_TURN, _currentUnit->GetUID() );
+
                 humanturn_exit = true;
             }
         }
@@ -6443,7 +6414,7 @@ void Battle::Interface::ProcessingHeroDialogResult( const int result, Actions & 
 
                 if ( DialogBattleSurrender( *enemy, cost, kingdom ) ) {
                     actions.emplace_back( Command::SURRENDER );
-                    actions.emplace_back( Command::END_TURN, _currentUnit->GetUID() );
+
                     humanturn_exit = true;
                 }
             }

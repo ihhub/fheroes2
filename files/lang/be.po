@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-02 14:09+0000\n"
+"POT-Creation-Date: 2023-11-05 08:25+0000\n"
 "PO-Revision-Date: 2022-09-23 16:01+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3096,9 +3096,6 @@ msgstr ""
 msgid "Accept the choice made."
 msgstr "Ухваліць выбар."
 
-msgid "Unknown Hero"
-msgstr ""
-
 #, fuzzy
 msgid "%{color} %{race} hero"
 msgstr "%{color} гулец"
@@ -3117,6 +3114,10 @@ msgstr ""
 
 msgid "Select Hero:"
 msgstr ""
+
+#, fuzzy
+msgid "Select Treasure:"
+msgstr "Мова"
 
 msgid "Map Type:\n"
 msgstr ""
@@ -3421,6 +3422,12 @@ msgid "Monsters cannot be placed on water."
 msgstr ""
 
 msgid "Choose a tile which does not contain any objects."
+msgstr ""
+
+msgid "Treasure"
+msgstr ""
+
+msgid "Treasures cannot be placed on water."
 msgstr ""
 
 msgid "Heroes"
@@ -3931,6 +3938,9 @@ msgstr ""
 
 msgid "Your Name"
 msgstr "Вашае імя"
+
+msgid "Unknown Hero"
+msgstr ""
 
 msgid "Standard"
 msgstr ""
@@ -5311,9 +5321,6 @@ msgid ""
 msgstr ""
 
 msgid "You come upon the remains of an unfortunate adventurer."
-msgstr ""
-
-msgid "Treasure"
 msgstr ""
 
 msgid "Searching through the tattered clothing, you find the %{artifact}."

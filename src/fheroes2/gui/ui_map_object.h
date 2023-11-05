@@ -1,9 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
- *                                                                         *
- *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
- *   Copyright (C) 2011 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Copyright (C) 2023                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -21,33 +18,16 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2EDITOR_DIALOGS_H
-#define H2EDITOR_DIALOGS_H
+#pragma once
 
-#include "artifact.h"
-#include "heroes.h"
-#include "monster.h"
-#include "skill.h"
-#include "spell.h"
+#include "image.h"
 
-namespace Dialog
+namespace Maps
 {
-    Monster selectMonster( const int monsterId );
-
-    int selectHeroes( const int heroId = Heroes::UNKNOWN );
-
-    Artifact selectArtifact( const int artifactId = Artifact::UNKNOWN );
-
-    Spell selectSpell( const int spellId = Spell::NONE );
-
-    Skill::Secondary selectSecondarySkill( const Heroes & hero, const int skillId = Skill::Secondary::UNKNOWN );
-
-    // These functions should be called only from the Editor as they rely on Maps::ObjectInfo structures that are not the same as in-game items.
-    int selectHeroType( const int heroType );
-
-    int selectMonsterType( const int monsterType );
-
-    int selectTreasureType( const int resourceType );
+    struct ObjectInfo;
 }
 
-#endif
+namespace fheroes2
+{
+    Sprite generateMapObjectImage( const Maps::ObjectInfo & object );
+}

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-02 14:09+0000\n"
+"POT-Creation-Date: 2023-11-05 08:25+0000\n"
 "PO-Revision-Date: 2023-09-04 21:55+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -3204,9 +3204,6 @@ msgstr "Fájl betöltése:"
 msgid "Accept the choice made."
 msgstr "A választás elfogadása."
 
-msgid "Unknown Hero"
-msgstr "Ismeretlen hős"
-
 msgid "%{color} %{race} hero"
 msgstr "%{color} %{race} hős"
 
@@ -3223,6 +3220,10 @@ msgid "Select Monster:"
 msgstr "Lény kiválasztása:"
 
 msgid "Select Hero:"
+msgstr "Hős kiválasztása:"
+
+#, fuzzy
+msgid "Select Treasure:"
 msgstr "Hős kiválasztása:"
 
 msgid "Map Type:\n"
@@ -3535,6 +3536,14 @@ msgstr ""
 
 msgid "Choose a tile which does not contain any objects."
 msgstr ""
+
+#, fuzzy
+msgid "Treasure"
+msgstr "Kincsek"
+
+#, fuzzy
+msgid "Treasures cannot be placed on water."
+msgstr "Ezt a várost nem lehet kastéllyá fejleszteni."
 
 msgid "Heroes"
 msgstr "Hősök"
@@ -4056,6 +4065,9 @@ msgstr "Csomagterv"
 
 msgid "Your Name"
 msgstr "A te neved"
+
+msgid "Unknown Hero"
+msgstr "Ismeretlen hős"
 
 msgid "Standard"
 msgstr "Normál"
@@ -5484,10 +5496,6 @@ msgstr ""
 
 msgid "You come upon the remains of an unfortunate adventurer."
 msgstr ""
-
-#, fuzzy
-msgid "Treasure"
-msgstr "Kincsek"
 
 msgid "Searching through the tattered clothing, you find the %{artifact}."
 msgstr ""

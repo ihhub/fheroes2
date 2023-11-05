@@ -315,12 +315,9 @@ void Kingdom::AddHero( Heroes * hero )
         return;
     }
 
-    if ( heroes.end() == std::find( heroes.begin(), heroes.end(), hero ) )
+    if ( heroes.end() == std::find( heroes.begin(), heroes.end(), hero ) ) {
         heroes.push_back( hero );
-
-    const Player * player = Settings::Get().GetPlayers().GetCurrent();
-    if ( player && player->isColor( GetColor() ) && player->isControlHuman() )
-        Interface::AdventureMap::Get().GetIconsPanel().ResetIcons( ICON_HEROES );
+    }
 
     AI::Get().HeroesAdd( *hero );
 }

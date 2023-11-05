@@ -121,12 +121,18 @@ namespace
             return SDLK_CARET;
         case fheroes2::Key::KEY_UNDERSCORE:
             return SDLK_UNDERSCORE;
-        case fheroes2::Key::KEY_ALT:
+        case fheroes2::Key::KEY_LEFT_ALT:
             return SDLK_LALT;
-        case fheroes2::Key::KEY_CONTROL:
+        case fheroes2::Key::KEY_RIGHT_ALT:
+            return SDLK_RALT;
+        case fheroes2::Key::KEY_LEFT_CONTROL:
             return SDLK_LCTRL;
-        case fheroes2::Key::KEY_SHIFT:
+        case fheroes2::Key::KEY_RIGHT_CONTROL:
+            return SDLK_RCTRL;
+        case fheroes2::Key::KEY_LEFT_SHIFT:
             return SDLK_LSHIFT;
+        case fheroes2::Key::KEY_RIGHT_SHIFT:
+            return SDLK_RSHIFT;
         case fheroes2::Key::KEY_TAB:
             return SDLK_TAB;
         case fheroes2::Key::KEY_DELETE:

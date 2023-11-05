@@ -240,7 +240,7 @@ namespace
         }
     }
 
-    // BMP files within AGG are not Bitmap files.
+    // BMP files within AGG are not Bitmap images!
     fheroes2::Sprite loadBMPFile( const std::string & path )
     {
         const std::vector<uint8_t> & data = AGG::getDataFromAggFile( path );
@@ -252,10 +252,10 @@ namespace
         StreamBuf imageStream( data );
 
         const uint8_t blackColor = imageStream.get();
+        const uint8_t whiteColor = 11;
 
         // Skip the second byte
         imageStream.get();
-        const uint8_t whiteColor = 11;
 
         const int32_t width = imageStream.get16();
         const int32_t height = imageStream.get16();
@@ -266,7 +266,6 @@ namespace
         }
 
         fheroes2::Sprite output( width, height );
-        output.reset();
 
         const uint8_t * input = data.data() + 6;
         uint8_t * image = output.image();
@@ -281,6 +280,9 @@ namespace
             else if ( *input == 2 ) {
                 *image = blackColor;
                 *transform = 0;
+            }
+            else {
+                *transform = 1;
             }
         }
 
