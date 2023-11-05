@@ -3691,19 +3691,48 @@ namespace fheroes2
                         originalImage = std::move( temp );
                     }
                 }
-                if ( _icnVsSprite[id].size() == 104 ) {
-                    // Generate random artifact images for Editor.
-                    _icnVsSprite[id].resize( 109 );
-                    for ( uint32_t i = 0; i < 5; ++i ) {
-                        const Sprite & mapArtifactImage = GetICN( ICN::OBJNARTI, 2 * i + 207 );
-                        Sprite & originalImage = _icnVsSprite[id][i + 104];
+                return true;
+            case ICN::OBJNARTI:
+                LoadOriginalICN( id );
+                if ( _icnVsSprite[id].size() == 206 ) {
+                    // If we have Price of Loyalty assets we prepare a map sprite for the magic book.
+                    _icnVsSprite[id].resize( 208 );
 
-                        // Use background from the Black Pearl artifact.
-                        Copy( _icnVsSprite[id][81], originalImage );
-                        Blit( mapArtifactImage, originalImage, 16, 16 );
-                    }
+                    // MAgig book map sprite shadow.
+                    _icnVsSprite[id][206] = _icnVsSprite[id][162];
+                    FillTransform( _icnVsSprite[id][206], 0, 0, 5, 1, 1U );
+                    FillTransform( _icnVsSprite[id][206], 0, 1, 2, 1, 1U );
+                    FillTransform( _icnVsSprite[id][206], 2, 1, 4, 1, 3U );
+                    FillTransform( _icnVsSprite[id][206], 0, 2, 3, 1, 3U );
+                    FillTransform( _icnVsSprite[id][206], 18, 1, 2, 1, 1U );
+                    FillTransform( _icnVsSprite[id][206], 17, 2, 3, 1, 3U );
+                    FillTransform( _icnVsSprite[id][206], 20, 2, 1, 1, 1U );
+                    FillTransform( _icnVsSprite[id][206], 19, 3, 2, 1, 3U );
+
+                    // Magic Book main sprite. We use sprite from the info dialog to make the map sprite.
+                    _icnVsSprite[id][207].resize( 21, 32 );
+
+                    Copy( GetICN( ICN::ARTFX, 81 ), 6, 0, _icnVsSprite[id][207], 0, 0, 21, 32 );
+                    // Make transparency around the Magic Book sprite.
+                    FillTransform( _icnVsSprite[id][207], 0, 0, 12, 1, 1U );
+                    FillTransform( _icnVsSprite[id][207], 15, 0, 6, 1, 1U );
+                    FillTransform( _icnVsSprite[id][207], 0, 1, 9, 1, 1U );
+                    FillTransform( _icnVsSprite[id][207], 16, 1, 5, 1, 1U );
+                    FillTransform( _icnVsSprite[id][207], 0, 2, 6, 1, 1U );
+                    FillTransform( _icnVsSprite[id][207], 20, 2, 1, 1, 1U );
+                    FillTransform( _icnVsSprite[id][207], 0, 4, 1, 1, 1U );
+                    FillTransform( _icnVsSprite[id][207], 0, 3, 3, 1, 1U );
+                    FillTransform( _icnVsSprite[id][207], 20, 25, 1, 1, 1U );
+                    FillTransform( _icnVsSprite[id][207], 18, 26, 3, 1, 1U );
+                    FillTransform( _icnVsSprite[id][207], 16, 27, 5, 1, 1U );
+                    FillTransform( _icnVsSprite[id][207], 14, 28, 9, 1, 1U );
+                    FillTransform( _icnVsSprite[id][207], 0, 29, 1, 1, 1U );
+                    FillTransform( _icnVsSprite[id][207], 12, 29, 11, 1, 1U );
+                    FillTransform( _icnVsSprite[id][207], 0, 30, 3, 1, 1U );
+                    FillTransform( _icnVsSprite[id][207], 10, 30, 13, 1, 1U );
+                    FillTransform( _icnVsSprite[id][207], 0, 31, 5, 1, 1U );
+                    FillTransform( _icnVsSprite[id][207], 9, 31, 14, 1, 1U );
                 }
-
                 return true;
             case ICN::TWNSDW_5:
                 LoadOriginalICN( id );

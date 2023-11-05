@@ -138,7 +138,7 @@ spellstats_t spells[] = {
     { gettext_noop( "Random 3rd level spell" ), 0, 0, 0, 70, 0, gettext_noop( "Randomly selected 3rd level spell." ) },
     { gettext_noop( "Random 4th level spell" ), 0, 0, 0, 71, 0, gettext_noop( "Randomly selected 4th level spell." ) },
     { gettext_noop( "Random 5th level spell" ), 0, 0, 0, 72, 0, gettext_noop( "Randomly selected 5th level spell." ) },
-    { gettext_noop( "Petrification" ), 1, 0, 0, 66, 0,
+    { gettext_noop( "Petrification" ), 0, 0, 0, 66, 0,
       gettext_noop( "Turns the affected creature into stone. A petrified creature receives half damage from a direct attack." ) },
 };
 

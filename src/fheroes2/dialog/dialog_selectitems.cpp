@@ -152,10 +152,7 @@ public:
     {
         fheroes2::Display & display = fheroes2::Display::instance();
 
-        if ( !itemSprite.empty() ) {
-            fheroes2::Blit( itemSprite, display, destination.x + middleImageOffsetX - ( itemSprite.width() / 2 ),
-                            destination.y + itemOffsetY - ( itemSprite.height() / 2 ) );
-        }
+        fheroes2::Blit( itemSprite, display, destination.x + middleImageOffsetX - ( itemSprite.width() / 2 ), destination.y + itemOffsetY - ( itemSprite.height() / 2 ) );
 
         fheroes2::Text text( itemText, current ? fheroes2::FontType::normalYellow() : fheroes2::FontType::normalWhite() );
         text.fitToOneRow( background->activeArea().width - textOffsetX - 55 );
@@ -479,6 +476,57 @@ namespace
         }
     };
 
+    class ArtifactTypeSelection : public ObjectTypeSelection
+    {
+    public:
+        ArtifactTypeSelection( const std::vector<Maps::ObjectInfo> & objectInfo, const fheroes2::Size & size )
+            : ObjectTypeSelection( objectInfo, size, 24, 65, 40 )
+        {
+            // Do nothing.
+        }
+
+    private:
+        void showPopupWindow( const Maps::ObjectInfo & info ) override
+        {
+            switch ( info.objectType ) {
+            case MP2::OBJ_ARTIFACT:
+                fheroes2::ArtifactDialogElement( Artifact( static_cast<int>( info.metadata[0] ) ) ).showPopup( Dialog::ZERO );
+                break;
+            case MP2::OBJ_RANDOM_ARTIFACT:
+            case MP2::OBJ_RANDOM_ARTIFACT_MINOR:
+            case MP2::OBJ_RANDOM_ARTIFACT_MAJOR:
+            case MP2::OBJ_RANDOM_ARTIFACT_TREASURE:
+            case MP2::OBJ_RANDOM_ULTIMATE_ARTIFACT:
+                fheroes2::showStandardTextMessage( MP2::StringObject( info.objectType ), "", Dialog::ZERO );
+                break;
+            default:
+                // Did you expand the list of treasures? Add the corresponding logic!
+                assert( 0 );
+                break;
+            }
+        }
+
+        std::string getObjectName( const Maps::ObjectInfo & info ) override
+        {
+            switch ( info.objectType ) {
+            case MP2::OBJ_ARTIFACT:
+                return _( fheroes2::getArtifactData( info.metadata[0] ).name );
+            case MP2::OBJ_RANDOM_ARTIFACT:
+            case MP2::OBJ_RANDOM_ARTIFACT_MINOR:
+            case MP2::OBJ_RANDOM_ARTIFACT_MAJOR:
+            case MP2::OBJ_RANDOM_ARTIFACT_TREASURE:
+            case MP2::OBJ_RANDOM_ULTIMATE_ARTIFACT:
+                return MP2::StringObject( info.objectType );
+            default:
+                // Did you expand the list of treasures? Add the corresponding logic!
+                assert( 0 );
+                break;
+            }
+
+            return {};
+        }
+    };
+
     class TreasureTypeSelection : public ObjectTypeSelection
     {
     public:
@@ -594,22 +642,18 @@ Spell Dialog::selectSpell( const int spellId, const bool includeRandomSpells )
     return result == Dialog::OK || listbox.ok ? Spell( listbox.GetCurrent() ) : Spell( Spell::NONE );
 }
 
-Artifact Dialog::selectArtifact( const int artifactId, const bool onlyPlaceableOnMap )
+Artifact Dialog::selectArtifact( const int artifactId )
 {
     std::vector<int> artifacts;
     artifacts.reserve( Artifact::ARTIFACT_COUNT - 1 );
 
     const bool isPriceofLoyaltyArtifactAllowed = Settings::Get().isCurrentMapPriceOfLoyalty();
 
-    if ( !onlyPlaceableOnMap ) {
-        // When we do not show random artifacts it is not map editing then
-        // it is hero editing and we show the magic book at the first place.
-        artifacts.emplace_back( Artifact::MAGIC_BOOK );
-    }
+    // We show the magic book at the first place.
+    artifacts.emplace_back( Artifact::MAGIC_BOOK );
 
-    for ( int id = onlyPlaceableOnMap ? Artifact::ARCANE_NECKLACE : ( Artifact::UNKNOWN + 1 ); id < Artifact::ARTIFACT_COUNT; ++id ) {
-        if ( id != Artifact::MAGIC_BOOK && Artifact( id ).isValid() && ( onlyPlaceableOnMap || id < Artifact::RANDOM_ALL_LEVELS || id > Artifact::RANDOM_3_LEVEL )
-             && ( isPriceofLoyaltyArtifactAllowed || !fheroes2::isPriceOfLoyaltyArtifact( id ) ) ) {
+    for ( int id = Artifact::UNKNOWN + 1; id < Artifact::ARTIFACT_COUNT; ++id ) {
+        if ( id != Artifact::MAGIC_BOOK && Artifact( id ).isValid() && ( isPriceofLoyaltyArtifactAllowed || !fheroes2::isPriceOfLoyaltyArtifact( id ) ) ) {
             artifacts.emplace_back( id );
         }
     }
@@ -621,24 +665,9 @@ Artifact Dialog::selectArtifact( const int artifactId, const bool onlyPlaceableO
         listbox.SetCurrent( artifactId );
     }
 
-    if ( listbox.selectItemsEventProcessing( _( "Select Artifact:" ) ) == Dialog::OK || listbox.ok ) {
-        Artifact artifact( listbox.GetCurrent() );
+    const int32_t result = listbox.selectItemsEventProcessing( _( "Select Artifact:" ) );
 
-        if ( artifact.GetID() == Artifact::SPELL_SCROLL ) {
-            const int spellId = Dialog::selectSpell( Spell::RANDOM, true ).GetID();
-
-            if ( spellId == Spell::NONE ) {
-                // No spell for the Spell Scroll artifact was selected - cancel the artifact selection.
-                return { Artifact::UNKNOWN };
-            }
-
-            artifact.SetSpell( spellId );
-        }
-
-        return artifact;
-    }
-
-    return { Artifact::UNKNOWN };
+    return ( result == Dialog::OK || listbox.ok ) ? Artifact( listbox.GetCurrent() ) : Artifact( Artifact::UNKNOWN );
 }
 
 Monster Dialog::selectMonster( const int monsterId )
@@ -694,6 +723,15 @@ int Dialog::selectMonsterType( const int monsterType )
     MonsterTypeSelection listbox( objectInfo, { 350, fheroes2::Display::instance().height() - 200 } );
 
     return selectObjectType( monsterType, objectInfo.size(), listbox, _( "Select Monster:" ) );
+}
+
+int Dialog::selectArtifactType( const int artifactType )
+{
+    const auto & objectInfo = Maps::getObjectsByGroup( Maps::ObjectGroup::Artifact );
+
+    ArtifactTypeSelection listbox( objectInfo, { 350, fheroes2::Display::instance().height() - 200 } );
+
+    return selectObjectType( artifactType, objectInfo.size(), listbox, _( "Select Artifact:" ) );
 }
 
 int Dialog::selectTreasureType( const int resourceType )

@@ -636,15 +636,7 @@ namespace Interface
                 fheroes2::showStandardTextMessage( _( "Artifacts" ), _( "Choose a tile which does not contain any objects." ), Dialog::OK );
             }
             else {
-                const Artifact artifact( _editorPanel.getArtifact() );
-
-                if ( artifact.isValid() ) {
-                    const fheroes2::ActionCreator action( _historyManager );
-
-                    Maps::setArtifactOnTile( tile, artifact );
-
-                    _redraw |= mapUpdateFlags;
-                }
+                setObjectOnTile( tile, Maps::ObjectGroup::Artifact, _editorPanel.getArtifactType() );
             }
         }
     }

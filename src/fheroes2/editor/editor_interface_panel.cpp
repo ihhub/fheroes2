@@ -20,7 +20,6 @@
 
 #include "editor_interface_panel.h"
 
-#include <algorithm>
 #include <cassert>
 #include <cstddef>
 #include <string>
@@ -549,35 +548,11 @@ namespace Interface
                 }
             }
             else if ( le.MouseClickLeft( _objectButtonsRect[Brush::ARTIFACTS] ) ) {
-                const Artifact artifact = Dialog::selectArtifact( _artifact.GetID(), true );
-                if ( artifact.GetID() != Artifact::UNKNOWN ) {
-                    _artifact = artifact;
+                const int artifactType = Dialog::selectArtifactType( _artifactType );
+                if ( artifactType >= 0 ) {
+                    _artifactType = artifactType;
 
-                    _interface.setCursorUpdater( [artifact]( const int32_t /*tileIndex*/ ) {
-                        uint32_t imageIndex = artifact.IndexSprite32() * 2 + 1;
-
-                        if ( imageIndex < 9 ) {
-                            // First four ultimate artifacts do not have map sprites. We show "Ult ART" image instead.
-                            // TODO: Make sprites for these ultimate artifacts.
-                            imageIndex = 209;
-                        }
-
-                        // Combine two sprites to get mouse cursor sprite.
-                        // TODO: Implement a function that glue multi-tile objects into one using given pattern.
-                        const fheroes2::Sprite & mainImage = fheroes2::AGG::GetICN( ICN::OBJNARTI, imageIndex );
-                        const fheroes2::Sprite & shadowImage = fheroes2::AGG::GetICN( ICN::OBJNARTI, imageIndex - 1 );
-                        const int32_t shadowImageWidth = shadowImage.width();
-                        const int32_t shadowImageHeight = shadowImage.height();
-                        const int32_t mainImageWidth = mainImage.width();
-                        const int32_t mainImageHeight = mainImage.height();
-
-                        fheroes2::Image image( mainImageWidth + shadowImageWidth, std::max( shadowImageHeight, mainImageHeight ) );
-                        image.reset();
-                        fheroes2::Copy( shadowImage, 0, 0, image, 0, shadowImage.y() - mainImage.y(), shadowImageWidth, shadowImageHeight );
-                        fheroes2::Copy( mainImage, 0, 0, image, shadowImageWidth, 0, mainImageWidth, mainImageHeight );
-
-                        Cursor::Get().setCustomImage( image, { -shadowImageWidth - mainImageWidth / 2, -image.height() / 2 } );
-                    } );
+                    _interface.setCursorUpdater( [type = _artifactType]( const int32_t /*tileIndex*/ ) { setCustomCursor( Maps::ObjectGroup::Artifact, type ); } );
 
                     _interface.updateCursor( 0 );
                     return res;

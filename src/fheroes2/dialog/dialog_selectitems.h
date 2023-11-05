@@ -36,7 +36,7 @@ namespace Dialog
 
     int selectHeroes( const int heroId = Heroes::UNKNOWN );
 
-    Artifact selectArtifact( const int artifactId, const bool onlyPlaceableOnMap );
+    Artifact selectArtifact( const int artifactId );
 
     Spell selectSpell( const int spellId, const bool includeRandomSpells );
 
@@ -46,6 +46,8 @@ namespace Dialog
     int selectHeroType( const int heroType );
 
     int selectMonsterType( const int monsterType );
+
+    int selectArtifactType( const int artifactType );
 
     int selectTreasureType( const int resourceType );
 }

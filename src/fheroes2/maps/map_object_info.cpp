@@ -41,22 +41,24 @@ namespace
 
     void populateArtifactData( std::vector<Maps::ObjectInfo> & objects )
     {
-        // Put an unknown artifact.
-        {
-            Maps::ObjectInfo object{ MP2::OBJ_NONE };
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_UNKNOWN, 0, fheroes2::Point{ 0, 0 }, MP2::OBJ_NONE, Maps::TERRAIN_LAYER );
-
-            objects.emplace_back( std::move( object ) );
-        }
-
         // All artifacts before Magic Book have their own images.
         // Magic Book is not present in the ICN resources but it is present in artifact IDs.
         std::vector<uint32_t> imageIndices;
 
-        for ( int artifactId = Artifact::UNKNOWN + 1; artifactId < Artifact::MAGIC_BOOK; ++artifactId ) {
+        for ( int artifactId = Artifact::ARCANE_NECKLACE; artifactId < Artifact::MAGIC_BOOK; ++artifactId ) {
             Maps::ObjectInfo object{ MP2::OBJ_ARTIFACT };
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNARTI, artifactId * 2 - 1, fheroes2::Point{ 0, 0 }, MP2::OBJ_ARTIFACT, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNARTI, artifactId * 2, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNARTI, artifactId * 2 - 2, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            object.metadata[0] = artifactId;
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        for ( int artifactId = Artifact::SPELL_SCROLL; artifactId < Artifact::ARTIFACT_COUNT; ++artifactId ) {
+            const uint32_t imageIndex{ 173U + ( static_cast<uint32_t>( artifactId ) - Artifact::SPELL_SCROLL ) * 2 };
+            Maps::ObjectInfo object{ MP2::OBJ_ARTIFACT };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNARTI, imageIndex, fheroes2::Point{ 0, 0 }, MP2::OBJ_ARTIFACT, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNARTI, imageIndex - 1, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
             object.metadata[0] = artifactId;
 
             objects.emplace_back( std::move( object ) );
@@ -65,8 +67,8 @@ namespace
         // TODO: temporary assign Magic Book some values.
         {
             Maps::ObjectInfo object{ MP2::OBJ_ARTIFACT };
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNARTI, 1, fheroes2::Point{ 0, 0 }, MP2::OBJ_ARTIFACT, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNARTI, 0, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNARTI, 207, fheroes2::Point{ 0, 0 }, MP2::OBJ_ARTIFACT, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNARTI, 206, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
             object.metadata[0] = Artifact::MAGIC_BOOK;
 
             objects.emplace_back( std::move( object ) );
@@ -105,12 +107,9 @@ namespace
             objects.emplace_back( std::move( object ) );
         }
 
-        for ( int artifactId = Artifact::SPELL_SCROLL; artifactId < Artifact::ARTIFACT_COUNT; ++artifactId ) {
-            const uint32_t imageIndex{ 173U + ( static_cast<uint32_t>( artifactId ) - Artifact::SPELL_SCROLL ) * 2 };
-            Maps::ObjectInfo object{ MP2::OBJ_ARTIFACT };
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNARTI, imageIndex, fheroes2::Point{ 0, 0 }, MP2::OBJ_ARTIFACT, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNARTI, imageIndex - 1, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
-            object.metadata[0] = artifactId;
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_RANDOM_ULTIMATE_ARTIFACT };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNARTI, 164, fheroes2::Point{ 0, 0 }, MP2::OBJ_RANDOM_ARTIFACT_TREASURE, Maps::OBJECT_LAYER );
 
             objects.emplace_back( std::move( object ) );
         }

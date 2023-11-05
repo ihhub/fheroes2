@@ -23,7 +23,6 @@
 #include <array>
 #include <cstdint>
 
-#include "artifact.h"
 #include "game_mode.h"
 #include "ground.h"
 #include "maps_tiles_helper.h"
@@ -102,7 +101,6 @@ namespace Interface
         {
             return _selectedInstrument == Instrument::TERRAIN || _selectedInstrument == Instrument::STREAM || _selectedInstrument == Instrument::ROAD
                    || _selectedInstrument == Instrument::ERASE || isMonsterSettingMode() || isHeroSettingMode() || isArtifactSettingMode() || isTreasureSettingMode();
-                   || _selectedInstrument == Instrument::ERASE || isMonsterSettingMode() || isHeroSettingMode() || isTreasureSettingMode();
         }
 
         bool useMouseDragMovement() const
@@ -132,9 +130,9 @@ namespace Interface
             return _heroType;
         }
 
-        Artifact getArtifact() const
+        int32_t getArtifactType() const
         {
-            return _artifact;
+            return _artifactType;
         }
 
         int32_t getTreasureType() const
@@ -253,7 +251,7 @@ namespace Interface
 
         int32_t _heroType{ -1 };
 
-        Artifact _artifact{ Artifact::UNKNOWN };
+        int32_t _artifactType{ -1 };
 
         int32_t _treasureType{ -1 };
     };

@@ -582,13 +582,6 @@ namespace
                   "A dirty shovel has been thrust into a dirt mound nearby. Upon investigation, you discover it to be the enchanted shovel of the Gravediggers, long thought lost by mortals." ),
               {},
               {} },
-            // These are random artifacts, used only for map editor.
-            { gettext_noop( "Random Artifact" ), gettext_noop( "Randomly selected artifact." ), nullptr, {}, {} },
-            { gettext_noop( "Random Ultimate Artifact" ), gettext_noop( "Randomly selected ultimate artifact." ), nullptr, {}, {} },
-            { gettext_noop( "Random Artifact - Treasure" ), gettext_noop( "Randomly selected Treasure Artifact." ), nullptr, {}, {} },
-            { gettext_noop( "Random Artifact - Minor" ), gettext_noop( "Randomly selected Minor Artifact." ), nullptr, {}, {} },
-            { gettext_noop( "Random Artifact - Major" ), gettext_noop( "Randomly selected Major Artifact." ), nullptr, {}, {} },
-
         };
 
         assert( artifactData.size() == ( Artifact::ARTIFACT_COUNT ) );
@@ -822,12 +815,6 @@ namespace
         artifactData[Artifact::SWORD_ANDURAN].bonuses.emplace_back( fheroes2::ArtifactBonusType::ATTACK_SKILL, 5 );
 
         artifactData[Artifact::SPADE_NECROMANCY].bonuses.emplace_back( fheroes2::ArtifactBonusType::NECROMANCY_SKILL, 10 );
-
-        artifactData[Artifact::RANDOM_ALL_LEVELS].bonuses.emplace_back( fheroes2::ArtifactBonusType::NONE );
-        artifactData[Artifact::RANDOM_ULTIMATE].bonuses.emplace_back( fheroes2::ArtifactBonusType::NONE );
-        artifactData[Artifact::RANDOM_1_LEVEL].bonuses.emplace_back( fheroes2::ArtifactBonusType::NONE );
-        artifactData[Artifact::RANDOM_2_LEVEL].bonuses.emplace_back( fheroes2::ArtifactBonusType::NONE );
-        artifactData[Artifact::RANDOM_3_LEVEL].bonuses.emplace_back( fheroes2::ArtifactBonusType::NONE );
 
         for ( const fheroes2::ArtifactData & artifact : artifactData ) {
             if ( artifact.bonuses.empty() && artifact.curses.empty() ) {
