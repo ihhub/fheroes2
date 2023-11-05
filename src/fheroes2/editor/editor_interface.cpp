@@ -21,7 +21,9 @@
 #include "editor_interface.h"
 
 #include <algorithm>
+#include <array>
 #include <cassert>
+#include <memory>
 #include <ostream>
 #include <string>
 #include <vector>
