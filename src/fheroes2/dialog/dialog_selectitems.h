@@ -46,6 +46,8 @@ namespace Dialog
     int selectHeroType( const int heroType );
 
     int selectMonsterType( const int monsterType );
+
+    int selectTreasureType( const int resourceType );
 }
 
 #endif

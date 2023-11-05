@@ -47,6 +47,23 @@
 #include "ui_map_object.h"
 #include "ui_text.h"
 
+namespace
+{
+    void setCustomCursor( const Maps::ObjectGroup group, const int32_t type )
+    {
+        const auto & objectInfo = Maps::getObjectsByGroup( group );
+        if ( type < 0 || type >= static_cast<int32_t>( objectInfo.size() ) ) {
+            // You are trying to render some unknown stuff!
+            assert( 0 );
+            return;
+        }
+
+        const fheroes2::Sprite & image = fheroes2::generateMapObjectImage( objectInfo[type] );
+
+        Cursor::Get().setCustomImage( image, { image.x(), image.y() } );
+    }
+}
+
 namespace Interface
 {
     EditorPanel::EditorPanel( EditorInterface & interface_ )
@@ -82,7 +99,7 @@ namespace Interface
     {
         // Roads and streams are placed using only 1x1 brush.
         if ( _selectedInstrument == Instrument::STREAM || _selectedInstrument == Instrument::ROAD || isMonsterSettingMode() || isHeroSettingMode()
-             || isArtifactSettingMode() ) {
+             || isTreasureSettingMode() || isArtifactSettingMode() ) {
             return 1;
         }
 
@@ -494,18 +511,18 @@ namespace Interface
                 if ( monsterType >= 0 ) {
                     _monsterType = monsterType;
 
-                    _interface.setCursorUpdater( [type = _monsterType]( const int32_t /*tileIndex*/ ) {
-                        const auto & objectInfo = Maps::getObjectsByGroup( Maps::ObjectGroup::Monster );
-                        if ( type < 0 || type >= static_cast<int32_t>( objectInfo.size() ) ) {
-                            // You are trying to render some unknown stuff!
-                            assert( 0 );
-                            return;
-                        }
+                    _interface.setCursorUpdater( [type = _monsterType]( const int32_t /*tileIndex*/ ) { setCustomCursor( Maps::ObjectGroup::Monster, type ); } );
 
-                        const fheroes2::Sprite & image = fheroes2::generateMapObjectImage( objectInfo[type] );
+                    _interface.updateCursor( 0 );
+                    return res;
+                }
+            }
+            else if ( le.MouseClickLeft( _objectButtonsRect[Brush::TREASURES] ) ) {
+                const int treasureType = Dialog::selectTreasureType( _treasureType );
+                if ( treasureType >= 0 ) {
+                    _treasureType = treasureType;
 
-                        Cursor::Get().setCustomImage( image, { image.x(), image.y() } );
-                    } );
+                    _interface.setCursorUpdater( [type = _treasureType]( const int32_t /*tileIndex*/ ) { setCustomCursor( Maps::ObjectGroup::Treasure, type ); } );
 
                     _interface.updateCursor( 0 );
                     return res;

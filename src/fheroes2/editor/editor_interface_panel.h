@@ -93,10 +93,16 @@ namespace Interface
             return ( _selectedInstrument == OBJECT ) && ( _selectedObject == ARTIFACTS );
         }
 
+        bool isTreasureSettingMode() const
+        {
+            return ( _selectedInstrument == OBJECT ) && ( _selectedObject == TREASURES );
+        }
+
         bool showAreaSelectRect() const
         {
             return _selectedInstrument == Instrument::TERRAIN || _selectedInstrument == Instrument::STREAM || _selectedInstrument == Instrument::ROAD
-                   || _selectedInstrument == Instrument::ERASE || isMonsterSettingMode() || isHeroSettingMode() || isArtifactSettingMode();
+                   || _selectedInstrument == Instrument::ERASE || isMonsterSettingMode() || isHeroSettingMode() || isArtifactSettingMode() || isTreasureSettingMode();
+                   || _selectedInstrument == Instrument::ERASE || isMonsterSettingMode() || isHeroSettingMode() || isTreasureSettingMode();
         }
 
         bool useMouseDragMovement() const
@@ -129,6 +135,11 @@ namespace Interface
         Artifact getArtifact() const
         {
             return _artifact;
+        }
+
+        int32_t getTreasureType() const
+        {
+            return _treasureType;
         }
 
     private:
@@ -243,5 +254,7 @@ namespace Interface
         int32_t _heroType{ -1 };
 
         Artifact _artifact{ Artifact::UNKNOWN };
+
+        int32_t _treasureType{ -1 };
     };
 }

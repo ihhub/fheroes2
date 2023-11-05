@@ -606,6 +606,17 @@ namespace Interface
                 setObjectOnTile( tile, Maps::ObjectGroup::Monster, _editorPanel.getMonsterType() );
             }
         }
+        else if ( _editorPanel.isTreasureSettingMode() ) {
+            if ( tile.isWater() ) {
+                fheroes2::showStandardTextMessage( _( "Treasure" ), _( "Treasures cannot be placed on water." ), Dialog::OK );
+            }
+            else if ( !Maps::isClearGround( tile ) ) {
+                fheroes2::showStandardTextMessage( _( "Treasure" ), _( "Choose a tile which does not contain any objects." ), Dialog::OK );
+            }
+            else {
+                setObjectOnTile( tile, Maps::ObjectGroup::Treasure, _editorPanel.getTreasureType() );
+            }
+        }
         else if ( _editorPanel.isHeroSettingMode() ) {
             if ( tile.isWater() ) {
                 fheroes2::showStandardTextMessage( _( "Heroes" ), _( "Heroes cannot be placed on water." ), Dialog::OK );
