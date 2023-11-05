@@ -3313,8 +3313,6 @@ msgid ""
 "Indicates how many players total are in the scenario. Any positions not "
 "occupied by humans will be occupied by computer players."
 msgstr ""
-"Jelzi, hogy összesen hány játékos van a pályán. Minden ember által le nem "
-"foglalt pozíciót a számítógép fog elfoglalni."
 
 msgid ""
 "Indicates whether the map\n"
@@ -3487,46 +3485,50 @@ msgstr "Személyiség:"
 msgid "Best Monster:"
 msgstr "Legerősebb lény:"
 
+#, fuzzy
 msgid ""
 "Are you sure you want to load a new map? (Any unsaved changes to the current "
 "map will be lost.)"
 msgstr ""
-"Biztos, hogy új térképet akarsz betölteni? (A jelenlegi térkép "
-"minden változtatása el fog veszni)"
+"Biztos hogy benne hogy új játékot töltesz be? (A jelenlegi játékod el fog "
+"veszni)"
 
+#, fuzzy
 msgid ""
 "Are you sure you want to create a new map? (Any unsaved changes to the "
 "current map will be lost.)"
 msgstr ""
-"Biztos, hogy új térképet akarsz létrehozni? (A jelenlegi térkép "
-"minden változtatása el fog veszni)"
+"Biztos hogy benne hogy új játékot töltesz be? (A jelenlegi játékod el fog "
+"veszni)"
 
 msgid ""
 "Create a new map, either from scratch or using the random map generator."
 msgstr ""
-"Készíts új térképet, a saját elképzelésed szerint vagy használd a "
-"véletlenszerű térkép generátort."
 
+#, fuzzy
 msgid "New Map"
-msgstr "Új térkép"
+msgstr "Dawn"
 
+#, fuzzy
 msgid "Load Map"
-msgstr "Térkép betöltése"
+msgstr "Játék betöltése"
 
 msgid "Load an existing map."
-msgstr "Létező térkép betöltése."
+msgstr ""
 
+#, fuzzy
 msgid "Save Map"
-msgstr "Térkép mentése"
+msgstr "Új játék"
 
+#, fuzzy
 msgid "Save the current map."
-msgstr "A jelenlegi térkép mentése."
+msgstr "Kattints a főmenübe való visszatéréshez."
 
 msgid "Quit out of the map editor."
-msgstr "Kilépés a térképszerkesztőből."
+msgstr ""
 
 msgid "Monster"
-msgstr "Lény"
+msgstr "Szörny"
 
 msgid "Monsters cannot be placed on water."
 msgstr ""
@@ -3800,54 +3802,44 @@ msgid "difficulty|Impossible"
 msgstr "Lehetetlen"
 
 msgid "and more..."
-msgstr "és egyebek ..."
+msgstr ""
 
 msgid "Easy"
-msgstr "Könnyű"
+msgstr ""
 
 msgid "Hard"
-msgstr "Nehéz"
+msgstr ""
 
+#, fuzzy
 msgid "Campaign Difficulty"
-msgstr "Hadjárat nehézsége"
+msgstr "Játék nehézsége"
 
 msgid ""
 "Choose this difficulty if you want to prefer game story over challenge. AI "
 "is weaker in comparison with normal difficulty."
 msgstr ""
-"Válaszd ezt a nehézséget, ha előnyben részesíted a játék történetiségét a "
-"kihíváshoz képest. A gép gyengébb lesz a normálishoz képest."
 
 msgid ""
 "Choose this difficulty to enjoy the campaign as per the original design."
 msgstr ""
-"Válaszd ezt a nehézséget, ha a hadjáratot az eredeti elgondolásnak "
-"megfelelően szeretnéd játszani."
 
 msgid ""
 "Choose this difficulty if you want challenge. AI is stronger in comparison "
 "with normal difficulty."
 msgstr ""
-"Válaszd ezt a nehézséget, ha kihívást akarsz. A gép erősebb, mint a normális "
-"nehézségi fokozaton."
 
+#, fuzzy
 msgid ""
 "Congratulations!\n"
 "\n"
 "Days: %{days}\n"
-msgstr ""
-"Gratulálunk!\n"
-"\n"
-"Nap: %{days}\n"
+msgstr "Gratulálunk!"
 
 msgid ""
 "\n"
 "Difficulty: %{difficulty}\n"
 "\n"
 msgstr ""
-"\n"
-"Nehézség: %{difficulty}\n"
-"\n"
 
 msgid ""
 "Score: %{score}\n"
@@ -3855,35 +3847,34 @@ msgid ""
 "Rating:\n"
 "%{rating}"
 msgstr ""
-"Pontszám: %{score}\n"
-"\n"
-"Besorolás:\n"
-"%{rating}"
 
 msgid "Start the selected scenario."
-msgstr "A kiválasztott küldetés indítása."
+msgstr ""
 
+#, fuzzy
 msgid "View Intro"
-msgstr "Intró mutatása"
+msgstr "Hős mutatása"
 
 msgid "View Intro videos for the current state of the campaign."
-msgstr "A hadjárat jelenlegi állásához tartozó bemutató videó megnézése."
+msgstr ""
 
 msgid ""
 "Select the campaign difficulty. This can be lowered at any point during the "
 "campaign."
 msgstr ""
-"A hadjárat nehézségének kiválasztása. Ez bármikor csökkenthető a hadjárat "
-"során."
 
 msgid "Restart"
-msgstr "Újraindít"
+msgstr ""
 
+#, fuzzy
 msgid "Restart the current scenario."
-msgstr "Aktuális küldetés újraindítása."
+msgstr "Készítők listájának megjelenítése."
 
+#, fuzzy
 msgid "Difficulty"
-msgstr "Nehézség"
+msgstr ""
+"Térkép\n"
+"Nehézség"
 
 msgid ""
 "You have changed to a lower difficulty for the campaign. You will not be "
