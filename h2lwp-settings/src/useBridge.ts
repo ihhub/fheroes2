@@ -26,12 +26,6 @@ export const useBridge = () => {
       setState(message);
     };
 
-    setTimeout(() => {
-      setState({
-        field: 1
-      })
-    }, 2000)
-
     startApp(() => {
       window.Android = window.Bridge?.interfaces.Android;
     });
