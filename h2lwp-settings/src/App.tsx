@@ -6,7 +6,7 @@ import { Header } from "./Header";
 
 export function App() {
   const { settings } = useBridge();
-  const isLoading = Object.keys(settings).length === 0;
+  const isLoading = !settings;
 
   return (
     <Grid container height="100%" width="100%" direction="column">
@@ -19,7 +19,7 @@ export function App() {
         flex="1"
         direction="column"
       >
-        {isLoading && <CircularProgress  />}
+        {isLoading && <CircularProgress />}
 
         {!isLoading && <Settings settings={settings} />}
 

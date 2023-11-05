@@ -4,7 +4,7 @@ import ListSubheader from "@mui/material/ListSubheader";
 import { Scale } from "./Settings/Scale";
 import { ScaleType } from "./Settings/ScaleType";
 import { Brightness } from "./Settings/Brightness";
-// import { UseScroll } from "./Settings/UseScroll";
+import { MapUpdateInterval } from "./Settings/MapUpdateInterval";
 import { WallpaperSettings } from "./global";
 
 type Props = {
@@ -20,7 +20,5 @@ export const Settings: React.FC<Props> = ({ settings }) => (
     <MapUpdateInterval value={settings.mapUpdateInterval} />
 
     <Brightness value={settings.brightness} />
-
-    {/*<UseScroll value={Boolean(state.useMapScroll)} />*/}
   </List>
 );

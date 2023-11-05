@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { WallpaperSettings } from "./global";
 
 function startApp(callback: () => void) {
   if (!window.Bridge) {
@@ -14,7 +15,7 @@ function startApp(callback: () => void) {
 }
 
 export const useBridge = () => {
-  const [settings, setSettings] = useState({});
+  const [settings, setSettings] = useState<WallpaperSettings | null>(null);
 
   useEffect(() => {
     window.Bridge?.init();
@@ -23,7 +24,7 @@ export const useBridge = () => {
       console.log("dispatchWebViewEvent:", JSON.stringify(message, null, 2));
 
       if (message.type === "settings") {
-        setSettings(message);
+        setSettings(message.payload);
       }
     };
 
