@@ -3729,7 +3729,7 @@ namespace fheroes2
                     FillTransform( _icnVsSprite[id][207], 0, 30, 3, 1, 1U );
                     FillTransform( _icnVsSprite[id][207], 10, 30, 13, 1, 1U );
                     FillTransform( _icnVsSprite[id][207], 0, 31, 5, 1, 1U );
-                    FillTransform( _icnVsSprite[id][207], 9, 31, 14, 1, 1U );
+                    FillTransform( _icnVsSprite[id][207], 8, 31, 15, 1, 1U );
                 }
                 return true;
             case ICN::TWNSDW_5:
