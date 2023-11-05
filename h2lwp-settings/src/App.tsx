@@ -1,31 +1,16 @@
 import "./App.css";
 import { useBridge } from "./useBridge";
-import {
-  AppBar,
-  Button,
-  CircularProgress,
-  Grid,
-  Toolbar,
-  Typography,
-} from "@mui/material";
+import { Button, CircularProgress, Grid } from "@mui/material";
 import { Settings } from "./Settings";
+import { Header } from "./Header";
 
 export function App() {
   const { state } = useBridge();
-
   const isLoading = Object.keys(state).length === 0;
 
   return (
     <>
-      <AppBar>
-        <Toolbar>
-          <Typography variant="h6" component="div">
-            Wallpaper settings
-          </Typography>
-        </Toolbar>
-      </AppBar>
-
-      <Toolbar />
+      <Header title="Wallpaper settings" />
 
       {isLoading && (
         <Grid
