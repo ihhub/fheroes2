@@ -117,4 +117,6 @@ namespace Maps
     };
 
     const std::vector<ObjectInfo> & getObjectsByGroup( const ObjectGroup group );
+
+    MP2::MapObjectType getObjectTypeByIcn( const MP2::ObjectIcnType icnType, const uint32_t icnIndex );
 }

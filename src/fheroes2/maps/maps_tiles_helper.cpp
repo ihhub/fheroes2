@@ -1196,7 +1196,21 @@ namespace
             // It is important that the type of the object is set properly for this layer.
             assert( partInfo.objectType != MP2::OBJ_NONE );
 
-            currentTile.SetObject( partInfo.objectType );
+            bool setObjectType = true;
+            if ( !MP2::isActionObject( partInfo.objectType ) ) {
+                for ( const auto & addon : currentTile.getTopLayerAddons() ) {
+                    const MP2::MapObjectType type = Maps::getObjectTypeByIcn( addon._objectIcnType, addon._imageIndex );
+                    if ( type != MP2::OBJ_NONE ) {
+                        setObjectType = false;
+                        break;
+                    }
+                }
+            }
+
+            if ( setObjectType ) {
+                currentTile.SetObject( partInfo.objectType );
+            }
+
             currentTile.moveMainAddonToBottomLayer();
 
             currentTile.setObjectUID( uid );
@@ -1219,6 +1233,10 @@ namespace
             Maps::Tiles & currentTile = world.GetTiles( pos.x, pos.y );
 
             currentTile.pushTopLayerAddon( Maps::TilesAddon( partInfo.layerType, uid, partInfo.icnType, static_cast<uint8_t>( partInfo.icnIndex ) ) );
+
+            if ( partInfo.objectType != MP2::OBJ_NONE && !MP2::isActionObject( currentTile.GetObject() ) ) {
+                currentTile.SetObject( partInfo.objectType );
+            }
         }
     }
 }
