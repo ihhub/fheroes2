@@ -4183,238 +4183,223 @@ msgid "hotkey|redo last action"
 msgstr "Legutolsó cselekvés visszaállítása (REDO)"
 
 msgid "hotkey|roland campaign"
-msgstr ""
+msgstr "roland hadjárata"
 
 msgid "hotkey|archibald campaign"
-msgstr ""
+msgstr "archibald hadjárata"
 
 msgid "hotkey|the price of loyalty campaign"
-msgstr ""
+msgstr "a hűség ára hadjárat"
 
 msgid "hotkey|voyage home campaign"
-msgstr ""
+msgstr "hazatérés hadjárat"
 
 msgid "hotkey|wizard's isle campaign"
-msgstr ""
+msgstr "varázslósziget hadjárat"
 
 msgid "hotkey|descendants campaign"
-msgstr ""
+msgstr "leszármazottak hadjárata"
 
 msgid "hotkey|select first campaign bonus"
-msgstr ""
+msgstr "első hadjárat bónusz kiválasztása"
 
 msgid "hotkey|select second campaign bonus"
-msgstr ""
+msgstr "második hadjárat bónusz kiválasztása"
 
 msgid "hotkey|select third campaign bonus"
-msgstr ""
+msgstr "harmadik hadjárat bónusz kiválasztása"
 
 msgid "hotkey|view campaign intro"
-msgstr ""
+msgstr "hadjárat bevezetőjének megtekintése"
 
-#, fuzzy
 msgid "hotkey|select campaign difficulty"
-msgstr "Játék nehézsége"
+msgstr "térkép nehézségének kiválasztása"
 
 msgid "hotkey|restart campaign scenario"
-msgstr ""
+msgstr "hadjárat küldetés újrakezdése"
 
 msgid "hotkey|world map left"
-msgstr ""
+msgstr "világtérkép: balra"
 
 msgid "hotkey|world map right"
-msgstr ""
+msgstr "világtérkép: jobbra"
 
 msgid "hotkey|world map up"
-msgstr ""
+msgstr "világtérkép: fel"
 
 msgid "hotkey|world map down"
-msgstr ""
+msgstr "világtérkép: le"
 
 msgid "hotkey|world map up left"
-msgstr ""
+msgstr "világtérkép: fel-balra"
 
 msgid "hotkey|world map up right"
-msgstr ""
+msgstr "világtérkép: fel-jobbra"
 
 msgid "hotkey|world map down left"
-msgstr ""
+msgstr "világtérkép: le-balra"
 
 msgid "hotkey|world map down right"
-msgstr ""
+msgstr "világtérkép: le-jobbra"
 
 msgid "hotkey|save game"
-msgstr ""
+msgstr "játék mentése"
 
-#, fuzzy
 msgid "hotkey|next hero"
-msgstr "Következő hősök"
+msgstr "következő hős"
 
-#, fuzzy
 msgid "hotkey|start hero movement"
-msgstr "Mozgás folytatása"
+msgstr "hős mozgásának megkezdése"
 
-#, fuzzy
 msgid "hotkey|cast adventure spell"
-msgstr "Kalandozó varázslat elsütése."
+msgstr "kalandozó varázslat idézése"
 
 msgid "hotkey|put hero to sleep"
-msgstr ""
+msgstr "hős altatása"
 
-#, fuzzy
 msgid "hotkey|next town"
-msgstr "Következő város mutatása"
+msgstr "következő város"
 
 msgid "hotkey|end turn"
-msgstr ""
+msgstr "kör befejezése"
 
-#, fuzzy
 msgid "hotkey|file options"
-msgstr "Fájlbeállítások"
+msgstr "fájlbeállítások"
 
-#, fuzzy
 msgid "hotkey|adventure options"
-msgstr "Kaland Opciók"
+msgstr "kaland opciók"
 
 msgid "hotkey|puzzle map"
-msgstr ""
+msgstr "rejtvény térkép"
 
-#, fuzzy
 msgid "hotkey|scenario information"
-msgstr "Laza felállás"
+msgstr "küldetés infromáció"
 
 msgid "hotkey|dig for artifact"
-msgstr ""
+msgstr "varázstárgy kiásása"
 
 msgid "hotkey|view world"
-msgstr ""
+msgstr "világ mutatása"
 
-#, fuzzy
 msgid "hotkey|kingdom summary"
-msgstr "Királyság összesítése"
+msgstr "királyság összesítő"
 
 msgid "hotkey|default action"
-msgstr ""
+msgstr "alaőértelmezett cselekvés"
 
 msgid "hotkey|open focus"
-msgstr ""
+msgstr "fókuszálás kezdése"
 
-#, fuzzy
 msgid "hotkey|system options"
-msgstr "Rendszerbeállítások testreszabása"
+msgstr "rendszerbeállítások"
 
 msgid "hotkey|scroll left"
-msgstr ""
+msgstr "görgetés balra"
 
 msgid "hotkey|scroll right"
-msgstr ""
+msgstr "görgetés jobbra"
 
 msgid "hotkey|scroll up"
-msgstr ""
+msgstr "görgetés fel"
 
 msgid "hotkey|scroll down"
-msgstr ""
+msgstr "görgetés le"
 
 msgid "hotkey|toggle control panel"
-msgstr ""
+msgstr "vezérlőpult kapcsoló"
 
 msgid "hotkey|toggle radar"
-msgstr ""
+msgstr "radar kapcsoló"
 
 msgid "hotkey|toggle buttons"
-msgstr ""
+msgstr "gomb átkapcsoló"
 
 msgid "hotkey|toggle status"
-msgstr ""
+msgstr "státusz kapcsoló"
 
 msgid "hotkey|toggle icons"
-msgstr ""
+msgstr "ikon kapcsoló"
 
 msgid "hotkey|transfer control to ai"
-msgstr ""
+msgstr "irányítás átadása a gépnek"
 
 msgid "hotkey|retreat from battle"
-msgstr ""
+msgstr "visszavonulás a csatából"
 
 msgid "hotkey|surrender during battle"
-msgstr ""
+msgstr "megadás a csatában"
 
 msgid "hotkey|toggle battle auto mode"
-msgstr ""
+msgstr "automatikus csata mód kapcsoló"
 
-#, fuzzy
 msgid "hotkey|finish the battle in auto mode"
-msgstr "Biztos vagy benne hogy feloszlatod ezt a sereget?"
+msgstr "csata befejezése automatikus módban"
 
-#, fuzzy
 msgid "hotkey|battle options"
-msgstr "Kastély beállítások"
+msgstr "csata beállítások"
 
 msgid "hotkey|skip turn in battle"
-msgstr ""
+msgstr "kör kihagyása a csatában"
 
 msgid "hotkey|cast battle spell"
-msgstr ""
+msgstr "varázslat idézése csatában"
 
 msgid "hotkey|dwelling level 1"
-msgstr ""
+msgstr "toborzóhely 1. szint"
 
 msgid "hotkey|dwelling level 2"
-msgstr ""
+msgstr "toborzóhely 2. szint"
 
 msgid "hotkey|dwelling level 3"
-msgstr ""
+msgstr "toborzóhely 3. szint"
 
 msgid "hotkey|dwelling level 4"
-msgstr ""
+msgstr "toborzóhely 4. szint"
 
 msgid "hotkey|dwelling level 5"
-msgstr ""
+msgstr "toborzóhely 5. szint"
 
 msgid "hotkey|dwelling level 6"
-msgstr ""
+msgstr "toborzóhely 6. szint"
 
 msgid "hotkey|well"
-msgstr ""
+msgstr "kút"
 
-#, fuzzy
 msgid "hotkey|marketplace"
-msgstr "Piactér"
+msgstr "piactér"
 
 msgid "hotkey|mage guild"
-msgstr ""
+msgstr "varázstorony"
 
-#, fuzzy
 msgid "hotkey|shipyard"
-msgstr "Hajógyár"
+msgstr "hajógyár"
 
-#, fuzzy
 msgid "hotkey|thieves guild"
-msgstr "Tolvajcéh"
+msgstr "tolvajcéh"
 
 msgid "hotkey|tavern"
-msgstr ""
+msgstr "fogadó"
 
 msgid "hotkey|construction screen"
-msgstr ""
+msgstr "tervezési képernyő"
 
 msgid "hotkey|buy all monsters in well"
-msgstr ""
+msgstr "minden lény megvásárlása a kútban"
 
 msgid "hotkey|split stack by half"
-msgstr ""
+msgstr "egység kétfelé osztása"
 
 msgid "hotkey|split stack by one"
-msgstr ""
+msgstr "egység szétosztása"
 
 msgid "hotkey|join stacks"
-msgstr ""
+msgstr "egységek összevonása"
 
 msgid "hotkey|upgrade troop"
-msgstr ""
+msgstr "csapat fejlesztése"
 
 msgid "hotkey|dismiss hero or troop"
-msgstr ""
+msgstr "hős/egység elbocsátása"
 
 msgid ""
 "Do you want to regain control from AI? The effect will take place only on "
