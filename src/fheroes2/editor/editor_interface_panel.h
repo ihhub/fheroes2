@@ -87,10 +87,15 @@ namespace Interface
             return ( _selectedInstrument == OBJECT ) && ( _selectedObject == HEROES );
         }
 
+        bool isTreasureSettingMode() const
+        {
+            return ( _selectedInstrument == OBJECT ) && ( _selectedObject == TREASURES );
+        }
+
         bool showAreaSelectRect() const
         {
             return _selectedInstrument == Instrument::TERRAIN || _selectedInstrument == Instrument::STREAM || _selectedInstrument == Instrument::ROAD
-                   || _selectedInstrument == Instrument::ERASE || isMonsterSettingMode() || isHeroSettingMode();
+                   || _selectedInstrument == Instrument::ERASE || isMonsterSettingMode() || isHeroSettingMode() || isTreasureSettingMode();
         }
 
         bool useMouseDragMovement() const
@@ -118,6 +123,11 @@ namespace Interface
         int32_t getHeroType() const
         {
             return _heroType;
+        }
+
+        int32_t getTreasureType() const
+        {
+            return _treasureType;
         }
 
     private:
@@ -230,5 +240,7 @@ namespace Interface
         int32_t _monsterType{ -1 };
 
         int32_t _heroType{ -1 };
+
+        int32_t _treasureType{ -1 };
     };
 }

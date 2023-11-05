@@ -813,6 +813,7 @@ int MP2::getActionObjectDirection( const MapObjectType objectType )
     case OBJ_RANDOM_MONSTER_VERY_STRONG:
     case OBJ_RANDOM_MONSTER_WEAK:
     case OBJ_RANDOM_ULTIMATE_ARTIFACT:
+    case OBJ_RANDOM_RESOURCE:
     case OBJ_RESOURCE:
     case OBJ_SEA_CHEST:
     case OBJ_SHIPWRECK_SURVIVOR:

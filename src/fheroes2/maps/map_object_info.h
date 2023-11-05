@@ -108,7 +108,7 @@ namespace Maps
         Artifact,
         Hero,
         Monster,
-        Resource,
+        Treasure,
         Ocean_Object,
 
         // IMPORTANT!!!
