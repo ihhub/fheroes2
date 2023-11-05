@@ -15,15 +15,6 @@ class AndroidNativeInterface(
     private val viewModel: SettingsViewModel
 ) :
     DefaultJSInterface("Android") {
-    @NativeCall(CallType.FULL_SYNC)
-    fun helloFullSync(name: String): String {
-        return "helloFullSync return: $name"
-    }
-
-    @NativeCall(CallType.WEB_PROMISE)
-    fun helloWebPromise(name: String): String {
-        return "helloWebPromise return: $name"
-    }
 
     @NativeCall(CallType.FULL_PROMISE)
     fun helloFullPromise(name: String) = doInBackground { promise ->
