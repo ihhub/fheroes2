@@ -1,6 +1,5 @@
 package com.ipapps.homm2.livewallpaper
 
-import android.app.Activity
 import android.app.WallpaperManager
 import android.content.ComponentName
 import android.content.Intent
@@ -42,15 +41,15 @@ class WebViewActivity : AppCompatActivity() {
 
     private val fileChooserLauncher =
         registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
-            val array = arrayOf<Uri>()
+            val urisList = mutableListOf<Uri>()
             if (uri != null) {
                 println("selected url $uri")
-                array[0] = uri;
+                urisList.add(uri)
             } else {
                 println("No uri")
             }
 
-            filePathCallback?.onReceiveValue(arrayOf())
+            filePathCallback?.onReceiveValue(urisList.toTypedArray())
             filePathCallback = null
         }
 
