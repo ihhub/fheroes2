@@ -607,7 +607,11 @@ int32_t Dialog::selectKingdomCastle( const Kingdom & kingdom, const bool notOccu
         castles.push_back( castle->GetIndex() );
     }
 
-    SelectKingdomCastle listbox( { 350, fheroes2::Display::instance().height() - 200 }, title, additionalText );
+    const int32_t maxHeight = std::min( 100 + 35 * 12, fheroes2::Display::instance().height() - 200 );
+    const int32_t itemsHeight = std::max( 100 + 35 * static_cast<int32_t>( castles.size() ), 100 + 35 * 5 );
+    const int32_t totalHeight = std::min( itemsHeight, maxHeight );
+
+    SelectKingdomCastle listbox( { 350, totalHeight }, title, additionalText );
 
     listbox.SetListContent( castles );
     if ( castlePositionIndex != -1 ) {
