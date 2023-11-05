@@ -37,6 +37,15 @@ class WebViewActivity : AppCompatActivity() {
         }
     }
 
+    private fun copyConfigFile() {
+        val input = assets.open("fheroes2.cfg")
+        val output = getExternalFilesDir(null)?.resolve("fheroes2.cfg");
+
+        if (output != null && !output.exists() && output.createNewFile()) {
+            input.copyTo(output.outputStream())
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_web_view)
@@ -44,12 +53,10 @@ class WebViewActivity : AppCompatActivity() {
         val webView = findViewById<WebView>(R.id.activity_web_view)
         webView.loadUrl("file:///android_asset/www/index.html")
 
-        var config = getExternalFilesDir(null)?.resolve("fheroes2.cfg")
-        if (config == null || !config.exists()) {
-            config?.createNewFile()
-        }
-
         copyResurrectionH2d()
+        copyConfigFile()
+
+        val config = getExternalFilesDir(null)?.resolve("fheroes2.cfg")
 
         val prefsRepository = WallpaperPreferencesRepository(config)
         val settingsViewModel =
