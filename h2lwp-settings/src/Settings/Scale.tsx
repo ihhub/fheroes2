@@ -23,6 +23,6 @@ export const Scale: React.FC<Props> = ({ value }) => (
     label="Scale"
     value={value}
     items={items}
-    onChange={(value) => window.Android?.setScale(value)}
+    onChange={(value) => window.Android?.setScale(Number(value) || 0)}
   />
 );

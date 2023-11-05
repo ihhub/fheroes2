@@ -23,11 +23,11 @@ export const Brightness: React.FC<Props> = ({ value }) => {
             max={100}
             step={1}
             valueLabelDisplay="auto"
-            valueLabelFormat={(value) => value + "%"}
+            valueLabelFormat={(value) => (value || 0) + "%"}
             value={localValue}
             onChange={(_, value) => {
               setLocalValue(Number(value));
-              window.Android?.setBrightness(Number(value));
+              window.Android?.setBrightness(Number(value) || 0);
             }}
           />
         </Box>

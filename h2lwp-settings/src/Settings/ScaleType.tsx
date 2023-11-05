@@ -19,6 +19,6 @@ export const ScaleType: React.FC<Props> = ({ value }) => (
     label="Scale type"
     value={value}
     items={items}
-    onChange={(value) => window.Android?.setScaleType(value)}
+    onChange={(value) => window.Android?.setScaleType(Number(value) || 0)}
   />
 );

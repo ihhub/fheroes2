@@ -11,13 +11,13 @@ export const Settings: React.FC<{ state: Record<string, unknown> }> = ({
   state,
 }) => (
   <List subheader={<ListSubheader>Settings</ListSubheader>} disablePadding>
-    <ScaleType value={Number(state.scaleType)} />
+    <ScaleType value={Number(state.scaleType) || 0} />
 
-    <Scale value={Number(state.scale)} />
+    <Scale value={Number(state.scale) || 0} />
 
-    <MapUpdateInterval value={Number(state.mapUpdateInterval)} />
+    <MapUpdateInterval value={Number(state.mapUpdateInterval) || 0} />
 
-    <Brightness value={Number(state.brightness)} />
+    <Brightness value={Number(state.brightness) || 0} />
 
     {/*<UseScroll value={Boolean(state.useMapScroll)} />*/}
   </List>

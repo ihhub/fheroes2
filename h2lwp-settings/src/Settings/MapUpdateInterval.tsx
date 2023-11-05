@@ -22,6 +22,6 @@ export const MapUpdateInterval: React.FC<Props> = ({ value }) => (
     label="Map update interval"
     value={value}
     items={items}
-    onChange={(value) => window.Android?.setMapUpdateInterval(value)}
+    onChange={(value) => window.Android?.setMapUpdateInterval(Number(value) || 0)}
   />
 );
