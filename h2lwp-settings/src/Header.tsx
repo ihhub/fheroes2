@@ -1,4 +1,4 @@
-import { AppBar, Toolbar, Typography } from "@mui/material";
+import { AppBar, Grid, Toolbar, Typography } from "@mui/material";
 import { ReactNode } from "react";
 
 type Props = {
@@ -6,7 +6,7 @@ type Props = {
 };
 
 export const Header: React.FC<Props> = ({ title }) => (
-  <>
+  <Grid>
     <AppBar>
       <Toolbar>
         <Typography variant="h6" component="div">
@@ -16,5 +16,5 @@ export const Header: React.FC<Props> = ({ title }) => (
     </AppBar>
 
     <Toolbar />
-  </>
+  </Grid>
 );

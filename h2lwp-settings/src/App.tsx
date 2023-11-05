@@ -9,30 +9,28 @@ export function App() {
   const isLoading = Object.keys(state).length === 0;
 
   return (
-    <>
+    <Grid container height="100%" width="100%" direction="column">
       <Header title="Wallpaper settings" />
 
-      {isLoading && (
-        <Grid
-          height="100%"
-          container
-          alignContent="center"
-          justifyContent="center"
-        >
-          <CircularProgress />
-        </Grid>
-      )}
+      <Grid
+        container
+        alignContent="center"
+        justifyContent="center"
+        flex="1"
+        direction="column"
+      >
+        {isLoading && <CircularProgress />}
 
-      {!isLoading && (
-        <Grid>
-          <Settings state={state} />
+        {!isLoading && <Settings state={state} />}
 
+        {!isLoading && (
           <Grid
             container
-            alignContent="center"
+            alignContent="flex-start"
             justifyContent="center"
+            flex="1"
+            flexShrink={1}
             padding={2}
-            width="100%"
           >
             <Button
               variant="contained"
@@ -41,8 +39,8 @@ export function App() {
               Set wallpaper
             </Button>
           </Grid>
-        </Grid>
-      )}
-    </>
+        )}
+      </Grid>
+    </Grid>
   );
 }
