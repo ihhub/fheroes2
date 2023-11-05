@@ -48,6 +48,7 @@
 #include "kingdom.h"
 #include "localevent.h"
 #include "map_object_info.h"
+#include "maps.h"
 #include "math_base.h"
 #include "mp2.h"
 #include "race.h"

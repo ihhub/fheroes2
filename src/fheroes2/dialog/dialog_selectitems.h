@@ -24,11 +24,15 @@
 #ifndef H2EDITOR_DIALOGS_H
 #define H2EDITOR_DIALOGS_H
 
+#include <stdint.h>
+
 #include "artifact.h"
 #include "heroes.h"
 #include "monster.h"
 #include "skill.h"
 #include "spell.h"
+
+class Kingdom;
 
 namespace Dialog
 {

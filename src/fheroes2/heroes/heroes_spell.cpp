@@ -26,6 +26,7 @@
 #include <memory>
 #include <ostream>
 #include <string>
+#include <vector> 
 
 #include "army.h"
 #include "army_troop.h"
@@ -39,7 +40,6 @@
 #include "heroes.h"
 #include "interface_base.h"
 #include "interface_gamearea.h"
-#include "interface_icons.h"
 #include "interface_radar.h"
 #include "kingdom.h"
 #include "logging.h"
