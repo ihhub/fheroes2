@@ -3959,7 +3959,7 @@ msgid "Additional Design"
 msgstr "További tervezés"
 
 msgid "Additional Programming"
-msgstr "KTovábbi programozás"
+msgstr "További programozás"
 
 msgid "Musical Production"
 msgstr "Zenei produkció"
