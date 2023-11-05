@@ -20,8 +20,6 @@
 
 #pragma once
 
-// TODO: this header is redundant here, but detected as required by IWYU with older compilers
-// IWYU pragma: no_include <algorithm>
 #include <cstdint>
 #include <string>
 #include <vector>

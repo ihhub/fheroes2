@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-23 00:14+0000\n"
+"POT-Creation-Date: 2023-11-03 12:33+0000\n"
 "PO-Revision-Date: 2022-10-01 20:20+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Turkish <tr@li.org>\n"
@@ -933,12 +933,6 @@ msgstr "her biri saldırı becerilerine +%{attack} bonusu ekler."
 #, fuzzy
 msgid "The %{name} is destroyed."
 msgstr "Ayna görüntüsü yok edildi!"
-
-msgid ""
-"The %{artifact} artifact is in effect for this battle, disabling %{spell} "
-"spell."
-msgstr ""
-"%{artifact} eseri bu savaşta etkin, %{spell} büyüsünü devre dışı bırakıyor."
 
 msgid "%{count} %{name} rises from the dead!"
 msgid_plural "%{count} %{name} rise from the dead!"
@@ -3047,9 +3041,6 @@ msgstr ""
 msgid "Accept the choice made."
 msgstr ""
 
-msgid "Unknown Hero"
-msgstr ""
-
 msgid "%{color} %{race} hero"
 msgstr ""
 
@@ -3851,6 +3842,9 @@ msgid "Package Design"
 msgstr ""
 
 msgid "Your Name"
+msgstr ""
+
+msgid "Unknown Hero"
 msgstr ""
 
 msgid "Standard"

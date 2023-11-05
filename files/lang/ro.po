@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-23 00:14+0000\n"
+"POT-Creation-Date: 2023-11-03 12:33+0000\n"
 "PO-Revision-Date: 2022-10-25 08:56+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -947,13 +947,6 @@ msgstr "fiecare cu un bonus de +%{attack} la abilitatea lor de atac."
 #, fuzzy
 msgid "The %{name} is destroyed."
 msgstr "Imaginea în oglindă este distrusă!"
-
-msgid ""
-"The %{artifact} artifact is in effect for this battle, disabling %{spell} "
-"spell."
-msgstr ""
-"Artefactul %{artifact} este în vigoare pentru această bătălie, dezactivând "
-"vraja %{spell}."
 
 #, fuzzy
 msgid "%{count} %{name} rises from the dead!"
@@ -3109,9 +3102,6 @@ msgstr ""
 msgid "Accept the choice made."
 msgstr ""
 
-msgid "Unknown Hero"
-msgstr ""
-
 msgid "%{color} %{race} hero"
 msgstr ""
 
@@ -3913,6 +3903,9 @@ msgid "Package Design"
 msgstr ""
 
 msgid "Your Name"
+msgstr ""
+
+msgid "Unknown Hero"
 msgstr ""
 
 msgid "Standard"

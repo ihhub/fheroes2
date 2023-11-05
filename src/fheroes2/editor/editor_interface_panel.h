@@ -27,7 +27,6 @@
 #include "ground.h"
 #include "maps_tiles_helper.h"
 #include "math_base.h"
-#include "monster.h"
 #include "ui_button.h"
 
 namespace Interface
@@ -111,9 +110,9 @@ namespace Interface
         // The name of this method starts from _ on purpose to do not mix with other public methods.
         void _redraw() const;
 
-        int32_t getMonsterId() const
+        int32_t getMonsterType() const
         {
-            return _monsterId;
+            return _monsterType;
         }
 
         int32_t getHeroType() const
@@ -228,7 +227,7 @@ namespace Interface
         uint8_t _selectedBrushSize{ BrushSize::MEDIUM };
         uint32_t _eraseTypes{ Maps::ObjectErasureType::ALL_OBJECTS };
 
-        int32_t _monsterId{ Monster::UNKNOWN };
+        int32_t _monsterType{ -1 };
 
         int32_t _heroType{ -1 };
     };

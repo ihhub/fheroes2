@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-23 00:14+0000\n"
-"PO-Revision-Date: 2023-10-25 08:49+0700\n"
+"POT-Creation-Date: 2023-11-03 12:33+0000\n"
+"PO-Revision-Date: 2023-11-01 22:53+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: vi_VN\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 3.4\n"
+"X-Generator: Poedit 3.4.1\n"
 
 msgid ""
 "BATTLE\n"
@@ -967,13 +967,6 @@ msgstr "mỗi người có phần thưởng +%{attack} cho kỹ năng tấn côn
 msgid "The %{name} is destroyed."
 msgstr "%{name} bị phá hủy."
 
-msgid ""
-"The %{artifact} artifact is in effect for this battle, disabling %{spell} "
-"spell."
-msgstr ""
-"Bảo vật %{artifact} có tác dụng trong trận đấu này, vô hiệu hóa phép "
-"%{spell}."
-
 msgid "%{count} %{name} rises from the dead!"
 msgid_plural "%{count} %{name} rise from the dead!"
 msgstr[0] "%{count} %{name} hồi sinh từ cõi chết!"
@@ -1631,263 +1624,267 @@ msgid "\"The Dwarfbane!!!!, run for your lives.\""
 msgstr "\"Tai ương Người lùn!!!, chạy ngay đi.\""
 
 msgid "campaignBonus|Animate Dead"
-msgstr ""
+msgstr "Sức sống Thần chết"
 
 msgid "campaignBonus|Chain Lightning"
-msgstr ""
+msgstr "Sét chuyền"
 
 msgid "campaignBonus|Fireblast"
-msgstr ""
+msgstr "Nổ lửa"
 
 msgid "campaignBonus|Mass Curse"
-msgstr ""
+msgstr "Nguyền rủa Rộng"
 
 msgid "campaignBonus|Mass Haste"
-msgstr ""
+msgstr "Tăng tốc Rộng"
 
 msgid "campaignBonus|Mirror Image"
-msgstr ""
+msgstr "Hình ảnh Gương"
 
 msgid "campaignBonus|Resurrect"
-msgstr ""
+msgstr "Hồi sinh"
 
 msgid "campaignBonus|Steelskin"
-msgstr ""
+msgstr "Da sắt"
 
 msgid "campaignBonus|Summon Earth"
-msgstr ""
+msgstr "Triệu hồi Nguyên tố Đất"
 
 msgid "campaignBonus|View Heroes"
-msgstr ""
+msgstr "Xem Tướng"
 
 msgid "campaignBonus|Ballista"
-msgstr ""
+msgstr "Máy bắn đá"
 
 msgid "campaignBonus|Black Pearl"
-msgstr ""
+msgstr "Ngọc trai Đen"
 
 msgid "campaignBonus|Caster's Bracelet"
-msgstr ""
+msgstr "Vòng tay Caster"
 
 msgid "campaignBonus|Defender Helm"
-msgstr ""
+msgstr "Mũ Bảo vệ"
 
 msgid "campaignBonus|Breastplate"
-msgstr ""
+msgstr "Giáp ngực"
 
 msgid "campaignBonus|Dragon Sword"
-msgstr ""
+msgstr "Kiếm Rồng"
 
 msgid "campaignBonus|Fizbin Medal"
-msgstr ""
+msgstr "Huân chương Fizbin"
 
 msgid "campaignBonus|Foremost Scroll"
-msgstr ""
+msgstr "Phép Đầu tiên"
 
 msgid "campaignBonus|Gauntlets"
-msgstr ""
+msgstr "Găng tay"
 
 msgid "campaignBonus|Hideous Mask"
-msgstr ""
+msgstr "Mặt nạ Gớm ghiếc"
 
 msgid "campaignBonus|Mage's Ring"
-msgstr ""
+msgstr "Nhẫn Ma thuật"
 
 msgid "campaignBonus|Major Scroll"
-msgstr ""
+msgstr "Phép Lớn"
 
 msgid "campaignBonus|Medal of Honor"
-msgstr ""
+msgstr "Huân chương Danh dự"
 
 msgid "campaignBonus|Medal of Valor"
-msgstr ""
+msgstr "Huân chương Can đảm"
 
 msgid "campaignBonus|Minor Scroll"
-msgstr ""
+msgstr "Phép Nhỏ"
 
 msgid "campaignBonus|Nomad Boots"
-msgstr ""
+msgstr "Giầy Du mục"
 
 msgid "campaignBonus|Power Axe"
-msgstr ""
+msgstr "Rìu Sức mạnh"
 
 msgid "campaignBonus|Spiked Shield"
-msgstr ""
+msgstr "Khiên Gai"
 
 msgid "campaignBonus|Stealth Shield"
-msgstr ""
+msgstr "Khiên Tàng hình"
 
 msgid "campaignBonus|Tax Lien"
 msgstr ""
 
 msgid "campaignBonus|Thunder Mace"
-msgstr ""
+msgstr "Chùy Sấm sét"
 
 msgid "campaignBonus|Traveler's Boots"
-msgstr ""
+msgstr "Giầy Du khách"
 
 msgid "campaignBonus|White Pearl"
-msgstr ""
+msgstr "Ngọc trai Trắng"
 
 msgid "campaignBonus|Basic Archery"
-msgstr ""
+msgstr "Cơ bản Bắn cung"
 
 msgid "campaignBonus|Advanced Archery"
-msgstr ""
+msgstr "Nâng cao Bắn cung"
 
 msgid "campaignBonus|Expert Archery"
-msgstr ""
+msgstr "Chuyên gia Bắn cung"
 
 msgid "campaignBonus|Basic Ballistics"
-msgstr ""
+msgstr "Cơ bản Máy bắn đá"
 
 msgid "campaignBonus|Advanced Ballistics"
-msgstr ""
+msgstr "Nâng cao Máy bắn đá"
 
 msgid "campaignBonus|Expert Ballistics"
-msgstr ""
+msgstr "Chuyên gia Máy bắn đá"
 
 msgid "campaignBonus|Basic Diplomacy"
-msgstr ""
+msgstr "Cơ bản Ngoại giao"
 
 msgid "campaignBonus|Advanced Diplomacy"
-msgstr ""
+msgstr "Nâng cao Ngoại giao"
 
 msgid "campaignBonus|Expert Diplomacy"
-msgstr ""
+msgstr "Chuyên gia Ngoại giao"
 
 msgid "campaignBonus|Basic Eagle Eye"
-msgstr ""
+msgstr "Cơ bản Mắt Đại bàng"
 
 msgid "campaignBonus|Advanced Eagle Eye"
-msgstr ""
+msgstr "Nâng cao Mắt Đại bàng"
 
 msgid "campaignBonus|Expert Eagle Eye"
-msgstr ""
+msgstr "Chuyên gia Mắt Đại bàng"
 
 msgid "campaignBonus|Basic Estates"
-msgstr ""
+msgstr "Cơ bản Tài sàn"
 
 msgid "campaignBonus|Advanced Estates"
-msgstr ""
+msgstr "Nâng cao Tài sản"
 
 msgid "campaignBonus|Expert Estates"
-msgstr ""
+msgstr "Chuyên gia Tài sản"
 
 msgid "campaignBonus|Basic Leadership"
-msgstr ""
+msgstr "Cơ bản Lãnh đạo"
 
 msgid "campaignBonus|Advanced Leadership"
-msgstr ""
+msgstr "Nâng cao Lãnh đạo"
 
 msgid "campaignBonus|Expert Leadership"
-msgstr ""
+msgstr "Chuyên gia Lãnh đạo"
 
 msgid "campaignBonus|Basic Logistics"
-msgstr ""
+msgstr "Cơ bản Vận chuyển"
 
 msgid "campaignBonus|Advanced Logistics"
-msgstr ""
+msgstr "Nâng cao Vận chuyển"
 
 msgid "campaignBonus|Expert Logistics"
-msgstr ""
+msgstr "Chuyên gia Vận chuyển"
 
 msgid "campaignBonus|Basic Luck"
-msgstr ""
+msgstr "Cơ bản May mắn"
 
 msgid "campaignBonus|Advanced Luck"
-msgstr ""
+msgstr "Nâng cao May mắn"
 
 msgid "campaignBonus|Expert Luck"
-msgstr ""
+msgstr "Chuyên gia May mắn"
 
 msgid "campaignBonus|Basic Mysticism"
-msgstr ""
+msgstr "Cơ bản Thần bí"
 
 msgid "campaignBonus|Advanced Mysticism"
-msgstr ""
+msgstr "Nâng cao Thần bí"
 
 msgid "campaignBonus|Expert Mysticism"
-msgstr ""
+msgstr "Chuyên gia Thần bí"
 
 msgid "campaignBonus|Basic Navigation"
-msgstr ""
+msgstr "Cơ bản Dẫn đường"
 
 msgid "campaignBonus|Advanced Navigation"
-msgstr ""
+msgstr "Nâng cao Dẫn đường"
 
 msgid "campaignBonus|Expert Navigation"
-msgstr ""
+msgstr "Chuyên gia Dẫn đường"
 
 msgid "campaignBonus|Basic Necromancy"
-msgstr ""
+msgstr "Cơ bản Chiêu hồn"
 
 msgid "campaignBonus|Advanced Necromancy"
-msgstr ""
+msgstr "Nâng cao Chiêu hồn"
 
 msgid "campaignBonus|Expert Necromancy"
-msgstr ""
+msgstr "Chuyên gia Chiêu hồn"
 
 msgid "campaignBonus|Basic Pathfinding"
-msgstr ""
+msgstr "Cơ bản Tìm đường"
 
 msgid "campaignBonus|Advanced Pathfinding"
-msgstr ""
+msgstr "Nâng cao Tìm đường"
 
 msgid "campaignBonus|Expert Pathfinding"
-msgstr ""
+msgstr "Chuyên gia Dẫn đường"
 
 msgid "campaignBonus|Basic Scouting"
-msgstr ""
+msgstr "Cơ bản Do thám"
 
 msgid "campaignBonus|Advanced Scouting"
-msgstr ""
+msgstr "Nâng cao Do thám"
 
 msgid "campaignBonus|Expert Scouting"
-msgstr ""
+msgstr "Chuyên gia Do thám"
 
 msgid "campaignBonus|Basic Wisdom"
-msgstr ""
+msgstr "Cơ bản Thông thái"
 
 msgid "campaignBonus|Advanced Wisdom"
-msgstr ""
+msgstr "Nâng cao Thông thái"
 
 msgid "campaignBonus|Expert Wisdom"
-msgstr ""
+msgstr "Chuyên gia Thông thái"
 
 msgid ""
 "The main hero will have \"%{artifact}\" artifact at the start of the "
 "scenario."
-msgstr ""
+msgstr "Tướng chính sẽ có bảo vật \"%{artifact}\" khi bắt đầu kịch bản."
 
 msgid ""
 "The kingdom will receive %{amount} additional %{resource} at the start of "
 "the scenario."
 msgstr ""
+"Vương quốc sẽ nhận được thêm một khoản %{amount} tài nguyên %{resource} khi "
+"bắt đầu kịch bản."
 
 msgid ""
 "The kingdom will have %{amount} less %{resource} at the start of the "
 "scenario."
 msgstr ""
+"Vương quốc sẽ bị ít đi một khoản %{amount} tài nguyên %{resource} khi bắt "
+"đầu kịch bản."
 
 msgid ""
 "The main hero will have %{count} %{monster} at the start of the scenario."
-msgstr ""
+msgstr "Tướng chính sẽ nhận %{count} quái %{monster} khi bắt đầu kịch bản."
 
 msgid ""
 "The main hero will have \"%{spell}\" spell at the start of the scenario."
-msgstr ""
+msgstr "Tướng chính sẽ có phép \"%{spell}\" khi bắt đầu kịch bản."
 
 msgid "The starting race of the scenario will be %{race}."
-msgstr ""
+msgstr "Chủng tộc của kịch bản sẽ là %{race}."
 
 msgid ""
 "The main hero will have additional %{count} %{skill} at the start of the "
 "scenario."
-msgstr ""
+msgstr "Tướng chính sẽ có thêm %{count} kỹ năng %{skill} khi bắt đầu kịch bản."
 
 msgid "The main hero will have %{skill} at the start of the scenario."
-msgstr ""
+msgstr "Tướng chính sẽ có kỹ năng %{skill} khi bắt đầu kịch bản."
 
 msgid "Roland"
 msgstr "Roland"
@@ -2307,7 +2304,7 @@ msgid "Orchard"
 msgstr "Vườn quả"
 
 msgid "Habitat"
-msgstr ""
+msgstr "Cư trú"
 
 msgid "Pen"
 msgstr "Chuồng trại"
@@ -2334,13 +2331,13 @@ msgid "Upg. Cloud Castle"
 msgstr "NC. Lâu đài Mây"
 
 msgid "Storm"
-msgstr ""
+msgstr "Bão"
 
 msgid "Skull Pile"
 msgstr "Đống Đầu lâu"
 
 msgid "Excavation"
-msgstr ""
+msgstr "Huyệt"
 
 msgid "Graveyard"
 msgstr "Nghĩa địa"
@@ -3226,16 +3223,16 @@ msgid "Defense:"
 msgstr "Phòng thủ:"
 
 msgid "Spell Power:"
-msgstr ""
+msgstr "Sức mạnh Phép:"
 
 msgid "Knowledge:"
 msgstr "Trí thức:"
 
 msgid "Spell Points:"
-msgstr ""
+msgstr "Điểm Phép thuật:"
 
 msgid "Move Points:"
-msgstr ""
+msgstr "Điểm Di chuyển:"
 
 msgid "Uncharted Territory"
 msgstr "Lãnh thổ Chưa khám phá"
@@ -3326,9 +3323,6 @@ msgstr "Tệp để Tải:"
 
 msgid "Accept the choice made."
 msgstr "Chấp nhận sự lựa chọn được thực hiện."
-
-msgid "Unknown Hero"
-msgstr "Tướng Vô danh"
 
 msgid "%{color} %{race} hero"
 msgstr "%{color} %{race} tướng"
@@ -4048,7 +4042,7 @@ msgid "Visit us at "
 msgstr "Tới thăm chúng tôi tại "
 
 msgid "QA and Support"
-msgstr ""
+msgstr "QA và Hỗ trợ"
 
 msgid "Dev and Support"
 msgstr "Phát triển và Hỗ trợ"
@@ -4084,88 +4078,88 @@ msgid "Heroes of Might and Magic II: The Succession Wars team"
 msgstr ""
 
 msgid "Designed and Directed"
-msgstr ""
+msgstr "Thiết kế và Chỉ đạo"
 
 msgid "Programming and Design"
-msgstr ""
+msgstr "Lập trình và Thiết kế"
 
 msgid "Executive Producer"
-msgstr ""
+msgstr "Điều hành Sản xuất"
 
 msgid "Producer"
-msgstr ""
+msgstr "Sản xuất"
 
 msgid "Additional Design"
-msgstr ""
+msgstr "Thiết kế Bổ sung"
 
 msgid "Additional Programming"
-msgstr ""
+msgstr "Lập trình Bổ sung"
 
 msgid "Musical Production"
-msgstr ""
+msgstr "Sản xuất Âm nhạc"
 
 msgid "Music and Sound Design"
-msgstr ""
+msgstr "Thiết kế Nhạc và Âm"
 
 msgid "Vocalists"
-msgstr ""
+msgstr "Lồng tiếng"
 
 msgid "Art Director"
-msgstr ""
+msgstr "Chỉ đạo Nghệ thuật"
 
 msgid "Assistant Art Director"
-msgstr ""
+msgstr "Trợ lý Chỉ đạo Nghệ thuật"
 
 msgid "Artists"
-msgstr ""
+msgstr "Nghệ sỹ"
 
 msgid "QA Manager"
-msgstr ""
+msgstr "Quản lý QA"
 
 msgid "QA"
-msgstr ""
+msgstr "QA"
 
 msgid "Writing"
-msgstr ""
+msgstr "Kịch bản"
 
 msgid "Manual and Helpfile"
-msgstr ""
+msgstr "Hướng dẫn sử dụng và Tệp trợ giúp"
 
 msgid "Scenarios"
-msgstr ""
+msgstr "Biên kịch"
 
 msgid "Heroes of Might and Magic II: The Price of Loyalty team"
 msgstr ""
 
 msgid "Design Lead"
-msgstr ""
+msgstr "Thiết kế Trưởng"
 
 msgid "Designers"
-msgstr ""
+msgstr "Thiết kế"
 
 msgid "Programming Lead"
-msgstr ""
+msgstr "Trưởng Lập trình"
 
 msgid "Art Lead"
-msgstr ""
+msgstr "Trưởng Nghệ thuật"
 
 msgid "Playtesters"
-msgstr ""
+msgstr "Chơi thử"
 
 msgid "Designer"
-msgstr ""
+msgstr "Thiết kế"
 
 msgid "Producers"
-msgstr ""
+msgstr "Sản xuất"
 
 msgid "QA Managers"
-msgstr ""
+msgstr "Quản lý QA"
 
 msgid "Sound Design"
-msgstr ""
+msgstr "Thiết kế Âm thanh"
 
 msgid "Town Themes"
-msgstr ""
+msgstr "Chủ đề Thị trấn"
 
 msgid "Alto Sax"
 msgstr ""
@@ -4180,25 +4174,28 @@ msgid "Soprano Vocal"
 msgstr ""
 
 msgid "Recorded at %{recordingStudio}"
-msgstr ""
+msgstr "Thu âm tại %{recordingStudio}"
 
 msgid "credits|Manual"
 msgstr "Thủ công"
 
 msgid "German Consultant"
-msgstr ""
+msgstr "Tư vấn Tiếng Đức"
 
 msgid "Map Designers"
-msgstr ""
+msgstr "Thiết kế Bản đồ"
 
 msgid "Package Design"
-msgstr ""
+msgstr "Thiết kế Đóng gói"
 
 msgid "Your Name"
-msgstr ""
+msgstr "Tên của Ngươi"
+
+msgid "Unknown Hero"
+msgstr "Tướng Vô danh"
 
 msgid "Standard"
-msgstr ""
+msgstr "Tiêu chuẩn"
 
 msgid "View High Scores for Standard Maps."
 msgstr "Xem Điểm cho chế độ Thường."
@@ -4210,172 +4207,172 @@ msgid "View High Scores for Campaigns."
 msgstr "Xem Điểm cho chế độ Chiến dịch."
 
 msgid "hotkey|default okay event"
-msgstr ""
+msgstr "sự kiện tốt mặc định"
 
 msgid "hotkey|default cancel event"
-msgstr ""
+msgstr "sự kiện hủy mặc định"
 
 msgid "hotkey|default left"
-msgstr ""
+msgstr "mặc định trái"
 
 msgid "hotkey|default right"
-msgstr ""
+msgstr "mặc định phải"
 
 msgid "hotkey|default up"
-msgstr ""
+msgstr "mặc định lên"
 
 msgid "hotkey|default down"
-msgstr ""
+msgstr "mặc định xuống"
 
 msgid "hotkey|toggle fullscreen"
-msgstr ""
+msgstr "chuyển đổi chế độ toàn màn hình"
 
 msgid "hotkey|toggle text support mode"
-msgstr ""
+msgstr "chuyển đội chế độ hỗ trợ văn bản"
 
 msgid "hotkey|new game"
-msgstr ""
+msgstr "trò chơi mới"
 
 msgid "hotkey|load game"
-msgstr ""
+msgstr "tải trò chơi"
 
 msgid "hotkey|highscores"
-msgstr ""
+msgstr "điểm cao"
 
 msgid "hotkey|credits"
-msgstr ""
+msgstr "công trạng"
 
 msgid "hotkey|standard game"
-msgstr ""
+msgstr "trò chơi tiêu chuẩn"
 
 msgid "hotkey|campaign game"
-msgstr ""
+msgstr "trò chơi chiến dịch"
 
 msgid "hotkey|multi-player game"
-msgstr ""
+msgstr "trò chơi nhiều người"
 
 msgid "hotkey|settings"
-msgstr ""
+msgstr "thiết lập"
 
 msgid "hotkey|quit"
-msgstr ""
+msgstr "thoát"
 
 msgid "hotkey|select map"
-msgstr ""
+msgstr "chọn bản đồ"
 
 msgid "hotkey|select small map size"
-msgstr ""
+msgstr "chọn bản đồ cỡ nhỏ"
 
 msgid "hotkey|select medium map size"
-msgstr ""
+msgstr "chọn bản đồ cỡ vừa"
 
 msgid "hotkey|select large map size"
-msgstr ""
+msgstr "chọn bản đồ cỡ lớn"
 
 msgid "hotkey|select extra large map size"
-msgstr ""
+msgstr "chọn bản đồ cỡ siêu lớn"
 
 msgid "hotkey|select all map sizes"
-msgstr ""
+msgstr "chọn tất cả các bản đồ"
 
 msgid "hotkey|hotseat game"
-msgstr ""
+msgstr "trò chơi ghế nóng"
 
 msgid "hotkey|battle only game"
-msgstr ""
+msgstr "trò chơi chỉ chiến đấu"
 
 msgid "hotkey|choose the original campaign"
-msgstr ""
+msgstr "chọn chiến dịch gốc"
 
 msgid "hotkey|choose the expansion campaign"
-msgstr ""
+msgstr "chọn chiến dịch mở rộng"
 
 msgid "hotkey|map editor main menu"
-msgstr ""
+msgstr "trình đơn biên tập bản đồ"
 
 msgid "hotkey|new map menu"
-msgstr ""
+msgstr "trình đơn bản đồ mới"
 
 msgid "hotkey|load map menu"
-msgstr ""
+msgstr "trình đơn tải bản đồ"
 
 msgid "hotkey|new map from scratch"
-msgstr ""
+msgstr "bắt đầu bản đồ mới"
 
 msgid "hotkey|new random map"
-msgstr ""
+msgstr "bản đồ mới ngẫu nhiên"
 
 msgid "hotkey|undo last action"
-msgstr ""
+msgstr "hoàn tác tác vụ cuối"
 
 msgid "hotkey|redo last action"
-msgstr ""
+msgstr "thực hiện lại tác vụ cuối"
 
 msgid "hotkey|roland campaign"
-msgstr ""
+msgstr "chiến dịch roland"
 
 msgid "hotkey|archibald campaign"
-msgstr ""
+msgstr "chiến dịch archibald"
 
 msgid "hotkey|the price of loyalty campaign"
-msgstr ""
+msgstr "chiến dịch giá của lòng trung thành"
 
 msgid "hotkey|voyage home campaign"
-msgstr ""
+msgstr "chiến dịch đường về nhà"
 
 msgid "hotkey|wizard's isle campaign"
-msgstr ""
+msgstr "chiến dịch đảo phù thủy"
 
 msgid "hotkey|descendants campaign"
-msgstr ""
+msgstr "chiến dịch hậu duệ"
 
 msgid "hotkey|select first campaign bonus"
-msgstr ""
+msgstr "chọn phần thưởng chiến dịch đầu tiên"
 
 msgid "hotkey|select second campaign bonus"
-msgstr ""
+msgstr "chọn phần thưởng chiến dịch thứ 2"
 
 msgid "hotkey|select third campaign bonus"
-msgstr ""
+msgstr "chọn phần thưởng chiến dịch thứ 3"
 
 msgid "hotkey|view campaign intro"
-msgstr ""
+msgstr "xem giới thiệu chiến dịch"
 
 msgid "hotkey|select campaign difficulty"
-msgstr ""
+msgstr "chọn độ khó chiến dịch"
 
 msgid "hotkey|restart campaign scenario"
-msgstr ""
+msgstr "khởi động lại kịch bản chiến dịch"
 
 msgid "hotkey|world map left"
-msgstr ""
+msgstr "bản đồ thế giới trái"
 
 msgid "hotkey|world map right"
-msgstr ""
+msgstr "bản đồ thế giới phải"
 
 msgid "hotkey|world map up"
-msgstr ""
+msgstr "bản đồ thế giới trên"
 
 msgid "hotkey|world map down"
-msgstr ""
+msgstr "bản đồ thế giới dưới"
 
 msgid "hotkey|world map up left"
-msgstr ""
+msgstr "bản đồ thế giới trái trên"
 
 msgid "hotkey|world map up right"
-msgstr ""
+msgstr "bản đồ thế giới phải trên"
 
 msgid "hotkey|world map down left"
-msgstr ""
+msgstr "bản đồ thế giới trái dưới"
 
 msgid "hotkey|world map down right"
-msgstr ""
+msgstr "bản đồ thế giới phải dưới"
 
 msgid "hotkey|save game"
-msgstr ""
+msgstr "lưu trò chơi"
 
 msgid "hotkey|next hero"
-msgstr ""
+msgstr "tướng tiếp theo"
 
 msgid "hotkey|start hero movement"
 msgstr ""
@@ -4384,49 +4381,49 @@ msgid "hotkey|cast adventure spell"
 msgstr ""
 
 msgid "hotkey|put hero to sleep"
-msgstr ""
+msgstr "cho tướng đi ngủ"
 
 msgid "hotkey|next town"
-msgstr ""
+msgstr "thị trấn tiếp theo"
 
 msgid "hotkey|end turn"
-msgstr ""
+msgstr "kết thúc lượt"
 
 msgid "hotkey|file options"
-msgstr ""
+msgstr "lựa chọn tệp"
 
 msgid "hotkey|adventure options"
-msgstr ""
+msgstr "tùy chọn thám hiểm"
 
 msgid "hotkey|puzzle map"
 msgstr ""
 
 msgid "hotkey|scenario information"
-msgstr ""
+msgstr "thông tin kịch bản"
 
 msgid "hotkey|dig for artifact"
-msgstr ""
+msgstr "đào bảo vật"
 
 msgid "hotkey|view world"
-msgstr ""
+msgstr "xem thế giới"
 
 msgid "hotkey|kingdom summary"
-msgstr ""
+msgstr "tổng quát vương quốc"
 
 msgid "hotkey|default action"
-msgstr ""
+msgstr "hành động mặc định"
 
 msgid "hotkey|open focus"
-msgstr ""
+msgstr "mở tiêu điểm"
 
 msgid "hotkey|system options"
-msgstr ""
+msgstr "tùy chọn hệ thống"
 
 msgid "hotkey|scroll left"
-msgstr ""
+msgstr "cuộn trái"
 
 msgid "hotkey|scroll right"
-msgstr ""
+msgstr "cuộn phải"
 
 msgid "hotkey|scroll up"
 msgstr ""

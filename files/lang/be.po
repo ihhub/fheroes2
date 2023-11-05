@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-23 00:14+0000\n"
+"POT-Creation-Date: 2023-11-03 12:33+0000\n"
 "PO-Revision-Date: 2022-09-23 16:01+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -927,11 +927,6 @@ msgstr ""
 #, fuzzy
 msgid "The %{name} is destroyed."
 msgstr "У горадзе ўжо ёсць %{name}."
-
-msgid ""
-"The %{artifact} artifact is in effect for this battle, disabling %{spell} "
-"spell."
-msgstr ""
 
 msgid "%{count} %{name} rises from the dead!"
 msgid_plural "%{count} %{name} rise from the dead!"
@@ -3101,9 +3096,6 @@ msgstr ""
 msgid "Accept the choice made."
 msgstr "Ухваліць выбар."
 
-msgid "Unknown Hero"
-msgstr ""
-
 #, fuzzy
 msgid "%{color} %{race} hero"
 msgstr "%{color} гулец"
@@ -3936,6 +3928,9 @@ msgstr ""
 
 msgid "Your Name"
 msgstr "Вашае імя"
+
+msgid "Unknown Hero"
+msgstr ""
 
 msgid "Standard"
 msgstr ""

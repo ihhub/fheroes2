@@ -165,18 +165,20 @@ namespace
     }
 
 #ifdef WITH_DEBUG
-    const fheroes2::Image & PassableViewSurface( const int passable )
+    const fheroes2::Image & PassableViewSurface( const int passable, const bool isActionObject )
     {
-        static std::map<int, fheroes2::Image> imageMap;
+        static std::map<std::pair<int, bool>, fheroes2::Image> imageMap;
 
-        auto iter = imageMap.find( passable );
+        auto key = std::make_pair( passable, isActionObject );
+
+        auto iter = imageMap.find( key );
         if ( iter != imageMap.end() ) {
             return iter->second;
         }
 
         const int32_t size = 31;
         const uint8_t red = 0xBA;
-        const uint8_t green = 0x5A;
+        const uint8_t green = isActionObject ? 115 : 90;
 
         fheroes2::Image sf( size, size );
         sf.reset();
@@ -251,7 +253,7 @@ namespace
             }
         }
 
-        return imageMap.try_emplace( passable, std::move( sf ) ).first->second;
+        return imageMap.try_emplace( std::move( key ), std::move( sf ) ).first->second;
     }
 
     const fheroes2::Image & getDebugFogImage()
@@ -915,8 +917,10 @@ namespace Maps
         if ( friendColors != 0 && tile.isFog( friendColors ) ) {
             area.BlitOnTile( dst, getDebugFogImage(), 0, 0, Maps::GetPoint( tile.GetIndex() ), false, 255 );
         }
-        if ( 0 == tile.GetPassable() || DIRECTION_ALL != tile.GetPassable() ) {
-            area.BlitOnTile( dst, PassableViewSurface( tile.GetPassable() ), 0, 0, Maps::GetPoint( tile.GetIndex() ), false, 255 );
+
+        const bool isActionObject = MP2::isActionObject( tile.GetObject() );
+        if ( isActionObject || tile.GetPassable() != DIRECTION_ALL ) {
+            area.BlitOnTile( dst, PassableViewSurface( tile.GetPassable(), isActionObject ), 0, 0, Maps::GetPoint( tile.GetIndex() ), false, 255 );
         }
 #else
         (void)tile;
@@ -943,7 +947,7 @@ namespace Maps
         size_t postRenderAddonCount = 0;
 
         for ( const TilesAddon & addon : tile.getBottomLayerAddons() ) {
-            if ( ( addon._layerType & 0x03 ) != level ) {
+            if ( addon._layerType != level ) {
                 continue;
             }
 
@@ -963,7 +967,7 @@ namespace Maps
             renderAddonObject( dst, area, mp, addon );
         }
 
-        if ( tile.getObjectIcnType() != MP2::OBJ_ICN_TYPE_UNKNOWN && ( tile.getLayerType() & 0x03 ) == level
+        if ( tile.getObjectIcnType() != MP2::OBJ_ICN_TYPE_UNKNOWN && tile.getLayerType() == level
              && ( !isPuzzleDraw || !MP2::isHiddenForPuzzle( tile.GetGround(), tile.getObjectIcnType(), tile.GetObjectSpriteIndex() ) ) ) {
             renderMainObject( dst, area, mp, tile );
         }
