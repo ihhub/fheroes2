@@ -15,7 +15,16 @@ function startApp(callback: () => void) {
 }
 
 export const useBridge = () => {
+  // {
+  //   brightness: 0,
+  //   mapUpdateInterval: 0,
+  //   scale: 0,
+  //   scaleType: 0,
+  //   useScroll: false,
+  // }
+
   const [settings, setSettings] = useState<WallpaperSettings | null>(null);
+  const [ready, setReady] = useState(false);
 
   useEffect(() => {
     window.Bridge?.init();
@@ -29,14 +38,10 @@ export const useBridge = () => {
     };
 
     startApp(() => {
+      setReady(true);
       window.Android = window.Bridge?.interfaces.Android;
-
-      console.log("getMapsList start")
-      window.Android?.getMapsList()
-        .then((result) => console.log("getMapsList", result))
-        .catch((e) => console.log("getMapsList err", e));
     });
   }, []);
 
-  return { settings };
+  return { settings, ready };
 };

@@ -1,5 +1,6 @@
 package com.ipapps.homm2.livewallpaper
 
+import com.ipapps.homm2.livewallpaper.data.MapHeaderReader
 import com.ipapps.homm2.livewallpaper.data.MapUpdateInterval
 import com.ipapps.homm2.livewallpaper.data.Scale
 import com.ipapps.homm2.livewallpaper.data.ScaleType
@@ -11,6 +12,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.json.JSONArray
+import org.json.JSONObject
 import java.io.File
 
 class AndroidNativeInterface(
@@ -34,22 +36,20 @@ class AndroidNativeInterface(
                 if (mapsFolder == null) {
                     promise.resolve("[]")
                 } else {
-                    val list = mapsFolder.list { _, filename -> filename.endsWith(".mp2") }
+                    val list = mapsFolder?.listFiles()
+                        ?.filter { it.extension.endsWith("mp2") }
+                        ?.map { Pair(it, MapHeaderReader(it.inputStream()).readMapHeader()) }
+                        ?.filter { it.second != null }
+                        ?.map {
+                            val file = it.first
+                            val header = it.second
 
-                    promise.resolve(JSONArray(list).toString(2))
-                }
-            }
-        }
-    }
-
-    @NativeCall(CallType.FULL_PROMISE)
-    fun uploadMap() = doInBackground { promise ->
-        runBlocking {
-            launch {
-                if (mapsFolder == null) {
-                    promise.resolve("[]")
-                } else {
-                    val list = mapsFolder.list { _, filename -> filename.endsWith(".mp2") }
+                            JSONObject()
+                                .put("name", file.name)
+                                .put("title", header?.title)
+                                .put("width", header?.width)
+                                .put("height", header?.height)
+                        }
 
                     promise.resolve(JSONArray(list).toString(2))
                 }

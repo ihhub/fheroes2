@@ -3,24 +3,11 @@ import { useBridge } from "./useBridge";
 import { Button, CircularProgress, Grid } from "@mui/material";
 import { Settings } from "./Settings";
 import { Header } from "./Header";
-import styled from "@emotion/styled";
-import CloudUploadIcon from "@mui/icons-material/CloudUpload";
-
-const VisuallyHiddenInput = styled("input")({
-  clip: "rect(0 0 0 0)",
-  clipPath: "inset(50%)",
-  height: 1,
-  overflow: "hidden",
-  position: "absolute",
-  bottom: 0,
-  left: 0,
-  whiteSpace: "nowrap",
-  width: 1,
-});
+import { FileList } from "./FileList";
 
 export function App() {
-  const { settings } = useBridge();
-  const isLoading = !settings;
+  const { settings, ready } = useBridge();
+  const isLoading = !settings || !ready;
 
   return (
     <Grid container height="100%" width="100%" direction="column">
@@ -55,17 +42,7 @@ export function App() {
               Set wallpaper
             </Button>
 
-            <Button
-              component="label"
-              variant="contained"
-              startIcon={<CloudUploadIcon />}
-            >
-              Upload file
-              <VisuallyHiddenInput
-                type="file"
-                onChange={(e) => console.log("on change", e)}
-              />
-            </Button>
+            <FileList />
           </Grid>
         )}
       </Grid>

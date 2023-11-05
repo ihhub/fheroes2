@@ -33,7 +33,12 @@ export type WebViewSettingsEvent = {
   payload: WallpaperSettings;
 };
 
-export type WallpaperMapItem = {};
+export type WallpaperMapItem = {
+  name: string;
+  title: string;
+  width: number;
+  height: number;
+};
 
 export type WebViewMapsListEvent = {
   type: "maps-list";
@@ -47,7 +52,7 @@ declare global {
       helloWebPromise: (name: string) => Promise<string>;
       helloFullPromise: (name: string) => Promise<string>;
 
-      getMapsList: () => Promise<string[]>;
+      getMapsList: () => Promise<string>;
 
       setBrightness: (value: number) => void;
       setScale: (value: number) => void;
