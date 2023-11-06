@@ -33,26 +33,31 @@ class AndroidNativeInterface(
     fun getMapsList() = doInBackground { promise ->
         runBlocking {
             launch {
-                if (mapsFolder == null) {
-                    promise.resolve("[]")
-                } else {
-                    val list = mapsFolder?.listFiles()
-                        ?.filter { it.extension.endsWith("mp2") }
-                        ?.map { Pair(it, MapHeaderReader(it.inputStream()).readMapHeader()) }
-                        ?.filter { it.second != null }
-                        ?.map {
-                            val file = it.first
-                            val header = it.second
+                val filesList =mapsFolder?.listFiles() ?: emptyArray<File>()
+                val objectsList = filesList
+                    .filter { it.extension.endsWith("mp2") }
+                    .map {
+                        val input = it.inputStream()
+                        val mapHeader = kotlin.runCatching {
+                            MapHeaderReader.readMapHeader(input)
+                        }.getOrNull()
+                        input.close()
 
-                            JSONObject()
-                                .put("name", file.name)
-                                .put("title", header?.title)
-                                .put("width", header?.width)
-                                .put("height", header?.height)
-                        }
+                        Pair(it, mapHeader)
+                    }
+                    .filter { it.second != null }
+                    .map {
+                        val file = it.first
+                        val header = it.second
 
-                    promise.resolve(JSONArray(list).toString(2))
-                }
+                        JSONObject()
+                            .put("name", file.name)
+                            .put("title", header?.title)
+                            .put("width", header?.width)
+                            .put("height", header?.height)
+                    }
+
+                promise.resolve(JSONArray(objectsList).toString(2))
             }
         }
     }

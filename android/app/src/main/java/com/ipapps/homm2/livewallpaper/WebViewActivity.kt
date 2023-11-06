@@ -12,7 +12,9 @@ import android.webkit.WebChromeClient
 import android.webkit.WebView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import com.ipapps.homm2.livewallpaper.data.MapHeader
 import com.ipapps.homm2.livewallpaper.data.MapHeaderReader
+import com.ipapps.homm2.livewallpaper.data.MapHeaderReader.Companion.readMapHeader
 import com.ipapps.homm2.livewallpaper.data.SettingsViewModel
 import com.ipapps.homm2.livewallpaper.data.WallpaperPreferencesRepository
 import com.ipapps.homm2.livewallpaper.data.WebViewSettingsEvent
@@ -20,8 +22,6 @@ import com.ipapps.homm2.livewallpaper.data.sendWebViewEvent
 import de.andycandy.android.bridge.Bridge
 import org.libsdl.app.SDLActivity
 import java.io.InputStream
-import java.nio.ByteBuffer
-import java.nio.ByteOrder
 
 class WebViewActivity : AppCompatActivity() {
     private fun setWallpaper() {
@@ -44,45 +44,61 @@ class WebViewActivity : AppCompatActivity() {
         }
     }
 
-    private var filePathCallback: ValueCallback<Array<Uri>>? = null
+    private fun getMapHeader(uri: Uri): MapHeader? {
+        val input = contentResolver.openInputStream(uri)
+        val mapHeader = kotlin.runCatching { readMapHeader(input) }.getOrNull()
+        input?.close()
 
-    private fun getFileName(uri: Uri): String {
+        Log.v(
+            "MAP",
+            "Map: ${mapHeader?.title} width: ${mapHeader?.width} height: ${mapHeader?.height}"
+        )
+
+        return mapHeader
+    }
+
+    private fun getFileName(uri: Uri): String? {
         val cursor = contentResolver.query(
             uri, null, null, null, null, null
         )
 
-        if (cursor != null && cursor.moveToFirst()) {
-            val columnIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
-            if (columnIndex == -1) {
-                return "Unknown.mp2"
-            }
-
-            // Note it's called "Display Name". This is
-            // provider-specific, and might not necessarily be the file name.
-            return cursor.getString(columnIndex)
+        if (cursor?.moveToFirst() == null) {
+            cursor?.close()
+            return null;
         }
 
-        return "Not-found.mp2"
+        val columnIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
+        if (columnIndex == -1) {
+            cursor.close()
+            return null
+        }
+
+        // Note it's called "Display Name". This is
+        // provider-specific, and might not necessarily be the file name.
+        val filename = cursor.getString(columnIndex)
+        cursor.close()
+        if (filename.length > 30 || !filename.endsWith(".mp2")) {
+            return null;
+        }
+
+        return filename
     }
 
+    private var filePathCallback: ValueCallback<Array<Uri>>? = null
     private val fileChooserLauncher =
         registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
             val urisList = mutableListOf<Uri>()
-            if (uri != null) {
-                contentResolver.openInputStream(uri).use {
-                    if (it == null) {
-                        return@use
-                    }
 
-                    val mh = kotlin.runCatching {
-                        MapHeaderReader(it).readMapHeader()
-                    }.getOrNull()
-                    Log.v("MAP", "Map: ${mh?.title} width: ${mh?.width} height: ${mh?.height}")
-
-                    it.reset()
-
-                    copyFile(it, getFileName(uri), "maps")
+            kotlin.runCatching {
+                if (uri == null) {
+                    return@runCatching
                 }
+
+                val mapHeader = getMapHeader(uri) ?: return@runCatching
+                val input = contentResolver.openInputStream(uri) ?: return@runCatching
+                val fileName = getFileName(uri) ?: "${mapHeader.title}.mp2"
+                copyFile(input, fileName, "maps")
+                input.close()
 
                 urisList.add(uri)
             }
