@@ -1,5 +1,6 @@
 package com.ipapps.homm2.livewallpaper
 
+import com.ipapps.homm2.livewallpaper.data.MapHeader
 import com.ipapps.homm2.livewallpaper.data.MapReader
 import com.ipapps.homm2.livewallpaper.data.MapUpdateInterval
 import com.ipapps.homm2.livewallpaper.data.Scale
@@ -19,45 +20,31 @@ class AndroidNativeInterface(
     private val viewModel: SettingsViewModel, private val mapsFolder: File?
 ) : DefaultJSInterface("Android") {
 
-    @NativeCall(CallType.FULL_PROMISE)
-    fun helloFullPromise(name: String) = doInBackground { promise ->
-        runBlocking {
-            launch {
-                delay(5000L)
-                promise.resolve("helloFullPromise return: $name")
-            }
+    private fun mapToJson(file: File): JSONObject? {
+        if (!file.extension.endsWith("mp2")) {
+            return null
         }
+
+        val input = file.inputStream()
+        val header = kotlin.runCatching {
+            MapReader.readMap(input)
+        }.getOrNull()
+        input.close()
+
+        return JSONObject()
+            .put("name", file.name)
+            .put("title", header?.title)
+            .put("width", header?.width)
+            .put("height", header?.height)
+            .put("isPoL", header?.isPoL)
     }
 
     @NativeCall(CallType.FULL_PROMISE)
     fun getMapsList() = doInBackground { promise ->
         runBlocking {
             launch {
-                val filesList = mapsFolder?.listFiles() ?: emptyArray<File>()
-
-                val objectsList = filesList
-                    .filter { it.extension.endsWith("mp2") }
-                    .map {
-                        val input = it.inputStream()
-                        val mapHeader = kotlin.runCatching {
-                            MapReader.readMap(input)
-                        }.getOrNull()
-                        input.close()
-
-                        Pair(it, mapHeader)
-                    }
-                    .filter { it.second != null }
-                    .map {
-                        val file = it.first
-                        val header = it.second
-
-                        JSONObject()
-                            .put("name", file.name)
-                            .put("title", header?.title)
-                            .put("width", header?.width)
-                            .put("height", header?.height)
-                            .put("isPoL", header?.isPoL)
-                    }
+                val objectsList = (mapsFolder?.listFiles() ?: emptyArray<File>())
+                    .mapNotNull { mapToJson(it) }
 
                 promise.resolve(JSONArray(objectsList).toString(2))
             }

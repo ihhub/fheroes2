@@ -96,15 +96,13 @@ bool forceConfigUpdate = true;
 void initWallpaper() {
     Settings &conf = Settings::Get();
 
-    const MapsFileInfoList lists = Maps::PrepareMapsFileInfoList(conf.IsGameType(Game::TYPE_MULTI));
-    const uint32_t randomMapIndex = Rand::Get(0, lists.size() - 1);
-    const Maps::FileInfo& map = lists.at(randomMapIndex);
+    const MapsFileInfoList list = Maps::PrepareMapsFileInfoList(conf.IsGameType(Game::TYPE_MULTI));
+    const uint32_t randomMapIndex = Rand::Get(0, list.size() - 1);
+    const Maps::FileInfo &map = list.at(randomMapIndex);
 
     conf.SetCurrentFileInfo(map);
-
     VERBOSE_LOG("initWallpaper name: " << map.name.c_str() << " file: "
                                        << map.file.c_str())
-
     conf.GetPlayers().SetStartGame();
 
     world.LoadMapMP2(conf.MapsFile(), true);
