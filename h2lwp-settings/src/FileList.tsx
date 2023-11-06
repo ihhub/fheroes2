@@ -41,15 +41,13 @@ export const FileList: React.FC<Props> = () => {
         </ListItem>
       ))}
 
-      <ListItem>
-        <Button variant="contained">
-          Upload
-          <VisuallyHiddenInput
-            type="file"
-            onChange={(e) => console.log("on change", e)}
-          />
-        </Button>
-      </ListItem>
+      <Button variant="contained" component="label">
+        Upload
+        <VisuallyHiddenInput
+          type="file"
+          onChange={(e) => console.log("on change", e)}
+        />
+      </Button>
     </List>
   );
 };
