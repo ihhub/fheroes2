@@ -151,6 +151,8 @@ namespace Interface
         static const char * _getObjectTypeName( const uint8_t brushId );
         static const char * _getEraseObjectTypeName( const uint32_t eraseObjectType );
 
+        void _setCursor();
+
         enum Instrument : uint8_t
         {
             // IMPORTANT. This enumeration corresponds with the order of instruments in original assets. Do not change this order.
