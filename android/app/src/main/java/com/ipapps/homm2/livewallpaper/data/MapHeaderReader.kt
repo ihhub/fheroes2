@@ -8,8 +8,8 @@ class MapHeader(val title: String, val width: Int, val height: Int)
 
 class MapHeaderReader(val input: InputStream?) {
     companion object {
-        private val titleOffset = 0x3a
-        private val titleLength = 16
+        private const val titleOffset = 0x3a
+        private const val titleLength = 16
 
         private fun isCorrectMagicNumber(headerBuffer: ByteArray): Boolean {
             val magic = ByteArray(4);
@@ -23,7 +23,7 @@ class MapHeaderReader(val input: InputStream?) {
             val mapName = ByteArray(titleLength)
             headerBuffer.copyInto(mapName, 0, titleOffset, titleOffset + titleLength)
 
-            return mapName.toString(Charsets.UTF_8).trim { it < ' ' }
+            return mapName.toString(Charsets.UTF_8).split((0x00).toChar())[0]
         }
 
         fun readMapHeader(input: InputStream?): MapHeader {

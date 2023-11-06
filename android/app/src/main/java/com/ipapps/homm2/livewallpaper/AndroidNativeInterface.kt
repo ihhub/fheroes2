@@ -33,7 +33,8 @@ class AndroidNativeInterface(
     fun getMapsList() = doInBackground { promise ->
         runBlocking {
             launch {
-                val filesList =mapsFolder?.listFiles() ?: emptyArray<File>()
+                val filesList = mapsFolder?.listFiles() ?: emptyArray<File>()
+
                 val objectsList = filesList
                     .filter { it.extension.endsWith("mp2") }
                     .map {
