@@ -509,7 +509,8 @@ namespace Interface
                 const int monsterType = Dialog::selectMonsterType( _monsterType );
                 if ( monsterType >= 0 ) {
                     _monsterType = monsterType;
-
+                }
+                if ( _monsterType >= 0 ) {
                     _interface.setCursorUpdater( [type = _monsterType]( const int32_t /*tileIndex*/ ) { setCustomCursor( Maps::ObjectGroup::Monster, type ); } );
 
                     _interface.updateCursor( 0 );
@@ -520,7 +521,8 @@ namespace Interface
                 const int treasureType = Dialog::selectTreasureType( _treasureType );
                 if ( treasureType >= 0 ) {
                     _treasureType = treasureType;
-
+                }
+                if ( _treasureType >= 0 ) {
                     _interface.setCursorUpdater( [type = _treasureType]( const int32_t /*tileIndex*/ ) { setCustomCursor( Maps::ObjectGroup::Treasure, type ); } );
 
                     _interface.updateCursor( 0 );
@@ -531,10 +533,11 @@ namespace Interface
                 const int32_t heroType = Dialog::selectHeroType( _heroType );
                 if ( heroType >= 0 ) {
                     _heroType = heroType;
-
-                    _interface.setCursorUpdater( [heroType]( const int32_t /*tileIndex*/ ) {
+                }
+                if ( _heroType >= 0 ) {
+                    _interface.setCursorUpdater( [type = _heroType]( const int32_t /*tileIndex*/ ) {
                         // TODO: render ICN::MINIHERO from the existing hero images.
-                        const fheroes2::Sprite & image = fheroes2::AGG::GetICN( ICN::MINIHERO, heroType );
+                        const fheroes2::Sprite & image = fheroes2::AGG::GetICN( ICN::MINIHERO, type );
 
                         // Mini-hero images contain a pole with a flag.
                         // This causes a situation that a selected tile does not properly correspond to the position of cursor.
@@ -551,7 +554,8 @@ namespace Interface
                 const int artifactType = Dialog::selectArtifactType( _artifactType );
                 if ( artifactType >= 0 ) {
                     _artifactType = artifactType;
-
+                }
+                if ( _artifactType >= 0 ) {
                     _interface.setCursorUpdater( [type = _artifactType]( const int32_t /*tileIndex*/ ) { setCustomCursor( Maps::ObjectGroup::Artifact, type ); } );
 
                     _interface.updateCursor( 0 );
