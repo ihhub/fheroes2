@@ -13,8 +13,7 @@ import android.webkit.WebView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.ipapps.homm2.livewallpaper.data.MapHeader
-import com.ipapps.homm2.livewallpaper.data.MapHeaderReader
-import com.ipapps.homm2.livewallpaper.data.MapHeaderReader.Companion.readMapHeader
+import com.ipapps.homm2.livewallpaper.data.MapReader.Companion.readMap
 import com.ipapps.homm2.livewallpaper.data.SettingsViewModel
 import com.ipapps.homm2.livewallpaper.data.WallpaperPreferencesRepository
 import com.ipapps.homm2.livewallpaper.data.WebViewSettingsEvent
@@ -44,17 +43,14 @@ class WebViewActivity : AppCompatActivity() {
         }
     }
 
-    private fun getMapHeader(uri: Uri): MapHeader? {
+    private fun getMap(uri: Uri): MapHeader? {
         val input = contentResolver.openInputStream(uri)
-        val mapHeader = kotlin.runCatching { readMapHeader(input) }.getOrNull()
+        val map = kotlin.runCatching { readMap(input) }.getOrNull()
         input?.close()
 
-        Log.v(
-            "MAP",
-            "Map: ${mapHeader?.title} width: ${mapHeader?.width} height: ${mapHeader?.height}"
-        )
+        Log.v("MAP", "Map: ${map?.title} width: ${map?.width} height: ${map?.height} pol: ${map?.isPoL}")
 
-        return mapHeader
+        return map
     }
 
     private fun getFileName(uri: Uri): String? {
@@ -94,9 +90,14 @@ class WebViewActivity : AppCompatActivity() {
                     return@runCatching
                 }
 
-                val mapHeader = getMapHeader(uri) ?: return@runCatching
+                val map = getMap(uri) ?: return@runCatching
                 val input = contentResolver.openInputStream(uri) ?: return@runCatching
-                val fileName = getFileName(uri) ?: "${mapHeader.title}.mp2"
+                val fileName = getFileName(uri) ?: "${map.title}.mp2"
+                if (map.isPoL) {
+                    Log.v("MAP", "$fileName is pol")
+                    return@runCatching
+                }
+
                 copyFile(input, fileName, "maps")
                 input.close()
 

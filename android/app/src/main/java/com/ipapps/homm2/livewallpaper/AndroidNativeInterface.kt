@@ -1,6 +1,6 @@
 package com.ipapps.homm2.livewallpaper
 
-import com.ipapps.homm2.livewallpaper.data.MapHeaderReader
+import com.ipapps.homm2.livewallpaper.data.MapReader
 import com.ipapps.homm2.livewallpaper.data.MapUpdateInterval
 import com.ipapps.homm2.livewallpaper.data.Scale
 import com.ipapps.homm2.livewallpaper.data.ScaleType
@@ -40,7 +40,7 @@ class AndroidNativeInterface(
                     .map {
                         val input = it.inputStream()
                         val mapHeader = kotlin.runCatching {
-                            MapHeaderReader.readMapHeader(input)
+                            MapReader.readMap(input)
                         }.getOrNull()
                         input.close()
 
@@ -56,6 +56,7 @@ class AndroidNativeInterface(
                             .put("title", header?.title)
                             .put("width", header?.width)
                             .put("height", header?.height)
+                            .put("isPoL", header?.isPoL)
                     }
 
                 promise.resolve(JSONArray(objectsList).toString(2))
