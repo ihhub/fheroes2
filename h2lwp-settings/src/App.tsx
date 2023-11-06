@@ -1,4 +1,5 @@
 import { Button, CircularProgress, Grid } from "@mui/material";
+import { useEffect } from "react";
 import "./App.css";
 import { FileList } from "./FileList";
 import { Header } from "./Header";
@@ -8,6 +9,15 @@ import { useBridge } from "./useBridge";
 export function App() {
   const { settings, ready } = useBridge();
   const isLoading = !settings || !ready;
+
+  useEffect(() => {
+    console.log({
+      isLoading,
+      ready,
+      settings,
+      a: window.Android,
+    });
+  }, [isLoading, ready, settings]);
 
   return (
     <Grid container height="100%" width="100%" direction="column">

@@ -38,6 +38,7 @@ export type WallpaperMapItem = {
   title: string;
   width: number;
   height: number;
+  isPoL: boolean;
 };
 
 export type WebViewMapsListEvent = {

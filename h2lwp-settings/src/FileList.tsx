@@ -36,7 +36,7 @@ export const FileList: React.FC<Props> = () => {
         <ListItem key={item.name}>
           <ListItemText
             primary={item.title}
-            secondary={`(${item.width}x${item.height}) ${item.name}`}
+            secondary={`(${item.width}x${item.height}) isPoL: ${item.isPoL} ${item.name}`}
           />
         </ListItem>
       ))}

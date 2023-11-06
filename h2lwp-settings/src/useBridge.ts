@@ -14,15 +14,15 @@ function startApp(callback: () => void) {
   }
 }
 
-export const useBridge = () => {
-  // {
-  //   brightness: 0,
-  //   mapUpdateInterval: 0,
-  //   scale: 0,
-  //   scaleType: 0,
-  //   useScroll: false,
-  // }
+// const initialState = {
+//   brightness: 0,
+//   mapUpdateInterval: 0,
+//   scale: 0,
+//   scaleType: 0,
+//   useScroll: false,
+// };
 
+export const useBridge = () => {
   const [settings, setSettings] = useState<WallpaperSettings | null>(null);
   const [ready, setReady] = useState(false);
 
@@ -40,6 +40,9 @@ export const useBridge = () => {
     startApp(() => {
       setReady(true);
       window.Android = window.Bridge?.interfaces.Android;
+      console.log("READY", {
+        a: window.Android,
+      });
     });
   }, []);
 
