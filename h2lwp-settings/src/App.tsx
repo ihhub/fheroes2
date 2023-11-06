@@ -1,9 +1,9 @@
-import "./App.css";
-import { useBridge } from "./useBridge";
 import { Button, CircularProgress, Grid } from "@mui/material";
-import { Settings } from "./Settings";
-import { Header } from "./Header";
+import "./App.css";
 import { FileList } from "./FileList";
+import { Header } from "./Header";
+import { Settings } from "./Settings";
+import { useBridge } from "./useBridge";
 
 export function App() {
   const { settings, ready } = useBridge();

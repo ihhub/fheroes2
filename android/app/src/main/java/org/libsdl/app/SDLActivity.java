@@ -466,7 +466,7 @@ public class SDLActivity extends WallpaperService implements View.OnSystemUiVisi
         @Override
         public void onTouchEvent(MotionEvent event) {
             if (event.getAction() == MotionEvent.ACTION_UP) {
-//                nativeUpdateVisibleMapRegion();
+                nativeUpdateVisibleMapRegion();
             }
         }
 

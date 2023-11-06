@@ -96,12 +96,14 @@ bool forceConfigUpdate = true;
 void initWallpaper() {
     Settings &conf = Settings::Get();
 
-    const MapsFileInfoList lists = Maps::PrepareMapsFileInfoList(
-            Settings::Get().IsGameType(Game::TYPE_MULTI));
-    conf.SetCurrentFileInfo(lists.front());
+    const MapsFileInfoList lists = Maps::PrepareMapsFileInfoList(conf.IsGameType(Game::TYPE_MULTI));
+    const uint32_t randomMapIndex = Rand::Get(0, lists.size() - 1);
+    const Maps::FileInfo& map = lists.at(randomMapIndex);
 
-    VERBOSE_LOG("initWallpaper file: " << lists.front().file.c_str() << " name: "
-                                 << lists.front().name.c_str())
+    conf.SetCurrentFileInfo(map);
+
+    VERBOSE_LOG("initWallpaper name: " << map.name.c_str() << " file: "
+                                       << map.file.c_str())
 
     conf.GetPlayers().SetStartGame();
 
@@ -126,6 +128,10 @@ bool shouldUpdateMapRegion() {
 void randomizeGameAreaPoint() {
     if (!shouldUpdateMapRegion()) {
         return;
+    }
+
+    if (lwpLastMapUpdate != 0) {
+        initWallpaper();
     }
 
     lwpLastMapUpdate = std::time(nullptr);
