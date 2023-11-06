@@ -37,6 +37,7 @@
 #include "kingdom.h"
 #include "logging.h"
 #include "maps_tiles.h"
+#include "maps_tiles_helper.h"
 #include "players.h"
 #include "race.h"
 #include "resource.h"
@@ -298,26 +299,34 @@ Maps::Indexes Maps::getAroundIndexes( const int32_t tileIndex, const int32_t max
         return results;
     }
 
-    results.reserve( ( maxDistanceFromTile * 2 + 1 ) * ( maxDistanceFromTile * 2 + 1 ) - 1 );
+    const size_t areaSideSize = maxDistanceFromTile * 2 + 1;
+    results.reserve( areaSideSize * areaSideSize - 1 );
 
-    assert( world.w() > 0 );
+    const int32_t worldWidth = world.w();
+    const int32_t worldHeight = world.h();
 
-    const int32_t centerX = tileIndex % world.w();
-    const int32_t centerY = tileIndex / world.w();
+    assert( worldWidth > 0 && worldHeight > 0 );
 
-    for ( int32_t y = -maxDistanceFromTile; y <= maxDistanceFromTile; ++y ) {
-        for ( int32_t x = -maxDistanceFromTile; x <= maxDistanceFromTile; ++x ) {
-            // the central tile is not included
-            if ( x == 0 && y == 0 ) {
+    const int32_t centerX = tileIndex % worldWidth;
+    const int32_t centerY = tileIndex / worldWidth;
+
+    // We avoid getting out of map boundaries.
+    const int32_t minTileX = std::max( centerX - maxDistanceFromTile, 0 );
+    const int32_t minTileY = std::max( centerY - maxDistanceFromTile, 0 );
+    const int32_t maxTileX = std::min( centerX + maxDistanceFromTile + 1, worldWidth );
+    const int32_t maxTileY = std::min( centerY + maxDistanceFromTile + 1, worldHeight );
+
+    for ( int32_t tileY = minTileY; tileY < maxTileY; ++tileY ) {
+        const int32_t indexOffsetY = tileY * worldWidth;
+        const bool isCenterY = ( tileY == centerY );
+
+        for ( int32_t tileX = minTileX; tileX < maxTileX; ++tileX ) {
+            // Skip the center tile.
+            if ( isCenterY && tileX == centerX ) {
                 continue;
             }
 
-            const int32_t tileX = centerX + x;
-            const int32_t tileY = centerY + y;
-
-            if ( isValidAbsPoint( tileX, tileY ) ) {
-                results.push_back( tileY * world.w() + tileX );
-            }
+            results.push_back( indexOffsetY + tileX );
         }
     }
 
@@ -399,7 +408,7 @@ void Maps::ClearFog( const int32_t tileIndex, int scoutingDistance, const int pl
         // Fog directions should be updated 1 tile outside of the cleared fog.
         fogRevealMinPos -= { 1, 1 };
         fogRevealMaxPos += { 1, 1 };
-        Maps::Tiles::updateFogDirectionsInArea( fogRevealMinPos, fogRevealMaxPos, alliedColors );
+        Maps::updateFogDirectionsInArea( fogRevealMinPos, fogRevealMaxPos, alliedColors );
     }
 }
 
@@ -455,7 +464,7 @@ Maps::Indexes Maps::ScanAroundObject( const int32_t center, const MP2::MapObject
 Maps::Indexes Maps::GetFreeIndexesAroundTile( const int32_t center )
 {
     Indexes results = getAroundIndexes( center );
-    results.erase( std::remove_if( results.begin(), results.end(), []( const int32_t tile ) { return !world.GetTiles( tile ).isClearGround(); } ), results.end() );
+    results.erase( std::remove_if( results.begin(), results.end(), []( const int32_t tile ) { return !isClearGround( world.GetTiles( tile ) ); } ), results.end() );
     return results;
 }
 
@@ -708,7 +717,7 @@ void Maps::UpdateCastleSprite( const fheroes2::Point & center, int race, bool is
                 tile.updateObjectImageIndex( castleID, MP2::OBJ_ICN_TYPE_OBJNTOWN, -16 );
 
             if ( index == 0 ) {
-                TilesAddon * addon = tile.FindAddonLevel2( castleID );
+                TilesAddon * addon = tile.getTopLayerAddon( castleID );
                 if ( addon && addon->_objectIcnType == MP2::OBJ_ICN_TYPE_OBJNTWRD ) {
                     addon->_objectIcnType = MP2::OBJ_ICN_TYPE_OBJNTOWN;
                     addon->_imageIndex = fullTownIndex - 16;

@@ -63,23 +63,19 @@ namespace fheroes2
 {
     class Image;
     class Sprite;
-    struct ObjectRenderingInfo;
 }
-
-struct HeroSeedsForLevelUp
-{
-    uint32_t seedPrimarySkill = 0;
-    uint32_t seedSecondarySkill1 = 0;
-    uint32_t seedSecondarySkill2 = 0;
-    uint32_t seedSecondarySkillRandomChoose = 0;
-};
 
 class Heroes final : public HeroBase, public ColorBase
 {
 public:
-    enum
+    friend class Battle::Only;
+
+    enum : int32_t
     {
-        // knight
+        // Unknown / undefined hero.
+        UNKNOWN,
+
+        // Knight heroes from The Succession Wars.
         LORDKILBURN,
         SIRGALLANTH,
         ECTOR,
@@ -89,7 +85,8 @@ public:
         RUBY,
         MAXIMUS,
         DIMITRY,
-        // barbarian
+
+        // Barbarian heroes from The Succession Wars.
         THUNDAX,
         FINEOUS,
         JOJOSH,
@@ -99,7 +96,8 @@ public:
         ERGON,
         TSABU,
         ATLAS,
-        // sorceress
+
+        // Sorceress heroes from The Succession Wars.
         ASTRA,
         NATASHA,
         TROYAN,
@@ -109,7 +107,8 @@ public:
         ARIEL,
         CARLAWN,
         LUNA,
-        // warlock
+
+        // Warlock heroes from The Succession Wars.
         ARIE,
         ALAMAR,
         VESPER,
@@ -119,7 +118,8 @@ public:
         AGAR,
         FALAGAR,
         WRATHMONT,
-        // wizard
+
+        // Wizard heroes from The Succession Wars.
         MYRA,
         FLINT,
         DAWN,
@@ -129,7 +129,8 @@ public:
         SARAKIN,
         KALINDRA,
         MANDIGAL,
-        // necromancer
+
+        // Necromancer heroes from The Succession Wars.
         ZOM,
         DARLANA,
         ZAM,
@@ -139,14 +140,16 @@ public:
         ROXANA,
         SANDRO,
         CELIA,
-        // From The Succession Wars campaign.
+
+        // The Succession Wars campaign heroes.
         ROLAND,
         CORLAGON,
         ELIZA,
         ARCHIBALD,
         HALTON,
         BRAX,
-        // From The Price of Loyalty expansion.
+
+        // The Price of Loyalty expansion heroes.
         SOLMYR,
         DAINWIN,
         MOG,
@@ -158,9 +161,14 @@ public:
         DRAKONIA,
         MARTINE,
         JARKONAS,
-        // debugger
+
+        // Debug hero. Should not be used anywhere outside the development!
         DEBUG_HERO,
-        UNKNOWN
+
+        // Resurrection expansion heroes.
+
+        // IMPORTANT! Put all new heroes just above this line.
+        HEROES_COUNT
     };
 
     enum : uint32_t
@@ -185,14 +193,11 @@ public:
 
         // UNUSED = 0x00000800,
 
-        NOTDEFAULTS = 0x00001000,
+        // Hero has non-standard properties that were set using the map editor
+        CUSTOM = 0x00001000,
         NOTDISMISS = 0x00002000,
         VISIONS = 0x00004000,
-        PATROL = 0x00008000,
-
-        // UNUSED = 0x00010000,
-
-        CUSTOMSKILLS = 0x00020000
+        PATROL = 0x00008000
     };
 
     // Types of hero roles. They are only for AI as humans are smart enough to manage heroes by themselves.
@@ -264,6 +269,8 @@ public:
         const double _initialArmyStrength;
     };
 
+    static const int heroFrameCountPerTile{ 9 };
+
     Heroes();
     Heroes( int heroid, int rc );
     Heroes( const int heroID, const int race, const uint32_t additionalExperience );
@@ -272,9 +279,6 @@ public:
     ~Heroes() override = default;
 
     Heroes & operator=( const Heroes & ) = delete;
-
-    static const fheroes2::Sprite & GetPortrait( int heroid, int type );
-    static const char * GetName( int heroid );
 
     bool isValid() const override;
     // Returns true if the hero is active on the adventure map (i.e. has a valid ID, is not imprisoned, and is hired by
@@ -292,7 +296,6 @@ public:
     Castle * inCastleMutable() const;
 
     void LoadFromMP2( const int32_t mapIndex, const int colorType, const int raceType, const bool isInJail, const std::vector<uint8_t> & data );
-    void PostLoad();
 
     int GetRace() const override;
     const std::string & GetName() const override;
@@ -305,7 +308,7 @@ public:
 
     int GetID() const
     {
-        return hid;
+        return _id;
     }
 
     double getMeetingValue( const Heroes & otherHero ) const;
@@ -334,8 +337,15 @@ public:
         return GetLevelFromExperience( experience );
     }
 
-    MP2::MapObjectType GetMapsObject() const;
-    void SetMapsObject( const MP2::MapObjectType objectType );
+    MP2::MapObjectType getObjectTypeUnderHero() const
+    {
+        return _objectTypeUnderHero;
+    }
+
+    void setObjectTypeUnderHero( const MP2::MapObjectType objectType )
+    {
+        _objectTypeUnderHero = ( ( objectType != MP2::OBJ_HEROES ) ? objectType : MP2::OBJ_NONE );
+    }
 
     const fheroes2::Point & GetPatrolCenter() const
     {
@@ -347,13 +357,17 @@ public:
         _patrolCenter = pos;
     }
 
-    int GetPatrolDistance() const
+    uint32_t GetPatrolDistance() const
     {
         return _patrolDistance;
     }
 
     uint32_t GetMaxSpellPoints() const override;
+
+    // Returns the maximum number of hero movement points, depending on the surface type on which the hero is currently located
     uint32_t GetMaxMovePoints() const;
+    // Returns the maximum number of hero movement points, depending on the specified surface type (water or land)
+    uint32_t GetMaxMovePoints( const bool onWater ) const;
 
     uint32_t GetMovePoints() const
     {
@@ -383,7 +397,7 @@ public:
         return secondary_skills;
     }
 
-    bool PickupArtifact( const Artifact & );
+    bool PickupArtifact( const Artifact & art );
 
     bool HasUltimateArtifact() const
     {
@@ -490,10 +504,6 @@ public:
 
     bool MayCastAdventureSpells() const;
 
-    // Since heroes sprite are much bigger than a tile we need to 'cut' the sprite and the shadow's sprite into pieces. Each piece is for a separate tile.
-    std::vector<fheroes2::ObjectRenderingInfo> getHeroSpritesPerTile() const;
-    std::vector<fheroes2::ObjectRenderingInfo> getHeroShadowSpritesPerTile() const;
-
     void PortraitRedraw( const int32_t px, const int32_t py, const PortraitType type, fheroes2::Image & dstsf ) const override;
 
     int GetSpriteIndex() const
@@ -552,8 +562,10 @@ public:
         return portrait;
     }
 
-    static int GetLevelFromExperience( uint32_t );
-    static uint32_t GetExperienceFromLevel( int );
+    bool isPoLPortrait() const
+    {
+        return ( portrait >= SOLMYR && portrait <= JARKONAS );
+    }
 
     fheroes2::Point MovementDirection() const;
 
@@ -596,19 +608,41 @@ public:
 
     uint32_t getDailyRestoredSpellPoints() const;
 
+    bool isInDeepOcean() const;
+
+    static int GetLevelFromExperience( uint32_t exp );
+    static uint32_t GetExperienceFromLevel( int lvl );
+
+    static const fheroes2::Sprite & GetPortrait( int heroid, int type );
+    static const char * GetName( int heroid );
+
+    static bool isValidId( const int32_t id )
+    {
+        return id > UNKNOWN && id < HEROES_COUNT;
+    }
+
 private:
     friend StreamBase & operator<<( StreamBase &, const Heroes & );
     friend StreamBase & operator>>( StreamBase &, Heroes & );
 
-    friend class Recruits;
-    friend class Battle::Only;
+    enum
+    {
+        SKILL_VALUE = 100
+    };
+
+    struct HeroSeedsForLevelUp
+    {
+        uint32_t seedPrimarySkill{ 0 };
+        uint32_t seedSecondarySkill1{ 0 };
+        uint32_t seedSecondarySkill2{ 0 };
+        uint32_t seedSecondarySkillRandomChoose{ 0 };
+    };
 
     HeroSeedsForLevelUp GetSeedsForLevelUp() const;
     void LevelUp( bool skipsecondary, bool autoselect = false );
     void LevelUpSecondarySkill( const HeroSeedsForLevelUp & seeds, int primary, bool autoselect = false );
     void AngleStep( int );
     bool MoveStep( const bool jumpToNextTile );
-    static uint32_t GetStartingXp();
     bool isInVisibleMapArea() const;
 
     // This function is useful only in a situation when AI hero moves out of the fog
@@ -621,12 +655,7 @@ private:
     // Daily replenishment of spell points
     void ReplenishSpellPoints();
 
-    bool isInDeepOcean() const;
-
-    enum
-    {
-        SKILL_VALUE = 100
-    };
+    static uint32_t GetStartingXp();
 
     std::string name;
     uint32_t experience;
@@ -636,12 +665,13 @@ private:
     Army army;
 
     // Hero ID
-    int hid;
+    int _id;
     // Corresponds to the ID of the hero whose portrait is applied. Usually equal to the
     // ID of this hero, unless a custom portrait is applied.
     int portrait;
     int _race;
-    int save_maps_object;
+
+    MP2::MapObjectType _objectTypeUnderHero;
 
     Route::Path path;
 
@@ -650,7 +680,7 @@ private:
     fheroes2::Point _offset; // used only during hero's movement
 
     fheroes2::Point _patrolCenter;
-    int _patrolDistance;
+    uint32_t _patrolDistance;
 
     std::list<IndexObject> visit_object;
     uint32_t _lastGroundRegion = 0;
@@ -664,22 +694,17 @@ private:
 
     // This value should NOT be saved in save file as it's dynamically set during AI turn.
     Role _aiRole;
-
-    enum
-    {
-        HERO_MOVE_STEP = 4 // in pixels
-    };
 };
 
 struct VecHeroes : public std::vector<Heroes *>
 {
-    Heroes * Get( int /* hero id */ ) const;
-    Heroes * Get( const fheroes2::Point & ) const;
+    Heroes * Get( int hid ) const;
+    Heroes * Get( const fheroes2::Point & center ) const;
 };
 
 struct AllHeroes : public VecHeroes
 {
-    AllHeroes();
+    AllHeroes() = default;
     AllHeroes( const AllHeroes & ) = delete;
 
     ~AllHeroes();
@@ -689,7 +714,7 @@ struct AllHeroes : public VecHeroes
     void Init();
     void clear();
 
-    void Scout( int ) const;
+    void Scout( int colors ) const;
 
     void ResetModes( const uint32_t modes ) const
     {
@@ -711,9 +736,8 @@ struct AllHeroes : public VecHeroes
         std::for_each( begin(), end(), []( Heroes * hero ) { hero->ActionNewMonth(); } );
     }
 
-    Heroes * GetHero( const Castle & castle ) const;
     Heroes * GetHeroForHire( const int race, const int heroIDToIgnore ) const;
-    Heroes * FromJail( int32_t ) const;
+    Heroes * FromJail( int32_t index ) const;
 };
 
 StreamBase & operator<<( StreamBase &, const VecHeroes & );

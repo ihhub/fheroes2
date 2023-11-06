@@ -65,6 +65,7 @@ void Interface::AdventureMap::SetFocus( Heroes * hero, const bool retainScrollBa
 
     Heroes * focusedHero = focus.GetHeroes();
     if ( focusedHero && focusedHero != hero ) {
+        // Focus has been changed to another hero. Hide the path of the previous hero.
         focusedHero->ShowPath( false );
     }
 
@@ -76,7 +77,7 @@ void Interface::AdventureMap::SetFocus( Heroes * hero, const bool retainScrollBa
     hero->ShowPath( true );
     focus.Set( hero );
 
-    redraw( REDRAW_BUTTONS );
+    setRedraw( REDRAW_BUTTONS );
 
     if ( !retainScrollBarPosition ) {
         iconsPanel.Select( hero );
@@ -120,7 +121,7 @@ void Interface::AdventureMap::SetFocus( Castle * castle )
 
     focus.Set( castle );
 
-    redraw( REDRAW_BUTTONS );
+    setRedraw( REDRAW_BUTTONS );
 
     iconsPanel.Select( castle );
     _gameArea.SetCenter( castle->GetCenter() );
@@ -174,20 +175,25 @@ void Interface::AdventureMap::ResetFocus( const int priority, const bool retainS
 
     switch ( priority ) {
     case GameFocus::FIRSTHERO: {
-        const KingdomHeroes & heroes = myKingdom.GetHeroes();
-        // skip sleeping
-        KingdomHeroes::const_iterator it = std::find_if( heroes.begin(), heroes.end(), []( const Heroes * hero ) { return !hero->Modes( Heroes::SLEEPER ); } );
+        const VecHeroes & heroes = myKingdom.GetHeroes();
+        // Find first hero excluding sleeping ones.
+        const VecHeroes::const_iterator it = std::find_if( heroes.begin(), heroes.end(), []( const Heroes * hero ) { return !hero->Modes( Heroes::SLEEPER ); } );
 
-        if ( it != heroes.end() )
+        if ( it != heroes.end() ) {
             SetFocus( *it, false );
-        else
+        }
+        else {
+            // There are no non-sleeping heroes. Focus on the castle instead.
             ResetFocus( GameFocus::CASTLE, retainScrollBarPosition );
+        }
         break;
     }
 
     case GameFocus::HEROES:
-        if ( focus.GetHeroes() && focus.GetHeroes()->GetColor() == player->GetColor() )
-            SetFocus( focus.GetHeroes(), retainScrollBarPosition );
+        if ( Heroes * hero = focus.GetHeroes(); ( hero != nullptr ) && ( hero->GetColor() == player->GetColor() ) ) {
+            // Set focus on the previously focused hero.
+            SetFocus( hero, retainScrollBarPosition );
+        }
         else if ( !myKingdom.GetHeroes().empty() ) {
             // Reset scrollbar here because the current focused hero might have
             // lost a battle and is not in the heroes list anymore.
@@ -195,26 +201,33 @@ void Interface::AdventureMap::ResetFocus( const int priority, const bool retainS
             SetFocus( myKingdom.GetHeroes().front(), false );
         }
         else if ( !myKingdom.GetCastles().empty() ) {
+            // There are no heroes left in the kingdom. Reset the heroes scrollbar and focus on the first castle.
             iconsPanel.SetRedraw( ICON_HEROES );
             SetFocus( myKingdom.GetCastles().front() );
         }
-        else
+        else {
             focus.Reset();
+        }
         break;
 
     case GameFocus::CASTLE:
-        if ( focus.GetCastle() && focus.GetCastle()->GetColor() == player->GetColor() )
-            SetFocus( focus.GetCastle() );
+        if ( Castle * castle = focus.GetCastle(); ( castle != nullptr ) && ( castle->GetColor() == player->GetColor() ) ) {
+            // Focus on the previously focused castle.
+            SetFocus( castle );
+        }
         else if ( !myKingdom.GetCastles().empty() ) {
+            // The previously focused castle is lost, so we update the castles scrollbar.
             iconsPanel.ResetIcons( ICON_CASTLES );
             SetFocus( myKingdom.GetCastles().front() );
         }
         else if ( !myKingdom.GetHeroes().empty() ) {
+            // There are no castles left in the kingdom. Reset the castles scrollbar and focus on the first hero.
             iconsPanel.SetRedraw( ICON_CASTLES );
             SetFocus( myKingdom.GetHeroes().front(), false );
         }
-        else
+        else {
             focus.Reset();
+        }
         break;
 
     default:
@@ -230,10 +243,12 @@ int Interface::GetFocusType()
     if ( player ) {
         Focus & focus = player->GetFocus();
 
-        if ( focus.GetHeroes() )
+        if ( focus.GetHeroes() ) {
             return GameFocus::HEROES;
-        if ( focus.GetCastle() )
+        }
+        if ( focus.GetCastle() ) {
             return GameFocus::CASTLE;
+        }
     }
 
     return GameFocus::UNSEL;
@@ -255,7 +270,7 @@ Heroes * Interface::GetFocusHeroes()
 
 void Interface::AdventureMap::RedrawFocus()
 {
-    int type = GetFocusType();
+    const int type = GetFocusType();
 
     if ( type != FOCUS_HEROES && iconsPanel.IsSelected( ICON_HEROES ) ) {
         iconsPanel.ResetIcons( ICON_HEROES );
@@ -277,10 +292,12 @@ void Interface::AdventureMap::RedrawFocus()
 
     setRedraw( REDRAW_GAMEAREA | REDRAW_RADAR_CURSOR );
 
-    if ( type == FOCUS_HEROES )
+    if ( type == FOCUS_HEROES ) {
         iconsPanel.SetRedraw( ICON_HEROES );
-    else if ( type == FOCUS_CASTLE )
+    }
+    else if ( type == FOCUS_CASTLE ) {
         iconsPanel.SetRedraw( ICON_CASTLES );
+    }
 
     _statusWindow.SetRedraw();
 }

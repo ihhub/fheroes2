@@ -56,11 +56,11 @@
 #include "mus.h"
 #include "screen.h"
 #include "statusbar.h"
-#include "text.h"
 #include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
 #include "ui_castle.h"
+#include "ui_dialog.h"
 #include "ui_kingdom.h"
 #include "ui_tool.h"
 #include "ui_window.h"
@@ -135,23 +135,22 @@ namespace
         fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STRIP, 0 ), display, pt.x, pt.y + 256 );
 
         if ( castle.isBuild( BUILD_CAPTAIN ) ) {
-            fheroes2::Blit( castle.GetCaptain().GetPortrait( PORT_BIG ), display, pt.x + 5, pt.y + 262 );
+            const fheroes2::Sprite & captainImage = castle.GetCaptain().GetPortrait( PORT_BIG );
+            fheroes2::Copy( captainImage, 0, 0, display, pt.x + 5, pt.y + 262, captainImage.width(), captainImage.height() );
         }
         else {
-            fheroes2::Blit( fheroes2::AGG::GetICN( ICN::CREST, Color::GetIndex( castle.GetColor() ) ), display, pt.x + 5, pt.y + 262 );
+            const fheroes2::Sprite & crestImage = fheroes2::AGG::GetICN( ICN::CREST, Color::GetIndex( castle.GetColor() ) );
+            fheroes2::Copy( crestImage, 0, 0, display, pt.x + 5, pt.y + 262, crestImage.width(), crestImage.height() );
         }
 
         if ( hero ) {
             hero->PortraitRedraw( pt.x + 5, pt.y + 361, PORT_BIG, display );
         }
         else {
-            fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STRIP, 3 ), display, pt.x + 5, pt.y + 361 );
-        }
-
-        if ( hero == nullptr ) {
+            const fheroes2::Sprite & heroImage = fheroes2::AGG::GetICN( ICN::STRIP, 3 );
             const fheroes2::Sprite & backgroundImage = fheroes2::AGG::GetICN( ICN::STRIP, 11 );
-
-            fheroes2::Blit( backgroundImage, display, pt.x + 112, pt.y + 361 );
+            fheroes2::Copy( heroImage, 0, 0, display, pt.x + 5, pt.y + 361, heroImage.width(), heroImage.height() );
+            fheroes2::Copy( backgroundImage, 0, 0, display, pt.x + 112, pt.y + 361, backgroundImage.width(), backgroundImage.height() );
         }
     }
 
@@ -172,10 +171,10 @@ namespace
         }
 
         if ( hero->IsFullBagArtifacts() ) {
-            Dialog::Message(
+            fheroes2::showStandardTextMessage(
                 hero->GetName(),
                 _( "You must purchase a spell book to use the mage guild, but you currently have no room for a spell book. Try giving one of your artifacts to another hero." ),
-                Font::BIG, Dialog::OK );
+                Dialog::OK );
 
             return false;
         }
@@ -188,10 +187,12 @@ namespace
         Game::SetUpdateSoundsOnFocusUpdate( false );
         Game::OpenHeroesDialog( hero, false, false );
 
-        if ( topArmyBar.isValid() && topArmyBar.isSelected() )
+        if ( topArmyBar.isValid() && topArmyBar.isSelected() ) {
             topArmyBar.ResetSelected();
-        if ( bottomArmyBar.isValid() && bottomArmyBar.isSelected() )
+        }
+        if ( bottomArmyBar.isValid() && bottomArmyBar.isSelected() ) {
             bottomArmyBar.ResetSelected();
+        }
     }
 
     void generateHeroImage( fheroes2::Image & image, Heroes * hero )
@@ -205,7 +206,7 @@ namespace
 
         fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STRIP, 0 ), 0, 100, image, 0, 0, 552, 107 );
         const fheroes2::Sprite & port = hero->GetPortrait( PORT_BIG );
-        fheroes2::Blit( port, image, 5, 5 );
+        fheroes2::Copy( port, 0, 0, image, 5, 5, port.width(), port.height() );
 
         ArmyBar armyBar( &hero->GetArmy(), false, false );
         armyBar.setTableSize( { 5, 1 } );
@@ -217,32 +218,33 @@ namespace
 
 Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionWindow, const bool fade, const bool renderBackgroundDialog )
 {
-    // setup cursor
-    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
+    // Set the cursor image. This dialog does not require a cursor restorer. It is called from other dialogs that have the same cursor
+    // or from the Game Area that will set the appropriate cursor after this dialog is closed.
+    Cursor::Get().SetThemes( Cursor::POINTER );
 
     fheroes2::Display & display = fheroes2::Display::instance();
 
-    fheroes2::Rect fadeRoi;
-    fheroes2::Rect dialodWithShadowRoi;
+    fheroes2::Rect dialogRoi;
+    fheroes2::Rect dialogWithShadowRoi;
     std::unique_ptr<fheroes2::StandardWindow> background;
     std::unique_ptr<fheroes2::ImageRestorer> restorer;
 
     if ( renderBackgroundDialog ) {
         background = std::make_unique<fheroes2::StandardWindow>( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT, false );
-        fadeRoi = background->activeArea();
-        dialodWithShadowRoi = background->totalArea();
+        dialogRoi = background->activeArea();
+        dialogWithShadowRoi = background->totalArea();
     }
     else {
-        fadeRoi = { ( display.width() - fheroes2::Display::DEFAULT_WIDTH ) / 2, ( display.height() - fheroes2::Display::DEFAULT_HEIGHT ) / 2,
-                    fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT };
-        dialodWithShadowRoi = { fadeRoi.x - 2 * BORDERWIDTH, fadeRoi.y - BORDERWIDTH, fadeRoi.width + 3 * BORDERWIDTH, fadeRoi.height + 3 * BORDERWIDTH };
-        restorer = std::make_unique<fheroes2::ImageRestorer>( display, fadeRoi.x, fadeRoi.y, fadeRoi.width, fadeRoi.height );
+        dialogRoi = { ( display.width() - fheroes2::Display::DEFAULT_WIDTH ) / 2, ( display.height() - fheroes2::Display::DEFAULT_HEIGHT ) / 2,
+                      fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT };
+        dialogWithShadowRoi = { dialogRoi.x - 2 * BORDERWIDTH, dialogRoi.y - BORDERWIDTH, dialogRoi.width + 3 * BORDERWIDTH, dialogRoi.height + 3 * BORDERWIDTH };
+        restorer = std::make_unique<fheroes2::ImageRestorer>( display, dialogRoi.x, dialogRoi.y, dialogRoi.width, dialogRoi.height );
     }
 
     // Fade-out game screen only for 640x480 resolution and if 'renderBackgroundDialog' is false (we are replacing image in already opened dialog).
     const bool isDefaultScreenSize = display.isDefaultSize();
     if ( fade && ( isDefaultScreenSize || !renderBackgroundDialog ) ) {
-        fheroes2::fadeOutDisplay( fadeRoi, !isDefaultScreenSize );
+        fheroes2::fadeOutDisplay( dialogRoi, !isDefaultScreenSize );
     }
 
     AudioManager::PlayMusicAsync( MUS::FromRace( race ), Music::PlaybackMode::RESUME_AND_PLAY_INFINITE );
@@ -254,99 +256,104 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
 
     fheroes2::Image surfaceHero;
 
-    if ( openConstructionWindow && isBuild( BUILD_CASTLE ) ) {
-        uint32_t build = BUILD_NOTHING;
-        const ConstructionDialogResult townResult = openConstructionDialog( build );
-
-        if ( townResult == ConstructionDialogResult::NextConstructionWindow ) {
+    auto constructionDialogHandler = [this, &display, &dialogRoi, &fadeBuilding, &hero, &surfaceHero, &alphaHero]() {
+        switch ( uint32_t build = BUILD_NOTHING; openConstructionDialog( build ) ) {
+        case ConstructionDialogResult::NextConstructionWindow:
             return CastleDialogReturnValue::NextCostructionWindow;
-        }
-        if ( townResult == ConstructionDialogResult::PrevConstructionWindow ) {
+        case ConstructionDialogResult::PrevConstructionWindow:
             return CastleDialogReturnValue::PreviousCostructionWindow;
-        }
-
-        if ( build != BUILD_NOTHING ) {
-            AudioManager::PlaySound( M82::BUILDTWN );
-            fadeBuilding.StartFadeBuilding( build );
-        }
-
-        if ( townResult == ConstructionDialogResult::RecruitHero ) {
+        case ConstructionDialogResult::RecruitHero:
             hero = world.GetHero( *this );
-
             generateHeroImage( surfaceHero, hero );
-
             AudioManager::PlaySound( M82::BUILDTWN );
             alphaHero = 0;
+            break;
+        default:
+            if ( build != BUILD_NOTHING ) {
+                AudioManager::PlaySound( M82::BUILDTWN );
+                fadeBuilding.StartFadeBuilding( build );
+            }
+            break;
+        }
+
+        // Set next render ROI to dialog ROI. It is needed to properly update the castle dialog after the construction dialog is closed.
+        display.updateNextRenderRoi( dialogRoi );
+
+        return CastleDialogReturnValue::DoNothing;
+    };
+
+    if ( openConstructionWindow && isBuild( BUILD_CASTLE ) ) {
+        const CastleDialogReturnValue constructionResult = constructionDialogHandler();
+        if ( constructionResult != CastleDialogReturnValue::DoNothing ) {
+            return constructionResult;
         }
     }
 
-    const fheroes2::Point cur_pt( fadeRoi.x, fadeRoi.y );
     const std::string currentDate = getDateString();
 
-    // button prev castle
-    const int32_t statusBarOffsetY = 480 - 19;
+    // Previous castle button.
+    fheroes2::Point statusBarPosition( dialogRoi.x, dialogRoi.y + 480 - 19 );
 
-    fheroes2::Button buttonPrevCastle( cur_pt.x, cur_pt.y + statusBarOffsetY, ICN::SMALLBAR, 1, 2 );
+    fheroes2::Button buttonPrevCastle( statusBarPosition.x, statusBarPosition.y, ICN::SMALLBAR, 1, 2 );
     fheroes2::TimedEventValidator timedButtonPrevCastle( [&buttonPrevCastle]() { return buttonPrevCastle.isPressed(); } );
     buttonPrevCastle.subscribe( &timedButtonPrevCastle );
 
-    // bottom small bar
+    statusBarPosition.x += buttonPrevCastle.area().width;
+
+    // Status bar at the bottom of dialog.
     const fheroes2::Sprite & bar = fheroes2::AGG::GetICN( ICN::SMALLBAR, 0 );
-    fheroes2::Blit( bar, display, cur_pt.x + buttonPrevCastle.area().width, cur_pt.y + statusBarOffsetY );
+    fheroes2::Copy( bar, 0, 0, display, statusBarPosition.x, statusBarPosition.y, bar.width(), bar.height() );
 
     StatusBar statusBar;
-    statusBar.SetFont( Font::BIG );
-    statusBar.SetCenter( cur_pt.x + buttonPrevCastle.area().width + bar.width() / 2, cur_pt.y + statusBarOffsetY + 12 );
+    // Status bar must be smaller due to extra art on both sides.
+    statusBar.setRoi( { statusBarPosition.x + 16, statusBarPosition.y + 3, bar.width() - 16 * 2, 0 } );
 
-    // button next castle
-    fheroes2::Button buttonNextCastle( cur_pt.x + buttonPrevCastle.area().width + bar.width(), cur_pt.y + statusBarOffsetY, ICN::SMALLBAR, 3, 4 );
+    // Next castle button.
+    fheroes2::Button buttonNextCastle( statusBarPosition.x + bar.width(), statusBarPosition.y, ICN::SMALLBAR, 3, 4 );
     fheroes2::TimedEventValidator timedButtonNextCastle( [&buttonNextCastle]() { return buttonNextCastle.isPressed(); } );
     buttonNextCastle.subscribe( &timedButtonNextCastle );
 
-    // color crest
+    // Position of the captain/crest and hero portrait to the left of army bars.
     const fheroes2::Sprite & crest = fheroes2::AGG::GetICN( ICN::CREST, Color::GetIndex( GetColor() ) );
-    const fheroes2::Rect rectSign1( cur_pt.x + 5, cur_pt.y + 262, crest.width(), crest.height() );
+    const fheroes2::Rect rectSign1( dialogRoi.x + 5, dialogRoi.y + 262, crest.width(), crest.height() );
+    const fheroes2::Rect rectSign2( rectSign1.x, dialogRoi.y + 361, 100, 92 );
 
-    RedrawIcons( *this, hero, cur_pt );
+    // For the case when new hero is recruited we need to render bottom army bar
+    // without hero and his army to properly perform hero fade-in.
+    RedrawIcons( *this, ( alphaHero == 0 ) ? nullptr : hero, dialogRoi.getPosition() );
 
-    // castle troops selector
-    // castle army bar
+    auto setArmyBarParameters = []( ArmyBar & armyBar, const fheroes2::Point & offset ) {
+        armyBar.setTableSize( { 5, 1 } );
+        armyBar.setRenderingOffset( offset );
+        armyBar.setInBetweenItemsOffset( { 6, 0 } );
+    };
+
+    // Castle army (top) bar.
     ArmyBar topArmyBar( &army, false, false );
-    topArmyBar.setTableSize( { 5, 1 } );
-    topArmyBar.setRenderingOffset( { cur_pt.x + 112, cur_pt.y + 262 } );
-    topArmyBar.setInBetweenItemsOffset( { 6, 0 } );
+    setArmyBarParameters( topArmyBar, { dialogRoi.x + 112, rectSign1.y } );
     topArmyBar.Redraw( display );
 
-    // portrait heroes or captain or sign
-    const fheroes2::Rect rectSign2( cur_pt.x + 5, cur_pt.y + 361, 100, 92 );
+    // Hero army (bottom) bar.
+    ArmyBar bottomArmyBar( hero ? &hero->GetArmy() : nullptr, false, false );
+    setArmyBarParameters( bottomArmyBar, { dialogRoi.x + 112, rectSign2.y } );
 
-    // castle_heroes troops background
-    ArmyBar bottomArmyBar( nullptr, false, false );
-    bottomArmyBar.setTableSize( { 5, 1 } );
-    bottomArmyBar.setRenderingOffset( { cur_pt.x + 112, cur_pt.y + 361 } );
-    bottomArmyBar.setInBetweenItemsOffset( { 6, 0 } );
-
-    if ( hero ) {
-        bottomArmyBar.SetArmy( &hero->GetArmy() );
-
-        if ( alphaHero != 0 ) {
-            // Draw bottom bar only if no hero fading animation is going.
-            bottomArmyBar.Redraw( display );
-        }
+    if ( hero && alphaHero != 0 ) {
+        // Draw bottom bar only if no hero fading animation is going.
+        bottomArmyBar.Redraw( display );
     }
 
-    // button exit
-    fheroes2::Button buttonExit( cur_pt.x + 553, cur_pt.y + 428, ICN::BUTTON_EXIT_TOWN, 0, 1 );
+    // Exit button.
+    fheroes2::Button buttonExit( dialogRoi.x + 553, dialogRoi.y + 428, ICN::BUTTON_EXIT_TOWN, 0, 1 );
 
-    // resource
-    const fheroes2::Rect & rectResource = fheroes2::drawResourcePanel( GetKingdom().GetFunds(), display, cur_pt );
+    // Kingdom resources.
+    const fheroes2::Rect & rectResource = fheroes2::drawResourcePanel( GetKingdom().GetFunds(), display, dialogRoi.getPosition() );
     const fheroes2::Rect resActiveArea( rectResource.x, rectResource.y, rectResource.width, buttonExit.area().y - rectResource.y - 3 );
 
-    // fill cache buildings
-    CastleDialog::CacheBuildings cacheBuildings( *this, cur_pt );
+    // Cache a vector of castle buildings in the order they are rendered.
+    const CastleDialog::CacheBuildings cacheBuildings( *this, dialogRoi.getPosition() );
 
-    // draw building
-    CastleDialog::RedrawAllBuilding( *this, cur_pt, cacheBuildings, fadeBuilding, castleAnimationIndex );
+    // Render castle buildings.
+    CastleDialog::RedrawAllBuilding( *this, dialogRoi.getPosition(), cacheBuildings, fadeBuilding, castleAnimationIndex );
 
     if ( GetKingdom().GetCastles().size() < 2 ) {
         buttonPrevCastle.disable();
@@ -361,29 +368,28 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
     if ( fade ) {
         if ( renderBackgroundDialog && !isDefaultScreenSize ) {
             // We need to expand the ROI for the next render to properly render window borders and shadow.
-            display.updateNextRenderRoi( dialodWithShadowRoi );
+            display.updateNextRenderRoi( dialogWithShadowRoi );
         }
 
         // Use half fade if game resolution is not 640x480.
-        fheroes2::fadeInDisplay( fadeRoi, !isDefaultScreenSize );
+        fheroes2::fadeInDisplay( dialogRoi, !isDefaultScreenSize );
     }
     else {
-        display.render();
+        display.render( dialogWithShadowRoi );
     }
 
     CastleDialogReturnValue result = CastleDialogReturnValue::DoNothing;
-    bool need_redraw = false;
+    bool needRedraw = false;
     bool needFadeIn = false;
-
-    // dialog menu loop
-    Game::passAnimationDelay( Game::CASTLE_AROUND_DELAY );
 
     // This variable must be declared out of the loop for performance reasons.
     std::string statusMessage;
 
+    Game::passAnimationDelay( Game::CASTLE_AROUND_DELAY );
+
     LocalEvent & le = LocalEvent::Get();
     while ( le.HandleEvents() && result == CastleDialogReturnValue::DoNothing ) {
-        // During hero purchase or building construction disable any interaction
+        // During hero purchase or building construction skip any interaction with the dialog.
         if ( alphaHero >= 255 && fadeBuilding.IsFadeDone() ) {
             if ( buttonPrevCastle.isEnabled() ) {
                 le.MousePressLeft( buttonPrevCastle.area() ) ? buttonPrevCastle.drawOnPress() : buttonPrevCastle.drawOnRelease();
@@ -399,7 +405,7 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
                 result = CastleDialogReturnValue::Close;
 
                 // Fade-out castle dialog.
-                fheroes2::fadeOutDisplay( fadeRoi, !isDefaultScreenSize );
+                fheroes2::fadeOutDisplay( dialogRoi, !isDefaultScreenSize );
                 break;
             }
             if ( buttonPrevCastle.isEnabled()
@@ -414,7 +420,7 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
             }
 
             if ( le.MouseClickLeft( resActiveArea ) ) {
-                fheroes2::ButtonRestorer exitRestorer( buttonExit );
+                const fheroes2::ButtonRestorer exitRestorer( buttonExit );
 
                 fheroes2::showKingdomIncome( GetKingdom(), Dialog::OK );
             }
@@ -422,24 +428,30 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
                 fheroes2::showKingdomIncome( GetKingdom(), 0 );
             }
             else if ( le.MousePressRight( buttonExit.area() ) ) {
-                Dialog::Message( _( "Exit" ), _( "Exit this menu." ), Font::BIG );
+                fheroes2::showStandardTextMessage( _( "Exit" ), _( "Exit this menu." ), Dialog::ZERO );
             }
             else if ( le.MousePressRight( buttonNextCastle.area() ) ) {
-                Dialog::Message( _( "Show next town" ), _( "Click to show next town." ), Font::BIG );
+                fheroes2::showStandardTextMessage( _( "Show next town" ), _( "Click to show next town." ), Dialog::ZERO );
             }
             else if ( le.MousePressRight( buttonPrevCastle.area() ) ) {
-                Dialog::Message( _( "Show previous town" ), _( "Click to show previous town." ), Font::BIG );
+                fheroes2::showStandardTextMessage( _( "Show previous town" ), _( "Click to show previous town." ), Dialog::ZERO );
+            }
+            else if ( isBuild( BUILD_CAPTAIN ) && le.MousePressRight( rectSign1 ) ) {
+                Dialog::QuickInfo( GetCaptain() );
+            }
+            else if ( hero && le.MousePressRight( rectSign2 ) ) {
+                Dialog::QuickInfo( *hero );
             }
 
-            // selector troops event
+            // Army bar events processing.
             if ( ( bottomArmyBar.isValid()
                    && ( ( le.MouseCursor( topArmyBar.GetArea() ) && topArmyBar.QueueEventProcessing( bottomArmyBar, &statusMessage ) )
                         || ( le.MouseCursor( bottomArmyBar.GetArea() ) && bottomArmyBar.QueueEventProcessing( topArmyBar, &statusMessage ) ) ) )
                  || ( !bottomArmyBar.isValid() && le.MouseCursor( topArmyBar.GetArea() ) && topArmyBar.QueueEventProcessing( &statusMessage ) ) ) {
-                need_redraw = true;
+                needRedraw = true;
             }
 
-            // Actions with hero armies.
+            // Actions with hero army.
             if ( hero ) {
                 bool isArmyActionPerformed = false;
 
@@ -462,7 +474,7 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
                     isArmyActionPerformed = true;
                 }
 
-                // Redraw and reset if any action modifying armies has been made.
+                // Reset selection and schedule dialog redraw if any action modifying armies has been made.
                 if ( isArmyActionPerformed ) {
                     if ( topArmyBar.isSelected() ) {
                         topArmyBar.ResetSelected();
@@ -471,7 +483,7 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
                         bottomArmyBar.ResetSelected();
                     }
 
-                    need_redraw = true;
+                    needRedraw = true;
                 }
             }
 
@@ -480,14 +492,7 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
                 openHeroDialog( topArmyBar, bottomArmyBar, *hero );
 
                 needFadeIn = true;
-                need_redraw = true;
-            }
-
-            if ( isBuild( BUILD_CAPTAIN ) && le.MousePressRight( rectSign1 ) ) {
-                Dialog::QuickInfo( GetCaptain() );
-            }
-            else if ( hero && le.MousePressRight( rectSign2 ) ) {
-                Dialog::QuickInfo( *hero );
+                needRedraw = true;
             }
 
             // Get pressed hotkey.
@@ -510,7 +515,7 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
                         Dialog::DwellingInfo( Monster( race, it->id ), getMonstersInDwelling( it->id ) );
                     }
                     else {
-                        Dialog::Message( GetStringBuilding( it->id ), GetDescriptionBuilding( it->id ), Font::BIG );
+                        fheroes2::showStandardTextMessage( GetStringBuilding( it->id ), GetDescriptionBuilding( it->id ), Dialog::ZERO );
                     }
 
                     // Nothing we need to do after.
@@ -520,29 +525,31 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
                 const bool isMagicGuild = ( BUILD_MAGEGUILD & it->id ) != 0;
 
                 if ( le.MouseClickLeft( it->coord ) || hotKeyBuilding == it->id || ( isMagicGuild && hotKeyBuilding == BUILD_MAGEGUILD ) ) {
-                    if ( topArmyBar.isSelected() )
+                    if ( topArmyBar.isSelected() ) {
                         topArmyBar.ResetSelected();
-                    if ( bottomArmyBar.isValid() && bottomArmyBar.isSelected() )
+                    }
+                    if ( bottomArmyBar.isValid() && bottomArmyBar.isSelected() ) {
                         bottomArmyBar.ResetSelected();
+                    }
 
                     if ( isMagicGuild ) {
-                        fheroes2::ButtonRestorer exitRestorer( buttonExit );
+                        const fheroes2::ButtonRestorer exitRestorer( buttonExit );
 
                         if ( purchaseSpellBookIfNecessary( *this, hero ) ) {
                             // Guest hero purchased the spellbook, redraw the resource panel
-                            need_redraw = true;
+                            needRedraw = true;
                         }
 
                         OpenMageGuild( hero );
                     }
                     else if ( isMonsterDwelling ) {
-                        fheroes2::ButtonRestorer exitRestorer( buttonExit );
+                        const fheroes2::ButtonRestorer exitRestorer( buttonExit );
 
                         const int32_t recruitMonsterWindowOffsetY = -65;
                         const Troop monsterToRecruit
                             = Dialog::RecruitMonster( Monster( race, monsterDwelling ), getMonstersInDwelling( it->id ), true, recruitMonsterWindowOffsetY );
                         if ( Castle::RecruitMonster( monsterToRecruit ) ) {
-                            need_redraw = true;
+                            needRedraw = true;
                         }
                     }
                     else {
@@ -552,7 +559,7 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
                             break;
 
                         case BUILD_TAVERN: {
-                            fheroes2::ButtonRestorer exitRestorer( buttonExit );
+                            const fheroes2::ButtonRestorer exitRestorer( buttonExit );
                             OpenTavern();
                             break;
                         }
@@ -563,14 +570,14 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
                         case BUILD_MOAT:
                         case BUILD_SPEC:
                         case BUILD_SHRINE: {
-                            fheroes2::ButtonRestorer exitRestorer( buttonExit );
-                            Dialog::Message( GetStringBuilding( it->id ), GetDescriptionBuilding( it->id ), Font::BIG, Dialog::OK );
+                            const fheroes2::ButtonRestorer exitRestorer( buttonExit );
+                            fheroes2::showStandardTextMessage( GetStringBuilding( it->id ), GetDescriptionBuilding( it->id ), Dialog::OK );
                             break;
                         }
 
                         case BUILD_SHIPYARD: {
-                            fheroes2::ButtonRestorer exitRestorer( buttonExit );
-                            if ( Dialog::OK == Dialog::BuyBoat( AllowBuyBoat() ) ) {
+                            const fheroes2::ButtonRestorer exitRestorer( buttonExit );
+                            if ( Dialog::OK == Dialog::BuyBoat( AllowBuyBoat( true ) ) ) {
                                 BuyBoat();
                                 fadeBuilding.StartFadeBuilding( BUILD_SHIPYARD );
                             }
@@ -578,21 +585,21 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
                         }
 
                         case BUILD_MARKETPLACE: {
-                            fheroes2::ButtonRestorer exitRestorer( buttonExit );
+                            const fheroes2::ButtonRestorer exitRestorer( buttonExit );
                             Dialog::Marketplace( GetKingdom(), false );
-                            need_redraw = true;
+                            needRedraw = true;
                             break;
                         }
 
                         case BUILD_WELL:
                             OpenWell();
-                            need_redraw = true;
+                            needRedraw = true;
                             break;
 
                         case BUILD_TENT: {
-                            fheroes2::ButtonRestorer exitRestorer( buttonExit );
+                            const fheroes2::ButtonRestorer exitRestorer( buttonExit );
                             if ( !Modes( ALLOWCASTLE ) ) {
-                                Dialog::Message( _( "Town" ), _( "This town may not be upgraded to a castle." ), Font::BIG, Dialog::OK );
+                                fheroes2::showStandardTextMessage( _( "Town" ), _( "This town may not be upgraded to a castle." ), Dialog::OK );
                             }
                             else if ( Dialog::OK == DialogBuyCastle( true ) ) {
                                 AudioManager::PlaySound( M82::BUILDTWN );
@@ -602,33 +609,11 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
                         }
 
                         case BUILD_CASTLE: {
-                            uint32_t build = BUILD_NOTHING;
-                            const ConstructionDialogResult townResult = openConstructionDialog( build );
-
-                            if ( townResult == ConstructionDialogResult::NextConstructionWindow ) {
-                                result = CastleDialogReturnValue::NextCostructionWindow;
-                                break;
-                            }
-                            if ( townResult == ConstructionDialogResult::PrevConstructionWindow ) {
-                                result = CastleDialogReturnValue::PreviousCostructionWindow;
-                                break;
-                            }
-
-                            if ( build != BUILD_NOTHING ) {
-                                AudioManager::PlaySound( M82::BUILDTWN );
-                                fadeBuilding.StartFadeBuilding( build );
-                            }
-
-                            hero = world.GetHero( *this );
-
-                            if ( townResult == ConstructionDialogResult::RecruitHero ) {
-                                AudioManager::PlaySound( M82::BUILDTWN );
-
-                                bottomArmyBar.SetArmy( &hero->GetArmy() );
-                                generateHeroImage( surfaceHero, hero );
-
-                                alphaHero = 0;
-                                need_redraw = true;
+                            const bool noHeroInCastle = ( hero == nullptr );
+                            result = constructionDialogHandler();
+                            if ( noHeroInCastle && hero != nullptr ) {
+                                // A hero has been recruited.
+                                needRedraw = true;
                             }
                             break;
                         }
@@ -649,27 +634,29 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
             break;
         }
 
-        if ( alphaHero < 255 ) {
-            if ( Game::validateAnimationDelay( Game::CASTLE_BUYHERO_DELAY ) ) {
-                alphaHero += 10;
-                if ( alphaHero >= 255 ) {
-                    alphaHero = 255;
-                }
+        if ( alphaHero < 255 && Game::validateAnimationDelay( Game::CASTLE_BUYHERO_DELAY ) ) {
+            alphaHero += 10;
+            if ( alphaHero >= 255 ) {
+                alphaHero = 255;
 
-                fheroes2::AlphaBlit( surfaceHero, display, cur_pt.x, cur_pt.y + 356, static_cast<uint8_t>( alphaHero ) );
+                // Hero fade-in animation is finished, we can set up his army bar.
+                bottomArmyBar.SetArmy( &hero->GetArmy() );
+            }
 
-                if ( !need_redraw ) {
-                    display.render();
-                }
+            fheroes2::AlphaBlit( surfaceHero, display, dialogRoi.x, dialogRoi.y + 356, static_cast<uint8_t>( alphaHero ) );
+
+            if ( !needRedraw ) {
+                display.render( dialogRoi );
             }
         }
 
-        if ( need_redraw ) {
+        if ( needRedraw ) {
+            // Redraw the bottom part of the castle dialog (army bars, resources, exit button).
             topArmyBar.Redraw( display );
-            if ( bottomArmyBar.isValid() && alphaHero >= 255 )
+            if ( bottomArmyBar.isValid() && alphaHero >= 255 ) {
                 bottomArmyBar.Redraw( display );
-            fheroes2::drawCastleName( *this, display, cur_pt );
-            fheroes2::drawResourcePanel( GetKingdom().GetFunds(), display, cur_pt );
+            }
+            fheroes2::drawResourcePanel( GetKingdom().GetFunds(), display, dialogRoi.getPosition() );
 
             if ( buttonExit.isPressed() ) {
                 buttonExit.draw();
@@ -678,10 +665,10 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
             if ( needFadeIn ) {
                 needFadeIn = false;
 
-                fheroes2::fadeInDisplay( fadeRoi, !isDefaultScreenSize );
+                fheroes2::fadeInDisplay( dialogRoi, !isDefaultScreenSize );
             }
             else {
-                display.render();
+                display.render( dialogRoi );
             }
         }
 
@@ -719,35 +706,44 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
             statusMessage.clear();
         }
 
-        need_redraw = fadeBuilding.UpdateFadeBuilding();
+        needRedraw = fadeBuilding.UpdateFadeBuilding();
         if ( fadeBuilding.IsFadeDone() ) {
             const uint32_t build = fadeBuilding.GetBuild();
 
             if ( build != BUILD_NOTHING ) {
                 BuyBuilding( build );
                 if ( BUILD_CAPTAIN == build ) {
-                    RedrawIcons( *this, hero, cur_pt );
+                    RedrawIcons( *this, hero, dialogRoi.getPosition() );
+                    fheroes2::drawCastleName( *this, fheroes2::Display::instance(), dialogRoi.getPosition() );
                 }
 
-                fheroes2::drawCastleName( *this, display, cur_pt );
-                fheroes2::drawResourcePanel( GetKingdom().GetFunds(), display, cur_pt );
+                fheroes2::drawResourcePanel( GetKingdom().GetFunds(), display, dialogRoi.getPosition() );
 
-                display.render();
+                display.render( dialogRoi );
             }
 
             fadeBuilding.StopFadeBuilding();
         }
-        // animation sprite
-        if ( Game::validateAnimationDelay( Game::CASTLE_AROUND_DELAY ) ) {
-            CastleDialog::RedrawAllBuilding( *this, cur_pt, cacheBuildings, fadeBuilding, castleAnimationIndex );
-            display.render();
-
-            ++castleAnimationIndex;
+        else if ( fadeBuilding.GetBuild() == BUILD_CAPTAIN ) {
+            // Fade-in the captain image while fading-in his quarters.
+            const fheroes2::Sprite & crestImage = fheroes2::AGG::GetICN( ICN::CREST, Color::GetIndex( GetColor() ) );
+            fheroes2::Copy( crestImage, 0, 0, display, rectSign1.x, rectSign1.y, crestImage.width(), crestImage.height() );
+            const fheroes2::Sprite & captainImage = GetCaptain().GetPortrait( PORT_BIG );
+            fheroes2::AlphaBlit( captainImage, display, rectSign1.x, rectSign1.y, fadeBuilding.GetAlpha() );
         }
-        else if ( need_redraw ) {
-            CastleDialog::RedrawAllBuilding( *this, cur_pt, cacheBuildings, fadeBuilding, castleAnimationIndex );
-            display.render();
-            need_redraw = false;
+
+        // Castle dialog animation.
+        if ( Game::validateAnimationDelay( Game::CASTLE_AROUND_DELAY ) || needRedraw ) {
+            CastleDialog::RedrawAllBuilding( *this, dialogRoi.getPosition(), cacheBuildings, fadeBuilding, castleAnimationIndex );
+
+            display.render( dialogRoi );
+
+            if ( needRedraw ) {
+                needRedraw = false;
+            }
+            else {
+                ++castleAnimationIndex;
+            }
         }
     }
 

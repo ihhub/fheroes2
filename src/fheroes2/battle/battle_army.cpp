@@ -30,14 +30,13 @@
 #include "army_troop.h"
 #include "artifact.h"
 #include "artifact_info.h"
-#include "battle.h"
 #include "battle_arena.h"
 #include "battle_cell.h"
 #include "battle_troop.h"
 #include "heroes.h"
 #include "heroes_base.h"
 #include "monster_anim.h"
-#include "payment.h"
+#include "resource.h"
 #include "skill.h"
 
 namespace
@@ -82,12 +81,8 @@ Battle::Units::Units( const Units & units, const Unit * unitToRemove )
 
 void Battle::Units::SortFastest()
 {
+    // It is important to maintain the initial order of units having the same speed for the proper operation of the unit turn queue
     std::stable_sort( begin(), end(), Army::FastestTroop );
-}
-
-void Battle::Units::SortArchers()
-{
-    std::sort( begin(), end(), []( const Troop * t1, const Troop * t2 ) { return t1->isArchers() && !t2->isArchers(); } );
 }
 
 Battle::Unit * Battle::Units::FindUID( uint32_t pid ) const
@@ -104,7 +99,7 @@ Battle::Unit * Battle::Units::FindMode( uint32_t mod ) const
     return it == end() ? nullptr : *it;
 }
 
-Battle::Force::Force( Army & parent, bool opposite, const Rand::DeterministicRandomGenerator & randomGenerator, TroopsUidGenerator & generator )
+Battle::Force::Force( Army & parent, bool opposite, TroopsUidGenerator & generator )
     : army( parent )
 {
     uids.reserve( army.Size() );
@@ -132,7 +127,7 @@ Battle::Force::Force( Army & parent, bool opposite, const Rand::DeterministicRan
 
         assert( pos.GetHead() != nullptr && ( !troop->isWide() || pos.GetTail() != nullptr ) );
 
-        push_back( new Unit( *troop, pos, opposite, randomGenerator, generator.GetUnique() ) );
+        push_back( new Unit( *troop, pos, opposite, generator.GetUnique() ) );
         back()->SetArmy( army );
 
         uids.push_back( back()->GetUID() );
@@ -141,8 +136,11 @@ Battle::Force::Force( Army & parent, bool opposite, const Rand::DeterministicRan
 
 Battle::Force::~Force()
 {
-    for ( iterator it = begin(); it != end(); ++it )
-        delete *it;
+    std::for_each( begin(), end(), []( Unit * unit ) {
+        assert( unit != nullptr );
+
+        delete unit;
+    } );
 }
 
 const HeroBase * Battle::Force::GetCommander() const
@@ -274,7 +272,7 @@ bool Battle::Force::animateIdleUnits() const
         if ( unit->isValid() ) {
             if ( unit->isIdling() ) {
                 // Go to 'STATIC' animation state if idle animation is over or if unit is blinded or paralyzed.
-                if ( unit->isFinishAnimFrame() || unit->Modes( SP_BLIND | IS_PARALYZE_MAGIC ) ) {
+                if ( unit->isFinishAnimFrame() || unit->isImmovable() ) {
                     redrawNeeded = unit->SwitchAnimation( Monster_Info::STATIC ) || redrawNeeded;
                 }
                 else {
@@ -284,7 +282,7 @@ bool Battle::Force::animateIdleUnits() const
             }
             // checkIdleDelay() sets and checks unit's internal timer if we're ready to switch to next one.
             // Do not start idle animations for paralyzed or blinded units.
-            else if ( unit->GetAnimationState() == Monster_Info::STATIC && !unit->Modes( SP_BLIND | IS_PARALYZE_MAGIC ) && unit->checkIdleDelay() ) {
+            else if ( unit->GetAnimationState() == Monster_Info::STATIC && !unit->isImmovable() && unit->checkIdleDelay() ) {
                 redrawNeeded = unit->SwitchAnimation( Monster_Info::IDLE ) || redrawNeeded;
             }
         }
@@ -296,7 +294,7 @@ void Battle::Force::resetIdleAnimation() const
 {
     for ( Unit * unit : *this ) {
         // Check if unit is alive, not paralyzed or blinded and is in 'STATIC' animation state.
-        if ( unit->isValid() && unit->GetAnimationState() == Monster_Info::STATIC && !unit->Modes( SP_BLIND | IS_PARALYZE_MAGIC ) ) {
+        if ( unit->isValid() && unit->GetAnimationState() == Monster_Info::STATIC && !unit->isImmovable() ) {
             unit->checkIdleDelay();
         }
     }

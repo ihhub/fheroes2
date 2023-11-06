@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component type="desktop">
   <id>io.github.ihhub.Fheroes2</id>
+  <launchable type="desktop-id">fheroes2.desktop</launchable>
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-2.0</project_license>
   <name>fheroes2</name>
   <developer_name>fheroes2 Resurrection team</developer_name>
-  <summary>fheroes2 is a recreation of Heroes of Might and Magic II game engine</summary>
+  <summary>fheroes2 is a recreation of the Heroes of Might and Magic II game engine</summary>
   <description>
-    <p>fheroes2 is a recreation of Heroes of Might and Magic II game engine.</p>
-    <p>This open source multiplatform project, written from scratch, is designed to reproduce the original game with significant improvements in the gameplay, graphics and logic (including support for high-resolution graphics, improved AI, numerous fixes and UI improvements), breathing new life into one of the most addictive turn-based strategies.</p>
+    <p>This open source multiplatform project, written from scratch, is designed to reproduce the original game with significant improvements to the gameplay, graphics and logic (including support for high-resolution graphics, improved AI, numerous fixes and UI improvements), breathing new life into one of the most addictive turn-based strategy games.</p>
   </description>
   <categories>
     <category>Game</category>
@@ -37,6 +37,126 @@
     <control>touch</control>
   </recommends>
   <releases>
+    <release date="2023-10-11" version="v1.0.9">
+      <url>https://github.com/ihhub/fheroes2/releases/tag/1.0.9</url>
+      <description>
+        <p>Changes in v1.0.9 (11 October 2023):</p>
+        <ul>
+          <li>add "tent visited" info to barrier quick info dialog</li>
+          <li>update Vietnamese translation</li>
+          <li>rework Hot-Keys dialog</li>
+          <li>fix combat victory window creature position</li>
+          <li>Town Gate and Town Portal spells: use depersonalized wording</li>
+          <li>add an ability to place heroes in the Editor</li>
+          <li>add an ability to place Random Monsters in the Editor</li>
+          <li>fix rendering of very long scenario names in the campaign briefing dialog</li>
+          <li>disable the not implemented Random Map option in the Editor</li>
+          <li>update German translation</li>
+          <li>make a long press on the "continue movement" button to reset a hero's path</li>
+          <li>use the "continue movement" button to interact with an object a hero is standing on</li>
+          <li>make Grass the default terrain for new maps in the Editor</li>
+          <li>restrict heroes' meetings and army merging on Easy difficulty</li>
+          <li>AI should avoid splitting troops on Easy difficulty</li>
+          <li>add functionality to place monsters in the Editor</li>
+          <li>add a mirror image check during spell evaluation</li>
+          <li>teach battle AI to use shield spells</li>
+          <li>implement streams' placing in the Editor</li>
+          <li>adjust AI combat spell heuristics</li>
+          <li>fix rendering of long text in the Hero screen status bar</li>
+          <li>update Ukrainian translation</li>
+          <li>implement roads' placing in the Editor</li>
+          <li>fix the AI first strike logic</li>
+          <li>update Hungarian translation</li>
+          <li>fix battle AI protecting paralyzed archers</li>
+          <li>properly display player's name in the New Game window</li>
+          <li>fix memorizing the position in the map list when changing the map size filter</li>
+          <li>adjust the position of luck and morale icons in the hero info window</li>
+          <li>update the followers window to support text mode</li>
+          <li>fix the logic of ALWAYS_RETALIATE regarding paralyzed units</li>
+          <li>add historical changes support for the Editor</li>
+          <li>add the ability to confirm actions in battle for touch devices</li>
+          <li>update Russian translation</li>
+          <li>fix Editor Main Menu hotkeys</li>
+          <li>update Swedish translation</li>
+          <li>speed up overall rendering for cycling animation</li>
+          <li>do not render text beyond the info and status bars during battles</li>
+          <li>rework game settings on the Adventure Map</li>
+          <li>remove double spaces in translatable texts</li>
+          <li>update Bulgarian translation</li>
+          <li>update Slovak translation</li>
+          <li>update Czech translations</li>
+          <li>update Danish translation</li>
+          <li>use Home and End hotkeys to navigate among items within a list</li>
+          <li>always use the nearest cell to attack the nearby unit if a monster is under the Berserker spell</li>
+          <li>fix an assertion when a hero starts moving and a player immediately mouse left clicks on the Adventure Map</li>
+          <li>improve path calculations by AIWorldPathfinder in planning mode</li>
+          <li>Wand of Negation should grant immunity against the Mass Dispel spell</li>
+        </ul>
+      </description>
+    </release>
+    <release date="2023-09-11" version="v1.0.8">
+      <url>https://github.com/ihhub/fheroes2/releases/tag/1.0.8</url>
+      <description>
+        <p>Changes in v1.0.8 (11 September 2023):</p>
+        <ul>
+          <li>fix number placeholders not being replaced in campaign spell bonus texts</li>
+          <li>fix spell rendering issues when words are divided in the middle</li>
+          <li>fix ? symbols appearing in single-line texts</li>
+          <li>generate vertical high scores buttons</li>
+          <li>display missing resource dialog for at least 5 seconds</li>
+          <li>show only skills that the hero does not already have in battle only skill selection list</li>
+          <li>show highscores after multiplayer game</li>
+          <li>improve the logic of kiting enemies with archers</li>
+          <li>update Vietnamese translation</li>
+          <li>update Hungarian Translation</li>
+          <li>adjust the description of the Eagle Eye skill</li>
+          <li>fix an empty gap in between lines in buttons font</li>
+          <li>update Russian translation</li>
+          <li>translate disabled buttons and reset them when changing languages</li>
+          <li>make vertical buttons translatable</li>
+          <li>implement terrain transitions in Editor</li>
+          <li>rework the Save/Load game dialog to allow variable dialog size and support Evil interface</li>
+          <li>change Army Order to Turn Order</li>
+          <li>Add Czech to original resource exception</li>
+          <li>do not close File options menu on cancelling load game dialog</li>
+          <li>fix foreign pixels on snow battlefield objects</li>
+          <li>do not try to scout the area if the hero is in jail and gets an artifact assigned using the map editor</li>
+          <li>update Slovak translation</li>
+          <li>cancel Hut of Magi reveal area animation when a player clicks any button</li>
+          <li>show the "You have been eliminated from the game" message in the multiplayer game</li>
+          <li>add small skill icons for Xanadu visit dialog</li>
+          <li>fix invalid logic for some objects on water</li>
+          <li>update Polish translation</li>
+          <li>speed up map, translation and save files loading</li>
+          <li>fix missing hero and town name in dialogs for non-English languages</li>
+          <li>fix Load/Save file title position and color</li>
+          <li>change Shipyard construction message</li>
+          <li>expand clickable area for settings in the Main Menu</li>
+          <li>shift text in Surrender window</li>
+          <li>show ... in Load/Save File dialog for long names</li>
+          <li>fix monster name position in monster info dialog</li>
+          <li>speed up rendering for specific buttons</li>
+          <li>fix multiple rendering issues in the Kingdom Overview dialog</li>
+          <li>adjust text for Quick Info dialogs</li>
+          <li>improve fading animation using Redmean color distance calculation</li>
+          <li>limit Dimension Door spell usage for AI heroes on lower difficulties</li>
+          <li>center text in hero battle info window</li>
+          <li>add A and O with diaereses to CP1252 button font</li>
+          <li>fix size of the button letter Æ</li>
+          <li>improve Mage guild status message for learnt spells</li>
+          <li>add "New Month!" title for new month</li>
+          <li>add "Victory!" title to victory dialog</li>
+          <li>update Danish translation</li>
+          <li>update Ukrainian translation</li>
+          <li>allow early exit from puzzle map during reveal animation</li>
+          <li>remember map filter selection until you quit the game</li>
+          <li>improve the distance estimation when an AI-controlled hero passes through objects on the map</li>
+          <li>update Swedish translation</li>
+          <li>AI heroes should decline battles if passing by</li>
+          <li>implement basic terrain draw in Map Editor</li>
+        </ul>
+      </description>
+    </release>
     <release date="2023-08-15" version="v1.0.7">
       <url>https://github.com/ihhub/fheroes2/releases/tag/1.0.7</url>
       <description>

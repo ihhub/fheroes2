@@ -29,7 +29,6 @@
 #include <map>
 #include <set>
 #include <utility>
-#include <vector>
 
 #include <SDL_events.h>
 #include <SDL_gamecontroller.h>
@@ -45,13 +44,16 @@
 
 #include "audio.h"
 #include "image.h"
-#include "pal.h"
+#include "render_processor.h"
 #include "screen.h"
 #include "tools.h"
 
 namespace
 {
     const uint32_t globalLoopSleepTime{ 1 };
+
+    // If such or more ms has passed after pressing the mouse button, then this is a long press.
+    const uint32_t mouseButtonLongPressTimeout{ 850 };
 
     int getSDLKey( const fheroes2::Key key )
     {
@@ -119,12 +121,18 @@ namespace
             return SDLK_CARET;
         case fheroes2::Key::KEY_UNDERSCORE:
             return SDLK_UNDERSCORE;
-        case fheroes2::Key::KEY_ALT:
+        case fheroes2::Key::KEY_LEFT_ALT:
             return SDLK_LALT;
-        case fheroes2::Key::KEY_CONTROL:
+        case fheroes2::Key::KEY_RIGHT_ALT:
+            return SDLK_RALT;
+        case fheroes2::Key::KEY_LEFT_CONTROL:
             return SDLK_LCTRL;
-        case fheroes2::Key::KEY_SHIFT:
+        case fheroes2::Key::KEY_RIGHT_CONTROL:
+            return SDLK_RCTRL;
+        case fheroes2::Key::KEY_LEFT_SHIFT:
             return SDLK_LSHIFT;
+        case fheroes2::Key::KEY_RIGHT_SHIFT:
+            return SDLK_RSHIFT;
         case fheroes2::Key::KEY_TAB:
             return SDLK_TAB;
         case fheroes2::Key::KEY_DELETE:
@@ -654,6 +662,7 @@ LocalEvent::LocalEvent()
     : modes( 0 )
     , key_value( fheroes2::Key::NONE )
     , mouse_button( 0 )
+    , _mouseButtonLongPressDelay( mouseButtonLongPressTimeout )
 {}
 
 void LocalEvent::OpenController()
@@ -688,108 +697,11 @@ void LocalEvent::OpenTouchpad()
     }
 }
 
-namespace
-{
-    class ColorCycling
-    {
-    public:
-        ColorCycling()
-            : _counter( 0 )
-            , _isPaused( false )
-            , _preRenderDrawing( nullptr )
-            , _posRenderDrawing( nullptr )
-        {}
-
-        bool applyCycling( std::vector<uint8_t> & palette )
-        {
-            if ( _preRenderDrawing != nullptr )
-                _preRenderDrawing();
-
-            if ( _timer.getMs() >= 220 ) {
-                _timer.reset();
-                palette = PAL::GetCyclingPalette( _counter );
-                ++_counter;
-                return true;
-            }
-            return false;
-        }
-
-        void reset()
-        {
-            _prevDraw.reset();
-
-            if ( _posRenderDrawing != nullptr )
-                _posRenderDrawing();
-        }
-
-        bool isRedrawRequired() const
-        {
-            return !_isPaused && _prevDraw.getMs() >= 220;
-        }
-
-        void registerDrawing( void ( *preRenderDrawing )(), void ( *postRenderDrawing )() )
-        {
-            if ( preRenderDrawing != nullptr )
-                _preRenderDrawing = preRenderDrawing;
-
-            if ( postRenderDrawing != nullptr )
-                _posRenderDrawing = postRenderDrawing;
-        }
-
-        void pause()
-        {
-            _isPaused = true;
-        }
-
-        void resume()
-        {
-            _isPaused = false;
-            _prevDraw.reset();
-            _timer.reset();
-        }
-
-    private:
-        fheroes2::Time _timer;
-        fheroes2::Time _prevDraw;
-        uint32_t _counter;
-        bool _isPaused;
-
-        void ( *_preRenderDrawing )();
-        void ( *_posRenderDrawing )();
-    };
-
-    ColorCycling colorCycling;
-
-    bool ApplyCycling( std::vector<uint8_t> & palette )
-    {
-        return colorCycling.applyCycling( palette );
-    }
-
-    void ResetCycling()
-    {
-        colorCycling.reset();
-    }
-}
-
 LocalEvent & LocalEvent::Get()
 {
     static LocalEvent le;
 
     return le;
-}
-
-void LocalEvent::RegisterCycling( void ( *preRenderDrawing )(), void ( *postRenderDrawing )() )
-{
-    colorCycling.registerDrawing( preRenderDrawing, postRenderDrawing );
-    colorCycling.resume();
-
-    fheroes2::Display::instance().subscribe( ApplyCycling, ResetCycling );
-}
-
-void LocalEvent::PauseCycling()
-{
-    colorCycling.pause();
-    fheroes2::Display::instance().subscribe( nullptr, nullptr );
 }
 
 LocalEvent & LocalEvent::GetClean()
@@ -800,8 +712,8 @@ LocalEvent & LocalEvent::GetClean()
     le.ResetModes( MOUSE_MOTION );
     le.ResetModes( MOUSE_PRESSED );
     le.ResetModes( MOUSE_RELEASED );
-    le.ResetModes( MOUSE_CLICKED );
     le.ResetModes( MOUSE_WHEEL );
+    le.ResetModes( MOUSE_TOUCH );
     le.ResetModes( KEY_HOLD );
 
     return le;
@@ -821,19 +733,23 @@ bool LocalEvent::HandleEvents( const bool sleepAfterEventProcessing, const bool 
 
     fheroes2::Display & display = fheroes2::Display::instance();
 
-    if ( colorCycling.isRedrawRequired() ) {
+    if ( fheroes2::RenderProcessor::instance().isCyclingUpdateRequired() ) {
         // To maintain color cycling animation we need to render the whole frame with an updated palette.
         renderRoi = { 0, 0, display.width(), display.height() };
     }
 
     SDL_Event event;
 
-    // We shouldn't reset the MOUSE_PRESSED and KEY_HOLD here because these are "lasting" states
+    // We shouldn't reset the MOUSE_PRESSED and KEY_HOLD here because these are "ongoing" states
     ResetModes( KEY_PRESSED );
     ResetModes( MOUSE_MOTION );
     ResetModes( MOUSE_RELEASED );
-    ResetModes( MOUSE_CLICKED );
     ResetModes( MOUSE_WHEEL );
+
+    // MOUSE_PRESSED is an "ongoing" state, so we shouldn't reset the MOUSE_TOUCH while that state is active
+    if ( !( modes & MOUSE_PRESSED ) ) {
+        ResetModes( MOUSE_TOUCH );
+    }
 
     while ( SDL_PollEvent( &event ) ) {
         switch ( event.type ) {
@@ -1034,6 +950,7 @@ void LocalEvent::HandleTouchEvent( const SDL_TouchFingerEvent & event )
         mouse_cu.y = static_cast<int32_t>( _emulatedPointerPosY );
 
         SetModes( MOUSE_MOTION );
+        SetModes( MOUSE_TOUCH );
 
         if ( _globalMouseMotionEventHook ) {
             _mouseCursorRenderArea = _globalMouseMotionEventHook( mouse_cu.x, mouse_cu.y );
@@ -1045,6 +962,8 @@ void LocalEvent::HandleTouchEvent( const SDL_TouchFingerEvent & event )
             if ( event.type == SDL_FINGERDOWN ) {
                 mouse_pl = mouse_cu;
 
+                _mouseButtonLongPressDelay.reset();
+
                 SetModes( MOUSE_PRESSED );
             }
             else if ( event.type == SDL_FINGERUP ) {
@@ -1052,7 +971,6 @@ void LocalEvent::HandleTouchEvent( const SDL_TouchFingerEvent & event )
 
                 ResetModes( MOUSE_PRESSED );
                 SetModes( MOUSE_RELEASED );
-                SetModes( MOUSE_CLICKED );
             }
 
             mouse_button = SDL_BUTTON_LEFT;
@@ -1062,7 +980,10 @@ void LocalEvent::HandleTouchEvent( const SDL_TouchFingerEvent & event )
         if ( event.type == SDL_FINGERDOWN ) {
             mouse_pr = mouse_cu;
 
+            _mouseButtonLongPressDelay.reset();
+
             SetModes( MOUSE_PRESSED );
+            SetModes( MOUSE_TOUCH );
 
             // When the second finger touches the screen, the two-finger gesture processing begins. This
             // gesture simulates the operation of the right mouse button and ends when both fingers are
@@ -1074,7 +995,7 @@ void LocalEvent::HandleTouchEvent( const SDL_TouchFingerEvent & event )
 
             ResetModes( MOUSE_PRESSED );
             SetModes( MOUSE_RELEASED );
-            SetModes( MOUSE_CLICKED );
+            SetModes( MOUSE_TOUCH );
         }
 
         mouse_button = SDL_BUTTON_RIGHT;
@@ -1137,12 +1058,13 @@ void LocalEvent::HandleControllerButtonEvent( const SDL_ControllerButtonEvent & 
 
     if ( button.button == SDL_CONTROLLER_BUTTON_A || button.button == SDL_CONTROLLER_BUTTON_B ) {
         if ( modes & KEY_PRESSED ) {
+            _mouseButtonLongPressDelay.reset();
+
             SetModes( MOUSE_PRESSED );
         }
         else {
             ResetModes( MOUSE_PRESSED );
             SetModes( MOUSE_RELEASED );
-            SetModes( MOUSE_CLICKED );
         }
 
         if ( button.button == SDL_CONTROLLER_BUTTON_A ) {
@@ -1365,12 +1287,13 @@ void LocalEvent::HandleMouseMotionEvent( const SDL_MouseMotionEvent & motion )
 void LocalEvent::HandleMouseButtonEvent( const SDL_MouseButtonEvent & button )
 {
     if ( button.state == SDL_PRESSED ) {
+        _mouseButtonLongPressDelay.reset();
+
         SetModes( MOUSE_PRESSED );
     }
     else {
         ResetModes( MOUSE_PRESSED );
         SetModes( MOUSE_RELEASED );
-        SetModes( MOUSE_CLICKED );
     }
 
     mouse_button = button.button;
@@ -1380,7 +1303,7 @@ void LocalEvent::HandleMouseButtonEvent( const SDL_MouseButtonEvent & button )
     _emulatedPointerPosX = mouse_cu.x;
     _emulatedPointerPosY = mouse_cu.y;
 
-    if ( modes & MOUSE_PRESSED )
+    if ( modes & MOUSE_PRESSED ) {
         switch ( button.button ) {
         case SDL_BUTTON_LEFT:
             mouse_pl = mouse_cu;
@@ -1397,7 +1320,9 @@ void LocalEvent::HandleMouseButtonEvent( const SDL_MouseButtonEvent & button )
         default:
             break;
         }
-    else // mouse button released
+    }
+    // Mouse button has been released
+    else {
         switch ( button.button ) {
         case SDL_BUTTON_LEFT:
             mouse_rl = mouse_cu;
@@ -1414,66 +1339,137 @@ void LocalEvent::HandleMouseButtonEvent( const SDL_MouseButtonEvent & button )
         default:
             break;
         }
+    }
 }
 
 bool LocalEvent::MouseClickLeft()
 {
-    if ( ( modes & MOUSE_CLICKED ) && SDL_BUTTON_LEFT == mouse_button ) {
-        ResetModes( MOUSE_RELEASED );
-        ResetModes( MOUSE_CLICKED );
-
-        return true;
+    if ( !( modes & MOUSE_RELEASED ) ) {
+        return false;
     }
 
-    return false;
+    if ( SDL_BUTTON_LEFT != mouse_button ) {
+        return false;
+    }
+
+    if ( _mouseButtonLongPressDelay.isTriggered() ) {
+        return false;
+    }
+
+    ResetModes( MOUSE_RELEASED );
+
+    return true;
 }
 
 bool LocalEvent::MouseClickLeft( const fheroes2::Rect & rt )
 {
-    if ( ( modes & MOUSE_CLICKED ) && SDL_BUTTON_LEFT == mouse_button && ( rt & mouse_pl ) && ( rt & mouse_rl ) ) {
-        ResetModes( MOUSE_RELEASED );
-        ResetModes( MOUSE_CLICKED );
-
-        return true;
+    if ( !( modes & MOUSE_RELEASED ) ) {
+        return false;
     }
 
-    return false;
+    if ( SDL_BUTTON_LEFT != mouse_button ) {
+        return false;
+    }
+
+    if ( !( rt & mouse_pl ) || !( rt & mouse_rl ) ) {
+        return false;
+    }
+
+    if ( _mouseButtonLongPressDelay.isTriggered() ) {
+        return false;
+    }
+
+    ResetModes( MOUSE_RELEASED );
+
+    return true;
 }
 
 bool LocalEvent::MouseClickMiddle()
 {
-    if ( ( modes & MOUSE_CLICKED ) && SDL_BUTTON_MIDDLE == mouse_button ) {
-        ResetModes( MOUSE_RELEASED );
-        ResetModes( MOUSE_CLICKED );
-
-        return true;
+    if ( !( modes & MOUSE_RELEASED ) ) {
+        return false;
     }
 
-    return false;
+    if ( SDL_BUTTON_MIDDLE != mouse_button ) {
+        return false;
+    }
+
+    if ( _mouseButtonLongPressDelay.isTriggered() ) {
+        return false;
+    }
+
+    ResetModes( MOUSE_RELEASED );
+
+    return true;
 }
 
 bool LocalEvent::MouseClickRight()
 {
-    if ( ( modes & MOUSE_CLICKED ) && SDL_BUTTON_RIGHT == mouse_button ) {
-        ResetModes( MOUSE_RELEASED );
-        ResetModes( MOUSE_CLICKED );
-
-        return true;
+    if ( !( modes & MOUSE_RELEASED ) ) {
+        return false;
     }
 
-    return false;
+    if ( SDL_BUTTON_RIGHT != mouse_button ) {
+        return false;
+    }
+
+    if ( _mouseButtonLongPressDelay.isTriggered() ) {
+        return false;
+    }
+
+    ResetModes( MOUSE_RELEASED );
+
+    return true;
 }
 
 bool LocalEvent::MouseClickRight( const fheroes2::Rect & rt )
 {
-    if ( ( modes & MOUSE_CLICKED ) && SDL_BUTTON_RIGHT == mouse_button && ( rt & mouse_pr ) && ( rt & mouse_rr ) ) {
-        ResetModes( MOUSE_RELEASED );
-        ResetModes( MOUSE_CLICKED );
-
-        return true;
+    if ( !( modes & MOUSE_RELEASED ) ) {
+        return false;
     }
 
-    return false;
+    if ( SDL_BUTTON_RIGHT != mouse_button ) {
+        return false;
+    }
+
+    if ( !( rt & mouse_pr ) || !( rt & mouse_rr ) ) {
+        return false;
+    }
+
+    if ( _mouseButtonLongPressDelay.isTriggered() ) {
+        return false;
+    }
+
+    ResetModes( MOUSE_RELEASED );
+
+    return true;
+}
+
+bool LocalEvent::MouseLongPressLeft( const fheroes2::Rect & rt )
+{
+    if ( !( modes & MOUSE_PRESSED ) ) {
+        return false;
+    }
+
+    if ( SDL_BUTTON_LEFT != mouse_button ) {
+        return false;
+    }
+
+    if ( !( rt & mouse_pl ) ) {
+        return false;
+    }
+
+    if ( !_mouseButtonLongPressDelay.isPassed() ) {
+        return false;
+    }
+
+    if ( _mouseButtonLongPressDelay.isTriggered() ) {
+        return false;
+    }
+
+    _mouseButtonLongPressDelay.setTriggered();
+
+    return true;
 }
 
 bool LocalEvent::MouseWheelUp() const

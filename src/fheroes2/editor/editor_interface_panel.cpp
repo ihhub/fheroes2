@@ -23,9 +23,13 @@
 #include <cassert>
 #include <cstddef>
 #include <string>
+#include <utility>
+#include <vector>
 
 #include "agg_image.h"
+#include "cursor.h"
 #include "dialog.h"
+#include "dialog_selectitems.h"
 #include "dialog_system_options.h"
 #include "editor_interface.h"
 #include "ground.h"
@@ -33,16 +37,35 @@
 #include "image.h"
 #include "interface_base.h"
 #include "localevent.h"
+#include "map_object_info.h"
 #include "screen.h"
 #include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
 #include "ui_dialog.h"
+#include "ui_map_object.h"
 #include "ui_text.h"
+
+namespace
+{
+    void setCustomCursor( const Maps::ObjectGroup group, const int32_t type )
+    {
+        const auto & objectInfo = Maps::getObjectsByGroup( group );
+        if ( type < 0 || type >= static_cast<int32_t>( objectInfo.size() ) ) {
+            // You are trying to render some unknown stuff!
+            assert( 0 );
+            return;
+        }
+
+        const fheroes2::Sprite & image = fheroes2::generateMapObjectImage( objectInfo[type] );
+
+        Cursor::Get().setCustomImage( image, { image.x(), image.y() } );
+    }
+}
 
 namespace Interface
 {
-    EditorPanel::EditorPanel( Editor & interface_ )
+    EditorPanel::EditorPanel( EditorInterface & interface_ )
         : _interface( interface_ )
     {
         int32_t icnIndex = 0;
@@ -73,6 +96,12 @@ namespace Interface
 
     int32_t EditorPanel::getBrushSize() const
     {
+        // Roads and streams are placed using only 1x1 brush.
+        if ( _selectedInstrument == Instrument::STREAM || _selectedInstrument == Instrument::ROAD || isMonsterSettingMode() || isHeroSettingMode()
+             || isTreasureSettingMode() ) {
+            return 1;
+        }
+
         switch ( _selectedBrushSize ) {
         case BrushSize::SMALL:
             return 1;
@@ -138,6 +167,11 @@ namespace Interface
         }
         // The last object button is located not next to previous one and needs to be shifted to the right.
         _objectButtonsRect[Brush::TREASURES].x += 29 * 2;
+
+        offsetY += 56;
+        for ( size_t i = 0; i < _eraseButtonsRect.size(); ++i ) {
+            _eraseButtonsRect[i] = { offsetX + static_cast<int32_t>( i % 4 ) * 29, offsetY + static_cast<int32_t>( i / 4 ) * 28, 27, 27 };
+        }
 
         displayY += _rectInstrumentPanel.height;
 
@@ -205,6 +239,15 @@ namespace Interface
 
             const fheroes2::Text terrainText( _getObjectTypeName( _selectedObject ), fheroes2::FontType::smallWhite() );
             terrainText.draw( _rectInstrumentPanel.x + 72 - terrainText.width() / 2, _rectInstrumentPanel.y + 135, display );
+        }
+        else if ( _selectedInstrument == Instrument::ERASE ) {
+            const fheroes2::Sprite & selectionMark = fheroes2::AGG::GetICN( ICN::TOWNWIND, 11 );
+            for ( size_t i = 0; i < _eraseButtonsRect.size(); ++i ) {
+                if ( _eraseButtonObjectTypes[i] & _eraseTypes ) {
+                    fheroes2::Blit( selectionMark, 0, 0, display, _eraseButtonsRect[i].x + 10, _eraseButtonsRect[i].y + 11, selectionMark.width(),
+                                    selectionMark.height() );
+                }
+            }
         }
 
         _buttonMagnify.draw();
@@ -286,6 +329,34 @@ namespace Interface
         return "Unknown object type";
     }
 
+    const char * EditorPanel::_getEraseObjectTypeName( const uint32_t eraseObjectType )
+    {
+        switch ( eraseObjectType ) {
+        case Maps::ObjectErasureType::TERRAIN_OBJECTS:
+            return _( "Terrain" );
+        case Maps::ObjectErasureType::CASTLES:
+            return _( "Castles" );
+        case Maps::ObjectErasureType::MONSTERS:
+            return _( "Monsters" );
+        case Maps::ObjectErasureType::HEROES:
+            return _( "Heroes" );
+        case Maps::ObjectErasureType::ARTIFACTS:
+            return _( "Artifacts" );
+        case Maps::ObjectErasureType::ROADS:
+            return _( "Roads" );
+        case Maps::ObjectErasureType::STREAMS:
+            return _( "Streams" );
+        case Maps::ObjectErasureType::TREASURES:
+            return _( "Treasures" );
+        default:
+            // Have you added a new object type to erase? Add the logic above!
+            assert( 0 );
+            break;
+        }
+
+        return "Unknown object type";
+    }
+
     fheroes2::GameMode EditorPanel::queueEventProcessing()
     {
         LocalEvent & le = LocalEvent::Get();
@@ -296,6 +367,10 @@ namespace Interface
                 if ( le.MousePressLeft( _instrumentButtonsRect[i] ) ) {
                     if ( _instrumentButtons[i].drawOnPress() ) {
                         _selectedInstrument = static_cast<uint8_t>( i );
+
+                        // Reset cursor updater since this UI element was clicked.
+                        _interface.setCursorUpdater( {} );
+
                         setRedraw();
                     }
                 }
@@ -389,11 +464,14 @@ namespace Interface
                 fheroes2::showStandardTextMessage( _getTerrainTypeName( Brush::BEACH ), movePenaltyText( "1.25" ), Dialog::ZERO );
             }
         }
-
-        if ( _selectedInstrument == Instrument::OBJECT ) {
+        else if ( _selectedInstrument == Instrument::OBJECT ) {
             for ( size_t i = 0; i < _objectButtonsRect.size(); ++i ) {
                 if ( ( _selectedObject != i ) && le.MousePressLeft( _objectButtonsRect[i] ) ) {
                     _selectedObject = static_cast<uint8_t>( i );
+
+                    // Reset cursor updater since this UI element was clicked.
+                    _interface.setCursorUpdater( {} );
+
                     setRedraw();
 
                     // There is no need to continue the loop as only one button can be pressed at one moment.
@@ -405,7 +483,7 @@ namespace Interface
                 if ( le.MousePressRight( _objectButtonsRect[objectId] ) ) {
                     std::string text = _( "Used to place objects most appropriate for use on %{terrain}." );
                     StringReplaceWithLowercase( text, "%{terrain}", _getTerrainTypeName( objectId ) );
-                    fheroes2::showStandardTextMessage( _getObjectTypeName( objectId ), text, Dialog::ZERO );
+                    fheroes2::showStandardTextMessage( _getObjectTypeName( objectId ), std::move( text ), Dialog::ZERO );
 
                     // There is no need to continue the loop as only one button can be pressed at one moment.
                     break;
@@ -427,6 +505,74 @@ namespace Interface
             else if ( le.MousePressRight( _objectButtonsRect[Brush::TREASURES] ) ) {
                 fheroes2::showStandardTextMessage( _getObjectTypeName( Brush::TREASURES ), _( "Used to place\na resource or treasure." ), Dialog::ZERO );
             }
+            else if ( le.MouseClickLeft( _objectButtonsRect[Brush::MONSTERS] ) ) {
+                const int monsterType = Dialog::selectMonsterType( _monsterType );
+                if ( monsterType >= 0 ) {
+                    _monsterType = monsterType;
+
+                    _interface.setCursorUpdater( [type = _monsterType]( const int32_t /*tileIndex*/ ) { setCustomCursor( Maps::ObjectGroup::Monster, type ); } );
+
+                    _interface.updateCursor( 0 );
+                    return res;
+                }
+            }
+            else if ( le.MouseClickLeft( _objectButtonsRect[Brush::TREASURES] ) ) {
+                const int treasureType = Dialog::selectTreasureType( _treasureType );
+                if ( treasureType >= 0 ) {
+                    _treasureType = treasureType;
+
+                    _interface.setCursorUpdater( [type = _treasureType]( const int32_t /*tileIndex*/ ) { setCustomCursor( Maps::ObjectGroup::Treasure, type ); } );
+
+                    _interface.updateCursor( 0 );
+                    return res;
+                }
+            }
+            else if ( le.MouseClickLeft( _objectButtonsRect[Brush::HEROES] ) ) {
+                const int32_t heroType = Dialog::selectHeroType( _heroType );
+                if ( heroType >= 0 ) {
+                    _heroType = heroType;
+
+                    _interface.setCursorUpdater( [heroType]( const int32_t /*tileIndex*/ ) {
+                        // TODO: render ICN::MINIHERO from the existing hero images.
+                        const fheroes2::Sprite & image = fheroes2::AGG::GetICN( ICN::MINIHERO, heroType );
+
+                        // Mini-hero images contain a pole with a flag.
+                        // This causes a situation that a selected tile does not properly correspond to the position of cursor.
+                        // We need to add a hardcoded correction.
+                        const int32_t heroCorrectionY{ 12 };
+                        Cursor::Get().setCustomImage( image, { -image.width() / 2, -image.height() / 2 - heroCorrectionY } );
+                    } );
+
+                    _interface.updateCursor( 0 );
+                    return res;
+                }
+            }
+        }
+        else if ( _selectedInstrument == Instrument::ERASE ) {
+            for ( size_t i = 0; i < _eraseButtonsRect.size(); ++i ) {
+                if ( le.MouseClickLeft( _eraseButtonsRect[i] ) ) {
+                    _eraseTypes ^= _eraseButtonObjectTypes[i];
+                    setRedraw();
+                }
+                else if ( le.MousePressRight( _eraseButtonsRect[i] ) ) {
+                    std::string header = _( "Toggle the erasure of %{type} objects." );
+                    StringReplaceWithLowercase( header, "%{type}", _getEraseObjectTypeName( _eraseButtonObjectTypes[i] ) );
+
+                    fheroes2::showStandardTextMessage(
+                        std::move( header ),
+                        ( _eraseButtonObjectTypes[i] & _eraseTypes )
+                            ? _(
+                                "Objects of this type will be deleted with the Erase tool. Left-click here to deselect this type. Press and hold this button to deselect all other object types." )
+                            : _(
+                                "Objects of this type will NOT be deleted with the Erase tool. Left-click here to select this type. Press and hold this button to select all other object types." ),
+                        Dialog::ZERO );
+                }
+                else if ( le.MouseLongPressLeft( _eraseButtonsRect[i] ) ) {
+                    _eraseTypes = ( _eraseButtonObjectTypes[i] & _eraseTypes ) ? _eraseButtonObjectTypes[i]
+                                                                               : ( Maps::ObjectErasureType::ALL_OBJECTS & ~_eraseButtonObjectTypes[i] );
+                    setRedraw();
+                }
+            }
         }
 
         le.MousePressLeft( _rectMagnify ) ? _buttonMagnify.drawOnPress() : _buttonMagnify.drawOnRelease();
@@ -439,24 +585,25 @@ namespace Interface
         if ( le.MouseClickLeft( _rectMagnify ) ) {
             _interface.eventViewWorld();
         }
-        else if ( le.MouseClickLeft( _rectUndo ) ) {
-            fheroes2::showStandardTextMessage( _( "Warning!" ), "The Map Editor is still in development. This function is not available yet.", Dialog::OK );
+        else if ( _buttonUndo.isEnabled() && le.MouseClickLeft( _rectUndo ) ) {
+            _interface.undoAction();
+            return fheroes2::GameMode::CANCEL;
         }
         else if ( le.MouseClickLeft( _rectNew ) ) {
-            res = Editor::eventNewMap();
+            res = EditorInterface::eventNewMap();
         }
         else if ( le.MouseClickLeft( _rectSpecs ) ) {
             // TODO: Make the scenario info editor.
             Dialog::GameInfo();
         }
         else if ( le.MouseClickLeft( _rectFile ) ) {
-            res = Interface::Editor::eventFileDialog();
+            res = Interface::EditorInterface::eventFileDialog();
         }
         else if ( le.MouseClickLeft( _rectSystem ) ) {
             // Replace this with Editor options dialog.
             fheroes2::showSystemOptionsDialog();
         }
-        if ( le.MousePressRight( _instrumentButtonsRect[Instrument::TERRAIN] ) ) {
+        else if ( le.MousePressRight( _instrumentButtonsRect[Instrument::TERRAIN] ) ) {
             fheroes2::showStandardTextMessage( _( "Terrain Mode" ), _( "Used to draw the underlying grass, dirt, water, etc. on the map." ), Dialog::ZERO );
         }
         else if ( le.MousePressRight( _instrumentButtonsRect[Instrument::OBJECT] ) ) {
@@ -472,13 +619,13 @@ namespace Interface
             fheroes2::showStandardTextMessage( _( "Road Mode" ), _( "Allows you to draw roads by clicking and dragging." ), Dialog::ZERO );
         }
         else if ( le.MousePressRight( _instrumentButtonsRect[Instrument::ERASE] ) ) {
-            fheroes2::showStandardTextMessage( _( "Erase Mode" ), _( "Used to erase objects off the map." ), Dialog::ZERO );
+            fheroes2::showStandardTextMessage( _( "Erase Mode" ), _( "Used to erase objects from the map." ), Dialog::ZERO );
         }
         else if ( le.MousePressRight( _rectMagnify ) ) {
             fheroes2::showStandardTextMessage( _( "Magnify" ), _( "Change between zoom and normal view." ), Dialog::ZERO );
         }
         else if ( le.MousePressRight( _rectUndo ) ) {
-            fheroes2::showStandardTextMessage( _( "Undo" ), _( "Undo your last action. Press again to redo the action." ), Dialog::ZERO );
+            fheroes2::showStandardTextMessage( _( "Undo" ), _( "Undo your last action." ), Dialog::ZERO );
         }
         else if ( le.MousePressRight( _rectNew ) ) {
             fheroes2::showStandardTextMessage( _( "New Map" ), _( "Create a new map either from scratch or using the random map generator." ), Dialog::ZERO );

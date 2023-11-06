@@ -69,7 +69,6 @@
 #include "screen.h"
 #include "settings.h"
 #include "skill.h"
-#include "text.h"
 #include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
@@ -380,9 +379,12 @@ namespace
 
     void DrawCampaignScenarioDescription( const Campaign::ScenarioData & scenario, const fheroes2::Point & top )
     {
+        fheroes2::Display & display = fheroes2::Display::instance();
+
         const std::vector<Campaign::ScenarioBonusData> & bonuses = scenario.getBonuses();
-        TextBox mapName( scenario.getScenarioName(), Font::BIG, 200 );
-        mapName.Blit( top.x + 197, top.y + 97 - mapName.h() / 2 );
+        fheroes2::Text mapName( scenario.getScenarioName(), fheroes2::FontType::normalWhite() );
+        mapName.fitToOneRow( 200 );
+        mapName.draw( top.x + 197 + ( 200 - mapName.width() ) / 2, top.y + 99 - mapName.height() / 2, display );
 
         int scenarioId = scenario.getScenarioID() + 1;
         if ( isBetrayalScenario( scenario.getScenarioInfoId() ) ) {
@@ -390,15 +392,14 @@ namespace
             scenarioId = betrayalScenarioId + 1;
         }
 
-        const Text campaignMapId( std::to_string( scenarioId ), Font::BIG );
-        campaignMapId.Blit( top.x + 172 - campaignMapId.w() / 2, top.y + 97 - campaignMapId.h() / 2 );
+        const fheroes2::Text campaignMapId( std::to_string( scenarioId ), fheroes2::FontType::normalWhite() );
+        campaignMapId.draw( top.x + 172 - campaignMapId.width() / 2, top.y + 99 - campaignMapId.height() / 2, display );
 
-        TextBox mapDescription( scenario.getDescription(), Font::BIG, 356 );
-        mapDescription.Blit( top.x + 34, top.y + 132 );
+        fheroes2::Text mapDescription( scenario.getDescription(), fheroes2::FontType::normalWhite() );
+        mapDescription.draw( top.x + 34, top.y + 134, 356, display );
 
         const int textChoiceWidth = 160;
         const fheroes2::Point initialOffset{ top.x + 425, top.y + 211 };
-        fheroes2::Display & display = fheroes2::Display::instance();
 
         for ( size_t i = 0; i < bonuses.size(); ++i ) {
             fheroes2::Text choice( bonuses[i].getName(), fheroes2::FontType::normalWhite() );
@@ -725,7 +726,7 @@ namespace
             case Campaign::CampaignAwardData::TYPE_DEFEAT_ENEMY_HERO:
                 for ( const Player * player : sortedPlayers ) {
                     const Kingdom & kingdom = world.GetKingdom( player->GetColor() );
-                    const KingdomHeroes & heroes = kingdom.GetHeroes();
+                    const VecHeroes & heroes = kingdom.GetHeroes();
 
                     for ( size_t j = 0; j < heroes.size(); ++j ) {
                         assert( heroes[j] != nullptr );
@@ -1411,8 +1412,8 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
 
     buttonCancel.draw();
 
-    const Text textDaysSpent( std::to_string( campaignSaveData.getDaysPassed() ), Font::BIG );
-    textDaysSpent.Blit( top.x + 582 - textDaysSpent.w() / 2, top.y + 31 );
+    const fheroes2::Text textDaysSpent( std::to_string( campaignSaveData.getDaysPassed() ), fheroes2::FontType::normalWhite() );
+    textDaysSpent.draw( top.x + 582 - textDaysSpent.width() / 2, top.y + 33, display );
 
     DrawCampaignScenarioDescription( scenario, top );
     drawObtainedCampaignAwards( campaignSaveData, top );
@@ -1583,7 +1584,8 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
             const bool isSWCampaign = ( chosenCampaignID == Campaign::ROLAND_CAMPAIGN ) || ( chosenCampaignID == Campaign::ARCHIBALD_CAMPAIGN );
 
             if ( !world.LoadMapMP2( mapInfo.file, isSWCampaign ) ) {
-                Dialog::Message( _( "Campaign Scenario loading failure" ), _( "Please make sure that campaign files are correct and present." ), Font::BIG, Dialog::OK );
+                fheroes2::showStandardTextMessage( _( "Campaign Scenario loading failure" ), _( "Please make sure that campaign files are correct and present." ),
+                                                   Dialog::OK );
 
                 // TODO: find a way to restore world for the current game after a failure.
                 conf.SetCurrentFileInfo( Maps::FileInfo() );

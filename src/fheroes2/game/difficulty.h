@@ -40,7 +40,9 @@ namespace Difficulty
     std::string String( int );
 
     int GetScoutingBonus( int difficulty );
-    double GetGoldIncomeBonus( int difficulty );
+
+    // Returns an extra gold bonus modifier for AI based on difficulty level.
+    double getGoldIncomeBonusForAI( const int difficulty );
 
     // Returns an extra growth bonus modifier for AI based on difficulty level.
     double GetUnitGrowthBonusForAI( const int difficulty );
@@ -49,6 +51,13 @@ namespace Difficulty
     double GetAIRetreatRatio( int difficulty );
 
     uint32_t GetDimensionDoorLimit( int difficulty );
+
+    bool areAIHeroRolesAllowed( const int difficulty );
+
+    int getMinStatDiffBetweenAIRoles( const int difficulty );
+
+    // Returns true if AI should avoid having free slots in the army
+    bool allowAIToSplitWeakStacks( const int difficulty );
 }
 
 #endif

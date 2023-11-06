@@ -267,7 +267,7 @@ namespace
             hero.FadeIn();
         }
 
-        AI::Get().HeroesActionComplete( hero, targetIndex, hero.GetMapsObject() );
+        AI::Get().HeroesActionComplete( hero, targetIndex, hero.getObjectTypeUnderHero() );
 
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " used the " << spellToUse.GetName() << " to reach the " << targetCastle->GetName() )
     }
@@ -414,7 +414,7 @@ namespace
 
     void AIToHeroes( Heroes & hero, const int32_t dstIndex )
     {
-        Heroes * otherHero = world.GetTiles( dstIndex ).GetHeroes();
+        Heroes * otherHero = world.GetTiles( dstIndex ).getHero();
         if ( otherHero == nullptr ) {
             // This should never happen
             assert( 0 );
@@ -511,7 +511,7 @@ namespace
             DEBUG_LOG( DBG_AI, DBG_INFO, join.monsterCount << " " << troop.GetName() << " join " << hero.GetName() << " for " << joiningCost << " gold" )
 
             // These conditions must already be met if a group of monsters wants to join
-            assert( hero.GetArmy().CanJoinTroop( troop ) && hero.GetKingdom().AllowPayment( payment_t( Resource::GOLD, joiningCost ) ) );
+            assert( hero.GetArmy().CanJoinTroop( troop ) && hero.GetKingdom().AllowPayment( Funds( Resource::GOLD, joiningCost ) ) );
 
             hero.GetArmy().JoinTroop( troop.GetMonster(), join.monsterCount, false );
             hero.GetKingdom().OddFundsResource( Funds( Resource::GOLD, joiningCost ) );
@@ -1112,7 +1112,7 @@ namespace
             event_maps->SetVisited( hero.GetColor() );
 
             if ( event_maps->cancel ) {
-                hero.SetMapsObject( MP2::OBJ_NONE );
+                hero.setObjectTypeUnderHero( MP2::OBJ_NONE );
                 world.RemoveMapObject( event_maps );
             }
         }
@@ -1346,7 +1346,7 @@ namespace
         }
 
         Kingdom & kingdom = hero.GetKingdom();
-        const payment_t singleMonsterCost = troop.GetCost();
+        const Funds singleMonsterCost = troop.GetCost();
 
         uint32_t recruitTroopCount = kingdom.GetFunds().getLowestQuotient( singleMonsterCost );
         if ( recruitTroopCount <= 0 ) {
@@ -1461,7 +1461,7 @@ namespace
             hero.IncreaseExperience( result.GetExperienceAttacker() );
 
             Maps::restoreAbandonedMine( tile, Resource::GOLD );
-            hero.SetMapsObject( MP2::OBJ_MINES );
+            hero.setObjectTypeUnderHero( MP2::OBJ_MINES );
             setColorOnTile( tile, hero.GetColor() );
         }
         else {
@@ -1583,7 +1583,7 @@ namespace
 
         // Set the direction of the hero to the one of the boat as the boat does not move when boarding it
         hero.setDirection( boatDirection );
-        hero.SetMapsObject( MP2::OBJ_NONE );
+        hero.setObjectTypeUnderHero( MP2::OBJ_NONE );
         world.GetTiles( dst_index ).resetObjectSprite();
         hero.SetShipMaster( true );
 
@@ -1667,7 +1667,7 @@ namespace
             return;
         }
 
-        const payment_t payment = PaymentConditions::ForAlchemist();
+        const Funds payment = PaymentConditions::ForAlchemist();
 
         if ( hero.GetKingdom().AllowPayment( payment ) ) {
             hero.GetKingdom().OddFundsResource( payment );

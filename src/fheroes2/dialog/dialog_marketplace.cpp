@@ -24,7 +24,9 @@
 #include <algorithm>
 #include <cstdint>
 #include <functional>
+#include <memory>
 #include <string>
+#include <utility>
 #include <vector>
 
 #include "agg_image.h"
@@ -41,12 +43,12 @@
 #include "resource_trading.h"
 #include "screen.h"
 #include "settings.h"
-#include "text.h"
 #include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
 #include "ui_kingdom.h"
 #include "ui_scrollbar.h"
+#include "ui_text.h"
 #include "ui_tool.h"
 #include "world.h"
 
@@ -62,6 +64,8 @@ public:
         : pos_rt( rt )
         , back( fheroes2::Display::instance() )
         , tradpostIcnId( Settings::Get().isEvilInterfaceEnabled() ? ICN::TRADPOSE : ICN::TRADPOST )
+        , textSell( fheroes2::Display::instance() )
+        , textBuy( fheroes2::Display::instance() )
         , _singlePlayer( false )
     {
         Settings & conf = Settings::Get();
@@ -89,11 +93,9 @@ public:
         _scrollbar.setArea( { pos_rt.x + ( pos_rt.width - fheroes2::AGG::GetICN( tradpostIcnId, 1 ).width() ) / 2 + 22, pos_rt.y + 131, 187, 11 } );
         _scrollbar.hide();
 
-        const TextBox text( _( "Please inspect our fine wares. If you feel like offering a trade, click on the items you wish to trade with and for." ), Font::BIG,
-                            fheroes2::Rect( pos_rt.x, pos_rt.y + 30, pos_rt.width, 100 ) );
-
-        textSell.SetFont( Font::SMALL );
-        textBuy.SetFont( Font::SMALL );
+        const fheroes2::Text text( _( "Please inspect our fine wares. If you feel like offering a trade, click on the items you wish to trade with and for." ),
+                                   fheroes2::FontType::normalWhite() );
+        text.draw( pos_rt.x, pos_rt.y + 32, pos_rt.width, fheroes2::Display::instance() );
 
         const Players & players = conf.GetPlayers();
         int playerCount = 0;
@@ -125,8 +127,8 @@ private:
     fheroes2::ImageRestorer back;
     const int tradpostIcnId;
 
-    TextSprite textSell;
-    TextSprite textBuy;
+    fheroes2::MovableText textSell;
+    fheroes2::MovableText textBuy;
     bool _singlePlayer;
 };
 
@@ -140,11 +142,12 @@ void TradeWindowGUI::ShowTradeArea( const Kingdom & kingdom, int resourceFrom, i
         _scrollbar.hide();
         back.restore();
         fheroes2::Rect dst_rt( pos_rt.x, pos_rt.y + 30, pos_rt.width, 100 );
-        const std::string message = firstExchange && ( resourceFrom == resourceTo || 0 == max_buy )
-                                        ? _( "Please inspect our fine wares. If you feel like offering a trade, click on the items you wish to trade with and for." )
-                                        : _( "You have received quite a bargain. I expect to make no profit on the deal. Can I interest you in any of my other wares?" );
+        std::string message = firstExchange && ( resourceFrom == resourceTo || 0 == max_buy )
+                                  ? _( "Please inspect our fine wares. If you feel like offering a trade, click on the items you wish to trade with and for." )
+                                  : _( "You have received quite a bargain. I expect to make no profit on the deal. Can I interest you in any of my other wares?" );
 
-        const TextBox displayMessage( message, Font::BIG, dst_rt );
+        const fheroes2::Text displayMessage( std::move( message ), fheroes2::FontType::normalWhite() );
+        displayMessage.draw( dst_rt.x, dst_rt.y + 2, dst_rt.width, display );
 
         if ( !_singlePlayer ) {
             buttonGift.enable();
@@ -185,7 +188,10 @@ void TradeWindowGUI::ShowTradeArea( const Kingdom & kingdom, int resourceFrom, i
             StringReplace( message, "%{resfrom}", Resource::String( resourceFrom ) );
             StringReplace( message, "%{count}", exchange_rate );
         }
-        const TextBox displayMessage( message, Font::BIG, { pos_rt.x, pos_rt.y + 30, pos_rt.width, 100 } );
+
+        const fheroes2::Text displayMessage( std::move( message ), fheroes2::FontType::normalWhite() );
+        displayMessage.draw( pos_rt.x, pos_rt.y + 32, pos_rt.width, display );
+
         const fheroes2::Sprite & sprite_from = fheroes2::AGG::GetICN( ICN::RESOURCE, Resource::getIconIcnIndex( resourceFrom ) );
         dst_pt.x = pos_rt.x + ( pos_rt.width - sprite_from.width() + 1 ) / 2 - 70;
         dst_pt.y = pos_rt.y + 115 - sprite_from.height();
@@ -198,20 +204,20 @@ void TradeWindowGUI::ShowTradeArea( const Kingdom & kingdom, int resourceFrom, i
         dst_pt.x = pos_rt.x + ( pos_rt.width - sprite_fromto.width() ) / 2;
         dst_pt.y = pos_rt.y + 90;
         fheroes2::Blit( sprite_fromto, display, dst_pt.x, dst_pt.y );
-        Text text( _( "Max" ), Font::YELLOW_SMALL );
-        dst_pt.x = pos_rt.x + ( pos_rt.width - text.w() ) / 2 - 5;
+        fheroes2::Text text( _( "Max" ), fheroes2::FontType::smallYellow() );
+        dst_pt.x = pos_rt.x + ( pos_rt.width - text.width() ) / 2 - 5;
         dst_pt.y = pos_rt.y + 80;
-        buttonMax = fheroes2::Rect( dst_pt.x, dst_pt.y, text.w(), text.h() );
-        text.Blit( dst_pt.x, dst_pt.y );
-        text.Set( _( "Min" ), Font::YELLOW_SMALL );
-        dst_pt.x = pos_rt.x + ( pos_rt.width - text.w() ) / 2 - 5;
+        buttonMax = fheroes2::Rect( dst_pt.x, dst_pt.y, text.width(), text.height() );
+        text.draw( dst_pt.x, dst_pt.y + 2, display );
+        text.set( _( "Min" ), fheroes2::FontType::smallYellow() );
+        dst_pt.x = pos_rt.x + ( pos_rt.width - text.width() ) / 2 - 5;
         dst_pt.y = pos_rt.y + 103;
-        buttonMin = fheroes2::Rect( dst_pt.x, dst_pt.y, text.w(), text.h() );
-        text.Blit( dst_pt.x, dst_pt.y );
-        text.Set( _( "Qty to trade" ), Font::SMALL );
-        dst_pt.x = pos_rt.x + ( pos_rt.width - text.w() ) / 2;
+        buttonMin = fheroes2::Rect( dst_pt.x, dst_pt.y, text.width(), text.height() );
+        text.draw( dst_pt.x, dst_pt.y + 2, display );
+        text.set( _( "Qty to trade" ), fheroes2::FontType::smallWhite() );
+        dst_pt.x = pos_rt.x + ( pos_rt.width - text.width() ) / 2;
         dst_pt.y = pos_rt.y + 115;
-        text.Blit( dst_pt.x, dst_pt.y );
+        text.draw( dst_pt.x, dst_pt.y + 2, display );
 
         buttonGift.enable();
         buttonTrade.enable();
@@ -235,19 +241,25 @@ void TradeWindowGUI::RedrawInfoBuySell( uint32_t count_sell, uint32_t count_buy,
 
     _scrollbar.hide();
 
-    textSell.Hide();
-    textSell.SetText( std::string( "-" ) + std::to_string( count_sell ) + " " + "(" + std::to_string( max_sell - count_sell ) + ")" );
-    dst_pt.x = pos_rt.x + pos_rt.width / 2 - 70 - ( textSell.w() + 1 ) / 2;
-    dst_pt.y = pos_rt.y + 116;
-    textSell.SetPos( dst_pt.x, dst_pt.y );
-    textSell.Show();
+    auto text = std::make_unique<fheroes2::Text>( std::string( "-" ) + std::to_string( count_sell ) + " " + "(" + std::to_string( max_sell - count_sell ) + ")",
+                                                  fheroes2::FontType::smallWhite() );
 
-    textBuy.Hide();
-    textBuy.SetText( std::string( "+" ) + std::to_string( count_buy ) + " " + "(" + std::to_string( orig_buy + count_buy ) + ")" );
-    dst_pt.x = pos_rt.x + pos_rt.width / 2 + 70 - ( textBuy.w() + 1 ) / 2;
+    int32_t textWidth = text->width();
+
+    textSell.update( std::move( text ) );
+    dst_pt.x = pos_rt.x + pos_rt.width / 2 - 70 - ( textWidth + 1 ) / 2;
     dst_pt.y = pos_rt.y + 116;
-    textBuy.SetPos( dst_pt.x, dst_pt.y );
-    textBuy.Show();
+    textSell.draw( dst_pt.x, dst_pt.y );
+
+    text = std::make_unique<fheroes2::Text>( std::string( "+" ) + std::to_string( count_buy ) + " " + "(" + std::to_string( orig_buy + count_buy ) + ")",
+                                             fheroes2::FontType::smallWhite() );
+
+    textWidth = text->width();
+
+    textBuy.update( std::move( text ) );
+    dst_pt.x = pos_rt.x + pos_rt.width / 2 + 70 - ( textWidth + 1 ) / 2;
+    dst_pt.y = pos_rt.y + 116;
+    textBuy.draw( dst_pt.x, dst_pt.y );
 
     _scrollbar.show();
 }
@@ -269,15 +281,12 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
     fheroes2::Point dst_pt( pos_rt.x, pos_rt.y );
 
     // header
-    Text text;
-    text.Set( header, Font::YELLOW_BIG );
-    dst_pt.x = pos_rt.x + ( pos_rt.width - text.w() ) / 2;
+    fheroes2::Text text{ header, fheroes2::FontType::normalYellow() };
+    dst_pt.x = pos_rt.x + ( pos_rt.width - text.width() ) / 2;
     dst_pt.y = pos_rt.y;
-    text.Blit( dst_pt.x, dst_pt.y );
+    text.draw( dst_pt.x, dst_pt.y + 2, display );
 
     TradeWindowGUI gui( pos_rt );
-
-    const std::string & header_from = _( "Your Resources" );
 
     Funds fundsFrom = kingdom.GetFunds();
     int resourceFrom = 0;
@@ -293,13 +302,11 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
     rectsFrom.emplace_back( pt1.x + 37, pt1.y + 74, 34, 34 ); // gold
 
     fheroes2::MovableSprite cursorFrom( fheroes2::AGG::GetICN( tradpost, 14 ) );
-    text.Set( header_from, Font::SMALL );
-    dst_pt.x = pt1.x + ( 108 - text.w() ) / 2;
+    text.set( _( "Your Resources" ), fheroes2::FontType::smallWhite() );
+    dst_pt.x = pt1.x + ( 108 - text.width() ) / 2;
     dst_pt.y = pt1.y - 15;
-    text.Blit( dst_pt.x, dst_pt.y );
+    text.draw( dst_pt.x, dst_pt.y + 2, display );
     RedrawFromResource( pt1, fundsFrom );
-
-    const std::string & header_to = _( "Available Trades" );
 
     Funds fundsTo;
     int resourceTo = 0;
@@ -315,10 +322,10 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
     rectsTo.emplace_back( pt2.x + 37, pt2.y + 74, 34, 34 ); // gold
 
     fheroes2::MovableSprite cursorTo( fheroes2::AGG::GetICN( tradpost, 14 ) );
-    text.Set( header_to, Font::SMALL );
-    dst_pt.x = pt2.x + ( 108 - text.w() ) / 2;
+    text.set( _( "Available Trades" ), fheroes2::FontType::smallWhite() );
+    dst_pt.x = pt2.x + ( 108 - text.width() ) / 2;
     dst_pt.y = pt2.y - 15;
-    text.Blit( dst_pt.x, dst_pt.y );
+    text.draw( dst_pt.x, dst_pt.y + 2, display );
     RedrawToResource( pt2, false, kingdom, fromTradingPost );
 
     uint32_t count_sell = 0;
@@ -545,14 +552,11 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
 
 void RedrawResourceSprite( const fheroes2::Image & sf, int32_t px, int32_t py, int32_t value )
 {
-    Text text;
-    fheroes2::Point dst_pt( px, py );
+    fheroes2::Display & display = fheroes2::Display::instance();
+    fheroes2::Blit( sf, display, px, py );
 
-    fheroes2::Blit( sf, fheroes2::Display::instance(), dst_pt.x, dst_pt.y );
-    text.Set( std::to_string( value ), Font::SMALL );
-    dst_pt.x += ( 34 - text.w() ) / 2;
-    dst_pt.y += 21;
-    text.Blit( dst_pt.x, dst_pt.y );
+    const fheroes2::Text text( std::to_string( value ), fheroes2::FontType::smallWhite() );
+    text.draw( px + ( 34 - text.width() ) / 2, py + 23, display );
 }
 
 void RedrawFromResource( const fheroes2::Point & pt, const Funds & rs )
@@ -577,15 +581,12 @@ void RedrawFromResource( const fheroes2::Point & pt, const Funds & rs )
 
 void RedrawResourceSprite2( const fheroes2::Image & sf, int32_t px, int32_t py, bool show, const Kingdom & kingdom, int from, int res, bool trading )
 {
-    fheroes2::Point dst_pt( px, py );
-
-    fheroes2::Blit( sf, fheroes2::Display::instance(), dst_pt.x, dst_pt.y );
+    fheroes2::Display & display = fheroes2::Display::instance();
+    fheroes2::Blit( sf, display, px, py );
 
     if ( show ) {
-        Text text( GetStringTradeCosts( kingdom, from, res, trading ), Font::SMALL );
-        dst_pt.x += ( 34 - text.w() ) / 2;
-        dst_pt.y += 21;
-        text.Blit( dst_pt.x, dst_pt.y );
+        const fheroes2::Text text( GetStringTradeCosts( kingdom, from, res, trading ), fheroes2::FontType::smallWhite() );
+        text.draw( px + ( 34 - text.width() ) / 2, py + 23, display );
     }
 }
 

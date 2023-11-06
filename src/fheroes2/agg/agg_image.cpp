@@ -48,7 +48,6 @@
 #include "rand.h"
 #include "screen.h"
 #include "serialize.h"
-#include "text.h"
 #include "til.h"
 #include "tools.h"
 #include "translations.h"
@@ -160,6 +159,9 @@ namespace
                                                 ICN::BUTTON_VIEWWORLD_EXIT_EVIL,
                                                 ICN::BUTTON_VERTICAL_DISMISS,
                                                 ICN::BUTTON_VERTICAL_EXIT,
+                                                ICN::BUTTON_HSCORES_VERTICAL_CAMPAIGN,
+                                                ICN::BUTTON_HSCORES_VERTICAL_EXIT,
+                                                ICN::BUTTON_HSCORES_VERTICAL_STANDARD,
                                                 ICN::DISMISS_HERO_DISABLED_BUTTON,
                                                 ICN::NEW_CAMPAIGN_DISABLED_BUTTON,
                                                 ICN::BUTTON_SKIP };
@@ -239,7 +241,7 @@ namespace
         }
     }
 
-    // BMP files within AGG are not Bitmap files.
+    // BMP files within AGG are not Bitmap images!
     fheroes2::Sprite loadBMPFile( const std::string & path )
     {
         const std::vector<uint8_t> & data = AGG::getDataFromAggFile( path );
@@ -251,10 +253,10 @@ namespace
         StreamBuf imageStream( data );
 
         const uint8_t blackColor = imageStream.get();
+        const uint8_t whiteColor = 11;
 
         // Skip the second byte
         imageStream.get();
-        const uint8_t whiteColor = 11;
 
         const int32_t width = imageStream.get16();
         const int32_t height = imageStream.get16();
@@ -265,7 +267,6 @@ namespace
         }
 
         fheroes2::Sprite output( width, height );
-        output.reset();
 
         const uint8_t * input = data.data() + 6;
         uint8_t * image = output.image();
@@ -280,6 +281,9 @@ namespace
             else if ( *input == 2 ) {
                 *image = blackColor;
                 *transform = 0;
+            }
+            else {
+                *transform = 1;
             }
         }
 
@@ -545,8 +549,13 @@ namespace fheroes2
 {
     namespace AGG
     {
+        void loadICN( const int id );
+
         void LoadOriginalICN( const int id )
         {
+            // If this assertion blows up then something wrong with your logic and you load resources more than once!
+            assert( _icnVsSprite[id].empty() );
+
             const std::vector<uint8_t> & body = ::AGG::getDataFromAggFile( ICN::GetString( id ) );
 
             if ( body.empty() ) {
@@ -1929,6 +1938,56 @@ namespace fheroes2
 
                 break;
             }
+            case ICN::BUTTON_HSCORES_VERTICAL_CAMPAIGN:
+            case ICN::BUTTON_HSCORES_VERTICAL_EXIT:
+            case ICN::BUTTON_HSCORES_VERTICAL_STANDARD: {
+                _icnVsSprite[id].resize( 2 );
+
+                const int originalID = ICN::HISCORE;
+                uint32_t originalICNIndex = 0;
+                if ( id == ICN::BUTTON_HSCORES_VERTICAL_STANDARD ) {
+                    originalICNIndex = 2;
+                }
+                else if ( id == ICN::BUTTON_HSCORES_VERTICAL_EXIT ) {
+                    originalICNIndex = 4;
+                }
+                else {
+                    assert( id == ICN::BUTTON_HSCORES_VERTICAL_CAMPAIGN );
+                }
+
+                if ( useOriginalResources() ) {
+                    _icnVsSprite[id][0] = GetICN( originalID, originalICNIndex );
+                    _icnVsSprite[id][1] = GetICN( originalID, originalICNIndex + 1 );
+                    break;
+                }
+
+                for ( size_t i = 0; i < _icnVsSprite[id].size(); ++i ) {
+                    const Sprite & originalButton = GetICN( originalID, originalICNIndex + static_cast<uint32_t>( i ) );
+                    Sprite & out = _icnVsSprite[id][i];
+
+                    out = originalButton;
+                    // Clean the button
+                    Fill( out, 4 - static_cast<int32_t>( i ), 4 + static_cast<int32_t>( i ), 19, 123, getButtonFillingColor( i == 0 ) );
+                }
+
+                const char * buttonText;
+
+                if ( id == ICN::BUTTON_HSCORES_VERTICAL_CAMPAIGN ) {
+                    buttonText = gettext_noop( "C\nA\nM\nP\nA\nI\nG\nN" );
+                }
+                else if ( id == ICN::BUTTON_HSCORES_VERTICAL_STANDARD ) {
+                    buttonText = gettext_noop( "S\nT\nA\nN\nD\nA\nR\nD" );
+                }
+                else {
+                    buttonText = gettext_noop( "E\nX\nI\nT" );
+                }
+
+                ButtonFontOffsetRestorer fontRestorerReleased( _icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED], -1 );
+                ButtonFontOffsetRestorer fontRestorerPressed( _icnVsSprite[ICN::BUTTON_GOOD_FONT_PRESSED], -1 );
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], buttonText, { 4, 4 }, { 3, 5 }, { 21, 124 }, fheroes2::FontColor::WHITE );
+
+                break;
+            }
             default:
                 // You're calling this function for non-specified ICN id. Check your logic!
                 // Did you add a new image for one language without generating a default
@@ -2257,8 +2316,16 @@ namespace fheroes2
             generateDefaultImages( id );
         }
 
-        bool LoadModifiedICN( int id )
+        // This function must return true is resources have been modified, false otherwise.
+        bool LoadModifiedICN( const int id )
         {
+            // If this assertion blows up then you are calling this function in a recursion. Check your code!
+            assert( _icnVsSprite[id].empty() );
+
+            // IMPORTANT!!!
+            // Call LoadOriginalICN() function only if you are handling the same ICN.
+            // If you need to load a different ICN use loadICN() function.
+
             switch ( id ) {
             case ICN::ROUTERED:
                 CopyICNWithPalette( id, ICN::ROUTE, PAL::PaletteType::RED );
@@ -2532,6 +2599,9 @@ namespace fheroes2
             case ICN::BUTTON_VERTICAL_DISMISS:
             case ICN::BUTTON_VERTICAL_EXIT:
             case ICN::BUTTON_SKIP:
+            case ICN::BUTTON_HSCORES_VERTICAL_CAMPAIGN:
+            case ICN::BUTTON_HSCORES_VERTICAL_EXIT:
+            case ICN::BUTTON_HSCORES_VERTICAL_STANDARD:
                 generateLanguageSpecificImages( id );
                 return true;
             case ICN::PHOENIX:
@@ -2605,7 +2675,7 @@ namespace fheroes2
                 }
                 return true;
             case ICN::TROLL2MSL:
-                LoadOriginalICN( ICN::TROLLMSL );
+                loadICN( ICN::TROLLMSL );
                 if ( _icnVsSprite[ICN::TROLLMSL].size() == 1 ) {
                     _icnVsSprite[id].resize( 1 );
 
@@ -2919,6 +2989,37 @@ namespace fheroes2
 
                 return true;
             }
+            case ICN::EDITPANL:
+                LoadOriginalICN( id );
+                if ( _icnVsSprite[id].size() > 5 ) {
+                    Sprite & erasePanel = _icnVsSprite[id][5];
+                    // To select object types for erasure we copy object buttons.
+                    Copy( _icnVsSprite[id][1], 15, 68, erasePanel, 15, 68, 114, 55 );
+
+                    // Make 3 empty buttons for terrain objects, roads and streams.
+                    Fill( erasePanel, 16, 69, 24, 24, 65U );
+                    Copy( erasePanel, 15, 68, erasePanel, 44, 96, 27, 27 );
+                    Copy( erasePanel, 15, 68, erasePanel, 73, 96, 27, 27 );
+
+                    // Make erase terrain objects button image.
+                    Image objectsImage( 24, 24 );
+                    Copy( GetICN( ICN::EDITBTNS, 2 ), 13, 4, objectsImage, 0, 0, 24, 24 );
+                    AddTransparency( objectsImage, 10U );
+                    AddTransparency( objectsImage, 38U );
+                    AddTransparency( objectsImage, 39U );
+                    AddTransparency( objectsImage, 40U );
+                    AddTransparency( objectsImage, 41U );
+                    AddTransparency( objectsImage, 46U );
+                    Blit( objectsImage, 0, 0, erasePanel, 16, 69, 24, 24 );
+
+                    // Make erase roads button image.
+                    Blit( GetICN( ICN::ROAD, 2 ), 0, 0, erasePanel, 45, 104, 24, 5 );
+                    Blit( GetICN( ICN::ROAD, 1 ), 1, 0, erasePanel, 45, 109, 24, 5 );
+
+                    // Make erase streams button image.
+                    Blit( GetICN( ICN::STREAM, 2 ), 0, 0, erasePanel, 74, 104, 24, 11 );
+                }
+                return true;
             case ICN::EDITOR:
                 LoadOriginalICN( id );
                 if ( !_icnVsSprite[id].empty() ) {
@@ -3328,7 +3429,7 @@ namespace fheroes2
             case ICN::GOOD_MARKET_BUTTON: {
                 _icnVsSprite[id].resize( 2 );
 
-                LoadOriginalICN( ICN::ADVBTNS );
+                loadICN( ICN::ADVBTNS );
 
                 const int releasedIndex = ( id == ICN::GOOD_ARMY_BUTTON ) ? 0 : 4;
                 Copy( GetICN( ICN::ADVBTNS, releasedIndex ), _icnVsSprite[id][0] );
@@ -3345,7 +3446,7 @@ namespace fheroes2
             case ICN::EVIL_MARKET_BUTTON: {
                 _icnVsSprite[id].resize( 2 );
 
-                LoadOriginalICN( ICN::ADVEBTNS );
+                loadICN( ICN::ADVEBTNS );
 
                 const int releasedIndex = ( id == ICN::EVIL_ARMY_BUTTON ) ? 0 : 4;
                 Copy( GetICN( ICN::ADVEBTNS, releasedIndex ), _icnVsSprite[id][0] );
@@ -3447,7 +3548,7 @@ namespace fheroes2
                 return true;
             }
             case ICN::MONO_CURSOR_ADVMBW: {
-                LoadOriginalICN( ICN::ADVMCO );
+                loadICN( ICN::ADVMCO );
 
                 _icnVsSprite[id].resize( _icnVsSprite[ICN::ADVMCO].size() );
                 for ( size_t i = 0; i < _icnVsSprite[id].size(); ++i ) {
@@ -3462,7 +3563,7 @@ namespace fheroes2
                 return true;
             }
             case ICN::MONO_CURSOR_SPELBW: {
-                LoadOriginalICN( ICN::SPELCO );
+                loadICN( ICN::SPELCO );
 
                 _icnVsSprite[id].resize( _icnVsSprite[ICN::SPELCO].size() );
                 for ( size_t i = 0; i < _icnVsSprite[id].size(); ++i ) {
@@ -3477,7 +3578,7 @@ namespace fheroes2
                 return true;
             }
             case ICN::MONO_CURSOR_CMSSBW: {
-                LoadOriginalICN( ICN::CMSECO );
+                loadICN( ICN::CMSECO );
 
                 _icnVsSprite[id].resize( _icnVsSprite[ICN::CMSECO].size() );
                 for ( size_t i = 0; i < _icnVsSprite[id].size(); ++i ) {
@@ -3491,6 +3592,84 @@ namespace fheroes2
                 }
                 return true;
             }
+            case ICN::ADVBTNS:
+            case ICN::ADVEBTNS:
+                LoadOriginalICN( id );
+                if ( _icnVsSprite[id].size() == 16 && _icnVsSprite[id][2].width() == 36 && _icnVsSprite[id][2].height() == 36 && _icnVsSprite[id][3].width() == 36
+                     && _icnVsSprite[id][3].height() == 36 ) {
+                    // Add hero action button released and pressed.
+                    _icnVsSprite[id].resize( 18 );
+                    Copy( _icnVsSprite[id][2], _icnVsSprite[id][16] );
+                    Copy( _icnVsSprite[id][3], _icnVsSprite[id][17] );
+
+                    // Get the button's icon colors.
+                    const uint8_t mainReleasedColor = _icnVsSprite[id][2].image()[7 * 36 + 26];
+                    const uint8_t mainPressedColor = _icnVsSprite[id][3].image()[8 * 36 + 25];
+                    const uint8_t backgroundReleasedColor = _icnVsSprite[id][2].image()[1 * 36 + 5];
+                    const uint8_t backgroundPressedColor = _icnVsSprite[id][3].image()[5 * 36 + 6];
+
+                    // Clean-up the buttons' background
+                    Fill( _icnVsSprite[id][16], 23, 5, 8, 5, backgroundReleasedColor );
+                    Fill( _icnVsSprite[id][16], 8, 10, 24, 8, backgroundReleasedColor );
+                    Fill( _icnVsSprite[id][16], 6, 18, 24, 10, backgroundReleasedColor );
+                    Fill( _icnVsSprite[id][17], 22, 6, 8, 5, backgroundPressedColor );
+                    Fill( _icnVsSprite[id][17], 7, 11, 24, 8, backgroundPressedColor );
+                    Fill( _icnVsSprite[id][17], 5, 19, 24, 10, backgroundPressedColor );
+
+                    // Get the action cursor and prepare it for button. We make it a little smaller.
+                    const Sprite & originalActionCursor = GetICN( ICN::ADVMCO, 9 );
+                    const int32_t actionCursorWidth = originalActionCursor.width() - 1;
+                    const int32_t actionCursorHeight = originalActionCursor.height() - 3;
+                    Image actionCursor( actionCursorWidth, actionCursorHeight );
+                    actionCursor.reset();
+
+                    // Head.
+                    Copy( originalActionCursor, 19, 1, actionCursor, 17, 2, 8, 5 );
+                    Copy( originalActionCursor, 16, 7, actionCursor, 14, 7, 12, 2 );
+                    actionCursor.transform()[15 + 7 * actionCursorWidth] = 1U;
+                    // Tail.
+                    Copy( originalActionCursor, 1, 10, actionCursor, 1, 9, 12, 11 );
+                    // Middle part.
+                    Copy( originalActionCursor, 14, 10, actionCursor, 13, 9, 1, 11 );
+                    // Front legs.
+                    Copy( originalActionCursor, 16, 10, actionCursor, 14, 9, 13, 11 );
+                    // Hind legs.
+                    Copy( originalActionCursor, 7, 22, actionCursor, 7, 19, 7, 7 );
+
+                    // Make contour transparent and the horse figure filled with solid color.
+                    const int32_t actionCursorSize = actionCursorWidth * actionCursorHeight;
+                    for ( int32_t i = 0; i < actionCursorSize; ++i ) {
+                        if ( actionCursor.transform()[i] == 1U ) {
+                            // Skip transparent pixel.
+                            continue;
+                        }
+                        if ( actionCursor.image()[i] < 152U ) {
+                            // It is the contour color, make it transparent.
+                            actionCursor.transform()[i] = 1U;
+                        }
+                        else {
+                            actionCursor.image()[i] = mainPressedColor;
+                        }
+                    }
+
+                    // Add shadows to the horse image.
+                    updateShadow( actionCursor, { 1, -1 }, 2, true );
+                    updateShadow( actionCursor, { -1, 1 }, 6, true );
+                    updateShadow( actionCursor, { 2, -2 }, 4, true );
+                    Blit( actionCursor, _icnVsSprite[id][17], 4, 4 );
+
+                    // Replace colors for the released button.
+                    for ( int32_t i = 0; i < actionCursorSize; ++i ) {
+                        if ( actionCursor.transform()[i] == 6U ) {
+                            // Disable whitening transform and set white color.
+                            actionCursor.transform()[i] = 0U;
+                            actionCursor.image()[i] = 10U;
+                        }
+                    }
+                    ReplaceColorId( actionCursor, mainPressedColor, mainReleasedColor );
+                    Blit( actionCursor, _icnVsSprite[id][16], 5, 3 );
+                }
+                return true;
             case ICN::ARTIFACT:
                 LoadOriginalICN( id );
                 if ( _icnVsSprite[id].size() > 99 ) {
@@ -3823,7 +4002,7 @@ namespace fheroes2
             case ICN::MINI_MONSTER_IMAGE:
             case ICN::MINI_MONSTER_SHADOW: {
                 // It doesn't matter which image is being called. We are generating both of them at the same time.
-                LoadOriginalICN( ICN::MINIMON );
+                loadICN( ICN::MINIMON );
 
                 // Minotaur King original Adventure map sprite has blue armlets. We make them gold to correspond the ICN::MINOTAU2.
                 if ( _icnVsSprite[ICN::MINIMON].size() > 303 ) {
@@ -3928,7 +4107,7 @@ namespace fheroes2
             case ICN::EMPTY_EVIL_BUTTON: {
                 const bool isGoodInterface = ( id == ICN::EMPTY_GOOD_BUTTON );
                 const int32_t originalId = isGoodInterface ? ICN::SYSTEM : ICN::SYSTEME;
-                LoadOriginalICN( originalId );
+                loadICN( originalId );
 
                 if ( _icnVsSprite[originalId].size() < 13 ) {
                     return true;
@@ -3971,7 +4150,7 @@ namespace fheroes2
             }
             case ICN::EMPTY_POL_BUTTON: {
                 const int originalID = ICN::X_CMPBTN;
-                LoadOriginalICN( originalID );
+                loadICN( originalID );
 
                 if ( _icnVsSprite[originalID].size() < 8 ) {
                     return true;
@@ -4013,7 +4192,7 @@ namespace fheroes2
             }
             case ICN::EMPTY_GUILDWELL_BUTTON: {
                 const int originalID = ICN::WELLXTRA;
-                LoadOriginalICN( originalID );
+                loadICN( originalID );
 
                 if ( _icnVsSprite[originalID].size() < 3 ) {
                     return true;
@@ -4039,7 +4218,7 @@ namespace fheroes2
             case ICN::EMPTY_EVIL_MEDIUM_BUTTON: {
                 const bool isGoodInterface = ( id == ICN::EMPTY_GOOD_MEDIUM_BUTTON );
                 const int32_t originalId = isGoodInterface ? ICN::APANEL : ICN::APANELE;
-                LoadOriginalICN( originalId );
+                loadICN( originalId );
 
                 if ( _icnVsSprite[originalId].size() < 10 ) {
                     return true;
@@ -4063,10 +4242,10 @@ namespace fheroes2
             }
             case ICN::EMPTY_VERTICAL_GOOD_BUTTON: {
                 const int32_t originalId = ICN::HSBTNS;
-                LoadOriginalICN( originalId );
+                loadICN( originalId );
 
                 if ( _icnVsSprite[originalId].size() < 9 ) {
-                    break;
+                    return true;
                 }
 
                 _icnVsSprite[id].resize( 2 );
@@ -4124,7 +4303,7 @@ namespace fheroes2
                     FillTransform( pressed, pressed.width() - 1, 3, 1, pressed.height() - 6, 1 );
                 }
 
-                break;
+                return true;
             }
             case ICN::BRCREST: {
                 LoadOriginalICN( id );
@@ -4196,11 +4375,21 @@ namespace fheroes2
             return false;
         }
 
-        size_t GetMaximumICNIndex( int id )
+        void loadICN( const int id )
         {
-            if ( _icnVsSprite[id].empty() && !LoadModifiedICN( id ) ) {
+            if ( !_icnVsSprite[id].empty() ) {
+                // The images have been loaded.
+                return;
+            }
+
+            if ( !LoadModifiedICN( id ) ) {
                 LoadOriginalICN( id );
             }
+        }
+
+        size_t GetMaximumICNIndex( int id )
+        {
+            loadICN( id );
 
             return _icnVsSprite[id].size();
         }
@@ -4346,48 +4535,6 @@ namespace fheroes2
             }
 
             return _tilVsImage[tilId][shapeId][index];
-        }
-
-        const Sprite & GetLetter( uint32_t character, uint32_t fontType )
-        {
-            if ( character < 0x21 ) {
-                return errorImage;
-            }
-
-            // TODO: correct naming and standardize the code
-            switch ( fontType ) {
-            case Font::GRAY_SMALL:
-                return GetICN( ICN::GRAY_SMALL_FONT, character - 0x20 );
-            case Font::YELLOW_BIG:
-                return GetICN( ICN::YELLOW_FONT, character - 0x20 );
-            case Font::YELLOW_SMALL:
-                return GetICN( ICN::YELLOW_SMALLFONT, character - 0x20 );
-            case Font::BIG:
-                return GetICN( ICN::FONT, character - 0x20 );
-            case Font::SMALL:
-                return GetICN( ICN::SMALFONT, character - 0x20 );
-            default:
-                assert( 0 );
-                break;
-            }
-
-            return GetICN( ICN::SMALFONT, character - 0x20 );
-        }
-
-        uint32_t ASCIILastSupportedCharacter( const uint32_t fontType )
-        {
-            switch ( fontType ) {
-            case Font::BIG:
-            case Font::YELLOW_BIG:
-                return static_cast<uint32_t>( GetMaximumICNIndex( ICN::FONT ) ) + 0x20 - 1;
-            case Font::SMALL:
-            case Font::GRAY_SMALL:
-            case Font::YELLOW_SMALL:
-                return static_cast<uint32_t>( GetMaximumICNIndex( ICN::SMALFONT ) ) + 0x20 - 1;
-            default:
-                assert( 0 );
-                return 0;
-            }
         }
 
         int32_t GetAbsoluteICNHeight( int icnId )

@@ -21,17 +21,25 @@
 #pragma once
 
 #include <cstdint>
+#include <functional>
 
 #include "editor_interface_panel.h"
 #include "game_mode.h"
+#include "history_manager.h"
 #include "interface_base.h"
+#include "map_object_info.h"
+
+namespace Maps
+{
+    class Tiles;
+}
 
 namespace Interface
 {
-    class Editor final : public BaseInterface
+    class EditorInterface final : public BaseInterface
     {
     public:
-        static Editor & Get();
+        static EditorInterface & Get();
 
         void redraw( const uint32_t force ) override;
 
@@ -54,12 +62,44 @@ namespace Interface
         void mouseCursorAreaClickLeft( const int32_t tileIndex ) override;
         void mouseCursorAreaPressRight( const int32_t tileIndex ) const override;
 
+        void undoAction()
+        {
+            if ( _historyManager.undo() ) {
+                _redraw |= ( REDRAW_GAMEAREA | REDRAW_RADAR );
+            }
+        }
+
+        void redoAction()
+        {
+            if ( _historyManager.redo() ) {
+                _redraw |= ( REDRAW_GAMEAREA | REDRAW_RADAR );
+            }
+        }
+
+        void updateCursor( const int32_t tileIndex ) override;
+
+        void setCursorUpdater( const std::function<void( const int32_t )> & cursorUpdater )
+        {
+            _cursorUpdater = cursorUpdater;
+        }
+
     private:
-        Editor();
+        EditorInterface()
+            : BaseInterface( true )
+            , _editorPanel( *this )
+        {
+            // Do nothing.
+        }
+
+        void setObjectOnTile( Maps::Tiles & tile, const Maps::ObjectGroup group, const int32_t objectType );
 
         EditorPanel _editorPanel;
 
         int32_t _selectedTile{ -1 };
         int32_t _tileUnderCursor{ -1 };
+
+        std::function<void( const int32_t )> _cursorUpdater;
+
+        fheroes2::HistoryManager _historyManager;
     };
 }

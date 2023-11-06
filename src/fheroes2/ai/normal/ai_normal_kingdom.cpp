@@ -40,6 +40,8 @@
 #include "audio_manager.h"
 #include "castle.h"
 #include "color.h"
+#include "difficulty.h"
+#include "game.h"
 #include "game_interface.h"
 #include "ground.h"
 #include "heroes.h"
@@ -92,15 +94,15 @@ namespace
                 assert( hero != nullptr && hero->isActive() );
 
                 Maps::Tiles & tile = world.GetTiles( hero->GetIndex() );
-                if ( tile.GetHeroes() == nullptr ) {
+                if ( tile.getHero() == nullptr ) {
                     // This could happen when a hero is moving.
                     continue;
                 }
 
-                assert( tile.GetHeroes() == hero );
+                assert( tile.getHero() == hero );
                 _heroes.emplace_back( hero );
 
-                tile.SetHeroes( nullptr );
+                tile.setHero( nullptr );
             }
         }
 
@@ -108,9 +110,9 @@ namespace
         {
             for ( Heroes * hero : _heroes ) {
                 Maps::Tiles & tile = world.GetTiles( hero->GetIndex() );
-                assert( tile.GetHeroes() == nullptr );
+                assert( tile.getHero() == nullptr );
 
-                tile.SetHeroes( hero );
+                tile.setHero( hero );
             }
         }
 
@@ -122,10 +124,19 @@ namespace
         std::vector<Heroes *> _heroes;
     };
 
-    void setHeroRoles( KingdomHeroes & heroes )
+    void setHeroRoles( VecHeroes & heroes, const int difficulty )
     {
         if ( heroes.empty() ) {
             // No heroes exist.
+            return;
+        }
+
+        if ( !Difficulty::areAIHeroRolesAllowed( difficulty ) ) {
+            // All heroes are equal.
+            for ( Heroes * hero : heroes ) {
+                hero->setAIRole( Heroes::Role::HUNTER );
+            }
+
             return;
         }
 
@@ -207,7 +218,7 @@ namespace
         const int32_t tileIndex = tile.GetIndex();
 
         if ( object == MP2::OBJ_HEROES ) {
-            const Heroes * hero = tile.GetHeroes();
+            const Heroes * hero = tile.getHero();
             // TODO: this function can be called when the game world is not fully initialized yet
             if ( hero == nullptr ) {
                 return {};
@@ -460,7 +471,7 @@ namespace AI
         }
     }
 
-    std::vector<AICastle> Normal::getSortedCastleList( const KingdomCastles & castles, const std::set<int> & castlesInDanger )
+    std::vector<AICastle> Normal::getSortedCastleList( const VecCastles & castles, const std::set<int> & castlesInDanger )
     {
         std::vector<AICastle> sortedCastleList;
         for ( Castle * castle : castles ) {
@@ -704,8 +715,8 @@ namespace AI
 
         AudioManager::PlayMusicAsync( MUS::COMPUTER_TURN, Music::PlaybackMode::RESUME_AND_PLAY_INFINITE );
 
-        KingdomHeroes & heroes = kingdom.GetHeroes();
-        const KingdomCastles & castles = kingdom.GetCastles();
+        VecHeroes & heroes = kingdom.GetHeroes();
+        const VecCastles & castles = kingdom.GetCastles();
 
         // Clear the cache of neutral monsters as their strength might have changed.
         _neutralMonsterStrengthCache.clear();
@@ -765,7 +776,7 @@ namespace AI
             _mapActionObjects.emplace_back( idx, objectType );
 
             if ( objectType == MP2::OBJ_HEROES ) {
-                const Heroes * hero = tile.GetHeroes();
+                const Heroes * hero = tile.getHero();
                 assert( hero != nullptr );
 
                 if ( hero->GetColor() == myColor && !hero->Modes( Heroes::PATROL ) ) {
@@ -822,7 +833,7 @@ namespace AI
             }
 
             // Step 3. Reassign heroes roles
-            setHeroRoles( heroes );
+            setHeroRoles( heroes, Game::getDifficulty() );
 
             castlesInDanger = findCastlesInDanger( kingdom );
             for ( Heroes * hero : heroes ) {
@@ -831,7 +842,7 @@ namespace AI
                     // a threatening enemy in an open field. Therefore let's make him stay in the castle.
                     // TODO: allow the hero to still do some actions but always return to the castle at the end of the turn.
 
-                    HeroesActionComplete( *hero, hero->GetIndex(), hero->GetMapsObject() );
+                    HeroesActionComplete( *hero, hero->GetIndex(), hero->getObjectTypeUnderHero() );
                 }
             }
 

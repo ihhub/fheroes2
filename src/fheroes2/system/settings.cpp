@@ -36,6 +36,7 @@
 #include "game.h"
 #include "gamedefs.h"
 #include "logging.h"
+#include "render_processor.h"
 #include "screen.h"
 #include "serialize.h"
 #include "settings.h"
@@ -77,7 +78,9 @@ namespace
         GLOBAL_BATTLE_AUTO_RESOLVE = 0x04000000,
         GLOBAL_BATTLE_AUTO_SPELLCAST = 0x08000000,
         GLOBAL_AUTO_SAVE_AT_BEGINNING_OF_TURN = 0x10000000,
-        GLOBAL_SCREEN_SCALING_TYPE_NEAREST = 0x20000000
+        GLOBAL_SCREEN_SCALING_TYPE_NEAREST = 0x20000000,
+        // TODO: remove this setting once the Editor goes public.
+        GLOBAL_ENABLE_EDITOR = 0x40000000
     };
 }
 
@@ -319,6 +322,10 @@ bool Settings::Read( const std::string & filePath )
         setScreenScalingTypeNearest( config.StrParams( "screen scaling type" ) == "nearest" );
     }
 
+    if ( config.Exists( "editor" ) && config.StrParams( "editor" ) == "beta" ) {
+        _optGlobal.SetModes( GLOBAL_ENABLE_EDITOR );
+    }
+
     return true;
 }
 
@@ -465,6 +472,10 @@ std::string Settings::String() const
 
     os << std::endl << "# scaling type: nearest or linear (set by default)" << std::endl;
     os << "screen scaling type = " << ( _optGlobal.Modes( GLOBAL_SCREEN_SCALING_TYPE_NEAREST ) ? "nearest" : "linear" ) << std::endl;
+
+    if ( _optGlobal.Modes( GLOBAL_ENABLE_EDITOR ) ) {
+        os << "editor = beta" << std::endl;
+    }
 
     return os.str();
 }
@@ -724,9 +735,11 @@ void Settings::setSystemInfo( const bool enable )
 {
     if ( enable ) {
         _optGlobal.SetModes( GLOBAL_SYSTEM_INFO );
+        fheroes2::RenderProcessor::instance().enableRenderers();
     }
     else {
         _optGlobal.ResetModes( GLOBAL_SYSTEM_INFO );
+        fheroes2::RenderProcessor::instance().disableRenderers();
     }
 }
 
@@ -830,6 +843,11 @@ bool Settings::isHideInterfaceEnabled() const
 bool Settings::isEvilInterfaceEnabled() const
 {
     return _optGlobal.Modes( GLOBAL_EVIL_INTERFACE );
+}
+
+bool Settings::isEditorEnabled() const
+{
+    return _optGlobal.Modes( GLOBAL_ENABLE_EDITOR );
 }
 
 bool Settings::ShowControlPanel() const

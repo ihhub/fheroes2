@@ -48,45 +48,46 @@
 #include "skill.h"
 #include "skill_bar.h"
 #include "statusbar.h"
-#include "text.h"
 #include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
+#include "ui_dialog.h"
 #include "ui_text.h"
 #include "ui_tool.h"
 #include "ui_window.h"
 
 int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disableDismiss, const bool disableSwitch, const bool renderBackgroundDialog )
 {
-    // setup cursor
-    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
+    // Set the cursor image.This dialog does not require a cursor restorer. It is called from other dialogs that have the same cursor
+    // or from the Game Area that will set the appropriate cursor after this dialog is closed.
+    Cursor::Get().SetThemes( Cursor::POINTER );
 
     fheroes2::Display & display = fheroes2::Display::instance();
 
-    fheroes2::Rect fadeRoi;
-    fheroes2::Rect dialodWithShadowRoi;
+    fheroes2::Rect dialogRoi;
+    fheroes2::Rect dialogWithShadowRoi;
     std::unique_ptr<fheroes2::StandardWindow> background;
     std::unique_ptr<fheroes2::ImageRestorer> restorer;
 
     if ( renderBackgroundDialog ) {
         background = std::make_unique<fheroes2::StandardWindow>( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT, false );
-        fadeRoi = background->activeArea();
-        dialodWithShadowRoi = background->totalArea();
+        dialogRoi = background->activeArea();
+        dialogWithShadowRoi = background->totalArea();
     }
     else {
-        fadeRoi = { ( display.width() - fheroes2::Display::DEFAULT_WIDTH ) / 2, ( display.height() - fheroes2::Display::DEFAULT_HEIGHT ) / 2,
-                    fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT };
-        dialodWithShadowRoi = { fadeRoi.x - 2 * BORDERWIDTH, fadeRoi.y - BORDERWIDTH, fadeRoi.width + 3 * BORDERWIDTH, fadeRoi.height + 3 * BORDERWIDTH };
-        restorer = std::make_unique<fheroes2::ImageRestorer>( display, fadeRoi.x, fadeRoi.y, fadeRoi.width, fadeRoi.height );
+        dialogRoi = { ( display.width() - fheroes2::Display::DEFAULT_WIDTH ) / 2, ( display.height() - fheroes2::Display::DEFAULT_HEIGHT ) / 2,
+                      fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT };
+        dialogWithShadowRoi = { dialogRoi.x - 2 * BORDERWIDTH, dialogRoi.y - BORDERWIDTH, dialogRoi.width + 3 * BORDERWIDTH, dialogRoi.height + 3 * BORDERWIDTH };
+        restorer = std::make_unique<fheroes2::ImageRestorer>( display, dialogRoi.x, dialogRoi.y, dialogRoi.width, dialogRoi.height );
     }
 
     // Fade-out game screen only for 640x480 resolution and if 'renderBackgroundDialog' is false (we are replacing image in already opened dialog).
     const bool isDefaultScreenSize = display.isDefaultSize();
     if ( fade && ( isDefaultScreenSize || !renderBackgroundDialog ) ) {
-        fheroes2::fadeOutDisplay( fadeRoi, !isDefaultScreenSize );
+        fheroes2::fadeOutDisplay( dialogRoi, !isDefaultScreenSize );
     }
 
-    fheroes2::Point cur_pt = { fadeRoi.x, fadeRoi.y };
+    fheroes2::Point cur_pt = { dialogRoi.x, dialogRoi.y };
     fheroes2::Point dst_pt( cur_pt );
 
     fheroes2::Blit( fheroes2::AGG::GetICN( ICN::HEROBKG, 0 ), display, dst_pt.x, dst_pt.y );
@@ -115,15 +116,15 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
 
     // morale
     dst_pt.x = cur_pt.x + 514;
-    dst_pt.y = cur_pt.y + 35;
+    dst_pt.y = cur_pt.y + 34;
 
     MoraleIndicator moraleIndicator( this );
     moraleIndicator.SetPos( dst_pt );
     moraleIndicator.Redraw();
 
     // luck
-    dst_pt.x = cur_pt.x + 552;
-    dst_pt.y = cur_pt.y + 35;
+    dst_pt.x = cur_pt.x + 550;
+    dst_pt.y = cur_pt.y + 34;
 
     LuckIndicator luckIndicator( this );
     luckIndicator.SetPos( dst_pt );
@@ -197,7 +198,8 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
     fheroes2::Blit( bar, display, dst_pt.x, dst_pt.y );
 
     StatusBar statusBar;
-    statusBar.SetCenter( dst_pt.x + bar.width() / 2, dst_pt.y + 13 );
+    // Status bar must be smaller due to extra art on both sides.
+    statusBar.setRoi( { dst_pt.x + 16, dst_pt.y + 3, bar.width() - 16 * 2, 0 } );
 
     // artifact bar
     dst_pt.x = cur_pt.x + 51;
@@ -260,14 +262,14 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
     if ( fade ) {
         if ( renderBackgroundDialog && !isDefaultScreenSize ) {
             // We need to expand the ROI for the next render to properly render window borders and shadow.
-            display.updateNextRenderRoi( dialodWithShadowRoi );
+            display.updateNextRenderRoi( dialogWithShadowRoi );
         }
 
         // Use half fade if game resolution is not 640x480.
-        fheroes2::fadeInDisplay( fadeRoi, !isDefaultScreenSize );
+        fheroes2::fadeInDisplay( dialogRoi, !isDefaultScreenSize );
     }
     else {
-        display.render();
+        display.render( dialogWithShadowRoi );
     }
 
     bool redrawMorale = false;
@@ -278,20 +280,20 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
     while ( le.HandleEvents() ) {
         if ( redrawMorale ) {
             moraleIndicator.Redraw();
-            display.render();
+            display.render( dialogRoi );
             redrawMorale = false;
         }
 
         if ( redrawLuck ) {
             luckIndicator.Redraw();
-            display.render();
+            display.render( dialogRoi );
             redrawLuck = false;
         }
 
         // exit
         if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() ) {
             // Fade-out hero dialog.
-            fheroes2::fadeOutDisplay( fadeRoi, !isDefaultScreenSize );
+            fheroes2::fadeOutDisplay( dialogRoi, !isDefaultScreenSize );
 
             return Dialog::CANCEL;
         }
@@ -347,9 +349,9 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
         // dismiss
         if ( buttonDismiss.isEnabled() && buttonDismiss.isVisible()
              && ( le.MouseClickLeft( buttonDismiss.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::ARMY_DISMISS ) )
-             && Dialog::YES == Dialog::Message( GetName(), _( "Are you sure you want to dismiss this Hero?" ), Font::BIG, Dialog::YES | Dialog::NO ) ) {
+             && Dialog::YES == fheroes2::showStandardTextMessage( GetName(), _( "Are you sure you want to dismiss this Hero?" ), Dialog::YES | Dialog::NO ) ) {
             // Fade-out hero dialog.
-            fheroes2::fadeOutDisplay( fadeRoi, !isDefaultScreenSize );
+            fheroes2::fadeOutDisplay( dialogRoi, !isDefaultScreenSize );
 
             return Dialog::DISMISS;
         }
@@ -366,30 +368,30 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
         // left click info
         if ( !readonly && le.MouseClickLeft( rectSpreadArmyFormat ) && !army.isSpreadFormation() ) {
             cursorFormat.setPosition( army1_pt.x, army1_pt.y );
-            display.render();
+            display.render( dialogRoi );
             army.SetSpreadFormation( true );
         }
         else if ( !readonly && le.MouseClickLeft( rectGroupedArmyFormat ) && army.isSpreadFormation() ) {
             cursorFormat.setPosition( army2_pt.x, army2_pt.y );
-            display.render();
+            display.render( dialogRoi );
             army.SetSpreadFormation( false );
         }
         else if ( le.MouseCursor( secskill_bar.GetArea() ) && secskill_bar.QueueEventProcessing( &message ) ) {
-            display.render();
+            display.render( dialogRoi );
         }
         else if ( le.MouseCursor( primskill_bar.GetArea() ) && primskill_bar.QueueEventProcessing( &message ) ) {
-            display.render();
+            display.render( dialogRoi );
         }
 
         // right info
         if ( le.MousePressRight( portPos ) ) {
-            Dialog::QuickInfo( *this );
+            Dialog::QuickInfo( *this, true );
         }
         else if ( le.MousePressRight( rectSpreadArmyFormat ) ) {
-            Dialog::Message( _( "Spread Formation" ), descriptionSpreadArmyFormat, Font::BIG );
+            fheroes2::showStandardTextMessage( _( "Spread Formation" ), descriptionSpreadArmyFormat, Dialog::ZERO );
         }
         else if ( le.MousePressRight( rectGroupedArmyFormat ) ) {
-            Dialog::Message( _( "Grouped Formation" ), descriptionGroupedArmyFormat, Font::BIG );
+            fheroes2::showStandardTextMessage( _( "Grouped Formation" ), descriptionGroupedArmyFormat, Dialog::ZERO );
         }
 
         // status message

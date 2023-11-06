@@ -21,10 +21,11 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "cursor.h"
+
 #include <cassert>
 
 #include "agg_image.h"
-#include "cursor.h"
 #include "icn.h"
 #include "image.h"
 #include "localevent.h"
@@ -86,7 +87,7 @@ void Cursor::setCustomImage( const fheroes2::Image & image, const fheroes2::Poin
 {
     theme = NONE;
 
-    fheroes2::cursor().update( image, 0, 0 );
+    fheroes2::cursor().update( image, -offset.x, -offset.y );
 
     // Immediately apply new mouse offset.
     const fheroes2::Point & currentPos = LocalEvent::Get().GetMouseCursor();
@@ -259,12 +260,5 @@ CursorRestorer::~CursorRestorer()
         cursorIcon.SetThemes( _theme );
 
         cursorRenderer.show( _visible );
-
-        // immediately render cursor area in case of software emulated cursor
-        if ( cursorRenderer.isSoftwareEmulation() ) {
-            const fheroes2::Point & pos = LocalEvent::Get().GetMouseCursor();
-
-            fheroes2::Display::instance().render( { pos.x, pos.y, 1, 1 } );
-        }
     }
 }

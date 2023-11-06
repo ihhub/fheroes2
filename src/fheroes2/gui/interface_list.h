@@ -35,13 +35,6 @@ namespace Interface
     class ListBasic
     {
     public:
-        ListBasic()
-            : _currentId( -1 )
-            , _topId( -1 )
-        {
-            // Do nothing.
-        }
-
         virtual ~ListBasic() = default;
         virtual bool IsNeedRedraw() const = 0;
         virtual void Redraw() = 0;
@@ -53,9 +46,9 @@ namespace Interface
         }
 
     protected:
-        int _currentId;
+        int _currentId{ -1 };
 
-        int _topId;
+        int _topId{ -1 };
     };
 
     template <class Item>
@@ -63,12 +56,7 @@ namespace Interface
     {
     public:
         explicit ListBox( const fheroes2::Point & pt = fheroes2::Point() )
-            : needRedraw( false )
-            , content( nullptr )
-            , maxItems( 0 )
-            , ptRedraw( pt )
-            , useHotkeys( true )
-            , _updateScrollbar( false )
+            : ptRedraw( pt )
             , _timedButtonPgUp( [this]() { return buttonPgUp.isPressed(); } )
             , _timedButtonPgDn( [this]() { return buttonPgDn.isPressed(); } )
         {
@@ -102,7 +90,7 @@ namespace Interface
             ActionListPressRight( item );
         }
 
-        virtual bool ActionListCursor( Item &, const fheroes2::Point & )
+        virtual bool ActionListCursor( Item & /* item */, const fheroes2::Point & /* cursor */ )
         {
             return false;
         }
@@ -155,13 +143,15 @@ namespace Interface
             content = &list;
             Reset();
 
-            if ( IsValid() )
+            if ( IsValid() ) {
                 _currentId = 0;
+            }
         }
 
         void Reset()
         {
-            if ( content == nullptr || content->empty() ) { // empty content. Must be non-initialized array
+            if ( content == nullptr || content->empty() ) {
+                // Empty content. It is non-initialized array, initialize it.
                 _currentId = -1;
                 _topId = -1;
                 _scrollbar.setRange( 0, 0 );
@@ -170,12 +160,8 @@ namespace Interface
                 _currentId = -1; // no selection
                 _topId = 0;
 
-                if ( maxItems < _size() ) {
-                    _scrollbar.setRange( 0, _size() - maxItems );
-                }
-                else {
-                    _scrollbar.setRange( 0, 0 );
-                }
+                const int newMaxValue = std::max( _size() - maxItems, 0 );
+                _scrollbar.setRange( 0, newMaxValue );
             }
         }
 
@@ -199,8 +185,9 @@ namespace Interface
             if ( IsValid() ) { // we have something to display
                 int id = _topId;
                 const int end = ( _topId + maxItems ) > _size() ? _size() - _topId : _topId + maxItems;
-                for ( ; id < end; ++id )
+                for ( ; id < end; ++id ) {
                     RedrawItem( ( *content )[id], rtAreaItems.x, rtAreaItems.y + ( id - _topId ) * rtAreaItems.height / maxItems, id == _currentId );
+                }
             }
         }
 
@@ -222,26 +209,34 @@ namespace Interface
         Item * GetFromPosition( const fheroes2::Point & mp )
         {
             Verify();
-            if ( !IsValid() )
+            if ( !IsValid() ) {
                 return nullptr;
+            }
 
-            if ( mp.y < rtAreaItems.y || mp.y >= rtAreaItems.y + rtAreaItems.height ) // out of boundaries
+            if ( mp.y < rtAreaItems.y || mp.y >= rtAreaItems.y + rtAreaItems.height ) {
+                // Out of boundaries.
                 return nullptr;
+            }
 
-            if ( mp.x < rtAreaItems.x || mp.x >= rtAreaItems.x + rtAreaItems.width ) // out of boundaries
+            if ( mp.x < rtAreaItems.x || mp.x >= rtAreaItems.x + rtAreaItems.width ) {
+                // Out of boundaries.
                 return nullptr;
+            }
 
             const int id = ( mp.y - rtAreaItems.y ) * maxItems / rtAreaItems.height;
-            if ( _topId + id >= _size() ) // out of items
+            if ( _topId + id >= _size() ) {
+                // Out of items.
                 return nullptr;
+            }
 
             return &( *content )[_topId + id];
         }
 
         void SetCurrent( size_t posId )
         {
-            if ( posId < content->size() )
+            if ( posId < content->size() ) {
                 _currentId = static_cast<int>( posId );
+            }
 
             SetCurrentVisible();
         }
@@ -256,10 +251,12 @@ namespace Interface
             }
 
             if ( _currentId >= 0 && ( _topId > _currentId || _topId + maxItems <= _currentId ) ) { // out of view
-                if ( _topId > _currentId ) { // scroll up, put current id on top
+                if ( _topId > _currentId ) {
+                    // Scroll up, put current id on top.
                     _topId = _currentId;
                 }
-                else if ( _topId + maxItems <= _currentId ) { // scroll down, put current id at bottom
+                else if ( _topId + maxItems <= _currentId ) {
+                    // Scroll down, put current id at bottom.
                     _topId = _currentId + 1 - maxItems;
                 }
             }
@@ -286,11 +283,13 @@ namespace Interface
 
         void SetCurrent( const Item & item )
         {
-            typename std::vector<Item>::iterator pos = std::find( content->begin(), content->end(), item );
-            if ( pos == content->end() )
+            const typename std::vector<Item>::iterator pos = std::find( content->begin(), content->end(), item );
+            if ( pos == content->end() ) {
                 Reset();
-            else
+            }
+            else {
                 _currentId = static_cast<int>( pos - content->begin() );
+            }
 
             SetCurrentVisible();
         }
@@ -328,16 +327,19 @@ namespace Interface
             le.MousePressLeft( buttonPgUp.area() ) ? buttonPgUp.drawOnPress() : buttonPgUp.drawOnRelease();
             le.MousePressLeft( buttonPgDn.area() ) ? buttonPgDn.drawOnPress() : buttonPgDn.drawOnRelease();
 
-            if ( !IsValid() )
+            if ( !IsValid() ) {
                 return false;
+            }
 
             if ( useHotkeys && le.KeyPress( fheroes2::Key::KEY_PAGE_UP ) && ( _topId > 0 ) ) {
                 needRedraw = true;
 
-                if ( _topId > maxItems )
+                if ( _topId > maxItems ) {
                     _topId -= maxItems;
-                else
+                }
+                else {
                     _topId = 0;
+                }
 
                 UpdateScrollbarRange();
                 _scrollbar.moveToIndex( _topId );
@@ -348,8 +350,9 @@ namespace Interface
                 needRedraw = true;
 
                 _topId += maxItems;
-                if ( _topId + maxItems >= _size() )
+                if ( _topId + maxItems >= _size() ) {
                     _topId = _size() - maxItems;
+                }
 
                 UpdateScrollbarRange();
                 _scrollbar.moveToIndex( _topId );
@@ -371,6 +374,26 @@ namespace Interface
                 ++_currentId;
                 SetCurrentVisible();
                 ActionCurrentDn();
+
+                return true;
+            }
+            if ( useHotkeys && le.KeyPress( fheroes2::Key::KEY_HOME ) && ( _topId > 0 ) ) {
+                needRedraw = true;
+
+                _topId = 0;
+
+                UpdateScrollbarRange();
+                _scrollbar.moveToIndex( _topId );
+
+                return true;
+            }
+            if ( useHotkeys && le.KeyPress( fheroes2::Key::KEY_END ) && ( _topId + maxItems < _size() ) ) {
+                needRedraw = true;
+
+                _topId = _size() - maxItems;
+
+                UpdateScrollbarRange();
+                _scrollbar.moveToIndex( _topId );
 
                 return true;
             }
@@ -448,7 +471,8 @@ namespace Interface
                         }
                         return true;
                     }
-                    else if ( le.MousePressRight( rtAreaItems ) ) {
+
+                    if ( le.MousePressRight( rtAreaItems ) ) {
                         ActionListPressRight( item, mousePos, rtAreaItems.x, rtAreaItems.y + offsetY );
                         return true;
                     }
@@ -461,7 +485,7 @@ namespace Interface
         }
 
     protected:
-        bool needRedraw;
+        bool needRedraw{ false };
 
         fheroes2::Rect rtAreaItems;
 
@@ -481,14 +505,14 @@ namespace Interface
         }
 
     private:
-        std::vector<Item> * content;
-        int maxItems;
+        std::vector<Item> * content{ nullptr };
+        int maxItems{ 0 };
 
         fheroes2::Point ptRedraw;
 
-        bool useHotkeys;
+        bool useHotkeys{ true };
 
-        bool _updateScrollbar;
+        bool _updateScrollbar{ false };
 
         fheroes2::TimedEventValidator _timedButtonPgUp;
         fheroes2::TimedEventValidator _timedButtonPgDn;
@@ -500,18 +524,40 @@ namespace Interface
                 _topId = -1;
             }
             else {
-                if ( _currentId >= _size() )
+                const int listSize = _size();
+                const int maxTopId = std::max( listSize - maxItems, 0 );
+
+                if ( _currentId >= listSize ) {
                     _currentId = -1;
-                if ( _topId < 0 || _topId >= _size() )
-                    _topId = 0;
+                }
+
+                if ( _topId < 0 || _topId > maxTopId ) {
+                    // Top position is out of list boundaries.
+                    if ( _currentId == -1 ) {
+                        // There is no item selected. Show the list from its very top.
+                        _topId = 0;
+                    }
+                    else {
+                        // Set top position to show the selected item.
+                        _topId = std::min( _currentId - maxItems / 2, maxTopId );
+                    }
+                }
+
+                // Update scrollbar range if needed.
+                if ( _scrollbar.maxIndex() != maxTopId ) {
+                    _scrollbar.setRange( 0, maxTopId );
+                    _scrollbar.moveToIndex( _topId );
+                }
             }
         }
 
         void UpdateScrollbarRange()
         {
-            const int maxValue = ( content != nullptr && maxItems < _size() ) ? static_cast<int>( _size() - maxItems ) : 0;
-            if ( _scrollbar.maxIndex() != maxValue )
+            const int newMaxValue = _size() - maxItems;
+            const int maxValue = ( content != nullptr && newMaxValue > 0 ) ? newMaxValue : 0;
+            if ( _scrollbar.maxIndex() != maxValue ) {
                 _scrollbar.setRange( 0, maxValue );
+            }
         }
     };
 }

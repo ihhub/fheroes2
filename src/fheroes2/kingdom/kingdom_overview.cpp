@@ -44,6 +44,7 @@
 #include "heroes_base.h"
 #include "icn.h"
 #include "image.h"
+#include "interface_base.h"
 #include "interface_icons.h"
 #include "interface_list.h"
 #include "kingdom.h"
@@ -87,6 +88,33 @@ namespace
         }
 
         return output;
+    }
+
+    void redrawCommonBackground( const fheroes2::Point & dst, const int visibleItems, fheroes2::Image & output )
+    {
+        // Scrollbar background.
+        const fheroes2::Sprite & scrollbar = fheroes2::AGG::GetICN( ICN::OVERVIEW, 13 );
+        fheroes2::Copy( scrollbar, 0, 0, output, dst.x + scrollbarOffset + 1, dst.y + 17, scrollbar.width(), scrollbar.height() );
+
+        // Items background.
+        const fheroes2::Sprite & itemsBack = fheroes2::AGG::GetICN( ICN::OVERVIEW, 8 );
+        const fheroes2::Sprite & overback = fheroes2::AGG::GetICN( ICN::OVERBACK, 0 );
+        const int32_t itemsBackWidth = itemsBack.width();
+        const int32_t itemsBackHeight = itemsBack.height();
+        const int32_t offsetX = dst.x + 30;
+        int32_t offsetY = dst.y + 17;
+        const int32_t stepY = itemsBackHeight + 4;
+        const int32_t overbackOffsetX = dst.x + 29;
+        int32_t overbackOffsetY = dst.y + 13;
+
+        for ( int i = 0; i < visibleItems; ++i, offsetY += stepY, overbackOffsetY += stepY ) {
+            fheroes2::Copy( itemsBack, 0, 0, output, offsetX, offsetY, itemsBackWidth, itemsBackHeight );
+            // Horizontal yellow "grid" lines.
+            fheroes2::Copy( overback, 29, 13, output, overbackOffsetX, overbackOffsetY, 595, 4 );
+        }
+
+        // Copy one vertical line in case of previous army selection.
+        fheroes2::Copy( overback, 29, 12, output, overbackOffsetX, dst.y + 12, 1, 357 );
     }
 }
 
@@ -140,9 +168,9 @@ struct HeroRow
 class StatsHeroesList : public Interface::ListBox<HeroRow>
 {
 public:
-    StatsHeroesList( const fheroes2::Rect & windowArea, const fheroes2::Point & offset, const KingdomHeroes & heroes );
+    StatsHeroesList( const fheroes2::Rect & windowArea, const fheroes2::Point & offset, const VecHeroes & heroes );
 
-    bool Refresh( KingdomHeroes & heroes );
+    bool Refresh( VecHeroes & heroes );
 
     void RedrawItem( const HeroRow & row, int32_t dstx, int32_t dsty, bool current ) override;
     void RedrawBackground( const fheroes2::Point & dst ) override;
@@ -178,13 +206,13 @@ public:
     bool ActionListCursor( HeroRow & row, const fheroes2::Point & cursor ) override;
 
 private:
-    void SetContent( const KingdomHeroes & heroes );
+    void SetContent( const VecHeroes & heroes );
 
     std::vector<HeroRow> content;
     const fheroes2::Rect _windowArea;
 };
 
-StatsHeroesList::StatsHeroesList( const fheroes2::Rect & windowArea, const fheroes2::Point & offset, const KingdomHeroes & heroes )
+StatsHeroesList::StatsHeroesList( const fheroes2::Rect & windowArea, const fheroes2::Point & offset, const VecHeroes & heroes )
     : Interface::ListBox<HeroRow>( offset )
     , _windowArea( windowArea )
 {
@@ -207,7 +235,7 @@ StatsHeroesList::StatsHeroesList( const fheroes2::Rect & windowArea, const fhero
     SetContent( heroes );
 }
 
-void StatsHeroesList::SetContent( const KingdomHeroes & heroes )
+void StatsHeroesList::SetContent( const VecHeroes & heroes )
 {
     content.clear();
     content.reserve( heroes.size() );
@@ -219,7 +247,7 @@ void StatsHeroesList::SetContent( const KingdomHeroes & heroes )
 
 // Updates the UI list according to current list of kingdom heroes.
 // Returns true if we updated something
-bool StatsHeroesList::Refresh( KingdomHeroes & heroes )
+bool StatsHeroesList::Refresh( VecHeroes & heroes )
 {
     const size_t contentSize = content.size();
 
@@ -260,7 +288,7 @@ void StatsHeroesList::ActionListSingleClick( HeroRow & row, const fheroes2::Poin
 void StatsHeroesList::ActionListPressRight( HeroRow & row, const fheroes2::Point & cursor, int32_t ox, int32_t oy )
 {
     if ( row.hero && ( fheroes2::Rect( ox + 5, oy + 4, Interface::IconsBar::GetItemWidth(), Interface::IconsBar::GetItemHeight() ) & cursor ) ) {
-        Dialog::QuickInfo( *row.hero, {}, true, _windowArea );
+        Dialog::QuickInfoWithIndicationOnRadar( *row.hero, _windowArea );
     }
 }
 
@@ -361,22 +389,7 @@ void StatsHeroesList::RedrawBackground( const fheroes2::Point & dst )
     text.set( _( "Artifacts" ), fheroes2::FontType::smallWhite() );
     text.draw( dst.x + 500 - text.width() / 2, offsetY, display );
 
-    // Scrollbar background.
-    const fheroes2::Sprite & scrollbar = fheroes2::AGG::GetICN( ICN::OVERVIEW, 13 );
-    fheroes2::Copy( scrollbar, 0, 0, display, dst.x + scrollbarOffset + 1, dst.y + 17, scrollbar.width(), scrollbar.height() );
-
-    // Items background.
-    const fheroes2::Sprite & itemsBack = fheroes2::AGG::GetICN( ICN::OVERVIEW, 8 );
-    const int32_t itemsBackWidth = itemsBack.width();
-    const int32_t itemsBackHeight = itemsBack.height();
-    const int32_t offsetX = dst.x + 30;
-    offsetY = dst.y + 17;
-    const int32_t stepY = itemsBackHeight + 4;
-    const int visibleItems = VisibleItemCount();
-
-    for ( int ii = 0; ii < visibleItems; ++ii, offsetY += stepY ) {
-        fheroes2::Copy( itemsBack, 0, 0, display, offsetX, offsetY, itemsBackWidth, itemsBackHeight );
-    }
+    redrawCommonBackground( dst, VisibleItemCount(), display );
 }
 
 struct CstlRow
@@ -434,7 +447,7 @@ struct CstlRow
 class StatsCastlesList : public Interface::ListBox<CstlRow>
 {
 public:
-    StatsCastlesList( const fheroes2::Rect & windowArea, const fheroes2::Point & offset, const KingdomCastles & castles );
+    StatsCastlesList( const fheroes2::Rect & windowArea, const fheroes2::Point & offset, const VecCastles & castles );
 
     void RedrawItem( const CstlRow & row, int32_t dstx, int32_t dsty, bool current ) override;
     void RedrawBackground( const fheroes2::Point & dst ) override;
@@ -481,7 +494,7 @@ private:
     const fheroes2::Rect _windowArea;
 };
 
-StatsCastlesList::StatsCastlesList( const fheroes2::Rect & windowArea, const fheroes2::Point & offset, const KingdomCastles & castles )
+StatsCastlesList::StatsCastlesList( const fheroes2::Rect & windowArea, const fheroes2::Point & offset, const VecCastles & castles )
     : Interface::ListBox<CstlRow>( offset )
     , _windowArea( windowArea )
 {
@@ -546,15 +559,15 @@ void StatsCastlesList::ActionListPressRight( CstlRow & row, const fheroes2::Poin
 {
     if ( row.castle ) {
         if ( fheroes2::Rect( ox + 17, oy + 19, Interface::IconsBar::GetItemWidth(), Interface::IconsBar::GetItemHeight() ) & cursor ) {
-            Dialog::QuickInfo( *row.castle, {}, true, _windowArea );
+            Dialog::QuickInfoWithIndicationOnRadar( *row.castle, _windowArea );
         }
         else if ( fheroes2::Rect( ox + 82, oy + 19, Interface::IconsBar::GetItemWidth(), Interface::IconsBar::GetItemHeight() ) & cursor ) {
             const Heroes * hero = row.castle->GetHero();
             if ( hero ) {
-                Dialog::QuickInfo( *hero, {}, true, _windowArea );
+                Dialog::QuickInfoWithIndicationOnRadar( *hero, _windowArea );
             }
             else if ( row.castle->isBuild( BUILD_CAPTAIN ) ) {
-                Dialog::QuickInfo( row.castle->GetCaptain(), {}, true, _windowArea );
+                Dialog::QuickInfoWithIndicationOnRadar( row.castle->GetCaptain(), _windowArea );
             }
         }
     }
@@ -667,30 +680,7 @@ void StatsCastlesList::RedrawBackground( const fheroes2::Point & dst )
     text.set( _( "Available" ), fheroes2::FontType::smallWhite() );
     text.draw( dst.x + 500 - text.width() / 2, offsetY, display );
 
-    // Scrollbar background.
-    const fheroes2::Sprite & scrollbar = fheroes2::AGG::GetICN( ICN::OVERVIEW, 13 );
-    fheroes2::Copy( scrollbar, 0, 0, display, dst.x + scrollbarOffset + 1, dst.y + 17, scrollbar.width(), scrollbar.height() );
-
-    // items background
-    const fheroes2::Sprite & itemsBack = fheroes2::AGG::GetICN( ICN::OVERVIEW, 8 );
-    const fheroes2::Sprite & overback = fheroes2::AGG::GetICN( ICN::OVERBACK, 0 );
-    const int32_t itemsBackWidth = itemsBack.width();
-    const int32_t itemsBackHeight = itemsBack.height();
-    const int32_t offsetX = dst.x + 30;
-    offsetY = dst.y + 17;
-    const int32_t stepY = itemsBackHeight + 4;
-    const int32_t overbackOffsetX = dst.x + 29;
-    int32_t overbackOffsetY = dst.y + 13;
-    const int visibleItems = VisibleItemCount();
-
-    for ( int i = 0; i < visibleItems; ++i, offsetY += stepY, overbackOffsetY += stepY ) {
-        fheroes2::Copy( itemsBack, 0, 0, display, offsetX, offsetY, itemsBackWidth, itemsBackHeight );
-        // fix bar
-        fheroes2::Copy( overback, 29, 13, display, overbackOffsetX, overbackOffsetY, 595, 4 );
-    }
-
-    // Copy one vertical line in case of previous army selection
-    fheroes2::Copy( overback, 29, 12, display, overbackOffsetX, dst.y + 12, 1, 357 );
+    redrawCommonBackground( dst, VisibleItemCount(), display );
 }
 
 void RedrawIncomeInfo( const fheroes2::Point & pt, const Kingdom & myKingdom )
@@ -770,6 +760,8 @@ void RedrawFundsInfo( const fheroes2::Point & pt, const Kingdom & myKingdom )
 
 void Kingdom::openOverviewDialog()
 {
+    Game::SetUpdateSoundsOnFocusUpdate( false );
+
     fheroes2::Display & display = fheroes2::Display::instance();
 
     // setup cursor
@@ -919,6 +911,7 @@ void Kingdom::openOverviewDialog()
         // So, it's equivalent to check if hero list changed.
         if ( listHeroes.Refresh( heroes ) ) {
             worldMapRedrawMask |= Interface::AdventureMap::Get().getRedrawMask();
+            worldMapRedrawMask |= Interface::REDRAW_HEROES;
 
             // Update army bars in Castles.
             listCastles.updateHeroArmyBars();
@@ -948,8 +941,18 @@ void Kingdom::openOverviewDialog()
     _topCastleInKingdomView = listCastles.getTopId();
     _topHeroInKingdomView = listHeroes.getTopId();
 
+    Game::SetUpdateSoundsOnFocusUpdate( true );
+
+    Interface::AdventureMap & adventureMapInterface = Interface::AdventureMap::Get();
+
     if ( worldMapRedrawMask != 0 ) {
         // Force redraw of all UI elements that changed, that were masked by Kingdom window
-        Interface::AdventureMap::Get().setRedraw( worldMapRedrawMask );
+        adventureMapInterface.setRedraw( worldMapRedrawMask );
+
+        // Update focus because there were some changes made in the Kingdom overview dialog.
+        adventureMapInterface.ResetFocus( Interface::GetFocusType(), false );
     }
+
+    // The army of the selected hero / castle may have been changed.
+    adventureMapInterface.RedrawFocus();
 }

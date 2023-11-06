@@ -24,7 +24,9 @@
 #ifndef H2BATTLE_CELL_H
 #define H2BATTLE_CELL_H
 
+#include <array>
 #include <cstdint>
+#include <optional>
 #include <utility>
 
 #include "math_base.h"
@@ -54,19 +56,27 @@ namespace Battle
     class Cell
     {
     public:
-        explicit Cell( int32_t );
+        explicit Cell( const int32_t idx );
         Cell( const Cell & ) = delete;
         Cell( Cell && ) = default;
 
         Cell & operator=( const Cell & ) = delete;
         Cell & operator=( Cell && ) = delete;
 
-        void ResetQuality();
+        int32_t GetIndex() const;
+        const fheroes2::Rect & GetPos() const;
+        int GetObject() const;
 
-        void SetObject( int );
-        void SetQuality( uint32_t );
+        const Unit * GetUnit() const;
+        Unit * GetUnit();
 
-        void SetArea( const fheroes2::Rect & );
+        direction_t GetTriangleDirection( const fheroes2::Point & dst ) const;
+
+        bool isPositionIncludePoint( const fheroes2::Point & pt ) const;
+
+        void SetArea( const fheroes2::Rect & area );
+        void SetObject( const int object );
+        void SetUnit( Unit * unit );
 
         // Checks that the cell is passable for a given unit located in a certain adjacent cell
         bool isPassableFromAdjacent( const Unit & unit, const Cell & adjacent ) const;
@@ -75,25 +85,12 @@ namespace Battle
         // Checks that the cell is passable, i.e. does not contain an obstacle or (optionally) a unit
         bool isPassable( const bool checkForUnit ) const;
 
-        bool isPositionIncludePoint( const fheroes2::Point & ) const;
-
-        int32_t GetIndex() const;
-        const fheroes2::Rect & GetPos() const;
-        int GetObject() const;
-        int32_t GetQuality() const;
-        direction_t GetTriangleDirection( const fheroes2::Point & ) const;
-
-        const Unit * GetUnit() const;
-        Unit * GetUnit();
-        void SetUnit( Unit * );
-
     private:
-        int32_t index;
-        fheroes2::Rect pos;
-        int object;
-        int32_t quality;
-        Unit * troop;
-        fheroes2::Point coord[7];
+        int32_t _index;
+        fheroes2::Rect _pos;
+        int _object;
+        Unit * _unit;
+        std::array<fheroes2::Point, 7> _coord;
     };
 
     class Position : protected std::pair<Cell *, Cell *>
@@ -110,19 +107,22 @@ namespace Battle
 
         // Returns the position that a given unit would occupy after moving to the cell
         // with a given index (without taking into account the pathfinder's info) or an
-        // empty Position object if this index is unreachable in principle for this unit
+        // empty Position object if this index is unreachable in principle for this unit.
         static Position GetPosition( const Unit & unit, const int32_t dst );
 
         // Returns the reachable position for a given unit, which corresponds to a given
         // index, or an empty Position object if this index is unreachable for this unit
-        // on the current turn
-        static Position GetReachable( const Unit & unit, const int32_t dst );
+        // on the current turn. if 'speed' is set, then this value will be used to check
+        // the position reachability instead of the speed returned by 'unit'.
+        static Position GetReachable( const Unit & unit, const int32_t dst, const std::optional<uint32_t> speed = {} );
 
         fheroes2::Rect GetRect() const;
         Cell * GetHead();
         const Cell * GetHead() const;
         Cell * GetTail();
         const Cell * GetTail() const;
+
+        bool operator<( const Position & other ) const;
     };
 }
 

@@ -22,18 +22,40 @@
  ***************************************************************************/
 
 #include "statusbar.h"
+
+#include <cstdint>
+#include <memory>
+#include <utility>
+
 #include "screen.h"
 #include "tools.h"
+#include "ui_text.h"
 
-void StatusBar::ShowMessage( const std::string & msg )
+StatusBar::StatusBar()
+    : MovableText( fheroes2::Display::instance() )
 {
-    if ( msg != prev ) {
-        const fheroes2::Rect prevRoi = GetRect();
-        SetText( msg );
-        SetPos( center.x - w() / 2, center.y - h() / 2 );
-        Show();
+    // Do nothing.
+}
 
-        fheroes2::Display::instance().render( fheroes2::getBoundaryRect( prevRoi, GetRect() ) );
-        prev = msg;
+void StatusBar::ShowMessage( std::string msg )
+{
+    if ( msg == _prevMessage ) {
+        // No updates.
+        return;
     }
+
+    _prevMessage = msg;
+
+    auto text = std::make_unique<fheroes2::Text>( std::move( msg ), fheroes2::FontType::normalWhite() );
+    text->fitToOneRow( _roi.width );
+
+    const int32_t textWidth = text->width();
+    const fheroes2::Rect messageRoi{ _roi.x + ( _roi.width - textWidth ) / 2, _roi.y, textWidth, text->height() };
+
+    update( std::move( text ) );
+
+    draw( messageRoi.x, messageRoi.y );
+
+    fheroes2::Display::instance().render( fheroes2::getBoundaryRect( _prevMessageRoi, messageRoi ) );
+    _prevMessageRoi = messageRoi;
 }

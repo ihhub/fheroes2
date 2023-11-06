@@ -52,7 +52,6 @@
 #include "maps_tiles_helper.h"
 #include "morale.h"
 #include "mp2.h"
-#include "payment.h"
 #include "race.h"
 #include "rand.h"
 #include "resource.h"
@@ -463,7 +462,7 @@ void Troops::UpgradeTroops( const Castle & castle ) const
             continue;
         }
 
-        const payment_t payment = troop->GetTotalUpgradeCost();
+        const Funds payment = troop->GetTotalUpgradeCost();
         if ( kingdom.AllowPayment( payment ) ) {
             kingdom.OddFundsResource( payment );
             troop->Upgrade();
@@ -1315,7 +1314,8 @@ int Army::GetControl() const
 
 uint32_t Army::getTotalCount() const
 {
-    return std::accumulate( begin(), end(), 0u, []( const uint32_t count, const Troop * troop ) { return troop->isValid() ? count + troop->GetCount() : count; } );
+    return std::accumulate( begin(), end(), static_cast<uint32_t>( 0 ),
+                            []( const uint32_t count, const Troop * troop ) { return troop->isValid() ? count + troop->GetCount() : count; } );
 }
 
 std::string Army::String() const
@@ -1501,12 +1501,12 @@ bool Army::isMeleeDominantArmy() const
     return meleeInfantry > other;
 }
 
-void Army::drawSingleDetailedMonsterLine( const Troops & troops, int32_t cx, int32_t cy, uint32_t width )
+void Army::drawSingleDetailedMonsterLine( const Troops & troops, int32_t cx, int32_t cy, int32_t width )
 {
     fheroes2::drawMiniMonsters( troops, cx, cy, width, 0, 0, false, true, false, 0, fheroes2::Display::instance() );
 }
 
-void Army::drawMultipleMonsterLines( const Troops & troops, int32_t posX, int32_t posY, uint32_t lineWidth, bool isCompact, const bool isDetailedView,
+void Army::drawMultipleMonsterLines( const Troops & troops, int32_t posX, int32_t posY, int32_t lineWidth, bool isCompact, const bool isDetailedView,
                                      const bool isGarrisonView /* = false */, const uint32_t thievesGuildsCount /* = 0 */ )
 {
     const uint32_t count = troops.GetOccupiedSlotCount();
@@ -1592,7 +1592,7 @@ NeutralMonsterJoiningCondition Army::GetJoinSolution( const Heroes & hero, const
 
             // The ability to hire the entire stack of monsters is a mandatory condition for their joining
             // due to hero's Diplomacy skill in accordance with the mechanics of the original game
-            if ( amountToJoin > 0 && hero.GetKingdom().AllowPayment( payment_t( Resource::GOLD, troop.GetTotalCost().gold ) ) ) {
+            if ( amountToJoin > 0 && hero.GetKingdom().AllowPayment( Funds( Resource::GOLD, troop.GetTotalCost().gold ) ) ) {
                 return { NeutralMonsterJoiningCondition::Reason::ForMoney, amountToJoin, nullptr, nullptr };
             }
         }
@@ -1801,7 +1801,8 @@ void Army::ArrangeForBattle( const Monster & monster, const uint32_t monstersCou
         at( i + shift )->Set( monster, i < remainder ? quotient + 1 : quotient );
     }
 
-    assert( std::accumulate( begin(), end(), 0U, []( const uint32_t count, const Troop * troop ) { return troop->isValid() ? count + troop->GetCount() : count; } )
+    assert( std::accumulate( begin(), end(), static_cast<uint32_t>( 0 ),
+                             []( const uint32_t count, const Troop * troop ) { return troop->isValid() ? count + troop->GetCount() : count; } )
             == monstersCount );
 }
 

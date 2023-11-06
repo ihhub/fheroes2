@@ -48,7 +48,8 @@
 #include "world.h"
 
 Interface::AdventureMap::AdventureMap()
-    : iconsPanel( *this )
+    : BaseInterface( false )
+    , iconsPanel( *this )
     , buttonsArea( *this )
     , controlPanel( *this )
     , _lockRedraw( false )

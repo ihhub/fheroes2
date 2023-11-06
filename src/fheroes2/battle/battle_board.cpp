@@ -29,20 +29,15 @@
 #include <cstdint>
 #include <cstdlib>
 #include <memory>
-#include <ostream>
-#include <set>
 #include <utility>
 
-#include "battle.h"
 #include "battle_arena.h"
-#include "battle_army.h"
 #include "battle_bridge.h"
 #include "battle_troop.h"
 #include "castle.h"
 #include "game_static.h"
 #include "ground.h"
 #include "icn.h"
-#include "logging.h"
 #include "maps_tiles.h"
 #include "mp2.h"
 #include "rand.h"
@@ -114,7 +109,7 @@ void Battle::Board::SetArea( const fheroes2::Rect & area )
         ( *it ).SetArea( area );
 }
 
-void Battle::Board::Reset()
+void Battle::Board::removeDeadUnits()
 {
     for ( Cell & cell : *this ) {
         Unit * unit = cell.GetUnit();
@@ -122,93 +117,76 @@ void Battle::Board::Reset()
         if ( unit && !unit->isValid() ) {
             unit->PostKilledAction();
         }
-
-        cell.ResetQuality();
     }
 }
 
-void Battle::Board::SetPositionQuality( const Unit & b ) const
+uint32_t Battle::Board::GetDistance( const int32_t index1, const int32_t index2 )
 {
-    const Arena * arena = GetArena();
-    assert( arena != nullptr );
-
-    Units enemies( arena->getEnemyForce( b.GetCurrentColor() ).getUnits(), true );
-
-    // Make sure archers are first here, so melee unit's score won't be double counted
-    enemies.SortArchers();
-
-    for ( const Unit * unit : enemies ) {
-        if ( !unit || !unit->isValid() ) {
-            continue;
-        }
-
-        const Indexes around = GetAroundIndexes( *unit );
-        for ( const int32_t index : around ) {
-            Cell * cell2 = GetCell( index );
-            if ( !cell2 || !cell2->isPassableForUnit( b ) )
-                continue;
-
-            const int32_t quality = cell2->GetQuality();
-            const int32_t attackValue = OptimalAttackValue( b, *unit, index );
-
-            // Only sum up quality score if it's archers; otherwise just pick the highest
-            if ( unit->isArchers() )
-                cell2->SetQuality( quality + attackValue );
-            else if ( attackValue > quality )
-                cell2->SetQuality( attackValue );
-        }
+    if ( !isValidIndex( index1 ) || !isValidIndex( index2 ) ) {
+        return 0;
     }
+
+    const int32_t x1 = index1 % ARENAW;
+    const int32_t y1 = index1 / ARENAW;
+
+    const int32_t x2 = index2 % ARENAW;
+    const int32_t y2 = index2 / ARENAW;
+
+    const int32_t du = y2 - y1;
+    const int32_t dv = ( x2 + y2 / 2 ) - ( x1 + y1 / 2 );
+
+    if ( ( du >= 0 && dv >= 0 ) || ( du < 0 && dv < 0 ) ) {
+        return std::max( std::abs( du ), std::abs( dv ) );
+    }
+
+    return std::abs( du ) + std::abs( dv );
 }
 
-void Battle::Board::SetEnemyQuality( const Unit & unit ) const
+uint32_t Battle::Board::GetDistance( const Position & pos1, const Position & pos2 )
 {
-    const Arena * arena = GetArena();
-    assert( arena != nullptr );
-
-    Units enemies( arena->getEnemyForce( unit.GetColor() ).getUnits(), true );
-    if ( unit.Modes( SP_BERSERKER ) ) {
-        Units allies( arena->getForce( unit.GetColor() ).getUnits(), true );
-        enemies.insert( enemies.end(), allies.begin(), allies.end() );
+    if ( pos1.GetHead() == nullptr || pos2.GetHead() == nullptr ) {
+        return 0;
     }
 
-    for ( Units::const_iterator it = enemies.begin(); it != enemies.end(); ++it ) {
-        const Unit * enemy = *it;
+    const int32_t head1Idx = pos1.GetHead()->GetIndex();
+    const int32_t tail1Idx = pos1.GetTail() ? pos1.GetTail()->GetIndex() : -1;
 
-        if ( enemy && enemy->isValid() ) {
-            const int32_t score = enemy->GetScoreQuality( unit );
-            Cell * cell = GetCell( enemy->GetHeadIndex() );
+    const int32_t head2Idx = pos2.GetHead()->GetIndex();
+    const int32_t tail2Idx = pos2.GetTail() ? pos2.GetTail()->GetIndex() : -1;
 
-            cell->SetQuality( score );
+    uint32_t distance = Board::GetDistance( head1Idx, head2Idx );
 
-            if ( enemy->isWide() )
-                GetCell( enemy->GetTailIndex() )->SetQuality( score );
+    if ( tail2Idx != -1 ) {
+        distance = std::min( distance, Board::GetDistance( head1Idx, tail2Idx ) );
+    }
 
-            DEBUG_LOG( DBG_BATTLE, DBG_TRACE, score << " for " << enemy->String() )
+    if ( tail1Idx != -1 ) {
+        distance = std::min( distance, Board::GetDistance( tail1Idx, head2Idx ) );
+
+        if ( tail2Idx != -1 ) {
+            distance = std::min( distance, Board::GetDistance( tail1Idx, tail2Idx ) );
         }
     }
+
+    return distance;
 }
 
-uint32_t Battle::Board::GetDistance( int32_t index1, int32_t index2 )
+uint32_t Battle::Board::GetDistance( const Position & pos, const int32_t index )
 {
-    if ( isValidIndex( index1 ) && isValidIndex( index2 ) ) {
-        const int32_t x1 = index1 % ARENAW;
-        const int32_t y1 = index1 / ARENAW;
-
-        const int32_t x2 = index2 % ARENAW;
-        const int32_t y2 = index2 / ARENAW;
-
-        const int32_t du = y2 - y1;
-        const int32_t dv = ( x2 + y2 / 2 ) - ( x1 + y1 / 2 );
-
-        if ( ( du >= 0 && dv >= 0 ) || ( du < 0 && dv < 0 ) ) {
-            return std::max( std::abs( du ), std::abs( dv ) );
-        }
-        else {
-            return std::abs( du ) + std::abs( dv );
-        }
+    if ( pos.GetHead() == nullptr || !isValidIndex( index ) ) {
+        return 0;
     }
 
-    return 0;
+    const int32_t headIdx = pos.GetHead()->GetIndex();
+    const int32_t tailIdx = pos.GetTail() ? pos.GetTail()->GetIndex() : -1;
+
+    uint32_t distance = Board::GetDistance( headIdx, index );
+
+    if ( tailIdx != -1 ) {
+        distance = std::min( distance, Board::GetDistance( tailIdx, index ) );
+    }
+
+    return distance;
 }
 
 std::vector<Battle::Unit *> Battle::Board::GetNearestTroops( const Unit * startUnit, const std::vector<Battle::Unit *> & blackList )
@@ -223,7 +201,7 @@ std::vector<Battle::Unit *> Battle::Board::GetNearestTroops( const Unit * startU
 
         const bool isBlackListed = std::find( blackList.begin(), blackList.end(), cellUnit ) != blackList.end();
         if ( !isBlackListed ) {
-            foundUnits.emplace_back( cellUnit, GetDistance( startUnit->GetHeadIndex(), cellUnit->GetHeadIndex() ) );
+            foundUnits.emplace_back( cellUnit, GetDistance( startUnit->GetPosition(), cellUnit->GetPosition() ) );
         }
     }
 
@@ -238,71 +216,6 @@ std::vector<Battle::Unit *> Battle::Board::GetNearestTroops( const Unit * startU
     }
 
     return units;
-}
-
-int32_t Battle::Board::DoubleCellAttackValue( const Unit & attacker, const Unit & target, const int32_t from, const int32_t targetCell )
-{
-    const Cell * behind = GetCell( targetCell, GetDirection( from, targetCell ) );
-    const Unit * secondaryTarget = ( behind != nullptr ) ? behind->GetUnit() : nullptr;
-    if ( secondaryTarget && secondaryTarget->GetUID() != target.GetUID() && secondaryTarget->GetUID() != attacker.GetUID() ) {
-        return secondaryTarget->GetScoreQuality( attacker );
-    }
-    return 0;
-}
-
-int32_t Battle::Board::OptimalAttackTarget( const Unit & attacker, const Unit & target, const int32_t from )
-{
-    const int32_t headIndex = target.GetHeadIndex();
-    const int32_t tailIndex = target.GetTailIndex();
-
-    // isNearIndexes should return false if we pass in invalid tail index (-1)
-    if ( isNearIndexes( from, tailIndex ) ) {
-        if ( attacker.isDoubleCellAttack() && isNearIndexes( from, headIndex )
-             && DoubleCellAttackValue( attacker, target, from, headIndex ) > DoubleCellAttackValue( attacker, target, from, tailIndex ) ) {
-            // Special case when attacking wide unit from the middle cell and could turn around
-            return headIndex;
-        }
-        return tailIndex;
-    }
-    return headIndex;
-}
-
-int32_t Battle::Board::OptimalAttackValue( const Unit & attacker, const Unit & target, const int32_t from )
-{
-    if ( attacker.isDoubleCellAttack() ) {
-        const int32_t targetCell = OptimalAttackTarget( attacker, target, from );
-        return target.GetScoreQuality( attacker ) + DoubleCellAttackValue( attacker, target, from, targetCell );
-    }
-
-    if ( attacker.isAllAdjacentCellsAttack() ) {
-        Position position = Position::GetPosition( attacker, from );
-
-        if ( position.GetHead() == nullptr || ( attacker.isWide() && position.GetTail() == nullptr ) ) {
-            DEBUG_LOG( DBG_BATTLE, DBG_WARN, "Invalid position for " << attacker.String() << ", target: " << target.String() << ", cell: " << from )
-
-            return 0;
-        }
-
-        Indexes aroundAttacker = GetAroundIndexes( position );
-
-        std::set<const Unit *> unitsUnderAttack;
-        Board * board = Arena::GetBoard();
-        for ( const int32_t index : aroundAttacker ) {
-            const Unit * unit = board->at( index ).GetUnit();
-            if ( unit != nullptr && unit->GetColor() != attacker.GetCurrentColor() ) {
-                unitsUnderAttack.insert( unit );
-            }
-        }
-
-        int32_t attackValue = 0;
-        for ( const Unit * unit : unitsUnderAttack ) {
-            attackValue += unit->GetScoreQuality( attacker );
-        }
-
-        return attackValue;
-    }
-
-    return target.GetScoreQuality( attacker );
 }
 
 int Battle::Board::GetDirection( const int32_t index1, const int32_t index2 )
@@ -349,11 +262,6 @@ int Battle::Board::GetReflectDirection( const int dir )
     }
 
     return UNKNOWN;
-}
-
-bool Battle::Board::isNegativeDistance( const int32_t index1, const int32_t index2 )
-{
-    return ( index1 % ARENAW ) - ( index2 % ARENAW ) < 0;
 }
 
 int Battle::Board::DistanceFromOriginX( const int32_t index, const bool reflect )
@@ -1029,18 +937,17 @@ bool Battle::Board::CanAttackTargetFromPosition( const Unit & attacker, const Un
             continue;
         }
 
-        if ( !CanAttackFromCell( attacker, cell->GetIndex() ) ) {
+        const int32_t cellIdx = cell->GetIndex();
+
+        if ( Board::GetDistance( target.GetPosition(), cellIdx ) > 1 ) {
             continue;
         }
 
-        for ( const int32_t nearbyIdx : GetAroundIndexes( cell->GetIndex() ) ) {
-            const Cell * nearbyCell = GetCell( nearbyIdx );
-            assert( nearbyCell != nullptr );
-
-            if ( nearbyCell->GetUnit() == &target ) {
-                return true;
-            }
+        if ( !CanAttackFromCell( attacker, cellIdx ) ) {
+            continue;
         }
+
+        return true;
     }
 
     return false;

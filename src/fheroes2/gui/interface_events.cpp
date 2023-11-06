@@ -32,10 +32,12 @@
 #include "artifact_ultimate.h"
 #include "audio.h"
 #include "audio_manager.h"
+#include "castle.h"
 #include "dialog.h"
 #include "dialog_system_options.h"
 #include "direction.h"
 #include "game.h"
+#include "game_delays.h"
 #include "game_interface.h"
 #include "game_io.h"
 #include "game_mode.h"
@@ -95,6 +97,11 @@ void Interface::AdventureMap::ShowPathOrStartMoveHero( Heroes * hero, const int3
         RedrawFocus();
 
         hero->SetMove( true );
+
+        // We pass this delay to start hero moving immediately and set all the variables needed to handle game events correctly
+        // and to stop handling mouse click events until hero stops. Otherwise there could be a rare case
+        // when double click is faster than this delay and the second click will also be handled which should not happen.
+        Game::passAnimationDelay( Game::DelayType::CURRENT_HERO_DELAY );
     }
 }
 
@@ -119,15 +126,15 @@ void Interface::AdventureMap::MoveHeroFromArrowKeys( Heroes & hero, const int di
 void Interface::AdventureMap::EventNextHero()
 {
     const Kingdom & myKingdom = world.GetKingdom( Settings::Get().CurrentColor() );
-    const KingdomHeroes & myHeroes = myKingdom.GetHeroes();
+    const VecHeroes & myHeroes = myKingdom.GetHeroes();
 
     if ( myHeroes.empty() ) {
         return;
     }
 
     if ( GetFocusHeroes() ) {
-        KingdomHeroes::const_iterator it = std::find( myHeroes.begin(), myHeroes.end(), GetFocusHeroes() );
-        KingdomHeroes::const_iterator currentHero = it;
+        VecHeroes::const_iterator it = std::find( myHeroes.begin(), myHeroes.end(), GetFocusHeroes() );
+        VecHeroes::const_iterator currentHero = it;
 
         do {
             ++it;
@@ -154,13 +161,32 @@ void Interface::AdventureMap::EventNextHero()
     RedrawFocus();
 }
 
-void Interface::AdventureMap::EventContinueMovement() const
+fheroes2::GameMode Interface::AdventureMap::EventHeroMovement()
 {
     Heroes * hero = GetFocusHeroes();
 
-    if ( hero && hero->GetPath().isValidForMovement() && hero->MayStillMove( false, true ) ) {
-        hero->SetMove( true );
+    if ( hero ) {
+        if ( hero->GetPath().isValidForMovement() && hero->MayStillMove( false, true ) ) {
+            hero->SetMove( true );
+        }
+        else if ( MP2::isActionObject( hero->getObjectTypeUnderHero(), hero->isShipMaster() ) ) {
+            return EventDefaultAction();
+        }
     }
+
+    return fheroes2::GameMode::CANCEL;
+}
+
+void Interface::AdventureMap::EventResetHeroPath()
+{
+    Heroes * hero = GetFocusHeroes();
+    if ( hero == nullptr ) {
+        return;
+    }
+
+    hero->GetPath().Reset();
+
+    setRedraw( REDRAW_GAMEAREA | REDRAW_BUTTONS );
 }
 
 void Interface::AdventureMap::EventKingdomInfo() const
@@ -262,11 +288,11 @@ fheroes2::GameMode Interface::BaseInterface::EventExit()
 void Interface::AdventureMap::EventNextTown()
 {
     Kingdom & myKingdom = world.GetKingdom( Settings::Get().CurrentColor() );
-    KingdomCastles & myCastles = myKingdom.GetCastles();
+    VecCastles & myCastles = myKingdom.GetCastles();
 
     if ( !myCastles.empty() ) {
         if ( GetFocusCastle() ) {
-            KingdomCastles::const_iterator it = std::find( myCastles.begin(), myCastles.end(), GetFocusCastle() );
+            VecCastles::const_iterator it = std::find( myCastles.begin(), myCastles.end(), GetFocusCastle() );
             ++it;
             if ( it == myCastles.end() )
                 it = myCastles.begin();
@@ -398,6 +424,7 @@ fheroes2::GameMode Interface::AdventureMap::EventDigArtifact()
         AudioManager::PlaySound( M82::DIGSOUND );
 
         hero->ResetMovePoints();
+        hero->GetPath().Reset();
 
         if ( world.DiggingForUltimateArtifact( hero->GetCenter() ) ) {
             const AudioManager::MusicRestorer musicRestorer;
@@ -426,7 +453,7 @@ fheroes2::GameMode Interface::AdventureMap::EventDigArtifact()
             fheroes2::showStandardTextMessage( "", _( "Nothing here. Where could it be?" ), Dialog::OK );
         }
 
-        redraw( REDRAW_HEROES );
+        redraw( REDRAW_HEROES | REDRAW_BUTTONS );
         fheroes2::Display::instance().render();
 
         // check if the game is over due to conditions related to the ultimate artifact
@@ -438,13 +465,12 @@ fheroes2::GameMode Interface::AdventureMap::EventDigArtifact()
     return fheroes2::GameMode::CANCEL;
 }
 
-fheroes2::GameMode Interface::AdventureMap::EventDefaultAction( const fheroes2::GameMode gameMode )
+fheroes2::GameMode Interface::AdventureMap::EventDefaultAction()
 {
     Heroes * hero = GetFocusHeroes();
 
     if ( hero ) {
-        // 1. action object
-        if ( MP2::isActionObject( hero->GetMapsObject(), hero->isShipMaster() ) ) {
+        if ( MP2::isActionObject( hero->getObjectTypeUnderHero(), hero->isShipMaster() ) ) {
             hero->Action( hero->GetIndex() );
 
             // The action object can alter the status of the hero (e.g. Stables or Well) or
@@ -452,20 +478,20 @@ fheroes2::GameMode Interface::AdventureMap::EventDefaultAction( const fheroes2::
             ResetFocus( GameFocus::HEROES, true );
             RedrawFocus();
 
-            // If a hero completed an action we must verify the condition for the scenario.
+            // If the hero has performed an action, we have to check the completion condition
+            // of the scenario
             if ( hero->isAction() ) {
                 hero->ResetAction();
-                // check if the game is over after the hero's action
+
                 return GameOver::Result::Get().checkGameOver();
             }
         }
     }
     else if ( GetFocusCastle() ) {
-        // 2. town dialog
         Game::OpenCastleDialog( *GetFocusCastle() );
     }
 
-    return gameMode;
+    return fheroes2::GameMode::CANCEL;
 }
 
 void Interface::AdventureMap::EventOpenFocus() const

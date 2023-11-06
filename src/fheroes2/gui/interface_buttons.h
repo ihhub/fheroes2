@@ -62,7 +62,7 @@ namespace Interface
         AdventureMap & interface;
 
         fheroes2::Button buttonNextHero;
-        fheroes2::Button buttonMovement;
+        fheroes2::Button buttonHeroMovement;
         fheroes2::Button buttonKingdom;
         fheroes2::Button buttonSpell;
         fheroes2::Button buttonEndTurn;
@@ -71,7 +71,7 @@ namespace Interface
         fheroes2::Button buttonSystem;
 
         fheroes2::Rect nextHeroRect;
-        fheroes2::Rect movementRect;
+        fheroes2::Rect heroMovementRect;
         fheroes2::Rect kingdomRect;
         fheroes2::Rect spellRect;
         fheroes2::Rect endTurnRect;

@@ -21,6 +21,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "monster.h"
+
 #include <algorithm>
 #include <vector>
 
@@ -28,7 +30,6 @@
 #include "color.h"
 #include "icn.h"
 #include "luck.h"
-#include "monster.h"
 #include "morale.h"
 #include "race.h"
 #include "rand.h"
@@ -71,24 +72,6 @@ uint32_t Monster::GetMissileICN( uint32_t monsterID )
     }
 
     return ICN::UNKNOWN;
-}
-
-Monster::Monster( const int m )
-    : id( UNKNOWN )
-{
-    if ( m <= WATER_ELEMENT ) {
-        id = m;
-    }
-    else if ( MONSTER_RND1 == m )
-        id = Rand( LevelType::LEVEL_1 ).GetID();
-    else if ( MONSTER_RND2 == m )
-        id = Rand( LevelType::LEVEL_2 ).GetID();
-    else if ( MONSTER_RND3 == m )
-        id = Rand( LevelType::LEVEL_3 ).GetID();
-    else if ( MONSTER_RND4 == m )
-        id = Rand( LevelType::LEVEL_4 ).GetID();
-    else if ( MONSTER_RND == m )
-        id = Rand( LevelType::LEVEL_ANY ).GetID();
 }
 
 Monster::Monster( const Spell & sp )
@@ -619,7 +602,7 @@ Monster::LevelType Monster::GetRandomUnitLevel() const
     case SKELETON:
     case ZOMBIE:
     case ROGUE:
-    case MONSTER_RND1:
+    case RANDOM_MONSTER_LEVEL_1:
         return LevelType::LEVEL_1;
 
     case RANGER:
@@ -637,7 +620,7 @@ Monster::LevelType Monster::GetRandomUnitLevel() const
     case MUTANT_ZOMBIE:
     case MUMMY:
     case NOMAD:
-    case MONSTER_RND2:
+    case RANDOM_MONSTER_LEVEL_2:
         return LevelType::LEVEL_2;
 
     case SWORDSMAN:
@@ -667,7 +650,7 @@ Monster::LevelType Monster::GetRandomUnitLevel() const
     case AIR_ELEMENT:
     case FIRE_ELEMENT:
     case WATER_ELEMENT:
-    case MONSTER_RND3:
+    case RANDOM_MONSTER_LEVEL_3:
         return LevelType::LEVEL_3;
 
     case PALADIN:
@@ -684,10 +667,10 @@ Monster::LevelType Monster::GetRandomUnitLevel() const
     case POWER_LICH:
     case BONE_DRAGON:
     case GENIE:
-    case MONSTER_RND4:
+    case RANDOM_MONSTER_LEVEL_4:
         return LevelType::LEVEL_4;
 
-    case MONSTER_RND:
+    case RANDOM_MONSTER:
         switch ( Rand::Get( 0, 3 ) ) {
         default:
             return LevelType::LEVEL_1;
@@ -818,7 +801,7 @@ int Monster::ICNMonh() const
     return id >= PEASANT && id <= WATER_ELEMENT ? ICN::MONH0000 + id - PEASANT : ICN::UNKNOWN;
 }
 
-payment_t Monster::GetUpgradeCost() const
+Funds Monster::GetUpgradeCost() const
 {
     const Monster upgr = GetUpgrade();
     if ( id == upgr.id ) {
@@ -828,13 +811,15 @@ payment_t Monster::GetUpgradeCost() const
     return ( upgr.GetCost() - GetCost() ) * 2;
 }
 
-uint32_t Monster::GetCountFromHitPoints( const Monster & mons, uint32_t hp )
+uint32_t Monster::GetCountFromHitPoints( const Monster & mons, const uint32_t hp )
 {
-    if ( hp ) {
-        const uint32_t hp1 = mons.GetHitPoints();
-        const uint32_t count = hp / hp1;
-        return ( count * hp1 ) < hp ? count + 1 : count;
+    if ( hp == 0 ) {
+        return 0;
     }
 
-    return 0;
+    const uint32_t singleMonsterHP = mons.GetHitPoints();
+    const uint32_t quotient = hp / singleMonsterHP;
+    const uint32_t remainder = hp % singleMonsterHP;
+
+    return ( remainder > 0 ? quotient + 1 : quotient );
 }

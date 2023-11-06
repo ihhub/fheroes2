@@ -32,11 +32,22 @@
 
 namespace Dialog
 {
-    Monster selectMonster( const int monsterId = Monster::UNKNOWN );
+    Monster selectMonster( const int monsterId );
+
     int selectHeroes( const int heroId = Heroes::UNKNOWN );
+
     Artifact selectArtifact( const int artifactId = Artifact::UNKNOWN );
+
     Spell selectSpell( const int spellId = Spell::NONE );
-    Skill::Secondary selectSecondarySkill( const int skillId = Skill::Secondary::UNKNOWN );
+
+    Skill::Secondary selectSecondarySkill( const Heroes & hero, const int skillId = Skill::Secondary::UNKNOWN );
+
+    // These functions should be called only from the Editor as they rely on Maps::ObjectInfo structures that are not the same as in-game items.
+    int selectHeroType( const int heroType );
+
+    int selectMonsterType( const int monsterType );
+
+    int selectTreasureType( const int resourceType );
 }
 
 #endif

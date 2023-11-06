@@ -240,21 +240,6 @@ fheroes2::GameMode Game::Load( const std::string & filePath )
         return fheroes2::GameMode::CANCEL;
     }
 
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE2_1002_RELEASE, "Remove the logic below." );
-    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_PRE2_1002_RELEASE ) {
-        uint16_t zippedSaveFileVersion = 0;
-        zb >> zippedSaveFileVersion;
-
-        if ( zippedSaveFileVersion != saveFileVersion ) {
-            DEBUG_LOG( DBG_GAME, DBG_WARN,
-                       "In the file " << filePath << " the file version " << saveFileVersion << " does not match the zipped one " << zippedSaveFileVersion )
-
-            showGenericErrorMessage();
-
-            return fheroes2::GameMode::CANCEL;
-        }
-    }
-
     zb >> World::Get() >> conf >> GameOver::Result::Get();
 
     fheroes2::GameMode returnValue = fheroes2::GameMode::START_GAME;

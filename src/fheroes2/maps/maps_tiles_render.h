@@ -25,6 +25,8 @@
 #include "math_base.h"
 #include "mp2.h"
 
+class Heroes;
+
 namespace fheroes2
 {
     class Image;
@@ -54,11 +56,14 @@ namespace Maps
 
     void drawByObjectIcnType( const Tiles & tile, fheroes2::Image & output, const Interface::GameArea & area, const MP2::ObjectIcnType objectIcnType );
 
-    std::vector<fheroes2::ObjectRenderingInfo> getMonsterSpritesPerTile( const Tiles & tile );
-    std::vector<fheroes2::ObjectRenderingInfo> getMonsterShadowSpritesPerTile( const Tiles & tile );
+    std::vector<fheroes2::ObjectRenderingInfo> getMonsterSpritesPerTile( const Tiles & tile, const bool isEditorMode );
+    std::vector<fheroes2::ObjectRenderingInfo> getMonsterShadowSpritesPerTile( const Tiles & tile, const bool isEditorMode );
     std::vector<fheroes2::ObjectRenderingInfo> getBoatSpritesPerTile( const Tiles & tile );
     std::vector<fheroes2::ObjectRenderingInfo> getBoatShadowSpritesPerTile( const Tiles & tile );
     std::vector<fheroes2::ObjectRenderingInfo> getMineGuardianSpritesPerTile( const Tiles & tile );
+    std::vector<fheroes2::ObjectRenderingInfo> getHeroSpritesPerTile( const Heroes & hero );
+    std::vector<fheroes2::ObjectRenderingInfo> getHeroShadowSpritesPerTile( const Heroes & hero );
+    std::vector<fheroes2::ObjectRenderingInfo> getEditorHeroSpritesPerTile( const Tiles & tile );
 
     const fheroes2::Image & getTileSurface( const Tiles & tile );
 }

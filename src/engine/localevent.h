@@ -73,9 +73,12 @@ namespace fheroes2
         KEY_RIGHT_BRACKET,
         KEY_CARET,
         KEY_UNDERSCORE,
-        KEY_ALT,
-        KEY_CONTROL,
-        KEY_SHIFT,
+        KEY_LEFT_ALT,
+        KEY_RIGHT_ALT,
+        KEY_LEFT_CONTROL,
+        KEY_RIGHT_CONTROL,
+        KEY_LEFT_SHIFT,
+        KEY_RIGHT_SHIFT,
         KEY_TAB,
         KEY_DELETE,
         KEY_PAGE_UP,
@@ -217,6 +220,10 @@ public:
     bool MouseClickLeft( const fheroes2::Rect & rt );
     bool MouseClickRight( const fheroes2::Rect & rt );
 
+    // The long press event is triggered only once. If this event was triggered (i.e. this method was called
+    // and returned true), then after releasing the mouse button, the click event will not be triggered.
+    bool MouseLongPressLeft( const fheroes2::Rect & rt );
+
     bool MouseWheelUp() const;
     bool MouseWheelDn() const;
 
@@ -256,6 +263,15 @@ public:
         return rt & mouse_cu;
     }
 
+    // Returns true if the current mouse event is triggered by the touchpad and not the mouse (in other words,
+    // this event is emulated using the touchpad). It is assumed that there is only one mouse in the system,
+    // and touchpad events have priority in this sense - that is, as long as the touchpad emulates pressing any
+    // mouse button, it is assumed that all mouse events are triggered by the touchpad.
+    bool MouseEventFromTouchpad() const
+    {
+        return modes & MOUSE_TOUCH;
+    }
+
     bool KeyPress() const
     {
         return modes & KEY_PRESSED;
@@ -277,16 +293,6 @@ public:
     }
 
     static int32_t getCurrentKeyModifiers();
-
-    static void RegisterCycling( void ( *preRenderDrawing )() = nullptr, void ( *postRenderDrawing )() = nullptr );
-
-    // These two methods are useful for video playback
-    static void PauseCycling();
-
-    static void ResumeCycling()
-    {
-        RegisterCycling();
-    }
 
     void OpenController();
     void CloseController();
@@ -321,15 +327,22 @@ private:
 
     void ProcessControllerAxisMotion();
 
-    enum flag_t
+    enum : uint32_t
     {
-        KEY_PRESSED = 0x0001, // key on the keyboard has been pressed
-        MOUSE_MOTION = 0x0002, // mouse cursor has been moved
-        MOUSE_PRESSED = 0x0004, // mouse button is currently pressed
-        MOUSE_RELEASED = 0x0008, // mouse button has just been released
-        MOUSE_CLICKED = 0x0010, // mouse button has been clicked
-        MOUSE_WHEEL = 0x0020, // mouse wheel has been rotated
-        KEY_HOLD = 0x0040 // key on the keyboard is currently being held down
+        // Key on the keyboard has been pressed
+        KEY_PRESSED = 0x0001,
+        // Mouse cursor has been moved
+        MOUSE_MOTION = 0x0002,
+        // Mouse button is currently pressed
+        MOUSE_PRESSED = 0x0004,
+        // Mouse button has just been released
+        MOUSE_RELEASED = 0x0008,
+        // Mouse wheel has been rotated
+        MOUSE_WHEEL = 0x0010,
+        // Current mouse event has been triggered by the touchpad
+        MOUSE_TOUCH = 0x0020,
+        // Key on the keyboard is currently being held down
+        KEY_HOLD = 0x0040,
     };
 
     enum
@@ -338,17 +351,17 @@ private:
         CONTROLLER_R_DEADZONE = 25000
     };
 
-    void SetModes( flag_t f )
+    void SetModes( const uint32_t f )
     {
         modes |= f;
     }
 
-    void ResetModes( flag_t f )
+    void ResetModes( const uint32_t f )
     {
         modes &= ~f;
     }
 
-    int modes;
+    uint32_t modes;
     fheroes2::Key key_value;
     int mouse_button;
 
@@ -363,6 +376,34 @@ private:
     fheroes2::Point mouse_cu; // point cursor
 
     fheroes2::Point mouse_wm; // wheel movement
+
+    class LongPressDelay final : public fheroes2::TimeDelay
+    {
+    public:
+        using TimeDelay::TimeDelay;
+
+        void reset()
+        {
+            TimeDelay::reset();
+
+            _triggered = false;
+        }
+
+        bool isTriggered() const
+        {
+            return _triggered;
+        }
+
+        void setTriggered()
+        {
+            _triggered = true;
+        }
+
+    private:
+        bool _triggered{ false };
+    };
+
+    LongPressDelay _mouseButtonLongPressDelay;
 
     std::function<fheroes2::Rect( const int32_t, const int32_t )> _globalMouseMotionEventHook;
     std::function<void( const fheroes2::Key, const int32_t )> _globalKeyDownEventHook;

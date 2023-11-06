@@ -24,6 +24,8 @@
 #include <array>
 #include <cassert>
 #include <cstdint>
+#include <cstdlib>
+#include <initializer_list>
 #include <limits>
 #include <list>
 #include <optional>
@@ -40,22 +42,22 @@
 #include "direction.h"
 #include "ground.h"
 #include "logging.h"
+#include "map_object_info.h"
 #include "maps.h"
 #include "maps_tiles.h"
 #include "math_base.h"
 #include "monster.h"
 #include "mp2.h"
-#include "payment.h"
 #include "profit.h"
 #include "race.h"
 #include "rand.h"
 #include "resource.h"
-#include "save_format_version.h"
 #include "skill.h"
 #include "spell.h"
 #include "tools.h"
 #include "week.h"
 #include "world.h"
+#include "world_object_uid.h"
 
 namespace
 {
@@ -86,12 +88,12 @@ namespace
             uidResource = tile.GetObjectUID();
         }
 
-        Maps::Tiles::updateTileById( tile, uidResource, resourceSprite );
+        Maps::Tiles::updateTileObjectIcnIndex( tile, uidResource, resourceSprite );
 
         // Replace shadow of the resource.
         if ( Maps::isValidDirection( tile.GetIndex(), Direction::LEFT ) ) {
             assert( resourceSprite > 0 );
-            Maps::Tiles::updateTileById( world.GetTiles( Maps::GetDirectionIndex( tile.GetIndex(), Direction::LEFT ) ), uidResource, resourceSprite - 1 );
+            Maps::Tiles::updateTileObjectIcnIndex( world.GetTiles( Maps::GetDirectionIndex( tile.GetIndex(), Direction::LEFT ) ), uidResource, resourceSprite - 1 );
         }
     }
 
@@ -132,20 +134,20 @@ namespace
             uidArtifact = tile.GetObjectUID();
         }
 
-        static_assert( std::is_same_v<decltype( Maps::Tiles::updateTileById ), void( Maps::Tiles &, uint32_t, uint8_t )>,
-                       "Type of updateTileById() has been changed, check the logic below" );
+        static_assert( std::is_same_v<decltype( Maps::Tiles::updateTileObjectIcnIndex ), void( Maps::Tiles &, uint32_t, uint8_t )>,
+                       "Type of updateTileObjectIcnIndex() has been changed, check the logic below" );
 
         // Please refer to ICN::OBJNARTI for artifact images. Since in the original game artifact UID start from 0 we have to deduct 1 from the current artifact ID.
         const uint32_t artSpriteIndex = ( art.GetID() - 1 ) * 2 + 1;
 
         assert( artSpriteIndex > std::numeric_limits<uint8_t>::min() && artSpriteIndex <= std::numeric_limits<uint8_t>::max() );
 
-        Maps::Tiles::updateTileById( tile, uidArtifact, static_cast<uint8_t>( artSpriteIndex ) );
+        Maps::Tiles::updateTileObjectIcnIndex( tile, uidArtifact, static_cast<uint8_t>( artSpriteIndex ) );
 
         // replace artifact shadow
         if ( Maps::isValidDirection( tile.GetIndex(), Direction::LEFT ) ) {
-            Maps::Tiles::updateTileById( world.GetTiles( Maps::GetDirectionIndex( tile.GetIndex(), Direction::LEFT ) ), uidArtifact,
-                                         static_cast<uint8_t>( artSpriteIndex - 1 ) );
+            Maps::Tiles::updateTileObjectIcnIndex( world.GetTiles( Maps::GetDirectionIndex( tile.GetIndex(), Direction::LEFT ) ), uidArtifact,
+                                                   static_cast<uint8_t>( artSpriteIndex - 1 ) );
         }
     }
 
@@ -257,6 +259,38 @@ namespace
         }
 
         return groundDirection;
+    }
+
+    // Returns the direction vector bits from 'centerTileIndex' where '_tileIsRoad' bit is set for the tiles around.
+    int getRoadDirecton( const Maps::Tiles & tile )
+    {
+        const int32_t centerTileIndex = tile.GetIndex();
+        int roadDirection = ( tile.isRoad() ) ? Direction::CENTER : 0;
+        const Maps::Indexes around = Maps::getAroundIndexes( centerTileIndex );
+
+        for ( const int32_t tileIndex : around ) {
+            if ( world.GetTiles( tileIndex ).isRoad() ) {
+                roadDirection |= Maps::GetDirection( centerTileIndex, tileIndex );
+            }
+        }
+
+        return roadDirection;
+    }
+
+    // Returns the direction vector bits from 'centerTileIndex' to the around tiles with streams.
+    int getStreamDirecton( const Maps::Tiles & tile )
+    {
+        const int32_t centerTileIndex = tile.GetIndex();
+        int streamDirection = ( tile.isStream() ) ? Direction::CENTER : 0;
+
+        // For streams we can check only the next four directions.
+        for ( const int direction : { Direction::LEFT, Direction::TOP, Direction::RIGHT, Direction::BOTTOM } ) {
+            if ( Maps::isValidDirection( centerTileIndex, direction ) && world.GetTiles( Maps::GetDirectionIndex( centerTileIndex, direction ) ).isStream() ) {
+                streamDirection |= direction;
+            }
+        }
+
+        return streamDirection;
     }
 
     bool hasBits( const int value, const int bits )
@@ -596,7 +630,7 @@ namespace
                 // For these cases there is no extra tile image, but for now we can leave a tile with ground without transition as it is barely noticeable.
                 // TODO: Design tile images for these cases.
 
-                tile.setTerrain( Maps::Ground::getRandomTerrainImageIndex( ground ), false, false );
+                tile.setTerrain( Maps::Ground::getRandomTerrainImageIndex( ground, true ), false, false );
                 return true;
             }
         }
@@ -629,7 +663,7 @@ namespace
             Maps::Tiles & tile = world.GetTiles( tileId );
             if ( Maps::Ground::isTerrainTransitionImage( tile.getTerrainImageIndex() ) ) {
                 // We change image with the transition to original terrain image without transition.
-                tile.setTerrain( Maps::Ground::getRandomTerrainImageIndex( ground ), false, false );
+                tile.setTerrain( Maps::Ground::getRandomTerrainImageIndex( ground, true ), false, false );
             }
             return true;
         }
@@ -714,7 +748,7 @@ namespace
                 DEBUG_LOG( DBG_DEVEL, DBG_WARN,
                            "Trying ground " << Maps::Ground::String( newGround ) << " at " << tileId % world.w() << ',' << tileId / world.w() << " (" << tileId << ")." )
 
-                world.GetTiles( tileId ).setTerrain( Maps::Ground::getRandomTerrainImageIndex( newGround ), false, false );
+                world.GetTiles( tileId ).setTerrain( Maps::Ground::getRandomTerrainImageIndex( newGround, true ), false, false );
 
                 if ( !updateTerrainTransitionOnTile( tileId ) ) {
                     // The ground image has not been set properly. We move on to the next type of the ground.
@@ -742,7 +776,7 @@ namespace
 
             // If all ground replacements fail we revert the ground change to the initial ground type.
             if ( needRevert && !newGrounds.empty() ) {
-                world.GetTiles( tileId ).setTerrain( Maps::Ground::getRandomTerrainImageIndex( groundOnTile ), false, false );
+                world.GetTiles( tileId ).setTerrain( Maps::Ground::getRandomTerrainImageIndex( groundOnTile, true ), false, false );
                 DEBUG_LOG( DBG_DEVEL, DBG_WARN,
                            "Reverting ground to " << Maps::Ground::String( groundOnTile ) << " at " << tileId % world.w() << ',' << tileId / world.w() << " (" << tileId
                                                   << ")." )
@@ -803,6 +837,385 @@ namespace
             updateTerrainTransitionOnArea( groundId, tileId, tileId, 1 );
         }
     }
+
+    uint8_t getRoadImageForTile( const Maps::Tiles & tile, const int roadDirection )
+    {
+        // To place some roads we need to check not only the road directions around this tile, but also the road ICN index at the nearby tile.
+        auto checkRoadIcnIndex = []( const int32_t tileIndex, const std::vector<uint8_t> & roadIcnIndexes ) {
+            for ( const Maps::TilesAddon & addon : world.GetTiles( tileIndex ).getBottomLayerAddons() ) {
+                if ( addon._objectIcnType == MP2::OBJ_ICN_TYPE_ROAD ) {
+                    return std::any_of( roadIcnIndexes.begin(), roadIcnIndexes.end(), [&addon]( const uint8_t index ) { return addon._imageIndex == index; } );
+                }
+            }
+            return false;
+        };
+
+        const int32_t tileIndex = tile.GetIndex();
+
+        if ( hasNoBits( roadDirection, Direction::CENTER ) ) {
+            if ( hasBits( roadDirection, Direction::TOP ) && hasNoBits( roadDirection, Direction::TOP_LEFT ) ) {
+                // We can do this without 'isValidDirection()' check because we have Direction::TOP.
+                const int32_t upperTileIndex = tileIndex - world.w();
+                if ( checkRoadIcnIndex( upperTileIndex, { 7, 17, 20, 22, 24, 29 } ) ) {
+                    return 8U;
+                }
+            }
+
+            if ( hasBits( roadDirection, Direction::TOP ) && hasNoBits( roadDirection, Direction::TOP_RIGHT ) ) {
+                // We can do this without 'isValidDirection()' check because we have Direction::TOP.
+                const int32_t upperTileIndex = tileIndex - world.w();
+                if ( checkRoadIcnIndex( upperTileIndex, { 16, 18, 19, 23, 25, 30 } ) ) {
+                    return 15U;
+                }
+            }
+            if ( hasBits( roadDirection, Direction::TOP )
+                 && ( hasBits( roadDirection, Direction::TOP_LEFT ) || hasBits( roadDirection, Direction::TOP_RIGHT )
+                      || hasBits( roadDirection, Direction::LEFT | Direction::RIGHT ) ) ) {
+                // We can do this without 'isValidDirection()' check because we have Direction::TOP.
+                const int32_t upperTileIndex = tileIndex - world.w();
+                if ( checkRoadIcnIndex( upperTileIndex, { 2, 3, 21, 28 } ) ) {
+                    return Rand::Get( 1 ) ? 1U : 27U;
+                }
+            }
+            if ( hasBits( roadDirection, Direction::BOTTOM | Direction::RIGHT ) && hasNoBits( roadDirection, Direction::TOP | Direction::LEFT ) ) {
+                // We can do this without 'isValidDirection()' check because we have Direction::BOTTOM.
+                const int32_t lowerTileIndex = tileIndex + world.w();
+                if ( checkRoadIcnIndex( lowerTileIndex, { 8, 9, 18, 20, 30 } ) ) {
+                    return Rand::Get( 1 ) ? 22U : 24U;
+                }
+            }
+            if ( hasBits( roadDirection, Direction::BOTTOM | Direction::LEFT ) && hasNoBits( roadDirection, Direction::TOP | Direction::RIGHT ) ) {
+                // We can do this without 'isValidDirection()' check because we have Direction::BOTTOM.
+                const int32_t lowerTileIndex = tileIndex + world.w();
+                if ( checkRoadIcnIndex( lowerTileIndex, { 12, 15, 17, 19, 29 } ) ) {
+                    return Rand::Get( 1 ) ? 23U : 25U;
+                }
+            }
+
+            // The next 4 conditions are to end the horizontal roads.
+            if ( hasBits( roadDirection, Direction::LEFT ) && hasNoBits( roadDirection, Direction::TOP ) && checkRoadIcnIndex( tileIndex - 1, { 2, 21, 28 } ) ) {
+                return Rand::Get( 1 ) ? 23U : 25U;
+            }
+            if ( hasBits( roadDirection, Direction::RIGHT ) && hasNoBits( roadDirection, Direction::TOP ) && checkRoadIcnIndex( tileIndex + 1, { 2, 21, 28 } ) ) {
+                return Rand::Get( 1 ) ? 22U : 24U;
+            }
+            if ( hasBits( roadDirection, Direction::TOP_LEFT ) && hasNoBits( roadDirection, Direction::TOP ) && checkRoadIcnIndex( tileIndex - 1, { 1, 4, 21, 27 } ) ) {
+                return 15U;
+            }
+            if ( hasBits( roadDirection, Direction::TOP_RIGHT ) && hasNoBits( roadDirection, Direction::TOP ) && checkRoadIcnIndex( tileIndex + 1, { 1, 4, 21, 27 } ) ) {
+                return 8U;
+            }
+
+            // This tile should not have a road image.
+            return 255U;
+        }
+
+        // The rest checks are made for the tile with the road on it: it has Direction::CENTER.
+
+        if ( hasBits( roadDirection, Direction::TOP | DIRECTION_CENTER_ROW )
+             && ( hasBits( roadDirection, Direction::TOP_LEFT ) || hasBits( roadDirection, Direction::TOP_RIGHT ) ) ) {
+            // = - horizontal road in this and in the upper tile.
+            return 21U;
+        }
+        if ( ( ( ( hasBits( roadDirection, Direction::BOTTOM_RIGHT ) || hasBits( roadDirection, Direction::TOP_LEFT ) ) && hasNoBits( roadDirection, Direction::RIGHT ) )
+               || hasBits( roadDirection, Direction::RIGHT | Direction::TOP_LEFT ) )
+             && hasNoBits( roadDirection, Direction::TOP | Direction::BOTTOM | Direction::LEFT | Direction::TOP_RIGHT | Direction::BOTTOM_LEFT ) ) {
+            // \ - diagonal road from top-left to bottom-right.
+            return Rand::Get( 1 ) ? 17U : 29U;
+        }
+        if ( ( ( ( hasBits( roadDirection, Direction::BOTTOM_LEFT ) || hasBits( roadDirection, Direction::TOP_RIGHT ) ) && hasNoBits( roadDirection, Direction::LEFT ) )
+               || hasBits( roadDirection, Direction::LEFT | Direction::TOP_RIGHT ) )
+             && hasNoBits( roadDirection, Direction::TOP | Direction::RIGHT | Direction::BOTTOM | Direction::TOP_LEFT | Direction::BOTTOM_RIGHT ) ) {
+            // / - diagonal road from top-right to bottom-left.
+            return Rand::Get( 1 ) ? 18U : 30U;
+        }
+        if ( hasBits( roadDirection, Direction::TOP )
+             && ( hasBits( roadDirection, Direction::LEFT | Direction::RIGHT ) || hasBits( roadDirection, Direction::BOTTOM_LEFT | Direction::RIGHT )
+                  || hasBits( roadDirection, Direction::LEFT | Direction::BOTTOM_RIGHT )
+                  || ( hasBits( roadDirection, Direction::BOTTOM_LEFT | Direction::BOTTOM_RIGHT ) && hasNoBits( roadDirection, Direction::BOTTOM ) ) )
+             && hasNoBits( roadDirection, Direction::TOP_LEFT | Direction::TOP_RIGHT ) ) {
+            // _|_ - cross.
+            return 3U;
+        }
+        if ( hasBits( roadDirection, Direction::TOP )
+             && ( hasBits( roadDirection, Direction::TOP_LEFT | Direction::TOP_RIGHT ) || ( checkRoadIcnIndex( tileIndex - world.w(), { 2, 28 } ) ) )
+             && hasNoBits( roadDirection, Direction::LEFT | Direction::RIGHT ) ) {
+            // T - cross. Also used for 90 degrees turn from the bottom to the left/right.
+            return 4U;
+        }
+        if ( hasBits( roadDirection, Direction::TOP | Direction::TOP_RIGHT ) && hasNoBits( roadDirection, Direction::TOP_LEFT | Direction::RIGHT | Direction::LEFT ) ) {
+            // Vertical road and branch to the right in the upper tile.
+            return 5U;
+        }
+        if ( hasBits( roadDirection, Direction::TOP | Direction::RIGHT | Direction::BOTTOM ) && hasNoBits( roadDirection, Direction::TOP_RIGHT | Direction::LEFT ) ) {
+            // L - cross.
+            return 6U;
+        }
+        if ( hasBits( roadDirection, Direction::TOP ) && ( hasBits( roadDirection, Direction::RIGHT ) || hasBits( roadDirection, Direction::BOTTOM_RIGHT ) )
+             && hasNoBits( roadDirection, Direction::BOTTOM | Direction::LEFT ) ) {
+            // Road turn from the top tile to the right tile.
+            return 7U;
+        }
+        if ( hasBits( roadDirection, Direction::TOP_RIGHT | Direction::BOTTOM )
+             && hasNoBits( roadDirection, Direction::TOP | Direction::TOP_LEFT | Direction::LEFT | Direction::RIGHT ) ) {
+            // Road turn from the bottom tile to the right tile.
+            return 9U;
+        }
+        if ( hasBits( roadDirection, Direction::TOP_LEFT | Direction::BOTTOM )
+             && hasNoBits( roadDirection, Direction::TOP | Direction::TOP_RIGHT | Direction::RIGHT | Direction::LEFT ) ) {
+            // Road turn from the bottom tile to the left tile.
+            return 12U;
+        }
+        if ( hasBits( roadDirection, Direction::TOP | Direction::TOP_LEFT ) && hasNoBits( roadDirection, Direction::TOP_RIGHT | Direction::RIGHT | Direction::LEFT ) ) {
+            // Vertical road and branch to the left in the upper tile.
+            return 13U;
+        }
+        if ( hasBits( roadDirection, Direction::TOP | Direction::LEFT | Direction::BOTTOM ) && hasNoBits( roadDirection, Direction::TOP_LEFT | Direction::RIGHT ) ) {
+            // _| - cross.
+            return 14U;
+        }
+        if ( hasBits( roadDirection, Direction::TOP ) && ( hasBits( roadDirection, Direction::LEFT ) || hasBits( roadDirection, Direction::BOTTOM_LEFT ) )
+             && hasNoBits( roadDirection, Direction::BOTTOM | Direction::RIGHT ) ) {
+            // Road turn from the top tile to the left tile.
+            return 16U;
+        }
+        if ( hasBits( roadDirection, Direction::TOP_LEFT ) && ( hasBits( roadDirection, Direction::LEFT ) || hasBits( roadDirection, Direction::BOTTOM_LEFT ) )
+             && hasNoBits( roadDirection, DIRECTION_RIGHT_COL ) && !checkRoadIcnIndex( tileIndex - 1, { 0, 3, 6, 7, 14, 16, 26 } ) ) {
+            // ) - road.
+            return 19U;
+        }
+        if ( hasBits( roadDirection, Direction::TOP_RIGHT ) && ( hasBits( roadDirection, Direction::RIGHT ) || hasBits( roadDirection, Direction::BOTTOM_RIGHT ) )
+             && hasNoBits( roadDirection, DIRECTION_LEFT_COL ) && !checkRoadIcnIndex( tileIndex + 1, { 0, 3, 6, 7, 14, 16, 26 } ) ) {
+            // ( - road.
+            return 20U;
+        }
+        if ( ( hasBits( roadDirection, Direction::LEFT ) || hasBits( roadDirection, Direction::RIGHT )
+               || ( hasBits( roadDirection, Direction::BOTTOM_RIGHT | Direction::BOTTOM_LEFT ) && hasNoBits( roadDirection, Direction::BOTTOM ) ) )
+             && hasNoBits( roadDirection, Direction::TOP ) ) {
+            // _ - horizontal road.
+            return Rand::Get( 1 ) ? 2U : 28U;
+        }
+        if ( hasNoBits( roadDirection, Direction::LEFT | Direction::TOP_LEFT | Direction::TOP_RIGHT | Direction::RIGHT ) ) {
+            // | - vertical road.
+            return Rand::Get( 1 ) ? 0U : 26U;
+        }
+
+        // We have not found the appropriate road image and return the value for the incorrect image index.
+        DEBUG_LOG( DBG_DEVEL, DBG_WARN, "No proper road image found for tile " << tileIndex << " with road directions: " << Direction::String( roadDirection ) )
+
+        return 255U;
+    }
+
+    void updateRoadSpriteOnTile( Maps::Tiles & tile, const bool forceRoadOnTile )
+    {
+        const uint8_t imageIndex = getRoadImageForTile( tile, getRoadDirecton( tile ) | ( forceRoadOnTile ? Direction::CENTER : Direction::UNKNOWN ) );
+
+        if ( imageIndex == 255U ) {
+            // After the check this tile should not contain a road sprite.
+            if ( !forceRoadOnTile && !tile.isRoad() ) {
+                // We remove any existing road sprite if this tile does not contain (or was not forced to contain) the main road sprite.
+                tile.removeObjects( MP2::OBJ_ICN_TYPE_ROAD );
+            }
+
+            return;
+        }
+
+        const uint32_t roadUid = tile.getObjectIdByObjectIcnType( MP2::OBJ_ICN_TYPE_ROAD );
+
+        if ( roadUid == 0 ) {
+            tile.pushBottomLayerAddon( Maps::TilesAddon( Maps::TERRAIN_LAYER, Maps::getNewObjectUID(), MP2::OBJ_ICN_TYPE_ROAD, imageIndex ) );
+        }
+        else {
+            Maps::Tiles::updateTileObjectIcnIndex( tile, roadUid, imageIndex );
+        }
+    }
+
+    // Update tiles in a square starting from the tile near the center tile to edges or in reverse order.
+    // This function can be called to update only tiles not marked as road.
+    void updateRoadSpritesInArea( const Maps::Tiles & centerTile, const int32_t centerToRectBorderDistance, const bool updateNonRoadTilesFromEdgesToCenter )
+    {
+        // We should update road sprites step by step starting from the tiles close connected to the center tile. 'getAroundIndexes()' cannot be used here.
+        const int32_t worldWidth = world.w();
+        const int32_t worldHeight = world.h();
+
+        assert( worldWidth > 0 && worldHeight > 0 );
+
+        const int32_t centerTileIndex = centerTile.GetIndex();
+        const int32_t centerX = centerTileIndex % worldWidth;
+        const int32_t centerY = centerTileIndex / worldWidth;
+
+        // We avoid getting out of map boundaries.
+        const int32_t minTileX = std::max( centerX - centerToRectBorderDistance, 0 );
+        const int32_t minTileY = std::max( centerY - centerToRectBorderDistance, 0 );
+        const int32_t maxTileX = std::min( centerX + centerToRectBorderDistance + 1, worldWidth );
+        const int32_t maxTileY = std::min( centerY + centerToRectBorderDistance + 1, worldHeight );
+
+        const int32_t distanceMax = centerToRectBorderDistance * 2 + 1;
+
+        for ( int32_t distance = 1; distance < distanceMax; ++distance ) {
+            const int32_t correctedDistance = updateNonRoadTilesFromEdgesToCenter ? distanceMax - distance : distance;
+
+            for ( int32_t tileY = minTileY; tileY < maxTileY; ++tileY ) {
+                const int32_t indexOffsetY = tileY * worldWidth;
+                const int32_t distanceY = std::abs( tileY - centerY );
+
+                for ( int32_t tileX = minTileX; tileX < maxTileX; ++tileX ) {
+                    if ( std::abs( tileX - centerX ) + distanceY != correctedDistance ) {
+                        continue;
+                    }
+
+                    Maps::Tiles & tile = world.GetTiles( indexOffsetY + tileX );
+                    if ( updateNonRoadTilesFromEdgesToCenter && tile.isRoad() ) {
+                        continue;
+                    }
+
+                    updateRoadSpriteOnTile( tile, false );
+                }
+            }
+        }
+    }
+
+    void updateRoadSpritesAround( const Maps::Tiles & tile )
+    {
+        updateRoadSpritesInArea( tile, 2, false );
+        // To properly update the around sprites we call the update function the second time
+        // for tiles not marked as road in reverse order and for 1 tile more distance from the center.
+        updateRoadSpritesInArea( tile, 3, true );
+    }
+
+    uint8_t getStreamImageForTile( const int streamDirection )
+    {
+        if ( hasNoBits( streamDirection, Direction::CENTER ) ) {
+            // This tile should not have a stream image.
+            return 255U;
+        }
+
+        if ( hasBits( streamDirection, Direction::LEFT | Direction::BOTTOM ) && hasNoBits( streamDirection, Direction::TOP | Direction::RIGHT ) ) {
+            // \ - stream from the left to the bottom.
+            return 0U;
+        }
+        if ( hasBits( streamDirection, Direction::RIGHT | Direction::BOTTOM ) && hasNoBits( streamDirection, Direction::TOP | Direction::LEFT ) ) {
+            // / - stream from the right to the bottom.
+            return 1U;
+        }
+        if ( hasBits( streamDirection, Direction::RIGHT | Direction::TOP ) && hasNoBits( streamDirection, Direction::BOTTOM | Direction::LEFT ) ) {
+            // \ - stream from the top to the right.
+            return 4U;
+        }
+        if ( hasBits( streamDirection, Direction::LEFT | Direction::TOP ) && hasNoBits( streamDirection, Direction::BOTTOM | Direction::RIGHT ) ) {
+            // / - stream from the top to the left.
+            return 7U;
+        }
+        if ( hasBits( streamDirection, Direction::LEFT | Direction::TOP | Direction::RIGHT ) && hasNoBits( streamDirection, Direction::BOTTOM ) ) {
+            // _|_ - stream from the top to the left and right.
+            return 8U;
+        }
+        if ( hasBits( streamDirection, Direction::BOTTOM | Direction::TOP | Direction::RIGHT ) && hasNoBits( streamDirection, Direction::LEFT ) ) {
+            // |- - stream from the top to the right and bottom.
+            return 9U;
+        }
+        if ( hasBits( streamDirection, Direction::BOTTOM | Direction::TOP | Direction::LEFT ) && hasNoBits( streamDirection, Direction::RIGHT ) ) {
+            // -| - stream from the top to the left and bottom.
+            return 10U;
+        }
+        if ( hasBits( streamDirection, Direction::BOTTOM | Direction::LEFT | Direction::RIGHT ) && hasNoBits( streamDirection, Direction::TOP ) ) {
+            // \/ - stream from the left and right to the bottom.
+            return 11U;
+        }
+        if ( hasBits( streamDirection, Direction::BOTTOM | Direction::LEFT | Direction::TOP | Direction::RIGHT ) ) {
+            // -|- - streams are all around.
+            return 6U;
+        }
+        if ( ( hasBits( streamDirection, Direction::LEFT ) || hasBits( streamDirection, Direction::RIGHT ) )
+             && hasNoBits( streamDirection, Direction::TOP | Direction::BOTTOM ) ) {
+            // - - horizontal stream.
+            return Rand::Get( 1 ) ? 2U : 5U;
+        }
+
+        // | - in all other cases are the vertical stream sprite, including the case when there are no other streams around.
+        return Rand::Get( 1 ) ? 3U : 12U;
+    }
+
+    void updateStreamSpriteOnTile( Maps::Tiles & tile, const bool forceStreamOnTile )
+    {
+        const uint8_t imageIndex = getStreamImageForTile( getStreamDirecton( tile ) | ( forceStreamOnTile ? Direction::CENTER : Direction::UNKNOWN ) );
+
+        if ( imageIndex == 255U ) {
+            // After the check this tile should not contain a stream sprite.
+            return;
+        }
+
+        const uint32_t streamUid = tile.getObjectIdByObjectIcnType( MP2::OBJ_ICN_TYPE_STREAM );
+
+        if ( streamUid == 0 ) {
+            tile.pushBottomLayerAddon( Maps::TilesAddon( Maps::TERRAIN_LAYER, Maps::getNewObjectUID(), MP2::OBJ_ICN_TYPE_STREAM, imageIndex ) );
+        }
+        else {
+            Maps::Tiles::updateTileObjectIcnIndex( tile, streamUid, imageIndex );
+        }
+    }
+
+    // Update streams on the left, top, right and bottom tiles around.
+    void updateStreamSpritesAround( const Maps::Tiles & centerTile )
+    {
+        const int32_t centerTileIndex = centerTile.GetIndex();
+
+        // For streams we should update only the next four directions.
+        for ( const int direction : { Direction::LEFT, Direction::TOP, Direction::RIGHT, Direction::BOTTOM } ) {
+            if ( Maps::isValidDirection( centerTileIndex, direction ) ) {
+                updateStreamSpriteOnTile( world.GetTiles( Maps::GetDirectionIndex( centerTileIndex, direction ) ), false );
+            }
+        }
+    }
+
+    void placeObjectOnTile( const Maps::Tiles & tile, const Maps::ObjectInfo & info )
+    {
+        assert( !info.empty() );
+
+        const uint32_t uid = Maps::getNewObjectUID();
+        const fheroes2::Point mainTilePos = tile.GetCenter();
+
+        for ( const auto & partInfo : info.groundLevelParts ) {
+            const fheroes2::Point pos = mainTilePos + partInfo.tileOffset;
+            if ( !Maps::isValidAbsPoint( pos.x, pos.y ) ) {
+                // This shouldn't happen as the object must be verified before placement.
+                assert( 0 );
+                continue;
+            }
+
+            Maps::Tiles & currentTile = world.GetTiles( pos.x, pos.y );
+
+            if ( partInfo.layerType == Maps::SHADOW_LAYER || partInfo.layerType == Maps::TERRAIN_LAYER ) {
+                // Shadows and terrain object do not change main tile information.
+                currentTile.pushBottomLayerAddon( Maps::TilesAddon( partInfo.layerType, uid, partInfo.icnType, static_cast<uint8_t>( partInfo.icnIndex ) ) );
+                continue;
+            }
+
+            currentTile.SetObject( partInfo.objectType );
+            currentTile.moveMainAddonToBottomLayer();
+
+            currentTile.setObjectUID( uid );
+            currentTile.setObjectIcnType( partInfo.icnType );
+
+            using TileImageIndexType = decltype( currentTile.GetObjectSpriteIndex() );
+            static_assert( std::is_same_v<TileImageIndexType, uint8_t>, "Type of GetObjectSpriteIndex() has been changed, check the logic below" );
+
+            currentTile.setObjectSpriteIndex( static_cast<uint8_t>( partInfo.icnIndex ) );
+        }
+
+        for ( const auto & partInfo : info.topLevelParts ) {
+            const fheroes2::Point pos = mainTilePos + partInfo.tileOffset;
+            if ( !Maps::isValidAbsPoint( pos.x, pos.y ) ) {
+                // This shouldn't happen as the object must be verified before placement.
+                assert( 0 );
+                continue;
+            }
+
+            Maps::Tiles & currentTile = world.GetTiles( pos.x, pos.y );
+
+            currentTile.pushTopLayerAddon( Maps::TilesAddon( partInfo.layerType, uid, partInfo.icnType, static_cast<uint8_t>( partInfo.icnIndex ) ) );
+        }
+    }
 }
 
 namespace Maps
@@ -827,12 +1240,83 @@ namespace Maps
             const int32_t tileOffset = y * mapWidth;
             for ( int32_t x = startX; x <= endX; ++x ) {
                 // In original editor these tiles are never flipped.
-                world.GetTiles( x + tileOffset ).setTerrain( Ground::getRandomTerrainImageIndex( groundId ), false, false );
+                world.GetTiles( x + tileOffset ).setTerrain( Ground::getRandomTerrainImageIndex( groundId, true ), false, false );
             }
         }
 
         // Set ground transitions on the boundaries of filled terrain area.
         updateTerrainTransitionOnAreaBoundaries( groundId, startX, endX, startY, endY );
+    }
+
+    bool updateRoadOnTile( Tiles & tile, const bool setRoad )
+    {
+        if ( setRoad == tile.isRoad() || ( tile.GetGround() == Ground::WATER ) ) {
+            // We cannot place roads on the water or above already placed roads.
+            return false;
+        }
+
+        if ( setRoad ) {
+            // Force set road on this tile and update its sprite.
+            updateRoadSpriteOnTile( tile, true );
+
+            if ( !tile.isRoad() ) {
+                // The road was not set because there is no corresponding sprite for this place.
+                return false;
+            }
+
+            updateRoadSpritesAround( tile );
+
+            if ( Maps::Ground::doesTerrainImageIndexContainEmbeddedObjects( tile.getTerrainImageIndex() ) ) {
+                // We need to set terrain image without extra objects under the road.
+                tile.setTerrain( Maps::Ground::getRandomTerrainImageIndex( tile.GetGround(), false ), false, false );
+            }
+        }
+        else {
+            // Remove all road object sprites from this tile.
+            tile.removeObjects( MP2::OBJ_ICN_TYPE_ROAD );
+
+            updateRoadSpritesAround( tile );
+
+            // After removing the road from the tile it may have road sprites for the nearby tiles with road.
+            updateRoadSpriteOnTile( tile, false );
+        }
+
+        return true;
+    }
+
+    bool updateStreamOnTile( Tiles & tile, const bool setStream )
+    {
+        if ( setStream == tile.isStream() || ( tile.GetGround() == Ground::WATER ) ) {
+            // We cannot place streams on the water or on already placed streams.
+            return false;
+        }
+
+        if ( setStream ) {
+            // Force set stream on this tile and update its sprite.
+            updateStreamSpriteOnTile( tile, true );
+
+            if ( !tile.isStream() ) {
+                // The stream was not set. How can it happen?
+                assert( 0 );
+
+                return false;
+            }
+
+            updateStreamSpritesAround( tile );
+
+            if ( Maps::Ground::doesTerrainImageIndexContainEmbeddedObjects( tile.getTerrainImageIndex() ) ) {
+                // We need to set terrain image without extra objects under the stream.
+                tile.setTerrain( Maps::Ground::getRandomTerrainImageIndex( tile.GetGround(), false ), false, false );
+            }
+        }
+        else {
+            // Remove all road object sprites from this tile.
+            tile.removeObjects( MP2::OBJ_ICN_TYPE_STREAM );
+
+            updateStreamSpritesAround( tile );
+        }
+
+        return true;
     }
 
     int32_t getMineSpellIdFromTile( const Tiles & tile )
@@ -1456,12 +1940,6 @@ namespace Maps
                 count += Rand::Get( 1, 3 );
             }
 
-            static_assert( LAST_SUPPORTED_FORMAT_VERSION <= FORMAT_VERSION_PRE1_1005_RELEASE, "Remove the check below." );
-            if ( count == 0 ) {
-                // The fix for the case when the Troll Bridge or City of Dead with NONE tile color, has 0 creatures (fixed in PR #7246).
-                count += Rand::Get( 1, 3 );
-            }
-
             break;
 
         case MP2::OBJ_DRAGON_CITY:
@@ -1470,12 +1948,6 @@ namespace Maps
             }
             else if ( getColorFromTile( tile ) != Color::NONE ) {
                 // If the Dragon City has been captured or has 0 creatures, its population is increased by 1 dragon per week.
-                ++count;
-            }
-
-            static_assert( LAST_SUPPORTED_FORMAT_VERSION <= FORMAT_VERSION_PRE1_1005_RELEASE, "Remove the check below." );
-            if ( count == 0 ) {
-                // The fix for the case when the Dragon City with NONE tile color, has 0 creatures (fixed in PR #7246).
                 ++count;
             }
 
@@ -1611,7 +2083,7 @@ namespace Maps
                 resourceType = Resource::FromIndexSprite( tile.GetObjectSpriteIndex() );
             }
             else {
-                for ( TilesAddon & addon : tile.getLevel1Addons() ) {
+                for ( TilesAddon & addon : tile.getBottomLayerAddons() ) {
                     if ( addon._objectIcnType == MP2::OBJ_ICN_TYPE_OBJNRSRC ) {
                         resourceType = Resource::FromIndexSprite( addon._imageIndex );
                         // If this happens we are in trouble. It looks like that map maker put the resource under an object which is impossible to do.
@@ -2124,14 +2596,17 @@ namespace Maps
     {
         tile.SetObject( MP2::OBJ_MONSTER );
 
-        // If there was another object sprite here (shadow for example) push it down to Addons,
-        // except when there is already MONS32.ICN here.
-        if ( tile.getObjectIcnType() != MP2::OBJ_ICN_TYPE_UNKNOWN && tile.getObjectIcnType() != MP2::OBJ_ICN_TYPE_MONS32 && tile.GetObjectSpriteIndex() != 255 ) {
-            // Push object sprite to Level 1 Addons preserving the Layer Type.
-            tile.AddonsPushLevel1( TilesAddon( tile.getLayerType(), tile.GetObjectUID(), tile.getObjectIcnType(), tile.GetObjectSpriteIndex(), false, false ) );
+        if ( tile.getObjectIcnType() == MP2::OBJ_ICN_TYPE_UNKNOWN ) {
+            // No object exists on this tile. Add one.
+            tile.setObjectUID( getNewObjectUID() );
+            tile.setObjectIcnType( MP2::OBJ_ICN_TYPE_MONS32 );
+        }
+        else if ( tile.getObjectIcnType() != MP2::OBJ_ICN_TYPE_MONS32 ) {
+            // If there is another object sprite here (shadow for example) push it down to add-ons.
+            tile.pushBottomLayerAddon( TilesAddon( tile.getLayerType(), tile.GetObjectUID(), tile.getObjectIcnType(), tile.GetObjectSpriteIndex() ) );
 
             // Set unique UID for placed monster.
-            tile.setObjectUID( World::GetUniq() );
+            tile.setObjectUID( getNewObjectUID() );
             tile.setObjectIcnType( MP2::OBJ_ICN_TYPE_MONS32 );
         }
 
@@ -2247,7 +2722,7 @@ namespace Maps
         assert( tile.GetObject( false ) == MP2::OBJ_ABANDONED_MINE );
         assert( tile.GetObjectUID() != 0 );
 
-        const payment_t info = ProfitConditions::FromMine( resource );
+        const Funds info = ProfitConditions::FromMine( resource );
         std::optional<uint32_t> resourceCount;
 
         switch ( resource ) {
@@ -2322,8 +2797,8 @@ namespace Maps
             if ( Maps::isValidDirection( tile.GetIndex(), directionVector ) ) {
                 Tiles & mineTile = world.GetTiles( Maps::GetDirectionIndex( tile.GetIndex(), directionVector ) );
                 if ( ( mineTile.GetObject() == MP2::OBJ_NON_ACTION_ABANDONED_MINE )
-                     && ( mineTile.GetObjectUID() == tile.GetObjectUID() || mineTile.FindAddonLevel1( tile.GetObjectUID() )
-                          || mineTile.FindAddonLevel2( tile.GetObjectUID() ) ) ) {
+                     && ( mineTile.GetObjectUID() == tile.GetObjectUID() || mineTile.getBottomLayerAddon( tile.GetObjectUID() )
+                          || mineTile.getTopLayerAddon( tile.GetObjectUID() ) ) ) {
                     mineTile.SetObject( MP2::OBJ_NON_ACTION_MINES );
                 }
             }
@@ -2336,7 +2811,7 @@ namespace Maps
         tile.setObjectIcnType( objectIcnTypeTemp );
         tile.setObjectSpriteIndex( imageIndexTemp );
 
-        for ( TilesAddon & addon : tile.getLevel1Addons() ) {
+        for ( TilesAddon & addon : tile.getBottomLayerAddons() ) {
             if ( addon._uid == tile.GetObjectUID() ) {
                 restoreLeftSprite( addon._objectIcnType, addon._imageIndex );
             }
@@ -2354,7 +2829,7 @@ namespace Maps
                 rightTile.setObjectSpriteIndex( imageIndexTemp );
             }
 
-            TilesAddon * addon = rightTile.FindAddonLevel1( tile.GetObjectUID() );
+            TilesAddon * addon = rightTile.getBottomLayerAddon( tile.GetObjectUID() );
 
             if ( addon ) {
                 restoreRightSprite( addon->_objectIcnType, addon->_imageIndex );
@@ -2406,5 +2881,264 @@ namespace Maps
             tile.Remove( tile.GetObjectUID() );
             break;
         }
+    }
+
+    bool isClearGround( const Tiles & tile )
+    {
+        const MP2::MapObjectType objectType = tile.GetObject( true );
+
+        switch ( objectType ) {
+        case MP2::OBJ_NONE:
+        case MP2::OBJ_COAST:
+            return true;
+        case MP2::OBJ_BOAT:
+            return false;
+
+        default:
+            break;
+        }
+
+        if ( ( tile.getObjectIcnType() == MP2::OBJ_ICN_TYPE_UNKNOWN ) || ( tile.getLayerType() == Maps::SHADOW_LAYER )
+             || ( tile.getLayerType() == Maps::TERRAIN_LAYER ) ) {
+            return !MP2::isActionObject( objectType, tile.isWater() );
+        }
+
+        return false;
+    }
+
+    void updateFogDirectionsInArea( const fheroes2::Point & minPos, const fheroes2::Point & maxPos, const int32_t color )
+    {
+        assert( ( minPos.x <= maxPos.x ) && ( minPos.y <= maxPos.y ) );
+
+        const int32_t worldWidth = world.w();
+        const int32_t worldHeight = world.w();
+
+        // Do not get over the world borders.
+        const int32_t minX = std::max( minPos.x, 0 );
+        const int32_t minY = std::max( minPos.y, 0 );
+        // Add extra 1 to reach the given maxPos point.
+        const int32_t maxX = std::min( maxPos.x + 1, worldWidth );
+        const int32_t maxY = std::min( maxPos.y + 1, worldHeight );
+
+        // Fog data range is 1 tile bigger from each side as for the fog directions we have to check all tiles around each tile in the area.
+        const int32_t fogMinX = std::max( minX - 1, 0 );
+        const int32_t fogMinY = std::max( minY - 1, 0 );
+        const int32_t fogMaxX = std::min( maxX + 1, worldWidth );
+        const int32_t fogMaxY = std::min( maxY + 1, worldHeight );
+
+        const int32_t fogDataWidth = maxX - minX + 2;
+        const int32_t fogDataSize = fogDataWidth * ( maxY - minY + 2 );
+
+        // A vector to cache 'isFog()' data. This vector type is not <bool> as using std::vector<uint8_t> gives the higher performance.
+        // 1 is for the 'true' state, 0 is for the 'false' state.
+        std::vector<uint8_t> fogData( fogDataSize, 1 );
+
+        // Set the 'fogData' index offset from the tile index.
+        const int32_t fogDataOffset = 1 - minX + ( 1 - minY ) * fogDataWidth;
+
+        // Cache the 'fogData' data for the given area to use it in fog direction calculation.
+        // The loops run only within the world area, if 'fogData' area includes tiles outside the world borders we do not update them as the are already set to 1.
+        for ( int32_t y = fogMinY; y < fogMaxY; ++y ) {
+            const int32_t fogTileOffsetY = y * worldWidth;
+            const int32_t fogDataOffsetY = y * fogDataWidth + fogDataOffset;
+
+            for ( int32_t x = fogMinX; x < fogMaxX; ++x ) {
+                fogData[x + fogDataOffsetY] = world.GetTiles( x + fogTileOffsetY ).isFog( color ) ? 1 : 0;
+            }
+        }
+
+        // Set the 'fogData' index offset from the tile index for the TOP LEFT direction from the tile.
+        const int32_t topLeftDirectionOffset = -1 - fogDataWidth;
+
+#ifndef NDEBUG
+        // Cache the maximum border for fogDataIndex corresponding the "CENTER" tile to use in assertion. Should be removed if assertion is removed.
+        const int32_t centerfogDataIndexLimit = fogDataSize + topLeftDirectionOffset;
+#endif
+
+        // Calculate fog directions using the cached 'isFog' data.
+        for ( int32_t y = minY; y < maxY; ++y ) {
+            const int32_t fogCenterDataOffsetY = y * fogDataWidth + fogDataOffset;
+
+            for ( int32_t x = minX; x < maxX; ++x ) {
+                Maps::Tiles & tile = world.GetTiles( x, y );
+
+                int32_t fogDataIndex = x + fogCenterDataOffsetY;
+
+                if ( fogData[fogDataIndex] == 0 ) {
+                    // For the tile is without fog we set the UNKNOWN direction.
+                    tile.setFogDirection( Direction::UNKNOWN );
+                }
+                else {
+                    // The tile is under the fog so its CENTER direction for fog is true.
+                    uint16_t fogDirection = Direction::CENTER;
+
+                    // 'fogDataIndex' should not get out of maximum 'fogData' vector index after all increments.
+                    assert( fogDataIndex < centerfogDataIndexLimit );
+
+                    // Check all tiles around for 'fogData' starting from the top left direction and if it is true then logically add the direction to 'fogDirection'.
+                    fogDataIndex += topLeftDirectionOffset;
+
+                    assert( fogDataIndex >= 0 );
+
+                    if ( fogData[fogDataIndex] == 1 ) {
+                        fogDirection |= Direction::TOP_LEFT;
+                    }
+
+                    ++fogDataIndex;
+
+                    if ( fogData[fogDataIndex] == 1 ) {
+                        fogDirection |= Direction::TOP;
+                    }
+
+                    ++fogDataIndex;
+
+                    if ( fogData[fogDataIndex] == 1 ) {
+                        fogDirection |= Direction::TOP_RIGHT;
+                    }
+
+                    // Set index to the left direction tile of the next fog data raw.
+                    fogDataIndex += fogDataWidth - 2;
+
+                    if ( fogData[fogDataIndex] == 1 ) {
+                        fogDirection |= Direction::LEFT;
+                    }
+
+                    // Skip the center tile as it was already checked.
+                    fogDataIndex += 2;
+
+                    if ( fogData[fogDataIndex] == 1 ) {
+                        fogDirection |= Direction::RIGHT;
+                    }
+
+                    fogDataIndex += fogDataWidth - 2;
+
+                    if ( fogData[fogDataIndex] == 1 ) {
+                        fogDirection |= Direction::BOTTOM_LEFT;
+                    }
+
+                    ++fogDataIndex;
+
+                    if ( fogData[fogDataIndex] == 1 ) {
+                        fogDirection |= Direction::BOTTOM;
+                    }
+
+                    ++fogDataIndex;
+
+                    if ( fogData[fogDataIndex] == 1 ) {
+                        fogDirection |= Direction::BOTTOM_RIGHT;
+                    }
+
+                    tile.setFogDirection( fogDirection );
+                }
+            }
+        }
+    }
+
+    bool removeObjectTypeFromTile( Tiles & tile, const MP2::ObjectIcnType objectIcnType )
+    {
+        if ( tile.getObjectIdByObjectIcnType( objectIcnType ) == 0 ) {
+            // There is no such object on this tile.
+            return false;
+        }
+
+        // TODO: Improve this code to remove the multi-tile objects.
+        tile.removeObjects( objectIcnType );
+
+        // For some objects we should set tile object type as empty and reset the metadata.
+        switch ( objectIcnType ) {
+        case MP2::OBJ_ICN_TYPE_MONS32:
+        case MP2::OBJ_ICN_TYPE_MINIHERO:
+            resetObjectMetadata( tile );
+            tile.setAsEmpty();
+            break;
+        default:
+            break;
+        }
+
+        return true;
+    }
+
+    bool eraseObjectsOnTiles( const int32_t startTileId, const int32_t endTileId, const uint32_t objectTypesToErase )
+    {
+        if ( objectTypesToErase == ObjectErasureType::NONE ) {
+            // Nothing to erase.
+            return false;
+        }
+
+        const int32_t mapWidth = world.w();
+        const int32_t maxTileId = mapWidth * world.h() - 1;
+        if ( startTileId < 0 || startTileId > maxTileId || endTileId < 0 || endTileId > maxTileId ) {
+            return false;
+        }
+
+        const fheroes2::Point startTileOffset = GetPoint( startTileId );
+        const fheroes2::Point endTileOffset = GetPoint( endTileId );
+
+        const int32_t startX = std::min( startTileOffset.x, endTileOffset.x );
+        const int32_t startY = std::min( startTileOffset.y, endTileOffset.y );
+        const int32_t endX = std::max( startTileOffset.x, endTileOffset.x );
+        const int32_t endY = std::max( startTileOffset.y, endTileOffset.y );
+
+        bool needRedraw = false;
+
+        for ( int32_t y = startY; y <= endY; ++y ) {
+            const int32_t tileOffset = y * mapWidth;
+            for ( int32_t x = startX; x <= endX; ++x ) {
+                needRedraw |= eraseOjects( world.GetTiles( x + tileOffset ), objectTypesToErase );
+            }
+        }
+
+        return needRedraw;
+    }
+
+    bool eraseOjects( Tiles & tile, const uint32_t objectTypesToErase )
+    {
+        if ( objectTypesToErase == ObjectErasureType::NONE ) {
+            // Nothing to erase.
+            return false;
+        }
+
+        bool needRedraw = false;
+
+        if ( objectTypesToErase & ObjectErasureType::ROADS ) {
+            needRedraw |= updateRoadOnTile( tile, false );
+        }
+        if ( objectTypesToErase & ObjectErasureType::STREAMS ) {
+            needRedraw |= updateStreamOnTile( tile, false );
+        }
+        if ( objectTypesToErase & ObjectErasureType::MONSTERS ) {
+            needRedraw |= removeObjectTypeFromTile( tile, MP2::OBJ_ICN_TYPE_MONS32 );
+        }
+        if ( objectTypesToErase & ObjectErasureType::HEROES ) {
+            // TODO: Implement hero removal from other objects (castles, windmills, mines, etc.)
+            // without corrupting their object data. Do this through 'OBJ_HEROES' (possibly like 'hero.Dismiss()').
+            needRedraw |= removeObjectTypeFromTile( tile, MP2::OBJ_ICN_TYPE_MINIHERO );
+        }
+
+        return needRedraw;
+    }
+
+    void setObjectOnTile( Tiles & tile, const ObjectInfo & info )
+    {
+        assert( !info.empty() );
+
+        switch ( info.objectType ) {
+        case MP2::OBJ_MONSTER:
+            setMonsterOnTile( tile, static_cast<int32_t>( info.metadata[0] ), 0 );
+            // Since setMonsterOnTile() function interprets 0 as a random number of monsters it is important to set the correct value.
+            setMonsterCountOnTile( tile, 0 );
+            return;
+        case MP2::OBJ_RESOURCE:
+            // Setting just 1 resource is enough. It doesn't matter as we are not saving this value into the map format.
+            placeObjectOnTile( tile, info );
+            setResourceOnTile( tile, static_cast<int>( info.metadata[0] ), 1 );
+            return;
+        default:
+            break;
+        }
+
+        placeObjectOnTile( tile, info );
+
+        world.updatePassabilities();
     }
 }

@@ -64,21 +64,22 @@ int Difficulty::GetScoutingBonus( int difficulty )
     return 0;
 }
 
-double Difficulty::GetGoldIncomeBonus( int difficulty )
+double Difficulty::getGoldIncomeBonusForAI( const int difficulty )
 {
     switch ( difficulty ) {
     case Difficulty::EASY:
-        return 0.75;
+        // It is deduction from the income.
+        return -0.25;
     case Difficulty::HARD:
-        return 1.29;
+        return 0.29;
     case Difficulty::EXPERT:
-        return 1.45;
+        return 0.45;
     case Difficulty::IMPOSSIBLE:
-        return 1.6;
+        return 0.6;
     default:
         break;
     }
-    return 1.0;
+    return 0;
 }
 
 double Difficulty::GetUnitGrowthBonusForAI( const int difficulty )
@@ -156,4 +157,55 @@ uint32_t Difficulty::GetDimensionDoorLimit( int difficulty )
         break;
     }
     return UINT32_MAX;
+}
+
+bool Difficulty::areAIHeroRolesAllowed( const int difficulty )
+{
+    switch ( difficulty ) {
+    case Difficulty::EASY:
+        return false;
+    case Difficulty::NORMAL:
+    case Difficulty::HARD:
+    case Difficulty::EXPERT:
+    case Difficulty::IMPOSSIBLE:
+        return true;
+    default:
+        // Did you add a new difficulty level? Add the logic above!
+        assert( 0 );
+        break;
+    }
+
+    return true;
+}
+
+int Difficulty::getMinStatDiffBetweenAIRoles( const int difficulty )
+{
+    switch ( difficulty ) {
+    case Difficulty::EASY:
+        // Easy difficulty still allows to merge armies but only if the difference in stats is huge.
+        return 10;
+    case Difficulty::NORMAL:
+    case Difficulty::HARD:
+    case Difficulty::EXPERT:
+    case Difficulty::IMPOSSIBLE:
+        return 2;
+    default:
+        // Did you add a new difficulty level? Add the logic above!
+        assert( 0 );
+        break;
+    }
+
+    return 2;
+}
+
+bool Difficulty::allowAIToSplitWeakStacks( const int difficulty )
+{
+    switch ( difficulty ) {
+    case Difficulty::EASY:
+    case Difficulty::NORMAL:
+        return false;
+    default:
+        break;
+    }
+    return true;
 }

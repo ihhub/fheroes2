@@ -170,8 +170,8 @@ namespace
         const uint8_t heroAlphaValue = hero->getAlphaValue();
         const int32_t worldHeight = world.h();
 
-        auto spriteInfo = hero->getHeroSpritesPerTile();
-        auto spriteShadowInfo = hero->getHeroShadowSpritesPerTile();
+        auto spriteInfo = Maps::getHeroSpritesPerTile( *hero );
+        auto spriteShadowInfo = Maps::getHeroShadowSpritesPerTile( *hero );
 
         for ( auto & objectInfo : spriteInfo ) {
             const fheroes2::Point imagePos = objectInfo.tileOffset;
@@ -297,9 +297,8 @@ namespace
 
         // There is a tile below the current.
         const Maps::Tiles & tileBelow = world.GetTiles( x, y + 1 );
-        const Maps::Addons & lowerTileAddons = tileBelow.getLevel2Addons();
 
-        for ( const Maps::TilesAddon & lowerAddon : lowerTileAddons ) {
+        for ( const Maps::TilesAddon & lowerAddon : tileBelow.getTopLayerAddons() ) {
             if ( lowerAddon._uid == uid ) {
                 // This is a tall object.
                 return true;
@@ -494,12 +493,22 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 
             switch ( objectType ) {
             case MP2::OBJ_HEROES: {
+                if ( _interface.isEditor() ) {
+                    const uint8_t alphaValue = getObjectAlphaValue( tile.GetIndex(), MP2::OBJ_HEROES );
+
+                    auto spriteInfo = getEditorHeroSpritesPerTile( tile );
+
+                    std::vector<fheroes2::ObjectRenderingInfo> temp;
+                    populateStaticTileUnfitObjectInfo( tileUnfit, spriteInfo, temp, tile.GetCenter(), alphaValue );
+                    continue;
+                }
+
                 if ( !drawHeroes ) {
                     continue;
                 }
 
                 const bool isUpperTileUnderFog = ( posY > 0 ) ? ( world.GetTiles( posX, posY - 1 ).getFogDirection() == DIRECTION_ALL ) : true;
-                const Heroes * hero = tile.GetHeroes();
+                const Heroes * hero = tile.getHero();
 
                 // Boats are 2 tiles high so for hero on the boat we have to populate info for boat one tile lower than the fog.
                 if ( isTileUnderFog && ( isUpperTileUnderFog || !hero->isShipMaster() ) ) {
@@ -531,8 +540,8 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 
                 const uint8_t alphaValue = getObjectAlphaValue( tile.GetIndex(), MP2::OBJ_MONSTER );
 
-                auto spriteInfo = getMonsterSpritesPerTile( tile );
-                auto spriteShadowInfo = getMonsterShadowSpritesPerTile( tile );
+                auto spriteInfo = getMonsterSpritesPerTile( tile, _interface.isEditor() );
+                auto spriteShadowInfo = getMonsterShadowSpritesPerTile( tile, _interface.isEditor() );
 
                 populateStaticTileUnfitObjectInfo( tileUnfit, spriteInfo, spriteShadowInfo, tile.GetCenter(), alphaValue );
 
@@ -658,7 +667,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
             // any other level 2 objects with the same UID.
 
             topLayerTallObjects.clear();
-            for ( const Maps::TilesAddon & addon : tile.getLevel2Addons() ) {
+            for ( const Maps::TilesAddon & addon : tile.getTopLayerAddons() ) {
                 if ( isTallTopLayerObject( x, y, addon._uid ) ) {
                     topLayerTallObjects.emplace_back( &addon );
                 }
@@ -787,17 +796,20 @@ void Interface::GameArea::renderTileAreaSelect( fheroes2::Image & dst, const int
     const fheroes2::Rect imageRoi{ startX, startY, sizeX, sizeY };
     const fheroes2::Rect overlappedRoi = _windowROI ^ imageRoi;
 
-    fheroes2::Fill( dst, overlappedRoi.x, overlappedRoi.y, overlappedRoi.width, std::min( 2, overlappedRoi.height ), 181 );
-    fheroes2::Fill( dst, overlappedRoi.x, overlappedRoi.y + 2, std::min( 2, overlappedRoi.width ), overlappedRoi.height - 4, 181 );
-    fheroes2::Fill( dst, overlappedRoi.x, overlappedRoi.y + overlappedRoi.height - 2, overlappedRoi.width, 2, 181 );
-    fheroes2::Fill( dst, overlappedRoi.x + overlappedRoi.width - 2, overlappedRoi.y + 2, 2, overlappedRoi.height - 4, 181 );
+    const int32_t limitedLineWidth = std::min( 2, overlappedRoi.width );
+    const int32_t limitedLineHeight = std::min( 2, overlappedRoi.height );
+
+    fheroes2::Fill( dst, overlappedRoi.x, overlappedRoi.y, overlappedRoi.width, limitedLineHeight, 181 );
+    fheroes2::Fill( dst, overlappedRoi.x, overlappedRoi.y + 2, limitedLineWidth, overlappedRoi.height - 4, 181 );
+    fheroes2::Fill( dst, overlappedRoi.x, overlappedRoi.y + overlappedRoi.height - limitedLineHeight, overlappedRoi.width, limitedLineHeight, 181 );
+    fheroes2::Fill( dst, overlappedRoi.x + overlappedRoi.width - limitedLineWidth, overlappedRoi.y + 2, limitedLineWidth, overlappedRoi.height - 4, 181 );
 }
 
 void Interface::GameArea::updateMapFogDirections()
 {
     const int32_t friendColors = Players::FriendColors();
 
-    Maps::Tiles::updateFogDirectionsInArea( { 0, 0 }, { world.w(), world.h() }, friendColors );
+    Maps::updateFogDirectionsInArea( { 0, 0 }, { world.w(), world.h() }, friendColors );
 }
 
 void Interface::GameArea::Scroll()
@@ -957,17 +969,21 @@ void Interface::GameArea::QueueEventProcessing( bool isCursorOverGamearea )
         return;
     }
 
-    const int32_t index = GetValidTileIdFromPoint( mousePosition );
-
-    // change cursor if need
-    if ( ( updateCursor || index != _prevIndexPos ) && isCursorOverGamearea ) {
-        Cursor::Get().SetThemes( Interface::AdventureMap::GetCursorTileIndex( index ) );
-        _prevIndexPos = index;
-        updateCursor = false;
+    if ( !isCursorOverGamearea ) {
+        // In this case the cursor image changes in 'Interface::AdventureMap::HumanTurn()' so there is nothing more to do here.
+        return;
     }
 
-    // out of range
-    if ( !isCursorOverGamearea || !Maps::isValidAbsIndex( index ) ) {
+    int32_t index = GetValidTileIdFromPoint( mousePosition );
+
+    if ( !Maps::isValidAbsIndex( index ) ) {
+        // Change the cursor image when it gets out of the map boundaries or by 'updateCursor' flag.
+        if ( updateCursor || index != _prevIndexPos ) {
+            _interface.updateCursor( index );
+            _prevIndexPos = index;
+            updateCursor = false;
+        }
+
         return;
     }
 
@@ -987,6 +1003,16 @@ void Interface::GameArea::QueueEventProcessing( bool isCursorOverGamearea )
     }
     else if ( le.MousePressRight( tileROI ) ) {
         _interface.mouseCursorAreaPressRight( index );
+    }
+
+    // The cursor may have moved after mouse click events.
+    index = GetValidTileIdFromPoint( le.GetMouseCursor() );
+
+    // Change the cursor image if needed.
+    if ( updateCursor || index != _prevIndexPos ) {
+        _interface.updateCursor( index );
+        _prevIndexPos = index;
+        updateCursor = false;
     }
 }
 

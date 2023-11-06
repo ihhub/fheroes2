@@ -31,6 +31,7 @@
 #include "ai.h"
 #include "castle.h"
 #include "game.h"
+#include "game_io.h"
 #include "gamedefs.h"
 #include "heroes.h"
 #include "logging.h"
@@ -99,22 +100,11 @@ bool Control::isControlHuman() const
     return ( CONTROL_HUMAN & GetControl() ) != 0;
 }
 
-bool Control::isControlLocal() const
-{
-    return !isControlRemote();
-}
-
-bool Control::isControlRemote() const
-{
-    return ( CONTROL_REMOTE & GetControl() ) != 0;
-}
-
 Player::Player( int col )
     : control( CONTROL_NONE )
     , color( col )
     , race( Race::NONE )
     , friends( col )
-    , id( World::GetUniq() )
     , _ai( std::make_shared<AI::Normal>() )
     , _handicapStatus( HandicapStatus::NONE )
 #if defined( WITH_DEBUG )
@@ -263,7 +253,7 @@ StreamBase & operator<<( StreamBase & msg, const Player & player )
     const BitModes & modes = player;
 
     assert( player._ai != nullptr );
-    msg << modes << player.id << player.control << player.color << player.race << player.friends << player.name << player.focus << *player._ai
+    msg << modes << player.control << player.color << player.race << player.friends << player.name << player.focus << *player._ai
         << static_cast<uint8_t>( player._handicapStatus );
     return msg;
 }
@@ -272,7 +262,15 @@ StreamBase & operator>>( StreamBase & msg, Player & player )
 {
     BitModes & modes = player;
 
-    msg >> modes >> player.id >> player.control >> player.color >> player.race >> player.friends >> player.name >> player.focus;
+    msg >> modes;
+
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1009_RELEASE, "Remove the logic below." );
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1009_RELEASE ) {
+        uint32_t temp;
+        msg >> temp;
+    }
+
+    msg >> player.control >> player.color >> player.race >> player.friends >> player.name >> player.focus;
 
     assert( player._ai );
     msg >> *player._ai;
@@ -548,10 +546,6 @@ std::string Players::String() const
             os << "human";
             break;
 
-        case CONTROL_REMOTE:
-            os << "remote";
-            break;
-
         default:
             os << "unknown";
             break;
@@ -579,13 +573,6 @@ StreamBase & operator>>( StreamBase & msg, Players & players )
     int colors;
     int current;
     msg >> colors >> current;
-
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1004_RELEASE, "Remove the logic below." );
-    // The old save files made at the end of a campaign scenario has player color set to '-1' which is not supported now.
-    // So we change the incorrect color '-1' to 'Color::NONE'.
-    if ( current == -1 ) {
-        current = Color::NONE;
-    }
 
     players.clear();
     players.setCurrentColor( current );
