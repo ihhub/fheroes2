@@ -3917,7 +3917,7 @@ msgid "Visit us at "
 msgstr "Látogass meg minket itt: "
 
 msgid "QA and Support"
-msgstr "Kérdés/Válasz és támogatás"
+msgstr "Minőségbiztosítás és támogatás"
 
 msgid "Dev and Support"
 msgstr "Fejl. és támogatás"
@@ -3989,10 +3989,10 @@ msgid "Artists"
 msgstr "Művészek"
 
 msgid "QA Manager"
-msgstr "Ügyfélszolgálati vezető"
+msgstr "Minőségbiztosítási menedzser"
 
 msgid "QA"
-msgstr "Kérdések/Válaszok"
+msgstr "Minőségbiztosítás"
 
 msgid "Writing"
 msgstr "Alaptörténet"
