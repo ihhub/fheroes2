@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { WallpaperSettings } from "./global";
+import { WallpaperMapItem, WallpaperSettings } from "./global";
 
 const isDev = true;
 
@@ -158,6 +158,7 @@ function startApp(callback: () => void) {
 
 export const useBridge = () => {
   const [settings, setSettings] = useState<WallpaperSettings | null>(null);
+  const [mapsList, setMapsList] = useState<WallpaperMapItem[]>([]);
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
@@ -169,6 +170,10 @@ export const useBridge = () => {
       if (message.type === "settings") {
         setSettings(message.payload);
       }
+
+      if (message.type === "maps-list") {
+        setMapsList(message.payload);
+      }
     };
 
     startApp(() => {
@@ -177,5 +182,5 @@ export const useBridge = () => {
     });
   }, []);
 
-  return { settings, ready };
+  return { settings, mapsList, ready };
 };

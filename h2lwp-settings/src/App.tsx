@@ -7,7 +7,7 @@ import { SettingsPage } from "./SettingsPage";
 import { useBridge } from "./useBridge";
 
 export function App() {
-  const { settings, ready } = useBridge();
+  const { settings, mapsList, ready } = useBridge();
   const isLoading = !settings || !ready;
 
   return (
@@ -18,7 +18,10 @@ export function App() {
 
           {!isLoading && (
             <>
-              <Route path="/maps-list" element={<MapsListPage />} />
+              <Route
+                path="/maps-list"
+                element={<MapsListPage list={mapsList} />}
+              />
               <Route path="*" element={<SettingsPage settings={settings} />} />
             </>
           )}
