@@ -5,7 +5,13 @@ import java.nio.ByteBuffer
 import java.nio.ByteOrder
 import java.nio.charset.Charset
 
-class MapHeader(val title: String, val width: Int, val height: Int, val isPoL: Boolean)
+class MapHeader(
+    val filename: String,
+    val title: String,
+    val width: Int,
+    val height: Int,
+    val isPoL: Boolean
+)
 
 class MapReader(val input: InputStream?) {
     companion object {
@@ -30,7 +36,7 @@ class MapReader(val input: InputStream?) {
             return mapName.toString(Charset.forName("windows-1251")).split((0x00).toChar())[0]
         }
 
-        fun readMap(input: InputStream?): MapHeader {
+        fun readMap(filename: String, input: InputStream?): MapHeader {
             val headerBuffer = ByteArray(titleOffset + titleLength)
             input?.read(headerBuffer)
 
@@ -47,7 +53,7 @@ class MapReader(val input: InputStream?) {
             input?.read(tilesBuffer)
             val isPoL = isPriceOfLoyalty(tilesBuffer)
 
-            return MapHeader(readMapName(headerBuffer), width, height, isPoL)
+            return MapHeader(filename, readMapName(headerBuffer), width, height, isPoL)
         }
 
         private val polMapObjectIndexes = listOf(

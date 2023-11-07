@@ -16,8 +16,10 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.ipapps.homm2.livewallpaper.data.MapHeader
 import com.ipapps.homm2.livewallpaper.data.MapReader.Companion.readMap
+import com.ipapps.homm2.livewallpaper.data.MapsViewModel
 import com.ipapps.homm2.livewallpaper.data.SettingsViewModel
 import com.ipapps.homm2.livewallpaper.data.WallpaperPreferencesRepository
+import com.ipapps.homm2.livewallpaper.data.WebViewMapsListEvent
 import com.ipapps.homm2.livewallpaper.data.WebViewSettingsEvent
 import com.ipapps.homm2.livewallpaper.data.sendWebViewEvent
 import de.andycandy.android.bridge.Bridge
@@ -25,6 +27,8 @@ import org.libsdl.app.SDLActivity
 import java.io.InputStream
 
 class WebViewActivity : AppCompatActivity() {
+    private val mapsViewModel = MapsViewModel(contentResolver, getExternalFilesDir("maps"))
+
     private fun setWallpaper() {
         startActivity(
             Intent().setAction(WallpaperManager.ACTION_CHANGE_LIVE_WALLPAPER).putExtra(
@@ -45,71 +49,14 @@ class WebViewActivity : AppCompatActivity() {
         }
     }
 
-    private fun getMap(uri: Uri): MapHeader? {
-        val input = contentResolver.openInputStream(uri)
-        val map = kotlin.runCatching { readMap(input) }.getOrNull()
-        input?.close()
-
-        Log.v(
-            "MAP",
-            "Map: ${map?.title} width: ${map?.width} height: ${map?.height} pol: ${map?.isPoL}"
-        )
-
-        return map
-    }
-
-    private fun getFileName(uri: Uri): String? {
-        val cursor = contentResolver.query(
-            uri, null, null, null, null, null
-        )
-
-        if (cursor?.moveToFirst() == null) {
-            cursor?.close()
-            return null;
-        }
-
-        val columnIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
-        if (columnIndex == -1) {
-            cursor.close()
-            return null
-        }
-
-        // Note it's called "Display Name". This is
-        // provider-specific, and might not necessarily be the file name.
-        val filename = cursor.getString(columnIndex)
-        cursor.close()
-        if (filename.length > 30 || !filename.endsWith(".mp2")) {
-            return null;
-        }
-
-        return filename
-    }
-
     private var filePathCallback: ValueCallback<Array<Uri>>? = null
     private val fileChooserLauncher =
         registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
             val urisList = mutableListOf<Uri>()
 
-            kotlin.runCatching {
-                if (uri == null) {
-                    return@runCatching
-                }
-
-                val map = getMap(uri) ?: return@runCatching
-                val input = contentResolver.openInputStream(uri) ?: return@runCatching
-                val fileName = getFileName(uri) ?: "${map.title}.mp2"
-                if (map.isPoL) {
-                    Log.v("MAP", "$fileName is pol")
-                    return@runCatching
-                }
-
-                copyFile(input, fileName, "maps")
-                input.close()
-
+            if (uri != null && mapsViewModel.uploadMap(uri)) {
                 urisList.add(uri)
-            }
-
-            if (urisList.isEmpty()) {
+            } else {
                 Toast
                     .makeText(applicationContext, "Selected file is not supported", Toast.LENGTH_SHORT)
                     .show()
@@ -153,13 +100,14 @@ class WebViewActivity : AppCompatActivity() {
         val webView = findViewById<WebView>(R.id.activity_web_view)
         val bridge = Bridge(applicationContext, webView)
         bridge.addJSInterface(
-            AndroidNativeInterface(
-                settingsViewModel, getExternalFilesDir("maps")
-            )
+            AndroidNativeInterface(settingsViewModel, mapsViewModel)
         )
         bridge.addAfterInitializeListener {
             settingsViewModel.subscribeToPreferences {
                 sendWebViewEvent(WebViewSettingsEvent(it), webView)
+            }
+            mapsViewModel.subscribeToMapsList {
+                sendWebViewEvent(WebViewMapsListEvent(it), webView)
             }
         }
 

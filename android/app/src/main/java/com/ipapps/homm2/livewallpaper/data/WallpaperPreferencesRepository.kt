@@ -55,7 +55,7 @@ fun writeConfig(file: File?, lines: List<String>) {
 }
 
 class WallpaperPreferencesRepository(configFile: File?) {
-    val preferences = MutableStateFlow(readConfig(configFile))
+    private val preferences = MutableStateFlow(readConfig(configFile))
 
     private fun getScaleType(value: String?): ScaleType {
         if (value == "linear") {

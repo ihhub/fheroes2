@@ -34,7 +34,7 @@ export type WebViewSettingsEvent = {
 };
 
 export type WallpaperMapItem = {
-  name: string;
+  filename: string;
   title: string;
   width: number;
   height: number;

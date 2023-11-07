@@ -29,8 +29,21 @@ class WebViewSettingsEvent(preferences: WallpaperPreferences) : WebViewEvent("se
     }
 }
 
-class WebViewMapsListEvent() : WebViewEvent("maps-list") {
+class WebViewMapsListEvent(mapsList: List<MapHeader>) : WebViewEvent("maps-list") {
     init {
+        val array = JSONArray()
+
+        mapsList.forEach {
+            array.put(
+                JSONObject()
+                    .put("filename", it.filename)
+                    .put("title", it.title)
+                    .put("width", it.width)
+                    .put("height", it.height)
+                    .put("isPoL", it.isPoL)
+            )
+        }
+
         setPayload(JSONArray())
     }
 }

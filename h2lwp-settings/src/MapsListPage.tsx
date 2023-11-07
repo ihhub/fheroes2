@@ -30,7 +30,7 @@ export const MapsListPage: React.FC<Props> = () => {
       <Grid container flex="1" direction="column">
         <List disablePadding dense>
           {list.map((item) => (
-            <MapItem key={item.name} map={item} />
+            <MapItem key={item.filename} map={item} />
           ))}
         </List>
       </Grid>

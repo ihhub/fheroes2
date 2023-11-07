@@ -52,6 +52,6 @@ class SettingsViewModel(
         wallpaperPreferencesRepository
             .preferencesFlow
             .onEach { callback(it) }
-            .launchIn(scope = CoroutineScope(SupervisorJob() + Dispatchers.Main))
+            .launchIn(viewModelScope)
     }
 }

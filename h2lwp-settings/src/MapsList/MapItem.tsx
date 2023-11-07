@@ -11,7 +11,7 @@ type Props = {
 
 export const MapItem: React.FC<Props> = ({ map }) => {
   const handleDelete = useCallback(() => {
-    window.Android?.deleteMap(map.name);
+    window.Android?.deleteMap(map.filename);
   }, []);
 
   return (
@@ -29,7 +29,7 @@ export const MapItem: React.FC<Props> = ({ map }) => {
       )}
 
       <ListItemText
-        primary={map.name}
+        primary={map.filename}
         secondary={`(${map.width}x${map.height}) ${map.title}`}
       />
     </ListItem>
