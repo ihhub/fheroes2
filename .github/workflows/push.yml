@@ -2,7 +2,7 @@ name: Push
 
 on:
   push:
-    branches: [master]
+    branches: [ master ]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -19,5 +19,5 @@ jobs:
   translation:
     name: Translation update
     needs:
-      - android
+    - android
     uses: ./.github/workflows/translation_update.yml

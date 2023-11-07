@@ -82,9 +82,9 @@ script/demo/demo
 VisualStudio/packages
 
 # Third-party packages for Android Studio
-# android/app/jni/SDL2/
-# android/app/jni/SDL2_mixer/
-# android/sdl2/
+android/app/jni/SDL2/
+android/app/jni/SDL2_mixer/
+android/sdl2/
 
 # Android Studio files specific to the developer's local configuration
 android/local.properties
