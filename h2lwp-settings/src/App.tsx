@@ -1,7 +1,9 @@
-import { Button, CircularProgress, Grid } from "@mui/material";
+import { Grid } from "@mui/material";
+import { HashRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
-import { Header } from "./Header";
-import { Settings } from "./Settings";
+import { LoadingPage } from "./LoadingPage";
+import { MapsListPage } from "./MapsListPage";
+import { SettingsPage } from "./SettingsPage";
 import { useBridge } from "./useBridge";
 
 export function App() {
@@ -9,40 +11,19 @@ export function App() {
   const isLoading = !settings || !ready;
 
   return (
-    <Grid container height="100%" width="100%" direction="column">
-      <Header title="Wallpaper settings" />
+    <HashRouter>
+      <Grid container height="100%" width="100%" direction="column">
+        <Routes>
+          {isLoading && <Route path="*" element={<LoadingPage />} />}
 
-      <Grid
-        container
-        alignContent="center"
-        justifyContent="center"
-        flex="1"
-        direction="column"
-      >
-        {isLoading && <CircularProgress />}
-
-        {!isLoading && <Settings settings={settings} />}
-
-        {!isLoading && (
-          <Grid
-            container
-            alignContent="center"
-            justifyContent="flex-start"
-            flex="1"
-            flexShrink={1}
-            padding={2}
-            gap={2}
-            direction="column"
-          >
-            <Button
-              variant="contained"
-              onClick={() => window.Android?.setWallpaper()}
-            >
-              Set wallpaper
-            </Button>
-          </Grid>
-        )}
+          {!isLoading && (
+            <>
+              <Route path="/maps-list" element={<MapsListPage />} />
+              <Route path="*" element={<SettingsPage settings={settings} />} />
+            </>
+          )}
+        </Routes>
       </Grid>
-    </Grid>
+    </HashRouter>
   );
 }
