@@ -11,6 +11,7 @@ import android.view.KeyEvent
 import android.webkit.ValueCallback
 import android.webkit.WebChromeClient
 import android.webkit.WebView
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.ipapps.homm2.livewallpaper.data.MapHeader
@@ -109,7 +110,10 @@ class WebViewActivity : AppCompatActivity() {
             }
 
             if (urisList.isEmpty()) {
-                filePathCallback?.onReceiveValue(arrayOf(Uri.parse("fail")))
+                Toast
+                    .makeText(applicationContext, "Selected file is not correct map", Toast.LENGTH_SHORT)
+                    .show()
+                filePathCallback?.onReceiveValue(null)
                 filePathCallback = null
                 return@registerForActivityResult
             }

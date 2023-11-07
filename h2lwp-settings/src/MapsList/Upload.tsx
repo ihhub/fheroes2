@@ -13,20 +13,12 @@ const VisuallyHiddenInput = styled("input")({
 });
 
 type Props = {
-  onFileSelect: (isSupported: boolean) => void;
+  onFileSelect?: (isSupported: boolean) => void;
 };
 
-export const Upload: React.FC<Props> = ({ onFileSelect }) => (
+export const Upload: React.FC<Props> = () => (
   <Button variant="contained" component="label">
     Upload
-    <VisuallyHiddenInput
-      type="file"
-      onChange={(e) => {
-        // File will be returned from WebView only if it accepted by backend
-        const file = e.currentTarget?.files?.[0];
-
-        onFileSelect(Boolean(file));
-      }}
-    />
+    <VisuallyHiddenInput type="file" />
   </Button>
 );

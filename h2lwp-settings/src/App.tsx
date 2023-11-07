@@ -12,7 +12,7 @@ export function App() {
 
   return (
     <HashRouter>
-      <Grid container height="100%" width="100%" direction="column">
+      <Grid container direction="column">
         <Routes>
           {isLoading && <Route path="*" element={<LoadingPage />} />}
 

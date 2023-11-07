@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { Header } from "../Header";
 import { WallpaperMapItem } from "../global";
 import { MapItem } from "./MapItem";
+import { Upload } from "./Upload";
 
 type Props = {};
 
@@ -21,6 +22,8 @@ export const MapsList: React.FC<Props> = () => {
   return (
     <>
       <Header title="Wallpaper settings" />
+
+      <Upload />
 
       <Grid
         container
