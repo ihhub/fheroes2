@@ -10,15 +10,6 @@ export function App() {
   const { settings, ready } = useBridge();
   const isLoading = !settings || !ready;
 
-  useEffect(() => {
-    console.log({
-      isLoading,
-      ready,
-      settings,
-      a: window.Android,
-    });
-  }, [isLoading, ready, settings]);
-
   return (
     <Grid container height="100%" width="100%" direction="column">
       <Header title="Wallpaper settings" />

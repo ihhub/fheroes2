@@ -49,11 +49,8 @@ export type WebViewMapsListEvent = {
 declare global {
   interface Window {
     Android?: {
-      helloFullSync: (name: string) => string;
-      helloWebPromise: (name: string) => Promise<string>;
-      helloFullPromise: (name: string) => Promise<string>;
-
       getMapsList: () => Promise<string>;
+      deleteMap: (filename: string) => boolean;
 
       setBrightness: (value: number) => void;
       setScale: (value: number) => void;

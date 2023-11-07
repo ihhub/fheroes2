@@ -40,9 +40,6 @@ export const useBridge = () => {
     startApp(() => {
       setReady(true);
       window.Android = window.Bridge?.interfaces.Android;
-      console.log("READY", {
-        a: window.Android,
-      });
     });
   }, []);
 

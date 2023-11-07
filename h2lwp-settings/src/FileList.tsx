@@ -1,4 +1,6 @@
+import DraftsIcon from "@mui/icons-material/Drafts";
 import { Button, List, ListItem, ListItemText, styled } from "@mui/material";
+import ListItemIcon from "@mui/material/ListItemIcon";
 import { useEffect, useState } from "react";
 import { WallpaperMapItem } from "./global";
 
@@ -20,13 +22,9 @@ export const FileList: React.FC<Props> = () => {
   const [list, setList] = useState<WallpaperMapItem[]>([]);
 
   useEffect(() => {
-    console.log("getMapsList start");
     window.Android?.getMapsList()
       .then(JSON.parse)
-      .then((result) => {
-        console.log("getMapsList", result);
-        setList(result);
-      })
+      .then(setList)
       .catch((e) => console.log("getMapsList err", e));
   }, []);
 
@@ -34,9 +32,14 @@ export const FileList: React.FC<Props> = () => {
     <List sx={{ width: "100%" }} disablePadding dense>
       {list.map((item) => (
         <ListItem key={item.name}>
+          {item.isPoL && (
+            <ListItemIcon>
+              <DraftsIcon />
+            </ListItemIcon>
+          )}
           <ListItemText
-            primary={item.title}
-            secondary={`(${item.width}x${item.height}) isPoL: ${item.isPoL} ${item.name}`}
+            primary={item.name}
+            secondary={`(${item.width}x${item.height}) isPoL: ${item.isPoL} ${item.title}`}
           />
         </ListItem>
       ))}
@@ -45,7 +48,13 @@ export const FileList: React.FC<Props> = () => {
         Upload
         <VisuallyHiddenInput
           type="file"
-          onChange={(e) => console.log("on change", e)}
+          onChange={(e) => {
+            if (Boolean(e.currentTarget?.files?.length)) {
+              console.log("file is MP2", e);
+            } else {
+              console.log("file is PoL", e);
+            }
+          }}
         />
       </Button>
     </List>
