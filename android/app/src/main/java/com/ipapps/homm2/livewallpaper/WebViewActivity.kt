@@ -7,6 +7,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.OpenableColumns
 import android.util.Log
+import android.view.KeyEvent
 import android.webkit.ValueCallback
 import android.webkit.WebChromeClient
 import android.webkit.WebView
@@ -48,7 +49,10 @@ class WebViewActivity : AppCompatActivity() {
         val map = kotlin.runCatching { readMap(input) }.getOrNull()
         input?.close()
 
-        Log.v("MAP", "Map: ${map?.title} width: ${map?.width} height: ${map?.height} pol: ${map?.isPoL}")
+        Log.v(
+            "MAP",
+            "Map: ${map?.title} width: ${map?.width} height: ${map?.height} pol: ${map?.isPoL}"
+        )
 
         return map
     }
@@ -104,9 +108,26 @@ class WebViewActivity : AppCompatActivity() {
                 urisList.add(uri)
             }
 
+            if (urisList.isEmpty()) {
+                filePathCallback?.onReceiveValue(arrayOf(Uri.parse("fail")))
+                filePathCallback = null
+                return@registerForActivityResult
+            }
+
             filePathCallback?.onReceiveValue(urisList.toTypedArray())
             filePathCallback = null
         }
+
+    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
+        val webView = findViewById<WebView>(R.id.activity_web_view)
+
+        if (keyCode == KeyEvent.KEYCODE_BACK && webView.canGoBack()) {
+            webView.goBack()
+            return true
+        }
+
+        return super.onKeyDown(keyCode, event)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
