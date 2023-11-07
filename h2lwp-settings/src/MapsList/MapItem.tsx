@@ -20,7 +20,7 @@ export const MapItem: React.FC<Props> = ({ map, deletable }) => {
           <IconButton
             edge="end"
             aria-label="delete"
-            onClick={() => androidInterface?.deleteMap(map.filename)}
+            onTouchEnd={() => androidInterface?.deleteMap(map.filename)}
           >
             <DeleteIcon />
           </IconButton>
