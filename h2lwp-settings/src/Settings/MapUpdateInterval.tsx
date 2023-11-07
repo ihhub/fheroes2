@@ -1,3 +1,4 @@
+import { useBridgeContext } from "../BridgeContext";
 import { WallpaperMapUpdateInterval } from "../global";
 import { SimpleListMenu } from "./SimpleListMenu";
 
@@ -18,11 +19,15 @@ const items = Object.entries(valueToText).map(([value, title]) => ({
   title,
 }));
 
-export const MapUpdateInterval: React.FC<Props> = ({ value }) => (
-  <SimpleListMenu
-    label="Map update interval"
-    value={value}
-    items={items}
-    onChange={(value) => window.Android?.setMapUpdateInterval(value)}
-  />
-);
+export const MapUpdateInterval: React.FC<Props> = ({ value }) => {
+  const { androidInterface } = useBridgeContext();
+
+  return (
+    <SimpleListMenu
+      label="Map update interval"
+      value={value}
+      items={items}
+      onChange={(value) => androidInterface?.setMapUpdateInterval(value)}
+    />
+  );
+};

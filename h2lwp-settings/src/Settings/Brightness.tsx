@@ -1,11 +1,14 @@
 import { Box, Grid, ListItem, Slider, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
+import { useBridgeContext } from "../BridgeContext";
 
 type Props = {
   value: number;
 };
 
 export const Brightness: React.FC<Props> = ({ value }) => {
+  const { androidInterface } = useBridgeContext();
+
   const [localValue, setLocalValue] = useState(value);
   useEffect(() => {
     setLocalValue(value);
@@ -27,7 +30,7 @@ export const Brightness: React.FC<Props> = ({ value }) => {
             value={localValue}
             onChange={(_, value) => {
               setLocalValue(Number(value));
-              window.Android?.setBrightness(Number(value));
+              androidInterface?.setBrightness(Number(value));
             }}
           />
         </Box>

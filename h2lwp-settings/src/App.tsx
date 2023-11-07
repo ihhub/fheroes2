@@ -1,28 +1,24 @@
 import { Grid } from "@mui/material";
 import { HashRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
+import { useBridgeContext } from "./BridgeContext";
 import { LoadingPage } from "./LoadingPage";
 import { MapsListPage } from "./MapsListPage";
 import { SettingsPage } from "./SettingsPage";
-import { useBridge } from "./useBridge";
 
 export function App() {
-  const { settings, mapsList, ready } = useBridge();
-  const isLoading = !settings || !ready;
+  const { ready } = useBridgeContext();
 
   return (
     <HashRouter>
       <Grid container direction="column">
         <Routes>
-          {isLoading && <Route path="*" element={<LoadingPage />} />}
+          {!ready && <Route path="*" element={<LoadingPage />} />}
 
-          {!isLoading && (
+          {ready && (
             <>
-              <Route
-                path="/maps-list"
-                element={<MapsListPage list={mapsList} />}
-              />
-              <Route path="*" element={<SettingsPage settings={settings} />} />
+              <Route path="/maps-list" element={<MapsListPage />} />
+              <Route path="*" element={<SettingsPage />} />
             </>
           )}
         </Routes>

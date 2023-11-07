@@ -46,26 +46,26 @@ export type WebViewMapsListEvent = {
   payload: WallpaperMapItem[];
 };
 
+export type AndroidInterface = {
+  getMapsList: () => Promise<string>;
+  deleteMap: (filename: string) => boolean;
+
+  setBrightness: (value: number) => void;
+  setScale: (value: number) => void;
+  setScaleType: (value: number) => void;
+  setMapUpdateInterval: (value: number) => void;
+  toggleUseScroll: () => void;
+  setWallpaper: () => void;
+};
+
 declare global {
   interface Window {
-    Android?: {
-      getMapsList: () => Promise<string>;
-      deleteMap: (filename: string) => boolean;
-
-      setBrightness: (value: number) => void;
-      setScale: (value: number) => void;
-      setScaleType: (value: number) => void;
-      setMapUpdateInterval: (value: number) => void;
-      toggleUseScroll: () => void;
-      setWallpaper: () => void;
-    };
-
     Bridge?: {
       initialized: boolean;
       afterInitialize: () => void;
       init: () => void;
       interfaces: {
-        Android?: Window["Android"];
+        Android?: AndroidInterface;
       };
     };
 

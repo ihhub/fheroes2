@@ -7,6 +7,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { App } from "./App";
+import { BridgeContextProvider } from "./BridgeContext";
 import "./index.css";
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -25,7 +26,9 @@ document.addEventListener("DOMContentLoaded", () => {
     <React.StrictMode>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <App />
+        <BridgeContextProvider>
+          <App />
+        </BridgeContextProvider>
       </ThemeProvider>
     </React.StrictMode>
   );

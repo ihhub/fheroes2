@@ -1,3 +1,4 @@
+import { useBridgeContext } from "../BridgeContext";
 import { WallpaperScaleType } from "../global";
 import { SimpleListMenu } from "./SimpleListMenu";
 
@@ -15,11 +16,15 @@ const items = Object.entries(valueToText).map(([value, title]) => ({
   title,
 }));
 
-export const ScaleType: React.FC<Props> = ({ value }) => (
-  <SimpleListMenu
-    label="Scale type"
-    value={value}
-    items={items}
-    onChange={(value) => window.Android?.setScaleType(value)}
-  />
-);
+export const ScaleType: React.FC<Props> = ({ value }) => {
+  const { androidInterface } = useBridgeContext();
+
+  return (
+    <SimpleListMenu
+      label="Scale type"
+      value={value}
+      items={items}
+      onChange={(value) => androidInterface?.setScaleType(value)}
+    />
+  );
+};
