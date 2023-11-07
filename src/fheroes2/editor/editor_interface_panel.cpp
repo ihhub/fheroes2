@@ -50,8 +50,14 @@ namespace
 {
     void setCustomCursor( const Maps::ObjectGroup group, const int32_t type )
     {
+        if ( type == -1 ) {
+            // The object type is not set. We show the POINTER cursor for this case.
+            Cursor::Get().SetThemes( Cursor::POINTER );
+            return;
+        }
+
         const auto & objectInfo = Maps::getObjectsByGroup( group );
-        if ( type < 0 || type >= static_cast<int32_t>( objectInfo.size() ) ) {
+        if ( type < -1 || type >= static_cast<int32_t>( objectInfo.size() ) ) {
             // You are trying to render some unknown stuff!
             assert( 0 );
             return;
@@ -366,25 +372,19 @@ namespace Interface
 
         switch ( _selectedObject ) {
         case Brush::MONSTERS:
-            if ( _monsterType < 0 ) {
-                _interface.setCursorUpdater( {} );
-                return;
-            }
             _interface.setCursorUpdater( [type = _monsterType]( const int32_t /*tileIndex*/ ) { setCustomCursor( Maps::ObjectGroup::Monster, type ); } );
             break;
         case Brush::TREASURES:
-            if ( _treasureType < 0 ) {
-                _interface.setCursorUpdater( {} );
-                return;
-            }
             _interface.setCursorUpdater( [type = _treasureType]( const int32_t /*tileIndex*/ ) { setCustomCursor( Maps::ObjectGroup::Treasure, type ); } );
             break;
         case Brush::HEROES:
-            if ( _heroType < 0 ) {
-                _interface.setCursorUpdater( {} );
-                return;
-            }
             _interface.setCursorUpdater( [type = _heroType]( const int32_t /*tileIndex*/ ) {
+                if ( type == -1 ) {
+                    // The object type is not set. We show the POINTER cursor for this case.
+                    Cursor::Get().SetThemes( Cursor::POINTER );
+                    return;
+                }
+
                 // TODO: render ICN::MINIHERO from the existing hero images.
                 const fheroes2::Sprite & image = fheroes2::AGG::GetICN( ICN::MINIHERO, type );
 
@@ -396,10 +396,6 @@ namespace Interface
             } );
             break;
         case Brush::ARTIFACTS:
-            if ( _artifactType < 0 ) {
-                _interface.setCursorUpdater( {} );
-                return;
-            }
             _interface.setCursorUpdater( [type = _artifactType]( const int32_t /*tileIndex*/ ) { setCustomCursor( Maps::ObjectGroup::Artifact, type ); } );
             break;
         default:

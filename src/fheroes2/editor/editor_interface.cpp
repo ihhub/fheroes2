@@ -642,14 +642,20 @@ namespace Interface
             else {
                 const int32_t artifactType = _editorPanel.getArtifactType();
 
+                const auto & artifactInfo = Maps::getObjectsByGroup( Maps::ObjectGroup::Artifact );
+                assert( artifactType >= 0 && artifactType < artifactInfo.size() );
+
                 // For each Spell Scroll artifact we select a spell.
-                if ( Maps::getObjectsByGroup( Maps::ObjectGroup::Artifact )[artifactType].metadata[0] == Artifact::SPELL_SCROLL ) {
+                if ( artifactInfo[artifactType].objectType == MP2::OBJ_ARTIFACT && artifactInfo[artifactType].metadata[0] == Artifact::SPELL_SCROLL ) {
                     const int spellId = Dialog::selectSpell( Spell::RANDOM, true ).GetID();
 
-                    if ( spellId != Spell::NONE ) {
-                        setObjectOnTile( tile, Maps::ObjectGroup::Artifact, _editorPanel.getArtifactType() );
-                        Maps::setSpellScrollSpellId( tile, static_cast<uint32_t>( spellId ) );
+                    if ( spellId == Spell::NONE ) {
+                        // We do not place the Spell Scroll artifact if the spell for it was not selected.
+                        return;
                     }
+
+                    setObjectOnTile( tile, Maps::ObjectGroup::Artifact, _editorPanel.getArtifactType() );
+                    Maps::setSpellOnTile( tile, static_cast<uint32_t>( spellId ) );
                 }
                 else {
                     setObjectOnTile( tile, Maps::ObjectGroup::Artifact, _editorPanel.getArtifactType() );

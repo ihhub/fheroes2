@@ -3695,7 +3695,7 @@ namespace fheroes2
             case ICN::OBJNARTI:
                 LoadOriginalICN( id );
                 if ( _icnVsSprite[id].size() == 206 ) {
-                    // If we have the Price of Loyalty assets we nake a map sprite for the Magic Book artifact.
+                    // If we have the Price of Loyalty assets we make a map sprite for the Magic Book artifact.
                     _icnVsSprite[id].resize( 208 );
 
                     // Magic book sprite shadow.

@@ -1188,6 +1188,7 @@ namespace
                     return;
                 }
             }
+
             for ( const Maps::TilesAddon & addon : currentTile.getTopLayerAddons() ) {
                 if ( addon._uid == uid ) {
                     currentTile.Remove( uid );
@@ -1423,6 +1424,11 @@ namespace Maps
         case MP2::OBJ_SHRINE_THIRD_CIRCLE:
         case MP2::OBJ_PYRAMID:
             tile.metadata()[0] = spellId;
+            break;
+        case MP2::OBJ_ARTIFACT:
+            // Only the Spell Scroll artifact can have a spell set.
+            assert( tile.metadata()[0] == Artifact::SPELL_SCROLL );
+            tile.metadata()[1] = spellId;
             break;
         default:
             // Why are you calling this function for an unsupported object type?
@@ -1707,17 +1713,6 @@ namespace Maps
     {
         tile.metadata()[0] = resourceType;
         tile.metadata()[1] = value;
-    }
-
-    void setSpellScrollSpellId( Tiles & tile, const uint32_t spellId )
-    {
-        if ( tile.GetObject() != MP2::OBJ_ARTIFACT || tile.metadata()[0] != Artifact::SPELL_SCROLL ) {
-            // This function should be used only for the Spell Scroll artifact.
-            assert( 0 );
-            return;
-        }
-
-        tile.metadata()[1] = spellId;
     }
 
     Funds getFundsFromTile( const Tiles & tile )
@@ -3112,6 +3107,9 @@ namespace Maps
         removeUidFromTilesAround( tile.GetIndex(), uid );
 
         resetObjectMetadata( tile );
+
+        // TODO: Improve this code to properly update '_mainObjectType' in the case when
+        // there is a non-action objects placed under the current (action) object.
         tile.setAsEmpty();
 
         return true;
