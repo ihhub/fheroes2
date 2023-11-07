@@ -36,7 +36,6 @@ jobs:
       working-directory: ./h2lwp-settings
     - name: Install dependencies
       run: |
-        bash script/android/install_packages.sh
         sudo apt-get -y update
         sudo apt-get -y install gettext
     - name: Generate translations
