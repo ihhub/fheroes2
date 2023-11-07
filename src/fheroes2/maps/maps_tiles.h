@@ -253,6 +253,11 @@ namespace Maps
 
         void pushTopLayerAddon( const MP2::mp2addon_t & ma );
 
+        void pushTopLayerAddon( TilesAddon ta )
+        {
+            _addonTopLayer.emplace_back( ta );
+        }
+
         const std::list<TilesAddon> & getBottomLayerAddons() const
         {
             return _addonBottomLayer;
@@ -266,6 +271,13 @@ namespace Maps
         const std::list<TilesAddon> & getTopLayerAddons() const
         {
             return _addonTopLayer;
+        }
+
+        void moveMainAddonToBottomLayer()
+        {
+            if ( _mainAddon._objectIcnType != MP2::OBJ_ICN_TYPE_UNKNOWN ) {
+                _addonBottomLayer.emplace_back( _mainAddon );
+            }
         }
 
         void AddonsSort();

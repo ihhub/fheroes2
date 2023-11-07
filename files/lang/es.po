@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-23 00:14+0000\n"
+"POT-Creation-Date: 2023-11-05 08:25+0000\n"
 "PO-Revision-Date: 2023-06-27 18:17+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -972,13 +972,6 @@ msgstr ""
 #, fuzzy
 msgid "The %{name} is destroyed."
 msgstr "El %{nombre} incrementa tu moral."
-
-msgid ""
-"The %{artifact} artifact is in effect for this battle, disabling %{spell} "
-"spell."
-msgstr ""
-"El artefacto %{artifact} está en efecto por esta batalla, deshabilitando el "
-"hechizo %{spell}."
 
 #, fuzzy
 msgid "%{count} %{name} rises from the dead!"
@@ -3305,9 +3298,6 @@ msgstr "Archivo a Cargar:"
 msgid "Accept the choice made."
 msgstr "Aceptar la elección realizada."
 
-msgid "Unknown Hero"
-msgstr ""
-
 #, fuzzy
 msgid "%{color} %{race} hero"
 msgstr "%{color} jugador"
@@ -3330,6 +3320,10 @@ msgstr "Mejor monstruo:"
 
 #, fuzzy
 msgid "Select Hero:"
+msgstr "Mejor héroe:"
+
+#, fuzzy
+msgid "Select Treasure:"
 msgstr "Mejor héroe:"
 
 #, fuzzy
@@ -3649,6 +3643,13 @@ msgstr ""
 
 msgid "Choose a tile which does not contain any objects."
 msgstr ""
+
+msgid "Treasure"
+msgstr "Tesoro"
+
+#, fuzzy
+msgid "Treasures cannot be placed on water."
+msgstr "Este pueblo no se puede actualizar a castillo."
 
 msgid "Heroes"
 msgstr "Héroes"
@@ -4182,6 +4183,9 @@ msgid "Package Design"
 msgstr ""
 
 msgid "Your Name"
+msgstr ""
+
+msgid "Unknown Hero"
 msgstr ""
 
 #, fuzzy
@@ -5701,9 +5705,6 @@ msgstr ""
 
 msgid "You come upon the remains of an unfortunate adventurer."
 msgstr "Te topas con los restos de un desafortunado aventurero."
-
-msgid "Treasure"
-msgstr "Tesoro"
 
 msgid "Searching through the tattered clothing, you find the %{artifact}."
 msgstr "Mientras buscabas entre las ropas sucias, encontraste %{artifact}."

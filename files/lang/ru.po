@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-23 00:14+0000\n"
+"POT-Creation-Date: 2023-11-05 08:25+0000\n"
 "PO-Revision-Date: 2023-10-10 06:12+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -985,11 +985,6 @@ msgstr "каждый с бонусом +%{attack} к своему навыку �
 
 msgid "The %{name} is destroyed."
 msgstr "%{name} уничтожена!"
-
-msgid ""
-"The %{artifact} artifact is in effect for this battle, disabling %{spell} "
-"spell."
-msgstr "%{artifact} запрещает использовать \"%{spell}\"."
 
 msgid "%{count} %{name} rises from the dead!"
 msgid_plural "%{count} %{name} rise from the dead!"
@@ -3318,9 +3313,6 @@ msgstr "Загрузить файл:"
 msgid "Accept the choice made."
 msgstr "Подтвердить Ваш выбор."
 
-msgid "Unknown Hero"
-msgstr "Неизвестный герой"
-
 msgid "%{color} %{race} hero"
 msgstr "%{color} герой - %{race}"
 
@@ -3337,6 +3329,10 @@ msgid "Select Monster:"
 msgstr "Выберите существо:"
 
 msgid "Select Hero:"
+msgstr "Выберите героя:"
+
+#, fuzzy
+msgid "Select Treasure:"
 msgstr "Выберите героя:"
 
 msgid "Map Type:\n"
@@ -3646,6 +3642,13 @@ msgstr "Монстров нельзя размещать на воде."
 
 msgid "Choose a tile which does not contain any objects."
 msgstr "Выберите ячейку карты, на которой нет никаких объектов."
+
+msgid "Treasure"
+msgstr "Сокровище"
+
+#, fuzzy
+msgid "Treasures cannot be placed on water."
+msgstr "Героев нельзя размещать на воде."
 
 msgid "Heroes"
 msgstr "Герои"
@@ -4181,6 +4184,9 @@ msgstr "Дизайн упаковки"
 
 msgid "Your Name"
 msgstr "Ваше имя"
+
+msgid "Unknown Hero"
+msgstr "Неизвестный герой"
 
 msgid "Standard"
 msgstr "Обычная игра"
@@ -5650,9 +5656,6 @@ msgstr ""
 
 msgid "You come upon the remains of an unfortunate adventurer."
 msgstr "Вы обнаружили останки какого-то несчастного путника."
-
-msgid "Treasure"
-msgstr "Сокровище"
 
 msgid "Searching through the tattered clothing, you find the %{artifact}."
 msgstr "Покопавшись среди лохмотьев, Вы нашли %{artifact}."
@@ -10841,13 +10844,3 @@ msgstr ""
 "Новую версию игры можно найти на сайте:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid ""
-#~ " on the left side of main menu or by clicking on the configuration "
-#~ "button. \n"
-#~ "\n"
-#~ "Enjoy the game!"
-#~ msgstr ""
-#~ " на левой стороне основного меню или нажав на кнопку настройки игры.\n"
-#~ "\n"
-#~ "Наслаждайтесь игрой!"

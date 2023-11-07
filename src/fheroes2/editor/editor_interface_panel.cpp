@@ -24,6 +24,7 @@
 #include <cstddef>
 #include <string>
 #include <utility>
+#include <vector>
 
 #include "agg_image.h"
 #include "cursor.h"
@@ -36,12 +37,31 @@
 #include "image.h"
 #include "interface_base.h"
 #include "localevent.h"
+#include "map_object_info.h"
 #include "screen.h"
 #include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
 #include "ui_dialog.h"
+#include "ui_map_object.h"
 #include "ui_text.h"
+
+namespace
+{
+    void setCustomCursor( const Maps::ObjectGroup group, const int32_t type )
+    {
+        const auto & objectInfo = Maps::getObjectsByGroup( group );
+        if ( type < 0 || type >= static_cast<int32_t>( objectInfo.size() ) ) {
+            // You are trying to render some unknown stuff!
+            assert( 0 );
+            return;
+        }
+
+        const fheroes2::Sprite & image = fheroes2::generateMapObjectImage( objectInfo[type] );
+
+        Cursor::Get().setCustomImage( image, { image.x(), image.y() } );
+    }
+}
 
 namespace Interface
 {
@@ -77,7 +97,8 @@ namespace Interface
     int32_t EditorPanel::getBrushSize() const
     {
         // Roads and streams are placed using only 1x1 brush.
-        if ( _selectedInstrument == Instrument::STREAM || _selectedInstrument == Instrument::ROAD || isMonsterSettingMode() || isHeroSettingMode() ) {
+        if ( _selectedInstrument == Instrument::STREAM || _selectedInstrument == Instrument::ROAD || isMonsterSettingMode() || isHeroSettingMode()
+             || isTreasureSettingMode() ) {
             return 1;
         }
 
@@ -485,15 +506,22 @@ namespace Interface
                 fheroes2::showStandardTextMessage( _getObjectTypeName( Brush::TREASURES ), _( "Used to place\na resource or treasure." ), Dialog::ZERO );
             }
             else if ( le.MouseClickLeft( _objectButtonsRect[Brush::MONSTERS] ) ) {
-                const Monster monster = Dialog::selectMonster( _monsterId, true );
-                if ( monster.GetID() != Monster::UNKNOWN ) {
-                    _monsterId = monster.GetID();
+                const int monsterType = Dialog::selectMonsterType( _monsterType );
+                if ( monsterType >= 0 ) {
+                    _monsterType = monsterType;
 
-                    _interface.setCursorUpdater( [monster = monster]( const int32_t /*tileIndex*/ ) {
-                        const fheroes2::Sprite & image = fheroes2::AGG::GetICN( ICN::MONS32, monster.GetSpriteIndex() );
+                    _interface.setCursorUpdater( [type = _monsterType]( const int32_t /*tileIndex*/ ) { setCustomCursor( Maps::ObjectGroup::Monster, type ); } );
 
-                        Cursor::Get().setCustomImage( image, { -image.width() / 2, -image.height() / 2 } );
-                    } );
+                    _interface.updateCursor( 0 );
+                    return res;
+                }
+            }
+            else if ( le.MouseClickLeft( _objectButtonsRect[Brush::TREASURES] ) ) {
+                const int treasureType = Dialog::selectTreasureType( _treasureType );
+                if ( treasureType >= 0 ) {
+                    _treasureType = treasureType;
+
+                    _interface.setCursorUpdater( [type = _treasureType]( const int32_t /*tileIndex*/ ) { setCustomCursor( Maps::ObjectGroup::Treasure, type ); } );
 
                     _interface.updateCursor( 0 );
                     return res;

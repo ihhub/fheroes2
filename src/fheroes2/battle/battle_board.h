@@ -83,13 +83,9 @@ namespace Battle
         static bool isCastleIndex( const int32_t index );
         static bool isMoatIndex( const int32_t index, const Unit & unit );
         static bool isOutOfWallsIndex( const int32_t index );
-        static bool isNegativeDistance( const int32_t index1, const int32_t index2 );
         static int DistanceFromOriginX( const int32_t index, const bool reflect );
         static int GetReflectDirection( const int dir );
         static int GetDirection( const int32_t index1, const int32_t index2 );
-        static int32_t DoubleCellAttackValue( const Unit & attacker, const Unit & target, const int32_t from, const int32_t targetCell );
-        static int32_t OptimalAttackTarget( const Unit & attacker, const Unit & target, const int32_t from );
-        static int32_t OptimalAttackValue( const Unit & attacker, const Unit & target, const int32_t from );
 
         // Returns the distance between two cells with the given indexes. If any of the indexes is not valid, then returns 0.
         static uint32_t GetDistance( const int32_t index1, const int32_t index2 );
@@ -112,9 +108,11 @@ namespace Battle
         static Indexes GetMoveWideIndexes( const int32_t head, const bool reflect );
         static bool isValidMirrorImageIndex( const int32_t index, const Unit * unit );
 
-        // Checks whether a given unit is (in principle) capable of attacking during the current turn from a cell with a given index
+        // Checks whether a given unit is (in principle) capable of attacking in melee during the current turn from a cell with
+        // a given index
         static bool CanAttackFromCell( const Unit & unit, const int32_t from );
-        // Checks whether this attacker is able to attack the target during the current turn from a position corresponding to a given index
+        // Checks whether the attacker is able to attack the target in melee during the current turn from a position corresponding
+        // to the given index
         static bool CanAttackTargetFromPosition( const Unit & attacker, const Unit & target, const int32_t dst );
 
         static Indexes GetAdjacentEnemies( const Unit & unit );

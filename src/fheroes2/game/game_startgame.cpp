@@ -263,6 +263,7 @@ void Game::OpenCastleDialog( Castle & castle, bool updateFocus /* = true */, con
 
         // The castle garrison can change
         adventureMapInterface.RedrawFocus();
+        adventureMapInterface.ResetFocus( Interface::GetFocusType(), false );
 
         // Fade-in game screen only for 640x480 resolution.
         if ( fheroes2::Display::instance().isDefaultSize() ) {
@@ -356,7 +357,6 @@ void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus, const bool renderB
                 adventureMapInterface.ResetFocus( GameFocus::HEROES, false );
             }
         }
-
         // The hero's army can change
         adventureMapInterface.RedrawFocus();
 
@@ -525,6 +525,31 @@ int Interface::AdventureMap::GetCursorFocusShipmaster( const Heroes & hero, cons
     return Cursor::POINTER;
 }
 
+int Interface::AdventureMap::_getCursorNoFocus( const Maps::Tiles & tile )
+{
+    switch ( tile.GetObject() ) {
+    case MP2::OBJ_NON_ACTION_CASTLE:
+    case MP2::OBJ_CASTLE: {
+        const Castle * castle = world.getCastle( tile.GetCenter() );
+        if ( castle && castle->GetColor() == Settings::Get().CurrentColor() ) {
+            return Cursor::CASTLE;
+        }
+        break;
+    }
+    case MP2::OBJ_HEROES: {
+        const Heroes * hero = tile.getHero();
+        if ( hero && hero->GetColor() == Settings::Get().CurrentColor() ) {
+            return Cursor::HEROES;
+        }
+        break;
+    }
+    default:
+        break;
+    }
+
+    return Cursor::POINTER;
+}
+
 int Interface::AdventureMap::GetCursorFocusHeroes( const Heroes & hero, const Maps::Tiles & tile )
 {
     if ( hero.Modes( Heroes::ENABLEMOVE ) ) {
@@ -640,6 +665,9 @@ int Interface::AdventureMap::GetCursorTileIndex( int32_t dstIndex )
 
     case GameFocus::CASTLE:
         return GetCursorFocusCastle( *GetFocusCastle(), tile );
+
+    case GameFocus::UNSEL:
+        return _getCursorNoFocus( tile );
 
     default:
         break;
@@ -1222,9 +1250,6 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
                             Interface::AdventureMap::RedrawLocker redrawLocker( Interface::AdventureMap::Get() );
 
                             _gameArea.SetCenter( hero->GetCenter() );
-                            ResetFocus( GameFocus::HEROES, true );
-
-                            RedrawFocus();
 
                             if ( stopHero ) {
                                 stopHero = false;
@@ -1243,9 +1268,6 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
                                 heroAnimationOffset = movement;
                                 _gameArea.ShiftCenter( movement );
 
-                                Game::SetUpdateSoundsOnFocusUpdate( false );
-                                ResetFocus( GameFocus::HEROES, true );
-                                Game::SetUpdateSoundsOnFocusUpdate( true );
                                 heroAnimationFrameCount = 32 - heroMovementSkipValue;
                                 heroAnimationSpriteId = hero->GetSpriteIndex();
                                 if ( heroMovementSkipValue < 4 ) {

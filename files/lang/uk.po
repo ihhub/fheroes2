@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-23 00:14+0000\n"
+"POT-Creation-Date: 2023-11-05 08:25+0000\n"
 "PO-Revision-Date: 2023-09-06 08:41+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -982,13 +982,6 @@ msgstr "кожна з бонусом +%{attack} до вміння Атаки."
 
 msgid "The %{name} is destroyed."
 msgstr "%{name} знищено."
-
-msgid ""
-"The %{artifact} artifact is in effect for this battle, disabling %{spell} "
-"spell."
-msgstr ""
-"Артефакт %{artifact} впливає на цю битву, не дозволяючи використати закляття "
-"%{spell}."
 
 msgid "%{count} %{name} rises from the dead!"
 msgid_plural "%{count} %{name} rise from the dead!"
@@ -3256,9 +3249,6 @@ msgstr ""
 msgid "Accept the choice made."
 msgstr ""
 
-msgid "Unknown Hero"
-msgstr ""
-
 msgid "%{color} %{race} hero"
 msgstr ""
 
@@ -3275,6 +3265,10 @@ msgid "Select Monster:"
 msgstr "Оберіть Монстра:"
 
 msgid "Select Hero:"
+msgstr "Оберіть Героя:"
+
+#, fuzzy
+msgid "Select Treasure:"
 msgstr "Оберіть Героя:"
 
 msgid "Map Type:\n"
@@ -3564,6 +3558,12 @@ msgid "Monsters cannot be placed on water."
 msgstr ""
 
 msgid "Choose a tile which does not contain any objects."
+msgstr ""
+
+msgid "Treasure"
+msgstr "Скарб"
+
+msgid "Treasures cannot be placed on water."
 msgstr ""
 
 msgid "Heroes"
@@ -4066,6 +4066,9 @@ msgstr ""
 
 msgid "Your Name"
 msgstr "Ваше Ім'я"
+
+msgid "Unknown Hero"
+msgstr ""
 
 msgid "Standard"
 msgstr ""
@@ -5413,9 +5416,6 @@ msgstr ""
 
 msgid "You come upon the remains of an unfortunate adventurer."
 msgstr ""
-
-msgid "Treasure"
-msgstr "Скарб"
 
 msgid "Searching through the tattered clothing, you find the %{artifact}."
 msgstr ""

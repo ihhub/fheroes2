@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-23 00:14+0000\n"
+"POT-Creation-Date: 2023-11-05 08:25+0000\n"
 "PO-Revision-Date: 2023-09-03 18:42+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -977,12 +977,6 @@ msgstr "hver med en angrepsbonus på +%{attack}."
 
 msgid "The %{name} is destroyed."
 msgstr "Borgens %{name} ble ødelagt."
-
-msgid ""
-"The %{artifact} artifact is in effect for this battle, disabling %{spell} "
-"spell."
-msgstr ""
-"%{artifact} er i bruk i denne kampen, dermed forhindres trolldommen %{spell}."
 
 msgid "%{count} %{name} rises from the dead!"
 msgid_plural "%{count} %{name} rise from the dead!"
@@ -3357,9 +3351,6 @@ msgstr "Lastingsfil:"
 msgid "Accept the choice made."
 msgstr "Bekreft valget og gå videre."
 
-msgid "Unknown Hero"
-msgstr "Ukjent helt"
-
 #, fuzzy
 msgid "%{color} %{race} hero"
 msgstr "%{color} spiller"
@@ -3377,6 +3368,10 @@ msgid "Select Monster:"
 msgstr "Velg monster:"
 
 msgid "Select Hero:"
+msgstr "Velg helt:"
+
+#, fuzzy
+msgid "Select Treasure:"
 msgstr "Velg helt:"
 
 msgid "Map Type:\n"
@@ -3689,6 +3684,13 @@ msgstr ""
 
 msgid "Choose a tile which does not contain any objects."
 msgstr ""
+
+msgid "Treasure"
+msgstr "Verdifull gjenstand"
+
+#, fuzzy
+msgid "Treasures cannot be placed on water."
+msgstr "Denne trolldommen kan ikke brukes på et skip."
 
 msgid "Heroes"
 msgstr "Helter"
@@ -4234,6 +4236,9 @@ msgstr "Innpakningsdesign"
 
 msgid "Your Name"
 msgstr "Ditt navn"
+
+msgid "Unknown Hero"
+msgstr "Ukjent helt"
 
 msgid "Standard"
 msgstr "Standard"
@@ -5727,9 +5732,6 @@ msgstr ""
 
 msgid "You come upon the remains of an unfortunate adventurer."
 msgstr "Du kommer over levningene til en uheldig eventyrer."
-
-msgid "Treasure"
-msgstr "Verdifull gjenstand"
 
 msgid "Searching through the tattered clothing, you find the %{artifact}."
 msgstr "Etter å ha lett gjennom de fillete plaggene, finner du: %{artifact}."
@@ -11101,13 +11103,3 @@ msgstr ""
 "Finn den siste oppdateringen av spillet på\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid ""
-#~ " on the left side of main menu or by clicking on the configuration "
-#~ "button. \n"
-#~ "\n"
-#~ "Enjoy the game!"
-#~ msgstr ""
-#~ " til venstre på hovedmenyen eller ved å trykke på knappen \"Valg\".\n"
-#~ "\n"
-#~ "Vi håper du får en fin opplevelse med spillet!"

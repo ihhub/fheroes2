@@ -40,12 +40,14 @@ uint32_t Battle::Command::updateSeed( uint32_t seed ) const
 {
     switch ( _type ) {
     case CommandType::ATTACK:
-        assert( size() == 4 );
+        assert( size() == 5 );
 
         fheroes2::hashCombine( seed, _type );
-        // Use only attacker & defender UIDs, because cell index and direction may differ depending on whether the AI or the human player gives the command
+        // Use only cell index to move and attacker & defender UIDs, because cell index to attack and attack direction may differ depending on whether the AI or the human
+        // player gives the command
         fheroes2::hashCombine( seed, at( 2 ) );
         fheroes2::hashCombine( seed, at( 3 ) );
+        fheroes2::hashCombine( seed, at( 4 ) );
         break;
 
     case CommandType::MOVE:
@@ -60,9 +62,6 @@ uint32_t Battle::Command::updateSeed( uint32_t seed ) const
         std::for_each( begin(), end(), [&seed]( const int param ) { fheroes2::hashCombine( seed, param ); } );
         break;
 
-    // Ignore the end turn command, because the AI and the human player give them differently
-    // TODO: eventually get rid of this command
-    case CommandType::END_TURN:
     // These commands should never affect the seed generation
     case CommandType::AUTO_SWITCH:
     case CommandType::AUTO_FINISH:

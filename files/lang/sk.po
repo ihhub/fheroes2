@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-23 00:14+0000\n"
+"POT-Creation-Date: 2023-11-05 08:25+0000\n"
 "PO-Revision-Date: 2023-09-11 20:22+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -971,12 +971,6 @@ msgstr "s bonusom +%{attack} k ich zručnosti útoku."
 
 msgid "The %{name} is destroyed."
 msgstr "%{name} je zničený/á."
-
-msgid ""
-"The %{artifact} artifact is in effect for this battle, disabling %{spell} "
-"spell."
-msgstr ""
-"Artefakt %{artifact} je aktívny pre tento boj a znemožňuje kúzlo %{spell}."
 
 msgid "%{count} %{name} rises from the dead!"
 msgid_plural "%{count} %{name} rise from the dead!"
@@ -3292,9 +3286,6 @@ msgstr "Nahrať súbor:"
 msgid "Accept the choice made."
 msgstr "Prijať uskutočnený výber."
 
-msgid "Unknown Hero"
-msgstr "Neznámy hrdina"
-
 #, fuzzy
 msgid "%{color} %{race} hero"
 msgstr "%{color} hráč"
@@ -3312,6 +3303,10 @@ msgid "Select Monster:"
 msgstr "Zvoľ bojovníka:"
 
 msgid "Select Hero:"
+msgstr "Zvoľ hrdinu:"
+
+#, fuzzy
+msgid "Select Treasure:"
 msgstr "Zvoľ hrdinu:"
 
 msgid "Map Type:\n"
@@ -3619,6 +3614,13 @@ msgstr ""
 
 msgid "Choose a tile which does not contain any objects."
 msgstr ""
+
+msgid "Treasure"
+msgstr "Poklad"
+
+#, fuzzy
+msgid "Treasures cannot be placed on water."
+msgstr "Toto kúzlo nemožno použiť na lodi."
 
 msgid "Heroes"
 msgstr "Hrdinovia"
@@ -4155,6 +4157,9 @@ msgstr "Dizajn balíkov"
 
 msgid "Your Name"
 msgstr "Tvoje meno"
+
+msgid "Unknown Hero"
+msgstr "Neznámy hrdina"
 
 msgid "Standard"
 msgstr "Štandard"
@@ -5623,9 +5628,6 @@ msgstr ""
 
 msgid "You come upon the remains of an unfortunate adventurer."
 msgstr "Narazíš na pozostatky nešťastného dobrodruha."
-
-msgid "Treasure"
-msgstr "Poklad"
 
 msgid "Searching through the tattered clothing, you find the %{artifact}."
 msgstr "Pri prehľadávaní roztrhaného oblečenia nájdeš %{artifact}."
@@ -10787,13 +10789,3 @@ msgstr ""
 "Pozri si najnovšiu verziu hry na\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid ""
-#~ " on the left side of main menu or by clicking on the configuration "
-#~ "button. \n"
-#~ "\n"
-#~ "Enjoy the game!"
-#~ msgstr ""
-#~ " na ľavej strane hlavnej ponuky alebo kliknutím na tlačidlo nastavenia. \n"
-#~ "\n"
-#~ "Prajeme ti príjemnú hru!"

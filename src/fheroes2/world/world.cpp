@@ -1281,19 +1281,23 @@ void World::resetPathfinder()
     AI::Get().resetPathfinder();
 }
 
+void World::updatePassabilities()
+{
+    for ( Maps::Tiles & tile : vec_tiles ) {
+        tile.updateEmpty();
+        tile.setInitialPassability();
+    }
+
+    // Once the original passabilities are set we know all neighbours. Now we have to update passabilities based on neighbours.
+    for ( Maps::Tiles & tile : vec_tiles ) {
+        tile.updatePassability();
+    }
+}
+
 void World::PostLoad( const bool setTilePassabilities )
 {
     if ( setTilePassabilities ) {
-        // update tile passable
-        for ( Maps::Tiles & tile : vec_tiles ) {
-            tile.updateEmpty();
-            tile.setInitialPassability();
-        }
-
-        // Once the original passabilities are set we know all neighbours. Now we have to update passabilities based on neighbours.
-        for ( Maps::Tiles & tile : vec_tiles ) {
-            tile.updatePassability();
-        }
+        updatePassabilities();
     }
 
     // Cache all tiles that that contain stone liths of a certain type (depending on object sprite index).

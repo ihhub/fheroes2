@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-23 00:14+0000\n"
+"POT-Creation-Date: 2023-11-05 08:25+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -976,13 +976,6 @@ msgstr "всеки получава +%{attack} бонус към своето у
 
 msgid "The %{name} is destroyed."
 msgstr "%{name} е унищожен!"
-
-msgid ""
-"The %{artifact} artifact is in effect for this battle, disabling %{spell} "
-"spell."
-msgstr ""
-"Артефактът %{artifact} е в сила за тази битка, дезактивирайки заклинанието "
-"%{spell}."
 
 msgid "%{count} %{name} rises from the dead!"
 msgid_plural "%{count} %{name} rise from the dead!"
@@ -3327,9 +3320,6 @@ msgstr "Файл за зареждане:"
 msgid "Accept the choice made."
 msgstr "Приемете направения избор."
 
-msgid "Unknown Hero"
-msgstr "Незнаен герой"
-
 #, fuzzy
 msgid "%{color} %{race} hero"
 msgstr "%{color} играч"
@@ -3347,6 +3337,10 @@ msgid "Select Monster:"
 msgstr "Избери чудовище:"
 
 msgid "Select Hero:"
+msgstr "Избери герой:"
+
+#, fuzzy
+msgid "Select Treasure:"
 msgstr "Избери герой:"
 
 msgid "Map Type:\n"
@@ -3661,6 +3655,13 @@ msgstr ""
 
 msgid "Choose a tile which does not contain any objects."
 msgstr ""
+
+msgid "Treasure"
+msgstr "Съкровище"
+
+#, fuzzy
+msgid "Treasures cannot be placed on water."
+msgstr "Това заклинание не може да се направи на кораб."
 
 msgid "Heroes"
 msgstr "Герой"
@@ -4207,6 +4208,9 @@ msgstr "Дизайн на опаковката"
 
 msgid "Your Name"
 msgstr "Твоето име"
+
+msgid "Unknown Hero"
+msgstr "Незнаен герой"
 
 msgid "Standard"
 msgstr "Стандарт"
@@ -5689,9 +5693,6 @@ msgstr ""
 
 msgid "You come upon the remains of an unfortunate adventurer."
 msgstr "Попадаш на останките на нещастен авантюрист."
-
-msgid "Treasure"
-msgstr "Съкровище"
 
 msgid "Searching through the tattered clothing, you find the %{artifact}."
 msgstr "Търсейки в едни дрипи, намираш %{artifact}."
@@ -10927,14 +10928,3 @@ msgstr ""
 "Проверете най-новата версия на играта на\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid ""
-#~ " on the left side of main menu or by clicking on the configuration "
-#~ "button. \n"
-#~ "\n"
-#~ "Enjoy the game!"
-#~ msgstr ""
-#~ " от лявата страна на главното меню или като цъкнеш на бутона за "
-#~ "конфигурация.\n"
-#~ "\n"
-#~ "Приятна игра!"

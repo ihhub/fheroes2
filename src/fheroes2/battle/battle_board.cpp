@@ -29,8 +29,6 @@
 #include <cstdint>
 #include <cstdlib>
 #include <memory>
-#include <ostream>
-#include <set>
 #include <utility>
 
 #include "battle_arena.h"
@@ -40,7 +38,6 @@
 #include "game_static.h"
 #include "ground.h"
 #include "icn.h"
-#include "logging.h"
 #include "maps_tiles.h"
 #include "mp2.h"
 #include "rand.h"
@@ -221,71 +218,6 @@ std::vector<Battle::Unit *> Battle::Board::GetNearestTroops( const Unit * startU
     return units;
 }
 
-int32_t Battle::Board::DoubleCellAttackValue( const Unit & attacker, const Unit & target, const int32_t from, const int32_t targetCell )
-{
-    const Cell * behind = GetCell( targetCell, GetDirection( from, targetCell ) );
-    const Unit * secondaryTarget = ( behind != nullptr ) ? behind->GetUnit() : nullptr;
-    if ( secondaryTarget && secondaryTarget->GetUID() != target.GetUID() && secondaryTarget->GetUID() != attacker.GetUID() ) {
-        return secondaryTarget->evaluateThreatForUnit( attacker );
-    }
-    return 0;
-}
-
-int32_t Battle::Board::OptimalAttackTarget( const Unit & attacker, const Unit & target, const int32_t from )
-{
-    const int32_t headIndex = target.GetHeadIndex();
-    const int32_t tailIndex = target.GetTailIndex();
-
-    // isNearIndexes should return false if we pass in invalid tail index (-1)
-    if ( isNearIndexes( from, tailIndex ) ) {
-        if ( attacker.isDoubleCellAttack() && isNearIndexes( from, headIndex )
-             && DoubleCellAttackValue( attacker, target, from, headIndex ) > DoubleCellAttackValue( attacker, target, from, tailIndex ) ) {
-            // Special case when attacking wide unit from the middle cell and could turn around
-            return headIndex;
-        }
-        return tailIndex;
-    }
-    return headIndex;
-}
-
-int32_t Battle::Board::OptimalAttackValue( const Unit & attacker, const Unit & target, const int32_t from )
-{
-    if ( attacker.isDoubleCellAttack() ) {
-        const int32_t targetCell = OptimalAttackTarget( attacker, target, from );
-        return target.evaluateThreatForUnit( attacker ) + DoubleCellAttackValue( attacker, target, from, targetCell );
-    }
-
-    if ( attacker.isAllAdjacentCellsAttack() ) {
-        Position position = Position::GetPosition( attacker, from );
-
-        if ( position.GetHead() == nullptr || ( attacker.isWide() && position.GetTail() == nullptr ) ) {
-            DEBUG_LOG( DBG_BATTLE, DBG_WARN, "Invalid position for " << attacker.String() << ", target: " << target.String() << ", cell: " << from )
-
-            return 0;
-        }
-
-        Indexes aroundAttacker = GetAroundIndexes( position );
-
-        std::set<const Unit *> unitsUnderAttack;
-        Board * board = Arena::GetBoard();
-        for ( const int32_t index : aroundAttacker ) {
-            const Unit * unit = board->at( index ).GetUnit();
-            if ( unit != nullptr && unit->GetColor() != attacker.GetCurrentColor() ) {
-                unitsUnderAttack.insert( unit );
-            }
-        }
-
-        int32_t attackValue = 0;
-        for ( const Unit * unit : unitsUnderAttack ) {
-            attackValue += unit->evaluateThreatForUnit( attacker );
-        }
-
-        return attackValue;
-    }
-
-    return target.evaluateThreatForUnit( attacker );
-}
-
 int Battle::Board::GetDirection( const int32_t index1, const int32_t index2 )
 {
     if ( !isValidIndex( index1 ) || !isValidIndex( index2 ) ) {
@@ -330,11 +262,6 @@ int Battle::Board::GetReflectDirection( const int dir )
     }
 
     return UNKNOWN;
-}
-
-bool Battle::Board::isNegativeDistance( const int32_t index1, const int32_t index2 )
-{
-    return ( index1 % ARENAW ) - ( index2 % ARENAW ) < 0;
 }
 
 int Battle::Board::DistanceFromOriginX( const int32_t index, const bool reflect )
@@ -1010,18 +937,17 @@ bool Battle::Board::CanAttackTargetFromPosition( const Unit & attacker, const Un
             continue;
         }
 
-        if ( !CanAttackFromCell( attacker, cell->GetIndex() ) ) {
+        const int32_t cellIdx = cell->GetIndex();
+
+        if ( Board::GetDistance( target.GetPosition(), cellIdx ) > 1 ) {
             continue;
         }
 
-        for ( const int32_t nearbyIdx : GetAroundIndexes( cell->GetIndex() ) ) {
-            const Cell * nearbyCell = GetCell( nearbyIdx );
-            assert( nearbyCell != nullptr );
-
-            if ( nearbyCell->GetUnit() == &target ) {
-                return true;
-            }
+        if ( !CanAttackFromCell( attacker, cellIdx ) ) {
+            continue;
         }
+
+        return true;
     }
 
     return false;
