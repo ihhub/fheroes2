@@ -1,7 +1,5 @@
 import { Button, CircularProgress, Grid } from "@mui/material";
-import { useEffect } from "react";
 import "./App.css";
-import { FileList } from "./FileList";
 import { Header } from "./Header";
 import { Settings } from "./Settings";
 import { useBridge } from "./useBridge";
@@ -42,8 +40,6 @@ export function App() {
             >
               Set wallpaper
             </Button>
-
-            <FileList />
           </Grid>
         )}
       </Grid>
