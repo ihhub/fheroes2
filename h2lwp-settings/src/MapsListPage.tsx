@@ -9,7 +9,7 @@ export const MapsListPage = () => {
 
   return (
     <>
-      <Header title="Maps list" />
+      <Header title="Maps list" backButton />
 
       <Grid container alignContent="center" justifyContent="center" padding={2}>
         <Upload />
