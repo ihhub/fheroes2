@@ -51,6 +51,17 @@ class AndroidNativeInterface(
         }
     }
 
+    @NativeCall(CallType.FULL_PROMISE)
+    fun deleteMap(name: String) = doInBackground { promise ->
+        runBlocking {
+            launch {
+                mapsFolder?.resolve(name)?.delete()
+
+                promise.resolve("")
+            }
+        }
+    }
+
     @NativeCall(CallType.FULL_SYNC)
     fun setBrightness(value: Int) {
         viewModel.setBrightness(value)
