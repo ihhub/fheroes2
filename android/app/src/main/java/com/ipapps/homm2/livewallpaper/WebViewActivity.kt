@@ -43,9 +43,9 @@ class WebViewActivity : AppCompatActivity() {
         val output = getExternalFilesDir(path)?.resolve(to);
 
         if (output != null && !output.exists() && output.createNewFile()) {
-            val outputStream = output.outputStream()
-            input.copyTo(outputStream)
-            outputStream.close()
+            output.outputStream().use {
+                input.copyTo(it)
+            }
         }
     }
 
@@ -86,11 +86,9 @@ class WebViewActivity : AppCompatActivity() {
 
         assets.open("files/data/resurrection.h2d").use {
             copyFile(it, "resurrection.h2d", "files/data")
-            it.close()
         }
         assets.open("default_fheroes2.cfg").use {
             copyFile(it, "fheroes2.cfg", null)
-            it.close()
         }
 
         val config = getExternalFilesDir(null)?.resolve("fheroes2.cfg")

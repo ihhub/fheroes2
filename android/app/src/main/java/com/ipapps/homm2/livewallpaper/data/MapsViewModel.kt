@@ -46,19 +46,15 @@ class MapsViewModel(
     }
 
     private fun readMap(uri: Uri): MapHeader? {
-        val input = contentResolver.openInputStream(uri)
-        val map = kotlin.runCatching { readMap(getContentResolverFilename(uri), input) }.getOrNull()
-        input?.close()
-
-        return map
+        contentResolver.openInputStream(uri).use {
+            return kotlin.runCatching { readMap(getContentResolverFilename(uri), it) }.getOrNull()
+        }
     }
 
     private fun readMap(file: File): MapHeader? {
-        val input = file.inputStream()
-        val map = kotlin.runCatching { readMap(file.name, input) }.getOrNull()
-        input.close()
-
-        return map
+        file.inputStream().use {
+            return kotlin.runCatching { readMap(file.name, it) }.getOrNull()
+        }
     }
 
     fun uploadMap(uri: Uri?): Boolean {
@@ -111,9 +107,13 @@ class MapsViewModel(
     }
 
     private fun copyMapToFile(uri: Uri, filename: String) {
-        val stream = contentResolver.openInputStream(uri) ?: throw Exception("File not found")
-        stream.copyTo(FileOutputStream(mapsFolder?.resolve(filename)))
-        stream.close()
+        contentResolver.openInputStream(uri).use {
+            if (it == null) {
+                throw Exception("File not found")
+            }
+
+            it.copyTo(FileOutputStream(mapsFolder?.resolve(filename)))
+        }
 
         updateFilesList()
     }
