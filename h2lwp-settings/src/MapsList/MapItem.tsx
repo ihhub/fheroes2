@@ -30,7 +30,7 @@ export const MapItem: React.FC<Props> = ({ map }) => {
 
       <ListItemText
         primary={map.name}
-        secondary={`(${map.width}x${map.height}) isPoL: ${map.isPoL} ${map.title}`}
+        secondary={`(${map.width}x${map.height}) ${map.title}`}
       />
     </ListItem>
   );
