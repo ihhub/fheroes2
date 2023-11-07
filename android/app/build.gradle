@@ -90,7 +90,7 @@ dependencies {
     implementation 'com.github.andycandy-de:simple-android-bridge:1.0.2'
 
     implementation project(':isotools')
-//    implementation project(':sdl2')
+    implementation project(':sdl2')
 
     implementation group: 'commons-io', name: 'commons-io', version: '2.13.0'
 
