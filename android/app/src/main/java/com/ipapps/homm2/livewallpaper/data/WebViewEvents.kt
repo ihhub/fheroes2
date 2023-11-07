@@ -44,7 +44,7 @@ class WebViewMapsListEvent(mapsList: List<MapHeader>) : WebViewEvent("maps-list"
             )
         }
 
-        setPayload(JSONArray())
+        setPayload(array)
     }
 }
 

@@ -27,7 +27,7 @@ import org.libsdl.app.SDLActivity
 import java.io.InputStream
 
 class WebViewActivity : AppCompatActivity() {
-    private val mapsViewModel = MapsViewModel(contentResolver, getExternalFilesDir("maps"))
+    private lateinit var mapsViewModel: MapsViewModel
 
     private fun setWallpaper() {
         startActivity(
@@ -97,12 +97,15 @@ class WebViewActivity : AppCompatActivity() {
         val prefsRepository = WallpaperPreferencesRepository(config)
         val settingsViewModel = SettingsViewModel(prefsRepository, ::setWallpaper);
 
+        mapsViewModel = MapsViewModel(contentResolver, getExternalFilesDir("maps"))
+
         val webView = findViewById<WebView>(R.id.activity_web_view)
         val bridge = Bridge(applicationContext, webView)
         bridge.addJSInterface(
             AndroidNativeInterface(settingsViewModel, mapsViewModel)
         )
         bridge.addAfterInitializeListener {
+            println()
             settingsViewModel.subscribeToPreferences {
                 sendWebViewEvent(WebViewSettingsEvent(it), webView)
             }

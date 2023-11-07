@@ -13,16 +13,16 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import org.json.JSONObject
 import java.io.File
 import java.io.FileOutputStream
 
-class MapsViewModel(private val contentResolver: ContentResolver, root: File?) : ViewModel() {
+class MapsViewModel(
+    private val contentResolver: ContentResolver,
+    private val mapsFolder: File?
+) : ViewModel() {
     companion object {
         const val TAG = "MapsViewModel"
     }
-
-    private val mapsFolder = root?.resolve("maps")
 
     private val _mapsListState = MutableStateFlow(emptyList<File>())
     private val mapsListFlow = _mapsListState
@@ -32,6 +32,7 @@ class MapsViewModel(private val contentResolver: ContentResolver, root: File?) :
 
     fun subscribeToMapsList(callback: (it: List<MapHeader>) -> Unit) {
         mapsListFlow.onEach { callback(it) }.launchIn(viewModelScope)
+        updateFilesList()
     }
 
     init {

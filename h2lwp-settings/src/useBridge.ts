@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { WallpaperMapItem, WallpaperSettings } from "./global";
 
-const isDev = true;
+const isDev = false;
 
 if (isDev) {
   window.Bridge = {
