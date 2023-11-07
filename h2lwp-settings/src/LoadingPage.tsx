@@ -10,6 +10,7 @@ export const LoadingPage = () => (
       alignContent="center"
       justifyContent="center"
       flex="1"
+      minHeight={400}
       direction="column"
     >
       <CircularProgress />

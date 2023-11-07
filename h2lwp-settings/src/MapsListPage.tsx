@@ -23,7 +23,9 @@ export const MapsListPage: React.FC<Props> = () => {
     <>
       <Header title="Maps list" />
 
-      <Upload />
+      <Grid container alignContent="center" justifyContent="center" padding={2}>
+        <Upload />
+      </Grid>
 
       <Grid container flex="1" direction="column">
         <List disablePadding dense>

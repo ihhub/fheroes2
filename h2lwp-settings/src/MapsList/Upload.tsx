@@ -18,7 +18,7 @@ type Props = {
 
 export const Upload: React.FC<Props> = () => (
   <Button variant="contained" component="label">
-    Upload
+    Add map
     <VisuallyHiddenInput type="file" />
   </Button>
 );

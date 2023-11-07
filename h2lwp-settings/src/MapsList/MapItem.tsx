@@ -1,23 +1,37 @@
+import DeleteIcon from "@mui/icons-material/Delete";
 import DraftsIcon from "@mui/icons-material/Drafts";
-import { ListItem, ListItemText } from "@mui/material";
+import { IconButton, ListItem, ListItemText } from "@mui/material";
 import ListItemIcon from "@mui/material/ListItemIcon";
+import { useCallback } from "react";
 import { WallpaperMapItem } from "../global";
 
 type Props = {
   map: WallpaperMapItem;
 };
 
-export const MapItem: React.FC<Props> = ({ map }) => (
-  <ListItem>
-    {map.isPoL && (
-      <ListItemIcon>
-        <DraftsIcon />
-      </ListItemIcon>
-    )}
+export const MapItem: React.FC<Props> = ({ map }) => {
+  const handleDelete = useCallback(() => {
+    window.Android?.deleteMap(map.name);
+  }, []);
 
-    <ListItemText
-      primary={map.name}
-      secondary={`(${map.width}x${map.height}) isPoL: ${map.isPoL} ${map.title}`}
-    />
-  </ListItem>
-);
+  return (
+    <ListItem
+      secondaryAction={
+        <IconButton edge="end" aria-label="delete" onClick={handleDelete}>
+          <DeleteIcon />
+        </IconButton>
+      }
+    >
+      {map.isPoL && (
+        <ListItemIcon>
+          <DraftsIcon />
+        </ListItemIcon>
+      )}
+
+      <ListItemText
+        primary={map.name}
+        secondary={`(${map.width}x${map.height}) isPoL: ${map.isPoL} ${map.title}`}
+      />
+    </ListItem>
+  );
+};

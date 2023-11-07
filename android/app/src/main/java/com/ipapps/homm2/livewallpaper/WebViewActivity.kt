@@ -111,7 +111,7 @@ class WebViewActivity : AppCompatActivity() {
 
             if (urisList.isEmpty()) {
                 Toast
-                    .makeText(applicationContext, "Selected file is not correct map", Toast.LENGTH_SHORT)
+                    .makeText(applicationContext, "Selected file is not supported", Toast.LENGTH_SHORT)
                     .show()
                 filePathCallback?.onReceiveValue(null)
                 filePathCallback = null
