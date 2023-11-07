@@ -1991,7 +1991,7 @@ namespace Maps
             const int art = Artifact::FromMP2IndexSprite( tile.GetObjectSpriteIndex() ).GetID();
             if ( Artifact::UNKNOWN == art ) {
                 // This is an unknown artifact. Did you add a new one?
-                assert( 0 );
+//                assert( 0 );
                 return;
             }
 

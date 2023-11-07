@@ -105,7 +105,7 @@ void initWallpaper() {
                                        << map.file.c_str())
     conf.GetPlayers().SetStartGame();
 
-    world.LoadMapMP2(conf.MapsFile(), true);
+    world.LoadMapMP2(conf.MapsFile(), false);
 }
 
 bool shouldUpdateMapRegion() {
