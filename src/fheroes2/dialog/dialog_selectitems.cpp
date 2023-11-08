@@ -29,7 +29,7 @@
 #include <cstddef>
 #include <memory>
 #include <numeric>
-#include <string>
+#include <utility>
 #include <vector>
 
 #include "agg_image.h"
