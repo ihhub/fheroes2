@@ -234,8 +234,8 @@ public:
 class SelectEnumMonster : public SelectEnum
 {
 public:
-    explicit SelectEnumMonster( const fheroes2::Size & rt, const char * title )
-        : SelectEnum( rt, title )
+    explicit SelectEnumMonster( const fheroes2::Size & rt, std::string title )
+        : SelectEnum( rt, std::move( title ) )
     {
         SetAreaMaxItems( rtAreaItems.height / _offsetY );
     }
@@ -268,8 +268,8 @@ private:
 class SelectEnumHeroes : public SelectEnum
 {
 public:
-    explicit SelectEnumHeroes( const fheroes2::Size & rt, const char * title )
-        : SelectEnum( rt, title )
+    explicit SelectEnumHeroes( const fheroes2::Size & rt, std::string title )
+        : SelectEnum( rt, std::move( title ) )
     {
         SetAreaMaxItems( rtAreaItems.height / _offsetY );
     }
@@ -295,8 +295,8 @@ private:
 class SelectEnumArtifact : public SelectEnum
 {
 public:
-    explicit SelectEnumArtifact( const fheroes2::Size & rt, const char * title )
-        : SelectEnum( rt, title )
+    explicit SelectEnumArtifact( const fheroes2::Size & rt, std::string title )
+        : SelectEnum( rt, std::move( title ) )
     {
         SetAreaMaxItems( rtAreaItems.height / _offsetY );
     }
@@ -323,8 +323,8 @@ private:
 class SelectEnumSpell : public SelectEnum
 {
 public:
-    explicit SelectEnumSpell( const fheroes2::Size & rt, const char * title )
-        : SelectEnum( rt, title )
+    explicit SelectEnumSpell( const fheroes2::Size & rt, std::string title )
+        : SelectEnum( rt, std::move( title ) )
     {
         SetAreaMaxItems( rtAreaItems.height / _offsetY );
     }
@@ -361,8 +361,8 @@ public:
         return 1 + ( index % 3 );
     }
 
-    explicit SelectEnumSecSkill( const fheroes2::Size & rt, const char * title )
-        : SelectEnum( rt, title )
+    explicit SelectEnumSecSkill( const fheroes2::Size & rt, std::string title )
+        : SelectEnum( rt, std::move( title ) )
     {
         SetAreaMaxItems( rtAreaItems.height / _offsetY );
     }
@@ -426,9 +426,9 @@ namespace
     class ObjectTypeSelection : public SelectEnum
     {
     public:
-        ObjectTypeSelection( const std::vector<Maps::ObjectInfo> & objectInfo, const fheroes2::Size & size, const char * title, const int32_t imageOffsetX,
+        ObjectTypeSelection( const std::vector<Maps::ObjectInfo> & objectInfo, const fheroes2::Size & size, std::string title, const int32_t imageOffsetX,
                              const int32_t textOffsetX, const int32_t offsetY )
-            : SelectEnum( size, title )
+            : SelectEnum( size, std::move( title ) )
             , _objectInfo( objectInfo )
             , _imageOffsetX( imageOffsetX )
             , _textOffsetX( textOffsetX )
@@ -473,8 +473,8 @@ namespace
     class HeroTypeSelection : public ObjectTypeSelection
     {
     public:
-        HeroTypeSelection( const std::vector<Maps::ObjectInfo> & objectInfo, const fheroes2::Size & size, const char * title )
-            : ObjectTypeSelection( objectInfo, size, title, 21, 47, fheroes2::AGG::GetICN( ICN::MINIHERO, 0 ).height() + 2 )
+        HeroTypeSelection( const std::vector<Maps::ObjectInfo> & objectInfo, const fheroes2::Size & size, std::string title )
+            : ObjectTypeSelection( objectInfo, size, std::move( title ), 21, 47, fheroes2::AGG::GetICN( ICN::MINIHERO, 0 ).height() + 2 )
         {
             // Do nothing.
         }
@@ -501,8 +501,8 @@ namespace
     class MonsterTypeSelection : public ObjectTypeSelection
     {
     public:
-        MonsterTypeSelection( const std::vector<Maps::ObjectInfo> & objectInfo, const fheroes2::Size & size, const char * title )
-            : ObjectTypeSelection( objectInfo, size, title, 45 / 2, 50, 43 )
+        MonsterTypeSelection( const std::vector<Maps::ObjectInfo> & objectInfo, const fheroes2::Size & size, std::string title )
+            : ObjectTypeSelection( objectInfo, size, std::move( title ), 45 / 2, 50, 43 )
         {
             // Do nothing.
         }
@@ -528,8 +528,8 @@ namespace
     class ArtifactTypeSelection : public ObjectTypeSelection
     {
     public:
-        ArtifactTypeSelection( const std::vector<Maps::ObjectInfo> & objectInfo, const fheroes2::Size & size )
-            : ObjectTypeSelection( objectInfo, size, 24, 65, 40 )
+        ArtifactTypeSelection( const std::vector<Maps::ObjectInfo> & objectInfo, const fheroes2::Size & size, std::string title )
+            : ObjectTypeSelection( objectInfo, size, std::move( title ), 24, 65, 40 )
         {
             // Do nothing.
         }
@@ -579,8 +579,8 @@ namespace
     class TreasureTypeSelection : public ObjectTypeSelection
     {
     public:
-        TreasureTypeSelection( const std::vector<Maps::ObjectInfo> & objectInfo, const fheroes2::Size & size, const char * title )
-            : ObjectTypeSelection( objectInfo, size, title, 17, 60, 40 )
+        TreasureTypeSelection( const std::vector<Maps::ObjectInfo> & objectInfo, const fheroes2::Size & size, std::string title )
+            : ObjectTypeSelection( objectInfo, size, std::move( title ), 17, 60, 40 )
         {
             // Do nothing.
         }
@@ -809,9 +809,9 @@ int Dialog::selectArtifactType( const int artifactType )
 {
     const auto & objectInfo = Maps::getObjectsByGroup( Maps::ObjectGroup::Artifact );
 
-    ArtifactTypeSelection listbox( objectInfo, { 350, fheroes2::Display::instance().height() - 200 } );
+    ArtifactTypeSelection listbox( objectInfo, { 350, fheroes2::Display::instance().height() - 200 }, _( "Select Artifact:" ) );
 
-    return selectObjectType( artifactType, objectInfo.size(), listbox, _( "Select Artifact:" ) );
+    return selectObjectType( artifactType, objectInfo.size(), listbox );
 }
 
 int Dialog::selectTreasureType( const int resourceType )
