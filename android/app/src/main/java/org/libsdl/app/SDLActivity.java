@@ -487,11 +487,11 @@ public class SDLActivity extends WallpaperService implements View.OnSystemUiVisi
                 SDLActivity.nativeResume();
                 nativeUpdateConfigs();
             } else {
-                debouncer.addRunLast(1, TimeUnit.SECONDS, "visibility-off", k1 -> {
+                debouncer.addRunLast(400, TimeUnit.MILLISECONDS, "visibility-off", k1 -> {
                     nativeUpdateVisibleMapRegion();
 
                     // small delay to let game engine update random map place and render it
-                    debouncer.addRunLast(1, TimeUnit.SECONDS, "native-pause", k2 -> {
+                    debouncer.addRunLast(500, TimeUnit.MILLISECONDS, "native-pause", k2 -> {
                         SDLActivity.nativePause();
                     });
                 });
