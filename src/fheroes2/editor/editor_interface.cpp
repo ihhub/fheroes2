@@ -21,15 +21,19 @@
 #include "editor_interface.h"
 
 #include <algorithm>
+#include <array>
 #include <cassert>
+#include <memory>
 #include <ostream>
 #include <string>
 #include <vector>
 
 #include "agg_image.h"
+#include "artifact.h"
 #include "audio_manager.h"
 #include "cursor.h"
 #include "dialog.h"
+#include "dialog_selectitems.h"
 #include "game.h"
 #include "game_delays.h"
 #include "game_hotkeys.h"
@@ -52,6 +56,7 @@
 #include "mp2.h"
 #include "screen.h"
 #include "settings.h"
+#include "spell.h"
 #include "translations.h"
 #include "ui_button.h"
 #include "ui_dialog.h"
@@ -625,6 +630,36 @@ namespace Interface
             }
             else {
                 setObjectOnTile( tile, Maps::ObjectGroup::Hero, _editorPanel.getHeroType() );
+            }
+        }
+        else if ( _editorPanel.isArtifactSettingMode() ) {
+            if ( tile.isWater() ) {
+                fheroes2::showStandardTextMessage( _( "Artifacts" ), _( "Artifacts cannot be placed on water." ), Dialog::OK );
+            }
+            else if ( !Maps::isClearGround( tile ) ) {
+                fheroes2::showStandardTextMessage( _( "Artifacts" ), _( "Choose a tile which does not contain any objects." ), Dialog::OK );
+            }
+            else {
+                const int32_t artifactType = _editorPanel.getArtifactType();
+
+                const auto & artifactInfo = Maps::getObjectsByGroup( Maps::ObjectGroup::Artifact );
+                assert( artifactType >= 0 && artifactType < static_cast<int32_t>( artifactInfo.size() ) );
+
+                // For each Spell Scroll artifact we select a spell.
+                if ( artifactInfo[artifactType].objectType == MP2::OBJ_ARTIFACT && artifactInfo[artifactType].metadata[0] == Artifact::SPELL_SCROLL ) {
+                    const int spellId = Dialog::selectSpell( Spell::RANDOM, true ).GetID();
+
+                    if ( spellId == Spell::NONE ) {
+                        // We do not place the Spell Scroll artifact if the spell for it was not selected.
+                        return;
+                    }
+
+                    setObjectOnTile( tile, Maps::ObjectGroup::Artifact, _editorPanel.getArtifactType() );
+                    Maps::setSpellOnTile( tile, spellId );
+                }
+                else {
+                    setObjectOnTile( tile, Maps::ObjectGroup::Artifact, _editorPanel.getArtifactType() );
+                }
             }
         }
     }

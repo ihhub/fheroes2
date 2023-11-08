@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-03 12:33+0000\n"
+"POT-Creation-Date: 2023-11-05 08:25+0000\n"
 "PO-Revision-Date: 2023-08-26 23:09+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: https://discord.com/"
@@ -3319,6 +3319,10 @@ msgstr "Wybierz potwora:"
 msgid "Select Hero:"
 msgstr "Wybierz bohatera:"
 
+#, fuzzy
+msgid "Select Treasure:"
+msgstr "Wybierz bohatera:"
+
 msgid "Map Type:\n"
 msgstr "Typ Mapy:\n"
 
@@ -3627,6 +3631,13 @@ msgstr ""
 
 msgid "Choose a tile which does not contain any objects."
 msgstr ""
+
+msgid "Treasure"
+msgstr "Skarb"
+
+#, fuzzy
+msgid "Treasures cannot be placed on water."
+msgstr "To zaklęcie nie może być rzucone z łodzi."
 
 msgid "Heroes"
 msgstr "Bohaterowie"
@@ -5642,9 +5653,6 @@ msgstr ""
 
 msgid "You come upon the remains of an unfortunate adventurer."
 msgstr "Dotarłeś do szczątek pechowego poszukiwacza."
-
-msgid "Treasure"
-msgstr "Skarb"
 
 msgid "Searching through the tattered clothing, you find the %{artifact}."
 msgstr "Po przeszukaniu rozdartego ubrania, znajdujesz %{artifact}."

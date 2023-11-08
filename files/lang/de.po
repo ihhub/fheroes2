@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-03 12:33+0000\n"
+"POT-Creation-Date: 2023-11-05 08:25+0000\n"
 "PO-Revision-Date: 2023-04-09 23:51+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3344,6 +3344,10 @@ msgstr "Monster auswählen:"
 msgid "Select Hero:"
 msgstr "Held auswählen:"
 
+#, fuzzy
+msgid "Select Treasure:"
+msgstr "Held auswählen:"
+
 msgid "Map Type:\n"
 msgstr "Kartentyp:\n"
 
@@ -3656,6 +3660,13 @@ msgstr "Monster können nicht auf Wasser plaziert werden."
 
 msgid "Choose a tile which does not contain any objects."
 msgstr "Ein Feld wählen, das keine Objekt enthält."
+
+msgid "Treasure"
+msgstr "Schatz"
+
+#, fuzzy
+msgid "Treasures cannot be placed on water."
+msgstr "Monster können nicht auf Wasser plaziert werden."
 
 msgid "Heroes"
 msgstr "Helden"
@@ -5725,9 +5736,6 @@ msgstr ""
 
 msgid "You come upon the remains of an unfortunate adventurer."
 msgstr "Ihr stoßt auf die Überreste eines unglückseligen Abenteurers."
-
-msgid "Treasure"
-msgstr "Schatz"
 
 msgid "Searching through the tattered clothing, you find the %{artifact}."
 msgstr "Beim Durchsuchen der zerlumpten Kleidung findet Ihr %{artifact}."

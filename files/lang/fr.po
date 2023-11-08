@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-03 12:33+0000\n"
+"POT-Creation-Date: 2023-11-05 08:25+0000\n"
 "PO-Revision-Date: 2022-12-18 13:48+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -3362,6 +3362,10 @@ msgid "Select Hero:"
 msgstr "Choisir héros :"
 
 #, fuzzy
+msgid "Select Treasure:"
+msgstr "Choisir héros :"
+
+#, fuzzy
 msgid "Map Type:\n"
 msgstr ""
 "\n"
@@ -3685,6 +3689,13 @@ msgstr ""
 
 msgid "Choose a tile which does not contain any objects."
 msgstr ""
+
+msgid "Treasure"
+msgstr "Trésor"
+
+#, fuzzy
+msgid "Treasures cannot be placed on water."
+msgstr "Ce sort ne peut pas être jeté en mer."
 
 msgid "Heroes"
 msgstr "Héros"
@@ -5755,9 +5766,6 @@ msgstr ""
 
 msgid "You come upon the remains of an unfortunate adventurer."
 msgstr "Vous tombez sur les restes d'un malheureux aventurier."
-
-msgid "Treasure"
-msgstr "Trésor"
 
 msgid "Searching through the tattered clothing, you find the %{artifact}."
 msgstr ""
