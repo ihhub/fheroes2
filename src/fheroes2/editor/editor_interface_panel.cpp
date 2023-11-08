@@ -57,7 +57,7 @@ namespace
         }
 
         const auto & objectInfo = Maps::getObjectsByGroup( group );
-        if ( type < -1 || type >= static_cast<int32_t>( objectInfo.size() ) ) {
+        if ( type < 0 || type >= static_cast<int32_t>( objectInfo.size() ) ) {
             // You are trying to render some unknown stuff!
             assert( 0 );
             return;

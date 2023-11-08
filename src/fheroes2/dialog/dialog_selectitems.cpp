@@ -500,7 +500,7 @@ namespace
                 fheroes2::showStandardTextMessage( MP2::StringObject( info.objectType ), "", Dialog::ZERO );
                 break;
             default:
-                // Did you expand the list of treasures? Add the corresponding logic!
+                // Did you expand the list of artifacts? Add the corresponding logic!
                 assert( 0 );
                 break;
             }

@@ -146,11 +146,13 @@ public:
 
         MAGIC_BOOK,
 
-        // Dummy artifacts for the compatibility with MP2 and MPX maps, used for random and ultimate artifacts there.
-        DUMMY1,
-        DUMMY2,
-        DUMMY3,
-        DUMMY4,
+        // These four artifacts are used in original editor for the Ultimate and Random artifacts.
+        // They should not exist and used on the adventure map after the game is properly started.
+        // We do not use these or create extra entries for the Ultimate and Random artifacts in editor.
+        UNUSED_83,
+        UNUSED_84,
+        UNUSED_85,
+        UNUSED_86,
 
         // The Price of Loyalty artifacts.
         SPELL_SCROLL,
@@ -208,7 +210,7 @@ public:
 
     bool isValid() const
     {
-        return id != UNKNOWN && id < ARTIFACT_COUNT && ( id < DUMMY1 || id > DUMMY4 );
+        return id != UNKNOWN && id < ARTIFACT_COUNT && ( id < UNUSED_83 || id > UNUSED_86 );
     }
 
     void Reset()

@@ -763,10 +763,10 @@ namespace
         artifactData[Artifact::BLACK_PEARL].bonuses.emplace_back( fheroes2::ArtifactBonusType::SPELL_POWER_SKILL, 2 );
 
         artifactData[Artifact::MAGIC_BOOK].bonuses.emplace_back( fheroes2::ArtifactBonusType::NONE );
-        artifactData[Artifact::DUMMY1].bonuses.emplace_back( fheroes2::ArtifactBonusType::NONE );
-        artifactData[Artifact::DUMMY2].bonuses.emplace_back( fheroes2::ArtifactBonusType::NONE );
-        artifactData[Artifact::DUMMY3].bonuses.emplace_back( fheroes2::ArtifactBonusType::NONE );
-        artifactData[Artifact::DUMMY4].bonuses.emplace_back( fheroes2::ArtifactBonusType::NONE );
+        artifactData[Artifact::UNUSED_83].bonuses.emplace_back( fheroes2::ArtifactBonusType::NONE );
+        artifactData[Artifact::UNUSED_84].bonuses.emplace_back( fheroes2::ArtifactBonusType::NONE );
+        artifactData[Artifact::UNUSED_85].bonuses.emplace_back( fheroes2::ArtifactBonusType::NONE );
+        artifactData[Artifact::UNUSED_86].bonuses.emplace_back( fheroes2::ArtifactBonusType::NONE );
 
         artifactData[Artifact::SPELL_SCROLL].bonuses.emplace_back( fheroes2::ArtifactBonusType::ADD_SPELL, Spell::NONE );
 

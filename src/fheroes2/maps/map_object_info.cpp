@@ -58,12 +58,12 @@ namespace
             addArtifactObject( artifactId, MP2::OBJ_ARTIFACT, artifactId * 2U - 1U );
         }
 
+        // Assign temporary sprites for the Magic Book.
+        addArtifactObject( Artifact::MAGIC_BOOK, MP2::OBJ_ARTIFACT, 207U );
+
         for ( uint32_t artifactId = Artifact::SPELL_SCROLL; artifactId < Artifact::ARTIFACT_COUNT; ++artifactId ) {
             addArtifactObject( artifactId, MP2::OBJ_ARTIFACT, artifactId * 2U - 1U );
         }
-
-        // Assign the Magic Book temporary made sprites.
-        addArtifactObject( Artifact::MAGIC_BOOK, MP2::OBJ_ARTIFACT, 207U );
 
         // Random artifacts.
         addArtifactObject( Artifact::UNKNOWN, MP2::OBJ_RANDOM_ARTIFACT, 163U );
