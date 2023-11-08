@@ -4252,7 +4252,7 @@ namespace fheroes2
                     Fill( out, 4 - i, 2 + i, 40, 13, getButtonFillingColor( i == 0 ) );
                 }
 
-                return true;                      
+                return true;   
             }
             case ICN::EMPTY_GOOD_MEDIUM_BUTTON:
             case ICN::EMPTY_EVIL_MEDIUM_BUTTON: {
