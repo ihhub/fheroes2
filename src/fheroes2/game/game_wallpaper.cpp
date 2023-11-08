@@ -197,6 +197,18 @@ void resizeDisplay() {
     }
 }
 
+void renderMap() {
+    Interface::GameArea const &gameArea = Interface::AdventureMap::Get().getGameArea();
+    fheroes2::Display &display = fheroes2::Display::instance();
+
+    Game::updateAdventureMapAnimationIndex();
+    gameArea.Redraw(
+            display,
+            Interface::RedrawLevelType::LEVEL_OBJECTS |
+            Interface::RedrawLevelType::LEVEL_HEROES);
+    display.render();
+}
+
 void rereadAndApplyConfigs() {
     readConfigFile();
     resizeDisplay();
@@ -211,6 +223,7 @@ void forceUpdates() {
 
     if (forceMapUpdate) {
         randomizeGameAreaPoint();
+        renderMap();
         forceMapUpdate = false;
     }
 }
@@ -262,13 +275,7 @@ void renderWallpaper() {
         handleSDLEvents(event, le, display);
 
         if (Game::validateAnimationDelay(Game::MAPS_DELAY)) {
-            Game::updateAdventureMapAnimationIndex();
-
-            gameArea.Redraw(
-                    display,
-                    Interface::RedrawLevelType::LEVEL_OBJECTS |
-                    Interface::RedrawLevelType::LEVEL_HEROES);
-            display.render();
+            renderMap();
         } else {
             SDL_Delay(
                     Game::getAnimationDelayValue(Game::MAPS_DELAY)
