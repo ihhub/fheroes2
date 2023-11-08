@@ -482,18 +482,16 @@ public class SDLActivity extends WallpaperService implements View.OnSystemUiVisi
             Log.v(TAG, "onVisibilityChange " + (visible ? "true" : "false"));
 
             if (visible) {
-                Log.v(TAG, "onVisibilityChange CANCEL");
                 debouncer.cancel("visibility-off");
                 debouncer.cancel("native-pause");
                 SDLActivity.nativeResume();
                 nativeUpdateConfigs();
             } else {
                 debouncer.addRunLast(1, TimeUnit.SECONDS, "visibility-off", k1 -> {
-                    Log.v(TAG, "onVisibilityChange UPDATE MAP");
                     nativeUpdateVisibleMapRegion();
 
+                    // small delay to let game engine update random map place and render it
                     debouncer.addRunLast(1, TimeUnit.SECONDS, "native-pause", k2 -> {
-                        Log.v(TAG, "debounceVisibilityChange NATIVE PAUSE");
                         SDLActivity.nativePause();
                     });
                 });
