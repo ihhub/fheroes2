@@ -103,3 +103,4 @@ android/app/src/main/assets/files/
 *.sublime-workspace
 /fheroes2
 /src/dist/fheroes2
+android/app/release/app-release.aab
