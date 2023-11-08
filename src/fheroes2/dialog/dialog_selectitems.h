@@ -36,9 +36,9 @@ namespace Dialog
 
     int selectHeroes( const int heroId = Heroes::UNKNOWN );
 
-    Artifact selectArtifact( const int artifactId = Artifact::UNKNOWN );
+    Artifact selectArtifact( const int artifactId );
 
-    Spell selectSpell( const int spellId = Spell::NONE );
+    Spell selectSpell( const int spellId, const bool includeRandomSpells );
 
     Skill::Secondary selectSecondarySkill( const Heroes & hero, const int skillId = Skill::Secondary::UNKNOWN );
 
@@ -46,6 +46,8 @@ namespace Dialog
     int selectHeroType( const int heroType );
 
     int selectMonsterType( const int monsterType );
+
+    int selectArtifactType( const int artifactType );
 
     int selectTreasureType( const int resourceType );
 }

@@ -50,6 +50,12 @@ namespace
 {
     void setCustomCursor( const Maps::ObjectGroup group, const int32_t type )
     {
+        if ( type == -1 ) {
+            // The object type is not set. We show the POINTER cursor for this case.
+            Cursor::Get().SetThemes( Cursor::POINTER );
+            return;
+        }
+
         const auto & objectInfo = Maps::getObjectsByGroup( group );
         if ( type < 0 || type >= static_cast<int32_t>( objectInfo.size() ) ) {
             // You are trying to render some unknown stuff!
@@ -98,7 +104,7 @@ namespace Interface
     {
         // Roads and streams are placed using only 1x1 brush.
         if ( _selectedInstrument == Instrument::STREAM || _selectedInstrument == Instrument::ROAD || isMonsterSettingMode() || isHeroSettingMode()
-             || isTreasureSettingMode() ) {
+             || isTreasureSettingMode() || isArtifactSettingMode() ) {
             return 1;
         }
 
@@ -357,6 +363,47 @@ namespace Interface
         return "Unknown object type";
     }
 
+    void EditorPanel::_setCursor()
+    {
+        if ( _selectedInstrument != Instrument::OBJECT ) {
+            _interface.setCursorUpdater( {} );
+            return;
+        }
+
+        switch ( _selectedObject ) {
+        case Brush::MONSTERS:
+            _interface.setCursorUpdater( [type = _monsterType]( const int32_t /*tileIndex*/ ) { setCustomCursor( Maps::ObjectGroup::Monster, type ); } );
+            break;
+        case Brush::TREASURES:
+            _interface.setCursorUpdater( [type = _treasureType]( const int32_t /*tileIndex*/ ) { setCustomCursor( Maps::ObjectGroup::Treasure, type ); } );
+            break;
+        case Brush::HEROES:
+            _interface.setCursorUpdater( [type = _heroType]( const int32_t /*tileIndex*/ ) {
+                if ( type == -1 ) {
+                    // The object type is not set. We show the POINTER cursor for this case.
+                    Cursor::Get().SetThemes( Cursor::POINTER );
+                    return;
+                }
+
+                // TODO: render ICN::MINIHERO from the existing hero images.
+                const fheroes2::Sprite & image = fheroes2::AGG::GetICN( ICN::MINIHERO, type );
+
+                // Mini-hero images contain a pole with a flag.
+                // This causes a situation that a selected tile does not properly correspond to the position of cursor.
+                // We need to add a hardcoded correction.
+                const int32_t heroCorrectionY{ 12 };
+                Cursor::Get().setCustomImage( image, { -image.width() / 2, -image.height() / 2 - heroCorrectionY } );
+            } );
+            break;
+        case Brush::ARTIFACTS:
+            _interface.setCursorUpdater( [type = _artifactType]( const int32_t /*tileIndex*/ ) { setCustomCursor( Maps::ObjectGroup::Artifact, type ); } );
+            break;
+        default:
+            _interface.setCursorUpdater( {} );
+            break;
+        }
+    }
+
     fheroes2::GameMode EditorPanel::queueEventProcessing()
     {
         LocalEvent & le = LocalEvent::Get();
@@ -369,7 +416,7 @@ namespace Interface
                         _selectedInstrument = static_cast<uint8_t>( i );
 
                         // Reset cursor updater since this UI element was clicked.
-                        _interface.setCursorUpdater( {} );
+                        _setCursor();
 
                         setRedraw();
                     }
@@ -470,7 +517,7 @@ namespace Interface
                     _selectedObject = static_cast<uint8_t>( i );
 
                     // Reset cursor updater since this UI element was clicked.
-                    _interface.setCursorUpdater( {} );
+                    _setCursor();
 
                     setRedraw();
 
@@ -509,43 +556,38 @@ namespace Interface
                 const int monsterType = Dialog::selectMonsterType( _monsterType );
                 if ( monsterType >= 0 ) {
                     _monsterType = monsterType;
-
-                    _interface.setCursorUpdater( [type = _monsterType]( const int32_t /*tileIndex*/ ) { setCustomCursor( Maps::ObjectGroup::Monster, type ); } );
-
-                    _interface.updateCursor( 0 );
-                    return res;
                 }
+                _setCursor();
+                _interface.updateCursor( 0 );
+                return res;
             }
             else if ( le.MouseClickLeft( _objectButtonsRect[Brush::TREASURES] ) ) {
                 const int treasureType = Dialog::selectTreasureType( _treasureType );
                 if ( treasureType >= 0 ) {
                     _treasureType = treasureType;
-
-                    _interface.setCursorUpdater( [type = _treasureType]( const int32_t /*tileIndex*/ ) { setCustomCursor( Maps::ObjectGroup::Treasure, type ); } );
-
-                    _interface.updateCursor( 0 );
-                    return res;
                 }
+                _setCursor();
+                _interface.updateCursor( 0 );
+                return res;
             }
             else if ( le.MouseClickLeft( _objectButtonsRect[Brush::HEROES] ) ) {
                 const int32_t heroType = Dialog::selectHeroType( _heroType );
                 if ( heroType >= 0 ) {
                     _heroType = heroType;
-
-                    _interface.setCursorUpdater( [heroType]( const int32_t /*tileIndex*/ ) {
-                        // TODO: render ICN::MINIHERO from the existing hero images.
-                        const fheroes2::Sprite & image = fheroes2::AGG::GetICN( ICN::MINIHERO, heroType );
-
-                        // Mini-hero images contain a pole with a flag.
-                        // This causes a situation that a selected tile does not properly correspond to the position of cursor.
-                        // We need to add a hardcoded correction.
-                        const int32_t heroCorrectionY{ 12 };
-                        Cursor::Get().setCustomImage( image, { -image.width() / 2, -image.height() / 2 - heroCorrectionY } );
-                    } );
-
-                    _interface.updateCursor( 0 );
-                    return res;
                 }
+
+                _setCursor();
+                _interface.updateCursor( 0 );
+                return res;
+            }
+            else if ( le.MouseClickLeft( _objectButtonsRect[Brush::ARTIFACTS] ) ) {
+                const int artifactType = Dialog::selectArtifactType( _artifactType );
+                if ( artifactType >= 0 ) {
+                    _artifactType = artifactType;
+                }
+                _setCursor();
+                _interface.updateCursor( 0 );
+                return res;
             }
         }
         else if ( _selectedInstrument == Instrument::ERASE ) {
