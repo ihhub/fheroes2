@@ -74,9 +74,9 @@ public:
 
     SelectEnum() = delete;
 
-    explicit SelectEnum( const fheroes2::Size & dialogSize, const char * title, const char * additionalText = nullptr )
+    explicit SelectEnum( const fheroes2::Size & dialogSize, std::string title, std::string description = {} )
     {
-        assert( title != nullptr );
+        assert( !title.empty() );
 
         fheroes2::Display & display = fheroes2::Display::instance();
         background = std::make_unique<fheroes2::StandardWindow>( dialogSize.width, dialogSize.height, true, display );
@@ -85,12 +85,12 @@ public:
 
         int32_t listOffsetY = 0;
 
-        fheroes2::Text text( title, fheroes2::FontType::normalYellow() );
+        fheroes2::Text text( std::move( title ), fheroes2::FontType::normalYellow() );
         text.draw( area.x + ( area.width - text.width() ) / 2, area.y + 10, display );
 
         // The additional text under the title.
-        if ( additionalText != nullptr ) {
-            text.set( additionalText, fheroes2::FontType::normalWhite() );
+        if ( !description.empty() ) {
+            text.set( std::move( description ), fheroes2::FontType::normalWhite() );
             text.draw( area.x + ( area.width - text.width() ) / 2, area.y + 30, display );
             listOffsetY = text.height() + 3;
         }
@@ -392,8 +392,8 @@ private:
 class SelectKingdomCastle : public SelectEnum
 {
 public:
-    explicit SelectKingdomCastle( const fheroes2::Size & rt, const char * title, const char * additionalText )
-        : SelectEnum( rt, title, additionalText )
+    explicit SelectKingdomCastle( const fheroes2::Size & rt, std::string title, std::string description )
+        : SelectEnum( rt, std::move( title ), std::move( description ) )
         , _townFrameIcnId( Settings::Get().isEvilInterfaceEnabled() ? ICN::LOCATORE : ICN::LOCATORS )
     {
         SetAreaMaxItems( rtAreaItems.height / _offsetY );
@@ -590,7 +590,7 @@ namespace
     }
 }
 
-int32_t Dialog::selectKingdomCastle( const Kingdom & kingdom, const bool notOccupiedByHero, const char * title, const char * additionalText /* = nullptr */,
+int32_t Dialog::selectKingdomCastle( const Kingdom & kingdom, const bool notOccupiedByHero, std::string title, std::string description /* = {} */,
                                      int32_t castlePositionIndex /* = -1 */ )
 {
     std::vector<int32_t> castles;
@@ -611,7 +611,7 @@ int32_t Dialog::selectKingdomCastle( const Kingdom & kingdom, const bool notOccu
     const int32_t itemsHeight = std::max( 100 + 35 * static_cast<int32_t>( castles.size() ), 100 + 35 * 5 );
     const int32_t totalHeight = std::min( itemsHeight, maxHeight );
 
-    SelectKingdomCastle listbox( { 350, totalHeight }, title, additionalText );
+    SelectKingdomCastle listbox( { 350, totalHeight }, std::move( title ), std::move( description ) );
 
     listbox.SetListContent( castles );
     if ( castlePositionIndex != -1 ) {
