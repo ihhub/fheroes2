@@ -415,7 +415,7 @@ public:
 
     void ActionListPressRight( int & index ) override
     {
-        Dialog::QuickInfoWithIndicationOnRadar( *world.getCastleEntrance( Maps::GetPoint( index ) ), background->activeArea() );
+        Dialog::QuickInfoWithIndicationOnRadar( *world.getCastleEntrance( Maps::GetPoint( index ) ), background->totalArea() );
     }
 
 private:
