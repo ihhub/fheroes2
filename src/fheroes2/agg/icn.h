@@ -1081,6 +1081,7 @@ namespace ICN
         BUTTON_HSCORES_VERTICAL_STANDARD,
 
         BUTTON_SKIP,
+        BUTTON_AUTO,
 
         GAME_OPTION_ICON,
 

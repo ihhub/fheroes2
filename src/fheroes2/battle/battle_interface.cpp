@@ -1246,7 +1246,7 @@ Battle::Interface::Interface( Arena & battleArena, const int32_t tileIndex )
     // As '_mainSurface' is used to prepare battlefield screen to render on display it does not need to have a transform layer.
     _mainSurface._disableTransformLayer();
 
-    btn_auto.setICNInfo( ICN::TEXTBAR, 4, 5 );
+    btn_auto.setICNInfo( ICN::BUTTON_AUTO, 0, 1 );
     btn_settings.setICNInfo( ICN::TEXTBAR, 6, 7 );
 
     // opponents

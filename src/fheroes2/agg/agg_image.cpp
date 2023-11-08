@@ -164,7 +164,8 @@ namespace
                                                 ICN::BUTTON_HSCORES_VERTICAL_STANDARD,
                                                 ICN::DISMISS_HERO_DISABLED_BUTTON,
                                                 ICN::NEW_CAMPAIGN_DISABLED_BUTTON,
-                                                ICN::BUTTON_SKIP };
+                                                ICN::BUTTON_SKIP,
+                                                ICN::BUTTON_AUTO };
 
 #ifndef NDEBUG
     bool isLanguageDependentIcnId( const int id )
@@ -1938,6 +1939,27 @@ namespace fheroes2
 
                 break;
             }
+            case ICN::BUTTON_AUTO: {
+                _icnVsSprite[id].resize( 2 );
+                const int32_t originalId = ICN::TEXTBAR;
+
+                if ( useOriginalResources() ) {
+                    _icnVsSprite[id][0] = GetICN( originalId, 4 );
+                    _icnVsSprite[id][1] = GetICN( originalId, 5 );
+                    break;
+                }
+
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( originalId, 4 + i );
+                    // Clean the button
+                    Fill( out, 4 - i, 2 + i, 41, 13, getButtonFillingColor( i == 0 ) );
+                }
+
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "AUTO" ), { 4, 2 }, { 3, 3 }, { 41, 13 }, fheroes2::FontColor::WHITE );
+
+                break;
+            }
             case ICN::BUTTON_HSCORES_VERTICAL_CAMPAIGN:
             case ICN::BUTTON_HSCORES_VERTICAL_EXIT:
             case ICN::BUTTON_HSCORES_VERTICAL_STANDARD: {
@@ -2599,6 +2621,7 @@ namespace fheroes2
             case ICN::BUTTON_VERTICAL_DISMISS:
             case ICN::BUTTON_VERTICAL_EXIT:
             case ICN::BUTTON_SKIP:
+            case ICN::BUTTON_AUTO:
             case ICN::BUTTON_HSCORES_VERTICAL_CAMPAIGN:
             case ICN::BUTTON_HSCORES_VERTICAL_EXIT:
             case ICN::BUTTON_HSCORES_VERTICAL_STANDARD:
