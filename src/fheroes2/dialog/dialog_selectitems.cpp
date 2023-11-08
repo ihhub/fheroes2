@@ -393,7 +393,7 @@ public:
         : SelectEnum( rt, std::move( title ), std::move( description ) )
         , _townFrameIcnId( Settings::Get().isEvilInterfaceEnabled() ? ICN::LOCATORE : ICN::LOCATORS )
     {
-        SetAreaMaxItems( rtAreaItems.height / _offsetY );
+        SetAreaMaxItems( rtAreaItems.height / itemsOffsetY );
     }
 
     using SelectEnum::ActionListPressRight;
@@ -407,7 +407,7 @@ public:
         fheroes2::Sprite castleIcon( fheroes2::AGG::GetICN( _townFrameIcnId, 23 ) );
         fheroes2::drawCastleIcon( *castle, castleIcon, { 4, 4 } );
 
-        renderItem( castleIcon, castle->GetName(), { dstx, dsty }, 35, 75, _offsetY / 2, current );
+        renderItem( castleIcon, castle->GetName(), { dstx, dsty }, 35, 75, itemsOffsetY / 2, current );
     }
 
     void ActionListPressRight( int & index ) override
@@ -415,8 +415,9 @@ public:
         Dialog::QuickInfoWithIndicationOnRadar( *world.getCastleEntrance( Maps::GetPoint( index ) ), background->totalArea() );
     }
 
+    static const int32_t itemsOffsetY{ 35 };
+
 private:
-    static const int32_t _offsetY{ 35 };
     const int _townFrameIcnId;
 };
 
@@ -655,8 +656,8 @@ int32_t Dialog::selectKingdomCastle( const Kingdom & kingdom, const bool notOccu
         castles.push_back( castle->GetIndex() );
     }
 
-    const int32_t maxHeight = std::min( 100 + 35 * 12, fheroes2::Display::instance().height() - 200 );
-    const int32_t itemsHeight = std::max( 100 + 35 * static_cast<int32_t>( castles.size() ), 100 + 35 * 5 );
+    const int32_t maxHeight = std::min( 100 + SelectKingdomCastle::itemsOffsetY * 12, fheroes2::Display::instance().height() - 200 );
+    const int32_t itemsHeight = std::max( 100 + SelectKingdomCastle::itemsOffsetY * static_cast<int32_t>( castles.size() ), 100 + SelectKingdomCastle::itemsOffsetY * 5 );
     const int32_t totalHeight = std::min( itemsHeight, maxHeight );
 
     SelectKingdomCastle listbox( { 350, totalHeight }, std::move( title ), std::move( description ) );
