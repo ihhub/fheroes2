@@ -33,6 +33,9 @@ import android.view.inputmethod.InputConnection;
 import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
+
+import io.github.bhowell2.debouncer.Debouncer;
 
 
 /**
@@ -472,28 +475,28 @@ public class SDLActivity extends WallpaperService implements View.OnSystemUiVisi
             }
         }
 
-        boolean isVisible = false;
+        Debouncer debouncer = new Debouncer(2);
 
         @Override
         public void onVisibilityChanged(boolean visible) {
             Log.v(TAG, "onVisibilityChange " + (visible ? "true" : "false"));
-            isVisible = visible;
+
             if (visible) {
+                Log.v(TAG, "onVisibilityChange CANCEL");
+                debouncer.cancel("visibility-off");
+                debouncer.cancel("native-pause");
                 SDLActivity.nativeResume();
                 nativeUpdateConfigs();
             } else {
-                nativeUpdateVisibleMapRegion();
+                debouncer.addRunLast(1, TimeUnit.SECONDS, "visibility-off", k1 -> {
+                    Log.v(TAG, "onVisibilityChange UPDATE MAP");
+                    nativeUpdateVisibleMapRegion();
 
-                // nativePause should be delayed to update next visible map region
-                TimerTask task = new TimerTask() {
-                    @Override
-                    public void run() {
-                        if (!isVisible) {
-                            SDLActivity.nativePause();
-                        }
-                    }
-                };
-                new Timer(true).schedule(task, 1000);
+                    debouncer.addRunLast(1, TimeUnit.SECONDS, "native-pause", k2 -> {
+                        Log.v(TAG, "debounceVisibilityChange NATIVE PAUSE");
+                        SDLActivity.nativePause();
+                    });
+                });
             }
         }
 

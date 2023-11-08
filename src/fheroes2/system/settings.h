@@ -450,7 +450,7 @@ public:
                 return 60 * 60 * 24;
             case EVERY_SWITCH:
             default:
-                return 0;
+                return 1;
         }
     }
 

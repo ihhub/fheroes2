@@ -277,9 +277,7 @@ void renderWallpaper() {
         if (Game::validateAnimationDelay(Game::MAPS_DELAY)) {
             renderMap();
         } else {
-            SDL_Delay(
-                    Game::getAnimationDelayValue(Game::MAPS_DELAY)
-            );
+            SDL_Delay(Game::getAnimationDelayValue(Game::MAPS_DELAY));
         }
     }
 }
