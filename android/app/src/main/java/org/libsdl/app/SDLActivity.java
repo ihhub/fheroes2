@@ -31,6 +31,8 @@ import android.view.inputmethod.BaseInputConnection;
 import android.view.inputmethod.InputConnection;
 
 import java.util.Locale;
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 /**
@@ -470,15 +472,28 @@ public class SDLActivity extends WallpaperService implements View.OnSystemUiVisi
             }
         }
 
+        boolean isVisible = false;
+
         @Override
         public void onVisibilityChanged(boolean visible) {
             Log.v(TAG, "onVisibilityChange " + (visible ? "true" : "false"));
+            isVisible = visible;
             if (visible) {
                 SDLActivity.nativeResume();
                 nativeUpdateConfigs();
             } else {
                 nativeUpdateVisibleMapRegion();
-                SDLActivity.nativePause();
+
+                // nativePause should be delayed to update next visible map region
+                TimerTask task = new TimerTask() {
+                    @Override
+                    public void run() {
+                        if (!isVisible) {
+                            SDLActivity.nativePause();
+                        }
+                    }
+                };
+                new Timer(true).schedule(task, 1000);
             }
         }
 
