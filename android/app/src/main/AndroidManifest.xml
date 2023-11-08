@@ -20,7 +20,7 @@
         android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
         android:hardwareAccelerated="true"
         android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_label"
+        android:label="@string/app_name"
         android:supportsRtl="false">
 
         <service
@@ -37,22 +37,6 @@
                 android:name="android.service.wallpaper"
                 android:resource="@xml/livewallpaper" />
         </service>
-
-        <activity
-            android:name="com.ipapps.homm2.livewallpaper.settings.MainActivity"
-            android:parentActivityName="org.fheroes2.ToolsetActivity"
-            android:exported="true"
-            android:icon="@mipmap/ic_launcher_toolset"
-            android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar">
-        </activity>
-
-        <activity
-            android:name="com.ipapps.homm2.livewallpaper.WebViewActivity"
-            android:parentActivityName="org.fheroes2.ToolsetActivity"
-            android:exported="true"
-            android:icon="@mipmap/ic_launcher_toolset"
-            android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar">
-        </activity>
 
         <activity
             android:name="org.fheroes2.ToolsetActivity"
