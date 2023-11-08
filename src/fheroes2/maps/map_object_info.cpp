@@ -41,76 +41,42 @@ namespace
 
     void populateArtifactData( std::vector<Maps::ObjectInfo> & objects )
     {
-        // Put an unknown artifact.
-        {
-            Maps::ObjectInfo object{ MP2::OBJ_NONE };
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_UNKNOWN, 0, fheroes2::Point{ 0, 0 }, MP2::OBJ_NONE, Maps::TERRAIN_LAYER );
-
-            objects.emplace_back( std::move( object ) );
-        }
-
         // All artifacts before Magic Book have their own images.
         // Magic Book is not present in the ICN resources but it is present in artifact IDs.
         std::vector<uint32_t> imageIndices;
 
-        for ( int artifactId = Artifact::UNKNOWN + 1; artifactId < Artifact::MAGIC_BOOK; ++artifactId ) {
-            Maps::ObjectInfo object{ MP2::OBJ_ARTIFACT };
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNARTI, artifactId * 2 - 1, fheroes2::Point{ 0, 0 }, MP2::OBJ_ARTIFACT, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNARTI, artifactId * 2, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+        auto addArtifactObject = [&objects]( const uint32_t artifactId, const MP2::MapObjectType ObjectType, const uint32_t mainIcnIndex ) {
+            Maps::ObjectInfo object{ ObjectType };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNARTI, mainIcnIndex, fheroes2::Point{ 0, 0 }, ObjectType, Maps::OBJECT_LAYER );
             object.metadata[0] = artifactId;
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNARTI, mainIcnIndex - 1U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
 
             objects.emplace_back( std::move( object ) );
+        };
+
+        for ( uint32_t artifactId = Artifact::ARCANE_NECKLACE; artifactId < Artifact::MAGIC_BOOK; ++artifactId ) {
+            addArtifactObject( artifactId, MP2::OBJ_ARTIFACT, artifactId * 2U - 1U );
         }
 
-        // TODO: temporary assign Magic Book some values.
-        {
-            Maps::ObjectInfo object{ MP2::OBJ_ARTIFACT };
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNARTI, 1, fheroes2::Point{ 0, 0 }, MP2::OBJ_ARTIFACT, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNARTI, 0, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
-            object.metadata[0] = Artifact::MAGIC_BOOK;
+        // Assign temporary sprites for the Magic Book.
+        addArtifactObject( Artifact::MAGIC_BOOK, MP2::OBJ_ARTIFACT, 207U );
 
-            objects.emplace_back( std::move( object ) );
+        for ( uint32_t artifactId = Artifact::SPELL_SCROLL; artifactId < Artifact::ARTIFACT_COUNT; ++artifactId ) {
+            addArtifactObject( artifactId, MP2::OBJ_ARTIFACT, artifactId * 2U - 1U );
         }
 
         // Random artifacts.
+        addArtifactObject( Artifact::UNKNOWN, MP2::OBJ_RANDOM_ARTIFACT, 163U );
+        addArtifactObject( Artifact::UNKNOWN, MP2::OBJ_RANDOM_ARTIFACT_MINOR, 167U );
+        addArtifactObject( Artifact::UNKNOWN, MP2::OBJ_RANDOM_ARTIFACT_MAJOR, 169U );
+        addArtifactObject( Artifact::UNKNOWN, MP2::OBJ_RANDOM_ARTIFACT_TREASURE, 171U );
+
+        // The random Ultimate artifact does not have a shadow in original assets.
+        // We temporary use an empty shadow image from the Spell Scroll artifact for this case.
         {
-            Maps::ObjectInfo object{ MP2::OBJ_RANDOM_ARTIFACT };
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNARTI, 163, fheroes2::Point{ 0, 0 }, MP2::OBJ_RANDOM_ARTIFACT, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNARTI, 162, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
-
-            objects.emplace_back( std::move( object ) );
-        }
-
-        {
-            Maps::ObjectInfo object{ MP2::OBJ_RANDOM_ARTIFACT_MINOR };
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNARTI, 167, fheroes2::Point{ 0, 0 }, MP2::OBJ_RANDOM_ARTIFACT_MINOR, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNARTI, 166, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
-
-            objects.emplace_back( std::move( object ) );
-        }
-
-        {
-            Maps::ObjectInfo object{ MP2::OBJ_RANDOM_ARTIFACT_MAJOR };
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNARTI, 169, fheroes2::Point{ 0, 0 }, MP2::OBJ_RANDOM_ARTIFACT_MAJOR, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNARTI, 168, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
-
-            objects.emplace_back( std::move( object ) );
-        }
-
-        {
-            Maps::ObjectInfo object{ MP2::OBJ_RANDOM_ARTIFACT_TREASURE };
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNARTI, 171, fheroes2::Point{ 0, 0 }, MP2::OBJ_RANDOM_ARTIFACT_TREASURE, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNARTI, 170, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
-
-            objects.emplace_back( std::move( object ) );
-        }
-
-        for ( int artifactId = Artifact::SPELL_SCROLL; artifactId < Artifact::ARTIFACT_COUNT; ++artifactId ) {
-            const uint32_t imageIndex{ 173U + ( static_cast<uint32_t>( artifactId ) - Artifact::SPELL_SCROLL ) * 2 };
-            Maps::ObjectInfo object{ MP2::OBJ_ARTIFACT };
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNARTI, imageIndex, fheroes2::Point{ 0, 0 }, MP2::OBJ_ARTIFACT, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNARTI, imageIndex - 1, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
-            object.metadata[0] = artifactId;
+            Maps::ObjectInfo object{ MP2::OBJ_RANDOM_ULTIMATE_ARTIFACT };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNARTI, 164U, fheroes2::Point{ 0, 0 }, MP2::OBJ_RANDOM_ULTIMATE_ARTIFACT, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNARTI, 172U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
 
             objects.emplace_back( std::move( object ) );
         }
