@@ -1949,14 +1949,7 @@ namespace fheroes2
                     break;
                 }
 
-                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
-                    Sprite & out = _icnVsSprite[id][i];
-                    out = GetICN( originalId, 4 + i );
-                    // Clean the button
-                    Fill( out, 4 - i, 2 + i, 41, 13, getButtonFillingColor( i == 0 ) );
-                }
-
-                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "AUTO" ), { 4, 2 }, { 3, 3 }, { 41, 13 }, fheroes2::FontColor::WHITE );
+                getTextAdaptedButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "AUTO" ), ICN::EMPTY_GOOD_BATTLE_BUTTON, ICN::UNKNOWN );
 
                 break;
             }
@@ -4236,6 +4229,30 @@ namespace fheroes2
                 }
 
                 return true;
+            }
+            case ICN::EMPTY_GOOD_BATTLE_BUTTON: {
+                const int originalID = ICN::TEXTBAR;
+                loadICN( originalID );
+
+                if ( _icnVsSprite[originalID].size() < 3 ) {
+                    return true;
+                }
+                _icnVsSprite[id].resize( 2 );
+
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    const Sprite & original = GetICN( originalID, 4 + i );
+
+                    Sprite & out = _icnVsSprite[id][i];
+                    // the empty button needs to shortened by 1 px so that when it is divided by 3 in resizeButton() in ui_tools it will give an integer result
+                    out.resize( original.width() - 1, original.height() );
+
+                    Copy( original, 0, 0, out, 0, 0, original.width() - 5 - i, original.height() );
+                    Copy( original, original.width() - 4 - i, 0, out, original.width() - 5 - i, 0, 4 + i, original.height() );
+
+                    Fill( out, 4 - i, 2 + i, 40, 13, getButtonFillingColor( i == 0 ) );
+                }
+
+                return true;                      
             }
             case ICN::EMPTY_GOOD_MEDIUM_BUTTON:
             case ICN::EMPTY_EVIL_MEDIUM_BUTTON: {

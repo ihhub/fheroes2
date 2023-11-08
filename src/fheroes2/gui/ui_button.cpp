@@ -127,6 +127,14 @@ namespace
             releasedOffset = { 5, 52 };
             pressedOffset = { 4, 53 };
             break;
+        case ICN::EMPTY_GOOD_BATTLE_BUTTON:
+            font = fheroes2::FontColor::WHITE;
+            textMargin = 1 + 1;
+            minimumTextAreaWidth = 41;
+            backgroundBorders = 4 + 4;
+            releasedOffset = { 4, 1 };
+            pressedOffset = { 3, 2 };
+            break;
         default:
             // Was a new empty button template added?
             assert( 0 );
