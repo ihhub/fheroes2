@@ -135,6 +135,14 @@ namespace
             releasedOffset = { 4, 1 };
             pressedOffset = { 3, 2 };
             break;
+        case ICN::EMPTY_GOOD_SKIP_BUTTON:
+            font = fheroes2::FontColor::WHITE;
+            textMargin = 1 + 1;
+            minimumTextAreaWidth = 40;
+            backgroundBorders = 4 + 4;
+            releasedOffset = { 4, 11 };
+            pressedOffset = { 3, 12 };
+            break;
         default:
             // Was a new empty button template added?
             assert( 0 );
