@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    android:installLocation="auto"
     android:versionCode="1"
-    android:versionName="1.0"
-    android:installLocation="auto">
+    android:versionName="1.0">
 
     <uses-feature android:name="android.software.live_wallpaper" />
 
@@ -17,15 +17,15 @@
 
     <application
         android:allowBackup="true"
-        android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
         android:hardwareAccelerated="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:supportsRtl="false">
+        android:supportsRtl="false"
+        android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
 
         <service
-            android:exported="true"
             android:name="org.libsdl.app.SDLActivity"
+            android:exported="true"
             android:icon="@mipmap/ic_launcher"
             android:label="@string/app_name"
             android:permission="android.permission.BIND_WALLPAPER">
@@ -39,9 +39,17 @@
         </service>
 
         <activity
+            android:name="com.ipapps.homm2.livewallpaper.WebViewActivity"
+            android:exported="false"
+            android:icon="@mipmap/ic_launcher"
+            android:parentActivityName="org.fheroes2.ToolsetActivity"
+            android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar">
+        </activity>
+
+        <activity
             android:name="org.fheroes2.ToolsetActivity"
             android:exported="true"
-            android:icon="@mipmap/ic_launcher_toolset"
+            android:icon="@mipmap/ic_launcher"
             android:label="@string/activity_toolset_label"
             android:launchMode="singleTask"
             android:taskAffinity="org.fheroes2.ToolsetTask"
