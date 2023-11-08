@@ -63,7 +63,7 @@ jobs:
       env:
         FHEROES2_KEYSTORE: .keystore/fheroes2.keystore
         FHEROES2_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
-        FHEROES2_KEY_ALIAS: key0
+        FHEROES2_KEY_ALIAS: release
         FHEROES2_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
     - name: Lint
       if: ${{ github.event_name == 'pull_request' }}
