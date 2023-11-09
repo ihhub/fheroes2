@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-05 08:25+0000\n"
+"POT-Creation-Date: 2023-11-09 03:47+0000\n"
 "PO-Revision-Date: 2023-09-11 20:22+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3628,6 +3628,13 @@ msgstr "Hrdinovia"
 msgid "Heroes cannot be placed on water."
 msgstr ""
 
+msgid "Artifacts"
+msgstr "Artefakty"
+
+#, fuzzy
+msgid "Artifacts cannot be placed on water."
+msgstr "Toto kúzlo nemožno použiť na lodi."
+
 msgid "Ocean Objects"
 msgstr "Objekty oceánu"
 
@@ -3657,9 +3664,6 @@ msgstr "Objekty pláže"
 
 msgid "Towns"
 msgstr "Mestá"
-
-msgid "Artifacts"
-msgstr "Artefakty"
 
 msgid "Treasures"
 msgstr "Poklady"
@@ -7061,17 +7065,17 @@ msgstr ""
 msgid "%{name1} meets %{name2}"
 msgstr "%{name1} a %{name2} sa stretávajú"
 
-msgid "Town Portal"
-msgstr "Mestský portál"
-
-msgid "Select town to port to."
-msgstr "Vyber mesto, do ktorého sa chceš preniesť."
-
 msgid "Enemy heroes are now fully identifiable."
 msgstr "Nepriateľskí hrdinovia sú teraz plne identifikovateľní."
 
 msgid "Identify Hero"
 msgstr "Identifikovať hrdinu"
+
+msgid "Select town to port to."
+msgstr "Vyber mesto, do ktorého sa chceš preniesť."
+
+msgid "Town Portal"
+msgstr "Mestský portál"
 
 msgid "The creatures are willing to join us!"
 msgstr "Bojovníci sú ochotní sa k nám pridať!"
@@ -10158,6 +10162,9 @@ msgstr ""
 "zistíš, že je to zakliata lopata Hrobárov, ktorú smrteľníci dlho považovali "
 "za stratenú."
 
+msgid "spellBonus|selected by user"
+msgstr ""
+
 msgid "Wood"
 msgstr "Drevo"
 
@@ -10660,6 +10667,44 @@ msgstr "Nasadiť vodnú stráž"
 msgid "Sets Water Elementals to guard a mine against enemy armies."
 msgstr ""
 "Nasadí Vodných elementálov, aby strážili baňu pred nepriateľskými armádami."
+
+#, fuzzy
+msgid "Random Spell"
+msgstr "Náhodná"
+
+msgid "Randomly selected spell of any level."
+msgstr ""
+
+#, fuzzy
+msgid "Random 1st Level Spell"
+msgstr "Náhodný hrad"
+
+msgid "Randomly selected 1st level spell."
+msgstr ""
+
+msgid "Random 2nd Level Spell"
+msgstr ""
+
+msgid "Randomly selected 2nd level spell."
+msgstr ""
+
+msgid "Random 3rd Level Spell"
+msgstr ""
+
+msgid "Randomly selected 3rd level spell."
+msgstr ""
+
+msgid "Random 4th Level Spell"
+msgstr ""
+
+msgid "Randomly selected 4th level spell."
+msgstr ""
+
+msgid "Random 5th Level Spell"
+msgstr ""
+
+msgid "Randomly selected 5th level spell."
+msgstr ""
 
 msgid "Petrification"
 msgstr "Skamenenie"

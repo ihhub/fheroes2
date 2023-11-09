@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-05 08:25+0000\n"
+"POT-Creation-Date: 2023-11-09 03:47+0000\n"
 "PO-Revision-Date: 2023-09-04 21:55+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -3529,6 +3529,14 @@ msgstr "Hősök"
 msgid "Heroes cannot be placed on water."
 msgstr ""
 
+#, fuzzy
+msgid "Artifacts"
+msgstr "Varázstárgy"
+
+#, fuzzy
+msgid "Artifacts cannot be placed on water."
+msgstr "Ezt a várost nem lehet kastéllyá fejleszteni."
+
 msgid "Ocean Objects"
 msgstr ""
 
@@ -3561,10 +3569,6 @@ msgstr ""
 #, fuzzy
 msgid "Towns"
 msgstr "Város"
-
-#, fuzzy
-msgid "Artifacts"
-msgstr "Varázstárgy"
 
 #, fuzzy
 msgid "Treasures"
@@ -6784,17 +6788,17 @@ msgstr ""
 msgid "%{name1} meets %{name2}"
 msgstr "%{name1} és %{name2} találkozik"
 
-msgid "Town Portal"
-msgstr "Városba lépés"
-
-msgid "Select town to port to."
-msgstr ""
-
 msgid "Enemy heroes are now fully identifiable."
 msgstr "Az ellenséges hősök teljes mértékben azonosíthatóak."
 
 msgid "Identify Hero"
 msgstr "Hősazonosítás"
+
+msgid "Select town to port to."
+msgstr ""
+
+msgid "Town Portal"
+msgstr "Városba lépés"
 
 msgid "The creatures are willing to join us!"
 msgstr "A lények csatlakozni akarnak hozzád!"
@@ -9794,6 +9798,9 @@ msgid ""
 "lost by mortals."
 msgstr ""
 
+msgid "spellBonus|selected by user"
+msgstr ""
+
 msgid "Wood"
 msgstr "Fa"
 
@@ -10267,6 +10274,44 @@ msgstr "Vízelementál Őr"
 
 msgid "Sets Water Elementals to guard a mine against enemy armies."
 msgstr "Vízelementálok beállítása bányaőrzőnek."
+
+#, fuzzy
+msgid "Random Spell"
+msgstr "Véletlenszerű város"
+
+msgid "Randomly selected spell of any level."
+msgstr ""
+
+#, fuzzy
+msgid "Random 1st Level Spell"
+msgstr "Véletlenszerű kastély"
+
+msgid "Randomly selected 1st level spell."
+msgstr ""
+
+msgid "Random 2nd Level Spell"
+msgstr ""
+
+msgid "Randomly selected 2nd level spell."
+msgstr ""
+
+msgid "Random 3rd Level Spell"
+msgstr ""
+
+msgid "Randomly selected 3rd level spell."
+msgstr ""
+
+msgid "Random 4th Level Spell"
+msgstr ""
+
+msgid "Randomly selected 4th level spell."
+msgstr ""
+
+msgid "Random 5th Level Spell"
+msgstr ""
+
+msgid "Randomly selected 5th level spell."
+msgstr ""
 
 #, fuzzy
 msgid "Petrification"
