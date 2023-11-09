@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-03 12:33+0000\n"
+"POT-Creation-Date: 2023-11-09 03:47+0000\n"
 "PO-Revision-Date: 2023-10-10 06:12+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -3331,6 +3331,10 @@ msgstr "Выберите существо:"
 msgid "Select Hero:"
 msgstr "Выберите героя:"
 
+#, fuzzy
+msgid "Select Treasure:"
+msgstr "Выберите героя:"
+
 msgid "Map Type:\n"
 msgstr "Тип карты:\n"
 
@@ -3639,10 +3643,24 @@ msgstr "Монстров нельзя размещать на воде."
 msgid "Choose a tile which does not contain any objects."
 msgstr "Выберите ячейку карты, на которой нет никаких объектов."
 
+msgid "Treasure"
+msgstr "Сокровище"
+
+#, fuzzy
+msgid "Treasures cannot be placed on water."
+msgstr "Героев нельзя размещать на воде."
+
 msgid "Heroes"
 msgstr "Герои"
 
 msgid "Heroes cannot be placed on water."
+msgstr "Героев нельзя размещать на воде."
+
+msgid "Artifacts"
+msgstr "Артефакты"
+
+#, fuzzy
+msgid "Artifacts cannot be placed on water."
 msgstr "Героев нельзя размещать на воде."
 
 msgid "Ocean Objects"
@@ -3674,9 +3692,6 @@ msgstr "Объекты побережья"
 
 msgid "Towns"
 msgstr "Города"
-
-msgid "Artifacts"
-msgstr "Артефакты"
 
 msgid "Treasures"
 msgstr "Сокровища"
@@ -5646,9 +5661,6 @@ msgstr ""
 msgid "You come upon the remains of an unfortunate adventurer."
 msgstr "Вы обнаружили останки какого-то несчастного путника."
 
-msgid "Treasure"
-msgstr "Сокровище"
-
 msgid "Searching through the tattered clothing, you find the %{artifact}."
 msgstr "Покопавшись среди лохмотьев, Вы нашли %{artifact}."
 
@@ -7097,17 +7109,17 @@ msgstr ""
 msgid "%{name1} meets %{name2}"
 msgstr "%{name1} встретил %{name2}"
 
-msgid "Town Portal"
-msgstr "Портал города"
-
-msgid "Select town to port to."
-msgstr "Выберите, куда перенестись."
-
 msgid "Enemy heroes are now fully identifiable."
 msgstr "Все вражеские Герои опознаны."
 
 msgid "Identify Hero"
 msgstr "Опознать героя"
+
+msgid "Select town to port to."
+msgstr "Выберите, куда перенестись."
+
+msgid "Town Portal"
+msgstr "Портал города"
 
 msgid "The creatures are willing to join us!"
 msgstr "Эта армия монстров будет присоединяться!"
@@ -10192,6 +10204,9 @@ msgstr ""
 "что это зачарованная лопата гробокопателей, считавшаяся давным-давно "
 "потерянной смертными."
 
+msgid "spellBonus|selected by user"
+msgstr ""
+
 msgid "Wood"
 msgstr "Древесина"
 
@@ -10706,6 +10721,44 @@ msgstr "Страж воды"
 
 msgid "Sets Water Elementals to guard a mine against enemy armies."
 msgstr "Призывает Водных элементалей охранять Вашу шахту от врагов."
+
+#, fuzzy
+msgid "Random Spell"
+msgstr "Случайная карта"
+
+msgid "Randomly selected spell of any level."
+msgstr ""
+
+#, fuzzy
+msgid "Random 1st Level Spell"
+msgstr "Случайный замок"
+
+msgid "Randomly selected 1st level spell."
+msgstr ""
+
+msgid "Random 2nd Level Spell"
+msgstr ""
+
+msgid "Randomly selected 2nd level spell."
+msgstr ""
+
+msgid "Random 3rd Level Spell"
+msgstr ""
+
+msgid "Randomly selected 3rd level spell."
+msgstr ""
+
+msgid "Random 4th Level Spell"
+msgstr ""
+
+msgid "Randomly selected 4th level spell."
+msgstr ""
+
+msgid "Random 5th Level Spell"
+msgstr ""
+
+msgid "Randomly selected 5th level spell."
+msgstr ""
 
 msgid "Petrification"
 msgstr "Окаменение"

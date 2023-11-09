@@ -830,7 +830,7 @@ bool Battle::Arena::isSpellcastDisabled() const
     return false;
 }
 
-bool Battle::Arena::isDisableCastSpell( const Spell & spell, std::string * msg /* = nullptr */ )
+bool Battle::Arena::isDisableCastSpell( const Spell & spell, std::string * msg /* = nullptr */ ) const
 {
     // check sphere negation (only for heroes)
     if ( isSpellcastDisabled() ) {

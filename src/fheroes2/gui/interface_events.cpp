@@ -424,6 +424,7 @@ fheroes2::GameMode Interface::AdventureMap::EventDigArtifact()
         AudioManager::PlaySound( M82::DIGSOUND );
 
         hero->ResetMovePoints();
+        hero->GetPath().Reset();
 
         if ( world.DiggingForUltimateArtifact( hero->GetCenter() ) ) {
             const AudioManager::MusicRestorer musicRestorer;
@@ -452,7 +453,7 @@ fheroes2::GameMode Interface::AdventureMap::EventDigArtifact()
             fheroes2::showStandardTextMessage( "", _( "Nothing here. Where could it be?" ), Dialog::OK );
         }
 
-        redraw( REDRAW_HEROES );
+        redraw( REDRAW_HEROES | REDRAW_BUTTONS );
         fheroes2::Display::instance().render();
 
         // check if the game is over due to conditions related to the ultimate artifact

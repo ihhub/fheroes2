@@ -240,7 +240,7 @@ namespace
         }
     }
 
-    // BMP files within AGG are not Bitmap files.
+    // BMP files within AGG are not Bitmap images!
     fheroes2::Sprite loadBMPFile( const std::string & path )
     {
         const std::vector<uint8_t> & data = AGG::getDataFromAggFile( path );
@@ -252,10 +252,10 @@ namespace
         StreamBuf imageStream( data );
 
         const uint8_t blackColor = imageStream.get();
+        const uint8_t whiteColor = 11;
 
         // Skip the second byte
         imageStream.get();
-        const uint8_t whiteColor = 11;
 
         const int32_t width = imageStream.get16();
         const int32_t height = imageStream.get16();
@@ -266,7 +266,6 @@ namespace
         }
 
         fheroes2::Sprite output( width, height );
-        output.reset();
 
         const uint8_t * input = data.data() + 6;
         uint8_t * image = output.image();
@@ -281,6 +280,9 @@ namespace
             else if ( *input == 2 ) {
                 *image = blackColor;
                 *transform = 0;
+            }
+            else {
+                *transform = 1;
             }
         }
 
@@ -2427,21 +2429,35 @@ namespace fheroes2
                 return true;
             case ICN::SPELLS:
                 LoadOriginalICN( id );
-                _icnVsSprite[id].resize( 67 );
+                if ( _icnVsSprite[id].size() != 60 ) {
+                    return true;
+                }
+
+                _icnVsSprite[id].resize( 73 );
+
                 for ( uint32_t i = 60; i < 66; ++i ) {
-                    int originalIndex = 0;
-                    if ( i == 60 ) // Mass Cure
-                        originalIndex = 6;
-                    else if ( i == 61 ) // Mass Haste
+                    // Mass Cure spell. ( when i == 60 ).
+                    size_t originalIndex = 6;
+                    if ( i == 61 ) {
+                        // Mass Haste spell.
                         originalIndex = 14;
-                    else if ( i == 62 ) // Mass Slow
+                    }
+                    else if ( i == 62 ) {
+                        // Mass Slow spell.
                         originalIndex = 1;
-                    else if ( i == 63 ) // Mass Bless
+                    }
+                    else if ( i == 63 ) {
+                        // Mass Bless spell.
                         originalIndex = 7;
-                    else if ( i == 64 ) // Mass Curse
+                    }
+                    else if ( i == 64 ) {
+                        // Mass Curse spell.
                         originalIndex = 3;
-                    else if ( i == 65 ) // Mass Shield
+                    }
+                    else if ( i == 65 ) {
+                        // Mass Shield spell.
                         originalIndex = 15;
+                    }
 
                     const Sprite & originalImage = _icnVsSprite[id][originalIndex];
                     Sprite & image = _icnVsSprite[id][i];
@@ -2460,6 +2476,22 @@ namespace fheroes2
                 // The Petrification spell does not have its own icon in the original game.
                 h2d::readImage( "petrification_spell_icon.image", _icnVsSprite[id][66] );
 
+                // Generate random spell image for Editor.
+                {
+                    const Sprite & randomSpellImage = _icnVsSprite[id][2];
+                    int32_t imageWidth = randomSpellImage.width();
+
+                    Copy( randomSpellImage, _icnVsSprite[id][67] );
+
+                    // Add text on random spell images.
+                    for ( uint32_t i = 1; i < 6; ++i ) {
+                        Sprite & originalImage = _icnVsSprite[id][i + 67];
+                        Copy( randomSpellImage, originalImage );
+
+                        const Text text( std::to_string( i ), FontType::normalWhite() );
+                        text.draw( ( imageWidth - text.width() ) / 2, 22, originalImage );
+                    }
+                }
                 return true;
             case ICN::CSLMARKER:
                 _icnVsSprite[id].resize( 3 );
@@ -3658,6 +3690,46 @@ namespace fheroes2
                         Blit( originalImage, temp );
                         originalImage = std::move( temp );
                     }
+                }
+                return true;
+            case ICN::OBJNARTI:
+                LoadOriginalICN( id );
+                if ( _icnVsSprite[id].size() == 206 ) {
+                    // If we have the Price of Loyalty assets we make a map sprite for the Magic Book artifact.
+                    _icnVsSprite[id].resize( 208 );
+
+                    // Magic book sprite shadow.
+                    _icnVsSprite[id][206] = _icnVsSprite[id][162];
+                    FillTransform( _icnVsSprite[id][206], 0, 0, 5, 1, 1U );
+                    FillTransform( _icnVsSprite[id][206], 0, 1, 2, 1, 1U );
+                    FillTransform( _icnVsSprite[id][206], 2, 1, 4, 1, 3U );
+                    FillTransform( _icnVsSprite[id][206], 0, 2, 3, 1, 3U );
+                    FillTransform( _icnVsSprite[id][206], 18, 1, 2, 1, 1U );
+                    FillTransform( _icnVsSprite[id][206], 17, 2, 3, 1, 3U );
+                    FillTransform( _icnVsSprite[id][206], 20, 2, 1, 1, 1U );
+                    FillTransform( _icnVsSprite[id][206], 19, 3, 2, 1, 3U );
+
+                    // Magic Book main sprite. We use sprite from the info dialog to make the map sprite.
+                    _icnVsSprite[id][207].resize( 21, 32 );
+                    Copy( GetICN( ICN::ARTFX, 81 ), 6, 0, _icnVsSprite[id][207], 0, 0, 21, 32 );
+                    FillTransform( _icnVsSprite[id][207], 0, 0, 12, 1, 1U );
+                    FillTransform( _icnVsSprite[id][207], 15, 0, 6, 1, 1U );
+                    FillTransform( _icnVsSprite[id][207], 0, 1, 9, 1, 1U );
+                    FillTransform( _icnVsSprite[id][207], 16, 1, 5, 1, 1U );
+                    FillTransform( _icnVsSprite[id][207], 0, 2, 6, 1, 1U );
+                    FillTransform( _icnVsSprite[id][207], 20, 2, 1, 1, 1U );
+                    FillTransform( _icnVsSprite[id][207], 0, 4, 1, 1, 1U );
+                    FillTransform( _icnVsSprite[id][207], 0, 3, 3, 1, 1U );
+                    FillTransform( _icnVsSprite[id][207], 20, 25, 1, 1, 1U );
+                    FillTransform( _icnVsSprite[id][207], 18, 26, 3, 1, 1U );
+                    FillTransform( _icnVsSprite[id][207], 16, 27, 5, 1, 1U );
+                    FillTransform( _icnVsSprite[id][207], 14, 28, 9, 1, 1U );
+                    FillTransform( _icnVsSprite[id][207], 0, 29, 1, 1, 1U );
+                    FillTransform( _icnVsSprite[id][207], 12, 29, 11, 1, 1U );
+                    FillTransform( _icnVsSprite[id][207], 0, 30, 3, 1, 1U );
+                    FillTransform( _icnVsSprite[id][207], 10, 30, 13, 1, 1U );
+                    FillTransform( _icnVsSprite[id][207], 0, 31, 5, 1, 1U );
+                    FillTransform( _icnVsSprite[id][207], 8, 31, 15, 1, 1U );
                 }
                 return true;
             case ICN::TWNSDW_5:

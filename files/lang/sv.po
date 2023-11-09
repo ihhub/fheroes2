@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-03 12:33+0000\n"
+"POT-Creation-Date: 2023-11-09 03:47+0000\n"
 "PO-Revision-Date: 2023-10-12 20:05+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -3325,6 +3325,10 @@ msgstr "Välj Monster:"
 msgid "Select Hero:"
 msgstr "Välj Hjälte:"
 
+#, fuzzy
+msgid "Select Treasure:"
+msgstr "Välj Hjälte:"
+
 msgid "Map Type:\n"
 msgstr "Karttyp:\n"
 
@@ -3638,10 +3642,24 @@ msgstr "Varelser kan inte placeras på vatten."
 msgid "Choose a tile which does not contain any objects."
 msgstr "Välj en ruta som inte har några objekt."
 
+msgid "Treasure"
+msgstr "Skatt"
+
+#, fuzzy
+msgid "Treasures cannot be placed on water."
+msgstr "Hjältar kan inte placeras på vatten."
+
 msgid "Heroes"
 msgstr "Hjältar"
 
 msgid "Heroes cannot be placed on water."
+msgstr "Hjältar kan inte placeras på vatten."
+
+msgid "Artifacts"
+msgstr "Artefakter"
+
+#, fuzzy
+msgid "Artifacts cannot be placed on water."
 msgstr "Hjältar kan inte placeras på vatten."
 
 msgid "Ocean Objects"
@@ -3673,9 +3691,6 @@ msgstr "Strandföremål"
 
 msgid "Towns"
 msgstr "Städer"
-
-msgid "Artifacts"
-msgstr "Artefakter"
 
 msgid "Treasures"
 msgstr "Skatter"
@@ -5643,9 +5658,6 @@ msgstr ""
 msgid "You come upon the remains of an unfortunate adventurer."
 msgstr "Du stöter på kvarlevorna av en olycklig äventyrare."
 
-msgid "Treasure"
-msgstr "Skatt"
-
 msgid "Searching through the tattered clothing, you find the %{artifact}."
 msgstr "När du söker igenom de trasiga kläderna hittar du %{artifact}."
 
@@ -7105,17 +7117,17 @@ msgstr ""
 msgid "%{name1} meets %{name2}"
 msgstr "%{name1} möter %{name2}"
 
-msgid "Town Portal"
-msgstr "Stadsportal"
-
-msgid "Select town to port to."
-msgstr "Välj stad att teleportera till."
-
 msgid "Enemy heroes are now fully identifiable."
 msgstr "Fiendehjältar är nu fullt identifierade."
 
 msgid "Identify Hero"
 msgstr "Identifiera Hjälte"
+
+msgid "Select town to port to."
+msgstr "Välj stad att teleportera till."
+
+msgid "Town Portal"
+msgstr "Stadsportal"
 
 msgid "The creatures are willing to join us!"
 msgstr "Varelserna är villiga att följa med oss!"
@@ -10215,6 +10227,9 @@ msgstr ""
 "att det faktiskt är Dödgrävarnas förtrollande spade som sedan länge ansetts "
 "vara förlorad."
 
+msgid "spellBonus|selected by user"
+msgstr ""
+
 msgid "Wood"
 msgstr "Trä"
 
@@ -10737,6 +10752,44 @@ msgstr "Placera Vattenväktare"
 
 msgid "Sets Water Elementals to guard a mine against enemy armies."
 msgstr "Placerar Vattenväsen att vakta en gruva mot fiendearméer."
+
+#, fuzzy
+msgid "Random Spell"
+msgstr "Slumpad"
+
+msgid "Randomly selected spell of any level."
+msgstr ""
+
+#, fuzzy
+msgid "Random 1st Level Spell"
+msgstr "Slumpat Slott"
+
+msgid "Randomly selected 1st level spell."
+msgstr ""
+
+msgid "Random 2nd Level Spell"
+msgstr ""
+
+msgid "Randomly selected 2nd level spell."
+msgstr ""
+
+msgid "Random 3rd Level Spell"
+msgstr ""
+
+msgid "Randomly selected 3rd level spell."
+msgstr ""
+
+msgid "Random 4th Level Spell"
+msgstr ""
+
+msgid "Randomly selected 4th level spell."
+msgstr ""
+
+msgid "Random 5th Level Spell"
+msgstr ""
+
+msgid "Randomly selected 5th level spell."
+msgstr ""
 
 msgid "Petrification"
 msgstr "Förstening"
