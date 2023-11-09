@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-08 19:09+0000\n"
+"POT-Creation-Date: 2023-11-09 03:47+0000\n"
 "PO-Revision-Date: 2023-10-12 20:05+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -7117,17 +7117,17 @@ msgstr ""
 msgid "%{name1} meets %{name2}"
 msgstr "%{name1} möter %{name2}"
 
-msgid "Town Portal"
-msgstr "Stadsportal"
-
-msgid "Select town to port to."
-msgstr "Välj stad att teleportera till."
-
 msgid "Enemy heroes are now fully identifiable."
 msgstr "Fiendehjältar är nu fullt identifierade."
 
 msgid "Identify Hero"
 msgstr "Identifiera Hjälte"
+
+msgid "Select town to port to."
+msgstr "Välj stad att teleportera till."
+
+msgid "Town Portal"
+msgstr "Stadsportal"
 
 msgid "The creatures are willing to join us!"
 msgstr "Varelserna är villiga att följa med oss!"
