@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-08 19:09+0000\n"
+"POT-Creation-Date: 2023-11-09 03:47+0000\n"
 "PO-Revision-Date: 2023-09-11 20:22+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -7065,17 +7065,17 @@ msgstr ""
 msgid "%{name1} meets %{name2}"
 msgstr "%{name1} a %{name2} sa stretávajú"
 
-msgid "Town Portal"
-msgstr "Mestský portál"
-
-msgid "Select town to port to."
-msgstr "Vyber mesto, do ktorého sa chceš preniesť."
-
 msgid "Enemy heroes are now fully identifiable."
 msgstr "Nepriateľskí hrdinovia sú teraz plne identifikovateľní."
 
 msgid "Identify Hero"
 msgstr "Identifikovať hrdinu"
+
+msgid "Select town to port to."
+msgstr "Vyber mesto, do ktorého sa chceš preniesť."
+
+msgid "Town Portal"
+msgstr "Mestský portál"
 
 msgid "The creatures are willing to join us!"
 msgstr "Bojovníci sú ochotní sa k nám pridať!"
