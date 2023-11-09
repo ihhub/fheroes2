@@ -909,7 +909,6 @@ namespace ICN
         ROUTERED,
         YELLOW_FONT,
         YELLOW_SMALLFONT,
-        BATTLESKIP,
         BUYMAX,
         BTNBATTLEONLY,
         BTNGIFT_GOOD,
