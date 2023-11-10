@@ -1,13 +1,13 @@
 # Norwegian translation for fheroes2
 # Copyright (C) 2021 - 2022 fheroes2 team <fhomm2@gmail.com>
 # This file is distributed under the same license as the fheroes2 package.
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-11-05 08:25+0000\n"
-"PO-Revision-Date: 2023-09-03 18:42+0200\n"
+"PO-Revision-Date: 2023-11-10 03:17+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: nb_NO\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.2.2\n"
+"X-Generator: Poedit 3.4.1\n"
 
 msgid ""
 "BATTLE\n"
@@ -226,7 +226,7 @@ msgstr ""
 "T"
 
 msgid "SKIP"
-msgstr ""
+msgstr "PASS"
 
 msgid ""
 "C\n"
@@ -5331,7 +5331,7 @@ msgstr ""
 msgid "Handicap"
 msgstr "Handikap"
 
-# 
+#
 msgid ""
 "This lets you change the handicap of a particular player. Only humans may be "
 "handicapped. Handicapped players start with fewer resources and earn 15 or "
@@ -5356,7 +5356,7 @@ msgstr ""
 msgid "Mild Handicap"
 msgstr "Lett handikap"
 
-# 
+#
 msgid ""
 "Mild handicapped players start with fewer resources and earn 15% fewer "
 "resources per turn."
