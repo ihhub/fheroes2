@@ -158,7 +158,7 @@ namespace Interface
 
         void ShowPathOrStartMoveHero( Heroes * hero, const int32_t destinationIdx );
         void MoveHeroFromArrowKeys( Heroes & hero, const int direction );
-        void _startHeroMove( Heroes * hero );
+        void _startHeroMove( Heroes & hero );
 
         fheroes2::GameMode HumanTurn( const bool isload );
 

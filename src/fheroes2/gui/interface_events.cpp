@@ -93,7 +93,7 @@ void Interface::AdventureMap::ShowPathOrStartMoveHero( Heroes * hero, const int3
     }
     // Start the hero's movement
     else if ( path.isValidForMovement() && hero->MayStillMove( false, true ) ) {
-        _startHeroMove( hero );
+        _startHeroMove( *hero );
     }
 }
 
@@ -115,16 +115,12 @@ void Interface::AdventureMap::MoveHeroFromArrowKeys( Heroes & hero, const int di
     ShowPathOrStartMoveHero( &hero, dstIndex );
 }
 
-void Interface::AdventureMap::_startHeroMove( Heroes * hero )
+void Interface::AdventureMap::_startHeroMove( Heroes & hero )
 {
-    if ( hero == nullptr ) {
-        return;
-    }
-
-    SetFocus( hero, true );
+    SetFocus( &hero, true );
     RedrawFocus();
 
-    hero->SetMove( true );
+    hero.SetMove( true );
 
     // We pass this delay to start hero moving immediately and set all the variables needed to handle game events correctly
     // and to stop handling mouse click events until hero stops. Otherwise there could be a rare case
@@ -176,7 +172,7 @@ fheroes2::GameMode Interface::AdventureMap::EventHeroMovement()
 
     if ( hero ) {
         if ( hero->GetPath().isValidForMovement() && hero->MayStillMove( false, true ) ) {
-            _startHeroMove( hero );
+            _startHeroMove( *hero );
         }
         else if ( MP2::isActionObject( hero->getObjectTypeUnderHero(), hero->isShipMaster() ) ) {
             return EventDefaultAction();
