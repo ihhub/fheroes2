@@ -1083,6 +1083,7 @@ namespace ICN
 
         BUTTON_SKIP,
         BUTTON_AUTO,
+        BUTTON_BATTLE_SETTINGS,
 
         GAME_OPTION_ICON,
 

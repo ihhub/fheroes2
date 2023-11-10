@@ -1247,7 +1247,7 @@ Battle::Interface::Interface( Arena & battleArena, const int32_t tileIndex )
     _mainSurface._disableTransformLayer();
 
     btn_auto.setICNInfo( ICN::BUTTON_AUTO, 0, 1 );
-    btn_settings.setICNInfo( ICN::TEXTBAR, 6, 7 );
+    btn_settings.setICNInfo( ICN::BUTTON_BATTLE_SETTINGS, 0, 1 );
 
     // opponents
     _opponent1 = arena.GetCommander1() ? std::make_unique<OpponentSprite>( _surfaceInnerArea, arena.GetCommander1(), false ) : nullptr;
