@@ -4376,7 +4376,7 @@ namespace fheroes2
 
                 topHalf.resize( originalTopHalf.width() - moreThanOriginalButtonsWidth, topBarHeight );
                 bottomHalf.resize( originalBottomHalf.width() - moreThanOriginalButtonsWidth, bottomBarHeight );
-                
+
                 fheroes2::Copy( originalTopHalf, 0, 0, topHalf, 0, 0, fheroes2::Display::DEFAULT_WIDTH / 2 - buttonAutoWidth, topBarHeight );
                 fheroes2::Copy( originalTopHalf, originalTopHalf.width() - fheroes2::Display::DEFAULT_WIDTH / 2 + buttonSkipWidth - 1, 0, topHalf,
                                 fheroes2::Display::DEFAULT_WIDTH / 2 - buttonAutoWidth, 0, fheroes2::Display::DEFAULT_WIDTH / 2 - buttonSkipWidth + 1, topBarHeight );
