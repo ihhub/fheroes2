@@ -4372,10 +4372,10 @@ namespace fheroes2
                 const int32_t topBarHeight = originalTopHalf.height();
                 const int32_t bottomBarHeight = originalBottomHalf.height();
 
-                const int32_t moreThanOriginalButtonsWidth = ( ( buttonAutoWidth + buttonSkipWidth ) - ( originalButtonAutoWidth + originalButtonSkipWidth ) );
+                const int32_t excessWidth = ( ( buttonAutoWidth + buttonSkipWidth ) - ( originalButtonAutoWidth + originalButtonSkipWidth ) );
 
-                topHalf.resize( originalTopHalf.width() - moreThanOriginalButtonsWidth, topBarHeight );
-                bottomHalf.resize( originalBottomHalf.width() - moreThanOriginalButtonsWidth, bottomBarHeight );
+                topHalf.resize( originalTopHalf.width() - excessWidth, topBarHeight );
+                bottomHalf.resize( originalBottomHalf.width() - excessWidth, bottomBarHeight );
 
                 fheroes2::Copy( originalTopHalf, 0, 0, topHalf, 0, 0, fheroes2::Display::DEFAULT_WIDTH / 2 - buttonAutoWidth, topBarHeight );
                 fheroes2::Copy( originalTopHalf, originalTopHalf.width() - fheroes2::Display::DEFAULT_WIDTH / 2 + buttonSkipWidth - 1, 0, topHalf,
