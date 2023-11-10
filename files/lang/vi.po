@@ -6,8 +6,13 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
+<<<<<<< HEAD
 "POT-Creation-Date: 2023-11-03 12:33+0000\n"
 "PO-Revision-Date: 2023-11-09 15:08+0700\n"
+=======
+"POT-Creation-Date: 2023-10-23 00:14+0000\n"
+"PO-Revision-Date: 2023-11-02 10:09+0700\n"
+>>>>>>> parent of 7321209d (Update vi.po)
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: vi_VN\n"
@@ -5452,70 +5457,70 @@ msgid "Sarakin"
 msgstr "Sarakin"
 
 msgid "Charity"
-msgstr ""
+msgstr "Charity"
 
 msgid "Darlana"
-msgstr ""
+msgstr "Darlana"
 
 msgid "Ranloo"
-msgstr ""
+msgstr "Ranloo"
 
 msgid "Rialdo"
-msgstr ""
+msgstr "Rialdo"
 
 msgid "Zam"
-msgstr ""
+msgstr "Zam"
 
 msgid "Zom"
-msgstr ""
+msgstr "Zom"
 
 msgid "Celia"
-msgstr ""
+msgstr "Celia"
 
 msgid "Roxana"
-msgstr ""
+msgstr "Roxana"
 
 msgid "Lord Corlagon"
-msgstr ""
+msgstr "Lord Corlagon"
 
 msgid "Lord Halton"
-msgstr ""
+msgstr "Lord Halton"
 
 msgid "Sister Eliza"
-msgstr ""
+msgstr "Sister Eliza"
 
 msgid "Brother Brax"
-msgstr ""
+msgstr "Brother Brax"
 
 msgid "Dainwin"
-msgstr ""
+msgstr "Dainwin"
 
 msgid "Joseph"
-msgstr ""
+msgstr "Joseph"
 
 msgid "Mog"
-msgstr ""
+msgstr "Mog"
 
 msgid "Solmyr"
-msgstr ""
+msgstr "Solmyr"
 
 msgid "Ceallach"
-msgstr ""
+msgstr "Ceallach"
 
 msgid "Drakonia"
-msgstr ""
+msgstr "Drakonia"
 
 msgid "Elderian"
-msgstr ""
+msgstr "Elderian"
 
 msgid "Gallavant"
-msgstr ""
+msgstr "Gallavant"
 
 msgid "Jarkonas"
-msgstr ""
+msgstr "Jarkonas"
 
 msgid "Martine"
-msgstr ""
+msgstr "Martine"
 
 msgid " gives you maximum morale"
 msgstr " cho ngươi tối đa tinh thần"
@@ -5862,8 +5867,8 @@ msgid ""
 "\"I'm sorry sir,\" The leader of the soldiers says, \"but you already know "
 "everything we have to teach.\""
 msgstr ""
-"\\“Tôi xin lỗi thưa ngài,\\” Người chỉ huy nói, \\“nhưng ngài đã biết tất cả "
-"những gì chúng tôi phải dạy rồi.\\”"
+"\“Tôi xin lỗi thưa ngài,\” Người chỉ huy nói, \“nhưng ngài đã biết tất cả "
+"những gì chúng tôi phải dạy rồi.\”"
 
 msgid "The soldiers living in the fort teach you a few new defensive tricks."
 msgstr ""
@@ -5874,8 +5879,8 @@ msgid ""
 "You've come upon a mercenary camp practicing their tactics. \"You're too "
 "advanced for us,\" the mercenary captain says. \"We can teach nothing more.\""
 msgstr ""
-"Ngươi đã gặp một trại lính đánh thuê đang thực hành chiến thuật của họ. \\“Ngài "
-"quá tiến bộ so với chúng tôi,\\” đội trưởng lính đánh thuê nói. \"Chúng tôi "
+"Ngươi đã gặp một trại lính đánh thuê đang thực hành chiến thuật của họ. \“Ngài "
+"quá tiến bộ so với chúng tôi,\” đội trưởng lính đánh thuê nói. \"Chúng tôi "
 "không thể dạy gì thêm nữa.\""
 
 msgid ""
@@ -6017,15 +6022,15 @@ msgid ""
 "An old Knight appears on the steps of the gazebo. \"I am sorry, my liege, I "
 "have taught you all I can.\""
 msgstr ""
-"Một Hiệp sĩ già xuất hiện trên bậc thềm của vọng lâu. \\“Tôi xin lỗi, thưa bệ "
-"hạ, tôi đã dạy ngài tất cả những gì có thể.\\”"
+"Một Hiệp sĩ già xuất hiện trên bậc thềm của vọng lâu. \“Tôi xin lỗi, thưa bệ "
+"hạ, tôi đã dạy ngài tất cả những gì có thể.\”"
 
 msgid ""
 "An old Knight appears on the steps of the gazebo. \"My liege, I will teach you "
 "all that I know to aid you in your travels.\""
 msgstr ""
-"Một Hiệp sĩ già xuất hiện trên bậc thềm của vọng lâu. \\“Thưa bệ hạ, tôi sẽ dạy "
-"cho ngài tất cả những gì tôi biết để hỗ trợ ngài trong chuyến đi.\\”"
+"Một Hiệp sĩ già xuất hiện trên bậc thềm của vọng lâu. \“Thưa bệ hạ, tôi sẽ dạy "
+"cho ngài tất cả những gì tôi biết để hỗ trợ ngài trong chuyến đi.\”"
 
 msgid ""
 "You've pulled a shipwreck survivor from certain death in an unforgiving ocean. "
