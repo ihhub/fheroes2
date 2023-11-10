@@ -208,37 +208,84 @@ namespace AI
         return target.evaluateThreatForUnit( attacker );
     }
 
-    std::vector<int32_t> evaluatePotentialAttackPositions( const Arena & arena, const Unit & attacker )
+    // Key is a potential unit position, value is the result of the evaluation of this position
+    using PositionValues = std::map<Position, int32_t>;
+
+    PositionValues evaluatePotentialAttackPositions( const Arena & arena, const Unit & attacker )
     {
         // Attacking unit can be under the influence of the Hypnotize spell
         Units enemies( arena.getEnemyForce( attacker.GetCurrentColor() ).getUnits(), &attacker );
 
-        // For each cell, choose the maximum attack value among the nearby melee units and then add the sum of the attack values of nearby archers to encourage the use of
-        // attack positions that block archers
+        // For each position near enemy units, select the maximum attack value among neighboring enemy melee units, and then add the sum of the attack values of
+        // neighboring enemy archers to encourage the use of attacking positions that block these archers
         std::sort( enemies.begin(), enemies.end(), []( const Unit * unit1, const Unit * unit2 ) { return !unit1->isArchers() && unit2->isArchers(); } );
 
-        std::vector<int32_t> result( ARENASIZE, 0 );
+        PositionValues result;
 
         for ( const Unit * enemyUnit : enemies ) {
             assert( enemyUnit != nullptr && enemyUnit->isValid() );
 
-            for ( const int32_t nearbyIdx : Board::GetAroundIndexes( *enemyUnit ) ) {
-                assert( nearbyIdx >= 0 && static_cast<size_t>( nearbyIdx ) < result.size() );
+            std::set<Position> processedPositions;
 
-                const Cell * nearbyCell = Board::GetCell( nearbyIdx );
-                assert( nearbyCell != nullptr );
+            const std::array<int32_t, 2> enemyUnitIndexes = { enemyUnit->GetHeadIndex(), enemyUnit->GetTailIndex() };
 
-                if ( !nearbyCell->isPassableForUnit( attacker ) ) {
+            for ( const int32_t enemyUnitIdx : enemyUnitIndexes ) {
+                if ( !Board::isValidIndex( enemyUnitIdx ) ) {
                     continue;
                 }
 
-                const int32_t attackValue = optimalAttackValue( attacker, *enemyUnit, nearbyIdx );
+                for ( const int32_t idx : Board::GetDistanceIndexes( enemyUnitIdx, attacker.isWide() ? 2 : 1 ) ) {
+                    const Position pos = Position::GetPosition( attacker, idx );
+                    if ( pos.GetHead() == nullptr ) {
+                        continue;
+                    }
 
-                if ( enemyUnit->isArchers() ) {
-                    result[nearbyIdx] += attackValue;
-                }
-                else {
-                    result[nearbyIdx] = std::max( result[nearbyIdx], attackValue );
+                    assert( !attacker.isWide() || pos.GetTail() != nullptr );
+
+                    const uint32_t dist = Board::GetDistance( pos, enemyUnit->GetPosition() );
+                    assert( dist > 0 );
+
+                    if ( dist != 1 ) {
+                        continue;
+                    }
+
+                    const auto [dummy, inserted] = processedPositions.insert( pos );
+                    if ( !inserted ) {
+                        continue;
+                    }
+
+                    const int32_t attackValue = [&attacker, enemyUnit, &pos]() {
+                        const int32_t posHeadIdx
+                            = ( pos.GetHead() && Board::GetDistance( enemyUnit->GetPosition(), pos.GetHead()->GetIndex() ) == 1 ? pos.GetHead()->GetIndex() : -1 );
+                        const int32_t posTailIdx
+                            = ( pos.GetTail() && Board::GetDistance( enemyUnit->GetPosition(), pos.GetTail()->GetIndex() ) == 1 ? pos.GetTail()->GetIndex() : -1 );
+
+                        if ( !Board::isValidIndex( posHeadIdx ) ) {
+                            assert( Board::isValidIndex( posTailIdx ) );
+
+                            return optimalAttackValue( attacker, *enemyUnit, posTailIdx );
+                        }
+
+                        if ( !Board::isValidIndex( posTailIdx ) ) {
+                            assert( Board::isValidIndex( posHeadIdx ) );
+
+                            return optimalAttackValue( attacker, *enemyUnit, posHeadIdx );
+                        }
+
+                        return std::max( optimalAttackValue( attacker, *enemyUnit, posHeadIdx ), optimalAttackValue( attacker, *enemyUnit, posTailIdx ) );
+                    }();
+
+                    const auto iter = result.find( pos );
+
+                    if ( iter == result.end() ) {
+                        result.try_emplace( pos, attackValue );
+                    }
+                    else if ( enemyUnit->isArchers() ) {
+                        iter->second += attackValue;
+                    }
+                    else {
+                        iter->second = std::max( iter->second, attackValue );
+                    }
                 }
             }
         }
@@ -272,7 +319,7 @@ namespace AI
         return false;
     }
 
-    MeleeAttackOutcome BestAttackOutcome( Arena & arena, const Unit & attacker, const Unit & defender, const std::vector<int32_t> & positionValues )
+    MeleeAttackOutcome BestAttackOutcome( Arena & arena, const Unit & attacker, const Unit & defender, const PositionValues & positionValues )
     {
         MeleeAttackOutcome bestOutcome;
 
@@ -285,8 +332,6 @@ namespace AI
 
         // Check if we can reach the target and pick best position to attack from
         for ( const int32_t nearbyIdx : aroundDefender ) {
-            assert( nearbyIdx >= 0 && static_cast<size_t>( nearbyIdx ) < positionValues.size() );
-
             const Position pos = Position::GetPosition( attacker, nearbyIdx );
             if ( !arena.isPositionReachable( attacker, pos, false ) ) {
                 continue;
@@ -294,16 +339,18 @@ namespace AI
 
             assert( pos.GetHead() != nullptr && ( !attacker.isWide() || pos.GetTail() != nullptr ) );
 
+            const auto posValueIter = positionValues.find( pos );
+
             MeleeAttackOutcome current;
-            current.positionValue = positionValues[nearbyIdx];
             current.attackValue = optimalAttackValue( attacker, defender, nearbyIdx );
+            current.positionValue = ( posValueIter != positionValues.end() ? posValueIter->second : 0 );
             current.canAttackImmediately = Board::CanAttackTargetFromPosition( attacker, defender, nearbyIdx );
 
             // Pick target if either position has improved or unit is higher value at the same position value
             if ( IsOutcomeImproved( current, bestOutcome ) ) {
+                bestOutcome.fromIndex = nearbyIdx;
                 bestOutcome.attackValue = current.attackValue;
                 bestOutcome.positionValue = current.positionValue;
-                bestOutcome.fromIndex = nearbyIdx;
                 bestOutcome.canAttackImmediately = current.canAttackImmediately;
             }
         }
@@ -1119,7 +1166,7 @@ namespace AI
 
         const Castle * castle = Arena::GetCastle();
         const bool isMoatBuilt = castle && castle->isBuild( BUILD_MOAT );
-        const std::vector<int32_t> positionValues = evaluatePotentialAttackPositions( arena, currentUnit );
+        const PositionValues positionValues = evaluatePotentialAttackPositions( arena, currentUnit );
 
         // Current unit can be under the influence of the Hypnotize spell
         const Units enemies( arena.getEnemyForce( _myColor ).getUnits(), &currentUnit );
@@ -1217,7 +1264,7 @@ namespace AI
         BattleTargetPair target;
 
         const double defenceDistanceModifier = _myArmyStrength / STRENGTH_DISTANCE_FACTOR;
-        const std::vector<int32_t> positionValues = evaluatePotentialAttackPositions( arena, currentUnit );
+        const PositionValues positionValues = evaluatePotentialAttackPositions( arena, currentUnit );
 
         const Units friendly( arena.getForce( _myColor ).getUnits(), &currentUnit );
         // Current unit can be under the influence of the Hypnotize spell
