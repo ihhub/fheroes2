@@ -4402,6 +4402,13 @@ namespace fheroes2
                 }
 
                 _icnVsSprite[id].resize( 2 );
+
+                if ( useOriginalResources() ) {
+                    _icnVsSprite[id][0] = GetICN( originalId, 8 );
+                    _icnVsSprite[id][1] = GetICN( originalId, 9 );
+                    return true;
+                }
+
                 const Sprite & originalTopHalf = GetICN( originalId, 8 );
                 const Sprite & originalBottomHalf = GetICN( originalId, 9 );
 
