@@ -1259,15 +1259,15 @@ Battle::Interface::Interface( Arena & battleArena, const int32_t tileIndex )
 
     const fheroes2::Rect & area = border.GetArea();
 
-    const fheroes2::Rect autoButtonRect = btn_auto.area();
-    const int32_t statusOffsetY = area.y + area.height - autoButtonRect.height - btn_auto.area().height;
+    const fheroes2::Rect settingsButtonRect = btn_settings.area();
+    const int32_t statusOffsetY = area.y + area.height - settingsButtonRect.height - btn_auto.area().height;
     btn_auto.setPosition( area.x, statusOffsetY );
-    btn_settings.setPosition( area.x, area.y + area.height - autoButtonRect.height );
+    btn_settings.setPosition( area.x, area.y + area.height - settingsButtonRect.height );
 
     btn_skip.setICNInfo( ICN::BUTTON_SKIP, 0, 1 );
     btn_skip.setPosition( area.x + area.width - btn_skip.area().width, area.y + area.height - btn_skip.area().height );
 
-    status.SetPosition( area.x + autoButtonRect.width, statusOffsetY );
+    status.SetPosition( area.x + settingsButtonRect.width, statusOffsetY );
 
     listlog = std::make_unique<StatusListBox>();
 
