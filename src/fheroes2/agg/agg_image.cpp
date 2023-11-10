@@ -165,7 +165,8 @@ namespace
                                                 ICN::DISMISS_HERO_DISABLED_BUTTON,
                                                 ICN::NEW_CAMPAIGN_DISABLED_BUTTON,
                                                 ICN::BUTTON_SKIP,
-                                                ICN::BUTTON_AUTO };
+                                                ICN::BUTTON_AUTO,
+                                                ICN::STATUSBAR_BATTLE };
 
 #ifndef NDEBUG
     bool isLanguageDependentIcnId( const int id )
@@ -4346,6 +4347,43 @@ namespace fheroes2
                     FillTransform( pressed, pressed.width() - 2, 2, 2, 1, 1 );
                     FillTransform( pressed, pressed.width() - 1, 3, 1, pressed.height() - 6, 1 );
                 }
+
+                return true;
+            }
+            case ICN::STATUSBAR_BATTLE: {
+                const int32_t originalId = ICN::TEXTBAR;
+                loadICN( originalId );
+
+                if ( _icnVsSprite[originalId].size() < 15 ) {
+                    return true;
+                }
+
+                _icnVsSprite[id].resize( 2 );
+                const Sprite & originalTopHalf = GetICN( originalId, 8 );
+                const Sprite & originalBottomHalf = GetICN( originalId, 9 );
+
+                Sprite & topHalf = _icnVsSprite[id][0];
+                Sprite & bottomHalf = _icnVsSprite[id][1];
+
+                const int32_t buttonAutoWidth = fheroes2::AGG::GetICN( ICN::BUTTON_AUTO, 0 ).width();
+                const int32_t buttonSkipWidth = fheroes2::AGG::GetICN( ICN::BUTTON_SKIP, 0 ).width();
+                const int32_t originalButtonAutoWidth = fheroes2::AGG::GetICN( originalId, 4 ).width();
+                const int32_t originalButtonSkipWidth = fheroes2::AGG::GetICN( originalId, 0 ).width();
+                const int32_t topBarHeight = originalTopHalf.height();
+                const int32_t bottomBarHeight = originalBottomHalf.height();
+
+                const int32_t moreThanOriginalButtonsWidth = ( ( buttonAutoWidth + buttonSkipWidth ) - ( originalButtonAutoWidth + originalButtonSkipWidth ) );
+
+                topHalf.resize( originalTopHalf.width() - moreThanOriginalButtonsWidth, topBarHeight );
+                bottomHalf.resize( originalBottomHalf.width() - moreThanOriginalButtonsWidth, bottomBarHeight );
+                
+                fheroes2::Copy( originalTopHalf, 0, 0, topHalf, 0, 0, fheroes2::Display::DEFAULT_WIDTH / 2 - buttonAutoWidth, topBarHeight );
+                fheroes2::Copy( originalTopHalf, originalTopHalf.width() - fheroes2::Display::DEFAULT_WIDTH / 2 + buttonSkipWidth - 1, 0, topHalf,
+                                fheroes2::Display::DEFAULT_WIDTH / 2 - buttonAutoWidth, 0, fheroes2::Display::DEFAULT_WIDTH / 2 - buttonSkipWidth + 1, topBarHeight );
+
+                fheroes2::Copy( originalBottomHalf, 0, 0, bottomHalf, 0, 0, fheroes2::Display::DEFAULT_WIDTH / 2 - buttonAutoWidth, bottomBarHeight );
+                fheroes2::Copy( originalBottomHalf, originalBottomHalf.width() - fheroes2::Display::DEFAULT_WIDTH / 2 + buttonSkipWidth - 1, 0, bottomHalf,
+                                fheroes2::Display::DEFAULT_WIDTH / 2 - buttonAutoWidth, 0, fheroes2::Display::DEFAULT_WIDTH / 2 - buttonSkipWidth + 1, bottomBarHeight );
 
                 return true;
             }

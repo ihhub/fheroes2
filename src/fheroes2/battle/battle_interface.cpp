@@ -923,8 +923,8 @@ bool Battle::OpponentSprite::updateAnimationState()
 }
 
 Battle::Status::Status()
-    : back1( fheroes2::AGG::GetICN( ICN::TEXTBAR, 8 ) )
-    , back2( fheroes2::AGG::GetICN( ICN::TEXTBAR, 9 ) )
+    : back1( fheroes2::AGG::GetICN( ICN::STATUSBAR_BATTLE, 0 ) )
+    , back2( fheroes2::AGG::GetICN( ICN::STATUSBAR_BATTLE, 1 ) )
     , listlog( nullptr )
 {
     width = back1.width();

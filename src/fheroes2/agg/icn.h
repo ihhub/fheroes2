@@ -1086,6 +1086,8 @@ namespace ICN
 
         GAME_OPTION_ICON,
 
+        STATUSBAR_BATTLE,
+
         // IMPORTANT! Put any new entry just above this one.
         LASTICN
     };
