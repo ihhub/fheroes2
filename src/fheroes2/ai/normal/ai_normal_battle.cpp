@@ -179,7 +179,7 @@ namespace AI
         int32_t attackValue = target.evaluateThreatForUnit( attacker );
 
         // A double cell attack should only be considered if the attacker is actually able to attack the target from the given attack position. Otherwise, the attacker
-        // can at least block the target if the target is a shooter.
+        // can at least block the target if the target is a shooter, so this position can be valuable in any case.
         if ( attacker.isDoubleCellAttack() && Board::CanAttackTargetFromPosition( attacker, target, attackPos.GetHead()->GetIndex() ) ) {
             const auto [attackTargetIdx, attackDirection] = optimalAttackVector( attacker, target, attackPos );
             assert( Board::isValidDirection( attackTargetIdx, Board::GetReflectDirection( attackDirection ) ) );
