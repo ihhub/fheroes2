@@ -31,8 +31,6 @@ import android.view.inputmethod.BaseInputConnection;
 import android.view.inputmethod.InputConnection;
 
 import java.util.Locale;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
 import io.github.bhowell2.debouncer.Debouncer;
@@ -336,14 +334,15 @@ public class SDLActivity extends WallpaperService implements View.OnSystemUiVisi
 //    }
 
     public static int getCurrentOrientation() {
-        return SDL_ORIENTATION_PORTRAIT;
-      /*  int result = SDL_ORIENTATION_UNKNOWN;
+        int result = SDL_ORIENTATION_UNKNOWN;
 
-        Activity activity = (Activity)getContext();
-        if (activity == null) {
+        Context context = getContext();
+        if (context == null) {
             return result;
         }
-        Display display = activity.getWindowManager().getDefaultDisplay();
+
+        WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        Display display = windowManager.getDefaultDisplay();
 
         switch (display.getRotation()) {
             case Surface.ROTATION_0:
@@ -363,7 +362,7 @@ public class SDLActivity extends WallpaperService implements View.OnSystemUiVisi
                 break;
         }
 
-        return result;*/
+        return result;
     }
 
     // FIXME
@@ -537,6 +536,8 @@ public class SDLActivity extends WallpaperService implements View.OnSystemUiVisi
             SDLActivity.nativeSetScreenResolution(width, height, width, height, mDisplay.getRefreshRate());
             SDLActivity.onNativeResize();
             SDLActivity.onNativeSurfaceChanged();
+
+            nativeUpdateOrientation();
 
             if (mSDLThread == null) {
                 Log.v(TAG, "Starting SDLThread");
@@ -804,6 +805,8 @@ public class SDLActivity extends WallpaperService implements View.OnSystemUiVisi
 
     // C functions we call
     public static native String nativeGetVersion();
+
+    public static native void nativeUpdateOrientation();
 
     public static native void nativeUpdateVisibleMapRegion();
 

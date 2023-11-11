@@ -92,6 +92,7 @@
 uint32_t lwpLastMapUpdate = 0;
 bool forceMapUpdate = true;
 bool forceConfigUpdate = true;
+bool forceUpdateOrientation = true;
 
 void initWallpaper() {
     Settings &conf = Settings::Get();
@@ -226,7 +227,20 @@ void forceUpdates() {
         renderMap();
         forceMapUpdate = false;
     }
+
+    if (forceUpdateOrientation) {
+        resizeDisplay();
+        forceUpdateOrientation = false;
+    }
 }
+
+extern "C" JNIEXPORT void JNICALL
+Java_org_libsdl_app_SDLActivity_nativeUpdateOrientation([[maybe_unused]] JNIEnv *env,
+                                                        [[maybe_unused]] jclass cls) {
+    VERBOSE_LOG("nativeUpdateOrientation")
+    forceUpdateOrientation = true;
+}
+
 
 extern "C" JNIEXPORT void JNICALL
 Java_org_libsdl_app_SDLActivity_nativeUpdateVisibleMapRegion([[maybe_unused]] JNIEnv *env,
