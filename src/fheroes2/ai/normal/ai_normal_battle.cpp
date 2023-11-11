@@ -165,7 +165,7 @@ namespace AI
         }
 
         // Either the attack position is unreachable on the current turn, or we are guaranteed to be able to attack the target from this position. In the first case, we
-        // perform a rough assessment, in the second - a more accurate one.
+        // perform a rough estimation, in the second - a more accurate one.
 
         if ( attacker.isAllAdjacentCellsAttack() ) {
             const Board * board = Arena::GetBoard();
