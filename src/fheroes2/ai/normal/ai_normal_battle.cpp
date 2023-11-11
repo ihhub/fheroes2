@@ -303,31 +303,6 @@ namespace AI
     {
         MeleeAttackOutcome bestOutcome;
 
-        const Position bestPosition = [&attacker, &valuesOfAttackPositions]() {
-            const auto bestPositionIter = std::max_element( valuesOfAttackPositions.begin(), valuesOfAttackPositions.end(),
-                                                            []( const std::pair<Position, int32_t> & item1, const std::pair<Position, int32_t> & item2 ) {
-                                                                return item1.second < item2.second;
-                                                            } );
-            if ( bestPositionIter == valuesOfAttackPositions.end() ) {
-                return attacker.GetPosition();
-            }
-
-            const auto attackerPositionIter = valuesOfAttackPositions.find( attacker.GetPosition() );
-            if ( attackerPositionIter == valuesOfAttackPositions.end() ) {
-                return bestPositionIter->first;
-            }
-
-            assert( bestPositionIter->second >= attackerPositionIter->second );
-
-            // If the attacker's current position is rated no worse than the best position (i.e., there are several positions with the maximum value, and the attacker's
-            // current position is one of such positions), then there is no point in changing it
-            if ( bestPositionIter->second == attackerPositionIter->second ) {
-                return attackerPositionIter->first;
-            }
-
-            return bestPositionIter->first;
-        }();
-
         std::vector<Position> aroundDefender;
         aroundDefender.reserve( valuesOfAttackPositions.size() );
 
@@ -346,9 +321,9 @@ namespace AI
             aroundDefender.push_back( pos );
         }
 
-        // Prefer the positions closest to the best position
-        std::sort( aroundDefender.begin(), aroundDefender.end(), [&bestPosition]( const Position & pos1, const Position & pos2 ) {
-            return ( Board::GetDistance( bestPosition, pos1 ) < Board::GetDistance( bestPosition, pos2 ) );
+        // Prefer the positions closest to the current attacker's position
+        std::sort( aroundDefender.begin(), aroundDefender.end(), [&attacker]( const Position & pos1, const Position & pos2 ) {
+            return ( Board::GetDistance( attacker.GetPosition(), pos1 ) < Board::GetDistance( attacker.GetPosition(), pos2 ) );
         } );
 
         // Pick the best position to attack from
