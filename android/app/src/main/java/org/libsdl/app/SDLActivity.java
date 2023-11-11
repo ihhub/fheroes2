@@ -286,33 +286,6 @@ public class SDLActivity extends WallpaperService implements View.OnSystemUiVisi
         return result;
     }
 
-    // FIXME
-//    @Override
-//    public void onWindowFocusChanged(boolean hasFocus) {
-//        super.onWindowFocusChanged(hasFocus);
-//        Log.v(TAG, "onWindowFocusChanged(): " + hasFocus);
-//
-//        if (SDLActivity.mBrokenLibraries) {
-//           return;
-//        }
-//
-//        mHasFocus = hasFocus;
-//        if (hasFocus) {
-//           mNextNativeState = NativeState.RESUMED;
-//           SDLActivity.getMotionListener().reclaimRelativeMouseModeIfNeeded();
-//
-//           SDLActivity.handleNativeState();
-//           nativeFocusChanged(true);
-//
-//        } else {
-//           nativeFocusChanged(false);
-//           if (!mHasMultiWindow) {
-//               mNextNativeState = NativeState.PAUSED;
-//               SDLActivity.handleNativeState();
-//           }
-//        }
-//    }
-
     @Override
     public void onLowMemory() {
         Log.v(TAG, "onLowMemory()");
@@ -350,11 +323,6 @@ public class SDLActivity extends WallpaperService implements View.OnSystemUiVisi
         }
 
         if (SDLActivity.mSDLThread != null) {
-
-            // Send Quit event to "SDLThread" thread
-            SDLActivity.nativeQuit();
-
-            // Wait for "SDLThread" thread to end
             try {
                 SDLActivity.mSDLThread.join();
             } catch (Exception e) {
@@ -428,6 +396,7 @@ public class SDLActivity extends WallpaperService implements View.OnSystemUiVisi
         public void onDestroy() {
             Log.v(TAG, "onDestroy");
         }
+
         @Override
         public SurfaceHolder getSurfaceHolder() {
             Log.v(TAG, "Engine getSurfaceHolder");
@@ -496,6 +465,8 @@ public class SDLActivity extends WallpaperService implements View.OnSystemUiVisi
                 // FIXME find way to correctly close prev thread and start new one
                 // tid 19982: swapBuffers(681): error 0x300d (EGL_BAD_SURFACE)
                 // egl_window_surface_t::swapBuffers called with NULL buffer
+
+                Log.v(TAG, "kill process");
 
                 // TODO crash can cause restart?
                 Process.killProcess(Process.myPid());
@@ -585,15 +556,8 @@ public class SDLActivity extends WallpaperService implements View.OnSystemUiVisi
                 Log.v("SDL", "NativeState.RESUMED 1");
                 if (mSDLThread == null) {
                     Log.v("SDL", "NativeState.RESUMED 2");
-                    // This is the entry point to the C app.
-                    // Start up the C app thread and enable sensor input for the first time
-                    // FIXME: Why aren't we enabling sensor input at start?
-
                     mSDLThread = new Thread(new SDLMain(), "SDLThread");
-//                    mSurface.enableSensor(Sensor.TYPE_ACCELEROMETER, true);
                     mSDLThread.start();
-
-                    // No nativeResume(), don't signal Android_ResumeSem
                 } else {
                     nativeResume();
                 }
@@ -663,65 +627,6 @@ public class SDLActivity extends WallpaperService implements View.OnSystemUiVisi
     // Send a message from the SDLMain thread
     boolean sendCommand(int command, Object data) {
         return true;
-
-        /*Message msg = commandHandler.obtainMessage();
-        msg.arg1 = command;
-        msg.obj = data;
-        boolean result = commandHandler.sendMessage(msg);
-
-        if (Build.VERSION.SDK_INT >= 19) {
-            if (command == COMMAND_CHANGE_WINDOW_STYLE) {
-                // Ensure we don't return until the resize has actually happened,
-                // or 500ms have passed.
-
-                boolean bShouldWait = false;
-
-                if (data instanceof Integer) {
-                    // Let's figure out if we're already laid out fullscreen or not.
-                    Display display = ((WindowManager) getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
-                    DisplayMetrics realMetrics = new DisplayMetrics();
-                    display.getRealMetrics(realMetrics);
-
-                    boolean bFullscreenLayout = ((realMetrics.widthPixels == mSurface.getWidth()) &&
-                        (realMetrics.heightPixels == mSurface.getHeight()));
-
-                    if ((Integer) data == 1) {
-                        // If we aren't laid out fullscreen or actively in fullscreen mode already, we're going
-                        // to change size and should wait for surfaceChanged() before we return, so the size
-                        // is right back in native code.  If we're already laid out fullscreen, though, we're
-                        // not going to change size even if we change decor modes, so we shouldn't wait for
-                        // surfaceChanged() -- which may not even happen -- and should return immediately.
-                        bShouldWait = !bFullscreenLayout;
-                    } else {
-                        // If we're laid out fullscreen (even if the status bar and nav bar are present),
-                        // or are actively in fullscreen, we're going to change size and should wait for
-                        // surfaceChanged before we return, so the size is right back in native code.
-                        bShouldWait = bFullscreenLayout;
-                    }
-                }
-
-                if (bShouldWait && (SDLActivity.getContext() != null)) {
-                    // We'll wait for the surfaceChanged() method, which will notify us
-                    // when called.  That way, we know our current size is really the
-                    // size we need, instead of grabbing a size that's still got
-                    // the navigation and/or status bars before they're hidden.
-                    //
-                    // We'll wait for up to half a second, because some devices
-                    // take a surprisingly long time for the surface resize, but
-                    // then we'll just give up and return.
-                    //
-                    synchronized (SDLActivity.getContext()) {
-                        try {
-                            SDLActivity.getContext().wait(500);
-                        } catch (InterruptedException ie) {
-                            ie.printStackTrace();
-                        }
-                    }
-                }
-            }
-        }
-
-        return result;*/
     }
 
     // C functions we call
@@ -1148,51 +1053,11 @@ public class SDLActivity extends WallpaperService implements View.OnSystemUiVisi
         final String[] buttonTexts,
         final int[] colors) {
 
-        messageboxSelection[0] = -1;
+        Log.v(TAG, "messageboxShowMessageBox");
+        Log.v(TAG, title);
+        Log.v(TAG, message);
 
-        // sanity checks
-
-        if ((buttonFlags.length != buttonIds.length) && (buttonIds.length != buttonTexts.length)) {
-            return -1; // implementation broken
-        }
-
-        // collect arguments for Dialog
-
-        final Bundle args = new Bundle();
-        args.putInt("flags", flags);
-        args.putString("title", title);
-        args.putString("message", message);
-        args.putIntArray("buttonFlags", buttonFlags);
-        args.putIntArray("buttonIds", buttonIds);
-        args.putStringArray("buttonTexts", buttonTexts);
-        args.putIntArray("colors", colors);
-
-        // trigger Dialog creation on UI thread
-
-//        runOnUiThread(new Runnable() {
-//            @Override
-//            public void run() {
-//                messageboxCreateAndShow(args);
-//            }
-//        });
-
-        // block the calling thread
-
-        synchronized (messageboxSelection) {
-            try {
-                messageboxSelection.wait();
-            } catch (InterruptedException ex) {
-                ex.printStackTrace();
-                return -1;
-            }
-        }
-
-        // return selected value
-
-        return messageboxSelection[0];
-    }
-
-    protected void messageboxCreateAndShow(Bundle args) {
+       return 0;
     }
 
     private final Runnable rehideSystemUi = new Runnable() {
@@ -1212,15 +1077,6 @@ public class SDLActivity extends WallpaperService implements View.OnSystemUiVisi
     };
 
     public void onSystemUiVisibilityChange(int visibility) {
-        if (SDLActivity.mFullscreenModeActive && ((visibility & View.SYSTEM_UI_FLAG_FULLSCREEN) == 0 || (visibility & View.SYSTEM_UI_FLAG_HIDE_NAVIGATION) == 0)) {
-
-//            Handler handler = getWindow().getDecorView().getHandler();
-//            if (handler != null) {
-//                handler.removeCallbacks(rehideSystemUi); // Prevent a hide loop.
-//                handler.postDelayed(rehideSystemUi, 2000);
-//            }
-
-        }
     }
 
     /**
@@ -1331,9 +1187,6 @@ public class SDLActivity extends WallpaperService implements View.OnSystemUiVisi
     }
 }
 
-/**
- * Simple runnable to start the SDL application
- */
 class SDLMain implements Runnable {
     @Override
     public void run() {
