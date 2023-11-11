@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-11-09 20:42+0000\n"
-"PO-Revision-Date: 2023-10-12 20:05+0200\n"
+"PO-Revision-Date: 2023-11-10 14:21+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "Language: sv\n"
@@ -3322,9 +3322,8 @@ msgstr "Välj Monster:"
 msgid "Select Hero:"
 msgstr "Välj Hjälte:"
 
-#, fuzzy
 msgid "Select Treasure:"
-msgstr "Välj Hjälte:"
+msgstr "Välj Skatt:"
 
 msgid "Map Type:\n"
 msgstr "Karttyp:\n"
@@ -3642,9 +3641,8 @@ msgstr "Välj en ruta som inte har några objekt."
 msgid "Treasure"
 msgstr "Skatt"
 
-#, fuzzy
 msgid "Treasures cannot be placed on water."
-msgstr "Hjältar kan inte placeras på vatten."
+msgstr "Skatter kan inte placeras på vatten."
 
 msgid "Heroes"
 msgstr "Hjältar"
@@ -3655,9 +3653,8 @@ msgstr "Hjältar kan inte placeras på vatten."
 msgid "Artifacts"
 msgstr "Artefakter"
 
-#, fuzzy
 msgid "Artifacts cannot be placed on water."
-msgstr "Hjältar kan inte placeras på vatten."
+msgstr "Artefakter kan inte placeras på vatten."
 
 msgid "Ocean Objects"
 msgstr "Havsföremål"
@@ -10229,7 +10226,7 @@ msgstr ""
 "vara förlorad."
 
 msgid "spellBonus|selected by user"
-msgstr ""
+msgstr "vald av spelaren"
 
 msgid "Wood"
 msgstr "Trä"
@@ -10754,43 +10751,41 @@ msgstr "Placera Vattenväktare"
 msgid "Sets Water Elementals to guard a mine against enemy armies."
 msgstr "Placerar Vattenväsen att vakta en gruva mot fiendearméer."
 
-#, fuzzy
 msgid "Random Spell"
-msgstr "Slumpad"
+msgstr "Slumpad Besvärjelse"
 
 msgid "Randomly selected spell of any level."
-msgstr ""
+msgstr "Slumpmässigt vald besvärjelse från alla nivåer."
 
-#, fuzzy
 msgid "Random 1st Level Spell"
-msgstr "Slumpat Slott"
+msgstr "Slumpad Nivå 1-Besvärjelse"
 
 msgid "Randomly selected 1st level spell."
-msgstr ""
+msgstr "Slumpmässigt vald nivå 1-besvärjelse."
 
 msgid "Random 2nd Level Spell"
-msgstr ""
+msgstr "Slumpad Nivå 2-Besvärjelse"
 
 msgid "Randomly selected 2nd level spell."
-msgstr ""
+msgstr "Slumpmässigt vald nivå 2-besvärjelse."
 
 msgid "Random 3rd Level Spell"
-msgstr ""
+msgstr "Slumpad Nivå 3-Besvärjelse"
 
 msgid "Randomly selected 3rd level spell."
-msgstr ""
+msgstr "Slumpmässigt vald nivå 3-besvärjelse."
 
 msgid "Random 4th Level Spell"
-msgstr ""
+msgstr "Slumpad Nivå 4-Besvärjelse"
 
 msgid "Randomly selected 4th level spell."
-msgstr ""
+msgstr "Slumpmässigt vald nivå 4-besvärjelse."
 
 msgid "Random 5th Level Spell"
-msgstr ""
+msgstr "Slumpad Nivå 5-Besvärjelse"
 
 msgid "Randomly selected 5th level spell."
-msgstr ""
+msgstr "Slumpmässigt vald nivå 5-besvärjelse."
 
 msgid "Petrification"
 msgstr "Förstening"
