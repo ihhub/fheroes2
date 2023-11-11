@@ -2176,9 +2176,10 @@ bool Castle::HasSeaAccess() const
             return true;
         }
 
-        // If this is an action object and it can be removed then it is possible to put a boat here.
+        // If this is a shadow or an action object and it can be removed then it is possible to put a boat here.
         const MP2::MapObjectType objectType = tile.GetObject();
-        return MP2::isPickupObject( objectType ) || objectType == MP2::OBJ_BOAT;
+        return MP2::isPickupObject( objectType ) || objectType == MP2::OBJ_BOAT
+               || ( objectType == MP2::OBJ_NONE && tile.getLayerType() == Maps::ObjectLayerType::SHADOW_LAYER );
     };
 
     const int32_t index = Maps::GetIndexFromAbsPoint( possibleSeaTile.x, possibleSeaTile.y );
