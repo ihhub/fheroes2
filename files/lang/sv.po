@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-08 19:09+0000\n"
-"PO-Revision-Date: 2023-10-12 20:05+0200\n"
+"POT-Creation-Date: 2023-11-09 20:42+0000\n"
+"PO-Revision-Date: 2023-11-10 14:21+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "Language: sv\n"
@@ -1284,9 +1284,8 @@ msgstr "Förräderiet"
 msgid "Corruption's Heart"
 msgstr "Korruptionens Hjärta"
 
-#, fuzzy
 msgid "The Giant's Pass"
-msgstr "Kungligt avfall"
+msgstr "Jättens Pass"
 
 msgid ""
 "Subdue the unruly local lords in order to provide the Empire with facilities "
@@ -1434,9 +1433,8 @@ msgstr ""
 msgid "Fount of Wizardry"
 msgstr "Trollkonstens Källa"
 
-#, fuzzy
 msgid "Power's End"
-msgstr "Effekt"
+msgstr "Maktens Slut"
 
 msgid "The Eternal Scrolls"
 msgstr "De Eviga Rullarna"
@@ -1460,7 +1458,6 @@ msgstr ""
 "Det stora Bibliotekets plats har upptäckts. Du måste nå fram till det och "
 "återta staden Chronos som det ligger i."
 
-#, fuzzy
 msgid ""
 "Find the Orb of negation, which is said to be buried in this land. There are "
 "clues inscribed on stone obelisks which will help lead you to your prize. "
@@ -1469,7 +1466,7 @@ msgid ""
 msgstr ""
 "Hitta Upphävningsklotet som sägs vara begravet någonstans i detta land. Det "
 "finns ledtrådar inristade på stenobelisker som kan hjälpa dig finna det. "
-"Hitta klotet innan första dagen på den sjätte månaden, annars lär dina "
+"Hitta Klotet innan första dagen på den sjätte månaden, annars lär dina "
 "rivaler ha hittat det före dig."
 
 msgid ""
@@ -1526,7 +1523,7 @@ msgid " alliance"
 msgstr "allians"
 
 msgid "Carry-over forces"
-msgstr ""
+msgstr "Medföljande Styrkor"
 
 msgid " bonus"
 msgstr " bonus"
@@ -2818,7 +2815,7 @@ msgid "MIDI Expansion"
 msgstr "MIDI-expansion"
 
 msgid "External"
-msgstr ""
+msgstr "Extern"
 
 msgid "Music Type"
 msgstr "Musiktyp"
@@ -3061,7 +3058,7 @@ msgid "Toggle the type of interface you want to use."
 msgstr "Välj vilket gränssnitt du vill använda."
 
 msgid "Toggle interface visibility."
-msgstr ""
+msgstr "Aktivera gränssnittsynlighet"
 
 msgid "Toggle colored cursor on or off. This is only an esthetic choice."
 msgstr "Välj färglagd eller svartvit muspekare."
@@ -3254,7 +3251,7 @@ msgid "Open Virtual Keyboard"
 msgstr "Öppna virtuellt tangentbord."
 
 msgid "How many troops to move?"
-msgstr "Antal trupper som flyttas?"
+msgstr "Antal trupper att flytta?"
 
 msgid "Fast separation into slots:"
 msgstr "Snabbseparering till platser:"
@@ -3325,9 +3322,8 @@ msgstr "Välj Monster:"
 msgid "Select Hero:"
 msgstr "Välj Hjälte:"
 
-#, fuzzy
 msgid "Select Treasure:"
-msgstr "Välj Hjälte:"
+msgstr "Välj Skatt:"
 
 msgid "Map Type:\n"
 msgstr "Karttyp:\n"
@@ -3375,7 +3371,7 @@ msgid "Map difficulty:"
 msgstr "Kartsvårighet:"
 
 msgid "N"
-msgstr ""
+msgstr "N"
 
 msgid "No maps exist at that size"
 msgstr "Finns inga kartor av den storleken"
@@ -3645,9 +3641,8 @@ msgstr "Välj en ruta som inte har några objekt."
 msgid "Treasure"
 msgstr "Skatt"
 
-#, fuzzy
 msgid "Treasures cannot be placed on water."
-msgstr "Hjältar kan inte placeras på vatten."
+msgstr "Skatter kan inte placeras på vatten."
 
 msgid "Heroes"
 msgstr "Hjältar"
@@ -3658,9 +3653,8 @@ msgstr "Hjältar kan inte placeras på vatten."
 msgid "Artifacts"
 msgstr "Artefakter"
 
-#, fuzzy
 msgid "Artifacts cannot be placed on water."
-msgstr "Hjältar kan inte placeras på vatten."
+msgstr "Artefakter kan inte placeras på vatten."
 
 msgid "Ocean Objects"
 msgstr "Havsföremål"
@@ -3695,21 +3689,17 @@ msgstr "Städer"
 msgid "Treasures"
 msgstr "Skatter"
 
-#, fuzzy
 msgid "Terrain"
-msgstr "Terrängläge"
+msgstr "Terräng"
 
-#, fuzzy
 msgid "Castles"
 msgstr "Slott"
 
-#, fuzzy
 msgid "Roads"
-msgstr "Väg"
+msgstr "Vägar"
 
-#, fuzzy
 msgid "Streams"
-msgstr "Älvläge"
+msgstr "Floder"
 
 msgid ""
 "Draws terrain in\n"
@@ -3757,7 +3747,7 @@ msgid "Traversable only by boat."
 msgstr "Endast farbar med skepp."
 
 msgid "No special modifiers."
-msgstr ""
+msgstr "Ger inget förflyttningsstraff."
 
 msgid "Used to place objects most appropriate for use on %{terrain}."
 msgstr "Används för att placera de lämpligare objekten för %{terrain}."
@@ -3784,19 +3774,25 @@ msgid ""
 msgstr "Används för att placera en resurs eller skatt."
 
 msgid "Toggle the erasure of %{type} objects."
-msgstr ""
+msgstr "Aktivera raderingen av %{type}objekt."
 
 msgid ""
 "Objects of this type will be deleted with the Erase tool. Left-click here to "
 "deselect this type. Press and hold this button to deselect all other object "
 "types."
 msgstr ""
+"Objekt av denna typ kommer raderas med Raderingsverktyget. Vänsterklicka här "
+"för att avmarkera denna objekttyp. Tryck och håll denna knapp för att "
+"avmarkera alla andra objekttyper."
 
 msgid ""
 "Objects of this type will NOT be deleted with the Erase tool. Left-click "
 "here to select this type. Press and hold this button to select all other "
 "object types."
 msgstr ""
+"Objekt av denna typ kommer INTE att raderas med Raderingsverktyget. "
+"Vänsterklicka här för att markera denna objekttyp. Tryck och håll denna "
+"knapp för att markera alla andra objektyper."
 
 msgid "Terrain Mode"
 msgstr "Terrängläge"
@@ -3820,7 +3816,7 @@ msgid "Allows you to draw streams by clicking and dragging."
 msgstr "Används för att dra älvar genom att klicka och dra."
 
 msgid "Stream Mode"
-msgstr "Älvläge"
+msgstr "Flodläge"
 
 msgid "Allows you to draw roads by clicking and dragging."
 msgstr "Används för att dra vägar genom att klicka och dra."
@@ -3831,9 +3827,8 @@ msgstr "Vägläge"
 msgid "Erase Mode"
 msgstr "Raderarläge"
 
-#, fuzzy
 msgid "Used to erase objects from the map."
-msgstr "Använda för att radera föremål från kartan."
+msgstr "Används för att radera föremål från kartan."
 
 msgid "Change between zoom and normal view."
 msgstr "Ändra mellan inzoomad vy eller normal vy."
@@ -3845,7 +3840,7 @@ msgid "Undo"
 msgstr "Ångra"
 
 msgid "Undo your last action."
-msgstr ""
+msgstr "Ångra din sista åtgärd."
 
 msgid "Create a new map either from scratch or using the random map generator."
 msgstr "Skapa en ny blank karta eller en slumpad karta med kartgeneratorn."
@@ -4403,10 +4398,10 @@ msgid "hotkey|kingdom summary"
 msgstr "Rikessammanfattning"
 
 msgid "hotkey|default action"
-msgstr ""
+msgstr "Standardåtgärd"
 
 msgid "hotkey|open focus"
-msgstr ""
+msgstr "Öppna markerat"
 
 msgid "hotkey|system options"
 msgstr "Systeminställningar"
@@ -4601,7 +4596,6 @@ msgstr "Var Hälsad!"
 msgid "Welcome to Heroes of Might and Magic II powered by fheroes2 engine!"
 msgstr "Välkommen till Heroes of Might and Magic II genom fheroes2 spelmotor!"
 
-#, fuzzy
 msgid ""
 "Welcome to Heroes of Might and Magic II powered by the fheroes2 engine!\n"
 "Before starting the game please select a game resolution."
@@ -4612,22 +4606,22 @@ msgstr ""
 msgid "Please Remember"
 msgstr "Kom ihåg"
 
-#, fuzzy
 msgid ""
 "You can always change the language, resolution and settings of the game by "
 "clicking on the "
-msgstr "Du kan alltid ändra spelupplösning genom att klicka på "
+msgstr ""
+"Du kan alltid ändra språk, spelupplösning och inställningar genom att klicka "
+"på "
 
 msgid "door"
 msgstr "dörren"
 
 msgid " on the left side of the Main Menu, or with the "
-msgstr ""
+msgstr " vid vänster om huvudmenyn eller med "
 
 msgid " button from the "
-msgstr ""
+msgstr " knappen i "
 
-#, fuzzy
 msgid "NEW GAME"
 msgstr ""
 "NYTT\n"
@@ -4638,6 +4632,8 @@ msgid ""
 "\n"
 "Enjoy the game!"
 msgstr ""
+" menyn. \n"
+"Spela på!"
 
 msgid "Editor"
 msgstr "Redigerare"
@@ -4916,7 +4912,7 @@ msgid "%{color} player has been vanquished!"
 msgstr "%{color} har blivit besegrad!"
 
 msgid "Major Event!"
-msgstr ""
+msgstr "Stor Händelse!"
 
 msgid "Scenario:"
 msgstr "Scenario:"
@@ -5108,6 +5104,9 @@ msgid ""
 "Start the Hero's movement along the current path or re-visit the object "
 "occupied by the Hero. Press and hold this button to reset the Hero's path."
 msgstr ""
+"Påbörja Hjältens förflyttning längs den givna vägsträckan eller återbesök "
+"ett objekt som Hjälten står vid. Tryck och håll denna knapp för att "
+"återställa Hjältens vägsträckning."
 
 msgid "Kingdom Summary"
 msgstr "Rikessammanfattning"
@@ -7117,17 +7116,17 @@ msgstr ""
 msgid "%{name1} meets %{name2}"
 msgstr "%{name1} möter %{name2}"
 
-msgid "Town Portal"
-msgstr "Stadsportal"
-
-msgid "Select town to port to."
-msgstr "Välj stad att teleportera till."
-
 msgid "Enemy heroes are now fully identifiable."
 msgstr "Fiendehjältar är nu fullt identifierade."
 
 msgid "Identify Hero"
 msgstr "Identifiera Hjälte"
+
+msgid "Select town to port to."
+msgstr "Välj stad att teleportera till."
+
+msgid "Town Portal"
+msgstr "Stadsportal"
 
 msgid "The creatures are willing to join us!"
 msgstr "Varelserna är villiga att följa med oss!"
@@ -9905,9 +9904,8 @@ msgstr "%{name}en låter hjälten att kasta besvärjelser."
 msgid "Dummy 1"
 msgstr "Atrapp 1"
 
-#, fuzzy
 msgid "The reserved artifact."
-msgstr " med en artefakt."
+msgstr "Reseverad artefakt."
 
 msgid "Dummy 2"
 msgstr "Atrapp 2"
@@ -10228,7 +10226,7 @@ msgstr ""
 "vara förlorad."
 
 msgid "spellBonus|selected by user"
-msgstr ""
+msgstr "vald av spelaren"
 
 msgid "Wood"
 msgstr "Trä"
@@ -10753,43 +10751,41 @@ msgstr "Placera Vattenväktare"
 msgid "Sets Water Elementals to guard a mine against enemy armies."
 msgstr "Placerar Vattenväsen att vakta en gruva mot fiendearméer."
 
-#, fuzzy
 msgid "Random Spell"
-msgstr "Slumpad"
+msgstr "Slumpad Besvärjelse"
 
 msgid "Randomly selected spell of any level."
-msgstr ""
+msgstr "Slumpmässigt vald besvärjelse från alla nivåer."
 
-#, fuzzy
 msgid "Random 1st Level Spell"
-msgstr "Slumpat Slott"
+msgstr "Slumpad Nivå 1-Besvärjelse"
 
 msgid "Randomly selected 1st level spell."
-msgstr ""
+msgstr "Slumpmässigt vald nivå 1-besvärjelse."
 
 msgid "Random 2nd Level Spell"
-msgstr ""
+msgstr "Slumpad Nivå 2-Besvärjelse"
 
 msgid "Randomly selected 2nd level spell."
-msgstr ""
+msgstr "Slumpmässigt vald nivå 2-besvärjelse."
 
 msgid "Random 3rd Level Spell"
-msgstr ""
+msgstr "Slumpad Nivå 3-Besvärjelse"
 
 msgid "Randomly selected 3rd level spell."
-msgstr ""
+msgstr "Slumpmässigt vald nivå 3-besvärjelse."
 
 msgid "Random 4th Level Spell"
-msgstr ""
+msgstr "Slumpad Nivå 4-Besvärjelse"
 
 msgid "Randomly selected 4th level spell."
-msgstr ""
+msgstr "Slumpmässigt vald nivå 4-besvärjelse."
 
 msgid "Random 5th Level Spell"
-msgstr ""
+msgstr "Slumpad Nivå 5-Besvärjelse"
 
 msgid "Randomly selected 5th level spell."
-msgstr ""
+msgstr "Slumpmässigt vald nivå 5-besvärjelse."
 
 msgid "Petrification"
 msgstr "Förstening"

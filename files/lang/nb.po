@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-08 19:09+0000\n"
+"POT-Creation-Date: 2023-11-09 03:47+0000\n"
 "PO-Revision-Date: 2023-09-03 18:42+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -7238,17 +7238,17 @@ msgstr ""
 msgid "%{name1} meets %{name2}"
 msgstr "%{name1} møter %{name2}"
 
-msgid "Town Portal"
-msgstr "Byportal"
-
-msgid "Select town to port to."
-msgstr "Velg by å reise til."
-
 msgid "Enemy heroes are now fully identifiable."
 msgstr "De fiendtlige heltene er nå helt kartlagte."
 
 msgid "Identify Hero"
 msgstr "Kartlegg helt"
+
+msgid "Select town to port to."
+msgstr "Velg by å reise til."
+
+msgid "Town Portal"
+msgstr "Byportal"
 
 msgid "The creatures are willing to join us!"
 msgstr "Krigerne er villige til å slå seg til oss!"

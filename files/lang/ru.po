@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-08 19:09+0000\n"
+"POT-Creation-Date: 2023-11-09 03:47+0000\n"
 "PO-Revision-Date: 2023-10-10 06:12+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -7109,17 +7109,17 @@ msgstr ""
 msgid "%{name1} meets %{name2}"
 msgstr "%{name1} встретил %{name2}"
 
-msgid "Town Portal"
-msgstr "Портал города"
-
-msgid "Select town to port to."
-msgstr "Выберите, куда перенестись."
-
 msgid "Enemy heroes are now fully identifiable."
 msgstr "Все вражеские Герои опознаны."
 
 msgid "Identify Hero"
 msgstr "Опознать героя"
+
+msgid "Select town to port to."
+msgstr "Выберите, куда перенестись."
+
+msgid "Town Portal"
+msgstr "Портал города"
 
 msgid "The creatures are willing to join us!"
 msgstr "Эта армия монстров будет присоединяться!"
