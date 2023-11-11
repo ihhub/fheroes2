@@ -243,12 +243,14 @@ namespace AI
                     const uint32_t dist = Board::GetDistance( pos, enemyUnit->GetPosition() );
                     assert( dist > 0 );
 
-                    // If position is not close to the enemy unit under consideration, then skip it
                     if ( dist != 1 ) {
                         continue;
                     }
 
-                    // If position is a duplicate of an already considered position, then skip it
+                    if ( !arena.isPositionReachable( attacker, pos, false ) ) {
+                        continue;
+                    }
+
                     const auto [dummy, inserted] = processedPositions.insert( pos );
                     if ( !inserted ) {
                         continue;
@@ -311,10 +313,6 @@ namespace AI
             assert( dist > 0 );
 
             if ( dist != 1 ) {
-                continue;
-            }
-
-            if ( !arena.isPositionReachable( attacker, pos, false ) ) {
                 continue;
             }
 
