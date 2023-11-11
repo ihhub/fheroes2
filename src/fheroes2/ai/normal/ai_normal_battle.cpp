@@ -328,32 +328,41 @@ namespace AI
             return bestPositionIter->first;
         }();
 
-        Indexes aroundDefender = Board::GetAroundIndexes( defender );
+        std::vector<Position> aroundDefender;
+        aroundDefender.reserve( positionValues.size() );
 
-        // Prefer the cells closest to the best position
-        std::sort( aroundDefender.begin(), aroundDefender.end(), [&bestPosition]( const int32_t idx1, const int32_t idx2 ) {
-            return ( Board::GetDistance( bestPosition, idx1 ) < Board::GetDistance( bestPosition, idx2 ) );
-        } );
+        for ( const auto & [pos, dummy] : positionValues ) {
+            if ( Board::GetDistance( pos, defender.GetPosition() ) > 1 ) {
+                continue;
+            }
 
-        // Check if we can reach the target and pick best position to attack from
-        for ( const int32_t nearbyIdx : aroundDefender ) {
-            const Position pos = Position::GetPosition( attacker, nearbyIdx );
             if ( !arena.isPositionReachable( attacker, pos, false ) ) {
                 continue;
             }
 
-            assert( pos.GetHead() != nullptr && ( !attacker.isWide() || pos.GetTail() != nullptr ) );
+            aroundDefender.push_back( pos );
+        }
 
+        // Prefer the positions closest to the best position
+        std::sort( aroundDefender.begin(), aroundDefender.end(), [&bestPosition]( const Position & pos1, const Position & pos2 ) {
+            return ( Board::GetDistance( bestPosition, pos1 ) < Board::GetDistance( bestPosition, pos2 ) );
+        } );
+
+        // Check if we can reach the target and pick best position to attack from
+        for ( const Position & pos : aroundDefender ) {
+            assert( pos.GetHead() != nullptr );
+
+            const int32_t posHeadIdx = pos.GetHead()->GetIndex();
             const auto posValueIter = positionValues.find( pos );
 
             MeleeAttackOutcome current;
             current.attackValue = optimalAttackValue( arena, attacker, defender, pos );
             current.positionValue = ( posValueIter != positionValues.end() ? posValueIter->second : 0 );
-            current.canAttackImmediately = Board::CanAttackTargetFromPosition( attacker, defender, nearbyIdx );
+            current.canAttackImmediately = Board::CanAttackTargetFromPosition( attacker, defender, posHeadIdx );
 
             // Pick target if either position has improved or unit is higher value at the same position value
             if ( IsOutcomeImproved( current, bestOutcome ) ) {
-                bestOutcome.fromIndex = nearbyIdx;
+                bestOutcome.fromIndex = posHeadIdx;
                 bestOutcome.attackValue = current.attackValue;
                 bestOutcome.positionValue = current.positionValue;
                 bestOutcome.canAttackImmediately = current.canAttackImmediately;
