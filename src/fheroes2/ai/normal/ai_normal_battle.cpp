@@ -26,6 +26,7 @@
 #include <cstdint>
 #include <map>
 #include <memory>
+#include <numeric>
 #include <ostream>
 #include <set>
 #include <string>
@@ -102,25 +103,6 @@ namespace AI
         return 0;
     }
 
-    int32_t optimalAttackTarget( const Unit & attacker, const Unit & target, const int32_t from )
-    {
-        assert( Board::GetDistance( target.GetPosition(), from ) == 1 );
-
-        const int32_t headIndex = target.GetHeadIndex();
-        const int32_t tailIndex = target.GetTailIndex();
-
-        if ( !Board::isNearIndexes( from, tailIndex ) ) {
-            return headIndex;
-        }
-
-        if ( attacker.isDoubleCellAttack() && Board::isNearIndexes( from, headIndex )
-             && doubleCellAttackValue( attacker, target, from, headIndex ) > doubleCellAttackValue( attacker, target, from, tailIndex ) ) {
-            return headIndex;
-        }
-
-        return tailIndex;
-    }
-
     std::pair<int32_t, int> optimalAttackVector( const Unit & attacker, const Unit & target, const Position & attackPos )
     {
         assert( attackPos.GetHead() != nullptr && Board::CanAttackTargetFromPosition( attacker, target, attackPos.GetHead()->GetIndex() ) );
@@ -170,39 +152,36 @@ namespace AI
         return bestAttackVector;
     }
 
-    int32_t optimalAttackValue( const Unit & attacker, const Unit & target, const int32_t from )
+    int32_t optimalAttackValue( const Unit & attacker, const Unit & target, const Position & attackPos )
     {
+        assert( attackPos.GetHead() != nullptr && ( !attacker.isWide() || attackPos.GetTail() != nullptr ) );
+
         if ( attacker.isDoubleCellAttack() ) {
-            const int32_t targetCell = optimalAttackTarget( attacker, target, from );
-            return target.evaluateThreatForUnit( attacker ) + doubleCellAttackValue( attacker, target, from, targetCell );
+            const auto [attackTargetIdx, attackDirection] = optimalAttackVector( attacker, target, attackPos );
+            assert( Board::isValidDirection( attackTargetIdx, Board::GetReflectDirection( attackDirection ) ) );
+
+            return target.evaluateThreatForUnit( attacker )
+                   + doubleCellAttackValue( attacker, target, Board::GetIndexDirection( attackTargetIdx, Board::GetReflectDirection( attackDirection ) ),
+                                            attackTargetIdx );
         }
 
         if ( attacker.isAllAdjacentCellsAttack() ) {
-            Position position = Position::GetPosition( attacker, from );
-
-            if ( position.GetHead() == nullptr || ( attacker.isWide() && position.GetTail() == nullptr ) ) {
-                DEBUG_LOG( DBG_BATTLE, DBG_WARN, "Invalid position for " << attacker.String() << ", target: " << target.String() << ", cell: " << from )
-
-                return 0;
-            }
-
-            Indexes aroundAttacker = Board::GetAroundIndexes( position );
+            const Board * board = Arena::GetBoard();
 
             std::set<const Unit *> unitsUnderAttack;
-            Board * board = Arena::GetBoard();
-            for ( const int32_t index : aroundAttacker ) {
+
+            for ( const int32_t index : Board::GetAroundIndexes( attackPos ) ) {
                 const Unit * unit = board->at( index ).GetUnit();
-                if ( unit != nullptr && unit->GetColor() != attacker.GetCurrentColor() ) {
-                    unitsUnderAttack.insert( unit );
+
+                if ( unit == nullptr || unit->GetColor() == attacker.GetCurrentColor() ) {
+                    continue;
                 }
+
+                unitsUnderAttack.insert( unit );
             }
 
-            int32_t attackValue = 0;
-            for ( const Unit * unit : unitsUnderAttack ) {
-                attackValue += unit->evaluateThreatForUnit( attacker );
-            }
-
-            return attackValue;
+            return std::accumulate( unitsUnderAttack.begin(), unitsUnderAttack.end(), static_cast<int32_t>( 0 ),
+                                    [&attacker]( const int32_t total, const Unit * unit ) { return total + unit->evaluateThreatForUnit( attacker ); } );
         }
 
         return target.evaluateThreatForUnit( attacker );
@@ -263,27 +242,7 @@ namespace AI
                         continue;
                     }
 
-                    const int32_t attackValue = [&attacker, enemyUnit, &pos]() {
-                        const int32_t posHeadIdx
-                            = ( pos.GetHead() && Board::GetDistance( enemyUnit->GetPosition(), pos.GetHead()->GetIndex() ) == 1 ? pos.GetHead()->GetIndex() : -1 );
-                        const int32_t posTailIdx
-                            = ( pos.GetTail() && Board::GetDistance( enemyUnit->GetPosition(), pos.GetTail()->GetIndex() ) == 1 ? pos.GetTail()->GetIndex() : -1 );
-
-                        if ( !Board::isValidIndex( posHeadIdx ) ) {
-                            assert( Board::isValidIndex( posTailIdx ) );
-
-                            return optimalAttackValue( attacker, *enemyUnit, posTailIdx );
-                        }
-
-                        if ( !Board::isValidIndex( posTailIdx ) ) {
-                            assert( Board::isValidIndex( posHeadIdx ) );
-
-                            return optimalAttackValue( attacker, *enemyUnit, posHeadIdx );
-                        }
-
-                        return std::max( optimalAttackValue( attacker, *enemyUnit, posHeadIdx ), optimalAttackValue( attacker, *enemyUnit, posTailIdx ) );
-                    }();
-
+                    const int32_t attackValue = optimalAttackValue( attacker, *enemyUnit, pos );
                     const auto iter = result.find( pos );
 
                     if ( iter == result.end() ) {
@@ -332,11 +291,36 @@ namespace AI
     {
         MeleeAttackOutcome bestOutcome;
 
+        const Position bestPosition = [&attacker, &positionValues]() {
+            const auto bestPositionIter = std::max_element( positionValues.begin(), positionValues.end(),
+                                                            []( const std::pair<Position, int32_t> & item1, const std::pair<Position, int32_t> & item2 ) {
+                                                                return item1.second < item2.second;
+                                                            } );
+            if ( bestPositionIter == positionValues.end() ) {
+                return attacker.GetPosition();
+            }
+
+            const auto attackerPositionIter = positionValues.find( attacker.GetPosition() );
+            if ( attackerPositionIter == positionValues.end() ) {
+                return bestPositionIter->first;
+            }
+
+            assert( bestPositionIter->second >= attackerPositionIter->second );
+
+            // If the attacker's current position is rated no worse than the best position (i.e., there are several positions with the maximum value, and the attacker's
+            // current position is one of such positions), then there is no point in changing it
+            if ( bestPositionIter->second == attackerPositionIter->second ) {
+                return attackerPositionIter->first;
+            }
+
+            return bestPositionIter->first;
+        }();
+
         Indexes aroundDefender = Board::GetAroundIndexes( defender );
 
-        // Prefer the cells closest to the attacker
-        std::sort( aroundDefender.begin(), aroundDefender.end(), [&attacker]( const int32_t idx1, const int32_t idx2 ) {
-            return ( Board::GetDistance( attacker.GetPosition(), idx1 ) < Board::GetDistance( attacker.GetPosition(), idx2 ) );
+        // Prefer the cells closest to the best position
+        std::sort( aroundDefender.begin(), aroundDefender.end(), [&bestPosition]( const int32_t idx1, const int32_t idx2 ) {
+            return ( Board::GetDistance( bestPosition, idx1 ) < Board::GetDistance( bestPosition, idx2 ) );
         } );
 
         // Check if we can reach the target and pick best position to attack from
@@ -351,7 +335,7 @@ namespace AI
             const auto posValueIter = positionValues.find( pos );
 
             MeleeAttackOutcome current;
-            current.attackValue = optimalAttackValue( attacker, defender, nearbyIdx );
+            current.attackValue = optimalAttackValue( attacker, defender, pos );
             current.positionValue = ( posValueIter != positionValues.end() ? posValueIter->second : 0 );
             current.canAttackImmediately = Board::CanAttackTargetFromPosition( attacker, defender, nearbyIdx );
 
