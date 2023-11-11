@@ -208,7 +208,6 @@ namespace AI
         return target.evaluateThreatForUnit( attacker );
     }
 
-    // Key is a potential unit position, value is the result of the evaluation of this position
     using PositionValues = std::map<Position, int32_t>;
 
     PositionValues evaluatePotentialAttackPositions( const Arena & arena, const Unit & attacker )
@@ -234,6 +233,14 @@ namespace AI
                     continue;
                 }
 
+                // Wide attacker can occupy positions from which it is able to block or attack several units at once, even if there are not one but two cells between
+                // these units, e.g. like this:
+                //
+                // | | | |U|
+                // | |A|A| |
+                // |U| | | |
+                //
+                // It is necessary to correctly evaluate such a position as a position located "nearby" in relation to both units.
                 for ( const int32_t idx : Board::GetDistanceIndexes( enemyUnitIdx, attacker.isWide() ? 2 : 1 ) ) {
                     const Position pos = Position::GetPosition( attacker, idx );
                     if ( pos.GetHead() == nullptr ) {
@@ -245,10 +252,12 @@ namespace AI
                     const uint32_t dist = Board::GetDistance( pos, enemyUnit->GetPosition() );
                     assert( dist > 0 );
 
+                    // If position is not close to the enemy unit under consideration, then skip it
                     if ( dist != 1 ) {
                         continue;
                     }
 
+                    // If position is a duplicate of an already considered position, then skip it
                     const auto [dummy, inserted] = processedPositions.insert( pos );
                     if ( !inserted ) {
                         continue;
