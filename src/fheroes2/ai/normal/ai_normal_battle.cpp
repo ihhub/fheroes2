@@ -254,6 +254,11 @@ namespace AI
                     if ( iter == result.end() ) {
                         result.try_emplace( pos, attackValue );
                     }
+                    // If attacker is able to attack all adjacent cells, then the values of all units in adjacent cells (including archers) have already been taken into
+                    // account
+                    else if ( attacker.isAllAdjacentCellsAttack() ) {
+                        assert( iter->second == attackValue );
+                    }
                     else if ( enemyUnit->isArchers() ) {
                         iter->second += attackValue;
                     }
