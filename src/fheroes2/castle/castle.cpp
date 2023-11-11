@@ -2248,7 +2248,8 @@ int32_t Castle::getTileIndexToPlaceBoat() const
 
         // Mark the tile as worthy to a place a boat if the main addon does not exist on this tile.
         // This means that all objects on this tile are not primary objects (like shadows or some parts of objects).
-        return ( tile.getObjectIcnType() == MP2::OBJ_ICN_TYPE_UNKNOWN );
+        return ( tile.getObjectIcnType() == MP2::OBJ_ICN_TYPE_UNKNOWN
+                 || ( tile.GetObject() == MP2::OBJ_NONE && tile.getLayerType() == Maps::ObjectLayerType::SHADOW_LAYER ) );
     };
 
     const int32_t index = Maps::GetIndexFromAbsPoint( possibleSeaTile.x, possibleSeaTile.y );
