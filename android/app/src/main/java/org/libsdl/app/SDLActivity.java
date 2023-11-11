@@ -166,7 +166,6 @@ public class SDLActivity extends WallpaperService implements View.OnSystemUiVisi
         return new SDLSurface(context);
     }
 
-    // Setup
     @Override
     public void onCreate() {
         Log.v(TAG, "Device: " + Build.DEVICE);
@@ -180,16 +179,11 @@ public class SDLActivity extends WallpaperService implements View.OnSystemUiVisi
             Log.v(TAG, "modify thread properties failed " + e.toString());
         }
 
-        // Load shared libraries
         String errorMsgBrokenLib = "";
         try {
             loadLibraries();
-            mBrokenLibraries = false; /* success */
-        } catch (UnsatisfiedLinkError e) {
-            System.err.println(e.getMessage());
-            mBrokenLibraries = true;
-            errorMsgBrokenLib = e.getMessage();
-        } catch (Exception e) {
+            mBrokenLibraries = false;
+        } catch (UnsatisfiedLinkError | Exception e) {
             System.err.println(e.getMessage());
             mBrokenLibraries = true;
             errorMsgBrokenLib = e.getMessage();
@@ -208,41 +202,20 @@ public class SDLActivity extends WallpaperService implements View.OnSystemUiVisi
 
         if (mBrokenLibraries) {
             mSingleton = this;
-            AlertDialog.Builder dlgAlert = new AlertDialog.Builder(this);
-            dlgAlert.setMessage("An error occurred while trying to start the application. Please try again and/or reinstall."
-                + System.getProperty("line.separator")
-                + System.getProperty("line.separator")
-                + "Error: " + errorMsgBrokenLib);
-            dlgAlert.setTitle("SDL Error");
-            dlgAlert.setPositiveButton("Exit",
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int id) {
-                        // if this button is clicked, close current activity
-//                        SDLActivity.mSingleton.finish();
-                    }
-                });
-            dlgAlert.setCancelable(false);
-            dlgAlert.create().show();
+            Log.e(TAG, "Broken library message: " + errorMsgBrokenLib);
             return;
         }
 
-        // Set up JNI
         SDL.setupJNI();
-
-        // Initialize state
         SDL.initialize();
 
         // So we can call stuff from static callbacks
         mSingleton = this;
         SDL.setContext(this);
 
-        // Set up the surface
         mSurface = createSDLSurface(getApplication());
 
-        // Get our current screen orientation and pass it down.
         mCurrentOrientation = SDLActivity.getCurrentOrientation();
-        // Only record current orientation
         SDLActivity.onNativeOrientationChanged(mCurrentOrientation);
 
         try {
@@ -255,16 +228,6 @@ public class SDLActivity extends WallpaperService implements View.OnSystemUiVisi
         }
 
         setWindowStyle(false);
-
-        // Get filename from "Open with" of another application
-        Intent intent = new Intent();
-        if (intent != null && intent.getData() != null) {
-            String filename = intent.getData().getPath();
-            if (filename != null) {
-                Log.v(TAG, "Got filename: " + filename);
-                SDLActivity.onNativeDropFile(filename);
-            }
-        }
     }
 
     protected void pauseNativeThread() {
@@ -290,48 +253,6 @@ public class SDLActivity extends WallpaperService implements View.OnSystemUiVisi
 
         SDLActivity.handleNativeState();
     }
-
-//    FIXME
-//    @Override
-//    protected void onPause() {
-//        Log.v(TAG, "onPause()");
-//        super.onPause();
-//
-//        if (!mHasMultiWindow) {
-//            pauseNativeThread();
-//        }
-//    }
-
-    //    FIXME
-//    @Override
-//    protected void onResume() {
-//        Log.v(TAG, "onResume()");
-//        super.onResume();
-//
-//        if (!mHasMultiWindow) {
-//            resumeNativeThread();
-//        }
-//    }
-
-    // FIXME
-//    @Override
-//    protected void onStop() {
-//        Log.v(TAG, "onStop()");
-//        super.onStop();
-//        if (mHasMultiWindow) {
-//            pauseNativeThread();
-//        }
-//    }
-
-    // FIXME
-//    @Override
-//    protected void onStart() {
-//        Log.v(TAG, "onStart()");
-//        super.onStart();
-//        if (mHasMultiWindow) {
-//            resumeNativeThread();
-//        }
-//    }
 
     public static int getCurrentOrientation() {
         int result = SDL_ORIENTATION_UNKNOWN;
