@@ -103,9 +103,10 @@ namespace AI
         return 0;
     }
 
-    std::pair<int32_t, int> optimalAttackVector( const Unit & attacker, const Unit & target, const Position & attackPos )
+    std::pair<int32_t, int> optimalAttackVector( const Unit & attacker, const Unit & target, const Position & attackPos, const bool checkAttackPossibility )
     {
-        assert( attackPos.GetHead() != nullptr && Board::CanAttackTargetFromPosition( attacker, target, attackPos.GetHead()->GetIndex() ) );
+        assert( attackPos.GetHead() != nullptr && ( !attacker.isWide() || attackPos.GetTail() != nullptr ) );
+        assert( !checkAttackPossibility || Board::CanAttackTargetFromPosition( attacker, target, attackPos.GetHead()->GetIndex() ) );
 
         const Position & targetPos = target.GetPosition();
 
@@ -122,7 +123,7 @@ namespace AI
 
             const int32_t attackCellIdx = attackCell->GetIndex();
 
-            if ( !Board::CanAttackFromCell( attacker, attackCellIdx ) ) {
+            if ( checkAttackPossibility && !Board::CanAttackFromCell( attacker, attackCellIdx ) ) {
                 continue;
             }
 
@@ -152,18 +153,19 @@ namespace AI
         return bestAttackVector;
     }
 
-    int32_t optimalAttackValue( const Unit & attacker, const Unit & target, const Position & attackPos )
+    int32_t optimalAttackValue( Arena & arena, const Unit & attacker, const Unit & target, const Position & attackPos )
     {
         assert( attackPos.GetHead() != nullptr && ( !attacker.isWide() || attackPos.GetTail() != nullptr ) );
 
-        if ( attacker.isDoubleCellAttack() ) {
-            const auto [attackTargetIdx, attackDirection] = optimalAttackVector( attacker, target, attackPos );
-            assert( Board::isValidDirection( attackTargetIdx, Board::GetReflectDirection( attackDirection ) ) );
+        const bool isAttackPosReachableOnCurrentTurn = arena.isPositionReachable( attacker, attackPos, true );
 
-            return target.evaluateThreatForUnit( attacker )
-                   + doubleCellAttackValue( attacker, target, Board::GetIndexDirection( attackTargetIdx, Board::GetReflectDirection( attackDirection ) ),
-                                            attackTargetIdx );
+        // If the attack position is reachable on the current turn, but we cannot attack the target from this position, then there is no point in further checks
+        if ( isAttackPosReachableOnCurrentTurn && !Board::CanAttackTargetFromPosition( attacker, target, attackPos.GetHead()->GetIndex() ) ) {
+            return 0;
         }
+
+        // Either the attack position is unreachable on the current turn, or we are guaranteed to be able to attack the target from this position. In the first case, we
+        // perform a rough assessment, in the second - a more accurate one.
 
         if ( attacker.isAllAdjacentCellsAttack() ) {
             const Board * board = Arena::GetBoard();
@@ -184,12 +186,22 @@ namespace AI
                                     [&attacker]( const int32_t total, const Unit * unit ) { return total + unit->evaluateThreatForUnit( attacker ); } );
         }
 
-        return target.evaluateThreatForUnit( attacker );
+        int32_t attackValue = target.evaluateThreatForUnit( attacker );
+
+        if ( attacker.isDoubleCellAttack() ) {
+            const auto [attackTargetIdx, attackDirection] = optimalAttackVector( attacker, target, attackPos, isAttackPosReachableOnCurrentTurn );
+            assert( Board::isValidDirection( attackTargetIdx, Board::GetReflectDirection( attackDirection ) ) );
+
+            attackValue
+                += doubleCellAttackValue( attacker, target, Board::GetIndexDirection( attackTargetIdx, Board::GetReflectDirection( attackDirection ) ), attackTargetIdx );
+        }
+
+        return attackValue;
     }
 
     using PositionValues = std::map<Position, int32_t>;
 
-    PositionValues evaluatePotentialAttackPositions( const Arena & arena, const Unit & attacker )
+    PositionValues evaluatePotentialAttackPositions( Arena & arena, const Unit & attacker )
     {
         // Attacking unit can be under the influence of the Hypnotize spell
         Units enemies( arena.getEnemyForce( attacker.GetCurrentColor() ).getUnits(), &attacker );
@@ -242,7 +254,7 @@ namespace AI
                         continue;
                     }
 
-                    const int32_t attackValue = optimalAttackValue( attacker, *enemyUnit, pos );
+                    const int32_t attackValue = optimalAttackValue( arena, attacker, *enemyUnit, pos );
                     const auto iter = result.find( pos );
 
                     if ( iter == result.end() ) {
@@ -335,7 +347,7 @@ namespace AI
             const auto posValueIter = positionValues.find( pos );
 
             MeleeAttackOutcome current;
-            current.attackValue = optimalAttackValue( attacker, defender, pos );
+            current.attackValue = optimalAttackValue( arena, attacker, defender, pos );
             current.positionValue = ( posValueIter != positionValues.end() ? posValueIter->second : 0 );
             current.canAttackImmediately = Board::CanAttackTargetFromPosition( attacker, defender, nearbyIdx );
 
@@ -647,7 +659,7 @@ namespace AI
                     const Position attackPos = Position::GetReachable( currentUnit, moveTargetIdx );
                     assert( attackPos.GetHead() != nullptr && ( !currentUnit.isWide() || attackPos.GetTail() != nullptr ) );
 
-                    const auto [attackTargetIdx, attackDirection] = optimalAttackVector( currentUnit, *target.unit, attackPos );
+                    const auto [attackTargetIdx, attackDirection] = optimalAttackVector( currentUnit, *target.unit, attackPos, true );
 
                     actions.emplace_back( Command::ATTACK, currentUnit.GetUID(), target.unit->GetUID(),
                                           ( currentUnit.GetHeadIndex() == moveTargetIdx ? -1 : moveTargetIdx ), attackTargetIdx, attackDirection );
