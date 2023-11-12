@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-11-09 03:47+0000\n"
-"PO-Revision-Date: 2023-10-10 06:12+0300\n"
+"PO-Revision-Date: 2023-11-12 16:27+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
 "Language: ru\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Launchpad-Export-Date: 2013-10-09 02:01+0000\n"
-"X-Generator: Poedit 3.4\n"
+"X-Generator: Poedit 3.4.1\n"
 
 msgid ""
 "BATTLE\n"
@@ -1465,7 +1465,6 @@ msgstr ""
 "Местонахождение великой библиотеки было обнаружено! Вы должны добраться до "
 "нее и вернуть себе город Хронос, в котором она находится."
 
-#, fuzzy
 msgid ""
 "Find the Orb of negation, which is said to be buried in this land. There are "
 "clues inscribed on stone obelisks which will help lead you to your prize. "
@@ -3110,8 +3109,8 @@ msgid ""
 "Please inspect our fine wares. If you feel like offering a trade, click on "
 "the items you wish to trade with and for."
 msgstr ""
-"Посмотрите на наши прекрасные товары. Если Вас что-то заинтересует, щёлкните "
-"по нужному предмету и выберите, на что хотите поменять."
+"Посмотрите на наши прекрасные товары. Если Вас что-то заинтересует, нажмите "
+"на нужный предмет и выберите, на что хотите поменять."
 
 msgid ""
 "You have received quite a bargain. I expect to make no profit on the deal. "
@@ -3331,9 +3330,8 @@ msgstr "Выберите существо:"
 msgid "Select Hero:"
 msgstr "Выберите героя:"
 
-#, fuzzy
 msgid "Select Treasure:"
-msgstr "Выберите героя:"
+msgstr "Выберите сокровище:"
 
 msgid "Map Type:\n"
 msgstr "Тип карты:\n"
@@ -3646,9 +3644,8 @@ msgstr "Выберите ячейку карты, на которой нет н�
 msgid "Treasure"
 msgstr "Сокровище"
 
-#, fuzzy
 msgid "Treasures cannot be placed on water."
-msgstr "Героев нельзя размещать на воде."
+msgstr "Сокровища нельзя размещать на воде."
 
 msgid "Heroes"
 msgstr "Герои"
@@ -3659,9 +3656,8 @@ msgstr "Героев нельзя размещать на воде."
 msgid "Artifacts"
 msgstr "Артефакты"
 
-#, fuzzy
 msgid "Artifacts cannot be placed on water."
-msgstr "Героев нельзя размещать на воде."
+msgstr "Артефакты нельзя размещать на воде."
 
 msgid "Ocean Objects"
 msgstr "Объекты океана"
@@ -3696,19 +3692,15 @@ msgstr "Города"
 msgid "Treasures"
 msgstr "Сокровища"
 
-#, fuzzy
 msgid "Terrain"
 msgstr "Почва"
 
-#, fuzzy
 msgid "Castles"
-msgstr "Замок"
+msgstr "Замки"
 
-#, fuzzy
 msgid "Roads"
-msgstr "Дорога"
+msgstr "Дороги"
 
-#, fuzzy
 msgid "Streams"
 msgstr "Реки"
 
@@ -3783,19 +3775,26 @@ msgid ""
 msgstr "Используется для размещения сокровищ или ресурсов."
 
 msgid "Toggle the erasure of %{type} objects."
-msgstr ""
+msgstr "Удаление объектов типа: %{type}."
 
 msgid ""
 "Objects of this type will be deleted with the Erase tool. Left-click here to "
 "deselect this type. Press and hold this button to deselect all other object "
 "types."
 msgstr ""
+"Объекты данного типа будут удалены инструментом \"Ластик\". Нажмите левую "
+"кнопку мыши, чтобы исключить удаление объектов данного типа. Нажмите и "
+"удерживайте эту кнопку, чтобы инструмент НЕ удалял объекты всех остальных "
+"типов."
 
 msgid ""
 "Objects of this type will NOT be deleted with the Erase tool. Left-click "
 "here to select this type. Press and hold this button to select all other "
 "object types."
 msgstr ""
+"Объекты данного типа НЕ будут удалены инструментом \"Ластик\". Нажмите левую "
+"кнопку мыши, чтобы включить удаление объектов данного типа. Нажмите и "
+"удерживайте эту кнопку, чтобы инструмент удалял объекты всех остальных типов."
 
 msgid "Terrain Mode"
 msgstr "Почва"
@@ -3834,7 +3833,6 @@ msgstr "Дороги"
 msgid "Erase Mode"
 msgstr "Ластик"
 
-#, fuzzy
 msgid "Used to erase objects from the map."
 msgstr "Используется для удаления объектов с карты."
 
@@ -4604,43 +4602,43 @@ msgstr "Добро пожаловать!"
 msgid "Welcome to Heroes of Might and Magic II powered by fheroes2 engine!"
 msgstr "Добро пожаловать в Heroes of Might and Magic II на движке fheroes2!"
 
-#, fuzzy
 msgid ""
 "Welcome to Heroes of Might and Magic II powered by the fheroes2 engine!\n"
 "Before starting the game please select a game resolution."
 msgstr ""
-"Добро пожаловать в Heroes of Might and Magic II на движке fheroes2! Перед "
-"началом игры, пожалуйста, выберите разрешение экрана."
+"Добро пожаловать в Heroes of Might and Magic II на движке fheroes2!\n"
+"Перед началом игры, пожалуйста, выберите разрешение экрана."
 
 msgid "Please Remember"
 msgstr "Запомните"
 
-#, fuzzy
 msgid ""
 "You can always change the language, resolution and settings of the game by "
 "clicking on the "
-msgstr "Вы всегда можете изменить разрешение экрана, нажав на "
+msgstr ""
+"Вы всегда можете изменить язык, разрешение экрана или настройки игры, нажав "
+"на "
 
 msgid "door"
 msgstr "дверь"
 
 msgid " on the left side of the Main Menu, or with the "
-msgstr ""
+msgstr " в левой части главного меню или с помощью кнопки "
 
 msgid " button from the "
-msgstr ""
+msgstr ", расположенной в меню "
 
-#, fuzzy
 msgid "NEW GAME"
-msgstr ""
-"НОВАЯ\n"
-"ИГРА"
+msgstr "НОВАЯ ИГРА"
 
 msgid ""
 " menu. \n"
 "\n"
 "Enjoy the game!"
 msgstr ""
+".\n"
+"\n"
+"Желаем Вам приятной игры!"
 
 msgid "Editor"
 msgstr "Редактор"
@@ -5240,8 +5238,8 @@ msgid ""
 "shows the date. Left click here to cycle through these windows."
 msgstr ""
 "Это окно сообщает информацию о состоянии Вашего героя или королевства, а "
-"также показывает календарь. Щёлкните мышью, чтобы просмотреть всю доступную "
-"информацию."
+"также показывает календарь. Нажмите левую кнопку мыши, чтобы просмотреть всю "
+"доступную информацию."
 
 msgid ""
 "This lets you change player starting positions and colors. A particular "
@@ -10205,7 +10203,7 @@ msgstr ""
 "потерянной смертными."
 
 msgid "spellBonus|selected by user"
-msgstr ""
+msgstr ", выбранное пользователем"
 
 msgid "Wood"
 msgstr "Древесина"
@@ -10722,43 +10720,41 @@ msgstr "Страж воды"
 msgid "Sets Water Elementals to guard a mine against enemy armies."
 msgstr "Призывает Водных элементалей охранять Вашу шахту от врагов."
 
-#, fuzzy
 msgid "Random Spell"
-msgstr "Случайная карта"
+msgstr "Случайное заклинание"
 
 msgid "Randomly selected spell of any level."
-msgstr ""
+msgstr "Определённое случайным образом заклинание любого уровня."
 
-#, fuzzy
 msgid "Random 1st Level Spell"
-msgstr "Случайный замок"
+msgstr "Случайное заклинание 1-го уровня"
 
 msgid "Randomly selected 1st level spell."
-msgstr ""
+msgstr "Определённое случайным образом заклинание 1-го уровня."
 
 msgid "Random 2nd Level Spell"
-msgstr ""
+msgstr "Случайное заклинание 2-го уровня"
 
 msgid "Randomly selected 2nd level spell."
-msgstr ""
+msgstr "Определённое случайным образом заклинание 2-го уровня."
 
 msgid "Random 3rd Level Spell"
-msgstr ""
+msgstr "Случайное заклинание 3-го уровня"
 
 msgid "Randomly selected 3rd level spell."
-msgstr ""
+msgstr "Определённое случайным образом заклинание 3-го уровня."
 
 msgid "Random 4th Level Spell"
-msgstr ""
+msgstr "Случайное заклинание 4-го уровня"
 
 msgid "Randomly selected 4th level spell."
-msgstr ""
+msgstr "Определённое случайным образом заклинание 4-го уровня."
 
 msgid "Random 5th Level Spell"
-msgstr ""
+msgstr "Случайное заклинание 5-го уровня"
 
 msgid "Randomly selected 5th level spell."
-msgstr ""
+msgstr "Определённое случайным образом заклинание 5-го уровня."
 
 msgid "Petrification"
 msgstr "Окаменение"
