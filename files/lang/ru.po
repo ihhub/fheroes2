@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-11-09 03:47+0000\n"
-"PO-Revision-Date: 2023-11-12 01:00+0300\n"
+"PO-Revision-Date: 2023-11-12 13:03+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
 "Language: ru\n"
@@ -10729,31 +10729,31 @@ msgid "Random 1st Level Spell"
 msgstr "Случайное заклинание 1-го уровня"
 
 msgid "Randomly selected 1st level spell."
-msgstr "Определённое случайным образом  заклинание 1-го уровня."
+msgstr "Определённое случайным образом заклинание 1-го уровня."
 
 msgid "Random 2nd Level Spell"
 msgstr "Случайное заклинание 2-го уровня"
 
 msgid "Randomly selected 2nd level spell."
-msgstr "Определённое случайным образом  заклинание 2-го уровня."
+msgstr "Определённое случайным образом заклинание 2-го уровня."
 
 msgid "Random 3rd Level Spell"
 msgstr "Случайное заклинание 3-го уровня"
 
 msgid "Randomly selected 3rd level spell."
-msgstr "Определённое случайным образом  заклинание 3-го уровня."
+msgstr "Определённое случайным образом заклинание 3-го уровня."
 
 msgid "Random 4th Level Spell"
 msgstr "Случайное заклинание 4-го уровня"
 
 msgid "Randomly selected 4th level spell."
-msgstr "Определённое случайным образом  заклинание 4-го уровня."
+msgstr "Определённое случайным образом заклинание 4-го уровня."
 
 msgid "Random 5th Level Spell"
 msgstr "Случайное заклинание 5-го уровня"
 
 msgid "Randomly selected 5th level spell."
-msgstr "Определённое случайным образом  заклинание 5-го уровня."
+msgstr "Определённое случайным образом заклинание 5-го уровня."
 
 msgid "Petrification"
 msgstr "Окаменение"
