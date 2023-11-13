@@ -43,12 +43,6 @@ public class SDLSurface extends SurfaceView implements SurfaceHolder.Callback,
         super(context);
         getHolder().addCallback(this);
 
-//        setFocusable(true);
-//        setFocusableInTouchMode(true);
-//        requestFocus();
-//        setOnKeyListener(this);
-//        setOnTouchListener(this);
-
         mDisplay = ((WindowManager)context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
         mSensorManager = (SensorManager)context.getSystemService(Context.SENSOR_SERVICE);
 
@@ -63,17 +57,10 @@ public class SDLSurface extends SurfaceView implements SurfaceHolder.Callback,
 
     public void handlePause() {
         Log.v("SDL", "handlePause()");
-//        enableSensor(Sensor.TYPE_ACCELEROMETER, false);
     }
 
     public void handleResume() {
         Log.v("SDL", "handleResume()");
-//        setFocusable(true);
-//        setFocusableInTouchMode(true);
-//        requestFocus();
-//        setOnKeyListener(this);
-//        setOnTouchListener(this);
-//        enableSensor(Sensor.TYPE_ACCELEROMETER, true);
     }
 
     public Surface getNativeSurface() {
@@ -81,14 +68,12 @@ public class SDLSurface extends SurfaceView implements SurfaceHolder.Callback,
         return getHolder().getSurface();
     }
 
-    // Called when we have a valid drawing surface
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
         Log.v("SDL", "surfaceCreated()");
         SDLActivity.onNativeSurfaceCreated();
     }
 
-    // Called when we lose the surface
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
         Log.v("SDL", "surfaceDestroyed()");
@@ -101,7 +86,6 @@ public class SDLSurface extends SurfaceView implements SurfaceHolder.Callback,
         SDLActivity.onNativeSurfaceDestroyed();
     }
 
-    // Called when the surface is resized
     @Override
     public void surfaceChanged(SurfaceHolder holder,
                                int format, int width, int height) {
