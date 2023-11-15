@@ -67,6 +67,12 @@ namespace Maps
 
         ~TilesAddon() = default;
 
+        // Returns true if addon's layer type is Object or Background and false if it is Terrain or Shadow.
+        bool isObjectOrBackgroundLayerType() const
+        {
+            return _layerType == Maps::ObjectLayerType::OBJECT_LAYER || _layerType == Maps::ObjectLayerType::BACKGROUND_LAYER;
+        }
+
         bool operator==( const TilesAddon & addon ) const
         {
             return ( _uid == addon._uid ) && ( _layerType == addon._layerType ) && ( _objectIcnType == addon._objectIcnType ) && ( _imageIndex == addon._imageIndex );
@@ -172,6 +178,12 @@ namespace Maps
         bool isSameMainObject( const MP2::MapObjectType objectType ) const
         {
             return objectType == _mainObjectType;
+        }
+
+        // Returns true if tile's main addon layer type is Object or Background and false if it is Terrain or Shadow.
+        bool isObjectOrBackgroundLayerType() const
+        {
+            return _mainAddon.isObjectOrBackgroundLayerType();
         }
 
         // Checks whether it is possible to move into this tile from the specified direction
