@@ -662,6 +662,17 @@ namespace Interface
                 }
             }
         }
+        else if ( _editorPanel.isOceanObjectSettingMode() ) {
+            if ( !tile.isWater() ) {
+                fheroes2::showStandardTextMessage( _( "Ocean object" ), _( "Ocean object must be placed on water." ), Dialog::OK );
+            }
+            else if ( !Maps::isClearGround( tile ) ) {
+                fheroes2::showStandardTextMessage( _( "Ocean object" ), _( "Choose a tile which does not contain any objects." ), Dialog::OK );
+            }
+            else {
+                setObjectOnTile( tile, Maps::ObjectGroup::Ocean_Object, _editorPanel.getOceanObjectType() );
+            }
+        }
     }
 
     void EditorInterface::mouseCursorAreaPressRight( const int32_t tileIndex ) const

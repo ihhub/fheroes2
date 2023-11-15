@@ -630,7 +630,7 @@ namespace
     {
     public:
         OceanObjectTypeSelection( const std::vector<Maps::ObjectInfo> & objectInfo, const fheroes2::Size & size, std::string title )
-            : ObjectTypeSelection( objectInfo, size, 3 * 32 / 2, 3 * 32 + 5, 2 * 32 )
+            : ObjectTypeSelection( objectInfo, size, std::move( title ), 3 * 32 / 2, 3 * 32 + 10, 2 * 32 + 24 )
         {
             // Do nothing.
         }
@@ -643,6 +643,10 @@ namespace
 
         std::string getObjectName( const Maps::ObjectInfo & info ) override
         {
+            if ( info.objectType == MP2::OBJ_NONE ) {
+                return _( "Terrain object" );
+            }
+
             return MP2::StringObject( info.objectType );
         }
     };

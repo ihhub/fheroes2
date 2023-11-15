@@ -104,7 +104,7 @@ namespace Interface
     {
         // Roads and streams are placed using only 1x1 brush.
         if ( _selectedInstrument == Instrument::STREAM || _selectedInstrument == Instrument::ROAD || isMonsterSettingMode() || isHeroSettingMode()
-             || isTreasureSettingMode() || isArtifactSettingMode() ) {
+             || isTreasureSettingMode() || isArtifactSettingMode() || isOceanObjectSettingMode() ) {
             return 1;
         }
 
@@ -398,6 +398,9 @@ namespace Interface
         case Brush::ARTIFACTS:
             _interface.setCursorUpdater( [type = _artifactType]( const int32_t /*tileIndex*/ ) { setCustomCursor( Maps::ObjectGroup::Artifact, type ); } );
             break;
+        case Brush::WATER:
+            _interface.setCursorUpdater( [type = _oceanObjectType]( const int32_t /*tileIndex*/ ) { setCustomCursor( Maps::ObjectGroup::Ocean_Object, type ); } );
+            break;
         default:
             _interface.setCursorUpdater( {} );
             break;
@@ -584,6 +587,15 @@ namespace Interface
                 const int artifactType = Dialog::selectArtifactType( _artifactType );
                 if ( artifactType >= 0 ) {
                     _artifactType = artifactType;
+                }
+                _setCursor();
+                _interface.updateCursor( 0 );
+                return res;
+            }
+            else if ( le.MouseClickLeft( _objectButtonsRect[Brush::WATER] ) ) {
+                const int oceanObjectType = Dialog::selectOceanObjectType( _oceanObjectType );
+                if ( oceanObjectType >= 0 ) {
+                    _oceanObjectType = oceanObjectType;
                 }
                 _setCursor();
                 _interface.updateCursor( 0 );

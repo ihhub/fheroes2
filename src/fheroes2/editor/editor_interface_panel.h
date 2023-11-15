@@ -97,6 +97,11 @@ namespace Interface
             return ( _selectedInstrument == OBJECT ) && ( _selectedObject == TREASURES );
         }
 
+        bool isOceanObjectSettingMode() const
+        {
+            return ( _selectedInstrument == OBJECT ) && ( _selectedObject == WATER );
+        }
+
         bool showAreaSelectRect() const
         {
             return _selectedInstrument == Instrument::TERRAIN || _selectedInstrument == Instrument::STREAM || _selectedInstrument == Instrument::ROAD
@@ -138,6 +143,11 @@ namespace Interface
         int32_t getTreasureType() const
         {
             return _treasureType;
+        }
+
+        int32_t getOceanObjectType() const
+        {
+            return _oceanObjectType;
         }
 
     private:
@@ -256,5 +266,7 @@ namespace Interface
         int32_t _artifactType{ -1 };
 
         int32_t _treasureType{ -1 };
+
+        int32_t _oceanObjectType{ -1 };
     };
 }
