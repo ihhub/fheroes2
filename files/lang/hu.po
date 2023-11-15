@@ -235,6 +235,14 @@ msgid ""
 "G\n"
 "N"
 msgstr ""
+"H\n"
+"A\n"
+"D\n"
+"J\n"
+"Á\n"
+"R\n"
+"A\n"
+"T"
 
 msgid ""
 "S\n"
@@ -246,6 +254,12 @@ msgid ""
 "R\n"
 "D"
 msgstr ""
+"N\n"
+"O\n"
+"R\n"
+"M\n"
+"Á\n"
+"L"
 
 msgid "Warrior"
 msgstr "Harcos"
@@ -2982,6 +2996,10 @@ msgid ""
 "or\n"
 "%{skill2}"
 msgstr ""
+"Tanulható:\n"
+"%{skill1}\n"
+"vagy\n"
+"%{skill2}"
 
 msgid ""
 "Please inspect our fine wares. If you feel like offering a trade, click on "
@@ -3303,6 +3321,10 @@ msgid ""
 "(72 x 72), large (108 x 108),\n"
 "or extra large (144 x 144)."
 msgstr ""
+"Jelzi a térkép méretét,\n"
+"azaz: kicsi (36 x 36), közepes\n"
+"(72 x 72), nagy (108 x 108),"
+"vagy hatalmas (144 x 144)."
 
 msgid "Size Icon"
 msgstr "Ikon méret"
@@ -3399,22 +3421,22 @@ msgid "Knowl"
 msgstr "Tudás"
 
 msgid "1st"
-msgstr ""
+msgstr "1."
 
 msgid "2nd"
-msgstr ""
+msgstr "2."
 
 msgid "3rd"
-msgstr ""
+msgstr "3."
 
 msgid "4th"
-msgstr ""
+msgstr "4."
 
 msgid "5th"
-msgstr ""
+msgstr "5."
 
 msgid "6th"
-msgstr ""
+msgstr "6."
 
 msgid "Oracle: Player Rankings"
 msgstr "Orákulum: Játékos ranglista"
@@ -3890,538 +3912,499 @@ msgid "The number of days spent on this campaign."
 msgstr ""
 
 msgid "Project Coordination and Core Development"
-msgstr ""
+msgstr "Projekt-koordináció és fő fejlesztés"
 
 msgid "Development"
-msgstr ""
+msgstr "Fejlesztés"
 
 msgid "Visit us at "
-msgstr ""
+msgstr "Látogass meg minket itt: "
 
 msgid "QA and Support"
-msgstr ""
+msgstr "Minőségbiztosítás és támogatás"
 
-#, fuzzy
 msgid "Dev and Support"
-msgstr "Teleportálás"
+msgstr "Fejl. és támogatás"
 
 msgid "Special Thanks to"
-msgstr ""
+msgstr "Külön köszönet"
 
 msgid "and many other contributors!"
-msgstr ""
+msgstr "és sok egyéb további közreműködőnek!"
 
 msgid "and many-many other supporters!"
-msgstr ""
+msgstr "és sok-sok egyéb támogatónak!"
 
 msgid "Support us at"
-msgstr ""
+msgstr "Támogass minket itt"
 
 msgid "local-donation-platform|https://www.patreon.com/fheroes2"
-msgstr ""
+msgstr "https://www.patreon.com/fheroes2"
 
 msgid "Connect with us at"
-msgstr ""
+msgstr "Kapcsolat"
 
 msgid "local-social-network|https://www.facebook.com/groups/fheroes2"
-msgstr ""
+msgstr "https://www.facebook.com/groups/fheroes2"
 
 msgid "Need help with the game?"
-msgstr ""
+msgstr "Segítség kell a játékhoz?"
 
 msgid "Original project before 0.7"
-msgstr ""
+msgstr "Eredeti projekt, v0.7 előtti"
 
-#, fuzzy
 msgid "Heroes of Might and Magic II: The Succession Wars team"
-msgstr "Kilépés a játékból és visszatérés az operációs rendszerhez."
+msgstr "Heroes of Might and Magic II: Az örökösödési háborúk csapata"
 
 msgid "Designed and Directed"
-msgstr ""
+msgstr "Tervezte és rendezte"
 
 msgid "Programming and Design"
-msgstr ""
+msgstr "Programozta és tervezte"
 
 msgid "Executive Producer"
-msgstr ""
+msgstr "Vezető gyártásvezető"
 
 msgid "Producer"
-msgstr ""
+msgstr "Gyártásvezető"
 
 msgid "Additional Design"
-msgstr ""
+msgstr "További tervezés"
 
 msgid "Additional Programming"
-msgstr ""
+msgstr "További programozás"
 
 msgid "Musical Production"
-msgstr ""
+msgstr "Zenei produkció"
 
 msgid "Music and Sound Design"
-msgstr ""
+msgstr "Zene és hang tervezés"
 
-#, fuzzy
 msgid "Vocalists"
-msgstr "Ballisztika"
+msgstr "Énekesek"
 
 msgid "Art Director"
-msgstr ""
+msgstr "Művészeti igazgató"
 
 msgid "Assistant Art Director"
-msgstr ""
+msgstr "Művészeti igazgató asszisztens"
 
-#, fuzzy
 msgid "Artists"
-msgstr "Varázstárgy"
+msgstr "Művészek"
 
 msgid "QA Manager"
-msgstr ""
+msgstr "Minőségbiztosítási menedzser"
 
 msgid "QA"
-msgstr ""
+msgstr "Minőségbiztosítás"
 
-#, fuzzy
 msgid "Writing"
-msgstr "Besorolás"
+msgstr "Alaptörténet"
 
 msgid "Manual and Helpfile"
-msgstr ""
+msgstr "Kézikönyv és segédlet"
 
-#, fuzzy
 msgid "Scenarios"
-msgstr "Küldetés"
+msgstr "Küldetések"
 
-#, fuzzy
 msgid "Heroes of Might and Magic II: The Price of Loyalty team"
-msgstr "Kilépés a játékból és visszatérés az operációs rendszerhez."
+msgstr "Heroes of Might and Magic II: A hűség ára csapata"
 
 msgid "Design Lead"
-msgstr ""
+msgstr "Vezető tervező"
 
 msgid "Designers"
-msgstr ""
+msgstr "Tervezők"
 
 msgid "Programming Lead"
-msgstr ""
+msgstr "Vezető programozó"
 
 msgid "Art Lead"
-msgstr ""
+msgstr "Művészeti vezető"
 
-#, fuzzy
 msgid "Playtesters"
-msgstr "2 játékos"
+msgstr "Tesztelők"
 
 msgid "Designer"
-msgstr ""
+msgstr "Tervező"
 
 msgid "Producers"
-msgstr ""
+msgstr "Gyártásvezetők"
 
-#, fuzzy
 msgid "QA Managers"
-msgstr "Erdész"
+msgstr "Ügyfélszolgálatosok"
 
 msgid "Sound Design"
-msgstr ""
+msgstr "Hang tervező"
 
-#, fuzzy
 msgid "Town Themes"
-msgstr "Városkapu"
+msgstr "Város témák"
 
 msgid "Alto Sax"
-msgstr ""
+msgstr "Altszaxofon"
 
 msgid "Harpsichord and Piano"
-msgstr ""
+msgstr "Csembaló és zongora"
 
 msgid "Basso Vocal"
-msgstr ""
+msgstr "Basszus ének"
 
 msgid "Soprano Vocal"
-msgstr ""
+msgstr "Szoprán ének"
 
 msgid "Recorded at %{recordingStudio}"
-msgstr ""
+msgstr "Felvétel: %{recordingStudio}"
 
 msgid "credits|Manual"
-msgstr ""
+msgstr "Kézikönyv"
 
 msgid "German Consultant"
-msgstr ""
+msgstr "Német tanácsadó"
 
 msgid "Map Designers"
-msgstr ""
+msgstr "Térkép tervezők"
 
 msgid "Package Design"
-msgstr ""
+msgstr "Csomagterv"
 
 msgid "Your Name"
-msgstr ""
+msgstr "A te neved"
 
 msgid "Unknown Hero"
 msgstr "Ismeretlen hős"
 
-#, fuzzy
 msgid "Standard"
-msgstr "Szimpla játék"
+msgstr "Normál"
 
-#, fuzzy
 msgid "View High Scores for Standard Maps."
-msgstr "Dicsőségtábla megjelenítése."
+msgstr "A normál térképek dicsőségtáblájának megmutatása."
 
-#, fuzzy
 msgid "Campaign"
 msgstr "Hadjárat"
 
-#, fuzzy
 msgid "View High Scores for Campaigns."
-msgstr "Dicsőségtábla megjelenítése."
+msgstr "A hadjárat térképek dicsőségtáblájának megmutatása."
 
 msgid "hotkey|default okay event"
-msgstr ""
+msgstr "nyugtázás (OK)"
 
 msgid "hotkey|default cancel event"
-msgstr ""
+msgstr "visszavonás (MÉGSE)"
 
 msgid "hotkey|default left"
-msgstr ""
+msgstr "balra"
 
 msgid "hotkey|default right"
-msgstr ""
+msgstr "jobbra"
 
 msgid "hotkey|default up"
-msgstr ""
+msgstr "fel"
 
 msgid "hotkey|default down"
-msgstr ""
+msgstr "le"
 
 msgid "hotkey|toggle fullscreen"
-msgstr ""
+msgstr "teljes képernyő váltás"
 
 msgid "hotkey|toggle text support mode"
-msgstr ""
+msgstr "szöveges támogatás váltás"
 
 msgid "hotkey|new game"
-msgstr ""
+msgstr "új játék"
 
 msgid "hotkey|load game"
-msgstr ""
+msgstr "játék betöltés"
 
 msgid "hotkey|highscores"
-msgstr ""
+msgstr "dicsőségtábla"
 
 msgid "hotkey|credits"
-msgstr ""
+msgstr "stáblista"
 
-#, fuzzy
 msgid "hotkey|standard game"
-msgstr "Szimpla játék"
+msgstr "normál játék"
 
-#, fuzzy
 msgid "hotkey|campaign game"
-msgstr "Hadjárat"
+msgstr "hadjárat"
 
-#, fuzzy
 msgid "hotkey|multi-player game"
-msgstr "Többjátékos mód"
+msgstr "többjátékos mód"
 
-#, fuzzy
 msgid "hotkey|settings"
-msgstr "Beállítások"
+msgstr "beállítások"
 
 msgid "hotkey|quit"
-msgstr ""
+msgstr "kilépés"
 
 msgid "hotkey|select map"
-msgstr ""
+msgstr "térkép kiválasztás"
 
 msgid "hotkey|select small map size"
-msgstr ""
+msgstr "kis térkép kiválasztása"
 
 msgid "hotkey|select medium map size"
-msgstr ""
+msgstr "közepes térkép kiválasztása"
 
 msgid "hotkey|select large map size"
-msgstr ""
+msgstr "nagy térkép kiválasztása"
 
 msgid "hotkey|select extra large map size"
-msgstr ""
+msgstr "nagyon nagy térkép kiválasztása"
 
 msgid "hotkey|select all map sizes"
-msgstr ""
+msgstr "minden térképméret kiválasztása"
 
 msgid "hotkey|hotseat game"
-msgstr ""
+msgstr "helycserés játék"
 
 msgid "hotkey|battle only game"
-msgstr ""
+msgstr "csak csata mód"
 
 msgid "hotkey|choose the original campaign"
-msgstr ""
+msgstr "eredeti hadjárat kiválasztása"
 
 msgid "hotkey|choose the expansion campaign"
-msgstr ""
+msgstr "kiegészítő hadjárat kiválasztása"
 
-#, fuzzy
 msgid "hotkey|map editor main menu"
-msgstr "Hadjárat"
+msgstr "térképszerkesztő főmenü"
 
-#, fuzzy
 msgid "hotkey|new map menu"
-msgstr "Következő hősök"
+msgstr "új térkép menü"
 
-#, fuzzy
 msgid "hotkey|load map menu"
-msgstr "Szimpla játék"
+msgstr "térkép betöltés menü"
 
 msgid "hotkey|new map from scratch"
-msgstr ""
+msgstr "teljesen új térkép"
 
-#, fuzzy
 msgid "hotkey|new random map"
-msgstr "Királyság összesítése"
+msgstr "véletlenszerű térkép"
 
-#, fuzzy
 msgid "hotkey|undo last action"
-msgstr "Következő város mutatása"
+msgstr "Legutolsó cselekvés visszavonása (UNDO)"
 
-#, fuzzy
 msgid "hotkey|redo last action"
-msgstr "Következő város mutatása"
+msgstr "Legutolsó cselekvés visszaállítása (REDO)"
 
 msgid "hotkey|roland campaign"
-msgstr ""
+msgstr "roland hadjárata"
 
 msgid "hotkey|archibald campaign"
-msgstr ""
+msgstr "archibald hadjárata"
 
 msgid "hotkey|the price of loyalty campaign"
-msgstr ""
+msgstr "a hűség ára hadjárat"
 
 msgid "hotkey|voyage home campaign"
-msgstr ""
+msgstr "hazatérés hadjárat"
 
 msgid "hotkey|wizard's isle campaign"
-msgstr ""
+msgstr "varázslósziget hadjárat"
 
 msgid "hotkey|descendants campaign"
-msgstr ""
+msgstr "leszármazottak hadjárata"
 
 msgid "hotkey|select first campaign bonus"
-msgstr ""
+msgstr "első hadjárat bónusz kiválasztása"
 
 msgid "hotkey|select second campaign bonus"
-msgstr ""
+msgstr "második hadjárat bónusz kiválasztása"
 
 msgid "hotkey|select third campaign bonus"
-msgstr ""
+msgstr "harmadik hadjárat bónusz kiválasztása"
 
 msgid "hotkey|view campaign intro"
-msgstr ""
+msgstr "hadjárat bevezetőjének megtekintése"
 
-#, fuzzy
 msgid "hotkey|select campaign difficulty"
-msgstr "Játék nehézsége"
+msgstr "térkép nehézségének kiválasztása"
 
 msgid "hotkey|restart campaign scenario"
-msgstr ""
+msgstr "hadjárat küldetés újrakezdése"
 
 msgid "hotkey|world map left"
-msgstr ""
+msgstr "világtérkép: balra"
 
 msgid "hotkey|world map right"
-msgstr ""
+msgstr "világtérkép: jobbra"
 
 msgid "hotkey|world map up"
-msgstr ""
+msgstr "világtérkép: fel"
 
 msgid "hotkey|world map down"
-msgstr ""
+msgstr "világtérkép: le"
 
 msgid "hotkey|world map up left"
-msgstr ""
+msgstr "világtérkép: fel-balra"
 
 msgid "hotkey|world map up right"
-msgstr ""
+msgstr "világtérkép: fel-jobbra"
 
 msgid "hotkey|world map down left"
-msgstr ""
+msgstr "világtérkép: le-balra"
 
 msgid "hotkey|world map down right"
-msgstr ""
+msgstr "világtérkép: le-jobbra"
 
 msgid "hotkey|save game"
-msgstr ""
+msgstr "játék mentése"
 
-#, fuzzy
 msgid "hotkey|next hero"
-msgstr "Következő hősök"
+msgstr "következő hős"
 
-#, fuzzy
 msgid "hotkey|start hero movement"
-msgstr "Mozgás folytatása"
+msgstr "hős mozgásának megkezdése"
 
-#, fuzzy
 msgid "hotkey|cast adventure spell"
-msgstr "Kalandozó varázslat elsütése."
+msgstr "kalandozó varázslat idézése"
 
 msgid "hotkey|put hero to sleep"
-msgstr ""
+msgstr "hős altatása"
 
-#, fuzzy
 msgid "hotkey|next town"
-msgstr "Következő város mutatása"
+msgstr "következő város"
 
 msgid "hotkey|end turn"
-msgstr ""
+msgstr "kör befejezése"
 
-#, fuzzy
 msgid "hotkey|file options"
-msgstr "Fájlbeállítások"
+msgstr "fájlbeállítások"
 
-#, fuzzy
 msgid "hotkey|adventure options"
-msgstr "Kaland Opciók"
+msgstr "kaland opciók"
 
 msgid "hotkey|puzzle map"
-msgstr ""
+msgstr "rejtvény térkép"
 
-#, fuzzy
 msgid "hotkey|scenario information"
-msgstr "Laza felállás"
+msgstr "küldetés infromáció"
 
 msgid "hotkey|dig for artifact"
-msgstr ""
+msgstr "varázstárgy kiásása"
 
 msgid "hotkey|view world"
-msgstr ""
+msgstr "világ mutatása"
 
-#, fuzzy
 msgid "hotkey|kingdom summary"
-msgstr "Királyság összesítése"
+msgstr "királyság összesítő"
 
 msgid "hotkey|default action"
-msgstr ""
+msgstr "alaőértelmezett cselekvés"
 
 msgid "hotkey|open focus"
-msgstr ""
+msgstr "fókuszálás kezdése"
 
-#, fuzzy
 msgid "hotkey|system options"
-msgstr "Rendszerbeállítások testreszabása"
+msgstr "rendszerbeállítások"
 
 msgid "hotkey|scroll left"
-msgstr ""
+msgstr "görgetés balra"
 
 msgid "hotkey|scroll right"
-msgstr ""
+msgstr "görgetés jobbra"
 
 msgid "hotkey|scroll up"
-msgstr ""
+msgstr "görgetés fel"
 
 msgid "hotkey|scroll down"
-msgstr ""
+msgstr "görgetés le"
 
 msgid "hotkey|toggle control panel"
-msgstr ""
+msgstr "vezérlőpult kapcsoló"
 
 msgid "hotkey|toggle radar"
-msgstr ""
+msgstr "radar kapcsoló"
 
 msgid "hotkey|toggle buttons"
-msgstr ""
+msgstr "gomb átkapcsoló"
 
 msgid "hotkey|toggle status"
-msgstr ""
+msgstr "státusz kapcsoló"
 
 msgid "hotkey|toggle icons"
-msgstr ""
+msgstr "ikon kapcsoló"
 
 msgid "hotkey|transfer control to ai"
-msgstr ""
+msgstr "irányítás átadása a gépnek"
 
 msgid "hotkey|retreat from battle"
-msgstr ""
+msgstr "visszavonulás a csatából"
 
 msgid "hotkey|surrender during battle"
-msgstr ""
+msgstr "megadás a csatában"
 
 msgid "hotkey|toggle battle auto mode"
-msgstr ""
+msgstr "automatikus csata mód kapcsoló"
 
-#, fuzzy
 msgid "hotkey|finish the battle in auto mode"
-msgstr "Biztos vagy benne hogy feloszlatod ezt a sereget?"
+msgstr "csata befejezése automatikus módban"
 
-#, fuzzy
 msgid "hotkey|battle options"
-msgstr "Kastély beállítások"
+msgstr "csata beállítások"
 
 msgid "hotkey|skip turn in battle"
-msgstr ""
+msgstr "kör kihagyása a csatában"
 
 msgid "hotkey|cast battle spell"
-msgstr ""
+msgstr "varázslat idézése csatában"
 
 msgid "hotkey|dwelling level 1"
-msgstr ""
+msgstr "toborzóhely 1. szint"
 
 msgid "hotkey|dwelling level 2"
-msgstr ""
+msgstr "toborzóhely 2. szint"
 
 msgid "hotkey|dwelling level 3"
-msgstr ""
+msgstr "toborzóhely 3. szint"
 
 msgid "hotkey|dwelling level 4"
-msgstr ""
+msgstr "toborzóhely 4. szint"
 
 msgid "hotkey|dwelling level 5"
-msgstr ""
+msgstr "toborzóhely 5. szint"
 
 msgid "hotkey|dwelling level 6"
-msgstr ""
+msgstr "toborzóhely 6. szint"
 
 msgid "hotkey|well"
-msgstr ""
+msgstr "kút"
 
-#, fuzzy
 msgid "hotkey|marketplace"
-msgstr "Piactér"
+msgstr "piactér"
 
 msgid "hotkey|mage guild"
-msgstr ""
+msgstr "varázstorony"
 
-#, fuzzy
 msgid "hotkey|shipyard"
-msgstr "Hajógyár"
+msgstr "hajógyár"
 
-#, fuzzy
 msgid "hotkey|thieves guild"
-msgstr "Tolvajcéh"
+msgstr "tolvajcéh"
 
 msgid "hotkey|tavern"
-msgstr ""
+msgstr "fogadó"
 
 msgid "hotkey|construction screen"
-msgstr ""
+msgstr "tervezési képernyő"
 
 msgid "hotkey|buy all monsters in well"
-msgstr ""
+msgstr "minden lény megvásárlása a kútban"
 
 msgid "hotkey|split stack by half"
-msgstr ""
+msgstr "egység kétfelé osztása"
 
 msgid "hotkey|split stack by one"
-msgstr ""
+msgstr "egység szétosztása"
 
 msgid "hotkey|join stacks"
-msgstr ""
+msgstr "egységek összevonása"
 
 msgid "hotkey|upgrade troop"
-msgstr ""
+msgstr "csapat fejlesztése"
 
 msgid "hotkey|dismiss hero or troop"
-msgstr ""
+msgstr "hős/egység elbocsátása"
 
 msgid ""
 "Do you want to regain control from AI? The effect will take place only on "
