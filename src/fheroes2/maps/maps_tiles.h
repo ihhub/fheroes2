@@ -67,10 +67,10 @@ namespace Maps
 
         ~TilesAddon() = default;
 
-        // Returns true if addon's layer type is Object or Background and false if it is Terrain or Shadow.
-        bool isObjectOrBackgroundLayerType() const
+        // Returns true if it can be passed be hero/boat: addon's layer type is SHADOW or TERRAIN.
+        bool isPassabilityTransparent() const
         {
-            return _layerType == Maps::ObjectLayerType::OBJECT_LAYER || _layerType == Maps::ObjectLayerType::BACKGROUND_LAYER;
+            return _layerType == SHADOW_LAYER || _layerType == TERRAIN_LAYER;
         }
 
         bool operator==( const TilesAddon & addon ) const
@@ -180,11 +180,8 @@ namespace Maps
             return objectType == _mainObjectType;
         }
 
-        // Returns true if tile's main addon layer type is Object or Background and false if it is Terrain or Shadow.
-        bool isObjectOrBackgroundLayerType() const
-        {
-            return _mainAddon.isObjectOrBackgroundLayerType();
-        }
+        // Returns true if tile's main and bottom layer addons do not contain any objects: layer type is SHADOW or TERRAIN.
+        bool isPassabilityTransparent() const;
 
         // Checks whether it is possible to move into this tile from the specified direction
         bool isPassableFrom( const int direction ) const

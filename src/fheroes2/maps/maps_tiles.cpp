@@ -699,7 +699,7 @@ int Maps::Tiles::getOriginalPassability() const
         return MP2::getActionObjectDirection( objectType );
     }
 
-    if ( _mainAddon._objectIcnType == MP2::OBJ_ICN_TYPE_UNKNOWN || !isObjectOrBackgroundLayerType() || isShadow() ) {
+    if ( _mainAddon._objectIcnType == MP2::OBJ_ICN_TYPE_UNKNOWN || _mainAddon.isPassabilityTransparent() || isShadow() ) {
         // No object exists. Make it fully passable.
         return DIRECTION_ALL;
     }
@@ -734,7 +734,7 @@ void Maps::Tiles::updatePassability()
     // Get object type but ignore heroes as they are "temporary" objects.
     const MP2::MapObjectType objectType = GetObject( false );
 
-    if ( !MP2::isActionObject( objectType ) && ( _mainAddon._objectIcnType != MP2::OBJ_ICN_TYPE_UNKNOWN ) && isObjectOrBackgroundLayerType() && !isShadow() ) {
+    if ( !MP2::isActionObject( objectType ) && ( _mainAddon._objectIcnType != MP2::OBJ_ICN_TYPE_UNKNOWN ) && !_mainAddon.isPassabilityTransparent() && !isShadow() ) {
         // This is a non-action object.
 
         if ( !Maps::isValidDirection( _index, Direction::BOTTOM ) ) {
@@ -759,7 +759,7 @@ void Maps::Tiles::updatePassability()
         tileUIDs.emplace_back( _mainAddon._uid );
 
         for ( const TilesAddon & addon : _addonBottomLayer ) {
-            if ( addon.isObjectOrBackgroundLayerType() ) {
+            if ( !addon.isPassabilityTransparent() ) {
                 // If this assertion blows up then the object is not set properly. An object must have a valid UID!
                 assert( addon._uid != 0 );
                 tileUIDs.emplace_back( addon._uid );
@@ -785,7 +785,7 @@ void Maps::Tiles::updatePassability()
         const bool singleObjectTile = ( validBottomLayerObjects == 0 ) && _addonTopLayer.empty() && ( bottomTile._mainAddon._objectIcnType != _mainAddon._objectIcnType );
 
         // TODO: we might need to simplify the logic below as singleObjectTile might cover most of it.
-        if ( !singleObjectTile && !isDetachedObject() && bottomTile.isObjectOrBackgroundLayerType()
+        if ( !singleObjectTile && !isDetachedObject() && !bottomTile._mainAddon.isPassabilityTransparent()
              && ( bottomTile._mainAddon._objectIcnType != MP2::OBJ_ICN_TYPE_UNKNOWN ) ) {
             const MP2::MapObjectType bottomTileObjectType = bottomTile.GetObject( false );
             const MP2::MapObjectType correctedObjectType = MP2::getBaseActionObjectType( bottomTileObjectType );
@@ -838,12 +838,12 @@ void Maps::Tiles::updatePassability()
 
 bool Maps::Tiles::doesObjectExist( const uint32_t uid ) const
 {
-    if ( _mainAddon._uid == uid && isObjectOrBackgroundLayerType() ) {
+    if ( _mainAddon._uid == uid && !_mainAddon.isPassabilityTransparent() ) {
         return true;
     }
 
     return std::any_of( _addonBottomLayer.cbegin(), _addonBottomLayer.cend(),
-                        [uid]( const TilesAddon & addon ) { return addon._uid == uid && addon.isObjectOrBackgroundLayerType(); } );
+                        [uid]( const TilesAddon & addon ) { return addon._uid == uid && !addon.isPassabilityTransparent(); } );
 }
 
 void Maps::Tiles::UpdateRegion( uint32_t newRegionID )
@@ -1060,6 +1060,17 @@ bool Maps::Tiles::GoodForUltimateArtifact() const
     }
 
     return true;
+}
+
+bool Maps::Tiles::isPassabilityTransparent() const
+{
+    for ( const TilesAddon & addon : _addonBottomLayer ) {
+        if ( !addon.isPassabilityTransparent() ) {
+            return false;
+        }
+    }
+
+    return _mainAddon.isPassabilityTransparent();
 }
 
 bool Maps::Tiles::isPassableFrom( const int direction, const bool fromWater, const bool skipFog, const int heroColor ) const
@@ -1655,18 +1666,18 @@ bool Maps::Tiles::isTallObject() const
     }
 
     std::vector<uint32_t> tileUIDs;
-    if ( _mainAddon._objectIcnType != MP2::OBJ_ICN_TYPE_UNKNOWN && _mainAddon._uid != 0 && isObjectOrBackgroundLayerType() ) {
+    if ( _mainAddon._objectIcnType != MP2::OBJ_ICN_TYPE_UNKNOWN && _mainAddon._uid != 0 && !_mainAddon.isPassabilityTransparent() ) {
         tileUIDs.emplace_back( _mainAddon._uid );
     }
 
     for ( const TilesAddon & addon : _addonBottomLayer ) {
-        if ( addon._uid != 0 && addon.isObjectOrBackgroundLayerType() ) {
+        if ( addon._uid != 0 && !addon.isPassabilityTransparent() ) {
             tileUIDs.emplace_back( addon._uid );
         }
     }
 
     for ( const TilesAddon & addon : _addonTopLayer ) {
-        if ( addon._uid != 0 && addon.isObjectOrBackgroundLayerType() ) {
+        if ( addon._uid != 0 && !addon.isPassabilityTransparent() ) {
             tileUIDs.emplace_back( addon._uid );
         }
     }
@@ -1765,12 +1776,12 @@ bool Maps::Tiles::isDetachedObject() const
 
     const uint32_t objectUID = world.GetTiles( mainTileIndex ).GetObjectUID();
     if ( _mainAddon._uid == objectUID ) {
-        return isObjectOrBackgroundLayerType();
+        return !_mainAddon.isPassabilityTransparent();
     }
 
     for ( const TilesAddon & addon : _addonBottomLayer ) {
         if ( addon._uid == objectUID ) {
-            return addon.isObjectOrBackgroundLayerType();
+            return !addon.isPassabilityTransparent();
         }
     }
 
