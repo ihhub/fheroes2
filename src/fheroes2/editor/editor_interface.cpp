@@ -49,6 +49,7 @@
 #include "interface_status.h"
 #include "localevent.h"
 #include "logging.h"
+#include "maps.h"
 #include "map_object_info.h"
 #include "maps_tiles.h"
 #include "maps_tiles_helper.h"
