@@ -69,22 +69,22 @@ namespace
         Cursor::Get().setCustomImage( image, { image.x(), image.y() } );
     }
 
-    fheroes2::Size getObjectOccupiedSize( const Maps::ObjectGroup group, const int32_t objectType )
+    fheroes2::Rect getObjectOccupiedArea( const Maps::ObjectGroup group, const int32_t objectType )
     {
         if ( objectType < 0 ) {
             // It can happen if a user cancels object selection.
-            return { 1, 1 };
+            return { 0, 0, 1, 1 };
         }
 
         const auto & objectInfo = Maps::getObjectsByGroup( group );
         if ( objectType >= static_cast<int32_t>( objectInfo.size() ) ) {
             assert( 0 );
-            return { 1, 1 };
+            return { 0, 0, 1, 1 };
         }
 
         const auto & offsets = Maps::getGroundLevelOccupiedTileOffset( objectInfo[objectType] );
-        if ( offsets.empty() ) {
-            return { 1, 1 };
+        if ( offsets.size() < 2 ) {
+            return { 0, 0, 1, 1 };
         }
 
         fheroes2::Point minPos{ 0, 0 };
@@ -97,7 +97,7 @@ namespace
             maxPos.y = std::max( maxPos.y, offset.y );
         }
 
-        return { maxPos.x - minPos.x + 1, maxPos.y - minPos.y + 1 };
+        return { minPos.x, minPos.y, maxPos.x - minPos.x + 1, maxPos.y - minPos.y + 1 };
     }
 }
 
@@ -132,40 +132,40 @@ namespace Interface
         _brushSizeButtons[_selectedBrushSize].press();
     }
 
-    fheroes2::Size EditorPanel::getBrushSize() const
+    fheroes2::Rect EditorPanel::getBrushArea() const
     {
         // Roads and streams are placed using only 1x1 brush.
         if ( _selectedInstrument == Instrument::STREAM || _selectedInstrument == Instrument::ROAD ) {
-            return { 1, 1 };
+            return { 0, 0, 1, 1 };
         }
 
         if ( isMonsterSettingMode() ) {
-            return getObjectOccupiedSize( Maps::ObjectGroup::Monster, _monsterType );
+            return getObjectOccupiedArea( Maps::ObjectGroup::Monster, _monsterType );
         }
 
         if ( isHeroSettingMode() ) {
-            return getObjectOccupiedSize( Maps::ObjectGroup::Hero, _heroType );
+            return getObjectOccupiedArea( Maps::ObjectGroup::Hero, _heroType );
         }
 
         if ( isTreasureSettingMode() ) {
-            return getObjectOccupiedSize( Maps::ObjectGroup::Treasure, _treasureType );
+            return getObjectOccupiedArea( Maps::ObjectGroup::Treasure, _treasureType );
         }
 
         if ( isArtifactSettingMode() ) {
-            return getObjectOccupiedSize( Maps::ObjectGroup::Artifact, _artifactType );
+            return getObjectOccupiedArea( Maps::ObjectGroup::Artifact, _artifactType );
         }
 
         if ( isOceanObjectSettingMode() ) {
-            return getObjectOccupiedSize( Maps::ObjectGroup::Ocean_Object, _oceanObjectType );
+            return getObjectOccupiedArea( Maps::ObjectGroup::Ocean_Object, _oceanObjectType );
         }
 
         switch ( _selectedBrushSize ) {
         case BrushSize::SMALL:
-            return { 1, 1 };
+            return { 0, 0, 1, 1 };
         case BrushSize::MEDIUM:
-            return { 2, 2 };
+            return { 0, 0, 2, 2 };
         case BrushSize::LARGE:
-            return { 4, 4 };
+            return { -1, -1, 4, 4 };
         case BrushSize::AREA:
             return {};
         default:

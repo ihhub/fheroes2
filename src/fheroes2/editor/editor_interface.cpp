@@ -71,7 +71,7 @@ namespace
 {
     const uint32_t mapUpdateFlags = Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR;
 
-    fheroes2::Point getBrushAreaIndicies( const fheroes2::Size & brushSize, const int32_t startIndex )
+    fheroes2::Point getBrushAreaIndicies( const fheroes2::Rect & brushSize, const int32_t startIndex )
     {
         if ( brushSize.width <= 0 || brushSize.height <= 0 ) {
             return { startIndex, startIndex };
@@ -81,8 +81,8 @@ namespace
         const int32_t worldHeight = world.h();
 
         fheroes2::Point startPos{ startIndex % worldWidth, startIndex / worldWidth };
-        startPos.x -= ( brushSize.width - 1 ) / 2;
-        startPos.y -= ( brushSize.height - 1 ) / 2;
+        startPos.x += brushSize.x;
+        startPos.y += brushSize.y;
 
         fheroes2::Point endPos{ startPos.x + brushSize.width - 1, startPos.y + brushSize.height - 1 };
 
@@ -192,7 +192,7 @@ namespace Interface
             // TODO:: Render horizontal and vertical map tiles scale and highlight with yellow text cursor position.
 
             if ( _editorPanel.showAreaSelectRect() && ( _tileUnderCursor > -1 ) ) {
-                const fheroes2::Size brushSize = _editorPanel.getBrushSize();
+                const fheroes2::Rect brushSize = _editorPanel.getBrushArea();
 
                 if ( brushSize.width > 0 && brushSize.height > 0 ) {
                     const fheroes2::Point indices = getBrushAreaIndicies( brushSize, _tileUnderCursor );
@@ -200,7 +200,7 @@ namespace Interface
                     _gameArea.renderTileAreaSelect( display, indices.x, indices.y );
                 }
                 else {
-                    assert( brushSize == fheroes2::Size() );
+                    assert( brushSize == fheroes2::Rect() );
                     // Render area selection from the tile where the left mouse button was pressed till the tile under the cursor.
                     _gameArea.renderTileAreaSelect( display, _selectedTile, _tileUnderCursor );
                 }
@@ -369,7 +369,7 @@ namespace Interface
                 cursor.SetThemes( Cursor::POINTER );
 
                 // TODO: Add checks for object placing/moving, and other Editor functions that uses mouse dragging.
-                if ( !_gameArea.isDragScroll() && ( _editorPanel.getBrushSize().width > 0 || _selectedTile == -1 ) ) {
+                if ( !_gameArea.isDragScroll() && ( _editorPanel.getBrushArea().width > 0 || _selectedTile == -1 ) ) {
                     _radar.QueueEventProcessing();
                 }
             }
@@ -405,7 +405,7 @@ namespace Interface
             if ( isCursorOverGamearea ) {
                 // Get tile index under the cursor.
                 const int32_t tileIndex = _gameArea.GetValidTileIdFromPoint( le.GetMouseCursor() );
-                const fheroes2::Size brushSize = _editorPanel.getBrushSize();
+                const fheroes2::Rect brushSize = _editorPanel.getBrushArea();
 
                 if ( _tileUnderCursor != tileIndex ) {
                     _tileUnderCursor = tileIndex;
@@ -427,7 +427,7 @@ namespace Interface
             }
 
             if ( _selectedTile > -1 && le.MouseReleaseLeft() ) {
-                if ( isCursorOverGamearea && _editorPanel.getBrushSize().width == 0 ) {
+                if ( isCursorOverGamearea && _editorPanel.getBrushArea().width == 0 ) {
                     if ( _editorPanel.isTerrainEdit() ) {
                         // Fill the selected area in terrain edit mode.
                         const fheroes2::ActionCreator action( _historyManager );
@@ -622,7 +622,7 @@ namespace Interface
             Game::OpenCastleDialog( *otherCastle );
         }
         else if ( _editorPanel.isTerrainEdit() ) {
-            const fheroes2::Size brushSize = _editorPanel.getBrushSize();
+            const fheroes2::Rect brushSize = _editorPanel.getBrushArea();
             assert( brushSize.width == brushSize.height );
 
             const int groundId = _editorPanel.selectedGroundType();
@@ -660,7 +660,7 @@ namespace Interface
             }
         }
         else if ( _editorPanel.isEraseMode() ) {
-            const fheroes2::Size brushSize = _editorPanel.getBrushSize();
+            const fheroes2::Rect brushSize = _editorPanel.getBrushArea();
             assert( brushSize.width == brushSize.height );
 
             const fheroes2::ActionCreator action( _historyManager );

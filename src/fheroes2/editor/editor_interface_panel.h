@@ -45,7 +45,7 @@ namespace Interface
             return _rectEditorPanel;
         }
 
-        fheroes2::Size getBrushSize() const;
+        fheroes2::Rect getBrushArea() const;
 
         int selectedGroundType() const
         {
