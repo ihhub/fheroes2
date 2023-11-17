@@ -2176,9 +2176,9 @@ bool Castle::HasSeaAccess() const
             return true;
         }
 
-        // If this is an action object and it can be removed then it is possible to put a boat here.
+        // If this is an object's shadow or this is an action object that can be removed then it is possible to put a boat here.
         const MP2::MapObjectType objectType = tile.GetObject();
-        return MP2::isPickupObject( objectType ) || objectType == MP2::OBJ_BOAT;
+        return MP2::isPickupObject( objectType ) || objectType == MP2::OBJ_BOAT || tile.isPassabilityTransparent();
     };
 
     const int32_t index = Maps::GetIndexFromAbsPoint( possibleSeaTile.x, possibleSeaTile.y );
@@ -2247,7 +2247,7 @@ int32_t Castle::getTileIndexToPlaceBoat() const
 
         // Mark the tile as worthy to a place a boat if the main addon does not exist on this tile.
         // This means that all objects on this tile are not primary objects (like shadows or some parts of objects).
-        return ( tile.getObjectIcnType() == MP2::OBJ_ICN_TYPE_UNKNOWN );
+        return ( tile.getObjectIcnType() == MP2::OBJ_ICN_TYPE_UNKNOWN || tile.isPassabilityTransparent() );
     };
 
     const int32_t index = Maps::GetIndexFromAbsPoint( possibleSeaTile.x, possibleSeaTile.y );
