@@ -71,12 +71,12 @@
           <li>adjust welcome window text at the first game launch</li>
           <li>teach AI to use the marketplace to accelerate the development of their castles</li>
           <li>update German translation</li>
-          <li>implement an eraser tool in the Editor</li>
-          <li>fix recruit dialog MIN/MAX button when switching creature upgrades</li>
+          <li>implement erase tool in the Editor</li>
+          <li>fix recruit dialog's MIN/MAX buttons when switching between creature upgrades</li>
           <li>update Swedish translation</li>
           <li>show proper Quick Info window for a hero during battle</li>
-          <li>fix troops' sprites overlap in quick info</li>
-          <li>prioritize when hiring those heroes whose portraits are not used by customized heroes</li>
+          <li>fix troops' sprites overlapping in quick info</li>
+          <li>prioritize hiring those heroes whose portraits are not used by scenario specific heroes</li>
         </ul>
       </description>
     </release>

@@ -28,12 +28,12 @@ version 1.0.10 (18 November 2023)
 - adjust welcome window text at the first game launch
 - teach AI to use the marketplace to accelerate the development of their castles
 - update German translation
-- implement an eraser tool in the Editor
-- fix recruit dialog MIN/MAX button when switching creature upgrades
+- implement erase tool in the Editor
+- fix recruit dialog's MIN/MAX buttons when switching between creature upgrades
 - update Swedish translation
 - show proper Quick Info window for a hero during battle
-- fix troops' sprites overlap in quick info
-- prioritize when hiring those heroes whose portraits are not used by customized heroes
+- fix troops' sprites overlapping in quick info
+- prioritize hiring those heroes whose portraits are not used by scenario specific heroes
 
 version 1.0.9 (11 October 2023)
 - add "tent visited" info to barrier quick info dialog
