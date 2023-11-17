@@ -83,6 +83,16 @@
             android:padding="8dp"
             android:text="@string/activity_toolset_save_file_manager_btn_text" />
 
+        <TextView
+            android:id="@+id/activity_toolset_download_with_vpn_label"
+            style="@style/Widget.AppCompat.TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/activity_toolset_download_with_vpn"
+            android:textAlignment="center"
+            android:visibility="invisible" />
+
         <Button
             android:id="@+id/activity_toolset_wallpaper_settings_btn"
             android:layout_width="wrap_content"
