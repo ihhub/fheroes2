@@ -29,6 +29,7 @@
 #include <cstdint>
 #include <cstdlib>
 #include <memory>
+#include <set>
 #include <utility>
 
 #include "battle_arena.h"
@@ -742,19 +743,19 @@ Battle::Indexes Battle::Board::GetAroundIndexes( const Unit & unit )
     return GetAroundIndexes( unit.GetPosition() );
 }
 
-Battle::Indexes Battle::Board::GetAroundIndexes( const Position & position )
+Battle::Indexes Battle::Board::GetAroundIndexes( const Position & pos )
 {
-    if ( position.GetHead() == nullptr ) {
+    if ( pos.GetHead() == nullptr ) {
         return {};
     }
 
-    const int32_t headIdx = position.GetHead()->GetIndex();
+    const int32_t headIdx = pos.GetHead()->GetIndex();
 
-    if ( position.GetTail() == nullptr ) {
+    if ( pos.GetTail() == nullptr ) {
         return GetAroundIndexes( headIdx );
     }
 
-    const int32_t tailIdx = position.GetTail()->GetIndex();
+    const int32_t tailIdx = pos.GetTail()->GetIndex();
 
     if ( !isValidIndex( headIdx ) || !isValidIndex( tailIdx ) ) {
         return {};
@@ -865,6 +866,41 @@ Battle::Indexes Battle::Board::GetDistanceIndexes( const int32_t center, const u
     return result;
 }
 
+Battle::Indexes Battle::Board::GetDistanceIndexes( const Position & pos, const uint32_t radius )
+{
+    const std::array<int32_t, 2> posIndexes = { pos.GetHead() ? pos.GetHead()->GetIndex() : -1, pos.GetTail() ? pos.GetTail()->GetIndex() : -1 };
+
+    std::set<int32_t> boardIndexes;
+
+    for ( const int32_t posIdx : posIndexes ) {
+        if ( !Board::isValidIndex( posIdx ) ) {
+            continue;
+        }
+
+        for ( const int32_t idx : Board::GetDistanceIndexes( posIdx, radius ) ) {
+            assert( Board::isValidIndex( idx ) );
+
+            if ( std::find( posIndexes.begin(), posIndexes.end(), idx ) != posIndexes.end() ) {
+                continue;
+            }
+
+            boardIndexes.insert( idx );
+        }
+    }
+
+    Indexes result;
+
+    result.reserve( boardIndexes.size() );
+    result.assign( boardIndexes.begin(), boardIndexes.end() );
+
+    return result;
+}
+
+Battle::Indexes Battle::Board::GetDistanceIndexes( const Unit & unit, const uint32_t radius )
+{
+    return GetDistanceIndexes( unit.GetPosition(), radius );
+}
+
 bool Battle::Board::isValidMirrorImageIndex( const int32_t index, const Unit * unit )
 {
     if ( unit == nullptr ) {
@@ -957,7 +993,7 @@ Battle::Indexes Battle::Board::GetAdjacentEnemies( const Unit & unit )
 {
     Indexes result;
     const bool isWide = unit.isWide();
-    const int currentColor = unit.GetArmyColor();
+    const int armyColor = unit.GetArmyColor();
     result.reserve( isWide ? 8 : 6 );
 
     const int leftmostIndex = ( isWide && !unit.isReflect() ) ? unit.GetTailIndex() : unit.GetHeadIndex();
@@ -965,9 +1001,9 @@ Battle::Indexes Battle::Board::GetAdjacentEnemies( const Unit & unit )
     const int y = leftmostIndex / ARENAW;
     const int mod = y % 2;
 
-    const auto validateAndInsert = [&result, &currentColor]( const int index ) {
+    const auto validateAndInsert = [&result, armyColor]( const int index ) {
         const Unit * vUnit = GetCell( index )->GetUnit();
-        if ( vUnit && currentColor != vUnit->GetArmyColor() )
+        if ( vUnit && armyColor != vUnit->GetArmyColor() )
             result.push_back( index );
     };
 

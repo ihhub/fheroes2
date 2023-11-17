@@ -233,7 +233,7 @@ namespace AI
         uint32_t _attackerForceNumberOfDead = 0;
         uint32_t _defenderForceNumberOfDead = 0;
 
-        // turn variables that wouldn't persist
+        // Member variables with a lifetime in one turn
         const HeroBase * _commander = nullptr;
         int _myColor = Color::NONE;
         double _myArmyStrength = 0;

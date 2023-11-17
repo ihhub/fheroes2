@@ -101,11 +101,17 @@ namespace Battle
 
         static bool isValidDirection( const int32_t index, const int dir );
         static int32_t GetIndexDirection( const int32_t index, const int dir );
+
         static Indexes GetDistanceIndexes( const int32_t center, const uint32_t radius );
+        static Indexes GetDistanceIndexes( const Unit & unit, const uint32_t radius );
+        static Indexes GetDistanceIndexes( const Position & pos, const uint32_t radius );
+
         static Indexes GetAroundIndexes( const int32_t center );
         static Indexes GetAroundIndexes( const Unit & unit );
-        static Indexes GetAroundIndexes( const Position & position );
+        static Indexes GetAroundIndexes( const Position & pos );
+
         static Indexes GetMoveWideIndexes( const int32_t head, const bool reflect );
+
         static bool isValidMirrorImageIndex( const int32_t index, const Unit * unit );
 
         // Checks whether a given unit is (in principle) capable of attacking in melee during the current turn from a cell with
