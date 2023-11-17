@@ -70,12 +70,28 @@ namespace
 {
     const uint32_t mapUpdateFlags = Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR;
 
-    int32_t getBrushAreaEndIndex( const fheroes2::Size brushSize, const int32_t startIndex )
+    fheroes2::Point getBrushAreaIndicies( const fheroes2::Size & brushSize, const int32_t startIndex )
     {
+        if ( brushSize.width <= 0 || brushSize.height <= 0 ) {
+            return { startIndex, startIndex };
+        }
+
         const int32_t worldWidth = world.w();
-        const int32_t cursorSizeX = std::min( brushSize.width, worldWidth - startIndex % worldWidth ) - 1;
-        const int32_t cursorSizeY = std::min( brushSize.height, world.h() - startIndex / worldWidth ) - 1;
-        return startIndex + cursorSizeX + worldWidth * cursorSizeY;
+        const int32_t worldHeight = world.h();
+
+        fheroes2::Point startPos{ startIndex % worldWidth, startIndex / worldWidth };
+        startPos.x -= ( brushSize.width - 1 ) / 2;
+        startPos.y -= ( brushSize.height - 1 ) / 2;
+
+        fheroes2::Point endPos{ startPos.x + brushSize.width - 1, startPos.y + brushSize.height - 1 };
+
+        startPos.x = std::max( startPos.x, 0 );
+        startPos.y = std::max( startPos.y, 0 );
+
+        endPos.x = std::min( endPos.x, worldWidth - 1 );
+        endPos.y = std::min( endPos.y, worldHeight - 1 );
+
+        return { startPos.x + startPos.y * worldWidth, endPos.x + endPos.y * worldWidth };
     }
 
     const Maps::ObjectInfo & getObjectInfo( const Maps::ObjectGroup group, const int32_t objectType )
@@ -178,7 +194,9 @@ namespace Interface
                 const fheroes2::Size brushSize = _editorPanel.getBrushSize();
 
                 if ( brushSize.width > 0 && brushSize.height > 0 ) {
-                    _gameArea.renderTileAreaSelect( display, _tileUnderCursor, getBrushAreaEndIndex( brushSize, _tileUnderCursor ) );
+                    const fheroes2::Point indices = getBrushAreaIndicies( brushSize, _tileUnderCursor );
+
+                    _gameArea.renderTileAreaSelect( display, indices.x, indices.y );
                 }
                 else {
                     assert( brushSize == fheroes2::Size() );
@@ -611,7 +629,9 @@ namespace Interface
             const fheroes2::ActionCreator action( _historyManager );
 
             if ( brushSize.width > 0 ) {
-                Maps::setTerrainOnTiles( tileIndex, getBrushAreaEndIndex( brushSize, tileIndex ), groundId );
+                const fheroes2::Point indices = getBrushAreaIndicies( brushSize, tileIndex );
+
+                Maps::setTerrainOnTiles( indices.x, indices.y, groundId );
             }
             else {
                 assert( brushSize.width == 0 );
@@ -645,7 +665,9 @@ namespace Interface
             const fheroes2::ActionCreator action( _historyManager );
 
             if ( brushSize.width > 1 ) {
-                if ( Maps::eraseObjectsOnTiles( tileIndex, getBrushAreaEndIndex( brushSize, tileIndex ), _editorPanel.getEraseTypes() ) ) {
+                const fheroes2::Point indices = getBrushAreaIndicies( brushSize, tileIndex );
+
+                if ( Maps::eraseObjectsOnTiles( indices.x, indices.y, _editorPanel.getEraseTypes() ) ) {
                     _redraw |= mapUpdateFlags;
                 }
             }

@@ -87,8 +87,8 @@ namespace
         for ( const auto & offset : offsets ) {
             minPos.x = std::min( minPos.x, offset.x );
             minPos.y = std::min( minPos.y, offset.y );
-            maxPos.x = std::max( minPos.x, offset.x );
-            maxPos.y = std::max( minPos.y, offset.y );
+            maxPos.x = std::max( maxPos.x, offset.x );
+            maxPos.y = std::max( maxPos.y, offset.y );
         }
 
         return { maxPos.x - minPos.x + 1, maxPos.y - minPos.y + 1 };
