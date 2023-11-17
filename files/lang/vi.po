@@ -7,10 +7,10 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
 "POT-Creation-Date: 2023-10-23 00:14+0000\n"
+"PO-Revision-Date: \n"
 "PO-Revision-Date: 2023-11-01 22:53+0700\n"
+"Last-Translator: \n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: vi\n"
@@ -5423,70 +5423,70 @@ msgid "Sarakin"
 msgstr "Sarakin"
 
 msgid "Charity"
-msgstr ""
+msgstr "Charity"
 
 msgid "Darlana"
-msgstr ""
+msgstr "Darlana"
 
 msgid "Ranloo"
-msgstr ""
+msgstr "Ranloo"
 
 msgid "Rialdo"
-msgstr ""
+msgstr "Rialdo"
 
 msgid "Zam"
-msgstr ""
+msgstr "Zam"
 
 msgid "Zom"
-msgstr ""
+msgstr "Zom"
 
 msgid "Celia"
-msgstr ""
+msgstr "Celia"
 
 msgid "Roxana"
-msgstr ""
+msgstr "Roxana"
 
 msgid "Lord Corlagon"
-msgstr ""
+msgstr "Lord Corlagon"
 
 msgid "Lord Halton"
-msgstr ""
+msgstr "Lord Halton"
 
 msgid "Sister Eliza"
-msgstr ""
+msgstr "Sister Eliza"
 
 msgid "Brother Brax"
-msgstr ""
+msgstr "Brother Brax"
 
 msgid "Dainwin"
-msgstr ""
+msgstr "Dainwin"
 
 msgid "Joseph"
-msgstr ""
+msgstr "Joseph"
 
 msgid "Mog"
-msgstr ""
+msgstr "Mog"
 
 msgid "Solmyr"
-msgstr ""
+msgstr "Solmyr"
 
 msgid "Ceallach"
-msgstr ""
+msgstr "Ceallach"
 
 msgid "Drakonia"
-msgstr ""
+msgstr "Drakonia"
 
 msgid "Elderian"
-msgstr ""
+msgstr "Elderian"
 
 msgid "Gallavant"
-msgstr ""
+msgstr "Gallavant"
 
 msgid "Jarkonas"
-msgstr ""
+msgstr "Jarkonas"
 
 msgid "Martine"
-msgstr ""
+msgstr "Martine"
 
 msgid " gives you maximum morale"
 msgstr " cho ngươi tối đa tinh thần"
