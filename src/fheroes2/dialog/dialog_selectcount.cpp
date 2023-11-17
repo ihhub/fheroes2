@@ -390,7 +390,7 @@ bool Dialog::InputString( const std::string & header, std::string & res, const s
     return !res.empty();
 }
 
-int Dialog::ArmySplitTroop( uint32_t freeSlots, const uint32_t redistributeMax, uint32_t & redistributeCount, bool & useFastSplit, const std::string & name )
+int Dialog::ArmySplitTroop( uint32_t freeSlots, const uint32_t redistributeMax, uint32_t & redistributeCount, bool & useFastSplit, const std::string & troopName )
 {
     assert( freeSlots > 0 );
 
@@ -402,13 +402,13 @@ int Dialog::ArmySplitTroop( uint32_t freeSlots, const uint32_t redistributeMax, 
     const uint32_t min = std::min( 1U, redistributeMax );
     const int spacer = 10;
 
-    std::string msg( _( "How many %{tropps} to move?" ) );
-    StringReplace( msg, "%{tropps}", name );
-    fheroes2::Text text( msg, fheroes2::FontType::normalWhite() );
-    const int32_t textHeight = text.rows( BOXAREA_WIDTH ) * text.height();
+    std::string msg( _( "How many %{troops} to move?" ) );
+    StringReplace( msg, "%{troops}", troopName );
+    const fheroes2::Text title( msg, fheroes2::FontType::normalWhite() );
+    const int32_t textHeight = title.rows( BOXAREA_WIDTH ) * title.height();
 
-    fheroes2::Text text2( _( "Fast separation into slots:" ), fheroes2::FontType::normalWhite() );
-    const int32_t text2Height = text2.rows( BOXAREA_WIDTH ) * text2.height();
+    const fheroes2::Text slotSeparationText( _( "Fast separation into slots:" ), fheroes2::FontType::normalWhite() );
+    const int32_t text2Height = slotSeparationText.rows( BOXAREA_WIDTH ) * slotSeparationText.height();
 
     const int defaultYPosition = 160;
     const int boxHeight = freeSlots > 1 ? 56 + spacer + textHeight + text2Height : 45;
@@ -420,7 +420,7 @@ int Dialog::ArmySplitTroop( uint32_t freeSlots, const uint32_t redistributeMax, 
     const fheroes2::Rect & pos = box.GetArea();
     const int center = pos.x + pos.width / 2;
 
-    text.draw( pos.x, pos.y + 2, BOXAREA_WIDTH, display );
+    title.draw( pos.x, pos.y + 2, BOXAREA_WIDTH, display );
 
     sel.SetPos( fheroes2::Point( pos.x + 70, pos.y + 13 + textHeight ) );
     sel.Redraw();
@@ -444,7 +444,7 @@ int Dialog::ArmySplitTroop( uint32_t freeSlots, const uint32_t redistributeMax, 
             vrts[i] = fheroes2::Rect( center + offset + deltaXStart + i * deltaX, pos.y + 13 + textHeight + text2Height + 45, spriteWidth, sprites[i].height() );
         }
 
-        text2.draw( pos.x, pos.y + 13 + textHeight + 37, BOXAREA_WIDTH, display );
+        slotSeparationText.draw( pos.x, pos.y + 13 + textHeight + 37, BOXAREA_WIDTH, display );
 
         for ( uint32_t i = 0; i < freeSlots - 1; ++i ) {
             fheroes2::Blit( sprites[i], display, vrts[i].x, vrts[i].y );
