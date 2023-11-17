@@ -48,4 +48,5 @@
     <string name="activity_save_file_manager_delete_confirmation_positive_btn_text">Yes</string>
     <string name="activity_save_file_manager_delete_confirmation_negative_btn_text">No</string>
     <string name="activity_save_file_manager_suggested_zip_file_name" translatable="false">fheroes2_save_files.zip</string>
+    <string name="activity_toolset_download_with_vpn"> </string>
 </resources>

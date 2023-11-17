@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <string name="app_label">fheroes2</string>
-    <string name="activity_toolset_label">fh2 инструментарий</string>
     <string name="activity_toolset_game_logo_img_content_description">Логотип fheroes2</string>
     <string name="activity_toolset_game_status_lbl_text"><b>Вы не можете запустить живые обои в данный момент, потому что некоторые файлы данных оригинальной игры отсутствуют.</b>\n\nПожалуйста, поместите содержимое каталога с оригинальной игрой Heroes of Might and Magic II (или только каталоги <b>ANIM</b>, <b>DATA</b>, <b>MAPS</b> и <b>MUSIC</b>) в архив ZIP, скопируйте его на это устройство, нажмите кнопку \"<b>Извлечь ресурсы HoMM2</b>\" и выберите этот архив ZIP.\n\nЕсли у вас нет копии оригинальной игры, то вы можете скачать архив ZIP демо-версии. Как только загрузка демо-версии будет завершена, нажмите кнопку \"<b>Извлечь ресурсы HoMM2</b>\" и выберите загруженный архив ZIP.</string>
     <string name="activity_toolset_start_game_btn_text">Запустить игру</string>
@@ -15,6 +13,7 @@
     <string name="activity_toolset_download_homm2_demo_error_title">Ошибка скачивания</string>
     <string name="activity_toolset_download_homm2_demo_error_message">При попытке скачать демо-версию HoMM2 произошла ошибка. Возможной причиной является отсутствие приложения, которое может загружать файлы из Интернета. Пожалуйста, попробуйте установить такое приложение и повторите попытку.</string>
     <string name="activity_toolset_download_homm2_demo_error_positive_btn_text">OK</string>
+    <string name="activity_toolset_download_with_vpn">Может потребоваться VPN</string>
     <string name="activity_save_file_manager_label">fh2 менеджер файлов сохранений</string>
     <string name="activity_save_file_manager_filter_standard_btn_text">Стандарт</string>
     <string name="activity_save_file_manager_filter_campaign_btn_text">Кампания</string>

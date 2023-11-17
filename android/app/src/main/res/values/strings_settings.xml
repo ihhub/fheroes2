@@ -24,9 +24,6 @@
     <string name="source_code_title" translatable="false">App by Ilya Pomaskin</string>
     <string name="source_code_summary" translatable="false">https://github.com/IlyaPomaskin/h3lwp</string>
 
-    <string name="map_author_title" translatable="false">Map by Fosgen</string>
-    <string name="map_author_summary" translatable="false">https://en.heroesportal.net/maps/view/1737</string>
-
     <string name="scale_by_density">Based on display density</string>
 
     <string name="update_timeout_10minutes">10 minutes</string>
