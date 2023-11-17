@@ -71,8 +71,13 @@ namespace
 
     fheroes2::Size getObjectOccupiedSize( const Maps::ObjectGroup group, const int32_t objectType )
     {
+        if ( objectType < 0 ) {
+            // It can happen if a user cancels object selection.
+            return { 1, 1 };
+        }
+
         const auto & objectInfo = Maps::getObjectsByGroup( group );
-        if ( objectType < 0 || objectType >= static_cast<int32_t>( objectInfo.size() ) ) {
+        if ( objectType >= static_cast<int32_t>( objectInfo.size() ) ) {
             assert( 0 );
             return { 1, 1 };
         }
