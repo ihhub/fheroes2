@@ -67,6 +67,32 @@ namespace
 
         Cursor::Get().setCustomImage( image, { image.x(), image.y() } );
     }
+
+    fheroes2::Size getObjectOccupiedSize( const Maps::ObjectGroup group, const int32_t objectType )
+    {
+        const auto & objectInfo = Maps::getObjectsByGroup( group );
+        if ( objectType < 0 || objectType >= static_cast<int32_t>( objectInfo.size() ) ) {
+            assert( 0 );
+            return { 1, 1 };
+        }
+
+        const auto & offsets = Maps::getGroundLevelOccupiedTileOffset( objectInfo[objectType] );
+        if ( offsets.empty() ) {
+            return { 1, 1 };
+        }
+
+        fheroes2::Point minPos{ 0, 0 };
+        fheroes2::Point maxPos{ 0, 0 };
+
+        for ( const auto & offset : offsets ) {
+            minPos.x = std::min( minPos.x, offset.x );
+            minPos.y = std::min( minPos.y, offset.y );
+            maxPos.x = std::max( minPos.x, offset.x );
+            maxPos.y = std::max( minPos.y, offset.y );
+        }
+
+        return { maxPos.x - minPos.x + 1, maxPos.y - minPos.y + 1 };
+    }
 }
 
 namespace Interface
@@ -100,30 +126,49 @@ namespace Interface
         _brushSizeButtons[_selectedBrushSize].press();
     }
 
-    int32_t EditorPanel::getBrushSize() const
+    fheroes2::Size EditorPanel::getBrushSize() const
     {
         // Roads and streams are placed using only 1x1 brush.
-        if ( _selectedInstrument == Instrument::STREAM || _selectedInstrument == Instrument::ROAD || isMonsterSettingMode() || isHeroSettingMode()
-             || isTreasureSettingMode() || isArtifactSettingMode() || isOceanObjectSettingMode() ) {
-            return 1;
+        if ( _selectedInstrument == Instrument::STREAM || _selectedInstrument == Instrument::ROAD ) {
+            return { 1, 1 };
+        }
+
+        if ( isMonsterSettingMode() ) {
+            return getObjectOccupiedSize( Maps::ObjectGroup::Monster, _monsterType );
+        }
+
+        if ( isHeroSettingMode() ) {
+            return getObjectOccupiedSize( Maps::ObjectGroup::Hero, _heroType );
+        }
+
+        if ( isTreasureSettingMode() ) {
+            return getObjectOccupiedSize( Maps::ObjectGroup::Treasure, _treasureType );
+        }
+
+        if ( isArtifactSettingMode() ) {
+            return getObjectOccupiedSize( Maps::ObjectGroup::Artifact, _artifactType );
+        }
+
+        if ( isOceanObjectSettingMode() ) {
+            return getObjectOccupiedSize( Maps::ObjectGroup::Ocean_Object, _oceanObjectType );
         }
 
         switch ( _selectedBrushSize ) {
         case BrushSize::SMALL:
-            return 1;
+            return { 1, 1 };
         case BrushSize::MEDIUM:
-            return 2;
+            return { 2, 2 };
         case BrushSize::LARGE:
-            return 4;
+            return { 4, 4 };
         case BrushSize::AREA:
-            return 0;
+            return {};
         default:
             // Have you added a new Brush size? Update the logic above!
             assert( 0 );
             break;
         }
 
-        return 0;
+        return {};
     }
 
     void EditorPanel::setPos( const int32_t displayX, int32_t displayY )

@@ -45,7 +45,7 @@ namespace Interface
             return _rectEditorPanel;
         }
 
-        int32_t getBrushSize() const;
+        fheroes2::Size getBrushSize() const;
 
         int selectedGroundType() const
         {
@@ -105,7 +105,8 @@ namespace Interface
         bool showAreaSelectRect() const
         {
             return _selectedInstrument == Instrument::TERRAIN || _selectedInstrument == Instrument::STREAM || _selectedInstrument == Instrument::ROAD
-                   || _selectedInstrument == Instrument::ERASE || isMonsterSettingMode() || isHeroSettingMode() || isArtifactSettingMode() || isTreasureSettingMode();
+                   || _selectedInstrument == Instrument::ERASE || isMonsterSettingMode() || isHeroSettingMode() || isArtifactSettingMode() || isTreasureSettingMode()
+                   || isOceanObjectSettingMode();
         }
 
         bool useMouseDragMovement() const

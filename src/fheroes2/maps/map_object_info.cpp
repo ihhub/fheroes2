@@ -575,4 +575,19 @@ namespace Maps
 
         return MP2::OBJ_NONE;
     }
+
+    std::vector<fheroes2::Point> getGroundLevelOccupiedTileOffset( const ObjectInfo & info )
+    {
+        // If this assertion blows up then the object is not formed properly.
+        assert( !info.groundLevelParts.empty() );
+
+        std::vector<fheroes2::Point> offsets;
+        for ( const auto & objectPart : info.groundLevelParts ) {
+            if ( objectPart.layerType == OBJECT_LAYER || objectPart.layerType == BACKGROUND_LAYER ) {
+                offsets.push_back( objectPart.tileOffset );
+            }
+        }
+
+        return offsets;
+    }
 }

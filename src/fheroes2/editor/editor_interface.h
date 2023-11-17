@@ -91,7 +91,7 @@ namespace Interface
             // Do nothing.
         }
 
-        void setObjectOnTile( Maps::Tiles & tile, const Maps::ObjectGroup group, const int32_t objectType );
+        void setObjectOnTile( Maps::Tiles & tile, const Maps::ObjectInfo & objectInfo );
 
         EditorPanel _editorPanel;
 
