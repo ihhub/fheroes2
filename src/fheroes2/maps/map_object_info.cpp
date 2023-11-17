@@ -253,6 +253,14 @@ namespace
             objects.emplace_back( std::move( object ) );
         }
 
+        // Boat.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_BOAT };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_BOAT32, 18, fheroes2::Point{ 0, 0 }, MP2::OBJ_BOAT, Maps::OBJECT_LAYER );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
         // Shipwreck survivor.
         {
             Maps::ObjectInfo object{ MP2::OBJ_SHIPWRECK_SURVIVOR };
