@@ -87,10 +87,20 @@ namespace Interface
             return ( _selectedInstrument == OBJECT ) && ( _selectedObject == HEROES );
         }
 
+        bool isArtifactSettingMode() const
+        {
+            return ( _selectedInstrument == OBJECT ) && ( _selectedObject == ARTIFACTS );
+        }
+
+        bool isTreasureSettingMode() const
+        {
+            return ( _selectedInstrument == OBJECT ) && ( _selectedObject == TREASURES );
+        }
+
         bool showAreaSelectRect() const
         {
             return _selectedInstrument == Instrument::TERRAIN || _selectedInstrument == Instrument::STREAM || _selectedInstrument == Instrument::ROAD
-                   || _selectedInstrument == Instrument::ERASE || isMonsterSettingMode() || isHeroSettingMode();
+                   || _selectedInstrument == Instrument::ERASE || isMonsterSettingMode() || isHeroSettingMode() || isArtifactSettingMode() || isTreasureSettingMode();
         }
 
         bool useMouseDragMovement() const
@@ -120,6 +130,16 @@ namespace Interface
             return _heroType;
         }
 
+        int32_t getArtifactType() const
+        {
+            return _artifactType;
+        }
+
+        int32_t getTreasureType() const
+        {
+            return _treasureType;
+        }
+
     private:
         static int _getGroundId( const uint8_t brushId );
 
@@ -130,6 +150,8 @@ namespace Interface
 
         static const char * _getObjectTypeName( const uint8_t brushId );
         static const char * _getEraseObjectTypeName( const uint32_t eraseObjectType );
+
+        void _setCursor();
 
         enum Instrument : uint8_t
         {
@@ -230,5 +252,9 @@ namespace Interface
         int32_t _monsterType{ -1 };
 
         int32_t _heroType{ -1 };
+
+        int32_t _artifactType{ -1 };
+
+        int32_t _treasureType{ -1 };
     };
 }

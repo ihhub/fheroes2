@@ -419,7 +419,13 @@ namespace fheroes2
     {
         assert( spell.isValid() );
 
-        const Text spellNameText( std::string( _spell.GetName() ) + " [" + std::to_string( _spell.spellPoints( nullptr ) ) + ']', FontType::smallWhite() );
+        std::string spellText( _spell.GetName() );
+        const uint32_t spellPoints = _spell.spellPoints( nullptr );
+        if ( spellPoints > 0 ) {
+            spellText += " [" + std::to_string( spellPoints ) + ']';
+        }
+
+        const Text spellNameText( std::move( spellText ), FontType::smallWhite() );
 
         const Sprite & icn = AGG::GetICN( ICN::SPELLS, _spell.IndexSprite() );
         _area = { std::max( icn.width(), spellNameText.width() ), icn.height() + textOffsetFromElement + spellNameText.height() };
@@ -427,7 +433,13 @@ namespace fheroes2
 
     void SpellDialogElement::draw( Image & output, const Point & offset ) const
     {
-        const Text spellNameText( std::string( _spell.GetName() ) + " [" + std::to_string( _spell.spellPoints( _hero ) ) + ']', FontType::smallWhite() );
+        std::string spellText( _spell.GetName() );
+        const uint32_t spellPoints = _spell.spellPoints( nullptr );
+        if ( spellPoints > 0 ) {
+            spellText += " [" + std::to_string( spellPoints ) + ']';
+        }
+
+        const Text spellNameText( std::move( spellText ), FontType::smallWhite() );
         const Sprite & icn = AGG::GetICN( ICN::SPELLS, _spell.IndexSprite() );
 
         const int32_t maxWidth = std::max( icn.width(), spellNameText.width() );

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-03 12:33+0000\n"
+"POT-Creation-Date: 2023-11-09 03:47+0000\n"
 "PO-Revision-Date: 2023-09-03 18:42+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3370,6 +3370,10 @@ msgstr "Velg monster:"
 msgid "Select Hero:"
 msgstr "Velg helt:"
 
+#, fuzzy
+msgid "Select Treasure:"
+msgstr "Velg helt:"
+
 msgid "Map Type:\n"
 msgstr "Kart-type:\n"
 
@@ -3681,11 +3685,25 @@ msgstr ""
 msgid "Choose a tile which does not contain any objects."
 msgstr ""
 
+msgid "Treasure"
+msgstr "Verdifull gjenstand"
+
+#, fuzzy
+msgid "Treasures cannot be placed on water."
+msgstr "Denne trolldommen kan ikke brukes på et skip."
+
 msgid "Heroes"
 msgstr "Helter"
 
 msgid "Heroes cannot be placed on water."
 msgstr ""
+
+msgid "Artifacts"
+msgstr "Gjenstander"
+
+#, fuzzy
+msgid "Artifacts cannot be placed on water."
+msgstr "Denne trolldommen kan ikke brukes på et skip."
 
 msgid "Ocean Objects"
 msgstr "Sjøting"
@@ -3716,9 +3734,6 @@ msgstr "Strandting"
 
 msgid "Towns"
 msgstr "Byer"
-
-msgid "Artifacts"
-msgstr "Gjenstander"
 
 msgid "Treasures"
 msgstr "Verdifulle gjenstander"
@@ -5722,9 +5737,6 @@ msgstr ""
 msgid "You come upon the remains of an unfortunate adventurer."
 msgstr "Du kommer over levningene til en uheldig eventyrer."
 
-msgid "Treasure"
-msgstr "Verdifull gjenstand"
-
 msgid "Searching through the tattered clothing, you find the %{artifact}."
 msgstr "Etter å ha lett gjennom de fillete plaggene, finner du: %{artifact}."
 
@@ -7226,17 +7238,17 @@ msgstr ""
 msgid "%{name1} meets %{name2}"
 msgstr "%{name1} møter %{name2}"
 
-msgid "Town Portal"
-msgstr "Byportal"
-
-msgid "Select town to port to."
-msgstr "Velg by å reise til."
-
 msgid "Enemy heroes are now fully identifiable."
 msgstr "De fiendtlige heltene er nå helt kartlagte."
 
 msgid "Identify Hero"
 msgstr "Kartlegg helt"
+
+msgid "Select town to port to."
+msgstr "Velg by å reise til."
+
+msgid "Town Portal"
+msgstr "Byportal"
 
 msgid "The creatures are willing to join us!"
 msgstr "Krigerne er villige til å slå seg til oss!"
@@ -10411,6 +10423,9 @@ msgstr ""
 "nærmere titt oppdager du at det er den fortryllede spaden til Gravleggerne, "
 "lenge trodd å være forsvunnet av de dødelige."
 
+msgid "spellBonus|selected by user"
+msgstr ""
+
 msgid "Wood"
 msgstr "Ved"
 
@@ -10961,6 +10976,44 @@ msgstr "Plasser vannvokter"
 
 msgid "Sets Water Elementals to guard a mine against enemy armies."
 msgstr "Tilkaller en vannånd for å vokte over ei gruve mot fiendtlige styrker."
+
+#, fuzzy
+msgid "Random Spell"
+msgstr "Tilfeldig"
+
+msgid "Randomly selected spell of any level."
+msgstr ""
+
+#, fuzzy
+msgid "Random 1st Level Spell"
+msgstr "Vilkårlig borg"
+
+msgid "Randomly selected 1st level spell."
+msgstr ""
+
+msgid "Random 2nd Level Spell"
+msgstr ""
+
+msgid "Randomly selected 2nd level spell."
+msgstr ""
+
+msgid "Random 3rd Level Spell"
+msgstr ""
+
+msgid "Randomly selected 3rd level spell."
+msgstr ""
+
+msgid "Random 4th Level Spell"
+msgstr ""
+
+msgid "Randomly selected 4th level spell."
+msgstr ""
+
+msgid "Random 5th Level Spell"
+msgstr ""
+
+msgid "Randomly selected 5th level spell."
+msgstr ""
 
 msgid "Petrification"
 msgstr "Forstening"

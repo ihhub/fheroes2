@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-03 12:33+0000\n"
+"POT-Creation-Date: 2023-11-09 03:47+0000\n"
 "PO-Revision-Date: 2023-08-26 23:09+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: https://discord.com/"
@@ -3319,6 +3319,10 @@ msgstr "Wybierz potwora:"
 msgid "Select Hero:"
 msgstr "Wybierz bohatera:"
 
+#, fuzzy
+msgid "Select Treasure:"
+msgstr "Wybierz bohatera:"
+
 msgid "Map Type:\n"
 msgstr "Typ Mapy:\n"
 
@@ -3628,11 +3632,25 @@ msgstr ""
 msgid "Choose a tile which does not contain any objects."
 msgstr ""
 
+msgid "Treasure"
+msgstr "Skarb"
+
+#, fuzzy
+msgid "Treasures cannot be placed on water."
+msgstr "To zaklęcie nie może być rzucone z łodzi."
+
 msgid "Heroes"
 msgstr "Bohaterowie"
 
 msgid "Heroes cannot be placed on water."
 msgstr ""
+
+msgid "Artifacts"
+msgstr "Artefakty"
+
+#, fuzzy
+msgid "Artifacts cannot be placed on water."
+msgstr "To zaklęcie nie może być rzucone z łodzi."
 
 msgid "Ocean Objects"
 msgstr ""
@@ -3666,9 +3684,6 @@ msgstr ""
 
 msgid "Towns"
 msgstr "Miasta"
-
-msgid "Artifacts"
-msgstr "Artefakty"
 
 msgid "Treasures"
 msgstr "Skarby"
@@ -5643,9 +5658,6 @@ msgstr ""
 msgid "You come upon the remains of an unfortunate adventurer."
 msgstr "Dotarłeś do szczątek pechowego poszukiwacza."
 
-msgid "Treasure"
-msgstr "Skarb"
-
 msgid "Searching through the tattered clothing, you find the %{artifact}."
 msgstr "Po przeszukaniu rozdartego ubrania, znajdujesz %{artifact}."
 
@@ -7106,17 +7118,17 @@ msgstr ""
 msgid "%{name1} meets %{name2}"
 msgstr "Spotkanie: %{name1} i %{name2}"
 
-msgid "Town Portal"
-msgstr "Miejski Portal"
-
-msgid "Select town to port to."
-msgstr "Wybierz miasto docelowe."
-
 msgid "Enemy heroes are now fully identifiable."
 msgstr "Można już w pełni zidentyfikować wrogich bohaterów."
 
 msgid "Identify Hero"
 msgstr "Identyfikacja bohatera"
+
+msgid "Select town to port to."
+msgstr "Wybierz miasto docelowe."
+
+msgid "Town Portal"
+msgstr "Miejski Portal"
 
 msgid "The creatures are willing to join us!"
 msgstr "Te stworzenia są chętne przyłączyć się do nas!"
@@ -10270,6 +10282,9 @@ msgstr ""
 "przedmiotu odkrywasz, że jest to zaklęty szpadel Grabarzy, zaginiony dawno "
 "temu."
 
+msgid "spellBonus|selected by user"
+msgstr ""
+
 msgid "Wood"
 msgstr "Drewno"
 
@@ -10795,6 +10810,44 @@ msgstr "Ustawienie Strażnika Wody"
 
 msgid "Sets Water Elementals to guard a mine against enemy armies."
 msgstr "Wzywa Żywiołaki Wody, które pilnują kopalni przed wrogimi armiami."
+
+#, fuzzy
+msgid "Random Spell"
+msgstr "Losowa"
+
+msgid "Randomly selected spell of any level."
+msgstr ""
+
+#, fuzzy
+msgid "Random 1st Level Spell"
+msgstr "Losowy zamek"
+
+msgid "Randomly selected 1st level spell."
+msgstr ""
+
+msgid "Random 2nd Level Spell"
+msgstr ""
+
+msgid "Randomly selected 2nd level spell."
+msgstr ""
+
+msgid "Random 3rd Level Spell"
+msgstr ""
+
+msgid "Randomly selected 3rd level spell."
+msgstr ""
+
+msgid "Random 4th Level Spell"
+msgstr ""
+
+msgid "Randomly selected 4th level spell."
+msgstr ""
+
+msgid "Random 5th Level Spell"
+msgstr ""
+
+msgid "Randomly selected 5th level spell."
+msgstr ""
 
 msgid "Petrification"
 msgstr "Zamiana w Kamień"

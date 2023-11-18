@@ -106,7 +106,7 @@ namespace Maps
         Artifact,
         Hero,
         Monster,
-        Resource,
+        Treasure,
         Water_Object,
 
         // IMPORTANT!!!

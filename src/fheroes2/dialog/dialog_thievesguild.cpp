@@ -267,7 +267,7 @@ void Dialog::ThievesGuild( const bool oracle )
         fheroes2::fadeOutDisplay( dialogRoi, !isDefaultScreenSize );
     }
 
-    const bool isEvilInterfaceTown = !oracle && Settings::Get().isEvilInterfaceEnabled();
+    const bool isEvilInterfaceTown = Settings::Get().isEvilInterfaceEnabled();
 
     const fheroes2::Sprite & backgroundSprite = fheroes2::AGG::GetICN( isEvilInterfaceTown ? ICN::STONEBAK_EVIL : ICN::STONEBAK, 0 );
     fheroes2::Copy( backgroundSprite, 0, 0, display, dialogRoi.x, dialogRoi.y, backgroundSprite.width(), backgroundSprite.height() );

@@ -472,12 +472,6 @@ namespace
         getAddonInfo( addon, os );
         return os.str();
     }
-
-    // Returns true if layer type is Object or Background and false if it is Terrain or Shadow.
-    bool isObjectOrBottomLayerType( const uint8_t layerType )
-    {
-        return layerType == Maps::ObjectLayerType::OBJECT_LAYER || layerType == Maps::ObjectLayerType::BACKGROUND_LAYER;
-    }
 }
 
 void Maps::Tiles::Init( int32_t index, const MP2::mp2tile_t & mp2 )
@@ -513,7 +507,7 @@ void Maps::Tiles::Init( int32_t index, const MP2::mp2tile_t & mp2 )
         _isTileMarkedAsRoad = true;
     }
 
-    if ( mp2.mapObjectType == MP2::OBJ_NONE && !isObjectOrBottomLayerType( layerType ) ) {
+    if ( mp2.mapObjectType == MP2::OBJ_NONE && ( layerType == Maps::ObjectLayerType::SHADOW_LAYER || layerType == Maps::ObjectLayerType::TERRAIN_LAYER ) ) {
         // If an object sits on shadow or terrain layer then we should put it as a bottom layer add-on.
         if ( bottomObjectIcnType != MP2::ObjectIcnType::OBJ_ICN_TYPE_UNKNOWN ) {
             _addonBottomLayer.emplace_back( layerType, mp2.level1ObjectUID, bottomObjectIcnType, mp2.bottomIcnImageIndex );
@@ -705,7 +699,7 @@ int Maps::Tiles::getOriginalPassability() const
         return MP2::getActionObjectDirection( objectType );
     }
 
-    if ( _mainAddon._objectIcnType == MP2::OBJ_ICN_TYPE_UNKNOWN || !isObjectOrBottomLayerType( _mainAddon._layerType ) || isShadow() ) {
+    if ( _mainAddon._objectIcnType == MP2::OBJ_ICN_TYPE_UNKNOWN || _mainAddon.isPassabilityTransparent() || isShadow() ) {
         // No object exists. Make it fully passable.
         return DIRECTION_ALL;
     }
@@ -740,8 +734,7 @@ void Maps::Tiles::updatePassability()
     // Get object type but ignore heroes as they are "temporary" objects.
     const MP2::MapObjectType objectType = GetObject( false );
 
-    if ( !MP2::isActionObject( objectType ) && ( _mainAddon._objectIcnType != MP2::OBJ_ICN_TYPE_UNKNOWN ) && isObjectOrBottomLayerType( _mainAddon._layerType )
-         && !isShadow() ) {
+    if ( !MP2::isActionObject( objectType ) && ( _mainAddon._objectIcnType != MP2::OBJ_ICN_TYPE_UNKNOWN ) && !_mainAddon.isPassabilityTransparent() && !isShadow() ) {
         // This is a non-action object.
 
         if ( !Maps::isValidDirection( _index, Direction::BOTTOM ) ) {
@@ -766,7 +759,7 @@ void Maps::Tiles::updatePassability()
         tileUIDs.emplace_back( _mainAddon._uid );
 
         for ( const TilesAddon & addon : _addonBottomLayer ) {
-            if ( isObjectOrBottomLayerType( addon._layerType ) ) {
+            if ( !addon.isPassabilityTransparent() ) {
                 // If this assertion blows up then the object is not set properly. An object must have a valid UID!
                 assert( addon._uid != 0 );
                 tileUIDs.emplace_back( addon._uid );
@@ -792,7 +785,7 @@ void Maps::Tiles::updatePassability()
         const bool singleObjectTile = ( validBottomLayerObjects == 0 ) && _addonTopLayer.empty() && ( bottomTile._mainAddon._objectIcnType != _mainAddon._objectIcnType );
 
         // TODO: we might need to simplify the logic below as singleObjectTile might cover most of it.
-        if ( !singleObjectTile && !isDetachedObject() && isObjectOrBottomLayerType( bottomTile._mainAddon._layerType )
+        if ( !singleObjectTile && !isDetachedObject() && !bottomTile._mainAddon.isPassabilityTransparent()
              && ( bottomTile._mainAddon._objectIcnType != MP2::OBJ_ICN_TYPE_UNKNOWN ) ) {
             const MP2::MapObjectType bottomTileObjectType = bottomTile.GetObject( false );
             const MP2::MapObjectType correctedObjectType = MP2::getBaseActionObjectType( bottomTileObjectType );
@@ -845,12 +838,12 @@ void Maps::Tiles::updatePassability()
 
 bool Maps::Tiles::doesObjectExist( const uint32_t uid ) const
 {
-    if ( _mainAddon._uid == uid && isObjectOrBottomLayerType( _mainAddon._layerType ) ) {
+    if ( _mainAddon._uid == uid && !_mainAddon.isPassabilityTransparent() ) {
         return true;
     }
 
     return std::any_of( _addonBottomLayer.cbegin(), _addonBottomLayer.cend(),
-                        [uid]( const TilesAddon & addon ) { return addon._uid == uid && isObjectOrBottomLayerType( addon._layerType ); } );
+                        [uid]( const TilesAddon & addon ) { return addon._uid == uid && !addon.isPassabilityTransparent(); } );
 }
 
 void Maps::Tiles::UpdateRegion( uint32_t newRegionID )
@@ -1067,6 +1060,17 @@ bool Maps::Tiles::GoodForUltimateArtifact() const
     }
 
     return true;
+}
+
+bool Maps::Tiles::isPassabilityTransparent() const
+{
+    for ( const TilesAddon & addon : _addonBottomLayer ) {
+        if ( !addon.isPassabilityTransparent() ) {
+            return false;
+        }
+    }
+
+    return _mainAddon.isPassabilityTransparent();
 }
 
 bool Maps::Tiles::isPassableFrom( const int direction, const bool fromWater, const bool skipFog, const int heroColor ) const
@@ -1662,18 +1666,18 @@ bool Maps::Tiles::isTallObject() const
     }
 
     std::vector<uint32_t> tileUIDs;
-    if ( _mainAddon._objectIcnType != MP2::OBJ_ICN_TYPE_UNKNOWN && _mainAddon._uid != 0 && isObjectOrBottomLayerType( _mainAddon._layerType ) ) {
+    if ( _mainAddon._objectIcnType != MP2::OBJ_ICN_TYPE_UNKNOWN && _mainAddon._uid != 0 && !_mainAddon.isPassabilityTransparent() ) {
         tileUIDs.emplace_back( _mainAddon._uid );
     }
 
     for ( const TilesAddon & addon : _addonBottomLayer ) {
-        if ( addon._uid != 0 && isObjectOrBottomLayerType( addon._layerType ) ) {
+        if ( addon._uid != 0 && !addon.isPassabilityTransparent() ) {
             tileUIDs.emplace_back( addon._uid );
         }
     }
 
     for ( const TilesAddon & addon : _addonTopLayer ) {
-        if ( addon._uid != 0 && isObjectOrBottomLayerType( addon._layerType ) ) {
+        if ( addon._uid != 0 && !addon.isPassabilityTransparent() ) {
             tileUIDs.emplace_back( addon._uid );
         }
     }
@@ -1772,12 +1776,12 @@ bool Maps::Tiles::isDetachedObject() const
 
     const uint32_t objectUID = world.GetTiles( mainTileIndex ).GetObjectUID();
     if ( _mainAddon._uid == objectUID ) {
-        return isObjectOrBottomLayerType( _mainAddon._layerType );
+        return !_mainAddon.isPassabilityTransparent();
     }
 
     for ( const TilesAddon & addon : _addonBottomLayer ) {
         if ( addon._uid == objectUID ) {
-            return isObjectOrBottomLayerType( addon._layerType );
+            return !addon.isPassabilityTransparent();
         }
     }
 

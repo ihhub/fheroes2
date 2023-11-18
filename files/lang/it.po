@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-03 12:33+0000\n"
+"POT-Creation-Date: 2023-11-09 03:47+0000\n"
 "PO-Revision-Date: 2022-12-03 04:36+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <it@li.org>\n"
@@ -3196,6 +3196,10 @@ msgid "Select Hero:"
 msgstr "Scegli eroe:"
 
 #, fuzzy
+msgid "Select Treasure:"
+msgstr "Scegli eroe:"
+
+#, fuzzy
 msgid "Map Type:\n"
 msgstr "Tipo di mappa"
 
@@ -3511,10 +3515,22 @@ msgstr ""
 msgid "Choose a tile which does not contain any objects."
 msgstr ""
 
+msgid "Treasure"
+msgstr "Tesoro"
+
+msgid "Treasures cannot be placed on water."
+msgstr ""
+
 msgid "Heroes"
 msgstr "Eroi"
 
 msgid "Heroes cannot be placed on water."
+msgstr ""
+
+msgid "Artifacts"
+msgstr "Artefatti"
+
+msgid "Artifacts cannot be placed on water."
 msgstr ""
 
 msgid "Ocean Objects"
@@ -3550,9 +3566,6 @@ msgstr ""
 #, fuzzy
 msgid "Towns"
 msgstr "Castello"
-
-msgid "Artifacts"
-msgstr "Artefatti"
 
 #, fuzzy
 msgid "Treasures"
@@ -5459,9 +5472,6 @@ msgstr ""
 msgid "You come upon the remains of an unfortunate adventurer."
 msgstr "Trovi le spoglie di un avventuriero sfortunato."
 
-msgid "Treasure"
-msgstr "Tesoro"
-
 msgid "Searching through the tattered clothing, you find the %{artifact}."
 msgstr ""
 
@@ -6581,17 +6591,17 @@ msgstr ""
 msgid "%{name1} meets %{name2}"
 msgstr "%{name1} incontra %{name2}"
 
-msgid "Town Portal"
-msgstr "Alla Porta"
-
-msgid "Select town to port to."
-msgstr ""
-
 msgid "Enemy heroes are now fully identifiable."
 msgstr ""
 
 msgid "Identify Hero"
 msgstr "Riconosci Eroi"
+
+msgid "Select town to port to."
+msgstr ""
+
+msgid "Town Portal"
+msgstr "Alla Porta"
 
 msgid "The creatures are willing to join us!"
 msgstr ""
@@ -9356,6 +9366,9 @@ msgid ""
 "lost by mortals."
 msgstr ""
 
+msgid "spellBonus|selected by user"
+msgstr ""
+
 msgid "Wood"
 msgstr "Legno"
 
@@ -9875,6 +9888,44 @@ msgstr "Guardiano dell'Acqua"
 
 msgid "Sets Water Elementals to guard a mine against enemy armies."
 msgstr "Convoca una Creatura dell'Acqua per proteggere una miniera."
+
+#, fuzzy
+msgid "Random Spell"
+msgstr "Casuale"
+
+msgid "Randomly selected spell of any level."
+msgstr ""
+
+#, fuzzy
+msgid "Random 1st Level Spell"
+msgstr "Castello casuale"
+
+msgid "Randomly selected 1st level spell."
+msgstr ""
+
+msgid "Random 2nd Level Spell"
+msgstr ""
+
+msgid "Randomly selected 2nd level spell."
+msgstr ""
+
+msgid "Random 3rd Level Spell"
+msgstr ""
+
+msgid "Randomly selected 3rd level spell."
+msgstr ""
+
+msgid "Random 4th Level Spell"
+msgstr ""
+
+msgid "Randomly selected 4th level spell."
+msgstr ""
+
+msgid "Random 5th Level Spell"
+msgstr ""
+
+msgid "Randomly selected 5th level spell."
+msgstr ""
 
 msgid "Petrification"
 msgstr "Pietrificazione"

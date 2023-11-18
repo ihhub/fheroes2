@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-03 12:33+0000\n"
+"POT-Creation-Date: 2023-11-09 03:47+0000\n"
 "PO-Revision-Date: 2022-10-25 08:56+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
@@ -3263,6 +3263,10 @@ msgid "Select Hero:"
 msgstr "Melhor Herói:"
 
 #, fuzzy
+msgid "Select Treasure:"
+msgstr "Melhor Herói:"
+
+#, fuzzy
 msgid "Map Type:\n"
 msgstr "Tamano do Mapa"
 
@@ -3581,11 +3585,27 @@ msgstr ""
 msgid "Choose a tile which does not contain any objects."
 msgstr ""
 
+#, fuzzy
+msgid "Treasure"
+msgstr "Tesouros"
+
+#, fuzzy
+msgid "Treasures cannot be placed on water."
+msgstr "Esta cidade não pode ser transformada em castelo."
+
 msgid "Heroes"
 msgstr "Heróis"
 
 msgid "Heroes cannot be placed on water."
 msgstr ""
+
+#, fuzzy
+msgid "Artifacts"
+msgstr "Artefato"
+
+#, fuzzy
+msgid "Artifacts cannot be placed on water."
+msgstr "Esta cidade não pode ser transformada em castelo."
 
 msgid "Ocean Objects"
 msgstr ""
@@ -3619,10 +3639,6 @@ msgstr ""
 #, fuzzy
 msgid "Towns"
 msgstr "Cidade"
-
-#, fuzzy
-msgid "Artifacts"
-msgstr "Artefato"
 
 #, fuzzy
 msgid "Treasures"
@@ -5595,10 +5611,6 @@ msgstr ""
 "Olhando através da roupa esfarrapada, você encontra nada."
 
 #, fuzzy
-msgid "Treasure"
-msgstr "Tesouros"
-
-#, fuzzy
 msgid "Searching through the tattered clothing, you find the %{artifact}."
 msgstr ""
 "Você vai sobre os restos de um aventureiro infeliz.\n"
@@ -6781,16 +6793,16 @@ msgstr ""
 msgid "%{name1} meets %{name2}"
 msgstr ""
 
-msgid "Town Portal"
+msgid "Enemy heroes are now fully identifiable."
+msgstr ""
+
+msgid "Identify Hero"
 msgstr ""
 
 msgid "Select town to port to."
 msgstr ""
 
-msgid "Enemy heroes are now fully identifiable."
-msgstr ""
-
-msgid "Identify Hero"
+msgid "Town Portal"
 msgstr ""
 
 msgid "The creatures are willing to join us!"
@@ -9577,6 +9589,9 @@ msgid ""
 "lost by mortals."
 msgstr ""
 
+msgid "spellBonus|selected by user"
+msgstr ""
+
 msgid "Wood"
 msgstr "Madeira"
 
@@ -10028,6 +10043,43 @@ msgid "Set Water Guardian"
 msgstr ""
 
 msgid "Sets Water Elementals to guard a mine against enemy armies."
+msgstr ""
+
+#, fuzzy
+msgid "Random Spell"
+msgstr "Criaturas"
+
+msgid "Randomly selected spell of any level."
+msgstr ""
+
+msgid "Random 1st Level Spell"
+msgstr ""
+
+msgid "Randomly selected 1st level spell."
+msgstr ""
+
+msgid "Random 2nd Level Spell"
+msgstr ""
+
+msgid "Randomly selected 2nd level spell."
+msgstr ""
+
+msgid "Random 3rd Level Spell"
+msgstr ""
+
+msgid "Randomly selected 3rd level spell."
+msgstr ""
+
+msgid "Random 4th Level Spell"
+msgstr ""
+
+msgid "Randomly selected 4th level spell."
+msgstr ""
+
+msgid "Random 5th Level Spell"
+msgstr ""
+
+msgid "Randomly selected 5th level spell."
 msgstr ""
 
 #, fuzzy
