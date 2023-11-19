@@ -4432,32 +4432,33 @@ msgstr ""
 "Át akarod adni az irányítást a gépnek? Ez csak a következő körtől lesz "
 "hatásos."
 
-#, fuzzy
 msgid "The save file is corrupted."
-msgstr "A Tükörkép varázslat nem sikerült."
+msgstr "A mentés fájl sikerült."
 
 msgid "Unsupported save format: "
-msgstr ""
+msgstr "Nem támogatott mentés formátum: "
 
 msgid "Current game version: "
-msgstr ""
+msgstr "Jelenlegi játék verziója: "
 
 msgid "Last supported version: "
-msgstr ""
+msgstr "Utolsó támogatott verzió: "
 
 msgid "This file contains a save with an invalid game type."
-msgstr ""
+msgstr "Ez a fájl nem megfelelő játékverzióval lett mentve."
 
 msgid ""
 "This file was saved for a \"The Price of Loyalty\" map, but the "
 "corresponding game assets have not been provided to the engine."
 msgstr ""
+"Ez a fájl a \"Hűség ára\" térképhez lett mentve, de a játékmotor "
+"nem tartalmaz egyező eszközt."
 
 msgid "This saved game is localized to '"
-msgstr ""
+msgstr "Ez a mentett játék lokalizált '"
 
 msgid "' language, but the current language of the game is '"
-msgstr ""
+msgstr "' nyelvre, azonban a játék jelenlegi nyelve '"
 
 msgid "Hot Seat"
 msgstr "Helycserés"
@@ -4466,6 +4467,8 @@ msgid ""
 "Play a Hot Seat game, where 2 to 4 players play around the same computer, "
 "switching into the 'Hot Seat' when it is their turn."
 msgstr ""
+"A helycserés játék során 2-4 játékos játszik ugyanazon a számítógépen és "
+"körönként cserélődnek (Hot Seat)."
 
 msgid "A single player game playing out a single map."
 msgstr "Egyjátékos mód egy pályán."
@@ -4535,10 +4538,10 @@ msgstr ""
 "Élvezetes játékot!"
 
 msgid "Editor"
-msgstr ""
+msgstr "Szerkesztő"
 
 msgid "The Editor requires \"The Price of Loyalty\" expansion files to work."
-msgstr ""
+msgstr "A szerkesztő a \"Hűség ára\" kiegészítő fájljait igényli a működéséhez."
 
 msgid "Quit Heroes of Might and Magic II and return to the operating system."
 msgstr "Kilépés a Heroes of Might and Magic II-ből és visszatérés az operációs rendszerhez."
@@ -4567,6 +4570,8 @@ msgid ""
 "Required video files for campaign selection window are missing. Please make "
 "sure that all necessary files are present in the system."
 msgstr ""
+"A hadjárat kiválasztási ablak megnyitásához egy videó hiányzik. Kérlek "
+"nézd át, hogy a játékhoz minden szükséges fájl jelen van-e a rendszerben."
 
 msgid ""
 "Either Roland's or Archibald's campaign from the original Heroes of Might "
