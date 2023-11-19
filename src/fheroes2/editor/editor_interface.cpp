@@ -111,6 +111,11 @@ namespace
     {
         // Run through all tile offsets and check that all objects parts can be put on the map.
         for ( const auto & objectPart : info.groundLevelParts ) {
+            if ( objectPart.layerType == Maps::SHADOW_LAYER ) {
+                // Shadow layer parts are ignored.
+                continue;
+            }
+
             if ( !Maps::isValidAbsPoint( mainTilePos.x + objectPart.tileOffset.x, mainTilePos.y + objectPart.tileOffset.y ) ) {
                 return false;
             }
