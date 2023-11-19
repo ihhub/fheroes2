@@ -3821,7 +3821,7 @@ msgid "Easy"
 msgstr "Könnyű"
 
 msgid "Hard"
-msgstr "Nehéz"
+msgstr ""
 
 msgid "Campaign Difficulty"
 msgstr "Hadjárat nehézsége"
@@ -3891,7 +3891,7 @@ msgstr ""
 "során."
 
 msgid "Restart"
-msgstr "Újraindít"
+msgstr ""
 
 msgid "Restart the current scenario."
 msgstr "Aktuális küldetés újraindítása."
