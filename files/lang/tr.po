@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-09 03:47+0000\n"
+"POT-Creation-Date: 2023-11-19 15:02+0000\n"
 "PO-Revision-Date: 2022-10-01 20:20+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Turkish <tr@li.org>\n"
@@ -3044,6 +3044,9 @@ msgstr ""
 msgid "%{color} %{race} hero"
 msgstr ""
 
+msgid "Terrain object"
+msgstr ""
+
 msgid "Select Skill:"
 msgstr ""
 
@@ -3061,6 +3064,10 @@ msgstr ""
 
 #, fuzzy
 msgid "Select Treasure:"
+msgstr "Büyü hedefini seç"
+
+#, fuzzy
+msgid "Select Ocean Object:"
 msgstr "Büyü hedefini seç"
 
 msgid "Map Type:\n"
@@ -3346,6 +3353,9 @@ msgstr ""
 msgid "Monster"
 msgstr ""
 
+msgid "Objects cannot be placed outside the map."
+msgstr ""
+
 msgid "Monsters cannot be placed on water."
 msgstr ""
 
@@ -3368,6 +3378,12 @@ msgid "Artifacts"
 msgstr ""
 
 msgid "Artifacts cannot be placed on water."
+msgstr ""
+
+msgid "Ocean object"
+msgstr ""
+
+msgid "Ocean object must be placed on water."
 msgstr ""
 
 msgid "Ocean Objects"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-09 03:47+0000\n"
+"POT-Creation-Date: 2023-11-19 15:02+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3324,6 +3324,10 @@ msgstr "Приемете направения избор."
 msgid "%{color} %{race} hero"
 msgstr "%{color} играч"
 
+#, fuzzy
+msgid "Terrain object"
+msgstr "Режим терен"
+
 msgid "Select Skill:"
 msgstr "Избери умение:"
 
@@ -3342,6 +3346,10 @@ msgstr "Избери герой:"
 #, fuzzy
 msgid "Select Treasure:"
 msgstr "Избери герой:"
+
+#, fuzzy
+msgid "Select Ocean Object:"
+msgstr "Океански обекти"
 
 msgid "Map Type:\n"
 msgstr "Тип на карта:\n"
@@ -3650,6 +3658,10 @@ msgstr "Излез от редактора на карти."
 msgid "Monster"
 msgstr "Чудовище"
 
+#, fuzzy
+msgid "Objects cannot be placed outside the map."
+msgstr "Това заклинание не може да се направи на кораб."
+
 msgid "Monsters cannot be placed on water."
 msgstr ""
 
@@ -3674,6 +3686,14 @@ msgstr "Артефакти"
 
 #, fuzzy
 msgid "Artifacts cannot be placed on water."
+msgstr "Това заклинание не може да се направи на кораб."
+
+#, fuzzy
+msgid "Ocean object"
+msgstr "Океански обекти"
+
+#, fuzzy
+msgid "Ocean object must be placed on water."
 msgstr "Това заклинание не може да се направи на кораб."
 
 msgid "Ocean Objects"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-09 03:47+0000\n"
+"POT-Creation-Date: 2023-11-19 15:02+0000\n"
 "PO-Revision-Date: 2023-11-12 16:27+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -3315,6 +3315,10 @@ msgstr "Подтвердить Ваш выбор."
 msgid "%{color} %{race} hero"
 msgstr "%{color} герой - %{race}"
 
+#, fuzzy
+msgid "Terrain object"
+msgstr "Почва"
+
 msgid "Select Skill:"
 msgstr "Выберите навык:"
 
@@ -3332,6 +3336,10 @@ msgstr "Выберите героя:"
 
 msgid "Select Treasure:"
 msgstr "Выберите сокровище:"
+
+#, fuzzy
+msgid "Select Ocean Object:"
+msgstr "Объекты океана"
 
 msgid "Map Type:\n"
 msgstr "Тип карты:\n"
@@ -3635,6 +3643,10 @@ msgstr "Выйти из редактора карт."
 msgid "Monster"
 msgstr "Отряд"
 
+#, fuzzy
+msgid "Objects cannot be placed outside the map."
+msgstr "Героев нельзя размещать на воде."
+
 msgid "Monsters cannot be placed on water."
 msgstr "Монстров нельзя размещать на воде."
 
@@ -3658,6 +3670,14 @@ msgstr "Артефакты"
 
 msgid "Artifacts cannot be placed on water."
 msgstr "Артефакты нельзя размещать на воде."
+
+#, fuzzy
+msgid "Ocean object"
+msgstr "Объекты океана"
+
+#, fuzzy
+msgid "Ocean object must be placed on water."
+msgstr "Героев нельзя размещать на воде."
 
 msgid "Ocean Objects"
 msgstr "Объекты океана"
