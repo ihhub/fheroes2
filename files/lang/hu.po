@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-15 11:12+0000\n"
+"POT-Creation-Date: 2023-11-19 14:34+0000\n"
 "PO-Revision-Date: 2023-09-04 21:55+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -3207,6 +3207,9 @@ msgstr "A választás elfogadása."
 msgid "%{color} %{race} hero"
 msgstr "%{color} %{race} hős"
 
+msgid "Terrain object"
+msgstr ""
+
 msgid "Select Skill:"
 msgstr "Képesség kiválasztása:"
 
@@ -3225,6 +3228,10 @@ msgstr "Hős kiválasztása:"
 #, fuzzy
 msgid "Select Treasure:"
 msgstr "Hős kiválasztása:"
+
+#, fuzzy
+msgid "Select Ocean Object:"
+msgstr "Varázstárgy kiválasztása:"
 
 msgid "Map Type:\n"
 msgstr "Térképtípus:\n"
@@ -3530,6 +3537,10 @@ msgstr ""
 msgid "Monster"
 msgstr "Szörny"
 
+#, fuzzy
+msgid "Objects cannot be placed outside the map."
+msgstr "Ezt a várost nem lehet kastéllyá fejleszteni."
+
 msgid "Monsters cannot be placed on water."
 msgstr ""
 
@@ -3556,6 +3567,14 @@ msgstr "Varázstárgy"
 
 #, fuzzy
 msgid "Artifacts cannot be placed on water."
+msgstr "Ezt a várost nem lehet kastéllyá fejleszteni."
+
+#, fuzzy
+msgid "Ocean object"
+msgstr "Pusztulat"
+
+#, fuzzy
+msgid "Ocean object must be placed on water."
 msgstr "Ezt a várost nem lehet kastéllyá fejleszteni."
 
 msgid "Ocean Objects"

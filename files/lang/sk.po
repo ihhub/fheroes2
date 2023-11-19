@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-09 03:47+0000\n"
+"POT-Creation-Date: 2023-11-19 14:34+0000\n"
 "PO-Revision-Date: 2023-09-11 20:22+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3290,6 +3290,10 @@ msgstr "Prijať uskutočnený výber."
 msgid "%{color} %{race} hero"
 msgstr "%{color} hráč"
 
+#, fuzzy
+msgid "Terrain object"
+msgstr "Režim terénu"
+
 msgid "Select Skill:"
 msgstr "Zvoľ zručnosť:"
 
@@ -3308,6 +3312,10 @@ msgstr "Zvoľ hrdinu:"
 #, fuzzy
 msgid "Select Treasure:"
 msgstr "Zvoľ hrdinu:"
+
+#, fuzzy
+msgid "Select Ocean Object:"
+msgstr "Objekty oceánu"
 
 msgid "Map Type:\n"
 msgstr "Typ mapy:\n"
@@ -3609,6 +3617,10 @@ msgstr "Ukončiť prácu v editore máp."
 msgid "Monster"
 msgstr "Tvor"
 
+#, fuzzy
+msgid "Objects cannot be placed outside the map."
+msgstr "Toto kúzlo nemožno použiť na lodi."
+
 msgid "Monsters cannot be placed on water."
 msgstr ""
 
@@ -3633,6 +3645,14 @@ msgstr "Artefakty"
 
 #, fuzzy
 msgid "Artifacts cannot be placed on water."
+msgstr "Toto kúzlo nemožno použiť na lodi."
+
+#, fuzzy
+msgid "Ocean object"
+msgstr "Objekty oceánu"
+
+#, fuzzy
+msgid "Ocean object must be placed on water."
 msgstr "Toto kúzlo nemožno použiť na lodi."
 
 msgid "Ocean Objects"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-09 03:47+0000\n"
+"POT-Creation-Date: 2023-11-19 14:34+0000\n"
 "PO-Revision-Date: 2022-12-18 13:48+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -3346,6 +3346,10 @@ msgstr "Confirmez le choix."
 msgid "%{color} %{race} hero"
 msgstr "Joueur %{color}"
 
+#, fuzzy
+msgid "Terrain object"
+msgstr "Aucun objet"
+
 msgid "Select Skill:"
 msgstr "Choisir compétence :"
 
@@ -3364,6 +3368,10 @@ msgstr "Choisir héros :"
 #, fuzzy
 msgid "Select Treasure:"
 msgstr "Choisir héros :"
+
+#, fuzzy
+msgid "Select Ocean Object:"
+msgstr "Choisir artéfact :"
 
 #, fuzzy
 msgid "Map Type:\n"
@@ -3684,6 +3692,10 @@ msgstr ""
 msgid "Monster"
 msgstr "Monstre"
 
+#, fuzzy
+msgid "Objects cannot be placed outside the map."
+msgstr "Ce sort ne peut pas être jeté en mer."
+
 msgid "Monsters cannot be placed on water."
 msgstr ""
 
@@ -3708,6 +3720,14 @@ msgstr "Artéfacts"
 
 #, fuzzy
 msgid "Artifacts cannot be placed on water."
+msgstr "Ce sort ne peut pas être jeté en mer."
+
+#, fuzzy
+msgid "Ocean object"
+msgstr "Aucun objet"
+
+#, fuzzy
+msgid "Ocean object must be placed on water."
 msgstr "Ce sort ne peut pas être jeté en mer."
 
 msgid "Ocean Objects"

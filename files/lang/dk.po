@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-09 03:47+0000\n"
+"POT-Creation-Date: 2023-11-19 14:34+0000\n"
 "PO-Revision-Date: 2023-09-12 11:08+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
@@ -3350,6 +3350,10 @@ msgstr "Acceptér de trufne valg."
 msgid "%{color} %{race} hero"
 msgstr "%{color} spiller"
 
+#, fuzzy
+msgid "Terrain object"
+msgstr "Terræn-tilstand"
+
 msgid "Select Skill:"
 msgstr "Vælg evne:"
 
@@ -3368,6 +3372,10 @@ msgstr "Vælg helt:"
 #, fuzzy
 msgid "Select Treasure:"
 msgstr "Vælg helt:"
+
+#, fuzzy
+msgid "Select Ocean Object:"
+msgstr "Hav-objekter"
 
 msgid "Map Type:\n"
 msgstr "Korttype:\n"
@@ -3675,6 +3683,10 @@ msgstr "Forlad korteditoren."
 msgid "Monster"
 msgstr "Væsen"
 
+#, fuzzy
+msgid "Objects cannot be placed outside the map."
+msgstr "Denne besværgelse kan ikke kastes ombord på et skib."
+
 msgid "Monsters cannot be placed on water."
 msgstr ""
 
@@ -3699,6 +3711,14 @@ msgstr "Artefakter"
 
 #, fuzzy
 msgid "Artifacts cannot be placed on water."
+msgstr "Denne besværgelse kan ikke kastes ombord på et skib."
+
+#, fuzzy
+msgid "Ocean object"
+msgstr "Hav-objekter"
+
+#, fuzzy
+msgid "Ocean object must be placed on water."
 msgstr "Denne besværgelse kan ikke kastes ombord på et skib."
 
 msgid "Ocean Objects"
