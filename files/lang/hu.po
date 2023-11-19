@@ -3487,202 +3487,196 @@ msgstr "Személyiség:"
 msgid "Best Monster:"
 msgstr "Legerősebb lény:"
 
-#, fuzzy
 msgid ""
 "Are you sure you want to load a new map? (Any unsaved changes to the current "
 "map will be lost.)"
 msgstr ""
-"Biztos hogy benne hogy új játékot töltesz be? (A jelenlegi játékod el fog "
-"veszni)"
+"Biztos hogy benne hogy új térképet töltesz be? (A jelenlegi térkép változtatásai "
+"el fognak veszni.)"
 
-#, fuzzy
 msgid ""
 "Are you sure you want to create a new map? (Any unsaved changes to the "
 "current map will be lost.)"
 msgstr ""
-"Biztos hogy benne hogy új játékot töltesz be? (A jelenlegi játékod el fog "
-"veszni)"
+"Biztos hogy benne hogy új térképet hozol létre? (A jelenlegi térkép változtatásai "
+"el fognak veszni.)"
 
 msgid ""
 "Create a new map, either from scratch or using the random map generator."
 msgstr ""
+"Készíts új térképet a saját elképzelésed szerint vagy használd a "
+"véletlenszerű térkép generálót."
 
-#, fuzzy
 msgid "New Map"
-msgstr "Dawn"
+msgstr "Új térkép"
 
-#, fuzzy
 msgid "Load Map"
-msgstr "Játék betöltése"
+msgstr "Térkép betöltése"
 
 msgid "Load an existing map."
-msgstr ""
+msgstr "Létező térkép betöltése"
 
-#, fuzzy
 msgid "Save Map"
-msgstr "Új játék"
+msgstr "Térkép mentése"
 
-#, fuzzy
 msgid "Save the current map."
-msgstr "Kattints a főmenübe való visszatéréshez."
+msgstr "Az aktuális térkép mentése."
 
 msgid "Quit out of the map editor."
-msgstr ""
+msgstr "Kilépés a térképszerkesztőből."
 
 msgid "Monster"
-msgstr "Szörny"
+msgstr "Lény"
 
 msgid "Monsters cannot be placed on water."
-msgstr ""
+msgstr "Vízen nem helyezhetők el lények."
 
 msgid "Choose a tile which does not contain any objects."
 msgstr ""
 
-#, fuzzy
 msgid "Treasure"
-msgstr "Kincsek"
+msgstr "Kincs"
 
-#, fuzzy
 msgid "Treasures cannot be placed on water."
-msgstr "Ezt a várost nem lehet kastéllyá fejleszteni."
+msgstr "Vízen nem helyezhetők el kincsek."
 
 msgid "Heroes"
 msgstr "Hősök"
 
 msgid "Heroes cannot be placed on water."
-msgstr ""
+msgstr "Vízen nem helyezhetők el hősök."
 
-#, fuzzy
 msgid "Artifacts"
-msgstr "Varázstárgy"
+msgstr "Varázstárgyak"
 
-#, fuzzy
 msgid "Artifacts cannot be placed on water."
-msgstr "Ezt a várost nem lehet kastéllyá fejleszteni."
+msgstr "Vízen nem helyezhetők el varázstárgyak."
 
 msgid "Ocean Objects"
-msgstr ""
+msgstr "Tengeri tárgyak"
 
 msgid "Grass Objects"
-msgstr ""
+msgstr "Füves tárgyak"
 
 msgid "Snow Objects"
-msgstr ""
+msgstr "Havas tárgyak"
 
 msgid "Swamp Objects"
-msgstr ""
+msgstr "Mocsári tárgyak"
 
 msgid "Lava Objects"
-msgstr ""
+msgstr "Láva tárgyak"
 
-#, fuzzy
 msgid "Desert Objects"
-msgstr "Sivatagi sátor"
+msgstr "Sivatagi tárgyak"
 
 msgid "Dirt Objects"
-msgstr ""
+msgstr "Talaj tárgyak"
 
-#, fuzzy
 msgid "Wasteland Objects"
-msgstr "Pusztulat"
+msgstr "Pusztaság tárgyak"
 
 msgid "Beach Objects"
-msgstr ""
+msgstr "Tengerparti tárgyak"
 
-#, fuzzy
 msgid "Towns"
-msgstr "Város"
+msgstr "Városok"
 
-#, fuzzy
 msgid "Treasures"
 msgstr "Kincsek"
 
 msgid "Terrain"
-msgstr ""
+msgstr "Talaj"
 
-#, fuzzy
 msgid "Castles"
-msgstr "Vár"
+msgstr "Várak"
 
-#, fuzzy
 msgid "Roads"
-msgstr "Út Mód"
+msgstr "Utak"
 
 msgid "Streams"
-msgstr ""
+msgstr "Folyóvizek"
 
 msgid ""
 "Draws terrain in\n"
 "%{size} by %{size} square increments."
 msgstr ""
+"Talaj rajzolása\n"
+"%{size} x %{size} négyzetes egységekben."
 
 msgid ""
 "Erases objects in\n"
 "%{size} by %{size} square increments."
 msgstr ""
+"Tárgyak törlése\n"
+"%{size} x %{size} négyzetes egységekben."
 
-#, fuzzy
 msgid "Small Brush"
-msgstr "Kicsi térképek"
+msgstr "Kicsi ecset"
 
-#, fuzzy
 msgid "Medium Brush"
-msgstr "Közepes térképek"
+msgstr "Közepes ecset"
 
-#, fuzzy
 msgid "Large Brush"
-msgstr "Nagy térképek"
+msgstr "Nagy ecset"
 
 msgid "Area Fill"
-msgstr ""
+msgstr "Terület kitöltése"
 
 msgid "Used to click and drag for filling in large areas."
-msgstr ""
+msgstr "Nagy térképterületek kitöltésére használatos."
 
 msgid "Clear Area"
-msgstr ""
+msgstr "Terület törlése"
 
 msgid "Used to click and drag for clearing large areas."
-msgstr ""
+msgstr "Nagy térképterületek törlésére használatos."
 
 msgid ""
 "Costs %{rate} times normal movement for all heroes. (Pathfinding reduces or "
 "eliminates the penalty.)"
 msgstr ""
+"Költség: a hősök normál lépésszáma x %{rate}. (A nyomkövetés képesség "
+"csökkenti vagy teljesen lenullázza ezt a hátrányt.)"
 
 msgid "Traversable only by boat."
-msgstr ""
+msgstr "Csak hajóval járható."
 
 msgid "No special modifiers."
-msgstr ""
+msgstr "Nincs speciális módosító."
 
 msgid "Used to place objects most appropriate for use on %{terrain}."
-msgstr ""
+msgstr "Tárgyak elhelyezésére használatos, leginkább %{terrain} esetén."
 
 msgid ""
 "Used to place\n"
 "a town or castle."
 msgstr ""
+"Város vagy vár\n"
+"elhelyezésére való."
 
 msgid ""
 "Used to place\n"
 "a monster group."
 msgstr ""
+"Lénycsoportok\n"
+"elhelyezésére való."
 
 msgid "Used to place a hero."
-msgstr ""
+msgstr "Hős elhelyezésére való."
 
-#, fuzzy
 msgid "Used to place an artifact."
-msgstr "A Szent Varázstárgy kiásása."
+msgstr "Varázstárgy elhelyezésére való."
 
 msgid ""
 "Used to place\n"
 "a resource or treasure."
 msgstr ""
+"Erőforrás vagy kincs\n"
+"elhelyezésére való."
 
 msgid "Toggle the erasure of %{type} objects."
-msgstr ""
+msgstr "%{type} tárgyak törlésének kapcsolója."
 
 msgid ""
 "Objects of this type will be deleted with the Erase tool. Left-click here to "
@@ -3697,60 +3691,60 @@ msgid ""
 msgstr ""
 
 msgid "Terrain Mode"
-msgstr ""
+msgstr "Talaj mód"
 
 msgid "Used to draw the underlying grass, dirt, water, etc. on the map."
-msgstr ""
+msgstr "Különféle talajokat (fű, föld, víz stb.) rajzol a térképen."
 
 msgid "Object Mode"
-msgstr ""
+msgstr "Objektum mód"
 
 msgid "Used to place objects (mountains, trees, treasure, etc.) on the map."
-msgstr ""
+msgstr "Elhelyezi a tereptárgyakat (hegyek, fák, kincsek stb.) a térképen."
 
 msgid "Detail Mode"
-msgstr ""
+msgstr "Részletes mód"
 
-#, fuzzy
 msgid "Used for special editing of monsters, heroes and towns."
-msgstr "Az ellenfelek összes hősének és városának elpusztítása."
+msgstr "Lények, hősök, városok speciális szerkesztéséhez használatos."
 
 msgid "Allows you to draw streams by clicking and dragging."
-msgstr ""
+msgstr "Kattintás és húzás révén lehetővé teszi vízfolyások rajzolását."
 
 msgid "Stream Mode"
-msgstr ""
+msgstr "Vízfolyás mód"
 
 msgid "Allows you to draw roads by clicking and dragging."
-msgstr ""
+msgstr "Kattintás és húzás révén lehetővé teszi utak rajzolását."
 
-#, fuzzy
 msgid "Road Mode"
-msgstr "Út Mód"
+msgstr "Út mód"
 
 msgid "Erase Mode"
-msgstr ""
+msgstr "Törlés mód"
 
 msgid "Used to erase objects from the map."
-msgstr ""
+msgstr "Ezzel törölheted a tárgyakat a térképről."
 
 msgid "Change between zoom and normal view."
-msgstr ""
+msgstr "Váltás nagyított és normál nézet között."
 
 msgid "Magnify"
-msgstr ""
+msgstr "Nagyítás"
 
 msgid "Undo"
-msgstr ""
+msgstr "Visszavonás"
 
 msgid "Undo your last action."
-msgstr ""
+msgstr "Utolsó cselekedet visszavonása."
 
 msgid "Create a new map either from scratch or using the random map generator."
 msgstr ""
+"Készíts új térképet a saját elképzelésed szerint vagy használd a "
+"véletlenszerű térkép generálót."
 
 msgid "Edit map title, description, and other general information."
-msgstr ""
+msgstr "A pályanevek, leírások és egyéb általános információk szerkesztése."
 
 msgid "Specifications"
 msgstr "Jellemzők"
