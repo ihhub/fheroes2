@@ -66,16 +66,28 @@ int Difficulty::GetScoutingBonus( int difficulty )
 
 double Difficulty::getGoldIncomeBonusForAI( const int difficulty )
 {
+    // The original game has the following bonuses for AI:
+    // Easy - -0.25 (-25%)
+    // Normal - 0.0 (no bonus)
+    // Hard - 0.29 (29%)
+    // Expert - 0.4 (40%)
+    // Impossible - 0.6 (60%)
+    //
+    // However, the current AI is able to use marketplace to trade resources.
+    // This means that the AI has a lot of resources at the end which might break the balance.
+    //
+    // Therefore, gold income bonuses are reduced by about 17%.
+
     switch ( difficulty ) {
     case Difficulty::EASY:
         // It is deduction from the income.
         return -0.25;
     case Difficulty::HARD:
-        return 0.29;
+        return 0.242;
     case Difficulty::EXPERT:
-        return 0.45;
+        return 0.375;
     case Difficulty::IMPOSSIBLE:
-        return 0.6;
+        return 0.5;
     default:
         break;
     }
@@ -120,6 +132,7 @@ int Difficulty::GetHeroMovementBonus( int difficulty )
 {
     switch ( difficulty ) {
     case Difficulty::EXPERT:
+        return 50;
     case Difficulty::IMPOSSIBLE:
         return 75;
     default:
