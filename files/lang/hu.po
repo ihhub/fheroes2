@@ -2125,7 +2125,7 @@ msgid "Crystal Garden"
 msgstr "Kristálykert"
 
 msgid "Treehouse"
-msgstr "Faház"
+msgstr "Fa Ház"
 
 msgid "Cottage"
 msgstr "Törpe kunyhó"
