@@ -228,8 +228,11 @@ namespace Interface
         std::array<int32_t, OBJECT_COUNT> _selectedObjectType;
 
         const std::array<Maps::ObjectGroup, OBJECT_COUNT> _selectedObjectGroup{ Maps::ObjectGroup::Ocean_Object, Maps::ObjectGroup::Grass_Object,
-            Maps::ObjectGroup::Snow_Object, Maps::ObjectGroup::Swamp_Object, Maps::ObjectGroup::Lava_Object, Maps::ObjectGroup::Desert_Object,
-            Maps::ObjectGroup::Dirt_Object, Maps::ObjectGroup::Wasteland_Object, Maps::ObjectGroup::Beach_Object, Maps::ObjectGroup::Town,
-            Maps::ObjectGroup::Monster, Maps::ObjectGroup::Hero, Maps::ObjectGroup::Artifact, Maps::ObjectGroup::Treasure };
+                                                                                Maps::ObjectGroup::Snow_Object,  Maps::ObjectGroup::Swamp_Object,
+                                                                                Maps::ObjectGroup::Lava_Object,  Maps::ObjectGroup::Desert_Object,
+                                                                                Maps::ObjectGroup::Dirt_Object,  Maps::ObjectGroup::Wasteland_Object,
+                                                                                Maps::ObjectGroup::Beach_Object, Maps::ObjectGroup::Town,
+                                                                                Maps::ObjectGroup::Monster,      Maps::ObjectGroup::Hero,
+                                                                                Maps::ObjectGroup::Artifact,     Maps::ObjectGroup::Treasure };
     };
 }

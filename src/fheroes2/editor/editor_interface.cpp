@@ -614,8 +614,6 @@ namespace Interface
         Maps::Tiles & tile = world.GetTiles( tileIndex );
 
         Heroes * otherHero = tile.getHero();
-        
-
         Castle * otherCastle = world.getCastle( tile.GetCenter() );
 
         if ( otherHero ) {
