@@ -7917,16 +7917,18 @@ msgstr "Üveg"
 msgid "Magic Well"
 msgstr "Varázskút"
 
+#, fuzzy
 msgid "Magic Garden"
 msgid_plural "Magic Gardens"
 msgstr[0] "Varázskert"
-msgstr[1] "Varázskertek"
+msgstr[1] "Varázskert"
 
 msgid "Observation Tower"
 msgstr "Kilátótorony"
 
+#, fuzzy
 msgid "Freeman's Foundry"
-msgstr "Öntőde"
+msgstr "Öntőde Műhely"
 
 msgid "Reefs"
 msgstr "Zátonyok"
@@ -8009,23 +8011,27 @@ msgstr "Földidéző oltár"
 msgid "Water Summoning Altar"
 msgstr "Vízidéző oltár"
 
+#, fuzzy
 msgid "Unknown Monster"
-msgstr "Ismeretlen lény"
+msgstr "Ismeretlen"
 
+#, fuzzy
 msgid "Unknown Monsters"
-msgstr "Ismeretlen lények"
+msgstr "Ismeretlen"
 
+#, fuzzy
 msgid "Peasant"
 msgstr "Jobbágy"
 
 msgid "Peasants"
-msgstr "Jobbágyok"
+msgstr "Jobbágy"
 
+#, fuzzy
 msgid "Archer"
 msgstr "Íjász"
 
 msgid "Archers"
-msgstr "Íjászok"
+msgstr "Íjász"
 
 #, fuzzy
 msgid "Ranger"
