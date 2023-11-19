@@ -110,6 +110,15 @@ namespace Maps
         Monster,
         Treasure,
         Ocean_Object,
+        Grass_Object,
+        Snow_Object,
+        Swamp_Object,
+        Lava_Object,
+        Desert_Object,
+        Dirt_Object,
+        Wasteland_Object,
+        Beach_Object,
+        Town,
 
         // IMPORTANT!!!
         // Put all new entries just above this entry.

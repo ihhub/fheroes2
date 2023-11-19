@@ -38,7 +38,6 @@
 #include "image.h"
 #include "interface_base.h"
 #include "localevent.h"
-#include "map_object_info.h"
 #include "screen.h"
 #include "tools.h"
 #include "translations.h"
@@ -71,13 +70,8 @@ namespace
 
     fheroes2::Rect getObjectOccupiedArea( const Maps::ObjectGroup group, const int32_t objectType )
     {
-        if ( objectType < 0 ) {
-            // It can happen if a user cancels object selection.
-            return { 0, 0, 1, 1 };
-        }
-
         const auto & objectInfo = Maps::getObjectsByGroup( group );
-        if ( objectType >= static_cast<int32_t>( objectInfo.size() ) ) {
+        if ( objectType < 0 || objectType >= static_cast<int32_t>( objectInfo.size() ) ) {
             assert( 0 );
             return { 0, 0, 1, 1 };
         }
@@ -130,6 +124,8 @@ namespace Interface
 
         _instrumentButtons[_selectedInstrument].press();
         _brushSizeButtons[_selectedBrushSize].press();
+
+        _selectedObjectType.fill( -1 );
     }
 
     fheroes2::Rect EditorPanel::getBrushArea() const
@@ -139,24 +135,13 @@ namespace Interface
             return { 0, 0, 1, 1 };
         }
 
-        if ( isMonsterSettingMode() ) {
-            return getObjectOccupiedArea( Maps::ObjectGroup::Monster, _monsterType );
-        }
+        if ( _selectedInstrument == OBJECT ) {
+            const int32_t objectType = getSelectedObjectType();
+            if ( objectType >= 0 ) {
+                return getObjectOccupiedArea( getSelectedObjectGroup(), objectType );
+            }
 
-        if ( isHeroSettingMode() ) {
-            return getObjectOccupiedArea( Maps::ObjectGroup::Hero, _heroType );
-        }
-
-        if ( isTreasureSettingMode() ) {
-            return getObjectOccupiedArea( Maps::ObjectGroup::Treasure, _treasureType );
-        }
-
-        if ( isArtifactSettingMode() ) {
-            return getObjectOccupiedArea( Maps::ObjectGroup::Artifact, _artifactType );
-        }
-
-        if ( isOceanObjectSettingMode() ) {
-            return getObjectOccupiedArea( Maps::ObjectGroup::Ocean_Object, _oceanObjectType );
+            return {};
         }
 
         switch ( _selectedBrushSize ) {
@@ -423,13 +408,14 @@ namespace Interface
 
         switch ( _selectedObject ) {
         case Brush::MONSTERS:
-            _interface.setCursorUpdater( [type = _monsterType]( const int32_t /*tileIndex*/ ) { setCustomCursor( Maps::ObjectGroup::Monster, type ); } );
-            break;
         case Brush::TREASURES:
-            _interface.setCursorUpdater( [type = _treasureType]( const int32_t /*tileIndex*/ ) { setCustomCursor( Maps::ObjectGroup::Treasure, type ); } );
+        case Brush::ARTIFACTS:
+        case Brush::WATER:
+            _interface.setCursorUpdater(
+                [type = getSelectedObjectType(), group = getSelectedObjectGroup()]( const int32_t /*tileIndex*/ ) { setCustomCursor( group, type ); } );
             break;
         case Brush::HEROES:
-            _interface.setCursorUpdater( [type = _heroType]( const int32_t /*tileIndex*/ ) {
+            _interface.setCursorUpdater( [type = getSelectedObjectType()]( const int32_t /*tileIndex*/ ) {
                 if ( type == -1 ) {
                     // The object type is not set. We show the POINTER cursor for this case.
                     Cursor::Get().SetThemes( Cursor::POINTER );
@@ -445,12 +431,6 @@ namespace Interface
                 const int32_t heroCorrectionY{ 12 };
                 Cursor::Get().setCustomImage( image, { -image.width() / 2, -image.height() / 2 - heroCorrectionY } );
             } );
-            break;
-        case Brush::ARTIFACTS:
-            _interface.setCursorUpdater( [type = _artifactType]( const int32_t /*tileIndex*/ ) { setCustomCursor( Maps::ObjectGroup::Artifact, type ); } );
-            break;
-        case Brush::WATER:
-            _interface.setCursorUpdater( [type = _oceanObjectType]( const int32_t /*tileIndex*/ ) { setCustomCursor( Maps::ObjectGroup::Ocean_Object, type ); } );
             break;
         default:
             _interface.setCursorUpdater( {} );
@@ -607,27 +587,27 @@ namespace Interface
                 fheroes2::showStandardTextMessage( _getObjectTypeName( Brush::TREASURES ), _( "Used to place\na resource or treasure." ), Dialog::ZERO );
             }
             else if ( le.MouseClickLeft( _objectButtonsRect[Brush::MONSTERS] ) ) {
-                const int monsterType = Dialog::selectMonsterType( _monsterType );
+                const int monsterType = Dialog::selectMonsterType( _selectedObjectType[Brush::MONSTERS] );
                 if ( monsterType >= 0 ) {
-                    _monsterType = monsterType;
+                    _selectedObjectType[Brush::MONSTERS] = monsterType;
                 }
                 _setCursor();
                 _interface.updateCursor( 0 );
                 return res;
             }
             else if ( le.MouseClickLeft( _objectButtonsRect[Brush::TREASURES] ) ) {
-                const int treasureType = Dialog::selectTreasureType( _treasureType );
+                const int treasureType = Dialog::selectTreasureType( _selectedObjectType[Brush::TREASURES] );
                 if ( treasureType >= 0 ) {
-                    _treasureType = treasureType;
+                    _selectedObjectType[Brush::TREASURES] = treasureType;
                 }
                 _setCursor();
                 _interface.updateCursor( 0 );
                 return res;
             }
             else if ( le.MouseClickLeft( _objectButtonsRect[Brush::HEROES] ) ) {
-                const int32_t heroType = Dialog::selectHeroType( _heroType );
+                const int32_t heroType = Dialog::selectHeroType( _selectedObjectType[Brush::HEROES] );
                 if ( heroType >= 0 ) {
-                    _heroType = heroType;
+                    _selectedObjectType[Brush::HEROES] = heroType;
                 }
 
                 _setCursor();
@@ -635,18 +615,18 @@ namespace Interface
                 return res;
             }
             else if ( le.MouseClickLeft( _objectButtonsRect[Brush::ARTIFACTS] ) ) {
-                const int artifactType = Dialog::selectArtifactType( _artifactType );
+                const int artifactType = Dialog::selectArtifactType( _selectedObjectType[Brush::ARTIFACTS] );
                 if ( artifactType >= 0 ) {
-                    _artifactType = artifactType;
+                    _selectedObjectType[Brush::ARTIFACTS] = artifactType;
                 }
                 _setCursor();
                 _interface.updateCursor( 0 );
                 return res;
             }
             else if ( le.MouseClickLeft( _objectButtonsRect[Brush::WATER] ) ) {
-                const int oceanObjectType = Dialog::selectOceanObjectType( _oceanObjectType );
+                const int oceanObjectType = Dialog::selectOceanObjectType( _selectedObjectType[Brush::WATER] );
                 if ( oceanObjectType >= 0 ) {
-                    _oceanObjectType = oceanObjectType;
+                    _selectedObjectType[Brush::WATER] = oceanObjectType;
                 }
                 _setCursor();
                 _interface.updateCursor( 0 );

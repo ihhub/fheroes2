@@ -93,6 +93,8 @@ namespace Interface
 
         void setObjectOnTile( Maps::Tiles & tile, const Maps::ObjectInfo & objectInfo );
 
+        void handleObjectMouseLeftClick( Maps::Tiles & tile );
+
         EditorPanel _editorPanel;
 
         int32_t _selectedTile{ -1 };

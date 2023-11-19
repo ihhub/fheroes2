@@ -204,7 +204,7 @@ namespace Interface
 
                     _gameArea.renderTileAreaSelect( display, indices.x, indices.y );
                 }
-                else {
+                else if ( _editorPanel.isTerrainEdit() || _editorPanel.isEraseMode() ) {
                     assert( brushSize == fheroes2::Rect() );
                     // Render area selection from the tile where the left mouse button was pressed till the tile under the cursor.
                     _gameArea.renderTileAreaSelect( display, _selectedTile, _tileUnderCursor );
@@ -614,9 +614,9 @@ namespace Interface
         Maps::Tiles & tile = world.GetTiles( tileIndex );
 
         Heroes * otherHero = tile.getHero();
-        const fheroes2::Point tilePos = tile.GetCenter();
+        
 
-        Castle * otherCastle = world.getCastle( tilePos );
+        Castle * otherCastle = world.getCastle( tile.GetCenter() );
 
         if ( otherHero ) {
             // TODO: Make hero edit dialog: e.g. with functions like in Battle only dialog, but only for one hero.
@@ -688,9 +688,26 @@ namespace Interface
                 }
             }
         }
-        else if ( _editorPanel.isMonsterSettingMode() ) {
-            const auto & objectInfo = getObjectInfo( Maps::ObjectGroup::Monster, _editorPanel.getMonsterType() );
 
+        if ( _editorPanel.isObjectMode() ) {
+            handleObjectMouseLeftClick( tile );
+        }
+    }
+
+    void EditorInterface::handleObjectMouseLeftClick( Maps::Tiles & tile )
+    {
+        assert( _editorPanel.isObjectMode() );
+
+        if ( _editorPanel.getSelectedObjectType() < 0 ) {
+            return;
+        }
+
+        const fheroes2::Point tilePos = tile.GetCenter();
+
+        const Maps::ObjectGroup groupType = _editorPanel.getSelectedObjectGroup();
+        const auto & objectInfo = getObjectInfo( groupType, _editorPanel.getSelectedObjectType() );
+
+        if ( groupType == Maps::ObjectGroup::Monster ) {
             if ( !isObjectPlacementAllowed( objectInfo, tilePos ) ) {
                 fheroes2::showStandardTextMessage( _( "Monster" ), _( "Objects cannot be placed outside the map." ), Dialog::OK );
                 return;
@@ -708,9 +725,7 @@ namespace Interface
 
             setObjectOnTile( tile, objectInfo );
         }
-        else if ( _editorPanel.isTreasureSettingMode() ) {
-            const auto & objectInfo = getObjectInfo( Maps::ObjectGroup::Treasure, _editorPanel.getTreasureType() );
-
+        else if ( groupType == Maps::ObjectGroup::Treasure ) {
             if ( !isObjectPlacementAllowed( objectInfo, tilePos ) ) {
                 fheroes2::showStandardTextMessage( _( "Treasure" ), _( "Objects cannot be placed outside the map." ), Dialog::OK );
                 return;
@@ -728,9 +743,7 @@ namespace Interface
 
             setObjectOnTile( tile, objectInfo );
         }
-        else if ( _editorPanel.isHeroSettingMode() ) {
-            const auto & objectInfo = getObjectInfo( Maps::ObjectGroup::Hero, _editorPanel.getHeroType() );
-
+        else if ( groupType == Maps::ObjectGroup::Hero ) {
             if ( !isObjectPlacementAllowed( objectInfo, tilePos ) ) {
                 fheroes2::showStandardTextMessage( _( "Heroes" ), _( "Objects cannot be placed outside the map." ), Dialog::OK );
                 return;
@@ -748,9 +761,7 @@ namespace Interface
 
             setObjectOnTile( tile, objectInfo );
         }
-        else if ( _editorPanel.isArtifactSettingMode() ) {
-            const auto & objectInfo = getObjectInfo( Maps::ObjectGroup::Artifact, _editorPanel.getArtifactType() );
-
+        else if ( groupType == Maps::ObjectGroup::Artifact ) {
             if ( !isObjectPlacementAllowed( objectInfo, tilePos ) ) {
                 fheroes2::showStandardTextMessage( _( "Artifacts" ), _( "Objects cannot be placed outside the map." ), Dialog::OK );
                 return;
@@ -766,7 +777,7 @@ namespace Interface
                 return;
             }
 
-            const int32_t artifactType = _editorPanel.getArtifactType();
+            const int32_t artifactType = _editorPanel.getSelectedObjectType();
 
             const auto & artifactInfo = Maps::getObjectsByGroup( Maps::ObjectGroup::Artifact );
             assert( artifactType >= 0 && artifactType < static_cast<int32_t>( artifactInfo.size() ) );
@@ -787,9 +798,7 @@ namespace Interface
                 setObjectOnTile( tile, objectInfo );
             }
         }
-        else if ( _editorPanel.isOceanObjectSettingMode() ) {
-            const auto & objectInfo = getObjectInfo( Maps::ObjectGroup::Ocean_Object, _editorPanel.getOceanObjectType() );
-
+        else if ( groupType == Maps::ObjectGroup::Ocean_Object ) {
             if ( !isObjectPlacementAllowed( objectInfo, tilePos ) ) {
                 fheroes2::showStandardTextMessage( _( "Ocean object" ), _( "Objects cannot be placed outside the map." ), Dialog::OK );
                 return;
