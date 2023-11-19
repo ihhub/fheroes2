@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-09 03:47+0000\n"
+"POT-Creation-Date: 2023-11-19 15:02+0000\n"
 "PO-Revision-Date: 2022-10-25 08:56+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
@@ -3242,6 +3242,9 @@ msgstr "Aceitar a escolha feita."
 msgid "%{color} %{race} hero"
 msgstr "Turno do jogador %{color}"
 
+msgid "Terrain object"
+msgstr ""
+
 #, fuzzy
 msgid "Select Skill:"
 msgstr "Habilidade de Defesa"
@@ -3265,6 +3268,10 @@ msgstr "Melhor Herói:"
 #, fuzzy
 msgid "Select Treasure:"
 msgstr "Melhor Herói:"
+
+#, fuzzy
+msgid "Select Ocean Object:"
+msgstr "Artefato"
 
 #, fuzzy
 msgid "Map Type:\n"
@@ -3579,6 +3586,10 @@ msgstr ""
 msgid "Monster"
 msgstr ""
 
+#, fuzzy
+msgid "Objects cannot be placed outside the map."
+msgstr "Esta cidade não pode ser transformada em castelo."
+
 msgid "Monsters cannot be placed on water."
 msgstr ""
 
@@ -3605,6 +3616,14 @@ msgstr "Artefato"
 
 #, fuzzy
 msgid "Artifacts cannot be placed on water."
+msgstr "Esta cidade não pode ser transformada em castelo."
+
+#, fuzzy
+msgid "Ocean object"
+msgstr "Terreno Baldio"
+
+#, fuzzy
+msgid "Ocean object must be placed on water."
 msgstr "Esta cidade não pode ser transformada em castelo."
 
 msgid "Ocean Objects"
