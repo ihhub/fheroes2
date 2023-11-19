@@ -130,7 +130,7 @@ namespace Interface
 
         void _setCursor();
 
-        void handleObjectMouseClick( const std::function<int(int)> & typeSelection );
+        void handleObjectMouseClick( const std::function<int( int )> & typeSelection );
 
         enum Instrument : uint8_t
         {

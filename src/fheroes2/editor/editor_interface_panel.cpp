@@ -703,7 +703,7 @@ namespace Interface
         return res;
     }
 
-    void EditorPanel::handleObjectMouseClick( const std::function<int(int)> & typeSelection )
+    void EditorPanel::handleObjectMouseClick( const std::function<int( int )> & typeSelection )
     {
         const int type = typeSelection( _selectedObjectType[_selectedObject] );
         if ( type >= 0 ) {
