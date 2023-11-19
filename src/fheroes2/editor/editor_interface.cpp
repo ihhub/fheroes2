@@ -610,9 +610,11 @@ namespace Interface
         else if ( _editorPanel.isMonsterSettingMode() ) {
             if ( tile.isWater() ) {
                 fheroes2::showStandardTextMessage( _( "Monster" ), _( "Monsters cannot be placed on water." ), Dialog::OK );
+                _gameArea.SetUpdateCursor();
             }
             else if ( !Maps::isClearGround( tile ) ) {
                 fheroes2::showStandardTextMessage( _( "Monster" ), _( "Choose a tile which does not contain any objects." ), Dialog::OK );
+                _gameArea.SetUpdateCursor();
             }
             else {
                 setObjectOnTile( tile, Maps::ObjectGroup::Monster, _editorPanel.getMonsterType() );
@@ -621,9 +623,11 @@ namespace Interface
         else if ( _editorPanel.isTreasureSettingMode() ) {
             if ( tile.isWater() ) {
                 fheroes2::showStandardTextMessage( _( "Treasure" ), _( "Treasures cannot be placed on water." ), Dialog::OK );
+                _gameArea.SetUpdateCursor();
             }
             else if ( !Maps::isClearGround( tile ) ) {
                 fheroes2::showStandardTextMessage( _( "Treasure" ), _( "Choose a tile which does not contain any objects." ), Dialog::OK );
+                _gameArea.SetUpdateCursor();
             }
             else {
                 setObjectOnTile( tile, Maps::ObjectGroup::Treasure, _editorPanel.getTreasureType() );
@@ -632,9 +636,11 @@ namespace Interface
         else if ( _editorPanel.isHeroSettingMode() ) {
             if ( tile.isWater() ) {
                 fheroes2::showStandardTextMessage( _( "Heroes" ), _( "Heroes cannot be placed on water." ), Dialog::OK );
+                _gameArea.SetUpdateCursor();
             }
             else if ( !Maps::isClearGround( tile ) ) {
                 fheroes2::showStandardTextMessage( _( "Heroes" ), _( "Choose a tile which does not contain any objects." ), Dialog::OK );
+                _gameArea.SetUpdateCursor();
             }
             else {
                 setObjectOnTile( tile, Maps::ObjectGroup::Hero, _editorPanel.getHeroType() );
@@ -643,9 +649,11 @@ namespace Interface
         else if ( _editorPanel.isArtifactSettingMode() ) {
             if ( tile.isWater() ) {
                 fheroes2::showStandardTextMessage( _( "Artifacts" ), _( "Artifacts cannot be placed on water." ), Dialog::OK );
+                _gameArea.SetUpdateCursor();
             }
             else if ( !Maps::isClearGround( tile ) ) {
                 fheroes2::showStandardTextMessage( _( "Artifacts" ), _( "Choose a tile which does not contain any objects." ), Dialog::OK );
+                _gameArea.SetUpdateCursor();
             }
             else {
                 const int32_t artifactType = _editorPanel.getArtifactType();
@@ -700,6 +708,7 @@ namespace Interface
             }
             else if ( tile.getObjectIcnType() == MP2::OBJ_ICN_TYPE_MINIHERO ) {
                 fheroes2::showStandardTextMessage( _( "Heroes" ), "", Dialog::ZERO );
+                _gameArea.SetUpdateCursor();
             }
 
             break;
