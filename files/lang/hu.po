@@ -4609,12 +4609,11 @@ msgstr ""
 "automatikusan látható lesz. Több vendég is lehet egyszerre egy hálózati "
 "játszmában."
 
-#, fuzzy
 msgid "Battle Only"
-msgstr "Harci Törpe"
+msgstr "Csak csata"
 
 msgid "Setup and play a battle without loading any map."
-msgstr ""
+msgstr "Egyetlen csata beállítása és lejátszása térkép betöltése nélkül."
 
 msgid "2 Players"
 msgstr "2 játékos"
@@ -7640,7 +7639,7 @@ msgid "Gold Mine"
 msgstr "Aranybánya"
 
 msgid "Mine"
-msgstr ""
+msgstr "Bánya"
 
 msgid "Burma shave."
 msgstr ""
@@ -7648,15 +7647,14 @@ msgstr ""
 msgid "Next sign 50 miles."
 msgstr ""
 
-#, fuzzy
 msgid "See Rock City."
-msgstr "Fa Város"
+msgstr "Kő Város"
 
 msgid "This space for rent."
 msgstr ""
 
 msgid "No object"
-msgstr ""
+msgstr "Nincs tárgy"
 
 msgid "Alchemist Lab"
 msgstr "Alkímista labor"
@@ -7667,7 +7665,6 @@ msgstr "Jel"
 msgid "Buoy"
 msgstr "Bója"
 
-#, fuzzy
 msgid "Skeleton"
 msgstr "Csontváz"
 
@@ -7681,7 +7678,7 @@ msgid "Faerie Ring"
 msgstr "Tündérgyűrű"
 
 msgid "Campfire"
-msgstr ""
+msgstr "Tábortűz"
 
 msgid "Fountain"
 msgstr "Szökőkút"
@@ -7699,7 +7696,7 @@ msgid "Goblin Hut"
 msgstr "Goblinkunyhó"
 
 msgid "Dwarf Cottage"
-msgstr ""
+msgstr "Törp tanya"
 
 msgid "Peasant Hut"
 msgstr "Tanya"
@@ -7711,22 +7708,20 @@ msgid "Alchemist's Tower"
 msgstr "Alkímista torony"
 
 msgid "Event"
-msgstr ""
+msgstr "Esemény"
 
 msgid "Dragon City"
 msgstr "Sárkányváros"
 
-#, fuzzy
 msgid "Lighthouse"
 msgid_plural "Lighthouses"
 msgstr[0] "Világítótorony"
-msgstr[1] "Világítótorony"
+msgstr[1] "Világítótornyok"
 
-#, fuzzy
 msgid "Water Wheel"
 msgid_plural "Water Wheels"
 msgstr[0] "Vizikerék"
-msgstr[1] "Vizikerék"
+msgstr[1] "Vizikerekek"
 
 msgid "Mines"
 msgstr "Bányák"
@@ -7749,7 +7744,6 @@ msgstr "Orákulum"
 msgid "Shrine of the First Circle"
 msgstr "Az Első Kör szentélye"
 
-#, fuzzy
 msgid "Shipwreck"
 msgstr "Hajóroncs"
 
@@ -7760,7 +7754,7 @@ msgid "Desert Tent"
 msgstr "Sivatagi sátor"
 
 msgid "Stone Liths"
-msgstr ""
+msgstr "Állókövek"
 
 msgid "Wagon Camp"
 msgstr "Szekértábor"
@@ -7771,11 +7765,10 @@ msgstr "Máguskunyhó"
 msgid "Whirlpool"
 msgstr "Örvény"
 
-#, fuzzy
 msgid "Windmill"
 msgid_plural "Windmills"
 msgstr[0] "Szélmalom"
-msgstr[1] "Szélmalom"
+msgstr[1] "Szélmalmok"
 
 msgid "Artifact"
 msgstr "Varázstárgy"
@@ -7786,21 +7779,17 @@ msgstr "Sellő"
 msgid "Boat"
 msgstr "Csónak"
 
-#, fuzzy
 msgid "Random Ultimate Artifact"
-msgstr "A Szent Varázstárgy kiásása."
+msgstr "Véletlenszerű Szent Varázstárgy"
 
-#, fuzzy
 msgid "Random Artifact"
-msgstr "Varázstárgy"
+msgstr "Véletlenszerű varázstárgy"
 
-#, fuzzy
 msgid "Random Resource"
-msgstr "Erőforrás"
+msgstr "Véletlenszerű erőforrás"
 
-#, fuzzy
 msgid "Random Monster"
-msgstr "Véletlenszerű kastély"
+msgstr "Véletlenszerű lény"
 
 msgid "Random Town"
 msgstr "Véletlenszerű város"
@@ -7811,36 +7800,32 @@ msgstr "Véletlenszerű kastély"
 msgid "Eye of the Magi"
 msgstr "Mágus Szem"
 
-#, fuzzy
 msgid "Random Monster - weak"
-msgstr "Véletlenszerű kastély"
+msgstr "Véletlenszerű lény - gyenge"
 
-#, fuzzy
 msgid "Random Monster - medium"
-msgstr "Véletlenszerű kastély"
+msgstr "Véletlenszerű lény - közepes"
 
-#, fuzzy
 msgid "Random Monster - strong"
-msgstr "Véletlenszerű kastély"
+msgstr "Véletlenszerű lény - erős"
 
-#, fuzzy
 msgid "Random Monster - very strong"
-msgstr "Véletlenszerű kastély"
+msgstr "Véletlenszerű lény - nagyon erős"
 
 msgid "Nothing Special"
 msgstr "Semmi érdekes"
 
 msgid "Mossy Rock"
-msgstr ""
+msgstr "Mohás kő"
 
 msgid "Watch Tower"
 msgstr "Toronyóra"
 
 msgid "Tree House"
-msgstr "Fa Ház"
+msgstr "Faház"
 
 msgid "Tree City"
-msgstr "Fa Város"
+msgstr "Fa város"
 
 msgid "Ruins"
 msgstr "Romok"
@@ -7870,7 +7855,7 @@ msgid "Temple"
 msgstr "Templom"
 
 msgid "Hill Fort"
-msgstr ""
+msgstr "Erőd"
 
 msgid "Halfling Hole"
 msgstr "Hobbitlak"
@@ -7900,13 +7885,13 @@ msgid "Artesian Spring"
 msgstr "Artéziforrás"
 
 msgid "Troll Bridge"
-msgstr "Troll Híd"
+msgstr "Trollhíd"
 
 msgid "Watering Hole"
-msgstr ""
+msgstr "Csapszék"
 
 msgid "Witch's Hut"
-msgstr ""
+msgstr "Boszorkánykunyhó"
 
 msgid "Xanadu"
 msgstr "Xanadu"
@@ -7923,7 +7908,6 @@ msgstr "Uszadék"
 msgid "Derelict Ship"
 msgstr "Gazdátlan Hajó"
 
-#, fuzzy
 msgid "Shipwreck Survivor"
 msgstr "Hajótörött"
 
@@ -7933,18 +7917,16 @@ msgstr "Üveg"
 msgid "Magic Well"
 msgstr "Varázskút"
 
-#, fuzzy
 msgid "Magic Garden"
 msgid_plural "Magic Gardens"
 msgstr[0] "Varázskert"
-msgstr[1] "Varázskert"
+msgstr[1] "Varázskertek"
 
 msgid "Observation Tower"
 msgstr "Kilátótorony"
 
-#, fuzzy
 msgid "Freeman's Foundry"
-msgstr "Öntöde Műhely"
+msgstr "Öntőde"
 
 msgid "Reefs"
 msgstr "Zátonyok"
@@ -8027,27 +8009,23 @@ msgstr "Földidéző oltár"
 msgid "Water Summoning Altar"
 msgstr "Vízidéző oltár"
 
-#, fuzzy
 msgid "Unknown Monster"
-msgstr "Ismeretlen"
+msgstr "Ismeretlen lény"
 
-#, fuzzy
 msgid "Unknown Monsters"
-msgstr "Ismeretlen"
+msgstr "Ismeretlen lények"
 
-#, fuzzy
 msgid "Peasant"
 msgstr "Jobbágy"
 
 msgid "Peasants"
-msgstr "Paraszt"
+msgstr "Jobbágyok"
 
-#, fuzzy
 msgid "Archer"
 msgstr "Íjász"
 
 msgid "Archers"
-msgstr "Íjász"
+msgstr "Íjászok"
 
 #, fuzzy
 msgid "Ranger"
