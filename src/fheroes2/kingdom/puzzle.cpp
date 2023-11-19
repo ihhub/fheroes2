@@ -202,8 +202,6 @@ namespace
         fheroes2::fadeInDisplay( back.rect(), false );
 
         adventureMapInterface.getGameArea().SetUpdateCursor();
-
-        adventureMapInterface.setRedraw( Interface::REDRAW_RADAR_CURSOR );
     }
 
     void ShowExtendedDialog( const Puzzle & pzl, const fheroes2::Image & sf )
@@ -214,6 +212,11 @@ namespace
         Interface::AdventureMap & adventureMapInterface = Interface::AdventureMap::Get();
         Interface::GameArea & gameArea = adventureMapInterface.getGameArea();
         const fheroes2::Rect & gameAreaRoi = gameArea.GetROI();
+        const Interface::Radar & radar = adventureMapInterface.getRadar();
+        const fheroes2::Rect & radarRect = radar.GetRect();
+        const fheroes2::Rect & radarArea = radar.GetArea();
+
+        fheroes2::ImageRestorer radarRestorer( display, radarArea.x, radarArea.y, radarArea.width, radarArea.height );
 
         const fheroes2::StandardWindow border( gameAreaRoi.x + ( gameAreaRoi.width - sf.width() ) / 2, gameAreaRoi.y + ( gameAreaRoi.height - sf.height() ) / 2,
                                                sf.width(), sf.height(), false );
@@ -234,10 +237,6 @@ namespace
         }
 
         fheroes2::Blit( background, display, blitArea.x, blitArea.y );
-
-        const Interface::Radar & radar = adventureMapInterface.getRadar();
-        const fheroes2::Rect & radarRect = radar.GetRect();
-        const fheroes2::Rect & radarArea = radar.GetArea();
 
         fheroes2::Button buttonExit( radarArea.x + 32, radarArea.y + radarArea.height - 37,
                                      ( isEvilInterface ? ICN::BUTTON_EXIT_PUZZLE_DDOOR_EVIL : ICN::BUTTON_EXIT_PUZZLE_DDOOR_GOOD ), 0, 1 );
@@ -273,8 +272,6 @@ namespace
         fheroes2::fadeOutDisplay( border.activeArea(), true );
 
         gameArea.SetUpdateCursor();
-
-        adventureMapInterface.setRedraw( Interface::REDRAW_RADAR_CURSOR );
     }
 }
 

@@ -644,7 +644,10 @@ int Interface::AdventureMap::GetCursorFocusHeroes( const Heroes & hero, const Ma
 
 void Interface::AdventureMap::updateCursor( const int32_t tileIndex )
 {
-    Cursor::Get().SetThemes( GetCursorTileIndex( tileIndex ) );
+    if ( Cursor::Get().SetThemes( GetCursorTileIndex( tileIndex ) ) && fheroes2::cursor().isSoftwareEmulation() ) {
+        // Force software cursor render if the cursor icon is changed.
+        fheroes2::Display::instance().render( { tileIndex % world.w(), tileIndex / world.w(), 1, 1 } );
+    }
 }
 
 int Interface::AdventureMap::GetCursorTileIndex( int32_t dstIndex )
@@ -1359,14 +1362,12 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
                         }
                     }
                     else {
-                        // TODO: remove this assertion after testing.
                         // This should not happen. 'hero->isMoveEnabled()' is false so hero is not moving or stopping.
                         assert( !isMovingHero && !stopHero );
                     }
                 }
             }
             else {
-                // TODO: remove this assertion after testing.
                 // This should not happen. No hero is selected, so there is no "moving" or "sopping" hero actions.
                 assert( !isMovingHero && !stopHero );
             }

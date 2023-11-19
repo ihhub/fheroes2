@@ -1013,23 +1013,7 @@ void Interface::GameArea::QueueEventProcessing( bool isCursorOverGamearea )
 
     // Change the cursor image if needed.
     if ( updateCursor || index != _prevIndexPos ) {
-        if ( updateCursor && fheroes2::cursor().isSoftwareEmulation() ) {
-            // For the software cursor we check if it is needed to force its update on the screen.
-
-            const Cursor & cursor = Cursor::Get();
-            const int previousCursor = cursor.Themes();
-
-            _interface.updateCursor( index );
-
-            if ( cursor.Themes() != previousCursor ) {
-                // Force software cursor render if the cursor icon is changed.
-                fheroes2::Display::instance().render( { index % world.w(), index / world.w(), 1, 1 } );
-            }
-        }
-        else {
-            _interface.updateCursor( index );
-        }
-
+        _interface.updateCursor( index );
         _prevIndexPos = index;
         updateCursor = false;
     }

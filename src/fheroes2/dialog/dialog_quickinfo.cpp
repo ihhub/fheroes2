@@ -126,6 +126,28 @@ namespace
         fheroes2::ImageRestorer _restorer;
     };
 
+    void quickInfoCloseActions( const int32_t cursorTileIndex, const fheroes2::Rect & roi, CursorRestorer & cursorRestorer, Interface::GameArea * gameArea )
+    {
+        if ( gameArea && cursorTileIndex != gameArea->GetValidTileIdFromPoint( LocalEvent::Get().GetMouseCursor() ) ) {
+            gameArea->SetUpdateCursor();
+
+            if ( fheroes2::cursor().isSoftwareEmulation() ) {
+                // The tile under the cursor has changed. We will restore and update the cursor later, before the next display render, so leave it hidden.
+                fheroes2::Display::instance().updateNextRenderRoi( roi );
+            }
+            else {
+                // For the hardware cursor we can render the screen now.
+                fheroes2::Display::instance().render( roi );
+            }
+        }
+        else {
+            // Cursor is above the same map tile or we have no game area. We can restore it before the display render.
+            cursorRestorer.restore();
+
+            fheroes2::Display::instance().render( roi );
+        }
+    }
+
     std::string getMinesIncomeString( const int32_t resourceType )
     {
         const Funds income = ProfitConditions::FromMine( resourceType );
@@ -689,24 +711,7 @@ namespace
         // Restore radar view
         radarUpdater.restore();
 
-        if ( gameArea && cursorTileIndex != gameArea->GetValidTileIdFromPoint( le.GetMouseCursor() ) ) {
-            gameArea->SetUpdateCursor();
-
-            if ( fheroes2::cursor().isSoftwareEmulation() ) {
-                // The tile under the cursor has changed. We will restore and update the cursor later, before the next display render, so leave it hidden.
-                display.updateNextRenderRoi( back.rect() );
-            }
-            else {
-                // For the hardware cursor we can render the screen now.
-                display.render();
-            }
-        }
-        else {
-            // Cursor is above the same map tile or we have no game area. We can restore it before the display render.
-            cursorRestorer.restore();
-
-            display.render();
-        }
+        quickInfoCloseActions( cursorTileIndex, back.rect(), cursorRestorer, gameArea );
     }
 
     void showQuickInfo( const HeroBase & hero, const fheroes2::Point & position, const bool showOnRadar, const fheroes2::Rect & areaToRestore,
@@ -910,24 +915,7 @@ namespace
         // Restore radar view
         radarUpdater.restore();
 
-        if ( gameArea && cursorTileIndex != gameArea->GetValidTileIdFromPoint( le.GetMouseCursor() ) ) {
-            gameArea->SetUpdateCursor();
-
-            if ( fheroes2::cursor().isSoftwareEmulation() ) {
-                // The tile under the cursor has changed. We will restore and update the cursor later, before the next display render, so leave it hidden.
-                display.updateNextRenderRoi( restorer.rect() );
-            }
-            else {
-                // For the hardware cursor we can render the screen now.
-                display.render();
-            }
-        }
-        else {
-            // Cursor is above the same map tile or we have no game area. We can restore it before the display render.
-            cursorRestorer.restore();
-
-            display.render();
-        }
+        quickInfoCloseActions( cursorTileIndex, restorer.rect(), cursorRestorer, gameArea );
     }
 }
 
@@ -979,24 +967,7 @@ void Dialog::QuickInfo( const Maps::Tiles & tile, Interface::GameArea & gameArea
     // restore background
     restorer.restore();
 
-    if ( cursorTileIndex != gameArea.GetValidTileIdFromPoint( le.GetMouseCursor() ) ) {
-        gameArea.SetUpdateCursor();
-
-        if ( fheroes2::cursor().isSoftwareEmulation() ) {
-            // The tile under the cursor has changed. We will restore and update the cursor later, before the next display render, so leave it hidden.
-            display.updateNextRenderRoi( restorer.rect() );
-        }
-        else {
-            // For the hardware cursor we can render the screen now.
-            display.render( restorer.rect() );
-        }
-    }
-    else {
-        // Cursor is above the same map tile we can restore it before the display render.
-        cursorRestorer.restore();
-
-        display.render( restorer.rect() );
-    }
+    quickInfoCloseActions( cursorTileIndex, restorer.rect(), cursorRestorer, &gameArea );
 }
 
 void Dialog::QuickInfo( const Castle & castle, Interface::GameArea & gameArea )
