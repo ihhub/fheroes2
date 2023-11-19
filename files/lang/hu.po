@@ -4429,6 +4429,8 @@ msgid ""
 "Do you want to transfer control from you to the AI? The effect will take "
 "place only on the next turn."
 msgstr ""
+"Át akarod adni az irányítást a gépnek? Ez csak a következő körtől lesz "
+"hatásos."
 
 #, fuzzy
 msgid "The save file is corrupted."
@@ -4458,7 +4460,7 @@ msgid "' language, but the current language of the game is '"
 msgstr ""
 
 msgid "Hot Seat"
-msgstr ""
+msgstr "Helycserés"
 
 msgid ""
 "Play a Hot Seat game, where 2 to 4 players play around the same computer, "
@@ -4488,50 +4490,49 @@ msgstr ""
 "egy pályán."
 
 msgid "fheroes2 Resurrection Team presents"
-msgstr ""
+msgstr "fheroes2 Resurrection Team bemutatja"
 
-#, fuzzy
 msgid "Greetings!"
-msgstr "Beállítások"
+msgstr "Üdvözlet!"
 
-#, fuzzy
 msgid "Welcome to Heroes of Might and Magic II powered by fheroes2 engine!"
-msgstr "Kilépés a játékból és visszatérés az operációs rendszerhez."
+msgstr "Üdvözlünk az fheroes2 motorral működő Heroes of Might and Magic II-ben!"
 
-#, fuzzy
 msgid ""
 "Welcome to Heroes of Might and Magic II powered by the fheroes2 engine!\n"
 "Before starting the game please select a game resolution."
-msgstr "Kilépés a játékból és visszatérés az operációs rendszerhez."
+msgstr ""
+"Üdvözlünk az fheroes2 motorral megújított Heroes of Might and Magic II-ben! "
+"Mielőtt megkezded a játékot, válaszd ki a képernyőfelbontást."
 
 msgid "Please Remember"
-msgstr ""
+msgstr "Kérlek, ne felejtsd el"
 
 msgid ""
 "You can always change the language, resolution and settings of the game by "
 "clicking on the "
-msgstr ""
+msgstr "Mindig megváltoztathatod a játék felbontását, ha megnyomod a(z) "
 
 msgid "door"
-msgstr ""
+msgstr "ajtó"
 
 msgid " on the left side of the Main Menu, or with the "
-msgstr ""
+msgstr " gombot a főmenü baloldalán, illetve a(z) "
 
 msgid " button from the "
-msgstr ""
+msgstr " gomb megnyomásával a "
 
-#, fuzzy
 msgid "NEW GAME"
-msgstr ""
-"ÚJ\n"
-"JÁTÉK"
+msgstr "ÚJ JÁTÉK"
 
 msgid ""
 " menu. \n"
 "\n"
 "Enjoy the game!"
 msgstr ""
+" menüből. \n"
+"\n"
+"Élvezetes játékot!"
 
 msgid "Editor"
 msgstr ""
@@ -4539,9 +4540,8 @@ msgstr ""
 msgid "The Editor requires \"The Price of Loyalty\" expansion files to work."
 msgstr ""
 
-#, fuzzy
 msgid "Quit Heroes of Might and Magic II and return to the operating system."
-msgstr "Kilépés a játékból és visszatérés az operációs rendszerhez."
+msgstr "Kilépés a Heroes of Might and Magic II-ből és visszatérés az operációs rendszerhez."
 
 msgid "Credits"
 msgstr "Készítők"
@@ -4557,10 +4557,11 @@ msgstr "Dicsőségtábla megjelenítése."
 
 msgid "Change language, resolution and settings of the game."
 msgstr ""
+"Játék nyelvének, képernyőfelbontásának kiválasztása, illetve egyéb "
+"beállítások."
 
-#, fuzzy
 msgid "Game Settings"
-msgstr "Beállítások"
+msgstr "Játékbeállítások"
 
 msgid ""
 "Required video files for campaign selection window are missing. Please make "
