@@ -83,7 +83,7 @@ double Difficulty::getGoldIncomeBonusForAI( const int difficulty )
         // It is deduction from the income.
         return -0.25;
     case Difficulty::HARD:
-        return 0.242;
+        return 0.25;
     case Difficulty::EXPERT:
         return 0.375;
     case Difficulty::IMPOSSIBLE:
