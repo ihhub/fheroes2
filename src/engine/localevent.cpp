@@ -903,13 +903,18 @@ void LocalEvent::HandleTouchEvent( const SDL_TouchFingerEvent & event )
         return;
 #endif
 
+    // ID of a finger here is a composite thing, and consists of a touch device id and a finger id. This
+    // should allow gestures to be handled correctly even when using different touchpads for different
+    // fingers.
+    const auto eventFingerId = std::make_pair( event.touchId, event.fingerId );
+
     switch ( event.type ) {
     case SDL_FINGERDOWN:
         if ( !_fingerIds.first ) {
-            _fingerIds.first = event.fingerId;
+            _fingerIds.first = eventFingerId;
         }
         else if ( !_fingerIds.second ) {
-            _fingerIds.second = event.fingerId;
+            _fingerIds.second = eventFingerId;
         }
         else {
             // Gestures of more than two fingers are not supported, ignore
@@ -919,7 +924,7 @@ void LocalEvent::HandleTouchEvent( const SDL_TouchFingerEvent & event )
         break;
     case SDL_FINGERUP:
     case SDL_FINGERMOTION:
-        if ( event.fingerId != _fingerIds.first && event.fingerId != _fingerIds.second ) {
+        if ( eventFingerId != _fingerIds.first && eventFingerId != _fingerIds.second ) {
             // An event from an unknown finger, ignore
             return;
         }
@@ -931,7 +936,7 @@ void LocalEvent::HandleTouchEvent( const SDL_TouchFingerEvent & event )
         return;
     }
 
-    if ( event.fingerId == _fingerIds.first ) {
+    if ( eventFingerId == _fingerIds.first ) {
         const fheroes2::Display & display = fheroes2::Display::instance();
 
 #if defined( TARGET_PS_VITA ) || defined( TARGET_NINTENDO_SWITCH )
@@ -976,7 +981,7 @@ void LocalEvent::HandleTouchEvent( const SDL_TouchFingerEvent & event )
             mouse_button = SDL_BUTTON_LEFT;
         }
     }
-    else if ( event.fingerId == _fingerIds.second ) {
+    else if ( eventFingerId == _fingerIds.second ) {
         if ( event.type == SDL_FINGERDOWN ) {
             mouse_pr = mouse_cu;
 
@@ -1003,10 +1008,10 @@ void LocalEvent::HandleTouchEvent( const SDL_TouchFingerEvent & event )
 
     // The finger no longer touches the screen, reset its state
     if ( event.type == SDL_FINGERUP ) {
-        if ( event.fingerId == _fingerIds.first ) {
+        if ( eventFingerId == _fingerIds.first ) {
             _fingerIds.first.reset();
         }
-        else if ( event.fingerId == _fingerIds.second ) {
+        else if ( eventFingerId == _fingerIds.second ) {
             _fingerIds.second.reset();
         }
         else {

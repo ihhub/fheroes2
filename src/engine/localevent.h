@@ -428,8 +428,8 @@ private:
     int16_t _controllerRightYAxis = 0;
     bool _controllerScrollActive = false;
 
-    // Ids of currently active (touching the screen) fingers, if any
-    std::pair<std::optional<SDL_FingerID>, std::optional<SDL_FingerID>> _fingerIds;
+    // IDs of currently active (touching the screen) fingers, if any. These IDs consist of a touch device id and a finger id.
+    std::pair<std::optional<std::pair<SDL_TouchID, SDL_FingerID>>, std::optional<std::pair<SDL_TouchID, SDL_FingerID>>> _fingerIds;
     // Is the two-finger gesture currently being processed
     bool _isTwoFingerGestureInProgress = false;
 };
