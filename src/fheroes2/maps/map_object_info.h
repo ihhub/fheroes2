@@ -61,7 +61,9 @@ namespace Maps
         // The layer is used for passability calculations as well as an order of rendering objects.
         ObjectLayerType layerType{ OBJECT_LAYER };
 
-        // TODO: add information about animation.
+        // The number of following by index images is used to animate this object part.
+        // In most cases this value is 0 as the majority of object parts do not have animations.
+        uint8_t animationFrames{ 0 };
     };
 
     struct ObjectInfo
@@ -107,7 +109,16 @@ namespace Maps
         Hero,
         Monster,
         Treasure,
-        Water_Object,
+        Ocean_Object,
+        Grass_Object,
+        Snow_Object,
+        Swamp_Object,
+        Lava_Object,
+        Desert_Object,
+        Dirt_Object,
+        Wasteland_Object,
+        Beach_Object,
+        Town,
 
         // IMPORTANT!!!
         // Put all new entries just above this entry.
@@ -115,4 +126,10 @@ namespace Maps
     };
 
     const std::vector<ObjectInfo> & getObjectsByGroup( const ObjectGroup group );
+
+    MP2::MapObjectType getObjectTypeByIcn( const MP2::ObjectIcnType icnType, const uint32_t icnIndex );
+
+    // The function returns tile offset only for ground level objects located on OBJECT_LAYER and BACKGROUND_LAYER layers.
+    // Objects on other layers do not affect passabilities of tiles so they do not 'occupy' these tiles.
+    std::vector<fheroes2::Point> getGroundLevelOccupiedTileOffset( const ObjectInfo & info );
 }

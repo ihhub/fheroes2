@@ -1208,21 +1208,40 @@ namespace
 
         for ( const auto & partInfo : info.groundLevelParts ) {
             const fheroes2::Point pos = mainTilePos + partInfo.tileOffset;
+            const bool isMainObject = ( partInfo.layerType != Maps::SHADOW_LAYER && partInfo.layerType != Maps::TERRAIN_LAYER );
+
             if ( !Maps::isValidAbsPoint( pos.x, pos.y ) ) {
-                // This shouldn't happen as the object must be verified before placement.
-                assert( 0 );
+                // Only shadow and terrain layer object parts are allowed not to be placed.
+                assert( !isMainObject );
                 continue;
             }
 
             Maps::Tiles & currentTile = world.GetTiles( pos.x, pos.y );
 
-            if ( partInfo.layerType == Maps::SHADOW_LAYER || partInfo.layerType == Maps::TERRAIN_LAYER ) {
+            if ( !isMainObject ) {
                 // Shadows and terrain object do not change main tile information.
                 currentTile.pushBottomLayerAddon( Maps::TilesAddon( partInfo.layerType, uid, partInfo.icnType, static_cast<uint8_t>( partInfo.icnIndex ) ) );
                 continue;
             }
 
-            currentTile.SetObject( partInfo.objectType );
+            // It is important that the type of the object is set properly for this layer.
+            assert( partInfo.objectType != MP2::OBJ_NONE );
+
+            bool setObjectType = true;
+            if ( !MP2::isActionObject( partInfo.objectType ) ) {
+                for ( const auto & addon : currentTile.getTopLayerAddons() ) {
+                    const MP2::MapObjectType type = Maps::getObjectTypeByIcn( addon._objectIcnType, addon._imageIndex );
+                    if ( type != MP2::OBJ_NONE ) {
+                        setObjectType = false;
+                        break;
+                    }
+                }
+            }
+
+            if ( setObjectType ) {
+                currentTile.SetObject( partInfo.objectType );
+            }
+
             currentTile.moveMainAddonToBottomLayer();
 
             currentTile.setObjectUID( uid );
@@ -1245,6 +1264,10 @@ namespace
             Maps::Tiles & currentTile = world.GetTiles( pos.x, pos.y );
 
             currentTile.pushTopLayerAddon( Maps::TilesAddon( partInfo.layerType, uid, partInfo.icnType, static_cast<uint8_t>( partInfo.icnIndex ) ) );
+
+            if ( partInfo.objectType != MP2::OBJ_NONE && !MP2::isActionObject( currentTile.GetObject() ) ) {
+                currentTile.SetObject( partInfo.objectType );
+            }
         }
     }
 }
