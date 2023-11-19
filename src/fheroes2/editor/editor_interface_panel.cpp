@@ -81,8 +81,8 @@ namespace
             return { 0, 0, 1, 1 };
         }
 
-        fheroes2::Point minPos{ 0, 0 };
-        fheroes2::Point maxPos{ 0, 0 };
+        fheroes2::Point minPos{ offsets.front() };
+        fheroes2::Point maxPos{ offsets.front() };
 
         for ( const auto & offset : offsets ) {
             minPos.x = std::min( minPos.x, offset.x );

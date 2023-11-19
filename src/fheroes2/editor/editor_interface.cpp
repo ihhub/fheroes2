@@ -80,15 +80,11 @@ namespace
         const int32_t worldWidth = world.w();
         const int32_t worldHeight = world.h();
 
-        fheroes2::Point startPos{ startIndex % worldWidth, startIndex / worldWidth };
-        startPos.x += brushSize.x;
-        startPos.y += brushSize.y;
-
+        fheroes2::Point startPos{ ( startIndex % worldWidth ) + brushSize.x, ( startIndex / worldWidth ) + brushSize.y };
         fheroes2::Point endPos{ startPos.x + brushSize.width - 1, startPos.y + brushSize.height - 1 };
 
         startPos.x = std::max( startPos.x, 0 );
         startPos.y = std::max( startPos.y, 0 );
-
         endPos.x = std::min( endPos.x, worldWidth - 1 );
         endPos.y = std::min( endPos.y, worldHeight - 1 );
 
@@ -686,8 +682,7 @@ namespace Interface
                 }
             }
         }
-
-        if ( _editorPanel.isObjectMode() ) {
+        else if ( _editorPanel.isObjectMode() ) {
             handleObjectMouseLeftClick( tile );
         }
     }
