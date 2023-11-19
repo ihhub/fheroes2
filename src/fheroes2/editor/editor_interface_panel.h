@@ -22,6 +22,7 @@
 
 #include <array>
 #include <cstdint>
+#include <functional>
 
 #include "game_mode.h"
 #include "ground.h"
@@ -128,6 +129,8 @@ namespace Interface
         static const char * _getEraseObjectTypeName( const uint32_t eraseObjectType );
 
         void _setCursor();
+
+        void handleObjectMouseClick( const std::function<int(int)> & typeSelection );
 
         enum Instrument : uint8_t
         {

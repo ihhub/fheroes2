@@ -587,49 +587,23 @@ namespace Interface
                 fheroes2::showStandardTextMessage( _getObjectTypeName( Brush::TREASURES ), _( "Used to place\na resource or treasure." ), Dialog::ZERO );
             }
             else if ( le.MouseClickLeft( _objectButtonsRect[Brush::MONSTERS] ) ) {
-                const int monsterType = Dialog::selectMonsterType( _selectedObjectType[Brush::MONSTERS] );
-                if ( monsterType >= 0 ) {
-                    _selectedObjectType[Brush::MONSTERS] = monsterType;
-                }
-                _setCursor();
-                _interface.updateCursor( 0 );
+                handleObjectMouseClick( Dialog::selectMonsterType );
                 return res;
             }
             else if ( le.MouseClickLeft( _objectButtonsRect[Brush::TREASURES] ) ) {
-                const int treasureType = Dialog::selectTreasureType( _selectedObjectType[Brush::TREASURES] );
-                if ( treasureType >= 0 ) {
-                    _selectedObjectType[Brush::TREASURES] = treasureType;
-                }
-                _setCursor();
-                _interface.updateCursor( 0 );
+                handleObjectMouseClick( Dialog::selectTreasureType );
                 return res;
             }
             else if ( le.MouseClickLeft( _objectButtonsRect[Brush::HEROES] ) ) {
-                const int32_t heroType = Dialog::selectHeroType( _selectedObjectType[Brush::HEROES] );
-                if ( heroType >= 0 ) {
-                    _selectedObjectType[Brush::HEROES] = heroType;
-                }
-
-                _setCursor();
-                _interface.updateCursor( 0 );
+                handleObjectMouseClick( Dialog::selectHeroType );
                 return res;
             }
             else if ( le.MouseClickLeft( _objectButtonsRect[Brush::ARTIFACTS] ) ) {
-                const int artifactType = Dialog::selectArtifactType( _selectedObjectType[Brush::ARTIFACTS] );
-                if ( artifactType >= 0 ) {
-                    _selectedObjectType[Brush::ARTIFACTS] = artifactType;
-                }
-                _setCursor();
-                _interface.updateCursor( 0 );
+                handleObjectMouseClick( Dialog::selectArtifactType );
                 return res;
             }
             else if ( le.MouseClickLeft( _objectButtonsRect[Brush::WATER] ) ) {
-                const int oceanObjectType = Dialog::selectOceanObjectType( _selectedObjectType[Brush::WATER] );
-                if ( oceanObjectType >= 0 ) {
-                    _selectedObjectType[Brush::WATER] = oceanObjectType;
-                }
-                _setCursor();
-                _interface.updateCursor( 0 );
+                handleObjectMouseClick( Dialog::selectOceanObjectType );
                 return res;
             }
         }
@@ -727,5 +701,15 @@ namespace Interface
         }
 
         return res;
+    }
+
+    void EditorPanel::handleObjectMouseClick( const std::function<int(int)> & typeSelection )
+    {
+        const int type = typeSelection( _selectedObjectType[_selectedObject] );
+        if ( type >= 0 ) {
+            _selectedObjectType[_selectedObject] = type;
+        }
+        _setCursor();
+        _interface.updateCursor( 0 );
     }
 }
