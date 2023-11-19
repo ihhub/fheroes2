@@ -950,7 +950,7 @@ msgid "%{race2} %{name2}"
 msgstr "%{race2} %{name2}"
 
 msgid "Monsters"
-msgstr "Szörnyek"
+msgstr "Lények"
 
 msgid "N/A"
 msgstr "N/A"
@@ -3222,9 +3222,8 @@ msgstr "Lény kiválasztása:"
 msgid "Select Hero:"
 msgstr "Hős kiválasztása:"
 
-#, fuzzy
 msgid "Select Treasure:"
-msgstr "Hős kiválasztása:"
+msgstr "Kincs kiválasztása:"
 
 msgid "Map Type:\n"
 msgstr "Térképtípus:\n"
@@ -3532,7 +3531,7 @@ msgid "Monsters cannot be placed on water."
 msgstr "Vízen nem helyezhetők el lények."
 
 msgid "Choose a tile which does not contain any objects."
-msgstr ""
+msgstr "Olyan térképpontot válassz, ahol nincsenek még tárgyak."
 
 msgid "Treasure"
 msgstr "Kincs"
@@ -3683,12 +3682,18 @@ msgid ""
 "deselect this type. Press and hold this button to deselect all other object "
 "types."
 msgstr ""
+"Ezek a típusú tárgyak fognak törlődni a Törlés eszközzel. Bal kattintásra "
+"a típuskiválasztás törlődik, a gomb nyomva tartására pedig az összes többi "
+"típuskiválasztás is törlődik."
 
 msgid ""
 "Objects of this type will NOT be deleted with the Erase tool. Left-click "
 "here to select this type. Press and hold this button to select all other "
 "object types."
 msgstr ""
+"Ezek a típusú tárgyak NEM fognak törlődni a Törlés eszközzel. Bal kattintásra "
+"a típuskiválasztás törlődik, a gomb nyomva tartására pedig az összes többi "
+"típuskiválasztás is törlődik."
 
 msgid "Terrain Mode"
 msgstr "Talaj mód"
@@ -3899,22 +3904,24 @@ msgid ""
 "able to revert this after this point. The high score will be calculated "
 "based solely on the new difficulty. Do you want to proceed?"
 msgstr ""
+"Alacsonyabb nehézségi szintre szeretnéd állítani a hadjáratot. Innentől nem "
+"állíthatod újra vissza és a pontszámaid is az újonnan választott szintnek "
+"megfelelően számolódnak majd. Így is végre akarod hajtani?"
 
-#, fuzzy
 msgid "Are you sure you want to restart this scenario?"
-msgstr "Biztos, hogy elbocsátod ezt a Hőst?"
+msgstr "Biztosan újra akarod indítani a küldetést?"
 
 msgid "Campaign Scenario loading failure"
-msgstr ""
+msgstr "A hadjárat küldetésének betöltése sikertelen"
 
 msgid "Please make sure that campaign files are correct and present."
-msgstr ""
+msgstr "Bizonyosodj meg róla, hogy a hadjárat fájljai épek és mind megvannak."
 
 msgid "Days spent"
-msgstr ""
+msgstr "Nap eltelt"
 
 msgid "The number of days spent on this campaign."
-msgstr ""
+msgstr "Az eltöltött napok száma ebben a hadjáratban."
 
 msgid "Project Coordination and Core Development"
 msgstr "Projekt-koordináció és fő fejlesztés"
