@@ -236,7 +236,7 @@ void SecondarySkillsBar::RedrawItem( Skill::Secondary & skill, const fheroes2::R
 
     const fheroes2::Sprite & sprite
         = use_mini_sprite ? fheroes2::AGG::GetICN( ICN::MINISS, skill.GetIndexSprite2() ) : fheroes2::AGG::GetICN( ICN::SECSKILL, skill.GetIndexSprite1() );
-    fheroes2::Blit( sprite, dstsf, pos.x + centeredPadding(pos.width, sprite.width()), pos.y + centeredPadding( pos.height ,sprite.height()) );
+    fheroes2::Blit( sprite, dstsf, pos.x + centeredPadding( pos.width, sprite.width() ), pos.y + centeredPadding( pos.height, sprite.height() ) );
 
     if ( use_mini_sprite ) {
         const fheroes2::Text text{ std::to_string( skill.Level() ), fheroes2::FontType::smallWhite() };
@@ -245,17 +245,17 @@ void SecondarySkillsBar::RedrawItem( Skill::Secondary & skill, const fheroes2::R
     else {
         const int skillNamePaddingY = 5;
         const int skillLevelPaddingY = 53;
-        
+
         fheroes2::Text text{ Skill::Secondary::String( skill.Skill() ), fheroes2::FontType::smallWhite() };
         int skillNamePaddingX = centeredPadding( pos.width, text.width() );
-        //Special case for Necromancy because it overlaps the righthand border otherwise.
+        // Special case for Necromancy because it overlaps the righthand border otherwise.
         if ( skill.isSkill( Skill::Secondary::NECROMANCY ) ) {
             --skillNamePaddingX;
         }
         text.draw( pos.x + skillNamePaddingX, pos.y + skillNamePaddingY, dstsf );
 
         text.set( Skill::Level::StringWithBonus( _hero, skill ), fheroes2::FontType::smallWhite() );
-        text.draw( pos.x + centeredPadding( pos.width ,text.width() ), pos.y + skillLevelPaddingY, dstsf );
+        text.draw( pos.x + centeredPadding( pos.width, text.width() ), pos.y + skillLevelPaddingY, dstsf );
     }
 }
 
