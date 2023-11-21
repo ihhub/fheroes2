@@ -10,7 +10,7 @@ jobs:
   sonarcloud:
     name: SonarCloud Analyzer
     # This job should be run only for the original repo (either pushes or pull requests originating from the same repo), forks are not allowed.
-    # Pull requests from Dependabot do not have access to secrets, so this job should not be run on them.
+    # Workflows initiated by Dependabot do not have access to repo secrets, so this job should not be run in this case.
     if: >-
       ${{
           github.repository == 'ihhub/fheroes2'
