@@ -9,7 +9,14 @@ on:
 jobs:
   sonarcloud:
     name: SonarCloud Analyzer
-    if: ${{ github.repository == 'ihhub/fheroes2' && ( github.event_name == 'push' || ( github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository ) ) }}
+    # This job should be run only for the original repo (either pushes or pull requests originating from the same repo), forks are not allowed.
+    # Workflows initiated by Dependabot do not have access to repo secrets, so this job should not be run in this case.
+    if: >-
+      ${{
+          github.repository == 'ihhub/fheroes2'
+          && ( github.event_name == 'push' || ( github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository ) )
+          && github.actor != 'dependabot[bot]'
+       }}
     runs-on: ubuntu-latest
     timeout-minutes: 60
     defaults:
