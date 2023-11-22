@@ -256,54 +256,65 @@ Java_org_libsdl_app_SDLActivity_nativeUpdateConfigs([[maybe_unused]] JNIEnv *env
     forceConfigUpdate = true;
 }
 
-void handleKeyUp(SDL_Scancode scancode) {
+void handleKeyUp(SDL_Keysym keysym) {
     Settings &conf = Settings::Get();
 
-    switch (scancode) {
+    int offsetMultiplier = keysym.mod & KMOD_SHIFT ? 10 : 1;
+    int offset = TILEWIDTH * offsetMultiplier;
+
+    switch (keysym.scancode) {
         case SDL_SCANCODE_SPACE: {
             forceMapUpdate = true;
             break;
         }
         case SDL_SCANCODE_1: {
             conf.SetLWPScale(1);
-            conf.Save(Settings::configFileName);
-            rereadAndApplyConfigs();
             break;
         }
         case SDL_SCANCODE_2: {
             conf.SetLWPScale(2);
-            conf.Save(Settings::configFileName);
-            rereadAndApplyConfigs();
             break;
         }
         case SDL_SCANCODE_3: {
             conf.SetLWPScale(3);
-            conf.Save(Settings::configFileName);
-            rereadAndApplyConfigs();
             break;
         }
         case SDL_SCANCODE_4: {
             conf.SetLWPScale(4);
-            conf.Save(Settings::configFileName);
-            rereadAndApplyConfigs();
             break;
         }
         case SDL_SCANCODE_5: {
             conf.SetLWPScale(5);
-            conf.Save(Settings::configFileName);
-            rereadAndApplyConfigs();
             break;
         }
         case SDL_SCANCODE_0: {
             conf.SetLWPScale(0);
-            conf.Save(Settings::configFileName);
-            rereadAndApplyConfigs();
             break;
+        }
+
+        case SDL_SCANCODE_UP: {
+            Interface::AdventureMap::Get().getGameArea().ShiftCenter(fheroes2::Point(0, -offset));
+            return;
+        }
+        case SDL_SCANCODE_DOWN: {
+            Interface::AdventureMap::Get().getGameArea().ShiftCenter(fheroes2::Point(0, offset));
+            return;
+        }
+        case SDL_SCANCODE_LEFT: {
+            Interface::AdventureMap::Get().getGameArea().ShiftCenter(fheroes2::Point(-offset, 0));
+            return;
+        }
+        case SDL_SCANCODE_RIGHT: {
+            Interface::AdventureMap::Get().getGameArea().ShiftCenter(fheroes2::Point(offset, 0));
+            return;
         }
 
         default: {
         }
     }
+
+    conf.Save(Settings::configFileName);
+    rereadAndApplyConfigs();
 }
 
 bool handleSDLEvents(SDL_Event &event, LocalEvent &le, fheroes2::Display &display) {
@@ -322,14 +333,11 @@ bool handleSDLEvents(SDL_Event &event, LocalEvent &le, fheroes2::Display &displa
             }
 
             case SDL_KEYUP: {
-                VERBOSE_LOG("Scancode: " << event.key.keysym.scancode <<
-                                         " Keycode: " << event.key.keysym.sym)
-
                 if (event.key.keysym.scancode == SDL_SCANCODE_ESCAPE) {
                     return true;
                 }
 
-                handleKeyUp(event.key.keysym.scancode);
+                handleKeyUp(event.key.keysym);
             }
         }
     }
@@ -350,7 +358,6 @@ fheroes2::GameMode renderWallpaper() {
         forceUpdates();
 
         const bool isEscapePressed = handleSDLEvents(event, le, display);
-
         if (isEscapePressed) {
             return fheroes2::GameMode::QUIT_GAME;
         }
