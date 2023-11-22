@@ -110,9 +110,9 @@ void initWallpaper() {
 }
 
 bool shouldUpdateMapRegion() {
-    uint32_t updateInterval = Settings::Get().GetLWPMapUpdateInterval();
-    uint32_t currentTime = std::time(nullptr);
-    bool isExpired = lwpLastMapUpdate < currentTime - updateInterval;
+    uint32_t const updateInterval = Settings::Get().GetLWPMapUpdateInterval();
+    uint32_t const currentTime = std::time(nullptr);
+    bool const isExpired = lwpLastMapUpdate <= currentTime - updateInterval;
 
     VERBOSE_LOG(
             "ShouldUpdateMapRegion"
@@ -256,7 +256,57 @@ Java_org_libsdl_app_SDLActivity_nativeUpdateConfigs([[maybe_unused]] JNIEnv *env
     forceConfigUpdate = true;
 }
 
-void handleSDLEvents(SDL_Event &event, LocalEvent &le, fheroes2::Display &display) {
+void handleKeyUp(SDL_Scancode scancode) {
+    Settings &conf = Settings::Get();
+
+    switch (scancode) {
+        case SDL_SCANCODE_SPACE: {
+            forceMapUpdate = true;
+            break;
+        }
+        case SDL_SCANCODE_1: {
+            conf.SetLWPScale(1);
+            conf.Save(Settings::configFileName);
+            rereadAndApplyConfigs();
+            break;
+        }
+        case SDL_SCANCODE_2: {
+            conf.SetLWPScale(2);
+            conf.Save(Settings::configFileName);
+            rereadAndApplyConfigs();
+            break;
+        }
+        case SDL_SCANCODE_3: {
+            conf.SetLWPScale(3);
+            conf.Save(Settings::configFileName);
+            rereadAndApplyConfigs();
+            break;
+        }
+        case SDL_SCANCODE_4: {
+            conf.SetLWPScale(4);
+            conf.Save(Settings::configFileName);
+            rereadAndApplyConfigs();
+            break;
+        }
+        case SDL_SCANCODE_5: {
+            conf.SetLWPScale(5);
+            conf.Save(Settings::configFileName);
+            rereadAndApplyConfigs();
+            break;
+        }
+        case SDL_SCANCODE_0: {
+            conf.SetLWPScale(0);
+            conf.Save(Settings::configFileName);
+            rereadAndApplyConfigs();
+            break;
+        }
+
+        default: {
+        }
+    }
+}
+
+bool handleSDLEvents(SDL_Event &event, LocalEvent &le, fheroes2::Display &display) {
     while (SDL_PollEvent(&event)) {
         switch (event.type) {
             case SDL_RENDER_TARGETS_RESET: {
@@ -270,11 +320,24 @@ void handleSDLEvents(SDL_Event &event, LocalEvent &le, fheroes2::Display &displa
                 display.render();
                 break;
             }
+
+            case SDL_KEYUP: {
+                VERBOSE_LOG("Scancode: " << event.key.keysym.scancode <<
+                                         " Keycode: " << event.key.keysym.sym)
+
+                if (event.key.keysym.scancode == SDL_SCANCODE_ESCAPE) {
+                    return true;
+                }
+
+                handleKeyUp(event.key.keysym.scancode);
+            }
         }
     }
+
+    return false;
 }
 
-void renderWallpaper() {
+fheroes2::GameMode renderWallpaper() {
     Interface::GameArea &gameArea = Interface::AdventureMap::Get().getGameArea();
 
     fheroes2::Display &display = fheroes2::Display::instance();
@@ -286,7 +349,11 @@ void renderWallpaper() {
     while (true) {
         forceUpdates();
 
-        handleSDLEvents(event, le, display);
+        const bool isEscapePressed = handleSDLEvents(event, le, display);
+
+        if (isEscapePressed) {
+            return fheroes2::GameMode::QUIT_GAME;
+        }
 
         if (Game::validateAnimationDelay(Game::MAPS_DELAY)) {
             renderMap();
@@ -310,7 +377,6 @@ fheroes2::GameMode Game::Wallpaper() {
     rereadAndApplyConfigs();
     overrideConfiguration();
     initWallpaper();
-    renderWallpaper();
 
-    return fheroes2::GameMode::END_TURN;
+    return renderWallpaper();
 }
