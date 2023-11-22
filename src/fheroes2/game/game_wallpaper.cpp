@@ -259,8 +259,8 @@ Java_org_libsdl_app_SDLActivity_nativeUpdateConfigs([[maybe_unused]] JNIEnv *env
 void handleKeyUp(SDL_Keysym keysym) {
     Settings &conf = Settings::Get();
 
-    int offsetMultiplier = keysym.mod & KMOD_SHIFT ? 10 : 1;
-    int offset = TILEWIDTH * offsetMultiplier;
+    int const offsetMultiplier = keysym.mod & KMOD_SHIFT ? 10 : 1;
+    int const offset = TILEWIDTH * offsetMultiplier;
 
     switch (keysym.scancode) {
         case SDL_SCANCODE_SPACE: {
@@ -317,18 +317,20 @@ void handleKeyUp(SDL_Keysym keysym) {
     rereadAndApplyConfigs();
 }
 
-bool handleSDLEvents(SDL_Event &event, LocalEvent &le, fheroes2::Display &display) {
+bool handleSDLEvents() {
+    SDL_Event event;
+
     while (SDL_PollEvent(&event)) {
         switch (event.type) {
             case SDL_RENDER_TARGETS_RESET: {
                 VERBOSE_LOG("SDL_RENDER_TARGETS_RESET")
-                display.render();
+                fheroes2::Display::instance().render();
                 break;
             }
             case SDL_RENDER_DEVICE_RESET: {
                 VERBOSE_LOG("SDL_RENDER_DEVICE_RESET")
-                le.HandleRenderDeviceResetEvent();
-                display.render();
+                LocalEvent::HandleRenderDeviceResetEvent();
+                fheroes2::Display::instance().render();
                 break;
             }
 
@@ -346,18 +348,10 @@ bool handleSDLEvents(SDL_Event &event, LocalEvent &le, fheroes2::Display &displa
 }
 
 fheroes2::GameMode renderWallpaper() {
-    Interface::GameArea &gameArea = Interface::AdventureMap::Get().getGameArea();
-
-    fheroes2::Display &display = fheroes2::Display::instance();
-    LocalEvent &le = LocalEvent::Get();
-    SDL_Event event;
-
-    gameArea.generate({display.width(), display.height()}, true);
-
     while (true) {
         forceUpdates();
 
-        const bool isEscapePressed = handleSDLEvents(event, le, display);
+        const bool isEscapePressed = handleSDLEvents();
         if (isEscapePressed) {
             return fheroes2::GameMode::QUIT_GAME;
         }
