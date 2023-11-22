@@ -4362,6 +4362,52 @@ namespace fheroes2
                         original.image()[280] = 117;
                     }
                 }
+
+                // An extra image for the neutral color.
+                if ( _icnVsSprite[id].size() == 7 ) {
+                    Sprite neutralShield( GetICN( ICN::SPELLS, 15 ) );
+                    if ( neutralShield.empty() ) {
+                        // We can not make a new image if there is no original shield image.
+                        return true;
+                    }
+
+                    // Make original shield image contour transparent.
+                    ReplaceColorIdByTransformId( neutralShield, neutralShield.image()[1], 1U );
+
+                    Sprite neutralColorSprite( _icnVsSprite[id][0].width(), _icnVsSprite[id][0].height() );
+                    Blit( neutralShield, neutralColorSprite, 8, 4 );
+
+                    // Make the background.
+                    uint8_t * imageData = neutralColorSprite.image();
+                    const uint8_t * transformData = neutralColorSprite.transform();
+                    const uint32_t imageWidth = neutralColorSprite.width();
+                    const uint32_t imageHeight = neutralColorSprite.height();
+                    const uint32_t imageSize = imageWidth * imageHeight;
+                    const uint32_t startValueX = 12U * imageWidth;
+                    const uint32_t startValueY = 12U * imageHeight;
+
+                    for ( uint32_t y = 0; y < imageHeight; ++y ) {
+                        const uint32_t offsetY = y * imageWidth;
+                        const uint32_t offsetValueY = y * startValueX;
+                        for ( uint32_t x = 0; x < imageWidth; ++x ) {
+                            if ( transformData[x + offsetY] == 0U ) {
+                                // Skip pixels with image.
+                                continue;
+                            }
+
+                            const uint8_t colorValue = static_cast<uint8_t>( 10U + ( offsetValueY + ( imageWidth - x ) * startValueY ) / imageSize + ( x + y ) % 2U );
+                            imageData[x + offsetY] = ( imageWidth - x - 1U ) * imageHeight > offsetY ? colorValue : 44U - colorValue;
+                        }
+                    }
+
+                    // Make all image non-transparent.
+                    neutralColorSprite._disableTransformLayer();
+                    // We add shadow twice to make it more dark.
+                    addGradientShadow( neutralShield, neutralColorSprite, { 8, 4 }, { -2, 5 } );
+                    addGradientShadow( neutralShield, neutralColorSprite, { 8, 4 }, { -2, 5 } );
+
+                    _icnVsSprite[id].push_back( std::move( neutralColorSprite ) );
+                }
                 return true;
             }
             case ICN::CBKGWATR: {

@@ -586,6 +586,10 @@ namespace Interface
             else if ( le.MousePressRight( _objectButtonsRect[Brush::TREASURES] ) ) {
                 fheroes2::showStandardTextMessage( _getObjectTypeName( Brush::TREASURES ), _( "Used to place\na resource or treasure." ), Dialog::ZERO );
             }
+            else if ( le.MouseClickLeft( _objectButtonsRect[Brush::TOWNS] ) ) {
+                Dialog::selectCastleType( -1 );
+                return res;
+            }
             else if ( le.MouseClickLeft( _objectButtonsRect[Brush::MONSTERS] ) ) {
                 handleObjectMouseClick( Dialog::selectMonsterType );
                 return res;

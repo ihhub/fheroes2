@@ -857,3 +857,86 @@ int Dialog::selectOceanObjectType( const int resourceType )
 
     return selectObjectType( resourceType, objectInfo.size(), listbox );
 }
+
+int Dialog::selectCastleType( const int /* castleType */ )
+{
+    fheroes2::Display & display = fheroes2::Display::instance();
+    fheroes2::StandardWindow background( 550, 400, true, display );
+
+    const fheroes2::Rect area( background.activeArea() );
+
+    int32_t listOffsetY = 0;
+
+    fheroes2::Text text( _( "Select Castle:" ), fheroes2::FontType::normalYellow() );
+    text.draw( area.x + ( area.width - text.width() ) / 2, area.y + 10, display );
+
+    // The additional text under the title.
+    text.set( _( "Select color, race and castle/town." ), fheroes2::FontType::normalWhite() );
+    text.draw( area.x + ( area.width - text.width() ) / 2, area.y + 30, display );
+    listOffsetY = text.height() + 3;
+
+    // Render color and race selection sprites.
+    const int32_t stepX = 70;
+    const int32_t raceOffsetY = 70;
+    fheroes2::Point pos( area.x + 20, area.y + 50 );
+    const fheroes2::Sprite & colorSpriteBorder = fheroes2::AGG::GetICN( ICN::BRCREST, 6 );
+    const fheroes2::Sprite & raceShadow = fheroes2::AGG::GetICN( ICN::NGEXTRA, 61 );
+
+    // Neutral color.
+    fheroes2::Blit( colorSpriteBorder, display, pos.x, pos.y );
+    fheroes2::addGradientShadow( colorSpriteBorder, display, pos, { -5, 5 } );
+    const fheroes2::Sprite & neutralColorSprite = fheroes2::AGG::GetICN( ICN::BRCREST, 7 );
+    fheroes2::Copy( neutralColorSprite, 0, 0, display, pos.x + 4, pos.y + 4, neutralColorSprite.width(), neutralColorSprite.height() );
+
+    // Random race.
+    const fheroes2::Sprite & randomRaceSprite = fheroes2::AGG::GetICN( ICN::NGEXTRA, 58 );
+    fheroes2::Copy( randomRaceSprite, 0, 0, display, pos.x - 2, pos.y + raceOffsetY, randomRaceSprite.width(), randomRaceSprite.height() );
+    fheroes2::Blit( raceShadow, display, pos.x - 5, pos.y + raceOffsetY + 2 );
+
+    pos.x += stepX;
+    for ( int32_t i = 0; i < 6; ++i ) {
+        const fheroes2::Sprite & colorSprite = fheroes2::AGG::GetICN( ICN::BRCREST, i );
+
+        fheroes2::Blit( colorSpriteBorder, display, pos.x, pos.y );
+        fheroes2::addGradientShadow( colorSpriteBorder, display, pos, { -5, 5 } );
+        fheroes2::Copy( colorSprite, 0, 0, display, pos.x + 4, pos.y + 4, colorSprite.width(), colorSprite.height() );
+
+        const fheroes2::Sprite & raceSprite = fheroes2::AGG::GetICN( ICN::NGEXTRA, 51 + i );
+        fheroes2::Copy( raceSprite, 0, 0, display, pos.x - 2, pos.y + raceOffsetY, raceSprite.width(), raceSprite.height() );
+        fheroes2::Blit( raceShadow, display, pos.x - 5, pos.y + raceOffsetY + 2 );
+
+        pos.x += stepX;
+    }
+
+    const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
+
+    // Render dialog buttons.
+    fheroes2::Button buttonOk;
+    fheroes2::Button buttonCancel;
+    background.renderOkayCancelButtons( buttonOk, buttonCancel, isEvilInterface );
+
+    display.render( background.totalArea() );
+
+    LocalEvent & le = LocalEvent::Get();
+
+    while ( le.HandleEvents() ) {
+        le.MousePressLeft( buttonOk.area() ) && buttonOk.isEnabled() ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
+        le.MousePressLeft( buttonCancel.area() ) ? buttonCancel.drawOnPress() : buttonCancel.drawOnRelease();
+
+        if ( le.MouseClickLeft( buttonOk.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) ) {
+            return 1;
+        }
+        else if ( le.MouseClickLeft( buttonCancel.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
+            return -1;
+        }
+
+        if ( le.MousePressRight( buttonCancel.area() ) ) {
+            fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Exit this menu without doing anything." ), Dialog::ZERO );
+        }
+        else if ( le.MousePressRight( buttonOk.area() ) ) {
+            fheroes2::showStandardTextMessage( _( "Okay" ), _( "Click to start placing the selected castle." ), Dialog::ZERO );
+        }
+    }
+
+    return 0;
+}
