@@ -24,11 +24,16 @@
 #ifndef H2EDITOR_DIALOGS_H
 #define H2EDITOR_DIALOGS_H
 
+#include <cstdint>
+#include <string>
+
 #include "artifact.h"
 #include "heroes.h"
 #include "monster.h"
 #include "skill.h"
 #include "spell.h"
+
+class Kingdom;
 
 namespace Dialog
 {
@@ -36,9 +41,12 @@ namespace Dialog
 
     int selectHeroes( const int heroId = Heroes::UNKNOWN );
 
-    Artifact selectArtifact( const int artifactId = Artifact::UNKNOWN );
+    Artifact selectArtifact( const int artifactId );
 
-    Spell selectSpell( const int spellId = Spell::NONE );
+    Spell selectSpell( const int spellId, const bool includeRandomSpells );
+
+    int32_t selectKingdomCastle( const Kingdom & kingdom, const bool notOccupiedByHero, std::string title, std::string description = {},
+                                 int32_t castlePositionIndex = -1 );
 
     Skill::Secondary selectSecondarySkill( const Heroes & hero, const int skillId = Skill::Secondary::UNKNOWN );
 
@@ -47,7 +55,11 @@ namespace Dialog
 
     int selectMonsterType( const int monsterType );
 
+    int selectArtifactType( const int artifactType );
+
     int selectTreasureType( const int resourceType );
+
+    int selectOceanObjectType( const int resourceType );
 }
 
 #endif

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-05 08:25+0000\n"
+"POT-Creation-Date: 2023-11-19 15:02+0000\n"
 "PO-Revision-Date: 2023-04-09 23:51+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3329,6 +3329,10 @@ msgstr "Die getroffene Wahl bestätigen."
 msgid "%{color} %{race} hero"
 msgstr "Spieler %{color}"
 
+#, fuzzy
+msgid "Terrain object"
+msgstr "Gelände-Modus"
+
 msgid "Select Skill:"
 msgstr "Fähigkeit auswählen:"
 
@@ -3347,6 +3351,10 @@ msgstr "Held auswählen:"
 #, fuzzy
 msgid "Select Treasure:"
 msgstr "Held auswählen:"
+
+#, fuzzy
+msgid "Select Ocean Object:"
+msgstr "Ozean-Objekte"
 
 msgid "Map Type:\n"
 msgstr "Kartentyp:\n"
@@ -3655,6 +3663,10 @@ msgstr "Den Karteneditor verlassen."
 msgid "Monster"
 msgstr "Monster"
 
+#, fuzzy
+msgid "Objects cannot be placed outside the map."
+msgstr "Monster können nicht auf Wasser plaziert werden."
+
 msgid "Monsters cannot be placed on water."
 msgstr "Monster können nicht auf Wasser plaziert werden."
 
@@ -3673,6 +3685,21 @@ msgstr "Helden"
 
 msgid "Heroes cannot be placed on water."
 msgstr ""
+
+msgid "Artifacts"
+msgstr "Artefakte"
+
+#, fuzzy
+msgid "Artifacts cannot be placed on water."
+msgstr "Monster können nicht auf Wasser plaziert werden."
+
+#, fuzzy
+msgid "Ocean object"
+msgstr "Ozean-Objekte"
+
+#, fuzzy
+msgid "Ocean object must be placed on water."
+msgstr "Monster können nicht auf Wasser plaziert werden."
 
 msgid "Ocean Objects"
 msgstr "Ozean-Objekte"
@@ -3703,9 +3730,6 @@ msgstr "Strand-Objekte"
 
 msgid "Towns"
 msgstr "Städte"
-
-msgid "Artifacts"
-msgstr "Artefakte"
 
 msgid "Treasures"
 msgstr "Schätze"
@@ -7247,17 +7271,17 @@ msgstr ""
 msgid "%{name1} meets %{name2}"
 msgstr "%{name1} trifft %{name2}"
 
-msgid "Town Portal"
-msgstr "Stadtportal"
-
-msgid "Select town to port to."
-msgstr "Zielstadt auswählen."
-
 msgid "Enemy heroes are now fully identifiable."
 msgstr "Feindliche Helden sind jetzt vollständig identifizierbar."
 
 msgid "Identify Hero"
 msgstr "Held identifiz."
+
+msgid "Select town to port to."
+msgstr "Zielstadt auswählen."
+
+msgid "Town Portal"
+msgstr "Stadtportal"
 
 msgid "The creatures are willing to join us!"
 msgstr "Die Kreaturen sind bereit, sich uns anzuschließen!"
@@ -10423,6 +10447,9 @@ msgstr ""
 "Untersuchung stellt Ihr fest, dass es sich um den verzauberten Spaten der "
 "Totengräber handelt, der den Sterblichen schon lange als verschollen galt."
 
+msgid "spellBonus|selected by user"
+msgstr ""
+
 msgid "Wood"
 msgstr "Holz"
 
@@ -10954,6 +10981,44 @@ msgstr "Wasserws.-Wache"
 msgid "Sets Water Elementals to guard a mine against enemy armies."
 msgstr ""
 "Setzt Wasserwesen ein, um eine Mine vor feindlichen Armeen zu schützen."
+
+#, fuzzy
+msgid "Random Spell"
+msgstr "Zufällig"
+
+msgid "Randomly selected spell of any level."
+msgstr ""
+
+#, fuzzy
+msgid "Random 1st Level Spell"
+msgstr "Zufälliges Burg"
+
+msgid "Randomly selected 1st level spell."
+msgstr ""
+
+msgid "Random 2nd Level Spell"
+msgstr ""
+
+msgid "Randomly selected 2nd level spell."
+msgstr ""
+
+msgid "Random 3rd Level Spell"
+msgstr ""
+
+msgid "Randomly selected 3rd level spell."
+msgstr ""
+
+msgid "Random 4th Level Spell"
+msgstr ""
+
+msgid "Randomly selected 4th level spell."
+msgstr ""
+
+msgid "Random 5th Level Spell"
+msgstr ""
+
+msgid "Randomly selected 5th level spell."
+msgstr ""
 
 msgid "Petrification"
 msgstr "Versteinerung"

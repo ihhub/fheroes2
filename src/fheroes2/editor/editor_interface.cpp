@@ -21,15 +21,19 @@
 #include "editor_interface.h"
 
 #include <algorithm>
+#include <array>
 #include <cassert>
+#include <memory>
 #include <ostream>
 #include <string>
 #include <vector>
 
 #include "agg_image.h"
+#include "artifact.h"
 #include "audio_manager.h"
 #include "cursor.h"
 #include "dialog.h"
+#include "dialog_selectitems.h"
 #include "game.h"
 #include "game_delays.h"
 #include "game_hotkeys.h"
@@ -46,12 +50,14 @@
 #include "localevent.h"
 #include "logging.h"
 #include "map_object_info.h"
+#include "maps.h"
 #include "maps_tiles.h"
 #include "maps_tiles_helper.h"
 #include "math_base.h"
 #include "mp2.h"
 #include "screen.h"
 #include "settings.h"
+#include "spell.h"
 #include "translations.h"
 #include "ui_button.h"
 #include "ui_dialog.h"
@@ -65,12 +71,82 @@ namespace
 {
     const uint32_t mapUpdateFlags = Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR;
 
-    int32_t getBrushAreaEndIndex( const int32_t brushSize, const int32_t startIndex )
+    fheroes2::Point getBrushAreaIndicies( const fheroes2::Rect & brushSize, const int32_t startIndex )
     {
+        if ( brushSize.width <= 0 || brushSize.height <= 0 ) {
+            return { startIndex, startIndex };
+        }
+
         const int32_t worldWidth = world.w();
-        const int32_t cursorSizeX = std::min( brushSize, worldWidth - startIndex % worldWidth ) - 1;
-        const int32_t cursorSizeY = std::min( brushSize, world.h() - startIndex / worldWidth ) - 1;
-        return startIndex + cursorSizeX + worldWidth * cursorSizeY;
+        const int32_t worldHeight = world.h();
+
+        fheroes2::Point startPos{ ( startIndex % worldWidth ) + brushSize.x, ( startIndex / worldWidth ) + brushSize.y };
+        fheroes2::Point endPos{ startPos.x + brushSize.width - 1, startPos.y + brushSize.height - 1 };
+
+        startPos.x = std::max( startPos.x, 0 );
+        startPos.y = std::max( startPos.y, 0 );
+        endPos.x = std::min( endPos.x, worldWidth - 1 );
+        endPos.y = std::min( endPos.y, worldHeight - 1 );
+
+        return { startPos.x + startPos.y * worldWidth, endPos.x + endPos.y * worldWidth };
+    }
+
+    const Maps::ObjectInfo & getObjectInfo( const Maps::ObjectGroup group, const int32_t objectType )
+    {
+        const auto & objectInfo = Maps::getObjectsByGroup( group );
+        if ( objectType < 0 || objectType >= static_cast<int32_t>( objectInfo.size() ) ) {
+            assert( 0 );
+            static const Maps::ObjectInfo emptyObjectInfo{ MP2::OBJ_NONE };
+            return emptyObjectInfo;
+        }
+
+        return objectInfo[objectType];
+    }
+
+    bool isObjectPlacementAllowed( const Maps::ObjectInfo & info, const fheroes2::Point & mainTilePos )
+    {
+        // Run through all tile offsets and check that all objects parts can be put on the map.
+        for ( const auto & objectPart : info.groundLevelParts ) {
+            if ( objectPart.layerType == Maps::SHADOW_LAYER ) {
+                // Shadow layer parts are ignored.
+                continue;
+            }
+
+            if ( !Maps::isValidAbsPoint( mainTilePos.x + objectPart.tileOffset.x, mainTilePos.y + objectPart.tileOffset.y ) ) {
+                return false;
+            }
+        }
+
+        for ( const auto & objectPart : info.topLevelParts ) {
+            if ( !Maps::isValidAbsPoint( mainTilePos.x + objectPart.tileOffset.x, mainTilePos.y + objectPart.tileOffset.y ) ) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    bool verifyObjectCondition( const Maps::ObjectInfo & info, const fheroes2::Point & mainTilePos, const std::function<bool( const Maps::Tiles & tile )> & condition )
+    {
+        assert( condition );
+
+        const auto & offsets = Maps::getGroundLevelOccupiedTileOffset( info );
+        if ( offsets.empty() ) {
+            return true;
+        }
+
+        for ( const auto & offset : offsets ) {
+            const fheroes2::Point temp{ mainTilePos.x + offset.x, mainTilePos.y + offset.y };
+            if ( !Maps::isValidAbsPoint( temp.x, temp.y ) ) {
+                return false;
+            }
+
+            if ( !condition( world.GetTiles( temp.x, temp.y ) ) ) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }
 
@@ -117,12 +193,15 @@ namespace Interface
             // TODO:: Render horizontal and vertical map tiles scale and highlight with yellow text cursor position.
 
             if ( _editorPanel.showAreaSelectRect() && ( _tileUnderCursor > -1 ) ) {
-                const int32_t brushSize = _editorPanel.getBrushSize();
+                const fheroes2::Rect brushSize = _editorPanel.getBrushArea();
 
-                if ( brushSize > 0 ) {
-                    _gameArea.renderTileAreaSelect( display, _tileUnderCursor, getBrushAreaEndIndex( brushSize, _tileUnderCursor ) );
+                if ( brushSize.width > 0 && brushSize.height > 0 ) {
+                    const fheroes2::Point indices = getBrushAreaIndicies( brushSize, _tileUnderCursor );
+
+                    _gameArea.renderTileAreaSelect( display, indices.x, indices.y );
                 }
-                else if ( brushSize == 0 ) {
+                else if ( _editorPanel.isTerrainEdit() || _editorPanel.isEraseMode() ) {
+                    assert( brushSize == fheroes2::Rect() );
                     // Render area selection from the tile where the left mouse button was pressed till the tile under the cursor.
                     _gameArea.renderTileAreaSelect( display, _selectedTile, _tileUnderCursor );
                 }
@@ -291,7 +370,7 @@ namespace Interface
                 cursor.SetThemes( Cursor::POINTER );
 
                 // TODO: Add checks for object placing/moving, and other Editor functions that uses mouse dragging.
-                if ( !_gameArea.isDragScroll() && ( _editorPanel.getBrushSize() > 0 || _selectedTile == -1 ) ) {
+                if ( !_gameArea.isDragScroll() && ( _editorPanel.getBrushArea().width > 0 || _selectedTile == -1 ) ) {
                     _radar.QueueEventProcessing();
                 }
             }
@@ -327,18 +406,18 @@ namespace Interface
             if ( isCursorOverGamearea ) {
                 // Get tile index under the cursor.
                 const int32_t tileIndex = _gameArea.GetValidTileIdFromPoint( le.GetMouseCursor() );
-                const int32_t brushSize = _editorPanel.getBrushSize();
+                const fheroes2::Rect brushSize = _editorPanel.getBrushArea();
 
                 if ( _tileUnderCursor != tileIndex ) {
                     _tileUnderCursor = tileIndex;
 
                     // Force redraw if cursor position was changed as area rectangle is also changed.
-                    if ( _editorPanel.showAreaSelectRect() && ( brushSize > 0 || _selectedTile != -1 ) ) {
+                    if ( _editorPanel.showAreaSelectRect() && ( brushSize.width > 0 || _selectedTile != -1 ) ) {
                         _redraw |= REDRAW_GAMEAREA;
                     }
                 }
 
-                if ( _selectedTile == -1 && tileIndex != -1 && brushSize == 0 && le.MousePressLeft() ) {
+                if ( _selectedTile == -1 && tileIndex != -1 && brushSize.width == 0 && le.MousePressLeft() ) {
                     _selectedTile = tileIndex;
                     _redraw |= REDRAW_GAMEAREA;
                 }
@@ -349,7 +428,7 @@ namespace Interface
             }
 
             if ( _selectedTile > -1 && le.MouseReleaseLeft() ) {
-                if ( isCursorOverGamearea && _editorPanel.getBrushSize() == 0 ) {
+                if ( isCursorOverGamearea && _editorPanel.getBrushArea().width == 0 ) {
                     if ( _editorPanel.isTerrainEdit() ) {
                         // Fill the selected area in terrain edit mode.
                         const fheroes2::ActionCreator action( _historyManager );
@@ -542,15 +621,21 @@ namespace Interface
             Game::OpenCastleDialog( *otherCastle );
         }
         else if ( _editorPanel.isTerrainEdit() ) {
-            const int32_t brushSize = _editorPanel.getBrushSize();
+            const fheroes2::Rect brushSize = _editorPanel.getBrushArea();
+            assert( brushSize.width == brushSize.height );
+
             const int groundId = _editorPanel.selectedGroundType();
 
             const fheroes2::ActionCreator action( _historyManager );
 
-            if ( brushSize > 0 ) {
-                Maps::setTerrainOnTiles( tileIndex, getBrushAreaEndIndex( brushSize, tileIndex ), groundId );
+            if ( brushSize.width > 0 ) {
+                const fheroes2::Point indices = getBrushAreaIndicies( brushSize, tileIndex );
+
+                Maps::setTerrainOnTiles( indices.x, indices.y, groundId );
             }
-            else if ( brushSize == 0 ) {
+            else {
+                assert( brushSize.width == 0 );
+
                 // This is a case when area was not selected but a single tile was clicked.
                 Maps::setTerrainOnTiles( tileIndex, tileIndex, groundId );
 
@@ -574,12 +659,15 @@ namespace Interface
             }
         }
         else if ( _editorPanel.isEraseMode() ) {
-            const int32_t brushSize = _editorPanel.getBrushSize();
+            const fheroes2::Rect brushSize = _editorPanel.getBrushArea();
+            assert( brushSize.width == brushSize.height );
 
             const fheroes2::ActionCreator action( _historyManager );
 
-            if ( brushSize > 1 ) {
-                if ( Maps::eraseObjectsOnTiles( tileIndex, getBrushAreaEndIndex( brushSize, tileIndex ), _editorPanel.getEraseTypes() ) ) {
+            if ( brushSize.width > 1 ) {
+                const fheroes2::Point indices = getBrushAreaIndicies( brushSize, tileIndex );
+
+                if ( Maps::eraseObjectsOnTiles( indices.x, indices.y, _editorPanel.getEraseTypes() ) ) {
                     _redraw |= mapUpdateFlags;
                 }
             }
@@ -588,44 +676,138 @@ namespace Interface
                     _redraw |= mapUpdateFlags;
                 }
 
-                if ( brushSize == 0 ) {
+                if ( brushSize.width == 0 ) {
                     // This is a case when area was not selected but a single tile was clicked.
                     _selectedTile = -1;
                 }
             }
         }
-        else if ( _editorPanel.isMonsterSettingMode() ) {
-            if ( tile.isWater() ) {
+        else if ( _editorPanel.isObjectMode() ) {
+            handleObjectMouseLeftClick( tile );
+        }
+    }
+
+    void EditorInterface::handleObjectMouseLeftClick( Maps::Tiles & tile )
+    {
+        assert( _editorPanel.isObjectMode() );
+
+        if ( _editorPanel.getSelectedObjectType() < 0 ) {
+            return;
+        }
+
+        const fheroes2::Point tilePos = tile.GetCenter();
+
+        const Maps::ObjectGroup groupType = _editorPanel.getSelectedObjectGroup();
+        const auto & objectInfo = getObjectInfo( groupType, _editorPanel.getSelectedObjectType() );
+
+        if ( groupType == Maps::ObjectGroup::Monster ) {
+            if ( !isObjectPlacementAllowed( objectInfo, tilePos ) ) {
+                fheroes2::showStandardTextMessage( _( "Monster" ), _( "Objects cannot be placed outside the map." ), Dialog::OK );
+                return;
+            }
+
+            if ( !verifyObjectCondition( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return !tileToCheck.isWater(); } ) ) {
                 fheroes2::showStandardTextMessage( _( "Monster" ), _( "Monsters cannot be placed on water." ), Dialog::OK );
+                return;
             }
-            else if ( !Maps::isClearGround( tile ) ) {
+
+            if ( !verifyObjectCondition( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return Maps::isClearGround( tileToCheck ); } ) ) {
                 fheroes2::showStandardTextMessage( _( "Monster" ), _( "Choose a tile which does not contain any objects." ), Dialog::OK );
+                return;
             }
-            else {
-                setObjectOnTile( tile, Maps::ObjectGroup::Monster, _editorPanel.getMonsterType() );
-            }
+
+            setObjectOnTile( tile, objectInfo );
         }
-        else if ( _editorPanel.isTreasureSettingMode() ) {
-            if ( tile.isWater() ) {
+        else if ( groupType == Maps::ObjectGroup::Treasure ) {
+            if ( !isObjectPlacementAllowed( objectInfo, tilePos ) ) {
+                fheroes2::showStandardTextMessage( _( "Treasure" ), _( "Objects cannot be placed outside the map." ), Dialog::OK );
+                return;
+            }
+
+            if ( !verifyObjectCondition( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return !tileToCheck.isWater(); } ) ) {
                 fheroes2::showStandardTextMessage( _( "Treasure" ), _( "Treasures cannot be placed on water." ), Dialog::OK );
+                return;
             }
-            else if ( !Maps::isClearGround( tile ) ) {
+
+            if ( !verifyObjectCondition( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return Maps::isClearGround( tileToCheck ); } ) ) {
                 fheroes2::showStandardTextMessage( _( "Treasure" ), _( "Choose a tile which does not contain any objects." ), Dialog::OK );
+                return;
+            }
+
+            setObjectOnTile( tile, objectInfo );
+        }
+        else if ( groupType == Maps::ObjectGroup::Hero ) {
+            if ( !isObjectPlacementAllowed( objectInfo, tilePos ) ) {
+                fheroes2::showStandardTextMessage( _( "Heroes" ), _( "Objects cannot be placed outside the map." ), Dialog::OK );
+                return;
+            }
+
+            if ( !verifyObjectCondition( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return !tileToCheck.isWater(); } ) ) {
+                fheroes2::showStandardTextMessage( _( "Heroes" ), _( "Heroes cannot be placed on water." ), Dialog::OK );
+                return;
+            }
+
+            if ( !verifyObjectCondition( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return Maps::isClearGround( tileToCheck ); } ) ) {
+                fheroes2::showStandardTextMessage( _( "Heroes" ), _( "Choose a tile which does not contain any objects." ), Dialog::OK );
+                return;
+            }
+
+            setObjectOnTile( tile, objectInfo );
+        }
+        else if ( groupType == Maps::ObjectGroup::Artifact ) {
+            if ( !isObjectPlacementAllowed( objectInfo, tilePos ) ) {
+                fheroes2::showStandardTextMessage( _( "Artifacts" ), _( "Objects cannot be placed outside the map." ), Dialog::OK );
+                return;
+            }
+
+            if ( !verifyObjectCondition( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return !tileToCheck.isWater(); } ) ) {
+                fheroes2::showStandardTextMessage( _( "Artifacts" ), _( "Artifacts cannot be placed on water." ), Dialog::OK );
+                return;
+            }
+
+            if ( !verifyObjectCondition( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return Maps::isClearGround( tileToCheck ); } ) ) {
+                fheroes2::showStandardTextMessage( _( "Artifacts" ), _( "Choose a tile which does not contain any objects." ), Dialog::OK );
+                return;
+            }
+
+            const int32_t artifactType = _editorPanel.getSelectedObjectType();
+
+            const auto & artifactInfo = Maps::getObjectsByGroup( Maps::ObjectGroup::Artifact );
+            assert( artifactType >= 0 && artifactType < static_cast<int32_t>( artifactInfo.size() ) );
+
+            // For each Spell Scroll artifact we select a spell.
+            if ( artifactInfo[artifactType].objectType == MP2::OBJ_ARTIFACT && artifactInfo[artifactType].metadata[0] == Artifact::SPELL_SCROLL ) {
+                const int spellId = Dialog::selectSpell( Spell::RANDOM, true ).GetID();
+
+                if ( spellId == Spell::NONE ) {
+                    // We do not place the Spell Scroll artifact if the spell for it was not selected.
+                    return;
+                }
+
+                setObjectOnTile( tile, objectInfo );
+                Maps::setSpellOnTile( tile, spellId );
             }
             else {
-                setObjectOnTile( tile, Maps::ObjectGroup::Treasure, _editorPanel.getTreasureType() );
+                setObjectOnTile( tile, objectInfo );
             }
         }
-        else if ( _editorPanel.isHeroSettingMode() ) {
-            if ( tile.isWater() ) {
-                fheroes2::showStandardTextMessage( _( "Heroes" ), _( "Heroes cannot be placed on water." ), Dialog::OK );
+        else if ( groupType == Maps::ObjectGroup::Ocean_Object ) {
+            if ( !isObjectPlacementAllowed( objectInfo, tilePos ) ) {
+                fheroes2::showStandardTextMessage( _( "Ocean object" ), _( "Objects cannot be placed outside the map." ), Dialog::OK );
+                return;
             }
-            else if ( !Maps::isClearGround( tile ) ) {
-                fheroes2::showStandardTextMessage( _( "Heroes" ), _( "Choose a tile which does not contain any objects." ), Dialog::OK );
+
+            if ( !verifyObjectCondition( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return tileToCheck.isWater(); } ) ) {
+                fheroes2::showStandardTextMessage( _( "Ocean object" ), _( "Ocean object must be placed on water." ), Dialog::OK );
+                return;
             }
-            else {
-                setObjectOnTile( tile, Maps::ObjectGroup::Hero, _editorPanel.getHeroType() );
+
+            if ( !verifyObjectCondition( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return Maps::isClearGround( tileToCheck ); } ) ) {
+                fheroes2::showStandardTextMessage( _( "Ocean object" ), _( "Choose a tile which does not contain any objects." ), Dialog::OK );
+                return;
             }
+
+            setObjectOnTile( tile, objectInfo );
         }
     }
 
@@ -677,16 +859,11 @@ namespace Interface
         }
     }
 
-    void EditorInterface::setObjectOnTile( Maps::Tiles & tile, const Maps::ObjectGroup group, const int32_t objectType )
+    void EditorInterface::setObjectOnTile( Maps::Tiles & tile, const Maps::ObjectInfo & objectInfo )
     {
-        const auto & objectInfo = Maps::getObjectsByGroup( group );
-        if ( objectType < 0 || objectType >= static_cast<int32_t>( objectInfo.size() ) ) {
-            return;
-        }
-
         const fheroes2::ActionCreator action( _historyManager );
 
-        Maps::setObjectOnTile( tile, objectInfo[objectType] );
+        Maps::setObjectOnTile( tile, objectInfo );
 
         _redraw |= mapUpdateFlags;
     }

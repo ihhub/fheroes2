@@ -763,10 +763,10 @@ namespace
         artifactData[Artifact::BLACK_PEARL].bonuses.emplace_back( fheroes2::ArtifactBonusType::SPELL_POWER_SKILL, 2 );
 
         artifactData[Artifact::MAGIC_BOOK].bonuses.emplace_back( fheroes2::ArtifactBonusType::NONE );
-        artifactData[Artifact::DUMMY1].bonuses.emplace_back( fheroes2::ArtifactBonusType::NONE );
-        artifactData[Artifact::DUMMY2].bonuses.emplace_back( fheroes2::ArtifactBonusType::NONE );
-        artifactData[Artifact::DUMMY3].bonuses.emplace_back( fheroes2::ArtifactBonusType::NONE );
-        artifactData[Artifact::DUMMY4].bonuses.emplace_back( fheroes2::ArtifactBonusType::NONE );
+        artifactData[Artifact::UNUSED_83].bonuses.emplace_back( fheroes2::ArtifactBonusType::NONE );
+        artifactData[Artifact::UNUSED_84].bonuses.emplace_back( fheroes2::ArtifactBonusType::NONE );
+        artifactData[Artifact::UNUSED_85].bonuses.emplace_back( fheroes2::ArtifactBonusType::NONE );
+        artifactData[Artifact::UNUSED_86].bonuses.emplace_back( fheroes2::ArtifactBonusType::NONE );
 
         artifactData[Artifact::SPELL_SCROLL].bonuses.emplace_back( fheroes2::ArtifactBonusType::ADD_SPELL, Spell::NONE );
 
@@ -958,8 +958,13 @@ namespace fheroes2
         std::vector<ArtifactBonus>::const_iterator foundBonus = std::find( bonuses.begin(), bonuses.end(), ArtifactBonus( ArtifactBonusType::ADD_SPELL ) );
         if ( foundBonus != bonuses.end() ) {
             if ( foundBonus->value == Spell::NONE ) {
-                assert( extraParameter != Spell::NONE );
-                StringReplace( description, "%{spell}", Spell( extraParameter ).GetName() );
+                if ( extraParameter == Spell::NONE ) {
+                    // This is a case when artifact description is viewed from list in Battle Only mode or in Editor.
+                    StringReplace( description, "%{spell}", _( "spellBonus|selected by user" ) );
+                }
+                else {
+                    StringReplace( description, "%{spell}", Spell( extraParameter ).GetName() );
+                }
             }
             else {
                 StringReplace( description, "%{spell}", Spell( foundBonus->value ).GetName() );

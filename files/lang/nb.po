@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-05 08:25+0000\n"
+"POT-Creation-Date: 2023-11-19 15:02+0000\n"
 "PO-Revision-Date: 2023-09-03 18:42+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3355,6 +3355,10 @@ msgstr "Bekreft valget og gå videre."
 msgid "%{color} %{race} hero"
 msgstr "%{color} spiller"
 
+#, fuzzy
+msgid "Terrain object"
+msgstr "Terrengmodus"
+
 msgid "Select Skill:"
 msgstr "Velg ferdighet:"
 
@@ -3373,6 +3377,10 @@ msgstr "Velg helt:"
 #, fuzzy
 msgid "Select Treasure:"
 msgstr "Velg helt:"
+
+#, fuzzy
+msgid "Select Ocean Object:"
+msgstr "Sjøting"
 
 msgid "Map Type:\n"
 msgstr "Kart-type:\n"
@@ -3679,6 +3687,10 @@ msgstr "Forlat karttegneren"
 msgid "Monster"
 msgstr "Monster"
 
+#, fuzzy
+msgid "Objects cannot be placed outside the map."
+msgstr "Denne trolldommen kan ikke brukes på et skip."
+
 msgid "Monsters cannot be placed on water."
 msgstr ""
 
@@ -3697,6 +3709,21 @@ msgstr "Helter"
 
 msgid "Heroes cannot be placed on water."
 msgstr ""
+
+msgid "Artifacts"
+msgstr "Gjenstander"
+
+#, fuzzy
+msgid "Artifacts cannot be placed on water."
+msgstr "Denne trolldommen kan ikke brukes på et skip."
+
+#, fuzzy
+msgid "Ocean object"
+msgstr "Sjøting"
+
+#, fuzzy
+msgid "Ocean object must be placed on water."
+msgstr "Denne trolldommen kan ikke brukes på et skip."
 
 msgid "Ocean Objects"
 msgstr "Sjøting"
@@ -3727,9 +3754,6 @@ msgstr "Strandting"
 
 msgid "Towns"
 msgstr "Byer"
-
-msgid "Artifacts"
-msgstr "Gjenstander"
 
 msgid "Treasures"
 msgstr "Verdifulle gjenstander"
@@ -7234,17 +7258,17 @@ msgstr ""
 msgid "%{name1} meets %{name2}"
 msgstr "%{name1} møter %{name2}"
 
-msgid "Town Portal"
-msgstr "Byportal"
-
-msgid "Select town to port to."
-msgstr "Velg by å reise til."
-
 msgid "Enemy heroes are now fully identifiable."
 msgstr "De fiendtlige heltene er nå helt kartlagte."
 
 msgid "Identify Hero"
 msgstr "Kartlegg helt"
+
+msgid "Select town to port to."
+msgstr "Velg by å reise til."
+
+msgid "Town Portal"
+msgstr "Byportal"
 
 msgid "The creatures are willing to join us!"
 msgstr "Krigerne er villige til å slå seg til oss!"
@@ -10419,6 +10443,9 @@ msgstr ""
 "nærmere titt oppdager du at det er den fortryllede spaden til Gravleggerne, "
 "lenge trodd å være forsvunnet av de dødelige."
 
+msgid "spellBonus|selected by user"
+msgstr ""
+
 msgid "Wood"
 msgstr "Ved"
 
@@ -10969,6 +10996,44 @@ msgstr "Plasser vannvokter"
 
 msgid "Sets Water Elementals to guard a mine against enemy armies."
 msgstr "Tilkaller en vannånd for å vokte over ei gruve mot fiendtlige styrker."
+
+#, fuzzy
+msgid "Random Spell"
+msgstr "Tilfeldig"
+
+msgid "Randomly selected spell of any level."
+msgstr ""
+
+#, fuzzy
+msgid "Random 1st Level Spell"
+msgstr "Vilkårlig borg"
+
+msgid "Randomly selected 1st level spell."
+msgstr ""
+
+msgid "Random 2nd Level Spell"
+msgstr ""
+
+msgid "Randomly selected 2nd level spell."
+msgstr ""
+
+msgid "Random 3rd Level Spell"
+msgstr ""
+
+msgid "Randomly selected 3rd level spell."
+msgstr ""
+
+msgid "Random 4th Level Spell"
+msgstr ""
+
+msgid "Randomly selected 4th level spell."
+msgstr ""
+
+msgid "Random 5th Level Spell"
+msgstr ""
+
+msgid "Randomly selected 5th level spell."
+msgstr ""
 
 msgid "Petrification"
 msgstr "Forstening"

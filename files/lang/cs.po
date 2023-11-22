@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-05 08:25+0000\n"
+"POT-Creation-Date: 2023-11-19 15:02+0000\n"
 "PO-Revision-Date: 2023-09-24 16:05+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Czech <cs@li.org>\n"
@@ -3284,6 +3284,9 @@ msgstr ""
 msgid "%{color} %{race} hero"
 msgstr "%{color} hráč"
 
+msgid "Terrain object"
+msgstr ""
+
 msgid "Select Skill:"
 msgstr ""
 
@@ -3306,6 +3309,10 @@ msgstr "Nejlepší hrdina:"
 #, fuzzy
 msgid "Select Treasure:"
 msgstr "Nejlepší hrdina:"
+
+#, fuzzy
+msgid "Select Ocean Object:"
+msgstr "Artefakt"
 
 #, fuzzy
 msgid "Map Type:\n"
@@ -3603,6 +3610,9 @@ msgstr ""
 msgid "Monster"
 msgstr "Stvůra"
 
+msgid "Objects cannot be placed outside the map."
+msgstr ""
+
 msgid "Monsters cannot be placed on water."
 msgstr ""
 
@@ -3619,6 +3629,19 @@ msgid "Heroes"
 msgstr "Hrdinové"
 
 msgid "Heroes cannot be placed on water."
+msgstr ""
+
+msgid "Artifacts"
+msgstr "Artefakty"
+
+msgid "Artifacts cannot be placed on water."
+msgstr ""
+
+#, fuzzy
+msgid "Ocean object"
+msgstr "Pustina"
+
+msgid "Ocean object must be placed on water."
 msgstr ""
 
 msgid "Ocean Objects"
@@ -3653,9 +3676,6 @@ msgstr ""
 #, fuzzy
 msgid "Towns"
 msgstr "Město"
-
-msgid "Artifacts"
-msgstr "Artefakty"
 
 #, fuzzy
 msgid "Treasures"
@@ -6723,17 +6743,17 @@ msgstr ""
 msgid "%{name1} meets %{name2}"
 msgstr "%{name1} se střetá s %{name2}"
 
-msgid "Town Portal"
-msgstr ""
-
-msgid "Select town to port to."
-msgstr ""
-
 msgid "Enemy heroes are now fully identifiable."
 msgstr ""
 
 msgid "Identify Hero"
 msgstr "Identifikuj hrdinu"
+
+msgid "Select town to port to."
+msgstr ""
+
+msgid "Town Portal"
+msgstr ""
 
 msgid "The creatures are willing to join us!"
 msgstr ""
@@ -9508,6 +9528,9 @@ msgid ""
 "lost by mortals."
 msgstr ""
 
+msgid "spellBonus|selected by user"
+msgstr ""
+
 msgid "Wood"
 msgstr "Dřevo"
 
@@ -10006,6 +10029,44 @@ msgstr "Zanech vodního strážce"
 msgid "Sets Water Elementals to guard a mine against enemy armies."
 msgstr ""
 "Zanechá u dolu Vodní Elementály, aby ho bránili před nepřátelskými vojsky."
+
+#, fuzzy
+msgid "Random Spell"
+msgstr "Náhodné město"
+
+msgid "Randomly selected spell of any level."
+msgstr ""
+
+#, fuzzy
+msgid "Random 1st Level Spell"
+msgstr "Náhodný hrad"
+
+msgid "Randomly selected 1st level spell."
+msgstr ""
+
+msgid "Random 2nd Level Spell"
+msgstr ""
+
+msgid "Randomly selected 2nd level spell."
+msgstr ""
+
+msgid "Random 3rd Level Spell"
+msgstr ""
+
+msgid "Randomly selected 3rd level spell."
+msgstr ""
+
+msgid "Random 4th Level Spell"
+msgstr ""
+
+msgid "Randomly selected 4th level spell."
+msgstr ""
+
+msgid "Random 5th Level Spell"
+msgstr ""
+
+msgid "Randomly selected 5th level spell."
+msgstr ""
 
 msgid "Petrification"
 msgstr "Zkamenění"

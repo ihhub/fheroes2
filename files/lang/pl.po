@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-05 08:25+0000\n"
+"POT-Creation-Date: 2023-11-19 15:02+0000\n"
 "PO-Revision-Date: 2023-08-26 23:09+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: https://discord.com/"
@@ -3304,6 +3304,10 @@ msgstr "Zastosuj wprowadzone zmiany."
 msgid "%{color} %{race} hero"
 msgstr "%{color} gracz"
 
+#, fuzzy
+msgid "Terrain object"
+msgstr "Brak obiektu"
+
 msgid "Select Skill:"
 msgstr "Wybierz umiejętność:"
 
@@ -3322,6 +3326,10 @@ msgstr "Wybierz bohatera:"
 #, fuzzy
 msgid "Select Treasure:"
 msgstr "Wybierz bohatera:"
+
+#, fuzzy
+msgid "Select Ocean Object:"
+msgstr "Wybierz artefakt:"
 
 msgid "Map Type:\n"
 msgstr "Typ Mapy:\n"
@@ -3626,6 +3634,10 @@ msgstr ""
 msgid "Monster"
 msgstr "Potwór"
 
+#, fuzzy
+msgid "Objects cannot be placed outside the map."
+msgstr "To zaklęcie nie może być rzucone z łodzi."
+
 msgid "Monsters cannot be placed on water."
 msgstr ""
 
@@ -3644,6 +3656,21 @@ msgstr "Bohaterowie"
 
 msgid "Heroes cannot be placed on water."
 msgstr ""
+
+msgid "Artifacts"
+msgstr "Artefakty"
+
+#, fuzzy
+msgid "Artifacts cannot be placed on water."
+msgstr "To zaklęcie nie może być rzucone z łodzi."
+
+#, fuzzy
+msgid "Ocean object"
+msgstr "Brak obiektu"
+
+#, fuzzy
+msgid "Ocean object must be placed on water."
+msgstr "To zaklęcie nie może być rzucone z łodzi."
 
 msgid "Ocean Objects"
 msgstr ""
@@ -3677,9 +3704,6 @@ msgstr ""
 
 msgid "Towns"
 msgstr "Miasta"
-
-msgid "Artifacts"
-msgstr "Artefakty"
 
 msgid "Treasures"
 msgstr "Skarby"
@@ -7114,17 +7138,17 @@ msgstr ""
 msgid "%{name1} meets %{name2}"
 msgstr "Spotkanie: %{name1} i %{name2}"
 
-msgid "Town Portal"
-msgstr "Miejski Portal"
-
-msgid "Select town to port to."
-msgstr "Wybierz miasto docelowe."
-
 msgid "Enemy heroes are now fully identifiable."
 msgstr "Można już w pełni zidentyfikować wrogich bohaterów."
 
 msgid "Identify Hero"
 msgstr "Identyfikacja bohatera"
+
+msgid "Select town to port to."
+msgstr "Wybierz miasto docelowe."
+
+msgid "Town Portal"
+msgstr "Miejski Portal"
 
 msgid "The creatures are willing to join us!"
 msgstr "Te stworzenia są chętne przyłączyć się do nas!"
@@ -10278,6 +10302,9 @@ msgstr ""
 "przedmiotu odkrywasz, że jest to zaklęty szpadel Grabarzy, zaginiony dawno "
 "temu."
 
+msgid "spellBonus|selected by user"
+msgstr ""
+
 msgid "Wood"
 msgstr "Drewno"
 
@@ -10803,6 +10830,44 @@ msgstr "Ustawienie Strażnika Wody"
 
 msgid "Sets Water Elementals to guard a mine against enemy armies."
 msgstr "Wzywa Żywiołaki Wody, które pilnują kopalni przed wrogimi armiami."
+
+#, fuzzy
+msgid "Random Spell"
+msgstr "Losowa"
+
+msgid "Randomly selected spell of any level."
+msgstr ""
+
+#, fuzzy
+msgid "Random 1st Level Spell"
+msgstr "Losowy zamek"
+
+msgid "Randomly selected 1st level spell."
+msgstr ""
+
+msgid "Random 2nd Level Spell"
+msgstr ""
+
+msgid "Randomly selected 2nd level spell."
+msgstr ""
+
+msgid "Random 3rd Level Spell"
+msgstr ""
+
+msgid "Randomly selected 3rd level spell."
+msgstr ""
+
+msgid "Random 4th Level Spell"
+msgstr ""
+
+msgid "Randomly selected 4th level spell."
+msgstr ""
+
+msgid "Random 5th Level Spell"
+msgstr ""
+
+msgid "Randomly selected 5th level spell."
+msgstr ""
 
 msgid "Petrification"
 msgstr "Zamiana w Kamień"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-05 08:25+0000\n"
+"POT-Creation-Date: 2023-11-19 15:02+0000\n"
 "PO-Revision-Date: 2023-09-12 11:08+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
@@ -3350,6 +3350,10 @@ msgstr "Acceptér de trufne valg."
 msgid "%{color} %{race} hero"
 msgstr "%{color} spiller"
 
+#, fuzzy
+msgid "Terrain object"
+msgstr "Terræn-tilstand"
+
 msgid "Select Skill:"
 msgstr "Vælg evne:"
 
@@ -3368,6 +3372,10 @@ msgstr "Vælg helt:"
 #, fuzzy
 msgid "Select Treasure:"
 msgstr "Vælg helt:"
+
+#, fuzzy
+msgid "Select Ocean Object:"
+msgstr "Hav-objekter"
 
 msgid "Map Type:\n"
 msgstr "Korttype:\n"
@@ -3675,6 +3683,10 @@ msgstr "Forlad korteditoren."
 msgid "Monster"
 msgstr "Væsen"
 
+#, fuzzy
+msgid "Objects cannot be placed outside the map."
+msgstr "Denne besværgelse kan ikke kastes ombord på et skib."
+
 msgid "Monsters cannot be placed on water."
 msgstr ""
 
@@ -3693,6 +3705,21 @@ msgstr "Helte"
 
 msgid "Heroes cannot be placed on water."
 msgstr ""
+
+msgid "Artifacts"
+msgstr "Artefakter"
+
+#, fuzzy
+msgid "Artifacts cannot be placed on water."
+msgstr "Denne besværgelse kan ikke kastes ombord på et skib."
+
+#, fuzzy
+msgid "Ocean object"
+msgstr "Hav-objekter"
+
+#, fuzzy
+msgid "Ocean object must be placed on water."
+msgstr "Denne besværgelse kan ikke kastes ombord på et skib."
 
 msgid "Ocean Objects"
 msgstr "Hav-objekter"
@@ -3723,9 +3750,6 @@ msgstr "Strand-objekter"
 
 msgid "Towns"
 msgstr "Byer"
-
-msgid "Artifacts"
-msgstr "Artefakter"
 
 msgid "Treasures"
 msgstr "Skatte"
@@ -7188,17 +7212,17 @@ msgstr ""
 msgid "%{name1} meets %{name2}"
 msgstr "%{name1} møder %{name2}"
 
-msgid "Town Portal"
-msgstr "Byportal"
-
-msgid "Select town to port to."
-msgstr "Vælg den by, du gerne vil havne i."
-
 msgid "Enemy heroes are now fully identifiable."
 msgstr "Fjendtlige helte er nu fuldt identificerbare."
 
 msgid "Identify Hero"
 msgstr "Identificer helt"
+
+msgid "Select town to port to."
+msgstr "Vælg den by, du gerne vil havne i."
+
+msgid "Town Portal"
+msgstr "Byportal"
 
 msgid "The creatures are willing to join us!"
 msgstr "Disse væsener er villige til at forene sig med os!"
@@ -10318,6 +10342,9 @@ msgstr ""
 "søgen opdager du, at det er dødgravernes fortryllede skovl, som man længe "
 "har troet var gået tabt for dødelige."
 
+msgid "spellBonus|selected by user"
+msgstr ""
+
 msgid "Wood"
 msgstr "træ"
 
@@ -10871,6 +10898,44 @@ msgstr "Sæt Vand-vagt"
 
 msgid "Sets Water Elementals to guard a mine against enemy armies."
 msgstr "Sætter vand-elementaler til at beskytte en mine mod fjendtlige hære."
+
+#, fuzzy
+msgid "Random Spell"
+msgstr "Tilfældigt"
+
+msgid "Randomly selected spell of any level."
+msgstr ""
+
+#, fuzzy
+msgid "Random 1st Level Spell"
+msgstr "Tilfældig borg"
+
+msgid "Randomly selected 1st level spell."
+msgstr ""
+
+msgid "Random 2nd Level Spell"
+msgstr ""
+
+msgid "Randomly selected 2nd level spell."
+msgstr ""
+
+msgid "Random 3rd Level Spell"
+msgstr ""
+
+msgid "Randomly selected 3rd level spell."
+msgstr ""
+
+msgid "Random 4th Level Spell"
+msgstr ""
+
+msgid "Randomly selected 4th level spell."
+msgstr ""
+
+msgid "Random 5th Level Spell"
+msgstr ""
+
+msgid "Randomly selected 5th level spell."
+msgstr ""
 
 msgid "Petrification"
 msgstr "Forstening"
