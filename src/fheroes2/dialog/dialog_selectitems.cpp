@@ -816,7 +816,7 @@ int Dialog::selectHeroes( const int heroId /* = Heroes::UNKNOWN */ )
 
 int Dialog::selectHeroType( const int heroType )
 {
-    const auto & objectInfo = Maps::getObjectsByGroup( Maps::ObjectGroup::Hero );
+    const auto & objectInfo = Maps::getObjectsByGroup( Maps::ObjectGroup::Kingdom_Heroes );
     HeroTypeSelection listbox( objectInfo, { 350, fheroes2::Display::instance().height() - 200 }, _( "Select Hero:" ) );
 
     return selectObjectType( heroType, objectInfo.size(), listbox );
@@ -824,7 +824,7 @@ int Dialog::selectHeroType( const int heroType )
 
 int Dialog::selectMonsterType( const int monsterType )
 {
-    const auto & objectInfo = Maps::getObjectsByGroup( Maps::ObjectGroup::Monster );
+    const auto & objectInfo = Maps::getObjectsByGroup( Maps::ObjectGroup::Monsters );
 
     MonsterTypeSelection listbox( objectInfo, { 350, fheroes2::Display::instance().height() - 200 }, _( "Select Monster:" ) );
 
@@ -833,7 +833,7 @@ int Dialog::selectMonsterType( const int monsterType )
 
 int Dialog::selectArtifactType( const int artifactType )
 {
-    const auto & objectInfo = Maps::getObjectsByGroup( Maps::ObjectGroup::Artifact );
+    const auto & objectInfo = Maps::getObjectsByGroup( Maps::ObjectGroup::Adventure_Artifacts );
 
     ArtifactTypeSelection listbox( objectInfo, { 350, fheroes2::Display::instance().height() - 200 }, _( "Select Artifact:" ) );
 
@@ -842,7 +842,7 @@ int Dialog::selectArtifactType( const int artifactType )
 
 int Dialog::selectTreasureType( const int resourceType )
 {
-    const auto & objectInfo = Maps::getObjectsByGroup( Maps::ObjectGroup::Treasure );
+    const auto & objectInfo = Maps::getObjectsByGroup( Maps::ObjectGroup::Adventure_Treasures );
 
     TreasureTypeSelection listbox( objectInfo, { 350, fheroes2::Display::instance().height() - 200 }, _( "Select Treasure:" ) );
 
@@ -851,7 +851,7 @@ int Dialog::selectTreasureType( const int resourceType )
 
 int Dialog::selectOceanObjectType( const int resourceType )
 {
-    const auto & objectInfo = Maps::getObjectsByGroup( Maps::ObjectGroup::Ocean_Object );
+    const auto & objectInfo = Maps::getObjectsByGroup( Maps::ObjectGroup::Adventure_Water );
 
     OceanObjectTypeSelection listbox( objectInfo, { 350, fheroes2::Display::instance().height() - 200 }, _( "Select Ocean Object:" ) );
 
