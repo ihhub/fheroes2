@@ -231,12 +231,19 @@ namespace Interface
         std::array<int32_t, OBJECT_COUNT> _selectedObjectType;
 
         // TODO: this list is going to be modified as per proper object groups.
-        const std::array<Maps::ObjectGroup, OBJECT_COUNT> _selectedObjectGroup{ Maps::ObjectGroup::Landscape_Water,     Maps::ObjectGroup::Landscape_Mountains,
-                                                                                Maps::ObjectGroup::Landscape_Rocks,     Maps::ObjectGroup::Landscape_Trees,
-                                                                                Maps::ObjectGroup::Adventure_Dwellings, Maps::ObjectGroup::Landscape_Miscellaneous,
-                                                                                Maps::ObjectGroup::Adventure_Mines,     Maps::ObjectGroup::Adventure_Power_Ups,
-                                                                                Maps::ObjectGroup::Adventure_Water,     Maps::ObjectGroup::Kingdom_Towns,
-                                                                                Maps::ObjectGroup::Monsters,            Maps::ObjectGroup::Kingdom_Heroes,
-                                                                                Maps::ObjectGroup::Adventure_Artifacts, Maps::ObjectGroup::Adventure_Treasures };
+        const std::array<Maps::ObjectGroup, OBJECT_COUNT> _selectedObjectGroup{ Maps::ObjectGroup::Landscape_Water,
+                                                                                Maps::ObjectGroup::Landscape_Mountains,
+                                                                                Maps::ObjectGroup::Landscape_Rocks,
+                                                                                Maps::ObjectGroup::Landscape_Trees,
+                                                                                Maps::ObjectGroup::Adventure_Dwellings,
+                                                                                Maps::ObjectGroup::Landscape_Miscellaneous,
+                                                                                Maps::ObjectGroup::Adventure_Mines,
+                                                                                Maps::ObjectGroup::Adventure_Power_Ups,
+                                                                                Maps::ObjectGroup::Adventure_Water,
+                                                                                Maps::ObjectGroup::Kingdom_Towns,
+                                                                                Maps::ObjectGroup::Monsters,
+                                                                                Maps::ObjectGroup::Kingdom_Heroes,
+                                                                                Maps::ObjectGroup::Adventure_Artifacts,
+                                                                                Maps::ObjectGroup::Adventure_Treasures };
     };
 }

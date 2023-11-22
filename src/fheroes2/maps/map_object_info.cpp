@@ -663,8 +663,8 @@ namespace
         }
 
         // Check that all other objects are action objects.
-        for ( size_t groupType = static_cast<size_t>( Maps::ObjectGroup::Adventure_Artifacts );
-              groupType < static_cast<size_t>( Maps::ObjectGroup::Group_Count ); ++groupType ) {
+        for ( size_t groupType = static_cast<size_t>( Maps::ObjectGroup::Adventure_Artifacts ); groupType < static_cast<size_t>( Maps::ObjectGroup::Group_Count );
+              ++groupType ) {
             const auto & objects = objectData[groupType];
 
             for ( const auto & objectInfo : objects ) {
