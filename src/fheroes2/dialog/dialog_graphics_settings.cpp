@@ -49,17 +49,30 @@ namespace
         Mode,
         VSync,
         SystemInfo,
+        MonitorList,
         Exit
     };
 
-    const fheroes2::Size offsetBetweenOptions{ 118, 110 };
-    const fheroes2::Point optionOffset{ 69, 47 };
+    const fheroes2::Size offsetBetweenOptions{ 92, 110 };
+    const fheroes2::Point optionOffset{ 36, 47 };
     const int32_t optionWindowSize{ 65 };
 
     const fheroes2::Rect resolutionRoi{ optionOffset.x, optionOffset.y, optionWindowSize, optionWindowSize };
     const fheroes2::Rect modeRoi{ optionOffset.x + offsetBetweenOptions.width, optionOffset.y, optionWindowSize, optionWindowSize };
     const fheroes2::Rect vSyncRoi{ optionOffset.x, optionOffset.y + offsetBetweenOptions.height, optionWindowSize, optionWindowSize };
     const fheroes2::Rect systemInfoRoi{ optionOffset.x + offsetBetweenOptions.width, optionOffset.y + offsetBetweenOptions.height, optionWindowSize, optionWindowSize };
+    
+    const fheroes2::Rect monitorList{ optionOffset.x + offsetBetweenOptions.width * 2, optionOffset.y, optionWindowSize, optionWindowSize };
+    const fheroes2::Rect fillerRoi{ optionOffset.x + offsetBetweenOptions.width * 2 ,optionOffset.y + offsetBetweenOptions.height
+                                    ,optionWindowSize ,optionWindowSize };
+
+    void drawMonitor(const fheroes2::Rect& optionRoi) {
+       
+        const Settings & conf = Settings::Get();
+        fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::SPANEL, Settings::Get().isEvilInterfaceEnabled() ? 17 : 16 ), "Display Monitor"
+                                ,SDL_GetDisplayName(conf.DisplayMonitor())
+                                ,fheroes2::UiOptionTextWidth::TWO_ELEMENTS_ROW );
+    }
 
     void drawResolution( const fheroes2::Rect & optionRoi )
     {
@@ -119,6 +132,7 @@ namespace
 
         fheroes2::drawOption( optionRoi, image, _( "System Info" ), isSystemInfoDisplayed ? _( "on" ) : _( "off" ), fheroes2::UiOptionTextWidth::TWO_ELEMENTS_ROW );
     }
+    
 
     SelectedWindow showConfigurationWindow()
     {
@@ -126,8 +140,12 @@ namespace
 
         const Settings & conf = Settings::Get();
         const bool isEvilInterface = conf.isEvilInterfaceEnabled();
-        const fheroes2::Sprite & dialog = fheroes2::AGG::GetICN( ( isEvilInterface ? ICN::ESPANBKG_EVIL : ICN::ESPANBKG ), 0 );
+        const fheroes2::Sprite & dialog = fheroes2::AGG::GetICN( ( isEvilInterface ? ICN::CSPANBKE : ICN::CSPANBKG ), 0 );
         const fheroes2::Sprite & dialogShadow = fheroes2::AGG::GetICN( ( isEvilInterface ? ICN::CSPANBKE : ICN::CSPANBKG ), 1 );
+       
+        fheroes2::Sprite placeholder = fheroes2::AGG::GetICN( Settings::Get().isEvilInterfaceEnabled() ? ICN::STONBAKE : ICN::STONEBAK, 0 );
+        //this image needs to be bigger than other buttons cause it's gonna fill in shadow as well
+        placeholder = fheroes2::Crop( placeholder, 0, 0, optionWindowSize+20, optionWindowSize +20 );
 
         const fheroes2::Point dialogOffset( ( display.width() - dialog.width() ) / 2, ( display.height() - dialog.height() ) / 2 );
         const fheroes2::Point shadowOffset( dialogOffset.x - BORDERWIDTH, dialogOffset.y );
@@ -138,6 +156,9 @@ namespace
 
         fheroes2::Blit( dialogShadow, display, windowRoi.x - BORDERWIDTH, windowRoi.y + BORDERWIDTH );
         fheroes2::Blit( dialog, display, windowRoi.x, windowRoi.y );
+        //filling the empty space alognside the shadow 
+        fheroes2::Blit( placeholder, display, windowRoi.x + optionOffset.x -10 + offsetBetweenOptions.width * 2
+                                            , windowRoi.y + optionOffset.y -10 + offsetBetweenOptions.height );
 
         fheroes2::ImageRestorer emptyDialogRestorer( display, windowRoi.x, windowRoi.y, windowRoi.width, windowRoi.height );
 
@@ -145,12 +166,15 @@ namespace
         const fheroes2::Rect windowModeRoi( modeRoi + windowRoi.getPosition() );
         const fheroes2::Rect windowVSyncRoi( vSyncRoi + windowRoi.getPosition() );
         const fheroes2::Rect windowSystemInfoRoi( systemInfoRoi + windowRoi.getPosition() );
-
-        const auto drawOptions = [&windowResolutionRoi, &windowModeRoi, &windowVSyncRoi, &windowSystemInfoRoi]() {
+        
+        const fheroes2::Rect windowMonitorList( monitorList + windowRoi.getPosition() );
+        
+        const auto drawOptions = [&windowResolutionRoi, &windowModeRoi, &windowVSyncRoi, &windowSystemInfoRoi, &windowMonitorList]() {
             drawResolution( windowResolutionRoi );
             drawMode( windowModeRoi );
             drawVSync( windowVSyncRoi );
             drawSystemInfo( windowSystemInfoRoi );
+            drawMonitor(windowMonitorList);
         };
 
         drawOptions();
@@ -187,6 +211,9 @@ namespace
             if ( le.MouseClickLeft( windowSystemInfoRoi ) ) {
                 return SelectedWindow::SystemInfo;
             }
+            if ( le.MouseClickLeft( windowMonitorList ) ) {
+                return SelectedWindow::MonitorList;
+            }
 
             if ( le.MousePressRight( windowResolutionRoi ) ) {
                 fheroes2::showStandardTextMessage( _( "Select Game Resolution" ), _( "Change the resolution of the game." ), 0 );
@@ -196,6 +223,9 @@ namespace
             }
             else if ( le.MousePressRight( windowVSyncRoi ) ) {
                 fheroes2::showStandardTextMessage( _( "V-Sync" ), _( "The V-Sync option can be enabled to resolve flickering issues on some monitors." ), 0 );
+            }
+            else if ( le.MousePressRight( windowMonitorList ) ) {
+                fheroes2::showStandardTextMessage( _( "Monitor Selection" ), _( "Toggle Between available monitors, Restart Required to take Effect" ), 0 );
             }
             if ( le.MousePressRight( windowSystemInfoRoi ) ) {
                 fheroes2::showStandardTextMessage( _( "System Info" ), _( "Show extra information such as FPS and current time." ), 0 );
@@ -250,6 +280,11 @@ namespace fheroes2
                 break;
             case SelectedWindow::SystemInfo:
                 conf.setSystemInfo( !conf.isSystemInfoEnabled() );
+                conf.Save( Settings::configFileName );
+                windowType = SelectedWindow::Configuration;
+                break;
+            case SelectedWindow::MonitorList:
+                conf.setDisplayMonitor( ( conf.DisplayMonitor() + 1 ) % SDL_GetNumVideoDisplays() );
                 conf.Save( Settings::configFileName );
                 windowType = SelectedWindow::Configuration;
                 break;
