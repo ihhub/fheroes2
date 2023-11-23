@@ -102,6 +102,7 @@ Settings::Settings()
     , battle_speed( DEFAULT_BATTLE_SPEED )
     , game_type( 0 )
     , preferably_count_players( 0 )
+    , _displayMonitor(0)
 {
     _optGlobal.SetModes( GLOBAL_FIRST_RUN );
     _optGlobal.SetModes( GLOBAL_SHOW_INTRO );
@@ -326,6 +327,10 @@ bool Settings::Read( const std::string & filePath )
         _optGlobal.SetModes( GLOBAL_ENABLE_EDITOR );
     }
 
+    if ( config.Exists( "monitor" ) ) {
+        setDisplayMonitor( std::max( config.IntParams( "monitor" ), 0 ) );
+    }
+
     return true;
 }
 
@@ -476,6 +481,9 @@ std::string Settings::String() const
     if ( _optGlobal.Modes( GLOBAL_ENABLE_EDITOR ) ) {
         os << "editor = beta" << std::endl;
     }
+
+    os << std::endl << "# Display Monitor for Multi-Monitor Setups (defaults to first monitor)" << std::endl;
+    os << "monitor = " << DisplayMonitor() << std::endl;
 
     return os.str();
 }
@@ -953,6 +961,11 @@ void Settings::setDebug( int debug )
 #endif
 
     Logging::setDebugLevel( debug );
+}
+
+
+void Settings::setDisplayMonitor( int monitor ) {
+    _displayMonitor = monitor;
 }
 
 void Settings::SetSoundVolume( int v )
