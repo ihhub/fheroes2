@@ -1419,7 +1419,7 @@ namespace AI
             // Units whose affiliation has been changed are still looking in the direction they originally looked
             const bool reflect = ( currentUnit.GetArmyColor() == _myColor ? currentUnit.isReflect() : !currentUnit.isReflect() );
 
-            const auto checkIdx = [this, &currentUnit, reflect]( const int32_t idx ) {
+            const auto checkIdx = [this, reflect]( const int32_t idx ) {
                 if ( _defendingCastle ) {
                     return Board::isCastleIndex( idx );
                 }
