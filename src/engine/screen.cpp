@@ -1072,7 +1072,7 @@ namespace
 
             flags |= SDL_WINDOW_RESIZABLE;
             SDL_Rect monRect;
-            SDL_GetDisplayBounds( DisplayMonitor() , &monRect );
+            SDL_GetDisplayBounds( DisplayMonitor(), &monRect );
             _window = SDL_CreateWindow( _previousWindowTitle.data(), monRect.x + _prevWindowPos.x, monRect.y + _prevWindowPos.y, resolutionInfo.screenWidth,
                                         resolutionInfo.screenHeight, flags );
             if ( _window == nullptr ) {
@@ -1337,7 +1337,7 @@ namespace fheroes2
              && info.screenHeight == _screenSize.height ) // nothing to resize
             return;
 
-        _engine->setDisplayMonitor(_displayMonitor);
+        _engine->setDisplayMonitor( _displayMonitor );
         const bool isFullScreen = _engine->isFullScreen();
 
         // deallocate engine resources
