@@ -1071,8 +1071,11 @@ namespace
             }
 
             flags |= SDL_WINDOW_RESIZABLE;
-
-            _window = SDL_CreateWindow( _previousWindowTitle.data(), _prevWindowPos.x, _prevWindowPos.y, resolutionInfo.screenWidth, resolutionInfo.screenHeight, flags );
+            
+            SDL_Rect monRect;
+            SDL_GetDisplayBounds( DisplayMonitor() , &monRect );
+            
+            _window = SDL_CreateWindow( _previousWindowTitle.data(), monRect.x + _prevWindowPos.x, monRect.y + _prevWindowPos.y, resolutionInfo.screenWidth, resolutionInfo.screenHeight, flags );
             if ( _window == nullptr ) {
                 ERROR_LOG( "Failed to create an application window of " << resolutionInfo.screenWidth << " x " << resolutionInfo.screenHeight
                                                                         << " size. The error: " << SDL_GetError() )
@@ -1161,7 +1164,7 @@ namespace
         SDL_Renderer * _renderer;
         SDL_Texture * _texture;
         int _driverIndex;
-
+        
         std::string _previousWindowTitle;
         fheroes2::Point _prevWindowPos;
         fheroes2::Size _currentScreenResolution;
@@ -1336,11 +1339,12 @@ namespace fheroes2
              && info.screenHeight == _screenSize.height ) // nothing to resize
             return;
 
+        _engine->setDisplayMonitor(_displayMonitor);
         const bool isFullScreen = _engine->isFullScreen();
 
         // deallocate engine resources
         _engine->clear();
-
+        
         _prevRoi = {};
 
         // allocate engine resources
