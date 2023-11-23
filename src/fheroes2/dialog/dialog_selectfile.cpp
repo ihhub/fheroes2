@@ -509,9 +509,7 @@ namespace
                     listbox.updateScrollBarImage();
 
                     listbox.SetListContent( lists );
-
                     listbox.SetCurrent( std::max( listId - 1, 0 ) );
-
                 }
 
                 needRedraw = true;
