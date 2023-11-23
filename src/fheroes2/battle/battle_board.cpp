@@ -353,9 +353,9 @@ bool Battle::Board::isValidIndex( const int32_t index )
 
 bool Battle::Board::isCastleIndex( const int32_t index )
 {
-    return ( ( 8 < index && index <= 10 ) || ( 19 < index && index <= 21 ) || ( 29 < index && index <= 32 ) || ( 40 < index && index <= 43 )
-             || ( 50 < index && index <= 54 ) || ( 62 < index && index <= 65 ) || ( 73 < index && index <= 76 ) || ( 85 < index && index <= 87 )
-             || ( 96 < index && index <= 98 ) );
+    return ( ( 8 <= index && index <= 10 ) || ( 19 < index && index <= 21 ) || ( 29 <= index && index <= 32 ) || ( 40 < index && index <= 43 )
+             || ( 50 < index && index <= 54 ) || ( 62 < index && index <= 65 ) || ( 73 <= index && index <= 76 ) || ( 85 < index && index <= 87 )
+             || ( 96 <= index && index <= 98 ) );
 }
 
 bool Battle::Board::isOutOfWallsIndex( const int32_t index )

@@ -81,6 +81,8 @@ namespace Battle
 
         static bool isNearIndexes( const int32_t index1, const int32_t index2 );
         static bool isValidIndex( const int32_t index );
+        // Returns true if the given index is considered to be inside the castle from the point of view of castle defense,
+        // otherwise returns false. Indexes of destructible walls are considered to be located inside the castle.
         static bool isCastleIndex( const int32_t index );
         static bool isMoatIndex( const int32_t index, const Unit & unit );
         static bool isOutOfWallsIndex( const int32_t index );
