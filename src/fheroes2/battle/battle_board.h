@@ -78,14 +78,19 @@ namespace Battle
         static std::string GetMoatInfo();
 
         static Cell * GetCell( const int32_t position, const int dir = CENTER );
+
         static bool isNearIndexes( const int32_t index1, const int32_t index2 );
         static bool isValidIndex( const int32_t index );
         static bool isCastleIndex( const int32_t index );
         static bool isMoatIndex( const int32_t index, const Unit & unit );
         static bool isOutOfWallsIndex( const int32_t index );
-        static int DistanceFromOriginX( const int32_t index, const bool reflect );
+
         static int GetReflectDirection( const int dir );
         static int GetDirection( const int32_t index1, const int32_t index2 );
+
+        // Returns the distance to the cell with the given index from the given edge of the battlefield along the X axis. The
+        // distance from the edges of the battlefield to the cells closest to them is counted as one.
+        static uint32_t GetDistanceFromBoardEdgeAlongXAxis( const int32_t index, const bool fromRightEdge );
 
         // Returns the distance between two cells with the given indexes. If any of the indexes is not valid, then returns 0.
         static uint32_t GetDistance( const int32_t index1, const int32_t index2 );

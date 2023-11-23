@@ -265,10 +265,13 @@ int Battle::Board::GetReflectDirection( const int dir )
     return UNKNOWN;
 }
 
-int Battle::Board::DistanceFromOriginX( const int32_t index, const bool reflect )
+uint32_t Battle::Board::GetDistanceFromBoardEdgeAlongXAxis( const int32_t index, const bool fromRightEdge )
 {
-    const int xPos = index % ARENAW;
-    return std::max( 1, reflect ? ARENAW - xPos - 1 : xPos );
+    assert( isValidIndex( index ) );
+
+    const uint32_t x = index % ARENAW;
+
+    return ( fromRightEdge ? ARENAW - x : x + 1 );
 }
 
 bool Battle::Board::isValidDirection( const int32_t index, const int dir )

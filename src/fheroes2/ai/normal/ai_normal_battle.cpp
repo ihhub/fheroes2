@@ -291,7 +291,8 @@ namespace AI
         return false;
     }
 
-    MeleeAttackOutcome BestAttackOutcome( const Unit & attacker, const Unit & defender, const PositionValues & valuesOfAttackPositions )
+    MeleeAttackOutcome BestAttackOutcome( const Unit & attacker, const Unit & defender, const PositionValues & valuesOfAttackPositions,
+                                          const std::function<bool( const Position & )> & posFilter = {} )
     {
         MeleeAttackOutcome bestOutcome;
 
@@ -317,6 +318,10 @@ namespace AI
         // Pick the best position to attack from
         for ( const Position & pos : aroundDefender ) {
             assert( pos.GetHead() != nullptr );
+
+            if ( posFilter && !posFilter( pos ) ) {
+                continue;
+            }
 
             const int32_t posHeadIdx = pos.GetHead()->GetIndex();
 
@@ -1300,24 +1305,15 @@ namespace AI
         // Current unit can be under the influence of the Hypnotize spell
         const Units enemies( arena.getEnemyForce( _myColor ).getUnits(), &currentUnit );
 
-        const auto isInDefendedArea = [this, &currentUnit]( const int32_t index ) {
-            if ( _defendingCastle ) {
-                return Board::isCastleIndex( index );
-            }
-
-            // Units whose affiliation has been changed are still looking in the direction they originally looked
-            const bool reflect = ( currentUnit.GetArmyColor() == _myColor ? currentUnit.isReflect() : !currentUnit.isReflect() );
-
-            return ( Board::DistanceFromOriginX( index, reflect ) <= ARENAW / 2 );
-        };
-
         // 1. Cover our archers and attack enemy units blocking them, if there are any. Units whose affiliation has been changed should not cover the archers, because
         // such units will block them instead of covering them.
         if ( currentUnit.GetArmyColor() == _myColor ) {
-            const bool isEnemyPresentInDefendedArea = std::any_of( enemies.begin(), enemies.end(), [&isInDefendedArea]( const Unit * enemy ) {
+            const bool isAnyEnemyCanBeAttackedImmediately = std::any_of( enemies.begin(), enemies.end(), [&currentUnit, &valuesOfAttackPositions]( const Unit * enemy ) {
                 assert( enemy != nullptr );
 
-                return isInDefendedArea( enemy->GetHeadIndex() );
+                const MeleeAttackOutcome outcome = BestAttackOutcome( currentUnit, *enemy, valuesOfAttackPositions );
+
+                return outcome.canAttackImmediately;
             } );
             const double defenseDistanceModifier = _myArmyStrength / STRENGTH_DISTANCE_FACTOR;
 
@@ -1367,9 +1363,9 @@ namespace AI
                 }
 
                 // If the unit cannot approach either the archer or any of the enemies blocking that archer within two turns (according to a rough estimate), but there is
-                // an enemy in our half of the battlefield, then ignore that archer. Very slow units (such as Hydra) should not waste time covering archers far from them
-                // - especially if there are other enemy units nearby worthy of their attention.
-                if ( isEnemyPresentInDefendedArea && !currentUnit.isFlying() && dist > currentUnit.GetSpeed() * 2 ) {
+                // at least one enemy unit that can be immediately attacked by this unit, then ignore that archer. Very slow units (such as Hydra) should not waste time
+                // covering archers far from them - especially if there are other enemy units nearby worthy of their attention.
+                if ( isAnyEnemyCanBeAttackedImmediately && !currentUnit.isFlying() && dist > currentUnit.GetSpeed() * 2 ) {
                     continue;
                 }
 
@@ -1390,7 +1386,7 @@ namespace AI
                     const Unit * enemy = Board::GetCell( idx )->GetUnit();
                     assert( enemy != nullptr );
 
-                    MeleeAttackOutcome outcome = BestAttackOutcome( currentUnit, *enemy, valuesOfAttackPositions );
+                    const MeleeAttackOutcome outcome = BestAttackOutcome( currentUnit, *enemy, valuesOfAttackPositions );
 
                     if ( IsOutcomeImproved( outcome, bestOutcome ) ) {
                         bestOutcome = outcome;
@@ -1417,23 +1413,48 @@ namespace AI
             return target;
         }
 
+        const auto isPositionLocatedInDefendedArea = [this, &currentUnit]( const Position & pos ) {
+            assert( pos.isReflect() == currentUnit.GetPosition().isReflect() && pos.GetHead() != nullptr );
+
+            // Units whose affiliation has been changed are still looking in the direction they originally looked
+            const bool reflect = ( currentUnit.GetArmyColor() == _myColor ? currentUnit.isReflect() : !currentUnit.isReflect() );
+
+            const auto checkIdx = [this, &currentUnit, reflect]( const int32_t idx ) {
+                if ( _defendingCastle ) {
+                    return Board::isCastleIndex( idx );
+                }
+
+                return ( Board::GetDistanceFromBoardEdgeAlongXAxis( idx, reflect ) <= ARENAW / 2 );
+            };
+
+            if ( !checkIdx( pos.GetHead()->GetIndex() ) ) {
+                return false;
+            }
+
+            if ( pos.GetTail() && !checkIdx( pos.GetTail()->GetIndex() ) ) {
+                return false;
+            }
+
+            return true;
+        };
+
         // 2. If there are no uncovered archers, and unit is already in the enemy half of the battlefield, let it continue to attack
-        if ( !isInDefendedArea( currentUnit.GetHeadIndex() ) ) {
+        if ( !isPositionLocatedInDefendedArea( currentUnit.GetPosition() ) ) {
             DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " already in the enemy half of the battlefield, switching to offensive tactics" )
 
             return meleeUnitOffense( arena, currentUnit );
         }
 
-        // 3. Otherwise, try to find a suitable target in our half of the battlefield
+        // 3. Otherwise, try to find a suitable target that can be attacked from our half of the battlefield
         {
             MeleeAttackOutcome bestOutcome;
 
             for ( const Unit * enemy : enemies ) {
                 assert( enemy != nullptr );
 
-                const MeleeAttackOutcome outcome = BestAttackOutcome( currentUnit, *enemy, valuesOfAttackPositions );
+                const MeleeAttackOutcome outcome = BestAttackOutcome( currentUnit, *enemy, valuesOfAttackPositions, isPositionLocatedInDefendedArea );
 
-                if ( !isInDefendedArea( outcome.fromIndex ) ) {
+                if ( !Board::isValidIndex( outcome.fromIndex ) ) {
                     continue;
                 }
 

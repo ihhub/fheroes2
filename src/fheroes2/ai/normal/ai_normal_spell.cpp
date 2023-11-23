@@ -56,7 +56,10 @@ namespace AI
     double ReduceEffectivenessByDistance( const Unit & unit )
     {
         // Reduce spell effectiveness if unit already crossed the battlefield
-        return Board::DistanceFromOriginX( unit.GetHeadIndex(), unit.isReflect() );
+        const uint32_t result = Board::GetDistanceFromBoardEdgeAlongXAxis( unit.GetHeadIndex(), unit.isReflect() );
+        assert( result > 0 );
+
+        return result;
     }
 
     SpellSelection BattlePlanner::selectBestSpell( Arena & arena, const Battle::Unit & currentUnit, bool retreating ) const
