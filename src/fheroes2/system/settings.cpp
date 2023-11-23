@@ -102,7 +102,7 @@ Settings::Settings()
     , battle_speed( DEFAULT_BATTLE_SPEED )
     , game_type( 0 )
     , preferably_count_players( 0 )
-    , _displayMonitor(0)
+    , _displayMonitor( 0 )
 {
     _optGlobal.SetModes( GLOBAL_FIRST_RUN );
     _optGlobal.SetModes( GLOBAL_SHOW_INTRO );
@@ -963,8 +963,8 @@ void Settings::setDebug( int debug )
     Logging::setDebugLevel( debug );
 }
 
-
-void Settings::setDisplayMonitor( int monitor ) {
+void Settings::setDisplayMonitor( int monitor )
+{
     _displayMonitor = monitor;
 }
 

@@ -249,7 +249,6 @@ public:
     void setHideInterface( const bool enable );
     void setEvilInterface( const bool enable );
     void setScreenScalingTypeNearest( const bool enable );
-    
     void setDisplayMonitor( int monitor );
     void SetSoundVolume( int v );
     void SetMusicVolume( int v );

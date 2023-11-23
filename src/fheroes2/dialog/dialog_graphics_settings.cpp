@@ -61,17 +61,14 @@ namespace
     const fheroes2::Rect modeRoi{ optionOffset.x + offsetBetweenOptions.width, optionOffset.y, optionWindowSize, optionWindowSize };
     const fheroes2::Rect vSyncRoi{ optionOffset.x, optionOffset.y + offsetBetweenOptions.height, optionWindowSize, optionWindowSize };
     const fheroes2::Rect systemInfoRoi{ optionOffset.x + offsetBetweenOptions.width, optionOffset.y + offsetBetweenOptions.height, optionWindowSize, optionWindowSize };
-    
     const fheroes2::Rect monitorList{ optionOffset.x + offsetBetweenOptions.width * 2, optionOffset.y, optionWindowSize, optionWindowSize };
-    const fheroes2::Rect fillerRoi{ optionOffset.x + offsetBetweenOptions.width * 2 ,optionOffset.y + offsetBetweenOptions.height
-                                    ,optionWindowSize ,optionWindowSize };
+    const fheroes2::Rect fillerRoi{ optionOffset.x + offsetBetweenOptions.width * 2, optionOffset.y + offsetBetweenOptions.height, optionWindowSize, optionWindowSize };
 
-    void drawMonitor(const fheroes2::Rect& optionRoi) {
-       
+    void drawMonitor( const fheroes2::Rect & optionRoi )
+    {
         const Settings & conf = Settings::Get();
-        fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::SPANEL, Settings::Get().isEvilInterfaceEnabled() ? 17 : 16 ), "Display Monitor"
-                                ,SDL_GetDisplayName(conf.DisplayMonitor())
-                                ,fheroes2::UiOptionTextWidth::TWO_ELEMENTS_ROW );
+        fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::SPANEL, Settings::Get().isEvilInterfaceEnabled() ? 17 : 16 ), "Display Monitor",
+                              SDL_GetDisplayName( conf.DisplayMonitor() ), fheroes2::UiOptionTextWidth::TWO_ELEMENTS_ROW );
     }
 
     void drawResolution( const fheroes2::Rect & optionRoi )
@@ -132,7 +129,6 @@ namespace
 
         fheroes2::drawOption( optionRoi, image, _( "System Info" ), isSystemInfoDisplayed ? _( "on" ) : _( "off" ), fheroes2::UiOptionTextWidth::TWO_ELEMENTS_ROW );
     }
-    
 
     SelectedWindow showConfigurationWindow()
     {
@@ -144,8 +140,8 @@ namespace
         const fheroes2::Sprite & dialogShadow = fheroes2::AGG::GetICN( ( isEvilInterface ? ICN::CSPANBKE : ICN::CSPANBKG ), 1 );
        
         fheroes2::Sprite placeholder = fheroes2::AGG::GetICN( Settings::Get().isEvilInterfaceEnabled() ? ICN::STONBAKE : ICN::STONEBAK, 0 );
-        //this image needs to be bigger than other buttons cause it's gonna fill in shadow as well
-        placeholder = fheroes2::Crop( placeholder, 0, 0, optionWindowSize+20, optionWindowSize +20 );
+        // this image needs to be bigger than other buttons cause it's gonna fill in shadow as well
+        placeholder = fheroes2::Crop( placeholder, 0, 0, optionWindowSize + 20, optionWindowSize + 20 );
 
         const fheroes2::Point dialogOffset( ( display.width() - dialog.width() ) / 2, ( display.height() - dialog.height() ) / 2 );
         const fheroes2::Point shadowOffset( dialogOffset.x - BORDERWIDTH, dialogOffset.y );
@@ -156,9 +152,9 @@ namespace
 
         fheroes2::Blit( dialogShadow, display, windowRoi.x - BORDERWIDTH, windowRoi.y + BORDERWIDTH );
         fheroes2::Blit( dialog, display, windowRoi.x, windowRoi.y );
-        //filling the empty space alognside the shadow 
-        fheroes2::Blit( placeholder, display, windowRoi.x + optionOffset.x -10 + offsetBetweenOptions.width * 2
-                                            , windowRoi.y + optionOffset.y -10 + offsetBetweenOptions.height );
+        // filling the empty space alognside the shadow
+        fheroes2::Blit( placeholder, display, windowRoi.x + optionOffset.x - 10 + offsetBetweenOptions.width * 2,
+                        windowRoi.y + optionOffset.y - 10 + offsetBetweenOptions.height );
 
         fheroes2::ImageRestorer emptyDialogRestorer( display, windowRoi.x, windowRoi.y, windowRoi.width, windowRoi.height );
 
