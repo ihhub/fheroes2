@@ -91,6 +91,7 @@ std::string Settings::GetVersion()
 
 Settings::Settings()
     : _resolutionInfo( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT )
+    , _displayMonitor( 0 )
     , game_difficulty( Difficulty::NORMAL )
     , sound_volume( 6 )
     , music_volume( 6 )
@@ -101,7 +102,6 @@ Settings::Settings()
     , scroll_speed( SCROLL_SPEED_NORMAL )
     , battle_speed( DEFAULT_BATTLE_SPEED )
     , game_type( 0 )
-    , _displayMonitor( 0 )
     , preferably_count_players( 0 )
 {
     _optGlobal.SetModes( GLOBAL_FIRST_RUN );
