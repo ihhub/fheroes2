@@ -152,7 +152,6 @@ namespace fheroes2
     protected:
         BaseRenderEngine()
             : _isFullScreen( false )
-            , 
             , _nearestScaling( false )
 
         {
