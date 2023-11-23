@@ -1071,11 +1071,10 @@ namespace
             }
 
             flags |= SDL_WINDOW_RESIZABLE;
-            
             SDL_Rect monRect;
             SDL_GetDisplayBounds( DisplayMonitor() , &monRect );
-            
-            _window = SDL_CreateWindow( _previousWindowTitle.data(), monRect.x + _prevWindowPos.x, monRect.y + _prevWindowPos.y, resolutionInfo.screenWidth, resolutionInfo.screenHeight, flags );
+            _window = SDL_CreateWindow( _previousWindowTitle.data(), monRect.x + _prevWindowPos.x, monRect.y + _prevWindowPos.y, resolutionInfo.screenWidth,
+                                        resolutionInfo.screenHeight, flags );
             if ( _window == nullptr ) {
                 ERROR_LOG( "Failed to create an application window of " << resolutionInfo.screenWidth << " x " << resolutionInfo.screenHeight
                                                                         << " size. The error: " << SDL_GetError() )
@@ -1164,7 +1163,6 @@ namespace
         SDL_Renderer * _renderer;
         SDL_Texture * _texture;
         int _driverIndex;
-        
         std::string _previousWindowTitle;
         fheroes2::Point _prevWindowPos;
         fheroes2::Size _currentScreenResolution;
@@ -1344,7 +1342,6 @@ namespace fheroes2
 
         // deallocate engine resources
         _engine->clear();
-        
         _prevRoi = {};
 
         // allocate engine resources

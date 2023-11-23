@@ -138,7 +138,6 @@ namespace
         const bool isEvilInterface = conf.isEvilInterfaceEnabled();
         const fheroes2::Sprite & dialog = fheroes2::AGG::GetICN( ( isEvilInterface ? ICN::CSPANBKE : ICN::CSPANBKG ), 0 );
         const fheroes2::Sprite & dialogShadow = fheroes2::AGG::GetICN( ( isEvilInterface ? ICN::CSPANBKE : ICN::CSPANBKG ), 1 );
-       
         fheroes2::Sprite placeholder = fheroes2::AGG::GetICN( Settings::Get().isEvilInterfaceEnabled() ? ICN::STONBAKE : ICN::STONEBAK, 0 );
         // this image needs to be bigger than other buttons cause it's gonna fill in shadow as well
         placeholder = fheroes2::Crop( placeholder, 0, 0, optionWindowSize + 20, optionWindowSize + 20 );
@@ -162,15 +161,13 @@ namespace
         const fheroes2::Rect windowModeRoi( modeRoi + windowRoi.getPosition() );
         const fheroes2::Rect windowVSyncRoi( vSyncRoi + windowRoi.getPosition() );
         const fheroes2::Rect windowSystemInfoRoi( systemInfoRoi + windowRoi.getPosition() );
-        
         const fheroes2::Rect windowMonitorList( monitorList + windowRoi.getPosition() );
-        
         const auto drawOptions = [&windowResolutionRoi, &windowModeRoi, &windowVSyncRoi, &windowSystemInfoRoi, &windowMonitorList]() {
             drawResolution( windowResolutionRoi );
             drawMode( windowModeRoi );
             drawVSync( windowVSyncRoi );
             drawSystemInfo( windowSystemInfoRoi );
-            drawMonitor(windowMonitorList);
+            drawMonitor( windowMonitorList );
         };
 
         drawOptions();
