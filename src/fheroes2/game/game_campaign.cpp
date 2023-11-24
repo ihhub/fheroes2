@@ -888,7 +888,7 @@ namespace
 
     int32_t setCampaignDifficulty( int32_t currentDifficulty, const int32_t maximumAllowedDifficulty )
     {
-        const fheroes2::StandardWindow frameborder( 234, 270, true );
+        const fheroes2::StandardWindow frameborder( 234, 312, true );
         const fheroes2::Rect & windowRoi = frameborder.activeArea();
 
         const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
@@ -977,9 +977,9 @@ namespace
         fheroes2::ImageRestorer restorer( display, textOffset.x, textOffset.y, textWidth, description.height( textWidth ) );
         description.draw( textOffset.x, textOffset.y, textWidth, display );
 
-        const fheroes2::Text easyName( getCampaignDifficultyText( Campaign::CampaignDifficulty::Easy ), fheroes2::FontType::normalWhite() );
-        const fheroes2::Text normalName( getCampaignDifficultyText( Campaign::CampaignDifficulty::Normal ), fheroes2::FontType::normalWhite() );
-        const fheroes2::Text hardName( getCampaignDifficultyText( Campaign::CampaignDifficulty::Hard ), fheroes2::FontType::normalWhite() );
+        const fheroes2::Text easyName( getCampaignDifficultyText( Campaign::CampaignDifficulty::Easy ), fheroes2::FontType::smallWhite() );
+        const fheroes2::Text normalName( getCampaignDifficultyText( Campaign::CampaignDifficulty::Normal ), fheroes2::FontType::smallWhite() );
+        const fheroes2::Text hardName( getCampaignDifficultyText( Campaign::CampaignDifficulty::Hard ), fheroes2::FontType::smallWhite() );
 
         easyName.draw( difficultyArea[0].x + ( difficultyArea[0].width - easyName.width() ) / 2, difficultyArea[0].y + difficultyArea[0].height + 5, display );
         normalName.draw( difficultyArea[1].x + ( difficultyArea[1].width - normalName.width() ) / 2, difficultyArea[1].y + difficultyArea[1].height + 5, display );
