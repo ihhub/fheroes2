@@ -24,6 +24,8 @@
 #include <string>
 #include <utility>
 
+#include <SDL_video.h>
+
 #include "agg_image.h"
 #include "dialog_resolution.h"
 #include "game_hotkeys.h"
