@@ -137,7 +137,7 @@ namespace
 
         bool closeWindow = false;
 
-        while ( le.HandleEvents() ) {
+        while ( le.HandleEvents( true, true ) ) {
             if ( closeWindow && timer.getS() >= 5 ) {
                 break;
             }

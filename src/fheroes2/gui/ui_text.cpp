@@ -409,7 +409,13 @@ namespace
                 if ( offset->x + lineWidth + charWidth > maxWidth ) {
                     // Current character has exceeded the maximum line width.
                     const uint8_t * line = data - lineLength;
-                    if ( lineLength == lastWordLength ) {
+
+                    if ( lineLength == 0 && lastWordLength == 0 ) {
+                        // No new characters can be added.
+                        // This can happen when a new text in a multi-font text being appended just at the end of the line.
+                        assert( lineWidth == 0 );
+                    }
+                    else if ( lineLength == lastWordLength ) {
                         // This is the only word in the line.
                         // Search for '-' symbol to avoid truncating the word in the middle.
                         const uint8_t * hyphenPos = data - lineLength;
@@ -861,6 +867,7 @@ namespace fheroes2
                     startWidth = maxWordWidth;
                 }
             }
+
             int32_t endWidth = maxWidth;
             while ( startWidth + 1 < endWidth ) {
                 const int32_t currentWidth = ( endWidth + startWidth ) / 2;
