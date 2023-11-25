@@ -80,7 +80,7 @@ namespace AI
         // Hero should conserve spellpoints if already spent more than half or his army is stronger
         // Threshold is 0.04 when armies are equal (= 20% of single unit)
         double spellValueThreshold = _myArmyStrength * _myArmyStrength / _enemyArmyStrength * 0.04;
-        if ( _enemyShooterStr / _enemyArmyStrength > 0.5 ) {
+        if ( _enemyShootersStrength / _enemyArmyStrength > 0.5 ) {
             spellValueThreshold *= 0.5;
         }
         if ( _commander->GetSpellPoints() * 2 < _commander->GetMaxSpellPoints() ) {

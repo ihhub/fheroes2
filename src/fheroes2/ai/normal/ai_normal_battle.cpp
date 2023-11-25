@@ -699,8 +699,8 @@ namespace AI
         // Friendly and enemy army analysis
         _myArmyStrength = 0;
         _enemyArmyStrength = 0;
-        _myShooterStr = 0;
-        _enemyShooterStr = 0;
+        _myShootersStrength = 0;
+        _enemyShootersStrength = 0;
         _enemyRangedUnitsOnly = 0;
         _myArmyAverageSpeed = 0;
         _enemyAverageSpeed = 0;
@@ -737,7 +737,7 @@ namespace AI
             sumEnemyStr += unitStr;
         }
 
-        _enemyShooterStr = _enemyRangedUnitsOnly;
+        _enemyShootersStrength = _enemyRangedUnitsOnly;
 
         if ( sumEnemyStr > 0.0 ) {
             _enemyAverageSpeed /= sumEnemyStr;
@@ -775,7 +775,7 @@ namespace AI
             _myArmyStrength += unitStr;
 
             if ( unit->isArchers() && !unit->isImmovable() ) {
-                _myShooterStr += unitStr;
+                _myShootersStrength += unitStr;
             }
         }
 
@@ -806,45 +806,77 @@ namespace AI
 
             if ( _myColor == castle->GetColor() ) {
                 _defendingCastle = true;
-                _myShooterStr += towerStr;
+                _myShootersStrength += towerStr;
 
                 if ( !attackerIgnoresCover ) {
-                    _enemyShooterStr /= 1.5;
+                    _enemyShootersStrength /= 1.5;
                 }
             }
             else {
                 _attackingCastle = true;
-                _enemyShooterStr += towerStr;
+                _enemyShootersStrength += towerStr;
 
                 if ( !attackerIgnoresCover ) {
-                    _myShooterStr /= 1.5;
+                    _myShootersStrength /= 1.5;
                 }
             }
         }
 
         // Calculate each hero spell strength and add it to shooter values after castle modifiers were applied
-        if ( _commander && _myShooterStr > 1 ) {
-            _myShooterStr += commanderMaximumSpellDamageValue( *_commander );
+        if ( _commander && _myShootersStrength > 1 ) {
+            _myShootersStrength += commanderMaximumSpellDamageValue( *_commander );
         }
 
         const HeroBase * enemyCommander = arena.getEnemyCommander( _myColor );
         if ( enemyCommander ) {
             _enemySpellStrength = enemyCommander->GetMagicStrategicValue( _myArmyStrength );
-            _enemyShooterStr += commanderMaximumSpellDamageValue( *enemyCommander );
+            _enemyShootersStrength += commanderMaximumSpellDamageValue( *enemyCommander );
         }
 
-        const double overPowerRatio = ( currentUnit.isFlying() ? 6 : 10 );
+        _defensiveTactics = [this, &currentUnit]() {
+            const double overPowerRatio = ( currentUnit.isFlying() ? 6 : 10 );
 
-        // When we have in X times stronger army than the enemy we could consider it as an overpowered and we most likely will win.
-        const bool myOverpoweredArmy = _myArmyStrength > _enemyArmyStrength * overPowerRatio;
-        const double enemyArcherRatio = _enemyShooterStr / _enemyArmyStrength;
-        const double enemyArcherThreshold = 0.66;
+            // When we have a X times stronger army than the enemy, then we are likely to win, there is no need to go on the defensive
+            if ( _myArmyStrength > _enemyArmyStrength * overPowerRatio ) {
+                return false;
+            }
 
-        _defensiveTactics = _myShooterStr > _enemyShooterStr && ( _defendingCastle || enemyArcherRatio < enemyArcherThreshold ) && !myOverpoweredArmy;
+            // When we have fewer shooters than the enemy, it makes no sense to go on the defensive
+            if ( _myShootersStrength < _enemyShootersStrength ) {
+                return false;
+            }
+
+            // We have at least as many shooters as the enemy and we defend the castle under the protection of walls and towers, it makes sense to choose defensive
+            // tactics
+            if ( _defendingCastle ) {
+                return true;
+            }
+
+            assert( _myArmyStrength > 0.0 && _enemyArmyStrength > 0.0 );
+
+            const double myArcherRatio = _myShootersStrength / _myArmyStrength;
+            const double enemyArcherRatio = _enemyShootersStrength / _enemyArmyStrength;
+
+            const double myArcherThreshold = 0.20;
+            const double enemyArcherThreshold = 0.66;
+
+            // If we have an unfavorable ratio of infantry and shooters for defense, then it is better to choose an offensive
+            if ( myArcherRatio < myArcherThreshold ) {
+                return false;
+            }
+
+            // If the enemy has too many shooters, but not enough infantry to cover them, then it makes sense to choose an offensive
+            if ( enemyArcherRatio > enemyArcherThreshold ) {
+                return false;
+            }
+
+            return true;
+        }();
 
         DEBUG_LOG( DBG_BATTLE, DBG_TRACE,
-                   ( _defensiveTactics ? "Defensive" : "Offensive" ) << " tactics have been chosen. Archers strength: " << _myShooterStr
-                                                                     << ", enemy archers strength: " << _enemyShooterStr << ", ratio: " << enemyArcherRatio )
+                   ( _defensiveTactics ? "Defensive" : "Offensive" )
+                       << " tactics have been chosen. Army strength: " << _myArmyStrength << ", shooters strength: " << _myShootersStrength
+                       << ", enemy army strength: " << _enemyArmyStrength << ", enemy shooters strength: " << _enemyShootersStrength )
     }
 
     Actions BattlePlanner::archerDecision( Arena & arena, const Unit & currentUnit ) const

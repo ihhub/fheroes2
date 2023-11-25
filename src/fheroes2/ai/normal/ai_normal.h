@@ -238,8 +238,8 @@ namespace AI
         int _myColor = Color::NONE;
         double _myArmyStrength = 0;
         double _enemyArmyStrength = 0;
-        double _myShooterStr = 0;
-        double _enemyShooterStr = 0;
+        double _myShootersStrength = 0;
+        double _enemyShootersStrength = 0;
         double _enemyRangedUnitsOnly = 0;
         double _myArmyAverageSpeed = 0;
         double _enemyAverageSpeed = 0;
