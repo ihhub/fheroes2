@@ -992,7 +992,7 @@ bool Battle::Board::CanAttackTargetFromPosition( const Unit & attacker, const Un
     return false;
 }
 
-Battle::Indexes Battle::Board::GetAdjacentEnemies( const Unit & unit )
+Battle::Indexes Battle::Board::GetAdjacentEnemiesIndexes( const Unit & unit )
 {
     Indexes result;
     const bool isWide = unit.isWide();

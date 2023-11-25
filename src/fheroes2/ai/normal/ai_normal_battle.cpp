@@ -1069,7 +1069,7 @@ namespace AI
             BattleTargetPair target;
             int32_t bestOutcome = INT32_MIN;
 
-            for ( const int32_t cellIdx : Board::GetAdjacentEnemies( currentUnit ) ) {
+            for ( const int32_t cellIdx : Board::GetAdjacentEnemiesIndexes( currentUnit ) ) {
                 const Unit * enemy = Board::GetCell( cellIdx )->GetUnit();
                 assert( enemy != nullptr );
 
@@ -1328,7 +1328,7 @@ namespace AI
                 }
 
                 const CellDistanceInfo nearestToFrndCellInfo = findNearestCellNextToUnit( arena, currentUnit, *frnd );
-                const Battle::Indexes adjacentEnemiesIndexes = Board::GetAdjacentEnemies( *frnd );
+                const Battle::Indexes adjacentEnemiesIndexes = Board::GetAdjacentEnemiesIndexes( *frnd );
 
                 // If our archer is not blocked by enemy units, but the unit nevertheless cannot approach him, then ignore that archer
                 if ( nearestToFrndCellInfo.idx == -1 && adjacentEnemiesIndexes.empty() ) {
