@@ -126,7 +126,7 @@ namespace Battle
 
         void RedrawBaseInfo( const fheroes2::Point & top ) const;
 
-        void updateHero( ArmyInfo & info, const fheroes2::Point & offset );
+        static void updateHero( ArmyInfo & info, const fheroes2::Point & offset );
 
         static void updateArmyUI( ArmyUI & ui, Heroes * hero, const fheroes2::Point & offset, const uint8_t armyId );
 

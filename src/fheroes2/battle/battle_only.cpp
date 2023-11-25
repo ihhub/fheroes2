@@ -99,11 +99,11 @@ Battle::Only::Only()
 
     armyInfo[0].controlType = CONTROL_HUMAN;
     armyInfo[0].player.SetControl( armyInfo[0].controlType );
-    armyInfo[0].player.SetColor( Color::BLUE );
+    armyInfo[0].player.SetColor( playerColor[0] );
 
     armyInfo[1].controlType = CONTROL_AI;
     armyInfo[1].player.SetControl( armyInfo[1].controlType );
-    armyInfo[1].player.SetColor( Color::RED );
+    armyInfo[1].player.SetColor( playerColor[1] );
 }
 
 bool Battle::Only::setup( const bool allowBackup, bool & reset )
