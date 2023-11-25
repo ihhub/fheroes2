@@ -23,9 +23,13 @@
 
 #include "battle_only.h"
 
+#include <cassert>
+#include <cstddef>
 #include <cstdint>
+#include <initializer_list>
 #include <string>
 #include <utility>
+#include <vector>
 
 #include "agg_image.h"
 #include "army_bar.h"
@@ -48,6 +52,7 @@
 #include "settings.h"
 #include "skill.h"
 #include "skill_bar.h"
+#include "spell_book.h"
 #include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
@@ -178,7 +183,7 @@ bool Battle::Only::setup( const bool allowBackup, bool & reset )
         cinfo2 = std::make_unique<ControlInfo>( fheroes2::Point{ cur_pt.x + 500, cur_pt.y + 425 }, armyInfo[1].player.GetControl() );
     }
 
-    for ( auto & info : armyInfo ) {
+    for ( const auto & info : armyInfo ) {
         info.ui.redraw( display );
     }
 
@@ -229,7 +234,7 @@ bool Battle::Only::setup( const bool allowBackup, bool & reset )
 
         for ( const auto & ids : { std::pair<int32_t, int32_t>( 0, 1 ), std::pair<int32_t, int32_t>( 1, 0 ) } ) {
             ArmyInfo & first = armyInfo[ids.first];
-            ArmyInfo & second = armyInfo[ids.second];
+            const ArmyInfo & second = armyInfo[ids.second];
 
             if ( le.MouseClickLeft( first.portraitRoi ) ) {
                 int hid = Dialog::selectHeroes( first.hero ? first.hero->GetID() : Heroes::UNKNOWN );
@@ -397,25 +402,23 @@ void Battle::Only::RedrawBaseInfo( const fheroes2::Point & top ) const
 
     fheroes2::Blit( fheroes2::AGG::GetICN( ICN::SWAPWIN, 0 ), display, top.x, top.y );
 
-    std::string message = _( "%{race1} %{name1}" );
-    message += ' ';
-    message += _( "vs" );
-    message += ' ';
-    message += _( "%{race2} %{name2}" );
+    std::string message = _( "%{race1} %{name1} vs %{race2} %{name2}" );
 
     if ( armyInfo[0].hero ) {
         StringReplace( message, "%{name1}", armyInfo[0].hero->GetName() );
         StringReplace( message, "%{race1}", std::string( Race::String( armyInfo[0].hero->GetRace() ) ) );
     }
     else {
-        StringReplace( message, _( "%{race1} %{name1}" ), _( "Monsters" ) );
+        StringReplace( message, "%{race1}", "" );
+        StringReplace( message, " %{name1}", _( "Monsters" ) );
     }
     if ( armyInfo[1].hero ) {
         StringReplace( message, "%{name2}", armyInfo[1].hero->GetName() );
         StringReplace( message, "%{race2}", std::string( Race::String( armyInfo[1].hero->GetRace() ) ) );
     }
     else {
-        StringReplace( message, _( "%{race2} %{name2}" ), _( "Monsters" ) );
+        StringReplace( message, "%{race2}", "" );
+        StringReplace( message, " %{name2}", _( "Monsters" ) );
     }
 
     fheroes2::Text text( std::move( message ), fheroes2::FontType::normalWhite() );
@@ -447,15 +450,13 @@ void Battle::Only::StartBattle()
     conf.GetPlayers().Init( armyInfo[0].player.GetColor() | armyInfo[1].player.GetColor() );
     world.InitKingdoms();
 
-    Players::SetPlayerRace( armyInfo[0].player.GetColor(), armyInfo[0].player.GetRace() );
-    Players::SetPlayerRace( armyInfo[1].player.GetColor(), armyInfo[1].player.GetRace() );
-
     conf.SetCurrentColor( armyInfo[0].player.GetColor() );
 
-    Players::SetPlayerControl( armyInfo[0].player.GetColor(), CONTROL_AI );
-    Players::SetPlayerControl( armyInfo[1].player.GetColor(), CONTROL_AI );
-
     for ( int32_t idx : { 0, 1 } ) {
+        Players::SetPlayerRace( armyInfo[idx].player.GetColor(), armyInfo[idx].player.GetRace() );
+        Players::SetPlayerControl( armyInfo[idx].player.GetColor(), armyInfo[idx].player.GetControl() );
+        armyInfo[idx].controlType = armyInfo[idx].player.GetControl();
+
         armyInfo[idx].isHeroPresent = ( armyInfo[idx].hero != nullptr );
 
         if ( !armyInfo[idx].isHeroPresent ) {
@@ -472,12 +473,6 @@ void Battle::Only::StartBattle()
         armyInfo[idx].monster.GetTroop( 0 )->Set( Monster::PEASANT, 100 );
         armyInfo[idx].monsterBackup.Assign( armyInfo[idx].monster );
     }
-
-    Players::SetPlayerControl( armyInfo[0].player.GetColor(), armyInfo[0].player.GetControl() );
-    Players::SetPlayerControl( armyInfo[1].player.GetColor(), armyInfo[1].player.GetControl() );
-
-    armyInfo[0].controlType = armyInfo[0].player.GetControl();
-    armyInfo[1].controlType = armyInfo[1].player.GetControl();
 
     _backupCompleted = true;
 

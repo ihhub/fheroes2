@@ -36,8 +36,6 @@
 #include "players.h"
 #include "skill_bar.h"
 
-class Heroes;
-
 namespace Battle
 {
     struct ControlInfo
