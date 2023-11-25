@@ -118,8 +118,7 @@ namespace
             = { Game::HotKeyCategory::MAIN_MENU, gettext_noop( "hotkey|multi-player game" ), fheroes2::Key::KEY_M };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::MAIN_MENU_SETTINGS )]
             = { Game::HotKeyCategory::MAIN_MENU, gettext_noop( "hotkey|settings" ), fheroes2::Key::KEY_T };
-        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::MAIN_MENU_QUIT )]
-            = { Game::HotKeyCategory::MAIN_MENU, gettext_noop( "hotkey|quit" ), fheroes2::Key::KEY_Q };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::MAIN_MENU_QUIT )] = { Game::HotKeyCategory::MAIN_MENU, gettext_noop( "hotkey|quit" ), fheroes2::Key::KEY_Q };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::MAIN_MENU_SELECT_MAP )]
             = { Game::HotKeyCategory::MAIN_MENU, gettext_noop( "hotkey|select map" ), fheroes2::Key::KEY_S };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::MAIN_MENU_MAP_SIZE_SMALL )]
