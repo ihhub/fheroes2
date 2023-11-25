@@ -621,11 +621,11 @@ void Battle::Only::StartBattle()
 
     if ( hero1 ) {
         hero1->SetSpellPoints( hero1->GetMaxSpellPoints() );
-        hero1->Recruit( player1.GetColor(), { 5, 5 } );
+        hero1->Recruit( player1.GetColor(), { 0, 0 } );
 
         if ( hero2 ) {
             hero2->SetSpellPoints( hero2->GetMaxSpellPoints() );
-            hero2->Recruit( player2.GetColor(), { 5, 6 } );
+            hero2->Recruit( player2.GetColor(), { 1, 1 } );
         }
 
         Players::SetPlayerControl( player1.GetColor(), player1.GetControl() );

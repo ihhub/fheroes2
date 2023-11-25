@@ -134,8 +134,9 @@ fheroes2::GameMode Game::StartBattleOnly()
 {
     Battle::Only main;
 
-    if ( main.ChangeSettings() )
+    if ( main.ChangeSettings() ) {
         main.StartBattle();
+    }
 
     return fheroes2::GameMode::MAIN_MENU;
 }
