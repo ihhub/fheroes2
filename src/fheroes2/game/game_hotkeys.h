@@ -164,6 +164,19 @@ namespace Game
         NO_EVENT,
     };
 
+    enum class HotKeyCategory : uint8_t
+    {
+        DEFAULT,
+        GLOBAL,
+        MAIN_MENU,
+        CAMPAIGN,
+        WORLD_MAP,
+        BATTLE,
+        TOWN,
+        ARMY,
+        EDITOR,
+    };
+
     bool HotKeyPressEvent( const HotKeyEvent eventID );
     bool HotKeyHoldEvent( const HotKeyEvent eventID );
 
@@ -179,11 +192,13 @@ namespace Game
 
     const char * getHotKeyEventNameByEventId( const HotKeyEvent eventID );
 
-    std::vector<Game::HotKeyEvent> getAllHotKeyEvents();
+    std::vector<std::pair<HotKeyEvent, HotKeyCategory>> getAllHotKeyEvents();
 
     void globalKeyDownEvent( const fheroes2::Key key, const int32_t modifier );
 
     void HotKeysLoad( const std::string & filename );
 
     void HotKeySave();
+
+    const char * getHotKeyCategoryName( const HotKeyCategory category );
 }
