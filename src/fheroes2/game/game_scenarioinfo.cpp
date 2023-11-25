@@ -394,21 +394,18 @@ namespace
 
         conf.GetPlayers().SetStartGame();
 
-        // Load maps
-        std::string lower = StringLower( conf.MapsFile() );
-
-        if ( lower.size() > 3 ) {
-            std::string ext = lower.substr( lower.size() - 3 );
+        const std::string & filePath = conf.MapsFile();
+        const size_t pos = filePath.rfind( '.' );
+        if ( pos != std::string::npos ) {
+            const std::string ext = StringLower( filePath.substr( pos + 1 ) );
 
             if ( ext == "mp2" || ext == "mx2" ) {
-                return world.LoadMapMP2( conf.MapsFile(), ( ext == "mp2" ) ) ? fheroes2::GameMode::START_GAME : fheroes2::GameMode::MAIN_MENU;
+                return world.LoadMapMP2( filePath, ( ext == "mp2" ) ) ? fheroes2::GameMode::START_GAME : fheroes2::GameMode::MAIN_MENU;
             }
-
-            DEBUG_LOG( DBG_GAME, DBG_WARN,
-                       conf.MapsFile() << ", "
-                                       << "unknown map format" )
-            return fheroes2::GameMode::MAIN_MENU;
         }
+
+        // This should never happen. Players are not able to load other map formats.
+        assert( 0 );
 
         DEBUG_LOG( DBG_GAME, DBG_WARN,
                    conf.MapsFile() << ", "
