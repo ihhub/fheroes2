@@ -1163,6 +1163,7 @@ namespace
         SDL_Renderer * _renderer;
         SDL_Texture * _texture;
         int _driverIndex;
+
         std::string _previousWindowTitle;
         fheroes2::Point _prevWindowPos;
         fheroes2::Size _currentScreenResolution;
@@ -1342,6 +1343,7 @@ namespace fheroes2
 
         // deallocate engine resources
         _engine->clear();
+
         _prevRoi = {};
 
         // allocate engine resources

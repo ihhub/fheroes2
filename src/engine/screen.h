@@ -144,7 +144,7 @@ namespace fheroes2
             return _displayMonitor;
         }
 
-        void setDisplayMonitor( int monitor )
+        void setDisplayMonitor( const int monitor )
         {
             _displayMonitor = monitor;
         }
