@@ -494,6 +494,9 @@ namespace
             }
 
             if ( !isEditing && le.KeyPress( fheroes2::Key::KEY_DELETE ) && isListboxSelected ) {
+                listbox.SetCurrent( listId );
+                listbox.Redraw();
+
                 std::string msg( _( "Are you sure you want to delete file:" ) );
                 msg.append( "\n\n" );
                 msg.append( System::GetBasename( listbox.GetCurrent().file ) );
