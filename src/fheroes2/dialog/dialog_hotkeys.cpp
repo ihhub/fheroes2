@@ -177,7 +177,7 @@ namespace
             title.add( fheroes2::Text{ _( "Hotkey: " ), fheroes2::FontType::normalYellow() } );
             title.add( fheroes2::Text{ Game::getHotKeyNameByEventId( hotKeyEvent.first ), fheroes2::FontType::normalWhite() } );
 
-            fheroes2::showMessage( fheroes2::Text{}, std::move( title ), Dialog::ZERO );
+            fheroes2::showMessage( fheroes2::Text{}, title, Dialog::ZERO );
         }
 
         void ActionListDoubleClick( std::pair<Game::HotKeyEvent, Game::HotKeyCategory> & hotKeyEvent ) override
@@ -204,7 +204,7 @@ namespace
             title.add( fheroes2::Text{ _( "Event: " ), fheroes2::FontType::normalYellow() } );
             title.add( fheroes2::Text{ _( Game::getHotKeyEventNameByEventId( hotKeyEvent.first ) ), fheroes2::FontType::normalWhite() } );
 
-            const int returnValue = fheroes2::showMessage( fheroes2::Text{}, std::move( title ), Dialog::OK | Dialog::CANCEL, { &hotKeyUI } );
+            const int returnValue = fheroes2::showMessage( fheroes2::Text{}, title, Dialog::OK | Dialog::CANCEL, { &hotKeyUI } );
 
             Game::setHotKeyForEvent( Game::HotKeyEvent::DEFAULT_OKAY, okayEventKey );
             Game::setHotKeyForEvent( Game::HotKeyEvent::DEFAULT_CANCEL, cancelEventKey );
