@@ -70,7 +70,7 @@ namespace Battle
 
         Only & operator=( const Only & ) = delete;
 
-        bool setup( const bool allowBackup,  bool & reset );
+        bool setup( const bool allowBackup, bool & reset );
         void StartBattle();
 
         void reset();

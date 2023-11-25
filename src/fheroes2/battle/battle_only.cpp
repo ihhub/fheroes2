@@ -126,7 +126,7 @@ bool Battle::Only::setup( const bool allowBackup, bool & reset )
     const std::array<fheroes2::Rect, 2> attackRoi{ fheroes2::Rect( cur_pt.x + 215, cur_pt.y + 50, primarySkillIconSize, primarySkillIconSize ),
                                                    fheroes2::Rect( cur_pt.x + 390, cur_pt.y + 50, primarySkillIconSize, primarySkillIconSize ) };
     const std::array<fheroes2::Rect, 2> defenseRoi{ fheroes2::Rect( cur_pt.x + 215, cur_pt.y + 83, primarySkillIconSize, primarySkillIconSize ),
-                                                   fheroes2::Rect( cur_pt.x + 390, cur_pt.y + 83, primarySkillIconSize, primarySkillIconSize ) };
+                                                    fheroes2::Rect( cur_pt.x + 390, cur_pt.y + 83, primarySkillIconSize, primarySkillIconSize ) };
     const std::array<fheroes2::Rect, 2> powerRoi{ fheroes2::Rect( cur_pt.x + 215, cur_pt.y + 116, primarySkillIconSize, primarySkillIconSize ),
                                                   fheroes2::Rect( cur_pt.x + 390, cur_pt.y + 116, primarySkillIconSize, primarySkillIconSize ) };
     const std::array<fheroes2::Rect, 2> knowledgeRoi{ fheroes2::Rect( cur_pt.x + 215, cur_pt.y + 149, primarySkillIconSize, primarySkillIconSize ),
@@ -195,9 +195,9 @@ bool Battle::Only::setup( const bool allowBackup, bool & reset )
     fheroes2::Blit( buttonOverride, display, cur_pt.x + 276, cur_pt.y + 428 );
 
     fheroes2::ButtonSprite buttonOkay = fheroes2::makeButtonWithShadow( cur_pt.x + 178, cur_pt.y + 428, fheroes2::AGG::GetICN( ICN::BUTTON_SMALL_OKAY_GOOD, 0 ),
-                                                                         fheroes2::AGG::GetICN( ICN::BUTTON_SMALL_OKAY_GOOD, 1 ), display );
+                                                                        fheroes2::AGG::GetICN( ICN::BUTTON_SMALL_OKAY_GOOD, 1 ), display );
     fheroes2::ButtonSprite buttonCancel = fheroes2::makeButtonWithShadow( cur_pt.x + 366, cur_pt.y + 428, fheroes2::AGG::GetICN( ICN::BUTTON_SMALL_CANCEL_GOOD, 0 ),
-                                                                         fheroes2::AGG::GetICN( ICN::BUTTON_SMALL_CANCEL_GOOD, 1 ), display );
+                                                                          fheroes2::AGG::GetICN( ICN::BUTTON_SMALL_CANCEL_GOOD, 1 ), display );
 
     fheroes2::ButtonSprite buttonReset = fheroes2::makeButtonWithShadow( cur_pt.x + 30, cur_pt.y + 428, fheroes2::AGG::GetICN( ICN::BUTTON_RESET_GOOD, 0 ),
                                                                          fheroes2::AGG::GetICN( ICN::BUTTON_RESET_GOOD, 1 ), display );
@@ -250,7 +250,7 @@ bool Battle::Only::setup( const bool allowBackup, bool & reset )
             cinfo2.reset( new ControlInfo( { cur_pt.x + 500, cur_pt.y + 425 }, armyInfo[1].player.GetControl() ) );
         }
 
-        for ( auto & [ hero, index ] : { std::pair<Heroes*, size_t>( armyInfo[0].hero, 0 ), std::pair<Heroes*, size_t>( armyInfo[1].hero, 1 ) } ) {
+        for ( auto & [hero, index] : { std::pair<Heroes *, size_t>( armyInfo[0].hero, 0 ), std::pair<Heroes *, size_t>( armyInfo[1].hero, 1 ) } ) {
             if ( hero == nullptr ) {
                 continue;
             }
@@ -479,8 +479,8 @@ void Battle::Only::StartBattle()
 
     _backupCompleted = true;
 
-    Battle::Loader( ( armyInfo[0].hero ? armyInfo[0].hero->GetArmy() : armyInfo[0].monster ),
-                    ( armyInfo[1].hero ? armyInfo[1].hero->GetArmy() : armyInfo[1].monster ), 1 );
+    Battle::Loader( ( armyInfo[0].hero ? armyInfo[0].hero->GetArmy() : armyInfo[0].monster ), ( armyInfo[1].hero ? armyInfo[1].hero->GetArmy() : armyInfo[1].monster ),
+                    1 );
 
     conf.SetCurrentColor( Color::NONE );
 }
