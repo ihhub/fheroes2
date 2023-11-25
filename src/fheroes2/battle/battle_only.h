@@ -25,6 +25,7 @@
 #define H2BATTLE_ONLY_H
 
 #include <array>
+#include <cstdint>
 #include <memory>
 
 #include "army.h"
@@ -35,6 +36,11 @@
 #include "math_base.h"
 #include "players.h"
 #include "skill_bar.h"
+
+namespace fheroes2
+{
+    class Image;
+}
 
 namespace Battle
 {
