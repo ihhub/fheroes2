@@ -398,14 +398,14 @@ void World::generateBattleOnlyMap()
     for ( size_t i = 0; i < vec_tiles.size(); ++i ) {
         MP2::mp2tile_t mp2tile;
 
-        mp2tile.terrainImageIndex = Maps::Ground::getTerrainStartImageIndex( groundType ) + static_cast<uint16_t>( Rand::Get( 0, 2 ) );
+        mp2tile.terrainImageIndex = Maps::Ground::getTerrainStartImageIndex( groundType );
         mp2tile.objectName1 = 0; // object sprite level 1
         mp2tile.bottomIcnImageIndex = 0xff; // index sprite level 1
         mp2tile.quantity1 = 0;
         mp2tile.quantity2 = 0;
         mp2tile.objectName2 = 0; // object sprite level 2
         mp2tile.topIcnImageIndex = 0xff; // index sprite level 2
-        mp2tile.terrainFlags = static_cast<uint8_t>( Rand::Get( 0, 3 ) ); // shape reflect % 4, 0 none, 1 vertical, 2 horizontal, 3 any
+        mp2tile.terrainFlags = 0;
         mp2tile.mapObjectType = MP2::OBJ_NONE;
         mp2tile.nextAddonIndex = 0;
         mp2tile.level1ObjectUID = 0; // means that there's no object on this tile.

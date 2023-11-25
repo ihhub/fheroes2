@@ -126,7 +126,7 @@ namespace Battle
 
         std::unique_ptr<ControlInfo> cinfo2;
 
-        bool _backupCompleted;
+        bool _backupCompleted{ false };
 
         void RedrawBaseInfo( const fheroes2::Point & top ) const;
 
