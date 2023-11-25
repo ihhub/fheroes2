@@ -132,10 +132,25 @@ namespace
 
 fheroes2::GameMode Game::StartBattleOnly()
 {
-    Battle::Only main;
+    static Battle::Only battleOnlySetup;
 
-    if ( main.ChangeSettings() ) {
-        main.StartBattle();
+    world.generateBattleOnlyMap();
+
+    bool reset = false;
+    bool allowBackup = true;
+
+    while ( battleOnlySetup.setup( allowBackup, reset ) ) {
+        allowBackup = false;
+
+        if ( reset ) {
+            world.generateBattleOnlyMap();
+            battleOnlySetup.reset();
+            reset = false;
+            continue;
+        }
+
+        battleOnlySetup.StartBattle();
+        break;
     }
 
     return fheroes2::GameMode::MAIN_MENU;

@@ -166,7 +166,6 @@ fheroes2::GameMode Game::NewHotSeat()
 
     if ( conf.IsGameType( Game::TYPE_BATTLEONLY ) ) {
         conf.SetPreferablyCountPlayers( 2 );
-        world.generateBattleOnlyMap();
 
         // Redraw the main menu screen without multiplayer sub-menu to show it after the battle using screen restorer.
         fheroes2::drawMainMenuScreen();

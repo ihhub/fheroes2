@@ -24,11 +24,13 @@
 #ifndef H2BATTLE_ONLY_H
 #define H2BATTLE_ONLY_H
 
+#include <array>
 #include <memory>
 
 #include "army.h"
 #include "army_bar.h"
 #include "artifact.h"
+#include "heroes.h"
 #include "heroes_indicator.h"
 #include "math_base.h"
 #include "players.h"
@@ -44,7 +46,9 @@ namespace Battle
             : result( ctrl )
             , rtLocal( pt.x, pt.y, 24, 24 )
             , rtAI( pt.x + 75, pt.y, 24, 24 )
-        {}
+        {
+            // Do nothing.
+        }
 
         ControlInfo( const ControlInfo & ) = delete;
 
@@ -66,47 +70,67 @@ namespace Battle
 
         Only & operator=( const Only & ) = delete;
 
-        bool ChangeSettings();
+        bool setup( const bool allowBackup,  bool & reset );
         void StartBattle();
 
+        void reset();
+
     private:
-        void RedrawBaseInfo( const fheroes2::Point & top ) const;
+        struct ArmyUI
+        {
+            std::unique_ptr<MoraleIndicator> morale;
 
-        void UpdateHero1( const fheroes2::Point & cur_pt );
-        void UpdateHero2( const fheroes2::Point & cur_pt );
+            std::unique_ptr<LuckIndicator> luck;
 
-        Heroes * hero1;
-        Heroes * hero2;
+            std::unique_ptr<PrimarySkillsBar> primarySkill;
 
-        Player player1;
-        Player player2;
+            std::unique_ptr<SecondarySkillsBar> secondarySkill;
 
-        Army * army1;
-        Army * army2;
-        Army monsters;
+            std::unique_ptr<ArtifactsBar> artifact;
 
-        std::unique_ptr<MoraleIndicator> moraleIndicator1;
-        std::unique_ptr<MoraleIndicator> moraleIndicator2;
+            std::unique_ptr<ArmyBar> army;
 
-        std::unique_ptr<LuckIndicator> luckIndicator1;
-        std::unique_ptr<LuckIndicator> luckIndicator2;
+            void redraw( fheroes2::Image & output );
+        };
 
-        std::unique_ptr<PrimarySkillsBar> primskill_bar1;
-        std::unique_ptr<PrimarySkillsBar> primskill_bar2;
+        struct ArmyInfo
+        {
+            Heroes * hero{ nullptr };
 
-        std::unique_ptr<SecondarySkillsBar> secskill_bar1;
-        std::unique_ptr<SecondarySkillsBar> secskill_bar2;
+            Player player;
 
-        std::unique_ptr<ArmyBar> selectArmy1;
-        std::unique_ptr<ArmyBar> selectArmy2;
+            int controlType{ CONTROL_HUMAN };
 
-        std::unique_ptr<ArtifactsBar> selectArtifacts1;
-        std::unique_ptr<ArtifactsBar> selectArtifacts2;
+            Army monster;
+
+            Heroes heroBackup;
+
+            Army monsterBackup;
+
+            bool isHeroPresent{ false };
+
+            ArmyUI ui;
+
+            fheroes2::Rect portraitRoi;
+
+            uint8_t armyId{ 0 };
+
+            void reset();
+        };
+
+        std::array<ArmyInfo, 2> armyInfo;
 
         std::unique_ptr<ControlInfo> cinfo2;
 
-        fheroes2::Rect rtPortrait1;
-        fheroes2::Rect rtPortrait2;
+        bool _backupCompleted;
+
+        void RedrawBaseInfo( const fheroes2::Point & top ) const;
+
+        void updateHero( ArmyInfo & info, const fheroes2::Point & offset );
+
+        void copyHero( Heroes & in, Heroes & out );
+
+        void updateArmyUI( ArmyUI & ui, Heroes * hero, const fheroes2::Point & offset, const uint8_t armyId ) const;
     };
 }
 
