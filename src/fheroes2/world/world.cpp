@@ -368,8 +368,8 @@ void World::Reset()
 
 void World::generateBattleOnlyMap()
 {
-    const std::vector<int> terrainTypes{ Maps::Ground::DESERT, Maps::Ground::SNOW, Maps::Ground::SWAMP, Maps::Ground::WASTELAND, Maps::Ground::BEACH, Maps::Ground::LAVA,
-                                         Maps::Ground::DIRT, Maps::Ground::GRASS, Maps::Ground::WATER };
+    const std::vector<int> terrainTypes{ Maps::Ground::DESERT, Maps::Ground::SNOW, Maps::Ground::SWAMP, Maps::Ground::WASTELAND, Maps::Ground::BEACH,
+                                         Maps::Ground::LAVA,   Maps::Ground::DIRT, Maps::Ground::GRASS, Maps::Ground::WATER };
 
     Reset();
 
@@ -394,7 +394,7 @@ void World::generateBattleOnlyMap()
     vec_tiles.resize( static_cast<size_t>( width ) * height );
 
     const int groundType = Rand::Get( terrainTypes );
-    
+
     for ( size_t i = 0; i < vec_tiles.size(); ++i ) {
         MP2::mp2tile_t mp2tile;
 
