@@ -83,7 +83,7 @@ jobs:
         if git commit -m "Update translation files"; then git push origin HEAD; echo "CREATE_PR=YES" >> "$GITHUB_ENV"; fi
     - name: Create PR
       if: ${{ env.CREATE_PR == 'YES' }}
-      uses: actions/github-script@v6
+      uses: actions/github-script@v7
       with:
         script: |
           let pr = await github.rest.pulls.create({

@@ -700,7 +700,7 @@ namespace Interface
         const Maps::ObjectGroup groupType = _editorPanel.getSelectedObjectGroup();
         const auto & objectInfo = getObjectInfo( groupType, _editorPanel.getSelectedObjectType() );
 
-        if ( groupType == Maps::ObjectGroup::Monster ) {
+        if ( groupType == Maps::ObjectGroup::Monsters ) {
             if ( !isObjectPlacementAllowed( objectInfo, tilePos ) ) {
                 fheroes2::showStandardTextMessage( _( "Monster" ), _( "Objects cannot be placed outside the map." ), Dialog::OK );
                 return;
@@ -718,7 +718,7 @@ namespace Interface
 
             setObjectOnTile( tile, objectInfo );
         }
-        else if ( groupType == Maps::ObjectGroup::Treasure ) {
+        else if ( groupType == Maps::ObjectGroup::Adventure_Treasures ) {
             if ( !isObjectPlacementAllowed( objectInfo, tilePos ) ) {
                 fheroes2::showStandardTextMessage( _( "Treasure" ), _( "Objects cannot be placed outside the map." ), Dialog::OK );
                 return;
@@ -736,7 +736,7 @@ namespace Interface
 
             setObjectOnTile( tile, objectInfo );
         }
-        else if ( groupType == Maps::ObjectGroup::Hero ) {
+        else if ( groupType == Maps::ObjectGroup::Kingdom_Heroes ) {
             if ( !isObjectPlacementAllowed( objectInfo, tilePos ) ) {
                 fheroes2::showStandardTextMessage( _( "Heroes" ), _( "Objects cannot be placed outside the map." ), Dialog::OK );
                 return;
@@ -754,7 +754,7 @@ namespace Interface
 
             setObjectOnTile( tile, objectInfo );
         }
-        else if ( groupType == Maps::ObjectGroup::Artifact ) {
+        else if ( groupType == Maps::ObjectGroup::Adventure_Artifacts ) {
             if ( !isObjectPlacementAllowed( objectInfo, tilePos ) ) {
                 fheroes2::showStandardTextMessage( _( "Artifacts" ), _( "Objects cannot be placed outside the map." ), Dialog::OK );
                 return;
@@ -772,7 +772,7 @@ namespace Interface
 
             const int32_t artifactType = _editorPanel.getSelectedObjectType();
 
-            const auto & artifactInfo = Maps::getObjectsByGroup( Maps::ObjectGroup::Artifact );
+            const auto & artifactInfo = Maps::getObjectsByGroup( Maps::ObjectGroup::Adventure_Artifacts );
             assert( artifactType >= 0 && artifactType < static_cast<int32_t>( artifactInfo.size() ) );
 
             // For each Spell Scroll artifact we select a spell.
@@ -791,7 +791,7 @@ namespace Interface
                 setObjectOnTile( tile, objectInfo );
             }
         }
-        else if ( groupType == Maps::ObjectGroup::Ocean_Object ) {
+        else if ( groupType == Maps::ObjectGroup::Adventure_Water ) {
             if ( !isObjectPlacementAllowed( objectInfo, tilePos ) ) {
                 fheroes2::showStandardTextMessage( _( "Ocean object" ), _( "Objects cannot be placed outside the map." ), Dialog::OK );
                 return;
