@@ -90,7 +90,7 @@ namespace Battle
 
             std::unique_ptr<ArmyBar> army;
 
-            void redraw( fheroes2::Image & output );
+            void redraw( fheroes2::Image & output ) const;
         };
 
         struct ArmyInfo
@@ -128,9 +128,9 @@ namespace Battle
 
         void updateHero( ArmyInfo & info, const fheroes2::Point & offset );
 
-        void copyHero( Heroes & in, Heroes & out );
+        static void updateArmyUI( ArmyUI & ui, Heroes * hero, const fheroes2::Point & offset, const uint8_t armyId );
 
-        void updateArmyUI( ArmyUI & ui, Heroes * hero, const fheroes2::Point & offset, const uint8_t armyId ) const;
+        static void copyHero( Heroes & in, Heroes & out );
     };
 }
 

@@ -252,7 +252,7 @@ bool Battle::Only::setup( const bool allowBackup, bool & reset )
             cinfo2 = std::make_unique<ControlInfo>( fheroes2::Point{ cur_pt.x + 500, cur_pt.y + 425 }, armyInfo[1].player.GetControl() );
         }
 
-        for ( auto & [hero, index] : { std::pair<Heroes *, size_t>( armyInfo[0].hero, 0 ), std::pair<Heroes *, size_t>( armyInfo[1].hero, 1 ) } ) {
+        for ( const auto & [hero, index] : { std::pair<Heroes *, size_t>( armyInfo[0].hero, 0 ), std::pair<Heroes *, size_t>( armyInfo[1].hero, 1 ) } ) {
             if ( hero == nullptr ) {
                 continue;
             }
@@ -288,7 +288,7 @@ bool Battle::Only::setup( const bool allowBackup, bool & reset )
             }
         }
 
-        for ( const auto ids : { std::pair<int32_t, int32_t>{ 0, 1 }, std::pair<int32_t, int32_t>{ 1, 0 } } ) {
+        for ( const auto & ids : { std::pair<int32_t, int32_t>{ 0, 1 }, std::pair<int32_t, int32_t>{ 1, 0 } } ) {
             ArmyUI & firstUI = armyInfo[ids.first].ui;
             ArmyUI & secondUI = armyInfo[ids.second].ui;
 
@@ -512,41 +512,41 @@ void Battle::Only::copyHero( Heroes & in, Heroes & out )
     out.spell_book = in.spell_book;
 }
 
-void Battle::Only::updateArmyUI( ArmyUI & ui, Heroes * hero, const fheroes2::Point & offset, const uint8_t armyId ) const
+void Battle::Only::updateArmyUI( ArmyUI & ui, Heroes * hero, const fheroes2::Point & offset, const uint8_t armyId )
 {
     assert( hero != nullptr );
 
-    ui.morale.reset( new MoraleIndicator( hero ) );
+    ui.morale = std::make_unique<MoraleIndicator>( hero );
     ui.morale->SetPos( { offset.x + moraleAndLuckOffsetX[armyId], offset.y + 75 } );
 
-    ui.luck.reset( new LuckIndicator( hero ) );
+    ui.luck = std::make_unique<LuckIndicator>( hero );
     ui.luck->SetPos( { offset.x + moraleAndLuckOffsetX[armyId], offset.y + 115 } );
 
-    ui.primarySkill.reset( new PrimarySkillsBar( hero, true ) );
+    ui.primarySkill = std::make_unique<PrimarySkillsBar>( hero, true );
     ui.primarySkill->setTableSize( { 1, 4 } );
     ui.primarySkill->setInBetweenItemsOffset( { 0, -1 } );
     ui.primarySkill->SetTextOff( armyId == 0 ? 70 : -70, -25 );
     ui.primarySkill->setRenderingOffset( { offset.x + primarySkillOffsetX[armyId], offset.y + 51 } );
 
-    ui.secondarySkill.reset( new SecondarySkillsBar( *hero, true, true ) );
+    ui.secondarySkill = std::make_unique<SecondarySkillsBar>( *hero, true, true );
     ui.secondarySkill->setTableSize( { 8, 1 } );
     ui.secondarySkill->setInBetweenItemsOffset( { -1, 0 } );
     ui.secondarySkill->SetContent( hero->GetSecondarySkills().ToVector() );
     ui.secondarySkill->setRenderingOffset( { offset.x + secondarySkillOffsetX[armyId], offset.y + 199 } );
 
-    ui.artifact.reset( new ArtifactsBar( hero, true, false, true, true, nullptr ) );
+    ui.artifact = std::make_unique<ArtifactsBar>( hero, true, false, true, true, nullptr );
     ui.artifact->setTableSize( { 7, 2 } );
     ui.artifact->setInBetweenItemsOffset( { 2, 2 } );
     ui.artifact->SetContent( hero->GetBagArtifacts() );
     ui.artifact->setRenderingOffset( { offset.x + artifactOffsetX[armyId], offset.y + 347 } );
 
-    ui.army.reset( new ArmyBar( &hero->GetArmy(), true, false, true ) );
+    ui.army = std::make_unique<ArmyBar>( &hero->GetArmy(), true, false, true );
     ui.army->setTableSize( { 5, 1 } );
     ui.army->setRenderingOffset( { offset.x + armyOffsetX[armyId], offset.y + 267 } );
     ui.army->setInBetweenItemsOffset( { 2, 0 } );
 }
 
-void Battle::Only::ArmyUI::redraw( fheroes2::Image & output )
+void Battle::Only::ArmyUI::redraw( fheroes2::Image & output ) const
 {
     if ( morale ) {
         morale->Redraw();
