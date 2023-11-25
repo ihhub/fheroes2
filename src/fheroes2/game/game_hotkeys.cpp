@@ -285,7 +285,7 @@ namespace
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::TOWN_MARKETPLACE )]
             = { Game::HotKeyCategory::TOWN, gettext_noop( "hotkey|marketplace" ), fheroes2::Key::KEY_M };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::TOWN_MAGE_GUILD )]
-            \= { Game::HotKeyCategory::TOWN, gettext_noop( "hotkey|mage guild" ), fheroes2::Key::KEY_S };
+            = { Game::HotKeyCategory::TOWN, gettext_noop( "hotkey|mage guild" ), fheroes2::Key::KEY_S };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::TOWN_SHIPYARD )] = { Game::HotKeyCategory::TOWN, gettext_noop( "hotkey|shipyard" ), fheroes2::Key::KEY_N };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::TOWN_THIEVES_GUILD )]
             = { Game::HotKeyCategory::TOWN, gettext_noop( "hotkey|thieves guild" ), fheroes2::Key::KEY_T };
