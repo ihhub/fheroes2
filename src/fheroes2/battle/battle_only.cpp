@@ -167,7 +167,7 @@ bool Battle::Only::setup( const bool allowBackup, bool & reset )
             updateHero( info, cur_pt );
         }
         else {
-            info.ui.army.reset( new ArmyBar( &info.monster, true, false, true ) );
+            info.ui.army = std::make_unique<ArmyBar>( &info.monster, true, false, true );
             info.ui.army->setTableSize( { 5, 1 } );
             info.ui.army->setRenderingOffset( { cur_pt.x + armyOffsetX[info.armyId], cur_pt.y + 267 } );
             info.ui.army->setInBetweenItemsOffset( { 2, 0 } );
@@ -175,7 +175,7 @@ bool Battle::Only::setup( const bool allowBackup, bool & reset )
     }
 
     if ( armyInfo[1].hero != nullptr ) {
-        cinfo2.reset( new ControlInfo( { cur_pt.x + 500, cur_pt.y + 425 }, armyInfo[1].player.GetControl() ) );
+        cinfo2 = std::make_unique<ControlInfo>( fheroes2::Point{ cur_pt.x + 500, cur_pt.y + 425 }, armyInfo[1].player.GetControl() );
     }
 
     for ( auto & info : armyInfo ) {
@@ -219,13 +219,15 @@ bool Battle::Only::setup( const bool allowBackup, bool & reset )
         }
         if ( le.MouseClickLeft( buttonReset.area() ) ) {
             reset = true;
-            return true;
+            result = true;
+            break;
         }
-        else if ( le.MouseClickLeft( buttonCancel.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
+
+        if ( le.MouseClickLeft( buttonCancel.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
             exit = true;
         }
 
-        for ( auto & ids : { std::pair<int32_t, int32_t>( 0, 1 ), std::pair<int32_t, int32_t>( 1, 0 ) } ) {
+        for ( const auto & ids : { std::pair<int32_t, int32_t>( 0, 1 ), std::pair<int32_t, int32_t>( 1, 0 ) } ) {
             ArmyInfo & first = armyInfo[ids.first];
             ArmyInfo & second = armyInfo[ids.second];
 
@@ -247,7 +249,7 @@ bool Battle::Only::setup( const bool allowBackup, bool & reset )
         }
 
         if ( cinfo2 == nullptr && armyInfo[1].hero != nullptr ) {
-            cinfo2.reset( new ControlInfo( { cur_pt.x + 500, cur_pt.y + 425 }, armyInfo[1].player.GetControl() ) );
+            cinfo2 = std::make_unique<ControlInfo>( fheroes2::Point{ cur_pt.x + 500, cur_pt.y + 425 }, armyInfo[1].player.GetControl() );
         }
 
         for ( auto & [hero, index] : { std::pair<Heroes *, size_t>( armyInfo[0].hero, 0 ), std::pair<Heroes *, size_t>( armyInfo[1].hero, 1 ) } ) {
