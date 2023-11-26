@@ -25,6 +25,7 @@
 #include <cassert>
 #include <cstddef>
 #include <initializer_list>
+#include <map>
 #include <memory>
 #include <utility>
 
@@ -39,6 +40,8 @@ namespace
     // All object information is based on The Price of Loyalty expansion of the original game since
     // the fheroes2 Editor requires to have resources from the expansion.
     std::array<std::vector<Maps::ObjectInfo>, static_cast<size_t>( Maps::ObjectGroup::Group_Count )> objectData;
+
+    std::map<std::pair<MP2::ObjectIcnType, uint32_t>, std::pair<Maps::ObjectGroup, uint32_t>> icnVsObjectInfo;
 
     void populateLandscapeMountains( std::vector<Maps::ObjectInfo> & objects )
     {
@@ -613,6 +616,30 @@ namespace
         }
     }
 
+    void populateRoads( std::vector<Maps::ObjectInfo> & objects )
+    {
+        assert( objects.empty() );
+
+        for ( uint32_t i = 0; i < 32; ++i ) {
+            Maps::ObjectInfo object{ MP2::OBJ_NONE };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_ROAD, i, fheroes2::Point{ 0, 0 }, MP2::OBJ_NONE, Maps::TERRAIN_LAYER );
+
+            objects.emplace_back( std::move( object ) );
+        }
+    }
+
+    void populateStreams( std::vector<Maps::ObjectInfo> & objects )
+    {
+        assert( objects.empty() );
+
+        for ( uint32_t i = 0; i < 13; ++i ) {
+            Maps::ObjectInfo object{ MP2::OBJ_NONE };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_STREAM, i, fheroes2::Point{ 0, 0 }, MP2::OBJ_NONE, Maps::TERRAIN_LAYER );
+
+            objects.emplace_back( std::move( object ) );
+        }
+    }
+
     void populateObjectData()
     {
         static bool isPopulated = false;
@@ -623,6 +650,9 @@ namespace
 
         // IMPORTANT!!!
         // The order of objects must be preserved. If you want to add a new object, add it to the end of the corresponding container.
+        populateRoads( objectData[static_cast<size_t>( Maps::ObjectGroup::Roads )] );
+        populateStreams( objectData[static_cast<size_t>( Maps::ObjectGroup::Streams )] );
+
         populateLandscapeMountains( objectData[static_cast<size_t>( Maps::ObjectGroup::Landscape_Mountains )] );
         populateLandscapeRocks( objectData[static_cast<size_t>( Maps::ObjectGroup::Landscape_Rocks )] );
         populateLandscapeTrees( objectData[static_cast<size_t>( Maps::ObjectGroup::Landscape_Trees )] );
@@ -653,7 +683,7 @@ namespace
         }
 
         // Check that all landscape objects are non-action objects.
-        for ( size_t groupType = static_cast<size_t>( Maps::ObjectGroup::Landscape_Mountains );
+        for ( size_t groupType = static_cast<size_t>( Maps::ObjectGroup::Roads );
               groupType <= static_cast<size_t>( Maps::ObjectGroup::Landscape_Miscellaneous ); ++groupType ) {
             const auto & objects = objectData[groupType];
 
@@ -672,6 +702,20 @@ namespace
             }
         }
 #endif
+
+        // For game's map loading and saving we need to keep another cached container.
+        // This container also serves as verification that all objects use unique object info as their main object part.
+        for ( size_t groupType = 0; groupType < objectData.size(); ++groupType ) {
+            for ( size_t objectId = 0; objectId < objectData[groupType].size(); ++objectId ) {
+                const auto & frontPart = objectData[groupType][objectId].groundLevelParts.front();
+                auto [it, inserted] = icnVsObjectInfo.emplace( std::make_pair( frontPart.icnType, frontPart.icnIndex ),
+                                                               std::make_pair( static_cast<Maps::ObjectGroup>( groupType ), static_cast<uint32_t>( objectId ) ) );
+                if ( !inserted ) {
+                    // You use the same object part for more than one object. Check your code!
+                    assert( 0 );
+                }
+            }
+        }
 
         isPopulated = true;
     }
@@ -704,6 +748,25 @@ namespace Maps
         }
 
         return MP2::OBJ_NONE;
+    }
+
+    bool getObjectInfo( const MP2::ObjectIcnType icnType, const uint32_t icnIndex, ObjectGroup & group, uint32_t & index )
+    {
+        if ( icnType == MP2::OBJ_ICN_TYPE_UNKNOWN ) {
+            // No object exist. Nothing to do.
+            return false;
+        }
+
+        populateObjectData();
+
+        auto iter = icnVsObjectInfo.find( std::make_pair( icnType, icnIndex ) );
+        if ( iter != icnVsObjectInfo.end() ) {
+            group = iter->second.first;
+            index = iter->second.second;
+            return true;
+        }
+
+        return false;
     }
 
     std::vector<fheroes2::Point> getGroundLevelOccupiedTileOffset( const ObjectInfo & info )

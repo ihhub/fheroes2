@@ -159,8 +159,8 @@ public:
     void LoadDefaults( const int type, const int race );
 
 protected:
-    friend StreamBase & operator<<( StreamBase &, const HeroBase & );
-    friend StreamBase & operator>>( StreamBase &, HeroBase & );
+    friend StreamBase & operator<<( StreamBase & msg, const HeroBase & hero );
+    friend StreamBase & operator>>( StreamBase & msg, HeroBase & hero );
 
     uint32_t magic_point;
     uint32_t move_point;
@@ -169,7 +169,7 @@ protected:
     BagArtifacts bag_artifacts;
 };
 
-StreamBase & operator<<( StreamBase &, const HeroBase & );
-StreamBase & operator>>( StreamBase &, HeroBase & );
+StreamBase & operator<<( StreamBase & msg, const HeroBase & hero );
+StreamBase & operator>>( StreamBase & msg, HeroBase & hero );
 
 #endif

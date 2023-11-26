@@ -117,6 +117,10 @@ namespace Maps
     // These groups do not correlate with the original Editor.
     enum class ObjectGroup : int32_t
     {
+        // These groups are not being used by the Editor directly but they are still a part of a tile.
+        Roads,
+        Streams,
+
         // Landscape objects.
         Landscape_Mountains,
         Landscape_Rocks,
@@ -148,6 +152,9 @@ namespace Maps
     const std::vector<ObjectInfo> & getObjectsByGroup( const ObjectGroup group );
 
     MP2::MapObjectType getObjectTypeByIcn( const MP2::ObjectIcnType icnType, const uint32_t icnIndex );
+
+    // Returns true if given ICN type and index exist as a main object part, false otherwise.
+    bool getObjectInfo( const MP2::ObjectIcnType icnType, const uint32_t icnIndex, ObjectGroup & group, uint32_t & index );
 
     // The function returns tile offset only for ground level objects located on OBJECT_LAYER and BACKGROUND_LAYER layers.
     // Objects on other layers do not affect passabilities of tiles so they do not 'occupy' these tiles.

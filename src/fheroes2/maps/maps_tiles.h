@@ -111,6 +111,11 @@ namespace Maps
 
         void Init( int32_t index, const MP2::mp2tile_t & mp2 );
 
+        void setIndex( const int32_t index )
+        {
+            _index = index;
+        }
+
         int32_t GetIndex() const
         {
             return _index;
