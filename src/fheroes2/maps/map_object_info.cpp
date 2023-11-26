@@ -683,8 +683,8 @@ namespace
         }
 
         // Check that all landscape objects are non-action objects.
-        for ( size_t groupType = static_cast<size_t>( Maps::ObjectGroup::Roads );
-              groupType <= static_cast<size_t>( Maps::ObjectGroup::Landscape_Miscellaneous ); ++groupType ) {
+        for ( size_t groupType = static_cast<size_t>( Maps::ObjectGroup::Roads ); groupType <= static_cast<size_t>( Maps::ObjectGroup::Landscape_Miscellaneous );
+              ++groupType ) {
             const auto & objects = objectData[groupType];
 
             for ( const auto & objectInfo : objects ) {
