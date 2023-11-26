@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-19 15:02+0000\n"
+"POT-Creation-Date: 2023-11-26 00:36+0000\n"
 "PO-Revision-Date: 2023-09-11 20:22+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -199,6 +199,9 @@ msgstr "ZOBRAZIŤ INTRO"
 
 msgid "MIN"
 msgstr "MIN"
+
+msgid "RESET"
+msgstr ""
 
 msgid ""
 "D\n"
@@ -942,14 +945,9 @@ msgstr "Zvoľ zručnosť moci"
 msgid "Set Knowledge Skill"
 msgstr "Zvoľ zručnosť vedomostí"
 
-msgid "%{race1} %{name1}"
-msgstr "%{race1} %{name1}"
-
-msgid "vs"
-msgstr "proti"
-
-msgid "%{race2} %{name2}"
-msgstr "%{race2} %{name2}"
+#, fuzzy
+msgid "%{race1} %{name1} vs %{race2} %{name2}"
+msgstr "%{name1} a %{name2} sa stretávajú"
 
 msgid "Monsters"
 msgstr "Bojovníci"
@@ -10854,3 +10852,12 @@ msgstr ""
 "Pozri si najnovšiu verziu hry na\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "%{race1} %{name1}"
+#~ msgstr "%{race1} %{name1}"
+
+#~ msgid "vs"
+#~ msgstr "proti"
+
+#~ msgid "%{race2} %{name2}"
+#~ msgstr "%{race2} %{name2}"
