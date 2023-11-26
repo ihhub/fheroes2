@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-19 15:02+0000\n"
+"POT-Creation-Date: 2023-11-26 00:36+0000\n"
 "PO-Revision-Date: 2022-09-23 16:01+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -189,6 +189,9 @@ msgstr ""
 
 msgid "MIN"
 msgstr "МІН"
+
+msgid "RESET"
+msgstr ""
 
 msgid ""
 "D\n"
@@ -897,13 +900,7 @@ msgstr ""
 msgid "Set Knowledge Skill"
 msgstr ""
 
-msgid "%{race1} %{name1}"
-msgstr ""
-
-msgid "vs"
-msgstr "супраць"
-
-msgid "%{race2} %{name2}"
+msgid "%{race1} %{name1} vs %{race2} %{name2}"
 msgstr ""
 
 msgid "Monsters"
@@ -9796,3 +9793,6 @@ msgid ""
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
 msgstr ""
+
+#~ msgid "vs"
+#~ msgstr "супраць"
