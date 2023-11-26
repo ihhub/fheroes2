@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-19 15:02+0000\n"
+"POT-Creation-Date: 2023-11-26 00:36+0000\n"
 "PO-Revision-Date: 2022-12-03 04:36+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <it@li.org>\n"
@@ -172,6 +172,9 @@ msgid "VIEW INTRO"
 msgstr ""
 
 msgid "MIN"
+msgstr ""
+
+msgid "RESET"
 msgstr ""
 
 msgid ""
@@ -891,14 +894,9 @@ msgstr "Scegli Potere"
 msgid "Set Knowledge Skill"
 msgstr "Scegli Sapere"
 
-msgid "%{race1} %{name1}"
-msgstr ""
-
-msgid "vs"
-msgstr "contro"
-
-msgid "%{race2} %{name2}"
-msgstr ""
+#, fuzzy
+msgid "%{race1} %{name1} vs %{race2} %{name2}"
+msgstr "%{name1} incontra %{name2}"
 
 msgid "Monsters"
 msgstr "Mostri"
@@ -10078,3 +10076,6 @@ msgstr ""
 "Scopri l'ultima versione del gioco su\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "vs"
+#~ msgstr "contro"

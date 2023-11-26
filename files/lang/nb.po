@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-19 15:02+0000\n"
+"POT-Creation-Date: 2023-11-26 00:36+0000\n"
 "PO-Revision-Date: 2023-09-03 18:42+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -194,6 +194,9 @@ msgstr "VIS VIDEO"
 
 msgid "MIN"
 msgstr "MIN"
+
+msgid "RESET"
+msgstr ""
 
 msgid ""
 "D\n"
@@ -946,14 +949,9 @@ msgstr "Spesifiser kraftsevne"
 msgid "Set Knowledge Skill"
 msgstr "Spesifiser kunnskapsevne"
 
-msgid "%{race1} %{name1}"
-msgstr "%{race1}en %{name1}"
-
-msgid "vs"
-msgstr "mot"
-
-msgid "%{race2} %{name2}"
-msgstr "%{race2}en %{name2}"
+#, fuzzy
+msgid "%{race1} %{name1} vs %{race2} %{name2}"
+msgstr "%{name1} møter %{name2}"
 
 msgid "Monsters"
 msgstr "Monstre"
@@ -11168,3 +11166,12 @@ msgstr ""
 "Finn den siste oppdateringen av spillet på\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "%{race1} %{name1}"
+#~ msgstr "%{race1}en %{name1}"
+
+#~ msgid "vs"
+#~ msgstr "mot"
+
+#~ msgid "%{race2} %{name2}"
+#~ msgstr "%{race2}en %{name2}"
