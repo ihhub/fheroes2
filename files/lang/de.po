@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-19 15:02+0000\n"
+"POT-Creation-Date: 2023-11-26 00:36+0000\n"
 "PO-Revision-Date: 2023-04-09 23:51+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -196,6 +196,9 @@ msgstr "INTRO ANZEIGEN"
 
 msgid "MIN"
 msgstr "MIN"
+
+msgid "RESET"
+msgstr ""
 
 msgid ""
 "D\n"
@@ -926,14 +929,9 @@ msgstr "Zauberkraft setzen"
 msgid "Set Knowledge Skill"
 msgstr "Wissen setzen"
 
-msgid "%{race1} %{name1}"
-msgstr "%{name1} (%{race1})"
-
-msgid "vs"
-msgstr "gegen"
-
-msgid "%{race2} %{name2}"
-msgstr "%{name2} (%{race2})"
+#, fuzzy
+msgid "%{race1} %{name1} vs %{race2} %{name2}"
+msgstr "%{name1} trifft %{name2}"
 
 msgid "Monsters"
 msgstr "Monster"
@@ -11149,3 +11147,12 @@ msgstr ""
 "Die neueste Version des Spiels finden Sie unter\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "%{race1} %{name1}"
+#~ msgstr "%{name1} (%{race1})"
+
+#~ msgid "vs"
+#~ msgstr "gegen"
+
+#~ msgid "%{race2} %{name2}"
+#~ msgstr "%{name2} (%{race2})"
