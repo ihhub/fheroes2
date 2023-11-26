@@ -857,7 +857,7 @@ namespace AI
             const double myArcherRatio = _myShootersStrength / _myArmyStrength;
             const double enemyArcherRatio = _enemyShootersStrength / _enemyArmyStrength;
 
-            const double myArcherThreshold = 0.20;
+            const double myArcherThreshold = 0.15;
             const double enemyArcherThreshold = 0.66;
 
             // If we have an unfavorable ratio of infantry and shooters for defense, then it is better to choose an offensive
