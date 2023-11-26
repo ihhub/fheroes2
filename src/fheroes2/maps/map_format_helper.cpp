@@ -20,6 +20,14 @@
 
 #include "map_format_helper.h"
 
+#include <algorithm>
+#include <cassert>
+#include <cstddef>
+#include <cstdint>
+#include <list>
+#include <memory>
+#include <vector>
+
 #include "map_format_info.h"
 #include "map_object_info.h"
 #include "maps_tiles.h"
@@ -48,7 +56,7 @@ namespace Maps
 
         map.size = world.w();
 
-        const size_t size = map.size * map.size;
+        const size_t size = static_cast<size_t>( map.size ) * map.size;
 
         map.tiles.resize( size );
 

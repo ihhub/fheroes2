@@ -20,6 +20,8 @@
 
 #include "map_format_info.h"
 
+#include <type_traits>
+
 #include "serialize.h"
 
 namespace Maps::Map_Format
