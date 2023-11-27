@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-26 00:36+0000\n"
+"POT-Creation-Date: 2023-11-27 00:58+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3034,6 +3034,16 @@ msgstr ""
 msgid "Show extra information such as FPS and current time."
 msgstr "Показване на допълнителна информация като FPS и текущо време."
 
+msgid "Hotkey: "
+msgstr ""
+
+msgid "Category: "
+msgstr ""
+
+#, fuzzy
+msgid "Event: "
+msgstr "Събитие"
+
 msgid "Hot Keys:"
 msgstr "Бързи клавиши:"
 
@@ -4580,6 +4590,33 @@ msgid ""
 "place only on the next turn."
 msgstr "Искаш ли да си върнеш контрола от ИИ? Ще има ефектът на следващия ход."
 
+#, fuzzy
+msgid "Default Actions"
+msgstr "действие по подразбиране"
+
+msgid "Global Actions"
+msgstr ""
+
+msgid "Main Menu"
+msgstr ""
+
+msgid "World Map"
+msgstr "Карта на света"
+
+#, fuzzy
+msgid "Battle Screen"
+msgstr "Екран на героя"
+
+#, fuzzy
+msgid "Town Screen"
+msgstr "Екран на героя"
+
+msgid "Army Actions"
+msgstr ""
+
+msgid "Editor"
+msgstr ""
+
 msgid "The save file is corrupted."
 msgstr "Запазеният файл е повреден."
 
@@ -4688,9 +4725,6 @@ msgid ""
 " menu. \n"
 "\n"
 "Enjoy the game!"
-msgstr ""
-
-msgid "Editor"
 msgstr ""
 
 #, fuzzy
@@ -5259,9 +5293,6 @@ msgid "A miniature view of the known world. Left click to move viewing area."
 msgstr ""
 "Миниатюрен изглед на познатия свят. Кликни с левия бутон, за да преместиш "
 "зоната за преглед."
-
-msgid "World Map"
-msgstr "Карта на света"
 
 msgid "Month: %{month} Week: %{week}"
 msgstr "Месец: %{month} Седмица: %{week}"

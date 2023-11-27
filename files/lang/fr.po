@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-26 00:36+0000\n"
+"POT-Creation-Date: 2023-11-27 00:58+0000\n"
 "PO-Revision-Date: 2022-12-18 13:48+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -3056,6 +3056,16 @@ msgstr ""
 "Afficher des informations supplémentaires telles que le FPS et l'heure "
 "actuelle."
 
+msgid "Hotkey: "
+msgstr ""
+
+msgid "Category: "
+msgstr ""
+
+#, fuzzy
+msgid "Event: "
+msgstr "Événement"
+
 msgid "Hot Keys:"
 msgstr "Raccourcis clavier :"
 
@@ -4627,6 +4637,32 @@ msgstr ""
 "Voulez-vous laisser l'IA prendre les commandes ? L'effet aura lieu "
 "uniquement au prochain tour."
 
+msgid "Default Actions"
+msgstr ""
+
+msgid "Global Actions"
+msgstr ""
+
+msgid "Main Menu"
+msgstr ""
+
+msgid "World Map"
+msgstr "Carte du monde"
+
+#, fuzzy
+msgid "Battle Screen"
+msgstr "Fenêtre d'informations du héros"
+
+#, fuzzy
+msgid "Town Screen"
+msgstr "Fenêtre d'informations du héros"
+
+msgid "Army Actions"
+msgstr ""
+
+msgid "Editor"
+msgstr ""
+
 #, fuzzy
 msgid "The save file is corrupted."
 msgstr "L'image miroir est créée."
@@ -4739,9 +4775,6 @@ msgid ""
 " menu. \n"
 "\n"
 "Enjoy the game!"
-msgstr ""
-
-msgid "Editor"
 msgstr ""
 
 #, fuzzy
@@ -5322,9 +5355,6 @@ msgid "A miniature view of the known world. Left click to move viewing area."
 msgstr ""
 "Une vue miniature du monde connu. Cliquez avec le bouton gauche de la souris "
 "pour déplacer la zone d'affichage."
-
-msgid "World Map"
-msgstr "Carte du monde"
 
 msgid "Month: %{month} Week: %{week}"
 msgstr "Mois : %{month}, Semaine : %{week}"
