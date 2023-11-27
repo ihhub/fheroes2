@@ -83,18 +83,16 @@ namespace Battle
         struct ArmyUI
         {
             std::unique_ptr<MoraleIndicator> morale;
-
             std::unique_ptr<LuckIndicator> luck;
-
             std::unique_ptr<PrimarySkillsBar> primarySkill;
-
             std::unique_ptr<SecondarySkillsBar> secondarySkill;
-
             std::unique_ptr<ArtifactsBar> artifact;
-
             std::unique_ptr<ArmyBar> army;
 
             void redraw( fheroes2::Image & output ) const;
+
+            // Resets the state to empty and removes the morale & luck indicators from the screen
+            void resetForNewHero();
         };
 
         struct ArmyInfo
