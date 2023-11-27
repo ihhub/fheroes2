@@ -124,7 +124,7 @@ namespace Battle
 
         std::array<ArmyInfo, 2> armyInfo;
 
-        std::unique_ptr<ControlInfo> cinfo2;
+        std::unique_ptr<ControlInfo> attackedArmyControlInfo;
 
         bool _backupCompleted{ false };
 

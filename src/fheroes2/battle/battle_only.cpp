@@ -179,15 +179,15 @@ bool Battle::Only::setup( const bool allowBackup, bool & reset )
     }
 
     if ( armyInfo[1].hero != nullptr ) {
-        cinfo2 = std::make_unique<ControlInfo>( fheroes2::Point{ cur_pt.x + 500, cur_pt.y + 425 }, armyInfo[1].player.GetControl() );
+        attackedArmyControlInfo = std::make_unique<ControlInfo>( fheroes2::Point{ cur_pt.x + 500, cur_pt.y + 425 }, armyInfo[1].player.GetControl() );
     }
 
     for ( const auto & info : armyInfo ) {
         info.ui.redraw( display );
     }
 
-    if ( cinfo2 ) {
-        cinfo2->Redraw();
+    if ( attackedArmyControlInfo ) {
+        attackedArmyControlInfo->Redraw();
     }
 
     bool exit = false;
@@ -252,8 +252,8 @@ bool Battle::Only::setup( const bool allowBackup, bool & reset )
             }
         }
 
-        if ( cinfo2 == nullptr && armyInfo[1].hero != nullptr ) {
-            cinfo2 = std::make_unique<ControlInfo>( fheroes2::Point{ cur_pt.x + 500, cur_pt.y + 425 }, armyInfo[1].player.GetControl() );
+        if ( attackedArmyControlInfo == nullptr && armyInfo[1].hero != nullptr ) {
+            attackedArmyControlInfo = std::make_unique<ControlInfo>( fheroes2::Point{ cur_pt.x + 500, cur_pt.y + 425 }, armyInfo[1].player.GetControl() );
         }
 
         for ( const auto & [hero, index] : { std::pair<Heroes *, size_t>( armyInfo[0].hero, 0 ), std::pair<Heroes *, size_t>( armyInfo[1].hero, 1 ) } ) {
@@ -342,14 +342,14 @@ bool Battle::Only::setup( const bool allowBackup, bool & reset )
             }
         }
 
-        if ( cinfo2 ) {
-            if ( armyInfo[1].hero && le.MouseClickLeft( cinfo2->rtLocal ) && armyInfo[1].player.isControlAI() ) {
-                cinfo2->result = CONTROL_HUMAN;
+        if ( attackedArmyControlInfo ) {
+            if ( armyInfo[1].hero && le.MouseClickLeft( attackedArmyControlInfo->rtLocal ) && armyInfo[1].player.isControlAI() ) {
+                attackedArmyControlInfo->result = CONTROL_HUMAN;
                 armyInfo[1].player.SetControl( CONTROL_HUMAN );
                 redraw = true;
             }
-            else if ( le.MouseClickLeft( cinfo2->rtAI ) && armyInfo[1].player.isControlHuman() ) {
-                cinfo2->result = CONTROL_AI;
+            else if ( le.MouseClickLeft( attackedArmyControlInfo->rtAI ) && armyInfo[1].player.isControlHuman() ) {
+                attackedArmyControlInfo->result = CONTROL_AI;
                 armyInfo[1].player.SetControl( CONTROL_AI );
                 redraw = true;
             }
@@ -364,8 +364,8 @@ bool Battle::Only::setup( const bool allowBackup, bool & reset )
         armyInfo[0].ui.redraw( display );
         armyInfo[1].ui.redraw( display );
 
-        if ( cinfo2 ) {
-            cinfo2->Redraw();
+        if ( attackedArmyControlInfo ) {
+            attackedArmyControlInfo->Redraw();
         }
 
         fheroes2::Blit( buttonOverride, display, cur_pt.x + 276, cur_pt.y + 428 );
@@ -380,7 +380,7 @@ bool Battle::Only::setup( const bool allowBackup, bool & reset )
 
     armyInfo[0].ui = {};
     armyInfo[1].ui = {};
-    cinfo2.reset();
+    attackedArmyControlInfo.reset();
 
     return result;
 }
@@ -486,7 +486,7 @@ void Battle::Only::reset()
     armyInfo[0].reset();
     armyInfo[1].reset();
 
-    cinfo2.reset();
+    attackedArmyControlInfo.reset();
 }
 
 void Battle::Only::copyHero( Heroes & in, Heroes & out )
