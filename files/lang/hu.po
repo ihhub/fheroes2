@@ -4482,9 +4482,6 @@ msgstr "Hős képernyő"
 msgid "Army Actions"
 msgstr ""
 
-msgid "Editor"
-msgstr ""
-
 #, fuzzy
 msgid "The save file is corrupted."
 msgstr "A mentés fájl sikerült."
