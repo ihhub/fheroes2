@@ -38,6 +38,21 @@
 namespace
 {
     const int32_t tileSize{ 32 };
+
+    void renderObjectPart( fheroes2::Sprite & image, const Maps::ObjectPartInfo & objectPart, const fheroes2::Point & minOffset )
+    {
+        const int icnId = MP2::getIcnIdFromObjectIcnType( objectPart.icnType );
+
+        const fheroes2::Sprite & imagePart = fheroes2::AGG::GetICN( icnId, objectPart.icnIndex );
+        Blit( imagePart, 0, 0, image, ( objectPart.tileOffset.x - minOffset.x ) * tileSize + imagePart.x(),
+              ( objectPart.tileOffset.y - minOffset.y ) * tileSize + imagePart.y(), imagePart.width(), imagePart.height() );
+
+        if ( objectPart.animationFrames > 0 ) {
+            const fheroes2::Sprite & animationFrame = fheroes2::AGG::GetICN( icnId, objectPart.icnIndex + 1 );
+            Blit( animationFrame, 0, 0, image, ( objectPart.tileOffset.x - minOffset.x ) * tileSize + animationFrame.x(),
+                  ( objectPart.tileOffset.y - minOffset.y ) * tileSize + animationFrame.y(), animationFrame.width(), animationFrame.height() );
+        }
+    }
 }
 
 namespace fheroes2
@@ -50,8 +65,23 @@ namespace fheroes2
             return {};
         }
 
+        // The first object part must always have no offset.
+        assert( object.groundLevelParts.front().tileOffset == Point() );
+
         if ( object.groundLevelParts.size() == 1 && object.topLevelParts.empty() ) {
-            fheroes2::Sprite image = AGG::GetICN( MP2::getIcnIdFromObjectIcnType( object.groundLevelParts.front().icnType ), object.groundLevelParts.front().icnIndex );
+            const Maps::ObjectPartInfo & objectPart = object.groundLevelParts.front();
+            Sprite image;
+
+            if ( objectPart.animationFrames > 0 ) {
+                image.resize( tileSize, tileSize );
+                image.reset();
+
+                renderObjectPart( image, objectPart, { 0, 0 } );
+            }
+            else {
+                image = AGG::GetICN( MP2::getIcnIdFromObjectIcnType( objectPart.icnType ), objectPart.icnIndex );
+            }
+
             // If it is a one tile image make sure that the offset is in the middle of the image.
             image.setPosition( -image.width() / 2, -image.height() / 2 );
             return image;
@@ -59,7 +89,7 @@ namespace fheroes2
 
 #if defined( WITH_DEBUG )
         // Verify that all offsets are unique.
-        std::set<fheroes2::Point> uniqueOffsets;
+        std::set<Point> uniqueOffsets;
         for ( const auto & objectPart : object.groundLevelParts ) {
             const auto [dummy, inserted] = uniqueOffsets.emplace( objectPart.tileOffset );
             if ( !inserted ) {
@@ -78,8 +108,8 @@ namespace fheroes2
 #endif
 
         // Calculate the required size of the object in tiles.
-        fheroes2::Point minOffset;
-        fheroes2::Point maxOffset;
+        Point minOffset;
+        Point maxOffset;
         for ( const auto & objectPart : object.groundLevelParts ) {
             minOffset.x = std::min( minOffset.x, objectPart.tileOffset.x );
             minOffset.y = std::min( minOffset.y, objectPart.tileOffset.y );
@@ -101,22 +131,18 @@ namespace fheroes2
         // In other words, the main tile should be the center of the image.
         const int32_t width{ ( maxOffset.x - minOffset.x + 1 ) * tileSize };
         const int32_t height{ ( maxOffset.y - minOffset.y + 1 ) * tileSize };
-        const fheroes2::Point imageOffset{ ( minOffset.x * tileSize ) - tileSize / 2, ( minOffset.y * tileSize ) - tileSize / 2 };
+        const Point imageOffset{ ( minOffset.x * tileSize ) - tileSize / 2, ( minOffset.y * tileSize ) - tileSize / 2 };
 
-        fheroes2::Sprite image{ width, height, imageOffset.x, imageOffset.y };
+        Sprite image{ width, height, imageOffset.x, imageOffset.y };
         // Since we don't generate a pixel precise image make it transparent at first.
         image.reset();
 
         for ( const auto & objectPart : object.groundLevelParts ) {
-            const fheroes2::Sprite & imagePart = AGG::GetICN( MP2::getIcnIdFromObjectIcnType( objectPart.icnType ), objectPart.icnIndex );
-            fheroes2::Blit( imagePart, 0, 0, image, ( objectPart.tileOffset.x - minOffset.x ) * tileSize + imagePart.x(),
-                            ( objectPart.tileOffset.y - minOffset.y ) * tileSize + imagePart.y(), imagePart.width(), imagePart.height() );
+            renderObjectPart( image, objectPart, minOffset );
         }
 
         for ( const auto & objectPart : object.topLevelParts ) {
-            const fheroes2::Sprite & imagePart = AGG::GetICN( MP2::getIcnIdFromObjectIcnType( objectPart.icnType ), objectPart.icnIndex );
-            fheroes2::Blit( imagePart, 0, 0, image, ( objectPart.tileOffset.x - minOffset.x ) * tileSize + imagePart.x(),
-                            ( objectPart.tileOffset.y - minOffset.y ) * tileSize + imagePart.y(), imagePart.width(), imagePart.height() );
+            renderObjectPart( image, objectPart, minOffset );
         }
 
         return image;

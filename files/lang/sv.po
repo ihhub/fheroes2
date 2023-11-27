@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-09 20:42+0000\n"
+"POT-Creation-Date: 2023-11-27 00:58+0000\n"
 "PO-Revision-Date: 2023-11-10 14:21+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -193,6 +193,9 @@ msgstr "VISA INTRO"
 
 msgid "MIN"
 msgstr "MIN"
+
+msgid "RESET"
+msgstr ""
 
 msgid ""
 "D\n"
@@ -946,14 +949,9 @@ msgstr "Ange Trollkonst"
 msgid "Set Knowledge Skill"
 msgstr "Ange Kunskapsnivå"
 
-msgid "%{race1} %{name1}"
-msgstr "%{name1} (%{race1})"
-
-msgid "vs"
-msgstr "vs"
-
-msgid "%{race2} %{name2}"
-msgstr "%{name2} (%{race2})"
+#, fuzzy
+msgid "%{race1} %{name1} vs %{race2} %{name2}"
+msgstr "%{name1} möter %{name2}"
 
 msgid "Monsters"
 msgstr "Monster"
@@ -3014,6 +3012,16 @@ msgstr "V-Sync kan aktiveras för att lösa flimmerproblem på vissa skärmar."
 msgid "Show extra information such as FPS and current time."
 msgstr "Visa extra information som FPS och nuvarande tid."
 
+msgid "Hotkey: "
+msgstr ""
+
+msgid "Category: "
+msgstr ""
+
+#, fuzzy
+msgid "Event: "
+msgstr "Händelse"
+
 msgid "Hot Keys:"
 msgstr "Tangentbordsgenvägar"
 
@@ -3307,6 +3315,10 @@ msgstr "Acceptera alla ändringar."
 msgid "%{color} %{race} hero"
 msgstr "%{color} %{race}hjälte"
 
+#, fuzzy
+msgid "Terrain object"
+msgstr "Terrängläge"
+
 msgid "Select Skill:"
 msgstr "Välj Förmåga:"
 
@@ -3324,6 +3336,10 @@ msgstr "Välj Hjälte:"
 
 msgid "Select Treasure:"
 msgstr "Välj Skatt:"
+
+#, fuzzy
+msgid "Select Ocean Object:"
+msgstr "Havsföremål"
 
 msgid "Map Type:\n"
 msgstr "Karttyp:\n"
@@ -3632,6 +3648,10 @@ msgstr "Lämna kartredigeraren."
 msgid "Monster"
 msgstr "Monster"
 
+#, fuzzy
+msgid "Objects cannot be placed outside the map."
+msgstr "Hjältar kan inte placeras på vatten."
+
 msgid "Monsters cannot be placed on water."
 msgstr "Varelser kan inte placeras på vatten."
 
@@ -3655,6 +3675,14 @@ msgstr "Artefakter"
 
 msgid "Artifacts cannot be placed on water."
 msgstr "Artefakter kan inte placeras på vatten."
+
+#, fuzzy
+msgid "Ocean object"
+msgstr "Havsföremål"
+
+#, fuzzy
+msgid "Ocean object must be placed on water."
+msgstr "Hjältar kan inte placeras på vatten."
 
 msgid "Ocean Objects"
 msgstr "Havsföremål"
@@ -4527,6 +4555,33 @@ msgid ""
 msgstr ""
 "Vill du ge datorn kontrollen? Denna effekt gäller bara för nästa runda."
 
+#, fuzzy
+msgid "Default Actions"
+msgstr "Standardåtgärd"
+
+msgid "Global Actions"
+msgstr ""
+
+msgid "Main Menu"
+msgstr ""
+
+msgid "World Map"
+msgstr "Världskarta"
+
+#, fuzzy
+msgid "Battle Screen"
+msgstr "Hjältevy"
+
+#, fuzzy
+msgid "Town Screen"
+msgstr "Hjältevy"
+
+msgid "Army Actions"
+msgstr ""
+
+msgid "Editor"
+msgstr "Redigerare"
+
 msgid "The save file is corrupted."
 msgstr "Sparfilen är korrupt."
 
@@ -4634,9 +4689,6 @@ msgid ""
 msgstr ""
 " menyn. \n"
 "Spela på!"
-
-msgid "Editor"
-msgstr "Redigerare"
 
 msgid "The Editor requires \"The Price of Loyalty\" expansion files to work."
 msgstr ""
@@ -5201,9 +5253,6 @@ msgid "A miniature view of the known world. Left click to move viewing area."
 msgstr ""
 "En miniatyrvy av den kända världen. Vänsterklicka för att flytta "
 "visningsområdet."
-
-msgid "World Map"
-msgstr "Världskarta"
 
 msgid "Month: %{month} Week: %{week}"
 msgstr "Månad: %{month} Vecka: %{week}"
@@ -10916,3 +10965,12 @@ msgstr ""
 "Den senaste versionen av spelet finns på:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "%{race1} %{name1}"
+#~ msgstr "%{name1} (%{race1})"
+
+#~ msgid "vs"
+#~ msgstr "vs"
+
+#~ msgid "%{race2} %{name2}"
+#~ msgstr "%{name2} (%{race2})"

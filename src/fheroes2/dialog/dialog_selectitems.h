@@ -58,6 +58,8 @@ namespace Dialog
     int selectArtifactType( const int artifactType );
 
     int selectTreasureType( const int resourceType );
+
+    int selectOceanObjectType( const int resourceType );
 }
 
 #endif

@@ -63,7 +63,6 @@
 #include "ui_dialog.h"
 #include "ui_text.h"
 #include "ui_tool.h"
-#include "world.h"
 
 namespace
 {
@@ -166,7 +165,6 @@ fheroes2::GameMode Game::NewHotSeat()
 
     if ( conf.IsGameType( Game::TYPE_BATTLEONLY ) ) {
         conf.SetPreferablyCountPlayers( 2 );
-        world.NewMaps( 10, 10 );
 
         // Redraw the main menu screen without multiplayer sub-menu to show it after the battle using screen restorer.
         fheroes2::drawMainMenuScreen();

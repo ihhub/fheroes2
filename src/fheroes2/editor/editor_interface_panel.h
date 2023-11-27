@@ -22,9 +22,11 @@
 
 #include <array>
 #include <cstdint>
+#include <functional>
 
 #include "game_mode.h"
 #include "ground.h"
+#include "map_object_info.h"
 #include "maps_tiles_helper.h"
 #include "math_base.h"
 #include "ui_button.h"
@@ -45,7 +47,7 @@ namespace Interface
             return _rectEditorPanel;
         }
 
-        int32_t getBrushSize() const;
+        fheroes2::Rect getBrushArea() const;
 
         int selectedGroundType() const
         {
@@ -72,35 +74,20 @@ namespace Interface
             return _selectedInstrument == Instrument::ERASE;
         }
 
+        bool isObjectMode() const
+        {
+            return _selectedInstrument == Instrument::OBJECT;
+        }
+
         uint32_t getEraseTypes() const
         {
             return _eraseTypes;
         }
 
-        bool isMonsterSettingMode() const
-        {
-            return ( _selectedInstrument == OBJECT ) && ( _selectedObject == MONSTERS );
-        }
-
-        bool isHeroSettingMode() const
-        {
-            return ( _selectedInstrument == OBJECT ) && ( _selectedObject == HEROES );
-        }
-
-        bool isArtifactSettingMode() const
-        {
-            return ( _selectedInstrument == OBJECT ) && ( _selectedObject == ARTIFACTS );
-        }
-
-        bool isTreasureSettingMode() const
-        {
-            return ( _selectedInstrument == OBJECT ) && ( _selectedObject == TREASURES );
-        }
-
         bool showAreaSelectRect() const
         {
             return _selectedInstrument == Instrument::TERRAIN || _selectedInstrument == Instrument::STREAM || _selectedInstrument == Instrument::ROAD
-                   || _selectedInstrument == Instrument::ERASE || isMonsterSettingMode() || isHeroSettingMode() || isArtifactSettingMode() || isTreasureSettingMode();
+                   || _selectedInstrument == Instrument::ERASE || _selectedInstrument == Instrument::OBJECT || _selectedInstrument == Instrument::DETAIL;
         }
 
         bool useMouseDragMovement() const
@@ -120,24 +107,14 @@ namespace Interface
         // The name of this method starts from _ on purpose to do not mix with other public methods.
         void _redraw() const;
 
-        int32_t getMonsterType() const
+        int32_t getSelectedObjectType() const
         {
-            return _monsterType;
+            return _selectedObjectType[_selectedObject];
         }
 
-        int32_t getHeroType() const
+        Maps::ObjectGroup getSelectedObjectGroup() const
         {
-            return _heroType;
-        }
-
-        int32_t getArtifactType() const
-        {
-            return _artifactType;
-        }
-
-        int32_t getTreasureType() const
-        {
-            return _treasureType;
+            return _selectedObjectGroup[_selectedObject];
         }
 
     private:
@@ -152,6 +129,8 @@ namespace Interface
         static const char * _getEraseObjectTypeName( const uint32_t eraseObjectType );
 
         void _setCursor();
+
+        void handleObjectMouseClick( const std::function<int( int )> & typeSelection );
 
         enum Instrument : uint8_t
         {
@@ -249,12 +228,22 @@ namespace Interface
         uint8_t _selectedBrushSize{ BrushSize::MEDIUM };
         uint32_t _eraseTypes{ Maps::ObjectErasureType::ALL_OBJECTS };
 
-        int32_t _monsterType{ -1 };
+        std::array<int32_t, OBJECT_COUNT> _selectedObjectType;
 
-        int32_t _heroType{ -1 };
-
-        int32_t _artifactType{ -1 };
-
-        int32_t _treasureType{ -1 };
+        // TODO: this list is going to be modified as per proper object groups.
+        const std::array<Maps::ObjectGroup, OBJECT_COUNT> _selectedObjectGroup{ Maps::ObjectGroup::Adventure_Water,
+                                                                                Maps::ObjectGroup::Landscape_Mountains,
+                                                                                Maps::ObjectGroup::Landscape_Rocks,
+                                                                                Maps::ObjectGroup::Landscape_Trees,
+                                                                                Maps::ObjectGroup::Adventure_Dwellings,
+                                                                                Maps::ObjectGroup::Landscape_Miscellaneous,
+                                                                                Maps::ObjectGroup::Adventure_Mines,
+                                                                                Maps::ObjectGroup::Adventure_Power_Ups,
+                                                                                Maps::ObjectGroup::Landscape_Water,
+                                                                                Maps::ObjectGroup::Kingdom_Towns,
+                                                                                Maps::ObjectGroup::Monsters,
+                                                                                Maps::ObjectGroup::Kingdom_Heroes,
+                                                                                Maps::ObjectGroup::Adventure_Artifacts,
+                                                                                Maps::ObjectGroup::Adventure_Treasures };
     };
 }

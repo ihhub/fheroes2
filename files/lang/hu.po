@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-15 11:12+0000\n"
+"POT-Creation-Date: 2023-11-27 00:58+0000\n"
 "PO-Revision-Date: 2023-09-04 21:55+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -194,6 +194,9 @@ msgstr "BEVEZETŐ"
 
 msgid "MIN"
 msgstr "MIN"
+
+msgid "RESET"
+msgstr ""
 
 msgid ""
 "D\n"
@@ -940,14 +943,9 @@ msgstr "Varázserő beállítása"
 msgid "Set Knowledge Skill"
 msgstr "Tudás beállítása"
 
-msgid "%{race1} %{name1}"
-msgstr "%{race1} %{name1}"
-
-msgid "vs"
-msgstr "vs"
-
-msgid "%{race2} %{name2}"
-msgstr "%{race2} %{name2}"
+#, fuzzy
+msgid "%{race1} %{name1} vs %{race2} %{name2}"
+msgstr "%{name1} és %{name2} találkozik"
 
 msgid "Monsters"
 msgstr "Lények"
@@ -2917,6 +2915,15 @@ msgstr ""
 msgid "Show extra information such as FPS and current time."
 msgstr "Extra információkat jelenít meg, mint például FPS, illetve pontos idő."
 
+msgid "Hotkey: "
+msgstr ""
+
+msgid "Category: "
+msgstr ""
+
+msgid "Event: "
+msgstr ""
+
 msgid "Hot Keys:"
 msgstr "Billentyűfunkciók:"
 
@@ -3207,6 +3214,9 @@ msgstr "A választás elfogadása."
 msgid "%{color} %{race} hero"
 msgstr "%{color} %{race} hős"
 
+msgid "Terrain object"
+msgstr ""
+
 msgid "Select Skill:"
 msgstr "Képesség kiválasztása:"
 
@@ -3224,6 +3234,10 @@ msgstr "Hős kiválasztása:"
 
 msgid "Select Treasure:"
 msgstr "Kincs kiválasztása:"
+
+#, fuzzy
+msgid "Select Ocean Object:"
+msgstr "Varázstárgy kiválasztása:"
 
 msgid "Map Type:\n"
 msgstr "Térképtípus:\n"
@@ -3527,6 +3541,10 @@ msgstr "Kilépés a térképszerkesztőből."
 msgid "Monster"
 msgstr "Lény"
 
+#, fuzzy
+msgid "Objects cannot be placed outside the map."
+msgstr "Ezt a várost nem lehet kastéllyá fejleszteni."
+
 msgid "Monsters cannot be placed on water."
 msgstr "Vízen nem helyezhetők el lények."
 
@@ -3550,6 +3568,14 @@ msgstr "Varázstárgyak"
 
 msgid "Artifacts cannot be placed on water."
 msgstr "Vízen nem helyezhetők el varázstárgyak."
+
+#, fuzzy
+msgid "Ocean object"
+msgstr "Pusztulat"
+
+#, fuzzy
+msgid "Ocean object must be placed on water."
+msgstr "Ezt a várost nem lehet kastéllyá fejleszteni."
 
 msgid "Ocean Objects"
 msgstr "Tengeri tárgyak"
@@ -4432,6 +4458,34 @@ msgstr ""
 "Át akarod adni az irányítást a gépnek? Ez csak a következő körtől lesz "
 "hatásos."
 
+#, fuzzy
+msgid "Default Actions"
+msgstr "alaőértelmezett cselekvés"
+
+msgid "Global Actions"
+msgstr ""
+
+msgid "Main Menu"
+msgstr ""
+
+msgid "World Map"
+msgstr "Világtérkép"
+
+#, fuzzy
+msgid "Battle Screen"
+msgstr "Hős képernyő"
+
+#, fuzzy
+msgid "Town Screen"
+msgstr "Hős képernyő"
+
+msgid "Army Actions"
+msgstr ""
+
+msgid "Editor"
+msgstr ""
+
+#, fuzzy
 msgid "The save file is corrupted."
 msgstr "A mentés fájl sikerült."
 
@@ -5079,9 +5133,6 @@ msgid "A miniature view of the known world. Left click to move viewing area."
 msgstr ""
 "Az ismert világ kicsinyített mása. Bal kattintással mozgathatod a látható "
 "területet."
-
-msgid "World Map"
-msgstr "Világtérkép"
 
 msgid "Month: %{month} Week: %{week}"
 msgstr "Hónap: %{month} Hét: %{week}"
@@ -10435,3 +10486,12 @@ msgstr ""
 "Letöltheted a legújabb verziót az oldalról:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "%{race1} %{name1}"
+#~ msgstr "%{race1} %{name1}"
+
+#~ msgid "vs"
+#~ msgstr "vs"
+
+#~ msgid "%{race2} %{name2}"
+#~ msgstr "%{race2} %{name2}"
