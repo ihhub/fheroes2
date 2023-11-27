@@ -244,7 +244,7 @@ void SecondarySkillsBar::RedrawItem( Skill::Secondary & skill, const fheroes2::R
     else {
         fheroes2::Text text{ Skill::Secondary::String( skill.Skill() ), fheroes2::FontType::smallWhite() };
         int skillNamePaddingX = ( pos.width - text.width() ) / 2 - 1;
-        text.draw( pos.x + 5, pos.y + 53, dstsf );
+        text.draw( pos.x + skillNamePaddingX, pos.y + 5, dstsf );
 
         // If the skill is so long that the text shadow falls on the gold border (e.g. the Necromancy skill),
         // then redraw that side of the border to erase that part of the shadow.
@@ -256,7 +256,7 @@ void SecondarySkillsBar::RedrawItem( Skill::Secondary & skill, const fheroes2::R
         }
 
         text.set( Skill::Level::StringWithBonus( _hero, skill ), fheroes2::FontType::smallWhite() );
-        text.draw( pos.x + ( pos.width - text.width() ) / 2, pos.y + skillLevelPaddingY, dstsf );
+        text.draw( pos.x + ( pos.width - text.width() ) / 2, pos.y + 53, dstsf );
     }
 }
 
