@@ -340,14 +340,10 @@ bool Battle::Only::setup( const bool allowBackup, bool & reset )
             else if ( firstUI.luck != nullptr && le.MouseCursor( firstUI.luck->GetArea() ) ) {
                 LuckIndicator::QueueEventProcessing( *firstUI.luck );
             }
-            else if ( firstUI.primarySkill != nullptr && le.MouseCursor( firstUI.primarySkill->GetArea() ) ) {
-                firstUI.primarySkill->QueueEventProcessing();
-
+            else if ( firstUI.primarySkill != nullptr && le.MouseCursor( firstUI.primarySkill->GetArea() ) && firstUI.primarySkill->QueueEventProcessing() ) {
                 redraw = true;
             }
-            else if ( firstUI.secondarySkill != nullptr && le.MouseCursor( firstUI.secondarySkill->GetArea() ) ) {
-                firstUI.secondarySkill->QueueEventProcessing();
-
+            else if ( firstUI.secondarySkill != nullptr && le.MouseCursor( firstUI.secondarySkill->GetArea() ) && firstUI.secondarySkill->QueueEventProcessing() ) {
                 redraw = true;
             }
         }
