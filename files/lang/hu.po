@@ -2185,7 +2185,7 @@ msgid "Orchard"
 msgstr "Gyümölcsöskert"
 
 msgid "Habitat"
-msgstr "Hobbit-lak"
+msgstr "Félszerzet-lak"
 
 msgid "Pen"
 msgstr "Akol"
@@ -7858,7 +7858,7 @@ msgid "Hill Fort"
 msgstr "Erőd"
 
 msgid "Halfling Hole"
-msgstr "Hobbitlak"
+msgstr "Félszerzet odú"
 
 msgid "Mercenary Camp"
 msgstr "Zsoldostábor"
@@ -8288,12 +8288,11 @@ msgstr "Fekete Sárkány"
 msgid "Black Dragons"
 msgstr "Fekete Sárkány"
 
-#, fuzzy
 msgid "Halfling"
-msgstr "Hobbit"
+msgstr "Félszerzet"
 
 msgid "Halflings"
-msgstr "Hobbit"
+msgstr "Félszerzetek"
 
 #, fuzzy
 msgid "Boar"
