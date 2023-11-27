@@ -28,6 +28,7 @@
 #include "dialog_selectitems.h"
 #include "heroes.h"
 #include "icn.h"
+#include "logging.h"
 #include "screen.h"
 #include "skill.h"
 #include "tools.h"
@@ -232,30 +233,30 @@ void SecondarySkillsBar::RedrawItem( Skill::Secondary & skill, const fheroes2::R
         return;
     }
 
-    auto centeredPadding = ( []( int totalDimension, int elementDimension ) { return ( totalDimension - elementDimension ) / 2; } );
-
     const fheroes2::Sprite & sprite
         = use_mini_sprite ? fheroes2::AGG::GetICN( ICN::MINISS, skill.GetIndexSprite2() ) : fheroes2::AGG::GetICN( ICN::SECSKILL, skill.GetIndexSprite1() );
-    fheroes2::Blit( sprite, dstsf, pos.x + centeredPadding( pos.width, sprite.width() ), pos.y + centeredPadding( pos.height, sprite.height() ) );
+    fheroes2::Blit( sprite, dstsf, pos.x + ( pos.width - sprite.width() ) / 2, pos.y + ( pos.height - sprite.height() ) / 2 );
 
     if ( use_mini_sprite ) {
         const fheroes2::Text text{ std::to_string( skill.Level() ), fheroes2::FontType::smallWhite() };
         text.draw( pos.x + ( pos.width - text.width() ) - 3, pos.y + pos.height - 10, dstsf );
     }
     else {
-        const int skillNamePaddingY = 5;
-        const int skillLevelPaddingY = 53;
-
         fheroes2::Text text{ Skill::Secondary::String( skill.Skill() ), fheroes2::FontType::smallWhite() };
-        int skillNamePaddingX = centeredPadding( pos.width, text.width() );
-        // Special case for Necromancy because it overlaps the righthand border otherwise.
-        if ( skill.isSkill( Skill::Secondary::NECROMANCY ) ) {
-            --skillNamePaddingX;
+        int skillNamePaddingX = ( pos.width - text.width() ) / 2 - 1;
+        text.draw( pos.x + 5, pos.y + 53, dstsf );
+
+        // If the skill is so long that the text shadow falls on the gold border (e.g. the Necromancy skill),
+        // then redraw that side of the border to erase that part of the shadow.
+        if ( text.width() == 76 ) {
+            fheroes2::Image leftBorder( 1, 34 );
+            leftBorder.reset();
+            fheroes2::DrawLine( leftBorder, fheroes2::Point( 0, 0 ), fheroes2::Point( 0, 33 ), fheroes2::GetColorId( 0xD0, 0xC0, 0x48 ) );
+            fheroes2::Blit( leftBorder, 0, 0, dstsf, pos.x - 1, pos.y + 1, leftBorder.width(), leftBorder.height() );
         }
-        text.draw( pos.x + skillNamePaddingX, pos.y + skillNamePaddingY, dstsf );
 
         text.set( Skill::Level::StringWithBonus( _hero, skill ), fheroes2::FontType::smallWhite() );
-        text.draw( pos.x + centeredPadding( pos.width, text.width() ), pos.y + skillLevelPaddingY, dstsf );
+        text.draw( pos.x + ( pos.width - text.width() ) / 2, pos.y + skillLevelPaddingY, dstsf );
     }
 }
 
