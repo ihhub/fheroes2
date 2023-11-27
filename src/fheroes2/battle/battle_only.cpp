@@ -349,7 +349,9 @@ bool Battle::Only::setup( const bool allowBackup, bool & reset )
         }
 
         if ( attackedArmyControlInfo ) {
-            if ( armyInfo[1].hero && le.MouseClickLeft( attackedArmyControlInfo->rtLocal ) && armyInfo[1].player.isControlAI() ) {
+            assert( armyInfo[1].hero );
+
+            if ( le.MouseClickLeft( attackedArmyControlInfo->rtLocal ) && armyInfo[1].player.isControlAI() ) {
                 attackedArmyControlInfo->result = CONTROL_HUMAN;
                 armyInfo[1].player.SetControl( CONTROL_HUMAN );
 
