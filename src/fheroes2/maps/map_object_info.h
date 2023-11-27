@@ -118,35 +118,35 @@ namespace Maps
     enum class ObjectGroup : int32_t
     {
         // These groups are not being used by the Editor directly but they are still a part of a tile.
-        Roads,
-        Streams,
+        ROADS,
+        STREAMS,
 
         // Landscape objects.
-        Landscape_Mountains,
-        Landscape_Rocks,
-        Landscape_Trees,
-        Landscape_Water,
-        Landscape_Miscellaneous,
+        LANDSCAPE_MOUNTAINS,
+        LANDSCAPE_ROCKS,
+        LANDSCAPE_TREES,
+        LANDSCAPE_WATER,
+        LANDSCAPE_MISCELLANEOUS,
 
         // Adventure objects.
-        Adventure_Artifacts,
-        Adventure_Dwellings,
-        Adventure_Mines,
-        Adventure_Power_Ups,
-        Adventure_Treasures,
-        Adventure_Water,
-        Adventure_Miscellaneous,
+        ADVENTURE_ARTIFACTS,
+        ADVENTURE_DWELLINGS,
+        ADVENTURE_MINES,
+        ADVENTURE_POWER_UPS,
+        ADVENTURE_TREASURES,
+        ADVENTURE_WATER,
+        ADVENTURE_MISCELLANEOUS,
 
         // Kingdom objects.
-        Kingdom_Heroes,
-        Kingdom_Towns,
+        KINGDOM_HEROES,
+        KINGDOM_TOWNS,
 
         // Monsters.
-        Monsters,
+        MONSTERS,
 
         // IMPORTANT!!!
         // Put all new entries just above this entry.
-        Group_Count
+        GROUP_COUNT
     };
 
     const std::vector<ObjectInfo> & getObjectsByGroup( const ObjectGroup group );

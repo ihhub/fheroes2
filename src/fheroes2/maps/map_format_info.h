@@ -34,7 +34,7 @@ namespace Maps::Map_Format
     {
         uint32_t id{ 0 };
 
-        ObjectGroup group{ ObjectGroup::Landscape_Mountains };
+        ObjectGroup group{ ObjectGroup::LANDSCAPE_MOUNTAINS };
 
         uint32_t index{ 0 };
     };

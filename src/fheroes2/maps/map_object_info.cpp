@@ -39,7 +39,7 @@ namespace
     //
     // All object information is based on The Price of Loyalty expansion of the original game since
     // the fheroes2 Editor requires to have resources from the expansion.
-    std::array<std::vector<Maps::ObjectInfo>, static_cast<size_t>( Maps::ObjectGroup::Group_Count )> objectData;
+    std::array<std::vector<Maps::ObjectInfo>, static_cast<size_t>( Maps::ObjectGroup::GROUP_COUNT )> objectData;
 
     std::map<std::pair<MP2::ObjectIcnType, uint32_t>, std::pair<Maps::ObjectGroup, uint32_t>> icnVsObjectInfo;
 
@@ -650,27 +650,27 @@ namespace
 
         // IMPORTANT!!!
         // The order of objects must be preserved. If you want to add a new object, add it to the end of the corresponding container.
-        populateRoads( objectData[static_cast<size_t>( Maps::ObjectGroup::Roads )] );
-        populateStreams( objectData[static_cast<size_t>( Maps::ObjectGroup::Streams )] );
+        populateRoads( objectData[static_cast<size_t>( Maps::ObjectGroup::ROADS )] );
+        populateStreams( objectData[static_cast<size_t>( Maps::ObjectGroup::STREAMS )] );
 
-        populateLandscapeMountains( objectData[static_cast<size_t>( Maps::ObjectGroup::Landscape_Mountains )] );
-        populateLandscapeRocks( objectData[static_cast<size_t>( Maps::ObjectGroup::Landscape_Rocks )] );
-        populateLandscapeTrees( objectData[static_cast<size_t>( Maps::ObjectGroup::Landscape_Trees )] );
-        populateLandscapeWater( objectData[static_cast<size_t>( Maps::ObjectGroup::Landscape_Water )] );
-        populateLandscapeMiscellaneous( objectData[static_cast<size_t>( Maps::ObjectGroup::Landscape_Miscellaneous )] );
+        populateLandscapeMountains( objectData[static_cast<size_t>( Maps::ObjectGroup::LANDSCAPE_MOUNTAINS )] );
+        populateLandscapeRocks( objectData[static_cast<size_t>( Maps::ObjectGroup::LANDSCAPE_ROCKS )] );
+        populateLandscapeTrees( objectData[static_cast<size_t>( Maps::ObjectGroup::LANDSCAPE_TREES )] );
+        populateLandscapeWater( objectData[static_cast<size_t>( Maps::ObjectGroup::LANDSCAPE_WATER )] );
+        populateLandscapeMiscellaneous( objectData[static_cast<size_t>( Maps::ObjectGroup::LANDSCAPE_MISCELLANEOUS )] );
 
-        populateAdventureArtifacts( objectData[static_cast<size_t>( Maps::ObjectGroup::Adventure_Artifacts )] );
-        populateAdventureDwellings( objectData[static_cast<size_t>( Maps::ObjectGroup::Adventure_Dwellings )] );
-        populateAdventureMines( objectData[static_cast<size_t>( Maps::ObjectGroup::Adventure_Mines )] );
-        populateAdventurePowerUps( objectData[static_cast<size_t>( Maps::ObjectGroup::Adventure_Power_Ups )] );
-        populateAdventureTreasures( objectData[static_cast<size_t>( Maps::ObjectGroup::Adventure_Treasures )] );
-        populateAdventureWater( objectData[static_cast<size_t>( Maps::ObjectGroup::Adventure_Water )] );
-        populateAdventureMiscellaneous( objectData[static_cast<size_t>( Maps::ObjectGroup::Adventure_Miscellaneous )] );
+        populateAdventureArtifacts( objectData[static_cast<size_t>( Maps::ObjectGroup::ADVENTURE_ARTIFACTS )] );
+        populateAdventureDwellings( objectData[static_cast<size_t>( Maps::ObjectGroup::ADVENTURE_DWELLINGS )] );
+        populateAdventureMines( objectData[static_cast<size_t>( Maps::ObjectGroup::ADVENTURE_MINES )] );
+        populateAdventurePowerUps( objectData[static_cast<size_t>( Maps::ObjectGroup::ADVENTURE_POWER_UPS )] );
+        populateAdventureTreasures( objectData[static_cast<size_t>( Maps::ObjectGroup::ADVENTURE_TREASURES )] );
+        populateAdventureWater( objectData[static_cast<size_t>( Maps::ObjectGroup::ADVENTURE_WATER )] );
+        populateAdventureMiscellaneous( objectData[static_cast<size_t>( Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS )] );
 
-        populateKingdomHeroes( objectData[static_cast<size_t>( Maps::ObjectGroup::Kingdom_Heroes )] );
-        populateKingdomTows( objectData[static_cast<size_t>( Maps::ObjectGroup::Kingdom_Towns )] );
+        populateKingdomHeroes( objectData[static_cast<size_t>( Maps::ObjectGroup::KINGDOM_HEROES )] );
+        populateKingdomTows( objectData[static_cast<size_t>( Maps::ObjectGroup::KINGDOM_TOWNS )] );
 
-        populateMonsters( objectData[static_cast<size_t>( Maps::ObjectGroup::Monsters )] );
+        populateMonsters( objectData[static_cast<size_t>( Maps::ObjectGroup::MONSTERS )] );
 
 #if defined( WITH_DEBUG )
         // It is important to check that all data is accurately generated.
@@ -683,7 +683,7 @@ namespace
         }
 
         // Check that all landscape objects are non-action objects.
-        for ( size_t groupType = static_cast<size_t>( Maps::ObjectGroup::Roads ); groupType <= static_cast<size_t>( Maps::ObjectGroup::Landscape_Miscellaneous );
+        for ( size_t groupType = static_cast<size_t>( Maps::ObjectGroup::ROADS ); groupType <= static_cast<size_t>( Maps::ObjectGroup::LANDSCAPE_MISCELLANEOUS );
               ++groupType ) {
             const auto & objects = objectData[groupType];
 
@@ -693,7 +693,7 @@ namespace
         }
 
         // Check that all other objects are action objects.
-        for ( size_t groupType = static_cast<size_t>( Maps::ObjectGroup::Adventure_Artifacts ); groupType < static_cast<size_t>( Maps::ObjectGroup::Group_Count );
+        for ( size_t groupType = static_cast<size_t>( Maps::ObjectGroup::ADVENTURE_ARTIFACTS ); groupType < static_cast<size_t>( Maps::ObjectGroup::GROUP_COUNT );
               ++groupType ) {
             const auto & objects = objectData[groupType];
 
@@ -725,7 +725,7 @@ namespace Maps
 {
     const std::vector<ObjectInfo> & getObjectsByGroup( const ObjectGroup group )
     {
-        assert( group != ObjectGroup::Group_Count );
+        assert( group != ObjectGroup::GROUP_COUNT );
 
         populateObjectData();
 
