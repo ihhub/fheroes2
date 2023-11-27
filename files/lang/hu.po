@@ -3815,7 +3815,7 @@ msgid "difficulty|Impossible"
 msgstr "Lehetetlen"
 
 msgid "and more..."
-msgstr "és egyebek ..."
+msgstr "és egyebek..."
 
 msgid "Easy"
 msgstr "Könnyű"
@@ -7926,9 +7926,8 @@ msgstr[1] "Varázskert"
 msgid "Observation Tower"
 msgstr "Kilátótorony"
 
-#, fuzzy
 msgid "Freeman's Foundry"
-msgstr "Öntőde Műhely"
+msgstr "Öntőde"
 
 msgid "Reefs"
 msgstr "Zátonyok"
