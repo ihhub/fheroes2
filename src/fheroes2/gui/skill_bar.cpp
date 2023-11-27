@@ -28,7 +28,6 @@
 #include "dialog_selectitems.h"
 #include "heroes.h"
 #include "icn.h"
-#include "logging.h"
 #include "screen.h"
 #include "skill.h"
 #include "tools.h"
@@ -251,7 +250,7 @@ void SecondarySkillsBar::RedrawItem( Skill::Secondary & skill, const fheroes2::R
         if ( text.width() == 76 ) {
             fheroes2::Image leftBorder( 1, 34 );
             leftBorder.reset();
-            fheroes2::DrawLine( leftBorder, fheroes2::Point( 0, 0 ), fheroes2::Point( 0, 33 ), fheroes2::GetColorId( 0xD0, 0xC0, 0x48 ) );
+            fheroes2::DrawLine( leftBorder, fheroes2::Point( 0, 0 ), fheroes2::Point( 0, 33 ), fheroes2::GetColorId( 0xE4, 0xC8, 0x14 ) );
             fheroes2::Blit( leftBorder, 0, 0, dstsf, pos.x - 1, pos.y + 1, leftBorder.width(), leftBorder.height() );
         }
 
