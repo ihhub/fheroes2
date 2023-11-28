@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-09 03:47+0000\n"
+"POT-Creation-Date: 2023-11-27 00:58+0000\n"
 "PO-Revision-Date: 2022-12-03 04:36+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <it@li.org>\n"
@@ -172,6 +172,9 @@ msgid "VIEW INTRO"
 msgstr ""
 
 msgid "MIN"
+msgstr ""
+
+msgid "RESET"
 msgstr ""
 
 msgid ""
@@ -891,14 +894,9 @@ msgstr "Scegli Potere"
 msgid "Set Knowledge Skill"
 msgstr "Scegli Sapere"
 
-msgid "%{race1} %{name1}"
-msgstr ""
-
-msgid "vs"
-msgstr "contro"
-
-msgid "%{race2} %{name2}"
-msgstr ""
+#, fuzzy
+msgid "%{race1} %{name1} vs %{race2} %{name2}"
+msgstr "%{name1} incontra %{name2}"
 
 msgid "Monsters"
 msgstr "Mostri"
@@ -2888,6 +2886,16 @@ msgstr ""
 msgid "Show extra information such as FPS and current time."
 msgstr ""
 
+msgid "Hotkey: "
+msgstr ""
+
+msgid "Category: "
+msgstr ""
+
+#, fuzzy
+msgid "Event: "
+msgstr "Evento"
+
 msgid "Hot Keys:"
 msgstr ""
 
@@ -3180,6 +3188,10 @@ msgstr "Accetta la scelta."
 msgid "%{color} %{race} hero"
 msgstr "Giocatore %{color}"
 
+#, fuzzy
+msgid "Terrain object"
+msgstr "Nessun oggetto"
+
 msgid "Select Skill:"
 msgstr "Scegli dote:"
 
@@ -3198,6 +3210,10 @@ msgstr "Scegli eroe:"
 #, fuzzy
 msgid "Select Treasure:"
 msgstr "Scegli eroe:"
+
+#, fuzzy
+msgid "Select Ocean Object:"
+msgstr "Scegli artefatto:"
 
 #, fuzzy
 msgid "Map Type:\n"
@@ -3509,6 +3525,9 @@ msgstr ""
 msgid "Monster"
 msgstr "Mostro"
 
+msgid "Objects cannot be placed outside the map."
+msgstr ""
+
 msgid "Monsters cannot be placed on water."
 msgstr ""
 
@@ -3531,6 +3550,13 @@ msgid "Artifacts"
 msgstr "Artefatti"
 
 msgid "Artifacts cannot be placed on water."
+msgstr ""
+
+#, fuzzy
+msgid "Ocean object"
+msgstr "Nessun oggetto"
+
+msgid "Ocean object must be placed on water."
 msgstr ""
 
 msgid "Ocean Objects"
@@ -4420,6 +4446,32 @@ msgid ""
 "place only on the next turn."
 msgstr ""
 
+msgid "Default Actions"
+msgstr ""
+
+msgid "Global Actions"
+msgstr ""
+
+msgid "Main Menu"
+msgstr ""
+
+msgid "World Map"
+msgstr "Mappa mondiale"
+
+#, fuzzy
+msgid "Battle Screen"
+msgstr "Schermata Eroe"
+
+#, fuzzy
+msgid "Town Screen"
+msgstr "Schermata Eroe"
+
+msgid "Army Actions"
+msgstr ""
+
+msgid "Editor"
+msgstr ""
+
 #, fuzzy
 msgid "The save file is corrupted."
 msgstr "Non esistono punti di salvataggio da caricare."
@@ -4521,9 +4573,6 @@ msgid ""
 " menu. \n"
 "\n"
 "Enjoy the game!"
-msgstr ""
-
-msgid "Editor"
 msgstr ""
 
 #, fuzzy
@@ -5043,9 +5092,6 @@ msgstr "Riprova su terreno sgombro."
 
 msgid "A miniature view of the known world. Left click to move viewing area."
 msgstr ""
-
-msgid "World Map"
-msgstr "Mappa mondiale"
 
 msgid "Month: %{month} Week: %{week}"
 msgstr "Mese: %{month} Settimana: %{week}"
@@ -10060,3 +10106,6 @@ msgstr ""
 "Scopri l'ultima versione del gioco su\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "vs"
+#~ msgstr "contro"

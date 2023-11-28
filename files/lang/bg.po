@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-09 03:47+0000\n"
+"POT-Creation-Date: 2023-11-27 00:58+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -193,6 +193,9 @@ msgstr "ВИЖ ИНТРО"
 
 msgid "MIN"
 msgstr "МИН"
+
+msgid "RESET"
+msgstr ""
 
 msgid ""
 "D\n"
@@ -947,14 +950,9 @@ msgstr "Задайте умение за сила"
 msgid "Set Knowledge Skill"
 msgstr "Задайте умение за знание"
 
-msgid "%{race1} %{name1}"
-msgstr "%{race1} %{name1}"
-
-msgid "vs"
-msgstr "срещу"
-
-msgid "%{race2} %{name2}"
-msgstr "%{race2} %{name2}"
+#, fuzzy
+msgid "%{race1} %{name1} vs %{race2} %{name2}"
+msgstr "%{name1} среща %{name2}"
 
 msgid "Monsters"
 msgstr "Чудовища"
@@ -3036,6 +3034,16 @@ msgstr ""
 msgid "Show extra information such as FPS and current time."
 msgstr "Показване на допълнителна информация като FPS и текущо време."
 
+msgid "Hotkey: "
+msgstr ""
+
+msgid "Category: "
+msgstr ""
+
+#, fuzzy
+msgid "Event: "
+msgstr "Събитие"
+
 msgid "Hot Keys:"
 msgstr "Бързи клавиши:"
 
@@ -3324,6 +3332,10 @@ msgstr "Приемете направения избор."
 msgid "%{color} %{race} hero"
 msgstr "%{color} играч"
 
+#, fuzzy
+msgid "Terrain object"
+msgstr "Режим терен"
+
 msgid "Select Skill:"
 msgstr "Избери умение:"
 
@@ -3342,6 +3354,10 @@ msgstr "Избери герой:"
 #, fuzzy
 msgid "Select Treasure:"
 msgstr "Избери герой:"
+
+#, fuzzy
+msgid "Select Ocean Object:"
+msgstr "Океански обекти"
 
 msgid "Map Type:\n"
 msgstr "Тип на карта:\n"
@@ -3650,6 +3666,10 @@ msgstr "Излез от редактора на карти."
 msgid "Monster"
 msgstr "Чудовище"
 
+#, fuzzy
+msgid "Objects cannot be placed outside the map."
+msgstr "Това заклинание не може да се направи на кораб."
+
 msgid "Monsters cannot be placed on water."
 msgstr ""
 
@@ -3674,6 +3694,14 @@ msgstr "Артефакти"
 
 #, fuzzy
 msgid "Artifacts cannot be placed on water."
+msgstr "Това заклинание не може да се направи на кораб."
+
+#, fuzzy
+msgid "Ocean object"
+msgstr "Океански обекти"
+
+#, fuzzy
+msgid "Ocean object must be placed on water."
 msgstr "Това заклинание не може да се направи на кораб."
 
 msgid "Ocean Objects"
@@ -4562,6 +4590,33 @@ msgid ""
 "place only on the next turn."
 msgstr "Искаш ли да си върнеш контрола от ИИ? Ще има ефектът на следващия ход."
 
+#, fuzzy
+msgid "Default Actions"
+msgstr "действие по подразбиране"
+
+msgid "Global Actions"
+msgstr ""
+
+msgid "Main Menu"
+msgstr ""
+
+msgid "World Map"
+msgstr "Карта на света"
+
+#, fuzzy
+msgid "Battle Screen"
+msgstr "Екран на героя"
+
+#, fuzzy
+msgid "Town Screen"
+msgstr "Екран на героя"
+
+msgid "Army Actions"
+msgstr ""
+
+msgid "Editor"
+msgstr ""
+
 msgid "The save file is corrupted."
 msgstr "Запазеният файл е повреден."
 
@@ -4670,9 +4725,6 @@ msgid ""
 " menu. \n"
 "\n"
 "Enjoy the game!"
-msgstr ""
-
-msgid "Editor"
 msgstr ""
 
 #, fuzzy
@@ -5241,9 +5293,6 @@ msgid "A miniature view of the known world. Left click to move viewing area."
 msgstr ""
 "Миниатюрен изглед на познатия свят. Кликни с левия бутон, за да преместиш "
 "зоната за преглед."
-
-msgid "World Map"
-msgstr "Карта на света"
 
 msgid "Month: %{month} Week: %{week}"
 msgstr "Месец: %{month} Седмица: %{week}"
@@ -10973,3 +11022,12 @@ msgstr ""
 "Проверете най-новата версия на играта на\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "%{race1} %{name1}"
+#~ msgstr "%{race1} %{name1}"
+
+#~ msgid "vs"
+#~ msgstr "срещу"
+
+#~ msgid "%{race2} %{name2}"
+#~ msgstr "%{race2} %{name2}"

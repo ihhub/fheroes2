@@ -165,10 +165,11 @@ namespace fheroes2
 
             const int32_t stepY = verticalSpriteCopyHeight - transitionSize;
             const int32_t fromOffsetY = borderEdgeOffset + transitionSize;
-            const int32_t copyHeight = std::min( verticalSpriteCopyHeight, _windowArea.height - borderEdgeOffset - toOffsetY );
-            const int32_t toY = _windowArea.y + toOffsetY;
 
             for ( int32_t i = 0; i < verticalSpriteCopies; ++i ) {
+                const int32_t copyHeight = std::min( verticalSpriteCopyHeight, _windowArea.height - borderEdgeOffset - toOffsetY );
+                const int32_t toY = _windowArea.y + toOffsetY;
+
                 Blit( verticalSprite, 0, fromOffsetY, _output, _windowArea.x, toY, cornerSize, copyHeight );
                 Blit( verticalSprite, rightCornerSpriteOffsetX, fromOffsetY, _output, rightCornerOffsetX, toY, cornerSize, copyHeight );
 
@@ -221,10 +222,11 @@ namespace fheroes2
 
             const int32_t stepX = horizontalSpriteCopyWidth - transitionSize;
             const int32_t fromOffsetX = horizontalSpriteCopyStartX + transitionSize;
-            const int32_t copyWidth = std::min( horizontalSpriteCopyWidth, _windowArea.width - borderEdgeOffset - toOffsetX );
-            const int32_t toX = _windowArea.x + toOffsetX;
 
             for ( int32_t i = 0; i < horizontalSpriteCopies; ++i ) {
+                const int32_t copyWidth = std::min( horizontalSpriteCopyWidth, _windowArea.width - borderEdgeOffset - toOffsetX );
+                const int32_t toX = _windowArea.x + toOffsetX;
+
                 Blit( horizontalSprite, fromOffsetX, 0, _output, toX, _windowArea.y, copyWidth, cornerSize );
                 Blit( horizontalSprite, fromOffsetX, bottomBorderSpriteOffsetY, _output, toX, bottomCornerOffsetY, copyWidth, cornerSize );
 

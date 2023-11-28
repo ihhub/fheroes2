@@ -626,6 +626,31 @@ namespace
         }
     };
 
+    class OceanObjectTypeSelection : public ObjectTypeSelection
+    {
+    public:
+        OceanObjectTypeSelection( const std::vector<Maps::ObjectInfo> & objectInfo, const fheroes2::Size & size, std::string title )
+            : ObjectTypeSelection( objectInfo, size, std::move( title ), 3 * 32 / 2, 3 * 32 + 10, 2 * 32 + 24 )
+        {
+            // Do nothing.
+        }
+
+    private:
+        void showPopupWindow( const Maps::ObjectInfo & info ) override
+        {
+            fheroes2::showStandardTextMessage( getObjectName( info ), "", Dialog::ZERO );
+        }
+
+        std::string getObjectName( const Maps::ObjectInfo & info ) override
+        {
+            if ( info.objectType == MP2::OBJ_NONE ) {
+                return _( "Terrain object" );
+            }
+
+            return MP2::StringObject( info.objectType );
+        }
+    };
+
     int selectObjectType( const int objectType, const size_t objectCount, ObjectTypeSelection & objectSelection )
     {
         std::vector<int> objects( objectCount, 0 );
@@ -791,7 +816,7 @@ int Dialog::selectHeroes( const int heroId /* = Heroes::UNKNOWN */ )
 
 int Dialog::selectHeroType( const int heroType )
 {
-    const auto & objectInfo = Maps::getObjectsByGroup( Maps::ObjectGroup::Hero );
+    const auto & objectInfo = Maps::getObjectsByGroup( Maps::ObjectGroup::KINGDOM_HEROES );
     HeroTypeSelection listbox( objectInfo, { 350, fheroes2::Display::instance().height() - 200 }, _( "Select Hero:" ) );
 
     return selectObjectType( heroType, objectInfo.size(), listbox );
@@ -799,7 +824,7 @@ int Dialog::selectHeroType( const int heroType )
 
 int Dialog::selectMonsterType( const int monsterType )
 {
-    const auto & objectInfo = Maps::getObjectsByGroup( Maps::ObjectGroup::Monster );
+    const auto & objectInfo = Maps::getObjectsByGroup( Maps::ObjectGroup::MONSTERS );
 
     MonsterTypeSelection listbox( objectInfo, { 350, fheroes2::Display::instance().height() - 200 }, _( "Select Monster:" ) );
 
@@ -808,7 +833,7 @@ int Dialog::selectMonsterType( const int monsterType )
 
 int Dialog::selectArtifactType( const int artifactType )
 {
-    const auto & objectInfo = Maps::getObjectsByGroup( Maps::ObjectGroup::Artifact );
+    const auto & objectInfo = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_ARTIFACTS );
 
     ArtifactTypeSelection listbox( objectInfo, { 350, fheroes2::Display::instance().height() - 200 }, _( "Select Artifact:" ) );
 
@@ -817,9 +842,18 @@ int Dialog::selectArtifactType( const int artifactType )
 
 int Dialog::selectTreasureType( const int resourceType )
 {
-    const auto & objectInfo = Maps::getObjectsByGroup( Maps::ObjectGroup::Treasure );
+    const auto & objectInfo = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_TREASURES );
 
     TreasureTypeSelection listbox( objectInfo, { 350, fheroes2::Display::instance().height() - 200 }, _( "Select Treasure:" ) );
+
+    return selectObjectType( resourceType, objectInfo.size(), listbox );
+}
+
+int Dialog::selectOceanObjectType( const int resourceType )
+{
+    const auto & objectInfo = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_WATER );
+
+    OceanObjectTypeSelection listbox( objectInfo, { 350, fheroes2::Display::instance().height() - 200 }, _( "Select Ocean Object:" ) );
 
     return selectObjectType( resourceType, objectInfo.size(), listbox );
 }

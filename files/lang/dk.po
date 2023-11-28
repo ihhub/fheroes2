@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-09 03:47+0000\n"
+"POT-Creation-Date: 2023-11-27 00:58+0000\n"
 "PO-Revision-Date: 2023-09-12 11:08+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
@@ -193,6 +193,9 @@ msgstr "VIS INTRO"
 
 msgid "MIN"
 msgstr "MIN"
+
+msgid "RESET"
+msgstr ""
 
 msgid ""
 "D\n"
@@ -938,14 +941,9 @@ msgstr "Indstil magisk evne"
 msgid "Set Knowledge Skill"
 msgstr "Indstil kundskabsevne"
 
-msgid "%{race1} %{name1}"
-msgstr "%{race1} %{name1}"
-
-msgid "vs"
-msgstr "vs"
-
-msgid "%{race2} %{name2}"
-msgstr "%{race2} %{name2}"
+#, fuzzy
+msgid "%{race1} %{name1} vs %{race2} %{name2}"
+msgstr "%{name1} møder %{name2}"
 
 msgid "Monsters"
 msgstr "Monstre"
@@ -3062,6 +3060,16 @@ msgstr ""
 msgid "Show extra information such as FPS and current time."
 msgstr "Vis flere informationer som billeder i sekundet (FPS) og klokkeslæt."
 
+msgid "Hotkey: "
+msgstr ""
+
+msgid "Category: "
+msgstr ""
+
+#, fuzzy
+msgid "Event: "
+msgstr "Begivenhed"
+
 msgid "Hot Keys:"
 msgstr "Genvejstaster:"
 
@@ -3350,6 +3358,10 @@ msgstr "Acceptér de trufne valg."
 msgid "%{color} %{race} hero"
 msgstr "%{color} spiller"
 
+#, fuzzy
+msgid "Terrain object"
+msgstr "Terræn-tilstand"
+
 msgid "Select Skill:"
 msgstr "Vælg evne:"
 
@@ -3368,6 +3380,10 @@ msgstr "Vælg helt:"
 #, fuzzy
 msgid "Select Treasure:"
 msgstr "Vælg helt:"
+
+#, fuzzy
+msgid "Select Ocean Object:"
+msgstr "Hav-objekter"
 
 msgid "Map Type:\n"
 msgstr "Korttype:\n"
@@ -3675,6 +3691,10 @@ msgstr "Forlad korteditoren."
 msgid "Monster"
 msgstr "Væsen"
 
+#, fuzzy
+msgid "Objects cannot be placed outside the map."
+msgstr "Denne besværgelse kan ikke kastes ombord på et skib."
+
 msgid "Monsters cannot be placed on water."
 msgstr ""
 
@@ -3699,6 +3719,14 @@ msgstr "Artefakter"
 
 #, fuzzy
 msgid "Artifacts cannot be placed on water."
+msgstr "Denne besværgelse kan ikke kastes ombord på et skib."
+
+#, fuzzy
+msgid "Ocean object"
+msgstr "Hav-objekter"
+
+#, fuzzy
+msgid "Ocean object must be placed on water."
 msgstr "Denne besværgelse kan ikke kastes ombord på et skib."
 
 msgid "Ocean Objects"
@@ -4586,6 +4614,33 @@ msgstr ""
 "Vil du lade AI'en overtage kontrollen? Effekten vil først træde i kraft "
 "under næste tur."
 
+#, fuzzy
+msgid "Default Actions"
+msgstr "Standardhandling"
+
+msgid "Global Actions"
+msgstr ""
+
+msgid "Main Menu"
+msgstr ""
+
+msgid "World Map"
+msgstr "Verdenskort"
+
+#, fuzzy
+msgid "Battle Screen"
+msgstr "Helteskærm"
+
+#, fuzzy
+msgid "Town Screen"
+msgstr "Helteskærm"
+
+msgid "Army Actions"
+msgstr ""
+
+msgid "Editor"
+msgstr ""
+
 msgid "The save file is corrupted."
 msgstr "Det gemte spil er korrupt."
 
@@ -4692,9 +4747,6 @@ msgid ""
 " menu. \n"
 "\n"
 "Enjoy the game!"
-msgstr ""
-
-msgid "Editor"
 msgstr ""
 
 #, fuzzy
@@ -5266,9 +5318,6 @@ msgid "A miniature view of the known world. Left click to move viewing area."
 msgstr ""
 "Et miniaturebillede af den kendte verden. Venstre klik for at flytte "
 "visningsområde."
-
-msgid "World Map"
-msgstr "Verdenskort"
 
 msgid "Month: %{month} Week: %{week}"
 msgstr "Måned: %{month} Uge: %{week}"
@@ -11050,3 +11099,12 @@ msgstr ""
 "Check den nyeste version af spillet på\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "%{race1} %{name1}"
+#~ msgstr "%{race1} %{name1}"
+
+#~ msgid "vs"
+#~ msgstr "vs"
+
+#~ msgid "%{race2} %{name2}"
+#~ msgstr "%{race2} %{name2}"

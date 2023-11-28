@@ -37,6 +37,49 @@
     <control>touch</control>
   </recommends>
   <releases>
+    <release date="2023-11-18" version="v1.0.10">
+      <url>https://github.com/ihhub/fheroes2/releases/tag/1.0.10</url>
+      <description>
+        <p>Changes in v1.0.10 (18 November 2023):</p>
+        <ul>
+          <li>update Russian translation</li>
+          <li>rework Town Portal dialog</li>
+          <li>add artifact placement in the Editor</li>
+          <li>make Oracle dialog use selected interface mode (Good/Evil)</li>
+          <li>add treasure placement in the Editor</li>
+          <li>update hero status after digging on the Adventure Map</li>
+          <li>fix player names overlapping in Oracle and Thieves' Guild dialogs</li>
+          <li>fix dialog frames not being consistent for the same size windows</li>
+          <li>speed up monochrome cursors loading</li>
+          <li>fix rendering issue in Kingdom Overview dialog while dismissing a hero</li>
+          <li>fix castle and hero lists' updates after dismissing a hero in Kingdom Overview dialog</li>
+          <li>fix invalid attack positions from moat during battle</li>
+          <li>add support for right SHIFT, CTRL and ALT hotkeys</li>
+          <li>AI takes into account the spell immunity when calculating the effectiveness of mass damage spells</li>
+          <li>update Hungarian translation</li>
+          <li>fix incorrect AI estimation for moves during battle when a battlefield contains objects</li>
+          <li>update Vietnamese translation</li>
+          <li>fix several issues with loading ICN resources</li>
+          <li>add support for the future new heroes</li>
+          <li>fix the logic of purchasing a boat in a shipyard</li>
+          <li>increase the priority of those enemy units that have not yet got their turn, for proper AI decision making</li>
+          <li>add hero action button image</li>
+          <li>fix spelling in campaign text</li>
+          <li>display 0 shots during battle for archers with no shots left</li>
+          <li>fix random generator in normal and auto-combat modes</li>
+          <li>fix castle dialog rendering issues</li>
+          <li>adjust welcome window text at the first game launch</li>
+          <li>teach AI to use the marketplace to accelerate the development of their castles</li>
+          <li>update German translation</li>
+          <li>implement erase tool in the Editor</li>
+          <li>fix recruit dialog's MIN/MAX buttons when switching between creature upgrades</li>
+          <li>update Swedish translation</li>
+          <li>show proper Quick Info window for a hero during battle</li>
+          <li>fix troops' sprites overlapping in quick info</li>
+          <li>prioritize hiring those heroes whose portraits are not used by scenario specific heroes</li>
+        </ul>
+      </description>
+    </release>
     <release date="2023-10-11" version="v1.0.9">
       <url>https://github.com/ihhub/fheroes2/releases/tag/1.0.9</url>
       <description>

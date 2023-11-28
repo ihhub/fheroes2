@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-09 03:47+0000\n"
+"POT-Creation-Date: 2023-11-27 00:58+0000\n"
 "PO-Revision-Date: 2023-06-27 18:17+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -179,6 +179,9 @@ msgstr ""
 
 msgid "MIN"
 msgstr "MIN"
+
+msgid "RESET"
+msgstr ""
 
 msgid ""
 "D\n"
@@ -940,14 +943,7 @@ msgid "Set Knowledge Skill"
 msgstr "Conocimiento"
 
 #, fuzzy
-msgid "%{race1} %{name1}"
-msgstr "%{name1} se reune con %{name2}"
-
-msgid "vs"
-msgstr ""
-
-#, fuzzy
-msgid "%{race2} %{name2}"
+msgid "%{race1} %{name1} vs %{race2} %{name2}"
 msgstr "%{name1} se reune con %{name2}"
 
 #, fuzzy
@@ -3006,6 +3002,15 @@ msgstr ""
 msgid "Show extra information such as FPS and current time."
 msgstr "Muestra información adicional como FPS y la hora actual."
 
+msgid "Hotkey: "
+msgstr ""
+
+msgid "Category: "
+msgstr ""
+
+msgid "Event: "
+msgstr ""
+
 msgid "Hot Keys:"
 msgstr "Atajos de Teclado:"
 
@@ -3302,6 +3307,9 @@ msgstr "Aceptar la elección realizada."
 msgid "%{color} %{race} hero"
 msgstr "%{color} jugador"
 
+msgid "Terrain object"
+msgstr ""
+
 #, fuzzy
 msgid "Select Skill:"
 msgstr "Defensa"
@@ -3325,6 +3333,10 @@ msgstr "Mejor héroe:"
 #, fuzzy
 msgid "Select Treasure:"
 msgstr "Mejor héroe:"
+
+#, fuzzy
+msgid "Select Ocean Object:"
+msgstr "Artefactos"
 
 #, fuzzy
 msgid "Map Type:\n"
@@ -3638,6 +3650,10 @@ msgstr ""
 msgid "Monster"
 msgstr "Monstruo"
 
+#, fuzzy
+msgid "Objects cannot be placed outside the map."
+msgstr "Este pueblo no se puede actualizar a castillo."
+
 msgid "Monsters cannot be placed on water."
 msgstr ""
 
@@ -3662,6 +3678,14 @@ msgstr "Artefactos"
 
 #, fuzzy
 msgid "Artifacts cannot be placed on water."
+msgstr "Este pueblo no se puede actualizar a castillo."
+
+#, fuzzy
+msgid "Ocean object"
+msgstr "Paraje baldio"
+
+#, fuzzy
+msgid "Ocean object must be placed on water."
 msgstr "Este pueblo no se puede actualizar a castillo."
 
 msgid "Ocean Objects"
@@ -4565,6 +4589,32 @@ msgid ""
 "place only on the next turn."
 msgstr ""
 
+msgid "Default Actions"
+msgstr ""
+
+msgid "Global Actions"
+msgstr ""
+
+msgid "Main Menu"
+msgstr ""
+
+msgid "World Map"
+msgstr "Mapa del mundo"
+
+#, fuzzy
+msgid "Battle Screen"
+msgstr "Pantalla de Héroe"
+
+#, fuzzy
+msgid "Town Screen"
+msgstr "Pantalla de Héroe"
+
+msgid "Army Actions"
+msgstr ""
+
+msgid "Editor"
+msgstr ""
+
 #, fuzzy
 msgid "The save file is corrupted."
 msgstr "Reflejo creado."
@@ -4667,9 +4717,6 @@ msgid ""
 " menu. \n"
 "\n"
 "Enjoy the game!"
-msgstr ""
-
-msgid "Editor"
 msgstr ""
 
 msgid "The Editor requires \"The Price of Loyalty\" expansion files to work."
@@ -5246,9 +5293,6 @@ msgid "A miniature view of the known world. Left click to move viewing area."
 msgstr ""
 "Una vista en minatura del mundo explorado. Cliquea con el botón izquierdo "
 "para ver dicha área."
-
-msgid "World Map"
-msgstr "Mapa del mundo"
 
 msgid "Month: %{month} Week: %{week}"
 msgstr "Mes: %{month} Semana: %{week}"
@@ -10801,3 +10845,11 @@ msgstr ""
 "Puedes descargar la última versión del juego desde el sítio:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#, fuzzy
+#~ msgid "%{race1} %{name1}"
+#~ msgstr "%{name1} se reune con %{name2}"
+
+#, fuzzy
+#~ msgid "%{race2} %{name2}"
+#~ msgstr "%{name1} se reune con %{name2}"
