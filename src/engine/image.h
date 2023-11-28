@@ -147,7 +147,7 @@ namespace fheroes2
 
         ImageRestorer( const ImageRestorer & ) = delete;
 
-        // Restorers the original image if necessary, see the implementation for details
+        // Restores the original image if necessary, see the implementation for details
         ~ImageRestorer();
 
         void update( const int32_t x_, const int32_t y_, const int32_t width, const int32_t height );
