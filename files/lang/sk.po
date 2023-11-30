@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-26 00:36+0000\n"
+"POT-Creation-Date: 2023-11-27 00:58+0000\n"
 "PO-Revision-Date: 2023-09-11 20:22+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3002,6 +3002,16 @@ msgstr ""
 msgid "Show extra information such as FPS and current time."
 msgstr "Ukáž informácie navyše ako FPS a momentálny čas."
 
+msgid "Hotkey: "
+msgstr ""
+
+msgid "Category: "
+msgstr ""
+
+#, fuzzy
+msgid "Event: "
+msgstr "Udalosť"
+
 msgid "Hot Keys:"
 msgstr "Skratky:"
 
@@ -4531,6 +4541,33 @@ msgstr ""
 "Chceš preniesť kontrolu z teba na umelú inteligenciu? Účinok sa prejaví až "
 "od ďalšieho kola."
 
+#, fuzzy
+msgid "Default Actions"
+msgstr "predvolená činnosť"
+
+msgid "Global Actions"
+msgstr ""
+
+msgid "Main Menu"
+msgstr ""
+
+msgid "World Map"
+msgstr "Mapa sveta"
+
+#, fuzzy
+msgid "Battle Screen"
+msgstr "Okno hrdinu"
+
+#, fuzzy
+msgid "Town Screen"
+msgstr "Okno hrdinu"
+
+msgid "Army Actions"
+msgstr ""
+
+msgid "Editor"
+msgstr ""
+
 msgid "The save file is corrupted."
 msgstr "Uložený súbor je poškodený."
 
@@ -4636,9 +4673,6 @@ msgid ""
 " menu. \n"
 "\n"
 "Enjoy the game!"
-msgstr ""
-
-msgid "Editor"
 msgstr ""
 
 #, fuzzy
@@ -5197,9 +5231,6 @@ msgid "A miniature view of the known world. Left click to move viewing area."
 msgstr ""
 "Miniatúrny pohľad na známy svet. Kliknutím ľavým tlačidlom myši presunieš "
 "oblasť zobrazenia."
-
-msgid "World Map"
-msgstr "Mapa sveta"
 
 msgid "Month: %{month} Week: %{week}"
 msgstr "Mesiac: %{month} Týždeň: %{week}"

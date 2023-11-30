@@ -255,8 +255,7 @@ namespace Editor
             if ( le.MouseClickLeft( scratchMap.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::EDITOR_FROM_SCRATCH_MAP_MENU ) ) {
                 const Maps::mapsize_t mapSize = selectMapSize();
                 if ( mapSize != Maps::ZERO ) {
-                    // TODO: Put this call to the 'world' instance to a separate '.cpp' file were will be all map editing functions.
-                    world.NewMaps( mapSize, mapSize );
+                    world.generateForEditor( mapSize );
 
                     fheroes2::fadeOutDisplay();
                     Game::setDisplayFadeIn();

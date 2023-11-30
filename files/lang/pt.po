@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-26 00:36+0000\n"
+"POT-Creation-Date: 2023-11-27 00:58+0000\n"
 "PO-Revision-Date: 2022-10-25 08:56+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
@@ -2938,6 +2938,15 @@ msgstr ""
 msgid "Show extra information such as FPS and current time."
 msgstr ""
 
+msgid "Hotkey: "
+msgstr ""
+
+msgid "Category: "
+msgstr ""
+
+msgid "Event: "
+msgstr ""
+
 msgid "Hot Keys:"
 msgstr ""
 
@@ -4519,6 +4528,32 @@ msgid ""
 "place only on the next turn."
 msgstr ""
 
+msgid "Default Actions"
+msgstr ""
+
+msgid "Global Actions"
+msgstr ""
+
+msgid "Main Menu"
+msgstr ""
+
+msgid "World Map"
+msgstr "Mapa-Múndi"
+
+#, fuzzy
+msgid "Battle Screen"
+msgstr "Tela do herói"
+
+#, fuzzy
+msgid "Town Screen"
+msgstr "Tela do herói"
+
+msgid "Army Actions"
+msgstr ""
+
+msgid "Editor"
+msgstr ""
+
 #, fuzzy
 msgid "The save file is corrupted."
 msgstr "A imagem no espelho está criada."
@@ -4617,9 +4652,6 @@ msgid ""
 " menu. \n"
 "\n"
 "Enjoy the game!"
-msgstr ""
-
-msgid "Editor"
 msgstr ""
 
 msgid "The Editor requires \"The Price of Loyalty\" expansion files to work."
@@ -5180,9 +5212,6 @@ msgid "A miniature view of the known world. Left click to move viewing area."
 msgstr ""
 "Uma visão em miniatura do mundo conhecido. Clique o botao esquerdo para "
 "mover área de visualização."
-
-msgid "World Map"
-msgstr "Mapa-Múndi"
 
 msgid "Month: %{month} Week: %{week}"
 msgstr "Mês: %{month} Semana: %{week}"

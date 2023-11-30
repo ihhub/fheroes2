@@ -161,7 +161,7 @@ public:
     // Generate 2x2 map for Battle Only mode.
     void generateBattleOnlyMap();
 
-    void NewMaps( int32_t sw, int32_t sh );
+    void generateForEditor( const int32_t size );
 
     static World & Get();
 
