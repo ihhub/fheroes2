@@ -192,7 +192,7 @@ namespace fheroes2
     private:
         bool _isFullScreen;
 
-        int _displayId{ 0 };
+        int _displayId;
 
         bool _nearestScaling;
     };
