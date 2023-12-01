@@ -35,6 +35,9 @@ namespace fheroes2
     class Cursor;
     class Display;
 
+    int getNumberOfVideoDisplays();
+    const char * getDisplayName( const int display );
+
     struct ResolutionInfo
     {
         ResolutionInfo() = default;

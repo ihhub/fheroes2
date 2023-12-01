@@ -1475,4 +1475,15 @@ namespace fheroes2
     {
         return *( Display::instance()._cursor );
     }
+
+    int getNumberOfVideoDisplays()
+    {
+        return SDL_GetNumVideoDisplays();
+    }
+
+    const char * getDisplayName( const int display )
+    {
+        return SDL_GetDisplayName( display );
+    }
+
 }
