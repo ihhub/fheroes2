@@ -249,7 +249,7 @@ public:
     void setHideInterface( const bool enable );
     void setEvilInterface( const bool enable );
     void setScreenScalingTypeNearest( const bool enable );
-    void setDisplayMonitor( int monitor );
+    void setDisplayId( int monitor );
     void SetSoundVolume( int v );
     void SetMusicVolume( int v );
 
@@ -260,9 +260,9 @@ public:
 
     bool setGameLanguage( const std::string & language );
 
-    int DisplayMonitor() const
+    int getDisplayId() const
     {
-        return _displayMonitor;
+        return _displayId;
     }
 
     int SoundVolume() const
@@ -448,7 +448,7 @@ private:
     BitModes _optGlobal;
 
     fheroes2::ResolutionInfo _resolutionInfo;
-    int _displayMonitor;
+    int _displayId;
 
     int game_difficulty;
 

@@ -142,14 +142,14 @@ namespace fheroes2
             return _nearestScaling;
         }
 
-        int DisplayMonitor() const
+        int getDisplayId() const
         {
-            return _displayMonitor;
+            return _displayId;
         }
 
-        void setDisplayMonitor( const int monitor )
+        void setDisplayId( const int monitor )
         {
-            _displayMonitor = monitor;
+            _displayId = monitor;
         }
 
     protected:
@@ -192,7 +192,7 @@ namespace fheroes2
     private:
         bool _isFullScreen;
 
-        int _displayMonitor{ 0 };
+        int _displayId{ 0 };
 
         bool _nearestScaling;
     };
@@ -226,14 +226,14 @@ namespace fheroes2
         // Do not call this method. It serves as a patch over the basic class.
         void resize( int32_t width_, int32_t height_ ) override;
 
-        void setDisplayMonitor( int monitor )
+        void setDisplayId( int monitor )
         {
-            _displayMonitor = monitor;
+            _displayId = monitor;
         }
 
-        int DisplayMonitor() const
+        int getDisplayId() const
         {
-            return _displayMonitor;
+            return _displayId;
         }
 
         void setResolution( ResolutionInfo info );
@@ -278,7 +278,7 @@ namespace fheroes2
         PostRenderProcessing _postprocessing;
 
         uint8_t * _renderSurface;
-        int _displayMonitor;
+        int _displayId;
 
         // Previous area drawn on the screen.
         Rect _prevRoi;

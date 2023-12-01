@@ -167,11 +167,11 @@ namespace
                     }
                 }
                 // set display monitor to first monitor available
-                display.setDisplayMonitor( 0 );
+                display.setDisplayId( 0 );
                 display.setResolution( bestResolution );
             }
             else {
-                display.setDisplayMonitor( conf.DisplayMonitor() );
+                display.setDisplayId( conf.getDisplayId() );
                 display.setResolution( conf.currentResolutionInfo() );
             }
 

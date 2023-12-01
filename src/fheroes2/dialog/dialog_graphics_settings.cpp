@@ -69,7 +69,7 @@ namespace
     void drawMonitor( const fheroes2::Rect & optionRoi )
     {
         const Settings & conf = Settings::Get();
-        fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::GAME_OPTION_ICON, 1 ), "Display Monitor", fheroes2::getDisplayName( conf.DisplayMonitor() ),
+        fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::GAME_OPTION_ICON, 1 ), "Display Monitor", fheroes2::getDisplayName( conf.getDisplayId() ),
                               fheroes2::UiOptionTextWidth::TWO_ELEMENTS_ROW );
     }
 
@@ -301,7 +301,7 @@ namespace fheroes2
                 windowType = SelectedWindow::Configuration;
                 break;
             case SelectedWindow::MonitorList:
-                conf.setDisplayMonitor( ( conf.DisplayMonitor() + 1 ) % fheroes2::getNumberOfVideoDisplays() );
+                conf.setDisplayId( ( conf.getDisplayId() + 1 ) % fheroes2::getNumberOfVideoDisplays() );
                 conf.Save( Settings::configFileName );
                 windowType = SelectedWindow::Configuration;
                 break;

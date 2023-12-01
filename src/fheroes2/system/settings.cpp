@@ -91,7 +91,7 @@ std::string Settings::GetVersion()
 
 Settings::Settings()
     : _resolutionInfo( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT )
-    , _displayMonitor( 0 )
+    , _displayId( 0 )
     , game_difficulty( Difficulty::NORMAL )
     , sound_volume( 6 )
     , music_volume( 6 )
@@ -328,7 +328,7 @@ bool Settings::Read( const std::string & filePath )
     }
 
     if ( config.Exists( "monitor" ) ) {
-        setDisplayMonitor( std::max( config.IntParams( "monitor" ), 0 ) );
+        setDisplayId( std::max( config.IntParams( "monitor" ), 0 ) );
     }
 
     return true;
@@ -483,7 +483,7 @@ std::string Settings::String() const
     }
 
     os << std::endl << "# Display Monitor for Multi-Monitor Setups (defaults to first monitor)" << std::endl;
-    os << "monitor = " << DisplayMonitor() << std::endl;
+    os << "monitor = " << getDisplayId() << std::endl;
 
     return os.str();
 }
@@ -963,9 +963,9 @@ void Settings::setDebug( int debug )
     Logging::setDebugLevel( debug );
 }
 
-void Settings::setDisplayMonitor( int monitor )
+void Settings::setDisplayId( int monitor )
 {
-    _displayMonitor = monitor;
+    _displayId = monitor;
 }
 
 void Settings::SetSoundVolume( int v )
