@@ -41,6 +41,7 @@
 #include "heroes.h"
 #include "icn.h"
 #include "logging.h"
+#include "maps_fileinfo.h"
 #include "rand.h"
 #include "serialize.h"
 #include "settings.h"

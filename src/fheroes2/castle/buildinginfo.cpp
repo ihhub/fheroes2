@@ -36,6 +36,7 @@
 #include "icn.h"
 #include "localevent.h"
 #include "m82.h"
+#include "maps_fileinfo.h"
 #include "monster.h"
 #include "pal.h"
 #include "payment.h"

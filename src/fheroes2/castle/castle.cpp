@@ -52,6 +52,7 @@
 #include "luck.h"
 #include "m82.h"
 #include "maps.h"
+#include "maps_fileinfo.h"
 #include "maps_tiles.h"
 #include "morale.h"
 #include "mp2.h"

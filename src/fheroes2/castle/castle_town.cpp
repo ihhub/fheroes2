@@ -43,6 +43,7 @@
 #include "image.h"
 #include "kingdom.h"
 #include "localevent.h"
+#include "maps_fileinfo.h"
 #include "math_base.h"
 #include "payment.h"
 #include "race.h"
