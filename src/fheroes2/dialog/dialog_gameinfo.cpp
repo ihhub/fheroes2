@@ -91,7 +91,7 @@ void Dialog::GameInfo()
 
     fheroes2::Blit( window, display, dialogOffset.x, shadowOffset.y );
 
-    fheroes2::Text text( conf.MapsName(), fheroes2::FontType::normalWhite() );
+    fheroes2::Text text( conf.getCurrentMapName(), fheroes2::FontType::normalWhite() );
     text.draw( shadowOffset.x, shadowOffset.y + 32, DIALOG_CONTENT_WIDTH, display );
 
     text.set( _( "Map\nDifficulty" ), fheroes2::FontType::smallWhite() );
@@ -106,7 +106,7 @@ void Dialog::GameInfo()
     text.set( _( "Map Size" ), fheroes2::FontType::smallWhite() );
     text.draw( shadowOffset.x + SCENARIO_MAP_SIZE_OFFSET, shadowOffset.y + 78 - text.height( SCENARIO_INFO_VALUES_BOX_WIDTH ), SCENARIO_INFO_VALUES_BOX_WIDTH, display );
 
-    text.set( Difficulty::String( conf.MapsDifficulty() ), fheroes2::FontType::smallWhite() );
+    text.set( Difficulty::String( conf.getCurrentMapDifficultyLevel() ), fheroes2::FontType::smallWhite() );
     text.draw( shadowOffset.x + SCENARIO_MAP_DIFFICULTY_OFFSET, shadowOffset.y + 84, SCENARIO_INFO_VALUES_BOX_WIDTH, display );
 
     text.set( Difficulty::String( Game::getDifficulty() ), fheroes2::FontType::smallWhite() );
@@ -118,7 +118,7 @@ void Dialog::GameInfo()
     text.set( Maps::SizeString( conf.MapsSize().width ), fheroes2::FontType::smallWhite() );
     text.draw( shadowOffset.x + SCENARIO_MAP_SIZE_OFFSET, shadowOffset.y + 84, SCENARIO_INFO_VALUES_BOX_WIDTH, display );
 
-    text.set( conf.MapsDescription(), fheroes2::FontType::smallWhite() );
+    text.set( conf.getCurrentMapDescription(), fheroes2::FontType::smallWhite() );
     text.draw( shadowOffset.x + SCENARIO_DESCRIPTION_OFFSET, shadowOffset.y + 107, SCENARIO_DESCRIPTION_WIDTH, display );
 
     text.set( _( "Opponents" ), fheroes2::FontType::smallWhite() );

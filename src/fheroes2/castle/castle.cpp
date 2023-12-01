@@ -504,8 +504,11 @@ void Castle::PostLoad()
     // remove tavern from necromancer castle
     if ( Race::NECR == race && ( building & BUILD_TAVERN ) ) {
         building &= ~BUILD_TAVERN;
-        if ( Settings::Get().isCurrentMapPriceOfLoyalty() )
+        const GameVersion version = Settings::Get().getCurrentMapInfo().version;
+
+        if ( version == GameVersion::PRICE_OF_LOYALTY || version == GameVersion::RESURRECTION ) {
             building |= BUILD_SHRINE;
+        }
     }
 
     SetModes( ALLOWBUILD );
@@ -517,7 +520,16 @@ void Castle::PostLoad()
 
 uint32_t Castle::CountBuildings() const
 {
-    const uint32_t tavern = ( race == Race::NECR ? ( Settings::Get().isCurrentMapPriceOfLoyalty() ? BUILD_SHRINE : BUILD_NOTHING ) : BUILD_TAVERN );
+    uint32_t tavern = BUILD_TAVERN;
+    if ( race == Race::NECR ) {
+        const GameVersion version = Settings::Get().getCurrentMapInfo().version;
+        if ( version == GameVersion::PRICE_OF_LOYALTY || version == GameVersion::RESURRECTION ) {
+            tavern = BUILD_SHRINE;
+        }
+        else {
+            tavern = BUILD_NOTHING;
+        }
+    }
 
     return CountBits( building
                       & ( BUILD_THIEVESGUILD | tavern | BUILD_SHIPYARD | BUILD_WELL | BUILD_STATUE | BUILD_LEFTTURRET | BUILD_RIGHTTURRET | BUILD_MARKETPLACE | BUILD_WEL2
@@ -1482,7 +1494,7 @@ int Castle::CheckBuyBuilding( const uint32_t build ) const
         }
         break;
     case BUILD_SHRINE:
-        if ( Race::NECR != GetRace() || !Settings::Get().isCurrentMapPriceOfLoyalty() ) {
+        if ( Race::NECR != GetRace() || ( Settings::Get().getCurrentMapInfo().version == GameVersion::SUCCESSION_WARS ) ) {
             return BUILD_DISABLE;
         }
         break;

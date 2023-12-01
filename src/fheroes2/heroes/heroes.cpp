@@ -2029,7 +2029,8 @@ void AllHeroes::Init()
     push_back( new Heroes( Heroes::BRAX, Race::NECR, 5000 ) );
 
     // PoL
-    if ( Settings::Get().isCurrentMapPriceOfLoyalty() ) {
+    const GameVersion version = Settings::Get().getCurrentMapInfo().version;
+    if ( version == GameVersion::PRICE_OF_LOYALTY || version == GameVersion::RESURRECTION ) {
         push_back( new Heroes( Heroes::SOLMYR, Race::WZRD, 5000 ) );
         push_back( new Heroes( Heroes::DAINWIN, Race::WRLK, 5000 ) );
         push_back( new Heroes( Heroes::MOG, Race::NECR, 5000 ) );

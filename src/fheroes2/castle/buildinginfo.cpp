@@ -284,8 +284,10 @@ BuildingInfo::BuildingInfo( const Castle & c, const building_t b )
 
     building = castle.isBuild( b ) ? castle.GetUpgradeBuilding( b ) : b;
 
-    if ( BUILD_TAVERN == building && Race::NECR == castle.GetRace() )
-        building = ( Settings::Get().isCurrentMapPriceOfLoyalty() ) ? BUILD_SHRINE : BUILD_NOTHING;
+    if ( BUILD_TAVERN == building && Race::NECR == castle.GetRace() ) {
+        const GameVersion version = Settings::Get().getCurrentMapInfo().version;
+        building = ( version == GameVersion::PRICE_OF_LOYALTY || version == GameVersion::RESURRECTION ) ? BUILD_SHRINE : BUILD_NOTHING;
+    }
 
     bcond = castle.CheckBuyBuilding( building );
 

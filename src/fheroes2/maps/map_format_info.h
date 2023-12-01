@@ -47,25 +47,52 @@ namespace Maps::Map_Format
         std::vector<ObjectInfo> objects;
     };
 
-    struct MapFormat
+    struct BaseMapFormat
     {
         // TODO: change it only once the Editor is released to public and there is a need to expand map format functionality.
         uint16_t version{ 1 };
+        bool isCampaign{ false };
+
+        uint8_t difficulty{ 0 };
+
+        uint8_t availablePlayerColors{ 0 };
+        uint8_t humanPlayerColors{ 0 };
+        uint8_t computerPlayerColors{ 0 };
+        std::vector<uint8_t> alliances;
+
+        uint8_t victoryConditionType{ 0 };
+        bool isVictoryConditionApplicableForAI{ false };
+        bool allowNormalVictory{ false };
+        std::vector<uint32_t> victoryConditionMetadata;
+
+        uint8_t lossCondition{ 0 };
+        std::vector<uint32_t> lossConditionMetadata;
 
         int32_t size{ 0 };
 
         std::string name;
         std::string description;
+    };
+
+    struct MapFormat : public BaseMapFormat
+    {
+        // This is used only for campaign maps.
+        std::vector<uint32_t> additionalInfo;
 
         std::vector<TileInfo> tiles;
     };
 
+    bool loadBaseMap( const std::string & path, BaseMapFormat & map );
+    bool loadMap( const std::string & path, MapFormat & map );
+
+    bool saveMap( const std::string & path, const MapFormat & map );
+
     StreamBase & operator<<( StreamBase & msg, const ObjectInfo & object );
     StreamBase & operator>>( StreamBase & msg, ObjectInfo & object );
-
     StreamBase & operator<<( StreamBase & msg, const TileInfo & tile );
     StreamBase & operator>>( StreamBase & msg, TileInfo & tile );
-
+    StreamBase & operator<<( StreamBase & msg, const BaseMapFormat & map );
+    StreamBase & operator>>( StreamBase & msg, BaseMapFormat & map );
     StreamBase & operator<<( StreamBase & msg, const MapFormat & map );
     StreamBase & operator>>( StreamBase & msg, MapFormat & map );
 }

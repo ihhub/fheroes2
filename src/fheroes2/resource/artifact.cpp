@@ -249,8 +249,10 @@ int Artifact::Level() const
     case SWORD_ANDURAN:
     case SPADE_NECROMANCY:
     case HEART_FIRE:
-    case HEART_ICE:
-        return Settings::Get().isCurrentMapPriceOfLoyalty() ? ART_LOYALTY | LoyaltyLevel() : ART_LOYALTY;
+    case HEART_ICE: {
+        const GameVersion version = Settings::Get().getCurrentMapInfo().version;
+        return ( version == GameVersion::PRICE_OF_LOYALTY || version == GameVersion::RESURRECTION ) ? ART_LOYALTY | LoyaltyLevel() : ART_LOYALTY;
+    }
 
     default:
         break;

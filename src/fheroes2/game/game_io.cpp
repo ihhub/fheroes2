@@ -61,7 +61,7 @@ namespace
     {
         enum
         {
-            IS_PRICE_OF_LOYALTY_MAP = 0x4000
+            REQUIRES_POL_RESOURCES = 0x4000
         };
 
         HeaderSAV()
@@ -82,8 +82,8 @@ namespace
             info.worldWeek = worldWeek;
             info.worldMonth = worldMonth;
 
-            if ( fi.version == GameVersion::PRICE_OF_LOYALTY ) {
-                status |= IS_PRICE_OF_LOYALTY_MAP;
+            if ( fi.version != GameVersion::SUCCESSION_WARS ) {
+                status |= REQUIRES_POL_RESOURCES;
             }
         }
 
@@ -128,7 +128,7 @@ bool Game::Save( const std::string & filePath, const bool autoSave /* = false */
 
     // Header
     fs << SAV2ID3 << std::to_string( saveFileVersion ) << saveFileVersion
-       << HeaderSAV( conf.CurrentFileInfo(), conf.GameType(), world.GetDay(), world.GetWeek(), world.GetMonth() );
+       << HeaderSAV( conf.getCurrentMapInfo(), conf.GameType(), world.GetDay(), world.GetWeek(), world.GetMonth() );
     fs.close();
 
     ZStreamBuf zb;
@@ -232,10 +232,9 @@ fheroes2::GameMode Game::Load( const std::string & filePath )
         return fheroes2::GameMode::CANCEL;
     }
 
-    if ( ( header.status & HeaderSAV::IS_PRICE_OF_LOYALTY_MAP ) && !conf.isPriceOfLoyaltySupported() ) {
+    if ( ( header.status & HeaderSAV::REQUIRES_POL_RESOURCES ) && !conf.isPriceOfLoyaltySupported() ) {
         fheroes2::showStandardTextMessage(
-            _( "Error" ), _( "This file was saved for a \"The Price of Loyalty\" map, but the corresponding game assets have not been provided to the engine." ),
-            Dialog::OK );
+            _( "Error" ), _( "This save file requires \"The Price of Loyalty\" game assets, but they have not been provided to the engine." ), Dialog::OK );
 
         return fheroes2::GameMode::CANCEL;
     }
@@ -266,7 +265,7 @@ fheroes2::GameMode Game::Load( const std::string & filePath )
     }
 
     // Settings should contain the full path to the current map file, if this map is available
-    conf.SetMapsFile( Settings::GetLastFile( "maps", System::GetBasename( conf.MapsFile() ) ) );
+    conf.SetMapsFile( Settings::GetLastFile( "maps", System::GetBasename( conf.getCurrentMapFileName() ) ) );
 
     if ( !conf.loadedFileLanguage().empty() && conf.loadedFileLanguage() != "en" && conf.loadedFileLanguage() != conf.getGameLanguage() ) {
         std::string warningMessage( _( "This saved game is localized to '" ) );
@@ -357,7 +356,7 @@ std::string Game::GetSaveDir()
 
 std::string Game::GetSaveFileBaseName()
 {
-    std::string baseName = Settings::Get().CurrentFileInfo().name;
+    std::string baseName = Settings::Get().getCurrentMapInfo().name;
 
     // Replace all non-ASCII characters by exclamation marks
     std::replace_if(

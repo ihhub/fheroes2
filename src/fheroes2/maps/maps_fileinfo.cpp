@@ -40,6 +40,7 @@
 #include "game_io.h"
 #include "game_over.h"
 #include "logging.h"
+#include "map_format_info.h"
 #include "maps_tiles.h"
 #include "maps_tiles_helper.h"
 #include "mp2.h"
@@ -80,6 +81,11 @@ namespace
         // we came to the end of either (or both) strings, left is "smaller" if it was shorter:
         return li == lhs.end() && ri != rhs.end();
     }
+
+    bool sortByMapNames( const Maps::FileInfo & lhs, const Maps::FileInfo & rhs )
+    {
+        return CaseInsensitiveCompare( lhs.name, rhs.name );
+    }
 }
 
 namespace Editor
@@ -101,12 +107,6 @@ namespace Editor
     };
 }
 
-Maps::FileInfo::FileInfo()
-    : version( GameVersion::SUCCESSION_WARS )
-{
-    Reset();
-}
-
 void Maps::FileInfo::Reset()
 {
     file.clear();
@@ -115,7 +115,7 @@ void Maps::FileInfo::Reset()
 
     width = 0;
     height = 0;
-    difficulty = 0;
+    difficulty = Difficulty::NORMAL;
 
     static_assert( std::is_same_v<decltype( races ), std::array<uint8_t, KINGDOMMAX>>, "Type of races has been changed, check the logic below" );
     static_assert( std::is_same_v<decltype( unions ), std::array<uint8_t, KINGDOMMAX>>, "Type of unions has been changed, check the logic below" );
@@ -344,6 +344,28 @@ bool Maps::FileInfo::ReadMP2( const std::string & filePath )
     return true;
 }
 
+bool Maps::FileInfo::readResurrectionMap( std::string filePath )
+{
+    Reset();
+
+    Maps::Map_Format::MapFormat map;
+    if ( !Maps::Map_Format::loadBaseMap( filePath, map ) ) {
+        return false;
+    }
+
+    file = std::move( filePath );
+
+    difficulty = map.difficulty;
+
+    width = static_cast<uint16_t>( map.size );
+    height = static_cast<uint16_t>( map.size );
+
+    name = std::move( map.name );
+    description = std::move( map.description );
+
+    return true;
+}
+
 void Maps::FileInfo::FillUnions( const int side1Colors, const int side2Colors )
 {
     static_assert( std::is_same_v<decltype( unions ), std::array<uint8_t, KINGDOMMAX>>, "Type of unions has been changed, check the logic below" );
@@ -372,11 +394,6 @@ void Maps::FileInfo::FillUnions( const int side1Colors, const int side2Colors )
 bool Maps::FileInfo::FileSorting( const FileInfo & lhs, const FileInfo & rhs )
 {
     return CaseInsensitiveCompare( lhs.file, rhs.file );
-}
-
-bool Maps::FileInfo::NameSorting( const FileInfo & lhs, const FileInfo & rhs )
-{
-    return CaseInsensitiveCompare( lhs.name, rhs.name );
 }
 
 int Maps::FileInfo::KingdomRace( int color ) const
@@ -523,7 +540,7 @@ StreamBase & Maps::operator>>( StreamBase & msg, FileInfo & fi )
     return msg >> fi.worldDay >> fi.worldWeek >> fi.worldMonth;
 }
 
-MapsFileInfoList Maps::PrepareMapsFileInfoList( const bool multi )
+MapsFileInfoList Maps::getOriginalMapFileInfos( const bool multi )
 {
     const Settings & conf = Settings::Get();
 
@@ -574,15 +591,15 @@ MapsFileInfoList Maps::PrepareMapsFileInfoList( const bool multi )
         result.emplace_back( std::move( info ) );
     }
 
-    std::sort( result.begin(), result.end(), Maps::FileInfo::NameSorting );
+    std::sort( result.begin(), result.end(), sortByMapNames );
 
     return result;
 }
 
-MapsFileInfoList Maps::prepareResurrectionMapsFileInfoList()
+MapsFileInfoList Maps::getResurrectionMapFileInfos()
 {
     // TODO: set the proper resurrection map extension.
-    const ListFiles maps = Settings::FindFiles( "maps", ".mpr", false );
+    const ListFiles maps = Settings::FindFiles( "maps", ".fh2m", false );
 
     // Create a list of unique maps (based on the map file name).
     std::map<std::string, Maps::FileInfo> uniqueMaps;
@@ -590,13 +607,9 @@ MapsFileInfoList Maps::prepareResurrectionMapsFileInfoList()
     for ( const std::string & mapFile : maps ) {
         Maps::FileInfo fi;
 
-        // These are test data values.
-        // TODO: make a function to read resurrection map info data and remove the test values.
-        fi.width = 36;
-        fi.height = 36;
-        fi.name = "Test name";
-        fi.description = "Resurrection map test description.\nThe Map Editor is currently in development.";
-        fi.difficulty = 3;
+        if ( !fi.readResurrectionMap( mapFile ) ) {
+            continue;
+        }
 
         uniqueMaps.try_emplace( System::GetBasename( mapFile ), std::move( fi ) );
     }
@@ -608,7 +621,7 @@ MapsFileInfoList Maps::prepareResurrectionMapsFileInfoList()
         result.emplace_back( std::move( info ) );
     }
 
-    std::sort( result.begin(), result.end(), Maps::FileInfo::NameSorting );
+    std::sort( result.begin(), result.end(), sortByMapNames );
 
     return result;
 }

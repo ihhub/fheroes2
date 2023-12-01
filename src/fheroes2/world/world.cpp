@@ -418,10 +418,9 @@ void World::generateForEditor( const int32_t size )
     fi.height = static_cast<uint16_t>( height );
 
     Settings & conf = Settings::Get();
+    assert( conf.isPriceOfLoyaltySupported() );
 
-    if ( conf.isPriceOfLoyaltySupported() ) {
-        fi.version = GameVersion::PRICE_OF_LOYALTY;
-    }
+    fi.version = GameVersion::PRICE_OF_LOYALTY;
 
     conf.SetCurrentFileInfo( fi );
 

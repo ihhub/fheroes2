@@ -108,7 +108,7 @@ namespace
         text.draw( rt.x, rt.y + 25, rt.width, display );
 
         // maps name
-        text.set( conf.MapsName(), normalWhiteFont );
+        text.set( conf.getCurrentMapName(), normalWhiteFont );
         text.draw( rt.x, rt.y + 48, rt.width, display );
 
         // text game difficulty
@@ -192,7 +192,7 @@ namespace
         fheroes2::drawMainMenuScreen();
 
         Settings & conf = Settings::Get();
-        bool resetStartingSettings = conf.MapsFile().empty();
+        bool resetStartingSettings = conf.getCurrentMapFileName().empty();
         Players & players = conf.GetPlayers();
         Interface::PlayersInfo playersInfo;
 
@@ -200,11 +200,11 @@ namespace
 
         if ( !resetStartingSettings ) { // verify that current map really exists in map's list
             resetStartingSettings = true;
-            const std::string & mapName = conf.CurrentFileInfo().name;
-            const std::string & mapFileName = System::GetBasename( conf.CurrentFileInfo().file );
+            const std::string & mapName = conf.getCurrentMapInfo().name;
+            const std::string & mapFileName = System::GetBasename( conf.getCurrentMapInfo().file );
             for ( const Maps::FileInfo & mapInfo : lists ) {
                 if ( ( mapInfo.name == mapName ) && ( System::GetBasename( mapInfo.file ) == mapFileName ) ) {
-                    if ( mapInfo.file == conf.CurrentFileInfo().file ) {
+                    if ( mapInfo.file == conf.getCurrentMapInfo().file ) {
                         conf.SetCurrentFileInfo( mapInfo );
                         updatePlayers( players, humanPlayerCount );
                         Game::LoadPlayers( mapInfo.file, players );
@@ -285,7 +285,7 @@ namespace
                 const Maps::FileInfo * fi = Dialog::SelectScenario( lists );
 
                 if ( fi ) {
-                    Game::SavePlayers( conf.CurrentFileInfo().file, conf.GetPlayers() );
+                    Game::SavePlayers( conf.getCurrentMapInfo().file, conf.GetPlayers() );
                     conf.SetCurrentFileInfo( *fi );
                     Game::LoadPlayers( fi->file, players );
 
@@ -309,7 +309,7 @@ namespace
                 break;
             }
             else if ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) || le.MouseClickLeft( buttonOk.area() ) ) {
-                DEBUG_LOG( DBG_GAME, DBG_INFO, "select maps: " << conf.MapsFile() << ", difficulty: " << Difficulty::String( Game::getDifficulty() ) )
+                DEBUG_LOG( DBG_GAME, DBG_INFO, "select maps: " << conf.getCurrentMapFileName() << ", difficulty: " << Difficulty::String( Game::getDifficulty() ) )
                 result = fheroes2::GameMode::START_GAME;
 
                 // Fade-out screen before starting a scenario.
@@ -383,7 +383,7 @@ namespace
             }
         }
 
-        Game::SavePlayers( conf.CurrentFileInfo().file, conf.GetPlayers() );
+        Game::SavePlayers( conf.getCurrentMapInfo().file, conf.GetPlayers() );
 
         return result;
     }
@@ -394,7 +394,7 @@ namespace
 
         conf.GetPlayers().SetStartGame();
 
-        const std::string & filePath = conf.MapsFile();
+        const std::string & filePath = conf.getCurrentMapFileName();
         const size_t pos = filePath.rfind( '.' );
         if ( pos != std::string::npos ) {
             const std::string ext = StringLower( filePath.substr( pos + 1 ) );
@@ -408,7 +408,7 @@ namespace
         assert( 0 );
 
         DEBUG_LOG( DBG_GAME, DBG_WARN,
-                   conf.MapsFile() << ", "
+                   conf.getCurrentMapName() << ", "
                                    << "unknown map format" )
         return fheroes2::GameMode::MAIN_MENU;
     }
@@ -423,7 +423,7 @@ fheroes2::GameMode Game::ScenarioInfo()
 {
     AudioManager::PlayMusicAsync( MUS::MAINMENU, Music::PlaybackMode::RESUME_AND_PLAY_INFINITE );
 
-    const MapsFileInfoList lists = Maps::PrepareMapsFileInfoList( Settings::Get().IsGameType( Game::TYPE_MULTI ) );
+    const MapsFileInfoList lists = Maps::getOriginalMapFileInfos( Settings::Get().IsGameType( Game::TYPE_MULTI ) );
     if ( lists.empty() ) {
         fheroes2::showStandardTextMessage( _( "Warning" ), _( "No maps available!" ), Dialog::OK );
         return fheroes2::GameMode::MAIN_MENU;

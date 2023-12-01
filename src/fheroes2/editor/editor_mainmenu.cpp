@@ -38,6 +38,8 @@
 #include "icn.h"
 #include "localevent.h"
 #include "logging.h"
+#include "map_format_helper.h"
+#include "map_format_info.h"
 #include "maps.h"
 #include "maps_fileinfo.h"
 #include "math_base.h"
@@ -298,7 +300,7 @@ namespace Editor
 
         fheroes2::validateFadeInAndRender();
 
-        const MapsFileInfoList lists = Maps::prepareResurrectionMapsFileInfoList();
+        const MapsFileInfoList lists = Maps::getResurrectionMapFileInfos();
         if ( lists.empty() ) {
             fheroes2::showStandardTextMessage( _( "Warning" ), _( "No maps available!" ), Dialog::OK );
             return fheroes2::GameMode::EDITOR_MAIN_MENU;
@@ -307,7 +309,21 @@ namespace Editor
         const Maps::FileInfo * fileInfo = Dialog::SelectScenario( lists );
 
         if ( fileInfo ) {
-            fheroes2::showStandardTextMessage( _( "Warning!" ), "You have selected:\n" + fileInfo->name + "\n But the Map Editor is still in development.", Dialog::OK );
+            Maps::Map_Format::MapFormat map;
+            if ( !Maps::Map_Format::loadMap( fileInfo->file, map ) ) {
+                fheroes2::showStandardTextMessage( _( "Warning!" ), "Failed to load the map.", Dialog::OK );
+                return fheroes2::GameMode::CANCEL;
+            }
+
+            if ( !Maps::readMapInEditor( map ) ) {
+                fheroes2::showStandardTextMessage( _( "Warning!" ), "Failed to read the map.", Dialog::OK );
+                return fheroes2::GameMode::CANCEL;
+            }
+
+            fheroes2::fadeOutDisplay();
+            Game::setDisplayFadeIn();
+
+            return Interface::EditorInterface::Get().startEdit();
         }
         else {
             showWIPInfo();

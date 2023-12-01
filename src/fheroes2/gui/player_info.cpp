@@ -139,7 +139,7 @@ void Interface::PlayersInfo::UpdateInfo( Players & players, const fheroes2::Poin
 bool Interface::PlayersInfo::SwapPlayers( Player & player1, Player & player2 ) const
 {
     const Settings & conf = Settings::Get();
-    const Maps::FileInfo & fi = conf.CurrentFileInfo();
+    const Maps::FileInfo & fi = conf.getCurrentMapInfo();
 
     const int player1Color = player1.GetColor();
     const int player2Color = player2.GetColor();
@@ -250,7 +250,7 @@ void Interface::PlayersInfo::RedrawInfo( const bool displayInGameInfo ) const
 {
     const Settings & conf = Settings::Get();
     fheroes2::Display & display = fheroes2::Display::instance();
-    const Maps::FileInfo & fi = conf.CurrentFileInfo();
+    const Maps::FileInfo & fi = conf.getCurrentMapInfo();
 
     const int32_t playerCount = static_cast<int32_t>( conf.GetPlayers().size() );
     const uint32_t humanColors = conf.GetPlayers().GetColors( CONTROL_HUMAN, true );
@@ -450,7 +450,7 @@ bool Interface::PlayersInfo::QueueEventProcessing()
 
     Player * player = GetFromOpponentClick( le.GetMouseCursor() );
     if ( player != nullptr ) {
-        const Maps::FileInfo & fi = conf.CurrentFileInfo();
+        const Maps::FileInfo & fi = conf.getCurrentMapInfo();
 
         if ( conf.IsGameType( Game::TYPE_MULTI ) ) {
             if ( currentSelectedPlayer == nullptr ) {
@@ -466,7 +466,7 @@ bool Interface::PlayersInfo::QueueEventProcessing()
         else {
             const int playerColor = player->GetColor();
 
-            if ( playerColor & fi.AllowHumanColors() ) {
+            if ( playerColor & fi.colorsAvailableForHumans ) {
                 const int human = conf.GetPlayers().GetColors( CONTROL_HUMAN, true );
 
                 if ( playerColor != human ) {

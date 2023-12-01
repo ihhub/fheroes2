@@ -282,7 +282,7 @@ Castle::ConstructionDialogResult Castle::openConstructionDialog( uint32_t & dwel
     buildingMageGuild.Redraw();
 
     // tavern
-    const bool isSkipTavernInteraction = ( Race::NECR == race ) && !Settings::Get().isCurrentMapPriceOfLoyalty();
+    const bool isSkipTavernInteraction = ( Race::NECR == race ) && ( Settings::Get().getCurrentMapInfo().version == GameVersion::SUCCESSION_WARS );
     BuildingInfo buildingTavern( *this, BUILD_TAVERN );
     buildingTavern.SetPos( cur_pt.x + 149, dst_pt.y );
     buildingTavern.Redraw();
