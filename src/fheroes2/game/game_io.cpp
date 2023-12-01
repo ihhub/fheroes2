@@ -233,8 +233,9 @@ fheroes2::GameMode Game::Load( const std::string & filePath )
     }
 
     if ( ( header.status & HeaderSAV::REQUIRES_POL_RESOURCES ) && !conf.isPriceOfLoyaltySupported() ) {
-        fheroes2::showStandardTextMessage(
-            _( "Error" ), _( "This save file requires \"The Price of Loyalty\" game assets, but they have not been provided to the engine." ), Dialog::OK );
+        fheroes2::showStandardTextMessage( _( "Error" ),
+                                           _( "This save file requires \"The Price of Loyalty\" game assets, but they have not been provided to the engine." ),
+                                           Dialog::OK );
 
         return fheroes2::GameMode::CANCEL;
     }
