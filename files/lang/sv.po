@@ -3993,7 +3993,7 @@ msgstr ""
 "%{rating}"
 
 msgid "Start the selected scenario."
-msgstr "Börja valt scenario."
+msgstr "Påbörja valt scenario."
 
 msgid "View Intro"
 msgstr "Visa Intro"
