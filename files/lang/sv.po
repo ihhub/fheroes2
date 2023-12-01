@@ -950,7 +950,7 @@ msgid "Set Knowledge Skill"
 msgstr "Ange Kunskapsnivå"
 
 msgid "%{race1} %{name1} vs %{race2} %{name2}"
-msgstr "%{race1} %{name1} möter %{race2} %{name2}"
+msgstr "%{race1} %{name1} mot %{race2} %{name2}"
 
 msgid "Monsters"
 msgstr "Monster"
@@ -3021,7 +3021,7 @@ msgid "Event: "
 msgstr "Händelse: "
 
 msgid "Hot Keys:"
-msgstr "Snabbtangenter: "
+msgstr "Snabbtangenter:"
 
 msgid "Evil"
 msgstr "Ond"
