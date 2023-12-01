@@ -1485,5 +1485,4 @@ namespace fheroes2
     {
         return SDL_GetDisplayName( display );
     }
-
 }
