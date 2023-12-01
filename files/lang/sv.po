@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-11-27 00:58+0000\n"
-"PO-Revision-Date: 2023-11-10 14:21+0100\n"
+"PO-Revision-Date: 2023-11-30 15:55+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "Language: sv\n"
@@ -195,7 +195,7 @@ msgid "MIN"
 msgstr "MIN"
 
 msgid "RESET"
-msgstr ""
+msgstr "ÅTERS."
 
 msgid ""
 "D\n"
@@ -929,7 +929,7 @@ msgid ""
 msgstr "Genom sin falkblick så kan %{name} lära sig besvärjelsen %{spell}."
 
 msgid "Human"
-msgstr "Människa"
+msgstr "Spelare"
 
 msgid "AI"
 msgstr "AI"
@@ -949,9 +949,8 @@ msgstr "Ange Trollkonst"
 msgid "Set Knowledge Skill"
 msgstr "Ange Kunskapsnivå"
 
-#, fuzzy
 msgid "%{race1} %{name1} vs %{race2} %{name2}"
-msgstr "%{name1} möter %{name2}"
+msgstr "%{race1} %{name1} mot %{race2} %{name2}"
 
 msgid "Monsters"
 msgstr "Monster"
@@ -3013,17 +3012,16 @@ msgid "Show extra information such as FPS and current time."
 msgstr "Visa extra information som FPS och nuvarande tid."
 
 msgid "Hotkey: "
-msgstr ""
+msgstr "Snabbtangent: "
 
 msgid "Category: "
-msgstr ""
+msgstr "Kategori: "
 
-#, fuzzy
 msgid "Event: "
-msgstr "Händelse"
+msgstr "Händelse: "
 
 msgid "Hot Keys:"
-msgstr "Tangentbordsgenvägar"
+msgstr "Snabbtangenter:"
 
 msgid "Evil"
 msgstr "Ond"
@@ -3066,7 +3064,7 @@ msgid "Toggle the type of interface you want to use."
 msgstr "Välj vilket gränssnitt du vill använda."
 
 msgid "Toggle interface visibility."
-msgstr "Aktivera gränssnittsynlighet"
+msgstr "Aktivera gränssnittsynlighet."
 
 msgid "Toggle colored cursor on or off. This is only an esthetic choice."
 msgstr "Välj färglagd eller svartvit muspekare."
@@ -3175,7 +3173,7 @@ msgid "(not visited)"
 msgstr "(inte besökt)"
 
 msgid "%{color} Barrier"
-msgstr "%{color} Barriär."
+msgstr "%{color} Barriär"
 
 msgid "(tent visited)"
 msgstr "(tält besökt)"
@@ -3995,7 +3993,7 @@ msgstr ""
 "%{rating}"
 
 msgid "Start the selected scenario."
-msgstr "Börja valt scenerio"
+msgstr "Påbörja valt scenario."
 
 msgid "View Intro"
 msgstr "Visa Intro"
@@ -4550,29 +4548,26 @@ msgid ""
 msgstr ""
 "Vill du ge datorn kontrollen? Denna effekt gäller bara för nästa runda."
 
-#, fuzzy
 msgid "Default Actions"
-msgstr "Standardåtgärd"
+msgstr "Standardåtgärder"
 
 msgid "Global Actions"
-msgstr ""
+msgstr "Globala Åtgärder"
 
 msgid "Main Menu"
-msgstr ""
+msgstr "Huvudmeny"
 
 msgid "World Map"
 msgstr "Världskarta"
 
-#, fuzzy
 msgid "Battle Screen"
-msgstr "Hjältevy"
+msgstr "Stridsvy"
 
-#, fuzzy
 msgid "Town Screen"
-msgstr "Hjältevy"
+msgstr "Stadsvy"
 
 msgid "Army Actions"
-msgstr ""
+msgstr "Arméåtgärder"
 
 msgid "Editor"
 msgstr "Redigerare"
@@ -5355,7 +5350,7 @@ msgid "Kingdom Income"
 msgstr "Inkomst"
 
 msgid "Kingdom Income per day."
-msgstr "Rikets Dagsinkomst"
+msgstr "Rikets Dagsinkomst."
 
 msgid "For every lighthouse controlled, your ships will move further each day."
 msgstr ""
