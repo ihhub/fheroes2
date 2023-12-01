@@ -51,6 +51,7 @@ public:
     }
 
     const fheroes2::Rect & GetArea() const;
+
     void SetPos( const fheroes2::Point & pt );
     void SetHero( const Heroes * hero );
 
@@ -72,6 +73,13 @@ public:
     }
 
     void Redraw();
+
+    // Redraws only the background under this indicator, but not the indicator itself
+    void redrawOnlyBackground()
+    {
+        _back.restore();
+    }
+
     static void QueueEventProcessing( const LuckIndicator & indicator );
 
 private:
@@ -89,6 +97,13 @@ public:
     }
 
     void Redraw();
+
+    // Redraws only the background under this indicator, but not the indicator itself
+    void redrawOnlyBackground()
+    {
+        _back.restore();
+    }
+
     static void QueueEventProcessing( const MoraleIndicator & indicator );
 
 private:

@@ -3315,9 +3315,8 @@ msgstr "Acceptera alla ändringar."
 msgid "%{color} %{race} hero"
 msgstr "%{color} %{race}hjälte"
 
-#, fuzzy
 msgid "Terrain object"
-msgstr "Terrängläge"
+msgstr "Terrängföremål"
 
 msgid "Select Skill:"
 msgstr "Välj Förmåga:"
@@ -3337,9 +3336,8 @@ msgstr "Välj Hjälte:"
 msgid "Select Treasure:"
 msgstr "Välj Skatt:"
 
-#, fuzzy
 msgid "Select Ocean Object:"
-msgstr "Havsföremål"
+msgstr "Välj Havsföremål:"
 
 msgid "Map Type:\n"
 msgstr "Karttyp:\n"
@@ -3648,9 +3646,8 @@ msgstr "Lämna kartredigeraren."
 msgid "Monster"
 msgstr "Monster"
 
-#, fuzzy
 msgid "Objects cannot be placed outside the map."
-msgstr "Hjältar kan inte placeras på vatten."
+msgstr "Föremål kan inte placeras utanför kartan."
 
 msgid "Monsters cannot be placed on water."
 msgstr "Varelser kan inte placeras på vatten."
@@ -3676,13 +3673,11 @@ msgstr "Artefakter"
 msgid "Artifacts cannot be placed on water."
 msgstr "Artefakter kan inte placeras på vatten."
 
-#, fuzzy
 msgid "Ocean object"
 msgstr "Havsföremål"
 
-#, fuzzy
 msgid "Ocean object must be placed on water."
-msgstr "Hjältar kan inte placeras på vatten."
+msgstr "Havsföremål måste placeras på vatten."
 
 msgid "Ocean Objects"
 msgstr "Havsföremål"
