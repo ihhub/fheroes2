@@ -865,15 +865,12 @@ int Dialog::selectCastleType( const int castleType )
 
     const fheroes2::Rect area( background.activeArea() );
 
-    int32_t listOffsetY = 0;
-
     fheroes2::Text text( _( "Select Castle" ), fheroes2::FontType::normalYellow() );
     text.draw( area.x + ( area.width - text.width() ) / 2, area.y + 10, display );
 
     // The additional text under the title.
     text.set( _( "Select color and race." ), fheroes2::FontType::normalWhite() );
     text.draw( area.x + ( area.width - text.width() ) / 2, area.y + 30, display );
-    listOffsetY = text.height() + 3;
 
     // Render color and race selection sprites.
     const int32_t stepX = 70;
@@ -925,9 +922,12 @@ int Dialog::selectCastleType( const int castleType )
     // Render dialog buttons.
     fheroes2::Button buttonOk;
     fheroes2::Button buttonCancel;
-    fheroes2::Button buttonTownCastle;
+    fheroes2::Button buttonTown;
+    fheroes2::Button buttonCastle;
     background.renderOkayCancelButtons( buttonOk, buttonCancel, isEvilInterface );
-    background.renderButton( buttonTownCastle, isEvilInterface ? ICN::BUTTON_CASTLE_EVIL : ICN::BUTTON_CASTLE_GOOD, 0, 1, { 0, 7 },
+    background.renderButton( buttonTown, isEvilInterface ? ICN::BUTTON_TOWN_EVIL : ICN::BUTTON_TOWN_GOOD, 0, 1, { -50, 7 },
+                             fheroes2::StandardWindow::Padding::BOTTOM_CENTER );
+    background.renderButton( buttonCastle, isEvilInterface ? ICN::BUTTON_CASTLE_EVIL : ICN::BUTTON_CASTLE_GOOD, 0, 1, { 50, 7 },
                              fheroes2::StandardWindow::Padding::BOTTOM_CENTER );
 
     fheroes2::ImageRestorer castleBackground( display, pos.x - 7 * 32 + 16, pos.y - 4 * 32 + 16, 9 * 32, 5 * 32 );
@@ -940,6 +940,8 @@ int Dialog::selectCastleType( const int castleType )
     while ( le.HandleEvents() ) {
         le.MousePressLeft( buttonOk.area() ) ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
         le.MousePressLeft( buttonCancel.area() ) ? buttonCancel.drawOnPress() : buttonCancel.drawOnRelease();
+        le.MousePressLeft( buttonTown.area() ) || !isCastle ? buttonTown.drawOnPress() : buttonTown.drawOnRelease();
+        le.MousePressLeft( buttonCastle.area() ) || isCastle ? buttonCastle.drawOnPress() : buttonCastle.drawOnRelease();
 
         if ( le.MouseClickLeft( buttonOk.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) ) {
             return castleRace;
@@ -948,25 +950,13 @@ int Dialog::selectCastleType( const int castleType )
             return -1;
         }
 
-        if ( le.MouseClickLeft( buttonTownCastle.area() ) ) {
-            isCastle = buttonTownCastle.isPressed();
+        if ( isCastle && le.MouseClickLeft( buttonTown.area() ) ) {
+            isCastle = false;
             needRedraw = true;
         }
-        else if ( le.MousePressLeft( buttonTownCastle.area() ) ) {
-            if ( isCastle ) {
-                buttonTownCastle.drawOnRelease();
-            }
-            else {
-                buttonTownCastle.drawOnPress();
-            }
-        }
-        else {
-            if ( isCastle ) {
-                buttonTownCastle.drawOnPress();
-            }
-            else {
-                buttonTownCastle.drawOnRelease();
-            }
+        else if ( !isCastle && le.MouseClickLeft( buttonCastle.area() ) ) {
+            isCastle = true;
+            needRedraw = true;
         }
 
         for ( size_t i = 0; i < 7; ++i ) {
