@@ -4854,7 +4854,7 @@ msgid "Lose the town '%{name}'."
 msgstr "'%{name}' város elvesztése."
 
 msgid "Lose the hero: %{name}."
-msgstr ""'%{name}' hős elvesztése."
+msgstr "'%{name}' hős elvesztése."
 
 msgid "Fail to win by the end of month %{month}, week %{week}, day %{day}."
 msgstr "Nem sikerül győzni %{month} hó %{week} hét %{day} napjáig."
@@ -5075,28 +5075,31 @@ msgid "Adventure Options"
 msgstr "Kaland Opciók"
 
 msgid "Bring up the adventure options menu."
-msgstr ""
+msgstr "Megjeleníti a kaland opciók menüt."
 
 msgid ""
 "Bring up the file options menu, allowing you to load, save, start a new game "
 "or quit."
 msgstr ""
+"Megjeleníti a fájlbeállítások menüt, ahol pl. létrehozhatsz új játékot, "
+"illetve menthetsz és betölthetsz játékállásokat."
 
 msgid "Bring up the system options menu, allowing you to customize your game."
 msgstr ""
+"Megjeleníti a rendszerbeállítások menüt, melyben testre szabhatod a "
+"játékprogram működését."
 
 msgid ""
 "One or more heroes may still move, are you sure you want to end your turn?"
 msgstr ""
-"Egy vagy több hős még mozoghat, biztos hogy vagy benne hogy be akarod "
+"Egy vagy több hős még mozoghat, biztos vagy benne hogy be akarod "
 "fejezni a kört?"
 
 msgid "Are you sure you want to quit?"
 msgstr "Biztosan ki szeretne lépni?"
 
-#, fuzzy
 msgid "Are you sure you want to restart? (Your current game will be lost.)"
-msgstr "Biztos vagy benne hogy újrakezded? (A jelenlegi játékod el fog veszni)"
+msgstr "Biztos vagy benne hogy újrakezded? (A jelenlegi játékod el fog veszni.)"
 
 msgid "Are you sure you want to overwrite the save with this name?"
 msgstr "Biztosan felülírod a mentést ezzel a névvel?"
@@ -5105,30 +5108,30 @@ msgid "Game saved successfully."
 msgstr "A játék sikeresen mentve."
 
 msgid "There was an issue during saving."
-msgstr ""
+msgstr "Valami szösz került a gépezetbe mentés közben."
 
-#, fuzzy
 msgid ""
 "Are you sure you want to load a new game? (Your current game will be lost.)"
 msgstr ""
 "Biztos hogy benne hogy új játékot töltesz be? (A jelenlegi játékod el fog "
-"veszni)"
+"veszni)."
 
 msgid "Try looking on land!!!"
-msgstr ""
+msgstr "Nézz körül a vidéken!!!"
 
 msgid ""
 "Searching for the Ultimate Artifact is fruitless. Your hero could not carry "
 "it even if he found it - all his artifact slots are full."
 msgstr ""
+"Megtaláltad a Szent varázstárgyat, de nem tudod magadhoz venni, mert tele "
+"vagy egyéb felszereléssel."
 
 msgid "Digging for artifacts requires a whole day, try again tomorrow."
 msgstr "Egész nap a varázstárgy után kutattál, holnap próbáld újra."
 
-#, fuzzy
 msgid ""
 "After spending many hours digging here, you have uncovered the %{artifact}."
-msgstr "Több órányi ásás után, megtalálatad a "
+msgstr "Több órányi ásás után megtaláltad ezt: %{artifact}."
 
 msgid "Congratulations!"
 msgstr "Gratulálunk!"
@@ -5182,71 +5185,70 @@ msgid ""
 "and/or heroes not of their primary alignment."
 msgstr ""
 
-#, fuzzy
 msgid "Handicap"
-msgstr "Mandigal"
+msgstr "Hátrány"
 
-#
 msgid ""
 "This lets you change the handicap of a particular player. Only humans may be "
 "handicapped. Handicapped players start with fewer resources and earn 15 or "
 "30% fewer resources per turn for mild and severe handicaps, respectively."
 msgstr ""
+"Lehetővé teszi az egyes játékosok hátrányának beállítását. Csak emberi "
+"játékos sújtható hátránnyal. A hátrányban lévő játékosok kevesebb "
+"erőforrással kezdenek és azok 15-30%-kal kevesebbel gyarapodnak körönként a "
+"hátrány mértékétől függően, mely lehet mérsékelt vagy súlyos."
 
-#, fuzzy
 msgid "%{color} player"
-msgstr "%{color} játékos köre"
+msgstr "%{color} játékos"
 
 msgid "No Handicap"
-msgstr ""
+msgstr "Nincs hátrány"
 
 msgid "No special restrictions on start resources and earning them per turn."
-msgstr ""
+msgstr "Nincs semmilyen megkötés az induló erőforrásokkal és gyarapodásukkal kapcsolatban."
 
 msgid "Mild Handicap"
-msgstr ""
+msgstr "Mérsékelt hátrány"
 
-#
 msgid ""
 "Mild handicapped players start with fewer resources and earn 15% fewer "
 "resources per turn."
 msgstr ""
+"Mérsékelt hátrányban lévő játékosok kevesebb erőforrással kezdenek és azok "
+"15%-kal kevesebbel gyarapodnak körönként."
 
 msgid "Severe Handicap"
-msgstr ""
+msgstr "Súlyos hátrány"
 
-#
 msgid ""
 "Severe handicapped players start with fewer resources and earn 30% fewer "
 "resources per turn."
 msgstr ""
+"Súlyosan hátrányban lévő játékosok kevesebb erőforrással kezdenek és azok "
+"30%-kal kevesebbel gyarapodnak körönként."
 
-#, fuzzy
 msgid "View %{skill} Info"
-msgstr "%{level} %{skill} információ"
+msgstr "%{skill} információ megtekintése"
 
 msgid "Keyboard|123"
-msgstr ""
+msgstr "123"
 
 msgid "Keyboard|SPACE"
-msgstr ""
+msgstr "SPACE"
 
 msgid "Keyboard|ABC"
-msgstr ""
+msgstr "ABC"
 
-#, fuzzy
 msgid "Kingdom Income"
-msgstr "Jövedelem:"
+msgstr "Királyság jövedelme:"
 
-#, fuzzy
 msgid "Kingdom Income per day."
-msgstr "Jövedelem:"
+msgstr "Királyság napi jövedelme:"
 
-#, fuzzy
 msgid "For every lighthouse controlled, your ships will move further each day."
 msgstr ""
-"A kilátótorony a fennhatóságod alá került, és minden hajód többet mozoghat "
-"minden körben."
+"Minden fennhatóságod alatt lévő világítótorony miatt a hajóid többet "
+"mozoghatnak minden nap."
 
 msgid "English"
 msgstr ""
