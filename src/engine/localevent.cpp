@@ -1600,7 +1600,7 @@ size_t LocalEvent::insertLastPressedSymbol( std::string & res, size_t pos, const
     else {
         const uint8_t character = Encoding::getCodePageCharacter( _lastPressedCodePoint, codePage );
         if ( character != 0 ) {
-            res.insert( pos, 1, character );
+            res.insert( pos, 1, static_cast<char>( character ) );
             ++pos;
         }
     }

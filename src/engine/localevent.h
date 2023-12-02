@@ -187,6 +187,16 @@ public:
     static LocalEvent & Get();
     static LocalEvent & GetClean(); // reset all previous event statuses and return a reference for events
 
+    static int32_t getCurrentKeyModifiers();
+
+    static void OpenTouchpad();
+
+    static void setEventProcessingStates();
+
+    static void enableTextInput();
+
+    static void disableTextInput();
+
     void setGlobalMouseMotionEventHook( std::function<fheroes2::Rect( const int32_t, const int32_t )> hook )
     {
         _globalMouseMotionEventHook = std::move( hook );
@@ -197,13 +207,7 @@ public:
         _globalKeyDownEventHook = std::move( hook );
     }
 
-    static void setEventProcessingStates();
-
     bool HandleEvents( const bool sleepAfterEventProcessing = true, const bool allowExit = false );
-
-    void enableTextInput();
-
-    void disableTextInput();
 
     bool MouseMotion() const
     {
@@ -299,12 +303,8 @@ public:
         return key_value;
     }
 
-    static int32_t getCurrentKeyModifiers();
-
     void OpenController();
     void CloseController();
-
-    static void OpenTouchpad();
 
     void SetControllerPointerSpeed( const int newSpeed )
     {
