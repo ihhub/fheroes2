@@ -7587,7 +7587,7 @@ msgid "week|Rabbit"
 msgstr "Nyúl"
 
 msgid "week|Gopher"
-msgstr ""
+msgstr "Hörcsög"
 
 msgid "week|Badger"
 msgstr "Borz"
@@ -7599,46 +7599,46 @@ msgid "week|Eagle"
 msgstr "Sas"
 
 msgid "week|Weasel"
-msgstr ""
+msgstr "Menyét"
 
 msgid "week|Raven"
-msgstr ""
+msgstr "Holló"
 
 msgid "week|Mongoose"
-msgstr ""
+msgstr "Mongúz"
 
 msgid "week|Dog"
 msgstr "Kutya"
 
 msgid "week|Aardvark"
-msgstr ""
+msgstr "Földimalac"
 
 msgid "week|Lizard"
-msgstr ""
+msgstr "Gyík"
 
 msgid "week|Tortoise"
-msgstr ""
+msgstr "Teknősbéka"
 
 msgid "week|Hedgehog"
-msgstr ""
+msgstr "Sün"
 
 msgid "week|Condor"
-msgstr ""
+msgstr "Kondorkeselyű"
 
 msgid "week|Ant"
-msgstr ""
+msgstr "Hangya"
 
 msgid "week|Grasshopper"
-msgstr ""
+msgstr "Szöcske"
 
 msgid "week|Dragonfly"
 msgstr ""
 
 msgid "week|Spider"
-msgstr ""
+msgstr "Pók"
 
 msgid "week|Butterfly"
-msgstr ""
+msgstr "Pillangó"
 
 msgid "week|Bumblebee"
 msgstr ""
