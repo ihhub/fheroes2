@@ -3990,7 +3990,7 @@ msgstr ""
 "%{rating}"
 
 msgid "Start the selected scenario."
-msgstr "Börja valt scenario."
+msgstr "Påbörja valt scenario."
 
 msgid "View Intro"
 msgstr "Visa Intro"
@@ -5029,7 +5029,7 @@ msgid " All populations are halved."
 msgstr " All populationer är halverade."
 
 msgid " All dwellings increase population."
-msgstr " Alla bostäder ökar populationen."
+msgstr " Alla bostäder ökar sin population."
 
 msgid "New Month!"
 msgstr "Ny Månad!"
