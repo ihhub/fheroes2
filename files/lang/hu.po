@@ -146,7 +146,7 @@ msgstr ""
 "MÓD"
 
 msgid "CONFIG"
-msgstr "BEÁLLÍT"
+msgstr "OPCIÓK"
 
 msgid ""
 "ORIGINAL\n"
@@ -3360,7 +3360,7 @@ msgid "The name of the currently selected map."
 msgstr "A kiválasztott térkép neve."
 
 msgid "Selected Map Difficulty"
-msgstr "A kiválasztott térkép neve."
+msgstr "Kiválasztott nehézség"
 
 msgid ""
 "The map difficulty of the currently selected map. The map difficulty is "
@@ -4071,7 +4071,7 @@ msgid "Producers"
 msgstr "Gyártásvezetők"
 
 msgid "QA Managers"
-msgstr "Ügyfélszolgálatosok"
+msgstr "Minőségbiztosítási menedzserek"
 
 msgid "Sound Design"
 msgstr "Hang tervező"
@@ -4329,7 +4329,7 @@ msgid "hotkey|kingdom summary"
 msgstr "királyság összesítő"
 
 msgid "hotkey|default action"
-msgstr "alaőértelmezett cselekvés"
+msgstr "alapértelmezett cselekvés"
 
 msgid "hotkey|open focus"
 msgstr "fókuszálás kezdése"
