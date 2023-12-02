@@ -218,7 +218,6 @@ namespace
 
         // All artifacts before Magic Book have their own images.
         // Magic Book is not present in the ICN resources but it is present in artifact IDs.
-        std::vector<uint32_t> imageIndices;
 
         auto addArtifactObject = [&objects]( const uint32_t artifactId, const MP2::MapObjectType ObjectType, const uint32_t mainIcnIndex ) {
             Maps::ObjectInfo object{ ObjectType };
@@ -548,11 +547,119 @@ namespace
         }
     }
 
-    void populateKingdomTows( std::vector<Maps::ObjectInfo> & objects )
+    void populateKingdomTowns( std::vector<Maps::ObjectInfo> & objects )
     {
         assert( objects.empty() );
 
-        (void)objects;
+        // Random castle/town
+        for ( uint8_t isTown = 0; isTown < 2; ++isTown ) {
+            const uint8_t icnOffset = isTown * 16;
+            Maps::ObjectInfo object{ MP2::OBJ_CASTLE };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWRD, icnOffset + 13, fheroes2::Point{ 0, 0 }, MP2::OBJ_CASTLE, Maps::OBJECT_LAYER );
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWRD, icnOffset + 0, fheroes2::Point{ 0, -3 }, MP2::OBJ_CASTLE );
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWRD, icnOffset + 1, fheroes2::Point{ -2, -2 }, MP2::OBJ_CASTLE );
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWRD, icnOffset + 2, fheroes2::Point{ -1, -2 }, MP2::OBJ_CASTLE );
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWRD, icnOffset + 3, fheroes2::Point{ 0, -2 }, MP2::OBJ_CASTLE );
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWRD, icnOffset + 4, fheroes2::Point{ 1, -2 }, MP2::OBJ_CASTLE );
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWRD, icnOffset + 5, fheroes2::Point{ 2, -2 }, MP2::OBJ_CASTLE );
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWRD, icnOffset + 6, fheroes2::Point{ -2, -1 }, MP2::OBJ_CASTLE );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWRD, icnOffset + 7, fheroes2::Point{ -1, -1 }, MP2::OBJ_CASTLE, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWRD, icnOffset + 8, fheroes2::Point{ 0, -1 }, MP2::OBJ_CASTLE, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWRD, icnOffset + 9, fheroes2::Point{ 1, -1 }, MP2::OBJ_CASTLE, Maps::OBJECT_LAYER );
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWRD, icnOffset + 10, fheroes2::Point{ 2, -1 }, MP2::OBJ_CASTLE );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWRD, icnOffset + 11, fheroes2::Point{ -2, 0 }, MP2::OBJ_CASTLE, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWRD, icnOffset + 12, fheroes2::Point{ -1, 0 }, MP2::OBJ_CASTLE, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWRD, icnOffset + 14, fheroes2::Point{ 1, 0 }, MP2::OBJ_CASTLE, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWRD, icnOffset + 15, fheroes2::Point{ 2, 0 }, MP2::OBJ_CASTLE, Maps::OBJECT_LAYER );
+
+            objects.emplace_back( std::move( object ) );
+
+            // Castle/town shadow.
+
+            Maps::ObjectInfo townSadow{ MP2::OBJ_NONE };
+            townSadow.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWRD, icnOffset + 0 + 32, fheroes2::Point{ -4, -2 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            townSadow.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWRD, icnOffset + 1 + 32, fheroes2::Point{ -3, -2 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            townSadow.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWRD, icnOffset + 2 + 32, fheroes2::Point{ -2, -2 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            townSadow.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWRD, icnOffset + 3 + 32, fheroes2::Point{ -1, -2 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            townSadow.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWRD, icnOffset + 4 + 32, fheroes2::Point{ -5, -1 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            townSadow.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWRD, icnOffset + 5 + 32, fheroes2::Point{ -4, -1 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            townSadow.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWRD, icnOffset + 6 + 32, fheroes2::Point{ -3, -1 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            townSadow.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWRD, icnOffset + 7 + 32, fheroes2::Point{ -2, -1 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            townSadow.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWRD, icnOffset + 8 + 32, fheroes2::Point{ -1, -1 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            townSadow.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWRD, icnOffset + 9 + 32, fheroes2::Point{ -4, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            townSadow.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWRD, icnOffset + 10 + 32, fheroes2::Point{ -3, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            townSadow.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWRD, icnOffset + 11 + 32, fheroes2::Point{ -2, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            townSadow.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWRD, icnOffset + 12 + 32, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            townSadow.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWRD, icnOffset + 13 + 32, fheroes2::Point{ -3, 1 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            townSadow.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWRD, icnOffset + 14 + 32, fheroes2::Point{ -2, 1 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            townSadow.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWRD, icnOffset + 15 + 32, fheroes2::Point{ -1, 1 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+
+            objects.emplace_back( std::move( townSadow ) );
+        }
+
+        // Castle and town sprites: Knight, Barbarian, Sorceress, Warlock, Wizard, Necromancer.
+        for ( uint8_t race = 0; race < 6 * 2; ++race ) {
+            const uint8_t icnOffset = race * 16;
+            Maps::ObjectInfo object{ MP2::OBJ_CASTLE };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTOWN, icnOffset + 13, fheroes2::Point{ 0, 0 }, MP2::OBJ_CASTLE, Maps::OBJECT_LAYER );
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTOWN, icnOffset + 0, fheroes2::Point{ 0, -3 }, MP2::OBJ_CASTLE );
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTOWN, icnOffset + 1, fheroes2::Point{ -2, -2 }, MP2::OBJ_CASTLE );
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTOWN, icnOffset + 2, fheroes2::Point{ -1, -2 }, MP2::OBJ_CASTLE );
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTOWN, icnOffset + 3, fheroes2::Point{ 0, -2 }, MP2::OBJ_CASTLE );
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTOWN, icnOffset + 4, fheroes2::Point{ 1, -2 }, MP2::OBJ_CASTLE );
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTOWN, icnOffset + 5, fheroes2::Point{ 2, -2 }, MP2::OBJ_CASTLE );
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTOWN, icnOffset + 6, fheroes2::Point{ -2, -1 }, MP2::OBJ_CASTLE );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTOWN, icnOffset + 7, fheroes2::Point{ -1, -1 }, MP2::OBJ_CASTLE, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTOWN, icnOffset + 8, fheroes2::Point{ 0, -1 }, MP2::OBJ_CASTLE, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTOWN, icnOffset + 9, fheroes2::Point{ 1, -1 }, MP2::OBJ_CASTLE, Maps::OBJECT_LAYER );
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTOWN, icnOffset + 10, fheroes2::Point{ 2, -1 }, MP2::OBJ_CASTLE );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTOWN, icnOffset + 11, fheroes2::Point{ -2, 0 }, MP2::OBJ_CASTLE, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTOWN, icnOffset + 12, fheroes2::Point{ -1, 0 }, MP2::OBJ_CASTLE, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTOWN, icnOffset + 14, fheroes2::Point{ 1, 0 }, MP2::OBJ_CASTLE, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTOWN, icnOffset + 15, fheroes2::Point{ 2, 0 }, MP2::OBJ_CASTLE, Maps::OBJECT_LAYER );
+
+            objects.emplace_back( std::move( object ) );
+
+            // Castle/town shadow.
+
+            Maps::ObjectInfo townSadow{ MP2::OBJ_NONE };
+            townSadow.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWSH, icnOffset + 0, fheroes2::Point{ -4, -2 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            townSadow.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWSH, icnOffset + 1, fheroes2::Point{ -3, -2 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            townSadow.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWSH, icnOffset + 2, fheroes2::Point{ -2, -2 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            townSadow.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWSH, icnOffset + 3, fheroes2::Point{ -1, -2 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            townSadow.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWSH, icnOffset + 4, fheroes2::Point{ -5, -1 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            townSadow.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWSH, icnOffset + 5, fheroes2::Point{ -4, -1 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            townSadow.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWSH, icnOffset + 6, fheroes2::Point{ -3, -1 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            townSadow.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWSH, icnOffset + 7, fheroes2::Point{ -2, -1 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            townSadow.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWSH, icnOffset + 8, fheroes2::Point{ -1, -1 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            townSadow.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWSH, icnOffset + 9, fheroes2::Point{ -4, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            townSadow.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWSH, icnOffset + 10, fheroes2::Point{ -3, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            townSadow.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWSH, icnOffset + 11, fheroes2::Point{ -2, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            townSadow.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWSH, icnOffset + 12, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            townSadow.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWSH, icnOffset + 13, fheroes2::Point{ -3, 1 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            townSadow.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWSH, icnOffset + 14, fheroes2::Point{ -2, 1 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            townSadow.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWSH, icnOffset + 15, fheroes2::Point{ -1, 1 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+
+            objects.emplace_back( std::move( townSadow ) );
+        }
+
+        // Castle/town basement.
+        for ( uint8_t basement = 0; basement < 8; ++basement ) {
+            const uint8_t icnOffset = basement * 10;
+            Maps::ObjectInfo object{ MP2::OBJ_NONE };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWBA, icnOffset + 2, fheroes2::Point{ 0, 0 }, MP2::OBJ_NONE, Maps::TERRAIN_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWBA, icnOffset + 0, fheroes2::Point{ -2, 0 }, MP2::OBJ_NONE, Maps::TERRAIN_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWBA, icnOffset + 1, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::TERRAIN_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWBA, icnOffset + 3, fheroes2::Point{ 1, 0 }, MP2::OBJ_NONE, Maps::TERRAIN_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWBA, icnOffset + 4, fheroes2::Point{ 2, 0 }, MP2::OBJ_NONE, Maps::TERRAIN_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWBA, icnOffset + 5, fheroes2::Point{ -2, 1 }, MP2::OBJ_NONE, Maps::TERRAIN_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWBA, icnOffset + 6, fheroes2::Point{ -1, 1 }, MP2::OBJ_NONE, Maps::TERRAIN_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWBA, icnOffset + 7, fheroes2::Point{ 0, 1 }, MP2::OBJ_NONE, Maps::TERRAIN_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWBA, icnOffset + 8, fheroes2::Point{ 1, 1 }, MP2::OBJ_NONE, Maps::TERRAIN_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWBA, icnOffset + 9, fheroes2::Point{ 2, 1 }, MP2::OBJ_NONE, Maps::TERRAIN_LAYER );
+
+            objects.emplace_back( std::move( object ) );
+        }
     }
 
     void populateMonsters( std::vector<Maps::ObjectInfo> & objects )
@@ -668,7 +775,7 @@ namespace
         populateAdventureMiscellaneous( objectData[static_cast<size_t>( Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS )] );
 
         populateKingdomHeroes( objectData[static_cast<size_t>( Maps::ObjectGroup::KINGDOM_HEROES )] );
-        populateKingdomTows( objectData[static_cast<size_t>( Maps::ObjectGroup::KINGDOM_TOWNS )] );
+        populateKingdomTowns( objectData[static_cast<size_t>( Maps::ObjectGroup::KINGDOM_TOWNS )] );
 
         populateMonsters( objectData[static_cast<size_t>( Maps::ObjectGroup::MONSTERS )] );
 
@@ -698,6 +805,13 @@ namespace
             const auto & objects = objectData[groupType];
 
             for ( const auto & objectInfo : objects ) {
+                if ( groupType == static_cast<size_t>( Maps::ObjectGroup::KINGDOM_TOWNS ) ) {
+                    const MP2::ObjectIcnType icnType = objectInfo.groundLevelParts.front().icnType;
+                    if ( icnType == MP2::OBJ_ICN_TYPE_OBJNTWSH || icnType == MP2::OBJ_ICN_TYPE_OBJNTWBA || icnType == MP2::OBJ_ICN_TYPE_OBJNTWRD ) {
+                        // Town/castle objects contain separate shadow and basement that are not action objects.
+                        continue;
+                    }
+                }
                 assert( MP2::isActionObject( objectInfo.objectType ) );
             }
         }

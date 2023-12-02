@@ -152,6 +152,8 @@ namespace
                                                 ICN::BUTTON_SMALL_MAX_GOOD,
                                                 ICN::BUTTON_SMALL_MAX_EVIL,
                                                 ICN::BUTTON_RESET_GOOD,
+                                                ICN::BUTTON_CASTLE_GOOD,
+                                                ICN::BUTTON_CASTLE_EVIL,
                                                 ICN::BUTTON_GUILDWELL_EXIT,
                                                 ICN::GOOD_CAMPAIGN_BUTTONS,
                                                 ICN::EVIL_CAMPAIGN_BUTTONS,
@@ -1763,6 +1765,14 @@ namespace fheroes2
 
                 break;
             }
+            case ICN::BUTTON_CASTLE_GOOD:
+            case ICN::BUTTON_CASTLE_EVIL: {
+                _icnVsSprite[id].resize( 2 );
+
+                createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], 80, gettext_noop( "CASTLE" ), id == ICN::BUTTON_CASTLE_EVIL );
+
+                break;
+            }
             case ICN::UNIFORM_EVIL_MAX_BUTTON:
             case ICN::UNIFORM_EVIL_MIN_BUTTON:
             case ICN::UNIFORM_GOOD_MAX_BUTTON:
@@ -2607,6 +2617,8 @@ namespace fheroes2
             case ICN::BUTTON_SMALL_MAX_GOOD:
             case ICN::BUTTON_SMALL_MAX_EVIL:
             case ICN::BUTTON_RESET_GOOD:
+            case ICN::BUTTON_CASTLE_GOOD:
+            case ICN::BUTTON_CASTLE_EVIL:
             case ICN::BUTTON_GUILDWELL_EXIT:
             case ICN::GOOD_CAMPAIGN_BUTTONS:
             case ICN::EVIL_CAMPAIGN_BUTTONS:

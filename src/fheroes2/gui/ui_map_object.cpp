@@ -65,8 +65,10 @@ namespace fheroes2
             return {};
         }
 
-        // The first object part must always have no offset.
-        assert( object.groundLevelParts.front().tileOffset == Point() );
+        // The first object part must always have no offset if it is not a shadow object.
+        if ( object.groundLevelParts.front().layerType != Maps::SHADOW_LAYER ) {
+            assert( object.groundLevelParts.front().tileOffset == Point() );
+        }
 
         if ( object.groundLevelParts.size() == 1 && object.topLevelParts.empty() ) {
             const Maps::ObjectPartInfo & objectPart = object.groundLevelParts.front();

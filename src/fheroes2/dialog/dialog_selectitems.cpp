@@ -858,20 +858,20 @@ int Dialog::selectOceanObjectType( const int resourceType )
     return selectObjectType( resourceType, objectInfo.size(), listbox );
 }
 
-int Dialog::selectCastleType( const int /* castleType */ )
+int Dialog::selectCastleType( const int castleType )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
-    fheroes2::StandardWindow background( 550, 400, true, display );
+    fheroes2::StandardWindow background( 520, 360, true, display );
 
     const fheroes2::Rect area( background.activeArea() );
 
     int32_t listOffsetY = 0;
 
-    fheroes2::Text text( _( "Select Castle:" ), fheroes2::FontType::normalYellow() );
+    fheroes2::Text text( _( "Select Castle" ), fheroes2::FontType::normalYellow() );
     text.draw( area.x + ( area.width - text.width() ) / 2, area.y + 10, display );
 
     // The additional text under the title.
-    text.set( _( "Select color, race and castle/town." ), fheroes2::FontType::normalWhite() );
+    text.set( _( "Select color and race." ), fheroes2::FontType::normalWhite() );
     text.draw( area.x + ( area.width - text.width() ) / 2, area.y + 30, display );
     listOffsetY = text.height() + 3;
 
@@ -882,52 +882,99 @@ int Dialog::selectCastleType( const int /* castleType */ )
     const fheroes2::Sprite & colorSpriteBorder = fheroes2::AGG::GetICN( ICN::BRCREST, 6 );
     const fheroes2::Sprite & raceShadow = fheroes2::AGG::GetICN( ICN::NGEXTRA, 61 );
 
+    std::array<fheroes2::Rect, 7> colorRect;
+    std::array<fheroes2::Rect, 7> raceRect;
+
     // Neutral color.
     fheroes2::Blit( colorSpriteBorder, display, pos.x, pos.y );
     fheroes2::addGradientShadow( colorSpriteBorder, display, pos, { -5, 5 } );
     const fheroes2::Sprite & neutralColorSprite = fheroes2::AGG::GetICN( ICN::BRCREST, 7 );
     fheroes2::Copy( neutralColorSprite, 0, 0, display, pos.x + 4, pos.y + 4, neutralColorSprite.width(), neutralColorSprite.height() );
+    colorRect[0] = { pos.x + 4, pos.y + 4, neutralColorSprite.width(), neutralColorSprite.height() };
 
     // Random race.
     const fheroes2::Sprite & randomRaceSprite = fheroes2::AGG::GetICN( ICN::NGEXTRA, 58 );
     fheroes2::Copy( randomRaceSprite, 0, 0, display, pos.x - 2, pos.y + raceOffsetY, randomRaceSprite.width(), randomRaceSprite.height() );
     fheroes2::Blit( raceShadow, display, pos.x - 5, pos.y + raceOffsetY + 2 );
+    raceRect[0] = { pos.x - 2, pos.y + raceOffsetY, randomRaceSprite.width(), randomRaceSprite.height() };
 
     pos.x += stepX;
-    for ( int32_t i = 0; i < 6; ++i ) {
+    for ( uint32_t i = 0; i < 6; ++i ) {
         const fheroes2::Sprite & colorSprite = fheroes2::AGG::GetICN( ICN::BRCREST, i );
 
         fheroes2::Blit( colorSpriteBorder, display, pos.x, pos.y );
         fheroes2::addGradientShadow( colorSpriteBorder, display, pos, { -5, 5 } );
         fheroes2::Copy( colorSprite, 0, 0, display, pos.x + 4, pos.y + 4, colorSprite.width(), colorSprite.height() );
+        colorRect[i + 1] = { pos.x + 4, pos.y + 4, colorSprite.width(), colorSprite.height() };
 
-        const fheroes2::Sprite & raceSprite = fheroes2::AGG::GetICN( ICN::NGEXTRA, 51 + i );
+        const fheroes2::Sprite & raceSprite = fheroes2::AGG::GetICN( ICN::NGEXTRA, 51U + i );
         fheroes2::Copy( raceSprite, 0, 0, display, pos.x - 2, pos.y + raceOffsetY, raceSprite.width(), raceSprite.height() );
         fheroes2::Blit( raceShadow, display, pos.x - 5, pos.y + raceOffsetY + 2 );
+        raceRect[i + 1] = { pos.x - 2, pos.y + raceOffsetY, raceSprite.width(), raceSprite.height() };
 
         pos.x += stepX;
     }
+
+    pos.x = area.x + area.width / 2;
+    pos.y += 230;
+
+    int castleRace = ( castleType > -1 ) ? castleType : 0;
 
     const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
 
     // Render dialog buttons.
     fheroes2::Button buttonOk;
     fheroes2::Button buttonCancel;
+    fheroes2::Button buttonTownCastle;
     background.renderOkayCancelButtons( buttonOk, buttonCancel, isEvilInterface );
+    background.renderButton( buttonTownCastle, isEvilInterface ? ICN::BUTTON_CASTLE_EVIL : ICN::BUTTON_CASTLE_GOOD, 0, 1, { 0, 7 },
+                             fheroes2::StandardWindow::Padding::BOTTOM_CENTER );
 
-    display.render( background.totalArea() );
+    fheroes2::ImageRestorer castleBackground( display, pos.x - 7 * 32 + 16, pos.y - 4 * 32 + 16, 9 * 32, 5 * 32 );
 
     LocalEvent & le = LocalEvent::Get();
+    bool needRedraw = true;
+    bool isCastle = false;
+    const size_t basementId = isEvilInterface ? 31 : 33;
 
     while ( le.HandleEvents() ) {
-        le.MousePressLeft( buttonOk.area() ) && buttonOk.isEnabled() ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
+        le.MousePressLeft( buttonOk.area() ) ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
         le.MousePressLeft( buttonCancel.area() ) ? buttonCancel.drawOnPress() : buttonCancel.drawOnRelease();
 
         if ( le.MouseClickLeft( buttonOk.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) ) {
-            return 1;
+            return castleRace;
         }
-        else if ( le.MouseClickLeft( buttonCancel.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
+        if ( le.MouseClickLeft( buttonCancel.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
             return -1;
+        }
+
+        if ( le.MouseClickLeft( buttonTownCastle.area() ) ) {
+            isCastle = buttonTownCastle.isPressed();
+            needRedraw = true;
+        }
+        else if ( le.MousePressLeft( buttonTownCastle.area() ) ) {
+            if ( isCastle ) {
+                buttonTownCastle.drawOnRelease();
+            }
+            else {
+                buttonTownCastle.drawOnPress();
+            }
+        }
+        else {
+            if ( isCastle ) {
+                buttonTownCastle.drawOnPress();
+            }
+            else {
+                buttonTownCastle.drawOnRelease();
+            }
+        }
+
+        for ( size_t i = 0; i < 7; ++i ) {
+            if ( le.MouseClickLeft( raceRect[i] ) ) {
+                castleRace = static_cast<int>( i );
+                needRedraw = true;
+                continue;
+            }
         }
 
         if ( le.MousePressRight( buttonCancel.area() ) ) {
@@ -936,7 +983,25 @@ int Dialog::selectCastleType( const int /* castleType */ )
         else if ( le.MousePressRight( buttonOk.area() ) ) {
             fheroes2::showStandardTextMessage( _( "Okay" ), _( "Click to start placing the selected castle." ), Dialog::ZERO );
         }
+
+        if ( !needRedraw ) {
+            continue;
+        }
+
+        castleBackground.restore();
+
+        const size_t objectOffset = castleRace * 4 + ( isCastle ? 0 : 2 );
+        const fheroes2::Sprite & castleShadow = fheroes2::generateMapObjectImage( Maps::getObjectsByGroup( Maps::ObjectGroup::KINGDOM_TOWNS )[objectOffset + 1] );
+        fheroes2::Blit( castleShadow, display, pos.x + castleShadow.x(), pos.y + castleShadow.y() );
+        const fheroes2::Sprite & castleBasement = fheroes2::generateMapObjectImage( Maps::getObjectsByGroup( Maps::ObjectGroup::KINGDOM_TOWNS )[basementId] );
+        fheroes2::Blit( castleBasement, display, pos.x + castleBasement.x(), pos.y + castleBasement.y() );
+        const fheroes2::Sprite & castleImage = fheroes2::generateMapObjectImage( Maps::getObjectsByGroup( Maps::ObjectGroup::KINGDOM_TOWNS )[objectOffset] );
+        fheroes2::Blit( castleImage, display, pos.x + castleImage.x(), pos.y + castleImage.y() );
+
+        display.render( background.totalArea() );
+
+        needRedraw = false;
     }
 
-    return 0;
+    return castleRace;
 }
