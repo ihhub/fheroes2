@@ -7545,40 +7545,40 @@ msgstr ""
 "szörös"
 
 msgid "doubleLinedRace|Random"
-msgstr ""
+msgstr "Véletlen"
 
 msgid "doubleLinedRace|Neutral"
-msgstr ""
+msgstr "Semleges"
 
 msgid "speed|Standing"
-msgstr ""
+msgstr "Álló"
 
 msgid "speed|Crawling"
-msgstr ""
+msgstr "Vánszorgó"
 
 msgid "speed|Very Slow"
-msgstr ""
+msgstr "Nagyon lassú"
 
 msgid "speed|Slow"
 msgstr "Lassú"
 
 msgid "speed|Average"
-msgstr ""
+msgstr "Átlagos"
 
 msgid "speed|Fast"
-msgstr ""
+msgstr "Gyors"
 
 msgid "speed|Very Fast"
-msgstr ""
+msgstr "Nagyon gyors"
 
 msgid "speed|Ultra Fast"
-msgstr ""
+msgstr "Túl gyors"
 
 msgid "speed|Blazing"
-msgstr ""
+msgstr "Villámgyors"
 
 msgid "speed|Instant"
-msgstr ""
+msgstr "Itt terem"
 
 msgid "week|Squirrel"
 msgstr "Mókus"
@@ -7656,10 +7656,10 @@ msgid "week|Beetle"
 msgstr ""
 
 msgid "week|PLAGUE"
-msgstr ""
+msgstr "PESTIS"
 
 msgid "week|Unnamed"
-msgstr ""
+msgstr "Névtelen"
 
 msgid "Desert"
 msgstr "Sivatag"
@@ -7683,22 +7683,22 @@ msgid "Grass"
 msgstr "Fű"
 
 msgid "Ocean"
-msgstr ""
+msgstr "Óceán"
 
 msgid "maps|Small"
-msgstr ""
+msgstr "Kicsi"
 
 msgid "maps|Medium"
-msgstr ""
+msgstr "Közepes"
 
 msgid "maps|Large"
-msgstr ""
+msgstr "Nagy"
 
 msgid "maps|Extra Large"
-msgstr ""
+msgstr "Nagyon nagy"
 
 msgid "maps|Custom Size"
-msgstr ""
+msgstr "Egyedi"
 
 msgid "Ore Mine"
 msgstr "Ércbánya"
@@ -7722,13 +7722,13 @@ msgid "Burma shave."
 msgstr ""
 
 msgid "Next sign 50 miles."
-msgstr ""
+msgstr "Következő jelzés 50 mérföldre."
 
 msgid "See Rock City."
-msgstr "Kő Város"
+msgstr "Kőváros"
 
 msgid "This space for rent."
-msgstr ""
+msgstr "Ez a hely kiadó."
 
 msgid "No object"
 msgstr "Nincs tárgy"
@@ -7831,7 +7831,7 @@ msgid "Desert Tent"
 msgstr "Sivatagi sátor"
 
 msgid "Stone Liths"
-msgstr "Állókövek"
+msgstr "Átjáró"
 
 msgid "Wagon Camp"
 msgstr "Szekértábor"
@@ -7994,11 +7994,10 @@ msgstr "Üveg"
 msgid "Magic Well"
 msgstr "Varázskút"
 
-#, fuzzy
 msgid "Magic Garden"
 msgid_plural "Magic Gardens"
 msgstr[0] "Varázskert"
-msgstr[1] "Varázskert"
+msgstr[1] "Varázskertek"
 
 msgid "Observation Tower"
 msgstr "Kilátótorony"
