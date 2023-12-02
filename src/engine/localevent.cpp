@@ -800,7 +800,7 @@ bool LocalEvent::HandleEvents( const bool sleepAfterEventProcessing, const bool 
             break;
         case SDL_TEXTINPUT: {
             _lastPressedCodePoint = event.key.keysym.sym;
-            if ( !Encoding::utf8ToCodePoint( reinterpret_cast<uint8_t*>( event.text.text ), 32, _lastPressedCodePoint ) ) {
+            if ( !Encoding::utf8ToCodePoint( reinterpret_cast<uint8_t *>( event.text.text ), 32, _lastPressedCodePoint ) ) {
                 _lastPressedCodePoint = 0;
             }
             break;
