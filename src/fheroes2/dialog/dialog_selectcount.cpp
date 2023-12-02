@@ -316,7 +316,7 @@ bool Dialog::InputString( const std::string & header, std::string & res, const s
 
     const bool isInGameKeyboardRequired = System::isVirtualKeyboardSupported();
 
-    const TextInputEnabler textInputEnabler( le );
+    const TextInputEnabler textInputEnabler;
 
     const Encoding::CodePage codePage = fheroes2::getCodePage( fheroes2::getCurrentLanguage() );
 

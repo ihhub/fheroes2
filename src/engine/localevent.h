@@ -448,10 +448,9 @@ private:
 class TextInputEnabler
 {
 public:
-    TextInputEnabler( LocalEvent & eventHandler )
-        : _handler( eventHandler )
+    TextInputEnabler()
     {
-        _handler.enableTextInput();
+        LocalEvent::enableTextInput();
     }
 
     TextInputEnabler( const TextInputEnabler & ) = delete;
@@ -459,11 +458,8 @@ public:
 
     ~TextInputEnabler()
     {
-        _handler.disableTextInput();
+        LocalEvent::disableTextInput();
     }
-
-private:
-    LocalEvent & _handler;
 };
 
 #endif

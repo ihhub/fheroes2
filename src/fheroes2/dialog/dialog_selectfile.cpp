@@ -414,7 +414,7 @@ namespace
 
         LocalEvent & le = LocalEvent::Get();
 
-        const TextInputEnabler textInputEnabler( le );
+        const TextInputEnabler textInputEnabler;
 
         while ( le.HandleEvents( !isEditing || Game::isDelayNeeded( { Game::DelayType::CURSOR_BLINK_DELAY } ) ) && result.empty() ) {
             le.MousePressLeft( buttonOk.area() ) && buttonOk.isEnabled() ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();

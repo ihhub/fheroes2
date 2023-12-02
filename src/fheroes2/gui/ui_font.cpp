@@ -26,6 +26,7 @@
 #include <initializer_list>
 #include <memory>
 
+#include "char_encoding.h"
 #include "icn.h"
 #include "image.h"
 #include "math_base.h"
