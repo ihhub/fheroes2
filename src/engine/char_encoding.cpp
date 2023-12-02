@@ -26,7 +26,7 @@
 namespace
 {
     // All code page related array indexes are equal to index + 128 value in their code pages.
-    //For example, a first element in an array is actually value 128 in their code page.
+    // For example, a first element in an array is actually value 128 in their code page.
     const std::array<uint32_t, 128> cp1251CodePoints{ 0x0402, 0x0403, 0x201A, 0x0453, 0x201E, 0x2026, 0x2020, 0x2021, 0x20AC, 0x2030, 0x0409, 0x2039, 0x040A,
                                                       0x040C, 0x040B, 0x040F, 0x0452, 0x2018, 0x2019, 0x201C, 0x201D, 0x2022, 0x2013, 0x2014, 0x0000, 0x2122,
                                                       0x0459, 0x203A, 0x045A, 0x045C, 0x045B, 0x045F, 0x00A0, 0x040E, 0x045E, 0x0408, 0x00A4, 0x0490, 0x00A6,
