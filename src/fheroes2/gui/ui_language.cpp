@@ -71,6 +71,46 @@ namespace
 
 namespace fheroes2
 {
+    Encoding::CodePage getCodePage( const SupportedLanguage language )
+    {
+        switch ( language ) {
+        case SupportedLanguage::English:
+            return Encoding::CodePage::ASCII;
+        case SupportedLanguage::Czech:
+        case SupportedLanguage::Hungarian:
+        case SupportedLanguage::Polish:
+        case SupportedLanguage::Slovak:
+            return Encoding::CodePage::CP1250;
+        case SupportedLanguage::Belarusian:
+        case SupportedLanguage::Bulgarian:
+        case SupportedLanguage::Russian:
+        case SupportedLanguage::Ukrainian:
+            return Encoding::CodePage::CP1251;
+        case SupportedLanguage::Danish:
+        case SupportedLanguage::Dutch:
+        case SupportedLanguage::French:
+        case SupportedLanguage::German:
+        case SupportedLanguage::Italian:
+        case SupportedLanguage::Norwegian:
+        case SupportedLanguage::Portuguese:
+        case SupportedLanguage::Spanish:
+        case SupportedLanguage::Swedish:
+            return Encoding::CodePage::CP1252;
+        case SupportedLanguage::Turkish:
+            return Encoding::CodePage::CP1254;
+        case SupportedLanguage::Vietnamese:
+            return Encoding::CodePage::CP1258;
+        case SupportedLanguage::Romanian:
+            return Encoding::CodePage::ISO8859_16;
+        default:
+            // Add new language generation code!
+            assert( 0 );
+            break;
+        }
+
+        return Encoding::CodePage::ASCII;
+    }
+
     LanguageSwitcher::LanguageSwitcher( const SupportedLanguage language )
         : _currentLanguage( Settings::Get().getGameLanguage() )
     {

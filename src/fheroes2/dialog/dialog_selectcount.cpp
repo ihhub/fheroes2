@@ -31,6 +31,7 @@
 #include <vector>
 
 #include "agg_image.h"
+#include "char_encoding.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game_delays.h"
@@ -47,6 +48,7 @@
 #include "ui_button.h"
 #include "ui_dialog.h"
 #include "ui_keyboard.h"
+#include "ui_language.h"
 #include "ui_text.h"
 #include "ui_tool.h"
 
@@ -314,6 +316,10 @@ bool Dialog::InputString( const std::string & header, std::string & res, const s
 
     const bool isInGameKeyboardRequired = System::isVirtualKeyboardSupported();
 
+    const TextInputEnabler textInputEnabler( le );
+
+    const Encoding::CodePage codePage = fheroes2::getCodePage( fheroes2::getCurrentLanguage() );
+
     while ( le.HandleEvents( Game::isDelayNeeded( { Game::DelayType::CURSOR_BLINK_DELAY } ) ) ) {
         bool redraw = false;
 
@@ -340,7 +346,7 @@ bool Dialog::InputString( const std::string & header, std::string & res, const s
         }
         else if ( le.KeyPress() ) {
             if ( charLimit == 0 || charLimit > res.size() || le.KeyValue() == fheroes2::Key::KEY_BACKSPACE ) {
-                charInsertPos = InsertKeySym( res, charInsertPos, le.KeyValue(), LocalEvent::getCurrentKeyModifiers() );
+                charInsertPos = le.insertLastPressedSymbol( res, charInsertPos, codePage );
                 redraw = true;
             }
         }

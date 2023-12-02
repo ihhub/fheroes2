@@ -34,6 +34,7 @@
 #include <vector>
 
 #include "agg_image.h"
+#include "char_encoding.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "dir.h"
@@ -54,6 +55,7 @@
 #include "ui_button.h"
 #include "ui_dialog.h"
 #include "ui_keyboard.h"
+#include "ui_language.h"
 #include "ui_scrollbar.h"
 #include "ui_text.h"
 #include "ui_tool.h"
@@ -408,7 +410,11 @@ namespace
 
         bool isCursorVisible = true;
 
+        const Encoding::CodePage codePage = fheroes2::getCodePage( fheroes2::getCurrentLanguage() );
+
         LocalEvent & le = LocalEvent::Get();
+
+        const TextInputEnabler textInputEnabler( le );
 
         while ( le.HandleEvents( !isEditing || Game::isDelayNeeded( { Game::DelayType::CURSOR_BLINK_DELAY } ) ) && result.empty() ) {
             le.MousePressLeft( buttonOk.area() ) && buttonOk.isEnabled() ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
@@ -464,7 +470,7 @@ namespace
                 }
                 else if ( !listboxEvent && le.KeyPress()
                           && ( !isTextLimit || fheroes2::Key::KEY_BACKSPACE == le.KeyValue() || fheroes2::Key::KEY_DELETE == le.KeyValue() ) ) {
-                    charInsertPos = InsertKeySym( filename, charInsertPos, le.KeyValue(), LocalEvent::getCurrentKeyModifiers() );
+                    charInsertPos = le.insertLastPressedSymbol( filename, charInsertPos, codePage );
                     if ( filename.empty() ) {
                         buttonOk.disable();
                     }

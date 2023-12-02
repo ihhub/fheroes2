@@ -43,6 +43,7 @@
 #include <SDL_video.h>
 
 #include "audio.h"
+#include "char_encoding.h"
 #include "image.h"
 #include "render_processor.h"
 #include "screen.h"
@@ -340,8 +341,12 @@ namespace
         return modifier;
     }
 
-    char getCharacterFromPressedKey( const fheroes2::Key key, const int32_t mod )
+    char getCharacterFromPressedKey( const fheroes2::Key key, int32_t mod )
     {
+        if ( ( mod & fheroes2::KeyModifier::KEY_MODIFIER_SHIFT ) && ( mod & fheroes2::KeyModifier::KEY_MODIFIER_CAPS ) ) {
+            mod = mod & ~( fheroes2::KeyModifier::KEY_MODIFIER_SHIFT | fheroes2::KeyModifier::KEY_MODIFIER_CAPS );
+        }
+
         switch ( key ) {
         case fheroes2::Key::KEY_1:
             return ( fheroes2::KeyModifier::KEY_MODIFIER_SHIFT & mod ? '!' : '1' );
@@ -609,53 +614,6 @@ namespace fheroes2
 
         return false;
     }
-
-    size_t InsertKeySym( std::string & res, size_t pos, const Key key, const int32_t mod )
-    {
-        switch ( key ) {
-        case fheroes2::Key::KEY_BACKSPACE:
-            if ( !res.empty() && pos ) {
-                if ( pos >= res.size() )
-                    res.resize( res.size() - 1 );
-                else
-                    res.erase( pos - 1, 1 );
-                --pos;
-            }
-            break;
-        case fheroes2::Key::KEY_DELETE:
-            if ( !res.empty() ) {
-                if ( pos < res.size() )
-                    res.erase( pos, 1 );
-            }
-            break;
-
-        case fheroes2::Key::KEY_LEFT:
-            if ( pos )
-                --pos;
-            break;
-        case fheroes2::Key::KEY_RIGHT:
-            if ( pos < res.size() )
-                ++pos;
-            break;
-        case fheroes2::Key::KEY_HOME:
-            pos = 0;
-            break;
-        case fheroes2::Key::KEY_END:
-            pos = res.size();
-            break;
-
-        default: {
-            char c = getCharacterFromPressedKey( key, mod );
-
-            if ( c ) {
-                res.insert( pos, 1, c );
-                ++pos;
-            }
-        }
-        }
-
-        return pos;
-    }
 }
 
 LocalEvent::LocalEvent()
@@ -719,6 +677,16 @@ LocalEvent & LocalEvent::GetClean()
     return le;
 }
 
+void LocalEvent::enableTextInput()
+{
+    SDL_StartTextInput();
+}
+
+void LocalEvent::disableTextInput()
+{
+    SDL_StopTextInput();
+}
+
 bool LocalEvent::HandleEvents( const bool sleepAfterEventProcessing, const bool allowExit /* = false */ )
 {
     // Event processing might be computationally heavy.
@@ -768,6 +736,7 @@ bool LocalEvent::HandleEvents( const bool sleepAfterEventProcessing, const bool 
             break;
         case SDL_KEYDOWN:
         case SDL_KEYUP:
+            _lastPressedCodePoint = 0;
             HandleKeyboardEvent( event.key );
             break;
         case SDL_MOUSEMOTION:
@@ -829,9 +798,13 @@ bool LocalEvent::HandleEvents( const bool sleepAfterEventProcessing, const bool 
             HandleRenderDeviceResetEvent();
             renderRoi = { 0, 0, display.width(), display.height() };
             break;
-        case SDL_TEXTINPUT:
-            // Keyboard events on Android should be processed here. Use event.text.text to extract text input.
+        case SDL_TEXTINPUT: {
+            _lastPressedCodePoint = event.key.keysym.sym;
+            if ( !Encoding::utf8ToCodePoint( reinterpret_cast<uint8_t*>( event.text.text ), 32, _lastPressedCodePoint ) ) {
+                _lastPressedCodePoint = 0;
+            }
             break;
+        }
         case SDL_TEXTEDITING:
             // An event when a user pressed a button on a keyboard. Not all buttons are supported. This event should be used mainly on Android devices.
             break;
@@ -1255,25 +1228,25 @@ bool LocalEvent::MousePressRight() const
 
 void LocalEvent::HandleKeyboardEvent( const SDL_KeyboardEvent & event )
 {
-    const fheroes2::Key key = getKeyFromSDL( event.keysym.sym );
-    if ( key == fheroes2::Key::NONE ) {
-        return;
-    }
-
     if ( event.type == SDL_KEYDOWN ) {
         SetModes( KEY_PRESSED );
         SetModes( KEY_HOLD );
 
-        if ( _globalKeyDownEventHook ) {
+        const fheroes2::Key key = getKeyFromSDL( event.keysym.sym );
+        if ( key != fheroes2::Key::NONE && _globalKeyDownEventHook ) {
+            key_value = key;
             _globalKeyDownEventHook( key, getKeyModifierFromSDL( event.keysym.mod ) );
+        }
+        else {
+            key_value = fheroes2::Key::NONE;
         }
     }
     else if ( event.type == SDL_KEYUP ) {
         ResetModes( KEY_PRESSED );
         ResetModes( KEY_HOLD );
-    }
 
-    key_value = key;
+        key_value = fheroes2::Key::NONE;
+    }
 }
 
 void LocalEvent::HandleMouseMotionEvent( const SDL_MouseMotionEvent & motion )
@@ -1575,4 +1548,62 @@ void LocalEvent::setEventProcessingStates()
     // SDL_POLLSENTINEL is supported from SDL 2.0.?
     // We do not support custom user events as of now.
     setEventProcessingState( SDL_USEREVENT, false );
+}
+
+size_t LocalEvent::insertLastPressedSymbol( std::string & res, size_t pos, const Encoding::CodePage codePage )
+{
+    switch ( key_value ) {
+    case fheroes2::Key::KEY_BACKSPACE:
+        if ( !res.empty() && pos > 0 ) {
+            if ( pos >= res.size() ) {
+                res.resize( res.size() - 1 );
+            }
+            else {
+                res.erase( pos - 1, 1 );
+            }
+
+            --pos;
+        }
+        return pos;
+    case fheroes2::Key::KEY_DELETE:
+        if ( !res.empty() ) {
+            if ( pos < res.size() ) {
+                res.erase( pos, 1 );
+            }
+        }
+        return pos;
+    case fheroes2::Key::KEY_LEFT:
+        if ( pos > 0 ) {
+            --pos;
+        }
+        return pos;
+    case fheroes2::Key::KEY_RIGHT:
+        if ( pos < res.size() ) {
+            ++pos;
+        }
+        return pos;
+    case fheroes2::Key::KEY_HOME:
+        return 0;
+    case fheroes2::Key::KEY_END:
+        return res.size();
+    default:
+        break;
+    }
+
+    if ( Encoding::isASCIICharacter( _lastPressedCodePoint ) ) {
+        const char character = getCharacterFromPressedKey( key_value, LocalEvent::getCurrentKeyModifiers() );
+        if ( character != 0 ) {
+            res.insert( pos, 1, character );
+            ++pos;
+        }
+    }
+    else {
+        const uint8_t character = Encoding::getCodePageCharacter( _lastPressedCodePoint, codePage );
+        if ( character != 0 ) {
+            res.insert( pos, 1, character );
+            ++pos;
+        }
+    }
+
+    return pos;
 }

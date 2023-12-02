@@ -38,6 +38,11 @@
 #include "math_base.h"
 #include "timing.h"
 
+namespace Encoding
+{
+    enum class CodePage : uint8_t;
+}
+
 namespace fheroes2
 {
     enum class Key : int32_t
@@ -174,8 +179,6 @@ namespace fheroes2
     const char * KeySymGetName( const Key key );
 
     bool PressIntKey( uint32_t max, uint32_t & result );
-
-    size_t InsertKeySym( std::string & res, size_t pos, const Key key, const int32_t mod );
 }
 
 class LocalEvent
@@ -197,6 +200,10 @@ public:
     static void setEventProcessingStates();
 
     bool HandleEvents( const bool sleepAfterEventProcessing = true, const bool allowExit = false );
+
+    void enableTextInput();
+
+    void disableTextInput();
 
     bool MouseMotion() const
     {
@@ -305,6 +312,8 @@ public:
             _controllerPointerSpeed = newSpeed / CONTROLLER_SPEED_MOD;
         }
     }
+
+    size_t insertLastPressedSymbol( std::string & res, size_t pos, const Encoding::CodePage codePage );
 
 private:
     LocalEvent();
@@ -432,6 +441,29 @@ private:
     std::pair<std::optional<std::pair<SDL_TouchID, SDL_FingerID>>, std::optional<std::pair<SDL_TouchID, SDL_FingerID>>> _fingerIds;
     // Is the two-finger gesture currently being processed
     bool _isTwoFingerGestureInProgress = false;
+
+    uint32_t _lastPressedCodePoint{ 0 };
+};
+
+class TextInputEnabler
+{
+public:
+    TextInputEnabler( LocalEvent & eventHandler )
+        : _handler( eventHandler )
+    {
+        _handler.enableTextInput();
+    }
+
+    TextInputEnabler( const TextInputEnabler & ) = delete;
+    TextInputEnabler & operator=( const TextInputEnabler & ) = delete;
+
+    ~TextInputEnabler()
+    {
+        _handler.disableTextInput();
+    }
+
+private:
+    LocalEvent & _handler;
 };
 
 #endif

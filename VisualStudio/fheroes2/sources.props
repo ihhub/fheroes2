@@ -3,6 +3,7 @@
   <ItemGroup>
     <ClCompile Include="src\engine\agg_file.cpp" />
     <ClCompile Include="src\engine\audio.cpp" />
+    <ClCompile Include="src\engine\char_encoding.cpp" />
     <ClCompile Include="src\engine\core.cpp" />
     <ClCompile Include="src\engine\dir.cpp" />
     <ClCompile Include="src\engine\h2d_file.cpp" />
@@ -238,6 +239,7 @@
   <ItemGroup>
     <ClInclude Include="src\engine\agg_file.h" />
     <ClInclude Include="src\engine\audio.h" />
+    <ClInclude Include="src\engine\char_encoding.h" />
     <ClInclude Include="src\engine\core.h" />
     <ClInclude Include="src\engine\dir.h" />
     <ClInclude Include="src\engine\endian_h2.h" />
