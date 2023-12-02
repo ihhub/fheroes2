@@ -7632,7 +7632,7 @@ msgid "week|Grasshopper"
 msgstr "Szöcske"
 
 msgid "week|Dragonfly"
-msgstr ""
+msgstr "Szitakötő"
 
 msgid "week|Spider"
 msgstr "Pók"
@@ -7641,13 +7641,13 @@ msgid "week|Butterfly"
 msgstr "Pillangó"
 
 msgid "week|Bumblebee"
-msgstr ""
+msgstr "Darázs"
 
 msgid "week|Locust"
-msgstr ""
+msgstr "Sáska"
 
 msgid "week|Earthworm"
-msgstr ""
+msgstr "Földigiliszta"
 
 msgid "week|Hornet"
 msgstr ""
