@@ -1550,7 +1550,7 @@ void LocalEvent::setEventProcessingStates()
     setEventProcessingState( SDL_USEREVENT, false );
 }
 
-size_t LocalEvent::insertLastPressedSymbol( std::string & res, size_t pos, const Encoding::CodePage codePage )
+size_t LocalEvent::insertLastPressedSymbol( std::string & res, size_t pos, const Encoding::CodePage codePage ) const
 {
     switch ( key_value ) {
     case fheroes2::Key::KEY_BACKSPACE:

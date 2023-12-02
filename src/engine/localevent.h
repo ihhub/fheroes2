@@ -313,7 +313,7 @@ public:
         }
     }
 
-    size_t insertLastPressedSymbol( std::string & res, size_t pos, const Encoding::CodePage codePage );
+    size_t insertLastPressedSymbol( std::string & res, size_t pos, const Encoding::CodePage codePage ) const;
 
 private:
     LocalEvent();
