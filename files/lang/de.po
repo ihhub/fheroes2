@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-19 15:02+0000\n"
+"POT-Creation-Date: 2023-11-27 00:58+0000\n"
 "PO-Revision-Date: 2023-04-09 23:51+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -196,6 +196,9 @@ msgstr "INTRO ANZEIGEN"
 
 msgid "MIN"
 msgstr "MIN"
+
+msgid "RESET"
+msgstr ""
 
 msgid ""
 "D\n"
@@ -926,14 +929,9 @@ msgstr "Zauberkraft setzen"
 msgid "Set Knowledge Skill"
 msgstr "Wissen setzen"
 
-msgid "%{race1} %{name1}"
-msgstr "%{name1} (%{race1})"
-
-msgid "vs"
-msgstr "gegen"
-
-msgid "%{race2} %{name2}"
-msgstr "%{name2} (%{race2})"
+#, fuzzy
+msgid "%{race1} %{name1} vs %{race2} %{name2}"
+msgstr "%{name1} trifft %{name2}"
 
 msgid "Monsters"
 msgstr "Monster"
@@ -3035,6 +3033,16 @@ msgid "Show extra information such as FPS and current time."
 msgstr ""
 "Zusätzliche Informationen anzeigen, wie die FPS und die aktuelle Zeit an."
 
+msgid "Hotkey: "
+msgstr ""
+
+msgid "Category: "
+msgstr ""
+
+#, fuzzy
+msgid "Event: "
+msgstr "Ereignis"
+
 msgid "Hot Keys:"
 msgstr "Hotkeys:"
 
@@ -4597,6 +4605,33 @@ msgstr ""
 "Möchtet Ihr die Kontrolle von Euch auf die KI übertragen? Der Effekt tritt "
 "erst in der nächsten Runde ein."
 
+#, fuzzy
+msgid "Default Actions"
+msgstr "Standardaktion"
+
+msgid "Global Actions"
+msgstr ""
+
+msgid "Main Menu"
+msgstr ""
+
+msgid "World Map"
+msgstr "Weltkarte"
+
+#, fuzzy
+msgid "Battle Screen"
+msgstr "Heldenbildschirm"
+
+#, fuzzy
+msgid "Town Screen"
+msgstr "Heldenbildschirm"
+
+msgid "Army Actions"
+msgstr ""
+
+msgid "Editor"
+msgstr "Editor"
+
 msgid "The save file is corrupted."
 msgstr "Die Speicherdatei ist beschädigt."
 
@@ -4709,9 +4744,6 @@ msgid ""
 "\n"
 "Enjoy the game!"
 msgstr ""
-
-msgid "Editor"
-msgstr "Editor"
 
 msgid "The Editor requires \"The Price of Loyalty\" expansion files to work."
 msgstr ""
@@ -5294,9 +5326,6 @@ msgid "A miniature view of the known world. Left click to move viewing area."
 msgstr ""
 "Eine Miniaturansicht der bekannten Welt. Klickt mit der linken Maustaste, um "
 "den Sichtbereich zu verschieben."
-
-msgid "World Map"
-msgstr "Weltkarte"
 
 msgid "Month: %{month} Week: %{week}"
 msgstr "Monat: %{month} Woche: %{week}"
@@ -11149,3 +11178,12 @@ msgstr ""
 "Die neueste Version des Spiels finden Sie unter\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "%{race1} %{name1}"
+#~ msgstr "%{name1} (%{race1})"
+
+#~ msgid "vs"
+#~ msgstr "gegen"
+
+#~ msgid "%{race2} %{name2}"
+#~ msgstr "%{name2} (%{race2})"

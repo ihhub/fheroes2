@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-19 15:02+0000\n"
+"POT-Creation-Date: 2023-11-27 00:58+0000\n"
 "PO-Revision-Date: 2023-08-26 23:09+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: https://discord.com/"
@@ -199,6 +199,9 @@ msgstr ""
 
 msgid "MIN"
 msgstr "MIN"
+
+msgid "RESET"
+msgstr ""
 
 msgid ""
 "D\n"
@@ -932,14 +935,9 @@ msgstr "Ustaw wartość Mocy zaklęć"
 msgid "Set Knowledge Skill"
 msgstr "Ustaw wartość Wiedzy"
 
-msgid "%{race1} %{name1}"
-msgstr "%{race1} %{name1}"
-
-msgid "vs"
-msgstr "vs"
-
-msgid "%{race2} %{name2}"
-msgstr "%{race2} %{name2}"
+#, fuzzy
+msgid "%{race1} %{name1} vs %{race2} %{name2}"
+msgstr "Spotkanie: %{name1} i %{name2}"
 
 msgid "Monsters"
 msgstr "Potwory"
@@ -3016,6 +3014,16 @@ msgstr "Włączenie V-Sync może rozwiązać problemy z migocącym ekranem."
 msgid "Show extra information such as FPS and current time."
 msgstr "Pokaż dodatkowe informacje jak na przykład FPS lub aktualną godzinę."
 
+msgid "Hotkey: "
+msgstr ""
+
+msgid "Category: "
+msgstr ""
+
+#, fuzzy
+msgid "Event: "
+msgstr "Zdarzenie"
+
 msgid "Hot Keys:"
 msgstr "Skróty klawiszowe:"
 
@@ -4549,6 +4557,33 @@ msgid ""
 msgstr ""
 "Czy chcesz przekazać AI kontrolę? Efekt zadziała tylko w następnej turze."
 
+#, fuzzy
+msgid "Default Actions"
+msgstr "domyślna akcja"
+
+msgid "Global Actions"
+msgstr ""
+
+msgid "Main Menu"
+msgstr ""
+
+msgid "World Map"
+msgstr "Mapa świata"
+
+#, fuzzy
+msgid "Battle Screen"
+msgstr "Ekran bohatera"
+
+#, fuzzy
+msgid "Town Screen"
+msgstr "Ekran bohatera"
+
+msgid "Army Actions"
+msgstr ""
+
+msgid "Editor"
+msgstr ""
+
 msgid "The save file is corrupted."
 msgstr "Plik z zapisaną grą jest uszkodzony."
 
@@ -4659,9 +4694,6 @@ msgid ""
 " menu. \n"
 "\n"
 "Enjoy the game!"
-msgstr ""
-
-msgid "Editor"
 msgstr ""
 
 #, fuzzy
@@ -5225,9 +5257,6 @@ msgid "A miniature view of the known world. Left click to move viewing area."
 msgstr ""
 "Miniaturowy obraz znanego świata. Kliknij lewym przyciskiem, aby przesunąć "
 "widoczny obszar."
-
-msgid "World Map"
-msgstr "Mapa świata"
 
 msgid "Month: %{month} Week: %{week}"
 msgstr "Miesiąc: %{month} Tydzień: %{week}"
@@ -11000,3 +11029,12 @@ msgstr ""
 "Możesz pobrać najnowszą wersję gry ze strony:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "%{race1} %{name1}"
+#~ msgstr "%{race1} %{name1}"
+
+#~ msgid "vs"
+#~ msgstr "vs"
+
+#~ msgid "%{race2} %{name2}"
+#~ msgstr "%{race2} %{name2}"

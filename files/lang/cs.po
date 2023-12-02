@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-19 15:02+0000\n"
+"POT-Creation-Date: 2023-11-27 00:58+0000\n"
 "PO-Revision-Date: 2023-09-24 16:05+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Czech <cs@li.org>\n"
@@ -194,6 +194,9 @@ msgstr "ZOBRAZIT ÚVOD"
 
 msgid "MIN"
 msgstr "MIN"
+
+msgid "RESET"
+msgstr ""
 
 msgid ""
 "D\n"
@@ -943,14 +946,9 @@ msgstr "Nastav sílu kouzel"
 msgid "Set Knowledge Skill"
 msgstr "Nastav znalosti"
 
-msgid "%{race1} %{name1}"
-msgstr ""
-
-msgid "vs"
-msgstr "versus"
-
-msgid "%{race2} %{name2}"
-msgstr ""
+#, fuzzy
+msgid "%{race1} %{name1} vs %{race2} %{name2}"
+msgstr "%{name1} se střetá s %{name2}"
 
 msgid "Monsters"
 msgstr "Monstra"
@@ -2995,6 +2993,16 @@ msgstr "V-Sync může pomoct s blikáním na některých monitorech."
 msgid "Show extra information such as FPS and current time."
 msgstr "Zobraz extra informace jako FPS a místní čas."
 
+msgid "Hotkey: "
+msgstr ""
+
+msgid "Category: "
+msgstr ""
+
+#, fuzzy
+msgid "Event: "
+msgstr "Událost"
+
 msgid "Hot Keys:"
 msgstr "Kláv. zkratky:"
 
@@ -4530,6 +4538,32 @@ msgid ""
 msgstr ""
 "Přeješ si odevzdat kontrolu AI? Bude to platit pouze pro následující tah."
 
+msgid "Default Actions"
+msgstr ""
+
+msgid "Global Actions"
+msgstr ""
+
+msgid "Main Menu"
+msgstr ""
+
+msgid "World Map"
+msgstr "Mapa Světa"
+
+#, fuzzy
+msgid "Battle Screen"
+msgstr "Obrazovka hrdiny"
+
+#, fuzzy
+msgid "Town Screen"
+msgstr "Obrazovka hrdiny"
+
+msgid "Army Actions"
+msgstr ""
+
+msgid "Editor"
+msgstr ""
+
 msgid "The save file is corrupted."
 msgstr "Soubor je požkozen."
 
@@ -4631,9 +4665,6 @@ msgid ""
 " menu. \n"
 "\n"
 "Enjoy the game!"
-msgstr ""
-
-msgid "Editor"
 msgstr ""
 
 #, fuzzy
@@ -5181,9 +5212,6 @@ msgstr "Zkus hledat na volném místě."
 msgid "A miniature view of the known world. Left click to move viewing area."
 msgstr ""
 "Miniaturní pohled na odkrytý svět. Levým klikem pohneš zobrazovanou oblast."
-
-msgid "World Map"
-msgstr "Mapa Světa"
 
 msgid "Month: %{month} Week: %{week}"
 msgstr "Měsíc: %{month} Týden: %{week}"
@@ -10194,3 +10222,6 @@ msgstr ""
 "Nejnovější verzi hry nalezneš na\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "vs"
+#~ msgstr "versus"

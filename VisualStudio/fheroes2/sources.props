@@ -188,6 +188,8 @@
     <ClCompile Include="src\fheroes2\kingdom\view_world.cpp" />
     <ClCompile Include="src\fheroes2\kingdom\week.cpp" />
     <ClCompile Include="src\fheroes2\maps\ground.cpp" />
+    <ClCompile Include="src\fheroes2\maps\map_format_helper.cpp" />
+    <ClCompile Include="src\fheroes2\maps\map_format_info.cpp" />
     <ClCompile Include="src\fheroes2\maps\map_object_info.cpp" />
     <ClCompile Include="src\fheroes2\maps\maps.cpp" />
     <ClCompile Include="src\fheroes2\maps\maps_fileinfo.cpp" />
@@ -383,6 +385,8 @@
     <ClInclude Include="src\fheroes2\kingdom\view_world.h" />
     <ClInclude Include="src\fheroes2\kingdom\week.h" />
     <ClInclude Include="src\fheroes2\maps\ground.h" />
+    <ClInclude Include="src\fheroes2\maps\map_format_helper.h" />
+    <ClInclude Include="src\fheroes2\maps\map_format_info.h" />
     <ClInclude Include="src\fheroes2\maps\map_object_info.h" />
     <ClInclude Include="src\fheroes2\maps\maps.h" />
     <ClInclude Include="src\fheroes2\maps\maps_fileinfo.h" />

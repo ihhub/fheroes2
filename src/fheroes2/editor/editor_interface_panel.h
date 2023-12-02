@@ -87,7 +87,7 @@ namespace Interface
         bool showAreaSelectRect() const
         {
             return _selectedInstrument == Instrument::TERRAIN || _selectedInstrument == Instrument::STREAM || _selectedInstrument == Instrument::ROAD
-                   || _selectedInstrument == Instrument::ERASE || _selectedInstrument == Instrument::OBJECT;
+                   || _selectedInstrument == Instrument::ERASE || _selectedInstrument == Instrument::OBJECT || _selectedInstrument == Instrument::DETAIL;
         }
 
         bool useMouseDragMovement() const
@@ -231,19 +231,19 @@ namespace Interface
         std::array<int32_t, OBJECT_COUNT> _selectedObjectType;
 
         // TODO: this list is going to be modified as per proper object groups.
-        const std::array<Maps::ObjectGroup, OBJECT_COUNT> _selectedObjectGroup{ Maps::ObjectGroup::Adventure_Water,
-                                                                                Maps::ObjectGroup::Landscape_Mountains,
-                                                                                Maps::ObjectGroup::Landscape_Rocks,
-                                                                                Maps::ObjectGroup::Landscape_Trees,
-                                                                                Maps::ObjectGroup::Adventure_Dwellings,
-                                                                                Maps::ObjectGroup::Landscape_Miscellaneous,
-                                                                                Maps::ObjectGroup::Adventure_Mines,
-                                                                                Maps::ObjectGroup::Adventure_Power_Ups,
-                                                                                Maps::ObjectGroup::Landscape_Water,
-                                                                                Maps::ObjectGroup::Kingdom_Towns,
-                                                                                Maps::ObjectGroup::Monsters,
-                                                                                Maps::ObjectGroup::Kingdom_Heroes,
-                                                                                Maps::ObjectGroup::Adventure_Artifacts,
-                                                                                Maps::ObjectGroup::Adventure_Treasures };
+        const std::array<Maps::ObjectGroup, OBJECT_COUNT> _selectedObjectGroup{ Maps::ObjectGroup::ADVENTURE_WATER,
+                                                                                Maps::ObjectGroup::LANDSCAPE_MOUNTAINS,
+                                                                                Maps::ObjectGroup::LANDSCAPE_ROCKS,
+                                                                                Maps::ObjectGroup::LANDSCAPE_TREES,
+                                                                                Maps::ObjectGroup::ADVENTURE_DWELLINGS,
+                                                                                Maps::ObjectGroup::LANDSCAPE_MISCELLANEOUS,
+                                                                                Maps::ObjectGroup::ADVENTURE_MINES,
+                                                                                Maps::ObjectGroup::ADVENTURE_POWER_UPS,
+                                                                                Maps::ObjectGroup::LANDSCAPE_WATER,
+                                                                                Maps::ObjectGroup::KINGDOM_TOWNS,
+                                                                                Maps::ObjectGroup::MONSTERS,
+                                                                                Maps::ObjectGroup::KINGDOM_HEROES,
+                                                                                Maps::ObjectGroup::ADVENTURE_ARTIFACTS,
+                                                                                Maps::ObjectGroup::ADVENTURE_TREASURES };
     };
 }

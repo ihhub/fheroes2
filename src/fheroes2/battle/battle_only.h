@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2012 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -24,17 +24,23 @@
 #ifndef H2BATTLE_ONLY_H
 #define H2BATTLE_ONLY_H
 
+#include <array>
+#include <cstdint>
 #include <memory>
 
 #include "army.h"
 #include "army_bar.h"
 #include "artifact.h"
+#include "heroes.h"
 #include "heroes_indicator.h"
 #include "math_base.h"
 #include "players.h"
 #include "skill_bar.h"
 
-class Heroes;
+namespace fheroes2
+{
+    class Image;
+}
 
 namespace Battle
 {
@@ -44,7 +50,9 @@ namespace Battle
             : result( ctrl )
             , rtLocal( pt.x, pt.y, 24, 24 )
             , rtAI( pt.x + 75, pt.y, 24, 24 )
-        {}
+        {
+            // Do nothing.
+        }
 
         ControlInfo( const ControlInfo & ) = delete;
 
@@ -66,47 +74,65 @@ namespace Battle
 
         Only & operator=( const Only & ) = delete;
 
-        bool ChangeSettings();
+        bool setup( const bool allowBackup, bool & reset );
         void StartBattle();
 
+        void reset();
+
     private:
+        struct ArmyUI
+        {
+            std::unique_ptr<MoraleIndicator> morale;
+            std::unique_ptr<LuckIndicator> luck;
+            std::unique_ptr<PrimarySkillsBar> primarySkill;
+            std::unique_ptr<SecondarySkillsBar> secondarySkill;
+            std::unique_ptr<ArtifactsBar> artifact;
+            std::unique_ptr<ArmyBar> army;
+
+            void redraw( fheroes2::Image & output ) const;
+
+            // Resets the state to empty and removes the morale & luck indicators from the screen
+            void resetForNewHero();
+        };
+
+        struct ArmyInfo
+        {
+            Heroes * hero{ nullptr };
+
+            Player player;
+
+            int controlType{ CONTROL_HUMAN };
+
+            Army monster;
+
+            Heroes heroBackup;
+
+            Army monsterBackup;
+
+            bool isHeroPresent{ false };
+
+            ArmyUI ui;
+
+            fheroes2::Rect portraitRoi;
+
+            uint8_t armyId{ 0 };
+
+            void reset();
+        };
+
+        std::array<ArmyInfo, 2> armyInfo;
+
+        std::unique_ptr<ControlInfo> attackedArmyControlInfo;
+
+        bool _backupCompleted{ false };
+
         void RedrawBaseInfo( const fheroes2::Point & top ) const;
 
-        void UpdateHero1( const fheroes2::Point & cur_pt );
-        void UpdateHero2( const fheroes2::Point & cur_pt );
+        static void updateHero( ArmyInfo & info, const fheroes2::Point & offset );
 
-        Heroes * hero1;
-        Heroes * hero2;
+        static void updateArmyUI( ArmyUI & ui, Heroes * hero, const fheroes2::Point & offset, const uint8_t armyId );
 
-        Player player1;
-        Player player2;
-
-        Army * army1;
-        Army * army2;
-        Army monsters;
-
-        std::unique_ptr<MoraleIndicator> moraleIndicator1;
-        std::unique_ptr<MoraleIndicator> moraleIndicator2;
-
-        std::unique_ptr<LuckIndicator> luckIndicator1;
-        std::unique_ptr<LuckIndicator> luckIndicator2;
-
-        std::unique_ptr<PrimarySkillsBar> primskill_bar1;
-        std::unique_ptr<PrimarySkillsBar> primskill_bar2;
-
-        std::unique_ptr<SecondarySkillsBar> secskill_bar1;
-        std::unique_ptr<SecondarySkillsBar> secskill_bar2;
-
-        std::unique_ptr<ArmyBar> selectArmy1;
-        std::unique_ptr<ArmyBar> selectArmy2;
-
-        std::unique_ptr<ArtifactsBar> selectArtifacts1;
-        std::unique_ptr<ArtifactsBar> selectArtifacts2;
-
-        std::unique_ptr<ControlInfo> cinfo2;
-
-        fheroes2::Rect rtPortrait1;
-        fheroes2::Rect rtPortrait2;
+        static void copyHero( Heroes & in, Heroes & out );
     };
 }
 

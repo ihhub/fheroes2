@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-19 15:02+0000\n"
-"PO-Revision-Date: 2023-11-10 14:21+0100\n"
+"POT-Creation-Date: 2023-11-27 00:58+0000\n"
+"PO-Revision-Date: 2023-11-30 15:55+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "Language: sv\n"
@@ -193,6 +193,9 @@ msgstr "VISA INTRO"
 
 msgid "MIN"
 msgstr "MIN"
+
+msgid "RESET"
+msgstr "ÅTERS."
 
 msgid ""
 "D\n"
@@ -926,7 +929,7 @@ msgid ""
 msgstr "Genom sin falkblick så kan %{name} lära sig besvärjelsen %{spell}."
 
 msgid "Human"
-msgstr "Människa"
+msgstr "Spelare"
 
 msgid "AI"
 msgstr "AI"
@@ -946,14 +949,8 @@ msgstr "Ange Trollkonst"
 msgid "Set Knowledge Skill"
 msgstr "Ange Kunskapsnivå"
 
-msgid "%{race1} %{name1}"
-msgstr "%{name1} (%{race1})"
-
-msgid "vs"
-msgstr "vs"
-
-msgid "%{race2} %{name2}"
-msgstr "%{name2} (%{race2})"
+msgid "%{race1} %{name1} vs %{race2} %{name2}"
+msgstr "%{race1} %{name1} mot %{race2} %{name2}"
 
 msgid "Monsters"
 msgstr "Monster"
@@ -3014,8 +3011,17 @@ msgstr "V-Sync kan aktiveras för att lösa flimmerproblem på vissa skärmar."
 msgid "Show extra information such as FPS and current time."
 msgstr "Visa extra information som FPS och nuvarande tid."
 
+msgid "Hotkey: "
+msgstr "Snabbtangent: "
+
+msgid "Category: "
+msgstr "Kategori: "
+
+msgid "Event: "
+msgstr "Händelse: "
+
 msgid "Hot Keys:"
-msgstr "Tangentbordsgenvägar"
+msgstr "Snabbtangenter:"
 
 msgid "Evil"
 msgstr "Ond"
@@ -3058,7 +3064,7 @@ msgid "Toggle the type of interface you want to use."
 msgstr "Välj vilket gränssnitt du vill använda."
 
 msgid "Toggle interface visibility."
-msgstr "Aktivera gränssnittsynlighet"
+msgstr "Aktivera gränssnittsynlighet."
 
 msgid "Toggle colored cursor on or off. This is only an esthetic choice."
 msgstr "Välj färglagd eller svartvit muspekare."
@@ -3167,7 +3173,7 @@ msgid "(not visited)"
 msgstr "(inte besökt)"
 
 msgid "%{color} Barrier"
-msgstr "%{color} Barriär."
+msgstr "%{color} Barriär"
 
 msgid "(tent visited)"
 msgstr "(tält besökt)"
@@ -3307,9 +3313,8 @@ msgstr "Acceptera alla ändringar."
 msgid "%{color} %{race} hero"
 msgstr "%{color} %{race}hjälte"
 
-#, fuzzy
 msgid "Terrain object"
-msgstr "Terrängläge"
+msgstr "Terrängföremål"
 
 msgid "Select Skill:"
 msgstr "Välj Förmåga:"
@@ -3329,9 +3334,8 @@ msgstr "Välj Hjälte:"
 msgid "Select Treasure:"
 msgstr "Välj Skatt:"
 
-#, fuzzy
 msgid "Select Ocean Object:"
-msgstr "Havsföremål"
+msgstr "Välj Havsföremål:"
 
 msgid "Map Type:\n"
 msgstr "Karttyp:\n"
@@ -3640,9 +3644,8 @@ msgstr "Lämna kartredigeraren."
 msgid "Monster"
 msgstr "Monster"
 
-#, fuzzy
 msgid "Objects cannot be placed outside the map."
-msgstr "Hjältar kan inte placeras på vatten."
+msgstr "Föremål kan inte placeras utanför kartan."
 
 msgid "Monsters cannot be placed on water."
 msgstr "Varelser kan inte placeras på vatten."
@@ -3668,13 +3671,11 @@ msgstr "Artefakter"
 msgid "Artifacts cannot be placed on water."
 msgstr "Artefakter kan inte placeras på vatten."
 
-#, fuzzy
 msgid "Ocean object"
 msgstr "Havsföremål"
 
-#, fuzzy
 msgid "Ocean object must be placed on water."
-msgstr "Hjältar kan inte placeras på vatten."
+msgstr "Havsföremål måste placeras på vatten."
 
 msgid "Ocean Objects"
 msgstr "Havsföremål"
@@ -3992,7 +3993,7 @@ msgstr ""
 "%{rating}"
 
 msgid "Start the selected scenario."
-msgstr "Börja valt scenerio"
+msgstr "Påbörja valt scenario."
 
 msgid "View Intro"
 msgstr "Visa Intro"
@@ -4547,6 +4548,30 @@ msgid ""
 msgstr ""
 "Vill du ge datorn kontrollen? Denna effekt gäller bara för nästa runda."
 
+msgid "Default Actions"
+msgstr "Standardåtgärder"
+
+msgid "Global Actions"
+msgstr "Globala Åtgärder"
+
+msgid "Main Menu"
+msgstr "Huvudmeny"
+
+msgid "World Map"
+msgstr "Världskarta"
+
+msgid "Battle Screen"
+msgstr "Stridsvy"
+
+msgid "Town Screen"
+msgstr "Stadsvy"
+
+msgid "Army Actions"
+msgstr "Arméåtgärder"
+
+msgid "Editor"
+msgstr "Redigerare"
+
 msgid "The save file is corrupted."
 msgstr "Sparfilen är korrupt."
 
@@ -4654,9 +4679,6 @@ msgid ""
 msgstr ""
 " menyn. \n"
 "Spela på!"
-
-msgid "Editor"
-msgstr "Redigerare"
 
 msgid "The Editor requires \"The Price of Loyalty\" expansion files to work."
 msgstr ""
@@ -5222,9 +5244,6 @@ msgstr ""
 "En miniatyrvy av den kända världen. Vänsterklicka för att flytta "
 "visningsområdet."
 
-msgid "World Map"
-msgstr "Världskarta"
-
 msgid "Month: %{month} Week: %{week}"
 msgstr "Månad: %{month} Vecka: %{week}"
 
@@ -5331,7 +5350,7 @@ msgid "Kingdom Income"
 msgstr "Inkomst"
 
 msgid "Kingdom Income per day."
-msgstr "Rikets Dagsinkomst"
+msgstr "Rikets Dagsinkomst."
 
 msgid "For every lighthouse controlled, your ships will move further each day."
 msgstr ""
@@ -10936,3 +10955,12 @@ msgstr ""
 "Den senaste versionen av spelet finns på:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "%{race1} %{name1}"
+#~ msgstr "%{name1} (%{race1})"
+
+#~ msgid "vs"
+#~ msgstr "vs"
+
+#~ msgid "%{race2} %{name2}"
+#~ msgstr "%{name2} (%{race2})"
