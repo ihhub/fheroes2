@@ -65,8 +65,8 @@ namespace fheroes2
             return {};
         }
 
-        // The first object part must always have no offset if it is not a shadow object.
-        if ( object.groundLevelParts.front().layerType != Maps::SHADOW_LAYER ) {
+        // The first object part must always have no offset if it is not a shadow or flag object.
+        if ( object.groundLevelParts.front().layerType != Maps::SHADOW_LAYER && object.groundLevelParts.front().icnType != MP2::OBJ_ICN_TYPE_FLAG32 ) {
             assert( object.groundLevelParts.front().tileOffset == Point() );
         }
 

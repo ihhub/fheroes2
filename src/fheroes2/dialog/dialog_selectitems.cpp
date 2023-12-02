@@ -887,13 +887,13 @@ int Dialog::selectCastleType( const int castleType )
     fheroes2::addGradientShadow( colorSpriteBorder, display, pos, { -5, 5 } );
     const fheroes2::Sprite & neutralColorSprite = fheroes2::AGG::GetICN( ICN::BRCREST, 7 );
     fheroes2::Copy( neutralColorSprite, 0, 0, display, pos.x + 4, pos.y + 4, neutralColorSprite.width(), neutralColorSprite.height() );
-    colorRect[0] = { pos.x + 4, pos.y + 4, neutralColorSprite.width(), neutralColorSprite.height() };
+    colorRect.back() = { pos.x + 4, pos.y + 4, neutralColorSprite.width(), neutralColorSprite.height() };
 
     // Random race.
     const fheroes2::Sprite & randomRaceSprite = fheroes2::AGG::GetICN( ICN::NGEXTRA, 58 );
     fheroes2::Copy( randomRaceSprite, 0, 0, display, pos.x - 2, pos.y + raceOffsetY, randomRaceSprite.width(), randomRaceSprite.height() );
     fheroes2::Blit( raceShadow, display, pos.x - 5, pos.y + raceOffsetY + 2 );
-    raceRect[0] = { pos.x - 2, pos.y + raceOffsetY, randomRaceSprite.width(), randomRaceSprite.height() };
+    raceRect.front() = { pos.x - 2, pos.y + raceOffsetY, randomRaceSprite.width(), randomRaceSprite.height() };
 
     pos.x += stepX;
     for ( uint32_t i = 0; i < 6; ++i ) {
@@ -902,7 +902,7 @@ int Dialog::selectCastleType( const int castleType )
         fheroes2::Blit( colorSpriteBorder, display, pos.x, pos.y );
         fheroes2::addGradientShadow( colorSpriteBorder, display, pos, { -5, 5 } );
         fheroes2::Copy( colorSprite, 0, 0, display, pos.x + 4, pos.y + 4, colorSprite.width(), colorSprite.height() );
-        colorRect[i + 1] = { pos.x + 4, pos.y + 4, colorSprite.width(), colorSprite.height() };
+        colorRect[i] = { pos.x + 4, pos.y + 4, colorSprite.width(), colorSprite.height() };
 
         const fheroes2::Sprite & raceSprite = fheroes2::AGG::GetICN( ICN::NGEXTRA, 51U + i );
         fheroes2::Copy( raceSprite, 0, 0, display, pos.x - 2, pos.y + raceOffsetY, raceSprite.width(), raceSprite.height() );
@@ -914,8 +914,6 @@ int Dialog::selectCastleType( const int castleType )
 
     pos.x = area.x + area.width / 2;
     pos.y += 230;
-
-    int castleRace = ( castleType > -1 ) ? castleType : 0;
 
     const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
 
@@ -936,6 +934,8 @@ int Dialog::selectCastleType( const int castleType )
     bool needRedraw = true;
     bool isCastle = false;
     const size_t basementId = isEvilInterface ? 31 : 33;
+    int castleRace = ( castleType > -1 ) ? castleType : 0;
+    int castleColor = 6;
 
     while ( le.HandleEvents() ) {
         le.MousePressLeft( buttonOk.area() ) ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
@@ -965,6 +965,11 @@ int Dialog::selectCastleType( const int castleType )
                 needRedraw = true;
                 continue;
             }
+            else if ( le.MouseClickLeft( colorRect[i] ) ) {
+                castleColor = static_cast<int>( i );
+                needRedraw = true;
+                continue;
+            }
         }
 
         if ( le.MousePressRight( buttonCancel.area() ) ) {
@@ -987,6 +992,8 @@ int Dialog::selectCastleType( const int castleType )
         fheroes2::Blit( castleBasement, display, pos.x + castleBasement.x(), pos.y + castleBasement.y() );
         const fheroes2::Sprite & castleImage = fheroes2::generateMapObjectImage( Maps::getObjectsByGroup( Maps::ObjectGroup::KINGDOM_TOWNS )[objectOffset] );
         fheroes2::Blit( castleImage, display, pos.x + castleImage.x(), pos.y + castleImage.y() );
+        const fheroes2::Sprite & castleFlags = fheroes2::generateMapObjectImage( Maps::getObjectsByGroup( Maps::ObjectGroup::KINGDOM_TOWNS )[36 + castleColor] );
+        fheroes2::Blit( castleFlags, display, pos.x + castleFlags.x(), pos.y + castleFlags.y() );
 
         display.render( background.totalArea() );
 
