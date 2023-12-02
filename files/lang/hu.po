@@ -4633,18 +4633,19 @@ msgid ""
 "Either Roland's or Archibald's campaign from the original Heroes of Might "
 "and Magic II."
 msgstr ""
+"Roland, illetve Archibald hadjárata az eredeti Heroes of Might and Magic II-ből."
 
 msgid "Original Campaign"
-msgstr ""
+msgstr "Eredeti hadjárat"
 
 msgid "Expansion Campaign"
-msgstr ""
+msgstr "Kiegészítő hadjárat"
 
 msgid "One of the four new campaigns from the Price of Loyalty expansion set."
-msgstr ""
+msgstr "A Hűség ára kiegészítő négy új hadjáratának egyike."
 
 msgid "Loading video. Please wait..."
-msgstr ""
+msgstr "Videó betöltése. Kérlek várj..."
 
 msgid "Host"
 msgstr "Kiszolgáló"
@@ -4653,6 +4654,8 @@ msgid ""
 "The host sets up the game options. There can only be one host per network "
 "game."
 msgstr ""
+"A kiszolgáló határozza meg a játék beállításait. Csak egy kiszolgáló lehet "
+"egy hálózati játékban."
 
 msgid "Guest"
 msgstr "Vendég"
@@ -4677,7 +4680,7 @@ msgstr "2 játékos"
 msgid ""
 "Play with 2 human players, and optionally, up to 4 additional computer "
 "players."
-msgstr ""
+msgstr "Kétszemélyes játék, opcionálisan max. 4 további gépi ellenféllel."
 
 msgid "3 Players"
 msgstr "3 játékos"
@@ -4685,7 +4688,7 @@ msgstr "3 játékos"
 msgid ""
 "Play with 3 human players, and optionally, up to 3 additional computer "
 "players."
-msgstr ""
+msgstr "Háromszemélyes játék, opcionálisan max. 3 további gépi ellenféllel."
 
 msgid "4 Players"
 msgstr "4 játékos"
@@ -4693,7 +4696,7 @@ msgstr "4 játékos"
 msgid ""
 "Play with 4 human players, and optionally, up to 2 additional computer "
 "players."
-msgstr ""
+msgstr "Négyszemélyes játék, opcionálisan max. 2 további gépi ellenféllel."
 
 msgid "5 Players"
 msgstr "5 játékos"
@@ -4701,16 +4704,16 @@ msgstr "5 játékos"
 msgid ""
 "Play with 5 human players, and optionally, up to 1 additional computer "
 "player."
-msgstr ""
+msgstr "Ötszemélyes játék, opcionálisan max. 1 további gépi ellenféllel."
 
 msgid "6 Players"
 msgstr "6 játékos"
 
 msgid "Play with 6 human players."
-msgstr "Játsz 6 ember játékossal."
+msgstr "Hatszemélyes játék."
 
 msgid "Dragon city has fallen! You are now the Master of the Dragons."
-msgstr ""
+msgstr "Sárkányváros elesett! Mától te vagy a Sárkánymester."
 
 msgid ""
 "You captured %{name}!\n"
@@ -4733,9 +4736,8 @@ msgstr ""
 "Megtaláltad a  %{name}-t.\n"
 "Küldetés teljesítve."
 
-#, fuzzy
 msgid "Ultimate Artifact"
-msgstr "A Szent Varázstárgy kiásása."
+msgstr "Szent Varázstárgy"
 
 msgid ""
 "The enemy is beaten.\n"
@@ -4765,6 +4767,8 @@ msgid ""
 "The enemy has built up over %{count} gold in his treasury.\n"
 "You must bow done in defeat before his wealth and power."
 msgstr ""
+"Az ellenfél már %{count} aranyat felhalmozott a kincstárában.\n"
+"Fejet kell hajtanod az ereje és hatalma előtt."
 
 msgid "You have been eliminated from the game!!!"
 msgstr "Kiestél a játékból!"
@@ -4784,25 +4788,27 @@ msgstr ""
 "Minden elveszett."
 
 msgid "Defeat!"
-msgstr ""
+msgstr "Vereség!"
 
 msgid ""
 "Base score: %{score}\n"
 "Difficulty: %{difficulty}\n"
 "\n"
 msgstr ""
+"Alap pontszám: %{score}\n"
+"Nehézség: %{difficulty}\n"
+"\n"
 
-#, fuzzy
 msgid "Defeat all enemy heroes and capture all enemy towns and castles."
-msgstr "Az ellenfelek összes hősének és városának elpusztítása."
+msgstr "Az ellenfelek összes hősének legyőzése és várainak, városainak elpusztítása."
 
 msgid "Run out of time. (Fail to win by a certain point.)"
-msgstr "Az idő lejárt. (Nem sikerült nyernie egyes pontokban.)"
+msgstr "Az idő lejárt. (Nem sikerült nyernie adott idő alatt.)"
 
 msgid "You must defeat the enemy %{enemies}."
 msgid_plural "You must defeat the enemy alliance of %{enemies}."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Le kell győznöd a(z) %{enemies} ellenfelet."
+msgstr[1] "Le kell győznöd a(z) %{enemies} ellenfeleket."
 
 msgid ""
 "The alliance consisting of %{allies} and you must defeat the enemy "
@@ -4811,52 +4817,53 @@ msgid_plural ""
 "The alliance consisting of %{allies} and you must defeat the enemy alliance "
 "of %{enemies}."
 msgstr[0] ""
+"Szövetséged tagja %{allies} és te. Legyőzendő ellenségeitek: %{enemies}."
 msgstr[1] ""
+"Szövetséged tagjai %{allies} és te. Legyőzendő ellenséges szövetség: "
+"%{enemies}."
 
 msgid "Capture the castle '%{name}'."
-msgstr ""
+msgstr "'%{name}' vár elfoglalása."
 
 msgid "Capture the town '%{name}'."
-msgstr ""
+msgstr "'%{name}' város elfoglalása."
 
 msgid "Defeat the hero '%{name}'."
-msgstr ""
+msgstr "'%{name}' hős legyőzése."
 
-#, fuzzy
 msgid "Find the ultimate artifact."
-msgstr "A Szent Varázstárgy kiásása."
+msgstr "A Szent Varázstárgy megtalálása."
 
-#, fuzzy
 msgid "Find the '%{name}' artifact."
-msgstr " %{count} varázstárggyal"
+msgstr "'%{name}' varázstárgy megtalálása."
 
-#, fuzzy
 msgid "Accumulate %{count} gold."
-msgstr "Gyűjts össze egy nagyobb mennyiségű aranyat."
+msgstr "%{count} arany összegyűjtése."
 
 msgid ""
 ", or you may win by defeating all enemy heroes and capturing all enemy towns "
 "and castles."
 msgstr ""
+", vagy legyőzöd az ellenfelek összes hősét és elfoglalsz minden ellenséges "
+"várat és várost."
 
 msgid "Lose the castle '%{name}'."
-msgstr ""
+msgstr "'%{name}' vár elvesztése."
 
 msgid "Lose the town '%{name}'."
-msgstr ""
+msgstr "'%{name}' város elvesztése."
 
 msgid "Lose the hero: %{name}."
-msgstr ""
+msgstr ""'%{name}' hős elvesztése."
 
 msgid "Fail to win by the end of month %{month}, week %{week}, day %{day}."
-msgstr ""
+msgstr "Nem sikerül győzni %{month} hó %{week} hét %{day} napjáig."
 
-#, fuzzy
 msgid "%{color} player has been vanquished!"
-msgstr "%{color} kiesett!"
+msgstr "%{color} játékos legyőzetett!"
 
 msgid "Major Event!"
-msgstr ""
+msgstr "Fontos esemény!"
 
 msgid "Scenario:"
 msgstr "Küldetés:"
@@ -4887,6 +4894,9 @@ msgid ""
 "difficulty levels start you of with fewer resources, and at the higher "
 "settings, give extra resources to the computer."
 msgstr ""
+"Lehetővé teszi a játék kezdő nehézségének beállítását. Nehezebb fokozatokon "
+"egyre kevesebb erőforrással kezdesz, illetve a számítógép extra "
+"erőforrásokat kap."
 
 msgid "Difficulty Rating"
 msgstr "Nehézség besorolás"
@@ -4895,6 +4905,8 @@ msgid ""
 "The difficulty rating reflects a combination of various settings for your "
 "game. This number will be applied to your final score."
 msgstr ""
+"A nehézségi besorolás visszatükrözi a játék beállításait. Ez a besorolás "
+"meg fog jelenni majd az összpontszámnál is."
 
 msgid "Click to accept these settings and start a new game."
 msgstr "Kattints a beállítások elfogadásához és új játék indításához."
@@ -4902,16 +4914,14 @@ msgstr "Kattints a beállítások elfogadásához és új játék indításához
 msgid "Click to return to the main menu."
 msgstr "Kattints a főmenübe való visszatéréshez."
 
-#, fuzzy
 msgid "Astrologers proclaim the Month of the %{name}."
-msgstr "Az Asztrológusok kihírdették a %{name} havát."
+msgstr "Az asztrológusok kihirdették a %{name} havát."
 
-#, fuzzy
 msgid "Astrologers proclaim the Week of the %{name}."
-msgstr "Az Asztrológusok kihírdették a %{name} hetét."
+msgstr "Az asztrológusok kihirdették a %{name} hetét."
 
 msgid "After regular growth, the population of %{monster} is doubled!"
-msgstr ""
+msgstr "A %{monster} lények népessége megduplázódott!"
 
 msgid ""
 "After regular growth, the population of %{monster} increases by %{count} "
@@ -4919,11 +4929,11 @@ msgid ""
 msgid_plural ""
 "After regular growth, the population of %{monster} increases by %{count} "
 "percent!"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "A %{monster} lények népessége %{count} százalékkal megnövekedett!"
+msgstr[1] "A %{monster} lények népessége %{count} százalékkal megnövekedett!"
 
 msgid "%{monster} growth +%{count}."
-msgstr ""
+msgstr "%{monster} szaporulat: +%{count}."
 
 msgid " All populations are halved."
 msgstr " Minden populáció megfeleződött."
@@ -4954,9 +4964,8 @@ msgstr ""
 "%{color} játékos, már csak %{day} napod maradt, hogy elfoglalj egy város, "
 "vagy száműznek erről a földről."
 
-#, fuzzy
 msgid "%{color} player's turn."
-msgstr "%{color} játékos köre"
+msgstr "%{color} játékos köre."
 
 msgid ""
 "%{color} player, you have lost your last town. If you do not conquer another "
@@ -4976,22 +4985,20 @@ msgstr "Lord Kilburn"
 msgid "Tsabu"
 msgstr "Tsabu"
 
-#, fuzzy
 msgid "Sir Galant"
-msgstr "Sir Gallanth"
+msgstr "Sir Galant"
 
 msgid "Thundax"
 msgstr "Thundax"
 
-#, fuzzy
 msgid "Lord Haart"
-msgstr "Lord Halton"
+msgstr "Lord Haart"
 
 msgid "Ariel"
 msgstr "Ariel"
 
 msgid "Rebecca"
-msgstr "Rebecca"
+msgstr "Rebeka"
 
 msgid "Sandro"
 msgstr "Sandro"
@@ -4999,12 +5006,11 @@ msgstr "Sandro"
 msgid "Crodo"
 msgstr "Crodo"
 
-#, fuzzy
 msgid "Barock"
-msgstr "Barok"
+msgstr "Barock"
 
 msgid "Antoine"
-msgstr ""
+msgstr "Antoine"
 
 msgid "Astra"
 msgstr "Astra"
@@ -5039,14 +5045,16 @@ msgstr "Következő hős"
 msgid "Select the next Hero."
 msgstr "Következő hős kiválasztása."
 
-#, fuzzy
 msgid "Hero Movement"
-msgstr "Mozgás árnyék"
+msgstr "Hős mozgása"
 
 msgid ""
 "Start the Hero's movement along the current path or re-visit the object "
 "occupied by the Hero. Press and hold this button to reset the Hero's path."
 msgstr ""
+"A hős mozgásának megkezdése a kijelölt útvonal mentén vagy pedig a hős által "
+"elfoglalt objektum újra-látogatása. A gombot hosszan nyomva tartva, törlődik "
+"a hős útvonala."
 
 msgid "Kingdom Summary"
 msgstr "Királyság összesítése"
