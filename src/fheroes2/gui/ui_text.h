@@ -29,8 +29,6 @@
 
 namespace fheroes2
 {
-    class Image;
-
     enum class FontSize : uint8_t
     {
         SMALL,
