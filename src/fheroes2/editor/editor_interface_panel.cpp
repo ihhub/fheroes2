@@ -45,6 +45,7 @@
 #include "ui_dialog.h"
 #include "ui_map_object.h"
 #include "ui_text.h"
+#include "world.h"
 
 namespace
 {
@@ -438,7 +439,7 @@ namespace Interface
             } );
             break;
         case Brush::TOWNS:
-            _interface.setCursorUpdater( [type = getSelectedObjectType()]( const int32_t /*tileIndex*/ ) {
+            _interface.setCursorUpdater( [type = getSelectedObjectType()]( const int32_t tileIndex ) {
                 if ( type == -1 ) {
                     // The object type is not set. We show the POINTER cursor for this case.
                     Cursor::Get().SetThemes( Cursor::POINTER );
@@ -446,7 +447,7 @@ namespace Interface
                 }
 
                 // TODO: render ICN::MINIHERO from the existing hero images.
-                const fheroes2::Sprite & image = fheroes2::generateTownObjectImage( type, 31 );
+                const fheroes2::Sprite & image = fheroes2::generateTownObjectImage( type, world.GetTiles( tileIndex ).GetGround() );
 
                 Cursor::Get().setCustomImage( image, { image.x(), image.y() } );
             } );

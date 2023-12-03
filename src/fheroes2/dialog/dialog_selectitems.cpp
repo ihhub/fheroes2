@@ -40,6 +40,7 @@
 #include "dialog.h"
 #include "game_hotkeys.h"
 #include "gamedefs.h"
+#include "ground.h"
 #include "heroes_base.h"
 #include "icn.h"
 #include "image.h"
@@ -958,7 +959,7 @@ int Dialog::selectTownType( const int townType )
     bool isCastle = false;
     int townRace = 6;
     int townColor = 6;
-    const int basementId = isEvilInterface ? 31 : 33;
+    const int basementGround = isEvilInterface ? Maps::Ground::LAVA : Maps::Ground::DIRT;
 
     if ( townType > -1 ) {
         isCastle = Maps::isCastleByTownType( townType );
@@ -995,12 +996,12 @@ int Dialog::selectTownType( const int townType )
                 needRedraw = true;
                 continue;
             }
-            else if ( le.MouseClickLeft( colorRect[i] ) ) {
+            if ( le.MouseClickLeft( colorRect[i] ) ) {
                 townColor = static_cast<int>( i );
                 needRedraw = true;
                 continue;
             }
-            else if ( le.MousePressRight( raceRect[i] ) ) {
+            if ( le.MousePressRight( raceRect[i] ) ) {
                 fheroes2::showStandardTextMessage( _( "Race" ), _( "Click to select this race." ), Dialog::ZERO );
             }
             else if ( le.MousePressRight( colorRect[i] ) ) {
@@ -1034,9 +1035,11 @@ int Dialog::selectTownType( const int townType )
 
         castleBackground.restore();
 
-        const fheroes2::Sprite townImage = fheroes2::generateTownObjectImage( Maps::townTypeCalculation( townColor, townRace, isCastle ), basementId );
+        // Update town image.
+        const fheroes2::Sprite townImage = fheroes2::generateTownObjectImage( Maps::townTypeCalculation( townColor, townRace, isCastle ), basementGround );
         fheroes2::Blit( townImage, display, pos.x + townImage.x(), pos.y + townImage.y() );
 
+        // Update color and race borders.
         for ( int i = 0; i < 7; ++i ) {
             fheroes2::Blit( ( i == townColor ) ? colorSpriteBorderSelected : colorSpriteBorder, display, colorRect[i].x - 4, colorRect[i].y - 4 );
             fheroes2::Blit( ( i == townRace ) ? raceSpriteBorderSelected : raceSpriteBorder, display, raceRect[i].x - 4, raceRect[i].y - 4 );

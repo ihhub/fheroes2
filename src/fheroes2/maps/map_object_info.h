@@ -163,6 +163,7 @@ namespace Maps
     int getColorByTownType( const int townType );
     size_t getTownObjectOffset( const int townType );
     size_t getTownFlagObjectOffset( const int townType );
+    size_t getTownBasementObjectOffset( const int groundId );
 
     // The function returns tile offset only for ground level objects located on OBJECT_LAYER and BACKGROUND_LAYER layers.
     // Objects on other layers do not affect passabilities of tiles so they do not 'occupy' these tiles.

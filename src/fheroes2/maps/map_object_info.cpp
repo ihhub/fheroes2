@@ -30,6 +30,7 @@
 #include <utility>
 
 #include "artifact.h"
+#include "ground.h"
 #include "monster.h"
 #include "resource.h"
 
@@ -920,14 +921,44 @@ namespace Maps
 
     size_t getTownObjectOffset( const int townType )
     {
-        // NOTICE: This calculation should be consistent with KINGDOM_TOWNS objects position in vector.
+        // NOTICE: This calculation should be consistent with town main and shadow objects position in KINGDOM_TOWNS vector.
         return getRaceByTownType( townType ) * 4 + ( isCastleByTownType( townType ) ? 0 : 2 );
     }
 
     size_t getTownFlagObjectOffset( const int townType )
     {
-        // NOTICE: This calculation should be consistent with KINGDOM_TOWNS objects position in vector.
+        // NOTICE: This calculation should be consistent with flags objects position in KINGDOM_TOWNS vector.
         return 36 + getColorByTownType( townType );
+    }
+
+    size_t getTownBasementObjectOffset( const int groundId )
+    {
+        // NOTICE: This calculation should be consistent with basement objects position in KINGDOM_TOWNS vector.
+        switch ( groundId ) {
+        case Ground::WATER:
+            // Towns cannot be placed on water. We return 0 in this case.
+            return 0U;
+        case Ground::GRASS:
+            return 28U;
+        case Ground::SNOW:
+            return 29U;
+        case Ground::SWAMP:
+            return 30U;
+        case Ground::LAVA:
+            return 31U;
+        case Ground::DESERT:
+            return 32U;
+        case Ground::DIRT:
+            return 33U;
+        case Ground::WASTELAND:
+            return 34U;
+        case Ground::BEACH:
+            return 35U;
+        default:
+            // Have you added a new ground? Add the logic above!
+            assert( 0 );
+            return 0U;
+        }
     }
 
     std::vector<fheroes2::Point> getGroundLevelOccupiedTileOffset( const ObjectInfo & info )

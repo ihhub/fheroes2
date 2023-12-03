@@ -31,6 +31,7 @@
 #include <vector>
 
 #include "agg_image.h"
+#include "icn.h"
 #include "map_object_info.h"
 #include "math_base.h"
 #include "mp2.h"
@@ -149,17 +150,24 @@ namespace fheroes2
 
         return image;
     }
-    Sprite generateTownObjectImage( const int townType, const int basementId )
+    Sprite generateTownObjectImage( const int townType, const int groundId )
     {
         if ( townType < 0 ) {
             assert( 0 );
             return {};
         }
 
+        if ( groundId == Maps::Ground::WATER ) {
+            Sprite image = AGG::GetICN( ICN::SPELLS, 0 );
+            image.setPosition( -image.width() / 2, -image.height() / 2 );
+            return image;
+        }
+
         const size_t townObjectOffset = Maps::getTownObjectOffset( townType );
         const size_t flagObjectOffset = Maps::getTownFlagObjectOffset( townType );
         const Sprite & townShadow = generateMapObjectImage( Maps::getObjectsByGroup( Maps::ObjectGroup::KINGDOM_TOWNS )[townObjectOffset + 1] );
-        const Sprite & townBasement = generateMapObjectImage( Maps::getObjectsByGroup( Maps::ObjectGroup::KINGDOM_TOWNS )[basementId] );
+        const Sprite & townBasement
+            = generateMapObjectImage( Maps::getObjectsByGroup( Maps::ObjectGroup::KINGDOM_TOWNS )[Maps::getTownBasementObjectOffset( groundId )] );
         const Sprite & townMainImage = generateMapObjectImage( Maps::getObjectsByGroup( Maps::ObjectGroup::KINGDOM_TOWNS )[townObjectOffset] );
         const Sprite & townFlags = generateMapObjectImage( Maps::getObjectsByGroup( Maps::ObjectGroup::KINGDOM_TOWNS )[flagObjectOffset] );
 
