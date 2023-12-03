@@ -598,7 +598,6 @@ MapsFileInfoList Maps::getOriginalMapFileInfos( const bool multi )
 
 MapsFileInfoList Maps::getResurrectionMapFileInfos()
 {
-    // TODO: set the proper resurrection map extension.
     const ListFiles maps = Settings::FindFiles( "maps", ".fh2m", false );
 
     // Create a list of unique maps (based on the map file name).

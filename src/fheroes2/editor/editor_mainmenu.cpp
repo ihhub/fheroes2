@@ -307,28 +307,24 @@ namespace Editor
         }
 
         const Maps::FileInfo * fileInfo = Dialog::SelectScenario( lists );
-
-        if ( fileInfo ) {
-            Maps::Map_Format::MapFormat map;
-            if ( !Maps::Map_Format::loadMap( fileInfo->file, map ) ) {
-                fheroes2::showStandardTextMessage( _( "Warning!" ), "Failed to load the map.", Dialog::OK );
-                return fheroes2::GameMode::CANCEL;
-            }
-
-            if ( !Maps::readMapInEditor( map ) ) {
-                fheroes2::showStandardTextMessage( _( "Warning!" ), "Failed to read the map.", Dialog::OK );
-                return fheroes2::GameMode::CANCEL;
-            }
-
-            fheroes2::fadeOutDisplay();
-            Game::setDisplayFadeIn();
-
-            return Interface::EditorInterface::Get().startEdit();
-        }
-        else {
-            showWIPInfo();
+        if ( fileInfo == nullptr ) {
+            return fheroes2::GameMode::EDITOR_MAIN_MENU;
         }
 
-        return fheroes2::GameMode::EDITOR_MAIN_MENU;
+        Maps::Map_Format::MapFormat map;
+        if ( !Maps::Map_Format::loadMap( fileInfo->file, map ) ) {
+            fheroes2::showStandardTextMessage( _( "Warning!" ), "Failed to load the map.", Dialog::OK );
+            return fheroes2::GameMode::CANCEL;
+        }
+
+        if ( !Maps::readMapInEditor( map ) ) {
+            fheroes2::showStandardTextMessage( _( "Warning!" ), "Failed to read the map.", Dialog::OK );
+            return fheroes2::GameMode::CANCEL;
+        }
+
+        fheroes2::fadeOutDisplay();
+        Game::setDisplayFadeIn();
+
+        return Interface::EditorInterface::Get().startEdit();
     }
 }
