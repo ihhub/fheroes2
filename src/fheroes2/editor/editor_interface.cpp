@@ -819,10 +819,10 @@ namespace Interface
             setObjectOnTile( tile, objectInfo );
         }
         else if ( groupType == Maps::ObjectGroup::KINGDOM_TOWNS ) {
-            if ( true ) {
-                fheroes2::showStandardTextMessage( _( "Kingdom object" ), _( "Objects cannot be placed outside the map." ), Dialog::OK );
-                return;
-            }
+            // TODO: implement towns placing on the map.
+
+            fheroes2::showStandardTextMessage( _( "Kingdom object" ), _( "Objects cannot be placed outside the map." ), Dialog::OK );
+            return;
         }
     }
 

@@ -38,6 +38,7 @@
 #include "image.h"
 #include "interface_base.h"
 #include "localevent.h"
+#include "maps_tiles.h"
 #include "screen.h"
 #include "tools.h"
 #include "translations.h"

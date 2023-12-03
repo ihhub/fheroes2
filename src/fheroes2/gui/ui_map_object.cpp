@@ -26,13 +26,16 @@
 
 #include <algorithm>
 #include <cassert>
+#include <cstddef>
 #include <cstdint>
 #include <memory>
 #include <vector>
 
 #include "agg_image.h"
+#include "ground.h"
 #include "icn.h"
 #include "map_object_info.h"
+#include "maps_tiles.h"
 #include "math_base.h"
 #include "mp2.h"
 
@@ -158,6 +161,7 @@ namespace fheroes2
         }
 
         if ( groundId == Maps::Ground::WATER ) {
+            // Towns can not be placed on water.
             Sprite image = AGG::GetICN( ICN::SPELLS, 0 );
             image.setPosition( -image.width() / 2, -image.height() / 2 );
             return image;
