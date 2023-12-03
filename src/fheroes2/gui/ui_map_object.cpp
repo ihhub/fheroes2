@@ -149,4 +149,31 @@ namespace fheroes2
 
         return image;
     }
+    Sprite generateTownObjectImage( const int townType, const int basementId )
+    {
+        if ( townType < 0 ) {
+            assert( 0 );
+            return {};
+        }
+
+        const size_t townObjectOffset = Maps::getTownObjectOffset( townType );
+        const size_t flagObjectOffset = Maps::getTownFlagObjectOffset( townType );
+        const Sprite & townShadow = generateMapObjectImage( Maps::getObjectsByGroup( Maps::ObjectGroup::KINGDOM_TOWNS )[townObjectOffset + 1] );
+        const Sprite & townBasement = generateMapObjectImage( Maps::getObjectsByGroup( Maps::ObjectGroup::KINGDOM_TOWNS )[basementId] );
+        const Sprite & townMainImage = generateMapObjectImage( Maps::getObjectsByGroup( Maps::ObjectGroup::KINGDOM_TOWNS )[townObjectOffset] );
+        const Sprite & townFlags = generateMapObjectImage( Maps::getObjectsByGroup( Maps::ObjectGroup::KINGDOM_TOWNS )[flagObjectOffset] );
+
+        // Town image contains of 9x5 tiles total. The shadow image has minimum X offset and main image has minimum Y offset.
+        const int32_t townImageX = townShadow.x();
+        const int32_t townImageY = townMainImage.y();
+        fheroes2::Sprite townImage( 9 * tileSize, 5 * tileSize, townImageX, townImageY );
+        townImage.reset();
+
+        Blit( townShadow, townImage, townShadow.x() - townImageX, townShadow.y() - townImageY );
+        Blit( townBasement, townImage, townBasement.x() - townImageX, townBasement.y() - townImageY );
+        Blit( townMainImage, townImage, townMainImage.x() - townImageX, townMainImage.y() - townImageY );
+        Blit( townFlags, townImage, townFlags.x() - townImageX, townFlags.y() - townImageY );
+
+        return townImage;
+    }
 }

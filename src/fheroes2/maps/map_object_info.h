@@ -156,6 +156,14 @@ namespace Maps
     // Returns true if given ICN type and index exist as a main object part, false otherwise.
     bool getObjectInfo( const MP2::ObjectIcnType icnType, const uint32_t icnIndex, ObjectGroup & group, uint32_t & index );
 
+    // Returns the castle type id according the given castle color, race and castle/town state.
+    int townTypeCalculation( const int townColor, const int townRace, const bool isCastle );
+    bool isCastleByTownType( const int townType );
+    int getRaceByTownType( const int townType );
+    int getColorByTownType( const int townType );
+    size_t getTownObjectOffset( const int townType );
+    size_t getTownFlagObjectOffset( const int townType );
+
     // The function returns tile offset only for ground level objects located on OBJECT_LAYER and BACKGROUND_LAYER layers.
     // Objects on other layers do not affect passabilities of tiles so they do not 'occupy' these tiles.
     std::vector<fheroes2::Point> getGroundLevelOccupiedTileOffset( const ObjectInfo & info );

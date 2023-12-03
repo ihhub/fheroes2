@@ -61,7 +61,7 @@ namespace Dialog
 
     int selectOceanObjectType( const int resourceType );
 
-    int selectCastleType( const int castleType );
+    int selectTownType( const int townType );
 }
 
 #endif

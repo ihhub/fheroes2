@@ -70,6 +70,11 @@ namespace
 
     fheroes2::Rect getObjectOccupiedArea( const Maps::ObjectGroup group, const int32_t objectType )
     {
+        if ( group == Maps::ObjectGroup::KINGDOM_TOWNS ) {
+            // TODO: make occupied area calculation for complex objects.
+            return { -2, -3, 5, 5 };
+        }
+
         const auto & objectInfo = Maps::getObjectsByGroup( group );
         if ( objectType < 0 || objectType >= static_cast<int32_t>( objectInfo.size() ) ) {
             assert( 0 );
@@ -432,6 +437,20 @@ namespace Interface
                 Cursor::Get().setCustomImage( image, { -image.width() / 2, -image.height() / 2 - heroCorrectionY } );
             } );
             break;
+        case Brush::TOWNS:
+            _interface.setCursorUpdater( [type = getSelectedObjectType()]( const int32_t /*tileIndex*/ ) {
+                if ( type == -1 ) {
+                    // The object type is not set. We show the POINTER cursor for this case.
+                    Cursor::Get().SetThemes( Cursor::POINTER );
+                    return;
+                }
+
+                // TODO: render ICN::MINIHERO from the existing hero images.
+                const fheroes2::Sprite & image = fheroes2::generateTownObjectImage( type, 31 );
+
+                Cursor::Get().setCustomImage( image, { image.x(), image.y() } );
+            } );
+            break;
         default:
             _interface.setCursorUpdater( {} );
             break;
@@ -587,7 +606,7 @@ namespace Interface
                 fheroes2::showStandardTextMessage( _getObjectTypeName( Brush::TREASURES ), _( "Used to place\na resource or treasure." ), Dialog::ZERO );
             }
             else if ( le.MouseClickLeft( _objectButtonsRect[Brush::TOWNS] ) ) {
-                Dialog::selectCastleType( -1 );
+                handleObjectMouseClick( Dialog::selectTownType );
                 return res;
             }
             else if ( le.MouseClickLeft( _objectButtonsRect[Brush::MONSTERS] ) ) {
