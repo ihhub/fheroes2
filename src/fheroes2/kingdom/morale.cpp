@@ -56,13 +56,13 @@ std::string Morale::Description( int morale )
     case Morale::TREASON:
     case Morale::AWFUL:
     case Morale::POOR:
-        return _( "Bad morale may cause your armies to freeze in combat." );
+        return _( "Bad morale may cause your units to freeze in combat." );
     case Morale::NORMAL:
-        return _( "Neutral morale means your armies will never be blessed with extra attacks or freeze in combat." );
+        return _( "Neutral morale means your units will never be blessed with extra attacks or freeze in combat." );
     case Morale::GOOD:
     case Morale::GREAT:
     case Morale::BLOOD:
-        return _( "Good morale may give your armies extra attacks in combat." );
+        return _( "Good morale may give your units extra attacks in combat." );
     default:
         break;
     }
