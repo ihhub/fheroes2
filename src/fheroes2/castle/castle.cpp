@@ -2806,11 +2806,19 @@ void AllCastles::AddCastle( Castle * castle )
                 continue;
             }
 
-            _castleTiles[center + fheroes2::Point( x, y )] = id;
+            const auto [dummy, inserted] = _castleTiles.try_emplace( center + fheroes2::Point( x, y ), id );
+            if ( !inserted ) {
+                DEBUG_LOG( DBG_GAME, DBG_INFO,
+                            "Tile [" << center.x + x << ", " << center.y + y << "] is occupied by another castle" )
+            }
         }
     }
 
-    _castleTiles[center + fheroes2::Point( 0, -3 )] = id;
+    const auto [dummy, inserted] = _castleTiles.try_emplace( center + fheroes2::Point( 0, -3 ), id );
+    if ( !inserted ) {
+        DEBUG_LOG( DBG_GAME, DBG_INFO,
+                            "Tile [" << center.x << ", " << center.y - 3 << "] is occupied by another castle" )
+    }
 }
 
 void AllCastles::Scout( int colors ) const
