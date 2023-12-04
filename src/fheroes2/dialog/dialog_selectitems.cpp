@@ -67,6 +67,35 @@
 #include "ui_window.h"
 #include "world.h"
 
+namespace
+{
+    // Returns the town type according the given player color, race and castle/town state.
+    int townTypeCalculation( const int townColor, const int townRace, const bool isCastle )
+    {
+        // NOTICE: This calculation should be consistent with the number of KINGDOM_TOWNS objects.
+        return ( townColor * 7 + townRace ) * 2 + ( isCastle ? 0 : 1 );
+    }
+
+    bool isCastleByTownType( const int townType )
+    {
+        // NOTICE: This calculation should be consistent with the number of town types (town/castle) KINGDOM_TOWNS objects.
+        return ( townType % 2 ) == 0;
+    }
+
+    int getRaceByTownType( const int townType )
+    {
+        // NOTICE: This calculation should be consistent with the number of races in KINGDOM_TOWNS objects.
+        return ( townType / 2 ) % 7;
+    }
+
+    int getColorByTownType( const int townType )
+    {
+        // NOTICE: This calculation should be consistent with the number of color flags in KINGDOM_TOWNS objects.
+        return townType / 14;
+    }
+
+}
+
 class SelectEnum : public Interface::ListBox<int>
 {
 public:
@@ -874,7 +903,7 @@ int Dialog::selectTownType( const int townType )
     const int32_t stepX = 70;
     const int32_t raceOffsetY = 80;
     fheroes2::Point pos( area.x + 20, area.y + 30 );
-    const fheroes2::Sprite & colorSpriteBorderSelected = fheroes2::AGG::GetICN( ICN::BRCREST, 6 );
+    const fheroes2::Sprite colorSpriteBorderSelected = fheroes2::AGG::GetICN( ICN::BRCREST, 6 );
     const fheroes2::Sprite & raceShadow = fheroes2::AGG::GetICN( ICN::NGEXTRA, 61 );
     fheroes2::Sprite colorSpriteBorder( colorSpriteBorderSelected );
 
@@ -895,8 +924,9 @@ int Dialog::selectTownType( const int townType )
     fheroes2::Copy( randomRaceSprite, imageCopyOffset, 4, raceSpriteBorder, imageCopyOffset, 4, 4, raceImageHeight );
     imageCopyOffset = raceBorderHeight - 4;
     fheroes2::Copy( randomRaceSprite, 0, imageCopyOffset, raceSpriteBorder, 0, imageCopyOffset, raceBorderWidth, 4 );
-    const fheroes2::Image raceSpriteBorderSelected( raceSpriteBorder );
+    fheroes2::Image raceSpriteBorderSelected( raceSpriteBorder );
     fheroes2::ApplyPalette( raceSpriteBorder, darkGrayPalette );
+    fheroes2::ApplyPalette( raceSpriteBorderSelected, PAL::GetPalette( PAL::PaletteType::RED ) );
 
     std::array<fheroes2::Rect, 7> colorRect;
     std::array<fheroes2::Rect, 7> raceRect;
@@ -962,9 +992,9 @@ int Dialog::selectTownType( const int townType )
     const int basementGround = isEvilInterface ? Maps::Ground::LAVA : Maps::Ground::DIRT;
 
     if ( townType > -1 ) {
-        isCastle = Maps::isCastleByTownType( townType );
-        townRace = Maps::getRaceByTownType( townType );
-        townColor = Maps::getColorByTownType( townType );
+        isCastle = isCastleByTownType( townType );
+        townRace = getRaceByTownType( townType );
+        townColor = getColorByTownType( townType );
     }
 
     while ( le.HandleEvents() ) {
@@ -974,8 +1004,7 @@ int Dialog::selectTownType( const int townType )
         le.MousePressLeft( buttonCastle.area() ) || isCastle ? buttonCastle.drawOnPress() : buttonCastle.drawOnRelease();
 
         if ( le.MouseClickLeft( buttonOk.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) ) {
-            // Castle type contains castle/town, race and color settings.
-            return Maps::townTypeCalculation( townColor, townRace, isCastle );
+            return townTypeCalculation( townColor, townRace, isCastle );
         }
         if ( le.MouseClickLeft( buttonCancel.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
             return -1;
@@ -1036,7 +1065,7 @@ int Dialog::selectTownType( const int townType )
         castleBackground.restore();
 
         // Update town image.
-        const fheroes2::Sprite townImage = fheroes2::generateTownObjectImage( Maps::townTypeCalculation( townColor, townRace, isCastle ), basementGround );
+        const fheroes2::Sprite townImage = fheroes2::generateTownObjectImage( townTypeCalculation( townColor, townRace, isCastle ), basementGround );
         fheroes2::Blit( townImage, display, pos.x + townImage.x(), pos.y + townImage.y() );
 
         // Update color and race borders.

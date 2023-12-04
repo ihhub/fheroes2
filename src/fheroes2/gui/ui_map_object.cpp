@@ -96,14 +96,26 @@ namespace fheroes2
 #if defined( WITH_DEBUG )
         // Verify that all offsets are unique.
         std::set<Point> uniqueOffsets;
+        std::set<Point> uniqueShadowOffsets;
         for ( const auto & objectPart : object.groundLevelParts ) {
-            const auto [dummy, inserted] = uniqueOffsets.emplace( objectPart.tileOffset );
-            if ( !inserted ) {
-                // The object hasn't formed properly!
-                assert( 0 );
+            if ( objectPart.layerType != Maps::SHADOW_LAYER ) {
+                const auto [dummy, inserted] = uniqueOffsets.emplace( objectPart.tileOffset );
+                if ( !inserted ) {
+                    // The object hasn't formed properly!
+                    assert( 0 );
+                }
+            }
+            else {
+                const auto [dummy, inserted] = uniqueShadowOffsets.emplace( objectPart.tileOffset );
+                if ( !inserted ) {
+                    // The object hasn't formed properly!
+                    assert( 0 );
+                }
             }
         }
 
+        // Top objects can share the same tiles as bottom objects.
+        uniqueOffsets.clear();
         for ( const auto & objectPart : object.topLevelParts ) {
             const auto [dummy, inserted] = uniqueOffsets.emplace( objectPart.tileOffset );
             if ( !inserted ) {
@@ -153,6 +165,7 @@ namespace fheroes2
 
         return image;
     }
+
     Sprite generateTownObjectImage( const int townType, const int groundId )
     {
         if ( townType < 0 ) {
@@ -160,30 +173,61 @@ namespace fheroes2
             return {};
         }
 
-        if ( groundId == Maps::Ground::WATER ) {
+        size_t basementOffset = 0;
+        // NOTICE: 'basementOffset' should be consistent with basement objects position in LANDSCAPE_TOWN_BASEMENTS vector.
+        switch ( groundId ) {
+        case Maps::Ground::WATER:
             // Towns can not be placed on water.
-            Sprite image = AGG::GetICN( ICN::SPELLS, 0 );
-            image.setPosition( -image.width() / 2, -image.height() / 2 );
-            return image;
+            {
+                Sprite image = AGG::GetICN( ICN::SPELLS, 0 );
+                image.setPosition( -image.width() / 2, -image.height() / 2 );
+                return image;
+            }
+        case Maps::Ground::GRASS:
+            break;
+        case Maps::Ground::SNOW:
+            basementOffset = 1;
+            break;
+        case Maps::Ground::SWAMP:
+            basementOffset = 2;
+            break;
+        case Maps::Ground::LAVA:
+            basementOffset = 3;
+            break;
+        case Maps::Ground::DESERT:
+            basementOffset = 4;
+            break;
+        case Maps::Ground::DIRT:
+            basementOffset = 5;
+            break;
+        case Maps::Ground::WASTELAND:
+            basementOffset = 6;
+            break;
+        case Maps::Ground::BEACH:
+            basementOffset = 7;
+            break;
+        default:
+            // Have you added a new ground? Add the logic above!
+            assert( 0 );
+            break;
         }
 
-        const size_t townObjectOffset = Maps::getTownObjectOffset( townType );
-        const size_t flagObjectOffset = Maps::getTownFlagObjectOffset( townType );
-        const Sprite & townShadow = generateMapObjectImage( Maps::getObjectsByGroup( Maps::ObjectGroup::KINGDOM_TOWNS )[townObjectOffset + 1] );
-        const Sprite & townBasement
-            = generateMapObjectImage( Maps::getObjectsByGroup( Maps::ObjectGroup::KINGDOM_TOWNS )[Maps::getTownBasementObjectOffset( groundId )] );
-        const Sprite & townMainImage = generateMapObjectImage( Maps::getObjectsByGroup( Maps::ObjectGroup::KINGDOM_TOWNS )[townObjectOffset] );
-        const Sprite & townFlags = generateMapObjectImage( Maps::getObjectsByGroup( Maps::ObjectGroup::KINGDOM_TOWNS )[flagObjectOffset] );
+        // NOTICE: This calculations should be consistent with objects position in KINGDOM_TOWNS and LANDSCAPE_FLAGS vectors.
+        const size_t townMainObjectOffset = townType % 14;
+        const size_t townFlagsOffset = townType / 14;
 
-        // Town image contains of 9x5 tiles total. The shadow image has minimum X offset and main image has minimum Y offset.
-        const int32_t townImageX = townShadow.x();
-        const int32_t townImageY = townMainImage.y();
+        const Sprite & townBasement = generateMapObjectImage( Maps::getObjectsByGroup( Maps::ObjectGroup::LANDSCAPE_TOWN_BASEMENTS )[basementOffset] );
+        const Sprite & townMainObject = generateMapObjectImage( Maps::getObjectsByGroup( Maps::ObjectGroup::KINGDOM_TOWNS )[townMainObjectOffset] );
+        const Sprite & townFlags = generateMapObjectImage( Maps::getObjectsByGroup( Maps::ObjectGroup::LANDSCAPE_FLAGS )[townFlagsOffset] );
+
+        // Town image contains of 9x5 tiles total.
+        const int32_t townImageX = townMainObject.x();
+        const int32_t townImageY = townMainObject.y();
         fheroes2::Sprite townImage( 9 * tileSize, 5 * tileSize, townImageX, townImageY );
         townImage.reset();
 
-        Blit( townShadow, townImage, townShadow.x() - townImageX, townShadow.y() - townImageY );
         Blit( townBasement, townImage, townBasement.x() - townImageX, townBasement.y() - townImageY );
-        Blit( townMainImage, townImage, townMainImage.x() - townImageX, townMainImage.y() - townImageY );
+        Blit( townMainObject, townImage, townMainObject.x() - townImageX, townMainObject.y() - townImageY );
         Blit( townFlags, townImage, townFlags.x() - townImageX, townFlags.y() - townImageY );
 
         return townImage;
