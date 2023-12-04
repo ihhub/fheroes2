@@ -684,6 +684,9 @@ void LocalEvent::enableTextInput()
 
 void LocalEvent::disableTextInput()
 {
+    // If this assertion blows up then you are trying to disable text input twice!
+    assert( SDL_IsTextInputActive() );
+
     SDL_StopTextInput();
 }
 
@@ -801,6 +804,7 @@ bool LocalEvent::HandleEvents( const bool sleepAfterEventProcessing, const bool 
         case SDL_TEXTINPUT: {
             _lastPressedCodePoint = event.key.keysym.sym;
             if ( !Encoding::utf8ToCodePoint( reinterpret_cast<uint8_t *>( event.text.text ), 32, _lastPressedCodePoint ) ) {
+                // Not a valid UTF-8 character. Maybe it is an unsupported OS.
                 _lastPressedCodePoint = 0;
             }
             break;
