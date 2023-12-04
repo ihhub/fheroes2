@@ -1018,27 +1018,7 @@ int Dialog::selectTownType( const int townType )
             isCastle = true;
             needRedraw = true;
         }
-
-        for ( size_t i = 0; i < 7; ++i ) {
-            if ( le.MouseClickLeft( raceRect[i] ) ) {
-                townRace = static_cast<int>( i );
-                needRedraw = true;
-                continue;
-            }
-            if ( le.MouseClickLeft( colorRect[i] ) ) {
-                townColor = static_cast<int>( i );
-                needRedraw = true;
-                continue;
-            }
-            if ( le.MousePressRight( raceRect[i] ) ) {
-                fheroes2::showStandardTextMessage( _( "Race" ), _( "Click to select this race." ), Dialog::ZERO );
-            }
-            else if ( le.MousePressRight( colorRect[i] ) ) {
-                fheroes2::showStandardTextMessage( _( "player|Color" ), _( "Click to select this color." ), Dialog::ZERO );
-            }
-        }
-
-        if ( le.MousePressRight( buttonCancel.area() ) ) {
+        else if ( le.MousePressRight( buttonCancel.area() ) ) {
             fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Exit this menu without doing anything." ), Dialog::ZERO );
         }
         else if ( le.MousePressRight( buttonOk.area() ) ) {
@@ -1056,6 +1036,27 @@ int Dialog::selectTownType( const int townType )
             StringReplace( name, "%{race}", ( townRace < 6 ) ? Race::String( Race::IndexToRace( townRace ) ) : _( "race|Random" ) );
             StringReplace( name, "%{townOrCastle}", isCastle ? _( "Castle" ) : _( "Town" ) );
             fheroes2::showStandardTextMessage( _( "You will place" ), std::move( name ), Dialog::ZERO );
+        }
+        else {
+            for ( size_t i = 0; i < 7; ++i ) {
+                if ( le.MouseClickLeft( raceRect[i] ) ) {
+                    townRace = static_cast<int>( i );
+                    needRedraw = true;
+                    break;
+                }
+                if ( le.MouseClickLeft( colorRect[i] ) ) {
+                    townColor = static_cast<int>( i );
+                    needRedraw = true;
+                    break;
+                }
+
+                if ( le.MousePressRight( raceRect[i] ) ) {
+                    fheroes2::showStandardTextMessage( _( "Race" ), _( "Click to select this race." ), Dialog::ZERO );
+                }
+                else if ( le.MousePressRight( colorRect[i] ) ) {
+                    fheroes2::showStandardTextMessage( _( "player|Color" ), _( "Click to select this color." ), Dialog::ZERO );
+                }
+            }
         }
 
         if ( !needRedraw ) {

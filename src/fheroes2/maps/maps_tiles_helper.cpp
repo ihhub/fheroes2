@@ -1225,7 +1225,7 @@ namespace
             }
 
             // It is important that the type of the object is set properly for this layer.
-            assert( partInfo.objectType != MP2::OBJ_NONE );
+            assert( partInfo.objectType != MP2::OBJ_NONE || partInfo.icnType == MP2::OBJ_ICN_TYPE_FLAG32 );
 
             bool setObjectType = true;
             if ( !MP2::isActionObject( partInfo.objectType ) ) {

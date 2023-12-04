@@ -821,8 +821,9 @@ namespace Interface
         else if ( groupType == Maps::ObjectGroup::KINGDOM_TOWNS ) {
             // TODO: implement towns placing on the map.
 
-            fheroes2::showStandardTextMessage( _( "Kingdom object" ), _( "Objects cannot be placed outside the map." ), Dialog::OK );
-            return;
+            setObjectOnTile( tile, getObjectInfo( Maps::ObjectGroup::LANDSCAPE_FLAGS, _editorPanel.getSelectedObjectType() / 14 ) );
+            setObjectOnTile( tile, getObjectInfo( Maps::ObjectGroup::LANDSCAPE_TOWN_BASEMENTS, 0 ) );
+            setObjectOnTile( tile, getObjectInfo( groupType, _editorPanel.getSelectedObjectType() % 14 ) );
         }
     }
 
