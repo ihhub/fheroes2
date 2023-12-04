@@ -2808,16 +2808,14 @@ void AllCastles::AddCastle( Castle * castle )
 
             const auto [dummy, inserted] = _castleTiles.try_emplace( center + fheroes2::Point( x, y ), id );
             if ( !inserted ) {
-                DEBUG_LOG( DBG_GAME, DBG_INFO,
-                            "Tile [" << center.x + x << ", " << center.y + y << "] is occupied by another castle" )
+                DEBUG_LOG( DBG_GAME, DBG_INFO, "Tile [" << center.x + x << ", " << center.y + y << "] is occupied by another castle" )
             }
         }
     }
 
     const auto [dummy, inserted] = _castleTiles.try_emplace( center + fheroes2::Point( 0, -3 ), id );
     if ( !inserted ) {
-        DEBUG_LOG( DBG_GAME, DBG_INFO,
-                            "Tile [" << center.x << ", " << center.y - 3 << "] is occupied by another castle" )
+        DEBUG_LOG( DBG_GAME, DBG_INFO, "Tile [" << center.x << ", " << center.y - 3 << "] is occupied by another castle" )
     }
 }
 
