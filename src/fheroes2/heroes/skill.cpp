@@ -499,7 +499,7 @@ std::string Skill::Secondary::GetDescription( const Heroes & hero ) const
             str = _( "%{skill} gives the hero's catapult an extra shot, and each shot has a greater chance to hit and do damage to castle walls." );
             break;
         case Level::EXPERT:
-            str = _( "%{skill} gives thee hero's catapult an extra shot, and each shot automatically destroys any wall, except a fortified wall in a Knight castle." );
+            str = _( "%{skill} gives the hero's catapult an extra shot, and each shot automatically destroys any wall, except a fortified wall in a Knight castle." );
             break;
         default:
             break;
