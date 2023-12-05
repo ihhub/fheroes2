@@ -2796,8 +2796,8 @@ void AllCastles::AddCastle( Castle * castle )
     const size_t id = _castles.size() - 1;
     const fheroes2::Point & center = castle->GetCenter();
 
-    // We need to override any existing castle's ID that is why we use [] operator to access std::map.
-    // Castles are added from top to bottom, from left to right so a newer castle must override existing data for a tile if any.
+    // Castles are added from top to bottom, from left to right.
+    // Tiles containing castle ID cannot be overwritten.
 
     for ( int32_t y = -2; y <= 1; ++y ) {
         for ( int32_t x = -2; x <= 2; ++x ) {
