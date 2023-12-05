@@ -338,7 +338,7 @@ void Players::Init( const Maps::FileInfo & fi )
 
             if ( ( *it & fi.HumanOnlyColors() ) && Settings::Get().IsGameType( Game::TYPE_MULTI ) )
                 player->SetControl( CONTROL_HUMAN );
-            else if ( *it & fi.AllowHumanColors() )
+            else if ( *it & fi.colorsAvailableForHumans )
                 player->SetControl( player->GetControl() | CONTROL_HUMAN );
 
             if ( !first && ( player->GetControl() & CONTROL_HUMAN ) )
