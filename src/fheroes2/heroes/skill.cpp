@@ -188,7 +188,7 @@ std::string Skill::Primary::StringDescription( int skill, const Heroes * hero )
             hero->GetDefense( &ext );
         break;
     case POWER:
-        res = _( "The hero's spell power determines the length or power of a spell." );
+        res = _( "The hero's spell power determines the duration or power of a spell." );
         if ( hero )
             hero->GetPower( &ext );
         break;
@@ -432,7 +432,7 @@ std::string Skill::Secondary::GetDescription( const Heroes & hero ) const
         }
         break;
     case ARCHERY: {
-        str = _( "%{skill} increases the damage done by range attacking creatures by %{count} percent." );
+        str = _( "%{skill} increases the damage done by the hero's range attacking creatures by %{count} percent." );
         break;
     }
     case LOGISTICS: {
@@ -444,7 +444,7 @@ std::string Skill::Secondary::GetDescription( const Heroes & hero ) const
         break;
     }
     case DIPLOMACY:
-        str = _( "%{skill} allows the hero to negotiate with monsters who are weaker than their army. " );
+        str = _( "%{skill} allows the hero to negotiate with monsters who are weaker than their army." );
         switch ( Level() ) {
         case Level::BASIC:
         case Level::ADVANCED:
