@@ -2809,8 +2809,8 @@ void AllCastles::AddCastle( Castle * castle )
     const size_t id = _castles.size() - 1;
     const fheroes2::Point & center = castle->GetCenter();
 
-    // We need to override any existing castle's ID that is why we use [] operator to access std::map.
-    // Castles are added from top to bottom, from left to right so a newer castle must override existing data for a tile if any.
+    // Castles are added from top to bottom, from left to right.
+    // Tiles containing castle ID cannot be overwritten.
 
     for ( int32_t y = -2; y <= 1; ++y ) {
         for ( int32_t x = -2; x <= 2; ++x ) {
@@ -2819,11 +2819,17 @@ void AllCastles::AddCastle( Castle * castle )
                 continue;
             }
 
-            _castleTiles[center + fheroes2::Point( x, y )] = id;
+            const auto [dummy, inserted] = _castleTiles.try_emplace( center + fheroes2::Point( x, y ), id );
+            if ( !inserted ) {
+                DEBUG_LOG( DBG_GAME, DBG_INFO, "Tile [" << center.x + x << ", " << center.y + y << "] is occupied by another castle" )
+            }
         }
     }
 
-    _castleTiles[center + fheroes2::Point( 0, -3 )] = id;
+    const auto [dummy, inserted] = _castleTiles.try_emplace( center + fheroes2::Point( 0, -3 ), id );
+    if ( !inserted ) {
+        DEBUG_LOG( DBG_GAME, DBG_INFO, "Tile [" << center.x << ", " << center.y - 3 << "] is occupied by another castle" )
+    }
 }
 
 void AllCastles::Scout( int colors ) const
