@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-30 13:15+0000\n"
+"POT-Creation-Date: 2023-12-05 00:31+0000\n"
 "PO-Revision-Date: 2023-11-01 22:53+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3357,6 +3357,10 @@ msgstr "Kiểu Bản đồ:\n"
 msgid "The Succession Wars"
 msgstr "Cuộc chiến Kế vị"
 
+#, fuzzy
+msgid "Resurrection"
+msgstr "Phân giải"
+
 msgid "Lose all your heroes and towns."
 msgstr "Mất tất cả các tướng và thành."
 
@@ -3612,6 +3616,10 @@ msgstr "Nhân cách:"
 
 msgid "Best Monster:"
 msgstr "Quái vật Mạnh nhất:"
+
+#, fuzzy
+msgid "Map filename"
+msgstr "Cỡ Bản đồ"
 
 msgid ""
 "Are you sure you want to load a new map? (Any unsaved changes to the current "
@@ -4603,9 +4611,10 @@ msgstr "Phiên bản hỗ trợ cuối cùng: "
 msgid "This file contains a save with an invalid game type."
 msgstr "Tệp này chứa một bản lưu có loại trò chơi không hợp lệ."
 
+#, fuzzy
 msgid ""
-"This file was saved for a \"The Price of Loyalty\" map, but the "
-"corresponding game assets have not been provided to the engine."
+"This save file requires \"The Price of Loyalty\" game assets, but they have "
+"not been provided to the engine."
 msgstr ""
 "Tệp này đã được lưu cho bản đồ \"Cái giá của lòng trung thành\", nhưng nội "
 "dung trò chơi tương ứng chưa được cung cấp cho công cụ."

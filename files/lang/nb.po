@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-27 00:58+0000\n"
+"POT-Creation-Date: 2023-12-05 00:31+0000\n"
 "PO-Revision-Date: 2023-09-03 18:42+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3396,6 +3396,12 @@ msgstr "Kart-type:\n"
 msgid "The Succession Wars"
 msgstr "Krigen om tronen"
 
+#, fuzzy
+msgid "Resurrection"
+msgstr ""
+"Gjen-\n"
+"opplivning"
+
 msgid "Lose all your heroes and towns."
 msgstr "Mist alle helter og byer."
 
@@ -3655,6 +3661,12 @@ msgstr "Rolle:"
 
 msgid "Best Monster:"
 msgstr "Beste krigerslag:"
+
+#, fuzzy
+msgid "Map filename"
+msgstr ""
+"Kartets\n"
+"størrelse"
 
 msgid ""
 "Are you sure you want to load a new map? (Any unsaved changes to the current "
@@ -4664,9 +4676,10 @@ msgstr "Sist støttede utgave: "
 msgid "This file contains a save with an invalid game type."
 msgstr "Denne filen inneholder et lagringspunkt med en ugyldig spillversjon."
 
+#, fuzzy
 msgid ""
-"This file was saved for a \"The Price of Loyalty\" map, but the "
-"corresponding game assets have not been provided to the engine."
+"This save file requires \"The Price of Loyalty\" game assets, but they have "
+"not been provided to the engine."
 msgstr ""
 "Denne filen ble lagret i spillutgaven \"Prisen for trofasthet\", men de "
 "tilhørende utvidelsesfilene mangler."

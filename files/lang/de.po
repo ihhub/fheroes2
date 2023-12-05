@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-27 00:58+0000\n"
+"POT-Creation-Date: 2023-12-05 00:31+0000\n"
 "PO-Revision-Date: 2023-04-09 23:51+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3370,6 +3370,10 @@ msgstr "Kartentyp:\n"
 msgid "The Succession Wars"
 msgstr "The Succession Wars"
 
+#, fuzzy
+msgid "Resurrection"
+msgstr "Auferstehung"
+
 msgid "Lose all your heroes and towns."
 msgstr "Alle Helden und Städte verlieren."
 
@@ -3629,6 +3633,12 @@ msgstr "Person:"
 
 msgid "Best Monster:"
 msgstr "Bestes Monster:"
+
+#, fuzzy
+msgid "Map filename"
+msgstr ""
+"Karten-\n"
+"größe"
 
 msgid ""
 "Are you sure you want to load a new map? (Any unsaved changes to the current "
@@ -4647,9 +4657,10 @@ msgstr "Letzte unterstützte Version: "
 msgid "This file contains a save with an invalid game type."
 msgstr "Diese Datei enthält einen Spielstand mit einem ungültigen Spieltyp."
 
+#, fuzzy
 msgid ""
-"This file was saved for a \"The Price of Loyalty\" map, but the "
-"corresponding game assets have not been provided to the engine."
+"This save file requires \"The Price of Loyalty\" game assets, but they have "
+"not been provided to the engine."
 msgstr ""
 "Diese Datei wurde als \"The Price of Loyalty\"-Karte gespeichert, aber die "
 "entsprechenden Spiel-Assets wurden der Engine nicht zur Verfügung gestellt."
