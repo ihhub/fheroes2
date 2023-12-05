@@ -56,13 +56,13 @@ std::string Luck::Description( int luck )
     case Luck::CURSED:
     case Luck::AWFUL:
     case Luck::BAD:
-        return _( "Bad luck sometimes falls on the heros' units in combat, causing their attacks to only do half damage." );
+        return _( "Bad luck sometimes falls on the hero's units in combat, causing their attacks to only do half damage." );
     case Luck::NORMAL:
-        return _( "Neutral luck means heros' units will never get lucky or unlucky attacks on the enemy." );
+        return _( "Neutral luck means hero's units will never get lucky or unlucky attacks on the enemy." );
     case Luck::GOOD:
     case Luck::GREAT:
     case Luck::IRISH:
-        return _( "Good luck sometimes lets your heros' units get lucky attacks (double strength) in combat." );
+        return _( "Good luck sometimes lets your hero's units get lucky attacks (double strength) in combat." );
     default:
         break;
     }
