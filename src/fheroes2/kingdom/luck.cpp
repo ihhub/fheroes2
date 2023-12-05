@@ -58,7 +58,7 @@ std::string Luck::Description( int luck )
     case Luck::BAD:
         return _( "Bad luck sometimes falls on the hero's units in combat, causing their attacks to only do half damage." );
     case Luck::NORMAL:
-        return _( "Neutral luck means hero's units will never get lucky or unlucky attacks on the enemy." );
+        return _( "Neutral luck means the hero's units will never get lucky or unlucky attacks on the enemy." );
     case Luck::GOOD:
     case Luck::GREAT:
     case Luck::IRISH:
