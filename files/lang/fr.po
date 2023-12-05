@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-27 00:58+0000\n"
+"POT-Creation-Date: 2023-12-05 00:31+0000\n"
 "PO-Revision-Date: 2022-12-18 13:48+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -3391,6 +3391,10 @@ msgstr ""
 msgid "The Succession Wars"
 msgstr "The Succession Wars"
 
+#, fuzzy
+msgid "Resurrection"
+msgstr "Résurrection"
+
 msgid "Lose all your heroes and towns."
 msgstr "Perdre tous les héros et tous les villages."
 
@@ -3652,6 +3656,12 @@ msgstr "Personnalité :"
 
 msgid "Best Monster:"
 msgstr "Meilleure créature :"
+
+#, fuzzy
+msgid "Map filename"
+msgstr ""
+"Taille de\n"
+"la carte"
 
 # Needs line break to have insectile space but keep partie and ? together.
 #, fuzzy
@@ -4681,8 +4691,8 @@ msgstr "Ce fichier contient une sauvegarde avec un type de jeu invalide."
 
 #, fuzzy
 msgid ""
-"This file was saved for a \"The Price of Loyalty\" map, but the "
-"corresponding game assets have not been provided to the engine."
+"This save file requires \"The Price of Loyalty\" game assets, but they have "
+"not been provided to the engine."
 msgstr ""
 "Ce fichier est enregistré au format \"The Price of Loyalty\".\n"
 "Certains éléments peuvent ne pas être disponibles."

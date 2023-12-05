@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-27 00:58+0000\n"
+"POT-Creation-Date: 2023-12-05 00:31+0000\n"
 "PO-Revision-Date: 2023-12-02 22:18+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -3340,6 +3340,12 @@ msgstr "Karttyp:\n"
 msgid "The Succession Wars"
 msgstr "Successionskrigen"
 
+#, fuzzy
+msgid "Resurrection"
+msgstr ""
+"Åter-\n"
+"upplivning"
+
 msgid "Lose all your heroes and towns."
 msgstr "Förlora alla dina hjältar och städer."
 
@@ -3599,6 +3605,10 @@ msgstr "Personlighet:"
 
 msgid "Best Monster:"
 msgstr "Bästa Monster:"
+
+#, fuzzy
+msgid "Map filename"
+msgstr "Kartstorlek"
 
 msgid ""
 "Are you sure you want to load a new map? (Any unsaved changes to the current "
@@ -4584,9 +4594,10 @@ msgstr "Senast stödda version: "
 msgid "This file contains a save with an invalid game type."
 msgstr "Denna fil innehåller en sparning med en ogiltig speltyp."
 
+#, fuzzy
 msgid ""
-"This file was saved for a \"The Price of Loyalty\" map, but the "
-"corresponding game assets have not been provided to the engine."
+"This save file requires \"The Price of Loyalty\" game assets, but they have "
+"not been provided to the engine."
 msgstr ""
 "Denna fil är sparad för en The Price of Loyalty-karta men motsvarande "
 "speltillgångar finns inte."
