@@ -178,23 +178,23 @@ std::string Skill::Primary::StringDescription( int skill, const Heroes * hero )
 
     switch ( skill ) {
     case ATTACK:
-        res = _( "Your attack skill is a bonus added to each creature's attack skill." );
+        res = _( "The hero's attack skill is a bonus added to each unit's attack skill." );
         if ( hero )
             hero->GetAttack( &ext );
         break;
     case DEFENSE:
-        res = _( "Your defense skill is a bonus added to each creature's defense skill." );
+        res = _( "The hero's defense skill is a bonus added to each unit's defense skill." );
         if ( hero )
             hero->GetDefense( &ext );
         break;
     case POWER:
-        res = _( "Your spell power determines the length or power of a spell." );
+        res = _( "The hero's spell power determines the length or power of a spell." );
         if ( hero )
             hero->GetPower( &ext );
         break;
     case KNOWLEDGE:
         res = _(
-            "Your knowledge determines how many spell points your hero may have. Under normal circumstances, a hero is limited to 10 spell points per level of knowledge." );
+            " The hero's knowledge determines how many spell points the hero may have. Under normal circumstances, a hero is limited to 10 spell points per level of knowledge." );
         if ( hero )
             hero->GetKnowledge( &ext );
         break;
@@ -436,45 +436,45 @@ std::string Skill::Secondary::GetDescription( const Heroes & hero ) const
         break;
     }
     case LOGISTICS: {
-        str = _( "%{skill} increases your hero's movement points by %{count} percent." );
+        str = _( "%{skill} increases the hero's movement points by %{count} percent." );
         break;
     }
     case SCOUTING: {
-        str = _n( "%{skill} increases your hero's viewable area by one square.", "%{skill} increases your hero's viewable area by %{count} squares.", count );
+        str = _n( "%{skill} increases the hero's viewable area by one square.", "%{skill} increases the hero's viewable area by %{count} squares.", count );
         break;
     }
     case DIPLOMACY:
-        str = _( "%{skill} allows you to negotiate with monsters who are weaker than your group. " );
+        str = _( "%{skill} allows the hero to negotiate with monsters who are weaker than their army. " );
         switch ( Level() ) {
         case Level::BASIC:
         case Level::ADVANCED:
-            str.append( _( "Approximately %{count} percent of the creatures may offer to join you." ) );
+            str.append( _( "Approximately %{count} percent of the creatures may offer to join the hero." ) );
             break;
         case Level::EXPERT:
-            str.append( _( "All of the creatures may offer to join you." ) );
+            str.append( _( "All of the creatures may offer to join the hero." ) );
             break;
         default:
             break;
         }
         break;
     case NAVIGATION: {
-        str = _( "%{skill} increases your hero's movement points over water by %{count} percent." );
+        str = _( "%{skill} increases the hero's movement points over water by %{count} percent." );
         break;
     }
     case LEADERSHIP: {
-        str = _( "%{skill} increases your hero's troops morale by %{count}." );
+        str = _( "%{skill} increases the hero's troops morale by %{count}." );
         break;
     }
     case WISDOM: {
         switch ( Level() ) {
         case Level::BASIC:
-            str = _( "%{skill} allows your hero to learn third level spells." );
+            str = _( "%{skill} allows the hero to learn third level spells." );
             break;
         case Level::ADVANCED:
-            str = _( "%{skill} allows your hero to learn fourth level spells." );
+            str = _( "%{skill} allows the hero to learn fourth level spells." );
             break;
         case Level::EXPERT:
-            str = _( "%{skill} allows your hero to learn fifth level spells." );
+            str = _( "%{skill} allows the hero to learn fifth level spells." );
             break;
         default:
             break;
@@ -482,24 +482,24 @@ std::string Skill::Secondary::GetDescription( const Heroes & hero ) const
         break;
     }
     case MYSTICISM: {
-        str = _n( "%{skill} regenerates one additional spell point per day to your hero.", "%{skill} regenerates %{count} additional spell points per day to your hero.",
+        str = _n( "%{skill} regenerates one additional spell point per day to the hero.", "%{skill} regenerates %{count} additional spell points per day to the hero.",
                   count );
         break;
     }
     case LUCK: {
-        str = _( "%{skill} increases your hero's luck by %{count}." );
+        str = _( "%{skill} increases the hero's luck by %{count}." );
         break;
     }
     case BALLISTICS:
         switch ( Level() ) {
         case Level::BASIC:
-            str = _( "%{skill} gives your hero's catapult shots a greater chance to hit and do damage to castle walls." );
+            str = _( "%{skill} gives the hero's catapult shots a greater chance to hit and do damage to castle walls." );
             break;
         case Level::ADVANCED:
-            str = _( "%{skill} gives your hero's catapult an extra shot, and each shot has a greater chance to hit and do damage to castle walls." );
+            str = _( "%{skill} gives the hero's catapult an extra shot, and each shot has a greater chance to hit and do damage to castle walls." );
             break;
         case Level::EXPERT:
-            str = _( "%{skill} gives your hero's catapult an extra shot, and each shot automatically destroys any wall, except a fortified wall in a Knight castle." );
+            str = _( "%{skill} gives thee hero's catapult an extra shot, and each shot automatically destroys any wall, except a fortified wall in a Knight castle." );
             break;
         default:
             break;
@@ -508,13 +508,13 @@ std::string Skill::Secondary::GetDescription( const Heroes & hero ) const
     case EAGLEEYE:
         switch ( Level() ) {
         case Level::BASIC:
-            str = _( "%{skill} gives your hero a %{count} percent chance to learn any given 1st or 2nd level spell that was cast by an enemy during combat." );
+            str = _( "%{skill} gives the hero a %{count} percent chance to learn any given 1st or 2nd level spell that was cast by an enemy during combat." );
             break;
         case Level::ADVANCED:
-            str = _( "%{skill} gives your hero a %{count} percent chance to learn any given 3rd level spell (or below) that was cast by an enemy during combat." );
+            str = _( "%{skill} gives the hero a %{count} percent chance to learn any given 3rd level spell (or below) that was cast by an enemy during combat." );
             break;
         case Level::EXPERT:
-            str = _( "%{skill} gives your hero a %{count} percent chance to learn any given 4th level spell (or below) that was cast by an enemy during combat." );
+            str = _( "%{skill} gives the hero a %{count} percent chance to learn any given 4th level spell (or below) that was cast by an enemy during combat." );
             break;
         default:
             break;
@@ -527,7 +527,7 @@ std::string Skill::Secondary::GetDescription( const Heroes & hero ) const
         break;
     }
     case ESTATES:
-        str = _( "Your hero produces %{count} gold pieces per day as tax revenue from estates." );
+        str = _( "The hero produces %{count} gold pieces per day as tax revenue from estates." );
         break;
     default:
         // Are you sure that you are passing the correct secondary skill type?
