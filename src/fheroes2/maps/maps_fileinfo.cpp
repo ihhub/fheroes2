@@ -227,30 +227,24 @@ bool Maps::FileInfo::ReadMP2( const std::string & filePath )
     // fs.get();
 
     // Victory conditions
-    fs.seek( 0x1D );
+    fs.seek( 29 );
     victoryConditions = fs.get();
-    // Do the victory conditions apply to AI too
+    // Do the victory conditions apply to AI too?
     compAlsoWins = ( fs.get() != 0 );
     // Is "normal victory" (defeating all other players) applicable here
     allowNormalVictory = ( fs.get() != 0 );
     // Additional parameter of victory conditions
     victoryConditionsParam1 = fs.getLE16();
-    // Additional parameter of victory conditions
-    fs.seek( 0x2c );
-    victoryConditionsParam2 = fs.getLE16();
-
-    // Loss conditions
-    fs.seek( 0x22 );
+    // Loss conditions.
     lossConditions = fs.get();
-    // Additional parameter of loss conditions
+    // Additional parameter of loss conditions.
     lossConditionsParam1 = fs.getLE16();
-    // Additional parameter of loss conditions
-    fs.seek( 0x2e );
-    lossConditionsParam2 = fs.getLE16();
-
-    // Does the game start with heroes in castles automatically
-    fs.seek( 0x25 );
+    // Does the game start with heroes in castles automatically?
     startWithHeroInEachCastle = ( 0 == fs.get() );
+    // Additional parameter of victory conditions.
+    victoryConditionsParam2 = fs.getLE16();
+    // Additional parameter of loss conditions.
+    lossConditionsParam2 = fs.getLE16();
 
     static_assert( std::is_same_v<decltype( races ), std::array<uint8_t, KINGDOMMAX>>, "Type of races has been changed, check the logic below" );
 
@@ -294,11 +288,11 @@ bool Maps::FileInfo::ReadMP2( const std::string & filePath )
     }
 
     // Map name
-    fs.seek( 0x3A );
+    fs.seek( 58 );
     name = fs.toString( mapNameLength );
 
     // Map description
-    fs.seek( 0x76 );
+    fs.seek( 118 );
     description = fs.toString( mapDescriptionLength );
 
     // Alliances of kingdoms
@@ -362,6 +356,12 @@ bool Maps::FileInfo::readResurrectionMap( std::string filePath )
 
     name = std::move( map.name );
     description = std::move( map.description );
+
+    kingdomColors = map.availablePlayerColors;
+    colorsAvailableForHumans = map.humanPlayerColors;
+    colorsAvailableForComp = map.computerPlayerColors;
+
+    version = GameVersion::RESURRECTION;
 
     return true;
 }
