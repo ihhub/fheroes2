@@ -226,29 +226,25 @@ bool Maps::FileInfo::ReadMP2( const std::string & filePath )
     // fs.seekg(0x1A, std::ios_base::beg);
     // fs.get();
 
-    // Victory conditions
     fs.seek( 29 );
+    // Victory conditions.
     victoryConditions = fs.get();
     // Do the victory conditions apply to AI too?
     compAlsoWins = ( fs.get() != 0 );
-    // Is "normal victory" (defeating all other players) applicable here
+    // Is "normal victory" (defeating all other players) applicable here?
     allowNormalVictory = ( fs.get() != 0 );
-    // Additional parameter of victory conditions
+    // Additional parameter of victory conditions.
     victoryConditionsParam1 = fs.getLE16();
-    // Loss conditions.
+    // Loss conditions
     lossConditions = fs.get();
-    // Additional parameter of loss conditions.
+    // Additional parameter of loss conditions
     lossConditionsParam1 = fs.getLE16();
     // Does the game start with heroes in castles automatically?
     startWithHeroInEachCastle = ( 0 == fs.get() );
-    // Additional parameter of victory conditions.
-    victoryConditionsParam2 = fs.getLE16();
-    // Additional parameter of loss conditions.
-    lossConditionsParam2 = fs.getLE16();
 
     static_assert( std::is_same_v<decltype( races ), std::array<uint8_t, KINGDOMMAX>>, "Type of races has been changed, check the logic below" );
 
-    // Initial races
+    // Initial races.
     for ( const int color : colors ) {
         const uint8_t race = Race::IndexToRace( fs.get() );
         const int idx = Color::GetIndex( color );
@@ -260,6 +256,11 @@ bool Maps::FileInfo::ReadMP2( const std::string & filePath )
             colorsOfRandomRaces |= color;
         }
     }
+
+    // Additional parameter of victory conditions.
+    victoryConditionsParam2 = fs.getLE16();
+    // Additional parameter of loss conditions.
+    lossConditionsParam2 = fs.getLE16();
 
     bool skipUnionSetup = false;
     // If loss conditions are LOSS_HERO and victory conditions are VICTORY_DEFEAT_EVERYONE then we have to verify the color to which this object belongs to.
