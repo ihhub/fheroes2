@@ -889,7 +889,7 @@ namespace
     int32_t setCampaignDifficulty( int32_t currentDifficulty, const int32_t maximumAllowedDifficulty )
     {
         // It's better to have frameborder width value divisible to 2 and 3 w/o remainder
-        const fheroes2::StandardWindow frameborder( 300, 270, true );
+        const fheroes2::StandardWindow frameborder( 300, 284, true );
         const fheroes2::Rect & windowRoi = frameborder.activeArea();
 
         const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
@@ -998,7 +998,7 @@ namespace
         }
 
         const int32_t textWidth = windowRoi.width - 16;
-        const fheroes2::Point textOffset{ windowRoi.x + 8, windowRoi.y + 135 };
+        const fheroes2::Point textOffset{ windowRoi.x + 8, windowRoi.y + 140 };
 
         fheroes2::Text description( currentDescription, fheroes2::FontType::normalWhite() );
         fheroes2::ImageRestorer restorer( display, textOffset.x, textOffset.y, textWidth, description.height( textWidth ) );
