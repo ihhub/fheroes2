@@ -227,17 +227,17 @@ bool Maps::FileInfo::ReadMP2( const std::string & filePath )
     // fs.get();
 
     fs.seek( 29 );
-    // Victory conditions.
+    // Victory condition type.
     victoryConditions = fs.get();
     // Do the victory conditions apply to AI too?
     compAlsoWins = ( fs.get() != 0 );
     // Is "normal victory" (defeating all other players) applicable here?
     allowNormalVictory = ( fs.get() != 0 );
-    // Additional parameter of victory conditions.
+    // Parameter of victory condition.
     victoryConditionsParam1 = fs.getLE16();
-    // Loss conditions
+    // Loss condition type.
     lossConditions = fs.get();
-    // Additional parameter of loss conditions
+    // Parameter of loss condition.
     lossConditionsParam1 = fs.getLE16();
     // Does the game start with heroes in castles automatically?
     startWithHeroInEachCastle = ( 0 == fs.get() );
@@ -257,9 +257,9 @@ bool Maps::FileInfo::ReadMP2( const std::string & filePath )
         }
     }
 
-    // Additional parameter of victory conditions.
+    // Additional parameter of victory condition.
     victoryConditionsParam2 = fs.getLE16();
-    // Additional parameter of loss conditions.
+    // Additional parameter of loss condition.
     lossConditionsParam2 = fs.getLE16();
 
     bool skipUnionSetup = false;
