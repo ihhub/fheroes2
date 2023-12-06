@@ -888,7 +888,8 @@ namespace
 
     int32_t setCampaignDifficulty( int32_t currentDifficulty, const int32_t maximumAllowedDifficulty )
     {
-        const fheroes2::StandardWindow frameborder( 234, 270, true );
+        // It's better to have frameborder width value divisible to 2 and 3 w/o remainder
+        const fheroes2::StandardWindow frameborder( 300, 270, true );
         const fheroes2::Rect & windowRoi = frameborder.activeArea();
 
         const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
@@ -906,15 +907,40 @@ namespace
 
         const fheroes2::Text caption( _( "Campaign Difficulty" ), fheroes2::FontType::normalYellow() );
         caption.draw( windowRoi.x + ( windowRoi.width - caption.width() ) / 2, windowRoi.y + 10, display );
+        
+        const uint32_t iconWidth = 64;
+        const int32_t iconRecenterX = -5;
 
-        const fheroes2::Rect copyFromArea{ 20, 94, 223, 69 };
-        const fheroes2::Point copyToOffset{ windowRoi.x + 4, windowRoi.y + 40 };
-        fheroes2::Copy( fheroes2::AGG::GetICN( ICN::NGHSBKG, 0 ), copyFromArea.x, copyFromArea.y, display, copyToOffset.x, copyToOffset.y, copyFromArea.width,
-                        copyFromArea.height );
+        const uint32_t pawnIconOffsetX = windowRoi.x + iconRecenterX + ( windowRoi.width - iconWidth ) / 2 - windowRoi.width / 3;
+        const uint32_t horseIconOffsetX = windowRoi.x + iconRecenterX + ( windowRoi.width - iconWidth ) / 2;
+        const uint32_t rookIconOffsetX = windowRoi.x + iconRecenterX + ( windowRoi.width - iconWidth ) / 2 + windowRoi.width / 3;
+        
+        const std::array<fheroes2::Rect, 3> copyFromArea { fheroes2::Rect( 20, 94, 70, 69 ),
+                                                           fheroes2::Rect( 97, 94, 70, 69 ), 
+                                                           fheroes2::Rect( 173, 94, 70, 69 ) };
+
+        const std::array<fheroes2::Point, 3> copyToOffset{ fheroes2::Point( pawnIconOffsetX, windowRoi.y + 40 ),
+                                                           fheroes2::Point( horseIconOffsetX, windowRoi.y + 40 ),
+                                                           fheroes2::Point( rookIconOffsetX, windowRoi.y + 40 ) };
+
+        const fheroes2::Sprite chessIcon = fheroes2::AGG::GetICN( ICN::NGHSBKG, 0 );
+
+        fheroes2::Copy( chessIcon, copyFromArea[0].x, copyFromArea[0].y, display, copyToOffset[0].x, copyToOffset[0].y,
+                        copyFromArea[0].width, copyFromArea[0].height );
+        fheroes2::Copy( chessIcon, copyFromArea[1].x, copyFromArea[1].y, display, copyToOffset[1].x, copyToOffset[1].y,
+                        copyFromArea[1].width, copyFromArea[1].height );
+        fheroes2::Copy( chessIcon, copyFromArea[2].x, copyFromArea[2].y, display, copyToOffset[2].x, copyToOffset[2].y,
+                        copyFromArea[2].width, copyFromArea[2].height );
 
         if ( isEvilInterface ) {
-            fheroes2::ApplyPalette( display, copyToOffset.x, copyToOffset.y, display, copyToOffset.x, copyToOffset.y, copyFromArea.width, copyFromArea.height,
-                                    PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_INTERFACE ) );
+            const std::vector<uint8_t> goodToEvilPalette = PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_INTERFACE );
+
+            fheroes2::ApplyPalette( display, copyToOffset[0].x, copyToOffset[0].y, display, copyToOffset[0].x, copyToOffset[0].y,
+                                    copyFromArea[0].width, copyFromArea[0].height, goodToEvilPalette );
+            fheroes2::ApplyPalette( display, copyToOffset[1].x, copyToOffset[1].y, display, copyToOffset[1].x, copyToOffset[1].y,
+                                    copyFromArea[1].width, copyFromArea[1].height, goodToEvilPalette );
+            fheroes2::ApplyPalette( display, copyToOffset[2].x, copyToOffset[2].y, display, copyToOffset[2].x, copyToOffset[2].y,
+                                    copyFromArea[2].width, copyFromArea[2].height, goodToEvilPalette );
         }
 
         const fheroes2::Sprite & selectionImage = fheroes2::AGG::GetICN( ICN::NGEXTRA, 62 );
@@ -925,9 +951,9 @@ namespace
         const char * normalDescription = _( "Choose this difficulty to enjoy the campaign as per the original design." );
         const char * hardDescription = _( "Choose this difficulty if you want challenge. AI is stronger in comparison with normal difficulty." );
 
-        const std::array<fheroes2::Rect, 3> difficultyArea{ fheroes2::Rect( windowRoi.x + 5, windowRoi.y + 37, selectionImage.width(), selectionImage.height() ),
-                                                            fheroes2::Rect( windowRoi.x + 82, windowRoi.y + 37, selectionImage.width(), selectionImage.height() ),
-                                                            fheroes2::Rect( windowRoi.x + 158, windowRoi.y + 37, selectionImage.width(), selectionImage.height() ) };
+        const std::array<fheroes2::Rect, 3> difficultyArea{ fheroes2::Rect( copyToOffset[0].x, windowRoi.y + 37, selectionImage.width(), selectionImage.height() ),
+                                                            fheroes2::Rect( copyToOffset[1].x, windowRoi.y + 37, selectionImage.width(), selectionImage.height() ),
+                                                            fheroes2::Rect( copyToOffset[2].x, windowRoi.y + 37, selectionImage.width(), selectionImage.height() ) };
 
         const std::array<fheroes2::Rect, 3> iconArea{ fheroes2::Rect( difficultyArea[0].x + 4, difficultyArea[0].y + 4, 63, 63 ),
                                                       fheroes2::Rect( difficultyArea[1].x + 4, difficultyArea[1].y + 4, 63, 63 ),
@@ -937,15 +963,15 @@ namespace
         switch ( currentDifficulty ) {
         case Campaign::CampaignDifficulty::Easy:
             currentDescription = easyDescription;
-            selection.setPosition( difficultyArea[0].x, difficultyArea[0].y );
+            selection.setPosition( difficultyArea[0].x + 1, difficultyArea[0].y );
             break;
         case Campaign::CampaignDifficulty::Normal:
             currentDescription = normalDescription;
-            selection.setPosition( difficultyArea[1].x, difficultyArea[1].y );
+            selection.setPosition( difficultyArea[1].x + 1, difficultyArea[1].y );
             break;
         case Campaign::CampaignDifficulty::Hard:
             currentDescription = hardDescription;
-            selection.setPosition( difficultyArea[2].x, difficultyArea[2].y );
+            selection.setPosition( difficultyArea[2].x + 1, difficultyArea[2].y );
             break;
         default:
             // Did you add a new difficulty level for campaigns? Add the logic above!
@@ -957,6 +983,7 @@ namespace
                                                     ( maximumAllowedDifficulty >= Campaign::CampaignDifficulty::Normal ),
                                                     ( maximumAllowedDifficulty >= Campaign::CampaignDifficulty::Hard ) };
 
+        // TODO: Check this!
         if ( !allowedSelection[0] ) {
             fheroes2::ApplyPalette( display, iconArea[0].x, iconArea[0].y, display, iconArea[0].x, iconArea[0].y, iconArea[0].width, iconArea[0].height,
                                     PAL::GetPalette( PAL::PaletteType::GRAY ) );
@@ -1024,19 +1051,19 @@ namespace
 
             if ( allowedSelection[0] && le.MouseClickLeft( difficultyArea[0] ) ) {
                 currentDescription = easyDescription;
-                selection.setPosition( difficultyArea[0].x, difficultyArea[0].y );
+                selection.setPosition( difficultyArea[0].x + 1, difficultyArea[0].y );
                 currentDifficulty = Campaign::CampaignDifficulty::Easy;
                 updateInfo = true;
             }
             else if ( allowedSelection[1] && le.MouseClickLeft( difficultyArea[1] ) ) {
                 currentDescription = normalDescription;
-                selection.setPosition( difficultyArea[1].x, difficultyArea[1].y );
+                selection.setPosition( difficultyArea[1].x + 1, difficultyArea[1].y );
                 currentDifficulty = Campaign::CampaignDifficulty::Normal;
                 updateInfo = true;
             }
             else if ( allowedSelection[2] && le.MouseClickLeft( difficultyArea[2] ) ) {
                 currentDescription = hardDescription;
-                selection.setPosition( difficultyArea[2].x, difficultyArea[2].y );
+                selection.setPosition( difficultyArea[2].x + 1, difficultyArea[2].y );
                 currentDifficulty = Campaign::CampaignDifficulty::Hard;
                 updateInfo = true;
             }
