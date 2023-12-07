@@ -530,13 +530,13 @@ public:
     // Performs the fade-in animation for the hero with the given speed multiplier and an optional offset
     void FadeIn( const int animSpeedMultiplier, const fheroes2::Point & offset = fheroes2::Point() ) const;
 
-    // Performs the fade-out animation for the hero with an optional offset at the slowest speed
+    // Performs the fade-out animation for the hero with an optional offset at the lowest possible speed
     void FadeOut( const fheroes2::Point & offset = fheroes2::Point() ) const
     {
         FadeOut( 1, offset );
     }
 
-    // Performs the fade-in animation for the hero with an optional offset at the slowest speed
+    // Performs the fade-in animation for the hero with an optional offset at the lowest possible speed
     void FadeIn( const fheroes2::Point & offset = fheroes2::Point() ) const
     {
         FadeIn( 1, offset );
