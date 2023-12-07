@@ -1078,7 +1078,7 @@ namespace
             _window = SDL_CreateWindow( _previousWindowTitle.data(), monRect.x + _prevWindowPos.x, monRect.y + _prevWindowPos.y, resolutionInfo.screenWidth,
                                         resolutionInfo.screenHeight, flags );
 #else
-            _window = SDL_CreateWindow( _previousWindowTitle.data(), monRect.x, monRect.y, resolutionInfo.screenWidth, resolutionInfo.screenHeight, flags );
+            _window = SDL_CreateWindow( _previousWindowTitle.data(), _prevWindowPos.x, _prevWindowPos.y, resolutionInfo.screenWidth, resolutionInfo.screenHeight, flags );
 #endif
             if ( _window == nullptr ) {
                 ERROR_LOG( "Failed to create an application window of " << resolutionInfo.screenWidth << " x " << resolutionInfo.screenHeight
