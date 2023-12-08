@@ -52,7 +52,7 @@ namespace Maps
 
     bool saveMapInEditor( Map_Format::MapFormat & map )
     {
-        assert( world.w() == world.h() );
+        assert( world.w() > 0 && world.w() == world.h() );
 
         map.size = world.w();
 

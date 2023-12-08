@@ -727,7 +727,7 @@ namespace Campaign
             }
             break;
         case ARCHIBALD_CAMPAIGN:
-            if ( scenarioInfoId.scenarioId == 10 ) {
+            if ( scenarioInfoId.scenarioId == 5 || scenarioInfoId.scenarioId == 10 ) {
                 allAIPlayersInAlliance = true;
             }
             break;
