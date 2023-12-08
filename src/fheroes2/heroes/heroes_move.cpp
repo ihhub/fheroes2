@@ -497,7 +497,7 @@ void Heroes::FadeOut( const int animSpeedMultiplier, const fheroes2::Point & off
     fheroes2::Display & display = fheroes2::Display::instance();
     LocalEvent & le = LocalEvent::Get();
 
-    _alphaValue = 255 - 8 * animSpeedMultiplier;
+    _alphaValue = 255;
 
     while ( le.HandleEvents( Game::isDelayNeeded( { Game::HEROES_FADE_DELAY } ) ) && _alphaValue > 0 ) {
         if ( !Game::validateAnimationDelay( Game::HEROES_FADE_DELAY ) ) {
@@ -508,11 +508,11 @@ void Heroes::FadeOut( const int animSpeedMultiplier, const fheroes2::Point & off
             gamearea.ShiftCenter( offset );
         }
 
+        _alphaValue = std::max( 0, _alphaValue - 8 * animSpeedMultiplier );
+
         iface.redraw( Interface::REDRAW_GAMEAREA );
 
         display.render();
-
-        _alphaValue -= 8 * animSpeedMultiplier;
     }
 
     _alphaValue = 255;
@@ -532,7 +532,7 @@ void Heroes::FadeIn( const int animSpeedMultiplier, const fheroes2::Point & offs
     fheroes2::Display & display = fheroes2::Display::instance();
     LocalEvent & le = LocalEvent::Get();
 
-    _alphaValue = 8 * animSpeedMultiplier;
+    _alphaValue = 0;
 
     while ( le.HandleEvents( Game::isDelayNeeded( { Game::HEROES_FADE_DELAY } ) ) && _alphaValue < 255 ) {
         if ( !Game::validateAnimationDelay( Game::HEROES_FADE_DELAY ) ) {
@@ -543,11 +543,11 @@ void Heroes::FadeIn( const int animSpeedMultiplier, const fheroes2::Point & offs
             gamearea.ShiftCenter( offset );
         }
 
+        _alphaValue = std::min( _alphaValue + 8 * animSpeedMultiplier, 255 );
+
         iface.redraw( Interface::REDRAW_GAMEAREA );
 
         display.render();
-
-        _alphaValue += 8 * animSpeedMultiplier;
     }
 
     _alphaValue = 255;
