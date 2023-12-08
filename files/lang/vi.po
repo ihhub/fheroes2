@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-12-05 00:31+0000\n"
-"PO-Revision-Date: 2023-12-08 08:27+0700\n"
+"PO-Revision-Date: 2023-12-08 21:25+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: vi\n"
@@ -7286,7 +7286,7 @@ msgid "Mysticism"
 msgstr "Thần bí"
 
 msgid "Ballistics"
-msgstr "Đạn đạo"
+msgstr "Máy bắn đá"
 
 msgid "Eagle Eye"
 msgstr "Mắt Đại bàng"
@@ -7388,19 +7388,19 @@ msgid "Expert Mysticism"
 msgstr "Chuyên gia Thần bí"
 
 msgid "Advanced Ballistics"
-msgstr "Nâng cao Đạn đạo"
+msgstr "Nâng cao Máy bắn đá"
 
 msgid "Advanced Eagle Eye"
 msgstr "Nâng cao Mắt Đại bàng"
 
 msgid "Basic Ballistics"
-msgstr "Cơ bản Đạn đạo"
+msgstr "Cơ bản Máy bắn đá"
 
 msgid "Basic Eagle Eye"
 msgstr "Cơ bản Mắt Đại bàng"
 
 msgid "Expert Ballistics"
-msgstr "Chuyên gia Ballistics"
+msgstr "Chuyên gia Máy bắn đá"
 
 msgid "Advanced Necromancy"
 msgstr "Nâng cao Chiêu hồn"
