@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-12-05 00:31+0000\n"
-"PO-Revision-Date: 2023-11-01 22:53+0700\n"
+"PO-Revision-Date: 2023-12-08 08:27+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: vi\n"
@@ -1700,7 +1700,7 @@ msgid "campaignBonus|Stealth Shield"
 msgstr "Khiên Tàng hình"
 
 msgid "campaignBonus|Tax Lien"
-msgstr ""
+msgstr "Giữ Thuế"
 
 msgid "campaignBonus|Thunder Mace"
 msgstr "Chùy Sấm sét"
@@ -3353,9 +3353,8 @@ msgstr "Kiểu Bản đồ:\n"
 msgid "The Succession Wars"
 msgstr "Cuộc chiến Kế vị"
 
-#, fuzzy
 msgid "Resurrection"
-msgstr "Phân giải"
+msgstr "Hồi sinh"
 
 msgid "Lose all your heroes and towns."
 msgstr "Mất tất cả các tướng và thành."
@@ -3613,9 +3612,8 @@ msgstr "Nhân cách:"
 msgid "Best Monster:"
 msgstr "Quái vật Mạnh nhất:"
 
-#, fuzzy
 msgid "Map filename"
-msgstr "Cỡ Bản đồ"
+msgstr "Tệp bản đồ"
 
 msgid ""
 "Are you sure you want to load a new map? (Any unsaved changes to the current "
@@ -4604,13 +4602,12 @@ msgstr "Phiên bản hỗ trợ cuối cùng: "
 msgid "This file contains a save with an invalid game type."
 msgstr "Tệp này chứa một bản lưu có loại trò chơi không hợp lệ."
 
-#, fuzzy
 msgid ""
 "This save file requires \"The Price of Loyalty\" game assets, but they have "
 "not been provided to the engine."
 msgstr ""
-"Tệp này đã được lưu cho bản đồ \"Cái giá của lòng trung thành\", nhưng nội "
-"dung trò chơi tương ứng chưa được cung cấp cho công cụ."
+"Tệp lưu này yêu cầu nội dung trò chơi \"Cái giá của lòng trung thành\", "
+"nhưng chúng chưa được cung cấp cho công cụ."
 
 msgid "This saved game is localized to '"
 msgstr "Trò chơi đã lưu này được bản địa hóa thành '"
@@ -5430,7 +5427,7 @@ msgid "Vietnamese"
 msgstr "Tiếng Việt"
 
 msgid ", FPS: "
-msgstr ""
+msgstr ", FPS: "
 
 msgid "%{object} robber"
 msgstr "%{object} cướp"
@@ -6136,7 +6133,7 @@ msgstr ""
 "%{count} %{res}."
 
 msgid "Do you wish to buy this artifact?"
-msgstr ""
+msgstr "Ngươi có chắc muốn mua bảo vật này?"
 
 msgid ""
 "You try to pay the leprechaun, but realize that you can't afford it. The "
@@ -6153,7 +6150,7 @@ msgstr ""
 "chân và phớt lờ ngươi."
 
 msgid "You've found the artifact: "
-msgstr ""
+msgstr "Ngươi đã tìm thấy bảo vật: "
 
 msgid ""
 "You've found the humble dwelling of a withered hermit. The hermit tells you "
@@ -6196,7 +6193,7 @@ msgstr ""
 "với %{monster} để giành cổ vật không?"
 
 msgid "Victorious, you take your prize, the %{art}."
-msgstr ""
+msgstr "Chiến thắng, ngươi nhận được giải thưởng của mình, %{art}."
 
 msgid ""
 "Discretion is the better part of valor, and you decide to avoid this fight "
@@ -6313,7 +6310,7 @@ msgstr ""
 "ngươi giờ đây sẽ di chuyển xa hơn mỗi ngày."
 
 msgid "You gain control of a %{name}."
-msgstr ""
+msgstr "Ngươi giành được quyền kiểm soát một %{name}."
 
 msgid ""
 "You come upon an abandoned gold mine. The mine appears to be haunted. Do you "
@@ -6323,7 +6320,7 @@ msgstr ""
 "vào không?"
 
 msgid "You beat the Ghosts and are able to restore the mine to production."
-msgstr ""
+msgstr "Ngươi đánh bại các Bóng ma và có thể khôi phục mỏ để sản xuất."
 
 msgid ""
 "A group of %{monster} with a desire for greater glory wish to join you. Do "
@@ -6333,7 +6330,7 @@ msgstr ""
 "tham gia cùng ngươi. Ngươi có chấp nhận không?"
 
 msgid "As you approach the dwelling, you notice that there is no one here."
-msgstr ""
+msgstr "Khi ngươi đến gần ngôi nhà, ngươi nhận thấy rằng không có ai ở đây."
 
 msgid ""
 "You search the ruins, but the Medusas that used to live here are gone. "
@@ -6394,7 +6391,7 @@ msgstr ""
 "ngươi không?"
 
 msgid "The pit of mud bubbles for a minute and then lies still."
-msgstr ""
+msgstr "Hố bùn sủi bọt một phút rồi nằm yên."
 
 msgid ""
 "As you approach the bubbling pit of mud, creatures begin to climb out and "
@@ -6406,7 +6403,7 @@ msgstr ""
 "số quân của bà ấy. Ngươi có muốn chiêu mộ các Nguyên tố Trái đất không?\""
 
 msgid "You enter the structure of white stone pillars, and find nothing."
-msgstr ""
+msgstr "Ngươi bước vào cấu trúc của những cột đá trắng và không tìm thấy gì."
 
 msgid ""
 "White stone pillars support a roof that rises up to the sky. As you enter "
@@ -6424,7 +6421,7 @@ msgstr ""
 "\""
 
 msgid "No Fire Elementals approach you from the lava pool."
-msgstr ""
+msgstr "Không có Nguyên tố Lửa nào tiếp cận ngươi từ hồ dung nham."
 
 msgid ""
 "Beneath a structure that serves to hold in heat, Fire Elementals move about "
@@ -6448,7 +6445,7 @@ msgstr ""
 "hỏi: \"Ngươi có muốn kêu gọi sức mạnh của nước không?\""
 
 msgid "This burial site is deathly still."
-msgstr ""
+msgstr "Nơi chôn cất này vẫn còn chết chóc."
 
 msgid ""
 "Restless spirits of long dead warriors seeking their final resting place "
@@ -6544,7 +6541,7 @@ msgstr ""
 "Rồng không?"
 
 msgid "From the observation tower, you are able to see distant lands."
-msgstr ""
+msgstr "Từ tháp quan sát, ngươi có thể nhìn thấy những vùng đất xa xôi."
 
 msgid ""
 "The spring only refills once a week, and someone's already been here this "
@@ -6609,7 +6606,7 @@ msgstr ""
 "ngươi không có gì bên mình."
 
 msgid "All of your %{monsters} have been upgraded into %{monsters2}."
-msgstr ""
+msgstr "Tất cả %{monsters} của ngươi đã được nâng cấp thành %{monsters2}."
 
 msgid ""
 "A blacksmith working at the foundry offers to convert all Pikemen and "
@@ -6679,7 +6676,7 @@ msgstr ""
 "ta dạy cho ngươi một chút về những gì ta đã học được qua nhiều thời đại.\""
 
 msgid "Upon your approach, the tree opens its eyes in delight."
-msgstr ""
+msgstr "Khi ngươi đến gần, cái cây mở mắt vui mừng."
 
 msgid ""
 "\"Ahh, an adventurer! I will be happy to teach you a little of what I have "
@@ -6689,13 +6686,13 @@ msgstr ""
 "học được qua nhiều thời đại với chỉ %{count} %{res}.\""
 
 msgid "(Just bury it around my roots.)"
-msgstr ""
+msgstr "(Hãy chôn nó quanh rễ của tôi.)"
 
 msgid "Tears brim in the eyes of the tree."
-msgstr ""
+msgstr "Nước mắt giàn giụa trong mắt cây."
 
 msgid "\"I need %{count} %{res}.\""
-msgstr ""
+msgstr "\"Ta cần %{count} %{res}.\""
 
 msgid "it whispers. (sniff) \"Well, come back when you can pay me.\""
 msgstr ""
@@ -6872,7 +6869,7 @@ msgstr ""
 "lính cưỡi ngựa, nhưng ngài không có gì chúng tôi có thể giúp được.\""
 
 msgid "The Arena guards turn you away."
-msgstr ""
+msgstr "Những người bảo vệ Đấu trường đuổi bạn đi."
 
 msgid ""
 "You have your crew stop up their ears with wax before the sirens' eerie song "
@@ -6922,7 +6919,7 @@ msgstr ""
 "cuộc hành trình."
 
 msgid "This eye seems to be intently studying its surroundings."
-msgstr ""
+msgstr "Con mắt này dường như đang chăm chú nghiên cứu môi trường xung quanh."
 
 msgid "You come across a giant Sphinx. The Sphinx remains strangely quiet."
 msgstr ""
@@ -7021,10 +7018,10 @@ msgid "The spell was not found."
 msgstr "Không tìm thấy phép."
 
 msgid "Only heroes can cast this spell."
-msgstr ""
+msgstr "Chỉ có tướng mới có thể niệm phép này."
 
 msgid "This hero is not able to cast adventure spells."
-msgstr ""
+msgstr "Tướng này không thể sử dụng phép thuật phiêu lưu."
 
 msgid "Your hero is too tired to cast this spell today. Try again tomorrow."
 msgstr ""
@@ -7032,10 +7029,10 @@ msgstr ""
 "thử lại vào ngày mai."
 
 msgid "This spell cannot be cast on a boat."
-msgstr ""
+msgstr "Phép này không thể dùng trên thuyền."
 
 msgid "This spell can only be cast near an ocean."
-msgstr ""
+msgstr "Phép này chỉ sử dụng nơi gần đại dương."
 
 msgid ""
 "There are no boats available and no ocean adjacent to the hero where this "
@@ -7113,7 +7110,7 @@ msgstr ""
 "Sử dụng phép thuật này sẽ không có tác dụng."
 
 msgid "%{name} the %{race} (Level %{level})"
-msgstr ""
+msgstr "%{name} chủng tộc %{race} (Cấp %{level})"
 
 msgid "Are you sure you want to dismiss this Hero?"
 msgstr "Ngươi có chắc chắn muốn giải tán Tướng này không?"
@@ -7122,7 +7119,7 @@ msgid "View Experience Info"
 msgstr "Xem Thông tin Kinh nghiệm"
 
 msgid "View Spell Points Info"
-msgstr ""
+msgstr "Xem Thông tin Điểm Phép thuật"
 
 msgid "Set army combat formation to 'Spread'"
 msgstr "Đặt đội hình chiến đấu của quân đội thành 'Dàn trải'"
@@ -7131,16 +7128,16 @@ msgid "Set army combat formation to 'Grouped'"
 msgstr "Đặt đội hình chiến đấu của quân đội thành 'Tập trung'"
 
 msgid "Exit Hero Screen"
-msgstr ""
+msgstr "Thoát Màn hình Tướng"
 
 msgid "You cannot dismiss a hero in a castle"
-msgstr ""
+msgstr "Ngươi không thể giải tán một tướng bên trong một lâu đài"
 
 msgid "Dismissal of %{name} the %{race} is prohibited by scenario"
-msgstr ""
+msgstr "Giải tán %{name} chủng tộc %{race} bị cấm theo kịch bản"
 
 msgid "Dismiss %{name} the %{race}"
-msgstr ""
+msgstr "Giải tán %{name} chủng tộc %{race}"
 
 msgid "Show previous hero"
 msgstr "Xem tướng trước"
@@ -7149,7 +7146,7 @@ msgid "Show next hero"
 msgstr "Xem tướng sau"
 
 msgid "Blood Morale"
-msgstr ""
+msgstr "Tinh thần Máu lửa"
 
 msgid "%{morale} Morale"
 msgstr "%{morale} Tinh thần"
@@ -7158,18 +7155,20 @@ msgid "%{luck} Luck"
 msgstr "%{luck} May mắn"
 
 msgid "Current Luck Modifiers:"
-msgstr ""
+msgstr "Sửa đổi May mắn Hiện tại:"
 
 msgid "Current Morale Modifiers:"
-msgstr ""
+msgstr "Sửa đổi Tinh thần Hiện tại:"
 
 msgid "Entire army is undead, so morale does not apply."
-msgstr ""
+msgstr "Toàn bộ quân đội là xác sống, vì vậy tinh thần không có tác dụng."
 
 msgid ""
 "Current experience %{exp1}.\n"
 " Next level %{exp2}."
 msgstr ""
+"Kinh nghiệm hiện có %{exp1}.\n"
+" Cấp tiếp theo %{exp2}."
 
 msgid "Level %{level}"
 msgstr "Cấp bậc %{level}"
@@ -7180,31 +7179,35 @@ msgid ""
 "occasionally possible to have more than your maximum spell points via "
 "special events."
 msgstr ""
+"%{name} hiện có %{point} điểm phép thuật trong tổng số điểm tối đa là "
+"%{max}. Số điểm phép thuật tối đa gấp 10 lần kiến thức của ngươi. Đôi khi "
+"ngươi có thể nhận được nhiều hơn điểm phép thuật tối đa thông qua các sự "
+"kiện đặc biệt."
 
 msgid "%{name1} meets %{name2}"
-msgstr ""
+msgstr "%{name1} gặp %{name2}"
 
 msgid "Enemy heroes are now fully identifiable."
-msgstr ""
+msgstr "Tướng địch bây giờ đã có thể nhận dạng đầy đủ."
 
 msgid "Identify Hero"
-msgstr ""
+msgstr "Nhận dạng Tướng"
 
 msgid "Select town to port to."
-msgstr ""
+msgstr "Chọn thị trấn để dịch chuyển tới."
 
 msgid "Town Portal"
-msgstr ""
+msgstr "Hồi Thành"
 
 msgid "The creatures are willing to join us!"
-msgstr ""
+msgstr "Sinh vật này sẽ tham gia cùng ta!"
 
 msgid "All the creatures will join us..."
-msgstr ""
+msgstr "Tất cả các sinh vật sẽ tham gia cùng ta..."
 
 msgid "The creature will join us..."
 msgid_plural "%{count} of the creatures will join us..."
-msgstr[0] ""
+msgstr[0] "Sinh vật sẽ tham gia cùng ta..."
 
 msgid ""
 "\n"
@@ -7214,28 +7217,37 @@ msgstr ""
 " với chi phí %{gold} vàng."
 
 msgid "These weak creatures will surely flee before us."
-msgstr ""
+msgstr "Những sinh vật yếu đuối này chắc chắn sẽ chạy trốn trước chúng ta."
 
 msgid "I fear these creatures are in the mood for a fight."
-msgstr ""
+msgstr "Tôi e rằng những sinh vật này đang có tâm trạng muốn đánh nhau."
 
 msgid "Your attack skill is a bonus added to each creature's attack skill."
 msgstr ""
+"Kỹ năng tấn công của ngươi là phần thưởng được thêm vào kỹ năng tấn công của "
+"mỗi sinh vật."
 
 msgid "Your defense skill is a bonus added to each creature's defense skill."
 msgstr ""
+"Kỹ năng phòng thủ của ngươi là phần thưởng được thêm vào kỹ năng phòng thủ "
+"của mỗi sinh vật."
 
 msgid "Your spell power determines the length or power of a spell."
 msgstr ""
+"Sức mạnh phép thuật của ngươi quyết định độ dài hoặc sức mạnh của một câu "
+"thần chú."
 
 msgid ""
 "Your knowledge determines how many spell points your hero may have. Under "
 "normal circumstances, a hero is limited to 10 spell points per level of "
 "knowledge."
 msgstr ""
+"Kiến thức của ngươi quyết định số điểm phép thuật mà tướng của ngươi có thể "
+"có. Trong trường hợp bình thường, một tướng bị giới hạn 10 điểm phép thuật "
+"cho mỗi cấp độ kiến thức."
 
 msgid "Current Modifiers:"
-msgstr ""
+msgstr "Sửa đổi Hiện tại:"
 
 msgid "skill|Basic"
 msgstr "Cơ bản"
@@ -7247,264 +7259,290 @@ msgid "skill|Expert"
 msgstr "Chuyên gia"
 
 msgid "Pathfinding"
-msgstr ""
+msgstr "Tìm đường"
 
 msgid "Archery"
-msgstr ""
+msgstr "Bắn cung"
 
 msgid "Logistics"
-msgstr ""
+msgstr "Vận chuyển"
 
 msgid "Scouting"
-msgstr ""
+msgstr "Do thám"
 
 msgid "Diplomacy"
-msgstr ""
+msgstr "Ngoại giao"
 
 msgid "Navigation"
-msgstr ""
+msgstr "Dẫn đường"
 
 msgid "Leadership"
-msgstr ""
+msgstr "Lãnh đạo"
 
 msgid "Wisdom"
-msgstr ""
+msgstr "Thông thái"
 
 msgid "Mysticism"
-msgstr ""
+msgstr "Thần bí"
 
 msgid "Ballistics"
-msgstr ""
+msgstr "Đạn đạo"
 
 msgid "Eagle Eye"
-msgstr ""
+msgstr "Mắt Đại bàng"
 
 msgid "Necromancy"
-msgstr ""
+msgstr "Chiêu hồn"
 
 msgid "Estates"
-msgstr ""
+msgstr "Tài sản"
 
 msgid "Advanced Archery"
-msgstr ""
+msgstr "Nâng cao Bắn cung"
 
 msgid "Advanced Pathfinding"
-msgstr ""
+msgstr "Nâng cao Tìm đường"
 
 msgid "Basic Archery"
-msgstr ""
+msgstr "Cơ bản Bắn cung"
 
 msgid "Basic Pathfinding"
-msgstr ""
+msgstr "Cơ bản Tìm đường"
 
 msgid "Expert Pathfinding"
-msgstr ""
+msgstr "Chuyên gia Tìm đường"
 
 msgid "Advanced Logistics"
-msgstr ""
+msgstr "Nâng cao Vận chuyển"
 
 msgid "Basic Logistics"
-msgstr ""
+msgstr "Cơ bản Vận chuyển"
 
 msgid "Basic Scouting"
-msgstr ""
+msgstr "Cơ bản Do thám"
 
 msgid "Expert Archery"
-msgstr ""
+msgstr "Chuyên gia Bắn cung"
 
 msgid "Expert Logistics"
-msgstr ""
+msgstr "Chuyên gia Vận chuyển"
 
 msgid "Advanced Diplomacy"
-msgstr ""
+msgstr "Nâng cao Ngoại giao"
 
 msgid "Advanced Scouting"
-msgstr ""
+msgstr "Nâng cao Do thám"
 
 msgid "Basic Diplomacy"
-msgstr ""
+msgstr "Cơ bản Ngoại giao"
 
 msgid "Expert Diplomacy"
-msgstr ""
+msgstr "Chuyên gia Ngoại giao"
 
 msgid "Expert Scouting"
-msgstr ""
+msgstr "Chuyên gia Do thám"
 
 msgid "Advanced Leadership"
-msgstr ""
+msgstr "Nâng cao Lãnh đạo"
 
 msgid "Advanced Navigation"
-msgstr ""
+msgstr "Nâng cao Dẫn đường"
 
 msgid "Basic Leadership"
-msgstr ""
+msgstr "Cơ bản Lãnh đạo"
 
 msgid "Basic Navigation"
-msgstr ""
+msgstr "Cơ bản Dẫn đường"
 
 msgid "Expert Navigation"
-msgstr ""
+msgstr "Chuyên gia Dẫn đường"
 
 msgid "Advanced Wisdom"
-msgstr ""
+msgstr "Nâng cao Thông thái"
 
 msgid "Basic Mysticism"
-msgstr ""
+msgstr "Cơ bản Thần bí"
 
 msgid "Basic Wisdom"
-msgstr ""
+msgstr "Cơ bản Thông thái"
 
 msgid "Expert Leadership"
-msgstr ""
+msgstr "Chuyên gia Lãnh đạo"
 
 msgid "Expert Wisdom"
-msgstr ""
+msgstr "Chuyên gia Thông thái"
 
 msgid "Advanced Luck"
-msgstr ""
+msgstr "Nâng cao May mắn"
 
 msgid "Advanced Mysticism"
-msgstr ""
+msgstr "Nâng cao Thần bí"
 
 msgid "Basic Luck"
-msgstr ""
+msgstr "Cơ bản May mắn"
 
 msgid "Expert Luck"
-msgstr ""
+msgstr "Chuyên gia May mắn"
 
 msgid "Expert Mysticism"
-msgstr ""
+msgstr "Chuyên gia Thần bí"
 
 msgid "Advanced Ballistics"
-msgstr ""
+msgstr "Nâng cao Đạn đạo"
 
 msgid "Advanced Eagle Eye"
-msgstr ""
+msgstr "Nâng cao Mắt Đại bàng"
 
 msgid "Basic Ballistics"
-msgstr ""
+msgstr "Cơ bản Đạn đạo"
 
 msgid "Basic Eagle Eye"
-msgstr ""
+msgstr "Cơ bản Mắt Đại bàng"
 
 msgid "Expert Ballistics"
-msgstr ""
+msgstr "Chuyên gia Ballistics"
 
 msgid "Advanced Necromancy"
-msgstr ""
+msgstr "Nâng cao Chiêu hồn"
 
 msgid "Basic Estates"
-msgstr ""
+msgstr "Cơ bản Tài sàn"
 
 msgid "Basic Necromancy"
-msgstr ""
+msgstr "Cơ bản Chiêu hồn"
 
 msgid "Expert Eagle Eye"
-msgstr ""
+msgstr "Chuyên gia Mắt Đại bàng"
 
 msgid "Expert Necromancy"
-msgstr ""
+msgstr "Chuyên gia Chiêu hồn"
 
 msgid "Advanced Estates"
-msgstr ""
+msgstr "Nâng cao Tài sản"
 
 msgid "Expert Estates"
-msgstr ""
+msgstr "Chuyên gia Tài sản"
 
 msgid ""
 "%{skill} reduces the movement penalty for rough terrain by %{count} percent."
 msgstr ""
+"%{skill} giảm hình phạt di chuyển đối với địa hình gồ ghề %{count} phần trăm."
 
 msgid "%{skill} eliminates the movement penalty for rough terrain."
-msgstr ""
+msgstr "%{skill} loại bỏ hình phạt di chuyển đối với địa hình gồ ghề."
 
 msgid ""
 "%{skill} increases the damage done by range attacking creatures by %{count} "
 "percent."
 msgstr ""
+"%{skill} tăng sát thương do các sinh vật tấn công trong phạm vi gây ra thêm "
+"%{count} phần trăm."
 
 msgid "%{skill} increases your hero's movement points by %{count} percent."
 msgstr ""
+"%{skill} tăng điểm di chuyển của anh hùng của bạn thêm %{count} phần trăm."
 
 msgid "%{skill} increases your hero's viewable area by one square."
 msgid_plural ""
 "%{skill} increases your hero's viewable area by %{count} squares."
 msgstr[0] ""
+"%{skill} tăng diện tích có thể xem của tướng của ngươi thêm một ô vuông."
 
 msgid ""
 "%{skill} allows you to negotiate with monsters who are weaker than your "
 "group. "
 msgstr ""
+"%{skill} cho phép ngươi đàm phán với những quái vật yếu hơn nhóm của ngươi. "
 
 msgid "Approximately %{count} percent of the creatures may offer to join you."
-msgstr ""
+msgstr "Khoảng %{count} phần trăm sinh vật có thể đề nghị tham gia cùng ngươi."
 
 msgid "All of the creatures may offer to join you."
-msgstr ""
+msgstr "Tất cả các sinh vật có thể đề nghị tham gia cùng ngươi."
 
 msgid ""
 "%{skill} increases your hero's movement points over water by %{count} "
 "percent."
 msgstr ""
+"%{skill} tăng điểm di chuyển của anh hùng trên mặt nước thêm %{count} phần "
+"trăm."
 
 msgid "%{skill} increases your hero's troops morale by %{count}."
-msgstr ""
+msgstr "%{skill} tăng tinh thần quân đội của tướng của ngươi lên %{count}."
 
 msgid "%{skill} allows your hero to learn third level spells."
-msgstr ""
+msgstr "%{skill} cho phép tướng của ngươi học các phép thuật cấp ba."
 
 msgid "%{skill} allows your hero to learn fourth level spells."
-msgstr ""
+msgstr "%{skill} cho phép tướng của ngươi học các phép thuật cấp bốn."
 
 msgid "%{skill} allows your hero to learn fifth level spells."
-msgstr ""
+msgstr "%{skill} cho phép tướng của ngươi học các phép thuật cấp năm."
 
 msgid "%{skill} regenerates one additional spell point per day to your hero."
 msgid_plural ""
 "%{skill} regenerates %{count} additional spell points per day to your hero."
 msgstr[0] ""
+"%{skill} tái tạo thêm một điểm phép thuật mỗi ngày cho tướng của ngươi."
 
 msgid "%{skill} increases your hero's luck by %{count}."
-msgstr ""
+msgstr "%{skill} tăng may mắn cho tướng của ngươi thêm %{count}."
 
 msgid ""
 "%{skill} gives your hero's catapult shots a greater chance to hit and do "
 "damage to castle walls."
 msgstr ""
+"%{skill} giúp các cú bắn bằng máy bắn đá của tướng của ngươi có cơ hội trúng "
+"đích cao hơn và gây sát thương lên tường lâu đài."
 
 msgid ""
 "%{skill} gives your hero's catapult an extra shot, and each shot has a "
 "greater chance to hit and do damage to castle walls."
 msgstr ""
+"%{skill} giúp máy bắn đá của tướng của ngươi có thêm một phát bắn và mỗi "
+"phát bắn có cơ hội trúng đích và gây sát thương lên tường lâu đài cao hơn."
 
 msgid ""
 "%{skill} gives your hero's catapult an extra shot, and each shot "
 "automatically destroys any wall, except a fortified wall in a Knight castle."
 msgstr ""
+"%{skill} cung cấp thêm cho máy bắn đá của tướng của ngươi một phát bắn và "
+"mỗi phát bắn sẽ tự động phá hủy bất kỳ bức tường nào, ngoại trừ bức tường "
+"kiên cố trong lâu đài Hiệp sĩ."
 
 msgid ""
 "%{skill} gives your hero a %{count} percent chance to learn any given 1st or "
 "2nd level spell that was cast by an enemy during combat."
 msgstr ""
+"%{skill} mang lại cho tướng của bạn %{count} phần trăm cơ hội học bất kỳ "
+"phép thuật cấp 1 hoặc cấp 2 được sử dụng bởi kẻ thù trong trận chiến."
 
 msgid ""
 "%{skill} gives your hero a %{count} percent chance to learn any given 3rd "
 "level spell (or below) that was cast by an enemy during combat."
 msgstr ""
+"%{skill} mang lại cho tướng của bạn %{count} phần trăm cơ hội học bất kỳ "
+"phép thuật cấp 3 (hoặc thấp hơn) được sử dụng bởi kẻ thù trong trận chiến."
 
 msgid ""
 "%{skill} gives your hero a %{count} percent chance to learn any given 4th "
 "level spell (or below) that was cast by an enemy during combat."
 msgstr ""
+"%{skill} mang lại cho tướng của bạn %{count} phần trăm cơ hội học bất kỳ "
+"phép thuật cấp 4 (hoặc thấp hơn) được sử dụng bởi kẻ thù trong trận chiến."
 
 msgid ""
 "%{skill} allows %{count} percent of the creatures killed in combat to be "
 "brought back from the dead as Skeletons."
 msgstr ""
+"%{skill} cho phép %{count} phần trăm sinh vật bị giết trong trận chiến được "
+"hồi sinh từ cõi chết dưới dạng Bộ xương."
 
 msgid ""
 "Your hero produces %{count} gold pieces per day as tax revenue from estates."
 msgstr ""
+"Tướng của ngươi tạo ra %{count} miếng vàng mỗi ngày dưới dạng doanh thu thuế "
+"từ tài sản."
 
 msgid "Blue"
 msgstr "Lục"
@@ -7579,9 +7617,11 @@ msgid ""
 "Experience allows your heroes to go up levels, increasing their primary and "
 "secondary skills."
 msgstr ""
+"Kinh nghiệm cho phép các tướng của ngươi tăng cấp, tăng các kỹ năng chính và "
+"phụ."
 
 msgid "Hero/Stats"
-msgstr ""
+msgstr "Tướng/Tình trạng"
 
 msgid "Skills"
 msgstr "Kĩ năng"
@@ -7590,13 +7630,13 @@ msgid "Town/Castle"
 msgstr "Thị trấn/Lâu đài"
 
 msgid "Garrison"
-msgstr ""
+msgstr "Đồn trú"
 
 msgid "Gold Per Day:"
 msgstr "Vàng Mỗi Ngày:"
 
 msgid "View Heroes."
-msgstr ""
+msgstr "Xem Tướng."
 
 msgid "Towns/Castles"
 msgstr "Thị trấn/Lâu đài"
@@ -7629,16 +7669,22 @@ msgid ""
 "Bad luck sometimes falls on your armies in combat, causing their attacks to "
 "only do half damage."
 msgstr ""
+"Vận rủi đôi khi rơi vào quân đội của ngươi trong chiến đấu, khiến đòn tấn "
+"công của họ chỉ gây sát thương một nửa."
 
 msgid ""
 "Neutral luck means your armies will never get lucky or unlucky attacks on "
 "the enemy."
 msgstr ""
+"May mắn trung tính có nghĩa là quân đội của ngươi sẽ không bao giờ gặp may "
+"mắn hoặc xui xẻo tấn công kẻ thù."
 
 msgid ""
 "Good luck sometimes lets your armies get lucky attacks (double strength) in "
 "combat."
 msgstr ""
+"May mắn tốt đôi khi giúp quân đội của ngươi nhận được những đòn tấn công may "
+"mắn (sức mạnh gấp đôi) trong chiến đấu."
 
 msgid "morale|Treason"
 msgstr "Phản bội"
@@ -7678,60 +7724,62 @@ msgstr ""
 "trong chiến đấu."
 
 msgid "Knight"
-msgstr ""
+msgstr "Hiệp sĩ"
 
 msgid "Barbarian"
-msgstr ""
+msgstr "Man rợ"
 
 msgid "Sorceress"
-msgstr ""
+msgstr "Phù thủy"
 
 msgid "Warlock"
-msgstr ""
+msgstr "Pháp sư"
 
 msgid "Wizard"
-msgstr ""
+msgstr "Thuật sĩ"
 
 msgid "Necromancer"
-msgstr ""
+msgstr "Chiêu hồn"
 
 msgid "Multi"
-msgstr ""
+msgstr "Nhiều"
 
 msgid "race|Random"
-msgstr ""
+msgstr "Ngẫu nhiên"
 
 msgid "race|Neutral"
-msgstr ""
+msgstr "Trung lập"
 
 msgid "doubleLined|Knight"
-msgstr ""
+msgstr "Hiệp sĩ"
 
 msgid "doubleLined|Barbarian"
-msgstr ""
+msgstr "Man rợ"
 
 msgid "doubleLined|Sorceress"
-msgstr ""
+msgstr "Phù thủy"
 
 msgid "doubleLined|Warlock"
-msgstr ""
+msgstr "Pháp sư"
 
 msgid "doubleLined|Wizard"
-msgstr ""
+msgstr "Thuật sĩ"
 
 msgid ""
 "doubleLined|Necro-\n"
 "mancer"
 msgstr ""
+"Chiêu\n"
+"hồn"
 
 msgid "doubleLinedRace|Multi"
-msgstr ""
+msgstr "Nhiều"
 
 msgid "doubleLinedRace|Random"
-msgstr ""
+msgstr "Ngẫu nhiên"
 
 msgid "doubleLinedRace|Neutral"
-msgstr ""
+msgstr "Trung lập"
 
 msgid "speed|Standing"
 msgstr "Đứng"
@@ -7911,7 +7959,7 @@ msgid "See Rock City."
 msgstr ""
 
 msgid "This space for rent."
-msgstr ""
+msgstr "Chỗ này cho thuê."
 
 msgid "No object"
 msgstr "Không có gì"
@@ -7935,7 +7983,7 @@ msgid "Treasure Chest"
 msgstr "Rương Báu vật"
 
 msgid "Faerie Ring"
-msgstr ""
+msgstr "Vòng Tiên"
 
 msgid "Campfire"
 msgstr "Lửa trại"
@@ -7950,28 +7998,28 @@ msgid "Genie Lamp"
 msgstr "Đèn Thần"
 
 msgid "Archer's House"
-msgstr ""
+msgstr "Nhà Cung"
 
 msgid "Goblin Hut"
-msgstr ""
+msgstr "Lều Yêu tinh"
 
 msgid "Dwarf Cottage"
-msgstr ""
+msgstr "Nhà Người lùn"
 
 msgid "Peasant Hut"
-msgstr ""
+msgstr "Lều Nông dân"
 
 msgid "Stables"
 msgstr "Chuồng ngựa"
 
 msgid "Alchemist's Tower"
-msgstr ""
+msgstr "Tháp Giả kim"
 
 msgid "Event"
 msgstr "Sự kiện"
 
 msgid "Dragon City"
-msgstr ""
+msgstr "Thành phố Rồng"
 
 msgid "Lighthouse"
 msgid_plural "Lighthouses"
@@ -8000,7 +8048,7 @@ msgid "Oracle"
 msgstr "Tiên tri"
 
 msgid "Shrine of the First Circle"
-msgstr ""
+msgstr "Điện thờ Vòng Một"
 
 msgid "Shipwreck"
 msgstr "Tàu đắm"
@@ -8012,7 +8060,7 @@ msgid "Desert Tent"
 msgstr "Lều Xa mạc"
 
 msgid "Stone Liths"
-msgstr ""
+msgstr "Đá Phiến"
 
 msgid "Wagon Camp"
 msgstr "Toa xe"
@@ -8073,16 +8121,16 @@ msgid "Nothing Special"
 msgstr "Không có gì Đặc biệt"
 
 msgid "Mossy Rock"
-msgstr ""
+msgstr "Đá Rêu"
 
 msgid "Watch Tower"
 msgstr "Tháp Canh"
 
 msgid "Tree House"
-msgstr ""
+msgstr "Nhà trên Cây"
 
 msgid "Tree City"
-msgstr ""
+msgstr "Thành Cây"
 
 msgid "Ruins"
 msgstr "Tàn tích"
@@ -8097,16 +8145,16 @@ msgid "Sirens"
 msgstr "Nhân ngư"
 
 msgid "Standing Stones"
-msgstr ""
+msgstr "Đá Đứng"
 
 msgid "Idol"
-msgstr ""
+msgstr "Thần tượng"
 
 msgid "Tree of Knowledge"
 msgstr "Cây Tri thức"
 
 msgid "Witch Doctor's Hut"
-msgstr ""
+msgstr "Lều Bác học"
 
 msgid "Temple"
 msgstr "Ngôi đền"
@@ -8118,16 +8166,16 @@ msgid "Halfling Hole"
 msgstr ""
 
 msgid "Mercenary Camp"
-msgstr ""
+msgstr "Trại Lính đánh thuê"
 
 msgid "Shrine of the Second Circle"
-msgstr ""
+msgstr "Điện thờ Vòng thứ Hai"
 
 msgid "Shrine of the Third Circle"
-msgstr ""
+msgstr "Điện thờ Vòng thứ Ba"
 
 msgid "City of the Dead"
-msgstr ""
+msgstr "Thành phố Chết"
 
 msgid "Sphinx"
 msgstr "Nhân sư"
@@ -8136,16 +8184,16 @@ msgid "Wagon"
 msgstr "Toa xe"
 
 msgid "Tar Pit"
-msgstr ""
+msgstr "Hố Hắc ín"
 
 msgid "Artesian Spring"
-msgstr ""
+msgstr "Suối Artesian"
 
 msgid "Troll Bridge"
 msgstr ""
 
 msgid "Watering Hole"
-msgstr ""
+msgstr "Hố Nước"
 
 msgid "Witch's Hut"
 msgstr ""
