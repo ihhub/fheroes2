@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-27 00:58+0000\n"
+"POT-Creation-Date: 2023-12-05 00:31+0000\n"
 "PO-Revision-Date: 2023-09-06 08:41+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3293,6 +3293,10 @@ msgstr "Тип мапи:\n"
 msgid "The Succession Wars"
 msgstr "Війни за Спадщину"
 
+#, fuzzy
+msgid "Resurrection"
+msgstr "Воскресіння"
+
 msgid "Lose all your heroes and towns."
 msgstr ""
 
@@ -3534,6 +3538,10 @@ msgstr ""
 
 msgid "Best Monster:"
 msgstr ""
+
+#, fuzzy
+msgid "Map filename"
+msgstr "Розмір Мапи"
 
 msgid ""
 "Are you sure you want to load a new map? (Any unsaved changes to the current "
@@ -4485,8 +4493,8 @@ msgid "This file contains a save with an invalid game type."
 msgstr ""
 
 msgid ""
-"This file was saved for a \"The Price of Loyalty\" map, but the "
-"corresponding game assets have not been provided to the engine."
+"This save file requires \"The Price of Loyalty\" game assets, but they have "
+"not been provided to the engine."
 msgstr ""
 
 msgid "This saved game is localized to '"

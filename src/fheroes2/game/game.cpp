@@ -77,7 +77,7 @@ int Game::getDifficulty()
 {
     const Settings & configuration = Settings::Get();
     if ( configuration.isCampaignGameType() ) {
-        int difficulty = configuration.CurrentFileInfo().difficulty;
+        int difficulty = configuration.getCurrentMapInfo().difficulty;
         const int difficultyAdjustment = Campaign::CampaignSaveData::Get().getDifficulty();
         difficulty += difficultyAdjustment;
         return std::clamp( difficulty, static_cast<int>( Difficulty::EASY ), static_cast<int>( Difficulty::IMPOSSIBLE ) );
@@ -366,7 +366,7 @@ uint32_t Game::GetRating()
     const Settings & conf = Settings::Get();
     uint32_t rating = 50;
 
-    switch ( conf.MapsDifficulty() ) {
+    switch ( conf.getCurrentMapDifficultyLevel() ) {
     case Difficulty::NORMAL:
         rating += 20;
         break;

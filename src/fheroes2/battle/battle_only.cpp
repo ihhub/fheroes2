@@ -151,6 +151,7 @@ bool Battle::Only::setup( const bool allowBackup, bool & reset )
         if ( info.isHeroPresent ) {
             info.hero = world.GetHeroes( info.heroBackup.GetID() );
             info.hero->GetSecondarySkills().FillMax( Skill::Secondary() );
+
             copyHero( info.heroBackup, *info.hero );
         }
         else {
@@ -168,6 +169,7 @@ bool Battle::Only::setup( const bool allowBackup, bool & reset )
     for ( auto & info : armyInfo ) {
         if ( info.hero != nullptr ) {
             info.hero->GetSecondarySkills().FillMax( Skill::Secondary() );
+
             updateHero( info, cur_pt );
         }
         else {
@@ -179,15 +181,15 @@ bool Battle::Only::setup( const bool allowBackup, bool & reset )
     }
 
     if ( armyInfo[1].hero != nullptr ) {
-        cinfo2 = std::make_unique<ControlInfo>( fheroes2::Point{ cur_pt.x + 500, cur_pt.y + 425 }, armyInfo[1].player.GetControl() );
+        attackedArmyControlInfo = std::make_unique<ControlInfo>( fheroes2::Point{ cur_pt.x + 500, cur_pt.y + 425 }, armyInfo[1].player.GetControl() );
     }
 
     for ( const auto & info : armyInfo ) {
         info.ui.redraw( display );
     }
 
-    if ( cinfo2 ) {
-        cinfo2->Redraw();
+    if ( attackedArmyControlInfo ) {
+        attackedArmyControlInfo->Redraw();
     }
 
     bool exit = false;
@@ -242,9 +244,11 @@ bool Battle::Only::setup( const bool allowBackup, bool & reset )
                 }
                 else if ( Heroes::UNKNOWN != hid ) {
                     first.hero = world.GetHeroes( hid );
+
                     if ( first.hero ) {
                         first.hero->GetSecondarySkills().FillMax( Skill::Secondary() );
                     }
+
                     updateHero( first, cur_pt );
                 }
 
@@ -252,8 +256,8 @@ bool Battle::Only::setup( const bool allowBackup, bool & reset )
             }
         }
 
-        if ( cinfo2 == nullptr && armyInfo[1].hero != nullptr ) {
-            cinfo2 = std::make_unique<ControlInfo>( fheroes2::Point{ cur_pt.x + 500, cur_pt.y + 425 }, armyInfo[1].player.GetControl() );
+        if ( attackedArmyControlInfo == nullptr && armyInfo[1].hero != nullptr ) {
+            attackedArmyControlInfo = std::make_unique<ControlInfo>( fheroes2::Point{ cur_pt.x + 500, cur_pt.y + 425 }, armyInfo[1].player.GetControl() );
         }
 
         for ( const auto & [hero, index] : { std::pair<Heroes *, size_t>( armyInfo[0].hero, 0 ), std::pair<Heroes *, size_t>( armyInfo[1].hero, 1 ) } ) {
@@ -265,6 +269,7 @@ bool Battle::Only::setup( const bool allowBackup, bool & reset )
                 uint32_t value = hero->attack;
                 if ( Dialog::SelectCount( _( "Set Attack Skill" ), 0, primaryMaxValue, value ) ) {
                     hero->attack = value;
+
                     redraw = true;
                 }
             }
@@ -272,6 +277,7 @@ bool Battle::Only::setup( const bool allowBackup, bool & reset )
                 uint32_t value = hero->defense;
                 if ( Dialog::SelectCount( _( "Set Defense Skill" ), 0, primaryMaxValue, value ) ) {
                     hero->defense = value;
+
                     redraw = true;
                 }
             }
@@ -279,6 +285,7 @@ bool Battle::Only::setup( const bool allowBackup, bool & reset )
                 uint32_t value = hero->power;
                 if ( Dialog::SelectCount( _( "Set Power Skill" ), 0, primaryMaxValue, value ) ) {
                     hero->power = value;
+
                     redraw = true;
                 }
             }
@@ -287,6 +294,7 @@ bool Battle::Only::setup( const bool allowBackup, bool & reset )
                 if ( Dialog::SelectCount( _( "Set Knowledge Skill" ), 0, primaryMaxValue, value ) ) {
                     hero->knowledge = value;
                     hero->SetSpellPoints( hero->knowledge * 10 );
+
                     redraw = true;
                 }
             }
@@ -332,25 +340,27 @@ bool Battle::Only::setup( const bool allowBackup, bool & reset )
             else if ( firstUI.luck != nullptr && le.MouseCursor( firstUI.luck->GetArea() ) ) {
                 LuckIndicator::QueueEventProcessing( *firstUI.luck );
             }
-            else if ( firstUI.primarySkill != nullptr && le.MouseCursor( firstUI.primarySkill->GetArea() ) ) {
-                firstUI.primarySkill->QueueEventProcessing();
+            else if ( firstUI.primarySkill != nullptr && le.MouseCursor( firstUI.primarySkill->GetArea() ) && firstUI.primarySkill->QueueEventProcessing() ) {
                 redraw = true;
             }
-            else if ( firstUI.secondarySkill != nullptr && le.MouseCursor( firstUI.secondarySkill->GetArea() ) ) {
-                firstUI.secondarySkill->QueueEventProcessing();
+            else if ( firstUI.secondarySkill != nullptr && le.MouseCursor( firstUI.secondarySkill->GetArea() ) && firstUI.secondarySkill->QueueEventProcessing() ) {
                 redraw = true;
             }
         }
 
-        if ( cinfo2 ) {
-            if ( armyInfo[1].hero && le.MouseClickLeft( cinfo2->rtLocal ) && armyInfo[1].player.isControlAI() ) {
-                cinfo2->result = CONTROL_HUMAN;
+        if ( attackedArmyControlInfo ) {
+            assert( armyInfo[1].hero );
+
+            if ( le.MouseClickLeft( attackedArmyControlInfo->rtLocal ) && armyInfo[1].player.isControlAI() ) {
+                attackedArmyControlInfo->result = CONTROL_HUMAN;
                 armyInfo[1].player.SetControl( CONTROL_HUMAN );
+
                 redraw = true;
             }
-            else if ( le.MouseClickLeft( cinfo2->rtAI ) && armyInfo[1].player.isControlHuman() ) {
-                cinfo2->result = CONTROL_AI;
+            else if ( le.MouseClickLeft( attackedArmyControlInfo->rtAI ) && armyInfo[1].player.isControlHuman() ) {
+                attackedArmyControlInfo->result = CONTROL_AI;
                 armyInfo[1].player.SetControl( CONTROL_AI );
+
                 redraw = true;
             }
         }
@@ -364,8 +374,8 @@ bool Battle::Only::setup( const bool allowBackup, bool & reset )
         armyInfo[0].ui.redraw( display );
         armyInfo[1].ui.redraw( display );
 
-        if ( cinfo2 ) {
-            cinfo2->Redraw();
+        if ( attackedArmyControlInfo ) {
+            attackedArmyControlInfo->Redraw();
         }
 
         fheroes2::Blit( buttonOverride, display, cur_pt.x + 276, cur_pt.y + 428 );
@@ -380,14 +390,16 @@ bool Battle::Only::setup( const bool allowBackup, bool & reset )
 
     armyInfo[0].ui = {};
     armyInfo[1].ui = {};
-    cinfo2.reset();
+
+    attackedArmyControlInfo.reset();
 
     return result;
 }
 
 void Battle::Only::updateHero( ArmyInfo & info, const fheroes2::Point & offset )
 {
-    info.ui = {};
+    info.ui.resetForNewHero();
+
     if ( info.hero == nullptr ) {
         return;
     }
@@ -486,7 +498,7 @@ void Battle::Only::reset()
     armyInfo[0].reset();
     armyInfo[1].reset();
 
-    cinfo2.reset();
+    attackedArmyControlInfo.reset();
 }
 
 void Battle::Only::copyHero( Heroes & in, Heroes & out )
@@ -565,6 +577,19 @@ void Battle::Only::ArmyUI::redraw( fheroes2::Image & output ) const
     if ( army ) {
         army->Redraw( output );
     }
+}
+
+void Battle::Only::ArmyUI::resetForNewHero()
+{
+    if ( morale ) {
+        morale->redrawOnlyBackground();
+    }
+
+    if ( luck ) {
+        luck->redrawOnlyBackground();
+    }
+
+    *this = {};
 }
 
 void Battle::Only::ArmyInfo::reset()

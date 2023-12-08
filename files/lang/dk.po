@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-27 00:58+0000\n"
-"PO-Revision-Date: 2023-12-03 13:42+0100\n"
+"POT-Creation-Date: 2023-12-05 00:31+0000\n"
+"PO-Revision-Date: 2023-09-12 11:08+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
 "Language: da\n"
@@ -3383,6 +3383,10 @@ msgstr "Korttype:\n"
 msgid "The Succession Wars"
 msgstr "Arvefølgekrigene"
 
+#, fuzzy
+msgid "Resurrection"
+msgstr "Genoplivelse"
+
 msgid "Lose all your heroes and towns."
 msgstr "Mist alle dine helte og byer."
 
@@ -3638,6 +3642,10 @@ msgstr "Personlighed:"
 
 msgid "Best Monster:"
 msgstr "Bedste væsen:"
+
+#, fuzzy
+msgid "Map filename"
+msgstr "Kort størrelse"
 
 msgid ""
 "Are you sure you want to load a new map? (Any unsaved changes to the current "
@@ -4634,9 +4642,10 @@ msgstr "Sidste understøttede version: "
 msgid "This file contains a save with an invalid game type."
 msgstr "Denne fil indeholder et gemt spil af en invalid spiltype."
 
+#, fuzzy
 msgid ""
-"This file was saved for a \"The Price of Loyalty\" map, but the "
-"corresponding game assets have not been provided to the engine."
+"This save file requires \"The Price of Loyalty\" game assets, but they have "
+"not been provided to the engine."
 msgstr ""
 "Denne fil blev gemt som et \"Prisen for loyalitet\" kort, men de tilsvarende "
 "spilaktiver er ikke blevet leveret til spilmotoren."
