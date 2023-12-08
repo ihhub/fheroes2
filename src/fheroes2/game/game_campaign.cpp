@@ -908,13 +908,13 @@ namespace
         const fheroes2::Text caption( _( "Campaign Difficulty" ), fheroes2::FontType::normalYellow() );
         caption.draw( windowRoi.x + ( windowRoi.width - caption.width() ) / 2, windowRoi.y + 10, display );
         
-        const uint32_t iconSize = 65;
-        const uint32_t iconShadowSize = 4;
-        const uint32_t fullIconSize = iconSize + iconShadowSize;
+        const int32_t iconSize = 65;
+        const int32_t iconShadowSize = 4;
+        const int32_t fullIconSize = iconSize + iconShadowSize;
 
-        const uint32_t pawnIconOffsetX = windowRoi.x - iconShadowSize + ( windowRoi.width - iconSize ) / 2 - windowRoi.width / 3;
-        const uint32_t horseIconOffsetX = windowRoi.x - iconShadowSize + ( windowRoi.width - iconSize ) / 2;
-        const uint32_t rookIconOffsetX = windowRoi.x - iconShadowSize + ( windowRoi.width - iconSize ) / 2 + windowRoi.width / 3;
+        const int32_t pawnIconOffsetX = windowRoi.x - iconShadowSize + ( windowRoi.width - iconSize ) / 2 - windowRoi.width / 3;
+        const int32_t horseIconOffsetX = windowRoi.x - iconShadowSize + ( windowRoi.width - iconSize ) / 2;
+        const int32_t rookIconOffsetX = windowRoi.x - iconShadowSize + ( windowRoi.width - iconSize ) / 2 + windowRoi.width / 3;
         
         const std::array<fheroes2::Rect, 3> copyFromArea{ fheroes2::Rect( 20, 94, fullIconSize, fullIconSize ),
                                                           fheroes2::Rect( 97, 94, fullIconSize, fullIconSize ),
