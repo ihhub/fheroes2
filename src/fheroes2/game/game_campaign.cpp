@@ -907,7 +907,7 @@ namespace
 
         const fheroes2::Text caption( _( "Campaign Difficulty" ), fheroes2::FontType::normalYellow() );
         caption.draw( windowRoi.x + ( windowRoi.width - caption.width() ) / 2, windowRoi.y + 10, display );
-        
+
         const int32_t iconSize = 65;
         const int32_t iconShadowSize = 4;
         const int32_t fullIconSize = iconSize + iconShadowSize;
@@ -915,33 +915,28 @@ namespace
         const int32_t pawnIconOffsetX = windowRoi.x - iconShadowSize + ( windowRoi.width - iconSize ) / 2 - windowRoi.width / 3;
         const int32_t horseIconOffsetX = windowRoi.x - iconShadowSize + ( windowRoi.width - iconSize ) / 2;
         const int32_t rookIconOffsetX = windowRoi.x - iconShadowSize + ( windowRoi.width - iconSize ) / 2 + windowRoi.width / 3;
-        
-        const std::array<fheroes2::Rect, 3> copyFromArea{ fheroes2::Rect( 20, 94, fullIconSize, fullIconSize ),
-                                                          fheroes2::Rect( 97, 94, fullIconSize, fullIconSize ),
+
+        const std::array<fheroes2::Rect, 3> copyFromArea{ fheroes2::Rect( 20, 94, fullIconSize, fullIconSize ), fheroes2::Rect( 97, 94, fullIconSize, fullIconSize ),
                                                           fheroes2::Rect( 173, 94, fullIconSize, fullIconSize ) };
 
-        const std::array<fheroes2::Point, 3> copyToOffset{ fheroes2::Point( pawnIconOffsetX, windowRoi.y + 40 ),
-                                                           fheroes2::Point( horseIconOffsetX, windowRoi.y + 40 ),
+        const std::array<fheroes2::Point, 3> copyToOffset{ fheroes2::Point( pawnIconOffsetX, windowRoi.y + 40 ), fheroes2::Point( horseIconOffsetX, windowRoi.y + 40 ),
                                                            fheroes2::Point( rookIconOffsetX, windowRoi.y + 40 ) };
 
         const fheroes2::Sprite chessIcon = fheroes2::AGG::GetICN( ICN::NGHSBKG, 0 );
 
-        fheroes2::Copy( chessIcon, copyFromArea[0].x, copyFromArea[0].y, display, copyToOffset[0].x, copyToOffset[0].y,
-                        copyFromArea[0].width, copyFromArea[0].height );
-        fheroes2::Copy( chessIcon, copyFromArea[1].x, copyFromArea[1].y, display, copyToOffset[1].x, copyToOffset[1].y,
-                        copyFromArea[1].width, copyFromArea[1].height );
-        fheroes2::Copy( chessIcon, copyFromArea[2].x, copyFromArea[2].y, display, copyToOffset[2].x, copyToOffset[2].y,
-                        copyFromArea[2].width, copyFromArea[2].height );
+        fheroes2::Copy( chessIcon, copyFromArea[0].x, copyFromArea[0].y, display, copyToOffset[0].x, copyToOffset[0].y, copyFromArea[0].width, copyFromArea[0].height );
+        fheroes2::Copy( chessIcon, copyFromArea[1].x, copyFromArea[1].y, display, copyToOffset[1].x, copyToOffset[1].y, copyFromArea[1].width, copyFromArea[1].height );
+        fheroes2::Copy( chessIcon, copyFromArea[2].x, copyFromArea[2].y, display, copyToOffset[2].x, copyToOffset[2].y, copyFromArea[2].width, copyFromArea[2].height );
 
         if ( isEvilInterface ) {
             const std::vector<uint8_t> goodToEvilPalette = PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_INTERFACE );
 
-            fheroes2::ApplyPalette( display, copyToOffset[0].x, copyToOffset[0].y, display, copyToOffset[0].x, copyToOffset[0].y,
-                                    copyFromArea[0].width, copyFromArea[0].height, goodToEvilPalette );
-            fheroes2::ApplyPalette( display, copyToOffset[1].x, copyToOffset[1].y, display, copyToOffset[1].x, copyToOffset[1].y,
-                                    copyFromArea[1].width, copyFromArea[1].height, goodToEvilPalette );
-            fheroes2::ApplyPalette( display, copyToOffset[2].x, copyToOffset[2].y, display, copyToOffset[2].x, copyToOffset[2].y,
-                                    copyFromArea[2].width, copyFromArea[2].height, goodToEvilPalette );
+            fheroes2::ApplyPalette( display, copyToOffset[0].x, copyToOffset[0].y, display, copyToOffset[0].x, copyToOffset[0].y, copyFromArea[0].width,
+                                    copyFromArea[0].height, goodToEvilPalette );
+            fheroes2::ApplyPalette( display, copyToOffset[1].x, copyToOffset[1].y, display, copyToOffset[1].x, copyToOffset[1].y, copyFromArea[1].width,
+                                    copyFromArea[1].height, goodToEvilPalette );
+            fheroes2::ApplyPalette( display, copyToOffset[2].x, copyToOffset[2].y, display, copyToOffset[2].x, copyToOffset[2].y, copyFromArea[2].width,
+                                    copyFromArea[2].height, goodToEvilPalette );
         }
 
         const fheroes2::Sprite & selectionImage = fheroes2::AGG::GetICN( ICN::NGEXTRA, 62 );
@@ -956,9 +951,12 @@ namespace
                                                             fheroes2::Rect( copyToOffset[1].x + 1, windowRoi.y + 37, selectionImage.width(), selectionImage.height() ),
                                                             fheroes2::Rect( copyToOffset[2].x + 1, windowRoi.y + 37, selectionImage.width(), selectionImage.height() ) };
 
-        const std::array<fheroes2::Rect, 3> iconArea{ fheroes2::Rect( difficultyArea[0].x + iconShadowSize, difficultyArea[0].y + iconShadowSize, iconSize - 1, iconSize - 1 ),
-                                                      fheroes2::Rect( difficultyArea[1].x + iconShadowSize, difficultyArea[1].y + iconShadowSize, iconSize - 1, iconSize - 1 ),
-                                                      fheroes2::Rect( difficultyArea[2].x + iconShadowSize, difficultyArea[2].y + iconShadowSize, iconSize - 1, iconSize - 1 ) };
+        const std::array<fheroes2::Rect, 3> iconArea{ fheroes2::Rect( difficultyArea[0].x + iconShadowSize, difficultyArea[0].y + iconShadowSize, iconSize - 1,
+                                                                      iconSize - 1 ),
+                                                      fheroes2::Rect( difficultyArea[1].x + iconShadowSize, difficultyArea[1].y + iconShadowSize, iconSize - 1,
+                                                                      iconSize - 1 ),
+                                                      fheroes2::Rect( difficultyArea[2].x + iconShadowSize, difficultyArea[2].y + iconShadowSize, iconSize - 1,
+                                                                      iconSize - 1 ) };
 
         const char * currentDescription = nullptr;
         switch ( currentDifficulty ) {
