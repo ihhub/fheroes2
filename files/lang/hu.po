@@ -10320,17 +10320,14 @@ msgstr "Előző város mutatása"
 msgid "View next page"
 msgstr "%{name} mutatása"
 
-#, fuzzy
 msgid "Close Spellbook"
-msgstr "Varázslás"
+msgstr "Varázskönyv becsukása"
 
-#, fuzzy
 msgid "View %{spell}"
-msgstr "%{name} mutatása"
+msgstr "%{spell} mutatása"
 
-#, fuzzy
 msgid "This spell does %{damage} points of damage."
-msgstr "The %{spell} varázslat %{damage} sebzést okoz."
+msgstr "Ez a varázslat %{damage} sebzést okoz."
 
 #, fuzzy
 msgid ""
@@ -10339,16 +10336,16 @@ msgid ""
 msgstr "%{spell} varázslat idézése a(z) %{monster} lényre"
 
 msgid "This spell restores %{hp} HP."
-msgstr ""
+msgstr "A varázslat visszaállít %{hp} életerőt."
 
 msgid "This spell summons %{count} %{monster} to guard the mine."
 msgstr ""
 
 msgid "The nearest town is %{town}."
-msgstr ""
+msgstr "A legközelebbi város: %{town}"
 
 msgid "This town is occupied by your hero %{hero}."
-msgstr ""
+msgstr "Ezt a várost %{hero} hősöd foglalja el."
 
 msgid ""
 "This spell controls up to\n"
