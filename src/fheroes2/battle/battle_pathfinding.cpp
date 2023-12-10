@@ -50,7 +50,7 @@ namespace Battle
 
         // Passability of the board cells can change during the unit's turn even without its intervention (for example, because of a hero's spell cast),
         // we need to keep track of this
-        std::bitset<ARENASIZE> boardStatus;
+        std::array<bool, ARENASIZE> boardStatus{};
         for ( const Cell & cell : *board ) {
             const int32_t cellIdx = cell.GetIndex();
             assert( Board::isValidIndex( cellIdx ) );
