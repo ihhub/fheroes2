@@ -7144,9 +7144,8 @@ msgstr[0] ""
 msgstr[1] ""
 "A(z) %{skill} naponta %{count}-vel növeli a varázspontok újratermelődését."
 
-#, fuzzy
 msgid "%{skill} increases your hero's luck by %{count}."
-msgstr "Alap Szerencse növeli a hős szerencséjét %{count}-gyel."
+msgstr "A(z) %{skill} ennyivel növeli a hős szerencséjét: %{count}."
 
 #, fuzzy
 msgid ""
