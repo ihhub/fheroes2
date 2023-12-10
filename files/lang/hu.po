@@ -68,7 +68,7 @@ msgid "DECLINE"
 msgstr "ELUTASÍT"
 
 msgid "LEARN"
-msgstr "OLVAS"
+msgstr "TANUL"
 
 msgid "TRADE"
 msgstr "ÜZLET"
@@ -4503,7 +4503,7 @@ msgid ""
 "This save file requires \"The Price of Loyalty\" game assets, but they have "
 "not been provided to the engine."
 msgstr ""
-"Ehhezz a mentés fájlhoz szükség van a \"Hűség ára\" kiegészítőhöz, amely "
+"Ehhez a mentés fájlhoz szükség van a \"Hűség ára\" kiegészítőhöz, amely "
 "azonban nem található."
 
 msgid "This saved game is localized to '"
