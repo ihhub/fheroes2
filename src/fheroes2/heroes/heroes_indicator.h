@@ -43,33 +43,27 @@ class Heroes;
 class HeroesIndicator
 {
 public:
-    explicit HeroesIndicator( const Heroes * hero = nullptr )
-        : _hero( hero )
-        , _back( fheroes2::Display::instance() )
-    {
-        // Do nothing.
-    }
+    explicit HeroesIndicator( const Heroes * hero );
 
     const fheroes2::Rect & GetArea() const;
 
     void SetPos( const fheroes2::Point & pt );
-    void SetHero( const Heroes * hero );
 
 protected:
     const Heroes * _hero;
-    fheroes2::Rect area;
+    fheroes2::Rect _area;
     fheroes2::ImageRestorer _back;
-    std::string descriptions;
+    std::string _description;
 };
 
 class LuckIndicator : public HeroesIndicator
 {
 public:
-    explicit LuckIndicator( const Heroes * hero = nullptr )
+    explicit LuckIndicator( const Heroes * hero )
         : HeroesIndicator( hero )
     {
-        area.width = 35;
-        area.height = 26;
+        _area.width = 35;
+        _area.height = 26;
     }
 
     void Redraw();
@@ -83,17 +77,17 @@ public:
     static void QueueEventProcessing( const LuckIndicator & indicator );
 
 private:
-    int luck{ Luck::NORMAL };
+    int _luck{ Luck::NORMAL };
 };
 
 class MoraleIndicator : public HeroesIndicator
 {
 public:
-    explicit MoraleIndicator( const Heroes * hero = nullptr )
+    explicit MoraleIndicator( const Heroes * hero )
         : HeroesIndicator( hero )
     {
-        area.width = 35;
-        area.height = 26;
+        _area.width = 35;
+        _area.height = 26;
     }
 
     void Redraw();
@@ -107,13 +101,13 @@ public:
     static void QueueEventProcessing( const MoraleIndicator & indicator );
 
 private:
-    int morale{ Morale::NORMAL };
+    int _morale{ Morale::NORMAL };
 };
 
 class ExperienceIndicator : public HeroesIndicator
 {
 public:
-    explicit ExperienceIndicator( const Heroes * hero = nullptr );
+    explicit ExperienceIndicator( const Heroes * hero );
 
     void Redraw() const;
     void QueueEventProcessing() const;
@@ -122,7 +116,7 @@ public:
 class SpellPointsIndicator : public HeroesIndicator
 {
 public:
-    explicit SpellPointsIndicator( const Heroes * hero = nullptr );
+    explicit SpellPointsIndicator( const Heroes * hero );
 
     void Redraw() const;
     void QueueEventProcessing() const;
