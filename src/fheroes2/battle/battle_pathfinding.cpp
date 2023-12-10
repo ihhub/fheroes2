@@ -24,6 +24,7 @@
 #include <cassert>
 #include <cstddef>
 #include <cstdint>
+#include <functional>
 #include <set>
 #include <tuple>
 #include <vector>
@@ -60,7 +61,7 @@ namespace Battle
 
         auto currentSettings = std::tie( _pathStart, _speed, _isWide, _isFlying, _color, _boardStatus );
         const auto newSettings = std::make_tuple( BattleNodeIndex{ unit.GetHeadIndex(), unit.GetTailIndex() }, unit.GetSpeed(), unit.isWide(), unit.isFlying(),
-                                                  unit.GetColor(), boardStatus );
+                                                  unit.GetColor(), std::cref( boardStatus ) );
 
         // If all the current parameters match the parameters for which the current cache was built, then there is no need to rebuild it
         if ( currentSettings == newSettings ) {
