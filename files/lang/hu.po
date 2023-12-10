@@ -7136,14 +7136,13 @@ msgstr ""
 "A(z) %{skill} képessé teszi a hősödet 5. szintű varázslatok "
 "használatára."
 
-#, fuzzy
 msgid "%{skill} regenerates one additional spell point per day to your hero."
 msgid_plural ""
 "%{skill} regenerates %{count} additional spell points per day to your hero."
 msgstr[0] ""
-"Alap Misztika naponta %{count}-vel növeli a varázspontok újratermelődését."
+"A(z) %{skill} naponta eggyel növeli a varázspontok újratermelődését."
 msgstr[1] ""
-"Alap Misztika naponta %{count}-vel növeli a varázspontok újratermelődését."
+"A(z) %{skill} naponta %{count}-vel növeli a varázspontok újratermelődését."
 
 #, fuzzy
 msgid "%{skill} increases your hero's luck by %{count}."
