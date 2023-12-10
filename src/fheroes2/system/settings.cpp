@@ -91,7 +91,6 @@ std::string Settings::GetVersion()
 
 Settings::Settings()
     : _resolutionInfo( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT )
-    , _displayId( 0 )
     , game_difficulty( Difficulty::NORMAL )
     , sound_volume( 6 )
     , music_volume( 6 )
@@ -327,8 +326,8 @@ bool Settings::Read( const std::string & filePath )
         _optGlobal.SetModes( GLOBAL_ENABLE_EDITOR );
     }
 
-    if ( config.Exists( "monitor" ) ) {
-        setDisplayId( std::max( config.IntParams( "monitor" ), 0 ) );
+    if ( config.Exists( "display" ) ) {
+        fheroes2::engine().setDisplayId( std::max( config.IntParams( "display" ), 0 ) );
     }
 
     return true;
@@ -375,6 +374,9 @@ std::string Settings::String() const
 
     os << std::endl << "# video mode: in-game width x in-game height : on-screen width x on-screen height" << std::endl;
     os << "videomode = " << display.width() << "x" << display.height() << ":" << display.screenSize().width << "x" << display.screenSize().height << std::endl;
+
+    os << std::endl << "# Display ID (defaults to First Display)" << std::endl;
+    os << "display = " << fheroes2::engine().getDisplayId() << std::endl;
 
     os << std::endl << "# music: original, expansion, external" << std::endl;
     os << "music = " << musicType << std::endl;
@@ -481,9 +483,6 @@ std::string Settings::String() const
     if ( _optGlobal.Modes( GLOBAL_ENABLE_EDITOR ) ) {
         os << "editor = beta" << std::endl;
     }
-
-    os << std::endl << "# Display Monitor for Multi-Monitor Setups (defaults to first monitor)" << std::endl;
-    os << "monitor = " << getDisplayId() << std::endl;
 
     return os.str();
 }
@@ -961,11 +960,6 @@ void Settings::setDebug( int debug )
 #endif
 
     Logging::setDebugLevel( debug );
-}
-
-void Settings::setDisplayId( int monitor )
-{
-    _displayId = monitor;
 }
 
 void Settings::SetSoundVolume( int v )

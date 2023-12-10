@@ -147,14 +147,20 @@ namespace fheroes2
             return _displayId;
         }
 
-        void setDisplayId( const int monitor )
+        void setDisplayId( const int display )
         {
-            _displayId = monitor;
+            if ( display > getNumberOfVideoDisplays() )
+                // add safeguard for when 2nd display disconnects 
+                _displayId = 0;
+            else {
+                _displayId = display;
+            }
         }
 
     protected:
         BaseRenderEngine()
             : _isFullScreen( false )
+            , _displayId( 0 )
             , _nearestScaling( false )
 
         {
@@ -226,16 +232,6 @@ namespace fheroes2
         // Do not call this method. It serves as a patch over the basic class.
         void resize( int32_t width_, int32_t height_ ) override;
 
-        void setDisplayId( int monitor )
-        {
-            _displayId = monitor;
-        }
-
-        int getDisplayId() const
-        {
-            return _displayId;
-        }
-
         void setResolution( ResolutionInfo info );
 
         bool isDefaultSize() const
@@ -278,7 +274,6 @@ namespace fheroes2
         PostRenderProcessing _postprocessing;
 
         uint8_t * _renderSurface;
-        int _displayId;
 
         // Previous area drawn on the screen.
         Rect _prevRoi;

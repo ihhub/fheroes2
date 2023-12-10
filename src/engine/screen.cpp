@@ -1073,9 +1073,9 @@ namespace
             flags |= SDL_WINDOW_RESIZABLE;
 
 #if defined( _WIN32 )
-            SDL_Rect monRect;
-            SDL_GetDisplayBounds( getDisplayId(), &monRect );
-            _window = SDL_CreateWindow( _previousWindowTitle.data(), monRect.x + _prevWindowPos.x, monRect.y + _prevWindowPos.y, resolutionInfo.screenWidth,
+            SDL_Rect displayRect;
+            SDL_GetDisplayBounds( getDisplayId(), &displayRect );
+            _window = SDL_CreateWindow( _previousWindowTitle.data(), displayRect.x + _prevWindowPos.x, displayRect.y + _prevWindowPos.y, resolutionInfo.screenWidth,
                                         resolutionInfo.screenHeight, flags );
 #else
             _window = SDL_CreateWindow( _previousWindowTitle.data(), _prevWindowPos.x, _prevWindowPos.y, resolutionInfo.screenWidth, resolutionInfo.screenHeight, flags );
@@ -1343,7 +1343,6 @@ namespace fheroes2
              && info.screenHeight == _screenSize.height ) // nothing to resize
             return;
 
-        _engine->setDisplayId( _displayId );
         const bool isFullScreen = _engine->isFullScreen();
 
         // deallocate engine resources

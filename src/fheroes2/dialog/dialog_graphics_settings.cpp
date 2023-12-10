@@ -49,7 +49,7 @@ namespace
         Mode,
         VSync,
         SystemInfo,
-        MonitorList,
+        DisplayList,
         InterfaceType,
         Exit
     };
@@ -66,11 +66,10 @@ namespace
     const fheroes2::Rect interfaceTypeRoi{ optionOffset.x + offsetBetweenOptions.width * 2, optionOffset.y + offsetBetweenOptions.height, optionWindowSize,
                                            optionWindowSize };
 
-    void drawMonitor( const fheroes2::Rect & optionRoi )
+    void drawDisplay( const fheroes2::Rect & optionRoi )
     {
-        const Settings & conf = Settings::Get();
-        fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::GAME_OPTION_ICON, 1 ), "Display Monitor", fheroes2::getDisplayName( conf.getDisplayId() ),
-                              fheroes2::UiOptionTextWidth::TWO_ELEMENTS_ROW );
+        fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::GAME_OPTION_ICON, 1 ), _( "Display ID" ),
+                              fheroes2::getDisplayName( fheroes2::engine().getDisplayId() ), fheroes2::UiOptionTextWidth::TWO_ELEMENTS_ROW );
     }
 
     void drawResolution( const fheroes2::Rect & optionRoi )
@@ -177,15 +176,15 @@ namespace
         const fheroes2::Rect windowModeRoi( modeRoi + windowRoi.getPosition() );
         const fheroes2::Rect windowVSyncRoi( vSyncRoi + windowRoi.getPosition() );
         const fheroes2::Rect windowSystemInfoRoi( systemInfoRoi + windowRoi.getPosition() );
-        const fheroes2::Rect windowMonitorListRoi( monitorListRoi + windowRoi.getPosition() );
+        const fheroes2::Rect windowDisplayListRoi( monitorListRoi + windowRoi.getPosition() );
         const fheroes2::Rect windowInterfaceTypeRoi( interfaceTypeRoi + windowRoi.getPosition() );
 
-        const auto drawOptions = [&windowResolutionRoi, &windowModeRoi, &windowVSyncRoi, &windowSystemInfoRoi, &windowMonitorListRoi, &windowInterfaceTypeRoi]() {
+        const auto drawOptions = [&windowResolutionRoi, &windowModeRoi, &windowVSyncRoi, &windowSystemInfoRoi, &windowDisplayListRoi, &windowInterfaceTypeRoi]() {
             drawResolution( windowResolutionRoi );
             drawMode( windowModeRoi );
             drawVSync( windowVSyncRoi );
             drawSystemInfo( windowSystemInfoRoi );
-            drawMonitor( windowMonitorListRoi );
+            drawDisplay( windowDisplayListRoi );
             drawInterfaceType( windowInterfaceTypeRoi );
         };
 
@@ -223,8 +222,8 @@ namespace
             if ( le.MouseClickLeft( windowSystemInfoRoi ) ) {
                 return SelectedWindow::SystemInfo;
             }
-            if ( le.MouseClickLeft( windowMonitorListRoi ) ) {
-                return SelectedWindow::MonitorList;
+            if ( le.MouseClickLeft( windowDisplayListRoi ) ) {
+                return SelectedWindow::DisplayList;
             }
             if ( le.MouseClickLeft( windowInterfaceTypeRoi ) ) {
                 return SelectedWindow::InterfaceType;
@@ -238,7 +237,7 @@ namespace
             else if ( le.MousePressRight( windowVSyncRoi ) ) {
                 fheroes2::showStandardTextMessage( _( "V-Sync" ), _( "The V-Sync option can be enabled to resolve flickering issues on some monitors." ), 0 );
             }
-            else if ( le.MousePressRight( windowMonitorListRoi ) ) {
+            else if ( le.MousePressRight( windowDisplayListRoi ) ) {
                 fheroes2::showStandardTextMessage( _( "Monitor Selection" ), _( "Toggle Between available monitors, Restart Required to take Effect" ), 0 );
             }
             else if ( le.MousePressRight( windowSystemInfoRoi ) ) {
@@ -300,8 +299,8 @@ namespace fheroes2
                 conf.Save( Settings::configFileName );
                 windowType = SelectedWindow::Configuration;
                 break;
-            case SelectedWindow::MonitorList:
-                conf.setDisplayId( ( conf.getDisplayId() + 1 ) % fheroes2::getNumberOfVideoDisplays() );
+            case SelectedWindow::DisplayList:
+                fheroes2::engine().setDisplayId( ( fheroes2::engine().getDisplayId() + 1 ) % fheroes2::getNumberOfVideoDisplays() );
                 conf.Save( Settings::configFileName );
                 windowType = SelectedWindow::Configuration;
                 break;
