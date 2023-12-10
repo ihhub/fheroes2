@@ -5722,7 +5722,7 @@ namespace
         released[213 - 32].resize( released[79 - 32].width(), released[79 - 32].height() + 3 );
         released[213 - 32].reset();
         fheroes2::Copy( released[79 - 32], 0, 0, released[213 - 32], 0, 3, released[79 - 32].width(), released[79 - 32].height() );
-        fheroes2::Copy( released[195 - 32], offset + 4, offset, released[213 - 32], offset + 2, offset, 4, 2 );
+        fheroes2::Copy( released[195 - 32], offset + 4, offset, released[213 - 32], offset + 2, offset, 6, 2 );
 
         // O with diaeresis.
         released[214 - 32].resize( released[79 - 32].width(), released[79 - 32].height() + 2 );
