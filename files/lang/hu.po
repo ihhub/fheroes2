@@ -905,10 +905,10 @@ msgid "Surrender disabled"
 msgstr "Megadás nem lehetséges"
 
 msgid "Damage: %{max}"
-msgstr "Sérülés: %{max}"
+msgstr "Sebzés: %{max}"
 
 msgid "Damage: %{min} - %{max}"
-msgstr "Sérülés: %{min} - %{max}"
+msgstr "Sebzés: %{min} - %{max}"
 
 msgid "Perish: %{max}"
 msgstr "Megöl: %{max}"
@@ -2547,7 +2547,7 @@ msgid "Hire all creatures in the town."
 msgstr "Összes lény toborzása."
 
 msgid "Available"
-msgstr "Rendelkezésre áll"
+msgstr "Elérhető"
 
 msgid "Town Population Information and Statistics"
 msgstr "A város lakosságának adatai és statisztikái"
@@ -2611,7 +2611,7 @@ msgid "Shots"
 msgstr "Lövések"
 
 msgid "Shots Left"
-msgstr "Maradék lövések"
+msgstr "Maradék lövés"
 
 msgid "Hit Points"
 msgstr "Életerő"
@@ -5113,7 +5113,7 @@ msgstr ""
 "Biztos hogy új játékot töltesz be? (A jelenlegi játékod el fog veszni.)"
 
 msgid "Try looking on land!!!"
-msgstr "Nézz körül a vidéken!!!"
+msgstr "Próbálkozz a szárazföldön!!!"
 
 msgid ""
 "Searching for the Ultimate Artifact is fruitless. Your hero could not carry "
@@ -8003,27 +8003,23 @@ msgstr "Földidéző oltár"
 msgid "Water Summoning Altar"
 msgstr "Vízidéző oltár"
 
-#, fuzzy
 msgid "Unknown Monster"
-msgstr "Ismeretlen"
+msgstr "Ismeretlen lény"
 
-#, fuzzy
 msgid "Unknown Monsters"
-msgstr "Ismeretlen"
+msgstr "Ismeretlen lények"
 
-#, fuzzy
 msgid "Peasant"
 msgstr "Jobbágy"
 
 msgid "Peasants"
-msgstr "Jobbágy"
+msgstr "Jobbágyok"
 
-#, fuzzy
 msgid "Archer"
 msgstr "Íjász"
 
 msgid "Archers"
-msgstr "Íjász"
+msgstr "Íjászok"
 
 #, fuzzy
 msgid "Ranger"
