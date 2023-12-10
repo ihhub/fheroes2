@@ -72,6 +72,7 @@ void HeroesIndicator::SetPos( const fheroes2::Point & pt )
 {
     area.x = pt.x;
     area.y = pt.y;
+
     _back.update( area.x, area.y, area.width, area.height );
 }
 
@@ -104,6 +105,7 @@ void LuckIndicator::Redraw()
     }
 
     _back.restore();
+
     fheroes2::Display & display = fheroes2::Display::instance();
 
     while ( count-- ) {
@@ -158,6 +160,7 @@ void MoraleIndicator::Redraw()
     const int32_t cy = area.y + ( area.height - sprite.height() ) / 2;
 
     _back.restore();
+
     fheroes2::Display & display = fheroes2::Display::instance();
 
     while ( count-- ) {

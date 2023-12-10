@@ -49,6 +49,8 @@
 #include "interface_status.h"
 #include "localevent.h"
 #include "logging.h"
+#include "map_format_helper.h"
+#include "map_format_info.h"
 #include "map_object_info.h"
 #include "maps.h"
 #include "maps_tiles.h"
@@ -58,6 +60,7 @@
 #include "screen.h"
 #include "settings.h"
 #include "spell.h"
+#include "system.h"
 #include "translations.h"
 #include "ui_button.h"
 #include "ui_dialog.h"
@@ -285,7 +288,36 @@ namespace Interface
                     res = eventNewMap();
                 }
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_SAVE_GAME ) ) {
-                    fheroes2::showStandardTextMessage( _( "Warning!" ), "The Map Editor is still in development. Save function is not implemented yet.", Dialog::OK );
+                    const std::string dataPath = System::GetDataDirectory( "fheroes2" );
+                    if ( dataPath.empty() ) {
+                        fheroes2::showStandardTextMessage( _( "Warning!" ), "Unable to locate data directory to save the map.", Dialog::OK );
+                        continue;
+                    }
+
+                    const std::string mapDirectory = System::concatPath( dataPath, "maps" );
+
+                    if ( !System::IsDirectory( mapDirectory ) && !System::MakeDirectory( mapDirectory ) ) {
+                        fheroes2::showStandardTextMessage( _( "Warning!" ), "Unable to create a directory to save the map.", Dialog::OK );
+                        continue;
+                    }
+
+                    std::string fileName;
+                    if ( !Dialog::InputString( _( "Map filename" ), fileName, std::string(), 128 ) ) {
+                        continue;
+                    }
+
+                    Maps::Map_Format::MapFormat map;
+                    if ( !Maps::saveMapInEditor( map ) ) {
+                        fheroes2::showStandardTextMessage( _( "Warning!" ), "Cannot convert a map into the required map format.", Dialog::OK );
+                        continue;
+                    }
+
+                    map.name = fileName;
+                    map.description = "Put a real description here.";
+
+                    if ( !Maps::Map_Format::saveMap( System::concatPath( mapDirectory, fileName + ".fh2m" ), map ) ) {
+                        fheroes2::showStandardTextMessage( _( "Warning!" ), "Failed to save the map.", Dialog::OK );
+                    }
                 }
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_LOAD_GAME ) ) {
                     res = eventLoadMap();
@@ -700,7 +732,7 @@ namespace Interface
         const Maps::ObjectGroup groupType = _editorPanel.getSelectedObjectGroup();
         const auto & objectInfo = getObjectInfo( groupType, _editorPanel.getSelectedObjectType() );
 
-        if ( groupType == Maps::ObjectGroup::Monsters ) {
+        if ( groupType == Maps::ObjectGroup::MONSTERS ) {
             if ( !isObjectPlacementAllowed( objectInfo, tilePos ) ) {
                 fheroes2::showStandardTextMessage( _( "Monster" ), _( "Objects cannot be placed outside the map." ), Dialog::OK );
                 return;
@@ -718,7 +750,7 @@ namespace Interface
 
             setObjectOnTile( tile, objectInfo );
         }
-        else if ( groupType == Maps::ObjectGroup::Adventure_Treasures ) {
+        else if ( groupType == Maps::ObjectGroup::ADVENTURE_TREASURES ) {
             if ( !isObjectPlacementAllowed( objectInfo, tilePos ) ) {
                 fheroes2::showStandardTextMessage( _( "Treasure" ), _( "Objects cannot be placed outside the map." ), Dialog::OK );
                 return;
@@ -736,7 +768,7 @@ namespace Interface
 
             setObjectOnTile( tile, objectInfo );
         }
-        else if ( groupType == Maps::ObjectGroup::Kingdom_Heroes ) {
+        else if ( groupType == Maps::ObjectGroup::KINGDOM_HEROES ) {
             if ( !isObjectPlacementAllowed( objectInfo, tilePos ) ) {
                 fheroes2::showStandardTextMessage( _( "Heroes" ), _( "Objects cannot be placed outside the map." ), Dialog::OK );
                 return;
@@ -754,7 +786,7 @@ namespace Interface
 
             setObjectOnTile( tile, objectInfo );
         }
-        else if ( groupType == Maps::ObjectGroup::Adventure_Artifacts ) {
+        else if ( groupType == Maps::ObjectGroup::ADVENTURE_ARTIFACTS ) {
             if ( !isObjectPlacementAllowed( objectInfo, tilePos ) ) {
                 fheroes2::showStandardTextMessage( _( "Artifacts" ), _( "Objects cannot be placed outside the map." ), Dialog::OK );
                 return;
@@ -772,7 +804,7 @@ namespace Interface
 
             const int32_t artifactType = _editorPanel.getSelectedObjectType();
 
-            const auto & artifactInfo = Maps::getObjectsByGroup( Maps::ObjectGroup::Adventure_Artifacts );
+            const auto & artifactInfo = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_ARTIFACTS );
             assert( artifactType >= 0 && artifactType < static_cast<int32_t>( artifactInfo.size() ) );
 
             // For each Spell Scroll artifact we select a spell.
@@ -791,7 +823,7 @@ namespace Interface
                 setObjectOnTile( tile, objectInfo );
             }
         }
-        else if ( groupType == Maps::ObjectGroup::Adventure_Water ) {
+        else if ( groupType == Maps::ObjectGroup::ADVENTURE_WATER ) {
             if ( !isObjectPlacementAllowed( objectInfo, tilePos ) ) {
                 fheroes2::showStandardTextMessage( _( "Ocean object" ), _( "Objects cannot be placed outside the map." ), Dialog::OK );
                 return;

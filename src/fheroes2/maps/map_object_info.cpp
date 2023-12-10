@@ -25,6 +25,7 @@
 #include <cassert>
 #include <cstddef>
 #include <initializer_list>
+#include <map>
 #include <memory>
 #include <utility>
 
@@ -38,7 +39,9 @@ namespace
     //
     // All object information is based on The Price of Loyalty expansion of the original game since
     // the fheroes2 Editor requires to have resources from the expansion.
-    std::array<std::vector<Maps::ObjectInfo>, static_cast<size_t>( Maps::ObjectGroup::Group_Count )> objectData;
+    std::array<std::vector<Maps::ObjectInfo>, static_cast<size_t>( Maps::ObjectGroup::GROUP_COUNT )> objectData;
+
+    std::map<std::pair<MP2::ObjectIcnType, uint32_t>, std::pair<Maps::ObjectGroup, uint32_t>> icnVsObjectInfo;
 
     void populateLandscapeMountains( std::vector<Maps::ObjectInfo> & objects )
     {
@@ -613,6 +616,30 @@ namespace
         }
     }
 
+    void populateRoads( std::vector<Maps::ObjectInfo> & objects )
+    {
+        assert( objects.empty() );
+
+        for ( uint32_t i = 0; i < 32; ++i ) {
+            Maps::ObjectInfo object{ MP2::OBJ_NONE };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_ROAD, i, fheroes2::Point{ 0, 0 }, MP2::OBJ_NONE, Maps::TERRAIN_LAYER );
+
+            objects.emplace_back( std::move( object ) );
+        }
+    }
+
+    void populateStreams( std::vector<Maps::ObjectInfo> & objects )
+    {
+        assert( objects.empty() );
+
+        for ( uint32_t i = 0; i < 13; ++i ) {
+            Maps::ObjectInfo object{ MP2::OBJ_NONE };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_STREAM, i, fheroes2::Point{ 0, 0 }, MP2::OBJ_NONE, Maps::TERRAIN_LAYER );
+
+            objects.emplace_back( std::move( object ) );
+        }
+    }
+
     void populateObjectData()
     {
         static bool isPopulated = false;
@@ -623,24 +650,27 @@ namespace
 
         // IMPORTANT!!!
         // The order of objects must be preserved. If you want to add a new object, add it to the end of the corresponding container.
-        populateLandscapeMountains( objectData[static_cast<size_t>( Maps::ObjectGroup::Landscape_Mountains )] );
-        populateLandscapeRocks( objectData[static_cast<size_t>( Maps::ObjectGroup::Landscape_Rocks )] );
-        populateLandscapeTrees( objectData[static_cast<size_t>( Maps::ObjectGroup::Landscape_Trees )] );
-        populateLandscapeWater( objectData[static_cast<size_t>( Maps::ObjectGroup::Landscape_Water )] );
-        populateLandscapeMiscellaneous( objectData[static_cast<size_t>( Maps::ObjectGroup::Landscape_Miscellaneous )] );
+        populateRoads( objectData[static_cast<size_t>( Maps::ObjectGroup::ROADS )] );
+        populateStreams( objectData[static_cast<size_t>( Maps::ObjectGroup::STREAMS )] );
 
-        populateAdventureArtifacts( objectData[static_cast<size_t>( Maps::ObjectGroup::Adventure_Artifacts )] );
-        populateAdventureDwellings( objectData[static_cast<size_t>( Maps::ObjectGroup::Adventure_Dwellings )] );
-        populateAdventureMines( objectData[static_cast<size_t>( Maps::ObjectGroup::Adventure_Mines )] );
-        populateAdventurePowerUps( objectData[static_cast<size_t>( Maps::ObjectGroup::Adventure_Power_Ups )] );
-        populateAdventureTreasures( objectData[static_cast<size_t>( Maps::ObjectGroup::Adventure_Treasures )] );
-        populateAdventureWater( objectData[static_cast<size_t>( Maps::ObjectGroup::Adventure_Water )] );
-        populateAdventureMiscellaneous( objectData[static_cast<size_t>( Maps::ObjectGroup::Adventure_Miscellaneous )] );
+        populateLandscapeMountains( objectData[static_cast<size_t>( Maps::ObjectGroup::LANDSCAPE_MOUNTAINS )] );
+        populateLandscapeRocks( objectData[static_cast<size_t>( Maps::ObjectGroup::LANDSCAPE_ROCKS )] );
+        populateLandscapeTrees( objectData[static_cast<size_t>( Maps::ObjectGroup::LANDSCAPE_TREES )] );
+        populateLandscapeWater( objectData[static_cast<size_t>( Maps::ObjectGroup::LANDSCAPE_WATER )] );
+        populateLandscapeMiscellaneous( objectData[static_cast<size_t>( Maps::ObjectGroup::LANDSCAPE_MISCELLANEOUS )] );
 
-        populateKingdomHeroes( objectData[static_cast<size_t>( Maps::ObjectGroup::Kingdom_Heroes )] );
-        populateKingdomTows( objectData[static_cast<size_t>( Maps::ObjectGroup::Kingdom_Towns )] );
+        populateAdventureArtifacts( objectData[static_cast<size_t>( Maps::ObjectGroup::ADVENTURE_ARTIFACTS )] );
+        populateAdventureDwellings( objectData[static_cast<size_t>( Maps::ObjectGroup::ADVENTURE_DWELLINGS )] );
+        populateAdventureMines( objectData[static_cast<size_t>( Maps::ObjectGroup::ADVENTURE_MINES )] );
+        populateAdventurePowerUps( objectData[static_cast<size_t>( Maps::ObjectGroup::ADVENTURE_POWER_UPS )] );
+        populateAdventureTreasures( objectData[static_cast<size_t>( Maps::ObjectGroup::ADVENTURE_TREASURES )] );
+        populateAdventureWater( objectData[static_cast<size_t>( Maps::ObjectGroup::ADVENTURE_WATER )] );
+        populateAdventureMiscellaneous( objectData[static_cast<size_t>( Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS )] );
 
-        populateMonsters( objectData[static_cast<size_t>( Maps::ObjectGroup::Monsters )] );
+        populateKingdomHeroes( objectData[static_cast<size_t>( Maps::ObjectGroup::KINGDOM_HEROES )] );
+        populateKingdomTows( objectData[static_cast<size_t>( Maps::ObjectGroup::KINGDOM_TOWNS )] );
+
+        populateMonsters( objectData[static_cast<size_t>( Maps::ObjectGroup::MONSTERS )] );
 
 #if defined( WITH_DEBUG )
         // It is important to check that all data is accurately generated.
@@ -653,8 +683,8 @@ namespace
         }
 
         // Check that all landscape objects are non-action objects.
-        for ( size_t groupType = static_cast<size_t>( Maps::ObjectGroup::Landscape_Mountains );
-              groupType <= static_cast<size_t>( Maps::ObjectGroup::Landscape_Miscellaneous ); ++groupType ) {
+        for ( size_t groupType = static_cast<size_t>( Maps::ObjectGroup::ROADS ); groupType <= static_cast<size_t>( Maps::ObjectGroup::LANDSCAPE_MISCELLANEOUS );
+              ++groupType ) {
             const auto & objects = objectData[groupType];
 
             for ( const auto & objectInfo : objects ) {
@@ -663,7 +693,7 @@ namespace
         }
 
         // Check that all other objects are action objects.
-        for ( size_t groupType = static_cast<size_t>( Maps::ObjectGroup::Adventure_Artifacts ); groupType < static_cast<size_t>( Maps::ObjectGroup::Group_Count );
+        for ( size_t groupType = static_cast<size_t>( Maps::ObjectGroup::ADVENTURE_ARTIFACTS ); groupType < static_cast<size_t>( Maps::ObjectGroup::GROUP_COUNT );
               ++groupType ) {
             const auto & objects = objectData[groupType];
 
@@ -673,6 +703,20 @@ namespace
         }
 #endif
 
+        // For game's map loading and saving we need to keep another cached container.
+        // This container also serves as verification that all objects use unique object info as their main object part.
+        for ( size_t groupType = 0; groupType < objectData.size(); ++groupType ) {
+            for ( size_t objectId = 0; objectId < objectData[groupType].size(); ++objectId ) {
+                const auto & frontPart = objectData[groupType][objectId].groundLevelParts.front();
+                auto [it, inserted] = icnVsObjectInfo.emplace( std::make_pair( frontPart.icnType, frontPart.icnIndex ),
+                                                               std::make_pair( static_cast<Maps::ObjectGroup>( groupType ), static_cast<uint32_t>( objectId ) ) );
+                if ( !inserted ) {
+                    // You use the same object part for more than one object. Check your code!
+                    assert( 0 );
+                }
+            }
+        }
+
         isPopulated = true;
     }
 }
@@ -681,7 +725,7 @@ namespace Maps
 {
     const std::vector<ObjectInfo> & getObjectsByGroup( const ObjectGroup group )
     {
-        assert( group != ObjectGroup::Group_Count );
+        assert( group != ObjectGroup::GROUP_COUNT );
 
         populateObjectData();
 
@@ -704,6 +748,25 @@ namespace Maps
         }
 
         return MP2::OBJ_NONE;
+    }
+
+    bool getObjectInfo( const MP2::ObjectIcnType icnType, const uint32_t icnIndex, ObjectGroup & group, uint32_t & index )
+    {
+        if ( icnType == MP2::OBJ_ICN_TYPE_UNKNOWN ) {
+            // No object exist. Nothing to do.
+            return false;
+        }
+
+        populateObjectData();
+
+        auto iter = icnVsObjectInfo.find( std::make_pair( icnType, icnIndex ) );
+        if ( iter != icnVsObjectInfo.end() ) {
+            group = iter->second.first;
+            index = iter->second.second;
+            return true;
+        }
+
+        return false;
     }
 
     std::vector<fheroes2::Point> getGroundLevelOccupiedTileOffset( const ObjectInfo & info )

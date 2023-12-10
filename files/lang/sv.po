@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-27 00:58+0000\n"
-"PO-Revision-Date: 2023-11-10 14:21+0100\n"
+"POT-Creation-Date: 2023-12-05 00:31+0000\n"
+"PO-Revision-Date: 2023-12-02 22:18+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "Language: sv\n"
@@ -195,7 +195,7 @@ msgid "MIN"
 msgstr "MIN"
 
 msgid "RESET"
-msgstr ""
+msgstr "ÅTERS."
 
 msgid ""
 "D\n"
@@ -444,7 +444,7 @@ msgid ""
 "The Moat reduces by -%{count} the defense skill of any unit and slows to "
 "half movement rate."
 msgstr ""
-"Vallgraven sänker Försvarsförmågan med -%{count} och halverar truppens "
+"Vallgraven sänker en varelses Försvar med -%{count} och halverar dennes "
 "hastighet."
 
 msgid "Speed: %{speed}"
@@ -460,11 +460,11 @@ msgid "On"
 msgstr "På"
 
 msgid "Turn Order"
-msgstr "Truppturordning"
+msgstr "Turordning"
 
 msgid "Auto Spell Casting"
 msgstr ""
-"Automatisk\n"
+"Autom.\n"
 "besvärjelsekastning"
 
 msgid "Grid"
@@ -499,7 +499,7 @@ msgid "Set the speed of combat actions and animations."
 msgstr "Ange hastigheten för animationer på slagfältet."
 
 msgid "Toggle to display the turn order during the battle."
-msgstr "Visa truppturordningen för slagfältet."
+msgstr "Visa varelsernas turordning på slagfältet."
 
 msgid ""
 "Toggle whether or not the computer will cast spells for you when auto combat "
@@ -739,7 +739,7 @@ msgid "Enable auto combat"
 msgstr "Aktivera autom. strid"
 
 msgid "Allows the computer to fight out the battle for you."
-msgstr "Tillåter datorn att fortsätta slaget åt dig."
+msgstr "Tillåter datorn att fortsätta striden åt dig."
 
 msgid "Auto Combat"
 msgstr "Autom. Strid"
@@ -791,7 +791,7 @@ msgid "Shows the results of individual monster's actions."
 msgstr "Visa resultaten av en varelses handlingar."
 
 msgid "Are you sure you want to finish the battle in auto mode?"
-msgstr "Är du säker på att du vill fortsätta slaget i automatiskt läge?"
+msgstr "Är du säker på att du vill fortsätta striden i automatiskt läge?"
 
 msgid "Are you sure you want to enable auto combat?"
 msgstr "Är du säker på att du vill aktivera automatisk strid?"
@@ -929,7 +929,7 @@ msgid ""
 msgstr "Genom sin falkblick så kan %{name} lära sig besvärjelsen %{spell}."
 
 msgid "Human"
-msgstr "Människa"
+msgstr "Spelare"
 
 msgid "AI"
 msgstr "AI"
@@ -949,9 +949,8 @@ msgstr "Ange Trollkonst"
 msgid "Set Knowledge Skill"
 msgstr "Ange Kunskapsnivå"
 
-#, fuzzy
 msgid "%{race1} %{name1} vs %{race2} %{name2}"
-msgstr "%{name1} möter %{name2}"
+msgstr "%{race1} %{name1} mot %{race2} %{name2}"
 
 msgid "Monsters"
 msgstr "Monster"
@@ -969,7 +968,7 @@ msgid "The %{name} fires with the strength of %{count} Archers"
 msgstr "%{name} avfyrar med styrkan av %{count} Bågskyttar"
 
 msgid "each with a +%{attack} bonus to their attack skill."
-msgstr "varje med en +%{attack}bonus till deras Anfallsförmåga."
+msgstr "varje med en +%{attack} bonus till deras Anfall."
 
 msgid "The %{name} is destroyed."
 msgstr "%{name} förstörs."
@@ -2399,8 +2398,7 @@ msgid "The Orchard increases production of Halflings by %{count} per week."
 msgstr "Fruktodlingen ökar produktionen av Hober med %{count} per vecka."
 
 msgid "The Storm adds +2 to the power of spells of a defending spell caster."
-msgstr ""
-"Stormen ökar Trollkonstförmågan för en försvarande besvärjelsekastare med 2."
+msgstr "Stormen ökar Trollkonsten för en försvarande besvärjelsekastare med 2."
 
 msgid "The Skull Pile increases production of Skeletons by %{count} per week."
 msgstr "Benhögen ökar produktionen av Skelett med %{count} per vecka."
@@ -2606,7 +2604,7 @@ msgid ""
 "the battlefield, with at least one empty space between each army."
 msgstr ""
 "'Utspridd' stridsformation sprider ut dina trupper över hela slagfältet med "
-"minst en tomt mellanrum mellan varje trupp."
+"minst ett tomt mellanrum mellan varje trupp."
 
 msgid ""
 "'Grouped' combat formation bunches your army together in the center of your "
@@ -2993,7 +2991,7 @@ msgid "FPS"
 msgstr "FPS"
 
 msgid "System Info"
-msgstr "Systeminformation"
+msgstr "Systeminfo."
 
 msgid "Change the resolution of the game."
 msgstr "Ändra spelets upplösning."
@@ -3013,17 +3011,16 @@ msgid "Show extra information such as FPS and current time."
 msgstr "Visa extra information som FPS och nuvarande tid."
 
 msgid "Hotkey: "
-msgstr ""
+msgstr "Snabbtangent: "
 
 msgid "Category: "
-msgstr ""
+msgstr "Kategori: "
 
-#, fuzzy
 msgid "Event: "
-msgstr "Händelse"
+msgstr "Händelse: "
 
 msgid "Hot Keys:"
-msgstr "Tangentbordsgenvägar"
+msgstr "Snabbtangenter:"
 
 msgid "Evil"
 msgstr "Ond"
@@ -3032,9 +3029,7 @@ msgid "Good"
 msgstr "God"
 
 msgid "Interface Type"
-msgstr ""
-"Gränssnitts-\n"
-"format"
+msgstr "Gränssnittsstil"
 
 msgid "Hide"
 msgstr "Dölj"
@@ -3066,7 +3061,7 @@ msgid "Toggle the type of interface you want to use."
 msgstr "Välj vilket gränssnitt du vill använda."
 
 msgid "Toggle interface visibility."
-msgstr "Aktivera gränssnittsynlighet"
+msgstr "Aktivera gränssnittsynlighet."
 
 msgid "Toggle colored cursor on or off. This is only an esthetic choice."
 msgstr "Välj färglagd eller svartvit muspekare."
@@ -3175,7 +3170,7 @@ msgid "(not visited)"
 msgstr "(inte besökt)"
 
 msgid "%{color} Barrier"
-msgstr "%{color} Barriär."
+msgstr "%{color} Barriär"
 
 msgid "(tent visited)"
 msgstr "(tält besökt)"
@@ -3315,9 +3310,8 @@ msgstr "Acceptera alla ändringar."
 msgid "%{color} %{race} hero"
 msgstr "%{color} %{race}hjälte"
 
-#, fuzzy
 msgid "Terrain object"
-msgstr "Terrängläge"
+msgstr "Terrängföremål"
 
 msgid "Select Skill:"
 msgstr "Välj Förmåga:"
@@ -3337,15 +3331,20 @@ msgstr "Välj Hjälte:"
 msgid "Select Treasure:"
 msgstr "Välj Skatt:"
 
-#, fuzzy
 msgid "Select Ocean Object:"
-msgstr "Havsföremål"
+msgstr "Välj Havsföremål:"
 
 msgid "Map Type:\n"
 msgstr "Karttyp:\n"
 
 msgid "The Succession Wars"
 msgstr "Successionskrigen"
+
+#, fuzzy
+msgid "Resurrection"
+msgstr ""
+"Åter-\n"
+"upplivning"
 
 msgid "Lose all your heroes and towns."
 msgstr "Förlora alla dina hjältar och städer."
@@ -3357,7 +3356,7 @@ msgid "Lose a specific hero."
 msgstr "Förlora en viss hjälte."
 
 msgid "Run out of time. Fail to win by a certain point."
-msgstr "Få slut på tid. Misslyckas för att vinna vid en viss punkt."
+msgstr "Få slut på tid. Vinn innan en viss tidpunkt."
 
 msgid "Loss Condition"
 msgstr "Förlustvillkor"
@@ -3607,6 +3606,10 @@ msgstr "Personlighet:"
 msgid "Best Monster:"
 msgstr "Bästa Monster:"
 
+#, fuzzy
+msgid "Map filename"
+msgstr "Kartstorlek"
+
 msgid ""
 "Are you sure you want to load a new map? (Any unsaved changes to the current "
 "map will be lost.)"
@@ -3648,9 +3651,8 @@ msgstr "Lämna kartredigeraren."
 msgid "Monster"
 msgstr "Monster"
 
-#, fuzzy
 msgid "Objects cannot be placed outside the map."
-msgstr "Hjältar kan inte placeras på vatten."
+msgstr "Föremål kan inte placeras utanför kartan."
 
 msgid "Monsters cannot be placed on water."
 msgstr "Varelser kan inte placeras på vatten."
@@ -3676,13 +3678,11 @@ msgstr "Artefakter"
 msgid "Artifacts cannot be placed on water."
 msgstr "Artefakter kan inte placeras på vatten."
 
-#, fuzzy
 msgid "Ocean object"
 msgstr "Havsföremål"
 
-#, fuzzy
 msgid "Ocean object must be placed on water."
-msgstr "Hjältar kan inte placeras på vatten."
+msgstr "Havsföremål måste placeras på vatten."
 
 msgid "Ocean Objects"
 msgstr "Havsföremål"
@@ -3747,7 +3747,7 @@ msgid "Small Brush"
 msgstr "Liten Pensel"
 
 msgid "Medium Brush"
-msgstr "Medelstora Pensel"
+msgstr "Medelstor Pensel"
 
 msgid "Large Brush"
 msgstr "Stor Pensel"
@@ -3897,7 +3897,7 @@ msgid "Create a map that is %{size} squares wide and %{size} squares high."
 msgstr "Skapa en karta som är %{size} rutor bred och %{size} rutor hög."
 
 msgid "Cancel back to the New Map menu."
-msgstr "Avbryt och gå tillbaka till Ny Kartamenyn."
+msgstr "Avbryt och gå tillbaka till Ny Karta-menyn."
 
 msgid "Cancel back to the main menu."
 msgstr "Avbryt och gå tillbaka till huvudmenyn."
@@ -4000,7 +4000,7 @@ msgstr ""
 "%{rating}"
 
 msgid "Start the selected scenario."
-msgstr "Börja valt scenerio"
+msgstr "Påbörja valt scenario."
 
 msgid "View Intro"
 msgstr "Visa Intro"
@@ -4555,29 +4555,26 @@ msgid ""
 msgstr ""
 "Vill du ge datorn kontrollen? Denna effekt gäller bara för nästa runda."
 
-#, fuzzy
 msgid "Default Actions"
-msgstr "Standardåtgärd"
+msgstr "Standardåtgärder"
 
 msgid "Global Actions"
-msgstr ""
+msgstr "Globala Åtgärder"
 
 msgid "Main Menu"
-msgstr ""
+msgstr "Huvudmeny"
 
 msgid "World Map"
 msgstr "Världskarta"
 
-#, fuzzy
 msgid "Battle Screen"
-msgstr "Hjältevy"
+msgstr "Stridsvy"
 
-#, fuzzy
 msgid "Town Screen"
-msgstr "Hjältevy"
+msgstr "Stadsvy"
 
 msgid "Army Actions"
-msgstr ""
+msgstr "Arméåtgärder"
 
 msgid "Editor"
 msgstr "Redigerare"
@@ -4597,9 +4594,10 @@ msgstr "Senast stödda version: "
 msgid "This file contains a save with an invalid game type."
 msgstr "Denna fil innehåller en sparning med en ogiltig speltyp."
 
+#, fuzzy
 msgid ""
-"This file was saved for a \"The Price of Loyalty\" map, but the "
-"corresponding game assets have not been provided to the engine."
+"This save file requires \"The Price of Loyalty\" game assets, but they have "
+"not been provided to the engine."
 msgstr ""
 "Denna fil är sparad för en The Price of Loyalty-karta men motsvarande "
 "speltillgångar finns inte."
@@ -4749,7 +4747,7 @@ msgid ""
 "The host sets up the game options. There can only be one host per network "
 "game."
 msgstr ""
-"Värdarna anger spelinställningarna. Det kan endast finnas en värd per "
+"Värden anger spelinställningarna. Det kan endast finnas en värd per "
 "nätverksspel."
 
 msgid "Guest"
@@ -4759,7 +4757,7 @@ msgid ""
 "The guest waits for the host to set up the game, then is automatically added "
 "in. There can be multiple guests for TCP/IP games."
 msgstr ""
-"Gästen väntar på att värdarna ska sätta igång spelet, sen läggs till "
+"Gästen väntar på att värden ska sätta igång spelet, sen läggs till "
 "automatiskt. Det kan finnas flera gäster för TCP/IP-spel."
 
 msgid "Battle Only"
@@ -5042,7 +5040,7 @@ msgid " All populations are halved."
 msgstr " All populationer är halverade."
 
 msgid " All dwellings increase population."
-msgstr " Alla bostäder höjer folkmängden."
+msgstr " Alla bostäder ökar sin population."
 
 msgid "New Month!"
 msgstr "Ny Månad!"
@@ -5360,7 +5358,7 @@ msgid "Kingdom Income"
 msgstr "Inkomst"
 
 msgid "Kingdom Income per day."
-msgstr "Rikets Dagsinkomst"
+msgstr "Rikets Dagsinkomst."
 
 msgid "For every lighthouse controlled, your ships will move further each day."
 msgstr ""
@@ -5601,8 +5599,8 @@ msgstr ""
 
 msgid "To cast spells, you must first buy a spell book for %{gold} gold."
 msgstr ""
-"För att kasta besvärjelser måste du först och främst köpa en magibok för "
-"%{gold} guld."
+"För att kasta besvärjelser måste Hjälten först och främst köpa en magibok "
+"för %{gold} guld."
 
 msgid "Unfortunately, you seem to be a little short of cash at the moment."
 msgstr "Tyvärr verkar du för tillfället vara på grön kvist."
@@ -6072,7 +6070,7 @@ msgid ""
 "It doesn't help to pray twice before a battle. Come back after you've fought."
 msgstr ""
 "Det hjälper inte att be två gånger före en strid. Kom tillbaka när du har "
-"slagits."
+"stridit."
 
 msgid "A visit and a prayer at the temple raises the morale of your troops."
 msgstr "Ett besök och en bön i templet höjer dina truppers moral."
@@ -6159,7 +6157,7 @@ msgid ""
 "You've encountered a strange person with a hat and an owl on it. He tells "
 "you that he is willing to give %{art} if you have %{skill}."
 msgstr ""
-"Du stöter på en märklig hatklädd figur med en uggla på hatten. Han berättar "
+"Du stöter på en märklig hattklädd figur med en uggla på hatten. Han berättar "
 "att han kan ge dig %{art} om du besitter förmågan %{skill}."
 
 msgid ""
@@ -7202,7 +7200,7 @@ msgid "I fear these creatures are in the mood for a fight."
 msgstr "Jag är rädd för att dessa varelser är sugna på strid."
 
 msgid "Your attack skill is a bonus added to each creature's attack skill."
-msgstr "Hjältens Anfall ger bonus som läggs till på varje varelses Anfall."
+msgstr "Hjältens Anfall ger en bonus som läggs till på varje varelses Anfall."
 
 msgid "Your defense skill is a bonus added to each creature's defense skill."
 msgstr "Hjältens Försvar ger en bonus till varje varelses Försvar."
@@ -7900,7 +7898,7 @@ msgid "maps|Extra Large"
 msgstr "Extrastor"
 
 msgid "maps|Custom Size"
-msgstr "Anpassad storlek"
+msgstr "Anpassad Storlek"
 
 msgid "Ore Mine"
 msgstr "Malmgruva"
@@ -7966,10 +7964,10 @@ msgid "Gazebo"
 msgstr "Lusthus"
 
 msgid "Genie Lamp"
-msgstr "Andens lampa"
+msgstr "Andens Lampa"
 
 msgid "Archer's House"
-msgstr "Bågskyttens hus"
+msgstr "Bågskyttens Hus"
 
 msgid "Goblin Hut"
 msgstr "Vätthydda"
@@ -7984,7 +7982,7 @@ msgid "Stables"
 msgstr "Stall"
 
 msgid "Alchemist's Tower"
-msgstr "Alkemistens torn"
+msgstr "Alkemistens Torn"
 
 msgid "Event"
 msgstr "Händelse"
@@ -8149,7 +8147,7 @@ msgid "Shrine of the Third Circle"
 msgstr "Tredje kretsens Helgedom"
 
 msgid "City of the Dead"
-msgstr "Dödens stad"
+msgstr "Dödens Stad"
 
 msgid "Sphinx"
 msgstr "Sfinx"
@@ -8161,7 +8159,7 @@ msgid "Tar Pit"
 msgstr "Tjärhåla"
 
 msgid "Artesian Spring"
-msgstr "Artesisk källa"
+msgstr "Artesisk Källa"
 
 msgid "Troll Bridge"
 msgstr "Trollbro"
@@ -8179,13 +8177,13 @@ msgid "Lean-To"
 msgstr "Vindskydd"
 
 msgid "Magellan's Maps"
-msgstr "Magellans kartor"
+msgstr "Magellans Kartor"
 
 msgid "Flotsam"
 msgstr "Vrakgods"
 
 msgid "Derelict Ship"
-msgstr "Övergivet skepp"
+msgstr "Övergivet Skepp"
 
 msgid "Shipwreck Survivor"
 msgstr "Skeppsbruten Överlevare"
@@ -8850,7 +8848,7 @@ msgid "Cannot move the Spellbook"
 msgstr "Kan inte flytta Magibok"
 
 msgid "This item can't be traded."
-msgstr "Detta objekt kan inte bytas."
+msgstr "Detta föremål kan inte bytas."
 
 msgid "Invalid Artifact"
 msgstr "Ogiltig Artefakt"
@@ -8880,8 +8878,7 @@ msgid "Ultimate Wand of Magic"
 msgstr "Främsta Trollstaven"
 
 msgid "The %{name} increases your attack and defense skills by %{count} each."
-msgstr ""
-"%{name} höjer hjältens Anfall- och Försvarförmåga med %{count} vardera."
+msgstr "%{name} höjer hjältens Anfall- och Försvar med %{count} vardera."
 
 msgid "Ultimate Shield"
 msgstr "Främsta Skölden"
@@ -9986,7 +9983,7 @@ msgstr ""
 "så känner du dess magiska krafter i handen."
 
 msgid "Arm of the Martyr"
-msgstr "Martyrens arm"
+msgstr "Martyrens Arm"
 
 msgid ""
 "The %{name} increases your spell power by %{count} but adds the undead "
@@ -10356,7 +10353,7 @@ msgstr "Teleportera"
 
 msgid ""
 "Teleports the creature you select to any open position on the battlefield."
-msgstr "Teleporterar vald varelse till valfri position på slagfältet."
+msgstr "Teleporterar vald varelse till valfri fri position på slagfältet."
 
 msgid "Cure"
 msgstr "Hela"
@@ -10433,10 +10430,10 @@ msgid "Bless"
 msgstr "Välsignelse"
 
 msgid "Causes the selected creatures to inflict maximum damage."
-msgstr "Får en varelse att tilldela maximal skada."
+msgstr "Får en varelse att utdela maximal skada."
 
 msgid "Causes all of your units to inflict maximum damage."
-msgstr "Får alla dina varelser att tilldela maximal skada."
+msgstr "Får alla dina varelser att utdela maximal skada."
 
 msgid "Mass Bless"
 msgstr ""
@@ -10444,7 +10441,7 @@ msgstr ""
 "-välsignelse"
 
 msgid "Magically increases the defense skill of the selected creatures."
-msgstr "Ökar vald varelses Försvarsförmåga genom förtrollning."
+msgstr "Ökar vald varelses Försvar genom förtrollning."
 
 msgid "Stoneskin"
 msgstr "Stenhud"
@@ -10453,20 +10450,19 @@ msgid ""
 "Increases the defense skill of the targeted creatures. This is an improved "
 "version of Stoneskin."
 msgstr ""
-"Ökar Försvarförmågan för vald varelse. Detta är en förbättrad variant av "
-"Stenhud."
+"Ökar Försvaret för vald varelse. Detta är en förbättrad variant av Stenhud."
 
 msgid "Steelskin"
 msgstr "Stålhud"
 
 msgid "Causes the selected creatures to inflict minimum damage."
-msgstr "Får en varelse att tilldela minimal skada."
+msgstr "Får en varelse att utdela minimal skada."
 
 msgid "Curse"
 msgstr "Förbannelse"
 
 msgid "Causes all enemy troops to inflict minimum damage."
-msgstr "Får alla fiendetrupper att tilldela minimal skada."
+msgstr "Får alla fiendetrupper att utdela minimal skada."
 
 msgid "Mass Curse"
 msgstr ""
@@ -10583,7 +10579,7 @@ msgid "Disrupting Ray"
 msgstr "Störstråle"
 
 msgid "Reduces the defense rating of an enemy unit by three."
-msgstr "Sänker varelsens försvarsförmåga med tre enheter."
+msgstr "Sänker varelsens Försvar med tre enheter."
 
 msgid "Damages all living (non-undead) units in the battle."
 msgstr "Skadar alla levande (icke-odöda) varelser på slagfältet."
@@ -10605,13 +10601,13 @@ msgid "Dragon Slayer"
 msgstr "Drakdräpare"
 
 msgid "Greatly increases a unit's attack skill vs. Dragons."
-msgstr "Höjer kraftigt en varelses Anfallsförmåga mot Drakar."
+msgstr "Höjer kraftigt en varelses Anfall mot Drakar."
 
 msgid "Blood Lust"
 msgstr "Blodtörst"
 
 msgid "Increases a unit's attack skill."
-msgstr "Höjer en varelses Anfallsförmåga."
+msgstr "Höjer en varelses Anfall."
 
 msgid "Animate Dead"
 msgstr "Animera Död"

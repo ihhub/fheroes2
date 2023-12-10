@@ -48,6 +48,7 @@
 #include "localevent.h"
 #include "map_object_info.h"
 #include "maps.h"
+#include "maps_fileinfo.h"
 #include "math_base.h"
 #include "mp2.h"
 #include "race.h"
@@ -753,7 +754,8 @@ Artifact Dialog::selectArtifact( const int artifactId )
     std::vector<int> artifacts;
     artifacts.reserve( Artifact::ARTIFACT_COUNT - 1 );
 
-    const bool isPriceofLoyaltyArtifactAllowed = Settings::Get().isCurrentMapPriceOfLoyalty();
+    const GameVersion version = Settings::Get().getCurrentMapInfo().version;
+    const bool isPriceofLoyaltyArtifactAllowed = ( version == GameVersion::PRICE_OF_LOYALTY || version == GameVersion::RESURRECTION );
 
     // We show the magic book at the first place.
     artifacts.emplace_back( Artifact::MAGIC_BOOK );
@@ -798,7 +800,10 @@ Monster Dialog::selectMonster( const int monsterId )
 
 int Dialog::selectHeroes( const int heroId /* = Heroes::UNKNOWN */ )
 {
-    std::vector<int> heroes( static_cast<int>( Settings::Get().isCurrentMapPriceOfLoyalty() ? Heroes::JARKONAS : Heroes::BRAX ), Heroes::UNKNOWN );
+    const GameVersion version = Settings::Get().getCurrentMapInfo().version;
+    const bool isPoLHeroesAllowed = ( version == GameVersion::PRICE_OF_LOYALTY || version == GameVersion::RESURRECTION );
+
+    std::vector<int> heroes( static_cast<int>( isPoLHeroesAllowed ? Heroes::JARKONAS : Heroes::BRAX ), Heroes::UNKNOWN );
 
     std::iota( heroes.begin(), heroes.end(), Heroes::UNKNOWN + 1 );
 
@@ -816,7 +821,7 @@ int Dialog::selectHeroes( const int heroId /* = Heroes::UNKNOWN */ )
 
 int Dialog::selectHeroType( const int heroType )
 {
-    const auto & objectInfo = Maps::getObjectsByGroup( Maps::ObjectGroup::Kingdom_Heroes );
+    const auto & objectInfo = Maps::getObjectsByGroup( Maps::ObjectGroup::KINGDOM_HEROES );
     HeroTypeSelection listbox( objectInfo, { 350, fheroes2::Display::instance().height() - 200 }, _( "Select Hero:" ) );
 
     return selectObjectType( heroType, objectInfo.size(), listbox );
@@ -824,7 +829,7 @@ int Dialog::selectHeroType( const int heroType )
 
 int Dialog::selectMonsterType( const int monsterType )
 {
-    const auto & objectInfo = Maps::getObjectsByGroup( Maps::ObjectGroup::Monsters );
+    const auto & objectInfo = Maps::getObjectsByGroup( Maps::ObjectGroup::MONSTERS );
 
     MonsterTypeSelection listbox( objectInfo, { 350, fheroes2::Display::instance().height() - 200 }, _( "Select Monster:" ) );
 
@@ -833,7 +838,7 @@ int Dialog::selectMonsterType( const int monsterType )
 
 int Dialog::selectArtifactType( const int artifactType )
 {
-    const auto & objectInfo = Maps::getObjectsByGroup( Maps::ObjectGroup::Adventure_Artifacts );
+    const auto & objectInfo = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_ARTIFACTS );
 
     ArtifactTypeSelection listbox( objectInfo, { 350, fheroes2::Display::instance().height() - 200 }, _( "Select Artifact:" ) );
 
@@ -842,7 +847,7 @@ int Dialog::selectArtifactType( const int artifactType )
 
 int Dialog::selectTreasureType( const int resourceType )
 {
-    const auto & objectInfo = Maps::getObjectsByGroup( Maps::ObjectGroup::Adventure_Treasures );
+    const auto & objectInfo = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_TREASURES );
 
     TreasureTypeSelection listbox( objectInfo, { 350, fheroes2::Display::instance().height() - 200 }, _( "Select Treasure:" ) );
 
@@ -851,7 +856,7 @@ int Dialog::selectTreasureType( const int resourceType )
 
 int Dialog::selectOceanObjectType( const int resourceType )
 {
-    const auto & objectInfo = Maps::getObjectsByGroup( Maps::ObjectGroup::Adventure_Water );
+    const auto & objectInfo = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_WATER );
 
     OceanObjectTypeSelection listbox( objectInfo, { 350, fheroes2::Display::instance().height() - 200 }, _( "Select Ocean Object:" ) );
 
