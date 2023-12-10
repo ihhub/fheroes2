@@ -3502,7 +3502,7 @@ msgid "Best Monster:"
 msgstr "Legerősebb lény:"
 
 msgid "Map filename"
-msgstr "Térkép neve"
+msgstr "Térképfájl neve"
 
 msgid ""
 "Are you sure you want to load a new map? (Any unsaved changes to the current "
@@ -7082,73 +7082,58 @@ msgstr ""
 msgid "%{skill} eliminates the movement penalty for rough terrain."
 msgstr "A(z) %{skill} kiiktatja a nehéz terepen történő haladásból fakadó hátrányt."
 
-#, fuzzy
 msgid ""
 "%{skill} increases the damage done by range attacking creatures by %{count} "
 "percent."
 msgstr ""
-"Alap Íjászat növeli a távolsági támadások sebzését %{count} százalékkal."
+"A(z) %{skill} növeli a távolsági támadások sebzését %{count} százalékkal."
 
-#, fuzzy
 msgid "%{skill} increases your hero's movement points by %{count} percent."
 msgstr ""
-"Alap Logisztika növeli a hősöd mozgási sebességét %{count} százalékkal."
+"A(z) %{skill} növeli a hősöd mozgáspontjait %{count} százalékkal."
 
-#, fuzzy
 msgid "%{skill} increases your hero's viewable area by one square."
 msgid_plural ""
 "%{skill} increases your hero's viewable area by %{count} squares."
-msgstr[0] "Alap Felderítés növeli a hős láthatárát %{count} egységgel."
-msgstr[1] "Alap Felderítés növeli a hős láthatárát %{count} egységgel."
+msgstr[0] "A(z) %{skill} növeli a hős láthatárát egy egységgel."
+msgstr[1] "A(z) %{skill} növeli a hős láthatárát %{count} egységgel."
 
-#, fuzzy
 msgid ""
 "%{skill} allows you to negotiate with monsters who are weaker than your "
 "group. "
 msgstr ""
-"A Fejlett Diplomácia lehetővé teszi a seregednél gyengébb lényekkel való "
-"tárgyalást. Mindannyian csatlakozhatnak hozzád."
+"A(z) %{skill} lehetővé teszi a seregednél gyengébb lényekkel való "
+"tárgyalást."
 
-#, fuzzy
 msgid "Approximately %{count} percent of the creatures may offer to join you."
-msgstr ""
-"Alap Diplomácia lehetővé teszi, hogy a csapatodnál gyengébb szörnyekkel "
-"tárgyalj. Kb. a lények %{count} százaléka csatlakozhat hozzád."
+msgstr "A lények kb. %{count} százaléka csatlakozhat hozzád."
 
-#, fuzzy
 msgid "All of the creatures may offer to join you."
-msgstr ""
-"Alap Diplomácia lehetővé teszi, hogy a csapatodnál gyengébb szörnyekkel "
-"tárgyalj. Kb. a lények %{count} százaléka csatlakozhat hozzád."
+msgstr "Az összes lény csatlakozhat hozzád."
 
-#, fuzzy
 msgid ""
 "%{skill} increases your hero's movement points over water by %{count} "
 "percent."
 msgstr ""
-"Alap Navigáció növeli a hős vízen történő mozgáspontjait %{count} "
+"A(z) %{skill} növeli a hős vízen történő mozgáspontjait %{count} "
 "százalékkal."
 
-#, fuzzy
 msgid "%{skill} increases your hero's troops morale by %{count}."
-msgstr "Alap Vezetés növeli a csapatod tagjainak morálját %{count}-gyel."
+msgstr "A(z) %{skill} ennyivel növeli a csapatod tagjainak morálját: %{count}."
 
-#, fuzzy
 msgid "%{skill} allows your hero to learn third level spells."
 msgstr ""
-"Az Alap Bölcsesség képessé teszi a hősödet 3. szintű varázslatok "
-"használatára."
+"A(z) %{skill} képessé teszi a hősödet 3. szintű varázslatok "
+"megtanulására."
 
-#, fuzzy
 msgid "%{skill} allows your hero to learn fourth level spells."
 msgstr ""
-"A Haladó Bölcsesség képessé teszi a hősödet 4. szintű varázslatok "
+"A(z) %{skill} képessé teszi a hősödet 4. szintű varázslatok "
 "használatára."
 
-#, fuzzy
 msgid "%{skill} allows your hero to learn fifth level spells."
 msgstr ""
-"A Fejlett Bölcsesség képessé teszi a hősödet 5. szintű varázslatok "
+"A(z) %{skill} képessé teszi a hősödet 5. szintű varázslatok "
 "használatára."
 
 #, fuzzy
