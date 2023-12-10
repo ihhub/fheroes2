@@ -34,6 +34,7 @@
 #include "heroes.h"
 #include "icn.h"
 #include "localevent.h"
+#include "screen.h"
 #include "tools.h"
 #include "translations.h"
 #include "ui_dialog.h"

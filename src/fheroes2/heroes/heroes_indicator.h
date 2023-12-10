@@ -30,7 +30,6 @@
 #include "luck.h"
 #include "math_base.h"
 #include "morale.h"
-#include "screen.h"
 
 namespace fheroes2
 {
