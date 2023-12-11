@@ -1057,8 +1057,8 @@ namespace
             }
 #endif
             uint32_t flags = SDL_WINDOW_SHOWN;
-            
-            // SDL number starts from 1 so we add 1 to our variable
+
+            // SDL_GetNumVideoDisplays starts from 1 so we add 1 to our variable
             if ( getDisplayId() + 1 > SDL_GetNumVideoDisplays() ) {
                 setDisplayId( 0 );
                 Settings::Get().Save( Settings::configFileName );
