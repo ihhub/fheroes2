@@ -46,7 +46,6 @@
 #include "image_palette.h"
 #include "logging.h"
 #include "screen.h"
-#include "settings.h"
 #include "tools.h"
 
 namespace
@@ -1061,7 +1060,6 @@ namespace
             // SDL_GetNumVideoDisplays starts from 1 so we add 1 to our variable
             if ( getDisplayId() + 1 > SDL_GetNumVideoDisplays() ) {
                 setDisplayId( 0 );
-                Settings::Get().Save( Settings::configFileName );
             }
 
             if ( isFullScreen ) {
