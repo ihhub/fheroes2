@@ -462,7 +462,7 @@ namespace
 
         // The attacker was defeated
         if ( !res.AttackerWins() ) {
-            AIBattleLose( hero, res, true, &( otherHero->GetCenter() ), playVanishingHeroSound );
+            AIBattleLose( hero, res, true, ( otherHero->isActive() ? &( otherHero->GetCenter() ) : nullptr ), playVanishingHeroSound );
         }
 
         // The attacker won
