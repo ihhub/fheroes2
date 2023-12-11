@@ -30,13 +30,12 @@
 #include <type_traits>
 #include <utility>
 
-#include <difficulty.h>
-#include <game.h>
-
 #include "army.h"
 #include "artifact.h"
 #include "castle.h"
+#include "difficulty.h"
 #include "direction.h"
+#include "game.h"
 #include "game_over.h"
 #include "ground.h"
 #include "heroes.h"

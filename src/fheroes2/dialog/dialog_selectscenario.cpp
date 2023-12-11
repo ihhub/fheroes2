@@ -111,6 +111,9 @@ namespace
         case GameVersion::PRICE_OF_LOYALTY:
             body.add( { _( "The Price of Loyalty" ), fheroes2::FontType::normalWhite() } );
             break;
+        case GameVersion::RESURRECTION:
+            body.add( { _( "Resurrection" ), fheroes2::FontType::normalWhite() } );
+            break;
         default:
             // Did you add a new map version? Add the logic above!
             assert( 0 );
@@ -184,8 +187,8 @@ namespace
     {
         const Settings & conf = Settings::Get();
 
-        const std::string & mapName = conf.CurrentFileInfo().name;
-        const std::string & mapFileName = System::GetBasename( conf.CurrentFileInfo().file );
+        const std::string & mapName = conf.getCurrentMapInfo().name;
+        const std::string & mapFileName = System::GetBasename( conf.getCurrentMapInfo().file );
         size_t mapId = 0;
         for ( MapsFileInfoList::const_iterator mapIter = lists.begin(); mapIter != lists.end(); ++mapIter, ++mapId ) {
             if ( ( mapIter->name == mapName ) && ( System::GetBasename( mapIter->file ) == mapFileName ) ) {
@@ -342,7 +345,20 @@ const fheroes2::Sprite & ScenarioListBox::_getPlayersCountIcon( const uint8_t co
 
 const fheroes2::Sprite & ScenarioListBox::_getMapTypeIcon( const GameVersion version )
 {
-    return fheroes2::AGG::GetICN( ICN::MAP_TYPE_ICON, version == GameVersion::PRICE_OF_LOYALTY ? 1 : 0 );
+    switch ( version ) {
+    case GameVersion::SUCCESSION_WARS:
+        return fheroes2::AGG::GetICN( ICN::MAP_TYPE_ICON, 0 );
+    case GameVersion::PRICE_OF_LOYALTY:
+        return fheroes2::AGG::GetICN( ICN::MAP_TYPE_ICON, 1 );
+    case GameVersion::RESURRECTION:
+        return fheroes2::AGG::GetICN( ICN::MAP_TYPE_ICON, 2 );
+    default:
+        // Did you add a new game version? Add the corresponding logic above!
+        assert( 0 );
+        break;
+    }
+
+    return fheroes2::AGG::GetICN( ICN::UNKNOWN, 0 );
 }
 
 const fheroes2::Sprite & ScenarioListBox::_getWinConditionsIcon( const uint8_t condition )
@@ -640,6 +656,7 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & allMaps 
         else if ( le.MousePressRight( sizeMaps ) || le.MousePressRight( curMapSize ) )
             ShowToolTip( _( "Size Icon" ), _( "Indicates whether the map\nis small (36 x 36), medium\n(72 x 72), large (108 x 108),\nor extra large (144 x 144)." ) );
         else if ( le.MousePressRight( mapTypes ) || le.MousePressRight( curMapType ) )
+            // TODO: update this tooltip once the Editor is out for public.
             ShowToolTip( _( "Map Type" ), _( "Indicates whether the map is made for \"The Succession Wars\" or \"The Price of Loyalty\" version of the game." ) );
         else if ( le.MousePressRight( mapNames ) ) {
             const Maps::FileInfo * item = listbox.GetFromPosition( le.GetMouseCursor() );

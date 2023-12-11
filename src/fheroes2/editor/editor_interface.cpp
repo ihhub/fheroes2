@@ -49,6 +49,8 @@
 #include "interface_status.h"
 #include "localevent.h"
 #include "logging.h"
+#include "map_format_helper.h"
+#include "map_format_info.h"
 #include "map_object_info.h"
 #include "maps.h"
 #include "maps_tiles.h"
@@ -58,6 +60,7 @@
 #include "screen.h"
 #include "settings.h"
 #include "spell.h"
+#include "system.h"
 #include "translations.h"
 #include "ui_button.h"
 #include "ui_dialog.h"
@@ -285,7 +288,36 @@ namespace Interface
                     res = eventNewMap();
                 }
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_SAVE_GAME ) ) {
-                    fheroes2::showStandardTextMessage( _( "Warning!" ), "The Map Editor is still in development. Save function is not implemented yet.", Dialog::OK );
+                    const std::string dataPath = System::GetDataDirectory( "fheroes2" );
+                    if ( dataPath.empty() ) {
+                        fheroes2::showStandardTextMessage( _( "Warning!" ), "Unable to locate data directory to save the map.", Dialog::OK );
+                        continue;
+                    }
+
+                    const std::string mapDirectory = System::concatPath( dataPath, "maps" );
+
+                    if ( !System::IsDirectory( mapDirectory ) && !System::MakeDirectory( mapDirectory ) ) {
+                        fheroes2::showStandardTextMessage( _( "Warning!" ), "Unable to create a directory to save the map.", Dialog::OK );
+                        continue;
+                    }
+
+                    std::string fileName;
+                    if ( !Dialog::InputString( _( "Map filename" ), fileName, std::string(), 128 ) ) {
+                        continue;
+                    }
+
+                    Maps::Map_Format::MapFormat map;
+                    if ( !Maps::saveMapInEditor( map ) ) {
+                        fheroes2::showStandardTextMessage( _( "Warning!" ), "Cannot convert a map into the required map format.", Dialog::OK );
+                        continue;
+                    }
+
+                    map.name = fileName;
+                    map.description = "Put a real description here.";
+
+                    if ( !Maps::Map_Format::saveMap( System::concatPath( mapDirectory, fileName + ".fh2m" ), map ) ) {
+                        fheroes2::showStandardTextMessage( _( "Warning!" ), "Failed to save the map.", Dialog::OK );
+                    }
                 }
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_LOAD_GAME ) ) {
                     res = eventLoadMap();

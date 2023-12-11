@@ -1072,7 +1072,7 @@ namespace fheroes2
             break;
         case Race::NECR:
             priorities.emplace_back( BUILD_SPEC );
-            if ( version == GameVersion::PRICE_OF_LOYALTY ) {
+            if ( version == GameVersion::PRICE_OF_LOYALTY || version == GameVersion::RESURRECTION ) {
                 priorities.emplace_back( BUILD_SHRINE );
             }
             priorities.emplace_back( BUILD_TENT );
