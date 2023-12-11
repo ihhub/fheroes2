@@ -46,6 +46,7 @@
 #include "image_palette.h"
 #include "logging.h"
 #include "screen.h"
+#include "settings.h"
 #include "tools.h"
 
 namespace
@@ -1055,8 +1056,14 @@ namespace
                 ERROR_LOG( "Failed to set a hint for screen orientation." )
             }
 #endif
-
             uint32_t flags = SDL_WINDOW_SHOWN;
+            
+            // SDL number starts from 1 so we add 1 to our variable
+            if ( getDisplayId() + 1 > SDL_GetNumVideoDisplays() ) {
+                setDisplayId( 0 );
+                Settings::Get().Save( Settings::configFileName );
+            }
+
             if ( isFullScreen ) {
 #if defined( _WIN32 )
                 if ( fheroes2::cursor().isSoftwareEmulation() ) {
@@ -1073,10 +1080,9 @@ namespace
             flags |= SDL_WINDOW_RESIZABLE;
 
 #if defined( _WIN32 )
-            SDL_Rect displayRect;
-            SDL_GetDisplayBounds( getDisplayId(), &displayRect );
-            _window = SDL_CreateWindow( _previousWindowTitle.data(), displayRect.x + _prevWindowPos.x, displayRect.y + _prevWindowPos.y, resolutionInfo.screenWidth,
-                                        resolutionInfo.screenHeight, flags );
+
+            _window = SDL_CreateWindow( _previousWindowTitle.data(), SDL_WINDOWPOS_CENTERED_DISPLAY( getDisplayId() ), SDL_WINDOWPOS_CENTERED_DISPLAY( getDisplayId() ),
+                                        resolutionInfo.screenWidth, resolutionInfo.screenHeight, flags );
 #else
             _window = SDL_CreateWindow( _previousWindowTitle.data(), _prevWindowPos.x, _prevWindowPos.y, resolutionInfo.screenWidth, resolutionInfo.screenHeight, flags );
 #endif

@@ -149,12 +149,7 @@ namespace fheroes2
 
         void setDisplayId( const int display )
         {
-            if ( display > getNumberOfVideoDisplays() )
-                // add safeguard for when 2nd display disconnects
-                _displayId = 0;
-            else {
-                _displayId = display;
-            }
+            _displayId = display;
         }
 
     protected:
