@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-05 08:25+0000\n"
+"POT-Creation-Date: 2023-12-05 00:31+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -193,6 +193,9 @@ msgstr "ВИЖ ИНТРО"
 
 msgid "MIN"
 msgstr "МИН"
+
+msgid "RESET"
+msgstr ""
 
 msgid ""
 "D\n"
@@ -947,14 +950,9 @@ msgstr "Задайте умение за сила"
 msgid "Set Knowledge Skill"
 msgstr "Задайте умение за знание"
 
-msgid "%{race1} %{name1}"
-msgstr "%{race1} %{name1}"
-
-msgid "vs"
-msgstr "срещу"
-
-msgid "%{race2} %{name2}"
-msgstr "%{race2} %{name2}"
+#, fuzzy
+msgid "%{race1} %{name1} vs %{race2} %{name2}"
+msgstr "%{name1} среща %{name2}"
 
 msgid "Monsters"
 msgstr "Чудовища"
@@ -3036,6 +3034,16 @@ msgstr ""
 msgid "Show extra information such as FPS and current time."
 msgstr "Показване на допълнителна информация като FPS и текущо време."
 
+msgid "Hotkey: "
+msgstr ""
+
+msgid "Category: "
+msgstr ""
+
+#, fuzzy
+msgid "Event: "
+msgstr "Събитие"
+
 msgid "Hot Keys:"
 msgstr "Бързи клавиши:"
 
@@ -3324,6 +3332,10 @@ msgstr "Приемете направения избор."
 msgid "%{color} %{race} hero"
 msgstr "%{color} играч"
 
+#, fuzzy
+msgid "Terrain object"
+msgstr "Режим терен"
+
 msgid "Select Skill:"
 msgstr "Избери умение:"
 
@@ -3343,11 +3355,19 @@ msgstr "Избери герой:"
 msgid "Select Treasure:"
 msgstr "Избери герой:"
 
+#, fuzzy
+msgid "Select Ocean Object:"
+msgstr "Океански обекти"
+
 msgid "Map Type:\n"
 msgstr "Тип на карта:\n"
 
 msgid "The Succession Wars"
 msgstr "Войните за наследство"
+
+#, fuzzy
+msgid "Resurrection"
+msgstr "Възкресяване"
 
 msgid "Lose all your heroes and towns."
 msgstr "Ако загубиш всичките си герои и градове."
@@ -3609,6 +3629,10 @@ msgstr "Личност:"
 msgid "Best Monster:"
 msgstr "Най-добро чудовище:"
 
+#, fuzzy
+msgid "Map filename"
+msgstr "Размер на карта"
+
 msgid ""
 "Are you sure you want to load a new map? (Any unsaved changes to the current "
 "map will be lost.)"
@@ -3650,6 +3674,10 @@ msgstr "Излез от редактора на карти."
 msgid "Monster"
 msgstr "Чудовище"
 
+#, fuzzy
+msgid "Objects cannot be placed outside the map."
+msgstr "Това заклинание не може да се направи на кораб."
+
 msgid "Monsters cannot be placed on water."
 msgstr ""
 
@@ -3668,6 +3696,21 @@ msgstr "Герой"
 
 msgid "Heroes cannot be placed on water."
 msgstr ""
+
+msgid "Artifacts"
+msgstr "Артефакти"
+
+#, fuzzy
+msgid "Artifacts cannot be placed on water."
+msgstr "Това заклинание не може да се направи на кораб."
+
+#, fuzzy
+msgid "Ocean object"
+msgstr "Океански обекти"
+
+#, fuzzy
+msgid "Ocean object must be placed on water."
+msgstr "Това заклинание не може да се направи на кораб."
 
 msgid "Ocean Objects"
 msgstr "Океански обекти"
@@ -3698,9 +3741,6 @@ msgstr "Плажни обекти"
 
 msgid "Towns"
 msgstr "Градове"
-
-msgid "Artifacts"
-msgstr "Артефакти"
 
 msgid "Treasures"
 msgstr "Съкровища"
@@ -4558,6 +4598,33 @@ msgid ""
 "place only on the next turn."
 msgstr "Искаш ли да си върнеш контрола от ИИ? Ще има ефектът на следващия ход."
 
+#, fuzzy
+msgid "Default Actions"
+msgstr "действие по подразбиране"
+
+msgid "Global Actions"
+msgstr ""
+
+msgid "Main Menu"
+msgstr ""
+
+msgid "World Map"
+msgstr "Карта на света"
+
+#, fuzzy
+msgid "Battle Screen"
+msgstr "Екран на героя"
+
+#, fuzzy
+msgid "Town Screen"
+msgstr "Екран на героя"
+
+msgid "Army Actions"
+msgstr ""
+
+msgid "Editor"
+msgstr ""
+
 msgid "The save file is corrupted."
 msgstr "Запазеният файл е повреден."
 
@@ -4573,9 +4640,10 @@ msgstr "Последна поддържана версия: "
 msgid "This file contains a save with an invalid game type."
 msgstr "Този файл съдържа запис с невалиден тип игра."
 
+#, fuzzy
 msgid ""
-"This file was saved for a \"The Price of Loyalty\" map, but the "
-"corresponding game assets have not been provided to the engine."
+"This save file requires \"The Price of Loyalty\" game assets, but they have "
+"not been provided to the engine."
 msgstr ""
 "Този файл е запазен за \"Цената на лоялността\", но съответните активи на "
 "играта не са предоставени на двигателя."
@@ -4666,9 +4734,6 @@ msgid ""
 " menu. \n"
 "\n"
 "Enjoy the game!"
-msgstr ""
-
-msgid "Editor"
 msgstr ""
 
 #, fuzzy
@@ -5237,9 +5302,6 @@ msgid "A miniature view of the known world. Left click to move viewing area."
 msgstr ""
 "Миниатюрен изглед на познатия свят. Кликни с левия бутон, за да преместиш "
 "зоната за преглед."
-
-msgid "World Map"
-msgstr "Карта на света"
 
 msgid "Month: %{month} Week: %{week}"
 msgstr "Месец: %{month} Седмица: %{week}"
@@ -7142,17 +7204,17 @@ msgstr ""
 msgid "%{name1} meets %{name2}"
 msgstr "%{name1} среща %{name2}"
 
-msgid "Town Portal"
-msgstr "Градски портал"
-
-msgid "Select town to port to."
-msgstr "Избери град за пристанище."
-
 msgid "Enemy heroes are now fully identifiable."
 msgstr "Вражеските герои вече могат да бъдат идентифицирани напълно."
 
 msgid "Identify Hero"
 msgstr "Идентифицирай героя"
+
+msgid "Select town to port to."
+msgstr "Избери град за пристанище."
+
+msgid "Town Portal"
+msgstr "Градски портал"
 
 msgid "The creatures are willing to join us!"
 msgstr "Съществата са готови да се присъединят към нас!"
@@ -10285,6 +10347,9 @@ msgstr ""
 "това е омагьосаната лопата на Гробарите, дълго смятана за изгубена от "
 "смъртните."
 
+msgid "spellBonus|selected by user"
+msgstr ""
+
 msgid "Wood"
 msgstr "Дърво"
 
@@ -10798,6 +10863,44 @@ msgstr "Задай Воден пазител"
 msgid "Sets Water Elementals to guard a mine against enemy armies."
 msgstr "Кара Водни елементали да пазят мина срещу вражески армии"
 
+#, fuzzy
+msgid "Random Spell"
+msgstr "Случаен"
+
+msgid "Randomly selected spell of any level."
+msgstr ""
+
+#, fuzzy
+msgid "Random 1st Level Spell"
+msgstr "Случаен замък"
+
+msgid "Randomly selected 1st level spell."
+msgstr ""
+
+msgid "Random 2nd Level Spell"
+msgstr ""
+
+msgid "Randomly selected 2nd level spell."
+msgstr ""
+
+msgid "Random 3rd Level Spell"
+msgstr ""
+
+msgid "Randomly selected 3rd level spell."
+msgstr ""
+
+msgid "Random 4th Level Spell"
+msgstr ""
+
+msgid "Randomly selected 4th level spell."
+msgstr ""
+
+msgid "Random 5th Level Spell"
+msgstr ""
+
+msgid "Randomly selected 5th level spell."
+msgstr ""
+
 msgid "Petrification"
 msgstr "Вкаменяване"
 
@@ -10928,3 +11031,12 @@ msgstr ""
 "Проверете най-новата версия на играта на\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "%{race1} %{name1}"
+#~ msgstr "%{race1} %{name1}"
+
+#~ msgid "vs"
+#~ msgstr "срещу"
+
+#~ msgid "%{race2} %{name2}"
+#~ msgstr "%{race2} %{name2}"

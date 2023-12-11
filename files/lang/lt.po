@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-05 08:25+0000\n"
+"POT-Creation-Date: 2023-12-05 00:31+0000\n"
 "PO-Revision-Date: 2022-09-23 16:14+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Lithuanian <lt@li.org>\n"
@@ -174,6 +174,9 @@ msgid "VIEW INTRO"
 msgstr ""
 
 msgid "MIN"
+msgstr ""
+
+msgid "RESET"
 msgstr ""
 
 msgid ""
@@ -883,14 +886,7 @@ msgid "Set Knowledge Skill"
 msgstr "Išmanymas"
 
 #, fuzzy
-msgid "%{race1} %{name1}"
-msgstr "Žiūrėti %{name}"
-
-msgid "vs"
-msgstr ""
-
-#, fuzzy
-msgid "%{race2} %{name2}"
+msgid "%{race1} %{name1} vs %{race2} %{name2}"
 msgstr "Žiūrėti %{name}"
 
 #, fuzzy
@@ -2855,6 +2851,15 @@ msgstr ""
 msgid "Show extra information such as FPS and current time."
 msgstr ""
 
+msgid "Hotkey: "
+msgstr ""
+
+msgid "Category: "
+msgstr ""
+
+msgid "Event: "
+msgstr ""
+
 msgid "Hot Keys:"
 msgstr ""
 
@@ -3135,6 +3140,9 @@ msgstr ""
 msgid "%{color} %{race} hero"
 msgstr ""
 
+msgid "Terrain object"
+msgstr ""
+
 #, fuzzy
 msgid "Select Skill:"
 msgstr "Gynybos įgūdis"
@@ -3159,10 +3167,17 @@ msgid "Select Treasure:"
 msgstr "Pasirinkti %{name}"
 
 #, fuzzy
+msgid "Select Ocean Object:"
+msgstr "Magiškas artefaktas"
+
+#, fuzzy
 msgid "Map Type:\n"
 msgstr "Pasaulio dydis"
 
 msgid "The Succession Wars"
+msgstr ""
+
+msgid "Resurrection"
 msgstr ""
 
 msgid "Lose all your heroes and towns."
@@ -3417,6 +3432,12 @@ msgid "Best Monster:"
 msgstr ""
 
 #, fuzzy
+msgid "Map filename"
+msgstr ""
+"Pasaulio\n"
+"dydis"
+
+#, fuzzy
 msgid ""
 "Are you sure you want to load a new map? (Any unsaved changes to the current "
 "map will be lost.)"
@@ -3459,6 +3480,9 @@ msgstr ""
 msgid "Monster"
 msgstr ""
 
+msgid "Objects cannot be placed outside the map."
+msgstr ""
+
 msgid "Monsters cannot be placed on water."
 msgstr ""
 
@@ -3475,6 +3499,18 @@ msgid "Heroes"
 msgstr ""
 
 msgid "Heroes cannot be placed on water."
+msgstr ""
+
+msgid "Artifacts"
+msgstr ""
+
+msgid "Artifacts cannot be placed on water."
+msgstr ""
+
+msgid "Ocean object"
+msgstr ""
+
+msgid "Ocean object must be placed on water."
 msgstr ""
 
 msgid "Ocean Objects"
@@ -3507,9 +3543,6 @@ msgstr ""
 #, fuzzy
 msgid "Towns"
 msgstr "Miestelis"
-
-msgid "Artifacts"
-msgstr ""
 
 msgid "Treasures"
 msgstr ""
@@ -4348,6 +4381,30 @@ msgid ""
 "place only on the next turn."
 msgstr ""
 
+msgid "Default Actions"
+msgstr ""
+
+msgid "Global Actions"
+msgstr ""
+
+msgid "Main Menu"
+msgstr ""
+
+msgid "World Map"
+msgstr ""
+
+msgid "Battle Screen"
+msgstr ""
+
+msgid "Town Screen"
+msgstr ""
+
+msgid "Army Actions"
+msgstr ""
+
+msgid "Editor"
+msgstr ""
+
 msgid "The save file is corrupted."
 msgstr ""
 
@@ -4364,8 +4421,8 @@ msgid "This file contains a save with an invalid game type."
 msgstr ""
 
 msgid ""
-"This file was saved for a \"The Price of Loyalty\" map, but the "
-"corresponding game assets have not been provided to the engine."
+"This save file requires \"The Price of Loyalty\" game assets, but they have "
+"not been provided to the engine."
 msgstr ""
 
 msgid "This saved game is localized to '"
@@ -4440,9 +4497,6 @@ msgid ""
 " menu. \n"
 "\n"
 "Enjoy the game!"
-msgstr ""
-
-msgid "Editor"
 msgstr ""
 
 msgid "The Editor requires \"The Price of Loyalty\" expansion files to work."
@@ -4957,9 +5011,6 @@ msgid "Try searching on clear ground."
 msgstr ""
 
 msgid "A miniature view of the known world. Left click to move viewing area."
-msgstr ""
-
-msgid "World Map"
 msgstr ""
 
 msgid "Month: %{month} Week: %{week}"
@@ -6466,16 +6517,16 @@ msgstr ""
 msgid "%{name1} meets %{name2}"
 msgstr ""
 
-msgid "Town Portal"
+msgid "Enemy heroes are now fully identifiable."
+msgstr ""
+
+msgid "Identify Hero"
 msgstr ""
 
 msgid "Select town to port to."
 msgstr ""
 
-msgid "Enemy heroes are now fully identifiable."
-msgstr ""
-
-msgid "Identify Hero"
+msgid "Town Portal"
 msgstr ""
 
 msgid "The creatures are willing to join us!"
@@ -9264,6 +9315,9 @@ msgid ""
 "lost by mortals."
 msgstr ""
 
+msgid "spellBonus|selected by user"
+msgstr ""
+
 msgid "Wood"
 msgstr "Mediena"
 
@@ -9719,6 +9773,44 @@ msgid "Sets Water Elementals to guard a mine against enemy armies."
 msgstr ""
 
 #, fuzzy
+msgid "Random Spell"
+msgstr "Atsitiktinis miestas"
+
+msgid "Randomly selected spell of any level."
+msgstr ""
+
+#, fuzzy
+msgid "Random 1st Level Spell"
+msgstr "Atsitiktinė pilis"
+
+msgid "Randomly selected 1st level spell."
+msgstr ""
+
+msgid "Random 2nd Level Spell"
+msgstr ""
+
+msgid "Randomly selected 2nd level spell."
+msgstr ""
+
+msgid "Random 3rd Level Spell"
+msgstr ""
+
+msgid "Randomly selected 3rd level spell."
+msgstr ""
+
+msgid "Random 4th Level Spell"
+msgstr ""
+
+msgid "Randomly selected 4th level spell."
+msgstr ""
+
+msgid "Random 5th Level Spell"
+msgstr ""
+
+msgid "Randomly selected 5th level spell."
+msgstr ""
+
+#, fuzzy
 msgid "Petrification"
 msgstr "Įtvirtinimai"
 
@@ -9841,3 +9933,7 @@ msgid ""
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
 msgstr ""
+
+#, fuzzy
+#~ msgid "%{race2} %{name2}"
+#~ msgstr "Žiūrėti %{name}"

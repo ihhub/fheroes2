@@ -41,6 +41,7 @@
 #include "heroes.h"
 #include "icn.h"
 #include "logging.h"
+#include "maps_fileinfo.h"
 #include "rand.h"
 #include "serialize.h"
 #include "settings.h"
@@ -249,8 +250,10 @@ int Artifact::Level() const
     case SWORD_ANDURAN:
     case SPADE_NECROMANCY:
     case HEART_FIRE:
-    case HEART_ICE:
-        return Settings::Get().isCurrentMapPriceOfLoyalty() ? ART_LOYALTY | LoyaltyLevel() : ART_LOYALTY;
+    case HEART_ICE: {
+        const GameVersion version = Settings::Get().getCurrentMapInfo().version;
+        return ( version == GameVersion::PRICE_OF_LOYALTY || version == GameVersion::RESURRECTION ) ? ART_LOYALTY | LoyaltyLevel() : ART_LOYALTY;
+    }
 
     default:
         break;
@@ -1181,16 +1184,21 @@ bool ArtifactsBar::ActionBarLeftMouseSingleClick( Artifact & art )
     }
     else {
         if ( can_change ) {
-            const Artifact newArtifact = Dialog::selectArtifact();
+            art = Dialog::selectArtifact( Artifact::UNKNOWN );
 
-            if ( isMagicBook( newArtifact ) ) {
+            if ( isMagicBook( art ) ) {
+                art.Reset();
                 const_cast<Heroes *>( _hero )->SpellBookActivate();
             }
-            else {
-                art = newArtifact;
+            else if ( art.GetID() == Artifact::SPELL_SCROLL ) {
+                const int spellId = Dialog::selectSpell( Spell::RANDOM, true ).GetID();
 
-                if ( art.GetID() == Artifact::SPELL_SCROLL ) {
-                    art.SetSpell( Spell::RANDOM );
+                if ( spellId == Spell::NONE ) {
+                    // No spell for the Spell Scroll artifact was selected - cancel the artifact selection.
+                    art.Reset();
+                }
+                else {
+                    art.SetSpell( spellId );
                 }
             }
         }

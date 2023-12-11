@@ -37,14 +37,20 @@ class StreamBase;
 enum class GameVersion : int
 {
     SUCCESSION_WARS = 0,
-    PRICE_OF_LOYALTY = 1
+    PRICE_OF_LOYALTY = 1,
+    RESURRECTION = 2
 };
 
 namespace Maps
 {
     struct FileInfo
     {
-        FileInfo();
+    public:
+        FileInfo()
+        {
+            Reset();
+        }
+
         FileInfo( const FileInfo & ) = default;
         FileInfo( FileInfo && ) = default;
 
@@ -53,15 +59,16 @@ namespace Maps
         FileInfo & operator=( const FileInfo & ) = default;
         FileInfo & operator=( FileInfo && ) = default;
 
-        bool ReadMP2( const std::string & filePath );
-        bool ReadSAV( std::string filePath );
-
         bool operator==( const FileInfo & fi ) const
         {
             return file == fi.file;
         }
 
-        static bool NameSorting( const FileInfo & lhs, const FileInfo & rhs );
+        bool ReadMP2( const std::string & filePath );
+        bool readResurrectionMap( std::string filePath );
+
+        bool ReadSAV( std::string filePath );
+
         static bool FileSorting( const FileInfo & lhs, const FileInfo & rhs );
 
         bool isAllowCountPlayers( int playerCount ) const;
@@ -69,11 +76,6 @@ namespace Maps
         int AllowCompHumanColors() const
         {
             return colorsAvailableForHumans & colorsAvailableForComp;
-        }
-
-        int AllowHumanColors() const
-        {
-            return colorsAvailableForHumans;
         }
 
         int HumanOnlyColors() const
@@ -125,22 +127,6 @@ namespace Maps
 
         void Reset();
 
-        std::string file;
-        std::string name;
-        std::string description;
-
-        uint16_t width;
-        uint16_t height;
-        uint8_t difficulty;
-
-        std::array<uint8_t, KINGDOMMAX> races;
-        std::array<uint8_t, KINGDOMMAX> unions;
-
-        uint8_t kingdomColors;
-        uint8_t colorsAvailableForHumans;
-        uint8_t colorsAvailableForComp;
-        uint8_t colorsOfRandomRaces;
-
         enum VictoryCondition : uint8_t
         {
             VICTORY_DEFEAT_EVERYONE = 0,
@@ -158,6 +144,22 @@ namespace Maps
             LOSS_HERO = 2,
             LOSS_OUT_OF_TIME = 3
         };
+
+        std::string file;
+        std::string name;
+        std::string description;
+
+        uint16_t width;
+        uint16_t height;
+        uint8_t difficulty;
+
+        std::array<uint8_t, KINGDOMMAX> races;
+        std::array<uint8_t, KINGDOMMAX> unions;
+
+        uint8_t kingdomColors;
+        uint8_t colorsAvailableForHumans;
+        uint8_t colorsAvailableForComp;
+        uint8_t colorsOfRandomRaces;
 
         // Refer to the VictoryCondition
         uint8_t victoryConditions;
@@ -195,10 +197,11 @@ using MapsFileInfoList = std::vector<Maps::FileInfo>;
 
 namespace Maps
 {
-    MapsFileInfoList PrepareMapsFileInfoList( const bool multi );
+    // For SUCCESSION_WARS and PRICE_OF_LOYALTY map files.
+    MapsFileInfoList getOriginalMapFileInfos( const bool multi );
 
-    // Creates the list of fheroes2 Resurrection map files.
-    MapsFileInfoList prepareResurrectionMapsFileInfoList();
+    // For RESURRECTION map files.
+    MapsFileInfoList getResurrectionMapFileInfos();
 }
 
 #endif

@@ -43,6 +43,7 @@
 #include "image.h"
 #include "kingdom.h"
 #include "localevent.h"
+#include "maps_fileinfo.h"
 #include "math_base.h"
 #include "payment.h"
 #include "race.h"
@@ -282,7 +283,7 @@ Castle::ConstructionDialogResult Castle::openConstructionDialog( uint32_t & dwel
     buildingMageGuild.Redraw();
 
     // tavern
-    const bool isSkipTavernInteraction = ( Race::NECR == race ) && !Settings::Get().isCurrentMapPriceOfLoyalty();
+    const bool isSkipTavernInteraction = ( Race::NECR == race ) && ( Settings::Get().getCurrentMapInfo().version == GameVersion::SUCCESSION_WARS );
     BuildingInfo buildingTavern( *this, BUILD_TAVERN );
     buildingTavern.SetPos( cur_pt.x + 149, dst_pt.y );
     buildingTavern.Redraw();

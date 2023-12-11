@@ -52,6 +52,7 @@
 #include "luck.h"
 #include "m82.h"
 #include "maps.h"
+#include "maps_fileinfo.h"
 #include "maps_tiles.h"
 #include "morale.h"
 #include "mp2.h"
@@ -504,8 +505,11 @@ void Castle::PostLoad()
     // remove tavern from necromancer castle
     if ( Race::NECR == race && ( building & BUILD_TAVERN ) ) {
         building &= ~BUILD_TAVERN;
-        if ( Settings::Get().isCurrentMapPriceOfLoyalty() )
+        const GameVersion version = Settings::Get().getCurrentMapInfo().version;
+
+        if ( version == GameVersion::PRICE_OF_LOYALTY || version == GameVersion::RESURRECTION ) {
             building |= BUILD_SHRINE;
+        }
     }
 
     SetModes( ALLOWBUILD );
@@ -517,7 +521,16 @@ void Castle::PostLoad()
 
 uint32_t Castle::CountBuildings() const
 {
-    const uint32_t tavern = ( race == Race::NECR ? ( Settings::Get().isCurrentMapPriceOfLoyalty() ? BUILD_SHRINE : BUILD_NOTHING ) : BUILD_TAVERN );
+    uint32_t tavern = BUILD_TAVERN;
+    if ( race == Race::NECR ) {
+        const GameVersion version = Settings::Get().getCurrentMapInfo().version;
+        if ( version == GameVersion::PRICE_OF_LOYALTY || version == GameVersion::RESURRECTION ) {
+            tavern = BUILD_SHRINE;
+        }
+        else {
+            tavern = BUILD_NOTHING;
+        }
+    }
 
     return CountBits( building
                       & ( BUILD_THIEVESGUILD | tavern | BUILD_SHIPYARD | BUILD_WELL | BUILD_STATUE | BUILD_LEFTTURRET | BUILD_RIGHTTURRET | BUILD_MARKETPLACE | BUILD_WEL2
@@ -1482,7 +1495,7 @@ int Castle::CheckBuyBuilding( const uint32_t build ) const
         }
         break;
     case BUILD_SHRINE:
-        if ( Race::NECR != GetRace() || !Settings::Get().isCurrentMapPriceOfLoyalty() ) {
+        if ( Race::NECR != GetRace() || ( Settings::Get().getCurrentMapInfo().version == GameVersion::SUCCESSION_WARS ) ) {
             return BUILD_DISABLE;
         }
         break;
@@ -2176,9 +2189,9 @@ bool Castle::HasSeaAccess() const
             return true;
         }
 
-        // If this is an action object and it can be removed then it is possible to put a boat here.
+        // If this is an object's shadow or this is an action object that can be removed then it is possible to put a boat here.
         const MP2::MapObjectType objectType = tile.GetObject();
-        return MP2::isPickupObject( objectType ) || objectType == MP2::OBJ_BOAT;
+        return MP2::isPickupObject( objectType ) || objectType == MP2::OBJ_BOAT || tile.isPassabilityTransparent();
     };
 
     const int32_t index = Maps::GetIndexFromAbsPoint( possibleSeaTile.x, possibleSeaTile.y );
@@ -2247,7 +2260,7 @@ int32_t Castle::getTileIndexToPlaceBoat() const
 
         // Mark the tile as worthy to a place a boat if the main addon does not exist on this tile.
         // This means that all objects on this tile are not primary objects (like shadows or some parts of objects).
-        return ( tile.getObjectIcnType() == MP2::OBJ_ICN_TYPE_UNKNOWN );
+        return ( tile.getObjectIcnType() == MP2::OBJ_ICN_TYPE_UNKNOWN || tile.isPassabilityTransparent() );
     };
 
     const int32_t index = Maps::GetIndexFromAbsPoint( possibleSeaTile.x, possibleSeaTile.y );
@@ -2796,8 +2809,8 @@ void AllCastles::AddCastle( Castle * castle )
     const size_t id = _castles.size() - 1;
     const fheroes2::Point & center = castle->GetCenter();
 
-    // We need to override any existing castle's ID that is why we use [] operator to access std::map.
-    // Castles are added from top to bottom, from left to right so a newer castle must override existing data for a tile if any.
+    // Castles are added from top to bottom, from left to right.
+    // Tiles containing castle ID cannot be overwritten.
 
     for ( int32_t y = -2; y <= 1; ++y ) {
         for ( int32_t x = -2; x <= 2; ++x ) {
@@ -2806,11 +2819,17 @@ void AllCastles::AddCastle( Castle * castle )
                 continue;
             }
 
-            _castleTiles[center + fheroes2::Point( x, y )] = id;
+            const auto [dummy, inserted] = _castleTiles.try_emplace( center + fheroes2::Point( x, y ), id );
+            if ( !inserted ) {
+                DEBUG_LOG( DBG_GAME, DBG_INFO, "Tile [" << center.x + x << ", " << center.y + y << "] is occupied by another castle" )
+            }
         }
     }
 
-    _castleTiles[center + fheroes2::Point( 0, -3 )] = id;
+    const auto [dummy, inserted] = _castleTiles.try_emplace( center + fheroes2::Point( 0, -3 ), id );
+    if ( !inserted ) {
+        DEBUG_LOG( DBG_GAME, DBG_INFO, "Tile [" << center.x << ", " << center.y - 3 << "] is occupied by another castle" )
+    }
 }
 
 void AllCastles::Scout( int colors ) const

@@ -1168,6 +1168,37 @@ namespace
         }
     }
 
+    // Checks all layers in tiles around for given UID and if it is found removes this object part
+    // and initiates a new search around this tile using recursive call of this function.
+    void removeUidFromTilesAround( const int32_t centerTileIndex, const uint32_t uid )
+    {
+        for ( const int32_t tileIndex : Maps::getAroundIndexes( centerTileIndex ) ) {
+            Maps::Tiles & currentTile = world.GetTiles( tileIndex );
+
+            if ( currentTile.GetObjectUID() == uid ) {
+                currentTile.Remove( uid );
+                removeUidFromTilesAround( tileIndex, uid );
+                return;
+            }
+
+            for ( const Maps::TilesAddon & addon : currentTile.getBottomLayerAddons() ) {
+                if ( addon._uid == uid ) {
+                    currentTile.Remove( uid );
+                    removeUidFromTilesAround( tileIndex, uid );
+                    return;
+                }
+            }
+
+            for ( const Maps::TilesAddon & addon : currentTile.getTopLayerAddons() ) {
+                if ( addon._uid == uid ) {
+                    currentTile.Remove( uid );
+                    removeUidFromTilesAround( tileIndex, uid );
+                    return;
+                }
+            }
+        }
+    }
+
     void placeObjectOnTile( const Maps::Tiles & tile, const Maps::ObjectInfo & info )
     {
         assert( !info.empty() );
@@ -1177,21 +1208,40 @@ namespace
 
         for ( const auto & partInfo : info.groundLevelParts ) {
             const fheroes2::Point pos = mainTilePos + partInfo.tileOffset;
+            const bool isMainObject = ( partInfo.layerType != Maps::SHADOW_LAYER && partInfo.layerType != Maps::TERRAIN_LAYER );
+
             if ( !Maps::isValidAbsPoint( pos.x, pos.y ) ) {
-                // This shouldn't happen as the object must be verified before placement.
-                assert( 0 );
+                // Only shadow and terrain layer object parts are allowed not to be placed.
+                assert( !isMainObject );
                 continue;
             }
 
             Maps::Tiles & currentTile = world.GetTiles( pos.x, pos.y );
 
-            if ( partInfo.layerType == Maps::SHADOW_LAYER || partInfo.layerType == Maps::TERRAIN_LAYER ) {
+            if ( !isMainObject ) {
                 // Shadows and terrain object do not change main tile information.
                 currentTile.pushBottomLayerAddon( Maps::TilesAddon( partInfo.layerType, uid, partInfo.icnType, static_cast<uint8_t>( partInfo.icnIndex ) ) );
                 continue;
             }
 
-            currentTile.SetObject( partInfo.objectType );
+            // It is important that the type of the object is set properly for this layer.
+            assert( partInfo.objectType != MP2::OBJ_NONE );
+
+            bool setObjectType = true;
+            if ( !MP2::isActionObject( partInfo.objectType ) ) {
+                for ( const auto & addon : currentTile.getTopLayerAddons() ) {
+                    const MP2::MapObjectType type = Maps::getObjectTypeByIcn( addon._objectIcnType, addon._imageIndex );
+                    if ( type != MP2::OBJ_NONE ) {
+                        setObjectType = false;
+                        break;
+                    }
+                }
+            }
+
+            if ( setObjectType ) {
+                currentTile.SetObject( partInfo.objectType );
+            }
+
             currentTile.moveMainAddonToBottomLayer();
 
             currentTile.setObjectUID( uid );
@@ -1213,7 +1263,11 @@ namespace
 
             Maps::Tiles & currentTile = world.GetTiles( pos.x, pos.y );
 
-            currentTile.pushTopLayerAddon( Maps::TilesAddon( partInfo.layerType, uid, partInfo.icnType, static_cast<uint8_t>( partInfo.icnIndex ) ) );
+            currentTile.pushTopLayerAddon( Maps::TilesAddon( Maps::OBJECT_LAYER, uid, partInfo.icnType, static_cast<uint8_t>( partInfo.icnIndex ) ) );
+
+            if ( partInfo.objectType != MP2::OBJ_NONE && !MP2::isActionObject( currentTile.GetObject() ) ) {
+                currentTile.SetObject( partInfo.objectType );
+            }
         }
     }
 }
@@ -1393,6 +1447,11 @@ namespace Maps
         case MP2::OBJ_SHRINE_THIRD_CIRCLE:
         case MP2::OBJ_PYRAMID:
             tile.metadata()[0] = spellId;
+            break;
+        case MP2::OBJ_ARTIFACT:
+            // Only the Spell Scroll artifact can have a spell set.
+            assert( tile.metadata()[0] == Artifact::SPELL_SCROLL );
+            tile.metadata()[1] = spellId;
             break;
         default:
             // Why are you calling this function for an unsupported object type?
@@ -3058,6 +3117,27 @@ namespace Maps
         return true;
     }
 
+    bool removeObject( Tiles & tile, const uint32_t uid )
+    {
+        if ( uid == 0 ) {
+            // There is no such object on this tile.
+            return false;
+        }
+
+        tile.Remove( uid );
+
+        // An object may occupy several tiles, we recursively check all around tiles for its parts by UID.
+        removeUidFromTilesAround( tile.GetIndex(), uid );
+
+        resetObjectMetadata( tile );
+
+        // TODO: Improve this code to properly update '_mainObjectType' in the case when
+        // there is a non-action objects placed under the current (action) object.
+        tile.setAsEmpty();
+
+        return true;
+    }
+
     bool eraseObjectsOnTiles( const int32_t startTileId, const int32_t endTileId, const uint32_t objectTypesToErase )
     {
         if ( objectTypesToErase == ObjectErasureType::NONE ) {
@@ -3114,6 +3194,12 @@ namespace Maps
             // without corrupting their object data. Do this through 'OBJ_HEROES' (possibly like 'hero.Dismiss()').
             needRedraw |= removeObjectTypeFromTile( tile, MP2::OBJ_ICN_TYPE_MINIHERO );
         }
+        if ( objectTypesToErase & ObjectErasureType::TREASURES && tile.getObjectIcnType() == MP2::OBJ_ICN_TYPE_OBJNRSRC ) {
+            needRedraw |= removeObject( tile, tile.GetObjectUID() );
+        }
+        if ( objectTypesToErase & ObjectErasureType::ARTIFACTS && tile.getObjectIcnType() == MP2::OBJ_ICN_TYPE_OBJNARTI ) {
+            needRedraw |= removeObject( tile, tile.GetObjectUID() );
+        }
 
         return needRedraw;
     }
@@ -3132,6 +3218,11 @@ namespace Maps
             // Setting just 1 resource is enough. It doesn't matter as we are not saving this value into the map format.
             placeObjectOnTile( tile, info );
             setResourceOnTile( tile, static_cast<int>( info.metadata[0] ), 1 );
+            return;
+        case MP2::OBJ_ARTIFACT:
+            placeObjectOnTile( tile, info );
+            // The artifact ID is stored in metadata[0]. It is used by the other engine functions.
+            tile.metadata()[0] = info.metadata[0];
             return;
         default:
             break;
