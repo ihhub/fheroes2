@@ -4408,6 +4408,7 @@ namespace fheroes2
                     ReplaceColorIdByTransformId( neutralShield, neutralShield.image()[1], 1U );
 
                     Sprite neutralColorSprite( _icnVsSprite[id][0].width(), _icnVsSprite[id][0].height() );
+                    neutralColorSprite.reset();
                     Blit( neutralShield, neutralColorSprite, 8, 4 );
 
                     // Make the background.
