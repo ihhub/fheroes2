@@ -831,6 +831,11 @@ namespace Interface
             }
 
             const int groundType = Maps::Ground::getGroundByImageIndex( tile.getTerrainImageIndex() );
+            if ( groundType == Maps::Ground::WATER ) {
+                fheroes2::showStandardTextMessage( _( "Towns" ), _( "Towns cannot be placed on water." ), Dialog::OK );
+                return;
+            }
+
             const int32_t basementId = fheroes2::getTownBasementId( groundType );
 
             const fheroes2::ActionCreator action( _historyManager );
