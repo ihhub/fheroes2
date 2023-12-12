@@ -824,6 +824,11 @@ namespace Interface
             int32_t type = -1;
             int32_t color = -1;
             _editorPanel.getTownObjectProperties( type, color );
+            if ( type < 0 || color < 0 ) {
+                // Check your logic!
+                assert( 0 );
+                return;
+            }
 
             const int groundType = Maps::Ground::getGroundByImageIndex( tile.getTerrainImageIndex() );
             const int32_t basementId = fheroes2::getTownBasementId( groundType );
