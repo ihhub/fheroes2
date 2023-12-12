@@ -592,8 +592,7 @@ namespace
         assert( objects.empty() );
 
         auto addTown = [&objects]( const MP2::MapObjectType mainObjectType, const uint8_t townIcnOffset, const uint8_t shadowIcnOffset,
-                                   const MP2::ObjectIcnType townIcnType, const MP2::ObjectIcnType shadowIcnType )
-        {
+                                   const MP2::ObjectIcnType townIcnType, const MP2::ObjectIcnType shadowIcnType ) {
             assert( MP2::isActionObject( mainObjectType ) );
 
             const MP2::MapObjectType secondaryObjectType( static_cast<MP2::MapObjectType>( mainObjectType - MP2::OBJ_ACTION_OBJECT_TYPE ) );
