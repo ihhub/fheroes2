@@ -70,28 +70,10 @@
 namespace
 {
     // Returns the town type according the given player color, race and castle/town state.
-    int townTypeCalculation( const int townColor, const int townRace, const bool isCastle )
+    int getPackedTownType( const int townRace, const bool isCastle )
     {
         // NOTICE: This calculation should be consistent with the number of KINGDOM_TOWNS objects.
-        return ( townColor * 7 + townRace ) * 2 + ( isCastle ? 0 : 1 );
-    }
-
-    bool isCastleByTownType( const int townType )
-    {
-        // NOTICE: This calculation should be consistent with the number of town types (town/castle) KINGDOM_TOWNS objects.
-        return ( townType % 2 ) == 0;
-    }
-
-    int getRaceByTownType( const int townType )
-    {
-        // NOTICE: This calculation should be consistent with the number of races in KINGDOM_TOWNS objects.
-        return ( townType / 2 ) % 7;
-    }
-
-    int getColorByTownType( const int townType )
-    {
-        // NOTICE: This calculation should be consistent with the number of color flags in KINGDOM_TOWNS objects.
-        return townType / 14;
+        return townRace * 2 + ( isCastle ? 0 : 1 );
     }
 }
 
@@ -888,7 +870,7 @@ int Dialog::selectOceanObjectType( const int resourceType )
     return selectObjectType( resourceType, objectInfo.size(), listbox );
 }
 
-int Dialog::selectTownType( const int townType )
+void Dialog::selectTownType( int & type, int & color )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     fheroes2::StandardWindow background( 520, 360, true, display );
@@ -990,10 +972,10 @@ int Dialog::selectTownType( const int townType )
     int townColor = 6;
     const int basementGround = isEvilInterface ? Maps::Ground::LAVA : Maps::Ground::DIRT;
 
-    if ( townType > -1 ) {
-        isCastle = isCastleByTownType( townType );
-        townRace = getRaceByTownType( townType );
-        townColor = getColorByTownType( townType );
+    if ( type > -1 && color > -1 ) {
+        isCastle = ( type % 2 ) == 0;
+        townRace = type / 2;
+        townColor = color;
     }
 
     while ( le.HandleEvents() ) {
@@ -1003,10 +985,12 @@ int Dialog::selectTownType( const int townType )
         le.MousePressLeft( buttonCastle.area() ) || isCastle ? buttonCastle.drawOnPress() : buttonCastle.drawOnRelease();
 
         if ( le.MouseClickLeft( buttonOk.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) ) {
-            return townTypeCalculation( townColor, townRace, isCastle );
+            type = getPackedTownType( townRace, isCastle );
+            color = townColor;
+            return;
         }
         if ( le.MouseClickLeft( buttonCancel.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
-            return -1;
+            return;
         }
 
         if ( isCastle && le.MouseClickLeft( buttonTown.area() ) ) {
@@ -1065,7 +1049,7 @@ int Dialog::selectTownType( const int townType )
         castleBackground.restore();
 
         // Update town image.
-        const fheroes2::Sprite townImage = fheroes2::generateTownObjectImage( townTypeCalculation( townColor, townRace, isCastle ), basementGround );
+        const fheroes2::Sprite townImage = fheroes2::generateTownObjectImage( getPackedTownType( townRace, isCastle ), townColor, basementGround );
         fheroes2::Blit( townImage, display, pos.x + townImage.x(), pos.y + townImage.y() );
 
         // Update color and race borders.
@@ -1078,6 +1062,4 @@ int Dialog::selectTownType( const int townType )
 
         needRedraw = false;
     }
-
-    return townRace;
 }

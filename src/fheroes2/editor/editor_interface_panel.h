@@ -117,6 +117,8 @@ namespace Interface
             return _selectedObjectGroup[_selectedObject];
         }
 
+        void getTownObjectProperties( int32_t & type, int32_t & color ) const;
+
     private:
         static int _getGroundId( const uint8_t brushId );
 
@@ -131,6 +133,8 @@ namespace Interface
         void _setCursor();
 
         void handleObjectMouseClick( const std::function<int( int )> & typeSelection );
+
+        int32_t generateTownObjectProperties( const int32_t type, const int32_t color );
 
         enum Instrument : uint8_t
         {

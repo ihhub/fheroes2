@@ -166,9 +166,9 @@ namespace fheroes2
         return image;
     }
 
-    Sprite generateTownObjectImage( const int townType, const int groundId )
+    Sprite generateTownObjectImage( const int townType, const int color, const int groundId )
     {
-        if ( townType < 0 ) {
+        if ( townType < 0 || color < 0 ) {
             assert( 0 );
             return {};
         }
@@ -213,12 +213,13 @@ namespace fheroes2
         }
 
         // NOTICE: This calculations should be consistent with objects position in KINGDOM_TOWNS and LANDSCAPE_FLAGS vectors.
-        const size_t townMainObjectOffset = townType % 14;
-        const size_t townFlagsOffset = townType / 14;
+        assert( Maps::getObjectsByGroup( Maps::ObjectGroup::LANDSCAPE_TOWN_BASEMENTS ).size() > basementOffset );
+        assert( Maps::getObjectsByGroup( Maps::ObjectGroup::KINGDOM_TOWNS ).size() > townType );
+        assert( Maps::getObjectsByGroup( Maps::ObjectGroup::LANDSCAPE_FLAGS ).size() > color );
 
         const Sprite & townBasement = generateMapObjectImage( Maps::getObjectsByGroup( Maps::ObjectGroup::LANDSCAPE_TOWN_BASEMENTS )[basementOffset] );
-        const Sprite & townMainObject = generateMapObjectImage( Maps::getObjectsByGroup( Maps::ObjectGroup::KINGDOM_TOWNS )[townMainObjectOffset] );
-        const Sprite & townFlags = generateMapObjectImage( Maps::getObjectsByGroup( Maps::ObjectGroup::LANDSCAPE_FLAGS )[townFlagsOffset] );
+        const Sprite & townMainObject = generateMapObjectImage( Maps::getObjectsByGroup( Maps::ObjectGroup::KINGDOM_TOWNS )[townType] );
+        const Sprite & townFlags = generateMapObjectImage( Maps::getObjectsByGroup( Maps::ObjectGroup::LANDSCAPE_FLAGS )[color] );
 
         // Town image contains of 9x5 tiles total.
         const int32_t townImageX = townMainObject.x();

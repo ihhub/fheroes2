@@ -30,5 +30,5 @@ namespace Maps
 namespace fheroes2
 {
     Sprite generateMapObjectImage( const Maps::ObjectInfo & object );
-    Sprite generateTownObjectImage( const int townType, const int groundId );
+    Sprite generateTownObjectImage( const int townType, const int color, const int groundId );
 }

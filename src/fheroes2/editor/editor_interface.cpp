@@ -819,9 +819,13 @@ namespace Interface
             setObjectOnTile( tile, objectInfo );
         }
         else if ( groupType == Maps::ObjectGroup::KINGDOM_TOWNS ) {
-            setObjectOnTile( tile, getObjectInfo( Maps::ObjectGroup::LANDSCAPE_FLAGS, _editorPanel.getSelectedObjectType() / 14 ) );
+            int32_t type = 0;
+            int32_t color = 0;
+            _editorPanel.getTownObjectProperties( type, color );
+
+            setObjectOnTile( tile, getObjectInfo( Maps::ObjectGroup::LANDSCAPE_FLAGS, color ) );
             setObjectOnTile( tile, getObjectInfo( Maps::ObjectGroup::LANDSCAPE_TOWN_BASEMENTS, 0 ) );
-            setObjectOnTile( tile, getObjectInfo( groupType, _editorPanel.getSelectedObjectType() % 14 ) );
+            setObjectOnTile( tile, getObjectInfo( groupType, type ) );
         }
     }
 

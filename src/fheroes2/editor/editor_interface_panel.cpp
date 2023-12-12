@@ -440,15 +440,19 @@ namespace Interface
             } );
             break;
         case Brush::TOWNS:
-            _interface.setCursorUpdater( [type = getSelectedObjectType()]( const int32_t tileIndex ) {
-                if ( type == -1 ) {
+            _interface.setCursorUpdater( [this]( const int32_t tileIndex ) {
+                int32_t type = -1;
+                int32_t color = -1;
+                getTownObjectProperties( type, color );
+
+                if ( type == -1 || color == -1 ) {
                     // The object type is not set. We show the POINTER cursor for this case.
                     Cursor::Get().SetThemes( Cursor::POINTER );
                     return;
                 }
 
                 // TODO: render ICN::MINIHERO from the existing hero images.
-                const fheroes2::Sprite & image = fheroes2::generateTownObjectImage( type, world.GetTiles( tileIndex ).GetGround() );
+                const fheroes2::Sprite & image = fheroes2::generateTownObjectImage( type, color, world.GetTiles( tileIndex ).GetGround() );
 
                 Cursor::Get().setCustomImage( image, { image.x(), image.y() } );
             } );
@@ -608,7 +612,15 @@ namespace Interface
                 fheroes2::showStandardTextMessage( _getObjectTypeName( Brush::TREASURES ), _( "Used to place\na resource or treasure." ), Dialog::ZERO );
             }
             else if ( le.MouseClickLeft( _objectButtonsRect[Brush::TOWNS] ) ) {
-                handleObjectMouseClick( Dialog::selectTownType );
+                handleObjectMouseClick( [this](const int32_t /*type*/ ) -> int32_t {
+                    int32_t type = -1;
+                    int32_t color = -1;
+
+                    getTownObjectProperties( type, color );
+                    Dialog::selectTownType( type, color );
+
+                    return generateTownObjectProperties( type, color );
+                    } );
                 return res;
             }
             else if ( le.MouseClickLeft( _objectButtonsRect[Brush::MONSTERS] ) ) {
@@ -736,5 +748,31 @@ namespace Interface
         }
         _setCursor();
         _interface.updateCursor( 0 );
+    }
+
+    void EditorPanel::getTownObjectProperties( int32_t & type, int32_t & color ) const
+    {
+        const auto & townObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::KINGDOM_TOWNS );
+        if ( townObjects.empty() ) {
+            // How is it even possible?
+            assert( 0 );
+            type = -1;
+            color = -1;
+        }
+
+        type = _selectedObjectType[Brush::TOWNS] % static_cast<int32_t>( townObjects.size() );
+        color = _selectedObjectType[Brush::TOWNS] / static_cast<int32_t>( townObjects.size() );
+    }
+
+    int32_t EditorPanel::generateTownObjectProperties( const int32_t type, const int32_t color )
+    {
+        const auto & townObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::KINGDOM_TOWNS );
+        if ( townObjects.empty() ) {
+            // How is it even possible?
+            assert( 0 );
+            return -1;
+        }
+
+        return color * static_cast<int32_t>( townObjects.size() ) + type;
     }
 }
