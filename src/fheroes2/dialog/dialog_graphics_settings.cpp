@@ -49,7 +49,7 @@ namespace
         Mode,
         VSync,
         SystemInfo,
-        DisplayList,
+        SwitchDisplay,
         InterfaceType,
         Exit
     };
@@ -62,14 +62,14 @@ namespace
     const fheroes2::Rect modeRoi{ optionOffset.x + offsetBetweenOptions.width, optionOffset.y, optionWindowSize, optionWindowSize };
     const fheroes2::Rect vSyncRoi{ optionOffset.x, optionOffset.y + offsetBetweenOptions.height, optionWindowSize, optionWindowSize };
     const fheroes2::Rect systemInfoRoi{ optionOffset.x + offsetBetweenOptions.width, optionOffset.y + offsetBetweenOptions.height, optionWindowSize, optionWindowSize };
-    const fheroes2::Rect monitorListRoi{ optionOffset.x + offsetBetweenOptions.width * 2, optionOffset.y, optionWindowSize, optionWindowSize };
+    const fheroes2::Rect switchDisplayRoi{ optionOffset.x + offsetBetweenOptions.width * 2, optionOffset.y, optionWindowSize, optionWindowSize };
     const fheroes2::Rect interfaceTypeRoi{ optionOffset.x + offsetBetweenOptions.width * 2, optionOffset.y + offsetBetweenOptions.height, optionWindowSize,
                                            optionWindowSize };
 
     void drawDisplay( const fheroes2::Rect & optionRoi )
     {
         fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::GAME_OPTION_ICON, 1 ), _( "Display ID" ),
-                              fheroes2::getDisplayName( fheroes2::engine().getDisplayId() ), fheroes2::UiOptionTextWidth::TWO_ELEMENTS_ROW );
+                              fheroes2::engine().getDisplayName( fheroes2::engine().getDisplayId() ), fheroes2::UiOptionTextWidth::TWO_ELEMENTS_ROW );
     }
 
     void drawResolution( const fheroes2::Rect & optionRoi )
@@ -176,15 +176,15 @@ namespace
         const fheroes2::Rect windowModeRoi( modeRoi + windowRoi.getPosition() );
         const fheroes2::Rect windowVSyncRoi( vSyncRoi + windowRoi.getPosition() );
         const fheroes2::Rect windowSystemInfoRoi( systemInfoRoi + windowRoi.getPosition() );
-        const fheroes2::Rect windowDisplayListRoi( monitorListRoi + windowRoi.getPosition() );
+        const fheroes2::Rect windowSwitchDisplayRoi( switchDisplayRoi + windowRoi.getPosition() );
         const fheroes2::Rect windowInterfaceTypeRoi( interfaceTypeRoi + windowRoi.getPosition() );
 
-        const auto drawOptions = [&windowResolutionRoi, &windowModeRoi, &windowVSyncRoi, &windowSystemInfoRoi, &windowDisplayListRoi, &windowInterfaceTypeRoi]() {
+        const auto drawOptions = [&windowResolutionRoi, &windowModeRoi, &windowVSyncRoi, &windowSystemInfoRoi, &windowSwitchDisplayRoi, &windowInterfaceTypeRoi]() {
             drawResolution( windowResolutionRoi );
             drawMode( windowModeRoi );
             drawVSync( windowVSyncRoi );
             drawSystemInfo( windowSystemInfoRoi );
-            drawDisplay( windowDisplayListRoi );
+            drawDisplay( windowSwitchDisplayRoi );
             drawInterfaceType( windowInterfaceTypeRoi );
         };
 
@@ -222,8 +222,8 @@ namespace
             if ( le.MouseClickLeft( windowSystemInfoRoi ) ) {
                 return SelectedWindow::SystemInfo;
             }
-            if ( le.MouseClickLeft( windowDisplayListRoi ) ) {
-                return SelectedWindow::DisplayList;
+            if ( le.MouseClickLeft( windowSwitchDisplayRoi ) ) {
+                return SelectedWindow::SwitchDisplay;
             }
             if ( le.MouseClickLeft( windowInterfaceTypeRoi ) ) {
                 return SelectedWindow::InterfaceType;
@@ -237,8 +237,8 @@ namespace
             else if ( le.MousePressRight( windowVSyncRoi ) ) {
                 fheroes2::showStandardTextMessage( _( "V-Sync" ), _( "The V-Sync option can be enabled to resolve flickering issues on some monitors." ), 0 );
             }
-            else if ( le.MousePressRight( windowDisplayListRoi ) ) {
-                fheroes2::showStandardTextMessage( _( "Monitor Selection" ), _( "Toggle Between available monitors, Restart Required to take Effect" ), 0 );
+            else if ( le.MousePressRight( windowSwitchDisplayRoi ) ) {
+                fheroes2::showStandardTextMessage( _( "Display Selection" ), _( "Toggle Between available Displays, Restart Required to take Effect" ), 0 );
             }
             else if ( le.MousePressRight( windowSystemInfoRoi ) ) {
                 fheroes2::showStandardTextMessage( _( "System Info" ), _( "Show extra information such as FPS and current time." ), 0 );
@@ -299,8 +299,9 @@ namespace fheroes2
                 conf.Save( Settings::configFileName );
                 windowType = SelectedWindow::Configuration;
                 break;
-            case SelectedWindow::DisplayList:
-                fheroes2::engine().setDisplayId( ( fheroes2::engine().getDisplayId() + 1 ) % fheroes2::getNumberOfVideoDisplays() );
+            case SelectedWindow::SwitchDisplay:
+                fheroes2::engine().setDisplayId( ( fheroes2::engine().getDisplayId() + 1 ) % fheroes2::engine().getNumberOfVideoDisplays() );
+                updateUI();
                 conf.Save( Settings::configFileName );
                 windowType = SelectedWindow::Configuration;
                 break;

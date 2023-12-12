@@ -35,9 +35,6 @@ namespace fheroes2
     class Cursor;
     class Display;
 
-    int getNumberOfVideoDisplays();
-    const char * getDisplayName( const int display );
-
     struct ResolutionInfo
     {
         ResolutionInfo() = default;
@@ -152,11 +149,14 @@ namespace fheroes2
             _displayId = display;
         }
 
+        int getNumberOfVideoDisplays();
+        const char * getDisplayName( const int display );
+
     protected:
         BaseRenderEngine()
             : _isFullScreen( false )
-            , _displayId( 0 )
             , _nearestScaling( false )
+            , _displayId( 0 )
 
         {
             // Do nothing.
@@ -193,9 +193,9 @@ namespace fheroes2
     private:
         bool _isFullScreen;
 
-        int _displayId;
-
         bool _nearestScaling;
+
+        int _displayId;
     };
 
     class Display : public Image

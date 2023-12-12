@@ -442,7 +442,6 @@ private:
     BitModes _optGlobal;
 
     fheroes2::ResolutionInfo _resolutionInfo;
-
     int game_difficulty;
 
     std::string path_program;

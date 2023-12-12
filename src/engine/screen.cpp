@@ -1055,10 +1055,11 @@ namespace
                 ERROR_LOG( "Failed to set a hint for screen orientation." )
             }
 #endif
+
             uint32_t flags = SDL_WINDOW_SHOWN;
 
             // SDL_GetNumVideoDisplays starts from 1 so we add 1 to our variable
-            if ( getDisplayId() + 1 > SDL_GetNumVideoDisplays() ) {
+            if ( getDisplayId() + 1 > getNumberOfVideoDisplays() ) {
                 setDisplayId( 0 );
             }
 
@@ -1484,12 +1485,19 @@ namespace fheroes2
         return *( Display::instance()._cursor );
     }
 
-    int getNumberOfVideoDisplays()
+    int BaseRenderEngine::getNumberOfVideoDisplays()
     {
-        return SDL_GetNumVideoDisplays();
+        if ( int displayCount = SDL_GetNumVideoDisplays(); displayCount > 0 ) {
+            return displayCount;
+        }
+        else {
+            ERROR_LOG( "Failed to Get Number of Displays:" << displayCount << ", description: " << SDL_GetError() );
+            // there should be one display at least
+            return 1;
+        }
     }
 
-    const char * getDisplayName( const int display )
+    const char * BaseRenderEngine::getDisplayName( const int display )
     {
         return SDL_GetDisplayName( display );
     }
