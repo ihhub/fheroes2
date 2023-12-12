@@ -4399,7 +4399,7 @@ namespace fheroes2
                 // An extra image for the neutral color.
                 if ( _icnVsSprite[id].size() == 7 ) {
                     Sprite neutralShield( GetICN( ICN::SPELLS, 15 ) );
-                    if ( neutralShield.empty() ) {
+                    if ( neutralShield.width() < 2 || neutralShield.height() < 2 ) {
                         // We can not make a new image if there is no original shield image.
                         return true;
                     }
