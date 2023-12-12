@@ -819,8 +819,6 @@ namespace Interface
             setObjectOnTile( tile, objectInfo );
         }
         else if ( groupType == Maps::ObjectGroup::KINGDOM_TOWNS ) {
-            // TODO: implement towns placing on the map.
-
             setObjectOnTile( tile, getObjectInfo( Maps::ObjectGroup::LANDSCAPE_FLAGS, _editorPanel.getSelectedObjectType() / 14 ) );
             setObjectOnTile( tile, getObjectInfo( Maps::ObjectGroup::LANDSCAPE_TOWN_BASEMENTS, 0 ) );
             setObjectOnTile( tile, getObjectInfo( groupType, _editorPanel.getSelectedObjectType() % 14 ) );
