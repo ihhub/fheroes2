@@ -638,8 +638,12 @@ namespace
         // Random castle/town
         for ( uint8_t isTown = 0; isTown < 2; ++isTown ) {
             const uint8_t icnOffset = isTown * 16;
-            Maps::ObjectInfo object{ MP2::OBJ_CASTLE };
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWRD, icnOffset + 13, fheroes2::Point{ 0, 0 }, MP2::OBJ_CASTLE, Maps::OBJECT_LAYER );
+
+            const MP2::MapObjectType mainObjectType = ( isTown == 0 ) ? MP2::OBJ_RANDOM_CASTLE : MP2::OBJ_RANDOM_TOWN;
+            const MP2::MapObjectType secondaryObjectType = ( isTown == 0 ) ? MP2::OBJ_NON_ACTION_RANDOM_CASTLE : MP2::OBJ_NON_ACTION_RANDOM_TOWN;
+
+            Maps::ObjectInfo object{ mainObjectType };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWRD, icnOffset + 13, fheroes2::Point{ 0, 0 }, mainObjectType, Maps::OBJECT_LAYER );
             // Castle/town shadow.
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWRD, icnOffset + 13 + 32, fheroes2::Point{ -3, 1 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWRD, icnOffset + 14 + 32, fheroes2::Point{ -2, 1 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
@@ -658,21 +662,21 @@ namespace
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWRD, icnOffset + 2 + 32, fheroes2::Point{ -2, -2 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWRD, icnOffset + 3 + 32, fheroes2::Point{ -1, -2 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
             // Castle/town main sprite.
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWRD, icnOffset + 11, fheroes2::Point{ -2, 0 }, MP2::OBJ_NON_ACTION_CASTLE, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWRD, icnOffset + 12, fheroes2::Point{ -1, 0 }, MP2::OBJ_NON_ACTION_CASTLE, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWRD, icnOffset + 14, fheroes2::Point{ 1, 0 }, MP2::OBJ_NON_ACTION_CASTLE, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWRD, icnOffset + 15, fheroes2::Point{ 2, 0 }, MP2::OBJ_NON_ACTION_CASTLE, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWRD, icnOffset + 7, fheroes2::Point{ -1, -1 }, MP2::OBJ_NON_ACTION_CASTLE, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWRD, icnOffset + 8, fheroes2::Point{ 0, -1 }, MP2::OBJ_NON_ACTION_CASTLE, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWRD, icnOffset + 9, fheroes2::Point{ 1, -1 }, MP2::OBJ_NON_ACTION_CASTLE, Maps::OBJECT_LAYER );
-            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWRD, icnOffset + 1, fheroes2::Point{ -2, -2 }, MP2::OBJ_NON_ACTION_CASTLE );
-            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWRD, icnOffset + 2, fheroes2::Point{ -1, -2 }, MP2::OBJ_NON_ACTION_CASTLE );
-            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWRD, icnOffset + 3, fheroes2::Point{ 0, -2 }, MP2::OBJ_NON_ACTION_CASTLE );
-            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWRD, icnOffset + 4, fheroes2::Point{ 1, -2 }, MP2::OBJ_NON_ACTION_CASTLE );
-            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWRD, icnOffset + 5, fheroes2::Point{ 2, -2 }, MP2::OBJ_NON_ACTION_CASTLE );
-            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWRD, icnOffset + 6, fheroes2::Point{ -2, -1 }, MP2::OBJ_NON_ACTION_CASTLE );
-            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWRD, icnOffset + 10, fheroes2::Point{ 2, -1 }, MP2::OBJ_NON_ACTION_CASTLE );
-            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWRD, icnOffset + 0, fheroes2::Point{ 0, -3 }, MP2::OBJ_NON_ACTION_CASTLE );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWRD, icnOffset + 11, fheroes2::Point{ -2, 0 }, secondaryObjectType, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWRD, icnOffset + 12, fheroes2::Point{ -1, 0 }, secondaryObjectType, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWRD, icnOffset + 14, fheroes2::Point{ 1, 0 }, secondaryObjectType, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWRD, icnOffset + 15, fheroes2::Point{ 2, 0 }, secondaryObjectType, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWRD, icnOffset + 7, fheroes2::Point{ -1, -1 }, secondaryObjectType, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWRD, icnOffset + 8, fheroes2::Point{ 0, -1 }, secondaryObjectType, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWRD, icnOffset + 9, fheroes2::Point{ 1, -1 }, secondaryObjectType, Maps::OBJECT_LAYER );
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWRD, icnOffset + 1, fheroes2::Point{ -2, -2 }, secondaryObjectType );
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWRD, icnOffset + 2, fheroes2::Point{ -1, -2 }, secondaryObjectType );
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWRD, icnOffset + 3, fheroes2::Point{ 0, -2 }, secondaryObjectType );
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWRD, icnOffset + 4, fheroes2::Point{ 1, -2 }, secondaryObjectType );
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWRD, icnOffset + 5, fheroes2::Point{ 2, -2 }, secondaryObjectType );
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWRD, icnOffset + 6, fheroes2::Point{ -2, -1 }, secondaryObjectType );
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWRD, icnOffset + 10, fheroes2::Point{ 2, -1 }, secondaryObjectType );
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWRD, icnOffset + 0, fheroes2::Point{ 0, -3 }, secondaryObjectType );
 
             objects.emplace_back( std::move( object ) );
         }
