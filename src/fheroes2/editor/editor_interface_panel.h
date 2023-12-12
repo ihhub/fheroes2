@@ -130,11 +130,11 @@ namespace Interface
         static const char * _getObjectTypeName( const uint8_t brushId );
         static const char * _getEraseObjectTypeName( const uint32_t eraseObjectType );
 
+        static int32_t _generateTownObjectProperties( const int32_t type, const int32_t color );
+
         void _setCursor();
 
         void handleObjectMouseClick( const std::function<int( int )> & typeSelection );
-
-        int32_t generateTownObjectProperties( const int32_t type, const int32_t color );
 
         enum Instrument : uint8_t
         {
