@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-12-05 00:31+0000\n"
-"PO-Revision-Date: 2023-12-09 07:43+0700\n"
+"PO-Revision-Date: 2023-12-11 11:13+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: vi\n"
@@ -3345,7 +3345,7 @@ msgid "Select Treasure:"
 msgstr "Chọn Kho báu:"
 
 msgid "Select Ocean Object:"
-msgstr "Chọn Đối tượng Đại dương"
+msgstr "Chọn Đối tượng Đại dương:"
 
 msgid "Map Type:\n"
 msgstr "Kiểu Bản đồ:\n"
@@ -5382,7 +5382,7 @@ msgid "Italian"
 msgstr "Tiếng Ý"
 
 msgid "Czech"
-msgstr ""
+msgstr "Tiếng Séc"
 
 msgid "Norwegian"
 msgstr "Tiếng Na Uy"
@@ -5421,7 +5421,7 @@ msgid "Danish"
 msgstr "Tiếng Đan Mạch"
 
 msgid "Slovak"
-msgstr ""
+msgstr "Tiếng Slovak"
 
 msgid "Vietnamese"
 msgstr "Tiếng Việt"
@@ -8205,16 +8205,16 @@ msgid "Lean-To"
 msgstr ""
 
 msgid "Magellan's Maps"
-msgstr ""
+msgstr "Bản đồ Magellan"
 
 msgid "Flotsam"
-msgstr ""
+msgstr "Vật trôi nổi"
 
 msgid "Derelict Ship"
-msgstr ""
+msgstr "Tàu Hoang"
 
 msgid "Shipwreck Survivor"
-msgstr ""
+msgstr "Nạn nhân Tàu đắm"
 
 msgid "Bottle"
 msgstr "Chai"
@@ -8254,22 +8254,22 @@ msgid "Water Lake"
 msgstr "Hồ Nước"
 
 msgid "Mandrake"
-msgstr ""
+msgstr "Khoai ma"
 
 msgid "Dead Tree"
 msgstr "Cây khô"
 
 msgid "Stump"
-msgstr ""
+msgstr "Gốc cây"
 
 msgid "Crater"
-msgstr ""
+msgstr "Miệng núi lửa"
 
 msgid "Cactus"
 msgstr "Xương rồng"
 
 msgid "Mound"
-msgstr ""
+msgstr "Gò đất"
 
 msgid "Dune"
 msgstr "Đụn cát"
@@ -8278,46 +8278,46 @@ msgid "Lava Pool"
 msgstr "Vũng nham thạch"
 
 msgid "Shrub"
-msgstr ""
+msgstr "Cây bụi"
 
 msgid "Barrow Mounds"
 msgstr ""
 
 msgid "Random Artifact - Treasure"
-msgstr ""
+msgstr "Bảo vật Ngẫu nhiên - Châu báu"
 
 msgid "Random Artifact - Minor"
-msgstr ""
+msgstr "Bảo vật Ngẫu nhiên - Nhỏ"
 
 msgid "Random Artifact - Major"
-msgstr ""
+msgstr "Bảo vật Ngẫu nhiên - Lớn"
 
 msgid "Barrier"
-msgstr ""
+msgstr "Rào chắn"
 
 msgid "Traveller's Tent"
-msgstr ""
+msgstr "Lều Du khách"
 
 msgid "Jail"
 msgstr "Ngục"
 
 msgid "Fire Summoning Altar"
-msgstr ""
+msgstr "Bàn thờ Triệu hồi Lửa"
 
 msgid "Air Summoning Altar"
-msgstr ""
+msgstr "Bàn thờ Triệu hồi Khí"
 
 msgid "Earth Summoning Altar"
-msgstr ""
+msgstr "Bàn thờ Triệu hồi Đất"
 
 msgid "Water Summoning Altar"
-msgstr ""
+msgstr "Bàn thờ Triệu hồi Nước"
 
 msgid "Unknown Monster"
-msgstr ""
+msgstr "Quái vật Vô danh"
 
 msgid "Unknown Monsters"
-msgstr ""
+msgstr "Quái vật Vô danh"
 
 msgid "Peasant"
 msgstr "Nông dân"
@@ -8344,10 +8344,10 @@ msgid "Pikemen"
 msgstr "Thương thủ"
 
 msgid "Veteran Pikeman"
-msgstr ""
+msgstr "Thương thủ Kỳ cựu"
 
 msgid "Veteran Pikemen"
-msgstr ""
+msgstr "Thương thủ Kỳ cựu"
 
 msgid "Swordsman"
 msgstr "Kiếm thủ"
@@ -8356,22 +8356,22 @@ msgid "Swordsmen"
 msgstr "Kiếm thủ"
 
 msgid "Master Swordsman"
-msgstr ""
+msgstr "Kiếm thủ Bậc thầy"
 
 msgid "Master Swordsmen"
-msgstr ""
+msgstr "Kiếm thủ Bậc thầy"
 
 msgid "Cavalries"
-msgstr ""
+msgstr "Kỵ mã"
 
 msgid "Cavalry"
-msgstr ""
+msgstr "Kỵ mã"
 
 msgid "Champion"
-msgstr ""
+msgstr "Kỵ mã Bậc thầy"
 
 msgid "Champions"
-msgstr ""
+msgstr "Kỵ mã Bậc thầy"
 
 msgid "Paladin"
 msgstr "Hiệp sĩ"
@@ -8380,16 +8380,16 @@ msgid "Paladins"
 msgstr "Hiệp sĩ"
 
 msgid "Crusader"
-msgstr ""
+msgstr "Hiệp sĩ thập tự"
 
 msgid "Crusaders"
-msgstr ""
+msgstr "Hiệp sĩ thập tự"
 
 msgid "Goblin"
-msgstr ""
+msgstr "Yêu tinh"
 
 msgid "Goblins"
-msgstr ""
+msgstr "Yêu tinh"
 
 msgid "Orc"
 msgstr ""
@@ -8434,16 +8434,16 @@ msgid "War Trolls"
 msgstr ""
 
 msgid "Cyclopes"
-msgstr ""
+msgstr "Độc nhãn"
 
 msgid "Cyclops"
-msgstr ""
+msgstr "Độc nhãn"
 
 msgid "Sprite"
-msgstr ""
+msgstr "Ma tiên"
 
 msgid "Sprites"
-msgstr ""
+msgstr "Ma tiên"
 
 msgid "Dwarf"
 msgstr "Người lùn"
@@ -8458,28 +8458,28 @@ msgid "Battle Dwarves"
 msgstr "Người lùn Chiến"
 
 msgid "Elf"
-msgstr ""
+msgstr "Tiên"
 
 msgid "Elves"
-msgstr ""
+msgstr "Tiên"
 
 msgid "Grand Elf"
-msgstr ""
+msgstr "Tiên Đại"
 
 msgid "Grand Elves"
-msgstr ""
+msgstr "Tiên Đại"
 
 msgid "Druid"
-msgstr ""
+msgstr "Tu sĩ"
 
 msgid "Druids"
-msgstr ""
+msgstr "Tu sĩ"
 
 msgid "Greater Druid"
-msgstr ""
+msgstr "Tu sĩ Cả"
 
 msgid "Greater Druids"
-msgstr ""
+msgstr "Tu sĩ Cả"
 
 msgid "Unicorn"
 msgstr "Kỳ lân"
@@ -8689,127 +8689,127 @@ msgid "Medusas"
 msgstr ""
 
 msgid "Earth Elemental"
-msgstr ""
+msgstr "Nguyên tố Đất"
 
 msgid "Earth Elementals"
-msgstr ""
+msgstr "Nguyên tố Đất"
 
 msgid "Air Elemental"
-msgstr ""
+msgstr "Nguyên tố Khí"
 
 msgid "Air Elementals"
-msgstr ""
+msgstr "Nguyên tố Khí"
 
 msgid "Fire Elemental"
-msgstr ""
+msgstr "Nguyên tố Lửa"
 
 msgid "Fire Elementals"
-msgstr ""
+msgstr "Nguyên tố Lửa"
 
 msgid "Water Elemental"
-msgstr ""
+msgstr "Nguyên tố Nước"
 
 msgid "Water Elementals"
-msgstr ""
+msgstr "Nguyên tố Nước"
 
 msgid "Random Monsters"
-msgstr ""
+msgstr "Quái vật Ngẫu nhiên"
 
 msgid "Random Monster 1"
-msgstr ""
+msgstr "Quái vật Ngẫu nhiên 1"
 
 msgid "Random Monsters 1"
-msgstr ""
+msgstr "Quái vật Ngẫu nhiên 1"
 
 msgid "Random Monster 2"
-msgstr ""
+msgstr "Quái vật Ngẫu nhiên 2"
 
 msgid "Random Monsters 2"
-msgstr ""
+msgstr "Quái vật Ngẫu nhiên 2"
 
 msgid "Random Monster 3"
-msgstr ""
+msgstr "Quái vật Ngẫu nhiên 3"
 
 msgid "Random Monsters 3"
-msgstr ""
+msgstr "Quái vật Ngẫu nhiên 3"
 
 msgid "Random Monster 4"
-msgstr ""
+msgstr "Quái vật Ngẫu nhiên 4"
 
 msgid "Random Monsters 4"
-msgstr ""
+msgstr "Quái vật Ngẫu nhiên 4"
 
 msgid "Double shot"
-msgstr ""
+msgstr "Bắn đúp"
 
 msgid "2-hex monster"
-msgstr ""
+msgstr "quái 2 ô lục giác"
 
 msgid "Double strike"
-msgstr ""
+msgstr "Tấn công kép"
 
 msgid "Double damage to Undead"
-msgstr ""
+msgstr "Sát thương gấp đôi cho Bất tử"
 
 msgid "% magic resistance"
-msgstr ""
+msgstr "% kháng phép"
 
 msgid "Immune to Mind spells"
-msgstr ""
+msgstr "Kháng các phép Tâm trí"
 
 msgid "Immune to Elemental spells"
-msgstr ""
+msgstr "Kháng các phép Nguyên tố"
 
 msgid "Immune to Fire spells"
-msgstr ""
+msgstr "Kháng phép Lửa"
 
 msgid "Immune to Cold spells"
-msgstr ""
+msgstr "Kháng các phép Lạnh"
 
 msgid "Immune to "
-msgstr ""
+msgstr "Kháng phép "
 
 msgid "% immunity to %{spell} spell"
-msgstr ""
+msgstr "% kháng phép %{spell}"
 
 msgid "% damage from Elemental spells"
-msgstr ""
+msgstr "% sát thương với phép Nguyên tố"
 
 msgid "% chance to Dispel beneficial spells"
-msgstr ""
+msgstr "% cơ hội Xua tan các phép thuật có lợi"
 
 msgid "% chance to Paralyze"
-msgstr ""
+msgstr "% cơ hội bị Tê liêt"
 
 msgid "% chance to Petrify"
-msgstr ""
+msgstr "% cơ hội bị Hóa đá"
 
 msgid "% chance to Blind"
-msgstr ""
+msgstr "% cơ hội bị Mù"
 
 msgid "% chance to Curse"
-msgstr ""
+msgstr "% cơ hội bị Nguyền rủa"
 
 msgid "% chance to cast %{spell} spell"
-msgstr ""
+msgstr "% cơ hội niệm phép %{spell}"
 
 msgid "HP regeneration"
-msgstr ""
+msgstr "Hồi máu"
 
 msgid "Two hexes attack"
-msgstr ""
+msgstr "Tấn công 2 ô lục giác"
 
 msgid "Flyer"
-msgstr ""
+msgstr "Loài bay"
 
 msgid "Always retaliates"
-msgstr ""
+msgstr "Luôn phản đòn"
 
 msgid "Attacks all adjacent enemies"
-msgstr ""
+msgstr "Tấn công tất cả kẻ thù lân cận"
 
 msgid "No melee penalty"
-msgstr ""
+msgstr "Không bị phạt cận chiến"
 
 msgid "Dragon"
 msgstr "Rồng"
@@ -8818,55 +8818,55 @@ msgid "Undead"
 msgstr "Bất tử"
 
 msgid "No enemy retaliation"
-msgstr ""
+msgstr "Không có sự phản đòn của kẻ thù"
 
 msgid "HP drain"
-msgstr ""
+msgstr "Hút máu"
 
 msgid "Cloud attack"
-msgstr ""
+msgstr "Tấn công trên mây"
 
 msgid "Decreases enemy's morale by "
-msgstr ""
+msgstr "Làm giảm tinh thần của kẻ thù "
 
 msgid "% chance to halve enemy"
-msgstr ""
+msgstr "% cơ hội giảm một nửa kẻ địch"
 
 msgid "Soul Eater"
-msgstr ""
+msgstr "Kẻ ăn Linh hồn"
 
 msgid "Elemental"
-msgstr ""
+msgstr "Nguyên tố"
 
 msgid "No Morale"
-msgstr ""
+msgstr "Mất Tinh thần"
 
 msgid "200% damage from Fire spells"
-msgstr ""
+msgstr "200% sát thương từ phép Lửa"
 
 msgid "200% damage from Cold spells"
-msgstr ""
+msgstr "200% sát thương từ phép Lạnh"
 
 msgid "% damage from %{spell} spell"
-msgstr ""
+msgstr "% sát thương từ phép %{spell}"
 
 msgid "% immunity to "
-msgstr ""
+msgstr "% kháng lại "
 
 msgid "Lightning"
 msgstr "Sét"
 
 msgid "% damage from "
-msgstr ""
+msgstr "% sát thương từ "
 
 msgid "The three Anduran artifacts magically combine into one."
-msgstr ""
+msgstr "Ba bảo vật Anduran kết hợp một cách kỳ diệu thành một."
 
 msgid "View Spells"
-msgstr ""
+msgstr "Xem Phép"
 
 msgid "View %{name} Info"
-msgstr ""
+msgstr "Xem Thông tin %{name}"
 
 msgid "Move %{name}"
 msgstr "Chuyển %{name}"
@@ -8878,46 +8878,50 @@ msgid "This item can't be traded."
 msgstr "Vật này không thể trao đổi."
 
 msgid "Invalid Artifact"
-msgstr ""
+msgstr "Bảo vật Không hợp lệ"
 
 msgid "The %{name} increases your knowledge by %{count}."
-msgstr ""
+msgstr "%{name} nâng cao kiến thức của ngươi thêm %{count}."
 
 msgid "Ultimate Book of Knowledge"
-msgstr ""
+msgstr "Sách Kiến thức Tối thượng"
 
 msgid "The %{name} increases your attack skill by %{count}."
-msgstr ""
+msgstr "%{name} tăng kỹ năng tấn công của ngươi thêm %{count}."
 
 msgid "Ultimate Sword of Dominion"
-msgstr ""
+msgstr "Kiếm Thống trị Tối thượng"
 
 msgid "The %{name} increases your defense skill by %{count}."
-msgstr ""
+msgstr "%{name} tăng kỹ năng phòng thủ của ngươi thêm %{count}."
 
 msgid "Ultimate Cloak of Protection"
-msgstr ""
+msgstr "Áo Bảo vệ Tối thượng"
 
 msgid "The %{name} increases your spell power by %{count}."
-msgstr ""
+msgstr "%{name} tăng sức mạnh phép thuật của ngươi thêm %{count}."
 
 msgid "Ultimate Wand of Magic"
-msgstr ""
+msgstr "Đũa Phép Tối thượng"
 
 msgid "The %{name} increases your attack and defense skills by %{count} each."
 msgstr ""
+"%{name} tăng kỹ năng tấn công và phòng thủ của ngươi thêm %{count} mỗi kỹ "
+"năng."
 
 msgid "Ultimate Shield"
 msgstr "Khiên Tối thượng"
 
 msgid "The %{name} increases your spell power and knowledge by %{count} each."
 msgstr ""
+"%{name} tăng sức mạnh phép thuật và kiến thức của ngươi thêm %{count} mỗi "
+"thứ."
 
 msgid "Ultimate Staff"
 msgstr "Quyền trượng Tối thượng"
 
 msgid "The %{name} increases each of your basic skills by %{count} points."
-msgstr ""
+msgstr "%{name} tăng mỗi kỹ năng cơ bản của ngươi thêm %{count} điểm."
 
 msgid "Ultimate Crown"
 msgstr "Vương miện Tối thượng"
@@ -8926,52 +8930,65 @@ msgid "Golden Goose"
 msgstr "Ngỗng Vàng"
 
 msgid "The %{name} brings in an income of %{count} gold per day."
-msgstr ""
+msgstr "%{name} mang lại thu nhập %{count} vàng mỗi ngày."
 
 msgid "Arcane Necklace of Magic"
-msgstr ""
+msgstr "Vòng cổ Ma thuật Bí ẩn"
 
 msgid ""
 "After rescuing a Sorceress from a cursed tomb, she rewards your heroism with "
 "an exquisite jeweled necklace."
 msgstr ""
+"Sau khi giải cứu một Nữ phù thủy khỏi ngôi mộ bị nguyền rủa, cô ấy thưởng "
+"cho tướng của bạn một chiếc vòng cổ nạm ngọc tinh xảo."
 
 msgid "Caster's Bracelet of Magic"
-msgstr ""
+msgstr "Vòng tay Ma thuật của Caster"
 
 msgid ""
 "While searching through the rubble of a caved-in mine, you free a group of "
 "trapped Dwarves. Grateful, the leader gives you a golden bracelet."
 msgstr ""
+"Trong khi tìm kiếm trong đống đổ nát của một khu mỏ bị sập, ngươi giải thoát "
+"một nhóm Người lùn bị mắc kẹt. Biết ơn, người lãnh đạo tặng ngươi một chiếc "
+"vòng tay vàng."
 
 msgid "Mage's Ring of Power"
-msgstr ""
+msgstr "Nhẫn Quyền lực Pháp sư"
 
 msgid ""
 "A cry of pain leads you to a Centaur, caught in a trap. Upon setting the "
 "creature free, he hands you a small pouch. Emptying the contents, you find a "
 "dazzling jeweled ring."
 msgstr ""
+"Tiếng kêu đau đớn sẽ dẫn ngươi tới chỗ Nhân Mã đang mắc bẫy. Sau khi thả "
+"sinh vật ra, anh ta đưa cho ngươi một chiếc túi nhỏ. Dọn sạch nội dung bên "
+"trong, ngươi tìm thấy một chiếc nhẫn nạm ngọc rực rỡ."
 
 msgid "Witch's Broach of Magic"
-msgstr ""
+msgstr "Lời khuyên Phép thuật của Phù thủy"
 
 msgid ""
 "Alongside the remains of a burnt witch lies a beautiful broach, intricately "
 "designed. Approaching the corpse with caution, you add the broach to your "
 "inventory."
 msgstr ""
+"Bên cạnh hài cốt của một phù thủy bị cháy là một chiếc trâm cài đẹp đẽ, được "
+"thiết kế tinh xảo. Tiếp cận xác chết một cách thận trọng, ngươi thêm chiếc "
+"chuốt vào kho của mình."
 
 msgid "Medal of Valor"
 msgstr "Huân chương Dũng cảm"
 
 msgid "The %{name} increases your morale by %{count}."
-msgstr ""
+msgstr "%{name} nâng cao tinh thần của ngươi lên %{count}."
 
 msgid ""
 "Freeing a virtuous maiden from the clutches of an evil overlord, you are "
 "granted a Medal of Valor by the King's herald."
 msgstr ""
+"Giải thoát một thiếu nữ đức hạnh khỏi nanh vuốt của tên chúa tể độc ác, bạn "
+"được sứ giả của Nhà vua trao tặng Huân chương Dũng cảm."
 
 msgid "Medal of Courage"
 msgstr "Huân chương Cam đảm"
@@ -8980,6 +8997,8 @@ msgid ""
 "After saving a young boy from a vicious pack of Wolves, you return him to "
 "his father's manor. The grateful nobleman awards you with a Medal of Courage."
 msgstr ""
+"Sau khi cứu một cậu bé khỏi bầy Sói hung ác, bạn đưa cậu bé về trang viên "
+"của cha cậu. Nhà quý tộc biết ơn sẽ trao cho bạn Huân chương Can đảm."
 
 msgid "Medal of Honor"
 msgstr "Huân chương Danh dự"
@@ -8988,6 +9007,9 @@ msgid ""
 "After freeing a princess of a neighboring kingdom from the evil clutches of "
 "despicable slavers, she awards you with a Medal of Honor."
 msgstr ""
+"Sau khi giải phóng công chúa của một vương quốc láng giềng khỏi nanh vuốt "
+"độc ác của những kẻ nô lệ hèn hạ, cô ấy sẽ trao cho ngươi Huân chương Danh "
+"dự."
 
 msgid "Medal of Distinction"
 msgstr "Huân chương Xuất chúng"
@@ -8996,140 +9018,182 @@ msgid ""
 "Ridding the countryside of the hideous Minotaur who made a sport of eating "
 "noblemen's Knights, you are honored with the Medal of Distinction."
 msgstr ""
+"Thoát khỏi vùng nông thôn của Minotaur gớm ghiếc, kẻ chuyên ăn thịt các Hiệp "
+"sĩ của quý tộc, ngươi được vinh danh với Huân chương Xuất chúng."
 
 msgid "Fizbin of Misfortune"
-msgstr ""
+msgstr "Huy chương Bất hạnh"
 
 msgid "The %{name} greatly decreases your morale by %{count}."
-msgstr ""
+msgstr "%{name} làm giảm đáng kể tinh thần của bạn %{count}."
 
 msgid ""
 "You stumble upon a medal lying alongside the empty road. Adding the medal to "
 "your inventory, you become aware that you have acquired the undesirable "
 "Fizbin of Misfortune, greatly decreasing your army's morale."
 msgstr ""
+"Ngươi tình cờ thấy một chiếc huy chương nằm dọc con đường vắng. Khi thêm huy "
+"chương vào kho đồ của mình, ngươi sẽ biết rằng mình đã có được Huy chương "
+"Bất hạnh không mong muốn, khiến tinh thần quân đội của ngươi giảm đi đáng kể."
 
 msgid "Thunder Mace of Dominion"
-msgstr ""
+msgstr "Chùy Sấm sét của sự Thống trị"
 
 msgid ""
 "During a sudden storm, a bolt of lightning strikes a tree, splitting it. "
 "Inside the tree you find a mysterious mace."
 msgstr ""
+"Trong một cơn bão bất ngờ, một tia sét đánh vào một cái cây, làm gãy nó. Bên "
+"trong cái cây ngươi tìm thấy một cây chùy bí ẩn."
 
 msgid "Armored Gauntlets of Protection"
-msgstr ""
+msgstr "Găng tay Thép Bảo vệ"
 
 msgid "The %{name} increase your defense skill by %{count}."
-msgstr ""
+msgstr "%{name} tăng kỹ năng phòng thủ của ngươi thêm %{count}."
 
 msgid ""
 "You encounter the infamous Black Knight! After a grueling duel ending in a "
 "draw, the Knight, out of respect, offers you a pair of armored gauntlets."
 msgstr ""
+"Ngươi gặp phải Hiệp sĩ Đen khét tiếng! Sau khi một trận đấu tay đôi mệt mỏi "
+"kết thúc với tỷ số hòa, Hiệp sĩ, vì tôn trọng, sẽ tặng ngươi một đôi găng "
+"tay bọc thép."
 
 msgid "Defender Helm of Protection"
-msgstr ""
+msgstr "Mũ Bảo vệ của Phòng thủ"
 
 msgid ""
 "A glint of golden light catches your eye. Upon further investigation, you "
 "find a golden helm hidden under a bush."
 msgstr ""
+"Một tia sáng vàng thu hút ánh nhìn của ngươi. Sau khi điều tra sâu hơn, "
+"ngươi tìm thấy một chiếc mũ bảo hiểm bằng vàng ẩn dưới bụi cây."
 
 msgid "Giant Flail of Dominion"
-msgstr ""
+msgstr "Chùy Thống trị Khổng lồ"
 
 msgid ""
 "A clumsy Giant has killed himself with his own flail. Knowing your superior "
 "skill with this weapon, you confidently remove the spectacular flail from "
 "the fallen Giant."
 msgstr ""
+"Một gã khổng lồ vụng về đã tự sát bằng chính cây đập lúa của mình. Biết được "
+"kỹ năng vượt trội của mình với loại vũ khí này, ngươi tự tin loại bỏ cú đập "
+"cây ngoạn mục từ Người khổng lồ đã ngã xuống."
 
 msgid "Ballista of Quickness"
-msgstr ""
+msgstr "Máy bắn đá Nhanh"
 
 msgid "The %{name} gives your catapult one extra shot per combat round."
 msgstr ""
+"%{name} giúp máy bắn đá của bạn có thêm một phát bắn mỗi vòng chiến đấu."
 
 msgid ""
 "Walking through the ruins of an ancient walled city, you find the instrument "
 "of the city's destruction, an elaborately crafted ballista."
 msgstr ""
+"Đi bộ qua đống đổ nát của một thành phố cổ có tường bao quanh, ngươi tìm "
+"thấy công cụ hủy diệt thành phố, một chiếc ballista được chế tạo công phu."
 
 msgid "Stealth Shield of Protection"
-msgstr ""
+msgstr "Lá chắn Bảo vệ Tàng hình"
 
 msgid ""
 "A stone statue of a warrior holds a silver shield. As you remove the shield, "
 "the statue crumbles into dust."
 msgstr ""
+"Bức tượng đá của một chiến binh cầm một chiếc khiên bạc. Khi ngươi tháo tấm "
+"khiên ra, bức tượng sẽ vỡ vụn thành cát bụi."
 
 msgid "Dragon Sword of Dominion"
-msgstr ""
+msgstr "Kiếm Rồng Thống trị"
 
 msgid ""
 "As you are walking along a narrow path, a nearby bush suddenly bursts into "
 "flames. Before your eyes the flames become the image of a beautiful woman. "
 "She holds out a magnificent sword to you."
 msgstr ""
+"Khi ngươi đang đi dọc theo một con đường hẹp, một bụi cây gần đó bất ngờ bốc "
+"cháy. Trước mắt ngươi ngọn lửa trở thành hình ảnh của một người phụ nữ xinh "
+"đẹp. Cô ấy đưa ra một thanh kiếm tuyệt đẹp cho ngươi."
 
 msgid "Power Axe of Dominion"
-msgstr ""
+msgstr "Rìu Sức mạnh Thống trị"
 
 msgid ""
 "You see a silver axe embedded deeply in the ground. After several "
 "unsuccessful attempts by your army to remove the axe, you tightly grip the "
 "handle of the axe and effortlessly pull it free."
 msgstr ""
+"Ngươi nhìn thấy một chiếc rìu bạc cắm sâu vào lòng đất. Sau nhiều nỗ lực "
+"không thành công của quân đội để loại bỏ chiếc rìu, ngươi nắm chặt cán rìu "
+"và dễ dàng kéo nó ra."
 
 msgid "Divine Breastplate of Protection"
-msgstr ""
+msgstr "Giáp Bảo vệ Thần thánh"
 
 msgid ""
 "A gang of Rogues is sifting through the possessions of dead warriors. "
 "Scaring off the scavengers, you note the Rogues had overlooked a beautiful "
 "breastplate."
 msgstr ""
+"Một nhóm Rogues đang sàng lọc tài sản của những chiến binh đã chết. Khiến "
+"những người nhặt rác sợ hãi, ngươi lưu ý rằng Rogues đã bỏ qua một tấm giáp "
+"ngực tuyệt đẹp."
 
 msgid "Minor Scroll of Knowledge"
-msgstr ""
+msgstr "Cuộn Kiến thức Nhỏ"
 
 msgid ""
 "Before you appears a levitating glass case with a scroll, perched upon a bed "
 "of crimson velvet. At your touch, the lid opens and the scroll floats into "
 "your awaiting hands."
 msgstr ""
+"Trước khi ngươi xuất hiện một chiếc hộp thủy tinh bay lên với một cuộn giấy, "
+"nằm trên một chiếc giường nhung đỏ thẫm. Khi ngươi chạm vào, nắp sẽ mở ra và "
+"cuộn giấy sẽ trôi vào tay ngươi đang chờ đợi."
 
 msgid "Major Scroll of Knowledge"
-msgstr ""
+msgstr "Cuộn Kiến thức Lớn"
 
 msgid ""
 "Visiting a local wiseman, you explain the intent of your journey. He reaches "
 "into a sack and withdraws a yellowed scroll and hands it to you."
 msgstr ""
+"Đến thăm một nhà thông thái địa phương, ngươi giải thích mục đích chuyến đi "
+"của mình. Anh ta thò tay vào bao tải và rút ra một cuộn giấy màu vàng rồi "
+"đưa cho ngươi."
 
 msgid "Superior Scroll of Knowledge"
-msgstr ""
+msgstr "Cuộn Kiến thức Đại"
 
 msgid ""
 "You come across the remains of an ancient Druid. Bones, yellowed with age, "
 "peer from the ragged folds of her robe. Searching the robe, you discover a "
 "scroll hidden in the folds."
 msgstr ""
+"Ngươi tình cờ gặp hài cốt của một Tu sĩ cổ đại. Những bộ xương đã ố vàng "
+"theo thời gian lộ ra từ những nếp gấp rách rưới trên chiếc áo choàng của cô. "
+"Lục soát chiếc áo choàng, ngươi phát hiện ra một cuộn giấy được giấu trong "
+"các nếp gấp."
 
 msgid "Foremost Scroll of Knowledge"
-msgstr ""
+msgstr "Cuộn Kiến thức Tối cao"
 
 msgid ""
 "Mangled bones, yellowed with age, peer from the ragged folds of a dead "
 "Druid's robe. Searching the robe, you discover a scroll hidden within."
 msgstr ""
+"Những bộ xương xiêu vẹo, ố vàng theo thời gian, lộ ra từ những nếp gấp rách "
+"rưới trên chiếc áo choàng của một Tu sĩ đã chết. Lục soát chiếc áo choàng, "
+"ngươi phát hiện ra một cuộn giấy ẩn bên trong."
 
 msgid "Endless Sack of Gold"
-msgstr ""
+msgstr "Túi Vàng Vô tận"
 
 msgid "The %{name} provides you with %{count} gold per day."
-msgstr ""
+msgstr "%{name} cung cấp cho ngươi %{count} vàng mỗi ngày."
 
 msgid ""
 "A little leprechaun dances gleefully around a magic sack. Seeing you "
@@ -9137,29 +9201,39 @@ msgid ""
 "ferociously, vanishing into thin air. Remembering the old leprechaun saying "
 "'Finders Keepers', you grab the sack and leave."
 msgstr ""
+"Một chú yêu tinh nhỏ nhảy múa vui vẻ quanh chiếc bao ma thuật. Thấy ngươi "
+"đến gần, anh ta dừng lại giữa chừng. Người đàn ông nhỏ bé hét lên và giậm "
+"chân dữ dội, biến mất trong không khí loãng. Nhớ đến câu nói của yêu tinh "
+"già 'Người giữ người tìm kiếm', ngươi chộp lấy chiếc bao và rời đi."
 
 msgid "Endless Bag of Gold"
-msgstr ""
+msgstr "Bao Vàng Vô tận"
 
 msgid ""
 "A noblewoman, separated from her traveling companions, asks for your help. "
 "After escorting her home, she rewards you with a bag filled with gold."
 msgstr ""
+"Một phụ nữ quý tộc bị tách khỏi những người bạn đồng hành của mình và nhờ "
+"ngươi giúp đỡ. Sau khi hộ tống cô ấy về nhà, cô ấy thưởng cho ngươi một "
+"chiếc túi chứa đầy vàng."
 
 msgid "Endless Purse of Gold"
-msgstr ""
+msgstr "Ví Vàng Vô tận"
 
 msgid ""
 "In your travels, you find a leather purse filled with gold that once "
 "belonged to a great warrior king who had the ability to transform any "
 "inanimate object into gold."
 msgstr ""
+"Trong chuyến du hành của mình, ngươi tìm thấy một chiếc ví da chứa đầy vàng "
+"từng thuộc về một vị vua chiến binh vĩ đại, người có khả năng biến bất kỳ "
+"vật vô tri nào thành vàng."
 
 msgid "Nomad Boots of Mobility"
-msgstr ""
+msgstr "Giầy Du mục của Dịch chuyển"
 
 msgid "The %{name} increase your movement on land."
-msgstr ""
+msgstr "%{name} tăng khả năng di chuyển của ngươi trên đất liền."
 
 msgid ""
 "A Nomad trader seeks protection from a tribe of Goblins. For your "
@@ -9167,47 +9241,61 @@ msgid ""
 "softest leather. Looking closely, you see fascinating ancient carvings "
 "engraved on the leather."
 msgstr ""
+"Một thương nhân du mục tìm kiếm sự bảo vệ từ bộ tộc Yêu tinh. Để hỗ trợ "
+"ngươi, anh ấy sẽ đưa cho bạn một đôi bốt được chế tác tinh xảo làm từ loại "
+"da mềm nhất. Nhìn kỹ, ngươi sẽ thấy những hình chạm khắc cổ xưa đầy hấp dẫn "
+"được khắc trên da."
 
 msgid "Traveler's Boots of Mobility"
-msgstr ""
+msgstr "Giầy Du lich của Dịch chuyển"
 
 msgid ""
 "Discovering a pair of beautifully beaded boots made from the finest and "
 "softest leather, you thank the anonymous donor and add the boots to your "
 "inventory."
 msgstr ""
+"Phát hiện ra một đôi bốt đính cườm đẹp mắt được làm từ loại da mềm và đẹp "
+"nhất, ngươi cảm ơn nhà tài trợ ẩn danh và thêm đôi bốt vào kho của mình."
 
 msgid "Lucky Rabbit's Foot"
-msgstr ""
+msgstr "Chân Thỏ May mắn"
 
 msgid "The %{name} increases your luck in combat by %{count}."
-msgstr ""
+msgstr "%{name} tăng may mắn của bạn trong chiến đấu lên %{count}."
 
 msgid ""
 "A traveling merchant offers you a rabbit's foot, made of gleaming silver "
 "fur, for safe passage. The merchant explains the charm will increase your "
 "luck in combat."
 msgstr ""
+"Một thương gia du lịch tặng ngươi một bàn chân thỏ, làm bằng lông bạc lấp "
+"lánh, để đi lại an toàn. Người thương gia giải thích rằng bùa sẽ tăng may "
+"mắn cho ngươi trong chiến đấu."
 
 msgid "Golden Horseshoe"
-msgstr ""
+msgstr "Giầy ngựa Vàng"
 
 msgid ""
 "An ensnared Unicorn whinnies in fright. Murmuring soothing words, you set "
 "her free. Snorting and stamping her front hoof once, she gallops off. "
 "Looking down you see a golden horseshoe."
 msgstr ""
+"Một con Kỳ lân bị mắc bẫy đang rên rỉ vì sợ hãi. Thì thầm những lời êm dịu, "
+"bạn thả cô ấy ra. Khịt mũi và giậm mạnh móng trước một lần, cô ấy phi nước "
+"đại. Nhìn xuống ngươi thấy một chiếc móng ngựa màu vàng."
 
 msgid "Gambler's Lucky Coin"
-msgstr ""
+msgstr "Xu May mắn của Dân cờ bạc"
 
 msgid ""
 "You have captured a mischievous imp who has been terrorizing the region. In "
 "exchange for his release, he rewards you with a magical coin."
 msgstr ""
+"Ngươi đã bắt được một tên tiểu quỷ tinh quái đang khủng bố khu vực. Để đổi "
+"lấy việc được thả, anh ta thưởng cho ngươi một đồng xu ma thuật."
 
 msgid "Four-Leaf Clover"
-msgstr ""
+msgstr "Cỏ Bốn Lá"
 
 msgid ""
 "In the middle of a patch of dead and dry vegetation, to your surprise you "
