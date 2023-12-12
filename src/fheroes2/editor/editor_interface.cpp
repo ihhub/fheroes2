@@ -838,11 +838,44 @@ namespace Interface
             const int groundType = Maps::Ground::getGroundByImageIndex( tile.getTerrainImageIndex() );
             const int32_t basementId = fheroes2::getTownBasementId( groundType );
 
+            const auto & townObjectInfo = getObjectInfo( groupType, type );
+            const auto & basementObjectInfo = getObjectInfo( Maps::ObjectGroup::LANDSCAPE_TOWN_BASEMENTS, basementId );
+
+            if ( !isObjectPlacementAllowed( townObjectInfo, tilePos ) ) {
+                fheroes2::showStandardTextMessage( _( "Towns" ), _( "Objects cannot be placed outside the map." ), Dialog::OK );
+                return;
+            }
+
+            if ( !isObjectPlacementAllowed( basementObjectInfo, tilePos ) ) {
+                fheroes2::showStandardTextMessage( _( "Towns" ), _( "Objects cannot be placed outside the map." ), Dialog::OK );
+                return;
+            }
+
+            if ( !verifyObjectCondition( townObjectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return !tileToCheck.isWater(); } ) ) {
+                fheroes2::showStandardTextMessage( _( "Towns" ), _( "Towns cannot be placed on water." ), Dialog::OK );
+                return;
+            }
+
+            if ( !verifyObjectCondition( basementObjectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return !tileToCheck.isWater(); } ) ) {
+                fheroes2::showStandardTextMessage( _( "Towns" ), _( "Towns cannot be placed on water." ), Dialog::OK );
+                return;
+            }
+
+            if ( !verifyObjectCondition( townObjectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return Maps::isClearGround( tileToCheck ); } ) ) {
+                fheroes2::showStandardTextMessage( _( "Towns" ), _( "Choose a tile which does not contain any objects." ), Dialog::OK );
+                return;
+            }
+
+            if ( !verifyObjectCondition( basementObjectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return Maps::isClearGround( tileToCheck ); } ) ) {
+                fheroes2::showStandardTextMessage( _( "Towns" ), _( "Choose a tile which does not contain any objects." ), Dialog::OK );
+                return;
+            }
+
             const fheroes2::ActionCreator action( _historyManager );
 
             Maps::setObjectOnTile( tile, getObjectInfo( Maps::ObjectGroup::LANDSCAPE_FLAGS, color ) );
-            Maps::setObjectOnTile( tile, getObjectInfo( Maps::ObjectGroup::LANDSCAPE_TOWN_BASEMENTS, basementId ) );
-            Maps::setObjectOnTile( tile, getObjectInfo( groupType, type ) );
+            Maps::setObjectOnTile( tile, basementObjectInfo );
+            Maps::setObjectOnTile( tile, townObjectInfo );
 
             _redraw |= mapUpdateFlags;
         }
