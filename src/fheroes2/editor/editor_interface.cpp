@@ -821,8 +821,8 @@ namespace Interface
             setObjectOnTile( tile, objectInfo );
         }
         else if ( groupType == Maps::ObjectGroup::KINGDOM_TOWNS ) {
-            int32_t type = 0;
-            int32_t color = 0;
+            int32_t type = -1;
+            int32_t color = -1;
             _editorPanel.getTownObjectProperties( type, color );
 
             const int groundType = Maps::Ground::getGroundByImageIndex( tile.getTerrainImageIndex() );
