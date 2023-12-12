@@ -823,9 +823,13 @@ namespace Interface
             int32_t color = 0;
             _editorPanel.getTownObjectProperties( type, color );
 
-            setObjectOnTile( tile, getObjectInfo( Maps::ObjectGroup::LANDSCAPE_FLAGS, color ) );
-            setObjectOnTile( tile, getObjectInfo( Maps::ObjectGroup::LANDSCAPE_TOWN_BASEMENTS, 0 ) );
-            setObjectOnTile( tile, getObjectInfo( groupType, type ) );
+            const fheroes2::ActionCreator action( _historyManager );
+
+            Maps::setObjectOnTile( tile, getObjectInfo( Maps::ObjectGroup::LANDSCAPE_FLAGS, color ) );
+            Maps::setObjectOnTile( tile, getObjectInfo( Maps::ObjectGroup::LANDSCAPE_TOWN_BASEMENTS, 0 ) );
+            Maps::setObjectOnTile( tile, getObjectInfo( groupType, type ) );
+
+            _redraw |= mapUpdateFlags;
         }
     }
 
