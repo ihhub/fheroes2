@@ -214,8 +214,8 @@ namespace fheroes2
 
         // NOTICE: This calculations should be consistent with objects position in KINGDOM_TOWNS and LANDSCAPE_FLAGS vectors.
         assert( Maps::getObjectsByGroup( Maps::ObjectGroup::LANDSCAPE_TOWN_BASEMENTS ).size() > basementOffset );
-        assert( Maps::getObjectsByGroup( Maps::ObjectGroup::KINGDOM_TOWNS ).size() > townType );
-        assert( Maps::getObjectsByGroup( Maps::ObjectGroup::LANDSCAPE_FLAGS ).size() > color );
+        assert( Maps::getObjectsByGroup( Maps::ObjectGroup::KINGDOM_TOWNS ).size() > static_cast<size_t>( townType ) );
+        assert( Maps::getObjectsByGroup( Maps::ObjectGroup::LANDSCAPE_FLAGS ).size() > static_cast<size_t>( color ) );
 
         const Sprite & townBasement = generateMapObjectImage( Maps::getObjectsByGroup( Maps::ObjectGroup::LANDSCAPE_TOWN_BASEMENTS )[basementOffset] );
         const Sprite & townMainObject = generateMapObjectImage( Maps::getObjectsByGroup( Maps::ObjectGroup::KINGDOM_TOWNS )[townType] );
