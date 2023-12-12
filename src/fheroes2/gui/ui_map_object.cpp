@@ -173,47 +173,17 @@ namespace fheroes2
             return {};
         }
 
-        size_t basementOffset = 0;
-        // NOTICE: 'basementOffset' should be consistent with basement objects position in LANDSCAPE_TOWN_BASEMENTS vector.
-        switch ( groundId ) {
-        case Maps::Ground::WATER:
+        if ( groundId == Maps::Ground::WATER ) {
             // Towns can not be placed on water.
-            {
-                Sprite image = AGG::GetICN( ICN::SPELLS, 0 );
-                image.setPosition( -image.width() / 2, -image.height() / 2 );
-                return image;
-            }
-        case Maps::Ground::GRASS:
-            break;
-        case Maps::Ground::SNOW:
-            basementOffset = 1;
-            break;
-        case Maps::Ground::SWAMP:
-            basementOffset = 2;
-            break;
-        case Maps::Ground::LAVA:
-            basementOffset = 3;
-            break;
-        case Maps::Ground::DESERT:
-            basementOffset = 4;
-            break;
-        case Maps::Ground::DIRT:
-            basementOffset = 5;
-            break;
-        case Maps::Ground::WASTELAND:
-            basementOffset = 6;
-            break;
-        case Maps::Ground::BEACH:
-            basementOffset = 7;
-            break;
-        default:
-            // Have you added a new ground? Add the logic above!
-            assert( 0 );
-            break;
+            Sprite image = AGG::GetICN( ICN::SPELLS, 0 );
+            image.setPosition( -image.width() / 2, -image.height() / 2 );
+            return image;
         }
 
+        const int32_t basementOffset = getTownBasementId( groundId );
+
         // NOTICE: This calculations should be consistent with objects position in KINGDOM_TOWNS and LANDSCAPE_FLAGS vectors.
-        assert( Maps::getObjectsByGroup( Maps::ObjectGroup::LANDSCAPE_TOWN_BASEMENTS ).size() > basementOffset );
+        assert( Maps::getObjectsByGroup( Maps::ObjectGroup::LANDSCAPE_TOWN_BASEMENTS ).size() > static_cast<int32_t>( basementOffset ) );
         assert( Maps::getObjectsByGroup( Maps::ObjectGroup::KINGDOM_TOWNS ).size() > static_cast<size_t>( townType ) );
         assert( Maps::getObjectsByGroup( Maps::ObjectGroup::LANDSCAPE_FLAGS ).size() > static_cast<size_t>( color ) );
 
@@ -232,5 +202,38 @@ namespace fheroes2
         Blit( townFlags, townImage, townFlags.x() - townImageX, townFlags.y() - townImageY );
 
         return townImage;
+    }
+
+    int32_t getTownBasementId( const int groundType )
+    {
+        // NOTICE: 'basementOffset' should be consistent with basement objects position in LANDSCAPE_TOWN_BASEMENTS vector.
+        switch ( groundType ) {
+        case Maps::Ground::WATER:
+            // Logically Water is not allowed but let's do this.
+            assert( 0 );
+            return 0;
+        case Maps::Ground::GRASS:
+            return 0;
+        case Maps::Ground::SNOW:
+            return 1;
+        case Maps::Ground::SWAMP:
+            return 2;
+        case Maps::Ground::LAVA:
+            return 3;
+        case Maps::Ground::DESERT:
+            return 4;
+        case Maps::Ground::DIRT:
+            return 5;
+        case Maps::Ground::WASTELAND:
+            return 6;
+        case Maps::Ground::BEACH:
+            return 7;
+        default:
+            // Have you added a new ground? Add the logic above!
+            assert( 0 );
+            break;
+        }
+
+        return 0;
     }
 }

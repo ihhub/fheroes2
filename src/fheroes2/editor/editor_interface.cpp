@@ -38,6 +38,7 @@
 #include "game_delays.h"
 #include "game_hotkeys.h"
 #include "gamedefs.h"
+#include "ground.h"
 #include "heroes.h"
 #include "history_manager.h"
 #include "icn.h"
@@ -61,6 +62,7 @@
 #include "translations.h"
 #include "ui_button.h"
 #include "ui_dialog.h"
+#include "ui_map_object.h"
 #include "ui_tool.h"
 #include "view_world.h"
 #include "world.h"
@@ -823,10 +825,13 @@ namespace Interface
             int32_t color = 0;
             _editorPanel.getTownObjectProperties( type, color );
 
+            const int groundType = Maps::Ground::getGroundByImageIndex( tile.getTerrainImageIndex() );
+            const int32_t basementId = fheroes2::getTownBasementId( groundType );
+
             const fheroes2::ActionCreator action( _historyManager );
 
             Maps::setObjectOnTile( tile, getObjectInfo( Maps::ObjectGroup::LANDSCAPE_FLAGS, color ) );
-            Maps::setObjectOnTile( tile, getObjectInfo( Maps::ObjectGroup::LANDSCAPE_TOWN_BASEMENTS, 0 ) );
+            Maps::setObjectOnTile( tile, getObjectInfo( Maps::ObjectGroup::LANDSCAPE_TOWN_BASEMENTS, basementId ) );
             Maps::setObjectOnTile( tile, getObjectInfo( groupType, type ) );
 
             _redraw |= mapUpdateFlags;
