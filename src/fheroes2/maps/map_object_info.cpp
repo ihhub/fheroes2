@@ -669,13 +669,13 @@ namespace
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWRD, icnOffset + 7, fheroes2::Point{ -1, -1 }, secondaryObjectType, Maps::OBJECT_LAYER );
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWRD, icnOffset + 8, fheroes2::Point{ 0, -1 }, secondaryObjectType, Maps::OBJECT_LAYER );
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWRD, icnOffset + 9, fheroes2::Point{ 1, -1 }, secondaryObjectType, Maps::OBJECT_LAYER );
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWRD, icnOffset + 6, fheroes2::Point{ -2, -1 }, secondaryObjectType );
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWRD, icnOffset + 10, fheroes2::Point{ 2, -1 }, secondaryObjectType );
             object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWRD, icnOffset + 1, fheroes2::Point{ -2, -2 }, secondaryObjectType );
             object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWRD, icnOffset + 2, fheroes2::Point{ -1, -2 }, secondaryObjectType );
             object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWRD, icnOffset + 3, fheroes2::Point{ 0, -2 }, secondaryObjectType );
             object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWRD, icnOffset + 4, fheroes2::Point{ 1, -2 }, secondaryObjectType );
             object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWRD, icnOffset + 5, fheroes2::Point{ 2, -2 }, secondaryObjectType );
-            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWRD, icnOffset + 6, fheroes2::Point{ -2, -1 }, secondaryObjectType );
-            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWRD, icnOffset + 10, fheroes2::Point{ 2, -1 }, secondaryObjectType );
             object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWRD, icnOffset + 0, fheroes2::Point{ 0, -3 }, secondaryObjectType );
 
             objects.emplace_back( std::move( object ) );
