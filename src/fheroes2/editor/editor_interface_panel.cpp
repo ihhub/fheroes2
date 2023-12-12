@@ -758,6 +758,7 @@ namespace Interface
             assert( 0 );
             type = -1;
             color = -1;
+            return;
         }
 
         type = _selectedObjectType[Brush::TOWNS] % static_cast<int32_t>( townObjects.size() );
