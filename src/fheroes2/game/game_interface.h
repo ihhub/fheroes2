@@ -153,10 +153,12 @@ namespace Interface
         static int GetCursorFocusCastle( const Castle & castle, const Maps::Tiles & tile );
         static int GetCursorFocusHeroes( const Heroes & hero, const Maps::Tiles & tile );
         static int GetCursorFocusShipmaster( const Heroes & hero, const Maps::Tiles & tile );
+        static int _getCursorNoFocus( const Maps::Tiles & tile );
         static int GetCursorTileIndex( int32_t dstIndex );
 
         void ShowPathOrStartMoveHero( Heroes * hero, const int32_t destinationIdx );
         void MoveHeroFromArrowKeys( Heroes & hero, const int direction );
+        void _startHeroMove( Heroes & hero );
 
         fheroes2::GameMode HumanTurn( const bool isload );
 

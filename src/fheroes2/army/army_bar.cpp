@@ -451,7 +451,7 @@ bool ArmyBar::ActionBarLeftMouseSingleClick( ArmyTroop & troop )
                     break;
                 }
 
-            const Monster mons = Dialog::selectMonster( cur, false );
+            const Monster mons = Dialog::selectMonster( cur );
 
             if ( mons.isValid() ) {
                 uint32_t count = 1;

@@ -803,6 +803,17 @@ int MP2::getActionObjectDirection( const MapObjectType objectType )
     case OBJ_HEROES:
     case OBJ_JAIL:
     case OBJ_MONSTER:
+    case OBJ_RANDOM_ARTIFACT:
+    case OBJ_RANDOM_ARTIFACT_MAJOR:
+    case OBJ_RANDOM_ARTIFACT_MINOR:
+    case OBJ_RANDOM_ARTIFACT_TREASURE:
+    case OBJ_RANDOM_MONSTER:
+    case OBJ_RANDOM_MONSTER_MEDIUM:
+    case OBJ_RANDOM_MONSTER_STRONG:
+    case OBJ_RANDOM_MONSTER_VERY_STRONG:
+    case OBJ_RANDOM_MONSTER_WEAK:
+    case OBJ_RANDOM_ULTIMATE_ARTIFACT:
+    case OBJ_RANDOM_RESOURCE:
     case OBJ_RESOURCE:
     case OBJ_SEA_CHEST:
     case OBJ_SHIPWRECK_SURVIVOR:
@@ -818,6 +829,7 @@ int MP2::getActionObjectDirection( const MapObjectType objectType )
     case OBJ_ARENA:
     case OBJ_ARTESIAN_SPRING:
     case OBJ_BARROW_MOUNDS:
+    case OBJ_CASTLE:
     case OBJ_CAVE:
     case OBJ_CITY_OF_DEAD:
     case OBJ_DAEMON_CAVE:
@@ -884,8 +896,6 @@ int MP2::getActionObjectDirection( const MapObjectType objectType )
     case OBJ_WITCHS_HUT:
     case OBJ_XANADU:
         return DIRECTION_CENTER_ROW | DIRECTION_BOTTOM_ROW;
-    case OBJ_CASTLE:
-        return Direction::CENTER | Direction::BOTTOM;
     default:
         // Did you add a new action object? Please add its passability!
         assert( 0 );

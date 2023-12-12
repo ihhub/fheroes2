@@ -52,6 +52,7 @@
 #include "image.h"
 #include "interface_base.h"
 #include "interface_gamearea.h"
+#include "interface_icons.h"
 #include "interface_radar.h"
 #include "interface_status.h"
 #include "kingdom.h"
@@ -144,7 +145,7 @@ namespace
 
     void DialogCaptureResourceObject( const std::string & hdr, const std::string & str, const int32_t resourceType )
     {
-        const payment_t info = ProfitConditions::FromMine( resourceType );
+        const Funds info = ProfitConditions::FromMine( resourceType );
         int32_t resourceCount = 0;
 
         switch ( resourceType ) {
@@ -237,7 +238,7 @@ namespace
                     setMonsterCountOnTile( tile, troop.GetCount() - recruit );
                 }
 
-                const payment_t paymentCosts = troop.GetMonster().GetCost() * recruit;
+                const Funds paymentCosts = troop.GetMonster().GetCost() * recruit;
                 hero.GetKingdom().OddFundsResource( paymentCosts );
 
                 hero.GetArmy().JoinTroop( troop.GetMonster(), recruit, false );
@@ -342,7 +343,7 @@ namespace
             DEBUG_LOG( DBG_GAME, DBG_INFO, join.monsterCount << " " << troop.GetName() << " want to join " << hero.GetName() << " for " << joiningCost << " gold" )
 
             // These conditions must already be met if a group of monsters wants to join
-            assert( hero.GetArmy().CanJoinTroop( troop ) && hero.GetKingdom().AllowPayment( payment_t( Resource::GOLD, joiningCost ) ) );
+            assert( hero.GetArmy().CanJoinTroop( troop ) && hero.GetKingdom().AllowPayment( Funds( Resource::GOLD, joiningCost ) ) );
 
             if ( Dialog::YES == Dialog::ArmyJoinWithCost( troop, join.monsterCount, joiningCost ) ) {
                 hero.GetArmy().JoinTroop( troop.GetMonster(), join.monsterCount, false );
@@ -3112,7 +3113,7 @@ namespace
         const char * title = MP2::StringObject( MP2::OBJ_ALCHEMIST_TOWER );
 
         if ( cursed ) {
-            const payment_t payment = PaymentConditions::ForAlchemist();
+            const Funds payment = PaymentConditions::ForAlchemist();
 
             std::string msg = _( "As you enter the Alchemist's Tower, a hobbled, graying man in a brown cloak makes his way towards you." );
             msg += '\n';
@@ -3260,7 +3261,9 @@ namespace
                 _( "In a dazzling display of daring, you break into the local jail and free the hero imprisoned there, who, in return, pledges loyalty to your cause." ),
                 Dialog::OK );
 
-            Interface::AdventureMap::Get().getGameArea().runSingleObjectAnimation(
+            Interface::AdventureMap & adventureMapInterface = Interface::AdventureMap::Get();
+
+            adventureMapInterface.getGameArea().runSingleObjectAnimation(
                 std::make_shared<Interface::ObjectFadingOutInfo>( tile.GetObjectUID(), tile.GetIndex(), tile.GetObject() ) );
 
             // TODO: add hero fading in animation together with jail animation.
@@ -3268,6 +3271,9 @@ namespace
 
             if ( prisoner ) {
                 prisoner->Recruit( hero.GetColor(), Maps::GetPoint( dst_index ) );
+
+                // Update the kingdom heroes list including the scrollbar.
+                adventureMapInterface.GetIconsPanel().ResetIcons( ICON_HEROES );
             }
         }
         else {

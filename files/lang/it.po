@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-16 01:01+0000\n"
+"POT-Creation-Date: 2023-12-05 00:31+0000\n"
 "PO-Revision-Date: 2022-12-03 04:36+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <it@li.org>\n"
@@ -172,6 +172,9 @@ msgid "VIEW INTRO"
 msgstr ""
 
 msgid "MIN"
+msgstr ""
+
+msgid "RESET"
 msgstr ""
 
 msgid ""
@@ -891,14 +894,9 @@ msgstr "Scegli Potere"
 msgid "Set Knowledge Skill"
 msgstr "Scegli Sapere"
 
-msgid "%{race1} %{name1}"
-msgstr ""
-
-msgid "vs"
-msgstr "contro"
-
-msgid "%{race2} %{name2}"
-msgstr ""
+#, fuzzy
+msgid "%{race1} %{name1} vs %{race2} %{name2}"
+msgstr "%{name1} incontra %{name2}"
 
 msgid "Monsters"
 msgstr "Mostri"
@@ -921,11 +919,6 @@ msgstr ""
 #, fuzzy
 msgid "The %{name} is destroyed."
 msgstr "%{name} incrementa il morale delle tue truppe."
-
-msgid ""
-"The %{artifact} artifact is in effect for this battle, disabling %{spell} "
-"spell."
-msgstr ""
 
 msgid "%{count} %{name} rises from the dead!"
 msgid_plural "%{count} %{name} rise from the dead!"
@@ -1305,8 +1298,8 @@ msgstr ""
 
 msgid ""
 "Find the Orb of negation, which is said to be buried in this land. There are "
-"clues inscribed on stone obelisks which will help lead you to your price. "
-"Find the orb before the first day of the sixth month, or your rivals will "
+"clues inscribed on stone obelisks which will help lead you to your prize. "
+"Find the Orb before the first day of the sixth month, or your rivals will "
 "surely have gotten to the fount before you."
 msgstr ""
 
@@ -1765,6 +1758,9 @@ msgstr "Il/la %{building} produce %{monster}."
 
 msgid "Requires:"
 msgstr "Richiede:"
+
+msgid "Exit this menu without doing anything."
+msgstr "Esci dal menù senza far nulla."
 
 #, fuzzy
 msgid "Cannot build. You have already built here today."
@@ -2468,6 +2464,9 @@ msgstr "con 1 artefatto."
 msgid "without artifacts."
 msgstr "senza artefatti."
 
+msgid "Recruit %{name} the %{race}"
+msgstr "Recluta %{name}: %{race}"
+
 msgid ""
 "'Spread' combat formation spreads your armies from the top to the bottom of "
 "the battlefield, with at least one empty space between each army."
@@ -2483,9 +2482,6 @@ msgstr "Formazione sparsa"
 
 msgid "Grouped Formation"
 msgstr "Formazione chiusa"
-
-msgid "Recruit %{name} the %{race}"
-msgstr "Recluta %{name}: %{race}"
 
 msgid "Set garrison combat formation to 'Spread'"
 msgstr ""
@@ -2562,9 +2558,6 @@ msgstr "Scava alla ricerca dell'Estremo Artefatto."
 
 msgid "Digging"
 msgstr "Scavo"
-
-msgid "Exit this menu without doing anything."
-msgstr "Esci dal menù senza far nulla."
 
 msgid "Arena"
 msgstr "Arena"
@@ -2893,6 +2886,16 @@ msgstr ""
 msgid "Show extra information such as FPS and current time."
 msgstr ""
 
+msgid "Hotkey: "
+msgstr ""
+
+msgid "Category: "
+msgstr ""
+
+#, fuzzy
+msgid "Event: "
+msgstr "Evento"
+
 msgid "Hot Keys:"
 msgstr ""
 
@@ -3181,12 +3184,13 @@ msgstr "File da Caricare:"
 msgid "Accept the choice made."
 msgstr "Accetta la scelta."
 
-msgid "Unknown Hero"
-msgstr ""
-
 #, fuzzy
 msgid "%{color} %{race} hero"
 msgstr "Giocatore %{color}"
+
+#, fuzzy
+msgid "Terrain object"
+msgstr "Nessun oggetto"
 
 msgid "Select Skill:"
 msgstr "Scegli dote:"
@@ -3204,11 +3208,23 @@ msgid "Select Hero:"
 msgstr "Scegli eroe:"
 
 #, fuzzy
+msgid "Select Treasure:"
+msgstr "Scegli eroe:"
+
+#, fuzzy
+msgid "Select Ocean Object:"
+msgstr "Scegli artefatto:"
+
+#, fuzzy
 msgid "Map Type:\n"
 msgstr "Tipo di mappa"
 
 msgid "The Succession Wars"
 msgstr ""
+
+#, fuzzy
+msgid "Resurrection"
+msgstr "Risorgi"
 
 msgid "Lose all your heroes and towns."
 msgstr "Perdi tutti i tuoi eroi e le città."
@@ -3469,6 +3485,12 @@ msgid "Best Monster:"
 msgstr "Miglior Mostro:"
 
 #, fuzzy
+msgid "Map filename"
+msgstr ""
+"Dimensioni\n"
+"Mappa"
+
+#, fuzzy
 msgid ""
 "Are you sure you want to load a new map? (Any unsaved changes to the current "
 "map will be lost.)"
@@ -3513,16 +3535,38 @@ msgstr ""
 msgid "Monster"
 msgstr "Mostro"
 
+msgid "Objects cannot be placed outside the map."
+msgstr ""
+
 msgid "Monsters cannot be placed on water."
 msgstr ""
 
 msgid "Choose a tile which does not contain any objects."
 msgstr ""
 
+msgid "Treasure"
+msgstr "Tesoro"
+
+msgid "Treasures cannot be placed on water."
+msgstr ""
+
 msgid "Heroes"
 msgstr "Eroi"
 
 msgid "Heroes cannot be placed on water."
+msgstr ""
+
+msgid "Artifacts"
+msgstr "Artefatti"
+
+msgid "Artifacts cannot be placed on water."
+msgstr ""
+
+#, fuzzy
+msgid "Ocean object"
+msgstr "Nessun oggetto"
+
+msgid "Ocean object must be placed on water."
 msgstr ""
 
 msgid "Ocean Objects"
@@ -3558,9 +3602,6 @@ msgstr ""
 #, fuzzy
 msgid "Towns"
 msgstr "Castello"
-
-msgid "Artifacts"
-msgstr "Artefatti"
 
 #, fuzzy
 msgid "Treasures"
@@ -4048,6 +4089,9 @@ msgstr ""
 msgid "Your Name"
 msgstr ""
 
+msgid "Unknown Hero"
+msgstr ""
+
 msgid "Standard"
 msgstr ""
 
@@ -4412,6 +4456,32 @@ msgid ""
 "place only on the next turn."
 msgstr ""
 
+msgid "Default Actions"
+msgstr ""
+
+msgid "Global Actions"
+msgstr ""
+
+msgid "Main Menu"
+msgstr ""
+
+msgid "World Map"
+msgstr "Mappa mondiale"
+
+#, fuzzy
+msgid "Battle Screen"
+msgstr "Schermata Eroe"
+
+#, fuzzy
+msgid "Town Screen"
+msgstr "Schermata Eroe"
+
+msgid "Army Actions"
+msgstr ""
+
+msgid "Editor"
+msgstr ""
+
 #, fuzzy
 msgid "The save file is corrupted."
 msgstr "Non esistono punti di salvataggio da caricare."
@@ -4429,8 +4499,8 @@ msgid "This file contains a save with an invalid game type."
 msgstr ""
 
 msgid ""
-"This file was saved for a \"The Price of Loyalty\" map, but the "
-"corresponding game assets have not been provided to the engine."
+"This save file requires \"The Price of Loyalty\" game assets, but they have "
+"not been provided to the engine."
 msgstr ""
 
 msgid "This saved game is localized to '"
@@ -4479,9 +4549,10 @@ msgstr ""
 "Benvenuti a fheroes2! Gentilmente, prima di cominciare il gioco scegli una "
 "risoluzione per il gioco."
 
+#, fuzzy
 msgid ""
-"Welcome to Heroes of Might and Magic II powered by fheroes2 engine! Before "
-"starting the game please choose game resolution."
+"Welcome to Heroes of Might and Magic II powered by the fheroes2 engine!\n"
+"Before starting the game please select a game resolution."
 msgstr ""
 "Benvenuti a fheroes2! Gentilmente, prima di cominciare il gioco scegli una "
 "risoluzione per il gioco."
@@ -4490,19 +4561,28 @@ msgid "Please Remember"
 msgstr "Non Dimenticare"
 
 # Needs extra whitespace to avoid yellow word splitting
-msgid "You can always change game resolution by clicking on the "
+#, fuzzy
+msgid ""
+"You can always change the language, resolution and settings of the game by "
+"clicking on the "
 msgstr "Puoi sempre modificare la risoluzione cliccando sulla  "
 
 msgid "door"
 msgstr "porta"
 
-msgid ""
-" on the left side of main menu or by clicking on the configuration button. \n"
-"\n"
-"Enjoy the game!"
+msgid " on the left side of the Main Menu, or with the "
 msgstr ""
 
-msgid "Editor"
+msgid " button from the "
+msgstr ""
+
+msgid "NEW GAME"
+msgstr ""
+
+msgid ""
+" menu. \n"
+"\n"
+"Enjoy the game!"
 msgstr ""
 
 #, fuzzy
@@ -5023,9 +5103,6 @@ msgstr "Riprova su terreno sgombro."
 msgid "A miniature view of the known world. Left click to move viewing area."
 msgstr ""
 
-msgid "World Map"
-msgstr "Mappa mondiale"
-
 msgid "Month: %{month} Week: %{week}"
 msgstr "Mese: %{month} Settimana: %{week}"
 
@@ -5450,9 +5527,6 @@ msgstr ""
 
 msgid "You come upon the remains of an unfortunate adventurer."
 msgstr "Trovi le spoglie di un avventuriero sfortunato."
-
-msgid "Treasure"
-msgstr "Tesoro"
 
 msgid "Searching through the tattered clothing, you find the %{artifact}."
 msgstr ""
@@ -6573,17 +6647,17 @@ msgstr ""
 msgid "%{name1} meets %{name2}"
 msgstr "%{name1} incontra %{name2}"
 
-msgid "Town Portal"
-msgstr "Alla Porta"
-
-msgid "Select town to port to."
-msgstr ""
-
 msgid "Enemy heroes are now fully identifiable."
 msgstr ""
 
 msgid "Identify Hero"
 msgstr "Riconosci Eroi"
+
+msgid "Select town to port to."
+msgstr ""
+
+msgid "Town Portal"
+msgstr "Alla Porta"
 
 msgid "The creatures are willing to join us!"
 msgstr ""
@@ -9348,6 +9422,9 @@ msgid ""
 "lost by mortals."
 msgstr ""
 
+msgid "spellBonus|selected by user"
+msgstr ""
+
 msgid "Wood"
 msgstr "Legno"
 
@@ -9868,6 +9945,44 @@ msgstr "Guardiano dell'Acqua"
 msgid "Sets Water Elementals to guard a mine against enemy armies."
 msgstr "Convoca una Creatura dell'Acqua per proteggere una miniera."
 
+#, fuzzy
+msgid "Random Spell"
+msgstr "Casuale"
+
+msgid "Randomly selected spell of any level."
+msgstr ""
+
+#, fuzzy
+msgid "Random 1st Level Spell"
+msgstr "Castello casuale"
+
+msgid "Randomly selected 1st level spell."
+msgstr ""
+
+msgid "Random 2nd Level Spell"
+msgstr ""
+
+msgid "Randomly selected 2nd level spell."
+msgstr ""
+
+msgid "Random 3rd Level Spell"
+msgstr ""
+
+msgid "Randomly selected 3rd level spell."
+msgstr ""
+
+msgid "Random 4th Level Spell"
+msgstr ""
+
+msgid "Randomly selected 4th level spell."
+msgstr ""
+
+msgid "Random 5th Level Spell"
+msgstr ""
+
+msgid "Randomly selected 5th level spell."
+msgstr ""
+
 msgid "Petrification"
 msgstr "Pietrificazione"
 
@@ -10001,3 +10116,6 @@ msgstr ""
 "Scopri l'ultima versione del gioco su\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "vs"
+#~ msgstr "contro"

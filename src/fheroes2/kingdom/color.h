@@ -31,24 +31,14 @@ class StreamBase;
 
 namespace fheroes2
 {
-    enum ObjectColor
-    {
-        NONE = 0,
-        AQUA = 1,
-        BLUE = 2,
-        BROWN = 3,
-        GOLD = 4,
-        GREEN = 5,
-        ORANGE = 6,
-        PURPLE = 7,
-        RED = 8
-    };
     const char * getBarrierColorName( const int color );
     const char * getTentColorName( const int color );
 }
 
 namespace Color
 {
+    // !!! IMPORTANT !!!
+    // Do NOT change the order of the items as they are used for the map format.
     enum : uint8_t
     {
         NONE = 0x00,

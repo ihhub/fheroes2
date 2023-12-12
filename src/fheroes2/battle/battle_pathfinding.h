@@ -20,7 +20,7 @@
 
 #pragma once
 
-#include <bitset>
+#include <array>
 #include <cstddef>
 #include <cstdint>
 #include <unordered_map>
@@ -97,6 +97,11 @@ namespace Battle
         // Returns the indexes of all cells that can be occupied by the given unit's head on the current turn
         Indexes getAllAvailableMoves( const Unit & unit );
 
+        // Returns the position on the path for the given unit to the given position, which is reachable on the current
+        // turn and is as close as possible to the destination (excluding the current position of the unit). If the given
+        // position is unreachable by the given unit, then an empty Position object is returned.
+        Position getClosestReachablePosition( const Unit & unit, const Position & position );
+
     private:
         // Rebuilds the graph of available positions for the given unit if necessary (if it is not already cached)
         void reEvaluateIfNeeded( const Unit & unit );
@@ -111,6 +116,6 @@ namespace Battle
         // The unit's color (or rather, the unit's army color) affects the ability to pass the castle bridge
         int _color{ 0 };
         // Board cells passability status at the time of current cache creation
-        std::bitset<ARENASIZE> _boardStatus;
+        std::array<bool, ARENASIZE> _boardStatus{};
     };
 }

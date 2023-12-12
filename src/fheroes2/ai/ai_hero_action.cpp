@@ -254,7 +254,7 @@ namespace
 
         if ( AIIsShowAnimationForHero( hero, AIGetAllianceColors() ) ) {
             Interface::AdventureMap::Get().getGameArea().SetCenter( hero.GetCenter() );
-            hero.FadeOut();
+            hero.FadeOut( Game::AIHeroAnimSpeedMultiplier() );
         }
 
         hero.Scout( targetIndex );
@@ -264,7 +264,7 @@ namespace
 
         if ( AIIsShowAnimationForHero( hero, AIGetAllianceColors() ) ) {
             Interface::AdventureMap::Get().getGameArea().SetCenter( hero.GetCenter() );
-            hero.FadeIn();
+            hero.FadeIn( Game::AIHeroAnimSpeedMultiplier() );
         }
 
         AI::Get().HeroesActionComplete( hero, targetIndex, hero.getObjectTypeUnderHero() );
@@ -283,8 +283,12 @@ namespace
 
             if ( playSound ) {
                 AudioManager::PlaySound( M82::KILLFADE );
+
+                hero.FadeOut();
             }
-            hero.FadeOut();
+            else {
+                hero.FadeOut( Game::AIHeroAnimSpeedMultiplier() );
+            }
         }
 
         hero.Dismiss( reason );
@@ -458,7 +462,7 @@ namespace
 
         // The attacker was defeated
         if ( !res.AttackerWins() ) {
-            AIBattleLose( hero, res, true, &( otherHero->GetCenter() ), playVanishingHeroSound );
+            AIBattleLose( hero, res, true, ( otherHero->isActive() ? &( otherHero->GetCenter() ) : nullptr ), playVanishingHeroSound );
         }
 
         // The attacker won
@@ -511,7 +515,7 @@ namespace
             DEBUG_LOG( DBG_AI, DBG_INFO, join.monsterCount << " " << troop.GetName() << " join " << hero.GetName() << " for " << joiningCost << " gold" )
 
             // These conditions must already be met if a group of monsters wants to join
-            assert( hero.GetArmy().CanJoinTroop( troop ) && hero.GetKingdom().AllowPayment( payment_t( Resource::GOLD, joiningCost ) ) );
+            assert( hero.GetArmy().CanJoinTroop( troop ) && hero.GetKingdom().AllowPayment( Funds( Resource::GOLD, joiningCost ) ) );
 
             hero.GetArmy().JoinTroop( troop.GetMonster(), join.monsterCount, false );
             hero.GetKingdom().OddFundsResource( Funds( Resource::GOLD, joiningCost ) );
@@ -847,7 +851,7 @@ namespace
         if ( AIIsShowAnimationForHero( hero, AIGetAllianceColors() ) ) {
             // AI-controlled hero cannot activate Stone Liths from the same tile, but should move to this tile from some
             // other tile first, so there is no need to re-center the game area on the hero before his disappearance
-            hero.FadeOut();
+            hero.FadeOut( Game::AIHeroAnimSpeedMultiplier() );
         }
 
         hero.Scout( indexTo );
@@ -856,7 +860,7 @@ namespace
 
         if ( AIIsShowAnimationForHero( hero, AIGetAllianceColors() ) ) {
             Interface::AdventureMap::Get().getGameArea().SetCenter( hero.GetCenter() );
-            hero.FadeIn();
+            hero.FadeIn( Game::AIHeroAnimSpeedMultiplier() );
         }
 
         hero.ActionNewPosition( false );
@@ -912,7 +916,7 @@ namespace
         if ( AIIsShowAnimationForHero( hero, AIGetAllianceColors() ) ) {
             // AI-controlled hero cannot activate Whirlpool from the same tile, but should move to this tile from some
             // other tile first, so there is no need to re-center the game area on the hero before his disappearance
-            hero.FadeOut();
+            hero.FadeOut( Game::AIHeroAnimSpeedMultiplier() );
         }
 
         hero.Scout( indexTo );
@@ -923,7 +927,7 @@ namespace
 
         if ( AIIsShowAnimationForHero( hero, AIGetAllianceColors() ) ) {
             Interface::AdventureMap::Get().getGameArea().SetCenter( hero.GetCenter() );
-            hero.FadeIn();
+            hero.FadeIn( Game::AIHeroAnimSpeedMultiplier() );
         }
 
         hero.ActionNewPosition( false );
@@ -1346,7 +1350,7 @@ namespace
         }
 
         Kingdom & kingdom = hero.GetKingdom();
-        const payment_t singleMonsterCost = troop.GetCost();
+        const Funds singleMonsterCost = troop.GetCost();
 
         uint32_t recruitTroopCount = kingdom.GetFunds().getLowestQuotient( singleMonsterCost );
         if ( recruitTroopCount <= 0 ) {
@@ -1573,7 +1577,7 @@ namespace
 
         if ( AIIsShowAnimationForHero( hero, AIGetAllianceColors() ) ) {
             Interface::AdventureMap::Get().getGameArea().SetCenter( hero.GetCenter() );
-            hero.FadeOut( offset );
+            hero.FadeOut( Game::AIHeroAnimSpeedMultiplier(), offset );
         }
 
         hero.Scout( dst_index );
@@ -1616,7 +1620,7 @@ namespace
 
         if ( AIIsShowAnimationForHero( hero, AIGetAllianceColors() ) ) {
             Interface::AdventureMap::Get().getGameArea().SetCenter( prevPos );
-            hero.FadeIn( offset );
+            hero.FadeIn( Game::AIHeroAnimSpeedMultiplier(), offset );
         }
 
         hero.ActionNewPosition( true );
@@ -1667,7 +1671,7 @@ namespace
             return;
         }
 
-        const payment_t payment = PaymentConditions::ForAlchemist();
+        const Funds payment = PaymentConditions::ForAlchemist();
 
         if ( hero.GetKingdom().AllowPayment( payment ) ) {
             hero.GetKingdom().OddFundsResource( payment );
@@ -2057,7 +2061,7 @@ namespace AI
 
                 bool resetHeroSprite = false;
                 if ( heroAnimationFrameCount > 0 ) {
-                    const int32_t heroMovementSkipValue = Game::AIHeroAnimSkip();
+                    const int32_t heroMovementSkipValue = Game::AIHeroAnimSpeedMultiplier();
 
                     gameArea.ShiftCenter( { heroAnimationOffset.x * heroMovementSkipValue, heroAnimationOffset.y * heroMovementSkipValue } );
                     gameArea.SetRedraw();
@@ -2087,7 +2091,7 @@ namespace AI
                     else {
                         const fheroes2::Point movement( hero.MovementDirection() );
                         if ( movement != fheroes2::Point() ) { // don't waste resources for no movement
-                            const int32_t heroMovementSkipValue = Game::AIHeroAnimSkip();
+                            const int32_t heroMovementSkipValue = Game::AIHeroAnimSpeedMultiplier();
 
                             heroAnimationOffset = movement;
                             gameArea.ShiftCenter( movement );
@@ -2136,7 +2140,7 @@ namespace AI
 
         if ( AIIsShowAnimationForHero( hero, AIGetAllianceColors() ) ) {
             Interface::AdventureMap::Get().getGameArea().SetCenter( hero.GetCenter() );
-            hero.FadeOut();
+            hero.FadeOut( Game::AIHeroAnimSpeedMultiplier() );
         }
 
         hero.Scout( targetIndex );
@@ -2147,7 +2151,7 @@ namespace AI
 
         if ( AIIsShowAnimationForHero( hero, AIGetAllianceColors() ) ) {
             Interface::AdventureMap::Get().getGameArea().SetCenter( hero.GetCenter() );
-            hero.FadeIn();
+            hero.FadeIn( Game::AIHeroAnimSpeedMultiplier() );
         }
 
         hero.ActionNewPosition( false );

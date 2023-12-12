@@ -888,7 +888,8 @@ namespace
 
     int32_t setCampaignDifficulty( int32_t currentDifficulty, const int32_t maximumAllowedDifficulty )
     {
-        const fheroes2::StandardWindow frameborder( 234, 270, true );
+        // It's better to have frame border width value divisible to 2 and 3 w/o remainder.
+        const fheroes2::StandardWindow frameborder( 300, 284, true );
         const fheroes2::Rect & windowRoi = frameborder.activeArea();
 
         const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
@@ -907,14 +908,34 @@ namespace
         const fheroes2::Text caption( _( "Campaign Difficulty" ), fheroes2::FontType::normalYellow() );
         caption.draw( windowRoi.x + ( windowRoi.width - caption.width() ) / 2, windowRoi.y + 10, display );
 
-        const fheroes2::Rect copyFromArea{ 20, 94, 223, 69 };
-        const fheroes2::Point copyToOffset{ windowRoi.x + 4, windowRoi.y + 40 };
-        fheroes2::Copy( fheroes2::AGG::GetICN( ICN::NGHSBKG, 0 ), copyFromArea.x, copyFromArea.y, display, copyToOffset.x, copyToOffset.y, copyFromArea.width,
-                        copyFromArea.height );
+        const int32_t iconSize = 65;
+        const int32_t iconShadowSize = 4;
+        const int32_t fullIconSize = iconSize + iconShadowSize;
+
+        const int32_t pawnIconOffsetX = windowRoi.x - iconShadowSize + ( windowRoi.width - iconSize ) / 2 - windowRoi.width / 3;
+        const int32_t horseIconOffsetX = windowRoi.x - iconShadowSize + ( windowRoi.width - iconSize ) / 2;
+        const int32_t rookIconOffsetX = windowRoi.x - iconShadowSize + ( windowRoi.width - iconSize ) / 2 + windowRoi.width / 3;
+
+        const std::array<fheroes2::Rect, 3> copyFromArea{ fheroes2::Rect{ 20, 94, fullIconSize, fullIconSize }, fheroes2::Rect{ 97, 94, fullIconSize, fullIconSize },
+                                                          fheroes2::Rect{ 173, 94, fullIconSize, fullIconSize } };
+
+        const std::array<fheroes2::Point, 3> copyToOffset{ fheroes2::Point{ pawnIconOffsetX, windowRoi.y + 40 }, fheroes2::Point{ horseIconOffsetX, windowRoi.y + 40 },
+                                                           fheroes2::Point{ rookIconOffsetX, windowRoi.y + 40 } };
+
+        const fheroes2::Sprite & chessIcon = fheroes2::AGG::GetICN( ICN::NGHSBKG, 0 );
+
+        for ( size_t i = 0; i < copyToOffset.size(); ++i ) {
+            fheroes2::Copy( chessIcon, copyFromArea[i].x, copyFromArea[i].y, display, copyToOffset[i].x, copyToOffset[i].y, copyFromArea[i].width,
+                            copyFromArea[i].height );
+        }
 
         if ( isEvilInterface ) {
-            fheroes2::ApplyPalette( display, copyToOffset.x, copyToOffset.y, display, copyToOffset.x, copyToOffset.y, copyFromArea.width, copyFromArea.height,
-                                    PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_INTERFACE ) );
+            const std::vector<uint8_t> & goodToEvilPalette = PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_INTERFACE );
+
+            for ( size_t i = 0; i < copyToOffset.size(); ++i ) {
+                fheroes2::ApplyPalette( display, copyToOffset[i].x, copyToOffset[i].y, display, copyToOffset[i].x, copyToOffset[i].y, copyFromArea[i].width,
+                                        copyFromArea[i].height, goodToEvilPalette );
+            }
         }
 
         const fheroes2::Sprite & selectionImage = fheroes2::AGG::GetICN( ICN::NGEXTRA, 62 );
@@ -925,13 +946,16 @@ namespace
         const char * normalDescription = _( "Choose this difficulty to enjoy the campaign as per the original design." );
         const char * hardDescription = _( "Choose this difficulty if you want challenge. AI is stronger in comparison with normal difficulty." );
 
-        const std::array<fheroes2::Rect, 3> difficultyArea{ fheroes2::Rect( windowRoi.x + 5, windowRoi.y + 37, selectionImage.width(), selectionImage.height() ),
-                                                            fheroes2::Rect( windowRoi.x + 82, windowRoi.y + 37, selectionImage.width(), selectionImage.height() ),
-                                                            fheroes2::Rect( windowRoi.x + 158, windowRoi.y + 37, selectionImage.width(), selectionImage.height() ) };
+        const std::array<fheroes2::Rect, 3> difficultyArea{ fheroes2::Rect( copyToOffset[0].x + 1, windowRoi.y + 37, selectionImage.width(), selectionImage.height() ),
+                                                            fheroes2::Rect( copyToOffset[1].x + 1, windowRoi.y + 37, selectionImage.width(), selectionImage.height() ),
+                                                            fheroes2::Rect( copyToOffset[2].x + 1, windowRoi.y + 37, selectionImage.width(), selectionImage.height() ) };
 
-        const std::array<fheroes2::Rect, 3> iconArea{ fheroes2::Rect( difficultyArea[0].x + 4, difficultyArea[0].y + 4, 63, 63 ),
-                                                      fheroes2::Rect( difficultyArea[1].x + 4, difficultyArea[1].y + 4, 63, 63 ),
-                                                      fheroes2::Rect( difficultyArea[2].x + 4, difficultyArea[2].y + 4, 63, 63 ) };
+        const std::array<fheroes2::Rect, 3> iconArea{ fheroes2::Rect( difficultyArea[0].x + iconShadowSize, difficultyArea[0].y + iconShadowSize, iconSize - 1,
+                                                                      iconSize - 1 ),
+                                                      fheroes2::Rect( difficultyArea[1].x + iconShadowSize, difficultyArea[1].y + iconShadowSize, iconSize - 1,
+                                                                      iconSize - 1 ),
+                                                      fheroes2::Rect( difficultyArea[2].x + iconShadowSize, difficultyArea[2].y + iconShadowSize, iconSize - 1,
+                                                                      iconSize - 1 ) };
 
         const char * currentDescription = nullptr;
         switch ( currentDifficulty ) {
@@ -957,21 +981,15 @@ namespace
                                                     ( maximumAllowedDifficulty >= Campaign::CampaignDifficulty::Normal ),
                                                     ( maximumAllowedDifficulty >= Campaign::CampaignDifficulty::Hard ) };
 
-        if ( !allowedSelection[0] ) {
-            fheroes2::ApplyPalette( display, iconArea[0].x, iconArea[0].y, display, iconArea[0].x, iconArea[0].y, iconArea[0].width, iconArea[0].height,
-                                    PAL::GetPalette( PAL::PaletteType::GRAY ) );
-        }
-        if ( !allowedSelection[1] ) {
-            fheroes2::ApplyPalette( display, iconArea[1].x, iconArea[1].y, display, iconArea[1].x, iconArea[1].y, iconArea[1].width, iconArea[1].height,
-                                    PAL::GetPalette( PAL::PaletteType::GRAY ) );
-        }
-        if ( !allowedSelection[2] ) {
-            fheroes2::ApplyPalette( display, iconArea[2].x, iconArea[2].y, display, iconArea[2].x, iconArea[2].y, iconArea[2].width, iconArea[2].height,
-                                    PAL::GetPalette( PAL::PaletteType::GRAY ) );
+        for ( size_t i = 0; i < allowedSelection.size(); ++i ) {
+            if ( !allowedSelection[i] ) {
+                fheroes2::ApplyPalette( display, iconArea[i].x, iconArea[i].y, display, iconArea[i].x, iconArea[i].y, iconArea[i].width, iconArea[i].height,
+                                        PAL::GetPalette( PAL::PaletteType::GRAY ) );
+            }
         }
 
         const int32_t textWidth = windowRoi.width - 16;
-        const fheroes2::Point textOffset{ windowRoi.x + 8, windowRoi.y + 135 };
+        const fheroes2::Point textOffset{ windowRoi.x + 8, windowRoi.y + 140 };
 
         fheroes2::Text description( currentDescription, fheroes2::FontType::normalWhite() );
         fheroes2::ImageRestorer restorer( display, textOffset.x, textOffset.y, textWidth, description.height( textWidth ) );

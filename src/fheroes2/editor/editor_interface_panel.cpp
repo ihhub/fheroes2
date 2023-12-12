@@ -20,10 +20,12 @@
 
 #include "editor_interface_panel.h"
 
+#include <algorithm>
 #include <cassert>
 #include <cstddef>
 #include <string>
 #include <utility>
+#include <vector>
 
 #include "agg_image.h"
 #include "cursor.h"
@@ -41,7 +43,57 @@
 #include "translations.h"
 #include "ui_button.h"
 #include "ui_dialog.h"
+#include "ui_map_object.h"
 #include "ui_text.h"
+
+namespace
+{
+    void setCustomCursor( const Maps::ObjectGroup group, const int32_t type )
+    {
+        if ( type == -1 ) {
+            // The object type is not set. We show the POINTER cursor for this case.
+            Cursor::Get().SetThemes( Cursor::POINTER );
+            return;
+        }
+
+        const auto & objectInfo = Maps::getObjectsByGroup( group );
+        if ( type < 0 || type >= static_cast<int32_t>( objectInfo.size() ) ) {
+            // You are trying to render some unknown stuff!
+            assert( 0 );
+            return;
+        }
+
+        const fheroes2::Sprite & image = fheroes2::generateMapObjectImage( objectInfo[type] );
+
+        Cursor::Get().setCustomImage( image, { image.x(), image.y() } );
+    }
+
+    fheroes2::Rect getObjectOccupiedArea( const Maps::ObjectGroup group, const int32_t objectType )
+    {
+        const auto & objectInfo = Maps::getObjectsByGroup( group );
+        if ( objectType < 0 || objectType >= static_cast<int32_t>( objectInfo.size() ) ) {
+            assert( 0 );
+            return { 0, 0, 1, 1 };
+        }
+
+        const auto & offsets = Maps::getGroundLevelOccupiedTileOffset( objectInfo[objectType] );
+        if ( offsets.size() < 2 ) {
+            return { 0, 0, 1, 1 };
+        }
+
+        fheroes2::Point minPos{ offsets.front() };
+        fheroes2::Point maxPos{ offsets.front() };
+
+        for ( const auto & offset : offsets ) {
+            minPos.x = std::min( minPos.x, offset.x );
+            minPos.y = std::min( minPos.y, offset.y );
+            maxPos.x = std::max( maxPos.x, offset.x );
+            maxPos.y = std::max( maxPos.y, offset.y );
+        }
+
+        return { minPos.x, minPos.y, maxPos.x - minPos.x + 1, maxPos.y - minPos.y + 1 };
+    }
+}
 
 namespace Interface
 {
@@ -72,31 +124,42 @@ namespace Interface
 
         _instrumentButtons[_selectedInstrument].press();
         _brushSizeButtons[_selectedBrushSize].press();
+
+        _selectedObjectType.fill( -1 );
     }
 
-    int32_t EditorPanel::getBrushSize() const
+    fheroes2::Rect EditorPanel::getBrushArea() const
     {
         // Roads and streams are placed using only 1x1 brush.
-        if ( _selectedInstrument == Instrument::STREAM || _selectedInstrument == Instrument::ROAD || isMonsterSettingMode() || isHeroSettingMode() ) {
-            return 1;
+        if ( _selectedInstrument == Instrument::STREAM || _selectedInstrument == Instrument::ROAD || _selectedInstrument == Instrument::DETAIL ) {
+            return { 0, 0, 1, 1 };
+        }
+
+        if ( _selectedInstrument == OBJECT ) {
+            const int32_t objectType = getSelectedObjectType();
+            if ( objectType >= 0 ) {
+                return getObjectOccupiedArea( getSelectedObjectGroup(), objectType );
+            }
+
+            return {};
         }
 
         switch ( _selectedBrushSize ) {
         case BrushSize::SMALL:
-            return 1;
+            return { 0, 0, 1, 1 };
         case BrushSize::MEDIUM:
-            return 2;
+            return { 0, 0, 2, 2 };
         case BrushSize::LARGE:
-            return 4;
+            return { -1, -1, 4, 4 };
         case BrushSize::AREA:
-            return 0;
+            return {};
         default:
             // Have you added a new Brush size? Update the logic above!
             assert( 0 );
             break;
         }
 
-        return 0;
+        return {};
     }
 
     void EditorPanel::setPos( const int32_t displayX, int32_t displayY )
@@ -336,6 +399,45 @@ namespace Interface
         return "Unknown object type";
     }
 
+    void EditorPanel::_setCursor()
+    {
+        if ( _selectedInstrument != Instrument::OBJECT ) {
+            _interface.setCursorUpdater( {} );
+            return;
+        }
+
+        switch ( _selectedObject ) {
+        case Brush::MONSTERS:
+        case Brush::TREASURES:
+        case Brush::ARTIFACTS:
+        case Brush::WATER:
+            _interface.setCursorUpdater(
+                [type = getSelectedObjectType(), group = getSelectedObjectGroup()]( const int32_t /*tileIndex*/ ) { setCustomCursor( group, type ); } );
+            break;
+        case Brush::HEROES:
+            _interface.setCursorUpdater( [type = getSelectedObjectType()]( const int32_t /*tileIndex*/ ) {
+                if ( type == -1 ) {
+                    // The object type is not set. We show the POINTER cursor for this case.
+                    Cursor::Get().SetThemes( Cursor::POINTER );
+                    return;
+                }
+
+                // TODO: render ICN::MINIHERO from the existing hero images.
+                const fheroes2::Sprite & image = fheroes2::AGG::GetICN( ICN::MINIHERO, type );
+
+                // Mini-hero images contain a pole with a flag.
+                // This causes a situation that a selected tile does not properly correspond to the position of cursor.
+                // We need to add a hardcoded correction.
+                const int32_t heroCorrectionY{ 12 };
+                Cursor::Get().setCustomImage( image, { -image.width() / 2, -image.height() / 2 - heroCorrectionY } );
+            } );
+            break;
+        default:
+            _interface.setCursorUpdater( {} );
+            break;
+        }
+    }
+
     fheroes2::GameMode EditorPanel::queueEventProcessing()
     {
         LocalEvent & le = LocalEvent::Get();
@@ -348,7 +450,7 @@ namespace Interface
                         _selectedInstrument = static_cast<uint8_t>( i );
 
                         // Reset cursor updater since this UI element was clicked.
-                        _interface.setCursorUpdater( {} );
+                        _setCursor();
 
                         setRedraw();
                     }
@@ -449,7 +551,7 @@ namespace Interface
                     _selectedObject = static_cast<uint8_t>( i );
 
                     // Reset cursor updater since this UI element was clicked.
-                    _interface.setCursorUpdater( {} );
+                    _setCursor();
 
                     setRedraw();
 
@@ -485,39 +587,24 @@ namespace Interface
                 fheroes2::showStandardTextMessage( _getObjectTypeName( Brush::TREASURES ), _( "Used to place\na resource or treasure." ), Dialog::ZERO );
             }
             else if ( le.MouseClickLeft( _objectButtonsRect[Brush::MONSTERS] ) ) {
-                const Monster monster = Dialog::selectMonster( _monsterId, true );
-                if ( monster.GetID() != Monster::UNKNOWN ) {
-                    _monsterId = monster.GetID();
-
-                    _interface.setCursorUpdater( [monster = monster]( const int32_t /*tileIndex*/ ) {
-                        const fheroes2::Sprite & image = fheroes2::AGG::GetICN( ICN::MONS32, monster.GetSpriteIndex() );
-
-                        Cursor::Get().setCustomImage( image, { -image.width() / 2, -image.height() / 2 } );
-                    } );
-
-                    _interface.updateCursor( 0 );
-                    return res;
-                }
+                handleObjectMouseClick( Dialog::selectMonsterType );
+                return res;
+            }
+            else if ( le.MouseClickLeft( _objectButtonsRect[Brush::TREASURES] ) ) {
+                handleObjectMouseClick( Dialog::selectTreasureType );
+                return res;
             }
             else if ( le.MouseClickLeft( _objectButtonsRect[Brush::HEROES] ) ) {
-                const int32_t heroType = Dialog::selectHeroType( _heroType );
-                if ( heroType >= 0 ) {
-                    _heroType = heroType;
-
-                    _interface.setCursorUpdater( [heroType]( const int32_t /*tileIndex*/ ) {
-                        // TODO: render ICN::MINIHERO from the existing hero images.
-                        const fheroes2::Sprite & image = fheroes2::AGG::GetICN( ICN::MINIHERO, heroType );
-
-                        // Mini-hero images contain a pole with a flag.
-                        // This causes a situation that a selected tile does not properly correspond to the position of cursor.
-                        // We need to add a hardcoded correction.
-                        const int32_t heroCorrectionY{ 12 };
-                        Cursor::Get().setCustomImage( image, { -image.width() / 2, -image.height() / 2 - heroCorrectionY } );
-                    } );
-
-                    _interface.updateCursor( 0 );
-                    return res;
-                }
+                handleObjectMouseClick( Dialog::selectHeroType );
+                return res;
+            }
+            else if ( le.MouseClickLeft( _objectButtonsRect[Brush::ARTIFACTS] ) ) {
+                handleObjectMouseClick( Dialog::selectArtifactType );
+                return res;
+            }
+            else if ( le.MouseClickLeft( _objectButtonsRect[Brush::WATER] ) ) {
+                handleObjectMouseClick( Dialog::selectOceanObjectType );
+                return res;
             }
         }
         else if ( _selectedInstrument == Instrument::ERASE ) {
@@ -614,5 +701,15 @@ namespace Interface
         }
 
         return res;
+    }
+
+    void EditorPanel::handleObjectMouseClick( const std::function<int( int )> & typeSelection )
+    {
+        const int type = typeSelection( _selectedObjectType[_selectedObject] );
+        if ( type >= 0 ) {
+            _selectedObjectType[_selectedObject] = type;
+        }
+        _setCursor();
+        _interface.updateCursor( 0 );
     }
 }

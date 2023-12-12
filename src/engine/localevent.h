@@ -73,9 +73,12 @@ namespace fheroes2
         KEY_RIGHT_BRACKET,
         KEY_CARET,
         KEY_UNDERSCORE,
-        KEY_ALT,
-        KEY_CONTROL,
-        KEY_SHIFT,
+        KEY_LEFT_ALT,
+        KEY_RIGHT_ALT,
+        KEY_LEFT_CONTROL,
+        KEY_RIGHT_CONTROL,
+        KEY_LEFT_SHIFT,
+        KEY_RIGHT_SHIFT,
         KEY_TAB,
         KEY_DELETE,
         KEY_PAGE_UP,
@@ -425,8 +428,8 @@ private:
     int16_t _controllerRightYAxis = 0;
     bool _controllerScrollActive = false;
 
-    // Ids of currently active (touching the screen) fingers, if any
-    std::pair<std::optional<SDL_FingerID>, std::optional<SDL_FingerID>> _fingerIds;
+    // IDs of currently active (touching the touchpad) fingers, if any. These IDs consist of a touch device id and a finger id.
+    std::pair<std::optional<std::pair<SDL_TouchID, SDL_FingerID>>, std::optional<std::pair<SDL_TouchID, SDL_FingerID>>> _fingerIds;
     // Is the two-finger gesture currently being processed
     bool _isTwoFingerGestureInProgress = false;
 };

@@ -286,6 +286,12 @@ namespace fheroes2
         _pressedIndex = pressedIndex;
     }
 
+    void Button::setICNIndexes( const uint32_t releasedIndex, const uint32_t pressedIndex )
+    {
+        _releasedIndex = releasedIndex;
+        _pressedIndex = pressedIndex;
+    }
+
     const Sprite & Button::_getPressed() const
     {
         return AGG::GetICN( _icnId, _pressedIndex );
@@ -459,22 +465,27 @@ namespace fheroes2
         return Dialog::ZERO;
     }
 
-    ButtonRestorer::ButtonRestorer( ButtonBase & button, Image & area )
+    ButtonRestorer::ButtonRestorer( ButtonBase & button )
         : _button( button )
-        , _area( area )
-        , _isDisabled( button.isDisabled() )
+        , _isEnabled( button.isEnabled() )
     {
-        if ( !_isDisabled ) {
+        if ( _isEnabled ) {
+            Display & display = Display::instance();
+
             _button.disable();
-            _button.draw( _area );
+            _button.draw( display );
+            display.render( _button.area() );
         }
     }
 
     ButtonRestorer::~ButtonRestorer()
     {
-        if ( !_isDisabled ) {
+        if ( _isEnabled ) {
+            Display & display = Display::instance();
+
             _button.enable();
-            _button.draw( _area );
+            _button.draw( display );
+            display.render( _button.area() );
         }
     }
 

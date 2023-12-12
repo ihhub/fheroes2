@@ -41,8 +41,10 @@
 #include "color.h"
 #include "direction.h"
 #include "game.h"
+#include "game_io.h"
 #include "game_over.h"
 #include "gamedefs.h"
+#include "ground.h"
 #include "heroes.h"
 #include "logging.h"
 #include "maps_fileinfo.h"
@@ -55,6 +57,7 @@
 #include "rand.h"
 #include "resource.h"
 #include "route.h"
+#include "save_format_version.h"
 #include "serialize.h"
 #include "settings.h"
 #include "tools.h"
@@ -363,12 +366,15 @@ void World::Reset()
     _seed = 0;
 }
 
-void World::NewMaps( int32_t sw, int32_t sh )
+void World::generateBattleOnlyMap()
 {
+    const std::vector<int> terrainTypes{ Maps::Ground::DESERT, Maps::Ground::SNOW, Maps::Ground::SWAMP, Maps::Ground::WASTELAND, Maps::Ground::BEACH,
+                                         Maps::Ground::LAVA,   Maps::Ground::DIRT, Maps::Ground::GRASS, Maps::Ground::WATER };
+
     Reset();
 
-    width = sw;
-    height = sh;
+    width = 2;
+    height = 2;
 
     Maps::FileInfo fi;
 
@@ -387,24 +393,49 @@ void World::NewMaps( int32_t sw, int32_t sh )
 
     vec_tiles.resize( static_cast<size_t>( width ) * height );
 
+    const int groundType = Rand::Get( terrainTypes );
+
+    for ( size_t i = 0; i < vec_tiles.size(); ++i ) {
+        vec_tiles[i] = {};
+
+        vec_tiles[i].setIndex( static_cast<int32_t>( i ) );
+        vec_tiles[i].setTerrain( Maps::Ground::getTerrainStartImageIndex( groundType ), false, false );
+    }
+}
+
+void World::generateForEditor( const int32_t size )
+{
+    assert( size > 0 );
+
+    Reset();
+
+    width = size;
+    height = size;
+
+    Maps::FileInfo fi;
+
+    fi.width = static_cast<uint16_t>( width );
+    fi.height = static_cast<uint16_t>( height );
+
+    Settings & conf = Settings::Get();
+    assert( conf.isPriceOfLoyaltySupported() );
+
+    fi.version = GameVersion::PRICE_OF_LOYALTY;
+
+    conf.SetCurrentFileInfo( fi );
+
+    Defaults();
+
+    vec_tiles.resize( static_cast<size_t>( width ) * height );
+
     // init all tiles
     for ( size_t i = 0; i < vec_tiles.size(); ++i ) {
-        MP2::mp2tile_t mp2tile;
+        vec_tiles[i] = {};
 
-        mp2tile.terrainImageIndex = static_cast<uint16_t>( Rand::Get( 16, 19 ) ); // index sprite ground, see ground32.til
-        mp2tile.objectName1 = 0; // object sprite level 1
-        mp2tile.bottomIcnImageIndex = 0xff; // index sprite level 1
-        mp2tile.quantity1 = 0;
-        mp2tile.quantity2 = 0;
-        mp2tile.objectName2 = 0; // object sprite level 2
-        mp2tile.topIcnImageIndex = 0xff; // index sprite level 2
-        mp2tile.terrainFlags = static_cast<uint8_t>( Rand::Get( 0, 3 ) ); // shape reflect % 4, 0 none, 1 vertical, 2 horizontal, 3 any
-        mp2tile.mapObjectType = MP2::OBJ_NONE;
-        mp2tile.nextAddonIndex = 0;
-        mp2tile.level1ObjectUID = 0; // means that there's no object on this tile.
-        mp2tile.level2ObjectUID = 0;
+        vec_tiles[i].setIndex( static_cast<int32_t>( i ) );
 
-        vec_tiles[i].Init( static_cast<int32_t>( i ), mp2tile );
+        const uint8_t terrainFlag = static_cast<uint8_t>( Rand::Get( 0, 3 ) );
+        vec_tiles[i].setTerrain( static_cast<uint16_t>( Rand::Get( 16, 19 ) ), terrainFlag & 1, terrainFlag & 2 );
     }
 }
 
@@ -443,7 +474,7 @@ Heroes * World::FromJailHeroes( int32_t index )
 
 Heroes * World::GetHero( const Castle & castle ) const
 {
-    return vec_heroes.GetHero( castle );
+    return vec_heroes.Get( castle.GetCenter() );
 }
 
 int World::GetDay() const
@@ -1279,19 +1310,23 @@ void World::resetPathfinder()
     AI::Get().resetPathfinder();
 }
 
+void World::updatePassabilities()
+{
+    for ( Maps::Tiles & tile : vec_tiles ) {
+        tile.updateEmpty();
+        tile.setInitialPassability();
+    }
+
+    // Once the original passabilities are set we know all neighbours. Now we have to update passabilities based on neighbours.
+    for ( Maps::Tiles & tile : vec_tiles ) {
+        tile.updatePassability();
+    }
+}
+
 void World::PostLoad( const bool setTilePassabilities )
 {
     if ( setTilePassabilities ) {
-        // update tile passable
-        for ( Maps::Tiles & tile : vec_tiles ) {
-            tile.updateEmpty();
-            tile.setInitialPassability();
-        }
-
-        // Once the original passabilities are set we know all neighbours. Now we have to update passabilities based on neighbours.
-        for ( Maps::Tiles & tile : vec_tiles ) {
-            tile.updatePassability();
-        }
+        updatePassabilities();
     }
 
     // Cache all tiles that that contain stone liths of a certain type (depending on object sprite index).
@@ -1426,26 +1461,35 @@ StreamBase & operator>>( StreamBase & msg, MapObjects & objs )
 
 StreamBase & operator<<( StreamBase & msg, const World & w )
 {
-    // TODO: before 0.9.4 Size was uint16_t type
-    const uint16_t width = static_cast<uint16_t>( w.width );
-    const uint16_t height = static_cast<uint16_t>( w.height );
-
-    return msg << width << height << w.vec_tiles << w.vec_heroes << w.vec_castles << w.vec_kingdoms << w._rumors << w.vec_eventsday << w.map_captureobj
+    return msg << w.width << w.height << w.vec_tiles << w.vec_heroes << w.vec_castles << w.vec_kingdoms << w._rumors << w.vec_eventsday << w.map_captureobj
                << w.ultimate_artifact << w.day << w.week << w.month << w.heroes_cond_wins << w.heroes_cond_loss << w.map_objects << w._seed;
 }
 
 StreamBase & operator>>( StreamBase & msg, World & w )
 {
-    // TODO: before 0.9.4 Size was uint16_t type
-    uint16_t width = 0;
-    uint16_t height = 0;
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1010_RELEASE, "Remove the logic below." );
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1010_RELEASE ) {
+        uint16_t width = 0;
+        uint16_t height = 0;
 
-    msg >> width >> height;
-    w.width = width;
-    w.height = height;
+        msg >> width >> height;
+        w.width = width;
+        w.height = height;
+    }
+    else {
+        msg >> w.width >> w.height;
+    }
 
     msg >> w.vec_tiles >> w.vec_heroes >> w.vec_castles >> w.vec_kingdoms >> w._rumors >> w.vec_eventsday >> w.map_captureobj >> w.ultimate_artifact >> w.day >> w.week
-        >> w.month >> w.heroes_cond_wins >> w.heroes_cond_loss >> w.map_objects >> w._seed;
+        >> w.month >> w.heroes_cond_wins >> w.heroes_cond_loss;
+
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1010_RELEASE, "Remove the logic below." );
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1010_RELEASE ) {
+        ++w.heroes_cond_wins;
+        ++w.heroes_cond_loss;
+    }
+
+    msg >> w.map_objects >> w._seed;
 
     w.PostLoad( false );
 

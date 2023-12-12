@@ -144,9 +144,11 @@ namespace fheroes2
     public:
         explicit ImageRestorer( Image & image );
         ImageRestorer( Image & image, const int32_t x_, const int32_t y_, const int32_t width, const int32_t height );
-        ~ImageRestorer(); // restore method will be call upon object's destruction
 
         ImageRestorer( const ImageRestorer & ) = delete;
+
+        // Restores the original image if necessary, see the implementation for details
+        ~ImageRestorer();
 
         void update( const int32_t x_, const int32_t y_, const int32_t width, const int32_t height );
 
@@ -176,6 +178,7 @@ namespace fheroes2
         }
 
         void restore();
+
         void reset()
         {
             _isRestored = true;

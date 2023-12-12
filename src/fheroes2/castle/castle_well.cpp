@@ -47,7 +47,6 @@
 #include "math_base.h"
 #include "monster.h"
 #include "monster_anim.h"
-#include "payment.h"
 #include "resource.h"
 #include "screen.h"
 #include "settings.h"
@@ -72,7 +71,7 @@ namespace
         }
 
         uint32_t count = castle.getMonstersInDwelling( dw );
-        payment_t payment;
+        Funds payment;
 
         const Kingdom & kingdom = castle.GetKingdom();
 
@@ -167,7 +166,7 @@ bool Castle::_recruitCastleMax( const Troops & currentCastleArmy )
         for ( const uint32_t dwellingType : castleDwellings ) {
             if ( getMonstersInDwelling( dwellingType ) > 0 ) {
                 const Monster monsters( race, dwellingType );
-                const payment_t payment = monsters.GetCost();
+                const Funds payment = monsters.GetCost();
 
                 if ( GetKingdom().AllowPayment( payment ) ) {
                     canAffordOneCreature = true;

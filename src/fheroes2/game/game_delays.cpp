@@ -204,13 +204,17 @@ void Game::UpdateGameSpeed()
     delays[BATTLE_FLAGS_DELAY].setDelay( static_cast<uint64_t>( 250 * adjustedIdleAnimationSpeed ) );
 }
 
-int Game::HumanHeroAnimSkip()
+int Game::HumanHeroAnimSpeedMultiplier()
 {
+    assert( humanHeroMultiplier > 0 );
+
     return humanHeroMultiplier;
 }
 
-int Game::AIHeroAnimSkip()
+int Game::AIHeroAnimSpeedMultiplier()
 {
+    assert( aiHeroMultiplier > 0 );
+
     return aiHeroMultiplier;
 }
 

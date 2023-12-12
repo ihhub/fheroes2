@@ -16,7 +16,7 @@ jobs:
         shell: bash
     steps:
     - name: Download analysis results
-      uses: actions/github-script@v6
+      uses: actions/github-script@v7
       with:
         script: |
           let artifacts = await github.rest.actions.listWorkflowRunArtifacts({
@@ -41,14 +41,14 @@ jobs:
         unzip clang-tidy-result.zip -d clang-tidy-result
         echo "PR_ID=$(cat clang-tidy-result/pr-id.txt)" >> "$GITHUB_ENV"
         echo "PR_HEAD_REPO=$(cat clang-tidy-result/pr-head-repo.txt)" >> "$GITHUB_ENV"
-        echo "PR_HEAD_REF=$(cat clang-tidy-result/pr-head-ref.txt)" >> "$GITHUB_ENV"
+        echo "PR_HEAD_SHA=$(cat clang-tidy-result/pr-head-sha.txt)" >> "$GITHUB_ENV"
     - uses: actions/checkout@v4
       with:
         repository: ${{ env.PR_HEAD_REPO }}
-        ref: ${{ env.PR_HEAD_REF }}
+        ref: ${{ env.PR_HEAD_SHA }}
         persist-credentials: false
     - name: Redownload analysis results
-      uses: actions/github-script@v6
+      uses: actions/github-script@v7
       with:
         script: |
           let artifacts = await github.rest.actions.listWorkflowRunArtifacts({

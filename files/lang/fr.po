@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-16 01:01+0000\n"
+"POT-Creation-Date: 2023-12-05 00:31+0000\n"
 "PO-Revision-Date: 2022-12-18 13:48+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -192,6 +192,9 @@ msgstr ""
 
 msgid "MIN"
 msgstr "MIN"
+
+msgid "RESET"
+msgstr ""
 
 msgid ""
 "D\n"
@@ -928,14 +931,9 @@ msgstr "Régler puissance"
 msgid "Set Knowledge Skill"
 msgstr "Régler connaissance"
 
-msgid "%{race1} %{name1}"
-msgstr "%{race1} le %{name1}"
-
-msgid "vs"
-msgstr "vs"
-
-msgid "%{race2} %{name2}"
-msgstr "%{race2} le %{name2}"
+#, fuzzy
+msgid "%{race1} %{name1} vs %{race2} %{name2}"
+msgstr "Échanger %{name1} avec %{name2}"
 
 msgid "Monsters"
 msgstr "Monstres"
@@ -957,13 +955,6 @@ msgstr "chacun avec un bonus de +%{attack} à sa compétence d'attaque."
 
 msgid "The %{name} is destroyed."
 msgstr "Le %{name} est détruit."
-
-msgid ""
-"The %{artifact} artifact is in effect for this battle, disabling %{spell} "
-"spell."
-msgstr ""
-"L'artéfact %{artifact} est en vigueur pour ce combat, désactivant le sort "
-"%{spell}."
 
 msgid "%{count} %{name} rises from the dead!"
 msgid_plural "%{count} %{name} rise from the dead!"
@@ -1463,10 +1454,11 @@ msgstr ""
 "L'emplacement de la grande bibliothèque a été découverte ! Vous devez vous y "
 "rendre, et reconquérir le village de Chronos dans lequel elle se trouve."
 
+#, fuzzy
 msgid ""
 "Find the Orb of negation, which is said to be buried in this land. There are "
-"clues inscribed on stone obelisks which will help lead you to your price. "
-"Find the orb before the first day of the sixth month, or your rivals will "
+"clues inscribed on stone obelisks which will help lead you to your prize. "
+"Find the Orb before the first day of the sixth month, or your rivals will "
 "surely have gotten to the fount before you."
 msgstr ""
 "Trouvez l'orbe de la négation, qui serait enterré dans ce pays. Il y a des "
@@ -1917,6 +1909,9 @@ msgstr "Le %{building} produit des %{monster}."
 
 msgid "Requires:"
 msgstr "Nécessite :"
+
+msgid "Exit this menu without doing anything."
+msgstr "Sortir de ce menu sans modification."
 
 msgid "Cannot build. You have already built here today."
 msgstr "Construction impossible. Une construction a déjà eu lieu aujourd'hui."
@@ -2631,6 +2626,9 @@ msgstr "avec un artéfact."
 msgid "without artifacts."
 msgstr "sans artéfact."
 
+msgid "Recruit %{name} the %{race}"
+msgstr "Recrutement de %{name} le %{race}"
+
 msgid ""
 "'Spread' combat formation spreads your armies from the top to the bottom of "
 "the battlefield, with at least one empty space between each army."
@@ -2650,9 +2648,6 @@ msgstr "Formation dispersée"
 
 msgid "Grouped Formation"
 msgstr "Formation groupée"
-
-msgid "Recruit %{name} the %{race}"
-msgstr "Recrutement de %{name} le %{race}"
 
 msgid "Set garrison combat formation to 'Spread'"
 msgstr "Utiliser la formation de combat 'dispersée' pour la garnison"
@@ -2726,9 +2721,6 @@ msgstr "Creuser pour l'ultime artéfact."
 
 msgid "Digging"
 msgstr "Fouille"
-
-msgid "Exit this menu without doing anything."
-msgstr "Sortir de ce menu sans modification."
 
 msgid "Arena"
 msgstr "Arène"
@@ -3064,6 +3056,16 @@ msgstr ""
 "Afficher des informations supplémentaires telles que le FPS et l'heure "
 "actuelle."
 
+msgid "Hotkey: "
+msgstr ""
+
+msgid "Category: "
+msgstr ""
+
+#, fuzzy
+msgid "Event: "
+msgstr "Événement"
+
 msgid "Hot Keys:"
 msgstr "Raccourcis clavier :"
 
@@ -3348,12 +3350,13 @@ msgstr "Fichier à charger :"
 msgid "Accept the choice made."
 msgstr "Confirmez le choix."
 
-msgid "Unknown Hero"
-msgstr "Héros inconnu"
-
 #, fuzzy
 msgid "%{color} %{race} hero"
 msgstr "Joueur %{color}"
+
+#, fuzzy
+msgid "Terrain object"
+msgstr "Aucun objet"
 
 msgid "Select Skill:"
 msgstr "Choisir compétence :"
@@ -3371,6 +3374,14 @@ msgid "Select Hero:"
 msgstr "Choisir héros :"
 
 #, fuzzy
+msgid "Select Treasure:"
+msgstr "Choisir héros :"
+
+#, fuzzy
+msgid "Select Ocean Object:"
+msgstr "Choisir artéfact :"
+
+#, fuzzy
 msgid "Map Type:\n"
 msgstr ""
 "\n"
@@ -3379,6 +3390,10 @@ msgstr ""
 
 msgid "The Succession Wars"
 msgstr "The Succession Wars"
+
+#, fuzzy
+msgid "Resurrection"
+msgstr "Résurrection"
 
 msgid "Lose all your heroes and towns."
 msgstr "Perdre tous les héros et tous les villages."
@@ -3642,6 +3657,12 @@ msgstr "Personnalité :"
 msgid "Best Monster:"
 msgstr "Meilleure créature :"
 
+#, fuzzy
+msgid "Map filename"
+msgstr ""
+"Taille de\n"
+"la carte"
+
 # Needs line break to have insectile space but keep partie and ? together.
 #, fuzzy
 msgid ""
@@ -3689,17 +3710,43 @@ msgstr ""
 msgid "Monster"
 msgstr "Monstre"
 
+#, fuzzy
+msgid "Objects cannot be placed outside the map."
+msgstr "Ce sort ne peut pas être jeté en mer."
+
 msgid "Monsters cannot be placed on water."
 msgstr ""
 
 msgid "Choose a tile which does not contain any objects."
 msgstr ""
 
+msgid "Treasure"
+msgstr "Trésor"
+
+#, fuzzy
+msgid "Treasures cannot be placed on water."
+msgstr "Ce sort ne peut pas être jeté en mer."
+
 msgid "Heroes"
 msgstr "Héros"
 
 msgid "Heroes cannot be placed on water."
 msgstr ""
+
+msgid "Artifacts"
+msgstr "Artéfacts"
+
+#, fuzzy
+msgid "Artifacts cannot be placed on water."
+msgstr "Ce sort ne peut pas être jeté en mer."
+
+#, fuzzy
+msgid "Ocean object"
+msgstr "Aucun objet"
+
+#, fuzzy
+msgid "Ocean object must be placed on water."
+msgstr "Ce sort ne peut pas être jeté en mer."
 
 msgid "Ocean Objects"
 msgstr ""
@@ -3734,9 +3781,6 @@ msgstr ""
 #, fuzzy
 msgid "Towns"
 msgstr "Village"
-
-msgid "Artifacts"
-msgstr "Artéfacts"
 
 #, fuzzy
 msgid "Treasures"
@@ -4227,6 +4271,9 @@ msgstr "Conception du conditionnement"
 msgid "Your Name"
 msgstr "Votre nom"
 
+msgid "Unknown Hero"
+msgstr "Héros inconnu"
+
 msgid "Standard"
 msgstr "Jeu standard"
 
@@ -4600,6 +4647,32 @@ msgstr ""
 "Voulez-vous laisser l'IA prendre les commandes ? L'effet aura lieu "
 "uniquement au prochain tour."
 
+msgid "Default Actions"
+msgstr ""
+
+msgid "Global Actions"
+msgstr ""
+
+msgid "Main Menu"
+msgstr ""
+
+msgid "World Map"
+msgstr "Carte du monde"
+
+#, fuzzy
+msgid "Battle Screen"
+msgstr "Fenêtre d'informations du héros"
+
+#, fuzzy
+msgid "Town Screen"
+msgstr "Fenêtre d'informations du héros"
+
+msgid "Army Actions"
+msgstr ""
+
+msgid "Editor"
+msgstr ""
+
 #, fuzzy
 msgid "The save file is corrupted."
 msgstr "L'image miroir est créée."
@@ -4618,8 +4691,8 @@ msgstr "Ce fichier contient une sauvegarde avec un type de jeu invalide."
 
 #, fuzzy
 msgid ""
-"This file was saved for a \"The Price of Loyalty\" map, but the "
-"corresponding game assets have not been provided to the engine."
+"This save file requires \"The Price of Loyalty\" game assets, but they have "
+"not been provided to the engine."
 msgstr ""
 "Ce fichier est enregistré au format \"The Price of Loyalty\".\n"
 "Certains éléments peuvent ne pas être disponibles."
@@ -4673,9 +4746,10 @@ msgstr ""
 "Bienvenue sur Heroes of Might and Magic II (amélioré par le moteur "
 "fheroes2) !"
 
+#, fuzzy
 msgid ""
-"Welcome to Heroes of Might and Magic II powered by fheroes2 engine! Before "
-"starting the game please choose game resolution."
+"Welcome to Heroes of Might and Magic II powered by the fheroes2 engine!\n"
+"Before starting the game please select a game resolution."
 msgstr ""
 "Bienvenue sur Heroes of Might and Magic II (amélioré par le moteur "
 "fheroes2) ! Avant de commencer le jeu choisissez la résolution du jeu."
@@ -4684,7 +4758,10 @@ msgid "Please Remember"
 msgstr "N'oubliez pas"
 
 # Needs extra whitespace to avoid yellow word splitting
-msgid "You can always change game resolution by clicking on the "
+#, fuzzy
+msgid ""
+"You can always change the language, resolution and settings of the game by "
+"clicking on the "
 msgstr ""
 "Vous pouvez toujours changer la résolution en cliquant sur la\n"
 " "
@@ -4692,17 +4769,22 @@ msgstr ""
 msgid "door"
 msgstr "porte"
 
+msgid " on the left side of the Main Menu, or with the "
+msgstr ""
+
+msgid " button from the "
+msgstr ""
+
+#, fuzzy
+msgid "NEW GAME"
+msgstr ""
+"NOU-\n"
+"VEAU"
+
 msgid ""
-" on the left side of main menu or by clicking on the configuration button. \n"
+" menu. \n"
 "\n"
 "Enjoy the game!"
-msgstr ""
-" située à gauche du menu principal ou en cliquant sur le bouton de "
-"configuration.\n"
-"\n"
-"Bon jeu !"
-
-msgid "Editor"
 msgstr ""
 
 #, fuzzy
@@ -5284,9 +5366,6 @@ msgstr ""
 "Une vue miniature du monde connu. Cliquez avec le bouton gauche de la souris "
 "pour déplacer la zone d'affichage."
 
-msgid "World Map"
-msgstr "Carte du monde"
-
 msgid "Month: %{month} Week: %{week}"
 msgstr "Mois : %{month}, Semaine : %{week}"
 
@@ -5749,9 +5828,6 @@ msgstr ""
 
 msgid "You come upon the remains of an unfortunate adventurer."
 msgstr "Vous tombez sur les restes d'un malheureux aventurier."
-
-msgid "Treasure"
-msgstr "Trésor"
 
 msgid "Searching through the tattered clothing, you find the %{artifact}."
 msgstr ""
@@ -7269,17 +7345,17 @@ msgstr ""
 msgid "%{name1} meets %{name2}"
 msgstr "Échanger %{name1} avec %{name2}"
 
-msgid "Town Portal"
-msgstr "Portes du village"
-
-msgid "Select town to port to."
-msgstr "Sélectionnez la destination."
-
 msgid "Enemy heroes are now fully identifiable."
 msgstr "Les héros ennemis sont désormais parfaitement identifiables."
 
 msgid "Identify Hero"
 msgstr "Identifier héros"
+
+msgid "Select town to port to."
+msgstr "Sélectionnez la destination."
+
+msgid "Town Portal"
+msgstr "Portes du village"
 
 msgid "The creatures are willing to join us!"
 msgstr "Les créatures sont prêtes à nous rallier !"
@@ -10446,6 +10522,9 @@ msgstr ""
 "enquête, vous découvrez qu'il s'agit de la pelle enchantée du fossoyeur, "
 "longtemps pensée perdue par les mortels."
 
+msgid "spellBonus|selected by user"
+msgstr ""
+
 msgid "Wood"
 msgstr "Bois"
 
@@ -10982,6 +11061,44 @@ msgstr ""
 "Invoque les élémentaires de l'eau pour garder une mine contre les armées "
 "ennemies."
 
+#, fuzzy
+msgid "Random Spell"
+msgstr "Aléatoire"
+
+msgid "Randomly selected spell of any level."
+msgstr ""
+
+#, fuzzy
+msgid "Random 1st Level Spell"
+msgstr "Château aléatoire"
+
+msgid "Randomly selected 1st level spell."
+msgstr ""
+
+msgid "Random 2nd Level Spell"
+msgstr ""
+
+msgid "Randomly selected 2nd level spell."
+msgstr ""
+
+msgid "Random 3rd Level Spell"
+msgstr ""
+
+msgid "Randomly selected 3rd level spell."
+msgstr ""
+
+msgid "Random 4th Level Spell"
+msgstr ""
+
+msgid "Randomly selected 4th level spell."
+msgstr ""
+
+msgid "Random 5th Level Spell"
+msgstr ""
+
+msgid "Randomly selected 5th level spell."
+msgstr ""
+
 msgid "Petrification"
 msgstr "Pétrification"
 
@@ -11113,3 +11230,12 @@ msgstr ""
 "Téléchargez la dernière version du jeu sur\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "%{race1} %{name1}"
+#~ msgstr "%{race1} le %{name1}"
+
+#~ msgid "vs"
+#~ msgstr "vs"
+
+#~ msgid "%{race2} %{name2}"
+#~ msgstr "%{race2} le %{name2}"

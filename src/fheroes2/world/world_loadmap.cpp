@@ -517,8 +517,9 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
 
                     // Byte 17 determines whether the hero has a custom portrait, and byte 18 contains the custom portrait ID. If the hero has a custom portrait, then we
                     // should directly use the hero corresponding to this portrait, if possible.
-                    if ( pblock[17] && pblock[18] <= Heroes::JARKONAS ) {
-                        hero = vec_heroes.Get( pblock[18] );
+                    // MP2 format stores hero IDs start from 0, while fheroes2 engine starts from 1.
+                    if ( pblock[17] && pblock[18] + 1 <= Heroes::JARKONAS ) {
+                        hero = vec_heroes.Get( pblock[18] + 1 );
                     }
 
                     if ( !hero || !hero->isAvailableForHire() ) {
@@ -553,8 +554,9 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
 
                         // Byte 17 determines whether the hero has a custom portrait, and byte 18 contains the custom portrait ID. If the hero has a custom portrait, then
                         // we should directly use the hero corresponding to this portrait, if possible.
-                        if ( pblock[17] && pblock[18] <= Heroes::JARKONAS ) {
-                            hero = vec_heroes.Get( pblock[18] );
+                        // MP2 format stores hero IDs start from 0, while fheroes2 engine starts from 1.
+                        if ( pblock[17] && pblock[18] + 1 <= Heroes::JARKONAS ) {
+                            hero = vec_heroes.Get( pblock[18] + 1 );
                         }
 
                         if ( !hero || !hero->isAvailableForHire() ) {
@@ -653,7 +655,7 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
         return false;
     }
 
-    DEBUG_LOG( DBG_GAME, DBG_INFO, "end load" )
+    DEBUG_LOG( DBG_GAME, DBG_INFO, "Loading of MP2 map is completed." )
     return true;
 }
 
@@ -679,14 +681,28 @@ bool World::ProcessNewMap( const std::string & filename, const bool checkPoLObje
 
     // update wins, loss conditions
     if ( GameOver::WINS_HERO & conf.ConditionWins() ) {
-        const Heroes * hero = GetHeroes( conf.WinsMapsPositionObject() );
-        heroes_cond_wins = hero ? hero->GetID() : Heroes::UNKNOWN;
-    }
-    if ( GameOver::LOSS_HERO & conf.ConditionLoss() ) {
-        Heroes * hero = GetHeroes( conf.LossMapsPositionObject() );
-        heroes_cond_loss = hero ? hero->GetID() : Heroes::UNKNOWN;
+        const fheroes2::Point & pos = conf.WinsMapsPositionObject();
 
-        if ( hero ) {
+        const Heroes * hero = GetHeroes( pos );
+        if ( hero == nullptr ) {
+            heroes_cond_wins = Heroes::UNKNOWN;
+            ERROR_LOG( "A winning condition hero at location ['" << pos.x << ", " << pos.y << "'] is not found." )
+        }
+        else {
+            heroes_cond_wins = hero->GetID();
+        }
+    }
+
+    if ( GameOver::LOSS_HERO & conf.ConditionLoss() ) {
+        const fheroes2::Point & pos = conf.LossMapsPositionObject();
+
+        Heroes * hero = GetHeroes( pos );
+        if ( hero == nullptr ) {
+            heroes_cond_loss = Heroes::UNKNOWN;
+            ERROR_LOG( "A loosing condition hero at location ['" << pos.x << ", " << pos.y << "'] is not found." )
+        }
+        else {
+            heroes_cond_loss = hero->GetID();
             hero->SetModes( Heroes::NOTDISMISS | Heroes::CUSTOM );
         }
     }

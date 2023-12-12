@@ -28,6 +28,12 @@
 #include "history_manager.h"
 #include "interface_base.h"
 
+namespace Maps
+{
+    class Tiles;
+    struct ObjectInfo;
+}
+
 namespace Interface
 {
     class EditorInterface final : public BaseInterface
@@ -84,6 +90,10 @@ namespace Interface
         {
             // Do nothing.
         }
+
+        void setObjectOnTile( Maps::Tiles & tile, const Maps::ObjectInfo & objectInfo );
+
+        void handleObjectMouseLeftClick( Maps::Tiles & tile );
 
         EditorPanel _editorPanel;
 

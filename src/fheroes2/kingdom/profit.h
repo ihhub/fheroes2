@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -26,13 +26,13 @@
 
 #include <cstdint>
 
-#include "payment.h"
+#include "resource.h"
 
 namespace ProfitConditions
 {
-    payment_t FromBuilding( uint32_t building, int race );
-    payment_t FromArtifact( int );
-    payment_t FromMine( int );
+    Funds FromBuilding( uint32_t building, int race );
+    Funds FromArtifact( int );
+    Funds FromMine( int );
 }
 
 #endif

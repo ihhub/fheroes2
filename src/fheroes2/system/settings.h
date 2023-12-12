@@ -81,14 +81,9 @@ public:
     std::string String() const;
     void SetCurrentFileInfo( const Maps::FileInfo & );
 
-    const Maps::FileInfo & CurrentFileInfo() const
+    const Maps::FileInfo & getCurrentMapInfo() const
     {
         return current_maps_file;
-    }
-
-    bool isCurrentMapPriceOfLoyalty() const
-    {
-        return current_maps_file.version == GameVersion::PRICE_OF_LOYALTY;
     }
 
     int HeroesMoveSpeed() const
@@ -326,22 +321,22 @@ public:
         return ( current_maps_file.colorsOfRandomRaces & f ) != 0;
     }
 
-    const std::string & MapsFile() const
+    const std::string & getCurrentMapFileName() const
     {
         return current_maps_file.file;
     }
 
-    const std::string & MapsName() const
+    const std::string & getCurrentMapName() const
     {
         return current_maps_file.name;
     }
 
-    const std::string & MapsDescription() const
+    const std::string & getCurrentMapDescription() const
     {
         return current_maps_file.description;
     }
 
-    int MapsDifficulty() const
+    int getCurrentMapDifficultyLevel() const
     {
         return current_maps_file.difficulty;
     }

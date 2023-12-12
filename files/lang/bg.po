@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-16 01:01+0000\n"
+"POT-Creation-Date: 2023-12-05 00:31+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -193,6 +193,9 @@ msgstr "ВИЖ ИНТРО"
 
 msgid "MIN"
 msgstr "МИН"
+
+msgid "RESET"
+msgstr ""
 
 msgid ""
 "D\n"
@@ -946,14 +949,9 @@ msgstr "Задайте умение за сила"
 msgid "Set Knowledge Skill"
 msgstr "Задайте умение за знание"
 
-msgid "%{race1} %{name1}"
-msgstr "%{race1} %{name1}"
-
-msgid "vs"
-msgstr "срещу"
-
-msgid "%{race2} %{name2}"
-msgstr "%{race2} %{name2}"
+#, fuzzy
+msgid "%{race1} %{name1} vs %{race2} %{name2}"
+msgstr "%{name1} среща %{name2}"
 
 msgid "Monsters"
 msgstr "Чудовища"
@@ -975,13 +973,6 @@ msgstr "всеки получава +%{attack} бонус към своето у
 
 msgid "The %{name} is destroyed."
 msgstr "%{name} е унищожен!"
-
-msgid ""
-"The %{artifact} artifact is in effect for this battle, disabling %{spell} "
-"spell."
-msgstr ""
-"Артефактът %{artifact} е в сила за тази битка, дезактивирайки заклинанието "
-"%{spell}."
 
 msgid "%{count} %{name} rises from the dead!"
 msgid_plural "%{count} %{name} rise from the dead!"
@@ -1463,10 +1454,11 @@ msgstr ""
 "Местоположението на великата библиотека е открито! Трябва да стигнеш до него "
 "и да си върнеш града Хронос, в който се намира."
 
+#, fuzzy
 msgid ""
 "Find the Orb of negation, which is said to be buried in this land. There are "
-"clues inscribed on stone obelisks which will help lead you to your price. "
-"Find the orb before the first day of the sixth month, or your rivals will "
+"clues inscribed on stone obelisks which will help lead you to your prize. "
+"Find the Orb before the first day of the sixth month, or your rivals will "
 "surely have gotten to the fount before you."
 msgstr ""
 "Намери Кълбото на отрицанието, за което се казва, че е заровено в тази земя. "
@@ -1908,6 +1900,9 @@ msgstr "%{building} произвежда %{monster}."
 
 msgid "Requires:"
 msgstr "Изисква:"
+
+msgid "Exit this menu without doing anything."
+msgstr "Излез от това меню, без да правиш нищо."
 
 msgid "Cannot build. You have already built here today."
 msgstr "Не може да се строи. Ти вече си построил тук днес."
@@ -2613,6 +2608,9 @@ msgstr "с 1 артефакт."
 msgid "without artifacts."
 msgstr "без артефакти."
 
+msgid "Recruit %{name} the %{race}"
+msgstr "Вербувай %{name} %{race}"
+
 msgid ""
 "'Spread' combat formation spreads your armies from the top to the bottom of "
 "the battlefield, with at least one empty space between each army."
@@ -2632,9 +2630,6 @@ msgstr "Формация Разпростиране"
 
 msgid "Grouped Formation"
 msgstr "Групирана формация"
-
-msgid "Recruit %{name} the %{race}"
-msgstr "Вербувай %{name} %{race}"
 
 msgid "Set garrison combat formation to 'Spread'"
 msgstr "Задай гарнизонна бойна формация \"Разпростиране\""
@@ -2707,9 +2702,6 @@ msgstr "Изкопай най-добрия артефакт."
 
 msgid "Digging"
 msgstr "Изкопаване"
-
-msgid "Exit this menu without doing anything."
-msgstr "Излез от това меню, без да правиш нищо."
 
 msgid "Arena"
 msgstr "Арена"
@@ -3033,6 +3025,16 @@ msgstr ""
 msgid "Show extra information such as FPS and current time."
 msgstr "Показване на допълнителна информация като FPS и текущо време."
 
+msgid "Hotkey: "
+msgstr ""
+
+msgid "Category: "
+msgstr ""
+
+#, fuzzy
+msgid "Event: "
+msgstr "Събитие"
+
 msgid "Hot Keys:"
 msgstr "Бързи клавиши:"
 
@@ -3321,11 +3323,12 @@ msgstr "Файл за зареждане:"
 msgid "Accept the choice made."
 msgstr "Приемете направения избор."
 
-msgid "Unknown Hero"
-msgstr "Незнаен герой"
-
 msgid "%{color} %{race} hero"
 msgstr "%{color} %{race} герой"
+
+#, fuzzy
+msgid "Terrain object"
+msgstr "Режим терен"
 
 msgid "Select Skill:"
 msgstr "Избери умение:"
@@ -3342,11 +3345,23 @@ msgstr "Избери чудовище:"
 msgid "Select Hero:"
 msgstr "Избери герой:"
 
+#, fuzzy
+msgid "Select Treasure:"
+msgstr "Избери герой:"
+
+#, fuzzy
+msgid "Select Ocean Object:"
+msgstr "Океански обекти"
+
 msgid "Map Type:\n"
 msgstr "Тип на карта:\n"
 
 msgid "The Succession Wars"
 msgstr "Войните за наследство"
+
+#, fuzzy
+msgid "Resurrection"
+msgstr "Възкресяване"
 
 msgid "Lose all your heroes and towns."
 msgstr "Ако загубиш всичките си герои и градове."
@@ -3604,6 +3619,10 @@ msgstr "Личност:"
 msgid "Best Monster:"
 msgstr "Най-добро чудовище:"
 
+#, fuzzy
+msgid "Map filename"
+msgstr "Размер на карта"
+
 msgid ""
 "Are you sure you want to load a new map? (Any unsaved changes to the current "
 "map will be lost.)"
@@ -3645,17 +3664,43 @@ msgstr "Излез от редактора на карти."
 msgid "Monster"
 msgstr "Чудовище"
 
+#, fuzzy
+msgid "Objects cannot be placed outside the map."
+msgstr "Това заклинание не може да се направи на кораб."
+
 msgid "Monsters cannot be placed on water."
 msgstr "Чудовищата не могат да се поставят върху вода."
 
 msgid "Choose a tile which does not contain any objects."
 msgstr "Избери плочка, която не съдържа никакви предмети."
 
+msgid "Treasure"
+msgstr "Съкровище"
+
+#, fuzzy
+msgid "Treasures cannot be placed on water."
+msgstr "Това заклинание не може да се направи на кораб."
+
 msgid "Heroes"
 msgstr "Герой"
 
 msgid "Heroes cannot be placed on water."
 msgstr "Героите не могат да бъдат поставени на вода."
+
+msgid "Artifacts"
+msgstr "Артефакти"
+
+#, fuzzy
+msgid "Artifacts cannot be placed on water."
+msgstr "Това заклинание не може да се направи на кораб."
+
+#, fuzzy
+msgid "Ocean object"
+msgstr "Океански обекти"
+
+#, fuzzy
+msgid "Ocean object must be placed on water."
+msgstr "Това заклинание не може да се направи на кораб."
 
 msgid "Ocean Objects"
 msgstr "Океански обекти"
@@ -3686,9 +3731,6 @@ msgstr "Плажни обекти"
 
 msgid "Towns"
 msgstr "Градове"
-
-msgid "Artifacts"
-msgstr "Артефакти"
 
 msgid "Treasures"
 msgstr "Съкровища"
@@ -4198,6 +4240,9 @@ msgstr "Дизайн на опаковката"
 msgid "Your Name"
 msgstr "Твоето име"
 
+msgid "Unknown Hero"
+msgstr "Незнаен герой"
+
 msgid "Standard"
 msgstr "Стандарт"
 
@@ -4541,6 +4586,33 @@ msgid ""
 "place only on the next turn."
 msgstr "Искаш ли да си върнеш контрола от ИИ? Ще има ефектът на следващия ход."
 
+#, fuzzy
+msgid "Default Actions"
+msgstr "действие по подразбиране"
+
+msgid "Global Actions"
+msgstr ""
+
+msgid "Main Menu"
+msgstr ""
+
+msgid "World Map"
+msgstr "Карта на света"
+
+#, fuzzy
+msgid "Battle Screen"
+msgstr "Екран на героя"
+
+#, fuzzy
+msgid "Town Screen"
+msgstr "Екран на героя"
+
+msgid "Army Actions"
+msgstr ""
+
+msgid "Editor"
+msgstr "Редактор"
+
 msgid "The save file is corrupted."
 msgstr "Запазеният файл е повреден."
 
@@ -4556,9 +4628,10 @@ msgstr "Последна поддържана версия: "
 msgid "This file contains a save with an invalid game type."
 msgstr "Този файл съдържа запис с невалиден тип игра."
 
+#, fuzzy
 msgid ""
-"This file was saved for a \"The Price of Loyalty\" map, but the "
-"corresponding game assets have not been provided to the engine."
+"This save file requires \"The Price of Loyalty\" game assets, but they have "
+"not been provided to the engine."
 msgstr ""
 "Този файл е запазен за \"Цената на лоялността\", но съответните активи на "
 "играта не са предоставени на двигателя."
@@ -4611,9 +4684,10 @@ msgid "Welcome to Heroes of Might and Magic II powered by fheroes2 engine!"
 msgstr ""
 "Добре дошъл в Heroes of Might and Magic II, задвижван от двигателя fheroes2!"
 
+#, fuzzy
 msgid ""
-"Welcome to Heroes of Might and Magic II powered by fheroes2 engine! Before "
-"starting the game please choose game resolution."
+"Welcome to Heroes of Might and Magic II powered by the fheroes2 engine!\n"
+"Before starting the game please select a game resolution."
 msgstr ""
 "Добре дошъл в Heroes of Might and Magic II, задвижван от двигателя fheroes2! "
 "Преди да започнеш играта, моля избери разделителна способност на играта."
@@ -4621,7 +4695,10 @@ msgstr ""
 msgid "Please Remember"
 msgstr "Моля, запомни"
 
-msgid "You can always change game resolution by clicking on the "
+#, fuzzy
+msgid ""
+"You can always change the language, resolution and settings of the game by "
+"clicking on the "
 msgstr ""
 "Винаги можеш да промениш разделителната способност на играта, като щракнеш "
 "върху "
@@ -4629,18 +4706,23 @@ msgstr ""
 msgid "door"
 msgstr "вратата"
 
+msgid " on the left side of the Main Menu, or with the "
+msgstr ""
+
+msgid " button from the "
+msgstr ""
+
+#, fuzzy
+msgid "NEW GAME"
+msgstr ""
+"НОВА\n"
+"ИГРА"
+
 msgid ""
-" on the left side of main menu or by clicking on the configuration button. \n"
+" menu. \n"
 "\n"
 "Enjoy the game!"
 msgstr ""
-" от лявата страна на главното меню или като цъкнеш на бутона за "
-"конфигурация.\n"
-"\n"
-"Приятна игра!"
-
-msgid "Editor"
-msgstr "Редактор"
 
 msgid "The Editor requires \"The Price of Loyalty\" expansion files to work."
 msgstr ""
@@ -5207,9 +5289,6 @@ msgstr ""
 "Миниатюрен изглед на познатия свят. Кликни с левия бутон, за да преместиш "
 "зоната за преглед."
 
-msgid "World Map"
-msgstr "Карта на света"
-
 msgid "Month: %{month} Week: %{week}"
 msgstr "Месец: %{month} Седмица: %{week}"
 
@@ -5662,9 +5741,6 @@ msgstr ""
 
 msgid "You come upon the remains of an unfortunate adventurer."
 msgstr "Попадаш на останките на нещастен авантюрист."
-
-msgid "Treasure"
-msgstr "Съкровище"
 
 msgid "Searching through the tattered clothing, you find the %{artifact}."
 msgstr "Търсейки в едни дрипи, намираш %{artifact}."
@@ -7111,17 +7187,17 @@ msgstr ""
 msgid "%{name1} meets %{name2}"
 msgstr "%{name1} среща %{name2}"
 
-msgid "Town Portal"
-msgstr "Градски портал"
-
-msgid "Select town to port to."
-msgstr "Избери град за пристанище."
-
 msgid "Enemy heroes are now fully identifiable."
 msgstr "Вражеските герои вече могат да бъдат идентифицирани напълно."
 
 msgid "Identify Hero"
 msgstr "Идентифицирай героя"
+
+msgid "Select town to port to."
+msgstr "Избери град за пристанище."
+
+msgid "Town Portal"
+msgstr "Градски портал"
 
 msgid "The creatures are willing to join us!"
 msgstr "Съществата са готови да се присъединят към нас!"
@@ -10245,6 +10321,9 @@ msgstr ""
 "това е омагьосаната лопата на Гробарите, дълго смятана за изгубена от "
 "смъртните."
 
+msgid "spellBonus|selected by user"
+msgstr ""
+
 msgid "Wood"
 msgstr "Дърво"
 
@@ -10751,6 +10830,44 @@ msgstr "Задай Воден пазител"
 msgid "Sets Water Elementals to guard a mine against enemy armies."
 msgstr "Кара Водни елементали да пазят мина срещу вражески армии"
 
+#, fuzzy
+msgid "Random Spell"
+msgstr "Случаен"
+
+msgid "Randomly selected spell of any level."
+msgstr ""
+
+#, fuzzy
+msgid "Random 1st Level Spell"
+msgstr "Случаен замък"
+
+msgid "Randomly selected 1st level spell."
+msgstr ""
+
+msgid "Random 2nd Level Spell"
+msgstr ""
+
+msgid "Randomly selected 2nd level spell."
+msgstr ""
+
+msgid "Random 3rd Level Spell"
+msgstr ""
+
+msgid "Randomly selected 3rd level spell."
+msgstr ""
+
+msgid "Random 4th Level Spell"
+msgstr ""
+
+msgid "Randomly selected 4th level spell."
+msgstr ""
+
+msgid "Random 5th Level Spell"
+msgstr ""
+
+msgid "Randomly selected 5th level spell."
+msgstr ""
+
 msgid "Petrification"
 msgstr "Вкаменяване"
 
@@ -10879,3 +10996,12 @@ msgstr ""
 "Проверете най-новата версия на играта на\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "%{race1} %{name1}"
+#~ msgstr "%{race1} %{name1}"
+
+#~ msgid "vs"
+#~ msgstr "срещу"
+
+#~ msgid "%{race2} %{name2}"
+#~ msgstr "%{race2} %{name2}"
