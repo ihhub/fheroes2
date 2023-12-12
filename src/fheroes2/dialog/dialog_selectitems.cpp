@@ -93,7 +93,6 @@ namespace
         // NOTICE: This calculation should be consistent with the number of color flags in KINGDOM_TOWNS objects.
         return townType / 14;
     }
-
 }
 
 class SelectEnum : public Interface::ListBox<int>
