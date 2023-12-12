@@ -524,8 +524,23 @@ public:
 
     fheroes2::Point getCurrentPixelOffset() const;
 
-    void FadeOut( const fheroes2::Point & offset = fheroes2::Point() ) const;
-    void FadeIn( const fheroes2::Point & offset = fheroes2::Point() ) const;
+    // Performs a hero fade-out animation with the given speed multiplier and an optional offset
+    void FadeOut( const int animSpeedMultiplier, const fheroes2::Point & offset = fheroes2::Point() ) const;
+
+    // Performs a hero fade-in animation with the given speed multiplier and an optional offset
+    void FadeIn( const int animSpeedMultiplier, const fheroes2::Point & offset = fheroes2::Point() ) const;
+
+    // Performs a hero fade-out animation with an optional offset at the lowest possible speed
+    void FadeOut( const fheroes2::Point & offset = fheroes2::Point() ) const
+    {
+        FadeOut( 1, offset );
+    }
+
+    // Performs a hero fade-in animation with an optional offset at the lowest possible speed
+    void FadeIn( const fheroes2::Point & offset = fheroes2::Point() ) const
+    {
+        FadeIn( 1, offset );
+    }
 
     void Scout( const int tileIndex ) const;
     int GetScoutingDistance() const;
