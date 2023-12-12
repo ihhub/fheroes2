@@ -612,7 +612,7 @@ namespace Interface
                 fheroes2::showStandardTextMessage( _getObjectTypeName( Brush::TREASURES ), _( "Used to place\na resource or treasure." ), Dialog::ZERO );
             }
             else if ( le.MouseClickLeft( _objectButtonsRect[Brush::TOWNS] ) ) {
-                handleObjectMouseClick( [this](const int32_t /*type*/ ) -> int32_t {
+                handleObjectMouseClick( [this]( const int32_t /* type */ ) -> int32_t {
                     int32_t type = -1;
                     int32_t color = -1;
 
@@ -620,7 +620,7 @@ namespace Interface
                     Dialog::selectTownType( type, color );
 
                     return generateTownObjectProperties( type, color );
-                    } );
+                } );
                 return res;
             }
             else if ( le.MouseClickLeft( _objectButtonsRect[Brush::MONSTERS] ) ) {
