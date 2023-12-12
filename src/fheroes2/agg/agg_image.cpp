@@ -4414,23 +4414,23 @@ namespace fheroes2
                     // Make the background.
                     uint8_t * imageData = neutralColorSprite.image();
                     const uint8_t * transformData = neutralColorSprite.transform();
-                    const uint32_t imageWidth = neutralColorSprite.width();
-                    const uint32_t imageHeight = neutralColorSprite.height();
-                    const uint32_t imageSize = imageWidth * imageHeight;
-                    const uint32_t startValueX = 12U * imageWidth;
-                    const uint32_t startValueY = 12U * imageHeight;
+                    const int32_t imageWidth = neutralColorSprite.width();
+                    const int32_t imageHeight = neutralColorSprite.height();
+                    const int32_t imageSize = imageWidth * imageHeight;
+                    const int32_t startValueX = 12 * imageWidth;
+                    const int32_t startValueY = 12 * imageHeight;
 
-                    for ( uint32_t y = 0; y < imageHeight; ++y ) {
-                        const uint32_t offsetY = y * imageWidth;
-                        const uint32_t offsetValueY = y * startValueX;
-                        for ( uint32_t x = 0; x < imageWidth; ++x ) {
+                    for ( int32_t y = 0; y < imageHeight; ++y ) {
+                        const int32_t offsetY = y * imageWidth;
+                        const int32_t offsetValueY = y * startValueX;
+                        for ( int32_t x = 0; x < imageWidth; ++x ) {
                             if ( transformData[x + offsetY] == 0U ) {
                                 // Skip pixels with image.
                                 continue;
                             }
 
-                            const uint8_t colorValue = static_cast<uint8_t>( 10U + ( offsetValueY + ( imageWidth - x ) * startValueY ) / imageSize + ( x + y ) % 2U );
-                            imageData[x + offsetY] = ( imageWidth - x - 1U ) * imageHeight > offsetY ? colorValue : 44U - colorValue;
+                            const uint8_t colorValue = static_cast<uint8_t>( 10 + ( offsetValueY + ( imageWidth - x ) * startValueY ) / imageSize + ( x + y ) % 2 );
+                            imageData[x + offsetY] = ( ( imageWidth - x - 1 ) * imageHeight > offsetY ) ? colorValue : 44U - colorValue;
                         }
                     }
 
