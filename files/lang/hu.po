@@ -7103,7 +7103,7 @@ msgid ""
 "group. "
 msgstr ""
 "A(z) %{skill} lehetővé teszi a seregednél gyengébb lényekkel való "
-"tárgyalást."
+"tárgyalást. "
 
 msgid "Approximately %{count} percent of the creatures may offer to join you."
 msgstr "A lények kb. %{count} százaléka csatlakozhat hozzád."
