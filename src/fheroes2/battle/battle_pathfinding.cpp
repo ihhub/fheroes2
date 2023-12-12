@@ -24,6 +24,7 @@
 #include <cassert>
 #include <cstddef>
 #include <cstdint>
+#include <functional>
 #include <set>
 #include <tuple>
 #include <vector>
@@ -50,7 +51,7 @@ namespace Battle
 
         // Passability of the board cells can change during the unit's turn even without its intervention (for example, because of a hero's spell cast),
         // we need to keep track of this
-        std::bitset<ARENASIZE> boardStatus;
+        std::array<bool, ARENASIZE> boardStatus{};
         for ( const Cell & cell : *board ) {
             const int32_t cellIdx = cell.GetIndex();
             assert( Board::isValidIndex( cellIdx ) );
@@ -60,7 +61,7 @@ namespace Battle
 
         auto currentSettings = std::tie( _pathStart, _speed, _isWide, _isFlying, _color, _boardStatus );
         const auto newSettings = std::make_tuple( BattleNodeIndex{ unit.GetHeadIndex(), unit.GetTailIndex() }, unit.GetSpeed(), unit.isWide(), unit.isFlying(),
-                                                  unit.GetColor(), boardStatus );
+                                                  unit.GetColor(), std::cref( boardStatus ) );
 
         // If all the current parameters match the parameters for which the current cache was built, then there is no need to rebuild it
         if ( currentSettings == newSettings ) {
