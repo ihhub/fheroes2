@@ -888,7 +888,7 @@ namespace
 
     int32_t setCampaignDifficulty( int32_t currentDifficulty, const int32_t maximumAllowedDifficulty )
     {
-        // It's better to have frameborder width value divisible to 2 and 3 w/o remainder
+        // It's better to have frame border width value divisible to 2 and 3 w/o remainder.
         const fheroes2::StandardWindow frameborder( 300, 284, true );
         const fheroes2::Rect & windowRoi = frameborder.activeArea();
 
@@ -916,27 +916,26 @@ namespace
         const int32_t horseIconOffsetX = windowRoi.x - iconShadowSize + ( windowRoi.width - iconSize ) / 2;
         const int32_t rookIconOffsetX = windowRoi.x - iconShadowSize + ( windowRoi.width - iconSize ) / 2 + windowRoi.width / 3;
 
-        const std::array<fheroes2::Rect, 3> copyFromArea{ fheroes2::Rect( 20, 94, fullIconSize, fullIconSize ), fheroes2::Rect( 97, 94, fullIconSize, fullIconSize ),
-                                                          fheroes2::Rect( 173, 94, fullIconSize, fullIconSize ) };
+        const std::array<fheroes2::Rect, 3> copyFromArea{ fheroes2::Rect{ 20, 94, fullIconSize, fullIconSize }, fheroes2::Rect{ 97, 94, fullIconSize, fullIconSize },
+                                                          fheroes2::Rect{ 173, 94, fullIconSize, fullIconSize } };
 
-        const std::array<fheroes2::Point, 3> copyToOffset{ fheroes2::Point( pawnIconOffsetX, windowRoi.y + 40 ), fheroes2::Point( horseIconOffsetX, windowRoi.y + 40 ),
-                                                           fheroes2::Point( rookIconOffsetX, windowRoi.y + 40 ) };
+        const std::array<fheroes2::Point, 3> copyToOffset{ fheroes2::Point{ pawnIconOffsetX, windowRoi.y + 40 }, fheroes2::Point{ horseIconOffsetX, windowRoi.y + 40 },
+                                                           fheroes2::Point{ rookIconOffsetX, windowRoi.y + 40 } };
 
-        const fheroes2::Sprite chessIcon = fheroes2::AGG::GetICN( ICN::NGHSBKG, 0 );
+        const fheroes2::Sprite & chessIcon = fheroes2::AGG::GetICN( ICN::NGHSBKG, 0 );
 
-        fheroes2::Copy( chessIcon, copyFromArea[0].x, copyFromArea[0].y, display, copyToOffset[0].x, copyToOffset[0].y, copyFromArea[0].width, copyFromArea[0].height );
-        fheroes2::Copy( chessIcon, copyFromArea[1].x, copyFromArea[1].y, display, copyToOffset[1].x, copyToOffset[1].y, copyFromArea[1].width, copyFromArea[1].height );
-        fheroes2::Copy( chessIcon, copyFromArea[2].x, copyFromArea[2].y, display, copyToOffset[2].x, copyToOffset[2].y, copyFromArea[2].width, copyFromArea[2].height );
+        for ( size_t i = 0; i < copyToOffset.size(); ++i ) {
+            fheroes2::Copy( chessIcon, copyFromArea[i].x, copyFromArea[i].y, display, copyToOffset[i].x, copyToOffset[i].y, copyFromArea[i].width,
+                            copyFromArea[i].height );
+        }
 
         if ( isEvilInterface ) {
-            const std::vector<uint8_t> goodToEvilPalette = PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_INTERFACE );
+            const std::vector<uint8_t> & goodToEvilPalette = PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_INTERFACE );
 
-            fheroes2::ApplyPalette( display, copyToOffset[0].x, copyToOffset[0].y, display, copyToOffset[0].x, copyToOffset[0].y, copyFromArea[0].width,
-                                    copyFromArea[0].height, goodToEvilPalette );
-            fheroes2::ApplyPalette( display, copyToOffset[1].x, copyToOffset[1].y, display, copyToOffset[1].x, copyToOffset[1].y, copyFromArea[1].width,
-                                    copyFromArea[1].height, goodToEvilPalette );
-            fheroes2::ApplyPalette( display, copyToOffset[2].x, copyToOffset[2].y, display, copyToOffset[2].x, copyToOffset[2].y, copyFromArea[2].width,
-                                    copyFromArea[2].height, goodToEvilPalette );
+            for ( size_t i = 0; i < copyToOffset.size(); ++i ) {
+                fheroes2::ApplyPalette( display, copyToOffset[i].x, copyToOffset[i].y, display, copyToOffset[i].x, copyToOffset[i].y, copyFromArea[i].width,
+                                        copyFromArea[i].height, goodToEvilPalette );
+            }
         }
 
         const fheroes2::Sprite & selectionImage = fheroes2::AGG::GetICN( ICN::NGEXTRA, 62 );
@@ -982,17 +981,11 @@ namespace
                                                     ( maximumAllowedDifficulty >= Campaign::CampaignDifficulty::Normal ),
                                                     ( maximumAllowedDifficulty >= Campaign::CampaignDifficulty::Hard ) };
 
-        if ( !allowedSelection[0] ) {
-            fheroes2::ApplyPalette( display, iconArea[0].x, iconArea[0].y, display, iconArea[0].x, iconArea[0].y, iconArea[0].width, iconArea[0].height,
-                                    PAL::GetPalette( PAL::PaletteType::GRAY ) );
-        }
-        if ( !allowedSelection[1] ) {
-            fheroes2::ApplyPalette( display, iconArea[1].x, iconArea[1].y, display, iconArea[1].x, iconArea[1].y, iconArea[1].width, iconArea[1].height,
-                                    PAL::GetPalette( PAL::PaletteType::GRAY ) );
-        }
-        if ( !allowedSelection[2] ) {
-            fheroes2::ApplyPalette( display, iconArea[2].x, iconArea[2].y, display, iconArea[2].x, iconArea[2].y, iconArea[2].width, iconArea[2].height,
-                                    PAL::GetPalette( PAL::PaletteType::GRAY ) );
+        for ( size_t i = 0; i < allowedSelection.size(); ++i ) {
+            if ( !allowedSelection[i] ) {
+                fheroes2::ApplyPalette( display, iconArea[i].x, iconArea[i].y, display, iconArea[i].x, iconArea[i].y, iconArea[i].width, iconArea[i].height,
+                                        PAL::GetPalette( PAL::PaletteType::GRAY ) );
+            }
         }
 
         const int32_t textWidth = windowRoi.width - 16;
