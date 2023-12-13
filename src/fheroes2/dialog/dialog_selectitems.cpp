@@ -981,8 +981,15 @@ void Dialog::selectTownType( int & type, int & color )
     while ( le.HandleEvents() ) {
         le.MousePressLeft( buttonOk.area() ) ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
         le.MousePressLeft( buttonCancel.area() ) ? buttonCancel.drawOnPress() : buttonCancel.drawOnRelease();
-        le.MousePressLeft( buttonTown.area() ) || !isCastle ? buttonTown.drawOnPress() : buttonTown.drawOnRelease();
-        le.MousePressLeft( buttonCastle.area() ) || isCastle ? buttonCastle.drawOnPress() : buttonCastle.drawOnRelease();
+
+        if ( isCastle ) {
+            buttonCastle.drawOnPress();
+            le.MousePressLeft( buttonTown.area() ) ? buttonTown.drawOnPress() : buttonTown.drawOnRelease();
+        }
+        else {
+            buttonTown.drawOnPress();
+            le.MousePressLeft( buttonCastle.area() ) ? buttonCastle.drawOnPress() : buttonCastle.drawOnRelease();
+        }
 
         if ( le.MouseClickLeft( buttonOk.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) ) {
             type = getPackedTownType( townRace, isCastle );
@@ -996,10 +1003,12 @@ void Dialog::selectTownType( int & type, int & color )
         if ( isCastle && le.MouseClickLeft( buttonTown.area() ) ) {
             isCastle = false;
             needRedraw = true;
+            buttonTown.drawOnPress();
         }
         else if ( !isCastle && le.MouseClickLeft( buttonCastle.area() ) ) {
             isCastle = true;
             needRedraw = true;
+            buttonCastle.drawOnPress();
         }
         else if ( le.MousePressRight( buttonCancel.area() ) ) {
             fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Exit this menu without doing anything." ), Dialog::ZERO );
