@@ -99,10 +99,8 @@ namespace fheroes2
             return {};
         }
 
-        // The first object part must always have no offset if it is not a shadow or flag object.
-        if ( object.groundLevelParts.front().layerType != Maps::SHADOW_LAYER && object.groundLevelParts.front().icnType != MP2::OBJ_ICN_TYPE_FLAG32 ) {
-            assert( object.groundLevelParts.front().tileOffset == Point() );
-        }
+        // The first object part must always have no offset.
+        assert( object.groundLevelParts.front().tileOffset == Point() );
 
         if ( object.groundLevelParts.size() == 1 && object.topLevelParts.empty() ) {
             const Maps::ObjectPartInfo & objectPart = object.groundLevelParts.front();
@@ -126,26 +124,14 @@ namespace fheroes2
 #if defined( WITH_DEBUG )
         // Verify that all offsets are unique.
         std::set<Point> uniqueOffsets;
-        std::set<Point> uniqueShadowOffsets;
         for ( const auto & objectPart : object.groundLevelParts ) {
-            if ( objectPart.layerType != Maps::SHADOW_LAYER ) {
-                const auto [dummy, inserted] = uniqueOffsets.emplace( objectPart.tileOffset );
-                if ( !inserted ) {
-                    // The object hasn't formed properly!
-                    assert( 0 );
-                }
-            }
-            else {
-                const auto [dummy, inserted] = uniqueShadowOffsets.emplace( objectPart.tileOffset );
-                if ( !inserted ) {
-                    // The object hasn't formed properly!
-                    assert( 0 );
-                }
+            const auto [dummy, inserted] = uniqueOffsets.emplace( objectPart.tileOffset );
+            if ( !inserted ) {
+                // The object hasn't formed properly!
+                assert( 0 );
             }
         }
 
-        // Top objects can share the same tiles as bottom objects.
-        uniqueOffsets.clear();
         for ( const auto & objectPart : object.topLevelParts ) {
             const auto [dummy, inserted] = uniqueOffsets.emplace( objectPart.tileOffset );
             if ( !inserted ) {
