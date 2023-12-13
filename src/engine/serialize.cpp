@@ -236,7 +236,7 @@ StreamBuf::StreamBuf( const std::vector<uint8_t> & buf )
     , itput( nullptr )
     , itend( nullptr )
 {
-    itbeg = const_cast<uint8_t *>( &buf[0] );
+    itbeg = const_cast<uint8_t *>( buf.data() );
     itend = itbeg + buf.size();
     itget = itbeg;
     itput = itend;
@@ -681,7 +681,7 @@ std::vector<uint8_t> StreamFile::getRaw( const size_t size )
 
     std::vector<uint8_t> v( chunkSize );
 
-    if ( std::fread( &v[0], chunkSize, 1, _file.get() ) != 1 ) {
+    if ( std::fread( v.data(), chunkSize, 1, _file.get() ) != 1 ) {
         setfail( true );
 
         return {};
