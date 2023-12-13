@@ -873,7 +873,7 @@ int Dialog::selectOceanObjectType( const int resourceType )
 void Dialog::selectTownType( int & type, int & color )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
-    fheroes2::StandardWindow background( 520, 360, true, display );
+    fheroes2::StandardWindow background( 520, 370, true, display );
 
     const fheroes2::Rect & area = background.activeArea();
 
@@ -948,7 +948,7 @@ void Dialog::selectTownType( int & type, int & color )
     }
 
     pos.x = area.x + area.width / 2;
-    pos.y += 250;
+    pos.y += 260;
 
     const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
 
