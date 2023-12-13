@@ -20,6 +20,8 @@
 
 #pragma once
 
+#include <cstdint>
+
 #include "image.h"
 
 namespace Maps
