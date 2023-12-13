@@ -44,7 +44,7 @@ public:
     // Zips the contents of the buffer from the current read position to the end of the buffer and
     // writes (or appends) it to the specified file. The current read position of the buffer does
     // not change. Returns true on success and false on error.
-    bool write( const std::string & fn, const bool append = false ) const;
+    bool write( const std::string & fn, const bool append = false );
 };
 
 fheroes2::Image CreateImageFromZlib( int32_t width, int32_t height, const uint8_t * imageData, size_t imageSize, bool doubleLayer );

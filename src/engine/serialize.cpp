@@ -282,22 +282,22 @@ void StreamBuf::reset()
     itget = itbeg;
 }
 
-size_t StreamBuf::tellg() const
+size_t StreamBuf::tellg()
 {
     return itget - itbeg;
 }
 
-size_t StreamBuf::tellp() const
+size_t StreamBuf::tellp()
 {
     return itput - itbeg;
 }
 
-size_t StreamBuf::sizeg() const
+size_t StreamBuf::sizeg()
 {
     return itput - itget;
 }
 
-size_t StreamBuf::sizep() const
+size_t StreamBuf::sizep()
 {
     return itend - itput;
 }
@@ -477,83 +477,149 @@ void StreamBuf::skip( size_t sz )
     itget += sz <= sizeg() ? sz : sizeg();
 }
 
-StreamFile::StreamFile()
-    : _file( nullptr )
-{}
-
-StreamFile::~StreamFile()
-{
-    close();
-}
-
 bool StreamFile::open( const std::string & fn, const std::string & mode )
 {
-    _file = std::fopen( fn.c_str(), mode.c_str() );
-    if ( !_file )
-        ERROR_LOG( fn )
-    return _file != nullptr;
+    _file.reset( std::fopen( fn.c_str(), mode.c_str() ) );
+    if ( !_file ) {
+        ERROR_LOG( "Error opening file " << fn )
+    }
+
+    return static_cast<bool>( _file );
 }
 
 void StreamFile::close()
 {
-    if ( _file ) {
-        std::fclose( _file );
-        _file = nullptr;
-    }
+    _file.reset();
 }
 
-size_t StreamFile::size() const
+size_t StreamFile::size()
 {
-    if ( !_file )
+    if ( !_file ) {
         return 0;
-    const long pos = std::ftell( _file );
-    std::fseek( _file, 0, SEEK_END );
-    const long len = std::ftell( _file );
-    std::fseek( _file, pos, SEEK_SET );
+    }
+
+    const long pos = std::ftell( _file.get() );
+    if ( pos < 0 ) {
+        setfail( true );
+
+        return 0;
+    }
+
+    if ( std::fseek( _file.get(), 0, SEEK_END ) != 0 ) {
+        setfail( true );
+
+        return 0;
+    }
+
+    const long len = std::ftell( _file.get() );
+    if ( len < 0 ) {
+        setfail( true );
+
+        return 0;
+    }
+
+    if ( std::fseek( _file.get(), pos, SEEK_SET ) != 0 ) {
+        setfail( true );
+
+        return 0;
+    }
+
     return static_cast<size_t>( len );
 }
 
-size_t StreamFile::tell() const
+size_t StreamFile::tell()
 {
     return tellg();
 }
 
 void StreamFile::seek( size_t pos )
 {
-    if ( _file )
-        std::fseek( _file, static_cast<long>( pos ), SEEK_SET );
+    if ( !_file ) {
+        return;
+    }
+
+    if ( std::fseek( _file.get(), static_cast<long>( pos ), SEEK_SET ) != 0 ) {
+        setfail( true );
+    }
 }
 
-size_t StreamFile::sizeg() const
+size_t StreamFile::sizeg()
 {
-    if ( !_file )
+    if ( !_file ) {
         return 0;
-    const long pos = std::ftell( _file );
-    std::fseek( _file, 0, SEEK_END );
-    const long len = std::ftell( _file );
-    std::fseek( _file, pos, SEEK_SET );
+    }
+
+    const long pos = std::ftell( _file.get() );
+    if ( pos < 0 ) {
+        setfail( true );
+
+        return 0;
+    }
+
+    if ( std::fseek( _file.get(), 0, SEEK_END ) != 0 ) {
+        setfail( true );
+
+        return 0;
+    }
+
+    const long len = std::ftell( _file.get() );
+    if ( len < 0 ) {
+        setfail( true );
+
+        return 0;
+    }
+
+    if ( std::fseek( _file.get(), pos, SEEK_SET ) != 0 ) {
+        setfail( true );
+
+        return 0;
+    }
+
+    // Something weird has happened
+    if ( len < pos ) {
+        setfail( true );
+
+        return 0;
+    }
+
     return static_cast<size_t>( len - pos );
 }
 
-size_t StreamFile::tellg() const
+size_t StreamFile::tellg()
 {
-    return _file ? static_cast<size_t>( std::ftell( _file ) ) : 0;
+    if ( !_file ) {
+        return 0;
+    }
+
+    const long pos = std::ftell( _file.get() );
+    if ( pos < 0 ) {
+        setfail( true );
+
+        return 0;
+    }
+
+    return static_cast<size_t>( pos );
 }
 
-size_t StreamFile::sizep() const
+size_t StreamFile::sizep()
 {
     return sizeg();
 }
 
-size_t StreamFile::tellp() const
+size_t StreamFile::tellp()
 {
     return tellg();
 }
 
 void StreamFile::skip( size_t pos )
 {
-    if ( _file )
-        std::fseek( _file, static_cast<long int>( pos ), SEEK_CUR );
+    if ( !_file ) {
+        return;
+    }
+
+    if ( std::fseek( _file.get(), static_cast<long int>( pos ), SEEK_CUR ) != 0 ) {
+        setfail( true );
+    }
 }
 
 uint8_t StreamFile::get8()
@@ -615,9 +681,9 @@ std::vector<uint8_t> StreamFile::getRaw( const size_t size )
 
     std::vector<uint8_t> v( chunkSize );
 
-    const size_t count = std::fread( &v[0], chunkSize, 1, _file );
-    if ( count != 1 ) {
+    if ( std::fread( &v[0], chunkSize, 1, _file.get() ) != 1 ) {
         setfail( true );
+
         return {};
     }
 
@@ -626,8 +692,12 @@ std::vector<uint8_t> StreamFile::getRaw( const size_t size )
 
 void StreamFile::putRaw( const char * ptr, size_t sz )
 {
-    if ( _file ) {
-        std::fwrite( ptr, sz, 1, _file );
+    if ( !_file ) {
+        return;
+    }
+
+    if ( std::fwrite( ptr, sz, 1, _file.get() ) != 1 ) {
+        setfail( true );
     }
 }
 
@@ -640,9 +710,9 @@ StreamBuf StreamFile::toStreamBuf( const size_t size )
 
     StreamBuf buffer( chunkSize );
 
-    const size_t count = std::fread( buffer.data(), chunkSize, 1, _file );
-    if ( count != 1 ) {
+    if ( std::fread( buffer.data(), chunkSize, 1, _file.get() ) != 1 ) {
         setfail( true );
+
         return StreamBuf{};
     }
 
