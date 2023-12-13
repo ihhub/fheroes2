@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-10 03:25+0000\n"
+"POT-Creation-Date: 2023-12-13 15:38+0000\n"
 "PO-Revision-Date: 2023-09-04 21:55+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -68,7 +68,7 @@ msgid "DECLINE"
 msgstr "ELUTASÍT"
 
 msgid "LEARN"
-msgstr "OLVAS"
+msgstr "TANUL"
 
 msgid "TRADE"
 msgstr "ÜZLET"
@@ -905,10 +905,10 @@ msgid "Surrender disabled"
 msgstr "Megadás nem lehetséges"
 
 msgid "Damage: %{max}"
-msgstr "Sérülés: %{max}"
+msgstr "Sebzés: %{max}"
 
 msgid "Damage: %{min} - %{max}"
-msgstr "Sérülés: %{min} - %{max}"
+msgstr "Sebzés: %{min} - %{max}"
 
 msgid "Perish: %{max}"
 msgstr "Megöl: %{max}"
@@ -943,9 +943,8 @@ msgstr "Varázserő beállítása"
 msgid "Set Knowledge Skill"
 msgstr "Tudás beállítása"
 
-#, fuzzy
 msgid "%{race1} %{name1} vs %{race2} %{name2}"
-msgstr "%{name1} és %{name2} találkozik"
+msgstr "%{race1} %{name1} és %{race2} %{name2} találkozik"
 
 msgid "Monsters"
 msgstr "Lények"
@@ -2548,7 +2547,7 @@ msgid "Hire all creatures in the town."
 msgstr "Összes lény toborzása."
 
 msgid "Available"
-msgstr "Rendelkezésre áll"
+msgstr "Elérhető"
 
 msgid "Town Population Information and Statistics"
 msgstr "A város lakosságának adatai és statisztikái"
@@ -2612,7 +2611,7 @@ msgid "Shots"
 msgstr "Lövések"
 
 msgid "Shots Left"
-msgstr "Maradék lövések"
+msgstr "Maradék lövés"
 
 msgid "Hit Points"
 msgstr "Életerő"
@@ -3215,7 +3214,7 @@ msgid "%{color} %{race} hero"
 msgstr "%{color} %{race} hős"
 
 msgid "Terrain object"
-msgstr ""
+msgstr "Szárazföldi objektum"
 
 msgid "Select Skill:"
 msgstr "Képesség kiválasztása:"
@@ -3235,9 +3234,8 @@ msgstr "Hős kiválasztása:"
 msgid "Select Treasure:"
 msgstr "Kincs kiválasztása:"
 
-#, fuzzy
 msgid "Select Ocean Object:"
-msgstr "Varázstárgy kiválasztása:"
+msgstr "Tengeri objektum kiválasztása:"
 
 msgid "Map Type:\n"
 msgstr "Térképtípus:\n"
@@ -3245,7 +3243,6 @@ msgstr "Térképtípus:\n"
 msgid "The Succession Wars"
 msgstr "Örökösödési háborúk"
 
-#, fuzzy
 msgid "Resurrection"
 msgstr "Feltámasztás"
 
@@ -3504,11 +3501,8 @@ msgstr "Személyiség:"
 msgid "Best Monster:"
 msgstr "Legerősebb lény:"
 
-#, fuzzy
 msgid "Map filename"
-msgstr ""
-"Térkép\n"
-"mérete"
+msgstr "Térképfájl neve"
 
 msgid ""
 "Are you sure you want to load a new map? (Any unsaved changes to the current "
@@ -3551,9 +3545,8 @@ msgstr "Kilépés a térképszerkesztőből."
 msgid "Monster"
 msgstr "Lény"
 
-#, fuzzy
 msgid "Objects cannot be placed outside the map."
-msgstr "Ezt a várost nem lehet kastéllyá fejleszteni."
+msgstr "Tárgyakat nem lehet a térképen kívülre helyezni."
 
 msgid "Monsters cannot be placed on water."
 msgstr "Vízen nem helyezhetők el lények."
@@ -3579,13 +3572,11 @@ msgstr "Varázstárgyak"
 msgid "Artifacts cannot be placed on water."
 msgstr "Vízen nem helyezhetők el varázstárgyak."
 
-#, fuzzy
 msgid "Ocean object"
-msgstr "Pusztulat"
+msgstr "Tengeri objektum"
 
-#, fuzzy
 msgid "Ocean object must be placed on water."
-msgstr "Ezt a várost nem lehet kastéllyá fejleszteni."
+msgstr "Tengeri objektumot vízre kell elhelyezni."
 
 msgid "Ocean Objects"
 msgstr "Tengeri tárgyak"
@@ -4469,36 +4460,32 @@ msgstr ""
 "Át akarod adni az irányítást a gépnek? Ez csak a következő körtől lesz "
 "hatásos."
 
-#, fuzzy
 msgid "Default Actions"
-msgstr "alaőértelmezett cselekvés"
+msgstr "Alapértelmezett cselekvés"
 
 msgid "Global Actions"
-msgstr ""
+msgstr "Globális cselekvések"
 
 msgid "Main Menu"
-msgstr ""
+msgstr "Főmenü"
 
 msgid "World Map"
 msgstr "Világtérkép"
 
-#, fuzzy
 msgid "Battle Screen"
-msgstr "Hős képernyő"
+msgstr "Csata képernyő"
 
-#, fuzzy
 msgid "Town Screen"
-msgstr "Hős képernyő"
+msgstr "Város képernyő"
 
 msgid "Army Actions"
-msgstr ""
+msgstr "Sereg cselekvései"
 
 msgid "Editor"
 msgstr "Szerkesztő"
 
-#, fuzzy
 msgid "The save file is corrupted."
-msgstr "A mentés fájl sikerült."
+msgstr "A mentés fájl sérült."
 
 msgid "Unsupported save format: "
 msgstr "Nem támogatott mentés formátum: "
@@ -4512,13 +4499,12 @@ msgstr "Utolsó támogatott verzió: "
 msgid "This file contains a save with an invalid game type."
 msgstr "Ez a fájl nem megfelelő játékverzióval lett mentve."
 
-#, fuzzy
 msgid ""
 "This save file requires \"The Price of Loyalty\" game assets, but they have "
 "not been provided to the engine."
 msgstr ""
-"Ez a fájl a \"Hűség ára\" térképhez lett mentve, de a játékmotor nem "
-"tartalmaz egyező eszközt."
+"Ehhez a mentés fájlhoz szükség van a \"Hűség ára\" kiegészítőhöz, amely "
+"azonban nem található."
 
 msgid "This saved game is localized to '"
 msgstr "Ez a mentett játék lokalizált '"
@@ -5130,7 +5116,7 @@ msgstr ""
 "Biztos hogy új játékot töltesz be? (A jelenlegi játékod el fog veszni.)"
 
 msgid "Try looking on land!!!"
-msgstr "Nézz körül a vidéken!!!"
+msgstr "Próbálkozz a szárazföldön!!!"
 
 msgid ""
 "Searching for the Ultimate Artifact is fruitless. Your hero could not carry "
@@ -5275,74 +5261,70 @@ msgstr ""
 "mozoghatnak minden nap."
 
 msgid "English"
-msgstr ""
+msgstr "angol"
 
 msgid "French"
-msgstr ""
+msgstr "francia"
 
 msgid "Polish"
-msgstr ""
+msgstr "lengyel"
 
-#, fuzzy
 msgid "German"
-msgstr "Sherman"
+msgstr "német"
 
 msgid "Russian"
-msgstr ""
+msgstr "orosz"
 
 msgid "Italian"
-msgstr ""
+msgstr "olasz"
 
 msgid "Czech"
-msgstr ""
+msgstr "cseh"
 
 msgid "Norwegian"
-msgstr ""
+msgstr "norvég"
 
 msgid "Belarusian"
-msgstr ""
+msgstr "fehérorosz"
 
-#, fuzzy
 msgid "Bulgarian"
-msgstr "Barbár"
+msgstr "bolgár"
 
 msgid "Ukrainian"
-msgstr ""
+msgstr "ukrán"
 
 msgid "Romanian"
-msgstr ""
+msgstr "román"
 
 msgid "Spanish"
-msgstr ""
+msgstr "spanyol"
 
 msgid "Swedish"
-msgstr ""
+msgstr "svéd"
 
-#, fuzzy
 msgid "Portuguese"
-msgstr "Rabló"
+msgstr "portugál"
 
 msgid "Turkish"
-msgstr ""
+msgstr "török"
 
 msgid "Dutch"
-msgstr ""
+msgstr "holland"
 
 msgid "Hungarian"
-msgstr "Magyar nyelv"
+msgstr "magyar"
 
 msgid "Danish"
-msgstr ""
+msgstr "dán"
 
 msgid "Slovak"
-msgstr ""
+msgstr "szlovák"
 
-#, fuzzy
 msgid "Vietnamese"
-msgstr "%{name} mutatása"
+msgstr "vietnámi"
 
 msgid ", FPS: "
-msgstr ""
+msgstr ", FPS: "
 
 msgid "%{object} robber"
 msgstr ""
@@ -5351,14 +5333,13 @@ msgid "%{object} raided"
 msgstr ""
 
 msgid "Ector"
-msgstr "Ector"
+msgstr "Hector"
 
 msgid "Gwenneth"
-msgstr ""
+msgstr "Gwenneth"
 
-#, fuzzy
 msgid "Sir Gallant"
-msgstr "Sir Gallanth"
+msgstr "Sir Gallant"
 
 msgid "Tyro"
 msgstr "Tyro"
@@ -5468,9 +5449,8 @@ msgstr "Lord Halton"
 msgid "Sister Eliza"
 msgstr "Eliza nővér"
 
-#, fuzzy
 msgid "Brother Brax"
-msgstr "Bax atya"
+msgstr "Brax atya"
 
 msgid "Dainwin"
 msgstr "Dainwin"
@@ -5603,34 +5583,27 @@ msgid ""
 msgstr ""
 
 msgid "You come upon the remains of an unfortunate adventurer."
-msgstr ""
+msgstr "Egy szerencsétlen kalandor maradványaira lelsz rá."
 
 msgid "Searching through the tattered clothing, you find the %{artifact}."
 msgstr ""
+"Átkutatod rongyos ruházatát és rábukkansz erre a varázstárgyra: %{artifact}."
 
-#, fuzzy
 msgid "Searching through the tattered clothing, you find nothing."
-msgstr "Átkutatod az uszadékot, de semmit sem találsz."
+msgstr "Átkutatod rongyos ruházatát, de semmit sem találsz."
 
-#, fuzzy
 msgid ""
 "You come across an old wagon left by a trader who didn't quite make it to "
 "safe terrain."
 msgstr ""
 "Rábukkansz egy öreg szekérre, amit egy kereskedő hagyott hátra, mivel nem "
-"tudta megvédeni.\n"
-"Átkutatod, és egy %{artifact} varázstárgyat találsz rajta."
+"tudta megvédeni."
 
-#, fuzzy
 msgid "Unfortunately, others have found it first, and the wagon is empty."
-msgstr ""
-"Rábukkansz egy öreg szekérre, amit egy kereskedő hagyott hátra, mivel nem "
-"tudta megvédeni.\n"
-"Sajnos, valaki hamarabb rátalált, és a szekér üres."
+msgstr "Sajnos, valaki hamarabb rátalált a szekérre, így az üres."
 
-#, fuzzy
 msgid "Searching inside, you find the %{artifact}."
-msgstr "Megtaláltad a %{artifact}."
+msgstr "Átkutatva megtaláltad a(z) %{artifact} varázstárgyat."
 
 msgid "Inside, you find some of the wagon's cargo still intact."
 msgstr ""
@@ -5869,9 +5842,8 @@ msgstr ""
 "Miután legyőzted a Zombikat órákat töltöttél el a sírok átkutatásával de nem "
 "találtál semmit. Csökkent a csapatod morálja ."
 
-#, fuzzy
 msgid "Upon defeating the Zombies you search the graves and find something!"
-msgstr "Miután legyőzted a zombikat átkutattad a sírokat és találtál valamit!"
+msgstr "Miután legyőzted a zombikat, átkutattad a sírokat és találtál valamit!"
 
 msgid ""
 "The rotting hulk of a great pirate ship creaks eerily as it is pushed "
@@ -5911,26 +5883,25 @@ msgstr ""
 "Ha iszol az oázisban, akkor felfrissülsz, de más nem történik. Csak az első "
 "csatádban segít."
 
-#, fuzzy
 msgid ""
 "A drink at the oasis fills your troops with strength and lifts their "
 "spirits. You can travel a bit further today."
 msgstr ""
-"Ha iszol az oázisban, akkor az egységeid ereje és hangulata feltöltődik. "
-"Ezért ma egy kicsit tovább tudsz haladni."
+"Ha iszol az oázisban, akkor az egységeid ereje és morálja feltöltődik. Ezért "
+"ma egy kicsit tovább tudsz haladni."
 
 msgid ""
 "The drink at the watering hole is refreshing, but offers no further benefit. "
 "The watering hole might help again if you fought a battle first."
 msgstr ""
-"Ha iszol a vizesgödörnél, akkor felfrissülsz, de más nem történik. Csak az "
-"első csatádban segít."
+"Ha iszol az itatónál, akkor felfrissülsz, de más nem történik. Csak az első "
+"csatádban segít."
 
 msgid ""
 "A drink at the watering hole fills your troops with strength and lifts their "
 "spirits. You can travel a bit further today."
 msgstr ""
-"Ha iszol a vizesgödörnél, akkor az egységeid ereje és hangulata feltöltődik. "
+"Ha iszol az itatónál, akkor az egységeid ereje és hangulata feltöltődik. "
 "Ezért ma egy kicsit tovább tudsz haladni."
 
 msgid ""
@@ -6126,13 +6097,12 @@ msgid ""
 "day."
 msgstr "Megszereztél egy auranybányát. Ez naponta %{count} aranyat ad neked."
 
-#, fuzzy
 msgid ""
 "The lighthouse is now under your control, and all of your ships will now "
 "move further each day."
 msgstr ""
-"A kilátótorony a fennhatóságod alá került, és minden hajód többet mozoghat "
-"minden körben."
+"A kilátótorony a fennhatóságod alá került, így minden hajód többet mozoghat "
+"körönként."
 
 msgid "You gain control of a %{name}."
 msgstr ""
@@ -6379,7 +6349,7 @@ msgstr ""
 "érzed, hogy fejlődtél valamennyit.\""
 
 msgid " and "
-msgstr ""
+msgstr " és "
 
 msgid ""
 "All of the %{monsters} you have in your army have been trained by the battle "
@@ -6396,7 +6366,6 @@ msgstr ""
 msgid "All of your %{monsters} have been upgraded into %{monsters2}."
 msgstr "Minden %{monsters} fel lett fejlesztve %{monsters2}."
 
-#, fuzzy
 msgid ""
 "A blacksmith working at the foundry offers to convert all Pikemen and "
 "Swordsmen's weapons brought to him from iron to steel. He also says that he "
@@ -6458,13 +6427,12 @@ msgstr ""
 msgid "Upon your approach, the tree opens its eyes in delight."
 msgstr "Ahogy megközelíted, a fa kinyitja a szemeit ."
 
-#, fuzzy
 msgid ""
 "\"Ahh, an adventurer! I will be happy to teach you a little of what I have "
 "learned over the ages for a mere %{count} %{res}.\""
 msgstr ""
-"\"Ahh, egy kalandor! Szívesen megtanítalak 10 gyöngyért cserébe valamire, "
-"amit évek során megtanultam.\""
+"\"Ahh, egy kalandor! Szívesen megtanítalak cserébe valamire, amit az évek "
+"során megtanultam. Ennek ára: %{count} %{res}.\""
 
 msgid "(Just bury it around my roots.)"
 msgstr "(Csak ásd el a gyökereim közé.)"
@@ -6472,9 +6440,8 @@ msgstr "(Csak ásd el a gyökereim közé.)"
 msgid "Tears brim in the eyes of the tree."
 msgstr "A fa szemei megtelnek könnyel."
 
-#, fuzzy
 msgid "\"I need %{count} %{res}.\""
-msgstr "Szükségem van 10 drágakőre."
+msgstr "Szükségem van a következőkre: %{count} %{res}."
 
 msgid "it whispers. (sniff) \"Well, come back when you can pay me.\""
 msgstr "azt suttogja. (hüpp) \"Nos, gyere vissza amikor már tudsz fizetni.\""
@@ -6529,12 +6496,12 @@ msgid ""
 "to you for %{count} gold.\""
 msgstr ""
 
-#, fuzzy
 msgid ""
 "Upon defeating the daemon's servants, you find a hidden cache with %{count} "
 "gold."
 msgstr ""
-"Miután legyőzted a démon alattvalóit, találsz egy elrejtett 2500 aranyat."
+"Miután legyőzted a démon alattvalóit, egy titkos rejtekhelyen találsz "
+"%{count} aranyat."
 
 msgid ""
 "As you enter the Alchemist's Tower, a hobbled, graying man in a brown cloak "
@@ -6648,14 +6615,18 @@ msgstr ""
 "\"Van számodra egy rejtvényem.\" - mondja. \"Ha jó a válaszod, "
 "megjutalmazlak. Ha rossz a válaszod, felfallak. Elfogadod a kihívás?\""
 
-#, fuzzy
 msgid ""
 "The Sphinx asks you the following riddle:\n"
 "\n"
 "'%{riddle}'\n"
 "\n"
 "Your answer?"
-msgstr "A Szfinx a következő rejtvényt adja fel:  %{riddle}. Mi a válaszod?"
+msgstr ""
+"A Szfinx a következő találós kérdést adja fel:\n"
+"\n"
+"'%{riddle}'\n"
+"\n"
+"Mi a válaszod?"
 
 msgid ""
 "\"You guessed incorrectly,\" the Sphinx says, smiling. The Sphinx swipes at "
@@ -6858,11 +6829,12 @@ msgstr "Ható morál módosítók:"
 msgid "Entire army is undead, so morale does not apply."
 msgstr "A csapat minden tagja élőhalott, így a morál nem hat rájuk."
 
-#, fuzzy
 msgid ""
 "Current experience %{exp1}.\n"
 " Next level %{exp2}."
-msgstr "Jelenlegi tapasztalati pont %{exp1} Következő szint %{exp2}."
+msgstr ""
+"Jelenlegi tapasztalati pont: %{exp1}\n"
+" Következő szint: %{exp2}."
 
 msgid "Level %{level}"
 msgstr "%{level} szint"
@@ -6934,17 +6906,14 @@ msgstr ""
 msgid "Current Modifiers:"
 msgstr "Ható módosítók:"
 
-#, fuzzy
 msgid "skill|Basic"
 msgstr "Alap"
 
-#, fuzzy
 msgid "skill|Advanced"
 msgstr "Haladó"
 
-#, fuzzy
 msgid "skill|Expert"
-msgstr "Fejlett"
+msgstr "Szakértő"
 
 msgid "Pathfinding"
 msgstr "Nyomkövetés"
@@ -6985,267 +6954,201 @@ msgstr "Nekromancia"
 msgid "Estates"
 msgstr "Vagyon"
 
-#, fuzzy
 msgid "Advanced Archery"
-msgstr "Haladó"
+msgstr "Haladó íjászat"
 
-#, fuzzy
 msgid "Advanced Pathfinding"
-msgstr "Nyomkövetés"
+msgstr "Haladó nyomkövetés"
 
-#, fuzzy
 msgid "Basic Archery"
-msgstr "Íjászat"
+msgstr "Alap íjászat"
 
-#, fuzzy
 msgid "Basic Pathfinding"
-msgstr "Nyomkövetés"
+msgstr "Alap nyomkövetés"
 
-#, fuzzy
 msgid "Expert Pathfinding"
-msgstr "Nyomkövetés"
+msgstr "Szakértő nyomkövetés"
 
-#, fuzzy
 msgid "Advanced Logistics"
-msgstr "Logisztika"
+msgstr "Haladó logisztika"
 
-#, fuzzy
 msgid "Basic Logistics"
-msgstr "Logisztika"
+msgstr "Alap logisztika"
 
-#, fuzzy
 msgid "Basic Scouting"
-msgstr "Cserkészet"
+msgstr "Alap cserkészet"
 
-#, fuzzy
 msgid "Expert Archery"
-msgstr "Íjászat"
+msgstr "Szakértő íjászat"
 
-#, fuzzy
 msgid "Expert Logistics"
-msgstr "Logisztika"
+msgstr "Szakértő logisztika"
 
-#, fuzzy
 msgid "Advanced Diplomacy"
-msgstr "Diplomácia"
+msgstr "Haladó diplomácia"
 
-#, fuzzy
 msgid "Advanced Scouting"
-msgstr "Haladó"
+msgstr "Haladó cserkészet"
 
-#, fuzzy
 msgid "Basic Diplomacy"
-msgstr "Diplomácia"
+msgstr "Alap diplomácia"
 
-#, fuzzy
 msgid "Expert Diplomacy"
-msgstr "Diplomácia"
+msgstr "Szakértő diplomácia"
 
-#, fuzzy
 msgid "Expert Scouting"
-msgstr "Cserkészet"
+msgstr "Szakértő cserkészet"
 
-#, fuzzy
 msgid "Advanced Leadership"
-msgstr "Vezetés"
+msgstr "Haladó vezetés"
 
-#, fuzzy
 msgid "Advanced Navigation"
-msgstr "Navigáció"
+msgstr "Haladó navigáció"
 
-#, fuzzy
 msgid "Basic Leadership"
-msgstr "Vezetés"
+msgstr "Alap vezetés"
 
-#, fuzzy
 msgid "Basic Navigation"
-msgstr "Navigáció"
+msgstr "Alap navigáció"
 
-#, fuzzy
 msgid "Expert Navigation"
-msgstr "Navigáció"
+msgstr "Szakértő navigáció"
 
-#, fuzzy
 msgid "Advanced Wisdom"
-msgstr "Haladó"
+msgstr "Haladó bölcsesség"
 
-#, fuzzy
 msgid "Basic Mysticism"
-msgstr "Misztika"
+msgstr "Alap misztika"
 
-#, fuzzy
 msgid "Basic Wisdom"
-msgstr "Bölcsesség"
+msgstr "Alap bölcsesség"
 
-#, fuzzy
 msgid "Expert Leadership"
-msgstr "Vezetés"
+msgstr "Szakértő vezetés"
 
-#, fuzzy
 msgid "Expert Wisdom"
-msgstr "Fejlett"
+msgstr "Szakértő bölcsesség"
 
-#, fuzzy
 msgid "Advanced Luck"
-msgstr "Haladó"
+msgstr "Haladó szerencse"
 
-#, fuzzy
 msgid "Advanced Mysticism"
-msgstr "Misztika"
+msgstr "Haladó misztika"
 
-#, fuzzy
 msgid "Basic Luck"
-msgstr "Rossz szerencse"
+msgstr "Alap szerencse"
 
-#, fuzzy
 msgid "Expert Luck"
-msgstr "Fejlett"
+msgstr "Szakértő szerencse"
 
-#, fuzzy
 msgid "Expert Mysticism"
-msgstr "Misztika"
+msgstr "Szakértő misztika"
 
-#, fuzzy
 msgid "Advanced Ballistics"
-msgstr "Ballisztika"
+msgstr "Haladó ballisztika"
 
-#, fuzzy
 msgid "Advanced Eagle Eye"
-msgstr "Sasszem"
+msgstr "Haladó sasszem"
 
-#, fuzzy
 msgid "Basic Ballistics"
-msgstr "Ballisztika"
+msgstr "Alap ballisztika"
 
-#, fuzzy
 msgid "Basic Eagle Eye"
-msgstr "Sasszem"
+msgstr "Alap sasszem"
 
-#, fuzzy
 msgid "Expert Ballistics"
-msgstr "Ballisztika"
+msgstr "Szakértő ballisztika"
 
-#, fuzzy
 msgid "Advanced Necromancy"
-msgstr "Nekromancia"
+msgstr "Haladó nekromancia"
 
-#, fuzzy
 msgid "Basic Estates"
-msgstr "Vagyon"
+msgstr "Alap vagyon"
 
-#, fuzzy
 msgid "Basic Necromancy"
-msgstr "Nekromancia"
+msgstr "Alap nekromancia"
 
-#, fuzzy
 msgid "Expert Eagle Eye"
-msgstr "Sasszem"
+msgstr "Szakértő sasszem"
 
-#, fuzzy
 msgid "Expert Necromancy"
-msgstr "Nekromancia"
+msgstr "Szakértő nekromancia"
 
-#, fuzzy
 msgid "Advanced Estates"
-msgstr "Haladó"
+msgstr "Haladó vagyon"
 
-#, fuzzy
 msgid "Expert Estates"
-msgstr "Vagyon"
+msgstr "Szakértő vagyon"
 
-#, fuzzy
 msgid ""
 "%{skill} reduces the movement penalty for rough terrain by %{count} percent."
 msgstr ""
-"Alap Nyomkövetés hatására a nehéz terepen történő haladás büntetése %{count} "
-"százalékkal csökken."
+"A(z) %{skill} csökkenti a nehéz terepen történő haladásból fakadó hátrányt "
+"%{count} százalékkal."
 
-#, fuzzy
 msgid "%{skill} eliminates the movement penalty for rough terrain."
 msgstr ""
-"A Fejlett Nyomkövetés megszünteti a mozgásbüntetést egyenetlen terepen."
+"A(z) %{skill} kiiktatja a nehéz terepen történő haladásból fakadó hátrányt."
 
-#, fuzzy
 msgid ""
 "%{skill} increases the damage done by range attacking creatures by %{count} "
 "percent."
 msgstr ""
-"Alap Íjászat növeli a távolsági támadások sebzését %{count} százalékkal."
+"A(z) %{skill} növeli a távolsági támadások sebzését %{count} százalékkal."
 
-#, fuzzy
 msgid "%{skill} increases your hero's movement points by %{count} percent."
-msgstr ""
-"Alap Logisztika növeli a hősöd mozgási sebességét %{count} százalékkal."
+msgstr "A(z) %{skill} növeli a hősöd mozgáspontjait %{count} százalékkal."
 
-#, fuzzy
 msgid "%{skill} increases your hero's viewable area by one square."
 msgid_plural ""
 "%{skill} increases your hero's viewable area by %{count} squares."
-msgstr[0] "Alap Felderítés növeli a hős láthatárát %{count} egységgel."
-msgstr[1] "Alap Felderítés növeli a hős láthatárát %{count} egységgel."
+msgstr[0] "A(z) %{skill} növeli a hős láthatárát egy egységgel."
+msgstr[1] "A(z) %{skill} növeli a hős láthatárát %{count} egységgel."
 
-#, fuzzy
 msgid ""
 "%{skill} allows you to negotiate with monsters who are weaker than your "
 "group. "
 msgstr ""
-"A Fejlett Diplomácia lehetővé teszi a seregednél gyengébb lényekkel való "
-"tárgyalást. Mindannyian csatlakozhatnak hozzád."
+"A(z) %{skill} lehetővé teszi a seregednél gyengébb lényekkel való "
+"tárgyalást. "
 
-#, fuzzy
 msgid "Approximately %{count} percent of the creatures may offer to join you."
-msgstr ""
-"Alap Diplomácia lehetővé teszi, hogy a csapatodnál gyengébb szörnyekkel "
-"tárgyalj. Kb. a lények %{count} százaléka csatlakozhat hozzád."
+msgstr "A lények kb. %{count} százaléka csatlakozhat hozzád."
 
-#, fuzzy
 msgid "All of the creatures may offer to join you."
-msgstr ""
-"Alap Diplomácia lehetővé teszi, hogy a csapatodnál gyengébb szörnyekkel "
-"tárgyalj. Kb. a lények %{count} százaléka csatlakozhat hozzád."
+msgstr "Az összes lény csatlakozhat hozzád."
 
-#, fuzzy
 msgid ""
 "%{skill} increases your hero's movement points over water by %{count} "
 "percent."
 msgstr ""
-"Alap Navigáció növeli a hős vízen történő mozgáspontjait %{count} "
-"százalékkal."
+"A(z) %{skill} növeli a hős vízen történő mozgáspontjait %{count} százalékkal."
 
-#, fuzzy
 msgid "%{skill} increases your hero's troops morale by %{count}."
-msgstr "Alap Vezetés növeli a csapatod tagjainak morálját %{count}-gyel."
+msgstr "A(z) %{skill} ennyivel növeli a csapatod tagjainak morálját: %{count}."
 
-#, fuzzy
 msgid "%{skill} allows your hero to learn third level spells."
 msgstr ""
-"Az Alap Bölcsesség képessé teszi a hősödet 3. szintű varázslatok "
-"használatára."
+"A(z) %{skill} képessé teszi a hősödet 3. szintű varázslatok megtanulására."
 
-#, fuzzy
 msgid "%{skill} allows your hero to learn fourth level spells."
 msgstr ""
-"A Haladó Bölcsesség képessé teszi a hősödet 4. szintű varázslatok "
-"használatára."
+"A(z) %{skill} képessé teszi a hősödet 4. szintű varázslatok használatára."
 
-#, fuzzy
 msgid "%{skill} allows your hero to learn fifth level spells."
 msgstr ""
-"A Fejlett Bölcsesség képessé teszi a hősödet 5. szintű varázslatok "
-"használatára."
+"A(z) %{skill} képessé teszi a hősödet 5. szintű varázslatok használatára."
 
-#, fuzzy
 msgid "%{skill} regenerates one additional spell point per day to your hero."
 msgid_plural ""
 "%{skill} regenerates %{count} additional spell points per day to your hero."
 msgstr[0] ""
-"Alap Misztika naponta %{count}-vel növeli a varázspontok újratermelődését."
+"A(z) %{skill} naponta eggyel növeli a varázspontok újratermelődését."
 msgstr[1] ""
-"Alap Misztika naponta %{count}-vel növeli a varázspontok újratermelődését."
+"A(z) %{skill} naponta %{count}-vel növeli a varázspontok újratermelődését."
 
-#, fuzzy
 msgid "%{skill} increases your hero's luck by %{count}."
-msgstr "Alap Szerencse növeli a hős szerencséjét %{count}-gyel."
+msgstr "A(z) %{skill} ennyivel növeli a hős szerencséjét: %{count}."
 
 #, fuzzy
 msgid ""
@@ -7980,7 +7883,7 @@ msgid "Troll Bridge"
 msgstr "Trollhíd"
 
 msgid "Watering Hole"
-msgstr "Csapszék"
+msgstr "Itató"
 
 msgid "Witch's Hut"
 msgstr "Boszorkánykunyhó"
@@ -8101,27 +8004,23 @@ msgstr "Földidéző oltár"
 msgid "Water Summoning Altar"
 msgstr "Vízidéző oltár"
 
-#, fuzzy
 msgid "Unknown Monster"
-msgstr "Ismeretlen"
+msgstr "Ismeretlen lény"
 
-#, fuzzy
 msgid "Unknown Monsters"
-msgstr "Ismeretlen"
+msgstr "Ismeretlen lények"
 
-#, fuzzy
 msgid "Peasant"
 msgstr "Jobbágy"
 
 msgid "Peasants"
-msgstr "Jobbágy"
+msgstr "Jobbágyok"
 
-#, fuzzy
 msgid "Archer"
 msgstr "Íjász"
 
 msgid "Archers"
-msgstr "Íjász"
+msgstr "Íjászok"
 
 #, fuzzy
 msgid "Ranger"
@@ -10422,17 +10321,14 @@ msgstr "Előző város mutatása"
 msgid "View next page"
 msgstr "%{name} mutatása"
 
-#, fuzzy
 msgid "Close Spellbook"
-msgstr "Varázslás"
+msgstr "Varázskönyv becsukása"
 
-#, fuzzy
 msgid "View %{spell}"
-msgstr "%{name} mutatása"
+msgstr "%{spell} mutatása"
 
-#, fuzzy
 msgid "This spell does %{damage} points of damage."
-msgstr "The %{spell} varázslat %{damage} sebzést okoz."
+msgstr "Ez a varázslat %{damage} sebzést okoz."
 
 #, fuzzy
 msgid ""
@@ -10441,16 +10337,16 @@ msgid ""
 msgstr "%{spell} varázslat idézése a(z) %{monster} lényre"
 
 msgid "This spell restores %{hp} HP."
-msgstr ""
+msgstr "A varázslat visszaállít %{hp} életerőt."
 
 msgid "This spell summons %{count} %{monster} to guard the mine."
 msgstr ""
 
 msgid "The nearest town is %{town}."
-msgstr ""
+msgstr "A legközelebbi város: %{town}"
 
 msgid "This town is occupied by your hero %{hero}."
-msgstr ""
+msgstr "Ezt a várost %{hero} hősöd foglalja el."
 
 msgid ""
 "This spell controls up to\n"
