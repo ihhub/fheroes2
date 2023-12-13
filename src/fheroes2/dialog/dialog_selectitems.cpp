@@ -978,17 +978,37 @@ void Dialog::selectTownType( int & type, int & color )
         townColor = color;
     }
 
+    isCastle ? buttonCastle.drawOnPress() : buttonTown.drawOnPress();
+
     while ( le.HandleEvents() ) {
         le.MousePressLeft( buttonOk.area() ) ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
         le.MousePressLeft( buttonCancel.area() ) ? buttonCancel.drawOnPress() : buttonCancel.drawOnRelease();
 
         if ( isCastle ) {
-            buttonCastle.drawOnPress();
-            le.MousePressLeft( buttonTown.area() ) ? buttonTown.drawOnPress() : buttonTown.drawOnRelease();
+            if ( le.MousePressLeft( buttonTown.area() ) ) {
+                buttonTown.drawOnPress();
+            }
+            else if ( le.MouseClickLeft( buttonTown.area() ) ) {
+                buttonTown.drawOnPress();
+                isCastle = false;
+                needRedraw = true;
+            }
+            else {
+                buttonTown.drawOnRelease();
+            }
         }
         else {
-            buttonTown.drawOnPress();
-            le.MousePressLeft( buttonCastle.area() ) ? buttonCastle.drawOnPress() : buttonCastle.drawOnRelease();
+            if ( le.MousePressLeft( buttonCastle.area() ) ) {
+                buttonCastle.drawOnPress();
+            }
+            else if ( le.MouseClickLeft( buttonCastle.area() ) ) {
+                buttonCastle.drawOnPress();
+                isCastle = true;
+                needRedraw = true;
+            }
+            else {
+                buttonCastle.drawOnRelease();
+            }
         }
 
         if ( le.MouseClickLeft( buttonOk.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) ) {
@@ -1000,17 +1020,7 @@ void Dialog::selectTownType( int & type, int & color )
             return;
         }
 
-        if ( isCastle && le.MouseClickLeft( buttonTown.area() ) ) {
-            isCastle = false;
-            needRedraw = true;
-            buttonTown.drawOnPress();
-        }
-        else if ( !isCastle && le.MouseClickLeft( buttonCastle.area() ) ) {
-            isCastle = true;
-            needRedraw = true;
-            buttonCastle.drawOnPress();
-        }
-        else if ( le.MousePressRight( buttonCancel.area() ) ) {
+        if ( le.MousePressRight( buttonCancel.area() ) ) {
             fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Exit this menu without doing anything." ), Dialog::ZERO );
         }
         else if ( le.MousePressRight( buttonOk.area() ) ) {
