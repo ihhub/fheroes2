@@ -50,21 +50,20 @@ namespace
         VSync,
         SystemInfo,
         SwitchDisplay,
-        InterfaceType,
         Exit
     };
 
     const fheroes2::Size offsetBetweenOptions{ 92, 110 };
     const fheroes2::Point optionOffset{ 36, 47 };
     const int32_t optionWindowSize{ 65 };
+    const int32_t centerAlignmentOffset{ offsetBetweenOptions.width / 2 };
 
     const fheroes2::Rect resolutionRoi{ optionOffset.x, optionOffset.y, optionWindowSize, optionWindowSize };
     const fheroes2::Rect modeRoi{ optionOffset.x + offsetBetweenOptions.width, optionOffset.y, optionWindowSize, optionWindowSize };
-    const fheroes2::Rect vSyncRoi{ optionOffset.x, optionOffset.y + offsetBetweenOptions.height, optionWindowSize, optionWindowSize };
-    const fheroes2::Rect systemInfoRoi{ optionOffset.x + offsetBetweenOptions.width, optionOffset.y + offsetBetweenOptions.height, optionWindowSize, optionWindowSize };
+    const fheroes2::Rect vSyncRoi{ optionOffset.x + centerAlignmentOffset, optionOffset.y + offsetBetweenOptions.height, optionWindowSize, optionWindowSize };
+    const fheroes2::Rect systemInfoRoi{ optionOffset.x + offsetBetweenOptions.width + centerAlignmentOffset, optionOffset.y + offsetBetweenOptions.height,
+                                        optionWindowSize, optionWindowSize };
     const fheroes2::Rect switchDisplayRoi{ optionOffset.x + offsetBetweenOptions.width * 2, optionOffset.y, optionWindowSize, optionWindowSize };
-    const fheroes2::Rect interfaceTypeRoi{ optionOffset.x + offsetBetweenOptions.width * 2, optionOffset.y + offsetBetweenOptions.height, optionWindowSize,
-                                           optionWindowSize };
 
     void drawDisplay( const fheroes2::Rect & optionRoi )
     {
@@ -132,26 +131,6 @@ namespace
         fheroes2::drawOption( optionRoi, image, _( "System Info" ), isSystemInfoDisplayed ? _( "on" ) : _( "off" ), fheroes2::UiOptionTextWidth::TWO_ELEMENTS_ROW );
     }
 
-    void drawInterfaceType( const fheroes2::Rect & optionRoi )
-    {
-        fheroes2::Sprite goodInterface = fheroes2::AGG::GetICN( ICN::SPANEL, 16 );
-        fheroes2::Sprite evilInterface = fheroes2::AGG::GetICN( ICN::SPANEL, 17 );
-        const Settings & conf = Settings::Get();
-        const bool isEvilInterface = conf.isEvilInterfaceEnabled();
-
-        std::string value;
-        if ( isEvilInterface ) {
-            value = _( "Evil" );
-        }
-        else {
-            value = _( "Good" );
-        }
-        goodInterface = fheroes2::Crop( goodInterface, 0, 0, goodInterface.width() / 2, goodInterface.height() );
-        fheroes2::Blit( goodInterface, evilInterface );
-
-        fheroes2::drawOption( optionRoi, evilInterface, _( "Interface Type" ), std::move( value ), fheroes2::UiOptionTextWidth::TWO_ELEMENTS_ROW );
-    }
-
     SelectedWindow showConfigurationWindow()
     {
         fheroes2::Display & display = fheroes2::Display::instance();
@@ -160,6 +139,11 @@ namespace
         const bool isEvilInterface = conf.isEvilInterfaceEnabled();
         const fheroes2::Sprite & dialog = fheroes2::AGG::GetICN( ( isEvilInterface ? ICN::CSPANBKE : ICN::CSPANBKG ), 0 );
         const fheroes2::Sprite & dialogShadow = fheroes2::AGG::GetICN( ( isEvilInterface ? ICN::CSPANBKE : ICN::CSPANBKG ), 1 );
+
+        fheroes2::Sprite placeholder = fheroes2::AGG::GetICN( Settings::Get().isEvilInterfaceEnabled() ? ICN::SURDRBKE : ICN::SURDRBKG, 0 );
+        // the image taken from other big ICN and cropping it's background with adequate size
+        // the offsets are staticly fixed based on original image
+        placeholder = fheroes2::Crop( placeholder, 50, 30, dialog.width() - BORDERWIDTH * 2 - 20, optionWindowSize + 20 );
 
         const fheroes2::Point dialogOffset( ( display.width() - dialog.width() ) / 2, ( display.height() - dialog.height() ) / 2 );
         const fheroes2::Point shadowOffset( dialogOffset.x - BORDERWIDTH, dialogOffset.y );
@@ -170,6 +154,8 @@ namespace
 
         fheroes2::Blit( dialogShadow, display, windowRoi.x - BORDERWIDTH, windowRoi.y + BORDERWIDTH );
         fheroes2::Blit( dialog, display, windowRoi.x, windowRoi.y );
+        // filling the empty spaces on the second row alongside with it's shadow
+        fheroes2::Blit( placeholder, display, windowRoi.x + BORDERWIDTH + 10, windowRoi.y + optionOffset.y - 10 + offsetBetweenOptions.height );
 
         fheroes2::ImageRestorer emptyDialogRestorer( display, windowRoi.x, windowRoi.y, windowRoi.width, windowRoi.height );
 
@@ -178,15 +164,13 @@ namespace
         const fheroes2::Rect windowVSyncRoi( vSyncRoi + windowRoi.getPosition() );
         const fheroes2::Rect windowSystemInfoRoi( systemInfoRoi + windowRoi.getPosition() );
         const fheroes2::Rect windowSwitchDisplayRoi( switchDisplayRoi + windowRoi.getPosition() );
-        const fheroes2::Rect windowInterfaceTypeRoi( interfaceTypeRoi + windowRoi.getPosition() );
 
-        const auto drawOptions = [&windowResolutionRoi, &windowModeRoi, &windowVSyncRoi, &windowSystemInfoRoi, &windowSwitchDisplayRoi, &windowInterfaceTypeRoi]() {
+        const auto drawOptions = [&windowResolutionRoi, &windowModeRoi, &windowVSyncRoi, &windowSystemInfoRoi, &windowSwitchDisplayRoi]() {
             drawResolution( windowResolutionRoi );
             drawMode( windowModeRoi );
             drawVSync( windowVSyncRoi );
             drawSystemInfo( windowSystemInfoRoi );
             drawDisplay( windowSwitchDisplayRoi );
-            drawInterfaceType( windowInterfaceTypeRoi );
         };
 
         drawOptions();
@@ -226,9 +210,6 @@ namespace
             if ( le.MouseClickLeft( windowSwitchDisplayRoi ) ) {
                 return SelectedWindow::SwitchDisplay;
             }
-            if ( le.MouseClickLeft( windowInterfaceTypeRoi ) ) {
-                return SelectedWindow::InterfaceType;
-            }
             if ( le.MousePressRight( windowResolutionRoi ) ) {
                 fheroes2::showStandardTextMessage( _( "Select Game Resolution" ), _( "Change the resolution of the game." ), 0 );
             }
@@ -243,9 +224,6 @@ namespace
             }
             else if ( le.MousePressRight( windowSystemInfoRoi ) ) {
                 fheroes2::showStandardTextMessage( _( "System Info" ), _( "Show extra information such as FPS and current time." ), 0 );
-            }
-            else if ( le.MousePressRight( windowInterfaceTypeRoi ) ) {
-                fheroes2::showStandardTextMessage( _( "Interface Type" ), _( "Toggle Between Evil and Good Interface." ), 0 );
             }
             else if ( le.MousePressRight( okayButton.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Okay" ), _( "Exit this menu." ), 0 );
@@ -307,12 +285,6 @@ namespace fheroes2
                 windowType = SelectedWindow::Configuration;
                 break;
             }
-            case SelectedWindow::InterfaceType:
-                conf.setEvilInterface( !conf.isEvilInterfaceEnabled() );
-                updateUI();
-                conf.Save( Settings::configFileName );
-                windowType = SelectedWindow::Configuration;
-                break;
             default:
                 return;
             }
