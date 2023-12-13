@@ -26,6 +26,7 @@
 #include <algorithm>
 #include <cassert>
 #include <cstring>
+#include <ostream>
 #include <string>
 
 #include "endian_h2.h"
