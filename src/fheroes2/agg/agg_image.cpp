@@ -1779,7 +1779,7 @@ namespace fheroes2
             case ICN::BUTTON_TOWN_EVIL: {
                 _icnVsSprite[id].resize( 2 );
 
-                createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], 80, gettext_noop( "TOWN" ), id == ICN::BUTTON_CASTLE_EVIL );
+                createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], 80, gettext_noop( "TOWN" ), id == ICN::BUTTON_TOWN_EVIL );
 
                 break;
             }
