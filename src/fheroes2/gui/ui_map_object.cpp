@@ -58,6 +58,17 @@ namespace
         }
     }
 
+    void renderObject( fheroes2::Sprite & image, const Maps::ObjectInfo & object, const fheroes2::Point & minOffset )
+    {
+        for ( const auto & objectPart : object.groundLevelParts ) {
+            renderObjectPart( image, objectPart, minOffset );
+        }
+
+        for ( const auto & objectPart : object.topLevelParts ) {
+            renderObjectPart( image, objectPart, minOffset );
+        }
+    }
+
     void getMinMaxOffsets( const Maps::ObjectInfo & object, fheroes2::Point & minOffset, fheroes2::Point & maxOffset )
     {
         for ( const auto & objectPart : object.groundLevelParts ) {
@@ -160,13 +171,7 @@ namespace fheroes2
         // Since we don't generate a pixel precise image make it transparent at first.
         image.reset();
 
-        for ( const auto & objectPart : object.groundLevelParts ) {
-            renderObjectPart( image, objectPart, minOffset );
-        }
-
-        for ( const auto & objectPart : object.topLevelParts ) {
-            renderObjectPart( image, objectPart, minOffset );
-        }
+        renderObject( image, object, minOffset );
 
         return image;
     }
@@ -209,11 +214,6 @@ namespace fheroes2
 
         townObject.topLevelParts = combinedTownObject.topLevelParts;
 
-        const Sprite & basementImage = generateMapObjectImage( basementObject );
-        const Sprite & flagImage = generateMapObjectImage( flagObject );
-        const Sprite & townImage = generateMapObjectImage( townObject );
-        const Sprite & shadowImage = generateMapObjectImage( shadowObject );
-
         fheroes2::Point maxOffset;
         fheroes2::Point basementMinOffset;
         fheroes2::Point townMinOffset;
@@ -233,7 +233,6 @@ namespace fheroes2
         minOffset.y = std::min( minOffset.y, shadowMinOffset.y );
         minOffset.y = std::min( minOffset.y, flagMinOffset.y );
 
-        // Town image contains of 9x5 tiles total.
         const int32_t width{ ( maxOffset.x - minOffset.x + 1 ) * tileSize };
         const int32_t height{ ( maxOffset.y - minOffset.y + 1 ) * tileSize };
         const Point imageOffset{ ( minOffset.x * tileSize ) - tileSize / 2, ( minOffset.y * tileSize ) - tileSize / 2 };
@@ -241,11 +240,10 @@ namespace fheroes2
         fheroes2::Sprite outputImage( width, height, imageOffset.x, imageOffset.y );
         outputImage.reset();
 
-        // Since every image part has its own offset we need to use fixed offsets in order to render the final image.
-        Blit( shadowImage, outputImage, ( shadowMinOffset.x - minOffset.x ) * 32, ( shadowMinOffset.y - minOffset.y ) * 32 );
-        Blit( basementImage, outputImage, ( basementMinOffset.x - minOffset.x ) * 32, ( basementMinOffset.y - minOffset.y ) * 32 );
-        Blit( townImage, outputImage, ( townMinOffset.x - minOffset.x ) * 32, ( townMinOffset.y - minOffset.y ) * 32 );
-        Blit( flagImage, outputImage, ( flagMinOffset.x - minOffset.x ) * 32, ( flagMinOffset.y - minOffset.y ) * 32 );
+        renderObject( outputImage, shadowObject, minOffset );
+        renderObject( outputImage, basementObject, minOffset );
+        renderObject( outputImage, townObject, minOffset );
+        renderObject( outputImage, flagObject, minOffset );
 
         return outputImage;
     }
