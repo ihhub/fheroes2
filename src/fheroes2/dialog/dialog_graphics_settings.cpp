@@ -68,8 +68,9 @@ namespace
 
     void drawDisplay( const fheroes2::Rect & optionRoi )
     {
+        int displayId = fheroes2::engine().getDisplayId();
         fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::GAME_OPTION_ICON, 1 ), _( "Display ID" ),
-                              fheroes2::engine().getDisplayName( fheroes2::engine().getDisplayId() ), fheroes2::UiOptionTextWidth::TWO_ELEMENTS_ROW );
+                              std::to_string( displayId + 1 ) + ": " + fheroes2::engine().getDisplayName( displayId ), fheroes2::UiOptionTextWidth::TWO_ELEMENTS_ROW );
     }
 
     void drawResolution( const fheroes2::Rect & optionRoi )
@@ -270,6 +271,7 @@ namespace fheroes2
     void openGraphicsSettingsDialog( const std::function<void()> & updateUI )
     {
         Settings & conf = Settings::Get();
+        fheroes2::Display & display = fheroes2::Display::instance();
 
         SelectedWindow windowType = SelectedWindow::Configuration;
         while ( windowType != SelectedWindow::Exit ) {
@@ -299,12 +301,12 @@ namespace fheroes2
                 conf.Save( Settings::configFileName );
                 windowType = SelectedWindow::Configuration;
                 break;
-            case SelectedWindow::SwitchDisplay:
-                fheroes2::engine().setDisplayId( ( fheroes2::engine().getDisplayId() + 1 ) % fheroes2::engine().getNumberOfVideoDisplays() );
-                updateUI();
+            case SelectedWindow::SwitchDisplay: {
+                display.changeDisplayEngine( ( fheroes2::engine().getDisplayId() + 1 ) % fheroes2::engine().getNumberOfVideoDisplays() );
                 conf.Save( Settings::configFileName );
                 windowType = SelectedWindow::Configuration;
                 break;
+            }
             case SelectedWindow::InterfaceType:
                 conf.setEvilInterface( !conf.isEvilInterfaceEnabled() );
                 updateUI();

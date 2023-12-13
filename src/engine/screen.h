@@ -229,6 +229,8 @@ namespace fheroes2
 
         void setResolution( ResolutionInfo info );
 
+        void changeDisplayEngine( int displayId );
+
         bool isDefaultSize() const
         {
             return width() == DEFAULT_WIDTH && height() == DEFAULT_HEIGHT;

@@ -1367,6 +1367,26 @@ namespace fheroes2
         std::fill( transform(), transform() + width() * height(), static_cast<uint8_t>( 1 ) );
     }
 
+    void Display::changeDisplayEngine( int displayId )
+    {
+        _engine->setDisplayId( displayId );
+
+        const bool isFullScreen = _engine->isFullScreen();
+
+        Size currentRes = _engine->getCurrentScreenResolution();
+        ResolutionInfo resInfo( currentRes.width, currentRes.height );
+
+        // deallocate engine resources
+        _engine->clear();
+
+        _engine->allocate( resInfo, isFullScreen );
+
+        Image::resize( resInfo.gameWidth, resInfo.gameHeight );
+        _screenSize = { resInfo.screenWidth, resInfo.screenHeight };
+
+        std::fill( transform(), transform() + width() * height(), static_cast<uint8_t>( 1 ) );
+    }
+
     Display & Display::instance()
     {
         static Display display;
@@ -1490,11 +1510,9 @@ namespace fheroes2
         if ( int displayCount = SDL_GetNumVideoDisplays(); displayCount > 0 ) {
             return displayCount;
         }
-        else {
-            ERROR_LOG( "Failed to Get Number of Displays:" << displayCount << ", description: " << SDL_GetError() );
-            // there should be one display at least
-            return 1;
-        }
+        ERROR_LOG( "Failed to Get Number of Displays, description: " << SDL_GetError() );
+        // there should be one display at least
+        return 1;
     }
 
     const char * BaseRenderEngine::getDisplayName( const int display )
