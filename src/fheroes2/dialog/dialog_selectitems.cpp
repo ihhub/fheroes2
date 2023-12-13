@@ -93,7 +93,7 @@ public:
         fheroes2::Display & display = fheroes2::Display::instance();
         background = std::make_unique<fheroes2::StandardWindow>( dialogSize.width, dialogSize.height, true, display );
 
-        const fheroes2::Rect area( background->activeArea() );
+        const fheroes2::Rect & area = background->activeArea();
 
         int32_t listOffsetY = 0;
 
@@ -196,7 +196,7 @@ public:
         // setup cursor
         const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
-        const fheroes2::Rect roi = background->activeArea();
+        const fheroes2::Rect & roi = background->activeArea();
 
         updateScrollBarImage();
 
@@ -875,7 +875,7 @@ void Dialog::selectTownType( int & type, int & color )
     fheroes2::Display & display = fheroes2::Display::instance();
     fheroes2::StandardWindow background( 520, 360, true, display );
 
-    const fheroes2::Rect area( background.activeArea() );
+    const fheroes2::Rect & area = background.activeArea();
 
     fheroes2::Text text( _( "Castle/town placing" ), fheroes2::FontType::normalYellow() );
     text.draw( area.x + ( area.width - text.width() ) / 2, area.y + 10, display );
