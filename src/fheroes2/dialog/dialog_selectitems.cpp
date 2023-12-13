@@ -884,7 +884,7 @@ void Dialog::selectTownType( int & type, int & color )
     const int32_t stepX = 70;
     const int32_t raceOffsetY = 80;
     fheroes2::Point pos( area.x + 20, area.y + 30 );
-    const fheroes2::Sprite colorSpriteBorderSelected = fheroes2::AGG::GetICN( ICN::BRCREST, 6 );
+    const fheroes2::Sprite & colorSpriteBorderSelected = fheroes2::AGG::GetICN( ICN::BRCREST, 6 );
     const fheroes2::Sprite & raceShadow = fheroes2::AGG::GetICN( ICN::NGEXTRA, 61 );
     fheroes2::Sprite colorSpriteBorder( colorSpriteBorderSelected );
 
