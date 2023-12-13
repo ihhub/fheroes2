@@ -5583,7 +5583,7 @@ namespace
         const int32_t offset = 2;
 
         // Offset letters with diacritics above them.
-        for ( const int & charCode : { 192, 193, 195, 200, 201, 202, 205, 209, 211, 212, 213, 218 } ) {
+        for ( const int & charCode : { 192, 193, 194, 195, 200, 201, 202, 205, 209, 211, 212, 213, 218 } ) {
             released[charCode - 32].setPosition( buttonFontOffset.x, buttonFontOffset.y - 3 );
         }
 
