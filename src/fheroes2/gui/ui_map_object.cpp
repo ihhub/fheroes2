@@ -57,6 +57,25 @@ namespace
                   ( objectPart.tileOffset.y - minOffset.y ) * tileSize + animationFrame.y(), animationFrame.width(), animationFrame.height() );
         }
     }
+
+    void getMinMaxOffsets( const Maps::ObjectInfo & object, fheroes2::Point & minOffset, fheroes2::Point & maxOffset )
+    {
+        for ( const auto & objectPart : object.groundLevelParts ) {
+            minOffset.x = std::min( minOffset.x, objectPart.tileOffset.x );
+            minOffset.y = std::min( minOffset.y, objectPart.tileOffset.y );
+
+            maxOffset.x = std::max( maxOffset.x, objectPart.tileOffset.x );
+            maxOffset.y = std::max( maxOffset.y, objectPart.tileOffset.y );
+        }
+
+        for ( const auto & objectPart : object.topLevelParts ) {
+            minOffset.x = std::min( minOffset.x, objectPart.tileOffset.x );
+            minOffset.y = std::min( minOffset.y, objectPart.tileOffset.y );
+
+            maxOffset.x = std::max( maxOffset.x, objectPart.tileOffset.x );
+            maxOffset.y = std::max( maxOffset.y, objectPart.tileOffset.y );
+        }
+    }
 }
 
 namespace fheroes2
@@ -128,21 +147,7 @@ namespace fheroes2
         // Calculate the required size of the object in tiles.
         Point minOffset;
         Point maxOffset;
-        for ( const auto & objectPart : object.groundLevelParts ) {
-            minOffset.x = std::min( minOffset.x, objectPart.tileOffset.x );
-            minOffset.y = std::min( minOffset.y, objectPart.tileOffset.y );
-
-            maxOffset.x = std::max( maxOffset.x, objectPart.tileOffset.x );
-            maxOffset.y = std::max( maxOffset.y, objectPart.tileOffset.y );
-        }
-
-        for ( const auto & objectPart : object.topLevelParts ) {
-            minOffset.x = std::min( minOffset.x, objectPart.tileOffset.x );
-            minOffset.y = std::min( minOffset.y, objectPart.tileOffset.y );
-
-            maxOffset.x = std::max( maxOffset.x, objectPart.tileOffset.x );
-            maxOffset.y = std::max( maxOffset.y, objectPart.tileOffset.y );
-        }
+        getMinMaxOffsets( object, minOffset, maxOffset );
 
         // We can use an approximate size of the object based on tiles it needs
         // but make sure that the offset corresponds to { 0, 0 } tile offset's center.
@@ -187,21 +192,62 @@ namespace fheroes2
         assert( Maps::getObjectsByGroup( Maps::ObjectGroup::KINGDOM_TOWNS ).size() > static_cast<size_t>( townType ) );
         assert( Maps::getObjectsByGroup( Maps::ObjectGroup::LANDSCAPE_FLAGS ).size() > static_cast<size_t>( color ) );
 
-        const Sprite & townBasement = generateMapObjectImage( Maps::getObjectsByGroup( Maps::ObjectGroup::LANDSCAPE_TOWN_BASEMENTS )[basementOffset] );
-        const Sprite & townMainObject = generateMapObjectImage( Maps::getObjectsByGroup( Maps::ObjectGroup::KINGDOM_TOWNS )[townType] );
-        const Sprite & townFlags = generateMapObjectImage( Maps::getObjectsByGroup( Maps::ObjectGroup::LANDSCAPE_FLAGS )[color] );
+        const auto & basementObject = Maps::getObjectsByGroup( Maps::ObjectGroup::LANDSCAPE_TOWN_BASEMENTS )[basementOffset];
+        const auto & combinedTownObject = Maps::getObjectsByGroup( Maps::ObjectGroup::KINGDOM_TOWNS )[townType];
+        const auto & flagObject = Maps::getObjectsByGroup( Maps::ObjectGroup::LANDSCAPE_FLAGS )[color];
+
+        Maps::ObjectInfo townObject{ combinedTownObject.objectType };
+        Maps::ObjectInfo shadowObject{ MP2::OBJ_NONE };
+        for ( const auto & partInfo : combinedTownObject.groundLevelParts ) {
+            if ( partInfo.layerType == Maps::SHADOW_LAYER ) {
+                shadowObject.groundLevelParts.push_back( partInfo );
+            }
+            else {
+                townObject.groundLevelParts.push_back( partInfo );
+            }
+        }
+
+        townObject.topLevelParts = combinedTownObject.topLevelParts;
+
+        const Sprite & basementImage = generateMapObjectImage( basementObject );
+        const Sprite & flagImage = generateMapObjectImage( flagObject );
+        const Sprite & townImage = generateMapObjectImage( townObject );
+        const Sprite & shadowImage = generateMapObjectImage( shadowObject );
+
+        fheroes2::Point maxOffset;
+        fheroes2::Point basementMinOffset;
+        fheroes2::Point townMinOffset;
+        fheroes2::Point shadowMinOffset;
+        fheroes2::Point flagMinOffset;
+
+        getMinMaxOffsets( basementObject, basementMinOffset, maxOffset );
+        getMinMaxOffsets( townObject, townMinOffset, maxOffset );
+        getMinMaxOffsets( shadowObject, shadowMinOffset, maxOffset );
+        getMinMaxOffsets( flagObject, flagMinOffset, maxOffset );
+
+        fheroes2::Point minOffset = basementMinOffset;
+        minOffset.x = std::min( minOffset.x, townMinOffset.x );
+        minOffset.x = std::min( minOffset.x, shadowMinOffset.x );
+        minOffset.x = std::min( minOffset.x, flagMinOffset.x );
+        minOffset.y = std::min( minOffset.y, townMinOffset.y );
+        minOffset.y = std::min( minOffset.y, shadowMinOffset.y );
+        minOffset.y = std::min( minOffset.y, flagMinOffset.y );
 
         // Town image contains of 9x5 tiles total.
-        const int32_t townImageX = townMainObject.x();
-        const int32_t townImageY = townMainObject.y();
-        fheroes2::Sprite townImage( 9 * tileSize, 5 * tileSize, townImageX, townImageY );
-        townImage.reset();
+        const int32_t width{ ( maxOffset.x - minOffset.x + 1 ) * tileSize };
+        const int32_t height{ ( maxOffset.y - minOffset.y + 1 ) * tileSize };
+        const Point imageOffset{ ( minOffset.x * tileSize ) - tileSize / 2, ( minOffset.y * tileSize ) - tileSize / 2 };
 
-        Blit( townBasement, townImage, townBasement.x() - townImageX, townBasement.y() - townImageY );
-        Blit( townMainObject, townImage, townMainObject.x() - townImageX, townMainObject.y() - townImageY );
-        Blit( townFlags, townImage, townFlags.x() - townImageX, townFlags.y() - townImageY );
+        fheroes2::Sprite outputImage( width, height, imageOffset.x, imageOffset.y );
+        outputImage.reset();
 
-        return townImage;
+        // Since every image part has its own offset we need to use fixed offsets in order to render the final image.
+        Blit( shadowImage, outputImage, ( shadowMinOffset.x - minOffset.x ) * 32, ( shadowMinOffset.y - minOffset.y ) * 32 );
+        Blit( basementImage, outputImage, ( basementMinOffset.x - minOffset.x ) * 32, ( basementMinOffset.y - minOffset.y ) * 32 );
+        Blit( townImage, outputImage, ( townMinOffset.x - minOffset.x ) * 32, ( townMinOffset.y - minOffset.y ) * 32 );
+        Blit( flagImage, outputImage, ( flagMinOffset.x - minOffset.x ) * 32, ( flagMinOffset.y - minOffset.y ) * 32 );
+
+        return outputImage;
     }
 
     int32_t getTownBasementId( const int groundType )
