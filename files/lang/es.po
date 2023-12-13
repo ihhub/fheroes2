@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-12-05 00:31+0000\n"
-"PO-Revision-Date: 2023-12-13 04:45+0100\n"
+"PO-Revision-Date: 2023-12-13 05:53+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
 "Language: es\n"
@@ -2599,13 +2599,13 @@ msgid "%{name} is a level %{value} %{race} "
 msgstr "%{name} es un nivel %{value} %{race} "
 
 msgid "with %{count} artifacts."
-msgstr "con %{count} artefactos"
+msgstr "con %{count} artefactos."
 
 msgid "with 1 artifact."
-msgstr "con un artefacto"
+msgstr "con un artefacto."
 
 msgid "without artifacts."
-msgstr "con %{count} artefactos"
+msgstr "sin artefactos."
 
 msgid "Recruit %{name} the %{race}"
 msgstr "Reclutar a %{name} el %{race}"
@@ -3565,25 +3565,25 @@ msgid "Power"
 msgstr "Poder"
 
 msgid "Knowl"
-msgstr "Conoci."
+msgstr "Conoc."
 
 msgid "1st"
-msgstr "1º"
+msgstr "1er"
 
 msgid "2nd"
-msgstr "2º"
+msgstr "2do"
 
 msgid "3rd"
-msgstr "3º"
+msgstr "3er"
 
 msgid "4th"
-msgstr "4º"
+msgstr "4o"
 
 msgid "5th"
-msgstr "5º"
+msgstr "5o"
 
 msgid "6th"
-msgstr "6º"
+msgstr "6o"
 
 #, fuzzy
 msgid "Oracle: Player Rankings"
@@ -3608,7 +3608,7 @@ msgid "Wood & Ore:"
 msgstr "Madera y Hierro:"
 
 msgid "Gems, Cr, Slf & Mer:"
-msgstr "Gem, Crist, Azuf y Merc:"
+msgstr "Gem, Cri, Azu y Mer:"
 
 msgid "Obelisks Found:"
 msgstr "Obeliscos encontrados:"
@@ -3626,9 +3626,7 @@ msgid "Best Hero:"
 msgstr "Mejor héroe:"
 
 msgid "Best Hero Stats:"
-msgstr ""
-"Estadísticas\n"
-"(mejor héroe):"
+msgstr "Estads. mejor héroe:"
 
 msgid "Personality:"
 msgstr "Personalidad:"
