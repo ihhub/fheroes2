@@ -890,14 +890,8 @@ namespace Interface
         switch ( tile.GetObject() ) {
         case MP2::OBJ_NON_ACTION_CASTLE:
         case MP2::OBJ_CASTLE: {
-            const Castle * castle = world.getCastle( tile.GetCenter() );
-
-            if ( castle ) {
-                Dialog::QuickInfo( *castle );
-            }
-            else {
-                Dialog::QuickInfo( tile );
-            }
+            // TODO: Implement quick info for castles/towns in editor.
+            fheroes2::showStandardTextMessage( _( "Towns" ), "", Dialog::ZERO );
 
             break;
         }
