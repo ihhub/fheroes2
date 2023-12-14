@@ -239,14 +239,27 @@ namespace
     {
         assert( objects.empty() );
 
-        // Castle flags located one tile to the left and right from the castle entrance: blue, green, red, yellow, orange, purple, white (neutral).
+        // Castle flags located one tile to the left and right from the castle entrance: blue, green, red, yellow, orange, purple, gray (neutral).
         for ( uint8_t color = 0; color < 7; ++color ) {
             const uint8_t icnOffset = color * 2;
-            Maps::ObjectInfo object{ MP2::OBJ_NON_ACTION_CASTLE };
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_FLAG32, icnOffset, fheroes2::Point{ -1, 0 }, MP2::OBJ_NON_ACTION_CASTLE, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_FLAG32, icnOffset + 1, fheroes2::Point{ 1, 0 }, MP2::OBJ_NON_ACTION_CASTLE, Maps::OBJECT_LAYER );
 
-            objects.emplace_back( std::move( object ) );
+            {
+                // Left flag.
+                Maps::ObjectInfo object{ MP2::OBJ_NON_ACTION_CASTLE };
+                object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_FLAG32, icnOffset, fheroes2::Point{ 0, 0 }, MP2::OBJ_NON_ACTION_CASTLE, Maps::OBJECT_LAYER );
+                object.metadata[0] = color;
+
+                objects.emplace_back( std::move( object ) );
+            }
+
+            {
+                // Right flag.
+                Maps::ObjectInfo object{ MP2::OBJ_NON_ACTION_CASTLE };
+                object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_FLAG32, icnOffset + 1, fheroes2::Point{ 0, 0 }, MP2::OBJ_NON_ACTION_CASTLE, Maps::OBJECT_LAYER );
+                object.metadata[0] = color;
+
+                objects.emplace_back( std::move( object ) );
+            }
         }
 
         // TODO: Add flags for other capture-able objects.

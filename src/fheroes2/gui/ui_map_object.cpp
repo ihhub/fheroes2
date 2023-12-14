@@ -181,11 +181,12 @@ namespace fheroes2
         // NOTICE: This calculations should be consistent with objects position in KINGDOM_TOWNS and LANDSCAPE_FLAGS vectors.
         assert( Maps::getObjectsByGroup( Maps::ObjectGroup::LANDSCAPE_TOWN_BASEMENTS ).size() > static_cast<size_t>( basementOffset ) );
         assert( Maps::getObjectsByGroup( Maps::ObjectGroup::KINGDOM_TOWNS ).size() > static_cast<size_t>( townType ) );
-        assert( Maps::getObjectsByGroup( Maps::ObjectGroup::LANDSCAPE_FLAGS ).size() > static_cast<size_t>( color ) );
+        assert( Maps::getObjectsByGroup( Maps::ObjectGroup::LANDSCAPE_FLAGS ).size() > static_cast<size_t>( color * 2 + 1 ) );
 
         const auto & basementObject = Maps::getObjectsByGroup( Maps::ObjectGroup::LANDSCAPE_TOWN_BASEMENTS )[basementOffset];
         const auto & combinedTownObject = Maps::getObjectsByGroup( Maps::ObjectGroup::KINGDOM_TOWNS )[townType];
-        const auto & flagObject = Maps::getObjectsByGroup( Maps::ObjectGroup::LANDSCAPE_FLAGS )[color];
+        const auto & leftFlagObject = Maps::getObjectsByGroup( Maps::ObjectGroup::LANDSCAPE_FLAGS )[color * 2];
+        const auto & rightFlagObject = Maps::getObjectsByGroup( Maps::ObjectGroup::LANDSCAPE_FLAGS )[color * 2 + 1];
 
         Maps::ObjectInfo townObject{ combinedTownObject.objectType };
         Maps::ObjectInfo shadowObject{ MP2::OBJ_NONE };
@@ -204,20 +205,25 @@ namespace fheroes2
         fheroes2::Point basementMinOffset;
         fheroes2::Point townMinOffset;
         fheroes2::Point shadowMinOffset;
-        fheroes2::Point flagMinOffset;
+        fheroes2::Point leftFlagMinOffset{ 1, 0 };
+        fheroes2::Point rightFlagMinOffset{ -1, 0 };
 
         getMinMaxOffsets( basementObject, basementMinOffset, maxOffset );
         getMinMaxOffsets( townObject, townMinOffset, maxOffset );
         getMinMaxOffsets( shadowObject, shadowMinOffset, maxOffset );
-        getMinMaxOffsets( flagObject, flagMinOffset, maxOffset );
+
+        assert( leftFlagObject.groundLevelParts.size() == 1 && leftFlagObject.topLevelParts.empty() );
+        assert( rightFlagObject.groundLevelParts.size() == 1 && rightFlagObject.topLevelParts.empty() );
 
         fheroes2::Point minOffset = basementMinOffset;
         minOffset.x = std::min( minOffset.x, townMinOffset.x );
         minOffset.x = std::min( minOffset.x, shadowMinOffset.x );
-        minOffset.x = std::min( minOffset.x, flagMinOffset.x );
+        minOffset.x = std::min( minOffset.x, leftFlagMinOffset.x );
+        minOffset.x = std::min( minOffset.x, rightFlagMinOffset.x );
         minOffset.y = std::min( minOffset.y, townMinOffset.y );
         minOffset.y = std::min( minOffset.y, shadowMinOffset.y );
-        minOffset.y = std::min( minOffset.y, flagMinOffset.y );
+        minOffset.x = std::min( minOffset.y, leftFlagMinOffset.y );
+        minOffset.y = std::min( minOffset.y, rightFlagMinOffset.y );
 
         const int32_t width{ ( maxOffset.x - minOffset.x + 1 ) * tileSize };
         const int32_t height{ ( maxOffset.y - minOffset.y + 1 ) * tileSize };
@@ -229,7 +235,8 @@ namespace fheroes2
         renderObject( outputImage, shadowObject, minOffset );
         renderObject( outputImage, basementObject, minOffset );
         renderObject( outputImage, townObject, minOffset );
-        renderObject( outputImage, flagObject, minOffset );
+        renderObject( outputImage, leftFlagObject, minOffset + leftFlagMinOffset );
+        renderObject( outputImage, rightFlagObject, minOffset + rightFlagMinOffset );
 
         return outputImage;
     }
