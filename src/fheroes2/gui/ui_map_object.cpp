@@ -205,8 +205,8 @@ namespace fheroes2
         fheroes2::Point basementMinOffset;
         fheroes2::Point townMinOffset;
         fheroes2::Point shadowMinOffset;
-        fheroes2::Point leftFlagMinOffset{ 1, 0 };
-        fheroes2::Point rightFlagMinOffset{ -1, 0 };
+        const fheroes2::Point leftFlagMinOffset{ 1, 0 };
+        const fheroes2::Point rightFlagMinOffset{ -1, 0 };
 
         getMinMaxOffsets( basementObject, basementMinOffset, maxOffset );
         getMinMaxOffsets( townObject, townMinOffset, maxOffset );
@@ -218,12 +218,8 @@ namespace fheroes2
         fheroes2::Point minOffset = basementMinOffset;
         minOffset.x = std::min( minOffset.x, townMinOffset.x );
         minOffset.x = std::min( minOffset.x, shadowMinOffset.x );
-        minOffset.x = std::min( minOffset.x, leftFlagMinOffset.x );
-        minOffset.x = std::min( minOffset.x, rightFlagMinOffset.x );
         minOffset.y = std::min( minOffset.y, townMinOffset.y );
         minOffset.y = std::min( minOffset.y, shadowMinOffset.y );
-        minOffset.x = std::min( minOffset.y, leftFlagMinOffset.y );
-        minOffset.y = std::min( minOffset.y, rightFlagMinOffset.y );
 
         const int32_t width{ ( maxOffset.x - minOffset.x + 1 ) * tileSize };
         const int32_t height{ ( maxOffset.y - minOffset.y + 1 ) * tileSize };
