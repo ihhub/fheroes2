@@ -68,7 +68,7 @@ msgid "DECLINE"
 msgstr "ELUTASÍT"
 
 msgid "LEARN"
-msgstr "OLVAS"
+msgstr "TANUL"
 
 msgid "TRADE"
 msgstr "ÜZLET"
@@ -8411,7 +8411,7 @@ msgid "Double shot"
 msgstr "Dupla lövés"
 
 msgid "2-hex monster"
-msgstr "Két hexás %{monster}"
+msgstr "Két hexás lény"
 
 msgid "Double strike"
 msgstr "Dupla csapás"
@@ -8426,7 +8426,7 @@ msgid "Immune to Mind spells"
 msgstr "Immunis az elmére ható varázslatokra"
 
 msgid "Immune to Elemental spells"
-msgstr "Immunis az elementál varázslatokra"
+msgstr "Immunis az elemi varázslatokra"
 
 msgid "Immune to Fire spells"
 msgstr "Immunis a tűz varázslatokra"
@@ -8441,7 +8441,7 @@ msgid "% immunity to %{spell} spell"
 msgstr "% immunitás a(z) %{spell} varázslattól"
 
 msgid "% damage from Elemental spells"
-msgstr "% sebzés elementál varázslatoktól"
+msgstr "% sebzés elemi varázslatoktól"
 
 msgid "% chance to Dispel beneficial spells"
 msgstr ""
