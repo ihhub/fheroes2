@@ -10207,17 +10207,14 @@ msgstr "A hősödnek van még %{point} varázspontja."
 msgid "View Adventure Spells"
 msgstr "Kaland Opciók"
 
-#, fuzzy
 msgid "View Combat Spells"
-msgstr "Varázslás"
+msgstr "Csata varázslatok mutatása"
 
-#, fuzzy
 msgid "View previous page"
-msgstr "Előző város mutatása"
+msgstr "Előző oldal mutatása"
 
-#, fuzzy
 msgid "View next page"
-msgstr "%{name} mutatása"
+msgstr "Következő oldal mutatása"
 
 msgid "Close Spellbook"
 msgstr "Varázskönyv becsukása"
