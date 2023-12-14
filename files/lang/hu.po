@@ -7150,68 +7150,60 @@ msgstr[1] ""
 msgid "%{skill} increases your hero's luck by %{count}."
 msgstr "A(z) %{skill} ennyivel növeli a hős szerencséjét: %{count}."
 
-#, fuzzy
 msgid ""
 "%{skill} gives your hero's catapult shots a greater chance to hit and do "
 "damage to castle walls."
 msgstr ""
-"Az Alap Ballisztika nagyobb esélyt ad a hősöd katapultjának a találatra és "
-"kastélyfal sebzésre."
+"A(z) %{skill} nagyobb esélyt ad a hősöd katapultjának a találatra és "
+"a várfal rombolására."
 
-#, fuzzy
 msgid ""
 "%{skill} gives your hero's catapult an extra shot, and each shot has a "
 "greater chance to hit and do damage to castle walls."
 msgstr ""
-"A Haladó Ballisztika egy plusz lövést és nagyobb esélyt ad a hősöd "
-"katapultjának a találatra és kastélyfal sebzésre."
+"A(z) %{skill} egy plusz lövést és nagyobb esélyt ad a hősöd "
+"katapultjának a találatra és a várfal rombolására."
 
-#, fuzzy
 msgid ""
 "%{skill} gives your hero's catapult an extra shot, and each shot "
 "automatically destroys any wall, except a fortified wall in a Knight castle."
 msgstr ""
-"A Haladó Ballisztika egy plusz lövést ad a hősöd katapultjának. Minden lövés "
+"A(z) %{skill} egy plusz lövést ad a hősöd katapultjának. Minden lövés "
 "automatikusan rombolja a falat, kivéve a Lovagvár sánccal megerősített várát."
 
-#, fuzzy
 msgid ""
 "%{skill} gives your hero a %{count} percent chance to learn any given 1st or "
 "2nd level spell that was cast by an enemy during combat."
 msgstr ""
-"Az Alap Sasszem %{count} százaléknyi esélyt ad a hősnek, hogy az ellenfél "
-"által a csatában használt 1-es vagy 2-es szintű varázslatot tanuljon meg."
+"A(z) %{skill} %{count} százaléknyi esélyt ad a hősnek, hogy az ellenfél "
+"által a csatában használt 1-es vagy 2-es szintű varázslatot tanuljon el."
 
-#, fuzzy
 msgid ""
 "%{skill} gives your hero a %{count} percent chance to learn any given 3rd "
 "level spell (or below) that was cast by an enemy during combat."
 msgstr ""
-"A Fejlett Sasszem %{count} százaléknyi esélyt ad a hősnek, hogy az ellenfél "
+"A(z) %{skill} %{count} százaléknyi esélyt ad a hősnek, hogy az ellenfél "
 "által a csatában használt 3-as (vagy alacsonyabb) szintű varázslatot "
-"tanuljon meg."
+"tanuljon el."
 
-#, fuzzy
 msgid ""
 "%{skill} gives your hero a %{count} percent chance to learn any given 4th "
 "level spell (or below) that was cast by an enemy during combat."
 msgstr ""
-"A Gyakorlott Sasszem %{count} százaléknyi esélyt ad a hősnek, hogy az "
+"A(z) %{skill} %{count} százaléknyi esélyt ad a hősnek, hogy az "
 "ellenfél által a csatában használt 4-es (vagy alacsonyabb) szintű "
-"varázslatot tanuljon meg."
+"varázslatot tanuljon el."
 
-#, fuzzy
 msgid ""
 "%{skill} allows %{count} percent of the creatures killed in combat to be "
 "brought back from the dead as Skeletons."
 msgstr ""
-"Alap Nekromancia segítségével a csatában megölt lények %{count} százalékából "
-"Csontvázakat készíthetünk."
+"%{skill} segítségével a csatában megölt lények %{count} százalékából "
+"Csontvázakat igézhetünk meg."
 
-#, fuzzy
 msgid ""
 "Your hero produces %{count} gold pieces per day as tax revenue from estates."
-msgstr "A hősöd napi 500 arany adóbevételt kap."
+msgstr "A hősöd napi %{count} arany adóbevételt kap."
 
 msgid "Blue"
 msgstr "Kék"
@@ -7232,101 +7224,86 @@ msgid "Purple"
 msgstr "Lila"
 
 msgid "barrier|Aqua"
-msgstr ""
+msgstr "Tengerkék"
 
 msgid "barrier|Blue"
-msgstr ""
+msgstr "Kék"
 
 msgid "barrier|Brown"
-msgstr ""
+msgstr "Barna"
 
 msgid "barrier|Gold"
-msgstr ""
+msgstr "Arany"
 
 msgid "barrier|Green"
-msgstr ""
+msgstr "Zöld"
 
-#, fuzzy
 msgid "barrier|Orange"
 msgstr "Narancs"
 
-#, fuzzy
 msgid "barrier|Purple"
 msgstr "Lila"
 
 msgid "barrier|Red"
-msgstr ""
+msgstr "Vörös"
 
-#, fuzzy
 msgid "tent|Aqua"
 msgstr "Tengerkék"
 
-#, fuzzy
 msgid "tent|Blue"
 msgstr "Kék"
 
-#, fuzzy
 msgid "tent|Brown"
 msgstr "Barna"
 
-#, fuzzy
 msgid "tent|Gold"
 msgstr "Arany"
 
-#, fuzzy
 msgid "tent|Green"
 msgstr "Zöld"
 
-#, fuzzy
 msgid "tent|Orange"
 msgstr "Narancs"
 
-#, fuzzy
 msgid "tent|Purple"
 msgstr "Lila"
 
 msgid "tent|Red"
-msgstr ""
+msgstr "Vörös"
 
-#, fuzzy
 msgid "Experience"
-msgstr "Elemi Gyűrű"
+msgstr "Tapasztalat"
 
 msgid ""
 "Experience allows your heroes to go up levels, increasing their primary and "
 "secondary skills."
 msgstr ""
+"A tapasztalat lehetővé teszi, hogy a hősök elsődleges és másodlagos képességei "
+"fejlődjenek és szintet lépjenek."
 
-#, fuzzy
 msgid "Hero/Stats"
-msgstr "Legjobb hős statisztikái:"
+msgstr "Hős statisztikái"
 
-#, fuzzy
 msgid "Skills"
-msgstr "Fűrészmalom"
+msgstr "Készségek"
 
-#, fuzzy
 msgid "Town/Castle"
-msgstr "Kastély"
+msgstr "Város/Vár"
 
 msgid "Garrison"
 msgstr "Helyőrség"
 
-#, fuzzy
 msgid "Gold Per Day:"
-msgstr "Arany a kincstárban:"
+msgstr "Arany naponta:"
 
-#, fuzzy
 msgid "View Heroes."
-msgstr "Hősök mutatása"
+msgstr "Hősök mutatása."
 
-#, fuzzy
 msgid "Towns/Castles"
-msgstr "Kastély"
+msgstr "Városok/Várak"
 
-#, fuzzy
 msgid "View Towns and Castles."
-msgstr "Városok mutatása"
+msgstr "Városok/Várak mutatása."
 
 msgid "luck|Cursed"
 msgstr "Átkozott"
