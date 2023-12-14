@@ -1058,10 +1058,12 @@ void Dialog::selectTownType( int & type, int & color )
                 }
 
                 if ( le.MousePressRight( raceRect[i] ) ) {
-                    fheroes2::showStandardTextMessage( _( "Race" ), _( "Click to select this race." ), Dialog::ZERO );
+                    fheroes2::showStandardTextMessage( Race::String( Race::IndexToRace( static_cast<int>( i == 6 ? 7 : i ) ) ), _( "Click to select this class." ),
+                                                       Dialog::ZERO );
                 }
                 else if ( le.MousePressRight( colorRect[i] ) ) {
-                    fheroes2::showStandardTextMessage( _( "player|Color" ), _( "Click to select this color." ), Dialog::ZERO );
+                    fheroes2::showStandardTextMessage( i == 6 ? _( "race|Neutral" ) : Color::String( Color::IndexToColor( static_cast<int>( i ) ) ),
+                                                       _( "Click to select this color." ), Dialog::ZERO );
                 }
             }
         }
