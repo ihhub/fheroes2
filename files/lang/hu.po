@@ -8460,41 +8460,38 @@ msgstr ""
 msgid "% chance to Curse"
 msgstr ""
 
-#, fuzzy
 msgid "% chance to cast %{spell} spell"
-msgstr "%{name} %{spell} -t  varázsol."
+msgstr "% eséllyel varázsolja a(z) %{spell} varázslatot"
 
 msgid "HP regeneration"
-msgstr ""
+msgstr "Életerő visszatöltődés"
 
 msgid "Two hexes attack"
-msgstr ""
+msgstr "Két hexára támad"
 
 msgid "Flyer"
-msgstr ""
+msgstr "Repül"
 
 msgid "Always retaliates"
-msgstr ""
+msgstr "Mindig visszatámad"
 
 msgid "Attacks all adjacent enemies"
-msgstr ""
+msgstr "Minden mellette álló ellenséget támad"
 
 msgid "No melee penalty"
-msgstr ""
+msgstr "Nincs közelharc hátrány"
 
-#, fuzzy
 msgid "Dragon"
-msgstr "Szitakötő"
+msgstr "Sárkány"
 
-#, fuzzy
 msgid "Undead"
-msgstr "Élőholt hadsereg"
+msgstr "Élőhalott"
 
 msgid "No enemy retaliation"
-msgstr ""
+msgstr "Nem támad vissza rá az ellenség"
 
 msgid "HP drain"
-msgstr ""
+msgstr "Életerőt szív"
 
 #, fuzzy
 msgid "Cloud attack"
@@ -8507,7 +8504,7 @@ msgid "% chance to halve enemy"
 msgstr ""
 
 msgid "Soul Eater"
-msgstr ""
+msgstr "Lélekfaló"
 
 #, fuzzy
 msgid "Elemental"
