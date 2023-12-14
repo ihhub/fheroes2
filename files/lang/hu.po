@@ -8414,36 +8414,34 @@ msgid "2-hex monster"
 msgstr "Két hexás %{monster}"
 
 msgid "Double strike"
-msgstr "Dupla ütés"
+msgstr "Dupla csapás"
 
 msgid "Double damage to Undead"
-msgstr ""
+msgstr "Dupla sebzés élőhalottakon"
 
 msgid "% magic resistance"
-msgstr ""
+msgstr "% varázslat ellenállóképesség"
 
 msgid "Immune to Mind spells"
-msgstr ""
+msgstr "Immunis az elmére ható varázslatokra"
 
-#, fuzzy
 msgid "Immune to Elemental spells"
-msgstr "Az Elementál idézés sikertelen!"
+msgstr "Immunis az elementál varázslatokra"
 
 msgid "Immune to Fire spells"
-msgstr ""
+msgstr "Immunis a tűz varázslatokra"
 
 msgid "Immune to Cold spells"
-msgstr ""
+msgstr "Immunis a fagy varázslatokra"
 
 msgid "Immune to "
-msgstr ""
+msgstr "Immunis erre: "
 
 msgid "% immunity to %{spell} spell"
-msgstr ""
+msgstr "% immunitás a(z) %{spell} varázslattól"
 
-#, fuzzy
 msgid "% damage from Elemental spells"
-msgstr "Vízelementál"
+msgstr "% sebzés elementál varázslatoktól"
 
 msgid "% chance to Dispel beneficial spells"
 msgstr ""
