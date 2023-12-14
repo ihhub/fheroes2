@@ -115,6 +115,9 @@ namespace Maps
     // therefore, such enumeration exist.
     //
     // These groups do not correlate with the original Editor.
+    //
+    // !!! IMPORTANT !!!
+    // Do NOT change the order of the items as they are used for the map format.
     enum class ObjectGroup : int32_t
     {
         // These groups are not being used by the Editor directly but they are still a part of a tile.

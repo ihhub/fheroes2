@@ -49,6 +49,7 @@
 #include "localevent.h"
 #include "map_object_info.h"
 #include "maps.h"
+#include "maps_fileinfo.h"
 #include "math_base.h"
 #include "mp2.h"
 #include "pal.h"
@@ -765,7 +766,8 @@ Artifact Dialog::selectArtifact( const int artifactId )
     std::vector<int> artifacts;
     artifacts.reserve( Artifact::ARTIFACT_COUNT - 1 );
 
-    const bool isPriceofLoyaltyArtifactAllowed = Settings::Get().isCurrentMapPriceOfLoyalty();
+    const GameVersion version = Settings::Get().getCurrentMapInfo().version;
+    const bool isPriceofLoyaltyArtifactAllowed = ( version == GameVersion::PRICE_OF_LOYALTY || version == GameVersion::RESURRECTION );
 
     // We show the magic book at the first place.
     artifacts.emplace_back( Artifact::MAGIC_BOOK );
@@ -810,7 +812,10 @@ Monster Dialog::selectMonster( const int monsterId )
 
 int Dialog::selectHeroes( const int heroId /* = Heroes::UNKNOWN */ )
 {
-    std::vector<int> heroes( static_cast<int>( Settings::Get().isCurrentMapPriceOfLoyalty() ? Heroes::JARKONAS : Heroes::BRAX ), Heroes::UNKNOWN );
+    const GameVersion version = Settings::Get().getCurrentMapInfo().version;
+    const bool isPoLHeroesAllowed = ( version == GameVersion::PRICE_OF_LOYALTY || version == GameVersion::RESURRECTION );
+
+    std::vector<int> heroes( static_cast<int>( isPoLHeroesAllowed ? Heroes::JARKONAS : Heroes::BRAX ), Heroes::UNKNOWN );
 
     std::iota( heroes.begin(), heroes.end(), Heroes::UNKNOWN + 1 );
 

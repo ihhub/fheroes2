@@ -28,6 +28,8 @@
 
 namespace Difficulty
 {
+    // !!! IMPORTANT !!!
+    // Do NOT change the order of the items as they are used for the map format.
     enum DifficultyLevel : int
     {
         EASY,

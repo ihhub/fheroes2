@@ -483,71 +483,71 @@ fheroes2::Point Heroes::getCurrentPixelOffset() const
     return realOffset;
 }
 
-void Heroes::FadeOut( const fheroes2::Point & offset ) const
+void Heroes::FadeOut( const int animSpeedMultiplier, const fheroes2::Point & offset /* = fheroes2::Point() */ ) const
 {
-    if ( !isInVisibleMapArea() )
+    assert( animSpeedMultiplier > 0 );
+
+    if ( !isInVisibleMapArea() ) {
         return;
+    }
 
     Interface::AdventureMap & iface = Interface::AdventureMap::Get();
     Interface::GameArea & gamearea = iface.getGameArea();
 
-    int multiplier = std::max( offset.x < 0 ? -offset.x : offset.x, offset.y < 0 ? -offset.y : offset.y );
-    if ( multiplier < 1 )
-        multiplier = 1;
-
-    const bool offsetScreen = offset.x != 0 || offset.y != 0;
-
     fheroes2::Display & display = fheroes2::Display::instance();
     LocalEvent & le = LocalEvent::Get();
-    _alphaValue = 255 - 8 * multiplier;
 
-    const std::vector<Game::DelayType> delayTypes = { Game::HEROES_FADE_DELAY };
-    while ( le.HandleEvents( Game::isDelayNeeded( delayTypes ) ) && _alphaValue > 0 ) {
-        if ( Game::validateAnimationDelay( Game::HEROES_FADE_DELAY ) ) {
-            if ( offsetScreen ) {
-                gamearea.ShiftCenter( offset );
-            }
+    _alphaValue = 255;
 
-            iface.redraw( Interface::REDRAW_GAMEAREA );
-
-            display.render();
-            _alphaValue -= 8 * multiplier;
+    while ( le.HandleEvents( Game::isDelayNeeded( { Game::HEROES_FADE_DELAY } ) ) && _alphaValue > 0 ) {
+        if ( !Game::validateAnimationDelay( Game::HEROES_FADE_DELAY ) ) {
+            continue;
         }
+
+        if ( offset.x != 0 || offset.y != 0 ) {
+            gamearea.ShiftCenter( offset );
+        }
+
+        _alphaValue = std::max( 0, _alphaValue - 8 * animSpeedMultiplier );
+
+        iface.redraw( Interface::REDRAW_GAMEAREA );
+
+        display.render();
     }
 
     _alphaValue = 255;
 }
 
-void Heroes::FadeIn( const fheroes2::Point & offset ) const
+void Heroes::FadeIn( const int animSpeedMultiplier, const fheroes2::Point & offset /* = fheroes2::Point() */ ) const
 {
-    if ( !isInVisibleMapArea() )
+    assert( animSpeedMultiplier > 0 );
+
+    if ( !isInVisibleMapArea() ) {
         return;
+    }
 
     Interface::AdventureMap & iface = Interface::AdventureMap::Get();
     Interface::GameArea & gamearea = iface.getGameArea();
 
-    int multiplier = std::max( offset.x < 0 ? -offset.x : offset.x, offset.y < 0 ? -offset.y : offset.y );
-    if ( multiplier < 1 )
-        multiplier = 1;
-
-    const bool offsetScreen = offset.x != 0 || offset.y != 0;
-
     fheroes2::Display & display = fheroes2::Display::instance();
     LocalEvent & le = LocalEvent::Get();
-    _alphaValue = 8 * multiplier;
 
-    const std::vector<Game::DelayType> delayTypes = { Game::HEROES_FADE_DELAY };
-    while ( le.HandleEvents( Game::isDelayNeeded( delayTypes ) ) && _alphaValue < 250 ) {
-        if ( Game::validateAnimationDelay( Game::HEROES_FADE_DELAY ) ) {
-            if ( offsetScreen ) {
-                gamearea.ShiftCenter( offset );
-            }
+    _alphaValue = 0;
 
-            iface.redraw( Interface::REDRAW_GAMEAREA );
-
-            display.render();
-            _alphaValue += 8 * multiplier;
+    while ( le.HandleEvents( Game::isDelayNeeded( { Game::HEROES_FADE_DELAY } ) ) && _alphaValue < 255 ) {
+        if ( !Game::validateAnimationDelay( Game::HEROES_FADE_DELAY ) ) {
+            continue;
         }
+
+        if ( offset.x != 0 || offset.y != 0 ) {
+            gamearea.ShiftCenter( offset );
+        }
+
+        _alphaValue = std::min( _alphaValue + 8 * animSpeedMultiplier, 255 );
+
+        iface.redraw( Interface::REDRAW_GAMEAREA );
+
+        display.render();
     }
 
     _alphaValue = 255;
