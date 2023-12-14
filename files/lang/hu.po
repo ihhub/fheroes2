@@ -6773,7 +6773,7 @@ msgid ""
 "can generate. Casting this spell will have no effect."
 msgstr ""
 "Már jelenleg is annyi elementál őrzi a bányát, amennyit ez a hős meg tud "
-"idézni. A varázslet megidézése hatástalan."
+"idézni. A varázslat megidézése hatástalan."
 
 msgid "%{name} the %{race} (Level %{level})"
 msgstr "%{name} a %{race} (%{level}. szint)"
