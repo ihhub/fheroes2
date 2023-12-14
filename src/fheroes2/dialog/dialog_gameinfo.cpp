@@ -34,6 +34,7 @@
 #include "image.h"
 #include "localevent.h"
 #include "maps.h"
+#include "maps_fileinfo.h"
 #include "math_base.h"
 #include "player_info.h"
 #include "screen.h"

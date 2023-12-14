@@ -44,6 +44,7 @@
 #include "kingdom.h"
 #include "logging.h"
 #include "maps.h"
+#include "maps_fileinfo.h"
 #include "maps_objects.h"
 #include "maps_tiles.h"
 #include "maps_tiles_helper.h"
