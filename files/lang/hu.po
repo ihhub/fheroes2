@@ -1942,7 +1942,7 @@ msgid "Avalon"
 msgstr "Avalon"
 
 msgid "Roc Haven"
-msgstr "Roc Haven"
+msgstr "Rukh Haven"
 
 msgid "South Mill"
 msgstr "South Mill"
@@ -8240,10 +8240,10 @@ msgid "Steel Golems"
 msgstr "Acélgólemek"
 
 msgid "Roc"
-msgstr "Sas"
+msgstr "Rukh-madár"
 
 msgid "Rocs"
-msgstr "Sasok"
+msgstr "Rukh-madarak"
 
 msgid "Mage"
 msgstr "Mágus"
