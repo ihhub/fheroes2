@@ -181,12 +181,12 @@ namespace fheroes2
         // NOTICE: This calculations should be consistent with objects position in KINGDOM_TOWNS and LANDSCAPE_FLAGS vectors.
         assert( Maps::getObjectsByGroup( Maps::ObjectGroup::LANDSCAPE_TOWN_BASEMENTS ).size() > static_cast<size_t>( basementOffset ) );
         assert( Maps::getObjectsByGroup( Maps::ObjectGroup::KINGDOM_TOWNS ).size() > static_cast<size_t>( townType ) );
-        assert( Maps::getObjectsByGroup( Maps::ObjectGroup::LANDSCAPE_FLAGS ).size() > static_cast<size_t>( color * 2 + 1 ) );
+        assert( Maps::getObjectsByGroup( Maps::ObjectGroup::LANDSCAPE_FLAGS ).size() > static_cast<size_t>( color ) * 2 + 1 );
 
         const auto & basementObject = Maps::getObjectsByGroup( Maps::ObjectGroup::LANDSCAPE_TOWN_BASEMENTS )[basementOffset];
         const auto & combinedTownObject = Maps::getObjectsByGroup( Maps::ObjectGroup::KINGDOM_TOWNS )[townType];
-        const auto & leftFlagObject = Maps::getObjectsByGroup( Maps::ObjectGroup::LANDSCAPE_FLAGS )[color * 2];
-        const auto & rightFlagObject = Maps::getObjectsByGroup( Maps::ObjectGroup::LANDSCAPE_FLAGS )[color * 2 + 1];
+        const auto & leftFlagObject = Maps::getObjectsByGroup( Maps::ObjectGroup::LANDSCAPE_FLAGS )[static_cast<size_t>( color ) * 2];
+        const auto & rightFlagObject = Maps::getObjectsByGroup( Maps::ObjectGroup::LANDSCAPE_FLAGS )[static_cast<size_t>( color ) * 2 + 1];
 
         Maps::ObjectInfo townObject{ combinedTownObject.objectType };
         Maps::ObjectInfo shadowObject{ MP2::OBJ_NONE };
