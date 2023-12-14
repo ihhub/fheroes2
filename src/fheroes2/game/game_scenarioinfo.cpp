@@ -408,7 +408,7 @@ namespace
 
         DEBUG_LOG( DBG_GAME, DBG_WARN,
                    conf.getCurrentMapInfo().name << ", "
-                                            << "unknown map format" )
+                                                 << "unknown map format" )
         return fheroes2::GameMode::MAIN_MENU;
     }
 }
