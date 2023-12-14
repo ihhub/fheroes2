@@ -78,6 +78,7 @@ void Dialog::GameInfo()
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     Settings & conf = Settings::Get();
+    const Maps::FileInfo & mapInfo = conf.getCurrentMapInfo();
 
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
@@ -91,7 +92,7 @@ void Dialog::GameInfo()
 
     fheroes2::Blit( window, display, dialogOffset.x, shadowOffset.y );
 
-    fheroes2::Text text( conf.getCurrentMapName(), fheroes2::FontType::normalWhite() );
+    fheroes2::Text text( mapInfo.name, fheroes2::FontType::normalWhite() );
     text.draw( shadowOffset.x, shadowOffset.y + 32, DIALOG_CONTENT_WIDTH, display );
 
     text.set( _( "Map\nDifficulty" ), fheroes2::FontType::smallWhite() );
@@ -106,7 +107,7 @@ void Dialog::GameInfo()
     text.set( _( "Map Size" ), fheroes2::FontType::smallWhite() );
     text.draw( shadowOffset.x + SCENARIO_MAP_SIZE_OFFSET, shadowOffset.y + 78 - text.height( SCENARIO_INFO_VALUES_BOX_WIDTH ), SCENARIO_INFO_VALUES_BOX_WIDTH, display );
 
-    text.set( Difficulty::String( conf.getCurrentMapDifficultyLevel() ), fheroes2::FontType::smallWhite() );
+    text.set( Difficulty::String( mapInfo.difficulty ), fheroes2::FontType::smallWhite() );
     text.draw( shadowOffset.x + SCENARIO_MAP_DIFFICULTY_OFFSET, shadowOffset.y + 84, SCENARIO_INFO_VALUES_BOX_WIDTH, display );
 
     text.set( Difficulty::String( Game::getDifficulty() ), fheroes2::FontType::smallWhite() );
@@ -115,10 +116,10 @@ void Dialog::GameInfo()
     text.set( std::to_string( Game::GetRating() ) + " %", fheroes2::FontType::smallWhite() );
     text.draw( shadowOffset.x + SCENARIO_RATING_OFFSET, shadowOffset.y + 84, SCENARIO_INFO_VALUES_BOX_WIDTH, display );
 
-    text.set( Maps::SizeString( conf.MapsSize().width ), fheroes2::FontType::smallWhite() );
+    text.set( Maps::SizeString( mapInfo.width ), fheroes2::FontType::smallWhite() );
     text.draw( shadowOffset.x + SCENARIO_MAP_SIZE_OFFSET, shadowOffset.y + 84, SCENARIO_INFO_VALUES_BOX_WIDTH, display );
 
-    text.set( conf.getCurrentMapDescription(), fheroes2::FontType::smallWhite() );
+    text.set( mapInfo.description, fheroes2::FontType::smallWhite() );
     text.draw( shadowOffset.x + SCENARIO_DESCRIPTION_OFFSET, shadowOffset.y + 107, SCENARIO_DESCRIPTION_WIDTH, display );
 
     text.set( _( "Opponents" ), fheroes2::FontType::smallWhite() );
@@ -136,13 +137,13 @@ void Dialog::GameInfo()
     text.set( _( "Victory\nConditions" ), fheroes2::FontType::smallWhite() );
     text.draw( shadowOffset.x + CONDITION_LABEL_OFFSET, shadowOffset.y + 347, CONDITION_LABEL_WIDTH, display );
 
-    text.set( GameOver::GetActualDescription( conf.ConditionWins() ), fheroes2::FontType::smallWhite() );
+    text.set( GameOver::GetActualDescription( mapInfo.ConditionWins() ), fheroes2::FontType::smallWhite() );
     text.draw( shadowOffset.x + CONDITION_DESCRIPTION_OFFSET, shadowOffset.y + 350, CONDITION_DESCRIPTION_WIDTH, display );
 
     text.set( _( "Loss\nConditions" ), fheroes2::FontType::smallWhite() );
     text.draw( shadowOffset.x + CONDITION_LABEL_OFFSET, shadowOffset.y + 392, CONDITION_LABEL_WIDTH, display );
 
-    text.set( GameOver::GetActualDescription( conf.ConditionLoss() ), fheroes2::FontType::smallWhite() );
+    text.set( GameOver::GetActualDescription( mapInfo.ConditionLoss() ), fheroes2::FontType::smallWhite() );
     text.draw( shadowOffset.x + CONDITION_DESCRIPTION_OFFSET, shadowOffset.y + 398, CONDITION_DESCRIPTION_WIDTH, display );
 
     const int buttonOkIcnId = ICN::BUTTON_SMALL_OKAY_GOOD;

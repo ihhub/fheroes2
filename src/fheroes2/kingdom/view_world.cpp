@@ -246,7 +246,7 @@ namespace
             }
 
 #if defined( SAVE_WORLD_MAP )
-            fheroes2::Save( cachedImages[3], Settings::Get().getCurrentMapName() + saveFilePrefix + ".bmp" );
+            fheroes2::Save( cachedImages[3], Settings::Get().getCurrentMapInfo().name + saveFilePrefix + ".bmp" );
 #endif
         }
     };

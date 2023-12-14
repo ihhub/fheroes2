@@ -86,7 +86,6 @@ namespace
 
     void RedrawScenarioStaticInfo( const fheroes2::Rect & rt, bool firstDraw = false )
     {
-        const Settings & conf = Settings::Get();
         fheroes2::Display & display = fheroes2::Display::instance();
 
         if ( firstDraw ) {
@@ -108,7 +107,7 @@ namespace
         text.draw( rt.x, rt.y + 25, rt.width, display );
 
         // maps name
-        text.set( conf.getCurrentMapName(), normalWhiteFont );
+        text.set( Settings::Get().getCurrentMapInfo().name, normalWhiteFont );
         text.draw( rt.x, rt.y + 48, rt.width, display );
 
         // text game difficulty
@@ -192,7 +191,7 @@ namespace
         fheroes2::drawMainMenuScreen();
 
         Settings & conf = Settings::Get();
-        bool resetStartingSettings = conf.getCurrentMapFileName().empty();
+        bool resetStartingSettings = conf.getCurrentMapInfo().filename.empty();
         Players & players = conf.GetPlayers();
         Interface::PlayersInfo playersInfo;
 
@@ -201,13 +200,13 @@ namespace
         if ( !resetStartingSettings ) { // verify that current map really exists in map's list
             resetStartingSettings = true;
             const std::string & mapName = conf.getCurrentMapInfo().name;
-            const std::string & mapFileName = System::GetBasename( conf.getCurrentMapInfo().file );
+            const std::string & mapFileName = System::GetBasename( conf.getCurrentMapInfo().filename );
             for ( const Maps::FileInfo & mapInfo : lists ) {
-                if ( ( mapInfo.name == mapName ) && ( System::GetBasename( mapInfo.file ) == mapFileName ) ) {
-                    if ( mapInfo.file == conf.getCurrentMapInfo().file ) {
+                if ( ( mapInfo.name == mapName ) && ( System::GetBasename( mapInfo.filename ) == mapFileName ) ) {
+                    if ( mapInfo.filename == conf.getCurrentMapInfo().filename ) {
                         conf.SetCurrentFileInfo( mapInfo );
                         updatePlayers( players, humanPlayerCount );
-                        Game::LoadPlayers( mapInfo.file, players );
+                        Game::LoadPlayers( mapInfo.filename, players );
                         resetStartingSettings = false;
                         break;
                     }
@@ -219,7 +218,7 @@ namespace
         if ( resetStartingSettings ) {
             conf.SetCurrentFileInfo( lists.front() );
             updatePlayers( players, humanPlayerCount );
-            Game::LoadPlayers( lists.front().file, players );
+            Game::LoadPlayers( lists.front().filename, players );
         }
 
         playersInfo.UpdateInfo( players, pointOpponentInfo, pointClassInfo );
@@ -285,9 +284,9 @@ namespace
                 const Maps::FileInfo * fi = Dialog::SelectScenario( lists );
 
                 if ( fi ) {
-                    Game::SavePlayers( conf.getCurrentMapInfo().file, conf.GetPlayers() );
+                    Game::SavePlayers( conf.getCurrentMapInfo().filename, conf.GetPlayers() );
                     conf.SetCurrentFileInfo( *fi );
-                    Game::LoadPlayers( fi->file, players );
+                    Game::LoadPlayers( fi->filename, players );
 
                     updatePlayers( players, humanPlayerCount );
                     playersInfo.UpdateInfo( players, pointOpponentInfo, pointClassInfo );
@@ -309,7 +308,7 @@ namespace
                 break;
             }
             else if ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) || le.MouseClickLeft( buttonOk.area() ) ) {
-                DEBUG_LOG( DBG_GAME, DBG_INFO, "select maps: " << conf.getCurrentMapFileName() << ", difficulty: " << Difficulty::String( Game::getDifficulty() ) )
+                DEBUG_LOG( DBG_GAME, DBG_INFO, "select maps: " << conf.getCurrentMapInfo().filename << ", difficulty: " << Difficulty::String( Game::getDifficulty() ) )
                 result = fheroes2::GameMode::START_GAME;
 
                 // Fade-out screen before starting a scenario.
@@ -383,7 +382,7 @@ namespace
             }
         }
 
-        Game::SavePlayers( conf.getCurrentMapInfo().file, conf.GetPlayers() );
+        Game::SavePlayers( conf.getCurrentMapInfo().filename, conf.GetPlayers() );
 
         return result;
     }
@@ -394,7 +393,7 @@ namespace
 
         conf.GetPlayers().SetStartGame();
 
-        const std::string & filePath = conf.getCurrentMapFileName();
+        const std::string & filePath = conf.getCurrentMapInfo().filename;
         const size_t pos = filePath.rfind( '.' );
         if ( pos != std::string::npos ) {
             const std::string ext = StringLower( filePath.substr( pos + 1 ) );
@@ -408,7 +407,7 @@ namespace
         assert( 0 );
 
         DEBUG_LOG( DBG_GAME, DBG_WARN,
-                   conf.getCurrentMapName() << ", "
+                   conf.getCurrentMapInfo().name << ", "
                                             << "unknown map format" )
         return fheroes2::GameMode::MAIN_MENU;
     }
