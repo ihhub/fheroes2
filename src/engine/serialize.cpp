@@ -39,26 +39,32 @@ namespace
 
 void StreamBase::setconstbuf( bool f )
 {
-    if ( f )
-        flags |= 0x00001000;
-    else
-        flags &= ~0x00001000;
+    if ( f ) {
+        _flags |= ConstBufFlag;
+    }
+    else {
+        _flags &= ~ConstBufFlag;
+    }
 }
 
 void StreamBase::setbigendian( bool f )
 {
-    if ( f )
-        flags |= 0x80000000;
-    else
-        flags &= ~0x80000000;
+    if ( f ) {
+        _flags |= BigendianFlag;
+    }
+    else {
+        _flags &= ~BigendianFlag;
+    }
 }
 
 void StreamBase::setfail( bool f )
 {
-    if ( f )
-        flags |= 0x00000001;
-    else
-        flags &= ~0x00000001;
+    if ( f ) {
+        _flags |= FailureFlag;
+    }
+    else {
+        _flags &= ~FailureFlag;
+    }
 }
 
 uint16_t StreamBase::get16()

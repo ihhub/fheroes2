@@ -45,16 +45,12 @@
 class StreamBase
 {
 public:
-    StreamBase()
-        : flags( 0 )
-    {}
-
+    StreamBase() = default;
     StreamBase( const StreamBase & ) = delete;
 
     StreamBase( StreamBase && stream ) noexcept
-        : flags( 0 )
     {
-        std::swap( flags, stream.flags );
+        std::swap( _flags, stream._flags );
     }
 
     virtual ~StreamBase() = default;
@@ -63,7 +59,7 @@ public:
 
     StreamBase & operator=( StreamBase && stream ) noexcept
     {
-        std::swap( flags, stream.flags );
+        std::swap( _flags, stream._flags );
 
         return *this;
     }
@@ -72,17 +68,17 @@ public:
 
     bool isconstbuf() const
     {
-        return ( flags & 0x00001000 ) != 0;
+        return ( _flags & ConstBufFlag ) != 0;
     }
 
     bool fail() const
     {
-        return flags & 0x00000001;
+        return ( _flags & FailureFlag ) != 0;
     }
 
     bool bigendian() const
     {
-        return ( flags & 0x80000000 ) != 0;
+        return ( _flags & BigendianFlag ) != 0;
     }
 
     virtual void skip( size_t ) = 0;
@@ -221,8 +217,6 @@ public:
     }
 
 protected:
-    size_t flags;
-
     virtual uint8_t get8() = 0;
     virtual void put8( const uint8_t ) = 0;
 
@@ -233,6 +227,16 @@ protected:
 
     void setconstbuf( bool );
     void setfail( bool );
+
+private:
+    enum : uint32_t
+    {
+        FailureFlag = 0x00000001,
+        ConstBufFlag = 0x00000002,
+        BigendianFlag = 0x00000004
+    };
+
+    uint32_t _flags{ 0 };
 };
 
 class StreamBuf : public StreamBase
