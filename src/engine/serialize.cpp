@@ -485,7 +485,9 @@ bool StreamFile::open( const std::string & fn, const std::string & mode )
         ERROR_LOG( "Error opening file " << fn )
     }
 
-    return static_cast<bool>( _file );
+    setfail( !_file );
+
+    return !fail();
 }
 
 void StreamFile::close()
