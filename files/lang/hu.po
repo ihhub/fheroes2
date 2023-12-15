@@ -8598,7 +8598,7 @@ msgstr ""
 "A(z) %{name} naponta %{count} aranyat hoz a konyhára."
 
 msgid "Arcane Necklace of Magic"
-msgstr "Misztikus Varázslás Nyakék"
+msgstr "Misztikus Varázslás Nyaklánca"
 
 msgid ""
 "After rescuing a Sorceress from a cursed tomb, she rewards your heroism with "
