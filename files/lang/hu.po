@@ -9666,7 +9666,7 @@ msgstr ""
 "hálát adsz, amiért ezek a féleszű trollok az élénél fogják meg az éles tárgyakat."
 
 msgid "Spade of Necromancy"
-msgstr "Nekromancia sírásó"
+msgstr "Nekromancia sírásó lapát"
 
 msgid "The %{name} gives you increased necromancy skill."
 msgstr "A %{name} fokozza a Nekromancia képességedet."
