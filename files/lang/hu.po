@@ -8543,7 +8543,7 @@ msgid "Cannot move the Spellbook"
 msgstr "A varázskönyv nem mozgatható"
 
 msgid "This item can't be traded."
-msgstr "Ezt a tárgyat nem lehet elcserélni vagy eladni."
+msgstr "Ezt a tárgyat nem lehet elcserélni."
 
 msgid "Invalid Artifact"
 msgstr "Érvénytelen varázstárgy"
