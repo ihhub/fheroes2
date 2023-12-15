@@ -44,6 +44,7 @@
 #include "kingdom.h"
 #include "logging.h"
 #include "maps.h"
+#include "maps_fileinfo.h"
 #include "maps_objects.h"
 #include "maps_tiles.h"
 #include "maps_tiles_helper.h"
@@ -644,11 +645,11 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
     // clear artifact flags to correctly generate random artifacts
     fheroes2::ResetArtifactStats();
 
-    const Settings & conf = Settings::Get();
+    const Maps::FileInfo & mapInfo = Settings::Get().getCurrentMapInfo();
 
     // do not let the player get a random artifact that allows him to win the game
-    if ( ( conf.ConditionWins() & GameOver::WINS_ARTIFACT ) == GameOver::WINS_ARTIFACT && !conf.WinsFindUltimateArtifact() ) {
-        fheroes2::ExcludeArtifactFromRandom( conf.WinsFindArtifactID() );
+    if ( ( mapInfo.ConditionWins() & GameOver::WINS_ARTIFACT ) == GameOver::WINS_ARTIFACT && !mapInfo.WinsFindUltimateArtifact() ) {
+        fheroes2::ExcludeArtifactFromRandom( mapInfo.WinsFindArtifactID() );
     }
 
     if ( !ProcessNewMap( filename, checkPoLObjects ) ) {
@@ -677,11 +678,11 @@ bool World::ProcessNewMap( const std::string & filename, const bool checkPoLObje
     // add castles to kingdoms
     vec_kingdoms.AddCastles( vec_castles );
 
-    const Settings & conf = Settings::Get();
+    const Maps::FileInfo & mapInfo = Settings::Get().getCurrentMapInfo();
 
     // update wins, loss conditions
-    if ( GameOver::WINS_HERO & conf.ConditionWins() ) {
-        const fheroes2::Point & pos = conf.WinsMapsPositionObject();
+    if ( GameOver::WINS_HERO & mapInfo.ConditionWins() ) {
+        const fheroes2::Point & pos = mapInfo.WinsMapsPositionObject();
 
         const Heroes * hero = GetHeroes( pos );
         if ( hero == nullptr ) {
@@ -693,8 +694,8 @@ bool World::ProcessNewMap( const std::string & filename, const bool checkPoLObje
         }
     }
 
-    if ( GameOver::LOSS_HERO & conf.ConditionLoss() ) {
-        const fheroes2::Point & pos = conf.LossMapsPositionObject();
+    if ( GameOver::LOSS_HERO & mapInfo.ConditionLoss() ) {
+        const fheroes2::Point & pos = mapInfo.LossMapsPositionObject();
 
         Heroes * hero = GetHeroes( pos );
         if ( hero == nullptr ) {

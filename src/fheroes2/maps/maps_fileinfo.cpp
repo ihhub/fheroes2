@@ -109,7 +109,7 @@ namespace Editor
 
 void Maps::FileInfo::Reset()
 {
-    file.clear();
+    filename.clear();
     name.clear();
     description.clear();
 
@@ -130,15 +130,13 @@ void Maps::FileInfo::Reset()
     colorsAvailableForComp = 0;
     colorsOfRandomRaces = 0;
 
-    victoryConditions = VICTORY_DEFEAT_EVERYONE;
+    victoryConditionType = VICTORY_DEFEAT_EVERYONE;
     compAlsoWins = false;
     allowNormalVictory = false;
-    victoryConditionsParam1 = 0;
-    victoryConditionsParam2 = 0;
+    victoryConditionParams.fill( 0 );
 
-    lossConditions = LOSS_EVERYTHING;
-    lossConditionsParam1 = 0;
-    lossConditionsParam2 = 0;
+    lossConditionType = LOSS_EVERYTHING;
+    lossConditionParams.fill( 0 );
 
     timestamp = 0;
 
@@ -174,7 +172,7 @@ bool Maps::FileInfo::ReadMP2( const std::string & filePath )
         return false;
     }
 
-    file = filePath;
+    filename = filePath;
 
     // Difficulty level
     switch ( fs.getLE16() ) {
@@ -228,17 +226,17 @@ bool Maps::FileInfo::ReadMP2( const std::string & filePath )
 
     fs.seek( 29 );
     // Victory condition type.
-    victoryConditions = fs.get();
+    victoryConditionType = fs.get();
     // Do the victory conditions apply to AI too?
     compAlsoWins = ( fs.get() != 0 );
     // Is "normal victory" (defeating all other players) applicable here?
     allowNormalVictory = ( fs.get() != 0 );
     // Parameter of victory condition.
-    victoryConditionsParam1 = fs.getLE16();
+    victoryConditionParams[0] = fs.getLE16();
     // Loss condition type.
-    lossConditions = fs.get();
+    lossConditionType = fs.get();
     // Parameter of loss condition.
-    lossConditionsParam1 = fs.getLE16();
+    lossConditionParams[0] = fs.getLE16();
     // Does the game start with heroes in castles automatically?
     startWithHeroInEachCastle = ( 0 == fs.get() );
 
@@ -258,16 +256,16 @@ bool Maps::FileInfo::ReadMP2( const std::string & filePath )
     }
 
     // Additional parameter of victory condition.
-    victoryConditionsParam2 = fs.getLE16();
+    victoryConditionParams[1] = fs.getLE16();
     // Additional parameter of loss condition.
-    lossConditionsParam2 = fs.getLE16();
+    lossConditionParams[1] = fs.getLE16();
 
     bool skipUnionSetup = false;
     // If loss conditions are LOSS_HERO and victory conditions are VICTORY_DEFEAT_EVERYONE then we have to verify the color to which this object belongs to.
     // If the color is under computer control only we have to make it as an ally for human player.
-    if ( lossConditions == LOSS_HERO && victoryConditions == VICTORY_DEFEAT_EVERYONE && Colors( colorsAvailableForHumans ).size() == 1 ) {
+    if ( lossConditionType == LOSS_HERO && victoryConditionType == VICTORY_DEFEAT_EVERYONE && Colors( colorsAvailableForHumans ).size() == 1 ) {
         // Each tile needs 16 + 8 + 8 + 8 + 8 + 8 + 8 + 8 + 8 + 16 + 32 + 32 = 160 bits or 20 bytes.
-        fs.seek( MP2::MP2_MAP_INFO_SIZE + ( lossConditionsParam1 + lossConditionsParam2 * width ) * 20 );
+        fs.seek( MP2::MP2_MAP_INFO_SIZE + ( lossConditionParams[0] + lossConditionParams[1] * width ) * 20 );
 
         MP2::mp2tile_t mp2tile;
         MP2::loadTile( fs, mp2tile );
@@ -282,7 +280,7 @@ bool Maps::FileInfo::ReadMP2( const std::string & filePath )
 
             FillUnions( side1, side2 );
 
-            victoryConditions = VICTORY_DEFEAT_OTHER_SIDE;
+            victoryConditionType = VICTORY_DEFEAT_OTHER_SIDE;
 
             skipUnionSetup = true;
         }
@@ -297,7 +295,7 @@ bool Maps::FileInfo::ReadMP2( const std::string & filePath )
     description = fs.toString( mapDescriptionLength );
 
     // Alliances of kingdoms
-    if ( victoryConditions == VICTORY_DEFEAT_OTHER_SIDE && !skipUnionSetup ) {
+    if ( victoryConditionType == VICTORY_DEFEAT_OTHER_SIDE && !skipUnionSetup ) {
         int side1 = 0;
         int side2 = 0;
 
@@ -307,7 +305,7 @@ bool Maps::FileInfo::ReadMP2( const std::string & filePath )
             return false;
         }
 
-        const int numPlayersSide1 = victoryConditionsParam1;
+        const int numPlayersSide1 = victoryConditionParams[0];
         if ( ( numPlayersSide1 <= 0 ) || ( numPlayersSide1 >= static_cast<int>( availableColors.size() ) ) ) {
             DEBUG_LOG( DBG_GAME, DBG_WARN, "File " << filePath << ": invalid victory condition param during map load" )
             return false;
@@ -348,7 +346,7 @@ bool Maps::FileInfo::readResurrectionMap( std::string filePath )
         return false;
     }
 
-    file = std::move( filePath );
+    filename = std::move( filePath );
 
     difficulty = map.difficulty;
 
@@ -394,7 +392,7 @@ void Maps::FileInfo::FillUnions( const int side1Colors, const int side2Colors )
 
 bool Maps::FileInfo::FileSorting( const FileInfo & lhs, const FileInfo & rhs )
 {
-    return CaseInsensitiveCompare( lhs.file, rhs.file );
+    return CaseInsensitiveCompare( lhs.filename, rhs.filename );
 }
 
 int Maps::FileInfo::KingdomRace( int color ) const
@@ -420,7 +418,7 @@ int Maps::FileInfo::KingdomRace( int color ) const
 
 uint32_t Maps::FileInfo::ConditionWins() const
 {
-    switch ( victoryConditions ) {
+    switch ( victoryConditionType ) {
     case VICTORY_DEFEAT_EVERYONE:
         return GameOver::WINS_ALL;
     case VICTORY_CAPTURE_TOWN:
@@ -444,7 +442,7 @@ uint32_t Maps::FileInfo::ConditionWins() const
 
 uint32_t Maps::FileInfo::ConditionLoss() const
 {
-    switch ( lossConditions ) {
+    switch ( lossConditionType ) {
     case LOSS_EVERYTHING:
         return GameOver::LOSS_ALL;
     case LOSS_TOWN:
@@ -467,12 +465,6 @@ bool Maps::FileInfo::WinsCompAlsoWins() const
     return compAlsoWins && ( ( GameOver::WINS_TOWN | GameOver::WINS_GOLD ) & ConditionWins() );
 }
 
-int Maps::FileInfo::WinsFindArtifactID() const
-{
-    // In the original game artifact IDs start from 0 but for the victory condition it starts from 1 which aligns with fheroes2 artifact enumeration.
-    return victoryConditionsParam1;
-}
-
 bool Maps::FileInfo::isAllowCountPlayers( int playerCount ) const
 {
     const int humanOnly = Color::Count( HumanOnlyColors() );
@@ -486,7 +478,7 @@ StreamBase & Maps::operator<<( StreamBase & msg, const FileInfo & fi )
     using VersionUnderlyingType = std::underlying_type_t<decltype( fi.version )>;
 
     // Only the basename of map filename (fi.file) is saved
-    msg << System::GetBasename( fi.file ) << fi.name << fi.description << fi.width << fi.height << fi.difficulty << static_cast<uint8_t>( KINGDOMMAX );
+    msg << System::GetBasename( fi.filename ) << fi.name << fi.description << fi.width << fi.height << fi.difficulty << static_cast<uint8_t>( KINGDOMMAX );
 
     static_assert( std::is_same_v<decltype( fi.races ), std::array<uint8_t, KINGDOMMAX>>, "Type of races has been changed, check the logic below" );
     static_assert( std::is_same_v<decltype( fi.unions ), std::array<uint8_t, KINGDOMMAX>>, "Type of unions has been changed, check the logic below" );
@@ -495,9 +487,9 @@ StreamBase & Maps::operator<<( StreamBase & msg, const FileInfo & fi )
         msg << fi.races[i] << fi.unions[i];
     }
 
-    return msg << fi.kingdomColors << fi.colorsAvailableForHumans << fi.colorsAvailableForComp << fi.colorsOfRandomRaces << fi.victoryConditions << fi.compAlsoWins
-               << fi.allowNormalVictory << fi.victoryConditionsParam1 << fi.victoryConditionsParam2 << fi.lossConditions << fi.lossConditionsParam1
-               << fi.lossConditionsParam2 << fi.timestamp << fi.startWithHeroInEachCastle << static_cast<VersionUnderlyingType>( fi.version ) << fi.worldDay
+    return msg << fi.kingdomColors << fi.colorsAvailableForHumans << fi.colorsAvailableForComp << fi.colorsOfRandomRaces << fi.victoryConditionType << fi.compAlsoWins
+               << fi.allowNormalVictory << fi.victoryConditionParams[0] << fi.victoryConditionParams[1] << fi.lossConditionType << fi.lossConditionParams[0]
+               << fi.lossConditionParams[1] << fi.timestamp << fi.startWithHeroInEachCastle << static_cast<VersionUnderlyingType>( fi.version ) << fi.worldDay
                << fi.worldWeek << fi.worldMonth;
 }
 
@@ -506,7 +498,7 @@ StreamBase & Maps::operator>>( StreamBase & msg, FileInfo & fi )
     uint8_t kingdommax = 0;
 
     // Only the basename of map filename (fi.file) is loaded
-    msg >> fi.file >> fi.name >> fi.description >> fi.width >> fi.height >> fi.difficulty >> kingdommax;
+    msg >> fi.filename >> fi.name >> fi.description >> fi.width >> fi.height >> fi.difficulty >> kingdommax;
 
     static_assert( std::is_same_v<decltype( fi.races ), std::array<uint8_t, KINGDOMMAX>>, "Type of races has been changed, check the logic below" );
     static_assert( std::is_same_v<decltype( fi.unions ), std::array<uint8_t, KINGDOMMAX>>, "Type of unions has been changed, check the logic below" );
@@ -526,9 +518,9 @@ StreamBase & Maps::operator>>( StreamBase & msg, FileInfo & fi )
         }
     }
 
-    msg >> fi.kingdomColors >> fi.colorsAvailableForHumans >> fi.colorsAvailableForComp >> fi.colorsOfRandomRaces >> fi.victoryConditions >> fi.compAlsoWins
-        >> fi.allowNormalVictory >> fi.victoryConditionsParam1 >> fi.victoryConditionsParam2 >> fi.lossConditions >> fi.lossConditionsParam1 >> fi.lossConditionsParam2
-        >> fi.timestamp >> fi.startWithHeroInEachCastle;
+    msg >> fi.kingdomColors >> fi.colorsAvailableForHumans >> fi.colorsAvailableForComp >> fi.colorsOfRandomRaces >> fi.victoryConditionType >> fi.compAlsoWins
+        >> fi.allowNormalVictory >> fi.victoryConditionParams[0] >> fi.victoryConditionParams[1] >> fi.lossConditionType >> fi.lossConditionParams[0]
+        >> fi.lossConditionParams[1] >> fi.timestamp >> fi.startWithHeroInEachCastle;
 
     using VersionUnderlyingType = std::underlying_type_t<decltype( fi.version )>;
     static_assert( std::is_same_v<VersionUnderlyingType, int>, "Type of version has been changed, check the logic below" );
