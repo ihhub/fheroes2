@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-05 00:31+0000\n"
+"POT-Creation-Date: 2023-12-15 09:12+0000\n"
 "PO-Revision-Date: 2023-11-12 16:27+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -200,6 +200,15 @@ msgid "MIN"
 msgstr "МИН"
 
 msgid "RESET"
+msgstr ""
+
+#, fuzzy
+msgid "CASTLE"
+msgstr ""
+"ГОРОДА/\n"
+"ЗАМКИ"
+
+msgid "TOWN"
 msgstr ""
 
 msgid ""
@@ -3349,6 +3358,46 @@ msgstr "Выберите сокровище:"
 msgid "Select Ocean Object:"
 msgstr "Объекты океана"
 
+#, fuzzy
+msgid "Castle/town placing"
+msgstr "Настройки замка"
+
+msgid "doubleLinedRace|Neutral"
+msgstr "Нейтральный"
+
+msgid "race|Random"
+msgstr "Случайно"
+
+#, fuzzy
+msgid "Click to start placing the selected castle/town."
+msgstr "Нажмите, чтобы применить выбранное разрешение экрана."
+
+#, fuzzy
+msgid "Click to select town placing."
+msgstr "Нажмите, чтобы показать следующий город."
+
+#, fuzzy
+msgid "Click to select castle placing."
+msgstr "Нажмите сюда чтобы выбрать сценарий."
+
+#, fuzzy
+msgid "%{color} %{race} %{townOrCastle}"
+msgstr "%{color} герой - %{race}"
+
+msgid "race|Neutral"
+msgstr "Нейтральный"
+
+msgid "You will place"
+msgstr ""
+
+#, fuzzy
+msgid "Click to select this class."
+msgstr "Нажмите сюда чтобы выбрать сценарий."
+
+#, fuzzy
+msgid "Click to select this color."
+msgstr "Нажмите сюда чтобы выбрать сценарий."
+
 msgid "Map Type:\n"
 msgstr "Тип карты:\n"
 
@@ -3697,6 +3746,13 @@ msgstr "Объекты океана"
 msgid "Ocean object must be placed on water."
 msgstr "Героев нельзя размещать на воде."
 
+msgid "Towns"
+msgstr "Города"
+
+#, fuzzy
+msgid "Towns cannot be placed on water."
+msgstr "Монстров нельзя размещать на воде."
+
 msgid "Ocean Objects"
 msgstr "Объекты океана"
 
@@ -3723,9 +3779,6 @@ msgstr "Объекты пустоши"
 
 msgid "Beach Objects"
 msgstr "Объекты побережья"
-
-msgid "Towns"
-msgstr "Города"
 
 msgid "Treasures"
 msgstr "Сокровища"
@@ -7718,12 +7771,6 @@ msgstr "Некромант"
 msgid "Multi"
 msgstr "По сценарию"
 
-msgid "race|Random"
-msgstr "Случайно"
-
-msgid "race|Neutral"
-msgstr "Нейтральный"
-
 msgid "doubleLined|Knight"
 msgstr "Рыцарь"
 
@@ -7755,9 +7802,6 @@ msgstr ""
 
 msgid "doubleLinedRace|Random"
 msgstr "Случайно"
-
-msgid "doubleLinedRace|Neutral"
-msgstr "Нейтральный"
 
 msgid "speed|Standing"
 msgstr "На месте"
