@@ -8752,7 +8752,7 @@ msgid ""
 msgstr ""
 
 msgid "Divine Breastplate of Protection"
-msgstr ""
+msgstr "Védelem isteni mellvértje"
 
 msgid ""
 "A gang of Rogues is sifting through the possessions of dead warriors. "
@@ -8761,7 +8761,7 @@ msgid ""
 msgstr ""
 
 msgid "Minor Scroll of Knowledge"
-msgstr ""
+msgstr "Tudás kis tekercse"
 
 msgid ""
 "Before you appears a levitating glass case with a scroll, perched upon a bed "
@@ -8770,7 +8770,7 @@ msgid ""
 msgstr ""
 
 msgid "Major Scroll of Knowledge"
-msgstr ""
+msgstr "Tudás nagy tekercse"
 
 msgid ""
 "Visiting a local wiseman, you explain the intent of your journey. He reaches "
@@ -8778,7 +8778,7 @@ msgid ""
 msgstr ""
 
 msgid "Superior Scroll of Knowledge"
-msgstr ""
+msgstr "Felsőbb tudás tekercse"
 
 msgid ""
 "You come across the remains of an ancient Druid. Bones, yellowed with age, "
@@ -8787,7 +8787,7 @@ msgid ""
 msgstr ""
 
 msgid "Foremost Scroll of Knowledge"
-msgstr ""
+msgstr "Felsőbb tudás nagy tekercse"
 
 msgid ""
 "Mangled bones, yellowed with age, peer from the ragged folds of a dead "
@@ -8798,7 +8798,7 @@ msgid "Endless Sack of Gold"
 msgstr "Végtelen Aranyzsák"
 
 msgid "The %{name} provides you with %{count} gold per day."
-msgstr ""
+msgstr "A %{name} naponta %{count} aranyat ad."
 
 msgid ""
 "A little leprechaun dances gleefully around a magic sack. Seeing you "
@@ -8828,7 +8828,7 @@ msgid "Nomad Boots of Mobility"
 msgstr "Nomádcsizma"
 
 msgid "The %{name} increase your movement on land."
-msgstr ""
+msgstr "A %{name} megnöveli a mozgáspontjaidat szárazföldön."
 
 msgid ""
 "A Nomad trader seeks protection from a tribe of Goblins. For your "
@@ -8847,10 +8847,10 @@ msgid ""
 msgstr ""
 
 msgid "Lucky Rabbit's Foot"
-msgstr ""
+msgstr "Szerencsehozó nyúlláb"
 
 msgid "The %{name} increases your luck in combat by %{count}."
-msgstr "A(z) %{name} ennyivel növeli a csapatod szerencséjét a csatában: %{count}."
+msgstr "A %{name} ennyivel növeli a csapatod szerencséjét a csatában: %{count}."
 
 msgid ""
 "A traveling merchant offers you a rabbit's foot, made of gleaming silver "
@@ -8887,7 +8887,7 @@ msgid "True Compass of Mobility"
 msgstr "Iránytű"
 
 msgid "The %{name} increases your movement on land and sea."
-msgstr ""
+msgstr "Az %{name} megnöveli a mozgáspontjaidat szárazföldön és vízen egyaránt."
 
 msgid ""
 "An old man claiming to be an inventor asks you to try his latest invention. "
@@ -8895,10 +8895,10 @@ msgid ""
 msgstr ""
 
 msgid "Sailor's Astrolabe of Mobility"
-msgstr "Tengerészeti Magasságmérő"
+msgstr "Tengerész asztrolábium"
 
 msgid "The %{name} increases your movement on sea."
-msgstr ""
+msgstr "A %{name} megnöveli a mozgáspontjaidat vízen."
 
 msgid ""
 "An old sea captain is being tortured by Ogres. You save him, and in return "
@@ -8909,7 +8909,7 @@ msgid "Evil Eye"
 msgstr "Gonosz Szem"
 
 msgid "The %{name} reduces the casting cost of curse spells by half."
-msgstr ""
+msgstr "A %{name} felére csökkenti az átok varázslat varázslatpont-igényét."
 
 msgid ""
 "While venturing into a decrepit hut you find the Skeleton of a long dead "
@@ -8921,7 +8921,7 @@ msgid "Enchanted Hourglass"
 msgstr "Bűvös Homokóra"
 
 msgid "The %{name} extends the duration of all your spells by %{count} turns."
-msgstr ""
+msgstr "A %{name} megnöveli a varázslataid hatóidőit %{count} körrel."
 
 msgid ""
 "A surprise turn in the landscape finds you in the midst of a grisly scene: "
@@ -8930,10 +8930,10 @@ msgid ""
 msgstr ""
 
 msgid "Gold Watch"
-msgstr "Arany Óra"
+msgstr "Aranyóra"
 
 msgid "The %{name} doubles the effectiveness of your hypnotize spells."
-msgstr ""
+msgstr "Az %{name} megduplázza a hipnózis varázslat hatásosságát."
 
 msgid ""
 "In reward for helping his cart out of a ditch, a traveling potion salesman "
