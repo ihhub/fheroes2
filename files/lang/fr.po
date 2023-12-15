@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-12-05 00:31+0000\n"
-"PO-Revision-Date: 2023-12-15 00:40+0100\n"
+"PO-Revision-Date: 2023-12-15 01:05+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
 "Language: fr\n"
@@ -3366,9 +3366,8 @@ msgstr "Confirmez le choix."
 msgid "%{color} %{race} hero"
 msgstr "Héros %{race} %{color}"
 
-#, fuzzy
 msgid "Terrain object"
-msgstr "Aucun objet"
+msgstr ""
 
 msgid "Select Skill:"
 msgstr "Choisir compétence :"
@@ -3385,13 +3384,11 @@ msgstr "Choisir créature :"
 msgid "Select Hero:"
 msgstr "Choisir héros :"
 
-#, fuzzy
 msgid "Select Treasure:"
-msgstr "Choisir héros :"
+msgstr ""
 
-#, fuzzy
 msgid "Select Ocean Object:"
-msgstr "Choisir artéfact :"
+msgstr ""
 
 msgid "Map Type:\n"
 msgstr "Type de carte :\n"
@@ -3662,52 +3659,39 @@ msgstr "Personnalité :"
 msgid "Best Monster:"
 msgstr "Meilleure créature :"
 
-#, fuzzy
 msgid "Map filename"
 msgstr ""
-"Taille de\n"
-"la carte"
 
 # Needs line break to have insectile space but keep partie and ? together.
-#, fuzzy
 msgid ""
 "Are you sure you want to load a new map? (Any unsaved changes to the current "
 "map will be lost.)"
 msgstr ""
-"Voulez-vous vraiment charger une nouvelle\n"
-"partie ? (Votre partie en cours sera perdue.)"
 
 # Needs line break to have insectile space but keep partie and ? together.
-#, fuzzy
 msgid ""
 "Are you sure you want to create a new map? (Any unsaved changes to the "
 "current map will be lost.)"
 msgstr ""
-"Voulez-vous vraiment charger une nouvelle\n"
-"partie ? (Votre partie en cours sera perdue.)"
 
 msgid ""
 "Create a new map, either from scratch or using the random map generator."
 msgstr ""
 
-#, fuzzy
 msgid "New Map"
-msgstr "New Dawn"
+msgstr ""
 
-#, fuzzy
 msgid "Load Map"
-msgstr "Charger une partie"
+msgstr ""
 
 msgid "Load an existing map."
 msgstr ""
 
-#, fuzzy
 msgid "Save Map"
-msgstr "Enregistrer"
+msgstr ""
 
-#, fuzzy
 msgid "Save the current map."
-msgstr "Enregistrer le jeu en cours."
+msgstr ""
 
 msgid "Quit out of the map editor."
 msgstr ""
@@ -3715,9 +3699,8 @@ msgstr ""
 msgid "Monster"
 msgstr "Monstre"
 
-#, fuzzy
 msgid "Objects cannot be placed outside the map."
-msgstr "Ce sort ne peut pas être jeté en mer."
+msgstr ""
 
 msgid "Monsters cannot be placed on water."
 msgstr ""
@@ -3728,9 +3711,8 @@ msgstr ""
 msgid "Treasure"
 msgstr "Trésor"
 
-#, fuzzy
 msgid "Treasures cannot be placed on water."
-msgstr "Ce sort ne peut pas être jeté en mer."
+msgstr ""
 
 msgid "Heroes"
 msgstr "Héros"
@@ -3741,17 +3723,14 @@ msgstr ""
 msgid "Artifacts"
 msgstr "Artéfacts"
 
-#, fuzzy
 msgid "Artifacts cannot be placed on water."
-msgstr "Ce sort ne peut pas être jeté en mer."
+msgstr ""
 
-#, fuzzy
 msgid "Ocean object"
-msgstr "Aucun objet"
+msgstr ""
 
-#, fuzzy
 msgid "Ocean object must be placed on water."
-msgstr "Ce sort ne peut pas être jeté en mer."
+msgstr ""
 
 msgid "Ocean Objects"
 msgstr ""
@@ -3759,9 +3738,8 @@ msgstr ""
 msgid "Grass Objects"
 msgstr ""
 
-#, fuzzy
 msgid "Snow Objects"
-msgstr "Aucun objet"
+msgstr ""
 
 msgid "Swamp Objects"
 msgstr ""
@@ -3769,16 +3747,14 @@ msgstr ""
 msgid "Lava Objects"
 msgstr ""
 
-#, fuzzy
 msgid "Desert Objects"
-msgstr "Tente de désert"
+msgstr ""
 
 msgid "Dirt Objects"
 msgstr ""
 
-#, fuzzy
 msgid "Wasteland Objects"
-msgstr "Terrain vague"
+msgstr ""
 
 msgid "Beach Objects"
 msgstr ""
@@ -3795,9 +3771,8 @@ msgstr ""
 msgid "Castles"
 msgstr "Châteaux"
 
-#, fuzzy
 msgid "Roads"
-msgstr "Route"
+msgstr ""
 
 msgid "Streams"
 msgstr ""
@@ -3812,17 +3787,14 @@ msgid ""
 "%{size} by %{size} square increments."
 msgstr ""
 
-#, fuzzy
 msgid "Small Brush"
-msgstr "Petites cartes"
+msgstr ""
 
-#, fuzzy
 msgid "Medium Brush"
-msgstr "Cartes moyennes"
+msgstr ""
 
-#, fuzzy
 msgid "Large Brush"
-msgstr "Grandes cartes"
+msgstr ""
 
 msgid "Area Fill"
 msgstr ""
@@ -3863,9 +3835,8 @@ msgstr ""
 msgid "Used to place a hero."
 msgstr ""
 
-#, fuzzy
 msgid "Used to place an artifact."
-msgstr "Trouver l'ultime artéfact."
+msgstr ""
 
 msgid ""
 "Used to place\n"
@@ -3902,9 +3873,8 @@ msgstr ""
 msgid "Detail Mode"
 msgstr ""
 
-#, fuzzy
 msgid "Used for special editing of monsters, heroes and towns."
-msgstr "Vaincre tous les héros et villages ennemis."
+msgstr ""
 
 msgid "Allows you to draw streams by clicking and dragging."
 msgstr ""
@@ -3915,9 +3885,8 @@ msgstr ""
 msgid "Allows you to draw roads by clicking and dragging."
 msgstr ""
 
-#, fuzzy
 msgid "Road Mode"
-msgstr "Route"
+msgstr ""
 
 msgid "Erase Mode"
 msgstr ""
@@ -3943,33 +3912,25 @@ msgstr ""
 msgid "Edit map title, description, and other general information."
 msgstr ""
 
-#, fuzzy
 msgid "Specifications"
-msgstr "Pétrification"
+msgstr ""
 
 msgid "File Options"
 msgstr "Options fichier"
 
-#, fuzzy
 msgid ""
 "Open the file options menu, where you can save or load maps, or quit out of "
 "the editor."
 msgstr ""
-"Affiche le menu des options fichier, qui vous permet de charger, "
-"sauvegarder, recommencer ou quitter."
 
-#, fuzzy
 msgid "View the editor system options, which let you customize the editor."
 msgstr ""
-"Affiche le menu des options du système, qui vous permet de personnaliser "
-"votre jeu."
 
 msgid "Create a map that is %{size} squares wide and %{size} squares high."
 msgstr ""
 
-#, fuzzy
 msgid "Cancel back to the New Map menu."
-msgstr "Annuler et revenir au menu principal."
+msgstr ""
 
 msgid "Cancel back to the main menu."
 msgstr "Annuler et revenir au menu principal."
@@ -3983,13 +3944,11 @@ msgstr ""
 msgid "Create a randomly generated map."
 msgstr ""
 
-#, fuzzy
 msgid "Random"
-msgstr "Aléatoire"
+msgstr ""
 
-#, fuzzy
 msgid "Cancel back to the Map Editor main menu."
-msgstr "Annuler et revenir au menu principal."
+msgstr ""
 
 msgid "No maps available!"
 msgstr "Aucune carte disponible !"
