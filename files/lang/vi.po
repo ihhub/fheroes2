@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-12-05 00:31+0000\n"
-"PO-Revision-Date: 2023-12-13 06:51+0700\n"
+"PO-Revision-Date: 2023-12-14 06:30+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: vi\n"
@@ -10263,28 +10263,36 @@ msgstr ""
 "một bến tàu gần đó."
 
 msgid "Masthead"
-msgstr ""
+msgstr "Tiêu đề"
 
 msgid "The %{name} boosts your luck and morale by %{count} each in sea combat."
 msgstr ""
+"%{name} tăng cường may mắn và tinh thần của bạn thêm %{count} trong trận "
+"chiến trên biển."
 
 msgid "Sphere of Negation"
-msgstr ""
+msgstr "Quả cầu Phủ định"
 
 msgid "The %{name} disables all spell casting, for both sides, in combat."
 msgstr ""
+"%{name} vô hiệu hóa tất cả các phép thuật sử dụng cho cả hai bên trong chiến "
+"đấu."
 
 msgid ""
 "You stop to help a Peasant catch a runaway mare. To show his gratitude, he "
 "hands you a tiny sphere. As soon as you grasp it, you feel the magical "
 "energy drain from your limbs..."
 msgstr ""
+"Ngươi dừng lại để giúp một người nông dân bắt một con ngựa cái đang chạy "
+"trốn. Để tỏ lòng biết ơn, anh ấy đưa cho ngươi một quả cầu nhỏ. Ngay khi "
+"ngươi nắm lấy nó, ngươi sẽ cảm thấy năng lượng ma thuật rút cạn khỏi tay "
+"chân mình..."
 
 msgid "Staff of Wizardry"
-msgstr ""
+msgstr "Gậy Phù thủy"
 
 msgid "The %{name} boosts your spell power by %{count}."
-msgstr ""
+msgstr "%{name} tăng sức mạnh phép thuật của ngươi thêm %{count}."
 
 msgid ""
 "While out scaring up game, your troops find a mysterious staff levitating "
@@ -10292,20 +10300,27 @@ msgid ""
 "inscription. It reads: \"Brains best brawn and magic beats might. Heed my "
 "words, and you'll win every fight.\""
 msgstr ""
+"Trong khi đang hù dọa trò chơi, quân của ngươi tìm thấy một cây trượng bí ẩn "
+"đang bay cách mặt đất khoảng 1 mét. Họ đưa nó cho ngươi và ngươi nhận thấy "
+"một dòng chữ. Nó viết: \"Bộ não có sức mạnh tốt nhất và nhịp đập ma thuật. "
+"Hãy chú ý đến lời nói của tôi và ngươi sẽ thắng mọi cuộc chiến.\""
 
 msgid "Sword Breaker"
-msgstr ""
+msgstr "Kẻ phá Kiếm"
 
 msgid "The %{name} increases your defense by %{count} and attack by 1."
 msgstr ""
+"%{name} tăng khả năng phòng thủ của ngươi thêm %{count} và tấn công thêm 1."
 
 msgid ""
 "A former Captain of the Guard admires your quest and gives you the enchanted "
 "Sword Breaker that he relied on during his tour of duty."
 msgstr ""
+"Một cựu Đội trưởng Đội cận vệ ngưỡng mộ nhiệm vụ của ngươi và trao cho ngươi "
+"Kẻ phá Kiếm đầy mê hoặc mà anh ta đã dựa vào trong chuyến công tác của mình."
 
 msgid "Sword of Anduran"
-msgstr ""
+msgstr "Kiếm của Anduran"
 
 msgid ""
 "A Troll stops you and says: \"Pay me 5,000 gold, or the Sword of Anduran "
@@ -10314,21 +10329,29 @@ msgid ""
 "sword, you give thanks that half-witted Trolls tend to grab the wrong end of "
 "sharp objects."
 msgstr ""
+"Một con Troll ngăn ngươi lại và nói: \"Trả cho tôi 5.000 vàng, nếu không "
+"Thanh kiếm Anduran sẽ giết ngươi ngay tại chỗ.\" Ngươi từ chối. Con troll "
+"chộp lấy thanh kiếm treo trên thắt lưng, hét lên đau đớn rồi bỏ chạy. Nhặt "
+"thanh kiếm huyền thoại, ngươi tạ ơn vì lũ Troll nửa vời có xu hướng tóm nhầm "
+"đầu của những vật sắc nhọn."
 
 msgid "Spade of Necromancy"
-msgstr ""
+msgstr "Thuổng của Chiêu hồn"
 
 msgid "The %{name} gives you increased necromancy skill."
-msgstr ""
+msgstr "%{name} giúp ngươi tăng kỹ năng chiêu hồn."
 
 msgid ""
 "A dirty shovel has been thrust into a dirt mound nearby. Upon investigation, "
 "you discover it to be the enchanted shovel of the Gravediggers, long thought "
 "lost by mortals."
 msgstr ""
+"Một chiếc xẻng bẩn đã được đẩy vào một ụ đất gần đó. Sau khi điều tra, ngươi "
+"phát hiện ra đó là chiếc xẻng bị phù phép của Gravediggers, người phàm tưởng "
+"đã thất lạc từ lâu."
 
 msgid "spellBonus|selected by user"
-msgstr ""
+msgstr "chọn bởi người dùng"
 
 msgid "Wood"
 msgstr "Gỗ"
@@ -10358,31 +10381,40 @@ msgid ""
 "Mercury, Sulfur and Crystal are rare magical resources used for the most "
 "powerful creatures and buildings."
 msgstr ""
+"Có bảy tài nguyên trong Heroes 2, được sử dụng để xây dựng và cải thiện lâu "
+"đài, mua quân và chiêu mộ anh hùng. Vàng là thứ phổ biến nhất, cần thiết cho "
+"hầu hết mọi thứ. Gỗ và quặng được sử dụng cho hầu hết các tòa nhà. Ngọc, "
+"Thủy ngân, Lưu huỳnh và Pha lê là những tài nguyên ma thuật quý hiếm được sử "
+"dụng cho những sinh vật và công trình mạnh mẽ nhất."
 
 msgid ""
 "Causes a giant fireball to strike the selected area, damaging all nearby "
 "creatures."
 msgstr ""
+"Tạo ra một quả cầu lửa khổng lồ tấn công khu vực đã chọn, gây sát thương cho "
+"tất cả sinh vật gần đó."
 
 msgid "Fireball"
 msgstr "Cầu lửa"
 
 msgid "Fireblast"
-msgstr ""
+msgstr "Vụ nổ lửa"
 
 msgid ""
 "An improved version of fireball, fireblast affects two hexes around the "
 "center point of the spell, rather than one."
 msgstr ""
+"Một phiên bản cải tiến của quả cầu lửa, vụ nổ lửa ảnh hưởng đến hai hình lục "
+"giác xung quanh điểm trung tâm của câu thần chú, thay vì một."
 
 msgid "Causes a bolt of electrical energy to strike the selected creature."
-msgstr ""
+msgstr "Tạo ra một tia năng lượng điện tấn công sinh vật được chọn."
 
 msgid "Lightning Bolt"
-msgstr ""
+msgstr "Tia chớp"
 
 msgid "Chain Lightning"
-msgstr ""
+msgstr "Sét chuyền"
 
 msgid ""
 "Causes a bolt of electrical energy to strike a selected creature, then "
@@ -10390,6 +10422,11 @@ msgid ""
 "creature with half again damage, and so on, until it becomes too weak to be "
 "harmful. Warning: This spell can hit your own creatures!"
 msgstr ""
+"Tạo ra một tia năng lượng điện để tấn công một sinh vật đã chọn, sau đó tấn "
+"công sinh vật gần nhất với một nửa sát thương, sau đó tấn công sinh vật gần "
+"nhất TIẾP THEO với một nửa sát thương, v.v., cho đến khi nó trở nên quá yếu "
+"để có thể gây hại. Cảnh báo: Phép thuật này có thể tấn công sinh vật của "
+"chính ngươi!"
 
 msgid "Teleport"
 msgstr "Dịch chuyển"
@@ -10397,79 +10434,87 @@ msgstr "Dịch chuyển"
 msgid ""
 "Teleports the creature you select to any open position on the battlefield."
 msgstr ""
+"Dịch chuyển sinh vật ngươi chọn đến bất kỳ vị trí mở nào trên chiến trường."
 
 msgid "Cure"
-msgstr ""
+msgstr "Chữa trị"
 
 msgid ""
 "Removes all negative spells cast upon one of your units, and restores up to "
 "%{count} HP per level of spell power."
 msgstr ""
+"Loại bỏ tất cả các phép thuật tiêu cực được sử dụng trên một trong các đơn "
+"vị của bạn và phục hồi tối đa %{count} HP cho mỗi cấp độ sức mạnh phép thuật."
 
 msgid "Mass Cure"
-msgstr ""
+msgstr "Chữa trị Rộng"
 
 msgid ""
 "Removes all negative spells cast upon your forces, and restores up to "
 "%{count} HP per level of spell power, per creature."
 msgstr ""
+"Loại bỏ tất cả các phép thuật tiêu cực tác dụng lên lực lượng của ngươi và "
+"phục hồi tối đa %{count} HP cho mỗi cấp sức mạnh phép thuật, cho mỗi sinh "
+"vật."
 
 msgid "Resurrect"
-msgstr ""
+msgstr "Hồi sinh"
 
 msgid "Resurrects creatures from a damaged or dead unit until end of combat."
 msgstr ""
+"Hồi sinh các sinh vật từ đơn vị bị thương tật hoặc chết cho đến khi kết thúc "
+"trận chiến."
 
 msgid "Resurrect True"
-msgstr ""
+msgstr "Hồi sinh Thực"
 
 msgid "Resurrects creatures from a damaged or dead unit permanently."
-msgstr ""
+msgstr "Phục hồi vĩnh viễn các sinh vật từ một đơn vị bị thương tật hoặc chết."
 
 msgid "Haste"
-msgstr ""
+msgstr "Tăng tốc"
 
 msgid "Increases the speed of any creature by %{count}."
-msgstr ""
+msgstr "Tăng tốc độ của bất kỳ sinh vật nào thêm %{count}."
 
 msgid "Increases the speed of all of your creatures by %{count}."
-msgstr ""
+msgstr "Tăng tốc độ của tất cả sinh vật của ngươi thêm %{count}."
 
 msgid "Mass Haste"
-msgstr ""
+msgstr "Tăng tốc Rộng"
 
 msgid "Slows target to half movement rate."
-msgstr ""
+msgstr "Làm chậm mục tiêu xuống một nửa tốc độ di chuyển."
 
 msgid "spell|Slow"
-msgstr ""
+msgstr "Chậm"
 
 msgid "Mass Slow"
-msgstr ""
+msgstr "Chậm Rộng"
 
 msgid "Slows all enemies to half movement rate."
-msgstr ""
+msgstr "Làm chậm tất cả kẻ địch xuống một nửa tốc độ di chuyển."
 
 msgid "Clouds the affected creatures' eyes, preventing them from moving."
-msgstr ""
+msgstr "Che mờ mắt của sinh vật bị ảnh hưởng, ngăn chúng di chuyển."
 
 msgid "spell|Blind"
-msgstr ""
+msgstr "Mù"
 
 msgid "Bless"
-msgstr ""
+msgstr "Cầu nguyện"
 
 msgid "Causes the selected creatures to inflict maximum damage."
-msgstr ""
+msgstr "Khiến các sinh vật được chọn gây sát thương tối đa."
 
 msgid "Causes all of your units to inflict maximum damage."
-msgstr ""
+msgstr "Khiến tất cả các đơn vị của bạn gây sát thương tối đa."
 
 msgid "Mass Bless"
-msgstr ""
+msgstr "Cầu nguyện Rộng"
 
 msgid "Magically increases the defense skill of the selected creatures."
-msgstr ""
+msgstr "Tăng kỹ năng phòng thủ của các sinh vật được chọn một cách kỳ diệu."
 
 msgid "Stoneskin"
 msgstr "Thạch bì"
@@ -10478,64 +10523,68 @@ msgid ""
 "Increases the defense skill of the targeted creatures. This is an improved "
 "version of Stoneskin."
 msgstr ""
+"Tăng kỹ năng phòng thủ của các sinh vật được nhắm mục tiêu. Đây là phiên bản "
+"cải tiến của Thạch Bì."
 
 msgid "Steelskin"
 msgstr "Da sắt"
 
 msgid "Causes the selected creatures to inflict minimum damage."
-msgstr ""
+msgstr "Khiến các sinh vật được chọn gây ra thiệt hại tối thiểu."
 
 msgid "Curse"
 msgstr "Nguyền rủa"
 
 msgid "Causes all enemy troops to inflict minimum damage."
-msgstr ""
+msgstr "Khiến tất cả quân địch gây sát thương tối thiểu."
 
 msgid "Mass Curse"
-msgstr ""
+msgstr "Nguyền rủa Rộng"
 
 msgid "Damages all undead in the battle."
-msgstr ""
+msgstr "Gây sát thương cho tất cả xác sống trong trận chiến."
 
 msgid "Holy Word"
-msgstr ""
+msgstr "Thánh Ngữ"
 
 msgid ""
 "Damages all undead in the battle. This is an improved version of Holy Word."
 msgstr ""
+"Gây sát thương cho tất cả xác sống trong trận chiến. Đây là phiên bản cải "
+"tiến của Thánh Ngữ."
 
 msgid "Holy Shout"
-msgstr ""
+msgstr "Thánh Hét"
 
 msgid "Anti-Magic"
-msgstr ""
+msgstr "Phản Phép"
 
 msgid "Prevents harmful magic against the selected creatures."
-msgstr ""
+msgstr "Ngăn chặn phép thuật có hại chống lại các sinh vật được chọn."
 
 msgid "Dispel Magic"
-msgstr ""
+msgstr "Trừ Tà"
 
 msgid "Removes all magic spells from a single target."
-msgstr ""
+msgstr "Loại bỏ tất cả phép thuật khỏi một mục tiêu."
 
 msgid "Mass Dispel"
-msgstr ""
+msgstr "Trừ tà Rộng"
 
 msgid "Removes all magic spells from all creatures."
-msgstr ""
+msgstr "Loại bỏ tất cả các phép thuật từ tất cả các sinh vật."
 
 msgid "Causes a magic arrow to strike the selected target."
-msgstr ""
+msgstr "Tạo ra một mũi tên ma thuật tấn công mục tiêu đã chọn."
 
 msgid "Magic Arrow"
 msgstr "Mũi tên Ma thuật"
 
 msgid "Berserker"
-msgstr ""
+msgstr "Kẻ điên"
 
 msgid "Causes a creature to attack its nearest neighbor."
-msgstr ""
+msgstr "Khiến một sinh vật tấn công người hàng xóm gần nhất của nó."
 
 msgid "Armageddon"
 msgstr "Tận thế"
@@ -10543,17 +10592,22 @@ msgstr "Tận thế"
 msgid ""
 "Holy terror strikes the battlefield, causing severe damage to all creatures."
 msgstr ""
+"Thánh kinh khủng bố tấn công chiến trường, gây ra thiệt hại nặng nề cho mọi "
+"sinh vật."
 
 msgid "Elemental Storm"
-msgstr ""
+msgstr "Nguyên tố Bão"
 
 msgid "Magical elements pour down on the battlefield, damaging all creatures."
 msgstr ""
+"Các yếu tố ma thuật đổ xuống chiến trường, gây sát thương cho mọi sinh vật."
 
 msgid ""
 "A rain of rocks strikes an area of the battlefield, damaging all nearby "
 "creatures."
 msgstr ""
+"Một cơn mưa đá tấn công một khu vực trên chiến trường, gây sát thương cho "
+"tất cả sinh vật gần đó."
 
 msgid "Meteor Shower"
 msgstr "Mưa Sao băng"
@@ -10562,76 +10616,89 @@ msgid "Paralyze"
 msgstr "Hóa đá"
 
 msgid "The targeted creatures are paralyzed, unable to move or retaliate."
-msgstr ""
+msgstr "Các sinh vật mục tiêu bị tê liệt, không thể di chuyển hoặc phản kháng."
 
 msgid "Hypnotize"
-msgstr ""
+msgstr "Thôi miên"
 
 msgid ""
 "Brings a single enemy unit under your control if its hits are less than "
 "%{count} times the caster's spell power."
 msgstr ""
+"Đưa một đơn vị kẻ thù vào tầm kiểm soát của bạn nếu số lần tấn công của nó "
+"nhỏ hơn %{count} lần sức mạnh phép thuật của người thi triển."
 
 msgid "Cold Ray"
-msgstr ""
+msgstr "Tia Lạnh"
 
 msgid "Drains body heat from a single enemy unit."
-msgstr ""
+msgstr "Hút nhiệt cơ thể từ một đơn vị kẻ địch."
 
 msgid "Cold Ring"
-msgstr ""
+msgstr "Vòng Lạnh"
 
 msgid ""
 "Drains body heat from all units surrounding the center point, but not "
 "including the center point."
 msgstr ""
+"Thoát nhiệt cơ thể từ tất cả các đơn vị xung quanh điểm trung tâm, nhưng "
+"không bao gồm điểm trung tâm."
 
 msgid "Disrupting Ray"
-msgstr ""
+msgstr "Tia Phá vỡ"
 
 msgid "Reduces the defense rating of an enemy unit by three."
-msgstr ""
+msgstr "Giảm chỉ số phòng thủ của đơn vị địch xuống ba."
 
 msgid "Damages all living (non-undead) units in the battle."
 msgstr ""
+"Gây sát thương cho tất cả các đơn vị sống (không phải xác sống) trong trận "
+"chiến."
 
 msgid "Death Ripple"
-msgstr ""
+msgstr "Gợn sóng Chết"
 
 msgid "Death Wave"
-msgstr ""
+msgstr "Sóng Chết"
 
 msgid ""
 "Damages all living (non-undead) units in the battle. This spell is an "
 "improved version of Death Ripple."
 msgstr ""
+"Gây sát thương cho tất cả các đơn vị sống (không phải xác sống) trong trận "
+"chiến. Phép thuật này là phiên bản cải tiến của Gợn sóng Chết."
 
 msgid "Dragon Slayer"
-msgstr ""
+msgstr "Kẻ giết Rồng"
 
 msgid "Greatly increases a unit's attack skill vs. Dragons."
-msgstr ""
+msgstr "Tăng đáng kể kỹ năng tấn công của đơn vị so với Rồng."
 
 msgid "Blood Lust"
-msgstr ""
+msgstr "Khát máu"
 
 msgid "Increases a unit's attack skill."
-msgstr ""
+msgstr "Tăng kỹ năng tấn công của một đơn vị."
 
 msgid "Animate Dead"
-msgstr ""
+msgstr "Sức sống Thần chết"
 
 msgid "Resurrects creatures from a damaged or dead undead unit permanently."
 msgstr ""
+"Phục hồi vĩnh viễn các sinh vật từ một đơn vị xác sống bị hư hỏng hoặc đã "
+"chết."
 
 msgid "Mirror Image"
-msgstr ""
+msgstr "Ảnh Gương"
 
 msgid ""
 "Creates an illusionary unit that duplicates one of your existing units. This "
 "illusionary unit does the same damages as the original, but will vanish if "
 "it takes any damage."
 msgstr ""
+"Tạo một đơn vị ảo ảnh sao chép một trong các đơn vị hiện có của bạn. Đơn vị "
+"ảo ảnh này gây sát thương tương tự như ban đầu, nhưng sẽ biến mất nếu nhận "
+"bất kỳ thiệt hại nào."
 
 msgid "Shield"
 msgstr "Khiên"
@@ -10640,101 +10707,111 @@ msgid ""
 "Halves damage received from ranged attacks for a single unit. Does not "
 "affect damage received from Turrets or Ballistae."
 msgstr ""
+"Giảm một nửa sát thương nhận được từ các đòn tấn công tầm xa cho một đơn vị. "
+"Không ảnh hưởng đến sát thương nhận được từ Tháp pháo hoặc Cung máy."
 
 msgid "Mass Shield"
-msgstr ""
+msgstr "Khiên Rộng"
 
 msgid ""
 "Halves damage received from ranged attacks for all of your units. Does not "
 "affect damage received from Turrets or Ballistae."
 msgstr ""
+"Giảm một nửa sát thương nhận được từ các cuộc tấn công tầm xa cho tất cả các "
+"đơn vị của bạn. Không ảnh hưởng đến sát thương nhận được từ Tháp pháo hoặc "
+"Cung máy."
 
 msgid "Summon Earth Elemental"
-msgstr ""
+msgstr "Triệu hồi Nguyên tố Đất"
 
 msgid "Summons Earth Elementals to fight for your army."
-msgstr ""
+msgstr "Triệu hồi Nguyên tố Đất tới để chiến đấu cho quân đội ngươi."
 
 msgid "Summon Air Elemental"
-msgstr ""
+msgstr "Triệu hồi Nguyên tố Khí"
 
 msgid "Summons Air Elementals to fight for your army."
-msgstr ""
+msgstr "Triệu hồi Nguyên tố Khí tới để chiến đấu cho quân đội ngươi."
 
 msgid "Summon Fire Elemental"
-msgstr ""
+msgstr "Triệu hồi Nguyên tố Lửa"
 
 msgid "Summons Fire Elementals to fight for your army."
-msgstr ""
+msgstr "Triệu hồi Nguyên tố Lửa tới để chiến đấu cho quân đội ngươi."
 
 msgid "Summon Water Elemental"
-msgstr ""
+msgstr "Triệu hồi Nguyên tố Nước"
 
 msgid "Summons Water Elementals to fight for your army."
-msgstr ""
+msgstr "Triệu hồi Nguyên tố Nước tới để chiến đấu cho quân đội ngươi."
 
 msgid "Damages castle walls."
-msgstr ""
+msgstr "Sát thương tường lâu đài."
 
 msgid "Earthquake"
 msgstr "Động đất"
 
 msgid "Causes all mines across the land to become visible."
-msgstr ""
+msgstr "Làm cho tất cả các mỏ trên đất liền hiện rõ."
 
 msgid "View Mines"
-msgstr ""
+msgstr "Xem Mỏ"
 
 msgid "Causes all resources across the land to become visible."
-msgstr ""
+msgstr "Làm cho tất cả các tài nguyên trên đất liền trở nên hữu hình."
 
 msgid "View Resources"
-msgstr ""
+msgstr "Xem Tài nguyên"
 
 msgid "Causes all artifacts across the land to become visible."
-msgstr ""
+msgstr "Làm cho tất cả hiện vật trên khắp vùng đất có thể nhìn thấy được."
 
 msgid "View Artifacts"
-msgstr ""
+msgstr "Xem Bảo vật"
 
 msgid "Causes all towns and castles across the land to become visible."
-msgstr ""
+msgstr "Làm cho tất cả các thị trấn và lâu đài trên khắp vùng đất hiện rõ."
 
 msgid "View Towns"
-msgstr ""
+msgstr "Xem Thị trấn"
 
 msgid "Causes all Heroes across the land to become visible."
-msgstr ""
+msgstr "Làm cho tất cả các Anh hùng trên khắp vùng đất trở nên hữu hình."
 
 msgid "View Heroes"
-msgstr ""
+msgstr "Xem Tướng"
 
 msgid "Causes the entire land to become visible."
-msgstr ""
+msgstr "Làm cho toàn bộ vùng đất trở nên hữu hình."
 
 msgid "View All"
-msgstr ""
+msgstr "Xem Tất cả"
 
 msgid "Allows the caster to view detailed information on enemy Heroes."
-msgstr ""
+msgstr "Cho phép người thi triển xem thông tin chi tiết về Tướng địch."
 
 msgid "Summon Boat"
-msgstr ""
+msgstr "Triệu hồi Thuyền"
 
 msgid ""
 "Summons the nearest unoccupied, friendly boat to an adjacent shore location. "
 "A friendly boat is one which you just built or were the most recent player "
 "to occupy."
 msgstr ""
+"Triệu tập chiếc thuyền thân thiện, trống gần nhất đến vị trí bờ biển liền "
+"kề. Một chiếc thuyền thân thiện là chiếc thuyền mà bạn vừa đóng hoặc là "
+"người chơi gần đây nhất chiếm giữ."
 
 msgid "Allows the caster to magically transport to a nearby location."
 msgstr ""
+"Cho phép người sử dụng dịch chuyển một cách kỳ diệu đến một địa điểm gần đó."
 
 msgid "Dimension Door"
-msgstr ""
+msgstr "Cửa Kích thước"
 
 msgid "Returns the caster to any town or castle currently owned."
 msgstr ""
+"Trả người điều khiển về bất kỳ thị trấn hoặc lâu đài nào hiện đang sở hữu."
 
 msgid "Town Gate"
 msgstr "Cổng Thành"
@@ -10743,81 +10820,87 @@ msgid ""
 "Returns the hero to the town or castle of choice, provided it is controlled "
 "by you."
 msgstr ""
+"Đưa anh hùng trở lại thị trấn hoặc lâu đài mà bạn lựa chọn, miễn là nó do "
+"bạn điều khiển."
 
 msgid "Visions"
-msgstr ""
+msgstr "Thấu thị"
 
 msgid ""
 "Visions predicts the likely outcome of an encounter with a neutral army camp."
 msgstr ""
+"Thấu thị dự đoán kết quả có thể xảy ra của cuộc chạm trán với trại quân "
+"trung lập."
 
 msgid "Haunt"
-msgstr ""
+msgstr "Ma ám"
 
 msgid ""
 "Haunts a mine you control with Ghosts. This mine stops producing resources. "
 "(If I can't keep it, nobody will!)"
 msgstr ""
+"Ám một mỏ mà ngươi điều khiển bằng Bóng ma. Mỏ này ngừng sản xuất tài "
+"nguyên. (Nếu tôi không giữ được thì sẽ không có ai giữ được!)"
 
 msgid "Set Earth Guardian"
-msgstr ""
+msgstr "Đặt Người bảo vệ Đất"
 
 msgid "Sets Earth Elementals to guard a mine against enemy armies."
-msgstr ""
+msgstr "Đặt các Nguyên tố Đất để bảo vệ mỏ chống lại quân địch."
 
 msgid "Set Air Guardian"
-msgstr ""
+msgstr "Đặt Người bảo vệ Khí"
 
 msgid "Sets Air Elementals to guard a mine against enemy armies."
-msgstr ""
+msgstr "Đặt các Nguyên tố Khí để bảo vệ mỏ chống lại quân địch."
 
 msgid "Set Fire Guardian"
-msgstr ""
+msgstr "Đặt Người bảo vệ Lửa"
 
 msgid "Sets Fire Elementals to guard a mine against enemy armies."
-msgstr ""
+msgstr "Đặt các Nguyên tố Lửa để bảo vệ mỏ chống lại quân địch."
 
 msgid "Set Water Guardian"
-msgstr ""
+msgstr "Đặt Người bảo vệ Nước"
 
 msgid "Sets Water Elementals to guard a mine against enemy armies."
-msgstr ""
+msgstr "Đặt các Nguyên tố Nước để bảo vệ mỏ chống lại quân địch."
 
 msgid "Random Spell"
 msgstr "Ngẫu nhiên Phép"
 
 msgid "Randomly selected spell of any level."
-msgstr ""
+msgstr "Ngẫu nhiên lựa chọn phép của các cấp."
 
 msgid "Random 1st Level Spell"
 msgstr "Ngẫu nhiên Phép Cấp 1"
 
 msgid "Randomly selected 1st level spell."
-msgstr ""
+msgstr "Ngẫu nhiên lựa chọn pháp cấp 1"
 
 msgid "Random 2nd Level Spell"
-msgstr ""
+msgstr "Ngẫu nhiên Phép Cấp 2"
 
 msgid "Randomly selected 2nd level spell."
-msgstr ""
+msgstr "Ngẫu nhiên lựa chọn pháp cấp 2"
 
 msgid "Random 3rd Level Spell"
-msgstr ""
+msgstr "Ngẫu nhiên Phép Cấp 3"
 
 msgid "Randomly selected 3rd level spell."
-msgstr ""
+msgstr "Ngẫu nhiên lựa chọn pháp cấp "
 
 msgid "Random 4th Level Spell"
-msgstr ""
+msgstr "Ngẫu nhiên Phép Cấp 4"
 
 msgid "Randomly selected 4th level spell."
-msgstr ""
+msgstr "Ngẫu nhiên lựa chọn pháp cấp 4"
 
 msgid "Random 5th Level Spell"
-msgstr ""
+msgstr "Ngẫu nhiên Phép Cấp 5"
 
 msgid "Randomly selected 5th level spell."
-msgstr ""
+msgstr "Ngẫu nhiên lựa chọn pháp cấp 5"
 
 msgid "Petrification"
 msgstr "Hóa đá"
@@ -10830,19 +10913,19 @@ msgstr ""
 "thương từ đòn tấn công trực tiếp."
 
 msgid "You have no Magic Book, so you cannot cast a spell."
-msgstr ""
+msgstr "Ngươi không có Sách Phép, nên ngươi không thể niệm chú một phép."
 
 msgid "No spell to cast."
-msgstr ""
+msgstr "Không có phép để niệm."
 
 msgid "Your hero has %{point} spell points remaining."
-msgstr ""
+msgstr "Tướng của ngươi còn có %{point} điểm phép."
 
 msgid "View Adventure Spells"
-msgstr ""
+msgstr "Xem Phép Phiêu lưu"
 
 msgid "View Combat Spells"
-msgstr ""
+msgstr "Xem Phép Chiến đấu"
 
 msgid "View previous page"
 msgstr "Xem trang trước"
@@ -10854,38 +10937,42 @@ msgid "Close Spellbook"
 msgstr "Gấp sách phép"
 
 msgid "View %{spell}"
-msgstr ""
+msgstr "Xem %{spell}"
 
 msgid "This spell does %{damage} points of damage."
-msgstr ""
+msgstr "Phép thuật này gây %{damage} điểm sát thương."
 
 msgid ""
 "This spell summons\n"
 "%{count} %{monster}."
 msgstr ""
+"Phép thuật này triệu hồi\n"
+"%{count} %{monster}."
 
 msgid "This spell restores %{hp} HP."
-msgstr ""
+msgstr "Phép thuật này hồi phục %{hp} MÁU."
 
 msgid "This spell summons %{count} %{monster} to guard the mine."
-msgstr ""
+msgstr "Phép thuật này triệu hồi %{count} %{monster} tới canh mỏ."
 
 msgid "The nearest town is %{town}."
-msgstr ""
+msgstr "Thị trấn gần nhất là %{town}."
 
 msgid "This town is occupied by your hero %{hero}."
-msgstr ""
+msgstr "Thị trấn này đã bị tướng của ngươi chiếm đóng %{hero}."
 
 msgid ""
 "This spell controls up to\n"
 "%{hp} HP."
 msgstr ""
+"Phép thuật này điều khiển tới\n"
+"%{hp} MÁU."
 
 msgid "The ultimate artifact is really the %{name}."
-msgstr ""
+msgstr "Bảo vật tối thượng có tên thật là %{name}."
 
 msgid "The ultimate artifact may be found in the %{name} regions of the world."
-msgstr ""
+msgstr "Bảo vật tối thượng có thể tìm thấy ở vùng %{name} của thế giới."
 
 msgid "north-west"
 msgstr "tây-bắc"
@@ -10931,6 +11018,7 @@ msgstr "Rồng Đen sẽ mang Khổng Lồ bất cứ ngày nào trong ngày."
 
 msgid "He told her: Yada yada yada... and then she said: Blah, blah, blah..."
 msgstr ""
+"Ổng nói với bả: Yada yada yada... và sau đó bả nói: Blah, blah, blah..."
 
 msgid "An unknown force is being resurrected..."
 msgstr "Một lực lượng bóng tối đang hồi sinh..."
