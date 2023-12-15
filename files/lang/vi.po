@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-12-05 00:31+0000\n"
-"PO-Revision-Date: 2023-12-15 15:21+0700\n"
+"PO-Revision-Date: 2023-12-15 19:04+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: vi\n"
@@ -2770,7 +2770,7 @@ msgstr ""
 "Ngươi có chấp nhận không?"
 
 msgid "Followers"
-msgstr "Followers"
+msgstr ""
 
 msgid ""
 "The %{monster} is swayed by your diplomatic tongue, and offers to join your "
@@ -4090,13 +4090,13 @@ msgid "Support us at"
 msgstr "Hỗ trợ chúng tôi tại"
 
 msgid "local-donation-platform|https://www.patreon.com/fheroes2"
-msgstr "local-donation-platform|https://www.patreon.com/fheroes2"
+msgstr ""
 
 msgid "Connect with us at"
 msgstr "Kết nối với chúng tôi tại"
 
 msgid "local-social-network|https://www.facebook.com/groups/fheroes2"
-msgstr "local-social-network|https://www.facebook.com/groups/fheroes2"
+msgstr ""
 
 msgid "Need help with the game?"
 msgstr "Cần sự giúp đỡ với trò chơi?"
@@ -4192,16 +4192,16 @@ msgid "Town Themes"
 msgstr "Chủ đề Thị trấn"
 
 msgid "Alto Sax"
-msgstr "Alto Sax"
+msgstr ""
 
 msgid "Harpsichord and Piano"
-msgstr "Harpsichord and Piano"
+msgstr ""
 
 msgid "Basso Vocal"
-msgstr "Basso Vocal"
+msgstr ""
 
 msgid "Soprano Vocal"
-msgstr "Soprano Vocal"
+msgstr ""
 
 msgid "Recorded at %{recordingStudio}"
 msgstr "Thu âm tại %{recordingStudio}"
@@ -7670,7 +7670,7 @@ msgid "luck|Great"
 msgstr "Tuyệt"
 
 msgid "luck|Irish"
-msgstr "luck|Irish"
+msgstr ""
 
 msgid ""
 "Bad luck sometimes falls on your armies in combat, causing their attacks to "
@@ -7957,13 +7957,13 @@ msgid "Mine"
 msgstr "Mỏ"
 
 msgid "Burma shave."
-msgstr "Burma shave."
+msgstr ""
 
 msgid "Next sign 50 miles."
 msgstr "Chỉ dẫn kế tiếp cách 50 dặm."
 
 msgid "See Rock City."
-msgstr "See Rock City."
+msgstr ""
 
 msgid "This space for rent."
 msgstr "Chỗ này cho thuê."
@@ -7999,7 +7999,7 @@ msgid "Fountain"
 msgstr "Đài nước"
 
 msgid "Gazebo"
-msgstr "Gazebo"
+msgstr ""
 
 msgid "Genie Lamp"
 msgstr "Đèn Thần"
@@ -8170,7 +8170,7 @@ msgid "Hill Fort"
 msgstr "Pháo đài Trên đồi"
 
 msgid "Halfling Hole"
-msgstr "Halfling Hole"
+msgstr ""
 
 msgid "Mercenary Camp"
 msgstr "Trại Lính đánh thuê"
@@ -8197,19 +8197,19 @@ msgid "Artesian Spring"
 msgstr "Suối Nguồn"
 
 msgid "Troll Bridge"
-msgstr "Troll Bridge"
+msgstr ""
 
 msgid "Watering Hole"
 msgstr "Hố Nước"
 
 msgid "Witch's Hut"
-msgstr "Lều Phù thủy"
+msgstr ""
 
 msgid "Xanadu"
-msgstr "Xanadu"
+msgstr ""
 
 msgid "Lean-To"
-msgstr "Lean-To"
+msgstr ""
 
 msgid "Magellan's Maps"
 msgstr "Bản đồ Magellan"
@@ -8237,7 +8237,7 @@ msgid "Observation Tower"
 msgstr "Đài Quan sát"
 
 msgid "Freeman's Foundry"
-msgstr "Freeman's Foundry"
+msgstr ""
 
 msgid "Reefs"
 msgstr "Đá ngầm"
@@ -8288,7 +8288,7 @@ msgid "Shrub"
 msgstr "Cây bụi"
 
 msgid "Barrow Mounds"
-msgstr "Barrow Mounds"
+msgstr ""
 
 msgid "Random Artifact - Treasure"
 msgstr "Bảo vật Ngẫu nhiên - Châu báu"
@@ -8429,16 +8429,16 @@ msgid "Ogre Lords"
 msgstr ""
 
 msgid "Troll"
-msgstr "Quỷ lùn"
+msgstr ""
 
 msgid "Trolls"
-msgstr "Quỷ lùn"
+msgstr ""
 
 msgid "War Troll"
-msgstr "Quỷ lùn Chiến"
+msgstr ""
 
 msgid "War Trolls"
-msgstr "Quỷ lùn Chiến"
+msgstr ""
 
 msgid "Cyclopes"
 msgstr "Độc nhãn"
@@ -8597,16 +8597,16 @@ msgid "Archmagi"
 msgstr ""
 
 msgid "Giant"
-msgstr "To lớn"
+msgstr ""
 
 msgid "Giants"
-msgstr "To lớn"
+msgstr ""
 
 msgid "Titan"
-msgstr "Khổng lồ"
+msgstr ""
 
 msgid "Titans"
-msgstr "Khổng lồ"
+msgstr ""
 
 msgid "Skeletons"
 msgstr "Xương"
