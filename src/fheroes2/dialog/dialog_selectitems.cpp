@@ -920,34 +920,34 @@ void Dialog::selectTownType( int & type, int & color )
     // Neutral color.
     fheroes2::addGradientShadow( colorSpriteBorder, display, pos, { -5, 5 } );
     const fheroes2::Sprite & neutralColorSprite = fheroes2::AGG::GetICN( ICN::BRCREST, 7 );
-    colorRect.back() = { pos.x + 4, pos.y + 4, neutralColorSprite.width(), neutralColorSprite.height() };
-    fheroes2::Copy( neutralColorSprite, 0, 0, display, colorRect.back().x, colorRect.back().y, colorRect.back().width, colorRect.back().height );
+    colorRect.back() = { pos.x, pos.y, colorSpriteBorder.width(), colorSpriteBorder.height() };
+    fheroes2::Copy( neutralColorSprite, 0, 0, display, colorRect.back().x + 4, colorRect.back().y + 4, neutralColorSprite.width(), neutralColorSprite.height() );
     text.set( _( "doubleLinedRace|Neutral" ), fheroes2::FontType::smallWhite() );
-    text.draw( colorRect.back().x + ( colorRect.back().width - text.width() ) / 2, colorRect.back().y + colorRect.back().height + 8, display );
+    text.draw( colorRect.back().x + ( colorRect.back().width - text.width() ) / 2, colorRect.back().y + colorRect.back().height + 4, display );
 
     // Random race.
-    raceRect.back() = { pos.x + 2, pos.y + raceOffsetY + 4, raceImageWidth, raceImageHeight };
-    fheroes2::Copy( randomRaceSprite, 4, 4, display, raceRect.back().x, raceRect.back().y, raceImageWidth, raceImageHeight );
+    raceRect.back() = { pos.x - 2, pos.y + raceOffsetY, raceBorderWidth, raceBorderHeight };
+    fheroes2::Copy( randomRaceSprite, 4, 4, display, raceRect.back().x + 4, raceRect.back().y + 4, raceImageWidth, raceImageHeight );
     fheroes2::Blit( raceShadow, display, pos.x - 5, pos.y + raceOffsetY + 2 );
     text.set( _( "race|Random" ), fheroes2::FontType::smallWhite() );
-    text.draw( raceRect.back().x - 4, raceRect.back().y + raceRect.back().height + 8, raceBorderWidth, display );
+    text.draw( raceRect.back().x, raceRect.back().y + raceRect.back().height + 4, raceBorderWidth, display );
 
     pos.x += stepX;
     for ( uint32_t i = 0; i < 6; ++i ) {
         const fheroes2::Sprite & colorSprite = fheroes2::AGG::GetICN( ICN::BRCREST, i );
 
         fheroes2::addGradientShadow( colorSpriteBorder, display, pos, { -5, 5 } );
-        colorRect[i] = { pos.x + 4, pos.y + 4, colorSprite.width(), colorSprite.height() };
-        fheroes2::Copy( colorSprite, 0, 0, display, colorRect[i].x, colorRect[i].y, colorRect[i].width, colorRect[i].height );
+        colorRect[i] = { pos.x, pos.y, colorSpriteBorder.width(), colorSpriteBorder.height() };
+        fheroes2::Copy( colorSprite, 0, 0, display, colorRect[i].x + 4, colorRect[i].y + 4, colorSprite.width(), colorSprite.height() );
         text.set( Color::String( Color::IndexToColor( static_cast<int>( i ) ) ), fheroes2::FontType::smallWhite() );
-        text.draw( colorRect[i].x + ( colorRect[i].width - text.width() ) / 2, colorRect[i].y + colorRect[i].height + 8, display );
+        text.draw( colorRect[i].x + ( colorRect[i].width - text.width() ) / 2, colorRect[i].y + colorRect[i].height + 4, display );
 
         const fheroes2::Sprite & raceSprite = fheroes2::AGG::GetICN( ICN::NGEXTRA, 51U + i );
-        raceRect[i] = { pos.x + 2, pos.y + raceOffsetY + 4, raceImageWidth, raceImageHeight };
-        fheroes2::Copy( raceSprite, 4, 4, display, raceRect[i].x, raceRect[i].y, raceImageWidth, raceImageHeight );
+        raceRect[i] = { pos.x - 2, pos.y + raceOffsetY, raceBorderWidth, raceBorderHeight };
+        fheroes2::Copy( raceSprite, 4, 4, display, raceRect[i].x + 4, raceRect[i].y + 4, raceImageWidth, raceImageHeight );
         fheroes2::Blit( raceShadow, display, pos.x - 5, pos.y + raceOffsetY + 2 );
         text.set( Race::DoubleLinedString( Race::IndexToRace( static_cast<int>( i ) ) ), fheroes2::FontType::smallWhite() );
-        text.draw( raceRect[i].x - 4, raceRect[i].y + raceRect[i].height + 8, raceBorderWidth, display );
+        text.draw( raceRect[i].x, raceRect[i].y + raceRect[i].height + 4, raceBorderWidth, display );
 
         pos.x += stepX;
     }
@@ -1080,8 +1080,8 @@ void Dialog::selectTownType( int & type, int & color )
 
         // Update color and race borders.
         for ( int i = 0; i < 7; ++i ) {
-            fheroes2::Blit( ( i == townColor ) ? colorSpriteBorderSelected : colorSpriteBorder, display, colorRect[i].x - 4, colorRect[i].y - 4 );
-            fheroes2::Blit( ( i == townRace ) ? raceSpriteBorderSelected : raceSpriteBorder, display, raceRect[i].x - 4, raceRect[i].y - 4 );
+            fheroes2::Blit( ( i == townColor ) ? colorSpriteBorderSelected : colorSpriteBorder, display, colorRect[i].x, colorRect[i].y );
+            fheroes2::Blit( ( i == townRace ) ? raceSpriteBorderSelected : raceSpriteBorder, display, raceRect[i].x, raceRect[i].y );
         }
 
         display.render( background.totalArea() );
