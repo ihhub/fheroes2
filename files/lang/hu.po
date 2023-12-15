@@ -9887,7 +9887,7 @@ msgid "Dispel Magic"
 msgstr "Varázslatűzés"
 
 msgid "Removes all magic spells from a single target."
-msmsgstr "Eloszlat minden varászlatot a kiválasztott egységről."
+msgstr "Eloszlat minden varászlatot a kiválasztott egységről."
 
 msgid "Mass Dispel"
 msgstr "Teljes Varázslatűzés"
