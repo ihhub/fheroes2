@@ -9767,10 +9767,10 @@ msgid "Mass Haste"
 msgstr "Teljes Gyorsítás"
 
 msgid "Slows target to half movement rate."
-msgstr ""
+msgstr "Felére lassítja a kiválasztott lény sebességét."
 
 msgid "spell|Slow"
-msgstr ""
+msgstr "Lassítás"
 
 msgid "Mass Slow"
 msgstr "Teljes Lassítás"
@@ -9779,19 +9779,19 @@ msgid "Slows all enemies to half movement rate."
 msgstr "Felezi az összes ellenség sebességét."
 
 msgid "Clouds the affected creatures' eyes, preventing them from moving."
-msgstr ""
+msgstr "Elhomályosítja az érintett lény látását és megakadályozza a mozgásban."
 
 msgid "spell|Blind"
-msgstr ""
+msgstr "Vakítás"
 
 msgid "Bless"
 msgstr "Áldás"
 
 msgid "Causes the selected creatures to inflict maximum damage."
-msgstr ""
+msgstr "Maximális sebzést ad a kiválasztott lényeknek."
 
 msgid "Causes all of your units to inflict maximum damage."
-msgstr ""
+msgstr "Maximális sebzést ad az összes saját egységed."
 
 msgid "Mass Bless"
 msgstr "Teljes Áldás"
@@ -9812,19 +9812,19 @@ msgid "Steelskin"
 msgstr "Acélbőr"
 
 msgid "Causes the selected creatures to inflict minimum damage."
-msgstr "A kiválasztott egység a minimum sérülést szenvedi csak el támadáskor."
+msgstr "Minimálisra csökkenti a kiválasztott lények sebzését."
 
 msgid "Curse"
 msgstr "Átok"
 
 msgid "Causes all enemy troops to inflict minimum damage."
-msgstr ""
+msgstr "Minimálisra csökkenti az összes ellenséges lény sebzését."
 
 msgid "Mass Curse"
 msgstr "Teljes Átok"
 
 msgid "Damages all undead in the battle."
-msgstr ""
+msgstr "Megsebzi az összes élőhalott egységet a csatában."
 
 msgid "Holy Word"
 msgstr "Szent Ige"
@@ -9842,19 +9842,19 @@ msgid "Anti-Magic"
 msgstr "Antimágia"
 
 msgid "Prevents harmful magic against the selected creatures."
-msgstr ""
+msgstr "Megakadályozza a kártékony varázslatok idézését a kiválasztott egységeken."
 
 msgid "Dispel Magic"
 msgstr "Varázslatűzés"
 
 msgid "Removes all magic spells from a single target."
-msgstr ""
+msmsgstr "Eloszlat minden varászlatot a kiválasztott egységről."
 
 msgid "Mass Dispel"
 msgstr "Teljes Varázslatűzés"
 
 msgid "Removes all magic spells from all creatures."
-msgstr ""
+msgstr "Eloszlat minden varászlatot minden lényről."
 
 msgid "Causes a magic arrow to strike the selected target."
 msgstr "Varázsnyillal mér csapást a kiválasztott célpontra."
@@ -9863,7 +9863,7 @@ msgid "Magic Arrow"
 msgstr "Varázsnyíl"
 
 msgid "Berserker"
-msgstr ""
+msgstr "Őrjöngés"
 
 msgid "Causes a creature to attack its nearest neighbor."
 msgstr "A lény megtámadja a legközelebbi szomszédját."
@@ -9879,12 +9879,12 @@ msgid "Elemental Storm"
 msgstr "Elemi Vihar"
 
 msgid "Magical elements pour down on the battlefield, damaging all creatures."
-msgstr ""
+msgstr "Varázslat zúdul a csatatérre és minden lény sebződik."
 
 msgid ""
 "A rain of rocks strikes an area of the battlefield, damaging all nearby "
 "creatures."
-msgstr ""
+msgstr "Kőeső zúdul a csatatérre és minden lényt megsebez a közelben."
 
 msgid "Meteor Shower"
 msgstr "Meteoreső"
@@ -9902,12 +9902,14 @@ msgid ""
 "Brings a single enemy unit under your control if its hits are less than "
 "%{count} times the caster's spell power."
 msgstr ""
+"Átadja egy ellenséges egység irányítását, ha ütőereje kisebb, "
+"mint a varázserőd %{count}-szorosa."
 
 msgid "Cold Ray"
 msgstr "Jégsugár"
 
 msgid "Drains body heat from a single enemy unit."
-msgstr ""
+msgstr "Testhőt von el a kiválasztott ellenséges egységből."
 
 msgid "Cold Ring"
 msgstr "Jéggyűrű"
@@ -9915,7 +9917,7 @@ msgstr "Jéggyűrű"
 msgid ""
 "Drains body heat from all units surrounding the center point, but not "
 "including the center point."
-msgstr ""
+msgstr "Testhőt von el minden szomszédos egységből, kivéve a középpontban állót."
 
 msgid "Disrupting Ray"
 msgstr "Gyengítő Sugár"
@@ -9955,7 +9957,7 @@ msgid "Animate Dead"
 msgstr "Feltámasztás"
 
 msgid "Resurrects creatures from a damaged or dead undead unit permanently."
-msgstr ""
+msgstr "Maradandóan feltámaszt teremtményeket halott vagy sérült egységekből."
 
 msgid "Mirror Image"
 msgstr "Tükörkép"
@@ -10032,7 +10034,7 @@ msgid "View Resources"
 msgstr "Nyersaanyagok mutatása"
 
 msgid "Causes all artifacts across the land to become visible."
-msgstr ""
+msgstr "Minden varázstárgyat megmutat a vidéken."
 
 msgid "View Artifacts"
 msgstr "Varázstárgyak mutatása"
@@ -10066,9 +10068,11 @@ msgid ""
 "A friendly boat is one which you just built or were the most recent player "
 "to occupy."
 msgstr ""
+"Megidézi egy közeli partra a legközelebbi használaton kívüli baráti tulajdonban "
+"lévő hajót. Baráti hajó az, amit te építettél, vagy hősöd használt legutóbb."
 
 msgid "Allows the caster to magically transport to a nearby location."
-msgstr ""
+msgstr "Lehetővé teszi a megidéző számára, hogy egy közeli helyre teleportáljon."
 
 msgid "Dimension Door"
 msgstr "Dimenziókapu"
@@ -10092,12 +10096,14 @@ msgid ""
 msgstr "Megjósolja az összecsapás kimenetelét egy semleges csapattal szemben."
 
 msgid "Haunt"
-msgstr ""
+msgstr "Bánya elátkozás"
 
 msgid ""
 "Haunts a mine you control with Ghosts. This mine stops producing resources. "
 "(If I can't keep it, nobody will!)"
 msgstr ""
+"A bánya kísértjárta hellyé válik és nem termel többé. "
+"(Ha az enyém nem lehet, ne legyen másé sem!)"
 
 msgid "Set Earth Guardian"
 msgstr "Földelementál Őr"
@@ -10262,22 +10268,22 @@ msgid "The truth is out there."
 msgstr "Az igazság odakint van."
 
 msgid "The dark side is stronger."
-msgstr ""
+msgstr "A sötét oldal erősebb."
 
 msgid "The end of the world is near."
-msgstr ""
+msgstr "Közel a világvége."
 
 msgid "The bones of Lord Slayer are buried in the foundation of the arena."
-msgstr ""
+msgstr "Lord Slayer csontjai az aréna talapzatába vannak eltemetve."
 
 msgid "A Black Dragon will take out a Titan any day of the week."
 msgstr ""
 
 msgid "He told her: Yada yada yada... and then she said: Blah, blah, blah..."
-msgstr ""
+msgstr "Azt mondta a férfi: Yada yada yada... erre a nő válasza: blablabla..."
 
 msgid "An unknown force is being resurrected..."
-msgstr ""
+msgstr "Egy titokzatos erő kelt új életre ..."
 
 msgid ""
 "Check the newest version of the game at\n"
