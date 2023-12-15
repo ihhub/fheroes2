@@ -152,6 +152,10 @@ namespace
                                                 ICN::BUTTON_SMALL_MAX_GOOD,
                                                 ICN::BUTTON_SMALL_MAX_EVIL,
                                                 ICN::BUTTON_RESET_GOOD,
+                                                ICN::BUTTON_CASTLE_GOOD,
+                                                ICN::BUTTON_CASTLE_EVIL,
+                                                ICN::BUTTON_TOWN_GOOD,
+                                                ICN::BUTTON_TOWN_EVIL,
                                                 ICN::BUTTON_GUILDWELL_EXIT,
                                                 ICN::GOOD_CAMPAIGN_BUTTONS,
                                                 ICN::EVIL_CAMPAIGN_BUTTONS,
@@ -1763,6 +1767,22 @@ namespace fheroes2
 
                 break;
             }
+            case ICN::BUTTON_CASTLE_GOOD:
+            case ICN::BUTTON_CASTLE_EVIL: {
+                _icnVsSprite[id].resize( 2 );
+
+                createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], 80, gettext_noop( "CASTLE" ), id == ICN::BUTTON_CASTLE_EVIL );
+
+                break;
+            }
+            case ICN::BUTTON_TOWN_GOOD:
+            case ICN::BUTTON_TOWN_EVIL: {
+                _icnVsSprite[id].resize( 2 );
+
+                createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], 80, gettext_noop( "TOWN" ), id == ICN::BUTTON_TOWN_EVIL );
+
+                break;
+            }
             case ICN::UNIFORM_EVIL_MAX_BUTTON:
             case ICN::UNIFORM_EVIL_MIN_BUTTON:
             case ICN::UNIFORM_GOOD_MAX_BUTTON:
@@ -2607,6 +2627,10 @@ namespace fheroes2
             case ICN::BUTTON_SMALL_MAX_GOOD:
             case ICN::BUTTON_SMALL_MAX_EVIL:
             case ICN::BUTTON_RESET_GOOD:
+            case ICN::BUTTON_CASTLE_GOOD:
+            case ICN::BUTTON_CASTLE_EVIL:
+            case ICN::BUTTON_TOWN_GOOD:
+            case ICN::BUTTON_TOWN_EVIL:
             case ICN::BUTTON_GUILDWELL_EXIT:
             case ICN::GOOD_CAMPAIGN_BUTTONS:
             case ICN::EVIL_CAMPAIGN_BUTTONS:
@@ -4370,6 +4394,53 @@ namespace fheroes2
                         original._disableTransformLayer();
                         original.image()[280] = 117;
                     }
+                }
+
+                // An extra image for the neutral color.
+                if ( _icnVsSprite[id].size() == 7 ) {
+                    Sprite neutralShield( GetICN( ICN::SPELLS, 15 ) );
+                    if ( neutralShield.width() < 2 || neutralShield.height() < 2 ) {
+                        // We can not make a new image if there is no original shield image.
+                        return true;
+                    }
+
+                    // Make original shield image contour transparent.
+                    ReplaceColorIdByTransformId( neutralShield, neutralShield.image()[1], 1U );
+
+                    Sprite neutralColorSprite( _icnVsSprite[id][0].width(), _icnVsSprite[id][0].height() );
+                    neutralColorSprite.reset();
+                    Blit( neutralShield, neutralColorSprite, 8, 4 );
+
+                    // Make the background.
+                    uint8_t * imageData = neutralColorSprite.image();
+                    const uint8_t * transformData = neutralColorSprite.transform();
+                    const int32_t imageWidth = neutralColorSprite.width();
+                    const int32_t imageHeight = neutralColorSprite.height();
+                    const int32_t imageSize = imageWidth * imageHeight;
+                    const int32_t startValueX = 12 * imageWidth;
+                    const int32_t startValueY = 12 * imageHeight;
+
+                    for ( int32_t y = 0; y < imageHeight; ++y ) {
+                        const int32_t offsetY = y * imageWidth;
+                        const int32_t offsetValueY = y * startValueX;
+                        for ( int32_t x = 0; x < imageWidth; ++x ) {
+                            if ( transformData[x + offsetY] == 0U ) {
+                                // Skip pixels with image.
+                                continue;
+                            }
+
+                            const uint8_t colorValue = static_cast<uint8_t>( 10 + ( offsetValueY + ( imageWidth - x ) * startValueY ) / imageSize + ( x + y ) % 2 );
+                            imageData[x + offsetY] = ( ( imageWidth - x - 1 ) * imageHeight > offsetY ) ? colorValue : 44U - colorValue;
+                        }
+                    }
+
+                    // Make all image non-transparent.
+                    neutralColorSprite._disableTransformLayer();
+                    // We add shadow twice to make it more dark.
+                    addGradientShadow( neutralShield, neutralColorSprite, { 8, 4 }, { -2, 5 } );
+                    addGradientShadow( neutralShield, neutralColorSprite, { 8, 4 }, { -2, 5 } );
+
+                    _icnVsSprite[id].push_back( std::move( neutralColorSprite ) );
                 }
                 return true;
             }
