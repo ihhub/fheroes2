@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-05 00:31+0000\n"
+"POT-Creation-Date: 2023-12-15 09:12+0000\n"
 "PO-Revision-Date: 2022-09-23 16:01+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -191,6 +191,12 @@ msgid "MIN"
 msgstr "МІН"
 
 msgid "RESET"
+msgstr ""
+
+msgid "CASTLE"
+msgstr ""
+
+msgid "TOWN"
 msgstr ""
 
 msgid ""
@@ -3132,6 +3138,48 @@ msgstr "Мова"
 msgid "Select Ocean Object:"
 msgstr "Мова"
 
+#, fuzzy
+msgid "Castle/town placing"
+msgstr "Наладкі замка"
+
+msgid "doubleLinedRace|Neutral"
+msgstr ""
+
+msgid "race|Random"
+msgstr ""
+"Выпад-\n"
+"ковы"
+
+#, fuzzy
+msgid "Click to start placing the selected castle/town."
+msgstr "Пстрыкні, каб ухваліць абранае раздзяленне."
+
+#, fuzzy
+msgid "Click to select town placing."
+msgstr "Пстрыкніце сюды, каб выбраць сцэнар"
+
+#, fuzzy
+msgid "Click to select castle placing."
+msgstr "Пстрыкніце сюды, каб выбраць сцэнар"
+
+#, fuzzy
+msgid "%{color} %{race} %{townOrCastle}"
+msgstr "%{color} гулец"
+
+msgid "race|Neutral"
+msgstr ""
+
+msgid "You will place"
+msgstr ""
+
+#, fuzzy
+msgid "Click to select this class."
+msgstr "Пстрыкніце сюды, каб выбраць сцэнар"
+
+#, fuzzy
+msgid "Click to select this color."
+msgstr "Пстрыкніце сюды, каб выбраць сцэнар"
+
 msgid "Map Type:\n"
 msgstr ""
 
@@ -3471,6 +3519,13 @@ msgstr ""
 msgid "Ocean object must be placed on water."
 msgstr ""
 
+#, fuzzy
+msgid "Towns"
+msgstr "Горад"
+
+msgid "Towns cannot be placed on water."
+msgstr ""
+
 msgid "Ocean Objects"
 msgstr ""
 
@@ -3497,10 +3552,6 @@ msgstr ""
 
 msgid "Beach Objects"
 msgstr ""
-
-#, fuzzy
-msgid "Towns"
-msgstr "Горад"
 
 msgid "Treasures"
 msgstr ""
@@ -6965,14 +7016,6 @@ msgstr "Некрамант"
 msgid "Multi"
 msgstr ""
 
-msgid "race|Random"
-msgstr ""
-"Выпад-\n"
-"ковы"
-
-msgid "race|Neutral"
-msgstr ""
-
 msgid "doubleLined|Knight"
 msgstr "Рыцар"
 
@@ -7004,9 +7047,6 @@ msgid "doubleLinedRace|Random"
 msgstr ""
 "Выпад-\n"
 "ковы"
-
-msgid "doubleLinedRace|Neutral"
-msgstr ""
 
 msgid "speed|Standing"
 msgstr "На месцы"

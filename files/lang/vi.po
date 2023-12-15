@@ -197,6 +197,15 @@ msgstr "MIN"
 msgid "RESET"
 msgstr "CÀI LẠI"
 
+#, fuzzy
+msgid "CASTLE"
+msgstr ""
+"THỊ TRẤN/\n"
+"LÂU ĐÀI"
+
+msgid "TOWN"
+msgstr ""
+
 msgid ""
 "D\n"
 "I\n"
@@ -3353,6 +3362,46 @@ msgstr "Chọn Kho báu:"
 msgid "Select Ocean Object:"
 msgstr "Chọn Đối tượng Đại dương:"
 
+#, fuzzy
+msgid "Castle/town placing"
+msgstr "Lựa chọn Lâu đài"
+
+msgid "doubleLinedRace|Neutral"
+msgstr "Trung lập"
+
+msgid "race|Random"
+msgstr "Ngẫu nhiên"
+
+#, fuzzy
+msgid "Click to start placing the selected castle/town."
+msgstr "Nhấp để áp dụng độ phân giải đã chọn."
+
+#, fuzzy
+msgid "Click to select town placing."
+msgstr "Nhấp để xem thị trấn sau."
+
+#, fuzzy
+msgid "Click to select castle placing."
+msgstr "Nhấp vào đây để chọn kịch bản để chơi."
+
+#, fuzzy
+msgid "%{color} %{race} %{townOrCastle}"
+msgstr "%{color} %{race} tướng"
+
+msgid "race|Neutral"
+msgstr "Trung lập"
+
+msgid "You will place"
+msgstr ""
+
+#, fuzzy
+msgid "Click to select this class."
+msgstr "Nhấp vào đây để chọn kịch bản để chơi."
+
+#, fuzzy
+msgid "Click to select this color."
+msgstr "Nhấp vào đây để chọn kịch bản để chơi."
+
 msgid "Map Type:\n"
 msgstr "Kiểu Bản đồ:\n"
 
@@ -3693,6 +3742,13 @@ msgstr "Đối tượng đại dương"
 msgid "Ocean object must be placed on water."
 msgstr "Đối tượng đại dương phải đặt trên mặt nước."
 
+msgid "Towns"
+msgstr "Thị trấn"
+
+#, fuzzy
+msgid "Towns cannot be placed on water."
+msgstr "Quái vật không thể đặt trên nước."
+
 msgid "Ocean Objects"
 msgstr "Đối tượng Đại dương"
 
@@ -3719,9 +3775,6 @@ msgstr "Đối tượng Đất hoang"
 
 msgid "Beach Objects"
 msgstr "Đối tượng Biển"
-
-msgid "Towns"
-msgstr "Thị trấn"
 
 msgid "Treasures"
 msgstr "Kho báu"
@@ -7751,12 +7804,6 @@ msgstr "Chiêu hồn"
 msgid "Multi"
 msgstr "Nhiều"
 
-msgid "race|Random"
-msgstr "Ngẫu nhiên"
-
-msgid "race|Neutral"
-msgstr "Trung lập"
-
 msgid "doubleLined|Knight"
 msgstr "Hiệp sĩ"
 
@@ -7784,9 +7831,6 @@ msgstr "Nhiều"
 
 msgid "doubleLinedRace|Random"
 msgstr "Ngẫu nhiên"
-
-msgid "doubleLinedRace|Neutral"
-msgstr "Trung lập"
 
 msgid "speed|Standing"
 msgstr "Đứng"

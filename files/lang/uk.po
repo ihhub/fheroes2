@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-05 00:31+0000\n"
+"POT-Creation-Date: 2023-12-15 09:12+0000\n"
 "PO-Revision-Date: 2023-09-06 08:41+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -196,6 +196,15 @@ msgid "MIN"
 msgstr "МІН"
 
 msgid "RESET"
+msgstr ""
+
+#, fuzzy
+msgid "CASTLE"
+msgstr ""
+"МІСТА/\n"
+"ЗАМКИ"
+
+msgid "TOWN"
 msgstr ""
 
 msgid ""
@@ -3287,6 +3296,41 @@ msgstr "Оберіть Героя:"
 msgid "Select Ocean Object:"
 msgstr "Оберіть Артефакти:"
 
+msgid "Castle/town placing"
+msgstr ""
+
+msgid "doubleLinedRace|Neutral"
+msgstr ""
+
+msgid "race|Random"
+msgstr ""
+
+msgid "Click to start placing the selected castle/town."
+msgstr ""
+
+#, fuzzy
+msgid "Click to select town placing."
+msgstr "Натисніть щоб побачити наступне місто."
+
+msgid "Click to select castle placing."
+msgstr ""
+
+msgid "%{color} %{race} %{townOrCastle}"
+msgstr ""
+
+msgid "race|Neutral"
+msgstr ""
+
+msgid "You will place"
+msgstr ""
+
+msgid "Click to select this class."
+msgstr ""
+
+#, fuzzy
+msgid "Click to select this color."
+msgstr "Натисніть щоб побачити наступне місто."
+
 msgid "Map Type:\n"
 msgstr "Тип мапи:\n"
 
@@ -3612,6 +3656,13 @@ msgstr "Порожнє місце"
 msgid "Ocean object must be placed on water."
 msgstr ""
 
+msgid "Towns"
+msgstr "Міста"
+
+#, fuzzy
+msgid "Towns cannot be placed on water."
+msgstr "Це Місто не можна покращити до Замку."
+
 msgid "Ocean Objects"
 msgstr ""
 
@@ -3638,9 +3689,6 @@ msgstr "Об'єкти Пустки"
 
 msgid "Beach Objects"
 msgstr ""
-
-msgid "Towns"
-msgstr "Міста"
 
 msgid "Treasures"
 msgstr "Скарби"
@@ -7088,12 +7136,6 @@ msgstr "Некромант"
 msgid "Multi"
 msgstr ""
 
-msgid "race|Random"
-msgstr ""
-
-msgid "race|Neutral"
-msgstr ""
-
 msgid "doubleLined|Knight"
 msgstr ""
 
@@ -7120,9 +7162,6 @@ msgid "doubleLinedRace|Multi"
 msgstr ""
 
 msgid "doubleLinedRace|Random"
-msgstr ""
-
-msgid "doubleLinedRace|Neutral"
 msgstr ""
 
 msgid "speed|Standing"

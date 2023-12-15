@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-13 15:38+0000\n"
+"POT-Creation-Date: 2023-12-15 09:12+0000\n"
 "PO-Revision-Date: 2023-09-04 21:55+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -196,6 +196,15 @@ msgid "MIN"
 msgstr "MIN"
 
 msgid "RESET"
+msgstr ""
+
+#, fuzzy
+msgid "CASTLE"
+msgstr ""
+"VÁROS\n"
+"/VÁR"
+
+msgid "TOWN"
 msgstr ""
 
 msgid ""
@@ -3237,6 +3246,46 @@ msgstr "Kincs kiválasztása:"
 msgid "Select Ocean Object:"
 msgstr "Tengeri objektum kiválasztása:"
 
+#, fuzzy
+msgid "Castle/town placing"
+msgstr "Vár beállítások"
+
+msgid "doubleLinedRace|Neutral"
+msgstr "Semleges"
+
+msgid "race|Random"
+msgstr ""
+
+#, fuzzy
+msgid "Click to start placing the selected castle/town."
+msgstr "Kattints a kiválasztott képernyőfelbontás alkalmazásához."
+
+#, fuzzy
+msgid "Click to select town placing."
+msgstr "Kattints a következő város mutatásához."
+
+#, fuzzy
+msgid "Click to select castle placing."
+msgstr "Kattints ide, hogy kiválaszd melyik Küldetéssel játszol."
+
+#, fuzzy
+msgid "%{color} %{race} %{townOrCastle}"
+msgstr "%{color} %{race} hős"
+
+msgid "race|Neutral"
+msgstr ""
+
+msgid "You will place"
+msgstr ""
+
+#, fuzzy
+msgid "Click to select this class."
+msgstr "Kattints ide, hogy kiválaszd melyik Küldetéssel játszol."
+
+#, fuzzy
+msgid "Click to select this color."
+msgstr "Kattints ide, hogy kiválaszd melyik Küldetéssel játszol."
+
 msgid "Map Type:\n"
 msgstr "Térképtípus:\n"
 
@@ -3578,6 +3627,13 @@ msgstr "Tengeri objektum"
 msgid "Ocean object must be placed on water."
 msgstr "Tengeri objektumot vízre kell elhelyezni."
 
+msgid "Towns"
+msgstr "Városok"
+
+#, fuzzy
+msgid "Towns cannot be placed on water."
+msgstr "Vízen nem helyezhetők el lények."
+
 msgid "Ocean Objects"
 msgstr "Tengeri tárgyak"
 
@@ -3604,9 +3660,6 @@ msgstr "Pusztaság tárgyak"
 
 msgid "Beach Objects"
 msgstr "Tengerparti tárgyak"
-
-msgid "Towns"
-msgstr "Városok"
 
 msgid "Treasures"
 msgstr "Kincsek"
@@ -7154,15 +7207,15 @@ msgid ""
 "%{skill} gives your hero's catapult shots a greater chance to hit and do "
 "damage to castle walls."
 msgstr ""
-"A(z) %{skill} nagyobb esélyt ad a hősöd katapultjának a találatra és "
-"a várfal rombolására."
+"A(z) %{skill} nagyobb esélyt ad a hősöd katapultjának a találatra és a "
+"várfal rombolására."
 
 msgid ""
 "%{skill} gives your hero's catapult an extra shot, and each shot has a "
 "greater chance to hit and do damage to castle walls."
 msgstr ""
-"A(z) %{skill} egy plusz lövést és nagyobb esélyt ad a hősöd "
-"katapultjának a találatra és a várfal rombolására."
+"A(z) %{skill} egy plusz lövést és nagyobb esélyt ad a hősöd katapultjának a "
+"találatra és a várfal rombolására."
 
 msgid ""
 "%{skill} gives your hero's catapult an extra shot, and each shot "
@@ -7190,9 +7243,9 @@ msgid ""
 "%{skill} gives your hero a %{count} percent chance to learn any given 4th "
 "level spell (or below) that was cast by an enemy during combat."
 msgstr ""
-"A(z) %{skill} %{count} százaléknyi esélyt ad a hősnek, hogy az "
-"ellenfél által a csatában használt 4-es (vagy alacsonyabb) szintű "
-"varázslatot tanuljon el."
+"A(z) %{skill} %{count} százaléknyi esélyt ad a hősnek, hogy az ellenfél "
+"által a csatában használt 4-es (vagy alacsonyabb) szintű varázslatot "
+"tanuljon el."
 
 msgid ""
 "%{skill} allows %{count} percent of the creatures killed in combat to be "
@@ -7278,8 +7331,8 @@ msgid ""
 "Experience allows your heroes to go up levels, increasing their primary and "
 "secondary skills."
 msgstr ""
-"A tapasztalat lehetővé teszi, hogy a hősök elsődleges és másodlagos képességei "
-"fejlődjenek és szintet lépjenek."
+"A tapasztalat lehetővé teszi, hogy a hősök elsődleges és másodlagos "
+"képességei fejlődjenek és szintet lépjenek."
 
 msgid "Hero/Stats"
 msgstr "Hős statisztikái"
@@ -7402,12 +7455,6 @@ msgstr "Hullamágus"
 msgid "Multi"
 msgstr "Többszörös"
 
-msgid "race|Random"
-msgstr ""
-
-msgid "race|Neutral"
-msgstr ""
-
 msgid "doubleLined|Knight"
 msgstr "Lovag"
 
@@ -7441,9 +7488,6 @@ msgstr ""
 
 msgid "doubleLinedRace|Random"
 msgstr "Véletlen"
-
-msgid "doubleLinedRace|Neutral"
-msgstr "Semleges"
 
 msgid "speed|Standing"
 msgstr "Álló"
