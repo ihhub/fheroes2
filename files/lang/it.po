@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-05 00:31+0000\n"
+"POT-Creation-Date: 2023-12-15 09:12+0000\n"
 "PO-Revision-Date: 2022-12-03 04:36+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <it@li.org>\n"
@@ -175,6 +175,12 @@ msgid "MIN"
 msgstr ""
 
 msgid "RESET"
+msgstr ""
+
+msgid "CASTLE"
+msgstr ""
+
+msgid "TOWN"
 msgstr ""
 
 msgid ""
@@ -3216,6 +3222,46 @@ msgid "Select Ocean Object:"
 msgstr "Scegli artefatto:"
 
 #, fuzzy
+msgid "Castle/town placing"
+msgstr "Opzioni Castello"
+
+msgid "doubleLinedRace|Neutral"
+msgstr "Neutro"
+
+msgid "race|Random"
+msgstr "Casuale"
+
+#, fuzzy
+msgid "Click to start placing the selected castle/town."
+msgstr "Clicca per salvare la partita in corso."
+
+#, fuzzy
+msgid "Click to select town placing."
+msgstr "Clicca per andare alla città succ."
+
+#, fuzzy
+msgid "Click to select castle placing."
+msgstr "Clicca per salvare la partita in corso."
+
+#, fuzzy
+msgid "%{color} %{race} %{townOrCastle}"
+msgstr "Giocatore %{color}"
+
+msgid "race|Neutral"
+msgstr "Neutro"
+
+msgid "You will place"
+msgstr ""
+
+#, fuzzy
+msgid "Click to select this class."
+msgstr "Clicca per salvare la partita in corso."
+
+#, fuzzy
+msgid "Click to select this color."
+msgstr "Clicca per andare alla città succ."
+
+#, fuzzy
 msgid "Map Type:\n"
 msgstr "Tipo di mappa"
 
@@ -3569,6 +3615,13 @@ msgstr "Nessun oggetto"
 msgid "Ocean object must be placed on water."
 msgstr ""
 
+#, fuzzy
+msgid "Towns"
+msgstr "Castello"
+
+msgid "Towns cannot be placed on water."
+msgstr ""
+
 msgid "Ocean Objects"
 msgstr ""
 
@@ -3598,10 +3651,6 @@ msgstr "Terra sterile"
 
 msgid "Beach Objects"
 msgstr ""
-
-#, fuzzy
-msgid "Towns"
-msgstr "Castello"
 
 #, fuzzy
 msgid "Treasures"
@@ -7167,12 +7216,6 @@ msgstr "Negromante"
 msgid "Multi"
 msgstr "Multiplo"
 
-msgid "race|Random"
-msgstr "Casuale"
-
-msgid "race|Neutral"
-msgstr "Neutro"
-
 msgid "doubleLined|Knight"
 msgstr "Cavaliere"
 
@@ -7200,9 +7243,6 @@ msgstr "Multiplo"
 
 msgid "doubleLinedRace|Random"
 msgstr "Casuale"
-
-msgid "doubleLinedRace|Neutral"
-msgstr "Neutro"
 
 msgid "speed|Standing"
 msgstr "Fermo"
