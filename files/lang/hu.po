@@ -8942,10 +8942,12 @@ msgid ""
 msgstr ""
 
 msgid "Skullcap"
-msgstr "Csontsapka"
+msgstr "Koponyacsont sapka"
 
 msgid "The %{name} halves the casting cost of all mind influencing spells."
 msgstr ""
+"A %{name} felére csökkenti minden elmére ható varázslat varázslatpont-"
+"igényét."
 
 msgid ""
 "A brief stop at an improbable rural inn yields an exchange of money, tales, "
@@ -8956,7 +8958,7 @@ msgid "Ice Cloak"
 msgstr "Jégköpeny"
 
 msgid "The %{name} halves all damage your troops take from cold spells."
-msgstr ""
+msgstr "A %{name} felére csökkenti a fagy-varázslatok által okozott sérüléseket."
 
 msgid ""
 "Responding to the panicked cries of a damsel in distress, you discover a "
@@ -8968,7 +8970,7 @@ msgid "Fire Cloak"
 msgstr "Tűzköpeny"
 
 msgid "The %{name} halves all damage your troops take from fire spells."
-msgstr ""
+msgstr "A %{name} felére csökkenti a tűz-varázslatok által okozott sérüléseket."
 
 msgid ""
 "You've come upon a fight between a Necromancer and a Paladin. The "
@@ -8981,7 +8983,7 @@ msgid "Lightning Helm"
 msgstr "Villám Sisak"
 
 msgid "The %{name} halves all damage your troops take from lightning spells."
-msgstr ""
+msgstr "A %{name} felére csökkenti a villám-varázslatok által okozott sérüléseket."
 
 msgid ""
 "A traveling tinker in need of supplies offers you a helm with a thunderbolt "
@@ -8996,6 +8998,8 @@ msgid ""
 "The %{name} causes your cold spells to do %{count} percent more damage to "
 "enemy troops."
 msgstr ""
+"A %{name} %{count} százalékkal megnöveli a fagy-varázslataid hatásosságát az "
+"ellenséges csapatokon."
 
 msgid ""
 "An icicle withstanding the full heat of the noonday sun attracts your "
@@ -9010,6 +9014,8 @@ msgid ""
 "The %{name} causes your fire spells to do %{count} percent more damage to "
 "enemy troops."
 msgstr ""
+"A %{name} %{count} százalékkal megnöveli a tűz-varázslataid hatásosságát az "
+"ellenséges csapatokon."
 
 msgid ""
 "Your wanderings bring you into contact with a tribe of ape-like beings using "
@@ -9025,6 +9031,8 @@ msgid ""
 "The %{name} causes your lightning spells to do %{count} percent more damage "
 "to enemy troops."
 msgstr ""
+"A %{name} %{count} százalékkal megnöveli a villám-varázslataid hatásosságát "
+"az ellenséges csapatokon."
 
 msgid ""
 "While waiting out a storm, a lighting bolt strikes a nearby cottage's "
@@ -9037,7 +9045,7 @@ msgid "Snake-Ring"
 msgstr "Kígyógyűrű"
 
 msgid "The %{name} halves the casting cost of all your bless spells."
-msgstr ""
+msgstr "A %{name} felére csökkenti az áldás varázslat varázslatpont-igényét."
 
 msgid ""
 "You've found an oddly shaped ring on the finger of a long dead traveler. The "
@@ -9050,7 +9058,7 @@ msgstr "Ankh"
 msgid ""
 "The %{name} doubles the effectiveness of all your resurrect and animate "
 "spells."
-msgstr ""
+msgstr "A %{name} megduplázza a feltámasztó varázslatok hatásosságát."
 
 msgid ""
 "A fierce windstorm reveals the entrance to a buried tomb. Your investigation "
@@ -9062,7 +9070,7 @@ msgid "Book of Elements"
 msgstr "Elemek Könyve"
 
 msgid "The %{name} doubles the effectiveness of all your summoning spells."
-msgstr ""
+msgstr "A %{name} megduplázza az idéző varázslatok hatásosságát."
 
 msgid ""
 "You come across a conjurer who begs to accompany you and your army awhile "
@@ -9071,10 +9079,10 @@ msgid ""
 msgstr ""
 
 msgid "Elemental Ring"
-msgstr "Elemi Gyűrű"
+msgstr "Négy elem gyűrű"
 
 msgid "The %{name} halves the casting cost of all summoning spells."
-msgstr ""
+msgstr "A %{name} felére csökkenti az idéző varázslatok varázslatpont-igényét."
 
 msgid ""
 "While pausing to rest, you notice a bobcat climbing a short tree to get at a "
@@ -9086,7 +9094,7 @@ msgid "Holy Pendant"
 msgstr "Szent Nyakék"
 
 msgid "The %{name} makes all your troops immune to curse spells."
-msgstr ""
+msgstr "A %{name} immunissá teszi a csapataidat az átok varázslatra."
 
 msgid ""
 "In your wanderings you come across a hermit living in a small, tidy hut. "
@@ -9098,7 +9106,7 @@ msgid "Pendant of Free Will"
 msgstr "Szabad Akarat Nyakék"
 
 msgid "The %{name} makes all your troops immune to hypnotize spells."
-msgstr ""
+msgstr "A %{name} immunissá teszi a csapataidat a hipnózis varázslatra."
 
 msgid ""
 "Responding to cries for help, you find river Sprites making a sport of "
@@ -9111,7 +9119,7 @@ msgid "Pendant of Life"
 msgstr "Élet Nyakék"
 
 msgid "The %{name} makes all your troops immune to death spells."
-msgstr ""
+msgstr "A %{name} immunissá teszi a csapataidat a halál varázslatokra."
 
 msgid ""
 "A brief roadside encounter with a small caravan and a game of knucklebones "
@@ -9120,10 +9128,10 @@ msgid ""
 msgstr ""
 
 msgid "Serenity Pendant"
-msgstr "Tisztaság Nyakék"
+msgstr "Higgadtság nyakék"
 
 msgid "The %{name} makes all your troops immune to berserk spells."
-msgstr ""
+msgstr "A %{name} immunissá teszi a csapataidat az őrjöngés varázslatra."
 
 msgid ""
 "The sounds of combat draw you to the scene of a fight between an old "
@@ -9136,7 +9144,7 @@ msgid "Seeing-eye Pendant"
 msgstr "Látás Nyakék"
 
 msgid "The %{name} makes all your troops immune to blindness spells."
-msgstr ""
+msgstr "A %{name} immunissá teszi a csapataidat a vakítás varázslatra."
 
 msgid ""
 "You come upon a very old woman, long blind from cataracts and dying alone. "
@@ -9146,10 +9154,10 @@ msgid ""
 msgstr ""
 
 msgid "Kinetic Pendant"
-msgstr "Mozgás Nyakék"
+msgstr "Eleven nyakék"
 
 msgid "The %{name} makes all your troops immune to paralyze spells."
-msgstr ""
+msgstr "A %{name} immunissá teszi a csapataidat a paralízis varázslatra."
 
 msgid ""
 "You come across a golem wearing a glowing pendant and blocking your way. "
@@ -9161,7 +9169,7 @@ msgid "Pendant of Death"
 msgstr "Halál Nyakék"
 
 msgid "The %{name} makes all your troops immune to holy spells."
-msgstr ""
+msgstr "A %{name} immunissá teszi a csapataidat a szent varázslatokra."
 
 msgid ""
 "A quick and deadly battle with a Necromancer wins you his magical pendant. "
@@ -9173,7 +9181,7 @@ msgid "Wand of Negation"
 msgstr "Tagadás Pálca"
 
 msgid "The %{name} makes all your troops immune to dispel magic spells."
-msgstr ""
+msgstr "A %{name} megvédi a csapataidat a varázslatoszlató varázslattól."
 
 msgid ""
 "You meet an old Wizard friend of yours traveling in the opposite direction. "
@@ -9304,7 +9312,7 @@ msgid ""
 msgstr ""
 
 msgid "Endless Vial of Mercury"
-msgstr "Végtelen Higanyzacskó"
+msgstr "Végtelen Higanyfiola"
 
 msgid "The %{name} provides %{count} unit of mercury per day."
 msgstr "A(z) %{name} napi %{count} higanyt biztosít neked."
@@ -9316,7 +9324,7 @@ msgid ""
 msgstr ""
 
 msgid "Endless Pouch of Gems"
-msgstr "Végtelen Drágakőzacskó"
+msgstr "Végtelen Drágakőerszény"
 
 msgid "The %{name} provides %{count} unit of gems per day."
 msgstr "A(z) %{name} napi %{count} drágakövet biztosít neked."
@@ -9413,7 +9421,7 @@ msgid "Dummy 1"
 msgstr "Próba 1"
 
 msgid "The reserved artifact."
-msgstr " egy varázstárggyal"
+msgstr "A félretett varázstárgy."
 
 msgid "Dummy 2"
 msgstr "Próba 2"
@@ -9425,7 +9433,7 @@ msgid "Dummy 4"
 msgstr "Próba 4"
 
 msgid "Spell Scroll"
-msgstr "Varázstekercs"
+msgstr "Varázsige tekercs"
 
 msgid ""
 "This %{name} gives your hero the ability to cast the %{spell} spell if your "
@@ -9503,7 +9511,7 @@ msgid ""
 msgstr ""
 
 msgid "Crystal Ball"
-msgstr "Kristály Gömb"
+msgstr "Kristálygömb"
 
 msgid ""
 "The %{name} lets you get more specific information about monsters, enemy "
