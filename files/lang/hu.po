@@ -9079,7 +9079,7 @@ msgid ""
 msgstr ""
 
 msgid "Elemental Ring"
-msgstr "Négy elem gyűrű"
+msgstr "Elemi Gyűrű"
 
 msgid "The %{name} halves the casting cost of all summoning spells."
 msgstr "A %{name} felére csökkenti az idéző varázslatok varázslatpont-igényét."
