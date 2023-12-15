@@ -38,6 +38,8 @@
 #include "icn.h"
 #include "localevent.h"
 #include "logging.h"
+#include "map_format_helper.h"
+#include "map_format_info.h"
 #include "maps.h"
 #include "maps_fileinfo.h"
 #include "math_base.h"
@@ -255,8 +257,7 @@ namespace Editor
             if ( le.MouseClickLeft( scratchMap.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::EDITOR_FROM_SCRATCH_MAP_MENU ) ) {
                 const Maps::mapsize_t mapSize = selectMapSize();
                 if ( mapSize != Maps::ZERO ) {
-                    // TODO: Put this call to the 'world' instance to a separate '.cpp' file were will be all map editing functions.
-                    world.NewMaps( mapSize, mapSize );
+                    world.generateForEditor( mapSize );
 
                     fheroes2::fadeOutDisplay();
                     Game::setDisplayFadeIn();
@@ -299,21 +300,31 @@ namespace Editor
 
         fheroes2::validateFadeInAndRender();
 
-        const MapsFileInfoList lists = Maps::prepareResurrectionMapsFileInfoList();
+        const MapsFileInfoList lists = Maps::getResurrectionMapFileInfos();
         if ( lists.empty() ) {
             fheroes2::showStandardTextMessage( _( "Warning" ), _( "No maps available!" ), Dialog::OK );
             return fheroes2::GameMode::EDITOR_MAIN_MENU;
         }
 
         const Maps::FileInfo * fileInfo = Dialog::SelectScenario( lists );
-
-        if ( fileInfo ) {
-            fheroes2::showStandardTextMessage( _( "Warning!" ), "You have selected:\n" + fileInfo->name + "\n But the Map Editor is still in development.", Dialog::OK );
-        }
-        else {
-            showWIPInfo();
+        if ( fileInfo == nullptr ) {
+            return fheroes2::GameMode::EDITOR_MAIN_MENU;
         }
 
-        return fheroes2::GameMode::EDITOR_MAIN_MENU;
+        Maps::Map_Format::MapFormat map;
+        if ( !Maps::Map_Format::loadMap( fileInfo->file, map ) ) {
+            fheroes2::showStandardTextMessage( _( "Warning!" ), "Failed to load the map.", Dialog::OK );
+            return fheroes2::GameMode::CANCEL;
+        }
+
+        if ( !Maps::readMapInEditor( map ) ) {
+            fheroes2::showStandardTextMessage( _( "Warning!" ), "Failed to read the map.", Dialog::OK );
+            return fheroes2::GameMode::CANCEL;
+        }
+
+        fheroes2::fadeOutDisplay();
+        Game::setDisplayFadeIn();
+
+        return Interface::EditorInterface::Get().startEdit();
     }
 }

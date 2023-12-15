@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-09 03:47+0000\n"
+"POT-Creation-Date: 2023-12-15 09:12+0000\n"
 "PO-Revision-Date: 2022-10-01 20:20+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Turkish <tr@li.org>\n"
@@ -175,6 +175,15 @@ msgstr ""
 
 msgid "MIN"
 msgstr "MİN"
+
+msgid "RESET"
+msgstr ""
+
+msgid "CASTLE"
+msgstr ""
+
+msgid "TOWN"
+msgstr ""
 
 msgid ""
 "D\n"
@@ -903,14 +912,9 @@ msgstr "Güç Becerisini Ayarla"
 msgid "Set Knowledge Skill"
 msgstr "Bilgi Becerisini Ayarla"
 
-msgid "%{race1} %{name1}"
+#, fuzzy
+msgid "%{race1} %{name1} vs %{race2} %{name2}"
 msgstr "%{race1} %{name1}"
-
-msgid "vs"
-msgstr "karşı"
-
-msgid "%{race2} %{name2}"
-msgstr "%{race2} %{name2}"
 
 msgid "Monsters"
 msgstr "Canavarlar"
@@ -2772,6 +2776,15 @@ msgstr ""
 msgid "Show extra information such as FPS and current time."
 msgstr ""
 
+msgid "Hotkey: "
+msgstr ""
+
+msgid "Category: "
+msgstr ""
+
+msgid "Event: "
+msgstr ""
+
 msgid "Hot Keys:"
 msgstr ""
 
@@ -3044,6 +3057,9 @@ msgstr ""
 msgid "%{color} %{race} hero"
 msgstr ""
 
+msgid "Terrain object"
+msgstr ""
+
 msgid "Select Skill:"
 msgstr ""
 
@@ -3063,10 +3079,50 @@ msgstr ""
 msgid "Select Treasure:"
 msgstr "Büyü hedefini seç"
 
+#, fuzzy
+msgid "Select Ocean Object:"
+msgstr "Büyü hedefini seç"
+
+msgid "Castle/town placing"
+msgstr ""
+
+msgid "doubleLinedRace|Neutral"
+msgstr ""
+
+msgid "race|Random"
+msgstr ""
+
+msgid "Click to start placing the selected castle/town."
+msgstr ""
+
+msgid "Click to select town placing."
+msgstr ""
+
+msgid "Click to select castle placing."
+msgstr ""
+
+msgid "%{color} %{race} %{townOrCastle}"
+msgstr ""
+
+msgid "race|Neutral"
+msgstr ""
+
+msgid "You will place"
+msgstr ""
+
+msgid "Click to select this class."
+msgstr ""
+
+msgid "Click to select this color."
+msgstr ""
+
 msgid "Map Type:\n"
 msgstr ""
 
 msgid "The Succession Wars"
+msgstr ""
+
+msgid "Resurrection"
 msgstr ""
 
 msgid "Lose all your heroes and towns."
@@ -3311,6 +3367,9 @@ msgstr ""
 msgid "Best Monster:"
 msgstr ""
 
+msgid "Map filename"
+msgstr ""
+
 msgid ""
 "Are you sure you want to load a new map? (Any unsaved changes to the current "
 "map will be lost.)"
@@ -3346,6 +3405,9 @@ msgstr ""
 msgid "Monster"
 msgstr ""
 
+msgid "Objects cannot be placed outside the map."
+msgstr ""
+
 msgid "Monsters cannot be placed on water."
 msgstr ""
 
@@ -3368,6 +3430,18 @@ msgid "Artifacts"
 msgstr ""
 
 msgid "Artifacts cannot be placed on water."
+msgstr ""
+
+msgid "Ocean object"
+msgstr ""
+
+msgid "Ocean object must be placed on water."
+msgstr ""
+
+msgid "Towns"
+msgstr ""
+
+msgid "Towns cannot be placed on water."
 msgstr ""
 
 msgid "Ocean Objects"
@@ -3395,9 +3469,6 @@ msgid "Wasteland Objects"
 msgstr ""
 
 msgid "Beach Objects"
-msgstr ""
-
-msgid "Towns"
 msgstr ""
 
 msgid "Treasures"
@@ -4209,6 +4280,32 @@ msgid ""
 "place only on the next turn."
 msgstr ""
 
+msgid "Default Actions"
+msgstr ""
+
+msgid "Global Actions"
+msgstr ""
+
+msgid "Main Menu"
+msgstr ""
+
+msgid "World Map"
+msgstr ""
+
+#, fuzzy
+msgid "Battle Screen"
+msgstr "Kahraman Ekranı"
+
+#, fuzzy
+msgid "Town Screen"
+msgstr "Kahraman Ekranı"
+
+msgid "Army Actions"
+msgstr ""
+
+msgid "Editor"
+msgstr ""
+
 #, fuzzy
 msgid "The save file is corrupted."
 msgstr "Ayna görüntüsü oluşturuldu."
@@ -4226,8 +4323,8 @@ msgid "This file contains a save with an invalid game type."
 msgstr ""
 
 msgid ""
-"This file was saved for a \"The Price of Loyalty\" map, but the "
-"corresponding game assets have not been provided to the engine."
+"This save file requires \"The Price of Loyalty\" game assets, but they have "
+"not been provided to the engine."
 msgstr ""
 
 msgid "This saved game is localized to '"
@@ -4302,9 +4399,6 @@ msgid ""
 " menu. \n"
 "\n"
 "Enjoy the game!"
-msgstr ""
-
-msgid "Editor"
 msgstr ""
 
 msgid "The Editor requires \"The Price of Loyalty\" expansion files to work."
@@ -4796,9 +4890,6 @@ msgid "Try searching on clear ground."
 msgstr ""
 
 msgid "A miniature view of the known world. Left click to move viewing area."
-msgstr ""
-
-msgid "World Map"
 msgstr ""
 
 msgid "Month: %{month} Week: %{week}"
@@ -6793,12 +6884,6 @@ msgstr ""
 msgid "Multi"
 msgstr ""
 
-msgid "race|Random"
-msgstr ""
-
-msgid "race|Neutral"
-msgstr ""
-
 msgid "doubleLined|Knight"
 msgstr ""
 
@@ -6823,9 +6908,6 @@ msgid "doubleLinedRace|Multi"
 msgstr ""
 
 msgid "doubleLinedRace|Random"
-msgstr ""
-
-msgid "doubleLinedRace|Neutral"
 msgstr ""
 
 msgid "speed|Standing"
@@ -9639,3 +9721,9 @@ msgid ""
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
 msgstr ""
+
+#~ msgid "vs"
+#~ msgstr "karşı"
+
+#~ msgid "%{race2} %{name2}"
+#~ msgstr "%{race2} %{name2}"

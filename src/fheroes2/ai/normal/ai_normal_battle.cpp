@@ -26,6 +26,7 @@
 #include <cstdint>
 #include <map>
 #include <memory>
+#include <numeric>
 #include <ostream>
 #include <set>
 #include <string>
@@ -82,9 +83,9 @@ namespace AI
     bool IsOutcomeImproved( const MeleeAttackOutcome & newOutcome, const MeleeAttackOutcome & previous )
     {
         // Composite priority criteria:
-        // Primary - Enemy is within move range and can be attacked this turn
-        // Secondary - Position value
-        // Tertiary - Enemy unit threat
+        // Primary - whether the enemy unit can be attacked during the current turn
+        // Secondary - position value
+        // Tertiary - enemy unit's threat
         return ( newOutcome.canAttackImmediately && !previous.canAttackImmediately )
                || ( newOutcome.canAttackImmediately == previous.canAttackImmediately
                     && ValueHasImproved( newOutcome.positionValue, previous.positionValue, newOutcome.attackValue, previous.attackValue ) );
@@ -102,28 +103,10 @@ namespace AI
         return 0;
     }
 
-    int32_t optimalAttackTarget( const Unit & attacker, const Unit & target, const int32_t from )
-    {
-        assert( Board::GetDistance( target.GetPosition(), from ) == 1 );
-
-        const int32_t headIndex = target.GetHeadIndex();
-        const int32_t tailIndex = target.GetTailIndex();
-
-        if ( !Board::isNearIndexes( from, tailIndex ) ) {
-            return headIndex;
-        }
-
-        if ( attacker.isDoubleCellAttack() && Board::isNearIndexes( from, headIndex )
-             && doubleCellAttackValue( attacker, target, from, headIndex ) > doubleCellAttackValue( attacker, target, from, tailIndex ) ) {
-            return headIndex;
-        }
-
-        return tailIndex;
-    }
-
     std::pair<int32_t, int> optimalAttackVector( const Unit & attacker, const Unit & target, const Position & attackPos )
     {
-        assert( attackPos.GetHead() != nullptr && Board::CanAttackTargetFromPosition( attacker, target, attackPos.GetHead()->GetIndex() ) );
+        assert( attackPos.GetHead() != nullptr && ( !attacker.isWide() || attackPos.GetTail() != nullptr ) );
+        assert( Board::CanAttackTargetFromPosition( attacker, target, attackPos.GetHead()->GetIndex() ) );
 
         const Position & targetPos = target.GetPosition();
 
@@ -170,75 +153,118 @@ namespace AI
         return bestAttackVector;
     }
 
-    int32_t optimalAttackValue( const Unit & attacker, const Unit & target, const int32_t from )
+    int32_t optimalAttackValue( const Unit & attacker, const Unit & target, const Position & attackPos )
     {
-        if ( attacker.isDoubleCellAttack() ) {
-            const int32_t targetCell = optimalAttackTarget( attacker, target, from );
-            return target.evaluateThreatForUnit( attacker ) + doubleCellAttackValue( attacker, target, from, targetCell );
-        }
+        assert( attackPos.GetHead() != nullptr && ( !attacker.isWide() || attackPos.GetTail() != nullptr ) );
 
         if ( attacker.isAllAdjacentCellsAttack() ) {
-            Position position = Position::GetPosition( attacker, from );
-
-            if ( position.GetHead() == nullptr || ( attacker.isWide() && position.GetTail() == nullptr ) ) {
-                DEBUG_LOG( DBG_BATTLE, DBG_WARN, "Invalid position for " << attacker.String() << ", target: " << target.String() << ", cell: " << from )
-
-                return 0;
-            }
-
-            Indexes aroundAttacker = Board::GetAroundIndexes( position );
+            const Board * board = Arena::GetBoard();
 
             std::set<const Unit *> unitsUnderAttack;
-            Board * board = Arena::GetBoard();
-            for ( const int32_t index : aroundAttacker ) {
+
+            for ( const int32_t index : Board::GetAroundIndexes( attackPos ) ) {
                 const Unit * unit = board->at( index ).GetUnit();
-                if ( unit != nullptr && unit->GetColor() != attacker.GetCurrentColor() ) {
-                    unitsUnderAttack.insert( unit );
+
+                if ( unit == nullptr || unit->GetColor() == attacker.GetCurrentColor() ) {
+                    continue;
                 }
+
+                unitsUnderAttack.insert( unit );
             }
 
-            int32_t attackValue = 0;
-            for ( const Unit * unit : unitsUnderAttack ) {
-                attackValue += unit->evaluateThreatForUnit( attacker );
-            }
-
-            return attackValue;
+            return std::accumulate( unitsUnderAttack.begin(), unitsUnderAttack.end(), static_cast<int32_t>( 0 ),
+                                    [&attacker]( const int32_t total, const Unit * unit ) { return total + unit->evaluateThreatForUnit( attacker ); } );
         }
 
-        return target.evaluateThreatForUnit( attacker );
+        int32_t attackValue = target.evaluateThreatForUnit( attacker );
+
+        // A double cell attack should only be considered if the attacker is actually able to attack the target from the given attack position. Otherwise, the attacker
+        // can at least block the target if the target is a shooter, so this position can be valuable in any case.
+        if ( attacker.isDoubleCellAttack() && Board::CanAttackTargetFromPosition( attacker, target, attackPos.GetHead()->GetIndex() ) ) {
+            const auto [attackTargetIdx, attackDirection] = optimalAttackVector( attacker, target, attackPos );
+            assert( Board::isValidDirection( attackTargetIdx, Board::GetReflectDirection( attackDirection ) ) );
+
+            attackValue
+                += doubleCellAttackValue( attacker, target, Board::GetIndexDirection( attackTargetIdx, Board::GetReflectDirection( attackDirection ) ), attackTargetIdx );
+        }
+
+        return attackValue;
     }
 
-    std::vector<int32_t> evaluatePotentialAttackPositions( const Arena & arena, const Unit & attacker )
+    using PositionValues = std::map<Position, int32_t>;
+
+    PositionValues evaluatePotentialAttackPositions( Arena & arena, const Unit & attacker )
     {
         // Attacking unit can be under the influence of the Hypnotize spell
         Units enemies( arena.getEnemyForce( attacker.GetCurrentColor() ).getUnits(), &attacker );
 
-        // For each cell, choose the maximum attack value among the nearby melee units and then add the sum of the attack values of nearby archers to encourage the use of
-        // attack positions that block archers
+        // For each position near enemy units, select the maximum attack value among neighboring enemy melee units, and then add the sum of the attack values of
+        // neighboring enemy archers to encourage the use of attacking positions that block these archers
         std::sort( enemies.begin(), enemies.end(), []( const Unit * unit1, const Unit * unit2 ) { return !unit1->isArchers() && unit2->isArchers(); } );
 
-        std::vector<int32_t> result( ARENASIZE, 0 );
+        PositionValues result;
 
         for ( const Unit * enemyUnit : enemies ) {
             assert( enemyUnit != nullptr && enemyUnit->isValid() );
 
-            for ( const int32_t nearbyIdx : Board::GetAroundIndexes( *enemyUnit ) ) {
-                assert( nearbyIdx >= 0 && static_cast<size_t>( nearbyIdx ) < result.size() );
+            std::set<Position> processedPositions;
 
-                const Cell * nearbyCell = Board::GetCell( nearbyIdx );
-                assert( nearbyCell != nullptr );
+            const std::array<int32_t, 2> enemyUnitIndexes = { enemyUnit->GetHeadIndex(), enemyUnit->GetTailIndex() };
 
-                if ( !nearbyCell->isPassableForUnit( attacker ) ) {
+            for ( const int32_t enemyUnitIdx : enemyUnitIndexes ) {
+                if ( !Board::isValidIndex( enemyUnitIdx ) ) {
                     continue;
                 }
 
-                const int32_t attackValue = optimalAttackValue( attacker, *enemyUnit, nearbyIdx );
+                // Wide attacker can occupy positions from which it is able to block or attack several units at once, even if there are not one but two cells between
+                // these units, e.g. like this:
+                //
+                // | | | |U|
+                // | |A|A| |
+                // |U| | | |
+                //
+                // It is necessary to correctly evaluate such a position as a position located "nearby" in relation to both units.
+                for ( const int32_t idx : Board::GetDistanceIndexes( enemyUnitIdx, attacker.isWide() ? 2 : 1 ) ) {
+                    const Position pos = Position::GetPosition( attacker, idx );
+                    if ( pos.GetHead() == nullptr ) {
+                        continue;
+                    }
 
-                if ( enemyUnit->isArchers() ) {
-                    result[nearbyIdx] += attackValue;
-                }
-                else {
-                    result[nearbyIdx] = std::max( result[nearbyIdx], attackValue );
+                    assert( !attacker.isWide() || pos.GetTail() != nullptr );
+
+                    const uint32_t dist = Board::GetDistance( pos, enemyUnit->GetPosition() );
+                    assert( dist > 0 );
+
+                    if ( dist != 1 ) {
+                        continue;
+                    }
+
+                    if ( !arena.isPositionReachable( attacker, pos, false ) ) {
+                        continue;
+                    }
+
+                    const auto [dummy, inserted] = processedPositions.insert( pos );
+                    if ( !inserted ) {
+                        continue;
+                    }
+
+                    const int32_t attackValue = optimalAttackValue( attacker, *enemyUnit, pos );
+                    const auto iter = result.find( pos );
+
+                    if ( iter == result.end() ) {
+                        result.try_emplace( pos, attackValue );
+                    }
+                    // If attacker is able to attack all adjacent cells, then the values of all units in adjacent cells (including archers) have already been taken into
+                    // account
+                    else if ( attacker.isAllAdjacentCellsAttack() ) {
+                        assert( iter->second == attackValue );
+                    }
+                    else if ( enemyUnit->isArchers() ) {
+                        iter->second += attackValue;
+                    }
+                    else {
+                        iter->second = std::max( iter->second, attackValue );
+                    }
                 }
             }
         }
@@ -272,38 +298,48 @@ namespace AI
         return false;
     }
 
-    MeleeAttackOutcome BestAttackOutcome( Arena & arena, const Unit & attacker, const Unit & defender, const std::vector<int32_t> & positionValues )
+    MeleeAttackOutcome BestAttackOutcome( const Unit & attacker, const Unit & defender, const PositionValues & valuesOfAttackPositions )
     {
         MeleeAttackOutcome bestOutcome;
 
-        Indexes aroundDefender = Board::GetAroundIndexes( defender );
+        std::vector<Position> aroundDefender;
+        aroundDefender.reserve( valuesOfAttackPositions.size() );
 
-        // Prefer the cells closest to the attacker
-        std::sort( aroundDefender.begin(), aroundDefender.end(), [&attacker]( const int32_t idx1, const int32_t idx2 ) {
-            return ( Board::GetDistance( attacker.GetPosition(), idx1 ) < Board::GetDistance( attacker.GetPosition(), idx2 ) );
-        } );
+        for ( const auto & [pos, dummy] : valuesOfAttackPositions ) {
+            const uint32_t dist = Board::GetDistance( pos, defender.GetPosition() );
+            assert( dist > 0 );
 
-        // Check if we can reach the target and pick best position to attack from
-        for ( const int32_t nearbyIdx : aroundDefender ) {
-            assert( nearbyIdx >= 0 && static_cast<size_t>( nearbyIdx ) < positionValues.size() );
-
-            const Position pos = Position::GetPosition( attacker, nearbyIdx );
-            if ( !arena.isPositionReachable( attacker, pos, false ) ) {
+            if ( dist != 1 ) {
                 continue;
             }
 
-            assert( pos.GetHead() != nullptr && ( !attacker.isWide() || pos.GetTail() != nullptr ) );
+            aroundDefender.push_back( pos );
+        }
+
+        // Prefer the positions closest to the current attacker's position
+        std::sort( aroundDefender.begin(), aroundDefender.end(), [&attacker]( const Position & pos1, const Position & pos2 ) {
+            return ( Board::GetDistance( attacker.GetPosition(), pos1 ) < Board::GetDistance( attacker.GetPosition(), pos2 ) );
+        } );
+
+        // Pick the best position to attack from
+        for ( const Position & pos : aroundDefender ) {
+            assert( pos.GetHead() != nullptr );
+
+            const int32_t posHeadIdx = pos.GetHead()->GetIndex();
+
+            const auto posValueIter = valuesOfAttackPositions.find( pos );
+            assert( posValueIter != valuesOfAttackPositions.end() );
 
             MeleeAttackOutcome current;
-            current.positionValue = positionValues[nearbyIdx];
-            current.attackValue = optimalAttackValue( attacker, defender, nearbyIdx );
-            current.canAttackImmediately = Board::CanAttackTargetFromPosition( attacker, defender, nearbyIdx );
+            current.attackValue = optimalAttackValue( attacker, defender, pos );
+            current.positionValue = posValueIter->second;
+            current.canAttackImmediately = Board::CanAttackTargetFromPosition( attacker, defender, posHeadIdx );
 
             // Pick target if either position has improved or unit is higher value at the same position value
             if ( IsOutcomeImproved( current, bestOutcome ) ) {
+                bestOutcome.fromIndex = posHeadIdx;
                 bestOutcome.attackValue = current.attackValue;
                 bestOutcome.positionValue = current.positionValue;
-                bestOutcome.fromIndex = nearbyIdx;
                 bestOutcome.canAttackImmediately = current.canAttackImmediately;
             }
         }
@@ -1119,7 +1155,7 @@ namespace AI
 
         const Castle * castle = Arena::GetCastle();
         const bool isMoatBuilt = castle && castle->isBuild( BUILD_MOAT );
-        const std::vector<int32_t> positionValues = evaluatePotentialAttackPositions( arena, currentUnit );
+        const PositionValues valuesOfAttackPositions = evaluatePotentialAttackPositions( arena, currentUnit );
 
         // Current unit can be under the influence of the Hypnotize spell
         const Units enemies( arena.getEnemyForce( _myColor ).getUnits(), &currentUnit );
@@ -1128,7 +1164,7 @@ namespace AI
         double attackPositionValue = -_enemyArmyStrength;
 
         for ( const Unit * enemy : enemies ) {
-            const MeleeAttackOutcome & outcome = BestAttackOutcome( arena, currentUnit, *enemy, positionValues );
+            const MeleeAttackOutcome & outcome = BestAttackOutcome( currentUnit, *enemy, valuesOfAttackPositions );
 
             if ( outcome.canAttackImmediately && ValueHasImproved( outcome.positionValue, attackPositionValue, outcome.attackValue, attackHighestValue ) ) {
                 attackHighestValue = outcome.attackValue;
@@ -1217,7 +1253,7 @@ namespace AI
         BattleTargetPair target;
 
         const double defenceDistanceModifier = _myArmyStrength / STRENGTH_DISTANCE_FACTOR;
-        const std::vector<int32_t> positionValues = evaluatePotentialAttackPositions( arena, currentUnit );
+        const PositionValues valuesOfAttackPositions = evaluatePotentialAttackPositions( arena, currentUnit );
 
         const Units friendly( arena.getForce( _myColor ).getUnits(), &currentUnit );
         // Current unit can be under the influence of the Hypnotize spell
@@ -1231,7 +1267,7 @@ namespace AI
         // 1. Check if there's a target within our half of the battlefield
         MeleeAttackOutcome attackOption;
         for ( const Unit * enemy : enemies ) {
-            const MeleeAttackOutcome & outcome = BestAttackOutcome( arena, currentUnit, *enemy, positionValues );
+            const MeleeAttackOutcome & outcome = BestAttackOutcome( currentUnit, *enemy, valuesOfAttackPositions );
 
             // Allow to move only within our half of the battlefield. If in castle make sure to stay inside.
             if ( !isDefensivePosition( outcome.fromIndex ) )
@@ -1269,7 +1305,7 @@ namespace AI
                     continue;
                 }
 
-                MeleeAttackOutcome outcome = BestAttackOutcome( arena, currentUnit, *enemy, positionValues );
+                MeleeAttackOutcome outcome = BestAttackOutcome( currentUnit, *enemy, valuesOfAttackPositions );
                 outcome.positionValue = archerValue;
 
                 DEBUG_LOG( DBG_BATTLE, DBG_TRACE, " - Found enemy, cell: " << cell << ", threat: " << outcome.attackValue )

@@ -232,9 +232,9 @@ bool Battle::Position::isReflect() const
     return first && second && first->GetIndex() < second->GetIndex();
 }
 
-bool Battle::Position::contains( int cellIndex ) const
+bool Battle::Position::contains( const int32_t idx ) const
 {
-    return ( first && first->GetIndex() == cellIndex ) || ( second && second->GetIndex() == cellIndex );
+    return ( first && first->GetIndex() == idx ) || ( second && second->GetIndex() == idx );
 }
 
 bool Battle::Position::operator<( const Position & other ) const

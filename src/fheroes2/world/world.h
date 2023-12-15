@@ -158,7 +158,10 @@ public:
 
     bool LoadMapMP2( const std::string & filename, const bool isOriginalMp2File );
 
-    void NewMaps( int32_t, int32_t );
+    // Generate 2x2 map for Battle Only mode.
+    void generateBattleOnlyMap();
+
+    void generateForEditor( const int32_t size );
 
     static World & Get();
 

@@ -86,8 +86,11 @@ namespace Game
 
     uint32_t ApplyBattleSpeed( uint32_t delay );
 
-    int HumanHeroAnimSkip();
-    int AIHeroAnimSkip();
+    // Returns the animation speed multiplier for a human-controlled hero.
+    int HumanHeroAnimSpeedMultiplier();
+
+    // Returns the animation speed multiplier for an AI-controlled hero.
+    int AIHeroAnimSpeedMultiplier();
 
     // Returns true if every of delay type has passed.
     bool hasEveryDelayPassed( const std::vector<Game::DelayType> & delayTypes );

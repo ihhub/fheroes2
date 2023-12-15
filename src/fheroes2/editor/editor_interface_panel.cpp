@@ -38,6 +38,7 @@
 #include "image.h"
 #include "interface_base.h"
 #include "localevent.h"
+#include "maps_tiles.h"
 #include "screen.h"
 #include "tools.h"
 #include "translations.h"
@@ -45,6 +46,7 @@
 #include "ui_dialog.h"
 #include "ui_map_object.h"
 #include "ui_text.h"
+#include "world.h"
 
 namespace
 {
@@ -70,6 +72,11 @@ namespace
 
     fheroes2::Rect getObjectOccupiedArea( const Maps::ObjectGroup group, const int32_t objectType )
     {
+        if ( group == Maps::ObjectGroup::KINGDOM_TOWNS ) {
+            // TODO: make occupied area calculation for complex objects.
+            return { -2, -3, 5, 5 };
+        }
+
         const auto & objectInfo = Maps::getObjectsByGroup( group );
         if ( objectType < 0 || objectType >= static_cast<int32_t>( objectInfo.size() ) ) {
             assert( 0 );
@@ -131,7 +138,7 @@ namespace Interface
     fheroes2::Rect EditorPanel::getBrushArea() const
     {
         // Roads and streams are placed using only 1x1 brush.
-        if ( _selectedInstrument == Instrument::STREAM || _selectedInstrument == Instrument::ROAD ) {
+        if ( _selectedInstrument == Instrument::STREAM || _selectedInstrument == Instrument::ROAD || _selectedInstrument == Instrument::DETAIL ) {
             return { 0, 0, 1, 1 };
         }
 
@@ -432,6 +439,24 @@ namespace Interface
                 Cursor::Get().setCustomImage( image, { -image.width() / 2, -image.height() / 2 - heroCorrectionY } );
             } );
             break;
+        case Brush::TOWNS:
+            _interface.setCursorUpdater( [this]( const int32_t tileIndex ) {
+                int32_t type = -1;
+                int32_t color = -1;
+                getTownObjectProperties( type, color );
+
+                if ( type == -1 || color == -1 ) {
+                    // The object type is not set. We show the POINTER cursor for this case.
+                    Cursor::Get().SetThemes( Cursor::POINTER );
+                    return;
+                }
+
+                // TODO: render ICN::MINIHERO from the existing hero images.
+                const fheroes2::Sprite & image = fheroes2::generateTownObjectImage( type, color, world.GetTiles( tileIndex ).GetGround() );
+
+                Cursor::Get().setCustomImage( image, { image.x(), image.y() } );
+            } );
+            break;
         default:
             _interface.setCursorUpdater( {} );
             break;
@@ -586,6 +611,18 @@ namespace Interface
             else if ( le.MousePressRight( _objectButtonsRect[Brush::TREASURES] ) ) {
                 fheroes2::showStandardTextMessage( _getObjectTypeName( Brush::TREASURES ), _( "Used to place\na resource or treasure." ), Dialog::ZERO );
             }
+            else if ( le.MouseClickLeft( _objectButtonsRect[Brush::TOWNS] ) ) {
+                handleObjectMouseClick( [this]( const int32_t /* type */ ) -> int32_t {
+                    int32_t type = -1;
+                    int32_t color = -1;
+
+                    getTownObjectProperties( type, color );
+                    Dialog::selectTownType( type, color );
+
+                    return _generateTownObjectProperties( type, color );
+                } );
+                return res;
+            }
             else if ( le.MouseClickLeft( _objectButtonsRect[Brush::MONSTERS] ) ) {
                 handleObjectMouseClick( Dialog::selectMonsterType );
                 return res;
@@ -711,5 +748,32 @@ namespace Interface
         }
         _setCursor();
         _interface.updateCursor( 0 );
+    }
+
+    void EditorPanel::getTownObjectProperties( int32_t & type, int32_t & color ) const
+    {
+        const auto & townObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::KINGDOM_TOWNS );
+        if ( townObjects.empty() ) {
+            // How is it even possible?
+            assert( 0 );
+            type = -1;
+            color = -1;
+            return;
+        }
+
+        type = _selectedObjectType[Brush::TOWNS] % static_cast<int32_t>( townObjects.size() );
+        color = _selectedObjectType[Brush::TOWNS] / static_cast<int32_t>( townObjects.size() );
+    }
+
+    int32_t EditorPanel::_generateTownObjectProperties( const int32_t type, const int32_t color )
+    {
+        const auto & townObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::KINGDOM_TOWNS );
+        if ( townObjects.empty() ) {
+            // How is it even possible?
+            assert( 0 );
+            return -1;
+        }
+
+        return color * static_cast<int32_t>( townObjects.size() ) + type;
     }
 }

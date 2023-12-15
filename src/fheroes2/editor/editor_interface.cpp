@@ -38,6 +38,7 @@
 #include "game_delays.h"
 #include "game_hotkeys.h"
 #include "gamedefs.h"
+#include "ground.h"
 #include "heroes.h"
 #include "history_manager.h"
 #include "icn.h"
@@ -49,6 +50,8 @@
 #include "interface_status.h"
 #include "localevent.h"
 #include "logging.h"
+#include "map_format_helper.h"
+#include "map_format_info.h"
 #include "map_object_info.h"
 #include "maps.h"
 #include "maps_tiles.h"
@@ -58,9 +61,11 @@
 #include "screen.h"
 #include "settings.h"
 #include "spell.h"
+#include "system.h"
 #include "translations.h"
 #include "ui_button.h"
 #include "ui_dialog.h"
+#include "ui_map_object.h"
 #include "ui_tool.h"
 #include "view_world.h"
 #include "world.h"
@@ -287,8 +292,40 @@ namespace Interface
                     _gameArea.SetUpdateCursor();
                 }
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_SAVE_GAME ) ) {
-                    fheroes2::showStandardTextMessage( _( "Warning!" ), "The Map Editor is still in development. Save function is not implemented yet.", Dialog::OK );
-                    _gameArea.SetUpdateCursor();
+                    const std::string dataPath = System::GetDataDirectory( "fheroes2" );
+                    if ( dataPath.empty() ) {
+                        fheroes2::showStandardTextMessage( _( "Warning!" ), "Unable to locate data directory to save the map.", Dialog::OK );
+                        _gameArea.SetUpdateCursor();
+                        continue;
+                    }
+
+                    const std::string mapDirectory = System::concatPath( dataPath, "maps" );
+
+                    if ( !System::IsDirectory( mapDirectory ) && !System::MakeDirectory( mapDirectory ) ) {
+                        fheroes2::showStandardTextMessage( _( "Warning!" ), "Unable to create a directory to save the map.", Dialog::OK );
+                        _gameArea.SetUpdateCursor();
+                        continue;
+                    }
+
+                    std::string fileName;
+                    if ( !Dialog::InputString( _( "Map filename" ), fileName, std::string(), 128 ) ) {
+                        continue;
+                    }
+
+                    Maps::Map_Format::MapFormat map;
+                    if ( !Maps::saveMapInEditor( map ) ) {
+                        fheroes2::showStandardTextMessage( _( "Warning!" ), "Cannot convert a map into the required map format.", Dialog::OK );
+                        _gameArea.SetUpdateCursor();
+                        continue;
+                    }
+
+                    map.name = fileName;
+                    map.description = "Put a real description here.";
+
+                    if ( !Maps::Map_Format::saveMap( System::concatPath( mapDirectory, fileName + ".fh2m" ), map ) ) {
+                        fheroes2::showStandardTextMessage( _( "Warning!" ), "Failed to save the map.", Dialog::OK );
+                        _gameArea.SetUpdateCursor();
+                    }
                 }
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_LOAD_GAME ) ) {
                     res = eventLoadMap();
@@ -706,9 +743,10 @@ namespace Interface
         const fheroes2::Point tilePos = tile.GetCenter();
 
         const Maps::ObjectGroup groupType = _editorPanel.getSelectedObjectGroup();
-        const auto & objectInfo = getObjectInfo( groupType, _editorPanel.getSelectedObjectType() );
 
-        if ( groupType == Maps::ObjectGroup::Monster ) {
+        if ( groupType == Maps::ObjectGroup::MONSTERS ) {
+            const auto & objectInfo = getObjectInfo( groupType, _editorPanel.getSelectedObjectType() );
+
             if ( !isObjectPlacementAllowed( objectInfo, tilePos ) ) {
                 fheroes2::showStandardTextMessage( _( "Monster" ), _( "Objects cannot be placed outside the map." ), Dialog::OK );
                 _gameArea.SetUpdateCursor();
@@ -729,7 +767,9 @@ namespace Interface
 
             setObjectOnTile( tile, objectInfo );
         }
-        else if ( groupType == Maps::ObjectGroup::Treasure ) {
+        else if ( groupType == Maps::ObjectGroup::ADVENTURE_TREASURES ) {
+            const auto & objectInfo = getObjectInfo( groupType, _editorPanel.getSelectedObjectType() );
+
             if ( !isObjectPlacementAllowed( objectInfo, tilePos ) ) {
                 fheroes2::showStandardTextMessage( _( "Treasure" ), _( "Objects cannot be placed outside the map." ), Dialog::OK );
                 _gameArea.SetUpdateCursor();
@@ -750,7 +790,9 @@ namespace Interface
 
             setObjectOnTile( tile, objectInfo );
         }
-        else if ( groupType == Maps::ObjectGroup::Hero ) {
+        else if ( groupType == Maps::ObjectGroup::KINGDOM_HEROES ) {
+            const auto & objectInfo = getObjectInfo( groupType, _editorPanel.getSelectedObjectType() );
+
             if ( !isObjectPlacementAllowed( objectInfo, tilePos ) ) {
                 fheroes2::showStandardTextMessage( _( "Heroes" ), _( "Objects cannot be placed outside the map." ), Dialog::OK );
                 _gameArea.SetUpdateCursor();
@@ -771,7 +813,9 @@ namespace Interface
 
             setObjectOnTile( tile, objectInfo );
         }
-        else if ( groupType == Maps::ObjectGroup::Artifact ) {
+        else if ( groupType == Maps::ObjectGroup::ADVENTURE_ARTIFACTS ) {
+            const auto & objectInfo = getObjectInfo( groupType, _editorPanel.getSelectedObjectType() );
+
             if ( !isObjectPlacementAllowed( objectInfo, tilePos ) ) {
                 fheroes2::showStandardTextMessage( _( "Artifacts" ), _( "Objects cannot be placed outside the map." ), Dialog::OK );
                 _gameArea.SetUpdateCursor();
@@ -792,7 +836,7 @@ namespace Interface
 
             const int32_t artifactType = _editorPanel.getSelectedObjectType();
 
-            const auto & artifactInfo = Maps::getObjectsByGroup( Maps::ObjectGroup::Artifact );
+            const auto & artifactInfo = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_ARTIFACTS );
             assert( artifactType >= 0 && artifactType < static_cast<int32_t>( artifactInfo.size() ) );
 
             // For each Spell Scroll artifact we select a spell.
@@ -811,7 +855,9 @@ namespace Interface
                 setObjectOnTile( tile, objectInfo );
             }
         }
-        else if ( groupType == Maps::ObjectGroup::Ocean_Object ) {
+        else if ( groupType == Maps::ObjectGroup::ADVENTURE_WATER ) {
+            const auto & objectInfo = getObjectInfo( groupType, _editorPanel.getSelectedObjectType() );
+
             if ( !isObjectPlacementAllowed( objectInfo, tilePos ) ) {
                 fheroes2::showStandardTextMessage( _( "Ocean object" ), _( "Objects cannot be placed outside the map." ), Dialog::OK );
                 _gameArea.SetUpdateCursor();
@@ -832,6 +878,69 @@ namespace Interface
 
             setObjectOnTile( tile, objectInfo );
         }
+        else if ( groupType == Maps::ObjectGroup::KINGDOM_TOWNS ) {
+            int32_t type = -1;
+            int32_t color = -1;
+            _editorPanel.getTownObjectProperties( type, color );
+            if ( type < 0 || color < 0 ) {
+                // Check your logic!
+                assert( 0 );
+                return;
+            }
+
+            if ( tile.isWater() ) {
+                fheroes2::showStandardTextMessage( _( "Towns" ), _( "Towns cannot be placed on water." ), Dialog::OK );
+                return;
+            }
+
+            const int groundType = Maps::Ground::getGroundByImageIndex( tile.getTerrainImageIndex() );
+            const int32_t basementId = fheroes2::getTownBasementId( groundType );
+
+            const auto & townObjectInfo = getObjectInfo( groupType, type );
+            const auto & basementObjectInfo = getObjectInfo( Maps::ObjectGroup::LANDSCAPE_TOWN_BASEMENTS, basementId );
+
+            if ( !isObjectPlacementAllowed( townObjectInfo, tilePos ) ) {
+                fheroes2::showStandardTextMessage( _( "Towns" ), _( "Objects cannot be placed outside the map." ), Dialog::OK );
+                return;
+            }
+
+            if ( !isObjectPlacementAllowed( basementObjectInfo, tilePos ) ) {
+                fheroes2::showStandardTextMessage( _( "Towns" ), _( "Objects cannot be placed outside the map." ), Dialog::OK );
+                return;
+            }
+
+            if ( !verifyObjectCondition( townObjectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return !tileToCheck.isWater(); } ) ) {
+                fheroes2::showStandardTextMessage( _( "Towns" ), _( "Towns cannot be placed on water." ), Dialog::OK );
+                return;
+            }
+
+            if ( !verifyObjectCondition( basementObjectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return !tileToCheck.isWater(); } ) ) {
+                fheroes2::showStandardTextMessage( _( "Towns" ), _( "Towns cannot be placed on water." ), Dialog::OK );
+                return;
+            }
+
+            if ( !verifyObjectCondition( townObjectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return Maps::isClearGround( tileToCheck ); } ) ) {
+                fheroes2::showStandardTextMessage( _( "Towns" ), _( "Choose a tile which does not contain any objects." ), Dialog::OK );
+                return;
+            }
+
+            if ( !verifyObjectCondition( basementObjectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return Maps::isClearGround( tileToCheck ); } ) ) {
+                fheroes2::showStandardTextMessage( _( "Towns" ), _( "Choose a tile which does not contain any objects." ), Dialog::OK );
+                return;
+            }
+
+            const fheroes2::ActionCreator action( _historyManager );
+
+            Maps::setObjectOnTile( tile, basementObjectInfo );
+            Maps::setObjectOnTile( tile, townObjectInfo );
+
+            // Add flags.
+            assert( tile.GetIndex() > 0 && tile.GetIndex() < world.w() * world.h() - 1 );
+            Maps::setObjectOnTile( world.GetTiles( tile.GetIndex() - 1 ), getObjectInfo( Maps::ObjectGroup::LANDSCAPE_FLAGS, color * 2 ) );
+            Maps::setObjectOnTile( world.GetTiles( tile.GetIndex() + 1 ), getObjectInfo( Maps::ObjectGroup::LANDSCAPE_FLAGS, color * 2 + 1 ) );
+
+            _redraw |= mapUpdateFlags;
+        }
     }
 
     void EditorInterface::mouseCursorAreaPressRight( const int32_t tileIndex )
@@ -843,14 +952,8 @@ namespace Interface
         switch ( tile.GetObject() ) {
         case MP2::OBJ_NON_ACTION_CASTLE:
         case MP2::OBJ_CASTLE: {
-            const Castle * castle = world.getCastle( tile.GetCenter() );
-
-            if ( castle ) {
-                Dialog::QuickInfo( *castle, _gameArea );
-            }
-            else {
-                Dialog::QuickInfo( tile, _gameArea );
-            }
+            // TODO: Implement quick info for castles/towns in editor.
+            fheroes2::showStandardTextMessage( _( "Towns" ), "", Dialog::ZERO );
 
             break;
         }

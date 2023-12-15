@@ -25,6 +25,7 @@
 #include <cassert>
 #include <cstddef>
 #include <initializer_list>
+#include <map>
 #include <memory>
 #include <utility>
 
@@ -38,13 +39,238 @@ namespace
     //
     // All object information is based on The Price of Loyalty expansion of the original game since
     // the fheroes2 Editor requires to have resources from the expansion.
-    std::array<std::vector<Maps::ObjectInfo>, static_cast<size_t>( Maps::ObjectGroup::Group_Count )> objectData;
+    std::array<std::vector<Maps::ObjectInfo>, static_cast<size_t>( Maps::ObjectGroup::GROUP_COUNT )> objectData;
 
-    void populateArtifactData( std::vector<Maps::ObjectInfo> & objects )
+    std::map<std::pair<MP2::ObjectIcnType, uint32_t>, std::pair<Maps::ObjectGroup, uint32_t>> icnVsObjectInfo;
+
+    void populateLandscapeMountains( std::vector<Maps::ObjectInfo> & objects )
     {
+        assert( objects.empty() );
+
+        (void)objects;
+    }
+
+    void populateLandscapeRocks( std::vector<Maps::ObjectInfo> & objects )
+    {
+        assert( objects.empty() );
+
+        (void)objects;
+    }
+
+    void populateLandscapeTrees( std::vector<Maps::ObjectInfo> & objects )
+    {
+        assert( objects.empty() );
+
+        (void)objects;
+    }
+
+    void populateLandscapeWater( std::vector<Maps::ObjectInfo> & objects )
+    {
+        assert( objects.empty() );
+
+        // Rock with seagulls.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_ROCK };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNWATR, 182, fheroes2::Point{ 0, 0 }, MP2::OBJ_ROCK, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNWATR, 183, fheroes2::Point{ 1, 0 }, MP2::OBJ_ROCK, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNWATR, 166, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNWATR, 118, fheroes2::Point{ -1, -1 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            object.groundLevelParts.back().animationFrames = 15;
+
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNWATR, 150, fheroes2::Point{ 1, -1 }, MP2::OBJ_ROCK );
+            object.topLevelParts.back().animationFrames = 15;
+
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNWATR, 134, fheroes2::Point{ 0, -1 }, MP2::OBJ_ROCK );
+            object.topLevelParts.back().animationFrames = 15;
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Rock.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_ROCK };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNWATR, 185, fheroes2::Point{ 0, 0 }, MP2::OBJ_ROCK, Maps::BACKGROUND_LAYER );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Rock.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_ROCK };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNWATR, 186, fheroes2::Point{ 0, 0 }, MP2::OBJ_ROCK, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNWATR, 187, fheroes2::Point{ 1, 0 }, MP2::OBJ_ROCK, Maps::BACKGROUND_LAYER );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Rock.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_ROCK };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNWAT2, 2, fheroes2::Point{ 0, 0 }, MP2::OBJ_ROCK, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNWAT2, 1, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNWAT2, 0, fheroes2::Point{ 0, -1 }, MP2::OBJ_ROCK );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Aquatic plants. Terrain object.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_NONE };
+
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNWATR, 83, fheroes2::Point{ 0, 0 }, MP2::OBJ_NONE, Maps::TERRAIN_LAYER );
+            object.groundLevelParts.back().animationFrames = 6;
+
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNWATR, 76, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::TERRAIN_LAYER );
+            object.groundLevelParts.back().animationFrames = 6;
+
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNWATR, 90, fheroes2::Point{ 1, 0 }, MP2::OBJ_NONE, Maps::TERRAIN_LAYER );
+            object.groundLevelParts.back().animationFrames = 6;
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Aquatic plants. Terrain object.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_NONE };
+
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNWATR, 97, fheroes2::Point{ 0, 0 }, MP2::OBJ_NONE, Maps::TERRAIN_LAYER );
+            object.groundLevelParts.back().animationFrames = 6;
+
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNWATR, 104, fheroes2::Point{ 1, 0 }, MP2::OBJ_NONE, Maps::TERRAIN_LAYER );
+            object.groundLevelParts.back().animationFrames = 6;
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Reefs.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_REEFS };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC2, 113, fheroes2::Point{ 0, 0 }, MP2::OBJ_REEFS, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC2, 114, fheroes2::Point{ 1, 0 }, MP2::OBJ_REEFS, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC2, 115, fheroes2::Point{ 2, 0 }, MP2::OBJ_REEFS, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC2, 111, fheroes2::Point{ 1, -1 }, MP2::OBJ_REEFS, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC2, 112, fheroes2::Point{ 2, -1 }, MP2::OBJ_REEFS, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC2, 116, fheroes2::Point{ 0, 1 }, MP2::OBJ_REEFS, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC2, 117, fheroes2::Point{ 1, 1 }, MP2::OBJ_REEFS, Maps::BACKGROUND_LAYER );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_REEFS };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC2, 120, fheroes2::Point{ 0, 0 }, MP2::OBJ_REEFS, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC2, 121, fheroes2::Point{ 1, 0 }, MP2::OBJ_REEFS, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC2, 122, fheroes2::Point{ 2, 0 }, MP2::OBJ_REEFS, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC2, 118, fheroes2::Point{ 0, -1 }, MP2::OBJ_REEFS, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC2, 119, fheroes2::Point{ 1, -1 }, MP2::OBJ_REEFS, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC2, 123, fheroes2::Point{ 1, 1 }, MP2::OBJ_REEFS, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC2, 124, fheroes2::Point{ 2, 1 }, MP2::OBJ_REEFS, Maps::BACKGROUND_LAYER );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_REEFS };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC2, 125, fheroes2::Point{ 0, 0 }, MP2::OBJ_REEFS, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC2, 126, fheroes2::Point{ 1, 0 }, MP2::OBJ_REEFS, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC2, 127, fheroes2::Point{ 0, 1 }, MP2::OBJ_REEFS, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC2, 128, fheroes2::Point{ 1, 1 }, MP2::OBJ_REEFS, Maps::BACKGROUND_LAYER );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_REEFS };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC2, 129, fheroes2::Point{ 0, 0 }, MP2::OBJ_REEFS, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC2, 130, fheroes2::Point{ -1, 1 }, MP2::OBJ_REEFS, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC2, 131, fheroes2::Point{ 0, 1 }, MP2::OBJ_REEFS, Maps::BACKGROUND_LAYER );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_REEFS };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC2, 132, fheroes2::Point{ 0, 0 }, MP2::OBJ_REEFS, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC2, 133, fheroes2::Point{ 1, 0 }, MP2::OBJ_REEFS, Maps::BACKGROUND_LAYER );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_REEFS };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC2, 134, fheroes2::Point{ 0, 0 }, MP2::OBJ_REEFS, Maps::BACKGROUND_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC2, 135, fheroes2::Point{ 0, 1 }, MP2::OBJ_REEFS, Maps::BACKGROUND_LAYER );
+
+            objects.emplace_back( std::move( object ) );
+        }
+    }
+
+    void populateLandscapeMiscellaneous( std::vector<Maps::ObjectInfo> & objects )
+    {
+        assert( objects.empty() );
+
+        (void)objects;
+    }
+
+    void populateLandscapeTownBasements( std::vector<Maps::ObjectInfo> & objects )
+    {
+        assert( objects.empty() );
+
+        // Castle/town basement in the next order: grass, snow, swamp, lava, desert, dirt, wasteland, beach.
+        for ( uint8_t basement = 0; basement < 8; ++basement ) {
+            const uint8_t icnOffset = basement * 10;
+            Maps::ObjectInfo object{ MP2::OBJ_NON_ACTION_CASTLE };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWBA, icnOffset + 2, fheroes2::Point{ 0, 0 }, MP2::OBJ_NON_ACTION_CASTLE, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWBA, icnOffset + 0, fheroes2::Point{ -2, 0 }, MP2::OBJ_NON_ACTION_CASTLE, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWBA, icnOffset + 1, fheroes2::Point{ -1, 0 }, MP2::OBJ_NON_ACTION_CASTLE, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWBA, icnOffset + 3, fheroes2::Point{ 1, 0 }, MP2::OBJ_NON_ACTION_CASTLE, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWBA, icnOffset + 4, fheroes2::Point{ 2, 0 }, MP2::OBJ_NON_ACTION_CASTLE, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWBA, icnOffset + 5, fheroes2::Point{ -2, 1 }, MP2::OBJ_NON_ACTION_CASTLE, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWBA, icnOffset + 6, fheroes2::Point{ -1, 1 }, MP2::OBJ_NON_ACTION_CASTLE, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWBA, icnOffset + 7, fheroes2::Point{ 0, 1 }, MP2::OBJ_NON_ACTION_CASTLE, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWBA, icnOffset + 8, fheroes2::Point{ 1, 1 }, MP2::OBJ_NON_ACTION_CASTLE, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWBA, icnOffset + 9, fheroes2::Point{ 2, 1 }, MP2::OBJ_NON_ACTION_CASTLE, Maps::OBJECT_LAYER );
+
+            objects.emplace_back( std::move( object ) );
+        }
+    }
+
+    void populateLandscapeFlags( std::vector<Maps::ObjectInfo> & objects )
+    {
+        assert( objects.empty() );
+
+        // Castle flags located one tile to the left and right from the castle entrance: blue, green, red, yellow, orange, purple, gray (neutral).
+        for ( uint8_t color = 0; color < 7; ++color ) {
+            const uint8_t icnOffset = color * 2;
+
+            {
+                // Left flag.
+                Maps::ObjectInfo object{ MP2::OBJ_NON_ACTION_CASTLE };
+                object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_FLAG32, icnOffset, fheroes2::Point{ 0, 0 }, MP2::OBJ_NON_ACTION_CASTLE, Maps::OBJECT_LAYER );
+                object.metadata[0] = color;
+
+                objects.emplace_back( std::move( object ) );
+            }
+
+            {
+                // Right flag.
+                Maps::ObjectInfo object{ MP2::OBJ_NON_ACTION_CASTLE };
+                object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_FLAG32, icnOffset + 1, fheroes2::Point{ 0, 0 }, MP2::OBJ_NON_ACTION_CASTLE, Maps::OBJECT_LAYER );
+                object.metadata[0] = color;
+
+                objects.emplace_back( std::move( object ) );
+            }
+        }
+
+        // TODO: Add flags for other capture-able objects.
+    }
+
+    void populateAdventureArtifacts( std::vector<Maps::ObjectInfo> & objects )
+    {
+        assert( objects.empty() );
+
         // All artifacts before Magic Book have their own images.
         // Magic Book is not present in the ICN resources but it is present in artifact IDs.
-        std::vector<uint32_t> imageIndices;
 
         auto addArtifactObject = [&objects]( const uint32_t artifactId, const MP2::MapObjectType ObjectType, const uint32_t mainIcnIndex ) {
             Maps::ObjectInfo object{ ObjectType };
@@ -83,88 +309,31 @@ namespace
         }
     }
 
-    void populateHeroData( std::vector<Maps::ObjectInfo> & objects )
+    void populateAdventureDwellings( std::vector<Maps::ObjectInfo> & objects )
     {
-        // Only 7 races and 6 colors exist in the game.
-        for ( int32_t color = 0; color < 6; ++color ) {
-            for ( int32_t race = 0; race < 7; ++race ) {
-                Maps::ObjectInfo object{ MP2::OBJ_HEROES };
-                object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_MINIHERO, color * 7 + race, fheroes2::Point{ 0, 0 }, MP2::OBJ_HEROES, Maps::OBJECT_LAYER );
-                object.metadata[0] = color;
+        assert( objects.empty() );
 
-                if ( race == 6 ) {
-                    // We need to set as a random race, not multi.
-                    ++race;
-                }
-
-                object.metadata[1] = race;
-
-                objects.emplace_back( std::move( object ) );
-            }
-        }
+        (void)objects;
     }
 
-    void populateMonsterData( std::vector<Maps::ObjectInfo> & objects )
+    void populateAdventureMines( std::vector<Maps::ObjectInfo> & objects )
     {
-        // Monsters are "unique" objects in terms of their ICN resources.
-        // The Editor uses ICN::MON32 while the Adventure Map renderer uses modified ICN::MINIMON resources.
-        for ( int32_t monsterId = Monster::PEASANT; monsterId <= Monster::WATER_ELEMENT; ++monsterId ) {
-            Maps::ObjectInfo object{ MP2::OBJ_MONSTER };
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_MONS32, monsterId - 1, fheroes2::Point{ 0, 0 }, MP2::OBJ_MONSTER, Maps::OBJECT_LAYER );
-            object.metadata[0] = monsterId;
+        assert( objects.empty() );
 
-            objects.emplace_back( std::move( object ) );
-        }
-
-        // Random monsters.
-        {
-            Maps::ObjectInfo object{ MP2::OBJ_RANDOM_MONSTER };
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_MONS32, Monster::RANDOM_MONSTER - 1, fheroes2::Point{ 0, 0 }, MP2::OBJ_RANDOM_MONSTER,
-                                                  Maps::OBJECT_LAYER );
-            object.metadata[0] = Monster::RANDOM_MONSTER;
-
-            objects.emplace_back( std::move( object ) );
-        }
-
-        {
-            Maps::ObjectInfo object{ MP2::OBJ_RANDOM_MONSTER_WEAK };
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_MONS32, Monster::RANDOM_MONSTER_LEVEL_1 - 1, fheroes2::Point{ 0, 0 }, MP2::OBJ_RANDOM_MONSTER_WEAK,
-                                                  Maps::OBJECT_LAYER );
-            object.metadata[0] = Monster::RANDOM_MONSTER_LEVEL_1;
-
-            objects.emplace_back( std::move( object ) );
-        }
-
-        {
-            Maps::ObjectInfo object{ MP2::OBJ_RANDOM_MONSTER_MEDIUM };
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_MONS32, Monster::RANDOM_MONSTER_LEVEL_2 - 1, fheroes2::Point{ 0, 0 }, MP2::OBJ_RANDOM_MONSTER_MEDIUM,
-                                                  Maps::OBJECT_LAYER );
-            object.metadata[0] = Monster::RANDOM_MONSTER_LEVEL_2;
-
-            objects.emplace_back( std::move( object ) );
-        }
-
-        {
-            Maps::ObjectInfo object{ MP2::OBJ_RANDOM_MONSTER_STRONG };
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_MONS32, Monster::RANDOM_MONSTER_LEVEL_3 - 1, fheroes2::Point{ 0, 0 }, MP2::OBJ_RANDOM_MONSTER_STRONG,
-                                                  Maps::OBJECT_LAYER );
-            object.metadata[0] = Monster::RANDOM_MONSTER_LEVEL_3;
-
-            objects.emplace_back( std::move( object ) );
-        }
-
-        {
-            Maps::ObjectInfo object{ MP2::OBJ_RANDOM_MONSTER_VERY_STRONG };
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_MONS32, Monster::RANDOM_MONSTER_LEVEL_4 - 1, fheroes2::Point{ 0, 0 },
-                                                  MP2::OBJ_RANDOM_MONSTER_VERY_STRONG, Maps::OBJECT_LAYER );
-            object.metadata[0] = Monster::RANDOM_MONSTER_LEVEL_4;
-
-            objects.emplace_back( std::move( object ) );
-        }
+        (void)objects;
     }
 
-    void populateTreasureData( std::vector<Maps::ObjectInfo> & objects )
+    void populateAdventurePowerUps( std::vector<Maps::ObjectInfo> & objects )
     {
+        assert( objects.empty() );
+
+        (void)objects;
+    }
+
+    void populateAdventureTreasures( std::vector<Maps::ObjectInfo> & objects )
+    {
+        assert( objects.empty() );
+
         // Normal resources.
         int32_t resourceImageIndex = 1;
         for ( const uint32_t resource : { Resource::WOOD, Resource::MERCURY, Resource::ORE, Resource::SULFUR, Resource::CRYSTAL, Resource::GEMS, Resource::GOLD } ) {
@@ -206,8 +375,10 @@ namespace
         }
     }
 
-    void populateOceanObjectData( std::vector<Maps::ObjectInfo> & objects )
+    void populateAdventureWater( std::vector<Maps::ObjectInfo> & objects )
     {
+        assert( objects.empty() );
+
         // Bottle.
         {
             Maps::ObjectInfo object{ MP2::OBJ_BOTTLE };
@@ -282,54 +453,9 @@ namespace
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNWATR, 55, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
             object.groundLevelParts.back().animationFrames = 6;
 
-            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNWATR, 54, fheroes2::Point{ 1, -1 }, MP2::OBJ_NON_ACTION_MAGELLANS_MAPS, Maps::OBJECT_LAYER );
-            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNWATR, 53, fheroes2::Point{ 0, -1 }, MP2::OBJ_NON_ACTION_MAGELLANS_MAPS, Maps::OBJECT_LAYER );
-            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNWATR, 52, fheroes2::Point{ -1, -1 }, MP2::OBJ_NONE, Maps::OBJECT_LAYER );
-
-            objects.emplace_back( std::move( object ) );
-        }
-
-        // Rock with seagulls.
-        {
-            Maps::ObjectInfo object{ MP2::OBJ_ROCK };
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNWATR, 182, fheroes2::Point{ 0, 0 }, MP2::OBJ_ROCK, Maps::BACKGROUND_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNWATR, 183, fheroes2::Point{ 1, 0 }, MP2::OBJ_ROCK, Maps::BACKGROUND_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNWATR, 166, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNWATR, 118, fheroes2::Point{ -1, -1 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
-            object.groundLevelParts.back().animationFrames = 15;
-
-            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNWATR, 150, fheroes2::Point{ 1, -1 }, MP2::OBJ_ROCK, Maps::OBJECT_LAYER );
-            object.topLevelParts.back().animationFrames = 15;
-
-            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNWATR, 134, fheroes2::Point{ 0, -1 }, MP2::OBJ_ROCK, Maps::OBJECT_LAYER );
-            object.topLevelParts.back().animationFrames = 15;
-
-            objects.emplace_back( std::move( object ) );
-        }
-
-        // Rock.
-        {
-            Maps::ObjectInfo object{ MP2::OBJ_ROCK };
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNWATR, 185, fheroes2::Point{ 0, 0 }, MP2::OBJ_ROCK, Maps::BACKGROUND_LAYER );
-
-            objects.emplace_back( std::move( object ) );
-        }
-
-        // Rock.
-        {
-            Maps::ObjectInfo object{ MP2::OBJ_ROCK };
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNWATR, 186, fheroes2::Point{ 0, 0 }, MP2::OBJ_ROCK, Maps::BACKGROUND_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNWATR, 187, fheroes2::Point{ 1, 0 }, MP2::OBJ_ROCK, Maps::BACKGROUND_LAYER );
-
-            objects.emplace_back( std::move( object ) );
-        }
-
-        // Rock.
-        {
-            Maps::ObjectInfo object{ MP2::OBJ_ROCK };
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNWAT2, 2, fheroes2::Point{ 0, 0 }, MP2::OBJ_ROCK, Maps::BACKGROUND_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNWAT2, 1, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
-            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNWAT2, 0, fheroes2::Point{ 0, -1 }, MP2::OBJ_ROCK, Maps::OBJECT_LAYER );
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNWATR, 54, fheroes2::Point{ 1, -1 }, MP2::OBJ_NON_ACTION_MAGELLANS_MAPS );
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNWATR, 53, fheroes2::Point{ 0, -1 }, MP2::OBJ_NON_ACTION_MAGELLANS_MAPS );
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNWATR, 52, fheroes2::Point{ -1, -1 }, MP2::OBJ_NONE );
 
             objects.emplace_back( std::move( object ) );
         }
@@ -365,10 +491,10 @@ namespace
 
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNWATR, 240, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
 
-            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNWATR, 233, fheroes2::Point{ 1, -1 }, MP2::OBJ_NON_ACTION_SHIPWRECK, Maps::OBJECT_LAYER );
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNWATR, 233, fheroes2::Point{ 1, -1 }, MP2::OBJ_NON_ACTION_SHIPWRECK );
             object.topLevelParts.back().animationFrames = 6;
 
-            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNWATR, 226, fheroes2::Point{ 0, -1 }, MP2::OBJ_NON_ACTION_SHIPWRECK, Maps::OBJECT_LAYER );
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNWATR, 226, fheroes2::Point{ 0, -1 }, MP2::OBJ_NON_ACTION_SHIPWRECK );
             object.topLevelParts.back().animationFrames = 6;
 
             objects.emplace_back( std::move( object ) );
@@ -387,37 +513,8 @@ namespace
 
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNWAT2, 10, fheroes2::Point{ 1, -2 }, MP2::OBJ_NON_ACTION_DERELICT_SHIP, Maps::SHADOW_LAYER );
 
-            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNWAT2, 11, fheroes2::Point{ -1, -1 }, MP2::OBJ_NON_ACTION_DERELICT_SHIP, Maps::OBJECT_LAYER );
-            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNWAT2, 3, fheroes2::Point{ 0, -2 }, MP2::OBJ_NON_ACTION_DERELICT_SHIP, Maps::OBJECT_LAYER );
-
-            objects.emplace_back( std::move( object ) );
-        }
-
-        // Aquatic plants. Terrain object.
-        {
-            Maps::ObjectInfo object{ MP2::OBJ_NONE };
-
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNWATR, 83, fheroes2::Point{ 0, 0 }, MP2::OBJ_NONE, Maps::TERRAIN_LAYER );
-            object.groundLevelParts.back().animationFrames = 6;
-
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNWATR, 76, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::TERRAIN_LAYER );
-            object.groundLevelParts.back().animationFrames = 6;
-
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNWATR, 90, fheroes2::Point{ 1, 0 }, MP2::OBJ_NONE, Maps::TERRAIN_LAYER );
-            object.groundLevelParts.back().animationFrames = 6;
-
-            objects.emplace_back( std::move( object ) );
-        }
-
-        // Aquatic plants. Terrain object.
-        {
-            Maps::ObjectInfo object{ MP2::OBJ_NONE };
-
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNWATR, 97, fheroes2::Point{ 0, 0 }, MP2::OBJ_NONE, Maps::TERRAIN_LAYER );
-            object.groundLevelParts.back().animationFrames = 6;
-
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNWATR, 104, fheroes2::Point{ 1, 0 }, MP2::OBJ_NONE, Maps::TERRAIN_LAYER );
-            object.groundLevelParts.back().animationFrames = 6;
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNWAT2, 11, fheroes2::Point{ -1, -1 }, MP2::OBJ_NON_ACTION_DERELICT_SHIP );
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNWAT2, 3, fheroes2::Point{ 0, -2 }, MP2::OBJ_NON_ACTION_DERELICT_SHIP );
 
             objects.emplace_back( std::move( object ) );
         }
@@ -437,7 +534,7 @@ namespace
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC2, 10, fheroes2::Point{ -1, -1 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
             object.groundLevelParts.back().animationFrames = 8;
 
-            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC2, 19, fheroes2::Point{ 0, -1 }, MP2::OBJ_NON_ACTION_MERMAID, Maps::OBJECT_LAYER );
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC2, 19, fheroes2::Point{ 0, -1 }, MP2::OBJ_NON_ACTION_MERMAID );
             object.topLevelParts.back().animationFrames = 8;
 
             objects.emplace_back( std::move( object ) );
@@ -460,76 +557,195 @@ namespace
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC2, 47, fheroes2::Point{ -2, -1 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
             object.groundLevelParts.back().animationFrames = 8;
 
-            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC2, 56, fheroes2::Point{ -1, -1 }, MP2::OBJ_NON_ACTION_SIRENS, Maps::OBJECT_LAYER );
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC2, 56, fheroes2::Point{ -1, -1 }, MP2::OBJ_NON_ACTION_SIRENS );
             object.topLevelParts.back().animationFrames = 8;
 
-            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC2, 65, fheroes2::Point{ 0, -1 }, MP2::OBJ_NON_ACTION_SIRENS, Maps::OBJECT_LAYER );
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC2, 65, fheroes2::Point{ 0, -1 }, MP2::OBJ_NON_ACTION_SIRENS );
             object.topLevelParts.back().animationFrames = 8;
 
-            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC2, 74, fheroes2::Point{ 1, -1 }, MP2::OBJ_NON_ACTION_SIRENS, Maps::OBJECT_LAYER );
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC2, 74, fheroes2::Point{ 1, -1 }, MP2::OBJ_NON_ACTION_SIRENS );
             object.topLevelParts.back().animationFrames = 8;
 
             objects.emplace_back( std::move( object ) );
         }
+    }
 
-        // Reefs.
+    void populateAdventureMiscellaneous( std::vector<Maps::ObjectInfo> & objects )
+    {
+        assert( objects.empty() );
+
+        (void)objects;
+    }
+
+    void populateKingdomHeroes( std::vector<Maps::ObjectInfo> & objects )
+    {
+        assert( objects.empty() );
+
+        // Only 7 races and 6 colors exist in the game.
+        for ( int32_t color = 0; color < 6; ++color ) {
+            for ( int32_t race = 0; race < 7; ++race ) {
+                Maps::ObjectInfo object{ MP2::OBJ_HEROES };
+                object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_MINIHERO, color * 7 + race, fheroes2::Point{ 0, 0 }, MP2::OBJ_HEROES, Maps::OBJECT_LAYER );
+                object.metadata[0] = color;
+
+                if ( race == 6 ) {
+                    // We need to set as a random race, not multi.
+                    ++race;
+                }
+
+                object.metadata[1] = race;
+
+                objects.emplace_back( std::move( object ) );
+            }
+        }
+    }
+
+    void populateKingdomTowns( std::vector<Maps::ObjectInfo> & objects )
+    {
+        assert( objects.empty() );
+
+        auto addTown = [&objects]( const MP2::MapObjectType mainObjectType, const uint8_t townIcnOffset, const uint8_t shadowIcnOffset,
+                                   const MP2::ObjectIcnType townIcnType, const MP2::ObjectIcnType shadowIcnType ) {
+            assert( MP2::isActionObject( mainObjectType ) );
+
+            const MP2::MapObjectType secondaryObjectType( static_cast<MP2::MapObjectType>( mainObjectType - MP2::OBJ_ACTION_OBJECT_TYPE ) );
+
+            Maps::ObjectInfo object{ mainObjectType };
+            object.groundLevelParts.emplace_back( townIcnType, townIcnOffset + 13, fheroes2::Point{ 0, 0 }, mainObjectType, Maps::OBJECT_LAYER );
+            // Castle/town shadow.
+            object.groundLevelParts.emplace_back( shadowIcnType, shadowIcnOffset + 13, fheroes2::Point{ -3, 1 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            object.groundLevelParts.emplace_back( shadowIcnType, shadowIcnOffset + 14, fheroes2::Point{ -2, 1 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            object.groundLevelParts.emplace_back( shadowIcnType, shadowIcnOffset + 15, fheroes2::Point{ -1, 1 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            object.groundLevelParts.emplace_back( shadowIcnType, shadowIcnOffset + 9, fheroes2::Point{ -4, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            object.groundLevelParts.emplace_back( shadowIcnType, shadowIcnOffset + 10, fheroes2::Point{ -3, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            object.groundLevelParts.emplace_back( shadowIcnType, shadowIcnOffset + 11, fheroes2::Point{ -2, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            object.groundLevelParts.emplace_back( shadowIcnType, shadowIcnOffset + 12, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            object.groundLevelParts.emplace_back( shadowIcnType, shadowIcnOffset + 4, fheroes2::Point{ -5, -1 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            object.groundLevelParts.emplace_back( shadowIcnType, shadowIcnOffset + 5, fheroes2::Point{ -4, -1 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            object.groundLevelParts.emplace_back( shadowIcnType, shadowIcnOffset + 6, fheroes2::Point{ -3, -1 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            object.groundLevelParts.emplace_back( shadowIcnType, shadowIcnOffset + 7, fheroes2::Point{ -2, -1 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            object.groundLevelParts.emplace_back( shadowIcnType, shadowIcnOffset + 8, fheroes2::Point{ -1, -1 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            object.groundLevelParts.emplace_back( shadowIcnType, shadowIcnOffset + 0, fheroes2::Point{ -4, -2 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            object.groundLevelParts.emplace_back( shadowIcnType, shadowIcnOffset + 1, fheroes2::Point{ -3, -2 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            object.groundLevelParts.emplace_back( shadowIcnType, shadowIcnOffset + 2, fheroes2::Point{ -2, -2 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            object.groundLevelParts.emplace_back( shadowIcnType, shadowIcnOffset + 3, fheroes2::Point{ -1, -2 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            // Castle/town main sprite.
+            object.groundLevelParts.emplace_back( townIcnType, townIcnOffset + 11, fheroes2::Point{ -2, 0 }, secondaryObjectType, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( townIcnType, townIcnOffset + 12, fheroes2::Point{ -1, 0 }, secondaryObjectType, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( townIcnType, townIcnOffset + 14, fheroes2::Point{ 1, 0 }, secondaryObjectType, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( townIcnType, townIcnOffset + 15, fheroes2::Point{ 2, 0 }, secondaryObjectType, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( townIcnType, townIcnOffset + 7, fheroes2::Point{ -1, -1 }, secondaryObjectType, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( townIcnType, townIcnOffset + 8, fheroes2::Point{ 0, -1 }, secondaryObjectType, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( townIcnType, townIcnOffset + 9, fheroes2::Point{ 1, -1 }, secondaryObjectType, Maps::OBJECT_LAYER );
+            object.topLevelParts.emplace_back( townIcnType, townIcnOffset + 6, fheroes2::Point{ -2, -1 }, secondaryObjectType );
+            object.topLevelParts.emplace_back( townIcnType, townIcnOffset + 10, fheroes2::Point{ 2, -1 }, secondaryObjectType );
+            object.topLevelParts.emplace_back( townIcnType, townIcnOffset + 1, fheroes2::Point{ -2, -2 }, secondaryObjectType );
+            object.topLevelParts.emplace_back( townIcnType, townIcnOffset + 2, fheroes2::Point{ -1, -2 }, secondaryObjectType );
+            object.topLevelParts.emplace_back( townIcnType, townIcnOffset + 3, fheroes2::Point{ 0, -2 }, secondaryObjectType );
+            object.topLevelParts.emplace_back( townIcnType, townIcnOffset + 4, fheroes2::Point{ 1, -2 }, secondaryObjectType );
+            object.topLevelParts.emplace_back( townIcnType, townIcnOffset + 5, fheroes2::Point{ 2, -2 }, secondaryObjectType );
+            object.topLevelParts.emplace_back( townIcnType, townIcnOffset + 0, fheroes2::Point{ 0, -3 }, secondaryObjectType );
+
+            objects.emplace_back( std::move( object ) );
+        };
+
+        // Castle and town sprites: Knight, Barbarian, Sorceress, Warlock, Wizard, Necromancer.
+        // First goes castle, then town, then the next race.
+        for ( uint8_t race = 0; race < 6 * 2; ++race ) {
+            const uint8_t icnOffset = race * 16;
+
+            addTown( MP2::OBJ_CASTLE, icnOffset, icnOffset, MP2::OBJ_ICN_TYPE_OBJNTOWN, MP2::OBJ_ICN_TYPE_OBJNTWSH );
+        }
+
+        // Random castle/town
+        for ( uint8_t i = 0; i < 2; ++i ) {
+            const uint8_t icnOffset = i * 16;
+            const MP2::MapObjectType mainObjectType = ( i == 0 ) ? MP2::OBJ_RANDOM_CASTLE : MP2::OBJ_RANDOM_TOWN;
+
+            addTown( mainObjectType, icnOffset, icnOffset + 32, MP2::OBJ_ICN_TYPE_OBJNTWRD, MP2::OBJ_ICN_TYPE_OBJNTWRD );
+        }
+    }
+
+    void populateMonsters( std::vector<Maps::ObjectInfo> & objects )
+    {
+        assert( objects.empty() );
+
+        // Monsters are "unique" objects in terms of their ICN resources.
+        // The Editor uses ICN::MON32 while the Adventure Map renderer uses modified ICN::MINIMON resources.
+        for ( int32_t monsterId = Monster::PEASANT; monsterId <= Monster::WATER_ELEMENT; ++monsterId ) {
+            Maps::ObjectInfo object{ MP2::OBJ_MONSTER };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_MONS32, monsterId - 1, fheroes2::Point{ 0, 0 }, MP2::OBJ_MONSTER, Maps::OBJECT_LAYER );
+            object.metadata[0] = monsterId;
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Random monsters.
         {
-            Maps::ObjectInfo object{ MP2::OBJ_REEFS };
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC2, 113, fheroes2::Point{ 0, 0 }, MP2::OBJ_REEFS, Maps::BACKGROUND_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC2, 114, fheroes2::Point{ 1, 0 }, MP2::OBJ_REEFS, Maps::BACKGROUND_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC2, 115, fheroes2::Point{ 2, 0 }, MP2::OBJ_REEFS, Maps::BACKGROUND_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC2, 111, fheroes2::Point{ 1, -1 }, MP2::OBJ_REEFS, Maps::BACKGROUND_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC2, 112, fheroes2::Point{ 2, -1 }, MP2::OBJ_REEFS, Maps::BACKGROUND_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC2, 116, fheroes2::Point{ 0, 1 }, MP2::OBJ_REEFS, Maps::BACKGROUND_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC2, 117, fheroes2::Point{ 1, 1 }, MP2::OBJ_REEFS, Maps::BACKGROUND_LAYER );
+            Maps::ObjectInfo object{ MP2::OBJ_RANDOM_MONSTER };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_MONS32, Monster::RANDOM_MONSTER - 1, fheroes2::Point{ 0, 0 }, MP2::OBJ_RANDOM_MONSTER,
+                                                  Maps::OBJECT_LAYER );
+            object.metadata[0] = Monster::RANDOM_MONSTER;
 
             objects.emplace_back( std::move( object ) );
         }
 
         {
-            Maps::ObjectInfo object{ MP2::OBJ_REEFS };
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC2, 120, fheroes2::Point{ 0, 0 }, MP2::OBJ_REEFS, Maps::BACKGROUND_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC2, 121, fheroes2::Point{ 1, 0 }, MP2::OBJ_REEFS, Maps::BACKGROUND_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC2, 122, fheroes2::Point{ 2, 0 }, MP2::OBJ_REEFS, Maps::BACKGROUND_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC2, 118, fheroes2::Point{ 0, -1 }, MP2::OBJ_REEFS, Maps::BACKGROUND_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC2, 119, fheroes2::Point{ 1, -1 }, MP2::OBJ_REEFS, Maps::BACKGROUND_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC2, 123, fheroes2::Point{ 1, 1 }, MP2::OBJ_REEFS, Maps::BACKGROUND_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC2, 124, fheroes2::Point{ 2, 1 }, MP2::OBJ_REEFS, Maps::BACKGROUND_LAYER );
+            Maps::ObjectInfo object{ MP2::OBJ_RANDOM_MONSTER_WEAK };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_MONS32, Monster::RANDOM_MONSTER_LEVEL_1 - 1, fheroes2::Point{ 0, 0 }, MP2::OBJ_RANDOM_MONSTER_WEAK,
+                                                  Maps::OBJECT_LAYER );
+            object.metadata[0] = Monster::RANDOM_MONSTER_LEVEL_1;
 
             objects.emplace_back( std::move( object ) );
         }
 
         {
-            Maps::ObjectInfo object{ MP2::OBJ_REEFS };
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC2, 125, fheroes2::Point{ 0, 0 }, MP2::OBJ_REEFS, Maps::BACKGROUND_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC2, 126, fheroes2::Point{ 1, 0 }, MP2::OBJ_REEFS, Maps::BACKGROUND_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC2, 127, fheroes2::Point{ 0, 1 }, MP2::OBJ_REEFS, Maps::BACKGROUND_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC2, 128, fheroes2::Point{ 1, 1 }, MP2::OBJ_REEFS, Maps::BACKGROUND_LAYER );
+            Maps::ObjectInfo object{ MP2::OBJ_RANDOM_MONSTER_MEDIUM };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_MONS32, Monster::RANDOM_MONSTER_LEVEL_2 - 1, fheroes2::Point{ 0, 0 }, MP2::OBJ_RANDOM_MONSTER_MEDIUM,
+                                                  Maps::OBJECT_LAYER );
+            object.metadata[0] = Monster::RANDOM_MONSTER_LEVEL_2;
 
             objects.emplace_back( std::move( object ) );
         }
 
         {
-            Maps::ObjectInfo object{ MP2::OBJ_REEFS };
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC2, 129, fheroes2::Point{ 0, 0 }, MP2::OBJ_REEFS, Maps::BACKGROUND_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC2, 130, fheroes2::Point{ -1, 1 }, MP2::OBJ_REEFS, Maps::BACKGROUND_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC2, 131, fheroes2::Point{ 0, 1 }, MP2::OBJ_REEFS, Maps::BACKGROUND_LAYER );
+            Maps::ObjectInfo object{ MP2::OBJ_RANDOM_MONSTER_STRONG };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_MONS32, Monster::RANDOM_MONSTER_LEVEL_3 - 1, fheroes2::Point{ 0, 0 }, MP2::OBJ_RANDOM_MONSTER_STRONG,
+                                                  Maps::OBJECT_LAYER );
+            object.metadata[0] = Monster::RANDOM_MONSTER_LEVEL_3;
 
             objects.emplace_back( std::move( object ) );
         }
 
         {
-            Maps::ObjectInfo object{ MP2::OBJ_REEFS };
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC2, 132, fheroes2::Point{ 0, 0 }, MP2::OBJ_REEFS, Maps::BACKGROUND_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC2, 133, fheroes2::Point{ 1, 0 }, MP2::OBJ_REEFS, Maps::BACKGROUND_LAYER );
+            Maps::ObjectInfo object{ MP2::OBJ_RANDOM_MONSTER_VERY_STRONG };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_MONS32, Monster::RANDOM_MONSTER_LEVEL_4 - 1, fheroes2::Point{ 0, 0 },
+                                                  MP2::OBJ_RANDOM_MONSTER_VERY_STRONG, Maps::OBJECT_LAYER );
+            object.metadata[0] = Monster::RANDOM_MONSTER_LEVEL_4;
 
             objects.emplace_back( std::move( object ) );
         }
+    }
 
-        {
-            Maps::ObjectInfo object{ MP2::OBJ_REEFS };
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC2, 134, fheroes2::Point{ 0, 0 }, MP2::OBJ_REEFS, Maps::BACKGROUND_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC2, 135, fheroes2::Point{ 0, 1 }, MP2::OBJ_REEFS, Maps::BACKGROUND_LAYER );
+    void populateRoads( std::vector<Maps::ObjectInfo> & objects )
+    {
+        assert( objects.empty() );
+
+        for ( uint32_t i = 0; i < 32; ++i ) {
+            Maps::ObjectInfo object{ MP2::OBJ_NONE };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_ROAD, i, fheroes2::Point{ 0, 0 }, MP2::OBJ_NONE, Maps::TERRAIN_LAYER );
+
+            objects.emplace_back( std::move( object ) );
+        }
+    }
+
+    void populateStreams( std::vector<Maps::ObjectInfo> & objects )
+    {
+        assert( objects.empty() );
+
+        for ( uint32_t i = 0; i < 13; ++i ) {
+            Maps::ObjectInfo object{ MP2::OBJ_NONE };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_STREAM, i, fheroes2::Point{ 0, 0 }, MP2::OBJ_NONE, Maps::TERRAIN_LAYER );
 
             objects.emplace_back( std::move( object ) );
         }
@@ -545,11 +761,74 @@ namespace
 
         // IMPORTANT!!!
         // The order of objects must be preserved. If you want to add a new object, add it to the end of the corresponding container.
-        populateArtifactData( objectData[static_cast<size_t>( Maps::ObjectGroup::Artifact )] );
-        populateHeroData( objectData[static_cast<size_t>( Maps::ObjectGroup::Hero )] );
-        populateMonsterData( objectData[static_cast<size_t>( Maps::ObjectGroup::Monster )] );
-        populateTreasureData( objectData[static_cast<size_t>( Maps::ObjectGroup::Treasure )] );
-        populateOceanObjectData( objectData[static_cast<size_t>( Maps::ObjectGroup::Ocean_Object )] );
+        populateRoads( objectData[static_cast<size_t>( Maps::ObjectGroup::ROADS )] );
+        populateStreams( objectData[static_cast<size_t>( Maps::ObjectGroup::STREAMS )] );
+
+        populateLandscapeMountains( objectData[static_cast<size_t>( Maps::ObjectGroup::LANDSCAPE_MOUNTAINS )] );
+        populateLandscapeRocks( objectData[static_cast<size_t>( Maps::ObjectGroup::LANDSCAPE_ROCKS )] );
+        populateLandscapeTrees( objectData[static_cast<size_t>( Maps::ObjectGroup::LANDSCAPE_TREES )] );
+        populateLandscapeWater( objectData[static_cast<size_t>( Maps::ObjectGroup::LANDSCAPE_WATER )] );
+        populateLandscapeMiscellaneous( objectData[static_cast<size_t>( Maps::ObjectGroup::LANDSCAPE_MISCELLANEOUS )] );
+
+        populateLandscapeTownBasements( objectData[static_cast<size_t>( Maps::ObjectGroup::LANDSCAPE_TOWN_BASEMENTS )] );
+        populateLandscapeFlags( objectData[static_cast<size_t>( Maps::ObjectGroup::LANDSCAPE_FLAGS )] );
+
+        populateAdventureArtifacts( objectData[static_cast<size_t>( Maps::ObjectGroup::ADVENTURE_ARTIFACTS )] );
+        populateAdventureDwellings( objectData[static_cast<size_t>( Maps::ObjectGroup::ADVENTURE_DWELLINGS )] );
+        populateAdventureMines( objectData[static_cast<size_t>( Maps::ObjectGroup::ADVENTURE_MINES )] );
+        populateAdventurePowerUps( objectData[static_cast<size_t>( Maps::ObjectGroup::ADVENTURE_POWER_UPS )] );
+        populateAdventureTreasures( objectData[static_cast<size_t>( Maps::ObjectGroup::ADVENTURE_TREASURES )] );
+        populateAdventureWater( objectData[static_cast<size_t>( Maps::ObjectGroup::ADVENTURE_WATER )] );
+        populateAdventureMiscellaneous( objectData[static_cast<size_t>( Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS )] );
+
+        populateKingdomHeroes( objectData[static_cast<size_t>( Maps::ObjectGroup::KINGDOM_HEROES )] );
+        populateKingdomTowns( objectData[static_cast<size_t>( Maps::ObjectGroup::KINGDOM_TOWNS )] );
+
+        populateMonsters( objectData[static_cast<size_t>( Maps::ObjectGroup::MONSTERS )] );
+
+#if defined( WITH_DEBUG )
+        // It is important to check that all data is accurately generated.
+        for ( const auto & objects : objectData ) {
+            for ( const auto & objectInfo : objects ) {
+                assert( !objectInfo.groundLevelParts.empty() );
+
+                assert( objectInfo.groundLevelParts.front().objectType == objectInfo.objectType );
+            }
+        }
+
+        // Check that all landscape objects are non-action objects.
+        for ( size_t groupType = static_cast<size_t>( Maps::ObjectGroup::ROADS ); groupType <= static_cast<size_t>( Maps::ObjectGroup::LANDSCAPE_FLAGS ); ++groupType ) {
+            const auto & objects = objectData[groupType];
+
+            for ( const auto & objectInfo : objects ) {
+                assert( !MP2::isActionObject( objectInfo.objectType ) );
+            }
+        }
+
+        // Check that all other objects are action objects.
+        for ( size_t groupType = static_cast<size_t>( Maps::ObjectGroup::ADVENTURE_ARTIFACTS ); groupType < static_cast<size_t>( Maps::ObjectGroup::GROUP_COUNT );
+              ++groupType ) {
+            const auto & objects = objectData[groupType];
+
+            for ( const auto & objectInfo : objects ) {
+                assert( MP2::isActionObject( objectInfo.objectType ) );
+            }
+        }
+#endif
+
+        // For game's map loading and saving we need to keep another cached container.
+        // This container also serves as verification that all objects use unique object info as their main object part.
+        for ( size_t groupType = 0; groupType < objectData.size(); ++groupType ) {
+            for ( size_t objectId = 0; objectId < objectData[groupType].size(); ++objectId ) {
+                const auto & frontPart = objectData[groupType][objectId].groundLevelParts.front();
+                auto [it, inserted] = icnVsObjectInfo.emplace( std::make_pair( frontPart.icnType, frontPart.icnIndex ),
+                                                               std::make_pair( static_cast<Maps::ObjectGroup>( groupType ), static_cast<uint32_t>( objectId ) ) );
+                if ( !inserted ) {
+                    // You use the same object part for more than one object. Check your code!
+                    assert( 0 );
+                }
+            }
+        }
 
         isPopulated = true;
     }
@@ -559,7 +838,7 @@ namespace Maps
 {
     const std::vector<ObjectInfo> & getObjectsByGroup( const ObjectGroup group )
     {
-        assert( group != ObjectGroup::Group_Count );
+        assert( group != ObjectGroup::GROUP_COUNT );
 
         populateObjectData();
 
@@ -582,6 +861,25 @@ namespace Maps
         }
 
         return MP2::OBJ_NONE;
+    }
+
+    bool getObjectInfo( const MP2::ObjectIcnType icnType, const uint32_t icnIndex, ObjectGroup & group, uint32_t & index )
+    {
+        if ( icnType == MP2::OBJ_ICN_TYPE_UNKNOWN ) {
+            // No object exist. Nothing to do.
+            return false;
+        }
+
+        populateObjectData();
+
+        auto iter = icnVsObjectInfo.find( std::make_pair( icnType, icnIndex ) );
+        if ( iter != icnVsObjectInfo.end() ) {
+            group = iter->second.first;
+            index = iter->second.second;
+            return true;
+        }
+
+        return false;
     }
 
     std::vector<fheroes2::Point> getGroundLevelOccupiedTileOffset( const ObjectInfo & info )

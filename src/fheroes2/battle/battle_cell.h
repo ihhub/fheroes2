@@ -102,8 +102,9 @@ namespace Battle
 
         void Set( const int32_t head, const bool wide, const bool reflect );
         void Swap();
+
         bool isReflect() const;
-        bool contains( int cellIndex ) const;
+        bool contains( const int32_t idx ) const;
 
         // Returns the position that a given unit would occupy after moving to the cell
         // with a given index (without taking into account the pathfinder's info) or an
@@ -117,10 +118,12 @@ namespace Battle
         static Position GetReachable( const Unit & unit, const int32_t dst, const std::optional<uint32_t> speed = {} );
 
         fheroes2::Rect GetRect() const;
-        Cell * GetHead();
+
         const Cell * GetHead() const;
-        Cell * GetTail();
         const Cell * GetTail() const;
+
+        Cell * GetHead();
+        Cell * GetTail();
 
         bool operator<( const Position & other ) const;
     };

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-09 03:47+0000\n"
+"POT-Creation-Date: 2023-12-15 09:12+0000\n"
 "PO-Revision-Date: 2023-11-12 16:27+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -198,6 +198,18 @@ msgstr "ВСТУПЛЕНИЕ"
 
 msgid "MIN"
 msgstr "МИН"
+
+msgid "RESET"
+msgstr ""
+
+#, fuzzy
+msgid "CASTLE"
+msgstr ""
+"ГОРОДА/\n"
+"ЗАМКИ"
+
+msgid "TOWN"
+msgstr ""
 
 msgid ""
 "D\n"
@@ -956,14 +968,9 @@ msgstr "Сила магии"
 msgid "Set Knowledge Skill"
 msgstr "Знания"
 
-msgid "%{race1} %{name1}"
-msgstr "%{race1} %{name1}"
-
-msgid "vs"
-msgstr "против"
-
-msgid "%{race2} %{name2}"
-msgstr "%{race2} %{name2}"
+#, fuzzy
+msgid "%{race1} %{name1} vs %{race2} %{name2}"
+msgstr "%{name1} встретил %{name2}"
 
 msgid "Monsters"
 msgstr "Монстры"
@@ -3022,6 +3029,16 @@ msgstr ""
 "Показать дополнительную информацию, такую как FPS (количество отображаемых "
 "кадров в секунду) и текущее время."
 
+msgid "Hotkey: "
+msgstr ""
+
+msgid "Category: "
+msgstr ""
+
+#, fuzzy
+msgid "Event: "
+msgstr "Событие"
+
 msgid "Hot Keys:"
 msgstr "Горячие клавиши:"
 
@@ -3315,6 +3332,10 @@ msgstr "Подтвердить Ваш выбор."
 msgid "%{color} %{race} hero"
 msgstr "%{color} герой - %{race}"
 
+#, fuzzy
+msgid "Terrain object"
+msgstr "Почва"
+
 msgid "Select Skill:"
 msgstr "Выберите навык:"
 
@@ -3333,11 +3354,59 @@ msgstr "Выберите героя:"
 msgid "Select Treasure:"
 msgstr "Выберите сокровище:"
 
+#, fuzzy
+msgid "Select Ocean Object:"
+msgstr "Объекты океана"
+
+#, fuzzy
+msgid "Castle/town placing"
+msgstr "Настройки замка"
+
+msgid "doubleLinedRace|Neutral"
+msgstr "Нейтральный"
+
+msgid "race|Random"
+msgstr "Случайно"
+
+#, fuzzy
+msgid "Click to start placing the selected castle/town."
+msgstr "Нажмите, чтобы применить выбранное разрешение экрана."
+
+#, fuzzy
+msgid "Click to select town placing."
+msgstr "Нажмите, чтобы показать следующий город."
+
+#, fuzzy
+msgid "Click to select castle placing."
+msgstr "Нажмите сюда чтобы выбрать сценарий."
+
+#, fuzzy
+msgid "%{color} %{race} %{townOrCastle}"
+msgstr "%{color} герой - %{race}"
+
+msgid "race|Neutral"
+msgstr "Нейтральный"
+
+msgid "You will place"
+msgstr ""
+
+#, fuzzy
+msgid "Click to select this class."
+msgstr "Нажмите сюда чтобы выбрать сценарий."
+
+#, fuzzy
+msgid "Click to select this color."
+msgstr "Нажмите сюда чтобы выбрать сценарий."
+
 msgid "Map Type:\n"
 msgstr "Тип карты:\n"
 
 msgid "The Succession Wars"
 msgstr "Война за престол"
+
+#, fuzzy
+msgid "Resurrection"
+msgstr "Оживление"
 
 msgid "Lose all your heroes and towns."
 msgstr "Потерять всех героев и все города."
@@ -3595,6 +3664,12 @@ msgstr "Характер:"
 msgid "Best Monster:"
 msgstr "Лучший отряд:"
 
+#, fuzzy
+msgid "Map filename"
+msgstr ""
+"Размер\n"
+"карты"
+
 msgid ""
 "Are you sure you want to load a new map? (Any unsaved changes to the current "
 "map will be lost.)"
@@ -3635,6 +3710,10 @@ msgstr "Выйти из редактора карт."
 msgid "Monster"
 msgstr "Отряд"
 
+#, fuzzy
+msgid "Objects cannot be placed outside the map."
+msgstr "Героев нельзя размещать на воде."
+
 msgid "Monsters cannot be placed on water."
 msgstr "Монстров нельзя размещать на воде."
 
@@ -3658,6 +3737,21 @@ msgstr "Артефакты"
 
 msgid "Artifacts cannot be placed on water."
 msgstr "Артефакты нельзя размещать на воде."
+
+#, fuzzy
+msgid "Ocean object"
+msgstr "Объекты океана"
+
+#, fuzzy
+msgid "Ocean object must be placed on water."
+msgstr "Героев нельзя размещать на воде."
+
+msgid "Towns"
+msgstr "Города"
+
+#, fuzzy
+msgid "Towns cannot be placed on water."
+msgstr "Монстров нельзя размещать на воде."
 
 msgid "Ocean Objects"
 msgstr "Объекты океана"
@@ -3685,9 +3779,6 @@ msgstr "Объекты пустоши"
 
 msgid "Beach Objects"
 msgstr "Объекты побережья"
-
-msgid "Towns"
-msgstr "Города"
 
 msgid "Treasures"
 msgstr "Сокровища"
@@ -4537,6 +4628,33 @@ msgstr ""
 "Хотите ли Вы передать управление ИИ? Передача вступит в силу со следующего "
 "хода."
 
+#, fuzzy
+msgid "Default Actions"
+msgstr "действие по умолчанию"
+
+msgid "Global Actions"
+msgstr ""
+
+msgid "Main Menu"
+msgstr ""
+
+msgid "World Map"
+msgstr "Карта мира"
+
+#, fuzzy
+msgid "Battle Screen"
+msgstr "Экран героя"
+
+#, fuzzy
+msgid "Town Screen"
+msgstr "Экран героя"
+
+msgid "Army Actions"
+msgstr ""
+
+msgid "Editor"
+msgstr "Редактор"
+
 msgid "The save file is corrupted."
 msgstr "Файл сохранения повреждён."
 
@@ -4552,9 +4670,10 @@ msgstr "Последняя поддерживаемая версия: "
 msgid "This file contains a save with an invalid game type."
 msgstr "Этот файл содержит сохранение с некорректным типом игры."
 
+#, fuzzy
 msgid ""
-"This file was saved for a \"The Price of Loyalty\" map, but the "
-"corresponding game assets have not been provided to the engine."
+"This save file requires \"The Price of Loyalty\" game assets, but they have "
+"not been provided to the engine."
 msgstr ""
 "Этот файл сохранён для карты дополнения \"Цена верности\", но "
 "соответствующие игровые ресурсы не обнаружены."
@@ -4639,9 +4758,6 @@ msgstr ""
 ".\n"
 "\n"
 "Желаем Вам приятной игры!"
-
-msgid "Editor"
-msgstr "Редактор"
 
 msgid "The Editor requires \"The Price of Loyalty\" expansion files to work."
 msgstr ""
@@ -5206,9 +5322,6 @@ msgstr "Попробуйте копать на нормальной земле."
 msgid "A miniature view of the known world. Left click to move viewing area."
 msgstr ""
 "Мини-карта изученного мира. Нажатием левой кнопки можно управлять просмотром."
-
-msgid "World Map"
-msgstr "Карта мира"
 
 msgid "Month: %{month} Week: %{week}"
 msgstr "Месяц: %{month} Неделя: %{week}"
@@ -7658,12 +7771,6 @@ msgstr "Некромант"
 msgid "Multi"
 msgstr "По сценарию"
 
-msgid "race|Random"
-msgstr "Случайно"
-
-msgid "race|Neutral"
-msgstr "Нейтральный"
-
 msgid "doubleLined|Knight"
 msgstr "Рыцарь"
 
@@ -7695,9 +7802,6 @@ msgstr ""
 
 msgid "doubleLinedRace|Random"
 msgstr "Случайно"
-
-msgid "doubleLinedRace|Neutral"
-msgstr "Нейтральный"
 
 msgid "speed|Standing"
 msgstr "На месте"
@@ -10885,3 +10989,12 @@ msgstr ""
 "Новую версию игры можно найти на сайте:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "%{race1} %{name1}"
+#~ msgstr "%{race1} %{name1}"
+
+#~ msgid "vs"
+#~ msgstr "против"
+
+#~ msgid "%{race2} %{name2}"
+#~ msgstr "%{race2} %{name2}"

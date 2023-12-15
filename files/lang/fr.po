@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-09 03:47+0000\n"
-"PO-Revision-Date: 2022-12-18 13:48+0100\n"
+"POT-Creation-Date: 2023-12-15 09:12+0000\n"
+"PO-Revision-Date: 2023-12-13 02:41+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
 "Language: fr\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
 "X-Launchpad-Export-Date: 2010-05-27 09:12+0000\n"
-"X-Generator: Poedit 3.2\n"
+"X-Generator: Poedit 3.4.1\n"
 
 msgid ""
 "BATTLE\n"
@@ -49,8 +49,8 @@ msgstr "INFOS"
 
 msgid "QUIT"
 msgstr ""
-"QUITT-\n"
-"ER"
+"QUIT-\n"
+"TER"
 
 msgid "CANCEL"
 msgstr "SORTIR"
@@ -59,7 +59,7 @@ msgid "OKAY"
 msgstr "OK"
 
 msgid "smallerButton|OKAY"
-msgstr ""
+msgstr "OK"
 
 msgid "ACCEPT"
 msgstr "ACCEPTER"
@@ -83,7 +83,7 @@ msgid "EXIT"
 msgstr "FIN"
 
 msgid "smallerButton|EXIT"
-msgstr ""
+msgstr "FIN"
 
 msgid "DISMISS"
 msgstr "RENVOYER"
@@ -95,12 +95,14 @@ msgid "RESTART"
 msgstr "REJOUER"
 
 msgid "HEROES"
-msgstr ""
+msgstr "HÉROS"
 
 msgid ""
 "TOWNS/\n"
 "CASTLES"
 msgstr ""
+"VIL-\n"
+"LAGES"
 
 msgid "S"
 msgstr "S"
@@ -115,10 +117,10 @@ msgid "X-L"
 msgstr "XL"
 
 msgid "ALL"
-msgstr "T"
+msgstr "TOUT"
 
 msgid "SELECT"
-msgstr ""
+msgstr "AUTRE"
 
 msgid ""
 "STANDARD\n"
@@ -155,7 +157,7 @@ msgid ""
 "EXPANSION\n"
 "CAMPAIGN"
 msgstr ""
-"SCENARIO\n"
+"SCÉNARIO\n"
 "DISC"
 
 msgid "HOT SEAT"
@@ -188,10 +190,22 @@ msgid "DIFFICULTY"
 msgstr "DIFFICULTÉ"
 
 msgid "VIEW INTRO"
-msgstr ""
+msgstr "VOIR INTRO"
 
 msgid "MIN"
 msgstr "MIN"
+
+msgid "RESET"
+msgstr ""
+
+#, fuzzy
+msgid "CASTLE"
+msgstr ""
+"VIL-\n"
+"LAGES"
+
+msgid "TOWN"
+msgstr ""
 
 msgid ""
 "D\n"
@@ -202,6 +216,12 @@ msgid ""
 "S\n"
 "S"
 msgstr ""
+"R\n"
+"E\n"
+"N\n"
+"V\n"
+"O\n"
+"I"
 
 msgid ""
 "E\n"
@@ -209,6 +229,13 @@ msgid ""
 "I\n"
 "T"
 msgstr ""
+"Q\n"
+"U\n"
+"I\n"
+"T\n"
+"T\n"
+"E\n"
+"R"
 
 msgid ""
 "C\n"
@@ -220,6 +247,14 @@ msgid ""
 "G\n"
 "N"
 msgstr ""
+"C\n"
+"A\n"
+"M\n"
+"P\n"
+"A\n"
+"G\n"
+"N\n"
+"E"
 
 msgid ""
 "S\n"
@@ -231,6 +266,14 @@ msgid ""
 "R\n"
 "D"
 msgstr ""
+"S\n"
+"C\n"
+"É\n"
+"N\n"
+"A\n"
+"R\n"
+"I\n"
+"O"
 
 msgid "Warrior"
 msgstr "Guerrier"
@@ -359,7 +402,7 @@ msgid "Combine %{name} armies"
 msgstr "Fusionner les armées de %{name}"
 
 msgid "Exchange %{name2} with %{name}"
-msgstr "Échanger %{name2} avec %{name}"
+msgstr "Échanger %{name2} contre %{name}"
 
 msgid "Select %{name}"
 msgstr "Sélectionner %{name}"
@@ -404,7 +447,6 @@ msgstr "Ce sort n'affectera personne !"
 msgid "You may only summon one type of elemental per combat."
 msgstr "Vous ne pouvez invoquer qu'un seul type d'élémentaire par combat."
 
-#, fuzzy
 msgid ""
 "There is no open space adjacent to your hero where you can summon an "
 "Elemental to."
@@ -431,7 +473,6 @@ msgstr "Désactivé"
 msgid "On"
 msgstr "Activé"
 
-#, fuzzy
 msgid "Turn Order"
 msgstr "Ordre de jeu"
 
@@ -467,7 +508,6 @@ msgstr "Infos sur dégâts"
 msgid "Set the speed of combat actions and animations."
 msgstr "Définir la vitesse des actions et animations de combat."
 
-#, fuzzy
 msgid "Toggle to display the turn order during the battle."
 msgstr ""
 "Activer ou désactiver l'affichage de l'ordre de jeu des créatures pendant le "
@@ -928,14 +968,8 @@ msgstr "Régler puissance"
 msgid "Set Knowledge Skill"
 msgstr "Régler connaissance"
 
-msgid "%{race1} %{name1}"
-msgstr "%{race1} le %{name1}"
-
-msgid "vs"
-msgstr "vs"
-
-msgid "%{race2} %{name2}"
-msgstr "%{race2} le %{name2}"
+msgid "%{race1} %{name1} vs %{race2} %{name2}"
+msgstr "%{race1} %{name1} vs. %{race2} %{name2}"
 
 msgid "Monsters"
 msgstr "Monstres"
@@ -1026,7 +1060,6 @@ msgstr "Trahison"
 msgid "Final Justice"
 msgstr "Justice définitive"
 
-#, fuzzy
 msgid ""
 "Roland needs you to defeat the lords near his castle to begin his war of "
 "rebellion against his brother. They are not allied with each other, so they "
@@ -1123,15 +1156,14 @@ msgstr ""
 "et tous sont alliés contre vous. Capturez Archibald pour mettre fin à la "
 "guerre !"
 
-#, fuzzy
 msgid ""
 "Switching sides leaves you with three castles against the enemy's one. This "
 "battle will be the easiest one you will face for the rest of the war..."
 "traitor."
 msgstr ""
-"Changer de camp vous laisse avec trois châteaux contre un seul pour l'ennemi."
-"Cette bataille sera la plus facile que vous aurez à mener jusqu'à la fin de "
-"la guerre... traître."
+"Changer de camp vous laisse avec trois châteaux contre un seul pour "
+"l'ennemi. Cette bataille sera la plus facile que vous aurez à mener jusqu'à "
+"la fin de la guerre... traître."
 
 msgid "Barbarian Wars"
 msgstr "Guerres barbares"
@@ -1160,16 +1192,15 @@ msgstr "Apocalypse"
 msgid "Greater Glory"
 msgstr "Grande gloire"
 
-#, fuzzy
 msgid ""
 "King Archibald requires you to defeat the three enemies in this region. They "
 "are not allied with one another, so they will spend most of their energy "
 "fighting amongst themselves. You will win when you own all of the enemy "
 "castles and there are no more heroes left to fight."
 msgstr ""
-"Le roi Archibald vous demande de vaincre les trois ennemis de cette région.  "
+"Le roi Archibald vous demande de vaincre les trois ennemis de cette région. "
 "Ils ne sont pas alliés les uns aux autres, ils dépenseront donc la majeure "
-"partie de leur énergie à se battre entre eux.  Vous gagnerez lorsque vous "
+"partie de leur énergie à se battre entre eux. Vous gagnerez lorsque vous "
 "posséderez tous les châteaux ennemis et qu'il ne restera plus de héros à "
 "combattre."
 
@@ -1456,7 +1487,6 @@ msgstr ""
 "L'emplacement de la grande bibliothèque a été découverte ! Vous devez vous y "
 "rendre, et reconquérir le village de Chronos dans lequel elle se trouve."
 
-#, fuzzy
 msgid ""
 "Find the Orb of negation, which is said to be buried in this land. There are "
 "clues inscribed on stone obelisks which will help lead you to your prize. "
@@ -1573,7 +1603,6 @@ msgstr ""
 "Les dragons, en grognant, acceptent d'unir leurs forces avec vous, leur "
 "\"allié\"."
 
-#, fuzzy
 msgid ""
 "As you approach the group of elves, their leader calls them all to "
 "attention. He shouts to them, \"Who of you is brave enough to join this "
@@ -1581,11 +1610,10 @@ msgid ""
 "your ranks."
 msgstr ""
 "Alors que vous vous approchez du groupe d'elfes, leur chef les appelle tous "
-"au garde-à-vous.  Il leur crie : \"Qui d'entre vous est assez courageux pour "
-"joindre notre allié intrépide ?\"  Le groupe explose d'acclamations en "
+"au garde-à-vous. Il leur crie : \"Qui d'entre vous est assez courageux pour "
+"joindre notre allié intrépide ?\" Le groupe explose d'acclamations en "
 "courant pour rejoindre vos rangs."
 
-#, fuzzy
 msgid ""
 "The dwarves hail you, \"Any friend of Roland is a friend of ours. You may "
 "pass.\""
@@ -1599,23 +1627,21 @@ msgstr ""
 "Les ogres poussent un grognement de reconnaissance à votre encontre, \"Les "
 "alliés d'Archibald peuvent passer\"."
 
-#, fuzzy
 msgid ""
 "The dragons see you and call out. \"Our alliance with Archibald compels us "
 "to join you. Unfortunately you have no room. A pity!\" They quickly scatter."
 msgstr ""
-"Les dragons vous voient et crient.  \"Notre alliance avec Archibald nous "
-"oblige à nous joindre à vous.  Malheureusement, vous n'avez pas de place.  "
-"C'est dommage !\"  Ils se dispersent rapidement."
+"Les dragons vous voient et crient. \"Notre alliance avec Archibald nous "
+"oblige à nous joindre à vous. Malheureusement, vous n'avez pas de place. "
+"C'est dommage !\" Ils se dispersent rapidement."
 
-#, fuzzy
 msgid ""
 "The elves stand at attention as you approach. Their leader calls to you and "
 "says, \"Let us not impede your progress, ally! Move on, and may victory be "
 "yours.\""
 msgstr ""
-"Les elfes se tiennent au garde-à-vous à votre approche.  Leur chef vous "
-"appelle et dit : \"N'entravons pas votre progression, allié !  Avancez, et "
+"Les elfes se tiennent au garde-à-vous à votre approche. Leur chef vous "
+"appelle et dit : \"N'entravons pas votre progression, allié ! Avancez, et "
 "que la victoire soit vôtre.\""
 
 msgid "\"The Dwarfbane!!!!, run for your lives.\""
@@ -1675,9 +1701,8 @@ msgstr "Médaille Fizbin"
 msgid "campaignBonus|Foremost Scroll"
 msgstr "Parchemin ultime"
 
-#, fuzzy
 msgid "campaignBonus|Gauntlets"
-msgstr "Baliste"
+msgstr "Gantelets"
 
 msgid "campaignBonus|Hideous Mask"
 msgstr "Masque sinistre"
@@ -1921,7 +1946,6 @@ msgstr "Construction impossible. Une construction a déjà eu lieu aujourd'hui."
 msgid "For this action it is necessary to build a castle first."
 msgstr "Pour effectuer cette action il faut d'abord construire un château."
 
-#, fuzzy
 msgid "Cannot build %{name} because the castle is too far away from an ocean."
 msgstr "Impossible de construire %{name} - le château est trop loin de l'eau."
 
@@ -2727,7 +2751,6 @@ msgstr "Fouille"
 msgid "Arena"
 msgstr "Arène"
 
-#, fuzzy
 msgid ""
 "You enter the arena and face a pack of vicious lions. You handily defeat "
 "them, to the wild cheers of the crowd. Impressed by your skill, the aged "
@@ -2772,15 +2795,14 @@ msgstr "Voulez-vous vraiment renvoyer cette troupe ?"
 msgid "Upgrade"
 msgstr ""
 
-#, fuzzy
 msgid "Upgrade your troops."
-msgstr "Vous n'avez pas les moyens d'améliorer vos troupes !"
+msgstr "Améliorer vos troupes !"
 
 msgid "Dismiss"
-msgstr ""
+msgstr "Renvoyer"
 
 msgid "Dismiss this army."
-msgstr ""
+msgstr "Ronvoyer cette armée."
 
 msgid ""
 "A group of %{monster} with a desire for greater glory wish to join you.\n"
@@ -2936,7 +2958,6 @@ msgstr "Choix de la langue"
 msgid "Change the graphics settings of the game."
 msgstr "Changer les paramètres d'affichage."
 
-#, fuzzy
 msgid "Toggle colored cursor on or off. This is only an aesthetic choice."
 msgstr ""
 "Basculer le curseur en couleur. Il ne s'agit que d'un choix esthétique."
@@ -3058,6 +3079,15 @@ msgstr ""
 "Afficher des informations supplémentaires telles que le FPS et l'heure "
 "actuelle."
 
+msgid "Hotkey: "
+msgstr "Raccourci clavier : "
+
+msgid "Category: "
+msgstr "Catégorie : "
+
+msgid "Event: "
+msgstr "Événement : "
+
 msgid "Hot Keys:"
 msgstr "Raccourcis clavier :"
 
@@ -3122,20 +3152,25 @@ msgstr "%{skill} +1"
 msgid "You have learned %{skill}."
 msgstr "Vous avez appris %{skill}."
 
-#, fuzzy
 msgid ""
 "%{name} has gained a level.\n"
 "\n"
 "%{skill} +1"
-msgstr "%{name} a gagné un niveau."
+msgstr ""
+"%{name} a gagné un niveau.\n"
+"\n"
+"%{skill} +1"
 
-#, fuzzy
 msgid ""
 "You may learn either:\n"
 "%{skill1}\n"
 "or\n"
 "%{skill2}"
-msgstr "Vous pouvez apprendre :"
+msgstr ""
+"Vous pouvez apprendre :\n"
+"%{skill1}\n"
+"ou\n"
+"%{skill2}"
 
 msgid ""
 "Please inspect our fine wares. If you feel like offering a trade, click on "
@@ -3208,9 +3243,8 @@ msgstr "(non visité)"
 msgid "%{color} Barrier"
 msgstr "Barrière magique %{color}"
 
-#, fuzzy
 msgid "(tent visited)"
-msgstr "(non visité)"
+msgstr "(tente visitée)"
 
 msgid "%{color} Tent"
 msgstr "Tente %{color}"
@@ -3305,12 +3339,15 @@ msgid ""
 "\n"
 "Month: "
 msgstr ""
+"\n"
+"\n"
+"Mois : "
 
 msgid ", Week: "
-msgstr ""
+msgstr ", Semaine : "
 
 msgid ", Day: "
-msgstr ""
+msgstr ", Jour : "
 
 msgid ""
 "\n"
@@ -3342,9 +3379,12 @@ msgstr "Fichier à charger :"
 msgid "Accept the choice made."
 msgstr "Confirmez le choix."
 
-#, fuzzy
 msgid "%{color} %{race} hero"
-msgstr "Joueur %{color}"
+msgstr "Héros %{race} %{color}"
+
+#, fuzzy
+msgid "Terrain object"
+msgstr "Aucun objet"
 
 msgid "Select Skill:"
 msgstr "Choisir compétence :"
@@ -3366,14 +3406,57 @@ msgid "Select Treasure:"
 msgstr "Choisir héros :"
 
 #, fuzzy
-msgid "Map Type:\n"
+msgid "Select Ocean Object:"
+msgstr "Choisir artéfact :"
+
+#, fuzzy
+msgid "Castle/town placing"
+msgstr "Options du château"
+
+msgid "doubleLinedRace|Neutral"
+msgstr "Neutre"
+
+msgid "race|Random"
+msgstr "Aléatoire"
+
+#, fuzzy
+msgid "Click to start placing the selected castle/town."
+msgstr "Cliquez pour valider la résolution choisie."
+
+#, fuzzy
+msgid "Click to select town placing."
+msgstr "Cliquez pour afficher le village suivant."
+
+#, fuzzy
+msgid "Click to select castle placing."
+msgstr "Cliquez ici pour sélectionner le scénario à jouer."
+
+#, fuzzy
+msgid "%{color} %{race} %{townOrCastle}"
+msgstr "Héros %{race} %{color}"
+
+msgid "race|Neutral"
+msgstr "Neutre"
+
+msgid "You will place"
 msgstr ""
-"\n"
-"\n"
-"Type de carte :\n"
+
+#, fuzzy
+msgid "Click to select this class."
+msgstr "Cliquez ici pour sélectionner le scénario à jouer."
+
+#, fuzzy
+msgid "Click to select this color."
+msgstr "Cliquez ici pour sélectionner le scénario à jouer."
+
+msgid "Map Type:\n"
+msgstr "Type de carte :\n"
 
 msgid "The Succession Wars"
 msgstr "The Succession Wars"
+
+msgid "Resurrection"
+msgstr "Résurrection"
 
 msgid "Lose all your heroes and towns."
 msgstr "Perdre tous les héros et tous les villages."
@@ -3493,14 +3576,13 @@ msgstr "Le nom de la carte actuellement sélectionnée."
 msgid "Selected Map Difficulty"
 msgstr "Difficulté de la carte choisie"
 
-#, fuzzy
 msgid ""
 "The map difficulty of the currently selected map. The map difficulty is "
 "determined by the scenario designer. More difficult maps might include more "
 "or stronger enemies, fewer resources, or other special conditions making "
 "things tougher for the human player."
 msgstr ""
-"Difficulté de la carte actuellement sélectionnée.  La difficulté de la carte "
+"Difficulté de la carte actuellement sélectionnée. La difficulté de la carte "
 "est déterminée par le concepteur du scénario. Les cartes plus difficiles "
 "peuvent inclure des ennemis plus nombreux ou plus forts, moins de ressources "
 "ou d'autres conditions spéciales rendant les choses plus difficiles pour le "
@@ -3540,12 +3622,11 @@ msgid "Change the speed at which your heroes move on the main screen."
 msgstr ""
 "Change la vitesse à laquelle vos héros se déplacent sur l'écran principal."
 
-#, fuzzy
 msgid ""
 "Sets the speed that A.I. heroes move at. You can also elect not to view A.I. "
 "movement at all."
 msgstr ""
-"Définit la vitesse à laquelle les héros CPU se déplacent.  Vous pouvez "
+"Définit la vitesse à laquelle les héros CPU se déplacent. Vous pouvez "
 "également choisir de ne pas voir du tout le mouvement des CPU."
 
 #, fuzzy
@@ -3637,6 +3718,12 @@ msgstr "Personnalité :"
 msgid "Best Monster:"
 msgstr "Meilleure créature :"
 
+#, fuzzy
+msgid "Map filename"
+msgstr ""
+"Taille de\n"
+"la carte"
+
 # Needs line break to have insectile space but keep partie and ? together.
 #, fuzzy
 msgid ""
@@ -3684,6 +3771,10 @@ msgstr ""
 msgid "Monster"
 msgstr "Monstre"
 
+#, fuzzy
+msgid "Objects cannot be placed outside the map."
+msgstr "Ce sort ne peut pas être jeté en mer."
+
 msgid "Monsters cannot be placed on water."
 msgstr ""
 
@@ -3708,6 +3799,21 @@ msgstr "Artéfacts"
 
 #, fuzzy
 msgid "Artifacts cannot be placed on water."
+msgstr "Ce sort ne peut pas être jeté en mer."
+
+#, fuzzy
+msgid "Ocean object"
+msgstr "Aucun objet"
+
+#, fuzzy
+msgid "Ocean object must be placed on water."
+msgstr "Ce sort ne peut pas être jeté en mer."
+
+msgid "Towns"
+msgstr "Villages"
+
+#, fuzzy
+msgid "Towns cannot be placed on water."
 msgstr "Ce sort ne peut pas être jeté en mer."
 
 msgid "Ocean Objects"
@@ -3740,20 +3846,14 @@ msgstr "Terrain vague"
 msgid "Beach Objects"
 msgstr ""
 
-#, fuzzy
-msgid "Towns"
-msgstr "Village"
-
-#, fuzzy
 msgid "Treasures"
-msgstr "Trésor"
+msgstr "Trésors"
 
 msgid "Terrain"
 msgstr ""
 
-#, fuzzy
 msgid "Castles"
-msgstr "Château"
+msgstr "Châteaux"
 
 #, fuzzy
 msgid "Roads"
@@ -4004,18 +4104,23 @@ msgstr ""
 "Choisissez cette difficulté si vous voulez un vrai challenge. L'IA sera plus "
 "forte dans ce mode de difficulté."
 
-#, fuzzy
 msgid ""
 "Congratulations!\n"
 "\n"
 "Days: %{days}\n"
-msgstr "Félicitations !"
+msgstr ""
+"Félicitations !\n"
+"\n"
+"Jours : %{days}\n"
 
 msgid ""
 "\n"
 "Difficulty: %{difficulty}\n"
 "\n"
 msgstr ""
+"\n"
+"Difficulté : %{difficulty}\n"
+"\n"
 
 msgid ""
 "Score: %{score}\n"
@@ -4023,6 +4128,10 @@ msgid ""
 "Rating:\n"
 "%{rating}"
 msgstr ""
+"Score : %{score}\n"
+"\n"
+"Taux :\n"
+"%{rating}"
 
 msgid "Start the selected scenario."
 msgstr "Démarrer le scénario sélectionné."
@@ -4033,13 +4142,12 @@ msgstr "Voir l'intro"
 msgid "View Intro videos for the current state of the campaign."
 msgstr "Voir la vidéo d'introduction du scénario actuel."
 
-#, fuzzy
 msgid ""
 "Select the campaign difficulty. This can be lowered at any point during the "
 "campaign."
 msgstr ""
-"Choisissez la difficulté de la campagne. Elle ne pourra pas être modifiée "
-"par la suite."
+"Choisissez la difficulté de la campagne. Elle pourra être abaissée à tout "
+"moment au cours de la campagne."
 
 msgid "Restart"
 msgstr "Recommencer"
@@ -4047,17 +4155,17 @@ msgstr "Recommencer"
 msgid "Restart the current scenario."
 msgstr "Recommencer le scénario actuel."
 
-#, fuzzy
 msgid "Difficulty"
-msgstr ""
-"Difficulté\n"
-"de la carte"
+msgstr "Difficulté"
 
 msgid ""
 "You have changed to a lower difficulty for the campaign. You will not be "
 "able to revert this after this point. The high score will be calculated "
 "based solely on the new difficulty. Do you want to proceed?"
 msgstr ""
+"Vous avez diminué la difficulté de la campagne. Vous ne pourrez plus annuler "
+"ce changement après validation. Le score final sera calculé en se basant "
+"seulement sur le nouveau niveau de difficulté. Voulez-vous confirmer ?"
 
 msgid "Are you sure you want to restart this scenario?"
 msgstr "Voulez-vous vraiment recommencer ce scénario ?"
@@ -4609,6 +4717,32 @@ msgstr ""
 "Voulez-vous laisser l'IA prendre les commandes ? L'effet aura lieu "
 "uniquement au prochain tour."
 
+msgid "Default Actions"
+msgstr ""
+
+msgid "Global Actions"
+msgstr ""
+
+msgid "Main Menu"
+msgstr ""
+
+msgid "World Map"
+msgstr "Carte du monde"
+
+#, fuzzy
+msgid "Battle Screen"
+msgstr "Fenêtre d'informations du héros"
+
+#, fuzzy
+msgid "Town Screen"
+msgstr "Fenêtre d'informations du héros"
+
+msgid "Army Actions"
+msgstr ""
+
+msgid "Editor"
+msgstr ""
+
 #, fuzzy
 msgid "The save file is corrupted."
 msgstr "L'image miroir est créée."
@@ -4627,8 +4761,8 @@ msgstr "Ce fichier contient une sauvegarde avec un type de jeu invalide."
 
 #, fuzzy
 msgid ""
-"This file was saved for a \"The Price of Loyalty\" map, but the "
-"corresponding game assets have not been provided to the engine."
+"This save file requires \"The Price of Loyalty\" game assets, but they have "
+"not been provided to the engine."
 msgstr ""
 "Ce fichier est enregistré au format \"The Price of Loyalty\".\n"
 "Certains éléments peuvent ne pas être disponibles."
@@ -4682,49 +4816,45 @@ msgstr ""
 "Bienvenue sur Heroes of Might and Magic II (amélioré par le moteur "
 "fheroes2) !"
 
-#, fuzzy
 msgid ""
 "Welcome to Heroes of Might and Magic II powered by the fheroes2 engine!\n"
 "Before starting the game please select a game resolution."
 msgstr ""
 "Bienvenue sur Heroes of Might and Magic II (amélioré par le moteur "
-"fheroes2) ! Avant de commencer le jeu choisissez la résolution du jeu."
+"fheroes2) !\n"
+"Avant de commencer le jeu choisissez la résolution du jeu."
 
 msgid "Please Remember"
 msgstr "N'oubliez pas"
 
 # Needs extra whitespace to avoid yellow word splitting
-#, fuzzy
 msgid ""
 "You can always change the language, resolution and settings of the game by "
 "clicking on the "
 msgstr ""
-"Vous pouvez toujours changer la résolution en cliquant sur la\n"
-" "
+"Vous pouvez toujours changer la langue, la résolution et les paramètres en "
+"cliquant sur la "
 
 msgid "door"
 msgstr "porte"
 
 msgid " on the left side of the Main Menu, or with the "
-msgstr ""
+msgstr " située à gauche du menu principal, ou avec le bouton "
 
 msgid " button from the "
-msgstr ""
+msgstr " à partir du menu "
 
-#, fuzzy
 msgid "NEW GAME"
-msgstr ""
-"NOU-\n"
-"VEAU"
+msgstr "NOUVELLE PARTIE"
 
 msgid ""
 " menu. \n"
 "\n"
 "Enjoy the game!"
 msgstr ""
-
-msgid "Editor"
-msgstr ""
+".\n"
+"\n"
+"Bon jeu !"
 
 #, fuzzy
 msgid "The Editor requires \"The Price of Loyalty\" expansion files to work."
@@ -4779,7 +4909,7 @@ msgstr ""
 "L'une des quatre nouvelles campagnes de l'extension The Price of Loyalty."
 
 msgid "Loading video. Please wait..."
-msgstr ""
+msgstr "Chargement de la vidéo. Veuillez patienter..."
 
 msgid "Host"
 msgstr "Hôte"
@@ -4853,10 +4983,9 @@ msgstr "6 Joueurs"
 msgid "Play with 6 human players."
 msgstr "Jouer avec 6 joueurs humains."
 
-#, fuzzy
 msgid "Dragon city has fallen! You are now the Master of the Dragons."
 msgstr ""
-"La cité des dragons est tombée !  Vous êtes maintenant le maître des dragons."
+"La cité des dragons est tombée ! Vous êtes maintenant le maître des dragons."
 
 msgid ""
 "You captured %{name}!\n"
@@ -4896,9 +5025,8 @@ msgstr ""
 "Vous avez accumulé plus de %{count} pièces d'or dans votre trésorerie.\n"
 "Tous les ennemis s'inclinent devant votre richesse et votre puissance."
 
-#, fuzzy
 msgid "Victory!"
-msgstr "Ector"
+msgstr "Victoire !"
 
 msgid ""
 "The enemy has captured %{name}!\n"
@@ -4931,15 +5059,17 @@ msgstr ""
 "Vous n'avez pas réussi à terminer votre quête à temps.\n"
 "Tout est perdu."
 
-#, fuzzy
 msgid "Defeat!"
-msgstr " vaincu"
+msgstr "Défaite !"
 
 msgid ""
 "Base score: %{score}\n"
 "Difficulty: %{difficulty}\n"
 "\n"
 msgstr ""
+"Score de base : %{score}\n"
+"Difficulté : %{difficulty}\n"
+"\n"
 
 msgid "Defeat all enemy heroes and capture all enemy towns and castles."
 msgstr "Défaire tous les héros et capturer tous les villages ennemis."
@@ -5006,7 +5136,7 @@ msgid "%{color} player has been vanquished!"
 msgstr "Le joueur %{color} a été vaincu !"
 
 msgid "Major Event!"
-msgstr ""
+msgstr "Événement majeur !"
 
 msgid "Scenario:"
 msgstr "Scénario :"
@@ -5091,13 +5221,13 @@ msgid " All dwellings increase population."
 msgstr " La population de toutes les demeures augmente."
 
 msgid "New Month!"
-msgstr ""
+msgstr "Nouveau mois !"
 
 msgid "New Week!"
-msgstr ""
+msgstr "Nouvelle semaine !"
 
 msgid "Beware!"
-msgstr ""
+msgstr "Attention !"
 
 msgid ""
 "%{color} player, this is your last day to capture a town, or you will be "
@@ -5136,16 +5266,14 @@ msgstr "Lord Kilburn"
 msgid "Tsabu"
 msgstr "Tsabu"
 
-#, fuzzy
 msgid "Sir Galant"
-msgstr "Sir Gallant"
+msgstr "Sir Galant"
 
 msgid "Thundax"
 msgstr "Thundax"
 
-#, fuzzy
 msgid "Lord Haart"
-msgstr "Lord Halton"
+msgstr "Lord Haart"
 
 msgid "Ariel"
 msgstr "Ariel"
@@ -5159,9 +5287,8 @@ msgstr "Sandro"
 msgid "Crodo"
 msgstr "Crodo"
 
-#, fuzzy
 msgid "Barock"
-msgstr "Barok"
+msgstr "Barock"
 
 msgid "Antoine"
 msgstr ""
@@ -5305,9 +5432,6 @@ msgstr ""
 "Une vue miniature du monde connu. Cliquez avec le bouton gauche de la souris "
 "pour déplacer la zone d'affichage."
 
-msgid "World Map"
-msgstr "Carte du monde"
-
 msgid "Month: %{month} Week: %{week}"
 msgstr "Mois : %{month}, Semaine : %{week}"
 
@@ -5412,10 +5536,10 @@ msgid "Keyboard|123"
 msgstr ""
 
 msgid "Keyboard|SPACE"
-msgstr ""
+msgstr "ESPACE"
 
 msgid "Keyboard|ABC"
-msgstr ""
+msgstr "ABC"
 
 msgid "Kingdom Income"
 msgstr "Revenu du royaume"
@@ -6136,13 +6260,12 @@ msgstr ""
 "L'eau de l'oasis est rafraîchissante, mais n'offre aucun autre avantage. "
 "L'oasis pourrait vous aider à nouveau si vous livriez d'abord une bataille."
 
-#, fuzzy
 msgid ""
 "A drink at the oasis fills your troops with strength and lifts their "
 "spirits. You can travel a bit further today."
 msgstr ""
 "Une gorgée d'eau de l'oasis remplit vos troupes de force et leur remonte le "
-"moral.  Vous pouvez voyager un peu plus loin aujourd'hui."
+"moral. Vous pouvez voyager un peu plus loin aujourd'hui."
 
 msgid ""
 "The drink at the watering hole is refreshing, but offers no further benefit. "
@@ -7091,7 +7214,6 @@ msgstr ""
 "arcane. Un grand oracle m'a appris son talent. J'ai la réponse que vous "
 "cherchez.\""
 
-#, fuzzy
 msgid "No spell book is present."
 msgstr "Le grimoire n'est pas présent."
 
@@ -7103,7 +7225,6 @@ msgstr ""
 "Ce sort coûte %{mana} mana. Vous n'avez que %{point} mana, vous ne pouvez "
 "donc pas lancer le sort."
 
-#, fuzzy
 msgid ""
 "This spell costs %{mana} spell points. You only have %{point} spell points, "
 "so you cannot cast it."
@@ -7126,9 +7247,8 @@ msgstr ""
 "Votre héros est trop fatigué pour lancer ce sort aujourd'hui. Essayez à "
 "nouveau demain."
 
-#, fuzzy
 msgid "This spell cannot be cast on a boat."
-msgstr "Ce sort ne peut pas être jeté en mer."
+msgstr "Ce sort ne peut pas être lancé en mer."
 
 #, fuzzy
 msgid "This spell can only be cast near an ocean."
@@ -7191,7 +7311,6 @@ msgstr ""
 "Vous devez être à maximum %{count} de distance d'un monstre pour que le sort "
 "visions fonctionne."
 
-#, fuzzy
 msgid ""
 "You must be standing on the entrance to a mine (sawmills and alchemist labs "
 "do not count) to cast this spell."
@@ -7853,12 +7972,6 @@ msgstr "Nécromant"
 msgid "Multi"
 msgstr "Multi"
 
-msgid "race|Random"
-msgstr "Aléatoire"
-
-msgid "race|Neutral"
-msgstr "Neutre"
-
 msgid "doubleLined|Knight"
 msgstr "Chevalier"
 
@@ -7886,9 +7999,6 @@ msgstr "Multi"
 
 msgid "doubleLinedRace|Random"
 msgstr "Aléatoire"
-
-msgid "doubleLinedRace|Neutral"
-msgstr "Neutre"
 
 msgid "speed|Standing"
 msgstr "Immobile"
@@ -8130,11 +8240,10 @@ msgstr "Événement"
 msgid "Dragon City"
 msgstr "Cité des dragons"
 
-#, fuzzy
 msgid "Lighthouse"
 msgid_plural "Lighthouses"
 msgstr[0] "Phare"
-msgstr[1] "Phare"
+msgstr[1] "Phares"
 
 msgid "Water Wheel"
 msgid_plural "Water Wheels"
@@ -9093,9 +9202,8 @@ msgstr ""
 msgid "Medal of Valor"
 msgstr "La médaille de la bravoure"
 
-#, fuzzy
 msgid "The %{name} increases your morale by %{count}."
-msgstr "%{name} augmente votre connaissance de %{count}."
+msgstr "%{name} augmente votre moral de %{count}."
 
 msgid ""
 "Freeing a virtuous maiden from the clutches of an evil overlord, you are "
@@ -9167,7 +9275,6 @@ msgstr "Les gantelets de protection"
 msgid "The %{name} increase your defense skill by %{count}."
 msgstr "%{name} augmente votre compétence de défense de %{count}."
 
-#, fuzzy
 msgid ""
 "You encounter the infamous Black Knight! After a grueling duel ending in a "
 "draw, the Knight, out of respect, offers you a pair of armored gauntlets."
@@ -9201,7 +9308,6 @@ msgstr ""
 msgid "Ballista of Quickness"
 msgstr "La baliste de rapidité"
 
-#, fuzzy
 msgid "The %{name} gives your catapult one extra shot per combat round."
 msgstr ""
 "%{name} permet à votre catapulte de tirer un coup supplémentaire par round "
@@ -9378,9 +9484,8 @@ msgstr ""
 msgid "Lucky Rabbit's Foot"
 msgstr "La patte de lapin porte-bonheur"
 
-#, fuzzy
 msgid "The %{name} increases your luck in combat by %{count}."
-msgstr "%{name} augmente votre chance en combat."
+msgstr "%{name} augmente votre chance en combat de %{count}."
 
 msgid ""
 "A traveling merchant offers you a rabbit's foot, made of gleaming silver "
@@ -9473,7 +9578,6 @@ msgstr "Le sablier magique"
 msgid "The %{name} extends the duration of all your spells by %{count} turns."
 msgstr "%{name} prolonge la durée de tous vos sorts de %{count} tours."
 
-#, fuzzy
 msgid ""
 "A surprise turn in the landscape finds you in the midst of a grisly scene: "
 "Vultures picking at the aftermath of a terrible battle. Your cursory search "
@@ -9806,11 +9910,9 @@ msgstr ""
 msgid "Wand of Negation"
 msgstr "La baguette de la négation"
 
-#, fuzzy
 msgid "The %{name} makes all your troops immune to dispel magic spells."
-msgstr "%{name} immunise vos troupes contre les sorts de la mort."
+msgstr "%{name} immunise votre troupes contre les sortilèges de contre-sort."
 
-#, fuzzy
 msgid ""
 "You meet an old Wizard friend of yours traveling in the opposite direction. "
 "He presents  you with a gift: A wand that prevents the use of the dispel "
@@ -9957,7 +10059,6 @@ msgstr "Le masque hideux"
 msgid "The %{name} prevents all 'wandering' armies from joining your hero."
 msgstr "%{name} empêche toutes les armées 'errantes' de rallier votre héros."
 
-#, fuzzy
 msgid ""
 "Your looting of the grave of Sinfilas Gardolad, the famous shapeshifting "
 "Warlock, unearths his fabled mask. Trembling, you put it on and it twists "
@@ -9966,8 +10067,8 @@ msgid ""
 msgstr ""
 "En pillant la tombe de Sinfilas Gardolad, le fameux sorcier changeforme, "
 "vous exhumez son masque légendaire. En tremblant, vous mettez son masque et "
-"votre visage se change en une affreuse grimace ! Oh, non !  Il s'agit en "
-"fait du masque hideux de Gromluck Greene, et il reste collé à votre visage."
+"votre visage se change en une affreuse grimace ! Oh, non ! Il s'agit en fait "
+"du masque hideux de Gromluck Greene, et il reste collé à votre visage."
 
 msgid "Endless Pouch of Sulfur"
 msgstr "Le sac de soufre sans fin"
@@ -10059,7 +10160,6 @@ msgstr "La bourse de cristal sans fin"
 msgid "The %{name} provides %{count} unit of crystal per day."
 msgstr "%{name} fournit %{count} cristal par jour."
 
-#, fuzzy
 msgid ""
 "Taking shelter from a storm in a small cave, you notice a small patch of "
 "crystal in one corner. Curious, you break a piece off and notice that the "
@@ -10103,13 +10203,12 @@ msgstr ""
 msgid "White Pearl"
 msgstr "La perle blanche"
 
-#, fuzzy
 msgid ""
 "A walk across a dry saltwater lake bed yields an unlikely prize: A white "
 "pearl amidst shattered shells and debris."
 msgstr ""
 "Une promenade dans le bassin d'un lac salé asséché vous a permis de trouver "
-"un objet improbable : Une perle blanche parmi des coquillages brisés et des "
+"un objet improbable : une perle blanche parmi des coquillages brisés et des "
 "débris."
 
 msgid "Black Pearl"
@@ -10230,12 +10329,11 @@ msgstr ""
 msgid "Battle Garb of Anduran"
 msgstr "La cuirasse d'Anduran"
 
-#, fuzzy
 msgid ""
 "The %{name} combines the powers of the three Anduran artifacts. It provides "
 "maximum luck and morale for your troops and gives you the Town Portal spell."
 msgstr ""
-"%{name} combine les pouvoirs des trois artéfacts d'Anduran.  Il offre un "
+"%{name} combine les pouvoirs des trois artéfacts d'Anduran. Il offre un "
 "maximum de chance et de moral à vos troupes et vous donne le sort portes du "
 "village."
 
@@ -10305,7 +10403,6 @@ msgstr ""
 "%{name} offre une protection de %{count} pour cent contre le froid, mais "
 "double les dégâts de feu infligés à vos troupes."
 
-#, fuzzy
 msgid ""
 "Suddenly, a biting coldness engulfs your body. You seize up, falling from "
 "your horse. The pain subsides, but you still feel as if your chest is "
@@ -10315,7 +10412,7 @@ msgid ""
 msgstr ""
 "Soudain, un froid mordant envahit votre corps. Sous la surprise glaciale, "
 "vous tombez de votre cheval. La douleur s'atténue, mais vous avez toujours "
-"l'impression que votre poitrine est gelée.  Lorsque vous vous relevez, vous "
+"l'impression que votre poitrine est gelée. Lorsque vous vous relevez, vous "
 "entendez rire de bon coeur. Vous vous retournez juste à temps pour voir un "
 "géant de glace s'enfuir et disparaître dans les bois."
 
@@ -10336,7 +10433,6 @@ msgstr ""
 msgid "Holy Hammer"
 msgstr "Le marteau saint"
 
-#, fuzzy
 msgid ""
 "You come upon a battle where a Paladin has been mortally wounded by a group "
 "of Zombies. He asks you to take his hammer and finish what he started. As "
@@ -10531,7 +10627,6 @@ msgstr "Éclair foudroyant"
 msgid "Chain Lightning"
 msgstr "Foudre"
 
-#, fuzzy
 msgid ""
 "Causes a bolt of electrical energy to strike a selected creature, then "
 "strike the nearest creature with half damage, then strike the NEXT nearest "
@@ -10541,8 +10636,8 @@ msgstr ""
 "Provoque un éclair qui frappe une créature sélectionnée, puis la créature la "
 "plus proche en infligeant la moitié des dégâts, puis la créature suivante la "
 "plus proche infligeant encore la moitié des dégâts, et ainsi de suite, "
-"jusqu'à ce que l'éclair devienne trop faible pour être nuisible.  "
-"Avertissement :  Ce sort peut toucher vos propres créatures !"
+"jusqu'à ce que l'éclair devienne trop faible pour être nuisible. "
+"Avertissement : Ce sort peut toucher vos propres créatures !"
 
 msgid "Teleport"
 msgstr "Téléportation"
@@ -10636,13 +10731,12 @@ msgstr "Augmente la défense des créatures sélectionnées."
 msgid "Stoneskin"
 msgstr "Chair de pierre"
 
-#, fuzzy
 msgid ""
 "Increases the defense skill of the targeted creatures. This is an improved "
 "version of Stoneskin."
 msgstr ""
-"Augmente la défense des créatures ciblées.  Il s'agit d'une version "
-"améliorée de chair de pierre."
+"Augmente la défense des créatures ciblées. Il s'agit d'une version améliorée "
+"de chair de pierre."
 
 msgid "Steelskin"
 msgstr "Chair d'acier"
@@ -10665,7 +10759,6 @@ msgstr "Inflige des dégâts à tous les morts-vivants du champ de bataille."
 msgid "Holy Word"
 msgstr "Sainte parole"
 
-#, fuzzy
 msgid ""
 "Damages all undead in the battle. This is an improved version of Holy Word."
 msgstr ""
@@ -10780,7 +10873,6 @@ msgstr "Onde mortelle"
 msgid "Death Wave"
 msgstr "Vague mortelle"
 
-#, fuzzy
 msgid ""
 "Damages all living (non-undead) units in the battle. This spell is an "
 "improved version of Death Ripple."
@@ -10813,7 +10905,6 @@ msgstr ""
 msgid "Mirror Image"
 msgstr "Image miroir"
 
-#, fuzzy
 msgid ""
 "Creates an illusionary unit that duplicates one of your existing units. This "
 "illusionary unit does the same damages as the original, but will vanish if "
@@ -10920,7 +11011,6 @@ msgstr ""
 msgid "Summon Boat"
 msgstr "Embarquement"
 
-#, fuzzy
 msgid ""
 "Summons the nearest unoccupied, friendly boat to an adjacent shore location. "
 "A friendly boat is one which you just built or were the most recent player "
@@ -10963,7 +11053,6 @@ msgstr ""
 msgid "Haunt"
 msgstr "Hanter"
 
-#, fuzzy
 msgid ""
 "Haunts a mine you control with Ghosts. This mine stops producing resources. "
 "(If I can't keep it, nobody will!)"
@@ -11003,16 +11092,14 @@ msgstr ""
 "Invoque les élémentaires de l'eau pour garder une mine contre les armées "
 "ennemies."
 
-#, fuzzy
 msgid "Random Spell"
-msgstr "Aléatoire"
+msgstr "Sort aléatoire"
 
 msgid "Randomly selected spell of any level."
 msgstr ""
 
-#, fuzzy
 msgid "Random 1st Level Spell"
-msgstr "Château aléatoire"
+msgstr "Sort aléatoire de 1er niveau"
 
 msgid "Randomly selected 1st level spell."
 msgstr ""
@@ -11044,7 +11131,6 @@ msgstr ""
 msgid "Petrification"
 msgstr "Pétrification"
 
-#, fuzzy
 msgid ""
 "Turns the affected creature into stone. A petrified creature receives half "
 "damage from a direct attack."
@@ -11157,7 +11243,6 @@ msgid "A Black Dragon will take out a Titan any day of the week."
 msgstr "Un dragon noir éliminera un titan n'importe quel jour de la semaine."
 
 # Orignal H2-fr: Un Dragon noir peut vaincre un Titan à tout moment.
-#, fuzzy
 msgid "He told her: Yada yada yada... and then she said: Blah, blah, blah..."
 msgstr "Il lui a dit : Yada yada yada... et elle a répondu : Bla, bla, bla..."
 
@@ -11172,3 +11257,12 @@ msgstr ""
 "Téléchargez la dernière version du jeu sur\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "%{race1} %{name1}"
+#~ msgstr "%{race1} le %{name1}"
+
+#~ msgid "vs"
+#~ msgstr "vs"
+
+#~ msgid "%{race2} %{name2}"
+#~ msgstr "%{race2} le %{name2}"
