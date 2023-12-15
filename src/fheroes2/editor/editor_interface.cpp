@@ -34,6 +34,7 @@
 #include "cursor.h"
 #include "dialog.h"
 #include "dialog_selectitems.h"
+#include "editor_object_popup_window.h"
 #include "game.h"
 #include "game_delays.h"
 #include "game_hotkeys.h"
@@ -919,34 +920,7 @@ namespace Interface
 
     void EditorInterface::mouseCursorAreaPressRight( const int32_t tileIndex ) const
     {
-        const Maps::Tiles & tile = world.GetTiles( tileIndex );
-
-        DEBUG_LOG( DBG_DEVEL, DBG_INFO, std::endl << tile.String() )
-
-        switch ( tile.GetObject() ) {
-        case MP2::OBJ_NON_ACTION_CASTLE:
-        case MP2::OBJ_CASTLE: {
-            // TODO: Implement quick info for castles/towns in editor.
-            fheroes2::showStandardTextMessage( _( "Towns" ), "", Dialog::ZERO );
-
-            break;
-        }
-        case MP2::OBJ_HEROES: {
-            const Heroes * heroes = tile.getHero();
-
-            if ( heroes ) {
-                Dialog::QuickInfo( *heroes );
-            }
-            else if ( tile.getObjectIcnType() == MP2::OBJ_ICN_TYPE_MINIHERO ) {
-                fheroes2::showStandardTextMessage( _( "Heroes" ), "", Dialog::ZERO );
-            }
-
-            break;
-        }
-        default:
-            Dialog::QuickInfo( tile );
-            break;
-        }
+        Editor::showPopupWindow( world.GetTiles( tileIndex ) );
     }
 
     void EditorInterface::updateCursor( const int32_t tileIndex )

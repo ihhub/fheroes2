@@ -108,6 +108,7 @@
     <ClCompile Include="src\fheroes2\editor\editor_interface.cpp" />
     <ClCompile Include="src\fheroes2\editor\editor_interface_panel.cpp" />
     <ClCompile Include="src\fheroes2\editor\editor_mainmenu.cpp" />
+    <ClCompile Include="src\fheroes2\editor\editor_object_popup_window.cpp" />
     <ClCompile Include="src\fheroes2\editor\history_manager.cpp" />
     <ClCompile Include="src\fheroes2\game\difficulty.cpp" />
     <ClCompile Include="src\fheroes2\game\fheroes2.cpp" />
@@ -314,6 +315,7 @@
     <ClInclude Include="src\fheroes2\editor\editor.h" />
     <ClInclude Include="src\fheroes2\editor\editor_interface.h" />
     <ClInclude Include="src\fheroes2\editor\editor_interface_panel.h" />
+    <ClInclude Include="src\fheroes2\editor\editor_object_popup_window.h" />
     <ClInclude Include="src\fheroes2\editor\history_manager.h" />
     <ClInclude Include="src\fheroes2\game\difficulty.h" />
     <ClInclude Include="src\fheroes2\game\game.h" />
