@@ -266,7 +266,7 @@ fheroes2::GameMode Game::Load( const std::string & filePath )
     }
 
     // Settings should contain the full path to the current map file, if this map is available
-    conf.SetMapsFile( Settings::GetLastFile( "maps", System::GetBasename( conf.getCurrentMapFileName() ) ) );
+    conf.getCurrentMapInfo().filename = Settings::GetLastFile( "maps", System::GetBasename( conf.getCurrentMapInfo().filename ) );
 
     if ( !conf.loadedFileLanguage().empty() && conf.loadedFileLanguage() != "en" && conf.loadedFileLanguage() != conf.getGameLanguage() ) {
         std::string warningMessage( _( "This saved game is localized to '" ) );
@@ -325,7 +325,7 @@ bool Game::LoadSAV2FileInfo( std::string filePath, Maps::FileInfo & fileInfo )
     }
 
     fileInfo = std::move( header.info );
-    fileInfo.file = std::move( filePath );
+    fileInfo.filename = std::move( filePath );
 
     return true;
 }

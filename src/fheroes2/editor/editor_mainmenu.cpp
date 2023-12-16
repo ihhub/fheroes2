@@ -312,7 +312,7 @@ namespace Editor
         }
 
         Maps::Map_Format::MapFormat map;
-        if ( !Maps::Map_Format::loadMap( fileInfo->file, map ) ) {
+        if ( !Maps::Map_Format::loadMap( fileInfo->filename, map ) ) {
             fheroes2::showStandardTextMessage( _( "Warning!" ), "Failed to load the map.", Dialog::OK );
             return fheroes2::GameMode::CANCEL;
         }

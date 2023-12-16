@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-05 00:31+0000\n"
+"POT-Creation-Date: 2023-12-15 09:12+0000\n"
 "PO-Revision-Date: 2023-12-13 05:57+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -204,6 +204,15 @@ msgid "MIN"
 msgstr "MÍN"
 
 msgid "RESET"
+msgstr ""
+
+#, fuzzy
+msgid "CASTLE"
+msgstr ""
+"CIU-\n"
+"DADES"
+
+msgid "TOWN"
 msgstr ""
 
 msgid ""
@@ -3365,6 +3374,46 @@ msgid "Select Ocean Object:"
 msgstr "Artefactos"
 
 #, fuzzy
+msgid "Castle/town placing"
+msgstr "Opciones del Castillo"
+
+msgid "doubleLinedRace|Neutral"
+msgstr "Neutral"
+
+msgid "race|Random"
+msgstr "Aleatorio"
+
+#, fuzzy
+msgid "Click to start placing the selected castle/town."
+msgstr "Haz clic para volver al menú principal"
+
+#, fuzzy
+msgid "Click to select town placing."
+msgstr "Ver ciudad siguiente"
+
+#, fuzzy
+msgid "Click to select castle placing."
+msgstr "Haga clic aquí para seleccionar el escenario donde jugar."
+
+#, fuzzy
+msgid "%{color} %{race} %{townOrCastle}"
+msgstr "Héroe %{race} %{color}"
+
+msgid "race|Neutral"
+msgstr "Neutral"
+
+msgid "You will place"
+msgstr ""
+
+#, fuzzy
+msgid "Click to select this class."
+msgstr "Haga clic aquí para seleccionar el escenario donde jugar."
+
+#, fuzzy
+msgid "Click to select this color."
+msgstr "Haga clic aquí para seleccionar el escenario donde jugar."
+
+#, fuzzy
 msgid "Map Type:\n"
 msgstr "Tamaño del Mapa"
 
@@ -3723,6 +3772,14 @@ msgstr "Paraje baldio"
 msgid "Ocean object must be placed on water."
 msgstr "Este pueblo no se puede actualizar a castillo."
 
+#, fuzzy
+msgid "Towns"
+msgstr "Pueblo"
+
+#, fuzzy
+msgid "Towns cannot be placed on water."
+msgstr "Este pueblo no se puede actualizar a castillo."
+
 msgid "Ocean Objects"
 msgstr ""
 
@@ -3751,10 +3808,6 @@ msgstr "Paraje baldio"
 
 msgid "Beach Objects"
 msgstr ""
-
-#, fuzzy
-msgid "Towns"
-msgstr "Pueblo"
 
 #, fuzzy
 msgid "Treasures"
@@ -7770,12 +7823,6 @@ msgstr "Nigromante"
 msgid "Multi"
 msgstr "Multi"
 
-msgid "race|Random"
-msgstr "Aleatorio"
-
-msgid "race|Neutral"
-msgstr "Neutral"
-
 msgid "doubleLined|Knight"
 msgstr "Caballero"
 
@@ -7803,9 +7850,6 @@ msgstr "Multi"
 
 msgid "doubleLinedRace|Random"
 msgstr "Aleatorio"
-
-msgid "doubleLinedRace|Neutral"
-msgstr "Neutral"
 
 msgid "speed|Standing"
 msgstr "Fijo"

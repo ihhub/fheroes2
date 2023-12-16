@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-05 00:31+0000\n"
+"POT-Creation-Date: 2023-12-15 09:12+0000\n"
 "PO-Revision-Date: 2022-10-01 20:20+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Turkish <tr@li.org>\n"
@@ -177,6 +177,12 @@ msgid "MIN"
 msgstr "MİN"
 
 msgid "RESET"
+msgstr ""
+
+msgid "CASTLE"
+msgstr ""
+
+msgid "TOWN"
 msgstr ""
 
 msgid ""
@@ -3077,6 +3083,39 @@ msgstr "Büyü hedefini seç"
 msgid "Select Ocean Object:"
 msgstr "Büyü hedefini seç"
 
+msgid "Castle/town placing"
+msgstr ""
+
+msgid "doubleLinedRace|Neutral"
+msgstr ""
+
+msgid "race|Random"
+msgstr ""
+
+msgid "Click to start placing the selected castle/town."
+msgstr ""
+
+msgid "Click to select town placing."
+msgstr ""
+
+msgid "Click to select castle placing."
+msgstr ""
+
+msgid "%{color} %{race} %{townOrCastle}"
+msgstr ""
+
+msgid "race|Neutral"
+msgstr ""
+
+msgid "You will place"
+msgstr ""
+
+msgid "Click to select this class."
+msgstr ""
+
+msgid "Click to select this color."
+msgstr ""
+
 msgid "Map Type:\n"
 msgstr ""
 
@@ -3399,6 +3438,12 @@ msgstr ""
 msgid "Ocean object must be placed on water."
 msgstr ""
 
+msgid "Towns"
+msgstr ""
+
+msgid "Towns cannot be placed on water."
+msgstr ""
+
 msgid "Ocean Objects"
 msgstr ""
 
@@ -3424,9 +3469,6 @@ msgid "Wasteland Objects"
 msgstr ""
 
 msgid "Beach Objects"
-msgstr ""
-
-msgid "Towns"
 msgstr ""
 
 msgid "Treasures"
@@ -6842,12 +6884,6 @@ msgstr ""
 msgid "Multi"
 msgstr ""
 
-msgid "race|Random"
-msgstr ""
-
-msgid "race|Neutral"
-msgstr ""
-
 msgid "doubleLined|Knight"
 msgstr ""
 
@@ -6872,9 +6908,6 @@ msgid "doubleLinedRace|Multi"
 msgstr ""
 
 msgid "doubleLinedRace|Random"
-msgstr ""
-
-msgid "doubleLinedRace|Neutral"
 msgstr ""
 
 msgid "speed|Standing"
