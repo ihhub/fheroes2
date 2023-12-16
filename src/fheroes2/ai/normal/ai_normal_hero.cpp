@@ -55,6 +55,7 @@
 #include "logging.h"
 #include "luck.h"
 #include "maps.h"
+#include "maps_fileinfo.h"
 #include "maps_tiles.h"
 #include "maps_tiles_helper.h"
 #include "math_base.h"
@@ -93,32 +94,32 @@ namespace
     {
         assert( art.isValid() );
 
-        const Settings & conf = Settings::Get();
+        const Maps::FileInfo & mapInfo = Settings::Get().getCurrentMapInfo();
 
-        if ( ( conf.ConditionWins() & GameOver::WINS_ARTIFACT ) == 0 ) {
+        if ( ( mapInfo.ConditionWins() & GameOver::WINS_ARTIFACT ) == 0 ) {
             return false;
         }
 
-        if ( conf.WinsFindUltimateArtifact() ) {
+        if ( mapInfo.WinsFindUltimateArtifact() ) {
             return art.isUltimate();
         }
 
-        return ( art.GetID() == conf.WinsFindArtifactID() );
+        return ( art.GetID() == mapInfo.WinsFindArtifactID() );
     }
 
     bool isCastleLossConditionForHuman( const Castle * castle )
     {
         assert( castle != nullptr );
 
-        const Settings & conf = Settings::Get();
+        const Maps::FileInfo & mapInfo = Settings::Get().getCurrentMapInfo();
         const bool isSinglePlayer = ( Colors( Players::HumanColors() ).size() == 1 );
 
-        if ( isSinglePlayer && ( conf.ConditionLoss() & GameOver::LOSS_TOWN ) != 0 && castle->GetCenter() == conf.LossMapsPositionObject() ) {
+        if ( isSinglePlayer && ( mapInfo.ConditionLoss() & GameOver::LOSS_TOWN ) != 0 && castle->GetCenter() == mapInfo.LossMapsPositionObject() ) {
             // It is a loss town condition for human.
             return true;
         }
 
-        if ( conf.WinsCompAlsoWins() && ( conf.ConditionWins() & GameOver::WINS_TOWN ) != 0 && castle->GetCenter() == conf.WinsMapsPositionObject() ) {
+        if ( mapInfo.WinsCompAlsoWins() && ( mapInfo.ConditionWins() & GameOver::WINS_TOWN ) != 0 && castle->GetCenter() == mapInfo.WinsMapsPositionObject() ) {
             // It is a town capture winning condition for AI.
             return true;
         }

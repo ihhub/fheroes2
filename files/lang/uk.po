@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-09 03:47+0000\n"
+"POT-Creation-Date: 2023-12-15 09:12+0000\n"
 "PO-Revision-Date: 2023-09-06 08:41+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -194,6 +194,18 @@ msgstr "ПОВТОР ІНТРО"
 
 msgid "MIN"
 msgstr "МІН"
+
+msgid "RESET"
+msgstr ""
+
+#, fuzzy
+msgid "CASTLE"
+msgstr ""
+"МІСТА/\n"
+"ЗАМКИ"
+
+msgid "TOWN"
+msgstr ""
 
 msgid ""
 "D\n"
@@ -953,14 +965,9 @@ msgstr "Встановити Силу Магії"
 msgid "Set Knowledge Skill"
 msgstr "Встановити Знання"
 
-msgid "%{race1} %{name1}"
+#, fuzzy
+msgid "%{race1} %{name1} vs %{race2} %{name2}"
 msgstr "%{race1} %{name1}"
-
-msgid "vs"
-msgstr "проти"
-
-msgid "%{race2} %{name2}"
-msgstr "%{race2} %{name2}"
 
 msgid "Monsters"
 msgstr "Монстри"
@@ -2980,6 +2987,16 @@ msgstr ""
 msgid "Show extra information such as FPS and current time."
 msgstr ""
 
+msgid "Hotkey: "
+msgstr ""
+
+msgid "Category: "
+msgstr ""
+
+#, fuzzy
+msgid "Event: "
+msgstr "Подія"
+
 msgid "Hot Keys:"
 msgstr ""
 
@@ -3252,6 +3269,10 @@ msgstr ""
 msgid "%{color} %{race} hero"
 msgstr ""
 
+#, fuzzy
+msgid "Terrain object"
+msgstr "Порожнє місце"
+
 msgid "Select Skill:"
 msgstr "Оберіть Навички:"
 
@@ -3271,11 +3292,54 @@ msgstr "Оберіть Героя:"
 msgid "Select Treasure:"
 msgstr "Оберіть Героя:"
 
+#, fuzzy
+msgid "Select Ocean Object:"
+msgstr "Оберіть Артефакти:"
+
+msgid "Castle/town placing"
+msgstr ""
+
+msgid "doubleLinedRace|Neutral"
+msgstr ""
+
+msgid "race|Random"
+msgstr ""
+
+msgid "Click to start placing the selected castle/town."
+msgstr ""
+
+#, fuzzy
+msgid "Click to select town placing."
+msgstr "Натисніть щоб побачити наступне місто."
+
+msgid "Click to select castle placing."
+msgstr ""
+
+msgid "%{color} %{race} %{townOrCastle}"
+msgstr ""
+
+msgid "race|Neutral"
+msgstr ""
+
+msgid "You will place"
+msgstr ""
+
+msgid "Click to select this class."
+msgstr ""
+
+#, fuzzy
+msgid "Click to select this color."
+msgstr "Натисніть щоб побачити наступне місто."
+
 msgid "Map Type:\n"
 msgstr "Тип мапи:\n"
 
 msgid "The Succession Wars"
 msgstr "Війни за Спадщину"
+
+#, fuzzy
+msgid "Resurrection"
+msgstr "Воскресіння"
 
 msgid "Lose all your heroes and towns."
 msgstr ""
@@ -3519,6 +3583,10 @@ msgstr ""
 msgid "Best Monster:"
 msgstr ""
 
+#, fuzzy
+msgid "Map filename"
+msgstr "Розмір Мапи"
+
 msgid ""
 "Are you sure you want to load a new map? (Any unsaved changes to the current "
 "map will be lost.)"
@@ -3554,6 +3622,9 @@ msgstr ""
 msgid "Monster"
 msgstr "Монстр"
 
+msgid "Objects cannot be placed outside the map."
+msgstr ""
+
 msgid "Monsters cannot be placed on water."
 msgstr ""
 
@@ -3577,6 +3648,20 @@ msgstr ""
 
 msgid "Artifacts cannot be placed on water."
 msgstr ""
+
+#, fuzzy
+msgid "Ocean object"
+msgstr "Порожнє місце"
+
+msgid "Ocean object must be placed on water."
+msgstr ""
+
+msgid "Towns"
+msgstr "Міста"
+
+#, fuzzy
+msgid "Towns cannot be placed on water."
+msgstr "Це Місто не можна покращити до Замку."
 
 msgid "Ocean Objects"
 msgstr ""
@@ -3604,9 +3689,6 @@ msgstr "Об'єкти Пустки"
 
 msgid "Beach Objects"
 msgstr ""
-
-msgid "Towns"
-msgstr "Міста"
 
 msgid "Treasures"
 msgstr "Скарби"
@@ -4417,6 +4499,32 @@ msgid ""
 "place only on the next turn."
 msgstr ""
 
+msgid "Default Actions"
+msgstr ""
+
+msgid "Global Actions"
+msgstr ""
+
+msgid "Main Menu"
+msgstr ""
+
+msgid "World Map"
+msgstr ""
+
+#, fuzzy
+msgid "Battle Screen"
+msgstr "Вікно Героя"
+
+#, fuzzy
+msgid "Town Screen"
+msgstr "Вікно Героя"
+
+msgid "Army Actions"
+msgstr ""
+
+msgid "Editor"
+msgstr ""
+
 msgid "The save file is corrupted."
 msgstr "Файл збереження пошкоджений."
 
@@ -4433,8 +4541,8 @@ msgid "This file contains a save with an invalid game type."
 msgstr ""
 
 msgid ""
-"This file was saved for a \"The Price of Loyalty\" map, but the "
-"corresponding game assets have not been provided to the engine."
+"This save file requires \"The Price of Loyalty\" game assets, but they have "
+"not been provided to the engine."
 msgstr ""
 
 msgid "This saved game is localized to '"
@@ -4513,9 +4621,6 @@ msgid ""
 " menu. \n"
 "\n"
 "Enjoy the game!"
-msgstr ""
-
-msgid "Editor"
 msgstr ""
 
 msgid "The Editor requires \"The Price of Loyalty\" expansion files to work."
@@ -5010,9 +5115,6 @@ msgid "Try searching on clear ground."
 msgstr ""
 
 msgid "A miniature view of the known world. Left click to move viewing area."
-msgstr ""
-
-msgid "World Map"
 msgstr ""
 
 msgid "Month: %{month} Week: %{week}"
@@ -7034,12 +7136,6 @@ msgstr "Некромант"
 msgid "Multi"
 msgstr ""
 
-msgid "race|Random"
-msgstr ""
-
-msgid "race|Neutral"
-msgstr ""
-
 msgid "doubleLined|Knight"
 msgstr ""
 
@@ -7066,9 +7162,6 @@ msgid "doubleLinedRace|Multi"
 msgstr ""
 
 msgid "doubleLinedRace|Random"
-msgstr ""
-
-msgid "doubleLinedRace|Neutral"
 msgstr ""
 
 msgid "speed|Standing"
@@ -10143,3 +10236,9 @@ msgstr ""
 "Перевірити нову версію гри на\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "vs"
+#~ msgstr "проти"
+
+#~ msgid "%{race2} %{name2}"
+#~ msgstr "%{race2} %{name2}"

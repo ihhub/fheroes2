@@ -81,14 +81,14 @@ public:
     std::string String() const;
     void SetCurrentFileInfo( const Maps::FileInfo & );
 
-    const Maps::FileInfo & CurrentFileInfo() const
+    const Maps::FileInfo & getCurrentMapInfo() const
     {
         return current_maps_file;
     }
 
-    bool isCurrentMapPriceOfLoyalty() const
+    Maps::FileInfo & getCurrentMapInfo()
     {
-        return current_maps_file.version == GameVersion::PRICE_OF_LOYALTY;
+        return current_maps_file;
     }
 
     int HeroesMoveSpeed() const
@@ -320,95 +320,9 @@ public:
 
     void SetPreferablyCountPlayers( int );
 
-    // from maps info
-    bool AllowChangeRace( int f ) const
-    {
-        return ( current_maps_file.colorsOfRandomRaces & f ) != 0;
-    }
-
-    const std::string & MapsFile() const
-    {
-        return current_maps_file.file;
-    }
-
-    const std::string & MapsName() const
-    {
-        return current_maps_file.name;
-    }
-
-    const std::string & MapsDescription() const
-    {
-        return current_maps_file.description;
-    }
-
-    int MapsDifficulty() const
-    {
-        return current_maps_file.difficulty;
-    }
-
-    fheroes2::Size MapsSize() const
-    {
-        return { current_maps_file.width, current_maps_file.height };
-    }
-
-    bool GameStartWithHeroes() const
-    {
-        return current_maps_file.startWithHeroInEachCastle;
-    }
-
-    uint32_t ConditionWins() const
-    {
-        return current_maps_file.ConditionWins();
-    }
-
-    uint32_t ConditionLoss() const
-    {
-        return current_maps_file.ConditionLoss();
-    }
-
-    bool WinsCompAlsoWins() const
-    {
-        return current_maps_file.WinsCompAlsoWins();
-    }
-
-    int WinsFindArtifactID() const
-    {
-        return current_maps_file.WinsFindArtifactID();
-    }
-
-    bool WinsFindUltimateArtifact() const
-    {
-        return current_maps_file.WinsFindUltimateArtifact();
-    }
-
-    uint32_t getWinningGoldAccumulationValue() const
-    {
-        return current_maps_file.getWinningGoldAccumulationValue();
-    }
-
-    fheroes2::Point WinsMapsPositionObject() const
-    {
-        return current_maps_file.WinsMapsPositionObject();
-    }
-
-    fheroes2::Point LossMapsPositionObject() const
-    {
-        return current_maps_file.LossMapsPositionObject();
-    }
-
-    uint32_t LossCountDays() const
-    {
-        return current_maps_file.LossCountDays();
-    }
-
     int controllerPointerSpeed() const
     {
         return _controllerPointerSpeed;
-    }
-
-    void SetMapsFile( const std::string & file )
-    {
-        current_maps_file.file = file;
     }
 
     ZoomLevel ViewWorldZoomLevel() const

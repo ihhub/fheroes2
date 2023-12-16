@@ -20,19 +20,21 @@
 
 #pragma once
 
-#include <cstdint>
-
-#include "image.h"
-
 namespace Maps
 {
-    struct ObjectInfo;
-}
+    class Tiles;
 
-namespace fheroes2
-{
-    Sprite generateMapObjectImage( const Maps::ObjectInfo & object );
-    Sprite generateTownObjectImage( const int townType, const int color, const int groundId );
+    namespace Map_Format
+    {
+        struct MapFormat;
+        struct TileInfo;
+    }
 
-    int32_t getTownBasementId( const int groundType );
+    bool readMapInEditor( const Map_Format::MapFormat & map );
+
+    bool saveMapInEditor( Map_Format::MapFormat & map );
+
+    void readTile( Tiles & tile, const Map_Format::TileInfo & info );
+
+    void writeTile( const Tiles & tile, Map_Format::TileInfo & info );
 }

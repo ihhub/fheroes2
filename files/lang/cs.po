@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-09 03:47+0000\n"
+"POT-Creation-Date: 2023-12-15 09:12+0000\n"
 "PO-Revision-Date: 2023-09-24 16:05+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Czech <cs@li.org>\n"
@@ -194,6 +194,18 @@ msgstr "ZOBRAZIT ÚVOD"
 
 msgid "MIN"
 msgstr "MIN"
+
+msgid "RESET"
+msgstr ""
+
+#, fuzzy
+msgid "CASTLE"
+msgstr ""
+"MĚSTA/\n"
+"HRADY"
+
+msgid "TOWN"
+msgstr ""
 
 msgid ""
 "D\n"
@@ -943,14 +955,9 @@ msgstr "Nastav sílu kouzel"
 msgid "Set Knowledge Skill"
 msgstr "Nastav znalosti"
 
-msgid "%{race1} %{name1}"
-msgstr ""
-
-msgid "vs"
-msgstr "versus"
-
-msgid "%{race2} %{name2}"
-msgstr ""
+#, fuzzy
+msgid "%{race1} %{name1} vs %{race2} %{name2}"
+msgstr "%{name1} se střetá s %{name2}"
 
 msgid "Monsters"
 msgstr "Monstra"
@@ -2995,6 +3002,16 @@ msgstr "V-Sync může pomoct s blikáním na některých monitorech."
 msgid "Show extra information such as FPS and current time."
 msgstr "Zobraz extra informace jako FPS a místní čas."
 
+msgid "Hotkey: "
+msgstr ""
+
+msgid "Category: "
+msgstr ""
+
+#, fuzzy
+msgid "Event: "
+msgstr "Událost"
+
 msgid "Hot Keys:"
 msgstr "Kláv. zkratky:"
 
@@ -3284,6 +3301,9 @@ msgstr ""
 msgid "%{color} %{race} hero"
 msgstr "%{color} hráč"
 
+msgid "Terrain object"
+msgstr ""
+
 msgid "Select Skill:"
 msgstr ""
 
@@ -3308,11 +3328,59 @@ msgid "Select Treasure:"
 msgstr "Nejlepší hrdina:"
 
 #, fuzzy
+msgid "Select Ocean Object:"
+msgstr "Artefakt"
+
+#, fuzzy
+msgid "Castle/town placing"
+msgstr "Možnosti Hradu"
+
+msgid "doubleLinedRace|Neutral"
+msgstr ""
+
+msgid "race|Random"
+msgstr ""
+
+#, fuzzy
+msgid "Click to start placing the selected castle/town."
+msgstr "Kliknutím se rozliśení změní na vybrané. "
+
+#, fuzzy
+msgid "Click to select town placing."
+msgstr "Klikni pro zobrazení následujícího města."
+
+#, fuzzy
+msgid "Click to select castle placing."
+msgstr "Kliknout sem pro výběr scénáře."
+
+#, fuzzy
+msgid "%{color} %{race} %{townOrCastle}"
+msgstr "%{color} hráč"
+
+msgid "race|Neutral"
+msgstr ""
+
+msgid "You will place"
+msgstr ""
+
+#, fuzzy
+msgid "Click to select this class."
+msgstr "Kliknout sem pro výběr scénáře."
+
+#, fuzzy
+msgid "Click to select this color."
+msgstr "Kliknout sem pro výběr scénáře."
+
+#, fuzzy
 msgid "Map Type:\n"
 msgstr "Velikost mapy"
 
 msgid "The Succession Wars"
 msgstr ""
+
+#, fuzzy
+msgid "Resurrection"
+msgstr "Oživení"
 
 msgid "Lose all your heroes and towns."
 msgstr ""
@@ -3563,6 +3631,12 @@ msgid "Best Monster:"
 msgstr "Nejlepší Stvůra:"
 
 #, fuzzy
+msgid "Map filename"
+msgstr ""
+"Velikost\n"
+"mapy"
+
+#, fuzzy
 msgid ""
 "Are you sure you want to load a new map? (Any unsaved changes to the current "
 "map will be lost.)"
@@ -3603,6 +3677,9 @@ msgstr ""
 msgid "Monster"
 msgstr "Stvůra"
 
+msgid "Objects cannot be placed outside the map."
+msgstr ""
+
 msgid "Monsters cannot be placed on water."
 msgstr ""
 
@@ -3626,6 +3703,21 @@ msgstr "Artefakty"
 
 msgid "Artifacts cannot be placed on water."
 msgstr ""
+
+#, fuzzy
+msgid "Ocean object"
+msgstr "Pustina"
+
+msgid "Ocean object must be placed on water."
+msgstr ""
+
+#, fuzzy
+msgid "Towns"
+msgstr "Město"
+
+#, fuzzy
+msgid "Towns cannot be placed on water."
+msgstr "Toto město nemůže být povýšeno na hrad."
 
 msgid "Ocean Objects"
 msgstr ""
@@ -3655,10 +3747,6 @@ msgstr "Pustina"
 
 msgid "Beach Objects"
 msgstr ""
-
-#, fuzzy
-msgid "Towns"
-msgstr "Město"
 
 #, fuzzy
 msgid "Treasures"
@@ -4513,6 +4601,32 @@ msgid ""
 msgstr ""
 "Přeješ si odevzdat kontrolu AI? Bude to platit pouze pro následující tah."
 
+msgid "Default Actions"
+msgstr ""
+
+msgid "Global Actions"
+msgstr ""
+
+msgid "Main Menu"
+msgstr ""
+
+msgid "World Map"
+msgstr "Mapa Světa"
+
+#, fuzzy
+msgid "Battle Screen"
+msgstr "Obrazovka hrdiny"
+
+#, fuzzy
+msgid "Town Screen"
+msgstr "Obrazovka hrdiny"
+
+msgid "Army Actions"
+msgstr ""
+
+msgid "Editor"
+msgstr ""
+
 msgid "The save file is corrupted."
 msgstr "Soubor je požkozen."
 
@@ -4528,9 +4642,10 @@ msgstr "Poslední podporovaná verze: "
 msgid "This file contains a save with an invalid game type."
 msgstr "Soubor obsahuje údaje z neplatné verze hry."
 
+#, fuzzy
 msgid ""
-"This file was saved for a \"The Price of Loyalty\" map, but the "
-"corresponding game assets have not been provided to the engine."
+"This save file requires \"The Price of Loyalty\" game assets, but they have "
+"not been provided to the engine."
 msgstr ""
 "Hra byla uložena pro mapu z datadisku \"The Price of Loyalty\", nebyly ale "
 "poskytnuty odpovídající zdrojové soubory."
@@ -4614,9 +4729,6 @@ msgid ""
 " menu. \n"
 "\n"
 "Enjoy the game!"
-msgstr ""
-
-msgid "Editor"
 msgstr ""
 
 #, fuzzy
@@ -5164,9 +5276,6 @@ msgstr "Zkus hledat na volném místě."
 msgid "A miniature view of the known world. Left click to move viewing area."
 msgstr ""
 "Miniaturní pohled na odkrytý svět. Levým klikem pohneš zobrazovanou oblast."
-
-msgid "World Map"
-msgstr "Mapa Světa"
 
 msgid "Month: %{month} Week: %{week}"
 msgstr "Měsíc: %{month} Týden: %{week}"
@@ -7270,12 +7379,6 @@ msgstr ""
 msgid "Multi"
 msgstr ""
 
-msgid "race|Random"
-msgstr ""
-
-msgid "race|Neutral"
-msgstr ""
-
 msgid "doubleLined|Knight"
 msgstr ""
 
@@ -7300,9 +7403,6 @@ msgid "doubleLinedRace|Multi"
 msgstr ""
 
 msgid "doubleLinedRace|Random"
-msgstr ""
-
-msgid "doubleLinedRace|Neutral"
 msgstr ""
 
 msgid "speed|Standing"
@@ -10177,3 +10277,6 @@ msgstr ""
 "Nejnovější verzi hry nalezneš na\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "vs"
+#~ msgstr "versus"

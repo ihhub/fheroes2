@@ -233,7 +233,7 @@ namespace MP2
         OBJ_NON_ACTION_MAGIC_GARDEN = 95, // Never set in maps.
         OBJ_NON_ACTION_OBSERVATION_TOWER = 96,
         OBJ_NON_ACTION_FREEMANS_FOUNDRY = 97,
-        OBJ_REEFS = 98, // Never set in maps. Not in use within the original Editor.
+        OBJ_REEFS = 98, // Never used within the original Editor.
         OBJ_TREES = 99,
         OBJ_MOUNTAINS = 100,
         OBJ_VOLCANO = 101,

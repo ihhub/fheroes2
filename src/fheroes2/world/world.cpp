@@ -44,6 +44,7 @@
 #include "game_io.h"
 #include "game_over.h"
 #include "gamedefs.h"
+#include "ground.h"
 #include "heroes.h"
 #include "logging.h"
 #include "maps_fileinfo.h"
@@ -365,12 +366,15 @@ void World::Reset()
     _seed = 0;
 }
 
-void World::NewMaps( int32_t sw, int32_t sh )
+void World::generateBattleOnlyMap()
 {
+    const std::vector<int> terrainTypes{ Maps::Ground::DESERT, Maps::Ground::SNOW, Maps::Ground::SWAMP, Maps::Ground::WASTELAND, Maps::Ground::BEACH,
+                                         Maps::Ground::LAVA,   Maps::Ground::DIRT, Maps::Ground::GRASS, Maps::Ground::WATER };
+
     Reset();
 
-    width = sw;
-    height = sh;
+    width = 2;
+    height = 2;
 
     Maps::FileInfo fi;
 
@@ -389,24 +393,49 @@ void World::NewMaps( int32_t sw, int32_t sh )
 
     vec_tiles.resize( static_cast<size_t>( width ) * height );
 
+    const int groundType = Rand::Get( terrainTypes );
+
+    for ( size_t i = 0; i < vec_tiles.size(); ++i ) {
+        vec_tiles[i] = {};
+
+        vec_tiles[i].setIndex( static_cast<int32_t>( i ) );
+        vec_tiles[i].setTerrain( Maps::Ground::getTerrainStartImageIndex( groundType ), false, false );
+    }
+}
+
+void World::generateForEditor( const int32_t size )
+{
+    assert( size > 0 );
+
+    Reset();
+
+    width = size;
+    height = size;
+
+    Maps::FileInfo fi;
+
+    fi.width = static_cast<uint16_t>( width );
+    fi.height = static_cast<uint16_t>( height );
+
+    Settings & conf = Settings::Get();
+    assert( conf.isPriceOfLoyaltySupported() );
+
+    fi.version = GameVersion::PRICE_OF_LOYALTY;
+
+    conf.SetCurrentFileInfo( fi );
+
+    Defaults();
+
+    vec_tiles.resize( static_cast<size_t>( width ) * height );
+
     // init all tiles
     for ( size_t i = 0; i < vec_tiles.size(); ++i ) {
-        MP2::mp2tile_t mp2tile;
+        vec_tiles[i] = {};
 
-        mp2tile.terrainImageIndex = static_cast<uint16_t>( Rand::Get( 16, 19 ) ); // index sprite ground, see ground32.til
-        mp2tile.objectName1 = 0; // object sprite level 1
-        mp2tile.bottomIcnImageIndex = 0xff; // index sprite level 1
-        mp2tile.quantity1 = 0;
-        mp2tile.quantity2 = 0;
-        mp2tile.objectName2 = 0; // object sprite level 2
-        mp2tile.topIcnImageIndex = 0xff; // index sprite level 2
-        mp2tile.terrainFlags = static_cast<uint8_t>( Rand::Get( 0, 3 ) ); // shape reflect % 4, 0 none, 1 vertical, 2 horizontal, 3 any
-        mp2tile.mapObjectType = MP2::OBJ_NONE;
-        mp2tile.nextAddonIndex = 0;
-        mp2tile.level1ObjectUID = 0; // means that there's no object on this tile.
-        mp2tile.level2ObjectUID = 0;
+        vec_tiles[i].setIndex( static_cast<int32_t>( i ) );
 
-        vec_tiles[i].Init( static_cast<int32_t>( i ), mp2tile );
+        const uint8_t terrainFlag = static_cast<uint8_t>( Rand::Get( 0, 3 ) );
+        vec_tiles[i].setTerrain( static_cast<uint16_t>( Rand::Get( 16, 19 ) ), terrainFlag & 1, terrainFlag & 2 );
     }
 }
 
@@ -1006,12 +1035,12 @@ void World::RemoveMapObject( const MapObjectSimple * obj )
 
 const Heroes * World::GetHeroesCondWins() const
 {
-    return ( ( Settings::Get().ConditionWins() & GameOver::WINS_HERO ) != 0 ) ? GetHeroes( heroes_cond_wins ) : nullptr;
+    return ( ( Settings::Get().getCurrentMapInfo().ConditionWins() & GameOver::WINS_HERO ) != 0 ) ? GetHeroes( heroes_cond_wins ) : nullptr;
 }
 
 const Heroes * World::GetHeroesCondLoss() const
 {
-    return ( ( Settings::Get().ConditionLoss() & GameOver::LOSS_HERO ) != 0 ) ? GetHeroes( heroes_cond_loss ) : nullptr;
+    return ( ( Settings::Get().getCurrentMapInfo().ConditionLoss() & GameOver::LOSS_HERO ) != 0 ) ? GetHeroes( heroes_cond_loss ) : nullptr;
 }
 
 bool World::KingdomIsWins( const Kingdom & kingdom, const uint32_t wins ) const
@@ -1027,7 +1056,7 @@ bool World::KingdomIsWins( const Kingdom & kingdom, const uint32_t wins ) const
 #endif // WITH_DEBUG
 #endif // !NDEBUG
 
-    const Settings & conf = Settings::Get();
+    const Maps::FileInfo & mapInfo = Settings::Get().getCurrentMapInfo();
 
     switch ( wins ) {
     case GameOver::WINS_ALL:
@@ -1037,8 +1066,8 @@ bool World::KingdomIsWins( const Kingdom & kingdom, const uint32_t wins ) const
         return kingdom.GetColor() == vec_kingdoms.GetNotLossColors();
 
     case GameOver::WINS_TOWN: {
-        const Castle * town = getCastleEntrance( conf.WinsMapsPositionObject() );
-        return ( kingdom.isControlHuman() || conf.WinsCompAlsoWins() ) && ( town && town->GetColor() == kingdom.GetColor() );
+        const Castle * town = getCastleEntrance( mapInfo.WinsMapsPositionObject() );
+        return ( kingdom.isControlHuman() || mapInfo.WinsCompAlsoWins() ) && ( town && town->GetColor() == kingdom.GetColor() );
     }
 
     case GameOver::WINS_HERO: {
@@ -1061,11 +1090,11 @@ bool World::KingdomIsWins( const Kingdom & kingdom, const uint32_t wins ) const
         assert( kingdom.isControlHuman() || isKingdomInAIAutoControlMode );
 
         const VecHeroes & heroes = kingdom.GetHeroes();
-        if ( conf.WinsFindUltimateArtifact() ) {
+        if ( mapInfo.WinsFindUltimateArtifact() ) {
             return std::any_of( heroes.begin(), heroes.end(), []( const Heroes * hero ) { return hero->HasUltimateArtifact(); } );
         }
         else {
-            const Artifact art = conf.WinsFindArtifactID();
+            const Artifact art = mapInfo.WinsFindArtifactID();
             return std::any_of( heroes.begin(), heroes.end(), [&art]( const Heroes * hero ) { return hero->hasArtifact( art ); } );
         }
     }
@@ -1077,8 +1106,8 @@ bool World::KingdomIsWins( const Kingdom & kingdom, const uint32_t wins ) const
         return !( Game::GetActualKingdomColors() & ~Players::GetPlayerFriends( kingdom.GetColor() ) );
 
     case GameOver::WINS_GOLD:
-        return ( ( kingdom.isControlHuman() || conf.WinsCompAlsoWins() ) && 0 < kingdom.GetFunds().Get( Resource::GOLD )
-                 && static_cast<uint32_t>( kingdom.GetFunds().Get( Resource::GOLD ) ) >= conf.getWinningGoldAccumulationValue() );
+        return ( ( kingdom.isControlHuman() || mapInfo.WinsCompAlsoWins() ) && 0 < kingdom.GetFunds().Get( Resource::GOLD )
+                 && static_cast<uint32_t>( kingdom.GetFunds().Get( Resource::GOLD ) ) >= mapInfo.getWinningGoldAccumulationValue() );
 
     default:
         break;
@@ -1110,7 +1139,7 @@ bool World::KingdomIsLoss( const Kingdom & kingdom, const uint32_t loss ) const
         return kingdom.isLoss();
 
     case GameOver::LOSS_TOWN: {
-        const Castle * town = getCastleEntrance( conf.LossMapsPositionObject() );
+        const Castle * town = getCastleEntrance( conf.getCurrentMapInfo().LossMapsPositionObject() );
         return ( town && town->GetColor() != kingdom.GetColor() );
     }
 
@@ -1150,7 +1179,7 @@ bool World::KingdomIsLoss( const Kingdom & kingdom, const uint32_t loss ) const
     }
 
     case GameOver::LOSS_TIME:
-        return ( CountDay() > conf.LossCountDays() );
+        return ( CountDay() > conf.getCurrentMapInfo().LossCountDays() );
 
     default:
         break;
@@ -1193,7 +1222,7 @@ uint32_t World::CheckKingdomWins( const Kingdom & kingdom ) const
         = { GameOver::WINS_ALL, GameOver::WINS_TOWN, GameOver::WINS_HERO, GameOver::WINS_ARTIFACT, GameOver::WINS_SIDE, GameOver::WINS_GOLD };
 
     for ( const uint32_t cond : wins ) {
-        if ( ( ( conf.ConditionWins() & cond ) == cond ) && KingdomIsWins( kingdom, cond ) ) {
+        if ( ( ( conf.getCurrentMapInfo().ConditionWins() & cond ) == cond ) && KingdomIsWins( kingdom, cond ) ) {
             return cond;
         }
     }
@@ -1224,7 +1253,7 @@ uint32_t World::CheckKingdomLoss( const Kingdom & kingdom ) const
                                                                       std::make_pair<uint32_t, uint32_t>( GameOver::WINS_GOLD, GameOver::LOSS_ENEMY_WINS_GOLD ) };
 
     for ( const auto & item : enemy_wins ) {
-        if ( conf.ConditionWins() & item.first ) {
+        if ( conf.getCurrentMapInfo().ConditionWins() & item.first ) {
             const int color = vec_kingdoms.FindWins( item.first );
 
             if ( color && color != kingdom.GetColor() ) {
@@ -1255,7 +1284,7 @@ uint32_t World::CheckKingdomLoss( const Kingdom & kingdom ) const
     const std::array<uint32_t, 4> loss = { GameOver::LOSS_ALL, GameOver::LOSS_TOWN, GameOver::LOSS_HERO, GameOver::LOSS_TIME };
 
     for ( const uint32_t cond : loss ) {
-        if ( ( ( conf.ConditionLoss() & cond ) == cond ) && KingdomIsLoss( kingdom, cond ) ) {
+        if ( ( ( conf.getCurrentMapInfo().ConditionLoss() & cond ) == cond ) && KingdomIsLoss( kingdom, cond ) ) {
             return cond;
         }
     }

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-09 03:47+0000\n"
+"POT-Creation-Date: 2023-12-15 09:12+0000\n"
 "PO-Revision-Date: 2023-09-03 18:42+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -194,6 +194,18 @@ msgstr "VIS VIDEO"
 
 msgid "MIN"
 msgstr "MIN"
+
+msgid "RESET"
+msgstr ""
+
+#, fuzzy
+msgid "CASTLE"
+msgstr ""
+"BYER/\n"
+"BORGER"
+
+msgid "TOWN"
+msgstr ""
 
 msgid ""
 "D\n"
@@ -946,14 +958,9 @@ msgstr "Spesifiser kraftsevne"
 msgid "Set Knowledge Skill"
 msgstr "Spesifiser kunnskapsevne"
 
-msgid "%{race1} %{name1}"
-msgstr "%{race1}en %{name1}"
-
-msgid "vs"
-msgstr "mot"
-
-msgid "%{race2} %{name2}"
-msgstr "%{race2}en %{name2}"
+#, fuzzy
+msgid "%{race1} %{name1} vs %{race2} %{name2}"
+msgstr "%{name1} møter %{name2}"
 
 msgid "Monsters"
 msgstr "Monstre"
@@ -3067,6 +3074,16 @@ msgstr ""
 msgid "Show extra information such as FPS and current time."
 msgstr "Vis ekstra informasjon som bilder per sekund (FPS) og tid."
 
+msgid "Hotkey: "
+msgstr ""
+
+msgid "Category: "
+msgstr ""
+
+#, fuzzy
+msgid "Event: "
+msgstr "Hendelse"
+
 msgid "Hot Keys:"
 msgstr "Hurtigtaster:"
 
@@ -3355,6 +3372,10 @@ msgstr "Bekreft valget og gå videre."
 msgid "%{color} %{race} hero"
 msgstr "%{color} spiller"
 
+#, fuzzy
+msgid "Terrain object"
+msgstr "Terrengmodus"
+
 msgid "Select Skill:"
 msgstr "Velg ferdighet:"
 
@@ -3374,11 +3395,61 @@ msgstr "Velg helt:"
 msgid "Select Treasure:"
 msgstr "Velg helt:"
 
+#, fuzzy
+msgid "Select Ocean Object:"
+msgstr "Sjøting"
+
+#, fuzzy
+msgid "Castle/town placing"
+msgstr "Borgvalg"
+
+msgid "doubleLinedRace|Neutral"
+msgstr "Nøytral"
+
+msgid "race|Random"
+msgstr "Tilfeldig"
+
+#, fuzzy
+msgid "Click to start placing the selected castle/town."
+msgstr "Trykk for å bruke den valgte oppløsningen."
+
+#, fuzzy
+msgid "Click to select town placing."
+msgstr "Klikk for å vise neste by."
+
+#, fuzzy
+msgid "Click to select castle placing."
+msgstr "Klikk her for å velge hvilket kart du vil spille."
+
+#, fuzzy
+msgid "%{color} %{race} %{townOrCastle}"
+msgstr "%{color} spiller"
+
+msgid "race|Neutral"
+msgstr "Nøytral"
+
+msgid "You will place"
+msgstr ""
+
+#, fuzzy
+msgid "Click to select this class."
+msgstr "Klikk her for å velge hvilket kart du vil spille."
+
+#, fuzzy
+msgid "Click to select this color."
+msgstr "Klikk her for å velge hvilket kart du vil spille."
+
 msgid "Map Type:\n"
 msgstr "Kart-type:\n"
 
 msgid "The Succession Wars"
 msgstr "Krigen om tronen"
+
+#, fuzzy
+msgid "Resurrection"
+msgstr ""
+"Gjen-\n"
+"opplivning"
 
 msgid "Lose all your heroes and towns."
 msgstr "Mist alle helter og byer."
@@ -3640,6 +3711,12 @@ msgstr "Rolle:"
 msgid "Best Monster:"
 msgstr "Beste krigerslag:"
 
+#, fuzzy
+msgid "Map filename"
+msgstr ""
+"Kartets\n"
+"størrelse"
+
 msgid ""
 "Are you sure you want to load a new map? (Any unsaved changes to the current "
 "map will be lost.)"
@@ -3679,6 +3756,10 @@ msgstr "Forlat karttegneren"
 msgid "Monster"
 msgstr "Monster"
 
+#, fuzzy
+msgid "Objects cannot be placed outside the map."
+msgstr "Denne trolldommen kan ikke brukes på et skip."
+
 msgid "Monsters cannot be placed on water."
 msgstr ""
 
@@ -3703,6 +3784,21 @@ msgstr "Gjenstander"
 
 #, fuzzy
 msgid "Artifacts cannot be placed on water."
+msgstr "Denne trolldommen kan ikke brukes på et skip."
+
+#, fuzzy
+msgid "Ocean object"
+msgstr "Sjøting"
+
+#, fuzzy
+msgid "Ocean object must be placed on water."
+msgstr "Denne trolldommen kan ikke brukes på et skip."
+
+msgid "Towns"
+msgstr "Byer"
+
+#, fuzzy
+msgid "Towns cannot be placed on water."
 msgstr "Denne trolldommen kan ikke brukes på et skip."
 
 msgid "Ocean Objects"
@@ -3731,9 +3827,6 @@ msgstr "Ødemarksting"
 
 msgid "Beach Objects"
 msgstr "Strandting"
-
-msgid "Towns"
-msgstr "Byer"
 
 msgid "Treasures"
 msgstr "Verdifulle gjenstander"
@@ -4594,6 +4687,33 @@ msgstr ""
 "Ønsker du å ta styringen fra datamaskinen? Dette vil kun tre i kraft den "
 "neste runden."
 
+#, fuzzy
+msgid "Default Actions"
+msgstr "Standard handling"
+
+msgid "Global Actions"
+msgstr ""
+
+msgid "Main Menu"
+msgstr ""
+
+msgid "World Map"
+msgstr "Verdenskart"
+
+#, fuzzy
+msgid "Battle Screen"
+msgstr "Heltevindu"
+
+#, fuzzy
+msgid "Town Screen"
+msgstr "Heltevindu"
+
+msgid "Army Actions"
+msgstr ""
+
+msgid "Editor"
+msgstr ""
+
 msgid "The save file is corrupted."
 msgstr "Lagringsfilen er korrupt."
 
@@ -4609,9 +4729,10 @@ msgstr "Sist støttede utgave: "
 msgid "This file contains a save with an invalid game type."
 msgstr "Denne filen inneholder et lagringspunkt med en ugyldig spillversjon."
 
+#, fuzzy
 msgid ""
-"This file was saved for a \"The Price of Loyalty\" map, but the "
-"corresponding game assets have not been provided to the engine."
+"This save file requires \"The Price of Loyalty\" game assets, but they have "
+"not been provided to the engine."
 msgstr ""
 "Denne filen ble lagret i spillutgaven \"Prisen for trofasthet\", men de "
 "tilhørende utvidelsesfilene mangler."
@@ -4701,9 +4822,6 @@ msgid ""
 " menu. \n"
 "\n"
 "Enjoy the game!"
-msgstr ""
-
-msgid "Editor"
 msgstr ""
 
 #, fuzzy
@@ -5276,9 +5394,6 @@ msgid "A miniature view of the known world. Left click to move viewing area."
 msgstr ""
 "Et overblikk over den utforskede verdenen. Venstre-klikk for å flytte "
 "visningsområdet."
-
-msgid "World Map"
-msgstr "Verdenskart"
 
 msgid "Month: %{month} Week: %{week}"
 msgstr "Måned: %{month}, Uke: %{week}"
@@ -7804,12 +7919,6 @@ msgstr "Sortekunstner"
 msgid "Multi"
 msgstr "Flere"
 
-msgid "race|Random"
-msgstr "Tilfeldig"
-
-msgid "race|Neutral"
-msgstr "Nøytral"
-
 msgid "doubleLined|Knight"
 msgstr "Ridder"
 
@@ -7845,9 +7954,6 @@ msgstr "Flere"
 
 msgid "doubleLinedRace|Random"
 msgstr "Tilfeldig"
-
-msgid "doubleLinedRace|Neutral"
-msgstr "Nøytral"
 
 # Stillestående (for lang), bomstille.
 msgid "speed|Standing"
@@ -11148,3 +11254,12 @@ msgstr ""
 "Finn den siste oppdateringen av spillet på\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "%{race1} %{name1}"
+#~ msgstr "%{race1}en %{name1}"
+
+#~ msgid "vs"
+#~ msgstr "mot"
+
+#~ msgid "%{race2} %{name2}"
+#~ msgstr "%{race2}en %{name2}"

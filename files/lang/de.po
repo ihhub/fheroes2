@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-09 03:47+0000\n"
+"POT-Creation-Date: 2023-12-15 09:12+0000\n"
 "PO-Revision-Date: 2023-04-09 23:51+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -196,6 +196,18 @@ msgstr "INTRO ANZEIGEN"
 
 msgid "MIN"
 msgstr "MIN"
+
+msgid "RESET"
+msgstr ""
+
+#, fuzzy
+msgid "CASTLE"
+msgstr ""
+"STÄDTE/\n"
+"BURGEN"
+
+msgid "TOWN"
+msgstr ""
 
 msgid ""
 "D\n"
@@ -926,14 +938,9 @@ msgstr "Zauberkraft setzen"
 msgid "Set Knowledge Skill"
 msgstr "Wissen setzen"
 
-msgid "%{race1} %{name1}"
-msgstr "%{name1} (%{race1})"
-
-msgid "vs"
-msgstr "gegen"
-
-msgid "%{race2} %{name2}"
-msgstr "%{name2} (%{race2})"
+#, fuzzy
+msgid "%{race1} %{name1} vs %{race2} %{name2}"
+msgstr "%{name1} trifft %{name2}"
 
 msgid "Monsters"
 msgstr "Monster"
@@ -3035,6 +3042,16 @@ msgid "Show extra information such as FPS and current time."
 msgstr ""
 "Zusätzliche Informationen anzeigen, wie die FPS und die aktuelle Zeit an."
 
+msgid "Hotkey: "
+msgstr ""
+
+msgid "Category: "
+msgstr ""
+
+#, fuzzy
+msgid "Event: "
+msgstr "Ereignis"
+
 msgid "Hot Keys:"
 msgstr "Hotkeys:"
 
@@ -3329,6 +3346,10 @@ msgstr "Die getroffene Wahl bestätigen."
 msgid "%{color} %{race} hero"
 msgstr "Spieler %{color}"
 
+#, fuzzy
+msgid "Terrain object"
+msgstr "Gelände-Modus"
+
 msgid "Select Skill:"
 msgstr "Fähigkeit auswählen:"
 
@@ -3348,11 +3369,59 @@ msgstr "Held auswählen:"
 msgid "Select Treasure:"
 msgstr "Held auswählen:"
 
+#, fuzzy
+msgid "Select Ocean Object:"
+msgstr "Ozean-Objekte"
+
+#, fuzzy
+msgid "Castle/town placing"
+msgstr "Burg Optionen"
+
+msgid "doubleLinedRace|Neutral"
+msgstr "Neutral"
+
+msgid "race|Random"
+msgstr "Zufällig"
+
+#, fuzzy
+msgid "Click to start placing the selected castle/town."
+msgstr "Klicken um die ausgewählte Auflösung anzuwenden."
+
+#, fuzzy
+msgid "Click to select town placing."
+msgstr "Klicken um die nächste Stadt anzuzeigen."
+
+#, fuzzy
+msgid "Click to select castle placing."
+msgstr "Hier klicken, um auszuwählen, welches Szenario gespielt werden soll."
+
+#, fuzzy
+msgid "%{color} %{race} %{townOrCastle}"
+msgstr "Spieler %{color}"
+
+msgid "race|Neutral"
+msgstr "Neutral"
+
+msgid "You will place"
+msgstr ""
+
+#, fuzzy
+msgid "Click to select this class."
+msgstr "Hier klicken, um auszuwählen, welches Szenario gespielt werden soll."
+
+#, fuzzy
+msgid "Click to select this color."
+msgstr "Hier klicken, um auszuwählen, welches Szenario gespielt werden soll."
+
 msgid "Map Type:\n"
 msgstr "Kartentyp:\n"
 
 msgid "The Succession Wars"
 msgstr "The Succession Wars"
+
+#, fuzzy
+msgid "Resurrection"
+msgstr "Auferstehung"
 
 msgid "Lose all your heroes and towns."
 msgstr "Alle Helden und Städte verlieren."
@@ -3614,6 +3683,12 @@ msgstr "Person:"
 msgid "Best Monster:"
 msgstr "Bestes Monster:"
 
+#, fuzzy
+msgid "Map filename"
+msgstr ""
+"Karten-\n"
+"größe"
+
 msgid ""
 "Are you sure you want to load a new map? (Any unsaved changes to the current "
 "map will be lost.)"
@@ -3655,6 +3730,10 @@ msgstr "Den Karteneditor verlassen."
 msgid "Monster"
 msgstr "Monster"
 
+#, fuzzy
+msgid "Objects cannot be placed outside the map."
+msgstr "Monster können nicht auf Wasser plaziert werden."
+
 msgid "Monsters cannot be placed on water."
 msgstr "Monster können nicht auf Wasser plaziert werden."
 
@@ -3679,6 +3758,21 @@ msgstr "Artefakte"
 
 #, fuzzy
 msgid "Artifacts cannot be placed on water."
+msgstr "Monster können nicht auf Wasser plaziert werden."
+
+#, fuzzy
+msgid "Ocean object"
+msgstr "Ozean-Objekte"
+
+#, fuzzy
+msgid "Ocean object must be placed on water."
+msgstr "Monster können nicht auf Wasser plaziert werden."
+
+msgid "Towns"
+msgstr "Städte"
+
+#, fuzzy
+msgid "Towns cannot be placed on water."
 msgstr "Monster können nicht auf Wasser plaziert werden."
 
 msgid "Ocean Objects"
@@ -3707,9 +3801,6 @@ msgstr "Ödland-Objekte"
 
 msgid "Beach Objects"
 msgstr "Strand-Objekte"
-
-msgid "Towns"
-msgstr "Städte"
 
 msgid "Treasures"
 msgstr "Schätze"
@@ -4577,6 +4668,33 @@ msgstr ""
 "Möchtet Ihr die Kontrolle von Euch auf die KI übertragen? Der Effekt tritt "
 "erst in der nächsten Runde ein."
 
+#, fuzzy
+msgid "Default Actions"
+msgstr "Standardaktion"
+
+msgid "Global Actions"
+msgstr ""
+
+msgid "Main Menu"
+msgstr ""
+
+msgid "World Map"
+msgstr "Weltkarte"
+
+#, fuzzy
+msgid "Battle Screen"
+msgstr "Heldenbildschirm"
+
+#, fuzzy
+msgid "Town Screen"
+msgstr "Heldenbildschirm"
+
+msgid "Army Actions"
+msgstr ""
+
+msgid "Editor"
+msgstr "Editor"
+
 msgid "The save file is corrupted."
 msgstr "Die Speicherdatei ist beschädigt."
 
@@ -4592,9 +4710,10 @@ msgstr "Letzte unterstützte Version: "
 msgid "This file contains a save with an invalid game type."
 msgstr "Diese Datei enthält einen Spielstand mit einem ungültigen Spieltyp."
 
+#, fuzzy
 msgid ""
-"This file was saved for a \"The Price of Loyalty\" map, but the "
-"corresponding game assets have not been provided to the engine."
+"This save file requires \"The Price of Loyalty\" game assets, but they have "
+"not been provided to the engine."
 msgstr ""
 "Diese Datei wurde als \"The Price of Loyalty\"-Karte gespeichert, aber die "
 "entsprechenden Spiel-Assets wurden der Engine nicht zur Verfügung gestellt."
@@ -4689,9 +4808,6 @@ msgid ""
 "\n"
 "Enjoy the game!"
 msgstr ""
-
-msgid "Editor"
-msgstr "Editor"
 
 msgid "The Editor requires \"The Price of Loyalty\" expansion files to work."
 msgstr ""
@@ -5274,9 +5390,6 @@ msgid "A miniature view of the known world. Left click to move viewing area."
 msgstr ""
 "Eine Miniaturansicht der bekannten Welt. Klickt mit der linken Maustaste, um "
 "den Sichtbereich zu verschieben."
-
-msgid "World Map"
-msgstr "Weltkarte"
 
 msgid "Month: %{month} Week: %{week}"
 msgstr "Monat: %{month} Woche: %{week}"
@@ -7815,12 +7928,6 @@ msgstr "Totenbeschwörer"
 msgid "Multi"
 msgstr "Verschied"
 
-msgid "race|Random"
-msgstr "Zufällig"
-
-msgid "race|Neutral"
-msgstr "Neutral"
-
 msgid "doubleLined|Knight"
 msgstr "Ritter"
 
@@ -7848,9 +7955,6 @@ msgstr "Verschied"
 
 msgid "doubleLinedRace|Random"
 msgstr "Zufällig"
-
-msgid "doubleLinedRace|Neutral"
-msgstr "Neutral"
 
 msgid "speed|Standing"
 msgstr "Stehend"
@@ -11129,3 +11233,12 @@ msgstr ""
 "Die neueste Version des Spiels finden Sie unter\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "%{race1} %{name1}"
+#~ msgstr "%{name1} (%{race1})"
+
+#~ msgid "vs"
+#~ msgstr "gegen"
+
+#~ msgid "%{race2} %{name2}"
+#~ msgstr "%{name2} (%{race2})"

@@ -28,8 +28,6 @@
 #include <utility>
 
 #include "agg_image.h"
-#include "image.h"
-#include "math_base.h"
 
 namespace
 {
@@ -289,7 +287,8 @@ namespace
         offset->x += lineWidth;
     }
 
-    int32_t render( const uint8_t * data, const int32_t size, const int32_t x, const int32_t y, fheroes2::Image & output, const fheroes2::FontType & fontType )
+    int32_t render( const uint8_t * data, const int32_t size, const int32_t x, const int32_t y, fheroes2::Image & output, const fheroes2::Rect & imageRoi,
+                    const fheroes2::FontType & fontType )
     {
         assert( data != nullptr && size > 0 && !output.empty() );
 
@@ -317,7 +316,12 @@ namespace
             const fheroes2::Sprite & charSprite = fheroes2::AGG::getChar( validator.isValid( *data ) ? *data : invalidChar, fontType );
             assert( !charSprite.empty() );
 
-            fheroes2::Blit( charSprite, output, offsetX + charSprite.x(), y + charSprite.y() );
+            const fheroes2::Rect charRoi{ offsetX + charSprite.x(), y + charSprite.y(), charSprite.width(), charSprite.height() };
+
+            const fheroes2::Rect overlappedRoi = imageRoi ^ charRoi;
+
+            fheroes2::Blit( charSprite, overlappedRoi.x - charRoi.x, overlappedRoi.y - charRoi.y, output, overlappedRoi.x, overlappedRoi.y, overlappedRoi.width,
+                            overlappedRoi.height );
             offsetX += charSprite.width() + charSprite.x();
         }
 
@@ -325,7 +329,7 @@ namespace
     }
 
     void renderLine( const uint8_t * data, const int32_t size, const int32_t x, const int32_t y, const int32_t maxWidth, fheroes2::Image & output,
-                     const fheroes2::FontType & fontType, const bool align )
+                     const fheroes2::Rect & imageRoi, const fheroes2::FontType & fontType, const bool align )
     {
         if ( align ) {
             const int32_t correctedLineWidth = getTruncatedLineWidth( data, size, fontType );
@@ -336,15 +340,15 @@ namespace
                                            && ( fontType.size == fheroes2::FontSize::BUTTON_RELEASED || fontType.size == fheroes2::FontSize::BUTTON_PRESSED ) )
                                              ? 1
                                              : 0;
-            render( data, size, x + ( maxWidth - correctedLineWidth + extraOffsetX ) / 2, y, output, fontType );
+            render( data, size, x + ( maxWidth - correctedLineWidth + extraOffsetX ) / 2, y, output, imageRoi, fontType );
         }
         else {
-            render( data, size, x, y, output, fontType );
+            render( data, size, x, y, output, imageRoi, fontType );
         }
     }
 
     void render( const uint8_t * data, const int32_t size, const int32_t x, const int32_t y, const int32_t maxWidth, fheroes2::Image & output,
-                 const fheroes2::FontType & fontType, const int32_t rowHeight, const bool align, std::deque<fheroes2::Point> & offsets )
+                 const fheroes2::Rect & imageRoi, const fheroes2::FontType & fontType, const int32_t rowHeight, const bool align, std::deque<fheroes2::Point> & offsets )
     {
         assert( data != nullptr && size > 0 && !output.empty() && maxWidth > 0 );
 
@@ -376,7 +380,7 @@ namespace
             if ( *data == lineSeparator ) {
                 // End of line. Render the current line.
                 if ( lineLength > 0 ) {
-                    renderLine( data - lineLength, lineLength, x + offset->x, yPos + offset->y, maxWidth, output, fontType, align );
+                    renderLine( data - lineLength, lineLength, x + offset->x, yPos + offset->y, maxWidth, output, imageRoi, fontType, align );
                     lineLength = 0;
                     lastWordLength = 0;
                     lineWidth = 0;
@@ -409,7 +413,13 @@ namespace
                 if ( offset->x + lineWidth + charWidth > maxWidth ) {
                     // Current character has exceeded the maximum line width.
                     const uint8_t * line = data - lineLength;
-                    if ( lineLength == lastWordLength ) {
+
+                    if ( lineLength == 0 && lastWordLength == 0 ) {
+                        // No new characters can be added.
+                        // This can happen when a new text in a multi-font text being appended just at the end of the line.
+                        assert( lineWidth == 0 );
+                    }
+                    else if ( lineLength == lastWordLength ) {
                         // This is the only word in the line.
                         // Search for '-' symbol to avoid truncating the word in the middle.
                         const uint8_t * hyphenPos = data - lineLength;
@@ -420,26 +430,26 @@ namespace
                         }
 
                         if ( hyphenPos != data ) {
-                            renderLine( line, static_cast<int32_t>( hyphenPos + lineLength - data ) + 1, x + offset->x, yPos + offset->y, maxWidth, output, fontType,
-                                        align );
+                            renderLine( line, static_cast<int32_t>( hyphenPos + lineLength - data ) + 1, x + offset->x, yPos + offset->y, maxWidth, output, imageRoi,
+                                        fontType, align );
                             data = hyphenPos;
                             ++data;
                         }
                         else {
-                            renderLine( line, lineLength, x + offset->x, yPos + offset->y, maxWidth, output, fontType, align );
+                            renderLine( line, lineLength, x + offset->x, yPos + offset->y, maxWidth, output, imageRoi, fontType, align );
                         }
                     }
                     else {
                         if ( isSpace ) {
                             // Current character could be a space character then current line is over.
-                            renderLine( line, lineLength, x + offset->x, yPos + offset->y, maxWidth, output, fontType, align );
+                            renderLine( line, lineLength, x + offset->x, yPos + offset->y, maxWidth, output, imageRoi, fontType, align );
 
                             // We skip this space character.
                             ++data;
                         }
                         else {
                             // Exclude last word from this line.
-                            renderLine( line, lineLength - lastWordLength, x + offset->x, yPos + offset->y, maxWidth, output, fontType, align );
+                            renderLine( line, lineLength - lastWordLength, x + offset->x, yPos + offset->y, maxWidth, output, imageRoi, fontType, align );
 
                             // Go back to the start of the word.
                             data -= lastWordLength;
@@ -482,7 +492,7 @@ namespace
         }
 
         if ( lineLength > 0 ) {
-            renderLine( data - lineLength, lineLength, x + offset->x, yPos + offset->y, maxWidth, output, fontType, align );
+            renderLine( data - lineLength, lineLength, x + offset->x, yPos + offset->y, maxWidth, output, imageRoi, fontType, align );
             offset->x += lineWidth;
         }
     }
@@ -614,17 +624,17 @@ namespace fheroes2
         return offsets.back().y / fontHeight + 1;
     }
 
-    void Text::draw( const int32_t x, const int32_t y, Image & output ) const
+    void Text::drawInRoi( const int32_t x, const int32_t y, Image & output, const Rect & imageRoi ) const
     {
         if ( output.empty() || _text.empty() ) {
             // No use to render something on an empty image or if something is empty.
             return;
         }
 
-        render( reinterpret_cast<const uint8_t *>( _text.data() ), static_cast<int32_t>( _text.size() ), x, y, output, _fontType );
+        render( reinterpret_cast<const uint8_t *>( _text.data() ), static_cast<int32_t>( _text.size() ), x, y, output, imageRoi, _fontType );
     }
 
-    void Text::draw( const int32_t x, const int32_t y, const int32_t maxWidth, Image & output ) const
+    void Text::drawInRoi( const int32_t x, const int32_t y, const int32_t maxWidth, Image & output, const Rect & imageRoi ) const
     {
         if ( output.empty() || _text.empty() ) {
             // No use to render something on an empty image or if something is empty.
@@ -633,7 +643,7 @@ namespace fheroes2
 
         assert( maxWidth > 0 ); // Why is the limit less than 1?
         if ( maxWidth <= 0 ) {
-            draw( x, y, output );
+            drawInRoi( x, y, output, imageRoi );
             return;
         }
 
@@ -674,8 +684,8 @@ namespace fheroes2
         xOffset = ( maxWidth - correctedWidth ) / 2;
 
         offsets.clear();
-        render( reinterpret_cast<const uint8_t *>( _text.data() ), static_cast<int32_t>( _text.size() ), x + xOffset, y, correctedWidth, output, _fontType, fontHeight,
-                true, offsets );
+        render( reinterpret_cast<const uint8_t *>( _text.data() ), static_cast<int32_t>( _text.size() ), x + xOffset, y, correctedWidth, output, imageRoi, _fontType,
+                fontHeight, true, offsets );
     }
 
     bool Text::empty() const
@@ -811,7 +821,7 @@ namespace fheroes2
         return offsets.back().y / maxFontHeight + 1;
     }
 
-    void MultiFontText::draw( const int32_t x, const int32_t y, Image & output ) const
+    void MultiFontText::drawInRoi( const int32_t x, const int32_t y, Image & output, const Rect & imageRoi ) const
     {
         if ( output.empty() || _texts.empty() ) {
             // No use to render something on an empty image or if something is empty.
@@ -824,11 +834,11 @@ namespace fheroes2
         for ( const Text & text : _texts ) {
             const int32_t fontHeight = getFontHeight( text._fontType.size );
             offsetX = render( reinterpret_cast<const uint8_t *>( text._text.data() ), static_cast<int32_t>( text._text.size() ), offsetX,
-                              y + ( maxFontHeight - fontHeight ) / 2, output, text._fontType );
+                              y + ( maxFontHeight - fontHeight ) / 2, output, imageRoi, text._fontType );
         }
     }
 
-    void MultiFontText::draw( const int32_t x, const int32_t y, const int32_t maxWidth, Image & output ) const
+    void MultiFontText::drawInRoi( const int32_t x, const int32_t y, const int32_t maxWidth, Image & output, const Rect & imageRoi ) const
     {
         if ( output.empty() || _texts.empty() ) {
             // No use to render something on an empty image or if something is empty.
@@ -837,7 +847,7 @@ namespace fheroes2
 
         assert( maxWidth > 0 ); // Why is the limit less than 1?
         if ( maxWidth <= 0 ) {
-            draw( x, y, output );
+            drawInRoi( x, y, output, imageRoi );
             return;
         }
 
@@ -861,6 +871,7 @@ namespace fheroes2
                     startWidth = maxWordWidth;
                 }
             }
+
             int32_t endWidth = maxWidth;
             while ( startWidth + 1 < endWidth ) {
                 const int32_t currentWidth = ( endWidth + startWidth ) / 2;
@@ -895,7 +906,7 @@ namespace fheroes2
 
         for ( size_t i = 0; i < _texts.size(); ++i ) {
             render( reinterpret_cast<const uint8_t *>( _texts[i]._text.data() ), static_cast<int32_t>( _texts[i]._text.size() ), x + xOffset, y, correctedWidth, output,
-                    _texts[i]._fontType, maxFontHeight, false, offsets );
+                    imageRoi, _texts[i]._fontType, maxFontHeight, false, offsets );
         }
     }
 
