@@ -230,22 +230,25 @@ void SecondarySkillsBar::RedrawItem( Skill::Secondary & skill, const fheroes2::R
     if ( !skill.isValid() ) {
         // If the skill is invalid nothing we need to do.
         return;
-    }
-
+    } 
+    
     const fheroes2::Sprite & sprite
         = use_mini_sprite ? fheroes2::AGG::GetICN( ICN::MINISS, skill.GetIndexSprite2() ) : fheroes2::AGG::GetICN( ICN::SECSKILL, skill.GetIndexSprite1() );
     fheroes2::Blit( sprite, dstsf, pos.x + ( pos.width - sprite.width() ) / 2, pos.y + ( pos.height - sprite.height() ) / 2 );
 
     if ( use_mini_sprite ) {
-        const fheroes2::Text text{ std::to_string( skill.Level() ), fheroes2::FontType::smallWhite() };
+        fheroes2::Text text{ std::to_string( skill.Level() ), fheroes2::FontType::smallWhite() };
+        if ( text.width() > 76 ) text.fitToOneRow( pos.width );
         text.drawInRoi( pos.x + ( pos.width - text.width() ) - 3, pos.y + pos.height - 10, dstsf, pos );
     }
     else {
         fheroes2::Text text{ Skill::Secondary::String( skill.Skill() ), fheroes2::FontType::smallWhite() };
+        if ( text.width() > 76 )  text.fitToOneRow( pos.width );
         const int skillNamePaddingX = ( pos.width - text.width() ) / 2 - 1;
         text.drawInRoi( pos.x + skillNamePaddingX, pos.y + 5, dstsf, pos );
 
         text.set( Skill::Level::StringWithBonus( _hero, skill ), fheroes2::FontType::smallWhite() );
+        if ( text.width() > 76 )  text.fitToOneRow( pos.width );
         const int skillLevelPaddingX = ( pos.width - text.width() ) / 2 - 1;
         text.drawInRoi( pos.x + skillLevelPaddingX, pos.y + 53, dstsf, pos );
     }
