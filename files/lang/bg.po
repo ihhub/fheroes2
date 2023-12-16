@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-11-09 03:47+0000\n"
-"PO-Revision-Date: 2022-11-08 16:44+0000\n"
+"PO-Revision-Date: 2023-12-07 21:49+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: bg\n"
@@ -1576,7 +1576,6 @@ msgstr ""
 "Драконите, ръмжащи и ръмжейки, се съгласяват да обединят сили с теб, техния "
 "\"съюзник\"."
 
-#, fuzzy
 msgid ""
 "As you approach the group of elves, their leader calls them all to "
 "attention. He shouts to them, \"Who of you is brave enough to join this "
@@ -1586,9 +1585,8 @@ msgstr ""
 "Когато се приближавате до групата елфи, техният водач ги призовава всички да "
 "внимават. Той им крещи: \"Кой от вас е достатъчно смел да се присъедини към "
 "този наш безстрашен съюзник?\" Групата избухва от възгласи, докато тичат да "
-"се присъединят към вашите редици."
+"се присъединят към твоите редици."
 
-#, fuzzy
 msgid ""
 "The dwarves hail you, \"Any friend of Roland is a friend of ours. You may "
 "pass.\""
@@ -1602,24 +1600,22 @@ msgstr ""
 "Огритата ти изсумтяват в знак на признание: \"Съюзниците на Арчибалд може да "
 "преминат.\""
 
-#, fuzzy
 msgid ""
 "The dragons see you and call out. \"Our alliance with Archibald compels us "
 "to join you. Unfortunately you have no room. A pity!\" They quickly scatter."
 msgstr ""
-"Драконите те виждат и викат. \"Съюзът ни с Арчибалд ни принуждава да се "
+"Драконите те виждат и казват. \"Съюзът ни с Арчибалд ни принуждава да се "
 "присъединим към теб. За съжаление нямаш място. Жалко!\" Те бързо се "
 "разпръскват."
 
-#, fuzzy
 msgid ""
 "The elves stand at attention as you approach. Their leader calls to you and "
 "says, \"Let us not impede your progress, ally! Move on, and may victory be "
 "yours.\""
 msgstr ""
-"Елфите стоят мирно, докато се приближаваш. Техният водач ти казва: \"Нека не "
-"пречим на прогреса ти, съюзнико! Продължавай напред и нека победата бъде "
-"твоя.\""
+"Елфите стоят мирно, докато се приближаваш. Техният водач те повиква и казва: "
+"\"Нека не пречим на прогреса ти, съюзнико! Продължавай напред и нека "
+"победата бъде твоя.\""
 
 msgid "\"The Dwarfbane!!!!, run for your lives.\""
 msgstr "\"Джуджеубиецо!!!!, бягай за да опазиш живота си.\""
@@ -2716,7 +2712,6 @@ msgstr "Изкопаване"
 msgid "Arena"
 msgstr "Арена"
 
-#, fuzzy
 msgid ""
 "You enter the arena and face a pack of vicious lions. You handily defeat "
 "them, to the wild cheers of the crowd. Impressed by your skill, the aged "
@@ -3100,12 +3095,14 @@ msgstr "%{skill} +1"
 msgid "You have learned %{skill}."
 msgstr "Научи %{skill}."
 
-#, fuzzy
 msgid ""
 "%{name} has gained a level.\n"
 "\n"
 "%{skill} +1"
-msgstr "%{name} спечели ниво."
+msgstr ""
+"%{name} спечели ниво.\n"
+"\n"
+"%{skill} +1"
 
 #, fuzzy
 msgid ""
@@ -3184,9 +3181,8 @@ msgstr "(не посещаван)"
 msgid "%{color} Barrier"
 msgstr "%{color} Бариера"
 
-#, fuzzy
 msgid "(tent visited)"
-msgstr "(не посещаван)"
+msgstr "(посетена палатка)"
 
 msgid "%{color} Tent"
 msgstr "%{color} палатка"
@@ -3320,9 +3316,8 @@ msgstr "Файл за зареждане:"
 msgid "Accept the choice made."
 msgstr "Приемете направения избор."
 
-#, fuzzy
 msgid "%{color} %{race} hero"
-msgstr "%{color} играч"
+msgstr "%{color} %{race} играч"
 
 msgid "Select Skill:"
 msgstr "Избери умение:"
@@ -3339,9 +3334,8 @@ msgstr "Избери чудовище:"
 msgid "Select Hero:"
 msgstr "Избери герой:"
 
-#, fuzzy
 msgid "Select Treasure:"
-msgstr "Избери герой:"
+msgstr "Избери Съкровище:"
 
 msgid "Map Type:\n"
 msgstr "Тип на карта:\n"
@@ -3512,7 +3506,6 @@ msgstr "Ръчно"
 msgid "Change the speed at which your heroes move on the main screen."
 msgstr "Промени скоростта, с която твоите герои се движат на главния екран."
 
-#, fuzzy
 msgid ""
 "Sets the speed that A.I. heroes move at. You can also elect not to view A.I. "
 "movement at all."
@@ -3524,9 +3517,8 @@ msgstr ""
 msgid "Change the interface settings of the game."
 msgstr "Промени графичните настройки на играта."
 
-#, fuzzy
 msgid "Interface Settings"
-msgstr "Игрови настройки"
+msgstr "Настройки на интерфейса"
 
 msgid "Toggle instant battle mode."
 msgstr "Превключи режима на незабавна битка."
@@ -3713,9 +3705,8 @@ msgstr "Съкровища"
 msgid "Terrain"
 msgstr "Режим терен"
 
-#, fuzzy
 msgid "Castles"
-msgstr "Замък"
+msgstr "Замъци"
 
 #, fuzzy
 msgid "Roads"
@@ -3857,7 +3848,6 @@ msgstr "Пътен режим"
 msgid "Erase Mode"
 msgstr "Режим на изтриване"
 
-#, fuzzy
 msgid "Used to erase objects from the map."
 msgstr "Използва се за изтриване на обекти от картата."
 
@@ -4324,13 +4314,11 @@ msgstr "нова карта от начало"
 msgid "hotkey|new random map"
 msgstr "нова случайна игра"
 
-#, fuzzy
 msgid "hotkey|undo last action"
-msgstr "действие по подразбиране"
+msgstr "върни последното действие"
 
-#, fuzzy
 msgid "hotkey|redo last action"
-msgstr "действие по подразбиране"
+msgstr "повтори последното действие"
 
 msgid "hotkey|roland campaign"
 msgstr "кампания на роланд"
@@ -4632,7 +4620,6 @@ msgid "Welcome to Heroes of Might and Magic II powered by fheroes2 engine!"
 msgstr ""
 "Добре дошъл в Heroes of Might and Magic II, задвижван от двигателя fheroes2!"
 
-#, fuzzy
 msgid ""
 "Welcome to Heroes of Might and Magic II powered by the fheroes2 engine!\n"
 "Before starting the game please select a game resolution."
@@ -4643,13 +4630,12 @@ msgstr ""
 msgid "Please Remember"
 msgstr "Моля, запомни"
 
-#, fuzzy
 msgid ""
 "You can always change the language, resolution and settings of the game by "
 "clicking on the "
 msgstr ""
-"Винаги можеш да промениш разделителната способност на играта, като щракнеш "
-"върху "
+"Винаги можеш да промениш езика, разделителната способност на играта и "
+"настройките, като кликнеш върху "
 
 msgid "door"
 msgstr "вратата"
@@ -4675,11 +4661,8 @@ msgstr ""
 msgid "Editor"
 msgstr ""
 
-#, fuzzy
 msgid "The Editor requires \"The Price of Loyalty\" expansion files to work."
-msgstr ""
-"Една от четирите нови кампании от комплекта за разширение на \"Цената на "
-"Лоялността\"."
+msgstr "Редакторът изисква разширението „Цената на лоялността“, за да работи."
 
 msgid "Quit Heroes of Might and Magic II and return to the operating system."
 msgstr ""
@@ -4799,7 +4782,6 @@ msgstr "6 Играча"
 msgid "Play with 6 human players."
 msgstr "Играй с 6 човешки играча."
 
-#, fuzzy
 msgid "Dragon city has fallen! You are now the Master of the Dragons."
 msgstr "Градът на драконите падна! Вече си Господарят на Драконите."
 
@@ -5140,9 +5122,8 @@ msgstr "Следващият герой"
 msgid "Select the next Hero."
 msgstr "Избери следващия герой."
 
-#, fuzzy
 msgid "Hero Movement"
-msgstr "Движение на сенките"
+msgstr "Движение на героя"
 
 msgid ""
 "Start the Hero's movement along the current path or re-visit the object "
@@ -6040,7 +6021,6 @@ msgstr ""
 "Напитката в оазиса е освежаваща, но не носи допълнителна полза. Оазисът може "
 "да помогне отново, ако си водил битка."
 
-#, fuzzy
 msgid ""
 "A drink at the oasis fills your troops with strength and lifts their "
 "spirits. You can travel a bit further today."
@@ -9320,13 +9300,12 @@ msgid "The %{name} extends the duration of all your spells by %{count} turns."
 msgstr ""
 "%{name} удължава продължителността на всичките ти заклинания с %{count} хода."
 
-#, fuzzy
 msgid ""
 "A surprise turn in the landscape finds you in the midst of a grisly scene: "
 "Vultures picking at the aftermath of a terrible battle. Your cursory search "
 "of the remains turns up an enchanted hourglass."
 msgstr ""
-"Изненадващ обрат в пейзажа ти открива ужасяваща сцена: лешояди, човъркащи "
+"Изненадващ обрат в пейзажа ти открива ужасяваща сцена: Лешояди, човъркащи "
 "след ужасна битка. Беглото ти търсене на останките открива омагьосан пясъчен "
 "часовник."
 
@@ -10066,7 +10045,6 @@ msgstr ""
 msgid "Battle Garb of Anduran"
 msgstr "Бойно облекло на Андуран"
 
-#, fuzzy
 msgid ""
 "The %{name} combines the powers of the three Anduran artifacts. It provides "
 "maximum luck and morale for your troops and gives you the Town Portal spell."
@@ -10136,7 +10114,6 @@ msgstr ""
 "%{name} осигурява %{count} процента защита от студ, но удвоява щетите, "
 "причинени от огън."
 
-#, fuzzy
 msgid ""
 "Suddenly, a biting coldness engulfs your body. You seize up, falling from "
 "your horse. The pain subsides, but you still feel as if your chest is "
@@ -10734,7 +10711,6 @@ msgstr ""
 msgid "Summon Boat"
 msgstr "Призови кораб"
 
-#, fuzzy
 msgid ""
 "Summons the nearest unoccupied, friendly boat to an adjacent shore location. "
 "A friendly boat is one which you just built or were the most recent player "
