@@ -909,18 +909,18 @@ namespace Interface
             Maps::setObjectOnTile( tile, basementObjectInfo );
 
             // Since the whole object consists of multiple "objects" we have to put the same ID for all of them.
-            const uint32_t objectId = Maps::getLastObjectUID();
-            assert( objectId > 0 );
+            assert( Maps::getLastObjectUID() > 0 );
+            const uint32_t objectId = Maps::getLastObjectUID() - 1;
 
-            Maps::setLastObjectUID( objectId - 1 );
+            Maps::setLastObjectUID( objectId );
             Maps::setObjectOnTile( tile, townObjectInfo );
 
             // Add flags.
             assert( tile.GetIndex() > 0 && tile.GetIndex() < world.w() * world.h() - 1 );
-            Maps::setLastObjectUID( objectId - 1 );
+            Maps::setLastObjectUID( objectId );
             Maps::setObjectOnTile( world.GetTiles( tile.GetIndex() - 1 ), getObjectInfo( Maps::ObjectGroup::LANDSCAPE_FLAGS, color * 2 ) );
 
-            Maps::setLastObjectUID( objectId - 1 );
+            Maps::setLastObjectUID( objectId );
             Maps::setObjectOnTile( world.GetTiles( tile.GetIndex() + 1 ), getObjectInfo( Maps::ObjectGroup::LANDSCAPE_FLAGS, color * 2 + 1 ) );
 
             _redraw |= mapUpdateFlags;
