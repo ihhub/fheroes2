@@ -547,6 +547,18 @@ namespace
         std::fill( imageTransform + ( imageHeight - 1 ) * imageWidth - 3, imageTransform + ( imageHeight - 1 ) * imageWidth, transparencyValue );
         std::fill( imageTransform + imageHeight * imageWidth - 4, imageTransform + imageHeight * imageWidth, transparencyValue );
     }
+
+    void makeAllShadowsTransparent( fheroes2::Sprite & image )
+    {
+        uint8_t * transform = image.transform();
+        const uint8_t * transformEnd = transform + image.width() * image.height();
+
+        for ( ; transform != transformEnd; ++transform ) {
+            if ( *transform > 1 ) {
+                *transform = 1U;
+            }
+        }
+    }
 }
 
 namespace fheroes2
@@ -3029,35 +3041,89 @@ namespace fheroes2
 
                 return true;
             }
+            case ICN::EDITBTNS:
+                LoadOriginalICN( id );
+                if ( _icnVsSprite[id].size() == 35 ) {
+                    // We add three buttons for new object groups: Adventure, Kingdom, Monsters.
+                    _icnVsSprite[id].resize( 41 );
+
+                    // First make the clean button sprites (pressed and released).
+                    Sprite released = GetICN( ICN::EDITBTNS, 4 );
+                    Sprite pressed = GetICN( ICN::EDITBTNS, 5 );
+                    // Clean the image from the button.
+                    Fill( released, 16, 6, 18, 24, 41U );
+                    Fill( pressed, 16, 7, 17, 23, 46U );
+
+                    const int32_t buttonWidth = released.width();
+                    const int32_t buttonHeight = released.height();
+
+                    for ( size_t i = 0; i < 4; i += 2 ) {
+                        Copy( released, _icnVsSprite[id][35 + i] );
+                        Copy( pressed, _icnVsSprite[id][35 + 1 + i] );
+                    }
+                    _icnVsSprite[id][39] = std::move( released );
+                    _icnVsSprite[id][40] = std::move( pressed );
+
+                    // Adventure objects button.
+                    Sprite buttonImage = GetICN( ICN::X_LOC1, 0 );
+                    // Remove shadow.
+                    makeAllShadowsTransparent( buttonImage );
+                    Blit( buttonImage, _icnVsSprite[id][35], ( buttonWidth - buttonImage.width() ) / 2 + 3, ( buttonHeight - buttonImage.height() ) / 2 );
+                    Blit( buttonImage, _icnVsSprite[id][36], ( buttonWidth - buttonImage.width() ) / 2 + 2, ( buttonHeight - buttonImage.height() ) / 2 + 1 );
+
+                    // Kingdom objects button.
+                    buttonImage = GetICN( ICN::OBJNARTI, 13 );
+                    // Remove shadow.
+                    makeAllShadowsTransparent( buttonImage );
+                    Blit( buttonImage, _icnVsSprite[id][37], ( buttonWidth - buttonImage.width() ) / 2 + 3, ( buttonHeight - buttonImage.height() ) / 2 );
+                    Blit( buttonImage, _icnVsSprite[id][38], ( buttonWidth - buttonImage.width() ) / 2 + 2, ( buttonHeight - buttonImage.height() ) / 2 + 1 );
+
+                    // Monsters objects button.
+                    buttonImage = GetICN( ICN::MONS32, 11 );
+                    // Remove shadow.
+                    makeAllShadowsTransparent( buttonImage );
+                    Blit( buttonImage, _icnVsSprite[id][39], ( buttonWidth - buttonImage.width() ) / 2 + 3, ( buttonHeight - buttonImage.height() ) / 2 );
+                    Blit( buttonImage, _icnVsSprite[id][40], ( buttonWidth - buttonImage.width() ) / 2 + 2, ( buttonHeight - buttonImage.height() ) / 2 + 1 );
+                }
+                return true;
+            case ICN::EDITBTNS_EVIL: {
+                loadICN( ICN::EDITBTNS );
+                _icnVsSprite[id] = _icnVsSprite[ICN::EDITBTNS];
+                for ( auto & image : _icnVsSprite[id] ) {
+                    convertToEvilInterface( image, { 0, 0, image.width(), image.height() } );
+                }
+                return true;
+            }
             case ICN::EDITPANL:
                 LoadOriginalICN( id );
-                if ( _icnVsSprite[id].size() > 5 ) {
+                if ( _icnVsSprite[id].size() == 6 ) {
+                    _icnVsSprite[id].resize( 9 );
+                    // For the Erasure tool we make extra brush type images: terrain, roads, streams
                     Sprite & erasePanel = _icnVsSprite[id][5];
                     // To select object types for erasure we copy object buttons.
                     Copy( _icnVsSprite[id][1], 15, 68, erasePanel, 15, 68, 114, 55 );
 
-                    // Make 3 empty buttons for terrain objects, roads and streams.
-                    Fill( erasePanel, 16, 69, 24, 24, 65U );
-                    Copy( erasePanel, 15, 68, erasePanel, 44, 96, 27, 27 );
-                    Copy( erasePanel, 15, 68, erasePanel, 73, 96, 27, 27 );
-
                     // Make erase terrain objects button image.
-                    Image objectsImage( 24, 24 );
-                    Copy( GetICN( ICN::EDITBTNS, 2 ), 13, 4, objectsImage, 0, 0, 24, 24 );
-                    AddTransparency( objectsImage, 10U );
-                    AddTransparency( objectsImage, 38U );
-                    AddTransparency( objectsImage, 39U );
-                    AddTransparency( objectsImage, 40U );
-                    AddTransparency( objectsImage, 41U );
-                    AddTransparency( objectsImage, 46U );
-                    Blit( objectsImage, 0, 0, erasePanel, 16, 69, 24, 24 );
+                    _icnVsSprite[id][6]._disableTransformLayer();
+                    Copy( GetICN( ICN::EDITBTNS, 2 ), 13, 4, _icnVsSprite[id][6], 0, 0, 24, 24 );
+                    ReplaceColorId( _icnVsSprite[id][6], 10U, 65U );
+                    ReplaceColorId( _icnVsSprite[id][6], 38U, 65U );
+                    ReplaceColorId( _icnVsSprite[id][6], 39U, 65U );
+                    ReplaceColorId( _icnVsSprite[id][6], 40U, 65U );
+                    ReplaceColorId( _icnVsSprite[id][6], 41U, 65U );
+                    ReplaceColorId( _icnVsSprite[id][6], 46U, 65U );
 
+                    // Make empty buttons for roads and streams.
+                    _icnVsSprite[id][7].resize( 24, 24 );
+                    _icnVsSprite[id][7]._disableTransformLayer();
+                    Fill( _icnVsSprite[id][7], 0, 0, 24, 24, 65U );
+                    Copy( _icnVsSprite[id][7], _icnVsSprite[id][8] );
                     // Make erase roads button image.
-                    Blit( GetICN( ICN::ROAD, 2 ), 0, 0, erasePanel, 45, 104, 24, 5 );
-                    Blit( GetICN( ICN::ROAD, 1 ), 1, 0, erasePanel, 45, 109, 24, 5 );
+                    Blit( GetICN( ICN::ROAD, 2 ), 0, 0, _icnVsSprite[id][7], 45, 104, 24, 5 );
+                    Blit( GetICN( ICN::ROAD, 1 ), 1, 0, _icnVsSprite[id][7], 45, 109, 24, 5 );
 
                     // Make erase streams button image.
-                    Blit( GetICN( ICN::STREAM, 2 ), 0, 0, erasePanel, 74, 104, 24, 11 );
+                    Blit( GetICN( ICN::STREAM, 2 ), 0, 0, _icnVsSprite[id][8], 74, 104, 24, 11 );
                 }
                 return true;
             case ICN::EDITOR:

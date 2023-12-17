@@ -39,6 +39,7 @@
 #include "interface_base.h"
 #include "localevent.h"
 #include "maps_tiles.h"
+#include "pal.h"
 #include "screen.h"
 #include "tools.h"
 #include "translations.h"
@@ -46,10 +47,26 @@
 #include "ui_dialog.h"
 #include "ui_map_object.h"
 #include "ui_text.h"
+#include "ui_window.h"
 #include "world.h"
 
 namespace
 {
+    fheroes2::Sprite getObjectImage( const Maps::ObjectGroup group, const int32_t type )
+    {
+        if ( type == -1 ) {
+            return {};
+        }
+        const auto & objectInfo = Maps::getObjectsByGroup( group );
+        if ( type < 0 || type >= static_cast<int32_t>( objectInfo.size() ) ) {
+            // You are trying to render some unknown stuff!
+            assert( 0 );
+            return {};
+        }
+
+        return fheroes2::generateMapObjectImage( objectInfo[type] );
+    }
+
     void setCustomCursor( const Maps::ObjectGroup group, const int32_t type )
     {
         if ( type == -1 ) {
@@ -58,14 +75,7 @@ namespace
             return;
         }
 
-        const auto & objectInfo = Maps::getObjectsByGroup( group );
-        if ( type < 0 || type >= static_cast<int32_t>( objectInfo.size() ) ) {
-            // You are trying to render some unknown stuff!
-            assert( 0 );
-            return;
-        }
-
-        const fheroes2::Sprite & image = fheroes2::generateMapObjectImage( objectInfo[type] );
+        const fheroes2::Sprite & image = getObjectImage( group, type );
 
         Cursor::Get().setCustomImage( image, { image.x(), image.y() } );
     }
@@ -100,6 +110,60 @@ namespace
 
         return { minPos.x, minPos.y, maxPos.x - minPos.x + 1, maxPos.y - minPos.y + 1 };
     }
+
+    fheroes2::Image makeInstrumentPanelBackground( const int32_t width, const int32_t height )
+    {
+        fheroes2::Image background( width, height );
+        background._disableTransformLayer();
+        fheroes2::StandardWindow::renderBackgroundImage( background, { 0, 0, width, height }, 0, Settings::Get().isEvilInterfaceEnabled() );
+
+        // Make background borders: it consists of rectangles with different transform shading.
+        auto applyRectTransform = [width, height]( fheroes2::Image & output, const int32_t offset, const uint8_t transformId ) {
+            const int32_t doubleOffset = 2 * offset;
+            // Top horizontal line.
+            ApplyTransform( output, offset, offset, width - doubleOffset, 1, transformId );
+            // Left vertical line without pixels that are parts of horizontal lines.
+            ApplyTransform( output, offset, offset + 1, 1, height - doubleOffset - 2, transformId );
+            // Bottom horizontal line.
+            ApplyTransform( output, offset, height - 1 - offset, width - doubleOffset, 1, transformId );
+            // Right vertical line without pixels that are parts of horizontal lines.
+            ApplyTransform( output, width - 1 - offset, offset + 1, 1, height - doubleOffset - 2, transformId );
+        };
+
+        applyRectTransform( background, 0, 2 );
+        applyRectTransform( background, 1, 4 );
+        applyRectTransform( background, 2, 9 );
+        applyRectTransform( background, 3, 8 );
+        applyRectTransform( background, 4, 9 );
+
+        return background;
+    }
+
+    void drawInstrumentName( fheroes2::Image & output, const fheroes2::Point & pos, std::string text )
+    {
+        const fheroes2::Sprite & originalPanel = fheroes2::AGG::GetICN( ICN::EDITPANL, 0 );
+        if ( Settings::Get().isEvilInterfaceEnabled() ) {
+            fheroes2::ApplyPalette( originalPanel, 7, 104, output, pos.x, pos.y, 130, 14, PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_INTERFACE ) );
+        }
+        else {
+            fheroes2::Copy( originalPanel, 7, 104, output, pos.x, pos.y, 130, 14 );
+        }
+        const fheroes2::Text terrainText( std::move( text ), fheroes2::FontType::smallWhite() );
+        terrainText.draw( pos.x + 65 - terrainText.width() / 2, pos.y + 3, output );
+    }
+
+    void drawObjectTypeSelectionRect( fheroes2::Image & output, const fheroes2::Point & pos )
+    {
+        const fheroes2::Sprite & selection = fheroes2::AGG::GetICN( ICN::TERRAINS, 9 );
+        fheroes2::Blit( selection, 0, 0, output, pos.x - 2, pos.y - 2, selection.width(), selection.height() );
+    }
+
+    void showObjectTypeInfoText( std::string objectName )
+    {
+        std::string text = _( "Used to place %{object}." );
+        StringReplaceWithLowercase( text, "%{object}", objectName );
+        fheroes2::showStandardTextMessage( std::move( objectName ), std::move( text ), Dialog::ZERO );
+    }
 }
 
 namespace Interface
@@ -107,42 +171,56 @@ namespace Interface
     EditorPanel::EditorPanel( EditorInterface & interface_ )
         : _interface( interface_ )
     {
-        int32_t icnIndex = 0;
+        uint32_t icnIndex = 0;
 
-        // Editor Instruments go in this order in ICN: TERRAIN, OBJECT, DETAIL, STREAM, ROAD, ERASE.
-        for ( fheroes2::Button & button : _instrumentButtons ) {
-            button.setICNInfo( ICN::EDITBTNS, icnIndex, icnIndex + 1 );
+        const int icnId = Settings::Get().isEvilInterfaceEnabled() ? ICN::EDITBTNS_EVIL : ICN::EDITBTNS;
+
+        // Editor Instruments go in this order in ICN: TERRAIN, LANDSCAPE_OBJECTS, DETAIL, ADVENTURE_OBJECTS, KINGDOM_OBJECTS, MONSTERS, STREAM, ROAD, ERASE.
+        for ( size_t i = 0; i < Instrument::INSTRUMENTS_COUNT; ++i ) {
+            if ( i == Instrument::ADVENTURE_OBJECTS ) {
+                // Second row buttons ICN index starts from 53.
+                icnIndex = 35;
+            }
+            else if ( i == Instrument::STREAM ) {
+                // Third row buttons ICN index starts from 53.
+                icnIndex = 6;
+            }
+            _instrumentButtons[i].setICNInfo( icnId, icnIndex, icnIndex + 1 );
             icnIndex += 2;
         }
 
-        _buttonMagnify.setICNInfo( ICN::EDITBTNS, 12, 13 );
-        _buttonUndo.setICNInfo( ICN::EDITBTNS, 14, 15 );
-        _buttonNew.setICNInfo( ICN::EDITBTNS, 16, 17 );
-        _buttonSpecs.setICNInfo( ICN::EDITBTNS, 18, 19 );
-        _buttonFile.setICNInfo( ICN::EDITBTNS, 20, 21 );
-        _buttonSystem.setICNInfo( ICN::EDITBTNS, 22, 23 );
+        _buttonMagnify.setICNInfo( icnId, 12, 13 );
+        _buttonUndo.setICNInfo( icnId, 14, 15 );
+        _buttonNew.setICNInfo( icnId, 16, 17 );
+        _buttonSpecs.setICNInfo( icnId, 18, 19 );
+        _buttonFile.setICNInfo( icnId, 20, 21 );
+        _buttonSystem.setICNInfo( icnId, 22, 23 );
 
         // Brush Size buttons go in this order in ICN: SMALL (1x), MEDIUM (2x), LARGE (4x), AREA.
         icnIndex = 24;
         for ( fheroes2::Button & button : _brushSizeButtons ) {
-            button.setICNInfo( ICN::EDITBTNS, icnIndex, icnIndex + 1 );
+            button.setICNInfo( icnId, icnIndex, icnIndex + 1 );
             icnIndex += 2;
         }
 
         _instrumentButtons[_selectedInstrument].press();
         _brushSizeButtons[_selectedBrushSize].press();
 
-        _selectedObjectType.fill( -1 );
+        _selectedLandscapeObjectType.fill( -1 );
+        _selectedAdventureObjectType.fill( -1 );
+        _selectedKingdomObjectType.fill( -1 );
     }
 
     fheroes2::Rect EditorPanel::getBrushArea() const
     {
         // Roads and streams are placed using only 1x1 brush.
-        if ( _selectedInstrument == Instrument::STREAM || _selectedInstrument == Instrument::ROAD || _selectedInstrument == Instrument::DETAIL ) {
+        if ( _selectedInstrument == Instrument::STREAM || _selectedInstrument == Instrument::ROAD || _selectedInstrument == Instrument::DETAIL
+             || _selectedInstrument == Instrument::MONSTERS ) {
             return { 0, 0, 1, 1 };
         }
 
-        if ( _selectedInstrument == OBJECT ) {
+        if ( _selectedInstrument == Instrument::LANDSCAPE_OBJECTS || _selectedInstrument == Instrument::ADVENTURE_OBJECTS
+             || _selectedInstrument == Instrument::KINGDOM_OBJECTS ) {
             const int32_t objectType = getSelectedObjectType();
             if ( objectType >= 0 ) {
                 return getObjectOccupiedArea( getSelectedObjectGroup(), objectType );
@@ -173,6 +251,15 @@ namespace Interface
     {
         int32_t offsetX = displayX;
 
+        // Editor panel consists of 3 instrument button rows, instrument panel and 2 system button rows.
+        // Each button row is 36 pixels height.
+        const fheroes2::Display & display = fheroes2::Display::instance();
+        const int32_t instrumentPanelWidth = display.width() - displayX - BORDERWIDTH;
+        const int32_t bottomBorderOffset = ( display.height() > fheroes2::Display::DEFAULT_HEIGHT + BORDERWIDTH ) ? BORDERWIDTH : 0;
+        const int32_t instrumentPanelHeight = display.height() - displayY - fheroes2::AGG::GetICN( ICN::EDITBTNS, 0 ).height() * 5 - bottomBorderOffset;
+
+        _instrumentPanelBackground = makeInstrumentPanelBackground( instrumentPanelWidth, instrumentPanelHeight );
+
         for ( size_t i = 0; i < _instrumentButtonsRect.size(); ++i ) {
             _instrumentButtons[i].setPosition( offsetX, displayY );
             _instrumentButtonsRect[i] = _instrumentButtons[i].area();
@@ -192,34 +279,44 @@ namespace Interface
                 _instrumentButtonsRect.back().x + _instrumentButtonsRect.back().width - _instrumentButtonsRect.front().x, displayY - _instrumentButtonsRect.front().y };
 
         // Instrument panel.
-        const fheroes2::Sprite & instrumentPanel = fheroes2::AGG::GetICN( ICN::EDITPANL, _selectedInstrument );
-        _rectInstrumentPanel = { displayX, displayY, instrumentPanel.width(), instrumentPanel.height() };
+        _rectInstrumentPanel = { displayX, displayY, instrumentPanelWidth, instrumentPanelHeight };
 
+        // Brush size buttons position. Shown on the terrain and erasure instrument panels.
         offsetX = displayX + 14;
-        int32_t offsetY = displayY + 128;
+        int32_t offsetY = displayY + std::min( instrumentPanelHeight - 30, 130 );
         for ( size_t i = 0; i < _brushSizeButtonsRect.size(); ++i ) {
             _brushSizeButtons[i].setPosition( offsetX, offsetY );
             _brushSizeButtonsRect[i] = _brushSizeButtons[i].area();
             offsetX += 30;
         }
 
+        // Terrain type select buttons position. Shown on the terrain instrument panel.
         offsetX = displayX + 30;
         offsetY = displayY + 11;
         for ( size_t i = 0; i < _terrainButtonsRect.size(); ++i ) {
             _terrainButtonsRect[i] = { offsetX + static_cast<int32_t>( i % 3 ) * 29, offsetY + static_cast<int32_t>( i / 3 ) * 29, 27, 27 };
         }
 
-        offsetX = displayX + 15;
-        ++offsetY;
-        for ( size_t i = 0; i < _objectButtonsRect.size(); ++i ) {
-            _objectButtonsRect[i] = { offsetX + static_cast<int32_t>( i % 4 ) * 29, offsetY + static_cast<int32_t>( i / 4 ) * 28, 27, 27 };
+        // Landscape objects buttons position.
+        for ( size_t i = 0; i < _landscapeObjectButtonsRect.size(); ++i ) {
+            _landscapeObjectButtonsRect[i] = { offsetX + static_cast<int32_t>( i % 3 ) * 29 + ( i > 2 ? 14 : 0 ), offsetY + static_cast<int32_t>( i / 3 ) * 29, 27, 27 };
         }
-        // The last object button is located not next to previous one and needs to be shifted to the right.
-        _objectButtonsRect[Brush::TREASURES].x += 29 * 2;
 
-        offsetY += 56;
+        // Adventure objects buttons position.
+        for ( size_t i = 0; i < _adventureObjectButtonsRect.size(); ++i ) {
+            _adventureObjectButtonsRect[i] = { offsetX + static_cast<int32_t>( i % 4 ) * 29 + ( i > 3 ? 0 : -14 ), offsetY + static_cast<int32_t>( i / 4 ) * 29, 27, 27 };
+        }
+
+        // Kingdom objects buttons position.
+        offsetX += 14;
+        for ( size_t i = 0; i < _kingdomObjectButtonsRect.size(); ++i ) {
+            _kingdomObjectButtonsRect[i] = { offsetX + static_cast<int32_t>( i ) * 29, offsetY, 27, 27 };
+        }
+
+        offsetX -= 28;
+        offsetY += 20;
         for ( size_t i = 0; i < _eraseButtonsRect.size(); ++i ) {
-            _eraseButtonsRect[i] = { offsetX + static_cast<int32_t>( i % 4 ) * 29, offsetY + static_cast<int32_t>( i / 4 ) * 28, 27, 27 };
+            _eraseButtonsRect[i] = { offsetX + static_cast<int32_t>( i % 4 ) * 29, offsetY + static_cast<int32_t>( i / 4 ) * 29, 27, 27 };
         }
 
         displayY += _rectInstrumentPanel.height;
@@ -263,9 +360,8 @@ namespace Interface
 
         fheroes2::Display & display = fheroes2::Display::instance();
 
-        const fheroes2::Sprite & instrumentPanel = fheroes2::AGG::GetICN( ICN::EDITPANL, _selectedInstrument );
-        fheroes2::Copy( instrumentPanel, 0, 0, display, _rectEditorPanel.x, _rectInstruments.y + _rectInstruments.height, instrumentPanel.width(),
-                        instrumentPanel.height() );
+        fheroes2::Copy( _instrumentPanelBackground, 0, 0, display, _rectInstrumentPanel.x, _rectInstrumentPanel.y, _rectInstrumentPanel.width,
+                        _rectInstrumentPanel.height );
 
         if ( _selectedInstrument == Instrument::TERRAIN || _selectedInstrument == Instrument::ERASE ) {
             for ( const fheroes2::Button & button : _brushSizeButtons ) {
@@ -274,22 +370,66 @@ namespace Interface
         }
 
         if ( _selectedInstrument == Instrument::TERRAIN ) {
-            const fheroes2::Sprite & selection = fheroes2::AGG::GetICN( ICN::TERRAINS, 9 );
-            fheroes2::Blit( selection, 0, 0, display, _terrainButtonsRect[_selectedTerrain].x - 2, _terrainButtonsRect[_selectedTerrain].y - 2, selection.width(),
-                            selection.height() );
+            // We use terrain images from the original terrain instrument panel sprite.
+            const fheroes2::Sprite & originalPanel = fheroes2::AGG::GetICN( ICN::EDITPANL, 0 );
+            for ( const fheroes2::Rect & pos : _terrainButtonsRect ) {
+                fheroes2::Copy( originalPanel, pos.x - _rectInstrumentPanel.x, pos.y - _rectInstrumentPanel.y, display, pos.x, pos.y, pos.width, pos.height );
+            }
 
-            const fheroes2::Text terrainText( _getTerrainTypeName( _selectedTerrain ), fheroes2::FontType::smallWhite() );
-            terrainText.draw( _rectInstrumentPanel.x + 72 - terrainText.width() / 2, _rectInstrumentPanel.y + 107, display );
+            // Terrain type selection yellow rectangle.
+            drawObjectTypeSelectionRect( display, _terrainButtonsRect[_selectedTerrain].getPosition() );
+
+            // On high resolutions we have space to show selected terrain text.
+            if ( _rectInstrumentPanel.height > 160 ) {
+                drawInstrumentName( display, { _rectInstrumentPanel.x + 7, _rectInstrumentPanel.y + 104 }, _getTerrainTypeName( _selectedTerrain ) );
+            }
         }
-        else if ( _selectedInstrument == Instrument::OBJECT ) {
-            const fheroes2::Sprite & selection = fheroes2::AGG::GetICN( ICN::TERRAINS, 9 );
-            fheroes2::Blit( selection, 0, 0, display, _objectButtonsRect[_selectedObject].x - 2, _objectButtonsRect[_selectedObject].y - 2, selection.width(),
-                            selection.height() );
+        else if ( _selectedInstrument == Instrument::LANDSCAPE_OBJECTS ) {
+            const fheroes2::Sprite & originalPanel = fheroes2::AGG::GetICN( ICN::EDITPANL, 0 );
+            fheroes2::Copy( originalPanel, 30, 11, display, _landscapeObjectButtonsRect[LandscapeObjectBrush::WATER_OBJECTS].x,
+                            _landscapeObjectButtonsRect[LandscapeObjectBrush::WATER_OBJECTS].y, 27, 27 );
+            // TODO: Render object type images.
 
-            const fheroes2::Text terrainText( _getObjectTypeName( _selectedObject ), fheroes2::FontType::smallWhite() );
-            terrainText.draw( _rectInstrumentPanel.x + 72 - terrainText.width() / 2, _rectInstrumentPanel.y + 135, display );
+            drawObjectTypeSelectionRect( display, _landscapeObjectButtonsRect[_selectedLandscapeObject].getPosition() );
+            drawInstrumentName( display, { _rectInstrumentPanel.x + 7, _rectInstrumentPanel.y + 76 }, _getLandscapeObjectTypeName( _selectedLandscapeObject ) );
+        }
+        else if ( _selectedInstrument == Instrument::ADVENTURE_OBJECTS ) {
+            const fheroes2::Sprite & originalPanel = fheroes2::AGG::GetICN( ICN::EDITPANL, 1 );
+            fheroes2::Copy( originalPanel, 15, 96, display, _adventureObjectButtonsRect[AdventureObjectBrush::ARTIFACTS].x,
+                            _adventureObjectButtonsRect[AdventureObjectBrush::ARTIFACTS].y, 27, 27 );
+            fheroes2::Copy( originalPanel, 102, 96, display, _adventureObjectButtonsRect[AdventureObjectBrush::TREASURES].x,
+                            _adventureObjectButtonsRect[AdventureObjectBrush::TREASURES].y, 27, 27 );
+            fheroes2::Copy( originalPanel, 15, 12, display, _adventureObjectButtonsRect[AdventureObjectBrush::WATER_ADVENTURE].x,
+                            _adventureObjectButtonsRect[AdventureObjectBrush::WATER_ADVENTURE].y, 27, 27 );
+            // TODO: Render object type images.
+
+            drawObjectTypeSelectionRect( display, _adventureObjectButtonsRect[_selectedAdventureObject].getPosition() );
+            drawInstrumentName( display, { _rectInstrumentPanel.x + 7, _rectInstrumentPanel.y + 76 }, _getAdventureObjectTypeName( _selectedAdventureObject ) );
+        }
+        else if ( _selectedInstrument == Instrument::KINGDOM_OBJECTS ) {
+            const fheroes2::Sprite & originalPanel = fheroes2::AGG::GetICN( ICN::EDITPANL, 1 );
+            fheroes2::Copy( originalPanel, 102, 68, display, _kingdomObjectButtonsRect[KingdomObjectBrush::HEROES].x,
+                            _adventureObjectButtonsRect[KingdomObjectBrush::HEROES].y, 27, 27 );
+            fheroes2::Copy( originalPanel, 44, 68, display, _kingdomObjectButtonsRect[KingdomObjectBrush::TOWNS].x,
+                            _adventureObjectButtonsRect[KingdomObjectBrush::TOWNS].y, 27, 27 );
+
+            drawObjectTypeSelectionRect( display, _kingdomObjectButtonsRect[_selectedKingdomObject].getPosition() );
+            drawInstrumentName( display, { _rectInstrumentPanel.x + 7, _rectInstrumentPanel.y + 48 }, _getKingdomObjectTypeName( _selectedKingdomObject ) );
+        }
+        else if ( _selectedInstrument == Instrument::MONSTERS ) {
+            // Instrument name.
+            const fheroes2::Text terrainText( _( "Monsters" ), fheroes2::FontType::normalWhite() );
+            terrainText.draw( _rectInstrumentPanel.x + ( _rectInstrumentPanel.width - terrainText.width() ) / 2, _rectInstrumentPanel.y + 8, display );
+
+            // Show the selected monster image on the panel.
+            const fheroes2::Sprite & image = getObjectImage( Maps::ObjectGroup::MONSTERS, _selectedMonsterType );
+            fheroes2::Blit( image, display, _rectInstrumentPanel.x + ( _rectInstrumentPanel.width - image.width() ) / 2, _rectInstrumentPanel.y + 30 );
         }
         else if ( _selectedInstrument == Instrument::ERASE ) {
+            // Instrument name.
+            const fheroes2::Text terrainText( _( "Erasure" ), fheroes2::FontType::normalWhite() );
+            terrainText.draw( _rectInstrumentPanel.x + ( _rectInstrumentPanel.width - terrainText.width() ) / 2, _rectInstrumentPanel.y + 8, display );
+
             const fheroes2::Sprite & selectionMark = fheroes2::AGG::GetICN( ICN::TOWNWIND, 11 );
             for ( size_t i = 0; i < _eraseButtonsRect.size(); ++i ) {
                 if ( _eraseButtonObjectTypes[i] & _eraseTypes ) {
@@ -312,23 +452,23 @@ namespace Interface
     int EditorPanel::_getGroundId( const uint8_t brushId )
     {
         switch ( brushId ) {
-        case Brush::WATER:
+        case TerrainBrush::WATER:
             return Maps::Ground::WATER;
-        case Brush::GRASS:
+        case TerrainBrush::GRASS:
             return Maps::Ground::GRASS;
-        case Brush::SNOW:
+        case TerrainBrush::SNOW:
             return Maps::Ground::SNOW;
-        case Brush::SWAMP:
+        case TerrainBrush::SWAMP:
             return Maps::Ground::SWAMP;
-        case Brush::LAVA:
+        case TerrainBrush::LAVA:
             return Maps::Ground::LAVA;
-        case Brush::DESERT:
+        case TerrainBrush::DESERT:
             return Maps::Ground::DESERT;
-        case Brush::DIRT:
+        case TerrainBrush::DIRT:
             return Maps::Ground::DIRT;
-        case Brush::WASTELAND:
+        case TerrainBrush::WASTELAND:
             return Maps::Ground::WASTELAND;
-        case Brush::BEACH:
+        case TerrainBrush::BEACH:
             return Maps::Ground::BEACH;
         default:
             // Have you added a new terrain type? Add the logic above!
@@ -338,37 +478,19 @@ namespace Interface
         return Maps::Ground::UNKNOWN;
     }
 
-    const char * EditorPanel::_getObjectTypeName( const uint8_t brushId )
+    const char * EditorPanel::_getLandscapeObjectTypeName( const uint8_t brushId )
     {
         switch ( brushId ) {
-        case Brush::WATER:
-            return _( "Ocean Objects" );
-        case Brush::GRASS:
-            return _( "Grass Objects" );
-        case Brush::SNOW:
-            return _( "Snow Objects" );
-        case Brush::SWAMP:
-            return _( "Swamp Objects" );
-        case Brush::LAVA:
-            return _( "Lava Objects" );
-        case Brush::DESERT:
-            return _( "Desert Objects" );
-        case Brush::DIRT:
-            return _( "Dirt Objects" );
-        case Brush::WASTELAND:
-            return _( "Wasteland Objects" );
-        case Brush::BEACH:
-            return _( "Beach Objects" );
-        case Brush::TOWNS:
-            return _( "Towns" );
-        case Brush::MONSTERS:
-            return _( "Monsters" );
-        case Brush::HEROES:
-            return _( "Heroes" );
-        case Brush::ARTIFACTS:
-            return _( "Artifacts" );
-        case Brush::TREASURES:
-            return _( "Treasures" );
+        case LandscapeObjectBrush::MOUNTAINS:
+            return _( "Mountains" );
+        case LandscapeObjectBrush::ROCKS:
+            return _( "Rocks" );
+        case LandscapeObjectBrush::TREES:
+            return _( "Trees" );
+        case LandscapeObjectBrush::WATER_OBJECTS:
+            return _( "Water Objects" );
+        case LandscapeObjectBrush::LANDSCAPE_MISC:
+            return _( "Miscellaneous" );
         default:
             // Have you added a new object type? Add the logic above!
             assert( 0 );
@@ -376,6 +498,47 @@ namespace Interface
         }
 
         return "Unknown object type";
+    }
+
+    const char * EditorPanel::_getAdventureObjectTypeName( const uint8_t brushId )
+    {
+        switch ( brushId ) {
+        case AdventureObjectBrush::ARTIFACTS:
+            return _( "Artifacts" );
+        case AdventureObjectBrush::DWELLINGS:
+            return _( "Dwellings" );
+        case AdventureObjectBrush::MINES:
+            return _( "Mines" );
+        case AdventureObjectBrush::POWER_UPS:
+            return _( "Power-ups" );
+        case AdventureObjectBrush::TREASURES:
+            return _( "Treasures" );
+        case AdventureObjectBrush::WATER_ADVENTURE:
+            return _( "Water Objects" );
+        case AdventureObjectBrush::ADVENTURE_MISC:
+            return _( "Miscellaneous" );
+        default:
+            // Have you added a new object type? Add the logic above!
+            assert( 0 );
+            break;
+        }
+
+        return "Unknown object type";
+    }
+
+    const char * EditorPanel::_getKingdomObjectTypeName( const uint8_t brushId )
+    {
+        switch ( brushId ) {
+        case KingdomObjectBrush::TOWNS:
+            return _( "Towns" );
+        case KingdomObjectBrush::HEROES:
+            return _( "Heroes" );
+        default:
+            // Have you added a new object type? Add the logic above!
+            assert( 0 );
+            break;
+        }
+        return nullptr;
     }
 
     const char * EditorPanel::_getEraseObjectTypeName( const uint32_t eraseObjectType )
@@ -408,59 +571,88 @@ namespace Interface
 
     void EditorPanel::_setCursor()
     {
-        if ( _selectedInstrument != Instrument::OBJECT ) {
-            _interface.setCursorUpdater( {} );
-            return;
-        }
-
-        switch ( _selectedObject ) {
-        case Brush::MONSTERS:
-        case Brush::TREASURES:
-        case Brush::ARTIFACTS:
-        case Brush::WATER:
+        switch ( _selectedInstrument ) {
+        case Instrument::MONSTERS:
             _interface.setCursorUpdater(
                 [type = getSelectedObjectType(), group = getSelectedObjectGroup()]( const int32_t /*tileIndex*/ ) { setCustomCursor( group, type ); } );
+            return;
+        case Instrument::LANDSCAPE_OBJECTS:
+            switch ( _selectedLandscapeObject ) {
+            case LandscapeObjectBrush::MOUNTAINS:
+            case LandscapeObjectBrush::ROCKS:
+            case LandscapeObjectBrush::TREES:
+            case LandscapeObjectBrush::WATER_OBJECTS:
+            case LandscapeObjectBrush::LANDSCAPE_MISC:
+                _interface.setCursorUpdater(
+                    [type = getSelectedObjectType(), group = getSelectedObjectGroup()]( const int32_t /*tileIndex*/ ) { setCustomCursor( group, type ); } );
+                return;
+            default:
+                break;
+            }
             break;
-        case Brush::HEROES:
-            _interface.setCursorUpdater( [type = getSelectedObjectType()]( const int32_t /*tileIndex*/ ) {
-                if ( type == -1 ) {
-                    // The object type is not set. We show the POINTER cursor for this case.
-                    Cursor::Get().SetThemes( Cursor::POINTER );
-                    return;
-                }
-
-                // TODO: render ICN::MINIHERO from the existing hero images.
-                const fheroes2::Sprite & image = fheroes2::AGG::GetICN( ICN::MINIHERO, type );
-
-                // Mini-hero images contain a pole with a flag.
-                // This causes a situation that a selected tile does not properly correspond to the position of cursor.
-                // We need to add a hardcoded correction.
-                const int32_t heroCorrectionY{ 12 };
-                Cursor::Get().setCustomImage( image, { -image.width() / 2, -image.height() / 2 - heroCorrectionY } );
-            } );
+        case Instrument::ADVENTURE_OBJECTS:
+            switch ( _selectedAdventureObject ) {
+            case AdventureObjectBrush::ARTIFACTS:
+            case AdventureObjectBrush::DWELLINGS:
+            case AdventureObjectBrush::MINES:
+            case AdventureObjectBrush::POWER_UPS:
+            case AdventureObjectBrush::TREASURES:
+            case AdventureObjectBrush::WATER_ADVENTURE:
+            case AdventureObjectBrush::ADVENTURE_MISC:
+                _interface.setCursorUpdater(
+                    [type = getSelectedObjectType(), group = getSelectedObjectGroup()]( const int32_t /*tileIndex*/ ) { setCustomCursor( group, type ); } );
+                return;
+            default:
+                break;
+            }
             break;
-        case Brush::TOWNS:
-            _interface.setCursorUpdater( [this]( const int32_t tileIndex ) {
-                int32_t type = -1;
-                int32_t color = -1;
-                getTownObjectProperties( type, color );
+        case Instrument::KINGDOM_OBJECTS:
+            switch ( _selectedKingdomObject ) {
+            case KingdomObjectBrush::HEROES:
+                _interface.setCursorUpdater( [type = getSelectedObjectType()]( const int32_t /*tileIndex*/ ) {
+                    if ( type == -1 ) {
+                        // The object type is not set. We show the POINTER cursor for this case.
+                        Cursor::Get().SetThemes( Cursor::POINTER );
+                        return;
+                    }
 
-                if ( type == -1 || color == -1 ) {
-                    // The object type is not set. We show the POINTER cursor for this case.
-                    Cursor::Get().SetThemes( Cursor::POINTER );
-                    return;
-                }
+                    // TODO: render ICN::MINIHERO from the existing hero images.
+                    const fheroes2::Sprite & image = fheroes2::AGG::GetICN( ICN::MINIHERO, type );
 
-                // TODO: render ICN::MINIHERO from the existing hero images.
-                const fheroes2::Sprite & image = fheroes2::generateTownObjectImage( type, color, world.GetTiles( tileIndex ).GetGround() );
+                    // Mini-hero images contain a pole with a flag.
+                    // This causes a situation that a selected tile does not properly correspond to the position of cursor.
+                    // We need to add a hardcoded correction.
+                    const int32_t heroCorrectionY{ 12 };
+                    Cursor::Get().setCustomImage( image, { -image.width() / 2, -image.height() / 2 - heroCorrectionY } );
+                } );
+                return;
+            case KingdomObjectBrush::TOWNS:
+                _interface.setCursorUpdater( [this]( const int32_t tileIndex ) {
+                    int32_t type = -1;
+                    int32_t color = -1;
+                    getTownObjectProperties( type, color );
 
-                Cursor::Get().setCustomImage( image, { image.x(), image.y() } );
-            } );
+                    if ( type == -1 || color == -1 ) {
+                        // The object type is not set. We show the POINTER cursor for this case.
+                        Cursor::Get().SetThemes( Cursor::POINTER );
+                        return;
+                    }
+
+                    // TODO: render ICN::MINIHERO from the existing hero images.
+                    const fheroes2::Sprite & image = fheroes2::generateTownObjectImage( type, color, world.GetTiles( tileIndex ).GetGround() );
+
+                    Cursor::Get().setCustomImage( image, { image.x(), image.y() } );
+                } );
+                return;
+            default:
+                break;
+            }
             break;
         default:
-            _interface.setCursorUpdater( {} );
             break;
         }
+
+        _interface.setCursorUpdater( {} );
     }
 
     fheroes2::GameMode EditorPanel::queueEventProcessing()
@@ -542,76 +734,117 @@ namespace Interface
                 return text;
             };
 
-            if ( le.MousePressRight( _terrainButtonsRect[Brush::WATER] ) ) {
-                fheroes2::showStandardTextMessage( _getTerrainTypeName( Brush::WATER ), _( "Traversable only by boat." ), Dialog::ZERO );
+            if ( le.MousePressRight( _terrainButtonsRect[TerrainBrush::WATER] ) ) {
+                fheroes2::showStandardTextMessage( _getTerrainTypeName( TerrainBrush::WATER ), _( "Traversable only by boat." ), Dialog::ZERO );
             }
-            else if ( le.MousePressRight( _terrainButtonsRect[Brush::GRASS] ) ) {
-                fheroes2::showStandardTextMessage( _getTerrainTypeName( Brush::GRASS ), _( "No special modifiers." ), Dialog::ZERO );
+            else if ( le.MousePressRight( _terrainButtonsRect[TerrainBrush::GRASS] ) ) {
+                fheroes2::showStandardTextMessage( _getTerrainTypeName( TerrainBrush::GRASS ), _( "No special modifiers." ), Dialog::ZERO );
             }
-            else if ( le.MousePressRight( _terrainButtonsRect[Brush::SNOW] ) ) {
-                fheroes2::showStandardTextMessage( _getTerrainTypeName( Brush::SNOW ), movePenaltyText( "1.5" ), Dialog::ZERO );
+            else if ( le.MousePressRight( _terrainButtonsRect[TerrainBrush::SNOW] ) ) {
+                fheroes2::showStandardTextMessage( _getTerrainTypeName( TerrainBrush::SNOW ), movePenaltyText( "1.5" ), Dialog::ZERO );
             }
-            else if ( le.MousePressRight( _terrainButtonsRect[Brush::SWAMP] ) ) {
-                fheroes2::showStandardTextMessage( _getTerrainTypeName( Brush::SWAMP ), movePenaltyText( "1.75" ), Dialog::ZERO );
+            else if ( le.MousePressRight( _terrainButtonsRect[TerrainBrush::SWAMP] ) ) {
+                fheroes2::showStandardTextMessage( _getTerrainTypeName( TerrainBrush::SWAMP ), movePenaltyText( "1.75" ), Dialog::ZERO );
             }
-            else if ( le.MousePressRight( _terrainButtonsRect[Brush::LAVA] ) ) {
-                fheroes2::showStandardTextMessage( _getTerrainTypeName( Brush::LAVA ), _( "No special modifiers." ), Dialog::ZERO );
+            else if ( le.MousePressRight( _terrainButtonsRect[TerrainBrush::LAVA] ) ) {
+                fheroes2::showStandardTextMessage( _getTerrainTypeName( TerrainBrush::LAVA ), _( "No special modifiers." ), Dialog::ZERO );
             }
-            else if ( le.MousePressRight( _terrainButtonsRect[Brush::DESERT] ) ) {
-                fheroes2::showStandardTextMessage( _getTerrainTypeName( Brush::DESERT ), movePenaltyText( "2" ), Dialog::ZERO );
+            else if ( le.MousePressRight( _terrainButtonsRect[TerrainBrush::DESERT] ) ) {
+                fheroes2::showStandardTextMessage( _getTerrainTypeName( TerrainBrush::DESERT ), movePenaltyText( "2" ), Dialog::ZERO );
             }
-            else if ( le.MousePressRight( _terrainButtonsRect[Brush::DIRT] ) ) {
-                fheroes2::showStandardTextMessage( _getTerrainTypeName( Brush::DIRT ), _( "No special modifiers." ), Dialog::ZERO );
+            else if ( le.MousePressRight( _terrainButtonsRect[TerrainBrush::DIRT] ) ) {
+                fheroes2::showStandardTextMessage( _getTerrainTypeName( TerrainBrush::DIRT ), _( "No special modifiers." ), Dialog::ZERO );
             }
-            else if ( le.MousePressRight( _terrainButtonsRect[Brush::WASTELAND] ) ) {
-                fheroes2::showStandardTextMessage( _getTerrainTypeName( Brush::WASTELAND ), movePenaltyText( "1.25" ), Dialog::ZERO );
+            else if ( le.MousePressRight( _terrainButtonsRect[TerrainBrush::WASTELAND] ) ) {
+                fheroes2::showStandardTextMessage( _getTerrainTypeName( TerrainBrush::WASTELAND ), movePenaltyText( "1.25" ), Dialog::ZERO );
             }
-            else if ( le.MousePressRight( _terrainButtonsRect[Brush::BEACH] ) ) {
-                fheroes2::showStandardTextMessage( _getTerrainTypeName( Brush::BEACH ), movePenaltyText( "1.25" ), Dialog::ZERO );
+            else if ( le.MousePressRight( _terrainButtonsRect[TerrainBrush::BEACH] ) ) {
+                fheroes2::showStandardTextMessage( _getTerrainTypeName( TerrainBrush::BEACH ), movePenaltyText( "1.25" ), Dialog::ZERO );
             }
         }
-        else if ( _selectedInstrument == Instrument::OBJECT ) {
-            for ( size_t i = 0; i < _objectButtonsRect.size(); ++i ) {
-                if ( ( _selectedObject != i ) && le.MousePressLeft( _objectButtonsRect[i] ) ) {
-                    _selectedObject = static_cast<uint8_t>( i );
+        else if ( _selectedInstrument == Instrument::LANDSCAPE_OBJECTS ) {
+            for ( size_t i = 0; i < _landscapeObjectButtonsRect.size(); ++i ) {
+                if ( ( _selectedLandscapeObject != i ) && le.MousePressLeft( _landscapeObjectButtonsRect[i] ) ) {
+                    _selectedLandscapeObject = static_cast<uint8_t>( i );
 
                     // Reset cursor updater since this UI element was clicked.
                     _setCursor();
 
                     setRedraw();
-
-                    // There is no need to continue the loop as only one button can be pressed at one moment.
                     break;
                 }
             }
 
-            for ( uint8_t objectId = Brush::WATER; objectId < Brush::TOWNS; ++objectId ) {
-                if ( le.MousePressRight( _objectButtonsRect[objectId] ) ) {
-                    std::string text = _( "Used to place objects most appropriate for use on %{terrain}." );
-                    StringReplaceWithLowercase( text, "%{terrain}", _getTerrainTypeName( objectId ) );
-                    fheroes2::showStandardTextMessage( _getObjectTypeName( objectId ), std::move( text ), Dialog::ZERO );
-
-                    // There is no need to continue the loop as only one button can be pressed at one moment.
+            for ( uint8_t objectId = LandscapeObjectBrush::MOUNTAINS; objectId < LandscapeObjectBrush::LANSCAPE_COUNT; ++objectId ) {
+                if ( le.MousePressRight( _landscapeObjectButtonsRect[objectId] ) ) {
+                    showObjectTypeInfoText( _getLandscapeObjectTypeName( objectId ) );
                     break;
                 }
             }
 
-            if ( le.MousePressRight( _objectButtonsRect[Brush::TOWNS] ) ) {
-                fheroes2::showStandardTextMessage( _getObjectTypeName( Brush::TOWNS ), _( "Used to place\na town or castle." ), Dialog::ZERO );
+            if ( le.MouseClickLeft( _landscapeObjectButtonsRect[LandscapeObjectBrush::WATER_OBJECTS] ) ) {
+                handleObjectMouseClick( Dialog::selectLandscapeOceanObjectType );
+                return res;
             }
-            else if ( le.MousePressRight( _objectButtonsRect[Brush::MONSTERS] ) ) {
-                fheroes2::showStandardTextMessage( _getObjectTypeName( Brush::MONSTERS ), _( "Used to place\na monster group." ), Dialog::ZERO );
+        }
+        else if ( _selectedInstrument == Instrument::ADVENTURE_OBJECTS ) {
+            for ( size_t i = 0; i < _adventureObjectButtonsRect.size(); ++i ) {
+                if ( ( _selectedAdventureObject != i ) && le.MousePressLeft( _adventureObjectButtonsRect[i] ) ) {
+                    _selectedAdventureObject = static_cast<uint8_t>( i );
+
+                    // Reset cursor updater since this UI element was clicked.
+                    _setCursor();
+
+                    setRedraw();
+                    break;
+                }
             }
-            else if ( le.MousePressRight( _objectButtonsRect[Brush::HEROES] ) ) {
-                fheroes2::showStandardTextMessage( _getObjectTypeName( Brush::HEROES ), _( "Used to place a hero." ), Dialog::ZERO );
+
+            for ( uint8_t objectId = AdventureObjectBrush::ARTIFACTS; objectId < AdventureObjectBrush::ADVENTURE_COUNT; ++objectId ) {
+                if ( le.MousePressRight( _adventureObjectButtonsRect[objectId] ) ) {
+                    showObjectTypeInfoText( _getAdventureObjectTypeName( objectId ) );
+                    break;
+                }
             }
-            else if ( le.MousePressRight( _objectButtonsRect[Brush::ARTIFACTS] ) ) {
-                fheroes2::showStandardTextMessage( _getObjectTypeName( Brush::ARTIFACTS ), _( "Used to place an artifact." ), Dialog::ZERO );
+
+            if ( le.MouseClickLeft( _adventureObjectButtonsRect[AdventureObjectBrush::ARTIFACTS] ) ) {
+                handleObjectMouseClick( Dialog::selectArtifactType );
+                return res;
             }
-            else if ( le.MousePressRight( _objectButtonsRect[Brush::TREASURES] ) ) {
-                fheroes2::showStandardTextMessage( _getObjectTypeName( Brush::TREASURES ), _( "Used to place\na resource or treasure." ), Dialog::ZERO );
+            if ( le.MouseClickLeft( _adventureObjectButtonsRect[AdventureObjectBrush::TREASURES] ) ) {
+                handleObjectMouseClick( Dialog::selectTreasureType );
+                return res;
             }
-            else if ( le.MouseClickLeft( _objectButtonsRect[Brush::TOWNS] ) ) {
+            if ( le.MouseClickLeft( _adventureObjectButtonsRect[AdventureObjectBrush::WATER_ADVENTURE] ) ) {
+                handleObjectMouseClick( Dialog::selectOceanObjectType );
+                return res;
+            }
+        }
+        else if ( _selectedInstrument == Instrument::KINGDOM_OBJECTS ) {
+            for ( size_t i = 0; i < _kingdomObjectButtonsRect.size(); ++i ) {
+                if ( ( _selectedKingdomObject != i ) && le.MousePressLeft( _kingdomObjectButtonsRect[i] ) ) {
+                    _selectedKingdomObject = static_cast<uint8_t>( i );
+
+                    // Reset cursor updater since this UI element was clicked.
+                    _setCursor();
+
+                    setRedraw();
+                    break;
+                }
+            }
+
+            for ( uint8_t objectId = KingdomObjectBrush::HEROES; objectId < KingdomObjectBrush::KINGDOM_OBJECTS_COUNT; ++objectId ) {
+                if ( le.MousePressRight( _kingdomObjectButtonsRect[objectId] ) ) {
+                    showObjectTypeInfoText( _getKingdomObjectTypeName( objectId ) );
+                    break;
+                }
+            }
+
+            if ( le.MouseClickLeft( _kingdomObjectButtonsRect[KingdomObjectBrush::HEROES] ) ) {
+                handleObjectMouseClick( Dialog::selectMonsterType );
+                return res;
+            }
+            else if ( le.MouseClickLeft( _kingdomObjectButtonsRect[KingdomObjectBrush::TOWNS] ) ) {
                 handleObjectMouseClick( [this]( const int32_t /* type */ ) -> int32_t {
                     int32_t type = -1;
                     int32_t color = -1;
@@ -623,26 +856,11 @@ namespace Interface
                 } );
                 return res;
             }
-            else if ( le.MouseClickLeft( _objectButtonsRect[Brush::MONSTERS] ) ) {
-                handleObjectMouseClick( Dialog::selectMonsterType );
-                return res;
-            }
-            else if ( le.MouseClickLeft( _objectButtonsRect[Brush::TREASURES] ) ) {
-                handleObjectMouseClick( Dialog::selectTreasureType );
-                return res;
-            }
-            else if ( le.MouseClickLeft( _objectButtonsRect[Brush::HEROES] ) ) {
-                handleObjectMouseClick( Dialog::selectHeroType );
-                return res;
-            }
-            else if ( le.MouseClickLeft( _objectButtonsRect[Brush::ARTIFACTS] ) ) {
-                handleObjectMouseClick( Dialog::selectArtifactType );
-                return res;
-            }
-            else if ( le.MouseClickLeft( _objectButtonsRect[Brush::WATER] ) ) {
-                handleObjectMouseClick( Dialog::selectOceanObjectType );
-                return res;
-            }
+        }
+        else if ( _selectedInstrument == Instrument::MONSTERS && le.MouseClickLeft( _rectInstrumentPanel ) ) {
+            handleObjectMouseClick( Dialog::selectMonsterType );
+            setRedraw();
+            return res;
         }
         else if ( _selectedInstrument == Instrument::ERASE ) {
             for ( size_t i = 0; i < _eraseButtonsRect.size(); ++i ) {
@@ -702,7 +920,7 @@ namespace Interface
         else if ( le.MousePressRight( _instrumentButtonsRect[Instrument::TERRAIN] ) ) {
             fheroes2::showStandardTextMessage( _( "Terrain Mode" ), _( "Used to draw the underlying grass, dirt, water, etc. on the map." ), Dialog::ZERO );
         }
-        else if ( le.MousePressRight( _instrumentButtonsRect[Instrument::OBJECT] ) ) {
+        else if ( le.MousePressRight( _instrumentButtonsRect[Instrument::LANDSCAPE_OBJECTS] ) ) {
             fheroes2::showStandardTextMessage( _( "Object Mode" ), _( "Used to place objects (mountains, trees, treasure, etc.) on the map." ), Dialog::ZERO );
         }
         else if ( le.MousePressRight( _instrumentButtonsRect[Instrument::DETAIL] ) ) {
@@ -742,9 +960,25 @@ namespace Interface
 
     void EditorPanel::handleObjectMouseClick( const std::function<int( int )> & typeSelection )
     {
-        const int type = typeSelection( _selectedObjectType[_selectedObject] );
+        const int type = typeSelection( getSelectedObjectType() );
         if ( type >= 0 ) {
-            _selectedObjectType[_selectedObject] = type;
+            switch ( _selectedInstrument ) {
+            case Instrument::MONSTERS:
+                _selectedMonsterType = type;
+                break;
+            case Instrument::LANDSCAPE_OBJECTS:
+                _selectedLandscapeObjectType[_selectedLandscapeObject] = type;
+                break;
+            case Instrument::ADVENTURE_OBJECTS:
+                _selectedAdventureObjectType[_selectedAdventureObject] = type;
+                break;
+            case Instrument::KINGDOM_OBJECTS:
+                _selectedKingdomObjectType[_selectedKingdomObject] = type;
+                break;
+            default:
+                // Why are you trying to get type for the non-object instrument. Check your logic!
+                assert( 0 );
+            }
         }
         _setCursor();
         _interface.updateCursor( 0 );
@@ -761,8 +995,8 @@ namespace Interface
             return;
         }
 
-        type = _selectedObjectType[Brush::TOWNS] % static_cast<int32_t>( townObjects.size() );
-        color = _selectedObjectType[Brush::TOWNS] / static_cast<int32_t>( townObjects.size() );
+        type = _selectedKingdomObjectType[KingdomObjectBrush::TOWNS] % static_cast<int32_t>( townObjects.size() );
+        color = _selectedKingdomObjectType[KingdomObjectBrush::TOWNS] / static_cast<int32_t>( townObjects.size() );
     }
 
     int32_t EditorPanel::_generateTownObjectProperties( const int32_t type, const int32_t color )

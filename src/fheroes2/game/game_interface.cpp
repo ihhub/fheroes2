@@ -52,6 +52,7 @@ Interface::AdventureMap::AdventureMap()
     , iconsPanel( *this )
     , buttonsArea( *this )
     , controlPanel( *this )
+    , _statusWindow( *this )
     , _lockRedraw( false )
 {
     AdventureMap::reset();
