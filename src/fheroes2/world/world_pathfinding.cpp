@@ -41,6 +41,7 @@
 #include "heroes.h"
 #include "kingdom.h"
 #include "maps.h"
+#include "maps_fileinfo.h"
 #include "maps_tiles.h"
 #include "maps_tiles_helper.h"
 #include "math_base.h"
@@ -60,17 +61,17 @@ namespace
     {
         assert( art.isValid() );
 
-        const Settings & conf = Settings::Get();
+        const Maps::FileInfo & mapInfo = Settings::Get().getCurrentMapInfo();
 
-        if ( ( conf.ConditionWins() & GameOver::WINS_ARTIFACT ) == 0 ) {
+        if ( ( mapInfo.ConditionWins() & GameOver::WINS_ARTIFACT ) == 0 ) {
             return false;
         }
 
-        if ( conf.WinsFindUltimateArtifact() ) {
+        if ( mapInfo.WinsFindUltimateArtifact() ) {
             return art.isUltimate();
         }
 
-        return ( art.GetID() == conf.WinsFindArtifactID() );
+        return ( art.GetID() == mapInfo.WinsFindArtifactID() );
     }
 
     bool isTileAvailableForWalkThrough( const int tileIndex, const bool fromWater )

@@ -363,10 +363,9 @@ void Game::restoreSoundsForCurrentFocus()
 
 uint32_t Game::GetRating()
 {
-    const Settings & conf = Settings::Get();
     uint32_t rating = 50;
 
-    switch ( conf.getCurrentMapDifficultyLevel() ) {
+    switch ( Settings::Get().getCurrentMapInfo().difficulty ) {
     case Difficulty::NORMAL:
         rating += 20;
         break;
@@ -403,11 +402,9 @@ uint32_t Game::GetRating()
 
 uint32_t Game::getGameOverScoreFactor()
 {
-    const Settings & conf = Settings::Get();
-
     uint32_t mapSizeFactor = 0;
 
-    switch ( conf.MapsSize().width ) {
+    switch ( Settings::Get().getCurrentMapInfo().width ) {
     case Maps::SMALL:
         mapSizeFactor = 140;
         break;

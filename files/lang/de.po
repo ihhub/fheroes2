@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-05 00:31+0000\n"
+"POT-Creation-Date: 2023-12-15 09:12+0000\n"
 "PO-Revision-Date: 2023-04-09 23:51+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -198,6 +198,15 @@ msgid "MIN"
 msgstr "MIN"
 
 msgid "RESET"
+msgstr ""
+
+#, fuzzy
+msgid "CASTLE"
+msgstr ""
+"STÄDTE/\n"
+"BURGEN"
+
+msgid "TOWN"
 msgstr ""
 
 msgid ""
@@ -3364,6 +3373,46 @@ msgstr "Held auswählen:"
 msgid "Select Ocean Object:"
 msgstr "Ozean-Objekte"
 
+#, fuzzy
+msgid "Castle/town placing"
+msgstr "Burg Optionen"
+
+msgid "doubleLinedRace|Neutral"
+msgstr "Neutral"
+
+msgid "race|Random"
+msgstr "Zufällig"
+
+#, fuzzy
+msgid "Click to start placing the selected castle/town."
+msgstr "Klicken um die ausgewählte Auflösung anzuwenden."
+
+#, fuzzy
+msgid "Click to select town placing."
+msgstr "Klicken um die nächste Stadt anzuzeigen."
+
+#, fuzzy
+msgid "Click to select castle placing."
+msgstr "Hier klicken, um auszuwählen, welches Szenario gespielt werden soll."
+
+#, fuzzy
+msgid "%{color} %{race} %{townOrCastle}"
+msgstr "Spieler %{color}"
+
+msgid "race|Neutral"
+msgstr "Neutral"
+
+msgid "You will place"
+msgstr ""
+
+#, fuzzy
+msgid "Click to select this class."
+msgstr "Hier klicken, um auszuwählen, welches Szenario gespielt werden soll."
+
+#, fuzzy
+msgid "Click to select this color."
+msgstr "Hier klicken, um auszuwählen, welches Szenario gespielt werden soll."
+
 msgid "Map Type:\n"
 msgstr "Kartentyp:\n"
 
@@ -3719,6 +3768,13 @@ msgstr "Ozean-Objekte"
 msgid "Ocean object must be placed on water."
 msgstr "Monster können nicht auf Wasser plaziert werden."
 
+msgid "Towns"
+msgstr "Städte"
+
+#, fuzzy
+msgid "Towns cannot be placed on water."
+msgstr "Monster können nicht auf Wasser plaziert werden."
+
 msgid "Ocean Objects"
 msgstr "Ozean-Objekte"
 
@@ -3745,9 +3801,6 @@ msgstr "Ödland-Objekte"
 
 msgid "Beach Objects"
 msgstr "Strand-Objekte"
-
-msgid "Towns"
-msgstr "Städte"
 
 msgid "Treasures"
 msgstr "Schätze"
@@ -7875,12 +7928,6 @@ msgstr "Totenbeschwörer"
 msgid "Multi"
 msgstr "Verschied"
 
-msgid "race|Random"
-msgstr "Zufällig"
-
-msgid "race|Neutral"
-msgstr "Neutral"
-
 msgid "doubleLined|Knight"
 msgstr "Ritter"
 
@@ -7908,9 +7955,6 @@ msgstr "Verschied"
 
 msgid "doubleLinedRace|Random"
 msgstr "Zufällig"
-
-msgid "doubleLinedRace|Neutral"
-msgstr "Neutral"
 
 msgid "speed|Standing"
 msgstr "Stehend"

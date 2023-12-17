@@ -61,7 +61,7 @@ namespace Maps
 
         bool operator==( const FileInfo & fi ) const
         {
-            return file == fi.file;
+            return filename == fi.filename;
         }
 
         bool ReadMP2( const std::string & filePath );
@@ -93,36 +93,46 @@ namespace Maps
         uint32_t ConditionWins() const;
         uint32_t ConditionLoss() const;
         bool WinsCompAlsoWins() const;
-        int WinsFindArtifactID() const;
+
+        int WinsFindArtifactID() const
+        {
+            // In the original game artifact IDs start from 0 but for the victory condition it starts from 1 which aligns with fheroes2 artifact enumeration.
+            return victoryConditionParams[0];
+        }
 
         bool WinsFindUltimateArtifact() const
         {
-            return 0 == victoryConditionsParam1;
+            return victoryConditionParams[0] == 0;
         }
 
         uint32_t getWinningGoldAccumulationValue() const
         {
-            return victoryConditionsParam1 * 1000;
+            return victoryConditionParams[0] * 1000;
         }
 
         fheroes2::Point WinsMapsPositionObject() const
         {
-            return { victoryConditionsParam1, victoryConditionsParam2 };
+            return { victoryConditionParams[0], victoryConditionParams[1] };
         }
 
         fheroes2::Point LossMapsPositionObject() const
         {
-            return { lossConditionsParam1, lossConditionsParam2 };
+            return { lossConditionParams[0], lossConditionParams[1] };
         }
 
         uint32_t LossCountDays() const
         {
-            return lossConditionsParam1;
+            return lossConditionParams[0];
         }
 
         void removeHumanColors( const int colors )
         {
             colorsAvailableForHumans &= ~colors;
+        }
+
+        bool AllowChangeRace( const int color ) const
+        {
+            return ( colorsOfRandomRaces & color ) != 0;
         }
 
         void Reset();
@@ -145,7 +155,7 @@ namespace Maps
             LOSS_OUT_OF_TIME = 3
         };
 
-        std::string file;
+        std::string filename;
         std::string name;
         std::string description;
 
@@ -162,16 +172,14 @@ namespace Maps
         uint8_t colorsOfRandomRaces;
 
         // Refer to the VictoryCondition
-        uint8_t victoryConditions;
+        uint8_t victoryConditionType;
         bool compAlsoWins;
         bool allowNormalVictory;
-        uint16_t victoryConditionsParam1;
-        uint16_t victoryConditionsParam2;
+        std::array<uint16_t, 2> victoryConditionParams;
 
         // Refer to the LossCondition
-        uint8_t lossConditions;
-        uint16_t lossConditionsParam1;
-        uint16_t lossConditionsParam2;
+        uint8_t lossConditionType;
+        std::array<uint16_t, 2> lossConditionParams;
 
         // Timestamp of the save file, only relevant for save files
         uint32_t timestamp;

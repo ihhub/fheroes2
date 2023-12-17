@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-05 00:31+0000\n"
+"POT-Creation-Date: 2023-12-15 09:12+0000\n"
 "PO-Revision-Date: 2023-08-26 23:09+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: https://discord.com/"
@@ -201,6 +201,15 @@ msgid "MIN"
 msgstr "MIN"
 
 msgid "RESET"
+msgstr ""
+
+#, fuzzy
+msgid "CASTLE"
+msgstr ""
+"MIASTA/\n"
+"ZAMKI"
+
+msgid "TOWN"
 msgstr ""
 
 msgid ""
@@ -3339,6 +3348,46 @@ msgstr "Wybierz bohatera:"
 msgid "Select Ocean Object:"
 msgstr "Wybierz artefakt:"
 
+#, fuzzy
+msgid "Castle/town placing"
+msgstr "Opcje zamku"
+
+msgid "doubleLinedRace|Neutral"
+msgstr "Neutralny"
+
+msgid "race|Random"
+msgstr "Losowo"
+
+#, fuzzy
+msgid "Click to start placing the selected castle/town."
+msgstr "Użyj wskazanej rozdzielczości."
+
+#, fuzzy
+msgid "Click to select town placing."
+msgstr "Kliknij aby przejść do następnego miasta."
+
+#, fuzzy
+msgid "Click to select castle placing."
+msgstr "Kliknij tutaj, aby wybrać scenariusz, który chcesz rozegrać."
+
+#, fuzzy
+msgid "%{color} %{race} %{townOrCastle}"
+msgstr "%{color} gracz"
+
+msgid "race|Neutral"
+msgstr "Neutralny"
+
+msgid "You will place"
+msgstr ""
+
+#, fuzzy
+msgid "Click to select this class."
+msgstr "Kliknij tutaj, aby wybrać scenariusz, który chcesz rozegrać."
+
+#, fuzzy
+msgid "Click to select this color."
+msgstr "Kliknij tutaj, aby wybrać scenariusz, który chcesz rozegrać."
+
 msgid "Map Type:\n"
 msgstr "Typ Mapy:\n"
 
@@ -3690,6 +3739,13 @@ msgstr "Brak obiektu"
 msgid "Ocean object must be placed on water."
 msgstr "To zaklęcie nie może być rzucone z łodzi."
 
+msgid "Towns"
+msgstr "Miasta"
+
+#, fuzzy
+msgid "Towns cannot be placed on water."
+msgstr "To zaklęcie nie może być rzucone z łodzi."
+
 msgid "Ocean Objects"
 msgstr ""
 
@@ -3719,9 +3775,6 @@ msgstr "Wyschnięty"
 
 msgid "Beach Objects"
 msgstr ""
-
-msgid "Towns"
-msgstr "Miasta"
 
 msgid "Treasures"
 msgstr "Skarby"
@@ -7744,12 +7797,6 @@ msgstr "Nekromanta"
 msgid "Multi"
 msgstr "Różne"
 
-msgid "race|Random"
-msgstr "Losowo"
-
-msgid "race|Neutral"
-msgstr "Neutralny"
-
 msgid "doubleLined|Knight"
 msgstr "Rycerz"
 
@@ -7783,9 +7830,6 @@ msgstr "Różne"
 
 msgid "doubleLinedRace|Random"
 msgstr "Losowo"
-
-msgid "doubleLinedRace|Neutral"
-msgstr "Neutralny"
 
 msgid "speed|Standing"
 msgstr "Stoi"
