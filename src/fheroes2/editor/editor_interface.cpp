@@ -24,7 +24,6 @@
 #include <array>
 #include <cassert>
 #include <memory>
-#include <ostream>
 #include <string>
 #include <vector>
 
@@ -40,7 +39,6 @@
 #include "game_hotkeys.h"
 #include "gamedefs.h"
 #include "ground.h"
-#include "heroes.h"
 #include "history_manager.h"
 #include "icn.h"
 #include "image.h"
@@ -50,7 +48,6 @@
 #include "interface_radar.h"
 #include "interface_status.h"
 #include "localevent.h"
-#include "logging.h"
 #include "map_format_helper.h"
 #include "map_format_info.h"
 #include "map_object_info.h"
@@ -72,6 +69,7 @@
 #include "world.h"
 
 class Castle;
+class Heroes;
 
 namespace
 {

@@ -20,15 +20,29 @@
 
 #include "editor_object_popup_window.h"
 
+#include <cassert>
+#include <cstdint>
+#include <string>
+#include <utility>
+
 #include "agg_image.h"
 #include "cursor.h"
 #include "editor_interface.h"
+#include "gamedefs.h"
+#include "ground.h"
 #include "icn.h"
 #include "image.h"
+#include "interface_gamearea.h"
+#include "localevent.h"
 #include "maps_tiles.h"
+#include "maps_tiles_helper.h"
+#include "math_base.h"
+#include "mp2.h"
+#include "resource.h"
 #include "screen.h"
 #include "translations.h"
 #include "ui_map_interface.h"
+#include "ui_text.h"
 #include "world.h"
 
 namespace
