@@ -283,7 +283,7 @@ namespace
             const Heroes * hero = Interface::GetFocusHeroes();
             if ( hero ) {
                 str.append( "\n" );
-                str.append( hero->isObjectTypeVisited( objectType ) ? _( "(already gained)" ) : _( "(not gained)" ) );
+                str.append( hero->isVisited( tile ) ? _( "(already gained)" ) : _( "(not gained)" ) );
             }
         }
 
