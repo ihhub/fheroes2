@@ -503,7 +503,10 @@ namespace fheroes2
         if ( !empty() ) {
             const size_t totalSize = static_cast<size_t>( _width ) * _height;
             memset( image(), value, totalSize );
-            memset( transform(), static_cast<uint8_t>( 0 ), totalSize );
+
+            if ( !_singleLayer ) {
+                memset( transform(), static_cast<uint8_t>( 0 ), totalSize );
+            }
         }
     }
 
@@ -532,8 +535,11 @@ namespace fheroes2
         if ( !empty() ) {
             const size_t totalSize = static_cast<size_t>( _width ) * _height;
             memset( image(), static_cast<uint8_t>( 0 ), totalSize );
-            // Set the transform layer to skip all data.
-            memset( transform(), static_cast<uint8_t>( 1 ), totalSize );
+
+            if ( !_singleLayer ) {
+                // Set the transform layer to skip all data.
+                memset( transform(), static_cast<uint8_t>( 1 ), totalSize );
+            }
         }
     }
 
@@ -556,7 +562,7 @@ namespace fheroes2
 
         _singleLayer = image._singleLayer;
 
-        memcpy( _data.get(), image._data.get(), size * 2 );
+        memcpy( _data.get(), image._data.get(), _singleLayer ? size : size * 2 );
     }
 
     Sprite::Sprite( const int32_t width_, const int32_t height_, const int32_t x_ /* = 0 */, const int32_t y_ /* = 0 */ )
