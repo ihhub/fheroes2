@@ -66,6 +66,7 @@
 #include "tools.h"
 #include "translations.h"
 #include "ui_castle.h"
+#include "ui_map_interface.h"
 #include "ui_text.h"
 #include "world.h"
 
@@ -404,24 +405,7 @@ namespace
             return { position.x - imageBox.width(), position.y, imageBox.width(), imageBox.height() };
         }
 
-        // place box next to mouse cursor
-        const fheroes2::Point & mp = le.GetMouseCursor();
-
-        const int32_t mx = ( ( mp.x - BORDERWIDTH ) / TILEWIDTH ) * TILEWIDTH;
-        const int32_t my = ( ( mp.y - BORDERWIDTH ) / TILEWIDTH ) * TILEWIDTH;
-
-        const Interface::GameArea & gamearea = Interface::AdventureMap::Get().getGameArea();
-        const fheroes2::Rect & ar = gamearea.GetROI();
-
-        int32_t xpos = mx + TILEWIDTH - ( imageBox.width() / 2 );
-        int32_t ypos = my + TILEWIDTH - ( imageBox.height() / 2 );
-
-        // clamp box to edges of adventure screen game area
-        assert( ar.width >= imageBox.width() && ar.height >= imageBox.height() );
-        xpos = std::clamp( xpos, BORDERWIDTH, ( ar.width - imageBox.width() ) + BORDERWIDTH );
-        ypos = std::clamp( ypos, BORDERWIDTH, ( ar.height - imageBox.height() ) + BORDERWIDTH );
-
-        return { xpos, ypos, imageBox.width(), imageBox.height() };
+        return Interface::getPopupWindowPosition( le.GetMouseCursor(), Interface::AdventureMap::Get().getGameArea().GetROI(), { imageBox.width(), imageBox.height() } );
     }
 
     std::string getQuickInfoText( const Maps::Tiles & tile )

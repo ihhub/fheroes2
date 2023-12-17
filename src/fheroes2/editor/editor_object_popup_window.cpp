@@ -28,32 +28,11 @@
 #include "maps_tiles.h"
 #include "screen.h"
 #include "translations.h"
+#include "ui_map_interface.h"
 #include "world.h"
 
 namespace
 {
-    fheroes2::Rect makeRectQuickInfo( const LocalEvent & le, const fheroes2::Sprite & imageBox )
-    {
-        // place box next to mouse cursor
-        const fheroes2::Point & mp = le.GetMouseCursor();
-
-        const int32_t mx = ( ( mp.x - BORDERWIDTH ) / TILEWIDTH ) * TILEWIDTH;
-        const int32_t my = ( ( mp.y - BORDERWIDTH ) / TILEWIDTH ) * TILEWIDTH;
-
-        const Interface::GameArea & gamearea = Interface::EditorInterface::Get().getGameArea();
-        const fheroes2::Rect & ar = gamearea.GetROI();
-
-        int32_t xpos = mx + TILEWIDTH - ( imageBox.width() / 2 );
-        int32_t ypos = my + TILEWIDTH - ( imageBox.height() / 2 );
-
-        // clamp box to edges of adventure screen game area
-        assert( ar.width >= imageBox.width() && ar.height >= imageBox.height() );
-        xpos = std::clamp( xpos, BORDERWIDTH, ( ar.width - imageBox.width() ) + BORDERWIDTH );
-        ypos = std::clamp( ypos, BORDERWIDTH, ( ar.height - imageBox.height() ) + BORDERWIDTH );
-
-        return { xpos, ypos, imageBox.width(), imageBox.height() };
-    }
-
     std::string getObjectInfoText( const Maps::Tiles & tile )
     {
         const MP2::MapObjectType type = tile.GetObject();
@@ -90,7 +69,8 @@ namespace Editor
         const fheroes2::Sprite & box = fheroes2::AGG::GetICN( ICN::QWIKINFO, 0 );
 
         LocalEvent & le = LocalEvent::Get();
-        const fheroes2::Rect pos = makeRectQuickInfo( le, box );
+        const fheroes2::Rect pos
+            = Interface::getPopupWindowPosition( le.GetMouseCursor(), Interface::EditorInterface::Get().getGameArea().GetROI(), { box.width(), box.height() } );
 
         fheroes2::ImageRestorer restorer( display, pos.x, pos.y, pos.width, pos.height );
         fheroes2::Blit( box, display, pos.x, pos.y );
@@ -106,14 +86,14 @@ namespace Editor
         }
 
         const int32_t objectTextBorderedWidth = pos.width - 2 * BORDERWIDTH;
-        const fheroes2::Text text( infoString, fheroes2::FontType::smallWhite() );
+        const fheroes2::Text text( std::move( infoString ), fheroes2::FontType::smallWhite() );
         text.draw( pos.x + 22, pos.y - 6 + ( ( pos.height - text.height( objectTextBorderedWidth ) ) / 2 ), objectTextBorderedWidth, display );
 
         display.render( restorer.rect() );
 
-        // quick info loop
-        while ( le.HandleEvents() && le.MousePressRight() )
-            ;
+        while ( le.HandleEvents() && le.MousePressRight() ) {
+            // Do nothing and wait till the user releases the button.
+        }
 
         // restore background
         restorer.restore();
