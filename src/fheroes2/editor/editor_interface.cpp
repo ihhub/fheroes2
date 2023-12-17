@@ -69,6 +69,7 @@
 #include "ui_tool.h"
 #include "view_world.h"
 #include "world.h"
+#include "world_object_uid.h"
 
 class Castle;
 
@@ -906,11 +907,20 @@ namespace Interface
             const fheroes2::ActionCreator action( _historyManager );
 
             Maps::setObjectOnTile( tile, basementObjectInfo );
+
+            // Since the whole object consists of multiple "objects" we have to put the same ID for all of them.
+            const uint32_t objectId = Maps::getLastObjectUID();
+            assert( objectId > 0 );
+
+            Maps::setLastObjectUID( objectId - 1 );
             Maps::setObjectOnTile( tile, townObjectInfo );
 
             // Add flags.
             assert( tile.GetIndex() > 0 && tile.GetIndex() < world.w() * world.h() - 1 );
+            Maps::setLastObjectUID( objectId - 1 );
             Maps::setObjectOnTile( world.GetTiles( tile.GetIndex() - 1 ), getObjectInfo( Maps::ObjectGroup::LANDSCAPE_FLAGS, color * 2 ) );
+
+            Maps::setLastObjectUID( objectId - 1 );
             Maps::setObjectOnTile( world.GetTiles( tile.GetIndex() + 1 ), getObjectInfo( Maps::ObjectGroup::LANDSCAPE_FLAGS, color * 2 + 1 ) );
 
             _redraw |= mapUpdateFlags;
