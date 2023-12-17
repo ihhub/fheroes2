@@ -909,6 +909,8 @@ namespace Interface
             Maps::setObjectOnTile( tile, basementObjectInfo );
 
             // Since the whole object consists of multiple "objects" we have to put the same ID for all of them.
+            // Every time an object is being placed on a map the counter is going to be increased by 1.
+            // Therefore, we set the counter by 1 less for each object to match object UID for all of them.
             assert( Maps::getLastObjectUID() > 0 );
             const uint32_t objectId = Maps::getLastObjectUID() - 1;
 
