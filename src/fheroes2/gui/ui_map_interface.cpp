@@ -36,8 +36,7 @@ namespace Interface
         fheroes2::Point windowsPos{ ( ( mousePos.x - BORDERWIDTH ) / TILEWIDTH ) * TILEWIDTH + TILEWIDTH - ( windowSize.width / 2 ),
                                     ( ( mousePos.y - BORDERWIDTH ) / TILEWIDTH ) * TILEWIDTH + TILEWIDTH - ( windowSize.height / 2 ) };
 
-        // clamp box to edges of adventure screen game area
-        
+        // Clamp area to the edges of the area.
         windowsPos.x = std::clamp( windowsPos.x, BORDERWIDTH, ( interfaceArea.width - windowSize.width ) + BORDERWIDTH );
         windowsPos.y = std::clamp( windowsPos.y, BORDERWIDTH, ( interfaceArea.height - windowSize.height ) + BORDERWIDTH );
 
