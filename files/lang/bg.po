@@ -956,7 +956,7 @@ msgid "Set Knowledge Skill"
 msgstr "Задайте умение за знание"
 
 msgid "%{race1} %{name1} vs %{race2} %{name2}"
-msgstr "%{name1} срещу %{name2}"
+msgstr "%{race1} %{name1} срещу %{race2} %{name2}"
 
 msgid "Monsters"
 msgstr "Чудовища"
@@ -3374,7 +3374,7 @@ msgid "Click to select castle placing."
 msgstr "Кликни, за да избереш разположението на замъка."
 
 msgid "%{color} %{race} %{townOrCastle}"
-msgstr ""
+msgstr "%{color} %{race} %{townOrCastle}"
 
 msgid "race|Neutral"
 msgstr "Неутрален"
@@ -4746,7 +4746,7 @@ msgid ""
 "\n"
 "Enjoy the game!"
 msgstr ""
-"меню.\n"
+" меню. \n"
 "\n"
 "Приятна игра!"
 
