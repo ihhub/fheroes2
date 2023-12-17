@@ -271,7 +271,7 @@ namespace
             const Funds & payment = getTreeOfKnowledgeRequirement( tile );
             str.append( "\n\n(" );
             if ( payment.GetValidItemsCount() == 0 ) {
-                str.append( "free" );
+                str.append( _( "treeOfKnowledge|free" ) );
             }
             else {
                 const auto rc = payment.getFirstValidResource();
