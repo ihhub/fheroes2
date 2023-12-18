@@ -275,7 +275,7 @@ namespace
             }
             else {
                 const auto rc = payment.getFirstValidResource();
-                str.append( std::to_string( rc.second ) + " " );
+                str.append( std::to_string( rc.second ) );
                 str += ' ';
                 str.append( Translation::StringLower( Resource::String( rc.first ) ) );
             }
