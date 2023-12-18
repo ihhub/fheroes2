@@ -276,14 +276,15 @@ namespace
             else {
                 const auto rc = payment.getFirstValidResource();
                 str.append( std::to_string( rc.second ) + " " );
+                str += ' ';
                 str.append( Translation::StringLower( Resource::String( rc.first ) ) );
             }
             str += ')';
 
             const Heroes * hero = Interface::GetFocusHeroes();
             if ( hero ) {
-                str.append( "\n" );
-                str.append( hero->isVisited( tile ) ? _( "(level gained)" ) : _( "(level not gained)" ) );
+                str += '\n';
+                str.append( hero->isVisited( tile ) ? _( "(already gained)" ) : _( "(not gained)" ) );
             }
         }
 
