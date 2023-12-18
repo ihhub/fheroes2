@@ -297,16 +297,17 @@ Troop Dialog::RecruitMonster( const Monster & monster0, const uint32_t available
     drawCostPerTroopFrame( display, dst_pt );
 
     // Prepare buttons.
-    dst_pt.x = dialogOffset.x + 18;
+    const int32_t backgroundMargin = 18;
+    dst_pt.x = dialogOffset.x + backgroundMargin;
     dst_pt.y = dialogOffset.y + 233;
 
     int buttonId = isEvilInterface ? ICN::BUTTON_SMALL_OKAY_EVIL : ICN::BUTTON_SMALL_OKAY_GOOD;
     fheroes2::Button buttonOk( dst_pt.x, dst_pt.y, buttonId, 0, 1 );
     drawButtonShadow( display, buttonId, 0, dst_pt );
 
-    dst_pt.x = dialogOffset.x + 181;
-
     buttonId = isEvilInterface ? ICN::BUTTON_SMALL_CANCEL_EVIL : ICN::BUTTON_SMALL_CANCEL_GOOD;
+    const int32_t buttonCancelWidth = fheroes2::AGG ::GetICN( buttonId, 0 ).width();
+    dst_pt.x = dialogOffset.x + windowSize.width - backgroundMargin - buttonCancelWidth;
     fheroes2::Button buttonCancel( dst_pt.x, dst_pt.y, buttonId, 0, 1 );
     drawButtonShadow( display, buttonId, 0, dst_pt );
 
