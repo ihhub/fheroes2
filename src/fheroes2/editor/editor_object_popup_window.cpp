@@ -27,11 +27,9 @@
 
 #include "editor_interface.h"
 #include "ground.h"
-#include "image.h"
 #include "interface_gamearea.h"
 #include "maps_tiles.h"
 #include "maps_tiles_helper.h"
-#include "math_base.h"
 #include "mp2.h"
 #include "resource.h"
 #include "translations.h"

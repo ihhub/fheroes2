@@ -22,11 +22,14 @@
 
 #include <algorithm>
 #include <cassert>
+#include <cstdint>
+#include <utility>
 
 #include "agg_image.h"
 #include "cursor.h"
 #include "gamedefs.h"
 #include "icn.h"
+#include "image.h"
 #include "localevent.h"
 #include "maps.h"
 #include "screen.h"

@@ -40,7 +40,6 @@
 #include "dialog.h"
 #include "game.h"
 #include "game_interface.h"
-#include "gamedefs.h"
 #include "ground.h"
 #include "heroes.h"
 #include "heroes_base.h"
