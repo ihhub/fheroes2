@@ -425,9 +425,21 @@ namespace Interface
             const fheroes2::Sprite & image = getObjectImage( Maps::ObjectGroup::MONSTERS, _selectedMonsterType );
             fheroes2::Blit( image, display, _rectInstrumentPanel.x + ( _rectInstrumentPanel.width - image.width() ) / 2, _rectInstrumentPanel.y + 30 );
         }
+        else if ( _selectedInstrument == Instrument::DETAIL ) {
+            const fheroes2::Text terrainText( _( "Cell\nDetails" ), fheroes2::FontType::normalWhite() );
+            terrainText.draw( _rectInstrumentPanel.x + 5, _rectInstrumentPanel.y + 8, _rectInstrumentPanel.width - 10, display );
+        }
+        else if ( _selectedInstrument == Instrument::ROAD ) {
+            const fheroes2::Text terrainText( _( "Roads" ), fheroes2::FontType::normalWhite() );
+            terrainText.draw( _rectInstrumentPanel.x + ( _rectInstrumentPanel.width - terrainText.width() ) / 2, _rectInstrumentPanel.y + 8, display );
+        }
+        else if ( _selectedInstrument == Instrument::STREAM ) {
+            const fheroes2::Text terrainText( _( "Streams" ), fheroes2::FontType::normalWhite() );
+            terrainText.draw( _rectInstrumentPanel.x + ( _rectInstrumentPanel.width - terrainText.width() ) / 2, _rectInstrumentPanel.y + 8, display );
+        }
         else if ( _selectedInstrument == Instrument::ERASE ) {
             // Instrument name.
-            const fheroes2::Text terrainText( _( "Erasure" ), fheroes2::FontType::normalWhite() );
+            const fheroes2::Text terrainText( _( "Erase" ), fheroes2::FontType::normalWhite() );
             terrainText.draw( _rectInstrumentPanel.x + ( _rectInstrumentPanel.width - terrainText.width() ) / 2, _rectInstrumentPanel.y + 8, display );
 
             const fheroes2::Sprite & selectionMark = fheroes2::AGG::GetICN( ICN::TOWNWIND, 11 );
