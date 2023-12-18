@@ -20,9 +20,13 @@
 
 #pragma once
 
+#include <string>
+
 #include "math_base.h"
 
 namespace Interface
 {
     fheroes2::Rect getPopupWindowPosition( const fheroes2::Point & mousePos, const fheroes2::Rect & interfaceArea, const fheroes2::Size & windowSize );
+
+    void displayStandardPopupWindow( std::string text, const fheroes2::Rect & interfaceArea );
 }

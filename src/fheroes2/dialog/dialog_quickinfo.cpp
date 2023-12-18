@@ -886,19 +886,6 @@ namespace
 
 void Dialog::QuickInfo( const Maps::Tiles & tile )
 {
-    const CursorRestorer cursorRestorer( false, Cursor::POINTER );
-
-    fheroes2::Display & display = fheroes2::Display::instance();
-
-    // image box
-    const fheroes2::Sprite & box = fheroes2::AGG::GetICN( ICN::QWIKINFO, 0 );
-
-    LocalEvent & le = LocalEvent::Get();
-    const fheroes2::Rect pos = makeRectQuickInfo( le, box );
-
-    fheroes2::ImageRestorer restorer( display, pos.x, pos.y, pos.width, pos.height );
-    fheroes2::Blit( box, display, pos.x, pos.y );
-
     std::string infoString;
 
     const int32_t playerColor = Settings::Get().CurrentColor();
@@ -917,21 +904,9 @@ void Dialog::QuickInfo( const Maps::Tiles & tile )
         }
     }
 
-    const int32_t objectTextBorderedWidth = pos.width - 2 * BORDERWIDTH;
-    const fheroes2::Text text( infoString, fheroes2::FontType::smallWhite() );
-    text.draw( pos.x + 22, pos.y - 6 + ( ( pos.height - text.height( objectTextBorderedWidth ) ) / 2 ), objectTextBorderedWidth, display );
-
     outputInTextSupportMode( tile, infoString );
 
-    display.render( restorer.rect() );
-
-    // quick info loop
-    while ( le.HandleEvents() && le.MousePressRight() )
-        ;
-
-    // restore background
-    restorer.restore();
-    display.render( restorer.rect() );
+    Interface::displayStandardPopupWindow( std::move( infoString ), Interface::AdventureMap::Get().getGameArea().GetROI() );
 }
 
 void Dialog::QuickInfo( const Castle & castle )

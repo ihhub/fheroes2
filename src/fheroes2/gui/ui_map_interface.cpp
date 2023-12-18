@@ -23,8 +23,14 @@
 #include <algorithm>
 #include <cassert>
 
+#include "agg_image.h"
+#include "cursor.h"
 #include "gamedefs.h"
+#include "icn.h"
+#include "localevent.h"
 #include "maps.h"
+#include "screen.h"
+#include "ui_text.h"
 
 namespace Interface
 {
@@ -41,5 +47,33 @@ namespace Interface
         windowsPos.y = std::clamp( windowsPos.y, BORDERWIDTH, ( interfaceArea.height - windowSize.height ) + BORDERWIDTH );
 
         return { windowsPos.x, windowsPos.y, windowSize.width, windowSize.height };
+    }
+
+    void displayStandardPopupWindow( std::string text, const fheroes2::Rect & interfaceArea )
+    {
+        const CursorRestorer cursorRestorer( false, Cursor::POINTER );
+
+        const fheroes2::Sprite & windowImage = fheroes2::AGG::GetICN( ICN::QWIKINFO, 0 );
+
+        LocalEvent & le = LocalEvent::Get();
+        const fheroes2::Rect windowRoi = Interface::getPopupWindowPosition( le.GetMouseCursor(), interfaceArea,
+                                                                            { windowImage.width(), windowImage.height() } );
+
+        fheroes2::Display & display = fheroes2::Display::instance();
+        fheroes2::ImageRestorer restorer( display, windowRoi.x, windowRoi.y, windowRoi.width, windowRoi.height );
+        fheroes2::Blit( windowImage, display, windowRoi.x, windowRoi.y );
+
+        const int32_t objectTextBorderedWidth = windowRoi.width - 2 * BORDERWIDTH;
+        const fheroes2::Text textUi( std::move( text ), fheroes2::FontType::smallWhite() );
+        textUi.draw( windowRoi.x + 22, windowRoi.y - 6 + ( ( windowRoi.height - textUi.height( objectTextBorderedWidth ) ) / 2 ), objectTextBorderedWidth, display );
+
+        display.render( restorer.rect() );
+
+        while ( le.HandleEvents() && le.MousePressRight() ) {
+            // Do nothing and wait till the user releases the button.
+        }
+
+        restorer.restore();
+        display.render( restorer.rect() );
     }
 }

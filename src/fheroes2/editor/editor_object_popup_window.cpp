@@ -25,24 +25,17 @@
 #include <string>
 #include <utility>
 
-#include "agg_image.h"
-#include "cursor.h"
 #include "editor_interface.h"
-#include "gamedefs.h"
 #include "ground.h"
-#include "icn.h"
 #include "image.h"
 #include "interface_gamearea.h"
-#include "localevent.h"
 #include "maps_tiles.h"
 #include "maps_tiles_helper.h"
 #include "math_base.h"
 #include "mp2.h"
 #include "resource.h"
-#include "screen.h"
 #include "translations.h"
 #include "ui_map_interface.h"
-#include "ui_text.h"
 #include "world.h"
 
 namespace
@@ -75,20 +68,6 @@ namespace Editor
 {
     void showPopupWindow( const Maps::Tiles & tile )
     {
-        const CursorRestorer cursorRestorer( false, Cursor::POINTER );
-
-        fheroes2::Display & display = fheroes2::Display::instance();
-
-        // image box
-        const fheroes2::Sprite & box = fheroes2::AGG::GetICN( ICN::QWIKINFO, 0 );
-
-        LocalEvent & le = LocalEvent::Get();
-        const fheroes2::Rect pos
-            = Interface::getPopupWindowPosition( le.GetMouseCursor(), Interface::EditorInterface::Get().getGameArea().GetROI(), { box.width(), box.height() } );
-
-        fheroes2::ImageRestorer restorer( display, pos.x, pos.y, pos.width, pos.height );
-        fheroes2::Blit( box, display, pos.x, pos.y );
-
         std::string infoString;
         const int32_t mainTileIndex = Maps::Tiles::getIndexOfMainTile( tile );
 
@@ -99,18 +78,6 @@ namespace Editor
             infoString = getObjectInfoText( tile );
         }
 
-        const int32_t objectTextBorderedWidth = pos.width - 2 * BORDERWIDTH;
-        const fheroes2::Text text( std::move( infoString ), fheroes2::FontType::smallWhite() );
-        text.draw( pos.x + 22, pos.y - 6 + ( ( pos.height - text.height( objectTextBorderedWidth ) ) / 2 ), objectTextBorderedWidth, display );
-
-        display.render( restorer.rect() );
-
-        while ( le.HandleEvents() && le.MousePressRight() ) {
-            // Do nothing and wait till the user releases the button.
-        }
-
-        // restore background
-        restorer.restore();
-        display.render( restorer.rect() );
+        Interface::displayStandardPopupWindow( std::move( infoString ), Interface::EditorInterface::Get().getGameArea().GetROI() );
     }
 }
