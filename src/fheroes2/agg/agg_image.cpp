@@ -551,7 +551,7 @@ namespace
     void makeAllShadowsTransparent( fheroes2::Sprite & image )
     {
         uint8_t * transform = image.transform();
-        const uint8_t * transformEnd = transform + image.width() * image.height();
+        const uint8_t * transformEnd = transform + static_cast<ptrdiff_t>( image.width() ) * image.height();
 
         for ( ; transform != transformEnd; ++transform ) {
             if ( *transform > 1 ) {

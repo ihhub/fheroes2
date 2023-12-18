@@ -26,6 +26,7 @@
 
 #include "game_mode.h"
 #include "ground.h"
+#include "image.h"
 #include "map_object_info.h"
 #include "maps_tiles_helper.h"
 #include "math_base.h"
@@ -108,41 +109,9 @@ namespace Interface
         // The name of this method starts from _ on purpose to do not mix with other public methods.
         void _redraw() const;
 
-        int32_t getSelectedObjectType() const
-        {
-            switch ( _selectedInstrument ) {
-            case Instrument::MONSTERS:
-                return _selectedMonsterType;
-            case Instrument::LANDSCAPE_OBJECTS:
-                return _selectedLandscapeObjectType[_selectedLandscapeObject];
-            case Instrument::ADVENTURE_OBJECTS:
-                return _selectedAdventureObjectType[_selectedAdventureObject];
-            case Instrument::KINGDOM_OBJECTS:
-                return _selectedKingdomObjectType[_selectedKingdomObject];
-            default:
-                // Why are you trying to get type for the non-object instrument. Check your logic!
-                assert( 0 );
-                return -1;
-            }
-        }
+        int32_t getSelectedObjectType() const;
 
-        Maps::ObjectGroup getSelectedObjectGroup() const
-        {
-            switch ( _selectedInstrument ) {
-            case Instrument::MONSTERS:
-                return Maps::ObjectGroup::MONSTERS;
-            case Instrument::LANDSCAPE_OBJECTS:
-                return _selectedLandscapeObjectGroup[_selectedLandscapeObject];
-            case Instrument::ADVENTURE_OBJECTS:
-                return _selectedAdventureObjectGroup[_selectedAdventureObject];
-            case Instrument::KINGDOM_OBJECTS:
-                return _selectedKingdomObjectGroup[_selectedKingdomObject];
-            default:
-                // Why are you trying to get object group for the non-object instrument. Check your logic!
-                assert( 0 );
-                return Maps::ObjectGroup::GROUP_COUNT;
-            }
-        }
+        Maps::ObjectGroup getSelectedObjectGroup() const;
 
         void getTownObjectProperties( int32_t & type, int32_t & color ) const;
 

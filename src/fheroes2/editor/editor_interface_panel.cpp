@@ -33,6 +33,7 @@
 #include "dialog_selectitems.h"
 #include "dialog_system_options.h"
 #include "editor_interface.h"
+#include "gamedefs.h"
 #include "ground.h"
 #include "icn.h"
 #include "image.h"
@@ -41,6 +42,7 @@
 #include "maps_tiles.h"
 #include "pal.h"
 #include "screen.h"
+#include "settings.h"
 #include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
@@ -461,6 +463,42 @@ namespace Interface
         display.render( _rectInstrumentPanel );
     }
 
+    int32_t EditorPanel::getSelectedObjectType() const
+    {
+        switch ( _selectedInstrument ) {
+        case Instrument::MONSTERS:
+            return _selectedMonsterType;
+        case Instrument::LANDSCAPE_OBJECTS:
+            return _selectedLandscapeObjectType[_selectedLandscapeObject];
+        case Instrument::ADVENTURE_OBJECTS:
+            return _selectedAdventureObjectType[_selectedAdventureObject];
+        case Instrument::KINGDOM_OBJECTS:
+            return _selectedKingdomObjectType[_selectedKingdomObject];
+        default:
+            // Why are you trying to get type for the non-object instrument. Check your logic!
+            assert( 0 );
+            return -1;
+        }
+    }
+
+    Maps::ObjectGroup EditorPanel::getSelectedObjectGroup() const
+    {
+        switch ( _selectedInstrument ) {
+        case Instrument::MONSTERS:
+            return Maps::ObjectGroup::MONSTERS;
+        case Instrument::LANDSCAPE_OBJECTS:
+            return _selectedLandscapeObjectGroup[_selectedLandscapeObject];
+        case Instrument::ADVENTURE_OBJECTS:
+            return _selectedAdventureObjectGroup[_selectedAdventureObject];
+        case Instrument::KINGDOM_OBJECTS:
+            return _selectedKingdomObjectGroup[_selectedKingdomObject];
+        default:
+            // Why are you trying to get object group for the non-object instrument. Check your logic!
+            assert( 0 );
+            return Maps::ObjectGroup::GROUP_COUNT;
+        }
+    }
+
     int EditorPanel::_getGroundId( const uint8_t brushId )
     {
         switch ( brushId ) {
@@ -856,7 +894,7 @@ namespace Interface
                 handleObjectMouseClick( Dialog::selectMonsterType );
                 return res;
             }
-            else if ( le.MouseClickLeft( _kingdomObjectButtonsRect[KingdomObjectBrush::TOWNS] ) ) {
+            if ( le.MouseClickLeft( _kingdomObjectButtonsRect[KingdomObjectBrush::TOWNS] ) ) {
                 handleObjectMouseClick( [this]( const int32_t /* type */ ) -> int32_t {
                     int32_t type = -1;
                     int32_t color = -1;
