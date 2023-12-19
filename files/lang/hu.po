@@ -10380,7 +10380,7 @@ msgid "The bones of Lord Slayer are buried in the foundation of the arena."
 msgstr "Lord Slayer csontjai az aréna talapzatába vannak eltemetve."
 
 msgid "A Black Dragon will take out a Titan any day of the week."
-msgstr "A fekete sárkány minden napra kap egy titánt."
+msgstr "A fekete sárkány titánt eszik reggelire."
 
 msgid "He told her: Yada yada yada... and then she said: Blah, blah, blah..."
 msgstr "Azt mondta a férfi: Yada yada yada... erre a nő válasza: blablabla..."
