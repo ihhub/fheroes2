@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-05 00:31+0000\n"
+"POT-Creation-Date: 2023-12-19 03:04+0000\n"
 "PO-Revision-Date: 2022-10-25 08:56+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
@@ -175,6 +175,12 @@ msgid "MIN"
 msgstr ""
 
 msgid "RESET"
+msgstr ""
+
+msgid "CASTLE"
+msgstr ""
+
+msgid "TOWN"
 msgstr ""
 
 msgid ""
@@ -3084,6 +3090,17 @@ msgstr "Vazio"
 msgid "already learned"
 msgstr "já aprendeu"
 
+#, fuzzy
+msgid "treeOfKnowledge|free"
+msgstr "Conhecimento"
+
+#, fuzzy
+msgid "already claimed"
+msgstr "já aprendeu"
+
+msgid "not claimed"
+msgstr ""
+
 msgid "already knows this skill"
 msgstr "já sabe essa habilidade"
 
@@ -3277,6 +3294,46 @@ msgstr "Melhor Herói:"
 #, fuzzy
 msgid "Select Ocean Object:"
 msgstr "Artefato"
+
+#, fuzzy
+msgid "Castle/town placing"
+msgstr "Opções do Castelo"
+
+msgid "doubleLinedRace|Neutral"
+msgstr ""
+
+msgid "race|Random"
+msgstr ""
+
+#, fuzzy
+msgid "Click to start placing the selected castle/town."
+msgstr "Salvar o jogo atual."
+
+#, fuzzy
+msgid "Click to select town placing."
+msgstr "Mostrar proxima cidade"
+
+#, fuzzy
+msgid "Click to select castle placing."
+msgstr "Clique aqui para selecionar o cenário a jogar."
+
+#, fuzzy
+msgid "%{color} %{race} %{townOrCastle}"
+msgstr "Turno do jogador %{color}"
+
+msgid "race|Neutral"
+msgstr ""
+
+msgid "You will place"
+msgstr ""
+
+#, fuzzy
+msgid "Click to select this class."
+msgstr "Clique aqui para selecionar o cenário a jogar."
+
+#, fuzzy
+msgid "Click to select this color."
+msgstr "Clique aqui para selecionar o cenário a jogar."
 
 #, fuzzy
 msgid "Map Type:\n"
@@ -3641,6 +3698,14 @@ msgstr "Terreno Baldio"
 msgid "Ocean object must be placed on water."
 msgstr "Esta cidade não pode ser transformada em castelo."
 
+#, fuzzy
+msgid "Towns"
+msgstr "Cidade"
+
+#, fuzzy
+msgid "Towns cannot be placed on water."
+msgstr "Esta cidade não pode ser transformada em castelo."
+
 msgid "Ocean Objects"
 msgstr ""
 
@@ -3669,10 +3734,6 @@ msgstr "Terreno Baldio"
 
 msgid "Beach Objects"
 msgstr ""
-
-#, fuzzy
-msgid "Towns"
-msgstr "Cidade"
 
 #, fuzzy
 msgid "Treasures"
@@ -7373,12 +7434,6 @@ msgstr ""
 msgid "Multi"
 msgstr ""
 
-msgid "race|Random"
-msgstr ""
-
-msgid "race|Neutral"
-msgstr ""
-
 msgid "doubleLined|Knight"
 msgstr ""
 
@@ -7403,9 +7458,6 @@ msgid "doubleLinedRace|Multi"
 msgstr ""
 
 msgid "doubleLinedRace|Random"
-msgstr ""
-
-msgid "doubleLinedRace|Neutral"
 msgstr ""
 
 msgid "speed|Standing"
@@ -7756,6 +7808,10 @@ msgstr "Criaturas"
 #, fuzzy
 msgid "Random Monster - very strong"
 msgstr "Criaturas"
+
+#, fuzzy
+msgid "Hero"
+msgstr "Heróis"
 
 msgid "Nothing Special"
 msgstr ""

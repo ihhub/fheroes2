@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-05 00:31+0000\n"
+"POT-Creation-Date: 2023-12-19 03:04+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -195,6 +195,15 @@ msgid "MIN"
 msgstr "МИН"
 
 msgid "RESET"
+msgstr ""
+
+#, fuzzy
+msgid "CASTLE"
+msgstr ""
+"ГРАДОВЕ/\n"
+"ЗАМЪЦИ"
+
+msgid "TOWN"
 msgstr ""
 
 msgid ""
@@ -3173,6 +3182,17 @@ msgstr "(празен)"
 msgid "already learned"
 msgstr "вече научен"
 
+#, fuzzy
+msgid "treeOfKnowledge|free"
+msgstr "Дърво на познанието"
+
+#, fuzzy
+msgid "already claimed"
+msgstr "вече научен"
+
+msgid "not claimed"
+msgstr ""
+
 msgid "already knows this skill"
 msgstr "вече владее това умение"
 
@@ -3352,6 +3372,48 @@ msgstr "Избери герой:"
 #, fuzzy
 msgid "Select Ocean Object:"
 msgstr "Океански обекти"
+
+#, fuzzy
+msgid "Castle/town placing"
+msgstr "Опции на замъка"
+
+msgid "doubleLinedRace|Neutral"
+msgstr ""
+"Неутра-\n"
+"лен"
+
+msgid "race|Random"
+msgstr "Случаен"
+
+#, fuzzy
+msgid "Click to start placing the selected castle/town."
+msgstr "Кликни, за да приложиш избраната резолюция."
+
+#, fuzzy
+msgid "Click to select town placing."
+msgstr "Кликни, за да покажеш следващия град."
+
+#, fuzzy
+msgid "Click to select castle placing."
+msgstr "Кликни тук, за да избереш кой сценарий да играеш."
+
+#, fuzzy
+msgid "%{color} %{race} %{townOrCastle}"
+msgstr "%{color} %{race} герой"
+
+msgid "race|Neutral"
+msgstr "Неутрален"
+
+msgid "You will place"
+msgstr ""
+
+#, fuzzy
+msgid "Click to select this class."
+msgstr "Кликни тук, за да избереш кой сценарий да играеш."
+
+#, fuzzy
+msgid "Click to select this color."
+msgstr "Кликни тук, за да избереш кой сценарий да играеш."
 
 msgid "Map Type:\n"
 msgstr "Тип на карта:\n"
@@ -3702,6 +3764,13 @@ msgstr "Океански обекти"
 msgid "Ocean object must be placed on water."
 msgstr "Това заклинание не може да се направи на кораб."
 
+msgid "Towns"
+msgstr "Градове"
+
+#, fuzzy
+msgid "Towns cannot be placed on water."
+msgstr "Чудовищата не могат да се поставят върху вода."
+
 msgid "Ocean Objects"
 msgstr "Океански обекти"
 
@@ -3728,9 +3797,6 @@ msgstr "Обекти от пущинака"
 
 msgid "Beach Objects"
 msgstr "Плажни обекти"
-
-msgid "Towns"
-msgstr "Градове"
 
 msgid "Treasures"
 msgstr "Съкровища"
@@ -7749,12 +7815,6 @@ msgstr "Некромант"
 msgid "Multi"
 msgstr "Смесен"
 
-msgid "race|Random"
-msgstr "Случаен"
-
-msgid "race|Neutral"
-msgstr "Неутрален"
-
 msgid "doubleLined|Knight"
 msgstr "Рицар"
 
@@ -7790,11 +7850,6 @@ msgstr ""
 
 msgid "doubleLinedRace|Random"
 msgstr "Случаен"
-
-msgid "doubleLinedRace|Neutral"
-msgstr ""
-"Неутра-\n"
-"лен"
 
 msgid "speed|Standing"
 msgstr "Стояща"
@@ -8134,6 +8189,10 @@ msgstr "Случайно чудовище - силно"
 
 msgid "Random Monster - very strong"
 msgstr "Случайно чудовище - мн. силно"
+
+#, fuzzy
+msgid "Hero"
+msgstr "Герой"
 
 msgid "Nothing Special"
 msgstr "Нищо специално"

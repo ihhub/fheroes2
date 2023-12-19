@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-05 00:31+0000\n"
+"POT-Creation-Date: 2023-12-19 03:04+0000\n"
 "PO-Revision-Date: 2023-09-24 16:05+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Czech <cs@li.org>\n"
@@ -196,6 +196,15 @@ msgid "MIN"
 msgstr "MIN"
 
 msgid "RESET"
+msgstr ""
+
+#, fuzzy
+msgid "CASTLE"
+msgstr ""
+"MĚSTA/\n"
+"HRADY"
+
+msgid "TOWN"
 msgstr ""
 
 msgid ""
@@ -3136,6 +3145,17 @@ msgstr "(prázdno)"
 msgid "already learned"
 msgstr "již to umíš"
 
+#, fuzzy
+msgid "treeOfKnowledge|free"
+msgstr "Strom poznání"
+
+#, fuzzy
+msgid "already claimed"
+msgstr "již to umíš"
+
+msgid "not claimed"
+msgstr ""
+
 msgid "already knows this skill"
 msgstr "tuhle dovednost již máš"
 
@@ -3321,6 +3341,46 @@ msgstr "Nejlepší hrdina:"
 #, fuzzy
 msgid "Select Ocean Object:"
 msgstr "Artefakt"
+
+#, fuzzy
+msgid "Castle/town placing"
+msgstr "Možnosti Hradu"
+
+msgid "doubleLinedRace|Neutral"
+msgstr ""
+
+msgid "race|Random"
+msgstr ""
+
+#, fuzzy
+msgid "Click to start placing the selected castle/town."
+msgstr "Kliknutím se rozliśení změní na vybrané. "
+
+#, fuzzy
+msgid "Click to select town placing."
+msgstr "Klikni pro zobrazení následujícího města."
+
+#, fuzzy
+msgid "Click to select castle placing."
+msgstr "Kliknout sem pro výběr scénáře."
+
+#, fuzzy
+msgid "%{color} %{race} %{townOrCastle}"
+msgstr "%{color} hráč"
+
+msgid "race|Neutral"
+msgstr ""
+
+msgid "You will place"
+msgstr ""
+
+#, fuzzy
+msgid "Click to select this class."
+msgstr "Kliknout sem pro výběr scénáře."
+
+#, fuzzy
+msgid "Click to select this color."
+msgstr "Kliknout sem pro výběr scénáře."
 
 #, fuzzy
 msgid "Map Type:\n"
@@ -3662,6 +3722,14 @@ msgstr "Pustina"
 msgid "Ocean object must be placed on water."
 msgstr ""
 
+#, fuzzy
+msgid "Towns"
+msgstr "Město"
+
+#, fuzzy
+msgid "Towns cannot be placed on water."
+msgstr "Toto město nemůže být povýšeno na hrad."
+
 msgid "Ocean Objects"
 msgstr ""
 
@@ -3690,10 +3758,6 @@ msgstr "Pustina"
 
 msgid "Beach Objects"
 msgstr ""
-
-#, fuzzy
-msgid "Towns"
-msgstr "Město"
 
 #, fuzzy
 msgid "Treasures"
@@ -7326,12 +7390,6 @@ msgstr ""
 msgid "Multi"
 msgstr ""
 
-msgid "race|Random"
-msgstr ""
-
-msgid "race|Neutral"
-msgstr ""
-
 msgid "doubleLined|Knight"
 msgstr ""
 
@@ -7356,9 +7414,6 @@ msgid "doubleLinedRace|Multi"
 msgstr ""
 
 msgid "doubleLinedRace|Random"
-msgstr ""
-
-msgid "doubleLinedRace|Neutral"
 msgstr ""
 
 msgid "speed|Standing"
@@ -7702,6 +7757,10 @@ msgstr ""
 
 msgid "Random Monster - very strong"
 msgstr ""
+
+#, fuzzy
+msgid "Hero"
+msgstr "Hrdinové"
 
 msgid "Nothing Special"
 msgstr "Nic zvláštního"

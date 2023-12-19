@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-05 00:31+0000\n"
+"POT-Creation-Date: 2023-12-19 03:04+0000\n"
 "PO-Revision-Date: 2023-12-02 22:18+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -196,6 +196,15 @@ msgstr "MIN"
 
 msgid "RESET"
 msgstr "ÅTERS."
+
+#, fuzzy
+msgid "CASTLE"
+msgstr ""
+"STÄDER/\n"
+"SLOTT"
+
+msgid "TOWN"
+msgstr ""
 
 msgid ""
 "D\n"
@@ -3157,6 +3166,17 @@ msgstr "(tom)"
 msgid "already learned"
 msgstr "redan inlärt"
 
+#, fuzzy
+msgid "treeOfKnowledge|free"
+msgstr "Kunskapens Träd"
+
+#, fuzzy
+msgid "already claimed"
+msgstr "redan inlärt"
+
+msgid "not claimed"
+msgstr ""
+
 msgid "already knows this skill"
 msgstr "kan redan denna färdighet"
 
@@ -3333,6 +3353,46 @@ msgstr "Välj Skatt:"
 
 msgid "Select Ocean Object:"
 msgstr "Välj Havsföremål:"
+
+#, fuzzy
+msgid "Castle/town placing"
+msgstr "Slottalternativ"
+
+msgid "doubleLinedRace|Neutral"
+msgstr "Neutral"
+
+msgid "race|Random"
+msgstr "Slumpad"
+
+#, fuzzy
+msgid "Click to start placing the selected castle/town."
+msgstr "Klicka här för att anta den valda upplösningen."
+
+#, fuzzy
+msgid "Click to select town placing."
+msgstr "Klicka för att visa nästa stad."
+
+#, fuzzy
+msgid "Click to select castle placing."
+msgstr "Klicka här för att välja vilket scenario som ska spelas."
+
+#, fuzzy
+msgid "%{color} %{race} %{townOrCastle}"
+msgstr "%{color} %{race}hjälte"
+
+msgid "race|Neutral"
+msgstr "Neutral"
+
+msgid "You will place"
+msgstr ""
+
+#, fuzzy
+msgid "Click to select this class."
+msgstr "Klicka här för att välja vilket scenario som ska spelas."
+
+#, fuzzy
+msgid "Click to select this color."
+msgstr "Klicka här för att välja vilket scenario som ska spelas."
 
 msgid "Map Type:\n"
 msgstr "Karttyp:\n"
@@ -3684,6 +3744,13 @@ msgstr "Havsföremål"
 msgid "Ocean object must be placed on water."
 msgstr "Havsföremål måste placeras på vatten."
 
+msgid "Towns"
+msgstr "Städer"
+
+#, fuzzy
+msgid "Towns cannot be placed on water."
+msgstr "Varelser kan inte placeras på vatten."
+
 msgid "Ocean Objects"
 msgstr "Havsföremål"
 
@@ -3710,9 +3777,6 @@ msgstr "Ödemarksföremål"
 
 msgid "Beach Objects"
 msgstr "Strandföremål"
-
-msgid "Towns"
-msgstr "Städer"
 
 msgid "Treasures"
 msgstr "Skatter"
@@ -7711,12 +7775,6 @@ msgstr "Svartkonstnär"
 msgid "Multi"
 msgstr "Flera"
 
-msgid "race|Random"
-msgstr "Slumpad"
-
-msgid "race|Neutral"
-msgstr "Neutral"
-
 msgid "doubleLined|Knight"
 msgstr "Riddare"
 
@@ -7746,9 +7804,6 @@ msgstr "Flera"
 
 msgid "doubleLinedRace|Random"
 msgstr "Slumpad"
-
-msgid "doubleLinedRace|Neutral"
-msgstr "Neutral"
 
 msgid "speed|Standing"
 msgstr "Stående"
@@ -8088,6 +8143,10 @@ msgstr "Slumpat Monster - starkt"
 
 msgid "Random Monster - very strong"
 msgstr "Slumpat Monster - väldigt starkt"
+
+#, fuzzy
+msgid "Hero"
+msgstr "Hjältar"
 
 msgid "Nothing Special"
 msgstr "Ingenting Speciellt"
