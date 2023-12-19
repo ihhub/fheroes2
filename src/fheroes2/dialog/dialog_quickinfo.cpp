@@ -261,6 +261,43 @@ namespace
         return str;
     }
 
+    std::string showTreeOfKnowledgeInfo( const Maps::Tiles & tile, const bool isVisited )
+    {
+        const MP2::MapObjectType objectType = tile.GetObject( false );
+        std::string str = MP2::StringObject( objectType );
+        const Heroes * hero = Interface::GetFocusHeroes();
+
+        if ( isVisited ) {
+            const Funds & payment = getTreeOfKnowledgeRequirement( tile );
+            str.append( "\n\n(" );
+            if ( payment.GetValidItemsCount() == 0 ) {
+                str.append( _( "treeOfKnowledge|free" ) );
+            }
+            else {
+                const auto rc = payment.getFirstValidResource();
+                str.append( std::to_string( rc.second ) );
+                str += ' ';
+                str.append( Translation::StringLower( Resource::String( rc.first ) ) );
+            }
+            str += ')';
+
+            if ( hero ) {
+                str.append( "\n(" );
+                str.append( hero->isVisited( tile ) ? _( "already claimed" ) : _( "not claimed" ) );
+                str += ')';
+            }
+        }
+        else {
+            if ( hero ) {
+                str.append( "\n\n(" );
+                str.append( _( "not claimed" ) );
+                str += ')';
+            }
+        }
+
+        return str;
+    }
+
     std::string showWitchHutInfo( const Maps::Tiles & tile, const bool isVisited )
     {
         std::string str = MP2::StringObject( tile.GetObject( false ) );
@@ -500,7 +537,6 @@ namespace
         case MP2::OBJ_MERCENARY_CAMP:
         case MP2::OBJ_WITCH_DOCTORS_HUT:
         case MP2::OBJ_STANDING_STONES:
-        case MP2::OBJ_TREE_OF_KNOWLEDGE:
             return showLocalVisitTileInfo( tile );
 
         case MP2::OBJ_MAGIC_WELL:
@@ -531,6 +567,8 @@ namespace
         case MP2::OBJ_TRAVELLER_TENT:
             return showTentInfo( tile, kingdom );
 
+        case MP2::OBJ_TREE_OF_KNOWLEDGE:
+            return showTreeOfKnowledgeInfo( tile, kingdom.isVisited( tile ) );
         // These objects does not have extra text for quick info.
         case MP2::OBJ_CAMPFIRE:
         case MP2::OBJ_ARTIFACT:
