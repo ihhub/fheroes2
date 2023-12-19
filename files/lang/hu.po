@@ -10341,31 +10341,31 @@ msgid "The ultimate artifact may be found in the %{name} regions of the world."
 msgstr "A legszentebb varázstárgyat a %{name} régióban találhatod."
 
 msgid "north-west"
-msgstr "észak-nyugat"
+msgstr "észak-nyugati"
 
 msgid "north"
-msgstr "észak"
+msgstr "északi"
 
 msgid "north-east"
-msgstr "észak-kelet"
+msgstr "észak-keleti"
 
 msgid "west"
-msgstr "nyugat"
+msgstr "nyugati"
 
 msgid "center"
-msgstr "közép"
+msgstr "középső"
 
 msgid "east"
-msgstr "kelet"
+msgstr "keleti"
 
 msgid "south-west"
-msgstr "dél-nyugat"
+msgstr "dél-nyugati"
 
 msgid "south"
-msgstr "dél"
+msgstr "déli"
 
 msgid "south-east"
-msgstr "dél-kelet"
+msgstr "dél-keleti"
 
 msgid "The truth is out there."
 msgstr "Az igazság odakint van."
