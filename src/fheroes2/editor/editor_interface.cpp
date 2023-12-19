@@ -48,6 +48,7 @@
 #include "interface_radar.h"
 #include "interface_status.h"
 #include "localevent.h"
+#include "logging.h"
 #include "map_format_helper.h"
 #include "map_format_info.h"
 #include "map_object_info.h"
@@ -930,7 +931,11 @@ namespace Interface
 
     void EditorInterface::mouseCursorAreaPressRight( const int32_t tileIndex ) const
     {
-        Editor::showPopupWindow( world.GetTiles( tileIndex ) );
+        const Maps::Tiles & tile = world.GetTiles( tileIndex );
+
+        DEBUG_LOG( DBG_DEVEL, DBG_INFO, std::endl << tile.String() )
+
+        Editor::showPopupWindow( tile );
     }
 
     void EditorInterface::updateCursor( const int32_t tileIndex )
