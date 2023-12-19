@@ -266,6 +266,7 @@ namespace
     {
         const MP2::MapObjectType objectType = tile.GetObject( false );
         std::string str = MP2::StringObject( objectType );
+        const Heroes * hero = Interface::GetFocusHeroes();
 
         if ( isVisited ) {
             const Funds & payment = getTreeOfKnowledgeRequirement( tile );
@@ -281,10 +282,17 @@ namespace
             }
             str += ')';
 
-            const Heroes * hero = Interface::GetFocusHeroes();
             if ( hero ) {
-                str += '\n';
-                str.append( hero->isVisited( tile ) ? _( "(already gained)" ) : _( "(not gained)" ) );
+                str.append( "\n(" );
+                str.append( hero->isVisited( tile ) ? _( "already claimed" ) : _( "not claimed" ) );
+                str += ')';
+            }
+        }
+        else {
+            if ( hero ) {
+                str.append( "\n\n(" );
+                str.append( _( "not claimed" ) );
+                str += ')';
             }
         }
 
