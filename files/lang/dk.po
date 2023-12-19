@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-15 09:12+0000\n"
+"POT-Creation-Date: 2023-12-19 03:04+0000\n"
 "PO-Revision-Date: 2023-09-12 11:08+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
@@ -3208,6 +3208,17 @@ msgstr "(tom)"
 
 msgid "already learned"
 msgstr "allerede lært"
+
+#, fuzzy
+msgid "treeOfKnowledge|free"
+msgstr "Visdomstræ"
+
+#, fuzzy
+msgid "already claimed"
+msgstr "allerede lært"
+
+msgid "not claimed"
+msgstr ""
 
 msgid "already knows this skill"
 msgstr "kender allerede denne evne"
@@ -8197,6 +8208,10 @@ msgstr "Tilfældigt monster - stærk"
 
 msgid "Random Monster - very strong"
 msgstr "Tilfældigt monster - meget stærk"
+
+#, fuzzy
+msgid "Hero"
+msgstr "Helte"
 
 msgid "Nothing Special"
 msgstr "Intet særligt"
