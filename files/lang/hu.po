@@ -6911,7 +6911,7 @@ msgid "Identify Hero"
 msgstr "Hősazonosítás"
 
 msgid "Select town to port to."
-msgstr ""
+msgstr "Válaszd ki, melyik városba szeretnél menni."
 
 msgid "Town Portal"
 msgstr "Városba lépés"
@@ -6931,6 +6931,8 @@ msgid ""
 "\n"
 " for a fee of %{gold} gold."
 msgstr ""
+"\n"
+"%{gold} arany fizetségért."
 
 msgid "These weak creatures will surely flee before us."
 msgstr "Ezek a gyenge lények valószínű elmenekül előled."
@@ -6954,6 +6956,8 @@ msgid ""
 "normal circumstances, a hero is limited to 10 spell points per level of "
 "knowledge."
 msgstr ""
+"Tudásod határozza meg, hogy hány varázspontod lehet. Általában a hős "
+"szintenként 10 varázspontot kaphat."
 
 msgid "Current Modifiers:"
 msgstr "Ható módosítók:"
@@ -7657,7 +7661,7 @@ msgid "Mine"
 msgstr "Bánya"
 
 msgid "Burma shave."
-msgstr ""
+msgstr "Hirdetőtábla."
 
 msgid "Next sign 50 miles."
 msgstr "Következő jelzés 50 mérföldre."
@@ -7998,16 +8002,16 @@ msgid "Barrow Mounds"
 msgstr "Barrow Dombság"
 
 msgid "Random Artifact - Treasure"
-msgstr ""
+msgstr "Véletlen tárgy - kincs"
 
 msgid "Random Artifact - Minor"
-msgstr ""
+msgstr "Véletlen tárgy - kisebb"
 
 msgid "Random Artifact - Major"
-msgstr ""
+msgstr "Véletlen tárgy - nagyobb"
 
 msgid "Barrier"
-msgstr ""
+msgstr "Határvám"
 
 msgid "Traveller's Tent"
 msgstr "Utazók Sátra"
@@ -8490,19 +8494,19 @@ msgid "% damage from Elemental spells"
 msgstr "% sebzés elemi varázslatoktól"
 
 msgid "% chance to Dispel beneficial spells"
-msgstr ""
+msgstr "% esély jótékony varázslatok eloszlatására"
 
 msgid "% chance to Paralyze"
-msgstr ""
+msgstr "% esély bénításra"
 
 msgid "% chance to Petrify"
-msgstr ""
+msgstr "% esély kővé dermesztésre"
 
 msgid "% chance to Blind"
-msgstr ""
+msgstr "% esély vakításra"
 
 msgid "% chance to Curse"
-msgstr ""
+msgstr "% esély átokra"
 
 msgid "% chance to cast %{spell} spell"
 msgstr "% eséllyel varázsolja a(z) %{spell} varázslatot"
@@ -8541,10 +8545,10 @@ msgid "Cloud attack"
 msgstr "Gyilkos köd támadás"
 
 msgid "Decreases enemy's morale by "
-msgstr ""
+msgstr "Csökkenti az ellenfél morálját ennyivel: "
 
 msgid "% chance to halve enemy"
-msgstr ""
+msgstr "% esély az ellenség megfelezésére"
 
 msgid "Soul Eater"
 msgstr "Lélekfaló"
@@ -8556,16 +8560,16 @@ msgid "No Morale"
 msgstr "Nincs morál"
 
 msgid "200% damage from Fire spells"
-msgstr ""
+msgstr "200% sebzés tűzvarázslatoktól"
 
 msgid "200% damage from Cold spells"
-msgstr ""
+msgstr "200% sebzés fagyvarázslatoktól"
 
 msgid "% damage from %{spell} spell"
-msgstr ""
+msgstr "% sebzés %{spell} varázslattól"
 
 msgid "% immunity to "
-msgstr ""
+msgstr "% immunitás ettől: "
 
 msgid "Lightning"
 msgstr "Villámlás"
@@ -8595,43 +8599,43 @@ msgid "Invalid Artifact"
 msgstr "Érvénytelen varázstárgy"
 
 msgid "The %{name} increases your knowledge by %{count}."
-msgstr ""
+msgstr "A %{name} ennyivel növeli a tudásodat: %{count}."
 
 msgid "Ultimate Book of Knowledge"
 msgstr "Tudás Szent Könyve"
 
 msgid "The %{name} increases your attack skill by %{count}."
-msgstr ""
+msgstr "A %{name} ennyivel növeli a támadóerődet: %{count}."
 
 msgid "Ultimate Sword of Dominion"
 msgstr "Hatalom Szent Kardja"
 
 msgid "The %{name} increases your defense skill by %{count}."
-msgstr ""
+msgstr "A %{name} ennyivel növeli a védőerődet: %{count}."
 
 msgid "Ultimate Cloak of Protection"
 msgstr "Védelem Szent Köpenye"
 
 msgid "The %{name} increases your spell power by %{count}."
-msgstr ""
+msgstr "A %{name} megnöveli a varázserődet ennyivel: %{count}."
 
 msgid "Ultimate Wand of Magic"
 msgstr "Varázslás Szent Pálcája"
 
 msgid "The %{name} increases your attack and defense skills by %{count} each."
-msgstr ""
+msgstr "A %{name} mind a támadóerődet, mind a védőerődet növeli ennyivel: %{count}."
 
 msgid "Ultimate Shield"
 msgstr "Szent Pajzs"
 
 msgid "The %{name} increases your spell power and knowledge by %{count} each."
-msgstr ""
+msgstr "A %{name} mind a tudásodat, mind a varázserődet növeli ennyivel: %{count}."
 
 msgid "Ultimate Staff"
 msgstr "Szent Jogar"
 
 msgid "The %{name} increases each of your basic skills by %{count} points."
-msgstr ""
+msgstr "A %{name} minden Alap képességedet növeli ennyivel: %{count}."
 
 msgid "Ultimate Crown"
 msgstr "Szent Korona"
@@ -8643,7 +8647,7 @@ msgid "The %{name} brings in an income of %{count} gold per day."
 msgstr "A(z) %{name} naponta %{count} aranyat hoz a konyhára."
 
 msgid "Arcane Necklace of Magic"
-msgstr "Misztikus Varázslás Nyaklánca"
+msgstr "Misztikus Varázslás Nyaklánc"
 
 msgid ""
 "After rescuing a Sorceress from a cursed tomb, she rewards your heroism with "
@@ -8680,7 +8684,7 @@ msgid "Medal of Valor"
 msgstr "Vitézség Medál"
 
 msgid "The %{name} increases your morale by %{count}."
-msgstr "A(z) %{name} ennyivel növeli a csapatod morálját: %{count}."
+msgstr "A %{name} ennyivel növeli a csapatod morálját: %{count}."
 
 msgid ""
 "Freeing a virtuous maiden from the clutches of an evil overlord, you are "
@@ -8712,10 +8716,10 @@ msgid ""
 msgstr ""
 
 msgid "Fizbin of Misfortune"
-msgstr ""
+msgstr "Balszerencse Kártya"
 
 msgid "The %{name} greatly decreases your morale by %{count}."
-msgstr ""
+msgstr "A %{name} %{count} mértékben lecsökkenti a morálodat."
 
 msgid ""
 "You stumble upon a medal lying alongside the empty road. Adding the medal to "
@@ -8732,10 +8736,10 @@ msgid ""
 msgstr ""
 
 msgid "Armored Gauntlets of Protection"
-msgstr ""
+msgstr "Védelem páncélkesztyűi"
 
 msgid "The %{name} increase your defense skill by %{count}."
-msgstr ""
+msgstr "A %{name} ennyivel növeli a védőerődet: %{count}."
 
 msgid ""
 "You encounter the infamous Black Knight! After a grueling duel ending in a "
@@ -8743,7 +8747,7 @@ msgid ""
 msgstr ""
 
 msgid "Defender Helm of Protection"
-msgstr ""
+msgstr "Védelem sisak"
 
 msgid ""
 "A glint of golden light catches your eye. Upon further investigation, you "
@@ -8751,7 +8755,7 @@ msgid ""
 msgstr ""
 
 msgid "Giant Flail of Dominion"
-msgstr ""
+msgstr "Óriás Királyi Cséphadaró"
 
 msgid ""
 "A clumsy Giant has killed himself with his own flail. Knowing your superior "
@@ -8760,10 +8764,10 @@ msgid ""
 msgstr ""
 
 msgid "Ballista of Quickness"
-msgstr ""
+msgstr "Gyorstüzelő hajítógép"
 
 msgid "The %{name} gives your catapult one extra shot per combat round."
-msgstr ""
+msgstr "A %{name} plusz lövést ad körönként a hajítógépednek."
 
 msgid ""
 "Walking through the ruins of an ancient walled city, you find the instrument "
@@ -8771,7 +8775,7 @@ msgid ""
 msgstr ""
 
 msgid "Stealth Shield of Protection"
-msgstr ""
+msgstr "Védelem titkos pajzsa"
 
 msgid ""
 "A stone statue of a warrior holds a silver shield. As you remove the shield, "
@@ -10376,7 +10380,7 @@ msgid "The bones of Lord Slayer are buried in the foundation of the arena."
 msgstr "Lord Slayer csontjai az aréna talapzatába vannak eltemetve."
 
 msgid "A Black Dragon will take out a Titan any day of the week."
-msgstr ""
+msgstr "A fekete sárkány minden napra kap egy titánt."
 
 msgid "He told her: Yada yada yada... and then she said: Blah, blah, blah..."
 msgstr "Azt mondta a férfi: Yada yada yada... erre a nő válasza: blablabla..."
