@@ -8011,7 +8011,7 @@ msgid "Random Artifact - Major"
 msgstr "Véletlen tárgy - nagyobb"
 
 msgid "Barrier"
-msgstr "Határvám"
+msgstr "Mágikus útakadály"
 
 msgid "Traveller's Tent"
 msgstr "Utazók Sátra"
