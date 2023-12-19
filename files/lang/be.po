@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-15 09:12+0000\n"
+"POT-Creation-Date: 2023-12-19 03:04+0000\n"
 "PO-Revision-Date: 2022-09-23 16:01+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -2961,6 +2961,16 @@ msgid "(empty)"
 msgstr ""
 
 msgid "already learned"
+msgstr ""
+
+#, fuzzy
+msgid "treeOfKnowledge|free"
+msgstr "Веды"
+
+msgid "already claimed"
+msgstr ""
+
+msgid "not claimed"
 msgstr ""
 
 msgid "already knows this skill"
@@ -7391,6 +7401,10 @@ msgstr ""
 
 msgid "Random Monster - very strong"
 msgstr ""
+
+#, fuzzy
+msgid "Hero"
+msgstr "Даведацца аб героі"
 
 msgid "Nothing Special"
 msgstr ""

@@ -21,7 +21,6 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <algorithm>
 #include <cassert>
 #include <cstdint>
 #include <cstdlib>
@@ -41,7 +40,6 @@
 #include "dialog.h"
 #include "game.h"
 #include "game_interface.h"
-#include "gamedefs.h"
 #include "ground.h"
 #include "heroes.h"
 #include "heroes_base.h"
@@ -66,6 +64,7 @@
 #include "tools.h"
 #include "translations.h"
 #include "ui_castle.h"
+#include "ui_map_interface.h"
 #include "ui_text.h"
 #include "world.h"
 
@@ -262,6 +261,43 @@ namespace
         return str;
     }
 
+    std::string showTreeOfKnowledgeInfo( const Maps::Tiles & tile, const bool isVisited )
+    {
+        const MP2::MapObjectType objectType = tile.GetObject( false );
+        std::string str = MP2::StringObject( objectType );
+        const Heroes * hero = Interface::GetFocusHeroes();
+
+        if ( isVisited ) {
+            const Funds & payment = getTreeOfKnowledgeRequirement( tile );
+            str.append( "\n\n(" );
+            if ( payment.GetValidItemsCount() == 0 ) {
+                str.append( _( "treeOfKnowledge|free" ) );
+            }
+            else {
+                const auto rc = payment.getFirstValidResource();
+                str.append( std::to_string( rc.second ) );
+                str += ' ';
+                str.append( Translation::StringLower( Resource::String( rc.first ) ) );
+            }
+            str += ')';
+
+            if ( hero ) {
+                str.append( "\n(" );
+                str.append( hero->isVisited( tile ) ? _( "already claimed" ) : _( "not claimed" ) );
+                str += ')';
+            }
+        }
+        else {
+            if ( hero ) {
+                str.append( "\n\n(" );
+                str.append( _( "not claimed" ) );
+                str += ')';
+            }
+        }
+
+        return str;
+    }
+
     std::string showWitchHutInfo( const Maps::Tiles & tile, const bool isVisited )
     {
         std::string str = MP2::StringObject( tile.GetObject( false ) );
@@ -404,24 +440,7 @@ namespace
             return { position.x - imageBox.width(), position.y, imageBox.width(), imageBox.height() };
         }
 
-        // place box next to mouse cursor
-        const fheroes2::Point & mp = le.GetMouseCursor();
-
-        const int32_t mx = ( ( mp.x - BORDERWIDTH ) / TILEWIDTH ) * TILEWIDTH;
-        const int32_t my = ( ( mp.y - BORDERWIDTH ) / TILEWIDTH ) * TILEWIDTH;
-
-        const Interface::GameArea & gamearea = Interface::AdventureMap::Get().getGameArea();
-        const fheroes2::Rect & ar = gamearea.GetROI();
-
-        int32_t xpos = mx + TILEWIDTH - ( imageBox.width() / 2 );
-        int32_t ypos = my + TILEWIDTH - ( imageBox.height() / 2 );
-
-        // clamp box to edges of adventure screen game area
-        assert( ar.width >= imageBox.width() && ar.height >= imageBox.height() );
-        xpos = std::clamp( xpos, BORDERWIDTH, ( ar.width - imageBox.width() ) + BORDERWIDTH );
-        ypos = std::clamp( ypos, BORDERWIDTH, ( ar.height - imageBox.height() ) + BORDERWIDTH );
-
-        return { xpos, ypos, imageBox.width(), imageBox.height() };
+        return Interface::getPopupWindowPosition( le.GetMouseCursor(), Interface::AdventureMap::Get().getGameArea().GetROI(), { imageBox.width(), imageBox.height() } );
     }
 
     std::string getQuickInfoText( const Maps::Tiles & tile )
@@ -518,7 +537,6 @@ namespace
         case MP2::OBJ_MERCENARY_CAMP:
         case MP2::OBJ_WITCH_DOCTORS_HUT:
         case MP2::OBJ_STANDING_STONES:
-        case MP2::OBJ_TREE_OF_KNOWLEDGE:
             return showLocalVisitTileInfo( tile );
 
         case MP2::OBJ_MAGIC_WELL:
@@ -549,6 +567,8 @@ namespace
         case MP2::OBJ_TRAVELLER_TENT:
             return showTentInfo( tile, kingdom );
 
+        case MP2::OBJ_TREE_OF_KNOWLEDGE:
+            return showTreeOfKnowledgeInfo( tile, kingdom.isVisited( tile ) );
         // These objects does not have extra text for quick info.
         case MP2::OBJ_CAMPFIRE:
         case MP2::OBJ_ARTIFACT:
@@ -903,19 +923,6 @@ namespace
 
 void Dialog::QuickInfo( const Maps::Tiles & tile )
 {
-    const CursorRestorer cursorRestorer( false, Cursor::POINTER );
-
-    fheroes2::Display & display = fheroes2::Display::instance();
-
-    // image box
-    const fheroes2::Sprite & box = fheroes2::AGG::GetICN( ICN::QWIKINFO, 0 );
-
-    LocalEvent & le = LocalEvent::Get();
-    const fheroes2::Rect pos = makeRectQuickInfo( le, box );
-
-    fheroes2::ImageRestorer restorer( display, pos.x, pos.y, pos.width, pos.height );
-    fheroes2::Blit( box, display, pos.x, pos.y );
-
     std::string infoString;
 
     const int32_t playerColor = Settings::Get().CurrentColor();
@@ -934,21 +941,9 @@ void Dialog::QuickInfo( const Maps::Tiles & tile )
         }
     }
 
-    const int32_t objectTextBorderedWidth = pos.width - 2 * BORDERWIDTH;
-    const fheroes2::Text text( infoString, fheroes2::FontType::smallWhite() );
-    text.draw( pos.x + 22, pos.y - 6 + ( ( pos.height - text.height( objectTextBorderedWidth ) ) / 2 ), objectTextBorderedWidth, display );
-
     outputInTextSupportMode( tile, infoString );
 
-    display.render( restorer.rect() );
-
-    // quick info loop
-    while ( le.HandleEvents() && le.MousePressRight() )
-        ;
-
-    // restore background
-    restorer.restore();
-    display.render( restorer.rect() );
+    Interface::displayStandardPopupWindow( std::move( infoString ), Interface::AdventureMap::Get().getGameArea().GetROI() );
 }
 
 void Dialog::QuickInfo( const Castle & castle )

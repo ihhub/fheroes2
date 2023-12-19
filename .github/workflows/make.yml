@@ -185,13 +185,13 @@ jobs:
       if: ${{ matrix.config.tools_package_name != '' && matrix.config.tools_package_files != '' }}
       run: |
         7z a -bb1 -tzip -- ${{ matrix.config.tools_package_name }} ${{ matrix.config.tools_package_files }}
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v4
       if: ${{ github.event_name == 'pull_request' && matrix.config.package_name != '' }}
       with:
         name: ${{ matrix.config.package_name }}
         path: ${{ matrix.config.package_name }}
         if-no-files-found: error
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v4
       if: ${{ github.event_name == 'pull_request' && matrix.config.tools_package_name != '' }}
       with:
         name: ${{ matrix.config.tools_package_name }}
@@ -275,7 +275,7 @@ jobs:
       run: |
         # Translations and H2D files are already included in fheroes2.vpk
         7z a -bb1 -tzip -- fheroes2_psv.zip LICENSE changelog.txt fheroes2.vpk ./docs/README.txt ./docs/README_PSV.md
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v4
       if: ${{ github.event_name == 'pull_request' }}
       with:
         name: fheroes2_psv.zip
@@ -320,7 +320,7 @@ jobs:
     - name: Create package
       run: |
         7z a -bb1 -tzip -- fheroes2_switch.zip LICENSE changelog.txt fheroes2.nro ./docs/README.txt ./docs/README_switch.md files/data/*.h2d files/lang/*.mo
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v4
       if: ${{ github.event_name == 'pull_request' }}
       with:
         name: fheroes2_switch.zip
