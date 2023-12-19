@@ -20,19 +20,13 @@
 
 #pragma once
 
-#include <cstdint>
+#include <string>
 
-#include "image.h"
+#include "math_base.h"
 
-namespace Maps
+namespace Interface
 {
-    struct ObjectInfo;
-}
+    fheroes2::Rect getPopupWindowPosition( const fheroes2::Point & mousePos, const fheroes2::Rect & interfaceArea, const fheroes2::Size & windowSize );
 
-namespace fheroes2
-{
-    Sprite generateMapObjectImage( const Maps::ObjectInfo & object );
-    Sprite generateTownObjectImage( const int townType, const int color, const int groundId );
-
-    int32_t getTownBasementId( const int groundType );
+    void displayStandardPopupWindow( std::string text, const fheroes2::Rect & interfaceArea );
 }

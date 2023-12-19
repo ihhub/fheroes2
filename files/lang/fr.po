@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-05 00:31+0000\n"
+"POT-Creation-Date: 2023-12-19 03:04+0000\n"
 "PO-Revision-Date: 2023-12-19 22:22+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -197,6 +197,15 @@ msgstr "MIN"
 
 msgid "RESET"
 msgstr "R.A.Z."
+
+#, fuzzy
+msgid "CASTLE"
+msgstr ""
+"VIL-\n"
+"LAGES"
+
+msgid "TOWN"
+msgstr ""
 
 msgid ""
 "D\n"
@@ -3215,6 +3224,17 @@ msgstr "(vide)"
 msgid "already learned"
 msgstr "déjà appris"
 
+#, fuzzy
+msgid "treeOfKnowledge|free"
+msgstr "Arbre de connaissance"
+
+#, fuzzy
+msgid "already claimed"
+msgstr "déjà appris"
+
+msgid "not claimed"
+msgstr ""
+
 msgid "already knows this skill"
 msgstr "connaît déjà cette compétence"
 
@@ -3391,6 +3411,46 @@ msgstr "Choix du trésor :"
 
 msgid "Select Ocean Object:"
 msgstr "Choix de l'objet en mer :"
+
+#, fuzzy
+msgid "Castle/town placing"
+msgstr "Options du château"
+
+msgid "doubleLinedRace|Neutral"
+msgstr "Neutre"
+
+msgid "race|Random"
+msgstr "Aléatoire"
+
+#, fuzzy
+msgid "Click to start placing the selected castle/town."
+msgstr "Cliquez pour valider la résolution choisie."
+
+#, fuzzy
+msgid "Click to select town placing."
+msgstr "Cliquez pour afficher le village suivant."
+
+#, fuzzy
+msgid "Click to select castle placing."
+msgstr "Cliquez ici pour sélectionner le scénario à jouer."
+
+#, fuzzy
+msgid "%{color} %{race} %{townOrCastle}"
+msgstr "Héros %{race} %{color}"
+
+msgid "race|Neutral"
+msgstr "Neutre"
+
+msgid "You will place"
+msgstr ""
+
+#, fuzzy
+msgid "Click to select this class."
+msgstr "Cliquez ici pour sélectionner le scénario à jouer."
+
+#, fuzzy
+msgid "Click to select this color."
+msgstr "Cliquez ici pour sélectionner le scénario à jouer."
 
 msgid "Map Type:\n"
 msgstr "Type de carte :\n"
@@ -3734,6 +3794,13 @@ msgstr ""
 msgid "Ocean object must be placed on water."
 msgstr "Les éléments liés à la mer doivent être placés sur l'eau."
 
+msgid "Towns"
+msgstr "Villages"
+
+#, fuzzy
+msgid "Towns cannot be placed on water."
+msgstr "Ce sort ne peut pas être jeté en mer."
+
 msgid "Ocean Objects"
 msgstr ""
 
@@ -3760,9 +3827,6 @@ msgstr ""
 
 msgid "Beach Objects"
 msgstr ""
-
-msgid "Towns"
-msgstr "Villages"
 
 msgid "Treasures"
 msgstr "Trésors"
@@ -7857,12 +7921,6 @@ msgstr "Nécromant"
 msgid "Multi"
 msgstr "Multi"
 
-msgid "race|Random"
-msgstr "Aléatoire"
-
-msgid "race|Neutral"
-msgstr "Neutre"
-
 msgid "doubleLined|Knight"
 msgstr "Chevalier"
 
@@ -7890,9 +7948,6 @@ msgstr "Multi"
 
 msgid "doubleLinedRace|Random"
 msgstr "Aléatoire"
-
-msgid "doubleLinedRace|Neutral"
-msgstr "Neutre"
 
 msgid "speed|Standing"
 msgstr "Immobile"
@@ -8232,6 +8287,10 @@ msgstr "Monstre aléatoire - fort"
 
 msgid "Random Monster - very strong"
 msgstr "Monstre aléatoire - très fort"
+
+#, fuzzy
+msgid "Hero"
+msgstr "Héros"
 
 msgid "Nothing Special"
 msgstr "Rien de spécial"

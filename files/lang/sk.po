@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-05 00:31+0000\n"
+"POT-Creation-Date: 2023-12-19 03:04+0000\n"
 "PO-Revision-Date: 2023-09-11 20:22+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -201,6 +201,15 @@ msgid "MIN"
 msgstr "MIN"
 
 msgid "RESET"
+msgstr ""
+
+#, fuzzy
+msgid "CASTLE"
+msgstr ""
+"MESTÁ/\n"
+"HRADY"
+
+msgid "TOWN"
 msgstr ""
 
 msgid ""
@@ -3143,6 +3152,17 @@ msgstr "(prázdne)"
 msgid "already learned"
 msgstr "už naučené"
 
+#, fuzzy
+msgid "treeOfKnowledge|free"
+msgstr "Strom poznania"
+
+#, fuzzy
+msgid "already claimed"
+msgstr "už naučené"
+
+msgid "not claimed"
+msgstr ""
+
 msgid "already knows this skill"
 msgstr "už má túto zručnosť"
 
@@ -3324,6 +3344,46 @@ msgstr "Zvoľ hrdinu:"
 #, fuzzy
 msgid "Select Ocean Object:"
 msgstr "Objekty oceánu"
+
+#, fuzzy
+msgid "Castle/town placing"
+msgstr "Možnosti hradu"
+
+msgid "doubleLinedRace|Neutral"
+msgstr "Neutrálna"
+
+msgid "race|Random"
+msgstr "Náhodná"
+
+#, fuzzy
+msgid "Click to start placing the selected castle/town."
+msgstr "Klikni pre výber zvoleného rozlíšenia."
+
+#, fuzzy
+msgid "Click to select town placing."
+msgstr "Kliknutím zobraz ďalšie mesto."
+
+#, fuzzy
+msgid "Click to select castle placing."
+msgstr "Klikni sem a vyber scenár, ktorý chceš hrať."
+
+#, fuzzy
+msgid "%{color} %{race} %{townOrCastle}"
+msgstr "%{color} hráč"
+
+msgid "race|Neutral"
+msgstr "Neutrálna"
+
+msgid "You will place"
+msgstr ""
+
+#, fuzzy
+msgid "Click to select this class."
+msgstr "Klikni sem a vyber scenár, ktorý chceš hrať."
+
+#, fuzzy
+msgid "Click to select this color."
+msgstr "Klikni sem a vyber scenár, ktorý chceš hrať."
 
 msgid "Map Type:\n"
 msgstr "Typ mapy:\n"
@@ -3671,6 +3731,13 @@ msgstr "Objekty oceánu"
 msgid "Ocean object must be placed on water."
 msgstr "Toto kúzlo nemožno použiť na lodi."
 
+msgid "Towns"
+msgstr "Mestá"
+
+#, fuzzy
+msgid "Towns cannot be placed on water."
+msgstr "Toto kúzlo nemožno použiť na lodi."
+
 msgid "Ocean Objects"
 msgstr "Objekty oceánu"
 
@@ -3697,9 +3764,6 @@ msgstr "Objekty pustatiny"
 
 msgid "Beach Objects"
 msgstr "Objekty pláže"
-
-msgid "Towns"
-msgstr "Mestá"
 
 msgid "Treasures"
 msgstr "Poklady"
@@ -7679,12 +7743,6 @@ msgstr "Nekromant"
 msgid "Multi"
 msgstr "Multi"
 
-msgid "race|Random"
-msgstr "Náhodná"
-
-msgid "race|Neutral"
-msgstr "Neutrálna"
-
 msgid "doubleLined|Knight"
 msgstr "Rytier"
 
@@ -7712,9 +7770,6 @@ msgstr "Multi"
 
 msgid "doubleLinedRace|Random"
 msgstr "Náhodná"
-
-msgid "doubleLinedRace|Neutral"
-msgstr "Neutrálna"
 
 msgid "speed|Standing"
 msgstr "Stojaca"
@@ -8057,6 +8112,10 @@ msgstr "Náhodný tvor - silný"
 
 msgid "Random Monster - very strong"
 msgstr "Náhodný tvor - veľmi silný"
+
+#, fuzzy
+msgid "Hero"
+msgstr "Hrdinovia"
 
 msgid "Nothing Special"
 msgstr "Nič zvláštne"

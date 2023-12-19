@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-05 00:31+0000\n"
+"POT-Creation-Date: 2023-12-19 03:04+0000\n"
 "PO-Revision-Date: 2022-10-25 08:56+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -177,6 +177,12 @@ msgid "MIN"
 msgstr "MIN"
 
 msgid "RESET"
+msgstr ""
+
+msgid "CASTLE"
+msgstr ""
+
+msgid "TOWN"
 msgstr ""
 
 msgid ""
@@ -2965,6 +2971,16 @@ msgstr ""
 msgid "already learned"
 msgstr ""
 
+#, fuzzy
+msgid "treeOfKnowledge|free"
+msgstr "Cunoștințe"
+
+msgid "already claimed"
+msgstr ""
+
+msgid "not claimed"
+msgstr ""
+
 msgid "already knows this skill"
 msgstr ""
 
@@ -3137,6 +3153,39 @@ msgstr "Selectați ținta vrăjii"
 #, fuzzy
 msgid "Select Ocean Object:"
 msgstr "Selectați ținta vrăjii"
+
+msgid "Castle/town placing"
+msgstr ""
+
+msgid "doubleLinedRace|Neutral"
+msgstr ""
+
+msgid "race|Random"
+msgstr ""
+
+msgid "Click to start placing the selected castle/town."
+msgstr ""
+
+msgid "Click to select town placing."
+msgstr ""
+
+msgid "Click to select castle placing."
+msgstr ""
+
+msgid "%{color} %{race} %{townOrCastle}"
+msgstr ""
+
+msgid "race|Neutral"
+msgstr ""
+
+msgid "You will place"
+msgstr ""
+
+msgid "Click to select this class."
+msgstr ""
+
+msgid "Click to select this color."
+msgstr ""
 
 msgid "Map Type:\n"
 msgstr ""
@@ -3460,6 +3509,12 @@ msgstr ""
 msgid "Ocean object must be placed on water."
 msgstr ""
 
+msgid "Towns"
+msgstr ""
+
+msgid "Towns cannot be placed on water."
+msgstr ""
+
 msgid "Ocean Objects"
 msgstr ""
 
@@ -3485,9 +3540,6 @@ msgid "Wasteland Objects"
 msgstr ""
 
 msgid "Beach Objects"
-msgstr ""
-
-msgid "Towns"
 msgstr ""
 
 msgid "Treasures"
@@ -6913,12 +6965,6 @@ msgstr ""
 msgid "Multi"
 msgstr ""
 
-msgid "race|Random"
-msgstr ""
-
-msgid "race|Neutral"
-msgstr ""
-
 msgid "doubleLined|Knight"
 msgstr ""
 
@@ -6943,9 +6989,6 @@ msgid "doubleLinedRace|Multi"
 msgstr ""
 
 msgid "doubleLinedRace|Random"
-msgstr ""
-
-msgid "doubleLinedRace|Neutral"
 msgstr ""
 
 msgid "speed|Standing"
@@ -7288,6 +7331,9 @@ msgid "Random Monster - strong"
 msgstr ""
 
 msgid "Random Monster - very strong"
+msgstr ""
+
+msgid "Hero"
 msgstr ""
 
 msgid "Nothing Special"
