@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-15 09:12+0000\n"
+"POT-Creation-Date: 2023-12-19 03:04+0000\n"
 "PO-Revision-Date: 2022-10-25 08:56+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
@@ -3089,6 +3089,17 @@ msgstr "Vazio"
 
 msgid "already learned"
 msgstr "já aprendeu"
+
+#, fuzzy
+msgid "treeOfKnowledge|free"
+msgstr "Conhecimento"
+
+#, fuzzy
+msgid "already claimed"
+msgstr "já aprendeu"
+
+msgid "not claimed"
+msgstr ""
 
 msgid "already knows this skill"
 msgstr "já sabe essa habilidade"
@@ -7797,6 +7808,10 @@ msgstr "Criaturas"
 #, fuzzy
 msgid "Random Monster - very strong"
 msgstr "Criaturas"
+
+#, fuzzy
+msgid "Hero"
+msgstr "Heróis"
 
 msgid "Nothing Special"
 msgstr ""

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-15 09:12+0000\n"
+"POT-Creation-Date: 2023-12-19 03:04+0000\n"
 "PO-Revision-Date: 2023-12-02 22:18+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -3165,6 +3165,17 @@ msgstr "(tom)"
 
 msgid "already learned"
 msgstr "redan inlärt"
+
+#, fuzzy
+msgid "treeOfKnowledge|free"
+msgstr "Kunskapens Träd"
+
+#, fuzzy
+msgid "already claimed"
+msgstr "redan inlärt"
+
+msgid "not claimed"
+msgstr ""
 
 msgid "already knows this skill"
 msgstr "kan redan denna färdighet"
@@ -8132,6 +8143,10 @@ msgstr "Slumpat Monster - starkt"
 
 msgid "Random Monster - very strong"
 msgstr "Slumpat Monster - väldigt starkt"
+
+#, fuzzy
+msgid "Hero"
+msgstr "Hjältar"
 
 msgid "Nothing Special"
 msgstr "Ingenting Speciellt"

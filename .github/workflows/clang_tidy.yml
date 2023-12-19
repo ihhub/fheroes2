@@ -48,7 +48,7 @@ jobs:
         echo "${{ github.event.number }}" > clang-tidy-result/pr-id.txt
         echo "${{ github.event.pull_request.head.repo.full_name }}" > clang-tidy-result/pr-head-repo.txt
         echo "${{ github.event.pull_request.head.sha }}" > clang-tidy-result/pr-head-sha.txt
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v4
       with:
         name: clang-tidy-result
         path: clang-tidy-result/

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-15 09:12+0000\n"
+"POT-Creation-Date: 2023-12-19 03:04+0000\n"
 "PO-Revision-Date: 2023-12-13 05:57+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -3189,6 +3189,17 @@ msgstr ""
 
 msgid "already learned"
 msgstr "ya se ha aprendido"
+
+#, fuzzy
+msgid "treeOfKnowledge|free"
+msgstr "Árbol del conocimiento"
+
+#, fuzzy
+msgid "already claimed"
+msgstr "ya se ha aprendido"
+
+msgid "not claimed"
+msgstr ""
 
 msgid "already knows this skill"
 msgstr "ya conoce esta habilidad"
@@ -8198,6 +8209,10 @@ msgstr "Cualquier castillo"
 #, fuzzy
 msgid "Random Monster - very strong"
 msgstr "Cualquier castillo"
+
+#, fuzzy
+msgid "Hero"
+msgstr "Héroes"
 
 msgid "Nothing Special"
 msgstr "Nada especial"
