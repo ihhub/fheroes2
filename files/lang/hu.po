@@ -198,14 +198,11 @@ msgstr "MIN"
 msgid "RESET"
 msgstr ""
 
-#, fuzzy
 msgid "CASTLE"
-msgstr ""
-"VÁROS\n"
-"/VÁR"
+msgstr "VÁR"
 
 msgid "TOWN"
-msgstr ""
+msgstr "VÁROS"
 
 msgid ""
 "D\n"
@@ -3069,9 +3066,8 @@ msgstr "(üres)"
 msgid "already learned"
 msgstr "már ismered"
 
-#, fuzzy
 msgid "treeOfKnowledge|free"
-msgstr "A Tudás fája"
+msgstr "ingyenes"
 
 #, fuzzy
 msgid "already claimed"
@@ -3257,45 +3253,38 @@ msgstr "Kincs kiválasztása:"
 msgid "Select Ocean Object:"
 msgstr "Tengeri objektum kiválasztása:"
 
-#, fuzzy
 msgid "Castle/town placing"
-msgstr "Vár beállítások"
+msgstr "Vár/város elhelyezés"
 
 msgid "doubleLinedRace|Neutral"
 msgstr "Semleges"
 
 msgid "race|Random"
-msgstr ""
+msgstr "Véletlen"
 
-#, fuzzy
 msgid "Click to start placing the selected castle/town."
-msgstr "Kattints a kiválasztott képernyőfelbontás alkalmazásához."
+msgstr "Kattints a kiválasztott vár/város elhelyezéséhez."
 
-#, fuzzy
 msgid "Click to select town placing."
-msgstr "Kattints a következő város mutatásához."
+msgstr "Kattints a következő város elhelyezéséhez."
 
-#, fuzzy
 msgid "Click to select castle placing."
-msgstr "Kattints ide, hogy kiválaszd melyik Küldetéssel játszol."
+msgstr "Kattints a következő vár elhelyezéséhez."
 
-#, fuzzy
 msgid "%{color} %{race} %{townOrCastle}"
-msgstr "%{color} %{race} hős"
+msgstr "%{color} %{race} %{townOrCastle}"
 
 msgid "race|Neutral"
-msgstr ""
+msgstr "Semleges"
 
 msgid "You will place"
-msgstr ""
+msgstr "El fogod helyezni"
 
-#, fuzzy
 msgid "Click to select this class."
-msgstr "Kattints ide, hogy kiválaszd melyik Küldetéssel játszol."
+msgstr "Kattints az osztály kiválasztásához."
 
-#, fuzzy
 msgid "Click to select this color."
-msgstr "Kattints ide, hogy kiválaszd melyik Küldetéssel játszol."
+msgstr "Kattints a szín kiválasztásához."
 
 msgid "Map Type:\n"
 msgstr "Térképtípus:\n"
@@ -3641,9 +3630,8 @@ msgstr "Tengeri objektumot vízre kell elhelyezni."
 msgid "Towns"
 msgstr "Városok"
 
-#, fuzzy
 msgid "Towns cannot be placed on water."
-msgstr "Vízen nem helyezhetők el lények."
+msgstr "Vízen nem helyezhetők el városok."
 
 msgid "Ocean Objects"
 msgstr "Tengeri tárgyak"
@@ -7839,9 +7827,8 @@ msgstr "Véletlenszerű lény - erős"
 msgid "Random Monster - very strong"
 msgstr "Véletlenszerű lény - nagyon erős"
 
-#, fuzzy
 msgid "Hero"
-msgstr "Hősök"
+msgstr "Hős"
 
 msgid "Nothing Special"
 msgstr "Semmi érdekes"
