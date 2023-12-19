@@ -134,6 +134,7 @@ namespace
 
         applyRectTransform( background, 0, 2 );
         applyRectTransform( background, 1, 4 );
+        applyRectTransform( background, 2, 5 );
         applyRectTransform( background, 2, 9 );
         applyRectTransform( background, 3, 8 );
         applyRectTransform( background, 4, 9 );
@@ -315,6 +316,7 @@ namespace Interface
             _kingdomObjectButtonsRect[i] = { offsetX + static_cast<int32_t>( i ) * 29, offsetY, 27, 27 };
         }
 
+        // Erase tool object type buttons.
         offsetX -= 28;
         offsetY += 20;
         for ( size_t i = 0; i < _eraseButtonsRect.size(); ++i ) {
@@ -387,28 +389,36 @@ namespace Interface
             }
         }
         else if ( _selectedInstrument == Instrument::LANDSCAPE_OBJECTS ) {
-            const fheroes2::Sprite & originalPanel = fheroes2::AGG::GetICN( ICN::EDITPANL, 0 );
-            fheroes2::Copy( originalPanel, 30, 11, display, _landscapeObjectButtonsRect[LandscapeObjectBrush::WATER_OBJECTS].x,
-                            _landscapeObjectButtonsRect[LandscapeObjectBrush::WATER_OBJECTS].y, 27, 27 );
-            // TODO: Render object type images.
+            // Landscape objects buttons.
+            for ( uint32_t i = 0; i < LandscapeObjectBrush::LANSCAPE_COUNT; ++i ) {
+                fheroes2::Copy( fheroes2::AGG::GetICN( ICN::EDITPANL, i + 6 ), 0, 0, display, _landscapeObjectButtonsRect[i].x, _landscapeObjectButtonsRect[i].y, 27,
+                                27 );
+            }
 
             drawObjectTypeSelectionRect( display, _landscapeObjectButtonsRect[_selectedLandscapeObject].getPosition() );
             drawInstrumentName( display, { _rectInstrumentPanel.x + 7, _rectInstrumentPanel.y + 76 }, _getLandscapeObjectTypeName( _selectedLandscapeObject ) );
         }
         else if ( _selectedInstrument == Instrument::ADVENTURE_OBJECTS ) {
+            // Adventure objects buttons.
             const fheroes2::Sprite & originalPanel = fheroes2::AGG::GetICN( ICN::EDITPANL, 1 );
             fheroes2::Copy( originalPanel, 15, 96, display, _adventureObjectButtonsRect[AdventureObjectBrush::ARTIFACTS].x,
                             _adventureObjectButtonsRect[AdventureObjectBrush::ARTIFACTS].y, 27, 27 );
+            for ( uint32_t i = AdventureObjectBrush::DWELLINGS; i < AdventureObjectBrush::TREASURES; ++i ) {
+                fheroes2::Copy( fheroes2::AGG::GetICN( ICN::EDITPANL, i + 10 ), 0, 0, display, _adventureObjectButtonsRect[i].x, _adventureObjectButtonsRect[i].y, 27,
+                                27 );
+            }
             fheroes2::Copy( originalPanel, 102, 96, display, _adventureObjectButtonsRect[AdventureObjectBrush::TREASURES].x,
                             _adventureObjectButtonsRect[AdventureObjectBrush::TREASURES].y, 27, 27 );
-            fheroes2::Copy( originalPanel, 15, 12, display, _adventureObjectButtonsRect[AdventureObjectBrush::WATER_ADVENTURE].x,
-                            _adventureObjectButtonsRect[AdventureObjectBrush::WATER_ADVENTURE].y, 27, 27 );
-            // TODO: Render object type images.
+            for ( uint32_t i = AdventureObjectBrush::WATER_ADVENTURE; i < AdventureObjectBrush::ADVENTURE_COUNT; ++i ) {
+                fheroes2::Copy( fheroes2::AGG::GetICN( ICN::EDITPANL, i + 9 ), 0, 0, display, _adventureObjectButtonsRect[i].x, _adventureObjectButtonsRect[i].y, 27,
+                                27 );
+            }
 
             drawObjectTypeSelectionRect( display, _adventureObjectButtonsRect[_selectedAdventureObject].getPosition() );
             drawInstrumentName( display, { _rectInstrumentPanel.x + 7, _rectInstrumentPanel.y + 76 }, _getAdventureObjectTypeName( _selectedAdventureObject ) );
         }
         else if ( _selectedInstrument == Instrument::KINGDOM_OBJECTS ) {
+            // Kingdom objects buttons.
             const fheroes2::Sprite & originalPanel = fheroes2::AGG::GetICN( ICN::EDITPANL, 1 );
             fheroes2::Copy( originalPanel, 102, 68, display, _kingdomObjectButtonsRect[KingdomObjectBrush::HEROES].x,
                             _adventureObjectButtonsRect[KingdomObjectBrush::HEROES].y, 27, 27 );
@@ -444,6 +454,18 @@ namespace Interface
             const fheroes2::Text terrainText( _( "Erase" ), fheroes2::FontType::normalWhite() );
             terrainText.draw( _rectInstrumentPanel.x + ( _rectInstrumentPanel.width - terrainText.width() ) / 2, _rectInstrumentPanel.y + 8, display );
 
+            // Object type to erase buttons.
+            const fheroes2::Sprite & originalPanel = fheroes2::AGG::GetICN( ICN::EDITPANL, 1 );
+            fheroes2::Copy( fheroes2::AGG::GetICN( ICN::EDITPANL, 8 ), 0, 0, display, _eraseButtonsRect[0].x, _eraseButtonsRect[0].y, 27, 27 );
+            fheroes2::Copy( originalPanel, 44, 68, display, _eraseButtonsRect[1].x, _eraseButtonsRect[1].y, 27, 27 );
+            fheroes2::Copy( originalPanel, 73, 68, display, _eraseButtonsRect[2].x, _eraseButtonsRect[2].y, 27, 27 );
+            fheroes2::Copy( originalPanel, 102, 68, display, _eraseButtonsRect[3].x, _eraseButtonsRect[3].y, 27, 27 );
+            fheroes2::Copy( originalPanel, 15, 96, display, _eraseButtonsRect[4].x, _eraseButtonsRect[4].y, 27, 27 );
+            fheroes2::Copy( fheroes2::AGG::GetICN( ICN::EDITPANL, 16 ), 0, 0, display, _eraseButtonsRect[5].x, _eraseButtonsRect[5].y, 27, 27 );
+            fheroes2::Copy( fheroes2::AGG::GetICN( ICN::EDITPANL, 17 ), 0, 0, display, _eraseButtonsRect[6].x, _eraseButtonsRect[6].y, 27, 27 );
+            fheroes2::Copy( originalPanel, 102, 96, display, _eraseButtonsRect[7].x, _eraseButtonsRect[7].y, 27, 27 );
+
+            // Object type to erase selection marks.
             const fheroes2::Sprite & selectionMark = fheroes2::AGG::GetICN( ICN::TOWNWIND, 11 );
             for ( size_t i = 0; i < _eraseButtonsRect.size(); ++i ) {
                 if ( _eraseButtonObjectTypes[i] & _eraseTypes ) {
@@ -588,7 +610,8 @@ namespace Interface
             assert( 0 );
             break;
         }
-        return nullptr;
+
+        return "Unknown object type";
     }
 
     const char * EditorPanel::_getEraseObjectTypeName( const uint32_t eraseObjectType )
@@ -971,10 +994,21 @@ namespace Interface
             fheroes2::showStandardTextMessage( _( "Terrain Mode" ), _( "Used to draw the underlying grass, dirt, water, etc. on the map." ), Dialog::ZERO );
         }
         else if ( le.MousePressRight( _instrumentButtonsRect[Instrument::LANDSCAPE_OBJECTS] ) ) {
-            fheroes2::showStandardTextMessage( _( "Object Mode" ), _( "Used to place objects (mountains, trees, treasure, etc.) on the map." ), Dialog::ZERO );
+            fheroes2::showStandardTextMessage( _( "Landscape Objects Mode" ), _( "Used to place landscape objects (mountains, rocks, trees, etc.) on the map." ),
+                                               Dialog::ZERO );
         }
         else if ( le.MousePressRight( _instrumentButtonsRect[Instrument::DETAIL] ) ) {
             fheroes2::showStandardTextMessage( _( "Detail Mode" ), _( "Used for special editing of monsters, heroes and towns." ), Dialog::ZERO );
+        }
+        else if ( le.MousePressRight( _instrumentButtonsRect[Instrument::ADVENTURE_OBJECTS] ) ) {
+            fheroes2::showStandardTextMessage( _( "Adventure Objects Mode" ),
+                                               _( "Used to place adventure objects (artifacts, dwellings, mines, treasures, etc.) on the map." ), Dialog::ZERO );
+        }
+        else if ( le.MousePressRight( _instrumentButtonsRect[Instrument::KINGDOM_OBJECTS] ) ) {
+            fheroes2::showStandardTextMessage( _( "Kingdom Objects Mode" ), _( "Used to place kingdom objects (towns, castles and heroes) on the map." ), Dialog::ZERO );
+        }
+        else if ( le.MousePressRight( _instrumentButtonsRect[Instrument::MONSTERS] ) ) {
+            fheroes2::showStandardTextMessage( _( "Monsters Mode" ), _( "Used to place monsters on the map." ), Dialog::ZERO );
         }
         else if ( le.MousePressRight( _instrumentButtonsRect[Instrument::STREAM] ) ) {
             fheroes2::showStandardTextMessage( _( "Stream Mode" ), _( "Allows you to draw streams by clicking and dragging." ), Dialog::ZERO );

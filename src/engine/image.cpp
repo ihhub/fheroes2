@@ -2645,6 +2645,25 @@ namespace fheroes2
         }
     }
 
+    void ReplaceTransformIdByColorId( Image & image, const uint8_t transformId, const uint8_t colorId )
+    {
+        if ( image.empty() || image.singleLayer() ) {
+            return;
+        }
+
+        const int32_t size = image.width() * image.height();
+
+        uint8_t * imageIn = image.image();
+        uint8_t * transformIn = image.transform();
+        const uint8_t * imageInEnd = imageIn + size;
+        for ( ; imageIn != imageInEnd; ++imageIn, ++transformIn ) {
+            if ( *transformIn == transformId ) {
+                *transformIn = 0U;
+                *imageIn = colorId;
+            }
+        }
+    }
+
     void Resize( const Image & in, Image & out, const bool isSubpixelAccuracy )
     {
         if ( in.empty() || out.empty() ) {
