@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-15 09:12+0000\n"
+"POT-Creation-Date: 2023-12-19 02:53+0000\n"
 "PO-Revision-Date: 2023-09-24 16:05+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Czech <cs@li.org>\n"
@@ -7746,6 +7746,10 @@ msgstr ""
 
 msgid "Random Monster - very strong"
 msgstr ""
+
+#, fuzzy
+msgid "Hero"
+msgstr "Hrdinové"
 
 msgid "Nothing Special"
 msgstr "Nic zvláštního"
