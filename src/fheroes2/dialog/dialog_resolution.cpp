@@ -18,6 +18,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <algorithm>
 #include <cstddef>
 #include <cstdint>
 #include <string>
@@ -36,11 +37,13 @@
 #include "localevent.h"
 #include "math_base.h"
 #include "screen.h"
+#include "settings.h"
 #include "translations.h"
 #include "ui_button.h"
 #include "ui_dialog.h"
 #include "ui_scrollbar.h"
 #include "ui_text.h"
+#include "ui_window.h"
 #include "zzlib.h"
 
 namespace
@@ -94,10 +97,9 @@ namespace
             resolutionText.draw( textOffsetX, textOffsetY, fheroes2::Display::instance() );
         }
 
-        void RedrawBackground( const fheroes2::Point & dst ) override
+        void RedrawBackground( const fheroes2::Point & /* unused */ ) override
         {
-            const fheroes2::Sprite & panel = fheroes2::AGG::GetICN( ICN::REQBKG, 0 );
-            fheroes2::Blit( panel, fheroes2::Display::instance(), dst.x, dst.y );
+            _listBackground->restore();
         }
 
         void ActionCurrentUp() override
@@ -130,14 +132,27 @@ namespace
             return _isDoubleClicked;
         }
 
+        void initListBackgroundRestorer( fheroes2::Rect roi )
+        {
+            _listBackground = std::make_unique<fheroes2::ImageRestorer>( fheroes2::Display::instance(), roi.x, roi.y, roi.width, roi.height );
+        }
+
+        void updateScrollBarImage()
+        {
+            const int32_t scrollBarWidth = _scrollbar.width();
+
+            setScrollBarImage( fheroes2::generateScrollbarSlider( _scrollbar, false, _scrollbar.getArea().height, VisibleItemCount(), _size(),
+                                                                  { 0, 0, scrollBarWidth, 8 }, { 0, 7, scrollBarWidth, 8 } ) );
+            _scrollbar.moveToIndex( _topId );
+        }
+
     private:
         bool _isDoubleClicked;
+        std::unique_ptr<fheroes2::ImageRestorer> _listBackground;
     };
 
     void RedrawInfo( const fheroes2::Point & dst, const fheroes2::ResolutionInfo & resolution, fheroes2::Image & output )
     {
-        fheroes2::Text text( _( "Select Game Resolution:" ), fheroes2::FontType::normalYellow() );
-        text.draw( dst.x + ( 377 - text.width() ) / 2, dst.y + 32, output );
 
         if ( resolution.gameWidth > 0 && resolution.gameHeight > 0 ) {
             const fheroes2::FontType fontType = fheroes2::FontType::normalYellow();
@@ -146,57 +161,76 @@ namespace
             const int32_t middleTextSize = fheroes2::Text( middleText, fontType ).width();
             const int32_t leftTextSize = fheroes2::Text( leftText, fontType ).width();
 
-            const int32_t textOffsetX = dst.x + 41 + editBoxLength / 2 - leftTextSize - middleTextSize / 2;
+            const int32_t textOffsetX = dst.x + editBoxLength / 2 - leftTextSize - middleTextSize / 2;
 
             const fheroes2::Text resolutionText( leftText + middleText + rightText, fontType );
-            resolutionText.draw( textOffsetX, dst.y + 287 + ( resolutionItemHeight - text.height() + textOffsetYCorrection ) / 2, output );
+            resolutionText.draw( textOffsetX, dst.y + ( resolutionItemHeight - resolutionText.height() + textOffsetYCorrection ) / 2, output );
         }
     }
 }
 
 namespace Dialog
 {
-    bool SelectResolution()
+    bool SelectResolution() 
     {
         std::vector<fheroes2::ResolutionInfo> resolutions = fheroes2::engine().getAvailableResolutions();
-        if ( resolutions.empty() )
+        if ( resolutions.empty() ) {
             return false;
-
-        fheroes2::Display & display = fheroes2::Display::instance();
+        }
 
         // setup cursor
         const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
-        const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::REQBKG, 0 );
-        const fheroes2::Sprite & spriteShadow = fheroes2::AGG::GetICN( ICN::REQBKG, 1 );
+        fheroes2::Display & display = fheroes2::Display::instance();
+        const int32_t listHeightDeduction = 112;
+        const int32_t listAreaOffsetY = 3;
+        const int32_t listAreaHeightDeduction = 4;
 
-        const fheroes2::Point dialogOffset( ( display.width() - sprite.width() ) / 2, ( display.height() - sprite.height() ) / 2 );
-        const fheroes2::Point shadowOffset( dialogOffset.x - BORDERWIDTH, dialogOffset.y );
+        // If we don't have many resolutions, we reduce the maximum dialog height,
+        // but not less than enough for 11 elements.
+        // We also limit the maximum list height to 22 lines.
+        const int32_t maxDialogHeight = fheroes2::getFontHeight( fheroes2::FontSize::NORMAL ) * 20/*std::clamp( static_cast<int32_t>( resolutions.size() ), 23, 24 )*/
+                                        + listAreaOffsetY + listAreaHeightDeduction + listHeightDeduction;
 
-        fheroes2::ImageRestorer restorer( display, shadowOffset.x, shadowOffset.y, sprite.width() + BORDERWIDTH, sprite.height() + BORDERWIDTH );
-        const fheroes2::Rect roi( dialogOffset.x, dialogOffset.y, sprite.width(), sprite.height() );
+        // Dialog height is also capped with the current screen height.
+        fheroes2::StandardWindow background( 260 + 204, maxDialogHeight/*std::min( display.height() - 100, maxDialogHeight )*/, true, display );
 
-        fheroes2::Blit( spriteShadow, display, roi.x - BORDERWIDTH, roi.y + BORDERWIDTH );
 
-        fheroes2::Button buttonOk( roi.x + 34, roi.y + 315, ICN::BUTTON_SMALL_OKAY_GOOD, 0, 1 );
-        fheroes2::Button buttonCancel( roi.x + 244, roi.y + 315, ICN::BUTTON_SMALL_CANCEL_GOOD, 0, 1 );
+        const fheroes2::Rect roi( background.activeArea() );
+        const fheroes2::Rect listRoi( roi.x + 24, roi.y + 37, 267, roi.height - 112 );
+
+        // We divide the list: resolution list and selected resolution.
+        const fheroes2::Rect selectedResRoi( listRoi.x, listRoi.y + listRoi.height + 12, 267, 21 );
+        background.applyTextBackgroundShading( selectedResRoi );
+        background.applyTextBackgroundShading( { listRoi.x, listRoi.y, listRoi.width, listRoi.height } );
+
+        const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
+
+        // Prepare OKAY and CANCEL buttons and render their shadows.
+        fheroes2::Button buttonOk;
+        fheroes2::Button buttonCancel;
+        background.renderOkayCancelButtons( buttonOk, buttonCancel, isEvilInterface );
 
         ResolutionList resList( roi.getPosition() );
 
-        resList.RedrawBackground( roi.getPosition() );
-        resList.SetScrollButtonUp( ICN::REQUESTS, 5, 6, { roi.x + 327, roi.y + 55 } );
-        resList.SetScrollButtonDn( ICN::REQUESTS, 7, 8, { roi.x + 327, roi.y + 257 } );
+        resList.initListBackgroundRestorer( listRoi );
 
-        const fheroes2::Sprite & originalSlider = fheroes2::AGG::GetICN( ICN::ESCROLL, 3 );
-        const fheroes2::Image scrollbarSlider = fheroes2::generateScrollbarSlider( originalSlider, false, 180, 11, static_cast<int32_t>( resolutions.size() ),
-                                                                                   { 0, 0, originalSlider.width(), 8 }, { 0, 7, originalSlider.width(), 8 } );
-        resList.setScrollBarArea( { roi.x + 328, roi.y + 73, 12, 180 } );
-        resList.setScrollBarImage( scrollbarSlider );
-        const int32_t maximumItems = 11;
-        resList.SetAreaMaxItems( maximumItems );
-        resList.SetAreaItems( { roi.x + 41, roi.y + 55 + 4, editBoxLength, resolutionItemHeight * maximumItems } );
+        resList.SetAreaItems( { listRoi.x, listRoi.y + 3, listRoi.width - 3, listRoi.height - 4 } );
+        
+        int32_t scrollbarOffsetX = roi.x + roi.width - 35;
+        background.renderScrollbarBackground( { scrollbarOffsetX, listRoi.y, listRoi.width, listRoi.height }, isEvilInterface );
 
+        const int listIcnId = isEvilInterface ? ICN::SCROLLE : ICN::SCROLL;
+        const int32_t topPartHeight = 19;
+        ++scrollbarOffsetX;
+
+        resList.SetScrollButtonUp( listIcnId, 0, 1, { scrollbarOffsetX, listRoi.y + 1 } );
+        resList.SetScrollButtonDn( listIcnId, 2, 3, { scrollbarOffsetX, listRoi.y + listRoi.height - 15 } );
+        resList.setScrollBarArea( { scrollbarOffsetX + 2, listRoi.y + topPartHeight, 10, listRoi.height - 2 * topPartHeight } );
+        resList.setScrollBarImage( fheroes2::AGG::GetICN( listIcnId, 4 ) );
+        resList.SetAreaMaxItems( ( listRoi.height - 7 ) / fheroes2::getFontHeight( fheroes2::FontSize::NORMAL ) );
         resList.SetListContent( resolutions );
+        resList.updateScrollBarImage();
 
         const fheroes2::ResolutionInfo currentResolution{ display.width(), display.height(), display.screenSize().width, display.screenSize().height };
 
@@ -211,12 +245,12 @@ namespace Dialog
 
         resList.Redraw();
 
-        buttonOk.draw();
-        buttonCancel.draw();
+        RedrawInfo( selectedResRoi.getPosition(), selectedResolution, display );
 
-        RedrawInfo( roi.getPosition(), selectedResolution, display );
+        const fheroes2::Text title( _( "Select Game Resolution:" ), fheroes2::FontType::normalYellow() );
+        title.draw( roi.x + ( roi.width - title.width() ) / 2, roi.y + 16, display );
 
-        display.render();
+        display.render( background.totalArea() );
 
         LocalEvent & le = LocalEvent::Get();
         while ( le.HandleEvents() ) {
@@ -257,13 +291,13 @@ namespace Dialog
             resList.Redraw();
             buttonOk.draw();
             buttonCancel.draw();
-            RedrawInfo( roi.getPosition(), selectedResolution, display );
-            display.render();
+            RedrawInfo( selectedResRoi.getPosition(), selectedResolution, display );
+            display.render( background.activeArea() );
         }
 
         if ( selectedResolution.gameWidth > 0 && selectedResolution.gameHeight > 0 && selectedResolution.screenWidth >= selectedResolution.gameWidth
              && selectedResolution.screenHeight >= selectedResolution.gameHeight && selectedResolution != currentResolution ) {
-            display.setResolution( selectedResolution );
+             display.setResolution( selectedResolution );
 
 #if !defined( MACOS_APP_BUNDLE )
             const fheroes2::Image & appIcon = CreateImageFromZlib( 32, 32, iconImage, sizeof( iconImage ), true );
