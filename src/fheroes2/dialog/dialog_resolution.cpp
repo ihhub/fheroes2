@@ -167,6 +167,7 @@ namespace
             resolutionText.draw( textOffsetX, dst.y + ( resolutionItemHeight - resolutionText.height() + textOffsetYCorrection ) / 2, output );
         }
     }
+
     fheroes2::ResolutionInfo getNewResolution()
     {
         // setup cursor
