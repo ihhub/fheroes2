@@ -395,8 +395,13 @@ namespace Interface
                                 27 );
             }
 
-            drawObjectTypeSelectionRect( display, _landscapeObjectButtonsRect[_selectedLandscapeObject].getPosition() );
-            drawInstrumentName( display, { _rectInstrumentPanel.x + 7, _rectInstrumentPanel.y + 76 }, _getLandscapeObjectTypeName( _selectedLandscapeObject ) );
+            if ( _selectedLandscapeObject < 0 ) {
+                drawInstrumentName( display, { _rectInstrumentPanel.x + 7, _rectInstrumentPanel.y + 76 }, _( "Select object type" ) );
+            }
+            else {
+                drawObjectTypeSelectionRect( display, _landscapeObjectButtonsRect[_selectedLandscapeObject].getPosition() );
+                drawInstrumentName( display, { _rectInstrumentPanel.x + 7, _rectInstrumentPanel.y + 76 }, _getLandscapeObjectTypeName( _selectedLandscapeObject ) );
+            }
         }
         else if ( _selectedInstrument == Instrument::ADVENTURE_OBJECTS ) {
             // Adventure objects buttons.
@@ -414,8 +419,13 @@ namespace Interface
                                 27 );
             }
 
-            drawObjectTypeSelectionRect( display, _adventureObjectButtonsRect[_selectedAdventureObject].getPosition() );
-            drawInstrumentName( display, { _rectInstrumentPanel.x + 7, _rectInstrumentPanel.y + 76 }, _getAdventureObjectTypeName( _selectedAdventureObject ) );
+            if ( _selectedAdventureObject < 0 ) {
+                drawInstrumentName( display, { _rectInstrumentPanel.x + 7, _rectInstrumentPanel.y + 76 }, _( "Select object type" ) );
+            }
+            else {
+                drawObjectTypeSelectionRect( display, _adventureObjectButtonsRect[_selectedAdventureObject].getPosition() );
+                drawInstrumentName( display, { _rectInstrumentPanel.x + 7, _rectInstrumentPanel.y + 76 }, _getAdventureObjectTypeName( _selectedAdventureObject ) );
+            }
         }
         else if ( _selectedInstrument == Instrument::KINGDOM_OBJECTS ) {
             // Kingdom objects buttons.
@@ -425,8 +435,13 @@ namespace Interface
             fheroes2::Copy( originalPanel, 44, 68, display, _kingdomObjectButtonsRect[KingdomObjectBrush::TOWNS].x,
                             _adventureObjectButtonsRect[KingdomObjectBrush::TOWNS].y, 27, 27 );
 
-            drawObjectTypeSelectionRect( display, _kingdomObjectButtonsRect[_selectedKingdomObject].getPosition() );
-            drawInstrumentName( display, { _rectInstrumentPanel.x + 7, _rectInstrumentPanel.y + 48 }, _getKingdomObjectTypeName( _selectedKingdomObject ) );
+            if ( _selectedKingdomObject < 0 ) {
+                drawInstrumentName( display, { _rectInstrumentPanel.x + 7, _rectInstrumentPanel.y + 76 }, _( "Select object type" ) );
+            }
+            else {
+                drawObjectTypeSelectionRect( display, _kingdomObjectButtonsRect[_selectedKingdomObject].getPosition() );
+                drawInstrumentName( display, { _rectInstrumentPanel.x + 7, _rectInstrumentPanel.y + 48 }, _getKingdomObjectTypeName( _selectedKingdomObject ) );
+            }
         }
         else if ( _selectedInstrument == Instrument::MONSTERS ) {
             // Instrument name.
@@ -435,7 +450,13 @@ namespace Interface
 
             // Show the selected monster image on the panel.
             const fheroes2::Sprite & image = getObjectImage( Maps::ObjectGroup::MONSTERS, _selectedMonsterType );
-            fheroes2::Blit( image, display, _rectInstrumentPanel.x + ( _rectInstrumentPanel.width - image.width() ) / 2, _rectInstrumentPanel.y + 30 );
+            if ( image.empty() ) {
+                const fheroes2::Text text( _( "Click here to\nselect a monster." ), fheroes2::FontType::smallWhite() );
+                text.draw( _rectInstrumentPanel.x + 5, _rectInstrumentPanel.y + 38, _rectInstrumentPanel.width - 10, display );
+            }
+            else {
+                fheroes2::Blit( image, display, _rectInstrumentPanel.x + ( _rectInstrumentPanel.width - image.width() ) / 2, _rectInstrumentPanel.y + 30 );
+            }
         }
         else if ( _selectedInstrument == Instrument::DETAIL ) {
             const fheroes2::Text terrainText( _( "Cell\nDetails" ), fheroes2::FontType::normalWhite() );
@@ -491,10 +512,19 @@ namespace Interface
         case Instrument::MONSTERS:
             return _selectedMonsterType;
         case Instrument::LANDSCAPE_OBJECTS:
+            if ( _selectedLandscapeObject < 0 ) {
+                return -1;
+            }
             return _selectedLandscapeObjectType[_selectedLandscapeObject];
         case Instrument::ADVENTURE_OBJECTS:
+            if ( _selectedAdventureObject < 0 ) {
+                return -1;
+            }
             return _selectedAdventureObjectType[_selectedAdventureObject];
         case Instrument::KINGDOM_OBJECTS:
+            if ( _selectedKingdomObject < 0 ) {
+                return -1;
+            }
             return _selectedKingdomObjectType[_selectedKingdomObject];
         default:
             // Why are you trying to get type for the non-object instrument. Check your logic!
@@ -509,10 +539,13 @@ namespace Interface
         case Instrument::MONSTERS:
             return Maps::ObjectGroup::MONSTERS;
         case Instrument::LANDSCAPE_OBJECTS:
+            assert( _selectedLandscapeObject > -1 );
             return _selectedLandscapeObjectGroup[_selectedLandscapeObject];
         case Instrument::ADVENTURE_OBJECTS:
+            assert( _selectedAdventureObject > -1 );
             return _selectedAdventureObjectGroup[_selectedAdventureObject];
         case Instrument::KINGDOM_OBJECTS:
+            assert( _selectedKingdomObject > -1 );
             return _selectedKingdomObjectGroup[_selectedKingdomObject];
         default:
             // Why are you trying to get object group for the non-object instrument. Check your logic!
@@ -739,10 +772,18 @@ namespace Interface
                     if ( _instrumentButtons[i].drawOnPress() ) {
                         _selectedInstrument = static_cast<uint8_t>( i );
 
+                        // When opening Monsters placing and no monster was previously selected force open the Select Monster dialog.
+                        if ( _selectedInstrument == Instrument::MONSTERS && _selectedMonsterType == -1 ) {
+                            // Update panel image and then open the Select Monster dialog.
+                            _redraw();
+                            handleObjectMouseClick( Dialog::selectMonsterType );
+                        }
+
                         // Reset cursor updater since this UI element was clicked.
                         _setCursor();
 
                         setRedraw();
+                        return res;
                     }
                 }
                 else {
@@ -838,7 +879,7 @@ namespace Interface
         else if ( _selectedInstrument == Instrument::LANDSCAPE_OBJECTS ) {
             for ( size_t i = 0; i < _landscapeObjectButtonsRect.size(); ++i ) {
                 if ( ( _selectedLandscapeObject != i ) && le.MousePressLeft( _landscapeObjectButtonsRect[i] ) ) {
-                    _selectedLandscapeObject = static_cast<uint8_t>( i );
+                    _selectedLandscapeObject = static_cast<int8_t>( i );
 
                     // Reset cursor updater since this UI element was clicked.
                     _setCursor();
@@ -863,7 +904,7 @@ namespace Interface
         else if ( _selectedInstrument == Instrument::ADVENTURE_OBJECTS ) {
             for ( size_t i = 0; i < _adventureObjectButtonsRect.size(); ++i ) {
                 if ( ( _selectedAdventureObject != i ) && le.MousePressLeft( _adventureObjectButtonsRect[i] ) ) {
-                    _selectedAdventureObject = static_cast<uint8_t>( i );
+                    _selectedAdventureObject = static_cast<int8_t>( i );
 
                     // Reset cursor updater since this UI element was clicked.
                     _setCursor();
@@ -896,7 +937,7 @@ namespace Interface
         else if ( _selectedInstrument == Instrument::KINGDOM_OBJECTS ) {
             for ( size_t i = 0; i < _kingdomObjectButtonsRect.size(); ++i ) {
                 if ( ( _selectedKingdomObject != i ) && le.MousePressLeft( _kingdomObjectButtonsRect[i] ) ) {
-                    _selectedKingdomObject = static_cast<uint8_t>( i );
+                    _selectedKingdomObject = static_cast<int8_t>( i );
 
                     // Reset cursor updater since this UI element was clicked.
                     _setCursor();
@@ -914,7 +955,7 @@ namespace Interface
             }
 
             if ( le.MouseClickLeft( _kingdomObjectButtonsRect[KingdomObjectBrush::HEROES] ) ) {
-                handleObjectMouseClick( Dialog::selectMonsterType );
+                handleObjectMouseClick( Dialog::selectHeroType );
                 return res;
             }
             if ( le.MouseClickLeft( _kingdomObjectButtonsRect[KingdomObjectBrush::TOWNS] ) ) {

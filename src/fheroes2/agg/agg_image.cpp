@@ -3128,12 +3128,21 @@ namespace fheroes2
 
                     // Make Trees object button. Also used as erase terrain objects button image.
                     Copy( GetICN( ICN::EDITBTNS, 2 ), 13, 4, _icnVsSprite[id][8], 1, 1, 24, 24 );
-                    ReplaceColorId( _icnVsSprite[id][8], 10U, 65U );
-                    ReplaceColorId( _icnVsSprite[id][8], 38U, 65U );
-                    ReplaceColorId( _icnVsSprite[id][8], 39U, 65U );
-                    ReplaceColorId( _icnVsSprite[id][8], 40U, 65U );
-                    ReplaceColorId( _icnVsSprite[id][8], 41U, 65U );
-                    ReplaceColorId( _icnVsSprite[id][8], 46U, 65U );
+
+                    // Replace image contour colors with the background color.
+                    std::vector<uint8_t> indexes( 256 );
+                    for ( uint32_t i = 0; i < 256; ++i ) {
+                        indexes[i] = static_cast<uint8_t>( i );
+                    }
+
+                    indexes[10] = 65U;
+                    indexes[38] = 65U;
+                    indexes[39] = 65U;
+                    indexes[40] = 65U;
+                    indexes[41] = 65U;
+                    indexes[46] = 65U;
+
+                    ApplyPalette( _icnVsSprite[id][8], indexes );
 
                     // Make Landscape Water objects button.
                     Blit( GetICN( ICN::OBJNWAT2, 0 ), 0, 3, _icnVsSprite[id][9], 5, 1, 13, 3 );

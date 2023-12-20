@@ -168,18 +168,18 @@ namespace Interface
             TERRAIN_COUNT = 9U,
         };
 
-        enum LandscapeObjectBrush : uint8_t
+        enum LandscapeObjectBrush : int8_t
         {
-            MOUNTAINS = 0U,
-            ROCKS = 1U,
-            TREES = 2U,
-            WATER_OBJECTS = 3U,
-            LANDSCAPE_MISC = 4U,
+            MOUNTAINS = 0,
+            ROCKS = 1,
+            TREES = 2,
+            WATER_OBJECTS = 3,
+            LANDSCAPE_MISC = 4,
 
-            LANSCAPE_COUNT = 5U,
+            LANSCAPE_COUNT = 5,
         };
 
-        enum AdventureObjectBrush : uint8_t
+        enum AdventureObjectBrush : int8_t
         {
             ARTIFACTS = 0U,
             DWELLINGS = 1U,
@@ -192,7 +192,7 @@ namespace Interface
             ADVENTURE_COUNT = 7U,
         };
 
-        enum KingdomObjectBrush : uint8_t
+        enum KingdomObjectBrush : int8_t
         {
             HEROES = 0U,
             TOWNS = 1U,
@@ -255,9 +255,9 @@ namespace Interface
 
         // A brand new map is always filled with Water so there is no need to make Water terrain brush as a default terrain selection.
         uint8_t _selectedTerrain{ TerrainBrush::GRASS };
-        uint8_t _selectedLandscapeObject{ LandscapeObjectBrush::MOUNTAINS };
-        uint8_t _selectedAdventureObject{ AdventureObjectBrush::ARTIFACTS };
-        uint8_t _selectedKingdomObject{ KingdomObjectBrush::HEROES };
+        int8_t _selectedLandscapeObject{ -1 };
+        int8_t _selectedAdventureObject{ -1 };
+        int8_t _selectedKingdomObject{ -1 };
         uint8_t _selectedBrushSize{ BrushSize::MEDIUM };
         uint32_t _eraseTypes{ Maps::ObjectErasureType::ALL_OBJECTS };
 
