@@ -153,7 +153,6 @@ namespace
 
     void RedrawInfo( const fheroes2::Point & dst, const fheroes2::ResolutionInfo & resolution, fheroes2::Image & output )
     {
-
         if ( resolution.gameWidth > 0 && resolution.gameHeight > 0 ) {
             const fheroes2::FontType fontType = fheroes2::FontType::normalYellow();
 
@@ -171,7 +170,7 @@ namespace
 
 namespace Dialog
 {
-    bool SelectResolution() 
+    bool SelectResolution()
     {
         std::vector<fheroes2::ResolutionInfo> resolutions = fheroes2::engine().getAvailableResolutions();
         if ( resolutions.empty() ) {
@@ -189,12 +188,11 @@ namespace Dialog
         // If we don't have many resolutions, we reduce the maximum dialog height,
         // but not less than enough for 11 elements.
         // We also limit the maximum list height to 22 lines.
-        const int32_t maxDialogHeight = fheroes2::getFontHeight( fheroes2::FontSize::NORMAL ) * 20/*std::clamp( static_cast<int32_t>( resolutions.size() ), 23, 24 )*/
+        const int32_t maxDialogHeight = fheroes2::getFontHeight( fheroes2::FontSize::NORMAL ) * 20 /*std::clamp( static_cast<int32_t>( resolutions.size() ), 23, 24 )*/
                                         + listAreaOffsetY + listAreaHeightDeduction + listHeightDeduction;
 
         // Dialog height is also capped with the current screen height.
-        fheroes2::StandardWindow background( 260 + 204, maxDialogHeight/*std::min( display.height() - 100, maxDialogHeight )*/, true, display );
-
+        fheroes2::StandardWindow background( 260 + 204, maxDialogHeight /*std::min( display.height() - 100, maxDialogHeight )*/, true, display );
 
         const fheroes2::Rect roi( background.activeArea() );
         const fheroes2::Rect listRoi( roi.x + 24, roi.y + 37, 267, roi.height - 112 );
@@ -216,7 +214,7 @@ namespace Dialog
         resList.initListBackgroundRestorer( listRoi );
 
         resList.SetAreaItems( { listRoi.x, listRoi.y + 3, listRoi.width - 3, listRoi.height - 4 } );
-        
+
         int32_t scrollbarOffsetX = roi.x + roi.width - 35;
         background.renderScrollbarBackground( { scrollbarOffsetX, listRoi.y, listRoi.width, listRoi.height }, isEvilInterface );
 
@@ -297,7 +295,7 @@ namespace Dialog
 
         if ( selectedResolution.gameWidth > 0 && selectedResolution.gameHeight > 0 && selectedResolution.screenWidth >= selectedResolution.gameWidth
              && selectedResolution.screenHeight >= selectedResolution.gameHeight && selectedResolution != currentResolution ) {
-             display.setResolution( selectedResolution );
+            display.setResolution( selectedResolution );
 
 #if !defined( MACOS_APP_BUNDLE )
             const fheroes2::Image & appIcon = CreateImageFromZlib( 32, 32, iconImage, sizeof( iconImage ), true );
