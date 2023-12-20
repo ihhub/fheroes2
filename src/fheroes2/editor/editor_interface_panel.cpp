@@ -878,7 +878,7 @@ namespace Interface
         }
         else if ( _selectedInstrument == Instrument::LANDSCAPE_OBJECTS ) {
             for ( size_t i = 0; i < _landscapeObjectButtonsRect.size(); ++i ) {
-                if ( ( _selectedLandscapeObject != i ) && le.MousePressLeft( _landscapeObjectButtonsRect[i] ) ) {
+                if ( ( _selectedLandscapeObject != static_cast<int8_t>( i ) ) && le.MousePressLeft( _landscapeObjectButtonsRect[i] ) ) {
                     _selectedLandscapeObject = static_cast<int8_t>( i );
 
                     // Reset cursor updater since this UI element was clicked.
@@ -903,7 +903,7 @@ namespace Interface
         }
         else if ( _selectedInstrument == Instrument::ADVENTURE_OBJECTS ) {
             for ( size_t i = 0; i < _adventureObjectButtonsRect.size(); ++i ) {
-                if ( ( _selectedAdventureObject != i ) && le.MousePressLeft( _adventureObjectButtonsRect[i] ) ) {
+                if ( ( _selectedAdventureObject != static_cast<int8_t>( i ) ) && le.MousePressLeft( _adventureObjectButtonsRect[i] ) ) {
                     _selectedAdventureObject = static_cast<int8_t>( i );
 
                     // Reset cursor updater since this UI element was clicked.
@@ -936,7 +936,7 @@ namespace Interface
         }
         else if ( _selectedInstrument == Instrument::KINGDOM_OBJECTS ) {
             for ( size_t i = 0; i < _kingdomObjectButtonsRect.size(); ++i ) {
-                if ( ( _selectedKingdomObject != i ) && le.MousePressLeft( _kingdomObjectButtonsRect[i] ) ) {
+                if ( ( _selectedKingdomObject != static_cast<int8_t>( i ) ) && le.MousePressLeft( _kingdomObjectButtonsRect[i] ) ) {
                     _selectedKingdomObject = static_cast<int8_t>( i );
 
                     // Reset cursor updater since this UI element was clicked.
