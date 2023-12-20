@@ -23,6 +23,7 @@
 #include <algorithm>
 #include <cstddef>
 #include <cstdint>
+#include <memory>
 #include <string>
 #include <utility>
 #include <vector>
@@ -167,17 +168,8 @@ namespace
             resolutionText.draw( textOffsetX, dst.y + ( resolutionItemHeight - resolutionText.height() + textOffsetYCorrection ) / 2, output );
         }
     }
-}
-
-namespace Dialog
-{
-    bool SelectResolution()
+    fheroes2::ResolutionInfo getNewResolution()
     {
-        std::vector<fheroes2::ResolutionInfo> resolutions = fheroes2::engine().getAvailableResolutions();
-        if ( resolutions.empty() ) {
-            return false;
-        }
-
         // setup cursor
         const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
@@ -186,20 +178,22 @@ namespace Dialog
         const int32_t listAreaOffsetY = 3;
         const int32_t listAreaHeightDeduction = 4;
 
+        std::vector<fheroes2::ResolutionInfo> resolutions = fheroes2::engine().getAvailableResolutions();
+
         // If we don't have many resolutions, we reduce the maximum dialog height,
         // but not less than enough for 11 elements.
         // We also limit the maximum list height to 22 lines.
-        const int32_t maxDialogHeight = fheroes2::getFontHeight( fheroes2::FontSize::NORMAL ) * 20 /*std::clamp( static_cast<int32_t>( resolutions.size() ), 23, 24 )*/
+        const int32_t maxDialogHeight = fheroes2::getFontHeight( fheroes2::FontSize::NORMAL ) * std::clamp( static_cast<int32_t>( resolutions.size() ), 11, 22 )
                                         + listAreaOffsetY + listAreaHeightDeduction + listHeightDeduction;
 
         // Dialog height is also capped with the current screen height.
-        fheroes2::StandardWindow background( 260 + 204, maxDialogHeight /*std::min( display.height() - 100, maxDialogHeight )*/, true, display );
+        fheroes2::StandardWindow background( 260 + 204, std::min( display.height() - 100, maxDialogHeight ), true, display );
 
         const fheroes2::Rect roi( background.activeArea() );
-        const fheroes2::Rect listRoi( roi.x + 24, roi.y + 37, 267, roi.height - 112 );
+        const fheroes2::Rect listRoi( roi.x + 24, roi.y + 37, roi.width - 75, roi.height - listHeightDeduction );
 
         // We divide the list: resolution list and selected resolution.
-        const fheroes2::Rect selectedResRoi( listRoi.x, listRoi.y + listRoi.height + 12, 267, 21 );
+        const fheroes2::Rect selectedResRoi( listRoi.x, listRoi.y + listRoi.height + 12, listRoi.width, 21 );
         background.applyTextBackgroundShading( selectedResRoi );
         background.applyTextBackgroundShading( { listRoi.x, listRoi.y, listRoi.width, listRoi.height } );
 
@@ -210,11 +204,11 @@ namespace Dialog
         fheroes2::Button buttonCancel;
         background.renderOkayCancelButtons( buttonOk, buttonCancel, isEvilInterface );
 
-        ResolutionList resList( roi.getPosition() );
+        ResolutionList listBox( roi.getPosition() );
 
-        resList.initListBackgroundRestorer( listRoi );
+        listBox.initListBackgroundRestorer( listRoi );
 
-        resList.SetAreaItems( { listRoi.x, listRoi.y + 3, listRoi.width - 3, listRoi.height - 4 } );
+        listBox.SetAreaItems( { listRoi.x, listRoi.y + 3, listRoi.width - 3, listRoi.height - 4 } );
 
         int32_t scrollbarOffsetX = roi.x + roi.width - 35;
         background.renderScrollbarBackground( { scrollbarOffsetX, listRoi.y, listRoi.width, listRoi.height }, isEvilInterface );
@@ -223,26 +217,26 @@ namespace Dialog
         const int32_t topPartHeight = 19;
         ++scrollbarOffsetX;
 
-        resList.SetScrollButtonUp( listIcnId, 0, 1, { scrollbarOffsetX, listRoi.y + 1 } );
-        resList.SetScrollButtonDn( listIcnId, 2, 3, { scrollbarOffsetX, listRoi.y + listRoi.height - 15 } );
-        resList.setScrollBarArea( { scrollbarOffsetX + 2, listRoi.y + topPartHeight, 10, listRoi.height - 2 * topPartHeight } );
-        resList.setScrollBarImage( fheroes2::AGG::GetICN( listIcnId, 4 ) );
-        resList.SetAreaMaxItems( ( listRoi.height - 7 ) / fheroes2::getFontHeight( fheroes2::FontSize::NORMAL ) );
-        resList.SetListContent( resolutions );
-        resList.updateScrollBarImage();
+        listBox.SetScrollButtonUp( listIcnId, 0, 1, { scrollbarOffsetX, listRoi.y + 1 } );
+        listBox.SetScrollButtonDn( listIcnId, 2, 3, { scrollbarOffsetX, listRoi.y + listRoi.height - 15 } );
+        listBox.setScrollBarArea( { scrollbarOffsetX + 2, listRoi.y + topPartHeight, 10, listRoi.height - 2 * topPartHeight } );
+        listBox.setScrollBarImage( fheroes2::AGG::GetICN( listIcnId, 4 ) );
+        listBox.SetAreaMaxItems( ( listRoi.height - 7 ) / fheroes2::getFontHeight( fheroes2::FontSize::NORMAL ) );
+        listBox.SetListContent( resolutions );
+        listBox.updateScrollBarImage();
 
         const fheroes2::ResolutionInfo currentResolution{ display.width(), display.height(), display.screenSize().width, display.screenSize().height };
 
         fheroes2::ResolutionInfo selectedResolution;
         for ( size_t i = 0; i < resolutions.size(); ++i ) {
             if ( resolutions[i] == currentResolution ) {
-                resList.SetCurrent( i );
-                selectedResolution = resList.GetCurrent();
+                listBox.SetCurrent( i );
+                selectedResolution = listBox.GetCurrent();
                 break;
             }
         }
 
-        resList.Redraw();
+        listBox.Redraw();
 
         RedrawInfo( selectedResRoi.getPosition(), selectedResolution, display );
 
@@ -256,11 +250,11 @@ namespace Dialog
             le.MousePressLeft( buttonOk.area() ) && buttonOk.isEnabled() ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
             le.MousePressLeft( buttonCancel.area() ) ? buttonCancel.drawOnPress() : buttonCancel.drawOnRelease();
 
-            resList.QueueEventProcessing();
+            const bool listboxEvent = listBox.QueueEventProcessing();
 
             if ( ( buttonOk.isEnabled() && le.MouseClickLeft( buttonOk.area() ) ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY )
-                 || resList.isDoubleClicked() ) {
-                if ( resList.isSelected() ) {
+                 || listBox.isDoubleClicked() ) {
+                if ( listBox.isSelected() ) {
                     break;
                 }
             }
@@ -279,20 +273,36 @@ namespace Dialog
                 fheroes2::showMessage( header, body, 0 );
             }
 
-            if ( resList.isSelected() ) {
-                selectedResolution = resList.GetCurrent();
+            if ( listBox.isSelected() ) {
+                selectedResolution = listBox.GetCurrent();
             }
 
-            if ( !resList.IsNeedRedraw() ) {
+            if ( !listBox.IsNeedRedraw() ) {
                 continue;
             }
 
-            resList.Redraw();
+            listBox.Redraw();
             buttonOk.draw();
             buttonCancel.draw();
             RedrawInfo( selectedResRoi.getPosition(), selectedResolution, display );
             display.render( background.activeArea() );
         }
+
+        return selectedResolution;
+    }
+}
+
+namespace Dialog
+{
+    bool SelectResolution()
+    {
+        const fheroes2::ResolutionInfo selectedResolution = getNewResolution();
+        if ( selectedResolution == fheroes2::ResolutionInfo{} ) {
+            return false;
+        }
+
+        fheroes2::Display & display = fheroes2::Display::instance();
+        const fheroes2::ResolutionInfo currentResolution{ display.width(), display.height(), display.screenSize().width, display.screenSize().height };
 
         if ( selectedResolution.gameWidth > 0 && selectedResolution.gameHeight > 0 && selectedResolution.screenWidth >= selectedResolution.gameWidth
              && selectedResolution.screenHeight >= selectedResolution.gameHeight && selectedResolution != currentResolution ) {
