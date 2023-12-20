@@ -1284,7 +1284,7 @@ msgid ""
 "Subdue the unruly local lords in order to provide the Empire with facilities "
 "to operate in this region."
 msgstr ""
-"Fékezd meg az engedetlen helye nagyurakat, hogy elláthasd javakkal "
+"Fékezd meg az engedetlen helyi nagyurakat, hogy elláthasd javakkal "
 "a Birodalmat és megszilárdítsd a hatalmát a régióban."
 
 msgid ""
