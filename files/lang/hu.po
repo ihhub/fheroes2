@@ -3069,12 +3069,11 @@ msgstr "már ismered"
 msgid "treeOfKnowledge|free"
 msgstr "ingyenes"
 
-#, fuzzy
 msgid "already claimed"
-msgstr "már ismered"
+msgstr "már megszerzett"
 
 msgid "not claimed"
-msgstr ""
+msgstr "még nem igényelt"
 
 msgid "already knows this skill"
 msgstr "már bírsz ezzel a képességgel"
@@ -3089,7 +3088,7 @@ msgid "(not visited)"
 msgstr "(nem látogatott)"
 
 msgid "%{color} Barrier"
-msgstr "%{color} vámőrhely"
+msgstr "%{color} útakadály"
 
 msgid "(tent visited)"
 msgstr "(nem látogatott)"
@@ -4966,13 +4965,13 @@ msgid "Click to return to the main menu."
 msgstr "Kattints a főmenübe való visszatéréshez."
 
 msgid "Astrologers proclaim the Month of the %{name}."
-msgstr "Az asztrológusok kihirdették a %{name} havát."
+msgstr "Az asztrológusok kihirdették a(z) %{name} havát."
 
 msgid "Astrologers proclaim the Week of the %{name}."
-msgstr "Az asztrológusok kihirdették a %{name} hetét."
+msgstr "Az asztrológusok kihirdették a(z) %{name} hetét."
 
 msgid "After regular growth, the population of %{monster} is doubled!"
-msgstr "A %{monster} lények népessége megduplázódott!"
+msgstr "A(z) %{monster} lények népessége megduplázódott!"
 
 msgid ""
 "After regular growth, the population of %{monster} increases by %{count} "
@@ -4990,7 +4989,7 @@ msgid " All populations are halved."
 msgstr " Minden populáció megfeleződött."
 
 msgid " All dwellings increase population."
-msgstr " Mindegyik toborzóhelynek nőtt a termelése."
+msgstr " Mindegyik toborzóhelynek nőtt a szaporulata."
 
 msgid "New Month!"
 msgstr "Új hónap!"
@@ -5379,13 +5378,13 @@ msgid ", FPS: "
 msgstr ", FPS: "
 
 msgid "%{object} robber"
-msgstr ""
+msgstr "%{object} rabló"
 
 msgid "%{object} raided"
-msgstr ""
+msgstr "%{object} kifosztva"
 
 msgid "Ector"
-msgstr "Hector"
+msgstr "Ector"
 
 msgid "Gwenneth"
 msgstr "Gwenneth"
@@ -5412,7 +5411,7 @@ msgid "Jezebel"
 msgstr "Jezebel"
 
 msgid "Atlas"
-msgstr "Atlas"
+msgstr "Atlasz"
 
 msgid "Ergon"
 msgstr "Ergon"
@@ -7796,7 +7795,7 @@ msgid "Mermaid"
 msgstr "Sellő"
 
 msgid "Boat"
-msgstr "Csónak"
+msgstr "Hajó"
 
 msgid "Random Ultimate Artifact"
 msgstr "Véletlenszerű Szent Varázstárgy"
