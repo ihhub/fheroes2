@@ -32,7 +32,6 @@
 #include "cursor.h"
 #include "embedded_image.h"
 #include "game_hotkeys.h"
-#include "gamedefs.h"
 #include "icn.h"
 #include "image.h"
 #include "interface_list.h"
