@@ -551,6 +551,8 @@ namespace
     // Remove all shadows from the image and make them fully transparent.
     void makeAllShadowsTransparent( fheroes2::Image & image )
     {
+        assert( !image.empty() && !image.singleLayer() );
+
         uint8_t * transform = image.transform();
         const uint8_t * transformEnd = transform + static_cast<ptrdiff_t>( image.width() ) * image.height();
 
@@ -568,6 +570,7 @@ namespace
         assert( !image.empty() && !releasedSprite.empty() && !pressedSprite.empty() );
 
         fheroes2::Image newImage( std::min( maxImageWidth, image.width() + 4 ), std::min( maxImageHeight, image.height() + 4 ) );
+        newImage.reset();
         fheroes2::Blit( image, 0, 0, newImage, 2, 2, 35, 25 );
         // Remove shadow from the image.
         makeAllShadowsTransparent( newImage );
@@ -3079,8 +3082,8 @@ namespace fheroes2
                     Fill( pressed, 16, 7, 17, 23, 46U );
 
                     for ( size_t i = 0; i < 4; i += 2 ) {
-                        Copy( released, _icnVsSprite[id][35 + i] );
-                        Copy( pressed, _icnVsSprite[id][35 + 1 + i] );
+                        _icnVsSprite[id][35 + i] = released;
+                        _icnVsSprite[id][35 + 1 + i] = pressed;
                     }
                     _icnVsSprite[id][39] = std::move( released );
                     _icnVsSprite[id][40] = std::move( pressed );
@@ -3114,7 +3117,7 @@ namespace fheroes2
                     _icnVsSprite[id][6].reset();
                     Fill( _icnVsSprite[id][6], 1, 1, 24, 24, 65U );
                     for ( size_t i = 7; i < _icnVsSprite[id].size(); ++i ) {
-                        Copy( _icnVsSprite[id][6], _icnVsSprite[id][i] );
+                        _icnVsSprite[id][i] = _icnVsSprite[id][6];
                     }
 
                     // Make Mountains objects button.
