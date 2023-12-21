@@ -166,7 +166,7 @@ namespace
         const fheroes2::Rect roi( background.activeArea() );
         const fheroes2::Rect listRoi( roi.x + paddingLeftSide, roi.y + 37, textAreaWidth, roi.height - listHeightDeduction );
 
-        // We divide the list: resolution list and selected resolution.
+        // We divide the list: language list and selected language.
         const fheroes2::Rect selectedLangRoi( listRoi.x, listRoi.y + listRoi.height + 12, listRoi.width, 21 );
         background.applyTextBackgroundShading( selectedLangRoi );
         background.applyTextBackgroundShading( { listRoi.x, listRoi.y, listRoi.width, listRoi.height } );
