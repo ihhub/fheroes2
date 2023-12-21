@@ -175,7 +175,6 @@ namespace
         // setup cursor
         const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
-        fheroes2::Display & display = fheroes2::Display::instance();
         const int32_t listHeightDeduction = 112;
         const int32_t listAreaOffsetY = 3;
         const int32_t listAreaHeightDeduction = 4;
@@ -188,8 +187,11 @@ namespace
         const int32_t maxDialogHeight = fheroes2::getFontHeight( fheroes2::FontSize::NORMAL ) * std::clamp( static_cast<int32_t>( resolutions.size() ), 11, 22 )
                                         + listAreaOffsetY + listAreaHeightDeduction + listHeightDeduction;
 
+        fheroes2::Display & display = fheroes2::Display::instance();
+
         // Dialog height is also capped with the current screen height.
-        fheroes2::StandardWindow background( paddingLeftSide + textAreaWidth + scrollBarAreaWidth + 3, std::min( display.height() - 100, maxDialogHeight ), true, display );
+        fheroes2::StandardWindow background( paddingLeftSide + textAreaWidth + scrollBarAreaWidth + 3, std::min( display.height() - 100, maxDialogHeight ), true,
+                                             display );
 
         const fheroes2::Rect roi( background.activeArea() );
         const fheroes2::Rect listRoi( roi.x + paddingLeftSide, roi.y + 37, textAreaWidth, roi.height - listHeightDeduction );
@@ -218,7 +220,7 @@ namespace
 
         int32_t scrollbarOffsetX = listRoi.x + listRoi.width + ( scrollBarAreaWidth - scrollbarwidth ) / 2;
         background.renderScrollbarBackground( { scrollbarOffsetX, listRoi.y, listRoi.width, listRoi.height }, isEvilInterface );
-        
+
         const int32_t topPartHeight = 19;
         ++scrollbarOffsetX;
 
