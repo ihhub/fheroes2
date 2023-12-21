@@ -8814,7 +8814,7 @@ msgid ""
 msgstr ""
 
 msgid "Witch's Broach of Magic"
-msgstr "Boszorkány Talizmánja"
+msgstr "Boszorkány Mágikus Mellcsatja"
 
 msgid ""
 "Alongside the remains of a burnt witch lies a beautiful broach, intricately "
@@ -9680,18 +9680,23 @@ msgid ""
 msgstr ""
 
 msgid "Broach of Shielding"
-msgstr ""
+msgstr "Védelem Mellcsat"
 
 msgid ""
 "The %{name} provides %{count} percent protection from Armageddon and "
 "Elemental Storm, but decreases spell power by 2."
 msgstr ""
+"A %{name} %{count} százalék védelmet nyújt az Armageddon és az Elemi vihar "
+"varázslatok ellen, ugyanakkor kettővel csökkenti a varázserőt."
 
 msgid ""
 "A kindly Sorceress thinks that your army's defenses could use a magical "
 "boost. She offers to enchant the Broach that you wear on your cloak, and you "
 "accept."
 msgstr ""
+"Egy barátságos varázslónő úgy véli, hogy seregednek hasznára lehet a "
+"mágia elleni védelmének a megerősítése. Felajánlja, hogy a köpenyed "
+"mellcsatját védelmező varázstárggyá változtatja. Elfogadod az ajánlatot."
 
 msgid "Battle Garb of Anduran"
 msgstr "Anduran Harci Pajzsa"
