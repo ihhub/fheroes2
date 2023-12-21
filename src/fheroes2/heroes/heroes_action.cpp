@@ -2858,6 +2858,7 @@ namespace
                         fheroes2::showStandardTextMessage( title, msg, Dialog::OK );
                     }
                 }
+                hero.SetVisited( dst_index, Visit::GLOBAL );
             }
 
             if ( increaseExperience ) {

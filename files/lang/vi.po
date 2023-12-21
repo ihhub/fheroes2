@@ -3182,6 +3182,17 @@ msgstr "(rỗng)"
 msgid "already learned"
 msgstr "đã học"
 
+#, fuzzy
+msgid "treeOfKnowledge|free"
+msgstr "Cây Tri thức"
+
+#, fuzzy
+msgid "already claimed"
+msgstr "đã học"
+
+msgid "not claimed"
+msgstr ""
+
 msgid "already knows this skill"
 msgstr "đã biết kỹ năng này"
 
@@ -8156,6 +8167,10 @@ msgstr "Ngẫu nhiên Quái vật - mạnh"
 
 msgid "Random Monster - very strong"
 msgstr "Ngẫu nhiên Quái vật - rất mạnh"
+
+#, fuzzy
+msgid "Hero"
+msgstr "Tướng"
 
 msgid "Nothing Special"
 msgstr "Không có gì Đặc biệt"

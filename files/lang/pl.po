@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-15 09:12+0000\n"
+"POT-Creation-Date: 2023-12-19 03:04+0000\n"
 "PO-Revision-Date: 2023-08-26 23:09+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: https://discord.com/"
@@ -3165,6 +3165,17 @@ msgstr "(nie ma nikogo)"
 
 msgid "already learned"
 msgstr "już to umiesz"
+
+#, fuzzy
+msgid "treeOfKnowledge|free"
+msgstr "Drzewo Wiedzy"
+
+#, fuzzy
+msgid "already claimed"
+msgstr "już to umiesz"
+
+msgid "not claimed"
+msgstr ""
 
 msgid "already knows this skill"
 msgstr "już znasz tę umiejętność"
@@ -8172,6 +8183,10 @@ msgstr "Losowy potwór - silny"
 
 msgid "Random Monster - very strong"
 msgstr "Losowy potwór - bardzo silny"
+
+#, fuzzy
+msgid "Hero"
+msgstr "Bohaterowie"
 
 msgid "Nothing Special"
 msgstr "Nic specjalnego"
