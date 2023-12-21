@@ -40,30 +40,30 @@ namespace
 void StreamBase::setconstbuf( bool f )
 {
     if ( f ) {
-        _flags |= ConstBufFlag;
+        _flags |= CONST_BUF;
     }
     else {
-        _flags &= ~ConstBufFlag;
+        _flags &= ~CONST_BUF;
     }
 }
 
 void StreamBase::setbigendian( bool f )
 {
     if ( f ) {
-        _flags |= BigendianFlag;
+        _flags |= BIGENDIAN;
     }
     else {
-        _flags &= ~BigendianFlag;
+        _flags &= ~BIGENDIAN;
     }
 }
 
 void StreamBase::setfail( bool f )
 {
     if ( f ) {
-        _flags |= FailureFlag;
+        _flags |= FAILURE;
     }
     else {
-        _flags &= ~FailureFlag;
+        _flags &= ~FAILURE;
     }
 }
 

@@ -68,17 +68,17 @@ public:
 
     bool isconstbuf() const
     {
-        return ( _flags & ConstBufFlag ) != 0;
+        return ( _flags & CONST_BUF ) != 0;
     }
 
     bool fail() const
     {
-        return ( _flags & FailureFlag ) != 0;
+        return ( _flags & FAILURE ) != 0;
     }
 
     bool bigendian() const
     {
-        return ( _flags & BigendianFlag ) != 0;
+        return ( _flags & BIGENDIAN ) != 0;
     }
 
     virtual void skip( size_t ) = 0;
@@ -231,9 +231,9 @@ protected:
 private:
     enum : uint32_t
     {
-        FailureFlag = 0x00000001,
-        ConstBufFlag = 0x00000002,
-        BigendianFlag = 0x00000004
+        FAILURE = 0x00000001,
+        CONST_BUF = 0x00000002,
+        BIGENDIAN = 0x00000004
     };
 
     uint32_t _flags{ 0 };
