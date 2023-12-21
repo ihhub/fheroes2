@@ -196,7 +196,7 @@ msgid "MIN"
 msgstr "MIN"
 
 msgid "RESET"
-msgstr ""
+msgstr "ÚJRA"
 
 msgid "CASTLE"
 msgstr "VÁR"
@@ -3018,13 +3018,13 @@ msgid "Show extra information such as FPS and current time."
 msgstr "Extra információkat jelenít meg, mint például FPS, illetve pontos idő."
 
 msgid "Hotkey: "
-msgstr ""
+msgstr "Gyorsbillentyű: "
 
 msgid "Category: "
-msgstr ""
+msgstr "Kategória: "
 
 msgid "Event: "
-msgstr ""
+msgstr "Esemény: "
 
 msgid "Hot Keys:"
 msgstr "Billentyűfunkciók:"
@@ -3996,7 +3996,7 @@ msgid "Easy"
 msgstr "Könnyű"
 
 msgid "Hard"
-msgstr ""
+msgstr "Nehéz"
 
 msgid "Campaign Difficulty"
 msgstr "Hadjárat nehézsége"
@@ -4067,7 +4067,7 @@ msgstr ""
 "során."
 
 msgid "Restart"
-msgstr ""
+msgstr "Újra"
 
 msgid "Restart the current scenario."
 msgstr "Aktuális küldetés újraindítása."
