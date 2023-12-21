@@ -49,7 +49,9 @@
 
 namespace
 {
-    const int32_t editBoxLength = 266;
+    const int32_t textAreaWidth = 270;
+    const int32_t scrollBarAreaWidth = 48;
+    const int32_t paddingLeftSide = 24;
     const int32_t resolutionItemHeight = 19;
     // TODO: this is a hack over partially incorrect text height calculation. Fix it later together with the Text classes.
     const int32_t textOffsetYCorrection = 6;
@@ -92,7 +94,7 @@ namespace
 
             const fheroes2::Text resolutionText( leftText + middleText + rightText, fontType );
 
-            const int32_t textOffsetX = offsetX + editBoxLength / 2 - leftTextSize - middleTextSize / 2;
+            const int32_t textOffsetX = offsetX + textAreaWidth / 2 - leftTextSize - middleTextSize / 2;
             const int32_t textOffsetY = offsetY + ( resolutionItemHeight - resolutionText.height() + textOffsetYCorrection ) / 2;
 
             resolutionText.draw( textOffsetX, textOffsetY, fheroes2::Display::instance() );
@@ -161,7 +163,7 @@ namespace
             const int32_t middleTextSize = fheroes2::Text( middleText, fontType ).width();
             const int32_t leftTextSize = fheroes2::Text( leftText, fontType ).width();
 
-            const int32_t textOffsetX = dst.x + editBoxLength / 2 - leftTextSize - middleTextSize / 2;
+            const int32_t textOffsetX = dst.x + textAreaWidth / 2 - leftTextSize - middleTextSize / 2;
 
             const fheroes2::Text resolutionText( leftText + middleText + rightText, fontType );
             resolutionText.draw( textOffsetX, dst.y + ( resolutionItemHeight - resolutionText.height() + textOffsetYCorrection ) / 2, output );
@@ -187,15 +189,17 @@ namespace
                                         + listAreaOffsetY + listAreaHeightDeduction + listHeightDeduction;
 
         // Dialog height is also capped with the current screen height.
-        fheroes2::StandardWindow background( 345, std::min( display.height() - 100, maxDialogHeight ), true, display );
+        fheroes2::StandardWindow background( paddingLeftSide + textAreaWidth + scrollBarAreaWidth + 3, std::min( display.height() - 100, maxDialogHeight ), true, display );
 
         const fheroes2::Rect roi( background.activeArea() );
-        const fheroes2::Rect listRoi( roi.x + 24, roi.y + 37, roi.width - 75, roi.height - listHeightDeduction );
+        const fheroes2::Rect listRoi( roi.x + paddingLeftSide, roi.y + 37, textAreaWidth, roi.height - listHeightDeduction );
 
         // We divide the list: resolution list and selected resolution.
         const fheroes2::Rect selectedResRoi( listRoi.x, listRoi.y + listRoi.height + 12, listRoi.width, 21 );
         background.applyTextBackgroundShading( selectedResRoi );
         background.applyTextBackgroundShading( { listRoi.x, listRoi.y, listRoi.width, listRoi.height } );
+
+        fheroes2::ImageRestorer selectedResBackground( fheroes2::Display::instance(), selectedResRoi.x, selectedResRoi.y, listRoi.width, selectedResRoi.height );
 
         const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
 
@@ -210,13 +214,15 @@ namespace
 
         listBox.SetAreaItems( { listRoi.x, listRoi.y + 3, listRoi.width - 3, listRoi.height - 4 } );
 
-        int32_t scrollbarOffsetX = roi.x + roi.width - 35;
-        background.renderScrollbarBackground( { scrollbarOffsetX, listRoi.y, listRoi.width, listRoi.height }, isEvilInterface );
+        const int32_t scrollbarwidth = 16;
 
-        const int listIcnId = isEvilInterface ? ICN::SCROLLE : ICN::SCROLL;
+        int32_t scrollbarOffsetX = listRoi.x + listRoi.width + ( scrollBarAreaWidth - scrollbarwidth ) / 2;
+        background.renderScrollbarBackground( { scrollbarOffsetX, listRoi.y, listRoi.width, listRoi.height }, isEvilInterface );
+        
         const int32_t topPartHeight = 19;
         ++scrollbarOffsetX;
 
+        const int listIcnId = isEvilInterface ? ICN::SCROLLE : ICN::SCROLL;
         listBox.SetScrollButtonUp( listIcnId, 0, 1, { scrollbarOffsetX, listRoi.y + 1 } );
         listBox.SetScrollButtonDn( listIcnId, 2, 3, { scrollbarOffsetX, listRoi.y + listRoi.height - 15 } );
         listBox.setScrollBarArea( { scrollbarOffsetX + 2, listRoi.y + topPartHeight, 10, listRoi.height - 2 * topPartHeight } );
@@ -282,6 +288,7 @@ namespace
             }
 
             listBox.Redraw();
+            selectedResBackground.restore();
             RedrawInfo( selectedResRoi.getPosition(), selectedResolution, display );
             display.render( background.activeArea() );
         }
