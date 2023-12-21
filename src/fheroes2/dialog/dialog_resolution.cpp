@@ -134,7 +134,7 @@ namespace
         {
             return _isDoubleClicked;
         }
-        
+
         int getCurrentId() const
         {
             return _currentId;
