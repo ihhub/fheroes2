@@ -282,8 +282,6 @@ namespace
             }
 
             listBox.Redraw();
-            buttonOk.draw();
-            buttonCancel.draw();
             RedrawInfo( selectedResRoi.getPosition(), selectedResolution, display );
             display.render( background.activeArea() );
         }
