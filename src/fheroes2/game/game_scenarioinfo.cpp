@@ -184,9 +184,11 @@ namespace
 
         const int32_t buttonSelectWidth = fheroes2::AGG::GetICN( ICN::BUTTON_MAP_SELECT, 0 ).width();
 
+        const int32_t cancelButtonWidth = fheroes2::AGG::GetICN( ICN::BUTTON_SMALL_CANCEL_GOOD, 0 ).width();
+
         fheroes2::Button buttonSelectMaps( rectPanel.x + 389 - buttonSelectWidth, rectPanel.y + 45, ICN::BUTTON_MAP_SELECT, 0, 1 );
         fheroes2::Button buttonOk( rectPanel.x + 31, rectPanel.y + 380, ICN::BUTTON_SMALL_OKAY_GOOD, 0, 1 );
-        fheroes2::Button buttonCancel( rectPanel.x + 287, rectPanel.y + 380, ICN::BUTTON_SMALL_CANCEL_GOOD, 0, 1 );
+        fheroes2::Button buttonCancel( rectPanel.x + rectPanel.width - 37 - cancelButtonWidth, rectPanel.y + 380, ICN::BUTTON_SMALL_CANCEL_GOOD, 0, 1 );
 
         fheroes2::drawMainMenuScreen();
 
