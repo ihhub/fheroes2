@@ -1746,7 +1746,7 @@ int32_t Maps::Tiles::getIndexOfMainTile( const Maps::Tiles & tile )
                     continue;
                 }
 
-                const int32_t objectUid = foundTile.GetObjectUID();
+                const uint32_t objectUid = foundTile.GetObjectUID();
                 if ( objectUid != 0 && uids.count( objectUid ) > 0 ) {
                     return foundTile._index;
                 }

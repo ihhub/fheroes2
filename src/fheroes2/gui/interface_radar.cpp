@@ -24,7 +24,6 @@
 #include "interface_radar.h"
 
 #include <cassert>
-#include <cstddef>
 #include <cstring>
 
 #include "agg_image.h"
@@ -40,7 +39,6 @@
 #include "localevent.h"
 #include "maps.h"
 #include "maps_tiles.h"
-#include "maps_tiles_helper.h"
 #include "mp2.h"
 #include "players.h"
 #include "screen.h"

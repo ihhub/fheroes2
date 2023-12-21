@@ -24,6 +24,7 @@
 #include <array>
 #include <cassert>
 #include <memory>
+#include <ostream>
 #include <string>
 #include <vector>
 
