@@ -313,9 +313,13 @@ void Interface::Radar::RedrawObjects( const int32_t playerColor, const ViewWorld
     const int32_t maxRoiX = _roi.width + _roi.x;
     const int32_t maxRoiY = _roi.height + _roi.y;
 
+    const uint8_t * radarYEnd = nullptr;
+
     for ( int32_t y = _roi.y; y < maxRoiY; ++y ) {
         uint8_t * radarY = radarImage + static_cast<size_t>( y * _zoom ) * radarWidth;
-        const size_t radarYStep = isZoomIn ? ( static_cast<size_t>( ( y + 1 ) * _zoom ) * radarWidth ) : 0;
+        if ( isZoomIn ) {
+            radarYEnd = radarImage + static_cast<size_t>( ( y + 1 ) * _zoom ) * radarWidth;
+        }
 
         for ( int32_t x = _roi.x; x < maxRoiX; ++x ) {
             const Maps::Tiles & tile = world.GetTiles( x, y );
@@ -323,7 +327,8 @@ void Interface::Radar::RedrawObjects( const int32_t playerColor, const ViewWorld
 
             uint8_t fillColor = 0;
 
-            switch ( tile.GetObject( revealOnlyVisible || revealHeroes ) ) {
+            const MP2::MapObjectType objectType = tile.GetObject( revealOnlyVisible || revealHeroes );
+            switch ( objectType ) {
             case MP2::OBJ_HEROES: {
                 if ( visibleTile || revealHeroes ) {
                     const Heroes * hero = world.GetHeroes( { x, y } );
@@ -338,11 +343,9 @@ void Interface::Radar::RedrawObjects( const int32_t playerColor, const ViewWorld
             case MP2::OBJ_ALCHEMIST_LAB:
             case MP2::OBJ_MINES:
             case MP2::OBJ_SAWMILL:
-            case MP2::OBJ_CASTLE:
-            case MP2::OBJ_RANDOM_CASTLE:
                 // TODO: Why Lighthouse is in this category? Verify the logic!
                 if ( visibleTile || revealMines ) {
-                    fillColor = GetPaletteIndexFromColor( getColorFromTile( tile ) );
+                    fillColor = GetPaletteIndexFromColor( world.ColorCapturedObject( tile.GetIndex() ) );
                     break;
                 }
                 continue;
@@ -350,13 +353,11 @@ void Interface::Radar::RedrawObjects( const int32_t playerColor, const ViewWorld
             case MP2::OBJ_NON_ACTION_ALCHEMIST_LAB:
             case MP2::OBJ_NON_ACTION_MINES:
             case MP2::OBJ_NON_ACTION_SAWMILL:
-            case MP2::OBJ_NON_ACTION_CASTLE:
-            case MP2::OBJ_NON_ACTION_RANDOM_CASTLE:
                 // TODO: Why Lighthouse is in this category? Verify the logic!
                 if ( visibleTile || revealMines ) {
                     const int32_t mainTileIndex = Maps::Tiles::getIndexOfMainTile( tile );
                     if ( mainTileIndex >= 0 ) {
-                        fillColor = GetPaletteIndexFromColor( getColorFromTile( world.GetTiles( mainTileIndex ) ) );
+                        fillColor = GetPaletteIndexFromColor( world.ColorCapturedObject( mainTileIndex ) );
                         break;
                     }
                 }
@@ -384,31 +385,28 @@ void Interface::Radar::RedrawObjects( const int32_t playerColor, const ViewWorld
                         else {
                             fillColor = GetPaletteIndexFromGround( tile.GetGround() );
 
-                            const MP2::MapObjectType objectType = tile.GetObject();
                             if ( objectType == MP2::OBJ_MOUNTAINS || objectType == MP2::OBJ_TREES ) {
                                 fillColor += 3;
                             }
                         }
                     }
                 }
+                else if ( revealTowns ) {
+                    getCastleColor( fillColor, { x, y } );
+                }
                 else {
-                    if ( revealTowns ) {
-                        getCastleColor( fillColor, { x, y } );
-                    }
-                    else {
-                        // Non visible tile, we have already black radar so skip the render of this tile.
-                        continue;
-                    }
+                    // Non visible tile, we have already black radar so skip the render of this tile.
+                    continue;
                 }
             }
 
             const size_t offsetX = static_cast<size_t>( x * _zoom );
             uint8_t * radarX = radarY + offsetX;
             if ( isZoomIn ) {
-                const uint8_t * radarYEnd = radarImage + radarYStep + offsetX;
+                const uint8_t * radarXEnd = radarYEnd + offsetX;
                 const size_t radarXStep = static_cast<size_t>( ( x + 1 ) * _zoom ) - offsetX;
 
-                for ( ; radarX != radarYEnd; radarX += radarWidth ) {
+                for ( ; radarX != radarXEnd; radarX += radarWidth ) {
                     std::memset( radarX, fillColor, radarXStep );
                 }
             }
