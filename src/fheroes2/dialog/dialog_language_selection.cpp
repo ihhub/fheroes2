@@ -108,6 +108,11 @@ namespace
             return _isDoubleClicked;
         }
 
+        int getCurrentId() const
+        {
+            return _currentId;
+        }
+
         void initListBackgroundRestorer( fheroes2::Rect roi )
         {
             _listBackground = std::make_unique<fheroes2::ImageRestorer>( fheroes2::Display::instance(), roi.x, roi.y, roi.width, roi.height );
@@ -222,7 +227,11 @@ namespace
             le.MousePressLeft( buttonOk.area() ) && buttonOk.isEnabled() ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
             le.MousePressLeft( buttonCancel.area() ) ? buttonCancel.drawOnPress() : buttonCancel.drawOnRelease();
 
-            listBox.QueueEventProcessing();
+            const int listId = listBox.getCurrentId();
+
+            const bool listBoxEvent = listBox.QueueEventProcessing();
+
+            bool needRedraw = listId != listBox.getCurrentId();
 
             if ( ( buttonOk.isEnabled() && le.MouseClickLeft( buttonOk.area() ) ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY )
                  || listBox.isDoubleClicked() ) {
@@ -243,25 +252,28 @@ namespace
                 fheroes2::Text body( _( "Click to choose the selected language." ), fheroes2::FontType::normalWhite() );
                 fheroes2::showMessage( header, body, 0 );
             }
+            else if ( le.MousePressRight( listRoi ) ) {
+                continue;
+            }
 
-            if ( listBox.isSelected() ) {
+            if ( !listBox.IsNeedRedraw() && !needRedraw ) {
+                continue;
+            }
+
+            if ( needRedraw ) {
                 const fheroes2::SupportedLanguage newChosenLanguage = listBox.GetCurrent();
                 if ( newChosenLanguage != chosenLanguage ) {
                     chosenLanguage = newChosenLanguage;
                     Settings::Get().setGameLanguage( fheroes2::getLanguageAbbreviation( chosenLanguage ) );
+                    titleBackground.restore();
+                    selectedLangBackground.restore();
+                    redrawDialogInfo( listRoi, chosenLanguage );
+                    buttonsBackground.restore();
+                    background.renderOkayCancelButtons( buttonOk, buttonCancel, isEvilInterface );
                 }
             }
 
-            if ( !listBox.IsNeedRedraw() ) {
-                continue;
-            }
-
             listBox.Redraw();
-            selectedLangBackground.restore();
-            titleBackground.restore();
-            buttonsBackground.restore();
-            background.renderOkayCancelButtons( buttonOk, buttonCancel, isEvilInterface );
-            redrawDialogInfo( listRoi, chosenLanguage );
             display.render( background.activeArea() );
         }
 
