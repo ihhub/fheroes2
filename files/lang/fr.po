@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-12-19 03:04+0000\n"
-"PO-Revision-Date: 2023-12-19 22:22+0100\n"
+"PO-Revision-Date: 2023-12-22 00:41+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
 "Language: fr\n"
@@ -3410,7 +3410,7 @@ msgid "Select Treasure:"
 msgstr "Choix du trésor :"
 
 msgid "Select Ocean Object:"
-msgstr "Choix de l'objet en mer :"
+msgstr "Choix d'élément (océan) :"
 
 #, fuzzy
 msgid "Castle/town placing"
@@ -3789,7 +3789,7 @@ msgid "Artifacts cannot be placed on water."
 msgstr "Les artéfacts ne peuvent pas être placés sur l'eau."
 
 msgid "Ocean object"
-msgstr ""
+msgstr "Océan"
 
 msgid "Ocean object must be placed on water."
 msgstr "Les éléments liés à la mer doivent être placés sur l'eau."
@@ -3802,31 +3802,31 @@ msgid "Towns cannot be placed on water."
 msgstr "Ce sort ne peut pas être jeté en mer."
 
 msgid "Ocean Objects"
-msgstr ""
+msgstr "Océan"
 
 msgid "Grass Objects"
-msgstr ""
+msgstr "Herbe"
 
 msgid "Snow Objects"
-msgstr ""
+msgstr "Neige"
 
 msgid "Swamp Objects"
-msgstr ""
+msgstr "Marais"
 
 msgid "Lava Objects"
-msgstr ""
+msgstr "Lave"
 
 msgid "Desert Objects"
-msgstr ""
+msgstr "Désert"
 
 msgid "Dirt Objects"
-msgstr ""
+msgstr "Boue"
 
 msgid "Wasteland Objects"
-msgstr ""
+msgstr "Terres arides"
 
 msgid "Beach Objects"
-msgstr ""
+msgstr "Plage"
 
 msgid "Treasures"
 msgstr "Trésors"
@@ -7397,13 +7397,13 @@ msgstr "Je crains que ces créatures ne soient d'humeur à se battre."
 
 msgid "Your attack skill is a bonus added to each creature's attack skill."
 msgstr ""
-"L'Attaque du Héros est ajouté en supplement de la statistique d'attaque de "
-"chaque creature dans son armée."
+"L'Attaque du héros est ajoutée á la statistique d'attaque de chaqune de ses "
+"créatures."
 
 msgid "Your defense skill is a bonus added to each creature's defense skill."
 msgstr ""
-"La Défense du Héros est ajouté en supplement de la statistique de défense de "
-"chaque creature dans son armée."
+"La Défense du héros est ajoutée á la statistique de défense de chaqune de "
+"ses créatures."
 
 msgid "Your spell power determines the length or power of a spell."
 msgstr "La Puissance du héros détermine la durée ou la puissance de ses sorts."
