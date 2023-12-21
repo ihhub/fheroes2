@@ -134,6 +134,11 @@ namespace
         {
             return _isDoubleClicked;
         }
+        
+        int getCurrentId() const
+        {
+            return _currentId;
+        }
 
         void initListBackgroundRestorer( fheroes2::Rect roi )
         {
@@ -258,7 +263,11 @@ namespace
             le.MousePressLeft( buttonOk.area() ) && buttonOk.isEnabled() ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
             le.MousePressLeft( buttonCancel.area() ) ? buttonCancel.drawOnPress() : buttonCancel.drawOnRelease();
 
-            listBox.QueueEventProcessing();
+            const int listId = listBox.getCurrentId();
+
+            const bool listBoxEvent = listBox.QueueEventProcessing();
+
+            bool needRedraw = listId != listBox.getCurrentId();
 
             if ( ( buttonOk.isEnabled() && le.MouseClickLeft( buttonOk.area() ) ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY )
                  || listBox.isDoubleClicked() ) {
@@ -280,18 +289,21 @@ namespace
                 fheroes2::Text body( _( "Click to apply the selected resolution." ), fheroes2::FontType::normalWhite() );
                 fheroes2::showMessage( header, body, 0 );
             }
-
-            if ( listBox.isSelected() ) {
-                selectedResolution = listBox.GetCurrent();
-            }
-
-            if ( !listBox.IsNeedRedraw() ) {
+            else if ( le.MousePressRight( listRoi ) ) {
                 continue;
             }
 
+            if ( !listBox.IsNeedRedraw() && !needRedraw ) {
+                continue;
+            }
+
+            if ( needRedraw ) {
+                selectedResolution = listBox.GetCurrent();
+                selectedResBackground.restore();
+                RedrawInfo( selectedResRoi.getPosition(), selectedResolution, display );
+            }
+
             listBox.Redraw();
-            selectedResBackground.restore();
-            RedrawInfo( selectedResRoi.getPosition(), selectedResolution, display );
             display.render( background.activeArea() );
         }
 
