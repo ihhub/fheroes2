@@ -187,7 +187,7 @@ namespace
                                         + listAreaOffsetY + listAreaHeightDeduction + listHeightDeduction;
 
         // Dialog height is also capped with the current screen height.
-        fheroes2::StandardWindow background( 260 + 204, std::min( display.height() - 100, maxDialogHeight ), true, display );
+        fheroes2::StandardWindow background( 345, std::min( display.height() - 100, maxDialogHeight ), true, display );
 
         const fheroes2::Rect roi( background.activeArea() );
         const fheroes2::Rect listRoi( roi.x + 24, roi.y + 37, roi.width - 75, roi.height - listHeightDeduction );
