@@ -30,7 +30,6 @@
 #include "agg_image.h"
 #include "cursor.h"
 #include "game_hotkeys.h"
-#include "gamedefs.h"
 #include "icn.h"
 #include "image.h"
 #include "interface_list.h"
