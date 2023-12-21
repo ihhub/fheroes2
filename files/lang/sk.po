@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-15 09:12+0000\n"
+"POT-Creation-Date: 2023-12-19 03:04+0000\n"
 "PO-Revision-Date: 2023-09-11 20:22+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3151,6 +3151,17 @@ msgstr "(prázdne)"
 
 msgid "already learned"
 msgstr "už naučené"
+
+#, fuzzy
+msgid "treeOfKnowledge|free"
+msgstr "Strom poznania"
+
+#, fuzzy
+msgid "already claimed"
+msgstr "už naučené"
+
+msgid "not claimed"
+msgstr ""
 
 msgid "already knows this skill"
 msgstr "už má túto zručnosť"
@@ -8101,6 +8112,10 @@ msgstr "Náhodný tvor - silný"
 
 msgid "Random Monster - very strong"
 msgstr "Náhodný tvor - veľmi silný"
+
+#, fuzzy
+msgid "Hero"
+msgstr "Hrdinovia"
 
 msgid "Nothing Special"
 msgstr "Nič zvláštne"

@@ -28,7 +28,7 @@ jobs:
         FHEROES2_WITH_DEBUG: ON
         FHEROES2_WITH_IMAGE: ON
         FHEROES2_WITH_TOOLS: ON
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v4
       if: ${{ failure() }}
       with:
         name: scan-build-result

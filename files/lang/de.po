@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-15 09:12+0000\n"
+"POT-Creation-Date: 2023-12-19 03:04+0000\n"
 "PO-Revision-Date: 2023-12-22 00:32+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3191,6 +3191,17 @@ msgstr "(leer)"
 
 msgid "already learned"
 msgstr "schon gelernt"
+
+#, fuzzy
+msgid "treeOfKnowledge|free"
+msgstr "Baum des Wissens"
+
+#, fuzzy
+msgid "already claimed"
+msgstr "schon gelernt"
+
+msgid "not claimed"
+msgstr ""
 
 msgid "already knows this skill"
 msgstr "kennt diese Fähigkeit schon"
@@ -8294,6 +8305,10 @@ msgstr "Zufälliges Monster - stark"
 
 msgid "Random Monster - very strong"
 msgstr "Zufälliges Monster - sehr stark"
+
+#, fuzzy
+msgid "Hero"
+msgstr "Helden"
 
 msgid "Nothing Special"
 msgstr "Nichts besonderes"
