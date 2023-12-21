@@ -37,6 +37,48 @@
     <control>touch</control>
   </recommends>
   <releases>
+    <release date="2023-12-23" version="v1.0.11">
+      <url>https://github.com/ihhub/fheroes2/releases/tag/1.0.11</url>
+      <description>
+        <p>Changes in v1.0.11 (23 December 2023):</p>
+        <ul>
+          <li>add Tree of Knowledge claimed and cost info to quick info dialog</li>
+          <li>add a different object popup window logic for the Editor</li>
+          <li>implement town and castle placing in the Editor</li>
+          <li>update the Spanish translation</li>
+          <li>update the French translation and add missing offset for an A with accent</li>
+          <li>update Bulgarian translation</li>
+          <li>increase width and height of the Campaign Difficulty selection dialog</li>
+          <li>make speed of fade-in &amp; fade-out animations for AI-controlled heroes dependent on the AI speed setting</li>
+          <li>speed up battle pathfinder logic</li>
+          <li>update Spanish translation</li>
+          <li>add Spanish and Portuguese button font letters</li>
+          <li>fix invalid focus update after AI hero battle</li>
+          <li>update Danish translation</li>
+          <li>speed up the original map format reading</li>
+          <li>fix a crash with castle overlapping inside a map</li>
+          <li>add basic logic to load and save maps through Editor UI</li>
+          <li>add text rendering within a given ROI</li>
+          <li>do not show quick info for hidden buttons inside castle building info dialog</li>
+          <li>add missing AI team alliance to Evil campaign's 6th scenario</li>
+          <li>update Swedish translation</li>
+          <li>update Hungarian translation</li>
+          <li>update Vietnamese Translation</li>
+          <li>fix update of the morale/luck indicator when changing the hero in the Battle Only mode</li>
+          <li>add base map file format for the Editor</li>
+          <li>add Hotkeys categories for the future UI improvements</li>
+          <li>fix scroll location on file deletion</li>
+          <li>rework Battle Only mode</li>
+          <li>add cell selection in Details mode for the Editor</li>
+          <li>speed up map loading for New Game</li>
+          <li>allow application closure by close button if no resources available</li>
+          <li>fix multi-font text offset calculation</li>
+          <li>properly evaluate potential attack positions for wide units</li>
+          <li>correctly manage touch device events</li>
+          <li>add ability to place Ocean Objects within the Editor</li>
+        </ul>
+      </description>
+    </release>
     <release date="2023-11-18" version="v1.0.10">
       <url>https://github.com/ihhub/fheroes2/releases/tag/1.0.10</url>
       <description>
