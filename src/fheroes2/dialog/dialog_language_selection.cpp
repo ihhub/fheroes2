@@ -228,6 +228,7 @@ namespace
             le.MousePressLeft( buttonCancel.area() ) ? buttonCancel.drawOnPress() : buttonCancel.drawOnRelease();
 
             const int listId = listBox.getCurrentId();
+            listBox.QueueEventProcessing();
             bool needRedraw = listId != listBox.getCurrentId();
 
             if ( ( buttonOk.isEnabled() && le.MouseClickLeft( buttonOk.area() ) ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY )
