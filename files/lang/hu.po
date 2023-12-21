@@ -2039,13 +2039,13 @@ msgid "Hampshire"
 msgstr "Hampshire"
 
 msgid "Antioch"
-msgstr "Antioch"
+msgstr "Antiókhia"
 
 msgid "Avalon"
 msgstr "Avalon"
 
 msgid "Roc Haven"
-msgstr "Rukh Haven"
+msgstr "Rukh menedék"
 
 msgid "South Mill"
 msgstr "South Mill"
@@ -2072,7 +2072,7 @@ msgid "Cathcart"
 msgstr "Cathcart"
 
 msgid "Elk's Head"
-msgstr "Elk's Head"
+msgstr "Elkfő"
 
 msgid "Roscomon"
 msgstr "Roscomon"
@@ -2096,7 +2096,7 @@ msgid "Pig's Eye"
 msgstr "Pig's Eye"
 
 msgid "Viper's Nest"
-msgstr "Viper's Nest"
+msgstr "Viperafészek"
 
 msgid "Fenton"
 msgstr "Fenton"
