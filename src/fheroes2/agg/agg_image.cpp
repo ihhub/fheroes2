@@ -28,6 +28,7 @@
 #include <initializer_list>
 #include <map>
 #include <memory>
+#include <numeric>
 #include <random>
 #include <set>
 #include <stdexcept>
@@ -549,7 +550,7 @@ namespace
     }
 
     // Remove all shadows from the image and make them fully transparent.
-    void makeAllShadowsTransparent( fheroes2::Image & image )
+    void setTransformLayerTransparent( fheroes2::Image & image )
     {
         assert( !image.empty() && !image.singleLayer() );
 
@@ -573,7 +574,7 @@ namespace
         newImage.reset();
         fheroes2::Blit( image, 0, 0, newImage, 2, 2, 35, 25 );
         // Remove shadow from the image.
-        makeAllShadowsTransparent( newImage );
+        setTransformLayerTransparent( newImage );
         // Add extra shading and brightening at the edges of the image.
         fheroes2::updateShadow( newImage, { 1, -1 }, 2U, false );
         fheroes2::updateShadow( newImage, { 2, -2 }, 5U, false );
@@ -2706,9 +2707,7 @@ namespace fheroes2
                     Sprite & out = _icnVsSprite[id][23];
 
                     std::vector<uint8_t> indexes( 256 );
-                    for ( uint32_t i = 0; i < 256; ++i ) {
-                        indexes[i] = static_cast<uint8_t>( i );
-                    }
+                    std::iota( indexes.begin(), indexes.end(), static_cast<uint8_t>( 0 ) );
 
                     indexes[69] = 187;
                     indexes[71] = 195;
@@ -2771,9 +2770,7 @@ namespace fheroes2
                     }
 
                     std::vector<uint8_t> indexes( 256 );
-                    for ( uint32_t i = 0; i < 256; ++i ) {
-                        indexes[i] = static_cast<uint8_t>( i );
-                    }
+                    std::iota( indexes.begin(), indexes.end(), static_cast<uint8_t>( 0 ) );
 
                     indexes[10] = 152;
                     indexes[11] = 153;
@@ -3131,9 +3128,7 @@ namespace fheroes2
 
                     // Replace image contour colors with the background color.
                     std::vector<uint8_t> indexes( 256 );
-                    for ( uint32_t i = 0; i < 256; ++i ) {
-                        indexes[i] = static_cast<uint8_t>( i );
-                    }
+                    std::iota( indexes.begin(), indexes.end(), static_cast<uint8_t>( 0 ) );
 
                     indexes[10] = 65U;
                     indexes[38] = 65U;

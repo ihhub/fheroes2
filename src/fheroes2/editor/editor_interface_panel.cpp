@@ -448,14 +448,21 @@ namespace Interface
             const fheroes2::Text terrainText( _( "Monsters" ), fheroes2::FontType::normalWhite() );
             terrainText.draw( _rectInstrumentPanel.x + ( _rectInstrumentPanel.width - terrainText.width() ) / 2, _rectInstrumentPanel.y + 8, display );
 
-            // Show the selected monster image on the panel.
-            const fheroes2::Sprite & image = getObjectImage( Maps::ObjectGroup::MONSTERS, _selectedMonsterType );
-            if ( image.empty() ) {
+            if ( _selectedMonsterType < 0 ) {
+                // Show a tip.
                 const fheroes2::Text text( _( "Click here to\nselect a monster." ), fheroes2::FontType::smallWhite() );
                 text.draw( _rectInstrumentPanel.x + 5, _rectInstrumentPanel.y + 38, _rectInstrumentPanel.width - 10, display );
             }
             else {
-                fheroes2::Blit( image, display, _rectInstrumentPanel.x + ( _rectInstrumentPanel.width - image.width() ) / 2, _rectInstrumentPanel.y + 30 );
+                // Show the selected monster image on the panel.
+                const fheroes2::Sprite & image = getObjectImage( Maps::ObjectGroup::MONSTERS, _selectedMonsterType );
+                fheroes2::Blit( image, display, _rectInstrumentPanel.x + ( _rectInstrumentPanel.width - image.width() ) / 2,
+                                _rectInstrumentPanel.y + 67 - image.height() );
+
+                fheroes2::Text text( Monster( _selectedMonsterType + 1 ).GetName(), fheroes2::FontType::smallWhite() );
+                text.draw( _rectInstrumentPanel.x + 5, _rectInstrumentPanel.y + 70, _rectInstrumentPanel.width - 10, display );
+                text.set( _( "Click here to\nselect another monster." ), fheroes2::FontType::smallWhite() );
+                text.draw( _rectInstrumentPanel.x + 5, _rectInstrumentPanel.y + 95, _rectInstrumentPanel.width - 10, display );
             }
         }
         else if ( _selectedInstrument == Instrument::DETAIL ) {
