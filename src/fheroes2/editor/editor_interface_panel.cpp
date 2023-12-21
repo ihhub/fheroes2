@@ -40,6 +40,7 @@
 #include "interface_base.h"
 #include "localevent.h"
 #include "maps_tiles.h"
+#include "monster.h"
 #include "pal.h"
 #include "screen.h"
 #include "settings.h"
