@@ -275,7 +275,7 @@ namespace
                     background.renderOkayCancelButtons( buttonOk, buttonCancel, isEvilInterface );
                 }
             }
-            
+
             display.render( background.activeArea() );
         }
 
