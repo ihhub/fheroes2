@@ -205,6 +205,16 @@ bool HeroBase::SpellBookActivate()
     return !HaveSpellBook() && bag_artifacts.PushArtifact( Artifact::MAGIC_BOOK );
 }
 
+void HeroBase::SpellBookDeactivate()
+{
+    bag_artifacts.RemoveArtifact( Artifact::MAGIC_BOOK );
+
+    // Hero should not have more than one spell book
+    assert( !HaveSpellBook() );
+
+    spell_book.clear();
+}
+
 bool HeroBase::hasArtifact( const Artifact & art ) const
 {
     return bag_artifacts.isPresentArtifact( art );

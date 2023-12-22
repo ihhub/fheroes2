@@ -142,7 +142,11 @@ public:
     bool HaveSpell( const Spell & spell, const bool skip_bag = false ) const;
     void AppendSpellToBook( const Spell &, const bool without_wisdom = false );
     void AppendSpellsToBook( const SpellStorage &, const bool without_wisdom = false );
+
+    // Adds the spell book to the artifact bag if it is not already there. Returns true if the spell book was actually added to the artifact bag, otherwise returns false.
     bool SpellBookActivate();
+    // Removes the spell book artifact from the artifact bag, if it is there, and removes all spells from the hero's spell book.
+    void SpellBookDeactivate();
 
     BagArtifacts & GetBagArtifacts()
     {
