@@ -46,6 +46,7 @@ namespace Battle
 {
     class Actions;
     class Arena;
+    class Position;
     class Unit;
     class Units;
 }
@@ -191,12 +192,6 @@ namespace AI
 
         Battle::Actions planUnitTurn( Battle::Arena & arena, const Battle::Unit & currentUnit );
 
-        // decision-making helpers
-        bool isUnitFaster( const Battle::Unit & currentUnit, const Battle::Unit & target ) const;
-        bool isHeroWorthSaving( const Heroes & hero ) const;
-        bool isCommanderCanSpellcast( const Battle::Arena & arena, const HeroBase * commander ) const;
-        bool checkRetreatCondition( const Heroes & hero ) const;
-
     private:
         void analyzeBattleState( const Battle::Arena & arena, const Battle::Unit & currentUnit );
 
@@ -220,6 +215,13 @@ namespace AI
         double getSpellSlowRatio( const Battle::Unit & target ) const;
         double getSpellHasteRatio( const Battle::Unit & target ) const;
         int32_t spellDurationMultiplier( const Battle::Unit & target ) const;
+
+        bool isPositionLocatedInDefendedArea( const Battle::Unit & currentUnit, const Battle::Position & pos ) const;
+        bool isUnitFaster( const Battle::Unit & currentUnit, const Battle::Unit & target ) const;
+        bool isHeroWorthSaving( const Heroes & hero ) const;
+        bool isCommanderCanSpellcast( const Battle::Arena & arena, const HeroBase * commander ) const;
+
+        bool checkRetreatCondition( const Heroes & hero ) const;
 
         static double commanderMaximumSpellDamageValue( const HeroBase & commander );
 

@@ -834,6 +834,11 @@ namespace AI
         }
 
         _defensiveTactics = [this, &currentUnit]() {
+            // Unit is already in the enemy half of the battlefield, just let it keep attacking
+            if ( !isPositionLocatedInDefendedArea( currentUnit, currentUnit.GetPosition() ) ) {
+                return false;
+            }
+
             const double overPowerRatio = ( currentUnit.isFlying() ? 6 : 10 );
 
             // When we have a X times stronger army than the enemy, then we are likely to win, there is no need to go on the defensive
@@ -1360,7 +1365,7 @@ namespace AI
                 }
 
                 const CellDistanceInfo nearestToFrndCellInfo = findNearestCellNextToUnit( arena, currentUnit, *frnd );
-                const Battle::Indexes adjacentEnemiesIndexes = Board::GetAdjacentEnemiesIndexes( *frnd );
+                const Indexes adjacentEnemiesIndexes = Board::GetAdjacentEnemiesIndexes( *frnd );
 
                 // If our archer is not blocked by enemy units, but the unit nevertheless cannot approach him, then ignore that archer
                 if ( nearestToFrndCellInfo.idx == -1 && adjacentEnemiesIndexes.empty() ) {
@@ -1446,46 +1451,16 @@ namespace AI
             return target;
         }
 
-        const auto isPositionLocatedInDefendedArea = [this, &currentUnit]( const Position & pos ) {
-            assert( pos.isReflect() == currentUnit.GetPosition().isReflect() && pos.GetHead() != nullptr );
-
-            // Units whose affiliation has been changed are still looking in the direction they originally looked
-            const bool reflect = ( currentUnit.GetArmyColor() == _myColor ? currentUnit.isReflect() : !currentUnit.isReflect() );
-
-            const auto checkIdx = [this, reflect]( const int32_t idx ) {
-                if ( _defendingCastle ) {
-                    return Board::isCastleIndex( idx );
-                }
-
-                return ( Board::GetDistanceFromBoardEdgeAlongXAxis( idx, reflect ) <= ARENAW / 2 );
-            };
-
-            if ( !checkIdx( pos.GetHead()->GetIndex() ) ) {
-                return false;
-            }
-
-            if ( pos.GetTail() && !checkIdx( pos.GetTail()->GetIndex() ) ) {
-                return false;
-            }
-
-            return true;
-        };
-
-        // 2. If there are no uncovered archers, and unit is already in the enemy half of the battlefield, let it continue to attack
-        if ( !isPositionLocatedInDefendedArea( currentUnit.GetPosition() ) ) {
-            DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " already in the enemy half of the battlefield, switching to offensive tactics" )
-
-            return meleeUnitOffense( arena, currentUnit );
-        }
-
-        // 3. Otherwise, try to find a suitable target that can be attacked from our half of the battlefield
+        // 2. Otherwise, try to find a suitable target that can be attacked from our half of the battlefield
         {
             MeleeAttackOutcome bestOutcome;
 
             for ( const Unit * enemy : enemies ) {
                 assert( enemy != nullptr );
 
-                const MeleeAttackOutcome outcome = BestAttackOutcome( currentUnit, *enemy, valuesOfAttackPositions, isPositionLocatedInDefendedArea );
+                const MeleeAttackOutcome outcome = BestAttackOutcome( currentUnit, *enemy, valuesOfAttackPositions, [this, &currentUnit]( const Position & pos ) {
+                    return isPositionLocatedInDefendedArea( currentUnit, pos );
+                } );
 
                 if ( !Board::isValidIndex( outcome.fromIndex ) ) {
                     continue;
@@ -1601,6 +1576,32 @@ namespace AI
 
         return actions;
     }
+
+    bool BattlePlanner::isPositionLocatedInDefendedArea( const Unit & currentUnit, const Position & pos ) const
+    {
+        assert( pos.isReflect() == currentUnit.GetPosition().isReflect() && pos.GetHead() != nullptr );
+
+        // Units whose affiliation has been changed are still looking in the direction they originally looked
+        const bool reflect = ( currentUnit.GetArmyColor() == _myColor ? currentUnit.isReflect() : !currentUnit.isReflect() );
+
+        const auto checkIdx = [this, reflect]( const int32_t idx ) {
+            if ( _defendingCastle ) {
+                return Board::isCastleIndex( idx );
+            }
+
+            return ( Board::GetDistanceFromBoardEdgeAlongXAxis( idx, reflect ) <= ARENAW / 2 );
+        };
+
+        if ( !checkIdx( pos.GetHead()->GetIndex() ) ) {
+            return false;
+        }
+
+        if ( pos.GetTail() && !checkIdx( pos.GetTail()->GetIndex() ) ) {
+            return false;
+        }
+
+        return true;
+    };
 
     void Normal::BattleTurn( Arena & arena, const Unit & currentUnit, Actions & actions )
     {
