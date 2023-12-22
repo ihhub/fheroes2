@@ -122,7 +122,7 @@ public:
     void SetSpellPoints( const uint32_t points );
     bool isPotentSpellcaster() const;
 
-    // Returns all spells present in Magic Book and in Scrolls.
+    // Returns all spells that the hero can cast (including spells from the spell book and spell scrolls)
     SpellStorage getAllSpells() const;
 
     const SpellStorage & getMagicBookSpells() const

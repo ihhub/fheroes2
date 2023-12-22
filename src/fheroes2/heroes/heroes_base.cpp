@@ -176,7 +176,13 @@ Spell HeroBase::OpenSpellBook( const SpellBook::Filter filter, const bool canCas
 
 SpellStorage HeroBase::getAllSpells() const
 {
+    // If the hero doesn't have a spell book, then spell scrolls are useless
+    if ( !HaveSpellBook() ) {
+        return {};
+    }
+
     SpellStorage storage;
+
     storage.Append( spell_book );
     storage.Append( bag_artifacts );
 
