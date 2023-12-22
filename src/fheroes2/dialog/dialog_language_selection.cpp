@@ -259,10 +259,6 @@ namespace
                 continue;
             }
 
-            if ( listBox.IsNeedRedraw() ) {
-                listBox.Redraw();
-            }
-
             if ( needRedraw ) {
                 const fheroes2::SupportedLanguage newChosenLanguage = listBox.GetCurrent();
                 if ( newChosenLanguage != chosenLanguage ) {
@@ -276,6 +272,7 @@ namespace
                 }
             }
 
+            listBox.Redraw();
             display.render( background.activeArea() );
         }
 

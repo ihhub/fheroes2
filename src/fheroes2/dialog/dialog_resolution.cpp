@@ -292,17 +292,13 @@ namespace
                 fheroes2::showMessage( header, body, 0 );
             }
 
-            if ( !listBox.IsNeedRedraw() && !needRedraw ) {
-                listBox.Redraw();
-                continue;
-            }
-
             if ( needRedraw ) {
                 selectedResolution = listBox.GetCurrent();
                 selectedResBackground.restore();
                 RedrawInfo( selectedResRoi.getPosition(), selectedResolution, display );
             }
 
+            listBox.Redraw();
             display.render( background.activeArea() );
         }
 
