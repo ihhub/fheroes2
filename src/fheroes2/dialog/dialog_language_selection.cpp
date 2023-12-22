@@ -177,7 +177,7 @@ namespace
 
         fheroes2::ImageRestorer titleBackground( fheroes2::Display::instance(), roi.x, listRoi.y - verticalPaddingAreasHight, roi.width, verticalPaddingAreasHight );
         fheroes2::ImageRestorer selectedLangBackground( fheroes2::Display::instance(), selectedLangRoi.x, selectedLangRoi.y, listRoi.width, selectedLangRoi.height );
-        fheroes2::ImageRestorer buttonsBackground( fheroes2::Display::instance(), roi.x, selectedLangRoi.y + selectedLangRoi.height + 9, roi.width,
+        fheroes2::ImageRestorer buttonsBackground( fheroes2::Display::instance(), roi.x, selectedLangRoi.y + selectedLangRoi.height + 10, roi.width,
                                                    verticalPaddingAreasHight );
 
         LanguageList listBox( roi.getPosition() );
@@ -227,9 +227,13 @@ namespace
             le.MousePressLeft( buttonOk.area() ) && buttonOk.isEnabled() ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
             le.MousePressLeft( buttonCancel.area() ) ? buttonCancel.drawOnPress() : buttonCancel.drawOnRelease();
 
+            if ( le.MousePressRight( listRoi ) ) {
+                continue;
+            }
+
             const int listId = listBox.getCurrentId();
             listBox.QueueEventProcessing();
-            bool needRedraw = listId != listBox.getCurrentId();
+            const bool needRedraw = listId != listBox.getCurrentId();
 
             if ( ( buttonOk.isEnabled() && le.MouseClickLeft( buttonOk.area() ) ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY )
                  || listBox.isDoubleClicked() ) {
@@ -250,12 +254,13 @@ namespace
                 fheroes2::Text body( _( "Click to choose the selected language." ), fheroes2::FontType::normalWhite() );
                 fheroes2::showMessage( header, body, 0 );
             }
-            else if ( le.MousePressRight( listRoi ) ) {
-                continue;
-            }
 
             if ( !listBox.IsNeedRedraw() && !needRedraw ) {
                 continue;
+            }
+
+            if ( listBox.IsNeedRedraw() ) {
+                listBox.Redraw();
             }
 
             if ( needRedraw ) {
@@ -270,8 +275,7 @@ namespace
                     background.renderOkayCancelButtons( buttonOk, buttonCancel, isEvilInterface );
                 }
             }
-
-            listBox.Redraw();
+            
             display.render( background.activeArea() );
         }
 

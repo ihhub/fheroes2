@@ -263,9 +263,13 @@ namespace
             le.MousePressLeft( buttonOk.area() ) && buttonOk.isEnabled() ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
             le.MousePressLeft( buttonCancel.area() ) ? buttonCancel.drawOnPress() : buttonCancel.drawOnRelease();
 
+            if ( le.MousePressRight( listRoi ) ) {
+                continue;
+            }
+
             const int listId = listBox.getCurrentId();
             listBox.QueueEventProcessing();
-            bool needRedraw = listId != listBox.getCurrentId();
+            const bool needRedraw = listId != listBox.getCurrentId();
 
             if ( ( buttonOk.isEnabled() && le.MouseClickLeft( buttonOk.area() ) ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY )
                  || listBox.isDoubleClicked() ) {
@@ -287,11 +291,9 @@ namespace
                 fheroes2::Text body( _( "Click to apply the selected resolution." ), fheroes2::FontType::normalWhite() );
                 fheroes2::showMessage( header, body, 0 );
             }
-            else if ( le.MousePressRight( listRoi ) ) {
-                continue;
-            }
 
             if ( !listBox.IsNeedRedraw() && !needRedraw ) {
+                listBox.Redraw();
                 continue;
             }
 
@@ -301,7 +303,6 @@ namespace
                 RedrawInfo( selectedResRoi.getPosition(), selectedResolution, display );
             }
 
-            listBox.Redraw();
             display.render( background.activeArea() );
         }
 
