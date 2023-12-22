@@ -1601,7 +1601,7 @@ namespace AI
         }
 
         return true;
-    };
+    }
 
     void Normal::BattleTurn( Arena & arena, const Unit & currentUnit, Actions & actions )
     {
