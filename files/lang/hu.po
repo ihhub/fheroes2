@@ -1695,7 +1695,7 @@ msgid "campaignBonus|Stealth Shield"
 msgstr "Tolvaj pajzs"
 
 msgid "campaignBonus|Tax Lien"
-msgstr "Adó kiváltság"
+msgstr "Adósságlevél"
 
 msgid "campaignBonus|Thunder Mace"
 msgstr "Mennydörgés pálcája"
@@ -4868,7 +4868,7 @@ msgid ""
 "You captured %{name}!\n"
 "You are victorious."
 msgstr ""
-"Elfoglaltad %{name}-t!\n"
+"Elfoglaltad %{name} várat!\n"
 "Győztél."
 
 msgid ""
@@ -4882,7 +4882,7 @@ msgid ""
 "You have found the %{name}.\n"
 "Your quest is complete."
 msgstr ""
-"Megtaláltad a  %{name}-t.\n"
+"Megtaláltad %{name} varázstárgyat.\n"
 "Küldetés teljesítve."
 
 msgid "Ultimate Artifact"
@@ -4900,7 +4900,7 @@ msgid ""
 "All enemies bow before your wealth and power."
 msgstr ""
 "Sikerült %{count} aranyat felhalmoznod a kincstáradban.\n"
-"Az összes ellenfeled fejet hajt elötted."
+"Az összes ellenfeled fejet hajt előtted."
 
 msgid "Victory!"
 msgstr "Győzelem!"
@@ -4909,8 +4909,8 @@ msgid ""
 "The enemy has captured %{name}!\n"
 "They are triumphant."
 msgstr ""
-"Az ellenfél elfoglalta %{name}!\n"
-"Ők győztek.."
+"Az ellenfél elfoglalta %{name} várat!\n"
+"Ők győztek."
 
 msgid ""
 "The enemy has built up over %{count} gold in his treasury.\n"
@@ -4926,8 +4926,8 @@ msgid ""
 "You have lost the hero %{name}.\n"
 "Your quest is over."
 msgstr ""
-"Elveszítetted a %{name} Hőst.\n"
-"A küldetésed elbukott.."
+"Elveszítetted a %{name} hőst.\n"
+"A küldetésed elbukott."
 
 msgid ""
 "You have failed to complete your quest in time.\n"
@@ -7610,7 +7610,7 @@ msgid "Wizard"
 msgstr "Varázsló"
 
 msgid "Necromancer"
-msgstr "Hullamágus"
+msgstr "Nekromanta"
 
 msgid "Multi"
 msgstr "Többszörös"
@@ -8800,13 +8800,13 @@ msgid "Ultimate Crown"
 msgstr "Szent Korona"
 
 msgid "Golden Goose"
-msgstr "Arany Lúd"
+msgstr "Arany lúd"
 
 msgid "The %{name} brings in an income of %{count} gold per day."
 msgstr "A(z) %{name} naponta %{count} aranyat hoz a konyhára."
 
 msgid "Arcane Necklace of Magic"
-msgstr "Misztikus Varázslás Nyaklánc"
+msgstr "Misztikus varázslás nyaklánc"
 
 msgid ""
 "After rescuing a Sorceress from a cursed tomb, she rewards your heroism with "
@@ -8814,7 +8814,7 @@ msgid ""
 msgstr ""
 
 msgid "Caster's Bracelet of Magic"
-msgstr "Idéző Varázslat Karkötője"
+msgstr "Idéző varázslat karkötő"
 
 msgid ""
 "While searching through the rubble of a caved-in mine, you free a group of "
@@ -8822,7 +8822,7 @@ msgid ""
 msgstr ""
 
 msgid "Mage's Ring of Power"
-msgstr "Mágus Erejénak Gyűrűje"
+msgstr "Máguserő gyűrű"
 
 msgid ""
 "A cry of pain leads you to a Centaur, caught in a trap. Upon setting the "
@@ -8831,7 +8831,7 @@ msgid ""
 msgstr ""
 
 msgid "Witch's Broach of Magic"
-msgstr "Boszorkány Mágikus Mellcsatja"
+msgstr "Boszorkány mágikus mellcsatja"
 
 msgid ""
 "Alongside the remains of a burnt witch lies a beautiful broach, intricately "
@@ -8840,7 +8840,7 @@ msgid ""
 msgstr ""
 
 msgid "Medal of Valor"
-msgstr "Vitézség Medál"
+msgstr "Vitézség medál"
 
 msgid "The %{name} increases your morale by %{count}."
 msgstr "A %{name} ennyivel növeli a csapatod morálját: %{count}."
@@ -8851,7 +8851,7 @@ msgid ""
 msgstr ""
 
 msgid "Medal of Courage"
-msgstr "Bátorság Medál"
+msgstr "Bátorság medál"
 
 msgid ""
 "After saving a young boy from a vicious pack of Wolves, you return him to "
@@ -8859,7 +8859,7 @@ msgid ""
 msgstr ""
 
 msgid "Medal of Honor"
-msgstr "Becsület Medál"
+msgstr "Becsület medál"
 
 msgid ""
 "After freeing a princess of a neighboring kingdom from the evil clutches of "
@@ -8867,7 +8867,7 @@ msgid ""
 msgstr ""
 
 msgid "Medal of Distinction"
-msgstr "Kiválóság Medál"
+msgstr "Kiválóság kedál"
 
 msgid ""
 "Ridding the countryside of the hideous Minotaur who made a sport of eating "
@@ -8875,7 +8875,7 @@ msgid ""
 msgstr ""
 
 msgid "Fizbin of Misfortune"
-msgstr "Balszerencse Kártya"
+msgstr "Balszerencse kártya"
 
 msgid "The %{name} greatly decreases your morale by %{count}."
 msgstr "A %{name} %{count} mértékben lecsökkenti a morálodat."
@@ -8887,7 +8887,7 @@ msgid ""
 msgstr ""
 
 msgid "Thunder Mace of Dominion"
-msgstr "Hatalom Mennydörgő Buzogánya"
+msgstr "Hatalom mennydörgő buzogánya"
 
 msgid ""
 "During a sudden storm, a bolt of lightning strikes a tree, splitting it. "
@@ -8914,7 +8914,7 @@ msgid ""
 msgstr ""
 
 msgid "Giant Flail of Dominion"
-msgstr "Óriás Hatalom Cséphadaró"
+msgstr "Óriás hatalom cséphadaró"
 
 msgid ""
 "A clumsy Giant has killed himself with his own flail. Knowing your superior "
@@ -8942,7 +8942,7 @@ msgid ""
 msgstr ""
 
 msgid "Dragon Sword of Dominion"
-msgstr "Sárkány Hatalom Kardja"
+msgstr "Sárkány hatalom kard"
 
 msgid ""
 "As you are walking along a narrow path, a nearby bush suddenly bursts into "
@@ -8951,7 +8951,7 @@ msgid ""
 msgstr ""
 
 msgid "Power Axe of Dominion"
-msgstr "Erő Hatalom Fejzséje"
+msgstr "Erő hatalom fejsze"
 
 msgid ""
 "You see a silver axe embedded deeply in the ground. After several "
@@ -9003,7 +9003,7 @@ msgid ""
 msgstr ""
 
 msgid "Endless Sack of Gold"
-msgstr "Végtelen Aranyzsák"
+msgstr "Végtelen aranyzsák"
 
 msgid "The %{name} provides you with %{count} gold per day."
 msgstr "A %{name} naponta %{count} aranyat ad."
@@ -9016,7 +9016,7 @@ msgid ""
 msgstr ""
 
 msgid "Endless Bag of Gold"
-msgstr "Végtelen Aranytarisznya"
+msgstr "Végtelen aranytarisznya"
 
 msgid ""
 "A noblewoman, separated from her traveling companions, asks for your help. "
@@ -9024,7 +9024,7 @@ msgid ""
 msgstr ""
 
 msgid "Endless Purse of Gold"
-msgstr "Végtelen Aranyerszény"
+msgstr "Végtelen aranyerszény"
 
 msgid ""
 "In your travels, you find a leather purse filled with gold that once "
@@ -9068,7 +9068,7 @@ msgid ""
 msgstr ""
 
 msgid "Golden Horseshoe"
-msgstr "Arany Lópatkó"
+msgstr "Arany lópatkó"
 
 msgid ""
 "An ensnared Unicorn whinnies in fright. Murmuring soothing words, you set "
@@ -9085,7 +9085,7 @@ msgid ""
 msgstr ""
 
 msgid "Four-Leaf Clover"
-msgstr "Négylevelű Lóhere"
+msgstr "Négylevelű lóhere"
 
 msgid ""
 "In the middle of a patch of dead and dry vegetation, to your surprise you "
@@ -9116,7 +9116,7 @@ msgid ""
 msgstr ""
 
 msgid "Evil Eye"
-msgstr "Gonosz Szem"
+msgstr "Gonosz szem"
 
 msgid "The %{name} reduces the casting cost of curse spells by half."
 msgstr "A %{name} felére csökkenti az átok varázslat varázslatpont-igényét."
@@ -9128,7 +9128,7 @@ msgid ""
 msgstr ""
 
 msgid "Enchanted Hourglass"
-msgstr "Bűvös Homokóra"
+msgstr "Bűvös homokóra"
 
 msgid "The %{name} extends the duration of all your spells by %{count} turns."
 msgstr "A %{name} megnöveli a varázslataid hatóidőit %{count} körrel."
@@ -9192,7 +9192,7 @@ msgid ""
 msgstr ""
 
 msgid "Lightning Helm"
-msgstr "Villám Sisak"
+msgstr "Villámló sisak"
 
 msgid "The %{name} halves all damage your troops take from lightning spells."
 msgstr ""
@@ -9205,7 +9205,7 @@ msgid ""
 msgstr ""
 
 msgid "Evercold Icicle"
-msgstr "Örök Jégcsap"
+msgstr "Örök jégcsap"
 
 msgid ""
 "The %{name} causes your cold spells to do %{count} percent more damage to "
@@ -9221,7 +9221,7 @@ msgid ""
 msgstr ""
 
 msgid "Everhot Lava Rock"
-msgstr "Örökké Izzó Láva"
+msgstr "Örökké izzó láva"
 
 msgid ""
 "The %{name} causes your fire spells to do %{count} percent more damage to "
@@ -9238,7 +9238,7 @@ msgid ""
 msgstr ""
 
 msgid "Lightning Rod"
-msgstr "Villámló Bot"
+msgstr "Villámló bot"
 
 msgid ""
 "The %{name} causes your lightning spells to do %{count} percent more damage "
@@ -9280,7 +9280,7 @@ msgid ""
 msgstr ""
 
 msgid "Book of Elements"
-msgstr "Elemek Könyve"
+msgstr "Elemek könyve"
 
 msgid "The %{name} doubles the effectiveness of all your summoning spells."
 msgstr "A %{name} megduplázza az idéző varázslatok hatásosságát."
@@ -9292,7 +9292,7 @@ msgid ""
 msgstr ""
 
 msgid "Elemental Ring"
-msgstr "Elemi Gyűrű"
+msgstr "Elemi gyűrű"
 
 msgid "The %{name} halves the casting cost of all summoning spells."
 msgstr "A %{name} felére csökkenti az idéző varázslatok varázslatpont-igényét."
@@ -9316,7 +9316,7 @@ msgid ""
 msgstr ""
 
 msgid "Pendant of Free Will"
-msgstr "Szabad Akarat Nyakék"
+msgstr "Szabad akarat nyakék"
 
 msgid "The %{name} makes all your troops immune to hypnotize spells."
 msgstr "A %{name} immunissá teszi a csapataidat a hipnózis varázslatra."
@@ -9329,7 +9329,7 @@ msgid ""
 msgstr ""
 
 msgid "Pendant of Life"
-msgstr "Élet Nyakék"
+msgstr "Élet nyakék"
 
 msgid "The %{name} makes all your troops immune to death spells."
 msgstr "A %{name} immunissá teszi a csapataidat a halál varázslatokra."
@@ -9354,7 +9354,7 @@ msgid ""
 msgstr ""
 
 msgid "Seeing-eye Pendant"
-msgstr "Látás Nyakék"
+msgstr "Látás nyakék"
 
 msgid "The %{name} makes all your troops immune to blindness spells."
 msgstr "A %{name} immunissá teszi a csapataidat a vakítás varázslatra."
@@ -9379,7 +9379,7 @@ msgid ""
 msgstr ""
 
 msgid "Pendant of Death"
-msgstr "Halál Nyakék"
+msgstr "Halál nyakék"
 
 msgid "The %{name} makes all your troops immune to holy spells."
 msgstr "A %{name} immunissá teszi a csapataidat a szent varázslatokra."
@@ -9391,7 +9391,7 @@ msgid ""
 msgstr ""
 
 msgid "Wand of Negation"
-msgstr "Tagadás Pálca"
+msgstr "Tagadás pálca"
 
 msgid "The %{name} makes all your troops immune to dispel magic spells."
 msgstr "A %{name} megvédi a csapataidat a varázslatoszlató varázslattól."
@@ -9403,7 +9403,7 @@ msgid ""
 msgstr ""
 
 msgid "Golden Bow"
-msgstr "Arany Íj"
+msgstr "Arany íj"
 
 msgid ""
 "The %{name} eliminates the %{count} percent penalty for your troops shooting "
@@ -9436,7 +9436,7 @@ msgid ""
 msgstr ""
 
 msgid "Statesman's Quill"
-msgstr "Politikus Pennája"
+msgstr "Politikus pennája"
 
 msgid ""
 "The %{name} reduces the cost of surrender to %{count} percent of the total "
@@ -9489,7 +9489,7 @@ msgid ""
 msgstr ""
 
 msgid "Tax Lien"
-msgstr "Adóteher"
+msgstr "Adósságlevél"
 
 msgid "The %{name} costs you %{count} gold pieces per day."
 msgstr "A(z) %{name} napi %{count} aranyba kerül neked."
@@ -9502,7 +9502,7 @@ msgid ""
 msgstr ""
 
 msgid "Hideous Mask"
-msgstr "Förtelmes Maszk"
+msgstr "Förtelmes maszk"
 
 msgid "The %{name} prevents all 'wandering' armies from joining your hero."
 msgstr ""
@@ -9516,7 +9516,7 @@ msgid ""
 msgstr ""
 
 msgid "Endless Pouch of Sulfur"
-msgstr "Végtelen Kénzacskó"
+msgstr "Végtelen kénzacskó"
 
 msgid "The %{name} provides %{count} unit of sulfur per day."
 msgstr "A(z) %{name} napi %{count} ként biztosít neked."
@@ -9528,7 +9528,7 @@ msgid ""
 msgstr ""
 
 msgid "Endless Vial of Mercury"
-msgstr "Végtelen Higanyfiola"
+msgstr "Végtelen higanyfiola"
 
 msgid "The %{name} provides %{count} unit of mercury per day."
 msgstr "A(z) %{name} napi %{count} higanyt biztosít neked."
@@ -9540,7 +9540,7 @@ msgid ""
 msgstr ""
 
 msgid "Endless Pouch of Gems"
-msgstr "Végtelen Drágakőerszény"
+msgstr "Végtelen drágakőerszény"
 
 msgid "The %{name} provides %{count} unit of gems per day."
 msgstr "A(z) %{name} napi %{count} drágakövet biztosít neked."
@@ -9553,7 +9553,7 @@ msgid ""
 msgstr ""
 
 msgid "Endless Cord of Wood"
-msgstr "Végtelen Fahalom"
+msgstr "Végtelen fahalom"
 
 msgid "The %{name} provides %{count} unit of wood per day."
 msgstr "A(z) %{name} napi %{count} fát biztosít neked."
@@ -9566,7 +9566,7 @@ msgid ""
 msgstr ""
 
 msgid "Endless Cart of Ore"
-msgstr "Végtelen Érccsille"
+msgstr "Végtelen érccsille"
 
 msgid "The %{name} provides %{count} unit of ore per day."
 msgstr "A(z) %{name} napi %{count} ércet biztosít neked."
@@ -9578,7 +9578,7 @@ msgid ""
 msgstr ""
 
 msgid "Endless Pouch of Crystal"
-msgstr "Végtelen Kristályzacskó"
+msgstr "Végtelen kristályzacskó"
 
 msgid "The %{name} provides %{count} unit of crystal per day."
 msgstr "A(z) %{name} napi %{count} kristályt biztosít neked."
@@ -9591,7 +9591,7 @@ msgid ""
 msgstr ""
 
 msgid "Spiked Helm"
-msgstr "Tüskés Sisak"
+msgstr "Tüskés sisak"
 
 msgid ""
 "Your army is ambushed by a small tribe of wild (and none too bright) Orcs. "
@@ -9601,7 +9601,7 @@ msgid ""
 msgstr ""
 
 msgid "Spiked Shield"
-msgstr "Tüskés Pajzs"
+msgstr "Tüskés pajzs"
 
 msgid ""
 "You come upon a bridge spanning a dry gully. Before you can cross, a Troll "
@@ -9994,7 +9994,7 @@ msgstr ""
 "függvényében visszaállít %{count} életerőt."
 
 msgid "Mass Cure"
-msgstr "Tömeges Gyógyítás"
+msgstr "Tömeges gyógyítás"
 
 msgid ""
 "Removes all negative spells cast upon your forces, and restores up to "
