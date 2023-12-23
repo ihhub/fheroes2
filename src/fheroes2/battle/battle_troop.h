@@ -117,8 +117,7 @@ namespace Battle
         }
 
         bool isHaveDamage() const;
-
-        bool OutOfWalls() const;
+        bool isOutOfCastleWalls() const;
 
         std::string String( bool more = false ) const;
 
