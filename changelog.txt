@@ -1,3 +1,40 @@
+version 1.0.11 (23 December 2023)
+- improve the logic of AI defensive tactics
+- add Tree of Knowledge claimed and cost info to quick info dialog
+- add a different object popup window logic for the Editor
+- implement town and castle placing in the Editor
+- update the Spanish translation
+- update the French translation and add missing offset for an A with accent
+- update Bulgarian translation
+- increase width and height of the Campaign Difficulty selection dialog
+- make speed of fade-in & fade-out animations for AI-controlled heroes dependent on the AI speed setting
+- speed up battle pathfinder logic
+- update Spanish translation
+- add Spanish and Portuguese button font letters
+- fix invalid focus update after AI hero battle
+- update Danish translation
+- speed up the original map format reading
+- fix a crash with castle overlapping inside a map
+- add basic logic to load and save maps through Editor UI
+- add text rendering within a given ROI
+- do not show quick info for hidden buttons inside castle building info dialog
+- add missing AI team alliance to Evil campaign's 6th scenario
+- update Swedish translation
+- update Hungarian translation
+- update Vietnamese Translation
+- fix update of the morale/luck indicator when changing the hero in the Battle Only mode
+- add base map file format for the Editor
+- add Hotkeys categories for the future UI improvements
+- fix scroll location on file deletion
+- rework Battle Only mode
+- add cell selection in Details mode for the Editor
+- speed up map loading for New Game
+- allow application closure by close button if no resources available
+- fix multi-font text offset calculation
+- properly evaluate potential attack positions for wide units
+- correctly manage touch device events
+- add ability to place Ocean Objects within the Editor
+
 version 1.0.10 (18 November 2023)
 - update Russian translation
 - rework Town Portal dialog
