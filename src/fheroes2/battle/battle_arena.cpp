@@ -1163,12 +1163,12 @@ bool Battle::Arena::IsShootingPenalty( const Unit & attacker, const Unit & defen
     }
 
     // penalty does not apply if the attacking unit (be it a castle attacker or a castle defender) is inside the castle walls
-    if ( !attacker.OutOfWalls() ) {
+    if ( !attacker.isOutOfCastleWalls() ) {
         return false;
     }
 
     // penalty does not apply if both units are on the same side relative to the castle walls
-    if ( attacker.OutOfWalls() == defender.OutOfWalls() ) {
+    if ( attacker.isOutOfCastleWalls() == defender.isOutOfCastleWalls() ) {
         return false;
     }
 
