@@ -1,4 +1,5 @@
 version 1.0.11 (23 December 2023)
+- improve the logic of AI defensive tactics
 - add Tree of Knowledge claimed and cost info to quick info dialog
 - add a different object popup window logic for the Editor
 - implement town and castle placing in the Editor

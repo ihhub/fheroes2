@@ -42,6 +42,7 @@
       <description>
         <p>Changes in v1.0.11 (23 December 2023):</p>
         <ul>
+          <li>improve the logic of AI defensive tactics</li>
           <li>add Tree of Knowledge claimed and cost info to quick info dialog</li>
           <li>add a different object popup window logic for the Editor</li>
           <li>implement town and castle placing in the Editor</li>
