@@ -158,7 +158,7 @@ namespace AI
                 return unit->GetMonsterStrength() * unit->HowManyWillBeKilled( damage );
             }
 
-            // Otherwise calculate amount of strength lost (% of unit times total strength)
+            // If the unit will be completely destroyed, then use its full strength plus a bonus for destroying the stack
             const uint32_t hitpoints = unit->Modes( CAP_MIRRORIMAGE ) ? 1 : unit->GetHitPoints();
             if ( damage >= hitpoints ) {
                 // Bonus for finishing a stack
@@ -166,9 +166,10 @@ namespace AI
                 return unit->GetStrength() + armyStrength * bonus;
             }
 
+            // Otherwise use the amount of strength lost (% of the total unit's strength)
             double unitPercentageLost = std::min( static_cast<double>( damage ) / hitpoints, 1.0 );
 
-            // Penalty for waking up disabled unit (if you kill only 30%, rest 70% is your penalty)
+            // Penalty for waking up disabled unit (if you kill only 30%, the remaining 70% is your penalty)
             if ( unit->isImmovable() ) {
                 unitPercentageLost += unitPercentageLost - 1.0;
             }
