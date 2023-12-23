@@ -366,7 +366,7 @@ bool Battle::Unit::isFlying() const
     return ArmyTroop::isFlying() && !Modes( SP_SLOW );
 }
 
-bool Battle::Unit::OutOfWalls() const
+bool Battle::Unit::isOutOfCastleWalls() const
 {
     return Board::isOutOfWallsIndex( GetHeadIndex() ) || ( isWide() && Board::isOutOfWallsIndex( GetTailIndex() ) );
 }
