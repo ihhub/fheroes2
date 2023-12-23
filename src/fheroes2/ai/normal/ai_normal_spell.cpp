@@ -161,7 +161,6 @@ namespace AI
             // If the unit will be completely destroyed, then use its full strength plus a bonus for destroying the stack
             const uint32_t hitpoints = unit->Modes( CAP_MIRRORIMAGE ) ? 1 : unit->GetHitPoints();
             if ( damage >= hitpoints ) {
-                // Bonus for finishing a stack
                 const double bonus = ( unit->GetSpeed() > armySpeed ) ? 0.07 : 0.035;
                 return unit->GetStrength() + armyStrength * bonus;
             }
