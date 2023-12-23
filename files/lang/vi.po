@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-19 03:04+0000\n"
-"PO-Revision-Date: 2023-12-15 19:27+0700\n"
+"POT-Creation-Date: 2023-12-05 00:31+0000\n"
+"PO-Revision-Date: 2023-12-20 19:47+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: vi\n"
@@ -197,14 +197,11 @@ msgstr "MIN"
 msgid "RESET"
 msgstr "CÀI LẠI"
 
-#, fuzzy
 msgid "CASTLE"
-msgstr ""
-"THỊ TRẤN/\n"
-"LÂU ĐÀI"
+msgstr "LÂU ĐÀI"
 
 msgid "TOWN"
-msgstr ""
+msgstr "THỊ TRẤN"
 
 msgid ""
 "D\n"
@@ -912,10 +909,10 @@ msgid "Surrender disabled"
 msgstr "Đầu hàng bị vô hiệu hóa"
 
 msgid "Damage: %{max}"
-msgstr "Thiệt hại: %{max}"
+msgstr "Sát thương: %{max}"
 
 msgid "Damage: %{min} - %{max}"
-msgstr "Thiệt hại: %{min} - %{max}"
+msgstr "Sát thương: %{min} - %{max}"
 
 msgid "Perish: %{max}"
 msgstr "Chết %{max}"
@@ -1447,7 +1444,7 @@ msgid "Power's End"
 msgstr "Chấm dứt Quyền lực"
 
 msgid "The Eternal Scrolls"
-msgstr "Phép màu vĩnh cửu"
+msgstr "Phép màu Vĩnh cửu"
 
 msgid "The Shrouded Isles"
 msgstr "Quần đảo được Bao phủ"
@@ -3373,9 +3370,8 @@ msgstr "Chọn Kho báu:"
 msgid "Select Ocean Object:"
 msgstr "Chọn Đối tượng Đại dương:"
 
-#, fuzzy
 msgid "Castle/town placing"
-msgstr "Lựa chọn Lâu đài"
+msgstr "Đặt Lâu đài/thị trấn"
 
 msgid "doubleLinedRace|Neutral"
 msgstr "Trung lập"
@@ -3383,35 +3379,29 @@ msgstr "Trung lập"
 msgid "race|Random"
 msgstr "Ngẫu nhiên"
 
-#, fuzzy
 msgid "Click to start placing the selected castle/town."
-msgstr "Nhấp để áp dụng độ phân giải đã chọn."
+msgstr "Nhấp để bắt đầu đặt lâu đài/thị trấn đã chọn"
 
-#, fuzzy
 msgid "Click to select town placing."
-msgstr "Nhấp để xem thị trấn sau."
+msgstr "Nhấp để chọn thị trấn đặt"
 
-#, fuzzy
 msgid "Click to select castle placing."
-msgstr "Nhấp vào đây để chọn kịch bản để chơi."
+msgstr "Nhấp để chọn lâu đài đặt"
 
-#, fuzzy
 msgid "%{color} %{race} %{townOrCastle}"
-msgstr "%{color} %{race} tướng"
+msgstr "%{color} %{race} %{townOrCastle}"
 
 msgid "race|Neutral"
 msgstr "Trung lập"
 
 msgid "You will place"
-msgstr ""
+msgstr "Ngươi sẽ đặt"
 
-#, fuzzy
 msgid "Click to select this class."
-msgstr "Nhấp vào đây để chọn kịch bản để chơi."
+msgstr "Nhấp để chọn chủng tộc."
 
-#, fuzzy
 msgid "Click to select this color."
-msgstr "Nhấp vào đây để chọn kịch bản để chơi."
+msgstr "Nhấp để chọn màu này."
 
 msgid "Map Type:\n"
 msgstr "Kiểu Bản đồ:\n"
@@ -3733,7 +3723,7 @@ msgid "Treasure"
 msgstr "Kho báu"
 
 msgid "Treasures cannot be placed on water."
-msgstr "Tướng không thể đặt trên nước."
+msgstr "Kho báu không thể đặt trên nước."
 
 msgid "Heroes"
 msgstr "Tướng"
@@ -3745,7 +3735,7 @@ msgid "Artifacts"
 msgstr "Bảo vật"
 
 msgid "Artifacts cannot be placed on water."
-msgstr "Tướng không thể đặt trên nước."
+msgstr "Bảo vật không thể đặt trên nước."
 
 msgid "Ocean object"
 msgstr "Đối tượng đại dương"
@@ -3756,9 +3746,8 @@ msgstr "Đối tượng đại dương phải đặt trên mặt nước."
 msgid "Towns"
 msgstr "Thị trấn"
 
-#, fuzzy
 msgid "Towns cannot be placed on water."
-msgstr "Quái vật không thể đặt trên nước."
+msgstr "Thị trấn không thể đặt trên nước."
 
 msgid "Ocean Objects"
 msgstr "Đối tượng Đại dương"
@@ -3791,7 +3780,7 @@ msgid "Treasures"
 msgstr "Kho báu"
 
 msgid "Terrain"
-msgstr "Chế độ Địa hình"
+msgstr "Địa hình"
 
 msgid "Castles"
 msgstr "Lâu đài"
@@ -3977,7 +3966,7 @@ msgid "Create a map that is %{size} squares wide and %{size} squares high."
 msgstr "Tạo bản đồ rộng %{size} ô vuông và cao %{size} ô vuông."
 
 msgid "Cancel back to the New Map menu."
-msgstr "Hủy quay lại menu Bản đồ mới."
+msgstr "Hủy quay lại menu Bản đồ Mới."
 
 msgid "Cancel back to the main menu."
 msgstr "Hủy quay lại menu chính."
@@ -4169,7 +4158,7 @@ msgid "Original project before 0.7"
 msgstr "Dự án Gốc trước 0.7"
 
 msgid "Heroes of Might and Magic II: The Succession Wars team"
-msgstr ""
+msgstr "Heroes of Might and Magic II: The Succession Wars team"
 
 msgid "Designed and Directed"
 msgstr "Thiết kế và Chỉ đạo"
@@ -4223,7 +4212,7 @@ msgid "Scenarios"
 msgstr "Biên kịch"
 
 msgid "Heroes of Might and Magic II: The Price of Loyalty team"
-msgstr ""
+msgstr "Heroes of Might and Magic II: The Price of Loyalty team"
 
 msgid "Design Lead"
 msgstr "Thiết kế Trưởng"
@@ -4256,16 +4245,16 @@ msgid "Town Themes"
 msgstr "Chủ đề Thị trấn"
 
 msgid "Alto Sax"
-msgstr ""
+msgstr "Alto Sax"
 
 msgid "Harpsichord and Piano"
-msgstr ""
+msgstr "Harpsichord and Piano"
 
 msgid "Basso Vocal"
-msgstr ""
+msgstr "Basso Vocal"
 
 msgid "Soprano Vocal"
-msgstr ""
+msgstr "Soprano Vocal"
 
 msgid "Recorded at %{recordingStudio}"
 msgstr "Thu âm tại %{recordingStudio}"
@@ -4753,7 +4742,7 @@ msgid " button from the "
 msgstr " nút từ "
 
 msgid "NEW GAME"
-msgstr "TẠO TRÒ CHƠI"
+msgstr "TRÒ CHƠI MỚI"
 
 msgid ""
 " menu. \n"
@@ -8488,16 +8477,16 @@ msgid "Ogre Lords"
 msgstr ""
 
 msgid "Troll"
-msgstr ""
+msgstr "Quỷ lùn"
 
 msgid "Trolls"
-msgstr ""
+msgstr "Quỷ lùn"
 
 msgid "War Troll"
-msgstr ""
+msgstr "Quỷ lùn Chiến"
 
 msgid "War Trolls"
-msgstr ""
+msgstr "Quỷ lùn Chiến"
 
 msgid "Cyclopes"
 msgstr "Độc nhãn"
@@ -8584,10 +8573,10 @@ msgid "Minotaurs"
 msgstr "Nhân ngưu"
 
 msgid "Minotaur King"
-msgstr "Nhân ngưu Chúa"
+msgstr "Nhân ngưu Vua"
 
 msgid "Minotaur Kings"
-msgstr "Nhân ngưu Chúa"
+msgstr "Nhân ngưu Vua"
 
 msgid "Hydra"
 msgstr ""
@@ -8656,16 +8645,16 @@ msgid "Archmagi"
 msgstr ""
 
 msgid "Giant"
-msgstr ""
+msgstr "To lớn"
 
 msgid "Giants"
-msgstr ""
+msgstr "To lớn"
 
 msgid "Titan"
-msgstr ""
+msgstr "Khổng lồ"
 
 msgid "Titans"
-msgstr ""
+msgstr "Khổng lồ"
 
 msgid "Skeletons"
 msgstr "Xương"
