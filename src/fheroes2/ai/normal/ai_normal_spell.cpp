@@ -148,7 +148,12 @@ namespace AI
         const auto damageHeuristic = [this, spellDamage, &spell, retreating]( const Unit * unit, const double armyStrength, const double armySpeed ) {
             const uint32_t damage = spellDamage * ( 100 - unit->GetMagicResist( spell, _commander ) ) / 100;
 
-            // If we're retreating we don't care about partial damage, only actual units killed
+            // If the unit is immune to this spell, then no one will be killed, no strength will be lost and the unit will not be woken up if it is disabled
+            if ( damage == 0 ) {
+                return 0.0;
+            }
+
+            // If we retreat, we are not interested in partial damage, but only in the number of units actually killed
             if ( retreating ) {
                 return unit->GetMonsterStrength() * unit->HowManyWillBeKilled( damage );
             }
@@ -156,7 +161,7 @@ namespace AI
             // Otherwise calculate amount of strength lost (% of unit times total strength)
             const uint32_t hitpoints = unit->Modes( CAP_MIRRORIMAGE ) ? 1 : unit->GetHitPoints();
             if ( damage >= hitpoints ) {
-                // bonus for finishing a stack
+                // Bonus for finishing a stack
                 const double bonus = ( unit->GetSpeed() > armySpeed ) ? 0.07 : 0.035;
                 return unit->GetStrength() + armyStrength * bonus;
             }
