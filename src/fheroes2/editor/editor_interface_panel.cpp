@@ -308,20 +308,21 @@ namespace Interface
 
         // Brush size buttons position. Shown on the terrain and erasure instrument panels.
         offsetX = displayX + 14;
-        int32_t offsetY = displayY + std::min( instrumentPanelHeight - 30, 130 );
+        int32_t offsetY = displayY + std::min( instrumentPanelHeight - 27, 135 );
         for ( size_t i = 0; i < _brushSizeButtonsRect.size(); ++i ) {
             _brushSizeButtons[i].setPosition( offsetX, offsetY );
             _brushSizeButtonsRect[i] = _brushSizeButtons[i].area();
             offsetX += 30;
         }
 
-        const int32_t buttonStepX{ 29 };
-        const int32_t buttonStepY{ 29 };
+        const int32_t buttonStepX{ 36 };
+        const int32_t buttonStepY{ 33 };
         const int32_t buttonWidth{ 27 };
         const int32_t buttonHeight{ 27 };
+        const int32_t buttonHalfStepX = buttonStepX / 2;
 
         // Terrain type select buttons position. Shown on the terrain instrument panel.
-        offsetX = displayX + 30;
+        offsetX = displayX + 23;
         offsetY = displayY + 11;
         for ( size_t i = 0; i < _terrainButtonsRect.size(); ++i ) {
             _terrainButtonsRect[i]
@@ -330,20 +331,20 @@ namespace Interface
 
         // Landscape objects buttons position.
         for ( size_t i = 0; i < _landscapeObjectButtonsRect.size(); ++i ) {
-            _landscapeObjectButtonsRect[i] = { offsetX + static_cast<int32_t>( i % 3 ) * buttonStepX + ( i > 2 ? 14 : 0 ),
+            _landscapeObjectButtonsRect[i] = { offsetX + static_cast<int32_t>( i % 3 ) * buttonStepX + ( i > 2 ? buttonHalfStepX : 0 ),
                                                offsetY + static_cast<int32_t>( i / 3 ) * buttonStepY, buttonWidth, buttonHeight };
         }
 
         // Adventure objects buttons position.
         for ( size_t i = 0; i < _adventureObjectButtonsRect.size(); ++i ) {
-            _adventureObjectButtonsRect[i] = { offsetX + static_cast<int32_t>( i % 4 ) * buttonStepX + ( i > 3 ? 0 : -14 ),
-                                               offsetY + static_cast<int32_t>( i / 4 ) * buttonStepY, buttonWidth, buttonHeight };
+            _adventureObjectButtonsRect[i] = { offsetX + static_cast<int32_t>( i % 2 ) * buttonStepX + ( i < 4 ? buttonHalfStepX : ( i < 6 ? 0 : buttonStepX * 2 ) ),
+                                               offsetY + static_cast<int32_t>( i / 2 ) * buttonStepY - ( i < 6 ? 0 : buttonStepY ), buttonWidth, buttonHeight };
         }
 
         // Kingdom objects buttons position.
-        offsetX += 14;
         for ( size_t i = 0; i < _kingdomObjectButtonsRect.size(); ++i ) {
-            _kingdomObjectButtonsRect[i] = { offsetX + static_cast<int32_t>( i ) * buttonStepX, offsetY, buttonWidth, buttonHeight };
+            // We have only two buttons and have enough space to make a double stepX.
+            _kingdomObjectButtonsRect[i] = { offsetX + static_cast<int32_t>( i ) * buttonStepX + buttonHalfStepX, offsetY, buttonWidth, buttonHeight };
         }
 
         // Erase tool object type buttons.
@@ -407,8 +408,11 @@ namespace Interface
         if ( _selectedInstrument == Instrument::TERRAIN ) {
             // We use terrain images from the original terrain instrument panel sprite.
             const fheroes2::Sprite & originalPanel = fheroes2::AGG::GetICN( ICN::EDITPANL, 0 );
-            for ( const fheroes2::Rect & pos : _terrainButtonsRect ) {
-                fheroes2::Copy( originalPanel, pos.x - _rectInstrumentPanel.x, pos.y - _rectInstrumentPanel.y, display, pos.x, pos.y, pos.width, pos.height );
+            for ( size_t i = 0; i < TerrainBrush::TERRAIN_COUNT; ++i ) {
+                const int32_t originalOffsetX = 30 + static_cast<int32_t>( i % 3 ) * 29;
+                const int32_t originalOffsetY = 11 + static_cast<int32_t>( i / 3 ) * 29;
+                fheroes2::Copy( originalPanel, originalOffsetX, originalOffsetY, display, _terrainButtonsRect[i].x, _terrainButtonsRect[i].y,
+                                _terrainButtonsRect[i].width, _terrainButtonsRect[i].height );
             }
 
             // Terrain type selection yellow rectangle.
@@ -416,7 +420,7 @@ namespace Interface
 
             // On high resolutions we have space to show selected terrain text.
             if ( _rectInstrumentPanel.height > 160 ) {
-                drawInstrumentName( display, { _rectInstrumentPanel.x + 7, _rectInstrumentPanel.y + 104 }, _getTerrainTypeName( _selectedTerrain ) );
+                drawInstrumentName( display, { _rectInstrumentPanel.x + 7, _rectInstrumentPanel.y + 113 }, _getTerrainTypeName( _selectedTerrain ) );
             }
         }
         else if ( _selectedInstrument == Instrument::LANDSCAPE_OBJECTS ) {
@@ -427,7 +431,7 @@ namespace Interface
             }
 
             updateObjectTypeSelection( _selectedLandscapeObject, _landscapeObjectButtonsRect, _getLandscapeObjectTypeName,
-                                       { _rectInstrumentPanel.x + 7, _rectInstrumentPanel.y + 76 }, display );
+                                       { _rectInstrumentPanel.x + 7, _rectInstrumentPanel.y + 80 }, display );
         }
         else if ( _selectedInstrument == Instrument::ADVENTURE_OBJECTS ) {
             // Adventure objects buttons.
@@ -452,7 +456,7 @@ namespace Interface
             }
 
             updateObjectTypeSelection( _selectedAdventureObject, _adventureObjectButtonsRect, _getAdventureObjectTypeName,
-                                       { _rectInstrumentPanel.x + 7, _rectInstrumentPanel.y + 76 }, display );
+                                       { _rectInstrumentPanel.x + 7, _rectInstrumentPanel.y + 113 }, display );
         }
         else if ( _selectedInstrument == Instrument::KINGDOM_OBJECTS ) {
             // Kingdom objects buttons.
