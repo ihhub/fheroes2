@@ -645,6 +645,12 @@ std::vector<Skill::Secondary> & Skill::SecSkills::ToVector()
     return v;
 }
 
+const std::vector<Skill::Secondary> & Skill::SecSkills::ToVector() const
+{
+    const std::vector<Secondary> & v = *this;
+    return v;
+}
+
 std::string Skill::SecSkills::String() const
 {
     std::string output;

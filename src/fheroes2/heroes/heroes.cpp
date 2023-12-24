@@ -446,8 +446,7 @@ void Heroes::LoadFromMP2( const int32_t mapIndex, const int colorType, const int
     //
 
     // Clear the initial spell
-    spell_book.clear();
-    bag_artifacts.RemoveArtifact( Artifact::MAGIC_BOOK );
+    SpellBookDeactivate();
 
     // Reset primary skills and initial spell to defaults
     HeroBase::LoadDefaults( HeroBase::HEROES, _race );
