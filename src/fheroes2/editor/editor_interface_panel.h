@@ -176,7 +176,7 @@ namespace Interface
             WATER_OBJECTS = 3,
             LANDSCAPE_MISC = 4,
 
-            LANSCAPE_COUNT = 5,
+            LANDSCAPE_COUNT = 5,
         };
 
         enum AdventureObjectBrush : int8_t
@@ -245,7 +245,7 @@ namespace Interface
 
         std::array<fheroes2::Rect, Instrument::INSTRUMENTS_COUNT> _instrumentButtonsRect;
         std::array<fheroes2::Rect, TerrainBrush::TERRAIN_COUNT> _terrainButtonsRect;
-        std::array<fheroes2::Rect, LandscapeObjectBrush::LANSCAPE_COUNT> _landscapeObjectButtonsRect;
+        std::array<fheroes2::Rect, LandscapeObjectBrush::LANDSCAPE_COUNT> _landscapeObjectButtonsRect;
         std::array<fheroes2::Rect, AdventureObjectBrush::ADVENTURE_COUNT> _adventureObjectButtonsRect;
         std::array<fheroes2::Rect, KingdomObjectBrush::KINGDOM_OBJECTS_COUNT> _kingdomObjectButtonsRect;
         std::array<fheroes2::Rect, BrushSize::BRUSH_SIZE_COUNT> _brushSizeButtonsRect;
@@ -261,16 +261,16 @@ namespace Interface
         uint8_t _selectedBrushSize{ BrushSize::MEDIUM };
         uint32_t _eraseTypes{ Maps::ObjectErasureType::ALL_OBJECTS };
 
-        std::array<int32_t, LandscapeObjectBrush::LANSCAPE_COUNT> _selectedLandscapeObjectType;
+        std::array<int32_t, LandscapeObjectBrush::LANDSCAPE_COUNT> _selectedLandscapeObjectType;
         std::array<int32_t, AdventureObjectBrush::ADVENTURE_COUNT> _selectedAdventureObjectType;
         std::array<int32_t, KingdomObjectBrush::KINGDOM_OBJECTS_COUNT> _selectedKingdomObjectType;
         int32_t _selectedMonsterType{ -1 };
 
-        const std::array<Maps::ObjectGroup, LandscapeObjectBrush::LANSCAPE_COUNT> _selectedLandscapeObjectGroup{ Maps::ObjectGroup::LANDSCAPE_MOUNTAINS,
-                                                                                                                 Maps::ObjectGroup::LANDSCAPE_ROCKS,
-                                                                                                                 Maps::ObjectGroup::LANDSCAPE_TREES,
-                                                                                                                 Maps::ObjectGroup::LANDSCAPE_WATER,
-                                                                                                                 Maps::ObjectGroup::LANDSCAPE_MISCELLANEOUS };
+        const std::array<Maps::ObjectGroup, LandscapeObjectBrush::LANDSCAPE_COUNT> _selectedLandscapeObjectGroup{ Maps::ObjectGroup::LANDSCAPE_MOUNTAINS,
+                                                                                                                  Maps::ObjectGroup::LANDSCAPE_ROCKS,
+                                                                                                                  Maps::ObjectGroup::LANDSCAPE_TREES,
+                                                                                                                  Maps::ObjectGroup::LANDSCAPE_WATER,
+                                                                                                                  Maps::ObjectGroup::LANDSCAPE_MISCELLANEOUS };
         const std::array<Maps::ObjectGroup, AdventureObjectBrush::ADVENTURE_COUNT> _selectedAdventureObjectGroup{ Maps::ObjectGroup::ADVENTURE_ARTIFACTS,
                                                                                                                   Maps::ObjectGroup::ADVENTURE_DWELLINGS,
                                                                                                                   Maps::ObjectGroup::ADVENTURE_MINES,

@@ -168,6 +168,20 @@ namespace
         StringReplaceWithLowercase( text, "%{object}", objectName );
         fheroes2::showStandardTextMessage( std::move( objectName ), std::move( text ), Dialog::ZERO );
     }
+
+    template <size_t TSize>
+    void updateObjectTypeSelection( const int8_t objectId, const std::array<fheroes2::Rect, TSize> & buttonAreas,
+                                    const std::function<const char *( uint8_t )> & getObjectTypeName, const fheroes2::Point & ObjectTypeNamePosition,
+                                    fheroes2::Image & output )
+    {
+        if ( objectId < 0 ) {
+            drawInstrumentName( output, ObjectTypeNamePosition, _( "Select object type" ) );
+        }
+        else {
+            drawObjectTypeSelectionRect( output, buttonAreas[objectId].getPosition() );
+            drawInstrumentName( output, ObjectTypeNamePosition, getObjectTypeName( objectId ) );
+        }
+    }
 }
 
 namespace Interface
@@ -391,18 +405,13 @@ namespace Interface
         }
         else if ( _selectedInstrument == Instrument::LANDSCAPE_OBJECTS ) {
             // Landscape objects buttons.
-            for ( uint32_t i = 0; i < LandscapeObjectBrush::LANSCAPE_COUNT; ++i ) {
+            for ( uint32_t i = 0; i < LandscapeObjectBrush::LANDSCAPE_COUNT; ++i ) {
                 fheroes2::Copy( fheroes2::AGG::GetICN( ICN::EDITPANL, i + 6 ), 0, 0, display, _landscapeObjectButtonsRect[i].x, _landscapeObjectButtonsRect[i].y, 27,
                                 27 );
             }
 
-            if ( _selectedLandscapeObject < 0 ) {
-                drawInstrumentName( display, { _rectInstrumentPanel.x + 7, _rectInstrumentPanel.y + 76 }, _( "Select object type" ) );
-            }
-            else {
-                drawObjectTypeSelectionRect( display, _landscapeObjectButtonsRect[_selectedLandscapeObject].getPosition() );
-                drawInstrumentName( display, { _rectInstrumentPanel.x + 7, _rectInstrumentPanel.y + 76 }, _getLandscapeObjectTypeName( _selectedLandscapeObject ) );
-            }
+            updateObjectTypeSelection( _selectedLandscapeObject, _landscapeObjectButtonsRect, _getLandscapeObjectTypeName,
+                                       { _rectInstrumentPanel.x + 7, _rectInstrumentPanel.y + 76 }, display );
         }
         else if ( _selectedInstrument == Instrument::ADVENTURE_OBJECTS ) {
             // Adventure objects buttons.
@@ -420,34 +429,23 @@ namespace Interface
                                 27 );
             }
 
-            if ( _selectedAdventureObject < 0 ) {
-                drawInstrumentName( display, { _rectInstrumentPanel.x + 7, _rectInstrumentPanel.y + 76 }, _( "Select object type" ) );
-            }
-            else {
-                drawObjectTypeSelectionRect( display, _adventureObjectButtonsRect[_selectedAdventureObject].getPosition() );
-                drawInstrumentName( display, { _rectInstrumentPanel.x + 7, _rectInstrumentPanel.y + 76 }, _getAdventureObjectTypeName( _selectedAdventureObject ) );
-            }
+            updateObjectTypeSelection( _selectedAdventureObject, _adventureObjectButtonsRect, _getAdventureObjectTypeName,
+                                       { _rectInstrumentPanel.x + 7, _rectInstrumentPanel.y + 76 }, display );
         }
         else if ( _selectedInstrument == Instrument::KINGDOM_OBJECTS ) {
             // Kingdom objects buttons.
             const fheroes2::Sprite & originalPanel = fheroes2::AGG::GetICN( ICN::EDITPANL, 1 );
             fheroes2::Copy( originalPanel, 102, 68, display, _kingdomObjectButtonsRect[KingdomObjectBrush::HEROES].x,
-                            _adventureObjectButtonsRect[KingdomObjectBrush::HEROES].y, 27, 27 );
+                            _kingdomObjectButtonsRect[KingdomObjectBrush::HEROES].y, 27, 27 );
             fheroes2::Copy( originalPanel, 44, 68, display, _kingdomObjectButtonsRect[KingdomObjectBrush::TOWNS].x,
-                            _adventureObjectButtonsRect[KingdomObjectBrush::TOWNS].y, 27, 27 );
+                            _kingdomObjectButtonsRect[KingdomObjectBrush::TOWNS].y, 27, 27 );
 
-            if ( _selectedKingdomObject < 0 ) {
-                drawInstrumentName( display, { _rectInstrumentPanel.x + 7, _rectInstrumentPanel.y + 76 }, _( "Select object type" ) );
-            }
-            else {
-                drawObjectTypeSelectionRect( display, _kingdomObjectButtonsRect[_selectedKingdomObject].getPosition() );
-                drawInstrumentName( display, { _rectInstrumentPanel.x + 7, _rectInstrumentPanel.y + 48 }, _getKingdomObjectTypeName( _selectedKingdomObject ) );
-            }
+            updateObjectTypeSelection( _selectedKingdomObject, _kingdomObjectButtonsRect, _getKingdomObjectTypeName,
+                                       { _rectInstrumentPanel.x + 7, _rectInstrumentPanel.y + 48 }, display );
         }
         else if ( _selectedInstrument == Instrument::MONSTERS ) {
-            // Instrument name.
-            const fheroes2::Text terrainText( _( "Monsters" ), fheroes2::FontType::normalWhite() );
-            terrainText.draw( _rectInstrumentPanel.x + ( _rectInstrumentPanel.width - terrainText.width() ) / 2, _rectInstrumentPanel.y + 8, display );
+            const fheroes2::Text instrumentName( _( "Monsters" ), fheroes2::FontType::normalWhite() );
+            instrumentName.draw( _rectInstrumentPanel.x + ( _rectInstrumentPanel.width - instrumentName.width() ) / 2, _rectInstrumentPanel.y + 8, display );
 
             if ( _selectedMonsterType < 0 ) {
                 // Show a tip.
@@ -467,21 +465,20 @@ namespace Interface
             }
         }
         else if ( _selectedInstrument == Instrument::DETAIL ) {
-            const fheroes2::Text terrainText( _( "Cell\nDetails" ), fheroes2::FontType::normalWhite() );
-            terrainText.draw( _rectInstrumentPanel.x + 5, _rectInstrumentPanel.y + 8, _rectInstrumentPanel.width - 10, display );
+            const fheroes2::Text instrumentName( _( "Cell\nDetails" ), fheroes2::FontType::normalWhite() );
+            instrumentName.draw( _rectInstrumentPanel.x + 5, _rectInstrumentPanel.y + 8, _rectInstrumentPanel.width - 10, display );
         }
         else if ( _selectedInstrument == Instrument::ROAD ) {
-            const fheroes2::Text terrainText( _( "Roads" ), fheroes2::FontType::normalWhite() );
-            terrainText.draw( _rectInstrumentPanel.x + ( _rectInstrumentPanel.width - terrainText.width() ) / 2, _rectInstrumentPanel.y + 8, display );
+            const fheroes2::Text instrumentName( _( "Roads" ), fheroes2::FontType::normalWhite() );
+            instrumentName.draw( _rectInstrumentPanel.x + ( _rectInstrumentPanel.width - instrumentName.width() ) / 2, _rectInstrumentPanel.y + 8, display );
         }
         else if ( _selectedInstrument == Instrument::STREAM ) {
-            const fheroes2::Text terrainText( _( "Streams" ), fheroes2::FontType::normalWhite() );
-            terrainText.draw( _rectInstrumentPanel.x + ( _rectInstrumentPanel.width - terrainText.width() ) / 2, _rectInstrumentPanel.y + 8, display );
+            const fheroes2::Text instrumentName( _( "Streams" ), fheroes2::FontType::normalWhite() );
+            instrumentName.draw( _rectInstrumentPanel.x + ( _rectInstrumentPanel.width - instrumentName.width() ) / 2, _rectInstrumentPanel.y + 8, display );
         }
         else if ( _selectedInstrument == Instrument::ERASE ) {
-            // Instrument name.
-            const fheroes2::Text terrainText( _( "Erase" ), fheroes2::FontType::normalWhite() );
-            terrainText.draw( _rectInstrumentPanel.x + ( _rectInstrumentPanel.width - terrainText.width() ) / 2, _rectInstrumentPanel.y + 8, display );
+            const fheroes2::Text instrumentName( _( "Erase" ), fheroes2::FontType::normalWhite() );
+            instrumentName.draw( _rectInstrumentPanel.x + ( _rectInstrumentPanel.width - instrumentName.width() ) / 2, _rectInstrumentPanel.y + 8, display );
 
             // Object type to erase buttons.
             const fheroes2::Sprite & originalPanel = fheroes2::AGG::GetICN( ICN::EDITPANL, 1 );
@@ -897,7 +894,7 @@ namespace Interface
                 }
             }
 
-            for ( uint8_t objectId = LandscapeObjectBrush::MOUNTAINS; objectId < LandscapeObjectBrush::LANSCAPE_COUNT; ++objectId ) {
+            for ( uint8_t objectId = LandscapeObjectBrush::MOUNTAINS; objectId < LandscapeObjectBrush::LANDSCAPE_COUNT; ++objectId ) {
                 if ( le.MousePressRight( _landscapeObjectButtonsRect[objectId] ) ) {
                     showObjectTypeInfoText( _getLandscapeObjectTypeName( objectId ) );
                     break;
