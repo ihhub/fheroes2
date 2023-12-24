@@ -1737,8 +1737,9 @@ int32_t Maps::Tiles::getIndexOfMainTile( const Maps::Tiles & tile )
 
     // Main tile is usually at the bottom of the object so let's start from there. Also there are no objects having tiles below more than 1 row.
     for ( int32_t y = radiusOfSearch; y >= -1; --y ) {
+        const int32_t offsetX = tileIndex + y * mapWidth;
         for ( int32_t x = -radiusOfSearch; x <= radiusOfSearch; ++x ) {
-            const int32_t index = tileIndex + y * mapWidth + x;
+            const int32_t index = offsetX + x;
             if ( Maps::isValidAbsIndex( index ) ) {
                 const Maps::Tiles & foundTile = world.GetTiles( index );
                 if ( foundTile.GetObject( false ) != correctedObjectType ) {
