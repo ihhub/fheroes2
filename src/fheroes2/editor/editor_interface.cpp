@@ -46,7 +46,6 @@
 #include "interface_border.h"
 #include "interface_gamearea.h"
 #include "interface_radar.h"
-#include "interface_status.h"
 #include "localevent.h"
 #include "map_format_helper.h"
 #include "map_format_info.h"
@@ -164,13 +163,7 @@ namespace Interface
         const int32_t xOffset = display.width() - BORDERWIDTH - RADARWIDTH;
         _radar.SetPos( xOffset, BORDERWIDTH );
 
-        if ( display.height() > display.DEFAULT_HEIGHT + BORDERWIDTH ) {
-            _editorPanel.setPos( xOffset, _radar.GetArea().y + _radar.GetArea().height + BORDERWIDTH );
-            _statusWindow.SetPos( xOffset, _editorPanel.getRect().y + _editorPanel.getRect().height );
-        }
-        else {
-            _editorPanel.setPos( xOffset, _radar.GetArea().y + _radar.GetArea().height );
-        }
+        _editorPanel.setPos( xOffset, _radar.GetArea().y + _radar.GetArea().height + ( ( display.height() > display.DEFAULT_HEIGHT + BORDERWIDTH ) ? BORDERWIDTH : 0 ) );
 
         const fheroes2::Point prevCenter = _gameArea.getCurrentCenterInPixels();
         const fheroes2::Rect prevRoi = _gameArea.GetROI();
@@ -225,13 +218,6 @@ namespace Interface
 
         if ( combinedRedraw & REDRAW_PANEL ) {
             _editorPanel._redraw();
-        }
-
-        if ( ( combinedRedraw & REDRAW_STATUS ) && ( display.height() > display.DEFAULT_HEIGHT + BORDERWIDTH ) ) {
-            // Currently the Adventure Map status is rendered to fill the space under the Editor buttons on high resolutions.
-            // TODO: Make special status for Editor to display some map info, e.g. object properties under the cursor (castle garrison, amount of resources, etc.)
-            // TODO: Decide where to output the status for low resolutions (reduce the number of displayed buttons - put some into sub-menu).
-            _statusWindow._redraw();
         }
 
         _redraw = 0;
@@ -832,7 +818,7 @@ namespace Interface
                 setObjectOnTile( tile, objectInfo );
             }
         }
-        else if ( groupType == Maps::ObjectGroup::ADVENTURE_WATER ) {
+        else if ( groupType == Maps::ObjectGroup::ADVENTURE_WATER || groupType == Maps::ObjectGroup::LANDSCAPE_WATER ) {
             const auto & objectInfo = getObjectInfo( groupType, _editorPanel.getSelectedObjectType() );
 
             if ( !isObjectPlacementAllowed( objectInfo, tilePos ) ) {
