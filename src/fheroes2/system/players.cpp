@@ -334,22 +334,22 @@ void Players::Init( const Maps::FileInfo & fi )
 
     Player * first = nullptr;
 
-    for ( Colors::const_iterator it = vcolors.begin(); it != vcolors.end(); ++it ) {
-        Player * player = new Player( *it );
-        player->SetRace( fi.KingdomRace( *it ) );
+    for ( const int color : vcolors ) {
+        Player * player = new Player( color );
+        player->SetRace( fi.KingdomRace( color ) );
         player->SetControl( CONTROL_AI );
-        player->SetFriends( *it | fi.unions[Color::GetIndex( *it )] );
+        player->SetFriends( color | fi.unions[Color::GetIndex( color )] );
 
-        if ( ( *it & fi.HumanOnlyColors() ) && Settings::Get().IsGameType( Game::TYPE_MULTI ) )
+        if ( ( color & fi.HumanOnlyColors() ) && Settings::Get().IsGameType( Game::TYPE_MULTI ) )
             player->SetControl( CONTROL_HUMAN );
-        else if ( *it & fi.colorsAvailableForHumans )
+        else if ( color & fi.colorsAvailableForHumans )
             player->SetControl( player->GetControl() | CONTROL_HUMAN );
 
         if ( !first && ( player->GetControl() & CONTROL_HUMAN ) )
             first = player;
 
         push_back( player );
-        _players[Color::GetIndex( *it )] = back();
+        _players[Color::GetIndex( color )] = back();
     }
 
     if ( first )
