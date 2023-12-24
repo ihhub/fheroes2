@@ -866,13 +866,22 @@ int Dialog::selectTreasureType( const int resourceType )
     return selectObjectType( resourceType, objectInfo.size(), listbox );
 }
 
-int Dialog::selectOceanObjectType( const int resourceType )
+int Dialog::selectOceanObjectType( const int objectType )
 {
     const auto & objectInfo = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_WATER );
 
     OceanObjectTypeSelection listbox( objectInfo, { 350, fheroes2::Display::instance().height() - 200 }, _( "Select Ocean Object:" ) );
 
-    return selectObjectType( resourceType, objectInfo.size(), listbox );
+    return selectObjectType( objectType, objectInfo.size(), listbox );
+}
+
+int Dialog::selectLandscapeOceanObjectType( const int objectType )
+{
+    const auto & objectInfo = Maps::getObjectsByGroup( Maps::ObjectGroup::LANDSCAPE_WATER );
+
+    OceanObjectTypeSelection listbox( objectInfo, { 350, fheroes2::Display::instance().height() - 200 }, _( "Select Ocean Object:" ) );
+
+    return selectObjectType( objectType, objectInfo.size(), listbox );
 }
 
 void Dialog::selectTownType( int & type, int & color )
