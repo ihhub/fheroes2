@@ -2231,10 +2231,10 @@ msgid "Treehouse"
 msgstr "Fa Ház"
 
 msgid "Cottage"
-msgstr "Törpe kunyhó"
+msgstr "Törp kunyhó"
 
 msgid "Upg. Cottage"
-msgstr "Fejl. törpe kunyhó"
+msgstr "Fejl. törp kunyhó"
 
 msgid "Stonehenge"
 msgstr "Kőkör"
@@ -3302,7 +3302,7 @@ msgid ""
 msgstr ""
 "\n"
 "\n"
-"Helyszín: "
+"Hely: "
 
 msgid "Click to save the current game."
 msgstr "Kattints az aktuális játékállás mentéséhez."
@@ -5862,7 +5862,7 @@ msgid ""
 "teaches you %{skill} for her own inscrutable purposes."
 msgstr ""
 "Egy vénséges, halhatatlan boszorkány lakik a cölöpkunyhóban, aki "
-"kifürkészhetetlen okok miatt megtanít téged a %{skill} képzettségre."
+"kifürkészhetetlen okok miatt megtanít téged a %{skill} képességre."
 
 msgid "As you drink the sweet water, you gain luck for your next battle."
 msgstr ""
@@ -7507,7 +7507,7 @@ msgid "Hero/Stats"
 msgstr "Hős statisztikái"
 
 msgid "Skills"
-msgstr "Készségek"
+msgstr "Képességek"
 
 msgid "Town/Castle"
 msgstr "Város/Vár"
@@ -7665,7 +7665,7 @@ msgid "speed|Crawling"
 msgstr "Vánszorgó"
 
 msgid "speed|Very Slow"
-msgstr "Nagyon lassú"
+msgstr "Csigalassú"
 
 msgid "speed|Slow"
 msgstr "Lassú"
@@ -7674,13 +7674,13 @@ msgid "speed|Average"
 msgstr "Átlagos"
 
 msgid "speed|Fast"
-msgstr "Gyors"
+msgstr "Sebes"
 
 msgid "speed|Very Fast"
-msgstr "Nagyon gyors"
+msgstr "Szélsebes"
 
 msgid "speed|Ultra Fast"
-msgstr "Túl gyors"
+msgstr "Nyílsebes"
 
 msgid "speed|Blazing"
 msgstr "Villámgyors"
@@ -10031,7 +10031,7 @@ msgid "Increases the speed of any creature by %{count}."
 msgstr "%{count} ponttal növeli bármely lény sebességét."
 
 msgid "Increases the speed of all of your creatures by %{count}."
-msgstr "%{count} ponttal növeli az összes lény sebességét."
+msgstr "%{count} ponttal növeli az összes saját lény sebességét."
 
 msgid "Mass Haste"
 msgstr "Teljes gyorsítás"
@@ -10353,7 +10353,7 @@ msgid "Dimension Door"
 msgstr "Dimenziókapu"
 
 msgid "Returns the caster to any town or castle currently owned."
-msgstr "A varázsló visszatér bármelyik saját városba vagy várba."
+msgstr "A varázslat megidézőjét visszarepíti bármelyik saját városba vagy várba."
 
 msgid "Town Gate"
 msgstr "Városkapu"
