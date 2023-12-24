@@ -444,8 +444,13 @@ namespace
 
         const char * textSupported = getSupportedText( text, releasedFont );
 
-        const fheroes2::Text releasedText( textSupported, releasedFont );
-        const fheroes2::Text pressedText( textSupported, pressedFont );
+        fheroes2::Text releasedText( textSupported, releasedFont );
+        fheroes2::Text pressedText( textSupported, pressedFont );
+
+        if ( releasedText.height( buttonSize.width ) > buttonSize.height || pressedText.height( buttonSize.width ) > buttonSize.height ) {
+            releasedText.fitToOneRow( buttonSize.width );
+            pressedText.fitToOneRow( buttonSize.width );
+        }
 
         const fheroes2::Size releasedTextSize( releasedText.width( buttonSize.width ), releasedText.height( buttonSize.width ) );
         const fheroes2::Size pressedTextSize( pressedText.width( buttonSize.width ), pressedText.height( buttonSize.width ) );
