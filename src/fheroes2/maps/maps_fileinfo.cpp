@@ -86,6 +86,65 @@ namespace
     {
         return CaseInsensitiveCompare( lhs.name, rhs.name );
     }
+
+    MapsFileInfoList getValidMaps( const ListFiles & mapFiles, const bool isMultiplayer, const bool isForEditor, const bool isOriginalMapFormat )
+    {
+        // create a list of unique maps (based on the map file name) and filter it by the preferred number of players
+        std::map<std::string, Maps::FileInfo> uniqueMaps;
+
+        const Settings & conf = Settings::Get();
+        const int prefNumOfPlayers = conf.PreferablyCountPlayers();
+
+        for ( const std::string & mapFile : mapFiles ) {
+            Maps::FileInfo fi;
+
+            if ( isOriginalMapFormat ) {
+                if ( !fi.readMP2Map( mapFile, isForEditor ) ) {
+                    continue;
+                }
+            }
+            else {
+                if ( !fi.readResurrectionMap( mapFile, isForEditor ) ) {
+                    continue;
+                }
+            }
+
+            if ( !isForEditor ) {
+                if ( isMultiplayer ) {
+                    assert( prefNumOfPlayers > 1 );
+                    if ( !fi.isAllowCountPlayers( prefNumOfPlayers ) ) {
+                        continue;
+                    }
+                }
+                else {
+                    const int humanOnlyColorsCount = Color::Count( fi.HumanOnlyColors() );
+
+                    // Map has more than one human-only color, it is not suitable for single player mode
+                    if ( humanOnlyColorsCount > 1 ) {
+                        continue;
+                    }
+
+                    // Map has the human-only color, only this color can be selected by a human player
+                    if ( humanOnlyColorsCount == 1 ) {
+                        fi.removeHumanColors( fi.AllowCompHumanColors() );
+                    }
+                }
+            }
+
+            uniqueMaps.try_emplace( System::GetBasename( mapFile ), std::move( fi ) );
+        }
+
+        MapsFileInfoList result;
+        result.reserve( uniqueMaps.size() );
+
+        for ( auto & [name, info] : uniqueMaps ) {
+            result.emplace_back( std::move( info ) );
+        }
+
+        std::sort( result.begin(), result.end(), sortByMapNames );
+
+        return result;
+    }
 }
 
 namespace Editor
@@ -156,7 +215,7 @@ bool Maps::FileInfo::ReadSAV( std::string filePath )
     return Game::LoadSAV2FileInfo( std::move( filePath ), *this );
 }
 
-bool Maps::FileInfo::ReadMP2( const std::string & filePath )
+bool Maps::FileInfo::readMP2Map( std::string filePath, const bool isForEditor )
 {
     Reset();
 
@@ -172,7 +231,7 @@ bool Maps::FileInfo::ReadMP2( const std::string & filePath )
         return false;
     }
 
-    filename = filePath;
+    filename = std::move( filePath );
 
     // Difficulty level
     switch ( fs.getLE16() ) {
@@ -218,6 +277,12 @@ bool Maps::FileInfo::ReadMP2( const std::string & filePath )
         if ( fs.get() != 0 ) {
             colorsAvailableForComp |= color;
         }
+    }
+
+    if ( !isForEditor && colorsAvailableForHumans == 0 ) {
+        // This is not a valid map since no human players exist so it cannot be played.
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "Map " << filename << " does not contain any human players." )
+        return false;
     }
 
     // TODO: Number of active kingdoms (unused)
@@ -301,13 +366,13 @@ bool Maps::FileInfo::ReadMP2( const std::string & filePath )
 
         const Colors availableColors( kingdomColors );
         if ( availableColors.empty() ) {
-            DEBUG_LOG( DBG_GAME, DBG_WARN, "File " << filePath << ": invalid list of kingdom colors during map load" )
+            DEBUG_LOG( DBG_GAME, DBG_WARN, "File " << filename << ": invalid list of kingdom colors during map load" )
             return false;
         }
 
         const int numPlayersSide1 = victoryConditionParams[0];
         if ( ( numPlayersSide1 <= 0 ) || ( numPlayersSide1 >= static_cast<int>( availableColors.size() ) ) ) {
-            DEBUG_LOG( DBG_GAME, DBG_WARN, "File " << filePath << ": invalid victory condition param during map load" )
+            DEBUG_LOG( DBG_GAME, DBG_WARN, "File " << filename << ": invalid victory condition param during map load" )
             return false;
         }
 
@@ -327,9 +392,9 @@ bool Maps::FileInfo::ReadMP2( const std::string & filePath )
     }
 
     // Determine the type of the map
-    const size_t pos = filePath.rfind( '.' );
+    const size_t pos = filename.rfind( '.' );
     if ( pos != std::string::npos ) {
-        const std::string fileExtension = StringLower( filePath.substr( pos + 1 ) );
+        const std::string fileExtension = StringLower( filename.substr( pos + 1 ) );
 
         version = ( fileExtension == "mx2" || fileExtension == "hxc" ) ? GameVersion::PRICE_OF_LOYALTY : GameVersion::SUCCESSION_WARS;
     }
@@ -337,7 +402,7 @@ bool Maps::FileInfo::ReadMP2( const std::string & filePath )
     return true;
 }
 
-bool Maps::FileInfo::readResurrectionMap( std::string filePath )
+bool Maps::FileInfo::readResurrectionMap( std::string filePath, const bool isForEditor )
 {
     Reset();
 
@@ -361,6 +426,12 @@ bool Maps::FileInfo::readResurrectionMap( std::string filePath )
     colorsAvailableForComp = map.computerPlayerColors;
 
     version = GameVersion::RESURRECTION;
+
+    if ( !isForEditor && colorsAvailableForHumans == 0 ) {
+        // This is not a valid map since no human players exist so it cannot be played.
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "Map " << filename << " does not contain any human players." )
+        return false;
+    }
 
     return true;
 }
@@ -533,87 +604,24 @@ StreamBase & Maps::operator>>( StreamBase & msg, FileInfo & fi )
     return msg >> fi.worldDay >> fi.worldWeek >> fi.worldMonth;
 }
 
-MapsFileInfoList Maps::getOriginalMapFileInfos( const bool multi )
+MapsFileInfoList Maps::getOriginalMapFileInfos( const bool isForEditor, const bool isMultiplayer )
 {
-    const Settings & conf = Settings::Get();
-
     ListFiles maps = Settings::FindFiles( "maps", ".mp2", false );
-    if ( conf.isPriceOfLoyaltySupported() ) {
+
+    if ( Settings::Get().isPriceOfLoyaltySupported() ) {
         maps.Append( Settings::FindFiles( "maps", ".mx2", false ) );
     }
 
-    // create a list of unique maps (based on the map file name) and filter it by the preferred number of players
-    std::map<std::string, Maps::FileInfo> uniqueMaps;
-
-    const int prefNumOfPlayers = conf.PreferablyCountPlayers();
-
-    for ( const std::string & mapFile : maps ) {
-        Maps::FileInfo fi;
-
-        if ( !fi.ReadMP2( mapFile ) ) {
-            continue;
-        }
-
-        if ( multi ) {
-            assert( prefNumOfPlayers > 1 );
-
-            if ( !fi.isAllowCountPlayers( prefNumOfPlayers ) ) {
-                continue;
-            }
-        }
-        else {
-            const int humanOnlyColorsCount = Color::Count( fi.HumanOnlyColors() );
-
-            // Map has more than one human-only color, it is not suitable for single player mode
-            if ( humanOnlyColorsCount > 1 ) {
-                continue;
-            }
-            // Map has the human-only color, only this color can be selected by a human player
-            if ( humanOnlyColorsCount == 1 ) {
-                fi.removeHumanColors( fi.AllowCompHumanColors() );
-            }
-        }
-
-        uniqueMaps.try_emplace( System::GetBasename( mapFile ), std::move( fi ) );
-    }
-
-    MapsFileInfoList result;
-    result.reserve( uniqueMaps.size() );
-
-    for ( auto & [name, info] : uniqueMaps ) {
-        result.emplace_back( std::move( info ) );
-    }
-
-    std::sort( result.begin(), result.end(), sortByMapNames );
-
-    return result;
+    return getValidMaps( maps, isMultiplayer, isForEditor, true );
 }
 
-MapsFileInfoList Maps::getResurrectionMapFileInfos()
+MapsFileInfoList Maps::getResurrectionMapFileInfos( const bool isForEditor, const bool isMultiplayer )
 {
+    if ( !Settings::Get().isPriceOfLoyaltySupported() ) {
+        // Resurrection maps require POL resources presence.
+        return {};
+    }
+
     const ListFiles maps = Settings::FindFiles( "maps", ".fh2m", false );
-
-    // Create a list of unique maps (based on the map file name).
-    std::map<std::string, Maps::FileInfo> uniqueMaps;
-
-    for ( const std::string & mapFile : maps ) {
-        Maps::FileInfo fi;
-
-        if ( !fi.readResurrectionMap( mapFile ) ) {
-            continue;
-        }
-
-        uniqueMaps.try_emplace( System::GetBasename( mapFile ), std::move( fi ) );
-    }
-
-    MapsFileInfoList result;
-    result.reserve( uniqueMaps.size() );
-
-    for ( auto & [name, info] : uniqueMaps ) {
-        result.emplace_back( std::move( info ) );
-    }
-
-    std::sort( result.begin(), result.end(), sortByMapNames );
-
-    return result;
+    return getValidMaps( maps, isMultiplayer, isForEditor, false );
 }

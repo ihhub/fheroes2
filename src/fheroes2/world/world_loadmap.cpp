@@ -43,6 +43,7 @@
 #include "heroes.h"
 #include "kingdom.h"
 #include "logging.h"
+#include "map_format_info.h"
 #include "maps.h"
 #include "maps_fileinfo.h"
 #include "maps_objects.h"
@@ -658,6 +659,20 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
 
     DEBUG_LOG( DBG_GAME, DBG_INFO, "Loading of MP2 map is completed." )
     return true;
+}
+
+bool World::loadResurrectionMap( const std::string & filename )
+{
+    Reset();
+    Defaults();
+
+    Maps::Map_Format::MapFormat map;
+    if ( !Maps::Map_Format::loadMap( filename, map ) ) {
+        return false;
+    }
+
+    // TODO: return true once we add logic for loading an entire map.
+    return false;
 }
 
 bool World::ProcessNewMap( const std::string & filename, const bool checkPoLObjects )

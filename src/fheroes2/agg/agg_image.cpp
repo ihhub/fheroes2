@@ -3412,7 +3412,7 @@ namespace fheroes2
                 return true;
             case ICN::MAP_TYPE_ICON: {
                 // TODO: add a new icon for the Resurrection add-on map type.
-                _icnVsSprite[id].resize( 2 );
+                _icnVsSprite[id].resize( 3 );
                 for ( Sprite & icon : _icnVsSprite[id] ) {
                     icon._disableTransformLayer();
                     icon.resize( 17, 17 );
@@ -3421,6 +3421,7 @@ namespace fheroes2
 
                 const Sprite & successionWarsIcon = GetICN( ICN::ARTFX, 6 );
                 const Sprite & priceOfLoyaltyIcon = GetICN( ICN::ARTFX, 90 );
+                const Sprite & resurrectionIcon = GetICN( ICN::ARTFX, 101 );
 
                 if ( !successionWarsIcon.empty() ) {
                     Resize( successionWarsIcon, 0, 0, successionWarsIcon.width(), successionWarsIcon.height(), _icnVsSprite[id][0], 1, 1, 15, 15 );
@@ -3428,6 +3429,10 @@ namespace fheroes2
 
                 if ( !priceOfLoyaltyIcon.empty() ) {
                     Resize( priceOfLoyaltyIcon, 0, 0, priceOfLoyaltyIcon.width(), priceOfLoyaltyIcon.height(), _icnVsSprite[id][1], 1, 1, 15, 15 );
+                }
+
+                if ( !resurrectionIcon.empty() ) {
+                    Resize( resurrectionIcon, 0, 0, resurrectionIcon.width(), resurrectionIcon.height(), _icnVsSprite[id][2], 1, 1, 15, 15 );
                 }
 
                 return true;

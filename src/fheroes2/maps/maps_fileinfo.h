@@ -64,8 +64,9 @@ namespace Maps
             return filename == fi.filename;
         }
 
-        bool ReadMP2( const std::string & filePath );
-        bool readResurrectionMap( std::string filePath );
+        bool readMP2Map( std::string filePath, const bool isForEditor );
+
+        bool readResurrectionMap( std::string filePath, const bool isForEditor );
 
         bool ReadSAV( std::string filePath );
 
@@ -206,10 +207,10 @@ using MapsFileInfoList = std::vector<Maps::FileInfo>;
 namespace Maps
 {
     // For SUCCESSION_WARS and PRICE_OF_LOYALTY map files.
-    MapsFileInfoList getOriginalMapFileInfos( const bool multi );
+    MapsFileInfoList getOriginalMapFileInfos( const bool isForEditor, const bool isMultiplayer );
 
     // For RESURRECTION map files.
-    MapsFileInfoList getResurrectionMapFileInfos();
+    MapsFileInfoList getResurrectionMapFileInfos(const bool isForEditor, const bool isMultiplayer );
 }
 
 #endif

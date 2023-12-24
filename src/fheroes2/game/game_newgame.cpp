@@ -143,7 +143,7 @@ fheroes2::GameMode Game::NewStandard()
 {
     Settings & conf = Settings::Get();
     if ( conf.isCampaignGameType() )
-        conf.SetCurrentFileInfo( Maps::FileInfo() );
+        conf.SetCurrentFileInfo( {} );
     conf.SetGameType( Game::TYPE_STANDARD );
     conf.SetPreferablyCountPlayers( 0 );
     return fheroes2::GameMode::SELECT_SCENARIO;
@@ -161,7 +161,7 @@ fheroes2::GameMode Game::NewHotSeat()
 {
     Settings & conf = Settings::Get();
     if ( conf.isCampaignGameType() )
-        conf.SetCurrentFileInfo( Maps::FileInfo() );
+        conf.SetCurrentFileInfo( {} );
 
     if ( conf.IsGameType( Game::TYPE_BATTLEONLY ) ) {
         conf.SetPreferablyCountPlayers( 2 );
@@ -174,7 +174,7 @@ fheroes2::GameMode Game::NewHotSeat()
     else {
         conf.SetGameType( Game::TYPE_HOTSEAT );
         const uint32_t select = SelectCountPlayers();
-        if ( select ) {
+        if ( select > 0 ) {
             conf.SetPreferablyCountPlayers( select );
             return fheroes2::GameMode::SELECT_SCENARIO;
         }
