@@ -150,12 +150,12 @@ namespace
         {
             // On some OSes like Windows, the path may contain '\' symbols. This symbol doesn't exist in the resources.
             // To avoid this we have to replace all '\' symbols by '/' symbols.
-            std::string fullPath = info.file;
+            std::string fullPath = info.filename;
 
             // TODO: Make '\' symbol in small font to properly show file path in OS familiar style.
             StringReplace( fullPath, "\\", "/" );
 
-            const fheroes2::Text header( ResizeToShortName( info.file ), fheroes2::FontType::normalYellow() );
+            const fheroes2::Text header( ResizeToShortName( info.filename ), fheroes2::FontType::normalYellow() );
 
             fheroes2::MultiFontText body;
 
@@ -208,7 +208,7 @@ namespace
 
     void FileInfoListBox::RedrawItem( const Maps::FileInfo & info, int32_t dstx, int32_t dsty, bool current )
     {
-        std::string savname( System::GetBasename( info.file ) );
+        std::string savname( System::GetBasename( info.filename ) );
 
         if ( savname.empty() ) {
             return;
@@ -360,7 +360,7 @@ namespace
 
             MapsFileInfoList::iterator it = lists.begin();
             for ( ; it != lists.end(); ++it ) {
-                if ( ( *it ).file == lastfile ) {
+                if ( ( *it ).filename == lastfile ) {
                     break;
                 }
             }
@@ -378,7 +378,7 @@ namespace
         }
 
         if ( filename.empty() && listbox.isSelected() ) {
-            filename = ResizeToShortName( listbox.GetCurrent().file );
+            filename = ResizeToShortName( listbox.GetCurrent().filename );
             charInsertPos = filename.size();
         }
 
@@ -437,7 +437,7 @@ namespace
                     result = System::concatPath( Game::GetSaveDir(), filename + Game::GetSaveFileExtension() );
                 }
                 else if ( isListboxSelected ) {
-                    result = listbox.GetCurrent().file;
+                    result = listbox.GetCurrent().filename;
                 }
             }
             else if ( le.MouseClickLeft( buttonCancel.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
@@ -505,9 +505,9 @@ namespace
 
                 std::string msg( _( "Are you sure you want to delete file:" ) );
                 msg.append( "\n\n" );
-                msg.append( System::GetBasename( listbox.GetCurrent().file ) );
+                msg.append( System::GetBasename( listbox.GetCurrent().filename ) );
                 if ( Dialog::YES == fheroes2::showStandardTextMessage( _( "Warning!" ), msg, Dialog::YES | Dialog::NO ) ) {
-                    System::Unlink( listbox.GetCurrent().file );
+                    System::Unlink( listbox.GetCurrent().filename );
                     listbox.RemoveSelected();
                     if ( lists.empty() || filename.empty() ) {
                         buttonOk.disable();
@@ -537,7 +537,7 @@ namespace
             }
 
             if ( needRedraw ) {
-                const std::string selectedFileName = isListboxSelected ? ResizeToShortName( listbox.GetCurrent().file ) : "";
+                const std::string selectedFileName = isListboxSelected ? ResizeToShortName( listbox.GetCurrent().filename ) : "";
                 if ( isListboxSelected && lastSelectedSaveFileName != selectedFileName ) {
                     lastSelectedSaveFileName = selectedFileName;
                     filename = selectedFileName;

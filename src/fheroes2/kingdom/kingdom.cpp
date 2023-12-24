@@ -125,7 +125,7 @@ void Kingdom::Init( int clr )
 
         // Difficulty calculation is different for campaigns. Difficulty affects only on starting resources for human players.
         const Settings & configuration = Settings::Get();
-        const int difficultyLevel = ( configuration.isCampaignGameType() ? configuration.CurrentFileInfo().difficulty : configuration.GameDifficulty() );
+        const int difficultyLevel = ( configuration.isCampaignGameType() ? configuration.getCurrentMapInfo().difficulty : configuration.GameDifficulty() );
 
         resource = _getKingdomStartingResources( difficultyLevel );
 
@@ -645,7 +645,7 @@ void Kingdom::ApplyPlayWithStartingHero()
         }
     }
 
-    if ( !foundHeroes && Settings::Get().GameStartWithHeroes() ) {
+    if ( !foundHeroes && Settings::Get().getCurrentMapInfo().startWithHeroInEachCastle ) {
         // get first castle
         const Castle * first = castles.GetFirstCastle();
         if ( nullptr == first )

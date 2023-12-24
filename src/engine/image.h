@@ -236,6 +236,7 @@ namespace fheroes2
     void Blit( const Image & in, const Point & inPos, Image & out, const Point & outPos, const Size & size, bool flip = false );
 
     void Copy( const Image & in, Image & out );
+    void Copy( const Image & in, int32_t inX, int32_t inY, Image & out, const Rect & outRoi );
     void Copy( const Image & in, int32_t inX, int32_t inY, Image & out, int32_t outX, int32_t outY, int32_t width, int32_t height );
 
     // Copies transform the layer from in to out. Both images must be of the same size.
@@ -294,6 +295,9 @@ namespace fheroes2
 
     // Use this function only when you need to convert pixel value into transform layer
     void ReplaceColorIdByTransformId( Image & image, const uint8_t colorId, const uint8_t transformId );
+
+    // Use this function only when you need to convert transform value into non-transparent pixel with the given color.
+    void ReplaceTransformIdByColorId( Image & image, const uint8_t transformId, const uint8_t colorId );
 
     // Please remember that subpixel accuracy resizing is extremely slow!
     void Resize( const Image & in, Image & out, const bool isSubpixelAccuracy = false );

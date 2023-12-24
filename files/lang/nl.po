@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-27 00:58+0000\n"
+"POT-Creation-Date: 2023-12-24 11:33+0000\n"
 "PO-Revision-Date: 2022-10-25 08:52+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Dutch <nl@li.org>\n"
@@ -177,6 +177,12 @@ msgid "MIN"
 msgstr "MIN"
 
 msgid "RESET"
+msgstr ""
+
+msgid "CASTLE"
+msgstr ""
+
+msgid "TOWN"
 msgstr ""
 
 msgid ""
@@ -3079,6 +3085,16 @@ msgstr ""
 msgid "already learned"
 msgstr ""
 
+#, fuzzy
+msgid "treeOfKnowledge|free"
+msgstr "Kennis"
+
+msgid "already claimed"
+msgstr ""
+
+msgid "not claimed"
+msgstr ""
+
 msgid "already knows this skill"
 msgstr ""
 
@@ -3252,10 +3268,46 @@ msgstr "Selecteer spreuk doelwit"
 msgid "Select Ocean Object:"
 msgstr "Selecteer spreuk doelwit"
 
+msgid "Castle/town placing"
+msgstr ""
+
+msgid "doubleLinedRace|Neutral"
+msgstr ""
+
+msgid "race|Random"
+msgstr ""
+
+msgid "Click to start placing the selected castle/town."
+msgstr ""
+
+msgid "Click to select town placing."
+msgstr ""
+
+msgid "Click to select castle placing."
+msgstr ""
+
+msgid "%{color} %{race} %{townOrCastle}"
+msgstr ""
+
+msgid "race|Neutral"
+msgstr ""
+
+msgid "You will place"
+msgstr ""
+
+msgid "Click to select this class."
+msgstr ""
+
+msgid "Click to select this color."
+msgstr ""
+
 msgid "Map Type:\n"
 msgstr ""
 
 msgid "The Succession Wars"
+msgstr ""
+
+msgid "Resurrection"
 msgstr ""
 
 msgid "Lose all your heroes and towns."
@@ -3500,6 +3552,9 @@ msgstr ""
 msgid "Best Monster:"
 msgstr ""
 
+msgid "Map filename"
+msgstr ""
+
 msgid ""
 "Are you sure you want to load a new map? (Any unsaved changes to the current "
 "map will be lost.)"
@@ -3568,35 +3623,68 @@ msgstr ""
 msgid "Ocean object must be placed on water."
 msgstr ""
 
-msgid "Ocean Objects"
-msgstr ""
-
-msgid "Grass Objects"
-msgstr ""
-
-msgid "Snow Objects"
-msgstr ""
-
-msgid "Swamp Objects"
-msgstr ""
-
-msgid "Lava Objects"
-msgstr ""
-
-msgid "Desert Objects"
-msgstr ""
-
-msgid "Dirt Objects"
-msgstr ""
-
-msgid "Wasteland Objects"
-msgstr ""
-
-msgid "Beach Objects"
-msgstr ""
-
 msgid "Towns"
 msgstr ""
+
+msgid "Towns cannot be placed on water."
+msgstr ""
+
+msgid "Used to place %{object}."
+msgstr ""
+
+#, fuzzy
+msgid "Select object type"
+msgstr "Selecteer spreuk doelwit"
+
+msgid ""
+"Click here to\n"
+"select a monster."
+msgstr ""
+
+#, fuzzy
+msgid ""
+"Click here to\n"
+"select another monster."
+msgstr "Selecteer een andere held."
+
+msgid ""
+"Cell\n"
+"Details"
+msgstr ""
+
+msgid "Roads"
+msgstr ""
+
+msgid "Streams"
+msgstr ""
+
+msgid "Erase"
+msgstr ""
+
+msgid "Mountains"
+msgstr ""
+
+msgid "Rocks"
+msgstr ""
+
+msgid "Trees"
+msgstr ""
+
+msgid "Water Objects"
+msgstr ""
+
+msgid "Miscellaneous"
+msgstr ""
+
+msgid "Dwellings"
+msgstr ""
+
+msgid "Mines"
+msgstr ""
+
+#, fuzzy
+msgid "Power-ups"
+msgstr "Einde van de macht"
 
 msgid "Treasures"
 msgstr ""
@@ -3605,12 +3693,6 @@ msgid "Terrain"
 msgstr ""
 
 msgid "Castles"
-msgstr ""
-
-msgid "Roads"
-msgstr ""
-
-msgid "Streams"
 msgstr ""
 
 msgid ""
@@ -3655,30 +3737,6 @@ msgstr ""
 msgid "No special modifiers."
 msgstr ""
 
-msgid "Used to place objects most appropriate for use on %{terrain}."
-msgstr ""
-
-msgid ""
-"Used to place\n"
-"a town or castle."
-msgstr ""
-
-msgid ""
-"Used to place\n"
-"a monster group."
-msgstr ""
-
-msgid "Used to place a hero."
-msgstr ""
-
-msgid "Used to place an artifact."
-msgstr ""
-
-msgid ""
-"Used to place\n"
-"a resource or treasure."
-msgstr ""
-
 msgid "Toggle the erasure of %{type} objects."
 msgstr ""
 
@@ -3700,16 +3758,38 @@ msgstr ""
 msgid "Used to draw the underlying grass, dirt, water, etc. on the map."
 msgstr ""
 
-msgid "Object Mode"
+msgid "Landscape Objects Mode"
 msgstr ""
 
-msgid "Used to place objects (mountains, trees, treasure, etc.) on the map."
+msgid ""
+"Used to place landscape objects (mountains, rocks, trees, etc.) on the map."
 msgstr ""
 
 msgid "Detail Mode"
 msgstr ""
 
 msgid "Used for special editing of monsters, heroes and towns."
+msgstr ""
+
+msgid "Adventure Objects Mode"
+msgstr ""
+
+msgid ""
+"Used to place adventure objects (artifacts, dwellings, mines, treasures, "
+"etc.) on the map."
+msgstr ""
+
+msgid "Kingdom Objects Mode"
+msgstr ""
+
+msgid "Used to place kingdom objects (towns, castles and heroes) on the map."
+msgstr ""
+
+#, fuzzy
+msgid "Monsters Mode"
+msgstr "Monsters"
+
+msgid "Used to place monsters on the map."
 msgstr ""
 
 msgid "Allows you to draw streams by clicking and dragging."
@@ -4452,8 +4532,8 @@ msgid "This file contains a save with an invalid game type."
 msgstr ""
 
 msgid ""
-"This file was saved for a \"The Price of Loyalty\" map, but the "
-"corresponding game assets have not been provided to the engine."
+"This save file requires \"The Price of Loyalty\" game assets, but they have "
+"not been provided to the engine."
 msgstr ""
 
 msgid "This saved game is localized to '"
@@ -7015,12 +7095,6 @@ msgstr ""
 msgid "Multi"
 msgstr ""
 
-msgid "race|Random"
-msgstr ""
-
-msgid "race|Neutral"
-msgstr ""
-
 msgid "doubleLined|Knight"
 msgstr ""
 
@@ -7045,9 +7119,6 @@ msgid "doubleLinedRace|Multi"
 msgstr ""
 
 msgid "doubleLinedRace|Random"
-msgstr ""
-
-msgid "doubleLinedRace|Neutral"
 msgstr ""
 
 msgid "speed|Standing"
@@ -7300,9 +7371,6 @@ msgid_plural "Water Wheels"
 msgstr[0] ""
 msgstr[1] ""
 
-msgid "Mines"
-msgstr ""
-
 msgid "Obelisk"
 msgstr ""
 
@@ -7387,6 +7455,9 @@ msgid "Random Monster - strong"
 msgstr ""
 
 msgid "Random Monster - very strong"
+msgstr ""
+
+msgid "Hero"
 msgstr ""
 
 msgid "Nothing Special"
@@ -7506,12 +7577,6 @@ msgid "Freeman's Foundry"
 msgstr ""
 
 msgid "Reefs"
-msgstr ""
-
-msgid "Trees"
-msgstr ""
-
-msgid "Mountains"
 msgstr ""
 
 msgid "Volcano"

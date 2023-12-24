@@ -20,7 +20,7 @@
 
 #pragma once
 
-#include <bitset>
+#include <array>
 #include <cstddef>
 #include <cstdint>
 #include <unordered_map>
@@ -116,6 +116,6 @@ namespace Battle
         // The unit's color (or rather, the unit's army color) affects the ability to pass the castle bridge
         int _color{ 0 };
         // Board cells passability status at the time of current cache creation
-        std::bitset<ARENASIZE> _boardStatus;
+        std::array<bool, ARENASIZE> _boardStatus{};
     };
 }

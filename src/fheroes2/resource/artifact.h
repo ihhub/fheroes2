@@ -318,6 +318,7 @@ public:
 
     bool PushArtifact( const Artifact & );
 
+    // Removes the first found instance of the specified artifact from the artifact bag
     void RemoveArtifact( const Artifact & art );
 
     bool isFull() const;

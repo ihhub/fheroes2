@@ -1233,7 +1233,7 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
             if ( hero ) {
                 bool resetHeroSprite = false;
                 if ( heroAnimationFrameCount > 0 ) {
-                    const int32_t heroMovementSkipValue = Game::HumanHeroAnimSkip();
+                    const int32_t heroMovementSkipValue = Game::HumanHeroAnimSpeedMultiplier();
 
                     _gameArea.ShiftCenter( { heroAnimationOffset.x * heroMovementSkipValue, heroAnimationOffset.y * heroMovementSkipValue } );
                     _gameArea.SetRedraw();
@@ -1279,7 +1279,7 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
                                 // Do not generate a frame as we are going to do it later.
                                 Interface::AdventureMap::RedrawLocker redrawLocker( Interface::AdventureMap::Get() );
 
-                                const int32_t heroMovementSkipValue = Game::HumanHeroAnimSkip();
+                                const int32_t heroMovementSkipValue = Game::HumanHeroAnimSpeedMultiplier();
 
                                 heroAnimationOffset = movement;
                                 _gameArea.ShiftCenter( movement );
@@ -1499,7 +1499,7 @@ void Interface::AdventureMap::mouseCursorAreaPressRight( const int32_t tileIndex
     const Settings & conf = Settings::Get();
     const Maps::Tiles & tile = world.GetTiles( tileIndex );
 
-    DEBUG_LOG( DBG_DEVEL, DBG_INFO, std::endl << tile.String() )
+    DEBUG_LOG( DBG_DEVEL, DBG_INFO, '\n' << tile.String() )
 
     if ( !IS_DEVEL() && tile.isFog( conf.CurrentColor() ) ) {
         Dialog::QuickInfo( tile );

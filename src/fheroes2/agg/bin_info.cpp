@@ -18,6 +18,9 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "bin_info.h"
+
+#include <algorithm>
 #include <cstdlib>
 #include <initializer_list>
 #include <map>
@@ -28,7 +31,6 @@
 #include "agg.h"
 #include "battle_animation.h"
 #include "battle_cell.h"
-#include "bin_info.h"
 #include "logging.h"
 #include "monster.h"
 #include "monster_info.h"

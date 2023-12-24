@@ -56,6 +56,7 @@
 #include "luck.h"
 #include "m82.h"
 #include "maps.h"
+#include "maps_fileinfo.h"
 #include "maps_tiles.h"
 #include "monster.h"
 #include "morale.h"
@@ -445,8 +446,7 @@ void Heroes::LoadFromMP2( const int32_t mapIndex, const int colorType, const int
     //
 
     // Clear the initial spell
-    spell_book.clear();
-    bag_artifacts.RemoveArtifact( Artifact::MAGIC_BOOK );
+    SpellBookDeactivate();
 
     // Reset primary skills and initial spell to defaults
     HeroBase::LoadDefaults( HeroBase::HEROES, _race );
@@ -2029,7 +2029,8 @@ void AllHeroes::Init()
     push_back( new Heroes( Heroes::BRAX, Race::NECR, 5000 ) );
 
     // PoL
-    if ( Settings::Get().isCurrentMapPriceOfLoyalty() ) {
+    const GameVersion version = Settings::Get().getCurrentMapInfo().version;
+    if ( version == GameVersion::PRICE_OF_LOYALTY || version == GameVersion::RESURRECTION ) {
         push_back( new Heroes( Heroes::SOLMYR, Race::WZRD, 5000 ) );
         push_back( new Heroes( Heroes::DAINWIN, Race::WRLK, 5000 ) );
         push_back( new Heroes( Heroes::MOG, Race::NECR, 5000 ) );

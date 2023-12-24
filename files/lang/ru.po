@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-27 00:58+0000\n"
+"POT-Creation-Date: 2023-12-24 11:33+0000\n"
 "PO-Revision-Date: 2023-11-12 16:27+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -200,6 +200,15 @@ msgid "MIN"
 msgstr "МИН"
 
 msgid "RESET"
+msgstr ""
+
+#, fuzzy
+msgid "CASTLE"
+msgstr ""
+"ГОРОДА/\n"
+"ЗАМКИ"
+
+msgid "TOWN"
 msgstr ""
 
 msgid ""
@@ -3168,6 +3177,17 @@ msgstr "(пусто)"
 msgid "already learned"
 msgstr "уже выучено"
 
+#, fuzzy
+msgid "treeOfKnowledge|free"
+msgstr "Древо знаний"
+
+#, fuzzy
+msgid "already claimed"
+msgstr "уже выучено"
+
+msgid "not claimed"
+msgstr ""
+
 msgid "already knows this skill"
 msgstr "уже знаете"
 
@@ -3349,11 +3369,55 @@ msgstr "Выберите сокровище:"
 msgid "Select Ocean Object:"
 msgstr "Объекты океана"
 
+#, fuzzy
+msgid "Castle/town placing"
+msgstr "Настройки замка"
+
+msgid "doubleLinedRace|Neutral"
+msgstr "Нейтральный"
+
+msgid "race|Random"
+msgstr "Случайно"
+
+#, fuzzy
+msgid "Click to start placing the selected castle/town."
+msgstr "Нажмите, чтобы применить выбранное разрешение экрана."
+
+#, fuzzy
+msgid "Click to select town placing."
+msgstr "Нажмите, чтобы показать следующий город."
+
+#, fuzzy
+msgid "Click to select castle placing."
+msgstr "Нажмите сюда чтобы выбрать сценарий."
+
+#, fuzzy
+msgid "%{color} %{race} %{townOrCastle}"
+msgstr "%{color} герой - %{race}"
+
+msgid "race|Neutral"
+msgstr "Нейтральный"
+
+msgid "You will place"
+msgstr ""
+
+#, fuzzy
+msgid "Click to select this class."
+msgstr "Нажмите сюда чтобы выбрать сценарий."
+
+#, fuzzy
+msgid "Click to select this color."
+msgstr "Нажмите сюда чтобы выбрать сценарий."
+
 msgid "Map Type:\n"
 msgstr "Тип карты:\n"
 
 msgid "The Succession Wars"
 msgstr "Война за престол"
+
+#, fuzzy
+msgid "Resurrection"
+msgstr "Оживление"
 
 msgid "Lose all your heroes and towns."
 msgstr "Потерять всех героев и все города."
@@ -3611,6 +3675,12 @@ msgstr "Характер:"
 msgid "Best Monster:"
 msgstr "Лучший отряд:"
 
+#, fuzzy
+msgid "Map filename"
+msgstr ""
+"Размер\n"
+"карты"
+
 msgid ""
 "Are you sure you want to load a new map? (Any unsaved changes to the current "
 "map will be lost.)"
@@ -3687,35 +3757,76 @@ msgstr "Объекты океана"
 msgid "Ocean object must be placed on water."
 msgstr "Героев нельзя размещать на воде."
 
-msgid "Ocean Objects"
-msgstr "Объекты океана"
-
-msgid "Grass Objects"
-msgstr "Объекты травы"
-
-msgid "Snow Objects"
-msgstr "Объекты снега"
-
-msgid "Swamp Objects"
-msgstr "Объекты болота"
-
-msgid "Lava Objects"
-msgstr "Объекты лавы"
-
-msgid "Desert Objects"
-msgstr "Объекты пустыни"
-
-msgid "Dirt Objects"
-msgstr "Объекты грязи"
-
-msgid "Wasteland Objects"
-msgstr "Объекты пустоши"
-
-msgid "Beach Objects"
-msgstr "Объекты побережья"
-
 msgid "Towns"
 msgstr "Города"
+
+#, fuzzy
+msgid "Towns cannot be placed on water."
+msgstr "Монстров нельзя размещать на воде."
+
+#, fuzzy
+msgid "Used to place %{object}."
+msgstr "Используется для размещения героев."
+
+#, fuzzy
+msgid "Select object type"
+msgstr "Объекты океана"
+
+#, fuzzy
+msgid ""
+"Click here to\n"
+"select a monster."
+msgstr "Нажмите сюда чтобы выбрать сценарий."
+
+#, fuzzy
+msgid ""
+"Click here to\n"
+"select another monster."
+msgstr "Пожалуйста, выберите другого героя."
+
+msgid ""
+"Cell\n"
+"Details"
+msgstr ""
+
+msgid "Roads"
+msgstr "Дороги"
+
+msgid "Streams"
+msgstr "Реки"
+
+#, fuzzy
+msgid "Erase"
+msgstr "Ластик"
+
+msgid "Mountains"
+msgstr "Горы"
+
+#, fuzzy
+msgid "Rocks"
+msgstr "Камень"
+
+msgid "Trees"
+msgstr "Деревья"
+
+#, fuzzy
+msgid "Water Objects"
+msgstr "Объекты пустоши"
+
+#, fuzzy
+msgid "Miscellaneous"
+msgstr "Финеус"
+
+#, fuzzy
+msgid "Dwellings"
+msgstr "Полурослики"
+
+msgid "Mines"
+msgstr "Шахты"
+
+#, fuzzy
+msgid "Power-ups"
+msgstr "Сила м."
 
 msgid "Treasures"
 msgstr "Сокровища"
@@ -3725,12 +3836,6 @@ msgstr "Почва"
 
 msgid "Castles"
 msgstr "Замки"
-
-msgid "Roads"
-msgstr "Дороги"
-
-msgid "Streams"
-msgstr "Реки"
 
 msgid ""
 "Draws terrain in\n"
@@ -3776,32 +3881,6 @@ msgstr "Передвижение возможно только на корабл
 msgid "No special modifiers."
 msgstr "Нет особых модификаторов."
 
-msgid "Used to place objects most appropriate for use on %{terrain}."
-msgstr ""
-"Используется для размещения объектов, наиболее подходящих ландшафту: "
-"%{terrain}."
-
-msgid ""
-"Used to place\n"
-"a town or castle."
-msgstr "Используется для размещения замков или городов."
-
-msgid ""
-"Used to place\n"
-"a monster group."
-msgstr "Используется для размещения отрядов монстров."
-
-msgid "Used to place a hero."
-msgstr "Используется для размещения героев."
-
-msgid "Used to place an artifact."
-msgstr "Используется для размещения артефактов."
-
-msgid ""
-"Used to place\n"
-"a resource or treasure."
-msgstr "Используется для размещения сокровищ или ресурсов."
-
 msgid "Toggle the erasure of %{type} objects."
 msgstr "Удаление объектов типа: %{type}."
 
@@ -3830,10 +3909,13 @@ msgstr "Почва"
 msgid "Used to draw the underlying grass, dirt, water, etc. on the map."
 msgstr "Используется для создания рельефа карты (травы, грязи, воды и т.п.)."
 
-msgid "Object Mode"
+#, fuzzy
+msgid "Landscape Objects Mode"
 msgstr "Объекты"
 
-msgid "Used to place objects (mountains, trees, treasure, etc.) on the map."
+#, fuzzy
+msgid ""
+"Used to place landscape objects (mountains, rocks, trees, etc.) on the map."
 msgstr ""
 "Используется для размещения объектов (гор, деревьев, сокровищ и т.п.) на "
 "карте."
@@ -3845,6 +3927,36 @@ msgid "Used for special editing of monsters, heroes and towns."
 msgstr ""
 "Используется для определения специальных параметров монстров, героев и "
 "городов."
+
+#, fuzzy
+msgid "Adventure Objects Mode"
+msgstr "Игровые действия"
+
+#, fuzzy
+msgid ""
+"Used to place adventure objects (artifacts, dwellings, mines, treasures, "
+"etc.) on the map."
+msgstr ""
+"Используется для размещения объектов (гор, деревьев, сокровищ и т.п.) на "
+"карте."
+
+#, fuzzy
+msgid "Kingdom Objects Mode"
+msgstr "Объекты"
+
+#, fuzzy
+msgid "Used to place kingdom objects (towns, castles and heroes) on the map."
+msgstr ""
+"Используется для размещения объектов (гор, деревьев, сокровищ и т.п.) на "
+"карте."
+
+#, fuzzy
+msgid "Monsters Mode"
+msgstr "Монстры"
+
+#, fuzzy
+msgid "Used to place monsters on the map."
+msgstr "Используется для размещения отрядов монстров."
 
 msgid "Allows you to draw streams by clicking and dragging."
 msgstr "Позволяет прокладывать русла рек."
@@ -4607,9 +4719,10 @@ msgstr "Последняя поддерживаемая версия: "
 msgid "This file contains a save with an invalid game type."
 msgstr "Этот файл содержит сохранение с некорректным типом игры."
 
+#, fuzzy
 msgid ""
-"This file was saved for a \"The Price of Loyalty\" map, but the "
-"corresponding game assets have not been provided to the engine."
+"This save file requires \"The Price of Loyalty\" game assets, but they have "
+"not been provided to the engine."
 msgstr ""
 "Этот файл сохранён для карты дополнения \"Цена верности\", но "
 "соответствующие игровые ресурсы не обнаружены."
@@ -7707,12 +7820,6 @@ msgstr "Некромант"
 msgid "Multi"
 msgstr "По сценарию"
 
-msgid "race|Random"
-msgstr "Случайно"
-
-msgid "race|Neutral"
-msgstr "Нейтральный"
-
 msgid "doubleLined|Knight"
 msgstr "Рыцарь"
 
@@ -7744,9 +7851,6 @@ msgstr ""
 
 msgid "doubleLinedRace|Random"
 msgstr "Случайно"
-
-msgid "doubleLinedRace|Neutral"
-msgstr "Нейтральный"
 
 msgid "speed|Standing"
 msgstr "На месте"
@@ -8000,9 +8104,6 @@ msgstr[0] "Водяное колесо"
 msgstr[1] "Водяных колеса"
 msgstr[2] "Водяных колёс"
 
-msgid "Mines"
-msgstr "Шахты"
-
 msgid "Obelisk"
 msgstr "Обелиск"
 
@@ -8089,6 +8190,10 @@ msgstr "Случайный сильный монстр"
 
 msgid "Random Monster - very strong"
 msgstr "Случайный великий монстр"
+
+#, fuzzy
+msgid "Hero"
+msgstr "Герои"
 
 msgid "Nothing Special"
 msgstr "Ничего особенного"
@@ -8209,12 +8314,6 @@ msgstr "Литейная"
 
 msgid "Reefs"
 msgstr "Рифы"
-
-msgid "Trees"
-msgstr "Деревья"
-
-msgid "Mountains"
-msgstr "Горы"
 
 msgid "Volcano"
 msgstr "Вулкан"
@@ -10934,6 +11033,48 @@ msgstr ""
 "Новую версию игры можно найти на сайте:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Ocean Objects"
+#~ msgstr "Объекты океана"
+
+#~ msgid "Grass Objects"
+#~ msgstr "Объекты травы"
+
+#~ msgid "Snow Objects"
+#~ msgstr "Объекты снега"
+
+#~ msgid "Swamp Objects"
+#~ msgstr "Объекты болота"
+
+#~ msgid "Lava Objects"
+#~ msgstr "Объекты лавы"
+
+#~ msgid "Desert Objects"
+#~ msgstr "Объекты пустыни"
+
+#~ msgid "Dirt Objects"
+#~ msgstr "Объекты грязи"
+
+#~ msgid "Beach Objects"
+#~ msgstr "Объекты побережья"
+
+#~ msgid "Used to place objects most appropriate for use on %{terrain}."
+#~ msgstr ""
+#~ "Используется для размещения объектов, наиболее подходящих ландшафту: "
+#~ "%{terrain}."
+
+#~ msgid ""
+#~ "Used to place\n"
+#~ "a town or castle."
+#~ msgstr "Используется для размещения замков или городов."
+
+#~ msgid "Used to place an artifact."
+#~ msgstr "Используется для размещения артефактов."
+
+#~ msgid ""
+#~ "Used to place\n"
+#~ "a resource or treasure."
+#~ msgstr "Используется для размещения сокровищ или ресурсов."
 
 #~ msgid "%{race1} %{name1}"
 #~ msgstr "%{race1} %{name1}"

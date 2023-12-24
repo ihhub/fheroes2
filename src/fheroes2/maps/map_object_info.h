@@ -115,6 +115,9 @@ namespace Maps
     // therefore, such enumeration exist.
     //
     // These groups do not correlate with the original Editor.
+    //
+    // !!! IMPORTANT !!!
+    // Do NOT change the order of the items as they are used for the map format.
     enum class ObjectGroup : int32_t
     {
         // These groups are not being used by the Editor directly but they are still a part of a tile.
@@ -127,6 +130,10 @@ namespace Maps
         LANDSCAPE_TREES,
         LANDSCAPE_WATER,
         LANDSCAPE_MISCELLANEOUS,
+
+        // Extra landscape objects placed together with other objects.
+        LANDSCAPE_TOWN_BASEMENTS,
+        LANDSCAPE_FLAGS,
 
         // Adventure objects.
         ADVENTURE_ARTIFACTS,

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-27 00:58+0000\n"
+"POT-Creation-Date: 2023-12-24 11:33+0000\n"
 "PO-Revision-Date: 2023-08-26 23:09+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: https://discord.com/"
@@ -201,6 +201,15 @@ msgid "MIN"
 msgstr "MIN"
 
 msgid "RESET"
+msgstr ""
+
+#, fuzzy
+msgid "CASTLE"
+msgstr ""
+"MIASTA/\n"
+"ZAMKI"
+
+msgid "TOWN"
 msgstr ""
 
 msgid ""
@@ -3157,6 +3166,17 @@ msgstr "(nie ma nikogo)"
 msgid "already learned"
 msgstr "już to umiesz"
 
+#, fuzzy
+msgid "treeOfKnowledge|free"
+msgstr "Drzewo Wiedzy"
+
+#, fuzzy
+msgid "already claimed"
+msgstr "już to umiesz"
+
+msgid "not claimed"
+msgstr ""
+
 msgid "already knows this skill"
 msgstr "już znasz tę umiejętność"
 
@@ -3339,11 +3359,55 @@ msgstr "Wybierz bohatera:"
 msgid "Select Ocean Object:"
 msgstr "Wybierz artefakt:"
 
+#, fuzzy
+msgid "Castle/town placing"
+msgstr "Opcje zamku"
+
+msgid "doubleLinedRace|Neutral"
+msgstr "Neutralny"
+
+msgid "race|Random"
+msgstr "Losowo"
+
+#, fuzzy
+msgid "Click to start placing the selected castle/town."
+msgstr "Użyj wskazanej rozdzielczości."
+
+#, fuzzy
+msgid "Click to select town placing."
+msgstr "Kliknij aby przejść do następnego miasta."
+
+#, fuzzy
+msgid "Click to select castle placing."
+msgstr "Kliknij tutaj, aby wybrać scenariusz, który chcesz rozegrać."
+
+#, fuzzy
+msgid "%{color} %{race} %{townOrCastle}"
+msgstr "%{color} gracz"
+
+msgid "race|Neutral"
+msgstr "Neutralny"
+
+msgid "You will place"
+msgstr ""
+
+#, fuzzy
+msgid "Click to select this class."
+msgstr "Kliknij tutaj, aby wybrać scenariusz, który chcesz rozegrać."
+
+#, fuzzy
+msgid "Click to select this color."
+msgstr "Kliknij tutaj, aby wybrać scenariusz, który chcesz rozegrać."
+
 msgid "Map Type:\n"
 msgstr "Typ Mapy:\n"
 
 msgid "The Succession Wars"
 msgstr "Wojna o Sukcesję"
+
+#, fuzzy
+msgid "Resurrection"
+msgstr "Wskrzeszenie"
 
 msgid "Lose all your heroes and towns."
 msgstr "Utrata wszystkich bohaterów i miast."
@@ -3601,6 +3665,12 @@ msgid "Best Monster:"
 msgstr "Najlepszy potwór:"
 
 #, fuzzy
+msgid "Map filename"
+msgstr ""
+"Wielkość\n"
+"mapy"
+
+#, fuzzy
 msgid ""
 "Are you sure you want to load a new map? (Any unsaved changes to the current "
 "map will be lost.)"
@@ -3680,38 +3750,76 @@ msgstr "Brak obiektu"
 msgid "Ocean object must be placed on water."
 msgstr "To zaklęcie nie może być rzucone z łodzi."
 
-msgid "Ocean Objects"
-msgstr ""
-
-msgid "Grass Objects"
-msgstr ""
-
-#, fuzzy
-msgid "Snow Objects"
-msgstr "Brak obiektu"
-
-msgid "Swamp Objects"
-msgstr ""
-
-msgid "Lava Objects"
-msgstr ""
-
-#, fuzzy
-msgid "Desert Objects"
-msgstr "Namiot na pustyni"
-
-msgid "Dirt Objects"
-msgstr ""
-
-#, fuzzy
-msgid "Wasteland Objects"
-msgstr "Wyschnięty"
-
-msgid "Beach Objects"
-msgstr ""
-
 msgid "Towns"
 msgstr "Miasta"
+
+#, fuzzy
+msgid "Towns cannot be placed on water."
+msgstr "To zaklęcie nie może być rzucone z łodzi."
+
+#, fuzzy
+msgid "Used to place %{object}."
+msgstr "Znajdź najpotężniejszy artefakt."
+
+#, fuzzy
+msgid "Select object type"
+msgstr "Wybierz artefakt:"
+
+#, fuzzy
+msgid ""
+"Click here to\n"
+"select a monster."
+msgstr "Kliknij tutaj, aby wybrać scenariusz, który chcesz rozegrać."
+
+#, fuzzy
+msgid ""
+"Click here to\n"
+"select another monster."
+msgstr "Wybierz innego bohatera."
+
+msgid ""
+"Cell\n"
+"Details"
+msgstr ""
+
+#, fuzzy
+msgid "Roads"
+msgstr "Droga"
+
+msgid "Streams"
+msgstr ""
+
+msgid "Erase"
+msgstr ""
+
+msgid "Mountains"
+msgstr "Góry"
+
+#, fuzzy
+msgid "Rocks"
+msgstr "Kamień"
+
+msgid "Trees"
+msgstr "Drzewa"
+
+#, fuzzy
+msgid "Water Objects"
+msgstr "Wyschnięty"
+
+#, fuzzy
+msgid "Miscellaneous"
+msgstr "Fineous"
+
+#, fuzzy
+msgid "Dwellings"
+msgstr "Niziołki"
+
+msgid "Mines"
+msgstr "Kopalnia"
+
+#, fuzzy
+msgid "Power-ups"
+msgstr "Moc"
 
 msgid "Treasures"
 msgstr "Skarby"
@@ -3722,13 +3830,6 @@ msgstr ""
 #, fuzzy
 msgid "Castles"
 msgstr "Zamek"
-
-#, fuzzy
-msgid "Roads"
-msgstr "Droga"
-
-msgid "Streams"
-msgstr ""
 
 msgid ""
 "Draws terrain in\n"
@@ -3775,31 +3876,6 @@ msgstr ""
 msgid "No special modifiers."
 msgstr ""
 
-msgid "Used to place objects most appropriate for use on %{terrain}."
-msgstr ""
-
-msgid ""
-"Used to place\n"
-"a town or castle."
-msgstr ""
-
-msgid ""
-"Used to place\n"
-"a monster group."
-msgstr ""
-
-msgid "Used to place a hero."
-msgstr ""
-
-#, fuzzy
-msgid "Used to place an artifact."
-msgstr "Znajdź najpotężniejszy artefakt."
-
-msgid ""
-"Used to place\n"
-"a resource or treasure."
-msgstr ""
-
 msgid "Toggle the erasure of %{type} objects."
 msgstr ""
 
@@ -3821,10 +3897,11 @@ msgstr ""
 msgid "Used to draw the underlying grass, dirt, water, etc. on the map."
 msgstr ""
 
-msgid "Object Mode"
+msgid "Landscape Objects Mode"
 msgstr ""
 
-msgid "Used to place objects (mountains, trees, treasure, etc.) on the map."
+msgid ""
+"Used to place landscape objects (mountains, rocks, trees, etc.) on the map."
 msgstr ""
 
 msgid "Detail Mode"
@@ -3833,6 +3910,30 @@ msgstr ""
 #, fuzzy
 msgid "Used for special editing of monsters, heroes and towns."
 msgstr "Pokonaj wszystkich wrogów i miasta."
+
+#, fuzzy
+msgid "Adventure Objects Mode"
+msgstr "Opcje przygody"
+
+msgid ""
+"Used to place adventure objects (artifacts, dwellings, mines, treasures, "
+"etc.) on the map."
+msgstr ""
+
+#, fuzzy
+msgid "Kingdom Objects Mode"
+msgstr "Przychód"
+
+msgid "Used to place kingdom objects (towns, castles and heroes) on the map."
+msgstr ""
+
+#, fuzzy
+msgid "Monsters Mode"
+msgstr "Potwory"
+
+#, fuzzy
+msgid "Used to place monsters on the map."
+msgstr "Znajdź najpotężniejszy artefakt."
 
 msgid "Allows you to draw streams by clicking and dragging."
 msgstr ""
@@ -4599,9 +4700,10 @@ msgstr "Ostatnia wspierana wersja: "
 msgid "This file contains a save with an invalid game type."
 msgstr "Ten plik zawiera zapis z nieprawidłowym typem gry."
 
+#, fuzzy
 msgid ""
-"This file was saved for a \"The Price of Loyalty\" map, but the "
-"corresponding game assets have not been provided to the engine."
+"This save file requires \"The Price of Loyalty\" game assets, but they have "
+"not been provided to the engine."
 msgstr ""
 "Ten plik jest zapisany w wersji gry \"Cena Lojalności\".\n"
 "Nie można wczytać pliku - do wczytania potrzebujesz \"Ceny Lojalności\"."
@@ -7733,12 +7835,6 @@ msgstr "Nekromanta"
 msgid "Multi"
 msgstr "Różne"
 
-msgid "race|Random"
-msgstr "Losowo"
-
-msgid "race|Neutral"
-msgstr "Neutralny"
-
 msgid "doubleLined|Knight"
 msgstr "Rycerz"
 
@@ -7772,9 +7868,6 @@ msgstr "Różne"
 
 msgid "doubleLinedRace|Random"
 msgstr "Losowo"
-
-msgid "doubleLinedRace|Neutral"
-msgstr "Neutralny"
 
 msgid "speed|Standing"
 msgstr "Stoi"
@@ -8028,9 +8121,6 @@ msgstr[0] "Młyn wodny"
 msgstr[1] "Młyny wodne"
 msgstr[2] "Młynów wodnych"
 
-msgid "Mines"
-msgstr "Kopalnia"
-
 msgid "Obelisk"
 msgstr "Obelisk"
 
@@ -8117,6 +8207,10 @@ msgstr "Losowy potwór - silny"
 
 msgid "Random Monster - very strong"
 msgstr "Losowy potwór - bardzo silny"
+
+#, fuzzy
+msgid "Hero"
+msgstr "Bohaterowie"
 
 msgid "Nothing Special"
 msgstr "Nic specjalnego"
@@ -8237,12 +8331,6 @@ msgstr "Odlewnia"
 
 msgid "Reefs"
 msgstr "Rafy"
-
-msgid "Trees"
-msgstr "Drzewa"
-
-msgid "Mountains"
-msgstr "Góry"
 
 msgid "Volcano"
 msgstr "Wulkan"
@@ -11029,6 +11117,14 @@ msgstr ""
 "Możesz pobrać najnowszą wersję gry ze strony:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#, fuzzy
+#~ msgid "Snow Objects"
+#~ msgstr "Brak obiektu"
+
+#, fuzzy
+#~ msgid "Desert Objects"
+#~ msgstr "Namiot na pustyni"
 
 #~ msgid "%{race1} %{name1}"
 #~ msgstr "%{race1} %{name1}"

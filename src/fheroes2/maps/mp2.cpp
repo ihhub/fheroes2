@@ -337,7 +337,7 @@ const char * MP2::StringObject( MapObjectType objectType, const int count )
     case OBJ_NON_ACTION_RANDOM_MONSTER_VERY_STRONG:
         return _( "Random Monster - very strong" );
     case OBJ_NON_ACTION_HEROES:
-        return _( "Heroes" );
+        return _( "Hero" );
     case OBJ_NOTHING_SPECIAL:
         return _( "Nothing Special" );
     case OBJ_MOSSY_ROCK:
@@ -807,11 +807,13 @@ int MP2::getActionObjectDirection( const MapObjectType objectType )
     case OBJ_RANDOM_ARTIFACT_MAJOR:
     case OBJ_RANDOM_ARTIFACT_MINOR:
     case OBJ_RANDOM_ARTIFACT_TREASURE:
+    case OBJ_RANDOM_CASTLE:
     case OBJ_RANDOM_MONSTER:
     case OBJ_RANDOM_MONSTER_MEDIUM:
     case OBJ_RANDOM_MONSTER_STRONG:
     case OBJ_RANDOM_MONSTER_VERY_STRONG:
     case OBJ_RANDOM_MONSTER_WEAK:
+    case OBJ_RANDOM_TOWN:
     case OBJ_RANDOM_ULTIMATE_ARTIFACT:
     case OBJ_RANDOM_RESOURCE:
     case OBJ_RESOURCE:

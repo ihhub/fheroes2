@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-27 00:58+0000\n"
+"POT-Creation-Date: 2023-12-24 11:33+0000\n"
 "PO-Revision-Date: 2022-12-03 04:36+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <it@li.org>\n"
@@ -175,6 +175,12 @@ msgid "MIN"
 msgstr ""
 
 msgid "RESET"
+msgstr ""
+
+msgid "CASTLE"
+msgstr ""
+
+msgid "TOWN"
 msgstr ""
 
 msgid ""
@@ -3029,6 +3035,17 @@ msgstr "(vuoto/a)"
 msgid "already learned"
 msgstr "già appreso/a"
 
+#, fuzzy
+msgid "treeOfKnowledge|free"
+msgstr "Albero del Sapere"
+
+#, fuzzy
+msgid "already claimed"
+msgstr "già appreso/a"
+
+msgid "not claimed"
+msgstr ""
+
 msgid "already knows this skill"
 msgstr "già imparato/a"
 
@@ -3216,11 +3233,55 @@ msgid "Select Ocean Object:"
 msgstr "Scegli artefatto:"
 
 #, fuzzy
+msgid "Castle/town placing"
+msgstr "Opzioni Castello"
+
+msgid "doubleLinedRace|Neutral"
+msgstr "Neutro"
+
+msgid "race|Random"
+msgstr "Casuale"
+
+#, fuzzy
+msgid "Click to start placing the selected castle/town."
+msgstr "Clicca per salvare la partita in corso."
+
+#, fuzzy
+msgid "Click to select town placing."
+msgstr "Clicca per andare alla città succ."
+
+#, fuzzy
+msgid "Click to select castle placing."
+msgstr "Clicca per salvare la partita in corso."
+
+#, fuzzy
+msgid "%{color} %{race} %{townOrCastle}"
+msgstr "Giocatore %{color}"
+
+msgid "race|Neutral"
+msgstr "Neutro"
+
+msgid "You will place"
+msgstr ""
+
+#, fuzzy
+msgid "Click to select this class."
+msgstr "Clicca per salvare la partita in corso."
+
+#, fuzzy
+msgid "Click to select this color."
+msgstr "Clicca per andare alla città succ."
+
+#, fuzzy
 msgid "Map Type:\n"
 msgstr "Tipo di mappa"
 
 msgid "The Succession Wars"
 msgstr ""
+
+#, fuzzy
+msgid "Resurrection"
+msgstr "Risorgi"
 
 msgid "Lose all your heroes and towns."
 msgstr "Perdi tutti i tuoi eroi e le città."
@@ -3481,6 +3542,12 @@ msgid "Best Monster:"
 msgstr "Miglior Mostro:"
 
 #, fuzzy
+msgid "Map filename"
+msgstr ""
+"Dimensioni\n"
+"Mappa"
+
+#, fuzzy
 msgid ""
 "Are you sure you want to load a new map? (Any unsaved changes to the current "
 "map will be lost.)"
@@ -3559,39 +3626,75 @@ msgstr "Nessun oggetto"
 msgid "Ocean object must be placed on water."
 msgstr ""
 
-msgid "Ocean Objects"
-msgstr ""
-
-msgid "Grass Objects"
-msgstr ""
-
-#, fuzzy
-msgid "Snow Objects"
-msgstr "Nessun oggetto"
-
-msgid "Swamp Objects"
-msgstr ""
-
-msgid "Lava Objects"
-msgstr ""
-
-#, fuzzy
-msgid "Desert Objects"
-msgstr "Tenda da Deserto"
-
-msgid "Dirt Objects"
-msgstr ""
-
-#, fuzzy
-msgid "Wasteland Objects"
-msgstr "Terra sterile"
-
-msgid "Beach Objects"
-msgstr ""
-
 #, fuzzy
 msgid "Towns"
 msgstr "Castello"
+
+msgid "Towns cannot be placed on water."
+msgstr ""
+
+msgid "Used to place %{object}."
+msgstr ""
+
+#, fuzzy
+msgid "Select object type"
+msgstr "Scegli artefatto:"
+
+#, fuzzy
+msgid ""
+"Click here to\n"
+"select a monster."
+msgstr "Clicca per andare alla città succ."
+
+#, fuzzy
+msgid ""
+"Click here to\n"
+"select another monster."
+msgstr "Per favore, scegli un altro eroe."
+
+msgid ""
+"Cell\n"
+"Details"
+msgstr ""
+
+#, fuzzy
+msgid "Roads"
+msgstr "Strada"
+
+msgid "Streams"
+msgstr ""
+
+msgid "Erase"
+msgstr ""
+
+msgid "Mountains"
+msgstr "Montagne"
+
+#, fuzzy
+msgid "Rocks"
+msgstr "Roccia"
+
+msgid "Trees"
+msgstr "Alberi"
+
+#, fuzzy
+msgid "Water Objects"
+msgstr "Terra sterile"
+
+#, fuzzy
+msgid "Miscellaneous"
+msgstr "Fineo"
+
+#, fuzzy
+msgid "Dwellings"
+msgstr "Frombolieri"
+
+msgid "Mines"
+msgstr "Miniere"
+
+#, fuzzy
+msgid "Power-ups"
+msgstr "Potere"
 
 #, fuzzy
 msgid "Treasures"
@@ -3603,13 +3706,6 @@ msgstr ""
 #, fuzzy
 msgid "Castles"
 msgstr "Castello"
-
-#, fuzzy
-msgid "Roads"
-msgstr "Strada"
-
-msgid "Streams"
-msgstr ""
 
 msgid ""
 "Draws terrain in\n"
@@ -3656,30 +3752,6 @@ msgstr ""
 msgid "No special modifiers."
 msgstr ""
 
-msgid "Used to place objects most appropriate for use on %{terrain}."
-msgstr ""
-
-msgid ""
-"Used to place\n"
-"a town or castle."
-msgstr ""
-
-msgid ""
-"Used to place\n"
-"a monster group."
-msgstr ""
-
-msgid "Used to place a hero."
-msgstr ""
-
-msgid "Used to place an artifact."
-msgstr ""
-
-msgid ""
-"Used to place\n"
-"a resource or treasure."
-msgstr ""
-
 msgid "Toggle the erasure of %{type} objects."
 msgstr ""
 
@@ -3701,10 +3773,11 @@ msgstr ""
 msgid "Used to draw the underlying grass, dirt, water, etc. on the map."
 msgstr ""
 
-msgid "Object Mode"
+msgid "Landscape Objects Mode"
 msgstr ""
 
-msgid "Used to place objects (mountains, trees, treasure, etc.) on the map."
+msgid ""
+"Used to place landscape objects (mountains, rocks, trees, etc.) on the map."
 msgstr ""
 
 msgid "Detail Mode"
@@ -3713,6 +3786,29 @@ msgstr ""
 #, fuzzy
 msgid "Used for special editing of monsters, heroes and towns."
 msgstr "Sconfiggi tutti gli eroi e città nemiche."
+
+#, fuzzy
+msgid "Adventure Objects Mode"
+msgstr "Opzioni Avventura"
+
+msgid ""
+"Used to place adventure objects (artifacts, dwellings, mines, treasures, "
+"etc.) on the map."
+msgstr ""
+
+#, fuzzy
+msgid "Kingdom Objects Mode"
+msgstr "Rendita"
+
+msgid "Used to place kingdom objects (towns, castles and heroes) on the map."
+msgstr ""
+
+#, fuzzy
+msgid "Monsters Mode"
+msgstr "Mostri"
+
+msgid "Used to place monsters on the map."
+msgstr ""
 
 msgid "Allows you to draw streams by clicking and dragging."
 msgstr ""
@@ -4489,8 +4585,8 @@ msgid "This file contains a save with an invalid game type."
 msgstr ""
 
 msgid ""
-"This file was saved for a \"The Price of Loyalty\" map, but the "
-"corresponding game assets have not been provided to the engine."
+"This save file requires \"The Price of Loyalty\" game assets, but they have "
+"not been provided to the engine."
 msgstr ""
 
 msgid "This saved game is localized to '"
@@ -7157,12 +7253,6 @@ msgstr "Negromante"
 msgid "Multi"
 msgstr "Multiplo"
 
-msgid "race|Random"
-msgstr "Casuale"
-
-msgid "race|Neutral"
-msgstr "Neutro"
-
 msgid "doubleLined|Knight"
 msgstr "Cavaliere"
 
@@ -7190,9 +7280,6 @@ msgstr "Multiplo"
 
 msgid "doubleLinedRace|Random"
 msgstr "Casuale"
-
-msgid "doubleLinedRace|Neutral"
-msgstr "Neutro"
 
 msgid "speed|Standing"
 msgstr "Fermo"
@@ -7448,9 +7535,6 @@ msgid_plural "Water Wheels"
 msgstr[0] "Mulino ad Acqua"
 msgstr[1] "Mulini ad Acqua"
 
-msgid "Mines"
-msgstr "Miniere"
-
 msgid "Obelisk"
 msgstr "Obelisco"
 
@@ -7536,6 +7620,10 @@ msgstr "Mostro casuale - forte"
 
 msgid "Random Monster - very strong"
 msgstr "Mostra casuale - molto forte"
+
+#, fuzzy
+msgid "Hero"
+msgstr "Eroi"
 
 msgid "Nothing Special"
 msgstr "Niente particolare"
@@ -7655,12 +7743,6 @@ msgstr "Fucina dei Liberti"
 
 msgid "Reefs"
 msgstr "Barriera Corallina"
-
-msgid "Trees"
-msgstr "Alberi"
-
-msgid "Mountains"
-msgstr "Montagne"
 
 msgid "Volcano"
 msgstr "Vulcano"
@@ -10106,6 +10188,14 @@ msgstr ""
 "Scopri l'ultima versione del gioco su\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#, fuzzy
+#~ msgid "Snow Objects"
+#~ msgstr "Nessun oggetto"
+
+#, fuzzy
+#~ msgid "Desert Objects"
+#~ msgstr "Tenda da Deserto"
 
 #~ msgid "vs"
 #~ msgstr "contro"

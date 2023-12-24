@@ -28,6 +28,7 @@
 #include <initializer_list>
 #include <map>
 #include <memory>
+#include <numeric>
 #include <random>
 #include <set>
 #include <stdexcept>
@@ -152,6 +153,10 @@ namespace
                                                 ICN::BUTTON_SMALL_MAX_GOOD,
                                                 ICN::BUTTON_SMALL_MAX_EVIL,
                                                 ICN::BUTTON_RESET_GOOD,
+                                                ICN::BUTTON_CASTLE_GOOD,
+                                                ICN::BUTTON_CASTLE_EVIL,
+                                                ICN::BUTTON_TOWN_GOOD,
+                                                ICN::BUTTON_TOWN_EVIL,
                                                 ICN::BUTTON_GUILDWELL_EXIT,
                                                 ICN::GOOD_CAMPAIGN_BUTTONS,
                                                 ICN::EVIL_CAMPAIGN_BUTTONS,
@@ -542,6 +547,45 @@ namespace
         std::fill( imageTransform + ( imageHeight - 2 ) * imageWidth - 2, imageTransform + ( imageHeight - 2 ) * imageWidth, transparencyValue );
         std::fill( imageTransform + ( imageHeight - 1 ) * imageWidth - 3, imageTransform + ( imageHeight - 1 ) * imageWidth, transparencyValue );
         std::fill( imageTransform + imageHeight * imageWidth - 4, imageTransform + imageHeight * imageWidth, transparencyValue );
+    }
+
+    // Remove all shadows from the image and make them fully transparent.
+    void setTransformLayerTransparent( fheroes2::Image & image )
+    {
+        assert( !image.empty() && !image.singleLayer() );
+
+        uint8_t * transform = image.transform();
+        const uint8_t * transformEnd = transform + static_cast<ptrdiff_t>( image.width() ) * image.height();
+
+        for ( ; transform != transformEnd; ++transform ) {
+            if ( *transform > 1 ) {
+                *transform = 1U;
+            }
+        }
+    }
+
+    // Draw the given image in the center of the button images (released and pressed states) and add extra shading and brightening at the edges of the image.
+    void drawImageOnButton( const fheroes2::Image & image, const int32_t maxImageWidth, const int32_t maxImageHeight, fheroes2::Image & releasedSprite,
+                            fheroes2::Image & pressedSprite )
+    {
+        assert( !image.empty() && !releasedSprite.empty() && !pressedSprite.empty() );
+
+        fheroes2::Image newImage( std::min( maxImageWidth, image.width() + 4 ), std::min( maxImageHeight, image.height() + 4 ) );
+        newImage.reset();
+        fheroes2::Blit( image, 0, 0, newImage, 2, 2, 35, 25 );
+        // Remove shadow from the image.
+        setTransformLayerTransparent( newImage );
+        // Add extra shading and brightening at the edges of the image.
+        fheroes2::updateShadow( newImage, { 1, -1 }, 2U, false );
+        fheroes2::updateShadow( newImage, { 2, -2 }, 5U, false );
+        fheroes2::updateShadow( newImage, { -1, 1 }, 6U, false );
+        fheroes2::updateShadow( newImage, { -2, 2 }, 9U, false );
+        // Draw the image on the button.
+        const int32_t offsetX = ( pressedSprite.width() - newImage.width() ) / 2;
+        const int32_t offsetY = ( pressedSprite.height() - newImage.height() ) / 2;
+        fheroes2::Blit( newImage, pressedSprite, offsetX + 2, offsetY + 1 );
+        fheroes2::ReplaceTransformIdByColorId( newImage, 6U, 10U );
+        fheroes2::Blit( newImage, releasedSprite, offsetX + 3, offsetY );
     }
 }
 
@@ -1763,6 +1807,22 @@ namespace fheroes2
 
                 break;
             }
+            case ICN::BUTTON_CASTLE_GOOD:
+            case ICN::BUTTON_CASTLE_EVIL: {
+                _icnVsSprite[id].resize( 2 );
+
+                createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], 80, gettext_noop( "CASTLE" ), id == ICN::BUTTON_CASTLE_EVIL );
+
+                break;
+            }
+            case ICN::BUTTON_TOWN_GOOD:
+            case ICN::BUTTON_TOWN_EVIL: {
+                _icnVsSprite[id].resize( 2 );
+
+                createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], 80, gettext_noop( "TOWN" ), id == ICN::BUTTON_TOWN_EVIL );
+
+                break;
+            }
             case ICN::UNIFORM_EVIL_MAX_BUTTON:
             case ICN::UNIFORM_EVIL_MIN_BUTTON:
             case ICN::UNIFORM_GOOD_MAX_BUTTON:
@@ -2487,7 +2547,7 @@ namespace fheroes2
                 // Generate random spell image for Editor.
                 {
                     const Sprite & randomSpellImage = _icnVsSprite[id][2];
-                    int32_t imageWidth = randomSpellImage.width();
+                    const int32_t imageWidth = randomSpellImage.width();
 
                     Copy( randomSpellImage, _icnVsSprite[id][67] );
 
@@ -2607,6 +2667,10 @@ namespace fheroes2
             case ICN::BUTTON_SMALL_MAX_GOOD:
             case ICN::BUTTON_SMALL_MAX_EVIL:
             case ICN::BUTTON_RESET_GOOD:
+            case ICN::BUTTON_CASTLE_GOOD:
+            case ICN::BUTTON_CASTLE_EVIL:
+            case ICN::BUTTON_TOWN_GOOD:
+            case ICN::BUTTON_TOWN_EVIL:
             case ICN::BUTTON_GUILDWELL_EXIT:
             case ICN::GOOD_CAMPAIGN_BUTTONS:
             case ICN::EVIL_CAMPAIGN_BUTTONS:
@@ -2643,9 +2707,7 @@ namespace fheroes2
                     Sprite & out = _icnVsSprite[id][23];
 
                     std::vector<uint8_t> indexes( 256 );
-                    for ( uint32_t i = 0; i < 256; ++i ) {
-                        indexes[i] = static_cast<uint8_t>( i );
-                    }
+                    std::iota( indexes.begin(), indexes.end(), static_cast<uint8_t>( 0 ) );
 
                     indexes[69] = 187;
                     indexes[71] = 195;
@@ -2708,9 +2770,7 @@ namespace fheroes2
                     }
 
                     std::vector<uint8_t> indexes( 256 );
-                    for ( uint32_t i = 0; i < 256; ++i ) {
-                        indexes[i] = static_cast<uint8_t>( i );
-                    }
+                    std::iota( indexes.begin(), indexes.end(), static_cast<uint8_t>( 0 ) );
 
                     indexes[10] = 152;
                     indexes[11] = 153;
@@ -3005,35 +3065,108 @@ namespace fheroes2
 
                 return true;
             }
+            case ICN::EDITBTNS:
+                LoadOriginalICN( id );
+                if ( _icnVsSprite[id].size() == 35 ) {
+                    // We add three buttons for new object groups: Adventure, Kingdom, Monsters.
+                    _icnVsSprite[id].resize( 41 );
+
+                    // First make clean button sprites (pressed and released).
+                    Sprite released = GetICN( ICN::EDITBTNS, 4 );
+                    Sprite pressed = GetICN( ICN::EDITBTNS, 5 );
+                    // Clean the image from the button.
+                    Fill( released, 16, 6, 18, 24, 41U );
+                    Fill( pressed, 16, 7, 17, 23, 46U );
+
+                    for ( size_t i = 0; i < 4; i += 2 ) {
+                        _icnVsSprite[id][35 + i] = released;
+                        _icnVsSprite[id][35 + 1 + i] = pressed;
+                    }
+                    _icnVsSprite[id][39] = std::move( released );
+                    _icnVsSprite[id][40] = std::move( pressed );
+
+                    // Adventure objects button.
+                    drawImageOnButton( GetICN( ICN::X_LOC1, 0 ), 39, 29, _icnVsSprite[id][35], _icnVsSprite[id][36] );
+
+                    // Kingdom objects button.
+                    drawImageOnButton( GetICN( ICN::OBJNARTI, 13 ), 39, 29, _icnVsSprite[id][37], _icnVsSprite[id][38] );
+
+                    // Monsters objects button.
+                    drawImageOnButton( GetICN( ICN::MONS32, 11 ), 39, 29, _icnVsSprite[id][39], _icnVsSprite[id][40] );
+                }
+                return true;
+            case ICN::EDITBTNS_EVIL: {
+                loadICN( ICN::EDITBTNS );
+                _icnVsSprite[id] = _icnVsSprite[ICN::EDITBTNS];
+                for ( auto & image : _icnVsSprite[id] ) {
+                    convertToEvilInterface( image, { 0, 0, image.width(), image.height() } );
+                }
+                return true;
+            }
             case ICN::EDITPANL:
                 LoadOriginalICN( id );
-                if ( _icnVsSprite[id].size() > 5 ) {
-                    Sprite & erasePanel = _icnVsSprite[id][5];
-                    // To select object types for erasure we copy object buttons.
-                    Copy( _icnVsSprite[id][1], 15, 68, erasePanel, 15, 68, 114, 55 );
+                if ( _icnVsSprite[id].size() == 6 ) {
+                    _icnVsSprite[id].resize( 18 );
 
-                    // Make 3 empty buttons for terrain objects, roads and streams.
-                    Fill( erasePanel, 16, 69, 24, 24, 65U );
-                    Copy( erasePanel, 15, 68, erasePanel, 44, 96, 27, 27 );
-                    Copy( erasePanel, 15, 68, erasePanel, 73, 96, 27, 27 );
+                    // Make empty buttons for object types.
+                    _icnVsSprite[id][6].resize( 27, 27 );
+                    _icnVsSprite[id][6]._disableTransformLayer();
+                    _icnVsSprite[id][6].reset();
+                    Fill( _icnVsSprite[id][6], 1, 1, 24, 24, 65U );
+                    for ( size_t i = 7; i < _icnVsSprite[id].size(); ++i ) {
+                        _icnVsSprite[id][i] = _icnVsSprite[id][6];
+                    }
 
-                    // Make erase terrain objects button image.
-                    Image objectsImage( 24, 24 );
-                    Copy( GetICN( ICN::EDITBTNS, 2 ), 13, 4, objectsImage, 0, 0, 24, 24 );
-                    AddTransparency( objectsImage, 10U );
-                    AddTransparency( objectsImage, 38U );
-                    AddTransparency( objectsImage, 39U );
-                    AddTransparency( objectsImage, 40U );
-                    AddTransparency( objectsImage, 41U );
-                    AddTransparency( objectsImage, 46U );
-                    Blit( objectsImage, 0, 0, erasePanel, 16, 69, 24, 24 );
+                    // Make Mountains objects button.
+                    Blit( GetICN( ICN::MTNCRCK, 3 ), 4, 0, _icnVsSprite[id][6], 1, 1, 24, 24 );
 
-                    // Make erase roads button image.
-                    Blit( GetICN( ICN::ROAD, 2 ), 0, 0, erasePanel, 45, 104, 24, 5 );
-                    Blit( GetICN( ICN::ROAD, 1 ), 1, 0, erasePanel, 45, 109, 24, 5 );
+                    // Make Rocks objects button.
+                    Blit( GetICN( ICN::OBJNGRAS, 41 ), 1, 0, _icnVsSprite[id][7], 1, 9, 23, 12 );
 
-                    // Make erase streams button image.
-                    Blit( GetICN( ICN::STREAM, 2 ), 0, 0, erasePanel, 74, 104, 24, 11 );
+                    // Make Trees object button. Also used as erase terrain objects button image.
+                    Copy( GetICN( ICN::EDITBTNS, 2 ), 13, 4, _icnVsSprite[id][8], 1, 1, 24, 24 );
+
+                    // Replace image contour colors with the background color.
+                    std::vector<uint8_t> indexes( 256 );
+                    std::iota( indexes.begin(), indexes.end(), static_cast<uint8_t>( 0 ) );
+
+                    indexes[10] = 65U;
+                    indexes[38] = 65U;
+                    indexes[39] = 65U;
+                    indexes[40] = 65U;
+                    indexes[41] = 65U;
+                    indexes[46] = 65U;
+
+                    ApplyPalette( _icnVsSprite[id][8], indexes );
+
+                    // Make Landscape Water objects button.
+                    Blit( GetICN( ICN::OBJNWAT2, 0 ), 0, 3, _icnVsSprite[id][9], 5, 1, 13, 3 );
+                    Blit( GetICN( ICN::OBJNWAT2, 2 ), 5, 0, _icnVsSprite[id][9], 1, 4, 24, 21 );
+
+                    // Make Landscape Miscellaneous objects button.
+                    Blit( GetICN( ICN::OBJNMUL2, 16 ), 3, 0, _icnVsSprite[id][10], 1, 4, 24, 19 );
+
+                    // Make erase Dwellings button image.
+                    Blit( GetICN( ICN::OBJNMULT, 114 ), 7, 0, _icnVsSprite[id][11], 1, 1, 24, 24 );
+
+                    // Make erase Mines button image.
+                    Blit( GetICN( ICN::MTNMULT, 82 ), 8, 4, _icnVsSprite[id][12], 1, 1, 24, 24 );
+
+                    // Make erase Power-ups button image.
+                    Blit( GetICN( ICN::OBJNMULT, 72 ), 0, 6, _icnVsSprite[id][13], 1, 1, 24, 24 );
+
+                    // Make Adventure Water objects button.
+                    Blit( GetICN( ICN::OBJNWATR, 24 ), 3, 0, _icnVsSprite[id][14], 1, 1, 24, 24 );
+
+                    // Make Adventure Miscellaneous objects button.
+                    Blit( GetICN( ICN::OBJNMUL2, 198 ), 2, 0, _icnVsSprite[id][15], 1, 1, 24, 24 );
+
+                    // Make erase Roads button image.
+                    Blit( GetICN( ICN::ROAD, 2 ), 0, 0, _icnVsSprite[id][16], 1, 8, 24, 5 );
+                    Blit( GetICN( ICN::ROAD, 1 ), 1, 0, _icnVsSprite[id][16], 1, 13, 24, 5 );
+
+                    // Make erase Streams button image.
+                    Blit( GetICN( ICN::STREAM, 2 ), 0, 0, _icnVsSprite[id][17], 1, 8, 24, 11 );
                 }
                 return true;
             case ICN::EDITOR:
@@ -4370,6 +4503,53 @@ namespace fheroes2
                         original._disableTransformLayer();
                         original.image()[280] = 117;
                     }
+                }
+
+                // An extra image for the neutral color.
+                if ( _icnVsSprite[id].size() == 7 ) {
+                    Sprite neutralShield( GetICN( ICN::SPELLS, 15 ) );
+                    if ( neutralShield.width() < 2 || neutralShield.height() < 2 ) {
+                        // We can not make a new image if there is no original shield image.
+                        return true;
+                    }
+
+                    // Make original shield image contour transparent.
+                    ReplaceColorIdByTransformId( neutralShield, neutralShield.image()[1], 1U );
+
+                    Sprite neutralColorSprite( _icnVsSprite[id][0].width(), _icnVsSprite[id][0].height() );
+                    neutralColorSprite.reset();
+                    Blit( neutralShield, neutralColorSprite, 8, 4 );
+
+                    // Make the background.
+                    uint8_t * imageData = neutralColorSprite.image();
+                    const uint8_t * transformData = neutralColorSprite.transform();
+                    const int32_t imageWidth = neutralColorSprite.width();
+                    const int32_t imageHeight = neutralColorSprite.height();
+                    const int32_t imageSize = imageWidth * imageHeight;
+                    const int32_t startValueX = 12 * imageWidth;
+                    const int32_t startValueY = 12 * imageHeight;
+
+                    for ( int32_t y = 0; y < imageHeight; ++y ) {
+                        const int32_t offsetY = y * imageWidth;
+                        const int32_t offsetValueY = y * startValueX;
+                        for ( int32_t x = 0; x < imageWidth; ++x ) {
+                            if ( transformData[x + offsetY] == 0U ) {
+                                // Skip pixels with image.
+                                continue;
+                            }
+
+                            const uint8_t colorValue = static_cast<uint8_t>( 10 + ( offsetValueY + ( imageWidth - x ) * startValueY ) / imageSize + ( x + y ) % 2 );
+                            imageData[x + offsetY] = ( ( imageWidth - x - 1 ) * imageHeight > offsetY ) ? colorValue : 44U - colorValue;
+                        }
+                    }
+
+                    // Make all image non-transparent.
+                    neutralColorSprite._disableTransformLayer();
+                    // We add shadow twice to make it more dark.
+                    addGradientShadow( neutralShield, neutralColorSprite, { 8, 4 }, { -2, 5 } );
+                    addGradientShadow( neutralShield, neutralColorSprite, { 8, 4 }, { -2, 5 } );
+
+                    _icnVsSprite[id].push_back( std::move( neutralColorSprite ) );
                 }
                 return true;
             }

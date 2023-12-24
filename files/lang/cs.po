@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-27 00:58+0000\n"
+"POT-Creation-Date: 2023-12-24 11:33+0000\n"
 "PO-Revision-Date: 2023-09-24 16:05+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Czech <cs@li.org>\n"
@@ -196,6 +196,15 @@ msgid "MIN"
 msgstr "MIN"
 
 msgid "RESET"
+msgstr ""
+
+#, fuzzy
+msgid "CASTLE"
+msgstr ""
+"MĚSTA/\n"
+"HRADY"
+
+msgid "TOWN"
 msgstr ""
 
 msgid ""
@@ -3136,6 +3145,17 @@ msgstr "(prázdno)"
 msgid "already learned"
 msgstr "již to umíš"
 
+#, fuzzy
+msgid "treeOfKnowledge|free"
+msgstr "Strom poznání"
+
+#, fuzzy
+msgid "already claimed"
+msgstr "již to umíš"
+
+msgid "not claimed"
+msgstr ""
+
 msgid "already knows this skill"
 msgstr "tuhle dovednost již máš"
 
@@ -3323,11 +3343,55 @@ msgid "Select Ocean Object:"
 msgstr "Artefakt"
 
 #, fuzzy
+msgid "Castle/town placing"
+msgstr "Možnosti Hradu"
+
+msgid "doubleLinedRace|Neutral"
+msgstr ""
+
+msgid "race|Random"
+msgstr ""
+
+#, fuzzy
+msgid "Click to start placing the selected castle/town."
+msgstr "Kliknutím se rozliśení změní na vybrané. "
+
+#, fuzzy
+msgid "Click to select town placing."
+msgstr "Klikni pro zobrazení následujícího města."
+
+#, fuzzy
+msgid "Click to select castle placing."
+msgstr "Kliknout sem pro výběr scénáře."
+
+#, fuzzy
+msgid "%{color} %{race} %{townOrCastle}"
+msgstr "%{color} hráč"
+
+msgid "race|Neutral"
+msgstr ""
+
+msgid "You will place"
+msgstr ""
+
+#, fuzzy
+msgid "Click to select this class."
+msgstr "Kliknout sem pro výběr scénáře."
+
+#, fuzzy
+msgid "Click to select this color."
+msgstr "Kliknout sem pro výběr scénáře."
+
+#, fuzzy
 msgid "Map Type:\n"
 msgstr "Velikost mapy"
 
 msgid "The Succession Wars"
 msgstr ""
+
+#, fuzzy
+msgid "Resurrection"
+msgstr "Oživení"
 
 msgid "Lose all your heroes and towns."
 msgstr ""
@@ -3578,6 +3642,12 @@ msgid "Best Monster:"
 msgstr "Nejlepší Stvůra:"
 
 #, fuzzy
+msgid "Map filename"
+msgstr ""
+"Velikost\n"
+"mapy"
+
+#, fuzzy
 msgid ""
 "Are you sure you want to load a new map? (Any unsaved changes to the current "
 "map will be lost.)"
@@ -3652,38 +3722,76 @@ msgstr "Pustina"
 msgid "Ocean object must be placed on water."
 msgstr ""
 
-msgid "Ocean Objects"
-msgstr ""
-
-msgid "Grass Objects"
-msgstr ""
-
-msgid "Snow Objects"
-msgstr ""
-
-msgid "Swamp Objects"
-msgstr ""
-
-msgid "Lava Objects"
-msgstr ""
-
-#, fuzzy
-msgid "Desert Objects"
-msgstr "Pouštní stan"
-
-msgid "Dirt Objects"
-msgstr ""
-
-#, fuzzy
-msgid "Wasteland Objects"
-msgstr "Pustina"
-
-msgid "Beach Objects"
-msgstr ""
-
 #, fuzzy
 msgid "Towns"
 msgstr "Město"
+
+#, fuzzy
+msgid "Towns cannot be placed on water."
+msgstr "Toto město nemůže být povýšeno na hrad."
+
+#, fuzzy
+msgid "Used to place %{object}."
+msgstr "Nalezení ultimátního artefaktu."
+
+#, fuzzy
+msgid "Select object type"
+msgstr "Artefakt"
+
+#, fuzzy
+msgid ""
+"Click here to\n"
+"select a monster."
+msgstr "Kliknout sem pro výběr scénáře."
+
+#, fuzzy
+msgid ""
+"Click here to\n"
+"select another monster."
+msgstr "Vyber jiného hrdinu."
+
+msgid ""
+"Cell\n"
+"Details"
+msgstr ""
+
+#, fuzzy
+msgid "Roads"
+msgstr "Cesta"
+
+msgid "Streams"
+msgstr ""
+
+msgid "Erase"
+msgstr ""
+
+msgid "Mountains"
+msgstr "Hory"
+
+#, fuzzy
+msgid "Rocks"
+msgstr "Skála"
+
+msgid "Trees"
+msgstr "Stromy"
+
+#, fuzzy
+msgid "Water Objects"
+msgstr "Pustina"
+
+msgid "Miscellaneous"
+msgstr ""
+
+#, fuzzy
+msgid "Dwellings"
+msgstr "Půlčíci"
+
+msgid "Mines"
+msgstr "Doly"
+
+#, fuzzy
+msgid "Power-ups"
+msgstr "Síla"
 
 #, fuzzy
 msgid "Treasures"
@@ -3695,13 +3803,6 @@ msgstr ""
 #, fuzzy
 msgid "Castles"
 msgstr "Hrad"
-
-#, fuzzy
-msgid "Roads"
-msgstr "Cesta"
-
-msgid "Streams"
-msgstr ""
 
 msgid ""
 "Draws terrain in\n"
@@ -3748,31 +3849,6 @@ msgstr ""
 msgid "No special modifiers."
 msgstr ""
 
-msgid "Used to place objects most appropriate for use on %{terrain}."
-msgstr ""
-
-msgid ""
-"Used to place\n"
-"a town or castle."
-msgstr ""
-
-msgid ""
-"Used to place\n"
-"a monster group."
-msgstr ""
-
-msgid "Used to place a hero."
-msgstr ""
-
-#, fuzzy
-msgid "Used to place an artifact."
-msgstr "Nalezení ultimátního artefaktu."
-
-msgid ""
-"Used to place\n"
-"a resource or treasure."
-msgstr ""
-
 msgid "Toggle the erasure of %{type} objects."
 msgstr ""
 
@@ -3794,10 +3870,11 @@ msgstr ""
 msgid "Used to draw the underlying grass, dirt, water, etc. on the map."
 msgstr ""
 
-msgid "Object Mode"
+msgid "Landscape Objects Mode"
 msgstr ""
 
-msgid "Used to place objects (mountains, trees, treasure, etc.) on the map."
+msgid ""
+"Used to place landscape objects (mountains, rocks, trees, etc.) on the map."
 msgstr ""
 
 msgid "Detail Mode"
@@ -3805,6 +3882,30 @@ msgstr ""
 
 msgid "Used for special editing of monsters, heroes and towns."
 msgstr ""
+
+#, fuzzy
+msgid "Adventure Objects Mode"
+msgstr "Možnosti hry"
+
+msgid ""
+"Used to place adventure objects (artifacts, dwellings, mines, treasures, "
+"etc.) on the map."
+msgstr ""
+
+#, fuzzy
+msgid "Kingdom Objects Mode"
+msgstr "Příjmy království"
+
+msgid "Used to place kingdom objects (towns, castles and heroes) on the map."
+msgstr ""
+
+#, fuzzy
+msgid "Monsters Mode"
+msgstr "Monstra"
+
+#, fuzzy
+msgid "Used to place monsters on the map."
+msgstr "Nalezení ultimátního artefaktu."
 
 msgid "Allows you to draw streams by clicking and dragging."
 msgstr ""
@@ -4579,9 +4680,10 @@ msgstr "Poslední podporovaná verze: "
 msgid "This file contains a save with an invalid game type."
 msgstr "Soubor obsahuje údaje z neplatné verze hry."
 
+#, fuzzy
 msgid ""
-"This file was saved for a \"The Price of Loyalty\" map, but the "
-"corresponding game assets have not been provided to the engine."
+"This save file requires \"The Price of Loyalty\" game assets, but they have "
+"not been provided to the engine."
 msgstr ""
 "Hra byla uložena pro mapu z datadisku \"The Price of Loyalty\", nebyly ale "
 "poskytnuty odpovídající zdrojové soubory."
@@ -7315,12 +7417,6 @@ msgstr ""
 msgid "Multi"
 msgstr ""
 
-msgid "race|Random"
-msgstr ""
-
-msgid "race|Neutral"
-msgstr ""
-
 msgid "doubleLined|Knight"
 msgstr ""
 
@@ -7345,9 +7441,6 @@ msgid "doubleLinedRace|Multi"
 msgstr ""
 
 msgid "doubleLinedRace|Random"
-msgstr ""
-
-msgid "doubleLinedRace|Neutral"
 msgstr ""
 
 msgid "speed|Standing"
@@ -7602,9 +7695,6 @@ msgstr[0] "Vodní Mlýnů"
 msgstr[1] "Vodní Mlýny"
 msgstr[2] "Vodních Mlýnů"
 
-msgid "Mines"
-msgstr "Doly"
-
 msgid "Obelisk"
 msgstr ""
 
@@ -7691,6 +7781,10 @@ msgstr ""
 
 msgid "Random Monster - very strong"
 msgstr ""
+
+#, fuzzy
+msgid "Hero"
+msgstr "Hrdinové"
 
 msgid "Nothing Special"
 msgstr "Nic zvláštního"
@@ -7811,12 +7905,6 @@ msgstr "Svobodná Slévárna"
 
 msgid "Reefs"
 msgstr "Útesy"
-
-msgid "Trees"
-msgstr "Stromy"
-
-msgid "Mountains"
-msgstr "Hory"
 
 msgid "Volcano"
 msgstr "Sopka"
@@ -10222,6 +10310,10 @@ msgstr ""
 "Nejnovější verzi hry nalezneš na\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#, fuzzy
+#~ msgid "Desert Objects"
+#~ msgstr "Pouštní stan"
 
 #~ msgid "vs"
 #~ msgstr "versus"

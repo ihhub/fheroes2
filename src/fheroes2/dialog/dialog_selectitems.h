@@ -59,7 +59,11 @@ namespace Dialog
 
     int selectTreasureType( const int resourceType );
 
-    int selectOceanObjectType( const int resourceType );
+    int selectOceanObjectType( const int objectType );
+
+    int selectLandscapeOceanObjectType( const int objectType );
+
+    void selectTownType( int & type, int & color );
 }
 
 #endif
