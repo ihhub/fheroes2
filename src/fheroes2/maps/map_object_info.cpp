@@ -417,7 +417,7 @@ namespace
             object.groundLevelParts.back().animationFrames = 6;
 
             // The original resources do not have a part of shadow for this object so we use the same shadow from another campfire.
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMULT, 124, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDSRT, 54, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
             object.groundLevelParts.back().animationFrames = 6;
 
             objects.emplace_back( std::move( object ) );
