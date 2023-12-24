@@ -148,22 +148,27 @@ namespace AI
         const auto damageHeuristic = [this, spellDamage, &spell, retreating]( const Unit * unit, const double armyStrength, const double armySpeed ) {
             const uint32_t damage = spellDamage * ( 100 - unit->GetMagicResist( spell, _commander ) ) / 100;
 
-            // If we're retreating we don't care about partial damage, only actual units killed
+            // If the unit is immune to this spell, then no one will be killed, no strength will be lost and the unit will not be woken up if it is disabled
+            if ( damage == 0 ) {
+                return 0.0;
+            }
+
+            // If we retreat, we are not interested in partial damage, but only in the number of units actually killed
             if ( retreating ) {
                 return unit->GetMonsterStrength() * unit->HowManyWillBeKilled( damage );
             }
 
-            // Otherwise calculate amount of strength lost (% of unit times total strength)
+            // If the unit will be completely destroyed, then use its full strength plus a bonus for destroying the stack
             const uint32_t hitpoints = unit->Modes( CAP_MIRRORIMAGE ) ? 1 : unit->GetHitPoints();
             if ( damage >= hitpoints ) {
-                // bonus for finishing a stack
                 const double bonus = ( unit->GetSpeed() > armySpeed ) ? 0.07 : 0.035;
                 return unit->GetStrength() + armyStrength * bonus;
             }
 
+            // Otherwise use the amount of strength lost (% of the total unit's strength)
             double unitPercentageLost = std::min( static_cast<double>( damage ) / hitpoints, 1.0 );
 
-            // Penalty for waking up disabled unit (if you kill only 30%, rest 70% is your penalty)
+            // Penalty for waking up disabled unit (if you kill only 30%, the remaining 70% is your penalty)
             if ( unit->isImmovable() ) {
                 unitPercentageLost += unitPercentageLost - 1.0;
             }
