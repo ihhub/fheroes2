@@ -43,6 +43,30 @@ namespace
 
     std::map<std::pair<MP2::ObjectIcnType, uint32_t>, std::pair<Maps::ObjectGroup, uint32_t>> icnVsObjectInfo;
 
+    void populateRoads( std::vector<Maps::ObjectInfo> & objects )
+    {
+        assert( objects.empty() );
+
+        for ( uint32_t i = 0; i < 32; ++i ) {
+            Maps::ObjectInfo object{ MP2::OBJ_NONE };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_ROAD, i, fheroes2::Point{ 0, 0 }, MP2::OBJ_NONE, Maps::TERRAIN_LAYER );
+
+            objects.emplace_back( std::move( object ) );
+        }
+    }
+
+    void populateStreams( std::vector<Maps::ObjectInfo> & objects )
+    {
+        assert( objects.empty() );
+
+        for ( uint32_t i = 0; i < 13; ++i ) {
+            Maps::ObjectInfo object{ MP2::OBJ_NONE };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_STREAM, i, fheroes2::Point{ 0, 0 }, MP2::OBJ_NONE, Maps::TERRAIN_LAYER );
+
+            objects.emplace_back( std::move( object ) );
+        }
+    }
+
     void populateLandscapeMountains( std::vector<Maps::ObjectInfo> & objects )
     {
         assert( objects.empty() );
@@ -370,6 +394,43 @@ namespace
             Maps::ObjectInfo object{ MP2::OBJ_TREASURE_CHEST };
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNRSRC, 19, fheroes2::Point{ 0, 0 }, MP2::OBJ_TREASURE_CHEST, Maps::OBJECT_LAYER );
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNRSRC, 18, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Campfire.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_CAMPFIRE };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMULT, 131, fheroes2::Point{ 0, 0 }, MP2::OBJ_CAMPFIRE, Maps::OBJECT_LAYER );
+            object.groundLevelParts.back().animationFrames = 6;
+
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMULT, 124, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            object.groundLevelParts.back().animationFrames = 6;
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Campfire on show.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_CAMPFIRE };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSNOW, 4, fheroes2::Point{ 0, 0 }, MP2::OBJ_CAMPFIRE, Maps::OBJECT_LAYER );
+            object.groundLevelParts.back().animationFrames = 6;
+
+            // The original resources do not have a part of shadow for this object so we use the same shadow from another campfire.
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMULT, 124, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            object.groundLevelParts.back().animationFrames = 6;
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Campfire in desert.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_CAMPFIRE };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDSRT, 61, fheroes2::Point{ 0, 0 }, MP2::OBJ_CAMPFIRE, Maps::OBJECT_LAYER );
+            object.groundLevelParts.back().animationFrames = 6;
+
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDSRT, 54, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            object.groundLevelParts.back().animationFrames = 6;
 
             objects.emplace_back( std::move( object ) );
         }
@@ -722,30 +783,6 @@ namespace
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_MONS32, Monster::RANDOM_MONSTER_LEVEL_4 - 1, fheroes2::Point{ 0, 0 },
                                                   MP2::OBJ_RANDOM_MONSTER_VERY_STRONG, Maps::OBJECT_LAYER );
             object.metadata[0] = Monster::RANDOM_MONSTER_LEVEL_4;
-
-            objects.emplace_back( std::move( object ) );
-        }
-    }
-
-    void populateRoads( std::vector<Maps::ObjectInfo> & objects )
-    {
-        assert( objects.empty() );
-
-        for ( uint32_t i = 0; i < 32; ++i ) {
-            Maps::ObjectInfo object{ MP2::OBJ_NONE };
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_ROAD, i, fheroes2::Point{ 0, 0 }, MP2::OBJ_NONE, Maps::TERRAIN_LAYER );
-
-            objects.emplace_back( std::move( object ) );
-        }
-    }
-
-    void populateStreams( std::vector<Maps::ObjectInfo> & objects )
-    {
-        assert( objects.empty() );
-
-        for ( uint32_t i = 0; i < 13; ++i ) {
-            Maps::ObjectInfo object{ MP2::OBJ_NONE };
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_STREAM, i, fheroes2::Point{ 0, 0 }, MP2::OBJ_NONE, Maps::TERRAIN_LAYER );
 
             objects.emplace_back( std::move( object ) );
         }

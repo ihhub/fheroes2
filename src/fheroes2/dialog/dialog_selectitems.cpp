@@ -608,6 +608,7 @@ namespace
                                                fheroes2::Text{ Resource::getDescription(), fheroes2::FontType::normalWhite() }, Dialog::ZERO,
                                                Funds{ static_cast<int>( info.metadata[0] ), 0 } );
                 break;
+            case MP2::OBJ_CAMPFIRE:
             case MP2::OBJ_GENIE_LAMP:
             case MP2::OBJ_RANDOM_RESOURCE:
             case MP2::OBJ_TREASURE_CHEST:
@@ -625,6 +626,7 @@ namespace
             switch ( info.objectType ) {
             case MP2::OBJ_RESOURCE:
                 return Resource::String( static_cast<int>( info.metadata[0] ) );
+            case MP2::OBJ_CAMPFIRE:
             case MP2::OBJ_GENIE_LAMP:
             case MP2::OBJ_RANDOM_RESOURCE:
             case MP2::OBJ_TREASURE_CHEST:
