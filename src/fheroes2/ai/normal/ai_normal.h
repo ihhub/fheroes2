@@ -46,6 +46,7 @@ namespace Battle
 {
     class Actions;
     class Arena;
+    class Position;
     class Unit;
     class Units;
 }
@@ -191,12 +192,6 @@ namespace AI
 
         Battle::Actions planUnitTurn( Battle::Arena & arena, const Battle::Unit & currentUnit );
 
-        // decision-making helpers
-        bool isUnitFaster( const Battle::Unit & currentUnit, const Battle::Unit & target ) const;
-        bool isHeroWorthSaving( const Heroes & hero ) const;
-        bool isCommanderCanSpellcast( const Battle::Arena & arena, const HeroBase * commander ) const;
-        bool checkRetreatCondition( const Heroes & hero ) const;
-
     private:
         void analyzeBattleState( const Battle::Arena & arena, const Battle::Unit & currentUnit );
 
@@ -221,6 +216,13 @@ namespace AI
         double getSpellHasteRatio( const Battle::Unit & target ) const;
         int32_t spellDurationMultiplier( const Battle::Unit & target ) const;
 
+        bool isPositionLocatedInDefendedArea( const Battle::Unit & currentUnit, const Battle::Position & pos ) const;
+        bool isUnitFaster( const Battle::Unit & currentUnit, const Battle::Unit & target ) const;
+        bool isHeroWorthSaving( const Heroes & hero ) const;
+        bool isCommanderCanSpellcast( const Battle::Arena & arena, const HeroBase * commander ) const;
+
+        bool checkRetreatCondition( const Heroes & hero ) const;
+
         static double commanderMaximumSpellDamageValue( const HeroBase & commander );
 
         // When this limit of turns without deaths is exceeded for an attacking AI-controlled hero,
@@ -233,13 +235,13 @@ namespace AI
         uint32_t _attackerForceNumberOfDead = 0;
         uint32_t _defenderForceNumberOfDead = 0;
 
-        // turn variables that wouldn't persist
+        // Member variables with a lifetime in one turn
         const HeroBase * _commander = nullptr;
         int _myColor = Color::NONE;
         double _myArmyStrength = 0;
         double _enemyArmyStrength = 0;
-        double _myShooterStr = 0;
-        double _enemyShooterStr = 0;
+        double _myShootersStrength = 0;
+        double _enemyShootersStrength = 0;
         double _enemyRangedUnitsOnly = 0;
         double _myArmyAverageSpeed = 0;
         double _enemyAverageSpeed = 0;

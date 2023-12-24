@@ -56,7 +56,10 @@ namespace AI
     double ReduceEffectivenessByDistance( const Unit & unit )
     {
         // Reduce spell effectiveness if unit already crossed the battlefield
-        return Board::DistanceFromOriginX( unit.GetHeadIndex(), unit.isReflect() );
+        const uint32_t result = Board::GetDistanceFromBoardEdgeAlongXAxis( unit.GetHeadIndex(), unit.isReflect() );
+        assert( result > 0 );
+
+        return result;
     }
 
     SpellSelection BattlePlanner::selectBestSpell( Arena & arena, const Battle::Unit & currentUnit, bool retreating ) const
@@ -77,7 +80,7 @@ namespace AI
         // Hero should conserve spellpoints if already spent more than half or his army is stronger
         // Threshold is 0.04 when armies are equal (= 20% of single unit)
         double spellValueThreshold = _myArmyStrength * _myArmyStrength / _enemyArmyStrength * 0.04;
-        if ( _enemyShooterStr / _enemyArmyStrength > 0.5 ) {
+        if ( _enemyShootersStrength / _enemyArmyStrength > 0.5 ) {
             spellValueThreshold *= 0.5;
         }
         if ( _commander->GetSpellPoints() * 2 < _commander->GetMaxSpellPoints() ) {
