@@ -258,6 +258,7 @@ namespace
         fheroes2::Blit( goblin, output, output.width() - goblin.width() * 2, output.height() - goblin.height() - 10, true );
 
         fheroes2::Image resizedOutput( 640, 480 );
+        resizedOutput._disableTransformLayer();
         fheroes2::Resize( output, 0, 0, output.width(), output.height(), resizedOutput, 0, 0, resizedOutput.width(), resizedOutput.height() );
 
         return output;
