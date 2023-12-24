@@ -221,8 +221,6 @@ namespace
 
         listBox.SetAreaItems( { listRoi.x, listRoi.y + 3, listRoi.width - 3, listRoi.height - 4 } );
 
-        const int32_t scrollbarwidth = 16;
-
         int32_t scrollbarOffsetX = roi.x + roi.width - 35;
         background.renderScrollbarBackground( { scrollbarOffsetX, listRoi.y, listRoi.width, listRoi.height }, isEvilInterface );
 
