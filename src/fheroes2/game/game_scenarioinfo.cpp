@@ -28,6 +28,7 @@
 #include <memory>
 #include <ostream>
 #include <string>
+#include <utility>
 #include <vector>
 
 #include "agg_image.h"
@@ -393,7 +394,7 @@ namespace
 
         conf.GetPlayers().SetStartGame();
 
-        Maps::FileInfo & mapInfo = conf.getCurrentMapInfo();
+        const Maps::FileInfo & mapInfo = conf.getCurrentMapInfo();
 
         if ( mapInfo.version == GameVersion::SUCCESSION_WARS || mapInfo.version == GameVersion::PRICE_OF_LOYALTY ) {
             if ( world.LoadMapMP2( mapInfo.filename, ( mapInfo.version == GameVersion::SUCCESSION_WARS ) ) ) {
