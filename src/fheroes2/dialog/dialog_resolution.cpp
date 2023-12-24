@@ -223,7 +223,7 @@ namespace
 
         const int32_t scrollbarwidth = 16;
 
-        int32_t scrollbarOffsetX = listRoi.x + listRoi.width + ( scrollBarAreaWidth - scrollbarwidth ) / 2;
+        int32_t scrollbarOffsetX = roi.x + roi.width - 35;
         background.renderScrollbarBackground( { scrollbarOffsetX, listRoi.y, listRoi.width, listRoi.height }, isEvilInterface );
 
         const int32_t topPartHeight = 19;
@@ -292,7 +292,7 @@ namespace
                 fheroes2::showMessage( header, body, 0 );
             }
 
-            if ( !listBox.IsNeedRedraw() && !needRedraw ) {
+            if ( !listBox.IsNeedRedraw() ) {
                 continue;
             }
 

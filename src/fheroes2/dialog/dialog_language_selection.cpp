@@ -255,7 +255,7 @@ namespace
                 fheroes2::showMessage( header, body, 0 );
             }
 
-            if ( !listBox.IsNeedRedraw() && !needRedraw ) {
+            if ( !listBox.IsNeedRedraw() ) {
                 continue;
             }
 
