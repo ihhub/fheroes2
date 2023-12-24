@@ -135,16 +135,21 @@ namespace Skill
         SecSkills & operator=( const SecSkills & ) = delete;
         SecSkills & operator=( SecSkills && ) = default;
 
+        int Count() const;
         int GetLevel( int skill ) const;
+        int GetTotalLevel() const;
         uint32_t GetValues( int skill ) const;
+
+        Secondary * FindSkill( int );
+
         void AddSkill( const Skill::Secondary & );
         void FindSkillsForLevelUp( int race, uint32_t seedSkill1, uint32_t seedSkill2, Secondary &, Secondary & ) const;
         void FillMax( const Skill::Secondary & );
-        Secondary * FindSkill( int );
+
         std::string String() const;
-        int Count() const;
-        int GetTotalLevel() const;
+
         std::vector<Secondary> & ToVector();
+        const std::vector<Secondary> & ToVector() const;
 
     protected:
         friend StreamBase & operator<<( StreamBase &, const SecSkills & );

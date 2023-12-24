@@ -192,10 +192,6 @@ bool Battle::Only::setup( const bool allowBackup, bool & reset )
         attackedArmyControlInfo->Redraw();
     }
 
-    bool exit = false;
-    bool redraw = false;
-    bool result = false;
-
     // hide the shadow from the original EXIT button
     const fheroes2::Sprite buttonOverride = fheroes2::Crop( fheroes2::AGG::GetICN( ICN::SWAPWIN, 0 ), 122, 428, 84, 32 );
     fheroes2::Blit( buttonOverride, display, cur_pt.x + 276, cur_pt.y + 428 );
@@ -214,23 +210,30 @@ bool Battle::Only::setup( const bool allowBackup, bool & reset )
 
     display.render();
 
-    while ( !exit && le.HandleEvents() ) {
+    bool result = false;
+
+    while ( le.HandleEvents() ) {
+        bool updateSpellPoints = false;
+        bool redraw = false;
+
         buttonOkay.isEnabled() && le.MousePressLeft( buttonOkay.area() ) ? buttonOkay.drawOnPress() : buttonOkay.drawOnRelease();
         buttonCancel.isEnabled() && le.MousePressLeft( buttonCancel.area() ) ? buttonCancel.drawOnPress() : buttonCancel.drawOnRelease();
         buttonReset.isEnabled() && le.MousePressLeft( buttonReset.area() ) ? buttonReset.drawOnPress() : buttonReset.drawOnRelease();
 
         if ( ( buttonOkay.isEnabled() && le.MouseClickLeft( buttonOkay.area() ) ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) ) {
             result = true;
-            exit = true;
+
+            break;
         }
         if ( le.MouseClickLeft( buttonReset.area() ) ) {
             reset = true;
             result = true;
+
             break;
         }
 
         if ( le.MouseClickLeft( buttonCancel.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
-            exit = true;
+            break;
         }
 
         for ( const auto & ids : { std::pair<int32_t, int32_t>( 0, 1 ), std::pair<int32_t, int32_t>( 1, 0 ) } ) {
@@ -293,8 +296,8 @@ bool Battle::Only::setup( const bool allowBackup, bool & reset )
                 uint32_t value = hero->knowledge;
                 if ( Dialog::SelectCount( _( "Set Knowledge Skill" ), 0, primaryMaxValue, value ) ) {
                     hero->knowledge = value;
-                    hero->SetSpellPoints( hero->knowledge * 10 );
 
+                    updateSpellPoints = true;
                     redraw = true;
                 }
             }
@@ -332,6 +335,7 @@ bool Battle::Only::setup( const bool allowBackup, bool & reset )
                     secondUI.army->ResetSelected();
                 }
 
+                updateSpellPoints = true;
                 redraw = true;
             }
             else if ( firstUI.morale != nullptr && le.MouseCursor( firstUI.morale->GetArea() ) ) {
@@ -365,6 +369,16 @@ bool Battle::Only::setup( const bool allowBackup, bool & reset )
             }
         }
 
+        if ( updateSpellPoints ) {
+            for ( Heroes * hero : { armyInfo[0].hero, armyInfo[1].hero } ) {
+                if ( hero == nullptr ) {
+                    continue;
+                }
+
+                hero->SetSpellPoints( hero->GetMaxSpellPoints() );
+            }
+        }
+
         if ( !redraw ) {
             continue;
         }
@@ -384,8 +398,6 @@ bool Battle::Only::setup( const bool allowBackup, bool & reset )
         buttonCancel.draw();
         buttonReset.draw();
         display.render();
-
-        redraw = false;
     }
 
     armyInfo[0].ui = {};
@@ -501,7 +513,7 @@ void Battle::Only::reset()
     attackedArmyControlInfo.reset();
 }
 
-void Battle::Only::copyHero( Heroes & in, Heroes & out )
+void Battle::Only::copyHero( const Heroes & in, Heroes & out )
 {
     out.attack = in.attack;
     out.defense = in.defense;
@@ -516,6 +528,8 @@ void Battle::Only::copyHero( Heroes & in, Heroes & out )
 
     out.bag_artifacts = in.bag_artifacts;
     out.spell_book = in.spell_book;
+
+    out.SetSpellPoints( out.GetMaxSpellPoints() );
 }
 
 void Battle::Only::updateArmyUI( ArmyUI & ui, Heroes * hero, const fheroes2::Point & offset, const uint8_t armyId )

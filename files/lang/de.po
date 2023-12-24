@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-15 09:12+0000\n"
+"POT-Creation-Date: 2023-12-24 11:33+0000\n"
 "PO-Revision-Date: 2023-04-09 23:51+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3192,6 +3192,17 @@ msgstr "(leer)"
 msgid "already learned"
 msgstr "schon gelernt"
 
+#, fuzzy
+msgid "treeOfKnowledge|free"
+msgstr "Baum des Wissens"
+
+#, fuzzy
+msgid "already claimed"
+msgstr "schon gelernt"
+
+msgid "not claimed"
+msgstr ""
+
 msgid "already knows this skill"
 msgstr "kennt diese Fähigkeit schon"
 
@@ -3775,32 +3786,71 @@ msgstr "Städte"
 msgid "Towns cannot be placed on water."
 msgstr "Monster können nicht auf Wasser plaziert werden."
 
-msgid "Ocean Objects"
+#, fuzzy
+msgid "Used to place %{object}."
+msgstr "Wird verwendet, um einen Helden zu platzieren."
+
+#, fuzzy
+msgid "Select object type"
 msgstr "Ozean-Objekte"
 
-msgid "Grass Objects"
-msgstr "Gras-Objekte"
+#, fuzzy
+msgid ""
+"Click here to\n"
+"select a monster."
+msgstr "Hier klicken, um auszuwählen, welches Szenario gespielt werden soll."
 
-msgid "Snow Objects"
-msgstr "Schnee-Objekte"
+#, fuzzy
+msgid ""
+"Click here to\n"
+"select another monster."
+msgstr "Bitte wählt einen anderen Helden aus."
 
-msgid "Swamp Objects"
-msgstr "Sumpf-Objekte"
+msgid ""
+"Cell\n"
+"Details"
+msgstr ""
 
-msgid "Lava Objects"
-msgstr "Lava-Objekte"
+#, fuzzy
+msgid "Roads"
+msgstr "Weg"
 
-msgid "Desert Objects"
-msgstr "Wüsten-Objekte"
+#, fuzzy
+msgid "Streams"
+msgstr "Wasserlauf-Modus"
 
-msgid "Dirt Objects"
-msgstr "Erde-Objekte"
+#, fuzzy
+msgid "Erase"
+msgstr "Lösch-Modus"
 
-msgid "Wasteland Objects"
+msgid "Mountains"
+msgstr "Berge"
+
+#, fuzzy
+msgid "Rocks"
+msgstr "Fels"
+
+msgid "Trees"
+msgstr "Bäume"
+
+#, fuzzy
+msgid "Water Objects"
 msgstr "Ödland-Objekte"
 
-msgid "Beach Objects"
-msgstr "Strand-Objekte"
+#, fuzzy
+msgid "Miscellaneous"
+msgstr "Fineous"
+
+#, fuzzy
+msgid "Dwellings"
+msgstr "Halblinge"
+
+msgid "Mines"
+msgstr "Minen"
+
+#, fuzzy
+msgid "Power-ups"
+msgstr "Kraft"
 
 msgid "Treasures"
 msgstr "Schätze"
@@ -3812,14 +3862,6 @@ msgstr "Gelände-Modus"
 #, fuzzy
 msgid "Castles"
 msgstr "Burg"
-
-#, fuzzy
-msgid "Roads"
-msgstr "Weg"
-
-#, fuzzy
-msgid "Streams"
-msgstr "Wasserlauf-Modus"
 
 msgid ""
 "Draws terrain in\n"
@@ -3869,38 +3911,6 @@ msgstr "Nur mit dem Boot befahrbar."
 msgid "No special modifiers."
 msgstr "Keine besonderen Modifikatoren."
 
-msgid "Used to place objects most appropriate for use on %{terrain}."
-msgstr ""
-"Wird verwendet, um Objekte zu platzieren, die am besten für die Verwendung "
-"auf %{terrain} geeignet sind."
-
-msgid ""
-"Used to place\n"
-"a town or castle."
-msgstr ""
-"Verwendet, um eine\n"
-"Stadt oder Burg zu platzieren."
-
-msgid ""
-"Used to place\n"
-"a monster group."
-msgstr ""
-"Verwendet, um eine\n"
-"Monstergruppe zu platzieren."
-
-msgid "Used to place a hero."
-msgstr "Wird verwendet, um einen Helden zu platzieren."
-
-msgid "Used to place an artifact."
-msgstr "Wird verwendet, um ein Artefakt zu platzieren."
-
-msgid ""
-"Used to place\n"
-"a resource or treasure."
-msgstr ""
-"Wird verwendet, um eine\n"
-"Ressource oder einen Schatz zu platzieren."
-
 msgid "Toggle the erasure of %{type} objects."
 msgstr ""
 
@@ -3924,10 +3934,13 @@ msgstr ""
 "Wird verwendet, um das darunter liegende Gras, die Erde, das Wasser usw. auf "
 "der Karte zu zeichnen."
 
-msgid "Object Mode"
+#, fuzzy
+msgid "Landscape Objects Mode"
 msgstr "Objekt-Modus"
 
-msgid "Used to place objects (mountains, trees, treasure, etc.) on the map."
+#, fuzzy
+msgid ""
+"Used to place landscape objects (mountains, rocks, trees, etc.) on the map."
 msgstr ""
 "Wird verwendet, um Objekte (Berge, Bäume, Schätze usw.) auf der Karte zu "
 "platzieren."
@@ -3939,6 +3952,38 @@ msgid "Used for special editing of monsters, heroes and towns."
 msgstr ""
 "Wird für die spezielle Bearbeitung von Monstern, Helden und Städten "
 "verwendet."
+
+#, fuzzy
+msgid "Adventure Objects Mode"
+msgstr "Abenteuer-Optionen"
+
+#, fuzzy
+msgid ""
+"Used to place adventure objects (artifacts, dwellings, mines, treasures, "
+"etc.) on the map."
+msgstr ""
+"Wird verwendet, um Objekte (Berge, Bäume, Schätze usw.) auf der Karte zu "
+"platzieren."
+
+#, fuzzy
+msgid "Kingdom Objects Mode"
+msgstr "Objekt-Modus"
+
+#, fuzzy
+msgid "Used to place kingdom objects (towns, castles and heroes) on the map."
+msgstr ""
+"Wird verwendet, um Objekte (Berge, Bäume, Schätze usw.) auf der Karte zu "
+"platzieren."
+
+#, fuzzy
+msgid "Monsters Mode"
+msgstr "Monster"
+
+#, fuzzy
+msgid "Used to place monsters on the map."
+msgstr ""
+"Verwendet, um eine\n"
+"Monstergruppe zu platzieren."
 
 msgid "Allows you to draw streams by clicking and dragging."
 msgstr "Ermöglicht das Zeichnen von Wasserläufen durch Klicken und Ziehen."
@@ -8206,9 +8251,6 @@ msgid_plural "Water Wheels"
 msgstr[0] "Wasserrad"
 msgstr[1] "Wasserräder"
 
-msgid "Mines"
-msgstr "Minen"
-
 msgid "Obelisk"
 msgstr "Obelisk"
 
@@ -8294,6 +8336,10 @@ msgstr "Zufälliges Monster - stark"
 
 msgid "Random Monster - very strong"
 msgstr "Zufälliges Monster - sehr stark"
+
+#, fuzzy
+msgid "Hero"
+msgstr "Helden"
 
 msgid "Nothing Special"
 msgstr "Nichts besonderes"
@@ -8413,12 +8459,6 @@ msgstr "Freemans Giesserei"
 
 msgid "Reefs"
 msgstr "Riffe"
-
-msgid "Trees"
-msgstr "Bäume"
-
-msgid "Mountains"
-msgstr "Berge"
 
 msgid "Volcano"
 msgstr "Vulkan"
@@ -11233,6 +11273,52 @@ msgstr ""
 "Die neueste Version des Spiels finden Sie unter\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Ocean Objects"
+#~ msgstr "Ozean-Objekte"
+
+#~ msgid "Grass Objects"
+#~ msgstr "Gras-Objekte"
+
+#~ msgid "Snow Objects"
+#~ msgstr "Schnee-Objekte"
+
+#~ msgid "Swamp Objects"
+#~ msgstr "Sumpf-Objekte"
+
+#~ msgid "Lava Objects"
+#~ msgstr "Lava-Objekte"
+
+#~ msgid "Desert Objects"
+#~ msgstr "Wüsten-Objekte"
+
+#~ msgid "Dirt Objects"
+#~ msgstr "Erde-Objekte"
+
+#~ msgid "Beach Objects"
+#~ msgstr "Strand-Objekte"
+
+#~ msgid "Used to place objects most appropriate for use on %{terrain}."
+#~ msgstr ""
+#~ "Wird verwendet, um Objekte zu platzieren, die am besten für die "
+#~ "Verwendung auf %{terrain} geeignet sind."
+
+#~ msgid ""
+#~ "Used to place\n"
+#~ "a town or castle."
+#~ msgstr ""
+#~ "Verwendet, um eine\n"
+#~ "Stadt oder Burg zu platzieren."
+
+#~ msgid "Used to place an artifact."
+#~ msgstr "Wird verwendet, um ein Artefakt zu platzieren."
+
+#~ msgid ""
+#~ "Used to place\n"
+#~ "a resource or treasure."
+#~ msgstr ""
+#~ "Wird verwendet, um eine\n"
+#~ "Ressource oder einen Schatz zu platzieren."
 
 #~ msgid "%{race1} %{name1}"
 #~ msgstr "%{name1} (%{race1})"

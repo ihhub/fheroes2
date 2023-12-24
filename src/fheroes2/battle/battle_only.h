@@ -132,7 +132,7 @@ namespace Battle
 
         static void updateArmyUI( ArmyUI & ui, Heroes * hero, const fheroes2::Point & offset, const uint8_t armyId );
 
-        static void copyHero( Heroes & in, Heroes & out );
+        static void copyHero( const Heroes & in, Heroes & out );
     };
 }
 

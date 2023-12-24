@@ -127,19 +127,19 @@ jobs:
         fi
       env:
         BUILD_DIR: build\${{ matrix.config.platform }}\${{ matrix.config.build_config }}
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v4
       if: ${{ github.event_name == 'pull_request' }}
       with:
         name: ${{ matrix.config.installer_package_name }}
         path: build/${{ matrix.config.platform }}/${{ matrix.config.build_config }}/${{ matrix.config.installer_package_name }}
         if-no-files-found: error
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v4
       if: ${{ github.event_name == 'pull_request' }}
       with:
         name: ${{ matrix.config.zip_package_name }}
         path: build/${{ matrix.config.platform }}/${{ matrix.config.build_config }}/${{ matrix.config.zip_package_name }}
         if-no-files-found: error
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v4
       if: ${{ github.event_name == 'pull_request' && matrix.config.tools_package_name != '' }}
       with:
         name: ${{ matrix.config.tools_package_name }}

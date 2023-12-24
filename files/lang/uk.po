@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-15 09:12+0000\n"
+"POT-Creation-Date: 2023-12-24 11:33+0000\n"
 "PO-Revision-Date: 2023-09-06 08:41+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3122,6 +3122,16 @@ msgstr ""
 msgid "already learned"
 msgstr ""
 
+#, fuzzy
+msgid "treeOfKnowledge|free"
+msgstr "Дерево Знань"
+
+msgid "already claimed"
+msgstr ""
+
+msgid "not claimed"
+msgstr ""
+
 msgid "already knows this skill"
 msgstr ""
 
@@ -3663,32 +3673,66 @@ msgstr "Міста"
 msgid "Towns cannot be placed on water."
 msgstr "Це Місто не можна покращити до Замку."
 
-msgid "Ocean Objects"
+msgid "Used to place %{object}."
 msgstr ""
 
-msgid "Grass Objects"
+#, fuzzy
+msgid "Select object type"
+msgstr "Оберіть Артефакти:"
+
+#, fuzzy
+msgid ""
+"Click here to\n"
+"select a monster."
+msgstr "Натисніть щоб побачити наступне місто."
+
+#, fuzzy
+msgid ""
+"Click here to\n"
+"select another monster."
+msgstr "Будь ласка, оберіть іншого героя."
+
+msgid ""
+"Cell\n"
+"Details"
 msgstr ""
 
-msgid "Snow Objects"
-msgstr "Об'єкти Засніжених Полонин"
-
-msgid "Swamp Objects"
+msgid "Roads"
 msgstr ""
 
-msgid "Lava Objects"
+msgid "Streams"
 msgstr ""
 
-msgid "Desert Objects"
-msgstr "Об'єкти Пустелі"
-
-msgid "Dirt Objects"
+msgid "Erase"
 msgstr ""
 
-msgid "Wasteland Objects"
+msgid "Mountains"
+msgstr "Гори"
+
+#, fuzzy
+msgid "Rocks"
+msgstr "Скеля"
+
+msgid "Trees"
+msgstr "Дерева"
+
+#, fuzzy
+msgid "Water Objects"
 msgstr "Об'єкти Пустки"
 
-msgid "Beach Objects"
+msgid "Miscellaneous"
 msgstr ""
+
+#, fuzzy
+msgid "Dwellings"
+msgstr "Напіврослики"
+
+msgid "Mines"
+msgstr "Копальні"
+
+#, fuzzy
+msgid "Power-ups"
+msgstr "Квіти"
 
 msgid "Treasures"
 msgstr "Скарби"
@@ -3699,12 +3743,6 @@ msgstr ""
 #, fuzzy
 msgid "Castles"
 msgstr "Замок"
-
-msgid "Roads"
-msgstr ""
-
-msgid "Streams"
-msgstr ""
 
 msgid ""
 "Draws terrain in\n"
@@ -3748,30 +3786,6 @@ msgstr ""
 msgid "No special modifiers."
 msgstr ""
 
-msgid "Used to place objects most appropriate for use on %{terrain}."
-msgstr ""
-
-msgid ""
-"Used to place\n"
-"a town or castle."
-msgstr ""
-
-msgid ""
-"Used to place\n"
-"a monster group."
-msgstr ""
-
-msgid "Used to place a hero."
-msgstr ""
-
-msgid "Used to place an artifact."
-msgstr ""
-
-msgid ""
-"Used to place\n"
-"a resource or treasure."
-msgstr ""
-
 msgid "Toggle the erasure of %{type} objects."
 msgstr ""
 
@@ -3793,16 +3807,39 @@ msgstr ""
 msgid "Used to draw the underlying grass, dirt, water, etc. on the map."
 msgstr ""
 
-msgid "Object Mode"
+msgid "Landscape Objects Mode"
 msgstr ""
 
-msgid "Used to place objects (mountains, trees, treasure, etc.) on the map."
+msgid ""
+"Used to place landscape objects (mountains, rocks, trees, etc.) on the map."
 msgstr ""
 
 msgid "Detail Mode"
 msgstr ""
 
 msgid "Used for special editing of monsters, heroes and towns."
+msgstr ""
+
+msgid "Adventure Objects Mode"
+msgstr ""
+
+msgid ""
+"Used to place adventure objects (artifacts, dwellings, mines, treasures, "
+"etc.) on the map."
+msgstr ""
+
+#, fuzzy
+msgid "Kingdom Objects Mode"
+msgstr "Об'єкти Засніжених Полонин"
+
+msgid "Used to place kingdom objects (towns, castles and heroes) on the map."
+msgstr ""
+
+#, fuzzy
+msgid "Monsters Mode"
+msgstr "Монстри"
+
+msgid "Used to place monsters on the map."
 msgstr ""
 
 msgid "Allows you to draw streams by clicking and dragging."
@@ -7416,9 +7453,6 @@ msgstr[0] "Водяне Колесо"
 msgstr[1] "Водяні Колеса"
 msgstr[2] "Водяні Колеса"
 
-msgid "Mines"
-msgstr "Копальні"
-
 msgid "Obelisk"
 msgstr "Обеліск"
 
@@ -7505,6 +7539,9 @@ msgstr "Випадковий Монстр - сильний"
 
 msgid "Random Monster - very strong"
 msgstr "Випадковий Монстр - могутній"
+
+msgid "Hero"
+msgstr ""
 
 msgid "Nothing Special"
 msgstr "Нічого Особливого"
@@ -7625,12 +7662,6 @@ msgstr "Ливарня"
 
 msgid "Reefs"
 msgstr "Рифи"
-
-msgid "Trees"
-msgstr "Дерева"
-
-msgid "Mountains"
-msgstr "Гори"
 
 msgid "Volcano"
 msgstr "Вулкан"
@@ -10236,6 +10267,9 @@ msgstr ""
 "Перевірити нову версію гри на\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Desert Objects"
+#~ msgstr "Об'єкти Пустелі"
 
 #~ msgid "vs"
 #~ msgstr "проти"

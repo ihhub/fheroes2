@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-15 09:12+0000\n"
+"POT-Creation-Date: 2023-12-24 11:33+0000\n"
 "PO-Revision-Date: 2023-09-03 18:42+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3217,6 +3217,17 @@ msgstr "(tom)"
 msgid "already learned"
 msgstr "allerede lært"
 
+#, fuzzy
+msgid "treeOfKnowledge|free"
+msgstr "Kunnskapstre"
+
+#, fuzzy
+msgid "already claimed"
+msgstr "allerede lært"
+
+msgid "not claimed"
+msgstr ""
+
 msgid "already knows this skill"
 msgstr "kan allerede denne ferdigheten"
 
@@ -3801,32 +3812,71 @@ msgstr "Byer"
 msgid "Towns cannot be placed on water."
 msgstr "Denne trolldommen kan ikke brukes på et skip."
 
-msgid "Ocean Objects"
+#, fuzzy
+msgid "Used to place %{object}."
+msgstr "Brukes til å plassere en helt."
+
+#, fuzzy
+msgid "Select object type"
 msgstr "Sjøting"
 
-msgid "Grass Objects"
-msgstr "Gressting"
+#, fuzzy
+msgid ""
+"Click here to\n"
+"select a monster."
+msgstr "Klikk her for å velge hvilket kart du vil spille."
 
-msgid "Snow Objects"
-msgstr "Snøting"
+#, fuzzy
+msgid ""
+"Click here to\n"
+"select another monster."
+msgstr "Vennligst velg en annen helt."
 
-msgid "Swamp Objects"
-msgstr "Myrting"
+msgid ""
+"Cell\n"
+"Details"
+msgstr ""
 
-msgid "Lava Objects"
-msgstr "Lavating"
+#, fuzzy
+msgid "Roads"
+msgstr "Vei"
 
-msgid "Desert Objects"
-msgstr "Ørkenting"
+#, fuzzy
+msgid "Streams"
+msgstr "Bekkmodus"
 
-msgid "Dirt Objects"
-msgstr "Grusting"
+#, fuzzy
+msgid "Erase"
+msgstr "Viskemodus"
 
-msgid "Wasteland Objects"
+msgid "Mountains"
+msgstr "Fjell"
+
+#, fuzzy
+msgid "Rocks"
+msgstr "Stein"
+
+msgid "Trees"
+msgstr "Trær"
+
+#, fuzzy
+msgid "Water Objects"
 msgstr "Ødemarksting"
 
-msgid "Beach Objects"
-msgstr "Strandting"
+#, fuzzy
+msgid "Miscellaneous"
+msgstr "Finneas"
+
+#, fuzzy
+msgid "Dwellings"
+msgstr "Halvinger"
+
+msgid "Mines"
+msgstr "Gruver"
+
+#, fuzzy
+msgid "Power-ups"
+msgstr "Kraft"
 
 msgid "Treasures"
 msgstr "Verdifulle gjenstander"
@@ -3838,14 +3888,6 @@ msgstr "Terrengmodus"
 #, fuzzy
 msgid "Castles"
 msgstr "Borg"
-
-#, fuzzy
-msgid "Roads"
-msgstr "Vei"
-
-#, fuzzy
-msgid "Streams"
-msgstr "Bekkmodus"
 
 msgid ""
 "Draws terrain in\n"
@@ -3895,35 +3937,6 @@ msgstr "Kan kun overfares med skip."
 msgid "No special modifiers."
 msgstr "Ingen spesielle påvirkninger."
 
-msgid "Used to place objects most appropriate for use on %{terrain}."
-msgstr ""
-"Brukes til å plassere ting som passer best på terreng av typen %{terrain}."
-
-msgid ""
-"Used to place\n"
-"a town or castle."
-msgstr ""
-"Brukes til å plassere\n"
-"en by eller borg."
-
-msgid ""
-"Used to place\n"
-"a monster group."
-msgstr ""
-"Brukes til å plassere\n"
-"en gruppe monstre."
-
-msgid "Used to place a hero."
-msgstr "Brukes til å plassere en helt."
-
-msgid "Used to place an artifact."
-msgstr "Brukes til å plassere en gjenstand."
-
-msgid ""
-"Used to place\n"
-"a resource or treasure."
-msgstr "Brukes til å plassere en råvare eller en verdifull gjenstand."
-
 msgid "Toggle the erasure of %{type} objects."
 msgstr ""
 
@@ -3946,10 +3959,13 @@ msgid "Used to draw the underlying grass, dirt, water, etc. on the map."
 msgstr ""
 "Brukes til å tegne det underliggende gresset, gjørmen, vannet osv. på kartet."
 
-msgid "Object Mode"
+#, fuzzy
+msgid "Landscape Objects Mode"
 msgstr "Tingmodus"
 
-msgid "Used to place objects (mountains, trees, treasure, etc.) on the map."
+#, fuzzy
+msgid ""
+"Used to place landscape objects (mountains, rocks, trees, etc.) on the map."
 msgstr ""
 "Brukes til å plassere ting (fjell, trær, verdifulle gjenstander osv.) på "
 "kartet."
@@ -3959,6 +3975,38 @@ msgstr "Detaljemodus"
 
 msgid "Used for special editing of monsters, heroes and towns."
 msgstr "Brukes for spesielle tilpasninger av monster, helter eller byer."
+
+#, fuzzy
+msgid "Adventure Objects Mode"
+msgstr "Kartinnstillinger"
+
+#, fuzzy
+msgid ""
+"Used to place adventure objects (artifacts, dwellings, mines, treasures, "
+"etc.) on the map."
+msgstr ""
+"Brukes til å plassere ting (fjell, trær, verdifulle gjenstander osv.) på "
+"kartet."
+
+#, fuzzy
+msgid "Kingdom Objects Mode"
+msgstr "Tingmodus"
+
+#, fuzzy
+msgid "Used to place kingdom objects (towns, castles and heroes) on the map."
+msgstr ""
+"Brukes til å plassere ting (fjell, trær, verdifulle gjenstander osv.) på "
+"kartet."
+
+#, fuzzy
+msgid "Monsters Mode"
+msgstr "Monstre"
+
+#, fuzzy
+msgid "Used to place monsters on the map."
+msgstr ""
+"Brukes til å plassere\n"
+"en gruppe monstre."
 
 msgid "Allows you to draw streams by clicking and dragging."
 msgstr "Lar deg tegne bekker ved å klikke og dra."
@@ -8217,9 +8265,6 @@ msgid_plural "Water Wheels"
 msgstr[0] "Vannhjul"
 msgstr[1] "Vannhjul"
 
-msgid "Mines"
-msgstr "Gruver"
-
 msgid "Obelisk"
 msgstr "Obelisk"
 
@@ -8306,6 +8351,10 @@ msgstr "Tilfeldig monster - sterk"
 
 msgid "Random Monster - very strong"
 msgstr "Tilfeldig monster - veldig sterk"
+
+#, fuzzy
+msgid "Hero"
+msgstr "Helter"
 
 msgid "Nothing Special"
 msgstr "Ingenting spesielt"
@@ -8428,12 +8477,6 @@ msgstr "Borgerens støperi"
 
 msgid "Reefs"
 msgstr "Rev"
-
-msgid "Trees"
-msgstr "Trær"
-
-msgid "Mountains"
-msgstr "Fjell"
 
 msgid "Volcano"
 msgstr "Vulkan"
@@ -11254,6 +11297,49 @@ msgstr ""
 "Finn den siste oppdateringen av spillet på\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Ocean Objects"
+#~ msgstr "Sjøting"
+
+#~ msgid "Grass Objects"
+#~ msgstr "Gressting"
+
+#~ msgid "Snow Objects"
+#~ msgstr "Snøting"
+
+#~ msgid "Swamp Objects"
+#~ msgstr "Myrting"
+
+#~ msgid "Lava Objects"
+#~ msgstr "Lavating"
+
+#~ msgid "Desert Objects"
+#~ msgstr "Ørkenting"
+
+#~ msgid "Dirt Objects"
+#~ msgstr "Grusting"
+
+#~ msgid "Beach Objects"
+#~ msgstr "Strandting"
+
+#~ msgid "Used to place objects most appropriate for use on %{terrain}."
+#~ msgstr ""
+#~ "Brukes til å plassere ting som passer best på terreng av typen %{terrain}."
+
+#~ msgid ""
+#~ "Used to place\n"
+#~ "a town or castle."
+#~ msgstr ""
+#~ "Brukes til å plassere\n"
+#~ "en by eller borg."
+
+#~ msgid "Used to place an artifact."
+#~ msgstr "Brukes til å plassere en gjenstand."
+
+#~ msgid ""
+#~ "Used to place\n"
+#~ "a resource or treasure."
+#~ msgstr "Brukes til å plassere en råvare eller en verdifull gjenstand."
 
 #~ msgid "%{race1} %{name1}"
 #~ msgstr "%{race1}en %{name1}"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-15 09:12+0000\n"
+"POT-Creation-Date: 2023-12-24 11:33+0000\n"
 "PO-Revision-Date: 2023-09-24 16:05+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Czech <cs@li.org>\n"
@@ -3145,6 +3145,17 @@ msgstr "(prázdno)"
 msgid "already learned"
 msgstr "již to umíš"
 
+#, fuzzy
+msgid "treeOfKnowledge|free"
+msgstr "Strom poznání"
+
+#, fuzzy
+msgid "already claimed"
+msgstr "již to umíš"
+
+msgid "not claimed"
+msgstr ""
+
 msgid "already knows this skill"
 msgstr "tuhle dovednost již máš"
 
@@ -3719,34 +3730,68 @@ msgstr "Město"
 msgid "Towns cannot be placed on water."
 msgstr "Toto město nemůže být povýšeno na hrad."
 
-msgid "Ocean Objects"
-msgstr ""
+#, fuzzy
+msgid "Used to place %{object}."
+msgstr "Nalezení ultimátního artefaktu."
 
-msgid "Grass Objects"
-msgstr ""
+#, fuzzy
+msgid "Select object type"
+msgstr "Artefakt"
 
-msgid "Snow Objects"
-msgstr ""
+#, fuzzy
+msgid ""
+"Click here to\n"
+"select a monster."
+msgstr "Kliknout sem pro výběr scénáře."
 
-msgid "Swamp Objects"
-msgstr ""
+#, fuzzy
+msgid ""
+"Click here to\n"
+"select another monster."
+msgstr "Vyber jiného hrdinu."
 
-msgid "Lava Objects"
+msgid ""
+"Cell\n"
+"Details"
 msgstr ""
 
 #, fuzzy
-msgid "Desert Objects"
-msgstr "Pouštní stan"
+msgid "Roads"
+msgstr "Cesta"
 
-msgid "Dirt Objects"
+msgid "Streams"
 msgstr ""
 
+msgid "Erase"
+msgstr ""
+
+msgid "Mountains"
+msgstr "Hory"
+
 #, fuzzy
-msgid "Wasteland Objects"
+msgid "Rocks"
+msgstr "Skála"
+
+msgid "Trees"
+msgstr "Stromy"
+
+#, fuzzy
+msgid "Water Objects"
 msgstr "Pustina"
 
-msgid "Beach Objects"
+msgid "Miscellaneous"
 msgstr ""
+
+#, fuzzy
+msgid "Dwellings"
+msgstr "Půlčíci"
+
+msgid "Mines"
+msgstr "Doly"
+
+#, fuzzy
+msgid "Power-ups"
+msgstr "Síla"
 
 #, fuzzy
 msgid "Treasures"
@@ -3758,13 +3803,6 @@ msgstr ""
 #, fuzzy
 msgid "Castles"
 msgstr "Hrad"
-
-#, fuzzy
-msgid "Roads"
-msgstr "Cesta"
-
-msgid "Streams"
-msgstr ""
 
 msgid ""
 "Draws terrain in\n"
@@ -3811,31 +3849,6 @@ msgstr ""
 msgid "No special modifiers."
 msgstr ""
 
-msgid "Used to place objects most appropriate for use on %{terrain}."
-msgstr ""
-
-msgid ""
-"Used to place\n"
-"a town or castle."
-msgstr ""
-
-msgid ""
-"Used to place\n"
-"a monster group."
-msgstr ""
-
-msgid "Used to place a hero."
-msgstr ""
-
-#, fuzzy
-msgid "Used to place an artifact."
-msgstr "Nalezení ultimátního artefaktu."
-
-msgid ""
-"Used to place\n"
-"a resource or treasure."
-msgstr ""
-
 msgid "Toggle the erasure of %{type} objects."
 msgstr ""
 
@@ -3857,10 +3870,11 @@ msgstr ""
 msgid "Used to draw the underlying grass, dirt, water, etc. on the map."
 msgstr ""
 
-msgid "Object Mode"
+msgid "Landscape Objects Mode"
 msgstr ""
 
-msgid "Used to place objects (mountains, trees, treasure, etc.) on the map."
+msgid ""
+"Used to place landscape objects (mountains, rocks, trees, etc.) on the map."
 msgstr ""
 
 msgid "Detail Mode"
@@ -3868,6 +3882,30 @@ msgstr ""
 
 msgid "Used for special editing of monsters, heroes and towns."
 msgstr ""
+
+#, fuzzy
+msgid "Adventure Objects Mode"
+msgstr "Možnosti hry"
+
+msgid ""
+"Used to place adventure objects (artifacts, dwellings, mines, treasures, "
+"etc.) on the map."
+msgstr ""
+
+#, fuzzy
+msgid "Kingdom Objects Mode"
+msgstr "Příjmy království"
+
+msgid "Used to place kingdom objects (towns, castles and heroes) on the map."
+msgstr ""
+
+#, fuzzy
+msgid "Monsters Mode"
+msgstr "Monstra"
+
+#, fuzzy
+msgid "Used to place monsters on the map."
+msgstr "Nalezení ultimátního artefaktu."
 
 msgid "Allows you to draw streams by clicking and dragging."
 msgstr ""
@@ -7657,9 +7695,6 @@ msgstr[0] "Vodní Mlýnů"
 msgstr[1] "Vodní Mlýny"
 msgstr[2] "Vodních Mlýnů"
 
-msgid "Mines"
-msgstr "Doly"
-
 msgid "Obelisk"
 msgstr ""
 
@@ -7746,6 +7781,10 @@ msgstr ""
 
 msgid "Random Monster - very strong"
 msgstr ""
+
+#, fuzzy
+msgid "Hero"
+msgstr "Hrdinové"
 
 msgid "Nothing Special"
 msgstr "Nic zvláštního"
@@ -7866,12 +7905,6 @@ msgstr "Svobodná Slévárna"
 
 msgid "Reefs"
 msgstr "Útesy"
-
-msgid "Trees"
-msgstr "Stromy"
-
-msgid "Mountains"
-msgstr "Hory"
 
 msgid "Volcano"
 msgstr "Sopka"
@@ -10277,6 +10310,10 @@ msgstr ""
 "Nejnovější verzi hry nalezneš na\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#, fuzzy
+#~ msgid "Desert Objects"
+#~ msgstr "Pouštní stan"
 
 #~ msgid "vs"
 #~ msgstr "versus"
