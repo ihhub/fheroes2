@@ -564,7 +564,7 @@ namespace
         }
     }
 
-    // Draw the given image in the center of the button images (released and pressed states) and adds extra shading and brightening at the edges of the image.
+    // Draw the given image in the center of the button images (released and pressed states) and add extra shading and brightening at the edges of the image.
     void drawImageOnButton( const fheroes2::Image & image, const int32_t maxImageWidth, const int32_t maxImageHeight, fheroes2::Image & releasedSprite,
                             fheroes2::Image & pressedSprite )
     {
@@ -3071,7 +3071,7 @@ namespace fheroes2
                     // We add three buttons for new object groups: Adventure, Kingdom, Monsters.
                     _icnVsSprite[id].resize( 41 );
 
-                    // First make the clean button sprites (pressed and released).
+                    // First make clean button sprites (pressed and released).
                     Sprite released = GetICN( ICN::EDITBTNS, 4 );
                     Sprite pressed = GetICN( ICN::EDITBTNS, 5 );
                     // Clean the image from the button.

@@ -778,7 +778,7 @@ namespace Interface
                     const fheroes2::Sprite & image = fheroes2::AGG::GetICN( ICN::MINIHERO, type );
 
                     // Mini-hero images contain a pole with a flag.
-                    // This causes a situation that a selected tile does not properly correspond to the position of cursor.
+                    // This causes a situation that a selected tile does not properly correspond to current position of the cursor.
                     // We need to add a hardcoded correction.
                     const int32_t heroCorrectionY{ 12 };
                     Cursor::Get().setCustomImage( image, { -image.width() / 2, -image.height() / 2 - heroCorrectionY } );
