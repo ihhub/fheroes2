@@ -855,8 +855,9 @@ fheroes2::Image Interface::GameArea::GenerateUltimateArtifactAreaSurface( const 
         return fheroes2::Image();
     }
 
-    fheroes2::Image result( 448, 448 );
+    fheroes2::Image result;
     result._disableTransformLayer();
+    result.resize( 448, 448 );
 
     // Make a temporary copy
     GameArea gamearea = AdventureMap::Get().getGameArea();
@@ -874,7 +875,6 @@ fheroes2::Image Interface::GameArea::GenerateUltimateArtifactAreaSurface( const 
 
     fheroes2::Blit( marker, result, markerPos.x, markerPos.y + 8 );
     fheroes2::ApplyPalette( result, PAL::GetPalette( PAL::PaletteType::TAN ) );
-    result._disableTransformLayer();
 
     return result;
 }

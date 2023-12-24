@@ -26,7 +26,6 @@
 
 #include <cstdint>
 
-#include "gamedefs.h"
 #include "image.h"
 #include "interface_border.h"
 #include "math_base.h"
@@ -101,7 +100,7 @@ namespace Interface
         RadarType _radarType;
         BaseInterface & _interface;
 
-        fheroes2::Image _map{ RADARWIDTH, RADARWIDTH };
+        fheroes2::Image _map;
         fheroes2::MovableSprite _cursorArea;
         fheroes2::Rect _roi;
         double _zoom{ 1.0 };

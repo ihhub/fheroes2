@@ -194,8 +194,8 @@ namespace
         explicit CacheForMapWithResources( const ViewWorldMode viewMode )
         {
             for ( int32_t i = 0; i < zoomLevels; ++i ) {
-                cachedImages[i].resize( world.w() * tileSizePerZoomLevel[i], world.h() * tileSizePerZoomLevel[i] );
                 cachedImages[i]._disableTransformLayer();
+                cachedImages[i].resize( world.w() * tileSizePerZoomLevel[i], world.h() * tileSizePerZoomLevel[i] );
             }
 
             const int32_t blockSizeX = 18;
@@ -214,8 +214,9 @@ namespace
             const int32_t redrawAreaCenterY = blockSizeY * TILEWIDTH / 2;
 
             // Create temporary image where we will draw blocks of the main map on
-            fheroes2::Image temporaryImg( redrawAreaWidth, redrawAreaHeight );
+            fheroes2::Image temporaryImg;
             temporaryImg._disableTransformLayer();
+            temporaryImg.resize( redrawAreaWidth, redrawAreaHeight );
 
             Interface::GameArea gamearea = Interface::AdventureMap::Get().getGameArea();
             gamearea.SetAreaPosition( 0, 0, redrawAreaWidth, redrawAreaHeight );

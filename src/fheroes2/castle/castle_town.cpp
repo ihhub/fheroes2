@@ -428,8 +428,9 @@ Castle::ConstructionDialogResult Castle::openConstructionDialog( uint32_t & dwel
         hero1->PortraitRedraw( dst_pt.x, dst_pt.y, PORT_BIG, display );
     }
     else {
-        fheroes2::Image noHeroPortrait( rectHero1.width, rectHero1.height );
+        fheroes2::Image noHeroPortrait;
         noHeroPortrait._disableTransformLayer();
+        noHeroPortrait.resize( rectHero1.width, rectHero1.height );
         noHeroPortrait.fill( 0 );
         fheroes2::Copy( noHeroPortrait, 0, 0, display, rectHero1.x, rectHero1.y, rectHero1.width, rectHero1.height );
     }
@@ -448,8 +449,9 @@ Castle::ConstructionDialogResult Castle::openConstructionDialog( uint32_t & dwel
         hero2->PortraitRedraw( dst_pt.x, dst_pt.y, PORT_BIG, display );
     }
     else {
-        fheroes2::Image noHeroPortrait( rectHero2.width, rectHero2.height );
+        fheroes2::Image noHeroPortrait;
         noHeroPortrait._disableTransformLayer();
+        noHeroPortrait.resize( rectHero2.width, rectHero2.height );
         noHeroPortrait.fill( 0 );
         fheroes2::Copy( noHeroPortrait, 0, 0, display, rectHero2.x, rectHero2.y, rectHero2.width, rectHero2.height );
     }

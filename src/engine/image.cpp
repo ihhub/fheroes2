@@ -504,6 +504,7 @@ namespace fheroes2
             memset( image(), value, totalSize );
 
             if ( !_singleLayer ) {
+                // For double-layer image: set the transform layer not to skip all data.
                 memset( transform(), static_cast<uint8_t>( 0 ), totalSize );
             }
         }
@@ -521,9 +522,10 @@ namespace fheroes2
             return;
         }
 
-        const size_t size = static_cast<size_t>( width_ ) * height_;
+        // Allocate memory only for the used layers.
+        const size_t size = static_cast<size_t>( width_ ) * height_ * ( _singleLayer ? 1 : 2 );
 
-        _data.reset( new uint8_t[size * 2] );
+        _data.reset( new uint8_t[size] );
 
         _width = width_;
         _height = height_;
@@ -550,18 +552,19 @@ namespace fheroes2
             return;
         }
 
-        const size_t size = static_cast<size_t>( image._width ) * image._height;
+        // Allocate memory and copy data only for the used layers.
+        const size_t size = static_cast<size_t>( image._width ) * image._height * ( _singleLayer ? 1 : 2 );
+
+        _singleLayer = image._singleLayer;
 
         if ( image._width != _width || image._height != _height ) {
-            _data.reset( new uint8_t[size * 2] );
+            _data.reset( new uint8_t[size] );
 
             _width = image._width;
             _height = image._height;
         }
 
-        _singleLayer = image._singleLayer;
-
-        memcpy( _data.get(), image._data.get(), _singleLayer ? size : size * 2 );
+        memcpy( _data.get(), image._data.get(), size );
     }
 
     Sprite::Sprite( const int32_t width_, const int32_t height_, const int32_t x_ /* = 0 */, const int32_t y_ /* = 0 */ )

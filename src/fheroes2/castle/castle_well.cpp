@@ -237,8 +237,9 @@ void Castle::OpenWell()
             fheroes2::RandomMonsterAnimation( castleMonster[2] ), fheroes2::RandomMonsterAnimation( castleMonster[3] ),
             fheroes2::RandomMonsterAnimation( castleMonster[4] ), fheroes2::RandomMonsterAnimation( castleMonster[5] ) };
 
-    fheroes2::Image background( roi.width, roi.height );
+    fheroes2::Image background;
     background._disableTransformLayer();
+    background.resize( roi.width, roi.height );
     _wellRedrawBackground( background );
 
     LocalEvent & le = LocalEvent::Get();

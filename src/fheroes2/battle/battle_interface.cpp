@@ -1243,9 +1243,6 @@ Battle::Interface::Interface( Arena & battleArena, const int32_t tileIndex )
     // Shadow that fits the hexagon grid.
     _hexagonGridShadow = DrawHexagonShadow( 4, 1 );
 
-    // As '_mainSurface' is used to prepare battlefield screen to render on display it does not need to have a transform layer.
-    _mainSurface._disableTransformLayer();
-
     btn_auto.setICNInfo( ICN::TEXTBAR, 4, 5 );
     btn_settings.setICNInfo( ICN::TEXTBAR, 6, 7 );
 
@@ -1278,13 +1275,13 @@ Battle::Interface::Interface( Arena & battleArena, const int32_t tileIndex )
     }
     status.SetLogs( listlog.get() );
 
-    // Battlefield area excludes the lower part where the status log is located.
-    _mainSurface.resize( area.width, battlefieldHeight );
-    _battleGround.resize( area.width, battlefieldHeight );
-
     // As `_battleGround` and '_mainSurface' are used to prepare battlefield screen to render on display they do not need to have a transform layer.
     _battleGround._disableTransformLayer();
     _mainSurface._disableTransformLayer();
+
+    // Battlefield area excludes the lower part where the status log is located.
+    _mainSurface.resize( area.width, battlefieldHeight );
+    _battleGround.resize( area.width, battlefieldHeight );
 
     AudioManager::ResetAudio();
 }
@@ -3058,8 +3055,9 @@ void Battle::Interface::FadeArena( const bool clearMessageLog )
     Redraw();
 
     const fheroes2::Rect srt = border.GetArea();
-    fheroes2::Image top( srt.width, srt.height );
+    fheroes2::Image top;
     top._disableTransformLayer();
+    top.resize( srt.width, srt.height );
 
     fheroes2::Copy( display, srt.x, srt.y, top, 0, 0, srt.width, srt.height );
     fheroes2::FadeDisplayWithPalette( top, srt.getPosition(), 5, 300, 5 );
@@ -5493,8 +5491,9 @@ void Battle::Interface::RedrawActionDeathWaveSpell( const int32_t strength )
         area.height -= listlog->GetArea().height;
     }
 
-    fheroes2::Image battleFieldCopy( area.width, area.height );
+    fheroes2::Image battleFieldCopy;
     battleFieldCopy._disableTransformLayer();
+    battleFieldCopy.resize( area.width, area.height );
     fheroes2::Copy( _mainSurface, 0, 0, battleFieldCopy, 0, 0, area.width, area.height );
 
     // The death wave horizontal length in pixels.
@@ -5518,9 +5517,10 @@ void Battle::Interface::RedrawActionDeathWaveSpell( const int32_t strength )
     int32_t position = waveStep;
     fheroes2::Display & display = fheroes2::Display::instance();
 
-    // Prepare the blank image for the Death Wave spell effect with the transform layer equal to "0"
-    fheroes2::Image spellEffect( waveLength, area.height );
+    // Prepare the blank image for the Death Wave spell effect.
+    fheroes2::Image spellEffect;
     spellEffect._disableTransformLayer();
+    spellEffect.resize( waveLength, area.height );
 
     AudioManager::PlaySound( M82::MNRDEATH );
 
@@ -5623,8 +5623,9 @@ void Battle::Interface::RedrawActionHolyShoutSpell( const uint8_t strength )
         area.height -= listlog->GetArea().height;
     }
 
-    fheroes2::Image battleFieldCopy( area.width, area.height );
+    fheroes2::Image battleFieldCopy;
     battleFieldCopy._disableTransformLayer();
+    battleFieldCopy.resize( area.width, area.height );
     fheroes2::Copy( _mainSurface, 0, 0, battleFieldCopy, 0, 0, area.width, area.height );
 
     _currentUnit = nullptr;
@@ -5759,12 +5760,12 @@ void Battle::Interface::RedrawActionArmageddonSpell()
 
     area.height -= 37;
 
-    fheroes2::Image spriteWhitening( area.width, area.height );
-    fheroes2::Image spriteReddish( area.width, area.height );
+    fheroes2::Image spriteWhitening;
     spriteWhitening._disableTransformLayer();
-    spriteReddish._disableTransformLayer();
+    spriteWhitening.resize( area.width, area.height );
+
     fheroes2::Copy( _mainSurface, area.x, area.y, spriteWhitening, 0, 0, area.width, area.height );
-    fheroes2::Copy( _mainSurface, area.x, area.y, spriteReddish, 0, 0, area.width, area.height );
+    fheroes2::Image spriteReddish = spriteWhitening;
 
     cursor.SetThemes( Cursor::WAR_POINTER );
 
@@ -5831,8 +5832,9 @@ void Battle::Interface::RedrawActionEarthQuakeSpell( const std::vector<CastleDef
 
     cursor.SetThemes( Cursor::WAR_POINTER );
 
-    fheroes2::Image sprite( area.width, area.height );
+    fheroes2::Image sprite;
     sprite._disableTransformLayer();
+    sprite.resize( area.width, area.height );
     fheroes2::Copy( _mainSurface, area.x, area.y, sprite, 0, 0, area.width, area.height );
 
     _currentUnit = nullptr;
