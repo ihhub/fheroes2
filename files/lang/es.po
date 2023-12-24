@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-19 03:04+0000\n"
+"POT-Creation-Date: 2023-12-24 11:33+0000\n"
 "PO-Revision-Date: 2023-12-13 05:57+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -3791,34 +3791,69 @@ msgstr "Pueblo"
 msgid "Towns cannot be placed on water."
 msgstr "Este pueblo no se puede actualizar a castillo."
 
-msgid "Ocean Objects"
-msgstr ""
+#, fuzzy
+msgid "Used to place %{object}."
+msgstr "Encuentra el artefacto definitivo"
 
-msgid "Grass Objects"
-msgstr ""
+#, fuzzy
+msgid "Select object type"
+msgstr "Artefactos"
 
-msgid "Snow Objects"
-msgstr ""
+#, fuzzy
+msgid ""
+"Click here to\n"
+"select a monster."
+msgstr "Haga clic aquí para seleccionar el escenario donde jugar."
 
-msgid "Swamp Objects"
-msgstr ""
+#, fuzzy
+msgid ""
+"Click here to\n"
+"select another monster."
+msgstr "Por favor, selecciona otro héroe."
 
-msgid "Lava Objects"
+msgid ""
+"Cell\n"
+"Details"
 msgstr ""
 
 #, fuzzy
-msgid "Desert Objects"
-msgstr "Tienda del Desierto"
+msgid "Roads"
+msgstr "Fin del camino"
 
-msgid "Dirt Objects"
+msgid "Streams"
 msgstr ""
 
+msgid "Erase"
+msgstr ""
+
+msgid "Mountains"
+msgstr "Montañas"
+
 #, fuzzy
-msgid "Wasteland Objects"
+msgid "Rocks"
+msgstr "Roca"
+
+msgid "Trees"
+msgstr "Árboles"
+
+#, fuzzy
+msgid "Water Objects"
 msgstr "Paraje baldio"
 
-msgid "Beach Objects"
-msgstr ""
+#, fuzzy
+msgid "Miscellaneous"
+msgstr "Fineous"
+
+#, fuzzy
+msgid "Dwellings"
+msgstr "Medianos"
+
+msgid "Mines"
+msgstr "Minas"
+
+#, fuzzy
+msgid "Power-ups"
+msgstr "Poder"
 
 #, fuzzy
 msgid "Treasures"
@@ -3830,13 +3865,6 @@ msgstr ""
 #, fuzzy
 msgid "Castles"
 msgstr "Castillo"
-
-#, fuzzy
-msgid "Roads"
-msgstr "Fin del camino"
-
-msgid "Streams"
-msgstr ""
 
 msgid ""
 "Draws terrain in\n"
@@ -3883,31 +3911,6 @@ msgstr ""
 msgid "No special modifiers."
 msgstr ""
 
-msgid "Used to place objects most appropriate for use on %{terrain}."
-msgstr ""
-
-msgid ""
-"Used to place\n"
-"a town or castle."
-msgstr ""
-
-msgid ""
-"Used to place\n"
-"a monster group."
-msgstr ""
-
-msgid "Used to place a hero."
-msgstr ""
-
-#, fuzzy
-msgid "Used to place an artifact."
-msgstr "Encuentra el artefacto definitivo"
-
-msgid ""
-"Used to place\n"
-"a resource or treasure."
-msgstr ""
-
 msgid "Toggle the erasure of %{type} objects."
 msgstr ""
 
@@ -3929,10 +3932,11 @@ msgstr ""
 msgid "Used to draw the underlying grass, dirt, water, etc. on the map."
 msgstr ""
 
-msgid "Object Mode"
+msgid "Landscape Objects Mode"
 msgstr ""
 
-msgid "Used to place objects (mountains, trees, treasure, etc.) on the map."
+msgid ""
+"Used to place landscape objects (mountains, rocks, trees, etc.) on the map."
 msgstr ""
 
 msgid "Detail Mode"
@@ -3941,6 +3945,30 @@ msgstr ""
 #, fuzzy
 msgid "Used for special editing of monsters, heroes and towns."
 msgstr "Derrota a todos los heroes enemígos y sus ciudades."
+
+#, fuzzy
+msgid "Adventure Objects Mode"
+msgstr "Opciones de la Aventura"
+
+msgid ""
+"Used to place adventure objects (artifacts, dwellings, mines, treasures, "
+"etc.) on the map."
+msgstr ""
+
+#, fuzzy
+msgid "Kingdom Objects Mode"
+msgstr "Ingresos del reino"
+
+msgid "Used to place kingdom objects (towns, castles and heroes) on the map."
+msgstr ""
+
+#, fuzzy
+msgid "Monsters Mode"
+msgstr "Monstruo"
+
+#, fuzzy
+msgid "Used to place monsters on the map."
+msgstr "Encuentra el artefacto definitivo"
 
 msgid "Allows you to draw streams by clicking and dragging."
 msgstr ""
@@ -8113,9 +8141,6 @@ msgid_plural "Water Wheels"
 msgstr[0] "Molino de Agua"
 msgstr[1] "Molinos de Agua"
 
-msgid "Mines"
-msgstr "Minas"
-
 msgid "Obelisk"
 msgstr "Obelisco"
 
@@ -8333,12 +8358,6 @@ msgstr "Fundición"
 
 msgid "Reefs"
 msgstr "Arrecifes"
-
-msgid "Trees"
-msgstr "Árboles"
-
-msgid "Mountains"
-msgstr "Montañas"
 
 msgid "Volcano"
 msgstr "Volcán"
@@ -10894,6 +10913,10 @@ msgstr ""
 "Puedes descargar la última versión del juego desde el sítio:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#, fuzzy
+#~ msgid "Desert Objects"
+#~ msgstr "Tienda del Desierto"
 
 #, fuzzy
 #~ msgid "%{race1} %{name1}"

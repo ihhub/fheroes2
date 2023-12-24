@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-19 03:04+0000\n"
+"POT-Creation-Date: 2023-12-24 11:33+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3771,32 +3771,69 @@ msgstr "Градове"
 msgid "Towns cannot be placed on water."
 msgstr "Чудовищата не могат да се поставят върху вода."
 
-msgid "Ocean Objects"
+#, fuzzy
+msgid "Used to place %{object}."
+msgstr "Използва се за поставяне на герой."
+
+#, fuzzy
+msgid "Select object type"
 msgstr "Океански обекти"
 
-msgid "Grass Objects"
-msgstr "Тревни обекти"
+#, fuzzy
+msgid ""
+"Click here to\n"
+"select a monster."
+msgstr "Кликни тук, за да избереш кой сценарий да играеш."
 
-msgid "Snow Objects"
-msgstr "Снежни обекти"
+#, fuzzy
+msgid ""
+"Click here to\n"
+"select another monster."
+msgstr "Моля, избери друг герой."
 
-msgid "Swamp Objects"
-msgstr "Блатни обекти"
+msgid ""
+"Cell\n"
+"Details"
+msgstr ""
 
-msgid "Lava Objects"
-msgstr "Лава обекти"
+msgid "Roads"
+msgstr "Пътища"
 
-msgid "Desert Objects"
-msgstr "Пустинни обекти"
+msgid "Streams"
+msgstr "Потоци"
 
-msgid "Dirt Objects"
-msgstr "Земни обекти"
+#, fuzzy
+msgid "Erase"
+msgstr "Режим на изтриване"
 
-msgid "Wasteland Objects"
+msgid "Mountains"
+msgstr "Планини"
+
+#, fuzzy
+msgid "Rocks"
+msgstr "Скала"
+
+msgid "Trees"
+msgstr "Дървета"
+
+#, fuzzy
+msgid "Water Objects"
 msgstr "Обекти от пущинака"
 
-msgid "Beach Objects"
-msgstr "Плажни обекти"
+#, fuzzy
+msgid "Miscellaneous"
+msgstr "Финиас"
+
+#, fuzzy
+msgid "Dwellings"
+msgstr "Хобити"
+
+msgid "Mines"
+msgstr "Мини"
+
+#, fuzzy
+msgid "Power-ups"
+msgstr "Сила"
 
 msgid "Treasures"
 msgstr "Съкровища"
@@ -3806,12 +3843,6 @@ msgstr "Терен"
 
 msgid "Castles"
 msgstr "Замъци"
-
-msgid "Roads"
-msgstr "Пътища"
-
-msgid "Streams"
-msgstr "Потоци"
 
 msgid ""
 "Draws terrain in\n"
@@ -3861,38 +3892,6 @@ msgstr "Преминаване само с лодка."
 msgid "No special modifiers."
 msgstr "Без специални модификатори."
 
-msgid "Used to place objects most appropriate for use on %{terrain}."
-msgstr ""
-"Използва се за поставяне на обекти, които са най-подходящи за използване на "
-"%{terrain}."
-
-msgid ""
-"Used to place\n"
-"a town or castle."
-msgstr ""
-"Използва се за поставяне\n"
-"на град или замък."
-
-msgid ""
-"Used to place\n"
-"a monster group."
-msgstr ""
-"Използва се за поставяне\n"
-"на група чудовища."
-
-msgid "Used to place a hero."
-msgstr "Използва се за поставяне на герой."
-
-msgid "Used to place an artifact."
-msgstr "Използва се за поставяне на артефакт."
-
-msgid ""
-"Used to place\n"
-"a resource or treasure."
-msgstr ""
-"Използва се за поставяне\n"
-"на ресурс или съкровище."
-
 msgid "Toggle the erasure of %{type} objects."
 msgstr "Превключи изтриването на %{type} обекти."
 
@@ -3922,10 +3921,13 @@ msgstr ""
 "Използва се за начертаване на основната трева, мръсотия, вода и т.н. върху "
 "картата."
 
-msgid "Object Mode"
+#, fuzzy
+msgid "Landscape Objects Mode"
 msgstr "Обектен режим"
 
-msgid "Used to place objects (mountains, trees, treasure, etc.) on the map."
+#, fuzzy
+msgid ""
+"Used to place landscape objects (mountains, rocks, trees, etc.) on the map."
 msgstr ""
 "Използва се за поставяне на обекти (планини, дървета, съкровища и др.) върху "
 "картата."
@@ -3935,6 +3937,38 @@ msgstr "Подробен режим"
 
 msgid "Used for special editing of monsters, heroes and towns."
 msgstr "Използва се за специално редактиране на чудовища, герои и градове."
+
+#, fuzzy
+msgid "Adventure Objects Mode"
+msgstr "Опции за приключения"
+
+#, fuzzy
+msgid ""
+"Used to place adventure objects (artifacts, dwellings, mines, treasures, "
+"etc.) on the map."
+msgstr ""
+"Използва се за поставяне на обекти (планини, дървета, съкровища и др.) върху "
+"картата."
+
+#, fuzzy
+msgid "Kingdom Objects Mode"
+msgstr "Обектен режим"
+
+#, fuzzy
+msgid "Used to place kingdom objects (towns, castles and heroes) on the map."
+msgstr ""
+"Използва се за поставяне на обекти (планини, дървета, съкровища и др.) върху "
+"картата."
+
+#, fuzzy
+msgid "Monsters Mode"
+msgstr "Чудовища"
+
+#, fuzzy
+msgid "Used to place monsters on the map."
+msgstr ""
+"Използва се за поставяне\n"
+"на група чудовища."
 
 msgid "Allows you to draw streams by clicking and dragging."
 msgstr "Позволява ти да рисуваш потоци чрез кликване и плъзгане."
@@ -8101,9 +8135,6 @@ msgid_plural "Water Wheels"
 msgstr[0] "Водно колело"
 msgstr[1] "Водни колела"
 
-msgid "Mines"
-msgstr "Мини"
-
 msgid "Obelisk"
 msgstr "Обелиск"
 
@@ -8312,12 +8343,6 @@ msgstr "Леярна на Фрийман"
 
 msgid "Reefs"
 msgstr "Рифове"
-
-msgid "Trees"
-msgstr "Дървета"
-
-msgid "Mountains"
-msgstr "Планини"
 
 msgid "Volcano"
 msgstr "Вулкан"
@@ -11055,6 +11080,52 @@ msgstr ""
 "Проверете най-новата версия на играта на\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Ocean Objects"
+#~ msgstr "Океански обекти"
+
+#~ msgid "Grass Objects"
+#~ msgstr "Тревни обекти"
+
+#~ msgid "Snow Objects"
+#~ msgstr "Снежни обекти"
+
+#~ msgid "Swamp Objects"
+#~ msgstr "Блатни обекти"
+
+#~ msgid "Lava Objects"
+#~ msgstr "Лава обекти"
+
+#~ msgid "Desert Objects"
+#~ msgstr "Пустинни обекти"
+
+#~ msgid "Dirt Objects"
+#~ msgstr "Земни обекти"
+
+#~ msgid "Beach Objects"
+#~ msgstr "Плажни обекти"
+
+#~ msgid "Used to place objects most appropriate for use on %{terrain}."
+#~ msgstr ""
+#~ "Използва се за поставяне на обекти, които са най-подходящи за използване "
+#~ "на %{terrain}."
+
+#~ msgid ""
+#~ "Used to place\n"
+#~ "a town or castle."
+#~ msgstr ""
+#~ "Използва се за поставяне\n"
+#~ "на град или замък."
+
+#~ msgid "Used to place an artifact."
+#~ msgstr "Използва се за поставяне на артефакт."
+
+#~ msgid ""
+#~ "Used to place\n"
+#~ "a resource or treasure."
+#~ msgstr ""
+#~ "Използва се за поставяне\n"
+#~ "на ресурс или съкровище."
 
 #~ msgid "%{race1} %{name1}"
 #~ msgstr "%{race1} %{name1}"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-05 00:31+0000\n"
+"POT-Creation-Date: 2023-12-24 11:33+0000\n"
 "PO-Revision-Date: 2023-12-20 19:47+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3749,32 +3749,68 @@ msgstr "Thị trấn"
 msgid "Towns cannot be placed on water."
 msgstr "Thị trấn không thể đặt trên nước."
 
-msgid "Ocean Objects"
-msgstr "Đối tượng Đại dương"
+#, fuzzy
+msgid "Used to place %{object}."
+msgstr "Dùng để đặt một tướng."
 
-msgid "Grass Objects"
-msgstr "Đối tượng Cỏ"
+#, fuzzy
+msgid "Select object type"
+msgstr "Chọn Đối tượng Đại dương:"
 
-msgid "Snow Objects"
-msgstr "Đối tượng Tuyết"
+#, fuzzy
+msgid ""
+"Click here to\n"
+"select a monster."
+msgstr "Nhấp vào đây để chọn kịch bản để chơi."
 
-msgid "Swamp Objects"
-msgstr "Đối tượng Đầm lầy"
+#, fuzzy
+msgid ""
+"Click here to\n"
+"select another monster."
+msgstr "Hãy chọn một tướng khác."
 
-msgid "Lava Objects"
-msgstr "Đối tượng Nham thạch"
+msgid ""
+"Cell\n"
+"Details"
+msgstr ""
 
-msgid "Desert Objects"
-msgstr "Đối tượng Sa mạc"
+msgid "Roads"
+msgstr "Đường"
 
-msgid "Dirt Objects"
-msgstr "Đối tượng Bùn"
+msgid "Streams"
+msgstr "Suối"
 
-msgid "Wasteland Objects"
+#, fuzzy
+msgid "Erase"
+msgstr "Chế độ Xóa"
+
+msgid "Mountains"
+msgstr "Núi"
+
+#, fuzzy
+msgid "Rocks"
+msgstr "Đá"
+
+msgid "Trees"
+msgstr "Cây"
+
+#, fuzzy
+msgid "Water Objects"
 msgstr "Đối tượng Đất hoang"
 
-msgid "Beach Objects"
-msgstr "Đối tượng Biển"
+#, fuzzy
+msgid "Miscellaneous"
+msgstr "Fineous"
+
+msgid "Dwellings"
+msgstr ""
+
+msgid "Mines"
+msgstr "Mỏ"
+
+#, fuzzy
+msgid "Power-ups"
+msgstr "Sức"
 
 msgid "Treasures"
 msgstr "Kho báu"
@@ -3784,12 +3820,6 @@ msgstr "Địa hình"
 
 msgid "Castles"
 msgstr "Lâu đài"
-
-msgid "Roads"
-msgstr "Đường"
-
-msgid "Streams"
-msgstr "Suối"
 
 msgid ""
 "Draws terrain in\n"
@@ -3839,36 +3869,6 @@ msgstr "Chỉ có thể di chuyển bằng thuyền."
 msgid "No special modifiers."
 msgstr "Không có sửa đổi đặc biệt."
 
-msgid "Used to place objects most appropriate for use on %{terrain}."
-msgstr "Dùng để đặt các vật thể thích hợp nhất để sử dụng trên %{terrain}."
-
-msgid ""
-"Used to place\n"
-"a town or castle."
-msgstr ""
-"Để đặt vị trí\n"
-"một thị trấn hoặc lâu đài."
-
-msgid ""
-"Used to place\n"
-"a monster group."
-msgstr ""
-"Dùng để đặt\n"
-"một nhóm quái vật."
-
-msgid "Used to place a hero."
-msgstr "Dùng để đặt một tướng."
-
-msgid "Used to place an artifact."
-msgstr "Dùng để đặt một bảo vật."
-
-msgid ""
-"Used to place\n"
-"a resource or treasure."
-msgstr ""
-"Dùng để đặt\n"
-"một tài nguyên hoặc kho báu."
-
 msgid "Toggle the erasure of %{type} objects."
 msgstr "Chuyển đổi tính năng xóa đối tượng %{type}."
 
@@ -3896,10 +3896,13 @@ msgstr "Chế độ Địa hình"
 msgid "Used to draw the underlying grass, dirt, water, etc. on the map."
 msgstr "Dùng để vẽ cỏ, bụi bẩn, nước, v.v. lên bản đồ."
 
-msgid "Object Mode"
+#, fuzzy
+msgid "Landscape Objects Mode"
 msgstr "Chế độ Vật thể"
 
-msgid "Used to place objects (mountains, trees, treasure, etc.) on the map."
+#, fuzzy
+msgid ""
+"Used to place landscape objects (mountains, rocks, trees, etc.) on the map."
 msgstr "Dùng để đặt các vật thể (núi, cây, kho báu, v.v.v) lên bản đồ."
 
 msgid "Detail Mode"
@@ -3907,6 +3910,34 @@ msgstr "Chế độ Chi tiết"
 
 msgid "Used for special editing of monsters, heroes and towns."
 msgstr "Dùng để hiệu chỉnh đặc biệt cho quái vật, tướng và thị trấn."
+
+#, fuzzy
+msgid "Adventure Objects Mode"
+msgstr "Tùy chọn Khám phá"
+
+#, fuzzy
+msgid ""
+"Used to place adventure objects (artifacts, dwellings, mines, treasures, "
+"etc.) on the map."
+msgstr "Dùng để đặt các vật thể (núi, cây, kho báu, v.v.v) lên bản đồ."
+
+#, fuzzy
+msgid "Kingdom Objects Mode"
+msgstr "Chế độ Vật thể"
+
+#, fuzzy
+msgid "Used to place kingdom objects (towns, castles and heroes) on the map."
+msgstr "Dùng để đặt các vật thể (núi, cây, kho báu, v.v.v) lên bản đồ."
+
+#, fuzzy
+msgid "Monsters Mode"
+msgstr "Quái vật"
+
+#, fuzzy
+msgid "Used to place monsters on the map."
+msgstr ""
+"Dùng để đặt\n"
+"một nhóm quái vật."
 
 msgid "Allows you to draw streams by clicking and dragging."
 msgstr "Cho phép vẽ suối bằng cách nhấp và kéo."
@@ -8080,9 +8111,6 @@ msgid "Water Wheel"
 msgid_plural "Water Wheels"
 msgstr[0] "Bánh xe Nước"
 
-msgid "Mines"
-msgstr "Mỏ"
-
 msgid "Obelisk"
 msgstr "Đài tưởng niệm"
 
@@ -8289,12 +8317,6 @@ msgstr ""
 
 msgid "Reefs"
 msgstr "Đá ngầm"
-
-msgid "Trees"
-msgstr "Cây"
-
-msgid "Mountains"
-msgstr "Núi"
 
 msgid "Volcano"
 msgstr "Núi lửa"
@@ -11087,6 +11109,50 @@ msgstr ""
 "Kiểm tra phiên bản mới nhất của trò chơi tại\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Ocean Objects"
+#~ msgstr "Đối tượng Đại dương"
+
+#~ msgid "Grass Objects"
+#~ msgstr "Đối tượng Cỏ"
+
+#~ msgid "Snow Objects"
+#~ msgstr "Đối tượng Tuyết"
+
+#~ msgid "Swamp Objects"
+#~ msgstr "Đối tượng Đầm lầy"
+
+#~ msgid "Lava Objects"
+#~ msgstr "Đối tượng Nham thạch"
+
+#~ msgid "Desert Objects"
+#~ msgstr "Đối tượng Sa mạc"
+
+#~ msgid "Dirt Objects"
+#~ msgstr "Đối tượng Bùn"
+
+#~ msgid "Beach Objects"
+#~ msgstr "Đối tượng Biển"
+
+#~ msgid "Used to place objects most appropriate for use on %{terrain}."
+#~ msgstr "Dùng để đặt các vật thể thích hợp nhất để sử dụng trên %{terrain}."
+
+#~ msgid ""
+#~ "Used to place\n"
+#~ "a town or castle."
+#~ msgstr ""
+#~ "Để đặt vị trí\n"
+#~ "một thị trấn hoặc lâu đài."
+
+#~ msgid "Used to place an artifact."
+#~ msgstr "Dùng để đặt một bảo vật."
+
+#~ msgid ""
+#~ "Used to place\n"
+#~ "a resource or treasure."
+#~ msgstr ""
+#~ "Dùng để đặt\n"
+#~ "một tài nguyên hoặc kho báu."
 
 #~ msgid "vs"
 #~ msgstr "vs"

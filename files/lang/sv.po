@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-19 03:04+0000\n"
+"POT-Creation-Date: 2023-12-24 11:33+0000\n"
 "PO-Revision-Date: 2023-12-02 22:18+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -3751,32 +3751,69 @@ msgstr "Städer"
 msgid "Towns cannot be placed on water."
 msgstr "Varelser kan inte placeras på vatten."
 
-msgid "Ocean Objects"
-msgstr "Havsföremål"
+#, fuzzy
+msgid "Used to place %{object}."
+msgstr "Används för att placera en hjälte."
 
-msgid "Grass Objects"
-msgstr "Gräsföremål"
+#, fuzzy
+msgid "Select object type"
+msgstr "Välj Havsföremål:"
 
-msgid "Snow Objects"
-msgstr "Snöföremål"
+#, fuzzy
+msgid ""
+"Click here to\n"
+"select a monster."
+msgstr "Klicka här för att välja vilket scenario som ska spelas."
 
-msgid "Swamp Objects"
-msgstr "Träskföremål"
+#, fuzzy
+msgid ""
+"Click here to\n"
+"select another monster."
+msgstr "Välj en annan hjälte."
 
-msgid "Lava Objects"
-msgstr "Lavaföremål"
+msgid ""
+"Cell\n"
+"Details"
+msgstr ""
 
-msgid "Desert Objects"
-msgstr "Ökenföremål"
+msgid "Roads"
+msgstr "Vägar"
 
-msgid "Dirt Objects"
-msgstr "Jordföremål"
+msgid "Streams"
+msgstr "Floder"
 
-msgid "Wasteland Objects"
+#, fuzzy
+msgid "Erase"
+msgstr "Raderarläge"
+
+msgid "Mountains"
+msgstr "Berg"
+
+#, fuzzy
+msgid "Rocks"
+msgstr "Sten"
+
+msgid "Trees"
+msgstr "Träd"
+
+#, fuzzy
+msgid "Water Objects"
 msgstr "Ödemarksföremål"
 
-msgid "Beach Objects"
-msgstr "Strandföremål"
+#, fuzzy
+msgid "Miscellaneous"
+msgstr "Fineous"
+
+#, fuzzy
+msgid "Dwellings"
+msgstr "Hober"
+
+msgid "Mines"
+msgstr "Gruvor"
+
+#, fuzzy
+msgid "Power-ups"
+msgstr "Trollk."
 
 msgid "Treasures"
 msgstr "Skatter"
@@ -3786,12 +3823,6 @@ msgstr "Terräng"
 
 msgid "Castles"
 msgstr "Slott"
-
-msgid "Roads"
-msgstr "Vägar"
-
-msgid "Streams"
-msgstr "Floder"
 
 msgid ""
 "Draws terrain in\n"
@@ -3841,30 +3872,6 @@ msgstr "Endast farbar med skepp."
 msgid "No special modifiers."
 msgstr "Ger inget förflyttningsstraff."
 
-msgid "Used to place objects most appropriate for use on %{terrain}."
-msgstr "Används för att placera de lämpligare objekten för %{terrain}."
-
-msgid ""
-"Used to place\n"
-"a town or castle."
-msgstr "Används för att placera en stad eller slott."
-
-msgid ""
-"Used to place\n"
-"a monster group."
-msgstr "Används för att placera en grupp monster."
-
-msgid "Used to place a hero."
-msgstr "Används för att placera en hjälte."
-
-msgid "Used to place an artifact."
-msgstr "Används för att placera en artefakt."
-
-msgid ""
-"Used to place\n"
-"a resource or treasure."
-msgstr "Används för att placera en resurs eller skatt."
-
 msgid "Toggle the erasure of %{type} objects."
 msgstr "Aktivera raderingen av %{type}objekt."
 
@@ -3892,10 +3899,13 @@ msgstr "Terrängläge"
 msgid "Used to draw the underlying grass, dirt, water, etc. on the map."
 msgstr "Används för att rita terrängen så som gräs, jord, hav osv på kartan."
 
-msgid "Object Mode"
+#, fuzzy
+msgid "Landscape Objects Mode"
 msgstr "Föremålsläge"
 
-msgid "Used to place objects (mountains, trees, treasure, etc.) on the map."
+#, fuzzy
+msgid ""
+"Used to place landscape objects (mountains, rocks, trees, etc.) on the map."
 msgstr "Används för att placera föremål (berg, träd, skatter, osv) på kartan."
 
 msgid "Detail Mode"
@@ -3903,6 +3913,32 @@ msgstr "Detaljläge"
 
 msgid "Used for special editing of monsters, heroes and towns."
 msgstr "Används för att redigera varelser, hjältar och städer."
+
+#, fuzzy
+msgid "Adventure Objects Mode"
+msgstr "Äventyrsinställningar"
+
+#, fuzzy
+msgid ""
+"Used to place adventure objects (artifacts, dwellings, mines, treasures, "
+"etc.) on the map."
+msgstr "Används för att placera föremål (berg, träd, skatter, osv) på kartan."
+
+#, fuzzy
+msgid "Kingdom Objects Mode"
+msgstr "Föremålsläge"
+
+#, fuzzy
+msgid "Used to place kingdom objects (towns, castles and heroes) on the map."
+msgstr "Används för att placera föremål (berg, träd, skatter, osv) på kartan."
+
+#, fuzzy
+msgid "Monsters Mode"
+msgstr "Monster"
+
+#, fuzzy
+msgid "Used to place monsters on the map."
+msgstr "Används för att placera en grupp monster."
 
 msgid "Allows you to draw streams by clicking and dragging."
 msgstr "Används för att dra älvar genom att klicka och dra."
@@ -8055,9 +8091,6 @@ msgid_plural "Water Wheels"
 msgstr[0] "Vattenkvarn"
 msgstr[1] "Vattenkvarnar"
 
-msgid "Mines"
-msgstr "Gruvor"
-
 msgid "Obelisk"
 msgstr "Obelisk"
 
@@ -8266,12 +8299,6 @@ msgstr "Hedersmedborgarnas gjuteri"
 
 msgid "Reefs"
 msgstr "Rev"
-
-msgid "Trees"
-msgstr "Träd"
-
-msgid "Mountains"
-msgstr "Berg"
 
 msgid "Volcano"
 msgstr "Vulkan"
@@ -11020,6 +11047,46 @@ msgstr ""
 "Den senaste versionen av spelet finns på:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Ocean Objects"
+#~ msgstr "Havsföremål"
+
+#~ msgid "Grass Objects"
+#~ msgstr "Gräsföremål"
+
+#~ msgid "Snow Objects"
+#~ msgstr "Snöföremål"
+
+#~ msgid "Swamp Objects"
+#~ msgstr "Träskföremål"
+
+#~ msgid "Lava Objects"
+#~ msgstr "Lavaföremål"
+
+#~ msgid "Desert Objects"
+#~ msgstr "Ökenföremål"
+
+#~ msgid "Dirt Objects"
+#~ msgstr "Jordföremål"
+
+#~ msgid "Beach Objects"
+#~ msgstr "Strandföremål"
+
+#~ msgid "Used to place objects most appropriate for use on %{terrain}."
+#~ msgstr "Används för att placera de lämpligare objekten för %{terrain}."
+
+#~ msgid ""
+#~ "Used to place\n"
+#~ "a town or castle."
+#~ msgstr "Används för att placera en stad eller slott."
+
+#~ msgid "Used to place an artifact."
+#~ msgstr "Används för att placera en artefakt."
+
+#~ msgid ""
+#~ "Used to place\n"
+#~ "a resource or treasure."
+#~ msgstr "Används för att placera en resurs eller skatt."
 
 #~ msgid "%{race1} %{name1}"
 #~ msgstr "%{name1} (%{race1})"

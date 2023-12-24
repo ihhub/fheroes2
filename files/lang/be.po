@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-19 03:04+0000\n"
+"POT-Creation-Date: 2023-12-24 11:33+0000\n"
 "PO-Revision-Date: 2022-09-23 16:01+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3536,31 +3536,63 @@ msgstr "Горад"
 msgid "Towns cannot be placed on water."
 msgstr ""
 
-msgid "Ocean Objects"
+msgid "Used to place %{object}."
 msgstr ""
 
-msgid "Grass Objects"
+#, fuzzy
+msgid "Select object type"
+msgstr "Мова"
+
+#, fuzzy
+msgid ""
+"Click here to\n"
+"select a monster."
+msgstr "Пстрыкніце сюды, каб выбраць сцэнар"
+
+#, fuzzy
+msgid ""
+"Click here to\n"
+"select another monster."
+msgstr "Калі ласка, выбярыце іншага героя."
+
+msgid ""
+"Cell\n"
+"Details"
 msgstr ""
 
-msgid "Snow Objects"
+msgid "Roads"
 msgstr ""
 
-msgid "Swamp Objects"
+msgid "Streams"
 msgstr ""
 
-msgid "Lava Objects"
+msgid "Erase"
 msgstr ""
 
-msgid "Desert Objects"
+msgid "Mountains"
 msgstr ""
 
-msgid "Dirt Objects"
+msgid "Rocks"
 msgstr ""
 
-msgid "Wasteland Objects"
+msgid "Trees"
 msgstr ""
 
-msgid "Beach Objects"
+#, fuzzy
+msgid "Water Objects"
+msgstr "Вадзяныя элементалі"
+
+msgid "Miscellaneous"
+msgstr ""
+
+#, fuzzy
+msgid "Dwellings"
+msgstr "Хобіты"
+
+msgid "Mines"
+msgstr ""
+
+msgid "Power-ups"
 msgstr ""
 
 msgid "Treasures"
@@ -3572,12 +3604,6 @@ msgstr ""
 #, fuzzy
 msgid "Castles"
 msgstr "Замак"
-
-msgid "Roads"
-msgstr ""
-
-msgid "Streams"
-msgstr ""
 
 msgid ""
 "Draws terrain in\n"
@@ -3624,30 +3650,6 @@ msgstr ""
 msgid "No special modifiers."
 msgstr ""
 
-msgid "Used to place objects most appropriate for use on %{terrain}."
-msgstr ""
-
-msgid ""
-"Used to place\n"
-"a town or castle."
-msgstr ""
-
-msgid ""
-"Used to place\n"
-"a monster group."
-msgstr ""
-
-msgid "Used to place a hero."
-msgstr ""
-
-msgid "Used to place an artifact."
-msgstr ""
-
-msgid ""
-"Used to place\n"
-"a resource or treasure."
-msgstr ""
-
 msgid "Toggle the erasure of %{type} objects."
 msgstr ""
 
@@ -3669,10 +3671,11 @@ msgstr ""
 msgid "Used to draw the underlying grass, dirt, water, etc. on the map."
 msgstr ""
 
-msgid "Object Mode"
+msgid "Landscape Objects Mode"
 msgstr ""
 
-msgid "Used to place objects (mountains, trees, treasure, etc.) on the map."
+msgid ""
+"Used to place landscape objects (mountains, rocks, trees, etc.) on the map."
 msgstr ""
 
 msgid "Detail Mode"
@@ -3681,6 +3684,28 @@ msgstr ""
 #, fuzzy
 msgid "Used for special editing of monsters, heroes and towns."
 msgstr "Знішчыць усіх варожых герояў і захапіць усе варожыя гарады."
+
+msgid "Adventure Objects Mode"
+msgstr ""
+
+msgid ""
+"Used to place adventure objects (artifacts, dwellings, mines, treasures, "
+"etc.) on the map."
+msgstr ""
+
+#, fuzzy
+msgid "Kingdom Objects Mode"
+msgstr "Прыбытак каралеўства"
+
+msgid "Used to place kingdom objects (towns, castles and heroes) on the map."
+msgstr ""
+
+#, fuzzy
+msgid "Monsters Mode"
+msgstr "Майстры мечнікі"
+
+msgid "Used to place monsters on the map."
+msgstr ""
 
 msgid "Allows you to draw streams by clicking and dragging."
 msgstr ""
@@ -7312,9 +7337,6 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-msgid "Mines"
-msgstr ""
-
 msgid "Obelisk"
 msgstr ""
 
@@ -7524,12 +7546,6 @@ msgid "Freeman's Foundry"
 msgstr ""
 
 msgid "Reefs"
-msgstr ""
-
-msgid "Trees"
-msgstr ""
-
-msgid "Mountains"
 msgstr ""
 
 msgid "Volcano"

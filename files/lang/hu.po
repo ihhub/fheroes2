@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-23 06:44+0000\n"
+"POT-Creation-Date: 2023-12-24 11:33+0000\n"
 "PO-Revision-Date: 2023-09-04 21:55+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -3732,32 +3732,69 @@ msgstr "Városok"
 msgid "Towns cannot be placed on water."
 msgstr "Vízen nem helyezhetők el városok."
 
-msgid "Ocean Objects"
-msgstr "Tengeri tárgyak"
+#, fuzzy
+msgid "Used to place %{object}."
+msgstr "Hős elhelyezésére való."
 
-msgid "Grass Objects"
-msgstr "Füves tárgyak"
+#, fuzzy
+msgid "Select object type"
+msgstr "Tengeri objektum kiválasztása:"
 
-msgid "Snow Objects"
-msgstr "Havas tárgyak"
+#, fuzzy
+msgid ""
+"Click here to\n"
+"select a monster."
+msgstr "Kattints ide, hogy kiválaszd melyik Küldetéssel játszol."
 
-msgid "Swamp Objects"
-msgstr "Mocsári tárgyak"
+#, fuzzy
+msgid ""
+"Click here to\n"
+"select another monster."
+msgstr "Kérlek válassz másik hőst."
 
-msgid "Lava Objects"
-msgstr "Láva tárgyak"
+msgid ""
+"Cell\n"
+"Details"
+msgstr ""
 
-msgid "Desert Objects"
-msgstr "Sivatagi tárgyak"
+msgid "Roads"
+msgstr "Utak"
 
-msgid "Dirt Objects"
-msgstr "Talaj tárgyak"
+msgid "Streams"
+msgstr "Folyóvizek"
 
-msgid "Wasteland Objects"
+#, fuzzy
+msgid "Erase"
+msgstr "Törlés mód"
+
+msgid "Mountains"
+msgstr "Hegyek"
+
+#, fuzzy
+msgid "Rocks"
+msgstr "Kő"
+
+msgid "Trees"
+msgstr "Fák"
+
+#, fuzzy
+msgid "Water Objects"
 msgstr "Pusztaság tárgyak"
 
-msgid "Beach Objects"
-msgstr "Tengerparti tárgyak"
+#, fuzzy
+msgid "Miscellaneous"
+msgstr "Fineous"
+
+#, fuzzy
+msgid "Dwellings"
+msgstr "Félszerzetek"
+
+msgid "Mines"
+msgstr "Bányák"
+
+#, fuzzy
+msgid "Power-ups"
+msgstr "Erő"
 
 msgid "Treasures"
 msgstr "Kincsek"
@@ -3767,12 +3804,6 @@ msgstr "Talaj"
 
 msgid "Castles"
 msgstr "Várak"
-
-msgid "Roads"
-msgstr "Utak"
-
-msgid "Streams"
-msgstr "Folyóvizek"
 
 msgid ""
 "Draws terrain in\n"
@@ -3822,36 +3853,6 @@ msgstr "Csak hajóval járható."
 msgid "No special modifiers."
 msgstr "Nincs speciális módosító."
 
-msgid "Used to place objects most appropriate for use on %{terrain}."
-msgstr "Tárgyak elhelyezésére használatos, leginkább %{terrain} esetén."
-
-msgid ""
-"Used to place\n"
-"a town or castle."
-msgstr ""
-"Város vagy vár\n"
-"elhelyezésére való."
-
-msgid ""
-"Used to place\n"
-"a monster group."
-msgstr ""
-"Lénycsoportok\n"
-"elhelyezésére való."
-
-msgid "Used to place a hero."
-msgstr "Hős elhelyezésére való."
-
-msgid "Used to place an artifact."
-msgstr "Varázstárgy elhelyezésére való."
-
-msgid ""
-"Used to place\n"
-"a resource or treasure."
-msgstr ""
-"Erőforrás vagy kincs\n"
-"elhelyezésére való."
-
 msgid "Toggle the erasure of %{type} objects."
 msgstr "%{type} tárgyak törlésének kapcsolója."
 
@@ -3879,10 +3880,13 @@ msgstr "Talaj mód"
 msgid "Used to draw the underlying grass, dirt, water, etc. on the map."
 msgstr "Különféle talajokat (fű, föld, víz stb.) rajzol a térképen."
 
-msgid "Object Mode"
+#, fuzzy
+msgid "Landscape Objects Mode"
 msgstr "Objektum mód"
 
-msgid "Used to place objects (mountains, trees, treasure, etc.) on the map."
+#, fuzzy
+msgid ""
+"Used to place landscape objects (mountains, rocks, trees, etc.) on the map."
 msgstr "Elhelyezi a tereptárgyakat (hegyek, fák, kincsek stb.) a térképen."
 
 msgid "Detail Mode"
@@ -3890,6 +3894,34 @@ msgstr "Részletes mód"
 
 msgid "Used for special editing of monsters, heroes and towns."
 msgstr "Lények, hősök, városok speciális szerkesztéséhez használatos."
+
+#, fuzzy
+msgid "Adventure Objects Mode"
+msgstr "Kaland Opciók"
+
+#, fuzzy
+msgid ""
+"Used to place adventure objects (artifacts, dwellings, mines, treasures, "
+"etc.) on the map."
+msgstr "Elhelyezi a tereptárgyakat (hegyek, fák, kincsek stb.) a térképen."
+
+#, fuzzy
+msgid "Kingdom Objects Mode"
+msgstr "Objektum mód"
+
+#, fuzzy
+msgid "Used to place kingdom objects (towns, castles and heroes) on the map."
+msgstr "Elhelyezi a tereptárgyakat (hegyek, fák, kincsek stb.) a térképen."
+
+#, fuzzy
+msgid "Monsters Mode"
+msgstr "Lények"
+
+#, fuzzy
+msgid "Used to place monsters on the map."
+msgstr ""
+"Lénycsoportok\n"
+"elhelyezésére való."
 
 msgid "Allows you to draw streams by clicking and dragging."
 msgstr "Kattintás és húzás révén lehetővé teszi vízfolyások rajzolását."
@@ -7899,9 +7931,6 @@ msgid_plural "Water Wheels"
 msgstr[0] "Vizikerék"
 msgstr[1] "Vizikerekek"
 
-msgid "Mines"
-msgstr "Bányák"
-
 msgid "Obelisk"
 msgstr "Obeliszk"
 
@@ -8109,12 +8138,6 @@ msgstr "Öntőde"
 
 msgid "Reefs"
 msgstr "Zátonyok"
-
-msgid "Trees"
-msgstr "Fák"
-
-msgid "Mountains"
-msgstr "Hegyek"
 
 msgid "Volcano"
 msgstr "Vulkán"
@@ -10560,6 +10583,50 @@ msgstr ""
 "Letöltheted a legújabb verziót innen:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Ocean Objects"
+#~ msgstr "Tengeri tárgyak"
+
+#~ msgid "Grass Objects"
+#~ msgstr "Füves tárgyak"
+
+#~ msgid "Snow Objects"
+#~ msgstr "Havas tárgyak"
+
+#~ msgid "Swamp Objects"
+#~ msgstr "Mocsári tárgyak"
+
+#~ msgid "Lava Objects"
+#~ msgstr "Láva tárgyak"
+
+#~ msgid "Desert Objects"
+#~ msgstr "Sivatagi tárgyak"
+
+#~ msgid "Dirt Objects"
+#~ msgstr "Talaj tárgyak"
+
+#~ msgid "Beach Objects"
+#~ msgstr "Tengerparti tárgyak"
+
+#~ msgid "Used to place objects most appropriate for use on %{terrain}."
+#~ msgstr "Tárgyak elhelyezésére használatos, leginkább %{terrain} esetén."
+
+#~ msgid ""
+#~ "Used to place\n"
+#~ "a town or castle."
+#~ msgstr ""
+#~ "Város vagy vár\n"
+#~ "elhelyezésére való."
+
+#~ msgid "Used to place an artifact."
+#~ msgstr "Varázstárgy elhelyezésére való."
+
+#~ msgid ""
+#~ "Used to place\n"
+#~ "a resource or treasure."
+#~ msgstr ""
+#~ "Erőforrás vagy kincs\n"
+#~ "elhelyezésére való."
 
 #~ msgid "%{race1} %{name1}"
 #~ msgstr "%{race1} %{name1}"
