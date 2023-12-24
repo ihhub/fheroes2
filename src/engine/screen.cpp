@@ -1349,10 +1349,9 @@ namespace fheroes2
         }
 
         Image::resize( info.gameWidth, info.gameHeight );
-        _screenSize = { info.screenWidth, info.screenHeight };
+        Image::reset();
 
-        // To detect some UI artifacts by invalid code let's put all transform data into pixel skipping mode.
-        std::fill( transform(), transform() + width() * height(), static_cast<uint8_t>( 1 ) );
+        _screenSize = { info.screenWidth, info.screenHeight };
     }
 
     Display & Display::instance()
