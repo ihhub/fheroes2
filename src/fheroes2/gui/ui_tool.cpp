@@ -538,7 +538,7 @@ namespace fheroes2
 
     Image CreateRippleEffect( const Image & in, const int32_t frameId, const double scaleX /* = 0.05 */, const double waveFrequency /* = 20.0 */ )
     {
-        if ( in.empty() ) {
+        if ( in.empty() || in.singleLayer() ) {
             return {};
         }
 

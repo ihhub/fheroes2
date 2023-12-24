@@ -173,6 +173,9 @@ namespace fheroes2
 
     bool readImageFromH2D( H2DReader & reader, const std::string & name, Sprite & image )
     {
+        // TODO: Store in h2d images the 'isSingleLayer' state to disable and skip transform layer for such images.
+        assert( !image.singleLayer() );
+
         const std::vector<uint8_t> & data = reader.getFile( name );
         if ( data.size() < 4 + 4 + 4 + 4 + 1 ) {
             // Empty or invalid image.
@@ -191,7 +194,6 @@ namespace fheroes2
         const size_t size = static_cast<size_t>( width * height );
         image.resize( width, height );
         memcpy( image.image(), data.data() + 4 + 4 + 4 + 4, size );
-        // TODO: Store in h2d images the 'isSingleLayer' state to disable and skip transform layer for such images.
         memcpy( image.transform(), data.data() + 4 + 4 + 4 + 4 + size, size );
 
         image.setPosition( x, y );
@@ -201,7 +203,8 @@ namespace fheroes2
 
     bool writeImageToH2D( H2DWriter & writer, const std::string & name, const Sprite & image )
     {
-        assert( !image.empty() );
+        // TODO: Store in h2d images the 'isSingleLayer' state to disable and skip transform layer for such images.
+        assert( !image.empty() && !image.singleLayer() );
 
         StreamBuf stream;
         stream.putLE32( static_cast<uint32_t>( image.width() ) );

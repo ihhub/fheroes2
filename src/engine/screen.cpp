@@ -363,6 +363,12 @@ namespace
 
         SDL_Surface * generateIconSurface( const fheroes2::Image & icon )
         {
+            if ( icon.empty() || icon.singleLayer() ) {
+                // What are you trying to do? Icon should have not empty both image and transform layers.
+                assert( 0 );
+                return nullptr;
+            }
+
             SDL_Surface * surface = SDL_CreateRGBSurface( 0, icon.width(), icon.height(), 32, 0xFF, 0xFF00, 0xFF0000, 0xFF000000 );
             if ( surface == nullptr ) {
                 ERROR_LOG( "Failed to create a surface of " << icon.width() << " x " << icon.height() << " size for cursor. The error: " << SDL_GetError() )
@@ -436,7 +442,7 @@ namespace
 
         void update( const fheroes2::Image & image, int32_t offsetX, int32_t offsetY ) override
         {
-            if ( image.empty() ) {
+            if ( image.empty() || image.singleLayer() ) {
                 // What are you trying to do? Set an invisible cursor? Use hide() method!
                 assert( 0 );
                 return;

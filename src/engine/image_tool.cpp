@@ -155,6 +155,12 @@ namespace fheroes2
 
     bool Load( const std::string & path, Image & image )
     {
+        if ( image.singleLayer() ) {
+            // Output image should be double-layer!
+            assert( 0 );
+            return false;
+        }
+
         std::unique_ptr<SDL_Surface, std::function<void( SDL_Surface * )>> surface( nullptr, SDL_FreeSurface );
         std::unique_ptr<SDL_Surface, std::function<void( SDL_Surface * )>> loadedSurface( nullptr, SDL_FreeSurface );
 
