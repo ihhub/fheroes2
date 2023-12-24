@@ -28,6 +28,7 @@
 #include "editor_interface.h"
 #include "ground.h"
 #include "interface_gamearea.h"
+#include "logging.h"
 #include "maps_tiles.h"
 #include "maps_tiles_helper.h"
 #include "mp2.h"
@@ -66,6 +67,8 @@ namespace Editor
 {
     void showPopupWindow( const Maps::Tiles & tile )
     {
+        DEBUG_LOG( DBG_DEVEL, DBG_INFO, '\n' << tile.String() )
+
         std::string infoString;
         const int32_t mainTileIndex = Maps::Tiles::getIndexOfMainTile( tile );
 
