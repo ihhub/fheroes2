@@ -22,6 +22,7 @@
 
 #include <cassert>
 #include <cstdint>
+#include <ostream>
 #include <string>
 #include <utility>
 
