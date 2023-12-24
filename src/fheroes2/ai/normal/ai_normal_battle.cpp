@@ -709,6 +709,7 @@ namespace AI
         _defendingCastle = false;
         _considerRetreat = false;
         _defensiveTactics = false;
+        _cautiousOffensive = false;
 
         if ( enemyForce.empty() ) {
             return;
@@ -877,6 +878,11 @@ namespace AI
 
             return true;
         }();
+
+        // If an offensive tactic is chosen, then this means that, most likely, the enemy has more shooters, which means that we should try to attack the enemy and
+        // neutralize his shooters as quickly as possible. A cautious offensive tactics can be chosen only if our army is fighting an enemy army that cannot attack
+        // from a distance.
+        _cautiousOffensive = ( _enemyShootersStrength < 0.1 );
 
         DEBUG_LOG( DBG_BATTLE, DBG_TRACE,
                    ( _defensiveTactics ? "Defensive" : "Offensive" )
@@ -1292,8 +1298,13 @@ namespace AI
 
                     DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "- Going after target " << enemy->GetName() << ", stopping in the moat at cell " << target.cell )
                 }
-                else {
+                else if ( _cautiousOffensive ) {
                     target.cell = findOptimalPositionForSubsequentAttack( arena, path, currentUnit, enemies );
+
+                    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "- Going after target " << enemy->GetName() << " using a cautious offensive, stopping at cell " << target.cell )
+                }
+                else {
+                    target.cell = path.back();
 
                     DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "- Going after target " << enemy->GetName() << ", stopping at cell " << target.cell )
                 }
