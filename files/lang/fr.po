@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-19 03:04+0000\n"
+"POT-Creation-Date: 2023-12-24 11:33+0000\n"
 "PO-Revision-Date: 2023-12-22 01:17+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -3801,32 +3801,68 @@ msgstr "Villages"
 msgid "Towns cannot be placed on water."
 msgstr "Ce sort ne peut pas être jeté en mer."
 
-msgid "Ocean Objects"
-msgstr "Océan"
+#, fuzzy
+msgid "Used to place %{object}."
+msgstr "Permet de placer un artéfact."
 
-msgid "Grass Objects"
-msgstr "Herbe"
+#, fuzzy
+msgid "Select object type"
+msgstr "Choix d'élément (océan) :"
 
-msgid "Snow Objects"
-msgstr "Neige"
+#, fuzzy
+msgid ""
+"Click here to\n"
+"select a monster."
+msgstr "Cliquez ici pour sélectionner le scénario à jouer."
 
-msgid "Swamp Objects"
-msgstr "Marais"
+#, fuzzy
+msgid ""
+"Click here to\n"
+"select another monster."
+msgstr "Veuillez choisir un autre héros."
 
-msgid "Lava Objects"
-msgstr "Lave"
+msgid ""
+"Cell\n"
+"Details"
+msgstr ""
 
-msgid "Desert Objects"
-msgstr "Désert"
+msgid "Roads"
+msgstr "Routes"
 
-msgid "Dirt Objects"
-msgstr "Boue"
+msgid "Streams"
+msgstr ""
 
-msgid "Wasteland Objects"
+msgid "Erase"
+msgstr ""
+
+msgid "Mountains"
+msgstr "Montagnes"
+
+#, fuzzy
+msgid "Rocks"
+msgstr "Caillou"
+
+msgid "Trees"
+msgstr "Arbres"
+
+#, fuzzy
+msgid "Water Objects"
 msgstr "Terre aride"
 
-msgid "Beach Objects"
-msgstr "Plage"
+#, fuzzy
+msgid "Miscellaneous"
+msgstr "Fineous"
+
+#, fuzzy
+msgid "Dwellings"
+msgstr "Galopins"
+
+msgid "Mines"
+msgstr "Mines"
+
+#, fuzzy
+msgid "Power-ups"
+msgstr "Puiss."
 
 msgid "Treasures"
 msgstr "Trésors"
@@ -3836,12 +3872,6 @@ msgstr ""
 
 msgid "Castles"
 msgstr "Châteaux"
-
-msgid "Roads"
-msgstr "Routes"
-
-msgid "Streams"
-msgstr ""
 
 msgid ""
 "Draws terrain in\n"
@@ -3885,30 +3915,6 @@ msgstr ""
 msgid "No special modifiers."
 msgstr ""
 
-msgid "Used to place objects most appropriate for use on %{terrain}."
-msgstr ""
-
-msgid ""
-"Used to place\n"
-"a town or castle."
-msgstr ""
-
-msgid ""
-"Used to place\n"
-"a monster group."
-msgstr ""
-
-msgid "Used to place a hero."
-msgstr ""
-
-msgid "Used to place an artifact."
-msgstr "Permet de placer un artéfact."
-
-msgid ""
-"Used to place\n"
-"a resource or treasure."
-msgstr ""
-
 msgid "Toggle the erasure of %{type} objects."
 msgstr ""
 
@@ -3930,10 +3936,12 @@ msgstr ""
 msgid "Used to draw the underlying grass, dirt, water, etc. on the map."
 msgstr ""
 
-msgid "Object Mode"
-msgstr ""
+#, fuzzy
+msgid "Landscape Objects Mode"
+msgstr "Lave"
 
-msgid "Used to place objects (mountains, trees, treasure, etc.) on the map."
+msgid ""
+"Used to place landscape objects (mountains, rocks, trees, etc.) on the map."
 msgstr ""
 
 msgid "Detail Mode"
@@ -3941,6 +3949,30 @@ msgstr ""
 
 msgid "Used for special editing of monsters, heroes and towns."
 msgstr "Permet d'éditer les monstres, les héros et les villes."
+
+#, fuzzy
+msgid "Adventure Objects Mode"
+msgstr "Options d'aventure"
+
+msgid ""
+"Used to place adventure objects (artifacts, dwellings, mines, treasures, "
+"etc.) on the map."
+msgstr ""
+
+#, fuzzy
+msgid "Kingdom Objects Mode"
+msgstr "Revenu du royaume"
+
+msgid "Used to place kingdom objects (towns, castles and heroes) on the map."
+msgstr ""
+
+#, fuzzy
+msgid "Monsters Mode"
+msgstr "Monstres"
+
+#, fuzzy
+msgid "Used to place monsters on the map."
+msgstr "Permet de placer un artéfact."
 
 msgid "Allows you to draw streams by clicking and dragging."
 msgstr ""
@@ -8199,9 +8231,6 @@ msgid_plural "Water Wheels"
 msgstr[0] "Roue hydraulique"
 msgstr[1] "Roue hydraulique"
 
-msgid "Mines"
-msgstr "Mines"
-
 msgid "Obelisk"
 msgstr "Obélisque"
 
@@ -8410,12 +8439,6 @@ msgstr "Fonderie du citoyen"
 
 msgid "Reefs"
 msgstr "Récifs"
-
-msgid "Trees"
-msgstr "Arbres"
-
-msgid "Mountains"
-msgstr "Montagnes"
 
 msgid "Volcano"
 msgstr "Volcan"
@@ -11210,6 +11233,27 @@ msgstr ""
 "Téléchargez la dernière version du jeu sur\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Ocean Objects"
+#~ msgstr "Océan"
+
+#~ msgid "Grass Objects"
+#~ msgstr "Herbe"
+
+#~ msgid "Snow Objects"
+#~ msgstr "Neige"
+
+#~ msgid "Swamp Objects"
+#~ msgstr "Marais"
+
+#~ msgid "Desert Objects"
+#~ msgstr "Désert"
+
+#~ msgid "Dirt Objects"
+#~ msgstr "Boue"
+
+#~ msgid "Beach Objects"
+#~ msgstr "Plage"
 
 #~ msgid "%{race1} %{name1}"
 #~ msgstr "%{race1} le %{name1}"
