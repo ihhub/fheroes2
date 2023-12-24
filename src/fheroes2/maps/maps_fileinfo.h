@@ -210,7 +210,7 @@ namespace Maps
     MapsFileInfoList getOriginalMapFileInfos( const bool isForEditor, const bool isMultiplayer );
 
     // For RESURRECTION map files.
-    MapsFileInfoList getResurrectionMapFileInfos(const bool isForEditor, const bool isMultiplayer );
+    MapsFileInfoList getResurrectionMapFileInfos( const bool isForEditor, const bool isMultiplayer );
 }
 
 #endif

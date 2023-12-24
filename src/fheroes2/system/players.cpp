@@ -325,7 +325,7 @@ void Players::Init( int colors )
 void Players::Init( const Maps::FileInfo & fi )
 {
     if ( fi.kingdomColors == 0 ) {
-         DEBUG_LOG( DBG_GAME, DBG_INFO, "No players are set." )
+        DEBUG_LOG( DBG_GAME, DBG_INFO, "No players are set." )
         return;
     }
 
