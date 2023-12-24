@@ -465,8 +465,8 @@ void Battle::Only::RedrawBaseInfo( const fheroes2::Point & top ) const
 
     // hide the swap army/artifact arrows
     const fheroes2::Sprite & moveButtonBackground = fheroes2::AGG::GetICN( ICN::STONEBAK, 0 );
-    fheroes2::Blit( moveButtonBackground, 292, 270, display, top.x + 292, top.y + 270, 48, 44 );
-    fheroes2::Blit( moveButtonBackground, 292, 363, display, top.x + 292, top.y + 363, 48, 44 );
+    fheroes2::Copy( moveButtonBackground, 292, 270, display, top.x + 292, top.y + 270, 48, 44 );
+    fheroes2::Copy( moveButtonBackground, 292, 363, display, top.x + 292, top.y + 363, 48, 44 );
 }
 
 void Battle::Only::StartBattle()
