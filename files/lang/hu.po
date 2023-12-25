@@ -381,7 +381,6 @@ msgstr "Több"
 msgid "Troops of %{count} alignments -%{penalty}"
 msgstr "%{count} féle csapatod van: -%{penalty}"
 
-#, fuzzy
 msgid "Some undead in army -1"
 msgstr "Élőhalottak a seregben -1"
 
@@ -2476,7 +2475,6 @@ msgid ""
 "per week."
 msgstr "A Kút hetente ennyivel növeli az összes lény szaporulatát: %{count}."
 
-#, fuzzy
 msgid "The Statue increases the town's income by %{count} gold per day."
 msgstr "A Szobor naponta ennyivel növeli a város bevételét: %{count}."
 
@@ -2500,7 +2498,6 @@ msgstr ""
 "A Vizesárok lassítja a támadó egységeket. Minden egység, aki belelép az "
 "árokba, ott be kell fejezze a körét és sebezhetőbbé válik."
 
-#, fuzzy
 msgid ""
 "The Castle improves the town's defense and increases its income to %{count} "
 "gold per day."
@@ -3735,30 +3732,32 @@ msgstr "Városok"
 msgid "Towns cannot be placed on water."
 msgstr "Vízen nem helyezhetők el városok."
 
-#, fuzzy
 msgid "Used to place %{object}."
-msgstr "Hős elhelyezésére való."
+msgstr "%{object} elhelyezésére való."
 
-#, fuzzy
 msgid "Select object type"
-msgstr "Tengeri objektum kiválasztása:"
+msgstr "Objektum típus kiválasztása:"
 
-#, fuzzy
 msgid ""
 "Click here to\n"
 "select a monster."
-msgstr "Kattints ide, hogy kiválaszd melyik Küldetéssel játszol."
+msgstr ""
+"Kattints ide, a\n"
+"lény kiválasztásához."
 
-#, fuzzy
 msgid ""
 "Click here to\n"
 "select another monster."
-msgstr "Kérlek válassz másik hőst."
+msgstr ""
+"Kattints ide, egy másik\n"
+"lény kiválasztásához."
 
 msgid ""
 "Cell\n"
 "Details"
 msgstr ""
+"Cella\n"
+"részletek"
 
 msgid "Roads"
 msgstr "Utak"
@@ -3766,38 +3765,32 @@ msgstr "Utak"
 msgid "Streams"
 msgstr "Folyóvizek"
 
-#, fuzzy
 msgid "Erase"
-msgstr "Törlés mód"
+msgstr "Törlés"
 
 msgid "Mountains"
 msgstr "Hegyek"
 
-#, fuzzy
 msgid "Rocks"
-msgstr "Kő"
+msgstr "Kövek"
 
 msgid "Trees"
 msgstr "Fák"
 
-#, fuzzy
 msgid "Water Objects"
-msgstr "Pusztaság tárgyak"
+msgstr "Vizi tárgyak"
 
-#, fuzzy
 msgid "Miscellaneous"
-msgstr "Fineous"
+msgstr "Vegyes"
 
-#, fuzzy
 msgid "Dwellings"
-msgstr "Félszerzetek"
+msgstr "Toborzóhelyek"
 
 msgid "Mines"
 msgstr "Bányák"
 
-#, fuzzy
 msgid "Power-ups"
-msgstr "Erő"
+msgstr "Erő-feltöltők"
 
 msgid "Treasures"
 msgstr "Kincsek"
@@ -3883,14 +3876,12 @@ msgstr "Talaj mód"
 msgid "Used to draw the underlying grass, dirt, water, etc. on the map."
 msgstr "Különféle talajokat (fű, föld, víz stb.) rajzol a térképen."
 
-#, fuzzy
 msgid "Landscape Objects Mode"
-msgstr "Objektum mód"
+msgstr "Szárazföldi objektum mód"
 
-#, fuzzy
 msgid ""
 "Used to place landscape objects (mountains, rocks, trees, etc.) on the map."
-msgstr "Elhelyezi a tereptárgyakat (hegyek, fák, kincsek stb.) a térképen."
+msgstr "Elhelyezi a szárazföldi tereptárgyakat (hegyek, köcek, fák stb.) a térképen."
 
 msgid "Detail Mode"
 msgstr "Részletes mód"
@@ -3898,33 +3889,27 @@ msgstr "Részletes mód"
 msgid "Used for special editing of monsters, heroes and towns."
 msgstr "Lények, hősök, városok speciális szerkesztéséhez használatos."
 
-#, fuzzy
 msgid "Adventure Objects Mode"
-msgstr "Kaland Opciók"
+msgstr "Kaland opciók mód"
 
-#, fuzzy
 msgid ""
 "Used to place adventure objects (artifacts, dwellings, mines, treasures, "
 "etc.) on the map."
-msgstr "Elhelyezi a tereptárgyakat (hegyek, fák, kincsek stb.) a térképen."
-
-#, fuzzy
-msgid "Kingdom Objects Mode"
-msgstr "Objektum mód"
-
-#, fuzzy
-msgid "Used to place kingdom objects (towns, castles and heroes) on the map."
-msgstr "Elhelyezi a tereptárgyakat (hegyek, fák, kincsek stb.) a térképen."
-
-#, fuzzy
-msgid "Monsters Mode"
-msgstr "Lények"
-
-#, fuzzy
-msgid "Used to place monsters on the map."
 msgstr ""
-"Lénycsoportok\n"
-"elhelyezésére való."
+"Elhelyezi a kaland térkép tárgyakat (varázstárgyak, toborzóhelyek, "
+"bányák, kincsek stb.) a térképen."
+
+msgid "Kingdom Objects Mode"
+msgstr "Királyság objektum mód"
+
+msgid "Used to place kingdom objects (towns, castles and heroes) on the map."
+msgstr "Elhelyezi a királyság tárgyait (városok, várak, hősök) a térképen."
+
+msgid "Monsters Mode"
+msgstr "Lények mód"
+
+msgid "Used to place monsters on the map."
+msgstr "Elhelyezi a lényeket a térképen."
 
 msgid "Allows you to draw streams by clicking and dragging."
 msgstr "Kattintás és húzás révén lehetővé teszi vízfolyások rajzolását."
@@ -7141,27 +7126,21 @@ msgstr "Ezek a gyenge lények valószínű elmenekül előled."
 msgid "I fear these creatures are in the mood for a fight."
 msgstr "Félő, hogy ezek a lények készek harcolni."
 
-#, fuzzy
 msgid "The hero's attack skill is a bonus added to each unit's attack skill."
-msgstr ""
-"A támadóerőd értéke bónuszként hozzáadódik mindegyik lényed támadóerejéhez."
+msgstr "A hős támadóerejének értéke bónuszként hozzáadódik mindegyik egység támadóerejéhez."
 
-#, fuzzy
 msgid "The hero's defense skill is a bonus added to each unit's defense skill."
-msgstr ""
-"A védőerőd értéke bónuszként hozzáadódik mindegyik lényed védőerejéhez."
+msgstr "A hős védőerejének értéke bónuszként hozzáadódik mindegyik egység védőerejéhez."
 
-#, fuzzy
 msgid "The hero's spell power determines the duration or power of a spell."
-msgstr "A varázserőd meghatározza a varázslat hatóidejét."
+msgstr "A hős varázsereje meghatározza a varázslat hatóidejét."
 
-#, fuzzy
 msgid ""
 " The hero's knowledge determines how many spell points the hero may have. "
 "Under normal circumstances, a hero is limited to 10 spell points per level "
 "of knowledge."
 msgstr ""
-"Tudásod határozza meg, hogy hány varázspontod lehet. Általában a hős "
+"A hős tudása határozza meg, hogy hány varázspontja lehet. Általában a hős "
 "szintenként 10 varázspontot kaphat."
 
 msgid "Current Modifiers:"
