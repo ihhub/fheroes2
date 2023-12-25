@@ -5882,7 +5882,7 @@ msgid ""
 "teaches you %{skill} for her own inscrutable purposes."
 msgstr ""
 "Egy vénséges, halhatatlan boszorkány lakik a cölöpkunyhóban, aki "
-"kifürkészhetetlen okok miatt megtanít téged a %{skill} képességre."
+"kifürkészhetetlen okok miatt megtanít téged a(z) %{skill} képességre."
 
 msgid "As you drink the sweet water, you gain luck for your next battle."
 msgstr ""
@@ -8199,7 +8199,7 @@ msgid "Shrub"
 msgstr "Bozót"
 
 msgid "Barrow Mounds"
-msgstr "Barrow dombság"
+msgstr "Halomsírok"
 
 msgid "Random Artifact - Treasure"
 msgstr "Véletlen tárgy - kincs"
@@ -9434,7 +9434,7 @@ msgid ""
 msgstr ""
 
 msgid "Wand of Negation"
-msgstr "Tagadás pálca"
+msgstr "Hatástalanító pálca"
 
 msgid "The %{name} makes all your troops immune to dispel magic spells."
 msgstr "A %{name} megvédi a csapataidat a varázslatoszlató varázslattól."
