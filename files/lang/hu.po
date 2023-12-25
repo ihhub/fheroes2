@@ -3778,7 +3778,7 @@ msgid "Trees"
 msgstr "Fák"
 
 msgid "Water Objects"
-msgstr "Vizi tárgyak"
+msgstr "Vízi tárgyak"
 
 msgid "Miscellaneous"
 msgstr "Vegyes"
@@ -3881,7 +3881,7 @@ msgstr "Szárazföldi objektum mód"
 
 msgid ""
 "Used to place landscape objects (mountains, rocks, trees, etc.) on the map."
-msgstr "Elhelyezi a szárazföldi tereptárgyakat (hegyek, köcek, fák stb.) a térképen."
+msgstr "Elhelyezi a szárazföldi tereptárgyakat (hegyek, kövek, fák stb.) a térképen."
 
 msgid "Detail Mode"
 msgstr "Részletes mód"
@@ -8074,7 +8074,7 @@ msgid "Sirens"
 msgstr "Szirének"
 
 msgid "Standing Stones"
-msgstr "Álló kövek"
+msgstr "Állókövek"
 
 msgid "Idol"
 msgstr "Bálvány"
@@ -9270,7 +9270,7 @@ msgid ""
 msgstr ""
 
 msgid "Everhot Lava Rock"
-msgstr "Örökké izzó láva"
+msgstr "Örökké izzó lávakő"
 
 msgid ""
 "The %{name} causes your fire spells to do %{count} percent more damage to "
@@ -9485,7 +9485,7 @@ msgid ""
 msgstr ""
 
 msgid "Statesman's Quill"
-msgstr "Politikus pennája"
+msgstr "Államférfi pennája"
 
 msgid ""
 "The %{name} reduces the cost of surrender to %{count} percent of the total "
@@ -10074,7 +10074,7 @@ msgid "Increases the speed of all of your creatures by %{count}."
 msgstr "%{count} ponttal növeli az összes saját lény sebességét."
 
 msgid "Mass Haste"
-msgstr "Teljes gyorsítás"
+msgstr "Tömeges gyorsítás"
 
 msgid "Slows target to half movement rate."
 msgstr "Felére lassítja a kiválasztott lény sebességét."
@@ -10083,7 +10083,7 @@ msgid "spell|Slow"
 msgstr "Lassítás"
 
 msgid "Mass Slow"
-msgstr "Teljes lassítás"
+msgstr "Tömeges lassítás"
 
 msgid "Slows all enemies to half movement rate."
 msgstr "Felezi az összes ellenség sebességét."
@@ -10104,7 +10104,7 @@ msgid "Causes all of your units to inflict maximum damage."
 msgstr "Maximális sebzést ad az összes saját egységednek."
 
 msgid "Mass Bless"
-msgstr "Teljes áldás"
+msgstr "Tömeges áldás"
 
 msgid "Magically increases the defense skill of the selected creatures."
 msgstr "A kiválasztott lény védőereje varázslatosan növekszik."
@@ -10131,7 +10131,7 @@ msgid "Causes all enemy troops to inflict minimum damage."
 msgstr "Minimálisra csökkenti az összes ellenséges lény sebzését."
 
 msgid "Mass Curse"
-msgstr "Teljes átok"
+msgstr "Tömeges átok"
 
 msgid "Damages all undead in the battle."
 msgstr "Megsebzi az összes élőhalott egységet a csatában."
@@ -10162,7 +10162,7 @@ msgid "Removes all magic spells from a single target."
 msgstr "Eloszlat minden varászlatot a kiválasztott egységről."
 
 msgid "Mass Dispel"
-msgstr "Teljes varázslatűzés"
+msgstr "Tömeges varázslatűzés"
 
 msgid "Removes all magic spells from all creatures."
 msgstr "Eloszlat minden varászlatot minden lényről."
@@ -10295,7 +10295,7 @@ msgstr ""
 "okozott sérülésekre."
 
 msgid "Mass Shield"
-msgstr "Teljes pajzs"
+msgstr "Tömeges pajzs"
 
 msgid ""
 "Halves damage received from ranged attacks for all of your units. Does not "
