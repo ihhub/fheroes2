@@ -24,91 +24,79 @@
 #include <cstdint>
 #include <vector>
 
+#include "map_format_helper.h"
 #include "maps_tiles.h"
-#include "world.h"
 #include "world_object_uid.h"
 
 namespace
 {
+    // This class holds 2 copies of MapFormat objects:
+    // - one copy before the action
+    // - one copy after the action
+    // Ideally, we need to store only difference between before and after an action
+    // but for simplification purposes we chose this way.
+    // TODO: optimize this class (if possible) to store less data.
     class MapAction : public fheroes2::Action
     {
     public:
-        MapAction()
-            : _latestObjectUIDBefore( Maps::getLastObjectUID() )
+        MapAction( Maps::Map_Format::MapFormat & mapFormat )
+            : _mapFormat( mapFormat )
+            , _latestObjectUIDBefore( Maps::getLastObjectUID() )
         {
-            const int32_t size = world.w() * world.h();
-            _before.reserve( size );
-
-            for ( int32_t i = 0; i < size; ++i ) {
-                _before.push_back( world.GetTiles( i ) );
+            if ( Maps::saveMapInEditor( _mapFormat ) ) {
+                // If this assertion blows up then something is really wrong with the Editor.
+                assert( 0 );
             }
+
+            _beforeMapFormat = _mapFormat;
         }
 
         bool prepare()
         {
-            std::vector<Maps::Tiles> temp;
-            std::swap( temp, _before );
-
-            const int32_t size = world.w() * world.h();
-            if ( size != static_cast<int32_t>( temp.size() ) ) {
+            if ( Maps::saveMapInEditor( _mapFormat ) ) {
+                // If this assertion blows up then something is really wrong with the Editor.
                 assert( 0 );
                 return false;
             }
 
-            _latestObjectUIDAfter = Maps::getLastObjectUID();
+            _afterMapFormat = _mapFormat;
 
-            bool foundDifference = false;
-
-            for ( int32_t i = 0; i < size; ++i ) {
-                if ( temp[i] != world.GetTiles( i ) ) {
-                    _before.push_back( std::move( temp[i] ) );
-                    _after.push_back( world.GetTiles( i ) );
-                    foundDifference = true;
-                }
-            }
-
-            assert( _before.size() == _after.size() );
-
-            // TODO: logically if the last object UID has been changed then we should mark the difference.
-
-            return foundDifference;
+            return true;
         }
 
         bool redo() override
         {
-            for ( const Maps::Tiles & tile : _after ) {
-                // Copy operator is disabled for Maps::Tiles class.
-                // This is done to avoid any tile copy made by a developer during the gameplay like map initialization.
-                // Therefore, such a trick is required to assign a new value.
-                Maps::Tiles temp{ tile };
-
-                world.GetTiles( tile.GetIndex() ) = std::move( temp );
+            _mapFormat = _afterMapFormat;
+            if ( Maps::readMapInEditor( _mapFormat ) ) {
+                // If this assertion blows up then something is really wrong with the Editor.
+                assert( 0 );
+                return false;
             }
 
             Maps::setLastObjectUID( _latestObjectUIDAfter );
 
-            return ( !_after.empty() );
+            return true;
         }
 
         bool undo() override
         {
-            for ( const Maps::Tiles & tile : _before ) {
-                // Copy operator is disabled for Maps::Tiles class.
-                // This is done to avoid any tile copy made by a developer during the gameplay like map initialization.
-                // Therefore, such a trick is required to assign a new value.
-                Maps::Tiles temp{ tile };
-
-                world.GetTiles( tile.GetIndex() ) = std::move( temp );
+            _mapFormat = _beforeMapFormat;
+            if ( Maps::readMapInEditor( _mapFormat ) ) {
+                // If this assertion blows up then something is really wrong with the Editor.
+                assert( 0 );
+                return false;
             }
 
             Maps::setLastObjectUID( _latestObjectUIDBefore );
 
-            return ( !_before.empty() );
+            return true;
         }
 
     private:
-        std::vector<Maps::Tiles> _before;
-        std::vector<Maps::Tiles> _after;
+        Maps::Map_Format::MapFormat & _mapFormat;
+
+        Maps::Map_Format::MapFormat _beforeMapFormat;
+        Maps::Map_Format::MapFormat _afterMapFormat;
 
         const uint32_t _latestObjectUIDBefore{ 0 };
         uint32_t _latestObjectUIDAfter{ 0 };
@@ -117,10 +105,10 @@ namespace
 
 namespace fheroes2
 {
-    ActionCreator::ActionCreator( HistoryManager & manager )
+    ActionCreator::ActionCreator( HistoryManager & manager, Maps::Map_Format::MapFormat & mapFormat )
         : _manager( manager )
     {
-        _action = std::make_unique<MapAction>();
+        _action = std::make_unique<MapAction>( mapFormat );
     }
 
     ActionCreator::~ActionCreator()

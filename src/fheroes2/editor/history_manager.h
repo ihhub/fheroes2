@@ -27,6 +27,8 @@
 #include <memory>
 #include <utility>
 
+#include "map_format_info.h"
+
 namespace fheroes2
 {
     class HistoryManager;
@@ -45,7 +47,7 @@ namespace fheroes2
     class ActionCreator
     {
     public:
-        explicit ActionCreator( HistoryManager & manager );
+        explicit ActionCreator( HistoryManager & manager, Maps::Map_Format::MapFormat & mapFormat );
 
         ~ActionCreator();
 

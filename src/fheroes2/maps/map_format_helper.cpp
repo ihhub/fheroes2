@@ -43,6 +43,14 @@ namespace Maps
 
         assert( static_cast<size_t>( world.w() ) * world.h() == map.tiles.size() );
 
+        // We must clear all tiles before writing something on them.
+        for ( size_t i = 0; i < map.tiles.size(); ++i ) {
+            auto & tile = world.GetTiles( static_cast<int32_t>( i ) );
+            tile = {};
+
+            tile.setIndex( static_cast<int32_t>( i ) );
+        }
+
         for ( size_t i = 0; i < map.tiles.size(); ++i ) {
             readTile( world.GetTiles( static_cast<int32_t>( i ) ), map.tiles[i] );
         }
@@ -93,6 +101,9 @@ namespace Maps
 
     void writeTile( const Tiles & tile, Map_Format::TileInfo & info )
     {
+        // Clear all data before writing new one.
+        info = {};
+
         // Only bottom layer addons / objects parts can be stored within the map format.
         ObjectGroup group;
         uint32_t index;
