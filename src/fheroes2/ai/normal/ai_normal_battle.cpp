@@ -1258,7 +1258,7 @@ namespace AI
             const Castle * castle = Arena::GetCastle();
             const bool isMoatBuilt = castle && castle->isBuild( BUILD_MOAT );
 
-            // The usual distance between units of different armies at the beginning of a battle is 10-14 tiles. For each tile passed, 20% of the maximum value will be
+            // The usual distance between units of different armies at the beginning of a battle is 10-14 tiles. For each tile passed, 20% of the total army value will be
             // lost to make sure that the difference of 4 tiles matters.
             const double attackDistanceModifier = _enemyArmyStrength / 5.0;
 
