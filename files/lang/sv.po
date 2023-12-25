@@ -3164,7 +3164,7 @@ msgid "already learned"
 msgstr "redan inlärt"
 
 msgid "treeOfKnowledge|free"
-msgstr "Kunskapens Träd"
+msgstr "Gratis"
 
 msgid "already claimed"
 msgstr "redan inlärt"
