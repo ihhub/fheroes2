@@ -277,6 +277,12 @@ msgstr ""
 "А\n"
 "Я"
 
+msgid "SKIP"
+msgstr "ПРОП"
+
+msgid "AUTO"
+msgstr "АВТО"
+
 msgid "Warrior"
 msgstr "Воин"
 

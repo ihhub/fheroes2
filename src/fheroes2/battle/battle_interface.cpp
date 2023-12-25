@@ -923,8 +923,8 @@ bool Battle::OpponentSprite::updateAnimationState()
 }
 
 Battle::Status::Status()
-    : back1( fheroes2::AGG::GetICN( ICN::TEXTBAR, 8 ) )
-    , back2( fheroes2::AGG::GetICN( ICN::TEXTBAR, 9 ) )
+    : back1( fheroes2::AGG::GetICN( ICN::STATUSBAR_BATTLE, 0 ) )
+    , back2( fheroes2::AGG::GetICN( ICN::STATUSBAR_BATTLE, 1 ) )
     , listlog( nullptr )
 {
     width = back1.width();
@@ -1246,8 +1246,8 @@ Battle::Interface::Interface( Arena & battleArena, const int32_t tileIndex )
     // As '_mainSurface' is used to prepare battlefield screen to render on display it does not need to have a transform layer.
     _mainSurface._disableTransformLayer();
 
-    btn_auto.setICNInfo( ICN::TEXTBAR, 4, 5 );
-    btn_settings.setICNInfo( ICN::TEXTBAR, 6, 7 );
+    btn_auto.setICNInfo( ICN::BUTTON_AUTO, 0, 1 );
+    btn_settings.setICNInfo( ICN::BUTTON_BATTLE_SETTINGS, 0, 1 );
 
     // opponents
     _opponent1 = arena.GetCommander1() ? std::make_unique<OpponentSprite>( _surfaceInnerArea, arena.GetCommander1(), false ) : nullptr;
@@ -1259,15 +1259,15 @@ Battle::Interface::Interface( Arena & battleArena, const int32_t tileIndex )
 
     const fheroes2::Rect & area = border.GetArea();
 
-    const fheroes2::Rect settingsRect = btn_settings.area();
-    const int32_t satusOffsetY = area.y + area.height - settingsRect.height - btn_auto.area().height;
-    btn_auto.setPosition( area.x, satusOffsetY );
-    btn_settings.setPosition( area.x, area.y + area.height - settingsRect.height );
+    const fheroes2::Rect settingsButtonRect = btn_settings.area();
+    const int32_t statusOffsetY = area.y + area.height - settingsButtonRect.height - btn_auto.area().height;
+    btn_auto.setPosition( area.x, statusOffsetY );
+    btn_settings.setPosition( area.x, area.y + area.height - settingsButtonRect.height );
 
-    btn_skip.setICNInfo( ICN::TEXTBAR, 0, 1 );
+    btn_skip.setICNInfo( ICN::BUTTON_SKIP, 0, 1 );
     btn_skip.setPosition( area.x + area.width - btn_skip.area().width, area.y + area.height - btn_skip.area().height );
 
-    status.SetPosition( area.x + settingsRect.width, satusOffsetY );
+    status.SetPosition( area.x + settingsButtonRect.width, statusOffsetY );
 
     listlog = std::make_unique<StatusListBox>();
 

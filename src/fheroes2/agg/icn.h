@@ -909,7 +909,6 @@ namespace ICN
         ROUTERED,
         YELLOW_FONT,
         YELLOW_SMALLFONT,
-        BATTLESKIP,
         BUYMAX,
         BTNBATTLEONLY,
         BTNGIFT_GOOD,
@@ -998,6 +997,8 @@ namespace ICN
         EMPTY_POL_BUTTON,
         EMPTY_GUILDWELL_BUTTON,
         EMPTY_VERTICAL_GOOD_BUTTON,
+        EMPTY_GOOD_BATTLE_BUTTON,
+        EMPTY_GOOD_SKIP_BUTTON,
 
         BUTTON_STANDARD_GAME,
         BUTTON_CAMPAIGN_GAME,
@@ -1088,7 +1089,13 @@ namespace ICN
         BUTTON_HSCORES_VERTICAL_EXIT,
         BUTTON_HSCORES_VERTICAL_STANDARD,
 
+        BUTTON_SKIP,
+        BUTTON_AUTO,
+        BUTTON_BATTLE_SETTINGS,
+
         GAME_OPTION_ICON,
+
+        STATUSBAR_BATTLE,
 
         // IMPORTANT! Put any new entry just above this one.
         LASTICN
