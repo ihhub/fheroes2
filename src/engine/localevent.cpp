@@ -340,8 +340,12 @@ namespace
         return modifier;
     }
 
-    char getCharacterFromPressedKey( const fheroes2::Key key, const int32_t mod )
+    char getCharacterFromPressedKey( const fheroes2::Key key, int32_t mod )
     {
+        if ( ( mod & fheroes2::KeyModifier::KEY_MODIFIER_SHIFT ) && ( mod & fheroes2::KeyModifier::KEY_MODIFIER_CAPS ) ) {
+            mod = mod & ~( fheroes2::KeyModifier::KEY_MODIFIER_SHIFT | fheroes2::KeyModifier::KEY_MODIFIER_CAPS );
+        }
+
         switch ( key ) {
         case fheroes2::Key::KEY_1:
             return ( fheroes2::KeyModifier::KEY_MODIFIER_SHIFT & mod ? '!' : '1' );

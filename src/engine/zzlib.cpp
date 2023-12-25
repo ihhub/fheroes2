@@ -170,7 +170,7 @@ bool ZStreamBuf::read( const std::string & fn, const size_t offset /* = 0 */ )
     return !fail();
 }
 
-bool ZStreamBuf::write( const std::string & fn, const bool append /* = false */ ) const
+bool ZStreamBuf::write( const std::string & fn, const bool append /* = false */ )
 {
     StreamFile sf;
     sf.setbigendian( true );

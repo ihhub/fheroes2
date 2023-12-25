@@ -23,9 +23,8 @@
 
 #include "interface_radar.h"
 
-#include <algorithm>
 #include <cassert>
-#include <cstddef>
+#include <cstring>
 
 #include "agg_image.h"
 #include "castle.h"
@@ -40,7 +39,6 @@
 #include "localevent.h"
 #include "maps.h"
 #include "maps_tiles.h"
-#include "maps_tiles_helper.h"
 #include "mp2.h"
 #include "players.h"
 #include "screen.h"
@@ -296,7 +294,7 @@ void Interface::Radar::RedrawObjects( const int32_t playerColor, const ViewWorld
 
     // Fill the radar map with black color ( 0 ) only if we are redrawing the entire map.
     if ( _roi.x == 0 && _roi.y == 0 && _roi.width == world.w() && _roi.height == world.h() ) {
-        std::fill( radarImage, radarImage + static_cast<ptrdiff_t>( area.width ) * area.height, COLOR_BLACK );
+        std::memset( radarImage, COLOR_BLACK, static_cast<size_t>( area.width ) * area.height );
     }
 
     const bool revealMines = revealAll || ( flags == ViewWorldMode::ViewMines );
@@ -313,9 +311,13 @@ void Interface::Radar::RedrawObjects( const int32_t playerColor, const ViewWorld
     const int32_t maxRoiX = _roi.width + _roi.x;
     const int32_t maxRoiY = _roi.height + _roi.y;
 
+    const uint8_t * radarYEnd = nullptr;
+
     for ( int32_t y = _roi.y; y < maxRoiY; ++y ) {
-        uint8_t * radarY = radarImage + static_cast<ptrdiff_t>( y * _zoom ) * radarWidth;
-        const ptrdiff_t radarYStep = isZoomIn ? ( static_cast<ptrdiff_t>( ( y + 1 ) * _zoom ) * radarWidth ) : 0;
+        uint8_t * radarY = radarImage + static_cast<size_t>( y * _zoom ) * radarWidth;
+        if ( isZoomIn ) {
+            radarYEnd = radarImage + static_cast<size_t>( ( y + 1 ) * _zoom ) * radarWidth;
+        }
 
         for ( int32_t x = _roi.x; x < maxRoiX; ++x ) {
             const Maps::Tiles & tile = world.GetTiles( x, y );
@@ -323,10 +325,11 @@ void Interface::Radar::RedrawObjects( const int32_t playerColor, const ViewWorld
 
             uint8_t fillColor = 0;
 
-            switch ( tile.GetObject( revealOnlyVisible || revealHeroes ) ) {
+            const MP2::MapObjectType objectType = tile.GetObject( revealOnlyVisible || revealHeroes );
+            switch ( objectType ) {
             case MP2::OBJ_HEROES: {
                 if ( visibleTile || revealHeroes ) {
-                    const Heroes * hero = world.GetHeroes( tile.GetCenter() );
+                    const Heroes * hero = world.GetHeroes( { x, y } );
                     if ( hero ) {
                         fillColor = GetPaletteIndexFromColor( hero->GetColor() );
                         break;
@@ -340,7 +343,7 @@ void Interface::Radar::RedrawObjects( const int32_t playerColor, const ViewWorld
             case MP2::OBJ_SAWMILL:
                 // TODO: Why Lighthouse is in this category? Verify the logic!
                 if ( visibleTile || revealMines ) {
-                    fillColor = GetPaletteIndexFromColor( getColorFromTile( tile ) );
+                    fillColor = GetPaletteIndexFromColor( world.ColorCapturedObject( tile.GetIndex() ) );
                     break;
                 }
                 continue;
@@ -352,7 +355,7 @@ void Interface::Radar::RedrawObjects( const int32_t playerColor, const ViewWorld
                 if ( visibleTile || revealMines ) {
                     const int32_t mainTileIndex = Maps::Tiles::getIndexOfMainTile( tile );
                     if ( mainTileIndex >= 0 ) {
-                        fillColor = GetPaletteIndexFromColor( getColorFromTile( world.GetTiles( mainTileIndex ) ) );
+                        fillColor = GetPaletteIndexFromColor( world.ColorCapturedObject( mainTileIndex ) );
                         break;
                     }
                 }
@@ -372,7 +375,7 @@ void Interface::Radar::RedrawObjects( const int32_t playerColor, const ViewWorld
             default:
                 if ( visibleTile ) {
                     // Castles and Towns can be partially covered by other non-action objects so we need to rely on special storage of castle's tiles.
-                    if ( !getCastleColor( fillColor, tile.GetCenter() ) ) {
+                    if ( !getCastleColor( fillColor, { x, y } ) ) {
                         // This is a visible tile and not covered by other objects, so fill it with the ground tile data.
                         if ( tile.isRoad() ) {
                             fillColor = COLOR_ROAD;
@@ -380,31 +383,29 @@ void Interface::Radar::RedrawObjects( const int32_t playerColor, const ViewWorld
                         else {
                             fillColor = GetPaletteIndexFromGround( tile.GetGround() );
 
-                            const MP2::MapObjectType objectType = tile.GetObject();
                             if ( objectType == MP2::OBJ_MOUNTAINS || objectType == MP2::OBJ_TREES ) {
                                 fillColor += 3;
                             }
                         }
                     }
                 }
+                else if ( revealTowns ) {
+                    getCastleColor( fillColor, { x, y } );
+                }
                 else {
-                    if ( revealTowns ) {
-                        getCastleColor( fillColor, tile.GetCenter() );
-                    }
-                    else {
-                        // Non visible tile, we have already black radar so skip the render of this tile.
-                        continue;
-                    }
+                    // Non visible tile, we have already black radar so skip the render of this tile.
+                    continue;
                 }
             }
 
-            uint8_t * radarX = radarY + static_cast<ptrdiff_t>( x * _zoom );
+            const size_t offsetX = static_cast<size_t>( x * _zoom );
+            uint8_t * radarX = radarY + offsetX;
             if ( isZoomIn ) {
-                const uint8_t * radarYEnd = radarImage + radarYStep + static_cast<ptrdiff_t>( x * _zoom );
-                uint8_t * radarXEnd = radarY + static_cast<ptrdiff_t>( ( x + 1 ) * _zoom );
+                const uint8_t * radarXEnd = radarYEnd + offsetX;
+                const size_t radarXStep = static_cast<size_t>( ( x + 1 ) * _zoom ) - offsetX;
 
-                for ( ; radarX != radarYEnd; radarX += radarWidth, radarXEnd += radarWidth ) {
-                    std::fill( radarX, radarXEnd, fillColor );
+                for ( ; radarX != radarXEnd; radarX += radarWidth ) {
+                    std::memset( radarX, fillColor, radarXStep );
                 }
             }
             else {
@@ -418,7 +419,7 @@ void Interface::Radar::RedrawObjects( const int32_t playerColor, const ViewWorld
 }
 
 // Redraw radar cursor. RoiRectangle is a rectangle in tile unit of the current radar view.
-void Interface::Radar::RedrawCursor( const fheroes2::Rect * roiRectangle /* =nullptr */ )
+void Interface::Radar::RedrawCursor( const fheroes2::Rect * roiRectangle /* = nullptr */ )
 {
     const Settings & conf = Settings::Get();
     if ( conf.isHideInterfaceEnabled() && !conf.ShowRadar() && _radarType != RadarType::ViewWorld ) {

@@ -608,6 +608,7 @@ namespace
                                                fheroes2::Text{ Resource::getDescription(), fheroes2::FontType::normalWhite() }, Dialog::ZERO,
                                                Funds{ static_cast<int>( info.metadata[0] ), 0 } );
                 break;
+            case MP2::OBJ_CAMPFIRE:
             case MP2::OBJ_GENIE_LAMP:
             case MP2::OBJ_RANDOM_RESOURCE:
             case MP2::OBJ_TREASURE_CHEST:
@@ -625,6 +626,7 @@ namespace
             switch ( info.objectType ) {
             case MP2::OBJ_RESOURCE:
                 return Resource::String( static_cast<int>( info.metadata[0] ) );
+            case MP2::OBJ_CAMPFIRE:
             case MP2::OBJ_GENIE_LAMP:
             case MP2::OBJ_RANDOM_RESOURCE:
             case MP2::OBJ_TREASURE_CHEST:
@@ -866,13 +868,22 @@ int Dialog::selectTreasureType( const int resourceType )
     return selectObjectType( resourceType, objectInfo.size(), listbox );
 }
 
-int Dialog::selectOceanObjectType( const int resourceType )
+int Dialog::selectOceanObjectType( const int objectType )
 {
     const auto & objectInfo = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_WATER );
 
     OceanObjectTypeSelection listbox( objectInfo, { 350, fheroes2::Display::instance().height() - 200 }, _( "Select Ocean Object:" ) );
 
-    return selectObjectType( resourceType, objectInfo.size(), listbox );
+    return selectObjectType( objectType, objectInfo.size(), listbox );
+}
+
+int Dialog::selectLandscapeOceanObjectType( const int objectType )
+{
+    const auto & objectInfo = Maps::getObjectsByGroup( Maps::ObjectGroup::LANDSCAPE_WATER );
+
+    OceanObjectTypeSelection listbox( objectInfo, { 350, fheroes2::Display::instance().height() - 200 }, _( "Select Ocean Object:" ) );
+
+    return selectObjectType( objectType, objectInfo.size(), listbox );
 }
 
 void Dialog::selectTownType( int & type, int & color )

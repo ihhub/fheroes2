@@ -1499,7 +1499,7 @@ void Interface::AdventureMap::mouseCursorAreaPressRight( const int32_t tileIndex
     const Settings & conf = Settings::Get();
     const Maps::Tiles & tile = world.GetTiles( tileIndex );
 
-    DEBUG_LOG( DBG_DEVEL, DBG_INFO, std::endl << tile.String() )
+    DEBUG_LOG( DBG_DEVEL, DBG_INFO, '\n' << tile.String() )
 
     if ( !IS_DEVEL() && tile.isFog( conf.CurrentColor() ) ) {
         Dialog::QuickInfo( tile );

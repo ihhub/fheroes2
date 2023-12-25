@@ -842,8 +842,11 @@ bool BagArtifacts::PushArtifact( const Artifact & art )
 void BagArtifacts::RemoveArtifact( const Artifact & art )
 {
     iterator it = std::find( begin(), end(), art );
-    if ( it != end() )
-        ( *it ).Reset();
+    if ( it == end() ) {
+        return;
+    }
+
+    it->Reset();
 }
 
 bool BagArtifacts::isFull() const
@@ -1188,6 +1191,7 @@ bool ArtifactsBar::ActionBarLeftMouseSingleClick( Artifact & art )
 
             if ( isMagicBook( art ) ) {
                 art.Reset();
+
                 const_cast<Heroes *>( _hero )->SpellBookActivate();
             }
             else if ( art.GetID() == Artifact::SPELL_SCROLL ) {
@@ -1226,7 +1230,12 @@ bool ArtifactsBar::ActionBarRightMouseHold( Artifact & art )
 
     if ( art.isValid() ) {
         if ( can_change ) {
-            art.Reset();
+            if ( isMagicBook( art ) ) {
+                const_cast<Heroes *>( _hero )->SpellBookDeactivate();
+            }
+            else {
+                art.Reset();
+            }
         }
         else {
             fheroes2::ArtifactDialogElement( art ).showPopup( Dialog::ZERO );

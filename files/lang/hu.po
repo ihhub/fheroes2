@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-15 09:12+0000\n"
+"POT-Creation-Date: 2023-12-25 01:52+0000\n"
 "PO-Revision-Date: 2023-09-04 21:55+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -196,16 +196,13 @@ msgid "MIN"
 msgstr "MIN"
 
 msgid "RESET"
-msgstr ""
+msgstr "ÚJRA"
 
-#, fuzzy
 msgid "CASTLE"
-msgstr ""
-"VÁROS\n"
-"/VÁR"
+msgstr "VÁR"
 
 msgid "TOWN"
-msgstr ""
+msgstr "VÁROS"
 
 msgid ""
 "D\n"
@@ -384,7 +381,8 @@ msgstr "Több"
 msgid "Troops of %{count} alignments -%{penalty}"
 msgstr "%{count} féle csapatod van: -%{penalty}"
 
-msgid "Some undead in group -1"
+#, fuzzy
+msgid "Some undead in army -1"
 msgstr "Élőhalottak a seregben -1"
 
 msgid "View %{name}"
@@ -694,10 +692,10 @@ msgid "View %{monster} info"
 msgstr "Megmutatja %{monster} információit"
 
 msgid "Fly %{monster} here"
-msgstr "A %{monster} ide repül"
+msgstr "%{monster} ide repül"
 
 msgid "Move %{monster} here"
-msgstr "A %{monster} ide megy"
+msgstr "%{monster} ide megy"
 
 msgid "Shoot %{monster}"
 msgstr "%{monster} lövése"
@@ -806,7 +804,7 @@ msgstr[1] "A(z) %{attacker} %{damage} sebzést okoz."
 msgid "1 creature perishes."
 msgid_plural "%{count} creatures perish."
 msgstr[0] "egy lény elpusztult."
-msgstr[1] "%{count} lények elpusztultak.."
+msgstr[1] "%{count} lény elpusztult."
 
 msgid "1 %{defender} perishes."
 msgid_plural "%{count} %{defender} perish."
@@ -824,7 +822,7 @@ msgstr[0] "1 %{unit} újjáéledt."
 msgstr[1] "%{count} %{unit} újjáéledt."
 
 msgid "Moved %{monster}: from [%{src}] to [%{dst}]."
-msgstr "A %{monster} ide vonul: [%{src}] -> [%{dst}]."
+msgstr "%{monster} mozgása: [%{src}] -> [%{dst}]."
 
 msgid "The %{name} resist the spell!"
 msgstr "A %{name} ellenáll a varázslatnak!"
@@ -833,7 +831,7 @@ msgid "%{name} casts %{spell} on the %{troop}."
 msgstr "%{name}  %{spell} -t varázsol a %{troop} egységre."
 
 msgid "%{name} casts %{spell}."
-msgstr "%{name} %{spell} -t  varázsol."
+msgstr "%{name} megidézte ezt a varázslatot: %{spell}."
 
 msgid "The %{spell} does %{damage} damage to one undead creature."
 msgstr "A %{spell} varázslat %{damage} sebzést okoz egy élőhalottnak."
@@ -1140,9 +1138,9 @@ msgid ""
 "battle will be the easiest one you will face for the rest of the war..."
 "traitor."
 msgstr ""
-"Miután átálltál a másik oldalra, három kastélyod maradt az ellenség "
-"egyetlenével szemben. Ez a csata lesz a legkönnyebb, mellyel a háború "
-"további részében szembesülsz, te hitszegő."
+"Miután átálltál a másik oldalra, három várad maradt az ellenség egyetlenével "
+"szemben. Ez a csata lesz a legkönnyebb, mellyel a háború további részében "
+"szembesülsz, te hitszegő."
 
 msgid "Barbarian Wars"
 msgstr "Barbár háborúk"
@@ -1177,6 +1175,10 @@ msgid ""
 "fighting amongst themselves. You will win when you own all of the enemy "
 "castles and there are no more heroes left to fight."
 msgstr ""
+"Archibald királynak szüksége van rád, hogy legyőzze három ellenségét ezen a "
+"területen. Ők nem szövetségesei egymásnak, így energiáik nagy része az "
+"egymással való csatározásokra megy el. Te győzöl, ha a kezedre kerül az "
+"összes ellenséges vár és nincs több ellenséges hős, aki harcolhatna ellened."
 
 msgid ""
 "You must unify the barbarian tribes of the north by conquering them. As in "
@@ -1184,6 +1186,10 @@ msgid ""
 "more resources at their disposal. You will win when you own all of the enemy "
 "castles and there are no more heroes left to fight."
 msgstr ""
+"Egyesítened kell az északi barbár törzseket, miután leigáztad őket. Ahogy az "
+"előző küldetésben, úgy az ellenségek most sem állnak szövetségben ellened, "
+"de több erőforrással rendelkeznek nálad. Te győzöl, ha a kezedre kerül az "
+"összes ellenséges vár és nincs több ellenséges hős, aki harcolhatna ellened."
 
 msgid ""
 "Do-gooder wizards have taken the Necromancers' castle. You must retake it to "
@@ -1191,6 +1197,10 @@ msgid ""
 "have no castle and must take one within 7 days, or lose this battle. (Hint: "
 "The nearest castle is to the southeast.)"
 msgstr ""
+"Jó varázslók elfoglalták a nekromanták várát. Vedd vissza a győzelemért. Ne "
+"feledd! Egy viszonylag erős csapattal kezdesz, de nincs várad, és hogy ne "
+"veszítsd el a küldetést rögtön az elején, 7-non belül birtokba kell venned "
+"egyet. (Jótanács: A legközelebbi vár délkeletre van.)"
 
 msgid ""
 "The dwarves need conquering before they can interfere in King Archibald's "
@@ -1198,18 +1208,28 @@ msgid ""
 "so be ready for attack from multiple directions. You must capture all of the "
 "enemy towns and castles to claim victory."
 msgstr ""
+"Le kell győzni a törpöket, mielőtt keresztülhúzzák Archibald király terveit. "
+"Roland erőinek egynél több hőse van és több vára kezdéskor, így légy résen, "
+"mert egyszerre több oldalról támadhatnak. Minden ellenséges várat és várost "
+"el kell foglalj a győzelemért."
 
 msgid ""
 "You must put down a peasant revolt led by Roland's forces. All are allied "
 "against you, but you have Lord Corlagon, an experienced hero, to help you. "
 "Capture all enemy castles to win."
 msgstr ""
+"Verd le a jobbágyfelkelést, melyet Roland követői vezetnek. Mindegyik "
+"összeszövetkezett ellened, viszont téged erősít Lord Corlagon, aki egy "
+"tapasztalt hős. Foglalj el minden ellenséges várat a győzelemért."
 
 msgid ""
 "There are two enemies allied against you in this mission. Both are well "
 "armed and seek to evict you from their island. Avoid them and capture Dragon "
 "City to win."
 msgstr ""
+"Ebben a küldetésben két, egymással szövetséges ellenfeled lesz. Mindkettő "
+"erős és azon vannak, hogy kiűzzenek téged a szigetükről. Kerüld őket és "
+"foglald el Sárkányvárost a győzelemért."
 
 msgid ""
 "Your orders are to conquer the country lords that have sworn to serve "
@@ -1217,17 +1237,26 @@ msgid ""
 "without a castle, you must hurry to capture one before the end of the week. "
 "Capture all enemy castles for victory."
 msgstr ""
+"A parancs szerint le kell győzzed a Rolandhoz hű nagyurakat a területen. "
+"Minden ellenséges vár egyesült ellened. Vár nélkül kezdesz és egy héten "
+"belül el kell foglalnod egyet. Vegyél be minden ellenséges várat a "
+"győzelemért."
 
 msgid ""
 "Find the Crown before Roland's heroes find it. Archibald will need the Crown "
 "for the final battle against Roland."
 msgstr ""
+"Találd meg a Koronát Roland hősei előtt. Archibaldnak nagy szüksége lesz rá "
+"a Roland elleni végső csatában."
 
 msgid ""
 "This is the final battle. Both you and your enemy are armed to the teeth, "
 "and all are allied against you. Capture Roland to win the war, and be sure "
 "not to lose Archibald in the fight!"
 msgstr ""
+"Ez a végső csata. Te és ellenségeid is állig fel vannak fegyverkezve és "
+"mindegyikük összeesküdött ellened. Fogd el Rolandot és tegyél róla, hogy ne "
+"veszítsd el Archibaldot a csatában!"
 
 msgid "Arrow's Flight"
 msgstr "A nyíl röpte"
@@ -1257,16 +1286,22 @@ msgid ""
 "Subdue the unruly local lords in order to provide the Empire with facilities "
 "to operate in this region."
 msgstr ""
+"Fékezd meg az engedetlen helyi nagyurakat, hogy elláthasd javakkal a "
+"Birodalmat és megszilárdítsd a hatalmát a régióban."
 
 msgid ""
 "Eliminate all opposition in this area. Then the first piece of the artifact "
 "will be yours."
 msgstr ""
+"Pusztíts el minden ellenséget a területen. Eztán lesz tied a varázstárgy "
+"első darabja."
 
 msgid ""
 "The sorceresses to the northeast are rebelling! For the good of the empire "
 "you must quash their feeble uprising on your way to the mountains."
 msgstr ""
+"Az északkeleti varázslónők fellázadtak! A Birodalom érdekében fojtsd el "
+"csírájában erőtlen próbálkozásukat, útban a hegyek felé."
 
 msgid ""
 "Having prepared for your arrival, Kraeger has arranged for a force of "
@@ -1274,27 +1309,39 @@ msgid ""
 "before the first day of the third week, or the Necromancers will be too "
 "strong for you."
 msgstr ""
+"Jöttödre készülvén Kraeger intézkedéseket tett, hogy a nekromanták ereje "
+"meghiúsítsa a küldetésedet. Vedd be Scabsdale várát a harmadik hét elejéig "
+"különben a nektromanták felülkerekednek rajtad."
 
 msgid ""
 "The barbarian despot in this area is, as yet, ignorant of your presence. "
 "Quickly, build up your forces before you are discovered and attacked! Secure "
 "the region by subduing all enemy forces."
 msgstr ""
+"A despota barbárok - eddig még - nincsenek tudatában a jelenlétednek a "
+"térségben. Sürgősen erősítsd meg a csapataidat, míg fel nem fedeznek és rád "
+"nem támadnak! Biztosítsd a területet az ellenséges erők kiiktatásával."
 
 msgid ""
 "The Empire is weak in this region. You will be unable to completely subdue "
 "all forces in this area, so take what you can before reprisal strikes. "
 "Remember, your true goal is to claim the Helmet of Anduran."
 msgstr ""
+"A Birodalom hatalma gyenge ezen a területen. Nem fogod tudni teljesen "
+"legyőzni az ellenséges erőket, úgyhogy vidd, amit csak lehet, még a várható "
+"megtorlás előtt. Ne feledd! A cél Anduran sisakjának megszerzése."
 
 msgid "For the good of the Empire, eliminate Kraeger."
-msgstr ""
+msgstr "A Birodalom érdekében iktasd ki Kraegert."
 
 msgid ""
 "At last, you have the opportunity and the facilities to rid the Empire of "
 "the necromancer's evil. Eradicate them completely, and you will be sung as a "
 "hero for all time."
 msgstr ""
+"Végre meg vannak a lehetőségeid és eszközeid arra, hogy leigázd a "
+"nekromanták gonosz birodalmát. Pusztítsd el mindegyiküket és nevedet hősként "
+"zengik majd örök időkre."
 
 msgid "Border Towns"
 msgstr "Határvárosok"
@@ -1324,45 +1371,61 @@ msgid ""
 "Conquer and unite all the enemy tribes. Don't lose the hero Jarkonas, the "
 "forefather of all descendants."
 msgstr ""
+"Hódítsd meg és egyesítsd az ellenséges törzseket. Ne hagyd veszni Jarkonast, "
+"minden leszármazott ősatyját."
 
 msgid ""
 "Your rival, the Kingdom of Harondale, is attacking weak towns on your "
 "border! Recover from their first strike and crush them completely!"
 msgstr ""
+"A rivális Harondale királyság megtámadta a határmenti gyengébb városaidat! "
+"Miután felocsúdtál az első meglepetésből, morzsold fel őket mind egy szálig!"
 
 msgid ""
 "Find your wayward son Joseph who is rumored to be living in the desolate "
 "lands. Do it before the first day of the third month or it will be of no "
 "help to your family."
 msgstr ""
+"Találd meg önfejű fiadat, Josephet, aki a szóbeszéd szerint egy elhagyatott "
+"vidéken él. Meg kell találnod a harmadik hónap elejéig, különben nem lesz "
+"segítségére a családodnak."
 
 msgid ""
 "Rescue your crazy uncle Ivan. Find him before the first day of the fourth "
 "month or it will be no help to your kingdom."
 msgstr ""
+"Mentsd meg az őrült Iván bácsikádat. Találd meg a negyedik hónap legelső "
+"napjáig, különben a királyságodon nem lehet segíteni."
 
 msgid ""
 "Destroy the barbarians who are attacking the southern border of your "
 "kingdom! Recover your fallen towns, and then invade the jungle kingdom. "
 "Leave no enemy standing."
 msgstr ""
+"Pusztítsd el a barbárokat, akik megtámadták királyságod déli határvidékét! "
+"Vedd vissza váraidat, majd hatolj be a dzsungel királyságba."
 
 msgid "Retake the castle of Ivory Gates, which has fallen due to treachery."
-msgstr ""
+msgstr "Vedd vissza Elefántcsont kapuk várát, mely árulás miatt veszett el."
 
 msgid ""
 "Gain the favor of the elves. They will not allow trees to be chopped down, "
 "so they will send you wood every 2 weeks. You must complete your mission "
 "before the first day of the seventh month, or the kingdom will surely fall."
 msgstr ""
+"Nyerd el a tündék kegyét. Ők nem engedik a fák kivágását, ezért kéthetente "
+"küldenek faanyagot inkább maguk. Be kell tudd fejezni a küldetést a hetedik "
+"hónap elejéig, különben a királyság menthetetlenül elesik."
 
 msgid ""
 "This is the final battle against your rival kingdom of Harondale. Eliminate "
 "everyone, and don't lose the hero Jarkonas VI."
 msgstr ""
+"Ez az utolsó csata a rivális Harondale királysággal. Pusztíts el mindenkit "
+"és ne veszítsd el VI. Jarkonas hősödet."
 
 msgid "Fount of Wizardry"
-msgstr "A varázslat forrása"
+msgstr "Varázslás forrása"
 
 msgid "Power's End"
 msgstr "A hatalom vége"
@@ -1378,11 +1441,15 @@ msgid ""
 "The completion of this task will give you a fighting chance against your "
 "rivals."
 msgstr ""
+"Az a küldetésed, hogy legyőzd a varázslatos ködbe borult szigetek háborúzó "
+"mágusait. A feladat teljesítése ad lehetőséget számodra a riválisaid ellen."
 
 msgid ""
 "The location of the great library has been discovered! You must make your "
 "way to it, and reclaim the city of Chronos in which it lies."
 msgstr ""
+"Megtalálták a nagy könyvtár pontos helyét! Utat kell találj oda és módot, "
+"hogy birtokba vegyed Chronost a várost, mely magában rejti."
 
 msgid ""
 "Find the Orb of negation, which is said to be buried in this land. There are "
@@ -1390,11 +1457,17 @@ msgid ""
 "Find the Orb before the first day of the sixth month, or your rivals will "
 "surely have gotten to the fount before you."
 msgstr ""
+"Találd meg a Tagadás Gömbjét, melyről úgy tartják, hogy ezen a vidéken lett "
+"eltemetve. A hozzá vezető nyomok kőobeliszkekre vannak felvésve. Találd meg "
+"a Gömböt a hatodik hónap elejéig, különben ellenfeleid bízvást elorozzák "
+"előled és előbb érnek a varázslat forrásához."
 
 msgid ""
 "You must take control of the castle of Magic, where the fount of wizardry "
 "lies. Do this and your victory will be supreme."
 msgstr ""
+"Be kell vegyed a varázslatos Magic várat, ahol a varázslás forrása "
+"található. Ha sikerrel jársz, győzelmed döntő jelentőségű lesz."
 
 msgid "Blood is Thicker"
 msgstr "A vér nem válik vízzé"
@@ -1412,21 +1485,30 @@ msgid ""
 "Capture the town on the island off the southeast shore in order to construct "
 "a boat and travel back towards the mainland. Do not lose the hero Gallavant."
 msgstr ""
+"Vedd be a várost a délkeleti partokon túli szigeten, hogy hajót ácsolva "
+"visszatérj a szárazföldre. Ne veszítsd el Gallavant hősödet."
 
 msgid ""
 "Find and defeat Martine, the pirate leader, who resides in Pirates Cove. Do "
 "not lose Gallavant or your quest will be over."
 msgstr ""
+"Keresd meg és győzd le a kalózvezért, Martine-t, aki a Kalóz öbölben "
+"tanyázik. Ne veszítsd el Gallavant hősödet, különben a küldetésednek "
+"befellegzett."
 
 msgid ""
 "Eliminate all the other forces who oppose the rule of Lord Alberon. "
 "Gallavant must not die."
 msgstr ""
+"Iktass ki minden más ellenséges erőt, aki szembe mer szállni Lord Alberon "
+"uralmával. Gallavant nem halhat meg."
 
 msgid ""
 "Overthrow the entrenched monarchy of Lord Alberon, and claim all the land in "
 "your name. Gallavant must not die."
 msgstr ""
+"Döntsd meg a védművekkel körbesáncolt Alberon monarchiát és követeld "
+"magadnak az egész vidéket. Gallavant nem halhat meg."
 
 msgid " bane"
 msgstr " veszedelem"
@@ -1474,11 +1556,15 @@ msgstr ""
 
 msgid "The ogres recognize you as the Dwarfbane and lumber over to join you."
 msgstr ""
+"Az ogrék felismerik benned a Törpveszedelmet és komótosan csatlakoznak "
+"hozzád."
 
 msgid ""
 "The dragons, snarling and growling, agree to join forces with you, their "
 "'Ally'."
 msgstr ""
+"A sárkányok vicsorognak és morognak, majd beleegyeznek, hogy egyesítsék "
+"erőiket veled, a 'szövetségesükkel'."
 
 msgid ""
 "As you approach the group of elves, their leader calls them all to "
@@ -1486,26 +1572,38 @@ msgid ""
 "fearless ally of ours?\" The group explodes with cheers as they run to join "
 "your ranks."
 msgstr ""
+"Amint közeledsz a tündék csoportjához, hallod, hogy a vezetőjük a "
+"figyelmüket kéri és így kiállt: \"Ki elég bátor közületek, hogy csatlakozzon "
+"rettenthetetlen szövetségesünkhöz?\" A csoport éljenzésben tör ki és futnak, "
+"hogy beálljanak a soraid közé."
 
 msgid ""
 "The dwarves hail you, \"Any friend of Roland is a friend of ours. You may "
 "pass.\""
 msgstr ""
+"A törpök fennhangon üdvözölnek téged: \"Bárki, aki Roland barátja, az a mi "
+"barátunk is egyben. Továbbhaladhatsz.\""
 
 msgid ""
 "The ogres give you a grunt of recognition, \"Archibald's allies may pass.\""
-msgstr ""
+msgstr "Az ogrék elismerően röfögnek: \"Archibald szövetségesei átkelhetnek.\""
 
 msgid ""
 "The dragons see you and call out. \"Our alliance with Archibald compels us "
 "to join you. Unfortunately you have no room. A pity!\" They quickly scatter."
 msgstr ""
+"A sárkányok meglátnak és így kiáltanak: \"Archibalddal kötött szövetségünk "
+"arra kötelez, hogy csatlakozzunk hozzád. Azonban sajnos nincs hely a "
+"csapatodban. Nagy kár!\" Ezután gyorsan szétrebbennek."
 
 msgid ""
 "The elves stand at attention as you approach. Their leader calls to you and "
 "says, \"Let us not impede your progress, ally! Move on, and may victory be "
 "yours.\""
 msgstr ""
+"A tündék vigyázzba vágják magukat a közeledtedre. Vezetőjük megszólít és azt "
+"mondja: \"Nem akadályozzuk az előrehaladásodat, szövetségesünk! Haladj "
+"tovább és legyen a győzelem a tiéd.\""
 
 msgid "\"The Dwarfbane!!!!, run for your lives.\""
 msgstr "\"Törp veszedelem! Fuss az életedért.\""
@@ -1945,13 +2043,13 @@ msgid "Hampshire"
 msgstr "Hampshire"
 
 msgid "Antioch"
-msgstr "Antioch"
+msgstr "Antiókhia"
 
 msgid "Avalon"
 msgstr "Avalon"
 
 msgid "Roc Haven"
-msgstr "Rukh Haven"
+msgstr "Rukh menedék"
 
 msgid "South Mill"
 msgstr "South Mill"
@@ -1978,7 +2076,7 @@ msgid "Cathcart"
 msgstr "Cathcart"
 
 msgid "Elk's Head"
-msgstr "Elk's Head"
+msgstr "Elkfő"
 
 msgid "Roscomon"
 msgstr "Roscomon"
@@ -2002,7 +2100,7 @@ msgid "Pig's Eye"
 msgstr "Pig's Eye"
 
 msgid "Viper's Nest"
-msgstr "Viper's Nest"
+msgstr "Viperafészek"
 
 msgid "Fenton"
 msgstr "Fenton"
@@ -2378,7 +2476,8 @@ msgid ""
 "per week."
 msgstr "A Kút hetente ennyivel növeli az összes lény szaporulatát: %{count}."
 
-msgid "The Statue increases your town's income by %{count} gold per day."
+#, fuzzy
+msgid "The Statue increases the town's income by %{count} gold per day."
 msgstr "A Szobor naponta ennyivel növeli a város bevételét: %{count}."
 
 msgid "The Left Turret provides extra firepower during castle combat."
@@ -2401,9 +2500,10 @@ msgstr ""
 "A Vizesárok lassítja a támadó egységeket. Minden egység, aki belelép az "
 "árokba, ott be kell fejezze a körét és sebezhetőbbé válik."
 
+#, fuzzy
 msgid ""
-"The Castle improves town defense and increases income to %{count} gold per "
-"day."
+"The Castle improves the town's defense and increases its income to %{count} "
+"gold per day."
 msgstr ""
 "A Vár javítja a város védelmét és naponta %{count} arannyal növeli a "
 "bevételét."
@@ -2924,13 +3024,13 @@ msgid "Show extra information such as FPS and current time."
 msgstr "Extra információkat jelenít meg, mint például FPS, illetve pontos idő."
 
 msgid "Hotkey: "
-msgstr ""
+msgstr "Gyorsbillentyű: "
 
 msgid "Category: "
-msgstr ""
+msgstr "Kategória: "
 
 msgid "Event: "
-msgstr ""
+msgstr "Esemény: "
 
 msgid "Hot Keys:"
 msgstr "Billentyűfunkciók:"
@@ -3069,6 +3169,15 @@ msgstr "(üres)"
 msgid "already learned"
 msgstr "már ismered"
 
+msgid "treeOfKnowledge|free"
+msgstr "ingyenes"
+
+msgid "already claimed"
+msgstr "már megszerzett"
+
+msgid "not claimed"
+msgstr "még nem megszerzett"
+
 msgid "already knows this skill"
 msgstr "már bírsz ezzel a képességgel"
 
@@ -3082,7 +3191,7 @@ msgid "(not visited)"
 msgstr "(nem látogatott)"
 
 msgid "%{color} Barrier"
-msgstr "%{color} vámőrhely"
+msgstr "%{color} útakadály"
 
 msgid "(tent visited)"
 msgstr "(nem látogatott)"
@@ -3246,45 +3355,38 @@ msgstr "Kincs kiválasztása:"
 msgid "Select Ocean Object:"
 msgstr "Tengeri objektum kiválasztása:"
 
-#, fuzzy
 msgid "Castle/town placing"
-msgstr "Vár beállítások"
+msgstr "Vár/város elhelyezés"
 
 msgid "doubleLinedRace|Neutral"
 msgstr "Semleges"
 
 msgid "race|Random"
-msgstr ""
+msgstr "Véletlen"
 
-#, fuzzy
 msgid "Click to start placing the selected castle/town."
-msgstr "Kattints a kiválasztott képernyőfelbontás alkalmazásához."
+msgstr "Kattints a kiválasztott vár/város elhelyezéséhez."
 
-#, fuzzy
 msgid "Click to select town placing."
-msgstr "Kattints a következő város mutatásához."
+msgstr "Kattints a következő város elhelyezéséhez."
 
-#, fuzzy
 msgid "Click to select castle placing."
-msgstr "Kattints ide, hogy kiválaszd melyik Küldetéssel játszol."
+msgstr "Kattints a következő vár elhelyezéséhez."
 
-#, fuzzy
 msgid "%{color} %{race} %{townOrCastle}"
-msgstr "%{color} %{race} hős"
+msgstr "%{color} %{race} %{townOrCastle}"
 
 msgid "race|Neutral"
-msgstr ""
+msgstr "Semleges"
 
 msgid "You will place"
-msgstr ""
+msgstr "El fogod helyezni"
 
-#, fuzzy
 msgid "Click to select this class."
-msgstr "Kattints ide, hogy kiválaszd melyik Küldetéssel játszol."
+msgstr "Kattints az osztály kiválasztásához."
 
-#, fuzzy
 msgid "Click to select this color."
-msgstr "Kattints ide, hogy kiválaszd melyik Küldetéssel játszol."
+msgstr "Kattints a szín kiválasztásához."
 
 msgid "Map Type:\n"
 msgstr "Térképtípus:\n"
@@ -3630,36 +3732,72 @@ msgstr "Tengeri objektumot vízre kell elhelyezni."
 msgid "Towns"
 msgstr "Városok"
 
-#, fuzzy
 msgid "Towns cannot be placed on water."
-msgstr "Vízen nem helyezhetők el lények."
+msgstr "Vízen nem helyezhetők el városok."
 
-msgid "Ocean Objects"
-msgstr "Tengeri tárgyak"
+#, fuzzy
+msgid "Used to place %{object}."
+msgstr "Hős elhelyezésére való."
 
-msgid "Grass Objects"
-msgstr "Füves tárgyak"
+#, fuzzy
+msgid "Select object type"
+msgstr "Tengeri objektum kiválasztása:"
 
-msgid "Snow Objects"
-msgstr "Havas tárgyak"
+#, fuzzy
+msgid ""
+"Click here to\n"
+"select a monster."
+msgstr "Kattints ide, hogy kiválaszd melyik Küldetéssel játszol."
 
-msgid "Swamp Objects"
-msgstr "Mocsári tárgyak"
+#, fuzzy
+msgid ""
+"Click here to\n"
+"select another monster."
+msgstr "Kérlek válassz másik hőst."
 
-msgid "Lava Objects"
-msgstr "Láva tárgyak"
+msgid ""
+"Cell\n"
+"Details"
+msgstr ""
 
-msgid "Desert Objects"
-msgstr "Sivatagi tárgyak"
+msgid "Roads"
+msgstr "Utak"
 
-msgid "Dirt Objects"
-msgstr "Talaj tárgyak"
+msgid "Streams"
+msgstr "Folyóvizek"
 
-msgid "Wasteland Objects"
+#, fuzzy
+msgid "Erase"
+msgstr "Törlés mód"
+
+msgid "Mountains"
+msgstr "Hegyek"
+
+#, fuzzy
+msgid "Rocks"
+msgstr "Kő"
+
+msgid "Trees"
+msgstr "Fák"
+
+#, fuzzy
+msgid "Water Objects"
 msgstr "Pusztaság tárgyak"
 
-msgid "Beach Objects"
-msgstr "Tengerparti tárgyak"
+#, fuzzy
+msgid "Miscellaneous"
+msgstr "Fineous"
+
+#, fuzzy
+msgid "Dwellings"
+msgstr "Félszerzetek"
+
+msgid "Mines"
+msgstr "Bányák"
+
+#, fuzzy
+msgid "Power-ups"
+msgstr "Erő"
 
 msgid "Treasures"
 msgstr "Kincsek"
@@ -3669,12 +3807,6 @@ msgstr "Talaj"
 
 msgid "Castles"
 msgstr "Várak"
-
-msgid "Roads"
-msgstr "Utak"
-
-msgid "Streams"
-msgstr "Folyóvizek"
 
 msgid ""
 "Draws terrain in\n"
@@ -3724,36 +3856,6 @@ msgstr "Csak hajóval járható."
 msgid "No special modifiers."
 msgstr "Nincs speciális módosító."
 
-msgid "Used to place objects most appropriate for use on %{terrain}."
-msgstr "Tárgyak elhelyezésére használatos, leginkább %{terrain} esetén."
-
-msgid ""
-"Used to place\n"
-"a town or castle."
-msgstr ""
-"Város vagy vár\n"
-"elhelyezésére való."
-
-msgid ""
-"Used to place\n"
-"a monster group."
-msgstr ""
-"Lénycsoportok\n"
-"elhelyezésére való."
-
-msgid "Used to place a hero."
-msgstr "Hős elhelyezésére való."
-
-msgid "Used to place an artifact."
-msgstr "Varázstárgy elhelyezésére való."
-
-msgid ""
-"Used to place\n"
-"a resource or treasure."
-msgstr ""
-"Erőforrás vagy kincs\n"
-"elhelyezésére való."
-
 msgid "Toggle the erasure of %{type} objects."
 msgstr "%{type} tárgyak törlésének kapcsolója."
 
@@ -3781,10 +3883,13 @@ msgstr "Talaj mód"
 msgid "Used to draw the underlying grass, dirt, water, etc. on the map."
 msgstr "Különféle talajokat (fű, föld, víz stb.) rajzol a térképen."
 
-msgid "Object Mode"
+#, fuzzy
+msgid "Landscape Objects Mode"
 msgstr "Objektum mód"
 
-msgid "Used to place objects (mountains, trees, treasure, etc.) on the map."
+#, fuzzy
+msgid ""
+"Used to place landscape objects (mountains, rocks, trees, etc.) on the map."
 msgstr "Elhelyezi a tereptárgyakat (hegyek, fák, kincsek stb.) a térképen."
 
 msgid "Detail Mode"
@@ -3792,6 +3897,34 @@ msgstr "Részletes mód"
 
 msgid "Used for special editing of monsters, heroes and towns."
 msgstr "Lények, hősök, városok speciális szerkesztéséhez használatos."
+
+#, fuzzy
+msgid "Adventure Objects Mode"
+msgstr "Kaland Opciók"
+
+#, fuzzy
+msgid ""
+"Used to place adventure objects (artifacts, dwellings, mines, treasures, "
+"etc.) on the map."
+msgstr "Elhelyezi a tereptárgyakat (hegyek, fák, kincsek stb.) a térképen."
+
+#, fuzzy
+msgid "Kingdom Objects Mode"
+msgstr "Objektum mód"
+
+#, fuzzy
+msgid "Used to place kingdom objects (towns, castles and heroes) on the map."
+msgstr "Elhelyezi a tereptárgyakat (hegyek, fák, kincsek stb.) a térképen."
+
+#, fuzzy
+msgid "Monsters Mode"
+msgstr "Lények"
+
+#, fuzzy
+msgid "Used to place monsters on the map."
+msgstr ""
+"Lénycsoportok\n"
+"elhelyezésére való."
 
 msgid "Allows you to draw streams by clicking and dragging."
 msgstr "Kattintás és húzás révén lehetővé teszi vízfolyások rajzolását."
@@ -3901,7 +4034,7 @@ msgid "Easy"
 msgstr "Könnyű"
 
 msgid "Hard"
-msgstr ""
+msgstr "Nehéz"
 
 msgid "Campaign Difficulty"
 msgstr "Hadjárat nehézsége"
@@ -3972,7 +4105,7 @@ msgstr ""
 "során."
 
 msgid "Restart"
-msgstr ""
+msgstr "Újra"
 
 msgid "Restart the current scenario."
 msgstr "Aktuális küldetés újraindítása."
@@ -4967,13 +5100,13 @@ msgid "Click to return to the main menu."
 msgstr "Kattints a főmenübe való visszatéréshez."
 
 msgid "Astrologers proclaim the Month of the %{name}."
-msgstr "Az asztrológusok kihirdették a %{name} havát."
+msgstr "Az asztrológusok kihirdették a(z) %{name} havát."
 
 msgid "Astrologers proclaim the Week of the %{name}."
-msgstr "Az asztrológusok kihirdették a %{name} hetét."
+msgstr "Az asztrológusok kihirdették a(z) %{name} hetét."
 
 msgid "After regular growth, the population of %{monster} is doubled!"
-msgstr "A %{monster} lények népessége megduplázódott!"
+msgstr "A(z) %{monster} lények népessége megduplázódott!"
 
 msgid ""
 "After regular growth, the population of %{monster} increases by %{count} "
@@ -4991,7 +5124,7 @@ msgid " All populations are halved."
 msgstr " Minden populáció megfeleződött."
 
 msgid " All dwellings increase population."
-msgstr " Mindegyik toborzóhelynek nőtt a termelése."
+msgstr " Mindegyik toborzóhelynek nőtt a szaporulata."
 
 msgid "New Month!"
 msgstr "Új hónap!"
@@ -5380,13 +5513,13 @@ msgid ", FPS: "
 msgstr ", FPS: "
 
 msgid "%{object} robber"
-msgstr ""
+msgstr "%{object} rabló"
 
 msgid "%{object} raided"
-msgstr ""
+msgstr "%{object} kifosztva"
 
 msgid "Ector"
-msgstr "Hector"
+msgstr "Ector"
 
 msgid "Gwenneth"
 msgstr "Gwenneth"
@@ -5413,7 +5546,7 @@ msgid "Jezebel"
 msgstr "Jezebel"
 
 msgid "Atlas"
-msgstr "Atlas"
+msgstr "Atlasz"
 
 msgid "Ergon"
 msgstr "Ergon"
@@ -5536,13 +5669,14 @@ msgid "Martine"
 msgstr "Martine"
 
 msgid " gives you maximum morale"
-msgstr ""
+msgstr " maximális morált ad"
 
 msgid " gives you maximum luck"
-msgstr ""
+msgstr " maximális szerencsét ad"
 
 msgid "You cannot pick up this artifact, you already have a full load!"
 msgstr ""
+"Nem tudod felvenni ezt a varázstárgyat, mert már így is túl vagy terhelve!"
 
 msgid "To cast spells, you must first buy a spell book for %{gold} gold."
 msgstr ""
@@ -5577,7 +5711,7 @@ msgstr ""
 "Akarod üldözni és megtámadni őket?"
 
 msgid "Ransacking an enemy camp, you discover a hidden cache of treasures."
-msgstr ""
+msgstr "Az ellenséges tábor kifosztása közben rálelsz egy elrejtett kicsre."
 
 msgid ""
 "The keeper of the mill announces:\n"
@@ -5618,9 +5752,11 @@ msgid ""
 "You've found an abandoned lean-to.\n"
 "Poking about, you discover some resources hidden nearby."
 msgstr ""
+"Rátaláltál egy elhagyatott fészerre.\n"
+"Körbekutatva rálelsz a közelben némi elrejtett erőforrásra."
 
 msgid "The lean-to is long abandoned. There is nothing of value here."
-msgstr ""
+msgstr "A fészer már régóta elhagyatott. Semmi értékes nincs már itt."
 
 msgid ""
 "You catch a leprechaun foolishly sleeping amidst a cluster of magic "
@@ -5628,12 +5764,17 @@ msgid ""
 "In exchange for his freedom, he guides you to a small pot filled with "
 "precious things."
 msgstr ""
+"Fülön csípsz egy koboldot, amint egy csomó varázsgomba között szunyókál.\n"
+"Szabadságáért cserébe mutat neked egy edényt tele különleges dolgokkal."
 
 msgid ""
 "You've found a magic garden, the kind of place that leprechauns and faeries "
 "like to cavort in, but there is no one here today.\n"
 "Perhaps you should try again next week."
 msgstr ""
+"Egy varázskertre bukkantál, ahol koboldok és tündérek szoktak játszadozni. "
+"Ma azonban senki sincs itt.\n"
+"Próbáld meg esetleg a jövő héten."
 
 msgid "You come upon the remains of an unfortunate adventurer."
 msgstr "Egy szerencsétlen kalandor maradványaira lelsz rá."
@@ -5659,7 +5800,7 @@ msgid "Searching inside, you find the %{artifact}."
 msgstr "Átkutatva megtaláltad a(z) %{artifact} varázstárgyat."
 
 msgid "Inside, you find some of the wagon's cargo still intact."
-msgstr ""
+msgstr "Átkutatva találsz némi érintetlen rakományt."
 
 msgid "You search through the flotsam, and find some wood and some gold."
 msgstr "Átkutatod az uszadékot, és találsz egy kevés fát és aranyat."
@@ -5671,31 +5812,37 @@ msgid "You search through the flotsam, but find nothing."
 msgstr "Átkutatod az uszadékot, de semmit sem találsz."
 
 msgid "Shrine of the 1st Circle"
-msgstr "1. Kör Szentélye"
+msgstr "Első Kör szentélye"
 
 msgid ""
 "You come across a small shrine attended by a group of novice acolytes.\n"
 "In exchange for your protection, they agree to teach you a simple spell - "
 "'%{spell}'."
 msgstr ""
+"Egy kis szentélyhez értél, melyet novíciusok csoportja látogat.\n"
+"Védelmedért cserébe megtanítanak egy varázslatra: '%{spell}'."
 
 msgid "Shrine of the 2nd Circle"
-msgstr ""
+msgstr "Második Kör szentélye"
 
 msgid ""
 "You come across an ornate shrine attended by a group of rotund friars.\n"
 "In exchange for your protection, they agree to teach you a spell - "
 "'%{spell}'."
 msgstr ""
+"Egy díszes szentélyhez értél, melyet joviális szerzetesek látogatnak.\n"
+"Védelmedért cserébe megtanítanak egy varázslatra: '%{spell}'."
 
 msgid "Shrine of the 3rd Circle"
-msgstr ""
+msgstr "Harmadik Kör szentélye"
 
 msgid ""
 "You come across a lavish shrine attended by a group of high priests.\n"
 "In exchange for your protection, they agree to teach you a sophisticated "
 "spell - '%{spell}'."
 msgstr ""
+"Egy pazar szentélyhez értél, melyet főpapok csoportja látogat.\n"
+"Védelmedért cserébe megtanítanak egy bonyolult varázslatra: '%{spell}'."
 
 msgid ""
 "\n"
@@ -5711,13 +5858,15 @@ msgid ""
 "Unfortunately, you already have knowledge of this spell, so there is nothing "
 "more for them to teach you."
 msgstr ""
+"\n"
+"Már ismered a varázslatot, másuk pedig nincs, amit taníthatnának neked."
 
 msgid ""
 "\n"
 "Unfortunately, you have no Magic Book to record the spell with."
 msgstr ""
 "\n"
-"Szerencsétlenségedre, nincs varázskönyved, amibe a varázslatot beírhatnád."
+"Sajnos nincs varázskönyved, amibe a varázslatot beírhatnád."
 
 msgid ""
 "You approach the hut and observe a witch inside studying an ancient tome on "
@@ -5794,6 +5943,11 @@ msgid ""
 "moment.\n"
 "The mermaids charms bless you with increased luck for your next combat."
 msgstr ""
+"A sellők varászlatos és andalító szépsége magával ragad téged és "
+"embereidet.\n"
+"Egy pillanatra elfelejted minden bánatod és csak fürdesz a pillanat "
+"szépségében.\n"
+"A sellők bűvöletétől szerencsésebb leszel a következő csatában."
 
 msgid ""
 "You come upon the pyramid of a great and ancient king.\n"
@@ -5801,11 +5955,17 @@ msgid ""
 "fearful curses and undead guardians.\n"
 "Will you search?"
 msgstr ""
+"Egy ősi és nagy király piramisához érkezel.\n"
+"Izgat a kíváncsiság és átkutatnád kincsek után, de visszatartanak a "
+"félelmetes átkokról és élőhalott őrzőkről szóló mendemondák.\n"
+"Átkutatod ennek ellenére?"
 
 msgid ""
 "Upon defeating the monsters, you decipher an ancient glyph on the wall, "
 "telling the secret of the spell - '"
 msgstr ""
+"A lények legyőzése után egy ősi írásjelet betűzöl ki a falon, mely e "
+"varázslat titkáról mesél: '"
 
 msgid "Unfortunately, you have no Magic Book to record the spell with."
 msgstr ""
@@ -5822,6 +5982,8 @@ msgid ""
 "You come upon the pyramid of a great and ancient king.\n"
 "Routine exploration reveals that the pyramid is completely empty."
 msgstr ""
+"Egy ősi és nagy király piramisához érkezel.\n"
+"Rutinszerűen átkutatod, de a piramis teljesen üres."
 
 msgid ""
 "A drink at the well is supposed to restore your spell points, but you are "
@@ -5851,11 +6013,17 @@ msgid ""
 "You've come upon a mercenary camp practicing their tactics. \"You're too "
 "advanced for us,\" the mercenary captain says. \"We can teach nothing more.\""
 msgstr ""
+"Zsoldosok táborához érkezel, akik éppen harci taktikáikat gyakorolják. \"Túl "
+"képzett vagy hozzánk\" - mondja a zsoldosvezér. \"Nem tudunk többet tanítani."
+"\""
 
 msgid ""
 "You've come upon a mercenary camp practicing their tactics. The mercenaries "
 "welcome you and your troops and invite you to train with them."
 msgstr ""
+"Zsoldosok táborához érkezel, akik éppen harci taktikáikat gyakorolják. A "
+"zsoldosok köszöntenek téged és embereidet, majd meghívnak egy kis "
+"gyakorlatozásra velük."
 
 msgid "\"Go 'way!\", the witch doctor barks, \"you know all I know.\""
 msgstr ""
@@ -6048,14 +6216,18 @@ msgid ""
 "guarded by a nearby %{monster}. Do you want to fight the %{monster} for the "
 "artifact?"
 msgstr ""
+"Kiürítés közben felfedezel egy varázstárgyat. Sajnos, %{monster} őrzik. Meg "
+"akarsz küzdeni velük a varázstárgyért?"
 
 msgid "Victorious, you take your prize, the %{art}."
-msgstr ""
+msgstr "Győzelem! Vedd át megérdemelt jutalmadat, mely egy %{art}."
 
 msgid ""
 "Discretion is the better part of valor, and you decide to avoid this fight "
 "for today."
 msgstr ""
+"A megfontoltság a vitézség tiszteletre méltó oldala. Ma úgy döntesz, hogy "
+"elállsz a harctól."
 
 msgid ""
 "After spending hours trying to fish the chest out of the sea, you open it "
@@ -6148,7 +6320,7 @@ msgstr ""
 msgid ""
 "You gain control of a gold mine. It will provide you with %{count} gold per "
 "day."
-msgstr "Megszereztél egy auranybányát. Ez naponta %{count} aranyat ad neked."
+msgstr "Megszereztél egy aranybányát. Ez naponta %{count} aranyat ad neked."
 
 msgid ""
 "The lighthouse is now under your control, and all of your ships will now "
@@ -6158,7 +6330,7 @@ msgstr ""
 "körönként."
 
 msgid "You gain control of a %{name}."
-msgstr ""
+msgstr "Irányítást szereztél %{name} felett."
 
 msgid ""
 "You come upon an abandoned gold mine. The mine appears to be haunted. Do you "
@@ -6228,13 +6400,17 @@ msgid ""
 msgstr ""
 
 msgid "The pit of mud bubbles for a minute and then lies still."
-msgstr ""
+msgstr "A sárgödör bugyog egy percig, majd elcsitul."
 
 msgid ""
 "As you approach the bubbling pit of mud, creatures begin to climb out and "
 "position themselves around it. In unison they say: \"Mother Earth would like "
 "to offer you a few of her troops. Do you want to recruit Earth Elementals?\""
 msgstr ""
+"Ahogy közeledsz a bugyogó sárgödörhöz, fura lények kezdenek előbújni belőle "
+"és körbeállni azt. Együtt, egyszólamban mondják neked: \"Föld Anya szeretne "
+"felajánlani számodra néhányat a seregeiből. Akarsz Földelementálokat "
+"toborozni?\""
 
 msgid "You enter the structure of white stone pillars, and find nothing."
 msgstr "Belépsz a fehér kő pillér építménybe, de nem találsz semmit."
@@ -6249,13 +6425,16 @@ msgid ""
 msgstr ""
 
 msgid "No Fire Elementals approach you from the lava pool."
-msgstr "A láva medencéből nem közeledik feléd egyetlen Tűz Elementál sem."
+msgstr "A lávatóból nem közeledik feléd egyetlen Tűzelementál sem."
 
 msgid ""
 "Beneath a structure that serves to hold in heat, Fire Elementals move about "
 "in a fiery pool of molten lava. A group of them approach you and offer their "
 "services. Would you like to recruit Fire Elementals?"
 msgstr ""
+"A meleget magában tartó struktúrák alatt Tűzelementálok mozgolódnak egy "
+"tüzes lávatóban. Egy kisebb csoportjuk közeledik hozzád és felajánlják a "
+"szolgálataikat neked. Akarsz Tűzelementálokat toborozni?"
 
 msgid "A face forms in the water for a moment, and then is gone."
 msgstr ""
@@ -6266,6 +6445,9 @@ msgid ""
 "You peer into the pool, and a face that is not your own peers back. It asks: "
 "\"Would you like to call upon the powers of water?\""
 msgstr ""
+"A kristály struktúrák árnyékot vetnek egy kicsi, tükröződő vízű tócsára. "
+"Belepillantasz a vízbe, de az arc, ami visszabámul rád, nem a tied. Emígyen "
+"szólít meg: \"Valóban e víz hatalmához szeretnél fordulni?\""
 
 msgid "This burial site is deathly still."
 msgstr "A temetkezési hely még mindig halálos."
@@ -6341,13 +6523,16 @@ msgid ""
 "The Dragon city is willing to offer some Dragons for your army for a price. "
 "Do you wish to recruit Dragons?"
 msgstr ""
-"A Sárkány városban lévő Sárkányok fizetség fejében csatlakoznak hozzád. "
+"A Sárkányvárosban lévő Sárkányok fizetség fejében csatlakoznak hozzád. "
 "Akarsz Sárkányokat toborozni?"
 
 msgid ""
 "You stand before the Dragon City, a place off-limits to mere humans. Do you "
 "wish to violate this rule and challenge the Dragons to a fight?"
 msgstr ""
+"Sárkányváros kapui előtt állsz, mely tiltott terület egyszerű halandók "
+"számára. Meg akarod szegni a szabályt és kihívni a sárkányokat egy "
+"küzdelemre?"
 
 msgid ""
 "Having defeated the Dragon champions, the city's leaders agree to supply "
@@ -6415,6 +6600,9 @@ msgid ""
 "An unusual alliance of Ogres, Orcs, and Dwarves offer to train (upgrade) any "
 "such troops brought to them. Unfortunately, you have none with you."
 msgstr ""
+"Az ogrék, orkok és törpök közötti szokatlan szövetkezés eredményeképpen "
+"bármely közülük való egységet ki lehet képezni (fejleszteni) ezen a helyen. "
+"Sajnos neked egyikből sincs a csapatodban."
 
 msgid "All of your %{monsters} have been upgraded into %{monsters2}."
 msgstr "Minden %{monsters} fel lett fejlesztve %{monsters2}."
@@ -6435,6 +6623,9 @@ msgid ""
 "The captain looks at you with surprise and says:\n"
 "\"You already have all the maps I know about. Let me fish in peace now.\""
 msgstr ""
+"A kapitány meglepetten néz rád és azt mondja:\n"
+"\"Már rendelkezel minden térképpel, ami nekem csak van. Hagy nyugodtan "
+"pecázni.\""
 
 msgid ""
 "A retired captain living on this refurbished fishing platform offers to sell "
@@ -6513,7 +6704,7 @@ msgstr ""
 "szájából. Belépsz?"
 
 msgid "Except for evidence of a terrible battle, the cave is empty."
-msgstr ""
+msgstr "Egy iszonyú csata tanújelein kívül a barlang üres."
 
 msgid ""
 "You find a powerful and grotesque Demon in the cave. \"Today,\" it rasps, "
@@ -6912,7 +7103,7 @@ msgid "Identify Hero"
 msgstr "Hősazonosítás"
 
 msgid "Select town to port to."
-msgstr ""
+msgstr "Válaszd ki, melyik városba szeretnél menni."
 
 msgid "Town Portal"
 msgstr "Városba lépés"
@@ -6932,6 +7123,8 @@ msgid ""
 "\n"
 " for a fee of %{gold} gold."
 msgstr ""
+"\n"
+"%{gold} arany fizetségért."
 
 msgid "These weak creatures will surely flee before us."
 msgstr "Ezek a gyenge lények valószínű elmenekül előled."
@@ -6939,22 +7132,28 @@ msgstr "Ezek a gyenge lények valószínű elmenekül előled."
 msgid "I fear these creatures are in the mood for a fight."
 msgstr "Félő, hogy ezek a lények készek harcolni."
 
-msgid "Your attack skill is a bonus added to each creature's attack skill."
+#, fuzzy
+msgid "The hero's attack skill is a bonus added to each unit's attack skill."
 msgstr ""
 "A támadóerőd értéke bónuszként hozzáadódik mindegyik lényed támadóerejéhez."
 
-msgid "Your defense skill is a bonus added to each creature's defense skill."
+#, fuzzy
+msgid "The hero's defense skill is a bonus added to each unit's defense skill."
 msgstr ""
 "A védőerőd értéke bónuszként hozzáadódik mindegyik lényed védőerejéhez."
 
-msgid "Your spell power determines the length or power of a spell."
+#, fuzzy
+msgid "The hero's spell power determines the duration or power of a spell."
 msgstr "A varázserőd meghatározza a varázslat hatóidejét."
 
+#, fuzzy
 msgid ""
-"Your knowledge determines how many spell points your hero may have. Under "
-"normal circumstances, a hero is limited to 10 spell points per level of "
-"knowledge."
+" The hero's knowledge determines how many spell points the hero may have. "
+"Under normal circumstances, a hero is limited to 10 spell points per level "
+"of knowledge."
 msgstr ""
+"Tudásod határozza meg, hogy hány varázspontod lehet. Általában a hős "
+"szintenként 10 varázspontot kaphat."
 
 msgid "Current Modifiers:"
 msgstr "Ható módosítók:"
@@ -7143,104 +7342,122 @@ msgid "%{skill} eliminates the movement penalty for rough terrain."
 msgstr ""
 "A(z) %{skill} kiiktatja a nehéz terepen történő haladásból fakadó hátrányt."
 
+#, fuzzy
 msgid ""
-"%{skill} increases the damage done by range attacking creatures by %{count} "
-"percent."
+"%{skill} increases the damage done by the hero's range attacking creatures "
+"by %{count} percent."
 msgstr ""
 "A(z) %{skill} növeli a távolsági támadások sebzését %{count} százalékkal."
 
-msgid "%{skill} increases your hero's movement points by %{count} percent."
+#, fuzzy
+msgid "%{skill} increases the hero's movement points by %{count} percent."
 msgstr "A(z) %{skill} növeli a hősöd mozgáspontjait %{count} százalékkal."
 
-msgid "%{skill} increases your hero's viewable area by one square."
-msgid_plural ""
-"%{skill} increases your hero's viewable area by %{count} squares."
+#, fuzzy
+msgid "%{skill} increases the hero's viewable area by one square."
+msgid_plural "%{skill} increases the hero's viewable area by %{count} squares."
 msgstr[0] "A(z) %{skill} növeli a hős láthatárát egy egységgel."
 msgstr[1] "A(z) %{skill} növeli a hős láthatárát %{count} egységgel."
 
+#, fuzzy
 msgid ""
-"%{skill} allows you to negotiate with monsters who are weaker than your "
-"group. "
+"%{skill} allows the hero to negotiate with monsters who are weaker than "
+"their army."
 msgstr ""
 "A(z) %{skill} lehetővé teszi a seregednél gyengébb lényekkel való "
 "tárgyalást. "
 
-msgid "Approximately %{count} percent of the creatures may offer to join you."
+#, fuzzy
+msgid ""
+"Approximately %{count} percent of the creatures may offer to join the hero."
 msgstr "A lények kb. %{count} százaléka csatlakozhat hozzád."
 
-msgid "All of the creatures may offer to join you."
+#, fuzzy
+msgid "All of the creatures may offer to join the hero."
 msgstr "Az összes lény csatlakozhat hozzád."
 
+#, fuzzy
 msgid ""
-"%{skill} increases your hero's movement points over water by %{count} "
-"percent."
+"%{skill} increases the hero's movement points over water by %{count} percent."
 msgstr ""
 "A(z) %{skill} növeli a hős vízen történő mozgáspontjait %{count} százalékkal."
 
-msgid "%{skill} increases your hero's troops morale by %{count}."
+#, fuzzy
+msgid "%{skill} increases the hero's troops morale by %{count}."
 msgstr "A(z) %{skill} ennyivel növeli a csapatod tagjainak morálját: %{count}."
 
-msgid "%{skill} allows your hero to learn third level spells."
+#, fuzzy
+msgid "%{skill} allows the hero to learn third level spells."
 msgstr ""
 "A(z) %{skill} képessé teszi a hősödet 3. szintű varázslatok megtanulására."
 
-msgid "%{skill} allows your hero to learn fourth level spells."
+#, fuzzy
+msgid "%{skill} allows the hero to learn fourth level spells."
 msgstr ""
 "A(z) %{skill} képessé teszi a hősödet 4. szintű varázslatok használatára."
 
-msgid "%{skill} allows your hero to learn fifth level spells."
+#, fuzzy
+msgid "%{skill} allows the hero to learn fifth level spells."
 msgstr ""
 "A(z) %{skill} képessé teszi a hősödet 5. szintű varázslatok használatára."
 
-msgid "%{skill} regenerates one additional spell point per day to your hero."
+#, fuzzy
+msgid "%{skill} regenerates one additional spell point per day to the hero."
 msgid_plural ""
-"%{skill} regenerates %{count} additional spell points per day to your hero."
+"%{skill} regenerates %{count} additional spell points per day to the hero."
 msgstr[0] ""
 "A(z) %{skill} naponta eggyel növeli a varázspontok újratermelődését."
 msgstr[1] ""
 "A(z) %{skill} naponta %{count}-vel növeli a varázspontok újratermelődését."
 
-msgid "%{skill} increases your hero's luck by %{count}."
+#, fuzzy
+msgid "%{skill} increases the hero's luck by %{count}."
 msgstr "A(z) %{skill} ennyivel növeli a hős szerencséjét: %{count}."
 
+#, fuzzy
 msgid ""
-"%{skill} gives your hero's catapult shots a greater chance to hit and do "
+"%{skill} gives the hero's catapult shots a greater chance to hit and do "
 "damage to castle walls."
 msgstr ""
 "A(z) %{skill} nagyobb esélyt ad a hősöd katapultjának a találatra és a "
 "várfal rombolására."
 
+#, fuzzy
 msgid ""
-"%{skill} gives your hero's catapult an extra shot, and each shot has a "
+"%{skill} gives the hero's catapult an extra shot, and each shot has a "
 "greater chance to hit and do damage to castle walls."
 msgstr ""
 "A(z) %{skill} egy plusz lövést és nagyobb esélyt ad a hősöd katapultjának a "
 "találatra és a várfal rombolására."
 
+#, fuzzy
 msgid ""
-"%{skill} gives your hero's catapult an extra shot, and each shot "
+"%{skill} gives the hero's catapult an extra shot, and each shot "
 "automatically destroys any wall, except a fortified wall in a Knight castle."
 msgstr ""
 "A(z) %{skill} egy plusz lövést ad a hősöd katapultjának. Minden lövés "
 "automatikusan rombolja a falat, kivéve a Lovagvár sánccal megerősített várát."
 
+#, fuzzy
 msgid ""
-"%{skill} gives your hero a %{count} percent chance to learn any given 1st or "
+"%{skill} gives the hero a %{count} percent chance to learn any given 1st or "
 "2nd level spell that was cast by an enemy during combat."
 msgstr ""
 "A(z) %{skill} %{count} százaléknyi esélyt ad a hősnek, hogy az ellenfél "
 "által a csatában használt 1-es vagy 2-es szintű varázslatot tanuljon el."
 
+#, fuzzy
 msgid ""
-"%{skill} gives your hero a %{count} percent chance to learn any given 3rd "
+"%{skill} gives the hero a %{count} percent chance to learn any given 3rd "
 "level spell (or below) that was cast by an enemy during combat."
 msgstr ""
 "A(z) %{skill} %{count} százaléknyi esélyt ad a hősnek, hogy az ellenfél "
 "által a csatában használt 3-as (vagy alacsonyabb) szintű varázslatot "
 "tanuljon el."
 
+#, fuzzy
 msgid ""
-"%{skill} gives your hero a %{count} percent chance to learn any given 4th "
+"%{skill} gives the hero a %{count} percent chance to learn any given 4th "
 "level spell (or below) that was cast by an enemy during combat."
 msgstr ""
 "A(z) %{skill} %{count} százaléknyi esélyt ad a hősnek, hogy az ellenfél "
@@ -7254,8 +7471,9 @@ msgstr ""
 "%{skill} segítségével a csatában megölt lények %{count} százalékából "
 "Csontvázakat igézhetünk meg."
 
+#, fuzzy
 msgid ""
-"Your hero produces %{count} gold pieces per day as tax revenue from estates."
+"The hero produces %{count} gold pieces per day as tax revenue from estates."
 msgstr "A hősöd napi %{count} arany adóbevételt kap."
 
 msgid "Blue"
@@ -7379,23 +7597,26 @@ msgstr "Nagyszerű"
 msgid "luck|Irish"
 msgstr "Páratlan"
 
+#, fuzzy
 msgid ""
-"Bad luck sometimes falls on your armies in combat, causing their attacks to "
-"only do half damage."
+"Bad luck sometimes falls on the hero's units in combat, causing their "
+"attacks to only do half damage."
 msgstr ""
 "A Rossz szerencse következtében a csatában alkalmanként egyes egységek "
 "sebzése felére csökken."
 
+#, fuzzy
 msgid ""
-"Neutral luck means your armies will never get lucky or unlucky attacks on "
-"the enemy."
+"Neutral luck means the hero's units will never get lucky or unlucky attacks "
+"on the enemy."
 msgstr ""
 "A Semleges szerencse azt jelenti, hogy a csata során se szerencse se "
 "balszerencse nem éri az egységeid támadását."
 
+#, fuzzy
 msgid ""
-"Good luck sometimes lets your armies get lucky attacks (double strength) in "
-"combat."
+"Good luck sometimes lets the hero's units get lucky attacks (double "
+"strength) in combat."
 msgstr ""
 "Jószerencse esetén a csapatod tagjainak alkalmanként esélye van szerencsés "
 "támadásra (dupla erősségű) a csata során."
@@ -7421,17 +7642,20 @@ msgstr "Nagyszerű"
 msgid "morale|Blood!"
 msgstr "Örjöngő!"
 
-msgid "Bad morale may cause your armies to freeze in combat."
+#, fuzzy
+msgid "Bad morale may cause the hero's units to freeze in combat."
 msgstr "Rossz morál következtében csapattagok kimaradhatnak a körből."
 
+#, fuzzy
 msgid ""
-"Neutral morale means your armies will never be blessed with extra attacks or "
-"freeze in combat."
+"Neutral morale means the hero's units will never be blessed with extra "
+"attacks or freeze in combat."
 msgstr ""
 "Semleges morál azt jelenti, hogy a csapattagok nem kapnak lehetősége extra "
 "támadásra és nem is maradnak ki."
 
-msgid "Good morale may give your armies extra attacks in combat."
+#, fuzzy
+msgid "Good morale may give the hero's units extra attacks in combat."
 msgstr "Jó morál esetén az egységek extra támadási lehetőséget kaphatnak."
 
 msgid "Knight"
@@ -7658,7 +7882,7 @@ msgid "Mine"
 msgstr "Bánya"
 
 msgid "Burma shave."
-msgstr ""
+msgstr "Hirdetőtábla."
 
 msgid "Next sign 50 miles."
 msgstr "Következő jelzés 50 mérföldre."
@@ -7739,9 +7963,6 @@ msgid_plural "Water Wheels"
 msgstr[0] "Vizikerék"
 msgstr[1] "Vizikerekek"
 
-msgid "Mines"
-msgstr "Bányák"
-
 msgid "Obelisk"
 msgstr "Obeliszk"
 
@@ -7793,7 +8014,7 @@ msgid "Mermaid"
 msgstr "Sellő"
 
 msgid "Boat"
-msgstr "Csónak"
+msgstr "Hajó"
 
 msgid "Random Ultimate Artifact"
 msgstr "Véletlenszerű Szent Varázstárgy"
@@ -7811,7 +8032,7 @@ msgid "Random Town"
 msgstr "Véletlenszerű város"
 
 msgid "Random Castle"
-msgstr "Véletlenszerű kastély"
+msgstr "Véletlenszerű vár"
 
 msgid "Eye of the Magi"
 msgstr "Mágus Szem"
@@ -7827,6 +8048,9 @@ msgstr "Véletlenszerű lény - erős"
 
 msgid "Random Monster - very strong"
 msgstr "Véletlenszerű lény - nagyon erős"
+
+msgid "Hero"
+msgstr "Hős"
 
 msgid "Nothing Special"
 msgstr "Semmi érdekes"
@@ -7947,12 +8171,6 @@ msgstr "Öntőde"
 msgid "Reefs"
 msgstr "Zátonyok"
 
-msgid "Trees"
-msgstr "Fák"
-
-msgid "Mountains"
-msgstr "Hegyek"
-
 msgid "Volcano"
 msgstr "Vulkán"
 
@@ -7996,16 +8214,16 @@ msgid "Barrow Mounds"
 msgstr "Barrow Dombság"
 
 msgid "Random Artifact - Treasure"
-msgstr ""
+msgstr "Véletlen tárgy - kincs"
 
 msgid "Random Artifact - Minor"
-msgstr ""
+msgstr "Véletlen tárgy - kisebb"
 
 msgid "Random Artifact - Major"
-msgstr ""
+msgstr "Véletlen tárgy - nagyobb"
 
 msgid "Barrier"
-msgstr ""
+msgstr "Mágikus útakadály"
 
 msgid "Traveller's Tent"
 msgstr "Utazók Sátra"
@@ -8488,19 +8706,19 @@ msgid "% damage from Elemental spells"
 msgstr "% sebzés elemi varázslatoktól"
 
 msgid "% chance to Dispel beneficial spells"
-msgstr ""
+msgstr "% esély jótékony varázslatok eloszlatására"
 
 msgid "% chance to Paralyze"
-msgstr ""
+msgstr "% esély bénításra"
 
 msgid "% chance to Petrify"
-msgstr ""
+msgstr "% esély kővé dermesztésre"
 
 msgid "% chance to Blind"
-msgstr ""
+msgstr "% esély vakításra"
 
 msgid "% chance to Curse"
-msgstr ""
+msgstr "% esély átokra"
 
 msgid "% chance to cast %{spell} spell"
 msgstr "% eséllyel varázsolja a(z) %{spell} varázslatot"
@@ -8535,111 +8753,103 @@ msgstr "Nem támad vissza rá az ellenség"
 msgid "HP drain"
 msgstr "Életerőt szív"
 
-#, fuzzy
 msgid "Cloud attack"
-msgstr "Fellegvár"
+msgstr "Gyilkos köd támadás"
 
 msgid "Decreases enemy's morale by "
-msgstr ""
+msgstr "Csökkenti az ellenfél morálját ennyivel: "
 
 msgid "% chance to halve enemy"
-msgstr ""
+msgstr "% esély az ellenség megfelezésére"
 
 msgid "Soul Eater"
 msgstr "Lélekfaló"
 
-#, fuzzy
 msgid "Elemental"
-msgstr "Elemi Gyűrű"
+msgstr "Elemi lény"
 
-#, fuzzy
 msgid "No Morale"
-msgstr "Morál"
+msgstr "Nincs morál"
 
 msgid "200% damage from Fire spells"
-msgstr ""
+msgstr "200% sebzés tűzvarázslatoktól"
 
 msgid "200% damage from Cold spells"
-msgstr ""
+msgstr "200% sebzés fagyvarázslatoktól"
 
 msgid "% damage from %{spell} spell"
-msgstr ""
+msgstr "% sebzés %{spell} varázslattól"
 
 msgid "% immunity to "
-msgstr ""
+msgstr "% immunitás ettől: "
 
-#, fuzzy
 msgid "Lightning"
-msgstr "Villámló Bot"
+msgstr "Villámlás"
 
-#, fuzzy
 msgid "% damage from "
-msgstr "Vízelementál"
+msgstr "% sebzés ettől: "
 
 msgid "The three Anduran artifacts magically combine into one."
-msgstr ""
+msgstr "A három Anduran varázstárgy mágikusan eggyéolvadt."
 
-#, fuzzy
 msgid "View Spells"
-msgstr "Minden mutatása"
+msgstr "Varázslatok mutatása"
 
-#, fuzzy
 msgid "View %{name} Info"
-msgstr "%{name} adatai."
+msgstr "%{name} adatai"
 
-#, fuzzy
 msgid "Move %{name}"
-msgstr "%{name} ide lép."
+msgstr "%{name} lép"
 
-#, fuzzy
 msgid "Cannot move the Spellbook"
-msgstr "A sereg utolsó egységét nem lehet áthelyezni."
+msgstr "A varázskönyv nem mozgatható"
 
 msgid "This item can't be traded."
-msgstr ""
+msgstr "Ezt a tárgyat nem lehet elcserélni."
 
-#, fuzzy
 msgid "Invalid Artifact"
-msgstr "Varázstárgy"
+msgstr "Érvénytelen varázstárgy"
 
 msgid "The %{name} increases your knowledge by %{count}."
-msgstr ""
+msgstr "A %{name} ennyivel növeli a tudásodat: %{count}."
 
 msgid "Ultimate Book of Knowledge"
 msgstr "Tudás Szent Könyve"
 
 msgid "The %{name} increases your attack skill by %{count}."
-msgstr ""
+msgstr "A %{name} ennyivel növeli a támadóerődet: %{count}."
 
 msgid "Ultimate Sword of Dominion"
 msgstr "Hatalom Szent Kardja"
 
 msgid "The %{name} increases your defense skill by %{count}."
-msgstr ""
+msgstr "A %{name} ennyivel növeli a védőerődet: %{count}."
 
 msgid "Ultimate Cloak of Protection"
 msgstr "Védelem Szent Köpenye"
 
 msgid "The %{name} increases your spell power by %{count}."
-msgstr ""
+msgstr "A %{name} megnöveli a varázserődet ennyivel: %{count}."
 
 msgid "Ultimate Wand of Magic"
-msgstr "Varázslás Szet Pálcája"
+msgstr "Varázslás Szent Pálcája"
 
 msgid "The %{name} increases your attack and defense skills by %{count} each."
 msgstr ""
+"A %{name} mind a támadóerődet, mind a védőerődet növeli ennyivel: %{count}."
 
 msgid "Ultimate Shield"
 msgstr "Szent Pajzs"
 
 msgid "The %{name} increases your spell power and knowledge by %{count} each."
 msgstr ""
+"A %{name} mind a tudásodat, mind a varázserődet növeli ennyivel: %{count}."
 
 msgid "Ultimate Staff"
 msgstr "Szent Jogar"
 
 msgid "The %{name} increases each of your basic skills by %{count} points."
-msgstr ""
+msgstr "A %{name} minden Alap képességedet növeli ennyivel: %{count}."
 
 msgid "Ultimate Crown"
 msgstr "Szent Korona"
@@ -8647,14 +8857,11 @@ msgstr "Szent Korona"
 msgid "Golden Goose"
 msgstr "Arany Lúd"
 
-#, fuzzy
 msgid "The %{name} brings in an income of %{count} gold per day."
-msgstr ""
-"A Kastély fejleszti a város védelmét és növeli naponta %{count} arannyal a "
-"bevételét."
+msgstr "A(z) %{name} naponta %{count} aranyat hoz a konyhára."
 
 msgid "Arcane Necklace of Magic"
-msgstr "Misztikus Varázslás Nyaklánca"
+msgstr "Misztikus Varázslás Nyaklánc"
 
 msgid ""
 "After rescuing a Sorceress from a cursed tomb, she rewards your heroism with "
@@ -8679,7 +8886,7 @@ msgid ""
 msgstr ""
 
 msgid "Witch's Broach of Magic"
-msgstr "Boszorkány Talizmánja"
+msgstr "Boszorkány Mágikus Mellcsatja"
 
 msgid ""
 "Alongside the remains of a burnt witch lies a beautiful broach, intricately "
@@ -8690,9 +8897,8 @@ msgstr ""
 msgid "Medal of Valor"
 msgstr "Vitézség Medál"
 
-#, fuzzy
 msgid "The %{name} increases your morale by %{count}."
-msgstr "Alap Vezetés növeli a csapatod tagjainak morálját %{count}-gyel."
+msgstr "A %{name} ennyivel növeli a csapatod morálját: %{count}."
 
 msgid ""
 "Freeing a virtuous maiden from the clutches of an evil overlord, you are "
@@ -8724,10 +8930,10 @@ msgid ""
 msgstr ""
 
 msgid "Fizbin of Misfortune"
-msgstr ""
+msgstr "Balszerencse Kártya"
 
 msgid "The %{name} greatly decreases your morale by %{count}."
-msgstr ""
+msgstr "A %{name} %{count} mértékben lecsökkenti a morálodat."
 
 msgid ""
 "You stumble upon a medal lying alongside the empty road. Adding the medal to "
@@ -8744,10 +8950,10 @@ msgid ""
 msgstr ""
 
 msgid "Armored Gauntlets of Protection"
-msgstr ""
+msgstr "Védelem páncélkesztyűi"
 
 msgid "The %{name} increase your defense skill by %{count}."
-msgstr ""
+msgstr "A %{name} ennyivel növeli a védőerődet: %{count}."
 
 msgid ""
 "You encounter the infamous Black Knight! After a grueling duel ending in a "
@@ -8755,7 +8961,7 @@ msgid ""
 msgstr ""
 
 msgid "Defender Helm of Protection"
-msgstr ""
+msgstr "Védelem sisak"
 
 msgid ""
 "A glint of golden light catches your eye. Upon further investigation, you "
@@ -8763,7 +8969,7 @@ msgid ""
 msgstr ""
 
 msgid "Giant Flail of Dominion"
-msgstr ""
+msgstr "Óriás Hatalom Cséphadaró"
 
 msgid ""
 "A clumsy Giant has killed himself with his own flail. Knowing your superior "
@@ -8772,10 +8978,10 @@ msgid ""
 msgstr ""
 
 msgid "Ballista of Quickness"
-msgstr ""
+msgstr "Gyorstüzelő hajítógép"
 
 msgid "The %{name} gives your catapult one extra shot per combat round."
-msgstr ""
+msgstr "A %{name} plusz lövést ad körönként a hajítógépednek."
 
 msgid ""
 "Walking through the ruins of an ancient walled city, you find the instrument "
@@ -8783,7 +8989,7 @@ msgid ""
 msgstr ""
 
 msgid "Stealth Shield of Protection"
-msgstr ""
+msgstr "Védelem titkos pajzsa"
 
 msgid ""
 "A stone statue of a warrior holds a silver shield. As you remove the shield, "
@@ -8809,7 +9015,7 @@ msgid ""
 msgstr ""
 
 msgid "Divine Breastplate of Protection"
-msgstr ""
+msgstr "Védelem isteni mellvértje"
 
 msgid ""
 "A gang of Rogues is sifting through the possessions of dead warriors. "
@@ -8818,7 +9024,7 @@ msgid ""
 msgstr ""
 
 msgid "Minor Scroll of Knowledge"
-msgstr ""
+msgstr "Tudás kis tekercse"
 
 msgid ""
 "Before you appears a levitating glass case with a scroll, perched upon a bed "
@@ -8827,7 +9033,7 @@ msgid ""
 msgstr ""
 
 msgid "Major Scroll of Knowledge"
-msgstr ""
+msgstr "Tudás nagy tekercse"
 
 msgid ""
 "Visiting a local wiseman, you explain the intent of your journey. He reaches "
@@ -8835,7 +9041,7 @@ msgid ""
 msgstr ""
 
 msgid "Superior Scroll of Knowledge"
-msgstr ""
+msgstr "Felsőbb tudás tekercse"
 
 msgid ""
 "You come across the remains of an ancient Druid. Bones, yellowed with age, "
@@ -8844,7 +9050,7 @@ msgid ""
 msgstr ""
 
 msgid "Foremost Scroll of Knowledge"
-msgstr ""
+msgstr "Felsőbb tudás nagy tekercse"
 
 msgid ""
 "Mangled bones, yellowed with age, peer from the ragged folds of a dead "
@@ -8855,7 +9061,7 @@ msgid "Endless Sack of Gold"
 msgstr "Végtelen Aranyzsák"
 
 msgid "The %{name} provides you with %{count} gold per day."
-msgstr ""
+msgstr "A %{name} naponta %{count} aranyat ad."
 
 msgid ""
 "A little leprechaun dances gleefully around a magic sack. Seeing you "
@@ -8885,7 +9091,7 @@ msgid "Nomad Boots of Mobility"
 msgstr "Nomádcsizma"
 
 msgid "The %{name} increase your movement on land."
-msgstr ""
+msgstr "A %{name} megnöveli a mozgáspontjaidat szárazföldön."
 
 msgid ""
 "A Nomad trader seeks protection from a tribe of Goblins. For your "
@@ -8904,11 +9110,11 @@ msgid ""
 msgstr ""
 
 msgid "Lucky Rabbit's Foot"
-msgstr ""
+msgstr "Szerencsehozó nyúlláb"
 
-#, fuzzy
 msgid "The %{name} increases your luck in combat by %{count}."
-msgstr "Alap Szerencse növeli a hős szerencséjét %{count}-gyel."
+msgstr ""
+"A %{name} ennyivel növeli a csapatod szerencséjét a csatában: %{count}."
 
 msgid ""
 "A traveling merchant offers you a rabbit's foot, made of gleaming silver "
@@ -8946,6 +9152,7 @@ msgstr "Iránytű"
 
 msgid "The %{name} increases your movement on land and sea."
 msgstr ""
+"Az %{name} megnöveli a mozgáspontjaidat szárazföldön és vízen egyaránt."
 
 msgid ""
 "An old man claiming to be an inventor asks you to try his latest invention. "
@@ -8953,10 +9160,10 @@ msgid ""
 msgstr ""
 
 msgid "Sailor's Astrolabe of Mobility"
-msgstr "Tengerészeti Magasságmérő"
+msgstr "Tengerész asztrolábium"
 
 msgid "The %{name} increases your movement on sea."
-msgstr ""
+msgstr "A %{name} megnöveli a mozgáspontjaidat vízen."
 
 msgid ""
 "An old sea captain is being tortured by Ogres. You save him, and in return "
@@ -8967,7 +9174,7 @@ msgid "Evil Eye"
 msgstr "Gonosz Szem"
 
 msgid "The %{name} reduces the casting cost of curse spells by half."
-msgstr ""
+msgstr "A %{name} felére csökkenti az átok varázslat varázslatpont-igényét."
 
 msgid ""
 "While venturing into a decrepit hut you find the Skeleton of a long dead "
@@ -8979,7 +9186,7 @@ msgid "Enchanted Hourglass"
 msgstr "Bűvös Homokóra"
 
 msgid "The %{name} extends the duration of all your spells by %{count} turns."
-msgstr ""
+msgstr "A %{name} megnöveli a varázslataid hatóidőit %{count} körrel."
 
 msgid ""
 "A surprise turn in the landscape finds you in the midst of a grisly scene: "
@@ -8988,10 +9195,10 @@ msgid ""
 msgstr ""
 
 msgid "Gold Watch"
-msgstr "Arany Óra"
+msgstr "Aranyóra"
 
 msgid "The %{name} doubles the effectiveness of your hypnotize spells."
-msgstr ""
+msgstr "Az %{name} megduplázza a hipnózis varázslat hatásosságát."
 
 msgid ""
 "In reward for helping his cart out of a ditch, a traveling potion salesman "
@@ -9000,10 +9207,12 @@ msgid ""
 msgstr ""
 
 msgid "Skullcap"
-msgstr "Csontsapka"
+msgstr "Koponyacsont sapka"
 
 msgid "The %{name} halves the casting cost of all mind influencing spells."
 msgstr ""
+"A %{name} felére csökkenti minden elmére ható varázslat varázslatpont-"
+"igényét."
 
 msgid ""
 "A brief stop at an improbable rural inn yields an exchange of money, tales, "
@@ -9015,6 +9224,7 @@ msgstr "Jégköpeny"
 
 msgid "The %{name} halves all damage your troops take from cold spells."
 msgstr ""
+"A %{name} felére csökkenti a fagy-varázslatok által okozott sérüléseket."
 
 msgid ""
 "Responding to the panicked cries of a damsel in distress, you discover a "
@@ -9027,6 +9237,7 @@ msgstr "Tűzköpeny"
 
 msgid "The %{name} halves all damage your troops take from fire spells."
 msgstr ""
+"A %{name} felére csökkenti a tűz-varázslatok által okozott sérüléseket."
 
 msgid ""
 "You've come upon a fight between a Necromancer and a Paladin. The "
@@ -9040,6 +9251,7 @@ msgstr "Villám Sisak"
 
 msgid "The %{name} halves all damage your troops take from lightning spells."
 msgstr ""
+"A %{name} felére csökkenti a villám-varázslatok által okozott sérüléseket."
 
 msgid ""
 "A traveling tinker in need of supplies offers you a helm with a thunderbolt "
@@ -9054,6 +9266,8 @@ msgid ""
 "The %{name} causes your cold spells to do %{count} percent more damage to "
 "enemy troops."
 msgstr ""
+"A %{name} %{count} százalékkal megnöveli a fagy-varázslataid hatásosságát az "
+"ellenséges csapatokon."
 
 msgid ""
 "An icicle withstanding the full heat of the noonday sun attracts your "
@@ -9068,6 +9282,8 @@ msgid ""
 "The %{name} causes your fire spells to do %{count} percent more damage to "
 "enemy troops."
 msgstr ""
+"A %{name} %{count} százalékkal megnöveli a tűz-varázslataid hatásosságát az "
+"ellenséges csapatokon."
 
 msgid ""
 "Your wanderings bring you into contact with a tribe of ape-like beings using "
@@ -9083,6 +9299,8 @@ msgid ""
 "The %{name} causes your lightning spells to do %{count} percent more damage "
 "to enemy troops."
 msgstr ""
+"A %{name} %{count} százalékkal megnöveli a villám-varázslataid hatásosságát "
+"az ellenséges csapatokon."
 
 msgid ""
 "While waiting out a storm, a lighting bolt strikes a nearby cottage's "
@@ -9095,7 +9313,7 @@ msgid "Snake-Ring"
 msgstr "Kígyógyűrű"
 
 msgid "The %{name} halves the casting cost of all your bless spells."
-msgstr ""
+msgstr "A %{name} felére csökkenti az áldás varázslat varázslatpont-igényét."
 
 msgid ""
 "You've found an oddly shaped ring on the finger of a long dead traveler. The "
@@ -9108,7 +9326,7 @@ msgstr "Ankh"
 msgid ""
 "The %{name} doubles the effectiveness of all your resurrect and animate "
 "spells."
-msgstr ""
+msgstr "A %{name} megduplázza a feltámasztó varázslatok hatásosságát."
 
 msgid ""
 "A fierce windstorm reveals the entrance to a buried tomb. Your investigation "
@@ -9120,7 +9338,7 @@ msgid "Book of Elements"
 msgstr "Elemek Könyve"
 
 msgid "The %{name} doubles the effectiveness of all your summoning spells."
-msgstr ""
+msgstr "A %{name} megduplázza az idéző varázslatok hatásosságát."
 
 msgid ""
 "You come across a conjurer who begs to accompany you and your army awhile "
@@ -9132,7 +9350,7 @@ msgid "Elemental Ring"
 msgstr "Elemi Gyűrű"
 
 msgid "The %{name} halves the casting cost of all summoning spells."
-msgstr ""
+msgstr "A %{name} felére csökkenti az idéző varázslatok varázslatpont-igényét."
 
 msgid ""
 "While pausing to rest, you notice a bobcat climbing a short tree to get at a "
@@ -9144,7 +9362,7 @@ msgid "Holy Pendant"
 msgstr "Szent Nyakék"
 
 msgid "The %{name} makes all your troops immune to curse spells."
-msgstr ""
+msgstr "A %{name} immunissá teszi a csapataidat az átok varázslatra."
 
 msgid ""
 "In your wanderings you come across a hermit living in a small, tidy hut. "
@@ -9156,7 +9374,7 @@ msgid "Pendant of Free Will"
 msgstr "Szabad Akarat Nyakék"
 
 msgid "The %{name} makes all your troops immune to hypnotize spells."
-msgstr ""
+msgstr "A %{name} immunissá teszi a csapataidat a hipnózis varázslatra."
 
 msgid ""
 "Responding to cries for help, you find river Sprites making a sport of "
@@ -9169,7 +9387,7 @@ msgid "Pendant of Life"
 msgstr "Élet Nyakék"
 
 msgid "The %{name} makes all your troops immune to death spells."
-msgstr ""
+msgstr "A %{name} immunissá teszi a csapataidat a halál varázslatokra."
 
 msgid ""
 "A brief roadside encounter with a small caravan and a game of knucklebones "
@@ -9178,10 +9396,10 @@ msgid ""
 msgstr ""
 
 msgid "Serenity Pendant"
-msgstr "Tisztaság Nyakék"
+msgstr "Higgadtság nyakék"
 
 msgid "The %{name} makes all your troops immune to berserk spells."
-msgstr ""
+msgstr "A %{name} immunissá teszi a csapataidat az őrjöngés varázslatra."
 
 msgid ""
 "The sounds of combat draw you to the scene of a fight between an old "
@@ -9194,7 +9412,7 @@ msgid "Seeing-eye Pendant"
 msgstr "Látás Nyakék"
 
 msgid "The %{name} makes all your troops immune to blindness spells."
-msgstr ""
+msgstr "A %{name} immunissá teszi a csapataidat a vakítás varázslatra."
 
 msgid ""
 "You come upon a very old woman, long blind from cataracts and dying alone. "
@@ -9204,10 +9422,10 @@ msgid ""
 msgstr ""
 
 msgid "Kinetic Pendant"
-msgstr "Mozgás Nyakék"
+msgstr "Eleven nyakék"
 
 msgid "The %{name} makes all your troops immune to paralyze spells."
-msgstr ""
+msgstr "A %{name} immunissá teszi a csapataidat a paralízis varázslatra."
 
 msgid ""
 "You come across a golem wearing a glowing pendant and blocking your way. "
@@ -9219,7 +9437,7 @@ msgid "Pendant of Death"
 msgstr "Halál Nyakék"
 
 msgid "The %{name} makes all your troops immune to holy spells."
-msgstr ""
+msgstr "A %{name} immunissá teszi a csapataidat a szent varázslatokra."
 
 msgid ""
 "A quick and deadly battle with a Necromancer wins you his magical pendant. "
@@ -9231,7 +9449,7 @@ msgid "Wand of Negation"
 msgstr "Tagadás Pálca"
 
 msgid "The %{name} makes all your troops immune to dispel magic spells."
-msgstr ""
+msgstr "A %{name} megvédi a csapataidat a varázslatoszlató varázslattól."
 
 msgid ""
 "You meet an old Wizard friend of yours traveling in the opposite direction. "
@@ -9242,11 +9460,12 @@ msgstr ""
 msgid "Golden Bow"
 msgstr "Arany Íj"
 
-#, fuzzy
 msgid ""
 "The %{name} eliminates the %{count} percent penalty for your troops shooting "
 "past obstacles (e.g. castle walls)."
-msgstr "Az Arany Íj eltörli az 50%-os távolsági büntetést."
+msgstr ""
+"A(z) %{name} eltörli a(z) %{count} százalékos távolsági lövés büntetést "
+"tereptárgyakon, várfalakon keresztül."
 
 msgid ""
 "A chance meeting with a famous Archer finds you in a game of knucklebones "
@@ -9260,6 +9479,8 @@ msgid ""
 "The %{name} increases the amount of terrain your hero reveals when "
 "adventuring by %{count} extra square."
 msgstr ""
+"A(z) %{name} %{count} egységgel megnöveli a hős által felfedett terület "
+"nagyságát."
 
 msgid ""
 "A merchant from far away lands trades you a new invention of his people for "
@@ -9275,7 +9496,7 @@ msgstr "Politikus Pennája"
 msgid ""
 "The %{name} reduces the cost of surrender to %{count} percent of the total "
 "cost of troops you have in your army."
-msgstr ""
+msgstr "A(z) %{name} %{count} százalékkal csökkenti a megadás költségét."
 
 msgid ""
 "You pause to help a diplomat with a broken axle fix his problem. In "
@@ -9287,7 +9508,7 @@ msgid "Wizard's Hat"
 msgstr "Varázslósüveg"
 
 msgid "The %{name} increases the duration of your spells by %{count} turns."
-msgstr ""
+msgstr "A(z) %{name} megnöveli a varázslataid hatóidejét %{count} körrel."
 
 msgid ""
 "You see a Wizard fleeing from a Griffin and riding like the wind. The Wizard "
@@ -9299,10 +9520,10 @@ msgstr ""
 msgid "Power Ring"
 msgstr "Hatalom gyűrűje"
 
-#, fuzzy
 msgid "The %{name} returns %{count} extra spell points per day to your hero."
 msgstr ""
-"A Hatalom Gyűrűje naponta 2 ponttal növeli a hősöd lecsökkent varázserejét."
+"A(z) %{name} naponta %{count} ponttal tölti vissza a hősöd lecsökkent "
+"varázserejét."
 
 msgid ""
 "You find a small tree that closely resembles the great Warlock Carnauth with "
@@ -9312,10 +9533,10 @@ msgid ""
 msgstr ""
 
 msgid "Ammo Cart"
-msgstr ""
+msgstr "Lőszeres kordé"
 
 msgid "The %{name} provides endless ammunition for all your troops that shoot."
-msgstr ""
+msgstr "A(z) %{name} végtelen lőszert ad a távolsági lövő egységeidnek."
 
 msgid ""
 "An ammunition cart in the middle of an old battlefield catches your eye. "
@@ -9325,9 +9546,8 @@ msgstr ""
 msgid "Tax Lien"
 msgstr "Adóteher"
 
-#, fuzzy
 msgid "The %{name} costs you %{count} gold pieces per day."
-msgstr "A Végtelen Érccsille napi 1 ércet biztosít neked."
+msgstr "A(z) %{name} napi %{count} aranyba kerül neked."
 
 msgid ""
 "Your big spending habits have earned you a massive tax bill that you can't "
@@ -9341,6 +9561,7 @@ msgstr "Förtelmes Maszk"
 
 msgid "The %{name} prevents all 'wandering' armies from joining your hero."
 msgstr ""
+"A(z) %{name} megakadályozza a kósza lények csatlakozását a csapatodhoz."
 
 msgid ""
 "Your looting of the grave of Sinfilas Gardolad, the famous shapeshifting "
@@ -9353,7 +9574,7 @@ msgid "Endless Pouch of Sulfur"
 msgstr "Végtelen Kénzacskó"
 
 msgid "The %{name} provides %{count} unit of sulfur per day."
-msgstr ""
+msgstr "A(z) %{name} napi %{count} ként biztosít neked."
 
 msgid ""
 "You visit an alchemist who, upon seeing your army, is swayed by the "
@@ -9362,10 +9583,10 @@ msgid ""
 msgstr ""
 
 msgid "Endless Vial of Mercury"
-msgstr "Végtelen Higanyzacskó"
+msgstr "Végtelen Higanyfiola"
 
 msgid "The %{name} provides %{count} unit of mercury per day."
-msgstr ""
+msgstr "A(z) %{name} napi %{count} higanyt biztosít neked."
 
 msgid ""
 "A brief stop at a hastily abandoned Wizard's tower turns up a magical vial "
@@ -9374,10 +9595,10 @@ msgid ""
 msgstr ""
 
 msgid "Endless Pouch of Gems"
-msgstr "Végtelen Drágakőzacskó"
+msgstr "Végtelen Drágakőerszény"
 
 msgid "The %{name} provides %{count} unit of gems per day."
-msgstr ""
+msgstr "A(z) %{name} napi %{count} drágakövet biztosít neked."
 
 msgid ""
 "A short rainstorm brings forth a rainbow...and you can see the end of it. "
@@ -9390,7 +9611,7 @@ msgid "Endless Cord of Wood"
 msgstr "Végtelen Fahalom"
 
 msgid "The %{name} provides %{count} unit of wood per day."
-msgstr ""
+msgstr "A(z) %{name} napi %{count} fát biztosít neked."
 
 msgid ""
 "Pausing to rest and light a cook fire, you pull wood out of a nearby pile of "
@@ -9403,7 +9624,7 @@ msgid "Endless Cart of Ore"
 msgstr "Végtelen Érccsille"
 
 msgid "The %{name} provides %{count} unit of ore per day."
-msgstr ""
+msgstr "A(z) %{name} napi %{count} ércet biztosít neked."
 
 msgid ""
 "You've found a Goblin weapon smithy making weapons for use against humans. "
@@ -9414,9 +9635,8 @@ msgstr ""
 msgid "Endless Pouch of Crystal"
 msgstr "Végtelen Kristályzacskó"
 
-#, fuzzy
 msgid "The %{name} provides %{count} unit of crystal per day."
-msgstr "A Végtelen Érccsille napi 1 ércet biztosít neked."
+msgstr "A(z) %{name} napi %{count} kristályt biztosít neked."
 
 msgid ""
 "Taking shelter from a storm in a small cave, you notice a small patch of "
@@ -9466,35 +9686,32 @@ msgid "Magic Book"
 msgstr "Varázskönyv"
 
 msgid "The %{name} enables you to cast spells."
-msgstr ""
+msgstr "A(z) %{name} lehetővé teszi varázslatok megidézését."
 
-#, fuzzy
 msgid "Dummy 1"
-msgstr "Scummy"
+msgstr "Próba 1"
 
-#, fuzzy
 msgid "The reserved artifact."
-msgstr " egy varázstárggyal"
+msgstr "A félretett varázstárgy."
 
-#, fuzzy
 msgid "Dummy 2"
-msgstr "Scummy"
+msgstr "Próba 2"
 
-#, fuzzy
 msgid "Dummy 3"
-msgstr "Scummy"
+msgstr "Próba 3"
 
-#, fuzzy
 msgid "Dummy 4"
-msgstr "Scummy"
+msgstr "Próba 4"
 
 msgid "Spell Scroll"
-msgstr "Varázstekercs"
+msgstr "Varázsige tekercs"
 
 msgid ""
 "This %{name} gives your hero the ability to cast the %{spell} spell if your "
 "hero has a Magic Book."
 msgstr ""
+"A %{name} lehetővé teszi a %{spell} varázslat használatát, ha van "
+"varázskönyved."
 
 msgid ""
 "You find an elaborate container which houses an old vellum scroll. The runes "
@@ -9504,12 +9721,14 @@ msgid ""
 msgstr ""
 
 msgid "Arm of the Martyr"
-msgstr ""
+msgstr "Mártír keze"
 
 msgid ""
 "The %{name} increases your spell power by %{count} but adds the undead "
 "morale penalty."
 msgstr ""
+"A %{name} %{count} ponttal növeli a varázserődet, de büntetésként élőhalott "
+"morált ad."
 
 msgid ""
 "One of the less intelligent members of your party picks up an arm off of the "
@@ -9523,7 +9742,7 @@ msgid "Breastplate of Anduran"
 msgstr "Anduran Mellvértje"
 
 msgid "The %{name} increases your defense by %{count}."
-msgstr ""
+msgstr "A %{name} %{count} ponttal növeli a védekezőképességedet."
 
 msgid ""
 "You come upon a sign. It reads: \"Here lies the body of Anduran. Bow and "
@@ -9533,18 +9752,23 @@ msgid ""
 msgstr ""
 
 msgid "Broach of Shielding"
-msgstr ""
+msgstr "Védelem Mellcsat"
 
 msgid ""
 "The %{name} provides %{count} percent protection from Armageddon and "
 "Elemental Storm, but decreases spell power by 2."
 msgstr ""
+"A %{name} %{count} százalék védelmet nyújt az Armageddon és az Elemi vihar "
+"varázslatok ellen, ugyanakkor kettővel csökkenti a varázserőt."
 
 msgid ""
 "A kindly Sorceress thinks that your army's defenses could use a magical "
 "boost. She offers to enchant the Broach that you wear on your cloak, and you "
 "accept."
 msgstr ""
+"Egy barátságos varázslónő úgy véli, hogy seregednek hasznára lehet a mágia "
+"elleni védelmének a megerősítése. Felajánlja, hogy a köpenyed mellcsatját "
+"védelmező varázstárggyá változtatja. Elfogadod az ajánlatot."
 
 msgid "Battle Garb of Anduran"
 msgstr "Anduran Harci Pajzsa"
@@ -9553,6 +9777,8 @@ msgid ""
 "The %{name} combines the powers of the three Anduran artifacts. It provides "
 "maximum luck and morale for your troops and gives you the Town Portal spell."
 msgstr ""
+"A %{name} összekapcsolja a három Anduran varázstárgy erejét. Maximum "
+"szerencsét és morált, valamint Városkapu varázslatot ad."
 
 msgid ""
 "Out of pity for a poor peasant, you purchase a chest of old junk they are "
@@ -9561,12 +9787,14 @@ msgid ""
 msgstr ""
 
 msgid "Crystal Ball"
-msgstr "Kristály Gömb"
+msgstr "Kristálygömb"
 
 msgid ""
 "The %{name} lets you get more specific information about monsters, enemy "
 "heroes, and castles nearby the hero who holds it."
 msgstr ""
+"A %{name} sokkal pontosabb információkat nyújt az azt viselő hős "
+"környezetében lévő lényekről, kastélyokról, hősökről."
 
 msgid ""
 "You come upon a caravan of gypsies who are feasting and fortifying their "
@@ -9583,6 +9811,8 @@ msgid ""
 "The %{name} provides %{count} percent protection from fire, but doubles the "
 "damage taken from cold."
 msgstr ""
+"A %{name} %{count} százalékos védelmet nyújt a tűzvarázslatok ellen, de "
+"duplázza a sebzést a fagyvarázslatoktól."
 
 msgid ""
 "You enter a recently burned glade and come upon a Fire Elemental sitting "
@@ -9598,6 +9828,8 @@ msgid ""
 "The %{name} provides %{count} percent protection from cold, but doubles the "
 "damage taken from fire."
 msgstr ""
+"A %{name} %{count} százalékos védelmet nyújt a fagyvarázslatok ellen, de "
+"duplázza a sebzést a tűzvarázslatoktól."
 
 msgid ""
 "Suddenly, a biting coldness engulfs your body. You seize up, falling from "
@@ -9628,10 +9860,10 @@ msgid ""
 msgstr ""
 
 msgid "Legendary Scepter"
-msgstr ""
+msgstr "Legendás jogar"
 
 msgid "The %{name} adds %{count} points to all attributes."
-msgstr ""
+msgstr "A %{name} %{count} ponttal növeli az összes képességedet."
 
 msgid ""
 "Upon cresting a small hill, you come upon a ridiculous looking sight. A "
@@ -9649,16 +9881,18 @@ msgid ""
 msgstr ""
 
 msgid "Masthead"
-msgstr ""
+msgstr "Árbóc"
 
 msgid "The %{name} boosts your luck and morale by %{count} each in sea combat."
 msgstr ""
+"A %{name} %{count} ponttal növeli mind a szerencsédet, mind pedig a "
+"morálodat tengeri ütközetben."
 
 msgid "Sphere of Negation"
 msgstr "Tagadás Gömbje"
 
 msgid "The %{name} disables all spell casting, for both sides, in combat."
-msgstr ""
+msgstr "A %{name} megakadályozza, hogy a háborúzó felek varázsolhassanak."
 
 msgid ""
 "You stop to help a Peasant catch a runaway mare. To show his gratitude, he "
@@ -9670,7 +9904,7 @@ msgid "Staff of Wizardry"
 msgstr "Varázsjogar"
 
 msgid "The %{name} boosts your spell power by %{count}."
-msgstr ""
+msgstr "A %{name} %{count} ponttal növeli a varázserődet."
 
 msgid ""
 "While out scaring up game, your troops find a mysterious staff levitating "
@@ -9680,15 +9914,17 @@ msgid ""
 msgstr ""
 
 msgid "Sword Breaker"
-msgstr ""
+msgstr "Kardtörő"
 
 msgid "The %{name} increases your defense by %{count} and attack by 1."
-msgstr ""
+msgstr "A(z) %{name} eggyel növeli a támadó- és %{count} ponttal a védőerődet."
 
 msgid ""
 "A former Captain of the Guard admires your quest and gives you the enchanted "
 "Sword Breaker that he relied on during his tour of duty."
 msgstr ""
+"A korábbi Őrkapitány küldetésed nagyrabecsülése jeléül átadja neked ezt a "
+"nagyszerű Kardtörőt, melyet szolgálati ideje alatt videlt."
 
 msgid "Sword of Anduran"
 msgstr "Anduran Kardja"
@@ -9700,21 +9936,29 @@ msgid ""
 "sword, you give thanks that half-witted Trolls tend to grab the wrong end of "
 "sharp objects."
 msgstr ""
+"Egy troll megállít és ezt mondja: \"Fizess 5000 aranyat, különben Anduran "
+"Kardja menten kettéhasít.\" Elutasítod. Erre a troll megragadja az övén lógó "
+"kardot és rögtön felordít a fájdalomtól, majd elszalad. Felveszed a mesés "
+"kardot és hálát adsz, amiért ezek a féleszű trollok az élénél fogják meg az "
+"éles tárgyakat."
 
 msgid "Spade of Necromancy"
-msgstr "Nekromancia Ásó"
+msgstr "Nekromancia sírásó lapát"
 
 msgid "The %{name} gives you increased necromancy skill."
-msgstr ""
+msgstr "A %{name} fokozza a Nekromancia képességedet."
 
 msgid ""
 "A dirty shovel has been thrust into a dirt mound nearby. Upon investigation, "
 "you discover it to be the enchanted shovel of the Gravediggers, long thought "
 "lost by mortals."
 msgstr ""
+"Egy koszos ásólapátot szúrtak egy közeli sárhalomba. Tüzetesen megvizsgálod "
+"és felismered, hogy ez a Sírásók ásólapátja, melyről régóta azt hitték, hogy "
+"elvesztették a halandók."
 
 msgid "spellBonus|selected by user"
-msgstr ""
+msgstr "kiválasztva"
 
 msgid "Wood"
 msgstr "Fa"
@@ -9732,7 +9976,7 @@ msgid "Crystal"
 msgstr "Kristály"
 
 msgid "Gems"
-msgstr "Drágakövek"
+msgstr "Drágakő"
 
 msgid "Gold"
 msgstr "Arany"
@@ -9744,6 +9988,10 @@ msgid ""
 "Mercury, Sulfur and Crystal are rare magical resources used for the most "
 "powerful creatures and buildings."
 msgstr ""
+"Hét erőforrás van a Heroes 2-ben, melyeket építésre, csapatok vásárlására, "
+"hősök toborzására lehet használni. Az Arany a legáltalánosabb, mely szinte "
+"mindenhez szükséges. A Fa és Érc használatos a legtöbb épülethez. A Drágakő, "
+"a Higany és a Kristály a legerősebb teremtményekhez, vagy építményekhez kell."
 
 msgid ""
 "Causes a giant fireball to strike the selected area, damaging all nearby "
@@ -9752,7 +10000,7 @@ msgstr ""
 "Egy hatalmas tűzgolyó robban a területen, megsebesítvén a közeli lényeket."
 
 msgid "Fireball"
-msgstr ""
+msgstr "Tűzgolyó"
 
 msgid "Fireblast"
 msgstr "Tűzlabda"
@@ -9765,7 +10013,7 @@ msgstr ""
 "területen hat."
 
 msgid "Causes a bolt of electrical energy to strike the selected creature."
-msgstr "Elektromos villámcsapást okoz a kiválasztott lényen."
+msgstr "Villámcsapást okoz a kiválasztott lényen."
 
 msgid "Lightning Bolt"
 msgstr "Villám"
@@ -9773,16 +10021,15 @@ msgstr "Villám"
 msgid "Chain Lightning"
 msgstr "Láncvillám"
 
-#, fuzzy
 msgid ""
 "Causes a bolt of electrical energy to strike a selected creature, then "
 "strike the nearest creature with half damage, then strike the NEXT nearest "
 "creature with half again damage, and so on, until it becomes too weak to be "
 "harmful. Warning: This spell can hit your own creatures!"
 msgstr ""
-"Elektromos villámcsapást okoz a kiválasztott lényen, majd a legközelebbin "
-"feleakkora sebzéssel, és így tovább mindaddig,amig el nem fogy az energiája. "
-"Vigyázat: ez a varázslat saját egységet is sebezhet!"
+"Villámcsapások láncolatát okozza a kiválasztott lénytől kezdődően, aztán a "
+"hozzá LEGKÖZELEBBIN feleakkora sebzéssel, és így tovább mindaddig, amíg el "
+"nem fogy az energiája. Vigyázat: ez a varázslat saját egységet is sebezhet!"
 
 msgid "Teleport"
 msgstr "Teleportálás"
@@ -9798,6 +10045,8 @@ msgid ""
 "Removes all negative spells cast upon one of your units, and restores up to "
 "%{count} HP per level of spell power."
 msgstr ""
+"Elűz minden negatív varázslatot egy egységedről és a varázserőd mértéke "
+"függvényében visszaállít %{count} életerőt."
 
 msgid "Mass Cure"
 msgstr "Tömeges Gyógyítás"
@@ -9806,36 +10055,39 @@ msgid ""
 "Removes all negative spells cast upon your forces, and restores up to "
 "%{count} HP per level of spell power, per creature."
 msgstr ""
+"Elűz minden negatív varázslatot az egységeidről és a varázserőd mértéke "
+"függvényében visszaállít %{count} életerőt."
 
 msgid "Resurrect"
 msgstr "Feltámasztás"
 
 msgid "Resurrects creatures from a damaged or dead unit until end of combat."
 msgstr ""
+"A csata végéig feltámaszt teremtményeket halott vagy sérült egységekből."
 
 msgid "Resurrect True"
 msgstr "Valódi feltámasztás"
 
 msgid "Resurrects creatures from a damaged or dead unit permanently."
-msgstr ""
+msgstr "Maradandóan feltámaszt teremtményeket halott vagy sérült egységekből."
 
 msgid "Haste"
 msgstr "Gyorsítás"
 
 msgid "Increases the speed of any creature by %{count}."
-msgstr ""
+msgstr "%{count} ponttal növeli bármely lény sebességét."
 
 msgid "Increases the speed of all of your creatures by %{count}."
-msgstr ""
+msgstr "%{count} ponttal növeli az összes lény sebességét."
 
 msgid "Mass Haste"
 msgstr "Teljes Gyorsítás"
 
 msgid "Slows target to half movement rate."
-msgstr ""
+msgstr "Felére lassítja a kiválasztott lény sebességét."
 
 msgid "spell|Slow"
-msgstr ""
+msgstr "Lassítás"
 
 msgid "Mass Slow"
 msgstr "Teljes Lassítás"
@@ -9844,19 +10096,19 @@ msgid "Slows all enemies to half movement rate."
 msgstr "Felezi az összes ellenség sebességét."
 
 msgid "Clouds the affected creatures' eyes, preventing them from moving."
-msgstr ""
+msgstr "Elhomályosítja az érintett lény látását és megakadályozza a mozgásban."
 
 msgid "spell|Blind"
-msgstr ""
+msgstr "Vakítás"
 
 msgid "Bless"
 msgstr "Áldás"
 
 msgid "Causes the selected creatures to inflict maximum damage."
-msgstr ""
+msgstr "Maximális sebzést ad a kiválasztott lényeknek."
 
 msgid "Causes all of your units to inflict maximum damage."
-msgstr ""
+msgstr "Maximális sebzést ad az összes saját egységed."
 
 msgid "Mass Bless"
 msgstr "Teljes Áldás"
@@ -9867,7 +10119,6 @@ msgstr "A kiválasztott lény védőereje varázslatosan növekszik."
 msgid "Stoneskin"
 msgstr "Kőbőr"
 
-#, fuzzy
 msgid ""
 "Increases the defense skill of the targeted creatures. This is an improved "
 "version of Stoneskin."
@@ -9878,24 +10129,23 @@ msgid "Steelskin"
 msgstr "Acélbőr"
 
 msgid "Causes the selected creatures to inflict minimum damage."
-msgstr ""
+msgstr "Minimálisra csökkenti a kiválasztott lények sebzését."
 
 msgid "Curse"
 msgstr "Átok"
 
 msgid "Causes all enemy troops to inflict minimum damage."
-msgstr ""
+msgstr "Minimálisra csökkenti az összes ellenséges lény sebzését."
 
 msgid "Mass Curse"
 msgstr "Teljes Átok"
 
 msgid "Damages all undead in the battle."
-msgstr ""
+msgstr "Megsebzi az összes élőhalott egységet a csatában."
 
 msgid "Holy Word"
 msgstr "Szent Ige"
 
-#, fuzzy
 msgid ""
 "Damages all undead in the battle. This is an improved version of Holy Word."
 msgstr ""
@@ -9910,18 +10160,19 @@ msgstr "Antimágia"
 
 msgid "Prevents harmful magic against the selected creatures."
 msgstr ""
+"Megakadályozza a kártékony varázslatok idézését a kiválasztott egységeken."
 
 msgid "Dispel Magic"
 msgstr "Varázslatűzés"
 
 msgid "Removes all magic spells from a single target."
-msgstr ""
+msgstr "Eloszlat minden varászlatot a kiválasztott egységről."
 
 msgid "Mass Dispel"
 msgstr "Teljes Varázslatűzés"
 
 msgid "Removes all magic spells from all creatures."
-msgstr ""
+msgstr "Eloszlat minden varászlatot minden lényről."
 
 msgid "Causes a magic arrow to strike the selected target."
 msgstr "Varázsnyillal mér csapást a kiválasztott célpontra."
@@ -9930,7 +10181,7 @@ msgid "Magic Arrow"
 msgstr "Varázsnyíl"
 
 msgid "Berserker"
-msgstr ""
+msgstr "Őrjöngés"
 
 msgid "Causes a creature to attack its nearest neighbor."
 msgstr "A lény megtámadja a legközelebbi szomszédját."
@@ -9946,12 +10197,12 @@ msgid "Elemental Storm"
 msgstr "Elemi Vihar"
 
 msgid "Magical elements pour down on the battlefield, damaging all creatures."
-msgstr ""
+msgstr "Varázslat zúdul a csatatérre és minden lény sebződik."
 
 msgid ""
 "A rain of rocks strikes an area of the battlefield, damaging all nearby "
 "creatures."
-msgstr ""
+msgstr "Kőeső zúdul a csatatérre és minden lényt megsebez a közelben."
 
 msgid "Meteor Shower"
 msgstr "Meteoreső"
@@ -9969,12 +10220,14 @@ msgid ""
 "Brings a single enemy unit under your control if its hits are less than "
 "%{count} times the caster's spell power."
 msgstr ""
+"Átadja egy ellenséges egység irányítását, ha ütőereje kisebb, mint a "
+"varázserőd %{count}-szorosa."
 
 msgid "Cold Ray"
 msgstr "Jégsugár"
 
 msgid "Drains body heat from a single enemy unit."
-msgstr ""
+msgstr "Testhőt von el a kiválasztott ellenséges egységből."
 
 msgid "Cold Ring"
 msgstr "Jéggyűrű"
@@ -9983,6 +10236,7 @@ msgid ""
 "Drains body heat from all units surrounding the center point, but not "
 "including the center point."
 msgstr ""
+"Testhőt von el minden szomszédos egységből, kivéve a középpontban állót."
 
 msgid "Disrupting Ray"
 msgstr "Gyengítő Sugár"
@@ -9999,12 +10253,11 @@ msgstr "Halállökés"
 msgid "Death Wave"
 msgstr "Halálhullám"
 
-#, fuzzy
 msgid ""
 "Damages all living (non-undead) units in the battle. This spell is an "
 "improved version of Death Ripple."
 msgstr ""
-"Megsebesít minden élőt (nem az élőhalottat) a csatában. Ez a varázslat a "
+"Megsebesít minden élőt (nem élőhalottat) a csatában. Ez a varázslat a "
 "Halállökés egy fejlettebb változata."
 
 msgid "Dragon Slayer"
@@ -10023,38 +10276,40 @@ msgid "Animate Dead"
 msgstr "Feltámasztás"
 
 msgid "Resurrects creatures from a damaged or dead undead unit permanently."
-msgstr ""
+msgstr "Maradandóan feltámaszt teremtményeket halott vagy sérült egységekből."
 
 msgid "Mirror Image"
 msgstr "Tükörkép"
 
-#, fuzzy
 msgid ""
 "Creates an illusionary unit that duplicates one of your existing units. This "
 "illusionary unit does the same damages as the original, but will vanish if "
 "it takes any damage."
 msgstr ""
-"Egy kiválasztott létező egységedről készít egy illúzió másolatot. Az illúzió "
-"ugyanakkora erővel támad, mint az eredeti, de bármilyen sebzés következtében "
-"eltűnik."
+"Egy kiválasztott létező egységedről készít egy hamis másolatot. Az illúzió "
+"ugyanakkora erővel támad, mint az eredeti, de bármekkora sebzés "
+"következtében eltűnik."
 
 msgid "Shield"
 msgstr "Pajzs"
 
-#, fuzzy
 msgid ""
 "Halves damage received from ranged attacks for a single unit. Does not "
 "affect damage received from Turrets or Ballistae."
-msgstr "Felére csökkenti a távolsági sebzéseket egy kiválasztott egységnek."
+msgstr ""
+"Felére csökkenti a kiválasztott egység sérülékenységét a távolsági "
+"lövésektől. Ez nem vonatkozik a vártornyok, illetve a hajítógép által "
+"okozott sérülésekre."
 
 msgid "Mass Shield"
 msgstr "Teljes Pajzs"
 
-#, fuzzy
 msgid ""
 "Halves damage received from ranged attacks for all of your units. Does not "
 "affect damage received from Turrets or Ballistae."
-msgstr "Felére csökkenti a távolsági sebzéseket minden egységnek."
+msgstr ""
+"Felére csökkenti minden egység sérülékenységét a távolsági lövésektől. Ez "
+"nem vonatkozik a vártornyok, illetve a hajítógép által okozott sérülésekre."
 
 msgid "Summon Earth Elemental"
 msgstr "Földelementál idézése"
@@ -10081,7 +10336,7 @@ msgid "Summons Water Elementals to fight for your army."
 msgstr "Megidézett Vízelementálok segítenek a harcban."
 
 msgid "Damages castle walls."
-msgstr "Megsebzi a kastély falait."
+msgstr "Rombolja a vár falait."
 
 msgid "Earthquake"
 msgstr "Földrengés"
@@ -10099,13 +10354,13 @@ msgid "View Resources"
 msgstr "Nyersaanyagok mutatása"
 
 msgid "Causes all artifacts across the land to become visible."
-msgstr ""
+msgstr "Minden varázstárgyat megmutat a vidéken."
 
 msgid "View Artifacts"
 msgstr "Varázstárgyak mutatása"
 
 msgid "Causes all towns and castles across the land to become visible."
-msgstr "A környék összes városa és kastélyja látható."
+msgstr "A környék összes városa és vára látható."
 
 msgid "View Towns"
 msgstr "Városok mutatása"
@@ -10133,9 +10388,13 @@ msgid ""
 "A friendly boat is one which you just built or were the most recent player "
 "to occupy."
 msgstr ""
+"Megidézi egy közeli partra a legközelebbi használaton kívüli baráti "
+"tulajdonban lévő hajót. Baráti hajó az, amit te építettél, vagy hősöd "
+"használt legutóbb."
 
 msgid "Allows the caster to magically transport to a nearby location."
 msgstr ""
+"Lehetővé teszi a megidéző számára, hogy egy közeli helyre teleportáljon."
 
 msgid "Dimension Door"
 msgstr "Dimenziókapu"
@@ -10159,12 +10418,14 @@ msgid ""
 msgstr "Megjósolja az összecsapás kimenetelét egy semleges csapattal szemben."
 
 msgid "Haunt"
-msgstr ""
+msgstr "Bánya elátkozás"
 
 msgid ""
 "Haunts a mine you control with Ghosts. This mine stops producing resources. "
 "(If I can't keep it, nobody will!)"
 msgstr ""
+"A bánya kísértjárta hellyé válik és nem termel többé. (Ha az enyém nem "
+"lehet, ne legyen másé sem!)"
 
 msgid "Set Earth Guardian"
 msgstr "Földelementál Őr"
@@ -10190,66 +10451,63 @@ msgstr "Vízelementál Őr"
 msgid "Sets Water Elementals to guard a mine against enemy armies."
 msgstr "Vízelementálok beállítása bányaőrzőnek."
 
-#, fuzzy
 msgid "Random Spell"
-msgstr "Véletlenszerű város"
+msgstr "Véletlenszerű varázslat"
 
 msgid "Randomly selected spell of any level."
-msgstr ""
+msgstr "Véletlenszerűen kiválasztott bármilyen szintű varázslat."
 
-#, fuzzy
 msgid "Random 1st Level Spell"
-msgstr "Véletlenszerű kastély"
+msgstr "Véletlenszerű 1. szintű varázslat"
 
 msgid "Randomly selected 1st level spell."
-msgstr ""
+msgstr "Véletlenszerűen kiválasztott 1. szintű varázslat."
 
 msgid "Random 2nd Level Spell"
-msgstr ""
+msgstr "Véletlenszerű 2. szintű varázslat"
 
 msgid "Randomly selected 2nd level spell."
-msgstr ""
+msgstr "Véletlenszerűen kiválasztott 2. szintű varázslat."
 
 msgid "Random 3rd Level Spell"
-msgstr ""
+msgstr "Véletlenszerű 3. szintű varázslat"
 
 msgid "Randomly selected 3rd level spell."
-msgstr ""
+msgstr "Véletlenszerűen kiválasztott 3. szintű varázslat."
 
 msgid "Random 4th Level Spell"
-msgstr ""
+msgstr "Véletlenszerű 4. szintű varázslat"
 
 msgid "Randomly selected 4th level spell."
-msgstr ""
+msgstr "Véletlenszerűen kiválasztott 4. szintű varázslat."
 
 msgid "Random 5th Level Spell"
-msgstr ""
+msgstr "Véletlenszerű 5. szintű varázslat"
 
 msgid "Randomly selected 5th level spell."
-msgstr ""
+msgstr "Véletlenszerűen kiválasztott 5. szintű varázslat."
 
-#, fuzzy
 msgid "Petrification"
-msgstr "Erődítmények"
+msgstr "Kővé dermesztés"
 
 msgid ""
 "Turns the affected creature into stone. A petrified creature receives half "
 "damage from a direct attack."
 msgstr ""
+"Kővé dermeszti az érintett lényt. A kővé vált egység fele sebzést szenved "
+"el, ha közvetlenül támadják."
 
 msgid "You have no Magic Book, so you cannot cast a spell."
-msgstr ""
+msgstr "Nincs varázskönyved, így nem tudsz varázsolni."
 
 msgid "No spell to cast."
-msgstr ""
+msgstr "Nincs idézhető varázslat."
 
-#, fuzzy
 msgid "Your hero has %{point} spell points remaining."
 msgstr "A hősödnek van még %{point} varázspontja."
 
-#, fuzzy
 msgid "View Adventure Spells"
-msgstr "Kaland Opciók"
+msgstr "Kaland varázslatok mutatása"
 
 msgid "View Combat Spells"
 msgstr "Csata varázslatok mutatása"
@@ -10269,17 +10527,18 @@ msgstr "%{spell} mutatása"
 msgid "This spell does %{damage} points of damage."
 msgstr "Ez a varázslat %{damage} sebzést okoz."
 
-#, fuzzy
 msgid ""
 "This spell summons\n"
 "%{count} %{monster}."
-msgstr "%{spell} varázslat idézése a(z) %{monster} lényre"
+msgstr ""
+"Megidézett lények:\n"
+"%{count} %{monster}."
 
 msgid "This spell restores %{hp} HP."
 msgstr "A varázslat visszaállít %{hp} életerőt."
 
 msgid "This spell summons %{count} %{monster} to guard the mine."
-msgstr ""
+msgstr "Ez a varázslat %{count} %{monster} őrzőt idéz meg a bánya védelmére."
 
 msgid "The nearest town is %{town}."
 msgstr "A legközelebbi város: %{town}"
@@ -10291,61 +10550,62 @@ msgid ""
 "This spell controls up to\n"
 "%{hp} HP."
 msgstr ""
+"A varázslat %{hp} vagy ez alatti életerővel\n"
+"rendelkező csapatokra van hatással."
 
-#, fuzzy
 msgid "The ultimate artifact is really the %{name}."
-msgstr "A Múmiák átka lesújt a(z) %{name}!"
+msgstr "A legszentebb varázstárgy kétség kívül a %{name}."
 
 msgid "The ultimate artifact may be found in the %{name} regions of the world."
-msgstr ""
+msgstr "A legszentebb varázstárgyat a %{name} régióban találhatod."
 
 msgid "north-west"
-msgstr "észak-nyugat"
+msgstr "észak-nyugati"
 
 msgid "north"
-msgstr "észak"
+msgstr "északi"
 
 msgid "north-east"
-msgstr "észak-kelet"
+msgstr "észak-keleti"
 
 msgid "west"
-msgstr "nyugat"
+msgstr "nyugati"
 
 msgid "center"
-msgstr "közép"
+msgstr "középső"
 
 msgid "east"
-msgstr "kelet"
+msgstr "keleti"
 
 msgid "south-west"
-msgstr "dél-nyugat"
+msgstr "dél-nyugati"
 
 msgid "south"
-msgstr "dél"
+msgstr "déli"
 
 msgid "south-east"
-msgstr "dél-kelet"
+msgstr "dél-keleti"
 
 msgid "The truth is out there."
 msgstr "Az igazság odakint van."
 
 msgid "The dark side is stronger."
-msgstr ""
+msgstr "A sötét oldal erősebb."
 
 msgid "The end of the world is near."
-msgstr ""
+msgstr "Közel a világvége."
 
 msgid "The bones of Lord Slayer are buried in the foundation of the arena."
-msgstr ""
+msgstr "Lord Slayer csontjai az aréna talapzatába vannak eltemetve."
 
 msgid "A Black Dragon will take out a Titan any day of the week."
-msgstr ""
+msgstr "A fekete sárkány titánt eszik reggelire."
 
 msgid "He told her: Yada yada yada... and then she said: Blah, blah, blah..."
-msgstr ""
+msgstr "Azt mondta a férfi: Yada yada yada... erre a nő válasza: blablabla..."
 
 msgid "An unknown force is being resurrected..."
-msgstr ""
+msgstr "Egy titokzatos erő kelt új életre ..."
 
 msgid ""
 "Check the newest version of the game at\n"
@@ -10355,6 +10615,50 @@ msgstr ""
 "Letöltheted a legújabb verziót innen:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Ocean Objects"
+#~ msgstr "Tengeri tárgyak"
+
+#~ msgid "Grass Objects"
+#~ msgstr "Füves tárgyak"
+
+#~ msgid "Snow Objects"
+#~ msgstr "Havas tárgyak"
+
+#~ msgid "Swamp Objects"
+#~ msgstr "Mocsári tárgyak"
+
+#~ msgid "Lava Objects"
+#~ msgstr "Láva tárgyak"
+
+#~ msgid "Desert Objects"
+#~ msgstr "Sivatagi tárgyak"
+
+#~ msgid "Dirt Objects"
+#~ msgstr "Talaj tárgyak"
+
+#~ msgid "Beach Objects"
+#~ msgstr "Tengerparti tárgyak"
+
+#~ msgid "Used to place objects most appropriate for use on %{terrain}."
+#~ msgstr "Tárgyak elhelyezésére használatos, leginkább %{terrain} esetén."
+
+#~ msgid ""
+#~ "Used to place\n"
+#~ "a town or castle."
+#~ msgstr ""
+#~ "Város vagy vár\n"
+#~ "elhelyezésére való."
+
+#~ msgid "Used to place an artifact."
+#~ msgstr "Varázstárgy elhelyezésére való."
+
+#~ msgid ""
+#~ "Used to place\n"
+#~ "a resource or treasure."
+#~ msgstr ""
+#~ "Erőforrás vagy kincs\n"
+#~ "elhelyezésére való."
 
 #~ msgid "%{race1} %{name1}"
 #~ msgstr "%{race1} %{name1}"
