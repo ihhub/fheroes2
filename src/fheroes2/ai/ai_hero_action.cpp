@@ -1642,6 +1642,8 @@ namespace
 
             if ( prisoner ) {
                 prisoner->Recruit( hero.GetColor(), Maps::GetPoint( tileIndex ) );
+
+                AI::OptimizeTroopsOrder( prisoner->GetArmy() );
             }
         }
     }
