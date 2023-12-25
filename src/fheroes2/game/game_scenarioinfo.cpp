@@ -431,6 +431,8 @@ fheroes2::GameMode Game::ScenarioInfo()
         maps.emplace_back( std::move( map ) );
     }
 
+    std::sort( maps.begin(), maps.end(), Maps::FileInfo::sortByMapName );
+
     if ( maps.empty() ) {
         fheroes2::showStandardTextMessage( _( "Warning" ), _( "No maps available!" ), Dialog::OK );
         return fheroes2::GameMode::MAIN_MENU;

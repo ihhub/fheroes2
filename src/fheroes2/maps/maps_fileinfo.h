@@ -68,10 +68,6 @@ namespace Maps
 
         bool readResurrectionMap( std::string filePath, const bool isForEditor );
 
-        bool ReadSAV( std::string filePath );
-
-        static bool FileSorting( const FileInfo & lhs, const FileInfo & rhs );
-
         bool isAllowCountPlayers( int playerCount ) const;
 
         int AllowCompHumanColors() const
@@ -137,6 +133,10 @@ namespace Maps
         }
 
         void Reset();
+
+        static bool sortByFileName( const FileInfo & lhs, const FileInfo & rhs );
+
+        static bool sortByMapName( const FileInfo & lhs, const FileInfo & rhs );
 
         enum VictoryCondition : uint8_t
         {

@@ -82,11 +82,6 @@ namespace
         return li == lhs.end() && ri != rhs.end();
     }
 
-    bool sortByMapNames( const Maps::FileInfo & lhs, const Maps::FileInfo & rhs )
-    {
-        return CaseInsensitiveCompare( lhs.name, rhs.name );
-    }
-
     MapsFileInfoList getValidMaps( const ListFiles & mapFiles, const bool isMultiplayer, const bool isForEditor, const bool isOriginalMapFormat )
     {
         // create a list of unique maps (based on the map file name) and filter it by the preferred number of players
@@ -141,7 +136,7 @@ namespace
             result.emplace_back( std::move( info ) );
         }
 
-        std::sort( result.begin(), result.end(), sortByMapNames );
+        std::sort( result.begin(), result.end(), Maps::FileInfo::sortByMapName );
 
         return result;
     }
@@ -206,13 +201,6 @@ void Maps::FileInfo::Reset()
     worldDay = 0;
     worldWeek = 0;
     worldMonth = 0;
-}
-
-bool Maps::FileInfo::ReadSAV( std::string filePath )
-{
-    Reset();
-
-    return Game::LoadSAV2FileInfo( std::move( filePath ), *this );
 }
 
 bool Maps::FileInfo::readMP2Map( std::string filePath, const bool isForEditor )
@@ -461,9 +449,14 @@ void Maps::FileInfo::FillUnions( const int side1Colors, const int side2Colors )
     }
 }
 
-bool Maps::FileInfo::FileSorting( const FileInfo & lhs, const FileInfo & rhs )
+bool Maps::FileInfo::sortByFileName( const FileInfo & lhs, const FileInfo & rhs )
 {
     return CaseInsensitiveCompare( lhs.filename, rhs.filename );
+}
+
+bool Maps::FileInfo::sortByMapName( const FileInfo & lhs, const FileInfo & rhs )
+{
+    return CaseInsensitiveCompare( lhs.name, rhs.name );
 }
 
 int Maps::FileInfo::KingdomRace( int color ) const

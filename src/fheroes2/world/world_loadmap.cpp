@@ -120,7 +120,7 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
 
     StreamFile fs;
     if ( !fs.open( filename, "rb" ) ) {
-        DEBUG_LOG( DBG_GAME, DBG_WARN, "Map file not found " << filename.c_str() )
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "Map file not found " << filename )
         return false;
     }
 
@@ -132,7 +132,7 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
 
     const size_t totalFileSize = fs.size();
     if ( totalFileSize < MP2::MP2_MAP_INFO_SIZE ) {
-        DEBUG_LOG( DBG_GAME, DBG_WARN, "Map file " << filename.c_str() << " is corrupted" )
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "Map file " << filename << " is corrupted" )
         return false;
     }
 
@@ -182,7 +182,7 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
     const int32_t worldSize = width * height;
 
     if ( totalFileSize < MP2::MP2_MAP_INFO_SIZE + static_cast<size_t>( worldSize ) * MP2::MP2_TILE_STRUCTURE_SIZE + MP2::MP2_ADDON_COUNT_SIZE ) {
-        DEBUG_LOG( DBG_GAME, DBG_WARN, "Map file " << filename.c_str() << " is corrupted" )
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "Map file " << filename << " is corrupted" )
         return false;
     }
 
@@ -195,7 +195,7 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
 
     if ( totalFileSize < MP2::MP2_MAP_INFO_SIZE + static_cast<size_t>( worldSize ) * MP2::MP2_TILE_STRUCTURE_SIZE + addonCount * MP2::MP2_ADDON_STRUCTURE_SIZE
                              + MP2::MP2_ADDON_COUNT_SIZE ) {
-        DEBUG_LOG( DBG_GAME, DBG_WARN, "Map file " << filename.c_str() << " is corrupted" )
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "Map file " << filename << " is corrupted" )
         return false;
     }
 
@@ -276,7 +276,7 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
     fs.seek( afterAddonInfoPos );
 
     if ( totalFileSize < afterAddonInfoPos + static_cast<size_t>( MP2::MP2_CASTLE_COUNT * MP2::MP2_CASTLE_POSITION_SIZE ) ) {
-        DEBUG_LOG( DBG_GAME, DBG_WARN, "Map file " << filename.c_str() << " is corrupted" )
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "Map file " << filename << " is corrupted" )
         return false;
     }
 
@@ -338,7 +338,7 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
     if ( totalFileSize
          < afterAddonInfoPos
                + static_cast<size_t>( MP2::MP2_CASTLE_COUNT * MP2::MP2_CASTLE_POSITION_SIZE + MP2::MP2_CAPTURE_OBJECT_COUNT * MP2::MP2_CAPTURE_OBJECT_POSITION_SIZE ) ) {
-        DEBUG_LOG( DBG_GAME, DBG_WARN, "Map file " << filename.c_str() << " is corrupted" )
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "Map file " << filename << " is corrupted" )
         return false;
     }
 
@@ -403,7 +403,7 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
         const uint32_t h = fs.get();
 
         if ( fs.tell() == fs.size() ) {
-            DEBUG_LOG( DBG_GAME, DBG_WARN, "Map file " << filename.c_str() << " is corrupted" )
+            DEBUG_LOG( DBG_GAME, DBG_WARN, "Map file " << filename << " is corrupted" )
             return false;
         }
 
@@ -668,6 +668,7 @@ bool World::loadResurrectionMap( const std::string & filename )
 
     Maps::Map_Format::MapFormat map;
     if ( !Maps::Map_Format::loadMap( filename, map ) ) {
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "Map file '" << filename << "' is corrupted or missing." )
         return false;
     }
 
