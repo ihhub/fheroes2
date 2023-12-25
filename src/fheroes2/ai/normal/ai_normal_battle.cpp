@@ -1356,10 +1356,10 @@ namespace AI
                 return outcome.canAttackImmediately;
             } );
 
-            // The distance between the archers located on the edges of the battlefield is 8 tiles. If the value of one of these archer stacks is 2 or more times greater
-            // than the value of the other, then it is worth using all melee units to create a more reliable cover for more powerful stack of archers. In other words,
-            // overcoming the distance of 8 cells should mean the loss of one third of the maximum value.
-            const double defenseDistanceModifier = _myRangedUnitsOnly / 24.0;
+            // The distance that melee units need to overcome to cover the archers located on the edges of the battlefield is approximately 5 tiles. If the value of one
+            // of these archer stacks is 2 or more times greater than the value of the other, then it is worth using all melee units to create a more reliable cover for
+            // more powerful stack of archers. In other words, overcoming the distance of 5 tiles should mean the loss of one third of the total ranged units value.
+            const double defenseDistanceModifier = _myRangedUnitsOnly / 15.0;
 
             double bestArcherValue = std::numeric_limits<double>::lowest();
 
