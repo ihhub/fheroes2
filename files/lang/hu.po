@@ -8918,7 +8918,7 @@ msgid ""
 msgstr ""
 
 msgid "Fizbin of Misfortune"
-msgstr "Balszerencse kártya"
+msgstr "Balszerencse medál"
 
 msgid "The %{name} greatly decreases your morale by %{count}."
 msgstr "A %{name} %{count} egységgel lecsökkenti a morálodat."
