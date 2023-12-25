@@ -1386,10 +1386,10 @@ namespace AI
                             }
 
                             if ( frnd->isReflect() ) {
-                                return { LEFT, RIGHT, TOP_LEFT, BOTTOM_LEFT, TOP_RIGHT, BOTTOM_RIGHT };
+                                return { LEFT, TOP_LEFT, BOTTOM_LEFT, TOP_RIGHT, BOTTOM_RIGHT, RIGHT };
                             }
 
-                            return { RIGHT, LEFT, TOP_RIGHT, BOTTOM_RIGHT, TOP_LEFT, BOTTOM_LEFT };
+                            return { RIGHT, TOP_RIGHT, BOTTOM_RIGHT, TOP_LEFT, BOTTOM_LEFT, LEFT };
                         }();
 
                         for ( const int32_t idx : std::array<int32_t, 2>{ frnd->GetHeadIndex(), frnd->GetTailIndex() } ) {
