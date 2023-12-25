@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-12-05 00:31+0000\n"
-"PO-Revision-Date: 2023-12-20 19:47+0700\n"
+"PO-Revision-Date: 2023-12-24 19:44+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: vi\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 3.4.1\n"
+"X-Generator: Poedit 3.4.2\n"
 
 msgid ""
 "BATTLE\n"
@@ -2676,7 +2676,7 @@ msgid "Town Population Information and Statistics"
 msgstr "Thông tin và Thống kê Dân số Thị trấn"
 
 msgid "Damage"
-msgstr "Thiệt hại"
+msgstr "Sát thương"
 
 msgid "HP"
 msgstr "Máu"
@@ -2725,10 +2725,10 @@ msgstr ""
 "một kỹ năng do ngươi lựa chọn."
 
 msgid "Attack Skill"
-msgstr "Kỹ năng Tấn công"
+msgstr "Tấn công"
 
 msgid "Defense Skill"
-msgstr "Kỹ năng Phòng thủ"
+msgstr "Phòng thủ"
 
 msgid "Shots"
 msgstr "Bắn"
@@ -3182,16 +3182,14 @@ msgstr "(rỗng)"
 msgid "already learned"
 msgstr "đã học"
 
-#, fuzzy
 msgid "treeOfKnowledge|free"
-msgstr "Cây Tri thức"
+msgstr "miễn phí"
 
-#, fuzzy
 msgid "already claimed"
-msgstr "đã học"
+msgstr "đã yêu cầu"
 
 msgid "not claimed"
-msgstr ""
+msgstr "chưa yêu cầu"
 
 msgid "already knows this skill"
 msgstr "đã biết kỹ năng này"
