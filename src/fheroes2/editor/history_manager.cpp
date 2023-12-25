@@ -39,7 +39,7 @@ namespace
     class MapAction : public fheroes2::Action
     {
     public:
-        MapAction( Maps::Map_Format::MapFormat & mapFormat )
+        explicit MapAction( Maps::Map_Format::MapFormat & mapFormat )
             : _mapFormat( mapFormat )
             , _latestObjectUIDBefore( Maps::getLastObjectUID() )
         {
