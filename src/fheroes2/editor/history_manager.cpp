@@ -42,7 +42,7 @@ namespace
             : _mapFormat( mapFormat )
             , _latestObjectUIDBefore( Maps::getLastObjectUID() )
         {
-            if ( Maps::saveMapInEditor( _mapFormat ) ) {
+            if ( !Maps::saveMapInEditor( _mapFormat ) ) {
                 // If this assertion blows up then something is really wrong with the Editor.
                 assert( 0 );
             }
@@ -52,7 +52,7 @@ namespace
 
         bool prepare()
         {
-            if ( Maps::saveMapInEditor( _mapFormat ) ) {
+            if ( !Maps::saveMapInEditor( _mapFormat ) ) {
                 // If this assertion blows up then something is really wrong with the Editor.
                 assert( 0 );
                 return false;
@@ -66,7 +66,7 @@ namespace
         bool redo() override
         {
             _mapFormat = _afterMapFormat;
-            if ( Maps::readMapInEditor( _mapFormat ) ) {
+            if ( !Maps::readMapInEditor( _mapFormat ) ) {
                 // If this assertion blows up then something is really wrong with the Editor.
                 assert( 0 );
                 return false;
@@ -80,7 +80,7 @@ namespace
         bool undo() override
         {
             _mapFormat = _beforeMapFormat;
-            if ( Maps::readMapInEditor( _mapFormat ) ) {
+            if ( !Maps::readMapInEditor( _mapFormat ) ) {
                 // If this assertion blows up then something is really wrong with the Editor.
                 assert( 0 );
                 return false;
