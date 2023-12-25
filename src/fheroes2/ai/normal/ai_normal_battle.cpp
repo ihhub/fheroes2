@@ -1441,7 +1441,7 @@ namespace AI
                     continue;
                 }
 
-                // Either the unit can cover the friendly archer, or the archer is blocked by an enemy unit that does not allow our unit to approach. As the distance to
+                // Either the unit can cover the friendly archer, or the archer is blocked by enemy units, which do not allow our unit to approach. As the distance to
                 // estimate the archer's value, we take the smallest of the distance that must be overcome to cover the archer and the distance that must be overcome to
                 // approach the nearest of the enemies blocking him.
                 const auto [eitherFrndOrAdjEnemyIsReachable, dist] = [&arena, &currentUnit, &bestCoverCellInfo, &adjacentEnemiesIndexes]() {
