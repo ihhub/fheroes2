@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-19 03:04+0000\n"
+"POT-Creation-Date: 2023-12-25 01:52+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -386,7 +386,8 @@ msgstr "Многократни"
 msgid "Troops of %{count} alignments -%{penalty}"
 msgstr "Войски от %{count} подравнявания -%{penalty}"
 
-msgid "Some undead in group -1"
+#, fuzzy
+msgid "Some undead in army -1"
 msgstr "Някои немъртви в група -1"
 
 msgid "View %{name}"
@@ -2493,7 +2494,8 @@ msgstr ""
 "Кладенецът увеличава скоростта на растеж във всички жилища с %{count} "
 "същества на седмица."
 
-msgid "The Statue increases your town's income by %{count} gold per day."
+#, fuzzy
+msgid "The Statue increases the town's income by %{count} gold per day."
 msgstr "Статуята увеличава приходите на твоя град с %{count} злато на ден."
 
 msgid "The Left Turret provides extra firepower during castle combat."
@@ -2518,9 +2520,10 @@ msgstr ""
 "Ровът забавя атакуващите единици. Всяка единица, влизаща в рова, трябва да "
 "завърши реда си там и да стане по-уязвима за атака."
 
+#, fuzzy
 msgid ""
-"The Castle improves town defense and increases income to %{count} gold per "
-"day."
+"The Castle improves the town's defense and increases its income to %{count} "
+"gold per day."
 msgstr ""
 "Замъкът подобрява защитата на града и увеличава приходите до %{count} злато "
 "на ден."
@@ -3771,32 +3774,69 @@ msgstr "Градове"
 msgid "Towns cannot be placed on water."
 msgstr "Чудовищата не могат да се поставят върху вода."
 
-msgid "Ocean Objects"
+#, fuzzy
+msgid "Used to place %{object}."
+msgstr "Използва се за поставяне на герой."
+
+#, fuzzy
+msgid "Select object type"
 msgstr "Океански обекти"
 
-msgid "Grass Objects"
-msgstr "Тревни обекти"
+#, fuzzy
+msgid ""
+"Click here to\n"
+"select a monster."
+msgstr "Кликни тук, за да избереш кой сценарий да играеш."
 
-msgid "Snow Objects"
-msgstr "Снежни обекти"
+#, fuzzy
+msgid ""
+"Click here to\n"
+"select another monster."
+msgstr "Моля, избери друг герой."
 
-msgid "Swamp Objects"
-msgstr "Блатни обекти"
+msgid ""
+"Cell\n"
+"Details"
+msgstr ""
 
-msgid "Lava Objects"
-msgstr "Лава обекти"
+msgid "Roads"
+msgstr "Пътища"
 
-msgid "Desert Objects"
-msgstr "Пустинни обекти"
+msgid "Streams"
+msgstr "Потоци"
 
-msgid "Dirt Objects"
-msgstr "Земни обекти"
+#, fuzzy
+msgid "Erase"
+msgstr "Режим на изтриване"
 
-msgid "Wasteland Objects"
+msgid "Mountains"
+msgstr "Планини"
+
+#, fuzzy
+msgid "Rocks"
+msgstr "Скала"
+
+msgid "Trees"
+msgstr "Дървета"
+
+#, fuzzy
+msgid "Water Objects"
 msgstr "Обекти от пущинака"
 
-msgid "Beach Objects"
-msgstr "Плажни обекти"
+#, fuzzy
+msgid "Miscellaneous"
+msgstr "Финиас"
+
+#, fuzzy
+msgid "Dwellings"
+msgstr "Хобити"
+
+msgid "Mines"
+msgstr "Мини"
+
+#, fuzzy
+msgid "Power-ups"
+msgstr "Сила"
 
 msgid "Treasures"
 msgstr "Съкровища"
@@ -3806,12 +3846,6 @@ msgstr "Терен"
 
 msgid "Castles"
 msgstr "Замъци"
-
-msgid "Roads"
-msgstr "Пътища"
-
-msgid "Streams"
-msgstr "Потоци"
 
 msgid ""
 "Draws terrain in\n"
@@ -3861,38 +3895,6 @@ msgstr "Преминаване само с лодка."
 msgid "No special modifiers."
 msgstr "Без специални модификатори."
 
-msgid "Used to place objects most appropriate for use on %{terrain}."
-msgstr ""
-"Използва се за поставяне на обекти, които са най-подходящи за използване на "
-"%{terrain}."
-
-msgid ""
-"Used to place\n"
-"a town or castle."
-msgstr ""
-"Използва се за поставяне\n"
-"на град или замък."
-
-msgid ""
-"Used to place\n"
-"a monster group."
-msgstr ""
-"Използва се за поставяне\n"
-"на група чудовища."
-
-msgid "Used to place a hero."
-msgstr "Използва се за поставяне на герой."
-
-msgid "Used to place an artifact."
-msgstr "Използва се за поставяне на артефакт."
-
-msgid ""
-"Used to place\n"
-"a resource or treasure."
-msgstr ""
-"Използва се за поставяне\n"
-"на ресурс или съкровище."
-
 msgid "Toggle the erasure of %{type} objects."
 msgstr "Превключи изтриването на %{type} обекти."
 
@@ -3922,10 +3924,13 @@ msgstr ""
 "Използва се за начертаване на основната трева, мръсотия, вода и т.н. върху "
 "картата."
 
-msgid "Object Mode"
+#, fuzzy
+msgid "Landscape Objects Mode"
 msgstr "Обектен режим"
 
-msgid "Used to place objects (mountains, trees, treasure, etc.) on the map."
+#, fuzzy
+msgid ""
+"Used to place landscape objects (mountains, rocks, trees, etc.) on the map."
 msgstr ""
 "Използва се за поставяне на обекти (планини, дървета, съкровища и др.) върху "
 "картата."
@@ -3935,6 +3940,38 @@ msgstr "Подробен режим"
 
 msgid "Used for special editing of monsters, heroes and towns."
 msgstr "Използва се за специално редактиране на чудовища, герои и градове."
+
+#, fuzzy
+msgid "Adventure Objects Mode"
+msgstr "Опции за приключения"
+
+#, fuzzy
+msgid ""
+"Used to place adventure objects (artifacts, dwellings, mines, treasures, "
+"etc.) on the map."
+msgstr ""
+"Използва се за поставяне на обекти (планини, дървета, съкровища и др.) върху "
+"картата."
+
+#, fuzzy
+msgid "Kingdom Objects Mode"
+msgstr "Обектен режим"
+
+#, fuzzy
+msgid "Used to place kingdom objects (towns, castles and heroes) on the map."
+msgstr ""
+"Използва се за поставяне на обекти (планини, дървета, съкровища и др.) върху "
+"картата."
+
+#, fuzzy
+msgid "Monsters Mode"
+msgstr "Чудовища"
+
+#, fuzzy
+msgid "Used to place monsters on the map."
+msgstr ""
+"Използва се за поставяне\n"
+"на група чудовища."
 
 msgid "Allows you to draw streams by clicking and dragging."
 msgstr "Позволява ти да рисуваш потоци чрез кликване и плъзгане."
@@ -7289,24 +7326,28 @@ msgstr "Тези слаби създания със сигурност ще из
 msgid "I fear these creatures are in the mood for a fight."
 msgstr "Страхувам се, че тези същества са в настроение за битка."
 
-msgid "Your attack skill is a bonus added to each creature's attack skill."
+#, fuzzy
+msgid "The hero's attack skill is a bonus added to each unit's attack skill."
 msgstr ""
 "Твоето умение за атака е бонус, добавен към умението за атака на всяко "
 "същество."
 
-msgid "Your defense skill is a bonus added to each creature's defense skill."
+#, fuzzy
+msgid "The hero's defense skill is a bonus added to each unit's defense skill."
 msgstr ""
 "Твоето защитно умение е бонус, добавен към защитното умение на всяко "
 "същество."
 
-msgid "Your spell power determines the length or power of a spell."
+#, fuzzy
+msgid "The hero's spell power determines the duration or power of a spell."
 msgstr ""
 "Твоята сила на заклинание определя дължината или силата на заклинанието."
 
+#, fuzzy
 msgid ""
-"Your knowledge determines how many spell points your hero may have. Under "
-"normal circumstances, a hero is limited to 10 spell points per level of "
-"knowledge."
+" The hero's knowledge determines how many spell points the hero may have. "
+"Under normal circumstances, a hero is limited to 10 spell points per level "
+"of knowledge."
 msgstr ""
 "Твойте знания определят колко точки за заклинание може да има твоят герой. "
 "При нормални обстоятелства един герой е ограничен до 10 точки за заклинание "
@@ -7498,108 +7539,126 @@ msgstr ""
 msgid "%{skill} eliminates the movement penalty for rough terrain."
 msgstr "%{skill} елиминира наказанието за движение при неравен терен."
 
+#, fuzzy
 msgid ""
-"%{skill} increases the damage done by range attacking creatures by %{count} "
-"percent."
+"%{skill} increases the damage done by the hero's range attacking creatures "
+"by %{count} percent."
 msgstr ""
 "%{skill} увеличава щетите, нанесени от атакуващи в обхвата същества с "
 "%{count} процента."
 
-msgid "%{skill} increases your hero's movement points by %{count} percent."
+#, fuzzy
+msgid "%{skill} increases the hero's movement points by %{count} percent."
 msgstr ""
 "%{skill} увеличава точките за движение на твоя герой с %{count} процента."
 
-msgid "%{skill} increases your hero's viewable area by one square."
-msgid_plural ""
-"%{skill} increases your hero's viewable area by %{count} squares."
+#, fuzzy
+msgid "%{skill} increases the hero's viewable area by one square."
+msgid_plural "%{skill} increases the hero's viewable area by %{count} squares."
 msgstr[0] "%{skill} увеличава видимата област на твоя герой с едно квадратче."
 msgstr[1] ""
 "%{skill} увеличава видимата област на теоя герой с %{count} квадрата."
 
+#, fuzzy
 msgid ""
-"%{skill} allows you to negotiate with monsters who are weaker than your "
-"group. "
+"%{skill} allows the hero to negotiate with monsters who are weaker than "
+"their army."
 msgstr ""
 "%{skill} ти позволява да преговаряш с чудовища, които са по-слаби от вашата "
 "група. "
 
-msgid "Approximately %{count} percent of the creatures may offer to join you."
+#, fuzzy
+msgid ""
+"Approximately %{count} percent of the creatures may offer to join the hero."
 msgstr ""
 "Приблизително %{count} процента от съществата може да предложат да се "
 "присъединят към теб."
 
-msgid "All of the creatures may offer to join you."
+#, fuzzy
+msgid "All of the creatures may offer to join the hero."
 msgstr "Всички същества може да предложат да се присъединят към теб."
 
+#, fuzzy
 msgid ""
-"%{skill} increases your hero's movement points over water by %{count} "
-"percent."
+"%{skill} increases the hero's movement points over water by %{count} percent."
 msgstr ""
 "%{skill} увеличава точките за движение на твоя герой над вода с %{count} "
 "процента."
 
-msgid "%{skill} increases your hero's troops morale by %{count}."
+#, fuzzy
+msgid "%{skill} increases the hero's troops morale by %{count}."
 msgstr "%{skill} повишава морала на войниците на твоя герой с %{count}."
 
-msgid "%{skill} allows your hero to learn third level spells."
+#, fuzzy
+msgid "%{skill} allows the hero to learn third level spells."
 msgstr "%{skill} позволява на твоя герой да научи магии от трето ниво."
 
-msgid "%{skill} allows your hero to learn fourth level spells."
+#, fuzzy
+msgid "%{skill} allows the hero to learn fourth level spells."
 msgstr "%{skill} позволява на твоя герой да научи заклинания от четвърто ниво."
 
-msgid "%{skill} allows your hero to learn fifth level spells."
+#, fuzzy
+msgid "%{skill} allows the hero to learn fifth level spells."
 msgstr "%{skill} позволява на твоя герой да научи заклинания от пето ниво."
 
-msgid "%{skill} regenerates one additional spell point per day to your hero."
+#, fuzzy
+msgid "%{skill} regenerates one additional spell point per day to the hero."
 msgid_plural ""
-"%{skill} regenerates %{count} additional spell points per day to your hero."
+"%{skill} regenerates %{count} additional spell points per day to the hero."
 msgstr[0] ""
 "%{skill} регенерира една допълнителна точка заклинание на ден на твоя герой."
 msgstr[1] ""
 "%{skill} регенерира %{count} допълнителни заклинателни точки на ден за твоя "
 "герой."
 
-msgid "%{skill} increases your hero's luck by %{count}."
+#, fuzzy
+msgid "%{skill} increases the hero's luck by %{count}."
 msgstr "%{skill} увеличава късмета на твоя герой с %{count}."
 
+#, fuzzy
 msgid ""
-"%{skill} gives your hero's catapult shots a greater chance to hit and do "
+"%{skill} gives the hero's catapult shots a greater chance to hit and do "
 "damage to castle walls."
 msgstr ""
 "%{skill} дава по-голям шанс на катапултните изстрели на твоя герой да уцели "
 "и да нанесе щети на стените на замъка."
 
+#, fuzzy
 msgid ""
-"%{skill} gives your hero's catapult an extra shot, and each shot has a "
+"%{skill} gives the hero's catapult an extra shot, and each shot has a "
 "greater chance to hit and do damage to castle walls."
 msgstr ""
 "%{skill} дава допълнителен изстрел на катапулта на твоя герой и всеки "
 "изстрел има по-голям шанс да уцели и да нанесе щети на стените на замъка."
 
+#, fuzzy
 msgid ""
-"%{skill} gives your hero's catapult an extra shot, and each shot "
+"%{skill} gives the hero's catapult an extra shot, and each shot "
 "automatically destroys any wall, except a fortified wall in a Knight castle."
 msgstr ""
 "%{skill} дава допълнителен изстрел на катапулта на твоя герой и всеки "
 "изстрел автоматично разрушава всяка стена, с изключение на укрепена стена в "
 "рицарски замък."
 
+#, fuzzy
 msgid ""
-"%{skill} gives your hero a %{count} percent chance to learn any given 1st or "
+"%{skill} gives the hero a %{count} percent chance to learn any given 1st or "
 "2nd level spell that was cast by an enemy during combat."
 msgstr ""
 "%{skill} дава на твоя герой %{count} процента шанс да научи вражеско "
 "заклинание от 1-во или 2-ро ниво, използвано срещу него в битка."
 
+#, fuzzy
 msgid ""
-"%{skill} gives your hero a %{count} percent chance to learn any given 3rd "
+"%{skill} gives the hero a %{count} percent chance to learn any given 3rd "
 "level spell (or below) that was cast by an enemy during combat."
 msgstr ""
 "%{skill} дава на твоя герой %{count} процента шанс да научи заклинание от 3-"
 "то ниво (или по-ниско), използвано срещу него в битка."
 
+#, fuzzy
 msgid ""
-"%{skill} gives your hero a %{count} percent chance to learn any given 4th "
+"%{skill} gives the hero a %{count} percent chance to learn any given 4th "
 "level spell (or below) that was cast by an enemy during combat."
 msgstr ""
 "%{skill} дава на твоя герой %{count} процента шанс да научи заклинание от 4-"
@@ -7612,8 +7671,9 @@ msgstr ""
 "%{skill} позволява на %{count} процента от съществата, убити в битка, да "
 "бъдат върнати от мъртвите като скелети."
 
+#, fuzzy
 msgid ""
-"Your hero produces %{count} gold pieces per day as tax revenue from estates."
+"The hero produces %{count} gold pieces per day as tax revenue from estates."
 msgstr ""
 "Твоят герой произвежда %{count} златни монети на ден като данъчни приходи от "
 "имоти."
@@ -7739,23 +7799,26 @@ msgstr "Чудесен"
 msgid "luck|Irish"
 msgstr "Ирландски"
 
+#, fuzzy
 msgid ""
-"Bad luck sometimes falls on your armies in combat, causing their attacks to "
-"only do half damage."
+"Bad luck sometimes falls on the hero's units in combat, causing their "
+"attacks to only do half damage."
 msgstr ""
 "Лош късмет понякога сполетява твойте армии в битка, което кара техните атаки "
 "да нанасят само половината щети."
 
+#, fuzzy
 msgid ""
-"Neutral luck means your armies will never get lucky or unlucky attacks on "
-"the enemy."
+"Neutral luck means the hero's units will never get lucky or unlucky attacks "
+"on the enemy."
 msgstr ""
 "Неутрален късмет означава, че армиите ти никога няма да получат късмет или "
 "злощастни атаки срещу врага."
 
+#, fuzzy
 msgid ""
-"Good luck sometimes lets your armies get lucky attacks (double strength) in "
-"combat."
+"Good luck sometimes lets the hero's units get lucky attacks (double "
+"strength) in combat."
 msgstr ""
 "Добрият късмет понякога позволява на твойте армии да получават късметлийски "
 "атаки (двойна сила) в битка."
@@ -7781,17 +7844,20 @@ msgstr "Чудесен"
 msgid "morale|Blood!"
 msgstr "Кървав!"
 
-msgid "Bad morale may cause your armies to freeze in combat."
+#, fuzzy
+msgid "Bad morale may cause the hero's units to freeze in combat."
 msgstr "Лошият морал може да накара армиите ти да замръзнат в битка."
 
+#, fuzzy
 msgid ""
-"Neutral morale means your armies will never be blessed with extra attacks or "
-"freeze in combat."
+"Neutral morale means the hero's units will never be blessed with extra "
+"attacks or freeze in combat."
 msgstr ""
 "Неутрален морал означава, че твойте армии никога няма да бъдат благословени "
 "с допълнителни атаки или да замръзнат в битка."
 
-msgid "Good morale may give your armies extra attacks in combat."
+#, fuzzy
+msgid "Good morale may give the hero's units extra attacks in combat."
 msgstr "Добрият морал може да даде на твойте армии допълнителни атаки в битка."
 
 msgid "Knight"
@@ -8101,9 +8167,6 @@ msgid_plural "Water Wheels"
 msgstr[0] "Водно колело"
 msgstr[1] "Водни колела"
 
-msgid "Mines"
-msgstr "Мини"
-
 msgid "Obelisk"
 msgstr "Обелиск"
 
@@ -8312,12 +8375,6 @@ msgstr "Леярна на Фрийман"
 
 msgid "Reefs"
 msgstr "Рифове"
-
-msgid "Trees"
-msgstr "Дървета"
-
-msgid "Mountains"
-msgstr "Планини"
 
 msgid "Volcano"
 msgstr "Вулкан"
@@ -11055,6 +11112,52 @@ msgstr ""
 "Проверете най-новата версия на играта на\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Ocean Objects"
+#~ msgstr "Океански обекти"
+
+#~ msgid "Grass Objects"
+#~ msgstr "Тревни обекти"
+
+#~ msgid "Snow Objects"
+#~ msgstr "Снежни обекти"
+
+#~ msgid "Swamp Objects"
+#~ msgstr "Блатни обекти"
+
+#~ msgid "Lava Objects"
+#~ msgstr "Лава обекти"
+
+#~ msgid "Desert Objects"
+#~ msgstr "Пустинни обекти"
+
+#~ msgid "Dirt Objects"
+#~ msgstr "Земни обекти"
+
+#~ msgid "Beach Objects"
+#~ msgstr "Плажни обекти"
+
+#~ msgid "Used to place objects most appropriate for use on %{terrain}."
+#~ msgstr ""
+#~ "Използва се за поставяне на обекти, които са най-подходящи за използване "
+#~ "на %{terrain}."
+
+#~ msgid ""
+#~ "Used to place\n"
+#~ "a town or castle."
+#~ msgstr ""
+#~ "Използва се за поставяне\n"
+#~ "на град или замък."
+
+#~ msgid "Used to place an artifact."
+#~ msgstr "Използва се за поставяне на артефакт."
+
+#~ msgid ""
+#~ "Used to place\n"
+#~ "a resource or treasure."
+#~ msgstr ""
+#~ "Използва се за поставяне\n"
+#~ "на ресурс или съкровище."
 
 #~ msgid "%{race1} %{name1}"
 #~ msgstr "%{race1} %{name1}"

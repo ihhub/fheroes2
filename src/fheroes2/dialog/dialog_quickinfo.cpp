@@ -840,6 +840,7 @@ namespace
             text.set( _( "Attack:" ), smallWhite );
             dst_pt.x = cur_rt.x + 10;
             dst_pt.y += heroPortraitFrame.height();
+            text.fitToOneRow( statNumberColumn );
             text.draw( dst_pt.x, dst_pt.y, display );
 
             text.set( std::to_string( hero.GetAttack() ), smallWhite );
@@ -850,6 +851,7 @@ namespace
             text.set( _( "Defense:" ), smallWhite );
             dst_pt.x = cur_rt.x + 10;
             dst_pt.y += statRow;
+            text.fitToOneRow( statNumberColumn );
             text.draw( dst_pt.x, dst_pt.y, display );
 
             text.set( std::to_string( hero.GetDefense() ), smallWhite );
@@ -860,6 +862,7 @@ namespace
             text.set( _( "Spell Power:" ), smallWhite );
             dst_pt.x = cur_rt.x + 10;
             dst_pt.y += statRow;
+            text.fitToOneRow( statNumberColumn );
             text.draw( dst_pt.x, dst_pt.y, display );
 
             text.set( std::to_string( hero.GetPower() ), smallWhite );
@@ -870,6 +873,7 @@ namespace
             text.set( _( "Knowledge:" ), smallWhite );
             dst_pt.x = cur_rt.x + 10;
             dst_pt.y += statRow;
+            text.fitToOneRow( statNumberColumn );
             text.draw( dst_pt.x, dst_pt.y, display );
 
             text.set( std::to_string( hero.GetKnowledge() ), smallWhite );
@@ -880,6 +884,7 @@ namespace
             text.set( _( "Spell Points:" ), smallWhite );
             dst_pt.x = cur_rt.x + 10;
             dst_pt.y += statRow;
+            text.fitToOneRow( statNumberColumn );
             text.draw( dst_pt.x, dst_pt.y, display );
 
             text.set( std::to_string( hero.GetSpellPoints() ) + "/" + std::to_string( hero.GetMaxSpellPoints() ), smallWhite );
@@ -891,6 +896,7 @@ namespace
                 text.set( _( "Move Points:" ), smallWhite );
                 dst_pt.x = cur_rt.x + 10;
                 dst_pt.y += statRow;
+                text.fitToOneRow( statNumberColumn );
                 text.draw( dst_pt.x, dst_pt.y, display );
 
                 text.set( std::to_string( activeHero->GetMovePoints() ) + "/" + std::to_string( activeHero->GetMaxMovePoints() ), smallWhite );

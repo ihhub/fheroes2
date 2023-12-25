@@ -1271,6 +1271,11 @@ namespace fheroes2
         Copy( in, 0, 0, out, 0, 0, in.width(), in.height() );
     }
 
+    void Copy( const Image & in, int32_t inX, int32_t inY, Image & out, const Rect & outRoi )
+    {
+        Copy( in, inX, inY, out, outRoi.x, outRoi.y, outRoi.width, outRoi.height );
+    }
+
     void Copy( const Image & in, int32_t inX, int32_t inY, Image & out, int32_t outX, int32_t outY, int32_t width, int32_t height )
     {
         if ( !Verify( in, inX, inY, out, outX, outY, width, height ) ) {
@@ -2641,6 +2646,25 @@ namespace fheroes2
         for ( ; imageIn != imageInEnd; ++imageIn, ++transformIn ) {
             if ( *transformIn == 0 && *imageIn == colorId ) { // modify pixels with transform value 0
                 *transformIn = transformId;
+            }
+        }
+    }
+
+    void ReplaceTransformIdByColorId( Image & image, const uint8_t transformId, const uint8_t colorId )
+    {
+        if ( image.empty() || image.singleLayer() ) {
+            return;
+        }
+
+        const int32_t size = image.width() * image.height();
+
+        uint8_t * imageIn = image.image();
+        uint8_t * transformIn = image.transform();
+        const uint8_t * imageInEnd = imageIn + size;
+        for ( ; imageIn != imageInEnd; ++imageIn, ++transformIn ) {
+            if ( *transformIn == transformId ) {
+                *transformIn = 0U;
+                *imageIn = colorId;
             }
         }
     }

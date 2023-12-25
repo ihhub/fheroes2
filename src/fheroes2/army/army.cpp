@@ -1197,7 +1197,7 @@ int Army::GetMoraleModificator( std::string * strs ) const
     if ( hasUndead ) {
         result -= 1;
         if ( strs ) {
-            strs->append( _( "Some undead in group -1" ) );
+            strs->append( _( "Some undead in army -1" ) );
             *strs += '\n';
         }
     }
