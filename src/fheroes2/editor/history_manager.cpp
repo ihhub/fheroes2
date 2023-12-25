@@ -22,10 +22,9 @@
 
 #include <cassert>
 #include <cstdint>
-#include <vector>
 
 #include "map_format_helper.h"
-#include "maps_tiles.h"
+#include "map_format_info.h"
 #include "world_object_uid.h"
 
 namespace

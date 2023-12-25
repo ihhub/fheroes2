@@ -27,7 +27,10 @@
 #include <memory>
 #include <utility>
 
-#include "map_format_info.h"
+namespace Maps::Map_Format
+{
+    struct MapFormat;
+}
 
 namespace fheroes2
 {
