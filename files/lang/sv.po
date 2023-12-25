@@ -3359,7 +3359,7 @@ msgid "race|Random"
 msgstr "Slumpad"
 
 msgid "Click to start placing the selected castle/town."
-msgstr "Klicka här för att placera det valda slotten/staden."
+msgstr "Klicka här för att placera det valda slottet/staden."
 
 msgid "Click to select town placing."
 msgstr "Klicka för att välja stadsplacering."
