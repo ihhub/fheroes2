@@ -37,7 +37,6 @@
 #include "color.h"
 #include "difficulty.h"
 #include "dir.h"
-#include "game_io.h"
 #include "game_over.h"
 #include "logging.h"
 #include "map_format_info.h"
