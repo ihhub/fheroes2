@@ -64,9 +64,6 @@ using namespace Battle;
 
 namespace AI
 {
-    // Usual distance between units at the start of the battle is 10-14 tiles
-    // 20% of maximum value lost for every tile travelled to make sure 4 tiles difference matters
-    const double STRENGTH_DISTANCE_FACTOR = 5.0;
     const std::vector<int32_t> cellsUnderWallsIndexes = { 7, 28, 49, 72, 95 };
 
     struct MeleeAttackOutcome
@@ -701,6 +698,7 @@ namespace AI
         _enemyArmyStrength = 0;
         _myShootersStrength = 0;
         _enemyShootersStrength = 0;
+        _myRangedUnitsOnly = 0;
         _enemyRangedUnitsOnly = 0;
         _myArmyAverageSpeed = 0;
         _enemyAverageSpeed = 0;
@@ -775,9 +773,11 @@ namespace AI
             _myArmyStrength += unitStr;
 
             if ( unit->isArchers() && !unit->isImmovable() ) {
-                _myShootersStrength += unitStr;
+                _myRangedUnitsOnly += unitStr;
             }
         }
+
+        _myShootersStrength = _myRangedUnitsOnly;
 
         if ( sumArmyStr > 0.0 ) {
             _myArmyAverageSpeed /= sumArmyStr;
@@ -1258,7 +1258,9 @@ namespace AI
             const Castle * castle = Arena::GetCastle();
             const bool isMoatBuilt = castle && castle->isBuild( BUILD_MOAT );
 
-            const double attackDistanceModifier = _enemyArmyStrength / STRENGTH_DISTANCE_FACTOR;
+            // The usual distance between units of different armies at the beginning of a battle is 10-14 tiles. For each tile passed, 20% of the maximum value will be
+            // lost to make sure that the difference of 4 tiles matters.
+            const double attackDistanceModifier = _enemyArmyStrength / 5.0;
 
             double maxPriority = std::numeric_limits<double>::lowest();
 
@@ -1353,7 +1355,11 @@ namespace AI
 
                 return outcome.canAttackImmediately;
             } );
-            const double defenseDistanceModifier = _myArmyStrength / STRENGTH_DISTANCE_FACTOR;
+
+            // The distance between the archers located on the edges of the battlefield is 8 tiles. If the value of one of these archer stacks is 2 or more times greater
+            // than the value of the other, then it is worth using all melee units to create a more reliable cover for more powerful stack of archers. In other words,
+            // overcoming the distance of 8 cells should mean the loss of one third of the maximum value.
+            const double defenseDistanceModifier = _myRangedUnitsOnly / 24.0;
 
             double bestArcherValue = std::numeric_limits<double>::lowest();
 
@@ -1364,19 +1370,82 @@ namespace AI
                     continue;
                 }
 
-                const CellDistanceInfo nearestToFrndCellInfo = findNearestCellNextToUnit( arena, currentUnit, *frnd );
+                const CellDistanceInfo bestCoverCellInfo = [&arena, &currentUnit, frnd]() -> CellDistanceInfo {
+                    const Indexes nearbyIndexes = [&currentUnit, frnd]() {
+                        Indexes result;
+                        result.reserve( 8 );
+
+                        // Wide units should first of all try to cover the shooters from the sides, while ordinary units should prioritize the frontal direction
+                        const std::array<int, 6> priorityDirections = [&currentUnit, frnd]() -> std::array<int, 6> {
+                            if ( currentUnit.isWide() ) {
+                                if ( frnd->isReflect() ) {
+                                    return { TOP_LEFT, BOTTOM_LEFT, LEFT, TOP_RIGHT, BOTTOM_RIGHT, RIGHT };
+                                }
+
+                                return { TOP_RIGHT, BOTTOM_RIGHT, RIGHT, TOP_LEFT, BOTTOM_LEFT, LEFT };
+                            }
+
+                            if ( frnd->isReflect() ) {
+                                return { LEFT, RIGHT, TOP_LEFT, BOTTOM_LEFT, TOP_RIGHT, BOTTOM_RIGHT };
+                            }
+
+                            return { RIGHT, LEFT, TOP_RIGHT, BOTTOM_RIGHT, TOP_LEFT, BOTTOM_LEFT };
+                        }();
+
+                        for ( const int32_t idx : std::array<int32_t, 2>{ frnd->GetHeadIndex(), frnd->GetTailIndex() } ) {
+                            if ( !Board::isValidIndex( idx ) ) {
+                                continue;
+                            }
+
+                            for ( const int dir : priorityDirections ) {
+                                if ( !Board::isValidDirection( idx, dir ) ) {
+                                    continue;
+                                }
+
+                                const int32_t nearbyIdx = Board::GetIndexDirection( idx, dir );
+
+                                if ( std::find( result.begin(), result.end(), nearbyIdx ) != result.end() ) {
+                                    continue;
+                                }
+
+                                result.push_back( nearbyIdx );
+                            }
+                        }
+
+                        return result;
+                    }();
+
+                    for ( const int32_t idx : nearbyIndexes ) {
+                        const Position pos = Position::GetPosition( currentUnit, idx );
+                        if ( pos.GetHead() == nullptr ) {
+                            continue;
+                        }
+
+                        assert( !currentUnit.isWide() || pos.GetTail() != nullptr );
+                        assert( Board::GetDistance( pos, frnd->GetPosition() ) == 1 );
+
+                        if ( !arena.isPositionReachable( currentUnit, pos, false ) ) {
+                            continue;
+                        }
+
+                        return { idx, arena.CalculateMoveDistance( currentUnit, pos ) };
+                    }
+
+                    return {};
+                }();
+
                 const Indexes adjacentEnemiesIndexes = Board::GetAdjacentEnemiesIndexes( *frnd );
 
-                // If our archer is not blocked by enemy units, but the unit nevertheless cannot approach him, then ignore that archer
-                if ( nearestToFrndCellInfo.idx == -1 && adjacentEnemiesIndexes.empty() ) {
+                // If our archer is not blocked by enemy units, but the unit nevertheless cannot cover that archer, then ignore that archer
+                if ( bestCoverCellInfo.idx == -1 && adjacentEnemiesIndexes.empty() ) {
                     continue;
                 }
 
-                // Either the unit can approach a friendly archer, or the archer is blocked by an enemy unit that does not allow our unit to approach. As the distance to
-                // estimate the archer's value, we take the smallest of the distance that must be covered to approach the archer himself and the distance that must be
-                // covered to approach the nearest of the enemies blocking him.
-                const auto [eitherFrndOrAdjEnemyIsReachable, dist] = [&arena, &currentUnit, &nearestToFrndCellInfo, &adjacentEnemiesIndexes]() {
-                    std::pair<bool, uint32_t> result{ nearestToFrndCellInfo.idx != -1, nearestToFrndCellInfo.dist };
+                // Either the unit can cover the friendly archer, or the archer is blocked by an enemy unit that does not allow our unit to approach. As the distance to
+                // estimate the archer's value, we take the smallest of the distance that must be overcome to cover the archer and the distance that must be overcome to
+                // approach the nearest of the enemies blocking him.
+                const auto [eitherFrndOrAdjEnemyIsReachable, dist] = [&arena, &currentUnit, &bestCoverCellInfo, &adjacentEnemiesIndexes]() {
+                    std::pair<bool, uint32_t> result{ bestCoverCellInfo.idx != -1, bestCoverCellInfo.dist };
 
                     for ( const int idx : adjacentEnemiesIndexes ) {
                         const Unit * enemy = Board::GetCell( idx )->GetUnit();
@@ -1395,12 +1464,12 @@ namespace AI
                     return result;
                 }();
 
-                // If the unit cannot approach either the archer or any of the enemies blocking that archer at all, then ignore that archer
+                // If the unit cannot cover the archer or approach any of the enemies blocking that archer, then ignore that archer
                 if ( !eitherFrndOrAdjEnemyIsReachable ) {
                     continue;
                 }
 
-                // If the unit cannot approach either the archer or any of the enemies blocking that archer within two turns (according to a rough estimate), but there is
+                // If the unit cannot cover the archer or approach any of the enemies blocking that archer within two turns (according to a rough estimate), but there is
                 // at least one enemy unit that can be immediately attacked by this unit, then ignore that archer. Very slow units (such as Hydra) should not waste time
                 // covering archers far from them - especially if there are other enemy units nearby worthy of their attention.
                 if ( isAnyEnemyCanBeAttackedImmediately && !currentUnit.isFlying() && dist > currentUnit.GetSpeed() * 2 ) {
@@ -1415,7 +1484,7 @@ namespace AI
 
                 bestArcherValue = archerValue;
 
-                target.cell = nearestToFrndCellInfo.idx;
+                target.cell = bestCoverCellInfo.idx;
                 target.unit = nullptr;
 
                 MeleeAttackOutcome bestOutcome;
@@ -1434,8 +1503,8 @@ namespace AI
                     }
                 }
 
-                // If we have reached this point, then the unit should be able to approach either the archer or one of the enemies blocking him - although, perhaps,
-                // without performing an immediate attack
+                // If we have reached this point, then the unit should be able to either cover the archer or approach any of the enemies blocking that archer - although
+                // perhaps without performing an immediate attack
                 assert( Board::isValidIndex( target.cell ) );
             }
         }
