@@ -50,7 +50,7 @@ namespace Maps
     using Indexes = MapsIndexes;
 
     const char * SizeString( int size );
-    const char * GetMineName( int res );
+    const char * GetMineName( const int resourceType );
 
     int GetDirection( int from, int to );
     int32_t GetDirectionIndex( const int32_t from, const int direction );
