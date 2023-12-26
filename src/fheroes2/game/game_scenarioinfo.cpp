@@ -422,17 +422,7 @@ fheroes2::GameMode Game::ScenarioInfo()
 {
     AudioManager::PlayMusicAsync( MUS::MAINMENU, Music::PlaybackMode::RESUME_AND_PLAY_INFINITE );
 
-    MapsFileInfoList maps = Maps::getOriginalMapFileInfos( false, Settings::Get().IsGameType( Game::TYPE_MULTI ) );
-    MapsFileInfoList resurrectionMaps = Maps::getResurrectionMapFileInfos( false, Settings::Get().IsGameType( Game::TYPE_MULTI ) );
-
-    maps.reserve( maps.size() + resurrectionMaps.size() );
-
-    for ( auto & map : resurrectionMaps ) {
-        maps.emplace_back( std::move( map ) );
-    }
-
-    std::sort( maps.begin(), maps.end(), Maps::FileInfo::sortByMapName );
-
+    const MapsFileInfoList maps = Maps::getAllMapFileInfos( false, Settings::Get().IsGameType( Game::TYPE_MULTI ) );
     if ( maps.empty() ) {
         fheroes2::showStandardTextMessage( _( "Warning" ), _( "No maps available!" ), Dialog::OK );
         return fheroes2::GameMode::MAIN_MENU;

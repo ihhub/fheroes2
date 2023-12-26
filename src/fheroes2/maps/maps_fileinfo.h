@@ -206,10 +206,10 @@ using MapsFileInfoList = std::vector<Maps::FileInfo>;
 
 namespace Maps
 {
-    // For SUCCESSION_WARS and PRICE_OF_LOYALTY map files.
-    MapsFileInfoList getOriginalMapFileInfos( const bool isForEditor, const bool isMultiplayer );
+    // For all map files.
+    MapsFileInfoList getAllMapFileInfos( const bool isForEditor, const bool isMultiplayer );
 
-    // For RESURRECTION map files.
+    // Only for RESURRECTION map files.
     MapsFileInfoList getResurrectionMapFileInfos( const bool isForEditor, const bool isMultiplayer );
 }
 

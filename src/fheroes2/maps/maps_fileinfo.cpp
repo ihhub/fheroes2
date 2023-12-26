@@ -81,6 +81,7 @@ namespace
         return li == lhs.end() && ri != rhs.end();
     }
 
+    // This function returns an unsorted array. It is a caller responsibility to take care of sorting if needed.
     MapsFileInfoList getValidMaps( const ListFiles & mapFiles, const bool isMultiplayer, const bool isForEditor, const bool isOriginalMapFormat )
     {
         // create a list of unique maps (based on the map file name) and filter it by the preferred number of players
@@ -134,8 +135,6 @@ namespace
         for ( auto & [name, info] : uniqueMaps ) {
             result.emplace_back( std::move( info ) );
         }
-
-        std::sort( result.begin(), result.end(), Maps::FileInfo::sortByMapName );
 
         return result;
     }
@@ -596,15 +595,32 @@ StreamBase & Maps::operator>>( StreamBase & msg, FileInfo & fi )
     return msg >> fi.worldDay >> fi.worldWeek >> fi.worldMonth;
 }
 
-MapsFileInfoList Maps::getOriginalMapFileInfos( const bool isForEditor, const bool isMultiplayer )
+MapsFileInfoList Maps::getAllMapFileInfos( const bool isForEditor, const bool isMultiplayer )
 {
     ListFiles maps = Settings::FindFiles( "maps", ".mp2", false );
 
-    if ( Settings::Get().isPriceOfLoyaltySupported() ) {
+    const bool isPOLSupported = Settings::Get().isPriceOfLoyaltySupported();
+
+    if ( isPOLSupported ) {
         maps.Append( Settings::FindFiles( "maps", ".mx2", false ) );
     }
 
-    return getValidMaps( maps, isMultiplayer, isForEditor, true );
+    MapsFileInfoList validMaps = getValidMaps( maps, isMultiplayer, isForEditor, true );
+
+    if ( isPOLSupported ) {
+        const ListFiles resurrectionMaps = Settings::FindFiles( "maps", ".fh2m", false );
+        MapsFileInfoList validResurrectionMaps = getValidMaps( resurrectionMaps, isMultiplayer, isForEditor, false );
+
+        validMaps.reserve( maps.size() + resurrectionMaps.size() );
+
+        for ( auto & map : validResurrectionMaps ) {
+            validMaps.emplace_back( std::move( map ) );
+        }
+    }
+
+    std::sort( validMaps.begin(), validMaps.end(), Maps::FileInfo::sortByMapName );
+
+    return validMaps;
 }
 
 MapsFileInfoList Maps::getResurrectionMapFileInfos( const bool isForEditor, const bool isMultiplayer )
@@ -615,5 +631,9 @@ MapsFileInfoList Maps::getResurrectionMapFileInfos( const bool isForEditor, cons
     }
 
     const ListFiles maps = Settings::FindFiles( "maps", ".fh2m", false );
-    return getValidMaps( maps, isMultiplayer, isForEditor, false );
+    MapsFileInfoList validMaps = getValidMaps( maps, isMultiplayer, isForEditor, false );
+
+    std::sort( validMaps.begin(), validMaps.end(), Maps::FileInfo::sortByMapName );
+
+    return validMaps;
 }
