@@ -152,6 +152,7 @@ namespace
                                                 ICN::BUTTON_SMALL_MIN_EVIL,
                                                 ICN::BUTTON_SMALL_MAX_GOOD,
                                                 ICN::BUTTON_SMALL_MAX_EVIL,
+                                                ICN::BUTTON_EXIT_GOOD,
                                                 ICN::BUTTON_RESET_GOOD,
                                                 ICN::BUTTON_START_GOOD,
                                                 ICN::BUTTON_CASTLE_GOOD,
@@ -1801,6 +1802,13 @@ namespace fheroes2
 
                 break;
             }
+            case ICN::BUTTON_EXIT_GOOD: {
+                _icnVsSprite[id].resize( 2 );
+
+                fheroes2::getTextAdaptedButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "EXIT" ), ICN::EMPTY_GOOD_BUTTON, ICN::STONEBAK );
+
+                break;
+            }
             case ICN::BUTTON_RESET_GOOD: {
                 _icnVsSprite[id].resize( 2 );
 
@@ -2674,6 +2682,7 @@ namespace fheroes2
             case ICN::BUTTON_SMALL_MIN_EVIL:
             case ICN::BUTTON_SMALL_MAX_GOOD:
             case ICN::BUTTON_SMALL_MAX_EVIL:
+            case ICN::BUTTON_EXIT_GOOD:
             case ICN::BUTTON_RESET_GOOD:
             case ICN::BUTTON_START_GOOD:
             case ICN::BUTTON_CASTLE_GOOD:

@@ -1059,6 +1059,7 @@ namespace ICN
         BUTTON_SMALL_MAX_GOOD,
         BUTTON_SMALL_MAX_EVIL,
 
+        BUTTON_EXIT_GOOD,
         BUTTON_RESET_GOOD,
         BUTTON_START_GOOD,
 
