@@ -416,10 +416,10 @@ msgstr[0] "%{name} förgör hälften av fiendetrupperna!"
 msgstr[1] "%{name} förgör hälften av fiendetrupperna!"
 
 msgid "%{name} has turned off the auto battle"
-msgstr "%{name} har stängt av autom. strid"
+msgstr "%{name} har stängt av automatisk strid"
 
 msgid "%{name} has turned on the auto battle"
-msgstr "%{name} har aktiverat autom. strid"
+msgstr "%{name} har aktiverat automatisk strid"
 
 msgid "Spell failed!"
 msgstr "Besvärjelse misslyckades!"
@@ -471,7 +471,8 @@ msgstr "Turordning"
 msgid "Auto Spell Casting"
 msgstr ""
 "Autom.\n"
-"besvärjelsekastning"
+"besvärjelse-\n"
+"kastning"
 
 msgid "Grid"
 msgstr "Rutnät"
