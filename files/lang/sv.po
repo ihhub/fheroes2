@@ -3625,7 +3625,7 @@ msgid "Wood & Ore:"
 msgstr "Trä & Malm:"
 
 msgid "Gems, Cr, Slf & Mer:"
-msgstr "Andra resurser:"
+msgstr "Andra Resurser:"
 
 msgid "Obelisks Found:"
 msgstr "Funna Obelisker:"
@@ -3634,7 +3634,7 @@ msgid "Artifacts:"
 msgstr "Artefakter:"
 
 msgid "Total Army Strength:"
-msgstr "Total arméstyrka:"
+msgstr "Total Arméstyrka:"
 
 msgid "Income:"
 msgstr "Inkomst:"
@@ -3649,7 +3649,7 @@ msgid "Personality:"
 msgstr "Personlighet:"
 
 msgid "Best Monster:"
-msgstr "Bästa Monster:"
+msgstr "Bästa Varelse:"
 
 msgid "Map filename"
 msgstr "Kartfilnamn"
@@ -3693,7 +3693,7 @@ msgid "Quit out of the map editor."
 msgstr "Lämna kartredigeraren."
 
 msgid "Monster"
-msgstr "Monster"
+msgstr "Varelse"
 
 msgid "Objects cannot be placed outside the map."
 msgstr "Föremål kan inte placeras utanför kartan."
