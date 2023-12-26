@@ -3895,7 +3895,7 @@ msgid "Used for special editing of monsters, heroes and towns."
 msgstr "Används för att redigera varelser, hjältar och städer."
 
 msgid "Adventure Objects Mode"
-msgstr "Äventyrsbjektsläge"
+msgstr "Äventyrsobjektsläge"
 
 msgid ""
 "Used to place adventure objects (artifacts, dwellings, mines, treasures, "
