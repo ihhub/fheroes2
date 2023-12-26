@@ -1356,9 +1356,27 @@ namespace AI
                 return outcome.canAttackImmediately;
             } );
 
-            // The distance that melee units need to overcome to cover the archers located on the edges of the battlefield is approximately 5 tiles. If the value of one
-            // of these archer stacks is 2 or more times greater than the value of the other, then it is worth using all melee units to create a more reliable cover for
-            // more powerful stack of archers. In other words, overcoming the distance of 5 tiles should mean the loss of one third of the total ranged units value.
+            // If the army has only one stack of archers, then there is no question about which stack to cover. If the army has three or more stacks of archers, then,
+            // most likely, melee units will be able to cover these stacks only partially. In the case of two stacks of archers, the question arises: in which cases we
+            // should try to cover both stacks, but partially, and in which cases we should cover just one stack, but completely.
+            //
+            // In the current implementation, if the value of one of these archer stacks is 2 or more times greater than the value of the other, then it is worth using
+            // all melee units to create a more reliable cover for more powerful stack of archers.
+            //
+            // In the case of two stacks of archers, AI will tend to initially place them on the edges of the battlefield. Thus, for melee units, the maximum distance to
+            // the stack of archers will be approximately 5 tiles. To fulfill the above condition, a distance of 5 tiles should give a penalty of 1/3 of the total value
+            // of the archer stacks.
+            //
+            // For example, suppose we have one stack of archers with the value of 200 on the tile with the index of 0, and another stack of archers with the value of 100
+            // on the tile with the index of 88. In this case, a melee unit from the tile with the index of 66 should overcome about 5 tiles in order to reach the more
+            // powerful stack of archers, but it should overcome just 1 tile to reach the less powerful stack. The penalty for each tile passed in its case will be
+            // calculated as (200 + 100) / 15 = 20, and after the penalty is applied, the value of the more powerful stack of archers will be 200 - 20 * 5 = 100, and the
+            // value of the less powerful stack will be 100 - 20 * 1 = 80, therefore, this melee unit will go to cover the more powerful stack of archers.
+            //
+            // However, if the strength of the archer stacks is comparable, for example, 150 vs 100, the penalty for each tile passed will be (150 + 100) / 15 = 16.66,
+            // and after the penalty is applied, the value of the more powerful stack of archers will be 150 - 16.66 * 5 = 66,7, and the value of the less powerful stack
+            // will be 100 - 16.66 * 1 = 83.34, therefore, this melee unit will go to cover the less powerful stack of archers, and both stacks will be only partially
+            // covered.
             const double defenseDistanceModifier = _myRangedUnitsOnly / 15.0;
 
             double bestArcherValue = std::numeric_limits<double>::lowest();
