@@ -38,8 +38,6 @@
 #include "icn.h"
 #include "localevent.h"
 #include "logging.h"
-#include "map_format_helper.h"
-#include "map_format_info.h"
 #include "maps.h"
 #include "maps_fileinfo.h"
 #include "math_base.h"
@@ -311,14 +309,8 @@ namespace Editor
             return fheroes2::GameMode::EDITOR_MAIN_MENU;
         }
 
-        Maps::Map_Format::MapFormat map;
-        if ( !Maps::Map_Format::loadMap( fileInfo->filename, map ) ) {
-            fheroes2::showStandardTextMessage( _( "Warning!" ), "Failed to load the map.", Dialog::OK );
-            return fheroes2::GameMode::CANCEL;
-        }
-
-        if ( !Maps::readMapInEditor( map ) ) {
-            fheroes2::showStandardTextMessage( _( "Warning!" ), "Failed to read the map.", Dialog::OK );
+        Interface::EditorInterface & editorInterface = Interface::EditorInterface::Get();
+        if ( !editorInterface.loadMap( fileInfo->filename ) ) {
             return fheroes2::GameMode::CANCEL;
         }
 
