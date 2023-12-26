@@ -1443,6 +1443,7 @@ void Maps::Tiles::fixTileObjectType( Tiles & tile )
 
 void Maps::Tiles::Remove( uint32_t uniqID )
 {
+    // TODO: this method must update the type of the main object
     _addonBottomLayer.remove_if( [uniqID]( const Maps::TilesAddon & v ) { return v._uid == uniqID; } );
     _addonTopLayer.remove_if( [uniqID]( const Maps::TilesAddon & v ) { return v._uid == uniqID; } );
 
