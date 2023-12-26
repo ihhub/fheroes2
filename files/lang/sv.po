@@ -3227,7 +3227,7 @@ msgid "Knowledge:"
 msgstr "Kunskap:"
 
 msgid "Spell Points:"
-msgstr "Besvärj.poäng:"
+msgstr "Besvärjelsepoäng:"
 
 msgid "Move Points:"
 msgstr "Steg:"
