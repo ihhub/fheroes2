@@ -20,7 +20,9 @@
 
 #pragma once
 
+#include <array>
 #include <cstdint>
+#include <map>
 #include <string>
 #include <vector>
 
@@ -45,6 +47,25 @@ namespace Maps::Map_Format
         uint8_t terrainFlag{ 0 };
 
         std::vector<ObjectInfo> objects;
+    };
+
+    // This structure should be used for any object that require simple data to be saved into map.
+    struct StandardObjectMetadata
+    {
+        std::array<uint32_t, 3> metadata{ 0 };
+    };
+
+    struct CastleMetadata
+    {
+        // Color, type and whether it is castle or town must come from ObjectInfo to make sure
+        // that these values correspond to graphical representation of the castle.
+
+        // If the name is empty a random name is going to be set by the engine.
+        std::string customName;
+
+        // Defending monsters that are set in the castle.
+        std::array<int32_t, 5> defenderMonsterType{ 0 };
+        std::array<int32_t, 5> defenderMonsterCount{ 0 };
     };
 
     struct BaseMapFormat
@@ -72,6 +93,9 @@ namespace Maps::Map_Format
 
         std::string name;
         std::string description;
+
+        // The language in which the map was made. This is important in order to load map's texts and display them properly.
+        uint8_t supportedLanguage{ 0 };
     };
 
     struct MapFormat : public BaseMapFormat
@@ -80,6 +104,11 @@ namespace Maps::Map_Format
         std::vector<uint32_t> additionalInfo;
 
         std::vector<TileInfo> tiles;
+
+        // These are matadata maps in relation to object UID.
+        std::map<uint32_t, StandardObjectMetadata> standardMetadata;
+
+        std::map<uint32_t, CastleMetadata> castleMetadata;
     };
 
     bool loadBaseMap( const std::string & path, BaseMapFormat & map );
@@ -91,6 +120,10 @@ namespace Maps::Map_Format
     StreamBase & operator>>( StreamBase & msg, ObjectInfo & object );
     StreamBase & operator<<( StreamBase & msg, const TileInfo & tile );
     StreamBase & operator>>( StreamBase & msg, TileInfo & tile );
+    StreamBase & operator<<( StreamBase & msg, const StandardObjectMetadata & metadata );
+    StreamBase & operator>>( StreamBase & msg, StandardObjectMetadata & metadata );
+    StreamBase & operator<<( StreamBase & msg, const CastleMetadata & metadata );
+    StreamBase & operator>>( StreamBase & msg, CastleMetadata & metadata );
     StreamBase & operator<<( StreamBase & msg, const BaseMapFormat & map );
     StreamBase & operator>>( StreamBase & msg, BaseMapFormat & map );
     StreamBase & operator<<( StreamBase & msg, const MapFormat & map );
