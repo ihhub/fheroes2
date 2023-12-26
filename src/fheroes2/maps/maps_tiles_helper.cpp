@@ -214,7 +214,9 @@ namespace
             Maps::Tiles & topTile = world.GetTiles( top );
             topTile.Remove( tile.GetObjectUID() );
 
-            if ( topTile.GetObject() == MP2::OBJ_JAIL ) {
+            if ( topTile.GetObject() == MP2::OBJ_JAIL && topTile.GetObjectUID() == 0 ) {
+                // Since the main object was removed from the tile is it safe to mark it as empty, even if other non-main objects exist.
+                // This is not ideal but it doesn't break things.
                 topTile.setAsEmpty();
                 topTile.FixObject();
             }
@@ -224,7 +226,9 @@ namespace
                 Maps::Tiles & leftTile = world.GetTiles( Maps::GetDirectionIndex( top, Direction::LEFT ) );
                 leftTile.Remove( tile.GetObjectUID() );
 
-                if ( leftTile.GetObject() == MP2::OBJ_JAIL ) {
+                if ( leftTile.GetObject() == MP2::OBJ_JAIL && leftTile.GetObjectUID() == 0 ) {
+                    // Since the main object was removed from the tile is it safe to mark it as empty, even if other non-main objects exist.
+                    // This is not ideal but it doesn't break things.
                     leftTile.setAsEmpty();
                     leftTile.FixObject();
                 }
