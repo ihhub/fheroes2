@@ -112,7 +112,7 @@ const char * Maps::SizeString( int s )
     return _( "maps|Custom Size" );
 }
 
-const char * Maps::GetMinesName( int type )
+const char * Maps::GetMineName( int type )
 {
     switch ( type ) {
     case Resource::ORE:

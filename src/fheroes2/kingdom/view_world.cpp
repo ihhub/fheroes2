@@ -405,7 +405,7 @@ namespace
                     }
 
                     case MP2::OBJ_ALCHEMIST_LAB:
-                    case MP2::OBJ_MINES:
+                    case MP2::OBJ_MINE:
                     case MP2::OBJ_SAWMILL:
                         if ( revealMines || !tile.isFog( color ) ) {
                             const uint32_t colorOffset = colorToOffsetICN( getColorFromTile( tile ) );

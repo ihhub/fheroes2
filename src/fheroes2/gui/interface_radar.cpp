@@ -339,7 +339,7 @@ void Interface::Radar::RedrawObjects( const int32_t playerColor, const ViewWorld
             }
             case MP2::OBJ_LIGHTHOUSE:
             case MP2::OBJ_ALCHEMIST_LAB:
-            case MP2::OBJ_MINES:
+            case MP2::OBJ_MINE:
             case MP2::OBJ_SAWMILL:
                 // TODO: Why Lighthouse is in this category? Verify the logic!
                 if ( visibleTile || revealMines ) {
@@ -349,7 +349,7 @@ void Interface::Radar::RedrawObjects( const int32_t playerColor, const ViewWorld
                 continue;
             case MP2::OBJ_NON_ACTION_LIGHTHOUSE:
             case MP2::OBJ_NON_ACTION_ALCHEMIST_LAB:
-            case MP2::OBJ_NON_ACTION_MINES:
+            case MP2::OBJ_NON_ACTION_MINE:
             case MP2::OBJ_NON_ACTION_SAWMILL:
                 // TODO: Why Lighthouse is in this category? Verify the logic!
                 if ( visibleTile || revealMines ) {

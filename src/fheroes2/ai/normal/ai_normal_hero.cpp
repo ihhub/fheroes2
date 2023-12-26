@@ -257,7 +257,7 @@ namespace
 
         case MP2::OBJ_ALCHEMIST_LAB:
         case MP2::OBJ_LIGHTHOUSE:
-        case MP2::OBJ_MINES:
+        case MP2::OBJ_MINE:
         case MP2::OBJ_SAWMILL:
             if ( !hero.isFriends( getColorFromTile( tile ) ) ) {
                 if ( isCaptureObjectProtected( tile ) ) {
@@ -788,7 +788,7 @@ namespace
         case MP2::OBJ_ALCHEMIST_LAB:
         case MP2::OBJ_ARTIFACT:
         case MP2::OBJ_HEROES:
-        case MP2::OBJ_MINES:
+        case MP2::OBJ_MINE:
         case MP2::OBJ_SAWMILL:
             return 0.9;
         case MP2::OBJ_CAMPFIRE:
@@ -1031,7 +1031,7 @@ namespace AI
             return 1000.0 + monsters.getTotalHP() / 100.0;
         }
         case MP2::OBJ_ALCHEMIST_LAB:
-        case MP2::OBJ_MINES:
+        case MP2::OBJ_MINE:
         case MP2::OBJ_SAWMILL:
         case MP2::OBJ_ABANDONED_MINE: {
             int resourceType = Resource::UNKNOWN;
@@ -1721,7 +1721,7 @@ namespace AI
             return twoTiles + monsters.getTotalHP() / 100.0;
         }
         case MP2::OBJ_ALCHEMIST_LAB:
-        case MP2::OBJ_MINES:
+        case MP2::OBJ_MINE:
         case MP2::OBJ_SAWMILL: {
             if ( getColorFromTile( tile ) == hero.GetColor() ) {
                 return -dangerousTaskPenalty; // don't even attempt to go here

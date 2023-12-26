@@ -644,7 +644,7 @@ namespace Maps
         if ( objectType == MP2::OBJ_ABANDONED_MINE ) {
             renderFlyingGhosts = true;
         }
-        else if ( objectType == MP2::OBJ_MINES ) {
+        else if ( objectType == MP2::OBJ_MINE ) {
             const int32_t spellID = Maps::getMineSpellIdFromTile( tile );
 
             switch ( spellID ) {
@@ -1146,7 +1146,7 @@ namespace Maps
 
     std::vector<fheroes2::ObjectRenderingInfo> getMineGuardianSpritesPerTile( const Tiles & tile )
     {
-        assert( tile.GetObject( false ) == MP2::OBJ_MINES );
+        assert( tile.GetObject( false ) == MP2::OBJ_MINE );
 
         std::vector<fheroes2::ObjectRenderingInfo> objectInfo;
 
