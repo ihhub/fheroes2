@@ -196,15 +196,15 @@ bool Battle::Only::setup( const bool allowBackup, bool & reset )
     const fheroes2::Sprite buttonOverride = fheroes2::Crop( fheroes2::AGG::GetICN( ICN::SWAPWIN, 0 ), 122, 428, 84, 32 );
     fheroes2::Blit( buttonOverride, display, cur_pt.x + 276, cur_pt.y + 428 );
 
-    fheroes2::ButtonSprite buttonOkay = fheroes2::makeButtonWithShadow( cur_pt.x + 178, cur_pt.y + 428, fheroes2::AGG::GetICN( ICN::BUTTON_SMALL_OKAY_GOOD, 0 ),
-                                                                        fheroes2::AGG::GetICN( ICN::BUTTON_SMALL_OKAY_GOOD, 1 ), display );
+    fheroes2::ButtonSprite buttonStart = fheroes2::makeButtonWithShadow( cur_pt.x + 178, cur_pt.y + 428, fheroes2::AGG::GetICN( ICN::BUTTON_START_GOOD, 0 ),
+                                                                         fheroes2::AGG::GetICN( ICN::BUTTON_START_GOOD, 1 ), display );
     fheroes2::ButtonSprite buttonCancel = fheroes2::makeButtonWithShadow( cur_pt.x + 366, cur_pt.y + 428, fheroes2::AGG::GetICN( ICN::BUTTON_SMALL_CANCEL_GOOD, 0 ),
                                                                           fheroes2::AGG::GetICN( ICN::BUTTON_SMALL_CANCEL_GOOD, 1 ), display );
 
     fheroes2::ButtonSprite buttonReset = fheroes2::makeButtonWithShadow( cur_pt.x + 30, cur_pt.y + 428, fheroes2::AGG::GetICN( ICN::BUTTON_RESET_GOOD, 0 ),
                                                                          fheroes2::AGG::GetICN( ICN::BUTTON_RESET_GOOD, 1 ), display );
 
-    buttonOkay.draw();
+    buttonStart.draw();
     buttonCancel.draw();
     buttonReset.draw();
 
@@ -216,11 +216,11 @@ bool Battle::Only::setup( const bool allowBackup, bool & reset )
         bool updateSpellPoints = false;
         bool redraw = false;
 
-        buttonOkay.isEnabled() && le.MousePressLeft( buttonOkay.area() ) ? buttonOkay.drawOnPress() : buttonOkay.drawOnRelease();
+        buttonStart.isEnabled() && le.MousePressLeft( buttonStart.area() ) ? buttonStart.drawOnPress() : buttonStart.drawOnRelease();
         buttonCancel.isEnabled() && le.MousePressLeft( buttonCancel.area() ) ? buttonCancel.drawOnPress() : buttonCancel.drawOnRelease();
         buttonReset.isEnabled() && le.MousePressLeft( buttonReset.area() ) ? buttonReset.drawOnPress() : buttonReset.drawOnRelease();
 
-        if ( ( buttonOkay.isEnabled() && le.MouseClickLeft( buttonOkay.area() ) ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) ) {
+        if ( ( buttonStart.isEnabled() && le.MouseClickLeft( buttonStart.area() ) ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) ) {
             result = true;
 
             break;
@@ -234,6 +234,16 @@ bool Battle::Only::setup( const bool allowBackup, bool & reset )
 
         if ( le.MouseClickLeft( buttonCancel.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
             break;
+        }
+
+        if ( le.MousePressRight( buttonStart.area() ) ) {
+            fheroes2::showStandardTextMessage( _( "Start" ), _( "Start the battle." ), 0 );
+        }
+        else if ( le.MousePressRight( buttonCancel.area() ) ) {
+            fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Exit this menu." ), 0 );
+        }
+        else if ( le.MousePressRight( buttonReset.area() ) ) {
+            fheroes2::showStandardTextMessage( _( "Reset" ), _( "Reset to default settings." ), 0 );
         }
 
         for ( const auto & ids : { std::pair<int32_t, int32_t>( 0, 1 ), std::pair<int32_t, int32_t>( 1, 0 ) } ) {
@@ -394,7 +404,7 @@ bool Battle::Only::setup( const bool allowBackup, bool & reset )
 
         fheroes2::Blit( buttonOverride, display, cur_pt.x + 276, cur_pt.y + 428 );
 
-        buttonOkay.draw();
+        buttonStart.draw();
         buttonCancel.draw();
         buttonReset.draw();
         display.render();
