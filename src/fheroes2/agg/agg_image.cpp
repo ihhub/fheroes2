@@ -1891,7 +1891,8 @@ namespace fheroes2
                     break;
                 }
 
-                getTextAdaptedButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "CANCEL" ), isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON, ICN::UNKNOWN );
+                getTextAdaptedButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "CANCEL" ),
+                                      isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON, ICN::UNKNOWN );
 
                 break;
             }
