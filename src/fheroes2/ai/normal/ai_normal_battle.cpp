@@ -834,7 +834,12 @@ namespace AI
             _enemyShootersStrength += commanderMaximumSpellDamageValue( *enemyCommander );
         }
 
-        _defensiveTactics = [this, &currentUnit]() {
+        assert( _myArmyStrength > 0.0 && _enemyArmyStrength > 0.0 );
+
+        const double myArcherRatio = _myShootersStrength / _myArmyStrength;
+        const double enemyArcherRatio = _enemyShootersStrength / _enemyArmyStrength;
+
+        _defensiveTactics = [this, &currentUnit, myArcherRatio, enemyArcherRatio]() {
             // Unit is already in the enemy half of the battlefield, just let it keep attacking
             if ( !isPositionLocatedInDefendedArea( currentUnit, currentUnit.GetPosition() ) ) {
                 return false;
@@ -858,21 +863,13 @@ namespace AI
                 return true;
             }
 
-            assert( _myArmyStrength > 0.0 && _enemyArmyStrength > 0.0 );
-
-            const double myArcherRatio = _myShootersStrength / _myArmyStrength;
-            const double enemyArcherRatio = _enemyShootersStrength / _enemyArmyStrength;
-
-            const double myArcherThreshold = 0.15;
-            const double enemyArcherThreshold = 0.66;
-
             // If we have an unfavorable ratio of infantry and shooters for defense, then it is better to choose an offensive
-            if ( myArcherRatio < myArcherThreshold ) {
+            if ( myArcherRatio < 0.15 ) {
                 return false;
             }
 
             // If the enemy has too many shooters, but not enough infantry to cover them, then it makes sense to choose an offensive
-            if ( enemyArcherRatio > enemyArcherThreshold ) {
+            if ( enemyArcherRatio > 0.66 ) {
                 return false;
             }
 
@@ -880,12 +877,12 @@ namespace AI
         }();
 
         // If an offensive tactic is chosen, then this means that, most likely, the enemy has more shooters, which means that we should try to attack the enemy and
-        // neutralize his shooters as quickly as possible. A cautious offensive tactics can be chosen only if our army is fighting an enemy army that cannot attack
-        // from a distance.
-        _cautiousOffensive = ( _enemyShootersStrength < 0.1 );
+        // neutralize his shooters as quickly as possible. A cautious offensive tactics can be chosen only if our army is fighting an enemy army that has limited
+        // distance attack capabilities.
+        _cautiousOffensive = ( enemyArcherRatio < 0.15 );
 
         DEBUG_LOG( DBG_BATTLE, DBG_TRACE,
-                   ( _defensiveTactics ? "Defensive" : "Offensive" )
+                   ( _defensiveTactics ? "Defensive" : ( _cautiousOffensive ? "Cautious offensive" : "Offensive" ) )
                        << " tactics have been chosen. Army strength: " << _myArmyStrength << ", shooters strength: " << _myShootersStrength
                        << ", enemy army strength: " << _enemyArmyStrength << ", enemy shooters strength: " << _enemyShootersStrength )
     }
