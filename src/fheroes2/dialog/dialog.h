@@ -81,7 +81,7 @@ namespace Dialog
         BUTTONS = ( YES | OK | NO | CANCEL )
     };
 
-    int AdventureOptions( bool enabledig );
+    int AdventureOptions( const bool enableDig );
     fheroes2::GameMode FileOptions();
     std::string SelectFileLoad();
     std::string SelectFileSave();
