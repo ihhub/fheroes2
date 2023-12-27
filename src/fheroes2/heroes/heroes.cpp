@@ -2288,7 +2288,7 @@ StreamBase & operator>>( StreamBase & msg, Heroes & hero )
 
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1100_RELEASE, "Remove the logic below." );
     if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1100_RELEASE ) {
-        // Before 1.1.0 release we did not check that a custom hero name is empty set inside the original map.
+        // Before FORMAT_VERSION_1100_RELEASE we did not check that a custom hero name is empty set inside the original map.
         // This leads to assertion rise while rendering text. Also, it is incorrect to have a hero with no name.
         if ( hero.name.empty() ) {
             hero.name = Heroes::GetName( hero._id );
