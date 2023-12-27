@@ -2568,14 +2568,14 @@ namespace fheroes2
 
         assert( !out.empty() );
 
-        const int32_t widthOut = out.width();
-
         if ( in.singleLayer() ) {
             // In this case we add a shadow of the fully non-transparent rectangular 'in' image.
             FillTransform( out, 0, shadowOffset.y, width, height, transformId );
 
             return out;
         }
+
+        const int32_t widthOut = out.width();
 
         const uint8_t * transformInY = in.transform();
         const uint8_t * transformInYEnd = transformInY + width * height;
