@@ -365,7 +365,7 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
         case 0x05: // Gems mine.
         case 0x06: // Gold mine.
             // TODO: should we verify the mine type by something?
-            map_captureobj.Set( Maps::GetIndexFromAbsPoint( posX, posY ), MP2::OBJ_MINES, Color::NONE );
+            map_captureobj.Set( Maps::GetIndexFromAbsPoint( posX, posY ), MP2::OBJ_MINE, Color::NONE );
             break;
         case 0x64:
             map_captureobj.Set( Maps::GetIndexFromAbsPoint( posX, posY ), MP2::OBJ_LIGHTHOUSE, Color::NONE );
@@ -842,7 +842,7 @@ bool World::updateTileMetadata( Maps::Tiles & tile, const MP2::MapObjectType obj
     case MP2::OBJ_HALFLING_HOLE:
     case MP2::OBJ_LEAN_TO:
     case MP2::OBJ_MAGIC_GARDEN:
-    case MP2::OBJ_MINES:
+    case MP2::OBJ_MINE:
     case MP2::OBJ_MONSTER:
     case MP2::OBJ_PEASANT_HUT:
     case MP2::OBJ_PYRAMID:

@@ -297,7 +297,7 @@ namespace
         case MP2::OBJ_CASTLE:
         case MP2::OBJ_WAGON_CAMP:
         case MP2::OBJ_FAERIE_RING:
-        case MP2::OBJ_MINES:
+        case MP2::OBJ_MINE:
         case MP2::OBJ_SAWMILL:
         case MP2::OBJ_WATER_ALTAR:
         case MP2::OBJ_AIR_ALTAR:
@@ -1208,7 +1208,7 @@ void Maps::Tiles::setOwnershipFlag( const MP2::MapObjectType objectType, const i
         break;
 
     case MP2::OBJ_WATER_WHEEL:
-    case MP2::OBJ_MINES:
+    case MP2::OBJ_MINE:
         objectSpriteIndex += 128 + 14;
         if ( Maps::isValidDirection( _index, Direction::TOP ) ) {
             Maps::Tiles & tile = world.GetTiles( Maps::GetDirectionIndex( _index, Direction::TOP ) );
