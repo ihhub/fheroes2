@@ -827,7 +827,7 @@ namespace Campaign
         if ( tryGetMatchingFile( _fileName, matchingFilePath ) ) {
             Maps::FileInfo fi;
 
-            if ( fi.ReadMP2( matchingFilePath ) ) {
+            if ( fi.readMP2Map( std::move( matchingFilePath ), false ) ) {
                 return fi;
             }
         }
