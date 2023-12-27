@@ -249,7 +249,8 @@ bool Dialog::InputString( const std::string & header, std::string & res, const s
     const fheroes2::Sprite & inputArea = fheroes2::AGG::GetICN( ( isEvilInterface ? ICN::BUYBUILD : ICN::BUYBUILE ), 3 );
 
     const int32_t titleHeight = title.empty() ? 0 : titlebox.height( BOXAREA_WIDTH ) + 10;
-    const FrameBox box( 10 + titleHeight + textbox.height( BOXAREA_WIDTH ) + 10 + inputArea.height(), true );
+    const int32_t keyBoardButtonExtraHeight = 20;
+    const FrameBox box( 10 + titleHeight + textbox.height( BOXAREA_WIDTH ) + 10 + inputArea.height() + keyBoardButtonExtraHeight, true );
     const fheroes2::Rect & box_rt = box.GetArea();
 
     if ( !title.empty() ) {
@@ -286,12 +287,12 @@ bool Dialog::InputString( const std::string & header, std::string & res, const s
     // Generate a button to open the Virtual Keyboard window.
     fheroes2::Sprite releasedVirtualKB;
     fheroes2::Sprite pressedVirtualKB;
-    const int32_t buttonVirtualKBWidth = 15;
+    const int32_t buttonVirtualKBWidth = 40;
 
     makeButtonSprites( releasedVirtualKB, pressedVirtualKB, "...", buttonVirtualKBWidth, isEvilInterface, true );
     // To center the button horizontally we have to take into account that actual button sprite is 10 pixels longer then the requested button width.
     fheroes2::ButtonSprite buttonVirtualKB
-        = makeButtonWithBackground( box_rt.x + ( box_rt.width - buttonVirtualKBWidth - 10 ) / 2, dst_pt.y, releasedVirtualKB, pressedVirtualKB, display );
+        = makeButtonWithBackground( box_rt.x + ( box_rt.width - buttonVirtualKBWidth - 10 ) / 2, dst_pt.y - 30, releasedVirtualKB, pressedVirtualKB, display );
 
     if ( res.empty() ) {
         buttonOk.disable();
