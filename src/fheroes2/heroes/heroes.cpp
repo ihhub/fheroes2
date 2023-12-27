@@ -561,9 +561,12 @@ void Heroes::LoadFromMP2( const int32_t mapIndex, const int colorType, const int
 
     const bool doesHeroHaveCustomName = ( dataStream.get() != 0 );
     if ( doesHeroHaveCustomName ) {
-        SetModes( CUSTOM );
-
-        name = dataStream.toString( 13 );
+        // An empty name can be set in the original Editor which is wrong.
+        std::string temp = dataStream.toString( 13 );
+        if ( !temp.empty() ) {
+            SetModes( CUSTOM );
+            name = std::move( temp );
+        }
     }
     else {
         dataStream.skip( 13 );
@@ -2282,6 +2285,15 @@ StreamBase & operator>>( StreamBase & msg, Heroes & hero )
 
     // Heroes
     msg >> hero.name >> col >> hero.experience >> hero.secondary_skills >> hero.army >> hero._id >> hero.portrait >> hero._race;
+
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1100_RELEASE, "Remove the logic below." );
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1100_RELEASE ) {
+        // Before 1.1.0 release we did not check that a custom hero name is empty set inside the original map.
+        // This leads to assertion rise while rendering text. Also, it is incorrect to have a hero with no name.
+        if ( hero.name.empty() ) {
+            hero.name = Heroes::GetName( hero._id );
+        }
+    }
 
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1010_RELEASE, "Remove the logic below." );
     if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1010_RELEASE ) {
