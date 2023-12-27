@@ -229,7 +229,7 @@ uint32_t CapturedObjects::GetCount( int obj, int col ) const
 uint32_t CapturedObjects::GetCountMines( const int resourceType, const int ownerColor ) const
 {
     uint32_t count = 0;
-    const ObjectColor correctObject( MP2::OBJ_MINES, ownerColor );
+    const ObjectColor correctObject( MP2::OBJ_MINE, ownerColor );
 
     for ( const auto & [tileIndex, objectInfo] : *this ) {
         if ( correctObject == objectInfo.objcol ) {
@@ -259,7 +259,7 @@ void CapturedObjects::ClearFog( int colors )
             int scoutingDistance = 0;
 
             switch ( objcol.first ) {
-            case MP2::OBJ_MINES:
+            case MP2::OBJ_MINE:
             case MP2::OBJ_ALCHEMIST_LAB:
             case MP2::OBJ_SAWMILL:
                 scoutingDistance = 2;

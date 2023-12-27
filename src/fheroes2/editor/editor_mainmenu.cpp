@@ -298,7 +298,7 @@ namespace Editor
 
         fheroes2::validateFadeInAndRender();
 
-        const MapsFileInfoList lists = Maps::getResurrectionMapFileInfos();
+        const MapsFileInfoList lists = Maps::getResurrectionMapFileInfos( true, false );
         if ( lists.empty() ) {
             fheroes2::showStandardTextMessage( _( "Warning" ), _( "No maps available!" ), Dialog::OK );
             return fheroes2::GameMode::EDITOR_MAIN_MENU;

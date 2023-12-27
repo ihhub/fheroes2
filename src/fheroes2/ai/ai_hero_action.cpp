@@ -684,7 +684,7 @@ namespace
         if ( !hero.isFriends( getColorFromTile( tile ) ) ) {
             const auto removeObjectProtection = [&tile]() {
                 // Clear any metadata related to spells
-                if ( tile.GetObject( false ) == MP2::OBJ_MINES ) {
+                if ( tile.GetObject( false ) == MP2::OBJ_MINE ) {
                     removeMineSpellFromTile( tile );
                 }
             };
@@ -1465,7 +1465,7 @@ namespace
             hero.IncreaseExperience( result.GetExperienceAttacker() );
 
             Maps::restoreAbandonedMine( tile, Resource::GOLD );
-            hero.setObjectTypeUnderHero( MP2::OBJ_MINES );
+            hero.setObjectTypeUnderHero( MP2::OBJ_MINE );
             setColorOnTile( tile, hero.GetColor() );
         }
         else {
@@ -1776,7 +1776,7 @@ namespace AI
             break;
 
         case MP2::OBJ_ALCHEMIST_LAB:
-        case MP2::OBJ_MINES:
+        case MP2::OBJ_MINE:
         case MP2::OBJ_SAWMILL:
         case MP2::OBJ_LIGHTHOUSE:
             AIToCaptureObject( hero, objectType, dst_index );

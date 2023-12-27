@@ -1606,7 +1606,7 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
                                                    Dialog::OK );
 
                 // TODO: find a way to restore world for the current game after a failure.
-                conf.SetCurrentFileInfo( Maps::FileInfo() );
+                conf.SetCurrentFileInfo( {} );
                 continue;
             }
 
