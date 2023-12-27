@@ -2573,21 +2573,22 @@ namespace fheroes2
         if ( in.singleLayer() ) {
             // In this case we add a shadow of the fully non-transparent rectangular 'in' image.
             FillTransform( out, 0, shadowOffset.y, width, height, transformId );
+
+            return out;
         }
-        else {
-            const uint8_t * transformInY = in.transform();
-            const uint8_t * transformInYEnd = transformInY + width * height;
-            uint8_t * transformOutY = out.transform() + shadowOffset.y * widthOut;
 
-            for ( ; transformInY != transformInYEnd; transformInY += width, transformOutY += widthOut ) {
-                const uint8_t * transformInX = transformInY;
-                uint8_t * transformOutX = transformOutY;
-                const uint8_t * transformInXEnd = transformInX + width;
+        const uint8_t * transformInY = in.transform();
+        const uint8_t * transformInYEnd = transformInY + width * height;
+        uint8_t * transformOutY = out.transform() + shadowOffset.y * widthOut;
 
-                for ( ; transformInX != transformInXEnd; ++transformInX, ++transformOutX ) {
-                    if ( *transformInX == 0 ) {
-                        *transformOutX = transformId;
-                    }
+        for ( ; transformInY != transformInYEnd; transformInY += width, transformOutY += widthOut ) {
+            const uint8_t * transformInX = transformInY;
+            uint8_t * transformOutX = transformOutY;
+            const uint8_t * transformInXEnd = transformInX + width;
+
+            for ( ; transformInX != transformInXEnd; ++transformInX, ++transformOutX ) {
+                if ( *transformInX == 0 ) {
+                    *transformOutX = transformId;
                 }
             }
         }
