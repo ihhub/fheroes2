@@ -395,22 +395,21 @@ namespace
 
         conf.GetPlayers().SetStartGame();
 
-        const std::string & filePath = conf.getCurrentMapInfo().filename;
-        const size_t pos = filePath.rfind( '.' );
-        if ( pos != std::string::npos ) {
-            const std::string ext = StringLower( filePath.substr( pos + 1 ) );
+        const Maps::FileInfo & mapInfo = conf.getCurrentMapInfo();
 
-            if ( ext == "mp2" || ext == "mx2" ) {
-                return world.LoadMapMP2( filePath, ( ext == "mp2" ) ) ? fheroes2::GameMode::START_GAME : fheroes2::GameMode::MAIN_MENU;
+        if ( mapInfo.version == GameVersion::SUCCESSION_WARS || mapInfo.version == GameVersion::PRICE_OF_LOYALTY ) {
+            if ( world.LoadMapMP2( mapInfo.filename, ( mapInfo.version == GameVersion::SUCCESSION_WARS ) ) ) {
+                return fheroes2::GameMode::START_GAME;
             }
+
+            return fheroes2::GameMode::MAIN_MENU;
         }
 
-        // This should never happen. Players are not able to load other map formats.
-        assert( 0 );
+        assert( mapInfo.version == GameVersion::RESURRECTION );
+        if ( world.loadResurrectionMap( mapInfo.filename ) ) {
+            return fheroes2::GameMode::START_GAME;
+        }
 
-        DEBUG_LOG( DBG_GAME, DBG_WARN,
-                   conf.getCurrentMapInfo().name << ", "
-                                                 << "unknown map format" )
         return fheroes2::GameMode::MAIN_MENU;
     }
 }
@@ -424,14 +423,14 @@ fheroes2::GameMode Game::ScenarioInfo()
 {
     AudioManager::PlayMusicAsync( MUS::MAINMENU, Music::PlaybackMode::RESUME_AND_PLAY_INFINITE );
 
-    const MapsFileInfoList lists = Maps::getOriginalMapFileInfos( Settings::Get().IsGameType( Game::TYPE_MULTI ) );
-    if ( lists.empty() ) {
+    const MapsFileInfoList maps = Maps::getAllMapFileInfos( false, Settings::Get().IsGameType( Game::TYPE_MULTI ) );
+    if ( maps.empty() ) {
         fheroes2::showStandardTextMessage( _( "Warning" ), _( "No maps available!" ), Dialog::OK );
         return fheroes2::GameMode::MAIN_MENU;
     }
 
     // We must release UI resources for this window before loading a new map. That's why all UI logic is in a separate function.
-    const fheroes2::GameMode result = ChooseNewMap( lists );
+    const fheroes2::GameMode result = ChooseNewMap( maps );
     if ( result != fheroes2::GameMode::START_GAME ) {
         return result;
     }

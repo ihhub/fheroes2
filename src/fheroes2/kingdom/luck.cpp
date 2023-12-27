@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -56,13 +56,13 @@ std::string Luck::Description( int luck )
     case Luck::CURSED:
     case Luck::AWFUL:
     case Luck::BAD:
-        return _( "Bad luck sometimes falls on your armies in combat, causing their attacks to only do half damage." );
+        return _( "Bad luck sometimes falls on the hero's units in combat, causing their attacks to only do half damage." );
     case Luck::NORMAL:
-        return _( "Neutral luck means your armies will never get lucky or unlucky attacks on the enemy." );
+        return _( "Neutral luck means the hero's units will never get lucky or unlucky attacks on the enemy." );
     case Luck::GOOD:
     case Luck::GREAT:
     case Luck::IRISH:
-        return _( "Good luck sometimes lets your armies get lucky attacks (double strength) in combat." );
+        return _( "Good luck sometimes lets the hero's units get lucky attacks (double strength) in combat." );
     default:
         break;
     }

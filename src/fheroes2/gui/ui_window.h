@@ -92,6 +92,8 @@ namespace fheroes2
 
         void applyTextBackgroundShading( const Rect & roi );
 
+        static void renderBackgroundImage( fheroes2::Image & output, const Rect & roi, const int32_t borderOffset, const bool isEvilInterface );
+
     private:
         Image & _output;
         const Rect _activeArea;
@@ -101,6 +103,5 @@ namespace fheroes2
         const bool _hasBackground{ true };
 
         Point _getRenderPos( const Point & offset, const Size & itemSize, const Padding padding ) const;
-        void _renderBackground( const bool isEvilInterface );
     };
 }

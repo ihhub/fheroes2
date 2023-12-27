@@ -64,12 +64,9 @@ namespace Maps
             return filename == fi.filename;
         }
 
-        bool ReadMP2( const std::string & filePath );
-        bool readResurrectionMap( std::string filePath );
+        bool readMP2Map( std::string filePath, const bool isForEditor );
 
-        bool ReadSAV( std::string filePath );
-
-        static bool FileSorting( const FileInfo & lhs, const FileInfo & rhs );
+        bool readResurrectionMap( std::string filePath, const bool isForEditor );
 
         bool isAllowCountPlayers( int playerCount ) const;
 
@@ -136,6 +133,10 @@ namespace Maps
         }
 
         void Reset();
+
+        static bool sortByFileName( const FileInfo & lhs, const FileInfo & rhs );
+
+        static bool sortByMapName( const FileInfo & lhs, const FileInfo & rhs );
 
         enum VictoryCondition : uint8_t
         {
@@ -205,11 +206,11 @@ using MapsFileInfoList = std::vector<Maps::FileInfo>;
 
 namespace Maps
 {
-    // For SUCCESSION_WARS and PRICE_OF_LOYALTY map files.
-    MapsFileInfoList getOriginalMapFileInfos( const bool multi );
+    // For all map files.
+    MapsFileInfoList getAllMapFileInfos( const bool isForEditor, const bool isMultiplayer );
 
-    // For RESURRECTION map files.
-    MapsFileInfoList getResurrectionMapFileInfos();
+    // Only for RESURRECTION map files.
+    MapsFileInfoList getResurrectionMapFileInfos( const bool isForEditor, const bool isMultiplayer );
 }
 
 #endif

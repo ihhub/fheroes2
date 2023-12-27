@@ -572,7 +572,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
             }
 
             // These are parts of original action objects which must be rendered under heroes.
-            if ( objectType == MP2::OBJ_MINES ) {
+            if ( objectType == MP2::OBJ_MINE ) {
                 auto spriteInfo = getMineGuardianSpritesPerTile( tile );
                 if ( !spriteInfo.empty() ) {
                     const uint8_t alphaValue = getObjectAlphaValue( tile.GetObjectUID() );

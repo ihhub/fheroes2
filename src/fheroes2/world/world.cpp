@@ -230,7 +230,7 @@ uint32_t CapturedObjects::GetCountMines( int type, int col ) const
 {
     uint32_t result = 0;
 
-    const ObjectColor objcol1( MP2::OBJ_MINES, col );
+    const ObjectColor objcol1( MP2::OBJ_MINE, col );
     const ObjectColor objcol2( MP2::OBJ_HEROES, col );
 
     for ( const_iterator it = begin(); it != end(); ++it ) {
@@ -273,7 +273,7 @@ void CapturedObjects::ClearFog( int colors )
             int scoutingDistance = 0;
 
             switch ( objcol.first ) {
-            case MP2::OBJ_MINES:
+            case MP2::OBJ_MINE:
             case MP2::OBJ_ALCHEMIST_LAB:
             case MP2::OBJ_SAWMILL:
                 scoutingDistance = 2;

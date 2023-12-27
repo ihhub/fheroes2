@@ -242,10 +242,18 @@ void SecondarySkillsBar::RedrawItem( Skill::Secondary & skill, const fheroes2::R
     }
     else {
         fheroes2::Text text{ Skill::Secondary::String( skill.Skill() ), fheroes2::FontType::smallWhite() };
-        text.draw( pos.x + ( pos.width - text.width() ) / 2, pos.y + 5, dstsf );
+        if ( text.width() > sprite.width() + 1 ) {
+            text.fitToOneRow( pos.width );
+        }
+        const int skillNamePaddingX = ( pos.width - text.width() ) / 2 - 1;
+        text.drawInRoi( pos.x + skillNamePaddingX, pos.y + 5, dstsf, pos );
 
         text.set( Skill::Level::StringWithBonus( _hero, skill ), fheroes2::FontType::smallWhite() );
-        text.draw( pos.x + ( pos.width - text.width() ) / 2, pos.y + 53, dstsf );
+        if ( text.width() > sprite.width() + 1 ) {
+            text.fitToOneRow( pos.width );
+        }
+        const int skillLevelPaddingX = ( pos.width - text.width() ) / 2 - 1;
+        text.drawInRoi( pos.x + skillLevelPaddingX, pos.y + 53, dstsf, pos );
     }
 }
 

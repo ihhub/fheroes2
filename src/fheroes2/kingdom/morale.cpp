@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -56,13 +56,13 @@ std::string Morale::Description( int morale )
     case Morale::TREASON:
     case Morale::AWFUL:
     case Morale::POOR:
-        return _( "Bad morale may cause your armies to freeze in combat." );
+        return _( "Bad morale may cause the hero's units to freeze in combat." );
     case Morale::NORMAL:
-        return _( "Neutral morale means your armies will never be blessed with extra attacks or freeze in combat." );
+        return _( "Neutral morale means the hero's units will never be blessed with extra attacks or freeze in combat." );
     case Morale::GOOD:
     case Morale::GREAT:
     case Morale::BLOOD:
-        return _( "Good morale may give your armies extra attacks in combat." );
+        return _( "Good morale may give the hero's units extra attacks in combat." );
     default:
         break;
     }
