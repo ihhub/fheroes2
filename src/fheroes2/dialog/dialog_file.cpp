@@ -21,6 +21,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <stdint.h> 
+
 #include "cursor.h"
 #include "dialog.h"
 #include "dir.h"
@@ -32,7 +34,6 @@
 #include "icn.h"
 #include "image.h"
 #include "localevent.h"
-#include "math_base.h"
 #include "screen.h"
 #include "settings.h"
 #include "translations.h"
