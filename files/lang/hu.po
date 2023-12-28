@@ -3890,7 +3890,7 @@ msgid "Used for special editing of monsters, heroes and towns."
 msgstr "Lények, hősök, városok speciális szerkesztéséhez használatos."
 
 msgid "Adventure Objects Mode"
-msgstr "Kaland opciók mód"
+msgstr "Kaland objektum mód"
 
 msgid ""
 "Used to place adventure objects (artifacts, dwellings, mines, treasures, "
