@@ -250,6 +250,7 @@ namespace AI
         bool _defendingCastle = false;
         bool _considerRetreat = false;
         bool _defensiveTactics = false;
+        bool _cautiousOffensive = false;
     };
 
     class Normal : public Base
