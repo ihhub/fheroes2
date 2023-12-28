@@ -37,8 +37,3 @@ bool ObjTown::isShadow( const uint8_t index )
 {
     return obTownShadowBitset[index];
 }
-
-bool ObjTwba::isShadow( const uint8_t /*index*/ )
-{
-    return false;
-}

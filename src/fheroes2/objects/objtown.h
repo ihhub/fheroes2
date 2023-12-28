@@ -31,9 +31,4 @@ namespace ObjTown
     bool isShadow( const uint8_t index );
 }
 
-namespace ObjTwba
-{
-    bool isShadow( const uint8_t index );
-}
-
 #endif
