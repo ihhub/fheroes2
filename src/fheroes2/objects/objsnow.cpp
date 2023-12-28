@@ -21,14 +21,12 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "objsnow.h"
+
 #include <algorithm>
 #include <bitset>
-#include <iterator>
 #include <vector>
 
-#include "direction.h"
-#include "mp2.h"
-#include "objsnow.h"
 #include "tools.h"
 
 namespace

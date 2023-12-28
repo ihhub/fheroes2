@@ -21,13 +21,12 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "trees.h"
+
 #include <bitset>
 #include <vector>
 
-#include "direction.h"
-#include "mp2.h"
 #include "tools.h"
-#include "trees.h"
 
 namespace
 {
