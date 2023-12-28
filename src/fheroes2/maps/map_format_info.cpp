@@ -81,6 +81,7 @@ namespace Maps::Map_Format
         if ( metadata.metadata.size() != temp.size() ) {
             // This is a corrupted file!
             assert( 0 );
+            metadata.metadata = { 0 };
         }
         else {
             std::copy_n( temp.begin(), metadata.metadata.size(), metadata.metadata.begin() );
@@ -104,6 +105,7 @@ namespace Maps::Map_Format
         if ( metadata.defenderMonsterType.size() != temp.size() ) {
             // This is a corrupted file!
             assert( 0 );
+            metadata.defenderMonsterType = { 0 };
         }
         else {
             std::copy_n( temp.begin(), metadata.defenderMonsterType.size(), metadata.defenderMonsterType.begin() );
@@ -115,6 +117,7 @@ namespace Maps::Map_Format
         if ( metadata.defenderMonsterCount.size() != temp.size() ) {
             // This is a corrupted file!
             assert( 0 );
+            metadata.defenderMonsterCount = { 0 };
         }
         else {
             std::copy_n( temp.begin(), metadata.defenderMonsterCount.size(), metadata.defenderMonsterCount.begin() );
@@ -127,14 +130,14 @@ namespace Maps::Map_Format
     {
         return msg << map.version << map.isCampaign << map.difficulty << map.availablePlayerColors << map.humanPlayerColors << map.computerPlayerColors << map.alliances
                    << map.victoryConditionType << map.isVictoryConditionApplicableForAI << map.allowNormalVictory << map.victoryConditionMetadata << map.lossCondition
-                   << map.lossConditionMetadata << map.size << map.name << map.description << map.supportedLanguage;
+                   << map.lossConditionMetadata << map.size << map.name << map.description;
     }
 
     StreamBase & operator>>( StreamBase & msg, BaseMapFormat & map )
     {
         return msg >> map.version >> map.isCampaign >> map.difficulty >> map.availablePlayerColors >> map.humanPlayerColors >> map.computerPlayerColors >> map.alliances
                >> map.victoryConditionType >> map.isVictoryConditionApplicableForAI >> map.allowNormalVictory >> map.victoryConditionMetadata >> map.lossCondition
-               >> map.lossConditionMetadata >> map.size >> map.name >> map.description >> map.supportedLanguage;
+               >> map.lossConditionMetadata >> map.size >> map.name >> map.description;
     }
 
     StreamBase & operator<<( StreamBase & msg, const MapFormat & map )

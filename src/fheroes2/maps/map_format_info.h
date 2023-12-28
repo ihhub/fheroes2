@@ -93,9 +93,6 @@ namespace Maps::Map_Format
 
         std::string name;
         std::string description;
-
-        // The language in which the map was made. This is important in order to load map's texts and display them properly.
-        uint8_t supportedLanguage{ 0 };
     };
 
     struct MapFormat : public BaseMapFormat
