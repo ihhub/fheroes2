@@ -28,18 +28,12 @@
 
 namespace ObjXlc1
 {
-    int GetPassable( const uint8_t index );
-    bool isAction( uint32_t index );
     bool isShadow( const uint8_t index );
-    int GetActionObject( uint32_t index );
 }
 
 namespace ObjXlc2
 {
-    int GetPassable( const uint8_t index );
-    bool isAction( uint32_t index );
     bool isShadow( const uint8_t index );
-    int GetActionObject( uint32_t index );
 
     // Returns true if the index belongs to Reefs type of the object.
     bool isReefs( const uint8_t index );
@@ -47,10 +41,7 @@ namespace ObjXlc2
 
 namespace ObjXlc3
 {
-    int GetPassable( const uint8_t index );
-    bool isAction( uint32_t index );
     bool isShadow( const uint8_t index );
-    int GetActionObject( uint32_t index );
 }
 
 #endif

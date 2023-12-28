@@ -28,10 +28,7 @@
 
 namespace ObjCrck
 {
-    bool isAction( uint32_t index );
     bool isShadow( const uint8_t index );
-    int GetPassable( const uint8_t index );
-    int GetActionObject( uint32_t index );
 }
 
 #endif

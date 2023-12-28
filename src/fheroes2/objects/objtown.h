@@ -29,17 +29,11 @@
 namespace ObjTown
 {
     bool isShadow( const uint8_t index );
-    bool isAction( uint32_t index );
-    int GetPassable( const uint8_t index );
-    int GetActionObject( uint32_t index );
 }
 
 namespace ObjTwba
 {
     bool isShadow( const uint8_t index );
-    bool isAction( uint32_t index );
-    int GetPassable( const uint8_t index );
-    int GetActionObject( uint32_t index );
 }
 
 #endif

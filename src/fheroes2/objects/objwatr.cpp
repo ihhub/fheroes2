@@ -39,46 +39,6 @@ namespace
                                                  168, 169, 170, 171, 172, 173, 174, 175, 176, 177, 178, 179, 180, 181, 184, 188, 189, 190, 191, 192, 193, 194, 240 } );
 }
 
-int ObjWat2::GetPassable( const uint8_t index )
-{
-    const uint8_t disabled[] = { 11, 12, 19, 22 };
-    const uint8_t restricted[] = { 2, 20 };
-
-    if ( isShadow( index ) )
-        return DIRECTION_ALL;
-    else if ( 10 == index )
-        return Direction::CENTER | Direction::TOP | Direction::LEFT | Direction::TOP_LEFT;
-    else if ( 22 == index )
-        return DIRECTION_CENTER_ROW | Direction::BOTTOM | Direction::BOTTOM_LEFT;
-    else if ( isAction( index ) || std::end( disabled ) != std::find( disabled, std::end( disabled ), index ) )
-        return 0;
-
-    return std::end( restricted ) != std::find( restricted, std::end( restricted ), index ) ? DIRECTION_CENTER_ROW | DIRECTION_BOTTOM_ROW : DIRECTION_ALL;
-}
-
-int ObjWatr::GetPassable( const uint8_t index )
-{
-    const uint8_t disabled[] = { 11, 12, 19, 22 };
-    const uint8_t restricted[] = { 69, 182, 183, 185, 186, 187, 248 };
-
-    if ( isShadow( index ) )
-        return DIRECTION_ALL;
-    else if ( isAction( index ) || std::end( disabled ) != std::find( disabled, std::end( disabled ), index ) )
-        return 0;
-
-    return std::end( restricted ) != std::find( restricted, std::end( restricted ), index ) ? DIRECTION_CENTER_ROW | DIRECTION_BOTTOM_ROW : DIRECTION_ALL;
-}
-
-bool ObjWat2::isAction( uint32_t index )
-{
-    return MP2::OBJ_NONE != GetActionObject( index );
-}
-
-bool ObjWatr::isAction( uint32_t index )
-{
-    return MP2::OBJ_NONE != GetActionObject( index );
-}
-
 bool ObjWatr::isShadow( const uint8_t index )
 {
     return objWatrShadowBitset[index];
@@ -87,39 +47,4 @@ bool ObjWatr::isShadow( const uint8_t index )
 bool ObjWat2::isShadow( const uint8_t index )
 {
     return index == 1;
-}
-
-int ObjWatr::GetActionObject( uint32_t index )
-{
-    switch ( index ) {
-    case 62:
-        return MP2::OBJ_MAGELLANS_MAPS;
-    case 195:
-        return MP2::OBJ_BUOY;
-    case 202:
-    case 206:
-    case 210:
-    case 214:
-    case 218:
-    case 222:
-        return MP2::OBJ_WHIRLPOOL;
-    case 241:
-        return MP2::OBJ_SHIPWRECK;
-    default:
-        break;
-    }
-
-    return MP2::OBJ_NONE;
-}
-
-int ObjWat2::GetActionObject( uint32_t index )
-{
-    switch ( index ) {
-    case 21:
-        return MP2::OBJ_DERELICT_SHIP;
-    default:
-        break;
-    }
-
-    return MP2::OBJ_NONE;
 }

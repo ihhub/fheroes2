@@ -44,44 +44,9 @@ namespace
           48, 49, 59, 65, 71, 77, 83, 89, 95, 101, 108, 109, 112, 113, 116, 117, 120, 121, 124, 125, 128, 129, 132, 133, 136, 137 } );
 }
 
-int ObjXlc1::GetPassable( const uint8_t index )
-{
-    const uint8_t disabled[] = { 40, 49, 50 };
-    const uint8_t restricted[] = { 69, 71, 75, 76, 85, 103, 117, 119, 126, 128, 134, 136 };
-
-    if ( isShadow( index ) )
-        return DIRECTION_ALL;
-    else if ( isAction( index ) || std::end( disabled ) != std::find( disabled, std::end( disabled ), index ) )
-        return 0;
-
-    return std::end( restricted ) != std::find( restricted, std::end( restricted ), index ) ? DIRECTION_CENTER_ROW | DIRECTION_BOTTOM_ROW : DIRECTION_ALL;
-}
-
-bool ObjXlc1::isAction( uint32_t index )
-{
-    return MP2::OBJ_NONE != GetActionObject( index );
-}
-
 bool ObjXlc1::isShadow( const uint8_t index )
 {
     return objXlc1ShadowBitset[index];
-}
-
-int ObjXlc2::GetPassable( const uint8_t index )
-{
-    const uint8_t restricted[] = { 3, 8, 28, 46, 92, 102 };
-
-    if ( isShadow( index ) )
-        return DIRECTION_ALL;
-    else if ( isAction( index ) || ( 110 < index && index < 136 ) )
-        return 0;
-
-    return std::end( restricted ) != std::find( restricted, std::end( restricted ), index ) ? DIRECTION_CENTER_ROW | DIRECTION_BOTTOM_ROW : DIRECTION_ALL;
-}
-
-bool ObjXlc2::isAction( uint32_t index )
-{
-    return MP2::OBJ_NONE != GetActionObject( index );
 }
 
 bool ObjXlc2::isShadow( const uint8_t index )
@@ -89,101 +54,12 @@ bool ObjXlc2::isShadow( const uint8_t index )
     return objXlc2ShadowBitset[index];
 }
 
-int ObjXlc3::GetPassable( const uint8_t index )
-{
-    if ( isShadow( index ) )
-        return DIRECTION_ALL;
-    else if ( isAction( index ) )
-        return 0;
-
-    return DIRECTION_ALL;
-}
-
-bool ObjXlc3::isAction( uint32_t index )
-{
-    return MP2::OBJ_NONE != GetActionObject( index );
-}
-
 bool ObjXlc3::isShadow( const uint8_t index )
 {
     return objXlc3ShadowBitset[index];
 }
 
-int ObjXlc1::GetActionObject( uint32_t index )
-{
-    switch ( index ) {
-    case 3:
-        return MP2::OBJ_ALCHEMIST_TOWER;
-    case 70:
-        return MP2::OBJ_ARENA;
-    case 77:
-        return MP2::OBJ_BARROW_MOUNDS;
-    case 94:
-        return MP2::OBJ_EARTH_ALTAR;
-    case 118:
-        return MP2::OBJ_AIR_ALTAR;
-    case 127:
-        return MP2::OBJ_FIRE_ALTAR;
-    case 135:
-        return MP2::OBJ_WATER_ALTAR;
-    default:
-        break;
-    }
-
-    return MP2::OBJ_NONE;
-}
-
-int ObjXlc2::GetActionObject( uint32_t index )
-{
-    switch ( index ) {
-    case 4:
-        return MP2::OBJ_STABLES;
-    case 9:
-        return MP2::OBJ_JAIL;
-    case 37:
-        return MP2::OBJ_MERMAID;
-    case 101:
-        return MP2::OBJ_SIRENS;
-    default:
-        break;
-    }
-
-    return MP2::OBJ_NONE;
-}
-
 bool ObjXlc2::isReefs( const uint8_t index )
 {
     return index >= 111 && index <= 135;
-}
-
-int ObjXlc3::GetActionObject( uint32_t index )
-{
-    switch ( index ) {
-    case 30:
-        return MP2::OBJ_HUT_OF_MAGI;
-    case 50:
-        return MP2::OBJ_EYE_OF_MAGI;
-    case 60:
-    case 66:
-    case 72:
-    case 78:
-    case 84:
-    case 90:
-    case 96:
-    case 102:
-        return MP2::OBJ_BARRIER;
-    case 110:
-    case 114:
-    case 118:
-    case 122:
-    case 126:
-    case 130:
-    case 134:
-    case 138:
-        return MP2::OBJ_TRAVELLER_TENT;
-    default:
-        break;
-    }
-
-    return MP2::OBJ_NONE;
 }

@@ -28,26 +28,17 @@
 
 namespace ObjLav2
 {
-    bool isAction( uint32_t index );
     bool isShadow( const uint8_t index );
-    int GetPassable( const uint8_t index );
-    int GetActionObject( uint32_t index );
 }
 
 namespace ObjLav3
 {
-    bool isAction( uint32_t index );
     bool isShadow( const uint8_t index );
-    int GetPassable( const uint8_t index );
-    int GetActionObject( uint32_t index );
 }
 
 namespace ObjLava
 {
-    bool isAction( uint32_t index );
     bool isShadow( const uint8_t index );
-    int GetPassable( const uint8_t index );
-    int GetActionObject( uint32_t index );
 }
 
 #endif

@@ -38,54 +38,7 @@ namespace
           126, 128, 136, 149, 150, 158, 161, 162, 163, 164, 165, 166, 167, 168, 177, 178, 179, 180, 181, 182, 183, 184, 193, 196, 200 } );
 }
 
-int ObjDirt::GetPassable( const uint8_t index )
-{
-    const uint8_t disabled[] = { 23, 24, 25, 26, 27, 28, 29, 30, 32, 33, 34, 35, 36, 37, 48, 49, 50, 51 };
-    const uint8_t restricted[]
-        = { 7,  9,  12, 13, 15, 16, 17, 18, 19, 20, 21, 22, 40, 41, 42, 43, 44, 45,  53,  54,  55,  56,  57,  58,  60,  61,  63,  64,  66,  67,  69, 71,
-            73, 74, 76, 77, 79, 80, 82, 83, 85, 86, 88, 89, 90, 92, 93, 98, 99, 101, 102, 104, 105, 118, 123, 127, 130, 133, 134, 137, 139, 152, 189 };
-
-    if ( isShadow( index ) )
-        return DIRECTION_ALL;
-    else if ( isAction( index ) || std::end( disabled ) != std::find( disabled, std::end( disabled ), index ) )
-        return 0;
-
-    return std::end( restricted ) != std::find( restricted, std::end( restricted ), index ) ? DIRECTION_CENTER_ROW | DIRECTION_BOTTOM_ROW : DIRECTION_ALL;
-}
-
-bool ObjDirt::isAction( uint32_t index )
-{
-    return MP2::OBJ_NONE != GetActionObject( index );
-}
-
 bool ObjDirt::isShadow( const uint8_t index )
 {
     return objDirtShadowBitset[index];
-}
-
-int ObjDirt::GetActionObject( uint32_t index )
-{
-    switch ( index ) {
-    case 8:
-        return MP2::OBJ_ABANDONED_MINE;
-    case 129:
-        return MP2::OBJ_FAERIE_RING;
-    case 135:
-        return MP2::OBJ_HILL_FORT;
-    case 138:
-        return MP2::OBJ_HALFLING_HOLE;
-    case 151:
-        return MP2::OBJ_TREE_CITY;
-    case 185:
-        return MP2::OBJ_WINDMILL;
-    case 197:
-    case 198:
-        return MP2::OBJ_ORACLE;
-    case 201:
-        return MP2::OBJ_OBELISK;
-    default:
-        break;
-    }
-
-    return MP2::OBJ_NONE;
 }
