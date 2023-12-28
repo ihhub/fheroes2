@@ -48,7 +48,6 @@
 #include "interface_radar.h"
 #include "localevent.h"
 #include "map_format_helper.h"
-#include "map_format_info.h"
 #include "map_object_info.h"
 #include "maps.h"
 #include "maps_tiles.h"
@@ -294,16 +293,10 @@ namespace Interface
                         continue;
                     }
 
-                    Maps::Map_Format::MapFormat map;
-                    if ( !Maps::saveMapInEditor( map ) ) {
-                        fheroes2::showStandardTextMessage( _( "Warning!" ), "Cannot convert a map into the required map format.", Dialog::OK );
-                        continue;
-                    }
+                    _mapFormat.name = fileName;
+                    _mapFormat.description = "Put a real description here.";
 
-                    map.name = fileName;
-                    map.description = "Put a real description here.";
-
-                    if ( !Maps::Map_Format::saveMap( System::concatPath( mapDirectory, fileName + ".fh2m" ), map ) ) {
+                    if ( !Maps::Map_Format::saveMap( System::concatPath( mapDirectory, fileName + ".fh2m" ), _mapFormat ) ) {
                         fheroes2::showStandardTextMessage( _( "Warning!" ), "Failed to save the map.", Dialog::OK );
                     }
                 }
@@ -451,14 +444,14 @@ namespace Interface
                 if ( isCursorOverGamearea && _editorPanel.getBrushArea().width == 0 ) {
                     if ( _editorPanel.isTerrainEdit() ) {
                         // Fill the selected area in terrain edit mode.
-                        const fheroes2::ActionCreator action( _historyManager );
+                        const fheroes2::ActionCreator action( _historyManager, _mapFormat );
 
                         const int groundId = _editorPanel.selectedGroundType();
                         Maps::setTerrainOnTiles( _selectedTile, _tileUnderCursor, groundId );
                     }
                     else if ( _editorPanel.isEraseMode() ) {
                         // Erase objects in the selected area.
-                        const fheroes2::ActionCreator action( _historyManager );
+                        const fheroes2::ActionCreator action( _historyManager, _mapFormat );
 
                         Maps::eraseObjectsOnTiles( _selectedTile, _tileUnderCursor, _editorPanel.getEraseTypes() );
                     }
@@ -646,7 +639,7 @@ namespace Interface
 
             const int groundId = _editorPanel.selectedGroundType();
 
-            const fheroes2::ActionCreator action( _historyManager );
+            const fheroes2::ActionCreator action( _historyManager, _mapFormat );
 
             if ( brushSize.width > 0 ) {
                 const fheroes2::Point indices = getBrushAreaIndicies( brushSize, tileIndex );
@@ -665,14 +658,14 @@ namespace Interface
             _redraw |= mapUpdateFlags;
         }
         else if ( _editorPanel.isRoadDraw() ) {
-            const fheroes2::ActionCreator action( _historyManager );
+            const fheroes2::ActionCreator action( _historyManager, _mapFormat );
 
             if ( Maps::updateRoadOnTile( tile, true ) ) {
                 _redraw |= mapUpdateFlags;
             }
         }
         else if ( _editorPanel.isStreamDraw() ) {
-            const fheroes2::ActionCreator action( _historyManager );
+            const fheroes2::ActionCreator action( _historyManager, _mapFormat );
 
             if ( Maps::updateStreamOnTile( tile, true ) ) {
                 _redraw |= mapUpdateFlags;
@@ -682,7 +675,7 @@ namespace Interface
             const fheroes2::Rect brushSize = _editorPanel.getBrushArea();
             assert( brushSize.width == brushSize.height );
 
-            const fheroes2::ActionCreator action( _historyManager );
+            const fheroes2::ActionCreator action( _historyManager, _mapFormat );
 
             if ( brushSize.width > 1 ) {
                 const fheroes2::Point indices = getBrushAreaIndicies( brushSize, tileIndex );
@@ -889,7 +882,7 @@ namespace Interface
                 return;
             }
 
-            const fheroes2::ActionCreator action( _historyManager );
+            const fheroes2::ActionCreator action( _historyManager, _mapFormat );
 
             Maps::setObjectOnTile( tile, basementObjectInfo );
 
@@ -931,10 +924,25 @@ namespace Interface
 
     void EditorInterface::setObjectOnTile( Maps::Tiles & tile, const Maps::ObjectInfo & objectInfo )
     {
-        const fheroes2::ActionCreator action( _historyManager );
+        const fheroes2::ActionCreator action( _historyManager, _mapFormat );
 
         Maps::setObjectOnTile( tile, objectInfo );
 
         _redraw |= mapUpdateFlags;
+    }
+
+    bool EditorInterface::loadMap( const std::string & filePath )
+    {
+        if ( !Maps::Map_Format::loadMap( filePath, _mapFormat ) ) {
+            fheroes2::showStandardTextMessage( _( "Warning!" ), "Failed to load the map.", Dialog::OK );
+            return false;
+        }
+
+        if ( !Maps::readMapInEditor( _mapFormat ) ) {
+            fheroes2::showStandardTextMessage( _( "Warning!" ), "Failed to read the map.", Dialog::OK );
+            return false;
+        }
+
+        return true;
     }
 }

@@ -176,7 +176,7 @@ fheroes2::GameMode Game::Load( const std::string & filePath )
     fs >> savId;
 
     if ( savId != SAV2ID3 ) {
-        DEBUG_LOG( DBG_GAME, DBG_WARN, "Invalid SAV2ID in the file " << filePath )
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "Invalid file identifier in the file " << filePath )
 
         showGenericErrorMessage();
 
@@ -300,7 +300,7 @@ bool Game::LoadSAV2FileInfo( std::string filePath, Maps::FileInfo & fileInfo )
     fs >> savId;
 
     if ( savId != SAV2ID3 ) {
-        DEBUG_LOG( DBG_GAME, DBG_WARN, "Invalid SAV2ID in the file " << filePath )
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "Invalid file identifier in the file " << filePath )
         return false;
     }
 
