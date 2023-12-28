@@ -21,38 +21,19 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "trees.h"
+
 #include <bitset>
 #include <vector>
 
-#include "direction.h"
-#include "mp2.h"
 #include "tools.h"
-#include "trees.h"
 
 namespace
 {
     const std::bitset<256> objTreeShadowBitset = fheroes2::makeBitsetFromVector<256>( { 0, 3, 7, 10, 13, 17, 20, 23, 26, 29, 32, 34 } );
 }
 
-int ObjTree::GetPassable( const uint8_t index )
-{
-    if ( isShadow( index ) )
-        return DIRECTION_ALL;
-
-    return ( 5 == index || 15 == index || 22 == index || 27 == index ? 0 : DIRECTION_CENTER_ROW | DIRECTION_BOTTOM_ROW );
-}
-
-bool ObjTree::isAction( uint32_t index )
-{
-    return MP2::OBJ_NONE != GetActionObject( index );
-}
-
 bool ObjTree::isShadow( const uint8_t index )
 {
     return objTreeShadowBitset[index];
-}
-
-int ObjTree::GetActionObject( uint32_t /* unused */ )
-{
-    return MP2::OBJ_NONE;
 }
