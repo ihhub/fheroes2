@@ -550,7 +550,7 @@ bool HeroBase::CanCastSpell( const Spell & spell, std::string * res /* = nullptr
             const Maps::Tiles & tile = world.GetTiles( hero->GetIndex() );
             const MP2::MapObjectType object = tile.GetObject( false );
 
-            if ( MP2::OBJ_MINES != object ) {
+            if ( MP2::OBJ_MINE != object ) {
                 if ( res != nullptr ) {
                     *res = _( "You must be standing on the entrance to a mine (sawmills and alchemist labs do not count) to cast this spell." );
                 }

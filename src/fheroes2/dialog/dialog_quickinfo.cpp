@@ -125,7 +125,7 @@ namespace
         fheroes2::ImageRestorer _restorer;
     };
 
-    std::string getMinesIncomeString( const int32_t resourceType )
+    std::string getMineIncomeString( const int32_t resourceType )
     {
         const Funds income = ProfitConditions::FromMine( resourceType );
         const int32_t value = income.Get( resourceType );
@@ -147,11 +147,11 @@ namespace
     std::string showMineInfo( const Maps::Tiles & tile, const bool isOwned )
     {
         const int32_t resourceType = getDailyIncomeObjectResources( tile ).getFirstValidResource().first;
-        std::string objectInfo = Maps::GetMinesName( resourceType );
+        std::string objectInfo = Maps::GetMineName( resourceType );
 
         if ( isOwned ) {
             // TODO: we should use the value from funds.
-            objectInfo.append( getMinesIncomeString( resourceType ) );
+            objectInfo.append( getMineIncomeString( resourceType ) );
         }
 
         return objectInfo;
@@ -163,7 +163,7 @@ namespace
 
         std::string str;
 
-        if ( objectType == MP2::OBJ_MINES ) {
+        if ( objectType == MP2::OBJ_MINE ) {
             str = showMineInfo( tile, isOwned );
         }
         else {
@@ -489,7 +489,7 @@ namespace
             return Resource::String( funds.getFirstValidResource().first );
         }
 
-        case MP2::OBJ_MINES:
+        case MP2::OBJ_MINE:
             return showMineInfo( tile, playerColor == getColorFromTile( tile ) );
 
         case MP2::OBJ_ALCHEMIST_LAB:
@@ -500,7 +500,7 @@ namespace
                 assert( funds.GetValidItemsCount() == 1 );
 
                 // TODO: we should use the value from funds.
-                objectInfo.append( getMinesIncomeString( funds.getFirstValidResource().first ) );
+                objectInfo.append( getMineIncomeString( funds.getFirstValidResource().first ) );
             }
             return objectInfo;
         }
@@ -840,6 +840,7 @@ namespace
             text.set( _( "Attack:" ), smallWhite );
             dst_pt.x = cur_rt.x + 10;
             dst_pt.y += heroPortraitFrame.height();
+            text.fitToOneRow( statNumberColumn );
             text.draw( dst_pt.x, dst_pt.y, display );
 
             text.set( std::to_string( hero.GetAttack() ), smallWhite );
@@ -850,6 +851,7 @@ namespace
             text.set( _( "Defense:" ), smallWhite );
             dst_pt.x = cur_rt.x + 10;
             dst_pt.y += statRow;
+            text.fitToOneRow( statNumberColumn );
             text.draw( dst_pt.x, dst_pt.y, display );
 
             text.set( std::to_string( hero.GetDefense() ), smallWhite );
@@ -860,6 +862,7 @@ namespace
             text.set( _( "Spell Power:" ), smallWhite );
             dst_pt.x = cur_rt.x + 10;
             dst_pt.y += statRow;
+            text.fitToOneRow( statNumberColumn );
             text.draw( dst_pt.x, dst_pt.y, display );
 
             text.set( std::to_string( hero.GetPower() ), smallWhite );
@@ -870,6 +873,7 @@ namespace
             text.set( _( "Knowledge:" ), smallWhite );
             dst_pt.x = cur_rt.x + 10;
             dst_pt.y += statRow;
+            text.fitToOneRow( statNumberColumn );
             text.draw( dst_pt.x, dst_pt.y, display );
 
             text.set( std::to_string( hero.GetKnowledge() ), smallWhite );
@@ -880,6 +884,7 @@ namespace
             text.set( _( "Spell Points:" ), smallWhite );
             dst_pt.x = cur_rt.x + 10;
             dst_pt.y += statRow;
+            text.fitToOneRow( statNumberColumn );
             text.draw( dst_pt.x, dst_pt.y, display );
 
             text.set( std::to_string( hero.GetSpellPoints() ) + "/" + std::to_string( hero.GetMaxSpellPoints() ), smallWhite );
@@ -891,6 +896,7 @@ namespace
                 text.set( _( "Move Points:" ), smallWhite );
                 dst_pt.x = cur_rt.x + 10;
                 dst_pt.y += statRow;
+                text.fitToOneRow( statNumberColumn );
                 text.draw( dst_pt.x, dst_pt.y, display );
 
                 text.set( std::to_string( activeHero->GetMovePoints() ) + "/" + std::to_string( activeHero->GetMaxMovePoints() ), smallWhite );

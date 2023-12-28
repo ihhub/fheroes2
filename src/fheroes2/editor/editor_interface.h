@@ -22,11 +22,13 @@
 
 #include <cstdint>
 #include <functional>
+#include <string>
 
 #include "editor_interface_panel.h"
 #include "game_mode.h"
 #include "history_manager.h"
 #include "interface_base.h"
+#include "map_format_info.h"
 
 namespace Maps
 {
@@ -83,6 +85,8 @@ namespace Interface
             _cursorUpdater = cursorUpdater;
         }
 
+        bool loadMap( const std::string & filePath );
+
     private:
         EditorInterface()
             : BaseInterface( true )
@@ -103,5 +107,7 @@ namespace Interface
         std::function<void( const int32_t )> _cursorUpdater;
 
         fheroes2::HistoryManager _historyManager;
+
+        Maps::Map_Format::MapFormat _mapFormat;
     };
 }

@@ -158,6 +158,8 @@ public:
 
     bool LoadMapMP2( const std::string & filename, const bool isOriginalMp2File );
 
+    bool loadResurrectionMap( const std::string & filename );
+
     // Generate 2x2 map for Battle Only mode.
     void generateBattleOnlyMap();
 

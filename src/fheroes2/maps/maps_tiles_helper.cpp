@@ -214,7 +214,9 @@ namespace
             Maps::Tiles & topTile = world.GetTiles( top );
             topTile.Remove( tile.GetObjectUID() );
 
-            if ( topTile.GetObject() == MP2::OBJ_JAIL ) {
+            if ( topTile.GetObject() == MP2::OBJ_JAIL && topTile.GetObjectUID() == 0 ) {
+                // Since the main object was removed from the tile is it safe to mark it as empty, even if other non-main objects exist.
+                // This is not ideal but it doesn't break things.
                 topTile.setAsEmpty();
                 topTile.FixObject();
             }
@@ -224,7 +226,9 @@ namespace
                 Maps::Tiles & leftTile = world.GetTiles( Maps::GetDirectionIndex( top, Direction::LEFT ) );
                 leftTile.Remove( tile.GetObjectUID() );
 
-                if ( leftTile.GetObject() == MP2::OBJ_JAIL ) {
+                if ( leftTile.GetObject() == MP2::OBJ_JAIL && leftTile.GetObjectUID() == 0 ) {
+                    // Since the main object was removed from the tile is it safe to mark it as empty, even if other non-main objects exist.
+                    // This is not ideal but it doesn't break things.
                     leftTile.setAsEmpty();
                     leftTile.FixObject();
                 }
@@ -1375,7 +1379,7 @@ namespace Maps
 
     int32_t getMineSpellIdFromTile( const Tiles & tile )
     {
-        if ( tile.GetObject( false ) != MP2::OBJ_MINES ) {
+        if ( tile.GetObject( false ) != MP2::OBJ_MINE ) {
             // Why are you calling this function for an unsupported object type?
             assert( 0 );
             return Spell::NONE;
@@ -1386,7 +1390,7 @@ namespace Maps
 
     void setMineSpellOnTile( Tiles & tile, const int32_t spellId )
     {
-        if ( tile.GetObject( false ) != MP2::OBJ_MINES ) {
+        if ( tile.GetObject( false ) != MP2::OBJ_MINE ) {
             // Why are you calling this function for an unsupported object type?
             assert( 0 );
             return;
@@ -1397,7 +1401,7 @@ namespace Maps
 
     void removeMineSpellFromTile( Tiles & tile )
     {
-        if ( tile.GetObject( false ) != MP2::OBJ_MINES ) {
+        if ( tile.GetObject( false ) != MP2::OBJ_MINE ) {
             // Why are you calling this function for an unsupported object type?
             assert( 0 );
             return;
@@ -1410,7 +1414,7 @@ namespace Maps
     {
         switch ( tile.GetObject( false ) ) {
         case MP2::OBJ_ALCHEMIST_LAB:
-        case MP2::OBJ_MINES:
+        case MP2::OBJ_MINE:
         case MP2::OBJ_SAWMILL:
             return { static_cast<int>( tile.metadata()[0] ), tile.metadata()[1] };
         default:
@@ -2502,7 +2506,7 @@ namespace Maps
             break;
         }
 
-        case MP2::OBJ_MINES: {
+        case MP2::OBJ_MINE: {
             assert( isFirstLoad );
 
             switch ( tile.GetObjectSpriteIndex() ) {
@@ -2858,7 +2862,7 @@ namespace Maps
                 if ( ( mineTile.GetObject() == MP2::OBJ_NON_ACTION_ABANDONED_MINE )
                      && ( mineTile.GetObjectUID() == tile.GetObjectUID() || mineTile.getBottomLayerAddon( tile.GetObjectUID() )
                           || mineTile.getTopLayerAddon( tile.GetObjectUID() ) ) ) {
-                    mineTile.SetObject( MP2::OBJ_NON_ACTION_MINES );
+                    mineTile.SetObject( MP2::OBJ_NON_ACTION_MINE );
                 }
             }
         };

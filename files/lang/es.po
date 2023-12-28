@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-24 11:33+0000\n"
+"POT-Creation-Date: 2023-12-25 01:52+0000\n"
 "PO-Revision-Date: 2023-12-13 05:57+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -392,7 +392,8 @@ msgstr "Múltiple"
 msgid "Troops of %{count} alignments -%{penalty}"
 msgstr "Tropas de %{count} alineamientos -%{penalty}"
 
-msgid "Some undead in group -1"
+#, fuzzy
+msgid "Some undead in army -1"
 msgstr "Algunos nomuertos en tu ejercito -1"
 
 msgid "View %{name}"
@@ -2485,7 +2486,7 @@ msgstr ""
 "criaturas por semana."
 
 #, fuzzy
-msgid "The Statue increases your town's income by %{count} gold per day."
+msgid "The Statue increases the town's income by %{count} gold per day."
 msgstr ""
 "La Estatua incrementa los ingresos de tus ciudades en %{count} por día."
 
@@ -2513,9 +2514,10 @@ msgstr ""
 "El Foso ralentiza a las unidades atacantes. Cualquier unidad que entre en el "
 "foso terminará su turno y será más vulnerable a los ataques."
 
+#, fuzzy
 msgid ""
-"The Castle improves town defense and increases income to %{count} gold per "
-"day."
+"The Castle improves the town's defense and increases its income to %{count} "
+"gold per day."
 msgstr ""
 "El Castillo mejora las defensas de la ciudad e incrementa los ingresos en "
 "%{count} de oro al día."
@@ -7340,24 +7342,28 @@ msgstr "Esas débiles criaturas seguramente huirán nada más vernos."
 msgid "I fear these creatures are in the mood for a fight."
 msgstr "Me temo que esas criaturas tienen ganas de luchar."
 
-msgid "Your attack skill is a bonus added to each creature's attack skill."
+#, fuzzy
+msgid "The hero's attack skill is a bonus added to each unit's attack skill."
 msgstr ""
 "Tu habilidad de ataque es una bonificación añadida a cada habilidad de "
 "ataque de cada criatura."
 
-msgid "Your defense skill is a bonus added to each creature's defense skill."
+#, fuzzy
+msgid "The hero's defense skill is a bonus added to each unit's defense skill."
 msgstr ""
 "Tu habilidad de defensa es un bonificación añadida a cada habilidad de "
 "defensa de cada criatura."
 
-msgid "Your spell power determines the length or power of a spell."
+#, fuzzy
+msgid "The hero's spell power determines the duration or power of a spell."
 msgstr ""
 "Tu Potencia de hechizo determina la longitud o el poder de los hechizos."
 
+#, fuzzy
 msgid ""
-"Your knowledge determines how many spell points your hero may have. Under "
-"normal circumstances, a hero is limited to 10 spell points per level of "
-"knowledge."
+" The hero's knowledge determines how many spell points the hero may have. "
+"Under normal circumstances, a hero is limited to 10 spell points per level "
+"of knowledge."
 msgstr ""
 "El conocimiento determina el número máximo de puntos de Maná que tu héroe "
 "puede alcanzar. Bajo circunstancias normales, un héroe está limitado a 10 "
@@ -7551,62 +7557,68 @@ msgstr "%{skill} elimina la penalización de movimiento por terreno agreste."
 
 #, fuzzy
 msgid ""
-"%{skill} increases the damage done by range attacking creatures by %{count} "
-"percent."
+"%{skill} increases the damage done by the hero's range attacking creatures "
+"by %{count} percent."
 msgstr "Aumenta la velocidad de cualquier criatura en %{count}."
 
 #, fuzzy
-msgid "%{skill} increases your hero's movement points by %{count} percent."
+msgid "%{skill} increases the hero's movement points by %{count} percent."
 msgstr ""
 "La Estatua incrementa los ingresos de tus ciudades en %{count} por día."
 
-msgid "%{skill} increases your hero's viewable area by one square."
-msgid_plural ""
-"%{skill} increases your hero's viewable area by %{count} squares."
+#, fuzzy
+msgid "%{skill} increases the hero's viewable area by one square."
+msgid_plural "%{skill} increases the hero's viewable area by %{count} squares."
 msgstr[0] ""
+"La Estatua incrementa los ingresos de tus ciudades en %{count} por día."
 msgstr[1] ""
+"La Estatua incrementa los ingresos de tus ciudades en %{count} por día."
 
+#, fuzzy
 msgid ""
-"%{skill} allows you to negotiate with monsters who are weaker than your "
-"group. "
+"%{skill} allows the hero to negotiate with monsters who are weaker than "
+"their army."
 msgstr ""
 "%{skill} te permite negociar con monstruos que sean más débiles que tu "
 "grupo. "
 
 #, fuzzy
-msgid "Approximately %{count} percent of the creatures may offer to join you."
+msgid ""
+"Approximately %{count} percent of the creatures may offer to join the hero."
 msgstr "Todas las criaturas se nos unirán..."
 
 #, fuzzy
-msgid "All of the creatures may offer to join you."
+msgid "All of the creatures may offer to join the hero."
 msgstr "Todas las criaturas se nos unirán..."
 
 #, fuzzy
 msgid ""
-"%{skill} increases your hero's movement points over water by %{count} "
-"percent."
+"%{skill} increases the hero's movement points over water by %{count} percent."
 msgstr ""
 "Reduce la penalización al movimiento debida a terreno agreste en un %{count} "
 "por ciento."
 
 #, fuzzy
-msgid "%{skill} increases your hero's troops morale by %{count}."
+msgid "%{skill} increases the hero's troops morale by %{count}."
 msgstr ""
 "La Estatua incrementa los ingresos de tus ciudades en %{count} por día."
 
-msgid "%{skill} allows your hero to learn third level spells."
+#, fuzzy
+msgid "%{skill} allows the hero to learn third level spells."
 msgstr "%{skill} permite a tu héroe aprender hechizos de tercer nivel."
 
-msgid "%{skill} allows your hero to learn fourth level spells."
+#, fuzzy
+msgid "%{skill} allows the hero to learn fourth level spells."
 msgstr "%{skill} permite a tu héroe aprender hechizos de cuarto nivel."
 
-msgid "%{skill} allows your hero to learn fifth level spells."
+#, fuzzy
+msgid "%{skill} allows the hero to learn fifth level spells."
 msgstr "%{skill} permite a tu héroe aprender hechizos de quinto nivel."
 
 #, fuzzy
-msgid "%{skill} regenerates one additional spell point per day to your hero."
+msgid "%{skill} regenerates one additional spell point per day to the hero."
 msgid_plural ""
-"%{skill} regenerates %{count} additional spell points per day to your hero."
+"%{skill} regenerates %{count} additional spell points per day to the hero."
 msgstr[0] ""
 "Has tomado el control de una mina de cristal. Te proveerá con %{count} "
 "unidades de cristal al día."
@@ -7615,13 +7627,13 @@ msgstr[1] ""
 "unidades de cristal al día."
 
 #, fuzzy
-msgid "%{skill} increases your hero's luck by %{count}."
+msgid "%{skill} increases the hero's luck by %{count}."
 msgstr ""
 "La Estatua incrementa los ingresos de tus ciudades en %{count} por día."
 
 #, fuzzy
 msgid ""
-"%{skill} gives your hero's catapult shots a greater chance to hit and do "
+"%{skill} gives the hero's catapult shots a greater chance to hit and do "
 "damage to castle walls."
 msgstr ""
 "Le otorga a los disparos de las catapultas de tu héroe mayores "
@@ -7629,7 +7641,7 @@ msgstr ""
 
 #, fuzzy
 msgid ""
-"%{skill} gives your hero's catapult an extra shot, and each shot has a "
+"%{skill} gives the hero's catapult an extra shot, and each shot has a "
 "greater chance to hit and do damage to castle walls."
 msgstr ""
 "Le otorga a la catapulta de tu héroe un disparo adicional y cada disparo "
@@ -7637,24 +7649,24 @@ msgstr ""
 
 #, fuzzy
 msgid ""
-"%{skill} gives your hero's catapult an extra shot, and each shot "
+"%{skill} gives the hero's catapult an extra shot, and each shot "
 "automatically destroys any wall, except a fortified wall in a Knight castle."
 msgstr ""
 "Le otorga a la catapulta de tu héroe un disparo adicional y cada disparo "
 "tiene mayores opciones de golpear y dañar las murallas de los castillos."
 
 msgid ""
-"%{skill} gives your hero a %{count} percent chance to learn any given 1st or "
+"%{skill} gives the hero a %{count} percent chance to learn any given 1st or "
 "2nd level spell that was cast by an enemy during combat."
 msgstr ""
 
 msgid ""
-"%{skill} gives your hero a %{count} percent chance to learn any given 3rd "
+"%{skill} gives the hero a %{count} percent chance to learn any given 3rd "
 "level spell (or below) that was cast by an enemy during combat."
 msgstr ""
 
 msgid ""
-"%{skill} gives your hero a %{count} percent chance to learn any given 4th "
+"%{skill} gives the hero a %{count} percent chance to learn any given 4th "
 "level spell (or below) that was cast by an enemy during combat."
 msgstr ""
 
@@ -7663,9 +7675,12 @@ msgid ""
 "brought back from the dead as Skeletons."
 msgstr ""
 
+#, fuzzy
 msgid ""
-"Your hero produces %{count} gold pieces per day as tax revenue from estates."
+"The hero produces %{count} gold pieces per day as tax revenue from estates."
 msgstr ""
+"Has tomado el control de una mina de cristal. Te proveerá con %{count} "
+"unidades de cristal al día."
 
 msgid "Blue"
 msgstr "Azul"
@@ -7786,23 +7801,26 @@ msgstr "Grande"
 msgid "luck|Irish"
 msgstr "Irlandés"
 
+#, fuzzy
 msgid ""
-"Bad luck sometimes falls on your armies in combat, causing their attacks to "
-"only do half damage."
+"Bad luck sometimes falls on the hero's units in combat, causing their "
+"attacks to only do half damage."
 msgstr ""
 "La Mala suerte cae a veces en combate sobre tus tropas dividiendo por 2 el "
 "daño de sus ataques."
 
+#, fuzzy
 msgid ""
-"Neutral luck means your armies will never get lucky or unlucky attacks on "
-"the enemy."
+"Neutral luck means the hero's units will never get lucky or unlucky attacks "
+"on the enemy."
 msgstr ""
 "Con Suerte Neutral tus ejércitos nunca lograrán ataques afortunados o "
 "desafortunados."
 
+#, fuzzy
 msgid ""
-"Good luck sometimes lets your armies get lucky attacks (double strength) in "
-"combat."
+"Good luck sometimes lets the hero's units get lucky attacks (double "
+"strength) in combat."
 msgstr ""
 "Con Buena Suerte a veces tus tropas consegirán ataques afortunados "
 "duplicando su daño."
@@ -7828,17 +7846,20 @@ msgstr "Grande"
 msgid "morale|Blood!"
 msgstr "¡Sangre!"
 
-msgid "Bad morale may cause your armies to freeze in combat."
+#, fuzzy
+msgid "Bad morale may cause the hero's units to freeze in combat."
 msgstr "Con Baja Moral tus tropas puede paralizarse en combate."
 
+#, fuzzy
 msgid ""
-"Neutral morale means your armies will never be blessed with extra attacks or "
-"freeze in combat."
+"Neutral morale means the hero's units will never be blessed with extra "
+"attacks or freeze in combat."
 msgstr ""
 "Con Moral Neutral tus tropas no serán bendecidas con ataques adicionales ni "
 "se petrificarán en combate."
 
-msgid "Good morale may give your armies extra attacks in combat."
+#, fuzzy
+msgid "Good morale may give the hero's units extra attacks in combat."
 msgstr "Con Moral Alta tus tropas podrán lograr ataques extra en combate."
 
 msgid "Knight"
