@@ -226,35 +226,21 @@ uint32_t CapturedObjects::GetCount( int obj, int col ) const
     return result;
 }
 
-uint32_t CapturedObjects::GetCountMines( int type, int col ) const
+uint32_t CapturedObjects::GetCountMines( const int resourceType, const int ownerColor ) const
 {
-    uint32_t result = 0;
+    uint32_t count = 0;
+    const ObjectColor correctObject( MP2::OBJ_MINE, ownerColor );
 
-    const ObjectColor objcol1( MP2::OBJ_MINE, col );
-    const ObjectColor objcol2( MP2::OBJ_HEROES, col );
-
-    for ( const_iterator it = begin(); it != end(); ++it ) {
-        const ObjectColor & objcol = ( *it ).second.objcol;
-
-        if ( objcol == objcol1 || objcol == objcol2 ) {
-            // scan for find mines
-            const uint8_t index = world.GetTiles( ( *it ).first ).GetObjectSpriteIndex();
-
-            // index sprite EXTRAOVR
-            if ( 0 == index && Resource::ORE == type )
-                ++result;
-            else if ( 1 == index && Resource::SULFUR == type )
-                ++result;
-            else if ( 2 == index && Resource::CRYSTAL == type )
-                ++result;
-            else if ( 3 == index && Resource::GEMS == type )
-                ++result;
-            else if ( 4 == index && Resource::GOLD == type )
-                ++result;
+    for ( const auto & [tileIndex, objectInfo] : *this ) {
+        if ( correctObject == objectInfo.objcol ) {
+            const int32_t mineResource = Maps::getDailyIncomeObjectResources( world.GetTiles( tileIndex ) ).getFirstValidResource().first;
+            if ( resourceType == mineResource ) {
+                ++count;
+            }
         }
     }
 
-    return result;
+    return count;
 }
 
 int CapturedObjects::GetColor( int32_t index ) const
