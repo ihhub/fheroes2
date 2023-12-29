@@ -121,7 +121,8 @@ namespace
                                                 ICN::BUTTON_MAPSIZE_LARGE,
                                                 ICN::BUTTON_MAPSIZE_XLARGE,
                                                 ICN::BUTTON_MAPSIZE_ALL,
-                                                ICN::BUTTON_MAP_SELECT,
+                                                ICN::BUTTON_MAP_SELECT_GOOD,
+                                                ICN::BUTTON_MAP_SELECT_EVIL,
                                                 ICN::BUTTON_STANDARD_GAME,
                                                 ICN::BUTTON_CAMPAIGN_GAME,
                                                 ICN::BUTTON_MULTIPLAYER_GAME,
@@ -1289,12 +1290,20 @@ namespace fheroes2
 
                 break;
             }
-            case ICN::BUTTON_MAP_SELECT: {
+            case ICN::BUTTON_MAP_SELECT_EVIL:
+            case ICN::BUTTON_MAP_SELECT_GOOD: {
                 _icnVsSprite[id].resize( 2 );
+                const bool isEvilInterface = ( id == ICN::BUTTON_MAP_SELECT_EVIL );
 
                 if ( useOriginalResources() ) {
                     _icnVsSprite[id][0] = GetICN( ICN::NGEXTRA, 64 );
                     _icnVsSprite[id][1] = GetICN( ICN::NGEXTRA, 65 );
+                    if (!isEvilInterface)
+                    {
+                        const std::vector<uint8_t> & goodToEvilPalette = PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_INTERFACE );
+                        fheroes2::ApplyPalette( _icnVsSprite[id][0], goodToEvilPalette );
+                        fheroes2::ApplyPalette( _icnVsSprite[id][1], goodToEvilPalette );
+                    }
                     break;
                 }
 
@@ -1323,6 +1332,11 @@ namespace fheroes2
                     // clean the button.
                     const int32_t leftMarginWidth = 6 - i;
                     Fill( out, leftMarginWidth, 2 + 2 * i, out.width() - rightPartWidth - leftMarginWidth, 15 - i, getButtonFillingColor( i == 0 ) );
+
+                    if ( isEvilInterface ) {
+                        const std::vector<uint8_t> & goodToEvilPalette = PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_INTERFACE );
+                        fheroes2::ApplyPalette( _icnVsSprite[id][i], goodToEvilPalette );
+                    }
                 }
 
                 renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "SELECT" ), { 7, 3 }, { 6, 4 }, { 76, 15 }, fheroes2::FontColor::WHITE );
@@ -2646,7 +2660,8 @@ namespace fheroes2
             case ICN::BUTTON_MAPSIZE_LARGE:
             case ICN::BUTTON_MAPSIZE_XLARGE:
             case ICN::BUTTON_MAPSIZE_ALL:
-            case ICN::BUTTON_MAP_SELECT:
+            case ICN::BUTTON_MAP_SELECT_GOOD:
+            case ICN::BUTTON_MAP_SELECT_EVIL:
             case ICN::BUTTON_STANDARD_GAME:
             case ICN::BUTTON_CAMPAIGN_GAME:
             case ICN::BUTTON_MULTIPLAYER_GAME:
