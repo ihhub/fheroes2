@@ -138,7 +138,7 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
 
     const fheroes2::Rect rectSpreadArmyFormat( dst_pt.x, dst_pt.y, sprite1.width(), sprite1.height() );
     const std::string descriptionSpreadArmyFormat
-        = _( "'Spread' combat formation spreads your armies from the top to the bottom of the battlefield, with at least one empty space between each army." );
+        = _( "'Spread' combat formation spreads the hero's units from the top to the bottom of the battlefield, with at least one empty space between each unit." );
     const fheroes2::Point army1_pt( dst_pt.x - 1, dst_pt.y - 1 );
 
     // army format grouped
@@ -148,7 +148,7 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
     fheroes2::Blit( sprite2, display, dst_pt.x, dst_pt.y );
 
     const fheroes2::Rect rectGroupedArmyFormat( dst_pt.x, dst_pt.y, sprite2.width(), sprite2.height() );
-    const std::string descriptionGroupedArmyFormat = _( "'Grouped' combat formation bunches your army together in the center of your side of the battlefield." );
+    const std::string descriptionGroupedArmyFormat = _( "'Grouped' combat formation bunches the hero's army together in the center of their side of the battlefield." );
     const fheroes2::Point army2_pt( dst_pt.x - 1, dst_pt.y - 1 );
 
     // cursor format
