@@ -88,21 +88,12 @@ namespace
     void RedrawScenarioStaticInfo( const fheroes2::Rect & rt )
     {
         fheroes2::Display & display = fheroes2::Display::instance();
-        const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
-        const int buttonIcnId = isEvilInterface ? ICN::BUTTON_MAP_SELECT_EVIL : ICN::BUTTON_MAP_SELECT_GOOD;
-        // Redraw select button as the original image has a wrong position of it
-        const int32_t buttonSelectWidth = fheroes2::AGG::GetICN( buttonIcnId, 0 ).width();
-        fheroes2::Blit( fheroes2::AGG::GetICN( buttonIcnId, 0 ), display, rt.x + 390 - buttonSelectWidth, rt.y + 45 );
 
-        fheroes2::FontType normalWhiteFont = fheroes2::FontType::normalWhite();
+        const fheroes2::FontType normalWhiteFont = fheroes2::FontType::normalWhite();
 
         // text scenario
         fheroes2::Text text( _( "Scenario:" ), normalWhiteFont );
         text.draw( rt.x, rt.y + 25, rt.width, display );
-
-        // maps name
-        text.set( Settings::Get().getCurrentMapInfo().name, normalWhiteFont );
-        text.draw( rt.x, rt.y + 48, rt.width, display );
 
         // text game difficulty
         text.set( _( "Game Difficulty:" ), normalWhiteFont );
@@ -156,6 +147,9 @@ namespace
 
         fheroes2::Display & display = fheroes2::Display::instance();
 
+        Settings & conf = Settings::Get();
+        const bool isEvilInterface = conf.isEvilInterfaceEnabled();
+
         fheroes2::drawMainMenuScreen();
 
         const int32_t originalPanelWidth = fheroes2::AGG::GetICN( ICN::NGHSBKG, 0 ).width();
@@ -168,9 +162,6 @@ namespace
         const fheroes2::Point pointDifficultyInfo( rectPanel.x + 24, rectPanel.y + 95 );
         const fheroes2::Point pointOpponentInfo( rectPanel.x + 24, rectPanel.y + 197 );
         const fheroes2::Point pointClassInfo( rectPanel.x + 24, rectPanel.y + 281 );
-
-        Settings & conf = Settings::Get();
-        const bool isEvilInterface = conf.isEvilInterfaceEnabled();
 
         const fheroes2::Sprite & scenarioBox = fheroes2::AGG::GetICN( ICN::METALLIC_BORDERED_TEXTBOX, isEvilInterface ? 1 : 0 );
 
@@ -197,6 +188,8 @@ namespace
 
         fheroes2::Button buttonSelectMaps( rectPanel.x + 390 - buttonSelectWidth, rectPanel.y + 45,
                                            isEvilInterface ? ICN::BUTTON_MAP_SELECT_EVIL : ICN::BUTTON_MAP_SELECT_GOOD, 0, 1 );
+        buttonSelectMaps.draw();
+
         fheroes2::Button buttonOk;
         fheroes2::Button buttonCancel;
 
@@ -237,10 +230,6 @@ namespace
         RedrawScenarioStaticInfo( rectPanel );
         RedrawDifficultyInfo( pointDifficultyInfo );
 
-        playersInfo.RedrawInfo( false );
-
-        fheroes2::Rect ratingRoi = RedrawRatingInfo( rectPanel.getPosition(), rectPanel.width );
-
         const int icnIndex = isEvilInterface ? 1 : 0;
 
         // Draw difficulty icons.
@@ -249,6 +238,18 @@ namespace
             fheroes2::Copy( icon, 0, 0, display, coordDifficulty[i] );
             fheroes2::addGradientShadow( icon, display, { coordDifficulty[i].x, coordDifficulty[i].y }, { -5, 5 } );
         }
+
+        // Set up restorers.
+        fheroes2::ImageRestorer defaultDialog( display, background.activeArea().x, background.activeArea().y, background.activeArea().width,
+                                               background.activeArea().height );
+
+        // Map name
+        fheroes2::Text text( Settings::Get().getCurrentMapInfo().name, fheroes2::FontType::normalWhite() );
+        text.draw( rectPanel.x, rectPanel.y + 48, rectPanel.width, display );
+
+        playersInfo.RedrawInfo( false );
+
+        fheroes2::Rect ratingRoi = RedrawRatingInfo( rectPanel.getPosition(), rectPanel.width );
 
         fheroes2::MovableSprite levelCursor( ngextra );
         const int32_t levelCursorOffset = 3;
@@ -276,12 +277,12 @@ namespace
         }
         levelCursor.redraw();
 
-        buttonSelectMaps.draw();
-
         display.render();
 
         fheroes2::GameMode result = fheroes2::GameMode::QUIT_GAME;
+
         LocalEvent & le = LocalEvent::Get();
+
         while ( true ) {
             if ( !le.HandleEvents( true, true ) ) {
                 if ( Interface::AdventureMap::EventExit() == fheroes2::GameMode::QUIT_GAME ) {
@@ -310,14 +311,10 @@ namespace
                     updatePlayers( players, humanPlayerCount );
                     playersInfo.UpdateInfo( players, pointOpponentInfo, pointClassInfo );
 
-                    RedrawScenarioStaticInfo( rectPanel );
-                    RedrawDifficultyInfo( pointDifficultyInfo );
                     playersInfo.resetSelection();
                     playersInfo.RedrawInfo( false );
                     ratingRoi = RedrawRatingInfo( rectPanel.getPosition(), rectPanel.width );
                     levelCursor.setPosition( coordDifficulty[Game::getDifficulty()].x, coordDifficulty[Game::getDifficulty()].y ); // From 0 to 4, see: Difficulty enum
-                    buttonOk.draw();
-                    buttonCancel.draw();
                 }
 
                 display.render();
@@ -339,27 +336,20 @@ namespace
 
                 // select difficulty
                 if ( 0 <= index ) {
-                    RedrawScenarioStaticInfo( rectPanel );
                     levelCursor.setPosition( coordDifficulty[index].x - levelCursorOffset, coordDifficulty[index].y - levelCursorOffset );
                     levelCursor.redraw();
                     Game::saveDifficulty( index );
-                    RedrawDifficultyInfo( pointDifficultyInfo );
                     playersInfo.RedrawInfo( false );
                     ratingRoi = RedrawRatingInfo( rectPanel.getPosition(), rectPanel.width );
-                    buttonOk.draw();
-                    buttonCancel.draw();
+
                     display.render();
                 }
                 // playersInfo
                 else if ( playersInfo.QueueEventProcessing() ) {
-                    RedrawScenarioStaticInfo( rectPanel );
                     levelCursor.redraw();
-                    RedrawDifficultyInfo( pointDifficultyInfo );
-
                     playersInfo.RedrawInfo( false );
                     ratingRoi = RedrawRatingInfo( rectPanel.getPosition(), rectPanel.width );
-                    buttonOk.draw();
-                    buttonCancel.draw();
+
                     display.render();
                 }
             }
@@ -367,14 +357,11 @@ namespace
                 if ( playersInfo.QueueEventProcessing() ) {
                     playersInfo.resetSelection();
 
-                    RedrawScenarioStaticInfo( rectPanel );
                     levelCursor.redraw();
-                    RedrawDifficultyInfo( pointDifficultyInfo );
 
                     playersInfo.RedrawInfo( false );
                     ratingRoi = RedrawRatingInfo( rectPanel.getPosition(), rectPanel.width );
-                    buttonOk.draw();
-                    buttonCancel.draw();
+
                     display.render();
                 }
             }
