@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-25 01:52+0000\n"
+"POT-Creation-Date: 2023-12-29 00:13+0000\n"
 "PO-Revision-Date: 2023-12-20 19:47+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -196,6 +196,10 @@ msgstr "MIN"
 
 msgid "RESET"
 msgstr "CÀI LẠI"
+
+#, fuzzy
+msgid "START"
+msgstr "LÀM LẠI"
 
 msgid "CASTLE"
 msgstr "LÂU ĐÀI"
@@ -933,6 +937,23 @@ msgstr "Con người"
 
 msgid "AI"
 msgstr "AI"
+
+#, fuzzy
+msgid "Start"
+msgstr "Chơi lại"
+
+#, fuzzy
+msgid "Start the battle."
+msgstr "Quay lại trận chiến."
+
+msgid "Exit"
+msgstr "Thoát"
+
+msgid "Reset"
+msgstr ""
+
+msgid "Reset to default settings."
+msgstr ""
 
 msgid "Please select another hero."
 msgstr "Hãy chọn một tướng khác."
@@ -2559,9 +2580,6 @@ msgstr ""
 "Ngươi phải mua một cuốn sách thần chú để sử dụng hội pháp sư, nhưng hiện tại "
 "ngươi không có chỗ cho một cuốn sách thần chú. Hãy thử đưa một trong những "
 "cổ vật của ngươi cho một anh tướng khác."
-
-msgid "Exit"
-msgstr "Thoát"
 
 msgid "Click to show next town."
 msgstr "Nhấp để xem thị trấn sau."

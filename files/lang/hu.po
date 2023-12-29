@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-25 01:52+0000\n"
+"POT-Creation-Date: 2023-12-29 00:13+0000\n"
 "PO-Revision-Date: 2023-09-04 21:55+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -196,6 +196,10 @@ msgid "MIN"
 msgstr "MIN"
 
 msgid "RESET"
+msgstr "ÚJRA"
+
+#, fuzzy
+msgid "START"
 msgstr "ÚJRA"
 
 msgid "CASTLE"
@@ -934,6 +938,23 @@ msgstr "Ember"
 
 msgid "AI"
 msgstr "Gép"
+
+#, fuzzy
+msgid "Start"
+msgstr "Újra"
+
+#, fuzzy
+msgid "Start the battle."
+msgstr "Visszatérés a csatába."
+
+msgid "Exit"
+msgstr "Kilép"
+
+msgid "Reset"
+msgstr ""
+
+msgid "Reset to default settings."
+msgstr ""
 
 msgid "Please select another hero."
 msgstr "Kérlek válassz másik hőst."
@@ -2542,9 +2563,6 @@ msgstr ""
 "Ahhoz, hogy használhasd a varázstoronyban lévő varázslatokat, szükséged van "
 "varázskönyvre, de nincs szabad hely a könyv számára. Próbálj meg egy "
 "varázstárgyat átadni egy másik hősnek."
-
-msgid "Exit"
-msgstr "Kilép"
 
 msgid "Click to show next town."
 msgstr "Kattints a következő város mutatásához."

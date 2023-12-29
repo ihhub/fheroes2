@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-25 01:52+0000\n"
+"POT-Creation-Date: 2023-12-29 00:13+0000\n"
 "PO-Revision-Date: 2023-09-03 18:42+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -197,6 +197,10 @@ msgstr "MIN"
 
 msgid "RESET"
 msgstr ""
+
+#, fuzzy
+msgid "START"
+msgstr "OMSTART"
 
 #, fuzzy
 msgid "CASTLE"
@@ -943,6 +947,23 @@ msgstr "Menneske"
 
 msgid "AI"
 msgstr "Datamaskin"
+
+#, fuzzy
+msgid "Start"
+msgstr "Start på nytt"
+
+#, fuzzy
+msgid "Start the battle."
+msgstr "Gå tilbake til kampen."
+
+msgid "Exit"
+msgstr "Gå ut"
+
+msgid "Reset"
+msgstr ""
+
+msgid "Reset to default settings."
+msgstr ""
 
 msgid "Please select another hero."
 msgstr "Vennligst velg en annen helt."
@@ -2593,9 +2614,6 @@ msgid ""
 msgstr ""
 "Du må kjøpe en tryllebok for å bruke Magikerforbundet, men du har ikke plass "
 "til en tryllebok nå. Prøv å gi en av dine skatter til en annen helt."
-
-msgid "Exit"
-msgstr "Gå ut"
 
 msgid "Click to show next town."
 msgstr "Klikk for å vise neste by."
