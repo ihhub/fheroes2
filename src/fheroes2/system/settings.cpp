@@ -82,6 +82,8 @@ namespace
         // TODO: remove this setting once the Editor goes public.
         GLOBAL_ENABLE_EDITOR = 0x40000000
     };
+
+    const int defaultSpeedDelay{ 5 };
 }
 
 std::string Settings::GetVersion()
@@ -96,8 +98,8 @@ Settings::Settings()
     , music_volume( 6 )
     , _musicType( MUSIC_EXTERNAL )
     , _controllerPointerSpeed( 10 )
-    , heroes_speed( DEFAULT_SPEED_DELAY )
-    , ai_speed( DEFAULT_SPEED_DELAY )
+    , heroes_speed( defaultSpeedDelay )
+    , ai_speed( defaultSpeedDelay )
     , scroll_speed( SCROLL_SPEED_NORMAL )
     , battle_speed( DEFAULT_BATTLE_SPEED )
     , game_type( 0 )

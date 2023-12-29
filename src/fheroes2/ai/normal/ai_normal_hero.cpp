@@ -647,11 +647,9 @@ namespace
 
     void addHeroToMove( Heroes * hero, std::vector<AI::HeroToMove> & availableHeroes )
     {
-        if ( hero->Modes( Heroes::PATROL ) ) {
-            if ( hero->GetPatrolDistance() == 0 ) {
-                DEBUG_LOG( DBG_AI, DBG_TRACE, hero->GetName() << " standing still. Skip turn." )
-                return;
-            }
+        if ( hero->Modes( Heroes::PATROL ) && ( hero->GetPatrolDistance() == 0 ) ) {
+            DEBUG_LOG( DBG_AI, DBG_TRACE, hero->GetName() << " standing still. Skip turn." )
+            return;
         }
 
         if ( hero->MayStillMove( false, false ) ) {

@@ -145,12 +145,12 @@ namespace
         LOCALE_UK
     };
 
-    struct chunk
+    struct Chunk
     {
         uint32_t offset;
         uint32_t length;
 
-        chunk( const uint32_t off, const uint32_t len )
+        Chunk( const uint32_t off, const uint32_t len )
             : offset( off )
             , length( len )
         {
@@ -196,18 +196,18 @@ namespace
         return pos ? ++pos : str;
     }
 
-    struct mofile
+    struct Mofile
     {
         // TODO: plural forms are not in use: Plural-Forms.
         LocaleType locale{ LocaleType::LOCALE_EN };
         StreamBuf buf;
-        std::map<uint32_t, chunk> hash_offsets;
+        std::map<uint32_t, Chunk> hash_offsets;
         std::string domain;
         std::string encoding;
 
         const char * ngettext( const char * str, size_t plural )
         {
-            std::map<uint32_t, chunk>::const_iterator it = hash_offsets.find( crc32b( str ) );
+            std::map<uint32_t, Chunk>::const_iterator it = hash_offsets.find( crc32b( str ) );
             if ( it == hash_offsets.end() )
                 return stripContext( str );
 
@@ -310,7 +310,7 @@ namespace
 
                 const uint32_t offset2 = buf.get32();
 
-                const auto [dummy, inserted] = hash_offsets.try_emplace( crc, chunk{ offset2, length2 } );
+                const auto [dummy, inserted] = hash_offsets.try_emplace( crc, Chunk{ offset2, length2 } );
                 if ( !inserted ) {
                     ERROR_LOG( "Clashing hash value for: " << msg1 )
                 }
@@ -320,8 +320,8 @@ namespace
         }
     };
 
-    mofile * current = nullptr;
-    std::map<std::string, mofile> domains;
+    Mofile * current = nullptr;
+    std::map<std::string, Mofile> domains;
 }
 
 namespace Translation
@@ -331,7 +331,7 @@ namespace Translation
         std::string str( domain );
 
         // Search for already loaded domain or load from file
-        std::map<std::string, mofile>::iterator it = domains.find( str );
+        std::map<std::string, Mofile>::iterator it = domains.find( str );
         if ( it != domains.end() ) {
             current = &( *it ).second;
             return true;
