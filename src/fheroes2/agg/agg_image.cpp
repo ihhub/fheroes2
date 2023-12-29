@@ -1298,8 +1298,7 @@ namespace fheroes2
                 if ( useOriginalResources() ) {
                     _icnVsSprite[id][0] = GetICN( ICN::NGEXTRA, 64 );
                     _icnVsSprite[id][1] = GetICN( ICN::NGEXTRA, 65 );
-                    if (!isEvilInterface)
-                    {
+                    if ( isEvilInterface ) {
                         const std::vector<uint8_t> & goodToEvilPalette = PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_INTERFACE );
                         fheroes2::ApplyPalette( _icnVsSprite[id][0], goodToEvilPalette );
                         fheroes2::ApplyPalette( _icnVsSprite[id][1], goodToEvilPalette );
@@ -1307,39 +1306,13 @@ namespace fheroes2
                     break;
                 }
 
-                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
-                    Sprite & out = _icnVsSprite[id][i];
+                getTextAdaptedButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "SELECT" ), ICN::EMPTY_MAP_SELECT_BUTTON, ICN::UNKNOWN );
 
-                    const Sprite & originalButton = GetICN( ICN::NGEXTRA, 64 + i );
-                    const int32_t originalHeight = originalButton.height();
-                    const int32_t originalWidth = originalButton.width();
-                    const int32_t extensionWidth = 5;
-                    out.resize( originalWidth + extensionWidth, originalHeight );
-                    out.reset();
-
-                    const int32_t rightPartWidth = 3 + i;
-                    const int32_t leftPartWidth = originalWidth - rightPartWidth;
-
-                    // copy left main body of button.
-                    fheroes2::Copy( originalButton, 0, 0, out, 0, 0, leftPartWidth, originalHeight );
-
-                    // copy middle extending part of button.
-                    fheroes2::Copy( originalButton, 9, 0, out, leftPartWidth, 0, extensionWidth, originalHeight );
-
-                    // copy terminating right margin of the button.
-                    fheroes2::Copy( originalButton, leftPartWidth, 0, out, leftPartWidth + extensionWidth, 0, rightPartWidth, originalHeight );
-
-                    // clean the button.
-                    const int32_t leftMarginWidth = 6 - i;
-                    Fill( out, leftMarginWidth, 2 + 2 * i, out.width() - rightPartWidth - leftMarginWidth, 15 - i, getButtonFillingColor( i == 0 ) );
-
-                    if ( isEvilInterface ) {
-                        const std::vector<uint8_t> & goodToEvilPalette = PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_INTERFACE );
-                        fheroes2::ApplyPalette( _icnVsSprite[id][i], goodToEvilPalette );
-                    }
+                if ( isEvilInterface ) {
+                    const std::vector<uint8_t> & goodToEvilPalette = PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_INTERFACE );
+                    fheroes2::ApplyPalette( _icnVsSprite[id][0], goodToEvilPalette );
+                    fheroes2::ApplyPalette( _icnVsSprite[id][1], goodToEvilPalette );
                 }
-
-                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "SELECT" ), { 7, 3 }, { 6, 4 }, { 76, 15 }, fheroes2::FontColor::WHITE );
 
                 break;
             }
@@ -4612,6 +4585,32 @@ namespace fheroes2
                     FillTransform( pressed, pressed.width() - 3, 1, 2, 1, 1 );
                     FillTransform( pressed, pressed.width() - 2, 2, 2, 1, 1 );
                     FillTransform( pressed, pressed.width() - 1, 3, 1, pressed.height() - 6, 1 );
+                }
+
+                return true;
+            }
+            case ICN::EMPTY_MAP_SELECT_BUTTON: {
+                const int32_t originalId = ICN::NGEXTRA;
+                loadICN( originalId );
+
+                if ( _icnVsSprite[originalId].size() < 80 ) {
+                    return true;
+                }
+
+                _icnVsSprite[id].resize( 2 );
+
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    const Sprite & original = GetICN( originalId, 64 + i );
+
+                    Sprite & out = _icnVsSprite[id][i];
+                    // the empty button needs to widened by 1 px so that when it is divided by 3 in resizeButton() in ui_tools.h it will
+                    // give an integer result
+                    out.resize( original.width() + 1, original.height() );
+
+                    Copy( original, 0, 0, out, 0, 0, original.width() - 5, original.height() );
+                    Copy( original, original.width() - 6, 0, out, original.width() - 5, 0, 6, original.height() );
+
+                    Fill( out, 6 - i, 2 + 2 * i, 72, 15 - i, getButtonFillingColor( i == 0 ) );
                 }
 
                 return true;

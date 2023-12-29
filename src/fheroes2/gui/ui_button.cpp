@@ -127,6 +127,14 @@ namespace
             releasedOffset = { 5, 52 };
             pressedOffset = { 4, 53 };
             break;
+        case ICN::EMPTY_MAP_SELECT_BUTTON:
+            font = fheroes2::FontColor::WHITE;
+            textMargin = 2 + 2;
+            minimumTextAreaWidth = 60;
+            backgroundBorders = 6 + 3;
+            releasedOffset = { 6, 3 };
+            pressedOffset = { 5, 4 };
+            break;
         default:
             // Was a new empty button template added?
             assert( 0 );
