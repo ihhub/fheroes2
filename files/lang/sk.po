@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-25 01:52+0000\n"
+"POT-Creation-Date: 2023-12-29 00:13+0000\n"
 "PO-Revision-Date: 2023-09-11 20:22+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -202,6 +202,10 @@ msgstr "MIN"
 
 msgid "RESET"
 msgstr ""
+
+#, fuzzy
+msgid "START"
+msgstr "REŠTART"
 
 #, fuzzy
 msgid "CASTLE"
@@ -939,6 +943,23 @@ msgstr "Človek"
 
 msgid "AI"
 msgstr "UI"
+
+#, fuzzy
+msgid "Start"
+msgstr "Reštart"
+
+#, fuzzy
+msgid "Start the battle."
+msgstr "Späť do boja."
+
+msgid "Exit"
+msgstr "Preč"
+
+msgid "Reset"
+msgstr ""
+
+msgid "Reset to default settings."
+msgstr ""
 
 msgid "Please select another hero."
 msgstr "Prosím zvoľ ďalšieho hrdinu."
@@ -2542,9 +2563,6 @@ msgstr ""
 "Ak chceš používať cech mágov, musíš si kúpiť knihu kúziel, ale momentálne "
 "nemáš miesto pre knihu kúziel. Skús dať jeden zo svojich artefaktov inému "
 "hrdinovi."
-
-msgid "Exit"
-msgstr "Preč"
 
 msgid "Click to show next town."
 msgstr "Kliknutím zobraz ďalšie mesto."

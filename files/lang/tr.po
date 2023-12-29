@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-25 01:52+0000\n"
+"POT-Creation-Date: 2023-12-29 00:13+0000\n"
 "PO-Revision-Date: 2022-10-01 20:20+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Turkish <tr@li.org>\n"
@@ -177,6 +177,9 @@ msgid "MIN"
 msgstr "MİN"
 
 msgid "RESET"
+msgstr ""
+
+msgid "START"
 msgstr ""
 
 msgid "CASTLE"
@@ -897,6 +900,22 @@ msgstr "İnsan"
 
 msgid "AI"
 msgstr "Bilgisayar"
+
+msgid "Start"
+msgstr ""
+
+#, fuzzy
+msgid "Start the battle."
+msgstr "Savaşa geri dön."
+
+msgid "Exit"
+msgstr ""
+
+msgid "Reset"
+msgstr ""
+
+msgid "Reset to default settings."
+msgstr ""
 
 msgid "Please select another hero."
 msgstr "Lütfen başka bir kahraman seç."
@@ -2336,9 +2355,6 @@ msgstr ""
 msgid ""
 "You must purchase a spell book to use the mage guild, but you currently have "
 "no room for a spell book. Try giving one of your artifacts to another hero."
-msgstr ""
-
-msgid "Exit"
 msgstr ""
 
 msgid "Click to show next town."

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-25 01:52+0000\n"
+"POT-Creation-Date: 2023-12-29 00:13+0000\n"
 "PO-Revision-Date: 2023-12-25 14:31+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -196,6 +196,10 @@ msgstr "MIN"
 
 msgid "RESET"
 msgstr "ÅTERS."
+
+#, fuzzy
+msgid "START"
+msgstr "OMSTART"
 
 msgid "CASTLE"
 msgstr "SLOTT"
@@ -939,6 +943,23 @@ msgstr "Spelare"
 
 msgid "AI"
 msgstr "AI"
+
+#, fuzzy
+msgid "Start"
+msgstr "Omstart"
+
+#, fuzzy
+msgid "Start the battle."
+msgstr "Återgå till striden."
+
+msgid "Exit"
+msgstr "Lämna staden"
+
+msgid "Reset"
+msgstr ""
+
+msgid "Reset to default settings."
+msgstr ""
 
 msgid "Please select another hero."
 msgstr "Välj en annan hjälte."
@@ -2544,9 +2565,6 @@ msgstr ""
 "Du måste köpa en Magibok för att få tillgång till Magikersamfundet. Tyvärr "
 "har du ingen plats för en Magibok. Försök ge en artefakt till en annan "
 "hjälte."
-
-msgid "Exit"
-msgstr "Lämna staden"
 
 msgid "Click to show next town."
 msgstr "Klicka för att visa nästa stad."

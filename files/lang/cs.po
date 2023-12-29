@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-25 01:52+0000\n"
+"POT-Creation-Date: 2023-12-29 00:13+0000\n"
 "PO-Revision-Date: 2023-09-24 16:05+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Czech <cs@li.org>\n"
@@ -197,6 +197,10 @@ msgstr "MIN"
 
 msgid "RESET"
 msgstr ""
+
+#, fuzzy
+msgid "START"
+msgstr "RESTART"
 
 #, fuzzy
 msgid "CASTLE"
@@ -939,6 +943,22 @@ msgstr "Člověk"
 
 msgid "AI"
 msgstr "AI"
+
+msgid "Start"
+msgstr ""
+
+#, fuzzy
+msgid "Start the battle."
+msgstr "Zpět do bitvy."
+
+msgid "Exit"
+msgstr "Pryč"
+
+msgid "Reset"
+msgstr ""
+
+msgid "Reset to default settings."
+msgstr ""
 
 msgid "Please select another hero."
 msgstr "Vyber jiného hrdinu."
@@ -2532,9 +2552,6 @@ msgid ""
 msgstr ""
 "Pro vstup do věže si musíš zakoupit knihu kouzel, teď ale nemáš pro ni "
 "místo. Zkus podarovat jeden ze svých artefaktů jinému hrdinovi."
-
-msgid "Exit"
-msgstr "Pryč"
 
 msgid "Click to show next town."
 msgstr "Klikni pro zobrazení následujícího města."

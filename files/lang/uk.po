@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-25 01:52+0000\n"
+"POT-Creation-Date: 2023-12-29 00:13+0000\n"
 "PO-Revision-Date: 2023-09-06 08:41+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -197,6 +197,10 @@ msgstr "МІН"
 
 msgid "RESET"
 msgstr ""
+
+#, fuzzy
+msgid "START"
+msgstr "РЕСТАРТ"
 
 #, fuzzy
 msgid "CASTLE"
@@ -950,6 +954,22 @@ msgstr "Людина"
 
 msgid "AI"
 msgstr "Комп'ютер"
+
+msgid "Start"
+msgstr ""
+
+#, fuzzy
+msgid "Start the battle."
+msgstr "Повернутися до битви."
+
+msgid "Exit"
+msgstr "Вийти"
+
+msgid "Reset"
+msgstr ""
+
+msgid "Reset to default settings."
+msgstr ""
 
 msgid "Please select another hero."
 msgstr "Будь ласка, оберіть іншого героя."
@@ -2548,9 +2568,6 @@ msgstr ""
 "Ви маєте придбати книгу чарів, щоб використовувати гільдію магів, але наразі "
 "у Вас немає вільного місця під книгу. Спробуйте передати один із артефактів "
 "іншому герою."
-
-msgid "Exit"
-msgstr "Вийти"
 
 msgid "Click to show next town."
 msgstr "Натисніть щоб побачити наступне місто."

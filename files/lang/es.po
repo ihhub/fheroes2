@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-25 01:52+0000\n"
+"POT-Creation-Date: 2023-12-29 00:13+0000\n"
 "PO-Revision-Date: 2023-12-13 05:57+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -205,6 +205,10 @@ msgstr "MÍN"
 
 msgid "RESET"
 msgstr ""
+
+#, fuzzy
+msgid "START"
+msgstr "REINICIA"
 
 #, fuzzy
 msgid "CASTLE"
@@ -971,6 +975,22 @@ msgstr "Humano"
 
 msgid "AI"
 msgstr "IA"
+
+msgid "Start"
+msgstr ""
+
+#, fuzzy
+msgid "Start the battle."
+msgstr "Volver a la batalla."
+
+msgid "Exit"
+msgstr "Salir"
+
+msgid "Reset"
+msgstr ""
+
+msgid "Reset to default settings."
+msgstr ""
 
 msgid "Please select another hero."
 msgstr "Por favor, selecciona otro héroe."
@@ -2556,9 +2576,6 @@ msgstr ""
 "Debes compra un libro de hechizos para usar el gremio de magos, pero "
 "actualmente no tienes espacio para un libro de hechizos. Prueba dando uno de "
 "tus artefactos a otro héroe."
-
-msgid "Exit"
-msgstr "Salir"
 
 #, fuzzy
 msgid "Click to show next town."
