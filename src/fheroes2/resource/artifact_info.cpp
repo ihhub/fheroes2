@@ -454,30 +454,30 @@ namespace
               {},
               {} },
             { gettext_noop( "Spiked Helm" ),
-              gettext_noop( "The %{name} increases your attack and defense skills by %{count} each." ),
+              gettext_noop( "The %{name} increases the hero's attack and defense skills by %{count} each." ),
               gettext_noop(
                   "Your army is ambushed by a small tribe of wild (and none too bright) Orcs. You fend them off easily and the survivors flee in all directions. One of the Orcs was wearing a polished spiked helm. Figuring it will make a good souvenir, you take it." ),
               {},
               {} },
             { gettext_noop( "Spiked Shield" ),
-              gettext_noop( "The %{name} increases your attack and defense skills by %{count} each." ),
+              gettext_noop( "The %{name} increases the hero's attack and defense skills by %{count} each." ),
               gettext_noop( "You come upon a bridge spanning a dry gully. Before you can cross, a Troll steps out from under the bridge and demands payment before it will permit you to pass. You refuse, and the Troll charges, forcing you to slay it. You take its spiked shield as a trophy." ),
               {},
               {} },
             { gettext_noop( "White Pearl" ),
-              gettext_noop( "The %{name} increases your spell power and knowledge by %{count} each." ),
+              gettext_noop( "The %{name} increases the hero's spell power and knowledge by %{count} each." ),
               gettext_noop( "A walk across a dry saltwater lake bed yields an unlikely prize: A white pearl amidst shattered shells and debris." ),
               {},
               {} },
             { gettext_noop( "Black Pearl" ),
-              gettext_noop( "The %{name} increases your spell power and knowledge by %{count} each." ),
+              gettext_noop( "The %{name} increases the hero's spell power and knowledge by %{count} each." ),
               gettext_noop(
                   "Rumors of a Griffin of unusual size preying upon the countryside lead you to its cave lair. A quick, brutal fight dispatches the beast, and a search of its foul nest turns up a huge black pearl." ),
               {},
               {} },
 
             // Magic Book cannot be located on a map.
-            { gettext_noop( "Magic Book" ), gettext_noop( "The %{name} enables you to cast spells." ), nullptr, {}, {} },
+            { gettext_noop( "Magic Book" ), gettext_noop( "The %{name} enables the hero to cast spells." ), nullptr, {}, {} },
 
             // These are artifacts used only for map editor (?).
             { gettext_noop( "Dummy 1" ), gettext_noop( "The reserved artifact." ), nullptr, {}, {} },
@@ -486,19 +486,19 @@ namespace
             { gettext_noop( "Dummy 4" ), gettext_noop( "The reserved artifact." ), nullptr, {}, {} },
 
             { gettext_noop( "Spell Scroll" ),
-              gettext_noop( "This %{name} gives your hero the ability to cast the %{spell} spell if your hero has a Magic Book." ),
+              gettext_noop( "This %{name} gives the hero the ability to cast the %{spell} spell if the hero has a Magic Book." ),
               gettext_noop(
                   "You find an elaborate container which houses an old vellum scroll. The runes on the container are very old, and the artistry with which it was put together is stunning. As you pull the scroll out, you feel imbued with magical power." ),
               {},
               {} },
             { gettext_noop( "Arm of the Martyr" ),
-              gettext_noop( "The %{name} increases your spell power by %{count} but adds the undead morale penalty." ),
+              gettext_noop( "The %{name} increases the hero's spell power by %{count} but adds the undead morale penalty." ),
               gettext_noop(
                   "One of the less intelligent members of your party picks up an arm off of the ground. Despite its missing a body, it is still moving. Your troops find the dismembered arm repulsive, but you cannot bring yourself to drop it: it seems to hold some sort of magical power that influences your decision making." ),
               {},
               {} },
             { gettext_noop( "Breastplate of Anduran" ),
-              gettext_noop( "The %{name} increases your defense by %{count}." ),
+              gettext_noop( "The %{name} increases the hero's defense by %{count}." ),
               gettext_noop(
                   "You come upon a sign. It reads: \"Here lies the body of Anduran. Bow and swear fealty, and you shall be rewarded.\" You decide to do as it says. As you stand up, you feel a coldness against your skin. Looking down, you find that you are suddenly wearing a gleaming, ornate breastplate." ),
               {},
@@ -511,13 +511,13 @@ namespace
               {} },
             { gettext_noop( "Battle Garb of Anduran" ),
               gettext_noop(
-                  "The %{name} combines the powers of the three Anduran artifacts. It provides maximum luck and morale for your troops and gives you the Town Portal spell." ),
+                  "The %{name} combines the powers of the three Anduran artifacts. It provides maximum luck and morale for the hero's troops and gives the hero the Town Portal spell." ),
               gettext_noop(
                   "Out of pity for a poor peasant, you purchase a chest of old junk they are hawking for too much gold. Later, as you search through it, you find it contains the 3 pieces of the legendary battle garb of Anduran!" ),
               {},
               {} },
             { gettext_noop( "Crystal Ball" ),
-              gettext_noop( "The %{name} lets you get more specific information about monsters, enemy heroes, and castles nearby the hero who holds it." ),
+              gettext_noop( "The %{name} lets the hero get more specific information about monsters, enemy heroes, and castles nearby the hero." ),
               gettext_noop(
                   "You come upon a caravan of gypsies who are feasting and fortifying their bodies with mead. They call you forward and say \"If you prove that you can dance the Rama-Buta, we will reward you.\" You don't know it, but try anyway. They laugh hysterically, but admire your bravery, giving you a Crystal Ball." ),
               {},
@@ -535,13 +535,13 @@ namespace
               {},
               {} },
             { gettext_noop( "Helmet of Anduran" ),
-              gettext_noop( "The %{name} increases your spell power by %{count}." ),
+              gettext_noop( "The %{name} increases the hero's spell power by %{count}." ),
               gettext_noop(
                   "You spy a gleaming object poking up out of the ground. You send a member of your party over to investigate. He comes back with a golden helmet in his hands. You realize that it must be the helmet of the legendary Anduran, the only man who was known to wear solid gold armor." ),
               {},
               {} },
             { gettext_noop( "Holy Hammer" ),
-              gettext_noop( "The %{name} increases your attack skill by %{count}." ),
+              gettext_noop( "The %{name} increases the hero's attack skill by %{count}." ),
               gettext_noop(
                   "You come upon a battle where a Paladin has been mortally wounded by a group of Zombies. He asks you to take his hammer and finish what he started. As you pick it up, it begins to hum, and then everything becomes a blur. The Zombies lie dead, the hammer dripping with blood. You strap it to your belt." ),
               {},
@@ -552,7 +552,7 @@ namespace
                   "Upon cresting a small hill, you come upon a ridiculous looking sight. A Sprite is attempting to carry a Scepter that is almost as big as it is. Trying not to laugh, you ask, \"Need help?\" The Sprite glares at you and answers: \"You think this is funny? Fine. You can carry it. I much prefer flying anyway.\"" ),
               {},
               {} },
-            { gettext_noop( "Masthead" ), gettext_noop( "The %{name} boosts your luck and morale by %{count} each in sea combat." ), gettext_noop( "An old seaman tells you a tale of an enchanted masthead that he used in his youth to rally his crew during times of trouble. He then hands you a faded map that shows where he hid it. After much exploring, you find it stashed underneath a nearby dock." ), {}, {} },
+            { gettext_noop( "Masthead" ), gettext_noop( "The %{name} boosts the hero's luck and morale by %{count} each in sea combat." ), gettext_noop( "An old seaman tells you a tale of an enchanted masthead that he used in his youth to rally his crew during times of trouble. He then hands you a faded map that shows where he hid it. After much exploring, you find it stashed underneath a nearby dock." ), {}, {} },
             { gettext_noop( "Sphere of Negation" ),
               gettext_noop( "The %{name} disables all spell casting, for both sides, in combat." ),
               gettext_noop(
@@ -560,24 +560,24 @@ namespace
               {},
               {} },
             { gettext_noop( "Staff of Wizardry" ),
-              gettext_noop( "The %{name} boosts your spell power by %{count}." ),
+              gettext_noop( "The %{name} boosts the hero's spell power by %{count}." ),
               gettext_noop(
                   "While out scaring up game, your troops find a mysterious staff levitating about three feet off of the ground. They hand it to you, and you notice an inscription. It reads: \"Brains best brawn and magic beats might. Heed my words, and you'll win every fight.\"" ),
               {},
               {} },
             { gettext_noop( "Sword Breaker" ),
-              gettext_noop( "The %{name} increases your defense by %{count} and attack by 1." ),
+              gettext_noop( "The %{name} increases the hero's defense by %{count} and attack by 1." ),
               gettext_noop( "A former Captain of the Guard admires your quest and gives you the enchanted Sword Breaker that he relied on during his tour of duty." ),
               {},
               {} },
             { gettext_noop( "Sword of Anduran" ),
-              gettext_noop( "The %{name} increases your attack skill by %{count}." ),
+              gettext_noop( "The %{name} increases the hero's attack skill by %{count}." ),
               gettext_noop(
                   "A Troll stops you and says: \"Pay me 5,000 gold, or the Sword of Anduran will slay you where you stand.\" You refuse. The troll grabs the sword hanging from its belt, screams in pain, and runs away. Picking up the fabled sword, you give thanks that half-witted Trolls tend to grab the wrong end of sharp objects." ),
               {},
               {} },
             { gettext_noop( "Spade of Necromancy" ),
-              gettext_noop( "The %{name} gives you increased necromancy skill." ),
+              gettext_noop( "The %{name} gives the hero increased necromancy skill." ),
               gettext_noop(
                   "A dirty shovel has been thrust into a dirt mound nearby. Upon investigation, you discover it to be the enchanted shovel of the Gravediggers, long thought lost by mortals." ),
               {},
