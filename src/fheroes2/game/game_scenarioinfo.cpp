@@ -88,10 +88,11 @@ namespace
     void RedrawScenarioStaticInfo( const fheroes2::Rect & rt )
     {
         fheroes2::Display & display = fheroes2::Display::instance();
-
+        const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
+        const int buttonIcnId = isEvilInterface ? ICN::BUTTON_MAP_SELECT_EVIL : ICN::BUTTON_MAP_SELECT_GOOD;
         // Redraw select button as the original image has a wrong position of it
-        const int32_t buttonSelectWidth = fheroes2::AGG::GetICN( ICN::BUTTON_MAP_SELECT, 0 ).width();
-        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::BUTTON_MAP_SELECT, 0 ), display, rt.x + 389 - buttonSelectWidth, rt.y + 45 );
+        const int32_t buttonSelectWidth = fheroes2::AGG::GetICN( buttonIcnId, 0 ).width();
+        fheroes2::Blit( fheroes2::AGG::GetICN( buttonIcnId, 0 ), display, rt.x + 390 - buttonSelectWidth, rt.y + 45 );
 
         fheroes2::FontType normalWhiteFont = fheroes2::FontType::normalWhite();
 
@@ -192,9 +193,10 @@ namespace
         coordDifficulty.emplace_back( rectPanel.x + 254, rectPanel.y + 94, ngextraWidth, ngextraHeight );
         coordDifficulty.emplace_back( rectPanel.x + 331, rectPanel.y + 94, ngextraWidth, ngextraHeight );
 
-        const int32_t buttonSelectWidth = fheroes2::AGG::GetICN( ICN::BUTTON_MAP_SELECT, 0 ).width();
+        const int32_t buttonSelectWidth = fheroes2::AGG::GetICN( ICN::BUTTON_MAP_SELECT_GOOD, 0 ).width();
 
-        fheroes2::Button buttonSelectMaps( rectPanel.x + 389 - buttonSelectWidth, rectPanel.y + 45, ICN::BUTTON_MAP_SELECT, 0, 1 );
+        fheroes2::Button buttonSelectMaps( rectPanel.x + 390 - buttonSelectWidth, rectPanel.y + 45,
+                                           isEvilInterface ? ICN::BUTTON_MAP_SELECT_EVIL : ICN::BUTTON_MAP_SELECT_GOOD, 0, 1 );
         fheroes2::Button buttonOk;
         fheroes2::Button buttonCancel;
 
@@ -239,15 +241,16 @@ namespace
 
         fheroes2::Rect ratingRoi = RedrawRatingInfo( rectPanel.getPosition(), rectPanel.width );
 
-        fheroes2::MovableSprite levelCursor( ngextra );
+        const int icnIndex = isEvilInterface ? 1 : 0;
 
-        const int icnId = isEvilInterface ? 1 : 0;
-
+        // Draw difficulty icons.
         for ( int i = 0; i < 5; ++i ) {
-            const fheroes2::Sprite & icon = fheroes2::AGG::GetICN( ICN::DIFFICULTY_ICON_EASY + i, icnId );
+            const fheroes2::Sprite & icon = fheroes2::AGG::GetICN( ICN::DIFFICULTY_ICON_EASY + i, icnIndex );
             fheroes2::Copy( icon, 0, 0, display, coordDifficulty[i] );
+            fheroes2::addGradientShadow( icon, display, { coordDifficulty[i].x, coordDifficulty[i].y }, { -5, 5 } );
         }
 
+        fheroes2::MovableSprite levelCursor( ngextra );
         const int32_t levelCursorOffset = 3;
 
         switch ( Game::getDifficulty() ) {
