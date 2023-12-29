@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-25 01:52+0000\n"
+"POT-Creation-Date: 2023-12-29 00:13+0000\n"
 "PO-Revision-Date: 2023-09-12 11:08+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
@@ -196,6 +196,10 @@ msgstr "MIN"
 
 msgid "RESET"
 msgstr "NULSTIL"
+
+#, fuzzy
+msgid "START"
+msgstr "OMKAMP"
 
 #, fuzzy
 msgid "CASTLE"
@@ -935,6 +939,23 @@ msgstr "Menneske"
 
 msgid "AI"
 msgstr "AI"
+
+#, fuzzy
+msgid "Start"
+msgstr "Genstart"
+
+#, fuzzy
+msgid "Start the battle."
+msgstr "Vend tilbage til kampen."
+
+msgid "Exit"
+msgstr "Gå"
+
+msgid "Reset"
+msgstr ""
+
+msgid "Reset to default settings."
+msgstr ""
 
 msgid "Please select another hero."
 msgstr "Vælg venligst en anden helt."
@@ -2584,9 +2605,6 @@ msgstr ""
 "Din helt er nødt til at købe en magibog, før denne må træde ind i "
 "magikerlauget. Men helten har desværre ikke plads til at bære en magibog. "
 "Prøv at afgive én af dine artefakter til en anden helt."
-
-msgid "Exit"
-msgstr "Gå"
 
 msgid "Click to show next town."
 msgstr "Klik for at se næste by."

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-25 01:52+0000\n"
+"POT-Creation-Date: 2023-12-29 00:13+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -196,6 +196,10 @@ msgstr "МИН"
 
 msgid "RESET"
 msgstr ""
+
+#, fuzzy
+msgid "START"
+msgstr "РЕСТАРТ"
 
 #, fuzzy
 msgid "CASTLE"
@@ -943,6 +947,23 @@ msgstr "Човек"
 
 msgid "AI"
 msgstr "ИИ"
+
+#, fuzzy
+msgid "Start"
+msgstr "Рестарт"
+
+#, fuzzy
+msgid "Start the battle."
+msgstr "Върни се в битката."
+
+msgid "Exit"
+msgstr "Изход"
+
+msgid "Reset"
+msgstr ""
+
+msgid "Reset to default settings."
+msgstr ""
 
 msgid "Please select another hero."
 msgstr "Моля, избери друг герой."
@@ -2562,9 +2583,6 @@ msgstr ""
 "Трябва да купиш книга със заклинания, за да използваш магий, но в момента "
 "нямаш място за нея. Опитай се да дадеш един от твойте артефакти на друг "
 "герой."
-
-msgid "Exit"
-msgstr "Изход"
 
 msgid "Click to show next town."
 msgstr "Кликни, за да покажеш следващия град."

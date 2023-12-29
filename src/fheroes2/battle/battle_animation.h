@@ -43,7 +43,7 @@ private:
     bool timerIsSet;
 };
 
-struct monsterReturnAnim
+struct MonsterReturnAnim
 {
     std::vector<int> start;
     std::vector<int> end;
@@ -107,13 +107,13 @@ protected:
     std::vector<int> _moving;
     std::vector<int> _moveLastTile;
     std::vector<int> _moveOneTile;
-    monsterReturnAnim _flying;
+    MonsterReturnAnim _flying;
     std::vector<int> _winceUp;
     std::vector<int> _winceDown;
     std::vector<int> _wince;
     std::vector<int> _death;
-    monsterReturnAnim _melee[3];
-    monsterReturnAnim _ranged[3];
+    MonsterReturnAnim _melee[3];
+    MonsterReturnAnim _ranged[3];
     std::vector<std::vector<int>> _idle;
     std::vector<std::vector<int>> _offsetX;
 

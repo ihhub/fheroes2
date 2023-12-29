@@ -242,6 +242,7 @@ namespace AI
         double _enemyArmyStrength = 0;
         double _myShootersStrength = 0;
         double _enemyShootersStrength = 0;
+        double _myRangedUnitsOnly = 0;
         double _enemyRangedUnitsOnly = 0;
         double _myArmyAverageSpeed = 0;
         double _enemyAverageSpeed = 0;
@@ -250,6 +251,7 @@ namespace AI
         bool _defendingCastle = false;
         bool _considerRetreat = false;
         bool _defensiveTactics = false;
+        bool _cautiousOffensive = false;
     };
 
     class Normal : public Base

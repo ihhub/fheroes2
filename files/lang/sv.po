@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-25 01:52+0000\n"
-"PO-Revision-Date: 2023-12-02 22:18+0100\n"
+"POT-Creation-Date: 2023-12-29 00:13+0000\n"
+"PO-Revision-Date: 2023-12-25 14:31+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "Language: sv\n"
@@ -198,13 +198,14 @@ msgid "RESET"
 msgstr "ÅTERS."
 
 #, fuzzy
+msgid "START"
+msgstr "OMSTART"
+
 msgid "CASTLE"
-msgstr ""
-"STÄDER/\n"
-"SLOTT"
+msgstr "SLOTT"
 
 msgid "TOWN"
-msgstr ""
+msgstr "STAD"
 
 msgid ""
 "D\n"
@@ -383,7 +384,6 @@ msgstr "Flera"
 msgid "Troops of %{count} alignments -%{penalty}"
 msgstr "Armén består av trupper från %{count} olika klasser, ger -%{penalty}"
 
-#, fuzzy
 msgid "Some undead in army -1"
 msgstr "Några odöda i armén -1"
 
@@ -420,10 +420,10 @@ msgstr[0] "%{name} förgör hälften av fiendetrupperna!"
 msgstr[1] "%{name} förgör hälften av fiendetrupperna!"
 
 msgid "%{name} has turned off the auto battle"
-msgstr "%{name} har stängt av autom. strid"
+msgstr "%{name} har stängt av automatisk strid"
 
 msgid "%{name} has turned on the auto battle"
-msgstr "%{name} har aktiverat autom. strid"
+msgstr "%{name} har aktiverat automatisk strid"
 
 msgid "Spell failed!"
 msgstr "Besvärjelse misslyckades!"
@@ -475,7 +475,7 @@ msgstr "Turordning"
 msgid "Auto Spell Casting"
 msgstr ""
 "Autom.\n"
-"besvärjelsekastning"
+"besvärj.kast."
 
 msgid "Grid"
 msgstr "Rutnät"
@@ -943,6 +943,23 @@ msgstr "Spelare"
 
 msgid "AI"
 msgstr "AI"
+
+#, fuzzy
+msgid "Start"
+msgstr "Omstart"
+
+#, fuzzy
+msgid "Start the battle."
+msgstr "Återgå till striden."
+
+msgid "Exit"
+msgstr "Lämna staden"
+
+msgid "Reset"
+msgstr ""
+
+msgid "Reset to default settings."
+msgstr ""
 
 msgid "Please select another hero."
 msgstr "Välj en annan hjälte."
@@ -2484,9 +2501,8 @@ msgid ""
 msgstr ""
 "Brunnen ökar produktionen i alla bostäder med %{count} varelser per vecka."
 
-#, fuzzy
 msgid "The Statue increases the town's income by %{count} gold per day."
-msgstr "Statyn ökar din stads inkomst med %{count} guld per dag."
+msgstr "Statyn ökar stadens inkomst med %{count} guld per dag."
 
 msgid "The Left Turret provides extra firepower during castle combat."
 msgstr "Vänster Torn ger extra mycket eldkraft under slottstrid."
@@ -2508,13 +2524,12 @@ msgstr ""
 "Vallgraven saktar ner anfallande trupper. En varelse som kliver i vallgraven "
 "avslutar sin tur och blir lätt utsatt för ett anfall."
 
-#, fuzzy
 msgid ""
 "The Castle improves the town's defense and increases its income to %{count} "
 "gold per day."
 msgstr ""
-"Slottet förbättrar stadens försvar och ökar inkomsten till %{count} guld per "
-"dag."
+"Slottet förbättrar stadens försvar och ökar dess inkomst till %{count} guld "
+"per dag."
 
 msgid ""
 "The Tent provides workers to build a castle, provided the materials and the "
@@ -2550,9 +2565,6 @@ msgstr ""
 "Du måste köpa en Magibok för att få tillgång till Magikersamfundet. Tyvärr "
 "har du ingen plats för en Magibok. Försök ge en artefakt till en annan "
 "hjälte."
-
-msgid "Exit"
-msgstr "Lämna staden"
 
 msgid "Click to show next town."
 msgstr "Klicka för att visa nästa stad."
@@ -3169,16 +3181,14 @@ msgstr "(tom)"
 msgid "already learned"
 msgstr "redan inlärt"
 
-#, fuzzy
 msgid "treeOfKnowledge|free"
-msgstr "Kunskapens Träd"
+msgstr "Gratis"
 
-#, fuzzy
 msgid "already claimed"
 msgstr "redan inlärt"
 
 msgid "not claimed"
-msgstr ""
+msgstr "inte inlärt"
 
 msgid "already knows this skill"
 msgstr "kan redan denna färdighet"
@@ -3235,7 +3245,7 @@ msgid "Knowledge:"
 msgstr "Kunskap:"
 
 msgid "Spell Points:"
-msgstr "Besvärj.poäng:"
+msgstr "Besvärjelsepoäng:"
 
 msgid "Move Points:"
 msgstr "Steg:"
@@ -3357,9 +3367,8 @@ msgstr "Välj Skatt:"
 msgid "Select Ocean Object:"
 msgstr "Välj Havsföremål:"
 
-#, fuzzy
 msgid "Castle/town placing"
-msgstr "Slottalternativ"
+msgstr "Slott/stadsplacering"
 
 msgid "doubleLinedRace|Neutral"
 msgstr "Neutral"
@@ -3367,35 +3376,29 @@ msgstr "Neutral"
 msgid "race|Random"
 msgstr "Slumpad"
 
-#, fuzzy
 msgid "Click to start placing the selected castle/town."
-msgstr "Klicka här för att anta den valda upplösningen."
+msgstr "Klicka här för att placera det valda slottet/staden."
 
-#, fuzzy
 msgid "Click to select town placing."
-msgstr "Klicka för att visa nästa stad."
+msgstr "Klicka för att välja stadsplacering."
 
-#, fuzzy
 msgid "Click to select castle placing."
-msgstr "Klicka här för att välja vilket scenario som ska spelas."
+msgstr "Klicka här för att välja slottplacering."
 
-#, fuzzy
 msgid "%{color} %{race} %{townOrCastle}"
-msgstr "%{color} %{race}hjälte"
+msgstr "%{color} %{race} %{townOrCastle}"
 
 msgid "race|Neutral"
 msgstr "Neutral"
 
 msgid "You will place"
-msgstr ""
+msgstr "Du kommer placera"
 
-#, fuzzy
 msgid "Click to select this class."
-msgstr "Klicka här för att välja vilket scenario som ska spelas."
+msgstr "Klicka här för att välja denna klass."
 
-#, fuzzy
 msgid "Click to select this color."
-msgstr "Klicka här för att välja vilket scenario som ska spelas."
+msgstr "Klicka här för att välja denna färgen."
 
 msgid "Map Type:\n"
 msgstr "Karttyp:\n"
@@ -3403,11 +3406,8 @@ msgstr "Karttyp:\n"
 msgid "The Succession Wars"
 msgstr "Successionskrigen"
 
-#, fuzzy
 msgid "Resurrection"
-msgstr ""
-"Åter-\n"
-"upplivning"
+msgstr "Resurrection"
 
 msgid "Lose all your heroes and towns."
 msgstr "Förlora alla dina hjältar och städer."
@@ -3643,7 +3643,7 @@ msgid "Wood & Ore:"
 msgstr "Trä & Malm:"
 
 msgid "Gems, Cr, Slf & Mer:"
-msgstr "Andra resurser:"
+msgstr "Andra Resurser:"
 
 msgid "Obelisks Found:"
 msgstr "Funna Obelisker:"
@@ -3652,7 +3652,7 @@ msgid "Artifacts:"
 msgstr "Artefakter:"
 
 msgid "Total Army Strength:"
-msgstr "Total arméstyrka:"
+msgstr "Total Arméstyrka:"
 
 msgid "Income:"
 msgstr "Inkomst:"
@@ -3667,11 +3667,10 @@ msgid "Personality:"
 msgstr "Personlighet:"
 
 msgid "Best Monster:"
-msgstr "Bästa Monster:"
+msgstr "Bästa Varelse:"
 
-#, fuzzy
 msgid "Map filename"
-msgstr "Kartstorlek"
+msgstr "Kartfilnamn"
 
 msgid ""
 "Are you sure you want to load a new map? (Any unsaved changes to the current "
@@ -3712,7 +3711,7 @@ msgid "Quit out of the map editor."
 msgstr "Lämna kartredigeraren."
 
 msgid "Monster"
-msgstr "Monster"
+msgstr "Varelse"
 
 msgid "Objects cannot be placed outside the map."
 msgstr "Föremål kan inte placeras utanför kartan."
@@ -3750,34 +3749,36 @@ msgstr "Havsföremål måste placeras på vatten."
 msgid "Towns"
 msgstr "Städer"
 
-#, fuzzy
 msgid "Towns cannot be placed on water."
-msgstr "Varelser kan inte placeras på vatten."
+msgstr "Städer kan inte placeras på vatten."
 
-#, fuzzy
 msgid "Used to place %{object}."
-msgstr "Används för att placera en hjälte."
+msgstr "Används för att placera %{object}."
 
-#, fuzzy
 msgid "Select object type"
-msgstr "Välj Havsföremål:"
+msgstr "Välj objekttyp"
 
-#, fuzzy
 msgid ""
 "Click here to\n"
 "select a monster."
-msgstr "Klicka här för att välja vilket scenario som ska spelas."
+msgstr ""
+"Klicka här för att\n"
+"välja en varelse."
 
-#, fuzzy
 msgid ""
 "Click here to\n"
 "select another monster."
-msgstr "Välj en annan hjälte."
+msgstr ""
+"Klicka här för att\n"
+" \n"
+"välja en annan varelse."
 
 msgid ""
 "Cell\n"
 "Details"
 msgstr ""
+"Cell-\n"
+"detaljer"
 
 msgid "Roads"
 msgstr "Vägar"
@@ -3785,38 +3786,32 @@ msgstr "Vägar"
 msgid "Streams"
 msgstr "Floder"
 
-#, fuzzy
 msgid "Erase"
-msgstr "Raderarläge"
+msgstr "Radera"
 
 msgid "Mountains"
 msgstr "Berg"
 
-#, fuzzy
 msgid "Rocks"
-msgstr "Sten"
+msgstr "Block"
 
 msgid "Trees"
 msgstr "Träd"
 
-#, fuzzy
 msgid "Water Objects"
-msgstr "Ödemarksföremål"
+msgstr "Havsföremål"
 
-#, fuzzy
 msgid "Miscellaneous"
-msgstr "Fineous"
+msgstr "Diverse"
 
-#, fuzzy
 msgid "Dwellings"
-msgstr "Hober"
+msgstr "Bostäder"
 
 msgid "Mines"
 msgstr "Gruvor"
 
-#, fuzzy
 msgid "Power-ups"
-msgstr "Trollk."
+msgstr "Kraftökningar"
 
 msgid "Treasures"
 msgstr "Skatter"
@@ -3902,14 +3897,13 @@ msgstr "Terrängläge"
 msgid "Used to draw the underlying grass, dirt, water, etc. on the map."
 msgstr "Används för att rita terrängen så som gräs, jord, hav osv på kartan."
 
-#, fuzzy
 msgid "Landscape Objects Mode"
-msgstr "Föremålsläge"
+msgstr "Landskapsobjektsläge"
 
-#, fuzzy
 msgid ""
 "Used to place landscape objects (mountains, rocks, trees, etc.) on the map."
-msgstr "Används för att placera föremål (berg, träd, skatter, osv) på kartan."
+msgstr ""
+"Används för att placera landskapsföremål (berg, block, träd osv) på kartan."
 
 msgid "Detail Mode"
 msgstr "Detaljläge"
@@ -3917,34 +3911,31 @@ msgstr "Detaljläge"
 msgid "Used for special editing of monsters, heroes and towns."
 msgstr "Används för att redigera varelser, hjältar och städer."
 
-#, fuzzy
 msgid "Adventure Objects Mode"
-msgstr "Äventyrsinställningar"
+msgstr "Äventyrsobjektsläge"
 
-#, fuzzy
 msgid ""
 "Used to place adventure objects (artifacts, dwellings, mines, treasures, "
 "etc.) on the map."
-msgstr "Används för att placera föremål (berg, träd, skatter, osv) på kartan."
+msgstr ""
+"Används för att placera äventyrsföremål (artefakter, bostäder, gruvor, "
+"skatter osv) på kartan."
 
-#, fuzzy
 msgid "Kingdom Objects Mode"
-msgstr "Föremålsläge"
+msgstr "Rikesföremålsläge"
 
-#, fuzzy
 msgid "Used to place kingdom objects (towns, castles and heroes) on the map."
-msgstr "Används för att placera föremål (berg, träd, skatter, osv) på kartan."
+msgstr ""
+"Används för att placera Rikesföremål (städer, slott och hjältar) på kartan."
 
-#, fuzzy
 msgid "Monsters Mode"
-msgstr "Monster"
+msgstr "Varelseläge"
 
-#, fuzzy
 msgid "Used to place monsters on the map."
-msgstr "Används för att placera en grupp monster."
+msgstr "Används för att placera varelser på kartan."
 
 msgid "Allows you to draw streams by clicking and dragging."
-msgstr "Används för att dra älvar genom att klicka och dra."
+msgstr "Används för att dra floder genom att klicka och dra."
 
 msgid "Stream Mode"
 msgstr "Flodläge"
@@ -4697,13 +4688,12 @@ msgstr "Senast stödda version: "
 msgid "This file contains a save with an invalid game type."
 msgstr "Denna fil innehåller en sparning med en ogiltig speltyp."
 
-#, fuzzy
 msgid ""
 "This save file requires \"The Price of Loyalty\" game assets, but they have "
 "not been provided to the engine."
 msgstr ""
-"Denna fil är sparad för en The Price of Loyalty-karta men motsvarande "
-"speltillgångar finns inte."
+"Denna sparfil kräver \"The Price of Loyalty\"s speltillgångar, men de har "
+"inte tillhandahållits till spelmotorn."
 
 msgid "This saved game is localized to '"
 msgstr "Denna spelomgång är översatt till '"
@@ -7302,19 +7292,15 @@ msgstr "Dessa svaga varelser kommer säkert att fly från oss."
 msgid "I fear these creatures are in the mood for a fight."
 msgstr "Jag är rädd för att dessa varelser är sugna på strid."
 
-#, fuzzy
 msgid "The hero's attack skill is a bonus added to each unit's attack skill."
 msgstr "Hjältens Anfall ger en bonus som läggs till på varje varelses Anfall."
 
-#, fuzzy
 msgid "The hero's defense skill is a bonus added to each unit's defense skill."
 msgstr "Hjältens Försvar ger en bonus till varje varelses Försvar."
 
-#, fuzzy
 msgid "The hero's spell power determines the duration or power of a spell."
 msgstr "Hjältens Trollkonst bestämmer besvärjelsens längd eller styrka."
 
-#, fuzzy
 msgid ""
 " The hero's knowledge determines how many spell points the hero may have. "
 "Under normal circumstances, a hero is limited to 10 spell points per level "
@@ -7510,7 +7496,6 @@ msgstr ""
 msgid "%{skill} eliminates the movement penalty for rough terrain."
 msgstr "%{skill} tar bort hjältens förflyttningshandikapp för grov terräng."
 
-#, fuzzy
 msgid ""
 "%{skill} increases the damage done by the hero's range attacking creatures "
 "by %{count} percent."
@@ -7518,56 +7503,45 @@ msgstr ""
 "%{skill} ökar skadan för varelser som avfyrar projektiler med %{count} "
 "procent."
 
-#, fuzzy
 msgid "%{skill} increases the hero's movement points by %{count} percent."
 msgstr "%{skill} ökar hjältens steg med %{count} procent."
 
-#, fuzzy
 msgid "%{skill} increases the hero's viewable area by one square."
 msgid_plural "%{skill} increases the hero's viewable area by %{count} squares."
 msgstr[0] "%{skill} ökar hjältens sikt med %{count} ruta."
 msgstr[1] "%{skill} ökar hjältens sikt med %{count} rutor."
 
-#, fuzzy
 msgid ""
 "%{skill} allows the hero to negotiate with monsters who are weaker than "
 "their army."
 msgstr ""
 "%{skill} låter hjälten förhandla med monster som är svagare än dennes armé. "
 
-#, fuzzy
 msgid ""
 "Approximately %{count} percent of the creatures may offer to join the hero."
 msgstr ""
 "Uppskattningsvis så kan %{count} procent av varelserna välja att ansluta sig "
 "till hjälten."
 
-#, fuzzy
 msgid "All of the creatures may offer to join the hero."
 msgstr "Alla varelserna kan ansluta sig till hjälten."
 
-#, fuzzy
 msgid ""
 "%{skill} increases the hero's movement points over water by %{count} percent."
 msgstr "%{skill} ökar hjältens steg över vatten med %{count} procent."
 
-#, fuzzy
 msgid "%{skill} increases the hero's troops morale by %{count}."
 msgstr "%{skill} höjer hjältens truppers stridsmoral med %{count}."
 
-#, fuzzy
 msgid "%{skill} allows the hero to learn third level spells."
 msgstr "%{skill} låter hjälten att lära sig %{count}:e nivåns besvärjelser."
 
-#, fuzzy
 msgid "%{skill} allows the hero to learn fourth level spells."
 msgstr "%{skill} låter hjälten att lära sig %{count}:e nivåns besvärjelser."
 
-#, fuzzy
 msgid "%{skill} allows the hero to learn fifth level spells."
 msgstr "%{skill} låter hjälten att lära sig %{count}:e nivåns besvärjelser."
 
-#, fuzzy
 msgid "%{skill} regenerates one additional spell point per day to the hero."
 msgid_plural ""
 "%{skill} regenerates %{count} additional spell points per day to the hero."
@@ -7578,18 +7552,15 @@ msgstr[1] ""
 "%{skill} återhämtar ytterligare %{count} av hjältens besvärjelsepoäng per "
 "dag."
 
-#, fuzzy
 msgid "%{skill} increases the hero's luck by %{count}."
 msgstr "%{skill} höjer hjältens tur med %{count}."
 
-#, fuzzy
 msgid ""
 "%{skill} gives the hero's catapult shots a greater chance to hit and do "
 "damage to castle walls."
 msgstr ""
 "%{skill} ökar katapultens sannolikhet att träffa och skada slottsmurar."
 
-#, fuzzy
 msgid ""
 "%{skill} gives the hero's catapult an extra shot, and each shot has a "
 "greater chance to hit and do damage to castle walls."
@@ -7597,7 +7568,6 @@ msgstr ""
 "%{skill} ger katapulten en extra avfyrning, och varje avfyrning har en "
 "större chans att träffa och skada slottsmurar."
 
-#, fuzzy
 msgid ""
 "%{skill} gives the hero's catapult an extra shot, and each shot "
 "automatically destroys any wall, except a fortified wall in a Knight castle."
@@ -7605,7 +7575,6 @@ msgstr ""
 "%{skill} ger katapulten en extra avfyrning och varje avfyrning förstör muren "
 "förutom Riddarens uppgraderade slottsmur."
 
-#, fuzzy
 msgid ""
 "%{skill} gives the hero a %{count} percent chance to learn any given 1st or "
 "2nd level spell that was cast by an enemy during combat."
@@ -7613,7 +7582,6 @@ msgstr ""
 "%{skill} ger hjälten en %{count} procents chans att lära sig upp till 2:a "
 "nivåns besvärjelser som kastas av fienden i strid."
 
-#, fuzzy
 msgid ""
 "%{skill} gives the hero a %{count} percent chance to learn any given 3rd "
 "level spell (or below) that was cast by an enemy during combat."
@@ -7621,7 +7589,6 @@ msgstr ""
 "%{skill} ger hjälten en %{count} procents chans att lära sig upp till 3:e "
 "nivåns besvärjelser som kastas av fienden i strid."
 
-#, fuzzy
 msgid ""
 "%{skill} gives the hero a %{count} percent chance to learn any given 4th "
 "level spell (or below) that was cast by an enemy during combat."
@@ -7636,7 +7603,6 @@ msgstr ""
 "%{skill} återuppväcker %{count} procent av de stupade varelserna i strid som "
 "Skelett."
 
-#, fuzzy
 msgid ""
 "The hero produces %{count} gold pieces per day as tax revenue from estates."
 msgstr "Hjälten får %{count} guld per dag i skatteintäkter från sina ägor."
@@ -7762,7 +7728,6 @@ msgstr "Fantastisk"
 msgid "luck|Irish"
 msgstr "Irländsk"
 
-#, fuzzy
 msgid ""
 "Bad luck sometimes falls on the hero's units in combat, causing their "
 "attacks to only do half damage."
@@ -7770,7 +7735,6 @@ msgstr ""
 "Otur drabbar ibland hjältens trupper i strid, som får de att bara gör "
 "hälften i skada."
 
-#, fuzzy
 msgid ""
 "Neutral luck means the hero's units will never get lucky or unlucky attacks "
 "on the enemy."
@@ -7778,7 +7742,6 @@ msgstr ""
 "Normal tur innebär att hjältens trupper kommer varken att få lyckosamma "
 "eller oturliga attacker."
 
-#, fuzzy
 msgid ""
 "Good luck sometimes lets the hero's units get lucky attacks (double "
 "strength) in combat."
@@ -7806,11 +7769,9 @@ msgstr "Fantastisk"
 msgid "morale|Blood!"
 msgstr "Blod!"
 
-#, fuzzy
 msgid "Bad morale may cause the hero's units to freeze in combat."
 msgstr "Låg stridsmoral kan få hjältens trupper att låsa sig i strid."
 
-#, fuzzy
 msgid ""
 "Neutral morale means the hero's units will never be blessed with extra "
 "attacks or freeze in combat."
@@ -7818,7 +7779,6 @@ msgstr ""
 "Neutral stridsmoral innebär att hjältens arméer aldrig kommer att bli "
 "välsignade eller låsta i strid."
 
-#, fuzzy
 msgid "Good morale may give the hero's units extra attacks in combat."
 msgstr "Hög stridsmoral kan ge hjältens trupper extra attacker i strid."
 
@@ -8209,9 +8169,8 @@ msgstr "Slumpat Monster - starkt"
 msgid "Random Monster - very strong"
 msgstr "Slumpat Monster - väldigt starkt"
 
-#, fuzzy
 msgid "Hero"
-msgstr "Hjältar"
+msgstr "Hjälte"
 
 msgid "Nothing Special"
 msgstr "Ingenting Speciellt"

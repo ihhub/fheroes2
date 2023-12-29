@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-25 01:52+0000\n"
+"POT-Creation-Date: 2023-12-29 00:13+0000\n"
 "PO-Revision-Date: 2023-12-22 00:32+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -199,6 +199,10 @@ msgstr "MIN"
 
 msgid "RESET"
 msgstr ""
+
+#, fuzzy
+msgid "START"
+msgstr "NEUSTART"
 
 #, fuzzy
 msgid "CASTLE"
@@ -923,6 +927,23 @@ msgstr "Mensch"
 
 msgid "AI"
 msgstr "KI"
+
+#, fuzzy
+msgid "Start"
+msgstr "Neustart"
+
+#, fuzzy
+msgid "Start the battle."
+msgstr "Zurück in die Schlacht."
+
+msgid "Exit"
+msgstr "Verlassen"
+
+msgid "Reset"
+msgstr ""
+
+msgid "Reset to default settings."
+msgstr ""
 
 msgid "Please select another hero."
 msgstr "Bitte wählt einen anderen Helden aus."
@@ -2564,9 +2585,6 @@ msgstr ""
 "Ihr müsst ein Zauberbuch kaufen, um die Magiergilde zu nutzen, aber Ihr habt "
 "derzeit keinen Platz für ein Zauberbuch. Versuchet, eines Eurer Artefakte "
 "einem anderen Helden zu übergeben."
-
-msgid "Exit"
-msgstr "Verlassen"
 
 msgid "Click to show next town."
 msgstr "Klicken um die nächste Stadt anzuzeigen."

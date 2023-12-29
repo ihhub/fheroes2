@@ -190,9 +190,8 @@ StreamBase & StreamBase::operator<<( const uint32_t v )
 StreamBase & StreamBase::operator<<( const std::string & v )
 {
     put32( static_cast<uint32_t>( v.size() ) );
-
-    for ( std::string::const_iterator it = v.begin(); it != v.end(); ++it )
-        put8( *it );
+    // A string is a container of bytes so it doesn't matter which endianess is being used.
+    putRaw( v.data(), v.size() );
 
     return *this;
 }
