@@ -105,8 +105,8 @@ namespace
                                                 ICN::BUTTON_SMALL_EXIT_EVIL,
                                                 ICN::BUTTON_EXIT_HEROES_MEETING,
                                                 ICN::BUTTON_EXIT_TOWN,
-                                                ICN::BUTTON_EXIT_PUZZLE_DDOOR_GOOD,
-                                                ICN::BUTTON_EXIT_PUZZLE_DDOOR_EVIL,
+                                                ICN::BUTTON_EXIT_PUZZLE_DIM_DOOR_GOOD,
+                                                ICN::BUTTON_EXIT_PUZZLE_DIM_DOOR_EVIL,
                                                 ICN::BUTTON_SMALL_DISMISS_GOOD,
                                                 ICN::BUTTON_SMALL_DISMISS_EVIL,
                                                 ICN::BUTTON_SMALL_UPGRADE_GOOD,
@@ -152,7 +152,9 @@ namespace
                                                 ICN::BUTTON_SMALL_MIN_EVIL,
                                                 ICN::BUTTON_SMALL_MAX_GOOD,
                                                 ICN::BUTTON_SMALL_MAX_EVIL,
+                                                ICN::BUTTON_EXIT_GOOD,
                                                 ICN::BUTTON_RESET_GOOD,
+                                                ICN::BUTTON_START_GOOD,
                                                 ICN::BUTTON_CASTLE_GOOD,
                                                 ICN::BUTTON_CASTLE_EVIL,
                                                 ICN::BUTTON_TOWN_GOOD,
@@ -1069,12 +1071,12 @@ namespace fheroes2
 
                 break;
             }
-            case ICN::BUTTON_EXIT_PUZZLE_DDOOR_GOOD:
-            case ICN::BUTTON_EXIT_PUZZLE_DDOOR_EVIL: {
+            case ICN::BUTTON_EXIT_PUZZLE_DIM_DOOR_GOOD:
+            case ICN::BUTTON_EXIT_PUZZLE_DIM_DOOR_EVIL: {
                 std::vector<fheroes2::Sprite> & buttonStates = _icnVsSprite[id];
                 buttonStates.resize( 2 );
 
-                const bool isEvilInterface = ( id == ICN::BUTTON_EXIT_PUZZLE_DDOOR_EVIL );
+                const bool isEvilInterface = ( id == ICN::BUTTON_EXIT_PUZZLE_DIM_DOOR_EVIL );
                 const int originalButtonICN = isEvilInterface ? ICN::LGNDXTRE : ICN::LGNDXTRA;
 
                 if ( useOriginalResources() ) {
@@ -1800,10 +1802,24 @@ namespace fheroes2
 
                 break;
             }
+            case ICN::BUTTON_EXIT_GOOD: {
+                _icnVsSprite[id].resize( 2 );
+
+                fheroes2::getTextAdaptedButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "EXIT" ), ICN::EMPTY_GOOD_BUTTON, ICN::STONEBAK );
+
+                break;
+            }
             case ICN::BUTTON_RESET_GOOD: {
                 _icnVsSprite[id].resize( 2 );
 
                 createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], 80, gettext_noop( "RESET" ), false );
+
+                break;
+            }
+            case ICN::BUTTON_START_GOOD: {
+                _icnVsSprite[id].resize( 2 );
+
+                createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], 80, gettext_noop( "START" ), false );
 
                 break;
             }
@@ -2619,8 +2635,8 @@ namespace fheroes2
             case ICN::BUTTON_SMALL_EXIT_EVIL:
             case ICN::BUTTON_EXIT_HEROES_MEETING:
             case ICN::BUTTON_EXIT_TOWN:
-            case ICN::BUTTON_EXIT_PUZZLE_DDOOR_EVIL:
-            case ICN::BUTTON_EXIT_PUZZLE_DDOOR_GOOD:
+            case ICN::BUTTON_EXIT_PUZZLE_DIM_DOOR_EVIL:
+            case ICN::BUTTON_EXIT_PUZZLE_DIM_DOOR_GOOD:
             case ICN::BUTTON_SMALL_DISMISS_GOOD:
             case ICN::BUTTON_SMALL_DISMISS_EVIL:
             case ICN::BUTTON_SMALL_UPGRADE_GOOD:
@@ -2666,7 +2682,9 @@ namespace fheroes2
             case ICN::BUTTON_SMALL_MIN_EVIL:
             case ICN::BUTTON_SMALL_MAX_GOOD:
             case ICN::BUTTON_SMALL_MAX_EVIL:
+            case ICN::BUTTON_EXIT_GOOD:
             case ICN::BUTTON_RESET_GOOD:
+            case ICN::BUTTON_START_GOOD:
             case ICN::BUTTON_CASTLE_GOOD:
             case ICN::BUTTON_CASTLE_EVIL:
             case ICN::BUTTON_TOWN_GOOD:
