@@ -175,7 +175,7 @@ namespace
 
         const fheroes2::Rect scenarioBoxRoi( rectPanel.x + 25, rectPanel.y + 40, 371, 30 );
 
-        fheroes2::Copy( scenarioBox, 0,0, display, scenarioBoxRoi );
+        fheroes2::Copy( scenarioBox, 0, 0, display, scenarioBoxRoi );
 
         const fheroes2::Sprite & ngextra = fheroes2::AGG::GetICN( ICN::NGEXTRA, 62 );
 
