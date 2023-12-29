@@ -1090,6 +1090,14 @@ namespace ICN
 
         GAME_OPTION_ICON,
 
+        DIFFICULTY_ICON_EASY,
+        DIFFICULTY_ICON_NORMAL,
+        DIFFICULTY_ICON_HARD,
+        DIFFICULTY_ICON_EXPERT,
+        DIFFICULTY_ICON_IMPOSSIBLE,
+
+        METALLIC_BORDERED_TEXTBOX,
+
         // IMPORTANT! Put any new entry just above this one.
         LASTICN
     };

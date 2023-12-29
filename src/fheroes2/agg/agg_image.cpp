@@ -3687,6 +3687,96 @@ namespace fheroes2
                 }
                 return true;
             }
+            case ICN::DIFFICULTY_ICON_EASY:
+            case ICN::DIFFICULTY_ICON_NORMAL:
+            case ICN::DIFFICULTY_ICON_HARD:
+            case ICN::DIFFICULTY_ICON_EXPERT:
+            case ICN::DIFFICULTY_ICON_IMPOSSIBLE: {
+                const int originalIcnId = ICN::NGHSBKG;
+
+                const fheroes2::Sprite & originalBackground = GetICN( originalIcnId, 0 );
+
+                if ( !originalBackground.empty() ) {
+                    _icnVsSprite[id].resize( 2 );
+
+                    int32_t iconOffsetX = 0;
+
+                    switch ( id ) {
+                    case ICN::DIFFICULTY_ICON_EASY:
+                        iconOffsetX = 24;
+                        break;
+                    case ICN::DIFFICULTY_ICON_NORMAL:
+                        iconOffsetX = 101;
+                        break;
+                    case ICN::DIFFICULTY_ICON_HARD:
+                        iconOffsetX = 177;
+                        break;
+                    case ICN::DIFFICULTY_ICON_EXPERT:
+                        iconOffsetX = 254;
+                        break;
+                    case ICN::DIFFICULTY_ICON_IMPOSSIBLE:
+                        iconOffsetX = 331;
+                        break;
+                    default:
+                        // Did you add a new difficulty?
+                        assert( 0 );
+                    }
+
+                    const int32_t iconSideLength = 65;
+                    const int32_t iconOffsetY = 94;
+                    _icnVsSprite[id][0].resize( iconSideLength, iconSideLength );
+
+                    Copy( originalBackground, iconOffsetX, iconOffsetY, _icnVsSprite[id][0], 0, 0, iconSideLength, iconSideLength );
+
+                    // Generate Evil Icons
+                    _icnVsSprite[id][1].resize( iconSideLength, iconSideLength );
+                    Copy( _icnVsSprite[id][0], _icnVsSprite[id][1] );
+
+                    const std::vector<uint8_t> & goodToEvilPalette = PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_INTERFACE );
+                    fheroes2::ApplyPalette( _icnVsSprite[id][0], _icnVsSprite[id][1], goodToEvilPalette );
+                }
+
+                return true;
+            }
+            case ICN::METALLIC_BORDERED_TEXTBOX: {
+                const int originalIcnId = ICN::NGHSBKG;
+
+                const fheroes2::Sprite & originalBackground = GetICN( originalIcnId, 0 );
+                const fheroes2::Sprite & originalEvilBackground = GetICN( ICN::CAMPBKGE, 0 );
+
+                if ( !originalBackground.empty() && !originalEvilBackground.empty() ) {
+                    _icnVsSprite[id].resize( 2 );
+
+                    const int32_t boxWidth = 371;
+                    const int32_t boxHeight = 30;
+                    const int32_t goodOriginalBoxOffsetX = 24;
+                    const int32_t goodOriginalBoxOffsetY = 40;
+
+                    _icnVsSprite[id][0].resize( boxWidth, boxHeight );
+
+                    Copy( originalBackground, goodOriginalBoxOffsetX, goodOriginalBoxOffsetY, _icnVsSprite[id][0], 0, 0, boxWidth, boxHeight );
+
+                    // Copy red pattern and cover up embedded button.
+                    const fheroes2::Sprite & redPart = fheroes2::Flip( Crop( originalBackground, 80, 45, 81, 19 ), true, false );
+                    Copy( redPart, 0, 0, _icnVsSprite[id][0], 284, 5, 81, 19 );
+
+                    // Construct evil style box.
+                    _icnVsSprite[id][1].resize( boxWidth, boxHeight );
+
+                    const int32_t evilOriginalBoxOffsetX = 26;
+                    const int32_t evilOriginalBoxOffsetY = 27;
+                    const int32_t upperPartHeight = 20;
+
+                    Copy( originalEvilBackground, evilOriginalBoxOffsetX, evilOriginalBoxOffsetY, _icnVsSprite[id][1], 0, 0, boxWidth, upperPartHeight );
+
+                    Copy( originalEvilBackground, evilOriginalBoxOffsetX, evilOriginalBoxOffsetY + upperPartHeight + 14, _icnVsSprite[id][1], 0, upperPartHeight,
+                          boxWidth, 10 );
+
+                    Copy( _icnVsSprite[id][0], 6, 5, _icnVsSprite[id][1], 6, 5, 359, 19 );
+                }
+
+                return true;
+            }
             case ICN::TWNWUP_5: {
                 LoadOriginalICN( id );
                 if ( !_icnVsSprite[id].empty() && _icnVsSprite[id].front().width() == 84 && _icnVsSprite[id].front().height() == 256 ) {
