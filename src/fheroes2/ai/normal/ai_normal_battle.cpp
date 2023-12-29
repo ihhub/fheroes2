@@ -1401,9 +1401,30 @@ namespace AI
                         Indexes result;
                         result.reserve( 8 );
 
-                        // Wide units should first of all try to cover the shooters from the sides, while ordinary units should prioritize the frontal direction
                         const std::array<int, 6> priorityDirections = [&currentUnit, frnd]() -> std::array<int, 6> {
-                            if ( currentUnit.isWide() ) {
+                            const bool preferToCoverFromTheSide = [&currentUnit, frnd]() {
+                                // If the covering unit is not a wide unit, then using this unit to cover the shooter from the side does not give any advantage
+                                if ( !currentUnit.isWide() ) {
+                                    return false;
+                                }
+
+                                // It is always better to use wide units to cover wide shooters from the sides
+                                if ( frnd->isWide() ) {
+                                    return true;
+                                }
+
+                                assert( Board::isValidIndex( frnd->GetHeadIndex() ) );
+
+                                // If an ordinary shooter is located on a tile that protrudes sideways, then using a wide unit to cover this shooter from the side does
+                                // not give any advantage
+                                if ( frnd->isReflect() ) {
+                                    return ( ( frnd->GetHeadIndex() / ARENAW ) % 2 == 1 );
+                                }
+
+                                return ( ( frnd->GetHeadIndex() / ARENAW ) % 2 == 0 );
+                            }();
+
+                            if ( preferToCoverFromTheSide ) {
                                 if ( frnd->isReflect() ) {
                                     return { TOP_LEFT, BOTTOM_LEFT, LEFT, TOP_RIGHT, BOTTOM_RIGHT, RIGHT };
                                 }
