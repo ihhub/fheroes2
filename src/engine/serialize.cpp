@@ -191,7 +191,7 @@ StreamBase & StreamBase::operator<<( const std::string & v )
 {
     put32( static_cast<uint32_t>( v.size() ) );
     // A string is a container of bytes so it doesn't matter which endianess is being used.
-    putRaw( v.c_str(), v.size() );
+    putRaw( v.data(), v.size() );
 
     return *this;
 }
