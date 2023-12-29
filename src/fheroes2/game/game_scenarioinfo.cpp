@@ -61,6 +61,7 @@
 #include "ui_dialog.h"
 #include "ui_text.h"
 #include "ui_tool.h"
+#include "ui_window.h"
 #include "world.h"
 
 namespace
@@ -84,17 +85,9 @@ namespace
         }
     }
 
-    void RedrawScenarioStaticInfo( const fheroes2::Rect & rt, bool firstDraw = false )
+    void RedrawScenarioStaticInfo( const fheroes2::Rect & rt )
     {
         fheroes2::Display & display = fheroes2::Display::instance();
-
-        if ( firstDraw ) {
-            fheroes2::Blit( fheroes2::AGG::GetICN( ICN::NGHSBKG, 1 ), display, rt.x - BORDERWIDTH, rt.y + BORDERWIDTH );
-        }
-
-        // image panel
-        const fheroes2::Sprite & panel = fheroes2::AGG::GetICN( ICN::NGHSBKG, 0 );
-        fheroes2::Blit( panel, display, rt.x, rt.y );
 
         // Redraw select button as the original image has a wrong position of it
         const int32_t buttonSelectWidth = fheroes2::AGG::GetICN( ICN::BUTTON_MAP_SELECT, 0 ).width();
@@ -161,11 +154,28 @@ namespace
         const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
         fheroes2::Display & display = fheroes2::Display::instance();
-        const fheroes2::Sprite & panel = fheroes2::AGG::GetICN( ICN::NGHSBKG, 0 );
-        const fheroes2::Rect rectPanel( ( display.width() - panel.width() ) / 2, ( display.height() - panel.height() ) / 2, panel.width(), panel.height() );
+
+        fheroes2::drawMainMenuScreen();
+
+        const int32_t originalPanelWidth = fheroes2::AGG::GetICN( ICN::NGHSBKG, 0 ).width();
+        const int32_t originalPanelHeight = fheroes2::AGG::GetICN( ICN::NGHSBKG, 0 ).height();
+
+        fheroes2::StandardWindow background( originalPanelWidth - 32, originalPanelHeight - 32, true, display );
+
+        const fheroes2::Rect rectPanel( ( display.width() - originalPanelWidth ) / 2, ( display.height() - originalPanelHeight ) / 2, originalPanelWidth,
+                                        originalPanelHeight );
         const fheroes2::Point pointDifficultyInfo( rectPanel.x + 24, rectPanel.y + 95 );
         const fheroes2::Point pointOpponentInfo( rectPanel.x + 24, rectPanel.y + 197 );
         const fheroes2::Point pointClassInfo( rectPanel.x + 24, rectPanel.y + 281 );
+
+        Settings & conf = Settings::Get();
+        const bool isEvilInterface = conf.isEvilInterfaceEnabled();
+
+        const fheroes2::Sprite & scenarioBox = fheroes2::AGG::GetICN( ICN::METALLIC_BORDERED_TEXTBOX, isEvilInterface ? 1 : 0 );
+
+        const fheroes2::Rect scenarioBoxRoi( rectPanel.x + 25, rectPanel.y + 40, 371, 30 );
+
+        fheroes2::Copy( scenarioBox, 0,0, display, scenarioBoxRoi );
 
         const fheroes2::Sprite & ngextra = fheroes2::AGG::GetICN( ICN::NGEXTRA, 62 );
 
@@ -176,23 +186,20 @@ namespace
         std::vector<fheroes2::Rect> coordDifficulty;
         coordDifficulty.reserve( 5 );
 
-        coordDifficulty.emplace_back( rectPanel.x + 21, rectPanel.y + 91, ngextraWidth, ngextraHeight );
-        coordDifficulty.emplace_back( rectPanel.x + 98, rectPanel.y + 91, ngextraWidth, ngextraHeight );
-        coordDifficulty.emplace_back( rectPanel.x + 174, rectPanel.y + 91, ngextraWidth, ngextraHeight );
-        coordDifficulty.emplace_back( rectPanel.x + 251, rectPanel.y + 91, ngextraWidth, ngextraHeight );
-        coordDifficulty.emplace_back( rectPanel.x + 328, rectPanel.y + 91, ngextraWidth, ngextraHeight );
+        coordDifficulty.emplace_back( rectPanel.x + 24, rectPanel.y + 94, ngextraWidth, ngextraHeight );
+        coordDifficulty.emplace_back( rectPanel.x + 101, rectPanel.y + 94, ngextraWidth, ngextraHeight );
+        coordDifficulty.emplace_back( rectPanel.x + 177, rectPanel.y + 94, ngextraWidth, ngextraHeight );
+        coordDifficulty.emplace_back( rectPanel.x + 254, rectPanel.y + 94, ngextraWidth, ngextraHeight );
+        coordDifficulty.emplace_back( rectPanel.x + 331, rectPanel.y + 94, ngextraWidth, ngextraHeight );
 
         const int32_t buttonSelectWidth = fheroes2::AGG::GetICN( ICN::BUTTON_MAP_SELECT, 0 ).width();
 
-        const int32_t cancelButtonWidth = fheroes2::AGG::GetICN( ICN::BUTTON_SMALL_CANCEL_GOOD, 0 ).width();
-
         fheroes2::Button buttonSelectMaps( rectPanel.x + 389 - buttonSelectWidth, rectPanel.y + 45, ICN::BUTTON_MAP_SELECT, 0, 1 );
-        fheroes2::Button buttonOk( rectPanel.x + 31, rectPanel.y + 380, ICN::BUTTON_SMALL_OKAY_GOOD, 0, 1 );
-        fheroes2::Button buttonCancel( rectPanel.x + rectPanel.width - 37 - cancelButtonWidth, rectPanel.y + 380, ICN::BUTTON_SMALL_CANCEL_GOOD, 0, 1 );
+        fheroes2::Button buttonOk;
+        fheroes2::Button buttonCancel;
 
-        fheroes2::drawMainMenuScreen();
+        background.renderOkayCancelButtons( buttonOk, buttonCancel, isEvilInterface );
 
-        Settings & conf = Settings::Get();
         bool resetStartingSettings = conf.getCurrentMapInfo().filename.empty();
         Players & players = conf.GetPlayers();
         Interface::PlayersInfo playersInfo;
@@ -225,7 +232,7 @@ namespace
 
         playersInfo.UpdateInfo( players, pointOpponentInfo, pointClassInfo );
 
-        RedrawScenarioStaticInfo( rectPanel, true );
+        RedrawScenarioStaticInfo( rectPanel );
         RedrawDifficultyInfo( pointDifficultyInfo );
 
         playersInfo.RedrawInfo( false );
@@ -234,21 +241,30 @@ namespace
 
         fheroes2::MovableSprite levelCursor( ngextra );
 
+        const int icnId = isEvilInterface ? 1 : 0;
+
+        for ( int i = 0; i < 5; ++i ) {
+            const fheroes2::Sprite & icon = fheroes2::AGG::GetICN( ICN::DIFFICULTY_ICON_EASY + i, icnId );
+            fheroes2::Copy( icon, 0, 0, display, coordDifficulty[i] );
+        }
+
+        const int32_t levelCursorOffset = 3;
+
         switch ( Game::getDifficulty() ) {
         case Difficulty::EASY:
-            levelCursor.setPosition( coordDifficulty[0].x, coordDifficulty[0].y );
+            levelCursor.setPosition( coordDifficulty[0].x - levelCursorOffset, coordDifficulty[0].y - levelCursorOffset );
             break;
         case Difficulty::NORMAL:
-            levelCursor.setPosition( coordDifficulty[1].x, coordDifficulty[1].y );
+            levelCursor.setPosition( coordDifficulty[1].x - levelCursorOffset, coordDifficulty[1].y - levelCursorOffset );
             break;
         case Difficulty::HARD:
-            levelCursor.setPosition( coordDifficulty[2].x, coordDifficulty[2].y );
+            levelCursor.setPosition( coordDifficulty[2].x - levelCursorOffset, coordDifficulty[2].y - levelCursorOffset );
             break;
         case Difficulty::EXPERT:
-            levelCursor.setPosition( coordDifficulty[3].x, coordDifficulty[3].y );
+            levelCursor.setPosition( coordDifficulty[3].x - levelCursorOffset, coordDifficulty[3].y - levelCursorOffset );
             break;
         case Difficulty::IMPOSSIBLE:
-            levelCursor.setPosition( coordDifficulty[4].x, coordDifficulty[4].y );
+            levelCursor.setPosition( coordDifficulty[4].x - levelCursorOffset, coordDifficulty[4].y - levelCursorOffset );
             break;
         default:
             // Did you add a new difficulty mode? Add the corresponding case above!
@@ -258,8 +274,6 @@ namespace
         levelCursor.redraw();
 
         buttonSelectMaps.draw();
-        buttonOk.draw();
-        buttonCancel.draw();
 
         display.render();
 
@@ -323,7 +337,7 @@ namespace
                 // select difficulty
                 if ( 0 <= index ) {
                     RedrawScenarioStaticInfo( rectPanel );
-                    levelCursor.setPosition( coordDifficulty[index].x, coordDifficulty[index].y );
+                    levelCursor.setPosition( coordDifficulty[index].x - levelCursorOffset, coordDifficulty[index].y - levelCursorOffset );
                     levelCursor.redraw();
                     Game::saveDifficulty( index );
                     RedrawDifficultyInfo( pointDifficultyInfo );
