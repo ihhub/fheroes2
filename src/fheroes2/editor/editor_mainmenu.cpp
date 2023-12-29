@@ -48,6 +48,7 @@
 #include "ui_dialog.h"
 #include "ui_tool.h"
 #include "world.h"
+#include "world_object_uid.h"
 
 namespace
 {
@@ -256,6 +257,9 @@ namespace Editor
                 const Maps::mapsize_t mapSize = selectMapSize();
                 if ( mapSize != Maps::ZERO ) {
                     world.generateForEditor( mapSize );
+
+                    // Reset object UID to keep track of newly added objects.
+                    Maps::resetObjectUID();
 
                     fheroes2::fadeOutDisplay();
                     Game::setDisplayFadeIn();
