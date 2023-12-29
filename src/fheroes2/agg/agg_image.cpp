@@ -3538,7 +3538,6 @@ namespace fheroes2
                 }
                 return true;
             case ICN::MAP_TYPE_ICON: {
-                // TODO: add a new icon for the Resurrection add-on map type.
                 _icnVsSprite[id].resize( 3 );
                 for ( Sprite & icon : _icnVsSprite[id] ) {
                     icon._disableTransformLayer();
