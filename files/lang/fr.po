@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-25 01:52+0000\n"
+"POT-Creation-Date: 2023-12-29 00:13+0000\n"
 "PO-Revision-Date: 2023-12-22 01:17+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -197,6 +197,10 @@ msgstr "MIN"
 
 msgid "RESET"
 msgstr "R.A.Z."
+
+#, fuzzy
+msgid "START"
+msgstr "REJOUER"
 
 #, fuzzy
 msgid "CASTLE"
@@ -950,6 +954,23 @@ msgstr "Humain"
 
 msgid "AI"
 msgstr "IA"
+
+#, fuzzy
+msgid "Start"
+msgstr "Recommencer"
+
+#, fuzzy
+msgid "Start the battle."
+msgstr "Retourner à la bataille."
+
+msgid "Exit"
+msgstr "Quitter"
+
+msgid "Reset"
+msgstr ""
+
+msgid "Reset to default settings."
+msgstr ""
 
 msgid "Please select another hero."
 msgstr "Veuillez choisir un autre héros."
@@ -2593,9 +2614,6 @@ msgstr ""
 "Vous devez acheter un grimoire pour utiliser la guilde des magiciens, mais "
 "vous n'avez actuellement pas de place pour un grimoire. Essayez de donner un "
 "de vos artéfacts à un autre héros."
-
-msgid "Exit"
-msgstr "Quitter"
 
 msgid "Click to show next town."
 msgstr "Cliquez pour afficher le village suivant."

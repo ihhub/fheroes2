@@ -420,11 +420,11 @@ namespace Maps
 
         uint8_t _fogColors{ Color::ALL };
 
-        // Fog direction to render fog in Game Area.
-        uint16_t _fogDirection{ DIRECTION_ALL };
-
         // Heroes can only summon neutral empty boats or empty boats belonging to their kingdom.
         uint8_t _boatOwnerColor{ Color::NONE };
+
+        // Fog direction to render fog in Game Area.
+        uint16_t _fogDirection{ DIRECTION_ALL };
 
         // This field does not persist in savegame.
         uint32_t _region{ REGION_NODE_BLOCKED };

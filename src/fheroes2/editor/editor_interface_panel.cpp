@@ -777,7 +777,6 @@ namespace Interface
                         return;
                     }
 
-                    // TODO: render ICN::MINIHERO from the existing hero images.
                     const fheroes2::Sprite & image = fheroes2::generateTownObjectImage( type, color, world.GetTiles( tileIndex ).GetGround() );
 
                     Cursor::Get().setCustomImage( image, { image.x(), image.y() } );

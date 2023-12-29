@@ -26,8 +26,6 @@
 #include <bitset>
 #include <vector>
 
-#include "direction.h"
-#include "mp2.h"
 #include "tools.h"
 
 namespace
@@ -35,75 +33,7 @@ namespace
     const std::bitset<256> obTownShadowBitset = fheroes2::makeBitsetFromVector<256>( { 0, 16, 17, 48, 80, 81, 112, 144, 145, 161, 165, 176 } );
 }
 
-int ObjTown::GetPassable( const uint8_t index0 )
-{
-    uint32_t index = index0 % 32;
-
-    // 13, 29, 45, 61, 77, 93, 109, 125, 141, 157, 173, 189
-    if ( 13 == index || 29 == index )
-        return Direction::CENTER | Direction::BOTTOM;
-    else
-        // town/castle
-        if ( ( 5 < index && index < 13 ) || ( 13 < index && index < 16 ) || ( 21 < index && index < 29 ) || ( 29 < index ) )
-        return 0;
-
-    return DIRECTION_ALL;
-}
-
-int ObjTwba::GetPassable( const uint8_t index0 )
-{
-    uint32_t index = index0 % 10;
-
-    // 2, 12, 22, 32, 42, 52, 62, 72
-    if ( index == 2 ) {
-        return Direction::CENTER | Direction::BOTTOM;
-    }
-    else if ( index < 5 ) {
-        return 0;
-    }
-    else {
-        // 7, 17, 27, 37, 47, 57, 67, 77
-        if ( index == 7 )
-            return DIRECTION_CENTER_ROW | DIRECTION_BOTTOM_ROW | Direction::TOP;
-        else
-            return DIRECTION_CENTER_ROW | DIRECTION_BOTTOM_ROW;
-    }
-}
-
-bool ObjTown::isAction( uint32_t index )
-{
-    return MP2::OBJ_NONE != GetActionObject( index );
-}
-
-bool ObjTwba::isAction( uint32_t index )
-{
-    return MP2::OBJ_NONE != GetActionObject( index );
-}
-
 bool ObjTown::isShadow( const uint8_t index )
 {
     return obTownShadowBitset[index];
-}
-
-bool ObjTwba::isShadow( const uint8_t /*index*/ )
-{
-    return false;
-}
-
-int ObjTown::GetActionObject( uint32_t index )
-{
-    switch ( index % 32 ) {
-    case 13:
-    case 29:
-        return MP2::OBJ_CASTLE;
-    default:
-        break;
-    }
-
-    return MP2::OBJ_NONE;
-}
-
-int ObjTwba::GetActionObject( uint32_t /* unused */ )
-{
-    return MP2::OBJ_NONE;
 }

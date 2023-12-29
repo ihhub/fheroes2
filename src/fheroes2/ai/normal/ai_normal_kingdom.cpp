@@ -305,12 +305,19 @@ namespace AI
             recruit = castle.RecruitHero( secondRecruit );
         }
 
-        if ( recruit && buyArmy ) {
+        if ( recruit == nullptr ) {
+            return false;
+        }
+
+        if ( buyArmy ) {
             CastleTurn( castle, underThreat );
             reinforceHeroInCastle( *recruit, castle, kingdom.GetFunds() );
         }
+        else {
+            OptimizeTroopsOrder( recruit->GetArmy() );
+        }
 
-        return recruit != nullptr;
+        return true;
     }
 
     void Normal::reinforceHeroInCastle( Heroes & hero, Castle & castle, const Funds & budget )

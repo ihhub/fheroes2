@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-25 01:52+0000\n"
+"POT-Creation-Date: 2023-12-29 00:13+0000\n"
 "PO-Revision-Date: 2022-09-23 16:14+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Lithuanian <lt@li.org>\n"
@@ -177,6 +177,9 @@ msgid "MIN"
 msgstr ""
 
 msgid "RESET"
+msgstr ""
+
+msgid "START"
 msgstr ""
 
 msgid "CASTLE"
@@ -870,6 +873,23 @@ msgid "Human"
 msgstr ""
 
 msgid "AI"
+msgstr ""
+
+msgid "Start"
+msgstr ""
+
+#, fuzzy
+msgid "Start the battle."
+msgstr "Grįžti į mūšį."
+
+#, fuzzy
+msgid "Exit"
+msgstr "Išeiti iš miesto"
+
+msgid "Reset"
+msgstr ""
+
+msgid "Reset to default settings."
 msgstr ""
 
 msgid "Please select another hero."
@@ -2394,10 +2414,6 @@ msgid ""
 "You must purchase a spell book to use the mage guild, but you currently have "
 "no room for a spell book. Try giving one of your artifacts to another hero."
 msgstr ""
-
-#, fuzzy
-msgid "Exit"
-msgstr "Išeiti iš miesto"
 
 #, fuzzy
 msgid "Click to show next town."

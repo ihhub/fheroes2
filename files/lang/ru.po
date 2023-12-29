@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-25 01:52+0000\n"
+"POT-Creation-Date: 2023-12-29 00:13+0000\n"
 "PO-Revision-Date: 2023-11-12 16:27+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -201,6 +201,10 @@ msgstr "МИН"
 
 msgid "RESET"
 msgstr ""
+
+#, fuzzy
+msgid "START"
+msgstr "СНАЧАЛА"
 
 #, fuzzy
 msgid "CASTLE"
@@ -953,6 +957,23 @@ msgstr "Человек"
 
 msgid "AI"
 msgstr "Компьютер"
+
+#, fuzzy
+msgid "Start"
+msgstr "Начать сначала"
+
+#, fuzzy
+msgid "Start the battle."
+msgstr "Вернуться к сражению."
+
+msgid "Exit"
+msgstr "Закрыть"
+
+msgid "Reset"
+msgstr ""
+
+msgid "Reset to default settings."
+msgstr ""
 
 msgid "Please select another hero."
 msgstr "Пожалуйста, выберите другого героя."
@@ -2557,9 +2578,6 @@ msgstr ""
 "Чтобы Вас пропустили в гильдию магов, Вы должны купить книгу заклинаний, но "
 "к сожалению, Ваша сумка и так переполнена артефактами. Попробуйте передать "
 "один из Ваших артефактов другому герою."
-
-msgid "Exit"
-msgstr "Закрыть"
 
 msgid "Click to show next town."
 msgstr "Нажмите, чтобы показать следующий город."
