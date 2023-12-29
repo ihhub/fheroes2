@@ -26,8 +26,6 @@
 
 #include <cstdint>
 
-#include "mp2.h"
-
 namespace ObjMnts1
 {
     bool isShadow( const uint8_t index );
