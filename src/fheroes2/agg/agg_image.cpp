@@ -4174,7 +4174,10 @@ namespace fheroes2
                 const bool isEvilInterface = ( id == ICN::UNIFORMBAK_EVIL );
                 const fheroes2::Sprite & original = GetICN( isEvilInterface ? ICN::BUYBUILE : ICN::BUYBUILD, 1 );
                 if ( !original.empty() ) {
-                    _icnVsSprite[id][0] = Crop( original, 0, 0, 125, 45 );
+                    _icnVsSprite[id][0].resize( 246, 45 );
+                    const fheroes2::Sprite & croppedImage = Crop( original, 0, 0, 125, 45 );
+                    Copy( croppedImage, 0, 0, _icnVsSprite[id][0], 0, 0, 123, 45 );
+                    Copy( croppedImage, 0, 0, _icnVsSprite[id][0], 123, 0, 123, 45 );
                 }
 
                 return true;
