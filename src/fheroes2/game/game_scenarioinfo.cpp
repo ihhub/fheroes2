@@ -250,9 +250,13 @@ namespace
         }
 
         // Set up restorers.
-        fheroes2::ImageRestorer mapTitleArea( display, scenarioBoxRoi.x + 113, scenarioBoxRoi.y + 5, 113 +  (254 - 113), scenarioBoxRoi.height );
+        fheroes2::ImageRestorer mapTitleArea( display, scenarioBoxRoi.x + 113, scenarioBoxRoi.y + 5, 141, scenarioBoxRoi.height );
+        fheroes2::ImageRestorer opponentsArea( display, roi.x, pointOpponentInfo.y, roi.width, 65 );
+        fheroes2::ImageRestorer classArea( display, roi.x, pointClassInfo.y, roi.width, 69 );
+        fheroes2::ImageRestorer handicapArea( display, roi.x, pointClassInfo.y + 69, roi.width, 31 );
         fheroes2::ImageRestorer ratingArea( display, buttonOk.area().x + buttonOk.area().width, buttonOk.area().y,
                                             roi.width - buttonOk.area().width - buttonCancel.area().width - 20 * 2, buttonOk.area().height );
+
         // Map name
         RedrawMapTitle( scenarioBoxRoi );
 
@@ -321,6 +325,10 @@ namespace
                     RedrawMapTitle( scenarioBoxRoi );
                     Game::LoadPlayers( fi->filename, players );
 
+                    opponentsArea.restore();
+                    classArea.restore();
+                    handicapArea.restore();
+
                     updatePlayers( players, humanPlayerCount );
                     playersInfo.UpdateInfo( players, pointOpponentInfo, pointClassInfo );
 
@@ -353,11 +361,10 @@ namespace
                     levelCursor.setPosition( coordDifficulty[index].x - levelCursorOffset, coordDifficulty[index].y - levelCursorOffset );
                     levelCursor.redraw();
                     Game::saveDifficulty( index );
-                    playersInfo.RedrawInfo( false );
                     ratingArea.restore();
                     ratingRoi = RedrawRatingInfo( roi.getPosition(), roi.width );
 
-                    display.render();
+                    display.render( background.activeArea() );
                 }
                 // playersInfo
                 else if ( playersInfo.QueueEventProcessing() ) {
@@ -366,41 +373,45 @@ namespace
                     ratingArea.restore();
                     ratingRoi = RedrawRatingInfo( roi.getPosition(), roi.width );
 
-                    display.render();
+                    display.render( background.activeArea() );
                 }
             }
             else if ( le.MouseWheelUp() || le.MouseWheelDn() ) {
                 if ( playersInfo.QueueEventProcessing() ) {
                     playersInfo.resetSelection();
 
-                    levelCursor.redraw();
-
+                    classArea.restore();
                     playersInfo.RedrawInfo( false );
-                    ratingRoi = RedrawRatingInfo( roi.getPosition(), roi.width );
 
-                    display.render();
+                    display.render( background.activeArea() );
                 }
             }
 
             if ( le.MousePressRight( roi ) ) {
-                if ( le.MousePressRight( buttonSelectMaps.area() ) )
+                if ( le.MousePressRight( buttonSelectMaps.area() ) ) {
                     fheroes2::showStandardTextMessage( _( "Scenario" ), _( "Click here to select which scenario to play." ), Dialog::ZERO );
-                else if ( 0 <= GetRectIndex( coordDifficulty, le.GetMouseCursor() ) )
+                }
+                else if ( 0 <= GetRectIndex( coordDifficulty, le.GetMouseCursor() ) ) {
                     fheroes2::showStandardTextMessage(
                         _( "Game Difficulty" ),
                         _( "This lets you change the starting difficulty at which you will play. Higher difficulty levels start you of with fewer resources, and at the higher settings, give extra resources to the computer." ),
                         Dialog::ZERO );
-                else if ( le.MousePressRight( ratingRoi ) )
+                }
+                else if ( le.MousePressRight( ratingRoi ) ) {
                     fheroes2::showStandardTextMessage(
                         _( "Difficulty Rating" ),
                         _( "The difficulty rating reflects a combination of various settings for your game. This number will be applied to your final score." ),
                         Dialog::ZERO );
-                else if ( le.MousePressRight( buttonOk.area() ) )
+                }
+                else if ( le.MousePressRight( buttonOk.area() ) ) {
                     fheroes2::showStandardTextMessage( _( "Okay" ), _( "Click to accept these settings and start a new game." ), Dialog::ZERO );
-                else if ( le.MousePressRight( buttonCancel.area() ) )
+                }
+                else if ( le.MousePressRight( buttonCancel.area() ) ) {
                     fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Click to return to the main menu." ), Dialog::ZERO );
-                else
+                }
+                else {
                     playersInfo.QueueEventProcessing();
+                }
             }
         }
 
