@@ -158,7 +158,7 @@ namespace
 
         fheroes2::drawMainMenuScreen();
 
-        fheroes2::StandardWindow background( 388, 395, true, display );
+        fheroes2::StandardWindow background( 388, 396, true, display );
 
         const fheroes2::Rect roi( background.activeArea() );
 
