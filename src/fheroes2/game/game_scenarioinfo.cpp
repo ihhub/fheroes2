@@ -85,7 +85,7 @@ namespace
         }
     }
 
-    void RedrawScenarioStaticInfo( const fheroes2::Rect & rt )
+    void DrawScenarioStaticInfo( const fheroes2::Rect & rt )
     {
         fheroes2::Display & display = fheroes2::Display::instance();
 
@@ -106,6 +106,12 @@ namespace
         // text class
         text.set( _( "Class:" ), normalWhiteFont );
         text.draw( rt.x, rt.y + 248, rt.width, display );
+    }
+
+    void RedrawMapTitle( const fheroes2::Rect & roi )
+    {
+        fheroes2::Text text( Settings::Get().getCurrentMapInfo().name, fheroes2::FontType::normalWhite() );
+        text.draw( roi.x, roi.y + 8, roi.width, fheroes2::Display::instance() );
     }
 
     void RedrawDifficultyInfo( const fheroes2::Point & dst )
@@ -231,7 +237,7 @@ namespace
 
         playersInfo.UpdateInfo( players, pointOpponentInfo, pointClassInfo );
 
-        RedrawScenarioStaticInfo( roi );
+        DrawScenarioStaticInfo( roi );
         RedrawDifficultyInfo( pointDifficultyInfo );
 
         const int icnIndex = isEvilInterface ? 1 : 0;
@@ -244,12 +250,11 @@ namespace
         }
 
         // Set up restorers.
-        fheroes2::ImageRestorer defaultDialog( display, background.activeArea().x, background.activeArea().y, background.activeArea().width,
-                                               background.activeArea().height );
-
+        fheroes2::ImageRestorer mapTitleArea( display, scenarioBoxRoi.x + 113, scenarioBoxRoi.y + 5, 113 +  (254 - 113), scenarioBoxRoi.height );
+        fheroes2::ImageRestorer ratingArea( display, buttonOk.area().x + buttonOk.area().width, buttonOk.area().y,
+                                            roi.width - buttonOk.area().width - buttonCancel.area().width - 20 * 2, buttonOk.area().height );
         // Map name
-        fheroes2::Text text( Settings::Get().getCurrentMapInfo().name, fheroes2::FontType::normalWhite() );
-        text.draw( scenarioBoxRoi.x, scenarioBoxRoi.y + 8, scenarioBoxRoi.width, display );
+        RedrawMapTitle( scenarioBoxRoi );
 
         playersInfo.RedrawInfo( false );
 
@@ -311,6 +316,9 @@ namespace
                 if ( fi && fi->filename != currentMapName ) {
                     Game::SavePlayers( currentMapName, conf.GetPlayers() );
                     conf.SetCurrentFileInfo( *fi );
+
+                    mapTitleArea.restore();
+                    RedrawMapTitle( scenarioBoxRoi );
                     Game::LoadPlayers( fi->filename, players );
 
                     updatePlayers( players, humanPlayerCount );
@@ -318,8 +326,10 @@ namespace
 
                     playersInfo.resetSelection();
                     playersInfo.RedrawInfo( false );
+                    ratingArea.restore();
                     ratingRoi = RedrawRatingInfo( roi.getPosition(), roi.width );
-                    levelCursor.setPosition( coordDifficulty[Game::getDifficulty()].x, coordDifficulty[Game::getDifficulty()].y ); // From 0 to 4, see: Difficulty enum
+                    levelCursor.setPosition( coordDifficulty[Game::getDifficulty()].x - levelCursorOffset,
+                                             coordDifficulty[Game::getDifficulty()].y - levelCursorOffset ); // From 0 to 4, see: Difficulty enum
                     display.render( background.activeArea() );
                 }
             }
@@ -344,6 +354,7 @@ namespace
                     levelCursor.redraw();
                     Game::saveDifficulty( index );
                     playersInfo.RedrawInfo( false );
+                    ratingArea.restore();
                     ratingRoi = RedrawRatingInfo( roi.getPosition(), roi.width );
 
                     display.render();
@@ -352,6 +363,7 @@ namespace
                 else if ( playersInfo.QueueEventProcessing() ) {
                     levelCursor.redraw();
                     playersInfo.RedrawInfo( false );
+                    ratingArea.restore();
                     ratingRoi = RedrawRatingInfo( roi.getPosition(), roi.width );
 
                     display.render();
