@@ -93,19 +93,19 @@ namespace
 
         // text scenario
         fheroes2::Text text( _( "Scenario:" ), normalWhiteFont );
-        text.draw( rt.x, rt.y + 25, rt.width, display );
+        text.draw( rt.x, rt.y + 9, rt.width, display );
 
         // text game difficulty
         text.set( _( "Game Difficulty:" ), normalWhiteFont );
-        text.draw( rt.x, rt.y + 75, rt.width, display );
+        text.draw( rt.x, rt.y + 59, rt.width, display );
 
         // text opponents
         text.set( _( "Opponents:" ), normalWhiteFont );
-        text.draw( rt.x, rt.y + 180, rt.width, display );
+        text.draw( rt.x, rt.y + 164, rt.width, display );
 
         // text class
         text.set( _( "Class:" ), normalWhiteFont );
-        text.draw( rt.x, rt.y + 264, rt.width, display );
+        text.draw( rt.x, rt.y + 248, rt.width, display );
     }
 
     void RedrawDifficultyInfo( const fheroes2::Point & dst )
@@ -132,7 +132,7 @@ namespace
         StringReplace( str, "%{rating}", Game::GetRating() );
 
         const fheroes2::Text text( str, fheroes2::FontType::normalWhite() );
-        const int32_t y = offset.y + 385;
+        const int32_t y = offset.y + 369;
         text.draw( offset.x, y, width_, fheroes2::Display::instance() );
 
         const int32_t textX = ( width_ > text.width() ) ? offset.x + ( width_ - text.width() ) / 2 : 0;
@@ -152,48 +152,52 @@ namespace
 
         fheroes2::drawMainMenuScreen();
 
-        const int32_t originalPanelWidth = fheroes2::AGG::GetICN( ICN::NGHSBKG, 0 ).width();
-        const int32_t originalPanelHeight = fheroes2::AGG::GetICN( ICN::NGHSBKG, 0 ).height();
+        fheroes2::StandardWindow background( 388, 395, true, display );
 
-        fheroes2::StandardWindow background( originalPanelWidth - 32, originalPanelHeight - 32, true, display );
-
-        const fheroes2::Rect rectPanel( ( display.width() - originalPanelWidth ) / 2, ( display.height() - originalPanelHeight ) / 2, originalPanelWidth,
-                                        originalPanelHeight );
-        const fheroes2::Point pointDifficultyInfo( rectPanel.x + 24, rectPanel.y + 95 );
-        const fheroes2::Point pointOpponentInfo( rectPanel.x + 24, rectPanel.y + 197 );
-        const fheroes2::Point pointClassInfo( rectPanel.x + 24, rectPanel.y + 281 );
+        const fheroes2::Rect roi( background.activeArea() );
+        
+        const fheroes2::Point pointDifficultyInfo( roi.x + 8, roi.y + 79 );
+        const fheroes2::Point pointOpponentInfo( roi.x + 8, roi.y + 181 );
+        const fheroes2::Point pointClassInfo( roi.x + 8, roi.y + 265 );
 
         const fheroes2::Sprite & scenarioBox = fheroes2::AGG::GetICN( ICN::METALLIC_BORDERED_TEXTBOX, isEvilInterface ? 1 : 0 );
 
-        const fheroes2::Rect scenarioBoxRoi( rectPanel.x + 25, rectPanel.y + 40, 371, 30 );
+        const fheroes2::Rect scenarioBoxRoi( roi.x + ( roi.width - scenarioBox.width() ) / 2, roi.y + 24, scenarioBox.width(), scenarioBox.height() );
 
         fheroes2::Copy( scenarioBox, 0, 0, display, scenarioBoxRoi );
+        fheroes2::addGradientShadow( scenarioBox, display, scenarioBoxRoi.getPosition(), { -5, 5 } );
 
-        const fheroes2::Sprite & ngextra = fheroes2::AGG::GetICN( ICN::NGEXTRA, 62 );
+        const fheroes2::Sprite & difficultyCursor = fheroes2::AGG::GetICN( ICN::NGEXTRA, 62 );
 
-        const int32_t ngextraWidth = ngextra.width();
-        const int32_t ngextraHeight = ngextra.height();
+        const int32_t difficultyCursorWidth = difficultyCursor.width();
+        const int32_t difficultyCursorHeight = difficultyCursor.height();
 
         // vector coord difficulty
         std::vector<fheroes2::Rect> coordDifficulty;
         coordDifficulty.reserve( 5 );
 
-        coordDifficulty.emplace_back( rectPanel.x + 24, rectPanel.y + 94, ngextraWidth, ngextraHeight );
-        coordDifficulty.emplace_back( rectPanel.x + 101, rectPanel.y + 94, ngextraWidth, ngextraHeight );
-        coordDifficulty.emplace_back( rectPanel.x + 177, rectPanel.y + 94, ngextraWidth, ngextraHeight );
-        coordDifficulty.emplace_back( rectPanel.x + 254, rectPanel.y + 94, ngextraWidth, ngextraHeight );
-        coordDifficulty.emplace_back( rectPanel.x + 331, rectPanel.y + 94, ngextraWidth, ngextraHeight );
+        coordDifficulty.emplace_back( roi.x + 8, roi.y + 78, difficultyCursorWidth, difficultyCursorHeight );
+        coordDifficulty.emplace_back( roi.x + 85, roi.y + 78, difficultyCursorWidth, difficultyCursorHeight );
+        coordDifficulty.emplace_back( roi.x + 161, roi.y + 78, difficultyCursorWidth, difficultyCursorHeight );
+        coordDifficulty.emplace_back( roi.x + 238, roi.y + 78, difficultyCursorWidth, difficultyCursorHeight );
+        coordDifficulty.emplace_back( roi.x + 315, roi.y + 78, difficultyCursorWidth, difficultyCursorHeight );
 
         const int32_t buttonSelectWidth = fheroes2::AGG::GetICN( ICN::BUTTON_MAP_SELECT_GOOD, 0 ).width();
 
-        fheroes2::Button buttonSelectMaps( rectPanel.x + 390 - buttonSelectWidth, rectPanel.y + 45,
+        fheroes2::Button buttonSelectMaps( scenarioBoxRoi.x + scenarioBoxRoi.width - 6 - buttonSelectWidth, scenarioBoxRoi.y + 5,
                                            isEvilInterface ? ICN::BUTTON_MAP_SELECT_EVIL : ICN::BUTTON_MAP_SELECT_GOOD, 0, 1 );
         buttonSelectMaps.draw();
 
         fheroes2::Button buttonOk;
         fheroes2::Button buttonCancel;
 
-        background.renderOkayCancelButtons( buttonOk, buttonCancel, isEvilInterface );
+        const fheroes2::Point buttonOffset( 20, 6 );
+
+        const int buttonOkIcn = isEvilInterface ? ICN::BUTTON_SMALL_OKAY_EVIL : ICN::BUTTON_SMALL_OKAY_GOOD;
+        background.renderButton( buttonOk, buttonOkIcn, 0, 1, buttonOffset, fheroes2::StandardWindow::Padding::BOTTOM_LEFT );
+
+        const int buttonCancelIcn = isEvilInterface ? ICN::BUTTON_SMALL_CANCEL_EVIL : ICN::BUTTON_SMALL_CANCEL_GOOD;
+        background.renderButton( buttonCancel, buttonCancelIcn, 0, 1, buttonOffset, fheroes2::StandardWindow::Padding::BOTTOM_RIGHT );
 
         bool resetStartingSettings = conf.getCurrentMapInfo().filename.empty();
         Players & players = conf.GetPlayers();
@@ -227,7 +231,7 @@ namespace
 
         playersInfo.UpdateInfo( players, pointOpponentInfo, pointClassInfo );
 
-        RedrawScenarioStaticInfo( rectPanel );
+        RedrawScenarioStaticInfo( roi );
         RedrawDifficultyInfo( pointDifficultyInfo );
 
         const int icnIndex = isEvilInterface ? 1 : 0;
@@ -245,13 +249,13 @@ namespace
 
         // Map name
         fheroes2::Text text( Settings::Get().getCurrentMapInfo().name, fheroes2::FontType::normalWhite() );
-        text.draw( rectPanel.x, rectPanel.y + 48, rectPanel.width, display );
+        text.draw( scenarioBoxRoi.x, scenarioBoxRoi.y + 8, scenarioBoxRoi.width, display );
 
         playersInfo.RedrawInfo( false );
 
-        fheroes2::Rect ratingRoi = RedrawRatingInfo( rectPanel.getPosition(), rectPanel.width );
+        fheroes2::Rect ratingRoi = RedrawRatingInfo( roi.getPosition(), roi.width );
 
-        fheroes2::MovableSprite levelCursor( ngextra );
+        fheroes2::MovableSprite levelCursor( difficultyCursor );
         const int32_t levelCursorOffset = 3;
 
         switch ( Game::getDifficulty() ) {
@@ -302,9 +306,10 @@ namespace
             // click select
             if ( HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_SELECT_MAP ) || le.MouseClickLeft( buttonSelectMaps.area() ) ) {
                 const Maps::FileInfo * fi = Dialog::SelectScenario( lists );
+                const std::string currentMapName = conf.getCurrentMapInfo().filename;
 
-                if ( fi ) {
-                    Game::SavePlayers( conf.getCurrentMapInfo().filename, conf.GetPlayers() );
+                if ( fi && fi->filename != currentMapName ) {
+                    Game::SavePlayers( currentMapName, conf.GetPlayers() );
                     conf.SetCurrentFileInfo( *fi );
                     Game::LoadPlayers( fi->filename, players );
 
@@ -313,11 +318,10 @@ namespace
 
                     playersInfo.resetSelection();
                     playersInfo.RedrawInfo( false );
-                    ratingRoi = RedrawRatingInfo( rectPanel.getPosition(), rectPanel.width );
+                    ratingRoi = RedrawRatingInfo( roi.getPosition(), roi.width );
                     levelCursor.setPosition( coordDifficulty[Game::getDifficulty()].x, coordDifficulty[Game::getDifficulty()].y ); // From 0 to 4, see: Difficulty enum
+                    display.render( background.activeArea() );
                 }
-
-                display.render();
             }
             else if ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) || le.MouseClickLeft( buttonCancel.area() ) ) {
                 result = fheroes2::GameMode::MAIN_MENU;
@@ -331,7 +335,7 @@ namespace
                 fheroes2::fadeOutDisplay();
                 break;
             }
-            else if ( le.MouseClickLeft( rectPanel ) ) {
+            else if ( le.MouseClickLeft( roi ) ) {
                 const int32_t index = GetRectIndex( coordDifficulty, le.GetMouseCursor() );
 
                 // select difficulty
@@ -340,7 +344,7 @@ namespace
                     levelCursor.redraw();
                     Game::saveDifficulty( index );
                     playersInfo.RedrawInfo( false );
-                    ratingRoi = RedrawRatingInfo( rectPanel.getPosition(), rectPanel.width );
+                    ratingRoi = RedrawRatingInfo( roi.getPosition(), roi.width );
 
                     display.render();
                 }
@@ -348,7 +352,7 @@ namespace
                 else if ( playersInfo.QueueEventProcessing() ) {
                     levelCursor.redraw();
                     playersInfo.RedrawInfo( false );
-                    ratingRoi = RedrawRatingInfo( rectPanel.getPosition(), rectPanel.width );
+                    ratingRoi = RedrawRatingInfo( roi.getPosition(), roi.width );
 
                     display.render();
                 }
@@ -360,13 +364,13 @@ namespace
                     levelCursor.redraw();
 
                     playersInfo.RedrawInfo( false );
-                    ratingRoi = RedrawRatingInfo( rectPanel.getPosition(), rectPanel.width );
+                    ratingRoi = RedrawRatingInfo( roi.getPosition(), roi.width );
 
                     display.render();
                 }
             }
 
-            if ( le.MousePressRight( rectPanel ) ) {
+            if ( le.MousePressRight( roi ) ) {
                 if ( le.MousePressRight( buttonSelectMaps.area() ) )
                     fheroes2::showStandardTextMessage( _( "Scenario" ), _( "Click here to select which scenario to play." ), Dialog::ZERO );
                 else if ( 0 <= GetRectIndex( coordDifficulty, le.GetMouseCursor() ) )
