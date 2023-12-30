@@ -158,7 +158,7 @@ namespace
 
         fheroes2::drawMainMenuScreen();
 
-        fheroes2::StandardWindow background( 388, 396, true, display );
+        fheroes2::StandardWindow background( 388, 397, true, display );
 
         const fheroes2::Rect roi( background.activeArea() );
 
@@ -328,17 +328,18 @@ namespace
                     opponentsArea.restore();
                     classArea.restore();
                     handicapArea.restore();
+                    ratingArea.restore();
 
                     updatePlayers( players, humanPlayerCount );
                     playersInfo.UpdateInfo( players, pointOpponentInfo, pointClassInfo );
 
                     playersInfo.resetSelection();
                     playersInfo.RedrawInfo( false );
-                    ratingArea.restore();
+                    
                     ratingRoi = RedrawRatingInfo( roi.getPosition(), roi.width );
                     levelCursor.setPosition( coordDifficulty[Game::getDifficulty()].x - levelCursorOffset,
                                              coordDifficulty[Game::getDifficulty()].y - levelCursorOffset ); // From 0 to 4, see: Difficulty enum
-                    display.render( background.activeArea() );
+                    display.render();
                 }
             }
             else if ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) || le.MouseClickLeft( buttonCancel.area() ) ) {
@@ -368,10 +369,10 @@ namespace
                 }
                 // playersInfo
                 else if ( playersInfo.QueueEventProcessing() ) {
-                    levelCursor.redraw();
+                    opponentsArea.restore();
+                    classArea.restore();
+                    handicapArea.restore();
                     playersInfo.RedrawInfo( false );
-                    ratingArea.restore();
-                    ratingRoi = RedrawRatingInfo( roi.getPosition(), roi.width );
 
                     display.render( background.activeArea() );
                 }
@@ -379,8 +380,9 @@ namespace
             else if ( le.MouseWheelUp() || le.MouseWheelDn() ) {
                 if ( playersInfo.QueueEventProcessing() ) {
                     playersInfo.resetSelection();
-
+                    opponentsArea.restore();
                     classArea.restore();
+                    handicapArea.restore();
                     playersInfo.RedrawInfo( false );
 
                     display.render( background.activeArea() );
