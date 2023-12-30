@@ -335,7 +335,7 @@ namespace
 
                     playersInfo.resetSelection();
                     playersInfo.RedrawInfo( false );
-                    
+
                     ratingRoi = RedrawRatingInfo( roi.getPosition(), roi.width );
                     levelCursor.setPosition( coordDifficulty[Game::getDifficulty()].x - levelCursorOffset,
                                              coordDifficulty[Game::getDifficulty()].y - levelCursorOffset ); // From 0 to 4, see: Difficulty enum
