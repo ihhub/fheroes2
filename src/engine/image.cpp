@@ -2555,7 +2555,7 @@ namespace fheroes2
 
     Sprite makeShadow( const Sprite & in, const Point & shadowOffset, const uint8_t transformId )
     {
-        if ( in.empty() || in.singleLayer() || shadowOffset.x > 0 || shadowOffset.y < 0 ) {
+        if ( in.empty() || shadowOffset.x > 0 || shadowOffset.y < 0 ) {
             return {};
         }
 
@@ -2567,6 +2567,13 @@ namespace fheroes2
         out.reset();
 
         assert( !out.empty() );
+
+        if ( in.singleLayer() ) {
+            // In this case we add a shadow of the fully non-transparent rectangular 'in' image.
+            FillTransform( out, 0, shadowOffset.y, width, height, transformId );
+
+            return out;
+        }
 
         const int32_t widthOut = out.width();
 
