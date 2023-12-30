@@ -740,10 +740,9 @@ namespace AI
             hero->ResetModes( Heroes::SLEEPER );
             hero->setDimensionDoorUsage( 0 );
 
-            const double strength = hero->GetArmy().GetStrength();
-            _combinedHeroStrength += strength;
-            if ( !hero->Modes( Heroes::PATROL ) )
+            if ( !hero->Modes( Heroes::PATROL ) ) {
                 ++availableHeroCount;
+            }
 
             if ( hero->HaveSpell( Spell::VIEWALL ) && ( !bestHeroToViewAll || hero->HasSecondarySkill( Skill::Secondary::MYSTICISM ) ) ) {
                 bestHeroToViewAll = hero;

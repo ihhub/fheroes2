@@ -345,7 +345,6 @@ namespace AI
         void updatePriorityAttackTarget( const Kingdom & kingdom, const Maps::Tiles & tile );
 
         // The following member variables should not be saved or serialized
-        double _combinedHeroStrength = 0;
         std::vector<IndexObject> _mapActionObjects;
         std::map<int32_t, PriorityTask> _priorityTargets;
         std::map<int32_t, EnemyArmy> _enemyArmies;
