@@ -2731,14 +2731,18 @@ void Castle::JoinRNDArmy()
 
 void Castle::ActionPreBattle()
 {
-    Heroes * hero = world.GetHero( *this );
-    if ( hero ) {
-        hero->GetArmy().ArrangeForCastleDefense( army );
-    }
-
     if ( isControlAI() ) {
         AI::Get().CastlePreBattle( *this );
+
+        return;
     }
+
+    Heroes * hero = world.GetHero( *this );
+    if ( hero == nullptr ) {
+        return;
+    }
+
+    hero->GetArmy().ArrangeForCastleDefense( army );
 }
 
 void Castle::ActionAfterBattle( bool attacker_wins )

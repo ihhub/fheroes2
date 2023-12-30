@@ -246,9 +246,10 @@ public:
 
     void resetInvalidMonsters() const;
 
-    // Performs the pre-battle arrangement for the castle (or town) defense, trying to add reinforcements from the garrison. The
-    // logic of combining troops for the castle defense differs from the original game, see the implementation for details.
-    void ArrangeForCastleDefense( Army & garrison );
+    // Performs the pre-battle arrangement for the castle (or town) defense, trying to add reinforcements from the garrison. Returns
+    // true if at least one unit from the garrison was moved to the army as reinforcements, otherwise returns false. The logic of
+    // combining troops for the castle defense differs from the original game, see the implementation for details.
+    bool ArrangeForCastleDefense( Army & garrison );
     // Optimizes the arrangement of troops to pass through the whirlpool (moves one weakest unit to a separate slot, if possible)
     void ArrangeForWhirlpool();
 
