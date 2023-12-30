@@ -1895,7 +1895,7 @@ namespace fheroes2
                 }
 
                 getTextAdaptedButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "CANCEL" ),
-                                      isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON, ICN::UNKNOWN );
+                                      isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON, isEvilInterface ? ICN::UNIFORMBAK_EVIL : ICN::UNIFORMBAK_GOOD );
 
                 break;
             }
@@ -4167,6 +4167,17 @@ namespace fheroes2
                     _icnVsSprite[id][0] = Crop( original, 0, 0, 37, 230 );
                 }
                 return true;
+            }
+            case ICN::UNIFORMBAK_GOOD: 
+            case ICN::UNIFORMBAK_EVIL: {
+                _icnVsSprite[id].resize( 1 );
+                const bool isEvilInterface = ( id == ICN::UNIFORMBAK_EVIL );
+                const fheroes2::Sprite & original = GetICN( isEvilInterface ? ICN::BUYBUILE : ICN::BUYBUILD, 1 );
+                if ( !original.empty() ) {
+                    _icnVsSprite[id][0] = Crop( original, 0, 0, 125, 45 );
+                }
+                return true;
+
             }
             case ICN::WELLBKG_EVIL: {
                 GetICN( ICN::WELLBKG, 0 );
