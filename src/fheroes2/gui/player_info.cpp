@@ -427,9 +427,9 @@ bool Interface::PlayersInfo::QueueEventProcessing()
         if ( player != nullptr ) {
             if ( conf.getCurrentMapInfo().AllowChangeRace( player->GetColor() ) ) {
                 changeRaceToPrev( *player );
-            }
 
-            return true;
+                return true;
+            }
         }
 
         return false;
@@ -440,9 +440,9 @@ bool Interface::PlayersInfo::QueueEventProcessing()
         if ( player != nullptr ) {
             if ( conf.getCurrentMapInfo().AllowChangeRace( player->GetColor() ) ) {
                 changeRaceToNext( *player );
-            }
 
-            return true;
+                return true;
+            }
         }
 
         return false;
