@@ -155,7 +155,7 @@ namespace
         fheroes2::StandardWindow background( 388, 395, true, display );
 
         const fheroes2::Rect roi( background.activeArea() );
-        
+
         const fheroes2::Point pointDifficultyInfo( roi.x + 8, roi.y + 79 );
         const fheroes2::Point pointOpponentInfo( roi.x + 8, roi.y + 181 );
         const fheroes2::Point pointClassInfo( roi.x + 8, roi.y + 265 );
