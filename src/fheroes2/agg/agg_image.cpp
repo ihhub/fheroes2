@@ -4168,7 +4168,7 @@ namespace fheroes2
                 }
                 return true;
             }
-            case ICN::UNIFORMBAK_GOOD: 
+            case ICN::UNIFORMBAK_GOOD:
             case ICN::UNIFORMBAK_EVIL: {
                 _icnVsSprite[id].resize( 1 );
                 const bool isEvilInterface = ( id == ICN::UNIFORMBAK_EVIL );
@@ -4176,8 +4176,8 @@ namespace fheroes2
                 if ( !original.empty() ) {
                     _icnVsSprite[id][0] = Crop( original, 0, 0, 125, 45 );
                 }
-                return true;
 
+                return true;
             }
             case ICN::WELLBKG_EVIL: {
                 GetICN( ICN::WELLBKG, 0 );
