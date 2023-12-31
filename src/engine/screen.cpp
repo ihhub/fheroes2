@@ -285,7 +285,7 @@ namespace
                         }
                     }
                     else {
-                        memcpy( surface->pixels, imageIn, static_cast<size_t>( imageWidth * imageHeight ) );
+                        memcpy( surface->pixels, imageIn, static_cast<size_t>( imageWidth ) * imageHeight );
                     }
                 }
             }
@@ -536,10 +536,9 @@ namespace
         }
 
     private:
-        SDL_Cursor * _cursor;
+        SDL_Cursor * _cursor{ nullptr };
 
         RenderCursor()
-            : _cursor( nullptr )
         {
             _emulation = false;
 

@@ -2742,7 +2742,7 @@ namespace
 
             const Artifact & art = event_maps->artifact;
             if ( art.isValid() && hero.PickupArtifact( art ) ) {
-                artifactUI.reset( new fheroes2::ArtifactDialogElement( art ) );
+                artifactUI = std::make_unique<fheroes2::ArtifactDialogElement>( art );
                 AudioManager::PlaySound( M82::TREASURE );
             }
 
