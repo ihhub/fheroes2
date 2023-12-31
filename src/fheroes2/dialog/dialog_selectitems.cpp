@@ -666,6 +666,27 @@ namespace
         }
     };
 
+    class DwellingTypeSelection : public ObjectTypeSelection
+    {
+    public:
+        DwellingTypeSelection( const std::vector<Maps::ObjectInfo> & objectInfo, const fheroes2::Size & size, std::string title )
+            : ObjectTypeSelection( objectInfo, size, std::move( title ), 6 * 32 / 2, 6 * 32 + 10, 3 * 32 )
+        {
+            // Do nothing.
+        }
+
+    private:
+        void showPopupWindow( const Maps::ObjectInfo & info ) override
+        {
+            fheroes2::showStandardTextMessage( getObjectName( info ), "", Dialog::ZERO );
+        }
+
+        std::string getObjectName( const Maps::ObjectInfo & info ) override
+        {
+            return MP2::StringObject( info.objectType );
+        }
+    };
+
     int selectObjectType( const int objectType, const size_t objectCount, ObjectTypeSelection & objectSelection )
     {
         std::vector<int> objects( objectCount, 0 );
@@ -1099,4 +1120,13 @@ void Dialog::selectTownType( int & type, int & color )
 
         needRedraw = false;
     }
+}
+
+int Dialog::selectDwellingType( const int dwellingType )
+{
+    const auto & objectInfo = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_DWELLINGS );
+
+    DwellingTypeSelection listbox( objectInfo, { 420, fheroes2::Display::instance().height() - 180 }, _( "Select Ocean Object:" ) );
+
+    return selectObjectType( dwellingType, objectInfo.size(), listbox );
 }
