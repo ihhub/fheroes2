@@ -243,13 +243,15 @@ namespace AI
             return;
         }
 
-        if ( !hero->GetArmy().ArrangeForCastleDefense( castle.GetArmy() ) ) {
+        Army & army = hero->GetArmy();
+
+        if ( !army.ArrangeForCastleDefense( castle.GetArmy() ) ) {
             return;
         }
 
         // Optimization cannot be performed if we have not received any reinforcements from the garrison, otherwise the actual placement of units during the battle will
         // differ from that observed by the enemy player before the start of the battle
-        OptimizeTroopsOrder( hero->GetArmy() );
+        OptimizeTroopsOrder( army );
     }
 
     void Normal::updateKingdomBudget( const Kingdom & kingdom )
