@@ -124,13 +124,15 @@ namespace AI
         // 2. Comparison by type (flying units first);
         // 3. Comparison by strength.
         std::sort( others.begin(), others.end(), []( const Troop & left, const Troop & right ) {
-            if ( left.GetSpeed() == right.GetSpeed() ) {
-                if ( left.isFlying() == right.isFlying() ) {
-                    return left.GetStrength() < right.GetStrength();
-                }
+            if ( left.GetSpeed() != right.GetSpeed() ) {
+                return left.GetSpeed() < right.GetSpeed();
+            }
+
+            if ( left.isFlying() != right.isFlying() ) {
                 return right.isFlying();
             }
-            return left.GetSpeed() < right.GetSpeed();
+
+            return left.GetStrength() < right.GetStrength();
         } );
 
         // Archers are sorted solely by strength
