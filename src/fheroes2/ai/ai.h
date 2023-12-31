@@ -169,7 +169,7 @@ namespace AI
     void OptimizeTroopsOrder( Army & army );
 
     // Transfers the slowest troops from the hero's army to the garrison to try to get a movement bonus on the next turn
-    void transferSlowestTroopsToGarrison( Army & army, Army & garrison );
+    void transferSlowestTroopsToGarrison( Heroes * hero, Castle * castle );
 
     bool CanPurchaseHero( const Kingdom & kingdom );
 

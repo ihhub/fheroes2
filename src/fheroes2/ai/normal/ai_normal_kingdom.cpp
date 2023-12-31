@@ -919,7 +919,7 @@ namespace AI
                 continue;
             }
 
-            transferSlowestTroopsToGarrison( hero->GetArmy(), castle->GetArmy() );
+            transferSlowestTroopsToGarrison( hero, castle );
         }
 
         status.DrawAITurnProgress( 10 );

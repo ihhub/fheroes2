@@ -181,9 +181,12 @@ namespace AI
         }
     }
 
-    void transferSlowestTroopsToGarrison( Army & army, Army & garrison )
+    void transferSlowestTroopsToGarrison( Heroes * hero, Castle * castle )
     {
-        assert( &army != &garrison );
+        assert( hero != nullptr && castle != nullptr );
+
+        Army & army = hero->GetArmy();
+        Army & garrison = castle->GetArmy();
 
         // Make efforts to get free slots in the garrison to move troops there
         garrison.MergeSameMonsterTroops();
