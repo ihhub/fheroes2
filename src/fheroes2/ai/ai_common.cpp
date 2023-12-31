@@ -35,6 +35,7 @@
 #include "color.h"
 #include "difficulty.h"
 #include "game.h"
+#include "heroes.h"
 #include "kingdom.h"
 #include "logging.h"
 #include "normal/ai_normal.h"
