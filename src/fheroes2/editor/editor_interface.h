@@ -29,6 +29,7 @@
 #include "history_manager.h"
 #include "interface_base.h"
 #include "map_format_info.h"
+#include "timing.h"
 
 namespace Maps
 {
@@ -88,9 +89,46 @@ namespace Interface
         bool loadMap( const std::string & filePath );
 
     private:
+        class WarningMessage
+        {
+        public:
+            explicit WarningMessage( EditorInterface & interface )
+                : _interface( interface )
+            {
+                // Do nothing.
+            }
+
+            void reset( const char * info )
+            {
+                _message = info;
+
+                _interface.setRedraw( REDRAW_GAMEAREA );
+
+                _timer.reset();
+            }
+
+            bool isValid() const
+            {
+                return _timer.getS() < 5 && ( _message != nullptr );
+            }
+
+            const char * message() const
+            {
+                return _message;
+            }
+
+        private:
+            EditorInterface & _interface;
+
+            const char * _message{ nullptr };
+
+            fheroes2::Time _timer;
+        };
+
         EditorInterface()
             : BaseInterface( true )
             , _editorPanel( *this )
+            , _warningMessage( *this )
         {
             // Do nothing.
         }
@@ -109,5 +147,7 @@ namespace Interface
         fheroes2::HistoryManager _historyManager;
 
         Maps::Map_Format::MapFormat _mapFormat;
+
+        WarningMessage _warningMessage;
     };
 }
