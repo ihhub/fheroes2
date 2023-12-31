@@ -196,7 +196,7 @@ namespace
         return pos ? ++pos : str;
     }
 
-    struct Mofile
+    struct MOFile
     {
         // TODO: plural forms are not in use: Plural-Forms.
         LocaleType locale{ LocaleType::LOCALE_EN };
@@ -320,8 +320,8 @@ namespace
         }
     };
 
-    Mofile * current = nullptr;
-    std::map<std::string, Mofile> domains;
+    MOFile * current = nullptr;
+    std::map<std::string, MOFile> domains;
 }
 
 namespace Translation
@@ -331,7 +331,7 @@ namespace Translation
         std::string str( domain );
 
         // Search for already loaded domain or load from file
-        std::map<std::string, Mofile>::iterator it = domains.find( str );
+        std::map<std::string, MOFile>::iterator it = domains.find( str );
         if ( it != domains.end() ) {
             current = &( *it ).second;
             return true;
