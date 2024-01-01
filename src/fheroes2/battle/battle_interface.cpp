@@ -438,18 +438,20 @@ namespace Battle
         void RedrawBackground( const fheroes2::Point & /* unused*/ ) override
         {
             fheroes2::Display & display = fheroes2::Display::instance();
-            const fheroes2::Sprite & sp1 = fheroes2::AGG::GetICN( ICN::DROPLISL, 10 );
-            const fheroes2::Sprite & sp2 = fheroes2::AGG::GetICN( ICN::DROPLISL, 12 );
-            const fheroes2::Sprite & sp3 = fheroes2::AGG::GetICN( ICN::DROPLISL, 11 );
+
             const int32_t ax = buttonPgUp.area().x;
             const int32_t ah = buttonPgDn.area().y - ( buttonPgUp.area().y + buttonPgUp.area().height );
 
             const fheroes2::Rect & borderRect = border.GetRect();
             Dialog::FrameBorder::RenderOther( fheroes2::AGG::GetICN( ICN::TEXTBAK2, 0 ), borderRect );
 
+            const fheroes2::Sprite & sp3 = fheroes2::AGG::GetICN( ICN::DROPLISL, 11 );
             for ( int32_t i = 0; i < ( ah / sp3.height() ); ++i ) {
                 fheroes2::Copy( sp3, 0, 0, display, ax, buttonPgUp.area().y + buttonPgUp.area().height + ( sp3.height() * i ), sp3.width(), sp3.height() );
             }
+
+            const fheroes2::Sprite & sp1 = fheroes2::AGG::GetICN( ICN::DROPLISL, 10 );
+            const fheroes2::Sprite & sp2 = fheroes2::AGG::GetICN( ICN::DROPLISL, 12 );
 
             fheroes2::Copy( sp1, 0, 0, display, ax, buttonPgUp.area().y + buttonPgUp.area().height, sp1.width(), sp1.height() );
             fheroes2::Copy( sp2, 0, 0, display, ax, buttonPgDn.area().y - sp2.height(), sp2.width(), sp2.height() );
