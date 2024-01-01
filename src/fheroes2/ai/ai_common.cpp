@@ -211,7 +211,7 @@ namespace AI
         // Move the slowest units first
         std::sort( armyTroops.begin(), armyTroops.end(), Army::SlowestTroop );
 
-        // At least one fastest unit should remain in the hero's army
+        // At least one of the fastest units should remain in the hero's army
         armyTroops.pop_back();
 
         for ( Troop * troop : armyTroops ) {
