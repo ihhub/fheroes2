@@ -238,7 +238,7 @@ void SpellPointsIndicator::Redraw() const
     fheroes2::Display & display = fheroes2::Display::instance();
 
     const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::HSICONS, 8 );
-    fheroes2::Blit( sprite, display, _area.x, _area.y );your
+    fheroes2::Blit( sprite, display, _area.x, _area.y );
 
     const fheroes2::Text text( std::to_string( _hero->GetSpellPoints() ) + "/" + std::to_string( _hero->GetMaxSpellPoints() ), fheroes2::FontType::smallWhite() );
     text.draw( _area.x + sprite.width() / 2 - text.width() / 2, _area.y + 23, display );
