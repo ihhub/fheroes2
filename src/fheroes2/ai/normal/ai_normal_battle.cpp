@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2023                                             *
+ *   Copyright (C) 2020 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -54,6 +54,7 @@
 #include "game.h"
 #include "heroes.h"
 #include "heroes_base.h"
+#include "kingdom.h"
 #include "logging.h"
 #include "monster_info.h"
 #include "settings.h"
@@ -591,24 +592,50 @@ namespace AI
 
         // Step 2. Check retreat/surrender condition
         const Heroes * actualHero = dynamic_cast<const Heroes *>( _commander );
-        if ( actualHero && arena.CanRetreatOpponent( _myColor ) && checkRetreatCondition( *actualHero ) ) {
-            if ( isCommanderCanSpellcast( arena, _commander ) ) {
-                // Cast maximum damage spell
-                const SpellSelection & bestSpell = selectBestSpell( arena, currentUnit, true );
-
-                if ( bestSpell.spellID != -1 ) {
-                    actions.emplace_back( Command::SPELLCAST, bestSpell.spellID, bestSpell.cell );
-
-                    DEBUG_LOG( DBG_BATTLE, DBG_INFO,
-                               arena.GetCurrentCommander()->GetName() << " casts " << Spell( bestSpell.spellID ).GetName() << " on cell " << bestSpell.cell )
+        if ( actualHero && checkRetreatCondition( *actualHero ) ) {
+            const auto farewellSpellcast = [this, &arena, &currentUnit, &actions]() {
+                if ( !isCommanderCanSpellcast( arena, _commander ) ) {
+                    return;
                 }
+
+                // Cast a spell with maximum damage
+                const SpellSelection & bestSpell = selectBestSpell( arena, currentUnit, true );
+                if ( bestSpell.spellID == -1 ) {
+                    return;
+                }
+
+                actions.emplace_back( Command::SPELLCAST, bestSpell.spellID, bestSpell.cell );
+
+                DEBUG_LOG( DBG_BATTLE, DBG_INFO,
+                           arena.GetCurrentCommander()->GetName() << " casts " << Spell( bestSpell.spellID ).GetName() << " on cell " << bestSpell.cell )
+            };
+
+            // Try to retreat first
+            if ( arena.CanRetreatOpponent( _myColor ) ) {
+                farewellSpellcast();
+
+                actions.emplace_back( Command::RETREAT );
+
+                DEBUG_LOG( DBG_BATTLE, DBG_INFO, arena.GetCurrentCommander()->GetName() << " retreats" )
+
+                return actions;
             }
 
-            actions.emplace_back( Command::RETREAT );
+            // If it is impossible to retreat (for example, when defending a castle), then try to surrender
+            if ( arena.CanSurrenderOpponent( _myColor ) ) {
+                const uint32_t cost = arena.getForce( _myColor ).GetSurrenderCost();
+                const Kingdom & kingdom = actualHero->GetKingdom();
 
-            DEBUG_LOG( DBG_BATTLE, DBG_INFO, arena.GetCurrentCommander()->GetName() << " retreats" )
+                if ( kingdom.AllowPayment( { Resource::GOLD, cost } ) ) {
+                    farewellSpellcast();
 
-            return actions;
+                    actions.emplace_back( Command::SURRENDER );
+
+                    DEBUG_LOG( DBG_BATTLE, DBG_INFO, arena.GetCurrentCommander()->GetName() << " surrenders for " << cost << " gold" )
+
+                    return actions;
+                }
+            }
         }
 
         // Step 3. Calculate spell heuristics
