@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-29 00:13+0000\n"
+"POT-Creation-Date: 2024-01-02 13:33+0000\n"
 "PO-Revision-Date: 2023-09-12 11:08+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
@@ -3765,9 +3765,6 @@ msgstr "Gem nuværende kort."
 msgid "Quit out of the map editor."
 msgstr "Forlad korteditoren."
 
-msgid "Monster"
-msgstr "Væsen"
-
 msgid "Objects cannot be placed outside the map."
 msgstr "Objekter kan ikke placeres udenfor kortet."
 
@@ -3777,32 +3774,17 @@ msgstr "Monstre kan ikke placeres på vand."
 msgid "Choose a tile which does not contain any objects."
 msgstr "Vælg et felt, som ikke indeholder nogen objekter."
 
-msgid "Treasure"
-msgstr "Skat"
-
 msgid "Treasures cannot be placed on water."
 msgstr "Skatte kan ikke placeres på vand."
-
-msgid "Heroes"
-msgstr "Helte"
 
 msgid "Heroes cannot be placed on water."
 msgstr "Helte kan ikke placeres på vand."
 
-msgid "Artifacts"
-msgstr "Artefakter"
-
 msgid "Artifacts cannot be placed on water."
 msgstr "Artefakter kan ikke placeres på vand."
 
-msgid "Ocean object"
-msgstr "Hav-objekt"
-
 msgid "Ocean object must be placed on water."
 msgstr "Hav-objekter må kun placeres på vand."
-
-msgid "Towns"
-msgstr "Byer"
 
 #, fuzzy
 msgid "Towns cannot be placed on water."
@@ -3861,6 +3843,9 @@ msgstr "Ødemark-objekter"
 msgid "Miscellaneous"
 msgstr "Fineas"
 
+msgid "Artifacts"
+msgstr "Artefakter"
+
 #, fuzzy
 msgid "Dwellings"
 msgstr "Halvlange"
@@ -3874,6 +3859,12 @@ msgstr "Magikr."
 
 msgid "Treasures"
 msgstr "Skatte"
+
+msgid "Towns"
+msgstr "Byer"
+
+msgid "Heroes"
+msgstr "Helte"
 
 msgid "Terrain"
 msgstr "Terræn-tilstand"
@@ -5873,6 +5864,9 @@ msgstr ""
 
 msgid "You come upon the remains of an unfortunate adventurer."
 msgstr "Du støder på resterne af en uheldig eventyrer."
+
+msgid "Treasure"
+msgstr "Skat"
 
 msgid "Searching through the tattered clothing, you find the %{artifact}."
 msgstr "Du gennemsøger det lasede tøj og finder %{artifact}."
@@ -8202,6 +8196,9 @@ msgid "Water Wheel"
 msgid_plural "Water Wheels"
 msgstr[0] "Vandmølle"
 msgstr[1] "Vandmøller"
+
+msgid "Monster"
+msgstr "Væsen"
 
 msgid "Obelisk"
 msgstr "Obelisk"
@@ -11196,6 +11193,9 @@ msgstr ""
 "Check den nyeste version af spillet på\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Ocean object"
+#~ msgstr "Hav-objekt"
 
 #~ msgid "Ocean Objects"
 #~ msgstr "Hav-objekter"

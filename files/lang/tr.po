@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-29 00:13+0000\n"
+"POT-Creation-Date: 2024-01-02 13:33+0000\n"
 "PO-Revision-Date: 2022-10-01 20:20+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Turkish <tr@li.org>\n"
@@ -3429,9 +3429,6 @@ msgstr ""
 msgid "Quit out of the map editor."
 msgstr ""
 
-msgid "Monster"
-msgstr ""
-
 msgid "Objects cannot be placed outside the map."
 msgstr ""
 
@@ -3441,31 +3438,16 @@ msgstr ""
 msgid "Choose a tile which does not contain any objects."
 msgstr ""
 
-msgid "Treasure"
-msgstr ""
-
 msgid "Treasures cannot be placed on water."
-msgstr ""
-
-msgid "Heroes"
 msgstr ""
 
 msgid "Heroes cannot be placed on water."
 msgstr ""
 
-msgid "Artifacts"
-msgstr ""
-
 msgid "Artifacts cannot be placed on water."
 msgstr ""
 
-msgid "Ocean object"
-msgstr ""
-
 msgid "Ocean object must be placed on water."
-msgstr ""
-
-msgid "Towns"
 msgstr ""
 
 msgid "Towns cannot be placed on water."
@@ -3518,6 +3500,9 @@ msgstr ""
 msgid "Miscellaneous"
 msgstr ""
 
+msgid "Artifacts"
+msgstr ""
+
 msgid "Dwellings"
 msgstr ""
 
@@ -3528,6 +3513,12 @@ msgid "Power-ups"
 msgstr ""
 
 msgid "Treasures"
+msgstr ""
+
+msgid "Towns"
+msgstr ""
+
+msgid "Heroes"
 msgstr ""
 
 msgid "Terrain"
@@ -5344,6 +5335,9 @@ msgid ""
 msgstr ""
 
 msgid "You come upon the remains of an unfortunate adventurer."
+msgstr ""
+
+msgid "Treasure"
 msgstr ""
 
 msgid "Searching through the tattered clothing, you find the %{artifact}."
@@ -7208,6 +7202,9 @@ msgid "Water Wheel"
 msgid_plural "Water Wheels"
 msgstr[0] ""
 msgstr[1] ""
+
+msgid "Monster"
+msgstr ""
 
 msgid "Obelisk"
 msgstr ""
