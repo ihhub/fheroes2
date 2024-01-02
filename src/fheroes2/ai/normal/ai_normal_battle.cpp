@@ -57,6 +57,7 @@
 #include "kingdom.h"
 #include "logging.h"
 #include "monster_info.h"
+#include "resource.h"
 #include "settings.h"
 #include "speed.h"
 #include "spell.h"
