@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2023                                             *
+ *   Copyright (C) 2020 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -2219,7 +2219,15 @@ namespace fheroes2
         const int32_t width = in.width();
         const int32_t height = in.height();
 
-        Image out( width, height );
+        Image out;
+
+        if ( in.singleLayer() ) {
+            // Make the result of Fill to have the same layers as the input image.
+            out._disableTransformLayer();
+        }
+
+        out.resize( width, height );
+
         if ( !horizontally && !vertically ) {
             Copy( in, out );
             return out;

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2023                                             *
+ *   Copyright (C) 2020 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -271,18 +271,21 @@ namespace AI
         // Implements the logic of transparent casting of the Summon Boat spell during the hero's movement
         void HeroesActionNewPosition( Heroes & hero ) override;
 
+        void CastlePreBattle( Castle & castle ) override;
+
         bool recruitHero( Castle & castle, bool buyArmy, bool underThreat );
         void reinforceHeroInCastle( Heroes & hero, Castle & castle, const Funds & budget );
         void evaluateRegionSafety();
         std::vector<AICastle> getSortedCastleList( const VecCastles & castles, const std::set<int> & castlesInDanger );
 
-        bool isValidHeroObject( const Heroes & hero, const int32_t index, const bool underHero ) override;
-        double getObjectValue( const Heroes & hero, const int index, const int objectType, const double valueToIgnore, const uint32_t distanceToObject ) const;
-        int getPriorityTarget( const HeroToMove & heroInfo, double & maxPriority );
         void resetPathfinder() override;
+        bool isValidHeroObject( const Heroes & hero, const int32_t index, const bool underHero ) override;
 
         void battleBegins() override;
 
+        void tradingPostVisitEvent( Kingdom & kingdom ) override;
+
+        double getObjectValue( const Heroes & hero, const int index, const int objectType, const double valueToIgnore, const uint32_t distanceToObject ) const;
         double getTargetArmyStrength( const Maps::Tiles & tile, const MP2::MapObjectType objectType );
 
         bool isPriorityTask( const int32_t index ) const
@@ -300,27 +303,13 @@ namespace AI
             return iter->second.type == PriorityTaskType::ATTACK || iter->second.type == PriorityTaskType::DEFEND;
         }
 
-        void tradingPostVisitEvent( Kingdom & kingdom ) override;
-
     private:
-        // following data won't be saved/serialized
-        double _combinedHeroStrength = 0;
-        std::vector<IndexObject> _mapActionObjects;
-        std::map<int32_t, PriorityTask> _priorityTargets;
-        std::map<int32_t, EnemyArmy> _enemyArmies;
-        std::vector<RegionStats> _regions;
-        std::array<BudgetEntry, 7> _budget = { Resource::WOOD, Resource::MERCURY, Resource::ORE, Resource::SULFUR, Resource::CRYSTAL, Resource::GEMS, Resource::GOLD };
-        AIWorldPathfinder _pathfinder;
-        BattlePlanner _battlePlanner;
-
-        // Monster strength is constant over the same turn for AI but its calculation is a heavy operation.
-        // In order to avoid extra computations during AI turn it is important to keep cache of monster strength but update it when an action on a monster is taken.
-        std::map<int32_t, double> _neutralMonsterStrengthCache;
-
         void CastleTurn( Castle & castle, const bool defensiveStrategy );
 
         // Returns true if heroes can still do tasks but they have no move points.
         bool HeroesTurn( VecHeroes & heroes, const uint32_t startProgressValue, const uint32_t endProgressValue );
+
+        int getPriorityTarget( const HeroToMove & heroInfo, double & maxPriority );
 
         double getGeneralObjectValue( const Heroes & hero, const int index, const double valueToIgnore, const uint32_t distanceToObject ) const;
         double getFighterObjectValue( const Heroes & hero, const int index, const double valueToIgnore, const uint32_t distanceToObject ) const;
@@ -354,6 +343,19 @@ namespace AI
         void removePriorityAttackTarget( const int32_t tileIndex );
 
         void updatePriorityAttackTarget( const Kingdom & kingdom, const Maps::Tiles & tile );
+
+        // The following member variables should not be saved or serialized
+        std::vector<IndexObject> _mapActionObjects;
+        std::map<int32_t, PriorityTask> _priorityTargets;
+        std::map<int32_t, EnemyArmy> _enemyArmies;
+        std::vector<RegionStats> _regions;
+        std::array<BudgetEntry, 7> _budget = { Resource::WOOD, Resource::MERCURY, Resource::ORE, Resource::SULFUR, Resource::CRYSTAL, Resource::GEMS, Resource::GOLD };
+        AIWorldPathfinder _pathfinder;
+        BattlePlanner _battlePlanner;
+
+        // Monster strength is constant over the same turn for AI but its calculation is a heavy operation.
+        // In order to avoid extra computations during AI turn it is important to keep cache of monster strength but update it when an action on a monster is taken.
+        std::map<int32_t, double> _neutralMonsterStrengthCache;
     };
 }
 
