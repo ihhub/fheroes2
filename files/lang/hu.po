@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-29 00:13+0000\n"
+"POT-Creation-Date: 2024-01-02 13:33+0000\n"
 "PO-Revision-Date: 2023-09-04 21:55+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -3711,9 +3711,6 @@ msgstr "Az aktuális térkép mentése."
 msgid "Quit out of the map editor."
 msgstr "Kilépés a térképszerkesztőből."
 
-msgid "Monster"
-msgstr "Lény"
-
 msgid "Objects cannot be placed outside the map."
 msgstr "Tárgyakat nem lehet a térképen kívülre helyezni."
 
@@ -3723,32 +3720,17 @@ msgstr "Vízen nem helyezhetők el lények."
 msgid "Choose a tile which does not contain any objects."
 msgstr "Olyan térképpontot válassz, ahol nincsenek még tárgyak."
 
-msgid "Treasure"
-msgstr "Kincs"
-
 msgid "Treasures cannot be placed on water."
 msgstr "Vízen nem helyezhetők el kincsek."
-
-msgid "Heroes"
-msgstr "Hősök"
 
 msgid "Heroes cannot be placed on water."
 msgstr "Vízen nem helyezhetők el hősök."
 
-msgid "Artifacts"
-msgstr "Varázstárgyak"
-
 msgid "Artifacts cannot be placed on water."
 msgstr "Vízen nem helyezhetők el varázstárgyak."
 
-msgid "Ocean object"
-msgstr "Tengeri objektum"
-
 msgid "Ocean object must be placed on water."
 msgstr "Tengeri objektumot vízre kell elhelyezni."
-
-msgid "Towns"
-msgstr "Városok"
 
 msgid "Towns cannot be placed on water."
 msgstr "Vízen nem helyezhetők el városok."
@@ -3806,6 +3788,9 @@ msgstr "Pusztaság tárgyak"
 msgid "Miscellaneous"
 msgstr "Fineous"
 
+msgid "Artifacts"
+msgstr "Varázstárgyak"
+
 #, fuzzy
 msgid "Dwellings"
 msgstr "Félszerzetek"
@@ -3819,6 +3804,12 @@ msgstr "Erő"
 
 msgid "Treasures"
 msgstr "Kincsek"
+
+msgid "Towns"
+msgstr "Városok"
+
+msgid "Heroes"
+msgstr "Hősök"
 
 msgid "Terrain"
 msgstr "Talaj"
@@ -5796,6 +5787,9 @@ msgstr ""
 
 msgid "You come upon the remains of an unfortunate adventurer."
 msgstr "Egy szerencsétlen kalandor maradványaira lelsz rá."
+
+msgid "Treasure"
+msgstr "Kincs"
 
 msgid "Searching through the tattered clothing, you find the %{artifact}."
 msgstr ""
@@ -7980,6 +7974,9 @@ msgid "Water Wheel"
 msgid_plural "Water Wheels"
 msgstr[0] "Vizikerék"
 msgstr[1] "Vizikerekek"
+
+msgid "Monster"
+msgstr "Lény"
 
 msgid "Obelisk"
 msgstr "Obeliszk"
@@ -10633,6 +10630,9 @@ msgstr ""
 "Letöltheted a legújabb verziót innen:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Ocean object"
+#~ msgstr "Tengeri objektum"
 
 #~ msgid "Ocean Objects"
 #~ msgstr "Tengeri tárgyak"

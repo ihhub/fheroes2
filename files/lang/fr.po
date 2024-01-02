@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-29 00:13+0000\n"
+"POT-Creation-Date: 2024-01-02 13:33+0000\n"
 "PO-Revision-Date: 2023-12-22 01:17+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -3779,9 +3779,6 @@ msgstr ""
 msgid "Quit out of the map editor."
 msgstr ""
 
-msgid "Monster"
-msgstr "Monstre"
-
 msgid "Objects cannot be placed outside the map."
 msgstr "Les élements ne peuvent pas être placés en dehors de la carte."
 
@@ -3791,32 +3788,17 @@ msgstr ""
 msgid "Choose a tile which does not contain any objects."
 msgstr ""
 
-msgid "Treasure"
-msgstr "Trésor"
-
 msgid "Treasures cannot be placed on water."
 msgstr "Les trésors ne peuvent pas être placés sur l'eau."
-
-msgid "Heroes"
-msgstr "Héros"
 
 msgid "Heroes cannot be placed on water."
 msgstr ""
 
-msgid "Artifacts"
-msgstr "Artéfacts"
-
 msgid "Artifacts cannot be placed on water."
 msgstr "Les artéfacts ne peuvent pas être placés sur l'eau."
 
-msgid "Ocean object"
-msgstr "Océan"
-
 msgid "Ocean object must be placed on water."
 msgstr "Les éléments liés à la mer doivent être placés sur l'eau."
-
-msgid "Towns"
-msgstr "Villages"
 
 #, fuzzy
 msgid "Towns cannot be placed on water."
@@ -3874,6 +3856,9 @@ msgstr "Terre aride"
 msgid "Miscellaneous"
 msgstr "Fineous"
 
+msgid "Artifacts"
+msgstr "Artéfacts"
+
 #, fuzzy
 msgid "Dwellings"
 msgstr "Galopins"
@@ -3887,6 +3872,12 @@ msgstr "Puiss."
 
 msgid "Treasures"
 msgstr "Trésors"
+
+msgid "Towns"
+msgstr "Villages"
+
+msgid "Heroes"
+msgstr "Héros"
 
 msgid "Terrain"
 msgstr ""
@@ -5906,6 +5897,9 @@ msgstr ""
 
 msgid "You come upon the remains of an unfortunate adventurer."
 msgstr "Vous tombez sur les restes d'un malheureux aventurier."
+
+msgid "Treasure"
+msgstr "Trésor"
 
 msgid "Searching through the tattered clothing, you find the %{artifact}."
 msgstr ""
@@ -8280,6 +8274,9 @@ msgid "Water Wheel"
 msgid_plural "Water Wheels"
 msgstr[0] "Roue hydraulique"
 msgstr[1] "Roue hydraulique"
+
+msgid "Monster"
+msgstr "Monstre"
 
 msgid "Obelisk"
 msgstr "Obélisque"
@@ -11283,6 +11280,9 @@ msgstr ""
 "Téléchargez la dernière version du jeu sur\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Ocean object"
+#~ msgstr "Océan"
 
 #~ msgid "Ocean Objects"
 #~ msgstr "Océan"
