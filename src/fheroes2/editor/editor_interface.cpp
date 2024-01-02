@@ -191,7 +191,10 @@ namespace Interface
             if ( _warningMessage.isValid() ) {
                 const fheroes2::Rect & roi = _gameArea.GetROI();
 
-                const fheroes2::Text text{ _warningMessage.message(), fheroes2::FontType::normalWhite() };
+                fheroes2::Text text{ _warningMessage.message(), fheroes2::FontType::normalWhite() };
+                // Keep 4 pixels from each edge.
+                text.fitToOneRow( roi.width - 8 );
+
                 text.draw( roi.x + 4, roi.y + roi.height - text.height() - 4, display );
             }
 
