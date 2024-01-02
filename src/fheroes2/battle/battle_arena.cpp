@@ -584,12 +584,14 @@ void Battle::Arena::Turns()
         result_game.exp1 = _army2->GetDeadHitPoints();
         result_game.exp2 = _army1->GetDeadHitPoints();
 
-        // Attacker (or defender) gets an experience bonus if the enemy army was under the command of a hero (or captain) who was defeated (i.e. did not retreat or
-        // surrender)
-        if ( _army1->GetCommander() && !( result_game.army1 & ( RESULT_RETREAT | RESULT_SURRENDER ) ) ) {
+        const HeroBase * army1Commander = _army1->GetCommander();
+        const HeroBase * army2Commander = _army2->GetCommander();
+
+        // Attacker (or defender) gets an experience bonus if the enemy army was under the command of a hero who was defeated (i.e. did not retreat or surrender)
+        if ( army1Commander && army1Commander->isHeroes() && !( result_game.army1 & ( RESULT_RETREAT | RESULT_SURRENDER ) ) ) {
             result_game.exp2 += 500;
         }
-        if ( _army2->GetCommander() && !( result_game.army2 & ( RESULT_RETREAT | RESULT_SURRENDER ) ) ) {
+        if ( army2Commander && army2Commander->isHeroes() && !( result_game.army2 & ( RESULT_RETREAT | RESULT_SURRENDER ) ) ) {
             result_game.exp1 += 500;
         }
 
