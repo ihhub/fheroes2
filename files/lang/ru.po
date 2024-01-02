@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-29 00:13+0000\n"
+"POT-Creation-Date: 2024-01-02 13:33+0000\n"
 "PO-Revision-Date: 2023-11-12 16:27+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -3739,9 +3739,6 @@ msgstr "Сохранить текущую карту."
 msgid "Quit out of the map editor."
 msgstr "Выйти из редактора карт."
 
-msgid "Monster"
-msgstr "Отряд"
-
 #, fuzzy
 msgid "Objects cannot be placed outside the map."
 msgstr "Героев нельзя размещать на воде."
@@ -3752,34 +3749,18 @@ msgstr "Монстров нельзя размещать на воде."
 msgid "Choose a tile which does not contain any objects."
 msgstr "Выберите ячейку карты, на которой нет никаких объектов."
 
-msgid "Treasure"
-msgstr "Сокровище"
-
 msgid "Treasures cannot be placed on water."
 msgstr "Сокровища нельзя размещать на воде."
 
-msgid "Heroes"
-msgstr "Герои"
-
 msgid "Heroes cannot be placed on water."
 msgstr "Героев нельзя размещать на воде."
-
-msgid "Artifacts"
-msgstr "Артефакты"
 
 msgid "Artifacts cannot be placed on water."
 msgstr "Артефакты нельзя размещать на воде."
 
 #, fuzzy
-msgid "Ocean object"
-msgstr "Объекты океана"
-
-#, fuzzy
 msgid "Ocean object must be placed on water."
 msgstr "Героев нельзя размещать на воде."
-
-msgid "Towns"
-msgstr "Города"
 
 #, fuzzy
 msgid "Towns cannot be placed on water."
@@ -3838,6 +3819,9 @@ msgstr "Объекты пустоши"
 msgid "Miscellaneous"
 msgstr "Финеус"
 
+msgid "Artifacts"
+msgstr "Артефакты"
+
 #, fuzzy
 msgid "Dwellings"
 msgstr "Полурослики"
@@ -3851,6 +3835,12 @@ msgstr "Сила м."
 
 msgid "Treasures"
 msgstr "Сокровища"
+
+msgid "Towns"
+msgstr "Города"
+
+msgid "Heroes"
+msgstr "Герои"
 
 msgid "Terrain"
 msgstr "Почва"
@@ -5841,6 +5831,9 @@ msgstr ""
 
 msgid "You come upon the remains of an unfortunate adventurer."
 msgstr "Вы обнаружили останки какого-то несчастного путника."
+
+msgid "Treasure"
+msgstr "Сокровище"
 
 msgid "Searching through the tattered clothing, you find the %{artifact}."
 msgstr "Покопавшись среди лохмотьев, Вы нашли %{artifact}."
@@ -8153,6 +8146,9 @@ msgid_plural "Water Wheels"
 msgstr[0] "Водяное колесо"
 msgstr[1] "Водяных колеса"
 msgstr[2] "Водяных колёс"
+
+msgid "Monster"
+msgstr "Отряд"
 
 msgid "Obelisk"
 msgstr "Обелиск"
@@ -11083,6 +11079,10 @@ msgstr ""
 "Новую версию игры можно найти на сайте:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#, fuzzy
+#~ msgid "Ocean object"
+#~ msgstr "Объекты океана"
 
 #~ msgid "Ocean Objects"
 #~ msgstr "Объекты океана"
