@@ -3729,13 +3729,12 @@ namespace fheroes2
 
                     const int32_t iconSideLength = 65;
                     const int32_t iconOffsetY = 94;
-                    _icnVsSprite[id][0].resize( iconSideLength, iconSideLength );
 
-                    Copy( originalBackground, iconOffsetX, iconOffsetY, _icnVsSprite[id][0], 0, 0, iconSideLength, iconSideLength );
+                    _icnVsSprite[id][0] = Crop( originalBackground, iconOffsetX, iconOffsetY, iconSideLength, iconSideLength );
+                    _icnVsSprite[id][0].setPosition( 0, 0 );
 
                     // Generate Evil Icons
-                    _icnVsSprite[id][1].resize( iconSideLength, iconSideLength );
-                    Copy( _icnVsSprite[id][0], _icnVsSprite[id][1] );
+                    _icnVsSprite[id][1] = _icnVsSprite[id][0];
 
                     const std::vector<uint8_t> & goodToEvilPalette = PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_INTERFACE );
                     fheroes2::ApplyPalette( _icnVsSprite[id][0], _icnVsSprite[id][1], goodToEvilPalette );
@@ -3757,9 +3756,8 @@ namespace fheroes2
                     const int32_t goodOriginalBoxOffsetX = 24;
                     const int32_t goodOriginalBoxOffsetY = 40;
 
-                    _icnVsSprite[id][0].resize( boxWidth, boxHeight );
-
-                    Copy( originalBackground, goodOriginalBoxOffsetX, goodOriginalBoxOffsetY, _icnVsSprite[id][0], 0, 0, boxWidth, boxHeight );
+                    _icnVsSprite[id][0] = Crop( originalBackground, goodOriginalBoxOffsetX, goodOriginalBoxOffsetY, boxWidth, boxHeight );
+                    _icnVsSprite[id][0].setPosition( 0, 0 );
 
                     // Copy red pattern and cover up embedded button.
                     const fheroes2::Sprite & redPart = fheroes2::Flip( Crop( originalBackground, 80, 45, 81, 19 ), true, false );
@@ -3767,16 +3765,19 @@ namespace fheroes2
 
                     // Construct evil style box.
                     _icnVsSprite[id][1].resize( boxWidth, boxHeight );
+                    _icnVsSprite[id][1].reset();
 
                     const int32_t evilOriginalBoxOffsetX = 26;
                     const int32_t evilOriginalBoxOffsetY = 27;
                     const int32_t upperPartHeight = 20;
 
+                    // The metallic box frame in campbkge is slightly taller than the one in nghsbkg. The width is the same.
                     Copy( originalEvilBackground, evilOriginalBoxOffsetX, evilOriginalBoxOffsetY, _icnVsSprite[id][1], 0, 0, boxWidth, upperPartHeight );
 
                     Copy( originalEvilBackground, evilOriginalBoxOffsetX, evilOriginalBoxOffsetY + upperPartHeight + 14, _icnVsSprite[id][1], 0, upperPartHeight,
                           boxWidth, 10 );
 
+                    // Copy red central part.
                     Copy( _icnVsSprite[id][0], 6, 5, _icnVsSprite[id][1], 6, 5, 359, 19 );
                 }
 
@@ -4175,9 +4176,9 @@ namespace fheroes2
                 const fheroes2::Sprite & original = GetICN( isEvilInterface ? ICN::BUYBUILE : ICN::BUYBUILD, 1 );
                 if ( !original.empty() ) {
                     _icnVsSprite[id][0].resize( 246, 45 );
-                    const fheroes2::Sprite & croppedImage = Crop( original, 0, 0, 125, 45 );
-                    Copy( croppedImage, 0, 0, _icnVsSprite[id][0], 0, 0, 123, 45 );
-                    Copy( croppedImage, 0, 0, _icnVsSprite[id][0], 123, 0, 123, 45 );
+                    _icnVsSprite[id][0].reset();
+                    Copy( original, 0, 0, _icnVsSprite[id][0], 0, 0, 123, 45 );
+                    Copy( original, 0, 0, _icnVsSprite[id][0], 123, 0, 123, 45 );
                 }
 
                 return true;
