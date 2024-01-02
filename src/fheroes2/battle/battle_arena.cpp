@@ -587,7 +587,7 @@ void Battle::Arena::Turns()
         if ( _army1->GetCommander() && !( result_game.army1 & ( RESULT_RETREAT | RESULT_SURRENDER ) ) ) {
             result_game.exp2 += 500;
         }
-        // Attacker always gets an experience bonus when besieging a castle, even if the defender surrendered
+        // Attacker always gets an experience bonus when besieging a town or castle, even if the defender fled or surrendered
         if ( _isTown || ( _army2->GetCommander() && !( result_game.army2 & ( RESULT_RETREAT | RESULT_SURRENDER ) ) ) ) {
             result_game.exp1 += 500;
         }
