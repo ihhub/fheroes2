@@ -77,6 +77,7 @@ namespace
 
         if ( !enableDig ) {
             buttonDig.disable();
+            buttonDig.draw();
         }
 
         display.render( background.totalArea() );
@@ -128,10 +129,6 @@ namespace
             if ( le.MousePressRight( buttonCancel.area() ) )
                 fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Exit this menu without doing anything." ), Dialog::ZERO );
         }
-
-        // restore background
-        back.restore();
-        display.render( background.totalArea() );
 
         return result;
     }

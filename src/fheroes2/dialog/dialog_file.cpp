@@ -150,10 +150,6 @@ namespace
             }
         }
 
-        // restore background
-        back.restore();
-        display.render( background.totalArea() );
-
         return result;
     }
 }

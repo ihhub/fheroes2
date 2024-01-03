@@ -3742,14 +3742,13 @@ namespace fheroes2
 
                 return true;
             }
-            case ICN::METALLIC_BORDERED_TEXTBOX: {
+            case ICN::METALLIC_BORDERED_TEXTBOX_GOOD: {
                 const int originalIcnId = ICN::NGHSBKG;
 
                 const fheroes2::Sprite & originalBackground = GetICN( originalIcnId, 0 );
-                const fheroes2::Sprite & originalEvilBackground = GetICN( ICN::CAMPBKGE, 0 );
 
-                if ( !originalBackground.empty() && !originalEvilBackground.empty() ) {
-                    _icnVsSprite[id].resize( 2 );
+                if ( !originalBackground.empty() ) {
+                    _icnVsSprite[id].resize( 1 );
 
                     const int32_t boxWidth = 371;
                     const int32_t boxHeight = 30;
@@ -3762,23 +3761,34 @@ namespace fheroes2
                     // Copy red pattern and cover up embedded button.
                     const fheroes2::Sprite & redPart = fheroes2::Flip( Crop( originalBackground, 80, 45, 81, 19 ), true, false );
                     Copy( redPart, 0, 0, _icnVsSprite[id][0], 284, 5, 81, 19 );
+                }
 
-                    // Construct evil style box.
-                    _icnVsSprite[id][1].resize( boxWidth, boxHeight );
-                    _icnVsSprite[id][1].reset();
+                return true;
+            }
+            case ICN::METALLIC_BORDERED_TEXTBOX_EVIL: {
+                const fheroes2::Sprite & originalEvilBackground = GetICN( ICN::CAMPBKGE, 0 );
+
+                if ( !originalEvilBackground.empty() ) {
+                    _icnVsSprite[id].resize( 1 );
+
+                    const int32_t boxWidth = 371;
+                    const int32_t boxHeight = 30;
+                    _icnVsSprite[id][0].resize( boxWidth, boxHeight );
+                    _icnVsSprite[id][0].reset();
 
                     const int32_t evilOriginalBoxOffsetX = 26;
                     const int32_t evilOriginalBoxOffsetY = 27;
                     const int32_t upperPartHeight = 20;
 
                     // The metallic box frame in campbkge is slightly taller than the one in nghsbkg. The width is the same.
-                    Copy( originalEvilBackground, evilOriginalBoxOffsetX, evilOriginalBoxOffsetY, _icnVsSprite[id][1], 0, 0, boxWidth, upperPartHeight );
+                    Copy( originalEvilBackground, evilOriginalBoxOffsetX, evilOriginalBoxOffsetY, _icnVsSprite[id][0], 0, 0, boxWidth, upperPartHeight );
 
-                    Copy( originalEvilBackground, evilOriginalBoxOffsetX, evilOriginalBoxOffsetY + upperPartHeight + 14, _icnVsSprite[id][1], 0, upperPartHeight,
+                    Copy( originalEvilBackground, evilOriginalBoxOffsetX, evilOriginalBoxOffsetY + upperPartHeight + 14, _icnVsSprite[id][0], 0, upperPartHeight,
                           boxWidth, 10 );
 
                     // Copy red central part.
-                    Copy( _icnVsSprite[id][0], 6, 5, _icnVsSprite[id][1], 6, 5, 359, 19 );
+                    const fheroes2::Sprite goodBox = GetICN( ICN::METALLIC_BORDERED_TEXTBOX_GOOD, 0 );
+                    Copy( goodBox, 6, 5, _icnVsSprite[id][0], 6, 5, 359, 19 );
                 }
 
                 return true;

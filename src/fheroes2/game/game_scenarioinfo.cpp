@@ -166,7 +166,7 @@ namespace
         const fheroes2::Point pointOpponentInfo( roi.x + 8, roi.y + 181 );
         const fheroes2::Point pointClassInfo( roi.x + 8, roi.y + 265 );
 
-        const fheroes2::Sprite & scenarioBox = fheroes2::AGG::GetICN( ICN::METALLIC_BORDERED_TEXTBOX, isEvilInterface ? 1 : 0 );
+        const fheroes2::Sprite & scenarioBox = fheroes2::AGG::GetICN( isEvilInterface ? ICN::METALLIC_BORDERED_TEXTBOX_EVIL : ICN::METALLIC_BORDERED_TEXTBOX_GOOD, 0 );
 
         const fheroes2::Rect scenarioBoxRoi( roi.x + ( roi.width - scenarioBox.width() ) / 2, roi.y + 24, scenarioBox.width(), scenarioBox.height() );
 

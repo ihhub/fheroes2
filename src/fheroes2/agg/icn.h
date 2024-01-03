@@ -1102,7 +1102,8 @@ namespace ICN
         DIFFICULTY_ICON_EXPERT,
         DIFFICULTY_ICON_IMPOSSIBLE,
 
-        METALLIC_BORDERED_TEXTBOX,
+        METALLIC_BORDERED_TEXTBOX_GOOD,
+        METALLIC_BORDERED_TEXTBOX_EVIL,
 
         // IMPORTANT! Put any new entry just above this one.
         LASTICN
