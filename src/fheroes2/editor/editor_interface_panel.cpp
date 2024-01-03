@@ -991,7 +991,7 @@ namespace Interface
                 return res;
             }
             if ( le.MouseClickLeft( _kingdomObjectButtonsRect[KingdomObjectBrush::TOWNS] ) ) {
-                handleObjectMouseClick( [this]( const int32_t /* type */ ) -> int32_t {
+                handleObjectMouseClick( [this]( const int32_t /* type */ ) {
                     int32_t type = -1;
                     int32_t color = -1;
 
