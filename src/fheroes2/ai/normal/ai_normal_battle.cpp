@@ -640,14 +640,6 @@ namespace AI
                     return Outcome::Retreat;
                 }
 
-                if ( !arena.getForce( _myColor ).hasUnitFromOriginalArmy( []( const Unit * unit ) {
-                         assert( unit != nullptr );
-
-                         return unit->GetMonsterLevel() > 4;
-                     } ) ) {
-                    return Outcome::Retreat;
-                }
-
                 if ( !kingdom.AllowPayment( Funds{ Resource::GOLD, arena.getForce( _myColor ).GetSurrenderCost() }
                                             * Difficulty::getGoldReserveRatioForAISurrender( Game::getDifficulty() ) ) ) {
                     return Outcome::Retreat;

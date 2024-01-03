@@ -97,8 +97,6 @@ namespace Battle
         void NewTurn();
         void SyncArmyCount();
 
-        bool hasUnitFromOriginalArmy( const std::function<bool( const Unit * )> & predicate ) const;
-
     private:
         Army & army;
         std::vector<uint32_t> uids;
