@@ -613,7 +613,7 @@ namespace AI
 
             enum class Outcome
             {
-                None,
+                ContinueBattle,
                 Retreat,
                 Surrender
             };
@@ -626,11 +626,11 @@ namespace AI
 
                 if ( !canRetreat ) {
                     if ( !canSurrender ) {
-                        return Outcome::None;
+                        return Outcome::ContinueBattle;
                     }
 
                     if ( !kingdom.AllowPayment( { Resource::GOLD, arena.getForce( _myColor ).GetSurrenderCost() } ) ) {
-                        return Outcome::None;
+                        return Outcome::ContinueBattle;
                     }
 
                     return Outcome::Surrender;
