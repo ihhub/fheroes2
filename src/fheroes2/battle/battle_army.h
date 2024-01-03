@@ -80,17 +80,24 @@ namespace Battle
 
         bool isValid( const bool considerBattlefieldArmy = true ) const;
         bool HasMonster( const Monster & ) const;
+
         uint32_t GetDeadHitPoints() const;
         uint32_t GetDeadCounts() const;
+
         int GetColor() const;
         int GetControl() const;
+
         uint32_t GetSurrenderCost() const;
+
         Troops GetKilledTroops() const;
+
         bool animateIdleUnits() const;
         void resetIdleAnimation() const;
 
         void NewTurn();
         void SyncArmyCount();
+
+        bool hasUnitFromOriginalArmy( const std::function<bool( const Unit * )> & predicate ) const;
 
     private:
         Army & army;

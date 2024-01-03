@@ -340,3 +340,28 @@ void Battle::Force::SyncArmyCount()
         }
     }
 }
+
+bool Battle::Force::hasUnitFromOriginalArmy( const std::function<bool( const Unit * )> & predicate ) const
+{
+    for ( size_t index = 0; index < army.Size(); ++index ) {
+        const Troop * troop = army.GetTroop( index );
+        assert( troop != nullptr );
+
+        if ( !troop->isValid() ) {
+            continue;
+        }
+
+        const Unit * unit = FindUID( uids.at( index ) );
+        assert( unit != nullptr );
+
+        if ( unit->GetDead() >= unit->GetInitialCount() ) {
+            continue;
+        }
+
+        if ( predicate( unit ) ) {
+            return true;
+        }
+    }
+
+    return false;
+}

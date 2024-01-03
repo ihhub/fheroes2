@@ -50,7 +50,9 @@ namespace Difficulty
     double GetUnitGrowthBonusForAI( const int difficulty );
 
     int GetHeroMovementBonus( int difficulty );
-    double GetAIRetreatRatio( int difficulty );
+
+    double getArmyStrengthRatioForAIRetreat( const int difficulty );
+    uint32_t getGoldReserveRatioForAISurrender( const int difficulty );
 
     uint32_t GetDimensionDoorLimit( int difficulty );
 
