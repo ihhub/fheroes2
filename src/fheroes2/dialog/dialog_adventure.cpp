@@ -114,13 +114,13 @@ namespace
             // right info
             if ( le.MousePressRight( buttonWorld.area() ) )
                 fheroes2::showStandardTextMessage( _( "View World" ), _( "View the entire world." ), Dialog::ZERO );
-            if ( le.MousePressRight( buttonPuzzle.area() ) )
+            else if ( le.MousePressRight( buttonPuzzle.area() ) )
                 fheroes2::showStandardTextMessage( _( "Puzzle" ), _( "View the obelisk puzzle." ), Dialog::ZERO );
-            if ( le.MousePressRight( buttonInfo.area() ) )
+            else if ( le.MousePressRight( buttonInfo.area() ) )
                 fheroes2::showStandardTextMessage( _( "Scenario Information" ), _( "View information on the scenario you are currently playing." ), Dialog::ZERO );
-            if ( le.MousePressRight( buttonDig.area() ) )
+            else if ( le.MousePressRight( buttonDig.area() ) )
                 fheroes2::showStandardTextMessage( _( "Digging" ), _( "Dig for the Ultimate Artifact." ), Dialog::ZERO );
-            if ( le.MousePressRight( buttonCancel.area() ) )
+            else if ( le.MousePressRight( buttonCancel.area() ) )
                 fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Exit this menu without doing anything." ), Dialog::ZERO );
         }
 
