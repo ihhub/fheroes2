@@ -94,7 +94,7 @@ namespace Maps
         ALL_OBJECTS = TERRAIN_OBJECTS | CASTLES | MONSTERS | HEROES | ARTIFACTS | STREAMS | ROADS | TREASURES,
     };
 
-    // Only for MP2::OBJ_MINES.
+    // Only for MP2::OBJ_MINE.
     int32_t getMineSpellIdFromTile( const Tiles & tile );
     void setMineSpellOnTile( Tiles & tile, const int32_t spellId );
     void removeMineSpellFromTile( Tiles & tile );
@@ -132,8 +132,6 @@ namespace Maps
     Skill::Secondary getSecondarySkillFromWitchsHut( const Tiles & tile );
 
     void setResourceOnTile( Tiles & tile, const int resourceType, uint32_t value );
-
-    void setSpellScrollSpellId( Tiles & tile, const uint32_t spellId );
 
     Funds getFundsFromTile( const Tiles & tile );
 

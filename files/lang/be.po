@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-25 01:52+0000\n"
+"POT-Creation-Date: 2024-01-04 12:56+0000\n"
 "PO-Revision-Date: 2022-09-23 16:01+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -192,6 +192,10 @@ msgstr "МІН"
 
 msgid "RESET"
 msgstr ""
+
+#, fuzzy
+msgid "START"
+msgstr "НАНОВА"
 
 msgid "CASTLE"
 msgstr ""
@@ -890,6 +894,22 @@ msgstr "Чалавек"
 
 msgid "AI"
 msgstr "Кампутар"
+
+msgid "Start"
+msgstr ""
+
+#, fuzzy
+msgid "Start the battle."
+msgstr "Вярнуцца да бою."
+
+msgid "Exit"
+msgstr "Выхад"
+
+msgid "Reset"
+msgstr ""
+
+msgid "Reset to default settings."
+msgstr ""
 
 msgid "Please select another hero."
 msgstr "Калі ласка, выбярыце іншага героя."
@@ -2386,9 +2406,6 @@ msgid ""
 "no room for a spell book. Try giving one of your artifacts to another hero."
 msgstr ""
 
-msgid "Exit"
-msgstr "Выхад"
-
 msgid "Click to show next town."
 msgstr ""
 
@@ -3494,9 +3511,6 @@ msgstr "Назва абранай мапы."
 msgid "Quit out of the map editor."
 msgstr ""
 
-msgid "Monster"
-msgstr ""
-
 msgid "Objects cannot be placed outside the map."
 msgstr ""
 
@@ -3506,35 +3520,22 @@ msgstr ""
 msgid "Choose a tile which does not contain any objects."
 msgstr ""
 
-msgid "Treasure"
-msgstr ""
-
 msgid "Treasures cannot be placed on water."
-msgstr ""
-
-msgid "Heroes"
 msgstr ""
 
 msgid "Heroes cannot be placed on water."
 msgstr ""
 
-msgid "Artifacts"
-msgstr ""
-
 msgid "Artifacts cannot be placed on water."
-msgstr ""
-
-msgid "Ocean object"
 msgstr ""
 
 msgid "Ocean object must be placed on water."
 msgstr ""
 
-#, fuzzy
-msgid "Towns"
-msgstr "Горад"
-
 msgid "Towns cannot be placed on water."
+msgstr ""
+
+msgid "Dwellings cannot be placed on water."
 msgstr ""
 
 msgid "Used to place %{object}."
@@ -3586,6 +3587,9 @@ msgstr "Вадзяныя элементалі"
 msgid "Miscellaneous"
 msgstr ""
 
+msgid "Artifacts"
+msgstr ""
+
 #, fuzzy
 msgid "Dwellings"
 msgstr "Хобіты"
@@ -3597,6 +3601,13 @@ msgid "Power-ups"
 msgstr ""
 
 msgid "Treasures"
+msgstr ""
+
+#, fuzzy
+msgid "Towns"
+msgstr "Горад"
+
+msgid "Heroes"
 msgstr ""
 
 msgid "Terrain"
@@ -5460,6 +5471,9 @@ msgid ""
 msgstr ""
 
 msgid "You come upon the remains of an unfortunate adventurer."
+msgstr ""
+
+msgid "Treasure"
 msgstr ""
 
 msgid "Searching through the tattered clothing, you find the %{artifact}."
@@ -7338,6 +7352,9 @@ msgid_plural "Water Wheels"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
+
+msgid "Monster"
+msgstr ""
 
 msgid "Obelisk"
 msgstr ""

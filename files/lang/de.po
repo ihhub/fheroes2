@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-25 01:52+0000\n"
+"POT-Creation-Date: 2024-01-04 12:56+0000\n"
 "PO-Revision-Date: 2023-04-09 23:51+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -199,6 +199,10 @@ msgstr "MIN"
 
 msgid "RESET"
 msgstr ""
+
+#, fuzzy
+msgid "START"
+msgstr "NEUSTART"
 
 #, fuzzy
 msgid "CASTLE"
@@ -923,6 +927,23 @@ msgstr "Mensch"
 
 msgid "AI"
 msgstr "KI"
+
+#, fuzzy
+msgid "Start"
+msgstr "Neustart"
+
+#, fuzzy
+msgid "Start the battle."
+msgstr "Zurück in die Schlacht."
+
+msgid "Exit"
+msgstr "Verlassen"
+
+msgid "Reset"
+msgstr ""
+
+msgid "Reset to default settings."
+msgstr ""
 
 msgid "Please select another hero."
 msgstr "Bitte wählt einen anderen Helden aus."
@@ -2565,9 +2586,6 @@ msgstr ""
 "derzeit keinen Platz für ein Zauberbuch. Versuchet, eines Eurer Artefakte "
 "einem anderen Helden zu übergeben."
 
-msgid "Exit"
-msgstr "Verlassen"
-
 msgid "Click to show next town."
 msgstr "Klicken um die nächste Stadt anzuzeigen."
 
@@ -3741,9 +3759,6 @@ msgstr "Speichern der aktuellen Karte."
 msgid "Quit out of the map editor."
 msgstr "Den Karteneditor verlassen."
 
-msgid "Monster"
-msgstr "Monster"
-
 #, fuzzy
 msgid "Objects cannot be placed outside the map."
 msgstr "Monster können nicht auf Wasser plaziert werden."
@@ -3754,39 +3769,27 @@ msgstr "Monster können nicht auf Wasser plaziert werden."
 msgid "Choose a tile which does not contain any objects."
 msgstr "Ein Feld wählen, das keine Objekt enthält."
 
-msgid "Treasure"
-msgstr "Schatz"
-
 #, fuzzy
 msgid "Treasures cannot be placed on water."
 msgstr "Monster können nicht auf Wasser plaziert werden."
 
-msgid "Heroes"
-msgstr "Helden"
-
 msgid "Heroes cannot be placed on water."
 msgstr ""
-
-msgid "Artifacts"
-msgstr "Artefakte"
 
 #, fuzzy
 msgid "Artifacts cannot be placed on water."
 msgstr "Monster können nicht auf Wasser plaziert werden."
 
 #, fuzzy
-msgid "Ocean object"
-msgstr "Ozean-Objekte"
-
-#, fuzzy
 msgid "Ocean object must be placed on water."
 msgstr "Monster können nicht auf Wasser plaziert werden."
 
-msgid "Towns"
-msgstr "Städte"
-
 #, fuzzy
 msgid "Towns cannot be placed on water."
+msgstr "Monster können nicht auf Wasser plaziert werden."
+
+#, fuzzy
+msgid "Dwellings cannot be placed on water."
 msgstr "Monster können nicht auf Wasser plaziert werden."
 
 #, fuzzy
@@ -3844,6 +3847,9 @@ msgstr "Ödland-Objekte"
 msgid "Miscellaneous"
 msgstr "Fineous"
 
+msgid "Artifacts"
+msgstr "Artefakte"
+
 #, fuzzy
 msgid "Dwellings"
 msgstr "Halblinge"
@@ -3857,6 +3863,12 @@ msgstr "Kraft"
 
 msgid "Treasures"
 msgstr "Schätze"
+
+msgid "Towns"
+msgstr "Städte"
+
+msgid "Heroes"
+msgstr "Helden"
 
 #, fuzzy
 msgid "Terrain"
@@ -5901,6 +5913,9 @@ msgstr ""
 
 msgid "You come upon the remains of an unfortunate adventurer."
 msgstr "Ihr stoßt auf die Überreste eines unglückseligen Abenteurers."
+
+msgid "Treasure"
+msgstr "Schatz"
 
 msgid "Searching through the tattered clothing, you find the %{artifact}."
 msgstr "Beim Durchsuchen der zerlumpten Kleidung findet Ihr %{artifact}."
@@ -8282,6 +8297,9 @@ msgid "Water Wheel"
 msgid_plural "Water Wheels"
 msgstr[0] "Wasserrad"
 msgstr[1] "Wasserräder"
+
+msgid "Monster"
+msgstr "Monster"
 
 msgid "Obelisk"
 msgstr "Obelisk"
@@ -11305,6 +11323,10 @@ msgstr ""
 "Die neueste Version des Spiels finden Sie unter\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#, fuzzy
+#~ msgid "Ocean object"
+#~ msgstr "Ozean-Objekte"
 
 #~ msgid "Ocean Objects"
 #~ msgstr "Ozean-Objekte"

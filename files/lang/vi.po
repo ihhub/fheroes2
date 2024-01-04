@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-25 01:52+0000\n"
+"POT-Creation-Date: 2024-01-04 12:56+0000\n"
 "PO-Revision-Date: 2023-12-20 19:47+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -196,6 +196,10 @@ msgstr "MIN"
 
 msgid "RESET"
 msgstr "CÀI LẠI"
+
+#, fuzzy
+msgid "START"
+msgstr "LÀM LẠI"
 
 msgid "CASTLE"
 msgstr "LÂU ĐÀI"
@@ -933,6 +937,23 @@ msgstr "Con người"
 
 msgid "AI"
 msgstr "AI"
+
+#, fuzzy
+msgid "Start"
+msgstr "Chơi lại"
+
+#, fuzzy
+msgid "Start the battle."
+msgstr "Quay lại trận chiến."
+
+msgid "Exit"
+msgstr "Thoát"
+
+msgid "Reset"
+msgstr ""
+
+msgid "Reset to default settings."
+msgstr ""
 
 msgid "Please select another hero."
 msgstr "Hãy chọn một tướng khác."
@@ -2560,9 +2581,6 @@ msgstr ""
 "ngươi không có chỗ cho một cuốn sách thần chú. Hãy thử đưa một trong những "
 "cổ vật của ngươi cho một anh tướng khác."
 
-msgid "Exit"
-msgstr "Thoát"
-
 msgid "Click to show next town."
 msgstr "Nhấp để xem thị trấn sau."
 
@@ -3710,9 +3728,6 @@ msgstr "Lưu bản đồ hiện tại."
 msgid "Quit out of the map editor."
 msgstr "Thoát khỏi biên tập bản đồ."
 
-msgid "Monster"
-msgstr "Quái vật"
-
 msgid "Objects cannot be placed outside the map."
 msgstr "Đối tượng không thể đặt ra ngoài bản đồ."
 
@@ -3722,34 +3737,23 @@ msgstr "Quái vật không thể đặt trên nước."
 msgid "Choose a tile which does not contain any objects."
 msgstr "Chọn một ô mà không chứa bất kỳ đối tượng nào."
 
-msgid "Treasure"
-msgstr "Kho báu"
-
 msgid "Treasures cannot be placed on water."
 msgstr "Kho báu không thể đặt trên nước."
-
-msgid "Heroes"
-msgstr "Tướng"
 
 msgid "Heroes cannot be placed on water."
 msgstr "Tướng không thể đặt trên nước."
 
-msgid "Artifacts"
-msgstr "Bảo vật"
-
 msgid "Artifacts cannot be placed on water."
 msgstr "Bảo vật không thể đặt trên nước."
-
-msgid "Ocean object"
-msgstr "Đối tượng đại dương"
 
 msgid "Ocean object must be placed on water."
 msgstr "Đối tượng đại dương phải đặt trên mặt nước."
 
-msgid "Towns"
-msgstr "Thị trấn"
-
 msgid "Towns cannot be placed on water."
+msgstr "Thị trấn không thể đặt trên nước."
+
+#, fuzzy
+msgid "Dwellings cannot be placed on water."
 msgstr "Thị trấn không thể đặt trên nước."
 
 #, fuzzy
@@ -3805,6 +3809,9 @@ msgstr "Đối tượng Đất hoang"
 msgid "Miscellaneous"
 msgstr "Fineous"
 
+msgid "Artifacts"
+msgstr "Bảo vật"
+
 msgid "Dwellings"
 msgstr ""
 
@@ -3817,6 +3824,12 @@ msgstr "Sức"
 
 msgid "Treasures"
 msgstr "Kho báu"
+
+msgid "Towns"
+msgstr "Thị trấn"
+
+msgid "Heroes"
+msgstr "Tướng"
 
 msgid "Terrain"
 msgstr "Địa hình"
@@ -5795,6 +5808,9 @@ msgstr ""
 
 msgid "You come upon the remains of an unfortunate adventurer."
 msgstr "Ngươi tình cờ gặp hài cốt của một nhà thám hiểm không may."
+
+msgid "Treasure"
+msgstr "Kho báu"
 
 msgid "Searching through the tattered clothing, you find the %{artifact}."
 msgstr "Lục lọi trong bộ quần áo rách rưới, ngươi tìm thấy %{artifact}."
@@ -8142,6 +8158,9 @@ msgstr[0] "Hải đăng"
 msgid "Water Wheel"
 msgid_plural "Water Wheels"
 msgstr[0] "Bánh xe Nước"
+
+msgid "Monster"
+msgstr "Quái vật"
 
 msgid "Obelisk"
 msgstr "Đài tưởng niệm"
@@ -11141,6 +11160,9 @@ msgstr ""
 "Kiểm tra phiên bản mới nhất của trò chơi tại\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Ocean object"
+#~ msgstr "Đối tượng đại dương"
 
 #~ msgid "Ocean Objects"
 #~ msgstr "Đối tượng Đại dương"
