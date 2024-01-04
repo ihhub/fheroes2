@@ -920,17 +920,17 @@ namespace Interface
             const auto & objectInfo = getObjectInfo( groupType, _editorPanel.getSelectedObjectType() );
 
             if ( !isObjectPlacementAllowed( objectInfo, tilePos ) ) {
-                fheroes2::showStandardTextMessage( _( "Dwellings" ), _( "Objects cannot be placed outside the map." ), Dialog::OK );
+                _warningMessage.reset( _( "Objects cannot be placed outside the map." ) );
                 return;
             }
 
             if ( !verifyObjectCondition( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return !tileToCheck.isWater(); } ) ) {
-                fheroes2::showStandardTextMessage( _( "Dwellings" ), _( "Dwellings cannot be placed on water." ), Dialog::OK );
+                _warningMessage.reset( _( "Dwellings cannot be placed on water." ) );
                 return;
             }
 
             if ( !verifyObjectCondition( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return Maps::isClearGround( tileToCheck ); } ) ) {
-                fheroes2::showStandardTextMessage( _( "Dwellings" ), _( "Choose a tile which does not contain any objects." ), Dialog::OK );
+                _warningMessage.reset( _( "Choose a tile which does not contain any objects." ) );
                 return;
             }
 
