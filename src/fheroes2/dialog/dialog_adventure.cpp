@@ -46,9 +46,6 @@ namespace
 
         fheroes2::Display & display = fheroes2::Display::instance();
 
-        const int32_t totalDialogWidth = 337;
-        const int32_t totalDialogHeight = 252;
-
         fheroes2::StandardWindow background( 289, 204, true, display );
 
         fheroes2::Button buttonWorld;
