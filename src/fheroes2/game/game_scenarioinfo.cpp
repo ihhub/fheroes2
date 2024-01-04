@@ -110,7 +110,7 @@ namespace
 
     void RedrawMapTitle( const fheroes2::Rect & roi )
     {
-        fheroes2::Text text( Settings::Get().getCurrentMapInfo().name, fheroes2::FontType::normalWhite() );
+        const fheroes2::Text text( Settings::Get().getCurrentMapInfo().name, fheroes2::FontType::normalWhite() );
         text.draw( roi.x, roi.y + 8, roi.width, fheroes2::Display::instance() );
     }
 
@@ -138,7 +138,7 @@ namespace
         StringReplace( str, "%{rating}", Game::GetRating() );
 
         const fheroes2::Text text( str, fheroes2::FontType::normalWhite() );
-        const int32_t y = offset.y + 369;
+        const int32_t y = offset.y + 372;
         text.draw( offset.x, y, width_, fheroes2::Display::instance() );
 
         const int32_t textX = ( width_ > text.width() ) ? offset.x + ( width_ - text.width() ) / 2 : 0;
@@ -365,7 +365,7 @@ namespace
                     ratingArea.restore();
                     ratingRoi = RedrawRatingInfo( roi.getPosition(), roi.width );
 
-                    display.render( background.activeArea() );
+                    display.render( roi );
                 }
                 // playersInfo
                 else if ( playersInfo.QueueEventProcessing() ) {
@@ -374,19 +374,17 @@ namespace
                     handicapArea.restore();
                     playersInfo.RedrawInfo( false );
 
-                    display.render( background.activeArea() );
+                    display.render( roi );
                 }
             }
-            else if ( le.MouseWheelUp() || le.MouseWheelDn() ) {
-                if ( playersInfo.QueueEventProcessing() ) {
-                    playersInfo.resetSelection();
-                    opponentsArea.restore();
-                    classArea.restore();
-                    handicapArea.restore();
-                    playersInfo.RedrawInfo( false );
+            else if ( ( le.MouseWheelUp() || le.MouseWheelDn() ) && playersInfo.QueueEventProcessing() ) {
+                playersInfo.resetSelection();
+                opponentsArea.restore();
+                classArea.restore();
+                handicapArea.restore();
+                playersInfo.RedrawInfo( false );
 
-                    display.render( background.activeArea() );
-                }
+                display.render( roi );
             }
 
             if ( le.MousePressRight( roi ) ) {
