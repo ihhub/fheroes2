@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -1197,7 +1197,7 @@ int Army::GetMoraleModificator( std::string * strs ) const
     if ( hasUndead ) {
         result -= 1;
         if ( strs ) {
-            strs->append( _( "Some undead in group -1" ) );
+            strs->append( _( "Some undead in army -1" ) );
             *strs += '\n';
         }
     }
@@ -1656,7 +1656,7 @@ void Army::resetInvalidMonsters() const
     }
 }
 
-void Army::ArrangeForCastleDefense( Army & garrison )
+bool Army::ArrangeForCastleDefense( Army & garrison )
 {
     assert( this != &garrison );
     assert( size() == maximumTroopCount && garrison.size() == maximumTroopCount );
@@ -1665,6 +1665,8 @@ void Army::ArrangeForCastleDefense( Army & garrison )
     // This method is designed to take reinforcements only from the garrison, because
     // it can leave the garrison empty
     assert( garrison.commander == nullptr || garrison.commander->isCaptain() );
+
+    bool result = false;
 
     // If the guest hero's army is controlled by AI, then try to squeeze as many garrison troops in as possible
     if ( isControlAI() ) {
@@ -1688,6 +1690,8 @@ void Army::ArrangeForCastleDefense( Army & garrison )
             if ( JoinTroop( *troop ) ) {
                 troop->Reset();
 
+                result = true;
+
                 continue;
             }
 
@@ -1696,6 +1700,8 @@ void Army::ArrangeForCastleDefense( Army & garrison )
                 // ... and try again
                 if ( JoinTroop( *troop ) ) {
                     troop->Reset();
+
+                    result = true;
                 }
                 else {
                     assert( 0 );
@@ -1705,7 +1711,7 @@ void Army::ArrangeForCastleDefense( Army & garrison )
 
         assert( size() == maximumTroopCount );
 
-        return;
+        return result;
     }
 
     // Otherwise, try to move the garrison troops to exactly the same slots of the guest hero's army, provided
@@ -1726,7 +1732,11 @@ void Army::ArrangeForCastleDefense( Army & garrison )
         troop->Set( garrisonTroop->GetMonster(), garrisonTroop->GetCount() );
 
         garrisonTroop->Reset();
+
+        result = true;
     }
+
+    return result;
 }
 
 void Army::ArrangeForWhirlpool()

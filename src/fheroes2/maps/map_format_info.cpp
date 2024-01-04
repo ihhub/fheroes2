@@ -20,7 +20,9 @@
 
 #include "map_format_info.h"
 
+#include <algorithm>
 #include <array>
+#include <cassert>
 #include <cstddef>
 #include <type_traits>
 
@@ -66,6 +68,64 @@ namespace Maps::Map_Format
         return msg >> tile.terrainIndex >> tile.terrainFlag >> tile.objects;
     }
 
+    StreamBase & operator<<( StreamBase & msg, const StandardObjectMetadata & metadata )
+    {
+        return msg << metadata.metadata;
+    }
+
+    StreamBase & operator>>( StreamBase & msg, StandardObjectMetadata & metadata )
+    {
+        std::vector<uint32_t> temp;
+        msg >> temp;
+
+        if ( metadata.metadata.size() != temp.size() ) {
+            // This is a corrupted file!
+            assert( 0 );
+            metadata.metadata = { 0 };
+        }
+        else {
+            std::copy_n( temp.begin(), metadata.metadata.size(), metadata.metadata.begin() );
+        }
+
+        return msg;
+    }
+
+    StreamBase & operator<<( StreamBase & msg, const CastleMetadata & metadata )
+    {
+        return msg << metadata.customName << metadata.defenderMonsterType << metadata.defenderMonsterCount;
+    }
+
+    StreamBase & operator>>( StreamBase & msg, CastleMetadata & metadata )
+    {
+        msg >> metadata.customName;
+
+        std::vector<uint32_t> temp;
+        msg >> temp;
+
+        if ( metadata.defenderMonsterType.size() != temp.size() ) {
+            // This is a corrupted file!
+            assert( 0 );
+            metadata.defenderMonsterType = { 0 };
+        }
+        else {
+            std::copy_n( temp.begin(), metadata.defenderMonsterType.size(), metadata.defenderMonsterType.begin() );
+        }
+
+        temp.clear();
+        msg >> temp;
+
+        if ( metadata.defenderMonsterCount.size() != temp.size() ) {
+            // This is a corrupted file!
+            assert( 0 );
+            metadata.defenderMonsterCount = { 0 };
+        }
+        else {
+            std::copy_n( temp.begin(), metadata.defenderMonsterCount.size(), metadata.defenderMonsterCount.begin() );
+        }
+
+        return msg;
+    }
+
     StreamBase & operator<<( StreamBase & msg, const BaseMapFormat & map )
     {
         return msg << map.version << map.isCampaign << map.difficulty << map.availablePlayerColors << map.humanPlayerColors << map.computerPlayerColors << map.alliances
@@ -82,12 +142,13 @@ namespace Maps::Map_Format
 
     StreamBase & operator<<( StreamBase & msg, const MapFormat & map )
     {
-        return msg << static_cast<const BaseMapFormat &>( map ) << map.additionalInfo << map.tiles;
+        return msg << static_cast<const BaseMapFormat &>( map ) << map.additionalInfo << map.tiles << map.standardMetadata << map.castleMetadata;
     }
 
     StreamBase & operator>>( StreamBase & msg, MapFormat & map )
     {
-        return msg >> static_cast<BaseMapFormat &>( map ) >> map.additionalInfo >> map.tiles;
+        // TODO: verify the correctness of metadata.
+        return msg >> static_cast<BaseMapFormat &>( map ) >> map.additionalInfo >> map.tiles >> map.standardMetadata >> map.castleMetadata;
     }
 
     bool loadBaseMap( const std::string & path, BaseMapFormat & map )

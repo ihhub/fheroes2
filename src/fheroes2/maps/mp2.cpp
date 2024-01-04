@@ -272,8 +272,8 @@ const char * MP2::StringObject( MapObjectType objectType, const int count )
         return _n( "Lighthouse", "Lighthouses", count );
     case OBJ_NON_ACTION_WATER_WHEEL:
         return _n( "Water Wheel", "Water Wheels", count );
-    case OBJ_NON_ACTION_MINES:
-        return _( "Mines" );
+    case OBJ_NON_ACTION_MINE:
+        return _( "Mine" );
     case OBJ_NON_ACTION_MONSTER:
         return _( "Monster" );
     case OBJ_NON_ACTION_OBELISK:
@@ -681,7 +681,7 @@ bool MP2::isCaptureObject( const MapObjectType objectType )
     case OBJ_ALCHEMIST_LAB:
     case OBJ_CASTLE:
     case OBJ_LIGHTHOUSE:
-    case OBJ_MINES:
+    case OBJ_MINE:
     case OBJ_SAWMILL:
         return true;
     default:
@@ -861,7 +861,7 @@ int MP2::getActionObjectDirection( const MapObjectType objectType )
     case OBJ_MAGIC_WELL:
     case OBJ_MERCENARY_CAMP:
     case OBJ_MERMAID:
-    case OBJ_MINES:
+    case OBJ_MINE:
     case OBJ_OASIS:
     case OBJ_OBELISK:
     case OBJ_OBSERVATION_TOWER:

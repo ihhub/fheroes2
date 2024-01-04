@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-24 11:33+0000\n"
+"POT-Creation-Date: 2024-01-02 13:33+0000\n"
 "PO-Revision-Date: 2023-04-09 23:51+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -201,6 +201,10 @@ msgid "RESET"
 msgstr ""
 
 #, fuzzy
+msgid "START"
+msgstr "NEUSTART"
+
+#, fuzzy
 msgid "CASTLE"
 msgstr ""
 "STÄDTE/\n"
@@ -359,7 +363,8 @@ msgstr "Verschied"
 msgid "Troops of %{count} alignments -%{penalty}"
 msgstr "Truppen aus %{count} Gattungen -%{penalty}"
 
-msgid "Some undead in group -1"
+#, fuzzy
+msgid "Some undead in army -1"
 msgstr "Einige Untote in der Gruppe -1"
 
 msgid "View %{name}"
@@ -922,6 +927,23 @@ msgstr "Mensch"
 
 msgid "AI"
 msgstr "KI"
+
+#, fuzzy
+msgid "Start"
+msgstr "Neustart"
+
+#, fuzzy
+msgid "Start the battle."
+msgstr "Zurück in die Schlacht."
+
+msgid "Exit"
+msgstr "Verlassen"
+
+msgid "Reset"
+msgstr ""
+
+msgid "Reset to default settings."
+msgstr ""
 
 msgid "Please select another hero."
 msgstr "Bitte wählt einen anderen Helden aus."
@@ -2493,7 +2515,8 @@ msgstr ""
 "Der Brunnen erhöht die Wachstumsrate aller Behausungen um %{count} Lebewesen "
 "pro Woche."
 
-msgid "The Statue increases your town's income by %{count} gold per day."
+#, fuzzy
+msgid "The Statue increases the town's income by %{count} gold per day."
 msgstr "Die Statue erhöht das Einkommen Eurer Stadt um %{count} Gold pro Tag."
 
 msgid "The Left Turret provides extra firepower during castle combat."
@@ -2520,9 +2543,10 @@ msgstr ""
 "Der Burggraben verlangsamt angreifende Einheiten. Jede Einheit, die den "
 "Graben betritt, muss ihren Zug dort beenden und wird für Angriffe anfälliger."
 
+#, fuzzy
 msgid ""
-"The Castle improves town defense and increases income to %{count} gold per "
-"day."
+"The Castle improves the town's defense and increases its income to %{count} "
+"gold per day."
 msgstr ""
 "Die Burg verbessert die Stadtverteidigung und erhöht das Einkommen auf "
 "%{count} Gold pro Tag."
@@ -2561,9 +2585,6 @@ msgstr ""
 "Ihr müsst ein Zauberbuch kaufen, um die Magiergilde zu nutzen, aber Ihr habt "
 "derzeit keinen Platz für ein Zauberbuch. Versuchet, eines Eurer Artefakte "
 "einem anderen Helden zu übergeben."
-
-msgid "Exit"
-msgstr "Verlassen"
 
 msgid "Click to show next town."
 msgstr "Klicken um die nächste Stadt anzuzeigen."
@@ -3738,9 +3759,6 @@ msgstr "Speichern der aktuellen Karte."
 msgid "Quit out of the map editor."
 msgstr "Den Karteneditor verlassen."
 
-msgid "Monster"
-msgstr "Monster"
-
 #, fuzzy
 msgid "Objects cannot be placed outside the map."
 msgstr "Monster können nicht auf Wasser plaziert werden."
@@ -3751,36 +3769,20 @@ msgstr "Monster können nicht auf Wasser plaziert werden."
 msgid "Choose a tile which does not contain any objects."
 msgstr "Ein Feld wählen, das keine Objekt enthält."
 
-msgid "Treasure"
-msgstr "Schatz"
-
 #, fuzzy
 msgid "Treasures cannot be placed on water."
 msgstr "Monster können nicht auf Wasser plaziert werden."
 
-msgid "Heroes"
-msgstr "Helden"
-
 msgid "Heroes cannot be placed on water."
 msgstr ""
-
-msgid "Artifacts"
-msgstr "Artefakte"
 
 #, fuzzy
 msgid "Artifacts cannot be placed on water."
 msgstr "Monster können nicht auf Wasser plaziert werden."
 
 #, fuzzy
-msgid "Ocean object"
-msgstr "Ozean-Objekte"
-
-#, fuzzy
 msgid "Ocean object must be placed on water."
 msgstr "Monster können nicht auf Wasser plaziert werden."
-
-msgid "Towns"
-msgstr "Städte"
 
 #, fuzzy
 msgid "Towns cannot be placed on water."
@@ -3841,6 +3843,9 @@ msgstr "Ödland-Objekte"
 msgid "Miscellaneous"
 msgstr "Fineous"
 
+msgid "Artifacts"
+msgstr "Artefakte"
+
 #, fuzzy
 msgid "Dwellings"
 msgstr "Halblinge"
@@ -3854,6 +3859,12 @@ msgstr "Kraft"
 
 msgid "Treasures"
 msgstr "Schätze"
+
+msgid "Towns"
+msgstr "Städte"
+
+msgid "Heroes"
+msgstr "Helden"
 
 #, fuzzy
 msgid "Terrain"
@@ -5899,6 +5910,9 @@ msgstr ""
 msgid "You come upon the remains of an unfortunate adventurer."
 msgstr "Ihr stoßt auf die Überreste eines unglückseligen Abenteurers."
 
+msgid "Treasure"
+msgstr "Schatz"
+
 msgid "Searching through the tattered clothing, you find the %{artifact}."
 msgstr "Beim Durchsuchen der zerlumpten Kleidung findet Ihr %{artifact}."
 
@@ -7445,23 +7459,27 @@ msgstr "Diese schwachen Kreaturen werden sicher vor uns fliehen."
 msgid "I fear these creatures are in the mood for a fight."
 msgstr "Ich fürchte, diese Kreaturen sind in der Stimmung für einen Kampf."
 
-msgid "Your attack skill is a bonus added to each creature's attack skill."
+#, fuzzy
+msgid "The hero's attack skill is a bonus added to each unit's attack skill."
 msgstr ""
 "Eure Angriffsfähigkeit ist ein Bonus, der zur Angriffsfähigkeit jeder "
 "Kreatur addiert wird."
 
-msgid "Your defense skill is a bonus added to each creature's defense skill."
+#, fuzzy
+msgid "The hero's defense skill is a bonus added to each unit's defense skill."
 msgstr ""
 "Eure Verteidigungsfähigkeit ist ein Bonus, der zur Verteidigungsfähigkeit "
 "jeder Kreatur addiert wird."
 
-msgid "Your spell power determines the length or power of a spell."
+#, fuzzy
+msgid "The hero's spell power determines the duration or power of a spell."
 msgstr "Eure Zauberkraft bestimmt die Länge oder Stärke eines Zaubers."
 
+#, fuzzy
 msgid ""
-"Your knowledge determines how many spell points your hero may have. Under "
-"normal circumstances, a hero is limited to 10 spell points per level of "
-"knowledge."
+" The hero's knowledge determines how many spell points the hero may have. "
+"Under normal circumstances, a hero is limited to 10 spell points per level "
+"of knowledge."
 msgstr ""
 "Euer Wissen bestimmt, wie viele Zauberpunkte Euer Held haben darf. Unter "
 "normalen Umständen ist ein Held auf 10 Zauberpunkte pro Wissensstufe "
@@ -7653,108 +7671,126 @@ msgstr ""
 msgid "%{skill} eliminates the movement penalty for rough terrain."
 msgstr "%{skill} eliminiert den Bewegungsabzug für unwegsames Gelände."
 
+#, fuzzy
 msgid ""
-"%{skill} increases the damage done by range attacking creatures by %{count} "
-"percent."
+"%{skill} increases the damage done by the hero's range attacking creatures "
+"by %{count} percent."
 msgstr ""
 "%{skill} erhöht den Schaden von Kreaturen, die aus der Entfernung angreifen, "
 "um %{count} Prozent."
 
-msgid "%{skill} increases your hero's movement points by %{count} percent."
+#, fuzzy
+msgid "%{skill} increases the hero's movement points by %{count} percent."
 msgstr "%{skill} erhöht die Bewegungspunkte Eures Helden um %{count} Prozent."
 
-msgid "%{skill} increases your hero's viewable area by one square."
-msgid_plural ""
-"%{skill} increases your hero's viewable area by %{count} squares."
+#, fuzzy
+msgid "%{skill} increases the hero's viewable area by one square."
+msgid_plural "%{skill} increases the hero's viewable area by %{count} squares."
 msgstr[0] "%{skill} erweitert das Blickfeld Eures Helden um ein Feld."
 msgstr[1] "%{skill} erweitert das Blickfeld Eures Helden um %{count} Felder."
 
+#, fuzzy
 msgid ""
-"%{skill} allows you to negotiate with monsters who are weaker than your "
-"group. "
+"%{skill} allows the hero to negotiate with monsters who are weaker than "
+"their army."
 msgstr ""
 "%{skill} erlaubt es Euch, mit Monstern zu verhandeln, die schwächer sind als "
 "Eure Truppe. "
 
-msgid "Approximately %{count} percent of the creatures may offer to join you."
+#, fuzzy
+msgid ""
+"Approximately %{count} percent of the creatures may offer to join the hero."
 msgstr ""
 "Ungefähr %{count} Prozent der Kreaturen werden Euch anbieten, sich Euch "
 "anzuschließen."
 
-msgid "All of the creatures may offer to join you."
+#, fuzzy
+msgid "All of the creatures may offer to join the hero."
 msgstr "Alle Kreaturen könnten anbieten, sich Euch anzuschließen."
 
+#, fuzzy
 msgid ""
-"%{skill} increases your hero's movement points over water by %{count} "
-"percent."
+"%{skill} increases the hero's movement points over water by %{count} percent."
 msgstr ""
 "%{skill} erhöht die Bewegungspunkte Eures Helden über Wasser um %{count} "
 "Prozent."
 
-msgid "%{skill} increases your hero's troops morale by %{count}."
+#, fuzzy
+msgid "%{skill} increases the hero's troops morale by %{count}."
 msgstr "%{skill} erhöht die Moral der Truppen Eures Helden um %{count}."
 
-msgid "%{skill} allows your hero to learn third level spells."
+#, fuzzy
+msgid "%{skill} allows the hero to learn third level spells."
 msgstr "%{skill} erlaubt es Eurem Helden, Zauber der dritten Stufe zu lernen."
 
-msgid "%{skill} allows your hero to learn fourth level spells."
+#, fuzzy
+msgid "%{skill} allows the hero to learn fourth level spells."
 msgstr "%{skill} erlaubt es Eurem Helden, Zauber der vierten Stufe zu lernen."
 
-msgid "%{skill} allows your hero to learn fifth level spells."
+#, fuzzy
+msgid "%{skill} allows the hero to learn fifth level spells."
 msgstr "%{skill} erlaubt es Eurem Helden, Zauber der fünften Stufe zu lernen."
 
-msgid "%{skill} regenerates one additional spell point per day to your hero."
+#, fuzzy
+msgid "%{skill} regenerates one additional spell point per day to the hero."
 msgid_plural ""
-"%{skill} regenerates %{count} additional spell points per day to your hero."
+"%{skill} regenerates %{count} additional spell points per day to the hero."
 msgstr[0] ""
 "%{skill} regeneriert einen zusätzlichen Zauberpunkt Eures Helden pro Tag."
 msgstr[1] ""
 "%{skill} regeneriert %{count} zusätzliche Zauberpunkte Eures Helden pro Tag."
 
-msgid "%{skill} increases your hero's luck by %{count}."
+#, fuzzy
+msgid "%{skill} increases the hero's luck by %{count}."
 msgstr "%{skill} erhöht das Glück Eures Helden um %{count}."
 
+#, fuzzy
 msgid ""
-"%{skill} gives your hero's catapult shots a greater chance to hit and do "
+"%{skill} gives the hero's catapult shots a greater chance to hit and do "
 "damage to castle walls."
 msgstr ""
 "%{skill} gibt den Katapultschüssen Eures Helden eine größere Chance, die "
 "Burgmauern zu treffen und Schaden zu verursachen."
 
+#, fuzzy
 msgid ""
-"%{skill} gives your hero's catapult an extra shot, and each shot has a "
+"%{skill} gives the hero's catapult an extra shot, and each shot has a "
 "greater chance to hit and do damage to castle walls."
 msgstr ""
 "%{skill} gibt dem Katapult Eures Helden einen zusätzlichen Schuss, und jeder "
 "Schuss hat eine größere Chance, die Burgmauern zu treffen und Schaden zu "
 "verursachen."
 
+#, fuzzy
 msgid ""
-"%{skill} gives your hero's catapult an extra shot, and each shot "
+"%{skill} gives the hero's catapult an extra shot, and each shot "
 "automatically destroys any wall, except a fortified wall in a Knight castle."
 msgstr ""
 "%{skill} gibt dem Katapult Eures Helden einen zusätzlichen Schuss, und jeder "
 "Schuss zerstört automatisch jede Mauer, außer einer befestigten Mauer in "
 "einer Ritterburg."
 
+#, fuzzy
 msgid ""
-"%{skill} gives your hero a %{count} percent chance to learn any given 1st or "
+"%{skill} gives the hero a %{count} percent chance to learn any given 1st or "
 "2nd level spell that was cast by an enemy during combat."
 msgstr ""
 "%{skill} gibt Eurem Helden eine %{count} Prozent Chance, jeden gegnerischen "
 "Zauber der Stufe 1 oder 2 zu erlernen, der in einem Kampf gegen ihn "
 "eingesetzt wird."
 
+#, fuzzy
 msgid ""
-"%{skill} gives your hero a %{count} percent chance to learn any given 3rd "
+"%{skill} gives the hero a %{count} percent chance to learn any given 3rd "
 "level spell (or below) that was cast by an enemy during combat."
 msgstr ""
 "%{skill} gibt Eurem Helden eine %{count} Prozent Chance, jeden beliebigen "
 "Zauber der Stufe 3 (oder niedriger) zu lernen, der im Kampf gegen ihn "
 "eingesetzt wird."
 
+#, fuzzy
 msgid ""
-"%{skill} gives your hero a %{count} percent chance to learn any given 4th "
+"%{skill} gives the hero a %{count} percent chance to learn any given 4th "
 "level spell (or below) that was cast by an enemy during combat."
 msgstr ""
 "%{skill} gibt Eurem Helden eine %{count} Prozent Chance, jeden beliebigen "
@@ -7768,8 +7804,9 @@ msgstr ""
 "%{skill} ermögicht Euch %{count} Prozent der im Kampf getöteten Kreaturen "
 "als Skelette von den Toten wiederauferstehen zu lassen."
 
+#, fuzzy
 msgid ""
-"Your hero produces %{count} gold pieces per day as tax revenue from estates."
+"The hero produces %{count} gold pieces per day as tax revenue from estates."
 msgstr ""
 "Euer Held produziert %{count} Goldstücke pro Tag als Steuereinnahmen aus "
 "Ländereien."
@@ -7895,23 +7932,26 @@ msgstr "Wunderbares"
 msgid "luck|Irish"
 msgstr "Irisches"
 
+#, fuzzy
 msgid ""
-"Bad luck sometimes falls on your armies in combat, causing their attacks to "
-"only do half damage."
+"Bad luck sometimes falls on the hero's units in combat, causing their "
+"attacks to only do half damage."
 msgstr ""
 "Eure Armeen werden im Kampf manchmal vom Pech verfolgt, so dass ihre "
 "Angriffe nur halben Schaden anrichten."
 
+#, fuzzy
 msgid ""
-"Neutral luck means your armies will never get lucky or unlucky attacks on "
-"the enemy."
+"Neutral luck means the hero's units will never get lucky or unlucky attacks "
+"on the enemy."
 msgstr ""
 "Neutrales Glück bedeutet, dass Eure Armeen weder Glück noch Unglück haben "
 "werden bei Angriffen auf den Feind."
 
+#, fuzzy
 msgid ""
-"Good luck sometimes lets your armies get lucky attacks (double strength) in "
-"combat."
+"Good luck sometimes lets the hero's units get lucky attacks (double "
+"strength) in combat."
 msgstr "Glück lässt Eure Truppen manchmal mit doppelter Stärke angreifen."
 
 msgid "morale|Treason"
@@ -7935,19 +7975,22 @@ msgstr "Wunderbare"
 msgid "morale|Blood!"
 msgstr "Blut!"
 
-msgid "Bad morale may cause your armies to freeze in combat."
+#, fuzzy
+msgid "Bad morale may cause the hero's units to freeze in combat."
 msgstr ""
 "Eine niedrige Moral kann dazu führen, dass Eure Armeen im Kampf vor Angst "
 "erstarren."
 
+#, fuzzy
 msgid ""
-"Neutral morale means your armies will never be blessed with extra attacks or "
-"freeze in combat."
+"Neutral morale means the hero's units will never be blessed with extra "
+"attacks or freeze in combat."
 msgstr ""
 "Neutrale Moral bedeutet, dass Eure Armeen keine zusätzlichen Angriffen "
 "erhalten werden aber auch nicht im Kampf einfrieren."
 
-msgid "Good morale may give your armies extra attacks in combat."
+#, fuzzy
+msgid "Good morale may give the hero's units extra attacks in combat."
 msgstr ""
 "Eine hohe Moral kann Eurer Armee zu zusätzlichen Angriffen im Kampf "
 "verhelfen."
@@ -8250,6 +8293,9 @@ msgid "Water Wheel"
 msgid_plural "Water Wheels"
 msgstr[0] "Wasserrad"
 msgstr[1] "Wasserräder"
+
+msgid "Monster"
+msgstr "Monster"
 
 msgid "Obelisk"
 msgstr "Obelisk"
@@ -11273,6 +11319,10 @@ msgstr ""
 "Die neueste Version des Spiels finden Sie unter\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#, fuzzy
+#~ msgid "Ocean object"
+#~ msgstr "Ozean-Objekte"
 
 #~ msgid "Ocean Objects"
 #~ msgstr "Ozean-Objekte"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-24 11:33+0000\n"
+"POT-Creation-Date: 2024-01-02 13:33+0000\n"
 "PO-Revision-Date: 2022-10-25 08:56+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -179,6 +179,9 @@ msgstr "MIN"
 msgid "RESET"
 msgstr ""
 
+msgid "START"
+msgstr ""
+
 msgid "CASTLE"
 msgstr ""
 
@@ -335,7 +338,8 @@ msgstr "Multiple"
 msgid "Troops of %{count} alignments -%{penalty}"
 msgstr "Trupe cu %{count} aliniamente -%{penalty}"
 
-msgid "Some undead in group -1"
+#, fuzzy
+msgid "Some undead in army -1"
 msgstr "Niște  strigoi în grup -1"
 
 msgid "View %{name}"
@@ -910,6 +914,22 @@ msgstr "Om"
 
 msgid "AI"
 msgstr "AI"
+
+msgid "Start"
+msgstr ""
+
+#, fuzzy
+msgid "Start the battle."
+msgstr "Întoarce-te la luptă."
+
+msgid "Exit"
+msgstr ""
+
+msgid "Reset"
+msgstr ""
+
+msgid "Reset to default settings."
+msgstr ""
 
 msgid "Please select another hero."
 msgstr "Te rog selectează un alt erou."
@@ -2348,7 +2368,7 @@ msgid ""
 "per week."
 msgstr ""
 
-msgid "The Statue increases your town's income by %{count} gold per day."
+msgid "The Statue increases the town's income by %{count} gold per day."
 msgstr ""
 
 msgid "The Left Turret provides extra firepower during castle combat."
@@ -2368,8 +2388,8 @@ msgid ""
 msgstr ""
 
 msgid ""
-"The Castle improves town defense and increases income to %{count} gold per "
-"day."
+"The Castle improves the town's defense and increases its income to %{count} "
+"gold per day."
 msgstr ""
 
 msgid ""
@@ -2396,9 +2416,6 @@ msgstr ""
 msgid ""
 "You must purchase a spell book to use the mage guild, but you currently have "
 "no room for a spell book. Try giving one of your artifacts to another hero."
-msgstr ""
-
-msgid "Exit"
 msgstr ""
 
 msgid "Click to show next town."
@@ -3473,9 +3490,6 @@ msgstr ""
 msgid "Quit out of the map editor."
 msgstr ""
 
-msgid "Monster"
-msgstr ""
-
 msgid "Objects cannot be placed outside the map."
 msgstr ""
 
@@ -3485,31 +3499,16 @@ msgstr ""
 msgid "Choose a tile which does not contain any objects."
 msgstr ""
 
-msgid "Treasure"
-msgstr ""
-
 msgid "Treasures cannot be placed on water."
-msgstr ""
-
-msgid "Heroes"
 msgstr ""
 
 msgid "Heroes cannot be placed on water."
 msgstr ""
 
-msgid "Artifacts"
-msgstr ""
-
 msgid "Artifacts cannot be placed on water."
 msgstr ""
 
-msgid "Ocean object"
-msgstr ""
-
 msgid "Ocean object must be placed on water."
-msgstr ""
-
-msgid "Towns"
 msgstr ""
 
 msgid "Towns cannot be placed on water."
@@ -3562,6 +3561,9 @@ msgstr ""
 msgid "Miscellaneous"
 msgstr ""
 
+msgid "Artifacts"
+msgstr ""
+
 msgid "Dwellings"
 msgstr ""
 
@@ -3572,6 +3574,12 @@ msgid "Power-ups"
 msgstr ""
 
 msgid "Treasures"
+msgstr ""
+
+msgid "Towns"
+msgstr ""
+
+msgid "Heroes"
 msgstr ""
 
 msgid "Terrain"
@@ -5392,6 +5400,9 @@ msgstr ""
 msgid "You come upon the remains of an unfortunate adventurer."
 msgstr ""
 
+msgid "Treasure"
+msgstr ""
+
 msgid "Searching through the tattered clothing, you find the %{artifact}."
 msgstr ""
 
@@ -6508,19 +6519,20 @@ msgstr ""
 msgid "I fear these creatures are in the mood for a fight."
 msgstr ""
 
-msgid "Your attack skill is a bonus added to each creature's attack skill."
+#, fuzzy
+msgid "The hero's attack skill is a bonus added to each unit's attack skill."
+msgstr "fiecare cu un bonus de +%{attack} la abilitatea lor de atac."
+
+msgid "The hero's defense skill is a bonus added to each unit's defense skill."
 msgstr ""
 
-msgid "Your defense skill is a bonus added to each creature's defense skill."
-msgstr ""
-
-msgid "Your spell power determines the length or power of a spell."
+msgid "The hero's spell power determines the duration or power of a spell."
 msgstr ""
 
 msgid ""
-"Your knowledge determines how many spell points your hero may have. Under "
-"normal circumstances, a hero is limited to 10 spell points per level of "
-"knowledge."
+" The hero's knowledge determines how many spell points the hero may have. "
+"Under normal circumstances, a hero is limited to 10 spell points per level "
+"of knowledge."
 msgstr ""
 
 msgid "Current Modifiers:"
@@ -6708,85 +6720,84 @@ msgid "%{skill} eliminates the movement penalty for rough terrain."
 msgstr ""
 
 msgid ""
-"%{skill} increases the damage done by range attacking creatures by %{count} "
-"percent."
+"%{skill} increases the damage done by the hero's range attacking creatures "
+"by %{count} percent."
 msgstr ""
 
-msgid "%{skill} increases your hero's movement points by %{count} percent."
+msgid "%{skill} increases the hero's movement points by %{count} percent."
 msgstr ""
 
-msgid "%{skill} increases your hero's viewable area by one square."
-msgid_plural ""
-"%{skill} increases your hero's viewable area by %{count} squares."
+msgid "%{skill} increases the hero's viewable area by one square."
+msgid_plural "%{skill} increases the hero's viewable area by %{count} squares."
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
 msgid ""
-"%{skill} allows you to negotiate with monsters who are weaker than your "
-"group. "
-msgstr ""
-
-msgid "Approximately %{count} percent of the creatures may offer to join you."
-msgstr ""
-
-msgid "All of the creatures may offer to join you."
+"%{skill} allows the hero to negotiate with monsters who are weaker than "
+"their army."
 msgstr ""
 
 msgid ""
-"%{skill} increases your hero's movement points over water by %{count} "
-"percent."
+"Approximately %{count} percent of the creatures may offer to join the hero."
 msgstr ""
 
-msgid "%{skill} increases your hero's troops morale by %{count}."
+msgid "All of the creatures may offer to join the hero."
 msgstr ""
 
-msgid "%{skill} allows your hero to learn third level spells."
+msgid ""
+"%{skill} increases the hero's movement points over water by %{count} percent."
 msgstr ""
 
-msgid "%{skill} allows your hero to learn fourth level spells."
+msgid "%{skill} increases the hero's troops morale by %{count}."
 msgstr ""
 
-msgid "%{skill} allows your hero to learn fifth level spells."
+msgid "%{skill} allows the hero to learn third level spells."
 msgstr ""
 
-msgid "%{skill} regenerates one additional spell point per day to your hero."
+msgid "%{skill} allows the hero to learn fourth level spells."
+msgstr ""
+
+msgid "%{skill} allows the hero to learn fifth level spells."
+msgstr ""
+
+msgid "%{skill} regenerates one additional spell point per day to the hero."
 msgid_plural ""
-"%{skill} regenerates %{count} additional spell points per day to your hero."
+"%{skill} regenerates %{count} additional spell points per day to the hero."
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-msgid "%{skill} increases your hero's luck by %{count}."
+msgid "%{skill} increases the hero's luck by %{count}."
 msgstr ""
 
 msgid ""
-"%{skill} gives your hero's catapult shots a greater chance to hit and do "
+"%{skill} gives the hero's catapult shots a greater chance to hit and do "
 "damage to castle walls."
 msgstr ""
 
 msgid ""
-"%{skill} gives your hero's catapult an extra shot, and each shot has a "
+"%{skill} gives the hero's catapult an extra shot, and each shot has a "
 "greater chance to hit and do damage to castle walls."
 msgstr ""
 
 msgid ""
-"%{skill} gives your hero's catapult an extra shot, and each shot "
+"%{skill} gives the hero's catapult an extra shot, and each shot "
 "automatically destroys any wall, except a fortified wall in a Knight castle."
 msgstr ""
 
 msgid ""
-"%{skill} gives your hero a %{count} percent chance to learn any given 1st or "
+"%{skill} gives the hero a %{count} percent chance to learn any given 1st or "
 "2nd level spell that was cast by an enemy during combat."
 msgstr ""
 
 msgid ""
-"%{skill} gives your hero a %{count} percent chance to learn any given 3rd "
+"%{skill} gives the hero a %{count} percent chance to learn any given 3rd "
 "level spell (or below) that was cast by an enemy during combat."
 msgstr ""
 
 msgid ""
-"%{skill} gives your hero a %{count} percent chance to learn any given 4th "
+"%{skill} gives the hero a %{count} percent chance to learn any given 4th "
 "level spell (or below) that was cast by an enemy during combat."
 msgstr ""
 
@@ -6796,7 +6807,7 @@ msgid ""
 msgstr ""
 
 msgid ""
-"Your hero produces %{count} gold pieces per day as tax revenue from estates."
+"The hero produces %{count} gold pieces per day as tax revenue from estates."
 msgstr ""
 
 msgid "Blue"
@@ -6919,18 +6930,18 @@ msgid "luck|Irish"
 msgstr ""
 
 msgid ""
-"Bad luck sometimes falls on your armies in combat, causing their attacks to "
-"only do half damage."
+"Bad luck sometimes falls on the hero's units in combat, causing their "
+"attacks to only do half damage."
 msgstr ""
 
 msgid ""
-"Neutral luck means your armies will never get lucky or unlucky attacks on "
-"the enemy."
+"Neutral luck means the hero's units will never get lucky or unlucky attacks "
+"on the enemy."
 msgstr ""
 
 msgid ""
-"Good luck sometimes lets your armies get lucky attacks (double strength) in "
-"combat."
+"Good luck sometimes lets the hero's units get lucky attacks (double "
+"strength) in combat."
 msgstr ""
 
 msgid "morale|Treason"
@@ -6954,15 +6965,16 @@ msgstr ""
 msgid "morale|Blood!"
 msgstr ""
 
-msgid "Bad morale may cause your armies to freeze in combat."
-msgstr ""
+#, fuzzy
+msgid "Bad morale may cause the hero's units to freeze in combat."
+msgstr "Moralul scăzut face ca %{monster} să înghețe de panică."
 
 msgid ""
-"Neutral morale means your armies will never be blessed with extra attacks or "
-"freeze in combat."
+"Neutral morale means the hero's units will never be blessed with extra "
+"attacks or freeze in combat."
 msgstr ""
 
-msgid "Good morale may give your armies extra attacks in combat."
+msgid "Good morale may give the hero's units extra attacks in combat."
 msgstr ""
 
 msgid "Knight"
@@ -7263,6 +7275,9 @@ msgid_plural "Water Wheels"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
+
+msgid "Monster"
+msgstr ""
 
 msgid "Obelisk"
 msgstr ""

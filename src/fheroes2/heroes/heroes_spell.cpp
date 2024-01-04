@@ -324,7 +324,7 @@ namespace
     bool ActionSpellSetGuardian( const Heroes & hero, const Spell & spell )
     {
         Maps::Tiles & tile = world.GetTiles( hero.GetIndex() );
-        assert( MP2::OBJ_MINES == tile.GetObject( false ) );
+        assert( MP2::OBJ_MINE == tile.GetObject( false ) );
 
         const uint32_t count = fheroes2::getGuardianMonsterCount( spell, hero.GetPower(), &hero );
 
@@ -336,7 +336,7 @@ namespace
 
         if ( spell == Spell::HAUNT ) {
             world.CaptureObject( tile.GetIndex(), Color::NONE );
-            tile.removeOwnershipFlag( MP2::OBJ_MINES );
+            tile.removeOwnershipFlag( MP2::OBJ_MINE );
 
             // Update the color of haunted mine on radar.
             Interface::AdventureMap & I = Interface::AdventureMap::Get();

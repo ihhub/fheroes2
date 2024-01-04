@@ -164,7 +164,11 @@ bool Battle::Only::setup( const bool allowBackup, bool & reset )
         armyInfo[0].isHeroPresent = true;
     }
 
-    RedrawBaseInfo( cur_pt );
+    const fheroes2::Sprite & background = fheroes2::AGG::GetICN( ICN::SWAPWIN, 0 );
+    fheroes2::Copy( background, 0, 0, display, cur_pt.x, cur_pt.y, background.width(), background.height() );
+
+    redrawOpponents( cur_pt );
+    redrawOpponentsStats( cur_pt );
 
     for ( auto & info : armyInfo ) {
         if ( info.hero != nullptr ) {
@@ -192,20 +196,25 @@ bool Battle::Only::setup( const bool allowBackup, bool & reset )
         attackedArmyControlInfo->Redraw();
     }
 
+    // hide the swap army/artifact arrows
+    const fheroes2::Sprite & stoneBackground = fheroes2::AGG::GetICN( ICN::STONEBAK, 0 );
+    fheroes2::Copy( stoneBackground, 292, 270, display, cur_pt.x + 292, cur_pt.y + 270, 48, 44 );
+    fheroes2::Copy( stoneBackground, 292, 363, display, cur_pt.x + 292, cur_pt.y + 363, 48, 44 );
+
     // hide the shadow from the original EXIT button
     const fheroes2::Sprite buttonOverride = fheroes2::Crop( fheroes2::AGG::GetICN( ICN::SWAPWIN, 0 ), 122, 428, 84, 32 );
-    fheroes2::Blit( buttonOverride, display, cur_pt.x + 276, cur_pt.y + 428 );
+    fheroes2::Copy( buttonOverride, 0, 0, display, cur_pt.x + 276, cur_pt.y + 428, 84, 32 );
 
-    fheroes2::ButtonSprite buttonOkay = fheroes2::makeButtonWithShadow( cur_pt.x + 178, cur_pt.y + 428, fheroes2::AGG::GetICN( ICN::BUTTON_SMALL_OKAY_GOOD, 0 ),
-                                                                        fheroes2::AGG::GetICN( ICN::BUTTON_SMALL_OKAY_GOOD, 1 ), display );
-    fheroes2::ButtonSprite buttonCancel = fheroes2::makeButtonWithShadow( cur_pt.x + 366, cur_pt.y + 428, fheroes2::AGG::GetICN( ICN::BUTTON_SMALL_CANCEL_GOOD, 0 ),
-                                                                          fheroes2::AGG::GetICN( ICN::BUTTON_SMALL_CANCEL_GOOD, 1 ), display );
+    fheroes2::Button buttonReset( cur_pt.x + 30, cur_pt.y + 428, ICN::BUTTON_RESET_GOOD, 0, 1 );
+    fheroes2::Button buttonStart( cur_pt.x + 178, cur_pt.y + 428, ICN::BUTTON_START_GOOD, 0, 1 );
+    fheroes2::Button buttonExit( cur_pt.x + 366, cur_pt.y + 428, ICN::BUTTON_EXIT_GOOD, 0, 1 );
 
-    fheroes2::ButtonSprite buttonReset = fheroes2::makeButtonWithShadow( cur_pt.x + 30, cur_pt.y + 428, fheroes2::AGG::GetICN( ICN::BUTTON_RESET_GOOD, 0 ),
-                                                                         fheroes2::AGG::GetICN( ICN::BUTTON_RESET_GOOD, 1 ), display );
+    fheroes2::addGradientShadow( fheroes2::AGG::GetICN( ICN::BUTTON_RESET_GOOD, 0 ), display, buttonReset.area().getPosition(), { -5, 5 } );
+    fheroes2::addGradientShadow( fheroes2::AGG::GetICN( ICN::BUTTON_START_GOOD, 0 ), display, buttonStart.area().getPosition(), { -5, 5 } );
+    fheroes2::addGradientShadow( fheroes2::AGG::GetICN( ICN::BUTTON_EXIT_GOOD, 0 ), display, buttonExit.area().getPosition(), { -5, 5 } );
 
-    buttonOkay.draw();
-    buttonCancel.draw();
+    buttonStart.draw();
+    buttonExit.draw();
     buttonReset.draw();
 
     display.render();
@@ -214,13 +223,15 @@ bool Battle::Only::setup( const bool allowBackup, bool & reset )
 
     while ( le.HandleEvents() ) {
         bool updateSpellPoints = false;
-        bool redraw = false;
+        bool needRender = false;
+        bool needRedrawOpponentsStats = false;
+        bool needRedrawControlInfo = false;
 
-        buttonOkay.isEnabled() && le.MousePressLeft( buttonOkay.area() ) ? buttonOkay.drawOnPress() : buttonOkay.drawOnRelease();
-        buttonCancel.isEnabled() && le.MousePressLeft( buttonCancel.area() ) ? buttonCancel.drawOnPress() : buttonCancel.drawOnRelease();
+        buttonStart.isEnabled() && le.MousePressLeft( buttonStart.area() ) ? buttonStart.drawOnPress() : buttonStart.drawOnRelease();
+        buttonExit.isEnabled() && le.MousePressLeft( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
         buttonReset.isEnabled() && le.MousePressLeft( buttonReset.area() ) ? buttonReset.drawOnPress() : buttonReset.drawOnRelease();
 
-        if ( ( buttonOkay.isEnabled() && le.MouseClickLeft( buttonOkay.area() ) ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) ) {
+        if ( ( buttonStart.isEnabled() && le.MouseClickLeft( buttonStart.area() ) ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) ) {
             result = true;
 
             break;
@@ -232,16 +243,26 @@ bool Battle::Only::setup( const bool allowBackup, bool & reset )
             break;
         }
 
-        if ( le.MouseClickLeft( buttonCancel.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
+        if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
             break;
         }
 
-        for ( const auto & ids : { std::pair<int32_t, int32_t>( 0, 1 ), std::pair<int32_t, int32_t>( 1, 0 ) } ) {
-            ArmyInfo & first = armyInfo[ids.first];
-            const ArmyInfo & second = armyInfo[ids.second];
+        if ( le.MousePressRight( buttonStart.area() ) ) {
+            fheroes2::showStandardTextMessage( _( "Start" ), _( "Start the battle." ), 0 );
+        }
+        else if ( le.MousePressRight( buttonExit.area() ) ) {
+            fheroes2::showStandardTextMessage( _( "Exit" ), _( "Exit this menu." ), 0 );
+        }
+        else if ( le.MousePressRight( buttonReset.area() ) ) {
+            fheroes2::showStandardTextMessage( _( "Reset" ), _( "Reset to default settings." ), 0 );
+        }
+
+        for ( const auto & [firstId, secondId] : { std::pair<int32_t, int32_t>( 0, 1 ), std::pair<int32_t, int32_t>( 1, 0 ) } ) {
+            ArmyInfo & first = armyInfo[firstId];
+            const ArmyInfo & second = armyInfo[secondId];
 
             if ( le.MouseClickLeft( first.portraitRoi ) ) {
-                int hid = Dialog::selectHeroes( first.hero ? first.hero->GetID() : Heroes::UNKNOWN );
+                const int hid = Dialog::selectHeroes( first.hero ? first.hero->GetID() : Heroes::UNKNOWN );
                 if ( second.hero && hid == second.hero->GetID() ) {
                     fheroes2::showStandardTextMessage( _( "Error" ), _( "Please select another hero." ), Dialog::OK );
                 }
@@ -255,12 +276,19 @@ bool Battle::Only::setup( const bool allowBackup, bool & reset )
                     updateHero( first, cur_pt );
                 }
 
-                redraw = true;
+                redrawOpponents( cur_pt );
+
+                first.needRedraw = true;
+                needRedrawOpponentsStats = true;
+
+                // User can not click two hero portraits at the same time so we can break the loop.
+                break;
             }
         }
 
         if ( attackedArmyControlInfo == nullptr && armyInfo[1].hero != nullptr ) {
             attackedArmyControlInfo = std::make_unique<ControlInfo>( fheroes2::Point{ cur_pt.x + 500, cur_pt.y + 425 }, armyInfo[1].player.GetControl() );
+            needRedrawControlInfo = true;
         }
 
         for ( const auto & [hero, index] : { std::pair<Heroes *, size_t>( armyInfo[0].hero, 0 ), std::pair<Heroes *, size_t>( armyInfo[1].hero, 1 ) } ) {
@@ -271,41 +299,41 @@ bool Battle::Only::setup( const bool allowBackup, bool & reset )
             if ( le.MouseClickLeft( attackRoi[index] ) ) {
                 uint32_t value = hero->attack;
                 if ( Dialog::SelectCount( _( "Set Attack Skill" ), 0, primaryMaxValue, value ) ) {
-                    hero->attack = value;
+                    hero->attack = static_cast<int>( value );
 
-                    redraw = true;
+                    needRedrawOpponentsStats = true;
                 }
             }
             else if ( le.MouseClickLeft( defenseRoi[index] ) ) {
                 uint32_t value = hero->defense;
                 if ( Dialog::SelectCount( _( "Set Defense Skill" ), 0, primaryMaxValue, value ) ) {
-                    hero->defense = value;
+                    hero->defense = static_cast<int>( value );
 
-                    redraw = true;
+                    needRedrawOpponentsStats = true;
                 }
             }
             else if ( le.MouseClickLeft( powerRoi[index] ) ) {
                 uint32_t value = hero->power;
                 if ( Dialog::SelectCount( _( "Set Power Skill" ), 0, primaryMaxValue, value ) ) {
-                    hero->power = value;
+                    hero->power = static_cast<int>( value );
 
-                    redraw = true;
+                    needRedrawOpponentsStats = true;
                 }
             }
             else if ( le.MouseClickLeft( knowledgeRoi[index] ) ) {
                 uint32_t value = hero->knowledge;
                 if ( Dialog::SelectCount( _( "Set Knowledge Skill" ), 0, primaryMaxValue, value ) ) {
-                    hero->knowledge = value;
+                    hero->knowledge = static_cast<int>( value );
 
                     updateSpellPoints = true;
-                    redraw = true;
+                    needRedrawOpponentsStats = true;
                 }
             }
         }
 
-        for ( const auto & ids : { std::pair<int32_t, int32_t>{ 0, 1 }, std::pair<int32_t, int32_t>{ 1, 0 } } ) {
-            ArmyUI & firstUI = armyInfo[ids.first].ui;
-            ArmyUI & secondUI = armyInfo[ids.second].ui;
+        for ( const auto & [firstId, secondId] : { std::pair<int32_t, int32_t>{ 0, 1 }, std::pair<int32_t, int32_t>{ 1, 0 } } ) {
+            const ArmyUI & firstUI = armyInfo[firstId].ui;
+            const ArmyUI & secondUI = armyInfo[secondId].ui;
 
             if ( firstUI.army != nullptr && le.MouseCursor( firstUI.army->GetArea() ) && firstUI.army->QueueEventProcessing() ) {
                 if ( firstUI.artifact != nullptr && firstUI.artifact->isSelected() ) {
@@ -320,7 +348,7 @@ bool Battle::Only::setup( const bool allowBackup, bool & reset )
                     secondUI.army->ResetSelected();
                 }
 
-                redraw = true;
+                armyInfo[firstId].needRedraw = true;
             }
             else if ( firstUI.artifact != nullptr && le.MouseCursor( firstUI.artifact->GetArea() ) && firstUI.artifact->QueueEventProcessing() ) {
                 if ( firstUI.army != nullptr && firstUI.army->isSelected() ) {
@@ -335,8 +363,9 @@ bool Battle::Only::setup( const bool allowBackup, bool & reset )
                     secondUI.army->ResetSelected();
                 }
 
+                armyInfo[firstId].needRedraw = true;
                 updateSpellPoints = true;
-                redraw = true;
+                needRedrawOpponentsStats = true;
             }
             else if ( firstUI.morale != nullptr && le.MouseCursor( firstUI.morale->GetArea() ) ) {
                 MoraleIndicator::QueueEventProcessing( *firstUI.morale );
@@ -344,11 +373,11 @@ bool Battle::Only::setup( const bool allowBackup, bool & reset )
             else if ( firstUI.luck != nullptr && le.MouseCursor( firstUI.luck->GetArea() ) ) {
                 LuckIndicator::QueueEventProcessing( *firstUI.luck );
             }
-            else if ( firstUI.primarySkill != nullptr && le.MouseCursor( firstUI.primarySkill->GetArea() ) && firstUI.primarySkill->QueueEventProcessing() ) {
-                redraw = true;
+            else if ( firstUI.primarySkill != nullptr && le.MouseCursor( firstUI.primarySkill->GetArea() ) ) {
+                firstUI.primarySkill->QueueEventProcessing();
             }
             else if ( firstUI.secondarySkill != nullptr && le.MouseCursor( firstUI.secondarySkill->GetArea() ) && firstUI.secondarySkill->QueueEventProcessing() ) {
-                redraw = true;
+                armyInfo[firstId].needRedraw = true;
             }
         }
 
@@ -359,13 +388,13 @@ bool Battle::Only::setup( const bool allowBackup, bool & reset )
                 attackedArmyControlInfo->result = CONTROL_HUMAN;
                 armyInfo[1].player.SetControl( CONTROL_HUMAN );
 
-                redraw = true;
+                needRedrawControlInfo = true;
             }
             else if ( le.MouseClickLeft( attackedArmyControlInfo->rtAI ) && armyInfo[1].player.isControlHuman() ) {
                 attackedArmyControlInfo->result = CONTROL_AI;
                 armyInfo[1].player.SetControl( CONTROL_AI );
 
-                redraw = true;
+                needRedrawControlInfo = true;
             }
         }
 
@@ -379,25 +408,31 @@ bool Battle::Only::setup( const bool allowBackup, bool & reset )
             }
         }
 
-        if ( !redraw ) {
-            continue;
+        if ( needRedrawOpponentsStats ) {
+            redrawOpponentsStats( cur_pt );
+
+            needRender = true;
         }
 
-        RedrawBaseInfo( cur_pt );
+        for ( const int32_t i : { 0, 1 } ) {
+            if ( armyInfo[i].needRedraw ) {
+                armyInfo[i].ui.redraw( display );
+                armyInfo[i].needRedraw = false;
 
-        armyInfo[0].ui.redraw( display );
-        armyInfo[1].ui.redraw( display );
+                needRender = true;
+            }
+        }
 
-        if ( attackedArmyControlInfo ) {
+        if ( needRedrawControlInfo ) {
+            assert( attackedArmyControlInfo != nullptr );
             attackedArmyControlInfo->Redraw();
+
+            needRender = true;
         }
 
-        fheroes2::Blit( buttonOverride, display, cur_pt.x + 276, cur_pt.y + 428 );
-
-        buttonOkay.draw();
-        buttonCancel.draw();
-        buttonReset.draw();
-        display.render();
+        if ( needRender ) {
+            display.render();
+        }
     }
 
     armyInfo[0].ui = {};
@@ -419,11 +454,13 @@ void Battle::Only::updateHero( ArmyInfo & info, const fheroes2::Point & offset )
     updateArmyUI( info.ui, info.hero, offset, info.armyId );
 }
 
-void Battle::Only::RedrawBaseInfo( const fheroes2::Point & top ) const
+void Battle::Only::redrawOpponents( const fheroes2::Point & top ) const
 {
     fheroes2::Display & display = fheroes2::Display::instance();
 
-    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::SWAPWIN, 0 ), display, top.x, top.y );
+    const fheroes2::Sprite & background = fheroes2::AGG::GetICN( ICN::SWAPWIN, 0 );
+    const fheroes2::Rect textRoi( top.x + 89, top.y + 27, 462, 17 );
+    fheroes2::Copy( background, 89, 27, display, textRoi );
 
     std::string message = _( "%{race1} %{name1} vs %{race2} %{name2}" );
 
@@ -445,13 +482,14 @@ void Battle::Only::RedrawBaseInfo( const fheroes2::Point & top ) const
     }
 
     fheroes2::Text text( std::move( message ), fheroes2::FontType::normalWhite() );
-    text.draw( top.x + 320 - text.width() / 2, top.y + 29, display );
+    text.drawInRoi( top.x + 320 - text.width() / 2, top.y + 29, display, textRoi );
 
-    for ( size_t idx : { 0, 1 } ) {
+    for ( const size_t idx : { 0, 1 } ) {
         if ( armyInfo[idx].hero ) {
             const fheroes2::Sprite & port1 = armyInfo[idx].hero->GetPortrait( PORT_BIG );
-            if ( !port1.empty() )
-                fheroes2::Blit( port1, display, armyInfo[idx].portraitRoi.x, armyInfo[idx].portraitRoi.y );
+            if ( !port1.empty() ) {
+                fheroes2::Copy( port1, 0, 0, display, armyInfo[idx].portraitRoi );
+            }
         }
         else {
             fheroes2::Fill( display, armyInfo[idx].portraitRoi.x, armyInfo[idx].portraitRoi.y, armyInfo[idx].portraitRoi.width, armyInfo[idx].portraitRoi.height, 0 );
@@ -460,7 +498,14 @@ void Battle::Only::RedrawBaseInfo( const fheroes2::Point & top ) const
                        armyInfo[idx].portraitRoi.y + armyInfo[idx].portraitRoi.height / 2 - 8, display );
         }
     }
+}
 
+void Battle::Only::redrawOpponentsStats( const fheroes2::Point & top ) const
+{
+    fheroes2::Display & display = fheroes2::Display::instance();
+    const fheroes2::Sprite & background = fheroes2::AGG::GetICN( ICN::SWAPWIN, 0 );
+
+    fheroes2::Copy( background, 262, 61, display, top.x + 262, top.y + 61, 115, 109 );
     fheroes2::RedrawPrimarySkillInfo( top, armyInfo[0].ui.primarySkill.get(), armyInfo[1].ui.primarySkill.get() );
 }
 
@@ -475,7 +520,7 @@ void Battle::Only::StartBattle()
 
     conf.SetCurrentColor( armyInfo[0].player.GetColor() );
 
-    for ( int32_t idx : { 0, 1 } ) {
+    for ( const int32_t idx : { 0, 1 } ) {
         Players::SetPlayerRace( armyInfo[idx].player.GetColor(), armyInfo[idx].player.GetRace() );
         Players::SetPlayerControl( armyInfo[idx].player.GetColor(), armyInfo[idx].player.GetControl() );
         armyInfo[idx].controlType = armyInfo[idx].player.GetControl();

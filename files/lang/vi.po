@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-24 11:33+0000\n"
+"POT-Creation-Date: 2024-01-02 13:33+0000\n"
 "PO-Revision-Date: 2023-12-20 19:47+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -197,6 +197,10 @@ msgstr "MIN"
 msgid "RESET"
 msgstr "CÀI LẠI"
 
+#, fuzzy
+msgid "START"
+msgstr "LÀM LẠI"
+
 msgid "CASTLE"
 msgstr "LÂU ĐÀI"
 
@@ -380,7 +384,8 @@ msgstr "Bội số"
 msgid "Troops of %{count} alignments -%{penalty}"
 msgstr "Quân của %{count} sắp hàng -%{penalty}"
 
-msgid "Some undead in group -1"
+#, fuzzy
+msgid "Some undead in army -1"
 msgstr "Trong đội có xác sống -1"
 
 msgid "View %{name}"
@@ -932,6 +937,23 @@ msgstr "Con người"
 
 msgid "AI"
 msgstr "AI"
+
+#, fuzzy
+msgid "Start"
+msgstr "Chơi lại"
+
+#, fuzzy
+msgid "Start the battle."
+msgstr "Quay lại trận chiến."
+
+msgid "Exit"
+msgstr "Thoát"
+
+msgid "Reset"
+msgstr ""
+
+msgid "Reset to default settings."
+msgstr ""
 
 msgid "Please select another hero."
 msgstr "Hãy chọn một tướng khác."
@@ -2491,7 +2513,8 @@ msgstr ""
 "Giếng tăng tốc độ phát triển của tất cả các ngôi nhà thêm %{count} sinh vật "
 "mỗi tuần."
 
-msgid "The Statue increases your town's income by %{count} gold per day."
+#, fuzzy
+msgid "The Statue increases the town's income by %{count} gold per day."
 msgstr ""
 "Tượng tăng thu nhập cho thị trấn của ngươi thêm %{count} vàng mỗi ngày."
 
@@ -2515,9 +2538,10 @@ msgstr ""
 "Hào làm chậm các đơn vị tấn công. Bất kỳ đơn vị nào đi vào hào đều phải kết "
 "thúc lượt của mình ở đó và trở nên dễ bị tấn công hơn."
 
+#, fuzzy
 msgid ""
-"The Castle improves town defense and increases income to %{count} gold per "
-"day."
+"The Castle improves the town's defense and increases its income to %{count} "
+"gold per day."
 msgstr ""
 "Lâu đài cải thiện khả năng phòng thủ của thị trấn và tăng thu nhập lên "
 "%{count} vàng mỗi ngày."
@@ -2556,9 +2580,6 @@ msgstr ""
 "Ngươi phải mua một cuốn sách thần chú để sử dụng hội pháp sư, nhưng hiện tại "
 "ngươi không có chỗ cho một cuốn sách thần chú. Hãy thử đưa một trong những "
 "cổ vật của ngươi cho một anh tướng khác."
-
-msgid "Exit"
-msgstr "Thoát"
 
 msgid "Click to show next town."
 msgstr "Nhấp để xem thị trấn sau."
@@ -3707,9 +3728,6 @@ msgstr "Lưu bản đồ hiện tại."
 msgid "Quit out of the map editor."
 msgstr "Thoát khỏi biên tập bản đồ."
 
-msgid "Monster"
-msgstr "Quái vật"
-
 msgid "Objects cannot be placed outside the map."
 msgstr "Đối tượng không thể đặt ra ngoài bản đồ."
 
@@ -3719,32 +3737,17 @@ msgstr "Quái vật không thể đặt trên nước."
 msgid "Choose a tile which does not contain any objects."
 msgstr "Chọn một ô mà không chứa bất kỳ đối tượng nào."
 
-msgid "Treasure"
-msgstr "Kho báu"
-
 msgid "Treasures cannot be placed on water."
 msgstr "Kho báu không thể đặt trên nước."
-
-msgid "Heroes"
-msgstr "Tướng"
 
 msgid "Heroes cannot be placed on water."
 msgstr "Tướng không thể đặt trên nước."
 
-msgid "Artifacts"
-msgstr "Bảo vật"
-
 msgid "Artifacts cannot be placed on water."
 msgstr "Bảo vật không thể đặt trên nước."
 
-msgid "Ocean object"
-msgstr "Đối tượng đại dương"
-
 msgid "Ocean object must be placed on water."
 msgstr "Đối tượng đại dương phải đặt trên mặt nước."
-
-msgid "Towns"
-msgstr "Thị trấn"
 
 msgid "Towns cannot be placed on water."
 msgstr "Thị trấn không thể đặt trên nước."
@@ -3802,6 +3805,9 @@ msgstr "Đối tượng Đất hoang"
 msgid "Miscellaneous"
 msgstr "Fineous"
 
+msgid "Artifacts"
+msgstr "Bảo vật"
+
 msgid "Dwellings"
 msgstr ""
 
@@ -3814,6 +3820,12 @@ msgstr "Sức"
 
 msgid "Treasures"
 msgstr "Kho báu"
+
+msgid "Towns"
+msgstr "Thị trấn"
+
+msgid "Heroes"
+msgstr "Tướng"
 
 msgid "Terrain"
 msgstr "Địa hình"
@@ -5793,6 +5805,9 @@ msgstr ""
 msgid "You come upon the remains of an unfortunate adventurer."
 msgstr "Ngươi tình cờ gặp hài cốt của một nhà thám hiểm không may."
 
+msgid "Treasure"
+msgstr "Kho báu"
+
 msgid "Searching through the tattered clothing, you find the %{artifact}."
 msgstr "Lục lọi trong bộ quần áo rách rưới, ngươi tìm thấy %{artifact}."
 
@@ -7313,25 +7328,29 @@ msgstr "Những sinh vật yếu đuối này chắc chắn sẽ chạy trốn t
 msgid "I fear these creatures are in the mood for a fight."
 msgstr "Tôi e rằng những sinh vật này đang có tâm trạng muốn đánh nhau."
 
-msgid "Your attack skill is a bonus added to each creature's attack skill."
+#, fuzzy
+msgid "The hero's attack skill is a bonus added to each unit's attack skill."
 msgstr ""
 "Kỹ năng tấn công của ngươi là phần thưởng được thêm vào kỹ năng tấn công của "
 "mỗi sinh vật."
 
-msgid "Your defense skill is a bonus added to each creature's defense skill."
+#, fuzzy
+msgid "The hero's defense skill is a bonus added to each unit's defense skill."
 msgstr ""
 "Kỹ năng phòng thủ của ngươi là phần thưởng được thêm vào kỹ năng phòng thủ "
 "của mỗi sinh vật."
 
-msgid "Your spell power determines the length or power of a spell."
+#, fuzzy
+msgid "The hero's spell power determines the duration or power of a spell."
 msgstr ""
 "Sức mạnh phép thuật của ngươi quyết định độ dài hoặc sức mạnh của một câu "
 "thần chú."
 
+#, fuzzy
 msgid ""
-"Your knowledge determines how many spell points your hero may have. Under "
-"normal circumstances, a hero is limited to 10 spell points per level of "
-"knowledge."
+" The hero's knowledge determines how many spell points the hero may have. "
+"Under normal circumstances, a hero is limited to 10 spell points per level "
+"of knowledge."
 msgstr ""
 "Kiến thức của ngươi quyết định số điểm phép thuật mà tướng của ngươi có thể "
 "có. Trong trường hợp bình thường, một tướng bị giới hạn 10 điểm phép thuật "
@@ -7522,101 +7541,119 @@ msgstr ""
 msgid "%{skill} eliminates the movement penalty for rough terrain."
 msgstr "%{skill} loại bỏ hình phạt di chuyển đối với địa hình gồ ghề."
 
+#, fuzzy
 msgid ""
-"%{skill} increases the damage done by range attacking creatures by %{count} "
-"percent."
+"%{skill} increases the damage done by the hero's range attacking creatures "
+"by %{count} percent."
 msgstr ""
 "%{skill} tăng sát thương do các sinh vật tấn công trong phạm vi gây ra thêm "
 "%{count} phần trăm."
 
-msgid "%{skill} increases your hero's movement points by %{count} percent."
+#, fuzzy
+msgid "%{skill} increases the hero's movement points by %{count} percent."
 msgstr ""
 "%{skill} tăng điểm di chuyển của anh hùng của ngươi thêm %{count} phần trăm."
 
-msgid "%{skill} increases your hero's viewable area by one square."
-msgid_plural ""
-"%{skill} increases your hero's viewable area by %{count} squares."
+#, fuzzy
+msgid "%{skill} increases the hero's viewable area by one square."
+msgid_plural "%{skill} increases the hero's viewable area by %{count} squares."
 msgstr[0] ""
 "%{skill} tăng diện tích có thể xem của tướng của ngươi thêm một ô vuông."
 
+#, fuzzy
 msgid ""
-"%{skill} allows you to negotiate with monsters who are weaker than your "
-"group. "
+"%{skill} allows the hero to negotiate with monsters who are weaker than "
+"their army."
 msgstr ""
 "%{skill} cho phép ngươi đàm phán với những quái vật yếu hơn nhóm của ngươi. "
 
-msgid "Approximately %{count} percent of the creatures may offer to join you."
+#, fuzzy
+msgid ""
+"Approximately %{count} percent of the creatures may offer to join the hero."
 msgstr "Khoảng %{count} phần trăm sinh vật có thể đề nghị tham gia cùng ngươi."
 
-msgid "All of the creatures may offer to join you."
+#, fuzzy
+msgid "All of the creatures may offer to join the hero."
 msgstr "Tất cả các sinh vật có thể đề nghị tham gia cùng ngươi."
 
+#, fuzzy
 msgid ""
-"%{skill} increases your hero's movement points over water by %{count} "
-"percent."
+"%{skill} increases the hero's movement points over water by %{count} percent."
 msgstr ""
 "%{skill} tăng điểm di chuyển của anh hùng trên mặt nước thêm %{count} phần "
 "trăm."
 
-msgid "%{skill} increases your hero's troops morale by %{count}."
+#, fuzzy
+msgid "%{skill} increases the hero's troops morale by %{count}."
 msgstr "%{skill} tăng tinh thần quân đội của tướng của ngươi lên %{count}."
 
-msgid "%{skill} allows your hero to learn third level spells."
+#, fuzzy
+msgid "%{skill} allows the hero to learn third level spells."
 msgstr "%{skill} cho phép tướng của ngươi học các phép thuật cấp ba."
 
-msgid "%{skill} allows your hero to learn fourth level spells."
+#, fuzzy
+msgid "%{skill} allows the hero to learn fourth level spells."
 msgstr "%{skill} cho phép tướng của ngươi học các phép thuật cấp bốn."
 
-msgid "%{skill} allows your hero to learn fifth level spells."
+#, fuzzy
+msgid "%{skill} allows the hero to learn fifth level spells."
 msgstr "%{skill} cho phép tướng của ngươi học các phép thuật cấp năm."
 
-msgid "%{skill} regenerates one additional spell point per day to your hero."
+#, fuzzy
+msgid "%{skill} regenerates one additional spell point per day to the hero."
 msgid_plural ""
-"%{skill} regenerates %{count} additional spell points per day to your hero."
+"%{skill} regenerates %{count} additional spell points per day to the hero."
 msgstr[0] ""
 "%{skill} tái tạo thêm một điểm phép thuật mỗi ngày cho tướng của ngươi."
 
-msgid "%{skill} increases your hero's luck by %{count}."
+#, fuzzy
+msgid "%{skill} increases the hero's luck by %{count}."
 msgstr "%{skill} tăng may mắn cho tướng của ngươi thêm %{count}."
 
+#, fuzzy
 msgid ""
-"%{skill} gives your hero's catapult shots a greater chance to hit and do "
+"%{skill} gives the hero's catapult shots a greater chance to hit and do "
 "damage to castle walls."
 msgstr ""
 "%{skill} giúp các cú bắn bằng máy bắn đá của tướng của ngươi có cơ hội trúng "
 "đích cao hơn và gây sát thương lên tường lâu đài."
 
+#, fuzzy
 msgid ""
-"%{skill} gives your hero's catapult an extra shot, and each shot has a "
+"%{skill} gives the hero's catapult an extra shot, and each shot has a "
 "greater chance to hit and do damage to castle walls."
 msgstr ""
 "%{skill} giúp máy bắn đá của tướng của ngươi có thêm một phát bắn và mỗi "
 "phát bắn có cơ hội trúng đích và gây sát thương lên tường lâu đài cao hơn."
 
+#, fuzzy
 msgid ""
-"%{skill} gives your hero's catapult an extra shot, and each shot "
+"%{skill} gives the hero's catapult an extra shot, and each shot "
 "automatically destroys any wall, except a fortified wall in a Knight castle."
 msgstr ""
 "%{skill} cung cấp thêm cho máy bắn đá của tướng của ngươi một phát bắn và "
 "mỗi phát bắn sẽ tự động phá hủy bất kỳ bức tường nào, ngoại trừ bức tường "
 "kiên cố trong lâu đài Hiệp sĩ."
 
+#, fuzzy
 msgid ""
-"%{skill} gives your hero a %{count} percent chance to learn any given 1st or "
+"%{skill} gives the hero a %{count} percent chance to learn any given 1st or "
 "2nd level spell that was cast by an enemy during combat."
 msgstr ""
 "%{skill} mang lại cho tướng của ngươi %{count} phần trăm cơ hội học bất kỳ "
 "phép thuật cấp 1 hoặc cấp 2 được sử dụng bởi kẻ thù trong trận chiến."
 
+#, fuzzy
 msgid ""
-"%{skill} gives your hero a %{count} percent chance to learn any given 3rd "
+"%{skill} gives the hero a %{count} percent chance to learn any given 3rd "
 "level spell (or below) that was cast by an enemy during combat."
 msgstr ""
 "%{skill} mang lại cho tướng của ngươi %{count} phần trăm cơ hội học bất kỳ "
 "phép thuật cấp 3 (hoặc thấp hơn) được sử dụng bởi kẻ thù trong trận chiến."
 
+#, fuzzy
 msgid ""
-"%{skill} gives your hero a %{count} percent chance to learn any given 4th "
+"%{skill} gives the hero a %{count} percent chance to learn any given 4th "
 "level spell (or below) that was cast by an enemy during combat."
 msgstr ""
 "%{skill} mang lại cho tướng của ngươi %{count} phần trăm cơ hội học bất kỳ "
@@ -7629,8 +7666,9 @@ msgstr ""
 "%{skill} cho phép %{count} phần trăm sinh vật bị giết trong trận chiến được "
 "hồi sinh từ cõi chết dưới dạng Bộ xương."
 
+#, fuzzy
 msgid ""
-"Your hero produces %{count} gold pieces per day as tax revenue from estates."
+"The hero produces %{count} gold pieces per day as tax revenue from estates."
 msgstr ""
 "Tướng của ngươi tạo ra %{count} miếng vàng mỗi ngày dưới dạng doanh thu thuế "
 "từ tài sản."
@@ -7756,23 +7794,26 @@ msgstr "Tuyệt"
 msgid "luck|Irish"
 msgstr ""
 
+#, fuzzy
 msgid ""
-"Bad luck sometimes falls on your armies in combat, causing their attacks to "
-"only do half damage."
+"Bad luck sometimes falls on the hero's units in combat, causing their "
+"attacks to only do half damage."
 msgstr ""
 "Vận rủi đôi khi rơi vào quân đội của ngươi trong chiến đấu, khiến đòn tấn "
 "công của họ chỉ gây sát thương một nửa."
 
+#, fuzzy
 msgid ""
-"Neutral luck means your armies will never get lucky or unlucky attacks on "
-"the enemy."
+"Neutral luck means the hero's units will never get lucky or unlucky attacks "
+"on the enemy."
 msgstr ""
 "May mắn trung tính có nghĩa là quân đội của ngươi sẽ không bao giờ gặp may "
 "mắn hoặc xui xẻo tấn công kẻ thù."
 
+#, fuzzy
 msgid ""
-"Good luck sometimes lets your armies get lucky attacks (double strength) in "
-"combat."
+"Good luck sometimes lets the hero's units get lucky attacks (double "
+"strength) in combat."
 msgstr ""
 "May mắn tốt đôi khi giúp quân đội của ngươi nhận được những đòn tấn công may "
 "mắn (sức mạnh gấp đôi) trong chiến đấu."
@@ -7798,18 +7839,21 @@ msgstr "Tuyệt vời"
 msgid "morale|Blood!"
 msgstr "Máu chiến!"
 
-msgid "Bad morale may cause your armies to freeze in combat."
+#, fuzzy
+msgid "Bad morale may cause the hero's units to freeze in combat."
 msgstr ""
 "Tinh thần tồi tệ có thể khiến quân đội của ngươi tê liệt trong chiến đấu."
 
+#, fuzzy
 msgid ""
-"Neutral morale means your armies will never be blessed with extra attacks or "
-"freeze in combat."
+"Neutral morale means the hero's units will never be blessed with extra "
+"attacks or freeze in combat."
 msgstr ""
 "Tinh thần trung lập có nghĩa là quân đội của ngươi sẽ không bao giờ được ban "
 "phước với các cuộc tấn công bổ sung hoặc đóng băng trong chiến đấu."
 
-msgid "Good morale may give your armies extra attacks in combat."
+#, fuzzy
+msgid "Good morale may give the hero's units extra attacks in combat."
 msgstr ""
 "Tinh thần tốt có thể mang lại cho quân đội của ngươi nhiều đòn tấn công hơn "
 "trong chiến đấu."
@@ -8110,6 +8154,9 @@ msgstr[0] "Hải đăng"
 msgid "Water Wheel"
 msgid_plural "Water Wheels"
 msgstr[0] "Bánh xe Nước"
+
+msgid "Monster"
+msgstr "Quái vật"
 
 msgid "Obelisk"
 msgstr "Đài tưởng niệm"
@@ -11109,6 +11156,9 @@ msgstr ""
 "Kiểm tra phiên bản mới nhất của trò chơi tại\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Ocean object"
+#~ msgstr "Đối tượng đại dương"
 
 #~ msgid "Ocean Objects"
 #~ msgstr "Đối tượng Đại dương"

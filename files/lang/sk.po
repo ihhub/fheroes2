@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-24 11:33+0000\n"
+"POT-Creation-Date: 2024-01-02 13:33+0000\n"
 "PO-Revision-Date: 2023-09-11 20:22+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -204,6 +204,10 @@ msgid "RESET"
 msgstr ""
 
 #, fuzzy
+msgid "START"
+msgstr "REŠTART"
+
+#, fuzzy
 msgid "CASTLE"
 msgstr ""
 "MESTÁ/\n"
@@ -387,7 +391,8 @@ msgstr "Viaceré"
 msgid "Troops of %{count} alignments -%{penalty}"
 msgstr "Jednotky %{count} zoskupení -%{penalty}"
 
-msgid "Some undead in group -1"
+#, fuzzy
+msgid "Some undead in army -1"
 msgstr "Nemŕtvi v skupine -1"
 
 msgid "View %{name}"
@@ -938,6 +943,23 @@ msgstr "Človek"
 
 msgid "AI"
 msgstr "UI"
+
+#, fuzzy
+msgid "Start"
+msgstr "Reštart"
+
+#, fuzzy
+msgid "Start the battle."
+msgstr "Späť do boja."
+
+msgid "Exit"
+msgstr "Preč"
+
+msgid "Reset"
+msgstr ""
+
+msgid "Reset to default settings."
+msgstr ""
 
 msgid "Please select another hero."
 msgstr "Prosím zvoľ ďalšieho hrdinu."
@@ -2479,7 +2501,8 @@ msgstr ""
 "Studňa zvyšuje rýchlosť nárastu bojovníkov všetkých obydlí o %{count} za "
 "týždeň."
 
-msgid "The Statue increases your town's income by %{count} gold per day."
+#, fuzzy
+msgid "The Statue increases the town's income by %{count} gold per day."
 msgstr "Socha zvyšuje príjem tvojho mesta o %{count} zlata za deň."
 
 msgid "The Left Turret provides extra firepower during castle combat."
@@ -2502,9 +2525,10 @@ msgstr ""
 "Priekopa spomaľuje útočiace jednotky. Každá jednotka, ktorá vstúpi do "
 "priekopy, tam musí svoj ťah ukončiť a stane sa zraniteľnejšou voči útoku."
 
+#, fuzzy
 msgid ""
-"The Castle improves town defense and increases income to %{count} gold per "
-"day."
+"The Castle improves the town's defense and increases its income to %{count} "
+"gold per day."
 msgstr "Hrad zlepšuje obranu mesta a zvyšuje príjem na %{count} zlata za deň."
 
 msgid ""
@@ -2539,9 +2563,6 @@ msgstr ""
 "Ak chceš používať cech mágov, musíš si kúpiť knihu kúziel, ale momentálne "
 "nemáš miesto pre knihu kúziel. Skús dať jeden zo svojich artefaktov inému "
 "hrdinovi."
-
-msgid "Exit"
-msgstr "Preč"
 
 msgid "Click to show next town."
 msgstr "Kliknutím zobraz ďalšie mesto."
@@ -3690,9 +3711,6 @@ msgstr "Uložiť aktuálnu mapu."
 msgid "Quit out of the map editor."
 msgstr "Ukončiť prácu v editore máp."
 
-msgid "Monster"
-msgstr "Tvor"
-
 #, fuzzy
 msgid "Objects cannot be placed outside the map."
 msgstr "Toto kúzlo nemožno použiť na lodi."
@@ -3703,36 +3721,20 @@ msgstr ""
 msgid "Choose a tile which does not contain any objects."
 msgstr ""
 
-msgid "Treasure"
-msgstr "Poklad"
-
 #, fuzzy
 msgid "Treasures cannot be placed on water."
 msgstr "Toto kúzlo nemožno použiť na lodi."
 
-msgid "Heroes"
-msgstr "Hrdinovia"
-
 msgid "Heroes cannot be placed on water."
 msgstr ""
-
-msgid "Artifacts"
-msgstr "Artefakty"
 
 #, fuzzy
 msgid "Artifacts cannot be placed on water."
 msgstr "Toto kúzlo nemožno použiť na lodi."
 
 #, fuzzy
-msgid "Ocean object"
-msgstr "Objekty oceánu"
-
-#, fuzzy
 msgid "Ocean object must be placed on water."
 msgstr "Toto kúzlo nemožno použiť na lodi."
-
-msgid "Towns"
-msgstr "Mestá"
 
 #, fuzzy
 msgid "Towns cannot be placed on water."
@@ -3793,6 +3795,9 @@ msgstr "Objekty pustatiny"
 msgid "Miscellaneous"
 msgstr "Fineous"
 
+msgid "Artifacts"
+msgstr "Artefakty"
+
 #, fuzzy
 msgid "Dwellings"
 msgstr "Polčíci"
@@ -3806,6 +3811,12 @@ msgstr "Sila"
 
 msgid "Treasures"
 msgstr "Poklady"
+
+msgid "Towns"
+msgstr "Mestá"
+
+msgid "Heroes"
+msgstr "Hrdinovia"
 
 #, fuzzy
 msgid "Terrain"
@@ -5786,6 +5797,9 @@ msgstr ""
 msgid "You come upon the remains of an unfortunate adventurer."
 msgstr "Narazíš na pozostatky nešťastného dobrodruha."
 
+msgid "Treasure"
+msgstr "Poklad"
+
 msgid "Searching through the tattered clothing, you find the %{artifact}."
 msgstr "Pri prehľadávaní roztrhaného oblečenia nájdeš %{artifact}."
 
@@ -7255,23 +7269,27 @@ msgstr "Títo slabí bojovníci pred nami určite utečú."
 msgid "I fear these creatures are in the mood for a fight."
 msgstr "Obávam sa, že títo bojovníci sú naladení na boj."
 
-msgid "Your attack skill is a bonus added to each creature's attack skill."
+#, fuzzy
+msgid "The hero's attack skill is a bonus added to each unit's attack skill."
 msgstr ""
 "Tvoja útočná schopnosť je bonus pridaný k útočnej schopnosti každého "
 "bojovníka."
 
-msgid "Your defense skill is a bonus added to each creature's defense skill."
+#, fuzzy
+msgid "The hero's defense skill is a bonus added to each unit's defense skill."
 msgstr ""
 "Tvoja obranná schopnosť je bonus pridaný k obrannej schopnosti každého "
 "bojovníka."
 
-msgid "Your spell power determines the length or power of a spell."
+#, fuzzy
+msgid "The hero's spell power determines the duration or power of a spell."
 msgstr "Tvoja Sila kúziel určuje dĺžku alebo silu kúzla."
 
+#, fuzzy
 msgid ""
-"Your knowledge determines how many spell points your hero may have. Under "
-"normal circumstances, a hero is limited to 10 spell points per level of "
-"knowledge."
+" The hero's knowledge determines how many spell points the hero may have. "
+"Under normal circumstances, a hero is limited to 10 spell points per level "
+"of knowledge."
 msgstr ""
 "Tvoje vedomosti určujú, koľko bodov kúziel môže mať tvoj hrdina. Za "
 "normálnych okolností je hrdina obmedzený na 10 bodov kúziel na úroveň "
@@ -7462,57 +7480,68 @@ msgstr ""
 msgid "%{skill} eliminates the movement penalty for rough terrain."
 msgstr "%{skill} eliminuje postih za pohyb po nerovnom teréne."
 
+#, fuzzy
 msgid ""
-"%{skill} increases the damage done by range attacking creatures by %{count} "
-"percent."
+"%{skill} increases the damage done by the hero's range attacking creatures "
+"by %{count} percent."
 msgstr ""
 "%{skill} zvyšuje poškodenie spôsobené bojovníkmi útočiacimi na diaľku o "
 "%{count} percent."
 
-msgid "%{skill} increases your hero's movement points by %{count} percent."
+#, fuzzy
+msgid "%{skill} increases the hero's movement points by %{count} percent."
 msgstr "%{skill} zvýši pohybové body tvojho hrdinu o %{count} percent."
 
-msgid "%{skill} increases your hero's viewable area by one square."
-msgid_plural ""
-"%{skill} increases your hero's viewable area by %{count} squares."
+#, fuzzy
+msgid "%{skill} increases the hero's viewable area by one square."
+msgid_plural "%{skill} increases the hero's viewable area by %{count} squares."
 msgstr[0] "%{skill} zväčší dohľadnú oblasť tvojho hrdinu o jeden štvorec."
 msgstr[1] "%{skill} zväčší dohľadnú oblasť tvojho hrdinu o %{count} štvorce."
 msgstr[2] "%{skill} zväčší dohľadnú oblasť tvojho hrdinu o %{count} štvorcov."
 
+#, fuzzy
 msgid ""
-"%{skill} allows you to negotiate with monsters who are weaker than your "
-"group. "
+"%{skill} allows the hero to negotiate with monsters who are weaker than "
+"their army."
 msgstr ""
 "%{skill} ti umožňuje vyjednávanie s príšerami, ktoré sú slabšie ako tvoja "
 "skupina. "
 
-msgid "Approximately %{count} percent of the creatures may offer to join you."
+#, fuzzy
+msgid ""
+"Approximately %{count} percent of the creatures may offer to join the hero."
 msgstr ""
 "Približne %{count} percent bojovníkov ti môže ponúknuť, že sa k tebe pridá."
 
-msgid "All of the creatures may offer to join you."
+#, fuzzy
+msgid "All of the creatures may offer to join the hero."
 msgstr "Všetci bojovníci ti môžu ponúknuť, že sa k tebe pridajú."
 
+#, fuzzy
 msgid ""
-"%{skill} increases your hero's movement points over water by %{count} "
-"percent."
+"%{skill} increases the hero's movement points over water by %{count} percent."
 msgstr "%{skill} zvýši pohybové body tvojho hrdinu po vode o %{count} percent."
 
-msgid "%{skill} increases your hero's troops morale by %{count}."
+#, fuzzy
+msgid "%{skill} increases the hero's troops morale by %{count}."
 msgstr "%{skill} zvýši morálku vojska tvojho hrdinu o %{count}."
 
-msgid "%{skill} allows your hero to learn third level spells."
+#, fuzzy
+msgid "%{skill} allows the hero to learn third level spells."
 msgstr "%{skill} umožňuje tvojmu hrdinovi naučiť sa kúzla tretej úrovne."
 
-msgid "%{skill} allows your hero to learn fourth level spells."
+#, fuzzy
+msgid "%{skill} allows the hero to learn fourth level spells."
 msgstr "%{skill} umožňuje tvojmu hrdinovi naučiť sa kúzla štvrtej úrovne."
 
-msgid "%{skill} allows your hero to learn fifth level spells."
+#, fuzzy
+msgid "%{skill} allows the hero to learn fifth level spells."
 msgstr "%{skill} umožňuje tvojmu hrdinovi naučiť sa kúzla piatej úrovne."
 
-msgid "%{skill} regenerates one additional spell point per day to your hero."
+#, fuzzy
+msgid "%{skill} regenerates one additional spell point per day to the hero."
 msgid_plural ""
-"%{skill} regenerates %{count} additional spell points per day to your hero."
+"%{skill} regenerates %{count} additional spell points per day to the hero."
 msgstr[0] ""
 "%{skill} regeneruje tvojmu hrdinovi o %{count} bod kúziel za deň viac."
 msgstr[1] ""
@@ -7520,46 +7549,53 @@ msgstr[1] ""
 msgstr[2] ""
 "%{skill} regeneruje tvojmu hrdinovi o %{count} bodov kúziel za deň viac."
 
-msgid "%{skill} increases your hero's luck by %{count}."
+#, fuzzy
+msgid "%{skill} increases the hero's luck by %{count}."
 msgstr "%{skill} zvyšuje šťastie tvojho hrdinu o %{count}."
 
+#, fuzzy
 msgid ""
-"%{skill} gives your hero's catapult shots a greater chance to hit and do "
+"%{skill} gives the hero's catapult shots a greater chance to hit and do "
 "damage to castle walls."
 msgstr ""
 "%{skill} dáva výstrelom z katapultu tvojho hrdinu väčšiu šancu zasiahnuť a "
 "poškodiť hradné múry."
 
+#, fuzzy
 msgid ""
-"%{skill} gives your hero's catapult an extra shot, and each shot has a "
+"%{skill} gives the hero's catapult an extra shot, and each shot has a "
 "greater chance to hit and do damage to castle walls."
 msgstr ""
 "%{skill} dáva katapultu tvojho hrdinu jeden výstrel navyše a každý výstrel "
 "má väčšiu šancu zasiahnuť a poškodiť hradné múry."
 
+#, fuzzy
 msgid ""
-"%{skill} gives your hero's catapult an extra shot, and each shot "
+"%{skill} gives the hero's catapult an extra shot, and each shot "
 "automatically destroys any wall, except a fortified wall in a Knight castle."
 msgstr ""
 "%{skill} dáva katapultu tvojho hrdinu jeden výstrel navyše a každý výstrel "
 "automaticky zničí akúkoľvek stenu, okrem opevnenej steny v Rytierskom hrade."
 
+#, fuzzy
 msgid ""
-"%{skill} gives your hero a %{count} percent chance to learn any given 1st or "
+"%{skill} gives the hero a %{count} percent chance to learn any given 1st or "
 "2nd level spell that was cast by an enemy during combat."
 msgstr ""
 "%{skill} dáva tvojmu hrdinovi %{count}-percentnú šancu naučiť sa akékoľvek "
 "kúzlo 1. alebo 2. úrovne, ktoré bolo zoslané nepriateľom počas boja."
 
+#, fuzzy
 msgid ""
-"%{skill} gives your hero a %{count} percent chance to learn any given 3rd "
+"%{skill} gives the hero a %{count} percent chance to learn any given 3rd "
 "level spell (or below) that was cast by an enemy during combat."
 msgstr ""
 "%{skill} dáva tvojmu hrdinovi %{count}-percentnú šancu naučiť sa akékoľvek "
 "kúzlo 3. úrovne (alebo nižšej), ktoré bolo zoslané nepriateľom počas boja."
 
+#, fuzzy
 msgid ""
-"%{skill} gives your hero a %{count} percent chance to learn any given 4th "
+"%{skill} gives the hero a %{count} percent chance to learn any given 4th "
 "level spell (or below) that was cast by an enemy during combat."
 msgstr ""
 "%{skill} dáva tvojmu hrdinovi %{count}-percentnú šancu naučiť sa akékoľvek "
@@ -7572,8 +7608,9 @@ msgstr ""
 "%{skill} umožňuje, aby %{count} percent bojovníkov zabitých v boji vstalo z "
 "mŕtvych ako Kostlivci."
 
+#, fuzzy
 msgid ""
-"Your hero produces %{count} gold pieces per day as tax revenue from estates."
+"The hero produces %{count} gold pieces per day as tax revenue from estates."
 msgstr ""
 "Tvoj hrdina vyprodukuje %{count} zlata za deň ako daňový príjem z majetku."
 
@@ -7698,23 +7735,26 @@ msgstr "Skvelé"
 msgid "luck|Irish"
 msgstr "Írske"
 
+#, fuzzy
 msgid ""
-"Bad luck sometimes falls on your armies in combat, causing their attacks to "
-"only do half damage."
+"Bad luck sometimes falls on the hero's units in combat, causing their "
+"attacks to only do half damage."
 msgstr ""
 "V boji sa na tvoje vojsko niekedy obráti smola a jeho útoky spôsobia len "
 "polovičné poškodenie."
 
+#, fuzzy
 msgid ""
-"Neutral luck means your armies will never get lucky or unlucky attacks on "
-"the enemy."
+"Neutral luck means the hero's units will never get lucky or unlucky attacks "
+"on the enemy."
 msgstr ""
 "Neutrálne šťastie znamená, že tvoje vojsko nikdy nebude mať šťastie alebo "
 "smolu pri útokoch na nepriateľa."
 
+#, fuzzy
 msgid ""
-"Good luck sometimes lets your armies get lucky attacks (double strength) in "
-"combat."
+"Good luck sometimes lets the hero's units get lucky attacks (double "
+"strength) in combat."
 msgstr ""
 "Šťastie niekedy umožňuje tvojmu vojsku získať šťastné útoky (dvojnásobnú "
 "silu) v boji."
@@ -7740,17 +7780,20 @@ msgstr "Skvelá"
 msgid "morale|Blood!"
 msgstr "Krvná!"
 
-msgid "Bad morale may cause your armies to freeze in combat."
+#, fuzzy
+msgid "Bad morale may cause the hero's units to freeze in combat."
 msgstr "Zlá morálka môže spôsobiť, že sa tvoje vojsko v boji zastaví."
 
+#, fuzzy
 msgid ""
-"Neutral morale means your armies will never be blessed with extra attacks or "
-"freeze in combat."
+"Neutral morale means the hero's units will never be blessed with extra "
+"attacks or freeze in combat."
 msgstr ""
 "Neutrálna morálka znamená, že tvoje vojsko nebude nikdy obdarené extra "
 "útokmi ani nezamrzne v boji."
 
-msgid "Good morale may give your armies extra attacks in combat."
+#, fuzzy
+msgid "Good morale may give the hero's units extra attacks in combat."
 msgstr "Dobrá morálka môže tvojmu vojsku poskytnúť extra útoky v boji."
 
 msgid "Knight"
@@ -8053,6 +8096,9 @@ msgid_plural "Water Wheels"
 msgstr[0] "Vodné koleso"
 msgstr[1] "Vodné kolesá"
 msgstr[2] "Vodných kolies"
+
+msgid "Monster"
+msgstr "Tvor"
 
 msgid "Obelisk"
 msgstr "Obelisk"
@@ -10973,6 +11019,10 @@ msgstr ""
 "Pozri si najnovšiu verziu hry na\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#, fuzzy
+#~ msgid "Ocean object"
+#~ msgstr "Objekty oceánu"
 
 #~ msgid "Ocean Objects"
 #~ msgstr "Objekty oceánu"

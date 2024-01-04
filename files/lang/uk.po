@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-24 11:33+0000\n"
+"POT-Creation-Date: 2024-01-02 13:33+0000\n"
 "PO-Revision-Date: 2023-09-06 08:41+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -199,6 +199,10 @@ msgid "RESET"
 msgstr ""
 
 #, fuzzy
+msgid "START"
+msgstr "РЕСТАРТ"
+
+#, fuzzy
 msgid "CASTLE"
 msgstr ""
 "МІСТА/\n"
@@ -385,7 +389,8 @@ msgstr "Різноманітні"
 msgid "Troops of %{count} alignments -%{penalty}"
 msgstr "Війська з %{count} рас - %{penalty}"
 
-msgid "Some undead in group -1"
+#, fuzzy
+msgid "Some undead in army -1"
 msgstr "Наявність невмерлих в армії -1"
 
 msgid "View %{name}"
@@ -949,6 +954,22 @@ msgstr "Людина"
 
 msgid "AI"
 msgstr "Комп'ютер"
+
+msgid "Start"
+msgstr ""
+
+#, fuzzy
+msgid "Start the battle."
+msgstr "Повернутися до битви."
+
+msgid "Exit"
+msgstr "Вийти"
+
+msgid "Reset"
+msgstr ""
+
+msgid "Reset to default settings."
+msgstr ""
 
 msgid "Please select another hero."
 msgstr "Будь ласка, оберіть іншого героя."
@@ -2484,7 +2505,8 @@ msgid ""
 "per week."
 msgstr "Колодязь підвищує приріст в усіх житлах на %{count} істот на тиждень."
 
-msgid "The Statue increases your town's income by %{count} gold per day."
+#, fuzzy
+msgid "The Statue increases the town's income by %{count} gold per day."
 msgstr "Статуя підвищує прибуток Вашого міста на %{count} золота в день."
 
 msgid "The Left Turret provides extra firepower during castle combat."
@@ -2507,9 +2529,10 @@ msgstr ""
 "Рів сповільнює ворожі загони. Кожний загін, що зайде у рів, завершить хід у "
 "ньому і стане вразливішим до нападу."
 
+#, fuzzy
 msgid ""
-"The Castle improves town defense and increases income to %{count} gold per "
-"day."
+"The Castle improves the town's defense and increases its income to %{count} "
+"gold per day."
 msgstr ""
 "Замок покращує захист міста та підвищує прибуток на %{count} золота в день."
 
@@ -2545,9 +2568,6 @@ msgstr ""
 "Ви маєте придбати книгу чарів, щоб використовувати гільдію магів, але наразі "
 "у Вас немає вільного місця під книгу. Спробуйте передати один із артефактів "
 "іншому герою."
-
-msgid "Exit"
-msgstr "Вийти"
 
 msgid "Click to show next town."
 msgstr "Натисніть щоб побачити наступне місто."
@@ -3629,9 +3649,6 @@ msgstr "Збережіть поточну мапу."
 msgid "Quit out of the map editor."
 msgstr ""
 
-msgid "Monster"
-msgstr "Монстр"
-
 msgid "Objects cannot be placed outside the map."
 msgstr ""
 
@@ -3641,33 +3658,17 @@ msgstr ""
 msgid "Choose a tile which does not contain any objects."
 msgstr ""
 
-msgid "Treasure"
-msgstr "Скарб"
-
 msgid "Treasures cannot be placed on water."
-msgstr ""
-
-msgid "Heroes"
 msgstr ""
 
 msgid "Heroes cannot be placed on water."
 msgstr ""
 
-msgid "Artifacts"
-msgstr ""
-
 msgid "Artifacts cannot be placed on water."
 msgstr ""
 
-#, fuzzy
-msgid "Ocean object"
-msgstr "Порожнє місце"
-
 msgid "Ocean object must be placed on water."
 msgstr ""
-
-msgid "Towns"
-msgstr "Міста"
 
 #, fuzzy
 msgid "Towns cannot be placed on water."
@@ -3723,6 +3724,9 @@ msgstr "Об'єкти Пустки"
 msgid "Miscellaneous"
 msgstr ""
 
+msgid "Artifacts"
+msgstr ""
+
 #, fuzzy
 msgid "Dwellings"
 msgstr "Напіврослики"
@@ -3736,6 +3740,12 @@ msgstr "Квіти"
 
 msgid "Treasures"
 msgstr "Скарби"
+
+msgid "Towns"
+msgstr "Міста"
+
+msgid "Heroes"
+msgstr ""
 
 msgid "Terrain"
 msgstr ""
@@ -5559,6 +5569,9 @@ msgstr ""
 msgid "You come upon the remains of an unfortunate adventurer."
 msgstr ""
 
+msgid "Treasure"
+msgstr "Скарб"
+
 msgid "Searching through the tattered clothing, you find the %{artifact}."
 msgstr ""
 
@@ -6674,19 +6687,20 @@ msgstr ""
 msgid "I fear these creatures are in the mood for a fight."
 msgstr ""
 
-msgid "Your attack skill is a bonus added to each creature's attack skill."
+#, fuzzy
+msgid "The hero's attack skill is a bonus added to each unit's attack skill."
+msgstr "кожна з бонусом +%{attack} до вміння Атаки."
+
+msgid "The hero's defense skill is a bonus added to each unit's defense skill."
 msgstr ""
 
-msgid "Your defense skill is a bonus added to each creature's defense skill."
-msgstr ""
-
-msgid "Your spell power determines the length or power of a spell."
+msgid "The hero's spell power determines the duration or power of a spell."
 msgstr ""
 
 msgid ""
-"Your knowledge determines how many spell points your hero may have. Under "
-"normal circumstances, a hero is limited to 10 spell points per level of "
-"knowledge."
+" The hero's knowledge determines how many spell points the hero may have. "
+"Under normal circumstances, a hero is limited to 10 spell points per level "
+"of knowledge."
 msgstr ""
 
 msgid "Current Modifiers:"
@@ -6875,101 +6889,119 @@ msgstr ""
 msgid "%{skill} eliminates the movement penalty for rough terrain."
 msgstr "%{skill} усуває штраф за переміщення по нерівній території."
 
+#, fuzzy
 msgid ""
-"%{skill} increases the damage done by range attacking creatures by %{count} "
-"percent."
+"%{skill} increases the damage done by the hero's range attacking creatures "
+"by %{count} percent."
 msgstr ""
 "%{skill} підвищує шкоду від істот, що атакують з відстані на %{count} "
 "відсотків."
 
-msgid "%{skill} increases your hero's movement points by %{count} percent."
+#, fuzzy
+msgid "%{skill} increases the hero's movement points by %{count} percent."
 msgstr "%{skill} підвищує одиниці руху Вашого героя на %{count} відсотків."
 
-msgid "%{skill} increases your hero's viewable area by one square."
-msgid_plural ""
-"%{skill} increases your hero's viewable area by %{count} squares."
+#, fuzzy
+msgid "%{skill} increases the hero's viewable area by one square."
+msgid_plural "%{skill} increases the hero's viewable area by %{count} squares."
 msgstr[0] "%{skill} підвищує радіус огляду героя на один квадрат."
 msgstr[1] "%{skill} підвищує радіус огляду героя на %{count} квадрата."
 msgstr[2] "%{skill} підвищує радіус огляду героя на %{count} квадратів."
 
+#, fuzzy
 msgid ""
-"%{skill} allows you to negotiate with monsters who are weaker than your "
-"group. "
+"%{skill} allows the hero to negotiate with monsters who are weaker than "
+"their army."
 msgstr ""
 "%{skill} дозволяє Вам домовлятися із істотами, що слабші за ваше військо. "
 
-msgid "Approximately %{count} percent of the creatures may offer to join you."
+#, fuzzy
+msgid ""
+"Approximately %{count} percent of the creatures may offer to join the hero."
 msgstr ""
 "Приблизно %{count} відсотків істот можуть запропонувати приєднатись до Вас."
 
-msgid "All of the creatures may offer to join you."
+#, fuzzy
+msgid "All of the creatures may offer to join the hero."
 msgstr "Всі істоти можуть запропонувати приєднатись до Вас."
 
+#, fuzzy
 msgid ""
-"%{skill} increases your hero's movement points over water by %{count} "
-"percent."
+"%{skill} increases the hero's movement points over water by %{count} percent."
 msgstr ""
 "%{skill} підвищує одиниці руху Вашого героя по воді на %{count} відсотків."
 
-msgid "%{skill} increases your hero's troops morale by %{count}."
+#, fuzzy
+msgid "%{skill} increases the hero's troops morale by %{count}."
 msgstr "%{skill} підвищує мораль військ Вашого героя на %{count}."
 
-msgid "%{skill} allows your hero to learn third level spells."
+#, fuzzy
+msgid "%{skill} allows the hero to learn third level spells."
 msgstr "%{skill} дозволяє Вашому герою вчити закляття третього рівня."
 
-msgid "%{skill} allows your hero to learn fourth level spells."
+#, fuzzy
+msgid "%{skill} allows the hero to learn fourth level spells."
 msgstr "%{skill} дозволяє Вашому герою вчити закляття четвертого рівня."
 
-msgid "%{skill} allows your hero to learn fifth level spells."
+#, fuzzy
+msgid "%{skill} allows the hero to learn fifth level spells."
 msgstr "%{skill} дозволяє Вашому герою вчити закляття п'ятого рівня."
 
-msgid "%{skill} regenerates one additional spell point per day to your hero."
+#, fuzzy
+msgid "%{skill} regenerates one additional spell point per day to the hero."
 msgid_plural ""
-"%{skill} regenerates %{count} additional spell points per day to your hero."
+"%{skill} regenerates %{count} additional spell points per day to the hero."
 msgstr[0] "%{skill} відновлює одину одиницю мани героя щодня."
 msgstr[1] "%{skill} відновлює %{count} одиниці мани героя щодня."
 msgstr[2] "%{skill} відновлює %{count} одиниць мани героя щодня."
 
-msgid "%{skill} increases your hero's luck by %{count}."
+#, fuzzy
+msgid "%{skill} increases the hero's luck by %{count}."
 msgstr "%{skill} підвищує удачу героя на %{count}."
 
+#, fuzzy
 msgid ""
-"%{skill} gives your hero's catapult shots a greater chance to hit and do "
+"%{skill} gives the hero's catapult shots a greater chance to hit and do "
 "damage to castle walls."
 msgstr ""
 "%{skill} дає пострілам катапульти Вашого героя більший шанс влучити та "
 "пошкодити стіни замка."
 
+#, fuzzy
 msgid ""
-"%{skill} gives your hero's catapult an extra shot, and each shot has a "
+"%{skill} gives the hero's catapult an extra shot, and each shot has a "
 "greater chance to hit and do damage to castle walls."
 msgstr ""
 "%{skill} дає пострілам катапульти Вашого героя додатковий постріл, "
 "підвищуючи шанс пошкодження стін замка кожним пострілом."
 
+#, fuzzy
 msgid ""
-"%{skill} gives your hero's catapult an extra shot, and each shot "
+"%{skill} gives the hero's catapult an extra shot, and each shot "
 "automatically destroys any wall, except a fortified wall in a Knight castle."
 msgstr ""
 "%{skill} дає пострілам катапульти Вашого героя додатковий постріл і кожний "
 "постріл гарантовано руйнує будь-яку стіну, окрім укріплень Лицарського замка."
 
+#, fuzzy
 msgid ""
-"%{skill} gives your hero a %{count} percent chance to learn any given 1st or "
+"%{skill} gives the hero a %{count} percent chance to learn any given 1st or "
 "2nd level spell that was cast by an enemy during combat."
 msgstr ""
 "%{skill} дає герою %{count}% шанс вивчити чари 1-го або 2-го рівня з тих, що "
 "ворог використовував проти нього в бою."
 
+#, fuzzy
 msgid ""
-"%{skill} gives your hero a %{count} percent chance to learn any given 3rd "
+"%{skill} gives the hero a %{count} percent chance to learn any given 3rd "
 "level spell (or below) that was cast by an enemy during combat."
 msgstr ""
 "%{skill} дає герою %{count}% шанс вивчити чари 3-го (або нижчого рівня) з "
 "числа тих, що ворог використовував проти нього в бою."
 
+#, fuzzy
 msgid ""
-"%{skill} gives your hero a %{count} percent chance to learn any given 4th "
+"%{skill} gives the hero a %{count} percent chance to learn any given 4th "
 "level spell (or below) that was cast by an enemy during combat."
 msgstr ""
 "%{skill} дає герою %{count}% шанс вивчити чари 4-го (або нижчого рівня) з "
@@ -6982,8 +7014,9 @@ msgstr ""
 "%{skill} дозволяє повернути %{count} відсотків вбитих у бою істот у вигляді "
 "Скелетів."
 
+#, fuzzy
 msgid ""
-"Your hero produces %{count} gold pieces per day as tax revenue from estates."
+"The hero produces %{count} gold pieces per day as tax revenue from estates."
 msgstr "Ваш герой збирає %{count} золота податків з маєтків щодня."
 
 msgid "Blue"
@@ -7106,18 +7139,18 @@ msgid "luck|Irish"
 msgstr "Ірландська"
 
 msgid ""
-"Bad luck sometimes falls on your armies in combat, causing their attacks to "
-"only do half damage."
+"Bad luck sometimes falls on the hero's units in combat, causing their "
+"attacks to only do half damage."
 msgstr ""
 
 msgid ""
-"Neutral luck means your armies will never get lucky or unlucky attacks on "
-"the enemy."
+"Neutral luck means the hero's units will never get lucky or unlucky attacks "
+"on the enemy."
 msgstr ""
 
 msgid ""
-"Good luck sometimes lets your armies get lucky attacks (double strength) in "
-"combat."
+"Good luck sometimes lets the hero's units get lucky attacks (double "
+"strength) in combat."
 msgstr ""
 
 msgid "morale|Treason"
@@ -7141,15 +7174,16 @@ msgstr "Чудова"
 msgid "morale|Blood!"
 msgstr "Кров!"
 
-msgid "Bad morale may cause your armies to freeze in combat."
-msgstr ""
+#, fuzzy
+msgid "Bad morale may cause the hero's units to freeze in combat."
+msgstr "Через низьку мораль %{monster} завмер у паніці."
 
 msgid ""
-"Neutral morale means your armies will never be blessed with extra attacks or "
-"freeze in combat."
+"Neutral morale means the hero's units will never be blessed with extra "
+"attacks or freeze in combat."
 msgstr ""
 
-msgid "Good morale may give your armies extra attacks in combat."
+msgid "Good morale may give the hero's units extra attacks in combat."
 msgstr ""
 
 msgid "Knight"
@@ -7452,6 +7486,9 @@ msgid_plural "Water Wheels"
 msgstr[0] "Водяне Колесо"
 msgstr[1] "Водяні Колеса"
 msgstr[2] "Водяні Колеса"
+
+msgid "Monster"
+msgstr "Монстр"
 
 msgid "Obelisk"
 msgstr "Обеліск"
@@ -10267,6 +10304,10 @@ msgstr ""
 "Перевірити нову версію гри на\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#, fuzzy
+#~ msgid "Ocean object"
+#~ msgstr "Порожнє місце"
 
 #~ msgid "Desert Objects"
 #~ msgstr "Об'єкти Пустелі"

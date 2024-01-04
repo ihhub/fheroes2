@@ -1965,7 +1965,7 @@ namespace
                     radarRoi.height = 2;
                     break;
                 case MP2::OBJ_ALCHEMIST_LAB:
-                case MP2::OBJ_MINES:
+                case MP2::OBJ_MINE:
                     --radarRoi.x;
                     --radarRoi.y;
                     radarRoi.width = 3;
@@ -1988,7 +1988,7 @@ namespace
 
             const auto removeObjectProtection = [&tile]() {
                 // Clear any metadata related to spells
-                if ( tile.GetObject( false ) == MP2::OBJ_MINES ) {
+                if ( tile.GetObject( false ) == MP2::OBJ_MINE ) {
                     removeMineSpellFromTile( tile );
                 }
             };
@@ -2017,9 +2017,9 @@ namespace
                     body = _( "You gain control of a sawmill. It will provide you with %{count} units of wood per day." );
                     break;
 
-                case MP2::OBJ_MINES: {
+                case MP2::OBJ_MINE: {
                     resource = getDailyIncomeObjectResources( tile ).getFirstValidResource().first;
-                    header = Maps::GetMinesName( resource );
+                    header = Maps::GetMineName( resource );
 
                     switch ( resource ) {
                     case Resource::ORE:
@@ -2131,7 +2131,7 @@ namespace
                 hero.IncreaseExperience( result.GetExperienceAttacker() );
 
                 Maps::restoreAbandonedMine( tile, Resource::GOLD );
-                hero.setObjectTypeUnderHero( MP2::OBJ_MINES );
+                hero.setObjectTypeUnderHero( MP2::OBJ_MINE );
                 setColorOnTile( tile, hero.GetColor() );
 
                 // TODO: make a function that will automatically get the object size in tiles and return a ROI for radar update.
@@ -2741,11 +2741,9 @@ namespace
             }
 
             const Artifact & art = event_maps->artifact;
-            if ( art.isValid() ) {
-                if ( hero.PickupArtifact( art ) ) {
-                    artifactUI.reset( new fheroes2::ArtifactDialogElement( art ) );
-                    AudioManager::PlaySound( M82::TREASURE );
-                }
+            if ( art.isValid() && hero.PickupArtifact( art ) ) {
+                artifactUI = std::make_unique<fheroes2::ArtifactDialogElement>( art );
+                AudioManager::PlaySound( M82::TREASURE );
             }
 
             std::vector<const fheroes2::DialogElement *> elementUI;
@@ -3775,7 +3773,7 @@ void Heroes::Action( int tileIndex )
 
     // capture color object
     case MP2::OBJ_ALCHEMIST_LAB:
-    case MP2::OBJ_MINES:
+    case MP2::OBJ_MINE:
     case MP2::OBJ_SAWMILL:
     case MP2::OBJ_LIGHTHOUSE:
         ActionToCaptureObject( *this, objectType, tileIndex );
