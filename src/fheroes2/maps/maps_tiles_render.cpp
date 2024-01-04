@@ -812,7 +812,7 @@ namespace Maps
             }
             else if ( contains( fogDirection, DIRECTION_CENTER_ROW | Direction::BOTTOM | Direction::TOP )
                       && !( fogDirection & ( Direction::TOP_RIGHT | Direction::BOTTOM_RIGHT | Direction::BOTTOM_LEFT | Direction::TOP_LEFT ) ) ) {
-                index = 22;
+                index = 21;
             }
             else if ( contains( fogDirection, DIRECTION_CENTER_ROW | Direction::BOTTOM | Direction::BOTTOM_LEFT )
                       && !( fogDirection & ( Direction::TOP | Direction::BOTTOM_RIGHT ) ) ) {
@@ -855,16 +855,15 @@ namespace Maps
                 index = 27;
             }
             else if ( contains( fogDirection, Direction::BOTTOM | Direction::RIGHT )
-                      && !( fogDirection & ( Direction::TOP | Direction::TOP_LEFT | Direction::LEFT | Direction::BOTTOM_RIGHT ) ) ) {
+                      && !( fogDirection & ( Direction::TOP | Direction::LEFT | Direction::BOTTOM_RIGHT ) ) ) {
                 index = 27;
                 revert = true;
             }
-            else if ( contains( fogDirection, Direction::LEFT | Direction::TOP )
-                      && !( fogDirection & ( Direction::TOP_LEFT | Direction::RIGHT | Direction::BOTTOM | Direction::BOTTOM_RIGHT ) ) ) {
+            else if ( contains( fogDirection, Direction::LEFT | Direction::TOP ) && !( fogDirection & ( Direction::TOP_LEFT | Direction::RIGHT | Direction::BOTTOM ) ) ) {
                 index = 28;
             }
             else if ( contains( fogDirection, Direction::RIGHT | Direction::TOP )
-                      && !( fogDirection & ( Direction::TOP_RIGHT | Direction::LEFT | Direction::BOTTOM | Direction::BOTTOM_LEFT ) ) ) {
+                      && !( fogDirection & ( Direction::TOP_RIGHT | Direction::LEFT | Direction::BOTTOM ) ) ) {
                 index = 28;
                 revert = true;
             }
@@ -900,7 +899,7 @@ namespace Maps
             }
             else {
                 // unknown
-                DEBUG_LOG( DBG_GAME, DBG_WARN, "Invalid direction for fog: " << fogDirection << ". Tile index: " << tile.GetIndex() )
+                DEBUG_LOG( DBG_GAME, DBG_WARN, "Invalid direction for fog: " << Direction::String( fogDirection ) << ". Tile index: " << tile.GetIndex() )
                 const fheroes2::Image & sf = fheroes2::AGG::GetTIL( TIL::CLOF32, ( mp.x + mp.y ) % 4, 0 );
                 area.DrawTile( dst, sf, mp );
                 return;
