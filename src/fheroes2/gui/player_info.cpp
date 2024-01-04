@@ -437,14 +437,11 @@ bool Interface::PlayersInfo::QueueEventProcessing()
 
     if ( le.MouseWheelDn() ) {
         Player * player = GetFromClassClick( le.GetMouseCursor() );
-        if ( player != nullptr ) {
-            if ( conf.getCurrentMapInfo().AllowChangeRace( player->GetColor() ) ) {
-                changeRaceToNext( *player );
+        if ( player != nullptr && conf.getCurrentMapInfo().AllowChangeRace( player->GetColor() ) ) {
+            changeRaceToNext( *player );
 
-                return true;
-            }
+            return true;
         }
-
         return false;
     }
 
@@ -501,10 +498,8 @@ bool Interface::PlayersInfo::QueueEventProcessing()
     }
 
     player = GetFromClassClick( le.GetMouseCursor() );
-    if ( player != nullptr ) {
-        if ( conf.getCurrentMapInfo().AllowChangeRace( player->GetColor() ) ) {
-            changeRaceToNext( *player );
-        }
+    if ( player != nullptr && conf.getCurrentMapInfo().AllowChangeRace( player->GetColor() ) ) {
+        changeRaceToNext( *player );
 
         return true;
     }
