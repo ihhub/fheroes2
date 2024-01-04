@@ -649,6 +649,8 @@ namespace AI
             }();
 
             switch ( outcome ) {
+            case Outcome::ContinueBattle:
+                break;
             case Outcome::Retreat:
                 farewellSpellcast();
 
@@ -666,6 +668,7 @@ namespace AI
 
                 return actions;
             default:
+                assert( 0 );
                 break;
             }
         }
