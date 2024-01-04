@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2023                                             *
+ *   Copyright (C) 2020 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -54,8 +54,10 @@
 #include "game.h"
 #include "heroes.h"
 #include "heroes_base.h"
+#include "kingdom.h"
 #include "logging.h"
 #include "monster_info.h"
+#include "resource.h"
 #include "settings.h"
 #include "speed.h"
 #include "spell.h"
@@ -64,9 +66,6 @@ using namespace Battle;
 
 namespace AI
 {
-    // Usual distance between units at the start of the battle is 10-14 tiles
-    // 20% of maximum value lost for every tile travelled to make sure 4 tiles difference matters
-    const double STRENGTH_DISTANCE_FACTOR = 5.0;
     const std::vector<int32_t> cellsUnderWallsIndexes = { 7, 28, 49, 72, 95 };
 
     struct MeleeAttackOutcome
@@ -594,24 +593,50 @@ namespace AI
 
         // Step 2. Check retreat/surrender condition
         const Heroes * actualHero = dynamic_cast<const Heroes *>( _commander );
-        if ( actualHero && arena.CanRetreatOpponent( _myColor ) && checkRetreatCondition( *actualHero ) ) {
-            if ( isCommanderCanSpellcast( arena, _commander ) ) {
-                // Cast maximum damage spell
-                const SpellSelection & bestSpell = selectBestSpell( arena, currentUnit, true );
-
-                if ( bestSpell.spellID != -1 ) {
-                    actions.emplace_back( Command::SPELLCAST, bestSpell.spellID, bestSpell.cell );
-
-                    DEBUG_LOG( DBG_BATTLE, DBG_INFO,
-                               arena.GetCurrentCommander()->GetName() << " casts " << Spell( bestSpell.spellID ).GetName() << " on cell " << bestSpell.cell )
+        if ( actualHero && checkRetreatCondition( *actualHero ) ) {
+            const auto farewellSpellcast = [this, &arena, &currentUnit, &actions]() {
+                if ( !isCommanderCanSpellcast( arena, _commander ) ) {
+                    return;
                 }
+
+                // Cast a spell with maximum damage
+                const SpellSelection & bestSpell = selectBestSpell( arena, currentUnit, true );
+                if ( bestSpell.spellID == -1 ) {
+                    return;
+                }
+
+                actions.emplace_back( Command::SPELLCAST, bestSpell.spellID, bestSpell.cell );
+
+                DEBUG_LOG( DBG_BATTLE, DBG_INFO,
+                           arena.GetCurrentCommander()->GetName() << " casts " << Spell( bestSpell.spellID ).GetName() << " on cell " << bestSpell.cell )
+            };
+
+            // Try to retreat first
+            if ( arena.CanRetreatOpponent( _myColor ) ) {
+                farewellSpellcast();
+
+                actions.emplace_back( Command::RETREAT );
+
+                DEBUG_LOG( DBG_BATTLE, DBG_INFO, arena.GetCurrentCommander()->GetName() << " retreats" )
+
+                return actions;
             }
 
-            actions.emplace_back( Command::RETREAT );
+            // If it is impossible to retreat (for example, when defending a castle), then try to surrender
+            if ( arena.CanSurrenderOpponent( _myColor ) ) {
+                const uint32_t cost = arena.getForce( _myColor ).GetSurrenderCost();
+                const Kingdom & kingdom = actualHero->GetKingdom();
 
-            DEBUG_LOG( DBG_BATTLE, DBG_INFO, arena.GetCurrentCommander()->GetName() << " retreats" )
+                if ( kingdom.AllowPayment( { Resource::GOLD, cost } ) ) {
+                    farewellSpellcast();
 
-            return actions;
+                    actions.emplace_back( Command::SURRENDER );
+
+                    DEBUG_LOG( DBG_BATTLE, DBG_INFO, arena.GetCurrentCommander()->GetName() << " surrenders for " << cost << " gold" )
+
+                    return actions;
+                }
+            }
         }
 
         // Step 3. Calculate spell heuristics
@@ -701,6 +726,7 @@ namespace AI
         _enemyArmyStrength = 0;
         _myShootersStrength = 0;
         _enemyShootersStrength = 0;
+        _myRangedUnitsOnly = 0;
         _enemyRangedUnitsOnly = 0;
         _myArmyAverageSpeed = 0;
         _enemyAverageSpeed = 0;
@@ -776,9 +802,11 @@ namespace AI
             _myArmyStrength += unitStr;
 
             if ( unit->isArchers() && !unit->isImmovable() ) {
-                _myShootersStrength += unitStr;
+                _myRangedUnitsOnly += unitStr;
             }
         }
+
+        _myShootersStrength = _myRangedUnitsOnly;
 
         if ( sumArmyStr > 0.0 ) {
             _myArmyAverageSpeed /= sumArmyStr;
@@ -1261,7 +1289,9 @@ namespace AI
             const Castle * castle = Arena::GetCastle();
             const bool isMoatBuilt = castle && castle->isBuild( BUILD_MOAT );
 
-            const double attackDistanceModifier = _enemyArmyStrength / STRENGTH_DISTANCE_FACTOR;
+            // The usual distance between units of different armies at the beginning of a battle is 10-14 tiles. For each tile passed, 20% of the total army value will be
+            // lost to make sure that the difference of 4 tiles matters.
+            const double attackDistanceModifier = _enemyArmyStrength / 5.0;
 
             double maxPriority = std::numeric_limits<double>::lowest();
 
@@ -1361,7 +1391,29 @@ namespace AI
 
                 return outcome.canAttackImmediately;
             } );
-            const double defenseDistanceModifier = _myArmyStrength / STRENGTH_DISTANCE_FACTOR;
+
+            // If the army has only one stack of archers, then there is no question about which stack to cover. If the army has three or more stacks of archers, then,
+            // most likely, melee units will be able to cover these stacks only partially. In the case of two stacks of archers, the question arises: in which cases we
+            // should try to cover both stacks, but partially, and in which cases we should cover just one stack, but completely.
+            //
+            // In the current implementation, if the value of one of these archer stacks is 2 or more times greater than the value of the other, then it is worth using
+            // all melee units to create a more reliable cover for more powerful stack of archers.
+            //
+            // In the case of two stacks of archers, AI will tend to initially place them on the edges of the battlefield. Thus, for melee units, the maximum distance to
+            // the stack of archers will be approximately 5 tiles. To fulfill the above condition, a distance of 5 tiles should give a penalty of 1/3 of the total value
+            // of the archer stacks.
+            //
+            // For example, suppose we have one stack of archers with the value of 200 on the tile with the index of 0, and another stack of archers with the value of 100
+            // on the tile with the index of 88. In this case, a melee unit from the tile with the index of 66 should overcome about 5 tiles in order to reach the more
+            // powerful stack of archers, but it should overcome just 1 tile to reach the less powerful stack. The penalty for each tile passed in its case will be
+            // calculated as (200 + 100) / 15 = 20, and after the penalty is applied, the value of the more powerful stack of archers will be 200 - 20 * 5 = 100, and the
+            // value of the less powerful stack will be 100 - 20 * 1 = 80, therefore, this melee unit will go to cover the more powerful stack of archers.
+            //
+            // However, if the strength of the archer stacks is comparable, for example, 150 vs 100, the penalty for each tile passed will be (150 + 100) / 15 = 16.66,
+            // and after the penalty is applied, the value of the more powerful stack of archers will be 150 - 16.66 * 5 = 66,7, and the value of the less powerful stack
+            // will be 100 - 16.66 * 1 = 83.34, therefore, this melee unit will go to cover the less powerful stack of archers, and both stacks will be only partially
+            // covered.
+            const double defenseDistanceModifier = _myRangedUnitsOnly / 15.0;
 
             double bestArcherValue = std::numeric_limits<double>::lowest();
 
@@ -1372,19 +1424,103 @@ namespace AI
                     continue;
                 }
 
-                const CellDistanceInfo nearestToFrndCellInfo = findNearestCellNextToUnit( arena, currentUnit, *frnd );
+                const CellDistanceInfo bestCoverCellInfo = [&arena, &currentUnit, frnd]() -> CellDistanceInfo {
+                    const Indexes nearbyIndexes = [&currentUnit, frnd]() {
+                        Indexes result;
+                        result.reserve( 8 );
+
+                        const std::array<int, 6> priorityDirections = [&currentUnit, frnd]() -> std::array<int, 6> {
+                            const bool preferToCoverFromTheSide = [&currentUnit, frnd]() {
+                                // If the covering unit is not a wide unit, then using this unit to cover the shooter from the side does not give any advantage
+                                if ( !currentUnit.isWide() ) {
+                                    return false;
+                                }
+
+                                // It is always better to use wide units to cover wide shooters from the sides
+                                if ( frnd->isWide() ) {
+                                    return true;
+                                }
+
+                                assert( Board::isValidIndex( frnd->GetHeadIndex() ) );
+
+                                // If an ordinary shooter is located on a tile that protrudes sideways, then using a wide unit to cover this shooter from the side does
+                                // not give any advantage
+                                if ( frnd->isReflect() ) {
+                                    return ( ( frnd->GetHeadIndex() / ARENAW ) % 2 == 1 );
+                                }
+
+                                return ( ( frnd->GetHeadIndex() / ARENAW ) % 2 == 0 );
+                            }();
+
+                            if ( preferToCoverFromTheSide ) {
+                                if ( frnd->isReflect() ) {
+                                    return { TOP_LEFT, BOTTOM_LEFT, LEFT, TOP_RIGHT, BOTTOM_RIGHT, RIGHT };
+                                }
+
+                                return { TOP_RIGHT, BOTTOM_RIGHT, RIGHT, TOP_LEFT, BOTTOM_LEFT, LEFT };
+                            }
+
+                            if ( frnd->isReflect() ) {
+                                return { LEFT, TOP_LEFT, BOTTOM_LEFT, TOP_RIGHT, BOTTOM_RIGHT, RIGHT };
+                            }
+
+                            return { RIGHT, TOP_RIGHT, BOTTOM_RIGHT, TOP_LEFT, BOTTOM_LEFT, LEFT };
+                        }();
+
+                        for ( const int32_t idx : std::array<int32_t, 2>{ frnd->GetHeadIndex(), frnd->GetTailIndex() } ) {
+                            if ( !Board::isValidIndex( idx ) ) {
+                                continue;
+                            }
+
+                            for ( const int dir : priorityDirections ) {
+                                if ( !Board::isValidDirection( idx, dir ) ) {
+                                    continue;
+                                }
+
+                                const int32_t nearbyIdx = Board::GetIndexDirection( idx, dir );
+
+                                if ( std::find( result.begin(), result.end(), nearbyIdx ) != result.end() ) {
+                                    continue;
+                                }
+
+                                result.push_back( nearbyIdx );
+                            }
+                        }
+
+                        return result;
+                    }();
+
+                    for ( const int32_t idx : nearbyIndexes ) {
+                        const Position pos = Position::GetPosition( currentUnit, idx );
+                        if ( pos.GetHead() == nullptr ) {
+                            continue;
+                        }
+
+                        assert( !currentUnit.isWide() || pos.GetTail() != nullptr );
+                        assert( Board::GetDistance( pos, frnd->GetPosition() ) == 1 );
+
+                        if ( !arena.isPositionReachable( currentUnit, pos, false ) ) {
+                            continue;
+                        }
+
+                        return { idx, arena.CalculateMoveDistance( currentUnit, pos ) };
+                    }
+
+                    return {};
+                }();
+
                 const Indexes adjacentEnemiesIndexes = Board::GetAdjacentEnemiesIndexes( *frnd );
 
-                // If our archer is not blocked by enemy units, but the unit nevertheless cannot approach him, then ignore that archer
-                if ( nearestToFrndCellInfo.idx == -1 && adjacentEnemiesIndexes.empty() ) {
+                // If our archer is not blocked by enemy units, but the unit nevertheless cannot cover that archer, then ignore that archer
+                if ( bestCoverCellInfo.idx == -1 && adjacentEnemiesIndexes.empty() ) {
                     continue;
                 }
 
-                // Either the unit can approach a friendly archer, or the archer is blocked by an enemy unit that does not allow our unit to approach. As the distance to
-                // estimate the archer's value, we take the smallest of the distance that must be covered to approach the archer himself and the distance that must be
-                // covered to approach the nearest of the enemies blocking him.
-                const auto [eitherFrndOrAdjEnemyIsReachable, dist] = [&arena, &currentUnit, &nearestToFrndCellInfo, &adjacentEnemiesIndexes]() {
-                    std::pair<bool, uint32_t> result{ nearestToFrndCellInfo.idx != -1, nearestToFrndCellInfo.dist };
+                // Either the unit can cover the friendly archer, or the archer is blocked by enemy units, which do not allow our unit to approach. As the distance to
+                // estimate the archer's value, we take the smallest of the distance that must be overcome to cover the archer and the distance that must be overcome to
+                // approach the nearest of the enemies blocking him.
+                const auto [eitherFrndOrAdjEnemyIsReachable, dist] = [&arena, &currentUnit, &bestCoverCellInfo, &adjacentEnemiesIndexes]() {
+                    std::pair<bool, uint32_t> result{ bestCoverCellInfo.idx != -1, bestCoverCellInfo.dist };
 
                     for ( const int idx : adjacentEnemiesIndexes ) {
                         const Unit * enemy = Board::GetCell( idx )->GetUnit();
@@ -1403,12 +1539,12 @@ namespace AI
                     return result;
                 }();
 
-                // If the unit cannot approach either the archer or any of the enemies blocking that archer at all, then ignore that archer
+                // If the unit cannot cover the archer or approach any of the enemies blocking that archer, then ignore that archer
                 if ( !eitherFrndOrAdjEnemyIsReachable ) {
                     continue;
                 }
 
-                // If the unit cannot approach either the archer or any of the enemies blocking that archer within two turns (according to a rough estimate), but there is
+                // If the unit cannot cover the archer or approach any of the enemies blocking that archer within two turns (according to a rough estimate), but there is
                 // at least one enemy unit that can be immediately attacked by this unit, then ignore that archer. Very slow units (such as Hydra) should not waste time
                 // covering archers far from them - especially if there are other enemy units nearby worthy of their attention.
                 if ( isAnyEnemyCanBeAttackedImmediately && !currentUnit.isFlying() && dist > currentUnit.GetSpeed() * 2 ) {
@@ -1423,7 +1559,7 @@ namespace AI
 
                 bestArcherValue = archerValue;
 
-                target.cell = nearestToFrndCellInfo.idx;
+                target.cell = bestCoverCellInfo.idx;
                 target.unit = nullptr;
 
                 MeleeAttackOutcome bestOutcome;
@@ -1442,8 +1578,8 @@ namespace AI
                     }
                 }
 
-                // If we have reached this point, then the unit should be able to approach either the archer or one of the enemies blocking him - although, perhaps,
-                // without performing an immediate attack
+                // If we have reached this point, then the unit should be able to either cover the archer or approach any of the enemies blocking that archer - although
+                // perhaps without performing an immediate attack
                 assert( Board::isValidIndex( target.cell ) );
             }
         }

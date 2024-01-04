@@ -184,7 +184,7 @@ namespace
 
 bool Heroes::isInVisibleMapArea() const
 {
-    // TODO: this is not entirely correct. Consider a hero being outside the visible are but his shadow is still inside. The visible tile ROI should be extended by
+    // TODO: this is not entirely correct. Consider a hero being outside the visible area but his shadow is still inside. The visible tile ROI should be extended by
     // TODO: at least 1 tile in each direction.
     return Interface::AdventureMap::Get().getGameArea().GetVisibleTileROI() & GetCenter();
 }

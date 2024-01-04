@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2023                                             *
+ *   Copyright (C) 2020 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -277,17 +277,15 @@ namespace
                     for ( ; out != outEnd; ++out, ++in )
                         *out = *( transform + *in );
                 }
-                else if ( surface->format->BitsPerPixel == 8 ) {
-                    if ( surface->pixels != imageIn ) {
-                        if ( imageWidth % 4 != 0 ) {
-                            const int32_t screenWidth = ( imageWidth / 4 ) * 4 + 4;
-                            for ( int32_t i = 0; i < imageHeight; ++i ) {
-                                memcpy( static_cast<uint8_t *>( surface->pixels ) + screenWidth * i, imageIn + imageWidth * i, static_cast<size_t>( imageWidth ) );
-                            }
+                else if ( ( surface->format->BitsPerPixel == 8 ) && ( surface->pixels != imageIn ) ) {
+                    if ( imageWidth % 4 != 0 ) {
+                        const int32_t screenWidth = ( imageWidth / 4 ) * 4 + 4;
+                        for ( int32_t i = 0; i < imageHeight; ++i ) {
+                            memcpy( static_cast<uint8_t *>( surface->pixels ) + screenWidth * i, imageIn + imageWidth * i, static_cast<size_t>( imageWidth ) );
                         }
-                        else {
-                            memcpy( surface->pixels, imageIn, static_cast<size_t>( imageWidth * imageHeight ) );
-                        }
+                    }
+                    else {
+                        memcpy( surface->pixels, imageIn, static_cast<size_t>( imageWidth ) * imageHeight );
                     }
                 }
             }
@@ -307,15 +305,13 @@ namespace
                             *outX = *( transform + *inX );
                     }
                 }
-                else if ( surface->format->BitsPerPixel == 8 ) {
-                    if ( surface->pixels != imageIn ) {
-                        const int32_t screenWidth = ( imageWidth / 4 ) * 4 + 4;
-                        const int32_t screenOffset = roi.x + roi.y * screenWidth;
-                        const int32_t imageOffset = roi.x + roi.y * imageWidth;
-                        for ( int32_t i = 0; i < roi.height; ++i ) {
-                            memcpy( static_cast<uint8_t *>( surface->pixels ) + screenWidth * i + screenOffset, imageIn + imageOffset + imageWidth * i,
-                                    static_cast<size_t>( roi.width ) );
-                        }
+                else if ( ( surface->format->BitsPerPixel == 8 ) && ( surface->pixels != imageIn ) ) {
+                    const int32_t screenWidth = ( imageWidth / 4 ) * 4 + 4;
+                    const int32_t screenOffset = roi.x + roi.y * screenWidth;
+                    const int32_t imageOffset = roi.x + roi.y * imageWidth;
+                    for ( int32_t i = 0; i < roi.height; ++i ) {
+                        memcpy( static_cast<uint8_t *>( surface->pixels ) + screenWidth * i + screenOffset, imageIn + imageOffset + imageWidth * i,
+                                static_cast<size_t>( roi.width ) );
                     }
                 }
             }
@@ -545,9 +541,10 @@ namespace
             return new RenderCursor;
         }
 
-    protected:
+    private:
+        SDL_Cursor * _cursor{ nullptr };
+
         RenderCursor()
-            : _cursor( nullptr )
         {
             _emulation = false;
 
@@ -556,9 +553,6 @@ namespace
                 ERROR_LOG( "Failed to set cursor state. The error value: " << returnCode << ", description: " << SDL_GetError() )
             }
         }
-
-    private:
-        SDL_Cursor * _cursor;
 
         void clear()
         {

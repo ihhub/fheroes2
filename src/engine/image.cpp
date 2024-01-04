@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2023                                             *
+ *   Copyright (C) 2020 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -2227,7 +2227,15 @@ namespace fheroes2
         const int32_t width = in.width();
         const int32_t height = in.height();
 
-        Image out( width, height );
+        Image out;
+
+        if ( in.singleLayer() ) {
+            // Make the result of Fill to have the same layers as the input image.
+            out._disableTransformLayer();
+        }
+
+        out.resize( width, height );
+
         if ( !horizontally && !vertically ) {
             Copy( in, out );
             return out;
@@ -2563,7 +2571,7 @@ namespace fheroes2
 
     Sprite makeShadow( const Sprite & in, const Point & shadowOffset, const uint8_t transformId )
     {
-        if ( in.empty() || in.singleLayer() || shadowOffset.x > 0 || shadowOffset.y < 0 ) {
+        if ( in.empty() || shadowOffset.x > 0 || shadowOffset.y < 0 ) {
             return {};
         }
 
@@ -2575,6 +2583,13 @@ namespace fheroes2
         out.reset();
 
         assert( !out.empty() );
+
+        if ( in.singleLayer() ) {
+            // In this case we add a shadow of the fully non-transparent rectangular 'in' image.
+            FillTransform( out, 0, shadowOffset.y, width, height, transformId );
+
+            return out;
+        }
 
         const int32_t widthOut = out.width();
 

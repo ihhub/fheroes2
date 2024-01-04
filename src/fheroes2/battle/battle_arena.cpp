@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -584,10 +584,19 @@ void Battle::Arena::Turns()
         result_game.exp1 = _army2->GetDeadHitPoints();
         result_game.exp2 = _army1->GetDeadHitPoints();
 
-        if ( _army1->GetCommander() && !( result_game.army1 & ( RESULT_RETREAT | RESULT_SURRENDER ) ) ) {
+        const HeroBase * army1Commander = _army1->GetCommander();
+        const HeroBase * army2Commander = _army2->GetCommander();
+
+        // Attacker (or defender) gets an experience bonus if the enemy army was under the command of a hero who was defeated (i.e. did not retreat or surrender)
+        if ( army1Commander && army1Commander->isHeroes() && !( result_game.army1 & ( RESULT_RETREAT | RESULT_SURRENDER ) ) ) {
             result_game.exp2 += 500;
         }
-        if ( ( _isTown || _army2->GetCommander() ) && !( result_game.army2 & ( RESULT_RETREAT | RESULT_SURRENDER ) ) ) {
+        if ( army2Commander && army2Commander->isHeroes() && !( result_game.army2 & ( RESULT_RETREAT | RESULT_SURRENDER ) ) ) {
+            result_game.exp1 += 500;
+        }
+
+        // Attacker gets an additional experience bonus after successfully besieging a town or castle
+        if ( _isTown ) {
             result_game.exp1 += 500;
         }
 

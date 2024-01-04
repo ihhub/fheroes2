@@ -378,9 +378,9 @@ namespace CastleDialog
         uint32_t _build;
     };
 
-    struct builds_t
+    struct BuildingRenderInfo
     {
-        builds_t( building_t b, const fheroes2::Rect & r )
+        BuildingRenderInfo( building_t b, const fheroes2::Rect & r )
             : id( b )
             , coord( r )
         {}
@@ -394,7 +394,7 @@ namespace CastleDialog
         fheroes2::Rect coord;
     };
 
-    struct CacheBuildings : std::vector<builds_t>
+    struct CacheBuildings : std::vector<BuildingRenderInfo>
     {
         CacheBuildings( const Castle &, const fheroes2::Point & );
     };

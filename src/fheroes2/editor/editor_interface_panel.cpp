@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2023                                                    *
+ *   Copyright (C) 2023 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -778,7 +778,6 @@ namespace Interface
                         return;
                     }
 
-                    // TODO: render ICN::MINIHERO from the existing hero images.
                     const fheroes2::Sprite & image = fheroes2::generateTownObjectImage( type, color, world.GetTiles( tileIndex ).GetGround() );
 
                     Cursor::Get().setCustomImage( image, { image.x(), image.y() } );
@@ -993,7 +992,7 @@ namespace Interface
                 return res;
             }
             if ( le.MouseClickLeft( _kingdomObjectButtonsRect[KingdomObjectBrush::TOWNS] ) ) {
-                handleObjectMouseClick( [this]( const int32_t /* type */ ) -> int32_t {
+                handleObjectMouseClick( [this]( const int32_t /* type */ ) {
                     int32_t type = -1;
                     int32_t color = -1;
 

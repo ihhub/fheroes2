@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2023                                             *
+ *   Copyright (C) 2021 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -105,8 +105,8 @@ namespace
                                                 ICN::BUTTON_SMALL_EXIT_EVIL,
                                                 ICN::BUTTON_EXIT_HEROES_MEETING,
                                                 ICN::BUTTON_EXIT_TOWN,
-                                                ICN::BUTTON_EXIT_PUZZLE_DDOOR_GOOD,
-                                                ICN::BUTTON_EXIT_PUZZLE_DDOOR_EVIL,
+                                                ICN::BUTTON_EXIT_PUZZLE_DIM_DOOR_GOOD,
+                                                ICN::BUTTON_EXIT_PUZZLE_DIM_DOOR_EVIL,
                                                 ICN::BUTTON_SMALL_DISMISS_GOOD,
                                                 ICN::BUTTON_SMALL_DISMISS_EVIL,
                                                 ICN::BUTTON_SMALL_UPGRADE_GOOD,
@@ -152,7 +152,9 @@ namespace
                                                 ICN::BUTTON_SMALL_MIN_EVIL,
                                                 ICN::BUTTON_SMALL_MAX_GOOD,
                                                 ICN::BUTTON_SMALL_MAX_EVIL,
+                                                ICN::BUTTON_EXIT_GOOD,
                                                 ICN::BUTTON_RESET_GOOD,
+                                                ICN::BUTTON_START_GOOD,
                                                 ICN::BUTTON_CASTLE_GOOD,
                                                 ICN::BUTTON_CASTLE_EVIL,
                                                 ICN::BUTTON_TOWN_GOOD,
@@ -192,7 +194,7 @@ namespace
 
     bool IsValidICNId( int id )
     {
-        return id >= 0 && static_cast<size_t>( id ) < _icnVsSprite.size();
+        return id > ICN::UNKNOWN && static_cast<size_t>( id ) < _icnVsSprite.size();
     }
 
     bool IsValidTILId( int id )
@@ -646,7 +648,7 @@ namespace fheroes2
         }
 
         // Helper function for LoadModifiedICN
-        void CopyICNWithPalette( int icnId, int originalIcnId, const PAL::PaletteType paletteType )
+        void CopyICNWithPalette( const int icnId, const int originalIcnId, const PAL::PaletteType paletteType )
         {
             assert( icnId != originalIcnId );
 
@@ -1069,12 +1071,12 @@ namespace fheroes2
 
                 break;
             }
-            case ICN::BUTTON_EXIT_PUZZLE_DDOOR_GOOD:
-            case ICN::BUTTON_EXIT_PUZZLE_DDOOR_EVIL: {
+            case ICN::BUTTON_EXIT_PUZZLE_DIM_DOOR_GOOD:
+            case ICN::BUTTON_EXIT_PUZZLE_DIM_DOOR_EVIL: {
                 std::vector<fheroes2::Sprite> & buttonStates = _icnVsSprite[id];
                 buttonStates.resize( 2 );
 
-                const bool isEvilInterface = ( id == ICN::BUTTON_EXIT_PUZZLE_DDOOR_EVIL );
+                const bool isEvilInterface = ( id == ICN::BUTTON_EXIT_PUZZLE_DIM_DOOR_EVIL );
                 const int originalButtonICN = isEvilInterface ? ICN::LGNDXTRE : ICN::LGNDXTRA;
 
                 if ( useOriginalResources() ) {
@@ -1800,10 +1802,24 @@ namespace fheroes2
 
                 break;
             }
+            case ICN::BUTTON_EXIT_GOOD: {
+                _icnVsSprite[id].resize( 2 );
+
+                fheroes2::getTextAdaptedButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "EXIT" ), ICN::EMPTY_GOOD_BUTTON, ICN::STONEBAK );
+
+                break;
+            }
             case ICN::BUTTON_RESET_GOOD: {
                 _icnVsSprite[id].resize( 2 );
 
                 createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], 80, gettext_noop( "RESET" ), false );
+
+                break;
+            }
+            case ICN::BUTTON_START_GOOD: {
+                _icnVsSprite[id].resize( 2 );
+
+                createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], 80, gettext_noop( "START" ), false );
 
                 break;
             }
@@ -2619,8 +2635,8 @@ namespace fheroes2
             case ICN::BUTTON_SMALL_EXIT_EVIL:
             case ICN::BUTTON_EXIT_HEROES_MEETING:
             case ICN::BUTTON_EXIT_TOWN:
-            case ICN::BUTTON_EXIT_PUZZLE_DDOOR_EVIL:
-            case ICN::BUTTON_EXIT_PUZZLE_DDOOR_GOOD:
+            case ICN::BUTTON_EXIT_PUZZLE_DIM_DOOR_EVIL:
+            case ICN::BUTTON_EXIT_PUZZLE_DIM_DOOR_GOOD:
             case ICN::BUTTON_SMALL_DISMISS_GOOD:
             case ICN::BUTTON_SMALL_DISMISS_EVIL:
             case ICN::BUTTON_SMALL_UPGRADE_GOOD:
@@ -2666,7 +2682,9 @@ namespace fheroes2
             case ICN::BUTTON_SMALL_MIN_EVIL:
             case ICN::BUTTON_SMALL_MAX_GOOD:
             case ICN::BUTTON_SMALL_MAX_EVIL:
+            case ICN::BUTTON_EXIT_GOOD:
             case ICN::BUTTON_RESET_GOOD:
+            case ICN::BUTTON_START_GOOD:
             case ICN::BUTTON_CASTLE_GOOD:
             case ICN::BUTTON_CASTLE_EVIL:
             case ICN::BUTTON_TOWN_GOOD:
@@ -3520,7 +3538,6 @@ namespace fheroes2
                 }
                 return true;
             case ICN::MAP_TYPE_ICON: {
-                // TODO: add a new icon for the Resurrection add-on map type.
                 _icnVsSprite[id].resize( 3 );
                 for ( Sprite & icon : _icnVsSprite[id] ) {
                     icon._disableTransformLayer();
@@ -4626,6 +4643,12 @@ namespace fheroes2
             if ( !LoadModifiedICN( id ) ) {
                 LoadOriginalICN( id );
             }
+
+            if ( _icnVsSprite[id].empty() ) {
+                // This could happen by one reason: asking to render an ICN that simply doesn't exist within the resources.
+                // In order to avoid subsequent attempts to get resources from this ICN we are making it as non-empty.
+                _icnVsSprite[id].resize( 1 );
+            }
         }
 
         size_t GetMaximumICNIndex( int id )
@@ -4635,10 +4658,12 @@ namespace fheroes2
             return _icnVsSprite[id].size();
         }
 
-        size_t GetMaximumTILIndex( int id )
+        size_t GetMaximumTILIndex( const int id )
         {
-            if ( _tilVsImage[id].empty() ) {
-                _tilVsImage[id].resize( 4 ); // 4 possible sides
+            auto & tilImages = _tilVsImage[id];
+
+            if ( tilImages.empty() ) {
+                tilImages.resize( 4 ); // 4 possible sides
 
                 const std::vector<uint8_t> & data = ::AGG::getDataFromAggFile( tilFileName[id] );
                 if ( data.size() < headerSize ) {
@@ -4656,23 +4681,29 @@ namespace fheroes2
                     return 0;
                 }
 
-                std::vector<Image> & originalTIL = _tilVsImage[id][0];
+                std::vector<Image> & originalTIL = tilImages[0];
                 decodeTILImages( data.data() + headerSize, count, width, height, originalTIL );
 
                 for ( uint32_t shapeId = 1; shapeId < 4; ++shapeId ) {
-                    std::vector<Image> & currentTIL = _tilVsImage[id][shapeId];
-                    currentTIL.resize( count );
+                    tilImages[shapeId].resize( count );
+                }
 
-                    const bool horizontalFlip = ( shapeId & 2 ) != 0;
-                    const bool verticalFlip = ( shapeId & 1 ) != 0;
+                for ( size_t i = 0; i < count; ++i ) {
+                    for ( uint32_t shapeId = 1; shapeId < 4; ++shapeId ) {
+                        Image & image = tilImages[shapeId][i];
 
-                    for ( size_t i = 0; i < count; ++i ) {
-                        currentTIL[i] = Flip( originalTIL[i], horizontalFlip, verticalFlip );
+                        const bool horizontalFlip = ( shapeId & 2 ) != 0;
+                        const bool verticalFlip = ( shapeId & 1 ) != 0;
+
+                        image._disableTransformLayer();
+                        image.resize( width, height );
+
+                        Flip( originalTIL[i], 0, 0, image, 0, 0, width, height, horizontalFlip, verticalFlip );
                     }
                 }
             }
 
-            return _tilVsImage[id][0].size();
+            return tilImages[0].size();
         }
 
         // We have few ICNs which we need to scale like some related to main screen

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-25 01:52+0000\n"
+"POT-Creation-Date: 2024-01-02 13:33+0000\n"
 "PO-Revision-Date: 2023-09-06 08:41+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -197,6 +197,10 @@ msgstr "МІН"
 
 msgid "RESET"
 msgstr ""
+
+#, fuzzy
+msgid "START"
+msgstr "РЕСТАРТ"
 
 #, fuzzy
 msgid "CASTLE"
@@ -950,6 +954,22 @@ msgstr "Людина"
 
 msgid "AI"
 msgstr "Комп'ютер"
+
+msgid "Start"
+msgstr ""
+
+#, fuzzy
+msgid "Start the battle."
+msgstr "Повернутися до битви."
+
+msgid "Exit"
+msgstr "Вийти"
+
+msgid "Reset"
+msgstr ""
+
+msgid "Reset to default settings."
+msgstr ""
 
 msgid "Please select another hero."
 msgstr "Будь ласка, оберіть іншого героя."
@@ -2549,9 +2569,6 @@ msgstr ""
 "у Вас немає вільного місця під книгу. Спробуйте передати один із артефактів "
 "іншому герою."
 
-msgid "Exit"
-msgstr "Вийти"
-
 msgid "Click to show next town."
 msgstr "Натисніть щоб побачити наступне місто."
 
@@ -3632,9 +3649,6 @@ msgstr "Збережіть поточну мапу."
 msgid "Quit out of the map editor."
 msgstr ""
 
-msgid "Monster"
-msgstr "Монстр"
-
 msgid "Objects cannot be placed outside the map."
 msgstr ""
 
@@ -3644,33 +3658,17 @@ msgstr ""
 msgid "Choose a tile which does not contain any objects."
 msgstr ""
 
-msgid "Treasure"
-msgstr "Скарб"
-
 msgid "Treasures cannot be placed on water."
-msgstr ""
-
-msgid "Heroes"
 msgstr ""
 
 msgid "Heroes cannot be placed on water."
 msgstr ""
 
-msgid "Artifacts"
-msgstr ""
-
 msgid "Artifacts cannot be placed on water."
 msgstr ""
 
-#, fuzzy
-msgid "Ocean object"
-msgstr "Порожнє місце"
-
 msgid "Ocean object must be placed on water."
 msgstr ""
-
-msgid "Towns"
-msgstr "Міста"
 
 #, fuzzy
 msgid "Towns cannot be placed on water."
@@ -3726,6 +3724,9 @@ msgstr "Об'єкти Пустки"
 msgid "Miscellaneous"
 msgstr ""
 
+msgid "Artifacts"
+msgstr ""
+
 #, fuzzy
 msgid "Dwellings"
 msgstr "Напіврослики"
@@ -3739,6 +3740,12 @@ msgstr "Квіти"
 
 msgid "Treasures"
 msgstr "Скарби"
+
+msgid "Towns"
+msgstr "Міста"
+
+msgid "Heroes"
+msgstr ""
 
 msgid "Terrain"
 msgstr ""
@@ -5561,6 +5568,9 @@ msgstr ""
 
 msgid "You come upon the remains of an unfortunate adventurer."
 msgstr ""
+
+msgid "Treasure"
+msgstr "Скарб"
 
 msgid "Searching through the tattered clothing, you find the %{artifact}."
 msgstr ""
@@ -7476,6 +7486,9 @@ msgid_plural "Water Wheels"
 msgstr[0] "Водяне Колесо"
 msgstr[1] "Водяні Колеса"
 msgstr[2] "Водяні Колеса"
+
+msgid "Monster"
+msgstr "Монстр"
 
 msgid "Obelisk"
 msgstr "Обеліск"
@@ -10291,6 +10304,10 @@ msgstr ""
 "Перевірити нову версію гри на\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#, fuzzy
+#~ msgid "Ocean object"
+#~ msgstr "Порожнє місце"
 
 #~ msgid "Desert Objects"
 #~ msgstr "Об'єкти Пустелі"

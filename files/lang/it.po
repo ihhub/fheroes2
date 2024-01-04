@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-25 01:52+0000\n"
+"POT-Creation-Date: 2024-01-02 13:33+0000\n"
 "PO-Revision-Date: 2022-12-03 04:36+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <it@li.org>\n"
@@ -175,6 +175,9 @@ msgid "MIN"
 msgstr ""
 
 msgid "RESET"
+msgstr ""
+
+msgid "START"
 msgstr ""
 
 msgid "CASTLE"
@@ -885,6 +888,22 @@ msgstr "Umano"
 
 msgid "AI"
 msgstr "Computer"
+
+msgid "Start"
+msgstr ""
+
+#, fuzzy
+msgid "Start the battle."
+msgstr "Torna al combattimento."
+
+msgid "Exit"
+msgstr "Esci"
+
+msgid "Reset"
+msgstr ""
+
+msgid "Reset to default settings."
+msgstr ""
 
 msgid "Please select another hero."
 msgstr "Per favore, scegli un altro eroe."
@@ -2413,9 +2432,6 @@ msgid ""
 "no room for a spell book. Try giving one of your artifacts to another hero."
 msgstr ""
 
-msgid "Exit"
-msgstr "Esci"
-
 msgid "Click to show next town."
 msgstr "Clicca per andare alla città succ."
 
@@ -3591,9 +3607,6 @@ msgstr "Salva la partita in corso."
 msgid "Quit out of the map editor."
 msgstr ""
 
-msgid "Monster"
-msgstr "Mostro"
-
 msgid "Objects cannot be placed outside the map."
 msgstr ""
 
@@ -3603,34 +3616,17 @@ msgstr ""
 msgid "Choose a tile which does not contain any objects."
 msgstr ""
 
-msgid "Treasure"
-msgstr "Tesoro"
-
 msgid "Treasures cannot be placed on water."
 msgstr ""
-
-msgid "Heroes"
-msgstr "Eroi"
 
 msgid "Heroes cannot be placed on water."
 msgstr ""
 
-msgid "Artifacts"
-msgstr "Artefatti"
-
 msgid "Artifacts cannot be placed on water."
 msgstr ""
 
-#, fuzzy
-msgid "Ocean object"
-msgstr "Nessun oggetto"
-
 msgid "Ocean object must be placed on water."
 msgstr ""
-
-#, fuzzy
-msgid "Towns"
-msgstr "Castello"
 
 msgid "Towns cannot be placed on water."
 msgstr ""
@@ -3687,6 +3683,9 @@ msgstr "Terra sterile"
 msgid "Miscellaneous"
 msgstr "Fineo"
 
+msgid "Artifacts"
+msgstr "Artefatti"
+
 #, fuzzy
 msgid "Dwellings"
 msgstr "Frombolieri"
@@ -3701,6 +3700,13 @@ msgstr "Potere"
 #, fuzzy
 msgid "Treasures"
 msgstr "Tesoro"
+
+#, fuzzy
+msgid "Towns"
+msgstr "Castello"
+
+msgid "Heroes"
+msgstr "Eroi"
 
 msgid "Terrain"
 msgstr ""
@@ -5615,6 +5621,9 @@ msgstr ""
 
 msgid "You come upon the remains of an unfortunate adventurer."
 msgstr "Trovi le spoglie di un avventuriero sfortunato."
+
+msgid "Treasure"
+msgstr "Tesoro"
 
 msgid "Searching through the tattered clothing, you find the %{artifact}."
 msgstr ""
@@ -7544,6 +7553,9 @@ msgid "Water Wheel"
 msgid_plural "Water Wheels"
 msgstr[0] "Mulino ad Acqua"
 msgstr[1] "Mulini ad Acqua"
+
+msgid "Monster"
+msgstr "Mostro"
 
 msgid "Obelisk"
 msgstr "Obelisco"
@@ -10198,6 +10210,10 @@ msgstr ""
 "Scopri l'ultima versione del gioco su\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#, fuzzy
+#~ msgid "Ocean object"
+#~ msgstr "Nessun oggetto"
 
 #, fuzzy
 #~ msgid "Snow Objects"

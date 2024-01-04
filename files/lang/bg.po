@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-25 01:52+0000\n"
+"POT-Creation-Date: 2024-01-02 13:33+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -196,6 +196,10 @@ msgstr "МИН"
 
 msgid "RESET"
 msgstr ""
+
+#, fuzzy
+msgid "START"
+msgstr "РЕСТАРТ"
 
 #, fuzzy
 msgid "CASTLE"
@@ -943,6 +947,23 @@ msgstr "Човек"
 
 msgid "AI"
 msgstr "ИИ"
+
+#, fuzzy
+msgid "Start"
+msgstr "Рестарт"
+
+#, fuzzy
+msgid "Start the battle."
+msgstr "Върни се в битката."
+
+msgid "Exit"
+msgstr "Изход"
+
+msgid "Reset"
+msgstr ""
+
+msgid "Reset to default settings."
+msgstr ""
 
 msgid "Please select another hero."
 msgstr "Моля, избери друг герой."
@@ -2563,9 +2584,6 @@ msgstr ""
 "нямаш място за нея. Опитай се да дадеш един от твойте артефакти на друг "
 "герой."
 
-msgid "Exit"
-msgstr "Изход"
-
 msgid "Click to show next town."
 msgstr "Кликни, за да покажеш следващия град."
 
@@ -3726,9 +3744,6 @@ msgstr "Запазете текущата карта."
 msgid "Quit out of the map editor."
 msgstr "Излез от редактора на карти."
 
-msgid "Monster"
-msgstr "Чудовище"
-
 #, fuzzy
 msgid "Objects cannot be placed outside the map."
 msgstr "Това заклинание не може да се направи на кораб."
@@ -3739,36 +3754,20 @@ msgstr "Чудовищата не могат да се поставят върх
 msgid "Choose a tile which does not contain any objects."
 msgstr "Избери плочка, която не съдържа никакви предмети."
 
-msgid "Treasure"
-msgstr "Съкровище"
-
 #, fuzzy
 msgid "Treasures cannot be placed on water."
 msgstr "Това заклинание не може да се направи на кораб."
 
-msgid "Heroes"
-msgstr "Герой"
-
 msgid "Heroes cannot be placed on water."
 msgstr "Героите не могат да бъдат поставени на вода."
-
-msgid "Artifacts"
-msgstr "Артефакти"
 
 #, fuzzy
 msgid "Artifacts cannot be placed on water."
 msgstr "Това заклинание не може да се направи на кораб."
 
 #, fuzzy
-msgid "Ocean object"
-msgstr "Океански обекти"
-
-#, fuzzy
 msgid "Ocean object must be placed on water."
 msgstr "Това заклинание не може да се направи на кораб."
-
-msgid "Towns"
-msgstr "Градове"
 
 #, fuzzy
 msgid "Towns cannot be placed on water."
@@ -3827,6 +3826,9 @@ msgstr "Обекти от пущинака"
 msgid "Miscellaneous"
 msgstr "Финиас"
 
+msgid "Artifacts"
+msgstr "Артефакти"
+
 #, fuzzy
 msgid "Dwellings"
 msgstr "Хобити"
@@ -3840,6 +3842,12 @@ msgstr "Сила"
 
 msgid "Treasures"
 msgstr "Съкровища"
+
+msgid "Towns"
+msgstr "Градове"
+
+msgid "Heroes"
+msgstr "Герой"
 
 msgid "Terrain"
 msgstr "Терен"
@@ -5844,6 +5852,9 @@ msgstr ""
 
 msgid "You come upon the remains of an unfortunate adventurer."
 msgstr "Попадаш на останките на нещастен авантюрист."
+
+msgid "Treasure"
+msgstr "Съкровище"
 
 msgid "Searching through the tattered clothing, you find the %{artifact}."
 msgstr "Търсейки в едни дрипи, намираш %{artifact}."
@@ -8166,6 +8177,9 @@ msgid "Water Wheel"
 msgid_plural "Water Wheels"
 msgstr[0] "Водно колело"
 msgstr[1] "Водни колела"
+
+msgid "Monster"
+msgstr "Чудовище"
 
 msgid "Obelisk"
 msgstr "Обелиск"
@@ -11112,6 +11126,10 @@ msgstr ""
 "Проверете най-новата версия на играта на\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#, fuzzy
+#~ msgid "Ocean object"
+#~ msgstr "Океански обекти"
 
 #~ msgid "Ocean Objects"
 #~ msgstr "Океански обекти"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-25 01:52+0000\n"
+"POT-Creation-Date: 2024-01-02 13:33+0000\n"
 "PO-Revision-Date: 2023-09-11 20:22+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -202,6 +202,10 @@ msgstr "MIN"
 
 msgid "RESET"
 msgstr ""
+
+#, fuzzy
+msgid "START"
+msgstr "REŠTART"
 
 #, fuzzy
 msgid "CASTLE"
@@ -939,6 +943,23 @@ msgstr "Človek"
 
 msgid "AI"
 msgstr "UI"
+
+#, fuzzy
+msgid "Start"
+msgstr "Reštart"
+
+#, fuzzy
+msgid "Start the battle."
+msgstr "Späť do boja."
+
+msgid "Exit"
+msgstr "Preč"
+
+msgid "Reset"
+msgstr ""
+
+msgid "Reset to default settings."
+msgstr ""
 
 msgid "Please select another hero."
 msgstr "Prosím zvoľ ďalšieho hrdinu."
@@ -2543,9 +2564,6 @@ msgstr ""
 "nemáš miesto pre knihu kúziel. Skús dať jeden zo svojich artefaktov inému "
 "hrdinovi."
 
-msgid "Exit"
-msgstr "Preč"
-
 msgid "Click to show next town."
 msgstr "Kliknutím zobraz ďalšie mesto."
 
@@ -3693,9 +3711,6 @@ msgstr "Uložiť aktuálnu mapu."
 msgid "Quit out of the map editor."
 msgstr "Ukončiť prácu v editore máp."
 
-msgid "Monster"
-msgstr "Tvor"
-
 #, fuzzy
 msgid "Objects cannot be placed outside the map."
 msgstr "Toto kúzlo nemožno použiť na lodi."
@@ -3706,36 +3721,20 @@ msgstr ""
 msgid "Choose a tile which does not contain any objects."
 msgstr ""
 
-msgid "Treasure"
-msgstr "Poklad"
-
 #, fuzzy
 msgid "Treasures cannot be placed on water."
 msgstr "Toto kúzlo nemožno použiť na lodi."
 
-msgid "Heroes"
-msgstr "Hrdinovia"
-
 msgid "Heroes cannot be placed on water."
 msgstr ""
-
-msgid "Artifacts"
-msgstr "Artefakty"
 
 #, fuzzy
 msgid "Artifacts cannot be placed on water."
 msgstr "Toto kúzlo nemožno použiť na lodi."
 
 #, fuzzy
-msgid "Ocean object"
-msgstr "Objekty oceánu"
-
-#, fuzzy
 msgid "Ocean object must be placed on water."
 msgstr "Toto kúzlo nemožno použiť na lodi."
-
-msgid "Towns"
-msgstr "Mestá"
 
 #, fuzzy
 msgid "Towns cannot be placed on water."
@@ -3796,6 +3795,9 @@ msgstr "Objekty pustatiny"
 msgid "Miscellaneous"
 msgstr "Fineous"
 
+msgid "Artifacts"
+msgstr "Artefakty"
+
 #, fuzzy
 msgid "Dwellings"
 msgstr "Polčíci"
@@ -3809,6 +3811,12 @@ msgstr "Sila"
 
 msgid "Treasures"
 msgstr "Poklady"
+
+msgid "Towns"
+msgstr "Mestá"
+
+msgid "Heroes"
+msgstr "Hrdinovia"
 
 #, fuzzy
 msgid "Terrain"
@@ -5788,6 +5796,9 @@ msgstr ""
 
 msgid "You come upon the remains of an unfortunate adventurer."
 msgstr "Narazíš na pozostatky nešťastného dobrodruha."
+
+msgid "Treasure"
+msgstr "Poklad"
 
 msgid "Searching through the tattered clothing, you find the %{artifact}."
 msgstr "Pri prehľadávaní roztrhaného oblečenia nájdeš %{artifact}."
@@ -8085,6 +8096,9 @@ msgid_plural "Water Wheels"
 msgstr[0] "Vodné koleso"
 msgstr[1] "Vodné kolesá"
 msgstr[2] "Vodných kolies"
+
+msgid "Monster"
+msgstr "Tvor"
 
 msgid "Obelisk"
 msgstr "Obelisk"
@@ -11005,6 +11019,10 @@ msgstr ""
 "Pozri si najnovšiu verziu hry na\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#, fuzzy
+#~ msgid "Ocean object"
+#~ msgstr "Objekty oceánu"
 
 #~ msgid "Ocean Objects"
 #~ msgstr "Objekty oceánu"

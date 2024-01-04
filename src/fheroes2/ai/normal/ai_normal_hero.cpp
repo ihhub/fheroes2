@@ -192,6 +192,36 @@ namespace
         return monster.GetStrength() > armyStrengthThreshold;
     }
 
+    bool isArmyValuableToHire( const Army & army, const Kingdom & kingdom, const Maps::Tiles & tile, const double armyStrengthThreshold )
+    {
+        const Troop & troop = getTroopFromTile( tile );
+        if ( !troop.isValid() ) {
+            return false;
+        }
+
+        const bool armyHasMonster = army.HasMonster( troop.GetMonster() );
+        if ( !armyHasMonster && army.isFullHouse() && army.areAllTroopsUnique() ) {
+            return false;
+        }
+
+        const Funds singleMonsterCost = troop.GetCost();
+
+        uint32_t recruitTroopCount = kingdom.GetFunds().getLowestQuotient( singleMonsterCost );
+        if ( recruitTroopCount == 0 ) {
+            // We do not have resources to hire even a single creature.
+            return false;
+        }
+
+        const uint32_t availableTroopCount = troop.GetCount();
+        if ( recruitTroopCount > availableTroopCount ) {
+            recruitTroopCount = availableTroopCount;
+        }
+
+        const Troop troopToHire{ troop.GetID(), recruitTroopCount };
+
+        return isArmyValuableToObtain( troopToHire, armyStrengthThreshold, armyHasMonster );
+    }
+
     bool isSpellUsedByAI( const int spellId )
     {
         // TODO: All these spells are not used by AI at the moment.
@@ -472,34 +502,8 @@ namespace
         case MP2::OBJ_RUINS:
         case MP2::OBJ_TREE_CITY:
         case MP2::OBJ_WAGON_CAMP:
-        case MP2::OBJ_WATER_ALTAR: {
-            const Troop & troop = getTroopFromTile( tile );
-            if ( !troop.isValid() ) {
-                return false;
-            }
-
-            const bool armyHasMonster = army.HasMonster( troop.GetMonster() );
-            if ( !armyHasMonster && army.isFullHouse() && army.areAllTroopsUnique() ) {
-                return false;
-            }
-
-            const Funds singleMonsterCost = troop.GetCost();
-
-            uint32_t recruitTroopCount = kingdom.GetFunds().getLowestQuotient( singleMonsterCost );
-            if ( recruitTroopCount <= 0 ) {
-                // We do not have resources to hire even a single creature.
-                return false;
-            }
-
-            const uint32_t availableTroopCount = troop.GetCount();
-            if ( recruitTroopCount > availableTroopCount ) {
-                recruitTroopCount = availableTroopCount;
-            }
-
-            const Troop troopToHire{ troop.GetID(), recruitTroopCount };
-
-            return isArmyValuableToObtain( troopToHire, armyStrengthThreshold, armyHasMonster );
-        }
+        case MP2::OBJ_WATER_ALTAR:
+            return isArmyValuableToHire( army, kingdom, tile, armyStrengthThreshold );
 
         // Dwellings where AI might fight monsters first before recruiting them.
         case MP2::OBJ_CITY_OF_DEAD:
@@ -509,23 +513,7 @@ namespace
                 return isHeroStrongerThan( tile, objectType, ai, heroArmyStrength, AI::ARMY_ADVANTAGE_MEDIUM );
             }
 
-            const Troop & troop = getTroopFromTile( tile );
-            if ( !troop.isValid() ) {
-                return false;
-            }
-
-            const bool armyHasMonster = army.HasMonster( troop.GetMonster() );
-            if ( !armyHasMonster && army.isFullHouse() && army.areAllTroopsUnique() ) {
-                return false;
-            }
-
-            const Funds & paymentCosts = troop.GetTotalCost();
-            // TODO: even if AI does not have enough money it might still buy few monsters.
-            if ( !kingdom.AllowPayment( paymentCosts ) ) {
-                return false;
-            }
-
-            return isArmyValuableToObtain( troop, armyStrengthThreshold, armyHasMonster );
+            return isArmyValuableToHire( army, kingdom, tile, armyStrengthThreshold );
         }
 
         // Free army upgrade objects.
@@ -659,11 +647,9 @@ namespace
 
     void addHeroToMove( Heroes * hero, std::vector<AI::HeroToMove> & availableHeroes )
     {
-        if ( hero->Modes( Heroes::PATROL ) ) {
-            if ( hero->GetPatrolDistance() == 0 ) {
-                DEBUG_LOG( DBG_AI, DBG_TRACE, hero->GetName() << " standing still. Skip turn." )
-                return;
-            }
+        if ( hero->Modes( Heroes::PATROL ) && ( hero->GetPatrolDistance() == 0 ) ) {
+            DEBUG_LOG( DBG_AI, DBG_TRACE, hero->GetName() << " standing still. Skip turn." )
+            return;
         }
 
         if ( hero->MayStillMove( false, false ) ) {
@@ -1167,28 +1153,52 @@ namespace AI
         case MP2::OBJ_WITCHS_HUT: {
             return 500.0;
         }
+        // These are dwelling where monsters can be purchased.
         case MP2::OBJ_AIR_ALTAR:
-        case MP2::OBJ_ARCHER_HOUSE:
         case MP2::OBJ_BARROW_MOUNDS:
-        case MP2::OBJ_CAVE:
         case MP2::OBJ_CITY_OF_DEAD:
         case MP2::OBJ_DESERT_TENT:
         case MP2::OBJ_DRAGON_CITY:
-        case MP2::OBJ_DWARF_COTTAGE:
         case MP2::OBJ_EARTH_ALTAR:
-        case MP2::OBJ_EXCAVATION:
         case MP2::OBJ_FIRE_ALTAR:
         case MP2::OBJ_GENIE_LAMP:
+        case MP2::OBJ_RUINS:
+        case MP2::OBJ_TREE_CITY:
+        case MP2::OBJ_TROLL_BRIDGE:
+        case MP2::OBJ_WAGON_CAMP:
+        case MP2::OBJ_WATER_ALTAR: {
+            const Troop & troop = getTroopFromTile( tile );
+            if ( !troop.isValid() ) {
+                // This should not happen! The dwelling must have monsters to reach this code.
+                assert( 0 );
+                return -dangerousTaskPenalty;
+            }
+
+            const Funds singleMonsterCost = troop.GetCost();
+
+            uint32_t recruitTroopCount = hero.GetKingdom().GetFunds().getLowestQuotient( singleMonsterCost );
+            if ( recruitTroopCount == 0 ) {
+                // This can actually happen when AI spends some money in between visiting objects.
+                return -dangerousTaskPenalty;
+            }
+
+            const uint32_t availableTroopCount = troop.GetCount();
+            if ( recruitTroopCount > availableTroopCount ) {
+                recruitTroopCount = availableTroopCount;
+            }
+
+            return Troop{ troop.GetID(), recruitTroopCount }.GetStrength();
+        }
+        // These are dwellings where monsters can be hired for free.
+        case MP2::OBJ_ARCHER_HOUSE:
+        case MP2::OBJ_CAVE:
+        case MP2::OBJ_DWARF_COTTAGE:
+        case MP2::OBJ_EXCAVATION:
         case MP2::OBJ_GOBLIN_HUT:
         case MP2::OBJ_HALFLING_HOLE:
         case MP2::OBJ_PEASANT_HUT:
-        case MP2::OBJ_RUINS:
-        case MP2::OBJ_TREE_CITY:
         case MP2::OBJ_TREE_HOUSE:
-        case MP2::OBJ_TROLL_BRIDGE:
-        case MP2::OBJ_WAGON_CAMP:
-        case MP2::OBJ_WATCH_TOWER:
-        case MP2::OBJ_WATER_ALTAR: {
+        case MP2::OBJ_WATCH_TOWER: {
             return getTroopFromTile( tile ).GetStrength();
         }
         case MP2::OBJ_STONE_LITHS: {
