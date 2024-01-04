@@ -301,7 +301,7 @@ namespace
             }
 
             listBox.Redraw();
-            display.render( background.activeArea() );
+            display.render( roi );
         }
 
         return selectedResolution;

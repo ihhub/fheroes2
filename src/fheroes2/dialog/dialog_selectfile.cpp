@@ -556,7 +556,7 @@ namespace
                 }
             }
 
-            display.render( background.activeArea() );
+            display.render( area );
         }
 
         return result;
