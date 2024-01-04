@@ -441,6 +441,9 @@
     <ClInclude Include="src\thirdparty\libsmacker\smk_malloc.h" />
   </ItemGroup>
   <ItemGroup>
+    <Manifest Include="src\resources\fheroes2.manifest" />
+  </ItemGroup>
+  <ItemGroup>
     <ResourceCompile Include="src\resources\fheroes2.rc" />
   </ItemGroup>
 </Project>

@@ -355,12 +355,7 @@ namespace AI
         case Spell::MASSCURSE:
             ratio = 0.15;
             break;
-        case Spell::BERSERKER: {
-            if ( targetIsLast )
-                return 0.0;
-            ratio = 0.85;
-            break;
-        }
+        case Spell::BERSERKER:
         case Spell::PARALYZE: {
             if ( targetIsLast )
                 return 0.0;

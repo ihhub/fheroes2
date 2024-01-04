@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-29 00:13+0000\n"
+"POT-Creation-Date: 2024-01-02 13:33+0000\n"
 "PO-Revision-Date: 2023-12-25 14:31+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -3710,9 +3710,6 @@ msgstr "Spara nuvarande karta."
 msgid "Quit out of the map editor."
 msgstr "Lämna kartredigeraren."
 
-msgid "Monster"
-msgstr "Varelse"
-
 msgid "Objects cannot be placed outside the map."
 msgstr "Föremål kan inte placeras utanför kartan."
 
@@ -3722,32 +3719,17 @@ msgstr "Varelser kan inte placeras på vatten."
 msgid "Choose a tile which does not contain any objects."
 msgstr "Välj en ruta som inte har några objekt."
 
-msgid "Treasure"
-msgstr "Skatt"
-
 msgid "Treasures cannot be placed on water."
 msgstr "Skatter kan inte placeras på vatten."
-
-msgid "Heroes"
-msgstr "Hjältar"
 
 msgid "Heroes cannot be placed on water."
 msgstr "Hjältar kan inte placeras på vatten."
 
-msgid "Artifacts"
-msgstr "Artefakter"
-
 msgid "Artifacts cannot be placed on water."
 msgstr "Artefakter kan inte placeras på vatten."
 
-msgid "Ocean object"
-msgstr "Havsföremål"
-
 msgid "Ocean object must be placed on water."
 msgstr "Havsföremål måste placeras på vatten."
-
-msgid "Towns"
-msgstr "Städer"
 
 msgid "Towns cannot be placed on water."
 msgstr "Städer kan inte placeras på vatten."
@@ -3804,6 +3786,9 @@ msgstr "Havsföremål"
 msgid "Miscellaneous"
 msgstr "Diverse"
 
+msgid "Artifacts"
+msgstr "Artefakter"
+
 msgid "Dwellings"
 msgstr "Bostäder"
 
@@ -3815,6 +3800,12 @@ msgstr "Kraftökningar"
 
 msgid "Treasures"
 msgstr "Skatter"
+
+msgid "Towns"
+msgstr "Städer"
+
+msgid "Heroes"
+msgstr "Hjältar"
 
 msgid "Terrain"
 msgstr "Terräng"
@@ -5796,6 +5787,9 @@ msgstr ""
 
 msgid "You come upon the remains of an unfortunate adventurer."
 msgstr "Du stöter på kvarlevorna av en olycklig äventyrare."
+
+msgid "Treasure"
+msgstr "Skatt"
 
 msgid "Searching through the tattered clothing, you find the %{artifact}."
 msgstr "När du söker igenom de trasiga kläderna hittar du %{artifact}."
@@ -8082,6 +8076,9 @@ msgid "Water Wheel"
 msgid_plural "Water Wheels"
 msgstr[0] "Vattenkvarn"
 msgstr[1] "Vattenkvarnar"
+
+msgid "Monster"
+msgstr "Varelse"
 
 msgid "Obelisk"
 msgstr "Obelisk"
@@ -11038,6 +11035,9 @@ msgstr ""
 "Den senaste versionen av spelet finns på:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Ocean object"
+#~ msgstr "Havsföremål"
 
 #~ msgid "Ocean Objects"
 #~ msgstr "Havsföremål"

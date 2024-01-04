@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2023                                                    *
+ *   Copyright (C) 2023 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -62,6 +62,7 @@
 #include "ui_button.h"
 #include "ui_dialog.h"
 #include "ui_map_object.h"
+#include "ui_text.h"
 #include "ui_tool.h"
 #include "view_world.h"
 #include "world.h"
@@ -186,6 +187,16 @@ namespace Interface
         if ( combinedRedraw & REDRAW_GAMEAREA ) {
             // Render all except the fog.
             _gameArea.Redraw( display, LEVEL_OBJECTS | LEVEL_HEROES | LEVEL_ROUTES );
+
+            if ( _warningMessage.isValid() ) {
+                const fheroes2::Rect & roi = _gameArea.GetROI();
+
+                fheroes2::Text text{ _warningMessage.message(), fheroes2::FontType::normalWhite() };
+                // Keep 4 pixels from each edge.
+                text.fitToOneRow( roi.width - 8 );
+
+                text.draw( roi.x + 4, roi.y + roi.height - text.height() - 4, display );
+            }
 
             // TODO:: Render horizontal and vertical map tiles scale and highlight with yellow text cursor position.
 
@@ -716,17 +727,17 @@ namespace Interface
             const auto & objectInfo = getObjectInfo( groupType, _editorPanel.getSelectedObjectType() );
 
             if ( !isObjectPlacementAllowed( objectInfo, tilePos ) ) {
-                fheroes2::showStandardTextMessage( _( "Monster" ), _( "Objects cannot be placed outside the map." ), Dialog::OK );
+                _warningMessage.reset( _( "Objects cannot be placed outside the map." ) );
                 return;
             }
 
             if ( !verifyObjectCondition( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return !tileToCheck.isWater(); } ) ) {
-                fheroes2::showStandardTextMessage( _( "Monster" ), _( "Monsters cannot be placed on water." ), Dialog::OK );
+                _warningMessage.reset( _( "Monsters cannot be placed on water." ) );
                 return;
             }
 
             if ( !verifyObjectCondition( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return Maps::isClearGround( tileToCheck ); } ) ) {
-                fheroes2::showStandardTextMessage( _( "Monster" ), _( "Choose a tile which does not contain any objects." ), Dialog::OK );
+                _warningMessage.reset( _( "Choose a tile which does not contain any objects." ) );
                 return;
             }
 
@@ -736,17 +747,17 @@ namespace Interface
             const auto & objectInfo = getObjectInfo( groupType, _editorPanel.getSelectedObjectType() );
 
             if ( !isObjectPlacementAllowed( objectInfo, tilePos ) ) {
-                fheroes2::showStandardTextMessage( _( "Treasure" ), _( "Objects cannot be placed outside the map." ), Dialog::OK );
+                _warningMessage.reset( _( "Objects cannot be placed outside the map." ) );
                 return;
             }
 
             if ( !verifyObjectCondition( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return !tileToCheck.isWater(); } ) ) {
-                fheroes2::showStandardTextMessage( _( "Treasure" ), _( "Treasures cannot be placed on water." ), Dialog::OK );
+                _warningMessage.reset( _( "Treasures cannot be placed on water." ) );
                 return;
             }
 
             if ( !verifyObjectCondition( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return Maps::isClearGround( tileToCheck ); } ) ) {
-                fheroes2::showStandardTextMessage( _( "Treasure" ), _( "Choose a tile which does not contain any objects." ), Dialog::OK );
+                _warningMessage.reset( _( "Choose a tile which does not contain any objects." ) );
                 return;
             }
 
@@ -756,17 +767,17 @@ namespace Interface
             const auto & objectInfo = getObjectInfo( groupType, _editorPanel.getSelectedObjectType() );
 
             if ( !isObjectPlacementAllowed( objectInfo, tilePos ) ) {
-                fheroes2::showStandardTextMessage( _( "Heroes" ), _( "Objects cannot be placed outside the map." ), Dialog::OK );
+                _warningMessage.reset( _( "Objects cannot be placed outside the map." ) );
                 return;
             }
 
             if ( !verifyObjectCondition( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return !tileToCheck.isWater(); } ) ) {
-                fheroes2::showStandardTextMessage( _( "Heroes" ), _( "Heroes cannot be placed on water." ), Dialog::OK );
+                _warningMessage.reset( _( "Heroes cannot be placed on water." ) );
                 return;
             }
 
             if ( !verifyObjectCondition( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return Maps::isClearGround( tileToCheck ); } ) ) {
-                fheroes2::showStandardTextMessage( _( "Heroes" ), _( "Choose a tile which does not contain any objects." ), Dialog::OK );
+                _warningMessage.reset( _( "Choose a tile which does not contain any objects." ) );
                 return;
             }
 
@@ -776,17 +787,17 @@ namespace Interface
             const auto & objectInfo = getObjectInfo( groupType, _editorPanel.getSelectedObjectType() );
 
             if ( !isObjectPlacementAllowed( objectInfo, tilePos ) ) {
-                fheroes2::showStandardTextMessage( _( "Artifacts" ), _( "Objects cannot be placed outside the map." ), Dialog::OK );
+                _warningMessage.reset( _( "Objects cannot be placed outside the map." ) );
                 return;
             }
 
             if ( !verifyObjectCondition( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return !tileToCheck.isWater(); } ) ) {
-                fheroes2::showStandardTextMessage( _( "Artifacts" ), _( "Artifacts cannot be placed on water." ), Dialog::OK );
+                _warningMessage.reset( _( "Artifacts cannot be placed on water." ) );
                 return;
             }
 
             if ( !verifyObjectCondition( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return Maps::isClearGround( tileToCheck ); } ) ) {
-                fheroes2::showStandardTextMessage( _( "Artifacts" ), _( "Choose a tile which does not contain any objects." ), Dialog::OK );
+                _warningMessage.reset( _( "Choose a tile which does not contain any objects." ) );
                 return;
             }
 
@@ -815,17 +826,17 @@ namespace Interface
             const auto & objectInfo = getObjectInfo( groupType, _editorPanel.getSelectedObjectType() );
 
             if ( !isObjectPlacementAllowed( objectInfo, tilePos ) ) {
-                fheroes2::showStandardTextMessage( _( "Ocean object" ), _( "Objects cannot be placed outside the map." ), Dialog::OK );
+                _warningMessage.reset( _( "Objects cannot be placed outside the map." ) );
                 return;
             }
 
             if ( !verifyObjectCondition( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return tileToCheck.isWater(); } ) ) {
-                fheroes2::showStandardTextMessage( _( "Ocean object" ), _( "Ocean object must be placed on water." ), Dialog::OK );
+                _warningMessage.reset( _( "Ocean object must be placed on water." ) );
                 return;
             }
 
             if ( !verifyObjectCondition( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return Maps::isClearGround( tileToCheck ); } ) ) {
-                fheroes2::showStandardTextMessage( _( "Ocean object" ), _( "Choose a tile which does not contain any objects." ), Dialog::OK );
+                _warningMessage.reset( _( "Choose a tile which does not contain any objects." ) );
                 return;
             }
 
@@ -842,7 +853,7 @@ namespace Interface
             }
 
             if ( tile.isWater() ) {
-                fheroes2::showStandardTextMessage( _( "Towns" ), _( "Towns cannot be placed on water." ), Dialog::OK );
+                _warningMessage.reset( _( "Towns cannot be placed on water." ) );
                 return;
             }
 
@@ -853,32 +864,32 @@ namespace Interface
             const auto & basementObjectInfo = getObjectInfo( Maps::ObjectGroup::LANDSCAPE_TOWN_BASEMENTS, basementId );
 
             if ( !isObjectPlacementAllowed( townObjectInfo, tilePos ) ) {
-                fheroes2::showStandardTextMessage( _( "Towns" ), _( "Objects cannot be placed outside the map." ), Dialog::OK );
+                _warningMessage.reset( _( "Objects cannot be placed outside the map." ) );
                 return;
             }
 
             if ( !isObjectPlacementAllowed( basementObjectInfo, tilePos ) ) {
-                fheroes2::showStandardTextMessage( _( "Towns" ), _( "Objects cannot be placed outside the map." ), Dialog::OK );
+                _warningMessage.reset( _( "Objects cannot be placed outside the map." ) );
                 return;
             }
 
             if ( !verifyObjectCondition( townObjectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return !tileToCheck.isWater(); } ) ) {
-                fheroes2::showStandardTextMessage( _( "Towns" ), _( "Towns cannot be placed on water." ), Dialog::OK );
+                _warningMessage.reset( _( "Towns cannot be placed on water." ) );
                 return;
             }
 
             if ( !verifyObjectCondition( basementObjectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return !tileToCheck.isWater(); } ) ) {
-                fheroes2::showStandardTextMessage( _( "Towns" ), _( "Towns cannot be placed on water." ), Dialog::OK );
+                _warningMessage.reset( _( "Towns cannot be placed on water." ) );
                 return;
             }
 
             if ( !verifyObjectCondition( townObjectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return Maps::isClearGround( tileToCheck ); } ) ) {
-                fheroes2::showStandardTextMessage( _( "Towns" ), _( "Choose a tile which does not contain any objects." ), Dialog::OK );
+                _warningMessage.reset( _( "Choose a tile which does not contain any objects." ) );
                 return;
             }
 
             if ( !verifyObjectCondition( basementObjectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return Maps::isClearGround( tileToCheck ); } ) ) {
-                fheroes2::showStandardTextMessage( _( "Towns" ), _( "Choose a tile which does not contain any objects." ), Dialog::OK );
+                _warningMessage.reset( _( "Choose a tile which does not contain any objects." ) );
                 return;
             }
 
