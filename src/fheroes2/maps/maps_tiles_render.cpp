@@ -29,6 +29,7 @@
 #include <map>
 #include <memory>
 #include <ostream>
+#include <string>
 #include <utility>
 
 #include "agg_image.h"
