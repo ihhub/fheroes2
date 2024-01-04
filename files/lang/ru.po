@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-02 13:33+0000\n"
+"POT-Creation-Date: 2024-01-04 12:56+0000\n"
 "PO-Revision-Date: 2023-11-12 16:27+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -3764,6 +3764,10 @@ msgstr "Героев нельзя размещать на воде."
 
 #, fuzzy
 msgid "Towns cannot be placed on water."
+msgstr "Монстров нельзя размещать на воде."
+
+#, fuzzy
+msgid "Dwellings cannot be placed on water."
 msgstr "Монстров нельзя размещать на воде."
 
 #, fuzzy
