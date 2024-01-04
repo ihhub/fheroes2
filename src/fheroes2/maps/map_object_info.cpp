@@ -289,6 +289,45 @@ namespace
         // TODO: Add flags for other capture-able objects.
     }
 
+    void populateAdventureMineResources( std::vector<Maps::ObjectInfo> & objects )
+    {
+        assert( objects.empty() );
+
+        // Extra mine resource sprites: Ore, Sulfur, Crystal, Gems, Gold.
+        for ( uint8_t resource = 0; resource < 5; ++resource ) {
+            Maps::ObjectInfo object{ MP2::OBJ_MINE };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_EXTRAOVR, resource, fheroes2::Point{ 0, 0 }, MP2::OBJ_MINE, Maps::OBJECT_LAYER );
+
+            // Income per day.
+            object.metadata[1] = 1;
+
+            switch ( resource ) {
+            case 0:
+                object.metadata[0] = Resource::ORE;
+                break;
+            case 1:
+                object.metadata[0] = Resource::SULFUR;
+                break;
+            case 2:
+                object.metadata[0] = Resource::CRYSTAL;
+                break;
+            case 3:
+                object.metadata[0] = Resource::GEMS;
+                break;
+            case 4:
+                object.metadata[0] = Resource::GOLD;
+                object.metadata[1] = 1000;
+                break;
+            default:
+                // Have you added a new mine resource?!
+                assert( 0 );
+                break;
+            }
+
+            objects.emplace_back( std::move( object ) );
+        }
+    }
+
     void populateAdventureArtifacts( std::vector<Maps::ObjectInfo> & objects )
     {
         assert( objects.empty() );
@@ -663,7 +702,96 @@ namespace
     {
         assert( objects.empty() );
 
-        (void)objects;
+        // Mines for different terrains: Generic, Grass, Snow, Swamp, Lava, Desert, Dirt, Wasteland.
+        for ( const auto & [type, offset] :
+              { std::make_pair( MP2::OBJ_ICN_TYPE_MTNMULT, 74U ), std::make_pair( MP2::OBJ_ICN_TYPE_MTNGRAS, 74U ), std::make_pair( MP2::OBJ_ICN_TYPE_MTNSNOW, 74U ),
+                std::make_pair( MP2::OBJ_ICN_TYPE_MTNSWMP, 74U ), std::make_pair( MP2::OBJ_ICN_TYPE_MTNLAVA, 74U ), std::make_pair( MP2::OBJ_ICN_TYPE_MTNDSRT, 74U ),
+                std::make_pair( MP2::OBJ_ICN_TYPE_MTNDIRT, 104U ), std::make_pair( MP2::OBJ_ICN_TYPE_MTNCRCK, 104U ) } ) {
+            Maps::ObjectInfo object{ MP2::OBJ_MINE };
+            object.groundLevelParts.emplace_back( type, offset + 8U, fheroes2::Point{ 0, 0 }, MP2::OBJ_MINE, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( type, offset + 4U, fheroes2::Point{ 1, -1 }, MP2::OBJ_NON_ACTION_MINE, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( type, offset + 7U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NON_ACTION_MINE, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( type, offset + 9U, fheroes2::Point{ 1, 0 }, MP2::OBJ_NON_ACTION_MINE, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( type, offset + 0U, fheroes2::Point{ -3, -1 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            object.groundLevelParts.emplace_back( type, offset + 1U, fheroes2::Point{ -2, -1 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            object.groundLevelParts.emplace_back( type, offset + 5U, fheroes2::Point{ -3, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            object.groundLevelParts.emplace_back( type, offset + 6U, fheroes2::Point{ -2, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            object.topLevelParts.emplace_back( type, offset + 2U, fheroes2::Point{ -1, -1 }, MP2::OBJ_NON_ACTION_MINE );
+            object.topLevelParts.emplace_back( type, offset + 3U, fheroes2::Point{ 0, -1 }, MP2::OBJ_NON_ACTION_MINE );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Abandoned mines are only for Grass and Dirt and they have different tiles number.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_ABANDONED_MINE };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNGRAS, 6U, fheroes2::Point{ 0, 0 }, MP2::OBJ_ABANDONED_MINE, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNGRAS, 3U, fheroes2::Point{ 1, -1 }, MP2::OBJ_NON_ACTION_ABANDONED_MINE, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNGRAS, 5U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NON_ACTION_ABANDONED_MINE, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNGRAS, 7U, fheroes2::Point{ 1, 0 }, MP2::OBJ_NON_ACTION_ABANDONED_MINE, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNGRAS, 0U, fheroes2::Point{ -2, -1 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNGRAS, 4U, fheroes2::Point{ -2, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNGRAS, 1U, fheroes2::Point{ -1, -1 }, MP2::OBJ_NON_ACTION_ABANDONED_MINE );
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNGRAS, 2U, fheroes2::Point{ 0, -1 }, MP2::OBJ_NON_ACTION_ABANDONED_MINE );
+
+            objects.emplace_back( std::move( object ) );
+        }
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_ABANDONED_MINE };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDIRT, 8U, fheroes2::Point{ 0, 0 }, MP2::OBJ_ABANDONED_MINE, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDIRT, 4U, fheroes2::Point{ 1, -1 }, MP2::OBJ_NON_ACTION_ABANDONED_MINE, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDIRT, 7U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NON_ACTION_ABANDONED_MINE, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDIRT, 9U, fheroes2::Point{ 1, 0 }, MP2::OBJ_NON_ACTION_ABANDONED_MINE, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDIRT, 0U, fheroes2::Point{ -3, -1 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDIRT, 1U, fheroes2::Point{ -2, -1 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDIRT, 5U, fheroes2::Point{ -3, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDIRT, 6U, fheroes2::Point{ -2, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDIRT, 2U, fheroes2::Point{ -1, -1 }, MP2::OBJ_NON_ACTION_ABANDONED_MINE );
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDIRT, 3U, fheroes2::Point{ 0, -1 }, MP2::OBJ_NON_ACTION_ABANDONED_MINE );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Sawmills for different terrains: Grass/Swamp, Snow, Lava, Desert, Dirt, Wasteland.
+        for ( const auto & [type, offset] : { std::make_pair( MP2::OBJ_ICN_TYPE_OBJNMUL2, 210U ), std::make_pair( MP2::OBJ_ICN_TYPE_OBJNSNOW, 195U ),
+                                              std::make_pair( MP2::OBJ_ICN_TYPE_OBJNLAVA, 118U ), std::make_pair( MP2::OBJ_ICN_TYPE_OBJNDSRT, 123U ),
+                                              std::make_pair( MP2::OBJ_ICN_TYPE_OBJNMUL2, 74U ), std::make_pair( MP2::OBJ_ICN_TYPE_OBJNCRCK, 239U ) } ) {
+            Maps::ObjectInfo object{ MP2::OBJ_SAWMILL };
+            object.groundLevelParts.emplace_back( type, offset + 6U, fheroes2::Point{ 0, 0 }, MP2::OBJ_SAWMILL, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( type, offset + 2U, fheroes2::Point{ 0, -1 }, MP2::OBJ_NON_ACTION_SAWMILL, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( type, offset + 3U, fheroes2::Point{ 1, -1 }, MP2::OBJ_NON_ACTION_SAWMILL, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( type, offset + 4U, fheroes2::Point{ -2, 0 }, MP2::OBJ_NON_ACTION_SAWMILL, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( type, offset + 5U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NON_ACTION_SAWMILL, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( type, offset + 7U, fheroes2::Point{ 1, 0 }, MP2::OBJ_NON_ACTION_SAWMILL, Maps::OBJECT_LAYER );
+            object.topLevelParts.emplace_back( type, offset + 0U, fheroes2::Point{ -2, -1 }, MP2::OBJ_NON_ACTION_SAWMILL );
+            object.topLevelParts.emplace_back( type, offset + 1U, fheroes2::Point{ -1, -1 }, MP2::OBJ_NON_ACTION_SAWMILL );
+
+            // Set resource type and income per day.
+            object.metadata[0] = Resource::WOOD;
+            object.metadata[1] = 2;
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Alchemist Lab (one for all terrains).
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_ALCHEMIST_LAB };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 26U, fheroes2::Point{ 0, 0 }, MP2::OBJ_ALCHEMIST_LAB, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 25U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NON_ACTION_ALCHEMIST_LAB, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 27U, fheroes2::Point{ 1, 0 }, MP2::OBJ_NON_ACTION_ALCHEMIST_LAB, Maps::OBJECT_LAYER );
+            object.groundLevelParts.back().animationFrames = 6;
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 24U, fheroes2::Point{ -2, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 20U, fheroes2::Point{ -2, -1 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 21U, fheroes2::Point{ -1, -1 }, MP2::OBJ_NON_ACTION_ALCHEMIST_LAB );
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 22U, fheroes2::Point{ 0, -1 }, MP2::OBJ_NON_ACTION_ALCHEMIST_LAB );
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 23U, fheroes2::Point{ 1, -1 }, MP2::OBJ_NON_ACTION_ALCHEMIST_LAB );
+
+            // Set resource type and income per day.
+            object.metadata[0] = Resource::MERCURY;
+            object.metadata[1] = 1;
+
+            objects.emplace_back( std::move( object ) );
+        }
     }
 
     void populateAdventurePowerUps( std::vector<Maps::ObjectInfo> & objects )
@@ -1126,8 +1254,10 @@ namespace
         populateLandscapeWater( objectData[static_cast<size_t>( Maps::ObjectGroup::LANDSCAPE_WATER )] );
         populateLandscapeMiscellaneous( objectData[static_cast<size_t>( Maps::ObjectGroup::LANDSCAPE_MISCELLANEOUS )] );
 
+        // These are the extra objects used with the others and never used alone.
         populateLandscapeTownBasements( objectData[static_cast<size_t>( Maps::ObjectGroup::LANDSCAPE_TOWN_BASEMENTS )] );
         populateLandscapeFlags( objectData[static_cast<size_t>( Maps::ObjectGroup::LANDSCAPE_FLAGS )] );
+        populateAdventureMineResources( objectData[static_cast<size_t>( Maps::ObjectGroup::ADVENTURE_MINE_RESOURCES )] );
 
         populateAdventureArtifacts( objectData[static_cast<size_t>( Maps::ObjectGroup::ADVENTURE_ARTIFACTS )] );
         populateAdventureDwellings( objectData[static_cast<size_t>( Maps::ObjectGroup::ADVENTURE_DWELLINGS )] );

@@ -131,9 +131,10 @@ namespace Maps
         LANDSCAPE_WATER,
         LANDSCAPE_MISCELLANEOUS,
 
-        // Extra landscape objects placed together with other objects.
+        // Extra objects placed together with other objects.
         LANDSCAPE_TOWN_BASEMENTS,
         LANDSCAPE_FLAGS,
+        ADVENTURE_MINE_RESOURCES,
 
         // Adventure objects.
         ADVENTURE_ARTIFACTS,

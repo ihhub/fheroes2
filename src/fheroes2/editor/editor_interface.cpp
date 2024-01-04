@@ -916,6 +916,42 @@ namespace Interface
 
             _redraw |= mapUpdateFlags;
         }
+        else if ( groupType == Maps::ObjectGroup::ADVENTURE_MINES ) {
+            const auto & objectInfo = getObjectInfo( groupType, _editorPanel.getSelectedObjectType() );
+
+            if ( !isObjectPlacementAllowed( objectInfo, tilePos ) ) {
+                _warningMessage.reset( _( "Objects cannot be placed outside the map." ) );
+                return;
+            }
+
+            if ( !verifyObjectCondition( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return !tileToCheck.isWater(); } ) ) {
+                _warningMessage.reset( _( "Mines cannot be placed on water." ) );
+                return;
+            }
+
+            if ( !verifyObjectCondition( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return Maps::isClearGround( tileToCheck ); } ) ) {
+                _warningMessage.reset( _( "Choose a tile which does not contain any objects." ) );
+                return;
+            }
+
+            const fheroes2::ActionCreator action( _historyManager, _mapFormat );
+
+            Maps::setObjectOnTile( tile, objectInfo );
+
+            // Since the mine should have a resource object we place this resource with the same ID.
+            if ( objectInfo.objectType == MP2::OBJ_MINE ) {
+                // Every time an object is being placed on a map the counter is going to be increased by 1.
+                // Therefore, we set the counter by 1 less for each object to match object UID for all of them.
+                assert( Maps::getLastObjectUID() > 0 );
+                const uint32_t objectId = Maps::getLastObjectUID() - 1;
+
+                Maps::setLastObjectUID( objectId );
+                // TODO: Implement different resources placing.
+                Maps::setObjectOnTile( tile, getObjectInfo( Maps::ObjectGroup::ADVENTURE_MINE_RESOURCES, 4 ) );
+            }
+
+            _redraw |= mapUpdateFlags;
+        }
         else if ( groupType == Maps::ObjectGroup::ADVENTURE_DWELLINGS ) {
             const auto & objectInfo = getObjectInfo( groupType, _editorPanel.getSelectedObjectType() );
 

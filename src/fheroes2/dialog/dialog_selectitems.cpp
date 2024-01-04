@@ -1126,7 +1126,20 @@ int Dialog::selectDwellingType( const int dwellingType )
 {
     const auto & objectInfo = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_DWELLINGS );
 
-    DwellingTypeSelection listbox( objectInfo, { 420, fheroes2::Display::instance().height() - 180 }, _( "Select Ocean Object:" ) );
+    DwellingTypeSelection listbox( objectInfo, { 420, fheroes2::Display::instance().height() - 180 }, _( "Select Dwelling:" ) );
 
     return selectObjectType( dwellingType, objectInfo.size(), listbox );
+}
+
+int Dialog::selectMineType( const int mineType )
+{
+    const auto & objectInfo = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_MINES );
+
+    // TODO: Make a dialog to separately select terrain, resource type and owner color. In example like it is done for Towns/Castles.
+
+    // TODO: Implement resource type selection for mines.
+
+    DwellingTypeSelection listbox( objectInfo, { 420, fheroes2::Display::instance().height() - 180 }, _( "Select Mine:" ) );
+
+    return selectObjectType( mineType, objectInfo.size(), listbox );
 }

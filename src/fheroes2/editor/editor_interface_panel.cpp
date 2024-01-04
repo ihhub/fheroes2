@@ -965,6 +965,10 @@ namespace Interface
                 handleObjectMouseClick( Dialog::selectOceanObjectType );
                 return res;
             }
+            if ( le.MouseClickLeft( _adventureObjectButtonsRect[AdventureObjectBrush::MINES] ) ) {
+                handleObjectMouseClick( Dialog::selectMineType );
+                return res;
+            }
             if ( le.MouseClickLeft( _adventureObjectButtonsRect[AdventureObjectBrush::DWELLINGS] ) ) {
                 handleObjectMouseClick( Dialog::selectDwellingType );
                 return res;

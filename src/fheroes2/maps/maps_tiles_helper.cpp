@@ -3228,6 +3228,15 @@ namespace Maps
             // The artifact ID is stored in metadata[0]. It is used by the other engine functions.
             tile.metadata()[0] = info.metadata[0];
             return;
+        case MP2::OBJ_ALCHEMIST_LAB:
+        case MP2::OBJ_SAWMILL:
+        case MP2::OBJ_MINE:
+            placeObjectOnTile( tile, info );
+            // Set resource type and income per day.
+            tile.metadata()[0] = info.metadata[0];
+            tile.metadata()[1] = info.metadata[1];
+            world.updatePassabilities();
+            return;
         default:
             break;
         }
