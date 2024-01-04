@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-02 13:33+0000\n"
+"POT-Creation-Date: 2024-01-04 12:56+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3771,6 +3771,10 @@ msgstr "Това заклинание не може да се направи н�
 
 #, fuzzy
 msgid "Towns cannot be placed on water."
+msgstr "Чудовищата не могат да се поставят върху вода."
+
+#, fuzzy
+msgid "Dwellings cannot be placed on water."
 msgstr "Чудовищата не могат да се поставят върху вода."
 
 #, fuzzy
