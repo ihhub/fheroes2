@@ -102,7 +102,7 @@ namespace
                 result = Dialog::INFO;
                 break;
             }
-            if ( ( le.MouseClickLeft( buttonDig.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::WORLD_DIG_ARTIFACT ) ) && buttonDig.isEnabled() ) {
+            if ( enableDig && ( le.MouseClickLeft( buttonDig.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::WORLD_DIG_ARTIFACT ) ) ) {
                 result = Dialog::DIG;
                 break;
             }
