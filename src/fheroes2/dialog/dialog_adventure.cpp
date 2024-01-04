@@ -49,10 +49,6 @@ namespace
         const int32_t totalDialogWidth = 337;
         const int32_t totalDialogHeight = 252;
 
-        // Prepare restorer of the adventure map when save feedback dialog is shown.
-        fheroes2::ImageRestorer back( display, ( display.width() - totalDialogWidth - BORDERWIDTH ) / 2, ( display.height() - totalDialogHeight + BORDERWIDTH ) / 2,
-                                      totalDialogWidth, totalDialogHeight );
-
         fheroes2::StandardWindow background( 289, 204, true, display );
 
         fheroes2::Button buttonWorld;
@@ -103,12 +99,10 @@ namespace
                 break;
             }
             if ( le.MouseClickLeft( buttonInfo.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::WORLD_SCENARIO_INFORMATION ) ) {
-                back.restore();
                 result = Dialog::INFO;
                 break;
             }
             if ( ( le.MouseClickLeft( buttonDig.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::WORLD_DIG_ARTIFACT ) ) && buttonDig.isEnabled() ) {
-                back.restore();
                 result = Dialog::DIG;
                 break;
             }
