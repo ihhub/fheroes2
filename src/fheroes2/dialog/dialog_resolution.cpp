@@ -18,15 +18,18 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <cstddef>
+#include "dialog_resolution.h"
+
+#include <cfloat>
+#include <cmath>
 #include <cstdint>
+#include <cstdlib>
 #include <string>
 #include <utility>
 #include <vector>
 
 #include "agg_image.h"
 #include "cursor.h"
-#include "dialog_resolution.h"
 #include "embedded_image.h"
 #include "game_hotkeys.h"
 #include "gamedefs.h"
@@ -50,6 +53,8 @@ namespace
     // TODO: this is a hack over partially incorrect text height calculation. Fix it later together with the Text classes.
     const int32_t textOffsetYCorrection = 6;
     const std::string middleText = " x ";
+    const int32_t textPadding = 6;
+    const int32_t aspectRatioApproximationIterations = 100;
 
     std::pair<std::string, std::string> getResolutionStrings( const fheroes2::ResolutionInfo & resolution )
     {
@@ -64,12 +69,38 @@ namespace
         return std::make_pair( std::to_string( resolution.gameWidth ), std::to_string( resolution.gameHeight ) );
     }
 
+    std::string getAspectRatio( const fheroes2::ResolutionInfo & resolution )
+    {
+        const double ratio = static_cast<double>( resolution.width ) / static_cast<double>( resolution.height );
+        double bestDelta = DBL_MAX;
+        int32_t width = 1;
+        int32_t height = 1;
+        int32_t bestWidth = 0;
+        int32_t bestHeight = 0;
+
+        for ( int32_t iterations = 0; iterations < aspectRatioApproximationIterations; iterations++ ) {
+            if ( const double delta = static_cast<double>( width ) / static_cast<double>( height ) - ratio; delta < 0 ) {
+                width++;
+            }
+            else {
+                height++;
+            }
+
+            if ( const std::double_t newDelta = std::abs( static_cast<double>( width ) / static_cast<double>( height ) - ratio ); newDelta < bestDelta ) {
+                bestDelta = newDelta;
+                bestWidth = width;
+                bestHeight = height;
+            }
+        }
+
+        return std::to_string( bestWidth ) + ":" + std::to_string( bestHeight );
+    }
+
     class ResolutionList : public Interface::ListBox<fheroes2::ResolutionInfo>
     {
     public:
         using Interface::ListBox<fheroes2::ResolutionInfo>::ActionListSingleClick;
         using Interface::ListBox<fheroes2::ResolutionInfo>::ActionListPressRight;
-        using Interface::ListBox<fheroes2::ResolutionInfo>::ActionListDoubleClick;
 
         explicit ResolutionList( const fheroes2::Point & offset )
             : Interface::ListBox<fheroes2::ResolutionInfo>( offset )
@@ -83,15 +114,15 @@ namespace
             const fheroes2::FontType fontType = current ? fheroes2::FontType::normalYellow() : fheroes2::FontType::normalWhite();
 
             const auto [leftText, rightText] = getResolutionStrings( resolution );
-            const int32_t middleTextSize = fheroes2::Text( middleText, fontType ).width();
-            const int32_t leftTextSize = fheroes2::Text( leftText, fontType ).width();
-
             const fheroes2::Text resolutionText( leftText + middleText + rightText, fontType );
 
-            const int32_t textOffsetX = offsetX + editBoxLength / 2 - leftTextSize - middleTextSize / 2;
+            const int32_t textOffsetX = offsetX + textPadding;
             const int32_t textOffsetY = offsetY + ( resolutionItemHeight - resolutionText.height() + textOffsetYCorrection ) / 2;
 
             resolutionText.draw( textOffsetX, textOffsetY, fheroes2::Display::instance() );
+
+            const fheroes2::Text aspectRatioText( getAspectRatio( resolution ), fontType );
+            aspectRatioText.draw( offsetX + editBoxLength - aspectRatioText.width() - textPadding, textOffsetY, fheroes2::Display::instance() );
         }
 
         void RedrawBackground( const fheroes2::Point & dst ) override
@@ -120,6 +151,11 @@ namespace
             // Do nothing.
         }
 
+        void ActionListDoubleClick( fheroes2::ResolutionInfo & item, const fheroes2::Point & /*unused*/, int32_t /*unused*/, int32_t /*unused*/ ) override
+        {
+            ActionListDoubleClick( item );
+        }
+
         void ActionListDoubleClick( fheroes2::ResolutionInfo & /*unused*/ ) override
         {
             _isDoubleClicked = true;
@@ -143,13 +179,15 @@ namespace
             const fheroes2::FontType fontType = fheroes2::FontType::normalYellow();
 
             const auto [leftText, rightText] = getResolutionStrings( resolution );
-            const int32_t middleTextSize = fheroes2::Text( middleText, fontType ).width();
-            const int32_t leftTextSize = fheroes2::Text( leftText, fontType ).width();
 
-            const int32_t textOffsetX = dst.x + 41 + editBoxLength / 2 - leftTextSize - middleTextSize / 2;
+            const int32_t textOffsetX = dst.x + 41 + textPadding;
+            const int32_t textOffsetY = dst.y + 287 + ( resolutionItemHeight - text.height() + textOffsetYCorrection ) / 2;
 
             const fheroes2::Text resolutionText( leftText + middleText + rightText, fontType );
-            resolutionText.draw( textOffsetX, dst.y + 287 + ( resolutionItemHeight - text.height() + textOffsetYCorrection ) / 2, output );
+            resolutionText.draw( textOffsetX, textOffsetY, output );
+
+            const fheroes2::Text aspectRatioText( getAspectRatio( resolution ), fontType );
+            aspectRatioText.draw( dst.x + 41 + editBoxLength - aspectRatioText.width() - textPadding, textOffsetY, output );
         }
     }
 }
