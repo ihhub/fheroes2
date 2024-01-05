@@ -28,6 +28,7 @@
 #include <cstddef>
 #include <memory>
 #include <ostream>
+#include <tuple>
 #include <utility>
 #include <vector>
 
@@ -355,8 +356,8 @@ Funds & Funds::operator/=( const int32_t div )
 
 bool Funds::operator==( const Funds & other ) const
 {
-    return wood == other.wood && mercury == other.mercury && ore == other.ore && sulfur == other.sulfur && crystal == other.crystal && gems == other.gems
-           && gold == other.gold;
+    return std::tie( wood, mercury, ore, sulfur, crystal, gems, gold )
+           == std::tie( other.wood, other.mercury, other.ore, other.sulfur, other.crystal, other.gems, other.gold );
 }
 
 bool Funds::operator>=( const Funds & other ) const
