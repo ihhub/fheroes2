@@ -262,6 +262,19 @@ namespace
         assert( 0 );
         return nullptr;
     }
+
+    void restoreFundsOfCommandersKingdom( const HeroBase * commander, const Funds & initialFunds )
+    {
+        Kingdom * kingdom = getKingdomOfCommander( commander );
+        assert( kingdom != nullptr );
+
+        const Funds fundsDiff = kingdom->GetFunds() - initialFunds;
+        assert( kingdom->AllowPayment( fundsDiff ) );
+
+        kingdom->OddFundsResource( fundsDiff );
+
+        assert( kingdom->GetFunds() == initialFunds );
+    }
 }
 
 Battle::Result Battle::Loader( Army & army1, Army & army2, int32_t mapsindex )
@@ -394,28 +407,12 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, int32_t mapsindex )
             if ( commander1 ) {
                 commander1->SetSpellPoints( initialSpellPoints1 );
 
-                Kingdom * kingdom = getKingdomOfCommander( commander1 );
-                assert( kingdom != nullptr );
-
-                const Funds fundsDiff = kingdom->GetFunds() - initialFunds1;
-                assert( kingdom->AllowPayment( fundsDiff ) );
-
-                kingdom->OddFundsResource( fundsDiff );
-
-                assert( kingdom->GetFunds() == initialFunds1 );
+                restoreFundsOfCommandersKingdom( commander1, initialFunds1 );
             }
             if ( commander2 ) {
                 commander2->SetSpellPoints( initialSpellPoints2 );
 
-                Kingdom * kingdom = getKingdomOfCommander( commander2 );
-                assert( kingdom != nullptr );
-
-                const Funds fundsDiff = kingdom->GetFunds() - initialFunds2;
-                assert( kingdom->AllowPayment( fundsDiff ) );
-
-                kingdom->OddFundsResource( fundsDiff );
-
-                assert( kingdom->GetFunds() == initialFunds2 );
+                restoreFundsOfCommandersKingdom( commander2, initialFunds2 );
             }
 
             continue;
