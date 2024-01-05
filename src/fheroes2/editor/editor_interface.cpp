@@ -917,7 +917,18 @@ namespace Interface
             _redraw |= mapUpdateFlags;
         }
         else if ( groupType == Maps::ObjectGroup::ADVENTURE_MINES ) {
-            const auto & objectInfo = getObjectInfo( groupType, _editorPanel.getSelectedObjectType() );
+            int32_t type = -1;
+            int32_t color = -1;
+            int32_t resource = -1;
+
+            _editorPanel.getMineObjectProperties( type, resource, color );
+            if ( type < 0 || color < 0 || resource < 0 ) {
+                // Check your logic!
+                assert( 0 );
+                return;
+            }
+
+            const auto & objectInfo = getObjectInfo( groupType, type );
 
             if ( !isObjectPlacementAllowed( objectInfo, tilePos ) ) {
                 _warningMessage.reset( _( "Objects cannot be placed outside the map." ) );
@@ -946,8 +957,9 @@ namespace Interface
                 const uint32_t objectId = Maps::getLastObjectUID() - 1;
 
                 Maps::setLastObjectUID( objectId );
-                // TODO: Implement different resources placing.
-                Maps::setObjectOnTile( tile, getObjectInfo( Maps::ObjectGroup::ADVENTURE_MINE_RESOURCES, 4 ) );
+                // Resources Ids 0 and 1 are for Wood and Mercury, mine resources starts from 2.
+                assert( resource > 1 && resource < 7 );
+                Maps::setObjectOnTile( tile, getObjectInfo( Maps::ObjectGroup::ADVENTURE_MINE_RESOURCES, resource - 2 ) );
             }
 
             _redraw |= mapUpdateFlags;

@@ -91,11 +91,6 @@ namespace
             return { -2, -3, 5, 5 };
         }
 
-        if ( group == Maps::ObjectGroup::ADVENTURE_MINES ) {
-            // TODO: make occupied area calculation for complex objects.
-            return { -2, -3, 5, 5 };
-        }
-
         const auto & objectInfo = Maps::getObjectsByGroup( group );
         if ( objectType < 0 || objectType >= static_cast<int32_t>( objectInfo.size() ) ) {
             assert( 0 );
@@ -254,7 +249,18 @@ namespace Interface
              || _selectedInstrument == Instrument::KINGDOM_OBJECTS ) {
             const int32_t objectType = getSelectedObjectType();
             if ( objectType >= 0 ) {
-                return getObjectOccupiedArea( getSelectedObjectGroup(), objectType );
+                const Maps::ObjectGroup objectGroup = getSelectedObjectGroup();
+                if ( objectGroup == Maps::ObjectGroup::ADVENTURE_MINES ) {
+                    // For mine we need to decode the objectType.
+                    int32_t type = -1;
+                    int32_t color = -1;
+                    int32_t resource = -1;
+                    getMineObjectProperties( type, resource, color );
+
+                    return getObjectOccupiedArea( objectGroup, type );
+                }
+
+                return getObjectOccupiedArea( objectGroup, objectType );
             }
 
             return {};
@@ -1251,5 +1257,4 @@ namespace Interface
         const int32_t objectType = ( color * static_cast<int32_t>( mineObjects.size() ) + type ) * maxResourceCount + resource;
         return ( objectType < 0 ) ? -1 : objectType;
     }
-
 }

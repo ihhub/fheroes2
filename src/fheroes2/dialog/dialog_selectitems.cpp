@@ -1215,7 +1215,6 @@ int Dialog::selectDwellingType( const int dwellingType )
 
 void Dialog::selectMineType( int32_t & type, int32_t & resource, int32_t & color )
 {
-    color = 0;
     fheroes2::Display & display = fheroes2::Display::instance();
     fheroes2::StandardWindow background( 365, 395, true, display );
 
@@ -1365,7 +1364,8 @@ void Dialog::selectMineType( int32_t & type, int32_t & resource, int32_t & color
 
         if ( le.MouseClickLeft( buttonOk.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) ) {
             type = objectInfoIndexes[listbox.getCurrentId()];
-            resource = selectedResourceType;
+            resource = static_cast<int32_t>( selectedResourceType );
+            // TODO: Implement owner color selection.
             color = 0;
             return;
         }
@@ -1418,6 +1418,4 @@ void Dialog::selectMineType( int32_t & type, int32_t & resource, int32_t & color
         listbox.Redraw();
         display.render( area );
     }
-
-    return;
 }
