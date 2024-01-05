@@ -22,6 +22,7 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <cassert>
 #include <cstddef>
 #include <cstdint>
 #include <memory>
@@ -38,6 +39,7 @@
 #include "battle_arena.h"
 #include "battle_army.h"
 #include "campaign_savedata.h"
+#include "captain.h"
 #include "dialog.h"
 #include "game.h"
 #include "heroes.h"
@@ -47,6 +49,7 @@
 #include "monster.h"
 #include "players.h"
 #include "rand.h"
+#include "resource.h"
 #include "settings.h"
 #include "skill.h"
 #include "spell.h"
