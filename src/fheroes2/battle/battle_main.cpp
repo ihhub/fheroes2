@@ -389,7 +389,7 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, int32_t mapsindex )
             // If dialog returns true we will restart battle in manual mode
             showBattle = true;
 
-            // Reset the status of army commanders and the state of their kingdoms' finances (one of them could spend gold to surrender, and the other could accept this
+            // Reset the state of army commanders and the state of their kingdoms' finances (one of them could spend gold to surrender, and the other could accept this
             // gold). Please note that heroes can also surrender to castle captains.
             if ( commander1 ) {
                 commander1->SetSpellPoints( initialSpellPoints1 );
