@@ -84,7 +84,12 @@ namespace Maps
     // tile without triggering a monster attack.
     Indexes getMonstersProtectingTile( const int32_t tileIndex, const bool checkObjectOnTile = true );
 
-    Indexes GetObjectPositions( const MP2::MapObjectType objectType, bool ignoreHeroes );
+    // This function always ignores heroes.
+    bool doesObjectExistOnMap( const MP2::MapObjectType objectType );
+
+    // This function always ignores heroes.
+    Indexes GetObjectPositions( const MP2::MapObjectType objectType );
+
     Indexes GetObjectPositions( int32_t center, const MP2::MapObjectType objectType, bool ignoreHeroes );
 
     void ClearFog( const int32_t tileIndex, int scoutingDistance, const int playerColor );

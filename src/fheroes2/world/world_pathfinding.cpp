@@ -916,6 +916,8 @@ int AIWorldPathfinder::getFogDiscoveryTile( const Heroes & hero, bool & isTerrit
             }
         }
 
+        int32_t maxTilesToReveal = 0;
+
         for ( size_t i = 0; i < directions.size(); ++i ) {
             if ( !Maps::isValidDirection( currentNodeIdx, directions[i] ) ) {
                 continue;
@@ -938,16 +940,23 @@ int AIWorldPathfinder::getFogDiscoveryTile( const Heroes & hero, bool & isTerrit
                 continue;
             }
 
+            int32_t tilesToReveal = 0;
+
             for ( const int32_t tileIndex : Maps::getAroundIndexes( newIndex ) ) {
                 if ( world.GetTiles( tileIndex ).isFog( _color ) ) {
                     // We found a tile which has a neighboring tile covered in fog.
                     // Since the current tile is accessible for the hero, the tile covered by fog most likely is accessible too.
-                    isTerritoryExpansion = true;
-                    return newIndex;
+                    ++tilesToReveal;
                 }
             }
 
-            nodesToExplore.push_back( newIndex );
+            if ( tilesToReveal > maxTilesToReveal ) {
+                bestIndex = newIndex;
+                maxTilesToReveal = tilesToReveal;
+            }
+            else {
+                nodesToExplore.push_back( newIndex );
+            }
 
             // If there is a teleport on this tile, we should also consider the endpoints
             MapsIndexes teleports = world.GetTeleportEndPoints( newIndex );
@@ -968,17 +977,29 @@ int AIWorldPathfinder::getFogDiscoveryTile( const Heroes & hero, bool & isTerrit
                     continue;
                 }
 
+                tilesToReveal = 0;
+
                 for ( const int32_t tileIndex : Maps::getAroundIndexes( teleportIndex ) ) {
                     if ( world.GetTiles( tileIndex ).isFog( _color ) ) {
                         // We found a tile which has a neighboring tile covered in fog.
                         // Since the current tile is accessible for the hero, the tile covered by fog most likely is accessible too.
-                        isTerritoryExpansion = true;
-                        return teleportIndex;
+                        ++tilesToReveal;
                     }
                 }
 
-                nodesToExplore.push_back( teleportIndex );
+                if ( tilesToReveal > maxTilesToReveal ) {
+                    bestIndex = newIndex;
+                    maxTilesToReveal = tilesToReveal;
+                }
+                else {
+                    nodesToExplore.push_back( teleportIndex );
+                }
             }
+        }
+
+        if ( maxTilesToReveal > 0 ) {
+            isTerritoryExpansion = true;
+            return bestIndex;
         }
     }
 

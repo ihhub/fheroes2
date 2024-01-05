@@ -120,9 +120,6 @@ void Kingdom::Init( int clr )
     color = clr;
 
     if ( Color::ALL & color ) {
-        heroes.reserve( GetMaxHeroes() );
-        castles.reserve( 15 );
-
         // Difficulty calculation is different for campaigns. Difficulty affects only on starting resources for human players.
         const Settings & configuration = Settings::Get();
         const int difficultyLevel = ( configuration.isCampaignGameType() ? configuration.getCurrentMapInfo().difficulty : configuration.GameDifficulty() );

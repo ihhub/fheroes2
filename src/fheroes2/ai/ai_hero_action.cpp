@@ -1305,8 +1305,7 @@ namespace
             Battle::Result res = Battle::Loader( hero.GetArmy(), army, dst_index );
             if ( res.AttackerWins() ) {
                 hero.IncreaseExperience( res.GetExperienceAttacker() );
-                // Daemon Cave always gives 2500 Gold after a battle
-                hero.GetKingdom().AddFundsResource( Funds( Resource::GOLD, 2500 ) );
+                hero.GetKingdom().AddFundsResource( Maps::getFundsFromTile( tile ) );
             }
             else {
                 AIBattleLose( hero, res, true );
@@ -1655,9 +1654,10 @@ namespace
         if ( !hero.isObjectTypeVisited( objectType, Visit::GLOBAL ) ) {
             hero.SetVisited( tileIndex, Visit::GLOBAL );
 
-            const MapsIndexes eyeMagiIndexes = Maps::GetObjectPositions( MP2::OBJ_EYE_OF_MAGI, true );
+            const MapsIndexes eyeMagiIndexes = Maps::GetObjectPositions( MP2::OBJ_EYE_OF_MAGI );
+            const uint32_t distance = GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::MAGI_EYES );
             for ( const int32_t index : eyeMagiIndexes ) {
-                Maps::ClearFog( index, GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::MAGI_EYES ), hero.GetColor() );
+                Maps::ClearFog( index, distance, hero.GetColor() );
             }
         }
     }
