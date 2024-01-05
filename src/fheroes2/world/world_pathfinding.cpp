@@ -954,6 +954,9 @@ int AIWorldPathfinder::getFogDiscoveryTile( const Heroes & hero, bool & isTerrit
                 bestIndex = newIndex;
                 maxTilesToReveal = tilesToReveal;
             }
+            else if ( maxTilesToReveal > 0 && tilesToReveal == maxTilesToReveal && _cache[newIndex]._cost < _cache[bestIndex]._cost ) {
+                bestIndex = newIndex;
+            }
             else {
                 nodesToExplore.push_back( newIndex );
             }
@@ -988,8 +991,11 @@ int AIWorldPathfinder::getFogDiscoveryTile( const Heroes & hero, bool & isTerrit
                 }
 
                 if ( tilesToReveal > maxTilesToReveal ) {
-                    bestIndex = newIndex;
+                    bestIndex = teleportIndex;
                     maxTilesToReveal = tilesToReveal;
+                }
+                else if ( maxTilesToReveal > 0 && tilesToReveal == maxTilesToReveal && _cache[teleportIndex]._cost < _cache[bestIndex]._cost ) {
+                    bestIndex = teleportIndex;
                 }
                 else {
                     nodesToExplore.push_back( teleportIndex );
