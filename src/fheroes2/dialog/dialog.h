@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -81,7 +81,7 @@ namespace Dialog
         BUTTONS = ( YES | OK | NO | CANCEL )
     };
 
-    int AdventureOptions( bool enabledig );
+    int AdventureOptions( const bool enableDig );
     fheroes2::GameMode FileOptions();
     std::string SelectFileLoad();
     std::string SelectFileSave();

@@ -821,7 +821,7 @@ Monster Dialog::selectMonster( const int monsterId )
     std::iota( monsters.begin(), monsters.end(), Monster::UNKNOWN + 1 );
     monsters.erase( std::remove_if( monsters.begin(), monsters.end(), []( const int id ) { return Monster( id ).isRandomMonster(); } ), monsters.end() );
 
-    SelectEnumMonster listbox( { 280, fheroes2::Display::instance().height() - 200 }, _( "Select Monster:" ) );
+    SelectEnumMonster listbox( { 320, fheroes2::Display::instance().height() - 200 }, _( "Select Monster:" ) );
 
     listbox.SetListContent( monsters );
     if ( monsterId != Monster::UNKNOWN ) {
@@ -842,7 +842,7 @@ int Dialog::selectHeroes( const int heroId /* = Heroes::UNKNOWN */ )
 
     std::iota( heroes.begin(), heroes.end(), Heroes::UNKNOWN + 1 );
 
-    SelectEnumHeroes listbox( { 240, fheroes2::Display::instance().height() - 200 }, _( "Select Hero:" ) );
+    SelectEnumHeroes listbox( { 300, fheroes2::Display::instance().height() - 200 }, _( "Select Hero:" ) );
 
     listbox.SetListContent( heroes );
     if ( heroId != Heroes::UNKNOWN ) {

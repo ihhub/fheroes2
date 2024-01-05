@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2023                                             *
+ *   Copyright (C) 2020 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -427,9 +427,9 @@ bool Interface::PlayersInfo::QueueEventProcessing()
         if ( player != nullptr ) {
             if ( conf.getCurrentMapInfo().AllowChangeRace( player->GetColor() ) ) {
                 changeRaceToPrev( *player );
-            }
 
-            return true;
+                return true;
+            }
         }
 
         return false;
@@ -437,14 +437,11 @@ bool Interface::PlayersInfo::QueueEventProcessing()
 
     if ( le.MouseWheelDn() ) {
         Player * player = GetFromClassClick( le.GetMouseCursor() );
-        if ( player != nullptr ) {
-            if ( conf.getCurrentMapInfo().AllowChangeRace( player->GetColor() ) ) {
-                changeRaceToNext( *player );
-            }
+        if ( player != nullptr && conf.getCurrentMapInfo().AllowChangeRace( player->GetColor() ) ) {
+            changeRaceToNext( *player );
 
             return true;
         }
-
         return false;
     }
 
@@ -501,10 +498,8 @@ bool Interface::PlayersInfo::QueueEventProcessing()
     }
 
     player = GetFromClassClick( le.GetMouseCursor() );
-    if ( player != nullptr ) {
-        if ( conf.getCurrentMapInfo().AllowChangeRace( player->GetColor() ) ) {
-            changeRaceToNext( *player );
-        }
+    if ( player != nullptr && conf.getCurrentMapInfo().AllowChangeRace( player->GetColor() ) ) {
+        changeRaceToNext( *player );
 
         return true;
     }
