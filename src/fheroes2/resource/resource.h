@@ -83,10 +83,12 @@ public:
     Funds & operator-=( const Funds & );
     Funds & operator=( const cost_t & );
 
-    bool operator>=( const Funds & ) const;
-    bool operator<( const Funds & funds ) const
+    bool operator==( const Funds & other ) const;
+    bool operator>=( const Funds & other ) const;
+
+    bool operator<( const Funds & other ) const
     {
-        return !operator>=( funds );
+        return !operator>=( other );
     }
 
     Funds max( const Funds & ) const;

@@ -353,9 +353,16 @@ Funds & Funds::operator/=( const int32_t div )
     return *this;
 }
 
-bool Funds::operator>=( const Funds & pm ) const
+bool Funds::operator==( const Funds & other ) const
 {
-    return wood >= pm.wood && mercury >= pm.mercury && ore >= pm.ore && sulfur >= pm.sulfur && crystal >= pm.crystal && gems >= pm.gems && gold >= pm.gold;
+    return wood == other.wood && mercury == other.mercury && ore == other.ore && sulfur == other.sulfur && crystal == other.crystal && gems == other.gems
+           && gold == other.gold;
+}
+
+bool Funds::operator>=( const Funds & other ) const
+{
+    return wood >= other.wood && mercury >= other.mercury && ore >= other.ore && sulfur >= other.sulfur && crystal >= other.crystal && gems >= other.gems
+           && gold >= other.gold;
 }
 
 std::string Funds::String() const

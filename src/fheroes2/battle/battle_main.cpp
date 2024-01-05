@@ -235,6 +235,30 @@ namespace
 
         DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "raise: " << raiseCount << " skeletons" )
     }
+
+    Kingdom * getKingdomOfCommander( const HeroBase * commander )
+    {
+        if ( commander == nullptr ) {
+            return nullptr;
+        }
+
+        if ( commander->isHeroes() ) {
+            const Heroes * hero = dynamic_cast<const Heroes *>( commander );
+            assert( hero != nullptr );
+
+            return &hero->GetKingdom();
+        }
+
+        if ( commander->isCaptain() ) {
+            const Captain * captain = dynamic_cast<const Captain *>( commander );
+            assert( captain != nullptr );
+
+            return &world.GetKingdom( captain->GetColor() );
+        }
+
+        assert( 0 );
+        return nullptr;
+    }
 }
 
 Battle::Result Battle::Loader( Army & army1, Army & army2, int32_t mapsindex )
@@ -255,33 +279,57 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, int32_t mapsindex )
         return result;
     }
 
-    // pre battle army1
     HeroBase * commander1 = army1.GetCommander();
-    uint32_t initialSpellPoints1 = 0;
-
     if ( commander1 ) {
         commander1->ActionPreBattle();
 
         if ( army1.isControlAI() ) {
             AI::Get().HeroesPreBattle( *commander1, true );
         }
-
-        initialSpellPoints1 = commander1->GetSpellPoints();
     }
 
-    // pre battle army2
-    HeroBase * commander2 = army2.GetCommander();
-    uint32_t initialSpellPoints2 = 0;
+    const uint32_t initialSpellPoints1 = [commander1]() -> uint32_t {
+        if ( commander1 == nullptr ) {
+            return 0;
+        }
 
+        return commander1->GetSpellPoints();
+    }();
+
+    const Funds initialFunds1 = [commander1]() -> Funds {
+        const Kingdom * kingdom = getKingdomOfCommander( commander1 );
+        if ( kingdom == nullptr ) {
+            return {};
+        }
+
+        return kingdom->GetFunds();
+    }();
+
+    HeroBase * commander2 = army2.GetCommander();
     if ( commander2 ) {
         commander2->ActionPreBattle();
 
         if ( army2.isControlAI() ) {
             AI::Get().HeroesPreBattle( *commander2, false );
         }
-
-        initialSpellPoints2 = commander2->GetSpellPoints();
     }
+
+    const uint32_t initialSpellPoints2 = [commander2]() -> uint32_t {
+        if ( commander2 == nullptr ) {
+            return 0;
+        }
+
+        return commander2->GetSpellPoints();
+    }();
+
+    const Funds initialFunds2 = [commander2]() -> Funds {
+        const Kingdom * kingdom = getKingdomOfCommander( commander2 );
+        if ( kingdom == nullptr ) {
+            return {};
+        }
+
+        return kingdom->GetFunds();
+    }();
 
     const bool isHumanBattle = army1.isControlHuman() || army2.isControlHuman();
 
@@ -308,8 +356,7 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, int32_t mapsindex )
 
     const uint32_t battleSeed = computeBattleSeed( mapsindex, world.GetMapSeed(), army1, army2 );
 
-    bool isBattleOver = false;
-    while ( !isBattleOver ) {
+    while ( true ) {
         Rand::DeterministicRandomGenerator randomGenerator( battleSeed );
         Arena arena( army1, army2, mapsindex, showBattle, randomGenerator );
 
@@ -331,7 +378,6 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, int32_t mapsindex )
                                                               : std::vector<Artifact>();
 
         if ( showBattle ) {
-            // fade arena
             const bool clearMessageLog = ( result.army1 & ( RESULT_RETREAT | RESULT_SURRENDER ) ) || ( result.army2 & ( RESULT_RETREAT | RESULT_SURRENDER ) );
             arena.FadeArena( clearMessageLog );
         }
@@ -340,24 +386,43 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, int32_t mapsindex )
             // If dialog returns true we will restart battle in manual mode
             showBattle = true;
 
-            // Reset army commander state
+            // Reset the status of army commanders and the state of their kingdoms' finances (some of them could have spent gold to surrender). Please note that heroes
+            // are able to surrender to castle captains.
             if ( commander1 ) {
                 commander1->SetSpellPoints( initialSpellPoints1 );
+
+                Kingdom * kingdom = getKingdomOfCommander( commander1 );
+                assert( kingdom != nullptr );
+
+                const Funds fundsDiff = kingdom->GetFunds() - initialFunds1;
+                assert( kingdom->AllowPayment( fundsDiff ) );
+
+                kingdom->OddFundsResource( fundsDiff );
+
+                assert( kingdom->GetFunds() == initialFunds1 );
             }
             if ( commander2 ) {
                 commander2->SetSpellPoints( initialSpellPoints2 );
+
+                Kingdom * kingdom = getKingdomOfCommander( commander2 );
+                assert( kingdom != nullptr );
+
+                const Funds fundsDiff = kingdom->GetFunds() - initialFunds2;
+                assert( kingdom->AllowPayment( fundsDiff ) );
+
+                kingdom->OddFundsResource( fundsDiff );
+
+                assert( kingdom->GetFunds() == initialFunds2 );
             }
 
             continue;
         }
 
-        isBattleOver = true;
-
         if ( loserHero != nullptr && loserAbandoned ) {
-            // if a hero lost the battle and didn't flee or surrender, they lose all artifacts
+            // If a hero lost the battle and didn't flee or surrender, they lose all artifacts
             clearArtifacts( loserHero->GetBagArtifacts() );
 
-            // if the other army also had a hero, some artifacts may be captured by them
+            // If the other army also had a hero, some artifacts may be captured by them
             if ( winnerHero != nullptr ) {
                 BagArtifacts & bag = winnerHero->GetBagArtifacts();
 
@@ -372,49 +437,51 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, int32_t mapsindex )
 
             if ( loserHero->isControlAI() ) {
                 const Heroes * loserAdventureHero = dynamic_cast<const Heroes *>( loserHero );
-
                 if ( loserAdventureHero != nullptr && conf.isCampaignGameType() ) {
                     Campaign::CampaignSaveData::Get().setEnemyDefeatedAward( loserAdventureHero->GetID() );
                 }
             }
         }
 
-        // save count troop
         arena.GetForce1().SyncArmyCount();
         arena.GetForce2().SyncArmyCount();
 
-        // after battle army1
         if ( commander1 ) {
-            if ( army1.isControlAI() )
+            if ( army1.isControlAI() ) {
                 AI::Get().HeroesAfterBattle( *commander1, true );
-            else
+            }
+            else {
                 commander1->ActionAfterBattle();
+            }
         }
 
-        // after battle army2
         if ( commander2 ) {
-            if ( army2.isControlAI() )
+            if ( army2.isControlAI() ) {
                 AI::Get().HeroesAfterBattle( *commander2, false );
-            else
+            }
+            else {
                 commander2->ActionAfterBattle();
+            }
         }
 
-        // eagle eye capability
-        if ( winnerHero && loserHero && winnerHero->GetLevelSkill( Skill::Secondary::EAGLEEYE ) && loserHero->isHeroes() )
+        if ( winnerHero && loserHero && winnerHero->GetLevelSkill( Skill::Secondary::EAGLEEYE ) && loserHero->isHeroes() ) {
             eagleEyeSkillAction( *winnerHero, arena.GetUsageSpells(), winnerHero->isControlHuman(), randomGenerator );
+        }
 
-        // necromancy capability
-        if ( winnerHero && winnerHero->GetLevelSkill( Skill::Secondary::NECROMANCY ) )
+        if ( winnerHero && winnerHero->GetLevelSkill( Skill::Secondary::NECROMANCY ) ) {
             necromancySkillAction( *winnerHero, result.killed, winnerHero->isControlHuman() );
+        }
 
         if ( winnerHero ) {
             const Heroes * kingdomHero = dynamic_cast<const Heroes *>( winnerHero );
-
             if ( kingdomHero ) {
                 Kingdom & kingdom = kingdomHero->GetKingdom();
+
                 kingdom.SetLastBattleWinHero( *kingdomHero );
             }
         }
+
+        break;
     }
 
     DEBUG_LOG( DBG_BATTLE, DBG_INFO, "army1 " << army1.String() )
