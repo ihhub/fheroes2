@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2023                                                    *
+ *   Copyright (C) 2023 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -38,6 +38,7 @@
 #include "maps_tiles.h"
 #include "math_base.h"
 #include "mp2.h"
+#include "resource.h"
 
 namespace
 {
@@ -237,6 +238,62 @@ namespace fheroes2
         return outputImage;
     }
 
+    Sprite generateMineObjectImage( const int mineType, const int color, const int resorceType )
+    {
+        if ( mineType < 0 || color < 0 ) {
+            assert( 0 );
+            return {};
+        }
+
+        if ( resorceType == Resource::UNKNOWN ) {
+            Sprite image = AGG::GetICN( ICN::SPELLS, 0 );
+            image.setPosition( -image.width() / 2, -image.height() / 2 );
+            return image;
+        }
+
+        assert( Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_MINES ).size() > static_cast<size_t>( mineType ) );
+        const auto & mineObject = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_MINES )[mineType];
+        fheroes2::Sprite mineSprite( generateMapObjectImage( mineObject ) );
+
+        const int32_t mineResourceId = getMineResourceId( resorceType );
+        if ( mineResourceId > -1 ) {
+            assert( Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_MINE_RESOURCES ).size() > static_cast<size_t>( mineResourceId ) );
+            const auto & mineResourceObject = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_MINE_RESOURCES )[mineResourceId];
+            const fheroes2::Sprite & resourceSprite = generateMapObjectImage( mineResourceObject );
+            fheroes2::Blit( resourceSprite, 0, 0, mineSprite, resourceSprite.x() - mineSprite.x(), resourceSprite.y() - mineSprite.y(), resourceSprite.width(),
+                            resourceSprite.height() );
+        }
+
+        // TODO: Add flags to the sprite according to the input 'color'.
+
+        return mineSprite;
+    }
+
+    int32_t getMineResourceId( const int resourceType )
+    {
+        // NOTICE: The return values should be consistent with the objects positions in Maps::ObjectGroup::ADVENTURE_MINE_RESOURCES vector.
+        switch ( resourceType ) {
+        case Resource::WOOD:
+        case Resource::MERCURY:
+            return -1;
+        case Resource::ORE:
+            return 0;
+        case Resource::SULFUR:
+            return 1;
+        case Resource::CRYSTAL:
+            return 2;
+        case Resource::GEMS:
+            return 3;
+        case Resource::GOLD:
+            return 4;
+        default:
+            // Have you added a new mine resource? Add the logic above!
+            assert( 0 );
+        }
+
+        return 0;
+    }
+
     int32_t getTownBasementId( const int groundType )
     {
         // NOTICE: 'basementOffset' should be consistent with basement objects position in LANDSCAPE_TOWN_BASEMENTS vector.
@@ -269,4 +326,5 @@ namespace fheroes2
 
         return 0;
     }
+
 }

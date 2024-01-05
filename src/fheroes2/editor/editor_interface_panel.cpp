@@ -733,13 +733,44 @@ namespace Interface
             switch ( _selectedAdventureObject ) {
             case AdventureObjectBrush::ARTIFACTS:
             case AdventureObjectBrush::DWELLINGS:
-            case AdventureObjectBrush::MINES:
             case AdventureObjectBrush::POWER_UPS:
             case AdventureObjectBrush::TREASURES:
             case AdventureObjectBrush::WATER_ADVENTURE:
             case AdventureObjectBrush::ADVENTURE_MISC:
                 _interface.setCursorUpdater(
                     [type = getSelectedObjectType(), group = getSelectedObjectGroup()]( const int32_t /*tileIndex*/ ) { setCustomCursor( group, type ); } );
+                return;
+            case AdventureObjectBrush::MINES:
+                _interface.setCursorUpdater( [this]( const int32_t tileIndex ) {
+                    if ( world.GetTiles( tileIndex ).GetGround() == Maps::Ground::WATER ) {
+                        // Mines can not be placed on water.
+                        const fheroes2::Sprite & image = fheroes2::AGG::GetICN( ICN::SPELLS, 0 );
+                        Cursor::Get().setCustomImage( image, { -image.width() / 2, -image.height() / 2 } );
+                        return;
+                    }
+
+                    const int32_t type = getSelectedObjectType();
+                    const int32_t color = 0;
+
+                    if ( type == -1 || color == -1 ) {
+                        // The object type is not set. We show the POINTER cursor for this case.
+                        Cursor::Get().SetThemes( Cursor::POINTER );
+                        return;
+                    }
+
+                    assert( Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_MINES ).size() > static_cast<size_t>( type ) );
+                    const auto & mineObject = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_MINES )[type];
+
+                    if ( mineObject.objectType == MP2::OBJ_ABANDONED_MINE ) {
+                        // This mine type can not be owned or have different resources.
+                        setCustomCursor( getSelectedObjectGroup(), type );
+                        return;
+                    }
+
+                    const fheroes2::Sprite & image = fheroes2::generateMineObjectImage( type, color, Resource::GOLD );
+
+                    Cursor::Get().setCustomImage( image, { image.x(), image.y() } );
+                } );
                 return;
             default:
                 break;
