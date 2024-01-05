@@ -780,7 +780,6 @@ namespace
         bool _isDoubleClicked{ false };
         std::unique_ptr<fheroes2::ImageRestorer> _listBackground;
     };
-
 }
 
 int32_t Dialog::selectKingdomCastle( const Kingdom & kingdom, const bool notOccupiedByHero, std::string title, std::string description /* = {} */,
