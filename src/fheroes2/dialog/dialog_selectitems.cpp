@@ -793,8 +793,8 @@ namespace
 
     private:
         bool _isDoubleClicked{ false };
-        int32_t _color;
-        int32_t _resourceId;
+        int32_t _color{ 0 };
+        int32_t _resourceId{ 0 };
         std::unique_ptr<fheroes2::ImageRestorer> _listBackground;
     };
 }
