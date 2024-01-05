@@ -27,6 +27,7 @@
 #include <array>
 #include <cassert>
 #include <cstddef>
+#include <iterator>
 #include <memory>
 #include <numeric>
 #include <utility>
@@ -740,10 +741,18 @@ namespace
 
         void RedrawItem( const Maps::ObjectInfo & info, int32_t dstx, int32_t dsty, bool current ) override
         {
-            const fheroes2::Sprite & image = fheroes2::generateMapObjectImage( info );
+            if ( _color < 0 || _resourceId < 0 ) {
+                assert( 0 );
+                return;
+            }
+
+            fheroes2::Sprite mineSprite( fheroes2::generateMapObjectImage( info ) );
+
+            renderMineExtraObjects( _color, _resourceId, mineSprite );
+
             fheroes2::Display & display = fheroes2::Display::instance();
 
-            fheroes2::Blit( image, display, dstx + 32 * 5 + 5 - image.width(), dsty + 1 );
+            fheroes2::Blit( mineSprite, display, dstx + 32 * 5 + 5 - mineSprite.width(), dsty + 1 );
 
             if ( current ) {
                 const fheroes2::Sprite & mark = fheroes2::AGG::GetICN( ICN::TOWNWIND, 11 );
@@ -776,8 +785,16 @@ namespace
             // Do nothing.
         }
 
+        void setMineTypeData( const int32_t color, const int32_t resourceId )
+        {
+            _color = color;
+            _resourceId = resourceId;
+        }
+
     private:
         bool _isDoubleClicked{ false };
+        int32_t _color;
+        int32_t _resourceId;
         std::unique_ptr<fheroes2::ImageRestorer> _listBackground;
     };
 }
@@ -1345,6 +1362,8 @@ void Dialog::selectMineType( int32_t & type, int32_t & resource, int32_t & color
         listbox.SetCurrent( std::distance( objectInfoIndexes.begin(), std::find( objectInfoIndexes.begin(), objectInfoIndexes.end(), type ) ) );
     }
 
+    listbox.setMineTypeData( color, static_cast<int32_t>( selectedResourceType ) );
+
     listbox.Redraw();
 
     // Render dialog buttons.
@@ -1387,6 +1406,8 @@ void Dialog::selectMineType( int32_t & type, int32_t & resource, int32_t & color
                         resourceTypeSelection.setPosition( resourceSelectRoi.x + 7,
                                                            resorceRoi[selectedResourceType].y + resorceRoi[selectedResourceType].height - mark.height() );
                         resourceTypeSelection.redraw();
+
+                        listbox.setMineTypeData( color, static_cast<int32_t>( selectedResourceType ) );
 
                         MP2::MapObjectType newObjectType = getObjectTypeByResource();
 
