@@ -326,5 +326,4 @@ namespace fheroes2
 
         return 0;
     }
-
 }
