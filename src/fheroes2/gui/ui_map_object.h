@@ -33,7 +33,7 @@ namespace fheroes2
 {
     Sprite generateMapObjectImage( const Maps::ObjectInfo & object );
     Sprite generateTownObjectImage( const int townType, const int color, const int groundId );
-    Sprite generateMineObjectImage( const int mineType, const int color, const int resorceType );
+    Sprite generateMineObjectImage( const int mineType, const int color, const int resourceId );
 
     int32_t getTownBasementId( const int groundType );
     int32_t getMineResourceId( const int resourceType );

@@ -67,7 +67,7 @@ namespace Dialog
 
     int selectDwellingType( const int dwellingType );
 
-    int selectMineType( const int mineType );
+    void selectMineType( int32_t & type, int32_t & resource, int32_t & color );
 }
 
 #endif

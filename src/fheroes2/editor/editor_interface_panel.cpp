@@ -91,6 +91,11 @@ namespace
             return { -2, -3, 5, 5 };
         }
 
+        if ( group == Maps::ObjectGroup::ADVENTURE_MINES ) {
+            // TODO: make occupied area calculation for complex objects.
+            return { -2, -3, 5, 5 };
+        }
+
         const auto & objectInfo = Maps::getObjectsByGroup( group );
         if ( objectType < 0 || objectType >= static_cast<int32_t>( objectInfo.size() ) ) {
             assert( 0 );
@@ -749,25 +754,20 @@ namespace Interface
                         return;
                     }
 
-                    const int32_t type = getSelectedObjectType();
-                    const int32_t color = 0;
+                    int32_t type = -1;
+                    int32_t color = -1;
+                    int32_t resource = -1;
+                    getMineObjectProperties( type, resource, color );
 
-                    if ( type == -1 || color == -1 ) {
+                    if ( type == -1 || color == -1 || resource == -1 ) {
                         // The object type is not set. We show the POINTER cursor for this case.
                         Cursor::Get().SetThemes( Cursor::POINTER );
                         return;
                     }
 
                     assert( Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_MINES ).size() > static_cast<size_t>( type ) );
-                    const auto & mineObject = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_MINES )[type];
 
-                    if ( mineObject.objectType == MP2::OBJ_ABANDONED_MINE ) {
-                        // This mine type can not be owned or have different resources.
-                        setCustomCursor( getSelectedObjectGroup(), type );
-                        return;
-                    }
-
-                    const fheroes2::Sprite & image = fheroes2::generateMineObjectImage( type, color, Resource::GOLD );
+                    const fheroes2::Sprite & image = fheroes2::generateMineObjectImage( type, color, resource );
 
                     Cursor::Get().setCustomImage( image, { image.x(), image.y() } );
                 } );
@@ -997,7 +997,16 @@ namespace Interface
                 return res;
             }
             if ( le.MouseClickLeft( _adventureObjectButtonsRect[AdventureObjectBrush::MINES] ) ) {
-                handleObjectMouseClick( Dialog::selectMineType );
+                handleObjectMouseClick( [this]( const int32_t /* type */ ) {
+                    int32_t type = -1;
+                    int32_t color = -1;
+                    int32_t resource = -1;
+
+                    getMineObjectProperties( type, resource, color );
+                    Dialog::selectMineType( type, resource, color );
+
+                    return _generateMineObjectProperties( type, resource, color );
+                } );
                 return res;
             }
             if ( le.MouseClickLeft( _adventureObjectButtonsRect[AdventureObjectBrush::DWELLINGS] ) ) {
@@ -1206,4 +1215,41 @@ namespace Interface
 
         return color * static_cast<int32_t>( townObjects.size() ) + type;
     }
+
+    void EditorPanel::getMineObjectProperties( int32_t & type, int32_t & resource, int32_t & color ) const
+    {
+        // There are 7 resource types + abandoned mine: total 8 resources.
+        resource = _selectedAdventureObjectType[AdventureObjectBrush::MINES] % 8;
+        const int32_t colorAndType = _selectedAdventureObjectType[AdventureObjectBrush::MINES] / 8;
+
+        const auto & mineObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_MINES );
+        if ( mineObjects.empty() ) {
+            // How is it even possible?
+            assert( 0 );
+            type = -1;
+            color = -1;
+            return;
+        }
+
+        type = colorAndType % static_cast<int32_t>( mineObjects.size() );
+        color = colorAndType / static_cast<int32_t>( mineObjects.size() );
+    }
+
+    int32_t EditorPanel::_generateMineObjectProperties( const int32_t type, const int32_t resource, const int32_t color )
+    {
+        // There are 7 resource types + abandoned mine: total 8 resources.
+        const int32_t maxResourceCount = 8;
+        assert( resource < maxResourceCount );
+
+        const auto & mineObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_MINES );
+        if ( mineObjects.empty() ) {
+            // How is it even possible?
+            assert( 0 );
+            return -1;
+        }
+
+        const int32_t objectType = ( color * static_cast<int32_t>( mineObjects.size() ) + type ) * maxResourceCount + resource;
+        return ( objectType < 0 ) ? -1 : objectType;
+    }
+
 }

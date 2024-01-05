@@ -238,14 +238,14 @@ namespace fheroes2
         return outputImage;
     }
 
-    Sprite generateMineObjectImage( const int mineType, const int color, const int resorceType )
+    Sprite generateMineObjectImage( const int mineType, const int color, const int resourceId )
     {
         if ( mineType < 0 || color < 0 ) {
             assert( 0 );
             return {};
         }
 
-        if ( resorceType == Resource::UNKNOWN ) {
+        if ( resourceId < 0 ) {
             Sprite image = AGG::GetICN( ICN::SPELLS, 0 );
             image.setPosition( -image.width() / 2, -image.height() / 2 );
             return image;
@@ -255,15 +255,16 @@ namespace fheroes2
         const auto & mineObject = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_MINES )[mineType];
         fheroes2::Sprite mineSprite( generateMapObjectImage( mineObject ) );
 
-        const int32_t mineResourceId = getMineResourceId( resorceType );
-        if ( mineResourceId > -1 ) {
-            assert( Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_MINE_RESOURCES ).size() > static_cast<size_t>( mineResourceId ) );
-            const auto & mineResourceObject = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_MINE_RESOURCES )[mineResourceId];
-            const fheroes2::Sprite & resourceSprite = generateMapObjectImage( mineResourceObject );
-            fheroes2::Blit( resourceSprite, 0, 0, mineSprite, resourceSprite.x() - mineSprite.x(), resourceSprite.y() - mineSprite.y(), resourceSprite.width(),
-                            resourceSprite.height() );
+        if ( resourceId < 7 ) {
+            const int32_t mineResourceId = getMineResourceId( Resource::getResourceTypeFromIconIndex( resourceId ) );
+            if ( mineResourceId > -1 ) {
+                assert( Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_MINE_RESOURCES ).size() > static_cast<size_t>( mineResourceId ) );
+                const auto & mineResourceObject = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_MINE_RESOURCES )[mineResourceId];
+                const fheroes2::Sprite & resourceSprite = generateMapObjectImage( mineResourceObject );
+                fheroes2::Blit( resourceSprite, 0, 0, mineSprite, resourceSprite.x() - mineSprite.x(), resourceSprite.y() - mineSprite.y(), resourceSprite.width(),
+                                resourceSprite.height() );
+            }
         }
-
         // TODO: Add flags to the sprite according to the input 'color'.
 
         return mineSprite;
