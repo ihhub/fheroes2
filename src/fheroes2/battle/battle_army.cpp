@@ -364,9 +364,7 @@ double Battle::Force::getStrengthOfArmyRemainingInCaseOfSurrender() const
 
         // Consider only the number of units that will remain in the army after the end of the battle (in particular, don't take into account the number of
         // non-true-resurrected units)
-        result += ArmyTroop{ &static_cast<const Army &>( army ),
-                             { unit->GetMonster(), unit->GetDead() > unit->GetInitialCount() ? 0 : unit->GetInitialCount() - unit->GetDead() } }
-                      .GetStrength();
+        result += Troop{ unit->GetMonster(), unit->GetDead() > unit->GetInitialCount() ? 0 : unit->GetInitialCount() - unit->GetDead() }.GetStrength();
     }
 
     return result;

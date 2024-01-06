@@ -1297,7 +1297,6 @@ double Army::getStrengthOfAverageStartingArmy( const Heroes * hero )
     assert( hero != nullptr );
 
     const int race = hero->GetRace();
-    const Army & army = hero->GetArmy();
 
     double result = 0.0;
 
@@ -1307,7 +1306,7 @@ double Army::getStrengthOfAverageStartingArmy( const Heroes * hero )
 
         const auto [min, max] = getNumberOfMonstersInStartingArmy( monster );
 
-        result += ArmyTroop{ &army, { monster, ( min + max ) / 2 } }.GetStrength();
+        result += Troop{ monster, ( min + max ) / 2 }.GetStrength();
     }
 
     return result;

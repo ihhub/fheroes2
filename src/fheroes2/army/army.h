@@ -173,7 +173,7 @@ public:
 
     static NeutralMonsterJoiningCondition GetJoinSolution( const Heroes &, const Maps::Tiles &, const Troop & );
 
-    // Returns the strength of the average starting army for a given hero (taking into account the hero's bonuses)
+    // Returns the strength of the average starting army for a given hero (not taking into account the hero's bonuses)
     static double getStrengthOfAverageStartingArmy( const Heroes * hero );
 
     static void drawSingleDetailedMonsterLine( const Troops & troops, int32_t cx, int32_t cy, int32_t width );
