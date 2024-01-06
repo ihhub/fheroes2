@@ -767,11 +767,19 @@ namespace
 
             fheroes2::Display & display = fheroes2::Display::instance();
 
-            fheroes2::Blit( mineSprite, display, dstx + 32 * 5 + 5 - mineSprite.width(), dsty + 1 );
+            fheroes2::Blit( mineSprite, display, dstx + TILEWIDTH * 5 + 5 - mineSprite.width(), dsty + 1 );
+
+            // Mine type selection mark background.
+            fheroes2::Sprite markBackground = fheroes2::AGG::GetICN( ICN::CELLWIN, 4 );
+            if ( Settings::Get().isEvilInterfaceEnabled() ) {
+                fheroes2::ApplyPalette( markBackground,
+                                        PAL::CombinePalettes( PAL::GetPalette( PAL::PaletteType::GRAY ), PAL::GetPalette( PAL::PaletteType::DARKENING ) ) );
+            }
+            fheroes2::Blit( markBackground, display, dstx + 10, dsty + 24 );
 
             if ( current ) {
-                const fheroes2::Sprite & mark = fheroes2::AGG::GetICN( ICN::TOWNWIND, 11 );
-                fheroes2::Blit( mark, display, dstx + 24, dsty + 32 );
+                const fheroes2::Sprite & mark = fheroes2::AGG::GetICN( ICN::CELLWIN, 5 );
+                fheroes2::Blit( mark, display, dstx + 13, dsty + 27 );
             }
         }
 
