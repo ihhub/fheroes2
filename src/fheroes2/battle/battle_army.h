@@ -31,7 +31,6 @@
 #include "bitmodes.h"
 #include "monster.h"
 
-class Funds;
 class HeroBase;
 
 namespace Battle
