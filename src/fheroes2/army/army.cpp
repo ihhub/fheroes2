@@ -1292,13 +1292,14 @@ double Army::GetStrength() const
     return result;
 }
 
-Funds Army::getCostOfAverageStartingArmy( const Heroes * hero )
+double Army::getStrengthOfAverageStartingArmy( const Heroes * hero )
 {
     assert( hero != nullptr );
 
     const int race = hero->GetRace();
+    const Army & army = hero->GetArmy();
 
-    Funds result;
+    double result = 0.0;
 
     for ( uint32_t dwelling : std::array<uint32_t, 2>{ DWELLING_MONSTER1, DWELLING_MONSTER2 } ) {
         const Monster monster{ race, dwelling };
@@ -1306,7 +1307,7 @@ Funds Army::getCostOfAverageStartingArmy( const Heroes * hero )
 
         const auto [min, max] = getNumberOfMonstersInStartingArmy( monster );
 
-        result += monster.GetCost() * ( ( min + max ) / 2 );
+        result += ArmyTroop{ &army, { monster, ( min + max ) / 2 } }.GetStrength();
     }
 
     return result;

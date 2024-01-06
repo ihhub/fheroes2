@@ -174,8 +174,8 @@ public:
 
     static NeutralMonsterJoiningCondition GetJoinSolution( const Heroes &, const Maps::Tiles &, const Troop & );
 
-    // Returns the cost of the average starting army for a given hero
-    static Funds getCostOfAverageStartingArmy( const Heroes * hero );
+    // Returns the strength of the average starting army for a given hero (taking into account the hero's bonuses)
+    static double getStrengthOfAverageStartingArmy( const Heroes * hero );
 
     static void drawSingleDetailedMonsterLine( const Troops & troops, int32_t cx, int32_t cy, int32_t width );
     static void drawMultipleMonsterLines( const Troops & troops, int32_t posX, int32_t posY, int32_t lineWidth, bool isCompact, const bool isDetailedView,

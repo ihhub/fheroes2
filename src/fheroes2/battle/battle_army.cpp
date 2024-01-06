@@ -193,9 +193,24 @@ bool Battle::Force::isValid( const bool considerBattlefieldArmy /* = true */ ) c
     return false;
 }
 
-uint32_t Battle::Force::GetSurrenderCost( const Funds & armyCost ) const
+uint32_t Battle::Force::GetSurrenderCost() const
 {
-    double result = armyCost.gold;
+    double result = 0.0;
+
+    // Consider only the units from the original army
+    for ( size_t index = 0; index < army.Size(); ++index ) {
+        const Troop * troop = army.GetTroop( index );
+        if ( troop == nullptr || !troop->isValid() ) {
+            continue;
+        }
+
+        const Unit * unit = FindUID( uids.at( index ) );
+        if ( unit == nullptr || !unit->isValid() ) {
+            continue;
+        }
+
+        result += unit->GetSurrenderCost().gold;
+    }
 
     const HeroBase * commander = GetCommander();
     if ( commander ) {
@@ -228,28 +243,6 @@ uint32_t Battle::Force::GetSurrenderCost( const Funds & armyCost ) const
 
     // Total cost should always be at least 1 gold
     return result >= 1 ? static_cast<uint32_t>( result + 0.5 ) : 1;
-}
-
-uint32_t Battle::Force::GetSurrenderCost() const
-{
-    Funds cost;
-
-    // Consider only the units from the original army
-    for ( size_t index = 0; index < army.Size(); ++index ) {
-        const Troop * troop = army.GetTroop( index );
-        if ( troop == nullptr || !troop->isValid() ) {
-            continue;
-        }
-
-        const Unit * unit = FindUID( uids.at( index ) );
-        if ( unit == nullptr || !unit->isValid() ) {
-            continue;
-        }
-
-        cost += unit->GetSurrenderCost();
-    }
-
-    return GetSurrenderCost( cost );
 }
 
 void Battle::Force::NewTurn()
@@ -351,4 +344,30 @@ void Battle::Force::SyncArmyCount()
 
         troop->SetCount( unit->GetDead() > unit->GetInitialCount() ? 0 : unit->GetInitialCount() - unit->GetDead() );
     }
+}
+
+double Battle::Force::getStrengthOfArmyRemainingInCaseOfSurrender() const
+{
+    double result = 0.0;
+
+    // Consider only the state of the original army
+    for ( uint32_t index = 0; index < army.Size(); ++index ) {
+        const Troop * troop = army.GetTroop( index );
+        if ( troop == nullptr || !troop->isValid() ) {
+            continue;
+        }
+
+        const Unit * unit = FindUID( uids.at( index ) );
+        if ( unit == nullptr ) {
+            continue;
+        }
+
+        // Consider only the number of units that will remain in the army after the end of the battle (in particular, don't take into account the number of
+        // non-true-resurrected units)
+        result += ArmyTroop{ &static_cast<const Army &>( army ),
+                             { unit->GetMonster(), unit->GetDead() > unit->GetInitialCount() ? 0 : unit->GetInitialCount() - unit->GetDead() } }
+                      .GetStrength();
+    }
+
+    return result;
 }

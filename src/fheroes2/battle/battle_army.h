@@ -90,8 +90,9 @@ namespace Battle
 
         // Returns the cost of surrender (in units of gold) for the current army on the battlefield
         uint32_t GetSurrenderCost() const;
-        // Returns the cost of surrender (in units of gold) as if there were an army on the battlefield with a total cost of 'armyCost'
-        uint32_t GetSurrenderCost( const Funds & armyCost ) const;
+
+        // Returns the strength of the army that will remain in case of surrender (taking into account the hero's bonuses)
+        double getStrengthOfArmyRemainingInCaseOfSurrender() const;
 
         Troops GetKilledTroops() const;
 

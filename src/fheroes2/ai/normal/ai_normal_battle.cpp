@@ -642,14 +642,12 @@ namespace AI
                     return Outcome::Retreat;
                 }
 
-                const uint32_t surrenderCost = force.GetSurrenderCost();
-                const uint32_t averageStartingArmySurrenderCost = force.GetSurrenderCost( Army::getCostOfAverageStartingArmy( actualHero ) );
-
-                if ( surrenderCost < averageStartingArmySurrenderCost ) {
+                if ( force.getStrengthOfArmyRemainingInCaseOfSurrender() < Army::getStrengthOfAverageStartingArmy( actualHero ) ) {
                     return Outcome::Retreat;
                 }
 
-                if ( !kingdom.AllowPayment( Funds{ Resource::GOLD, surrenderCost } * Difficulty::getGoldReserveRatioForAISurrender( Game::getDifficulty() ) ) ) {
+                if ( !kingdom.AllowPayment( Funds{ Resource::GOLD, force.GetSurrenderCost() }
+                                            * Difficulty::getGoldReserveRatioForAISurrender( Game::getDifficulty() ) ) ) {
                     return Outcome::Retreat;
                 }
 
