@@ -182,7 +182,7 @@ namespace Battle
         uint32_t GetHitPoints() const;
 
         // Returns the cost of this unit, suitable for calculating the cost of surrendering the army (see
-        // the implementation for details). No coefficients are applied to this cost.
+        // the implementation for details). No discounts are applied to this cost.
         Funds GetSurrenderCost() const;
 
         uint32_t GetShots() const override
