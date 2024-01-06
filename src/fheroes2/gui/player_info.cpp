@@ -424,12 +424,10 @@ bool Interface::PlayersInfo::QueueEventProcessing()
 
     if ( le.MouseWheelUp() ) {
         Player * player = GetFromClassClick( le.GetMouseCursor() );
-        if ( player != nullptr ) {
-            if ( conf.getCurrentMapInfo().AllowChangeRace( player->GetColor() ) ) {
-                changeRaceToPrev( *player );
+        if ( player != nullptr && conf.getCurrentMapInfo().AllowChangeRace( player->GetColor() ) ) {
+            changeRaceToPrev( *player );
 
-                return true;
-            }
+            return true;
         }
 
         return false;
