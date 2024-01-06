@@ -24,6 +24,7 @@
 #include "army.h"
 
 #include <algorithm>
+#include <array>
 #include <cassert>
 #include <cmath>
 #include <map>
@@ -62,6 +63,11 @@
 #include "tools.h"
 #include "translations.h"
 #include "world.h"
+
+namespace fheroes2
+{
+    class Image;
+}
 
 namespace
 {

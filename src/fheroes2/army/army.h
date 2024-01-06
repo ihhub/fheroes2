@@ -32,6 +32,7 @@
 
 #include "monster.h"
 #include "players.h"
+#include "resource.h"
 
 class StreamBase;
 
