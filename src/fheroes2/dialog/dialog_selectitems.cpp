@@ -712,6 +712,11 @@ namespace
 
         void ActionListPressRight( Maps::ObjectInfo & info ) override
         {
+            if ( _resourceId > 1 && _resourceId < 7 ) {
+                // Mine description is done by its resource type ( 2 - Ore, 3 -Sulfur, 4 - Crystal, 5 - Gems, 6 - Gold ).
+                fheroes2::showStandardTextMessage( Maps::GetMineName( Resource::getResourceTypeFromIconIndex( _resourceId ) ), "", Dialog::ZERO );
+                return;
+            }
             fheroes2::showStandardTextMessage( MP2::StringObject( info.objectType ), "", Dialog::ZERO );
         }
 
@@ -1233,7 +1238,7 @@ int Dialog::selectDwellingType( const int dwellingType )
 void Dialog::selectMineType( int32_t & type, int32_t & resource, int32_t & color )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
-    fheroes2::StandardWindow background( 365, 395, true, display );
+    fheroes2::StandardWindow background( 380, 395, true, display );
 
     const fheroes2::Rect & area = background.activeArea();
 
@@ -1241,30 +1246,36 @@ void Dialog::selectMineType( int32_t & type, int32_t & resource, int32_t & color
     int32_t offsetY = 10;
     text.draw( area.x + ( area.width - text.width() ) / 2, area.y + offsetY, display );
 
-    text.set( _( "Resource\nType:" ), fheroes2::FontType::smallWhite() );
-    offsetY = 30;
-    int32_t offsetX = 30;
-    const int32_t maxResouceIconWidth = 70;
-    text.draw( area.x + offsetX, area.y + offsetY, maxResouceIconWidth, display );
-
-    const int32_t stepY = 35;
-    offsetY += 10 + text.height( maxResouceIconWidth );
-
-    const fheroes2::Rect resourceSelectRoi( area.x + offsetX - 8, area.y + offsetY - 3, maxResouceIconWidth + 15, stepY * 8 + 10 );
-
-    background.applyTextBackgroundShading( resourceSelectRoi );
-
     // There are 7 resource types (WOOD, MERCURY, ORE, SULFUR, CRYSTAL, GEMS, GOLD) and abandoned mine.
     const uint32_t resourceCount{ 8 };
+    const int32_t stepY = 35;
+    offsetY = 60;
+    const fheroes2::Rect resourceSelectRoi( area.x + 22, area.y + offsetY - 5, 100, stepY * resourceCount + 10 );
+    background.applyTextBackgroundShading( resourceSelectRoi );
+
+    text.set( _( "Resource\ntype:" ), fheroes2::FontType::smallWhite() );
+    int32_t offsetX = 35;
+    text.draw( resourceSelectRoi.x, resourceSelectRoi.y - text.height( resourceSelectRoi.width ), resourceSelectRoi.width, display );
+
+    const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
     std::array<fheroes2::Rect, resourceCount> resorceRoi;
 
+    // Resource type selection mark background.
+    fheroes2::Sprite markBackground = fheroes2::AGG::GetICN( ICN::CELLWIN, 4 );
+    if ( isEvilInterface ) {
+        fheroes2::ApplyPalette( markBackground, PAL::CombinePalettes( PAL::GetPalette( PAL::PaletteType::GRAY ), PAL::GetPalette( PAL::PaletteType::DARKENING ) ) );
+    }
+
+    // Resource icons.
     for ( uint32_t i = 0; i < resourceCount - 1; ++i ) {
         const fheroes2::Sprite & resourceImage = fheroes2::AGG::GetICN( ICN::RESOURCE, i );
         const int32_t width = resourceImage.width();
         const int32_t height = resourceImage.height();
-        resorceRoi[i] = { area.x + offsetX + ( maxResouceIconWidth - width ) / 2, area.y + offsetY + ( stepY - height ) / 2, width, height };
-        fheroes2::Blit( resourceImage, display, resorceRoi[i].x, resorceRoi[i].y );
-        fheroes2::addGradientShadow( resourceImage, display, { resorceRoi[i].x - resourceImage.x(), resorceRoi[i].y - resourceImage.y() }, { -3, 3 } );
+        const fheroes2::Point imagePosition( area.x + offsetX + ( resourceSelectRoi.width - width ) / 2, area.y + offsetY + ( stepY - height ) / 2 );
+        resorceRoi[i] = { resourceSelectRoi.x + 5, imagePosition.y, resourceSelectRoi.width - 10, height };
+        fheroes2::Blit( resourceImage, display, imagePosition.x, imagePosition.y );
+        fheroes2::addGradientShadow( resourceImage, display, imagePosition, { -3, 3 } );
+        fheroes2::Blit( markBackground, display, resorceRoi[i].x + 2, resorceRoi[i].y + ( resorceRoi[i].height - markBackground.height() ) / 2 );
         offsetY += stepY;
     }
 
@@ -1274,24 +1285,25 @@ void Dialog::selectMineType( int32_t & type, int32_t & resource, int32_t & color
     const int32_t ghostsStepX = ghostImage.width() - 5;
     const int32_t ghostsIconWight = ghostsOnIcon * ghostsStepX + 5;
     const int32_t ghostsIconHeight = ghostImage.height();
-    resorceRoi[7]
-        = { area.x + offsetX + ( maxResouceIconWidth - ghostsIconWight ) / 2, area.y + offsetY + ( stepY - ghostsIconHeight ) / 2, ghostsIconWight, ghostsIconHeight };
+    resorceRoi[7] = { resourceSelectRoi.x + 5, area.y + offsetY + ( stepY - ghostsIconHeight ) / 2, resourceSelectRoi.width - 10, ghostsIconHeight };
     for ( int32_t i = 0; i < ghostsOnIcon; ++i ) {
-        fheroes2::Blit( ghostImage, display, resorceRoi[7].x + ghostsStepX * i, resorceRoi[7].y, i < 2 );
+        fheroes2::Blit( ghostImage, display, area.x + offsetX + ( resourceSelectRoi.width - ghostsIconWight ) / 2 + ghostsStepX * i, resorceRoi[7].y, i < 2 );
     }
+    fheroes2::Blit( markBackground, display, resorceRoi[7].x + 2, resorceRoi[7].y + ( resorceRoi[7].height - markBackground.height() ) / 2 );
 
     // Resource type selection mark.
+    const fheroes2::Sprite & mark = fheroes2::AGG::GetICN( ICN::CELLWIN, 5 );
     uint32_t selectedResourceType = ( resource < 0 ) ? 0 : resource;
-    const fheroes2::Sprite & mark = fheroes2::AGG::GetICN( ICN::TOWNWIND, 11 );
     fheroes2::MovableSprite resourceTypeSelection( mark );
-    resourceTypeSelection.setPosition( resourceSelectRoi.x + 7, resorceRoi[selectedResourceType].y + resorceRoi[selectedResourceType].height - mark.height() );
-    resourceTypeSelection.redraw();
+    auto redrawResourceSelection = [&resourceTypeSelection, &mark]( const fheroes2::Rect & pos ) {
+        resourceTypeSelection.setPosition( pos.x + 5, pos.y + ( pos.height - mark.height() ) / 2 );
+        resourceTypeSelection.redraw();
+    };
+    redrawResourceSelection( resorceRoi[selectedResourceType] );
 
     // Mine appearance type selection list.
     MineTypeList listbox( area.getPosition() );
     const fheroes2::Rect listRoi( area.x + area.width - 5 * TILEWIDTH - 75, resourceSelectRoi.y, 5 * TILEWIDTH + 20, resourceSelectRoi.height );
-    text.set( _( "Appearance:" ), fheroes2::FontType::smallWhite() );
-    text.draw( listRoi.x, listRoi.y - text.height( listRoi.width ) - 7, listRoi.width, display );
     background.applyTextBackgroundShading( listRoi );
 
     // Initialize list background restorer to use it in list method 'listbox.RedrawBackground()'.
@@ -1299,7 +1311,6 @@ void Dialog::selectMineType( int32_t & type, int32_t & resource, int32_t & color
 
     listbox.SetAreaItems( { listRoi.x, listRoi.y + 3, listRoi.width, listRoi.height - 3 } );
 
-    const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
     int32_t scrollbarOffsetX = listRoi.x + listRoi.width + 15;
     background.renderScrollbarBackground( { scrollbarOffsetX, listRoi.y, listRoi.width, listRoi.height }, isEvilInterface );
 
@@ -1362,6 +1373,26 @@ void Dialog::selectMineType( int32_t & type, int32_t & resource, int32_t & color
         listbox.SetCurrent( std::distance( objectInfoIndexes.begin(), std::find( objectInfoIndexes.begin(), objectInfoIndexes.end(), type ) ) );
     }
 
+    fheroes2::ImageRestorer appearanceTextBackground( display, 0, 0, 0, 0 );
+    // Mine appearance selection text.
+    auto redrawAppearanceText = [&selectedResourceType, &appearanceTextBackground, &listRoi, &display]( const MP2::MapObjectType objectType ) {
+        std::string mineText( _( "%{mineName} appearance:" ) );
+        if ( objectType == MP2::OBJ_MINE ) {
+            assert( selectedResourceType < 7 );
+            StringReplace( mineText, "%{mineName}", Maps::GetMineName( Resource::getResourceTypeFromIconIndex( selectedResourceType ) ) );
+        }
+        else {
+            StringReplace( mineText, "%{mineName}", MP2::StringObject( objectType ) );
+        }
+        fheroes2::Text appearanceText( std::move( mineText ), fheroes2::FontType::smallWhite() );
+        const int32_t textWidth = appearanceText.width( listRoi.width );
+        const int32_t textHeight = appearanceText.height( listRoi.width );
+        appearanceTextBackground.restore();
+        appearanceTextBackground.update( listRoi.x + ( listRoi.width - textWidth ) / 2, listRoi.y - textHeight, textWidth, textHeight );
+        appearanceText.draw( listRoi.x, listRoi.y - textHeight, listRoi.width, display );
+    };
+    redrawAppearanceText( objectInfo[listbox.getCurrentId()].objectType );
+
     listbox.setMineTypeData( color, static_cast<int32_t>( selectedResourceType ) );
 
     listbox.Redraw();
@@ -1381,7 +1412,7 @@ void Dialog::selectMineType( int32_t & type, int32_t & resource, int32_t & color
 
         bool needRedraw = listbox.QueueEventProcessing();
 
-        if ( le.MouseClickLeft( buttonOk.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) ) {
+        if ( listbox.isDoubleClicked() || le.MouseClickLeft( buttonOk.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) ) {
             type = objectInfoIndexes[listbox.getCurrentId()];
             resource = static_cast<int32_t>( selectedResourceType );
             // TODO: Implement owner color selection.
@@ -1403,9 +1434,7 @@ void Dialog::selectMineType( int32_t & type, int32_t & resource, int32_t & color
                 if ( le.MouseClickLeft( resorceRoi[i] ) ) {
                     if ( i != selectedResourceType ) {
                         selectedResourceType = i;
-                        resourceTypeSelection.setPosition( resourceSelectRoi.x + 7,
-                                                           resorceRoi[selectedResourceType].y + resorceRoi[selectedResourceType].height - mark.height() );
-                        resourceTypeSelection.redraw();
+                        redrawResourceSelection( resorceRoi[selectedResourceType] );
 
                         listbox.setMineTypeData( color, static_cast<int32_t>( selectedResourceType ) );
 
@@ -1415,6 +1444,9 @@ void Dialog::selectMineType( int32_t & type, int32_t & resource, int32_t & color
                             selectedObjectType = newObjectType;
                             updateListContent();
                         }
+
+                        redrawAppearanceText( objectInfo[listbox.getCurrentId()].objectType );
+
                         needRedraw = true;
                     }
                     break;
