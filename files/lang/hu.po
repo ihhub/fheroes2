@@ -3287,7 +3287,7 @@ msgid "Open Virtual Keyboard"
 msgstr "Virtuális billentyűzet megnyitása"
 
 msgid "How many troops to move?"
-msgstr "Hány egység mozogjon?"
+msgstr "Hány egységet mozgassunk?"
 
 msgid "Fast separation into slots:"
 msgstr "Gyors szétosztás:"
@@ -7492,11 +7492,11 @@ msgstr ""
 
 msgid "%{skill} allows the hero to learn fourth level spells."
 msgstr ""
-"%{skill} képessé teszi a hősödet 4. szintű varázslatok használatára."
+"%{skill} képessé teszi a hősödet 4. szintű varázslatok megtanulására."
 
 msgid "%{skill} allows the hero to learn fifth level spells."
 msgstr ""
-"%{skill} képessé teszi a hősödet 5. szintű varázslatok használatára."
+"%{skill} képessé teszi a hősödet 5. szintű varázslatok megtanulására."
 
 msgid "%{skill} regenerates one additional spell point per day to the hero."
 msgid_plural ""
@@ -9307,7 +9307,7 @@ msgid ""
 msgstr ""
 
 msgid "Skullcap"
-msgstr "Koponyacsont sapka"
+msgstr "Fejfedő"
 
 msgid "The %{name} halves the casting cost of all mind influencing spells."
 msgstr ""
@@ -9318,6 +9318,8 @@ msgid ""
 "A brief stop at an improbable rural inn yields an exchange of money, tales, "
 "and accidentally, luggage. You find a magical skullcap in your new backpack."
 msgstr ""
+"Egy rövid pihenő egy vidéki fogadóban lehetőséget ad pénz, történetek, vagy - "
+"akaratlanul - csomagok cseréjére. Az elcserélt új hátizsákodban egy fejfedőt találsz."
 
 msgid "Ice Cloak"
 msgstr "Jégköpeny"
