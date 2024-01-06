@@ -198,9 +198,8 @@ msgstr "MIN"
 msgid "RESET"
 msgstr "ÚJRA"
 
-#, fuzzy
 msgid "START"
-msgstr "ÚJRA"
+msgstr "START"
 
 msgid "CASTLE"
 msgstr "VÁR"
@@ -938,22 +937,20 @@ msgstr "Ember"
 msgid "AI"
 msgstr "Gép"
 
-#, fuzzy
 msgid "Start"
-msgstr "Újra"
+msgstr "Start"
 
-#, fuzzy
 msgid "Start the battle."
-msgstr "Visszatérés a csatába."
+msgstr "Csata indítása."
 
 msgid "Exit"
 msgstr "Kilép"
 
 msgid "Reset"
-msgstr ""
+msgstr "Reset"
 
 msgid "Reset to default settings."
-msgstr ""
+msgstr "Alapbeállítások visszaállítása"
 
 msgid "Please select another hero."
 msgstr "Kérlek válassz másik hőst."
@@ -3732,11 +3729,9 @@ msgstr "Tengeri objektumot vízre kell elhelyezni."
 msgid "Towns cannot be placed on water."
 msgstr "Vízen nem helyezhetők el városok."
 
-#, fuzzy
 msgid "Dwellings cannot be placed on water."
-msgstr "Vízen nem helyezhetők el városok."
+msgstr "Vízen nem helyezhetők el toborzóhelyek."
 
-#, fuzzy
 msgid "Used to place %{object}."
 msgstr "%{object} elhelyezésére való."
 
@@ -7352,132 +7347,113 @@ msgstr "Szakértő vagyon"
 msgid ""
 "%{skill} reduces the movement penalty for rough terrain by %{count} percent."
 msgstr ""
-"A(z) %{skill} csökkenti a nehéz terepen történő haladásból fakadó hátrányt "
+"%{skill} csökkenti a nehéz terepen történő haladásból fakadó hátrányt "
 "%{count} százalékkal."
 
 msgid "%{skill} eliminates the movement penalty for rough terrain."
 msgstr ""
-"A(z) %{skill} kiiktatja a nehéz terepen történő haladásból fakadó hátrányt."
+"%{skill} kiiktatja a nehéz terepen történő haladásból fakadó hátrányt."
 
-#, fuzzy
 msgid ""
 "%{skill} increases the damage done by the hero's range attacking creatures "
 "by %{count} percent."
 msgstr ""
-"A(z) %{skill} növeli a távolsági támadások sebzését %{count} százalékkal."
+"%{skill} növeli a hős távolsági támadásainak sebzését %{count} százalékkal."
 
-#, fuzzy
 msgid "%{skill} increases the hero's movement points by %{count} percent."
-msgstr "A(z) %{skill} növeli a hősöd mozgáspontjait %{count} százalékkal."
+msgstr "%{skill} növeli a hősöd mozgáspontjait %{count} százalékkal."
 
-#, fuzzy
 msgid "%{skill} increases the hero's viewable area by one square."
 msgid_plural "%{skill} increases the hero's viewable area by %{count} squares."
-msgstr[0] "A(z) %{skill} növeli a hős láthatárát egy egységgel."
-msgstr[1] "A(z) %{skill} növeli a hős láthatárát %{count} egységgel."
+msgstr[0] "%{skill} növeli a hős látóhatárát egy egységgel."
+msgstr[1] "%{skill} növeli a hős látóhatárát %{count} egységgel."
 
-#, fuzzy
 msgid ""
 "%{skill} allows the hero to negotiate with monsters who are weaker than "
 "their army."
 msgstr ""
-"A(z) %{skill} lehetővé teszi a seregednél gyengébb lényekkel való "
+"A(z) %{skill} lehetővé teszi a hős seregénél gyengébb lényekkel való "
 "tárgyalást. "
 
-#, fuzzy
 msgid ""
 "Approximately %{count} percent of the creatures may offer to join the hero."
-msgstr "A lények kb. %{count} százaléka csatlakozhat hozzád."
+msgstr "A lények kb. %{count} százaléka csatlakozhat a hős seregéhez."
 
-#, fuzzy
 msgid "All of the creatures may offer to join the hero."
-msgstr "Az összes lény csatlakozhat hozzád."
+msgstr "Az összes lény csatlakozhat a hős seregéhez."
 
-#, fuzzy
 msgid ""
 "%{skill} increases the hero's movement points over water by %{count} percent."
 msgstr ""
-"A(z) %{skill} növeli a hős vízen történő mozgáspontjait %{count} százalékkal."
+"%{skill} növeli a hős vízen történő mozgáspontjait %{count} százalékkal."
 
-#, fuzzy
 msgid "%{skill} increases the hero's troops morale by %{count}."
-msgstr "A(z) %{skill} ennyivel növeli a csapatod tagjainak morálját: %{count}."
+msgstr "%{skill} ennyivel növeli a hős seregének morálját: %{count}."
 
-#, fuzzy
 msgid "%{skill} allows the hero to learn third level spells."
 msgstr ""
-"A(z) %{skill} képessé teszi a hősödet 3. szintű varázslatok megtanulására."
+"%{skill} képessé teszi a hősödet 3. szintű varázslatok megtanulására."
 
-#, fuzzy
 msgid "%{skill} allows the hero to learn fourth level spells."
 msgstr ""
-"A(z) %{skill} képessé teszi a hősödet 4. szintű varázslatok használatára."
+"%{skill} képessé teszi a hősödet 4. szintű varázslatok használatára."
 
-#, fuzzy
 msgid "%{skill} allows the hero to learn fifth level spells."
 msgstr ""
-"A(z) %{skill} képessé teszi a hősödet 5. szintű varázslatok használatára."
+"%{skill} képessé teszi a hősödet 5. szintű varázslatok használatára."
 
-#, fuzzy
 msgid "%{skill} regenerates one additional spell point per day to the hero."
 msgid_plural ""
 "%{skill} regenerates %{count} additional spell points per day to the hero."
 msgstr[0] ""
-"A(z) %{skill} naponta eggyel növeli a varázspontok újratermelődését."
+"%{skill} naponta eggyel növeli a hős varázspontjainak újratermelődését."
 msgstr[1] ""
-"A(z) %{skill} naponta %{count}-vel növeli a varázspontok újratermelődését."
+"%{skill} naponta %{count}-vel növeli a hős varázspontjainak újratermelődését."
 
-#, fuzzy
 msgid "%{skill} increases the hero's luck by %{count}."
-msgstr "A(z) %{skill} ennyivel növeli a hős szerencséjét: %{count}."
+msgstr "%{skill} ennyivel növeli a hős szerencséjét: %{count}."
 
-#, fuzzy
 msgid ""
 "%{skill} gives the hero's catapult shots a greater chance to hit and do "
 "damage to castle walls."
 msgstr ""
-"A(z) %{skill} nagyobb esélyt ad a hősöd katapultjának a találatra és a "
+"%{skill} nagyobb esélyt ad a hősöd katapultjának a találatra és a "
 "várfal rombolására."
 
-#, fuzzy
 msgid ""
 "%{skill} gives the hero's catapult an extra shot, and each shot has a "
 "greater chance to hit and do damage to castle walls."
 msgstr ""
-"A(z) %{skill} egy plusz lövést és nagyobb esélyt ad a hősöd katapultjának a "
+"%{skill} egy plusz lövést és nagyobb esélyt ad a hősöd katapultjának a "
 "találatra és a várfal rombolására."
 
-#, fuzzy
 msgid ""
 "%{skill} gives the hero's catapult an extra shot, and each shot "
 "automatically destroys any wall, except a fortified wall in a Knight castle."
 msgstr ""
-"A(z) %{skill} egy plusz lövést ad a hősöd katapultjának. Minden lövés "
+"%{skill} egy plusz lövést ad a hősöd katapultjának. Minden lövés "
 "automatikusan rombolja a falat, kivéve a Lovagvár sánccal megerősített várát."
 
-#, fuzzy
 msgid ""
 "%{skill} gives the hero a %{count} percent chance to learn any given 1st or "
 "2nd level spell that was cast by an enemy during combat."
 msgstr ""
-"A(z) %{skill} %{count} százaléknyi esélyt ad a hősnek, hogy az ellenfél "
+"%{skill} %{count} százaléknyi esélyt ad a hősnek, hogy az ellenfél "
 "által a csatában használt 1-es vagy 2-es szintű varázslatot tanuljon el."
 
-#, fuzzy
 msgid ""
 "%{skill} gives the hero a %{count} percent chance to learn any given 3rd "
 "level spell (or below) that was cast by an enemy during combat."
 msgstr ""
-"A(z) %{skill} %{count} százaléknyi esélyt ad a hősnek, hogy az ellenfél "
+"%{skill} %{count} százaléknyi esélyt ad a hősnek, hogy az ellenfél "
 "által a csatában használt 3-as (vagy alacsonyabb) szintű varázslatot "
 "tanuljon el."
 
-#, fuzzy
 msgid ""
 "%{skill} gives the hero a %{count} percent chance to learn any given 4th "
 "level spell (or below) that was cast by an enemy during combat."
 msgstr ""
-"A(z) %{skill} %{count} százaléknyi esélyt ad a hősnek, hogy az ellenfél "
+"%{skill} %{count} százaléknyi esélyt ad a hősnek, hogy az ellenfél "
 "által a csatában használt 4-es (vagy alacsonyabb) szintű varázslatot "
 "tanuljon el."
 
@@ -7486,12 +7462,11 @@ msgid ""
 "brought back from the dead as Skeletons."
 msgstr ""
 "%{skill} segítségével a csatában megölt lények %{count} százalékából "
-"Csontvázakat igézhetünk meg."
+"Csontvázakat idézhetünk meg."
 
-#, fuzzy
 msgid ""
 "The hero produces %{count} gold pieces per day as tax revenue from estates."
-msgstr "A hősöd napi %{count} arany adóbevételt kap."
+msgstr "A hős napi %{count} arany adóbevételt kap birtokai után."
 
 msgid "Blue"
 msgstr "Kék"
@@ -7614,7 +7589,6 @@ msgstr "Nagyszerű"
 msgid "luck|Irish"
 msgstr "Páratlan"
 
-#, fuzzy
 msgid ""
 "Bad luck sometimes falls on the hero's units in combat, causing their "
 "attacks to only do half damage."
@@ -7622,7 +7596,6 @@ msgstr ""
 "A Rossz szerencse következtében a csatában alkalmanként egyes egységek "
 "sebzése felére csökken."
 
-#, fuzzy
 msgid ""
 "Neutral luck means the hero's units will never get lucky or unlucky attacks "
 "on the enemy."
@@ -7630,13 +7603,12 @@ msgstr ""
 "A Semleges szerencse azt jelenti, hogy a csata során se szerencse se "
 "balszerencse nem éri az egységeid támadását."
 
-#, fuzzy
 msgid ""
 "Good luck sometimes lets the hero's units get lucky attacks (double "
 "strength) in combat."
 msgstr ""
-"Jószerencse esetén a csapatod tagjainak alkalmanként esélye van szerencsés "
-"támadásra (dupla erősségű) a csata során."
+"Jó szerencse esetén a hős egységeinek alkalmanként esélye van szerencsés "
+"(dupla erősségű) támadásra a csata során."
 
 msgid "morale|Treason"
 msgstr "Felségárulás"
@@ -7659,21 +7631,18 @@ msgstr "Nagyszerű"
 msgid "morale|Blood!"
 msgstr "Örjöngő!"
 
-#, fuzzy
 msgid "Bad morale may cause the hero's units to freeze in combat."
-msgstr "Rossz morál következtében csapattagok kimaradhatnak a körből."
+msgstr "Rossz morál következtében a hős egységei kimaradhatnak a körből."
 
-#, fuzzy
 msgid ""
 "Neutral morale means the hero's units will never be blessed with extra "
 "attacks or freeze in combat."
 msgstr ""
-"Semleges morál azt jelenti, hogy a csapattagok nem kapnak lehetőséget extra "
-"támadásra és nem is maradnak ki."
+"Semleges morál azt jelenti, hogy a hős egységei nem kapnak lehetőséget extra "
+"támadásra, de nem is maradnak ki."
 
-#, fuzzy
 msgid "Good morale may give the hero's units extra attacks in combat."
-msgstr "Jó morál esetén az egységek extra támadási lehetőséget kaphatnak."
+msgstr "Jó morál esetén a hős egységei extra támadási lehetőséget kaphatnak."
 
 msgid "Knight"
 msgstr "Lovag"
