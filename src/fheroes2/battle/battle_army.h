@@ -87,7 +87,10 @@ namespace Battle
         int GetColor() const;
         int GetControl() const;
 
+        // Returns the cost of surrender (in units of gold) for the current army on the battlefield
         uint32_t GetSurrenderCost() const;
+        // Returns the cost of surrender (in units of gold) as if there were an army on the battlefield with a total cost of 'armyCost'
+        uint32_t GetSurrenderCost( const Funds & armyCost ) const;
 
         Troops GetKilledTroops() const;
 

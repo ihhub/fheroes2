@@ -173,6 +173,9 @@ public:
 
     static NeutralMonsterJoiningCondition GetJoinSolution( const Heroes &, const Maps::Tiles &, const Troop & );
 
+    // Returns the cost of the average starting army for a given hero
+    static Funds getCostOfAverageStartingArmy( const Heroes * hero );
+
     static void drawSingleDetailedMonsterLine( const Troops & troops, int32_t cx, int32_t cy, int32_t width );
     static void drawMultipleMonsterLines( const Troops & troops, int32_t posX, int32_t posY, int32_t lineWidth, bool isCompact, const bool isDetailedView,
                                           const bool isGarrisonView = false, const uint32_t thievesGuildsCount = 0 );
@@ -189,9 +192,11 @@ public:
     ~Army() override = default;
 
     const Troops & getTroops() const;
-    // Soft reset means reset to the default army (a few T1 and T2 units).
-    // Hard reset means reset to the minimum army (strictly one T1 unit).
-    void Reset( const bool soft = false );
+
+    // Resets the army. If the army doesn't have a commanding hero, then it makes the army empty. Otherwise, if 'defaultArmy' is set to true, then it creates a default
+    // army of the commanding hero's faction (several units of level 1 and 2). Otherwise, a minimum army is created, consisting of exactly one monster of the first level
+    // of the commanding hero's faction.
+    void Reset( const bool defaultArmy = false );
     void setFromTile( const Maps::Tiles & tile );
 
     int GetColor() const;

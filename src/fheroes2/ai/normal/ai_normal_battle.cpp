@@ -619,6 +619,7 @@ namespace AI
             };
 
             const Outcome outcome = [this, &arena, actualHero]() {
+                const Force & force = arena.getForce( _myColor );
                 const Kingdom & kingdom = actualHero->GetKingdom();
 
                 const bool canRetreat = arena.CanRetreatOpponent( _myColor );
@@ -629,7 +630,7 @@ namespace AI
                         return Outcome::ContinueBattle;
                     }
 
-                    if ( !kingdom.AllowPayment( { Resource::GOLD, arena.getForce( _myColor ).GetSurrenderCost() } ) ) {
+                    if ( !kingdom.AllowPayment( { Resource::GOLD, force.GetSurrenderCost() } ) ) {
                         return Outcome::ContinueBattle;
                     }
 
@@ -640,8 +641,14 @@ namespace AI
                     return Outcome::Retreat;
                 }
 
-                if ( !kingdom.AllowPayment( Funds{ Resource::GOLD, arena.getForce( _myColor ).GetSurrenderCost() }
-                                            * Difficulty::getGoldReserveRatioForAISurrender( Game::getDifficulty() ) ) ) {
+                const uint32_t surrenderCost = force.GetSurrenderCost();
+                const uint32_t averageStartingArmySurrenderCost = force.GetSurrenderCost( Army::getCostOfAverageStartingArmy( actualHero ) );
+
+                if ( surrenderCost < averageStartingArmySurrenderCost ) {
+                    return Outcome::Retreat;
+                }
+
+                if ( !kingdom.AllowPayment( Funds{ Resource::GOLD, surrenderCost } * Difficulty::getGoldReserveRatioForAISurrender( Game::getDifficulty() ) ) ) {
                     return Outcome::Retreat;
                 }
 

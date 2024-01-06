@@ -178,38 +178,26 @@ bool Battle::Force::isValid( const bool considerBattlefieldArmy /* = true */ ) c
     // Consider only the state of the original army
     for ( size_t index = 0; index < army.Size(); ++index ) {
         const Troop * troop = army.GetTroop( index );
-
-        if ( troop && troop->isValid() ) {
-            const Unit * unit = FindUID( uids.at( index ) );
-
-            if ( unit && unit->GetDead() < unit->GetInitialCount() ) {
-                return true;
-            }
+        if ( troop == nullptr || !troop->isValid() ) {
+            continue;
         }
+
+        const Unit * unit = FindUID( uids.at( index ) );
+        if ( unit == nullptr || unit->GetDead() >= unit->GetInitialCount() ) {
+            continue;
+        }
+
+        return true;
     }
 
     return false;
 }
 
-uint32_t Battle::Force::GetSurrenderCost() const
+uint32_t Battle::Force::GetSurrenderCost( const Funds & armyCost ) const
 {
-    double res = 0;
-
-    // Consider only the units from the original army
-    for ( size_t index = 0; index < army.Size(); ++index ) {
-        const Troop * troop = army.GetTroop( index );
-
-        if ( troop && troop->isValid() ) {
-            const Unit * unit = FindUID( uids.at( index ) );
-
-            if ( unit && unit->isValid() ) {
-                res += unit->GetSurrenderCost().gold;
-            }
-        }
-    }
+    double result = armyCost.gold;
 
     const HeroBase * commander = GetCommander();
-
     if ( commander ) {
         const std::vector<int32_t> costReductionPercent
             = commander->GetBagArtifacts().getTotalArtifactMultipliedPercent( fheroes2::ArtifactBonusType::SURRENDER_COST_REDUCTION_PERCENT );
@@ -235,11 +223,33 @@ uint32_t Battle::Force::GetSurrenderCost() const
             break;
         }
 
-        res *= mod;
+        result *= mod;
     }
 
     // Total cost should always be at least 1 gold
-    return res >= 1 ? static_cast<uint32_t>( res + 0.5 ) : 1;
+    return result >= 1 ? static_cast<uint32_t>( result + 0.5 ) : 1;
+}
+
+uint32_t Battle::Force::GetSurrenderCost() const
+{
+    Funds cost;
+
+    // Consider only the units from the original army
+    for ( size_t index = 0; index < army.Size(); ++index ) {
+        const Troop * troop = army.GetTroop( index );
+        if ( troop == nullptr || !troop->isValid() ) {
+            continue;
+        }
+
+        const Unit * unit = FindUID( uids.at( index ) );
+        if ( unit == nullptr || !unit->isValid() ) {
+            continue;
+        }
+
+        cost += unit->GetSurrenderCost();
+    }
+
+    return GetSurrenderCost( cost );
 }
 
 void Battle::Force::NewTurn()
@@ -330,13 +340,15 @@ void Battle::Force::SyncArmyCount()
 {
     for ( uint32_t index = 0; index < army.Size(); ++index ) {
         Troop * troop = army.GetTroop( index );
-
-        if ( troop && troop->isValid() ) {
-            const Unit * unit = FindUID( uids.at( index ) );
-
-            if ( unit ) {
-                troop->SetCount( unit->GetDead() > unit->GetInitialCount() ? 0 : unit->GetInitialCount() - unit->GetDead() );
-            }
+        if ( troop == nullptr || !troop->isValid() ) {
+            continue;
         }
+
+        const Unit * unit = FindUID( uids.at( index ) );
+        if ( unit == nullptr ) {
+            continue;
+        }
+
+        troop->SetCount( unit->GetDead() > unit->GetInitialCount() ? 0 : unit->GetInitialCount() - unit->GetDead() );
     }
 }

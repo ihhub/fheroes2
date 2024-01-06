@@ -63,76 +63,113 @@
 #include "translations.h"
 #include "world.h"
 
-namespace fheroes2
+namespace
 {
-    class Image;
-}
+    enum class ArmySize : uint32_t
+    {
+        ARMY_FEW = 1,
+        ARMY_SEVERAL = 5,
+        ARMY_PACK = 10,
+        ARMY_LOTS = 20,
+        ARMY_HORDE = 50,
+        ARMY_THRONG = 100,
+        ARMY_SWARM = 250,
+        ARMY_ZOUNDS = 500,
+        ARMY_LEGION = 1000
+    };
 
-enum armysize_t
-{
-    ARMY_FEW = 1,
-    ARMY_SEVERAL = 5,
-    ARMY_PACK = 10,
-    ARMY_LOTS = 20,
-    ARMY_HORDE = 50,
-    ARMY_THRONG = 100,
-    ARMY_SWARM = 250,
-    ARMY_ZOUNDS = 500,
-    ARMY_LEGION = 1000
-};
+    ArmySize getArmySize( const uint32_t count )
+    {
+        const ArmySize countAsEnum = static_cast<ArmySize>( count );
 
-armysize_t ArmyGetSize( uint32_t count )
-{
-    if ( ARMY_LEGION <= count )
-        return ARMY_LEGION;
-    else if ( ARMY_ZOUNDS <= count )
-        return ARMY_ZOUNDS;
-    else if ( ARMY_SWARM <= count )
-        return ARMY_SWARM;
-    else if ( ARMY_THRONG <= count )
-        return ARMY_THRONG;
-    else if ( ARMY_HORDE <= count )
-        return ARMY_HORDE;
-    else if ( ARMY_LOTS <= count )
-        return ARMY_LOTS;
-    else if ( ARMY_PACK <= count )
-        return ARMY_PACK;
-    else if ( ARMY_SEVERAL <= count )
-        return ARMY_SEVERAL;
+        if ( ArmySize::ARMY_LEGION <= countAsEnum ) {
+            return ArmySize::ARMY_LEGION;
+        }
+        if ( ArmySize::ARMY_ZOUNDS <= countAsEnum ) {
+            return ArmySize::ARMY_ZOUNDS;
+        }
+        if ( ArmySize::ARMY_SWARM <= countAsEnum ) {
+            return ArmySize::ARMY_SWARM;
+        }
+        if ( ArmySize::ARMY_THRONG <= countAsEnum ) {
+            return ArmySize::ARMY_THRONG;
+        }
+        if ( ArmySize::ARMY_HORDE <= countAsEnum ) {
+            return ArmySize::ARMY_HORDE;
+        }
+        if ( ArmySize::ARMY_LOTS <= countAsEnum ) {
+            return ArmySize::ARMY_LOTS;
+        }
+        if ( ArmySize::ARMY_PACK <= countAsEnum ) {
+            return ArmySize::ARMY_PACK;
+        }
+        if ( ArmySize::ARMY_SEVERAL <= countAsEnum ) {
+            return ArmySize::ARMY_SEVERAL;
+        }
+        return ArmySize::ARMY_FEW;
+    }
 
-    return ARMY_FEW;
+    std::pair<uint32_t, uint32_t> getNumberOfMonstersInStartingArmy( const Monster & monster )
+    {
+        switch ( monster.GetMonsterLevel() ) {
+        case 1:
+            switch ( monster.GetID() ) {
+            case Monster::PEASANT:
+                return { 30, 50 };
+            case Monster::GOBLIN:
+                return { 15, 25 };
+            case Monster::SPRITE:
+                return { 10, 20 };
+            default:
+                return { 6, 10 };
+            }
+        case 2:
+            switch ( monster.GetID() ) {
+            case Monster::ARCHER:
+            case Monster::ORC:
+                return { 3, 5 };
+            default:
+                return { 2, 4 };
+            }
+        default:
+            assert( 0 );
+            break;
+        }
+
+        return { 0, 0 };
+    }
 }
 
 std::string Army::TroopSizeString( const Troop & troop )
 {
     std::string str;
 
-    switch ( ArmyGetSize( troop.GetCount() ) ) {
-    case ARMY_FEW:
+    switch ( getArmySize( troop.GetCount() ) ) {
+    case ArmySize::ARMY_FEW:
         str = _( "A few\n%{monster}" );
         break;
-    case ARMY_SEVERAL:
+    case ArmySize::ARMY_SEVERAL:
         str = _( "Several\n%{monster}" );
         break;
-    case ARMY_PACK:
+    case ArmySize::ARMY_PACK:
         str = _( "A pack of\n%{monster}" );
         break;
-    case ARMY_LOTS:
+    case ArmySize::ARMY_LOTS:
         str = _( "Lots of\n%{monster}" );
         break;
-    case ARMY_HORDE:
+    case ArmySize::ARMY_HORDE:
         str = _( "A horde of\n%{monster}" );
         break;
-    case ARMY_THRONG:
+    case ArmySize::ARMY_THRONG:
         str = _( "A throng of\n%{monster}" );
         break;
-    case ARMY_SWARM:
+    case ArmySize::ARMY_SWARM:
         str = _( "A swarm of\n%{monster}" );
         break;
-    case ARMY_ZOUNDS:
+    case ArmySize::ARMY_ZOUNDS:
         str = _( "Zounds...\n%{monster}" );
         break;
-    case ARMY_LEGION:
+    case ArmySize::ARMY_LEGION:
         str = _( "A legion of\n%{monster}" );
         break;
     default:
@@ -147,24 +184,24 @@ std::string Army::TroopSizeString( const Troop & troop )
 
 std::string Army::SizeString( uint32_t size )
 {
-    switch ( ArmyGetSize( size ) ) {
-    case ARMY_FEW:
+    switch ( getArmySize( size ) ) {
+    case ArmySize::ARMY_FEW:
         return _( "army|Few" );
-    case ARMY_SEVERAL:
+    case ArmySize::ARMY_SEVERAL:
         return _( "army|Several" );
-    case ARMY_PACK:
+    case ArmySize::ARMY_PACK:
         return _( "army|Pack" );
-    case ARMY_LOTS:
+    case ArmySize::ARMY_LOTS:
         return _( "army|Lots" );
-    case ARMY_HORDE:
+    case ArmySize::ARMY_HORDE:
         return _( "army|Horde" );
-    case ARMY_THRONG:
+    case ArmySize::ARMY_THRONG:
         return _( "army|Throng" );
-    case ARMY_SWARM:
+    case ArmySize::ARMY_SWARM:
         return _( "army|Swarm" );
-    case ARMY_ZOUNDS:
+    case ArmySize::ARMY_ZOUNDS:
         return _( "army|Zounds" );
-    case ARMY_LEGION:
+    case ArmySize::ARMY_LEGION:
         return _( "army|Legion" );
     default:
         // Are you passing the correct value?
@@ -1249,47 +1286,57 @@ double Army::GetStrength() const
     return result;
 }
 
-void Army::Reset( const bool soft /* = false */ )
+Funds Army::getCostOfAverageStartingArmy( const Heroes * hero )
+{
+    assert( hero != nullptr );
+
+    const int race = hero->GetRace();
+
+    Funds result;
+
+    for ( uint32_t dwelling : std::array<uint32_t, 2>{ DWELLING_MONSTER1, DWELLING_MONSTER2 } ) {
+        const Monster monster{ race, dwelling };
+        assert( monster.isValid() );
+
+        const auto [min, max] = getNumberOfMonstersInStartingArmy( monster );
+
+        result += monster.GetCost() * ( ( min + max ) / 2 );
+    }
+
+    return result;
+}
+
+void Army::Reset( const bool defaultArmy /* = false */ )
 {
     Troops::Clean();
 
-    if ( commander && commander->isHeroes() ) {
-        const Monster mons1( commander->GetRace(), DWELLING_MONSTER1 );
-
-        if ( soft ) {
-            const Monster mons2( commander->GetRace(), DWELLING_MONSTER2 );
-
-            switch ( mons1.GetID() ) {
-            case Monster::PEASANT:
-                JoinTroop( mons1, Rand::Get( 30, 50 ), false );
-                break;
-            case Monster::GOBLIN:
-                JoinTroop( mons1, Rand::Get( 15, 25 ), false );
-                break;
-            case Monster::SPRITE:
-                JoinTroop( mons1, Rand::Get( 10, 20 ), false );
-                break;
-            default:
-                JoinTroop( mons1, Rand::Get( 6, 10 ), false );
-                break;
-            }
-
-            if ( Rand::Get( 1, 10 ) != 1 ) {
-                switch ( mons2.GetID() ) {
-                case Monster::ARCHER:
-                case Monster::ORC:
-                    JoinTroop( mons2, Rand::Get( 3, 5 ), false );
-                    break;
-                default:
-                    JoinTroop( mons2, Rand::Get( 2, 4 ), false );
-                    break;
-                }
-            }
-        }
-        else {
-            JoinTroop( mons1, 1, false );
-        }
+    if ( commander == nullptr || !commander->isHeroes() ) {
+        return;
     }
+
+    const int race = commander->GetRace();
+
+    if ( !defaultArmy ) {
+        JoinTroop( { race, DWELLING_MONSTER1 }, 1, false );
+
+        return;
+    }
+
+    const auto joinMonsters = [this]( const Monster & monster ) {
+        const auto [min, max] = getNumberOfMonstersInStartingArmy( monster );
+
+        if ( !JoinTroop( monster, Rand::Get( min, max ), false ) ) {
+            assert( 0 );
+        }
+    };
+
+    joinMonsters( { race, DWELLING_MONSTER1 } );
+
+    if ( Rand::Get( 1, 10 ) == 1 ) {
+        return;
+    }
+
+    joinMonsters( { race, DWELLING_MONSTER2 } );
 }
 
 HeroBase * Army::GetCommander()
