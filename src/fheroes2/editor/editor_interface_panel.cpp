@@ -753,13 +753,6 @@ namespace Interface
                 return;
             case AdventureObjectBrush::MINES:
                 _interface.setCursorUpdater( [this]( const int32_t tileIndex ) {
-                    if ( world.GetTiles( tileIndex ).GetGround() == Maps::Ground::WATER ) {
-                        // Mines can not be placed on water.
-                        const fheroes2::Sprite & image = fheroes2::AGG::GetICN( ICN::SPELLS, 0 );
-                        Cursor::Get().setCustomImage( image, { -image.width() / 2, -image.height() / 2 } );
-                        return;
-                    }
-
                     int32_t type = -1;
                     int32_t color = -1;
                     int32_t resource = -1;
@@ -768,6 +761,13 @@ namespace Interface
                     if ( type == -1 || color == -1 || resource == -1 ) {
                         // The object type is not set. We show the POINTER cursor for this case.
                         Cursor::Get().SetThemes( Cursor::POINTER );
+                        return;
+                    }
+
+                    if ( world.GetTiles( tileIndex ).GetGround() == Maps::Ground::WATER ) {
+                        // Mines can not be placed on water.
+                        const fheroes2::Sprite & image = fheroes2::AGG::GetICN( ICN::SPELLS, 0 );
+                        Cursor::Get().setCustomImage( image, { -image.width() / 2, -image.height() / 2 } );
                         return;
                     }
 
