@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2023                                                    *
+ *   Copyright (C) 2023 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -36,22 +36,22 @@ namespace Maps
     struct ObjectPartInfo
     {
         ObjectPartInfo( const MP2::ObjectIcnType icn, const uint32_t index, const fheroes2::Point offset, const MP2::MapObjectType type )
-            : icnType( icn )
+            : tileOffset( offset )
             , icnIndex( index )
-            , tileOffset( offset )
+            , icnType( icn )
             , objectType( type )
         {
             // Do nothing.
         }
 
-        // ICN type associated to this object part. Some objects like towns can have parts coming from different ICN resources.
-        MP2::ObjectIcnType icnType{ MP2::OBJ_ICN_TYPE_UNKNOWN };
+        // A tile offset from the main object tile.
+        fheroes2::Point tileOffset;
 
         // Image index from an ICN resource to render this object part.
         uint32_t icnIndex{ 0 };
 
-        // A tile offset from the main object tile.
-        fheroes2::Point tileOffset;
+        // ICN type associated to this object part. Some objects like towns can have parts coming from different ICN resources.
+        MP2::ObjectIcnType icnType{ MP2::OBJ_ICN_TYPE_UNKNOWN };
 
         // Object type associated with this object part. Not every object part has a type. For example, shadows don't have types.
         MP2::MapObjectType objectType{ MP2::OBJ_NONE };
