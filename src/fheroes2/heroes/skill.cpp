@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -49,7 +49,7 @@ namespace Skill
 
     const int secskills[]
         = { Secondary::PATHFINDING, Secondary::ARCHERY,   Secondary::LOGISTICS, Secondary::SCOUTING,   Secondary::DIPLOMACY, Secondary::NAVIGATION, Secondary::LEADERSHIP,
-            Secondary::WISDOM,      Secondary::MYSTICISM, Secondary::LUCK,      Secondary::BALLISTICS, Secondary::EAGLEEYE,  Secondary::NECROMANCY, Secondary::ESTATES };
+            Secondary::WISDOM,      Secondary::MYSTICISM, Secondary::LUCK,      Secondary::BALLISTICS, Secondary::EAGLE_EYE, Secondary::NECROMANCY, Secondary::ESTATES };
 }
 
 uint32_t Skill::Secondary::GetValues() const
@@ -311,7 +311,7 @@ int Skill::Secondary::RandForWitchsHut()
         if ( sec->diplomacy )
             v.push_back( DIPLOMACY );
         if ( sec->eagleeye )
-            v.push_back( EAGLEEYE );
+            v.push_back( EAGLE_EYE );
         if ( sec->estates )
             v.push_back( ESTATES );
         if ( sec->leadership )
@@ -372,7 +372,7 @@ const char * Skill::Secondary::String( int skill )
         return _( "Luck" );
     case BALLISTICS:
         return _( "Ballistics" );
-    case EAGLEEYE:
+    case EAGLE_EYE:
         return _( "Eagle Eye" );
     case NECROMANCY:
         return _( "Necromancy" );
@@ -505,7 +505,7 @@ std::string Skill::Secondary::GetDescription( const Heroes & hero ) const
             break;
         }
         break;
-    case EAGLEEYE:
+    case EAGLE_EYE:
         switch ( Level() ) {
         case Level::BASIC:
             str = _( "%{skill} gives the hero a %{count} percent chance to learn any given 1st or 2nd level spell that was cast by an enemy during combat." );
@@ -559,7 +559,7 @@ Skill::SecSkills::SecSkills( int race )
             if ( ptr->initial_secondary.diplomacy )
                 AddSkill( Secondary( Secondary::DIPLOMACY, ptr->initial_secondary.diplomacy ) );
             if ( ptr->initial_secondary.eagleeye )
-                AddSkill( Secondary( Secondary::EAGLEEYE, ptr->initial_secondary.eagleeye ) );
+                AddSkill( Secondary( Secondary::EAGLE_EYE, ptr->initial_secondary.eagleeye ) );
             if ( ptr->initial_secondary.estates )
                 AddSkill( Secondary( Secondary::ESTATES, ptr->initial_secondary.estates ) );
             if ( ptr->initial_secondary.logistics )
@@ -696,7 +696,7 @@ int Skill::SecondaryGetWeightSkillFromRace( int race, int skill )
             return ptr->mature_secondary.luck;
         else if ( skill == Secondary::BALLISTICS )
             return ptr->mature_secondary.ballistics;
-        else if ( skill == Secondary::EAGLEEYE )
+        else if ( skill == Secondary::EAGLE_EYE )
             return ptr->mature_secondary.eagleeye;
         else if ( skill == Secondary::NECROMANCY )
             return ptr->mature_secondary.necromancy;

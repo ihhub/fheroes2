@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2023                                             *
+ *   Copyright (C) 2020 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -385,8 +385,22 @@ namespace
         case MP2::OBJ_WITCHS_HUT: {
             const Skill::Secondary & skill = getSecondarySkillFromWitchsHut( tile );
             const int skillType = skill.Skill();
+            if ( !skill.isValid() ) {
+                // How is it possible that no skill exist?
+                assert( 0 );
+                return false;
+            }
 
-            if ( !skill.isValid() || hero.HasMaxSecondarySkill() || hero.HasSecondarySkill( skillType ) ) {
+            if ( hero.HasMaxSecondarySkill() ) {
+                return false;
+            }
+
+            if ( !hero.isVisited( tile, Visit::GLOBAL ) ) {
+                // The AI heroes should not have prior knowledge what skill this object has.
+                return true;
+            }
+
+            if ( hero.HasSecondarySkill( skillType ) ) {
                 return false;
             }
 
@@ -395,7 +409,7 @@ namespace
                 return false;
             }
 
-            if ( !hero.HaveSpellBook() && skillType == Skill::Secondary::MYSTICISM ) {
+            if ( !hero.HaveSpellBook() && ( skillType == Skill::Secondary::MYSTICISM || skillType == Skill::Secondary::EAGLE_EYE ) ) {
                 // It's useless to have Mysticism with no magic book in hands.
                 return false;
             }
@@ -1788,6 +1802,53 @@ namespace AI
         return getGeneralObjectValue( hero, index, valueToIgnore, distanceToObject );
     }
 
+    double Normal::getScoutObjectValue( const Heroes & hero, const int index, const double valueToIgnore, const uint32_t distanceToObject ) const
+    {
+        // Courier should focus on its main task and visit other objects only if it's close to the destination
+        assert( hero.getAIRole() == Heroes::Role::SCOUT );
+
+        const Maps::Tiles & tile = world.GetTiles( index );
+        const MP2::MapObjectType objectType = tile.GetObject();
+
+        switch ( objectType ) {
+        case MP2::OBJ_WITCHS_HUT: {
+            if ( !hero.isVisited( tile, Visit::GLOBAL ) ) {
+                // Since this object has not been visited use general value estimation.
+                return getGeneralObjectValue( hero, index, valueToIgnore, distanceToObject );
+            }
+
+            const Skill::Secondary & skill = getSecondarySkillFromWitchsHut( tile );
+            if ( !skill.isValid() || hero.HasMaxSecondarySkill() ) {
+                // This mustn't happen as these checks are done prior this code.
+                assert( 0 );
+                return -dangerousTaskPenalty;
+            }
+
+            const int skillType = skill.Skill();
+            if ( hero.HasSecondarySkill( skillType ) ) {
+                // This mustn't happen as these checks are done prior this code.
+                assert( 0 );
+                return -dangerousTaskPenalty;
+            }
+
+            double value = getGeneralObjectValue( hero, index, valueToIgnore, distanceToObject );
+            if ( skillType == Skill::Secondary::SCOUTING || skillType == Skill::Secondary::LOGISTICS ) {
+                // Scouts should focus on scouting so these skills must have much higher priority.
+                value = value * 3;
+            }
+            else if ( skillType == Skill::Secondary::PATHFINDING ) {
+                value = value * 2;
+            }
+
+            return value;
+        }
+        default:
+            break;
+        }
+
+        return getGeneralObjectValue( hero, index, valueToIgnore, distanceToObject );
+    }
+
     double Normal::getObjectValue( const Heroes & hero, const int index, const int objectType, const double valueToIgnore, const uint32_t distanceToObject ) const
     {
         assert( objectType == world.GetTiles( index ).GetObject() );
@@ -1798,8 +1859,9 @@ namespace AI
 
         switch ( hero.getAIRole() ) {
         case Heroes::Role::HUNTER:
-        case Heroes::Role::SCOUT:
             return getGeneralObjectValue( hero, index, valueToIgnore, distanceToObject );
+        case Heroes::Role::SCOUT:
+            return getScoutObjectValue( hero, index, valueToIgnore, distanceToObject );
         case Heroes::Role::CHAMPION:
         case Heroes::Role::FIGHTER:
             return getFighterObjectValue( hero, index, valueToIgnore, distanceToObject );
