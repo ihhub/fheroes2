@@ -1832,9 +1832,12 @@ namespace AI
             }
 
             double value = getGeneralObjectValue( hero, index, valueToIgnore, distanceToObject );
-            if ( skillType == Skill::Secondary::SCOUTING || skillType == Skill::Secondary::PATHFINDING ) {
+            if ( skillType == Skill::Secondary::SCOUTING || skillType == Skill::Secondary::LOGISTICS ) {
                 // Scouts should focus on scouting so these skills must have much higher priority.
                 value = value * 3;
+            }
+            else if ( skillType == Skill::Secondary::PATHFINDING ) {
+                value = value * 2;
             }
 
             return value;
