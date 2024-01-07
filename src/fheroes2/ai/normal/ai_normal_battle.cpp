@@ -38,6 +38,7 @@
 
 #include "ai.h"
 #include "ai_normal.h"
+#include "army.h"
 #include "artifact.h"
 #include "artifact_info.h"
 #include "battle.h"
@@ -502,7 +503,7 @@ namespace AI
 
         // Retreat if remaining army strength is a fraction of enemy's
         // Consider taking speed/turn order into account in the future
-        return _myArmyStrength * Difficulty::GetAIRetreatRatio( Game::getDifficulty() ) < _enemyArmyStrength;
+        return _myArmyStrength * Difficulty::getArmyStrengthRatioForAIRetreat( Game::getDifficulty() ) < _enemyArmyStrength;
     }
 
     bool BattlePlanner::isUnitFaster( const Unit & currentUnit, const Unit & target ) const
@@ -611,8 +612,52 @@ namespace AI
                            arena.GetCurrentCommander()->GetName() << " casts " << Spell( bestSpell.spellID ).GetName() << " on cell " << bestSpell.cell )
             };
 
-            // Try to retreat first
-            if ( arena.CanRetreatOpponent( _myColor ) ) {
+            enum class Outcome
+            {
+                ContinueBattle,
+                Retreat,
+                Surrender
+            };
+
+            const Outcome outcome = [this, &arena, actualHero]() {
+                const Force & force = arena.getForce( _myColor );
+                const Kingdom & kingdom = actualHero->GetKingdom();
+
+                const bool canRetreat = arena.CanRetreatOpponent( _myColor );
+                const bool canSurrender = arena.CanSurrenderOpponent( _myColor );
+
+                if ( !canRetreat ) {
+                    if ( !canSurrender ) {
+                        return Outcome::ContinueBattle;
+                    }
+
+                    if ( !kingdom.AllowPayment( { Resource::GOLD, force.GetSurrenderCost() } ) ) {
+                        return Outcome::ContinueBattle;
+                    }
+
+                    return Outcome::Surrender;
+                }
+
+                if ( !canSurrender ) {
+                    return Outcome::Retreat;
+                }
+
+                if ( force.getStrengthOfArmyRemainingInCaseOfSurrender() < Army::getStrengthOfAverageStartingArmy( actualHero ) ) {
+                    return Outcome::Retreat;
+                }
+
+                if ( !kingdom.AllowPayment( Funds{ Resource::GOLD, force.GetSurrenderCost() }
+                                            * Difficulty::getGoldReserveRatioForAISurrender( Game::getDifficulty() ) ) ) {
+                    return Outcome::Retreat;
+                }
+
+                return Outcome::Surrender;
+            }();
+
+            switch ( outcome ) {
+            case Outcome::ContinueBattle:
+                break;
+            case Outcome::Retreat:
                 farewellSpellcast();
 
                 actions.emplace_back( Command::RETREAT );
@@ -620,22 +665,17 @@ namespace AI
                 DEBUG_LOG( DBG_BATTLE, DBG_INFO, arena.GetCurrentCommander()->GetName() << " retreats" )
 
                 return actions;
-            }
+            case Outcome::Surrender:
+                farewellSpellcast();
 
-            // If it is impossible to retreat (for example, when defending a castle), then try to surrender
-            if ( arena.CanSurrenderOpponent( _myColor ) ) {
-                const uint32_t cost = arena.getForce( _myColor ).GetSurrenderCost();
-                const Kingdom & kingdom = actualHero->GetKingdom();
+                actions.emplace_back( Command::SURRENDER );
 
-                if ( kingdom.AllowPayment( { Resource::GOLD, cost } ) ) {
-                    farewellSpellcast();
+                DEBUG_LOG( DBG_BATTLE, DBG_INFO, arena.GetCurrentCommander()->GetName() << " surrenders" )
 
-                    actions.emplace_back( Command::SURRENDER );
-
-                    DEBUG_LOG( DBG_BATTLE, DBG_INFO, arena.GetCurrentCommander()->GetName() << " surrenders for " << cost << " gold" )
-
-                    return actions;
-                }
+                return actions;
+            default:
+                assert( 0 );
+                break;
             }
         }
 
