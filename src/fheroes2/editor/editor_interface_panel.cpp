@@ -56,6 +56,9 @@
 
 namespace
 {
+    // There are 7 resource types + abandoned mine: total 8 resources.
+    const int32_t minesResourceCount = 8;
+
     fheroes2::Sprite getObjectImage( const Maps::ObjectGroup group, const int32_t type )
     {
         if ( type == -1 ) {
@@ -1224,9 +1227,8 @@ namespace Interface
 
     void EditorPanel::getMineObjectProperties( int32_t & type, int32_t & resource, int32_t & color ) const
     {
-        // There are 7 resource types + abandoned mine: total 8 resources.
-        resource = _selectedAdventureObjectType[AdventureObjectBrush::MINES] % 8;
-        const int32_t colorAndType = _selectedAdventureObjectType[AdventureObjectBrush::MINES] / 8;
+        resource = _selectedAdventureObjectType[AdventureObjectBrush::MINES] % minesResourceCount;
+        const int32_t colorAndType = _selectedAdventureObjectType[AdventureObjectBrush::MINES] / minesResourceCount;
 
         const auto & mineObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_MINES );
         if ( mineObjects.empty() ) {
@@ -1243,9 +1245,7 @@ namespace Interface
 
     int32_t EditorPanel::_generateMineObjectProperties( const int32_t type, const int32_t resource, const int32_t color )
     {
-        // There are 7 resource types + abandoned mine: total 8 resources.
-        const int32_t maxResourceCount = 8;
-        assert( resource < maxResourceCount );
+        assert( resource < minesResourceCount );
 
         const auto & mineObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_MINES );
         if ( mineObjects.empty() ) {
@@ -1254,7 +1254,7 @@ namespace Interface
             return -1;
         }
 
-        const int32_t objectType = ( color * static_cast<int32_t>( mineObjects.size() ) + type ) * maxResourceCount + resource;
+        const int32_t objectType = ( color * static_cast<int32_t>( mineObjects.size() ) + type ) * minesResourceCount + resource;
         return ( objectType < 0 ) ? -1 : objectType;
     }
 }

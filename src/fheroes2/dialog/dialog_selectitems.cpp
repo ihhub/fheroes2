@@ -722,7 +722,7 @@ namespace
 
         void ActionListPressRight( Maps::ObjectInfo & info ) override
         {
-            if ( _resourceId > 1 && _resourceId < 7 ) {
+            if ( info.objectType == MP2::OBJ_MINE ) {
                 // Mine description is done by its resource type ( 2 - Ore, 3 -Sulfur, 4 - Crystal, 5 - Gems, 6 - Gold ).
                 fheroes2::showStandardTextMessage( Maps::GetMineName( Resource::getResourceTypeFromIconIndex( _resourceId ) ), "", Dialog::ZERO );
                 return;
@@ -1341,8 +1341,8 @@ void Dialog::selectMineType( int32_t & type, int32_t & resource, int32_t & color
     listbox.setScrollBarArea( { scrollbarOffsetX + 2, listRoi.y + topPartHeight, 10, listRoi.height - 2 * topPartHeight } );
     listbox.SetAreaMaxItems( 4 );
 
-    auto getObjectTypeByResource = [&selectedResourceType]() {
-        switch ( selectedResourceType ) {
+    auto getObjectTypeByResource = []( const uint32_t resourceType ) {
+        switch ( resourceType ) {
         case 0:
             return MP2::OBJ_SAWMILL;
         case 1:
@@ -1362,7 +1362,7 @@ void Dialog::selectMineType( int32_t & type, int32_t & resource, int32_t & color
         return MP2::OBJ_NONE;
     };
 
-    MP2::MapObjectType selectedObjectType = getObjectTypeByResource();
+    MP2::MapObjectType selectedObjectType = getObjectTypeByResource( selectedResourceType );
     const std::vector<Maps::ObjectInfo> & allObjectInfo = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_MINES );
     std::vector<Maps::ObjectInfo> objectInfo;
     std::vector<int32_t> objectInfoIndexes;
@@ -1456,7 +1456,7 @@ void Dialog::selectMineType( int32_t & type, int32_t & resource, int32_t & color
 
                         listbox.setMineTypeData( color, static_cast<int32_t>( selectedResourceType ) );
 
-                        const MP2::MapObjectType newObjectType = getObjectTypeByResource();
+                        const MP2::MapObjectType newObjectType = getObjectTypeByResource( selectedResourceType );
 
                         if ( newObjectType != selectedObjectType ) {
                             selectedObjectType = newObjectType;
@@ -1470,13 +1470,19 @@ void Dialog::selectMineType( int32_t & type, int32_t & resource, int32_t & color
                     break;
                 }
                 if ( le.MousePressRight( resorceRoi[i] ) ) {
-                    if ( i == 7 ) {
-                        fheroes2::showStandardTextMessage( _( "Abandoned Mine" ), _( "Click to select Abandoned Mine placing." ), Dialog::ZERO );
+                    const MP2::MapObjectType objectType = getObjectTypeByResource( i );
+                    std::string objectName;
+                    if ( objectType == MP2::OBJ_MINE ) {
+                        objectName = Maps::GetMineName( Resource::getResourceTypeFromIconIndex( i ) );
                     }
                     else {
-                        fheroes2::showStandardTextMessage( Resource::String( Resource::getResourceTypeFromIconIndex( i ) ),
-                                                           _( "Click to select this resource mine placing." ), Dialog::ZERO );
+                        objectName = MP2::StringObject( objectType );
                     }
+                    std::string description( _( "Click to select %{object} placing." ) );
+                    StringReplace( description, "%{object}", objectName );
+
+                    fheroes2::showStandardTextMessage( std::move( objectName ), std::move( description ), Dialog::ZERO );
+
                     break;
                 }
             }
