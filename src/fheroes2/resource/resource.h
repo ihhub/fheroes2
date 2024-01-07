@@ -44,11 +44,6 @@ struct cost_t
     uint8_t gems;
 };
 
-#define COST_NONE                                                                                                                                                        \
-    {                                                                                                                                                                    \
-        0, 0, 0, 0, 0, 0, 0                                                                                                                                              \
-    }
-
 namespace Resource
 {
     enum
