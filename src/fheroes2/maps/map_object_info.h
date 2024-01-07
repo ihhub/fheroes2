@@ -44,14 +44,14 @@ namespace Maps
             // Do nothing.
         }
 
-        // ICN type associated to this object part. Some objects like towns can have parts coming from different ICN resources.
-        MP2::ObjectIcnType icnType{ MP2::OBJ_ICN_TYPE_UNKNOWN };
+        // A tile offset from the main object tile.
+        fheroes2::Point tileOffset;
 
         // Image index from an ICN resource to render this object part.
         uint32_t icnIndex{ 0 };
 
-        // A tile offset from the main object tile.
-        fheroes2::Point tileOffset;
+        // ICN type associated to this object part. Some objects like towns can have parts coming from different ICN resources.
+        MP2::ObjectIcnType icnType{ MP2::OBJ_ICN_TYPE_UNKNOWN };
 
         // Object type associated with this object part. Not every object part has a type. For example, shadows don't have types.
         MP2::MapObjectType objectType{ MP2::OBJ_NONE };
