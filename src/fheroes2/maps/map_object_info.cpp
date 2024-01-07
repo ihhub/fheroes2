@@ -687,21 +687,23 @@ namespace
             for ( uint8_t resource = 0; resource < mineResources; ++resource ) {
                 object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_EXTRAOVR, resource, fheroes2::Point{ 0, 0 }, MP2::OBJ_MINE, Maps::OBJECT_LAYER );
 
-                // Income per day for all mines except the gold mine.
-                object.metadata[1] = 1;
-
+                // Set the metadata: 0 - resource type, 1 - income per day.
                 switch ( resource ) {
                 case 0:
                     object.metadata[0] = Resource::ORE;
+                    object.metadata[1] = 2;
                     break;
                 case 1:
                     object.metadata[0] = Resource::SULFUR;
+                    object.metadata[1] = 1;
                     break;
                 case 2:
                     object.metadata[0] = Resource::CRYSTAL;
+                    object.metadata[1] = 1;
                     break;
                 case 3:
                     object.metadata[0] = Resource::GEMS;
+                    object.metadata[1] = 1;
                     break;
                 case 4:
                     object.metadata[0] = Resource::GOLD;
