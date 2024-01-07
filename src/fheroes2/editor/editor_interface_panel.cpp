@@ -768,7 +768,7 @@ namespace Interface
                     }
 
                     if ( world.GetTiles( tileIndex ).GetGround() == Maps::Ground::WATER ) {
-                        // Mines can not be placed on water.
+                        // Mines cannot be placed on water.
                         const fheroes2::Sprite & image = fheroes2::AGG::GetICN( ICN::SPELLS, 0 );
                         Cursor::Get().setCustomImage( image, { -image.width() / 2, -image.height() / 2 } );
                         return;
