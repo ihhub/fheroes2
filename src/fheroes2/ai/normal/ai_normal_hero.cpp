@@ -2130,8 +2130,7 @@ namespace AI
         }
 
         double fogDiscoveryValue = getFogDiscoveryValue( hero );
-        bool isTerritoryExpansion = false;
-        const int fogDiscoveryTarget = _pathfinder.getFogDiscoveryTile( hero, isTerritoryExpansion );
+        const auto [fogDiscoveryTarget, isTerritoryExpansion] = _pathfinder.getFogDiscoveryTile( hero );
         if ( fogDiscoveryTarget >= 0 ) {
             uint32_t distanceToFogDiscovery = _pathfinder.getDistance( fogDiscoveryTarget );
 
