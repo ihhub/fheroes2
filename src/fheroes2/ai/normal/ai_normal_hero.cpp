@@ -334,11 +334,10 @@ namespace
         }
 
         case MP2::OBJ_OBSERVATION_TOWER: {
-            const int32_t fogCountToUncoverByHero = Maps::getFogTileCountToBeRevealed( index, hero.GetScoutingDistance(), hero.GetColor() );
             const int32_t fogCountToUncoverByTower
                 = Maps::getFogTileCountToBeRevealed( index, GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::OBSERVATION_TOWER ), hero.GetColor() );
 
-            return fogCountToUncoverByTower > fogCountToUncoverByHero;
+            return fogCountToUncoverByTower > 0;
         }
 
         case MP2::OBJ_OBELISK:
@@ -846,7 +845,7 @@ namespace
         return fogDiscoveryBaseValue;
     }
 
-    uint32_t getFogDiscoveryMaximizingPeriod( const Heroes & hero )
+    uint32_t getTimeoutBeforeFogDiscoveryIntensification( const Heroes & hero )
     {
         switch ( hero.getAIRole() ) {
         case Heroes::Role::SCOUT:
@@ -1245,13 +1244,11 @@ namespace AI
             const int32_t fogCountToUncoverByTower
                 = Maps::getFogTileCountToBeRevealed( index, GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::OBSERVATION_TOWER ), hero.GetColor() );
 
-            const int32_t fogCountToUncoverByHero = Maps::getFogTileCountToBeRevealed( index, hero.GetScoutingDistance(), hero.GetColor() );
-
-            if ( fogCountToUncoverByTower - fogCountToUncoverByHero <= 0 ) {
+            if ( fogCountToUncoverByTower == 0 ) {
                 // Nothing to uncover.
                 return -dangerousTaskPenalty;
             }
-            return fogCountToUncoverByTower - fogCountToUncoverByHero;
+            return fogCountToUncoverByTower;
         }
         case MP2::OBJ_MAGELLANS_MAPS: {
             // Very valuable object.
@@ -2148,14 +2145,14 @@ namespace AI
 
             if ( isTerritoryExpansion ) {
                 // Over time the AI should focus more on territory expansion.
-                const uint32_t period = getFogDiscoveryMaximizingPeriod( hero );
+                const uint32_t period = getTimeoutBeforeFogDiscoveryIntensification( hero );
+                assert( period > 0 );
 
                 if ( fogDiscoveryValue < 0 ) {
                     // This is actually a very useful fog discovery action which might lead to finding of new objects.
                     // Increase the value of this action.
                     fogDiscoveryValue /= 2;
 
-                    assert( period > 0 );
                     if ( world.CountDay() > period ) {
                         fogDiscoveryValue = 0;
                     }
