@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2011 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -247,7 +247,7 @@ const Skill::values_t * GameStatic::GetSkillValues( int type )
         return &Skill::_values[9];
     case Skill::Secondary::BALLISTICS:
         return &Skill::_values[10];
-    case Skill::Secondary::EAGLEEYE:
+    case Skill::Secondary::EAGLE_EYE:
         return &Skill::_values[11];
     case Skill::Secondary::NECROMANCY:
         return &Skill::_values[12];

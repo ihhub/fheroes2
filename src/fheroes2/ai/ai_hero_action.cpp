@@ -994,17 +994,27 @@ namespace
         }
     }
 
-    void AIToWitchsHut( Heroes & hero, int32_t dst_index )
+    void AIToWitchsHut( Heroes & hero, const MP2::MapObjectType objectType, const int32_t dst_index )
     {
-        DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() )
+        DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << ", object: " << MP2::StringObject( objectType ) )
 
         const Skill::Secondary & skill = getSecondarySkillFromWitchsHut( world.GetTiles( dst_index ) );
+        if ( !skill.isValid() ) {
+            // A broken object?
+            assert( 0 );
+            return;
+        }
 
-        // check full
-        if ( skill.isValid() && !hero.HasMaxSecondarySkill() && !hero.HasSecondarySkill( skill.Skill() ) )
+        if ( !hero.HasMaxSecondarySkill() && !hero.HasSecondarySkill( skill.Skill() ) ) {
             hero.LearnSkill( skill );
 
-        hero.SetVisited( dst_index );
+            if ( skill.Skill() == Skill::Secondary::SCOUTING ) {
+                hero.Scout( hero.GetIndex() );
+            }
+        }
+
+        // It is important to mark it globally so other heroes will know about the object.
+        hero.SetVisited( dst_index, Visit::GLOBAL );
     }
 
     void AIToShrine( Heroes & hero, int32_t dst_index )
@@ -1832,7 +1842,7 @@ namespace AI
 
         // Witch's hut
         case MP2::OBJ_WITCHS_HUT:
-            AIToWitchsHut( hero, dst_index );
+            AIToWitchsHut( hero, objectType, dst_index );
             break;
 
         // shrine circle
