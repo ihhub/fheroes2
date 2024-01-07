@@ -1812,6 +1812,11 @@ namespace AI
 
         switch ( objectType ) {
         case MP2::OBJ_WITCHS_HUT: {
+            if ( !hero.isVisited( tile, Visit::GLOBAL ) ) {
+                // Since this object has not been visited use general value estimation.
+                return getGeneralObjectValue( hero, index, valueToIgnore, distanceToObject );
+            }
+
             const Skill::Secondary & skill = getSecondarySkillFromWitchsHut( tile );
             if ( !skill.isValid() || hero.HasMaxSecondarySkill() ) {
                 // This mustn't happen as these checks are done prior this code.
@@ -1821,7 +1826,8 @@ namespace AI
 
             const int skillType = skill.Skill();
             if ( hero.HasSecondarySkill( skillType ) ) {
-                // This can actually happen since AI heroes don't have prior knowledge about the skill.
+                // This mustn't happen as these checks are done prior this code.
+                assert( 0 );
                 return -dangerousTaskPenalty;
             }
 
