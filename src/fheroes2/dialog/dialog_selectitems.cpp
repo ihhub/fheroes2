@@ -723,8 +723,8 @@ namespace
         void ActionListPressRight( Maps::ObjectInfo & info ) override
         {
             if ( info.objectType == MP2::OBJ_MINE ) {
-                // Mine description is done by its resource type ( 2 - Ore, 3 -Sulfur, 4 - Crystal, 5 - Gems, 6 - Gold ).
-                fheroes2::showStandardTextMessage( Maps::GetMineName( Resource::getResourceTypeFromIconIndex( _resourceId ) ), "", Dialog::ZERO );
+                // Mine description is done by its resource type stored in metadata.
+                fheroes2::showStandardTextMessage( Maps::GetMineName( static_cast<int>( info.metadata[0] ) ), "", Dialog::ZERO );
                 return;
             }
             fheroes2::showStandardTextMessage( MP2::StringObject( info.objectType ), "", Dialog::ZERO );
@@ -756,14 +756,12 @@ namespace
 
         void RedrawItem( const Maps::ObjectInfo & info, int32_t dstx, int32_t dsty, bool current ) override
         {
-            if ( _color < 0 || _resourceId < 0 ) {
+            if ( _color < 0 ) {
                 assert( 0 );
                 return;
             }
 
-            fheroes2::Sprite mineSprite( fheroes2::generateMapObjectImage( info ) );
-
-            renderMineExtraObjects( _color, _resourceId, mineSprite );
+            const fheroes2::Sprite mineSprite( fheroes2::generateMapObjectImage( info ) );
 
             fheroes2::Display & display = fheroes2::Display::instance();
 
@@ -808,16 +806,14 @@ namespace
             // Do nothing.
         }
 
-        void setMineTypeData( const int32_t color, const int32_t resourceId )
+        void setOwnerColor( const int32_t color )
         {
             _color = color;
-            _resourceId = resourceId;
         }
 
     private:
         bool _isDoubleClicked{ false };
         int32_t _color{ 0 };
-        int32_t _resourceId{ 0 };
         std::unique_ptr<fheroes2::ImageRestorer> _listBackground;
     };
 }
@@ -1362,17 +1358,25 @@ void Dialog::selectMineType( int32_t & type, int32_t & resource, int32_t & color
         return MP2::OBJ_NONE;
     };
 
-    MP2::MapObjectType selectedObjectType = getObjectTypeByResource( selectedResourceType );
     const std::vector<Maps::ObjectInfo> & allObjectInfo = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_MINES );
     std::vector<Maps::ObjectInfo> objectInfo;
     std::vector<int32_t> objectInfoIndexes;
 
-    auto updateListContent = [&listbox, &objectInfo, &objectInfoIndexes, &listIcnId, &allObjectInfo, &selectedObjectType]() {
+    auto updateListContent = [&listbox, &objectInfo, &allObjectInfo, &objectInfoIndexes, &listIcnId, &getObjectTypeByResource]( const uint32_t resourceId ) {
+        const MP2::MapObjectType objectType = getObjectTypeByResource( resourceId );
+
+        // Mine appearance is the same for different mine resources so we keep the selection.
+        const bool keepSelection = ( objectType == MP2::OBJ_MINE ) && ( objectInfo.front().objectType == MP2::OBJ_MINE );
+        const int selectedId = keepSelection ? listbox.getCurrentId() : 0;
+        const int topId = keepSelection ? listbox.getTopId() : 0;
+
         objectInfo.clear();
         objectInfoIndexes.clear();
 
+        // For the Abandoned Mine there is no metadata set so 'metadata[0] == 0'.
+        const uint32_t resourceType = ( objectType != MP2::OBJ_ABANDONED_MINE ) ? Resource::getResourceTypeFromIconIndex( resourceId ) : 0;
         for ( size_t i = 0; i < allObjectInfo.size(); ++i ) {
-            if ( allObjectInfo[i].objectType == selectedObjectType ) {
+            if ( allObjectInfo[i].objectType == objectType && allObjectInfo[i].metadata[0] == resourceType ) {
                 objectInfo.push_back( allObjectInfo[i] );
                 objectInfoIndexes.push_back( static_cast<int32_t>( i ) );
             }
@@ -1382,9 +1386,14 @@ void Dialog::selectMineType( int32_t & type, int32_t & resource, int32_t & color
         // We need to reset the initial slider image to be able to reduce the current slider height.
         listbox.setScrollBarImage( fheroes2::AGG::GetICN( listIcnId, 4 ) );
         listbox.updateScrollBarImage();
+
+        if ( keepSelection ) {
+            listbox.SetCurrent( selectedId );
+            listbox.setTopVisibleItem( topId );
+        }
     };
 
-    updateListContent();
+    updateListContent( selectedResourceType );
 
     // Select the previously used mine type and resource type in the lists.
     if ( type > -1 ) {
@@ -1393,14 +1402,14 @@ void Dialog::selectMineType( int32_t & type, int32_t & resource, int32_t & color
 
     fheroes2::ImageRestorer appearanceTextBackground( display, 0, 0, 0, 0 );
     // Mine appearance selection text.
-    auto redrawAppearanceText = [&selectedResourceType, &appearanceTextBackground, &listRoi, &display]( const MP2::MapObjectType objectType ) {
+    auto redrawAppearanceText = [&selectedResourceType, &appearanceTextBackground, &listRoi, &display]( const Maps::ObjectInfo & info ) {
         std::string mineText( _( "%{mineName} appearance:" ) );
-        if ( objectType == MP2::OBJ_MINE ) {
+        if ( info.objectType == MP2::OBJ_MINE ) {
             assert( selectedResourceType < 7 );
-            StringReplace( mineText, "%{mineName}", Maps::GetMineName( Resource::getResourceTypeFromIconIndex( selectedResourceType ) ) );
+            StringReplace( mineText, "%{mineName}", Maps::GetMineName( static_cast<int>( info.metadata[0] ) ) );
         }
         else {
-            StringReplace( mineText, "%{mineName}", MP2::StringObject( objectType ) );
+            StringReplace( mineText, "%{mineName}", MP2::StringObject( info.objectType ) );
         }
         const fheroes2::Text appearanceText( std::move( mineText ), fheroes2::FontType::smallWhite() );
         const int32_t textWidth = appearanceText.width( listRoi.width );
@@ -1409,9 +1418,10 @@ void Dialog::selectMineType( int32_t & type, int32_t & resource, int32_t & color
         appearanceTextBackground.update( listRoi.x + ( listRoi.width - textWidth ) / 2, listRoi.y - textHeight, textWidth, textHeight );
         appearanceText.draw( listRoi.x, listRoi.y - textHeight, listRoi.width, display );
     };
-    redrawAppearanceText( objectInfo[listbox.getCurrentId()].objectType );
+    redrawAppearanceText( objectInfo[listbox.getCurrentId()] );
 
-    listbox.setMineTypeData( color, static_cast<int32_t>( selectedResourceType ) );
+    // TODO: Implement owner color selection.
+    listbox.setOwnerColor( 0 );
 
     listbox.Redraw();
 
@@ -1433,7 +1443,6 @@ void Dialog::selectMineType( int32_t & type, int32_t & resource, int32_t & color
         if ( listbox.isDoubleClicked() || le.MouseClickLeft( buttonOk.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) ) {
             type = objectInfoIndexes[listbox.getCurrentId()];
             resource = static_cast<int32_t>( selectedResourceType );
-            // TODO: Implement owner color selection.
             color = 0;
             return;
         }
@@ -1453,17 +1462,8 @@ void Dialog::selectMineType( int32_t & type, int32_t & resource, int32_t & color
                     if ( i != selectedResourceType ) {
                         selectedResourceType = i;
                         redrawResourceSelection( resorceRoi[selectedResourceType] );
-
-                        listbox.setMineTypeData( color, static_cast<int32_t>( selectedResourceType ) );
-
-                        const MP2::MapObjectType newObjectType = getObjectTypeByResource( selectedResourceType );
-
-                        if ( newObjectType != selectedObjectType ) {
-                            selectedObjectType = newObjectType;
-                            updateListContent();
-                        }
-
-                        redrawAppearanceText( objectInfo[listbox.getCurrentId()].objectType );
+                        updateListContent( selectedResourceType );
+                        redrawAppearanceText( objectInfo[listbox.getCurrentId()] );
 
                         needRedraw = true;
                     }

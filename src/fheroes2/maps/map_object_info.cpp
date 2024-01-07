@@ -289,45 +289,6 @@ namespace
         // TODO: Add flags for other capture-able objects.
     }
 
-    void populateAdventureMineResources( std::vector<Maps::ObjectInfo> & objects )
-    {
-        assert( objects.empty() );
-
-        // Extra mine resource sprites: Ore, Sulfur, Crystal, Gems, Gold.
-        for ( uint8_t resource = 0; resource < 5; ++resource ) {
-            Maps::ObjectInfo object{ MP2::OBJ_MINE };
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_EXTRAOVR, resource, fheroes2::Point{ 0, 0 }, MP2::OBJ_MINE, Maps::OBJECT_LAYER );
-
-            // Income per day.
-            object.metadata[1] = 1;
-
-            switch ( resource ) {
-            case 0:
-                object.metadata[0] = Resource::ORE;
-                break;
-            case 1:
-                object.metadata[0] = Resource::SULFUR;
-                break;
-            case 2:
-                object.metadata[0] = Resource::CRYSTAL;
-                break;
-            case 3:
-                object.metadata[0] = Resource::GEMS;
-                break;
-            case 4:
-                object.metadata[0] = Resource::GOLD;
-                object.metadata[1] = 1000;
-                break;
-            default:
-                // Have you added a new mine resource?!
-                assert( 0 );
-                break;
-            }
-
-            objects.emplace_back( std::move( object ) );
-        }
-    }
-
     void populateAdventureArtifacts( std::vector<Maps::ObjectInfo> & objects )
     {
         assert( objects.empty() );
@@ -702,7 +663,10 @@ namespace
     {
         assert( objects.empty() );
 
-        // Mines for different terrains: Generic, Grass, Snow, Swamp, Lava, Desert, Dirt, Wasteland.
+        // Mines provides 5 resources: Ore, Sulfur, Crystal, Gems, Gold.
+        const uint8_t mineResources = 5;
+
+        // Mines have different appearance: Generic, Grass, Snow, Swamp, Lava, Desert, Dirt, Wasteland.
         for ( const auto & [type, offset] :
               { std::make_pair( MP2::OBJ_ICN_TYPE_MTNMULT, 74U ), std::make_pair( MP2::OBJ_ICN_TYPE_MTNGRAS, 74U ), std::make_pair( MP2::OBJ_ICN_TYPE_MTNSNOW, 74U ),
                 std::make_pair( MP2::OBJ_ICN_TYPE_MTNSWMP, 74U ), std::make_pair( MP2::OBJ_ICN_TYPE_MTNLAVA, 74U ), std::make_pair( MP2::OBJ_ICN_TYPE_MTNDSRT, 74U ),
@@ -719,7 +683,46 @@ namespace
             object.topLevelParts.emplace_back( type, offset + 2U, fheroes2::Point{ -1, -1 }, MP2::OBJ_NON_ACTION_MINE );
             object.topLevelParts.emplace_back( type, offset + 3U, fheroes2::Point{ 0, -1 }, MP2::OBJ_NON_ACTION_MINE );
 
-            objects.emplace_back( std::move( object ) );
+            // The cars with these resources are placed above the main mine tile.
+            for ( uint8_t resource = 0; resource < mineResources; ++resource ) {
+                object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_EXTRAOVR, resource, fheroes2::Point{ 0, 0 }, MP2::OBJ_MINE, Maps::OBJECT_LAYER );
+
+                // Income per day for all mines except the gold mine.
+                object.metadata[1] = 1;
+
+                switch ( resource ) {
+                case 0:
+                    object.metadata[0] = Resource::ORE;
+                    break;
+                case 1:
+                    object.metadata[0] = Resource::SULFUR;
+                    break;
+                case 2:
+                    object.metadata[0] = Resource::CRYSTAL;
+                    break;
+                case 3:
+                    object.metadata[0] = Resource::GEMS;
+                    break;
+                case 4:
+                    object.metadata[0] = Resource::GOLD;
+                    object.metadata[1] = 1000;
+                    break;
+                default:
+                    // Have you added a new mine resource?! Update the logic above!
+                    assert( 0 );
+                    break;
+                }
+
+                if ( resource < mineResources - 1 ) {
+                    objects.emplace_back( object );
+                    // Remove the resource from the mine to add a new one in the next loop.
+                    object.groundLevelParts.pop_back();
+                }
+                else {
+                    // The last loop for the current mine appearance type.
+                    objects.emplace_back( std::move( object ) );
+                }
+            }
         }
 
         // Abandoned mines are only for Grass and Dirt and they have different tiles number.
@@ -1257,7 +1260,6 @@ namespace
         // These are the extra objects used with the others and never used alone.
         populateLandscapeTownBasements( objectData[static_cast<size_t>( Maps::ObjectGroup::LANDSCAPE_TOWN_BASEMENTS )] );
         populateLandscapeFlags( objectData[static_cast<size_t>( Maps::ObjectGroup::LANDSCAPE_FLAGS )] );
-        populateAdventureMineResources( objectData[static_cast<size_t>( Maps::ObjectGroup::ADVENTURE_MINE_RESOURCES )] );
 
         populateAdventureArtifacts( objectData[static_cast<size_t>( Maps::ObjectGroup::ADVENTURE_ARTIFACTS )] );
         populateAdventureDwellings( objectData[static_cast<size_t>( Maps::ObjectGroup::ADVENTURE_DWELLINGS )] );
@@ -1330,7 +1332,8 @@ namespace
                                                                std::make_pair( static_cast<Maps::ObjectGroup>( groupType ), static_cast<uint32_t>( objectId ) ) );
                 if ( !inserted ) {
                     // You use the same object part for more than one object. Check your code!
-                    assert( 0 );
+                    // But mines with one appearance (terrain type) differ one from other only by the resource car.
+                    assert( objectData[groupType][objectId].objectType == MP2::OBJ_MINE );
                 }
             }
         }

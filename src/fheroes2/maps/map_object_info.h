@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2023 - 2024                                             *
+ *   Copyright (C) 2023                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -131,10 +131,9 @@ namespace Maps
         LANDSCAPE_WATER,
         LANDSCAPE_MISCELLANEOUS,
 
-        // Extra objects placed together with other objects.
+        // Extra landscape objects placed together with other objects.
         LANDSCAPE_TOWN_BASEMENTS,
         LANDSCAPE_FLAGS,
-        ADVENTURE_MINE_RESOURCES,
 
         // Adventure objects.
         ADVENTURE_ARTIFACTS,

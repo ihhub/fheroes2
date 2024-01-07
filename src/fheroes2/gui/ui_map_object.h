@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2023 - 2024                                             *
+ *   Copyright (C) 2023                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -33,10 +33,6 @@ namespace fheroes2
 {
     Sprite generateMapObjectImage( const Maps::ObjectInfo & object );
     Sprite generateTownObjectImage( const int townType, const int color, const int groundId );
-    Sprite generateMineObjectImage( const int32_t mineType, const int32_t color, const int32_t resourceId );
-
-    void renderMineExtraObjects( const int32_t color, const int32_t resourceId, fheroes2::Sprite & mineSprite );
 
     int32_t getTownBasementId( const int groundType );
-    int32_t getMineResourceId( const int resourceType );
 }

@@ -949,18 +949,7 @@ namespace Interface
 
             Maps::setObjectOnTile( tile, objectInfo );
 
-            // Since the mine should have a resource object we place this resource with the same ID.
-            if ( objectInfo.objectType == MP2::OBJ_MINE ) {
-                // Every time an object is being placed on a map the counter is going to be increased by 1.
-                // Therefore, we set the counter by 1 less for each object to match object UID for all of them.
-                assert( Maps::getLastObjectUID() > 0 );
-                const uint32_t objectId = Maps::getLastObjectUID() - 1;
-
-                Maps::setLastObjectUID( objectId );
-                // Resources Ids 0 and 1 are for Wood and Mercury, mine resources starts from 2.
-                assert( resource > 1 && resource < 7 );
-                Maps::setObjectOnTile( tile, getObjectInfo( Maps::ObjectGroup::ADVENTURE_MINE_RESOURCES, resource - 2 ) );
-            }
+            // TODO: Place owner flag according to the color state.
 
             _redraw |= mapUpdateFlags;
         }

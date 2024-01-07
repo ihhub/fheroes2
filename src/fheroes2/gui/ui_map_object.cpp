@@ -38,7 +38,6 @@
 #include "maps_tiles.h"
 #include "math_base.h"
 #include "mp2.h"
-#include "resource.h"
 
 namespace
 {
@@ -127,7 +126,7 @@ namespace fheroes2
         std::set<Point> uniqueOffsets;
         for ( const auto & objectPart : object.groundLevelParts ) {
             const auto [dummy, inserted] = uniqueOffsets.emplace( objectPart.tileOffset );
-            if ( !inserted ) {
+            if ( !inserted && object.objectType != MP2::OBJ_MINE ) {
                 // The object hasn't formed properly!
                 assert( 0 );
             }
@@ -236,64 +235,6 @@ namespace fheroes2
         renderObject( outputImage, rightFlagObject, minOffset + rightFlagMinOffset );
 
         return outputImage;
-    }
-
-    Sprite generateMineObjectImage( const int32_t mineType, const int32_t color, const int32_t resourceId )
-    {
-        if ( mineType < 0 || color < 0 || resourceId < 0 ) {
-            assert( 0 );
-            return {};
-        }
-
-        assert( Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_MINES ).size() > static_cast<size_t>( mineType ) );
-        const auto & mineObject = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_MINES )[mineType];
-        fheroes2::Sprite mineSprite( generateMapObjectImage( mineObject ) );
-
-        renderMineExtraObjects( color, resourceId, mineSprite );
-
-        return mineSprite;
-    }
-
-    void renderMineExtraObjects( const int32_t /*color*/, const int32_t resourceId, fheroes2::Sprite & mineSprite )
-    {
-        if ( resourceId > 6 ) {
-            return;
-        }
-        const int32_t mineResourceId = getMineResourceId( Resource::getResourceTypeFromIconIndex( static_cast<uint32_t>( resourceId ) ) );
-        if ( mineResourceId > -1 ) {
-            assert( Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_MINE_RESOURCES ).size() > static_cast<size_t>( mineResourceId ) );
-            const auto & mineResourceObject = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_MINE_RESOURCES )[mineResourceId];
-            const fheroes2::Sprite & resourceSprite = generateMapObjectImage( mineResourceObject );
-            fheroes2::Blit( resourceSprite, 0, 0, mineSprite, resourceSprite.x() - mineSprite.x(), resourceSprite.y() - mineSprite.y(), resourceSprite.width(),
-                            resourceSprite.height() );
-        }
-
-        // TODO: Add flags to the sprite according to the input 'color'.
-    }
-
-    int32_t getMineResourceId( const int resourceType )
-    {
-        // NOTICE: The return values should be consistent with the objects positions in Maps::ObjectGroup::ADVENTURE_MINE_RESOURCES vector.
-        switch ( resourceType ) {
-        case Resource::WOOD:
-        case Resource::MERCURY:
-            return -1;
-        case Resource::ORE:
-            return 0;
-        case Resource::SULFUR:
-            return 1;
-        case Resource::CRYSTAL:
-            return 2;
-        case Resource::GEMS:
-            return 3;
-        case Resource::GOLD:
-            return 4;
-        default:
-            // Have you added a new mine resource? Add the logic above!
-            assert( 0 );
-        }
-
-        return 0;
     }
 
     int32_t getTownBasementId( const int groundType )

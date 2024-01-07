@@ -776,7 +776,8 @@ namespace Interface
 
                     assert( Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_MINES ).size() > static_cast<size_t>( type ) );
 
-                    const fheroes2::Sprite & image = fheroes2::generateMineObjectImage( type, color, resource );
+                    // TODO: Implement a function to render also the owner flag after ownership selection is implemented.
+                    const fheroes2::Sprite & image = getObjectImage( Maps::ObjectGroup::ADVENTURE_MINES, type );
 
                     Cursor::Get().setCustomImage( image, { image.x(), image.y() } );
                 } );
