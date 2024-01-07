@@ -985,10 +985,6 @@ namespace
         DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() )
 
         const Skill::Secondary & skill = getSecondarySkillFromWitchsHut( world.GetTiles( dst_index ) );
-
-        // If this assertion blows up the object is not set properly.
-        assert( skill.isValid() );
-
         if ( skill.isValid() ) {
             std::string msg = _( "You approach the hut and observe a witch inside studying an ancient tome on %{skill}.\n\n" );
             const std::string & skill_name = Skill::Secondary::String( skill.Skill() );
@@ -1027,6 +1023,10 @@ namespace
                                            Dialog::OK, { &secondarySkillUI } );
                 }
             }
+        }
+        else {
+            // A broken object?
+            assert( 0 );
         }
 
         hero.SetVisited( dst_index, Visit::GLOBAL );
