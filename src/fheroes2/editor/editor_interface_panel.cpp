@@ -966,6 +966,10 @@ namespace Interface
                 handleObjectMouseClick( Dialog::selectOceanObjectType );
                 return res;
             }
+            if ( le.MouseClickLeft( _adventureObjectButtonsRect[AdventureObjectBrush::DWELLINGS] ) ) {
+                handleObjectMouseClick( Dialog::selectDwellingType );
+                return res;
+            }
         }
         else if ( _selectedInstrument == Instrument::KINGDOM_OBJECTS ) {
             for ( size_t i = 0; i < _kingdomObjectButtonsRect.size(); ++i ) {

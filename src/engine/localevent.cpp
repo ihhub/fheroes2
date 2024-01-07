@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2008 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -44,6 +44,7 @@
 
 #include "audio.h"
 #include "image.h"
+#include "logging.h"
 #include "render_processor.h"
 #include "screen.h"
 #include "tools.h"
@@ -845,6 +846,12 @@ bool LocalEvent::HandleEvents( const bool sleepAfterEventProcessing, const bool 
                 return false;
             }
             break;
+        case SDL_APP_LOWMEMORY:
+            // According to SDL this event can only happen on Android or iOS.
+            // We need to deallocate some memory but we need to be careful not to deallocate images that are in use at the moment.
+            // As of now we have no logic for this so we at least log this event.
+            DEBUG_LOG( DBG_ENGINE, DBG_WARN, "OS indicates low memory. Release some resources." )
+            break;
         default:
             // If this assertion blows up then we included an event type but we didn't add logic for it.
             assert( eventTypeStatus.count( event.type ) == 0 );
@@ -1507,8 +1514,8 @@ void LocalEvent::setEventProcessingStates()
     setEventProcessingState( SDL_QUIT, true );
     // TODO: we don't process this event. Add the logic.
     setEventProcessingState( SDL_APP_TERMINATING, false );
-    // TODO: we don't process this event. Add the logic.
-    setEventProcessingState( SDL_APP_LOWMEMORY, false );
+    // This is a very serious situation and we should handle it.
+    setEventProcessingState( SDL_APP_LOWMEMORY, true );
     // TODO: we don't process this event. Add the logic.
     setEventProcessingState( SDL_APP_WILLENTERBACKGROUND, false );
     // TODO: we don't process this event. Add the logic.

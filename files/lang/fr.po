@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-02 13:33+0000\n"
+"POT-Creation-Date: 2024-01-04 12:56+0000\n"
 "PO-Revision-Date: 2023-12-22 01:17+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -53,7 +53,7 @@ msgstr ""
 "TER"
 
 msgid "CANCEL"
-msgstr "SORTIR"
+msgstr "ANNULER"
 
 msgid "OKAY"
 msgstr "OK"
@@ -3802,6 +3802,10 @@ msgstr "Les éléments liés à la mer doivent être placés sur l'eau."
 
 #, fuzzy
 msgid "Towns cannot be placed on water."
+msgstr "Ce sort ne peut pas être jeté en mer."
+
+#, fuzzy
+msgid "Dwellings cannot be placed on water."
 msgstr "Ce sort ne peut pas être jeté en mer."
 
 #, fuzzy

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2011 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -666,6 +666,27 @@ namespace
         }
     };
 
+    class DwellingTypeSelection : public ObjectTypeSelection
+    {
+    public:
+        DwellingTypeSelection( const std::vector<Maps::ObjectInfo> & objectInfo, const fheroes2::Size & size, std::string title )
+            : ObjectTypeSelection( objectInfo, size, std::move( title ), 6 * 32 / 2, 6 * 32 + 10, 3 * 32 )
+        {
+            // Do nothing.
+        }
+
+    private:
+        void showPopupWindow( const Maps::ObjectInfo & info ) override
+        {
+            fheroes2::showStandardTextMessage( getObjectName( info ), "", Dialog::ZERO );
+        }
+
+        std::string getObjectName( const Maps::ObjectInfo & info ) override
+        {
+            return MP2::StringObject( info.objectType );
+        }
+    };
+
     int selectObjectType( const int objectType, const size_t objectCount, ObjectTypeSelection & objectSelection )
     {
         std::vector<int> objects( objectCount, 0 );
@@ -800,7 +821,7 @@ Monster Dialog::selectMonster( const int monsterId )
     std::iota( monsters.begin(), monsters.end(), Monster::UNKNOWN + 1 );
     monsters.erase( std::remove_if( monsters.begin(), monsters.end(), []( const int id ) { return Monster( id ).isRandomMonster(); } ), monsters.end() );
 
-    SelectEnumMonster listbox( { 280, fheroes2::Display::instance().height() - 200 }, _( "Select Monster:" ) );
+    SelectEnumMonster listbox( { 320, fheroes2::Display::instance().height() - 200 }, _( "Select Monster:" ) );
 
     listbox.SetListContent( monsters );
     if ( monsterId != Monster::UNKNOWN ) {
@@ -821,7 +842,7 @@ int Dialog::selectHeroes( const int heroId /* = Heroes::UNKNOWN */ )
 
     std::iota( heroes.begin(), heroes.end(), Heroes::UNKNOWN + 1 );
 
-    SelectEnumHeroes listbox( { 240, fheroes2::Display::instance().height() - 200 }, _( "Select Hero:" ) );
+    SelectEnumHeroes listbox( { 300, fheroes2::Display::instance().height() - 200 }, _( "Select Hero:" ) );
 
     listbox.SetListContent( heroes );
     if ( heroId != Heroes::UNKNOWN ) {
@@ -1099,4 +1120,13 @@ void Dialog::selectTownType( int & type, int & color )
 
         needRedraw = false;
     }
+}
+
+int Dialog::selectDwellingType( const int dwellingType )
+{
+    const auto & objectInfo = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_DWELLINGS );
+
+    DwellingTypeSelection listbox( objectInfo, { 420, fheroes2::Display::instance().height() - 180 }, _( "Select Ocean Object:" ) );
+
+    return selectObjectType( dwellingType, objectInfo.size(), listbox );
 }
