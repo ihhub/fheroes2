@@ -718,11 +718,10 @@ namespace
                     // Remove the resource from the mine to add a new one in the next loop.
                     object.groundLevelParts.pop_back();
                 }
-                else {
-                    // The last loop for the current mine appearance type.
-                    objects.emplace_back( std::move( object ) );
-                }
             }
+
+            // The last resource with the current mine appearance type.
+            objects.emplace_back( std::move( object ) );
         }
 
         // Abandoned mines are only for Grass and Dirt and they have different tiles number.
