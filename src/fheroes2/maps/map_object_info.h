@@ -36,9 +36,9 @@ namespace Maps
     struct ObjectPartInfo
     {
         ObjectPartInfo( const MP2::ObjectIcnType icn, const uint32_t index, const fheroes2::Point offset, const MP2::MapObjectType type )
-            : icnType( icn )
+            : tileOffset( offset )
             , icnIndex( index )
-            , tileOffset( offset )
+            , icnType( icn )
             , objectType( type )
         {
             // Do nothing.
