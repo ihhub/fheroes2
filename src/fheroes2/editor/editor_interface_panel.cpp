@@ -928,6 +928,10 @@ namespace Interface
                 }
             }
 
+            if ( le.MouseClickLeft( _landscapeObjectButtonsRect[LandscapeObjectBrush::MOUNTAINS] ) ) {
+                handleObjectMouseClick( Dialog::selectMountainType );
+                return res;
+            }
             if ( le.MouseClickLeft( _landscapeObjectButtonsRect[LandscapeObjectBrush::WATER_OBJECTS] ) ) {
                 handleObjectMouseClick( Dialog::selectLandscapeOceanObjectType );
                 return res;

@@ -1130,3 +1130,12 @@ int Dialog::selectDwellingType( const int dwellingType )
 
     return selectObjectType( dwellingType, objectInfo.size(), listbox );
 }
+
+int Dialog::selectMountainType( const int dwellingType )
+{
+    const auto & objectInfo = Maps::getObjectsByGroup( Maps::ObjectGroup::LANDSCAPE_MOUNTAINS );
+
+    DwellingTypeSelection listbox( objectInfo, { 420, fheroes2::Display::instance().height() - 180 }, _( "Select Mountain Object:" ) );
+
+    return selectObjectType( dwellingType, objectInfo.size(), listbox );
+}

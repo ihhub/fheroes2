@@ -71,7 +71,384 @@ namespace
     {
         assert( objects.empty() );
 
-        (void)objects;
+        // Grouped mountains have different appearances: Generic, Grass, Snow, Swamp, Lava, Desert, Dirt, Wasteland.
+        for ( const MP2::ObjectIcnType type : { MP2::OBJ_ICN_TYPE_MTNMULT, MP2::OBJ_ICN_TYPE_MTNGRAS, MP2::OBJ_ICN_TYPE_MTNSNOW, MP2::OBJ_ICN_TYPE_MTNSWMP,
+                                                MP2::OBJ_ICN_TYPE_MTNLAVA, MP2::OBJ_ICN_TYPE_MTNDSRT, MP2::OBJ_ICN_TYPE_MTNDIRT, MP2::OBJ_ICN_TYPE_MTNCRCK } ) {
+            // Big mountain from top-left to bottom-right.
+            {
+                Maps::ObjectInfo object{ MP2::OBJ_MOUNTAINS };
+                object.groundLevelParts.emplace_back( type, 14U, fheroes2::Point{ 0, 0 }, MP2::OBJ_MOUNTAINS, Maps::OBJECT_LAYER );
+                object.groundLevelParts.emplace_back( type, 6U, fheroes2::Point{ -2, -1 }, MP2::OBJ_MOUNTAINS, Maps::OBJECT_LAYER );
+                object.groundLevelParts.emplace_back( type, 7U, fheroes2::Point{ -1, -1 }, MP2::OBJ_MOUNTAINS, Maps::OBJECT_LAYER );
+                object.groundLevelParts.emplace_back( type, 8U, fheroes2::Point{ 0, -1 }, MP2::OBJ_MOUNTAINS, Maps::OBJECT_LAYER );
+                object.groundLevelParts.emplace_back( type, 9U, fheroes2::Point{ 1, -1 }, MP2::OBJ_MOUNTAINS, Maps::OBJECT_LAYER );
+                object.groundLevelParts.emplace_back( type, 12U, fheroes2::Point{ -2, 0 }, MP2::OBJ_MOUNTAINS, Maps::OBJECT_LAYER );
+                object.groundLevelParts.emplace_back( type, 13U, fheroes2::Point{ -1, 0 }, MP2::OBJ_MOUNTAINS, Maps::OBJECT_LAYER );
+                object.groundLevelParts.emplace_back( type, 15U, fheroes2::Point{ 1, 0 }, MP2::OBJ_MOUNTAINS, Maps::OBJECT_LAYER );
+                object.groundLevelParts.emplace_back( type, 16U, fheroes2::Point{ 2, 0 }, MP2::OBJ_MOUNTAINS, Maps::OBJECT_LAYER );
+                object.groundLevelParts.emplace_back( type, 18U, fheroes2::Point{ 0, 1 }, MP2::OBJ_MOUNTAINS, Maps::OBJECT_LAYER );
+                object.groundLevelParts.emplace_back( type, 19U, fheroes2::Point{ 1, 1 }, MP2::OBJ_MOUNTAINS, Maps::OBJECT_LAYER );
+                object.groundLevelParts.emplace_back( type, 20U, fheroes2::Point{ 2, 1 }, MP2::OBJ_MOUNTAINS, Maps::OBJECT_LAYER );
+
+                object.groundLevelParts.emplace_back( type, 0U, fheroes2::Point{ -3, -2 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+                object.groundLevelParts.emplace_back( type, 5U, fheroes2::Point{ -3, -1 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+                object.groundLevelParts.emplace_back( type, 11U, fheroes2::Point{ -3, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+                object.groundLevelParts.emplace_back( type, 17U, fheroes2::Point{ -1, 1 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+
+                object.topLevelParts.emplace_back( type, 1U, fheroes2::Point{ -2, -2 }, MP2::OBJ_MOUNTAINS );
+                object.topLevelParts.emplace_back( type, 2U, fheroes2::Point{ -1, -2 }, MP2::OBJ_MOUNTAINS );
+                object.topLevelParts.emplace_back( type, 3U, fheroes2::Point{ 0, -2 }, MP2::OBJ_MOUNTAINS );
+                object.topLevelParts.emplace_back( type, 4U, fheroes2::Point{ 1, -2 }, MP2::OBJ_MOUNTAINS );
+                object.topLevelParts.emplace_back( type, 10U, fheroes2::Point{ 2, -1 }, MP2::OBJ_MOUNTAINS );
+
+                objects.emplace_back( std::move( object ) );
+            }
+
+            uint32_t icnOffset = 21U;
+
+            // Big mountain from top-right to bottom-left.
+            {
+                Maps::ObjectInfo object{ MP2::OBJ_MOUNTAINS };
+                object.groundLevelParts.emplace_back( type, icnOffset + 14U, fheroes2::Point{ 0, 0 }, MP2::OBJ_MOUNTAINS, Maps::OBJECT_LAYER );
+                object.groundLevelParts.emplace_back( type, icnOffset + 7U, fheroes2::Point{ -1, -1 }, MP2::OBJ_MOUNTAINS, Maps::OBJECT_LAYER );
+                object.groundLevelParts.emplace_back( type, icnOffset + 8U, fheroes2::Point{ 0, -1 }, MP2::OBJ_MOUNTAINS, Maps::OBJECT_LAYER );
+                object.groundLevelParts.emplace_back( type, icnOffset + 9U, fheroes2::Point{ 1, -1 }, MP2::OBJ_MOUNTAINS, Maps::OBJECT_LAYER );
+                object.groundLevelParts.emplace_back( type, icnOffset + 10U, fheroes2::Point{ 2, -1 }, MP2::OBJ_MOUNTAINS, Maps::OBJECT_LAYER );
+                object.groundLevelParts.emplace_back( type, icnOffset + 12U, fheroes2::Point{ -2, 0 }, MP2::OBJ_MOUNTAINS, Maps::OBJECT_LAYER );
+                object.groundLevelParts.emplace_back( type, icnOffset + 13U, fheroes2::Point{ -1, 0 }, MP2::OBJ_MOUNTAINS, Maps::OBJECT_LAYER );
+                object.groundLevelParts.emplace_back( type, icnOffset + 15U, fheroes2::Point{ 1, 0 }, MP2::OBJ_MOUNTAINS, Maps::OBJECT_LAYER );
+                object.groundLevelParts.emplace_back( type, icnOffset + 16U, fheroes2::Point{ 2, 0 }, MP2::OBJ_MOUNTAINS, Maps::OBJECT_LAYER );
+                object.groundLevelParts.emplace_back( type, icnOffset + 18U, fheroes2::Point{ -2, 1 }, MP2::OBJ_MOUNTAINS, Maps::OBJECT_LAYER );
+                object.groundLevelParts.emplace_back( type, icnOffset + 19U, fheroes2::Point{ -1, 1 }, MP2::OBJ_MOUNTAINS, Maps::OBJECT_LAYER );
+                object.groundLevelParts.emplace_back( type, icnOffset + 20U, fheroes2::Point{ 0, 1 }, MP2::OBJ_MOUNTAINS, Maps::OBJECT_LAYER );
+
+                object.groundLevelParts.emplace_back( type, icnOffset + 0U, fheroes2::Point{ -2, -2 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+                object.groundLevelParts.emplace_back( type, icnOffset + 5U, fheroes2::Point{ -3, -1 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+                object.groundLevelParts.emplace_back( type, icnOffset + 11U, fheroes2::Point{ -3, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+                object.groundLevelParts.emplace_back( type, icnOffset + 17U, fheroes2::Point{ -3, 1 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+
+                object.topLevelParts.emplace_back( type, icnOffset + 1U, fheroes2::Point{ -1, -2 }, MP2::OBJ_MOUNTAINS );
+                object.topLevelParts.emplace_back( type, icnOffset + 2U, fheroes2::Point{ 0, -2 }, MP2::OBJ_MOUNTAINS );
+                object.topLevelParts.emplace_back( type, icnOffset + 3U, fheroes2::Point{ 1, -2 }, MP2::OBJ_MOUNTAINS );
+                object.topLevelParts.emplace_back( type, icnOffset + 4U, fheroes2::Point{ 2, -2 }, MP2::OBJ_MOUNTAINS );
+                object.topLevelParts.emplace_back( type, icnOffset + 6U, fheroes2::Point{ -2, -1 }, MP2::OBJ_MOUNTAINS );
+
+                objects.emplace_back( std::move( object ) );
+            }
+
+            icnOffset += 21;
+
+            // Dirt and Wasteland has extra mountains placed in ICN between big and small mountains
+            if ( type == MP2::OBJ_ICN_TYPE_MTNDIRT || type == MP2::OBJ_ICN_TYPE_MTNCRCK ) {
+                // Extra mountain from top-left to bottom-right.
+                {
+                    Maps::ObjectInfo object{ MP2::OBJ_MOUNTAINS };
+                    object.groundLevelParts.emplace_back( type, icnOffset + 8U, fheroes2::Point{ 0, 0 }, MP2::OBJ_MOUNTAINS, Maps::OBJECT_LAYER );
+                    object.groundLevelParts.emplace_back( type, icnOffset + 6U, fheroes2::Point{ -2, 0 }, MP2::OBJ_MOUNTAINS, Maps::OBJECT_LAYER );
+                    object.groundLevelParts.emplace_back( type, icnOffset + 7U, fheroes2::Point{ -1, 0 }, MP2::OBJ_MOUNTAINS, Maps::OBJECT_LAYER );
+                    object.groundLevelParts.emplace_back( type, icnOffset + 12U, fheroes2::Point{ 0, 1 }, MP2::OBJ_MOUNTAINS, Maps::OBJECT_LAYER );
+                    object.groundLevelParts.emplace_back( type, icnOffset + 13U, fheroes2::Point{ 1, 1 }, MP2::OBJ_MOUNTAINS, Maps::OBJECT_LAYER );
+                    object.groundLevelParts.emplace_back( type, icnOffset + 14U, fheroes2::Point{ 2, 1 }, MP2::OBJ_MOUNTAINS, Maps::OBJECT_LAYER );
+
+                    object.groundLevelParts.emplace_back( type, icnOffset + 0U, fheroes2::Point{ -3, -1 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+                    object.groundLevelParts.emplace_back( type, icnOffset + 4U, fheroes2::Point{ 1, -1 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+                    object.groundLevelParts.emplace_back( type, icnOffset + 5U, fheroes2::Point{ -3, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+                    object.groundLevelParts.emplace_back( type, icnOffset + 11U, fheroes2::Point{ -1, 1 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+
+                    object.topLevelParts.emplace_back( type, icnOffset + 1U, fheroes2::Point{ -2, -1 }, MP2::OBJ_MOUNTAINS );
+                    object.topLevelParts.emplace_back( type, icnOffset + 2U, fheroes2::Point{ -1, -1 }, MP2::OBJ_MOUNTAINS );
+                    object.topLevelParts.emplace_back( type, icnOffset + 3U, fheroes2::Point{ 0, -1 }, MP2::OBJ_MOUNTAINS );
+                    object.topLevelParts.emplace_back( type, icnOffset + 9U, fheroes2::Point{ 1, 0 }, MP2::OBJ_MOUNTAINS );
+                    object.topLevelParts.emplace_back( type, icnOffset + 10U, fheroes2::Point{ 2, 0 }, MP2::OBJ_MOUNTAINS );
+
+                    objects.emplace_back( std::move( object ) );
+                }
+
+                icnOffset += 15;
+
+                // Extra mountain from top-right to bottom-left.
+                {
+                    Maps::ObjectInfo object{ MP2::OBJ_MOUNTAINS };
+                    object.groundLevelParts.emplace_back( type, icnOffset + 8U, fheroes2::Point{ 0, 0 }, MP2::OBJ_MOUNTAINS, Maps::OBJECT_LAYER );
+                    object.groundLevelParts.emplace_back( type, icnOffset + 9U, fheroes2::Point{ 1, 0 }, MP2::OBJ_MOUNTAINS, Maps::OBJECT_LAYER );
+                    object.groundLevelParts.emplace_back( type, icnOffset + 10U, fheroes2::Point{ 2, 0 }, MP2::OBJ_MOUNTAINS, Maps::OBJECT_LAYER );
+                    object.groundLevelParts.emplace_back( type, icnOffset + 12U, fheroes2::Point{ -2, 1 }, MP2::OBJ_MOUNTAINS, Maps::OBJECT_LAYER );
+                    object.groundLevelParts.emplace_back( type, icnOffset + 13U, fheroes2::Point{ -1, 1 }, MP2::OBJ_MOUNTAINS, Maps::OBJECT_LAYER );
+                    object.groundLevelParts.emplace_back( type, icnOffset + 14U, fheroes2::Point{ 0, 1 }, MP2::OBJ_MOUNTAINS, Maps::OBJECT_LAYER );
+
+                    object.groundLevelParts.emplace_back( type, icnOffset + 0U, fheroes2::Point{ -2, -1 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+                    object.groundLevelParts.emplace_back( type, icnOffset + 1U, fheroes2::Point{ -1, -1 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+                    object.groundLevelParts.emplace_back( type, icnOffset + 5U, fheroes2::Point{ -3, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+                    object.groundLevelParts.emplace_back( type, icnOffset + 11U, fheroes2::Point{ -3, 1 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+
+                    object.topLevelParts.emplace_back( type, icnOffset + 2U, fheroes2::Point{ 0, -1 }, MP2::OBJ_MOUNTAINS );
+                    object.topLevelParts.emplace_back( type, icnOffset + 3U, fheroes2::Point{ 1, -1 }, MP2::OBJ_MOUNTAINS );
+                    object.topLevelParts.emplace_back( type, icnOffset + 4U, fheroes2::Point{ 2, -1 }, MP2::OBJ_MOUNTAINS );
+                    object.topLevelParts.emplace_back( type, icnOffset + 6U, fheroes2::Point{ -2, 0 }, MP2::OBJ_MOUNTAINS );
+                    object.topLevelParts.emplace_back( type, icnOffset + 7U, fheroes2::Point{ -1, 0 }, MP2::OBJ_MOUNTAINS );
+
+                    objects.emplace_back( std::move( object ) );
+                }
+
+                icnOffset += 15;
+            }
+
+            // Medium mountain from top-left to bottom-right.
+            {
+                Maps::ObjectInfo object{ MP2::OBJ_MOUNTAINS };
+                object.groundLevelParts.emplace_back( type, icnOffset + 5U, fheroes2::Point{ 0, 0 }, MP2::OBJ_MOUNTAINS, Maps::OBJECT_LAYER );
+                object.groundLevelParts.emplace_back( type, icnOffset + 4U, fheroes2::Point{ -1, 0 }, MP2::OBJ_MOUNTAINS, Maps::OBJECT_LAYER );
+                object.groundLevelParts.emplace_back( type, icnOffset + 6U, fheroes2::Point{ 1, 0 }, MP2::OBJ_MOUNTAINS, Maps::OBJECT_LAYER );
+                object.groundLevelParts.emplace_back( type, icnOffset + 8U, fheroes2::Point{ 0, 1 }, MP2::OBJ_MOUNTAINS, Maps::OBJECT_LAYER );
+                object.groundLevelParts.emplace_back( type, icnOffset + 9U, fheroes2::Point{ 1, 1 }, MP2::OBJ_MOUNTAINS, Maps::OBJECT_LAYER );
+
+                object.groundLevelParts.emplace_back( type, icnOffset + 0U, fheroes2::Point{ -2, -1 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+                object.groundLevelParts.emplace_back( type, icnOffset + 3U, fheroes2::Point{ -2, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+                object.groundLevelParts.emplace_back( type, icnOffset + 7U, fheroes2::Point{ -1, 1 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+
+                object.topLevelParts.emplace_back( type, icnOffset + 1U, fheroes2::Point{ -1, -1 }, MP2::OBJ_MOUNTAINS );
+                object.topLevelParts.emplace_back( type, icnOffset + 2U, fheroes2::Point{ 0, -1 }, MP2::OBJ_MOUNTAINS );
+
+                objects.emplace_back( std::move( object ) );
+            }
+
+            icnOffset += 10;
+
+            // Medium mountain from top-left to bottom-right.
+            {
+                Maps::ObjectInfo object{ MP2::OBJ_MOUNTAINS };
+                object.groundLevelParts.emplace_back( type, icnOffset + 5U, fheroes2::Point{ 0, 0 }, MP2::OBJ_MOUNTAINS, Maps::OBJECT_LAYER );
+                object.groundLevelParts.emplace_back( type, icnOffset + 4U, fheroes2::Point{ -1, 0 }, MP2::OBJ_MOUNTAINS, Maps::OBJECT_LAYER );
+                object.groundLevelParts.emplace_back( type, icnOffset + 6U, fheroes2::Point{ 1, 0 }, MP2::OBJ_MOUNTAINS, Maps::OBJECT_LAYER );
+                object.groundLevelParts.emplace_back( type, icnOffset + 8U, fheroes2::Point{ -1, 1 }, MP2::OBJ_MOUNTAINS, Maps::OBJECT_LAYER );
+                object.groundLevelParts.emplace_back( type, icnOffset + 9U, fheroes2::Point{ 0, 1 }, MP2::OBJ_MOUNTAINS, Maps::OBJECT_LAYER );
+
+                object.groundLevelParts.emplace_back( type, icnOffset + 0U, fheroes2::Point{ -1, -1 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+                object.groundLevelParts.emplace_back( type, icnOffset + 3U, fheroes2::Point{ -2, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+                object.groundLevelParts.emplace_back( type, icnOffset + 7U, fheroes2::Point{ -2, 1 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+
+                object.topLevelParts.emplace_back( type, icnOffset + 1U, fheroes2::Point{ 0, -1 }, MP2::OBJ_MOUNTAINS );
+                object.topLevelParts.emplace_back( type, icnOffset + 2U, fheroes2::Point{ 1, -1 }, MP2::OBJ_MOUNTAINS );
+
+                objects.emplace_back( std::move( object ) );
+            }
+
+            icnOffset += 10;
+
+            // Small mountain from top-left to bottom-right.
+            {
+                Maps::ObjectInfo object{ MP2::OBJ_MOUNTAINS };
+                object.groundLevelParts.emplace_back( type, icnOffset + 4U, fheroes2::Point{ 0, 0 }, MP2::OBJ_MOUNTAINS, Maps::OBJECT_LAYER );
+                object.groundLevelParts.emplace_back( type, icnOffset + 1U, fheroes2::Point{ -1, -1 }, MP2::OBJ_MOUNTAINS, Maps::OBJECT_LAYER );
+                object.groundLevelParts.emplace_back( type, icnOffset + 2U, fheroes2::Point{ 0, -1 }, MP2::OBJ_MOUNTAINS, Maps::OBJECT_LAYER );
+                object.groundLevelParts.emplace_back( type, icnOffset + 5U, fheroes2::Point{ 1, 0 }, MP2::OBJ_MOUNTAINS, Maps::OBJECT_LAYER );
+
+                object.groundLevelParts.emplace_back( type, icnOffset + 0U, fheroes2::Point{ -2, -1 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+                object.groundLevelParts.emplace_back( type, icnOffset + 3U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+
+                objects.emplace_back( std::move( object ) );
+            }
+
+            icnOffset += 6;
+
+            // Small mountain from top-right to bottom-left.
+            {
+                Maps::ObjectInfo object{ MP2::OBJ_MOUNTAINS };
+                object.groundLevelParts.emplace_back( type, icnOffset + 5U, fheroes2::Point{ 0, 0 }, MP2::OBJ_MOUNTAINS, Maps::OBJECT_LAYER );
+                object.groundLevelParts.emplace_back( type, icnOffset + 1U, fheroes2::Point{ 0, -1 }, MP2::OBJ_MOUNTAINS, Maps::OBJECT_LAYER );
+                object.groundLevelParts.emplace_back( type, icnOffset + 2U, fheroes2::Point{ 1, -1 }, MP2::OBJ_MOUNTAINS, Maps::OBJECT_LAYER );
+                object.groundLevelParts.emplace_back( type, icnOffset + 4U, fheroes2::Point{ -1, 0 }, MP2::OBJ_MOUNTAINS, Maps::OBJECT_LAYER );
+
+                object.groundLevelParts.emplace_back( type, icnOffset + 0U, fheroes2::Point{ -1, -1 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+                object.groundLevelParts.emplace_back( type, icnOffset + 3U, fheroes2::Point{ -2, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+
+                objects.emplace_back( std::move( object ) );
+            }
+        }
+
+        // Single mountains.
+
+        // Grass medium mound.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_MOUND };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNGRAS, 77U, fheroes2::Point{ 0, 0 }, MP2::OBJ_MOUND, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNGRAS, 78U, fheroes2::Point{ 1, 0 }, MP2::OBJ_MOUND, Maps::OBJECT_LAYER );
+
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNGRAS, 76U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Grass small mound.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_MOUND };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNGRAS, 149U, fheroes2::Point{ 0, 0 }, MP2::OBJ_MOUND, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNGRAS, 150U, fheroes2::Point{ 1, 0 }, MP2::OBJ_MOUND, Maps::OBJECT_LAYER );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Big volcano (Lava terrain).
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_VOLCANO };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAV3, 245U, fheroes2::Point{ 0, 0 }, MP2::OBJ_VOLCANO, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAV3, 244U, fheroes2::Point{ -1, 0 }, MP2::OBJ_VOLCANO, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAV3, 246U, fheroes2::Point{ 1, 0 }, MP2::OBJ_VOLCANO, Maps::OBJECT_LAYER );
+
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAV3, 120U, fheroes2::Point{ -4, -2 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            object.groundLevelParts.back().animationFrames = 14;
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAV3, 180U, fheroes2::Point{ -5, -1 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            object.groundLevelParts.back().animationFrames = 14;
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAV3, 195U, fheroes2::Point{ -4, -1 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            object.groundLevelParts.back().animationFrames = 14;
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAV3, 210U, fheroes2::Point{ -3, -1 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            object.groundLevelParts.back().animationFrames = 14;
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAV3, 225U, fheroes2::Point{ -2, -1 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            object.groundLevelParts.back().animationFrames = 14;
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAV3, 243U, fheroes2::Point{ -2, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAV3, 0U, fheroes2::Point{ -1, -4 }, MP2::OBJ_VOLCANO );
+            object.topLevelParts.back().animationFrames = 14;
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAV3, 15U, fheroes2::Point{ 0, -4 }, MP2::OBJ_VOLCANO );
+            object.topLevelParts.back().animationFrames = 14;
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAV3, 30U, fheroes2::Point{ 1, -4 }, MP2::OBJ_VOLCANO );
+            object.topLevelParts.back().animationFrames = 14;
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAV3, 45U, fheroes2::Point{ -2, -3 }, MP2::OBJ_VOLCANO );
+            object.topLevelParts.back().animationFrames = 14;
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAV3, 60U, fheroes2::Point{ -1, -3 }, MP2::OBJ_VOLCANO );
+            object.topLevelParts.back().animationFrames = 14;
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAV3, 75U, fheroes2::Point{ 0, -3 }, MP2::OBJ_VOLCANO );
+            object.topLevelParts.back().animationFrames = 14;
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAV3, 90U, fheroes2::Point{ 1, -3 }, MP2::OBJ_VOLCANO );
+            object.topLevelParts.back().animationFrames = 14;
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAV3, 105U, fheroes2::Point{ 2, -3 }, MP2::OBJ_VOLCANO );
+            object.topLevelParts.back().animationFrames = 14;
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAV3, 135U, fheroes2::Point{ -1, -2 }, MP2::OBJ_VOLCANO );
+            object.topLevelParts.back().animationFrames = 14;
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAV3, 150U, fheroes2::Point{ 0, -2 }, MP2::OBJ_VOLCANO );
+            object.topLevelParts.back().animationFrames = 14;
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAV3, 165U, fheroes2::Point{ 1, -2 }, MP2::OBJ_VOLCANO );
+            object.topLevelParts.back().animationFrames = 14;
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAV3, 240U, fheroes2::Point{ -1, -1 }, MP2::OBJ_VOLCANO );
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAV3, 241U, fheroes2::Point{ 0, -1 }, MP2::OBJ_VOLCANO );
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAV3, 242U, fheroes2::Point{ 1, -1 }, MP2::OBJ_VOLCANO );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Middle volcano (Lava terrain).
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_VOLCANO };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAV2, 31U, fheroes2::Point{ 0, 0 }, MP2::OBJ_VOLCANO, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAV2, 30U, fheroes2::Point{ -1, 0 }, MP2::OBJ_VOLCANO, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAV2, 32U, fheroes2::Point{ 1, 0 }, MP2::OBJ_VOLCANO, Maps::OBJECT_LAYER );
+
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAV2, 7U, fheroes2::Point{ -3, -1 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            object.groundLevelParts.back().animationFrames = 6;
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAV2, 14U, fheroes2::Point{ -2, -1 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            object.groundLevelParts.back().animationFrames = 6;
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAV2, 28U, fheroes2::Point{ 1, -1 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAV2, 29U, fheroes2::Point{ -2, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAV2, 0U, fheroes2::Point{ 0, -2 }, MP2::OBJ_VOLCANO );
+            object.topLevelParts.back().animationFrames = 6;
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAV2, 21U, fheroes2::Point{ 0, -1 }, MP2::OBJ_VOLCANO );
+            object.topLevelParts.back().animationFrames = 6;
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Small volcano (Lava terrain).
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_VOLCANO };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAV2, 80U, fheroes2::Point{ 0, 0 }, MP2::OBJ_VOLCANO, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAV2, 79U, fheroes2::Point{ -1, 0 }, MP2::OBJ_VOLCANO, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAV2, 81U, fheroes2::Point{ 1, 0 }, MP2::OBJ_VOLCANO, Maps::OBJECT_LAYER );
+
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAV2, 44U, fheroes2::Point{ -3, -1 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            object.groundLevelParts.back().animationFrames = 10;
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAV2, 55U, fheroes2::Point{ -2, -1 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            object.groundLevelParts.back().animationFrames = 10;
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAV2, 78U, fheroes2::Point{ -2, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAV2, 33U, fheroes2::Point{ 0, -2 }, MP2::OBJ_VOLCANO );
+            object.topLevelParts.back().animationFrames = 10;
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAV2, 66U, fheroes2::Point{ -1, -1 }, MP2::OBJ_VOLCANO );
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAV2, 67U, fheroes2::Point{ 0, -1 }, MP2::OBJ_VOLCANO );
+            object.topLevelParts.back().animationFrames = 10;
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Smallest volcano (Lava terrain).
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_VOLCANO };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 76U, fheroes2::Point{ 0, 0 }, MP2::OBJ_VOLCANO, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 77U, fheroes2::Point{ 1, 0 }, MP2::OBJ_VOLCANO, Maps::OBJECT_LAYER );
+
+            // TODO: Fit the lack of shadow tile to the left.
+
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 74U, fheroes2::Point{ 0, -1 }, MP2::OBJ_VOLCANO );
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 75U, fheroes2::Point{ 1, -1 }, MP2::OBJ_VOLCANO );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Desert dune.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_DUNE };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDSRT, 14U, fheroes2::Point{ 0, 0 }, MP2::OBJ_DUNE, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDSRT, 15U, fheroes2::Point{ 1, 0 }, MP2::OBJ_DUNE, Maps::OBJECT_LAYER );
+
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDSRT, 13U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Desert mound.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_DUNE };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDSRT, 17U, fheroes2::Point{ 0, 0 }, MP2::OBJ_DUNE, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDSRT, 18U, fheroes2::Point{ 1, 0 }, MP2::OBJ_DUNE, Maps::OBJECT_LAYER );
+
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDSRT, 19U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Desert dune.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_DUNE };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDSRT, 21U, fheroes2::Point{ 0, 0 }, MP2::OBJ_DUNE, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDSRT, 20U, fheroes2::Point{ -1, 0 }, MP2::OBJ_DUNE, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDSRT, 22U, fheroes2::Point{ 1, 0 }, MP2::OBJ_DUNE, Maps::OBJECT_LAYER );
+
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDSRT, 23U, fheroes2::Point{ -2, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Dirt mound.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_MOUND };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDIRT, 12U, fheroes2::Point{ 0, 0 }, MP2::OBJ_MOUND, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDIRT, 13U, fheroes2::Point{ 1, 0 }, MP2::OBJ_MOUND, Maps::OBJECT_LAYER );
+
+            // TODO: Fit the lack of shadow tile to the left.
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Dirt mound.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_MOUND };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDIRT, 15U, fheroes2::Point{ 0, 0 }, MP2::OBJ_MOUND, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDIRT, 16U, fheroes2::Point{ 1, 0 }, MP2::OBJ_MOUND, Maps::OBJECT_LAYER );
+
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDIRT, 14U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+
+            objects.emplace_back( std::move( object ) );
+        }
     }
 
     void populateLandscapeRocks( std::vector<Maps::ObjectInfo> & objects )
