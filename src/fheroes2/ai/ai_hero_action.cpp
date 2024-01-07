@@ -996,6 +996,7 @@ namespace
 
     void AIToWitchsHut( Heroes & hero, const MP2::MapObjectType objectType, const int32_t dst_index )
     {
+        (void)objectType;
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << ", object: " << MP2::StringObject( objectType ) )
 
         const Skill::Secondary & skill = getSecondarySkillFromWitchsHut( world.GetTiles( dst_index ) );
