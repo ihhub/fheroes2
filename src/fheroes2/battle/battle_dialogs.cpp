@@ -516,11 +516,11 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
     LoopedAnimationSequence sequence;
 
     if ( ( res.army1 & RESULT_WINS ) && ( attackerIsHuman ) ) {
-        GetSummaryParams( res.army1, res.army2, _army1->GetCommander(), res.exp1, _army2.get()->GetSurrenderCost(), sequence, title, surrenderText, outcomeText );
+        GetSummaryParams( res.army1, res.army2, _army1->GetCommander(), res.exp1, _army2->GetSurrenderCost(), sequence, title, surrenderText, outcomeText );
         AudioManager::PlayMusic( MUS::BATTLEWIN, Music::PlaybackMode::PLAY_ONCE );
     }
     else if ( ( res.army2 & RESULT_WINS ) && ( defenderIsHuman ) ) {
-        GetSummaryParams( res.army2, res.army1, _army2->GetCommander(), res.exp2, _army1.get()->GetSurrenderCost(), sequence, title, surrenderText, outcomeText );
+        GetSummaryParams( res.army2, res.army1, _army2->GetCommander(), res.exp2, _army1->GetSurrenderCost(), sequence, title, surrenderText, outcomeText );
         AudioManager::PlayMusic( MUS::BATTLEWIN, Music::PlaybackMode::PLAY_ONCE );
     }
     else if ( attackerIsHuman ) {
