@@ -694,23 +694,17 @@ namespace fheroes2
         Blit( background, 0, 0, output, offset.x, offset.y, background.width(), background.height() );
 
         const Sprite & icn = AGG::GetICN( ICN::SECSKILL, _skill.GetIndexSprite1() );
-        const int32_t iconOffsetX = offset.x + ( background.width() - icn.width() ) / 2;
-        const int32_t iconOffsetY = offset.y + ( background.height() - icn.height() ) / 2;
-        Blit( icn, 0, 0, output, iconOffsetX, iconOffsetY, icn.width(), icn.height() );
-
-        const fheroes2::Rect textBoundary( iconOffsetX, iconOffsetY, icn.width(), icn.height() );
+        const fheroes2::Rect icnRect( offset.x + ( background.width() - icn.width() ) / 2, offset.y + ( background.height() - icn.height() ) / 2, icn.width(),
+                                      icn.height() );
+        Copy( icn, 0, 0, output, icnRect );
 
         Text skillName( Skill::Secondary::String( _skill.Skill() ), FontType::smallWhite() );
-        if ( skillName.width() > textBoundary.width ) {
-            skillName.fitToOneRow( textBoundary.width );
-        }
-        skillName.drawInRoi( offset.x + ( background.width() - skillName.width() ) / 2 - 1, offset.y + 8, output, textBoundary );
+        skillName.fitToOneRow( icnRect.width );
+        skillName.drawInRoi( offset.x + ( background.width() - skillName.width() ) / 2 - 1, offset.y + 8, output, icnRect );
 
         Text skillDescription( Skill::Level::StringWithBonus( _hero, _skill ), FontType::smallWhite() );
-        if ( skillDescription.width() > textBoundary.width ) {
-            skillDescription.fitToOneRow( textBoundary.width );
-        }
-        skillDescription.drawInRoi( offset.x + ( background.width() - skillDescription.width() ) / 2 - 1, offset.y + 56, output, textBoundary );
+        skillDescription.fitToOneRow( icnRect.width );
+        skillDescription.drawInRoi( offset.x + ( background.width() - skillDescription.width() ) / 2 - 1, offset.y + 56, output, icnRect );
     }
 
     void SecondarySkillDialogElement::processEvents( const Point & offset ) const
