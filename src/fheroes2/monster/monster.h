@@ -266,7 +266,7 @@ public:
         return isAbilityPresent( fheroes2::MonsterAbilityType::ALL_ADJACENT_CELL_MELEE_ATTACK );
     }
 
-    bool ignoreRetaliation() const
+    bool isIgnoringRetaliation() const
     {
         return isAbilityPresent( fheroes2::MonsterAbilityType::NO_ENEMY_RETALIATION );
     }

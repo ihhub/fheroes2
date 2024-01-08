@@ -198,7 +198,7 @@ void Battle::Arena::BattleProcess( Unit & attacker, Unit & defender, int32_t tgt
             attacker.UpdateDirection( board[tgt].GetPos() );
         }
 
-        if ( !attacker.ignoreRetaliation() && defender.AllowResponse() ) {
+        if ( !attacker.isIgnoringRetaliation() && defender.AllowResponse() ) {
             const int32_t responseTgt = calculateAttackTarget( defender, defender.GetPosition(), attacker );
             const int responseDir = calculateAttackDirection( defender, defender.GetPosition(), responseTgt );
 
@@ -626,7 +626,7 @@ void Battle::Arena::ApplyActionAttack( Command & cmd )
     BattleProcess( *attacker, *defender, tgt, dir );
 
     if ( defender->isValid() ) {
-        if ( handfighting && !attacker->ignoreRetaliation() && defender->AllowResponse() ) {
+        if ( handfighting && !attacker->isIgnoringRetaliation() && defender->AllowResponse() ) {
             BattleProcess( *defender, *attacker );
             defender->SetResponse();
         }

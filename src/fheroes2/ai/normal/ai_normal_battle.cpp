@@ -461,7 +461,7 @@ namespace AI
         {
             const Position pos = Position::GetReachable( currentUnit, idx );
             if ( pos.GetHead() != nullptr ) {
-                assert( pos.GetHead() != nullptr && ( !currentUnit.isWide() || pos.GetTail() != nullptr ) );
+                assert( !currentUnit.isWide() || pos.GetTail() != nullptr );
 
                 return pos.GetHead()->GetIndex();
             }
@@ -1602,25 +1602,62 @@ namespace AI
                 target.cell = bestCoverCellInfo.idx;
                 target.unit = nullptr;
 
-                MeleeAttackOutcome bestOutcome;
+                // If the archer is blocked by enemy units, it is necessary to attack them immediately, or at least take the best position to attack
+                {
+                    MeleeAttackOutcome bestOutcome;
 
-                for ( const int idx : adjacentEnemiesIndexes ) {
-                    const Unit * enemy = Board::GetCell( idx )->GetUnit();
-                    assert( enemy != nullptr );
+                    for ( const int idx : adjacentEnemiesIndexes ) {
+                        const Unit * enemy = Board::GetCell( idx )->GetUnit();
+                        assert( enemy != nullptr );
 
-                    const MeleeAttackOutcome outcome = BestAttackOutcome( currentUnit, *enemy, valuesOfAttackPositions );
+                        const MeleeAttackOutcome outcome = BestAttackOutcome( currentUnit, *enemy, valuesOfAttackPositions );
 
-                    if ( IsOutcomeImproved( outcome, bestOutcome ) ) {
-                        bestOutcome = outcome;
+                        if ( IsOutcomeImproved( outcome, bestOutcome ) ) {
+                            bestOutcome = outcome;
 
-                        target.cell = outcome.fromIndex;
-                        target.unit = outcome.canAttackImmediately ? enemy : nullptr;
+                            target.cell = outcome.fromIndex;
+                            target.unit = outcome.canAttackImmediately ? enemy : nullptr;
+                        }
                     }
                 }
 
                 // If we have reached this point, then the unit should be able to either cover the archer or approach any of the enemies blocking that archer - although
                 // perhaps without performing an immediate attack
                 assert( Board::isValidIndex( target.cell ) );
+
+                // The unit is going to attack one of the enemy units that blocked the archer, nothing else needs to be done
+                if ( target.cell != bestCoverCellInfo.idx || target.unit != nullptr ) {
+                    continue;
+                }
+
+                // It makes sense for a unit that ignores retaliation to attack neighboring enemy units, even if it is covering an archer, since in this case it will not
+                // receive unnecessary damage (which could affect the duration of the cover)
+                if ( !currentUnit.isIgnoringRetaliation() ) {
+                    continue;
+                }
+
+                // If the decision is made to attack one of the neighboring enemy units (if any) while covering the archer, then we should choose the best target
+                {
+                    int32_t bestAttackValue = 0;
+
+                    for ( const Unit * enemy : enemies ) {
+                        assert( enemy != nullptr );
+
+                        if ( !Board::CanAttackTargetFromPosition( currentUnit, *enemy, target.cell ) ) {
+                            continue;
+                        }
+
+                        const Position pos = Position::GetReachable( currentUnit, target.cell );
+                        assert( pos.GetHead() != nullptr && ( !currentUnit.isWide() || pos.GetTail() != nullptr ) );
+
+                        const int32_t attackValue = optimalAttackValue( currentUnit, *enemy, pos );
+                        if ( bestAttackValue < attackValue ) {
+                            bestAttackValue = attackValue;
+
+                            target.unit = enemy;
+                        }
+                    }
+                }
             }
         }
 

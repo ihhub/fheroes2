@@ -1124,7 +1124,7 @@ int32_t Battle::Unit::evaluateThreatForUnit( const Unit & defender, const std::o
                 return false;
             }
 
-            if ( attacker.ignoreRetaliation() ) {
+            if ( attacker.isIgnoringRetaliation() ) {
                 return false;
             }
 
