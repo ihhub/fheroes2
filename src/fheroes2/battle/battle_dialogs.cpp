@@ -76,7 +76,7 @@ namespace
     // DialogBattleSummary text related values
     const int bsTextWidth = 270;
     const int bsTextXOffset = 25;
-    const int bsTextYOffset = 175;
+    const int bsTextYOffset = 174;
     const int bsTextIndent = 30;
 
     class LoopedAnimation
@@ -442,7 +442,7 @@ void Battle::GetSummaryParams( const uint32_t res1, const uint32_t res2, const H
         if ( res2 & RESULT_SURRENDER ) {
             title.append( _( "The enemy has surrendered!" ) );
             surrenderText.append( _( "Safe passage is granted for %{gold} gold." ) );
-            StringReplace( surrenderText, "%{gold}", std::to_string( surrenderCost ) );
+            StringReplace( surrenderText, "%{gold}", surrenderCost );
         }
         else if ( res2 & RESULT_RETREAT ) {
             title.append( _( "The enemy has fled!" ) );
@@ -569,8 +569,8 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
     }
     if ( !surrenderText.empty() ) {
         const fheroes2::Text box( surrenderText, fheroes2::FontType::normalWhite() );
-        box.draw( pos_rt.x + bsTextXOffset, pos_rt.y + bsTextYOffset + 2 + messageYOffset, bsTextWidth, display );
-        messageYOffset += box.height( bsTextWidth );
+        box.draw( pos_rt.x + bsTextXOffset, pos_rt.y + bsTextYOffset + 2 + messageYOffset + 5, bsTextWidth, display );
+        messageYOffset += box.height( bsTextWidth ) + 5;
     }
     if ( !outcomeText.empty() ) {
         const fheroes2::Text box( outcomeText, fheroes2::FontType::normalWhite() );
@@ -1129,8 +1129,9 @@ bool Battle::DialogBattleSurrender( const HeroBase & hero, uint32_t cost, Kingdo
         if ( btnMarket.isEnabled() )
             le.MousePressLeft( btnMarket.area() ) ? btnMarket.drawOnPress() : btnMarket.drawOnRelease();
 
-        if ( btnAccept.isEnabled() && le.MouseClickLeft( btnAccept.area() ) )
+        if ( btnAccept.isEnabled() && ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) || le.MouseClickLeft( btnAccept.area() ) ) ) {
             result = true;
+        }
 
         if ( btnMarket.isEnabled() && le.MouseClickLeft( btnMarket.area() ) ) {
             Dialog::Marketplace( kingdom, false );
