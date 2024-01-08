@@ -1637,7 +1637,7 @@ namespace AI
                 }
 
                 // It makes sense for a unit that ignores retaliation to attack neighboring enemy units, even if it is covering an archer, since in this case it will not
-                // receive unnecessary damage (which could affect the duration of the cover)
+                // receive unnecessary retaliatory damage (which could affect the duration of the cover)
                 if ( !currentUnit.isIgnoringRetaliation() ) {
                     continue;
                 }
