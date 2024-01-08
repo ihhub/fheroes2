@@ -398,8 +398,8 @@ namespace
 
 namespace Battle
 {
-    void GetSummaryParams( const uint32_t res1, const uint32_t res2, const HeroBase * hero, const uint32_t exp, const uint32_t surrenderCost, LoopedAnimationSequence & sequence,
-                           std::string & title, std::string & surrenderMessage, std::string & msg );
+    void GetSummaryParams( const uint32_t res1, const uint32_t res2, const HeroBase * hero, const uint32_t exp, const uint32_t surrenderCost,
+                           LoopedAnimationSequence & sequence, std::string & title, std::string & surrenderText, std::string & outcomeText );
 }
 
 void Battle::DialogBattleSettings()
@@ -433,8 +433,8 @@ void Battle::DialogBattleSettings()
     }
 }
 
-void Battle::GetSummaryParams( const uint32_t res1, const uint32_t res2, const HeroBase * hero, const uint32_t exp, const uint32_t surrenderCost, LoopedAnimationSequence & sequence,
-                               std::string & title, std::string & surrenderMessage, std::string & outcomeText )
+void Battle::GetSummaryParams( const uint32_t res1, const uint32_t res2, const HeroBase * hero, const uint32_t exp, const uint32_t surrenderCost,
+                               LoopedAnimationSequence & sequence, std::string & title, std::string & surrenderMessage, std::string & outcomeText )
 {
     if ( res1 & RESULT_WINS ) {
         sequence.push( ICN::WINCMBT, true );
@@ -481,7 +481,7 @@ void Battle::GetSummaryParams( const uint32_t res1, const uint32_t res2, const H
         sequence.push( ICN::CMBTLOS3, true );
 
         if ( hero && hero->isHeroes() ) {
-            outcomeText.append( _( "Your force suffer a bitter defeat, and %{name} abandons your cause." ) );
+            outcomeText.append( _( "Your forces suffer a bitter defeat, and %{name} abandons your cause." ) );
             StringReplace( outcomeText, "%{name}", hero->GetName() );
         }
         else {
