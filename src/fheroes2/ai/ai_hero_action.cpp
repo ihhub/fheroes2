@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -994,17 +994,27 @@ namespace
         }
     }
 
-    void AIToWitchsHut( Heroes & hero, int32_t dst_index )
+    void AIToWitchsHut( Heroes & hero, const int32_t dst_index )
     {
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() )
 
         const Skill::Secondary & skill = getSecondarySkillFromWitchsHut( world.GetTiles( dst_index ) );
+        if ( skill.isValid() ) {
+            if ( !hero.HasMaxSecondarySkill() && !hero.HasSecondarySkill( skill.Skill() ) ) {
+                hero.LearnSkill( skill );
 
-        // check full
-        if ( skill.isValid() && !hero.HasMaxSecondarySkill() && !hero.HasSecondarySkill( skill.Skill() ) )
-            hero.LearnSkill( skill );
+                if ( skill.Skill() == Skill::Secondary::SCOUTING ) {
+                    hero.Scout( hero.GetIndex() );
+                }
+            }
+        }
+        else {
+            // A broken object?
+            assert( 0 );
+        }
 
-        hero.SetVisited( dst_index );
+        // It is important to mark it globally so other heroes will know about the object.
+        hero.SetVisited( dst_index, Visit::GLOBAL );
     }
 
     void AIToShrine( Heroes & hero, int32_t dst_index )

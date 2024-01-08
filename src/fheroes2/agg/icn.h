@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -971,6 +971,8 @@ namespace ICN
         RECR2BKG_EVIL,
         STONEBAK_EVIL,
         STONEBAK_SMALL_POL,
+        UNIFORMBAK_GOOD,
+        UNIFORMBAK_EVIL,
         REDBAK_SMALL_VERTICAL,
         WELLBKG_EVIL,
         CASLWIND_EVIL,
@@ -998,6 +1000,7 @@ namespace ICN
         EMPTY_POL_BUTTON,
         EMPTY_GUILDWELL_BUTTON,
         EMPTY_VERTICAL_GOOD_BUTTON,
+        EMPTY_MAP_SELECT_BUTTON,
 
         BUTTON_STANDARD_GAME,
         BUTTON_CAMPAIGN_GAME,
@@ -1078,7 +1081,8 @@ namespace ICN
         BUTTON_MAPSIZE_XLARGE,
         BUTTON_MAPSIZE_ALL,
 
-        BUTTON_MAP_SELECT,
+        BUTTON_MAP_SELECT_GOOD,
+        BUTTON_MAP_SELECT_EVIL,
 
         BUTTON_GUILDWELL_EXIT,
         BUTTON_VIEWWORLD_EXIT_GOOD,
@@ -1091,6 +1095,15 @@ namespace ICN
         BUTTON_HSCORES_VERTICAL_STANDARD,
 
         GAME_OPTION_ICON,
+
+        DIFFICULTY_ICON_EASY,
+        DIFFICULTY_ICON_NORMAL,
+        DIFFICULTY_ICON_HARD,
+        DIFFICULTY_ICON_EXPERT,
+        DIFFICULTY_ICON_IMPOSSIBLE,
+
+        METALLIC_BORDERED_TEXTBOX_GOOD,
+        METALLIC_BORDERED_TEXTBOX_EVIL,
 
         // IMPORTANT! Put any new entry just above this one.
         LASTICN
