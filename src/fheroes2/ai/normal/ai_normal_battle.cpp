@@ -590,7 +590,7 @@ namespace AI
         // Step 1. Analyze current battle state and update variables
         analyzeBattleState( arena, currentUnit );
 
-        DEBUG_LOG( DBG_BATTLE, DBG_TRACE, currentUnit.GetName() << " begin the turn, color: " << Color::String( _myColor ) )
+        DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " begin the turn, color: " << Color::String( _myColor ) )
 
         // Step 2. Check retreat/surrender condition
         const Heroes * actualHero = dynamic_cast<const Heroes *>( _commander );
@@ -713,8 +713,6 @@ namespace AI
             }
 
             // Melee unit final stage - add actions to the queue
-            DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " melee phase end, target cell: " << target.cell )
-
             if ( target.cell != -1 ) {
                 // The target cell of the movement must be the cell that the unit's head will occupy
                 const int32_t moveTargetIdx = getUnitMovementTarget( arena, currentUnit, target.cell );
@@ -949,7 +947,7 @@ namespace AI
         // distance attack capabilities.
         _cautiousOffensive = ( enemyArcherRatio < 0.15 );
 
-        DEBUG_LOG( DBG_BATTLE, DBG_TRACE,
+        DEBUG_LOG( DBG_BATTLE, DBG_INFO,
                    ( _defensiveTactics ? "Defensive" : ( _cautiousOffensive ? "Cautious offensive" : "Offensive" ) )
                        << " tactics have been chosen. Army strength: " << _myArmyStrength << ", shooters strength: " << _myShootersStrength
                        << ", enemy army strength: " << _enemyArmyStrength << ", enemy shooters strength: " << _enemyShootersStrength )
@@ -1314,12 +1312,16 @@ namespace AI
 
                     target.cell = outcome.fromIndex;
                     target.unit = enemy;
+
+                    DEBUG_LOG( DBG_BATTLE, DBG_TRACE,
+                               "- Set attack priority on " << enemy->GetName() << ", attack value: " << outcome.attackValue
+                                                           << ", position value: " << outcome.positionValue )
                 }
             }
         }
 
         if ( target.unit ) {
-            DEBUG_LOG( DBG_BATTLE, DBG_TRACE, currentUnit.GetName() << " attacking " << target.unit->GetName() << " from cell " << target.cell )
+            DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " attacking " << target.unit->GetName() << " from cell " << target.cell )
 
             return target;
         }
@@ -1617,6 +1619,10 @@ namespace AI
 
                             target.cell = outcome.fromIndex;
                             target.unit = outcome.canAttackImmediately ? enemy : nullptr;
+
+                            DEBUG_LOG( DBG_BATTLE, DBG_TRACE,
+                                       "- Set attack priority on " << enemy->GetName() << ", attack value: " << outcome.attackValue
+                                                                   << ", position value: " << outcome.positionValue )
                         }
                     }
                 }
@@ -1655,6 +1661,8 @@ namespace AI
                             bestAttackValue = attackValue;
 
                             target.unit = enemy;
+
+                            DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "- Set attack priority on " << enemy->GetName() << ", attack value: " << attackValue )
                         }
                     }
                 }
@@ -1663,7 +1671,7 @@ namespace AI
 
         if ( target.cell != -1 ) {
             if ( target.unit ) {
-                DEBUG_LOG( DBG_BATTLE, DBG_TRACE, currentUnit.GetName() << " attacking " << target.unit->GetName() << " from cell " << target.cell )
+                DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " attacking " << target.unit->GetName() << " from cell " << target.cell )
             }
             else {
                 DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " covering friendly archers, moving to cell " << target.cell )
@@ -1692,11 +1700,15 @@ namespace AI
 
                     target.cell = outcome.fromIndex;
                     target.unit = outcome.canAttackImmediately ? enemy : nullptr;
+
+                    DEBUG_LOG( DBG_BATTLE, DBG_TRACE,
+                               "- Set attack priority on " << enemy->GetName() << ", attack value: " << outcome.attackValue
+                                                           << ", position value: " << outcome.positionValue )
                 }
             }
 
             if ( target.unit ) {
-                DEBUG_LOG( DBG_BATTLE, DBG_TRACE, currentUnit.GetName() << " attacking " << target.unit->GetName() << " from cell " << target.cell )
+                DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " attacking " << target.unit->GetName() << " from cell " << target.cell )
             }
         }
 
