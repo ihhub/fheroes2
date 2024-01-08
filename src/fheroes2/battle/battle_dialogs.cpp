@@ -434,7 +434,7 @@ void Battle::DialogBattleSettings()
 }
 
 void Battle::GetSummaryParams( const uint32_t res1, const uint32_t res2, const HeroBase * hero, const uint32_t exp, const uint32_t surrenderCost, LoopedAnimationSequence & sequence,
-                               std::string & title, std::string & surrenderMessage, std::string & msg )
+                               std::string & title, std::string & surrenderMessage, std::string & outcomeText )
 {
     if ( res1 & RESULT_WINS ) {
         sequence.push( ICN::WINCMBT, true );
@@ -452,9 +452,9 @@ void Battle::GetSummaryParams( const uint32_t res1, const uint32_t res2, const H
         }
 
         if ( hero && hero->isHeroes() ) {
-            msg.append( _( "For valor in combat, %{name} receives %{exp} experience." ) );
-            StringReplace( msg, "%{name}", hero->GetName() );
-            StringReplace( msg, "%{exp}", exp );
+            outcomeText.append( _( "For valor in combat, %{name} receives %{exp} experience." ) );
+            StringReplace( outcomeText, "%{name}", hero->GetName() );
+            StringReplace( outcomeText, "%{exp}", exp );
         }
     }
     else if ( res1 & RESULT_RETREAT ) {
@@ -464,16 +464,16 @@ void Battle::GetSummaryParams( const uint32_t res1, const uint32_t res2, const H
         sequence.push( ICN::CMBTFLE2, false );
         sequence.push( ICN::CMBTFLE3, false );
 
-        msg.append( _( "The cowardly %{name} flees from battle." ) );
-        StringReplace( msg, "%{name}", hero->GetName() );
+        outcomeText.append( _( "The cowardly %{name} flees from battle." ) );
+        StringReplace( outcomeText, "%{name}", hero->GetName() );
     }
     else if ( res1 & RESULT_SURRENDER ) {
         assert( hero != nullptr );
 
         sequence.push( ICN::CMBTSURR, true );
 
-        msg.append( _( "%{name} surrenders to the enemy, and departs in shame." ) );
-        StringReplace( msg, "%{name}", hero->GetName() );
+        surrenderMessage.append( _( "%{name} surrenders to the enemy, and departs in shame." ) );
+        StringReplace( surrenderMessage, "%{name}", hero->GetName() );
     }
     else {
         sequence.push( ICN::CMBTLOS1, false );
@@ -481,11 +481,11 @@ void Battle::GetSummaryParams( const uint32_t res1, const uint32_t res2, const H
         sequence.push( ICN::CMBTLOS3, true );
 
         if ( hero && hero->isHeroes() ) {
-            msg.append( _( "Your force suffer a bitter defeat, and %{name} abandons your cause." ) );
-            StringReplace( msg, "%{name}", hero->GetName() );
+            outcomeText.append( _( "Your force suffer a bitter defeat, and %{name} abandons your cause." ) );
+            StringReplace( outcomeText, "%{name}", hero->GetName() );
         }
         else {
-            msg.append( _( "Your force suffer a bitter defeat." ) );
+            outcomeText.append( _( "Your force suffer a bitter defeat." ) );
         }
     }
 }
@@ -510,25 +510,25 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
     // Set the cursor image. After this dialog the Game Area or the Battlefield will be shown, so it does not require a cursor restorer.
     Cursor::Get().SetThemes( Cursor::POINTER );
 
-    std::string firstMessage;
-    std::string secondMessage;
+    std::string surrenderText;
+    std::string outcomeText;
     std::string title;
     LoopedAnimationSequence sequence;
 
     if ( ( res.army1 & RESULT_WINS ) && ( attackerIsHuman ) ) {
-        GetSummaryParams( res.army1, res.army2, _army1->GetCommander(), res.exp1, _army2.get()->GetSurrenderCost(), sequence, title, firstMessage, secondMessage );
+        GetSummaryParams( res.army1, res.army2, _army1->GetCommander(), res.exp1, _army2.get()->GetSurrenderCost(), sequence, title, surrenderText, outcomeText );
         AudioManager::PlayMusic( MUS::BATTLEWIN, Music::PlaybackMode::PLAY_ONCE );
     }
     else if ( ( res.army2 & RESULT_WINS ) && ( defenderIsHuman ) ) {
-        GetSummaryParams( res.army2, res.army1, _army2->GetCommander(), res.exp2, _army1.get()->GetSurrenderCost(), sequence, title, firstMessage, secondMessage );
+        GetSummaryParams( res.army2, res.army1, _army2->GetCommander(), res.exp2, _army1.get()->GetSurrenderCost(), sequence, title, surrenderText, outcomeText );
         AudioManager::PlayMusic( MUS::BATTLEWIN, Music::PlaybackMode::PLAY_ONCE );
     }
     else if ( attackerIsHuman ) {
-        GetSummaryParams( res.army1, res.army2, _army1->GetCommander(), res.exp1, 0, sequence, title, firstMessage, secondMessage );
+        GetSummaryParams( res.army1, res.army2, _army1->GetCommander(), res.exp1, 0, sequence, title, surrenderText, outcomeText );
         AudioManager::PlayMusic( MUS::BATTLELOSE, Music::PlaybackMode::PLAY_ONCE );
     }
     else if ( defenderIsHuman ) {
-        GetSummaryParams( res.army2, res.army1, _army2->GetCommander(), res.exp2, 0, sequence, title, firstMessage, secondMessage );
+        GetSummaryParams( res.army2, res.army1, _army2->GetCommander(), res.exp2, 0, sequence, title, surrenderText, outcomeText );
         AudioManager::PlayMusic( MUS::BATTLELOSE, Music::PlaybackMode::PLAY_ONCE );
     }
 
@@ -567,13 +567,13 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
         box.draw( pos_rt.x + bsTextXOffset, pos_rt.y + bsTextYOffset + 2, bsTextWidth, display );
         messageYOffset = box.height( bsTextWidth );
     }
-    if ( !firstMessage.empty() ) {
-        const fheroes2::Text box( firstMessage, fheroes2::FontType::normalWhite() );
+    if ( !surrenderText.empty() ) {
+        const fheroes2::Text box( surrenderText, fheroes2::FontType::normalWhite() );
         box.draw( pos_rt.x + bsTextXOffset, pos_rt.y + bsTextYOffset + 2 + messageYOffset, bsTextWidth, display );
         messageYOffset += box.height( bsTextWidth );
     }
-    if ( !secondMessage.empty() ) {
-        const fheroes2::Text box( secondMessage, fheroes2::FontType::normalWhite() );
+    if ( !outcomeText.empty() ) {
+        const fheroes2::Text box( outcomeText, fheroes2::FontType::normalWhite() );
         box.draw( pos_rt.x + bsTextXOffset, pos_rt.y + bsTextYOffset + 2 + messageYOffset + 5, bsTextWidth, display );
     }
 
