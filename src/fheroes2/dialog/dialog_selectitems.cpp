@@ -1281,14 +1281,16 @@ void Dialog::selectMineType( int32_t & type, int32_t & resource, int32_t & color
 
     // Resource icons.
     const int32_t iconOffsetX = 35;
+    const std::vector<Maps::ObjectInfo> & resourceInfo = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_TREASURES );
+
+    assert( resourceInfo.size() > resourceCount - 1 );
+
     for ( uint32_t i = 0; i < resourceCount - 1; ++i ) {
-        const fheroes2::Sprite & resourceImage = fheroes2::AGG::GetICN( ICN::RESOURCE, i );
-        const int32_t width = resourceImage.width();
-        const int32_t height = resourceImage.height();
-        const fheroes2::Point imagePosition( area.x + iconOffsetX + ( resourceSelectRoi.width - width ) / 2, offsetY + ( stepY - height ) / 2 );
-        resourceRoi[i] = { resourceSelectRoi.x + 5, imagePosition.y, resourceSelectRoi.width - 10, height };
-        fheroes2::Blit( resourceImage, display, imagePosition.x, imagePosition.y );
-        fheroes2::addGradientShadow( resourceImage, display, imagePosition, { -3, 3 } );
+        // const fheroes2::Sprite & resourceImage = fheroes2::AGG::GetICN( ICN::RESOURCE, i );
+        const fheroes2::Sprite & resourceImage = fheroes2::generateMapObjectImage( resourceInfo[i] );
+        const fheroes2::Point imagePosition( area.x + iconOffsetX + ( resourceSelectRoi.width - TILEWIDTH * 3 ) / 2, offsetY + ( stepY - TILEWIDTH ) / 2 );
+        resourceRoi[i] = { resourceSelectRoi.x + 5, imagePosition.y, resourceSelectRoi.width - 10, TILEWIDTH };
+        fheroes2::Blit( resourceImage, display, imagePosition.x, imagePosition.y - 4 );
         fheroes2::Blit( markBackground, display, resourceRoi[i].x + 2, resourceRoi[i].y + ( resourceRoi[i].height - markBackground.height() ) / 2 );
         offsetY += stepY;
     }
@@ -1296,8 +1298,9 @@ void Dialog::selectMineType( int32_t & type, int32_t & resource, int32_t & color
     // Render ghosts to select Abandoned mine type.
     const fheroes2::Sprite & ghostImage = fheroes2::AGG::GetICN( ICN::MONS32, 59 );
     const int32_t ghostsOnIcon = 4;
-    const int32_t ghostsStepX = ghostImage.width() - 5;
-    const int32_t ghostsIconWight = ghostsOnIcon * ghostsStepX + 5;
+    const int32_t ghostsIconOverlap = 12;
+    const int32_t ghostsStepX = ghostImage.width() - ghostsIconOverlap;
+    const int32_t ghostsIconWight = ghostsOnIcon * ghostsStepX + ghostsIconOverlap;
     const int32_t ghostsIconHeight = ghostImage.height();
     resourceRoi[7] = { resourceSelectRoi.x + 5, offsetY + ( stepY - ghostsIconHeight ) / 2, resourceSelectRoi.width - 10, ghostsIconHeight };
     for ( int32_t i = 0; i < ghostsOnIcon; ++i ) {
