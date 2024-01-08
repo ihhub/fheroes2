@@ -442,7 +442,6 @@ void Battle::GetSummaryParams( const uint32_t res1, const uint32_t res2, const H
         if ( res2 & RESULT_SURRENDER ) {
             title.append( _( "The enemy has surrendered!" ) );
             surrenderMessage.append( _( "Safe passage is granted for %{gold} gold." ) );
-            StringReplace( surrenderMessage, "%{heroName}", hero->GetName() );
             StringReplace( surrenderMessage, "%{gold}", std::to_string( surrenderCost ) );
         }
         else if ( res2 & RESULT_RETREAT ) {
