@@ -663,10 +663,10 @@ namespace
     {
         assert( objects.empty() );
 
-        // Mines provides 5 resources: Ore, Sulfur, Crystal, Gems, Gold.
+        // Mines provide 5 resources: Ore, Sulfur, Crystal, Gems, Gold.
         const uint8_t mineResources = 5;
 
-        // Mines have different appearance: Generic, Grass, Snow, Swamp, Lava, Desert, Dirt, Wasteland.
+        // Mines have different appearances: Generic, Grass, Snow, Swamp, Lava, Desert, Dirt, Wasteland.
         for ( const auto & [type, offset] :
               { std::make_pair( MP2::OBJ_ICN_TYPE_MTNMULT, 74U ), std::make_pair( MP2::OBJ_ICN_TYPE_MTNGRAS, 74U ), std::make_pair( MP2::OBJ_ICN_TYPE_MTNSNOW, 74U ),
                 std::make_pair( MP2::OBJ_ICN_TYPE_MTNSWMP, 74U ), std::make_pair( MP2::OBJ_ICN_TYPE_MTNLAVA, 74U ), std::make_pair( MP2::OBJ_ICN_TYPE_MTNDSRT, 74U ),
@@ -683,7 +683,7 @@ namespace
             object.topLevelParts.emplace_back( type, offset + 2U, fheroes2::Point{ -1, -1 }, MP2::OBJ_NON_ACTION_MINE );
             object.topLevelParts.emplace_back( type, offset + 3U, fheroes2::Point{ 0, -1 }, MP2::OBJ_NON_ACTION_MINE );
 
-            // The cars with these resources are placed above the main mine tile.
+            // The carts with these resources are placed above the main mine tile.
             for ( uint8_t resource = 0; resource < mineResources; ++resource ) {
                 object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_EXTRAOVR, resource, fheroes2::Point{ 0, 0 }, MP2::OBJ_MINE, Maps::OBJECT_LAYER );
 
@@ -1333,7 +1333,7 @@ namespace
                                                                std::make_pair( static_cast<Maps::ObjectGroup>( groupType ), static_cast<uint32_t>( objectId ) ) );
                 if ( !inserted ) {
                     // You use the same object part for more than one object. Check your code!
-                    // But mines with one appearance (terrain type) differ one from other only by the resource car.
+                    // But note that mines with one appearance (terrain type) differ one from the other only by the resource cart.
                     assert( objectData[groupType][objectId].objectType == MP2::OBJ_MINE );
                 }
             }
