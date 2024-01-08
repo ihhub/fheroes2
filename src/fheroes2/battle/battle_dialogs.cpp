@@ -485,7 +485,7 @@ void Battle::GetSummaryParams( const uint32_t res1, const uint32_t res2, const H
             StringReplace( outcomeText, "%{name}", hero->GetName() );
         }
         else {
-            outcomeText.append( _( "Your force suffer a bitter defeat." ) );
+            outcomeText.append( _( "Your forces suffer a bitter defeat." ) );
         }
     }
 }
