@@ -398,8 +398,8 @@ namespace
 
 namespace Battle
 {
-    void GetSummaryParams( uint32_t res1, uint32_t res2, const HeroBase * hero, uint32_t exp, LoopedAnimationSequence & sequence, std::string & title,
-                           std::string & msg );
+    void GetSummaryParams( const uint32_t res1, const uint32_t res2, const HeroBase * hero, const uint32_t exp, const uint32_t surrenderCost, LoopedAnimationSequence & sequence,
+                           std::string & title, std::string & surrenderMessage, std::string & msg );
 }
 
 void Battle::DialogBattleSettings()
@@ -433,14 +433,17 @@ void Battle::DialogBattleSettings()
     }
 }
 
-void Battle::GetSummaryParams( uint32_t res1, uint32_t res2, const HeroBase * hero, uint32_t exp, LoopedAnimationSequence & sequence, std::string & title,
-                               std::string & msg )
+void Battle::GetSummaryParams( const uint32_t res1, const uint32_t res2, const HeroBase * hero, const uint32_t exp, const uint32_t surrenderCost, LoopedAnimationSequence & sequence,
+                               std::string & title, std::string & surrenderMessage, std::string & msg )
 {
     if ( res1 & RESULT_WINS ) {
         sequence.push( ICN::WINCMBT, true );
 
         if ( res2 & RESULT_SURRENDER ) {
             title.append( _( "The enemy has surrendered!" ) );
+            surrenderMessage.append( _( "They are granted safe passage for %{gold} gold." ) );
+            StringReplace( surrenderMessage, "%{heroName}", hero->GetName() );
+            StringReplace( surrenderMessage, "%{gold}", std::to_string( surrenderCost ) );
         }
         else if ( res2 & RESULT_RETREAT ) {
             title.append( _( "The enemy has fled!" ) );
@@ -488,12 +491,19 @@ void Battle::GetSummaryParams( uint32_t res1, uint32_t res2, const HeroBase * he
     }
 }
 
-// Returns true if player want to restart the battle
-bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<Artifact> & artifacts, bool allowToCancel ) const
+// Returns true if player wants to restart the battle
+bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<Artifact> & artifacts, const bool allowToCancel ) const
 {
+    const bool attackerIsHuman = _army1->GetControl() & CONTROL_HUMAN;
+    const bool defenderIsHuman = _army2->GetControl() & CONTROL_HUMAN;
+
+    if ( !attackerIsHuman && !defenderIsHuman ) {
+        // AI vs AI battle, this dialog should not be shown at all
+        assert( 0 );
+        return false;
+    }
+
     fheroes2::Display & display = fheroes2::Display::instance();
-    LocalEvent & le = LocalEvent::Get();
-    const Settings & conf = Settings::Get();
 
     const Troops killed1 = _army1->GetKilledTroops();
     const Troops killed2 = _army2->GetKilledTroops();
@@ -501,31 +511,26 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
     // Set the cursor image. After this dialog the Game Area or the Battlefield will be shown, so it does not require a cursor restorer.
     Cursor::Get().SetThemes( Cursor::POINTER );
 
-    std::string msg;
+    std::string firstMessage;
+    std::string secondMessage;
     std::string title;
     LoopedAnimationSequence sequence;
 
-    if ( ( res.army1 & RESULT_WINS ) && ( _army1->GetControl() & CONTROL_HUMAN ) ) {
-        GetSummaryParams( res.army1, res.army2, _army1->GetCommander(), res.exp1, sequence, title, msg );
+    if ( ( res.army1 & RESULT_WINS ) && ( attackerIsHuman ) ) {
+        GetSummaryParams( res.army1, res.army2, _army1->GetCommander(), res.exp1, _army2.get()->GetSurrenderCost(), sequence, title, firstMessage, secondMessage );
         AudioManager::PlayMusic( MUS::BATTLEWIN, Music::PlaybackMode::PLAY_ONCE );
     }
-    else if ( ( res.army2 & RESULT_WINS ) && ( _army2->GetControl() & CONTROL_HUMAN ) ) {
-        GetSummaryParams( res.army2, res.army1, _army2->GetCommander(), res.exp2, sequence, title, msg );
+    else if ( ( res.army2 & RESULT_WINS ) && ( defenderIsHuman ) ) {
+        GetSummaryParams( res.army2, res.army1, _army2->GetCommander(), res.exp2, _army1.get()->GetSurrenderCost(), sequence, title, firstMessage, secondMessage );
         AudioManager::PlayMusic( MUS::BATTLEWIN, Music::PlaybackMode::PLAY_ONCE );
     }
-    else if ( _army1->GetControl() & CONTROL_HUMAN ) {
-        GetSummaryParams( res.army1, res.army2, _army1->GetCommander(), res.exp1, sequence, title, msg );
+    else if ( attackerIsHuman ) {
+        GetSummaryParams( res.army1, res.army2, _army1->GetCommander(), res.exp1, 0, sequence, title, firstMessage, secondMessage );
         AudioManager::PlayMusic( MUS::BATTLELOSE, Music::PlaybackMode::PLAY_ONCE );
     }
-    else if ( _army2->GetControl() & CONTROL_HUMAN ) {
-        GetSummaryParams( res.army2, res.army1, _army2->GetCommander(), res.exp2, sequence, title, msg );
+    else if ( defenderIsHuman ) {
+        GetSummaryParams( res.army2, res.army1, _army2->GetCommander(), res.exp2, 0, sequence, title, firstMessage, secondMessage );
         AudioManager::PlayMusic( MUS::BATTLELOSE, Music::PlaybackMode::PLAY_ONCE );
-    }
-    else {
-        // AI vs AI battle, this dialog should not be shown at all
-        assert( 0 );
-
-        return false;
     }
 
     if ( sequence.isFinished() ) {
@@ -535,7 +540,7 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
         sequence.push( ICN::UNKNOWN, false );
     }
 
-    const bool isEvilInterface = conf.isEvilInterfaceEnabled();
+    const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
     const fheroes2::Sprite & dialog = fheroes2::AGG::GetICN( ( isEvilInterface ? ICN::WINLOSEE : ICN::WINLOSE ), 0 );
     const fheroes2::Sprite & dialogShadow = fheroes2::AGG::GetICN( ( isEvilInterface ? ICN::WINLOSEE : ICN::WINLOSE ), 1 );
 
@@ -561,12 +566,16 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
     if ( !title.empty() ) {
         const fheroes2::Text box( title, fheroes2::FontType::normalYellow() );
         box.draw( pos_rt.x + bsTextXOffset, pos_rt.y + bsTextYOffset + 2, bsTextWidth, display );
-        messageYOffset = bsTextIndent;
+        messageYOffset = box.height( bsTextWidth );
     }
-
-    if ( !msg.empty() ) {
-        const fheroes2::Text box( msg, fheroes2::FontType::normalWhite() );
-        box.draw( pos_rt.x + bsTextXOffset, pos_rt.y + bsTextYOffset + messageYOffset + 2, bsTextWidth, display );
+    if ( !firstMessage.empty() ) {
+        const fheroes2::Text box( firstMessage, fheroes2::FontType::normalWhite() );
+        box.draw( pos_rt.x + bsTextXOffset, pos_rt.y + bsTextYOffset + 2 + messageYOffset, bsTextWidth, display );
+        messageYOffset += box.height( bsTextWidth );
+    }
+    if ( !secondMessage.empty() ) {
+        const fheroes2::Text box( secondMessage, fheroes2::FontType::normalWhite() );
+        box.draw( pos_rt.x + bsTextXOffset, pos_rt.y + bsTextYOffset + 2 + messageYOffset + 5, bsTextWidth, display );
     }
 
     // battlefield casualties
@@ -622,6 +631,8 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
     btnOk->draw();
 
     display.render();
+
+    LocalEvent & le = LocalEvent::Get();
 
     while ( le.HandleEvents() ) {
         le.MousePressLeft( btnOk->area() ) ? btnOk->drawOnPress() : btnOk->drawOnRelease();
