@@ -434,15 +434,15 @@ void Battle::DialogBattleSettings()
 }
 
 void Battle::GetSummaryParams( const uint32_t res1, const uint32_t res2, const HeroBase * hero, const uint32_t exp, const uint32_t surrenderCost,
-                               LoopedAnimationSequence & sequence, std::string & title, std::string & surrenderMessage, std::string & outcomeText )
+                               LoopedAnimationSequence & sequence, std::string & title, std::string & surrenderText, std::string & outcomeText )
 {
     if ( res1 & RESULT_WINS ) {
         sequence.push( ICN::WINCMBT, true );
 
         if ( res2 & RESULT_SURRENDER ) {
             title.append( _( "The enemy has surrendered!" ) );
-            surrenderMessage.append( _( "Safe passage is granted for %{gold} gold." ) );
-            StringReplace( surrenderMessage, "%{gold}", std::to_string( surrenderCost ) );
+            surrenderText.append( _( "Safe passage is granted for %{gold} gold." ) );
+            StringReplace( surrenderText, "%{gold}", std::to_string( surrenderCost ) );
         }
         else if ( res2 & RESULT_RETREAT ) {
             title.append( _( "The enemy has fled!" ) );
@@ -472,8 +472,8 @@ void Battle::GetSummaryParams( const uint32_t res1, const uint32_t res2, const H
 
         sequence.push( ICN::CMBTSURR, true );
 
-        surrenderMessage.append( _( "%{name} surrenders to the enemy, and departs in shame." ) );
-        StringReplace( surrenderMessage, "%{name}", hero->GetName() );
+        surrenderText.append( _( "%{name} surrenders to the enemy, and departs in shame." ) );
+        StringReplace( surrenderText, "%{name}", hero->GetName() );
     }
     else {
         sequence.push( ICN::CMBTLOS1, false );
