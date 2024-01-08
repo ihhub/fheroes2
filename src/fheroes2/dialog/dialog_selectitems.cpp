@@ -1366,7 +1366,7 @@ void Dialog::selectMineType( int32_t & type, int32_t & resource, int32_t & color
         const MP2::MapObjectType objectType = getObjectTypeByResource( resourceId );
 
         // Mine appearance is the same for different mine resources so we keep the selection.
-        const bool keepSelection = ( objectType == MP2::OBJ_MINE ) && ( objectInfo.front().objectType == MP2::OBJ_MINE );
+        const bool keepSelection = ( objectType == MP2::OBJ_MINE ) && !objectInfo.empty() && ( objectInfo.front().objectType == MP2::OBJ_MINE );
         const int selectedId = keepSelection ? listbox.getCurrentId() : 0;
         const int topId = keepSelection ? listbox.getTopId() : 0;
 
