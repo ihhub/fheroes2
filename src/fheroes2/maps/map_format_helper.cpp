@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2023                                                    *
+ *   Copyright (C) 2023 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -69,7 +69,7 @@ namespace Maps
         map.tiles.resize( size );
 
         for ( size_t i = 0; i < size; ++i ) {
-            writeTile( world.GetTiles( static_cast<int32_t>( i ) ), map.tiles[i] );
+            writeTileTerrainInfo( world.GetTiles( static_cast<int32_t>( i ) ), map.tiles[i] );
         }
 
         return true;
@@ -99,32 +99,23 @@ namespace Maps
         }
     }
 
-    void writeTile( const Tiles & tile, Map_Format::TileInfo & info )
+    void writeTileTerrainInfo( const Tiles & tile, Map_Format::TileInfo & info )
     {
-        // Clear all data before writing new one.
-        info = {};
-
-        // Only bottom layer addons / objects parts can be stored within the map format.
-        ObjectGroup group;
-        uint32_t index;
-
-        for ( const auto & addon : tile.getBottomLayerAddons() ) {
-            if ( getObjectInfo( addon._objectIcnType, addon._imageIndex, group, index ) ) {
-                info.objects.emplace_back();
-                info.objects.back().id = addon._uid;
-                info.objects.back().group = group;
-                info.objects.back().index = index;
-            }
-        }
-
-        if ( getObjectInfo( tile.getObjectIcnType(), tile.GetObjectSpriteIndex(), group, index ) ) {
-            info.objects.emplace_back();
-            info.objects.back().id = tile.GetObjectUID();
-            info.objects.back().group = group;
-            info.objects.back().index = index;
-        }
-
         info.terrainIndex = tile.getTerrainImageIndex();
         info.terrainFlag = tile.getTerrainFlags();
+    }
+
+    void addObjectToMap( Map_Format::MapFormat & map, const int32_t tileId, const ObjectGroup group, const uint32_t index )
+    {
+        assert( tileId >= 0 && map.tiles.size() > static_cast<size_t>( tileId ) );
+
+        // At this time it is assumed that object was added into world object to be rendered using Maps::setObjectOnTile() function.
+        const uint32_t uid = getLastObjectUID();
+        assert( uid > 0 );
+
+        auto & object = map.tiles[tileId].objects.emplace_back();
+        object.id = uid;
+        object.group = group;
+        object.index = index;
     }
 }

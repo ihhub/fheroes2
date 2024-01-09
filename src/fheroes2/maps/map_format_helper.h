@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2023                                                    *
+ *   Copyright (C) 2023 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -20,6 +20,8 @@
 
 #pragma once
 
+#include <cstdint>
+
 namespace Maps
 {
     class Tiles;
@@ -30,11 +32,15 @@ namespace Maps
         struct TileInfo;
     }
 
+    enum class ObjectGroup : int32_t;
+
     bool readMapInEditor( const Map_Format::MapFormat & map );
 
     bool saveMapInEditor( Map_Format::MapFormat & map );
 
     void readTile( Tiles & tile, const Map_Format::TileInfo & info );
 
-    void writeTile( const Tiles & tile, Map_Format::TileInfo & info );
+    void writeTileTerrainInfo( const Tiles & tile, Map_Format::TileInfo & info );
+
+    void addObjectToMap( Map_Format::MapFormat & map, const int32_t tileId, const ObjectGroup group, const uint32_t index );
 }

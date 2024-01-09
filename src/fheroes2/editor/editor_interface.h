@@ -35,6 +35,8 @@ namespace Maps
 {
     class Tiles;
     struct ObjectInfo;
+
+    enum class ObjectGroup : int32_t;
 }
 
 namespace Interface
@@ -50,7 +52,7 @@ namespace Interface
         void reset() override;
 
         // Start Map Editor interface main function.
-        fheroes2::GameMode startEdit();
+        fheroes2::GameMode startEdit( const bool isNewMap );
 
         static fheroes2::GameMode eventLoadMap();
         static fheroes2::GameMode eventNewMap();
@@ -133,7 +135,9 @@ namespace Interface
             // Do nothing.
         }
 
-        void setObjectOnTile( Maps::Tiles & tile, const Maps::ObjectInfo & objectInfo );
+        void setObjectOnTile( Maps::Tiles & tile, const Maps::ObjectGroup groupType, const uint32_t objectIndex );
+
+        void setObjectOnTileAsAction( Maps::Tiles & tile, const Maps::ObjectGroup groupType, const uint32_t objectIndex );
 
         void handleObjectMouseLeftClick( Maps::Tiles & tile );
 
