@@ -1286,7 +1286,6 @@ void Dialog::selectMineType( int32_t & type, int32_t & color )
     assert( resourceInfo.size() > resourceCount - 1 );
 
     for ( uint32_t i = 0; i < resourceCount - 1; ++i ) {
-        // const fheroes2::Sprite & resourceImage = fheroes2::AGG::GetICN( ICN::RESOURCE, i );
         const fheroes2::Sprite & resourceImage = fheroes2::generateMapObjectImage( resourceInfo[i] );
         const fheroes2::Point imagePosition( area.x + iconOffsetX + ( resourceSelectRoi.width - TILEWIDTH * 3 ) / 2, offsetY + ( stepY - TILEWIDTH ) / 2 );
         resourceRoi[i] = { resourceSelectRoi.x + 5, imagePosition.y, resourceSelectRoi.width - 10, TILEWIDTH };
