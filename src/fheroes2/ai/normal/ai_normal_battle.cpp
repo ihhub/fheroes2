@@ -1632,7 +1632,7 @@ namespace AI
                 assert( Board::isValidIndex( target.cell ) );
 
                 // The unit is going to attack one of the enemy units that blocked the archer, nothing else needs to be done
-                if ( target.cell != bestCoverCellInfo.idx || target.unit != nullptr ) {
+                if ( target.unit != nullptr ) {
                     continue;
                 }
 
