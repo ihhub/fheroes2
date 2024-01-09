@@ -114,8 +114,11 @@ namespace Maps
         // Roads and streams are the only objects that are needed to be saved separately.
         // This is because modification on one tile affects all neighboring tiles as well.
         // Check all existing objects and delete all roads and streams.
-        info.objects.erase( std::remove_if( info.objects.begin(), info.objects.end(), []( const Maps::Map_Format::ObjectInfo & object ) {
-            return object.group == ObjectGroup::ROADS || object.group == ObjectGroup::STREAMS; } ), info.objects.end() );
+        info.objects.erase( std::remove_if( info.objects.begin(), info.objects.end(),
+                                            []( const Maps::Map_Format::ObjectInfo & object ) {
+                                                return object.group == ObjectGroup::ROADS || object.group == ObjectGroup::STREAMS;
+                                            } ),
+                            info.objects.end() );
 
         for ( const auto & addon : tile.getBottomLayerAddons() ) {
             if ( addon._objectIcnType == MP2::OBJ_ICN_TYPE_ROAD || addon._objectIcnType == MP2::OBJ_ICN_TYPE_STREAM ) {
