@@ -66,6 +66,8 @@ namespace Dialog
     void selectTownType( int & type, int & color );
 
     int selectDwellingType( const int dwellingType );
+
+    int selectPowerUpObjectType( const int powerUpObjectType );
 }
 
 #endif

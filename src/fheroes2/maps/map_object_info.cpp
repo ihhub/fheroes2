@@ -670,7 +670,155 @@ namespace
     {
         assert( objects.empty() );
 
-        (void)objects;
+        // Artesian Spring.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_ARTESIAN_SPRING };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 3U, fheroes2::Point{ 0, 0 }, MP2::OBJ_ARTESIAN_SPRING, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 4U, fheroes2::Point{ 1, 0 }, MP2::OBJ_ARTESIAN_SPRING, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 2U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 1U, fheroes2::Point{ 1, -1 }, MP2::OBJ_NONE );
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 0U, fheroes2::Point{ 0, -1 }, MP2::OBJ_NONE );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Watering Hole.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_WATERING_HOLE };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 218U, fheroes2::Point{ 0, 0 }, MP2::OBJ_WATERING_HOLE, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 217U, fheroes2::Point{ -1, 0 }, MP2::OBJ_WATERING_HOLE, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 219U, fheroes2::Point{ 1, 0 }, MP2::OBJ_WATERING_HOLE, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 220U, fheroes2::Point{ 2, 0 }, MP2::OBJ_WATERING_HOLE, Maps::OBJECT_LAYER );
+
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 216U, fheroes2::Point{ 1, -1 }, MP2::OBJ_NONE );
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 215U, fheroes2::Point{ 0, -1 }, MP2::OBJ_NONE );
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 214U, fheroes2::Point{ -1, -1 }, MP2::OBJ_NONE );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Faerie Ring.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_FAERIE_RING };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDIRT, 129U, fheroes2::Point{ 0, 0 }, MP2::OBJ_FAERIE_RING, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDIRT, 130U, fheroes2::Point{ 1, 0 }, MP2::OBJ_NON_ACTION_FAERIE_RING, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDIRT, 128U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Faerie Ring.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_FAERIE_RING };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNGRAS, 30U, fheroes2::Point{ 0, 0 }, MP2::OBJ_FAERIE_RING, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNGRAS, 31U, fheroes2::Point{ 1, 0 }, MP2::OBJ_NON_ACTION_FAERIE_RING, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNGRAS, 29U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Oasis.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_OASIS };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDSRT, 108U, fheroes2::Point{ 0, 0 }, MP2::OBJ_OASIS, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDSRT, 109U, fheroes2::Point{ 1, 0 }, MP2::OBJ_OASIS, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDSRT, 107U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NON_ACTION_OASIS, Maps::OBJECT_LAYER );
+
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDSRT, 106U, fheroes2::Point{ 1, -1 }, MP2::OBJ_NON_ACTION_OASIS );
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDSRT, 105U, fheroes2::Point{ 0, -1 }, MP2::OBJ_NON_ACTION_OASIS );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Fountain.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_FOUNTAIN };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 15U, fheroes2::Point{ 0, 0 }, MP2::OBJ_FOUNTAIN, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 14U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Magic Well.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_MAGIC_WELL };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 162U, fheroes2::Point{ 0, 0 }, MP2::OBJ_MAGIC_WELL , Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 161U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Magic Well.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_MAGIC_WELL };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 165U, fheroes2::Point{ 0, 0 }, MP2::OBJ_MAGIC_WELL , Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 164U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Magic Well.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_MAGIC_WELL };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSNOW, 194U, fheroes2::Point{ 0, 0 }, MP2::OBJ_MAGIC_WELL , Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSNOW, 193U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSNOW, 192U, fheroes2::Point{ 0, -1 }, MP2::OBJ_NONE );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Fort.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_FORT };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMULT, 59U, fheroes2::Point{ 0, 0 }, MP2::OBJ_FORT , Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMULT, 58U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NON_ACTION_FORT, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMULT, 57U, fheroes2::Point{ -2, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMULT, 56U, fheroes2::Point{ 0, -1 }, MP2::OBJ_NON_ACTION_FORT );
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMULT, 55U, fheroes2::Point{ -1, -1 }, MP2::OBJ_NON_ACTION_FORT );
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMULT, 54U, fheroes2::Point{ -2, -1 }, MP2::OBJ_NONE );
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMULT, 45U, fheroes2::Point{ -3, -1 }, MP2::OBJ_NONE );
+            object.topLevelParts.back().animationFrames = 8;
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMULT, 36U, fheroes2::Point{ -1, -2 }, MP2::OBJ_NONE );
+            object.topLevelParts.back().animationFrames = 8;
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Gazebo.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_GAZEBO };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMULT, 62U, fheroes2::Point{ 0, 0 }, MP2::OBJ_GAZEBO , Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMULT, 61U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMULT, 60U, fheroes2::Point{ 0, -1 }, MP2::OBJ_NON_ACTION_FORT );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Witch Doctor's Hut.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_WITCH_DOCTORS_HUT };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMULT, 69U, fheroes2::Point{ 0, 0 }, MP2::OBJ_WITCH_DOCTORS_HUT , Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMULT, 68U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMULT, 67U, fheroes2::Point{ -2, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMULT, 66U, fheroes2::Point{ 0, -1 }, MP2::OBJ_NON_ACTION_FORT );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Mercenary Camp.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_MERCENARY_CAMP };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMULT, 71U, fheroes2::Point{ 0, 0 }, MP2::OBJ_MERCENARY_CAMP , Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMULT, 72U, fheroes2::Point{ 1, 0 }, MP2::OBJ_NON_ACTION_MERCENARY_CAMP, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMULT, 70U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NON_ACTION_MERCENARY_CAMP, Maps::OBJECT_LAYER );
+
+            objects.emplace_back( std::move( object ) );
+        }
     }
 
     void populateAdventureTreasures( std::vector<Maps::ObjectInfo> & objects )
