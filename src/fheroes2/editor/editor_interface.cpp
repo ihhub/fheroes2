@@ -995,7 +995,7 @@ namespace Interface
 
     void EditorInterface::setObjectOnTile( Maps::Tiles & tile, const Maps::ObjectGroup groupType, const uint32_t objectIndex )
     {
-        const auto & objectInfo = getObjectInfo( groupType, _editorPanel.getSelectedObjectType() );
+        const auto & objectInfo = getObjectInfo( groupType, objectIndex );
         if ( objectInfo.empty() ) {
             // Check your logic as you are trying to insert an empty object!
             assert( 0 );
