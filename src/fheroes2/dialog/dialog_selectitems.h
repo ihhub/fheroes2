@@ -67,7 +67,9 @@ namespace Dialog
 
     int selectDwellingType( const int dwellingType );
 
-    int selectMountainType( const int dwellingType );
+    int selectMountainType( const int mountainType );
+
+    int selectTreeType( const int treeType );
 }
 
 #endif

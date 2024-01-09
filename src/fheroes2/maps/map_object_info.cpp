@@ -462,7 +462,86 @@ namespace
     {
         assert( objects.empty() );
 
-        (void)objects;
+        // Forest have different appearances: Deciduous, Evil (dead), Autumn, Fir trees, Jungle, Snowy fir trees.
+        for ( const MP2::ObjectIcnType type : { MP2::OBJ_ICN_TYPE_TREDECI, MP2::OBJ_ICN_TYPE_TREEVIL, MP2::OBJ_ICN_TYPE_TREFALL, MP2::OBJ_ICN_TYPE_TREFIR,
+                                                MP2::OBJ_ICN_TYPE_TREJNGL, MP2::OBJ_ICN_TYPE_TRESNOW } ) {
+            // Big forest from top-left to bottom-right.
+            {
+                Maps::ObjectInfo object{ MP2::OBJ_TREES };
+                object.groundLevelParts.emplace_back( type, 5U, fheroes2::Point{ 0, 0 }, MP2::OBJ_TREES, Maps::OBJECT_LAYER );
+                object.groundLevelParts.emplace_back( type, 4U, fheroes2::Point{ -1, 0 }, MP2::OBJ_TREES, Maps::OBJECT_LAYER );
+                object.groundLevelParts.emplace_back( type, 8U, fheroes2::Point{ 0, 1 }, MP2::OBJ_TREES, Maps::OBJECT_LAYER );
+                object.groundLevelParts.emplace_back( type, 9U, fheroes2::Point{ 1, 1 }, MP2::OBJ_TREES, Maps::OBJECT_LAYER );
+
+                object.groundLevelParts.emplace_back( type, 0U, fheroes2::Point{ -2, -1 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+                object.groundLevelParts.emplace_back( type, 3U, fheroes2::Point{ -2, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+                object.groundLevelParts.emplace_back( type, 7U, fheroes2::Point{ -1, 1 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+
+                object.topLevelParts.emplace_back( type, 1U, fheroes2::Point{ -1, -1 }, MP2::OBJ_TREES );
+                object.topLevelParts.emplace_back( type, 2U, fheroes2::Point{ 0, -1 }, MP2::OBJ_TREES );
+                object.topLevelParts.emplace_back( type, 6U, fheroes2::Point{ 1, 0 }, MP2::OBJ_TREES );
+
+                objects.emplace_back( std::move( object ) );
+            }
+
+            // Big forest from top-right to bottom-left.
+            {
+                Maps::ObjectInfo object{ MP2::OBJ_TREES };
+                object.groundLevelParts.emplace_back( type, 15U, fheroes2::Point{ 0, 0 }, MP2::OBJ_TREES, Maps::OBJECT_LAYER );
+                object.groundLevelParts.emplace_back( type, 16U, fheroes2::Point{ 1, 0 }, MP2::OBJ_TREES, Maps::OBJECT_LAYER );
+                object.groundLevelParts.emplace_back( type, 18U, fheroes2::Point{ -1, 1 }, MP2::OBJ_TREES, Maps::OBJECT_LAYER );
+                object.groundLevelParts.emplace_back( type, 19U, fheroes2::Point{ 0, 1 }, MP2::OBJ_TREES, Maps::OBJECT_LAYER );
+
+                object.groundLevelParts.emplace_back( type, 10U, fheroes2::Point{ -1, -1 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+                object.groundLevelParts.emplace_back( type, 13U, fheroes2::Point{ -2, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+                object.groundLevelParts.emplace_back( type, 17U, fheroes2::Point{ -2, 1 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+
+                object.topLevelParts.emplace_back( type, 11U, fheroes2::Point{ 0, -1 }, MP2::OBJ_TREES );
+                object.topLevelParts.emplace_back( type, 12U, fheroes2::Point{ 1, -1 }, MP2::OBJ_TREES );
+                object.topLevelParts.emplace_back( type, 14U, fheroes2::Point{ -1, 0 }, MP2::OBJ_TREES );
+
+                objects.emplace_back( std::move( object ) );
+            }
+
+            // Medium forest from top-left to bottom-right.
+            {
+                Maps::ObjectInfo object{ MP2::OBJ_TREES };
+                object.groundLevelParts.emplace_back( type, 24U, fheroes2::Point{ 0, 0 }, MP2::OBJ_TREES, Maps::OBJECT_LAYER );
+                object.groundLevelParts.emplace_back( type, 21U, fheroes2::Point{ -1, -1 }, MP2::OBJ_TREES, Maps::OBJECT_LAYER );
+                object.groundLevelParts.emplace_back( type, 22U, fheroes2::Point{ 0, -1 }, MP2::OBJ_TREES, Maps::OBJECT_LAYER );
+                object.groundLevelParts.emplace_back( type, 25U, fheroes2::Point{ 1, 0 }, MP2::OBJ_TREES, Maps::OBJECT_LAYER );
+
+                object.groundLevelParts.emplace_back( type, 20U, fheroes2::Point{ -2, -1 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+                object.groundLevelParts.emplace_back( type, 23U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+
+                objects.emplace_back( std::move( object ) );
+            }
+
+            // Medium forest from top-right to bottom-left.
+            {
+                Maps::ObjectInfo object{ MP2::OBJ_TREES };
+                object.groundLevelParts.emplace_back( type, 31U, fheroes2::Point{ 0, 0 }, MP2::OBJ_TREES, Maps::OBJECT_LAYER );
+                object.groundLevelParts.emplace_back( type, 27U, fheroes2::Point{ 0, -1 }, MP2::OBJ_TREES, Maps::OBJECT_LAYER );
+                object.groundLevelParts.emplace_back( type, 28U, fheroes2::Point{ 1, -1 }, MP2::OBJ_TREES, Maps::OBJECT_LAYER );
+                object.groundLevelParts.emplace_back( type, 30U, fheroes2::Point{ -1, 0 }, MP2::OBJ_TREES, Maps::OBJECT_LAYER );
+
+                object.groundLevelParts.emplace_back( type, 26U, fheroes2::Point{ -1, -1 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+                object.groundLevelParts.emplace_back( type, 29U, fheroes2::Point{ -2, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+
+                objects.emplace_back( std::move( object ) );
+            }
+
+            // Small forest (2 variants).
+            for ( uint32_t count = 0; count < 2; ++count ) {
+                const uint32_t offset = count * 2U + 32U;
+                Maps::ObjectInfo object{ MP2::OBJ_TREES };
+                object.groundLevelParts.emplace_back( type, offset + 1U, fheroes2::Point{ 0, 0 }, MP2::OBJ_TREES, Maps::OBJECT_LAYER );
+
+                object.groundLevelParts.emplace_back( type, offset + 0U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+
+                objects.emplace_back( std::move( object ) );
+            }
+        }
     }
 
     void populateLandscapeWater( std::vector<Maps::ObjectInfo> & objects )

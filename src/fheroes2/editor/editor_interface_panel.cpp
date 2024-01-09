@@ -932,6 +932,12 @@ namespace Interface
                 handleObjectMouseClick( Dialog::selectMountainType );
                 return res;
             }
+
+            if ( le.MouseClickLeft( _landscapeObjectButtonsRect[LandscapeObjectBrush::TREES] ) ) {
+                handleObjectMouseClick( Dialog::selectTreeType );
+                return res;
+            }
+
             if ( le.MouseClickLeft( _landscapeObjectButtonsRect[LandscapeObjectBrush::WATER_OBJECTS] ) ) {
                 handleObjectMouseClick( Dialog::selectLandscapeOceanObjectType );
                 return res;

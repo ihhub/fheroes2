@@ -1131,11 +1131,20 @@ int Dialog::selectDwellingType( const int dwellingType )
     return selectObjectType( dwellingType, objectInfo.size(), listbox );
 }
 
-int Dialog::selectMountainType( const int dwellingType )
+int Dialog::selectMountainType( const int mountainType )
 {
     const auto & objectInfo = Maps::getObjectsByGroup( Maps::ObjectGroup::LANDSCAPE_MOUNTAINS );
 
     DwellingTypeSelection listbox( objectInfo, { 420, fheroes2::Display::instance().height() - 180 }, _( "Select Mountain Object:" ) );
 
-    return selectObjectType( dwellingType, objectInfo.size(), listbox );
+    return selectObjectType( mountainType, objectInfo.size(), listbox );
+}
+
+int Dialog::selectTreeType( const int treeType )
+{
+    const auto & objectInfo = Maps::getObjectsByGroup( Maps::ObjectGroup::LANDSCAPE_TREES );
+
+    DwellingTypeSelection listbox( objectInfo, { 420, fheroes2::Display::instance().height() - 180 }, _( "Select Tree Object:" ) );
+
+    return selectObjectType( treeType, objectInfo.size(), listbox );
 }
