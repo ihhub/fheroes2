@@ -113,27 +113,18 @@ namespace Maps
     {
         // Roads and streams are the only objects that are needed to be saved separately.
         // This is because modification on one tile affects all neighboring tiles as well.
+        // Check all existing objects and delete all roads and streams.
+        info.objects.erase( std::remove_if( info.objects.begin(), info.objects.end(), []( const Maps::Map_Format::ObjectInfo & object ) {
+            return object.group == ObjectGroup::ROADS || object.group == ObjectGroup::STREAMS; } ), info.objects.end() );
+
         for ( const auto & addon : tile.getBottomLayerAddons() ) {
             if ( addon._objectIcnType == MP2::OBJ_ICN_TYPE_ROAD || addon._objectIcnType == MP2::OBJ_ICN_TYPE_STREAM ) {
                 const ObjectGroup group = ( addon._objectIcnType == MP2::OBJ_ICN_TYPE_ROAD ) ? ObjectGroup::ROADS : ObjectGroup::STREAMS;
 
                 const auto & objectInfos = getObjectsByGroup( group );
                 if ( addon._imageIndex < objectInfos.size() ) {
-                    // This is the correct object. First try to find a similar object present in this tile.
-                    bool objectFound = false;
-                    for ( auto & object : info.objects ) {
-                        if ( object.group == group ) {
-                            // An object from the same object has been found. Update its info.
-                            object.id = addon._uid;
-                            object.index = addon._imageIndex;
-                            objectFound = true;
-                            break;
-                        }
-                    }
-
-                    if ( !objectFound ) {
-                        addObjectToTile( info, group, addon._imageIndex, addon._uid );
-                    }
+                    // This is the correct object.
+                    addObjectToTile( info, group, addon._imageIndex, addon._uid );
                 }
             }
         }
