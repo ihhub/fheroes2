@@ -34,7 +34,6 @@
 namespace Maps
 {
     class Tiles;
-    struct ObjectInfo;
 
     enum class ObjectGroup : int32_t;
 }
