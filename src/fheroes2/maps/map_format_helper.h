@@ -40,7 +40,7 @@ namespace Maps
 
     void readTile( Tiles & tile, const Map_Format::TileInfo & info );
 
-    void writeTileTerrainInfo( const Tiles & tile, Map_Format::TileInfo & info );
+    void writeTile( const Tiles & tile, Map_Format::TileInfo & info );
 
     void addObjectToMap( Map_Format::MapFormat & map, const int32_t tileId, const ObjectGroup group, const uint32_t index );
 }

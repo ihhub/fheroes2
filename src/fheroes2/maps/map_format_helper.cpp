@@ -34,6 +34,17 @@
 #include "world.h"
 #include "world_object_uid.h"
 
+namespace
+{
+    void addObjectToTile( Maps::Map_Format::TileInfo & info, const Maps::ObjectGroup group, const uint32_t index, const uint32_t uid )
+    {
+        auto & object = info.objects.emplace_back();
+        object.id = uid;
+        object.group = group;
+        object.index = index;
+    }
+}
+
 namespace Maps
 {
     bool readMapInEditor( const Map_Format::MapFormat & map )
@@ -68,7 +79,7 @@ namespace Maps
         map.tiles.resize( size );
 
         for ( size_t i = 0; i < size; ++i ) {
-            writeTileTerrainInfo( world.GetTiles( static_cast<int32_t>( i ) ), map.tiles[i] );
+            writeTile( world.GetTiles( static_cast<int32_t>( i ) ), map.tiles[i] );
         }
 
         return true;
@@ -98,8 +109,35 @@ namespace Maps
         }
     }
 
-    void writeTileTerrainInfo( const Tiles & tile, Map_Format::TileInfo & info )
+    void writeTile( const Tiles & tile, Map_Format::TileInfo & info )
     {
+        // Roads and streams are the only objects that are needed to be saved separately.
+        // This is because modification on one tile affects all neighboring tiles as well.
+        for ( const auto & addon : tile.getBottomLayerAddons() ) {
+            if ( addon._objectIcnType == MP2::OBJ_ICN_TYPE_ROAD || addon._objectIcnType == MP2::OBJ_ICN_TYPE_STREAM ) {
+                const ObjectGroup group = ( addon._objectIcnType == MP2::OBJ_ICN_TYPE_ROAD ) ? ObjectGroup::ROADS : ObjectGroup::STREAMS;
+
+                const auto & objectInfos = getObjectsByGroup( group );
+                if ( addon._imageIndex < objectInfos.size() ) {
+                    // This is the correct object. First try to find a similar object present in this tile.
+                    bool objectFound = false;
+                    for ( auto & object : info.objects ) {
+                        if ( object.group == group ) {
+                            // An object from the same object has been found. Update its info.
+                            object.id = addon._uid;
+                            object.index = addon._imageIndex;
+                            objectFound = true;
+                            break;
+                        }
+                    }
+
+                    if ( !objectFound ) {
+                        addObjectToTile( info, group, addon._imageIndex, addon._uid );
+                    }
+                }
+            }
+        }
+
         info.terrainIndex = tile.getTerrainImageIndex();
         info.terrainFlag = tile.getTerrainFlags();
     }
@@ -112,9 +150,6 @@ namespace Maps
         const uint32_t uid = getLastObjectUID();
         assert( uid > 0 );
 
-        auto & object = map.tiles[tileId].objects.emplace_back();
-        object.id = uid;
-        object.group = group;
-        object.index = index;
+        addObjectToTile( map.tiles[tileId], group, index, uid );
     }
 }
