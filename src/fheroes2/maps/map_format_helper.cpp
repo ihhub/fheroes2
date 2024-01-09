@@ -24,13 +24,14 @@
 #include <cassert>
 #include <cstddef>
 #include <cstdint>
-#include <memory>
+#include <list>
 #include <vector>
 
 #include "map_format_info.h"
 #include "map_object_info.h"
 #include "maps_tiles.h"
 #include "maps_tiles_helper.h"
+#include "mp2.h"
 #include "world.h"
 #include "world_object_uid.h"
 
