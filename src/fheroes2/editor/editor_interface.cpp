@@ -993,7 +993,7 @@ namespace Interface
         }
     }
 
-    void EditorInterface::setObjectOnTile( Maps::Tiles & tile, const Maps::ObjectGroup groupType, const uint32_t objectIndex )
+    void EditorInterface::setObjectOnTile( Maps::Tiles & tile, const Maps::ObjectGroup groupType, const int32_t objectIndex )
     {
         const auto & objectInfo = getObjectInfo( groupType, objectIndex );
         if ( objectInfo.empty() ) {
@@ -1003,12 +1003,12 @@ namespace Interface
         }
 
         Maps::setObjectOnTile( tile, objectInfo );
-        Maps::addObjectToMap( _mapFormat, tile.GetIndex(), groupType, objectIndex );
+        Maps::addObjectToMap( _mapFormat, tile.GetIndex(), groupType, static_cast<uint32_t>( objectIndex ) );
 
         _redraw |= mapUpdateFlags;
     }
 
-    void EditorInterface::setObjectOnTileAsAction( Maps::Tiles & tile, const Maps::ObjectGroup groupType, const uint32_t objectIndex )
+    void EditorInterface::setObjectOnTileAsAction( Maps::Tiles & tile, const Maps::ObjectGroup groupType, const int32_t objectIndex )
     {
         const fheroes2::ActionCreator action( _historyManager, _mapFormat );
 
