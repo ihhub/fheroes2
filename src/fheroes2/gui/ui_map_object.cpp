@@ -117,8 +117,8 @@ namespace fheroes2
                 image = AGG::GetICN( MP2::getIcnIdFromObjectIcnType( objectPart.icnType ), objectPart.icnIndex );
             }
 
-            // If it is a one tile image make sure that the offset is relative to the center of the tile.
-            image.setPosition( image.x() - tileSize / 2, image.y() - tileSize / 2 );
+            // If it is a one tile image make sure that the offset is in the middle of the image.
+            image.setPosition( -image.width() / 2, -image.height() / 2 );
             return image;
         }
 
