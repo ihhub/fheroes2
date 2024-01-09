@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -911,8 +911,7 @@ bool Battle::Board::isValidMirrorImageIndex( const int32_t index, const Unit * u
     }
 
     const Position mirrorPos = Position::GetPosition( *unit, index );
-
-    if ( mirrorPos.GetHead() == nullptr || ( unit->isWide() && mirrorPos.GetTail() == nullptr ) ) {
+    if ( !mirrorPos.isValidForUnit( unit ) ) {
         return false;
     }
 
@@ -935,7 +934,7 @@ bool Battle::Board::CanAttackFromCell( const Unit & unit, const int32_t from )
         return false;
     }
 
-    assert( !unit.isWide() || pos.GetTail() != nullptr );
+    assert( pos.isValidForUnit( unit ) );
 
     const Castle * castle = Arena::GetCastle();
 

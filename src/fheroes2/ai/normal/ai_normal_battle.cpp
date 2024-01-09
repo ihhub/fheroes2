@@ -107,7 +107,7 @@ namespace AI
 
     std::pair<int32_t, int> optimalAttackVector( const Unit & attacker, const Unit & target, const Position & attackPos )
     {
-        assert( attackPos.GetHead() != nullptr && ( !attacker.isWide() || attackPos.GetTail() != nullptr ) );
+        assert( attackPos.isValidForUnit( attacker ) );
         assert( Board::CanAttackTargetFromPosition( attacker, target, attackPos.GetHead()->GetIndex() ) );
 
         const Position & targetPos = target.GetPosition();
@@ -157,7 +157,7 @@ namespace AI
 
     int32_t optimalAttackValue( const Unit & attacker, const Unit & target, const Position & attackPos )
     {
-        assert( attackPos.GetHead() != nullptr && ( !attacker.isWide() || attackPos.GetTail() != nullptr ) );
+        assert( attackPos.isValidForUnit( attacker ) );
 
         if ( attacker.isAllAdjacentCellsAttack() ) {
             const Board * board = Arena::GetBoard();
@@ -225,7 +225,7 @@ namespace AI
                     continue;
                 }
 
-                assert( !attacker.isWide() || pos.GetTail() != nullptr );
+                assert( pos.isValidForUnit( attacker ) );
 
                 const uint32_t dist = Board::GetDistance( pos, enemyUnit->GetPosition() );
                 assert( dist > 0 );
@@ -284,7 +284,7 @@ namespace AI
                 continue;
             }
 
-            assert( !unit->isWide() || nearbyPos.GetTail() != nullptr );
+            assert( nearbyPos.isValidForUnit( unit ) );
 
             return true;
         }
@@ -404,7 +404,7 @@ namespace AI
         for ( const auto & [stepPos, stepThreatLevel] : pathStepsThreatLevels ) {
             // We need to get as close to the target as possible (taking into account the threat level)
             if ( targetIdx == -1 || stepThreatLevel < lowestThreat || std::fabs( stepThreatLevel - lowestThreat ) < 0.001 ) {
-                assert( stepPos.GetHead() != nullptr && ( !currentUnit.isWide() || stepPos.GetTail() != nullptr ) );
+                assert( stepPos.isValidForUnit( currentUnit ) );
 
                 lowestThreat = stepThreatLevel;
                 // When moving along the path, the direction of a wide unit at some steps may be reversed in relation to the target one. Detect this and use the proper
@@ -433,7 +433,7 @@ namespace AI
                 continue;
             }
 
-            assert( !currentUnit.isWide() || pos.GetTail() != nullptr );
+            assert( pos.isValidForUnit( currentUnit ) );
 
             const uint32_t dist = Board::GetDistance( pos, target.GetPosition() );
             assert( dist > 0 );
@@ -461,7 +461,7 @@ namespace AI
         {
             const Position pos = Position::GetReachable( currentUnit, idx );
             if ( pos.GetHead() != nullptr ) {
-                assert( !currentUnit.isWide() || pos.GetTail() != nullptr );
+                assert( pos.isValidForUnit( currentUnit ) );
 
                 return pos.GetHead()->GetIndex();
             }
@@ -469,10 +469,10 @@ namespace AI
 
         // If there is no such position, then use the last position on the path to the cell with the specified index
         const Position dstPos = Position::GetPosition( currentUnit, idx );
-        assert( dstPos.GetHead() != nullptr && ( !currentUnit.isWide() || dstPos.GetTail() != nullptr ) );
+        assert( dstPos.isValidForUnit( currentUnit ) );
 
         const Position pos = arena.getClosestReachablePosition( currentUnit, dstPos );
-        assert( pos.GetHead() != nullptr && ( !currentUnit.isWide() || pos.GetTail() != nullptr ) );
+        assert( pos.isValidForUnit( currentUnit ) );
 
         return pos.GetHead()->GetIndex();
     }
@@ -719,7 +719,7 @@ namespace AI
 
                 if ( target.unit ) {
                     const Position attackPos = Position::GetReachable( currentUnit, moveTargetIdx );
-                    assert( attackPos.GetHead() != nullptr && ( !currentUnit.isWide() || attackPos.GetTail() != nullptr ) );
+                    assert( attackPos.isValidForUnit( currentUnit ) );
 
                     const auto [attackTargetIdx, attackDirection] = optimalAttackVector( currentUnit, *target.unit, attackPos );
 
@@ -988,7 +988,7 @@ namespace AI
                         const int32_t headIdx = unitToRemove.GetHeadIndex();
                         const int32_t tailIdx = unitToRemove.GetTailIndex();
 
-                        assert( headIdx != -1 && ( !unitToRemove.isWide() || tailIdx != -1 ) );
+                        assert( headIdx != -1 && ( unitToRemove.isWide() ? tailIdx != -1 : tailIdx == -1 ) );
 
                         unitToRestore = getUnitOnCell( headIdx );
                         assert( unitToRestore == &unitToRemove );
@@ -1011,7 +1011,7 @@ namespace AI
                         const int32_t headIdx = unitToRestore->GetHeadIndex();
                         const int32_t tailIdx = unitToRestore->GetTailIndex();
 
-                        assert( headIdx != -1 && ( !unitToRestore->isWide() || tailIdx != -1 ) );
+                        assert( headIdx != -1 && ( unitToRestore->isWide() ? tailIdx != -1 : tailIdx == -1 ) );
 
                         setUnitForCell( headIdx, unitToRestore );
 
@@ -1356,7 +1356,7 @@ namespace AI
                 maxPriority = unitPriority;
 
                 const Position pos = Position::GetPosition( currentUnit, nearestCellInfo.idx );
-                assert( pos.GetHead() != nullptr && ( !currentUnit.isWide() || pos.GetTail() != nullptr ) );
+                assert( pos.isValidForUnit( currentUnit ) );
 
                 const Indexes path = arena.GetPath( currentUnit, pos );
                 assert( !path.empty() );
@@ -1395,7 +1395,7 @@ namespace AI
                     continue;
                 }
 
-                assert( pos.GetHead() != nullptr && ( !currentUnit.isWide() || pos.GetTail() != nullptr ) );
+                assert( pos.isValidForUnit( currentUnit ) );
 
                 const uint32_t moveDist = arena.CalculateMoveDistance( currentUnit, pos );
                 if ( target.cell == -1 || moveDist < shortestDist ) {
@@ -1538,7 +1538,7 @@ namespace AI
                             continue;
                         }
 
-                        assert( !currentUnit.isWide() || pos.GetTail() != nullptr );
+                        assert( pos.isValidForUnit( currentUnit ) );
                         assert( Board::GetDistance( pos, frnd->GetPosition() ) == 1 );
 
                         if ( !arena.isPositionReachable( currentUnit, pos, false ) ) {
@@ -1654,7 +1654,7 @@ namespace AI
                         }
 
                         const Position pos = Position::GetReachable( currentUnit, target.cell );
-                        assert( pos.GetHead() != nullptr && ( !currentUnit.isWide() || pos.GetTail() != nullptr ) );
+                        assert( pos.isValidForUnit( currentUnit ) );
 
                         const int32_t attackValue = optimalAttackValue( currentUnit, *enemy, pos );
                         if ( bestAttackValue < attackValue ) {

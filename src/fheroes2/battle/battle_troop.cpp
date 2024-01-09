@@ -194,6 +194,9 @@ void Battle::Unit::SetPosition( const int32_t idx )
 
 void Battle::Unit::SetPosition( const Position & pos )
 {
+    // Position may be empty if this unit is a castle tower
+    assert( pos.isValidForUnit( this ) || pos.isEmpty() );
+
     if ( position.GetHead() ) {
         position.GetHead()->SetUnit( nullptr );
     }

@@ -68,7 +68,7 @@ namespace
         const int32_t attackPositionHeadIdx = attackPosition.GetHead() ? attackPosition.GetHead()->GetIndex() : -1;
         const int32_t attackPositionTailIdx = attackPosition.GetTail() ? attackPosition.GetTail()->GetIndex() : -1;
 
-        assert( attackPositionHeadIdx != -1 && ( !attackingUnit.isWide() || attackPositionTailIdx != -1 ) );
+        assert( attackPositionHeadIdx != -1 && ( attackingUnit.isWide() ? attackPositionTailIdx != -1 : attackPositionTailIdx == -1 ) );
 
         if ( Battle::Board::CanAttackFromCell( attackingUnit, attackPositionHeadIdx ) ) {
             // The defender's head cell is near the head cell of the attack position
@@ -103,7 +103,7 @@ namespace
         const int32_t attackPositionHeadIdx = attackPosition.GetHead() ? attackPosition.GetHead()->GetIndex() : -1;
         const int32_t attackPositionTailIdx = attackPosition.GetTail() ? attackPosition.GetTail()->GetIndex() : -1;
 
-        assert( attackPositionHeadIdx != -1 && ( !attackingUnit.isWide() || attackPositionTailIdx != -1 ) );
+        assert( attackPositionHeadIdx != -1 && ( attackingUnit.isWide() ? attackPositionTailIdx != -1 : attackPositionTailIdx == -1 ) );
 
         // The target cell of the attack is near the head cell of the attack position
         if ( Battle::Board::CanAttackFromCell( attackingUnit, attackPositionHeadIdx ) && Battle::Board::isNearIndexes( attackPositionHeadIdx, attackTargetIdx ) ) {
@@ -133,7 +133,7 @@ namespace
             return false;
         }
 
-        assert( !unit->isWide() || pos.GetTail() != nullptr );
+        assert( pos.isValidForUnit( unit ) );
 
         // Index of the destination cell should correspond to the index of the head cell of the target position and nothing else
         if ( pos.GetHead()->GetIndex() != dst ) {
@@ -310,7 +310,7 @@ void Battle::Arena::moveUnit( Unit * unit, const int32_t dst )
     assert( checkMoveParams( unit, dst ) );
 
     Position pos = Position::GetReachable( *unit, dst );
-    assert( pos.GetHead() != nullptr && ( !unit->isWide() || pos.GetTail() != nullptr ) );
+    assert( pos.isValidForUnit( unit ) );
 
     DEBUG_LOG( DBG_BATTLE, DBG_TRACE,
                unit->String() << ", dst: " << dst << ", (head: " << pos.GetHead()->GetIndex() << ", tail: " << ( unit->isWide() ? pos.GetTail()->GetIndex() : -1 )
@@ -559,7 +559,7 @@ void Battle::Arena::ApplyActionAttack( Command & cmd )
             return false;
         }
 
-        assert( !attacker->isWide() || attackPos.GetTail() != nullptr );
+        assert( attackPos.isValidForUnit( attacker ) );
 
         if ( tgt < 0 ) {
             tgt = calculateAttackTarget( *attacker, attackPos, *defender );
@@ -1510,7 +1510,7 @@ void Battle::Arena::ApplyActionSpellTeleport( Command & cmd )
     DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "src: " << src << ", dst: " << dst )
 
     const Position pos = Position::GetPosition( *unit, dst );
-    assert( pos.GetHead() != nullptr && ( !unit->isWide() || pos.GetTail() != nullptr ) );
+    assert( pos.isValidForUnit( unit ) );
 
     if ( _interface ) {
         const HeroBase * commander = GetCurrentCommander();
@@ -1633,7 +1633,7 @@ void Battle::Arena::ApplyActionSpellMirrorImage( Command & cmd )
         assert( mirrorUnit != nullptr );
 
         const Position pos = Position::GetPosition( *mirrorUnit, *it );
-        assert( pos.GetHead() != nullptr && ( !mirrorUnit->isWide() || pos.GetTail() != nullptr ) );
+        assert( pos.isValidForUnit( mirrorUnit ) );
 
         DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "set position: " << pos.GetHead()->GetIndex() )
 
