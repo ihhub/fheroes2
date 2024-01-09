@@ -919,10 +919,9 @@ namespace Interface
         else if ( groupType == Maps::ObjectGroup::ADVENTURE_MINES ) {
             int32_t type = -1;
             int32_t color = -1;
-            int32_t resource = -1;
 
-            _editorPanel.getMineObjectProperties( type, resource, color );
-            if ( type < 0 || color < 0 || resource < 0 ) {
+            _editorPanel.getMineObjectProperties( type, color );
+            if ( type < 0 || color < 0 ) {
                 // Check your logic!
                 assert( 0 );
                 return;

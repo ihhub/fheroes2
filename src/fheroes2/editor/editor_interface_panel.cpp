@@ -56,9 +56,6 @@
 
 namespace
 {
-    // There are 7 resource types + abandoned mine: total 8 resources.
-    const int32_t minesResourceCount = 8;
-
     fheroes2::Sprite getObjectImage( const Maps::ObjectGroup group, const int32_t type )
     {
         if ( type == -1 ) {
@@ -257,8 +254,7 @@ namespace Interface
                     // For mine we need to decode the objectType.
                     int32_t type = -1;
                     int32_t color = -1;
-                    int32_t resource = -1;
-                    getMineObjectProperties( type, resource, color );
+                    getMineObjectProperties( type, color );
 
                     return getObjectOccupiedArea( objectGroup, type );
                 }
@@ -758,10 +754,9 @@ namespace Interface
                 _interface.setCursorUpdater( [this]( const int32_t tileIndex ) {
                     int32_t type = -1;
                     int32_t color = -1;
-                    int32_t resource = -1;
-                    getMineObjectProperties( type, resource, color );
+                    getMineObjectProperties( type, color );
 
-                    if ( type == -1 || color == -1 || resource == -1 ) {
+                    if ( type == -1 || color == -1 ) {
                         // The object type is not set. We show the POINTER cursor for this case.
                         Cursor::Get().SetThemes( Cursor::POINTER );
                         return;
@@ -1010,12 +1005,11 @@ namespace Interface
                 handleObjectMouseClick( [this]( const int32_t /* type */ ) {
                     int32_t type = -1;
                     int32_t color = -1;
-                    int32_t resource = -1;
 
-                    getMineObjectProperties( type, resource, color );
-                    Dialog::selectMineType( type, resource, color );
+                    getMineObjectProperties( type, color );
+                    Dialog::selectMineType( type, color );
 
-                    return _generateMineObjectProperties( type, resource, color );
+                    return _generateMineObjectProperties( type, color );
                 } );
                 return res;
             }
@@ -1226,11 +1220,8 @@ namespace Interface
         return color * static_cast<int32_t>( townObjects.size() ) + type;
     }
 
-    void EditorPanel::getMineObjectProperties( int32_t & type, int32_t & resource, int32_t & color ) const
+    void EditorPanel::getMineObjectProperties( int32_t & type, int32_t & color ) const
     {
-        resource = _selectedAdventureObjectType[AdventureObjectBrush::MINES] % minesResourceCount;
-        const int32_t colorAndType = _selectedAdventureObjectType[AdventureObjectBrush::MINES] / minesResourceCount;
-
         const auto & mineObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_MINES );
         if ( mineObjects.empty() ) {
             // How is it even possible?
@@ -1240,14 +1231,12 @@ namespace Interface
             return;
         }
 
-        type = colorAndType % static_cast<int32_t>( mineObjects.size() );
-        color = colorAndType / static_cast<int32_t>( mineObjects.size() );
+        type = _selectedAdventureObjectType[AdventureObjectBrush::MINES] % static_cast<int32_t>( mineObjects.size() );
+        color = _selectedAdventureObjectType[AdventureObjectBrush::MINES] / static_cast<int32_t>( mineObjects.size() );
     }
 
-    int32_t EditorPanel::_generateMineObjectProperties( const int32_t type, const int32_t resource, const int32_t color )
+    int32_t EditorPanel::_generateMineObjectProperties( const int32_t type, const int32_t color )
     {
-        assert( resource < minesResourceCount );
-
         const auto & mineObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_MINES );
         if ( mineObjects.empty() ) {
             // How is it even possible?
@@ -1255,7 +1244,7 @@ namespace Interface
             return -1;
         }
 
-        const int32_t objectType = ( color * static_cast<int32_t>( mineObjects.size() ) + type ) * minesResourceCount + resource;
+        const int32_t objectType = ( color * static_cast<int32_t>( mineObjects.size() ) + type );
         return ( objectType < 0 ) ? -1 : objectType;
     }
 }

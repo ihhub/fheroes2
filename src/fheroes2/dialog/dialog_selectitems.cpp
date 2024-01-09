@@ -1249,7 +1249,7 @@ int Dialog::selectDwellingType( const int dwellingType )
     return selectObjectType( dwellingType, objectInfo.size(), listbox );
 }
 
-void Dialog::selectMineType( int32_t & type, int32_t & resource, int32_t & color )
+void Dialog::selectMineType( int32_t & type, int32_t & color )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     fheroes2::StandardWindow background( 380, 395, true, display );
@@ -1310,7 +1310,45 @@ void Dialog::selectMineType( int32_t & type, int32_t & resource, int32_t & color
 
     // Resource type selection mark.
     const fheroes2::Sprite & mark = fheroes2::AGG::GetICN( ICN::CELLWIN, 5 );
-    uint32_t selectedResourceType = ( resource < 0 ) ? 0 : resource;
+    uint32_t selectedResourceType = 0;
+
+    const std::vector<Maps::ObjectInfo> & allObjectInfo = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_MINES );
+    if ( type > 0 ) {
+        assert( static_cast<size_t>( type ) < allObjectInfo.size() );
+
+        if ( allObjectInfo[type].objectType == MP2::OBJ_ABANDONED_MINE ) {
+            selectedResourceType = 7;
+        }
+        else {
+            switch ( allObjectInfo[type].metadata[0] ) {
+            case Resource::ORE:
+                selectedResourceType = 2;
+                break;
+            case Resource::SULFUR:
+                selectedResourceType = 3;
+                break;
+            case Resource::CRYSTAL:
+                selectedResourceType = 4;
+                break;
+            case Resource::GEMS:
+                selectedResourceType = 5;
+                break;
+            case Resource::GOLD:
+                selectedResourceType = 6;
+                break;
+            case Resource::WOOD:
+                selectedResourceType = 0;
+                break;
+            case Resource::MERCURY:
+                selectedResourceType = 1;
+                break;
+            default:
+                // Have you added a new resource type for mines?
+                assert( 0 );
+            }
+        }
+    }
+
     fheroes2::MovableSprite resourceTypeSelection( mark );
     auto redrawResourceSelection = [&resourceTypeSelection, &mark]( const fheroes2::Rect & pos ) {
         resourceTypeSelection.setPosition( pos.x + 5, pos.y + ( pos.height - mark.height() ) / 2 );
@@ -1361,7 +1399,6 @@ void Dialog::selectMineType( int32_t & type, int32_t & resource, int32_t & color
         return MP2::OBJ_NONE;
     };
 
-    const std::vector<Maps::ObjectInfo> & allObjectInfo = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_MINES );
     std::vector<Maps::ObjectInfo> objectInfo;
     std::vector<int32_t> objectInfoIndexes;
 
@@ -1445,7 +1482,6 @@ void Dialog::selectMineType( int32_t & type, int32_t & resource, int32_t & color
 
         if ( listbox.isDoubleClicked() || le.MouseClickLeft( buttonOk.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) ) {
             type = objectInfoIndexes[listbox.getCurrentId()];
-            resource = static_cast<int32_t>( selectedResourceType );
             color = 0;
             return;
         }
