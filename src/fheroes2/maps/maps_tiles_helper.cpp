@@ -3229,8 +3229,8 @@ namespace Maps
             tile.metadata()[0] = info.metadata[0];
             return;
         case MP2::OBJ_ALCHEMIST_LAB:
-        case MP2::OBJ_SAWMILL:
         case MP2::OBJ_MINE:
+        case MP2::OBJ_SAWMILL:
             placeObjectOnTile( tile, info );
             // Set resource type and income per day.
             tile.metadata()[0] = info.metadata[0];
