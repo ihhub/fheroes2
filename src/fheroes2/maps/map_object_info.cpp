@@ -743,7 +743,7 @@ namespace
         // Magic Well.
         {
             Maps::ObjectInfo object{ MP2::OBJ_MAGIC_WELL };
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 162U, fheroes2::Point{ 0, 0 }, MP2::OBJ_MAGIC_WELL , Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 162U, fheroes2::Point{ 0, 0 }, MP2::OBJ_MAGIC_WELL, Maps::OBJECT_LAYER );
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 161U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
 
             objects.emplace_back( std::move( object ) );
@@ -752,7 +752,7 @@ namespace
         // Magic Well.
         {
             Maps::ObjectInfo object{ MP2::OBJ_MAGIC_WELL };
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 165U, fheroes2::Point{ 0, 0 }, MP2::OBJ_MAGIC_WELL , Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 165U, fheroes2::Point{ 0, 0 }, MP2::OBJ_MAGIC_WELL, Maps::OBJECT_LAYER );
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 164U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
 
             objects.emplace_back( std::move( object ) );
@@ -761,7 +761,7 @@ namespace
         // Magic Well.
         {
             Maps::ObjectInfo object{ MP2::OBJ_MAGIC_WELL };
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSNOW, 194U, fheroes2::Point{ 0, 0 }, MP2::OBJ_MAGIC_WELL , Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSNOW, 194U, fheroes2::Point{ 0, 0 }, MP2::OBJ_MAGIC_WELL, Maps::OBJECT_LAYER );
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSNOW, 193U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
 
             object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSNOW, 192U, fheroes2::Point{ 0, -1 }, MP2::OBJ_NONE );
@@ -772,7 +772,7 @@ namespace
         // Fort.
         {
             Maps::ObjectInfo object{ MP2::OBJ_FORT };
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMULT, 59U, fheroes2::Point{ 0, 0 }, MP2::OBJ_FORT , Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMULT, 59U, fheroes2::Point{ 0, 0 }, MP2::OBJ_FORT, Maps::OBJECT_LAYER );
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMULT, 58U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NON_ACTION_FORT, Maps::OBJECT_LAYER );
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMULT, 57U, fheroes2::Point{ -2, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
 
