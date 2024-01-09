@@ -60,6 +60,8 @@ namespace Battle
         Cell( const Cell & ) = delete;
         Cell( Cell && ) = default;
 
+        ~Cell() = default;
+
         Cell & operator=( const Cell & ) = delete;
         Cell & operator=( Cell && ) = delete;
 
