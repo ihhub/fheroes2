@@ -654,6 +654,89 @@ namespace
 
             objects.emplace_back( std::move( object ) );
         }
+
+        // Barrow Mounds (for Ghosts).
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_BARROW_MOUNDS };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC1, 77U, fheroes2::Point{ 0, 0 }, MP2::OBJ_BARROW_MOUNDS, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC1, 76U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NON_ACTION_BARROW_MOUNDS, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC1, 75U, fheroes2::Point{ -2, 0 }, MP2::OBJ_NON_ACTION_BARROW_MOUNDS, Maps::OBJECT_LAYER );
+
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC1, 74U, fheroes2::Point{ 0, -1 }, MP2::OBJ_NON_ACTION_BARROW_MOUNDS );
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC1, 73U, fheroes2::Point{ -1, -1 }, MP2::OBJ_NON_ACTION_BARROW_MOUNDS );
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC1, 72U, fheroes2::Point{ -2, -1 }, MP2::OBJ_NONE );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Earth Summoning Altar (for Earth Elementals).
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_EARTH_ALTAR };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC1, 94U, fheroes2::Point{ 0, 0 }, MP2::OBJ_EARTH_ALTAR, Maps::OBJECT_LAYER );
+            object.groundLevelParts.back().animationFrames = 8;
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC1, 103U, fheroes2::Point{ 1, 0 }, MP2::OBJ_NON_ACTION_EARTH_ALTAR, Maps::OBJECT_LAYER );
+            object.groundLevelParts.back().animationFrames = 8;
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC1, 85U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NON_ACTION_EARTH_ALTAR, Maps::OBJECT_LAYER );
+            object.groundLevelParts.back().animationFrames = 8;
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC1, 84U, fheroes2::Point{ -2, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC1, 83U, fheroes2::Point{ -3, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC1, 82U, fheroes2::Point{ 1, -1 }, MP2::OBJ_NON_ACTION_EARTH_ALTAR );
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC1, 81U, fheroes2::Point{ 0, -1 }, MP2::OBJ_NON_ACTION_EARTH_ALTAR );
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC1, 80U, fheroes2::Point{ -1, -1 }, MP2::OBJ_NON_ACTION_EARTH_ALTAR );
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC1, 79U, fheroes2::Point{ -2, -1 }, MP2::OBJ_NONE );
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC1, 78U, fheroes2::Point{ -3, -1 }, MP2::OBJ_NONE );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Air Summoning Altar (for Air Elementals).
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_AIR_ALTAR };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC1, 118U, fheroes2::Point{ 0, 0 }, MP2::OBJ_AIR_ALTAR, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC1, 119U, fheroes2::Point{ 1, 0 }, MP2::OBJ_NON_ACTION_AIR_ALTAR, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC1, 117U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NON_ACTION_AIR_ALTAR, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC1, 116U, fheroes2::Point{ -2, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC1, 115U, fheroes2::Point{ 1, -1 }, MP2::OBJ_NON_ACTION_AIR_ALTAR );
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC1, 114U, fheroes2::Point{ 0, -1 }, MP2::OBJ_NON_ACTION_AIR_ALTAR );
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC1, 113U, fheroes2::Point{ -1, -1 }, MP2::OBJ_NONE );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Fire Summoning Altar (for Fire Elementals).
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_FIRE_ALTAR };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC1, 127U, fheroes2::Point{ 0, 0 }, MP2::OBJ_FIRE_ALTAR, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC1, 128U, fheroes2::Point{ 1, 0 }, MP2::OBJ_NON_ACTION_FIRE_ALTAR, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC1, 126U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NON_ACTION_FIRE_ALTAR, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC1, 125U, fheroes2::Point{ -2, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC1, 124U, fheroes2::Point{ -3, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC1, 123U, fheroes2::Point{ 1, -1 }, MP2::OBJ_NON_ACTION_FIRE_ALTAR );
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC1, 122U, fheroes2::Point{ 0, -1 }, MP2::OBJ_NON_ACTION_FIRE_ALTAR );
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC1, 121U, fheroes2::Point{ -1, -1 }, MP2::OBJ_NON_ACTION_FIRE_ALTAR );
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC1, 120U, fheroes2::Point{ -2, -1 }, MP2::OBJ_NONE );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Water Summoning Altar (for Water Elementals).
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_WATER_ALTAR };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC1, 135U, fheroes2::Point{ 0, 0 }, MP2::OBJ_WATER_ALTAR, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC1, 136U, fheroes2::Point{ 1, 0 }, MP2::OBJ_NON_ACTION_WATER_ALTAR, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC1, 134U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NON_ACTION_WATER_ALTAR, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC1, 133U, fheroes2::Point{ -2, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC1, 132U, fheroes2::Point{ 1, -1 }, MP2::OBJ_NON_ACTION_WATER_ALTAR );
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC1, 131U, fheroes2::Point{ 0, -1 }, MP2::OBJ_NON_ACTION_WATER_ALTAR );
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC1, 130U, fheroes2::Point{ -1, -1 }, MP2::OBJ_NON_ACTION_WATER_ALTAR );
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC1, 129U, fheroes2::Point{ -2, -1 }, MP2::OBJ_NONE );
+
+            objects.emplace_back( std::move( object ) );
+        }
     }
 
     void populateAdventureMines( std::vector<Maps::ObjectInfo> & objects )
@@ -945,6 +1028,135 @@ namespace
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMULT, 71U, fheroes2::Point{ 0, 0 }, MP2::OBJ_MERCENARY_CAMP, Maps::OBJECT_LAYER );
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMULT, 72U, fheroes2::Point{ 1, 0 }, MP2::OBJ_NON_ACTION_MERCENARY_CAMP, Maps::OBJECT_LAYER );
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMULT, 70U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NON_ACTION_MERCENARY_CAMP, Maps::OBJECT_LAYER );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Shrine of the First Circle.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_SHRINE_FIRST_CIRCLE };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMULT, 80U, fheroes2::Point{ 0, 0 }, MP2::OBJ_SHRINE_FIRST_CIRCLE, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMULT, 79U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Shrine of the Second Circle.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_SHRINE_SECOND_CIRCLE };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMULT, 76U, fheroes2::Point{ 0, 0 }, MP2::OBJ_SHRINE_SECOND_CIRCLE, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMULT, 75U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Shrine of the Third Circle.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_SHRINE_THIRD_CIRCLE };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMULT, 78U, fheroes2::Point{ 0, 0 }, MP2::OBJ_SHRINE_THIRD_CIRCLE, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMULT, 77U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Idol.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_IDOL };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMULT, 82U, fheroes2::Point{ 0, 0 }, MP2::OBJ_IDOL, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMULT, 81U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Standing Stones.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_STANDING_STONES };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMULT, 84U, fheroes2::Point{ 0, 0 }, MP2::OBJ_STANDING_STONES, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMULT, 85U, fheroes2::Point{ 1, 0 }, MP2::OBJ_STANDING_STONES, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMULT, 83U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Temple.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_TEMPLE };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMULT, 88U, fheroes2::Point{ 0, 0 }, MP2::OBJ_TEMPLE, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMULT, 89U, fheroes2::Point{ 1, 0 }, MP2::OBJ_NON_ACTION_TEMPLE, Maps::OBJECT_LAYER );
+
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMULT, 87U, fheroes2::Point{ 1, -1 }, MP2::OBJ_NON_ACTION_FORT );
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMULT, 86U, fheroes2::Point{ 0, -1 }, MP2::OBJ_NON_ACTION_FORT );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Tree of Knowledge.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_TREE_OF_KNOWLEDGE };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMULT, 123U, fheroes2::Point{ 0, 0 }, MP2::OBJ_TREE_OF_KNOWLEDGE, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMULT, 122U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMULT, 121U, fheroes2::Point{ -2, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMULT, 120U, fheroes2::Point{ 0, -1 }, MP2::OBJ_NON_ACTION_TREE_OF_KNOWLEDGE );
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMULT, 119U, fheroes2::Point{ -1, -1 }, MP2::OBJ_NON_ACTION_TREE_OF_KNOWLEDGE );
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMULT, 118U, fheroes2::Point{ 0, -2 }, MP2::OBJ_NON_ACTION_TREE_OF_KNOWLEDGE );
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMULT, 117U, fheroes2::Point{ -1, -2 }, MP2::OBJ_NONE );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Xanadu.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_XANADU };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 81U, fheroes2::Point{ 0, 0 }, MP2::OBJ_XANADU, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 82U, fheroes2::Point{ 1, 0 }, MP2::OBJ_NON_ACTION_XANADU, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 74U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NON_ACTION_XANADU, Maps::OBJECT_LAYER );
+            object.groundLevelParts.back().animationFrames = 6;
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 67U, fheroes2::Point{ -2, 0 }, MP2::OBJ_NON_ACTION_XANADU, Maps::OBJECT_LAYER );
+            object.groundLevelParts.back().animationFrames = 6;
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 66U, fheroes2::Point{ -3, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 65U, fheroes2::Point{ 1, -1 }, MP2::OBJ_NON_ACTION_XANADU );
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 58U, fheroes2::Point{ 0, -1 }, MP2::OBJ_NON_ACTION_XANADU );
+            object.topLevelParts.back().animationFrames = 6;
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 51U, fheroes2::Point{ -1, -1 }, MP2::OBJ_NON_ACTION_XANADU );
+            object.topLevelParts.back().animationFrames = 6;
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 50U, fheroes2::Point{ -2, -1 }, MP2::OBJ_NON_ACTION_XANADU );
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 43U, fheroes2::Point{ -3, -1 }, MP2::OBJ_NON_ACTION_XANADU );
+            object.topLevelParts.back().animationFrames = 6;
+
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 42U, fheroes2::Point{ 1, -2 }, MP2::OBJ_NONE );
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 41U, fheroes2::Point{ 0, -2 }, MP2::OBJ_NONE );
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 34U, fheroes2::Point{ -1, -2 }, MP2::OBJ_NON_ACTION_XANADU );
+            object.topLevelParts.back().animationFrames = 6;
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Arena.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_ARENA };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC1, 70U, fheroes2::Point{ 0, 0 }, MP2::OBJ_ARENA, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC1, 71U, fheroes2::Point{ 1, 0 }, MP2::OBJ_NON_ACTION_ARENA, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC1, 69U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NON_ACTION_ARENA, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC1, 68U, fheroes2::Point{ -2, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC1, 59U, fheroes2::Point{ -3, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            object.groundLevelParts.back().animationFrames = 8;
+
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC1, 50U, fheroes2::Point{ 1, -1 }, MP2::OBJ_NON_ACTION_ARENA );
+            object.topLevelParts.back().animationFrames = 8;
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC1, 49U, fheroes2::Point{ 0, -1 }, MP2::OBJ_NON_ACTION_ARENA );
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC1, 40U, fheroes2::Point{ -1, -1 }, MP2::OBJ_NON_ACTION_ARENA );
+            object.topLevelParts.back().animationFrames = 8;
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC1, 31U, fheroes2::Point{ -2, -1 }, MP2::OBJ_NONE );
+            object.topLevelParts.back().animationFrames = 8;
+
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC1, 22U, fheroes2::Point{ 1, -2 }, MP2::OBJ_NON_ACTION_ARENA );
+            object.topLevelParts.back().animationFrames = 8;
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC1, 13U, fheroes2::Point{ 0, -2 }, MP2::OBJ_NON_ACTION_ARENA );
+            object.topLevelParts.back().animationFrames = 8;
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC1, 4U, fheroes2::Point{ -1, -2 }, MP2::OBJ_NONE );
+            object.topLevelParts.back().animationFrames = 8;
 
             objects.emplace_back( std::move( object ) );
         }
