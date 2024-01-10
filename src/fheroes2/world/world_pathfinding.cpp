@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2023                                             *
+ *   Copyright (C) 2020 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -27,7 +27,6 @@
 #include <memory>
 #include <set>
 #include <tuple>
-#include <type_traits>
 #include <utility>
 
 #include "army.h"
@@ -876,114 +875,110 @@ uint32_t AIWorldPathfinder::getMovementPenalty( const int from, const int to, co
     return defaultPenalty;
 }
 
-int AIWorldPathfinder::getFogDiscoveryTile( const Heroes & hero, bool & isTerritoryExpansion )
+std::pair<int32_t, bool> AIWorldPathfinder::getFogDiscoveryTile( const Heroes & hero )
 {
-    isTerritoryExpansion = false;
-
-    // paths have to be pre-calculated to find a spot where we're able to move
     reEvaluateIfNeeded( hero );
 
-    const int start = hero.GetIndex();
     const int scoutingDistance = hero.GetScoutingDistance();
-
     const Directions & directions = Direction::All();
-    std::vector<bool> tilesVisited( world.getSize(), false );
-    std::vector<int> nodesToExplore;
 
-    tilesVisited[start] = true;
+    struct TileCharacteristics
+    {
+        int32_t index{ -1 };
+        bool isFogNearby{ false };
+        uint32_t cost{ UINT32_MAX };
+        int32_t tilesToReveal{ 0 };
+    };
 
-    nodesToExplore.push_back( start );
+    TileCharacteristics bestTile;
 
-    int bestIndex = -1;
-
-    for ( size_t lastProcessedNode = 0; lastProcessedNode < nodesToExplore.size(); ++lastProcessedNode ) {
-        const int currentNodeIdx = nodesToExplore[lastProcessedNode];
-
-        if ( bestIndex == -1 && start != currentNodeIdx ) {
-            int32_t maxTilesToReveal = Maps::getFogTileCountToBeRevealed( currentNodeIdx, scoutingDistance, _color );
-            if ( maxTilesToReveal > 0 ) {
-                // Found a tile where we can reveal fog. Check for other tiles in the queue to find the one with the highest value.
-                bestIndex = currentNodeIdx;
-                for ( size_t i = lastProcessedNode + 1; i < nodesToExplore.size(); ++i ) {
-                    const int nodeIdx = nodesToExplore[i];
-                    const int32_t tilesToReveal = Maps::getFogTileCountToBeRevealed( nodeIdx, scoutingDistance, _color );
-
-                    if ( std::make_tuple( maxTilesToReveal, _cache[nodeIdx]._cost ) < std::make_tuple( tilesToReveal, _cache[bestIndex]._cost ) ) {
-                        maxTilesToReveal = tilesToReveal;
-                        bestIndex = nodeIdx;
-                    }
-                }
-            }
+    for ( size_t idx = 0; idx < _cache.size(); ++idx ) {
+        const uint32_t nodeCost = _cache[idx]._cost;
+        if ( nodeCost == 0 ) {
+            continue;
         }
 
-        for ( size_t i = 0; i < directions.size(); ++i ) {
-            if ( !Maps::isValidDirection( currentNodeIdx, directions[i] ) ) {
-                continue;
-            }
+        const int32_t tileIdx = static_cast<int32_t>( idx );
+        if ( !MP2::isSafeForFogDiscoveryObject( world.GetTiles( tileIdx ).GetObject( true ) ) ) {
+            continue;
+        }
 
-            const int newIndex = currentNodeIdx + _mapOffset[i];
+        // It makes sense to consider only two types of accessible tiles for fog discovery: tiles that have at least one neighboring tile covered with fog, and tiles that
+        // have at least one neighboring tile inaccessible to the hero (since there may be unexplored tiles covered with fog on the other side of such an obstacle).
+        const auto [isFogNearby, isInaccessibleTileNearby] = [this, &directions, tileIdx]() {
+            std::pair<bool, bool> res{ false, false };
 
-            if ( tilesVisited[newIndex] ) {
-                continue;
-            }
-
-            tilesVisited[newIndex] = true;
-
-            if ( !MP2::isSafeForFogDiscoveryObject( world.GetTiles( newIndex ).GetObject( true ) ) ) {
-                continue;
-            }
-
-            // Tile is unreachable (maybe because it is guarded by too strong an army)
-            if ( _cache[newIndex]._cost == 0 ) {
-                continue;
-            }
-
-            for ( const int32_t tileIndex : Maps::getAroundIndexes( newIndex ) ) {
-                if ( world.GetTiles( tileIndex ).isFog( _color ) ) {
-                    // We found a tile which has a neighboring tile covered in fog.
-                    // Since the current tile is accessible for the hero, the tile covered by fog most likely is accessible too.
-                    isTerritoryExpansion = true;
-                    return newIndex;
-                }
-            }
-
-            nodesToExplore.push_back( newIndex );
-
-            // If there is a teleport on this tile, we should also consider the endpoints
-            MapsIndexes teleports = world.GetTeleportEndPoints( newIndex );
-
-            if ( teleports.empty() ) {
-                teleports = world.GetWhirlpoolEndPoints( newIndex );
-            }
-
-            for ( const int teleportIndex : teleports ) {
-                if ( tilesVisited[teleportIndex] ) {
+            for ( size_t i = 0; i < directions.size(); ++i ) {
+                if ( !Maps::isValidDirection( tileIdx, directions[i] ) ) {
                     continue;
                 }
 
-                tilesVisited[teleportIndex] = true;
+                const int32_t nearbyIdx = tileIdx + _mapOffset[i];
 
-                // Teleport endpoint is unreachable (maybe because it is guarded by too strong an army)
-                if ( _cache[teleportIndex]._cost == 0 ) {
-                    continue;
+                // If at least one neighboring tile is covered with fog, then this is already enough to consider this tile
+                if ( world.GetTiles( nearbyIdx ).isFog( _color ) ) {
+                    res.first = true;
+
+                    break;
                 }
 
-                for ( const int32_t tileIndex : Maps::getAroundIndexes( teleportIndex ) ) {
-                    if ( world.GetTiles( tileIndex ).isFog( _color ) ) {
-                        // We found a tile which has a neighboring tile covered in fog.
-                        // Since the current tile is accessible for the hero, the tile covered by fog most likely is accessible too.
-                        isTerritoryExpansion = true;
-                        return teleportIndex;
-                    }
+                // If some neighboring tile is inaccessible to the hero, then that's good, but maybe there will also be a neighboring tile covered with fog
+                if ( _cache[nearbyIdx]._cost == 0 ) {
+                    res.second = true;
                 }
-
-                nodesToExplore.push_back( teleportIndex );
             }
+
+            return res;
+        }();
+
+        // If we have found at least one accessible tile, the neighboring tile of which is covered with fog, then we are no longer interested in tiles that simply reveal
+        // some new distant tiles.
+        if ( bestTile.isFogNearby ? !isFogNearby : ( !isFogNearby && !isInaccessibleTileNearby ) ) {
+            continue;
         }
+
+        const int32_t tilesToReveal = Maps::getFogTileCountToBeRevealed( tileIdx, scoutingDistance, _color );
+        assert( tilesToReveal >= 0 );
+
+        // If visiting this tile does not reveal any new tiles, then we are not interested in this tile.
+        if ( tilesToReveal == 0 ) {
+            continue;
+        }
+
+        const bool isBetterTile = [&bestTile = std::as_const( bestTile ), nodeCost, isFogNearby = isFogNearby, tilesToReveal]() {
+            if ( isFogNearby && !bestTile.isFogNearby ) {
+                return true;
+            }
+
+            if ( isFogNearby != bestTile.isFogNearby ) {
+                return false;
+            }
+
+            if ( nodeCost < bestTile.cost ) {
+                return true;
+            }
+
+            if ( nodeCost != bestTile.cost ) {
+                return false;
+            }
+
+            if ( tilesToReveal > bestTile.tilesToReveal ) {
+                return true;
+            }
+
+            return false;
+        }();
+
+        if ( !isBetterTile ) {
+            continue;
+        }
+
+        // If we have found an accessible tile, the neighboring tile of which is covered with fog, then, most likely, that neighboring tile is also accessible. Such
+        // tiles have priority over those that simply reveal some new distant tiles.
+        bestTile = { tileIdx, isFogNearby, nodeCost, tilesToReveal };
     }
 
-    // If we reach here it means that no tiles covered by fog are really useful. Let's at least uncover something even if it's useless.
-    return bestIndex;
+    return { bestTile.index, bestTile.isFogNearby };
 }
 
 int AIWorldPathfinder::getNearestTileToMove( const Heroes & hero )
