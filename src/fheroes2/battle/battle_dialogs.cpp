@@ -556,7 +556,7 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
     Copy( sequenceStart, 0, 0, display, animationRoi.x, animationRoi.y, sequenceStart.width(), sequenceStart.height() );
 
     const fheroes2::Rect summaryRoi( roi.x + 11, roi.y + bsTextYOffset, roi.width - 22, roi.height - bsTextYOffset - 46 );
-    const uint32_t casualtiesOffsetY = summaryRoi.y + 96;
+    const int32_t casualtiesOffsetY = summaryRoi.y + 96;
     int32_t summaryBodyOffset = summaryRoi.y;
     int32_t remainingSummaryBodyHeight = casualtiesOffsetY - summaryBodyOffset;
     if ( !title.empty() ) {
@@ -678,7 +678,7 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
 
         for ( const Artifact & art : artifacts ) {
             if ( isWinnerHuman || art.isUltimate() ) { // always show the message for ultimate artifacts
-                background.renderBackgroundImage( display, summaryRoi, 0, isEvilInterface );
+                fheroes2::StandardWindow::renderBackgroundImage( display, summaryRoi, 0, isEvilInterface );
 
                 std::string artMsg;
                 if ( art.isUltimate() ) {
