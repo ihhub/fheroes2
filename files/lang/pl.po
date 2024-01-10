@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-04 12:56+0000\n"
+"POT-Creation-Date: 2024-01-10 08:55+0000\n"
 "PO-Revision-Date: 2023-08-26 23:09+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: https://discord.com/"
@@ -3420,6 +3420,27 @@ msgstr "Kliknij tutaj, aby wybrać scenariusz, który chcesz rozegrać."
 msgid "Click to select this color."
 msgstr "Kliknij tutaj, aby wybrać scenariusz, który chcesz rozegrać."
 
+#, fuzzy
+msgid "Select Dwelling:"
+msgstr "Wybierz zaklęcie:"
+
+msgid "Mine placing"
+msgstr ""
+
+#, fuzzy
+msgid ""
+"Resource\n"
+"type:"
+msgstr "Surowiec"
+
+#, fuzzy
+msgid "%{mineName} appearance:"
+msgstr "%{name}, %{race}"
+
+#, fuzzy
+msgid "Click to select %{object} as the resource generator to be placed."
+msgstr "Kliknij tutaj, aby wybrać scenariusz, który chcesz rozegrać."
+
 msgid "Map Type:\n"
 msgstr "Typ Mapy:\n"
 
@@ -3757,6 +3778,10 @@ msgstr "To zaklęcie nie może być rzucone z łodzi."
 
 #, fuzzy
 msgid "Towns cannot be placed on water."
+msgstr "To zaklęcie nie może być rzucone z łodzi."
+
+#, fuzzy
+msgid "Mines cannot be placed on water."
 msgstr "To zaklęcie nie może być rzucone z łodzi."
 
 #, fuzzy

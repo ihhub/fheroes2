@@ -239,9 +239,14 @@ namespace Interface
         return editorInterface;
     }
 
-    fheroes2::GameMode Interface::EditorInterface::startEdit()
+    fheroes2::GameMode Interface::EditorInterface::startEdit( const bool isNewMap )
     {
         reset();
+
+        if ( isNewMap ) {
+            _mapFormat = {};
+            Maps::saveMapInEditor( _mapFormat );
+        }
 
         // Stop all sounds and music.
         AudioManager::ResetAudio();
@@ -741,7 +746,7 @@ namespace Interface
                 return;
             }
 
-            setObjectOnTile( tile, objectInfo );
+            setObjectOnTileAsAction( tile, groupType, _editorPanel.getSelectedObjectType() );
         }
         else if ( groupType == Maps::ObjectGroup::ADVENTURE_TREASURES ) {
             const auto & objectInfo = getObjectInfo( groupType, _editorPanel.getSelectedObjectType() );
@@ -761,7 +766,7 @@ namespace Interface
                 return;
             }
 
-            setObjectOnTile( tile, objectInfo );
+            setObjectOnTileAsAction( tile, groupType, _editorPanel.getSelectedObjectType() );
         }
         else if ( groupType == Maps::ObjectGroup::KINGDOM_HEROES ) {
             const auto & objectInfo = getObjectInfo( groupType, _editorPanel.getSelectedObjectType() );
@@ -781,7 +786,7 @@ namespace Interface
                 return;
             }
 
-            setObjectOnTile( tile, objectInfo );
+            setObjectOnTileAsAction( tile, groupType, _editorPanel.getSelectedObjectType() );
         }
         else if ( groupType == Maps::ObjectGroup::ADVENTURE_ARTIFACTS ) {
             const auto & objectInfo = getObjectInfo( groupType, _editorPanel.getSelectedObjectType() );
@@ -815,11 +820,11 @@ namespace Interface
                     return;
                 }
 
-                setObjectOnTile( tile, objectInfo );
+                setObjectOnTileAsAction( tile, groupType, _editorPanel.getSelectedObjectType() );
                 Maps::setSpellOnTile( tile, spellId );
             }
             else {
-                setObjectOnTile( tile, objectInfo );
+                setObjectOnTileAsAction( tile, groupType, _editorPanel.getSelectedObjectType() );
             }
         }
         else if ( groupType == Maps::ObjectGroup::LANDSCAPE_MOUNTAINS ) {
@@ -880,7 +885,7 @@ namespace Interface
                 return;
             }
 
-            setObjectOnTile( tile, objectInfo );
+            setObjectOnTileAsAction( tile, groupType, _editorPanel.getSelectedObjectType() );
         }
         else if ( groupType == Maps::ObjectGroup::KINGDOM_TOWNS ) {
             int32_t type = -1;
@@ -935,7 +940,7 @@ namespace Interface
 
             const fheroes2::ActionCreator action( _historyManager, _mapFormat );
 
-            Maps::setObjectOnTile( tile, basementObjectInfo );
+            setObjectOnTile( tile, Maps::ObjectGroup::LANDSCAPE_TOWN_BASEMENTS, basementId );
 
             // Since the whole object consists of multiple "objects" we have to put the same ID for all of them.
             // Every time an object is being placed on a map the counter is going to be increased by 1.
@@ -944,17 +949,52 @@ namespace Interface
             const uint32_t objectId = Maps::getLastObjectUID() - 1;
 
             Maps::setLastObjectUID( objectId );
-            Maps::setObjectOnTile( tile, townObjectInfo );
+
+            setObjectOnTile( tile, groupType, type );
 
             // Add flags.
             assert( tile.GetIndex() > 0 && tile.GetIndex() < world.w() * world.h() - 1 );
             Maps::setLastObjectUID( objectId );
-            Maps::setObjectOnTile( world.GetTiles( tile.GetIndex() - 1 ), getObjectInfo( Maps::ObjectGroup::LANDSCAPE_FLAGS, color * 2 ) );
+
+            setObjectOnTile( world.GetTiles( tile.GetIndex() - 1 ), Maps::ObjectGroup::LANDSCAPE_FLAGS, color * 2 );
 
             Maps::setLastObjectUID( objectId );
-            Maps::setObjectOnTile( world.GetTiles( tile.GetIndex() + 1 ), getObjectInfo( Maps::ObjectGroup::LANDSCAPE_FLAGS, color * 2 + 1 ) );
 
-            _redraw |= mapUpdateFlags;
+            setObjectOnTile( world.GetTiles( tile.GetIndex() + 1 ), Maps::ObjectGroup::LANDSCAPE_FLAGS, color * 2 + 1 );
+        }
+        else if ( groupType == Maps::ObjectGroup::ADVENTURE_MINES ) {
+            int32_t type = -1;
+            int32_t color = -1;
+
+            _editorPanel.getMineObjectProperties( type, color );
+            if ( type < 0 || color < 0 ) {
+                // Check your logic!
+                assert( 0 );
+                return;
+            }
+
+            const auto & objectInfo = getObjectInfo( groupType, type );
+
+            if ( !isObjectPlacementAllowed( objectInfo, tilePos ) ) {
+                _warningMessage.reset( _( "Objects cannot be placed outside the map." ) );
+                return;
+            }
+
+            if ( !verifyObjectCondition( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return !tileToCheck.isWater(); } ) ) {
+                _warningMessage.reset( _( "Mines cannot be placed on water." ) );
+                return;
+            }
+
+            if ( !verifyObjectCondition( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return Maps::isClearGround( tileToCheck ); } ) ) {
+                _warningMessage.reset( _( "Choose a tile which does not contain any objects." ) );
+                return;
+            }
+
+            const fheroes2::ActionCreator action( _historyManager, _mapFormat );
+
+            setObjectOnTile( tile, groupType, type );
+
+            // TODO: Place owner flag according to the color state.
         }
         else if ( groupType == Maps::ObjectGroup::ADVENTURE_DWELLINGS ) {
             const auto & objectInfo = getObjectInfo( groupType, _editorPanel.getSelectedObjectType() );
@@ -974,7 +1014,7 @@ namespace Interface
                 return;
             }
 
-            setObjectOnTile( tile, objectInfo );
+            setObjectOnTileAsAction( tile, groupType, _editorPanel.getSelectedObjectType() );
         }
     }
 
@@ -993,13 +1033,26 @@ namespace Interface
         }
     }
 
-    void EditorInterface::setObjectOnTile( Maps::Tiles & tile, const Maps::ObjectInfo & objectInfo )
+    void EditorInterface::setObjectOnTile( Maps::Tiles & tile, const Maps::ObjectGroup groupType, const int32_t objectIndex )
+    {
+        const auto & objectInfo = getObjectInfo( groupType, objectIndex );
+        if ( objectInfo.empty() ) {
+            // Check your logic as you are trying to insert an empty object!
+            assert( 0 );
+            return;
+        }
+
+        Maps::setObjectOnTile( tile, objectInfo );
+        Maps::addObjectToMap( _mapFormat, tile.GetIndex(), groupType, static_cast<uint32_t>( objectIndex ) );
+
+        _redraw |= mapUpdateFlags;
+    }
+
+    void EditorInterface::setObjectOnTileAsAction( Maps::Tiles & tile, const Maps::ObjectGroup groupType, const int32_t objectIndex )
     {
         const fheroes2::ActionCreator action( _historyManager, _mapFormat );
 
-        Maps::setObjectOnTile( tile, objectInfo );
-
-        _redraw |= mapUpdateFlags;
+        setObjectOnTile( tile, groupType, objectIndex );
     }
 
     bool EditorInterface::loadMap( const std::string & filePath )

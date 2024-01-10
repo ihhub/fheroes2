@@ -27,6 +27,7 @@
 #include <array>
 #include <cassert>
 #include <cstddef>
+#include <iterator>
 #include <memory>
 #include <numeric>
 #include <utility>
@@ -65,6 +66,7 @@
 #include "ui_map_object.h"
 #include "ui_scrollbar.h"
 #include "ui_text.h"
+#include "ui_tool.h"
 #include "ui_window.h"
 #include "world.h"
 
@@ -459,7 +461,17 @@ namespace
             assert( objectId >= 0 && objectId < static_cast<int>( _objectInfo.size() ) );
 
             const fheroes2::Sprite & image = fheroes2::generateMapObjectImage( _objectInfo[objectId] );
-            renderItem( image, getObjectName( _objectInfo[objectId] ), { posX, posY }, _imageOffsetX, _textOffsetX, _offsetY / 2, isSelected );
+            const int32_t imageHeight = image.height();
+            if ( imageHeight > TILEWIDTH * 2 ) {
+                // Reduce the size of very tall images to fit the list.
+                const double ratio = imageHeight / ( TILEWIDTH * 2. );
+                fheroes2::Image resized( static_cast<int32_t>( image.width() / ratio ), static_cast<int32_t>( imageHeight / ratio ) );
+                fheroes2::Resize( image, resized );
+                renderItem( resized, getObjectName( _objectInfo[objectId] ), { posX, posY }, _imageOffsetX, _textOffsetX, _offsetY / 2, isSelected );
+            }
+            else {
+                renderItem( image, getObjectName( _objectInfo[objectId] ), { posX, posY }, _imageOffsetX, _textOffsetX, _offsetY / 2, isSelected );
+            }
         }
 
         void ActionListPressRight( int & objectId ) override
@@ -698,6 +710,112 @@ namespace
         const int32_t result = objectSelection.selectItemsEventProcessing();
         return result == Dialog::OK || objectSelection.ok ? objectSelection.GetCurrent() : -1;
     }
+
+    class MineTypeList : public Interface::ListBox<Maps::ObjectInfo>
+    {
+    public:
+        using Interface::ListBox<Maps::ObjectInfo>::ActionListDoubleClick;
+        using Interface::ListBox<Maps::ObjectInfo>::ActionListSingleClick;
+        using Interface::ListBox<Maps::ObjectInfo>::ActionListPressRight;
+
+        using ListBox::ListBox;
+
+        void ActionListPressRight( Maps::ObjectInfo & info ) override
+        {
+            if ( info.objectType == MP2::OBJ_MINE ) {
+                // Mine description is done by its resource type stored in metadata.
+                fheroes2::showStandardTextMessage( Maps::GetMineName( static_cast<int>( info.metadata[0] ) ), "", Dialog::ZERO );
+                return;
+            }
+            fheroes2::showStandardTextMessage( MP2::StringObject( info.objectType ), "", Dialog::ZERO );
+        }
+
+        int getCurrentId() const
+        {
+            return _currentId;
+        }
+
+        void initListBackgroundRestorer( fheroes2::Rect roi )
+        {
+            _listBackground = std::make_unique<fheroes2::ImageRestorer>( fheroes2::Display::instance(), roi.x, roi.y, roi.width, roi.height );
+        }
+
+        bool isDoubleClicked() const
+        {
+            return _isDoubleClicked;
+        }
+
+        void updateScrollBarImage()
+        {
+            const int32_t scrollBarWidth = _scrollbar.width();
+
+            setScrollBarImage( fheroes2::generateScrollbarSlider( _scrollbar, false, _scrollbar.getArea().height, VisibleItemCount(), _size(),
+                                                                  { 0, 0, scrollBarWidth, 8 }, { 0, 7, scrollBarWidth, 8 } ) );
+            _scrollbar.moveToIndex( _topId );
+        }
+
+        void RedrawItem( const Maps::ObjectInfo & info, int32_t dstx, int32_t dsty, bool current ) override
+        {
+            if ( _color < 0 ) {
+                assert( 0 );
+                return;
+            }
+
+            const fheroes2::Sprite mineSprite( fheroes2::generateMapObjectImage( info ) );
+
+            fheroes2::Display & display = fheroes2::Display::instance();
+
+            fheroes2::Blit( mineSprite, display, dstx + TILEWIDTH * 5 + 5 - mineSprite.width(), dsty + 1 );
+
+            // Mine type selection mark background.
+            fheroes2::Sprite markBackground = fheroes2::AGG::GetICN( ICN::CELLWIN, 4 );
+            if ( Settings::Get().isEvilInterfaceEnabled() ) {
+                fheroes2::ApplyPalette( markBackground,
+                                        PAL::CombinePalettes( PAL::GetPalette( PAL::PaletteType::GRAY ), PAL::GetPalette( PAL::PaletteType::DARKENING ) ) );
+            }
+            fheroes2::Blit( markBackground, display, dstx + 10, dsty + 24 );
+
+            if ( current ) {
+                const fheroes2::Sprite & mark = fheroes2::AGG::GetICN( ICN::CELLWIN, 5 );
+                fheroes2::Blit( mark, display, dstx + 13, dsty + 27 );
+            }
+        }
+
+        void RedrawBackground( const fheroes2::Point & /* unused */ ) override
+        {
+            _listBackground->restore();
+        }
+
+        void ActionCurrentUp() override
+        {
+            // Do nothing.
+        }
+
+        void ActionCurrentDn() override
+        {
+            // Do nothing.
+        }
+
+        void ActionListDoubleClick( Maps::ObjectInfo & /*unused*/ ) override
+        {
+            _isDoubleClicked = true;
+        }
+
+        void ActionListSingleClick( Maps::ObjectInfo & /*unused*/ ) override
+        {
+            // Do nothing.
+        }
+
+        void setOwnerColor( const int32_t color )
+        {
+            _color = color;
+        }
+
+    private:
+        bool _isDoubleClicked{ false };
+        int32_t _color{ 0 };
+        std::unique_ptr<fheroes2::ImageRestorer> _listBackground;
+    };
 }
 
 int32_t Dialog::selectKingdomCastle( const Kingdom & kingdom, const bool notOccupiedByHero, std::string title, std::string description /* = {} */,
@@ -1000,7 +1118,7 @@ void Dialog::selectTownType( int & type, int & color )
     background.renderButton( buttonCastle, isEvilInterface ? ICN::BUTTON_CASTLE_EVIL : ICN::BUTTON_CASTLE_GOOD, 0, 1, { 50, 7 },
                              fheroes2::StandardWindow::Padding::BOTTOM_CENTER );
 
-    fheroes2::ImageRestorer castleBackground( display, pos.x - 7 * 32 + 16, pos.y - 4 * 32 + 16, 9 * 32, 5 * 32 );
+    fheroes2::ImageRestorer castleBackground( display, pos.x - 7 * TILEWIDTH + TILEWIDTH / 2, pos.y - 4 * TILEWIDTH + TILEWIDTH / 2, 9 * TILEWIDTH, 5 * TILEWIDTH );
 
     LocalEvent & le = LocalEvent::Get();
     bool needRedraw = true;
@@ -1126,9 +1244,295 @@ int Dialog::selectDwellingType( const int dwellingType )
 {
     const auto & objectInfo = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_DWELLINGS );
 
-    DwellingTypeSelection listbox( objectInfo, { 420, fheroes2::Display::instance().height() - 180 }, _( "Select Ocean Object:" ) );
+    DwellingTypeSelection listbox( objectInfo, { 420, fheroes2::Display::instance().height() - 180 }, _( "Select Dwelling:" ) );
 
     return selectObjectType( dwellingType, objectInfo.size(), listbox );
+}
+
+void Dialog::selectMineType( int32_t & type, int32_t & color )
+{
+    fheroes2::Display & display = fheroes2::Display::instance();
+    fheroes2::StandardWindow background( 380, 395, true, display );
+
+    const fheroes2::Rect & area = background.activeArea();
+
+    fheroes2::Text text( _( "Mine placing" ), fheroes2::FontType::normalYellow() );
+    int32_t offsetY = area.y + 10;
+    text.draw( area.x + ( area.width - text.width() ) / 2, offsetY, display );
+
+    // There are 7 resource types (WOOD, MERCURY, ORE, SULFUR, CRYSTAL, GEMS, GOLD) and abandoned mine.
+    const uint32_t resourceCount{ 8 };
+    const int32_t stepY = 35;
+    offsetY += 50;
+    const fheroes2::Rect resourceSelectRoi( area.x + 22, offsetY - 5, 100, stepY * resourceCount + 10 );
+    background.applyTextBackgroundShading( resourceSelectRoi );
+
+    text.set( _( "Resource\ntype:" ), fheroes2::FontType::smallWhite() );
+    text.draw( resourceSelectRoi.x, resourceSelectRoi.y - text.height( resourceSelectRoi.width ), resourceSelectRoi.width, display );
+
+    const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
+    std::array<fheroes2::Rect, resourceCount> resourceRoi;
+
+    // Resource type selection mark background.
+    fheroes2::Sprite markBackground = fheroes2::AGG::GetICN( ICN::CELLWIN, 4 );
+    if ( isEvilInterface ) {
+        fheroes2::ApplyPalette( markBackground, PAL::CombinePalettes( PAL::GetPalette( PAL::PaletteType::GRAY ), PAL::GetPalette( PAL::PaletteType::DARKENING ) ) );
+    }
+
+    // Resource icons.
+    const int32_t iconOffsetX = 35;
+    const std::vector<Maps::ObjectInfo> & resourceInfo = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_TREASURES );
+
+    assert( resourceInfo.size() > resourceCount - 1 );
+
+    for ( uint32_t i = 0; i < resourceCount - 1; ++i ) {
+        const fheroes2::Sprite & resourceImage = fheroes2::generateMapObjectImage( resourceInfo[i] );
+        const fheroes2::Point imagePosition( area.x + iconOffsetX + ( resourceSelectRoi.width - TILEWIDTH * 3 ) / 2, offsetY + ( stepY - TILEWIDTH ) / 2 );
+        resourceRoi[i] = { resourceSelectRoi.x + 5, imagePosition.y, resourceSelectRoi.width - 10, TILEWIDTH };
+        fheroes2::Blit( resourceImage, display, imagePosition.x, imagePosition.y - 4 );
+        fheroes2::Blit( markBackground, display, resourceRoi[i].x + 2, resourceRoi[i].y + ( resourceRoi[i].height - markBackground.height() ) / 2 );
+        offsetY += stepY;
+    }
+
+    // Render ghosts to select Abandoned mine type.
+    const fheroes2::Sprite & ghostImage = fheroes2::AGG::GetICN( ICN::MONS32, 59 );
+    const int32_t ghostsOnIcon = 4;
+    const int32_t ghostsIconOverlap = 12;
+    const int32_t ghostsStepX = ghostImage.width() - ghostsIconOverlap;
+    const int32_t ghostsIconWight = ghostsOnIcon * ghostsStepX + ghostsIconOverlap;
+    const int32_t ghostsIconHeight = ghostImage.height();
+    resourceRoi[7] = { resourceSelectRoi.x + 5, offsetY + ( stepY - ghostsIconHeight ) / 2, resourceSelectRoi.width - 10, ghostsIconHeight };
+    for ( int32_t i = 0; i < ghostsOnIcon; ++i ) {
+        fheroes2::Blit( ghostImage, display, area.x + iconOffsetX + ( resourceSelectRoi.width - ghostsIconWight ) / 2 + ghostsStepX * i, resourceRoi[7].y, i < 2 );
+    }
+    fheroes2::Blit( markBackground, display, resourceRoi[7].x + 2, resourceRoi[7].y + ( resourceRoi[7].height - markBackground.height() ) / 2 );
+
+    // Resource type selection mark.
+    const fheroes2::Sprite & mark = fheroes2::AGG::GetICN( ICN::CELLWIN, 5 );
+    uint32_t selectedResourceType = 0;
+
+    const std::vector<Maps::ObjectInfo> & allObjectInfo = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_MINES );
+    if ( type > 0 ) {
+        assert( static_cast<size_t>( type ) < allObjectInfo.size() );
+
+        if ( allObjectInfo[type].objectType == MP2::OBJ_ABANDONED_MINE ) {
+            selectedResourceType = 7;
+        }
+        else {
+            switch ( allObjectInfo[type].metadata[0] ) {
+            case Resource::ORE:
+                selectedResourceType = 2;
+                break;
+            case Resource::SULFUR:
+                selectedResourceType = 3;
+                break;
+            case Resource::CRYSTAL:
+                selectedResourceType = 4;
+                break;
+            case Resource::GEMS:
+                selectedResourceType = 5;
+                break;
+            case Resource::GOLD:
+                selectedResourceType = 6;
+                break;
+            case Resource::WOOD:
+                selectedResourceType = 0;
+                break;
+            case Resource::MERCURY:
+                selectedResourceType = 1;
+                break;
+            default:
+                // Have you added a new resource type for mines?
+                assert( 0 );
+            }
+        }
+    }
+
+    fheroes2::MovableSprite resourceTypeSelection( mark );
+    auto redrawResourceSelection = [&resourceTypeSelection, &mark]( const fheroes2::Rect & pos ) {
+        resourceTypeSelection.setPosition( pos.x + 5, pos.y + ( pos.height - mark.height() ) / 2 );
+        resourceTypeSelection.redraw();
+    };
+    redrawResourceSelection( resourceRoi[selectedResourceType] );
+
+    // Mine appearance type selection list.
+    MineTypeList listbox( area.getPosition() );
+    const fheroes2::Rect listRoi( area.x + area.width - 5 * TILEWIDTH - 75, resourceSelectRoi.y, 5 * TILEWIDTH + 20, resourceSelectRoi.height );
+    background.applyTextBackgroundShading( listRoi );
+
+    // Initialize list background restorer to use it in list method 'listbox.RedrawBackground()'.
+    listbox.initListBackgroundRestorer( listRoi );
+
+    listbox.SetAreaItems( { listRoi.x, listRoi.y + 3, listRoi.width, listRoi.height - 3 } );
+
+    int32_t scrollbarOffsetX = listRoi.x + listRoi.width + 15;
+    background.renderScrollbarBackground( { scrollbarOffsetX, listRoi.y, listRoi.width, listRoi.height }, isEvilInterface );
+
+    const int listIcnId = isEvilInterface ? ICN::SCROLLE : ICN::SCROLL;
+    const int32_t topPartHeight = 19;
+    ++scrollbarOffsetX;
+
+    listbox.SetScrollButtonUp( listIcnId, 0, 1, { scrollbarOffsetX, listRoi.y + 1 } );
+    listbox.SetScrollButtonDn( listIcnId, 2, 3, { scrollbarOffsetX, listRoi.y + listRoi.height - 15 } );
+    listbox.setScrollBarArea( { scrollbarOffsetX + 2, listRoi.y + topPartHeight, 10, listRoi.height - 2 * topPartHeight } );
+    listbox.SetAreaMaxItems( 4 );
+
+    auto getObjectTypeByResource = []( const uint32_t resourceType ) {
+        switch ( resourceType ) {
+        case 0:
+            return MP2::OBJ_SAWMILL;
+        case 1:
+            return MP2::OBJ_ALCHEMIST_LAB;
+        case 2:
+        case 3:
+        case 4:
+        case 5:
+        case 6:
+            return MP2::OBJ_MINE;
+        case 7:
+            return MP2::OBJ_ABANDONED_MINE;
+        default:
+            // Have you added a new resource type for mines?
+            assert( 0 );
+        }
+        return MP2::OBJ_NONE;
+    };
+
+    std::vector<Maps::ObjectInfo> objectInfo;
+    std::vector<int32_t> objectInfoIndexes;
+
+    auto updateListContent = [&listbox, &objectInfo, &allObjectInfo, &objectInfoIndexes, &listIcnId, &getObjectTypeByResource]( const uint32_t resourceId ) {
+        const MP2::MapObjectType objectType = getObjectTypeByResource( resourceId );
+
+        // Mine appearance is the same for different mine resources so we keep the selection.
+        const bool keepSelection = ( objectType == MP2::OBJ_MINE ) && !objectInfo.empty() && ( objectInfo.front().objectType == MP2::OBJ_MINE );
+        const int selectedId = keepSelection ? listbox.getCurrentId() : 0;
+        const int topId = keepSelection ? listbox.getTopId() : 0;
+
+        objectInfo.clear();
+        objectInfoIndexes.clear();
+
+        // For the Abandoned Mine there is no metadata set so 'metadata[0] == 0'.
+        const uint32_t resourceType = ( objectType != MP2::OBJ_ABANDONED_MINE ) ? Resource::getResourceTypeFromIconIndex( resourceId ) : 0;
+        for ( size_t i = 0; i < allObjectInfo.size(); ++i ) {
+            if ( allObjectInfo[i].objectType == objectType && allObjectInfo[i].metadata[0] == resourceType ) {
+                objectInfo.push_back( allObjectInfo[i] );
+                objectInfoIndexes.push_back( static_cast<int32_t>( i ) );
+            }
+        }
+
+        listbox.SetListContent( objectInfo );
+        // We need to reset the initial slider image to be able to reduce the current slider height.
+        listbox.setScrollBarImage( fheroes2::AGG::GetICN( listIcnId, 4 ) );
+        listbox.updateScrollBarImage();
+
+        if ( keepSelection ) {
+            listbox.SetCurrent( selectedId );
+            listbox.setTopVisibleItem( topId );
+        }
+    };
+
+    updateListContent( selectedResourceType );
+
+    // Select the previously used mine type and resource type in the lists.
+    if ( type > -1 ) {
+        listbox.SetCurrent( std::distance( objectInfoIndexes.begin(), std::find( objectInfoIndexes.begin(), objectInfoIndexes.end(), type ) ) );
+    }
+
+    fheroes2::ImageRestorer appearanceTextBackground( display, 0, 0, 0, 0 );
+    // Mine appearance selection text.
+    auto redrawAppearanceText = [&selectedResourceType, &appearanceTextBackground, &listRoi, &display]( const Maps::ObjectInfo & info ) {
+        std::string mineText( _( "%{mineName} appearance:" ) );
+        if ( info.objectType == MP2::OBJ_MINE ) {
+            assert( selectedResourceType < 7 );
+            StringReplace( mineText, "%{mineName}", Maps::GetMineName( static_cast<int>( info.metadata[0] ) ) );
+        }
+        else {
+            StringReplace( mineText, "%{mineName}", MP2::StringObject( info.objectType ) );
+        }
+        const fheroes2::Text appearanceText( std::move( mineText ), fheroes2::FontType::smallWhite() );
+        const int32_t textWidth = appearanceText.width( listRoi.width );
+        const int32_t textHeight = appearanceText.height( listRoi.width );
+        appearanceTextBackground.restore();
+        appearanceTextBackground.update( listRoi.x + ( listRoi.width - textWidth ) / 2, listRoi.y - textHeight, textWidth, textHeight );
+        appearanceText.draw( listRoi.x, listRoi.y - textHeight, listRoi.width, display );
+    };
+    redrawAppearanceText( objectInfo[listbox.getCurrentId()] );
+
+    // TODO: Implement owner color selection.
+    listbox.setOwnerColor( 0 );
+
+    listbox.Redraw();
+
+    // Render dialog buttons.
+    fheroes2::Button buttonOk;
+    fheroes2::Button buttonCancel;
+    background.renderOkayCancelButtons( buttonOk, buttonCancel, isEvilInterface );
+
+    display.render( background.totalArea() );
+
+    LocalEvent & le = LocalEvent::Get();
+
+    while ( le.HandleEvents() ) {
+        le.MousePressLeft( buttonOk.area() ) ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
+        le.MousePressLeft( buttonCancel.area() ) ? buttonCancel.drawOnPress() : buttonCancel.drawOnRelease();
+
+        bool needRedraw = listbox.QueueEventProcessing();
+
+        if ( listbox.isDoubleClicked() || le.MouseClickLeft( buttonOk.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) ) {
+            type = objectInfoIndexes[listbox.getCurrentId()];
+            color = 0;
+            return;
+        }
+        if ( le.MouseClickLeft( buttonCancel.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
+            return;
+        }
+
+        if ( le.MousePressRight( buttonCancel.area() ) ) {
+            fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Exit this menu without doing anything." ), Dialog::ZERO );
+        }
+        else if ( le.MousePressRight( buttonOk.area() ) ) {
+            fheroes2::showStandardTextMessage( _( "Okay" ), _( "Click to start placing the selected castle/town." ), Dialog::ZERO );
+        }
+        else {
+            for ( uint32_t i = 0; i < resourceCount; ++i ) {
+                if ( le.MouseClickLeft( resourceRoi[i] ) ) {
+                    if ( i != selectedResourceType ) {
+                        selectedResourceType = i;
+                        redrawResourceSelection( resourceRoi[selectedResourceType] );
+                        updateListContent( selectedResourceType );
+                        redrawAppearanceText( objectInfo[listbox.getCurrentId()] );
+
+                        needRedraw = true;
+                    }
+                    break;
+                }
+                if ( le.MousePressRight( resourceRoi[i] ) ) {
+                    const MP2::MapObjectType objectType = getObjectTypeByResource( i );
+                    std::string objectName;
+                    if ( objectType == MP2::OBJ_MINE ) {
+                        objectName = Maps::GetMineName( Resource::getResourceTypeFromIconIndex( i ) );
+                    }
+                    else {
+                        objectName = MP2::StringObject( objectType );
+                    }
+                    std::string description( _( "Click to select %{object} as the resource generator to be placed." ) );
+                    StringReplace( description, "%{object}", objectName );
+
+                    fheroes2::showStandardTextMessage( std::move( objectName ), std::move( description ), Dialog::ZERO );
+
+                    break;
+                }
+            }
+        }
+
+        if ( !needRedraw ) {
+            continue;
+        }
+
+        listbox.Redraw();
+        display.render( area );
+    }
 }
 
 int Dialog::selectMountainType( const int mountainType )
