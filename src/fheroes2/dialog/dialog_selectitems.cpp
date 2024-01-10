@@ -1544,6 +1544,15 @@ int Dialog::selectMountainType( const int mountainType )
     return selectObjectType( mountainType, objectInfo.size(), listbox );
 }
 
+int Dialog::selectRockType( const int rockType )
+{
+    const auto & objectInfo = Maps::getObjectsByGroup( Maps::ObjectGroup::LANDSCAPE_ROCKS );
+
+    DwellingTypeSelection listbox( objectInfo, { 420, fheroes2::Display::instance().height() - 180 }, _( "Select Rock Object:" ) );
+
+    return selectObjectType( rockType, objectInfo.size(), listbox );
+}
+
 int Dialog::selectTreeType( const int treeType )
 {
     const auto & objectInfo = Maps::getObjectsByGroup( Maps::ObjectGroup::LANDSCAPE_TREES );

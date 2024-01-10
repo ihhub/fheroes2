@@ -969,6 +969,11 @@ namespace Interface
                 return res;
             }
 
+            if ( le.MouseClickLeft( _landscapeObjectButtonsRect[LandscapeObjectBrush::ROCKS] ) ) {
+                handleObjectMouseClick( Dialog::selectRockType );
+                return res;
+            }
+
             if ( le.MouseClickLeft( _landscapeObjectButtonsRect[LandscapeObjectBrush::TREES] ) ) {
                 handleObjectMouseClick( Dialog::selectTreeType );
                 return res;
