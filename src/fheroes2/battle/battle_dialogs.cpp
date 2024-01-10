@@ -441,7 +441,7 @@ void Battle::GetSummaryParams( const uint32_t res1, const uint32_t res2, const H
 
         if ( res2 & RESULT_SURRENDER ) {
             title.append( _( "The enemy has surrendered!" ) );
-            surrenderText.append( _( "In shame, they hand over %{gold} gold." ) );
+            surrenderText.append( _( "They hand over %{gold} gold in shame." ) );
             StringReplace( surrenderText, "%{gold}", surrenderCost );
         }
         else if ( res2 & RESULT_RETREAT ) {
