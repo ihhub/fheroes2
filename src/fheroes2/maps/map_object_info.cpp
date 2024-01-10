@@ -539,6 +539,303 @@ namespace
                 objects.emplace_back( std::move( object ) );
             }
         }
+
+        // Three trees, grass terrain, variant 1.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_TREES };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNGRAS, 84U, fheroes2::Point{ 0, 0 }, MP2::OBJ_TREES, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNGRAS, 83U, fheroes2::Point{ -1, 0 }, MP2::OBJ_TREES, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNGRAS, 85U, fheroes2::Point{ 1, 0 }, MP2::OBJ_TREES, Maps::OBJECT_LAYER );
+
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNGRAS, 82U, fheroes2::Point{ -2, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNGRAS, 79U, fheroes2::Point{ -1, -1 }, MP2::OBJ_TREES );
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNGRAS, 80U, fheroes2::Point{ 0, -1 }, MP2::OBJ_TREES );
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNGRAS, 81U, fheroes2::Point{ 1, -1 }, MP2::OBJ_TREES );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Three trees, grass terrain, variant 2.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_TREES };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNGRAS, 89U, fheroes2::Point{ 0, 0 }, MP2::OBJ_TREES, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNGRAS, 90U, fheroes2::Point{ 1, 0 }, MP2::OBJ_TREES, Maps::OBJECT_LAYER );
+
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNGRAS, 88U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNGRAS, 86U, fheroes2::Point{ 0, -1 }, MP2::OBJ_TREES );
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNGRAS, 87U, fheroes2::Point{ 1, -1 }, MP2::OBJ_TREES );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Single tree, grass terrain.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_TREES };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNGRAS, 93U, fheroes2::Point{ 0, 0 }, MP2::OBJ_TREES, Maps::OBJECT_LAYER );
+
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNGRAS, 92U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNGRAS, 91U, fheroes2::Point{ 0, -1 }, MP2::OBJ_TREES );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Two stumps, snow terrain.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_STUMP };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSNOW, 41U, fheroes2::Point{ 0, 0 }, MP2::OBJ_STUMP, Maps::OBJECT_LAYER );
+
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSNOW, 40U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Single stump, snow terrain.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_STUMP };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSNOW, 42U, fheroes2::Point{ 0, 0 }, MP2::OBJ_STUMP, Maps::OBJECT_LAYER );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Dead tree (medium, wide), snow terrain.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_DEAD_TREE };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSNOW, 49U, fheroes2::Point{ 0, 0 }, MP2::OBJ_DEAD_TREE, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSNOW, 50U, fheroes2::Point{ 1, 0 }, MP2::OBJ_DEAD_TREE, Maps::OBJECT_LAYER );
+
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSNOW, 48U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSNOW, 46U, fheroes2::Point{ 0, -1 }, MP2::OBJ_DEAD_TREE );
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSNOW, 47U, fheroes2::Point{ 1, -1 }, MP2::OBJ_DEAD_TREE );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Dead tree (tall, wide), snow terrain.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_DEAD_TREE };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSNOW, 56U, fheroes2::Point{ 0, 0 }, MP2::OBJ_DEAD_TREE, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSNOW, 55U, fheroes2::Point{ -1, 0 }, MP2::OBJ_DEAD_TREE, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSNOW, 57U, fheroes2::Point{ 1, 0 }, MP2::OBJ_DEAD_TREE, Maps::OBJECT_LAYER );
+
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSNOW, 54U, fheroes2::Point{ -2, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSNOW, 51U, fheroes2::Point{ -1, -1 }, MP2::OBJ_DEAD_TREE );
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSNOW, 52U, fheroes2::Point{ 0, -1 }, MP2::OBJ_DEAD_TREE );
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSNOW, 53U, fheroes2::Point{ 1, -1 }, MP2::OBJ_DEAD_TREE );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Dead tree (medium, 1-tile), snow terrain.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_DEAD_TREE };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSNOW, 60U, fheroes2::Point{ 0, 0 }, MP2::OBJ_DEAD_TREE, Maps::OBJECT_LAYER );
+
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSNOW, 59U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSNOW, 58U, fheroes2::Point{ 0, -1 }, MP2::OBJ_DEAD_TREE );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Dead tree (medium, thinned, wide), snow terrain.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_DEAD_TREE };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSNOW, 64U, fheroes2::Point{ 0, 0 }, MP2::OBJ_DEAD_TREE, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSNOW, 65U, fheroes2::Point{ 1, 0 }, MP2::OBJ_DEAD_TREE, Maps::OBJECT_LAYER );
+
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSNOW, 63U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSNOW, 61U, fheroes2::Point{ 0, -1 }, MP2::OBJ_DEAD_TREE );
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSNOW, 62U, fheroes2::Point{ 1, -1 }, MP2::OBJ_DEAD_TREE );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Dead trees (1-tile), snow terrain. 5 variants.
+        for ( uint32_t count = 0; count < 5; count++ ) {
+            const uint32_t offset = 66U + count * 3U;
+
+            Maps::ObjectInfo object{ MP2::OBJ_DEAD_TREE };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSNOW, offset + 2U, fheroes2::Point{ 0, 0 }, MP2::OBJ_DEAD_TREE, Maps::OBJECT_LAYER );
+
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSNOW, offset + 1U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSNOW, offset + 0U, fheroes2::Point{ 0, -1 }, MP2::OBJ_DEAD_TREE );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Dead tree (tall in the pool), swamp terrain.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_DEAD_TREE };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 167U, fheroes2::Point{ 0, 0 }, MP2::OBJ_DEAD_TREE, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 166U, fheroes2::Point{ -1, 0 }, MP2::OBJ_DEAD_TREE, Maps::OBJECT_LAYER );
+
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 163U, fheroes2::Point{ -2, -1 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 161U, fheroes2::Point{ -1, -2 }, MP2::OBJ_DEAD_TREE );
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 162U, fheroes2::Point{ 0, -2 }, MP2::OBJ_DEAD_TREE );
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 164U, fheroes2::Point{ -1, -1 }, MP2::OBJ_DEAD_TREE );
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 165U, fheroes2::Point{ 0, -1 }, MP2::OBJ_DEAD_TREE );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Dead trees (2-tile), swamp terrain. 2 variants.
+        for ( uint32_t count = 0; count < 2; count++ ) {
+            const uint32_t offset = 168U + count * 5U;
+
+            Maps::ObjectInfo object{ MP2::OBJ_DEAD_TREE };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, offset + 3U, fheroes2::Point{ 0, 0 }, MP2::OBJ_DEAD_TREE, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, offset + 4U, fheroes2::Point{ 1, 0 }, MP2::OBJ_DEAD_TREE, Maps::OBJECT_LAYER );
+
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, offset + 2U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, offset + 0U, fheroes2::Point{ 0, -1 }, MP2::OBJ_DEAD_TREE );
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, offset + 1U, fheroes2::Point{ 1, -1 }, MP2::OBJ_DEAD_TREE );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Two tall palms, desert terrain.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_TREES };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDSRT, 3U, fheroes2::Point{ 0, 0 }, MP2::OBJ_TREES, Maps::OBJECT_LAYER );
+
+            // The next tile contents a shadow and the upper part of the tree. How to render it properly? What layer is better to use?
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDSRT, 2U, fheroes2::Point{ -1, 0 }, MP2::OBJ_TREES );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Tall palms, desert terrain. 3 variants.
+        for ( uint32_t count = 0; count < 3; count++ ) {
+            const uint32_t offset = 4U + count * 3U;
+
+            Maps::ObjectInfo object{ MP2::OBJ_TREES };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDSRT, offset + 2U, fheroes2::Point{ 0, 0 }, MP2::OBJ_TREES, Maps::OBJECT_LAYER );
+
+            // The next tile contents a shadow and the upper part of the tree. How to render it properly? What layer is better to use?
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDSRT, offset + 1U, fheroes2::Point{ -1, 0 }, MP2::OBJ_TREES );
+
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDSRT, offset + 0U, fheroes2::Point{ 0, -1 }, MP2::OBJ_TREES );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Small palms, desert terrain. 3 variants.
+        for ( uint32_t count = 0; count < 3; count++ ) {
+            const uint32_t offset = 23U + count * 2U;
+
+            Maps::ObjectInfo object{ MP2::OBJ_TREES };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDSRT, offset + 1U, fheroes2::Point{ 0, 0 }, MP2::OBJ_TREES, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDSRT, offset + 0U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Tall single tree, dirt terrain.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_TREES };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDIRT, 118U, fheroes2::Point{ 0, 0 }, MP2::OBJ_TREES, Maps::OBJECT_LAYER );
+
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDIRT, 117U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDIRT, 116U, fheroes2::Point{ 1, -1 }, MP2::OBJ_TREES );
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDIRT, 115U, fheroes2::Point{ 0, -1 }, MP2::OBJ_TREES );
+
+            // The next tile contents the upper part of the tree. It is passable but should be rendered before the hero on this tile.
+            // How to render it properly? What layer is better to use?
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDIRT, 119U, fheroes2::Point{ 1, 0 }, MP2::OBJ_TREES );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Two tall trees, dirt terrain.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_TREES };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDIRT, 123U, fheroes2::Point{ 0, 0 }, MP2::OBJ_TREES, Maps::OBJECT_LAYER );
+
+            // The next tile contents a shadow and the upper part of the tree. How to render it properly? What layer is better to use?
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDIRT, 122U, fheroes2::Point{ -1, 0 }, MP2::OBJ_TREES );
+
+            // The next tile contents the upper part of the tree. It is passable but should be rendered before the hero on this tile.
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDIRT, 124U, fheroes2::Point{ 1, 0 }, MP2::OBJ_TREES );
+
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDIRT, 120U, fheroes2::Point{ 0, -1 }, MP2::OBJ_TREES );
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDIRT, 121U, fheroes2::Point{ 1, -1 }, MP2::OBJ_TREES );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Two medium trees, dirt terrain.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_TREES };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDIRT, 127U, fheroes2::Point{ 0, 0 }, MP2::OBJ_TREES, Maps::OBJECT_LAYER );
+
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDIRT, 126U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDIRT, 125U, fheroes2::Point{ 0, -1 }, MP2::OBJ_TREES );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Dead tree, generic.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_DEAD_TREE };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMULT, 2U, fheroes2::Point{ 0, 0 }, MP2::OBJ_DEAD_TREE, Maps::OBJECT_LAYER );
+
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMULT, 1U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMULT, 0U, fheroes2::Point{ 0, -1 }, MP2::OBJ_DEAD_TREE );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Log (dead tree), generic.
+        {
+            // We use MP2::OBJ_DEAD_TREE instead of MP2::OBJ_NOTHING_SPECIAL used by the original editor.
+            Maps::ObjectInfo object{ MP2::OBJ_DEAD_TREE };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMULT, 4U, fheroes2::Point{ 0, 0 }, MP2::OBJ_DEAD_TREE, Maps::OBJECT_LAYER );
+
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMULT, 3U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Three stumps, generic.
+        {
+            // We use MP2::OBJ_STUMP instead of MP2::OBJ_DEAD_TREE used by the original editor.
+            Maps::ObjectInfo object{ MP2::OBJ_STUMP };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 16U, fheroes2::Point{ 0, 0 }, MP2::OBJ_STUMP, Maps::OBJECT_LAYER );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Two stumps, generic.
+        {
+            // We use MP2::OBJ_STUMP instead of MP2::OBJ_DEAD_TREE used by the original editor.
+            Maps::ObjectInfo object{ MP2::OBJ_STUMP };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 18U, fheroes2::Point{ 0, 0 }, MP2::OBJ_STUMP, Maps::OBJECT_LAYER );
+
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 17U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Single stump, generic.
+        {
+            // We use MP2::OBJ_STUMP instead of MP2::OBJ_DEAD_TREE used by the original editor.
+            Maps::ObjectInfo object{ MP2::OBJ_STUMP };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 19U, fheroes2::Point{ 0, 0 }, MP2::OBJ_STUMP, Maps::OBJECT_LAYER );
+
+            objects.emplace_back( std::move( object ) );
+        }
     }
 
     void populateLandscapeWater( std::vector<Maps::ObjectInfo> & objects )
