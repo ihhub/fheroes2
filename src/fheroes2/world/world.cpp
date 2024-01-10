@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -1318,14 +1318,14 @@ void World::PostLoad( const bool setTilePassabilities )
     // Cache all tiles that that contain stone liths of a certain type (depending on object sprite index).
     _allTeleports.clear();
 
-    for ( const int32_t index : Maps::GetObjectPositions( MP2::OBJ_STONE_LITHS, true ) ) {
+    for ( const int32_t index : Maps::GetObjectPositions( MP2::OBJ_STONE_LITHS ) ) {
         _allTeleports[GetTiles( index ).GetObjectSpriteIndex()].push_back( index );
     }
 
     // Cache all tiles that contain a certain part of the whirlpool (depending on object sprite index).
     _allWhirlpools.clear();
 
-    for ( const int32_t index : Maps::GetObjectPositions( MP2::OBJ_WHIRLPOOL, true ) ) {
+    for ( const int32_t index : Maps::GetObjectPositions( MP2::OBJ_WHIRLPOOL ) ) {
         _allWhirlpools[GetTiles( index ).GetObjectSpriteIndex()].push_back( index );
     }
 

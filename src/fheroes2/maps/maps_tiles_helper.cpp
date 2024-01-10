@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2023                                                    *
+ *   Copyright (C) 2023 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -3227,6 +3227,15 @@ namespace Maps
             placeObjectOnTile( tile, info );
             // The artifact ID is stored in metadata[0]. It is used by the other engine functions.
             tile.metadata()[0] = info.metadata[0];
+            return;
+        case MP2::OBJ_ALCHEMIST_LAB:
+        case MP2::OBJ_MINE:
+        case MP2::OBJ_SAWMILL:
+            placeObjectOnTile( tile, info );
+            // Set resource type and income per day.
+            tile.metadata()[0] = info.metadata[0];
+            tile.metadata()[1] = info.metadata[1];
+            world.updatePassabilities();
             return;
         default:
             break;

@@ -1665,9 +1665,10 @@ namespace
         if ( !hero.isObjectTypeVisited( objectType, Visit::GLOBAL ) ) {
             hero.SetVisited( tileIndex, Visit::GLOBAL );
 
-            const MapsIndexes eyeMagiIndexes = Maps::GetObjectPositions( MP2::OBJ_EYE_OF_MAGI, true );
+            const MapsIndexes eyeMagiIndexes = Maps::GetObjectPositions( MP2::OBJ_EYE_OF_MAGI );
+            const uint32_t distance = GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::MAGI_EYES );
             for ( const int32_t index : eyeMagiIndexes ) {
-                Maps::ClearFog( index, GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::MAGI_EYES ), hero.GetColor() );
+                Maps::ClearFog( index, distance, hero.GetColor() );
             }
         }
     }
