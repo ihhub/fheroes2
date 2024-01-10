@@ -994,7 +994,7 @@ namespace Interface
                 return;
             }
 
-            setObjectOnTile( tile, objectInfo );
+            setObjectOnTileAsAction( tile, groupType, _editorPanel.getSelectedObjectType() );
         }
     }
 
