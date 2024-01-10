@@ -1265,7 +1265,7 @@ int Dialog::selectDwellingType( const int dwellingType )
 {
     const auto & objectInfo = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_DWELLINGS );
 
-    DwellingTypeSelection listbox( objectInfo, { 420, fheroes2::Display::instance().height() - 180 }, _( "Select Dwelling:" ) );
+    DwellingTypeSelection listbox( objectInfo, { 480, fheroes2::Display::instance().height() - 180 }, _( "Select Dwelling:" ) );
 
     return selectObjectType( dwellingType, objectInfo.size(), listbox );
 }
