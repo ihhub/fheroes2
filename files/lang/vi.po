@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-04 12:56+0000\n"
+"POT-Creation-Date: 2024-01-10 08:55+0000\n"
 "PO-Revision-Date: 2023-12-20 19:47+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3424,6 +3424,27 @@ msgstr "Nhấp để chọn chủng tộc."
 msgid "Click to select this color."
 msgstr "Nhấp để chọn màu này."
 
+#, fuzzy
+msgid "Select Dwelling:"
+msgstr "Chọn Phép:"
+
+msgid "Mine placing"
+msgstr ""
+
+#, fuzzy
+msgid ""
+"Resource\n"
+"type:"
+msgstr "Tài nguyên"
+
+#, fuzzy
+msgid "%{mineName} appearance:"
+msgstr "%{name} cái %{race}"
+
+#, fuzzy
+msgid "Click to select %{object} as the resource generator to be placed."
+msgstr "Nhấp vào đây để chọn kịch bản để chơi."
+
 msgid "Map Type:\n"
 msgstr "Kiểu Bản đồ:\n"
 
@@ -3751,6 +3772,10 @@ msgstr "Đối tượng đại dương phải đặt trên mặt nước."
 
 msgid "Towns cannot be placed on water."
 msgstr "Thị trấn không thể đặt trên nước."
+
+#, fuzzy
+msgid "Mines cannot be placed on water."
+msgstr "Quái vật không thể đặt trên nước."
 
 #, fuzzy
 msgid "Dwellings cannot be placed on water."
