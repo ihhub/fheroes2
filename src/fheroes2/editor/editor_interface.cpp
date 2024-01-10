@@ -845,7 +845,7 @@ namespace Interface
                 return;
             }
 
-            setObjectOnTile( tile, groupType, _editorPanel.getSelectedObjectType() );
+            setObjectOnTileAsAction( tile, groupType, _editorPanel.getSelectedObjectType() );
         }
         else if ( groupType == Maps::ObjectGroup::LANDSCAPE_ROCKS ) {
             const auto & objectInfo = getObjectInfo( groupType, _editorPanel.getSelectedObjectType() );
@@ -865,7 +865,7 @@ namespace Interface
                 return;
             }
 
-            setObjectOnTile( tile, groupType, _editorPanel.getSelectedObjectType() );
+            setObjectOnTileAsAction( tile, groupType, _editorPanel.getSelectedObjectType() );
         }
         else if ( groupType == Maps::ObjectGroup::LANDSCAPE_TREES ) {
             const auto & objectInfo = getObjectInfo( groupType, _editorPanel.getSelectedObjectType() );
@@ -885,7 +885,7 @@ namespace Interface
                 return;
             }
 
-            setObjectOnTile( tile, groupType, _editorPanel.getSelectedObjectType() );
+            setObjectOnTileAsAction( tile, groupType, _editorPanel.getSelectedObjectType() );
         }
         else if ( groupType == Maps::ObjectGroup::ADVENTURE_WATER || groupType == Maps::ObjectGroup::LANDSCAPE_WATER ) {
             const auto & objectInfo = getObjectInfo( groupType, _editorPanel.getSelectedObjectType() );

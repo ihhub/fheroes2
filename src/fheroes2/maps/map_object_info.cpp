@@ -674,6 +674,120 @@ namespace
 
             objects.emplace_back( std::move( object ) );
         }
+
+        // Wide medium rock with a tree on it, wasteland terrain.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_ROCK };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 10U, fheroes2::Point{ 0, 0 }, MP2::OBJ_ROCK, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 11U, fheroes2::Point{ 1, 0 }, MP2::OBJ_ROCK, Maps::OBJECT_LAYER );
+
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 9U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 7U, fheroes2::Point{ 0, -1 }, MP2::OBJ_ROCK );
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 8U, fheroes2::Point{ 1, -1 }, MP2::OBJ_ROCK );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Small rock, wasteland terrain.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_ROCK };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 18U, fheroes2::Point{ 0, 0 }, MP2::OBJ_ROCK, Maps::OBJECT_LAYER );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Big rock and two medium around, wasteland terrain.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_ROCK };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 21U, fheroes2::Point{ 0, 0 }, MP2::OBJ_ROCK, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 22U, fheroes2::Point{ 1, 0 }, MP2::OBJ_ROCK, Maps::OBJECT_LAYER );
+
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 20U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 19U, fheroes2::Point{ 0, -1 }, MP2::OBJ_ROCK );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Wide medium rock, wasteland terrain.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_ROCK };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 24U, fheroes2::Point{ 0, 0 }, MP2::OBJ_ROCK, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 25U, fheroes2::Point{ 1, 0 }, MP2::OBJ_ROCK, Maps::OBJECT_LAYER );
+
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 23U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Wide big rock, wasteland terrain.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_ROCK };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 30U, fheroes2::Point{ 0, 0 }, MP2::OBJ_ROCK, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 29U, fheroes2::Point{ -1, 0 }, MP2::OBJ_ROCK, Maps::OBJECT_LAYER );
+
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 28U, fheroes2::Point{ -2, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 26U, fheroes2::Point{ -1, -1 }, MP2::OBJ_ROCK );
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 27U, fheroes2::Point{ 0, -1 }, MP2::OBJ_ROCK );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Wide low rock, wasteland terrain.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_ROCK };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 31U, fheroes2::Point{ 0, 0 }, MP2::OBJ_ROCK, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 32U, fheroes2::Point{ 1, 0 }, MP2::OBJ_ROCK, Maps::OBJECT_LAYER );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Wide small rock and a small rock, wasteland terrain.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_ROCK };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 38U, fheroes2::Point{ 0, 0 }, MP2::OBJ_ROCK, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 37U, fheroes2::Point{ -1, 0 }, MP2::OBJ_ROCK, Maps::OBJECT_LAYER );
+
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 36U, fheroes2::Point{ -2, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Wide small rock, wasteland terrain.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_ROCK };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 40U, fheroes2::Point{ 0, 0 }, MP2::OBJ_ROCK, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 41U, fheroes2::Point{ 1, 0 }, MP2::OBJ_ROCK, Maps::OBJECT_LAYER );
+
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 39U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Small and medium rocks, wasteland terrain.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_ROCK };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 43U, fheroes2::Point{ 0, 0 }, MP2::OBJ_ROCK, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 42U, fheroes2::Point{ -1, 0 }, MP2::OBJ_ROCK, Maps::OBJECT_LAYER );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Tall rocks, wasteland terrain. 4 variants.
+        for ( uint32_t count = 0; count < 4; count++ ) {
+            const uint32_t offset = 44U + count * 3U;
+
+            Maps::ObjectInfo object{ MP2::OBJ_ROCK };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, offset + 2U, fheroes2::Point{ 0, 0 }, MP2::OBJ_ROCK, Maps::OBJECT_LAYER );
+
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, offset + 1U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, offset + 0U, fheroes2::Point{ 0, -1 }, MP2::OBJ_ROCK );
+
+            objects.emplace_back( std::move( object ) );
+        }
     }
 
     void populateLandscapeTrees( std::vector<Maps::ObjectInfo> & objects )
