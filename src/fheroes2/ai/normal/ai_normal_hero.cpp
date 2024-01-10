@@ -2150,13 +2150,12 @@ namespace AI
                 if ( fogDiscoveryValue < 0 ) {
                     // This is actually a very useful fog discovery action which might lead to finding of new objects.
                     // Increase the value of this action.
-                    fogDiscoveryValue /= 2;
 
                     if ( world.CountDay() > period ) {
                         fogDiscoveryValue = 0;
                     }
                     else {
-                        fogDiscoveryValue = fogDiscoveryValue * ( period - world.CountDay() ) / period;
+                        fogDiscoveryValue = fogDiscoveryValue / 2 * ( period - world.CountDay() ) / period;
                     }
                 }
                 else {
