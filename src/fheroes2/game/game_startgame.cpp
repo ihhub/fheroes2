@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -1134,7 +1134,7 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
             else if ( isScrollBottom( le.GetMouseCursor() ) )
                 scrollPosition |= SCROLL_BOTTOM;
 
-            if ( scrollPosition != SCROLL_NONE ) {
+            if ( scrollPosition != SCROLL_NONE && Settings::Get().isFastScrollEnabled() ) {
                 if ( Game::validateAnimationDelay( Game::SCROLL_START_DELAY ) ) {
                     if ( fastScrollRepeatCount < fastScrollStartThreshold ) {
                         ++fastScrollRepeatCount;
@@ -1151,6 +1151,12 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
         }
         else {
             fastScrollRepeatCount = 0;
+        }
+
+        // re-enable fast scroll once the cursor leaves the border area
+        if ( !isScrollLeft( le.GetMouseCursor() ) && !isScrollRight( le.GetMouseCursor() ) && !isScrollTop( le.GetMouseCursor() )
+             && !isScrollBottom( le.GetMouseCursor() ) ) {
+            Settings::Get().SetFastScroll( true );
         }
 
         const bool isHiddenInterface = conf.isHideInterfaceEnabled();

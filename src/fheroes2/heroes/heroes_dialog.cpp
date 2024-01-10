@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -292,6 +292,9 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
 
         // exit
         if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() ) {
+            // disable fast scroll for resolutions where the exit button is directly above the border
+            Settings::Get().SetFastScroll( false );
+
             // Fade-out hero dialog.
             fheroes2::fadeOutDisplay( dialogRoi, !isDefaultScreenSize );
 

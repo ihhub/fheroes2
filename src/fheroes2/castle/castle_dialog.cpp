@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -55,6 +55,7 @@
 #include "monster.h"
 #include "mus.h"
 #include "screen.h"
+#include "settings.h"
 #include "statusbar.h"
 #include "tools.h"
 #include "translations.h"
@@ -403,6 +404,9 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
             // Check buttons for closing this castle's window.
             if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() ) {
                 result = CastleDialogReturnValue::Close;
+
+                // disable fast scroll for resolutions where the exit button is directly above the border
+                Settings::Get().SetFastScroll( false );
 
                 // Fade-out castle dialog.
                 fheroes2::fadeOutDisplay( dialogRoi, !isDefaultScreenSize );
