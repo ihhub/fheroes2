@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-04 12:56+0000\n"
+"POT-Creation-Date: 2024-01-10 08:55+0000\n"
 "PO-Revision-Date: 2023-12-22 01:17+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -3473,6 +3473,27 @@ msgstr "Cliquez ici pour sélectionner le scénario à jouer."
 msgid "Click to select this color."
 msgstr "Cliquez ici pour sélectionner le scénario à jouer."
 
+#, fuzzy
+msgid "Select Dwelling:"
+msgstr "Choisir sort :"
+
+msgid "Mine placing"
+msgstr ""
+
+#, fuzzy
+msgid ""
+"Resource\n"
+"type:"
+msgstr "Ressource"
+
+#, fuzzy
+msgid "%{mineName} appearance:"
+msgstr "%{name} le %{race}"
+
+#, fuzzy
+msgid "Click to select %{object} as the resource generator to be placed."
+msgstr "Cliquez ici pour sélectionner le scénario à jouer."
+
 msgid "Map Type:\n"
 msgstr "Type de carte :\n"
 
@@ -3802,6 +3823,10 @@ msgstr "Les éléments liés à la mer doivent être placés sur l'eau."
 
 #, fuzzy
 msgid "Towns cannot be placed on water."
+msgstr "Ce sort ne peut pas être jeté en mer."
+
+#, fuzzy
+msgid "Mines cannot be placed on water."
 msgstr "Ce sort ne peut pas être jeté en mer."
 
 #, fuzzy
