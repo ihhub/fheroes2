@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-04 12:56+0000\n"
+"POT-Creation-Date: 2024-01-10 08:55+0000\n"
 "PO-Revision-Date: 2022-10-25 08:56+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
@@ -3352,6 +3352,27 @@ msgid "Click to select this color."
 msgstr "Clique aqui para selecionar o cenário a jogar."
 
 #, fuzzy
+msgid "Select Dwelling:"
+msgstr "Magia"
+
+msgid "Mine placing"
+msgstr ""
+
+#, fuzzy
+msgid ""
+"Resource\n"
+"type:"
+msgstr "Custo de recursos:"
+
+#, fuzzy
+msgid "%{mineName} appearance:"
+msgstr "%{name} a %{race}"
+
+#, fuzzy
+msgid "Click to select %{object} as the resource generator to be placed."
+msgstr "Clique aqui para selecionar o cenário a jogar."
+
+#, fuzzy
 msgid "Map Type:\n"
 msgstr "Tamano do Mapa"
 
@@ -3698,6 +3719,10 @@ msgstr "Esta cidade não pode ser transformada em castelo."
 
 #, fuzzy
 msgid "Towns cannot be placed on water."
+msgstr "Esta cidade não pode ser transformada em castelo."
+
+#, fuzzy
+msgid "Mines cannot be placed on water."
 msgstr "Esta cidade não pode ser transformada em castelo."
 
 #, fuzzy

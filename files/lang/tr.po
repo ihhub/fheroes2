@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-04 12:56+0000\n"
+"POT-Creation-Date: 2024-01-10 08:55+0000\n"
 "PO-Revision-Date: 2022-10-01 20:20+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Turkish <tr@li.org>\n"
@@ -3143,6 +3143,25 @@ msgstr ""
 msgid "Click to select this color."
 msgstr ""
 
+#, fuzzy
+msgid "Select Dwelling:"
+msgstr "Büyü hedefini seç"
+
+msgid "Mine placing"
+msgstr ""
+
+msgid ""
+"Resource\n"
+"type:"
+msgstr ""
+
+#, fuzzy
+msgid "%{mineName} appearance:"
+msgstr "%{name} %{race}"
+
+msgid "Click to select %{object} as the resource generator to be placed."
+msgstr ""
+
 msgid "Map Type:\n"
 msgstr ""
 
@@ -3451,6 +3470,9 @@ msgid "Ocean object must be placed on water."
 msgstr ""
 
 msgid "Towns cannot be placed on water."
+msgstr ""
+
+msgid "Mines cannot be placed on water."
 msgstr ""
 
 msgid "Dwellings cannot be placed on water."

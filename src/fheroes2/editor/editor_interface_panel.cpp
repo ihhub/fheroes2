@@ -249,7 +249,17 @@ namespace Interface
              || _selectedInstrument == Instrument::KINGDOM_OBJECTS ) {
             const int32_t objectType = getSelectedObjectType();
             if ( objectType >= 0 ) {
-                return getObjectOccupiedArea( getSelectedObjectGroup(), objectType );
+                const Maps::ObjectGroup objectGroup = getSelectedObjectGroup();
+                if ( objectGroup == Maps::ObjectGroup::ADVENTURE_MINES ) {
+                    // For mine we need to decode the objectType.
+                    int32_t type = -1;
+                    int32_t color = -1;
+                    getMineObjectProperties( type, color );
+
+                    return getObjectOccupiedArea( objectGroup, type );
+                }
+
+                return getObjectOccupiedArea( objectGroup, objectType );
             }
 
             return {};
@@ -733,13 +743,39 @@ namespace Interface
             switch ( _selectedAdventureObject ) {
             case AdventureObjectBrush::ARTIFACTS:
             case AdventureObjectBrush::DWELLINGS:
-            case AdventureObjectBrush::MINES:
             case AdventureObjectBrush::POWER_UPS:
             case AdventureObjectBrush::TREASURES:
             case AdventureObjectBrush::WATER_ADVENTURE:
             case AdventureObjectBrush::ADVENTURE_MISC:
                 _interface.setCursorUpdater(
                     [type = getSelectedObjectType(), group = getSelectedObjectGroup()]( const int32_t /*tileIndex*/ ) { setCustomCursor( group, type ); } );
+                return;
+            case AdventureObjectBrush::MINES:
+                _interface.setCursorUpdater( [this]( const int32_t tileIndex ) {
+                    int32_t type = -1;
+                    int32_t color = -1;
+                    getMineObjectProperties( type, color );
+
+                    if ( type == -1 || color == -1 ) {
+                        // The object type is not set. We show the POINTER cursor for this case.
+                        Cursor::Get().SetThemes( Cursor::POINTER );
+                        return;
+                    }
+
+                    if ( world.GetTiles( tileIndex ).GetGround() == Maps::Ground::WATER ) {
+                        // Mines cannot be placed on water.
+                        const fheroes2::Sprite & image = fheroes2::AGG::GetICN( ICN::SPELLS, 0 );
+                        Cursor::Get().setCustomImage( image, { -image.width() / 2, -image.height() / 2 } );
+                        return;
+                    }
+
+                    assert( Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_MINES ).size() > static_cast<size_t>( type ) );
+
+                    // TODO: Implement a function to render also the owner flag after ownership selection is implemented.
+                    const fheroes2::Sprite & image = getObjectImage( Maps::ObjectGroup::ADVENTURE_MINES, type );
+
+                    Cursor::Get().setCustomImage( image, { image.x(), image.y() } );
+                } );
                 return;
             default:
                 break;
@@ -965,6 +1001,18 @@ namespace Interface
                 handleObjectMouseClick( Dialog::selectOceanObjectType );
                 return res;
             }
+            if ( le.MouseClickLeft( _adventureObjectButtonsRect[AdventureObjectBrush::MINES] ) ) {
+                handleObjectMouseClick( [this]( const int32_t /* type */ ) {
+                    int32_t type = -1;
+                    int32_t color = -1;
+
+                    getMineObjectProperties( type, color );
+                    Dialog::selectMineType( type, color );
+
+                    return _generateMineObjectProperties( type, color );
+                } );
+                return res;
+            }
             if ( le.MouseClickLeft( _adventureObjectButtonsRect[AdventureObjectBrush::DWELLINGS] ) ) {
                 handleObjectMouseClick( Dialog::selectDwellingType );
                 return res;
@@ -1174,5 +1222,33 @@ namespace Interface
         }
 
         return color * static_cast<int32_t>( townObjects.size() ) + type;
+    }
+
+    void EditorPanel::getMineObjectProperties( int32_t & type, int32_t & color ) const
+    {
+        const auto & mineObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_MINES );
+        if ( mineObjects.empty() ) {
+            // How is it even possible?
+            assert( 0 );
+            type = -1;
+            color = -1;
+            return;
+        }
+
+        type = _selectedAdventureObjectType[AdventureObjectBrush::MINES] % static_cast<int32_t>( mineObjects.size() );
+        color = _selectedAdventureObjectType[AdventureObjectBrush::MINES] / static_cast<int32_t>( mineObjects.size() );
+    }
+
+    int32_t EditorPanel::_generateMineObjectProperties( const int32_t type, const int32_t color )
+    {
+        const auto & mineObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_MINES );
+        if ( mineObjects.empty() ) {
+            // How is it even possible?
+            assert( 0 );
+            return -1;
+        }
+
+        const int32_t objectType = ( color * static_cast<int32_t>( mineObjects.size() ) + type );
+        return ( objectType < 0 ) ? -1 : objectType;
     }
 }

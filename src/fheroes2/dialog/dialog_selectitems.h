@@ -67,6 +67,8 @@ namespace Dialog
 
     int selectDwellingType( const int dwellingType );
 
+    void selectMineType( int32_t & type, int32_t & color );
+
     int selectPowerUpObjectType( const int powerUpObjectType );
 }
 
