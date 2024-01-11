@@ -3106,4 +3106,56 @@ namespace fheroes2
             }
         }
     }
+    void ApplyVerticalGradient( fheroes2::Image & image, uint8_t outsideColor, uint8_t insideColor, uint8_t offset, uint8_t borderWidth )
+    {
+        const int32_t height = image.height();
+        const int32_t width = image.width();
+        uint8_t * inData = image.image();
+        uint8_t * inTransform = image.transform();
+
+        uint8_t center_y = static_cast<uint8_t>( std::max( 1, ( height / 2 ) - height % 2 ) );
+        // offsetting provides better visibility
+        float scale = ( outsideColor - insideColor - offset ) / static_cast<float>( center_y );
+        // bottom Half
+        for ( uint8_t pos_y = center_y; pos_y <= height; pos_y++ ) {
+            uint8_t val = static_cast<uint8_t>( insideColor + abs( center_y - pos_y ) * scale );
+
+            uint8_t * rowStart = inData + static_cast<ptrdiff_t>( pos_y * width );
+            uint8_t * rowEnd = inData + static_cast<ptrdiff_t>( ( pos_y + 1 ) * width );
+            uint8_t * inTrans = inTransform + static_cast<ptrdiff_t>( pos_y * width );
+
+            for ( ; rowStart != rowEnd; ++rowStart, ++inTrans ) {
+                if ( *inTrans == 0 ) {
+                    *rowStart = val;
+                }
+            }
+        }
+
+        // top Half
+        for ( uint8_t neg_y = 0; neg_y <= center_y; neg_y++ ) {
+            uint8_t neg_Val = static_cast<uint8_t>( insideColor + abs( center_y - neg_y ) * scale );
+            uint8_t * neg_rowStart = inData + static_cast<ptrdiff_t>( neg_y * width );
+            uint8_t * neg_rowEnd = inData + static_cast<ptrdiff_t>( ( neg_y + 1 ) * width );
+            uint8_t * neg_inTrans = inTransform + static_cast<ptrdiff_t>( neg_y * width );
+            for ( ; neg_rowStart != neg_rowEnd; ++neg_rowStart, ++neg_inTrans ) {
+                if ( *neg_inTrans == 0 || neg_y == 0 ) {
+                    *neg_rowStart = neg_Val;
+                }
+            }
+        }
+
+        // first line is broken for unknown reason
+        uint8_t * data = inData;
+        uint8_t * transform = inTransform;
+        const uint8_t * dataEnd = data + width;
+        for ( ; data != dataEnd; ++data, ++transform ) {
+            *transform = 1;
+        }
+
+        for ( uint8_t i = 0; i < borderWidth; i++ ) {
+            fheroes2::Image cnt = CreateContour( image, 0 );
+            Blit( cnt, image );
+        }
+
+    }
 }
