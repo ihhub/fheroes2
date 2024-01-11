@@ -79,7 +79,7 @@ namespace
         const bool toWater = tile.isWater();
         const MP2::MapObjectType objectType = tile.GetObject();
 
-        if ( objectType == MP2::OBJ_HEROES || objectType == MP2::OBJ_MONSTER || objectType == MP2::OBJ_BOAT ) {
+        if ( objectType == MP2::OBJ_HERO || objectType == MP2::OBJ_MONSTER || objectType == MP2::OBJ_BOAT ) {
             return false;
         }
 
@@ -124,7 +124,7 @@ namespace
         };
 
         // Enemy heroes can be defeated and passed through
-        if ( objectType == MP2::OBJ_HEROES ) {
+        if ( objectType == MP2::OBJ_HERO ) {
             // Heroes on the water can be attacked from the nearby shore, but they cannot be passed through
             if ( fromWater != toWater ) {
                 assert( !fromWater && toWater );
@@ -1161,7 +1161,7 @@ bool AIWorldPathfinder::isHeroPossiblyBlockingWay( const Heroes & hero )
     for ( const int32_t idx : Maps::ScanAroundObject( heroIndex, MP2::OBJ_STONE_LITHS ) ) {
         const Maps::Tiles & tile = world.GetTiles( idx );
 
-        if ( tile.GetObject() == MP2::OBJ_HEROES ) {
+        if ( tile.GetObject() == MP2::OBJ_HERO ) {
             const int direction = Maps::GetDirection( idx, heroIndex );
             assert( CountBits( direction ) == 1 && direction != Direction::CENTER );
 

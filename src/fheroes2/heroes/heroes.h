@@ -344,7 +344,7 @@ public:
 
     void setObjectTypeUnderHero( const MP2::MapObjectType objectType )
     {
-        _objectTypeUnderHero = ( ( objectType != MP2::OBJ_HEROES ) ? objectType : MP2::OBJ_NONE );
+        _objectTypeUnderHero = ( ( objectType != MP2::OBJ_HERO ) ? objectType : MP2::OBJ_NONE );
     }
 
     const fheroes2::Point & GetPatrolCenter() const

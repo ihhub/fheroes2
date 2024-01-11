@@ -1128,7 +1128,7 @@ void Heroes::SetVisitedWideTile( int32_t index, const MP2::MapObjectType objectT
 void Heroes::markHeroMeeting( int heroID )
 {
     if ( isValidId( heroID ) && !hasMetWithHero( heroID ) ) {
-        visit_object.emplace_front( heroID, MP2::OBJ_HEROES );
+        visit_object.emplace_front( heroID, MP2::OBJ_HERO );
     }
 }
 
@@ -1140,14 +1140,14 @@ void Heroes::unmarkHeroMeeting()
             continue;
         }
 
-        hero->visit_object.remove( IndexObject( _id, MP2::OBJ_HEROES ) );
-        visit_object.remove( IndexObject( hero->_id, MP2::OBJ_HEROES ) );
+        hero->visit_object.remove( IndexObject( _id, MP2::OBJ_HERO ) );
+        visit_object.remove( IndexObject( hero->_id, MP2::OBJ_HERO ) );
     }
 }
 
 bool Heroes::hasMetWithHero( int heroID ) const
 {
-    return visit_object.end() != std::find( visit_object.begin(), visit_object.end(), IndexObject( heroID, MP2::OBJ_HEROES ) );
+    return visit_object.end() != std::find( visit_object.begin(), visit_object.end(), IndexObject( heroID, MP2::OBJ_HERO ) );
 }
 
 bool Heroes::isLosingGame() const

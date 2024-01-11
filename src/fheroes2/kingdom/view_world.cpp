@@ -375,7 +375,7 @@ namespace
 
                 for ( uint32_t i = 0; i < objectCount; ++i ) {
                     switch ( objectTypes[i] ) {
-                    case MP2::OBJ_HEROES: {
+                    case MP2::OBJ_HERO: {
                         if ( revealHeroes || !tile.isFog( color ) ) {
                             const Heroes * hero = world.GetHeroes( tile.GetCenter() );
                             if ( hero ) {

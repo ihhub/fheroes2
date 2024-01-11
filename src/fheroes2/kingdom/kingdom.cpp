@@ -484,7 +484,7 @@ bool Kingdom::isValidKingdomObject( const Maps::Tiles & tile, const MP2::MapObje
     }
 
     // Hero object can overlay other objects when standing on top of it: force check with GetObject( true )
-    if ( objectType == MP2::OBJ_HEROES ) {
+    if ( objectType == MP2::OBJ_HERO ) {
         const Heroes * hero = tile.getHero();
 
         // Hero can only be met if he either belongs to this kingdom or is an enemy hero (in the latter case, an attack will occur)

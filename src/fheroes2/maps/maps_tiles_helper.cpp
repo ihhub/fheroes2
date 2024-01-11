@@ -3195,7 +3195,7 @@ namespace Maps
         }
         if ( objectTypesToErase & ObjectErasureType::HEROES ) {
             // TODO: Implement hero removal from other objects (castles, windmills, mines, etc.)
-            // without corrupting their object data. Do this through 'OBJ_HEROES' (possibly like 'hero.Dismiss()').
+            // without corrupting their object data. Do this through 'OBJ_HERO' (possibly like 'hero.Dismiss()').
             needRedraw |= removeObjectTypeFromTile( tile, MP2::OBJ_ICN_TYPE_MINIHERO );
         }
         if ( objectTypesToErase & ObjectErasureType::TREASURES && tile.getObjectIcnType() == MP2::OBJ_ICN_TYPE_OBJNRSRC ) {

@@ -846,7 +846,7 @@ namespace
             return;
         }
 
-        assert( world.GetTiles( indexTo ).GetObject() != MP2::OBJ_HEROES );
+        assert( world.GetTiles( indexTo ).GetObject() != MP2::OBJ_HERO );
 
         if ( AIIsShowAnimationForHero( hero, AIGetAllianceColors() ) ) {
             // AI-controlled hero cannot activate Stone Liths from the same tile, but should move to this tile from some
@@ -1749,7 +1749,7 @@ namespace AI
         case MP2::OBJ_MONSTER:
             AIToMonster( hero, dst_index );
             break;
-        case MP2::OBJ_HEROES:
+        case MP2::OBJ_HERO:
             AIToHeroes( hero, dst_index );
             break;
         case MP2::OBJ_CASTLE:

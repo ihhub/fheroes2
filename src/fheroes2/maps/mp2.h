@@ -190,7 +190,7 @@ namespace MP2
         OBJ_NON_ACTION_RANDOM_MONSTER_MEDIUM = 52, // Never set in maps.
         OBJ_NON_ACTION_RANDOM_MONSTER_STRONG = 53, // Never set in maps.
         OBJ_NON_ACTION_RANDOM_MONSTER_VERY_STRONG = 54, // Never set in maps.
-        OBJ_NON_ACTION_HEROES = 55, // Never set in maps. This type is used for any types of heroes, including random.
+        OBJ_NON_ACTION_HERO = 55, // Never set in maps. This type is used for any types of heroes, including random.
         OBJ_NOTHING_SPECIAL = 56,
         OBJ_MOSSY_ROCK = 57, // It is a Rock with moss for Swamp terrain. ICN::OBJNSWMP, images 138-139. In the original game it has no name.
         OBJ_NON_ACTION_WATCH_TOWER = 58,
@@ -324,7 +324,7 @@ namespace MP2
         OBJ_RANDOM_MONSTER_MEDIUM = OBJ_NON_ACTION_RANDOM_MONSTER_MEDIUM + OBJ_ACTION_OBJECT_TYPE,
         OBJ_RANDOM_MONSTER_STRONG = OBJ_NON_ACTION_RANDOM_MONSTER_STRONG + OBJ_ACTION_OBJECT_TYPE,
         OBJ_RANDOM_MONSTER_VERY_STRONG = OBJ_NON_ACTION_RANDOM_MONSTER_VERY_STRONG + OBJ_ACTION_OBJECT_TYPE,
-        OBJ_HEROES = OBJ_NON_ACTION_HEROES + OBJ_ACTION_OBJECT_TYPE, // This type is used for any types of heroes, including random.
+        OBJ_HERO = OBJ_NON_ACTION_HERO + OBJ_ACTION_OBJECT_TYPE, // This type is used for any types of heroes, including random.
         OBJ_ACTION_NOTHING_SPECIAL = OBJ_NOTHING_SPECIAL + OBJ_ACTION_OBJECT_TYPE, // Never set in maps.
         OBJ_ACTION_MOSSY_ROCK = OBJ_MOSSY_ROCK + OBJ_ACTION_OBJECT_TYPE, // Never set in maps.
         OBJ_WATCH_TOWER = OBJ_NON_ACTION_WATCH_TOWER + OBJ_ACTION_OBJECT_TYPE,

@@ -1452,8 +1452,8 @@ namespace
         // Only 7 races and 6 colors exist in the game.
         for ( int32_t color = 0; color < 6; ++color ) {
             for ( int32_t race = 0; race < 7; ++race ) {
-                Maps::ObjectInfo object{ MP2::OBJ_HEROES };
-                object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_MINIHERO, color * 7 + race, fheroes2::Point{ 0, 0 }, MP2::OBJ_HEROES, Maps::OBJECT_LAYER );
+                Maps::ObjectInfo object{ MP2::OBJ_HERO };
+                object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_MINIHERO, color * 7 + race, fheroes2::Point{ 0, 0 }, MP2::OBJ_HERO, Maps::OBJECT_LAYER );
                 object.metadata[0] = color;
 
                 if ( race == 6 ) {
