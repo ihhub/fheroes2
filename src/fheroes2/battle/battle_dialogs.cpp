@@ -78,6 +78,7 @@ namespace
     const int bsTextWidth = 303;
     const int bsTextXOffset = 25;
     const int bsTextYOffset = 160;
+    const int bsTextIndent = 30;
 
     class LoopedAnimation
     {
@@ -517,6 +518,7 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
     const fheroes2::Rect animationRoi( roi.x + ( ( roi.width - animationBorder.width() ) / 2 ) + 4, roi.y + 21, animationBorder.width(), animationBorder.height() );
     Copy( animationBorder, 0, 0, display, animationRoi.x - 4, animationRoi.y - 4, animationRoi.width, animationRoi.height );
 
+    // Setup summary texts according to results and get the corresponding animation sequence.
     std::string surrenderText;
     std::string outcomeText;
     std::string title;
@@ -549,16 +551,20 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
         sequence.push( ICN::UNKNOWN, false );
     }
 
+    // Setup animation
     const fheroes2::Sprite & sequenceBase = fheroes2::AGG::GetICN( sequence.id(), 0 );
     const fheroes2::Sprite & sequenceStart = fheroes2::AGG::GetICN( sequence.id(), 1 );
-
     Copy( sequenceBase, 0, 0, display, animationRoi.x, animationRoi.y, sequenceBase.width(), sequenceBase.height() );
-    Copy( sequenceStart, 0, 0, display, animationRoi.x, animationRoi.y, sequenceStart.width(), sequenceStart.height() );
+    fheroes2::Blit( sequenceStart, display, animationRoi.x + sequenceStart.x(), animationRoi.y + sequenceStart.y() );
 
-    const fheroes2::Rect summaryRoi( roi.x + 11, roi.y + bsTextYOffset, roi.width - 22, roi.height - bsTextYOffset - 46 );
+    const fheroes2::Rect summaryRoi( roi.x + 11, roi.y + bsTextYOffset, roi.width - 22, roi.height - bsTextYOffset );
+    fheroes2::ImageRestorer summaryBackground( display, summaryRoi.x, summaryRoi.y, roi.width, summaryRoi.height );
+
     const int32_t casualtiesOffsetY = summaryRoi.y + 96;
     int32_t summaryBodyOffset = summaryRoi.y;
     int32_t remainingSummaryBodyHeight = casualtiesOffsetY - summaryBodyOffset;
+
+    // Draw texts
     if ( !title.empty() ) {
         const fheroes2::Text box( title, summaryTitleFont );
         box.draw( summaryRoi.x, summaryBodyOffset, summaryRoi.width, display );
@@ -567,6 +573,7 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
     }
     if ( !outcomeText.empty() ) {
         if ( !surrenderText.empty() ) {
+            // Divide the main text area evenly between the two texts bodies by splitting it into 3 equal parts.
             const fheroes2::Text upperText( surrenderText, fheroes2::FontType::normalWhite() );
             const fheroes2::Text lowerText( outcomeText, fheroes2::FontType::normalWhite() );
             const int32_t inbetweenSpace = ( remainingSummaryBodyHeight - upperText.height( summaryRoi.width ) - lowerText.height( summaryRoi.width ) ) / 3;
@@ -621,7 +628,6 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
     if ( allowToRestart ) {
         buttonRestart = std::make_unique<fheroes2::Button>();
         buttonHorizontalMargin = 23;
-
         background.renderButton( *buttonRestart, isEvilInterface ? ICN::BUTTON_SMALL_RESTART_EVIL : ICN::BUTTON_SMALL_RESTART_GOOD, 0, 1,
                                  { buttonHorizontalMargin, buttonVerticalMargin }, fheroes2::StandardWindow::Padding::BOTTOM_RIGHT );
     }
@@ -643,14 +649,21 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
         if ( allowToRestart ) {
             le.MousePressLeft( buttonRestart->area() ) ? buttonRestart->drawOnPress() : buttonRestart->drawOnRelease();
         }
-
-        // exit
-        if ( Game::HotKeyCloseWindow() || le.MouseClickLeft( buttonOk.area() ) )
+        
+        if ( Game::HotKeyCloseWindow() || le.MouseClickLeft( buttonOk.area() ) ) {
             break;
-
-        if ( allowToRestart && le.MouseClickLeft( buttonRestart->area() ) ) {
-            // Skip artifact transfer and return to restart battle in manual mode
-            return true;
+        }
+        else if ( le.MousePressRight( buttonOk.area() ) ) {
+            fheroes2::showStandardTextMessage( _( "Okay" ), _( "Click to leave the battle results." ), Dialog::ZERO );
+        }
+        else if ( allowToRestart ) {
+            if ( le.MouseClickLeft( buttonRestart->area() ) ) {
+                // Skip artifact transfer and return to restart the battle in manual mode
+                return true;
+            }
+            else if ( le.MousePressRight( buttonRestart->area() ) ) {
+                fheroes2::showStandardTextMessage( _( "Restart" ), _( "Click to restart the battle in manual mode." ), Dialog::ZERO );
+            }
         }
 
         // animation
@@ -658,7 +671,7 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
             const fheroes2::Sprite & base = fheroes2::AGG::GetICN( sequence.id(), 0 );
             const fheroes2::Sprite & sequenceCurrent = fheroes2::AGG::GetICN( sequence.id(), sequence.frameId() );
 
-            fheroes2::Blit( base, display, animationRoi.x + sequenceBase.x(), animationRoi.y + sequenceBase.y() );
+            Copy( base, 0, 0, display, animationRoi.x + sequenceBase.x(), animationRoi.y + sequenceBase.y(), base.width(),base.height() );
             fheroes2::Blit( sequenceCurrent, display, animationRoi.x + sequenceCurrent.x(), animationRoi.y + sequenceCurrent.y() );
             display.render( animationRoi );
         }
@@ -669,16 +682,28 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
         const HeroBase * loser = ( res.army1 & RESULT_LOSS ? _army1->GetCommander() : ( res.army2 & RESULT_LOSS ? _army2->GetCommander() : nullptr ) );
 
         // Can't transfer artifacts
-        if ( winner == nullptr || loser == nullptr )
+        if ( winner == nullptr || loser == nullptr ) {
             return false;
+        }
+
+        summaryBackground.restore();
 
         const bool isWinnerHuman = winner && winner->isControlHuman();
+        const int newButtonOkIcn = isEvilInterface ? ICN::BUTTON_SMALLER_OKAY_EVIL : ICN::BUTTON_SMALLER_OKAY_GOOD;
 
-        buttonOk.setICNInfo( isEvilInterface ? ICN::BUTTON_SMALLER_OKAY_EVIL : ICN::BUTTON_SMALLER_OKAY_GOOD, 0, 1 );
+        background.renderButton( buttonOk, newButtonOkIcn, 0, 1, { 0, buttonVerticalMargin }, fheroes2::StandardWindow::Padding::BOTTOM_CENTER );
+
+        const fheroes2::Sprite & border = fheroes2::AGG::GetICN( ICN::WINLOSEB, 0 );
+        const fheroes2::Rect artifactArea( summaryRoi.x + ( summaryRoi.width - border.width() ) / 2, casualtiesOffsetY + 38, border.width(), border.height() );
+        Copy( border, 0, 0, display, artifactArea.x, artifactArea.y, artifactArea.width, artifactArea.height );
+
+        fheroes2::ImageRestorer artifactHeader( display, summaryRoi.x, summaryRoi.y, summaryRoi.width, 40 );
+        fheroes2::ImageRestorer artifactName( display, summaryRoi.x, artifactArea.y + artifactArea.height, summaryRoi.width, 18 );
+
+        display.render( summaryRoi );
 
         for ( const Artifact & art : artifacts ) {
             if ( isWinnerHuman || art.isUltimate() ) { // always show the message for ultimate artifacts
-                fheroes2::StandardWindow::renderBackgroundImage( display, summaryRoi, 0, isEvilInterface );
 
                 std::string artMsg;
                 if ( art.isUltimate() ) {
@@ -695,21 +720,20 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
                     Game::PlayPickupSound();
                 }
 
+                artifactHeader.restore();
+                artifactName.restore();
+
                 const fheroes2::Text box( artMsg, fheroes2::FontType::normalYellow() );
-                box.draw( roi.x, summaryRoi.y, summaryRoi.width, display );
+                box.draw( summaryRoi.x, summaryRoi.y, summaryRoi.width, display );
 
-                const fheroes2::Sprite & border = fheroes2::AGG::GetICN( ICN::WINLOSEB, 0 );
                 const fheroes2::Sprite & artifact = fheroes2::AGG::GetICN( ICN::ARTIFACT, art.IndexSprite64() );
-                const fheroes2::Point artifactOffset( summaryRoi.x + ( summaryRoi.width + artifact.width() ) / 2,
-                                                      summaryRoi.y + ( summaryRoi.height - artifact.height() ) / 2 );
 
-                fheroes2::Blit( border, display, artifactOffset.x, artifactOffset.y );
-                fheroes2::Blit( artifact, display, artifactOffset.x + 8, artifactOffset.y + 8 );
+                Copy( artifact, 0, 0, display, artifactArea.x + 8, artifactArea.y + 8, artifact.width(), artifact.height() );
 
                 const fheroes2::Text artName( art.GetName(), fheroes2::FontType::smallWhite() );
-                artName.draw( artifactOffset.x, artifactOffset.y + 8, summaryRoi.width, display );
+                artName.draw( summaryRoi.x, artifactArea.y + border.height() + 7, summaryRoi.width, display );
 
-                const fheroes2::Rect artifactArea( artifactOffset.x, artifactOffset.y, border.width(), border.height() );
+                display.render( summaryRoi );
 
                 while ( le.HandleEvents() ) {
                     le.MousePressLeft( buttonOk.area() ) ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
@@ -718,17 +742,18 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
                     if ( le.MousePressRight( artifactArea ) ) {
                         fheroes2::ArtifactDialogElement( art ).showPopup( Dialog::ZERO );
                     }
-
-                    // exit
-                    if ( Game::HotKeyCloseWindow() || le.MouseClickLeft( buttonOk.area() ) )
+                    else if ( le.MouseClickLeft( buttonOk.area() ) || Game::HotKeyCloseWindow() ) {
                         break;
-
+                    }
+                    else if ( le.MousePressRight( buttonOk.area() ) ) {
+                        fheroes2::showStandardTextMessage( _( "Okay" ), _( "Exit this menu." ), Dialog::ZERO );
+                    }
                     // animation
                     if ( Game::validateAnimationDelay( Game::BATTLE_DIALOG_DELAY ) && !sequence.nextFrame() ) {
                         const fheroes2::Sprite & base = fheroes2::AGG::GetICN( sequence.id(), 0 );
                         const fheroes2::Sprite & sequenceCurrent = fheroes2::AGG::GetICN( sequence.id(), sequence.frameId() );
 
-                        fheroes2::Blit( base, display, animationRoi.x + sequenceBase.x(), animationRoi.y + sequenceBase.y() );
+                        Copy( base, 0, 0, display, animationRoi.x + sequenceBase.x(), animationRoi.y + sequenceBase.y(), base.width(), base.height() );
                         fheroes2::Blit( sequenceCurrent, display, animationRoi.x + sequenceCurrent.x(), animationRoi.y + sequenceCurrent.y() );
                         display.render( animationRoi );
                     }
@@ -774,10 +799,12 @@ void Battle::Arena::DialogBattleNecromancy( const uint32_t raiseCount )
                     renderArea.y + sequenceRenderAreaOffset.y + sequenceStart.y() );
 
     int xOffset = renderArea.x + bsTextXOffset;
-    int yOffset = renderArea.y + bsTextYOffset - 2;
+    int yOffset = renderArea.y + bsTextYOffset + 15;
+
+    const int adjustedTextWidth = bsTextWidth - 33;
 
     const fheroes2::Text titleBox( _( "Necromancy!" ), fheroes2::FontType::normalYellow() );
-    titleBox.draw( xOffset, yOffset + 2, bsTextWidth, display );
+    titleBox.draw( xOffset, yOffset + 2, adjustedTextWidth, display );
 
     const Monster mons( Monster::SKELETON );
     std::string msg = _( "Practicing the dark arts of necromancy, you are able to raise %{count} of the enemy's dead to return under your service as %{monster}." );
@@ -785,14 +812,15 @@ void Battle::Arena::DialogBattleNecromancy( const uint32_t raiseCount )
     StringReplace( msg, "%{monster}", mons.GetPluralName( raiseCount ) );
 
     const fheroes2::Text messageBox( msg, fheroes2::FontType::normalWhite() );
-    messageBox.draw( xOffset, yOffset + 2, bsTextWidth, display );
+    yOffset += bsTextIndent;
+    messageBox.draw( xOffset, yOffset + 2, adjustedTextWidth, display );
 
     const fheroes2::Sprite & monsterSprite = fheroes2::AGG::GetICN( ICN::MONS32, mons.GetSpriteIndex() );
-    yOffset += messageBox.height( bsTextWidth ) + monsterSprite.height();
+    yOffset += messageBox.height( adjustedTextWidth ) + monsterSprite.height();
     fheroes2::Blit( monsterSprite, display, ( display.width() - monsterSprite.width() ) / 2, yOffset );
 
     fheroes2::Text raiseCountText( std::to_string( raiseCount ), fheroes2::FontType::smallWhite() );
-    raiseCountText.fitToOneRow( bsTextWidth );
+    raiseCountText.fitToOneRow( adjustedTextWidth );
     yOffset += 30;
     raiseCountText.draw( ( display.width() - raiseCountText.width() ) / 2, yOffset + 2, display );
     Game::PlayPickupSound();
