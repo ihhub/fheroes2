@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-10 08:55+0000\n"
+"POT-Creation-Date: 2024-01-11 14:17+0000\n"
 "PO-Revision-Date: 2023-09-11 20:22+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3427,6 +3427,10 @@ msgstr "%{race} %{name}"
 msgid "Click to select %{object} as the resource generator to be placed."
 msgstr "Klikni sem a vyber scenár, ktorý chceš hrať."
 
+#, fuzzy
+msgid "Select Power Up Object:"
+msgstr "Objekty oceánu"
+
 msgid "Map Type:\n"
 msgstr "Typ mapy:\n"
 
@@ -3767,6 +3771,10 @@ msgstr "Toto kúzlo nemožno použiť na lodi."
 
 #, fuzzy
 msgid "Dwellings cannot be placed on water."
+msgstr "Toto kúzlo nemožno použiť na lodi."
+
+#, fuzzy
+msgid "Power-ups cannot be placed on water."
 msgstr "Toto kúzlo nemožno použiť na lodi."
 
 #, fuzzy
