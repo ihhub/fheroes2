@@ -1581,6 +1581,7 @@ int Dialog::selectTreeType( const int treeType )
     GenericObjectTypeSelection listbox( objectInfo, { 420, fheroes2::Display::instance().height() - 180 }, _( "Select Tree Object:" ) );
 
     return selectObjectType( treeType, objectInfo.size(), listbox );
+}
 
 int Dialog::selectPowerUpObjectType( const int powerUpObjectType )
 {
