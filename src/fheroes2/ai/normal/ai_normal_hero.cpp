@@ -588,7 +588,7 @@ namespace
         case MP2::OBJ_MONSTER:
             return isHeroStrongerThan( tile, objectType, ai, heroArmyStrength, ( hero.isLosingGame() ? 1.0 : AI::ARMY_ADVANTAGE_MEDIUM ) );
 
-        case MP2::OBJ_HEROES: {
+        case MP2::OBJ_HERO: {
             const Heroes * otherHero = tile.getHero();
             assert( otherHero != nullptr );
 
@@ -794,7 +794,7 @@ namespace
             return 0.8;
         case MP2::OBJ_ALCHEMIST_LAB:
         case MP2::OBJ_ARTIFACT:
-        case MP2::OBJ_HEROES:
+        case MP2::OBJ_HERO:
         case MP2::OBJ_MINE:
         case MP2::OBJ_SAWMILL:
             return 0.9;
@@ -989,7 +989,7 @@ namespace AI
 
             return calculateCastleValue( castle );
         }
-        case MP2::OBJ_HEROES: {
+        case MP2::OBJ_HERO: {
             const Heroes * otherHero = tile.getHero();
             if ( !otherHero ) {
                 // How is it even possible?
@@ -1551,7 +1551,7 @@ namespace AI
 
             return calculateCastleValue( castle );
         }
-        case MP2::OBJ_HEROES: {
+        case MP2::OBJ_HERO: {
             const Heroes * otherHero = tile.getHero();
             if ( !otherHero ) {
                 // How is it even possible?
@@ -1749,7 +1749,7 @@ namespace AI
         const MP2::MapObjectType objectType = tile.GetObject();
 
         switch ( objectType ) {
-        case MP2::OBJ_HEROES: {
+        case MP2::OBJ_HERO: {
             const Heroes * otherHero = tile.getHero();
             if ( !otherHero ) {
                 // How is it even possible?
@@ -2023,7 +2023,7 @@ namespace AI
         std::set<int> objectIndexes;
 
         for ( const auto & actionObject : _mapActionObjects ) {
-            if ( actionObject.second == MP2::OBJ_HEROES ) {
+            if ( actionObject.second == MP2::OBJ_HERO ) {
                 assert( world.GetTiles( actionObject.first ).getHero() != nullptr );
             }
 
@@ -2095,7 +2095,7 @@ namespace AI
 
                     break;
                 }
-                case MP2::OBJ_HEROES: {
+                case MP2::OBJ_HERO: {
                     const Heroes * anotherHero = destinationTile.getHero();
                     if ( anotherHero == nullptr ) {
                         assert( 0 );
@@ -2254,7 +2254,7 @@ namespace AI
 
     void Normal::updatePriorityTargets( Heroes & hero, int32_t tileIndex, const MP2::MapObjectType objectType )
     {
-        if ( objectType != MP2::OBJ_CASTLE && objectType != MP2::OBJ_HEROES ) {
+        if ( objectType != MP2::OBJ_CASTLE && objectType != MP2::OBJ_HERO ) {
             // Priorities are only for castles and heroes at the moment.
             return;
         }
@@ -2283,7 +2283,7 @@ namespace AI
             if ( objectType == MP2::OBJ_CASTLE ) {
                 updateCastle();
             }
-            else if ( objectType == MP2::OBJ_HEROES ) {
+            else if ( objectType == MP2::OBJ_HERO ) {
                 const Maps::Tiles & tile = world.GetTiles( tileIndex );
 
                 const Heroes * anotherHero = tile.getHero();

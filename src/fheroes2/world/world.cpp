@@ -82,7 +82,7 @@ namespace
             }
 
             const MP2::MapObjectType objectType = indexedTile.GetObject( true );
-            if ( objectType == MP2::OBJ_CASTLE || objectType == MP2::OBJ_HEROES || objectType == MP2::OBJ_MONSTER ) {
+            if ( objectType == MP2::OBJ_CASTLE || objectType == MP2::OBJ_HERO || objectType == MP2::OBJ_MONSTER ) {
                 return true;
             }
         }
@@ -619,7 +619,7 @@ void World::MonthOfMonstersAction( const Monster & mons )
         const int32_t tileId = tile.GetIndex();
         const MP2::MapObjectType objectType = tile.GetObject( true );
 
-        if ( objectType == MP2::OBJ_CASTLE || objectType == MP2::OBJ_HEROES || objectType == MP2::OBJ_MONSTER ) {
+        if ( objectType == MP2::OBJ_CASTLE || objectType == MP2::OBJ_HERO || objectType == MP2::OBJ_MONSTER ) {
             excludeTiles.emplace( tileId );
             continue;
         }
