@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-10 08:55+0000\n"
+"POT-Creation-Date: 2024-01-11 14:17+0000\n"
 "PO-Revision-Date: 2023-12-22 01:17+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -3494,6 +3494,10 @@ msgstr "%{name} le %{race}"
 msgid "Click to select %{object} as the resource generator to be placed."
 msgstr "Cliquez ici pour sélectionner le scénario à jouer."
 
+#, fuzzy
+msgid "Select Power Up Object:"
+msgstr "Choix d'élément (océan) :"
+
 msgid "Map Type:\n"
 msgstr "Type de carte :\n"
 
@@ -3831,6 +3835,10 @@ msgstr "Ce sort ne peut pas être jeté en mer."
 
 #, fuzzy
 msgid "Dwellings cannot be placed on water."
+msgstr "Ce sort ne peut pas être jeté en mer."
+
+#, fuzzy
+msgid "Power-ups cannot be placed on water."
 msgstr "Ce sort ne peut pas être jeté en mer."
 
 #, fuzzy

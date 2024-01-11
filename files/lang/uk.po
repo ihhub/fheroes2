@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-10 08:55+0000\n"
+"POT-Creation-Date: 2024-01-11 14:17+0000\n"
 "PO-Revision-Date: 2023-09-06 08:41+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3381,6 +3381,10 @@ msgstr "%{name} %{race}"
 msgid "Click to select %{object} as the resource generator to be placed."
 msgstr ""
 
+#, fuzzy
+msgid "Select Power Up Object:"
+msgstr "Оберіть Артефакти:"
+
 msgid "Map Type:\n"
 msgstr "Тип мапи:\n"
 
@@ -3700,6 +3704,10 @@ msgstr "Це Місто не можна покращити до Замку."
 
 #, fuzzy
 msgid "Dwellings cannot be placed on water."
+msgstr "Це Місто не можна покращити до Замку."
+
+#, fuzzy
+msgid "Power-ups cannot be placed on water."
 msgstr "Це Місто не можна покращити до Замку."
 
 msgid "Used to place %{object}."

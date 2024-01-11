@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-10 08:55+0000\n"
+"POT-Creation-Date: 2024-01-11 14:17+0000\n"
 "PO-Revision-Date: 2023-09-04 21:55+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -3424,6 +3424,10 @@ msgstr "%{name} a %{race}"
 msgid "Click to select %{object} as the resource generator to be placed."
 msgstr "Kattints ide, hogy kiválaszd melyik Küldetéssel játszol."
 
+#, fuzzy
+msgid "Select Power Up Object:"
+msgstr "Tengeri objektum kiválasztása:"
+
 msgid "Map Type:\n"
 msgstr "Térképtípus:\n"
 
@@ -3759,6 +3763,10 @@ msgstr "Vízen nem helyezhetők el lények."
 
 #, fuzzy
 msgid "Dwellings cannot be placed on water."
+msgstr "Vízen nem helyezhetők el városok."
+
+#, fuzzy
+msgid "Power-ups cannot be placed on water."
 msgstr "Vízen nem helyezhetők el városok."
 
 #, fuzzy
