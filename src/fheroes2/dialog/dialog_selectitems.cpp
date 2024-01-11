@@ -678,10 +678,10 @@ namespace
         }
     };
 
-    class DwellingTypeSelection : public ObjectTypeSelection
+    class GenericObjectTypeSelection : public ObjectTypeSelection
     {
     public:
-        DwellingTypeSelection( const std::vector<Maps::ObjectInfo> & objectInfo, const fheroes2::Size & size, std::string title )
+        GenericObjectTypeSelection( const std::vector<Maps::ObjectInfo> & objectInfo, const fheroes2::Size & size, std::string title )
             : ObjectTypeSelection( objectInfo, size, std::move( title ), 6 * 32 / 2, 6 * 32 + 10, 3 * 32 )
         {
             // Do nothing.
@@ -1244,7 +1244,7 @@ int Dialog::selectDwellingType( const int dwellingType )
 {
     const auto & objectInfo = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_DWELLINGS );
 
-    DwellingTypeSelection listbox( objectInfo, { 420, fheroes2::Display::instance().height() - 180 }, _( "Select Dwelling:" ) );
+    GenericObjectTypeSelection listbox( objectInfo, { 420, fheroes2::Display::instance().height() - 180 }, _( "Select Dwelling:" ) );
 
     return selectObjectType( dwellingType, objectInfo.size(), listbox );
 }
@@ -1539,7 +1539,7 @@ int Dialog::selectMountainType( const int mountainType )
 {
     const auto & objectInfo = Maps::getObjectsByGroup( Maps::ObjectGroup::LANDSCAPE_MOUNTAINS );
 
-    DwellingTypeSelection listbox( objectInfo, { 420, fheroes2::Display::instance().height() - 180 }, _( "Select Mountain Object:" ) );
+    GenericObjectTypeSelection listbox( objectInfo, { 420, fheroes2::Display::instance().height() - 180 }, _( "Select Mountain Object:" ) );
 
     return selectObjectType( mountainType, objectInfo.size(), listbox );
 }
@@ -1548,7 +1548,7 @@ int Dialog::selectRockType( const int rockType )
 {
     const auto & objectInfo = Maps::getObjectsByGroup( Maps::ObjectGroup::LANDSCAPE_ROCKS );
 
-    DwellingTypeSelection listbox( objectInfo, { 420, fheroes2::Display::instance().height() - 180 }, _( "Select Rock Object:" ) );
+    GenericObjectTypeSelection listbox( objectInfo, { 420, fheroes2::Display::instance().height() - 180 }, _( "Select Rock Object:" ) );
 
     return selectObjectType( rockType, objectInfo.size(), listbox );
 }
@@ -1557,7 +1557,7 @@ int Dialog::selectTreeType( const int treeType )
 {
     const auto & objectInfo = Maps::getObjectsByGroup( Maps::ObjectGroup::LANDSCAPE_TREES );
 
-    DwellingTypeSelection listbox( objectInfo, { 420, fheroes2::Display::instance().height() - 180 }, _( "Select Tree Object:" ) );
+    GenericObjectTypeSelection listbox( objectInfo, { 420, fheroes2::Display::instance().height() - 180 }, _( "Select Tree Object:" ) );
 
     return selectObjectType( treeType, objectInfo.size(), listbox );
 }
