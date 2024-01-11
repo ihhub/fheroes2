@@ -333,9 +333,12 @@ namespace
             return true;
         }
 
-        case MP2::OBJ_OBSERVATION_TOWER:
-            return Maps::getFogTileCountToBeRevealed( index, GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::OBSERVATION_TOWER ), hero.GetColor() )
-                   > 0;
+        case MP2::OBJ_OBSERVATION_TOWER: {
+            const int32_t fogCountToUncoverByTower
+                = Maps::getFogTileCountToBeRevealed( index, GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::OBSERVATION_TOWER ), hero.GetColor() );
+
+            return fogCountToUncoverByTower > 0;
+        }
 
         case MP2::OBJ_OBELISK:
             // TODO: add the logic to dig an Ultimate artifact when a digging tile is visible.
@@ -542,6 +545,10 @@ namespace
                 return true;
             }
 
+            if ( hero.isObjectTypeVisited( objectType ) ) {
+                return false;
+            }
+
             const uint32_t distance = getDistanceToObject( hero, pathfinder, index );
             if ( distance == 0 ) {
                 return false;
@@ -550,7 +557,7 @@ namespace
             const int daysActive = DAYOFWEEK - world.GetDay() + 1;
             const double movementBonus = daysActive * GameStatic::getMovementPointBonus( objectType ) - 2.0 * distance;
 
-            return !hero.isObjectTypeVisited( objectType ) && movementBonus > 0;
+            return movementBonus > 0;
         }
 
         // Objects that give goods but curse with bad morale when visiting them for subsequent times.
@@ -617,7 +624,7 @@ namespace
         case MP2::OBJ_JAIL:
             return kingdom.GetHeroes().size() < Kingdom::GetMaxHeroes();
         case MP2::OBJ_HUT_OF_MAGI:
-            return !hero.isObjectTypeVisited( objectType, Visit::GLOBAL ) && !Maps::GetObjectPositions( MP2::OBJ_EYE_OF_MAGI, true ).empty();
+            return !hero.isObjectTypeVisited( objectType, Visit::GLOBAL ) && Maps::doesObjectExistOnMap( MP2::OBJ_EYE_OF_MAGI );
 
         case MP2::OBJ_ALCHEMIST_TOWER: {
             const BagArtifacts & bag = hero.GetBagArtifacts();
@@ -813,14 +820,19 @@ namespace
         return 1.0;
     }
 
-    double ScaleWithDistance( const double value, const uint32_t distance, const MP2::MapObjectType objectType )
+    double scaleWithDistanceAndTime( const double value, const uint32_t distance, const MP2::MapObjectType objectType )
     {
         if ( distance == 0 ) {
             return value;
         }
 
         // Some objects do not loose their value drastically over distances. This allows AI heroes to keep focus on important targets.
-        const double correctedDistance = distance * getDistanceModifier( objectType );
+        double correctedDistance = distance * getDistanceModifier( objectType );
+
+        // Distances should be corrected over time as AI heroes should focus on keeping important objects in focus.
+        // This value shouldn't be big but very slowly increases over time.
+        const double timeCorrectionCoeff = 1 - std::min( 0.5, world.CountDay() * 0.0001 );
+        correctedDistance *= timeCorrectionCoeff;
 
         // Scale non-linearly (more value lost as distance increases)
         return value - ( correctedDistance * std::log10( correctedDistance ) );
@@ -830,12 +842,13 @@ namespace
     {
         switch ( hero.getAIRole() ) {
         case Heroes::Role::SCOUT:
+            // Scouts do not have any penalty on map exploration as it is their main priority.
             return 0;
         case Heroes::Role::HUNTER:
-            return fogDiscoveryBaseValue;
-        case Heroes::Role::COURIER:
         case Heroes::Role::FIGHTER:
         case Heroes::Role::CHAMPION:
+            return fogDiscoveryBaseValue;
+        case Heroes::Role::COURIER:
             return fogDiscoveryBaseValue * 2;
         default:
             // If you set a new type of a hero you must add the logic here.
@@ -844,6 +857,27 @@ namespace
         }
 
         return fogDiscoveryBaseValue;
+    }
+
+    uint32_t getTimeoutBeforeFogDiscoveryIntensification( const Heroes & hero )
+    {
+        switch ( hero.getAIRole() ) {
+        case Heroes::Role::SCOUT:
+            return 30;
+        case Heroes::Role::HUNTER:
+            return 90;
+        case Heroes::Role::FIGHTER:
+        case Heroes::Role::CHAMPION:
+            return 60;
+        case Heroes::Role::COURIER:
+            return 120;
+        default:
+            // If you set a new type of a hero you must add the logic here.
+            assert( 0 );
+            break;
+        }
+
+        return 30;
     }
 }
 
@@ -1221,13 +1255,14 @@ namespace AI
             return -dangerousTaskPenalty;
         }
         case MP2::OBJ_OBSERVATION_TOWER: {
-            const int fogCountToUncover
+            const int32_t fogCountToUncoverByTower
                 = Maps::getFogTileCountToBeRevealed( index, GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::OBSERVATION_TOWER ), hero.GetColor() );
-            if ( fogCountToUncover <= 0 ) {
+
+            if ( fogCountToUncoverByTower == 0 ) {
                 // Nothing to uncover.
                 return -dangerousTaskPenalty;
             }
-            return fogCountToUncover;
+            return fogCountToUncoverByTower;
         }
         case MP2::OBJ_MAGELLANS_MAPS: {
             // Very valuable object.
@@ -1283,13 +1318,19 @@ namespace AI
         case MP2::OBJ_STABLES: {
             const int daysActive = DAYOFWEEK - world.GetDay() + 1;
             double movementBonus = daysActive * GameStatic::getMovementPointBonus( objectType ) - 2.0 * distanceToObject;
-            if ( movementBonus < 0 ) {
-                // Looks like this is too far away.
-                movementBonus = 0;
-            }
 
             const double upgradeValue = getMonsterUpgradeValue( hero.GetArmy(), Monster::CHAMPION );
-            return movementBonus + freeMonsterUpgradeModifier * upgradeValue;
+            if ( upgradeValue > 0.0001 ) {
+                // Even if no movement bonus exist it is worth to visit just to upgrade monsters.
+                return std::max( movementBonus, 0.0 ) + freeMonsterUpgradeModifier * upgradeValue;
+            }
+
+            if ( movementBonus < 0 ) {
+                // Don't waste movement to even visit this object.
+                return -dangerousTaskPenalty;
+            }
+
+            return movementBonus;
         }
         case MP2::OBJ_FREEMANS_FOUNDRY: {
             const double upgradePikemanValue = getMonsterUpgradeValue( hero.GetArmy(), Monster::PIKEMAN );
@@ -1312,14 +1353,21 @@ namespace AI
         }
         case MP2::OBJ_OASIS:
         case MP2::OBJ_WATERING_HOLE: {
-            return std::max( GameStatic::getMovementPointBonus( objectType ) - 2.0 * distanceToObject, 0.0 );
+            const double movementBonus = GameStatic::getMovementPointBonus( objectType ) - 2.0 * distanceToObject;
+            if ( movementBonus < 0 ) {
+                // Don't waste movement to even visit this object.
+                return -dangerousTaskPenalty;
+            }
+
+            return movementBonus;
         }
         case MP2::OBJ_JAIL: {
-            // A free hero is always good and it could be very powerful.
+            // A free hero is always good and he could be very powerful.
             return 3000;
         }
         case MP2::OBJ_HUT_OF_MAGI: {
-            const MapsIndexes eyeMagiIndexes = Maps::GetObjectPositions( MP2::OBJ_EYE_OF_MAGI, true );
+            // TODO: cache Maps::GetObjectPositions() call as this is a very heavy operation.
+            const MapsIndexes eyeMagiIndexes = Maps::GetObjectPositions( MP2::OBJ_EYE_OF_MAGI );
             int fogCountToUncover = 0;
             const int heroColor = hero.GetColor();
             const int eyeViewDistance = GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::MAGI_EYES );
@@ -2085,7 +2133,7 @@ namespace AI
                 distance = hero.GetMovePoints() + ( distance - hero.GetMovePoints() ) * 2;
             }
 
-            value = ScaleWithDistance( value, distance, type );
+            value = scaleWithDistanceAndTime( value, distance, type );
         };
 
         // Set baseline target if it's a special role
@@ -2144,8 +2192,7 @@ namespace AI
         }
 
         double fogDiscoveryValue = getFogDiscoveryValue( hero );
-        bool isTerritoryExpansion = false;
-        const int fogDiscoveryTarget = _pathfinder.getFogDiscoveryTile( hero, isTerritoryExpansion );
+        const auto [fogDiscoveryTarget, isTerritoryExpansion] = _pathfinder.getFogDiscoveryTile( hero );
         if ( fogDiscoveryTarget >= 0 ) {
             uint32_t distanceToFogDiscovery = _pathfinder.getDistance( fogDiscoveryTarget );
 
@@ -2157,10 +2204,27 @@ namespace AI
                 useDimensionDoor = true;
             }
 
-            if ( isTerritoryExpansion && fogDiscoveryValue < 0 ) {
-                // This is actually a very useful fog discovery action which might lead to finding of new objects.
-                // Increase the value of this action.
-                fogDiscoveryValue /= 2;
+            if ( isTerritoryExpansion ) {
+                // Over time the AI should focus more on territory expansion.
+                const uint32_t period = getTimeoutBeforeFogDiscoveryIntensification( hero );
+                assert( period > 0 );
+
+                if ( fogDiscoveryValue < 0 ) {
+                    // This is actually a very useful fog discovery action which might lead to finding of new objects.
+                    // Increase the value of this action.
+
+                    if ( world.CountDay() > period ) {
+                        fogDiscoveryValue = 0;
+                    }
+                    else {
+                        fogDiscoveryValue = fogDiscoveryValue / 2 * ( period - world.CountDay() ) / period;
+                    }
+                }
+                else {
+                    // Over time the AI should focus more on territory expansion.
+                    // Scouts must focus on expansion so they should reach maximum "attention" in a month.
+                    fogDiscoveryValue += std::min( 1000.0 * world.CountDay() / period, 1000.0 );
+                }
             }
 
             getObjectValue( fogDiscoveryTarget, distanceToFogDiscovery, fogDiscoveryValue, MP2::OBJ_NONE, useDimensionDoor );

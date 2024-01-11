@@ -74,6 +74,8 @@ namespace Dialog
     int selectRockType( const int rockType );
 
     int selectTreeType( const int treeType );
+
+    int selectPowerUpObjectType( const int powerUpObjectType );
 }
 
 #endif

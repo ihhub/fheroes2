@@ -125,7 +125,7 @@ Battle::Force::Force( Army & parent, bool opposite, TroopsUidGenerator & generat
         Position pos;
         pos.Set( idx, troop->isWide(), opposite );
 
-        assert( pos.GetHead() != nullptr && ( !troop->isWide() || pos.GetTail() != nullptr ) );
+        assert( pos.GetHead() != nullptr && ( troop->isWide() ? pos.GetTail() != nullptr : pos.GetTail() == nullptr ) );
 
         push_back( new Unit( *troop, pos, opposite, generator.GetUnique() ) );
         back()->SetArmy( army );

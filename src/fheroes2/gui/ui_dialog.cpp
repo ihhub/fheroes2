@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2023                                             *
+ *   Copyright (C) 2021 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -694,13 +694,17 @@ namespace fheroes2
         Blit( background, 0, 0, output, offset.x, offset.y, background.width(), background.height() );
 
         const Sprite & icn = AGG::GetICN( ICN::SECSKILL, _skill.GetIndexSprite1() );
-        Blit( icn, 0, 0, output, offset.x + ( background.width() - icn.width() ) / 2, offset.y + ( background.height() - icn.height() ) / 2, icn.width(), icn.height() );
+        const fheroes2::Rect icnRect( offset.x + ( background.width() - icn.width() ) / 2, offset.y + ( background.height() - icn.height() ) / 2, icn.width(),
+                                      icn.height() );
+        Copy( icn, 0, 0, output, icnRect );
 
-        const Text skillName( Skill::Secondary::String( _skill.Skill() ), FontType::smallWhite() );
-        skillName.draw( offset.x + ( background.width() - skillName.width() ) / 2, offset.y + 8, output );
+        Text skillName( Skill::Secondary::String( _skill.Skill() ), FontType::smallWhite() );
+        skillName.fitToOneRow( icnRect.width );
+        skillName.drawInRoi( offset.x + ( background.width() - skillName.width() ) / 2 - 1, offset.y + 8, output, icnRect );
 
-        const Text skillDescription( Skill::Level::StringWithBonus( _hero, _skill ), FontType::smallWhite() );
-        skillDescription.draw( offset.x + ( background.width() - skillDescription.width() ) / 2, offset.y + 56, output );
+        Text skillDescription( Skill::Level::StringWithBonus( _hero, _skill ), FontType::smallWhite() );
+        skillDescription.fitToOneRow( icnRect.width );
+        skillDescription.drawInRoi( offset.x + ( background.width() - skillDescription.width() ) / 2 - 1, offset.y + 56, output, icnRect );
     }
 
     void SecondarySkillDialogElement::processEvents( const Point & offset ) const
