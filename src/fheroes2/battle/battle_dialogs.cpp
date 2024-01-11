@@ -649,7 +649,7 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
         if ( allowToRestart ) {
             le.MousePressLeft( buttonRestart->area() ) ? buttonRestart->drawOnPress() : buttonRestart->drawOnRelease();
         }
-        
+
         if ( Game::HotKeyCloseWindow() || le.MouseClickLeft( buttonOk.area() ) ) {
             break;
         }
@@ -671,7 +671,7 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
             const fheroes2::Sprite & base = fheroes2::AGG::GetICN( sequence.id(), 0 );
             const fheroes2::Sprite & sequenceCurrent = fheroes2::AGG::GetICN( sequence.id(), sequence.frameId() );
 
-            Copy( base, 0, 0, display, animationRoi.x + sequenceBase.x(), animationRoi.y + sequenceBase.y(), base.width(),base.height() );
+            Copy( base, 0, 0, display, animationRoi.x + sequenceBase.x(), animationRoi.y + sequenceBase.y(), base.width(), base.height() );
             fheroes2::Blit( sequenceCurrent, display, animationRoi.x + sequenceCurrent.x(), animationRoi.y + sequenceCurrent.y() );
             display.render( animationRoi );
         }
