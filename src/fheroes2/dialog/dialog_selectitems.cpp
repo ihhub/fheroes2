@@ -699,6 +699,27 @@ namespace
         }
     };
 
+    class PowerUpObjectTypeSelection : public ObjectTypeSelection
+    {
+    public:
+        PowerUpObjectTypeSelection( const std::vector<Maps::ObjectInfo> & objectInfo, const fheroes2::Size & size, std::string title )
+            : ObjectTypeSelection( objectInfo, size, std::move( title ), 4 * 32 / 2, 4 * 32 + 10, 3 * 32 )
+        {
+            // Do nothing.
+        }
+
+    private:
+        void showPopupWindow( const Maps::ObjectInfo & info ) override
+        {
+            fheroes2::showStandardTextMessage( getObjectName( info ), "", Dialog::ZERO );
+        }
+
+        std::string getObjectName( const Maps::ObjectInfo & info ) override
+        {
+            return MP2::StringObject( info.objectType );
+        }
+    };
+
     int selectObjectType( const int objectType, const size_t objectCount, ObjectTypeSelection & objectSelection )
     {
         std::vector<int> objects( objectCount, 0 );
@@ -1244,7 +1265,7 @@ int Dialog::selectDwellingType( const int dwellingType )
 {
     const auto & objectInfo = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_DWELLINGS );
 
-    DwellingTypeSelection listbox( objectInfo, { 420, fheroes2::Display::instance().height() - 180 }, _( "Select Dwelling:" ) );
+    DwellingTypeSelection listbox( objectInfo, { 480, fheroes2::Display::instance().height() - 180 }, _( "Select Dwelling:" ) );
 
     return selectObjectType( dwellingType, objectInfo.size(), listbox );
 }
@@ -1533,4 +1554,13 @@ void Dialog::selectMineType( int32_t & type, int32_t & color )
         listbox.Redraw();
         display.render( area );
     }
+}
+
+int Dialog::selectPowerUpObjectType( const int powerUpObjectType )
+{
+    const auto & objectInfo = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_POWER_UPS );
+
+    PowerUpObjectTypeSelection listbox( objectInfo, { 420, fheroes2::Display::instance().height() - 180 }, _( "Select Power Up Object:" ) );
+
+    return selectObjectType( powerUpObjectType, objectInfo.size(), listbox );
 }
