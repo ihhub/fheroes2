@@ -653,7 +653,7 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
         if ( Game::HotKeyCloseWindow() || le.MouseClickLeft( buttonOk.area() ) ) {
             break;
         }
-        else if ( le.MousePressRight( buttonOk.area() ) ) {
+        if ( le.MousePressRight( buttonOk.area() ) ) {
             fheroes2::showStandardTextMessage( _( "Okay" ), _( "Click to leave the battle results." ), Dialog::ZERO );
         }
         else if ( allowToRestart ) {
@@ -661,7 +661,7 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
                 // Skip artifact transfer and return to restart the battle in manual mode
                 return true;
             }
-            else if ( le.MousePressRight( buttonRestart->area() ) ) {
+            if ( le.MousePressRight( buttonRestart->area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Restart" ), _( "Click to restart the battle in manual mode." ), Dialog::ZERO );
             }
         }
