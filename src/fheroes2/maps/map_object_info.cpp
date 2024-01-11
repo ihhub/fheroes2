@@ -1142,14 +1142,13 @@ namespace
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC1, 68U, fheroes2::Point{ -2, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC1, 59U, fheroes2::Point{ -3, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
             object.groundLevelParts.back().animationFrames = 8;
-
-            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC1, 50U, fheroes2::Point{ 1, -1 }, MP2::OBJ_NON_ACTION_ARENA );
-            object.topLevelParts.back().animationFrames = 8;
-            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC1, 49U, fheroes2::Point{ 0, -1 }, MP2::OBJ_NON_ACTION_ARENA );
-            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC1, 40U, fheroes2::Point{ -1, -1 }, MP2::OBJ_NON_ACTION_ARENA );
-            object.topLevelParts.back().animationFrames = 8;
-            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC1, 31U, fheroes2::Point{ -2, -1 }, MP2::OBJ_NONE );
-            object.topLevelParts.back().animationFrames = 8;
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC1, 50U, fheroes2::Point{ 1, -1 }, MP2::OBJ_NON_ACTION_ARENA, Maps::OBJECT_LAYER );
+            object.groundLevelParts.back().animationFrames = 8;
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC1, 49U, fheroes2::Point{ 0, -1 }, MP2::OBJ_NON_ACTION_ARENA, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC1, 40U, fheroes2::Point{ -1, -1 }, MP2::OBJ_NON_ACTION_ARENA, Maps::OBJECT_LAYER );
+            object.groundLevelParts.back().animationFrames = 8;
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC1, 31U, fheroes2::Point{ -2, -1 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            object.groundLevelParts.back().animationFrames = 8;
 
             object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC1, 22U, fheroes2::Point{ 1, -2 }, MP2::OBJ_NON_ACTION_ARENA );
             object.topLevelParts.back().animationFrames = 8;
