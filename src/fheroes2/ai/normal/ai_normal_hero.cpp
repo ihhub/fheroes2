@@ -611,11 +611,11 @@ namespace
                 return AIShouldVisitCastle( hero, index, heroArmyStrength );
             }
 
-            if ( army.isStrongerThan( otherHero->GetArmy(), hero.isLosingGame() ? AI::ARMY_ADVANTAGE_DESPERATE : AI::ARMY_ADVANTAGE_SMALL ) ) {
-                return true;
-            }
+            // AI heroes should not attack other AI heroes so aggressively as human heroes.
+            // This is done to avoid situations when human players just wait when AI heroes kill each other.
+            const double normalArmyAdvantage = ( otherHero->GetControl() == CONTROL_AI ) ? AI::ARMY_ADVANTAGE_MEDIUM : AI::ARMY_ADVANTAGE_SMALL;
 
-            break;
+            return army.isStrongerThan( otherHero->GetArmy(), hero.isLosingGame() ? AI::ARMY_ADVANTAGE_DESPERATE : normalArmyAdvantage );
         }
 
         case MP2::OBJ_CASTLE:
