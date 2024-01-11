@@ -879,7 +879,7 @@ std::pair<int32_t, bool> AIWorldPathfinder::getFogDiscoveryTile( const Heroes & 
 {
     reEvaluateIfNeeded( hero );
 
-    const auto findBestTile = [this, scoutingDistance = hero.GetScoutingDistance()]( const auto nearbyTilesFilter ) {
+    const auto findBestTile = [this, scoutingDistance = hero.GetScoutingDistance()]( const auto nearbyTilePredicate ) {
         const Directions & directions = Direction::All();
 
         struct TileCharacteristics
@@ -909,7 +909,7 @@ std::pair<int32_t, bool> AIWorldPathfinder::getFogDiscoveryTile( const Heroes & 
                     continue;
                 }
 
-                if ( !nearbyTilesFilter( tileIdx + _mapOffset[i] ) ) {
+                if ( !nearbyTilePredicate( tileIdx + _mapOffset[i] ) ) {
                     continue;
                 }
 
