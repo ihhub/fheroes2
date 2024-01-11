@@ -3156,6 +3156,5 @@ namespace fheroes2
             fheroes2::Image cnt = CreateContour( image, 0 );
             Blit( cnt, image );
         }
-
     }
 }

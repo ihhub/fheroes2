@@ -43,7 +43,8 @@ namespace fheroes2
     {
         WHITE,
         GRAY,
-        YELLOW
+        YELLOW,
+        GOLDEN_GRADINT,
     };
 
     struct FontType

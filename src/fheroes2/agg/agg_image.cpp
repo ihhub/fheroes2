@@ -2493,6 +2493,32 @@ namespace fheroes2
             case ICN::GRAY_SMALL_FONT:
                 CopyICNWithPalette( id, ICN::SMALFONT, PAL::PaletteType::GRAY_FONT );
                 return true;
+            case ICN::GOLDEN_GRADIENT_FONT: {
+                GetICN( ICN::FONT, 0 );
+                const std::vector<Sprite> & original = _icnVsSprite[ICN::FONT];
+                _icnVsSprite[id].resize( original.size() );
+                for ( size_t i = 0; i < _icnVsSprite[id].size(); ++i ) {
+                    const Sprite & in = original[i];
+                    Sprite & out = _icnVsSprite[id][i];
+                    Copy( in, out );
+                    out.setPosition( in.x(), in.y() );
+                    ApplyVerticalGradient( out, PAL::ColorRanges::YELLOW_END, PAL::ColorRanges::YELLOW_START, 4, 1 );
+                }
+                return true;
+            }
+            case ICN::GOLDEN_GRADIENT_LARGE_FONT: {
+                GetICN( ICN::WHITE_LARGE_FONT, 0 );
+                const std::vector<Sprite> & original = _icnVsSprite[ICN::WHITE_LARGE_FONT];
+                _icnVsSprite[id].resize( original.size() );
+                for ( size_t i = 0; i < _icnVsSprite[id].size(); ++i ) {
+                    const Sprite & in = original[i];
+                    Sprite & out = _icnVsSprite[id][i];
+                    Copy( in, out );
+                    out.setPosition( in.x(), in.y() );
+                    ApplyVerticalGradient( out, PAL::ColorRanges::YELLOW_END, PAL::ColorRanges::YELLOW_START, 4, 3 );
+                }
+                return true;
+            }
             case ICN::SPELLS:
                 LoadOriginalICN( id );
                 if ( _icnVsSprite[id].size() != 60 ) {
@@ -4998,6 +5024,8 @@ namespace fheroes2
                     return GetICN( ICN::GRAY_FONT, character - 0x20 );
                 case FontColor::YELLOW:
                     return GetICN( ICN::YELLOW_FONT, character - 0x20 );
+                case FontColor::GOLDEN_GRADINT:
+                    return GetICN( ICN::GOLDEN_GRADIENT_FONT, character - 0x20 );
                 default:
                     // Did you add a new font color? Add the corresponding logic for it!
                     assert( 0 );
@@ -5008,6 +5036,8 @@ namespace fheroes2
                 switch ( fontType.color ) {
                 case FontColor::WHITE:
                     return GetICN( ICN::WHITE_LARGE_FONT, character - 0x20 );
+                case FontColor::GOLDEN_GRADINT:
+                    return GetICN( ICN::GOLDEN_GRADIENT_LARGE_FONT, character - 0x20 );
                 default:
                     // Did you add a new font color? Add the corresponding logic for it!
                     assert( 0 );
