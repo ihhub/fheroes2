@@ -1609,10 +1609,7 @@ void Heroes::LevelUp( bool skipsecondary, bool autoselect )
 
 void Heroes::LevelUpSecondarySkill( const HeroSeedsForLevelUp & seeds, int primary, bool autoselect )
 {
-    Skill::Secondary sec1;
-    Skill::Secondary sec2;
-
-    secondary_skills.FindSkillsForLevelUp( _race, seeds.seedSecondarySkill1, seeds.seedSecondarySkill2, sec1, sec2 );
+    const auto [sec1, sec2] = secondary_skills.FindSkillsForLevelUp( _race, seeds.seedSecondarySkill1, seeds.seedSecondarySkill2 );
 
     if ( sec1.isValid() && sec2.isValid() ) {
         DEBUG_LOG( DBG_GAME, DBG_INFO, GetName() << " select " << Skill::Secondary::String( sec1.Skill() ) << " or " << Skill::Secondary::String( sec2.Skill() ) )

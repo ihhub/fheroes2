@@ -46,6 +46,8 @@ namespace Race
     int Rand();
 
     uint8_t IndexToRace( const int index );
+
+    bool isMagicalRace( const int race );
 }
 
 #endif
