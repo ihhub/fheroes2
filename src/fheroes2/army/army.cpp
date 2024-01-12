@@ -407,31 +407,45 @@ bool Troops::CanJoinTroop( const Monster & mons ) const
            || std::any_of( begin(), end(), []( const Troop * troop ) { return !troop->isValid(); } );
 }
 
-bool Troops::JoinTroop( const Monster & mons, uint32_t count, bool emptySlotFirst )
+bool Troops::JoinTroop( const Monster & mons, const uint32_t count, const bool emptySlotFirst )
 {
     if ( !mons.isValid() || count == 0 ) {
         return false;
     }
 
-    const auto findEmptySlot = []( const Troop * troop ) { return !troop->isValid(); };
-    const auto findMonster = [&mons]( const Troop * troop ) { return troop->isValid() && troop->isMonster( mons.GetID() ); };
+    const auto findBestMatch = [this]( const auto higherPriorityPredicate, const auto lowerPriorityPredicate ) {
+        const auto iter = std::find_if( begin(), end(), higherPriorityPredicate );
+        if ( iter != end() ) {
+            return iter;
+        }
 
-    iterator it = emptySlotFirst ? std::find_if( begin(), end(), findEmptySlot ) : std::find_if( begin(), end(), findMonster );
-    if ( it == end() ) {
-        it = emptySlotFirst ? std::find_if( begin(), end(), findMonster ) : std::find_if( begin(), end(), findEmptySlot );
+        return std::find_if( begin(), end(), lowerPriorityPredicate );
+    };
+
+    const auto isSlotEmpty = []( const Troop * troop ) {
+        assert( troop != nullptr );
+
+        return troop->isEmpty();
+    };
+    const auto isSameMonster = [&mons]( const Troop * troop ) {
+        assert( troop != nullptr );
+
+        return troop->isValid() && troop->isMonster( mons.GetID() );
+    };
+
+    const auto iter = emptySlotFirst ? findBestMatch( isSlotEmpty, isSameMonster ) : findBestMatch( isSameMonster, isSlotEmpty );
+    if ( iter == end() ) {
+        return false;
     }
 
-    if ( it != end() ) {
-        if ( ( *it )->isValid() )
-            ( *it )->SetCount( ( *it )->GetCount() + count );
-        else
-            ( *it )->Set( mons, count );
-
-        DEBUG_LOG( DBG_GAME, DBG_INFO, std::dec << count << " " << ( *it )->GetName() )
-        return true;
+    if ( ( *iter )->isValid() ) {
+        ( *iter )->SetCount( ( *iter )->GetCount() + count );
+    }
+    else {
+        ( *iter )->Set( mons, count );
     }
 
-    return false;
+    return true;
 }
 
 bool Troops::JoinTroop( const Troop & troop )
