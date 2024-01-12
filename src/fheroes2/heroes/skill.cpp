@@ -50,7 +50,7 @@ namespace
                                                                      Skill::Secondary::LEADERSHIP,  Skill::Secondary::WISDOM,     Skill::Secondary::MYSTICISM,
                                                                      Skill::Secondary::LUCK,        Skill::Secondary::BALLISTICS, Skill::Secondary::EAGLE_EYE,
                                                                      Skill::Secondary::NECROMANCY,  Skill::Secondary::ESTATES };
-    static_assert( allSecondarySkills.size() > 0 && allSecondarySkills.back() != 0, "All existing secondary skills must be present in this array" );
+    static_assert( !allSecondarySkills.empty() && allSecondarySkills.back() != 0, "All existing secondary skills must be present in this array" );
 
     int SecondaryGetWeightSkillFromRace( const int race, const int skill )
     {
