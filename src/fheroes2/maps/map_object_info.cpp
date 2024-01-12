@@ -203,8 +203,15 @@ namespace
                 object.groundLevelParts.emplace_back( type, icnOffset + 3U, fheroes2::Point{ -2, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
                 object.groundLevelParts.emplace_back( type, icnOffset + 7U, fheroes2::Point{ -1, 1 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
 
-                object.topLevelParts.emplace_back( type, icnOffset + 1U, fheroes2::Point{ -1, -1 }, MP2::OBJ_MOUNTAINS );
-                object.topLevelParts.emplace_back( type, icnOffset + 2U, fheroes2::Point{ 0, -1 }, MP2::OBJ_MOUNTAINS );
+                // Grassy medium mountain should not be passable in the upper row (according to its image)
+                if ( type == MP2::OBJ_ICN_TYPE_MTNGRAS ) {
+                    object.groundLevelParts.emplace_back( type, icnOffset + 1U, fheroes2::Point{ -1, -1 }, MP2::OBJ_MOUNTAINS, Maps::OBJECT_LAYER );
+                    object.groundLevelParts.emplace_back( type, icnOffset + 2U, fheroes2::Point{ 0, -1 }, MP2::OBJ_MOUNTAINS, Maps::OBJECT_LAYER );
+                }
+                else {
+                    object.topLevelParts.emplace_back( type, icnOffset + 1U, fheroes2::Point{ -1, -1 }, MP2::OBJ_MOUNTAINS );
+                    object.topLevelParts.emplace_back( type, icnOffset + 2U, fheroes2::Point{ 0, -1 }, MP2::OBJ_MOUNTAINS );
+                }
 
                 objects.emplace_back( std::move( object ) );
             }
@@ -224,8 +231,15 @@ namespace
                 object.groundLevelParts.emplace_back( type, icnOffset + 3U, fheroes2::Point{ -2, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
                 object.groundLevelParts.emplace_back( type, icnOffset + 7U, fheroes2::Point{ -2, 1 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
 
-                object.topLevelParts.emplace_back( type, icnOffset + 1U, fheroes2::Point{ 0, -1 }, MP2::OBJ_MOUNTAINS );
-                object.topLevelParts.emplace_back( type, icnOffset + 2U, fheroes2::Point{ 1, -1 }, MP2::OBJ_MOUNTAINS );
+                // Grassy medium mountain should not be passable in the upper row (according to its image)
+                if ( type == MP2::OBJ_ICN_TYPE_MTNGRAS ) {
+                    object.groundLevelParts.emplace_back( type, icnOffset + 1U, fheroes2::Point{ 0, -1 }, MP2::OBJ_MOUNTAINS, Maps::OBJECT_LAYER );
+                    object.groundLevelParts.emplace_back( type, icnOffset + 2U, fheroes2::Point{ 1, -1 }, MP2::OBJ_MOUNTAINS, Maps::OBJECT_LAYER );
+                }
+                else {
+                    object.topLevelParts.emplace_back( type, icnOffset + 1U, fheroes2::Point{ 0, -1 }, MP2::OBJ_MOUNTAINS );
+                    object.topLevelParts.emplace_back( type, icnOffset + 2U, fheroes2::Point{ 1, -1 }, MP2::OBJ_MOUNTAINS );
+                }
 
                 objects.emplace_back( std::move( object ) );
             }
