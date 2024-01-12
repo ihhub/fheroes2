@@ -45,10 +45,12 @@
 
 namespace
 {
-    const std::array<int, 14> allSecondarySkills{ Skill::Secondary::PATHFINDING, Skill::Secondary::ARCHERY,    Skill::Secondary::LOGISTICS,  Skill::Secondary::SCOUTING,
-                                                  Skill::Secondary::DIPLOMACY,   Skill::Secondary::NAVIGATION, Skill::Secondary::LEADERSHIP, Skill::Secondary::WISDOM,
-                                                  Skill::Secondary::MYSTICISM,   Skill::Secondary::LUCK,       Skill::Secondary::BALLISTICS, Skill::Secondary::EAGLE_EYE,
-                                                  Skill::Secondary::NECROMANCY,  Skill::Secondary::ESTATES };
+    constexpr std::array<int, MAXSECONDARYSKILL> allSecondarySkills{ Skill::Secondary::PATHFINDING, Skill::Secondary::ARCHERY,    Skill::Secondary::LOGISTICS,
+                                                                     Skill::Secondary::SCOUTING,    Skill::Secondary::DIPLOMACY,  Skill::Secondary::NAVIGATION,
+                                                                     Skill::Secondary::LEADERSHIP,  Skill::Secondary::WISDOM,     Skill::Secondary::MYSTICISM,
+                                                                     Skill::Secondary::LUCK,        Skill::Secondary::BALLISTICS, Skill::Secondary::EAGLE_EYE,
+                                                                     Skill::Secondary::NECROMANCY,  Skill::Secondary::ESTATES };
+    static_assert( allSecondarySkills.size() > 0 && allSecondarySkills.back() != 0, "All existing secondary skills must be present in this array" );
 
     int SecondaryGetWeightSkillFromRace( const int race, const int skill )
     {
