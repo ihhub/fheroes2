@@ -111,15 +111,11 @@ bool Race::isMagicalRace( const int race )
 {
     switch ( race ) {
     case KNGT:
-        return false;
     case BARB:
         return false;
     case SORC:
-        return true;
     case WRLK:
-        return true;
     case WZRD:
-        return true;
     case NECR:
         return true;
     default:
