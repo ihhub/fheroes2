@@ -846,7 +846,7 @@ namespace
             return;
         }
 
-        assert( world.GetTiles( indexTo ).GetObject() != MP2::OBJ_HEROES );
+        assert( world.GetTiles( indexTo ).GetObject() != MP2::OBJ_HERO );
 
         if ( AIIsShowAnimationForHero( hero, AIGetAllianceColors() ) ) {
             // AI-controlled hero cannot activate Stone Liths from the same tile, but should move to this tile from some
@@ -1665,9 +1665,10 @@ namespace
         if ( !hero.isObjectTypeVisited( objectType, Visit::GLOBAL ) ) {
             hero.SetVisited( tileIndex, Visit::GLOBAL );
 
-            const MapsIndexes eyeMagiIndexes = Maps::GetObjectPositions( MP2::OBJ_EYE_OF_MAGI, true );
+            const MapsIndexes eyeMagiIndexes = Maps::GetObjectPositions( MP2::OBJ_EYE_OF_MAGI );
+            const uint32_t distance = GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::MAGI_EYES );
             for ( const int32_t index : eyeMagiIndexes ) {
-                Maps::ClearFog( index, GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::MAGI_EYES ), hero.GetColor() );
+                Maps::ClearFog( index, distance, hero.GetColor() );
             }
         }
     }
@@ -1748,7 +1749,7 @@ namespace AI
         case MP2::OBJ_MONSTER:
             AIToMonster( hero, dst_index );
             break;
-        case MP2::OBJ_HEROES:
+        case MP2::OBJ_HERO:
             AIToHeroes( hero, dst_index );
             break;
         case MP2::OBJ_CASTLE:

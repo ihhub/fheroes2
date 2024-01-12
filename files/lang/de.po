@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-04 12:56+0000\n"
+"POT-Creation-Date: 2024-01-11 14:17+0000\n"
 "PO-Revision-Date: 2023-12-22 00:32+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3445,6 +3445,31 @@ msgstr "Hier klicken, um auszuwählen, welches Szenario gespielt werden soll."
 msgid "Click to select this color."
 msgstr "Hier klicken, um auszuwählen, welches Szenario gespielt werden soll."
 
+#, fuzzy
+msgid "Select Dwelling:"
+msgstr "Zauberspruch auswählen:"
+
+msgid "Mine placing"
+msgstr ""
+
+#, fuzzy
+msgid ""
+"Resource\n"
+"type:"
+msgstr "Ressource"
+
+#, fuzzy
+msgid "%{mineName} appearance:"
+msgstr "%{name} (%{race})"
+
+#, fuzzy
+msgid "Click to select %{object} as the resource generator to be placed."
+msgstr "Hier klicken, um auszuwählen, welches Szenario gespielt werden soll."
+
+#, fuzzy
+msgid "Select Power Up Object:"
+msgstr "Ozean-Objekte"
+
 msgid "Map Type:\n"
 msgstr "Kartentyp:\n"
 
@@ -3789,7 +3814,15 @@ msgid "Towns cannot be placed on water."
 msgstr "Monster können nicht auf Wasser plaziert werden."
 
 #, fuzzy
+msgid "Mines cannot be placed on water."
+msgstr "Monster können nicht auf Wasser plaziert werden."
+
+#, fuzzy
 msgid "Dwellings cannot be placed on water."
+msgstr "Monster können nicht auf Wasser plaziert werden."
+
+#, fuzzy
+msgid "Power-ups cannot be placed on water."
 msgstr "Monster können nicht auf Wasser plaziert werden."
 
 #, fuzzy

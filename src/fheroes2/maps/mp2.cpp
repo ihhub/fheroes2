@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -336,7 +336,7 @@ const char * MP2::StringObject( MapObjectType objectType, const int count )
         return _( "Random Monster - strong" );
     case OBJ_NON_ACTION_RANDOM_MONSTER_VERY_STRONG:
         return _( "Random Monster - very strong" );
-    case OBJ_NON_ACTION_HEROES:
+    case OBJ_NON_ACTION_HERO:
         return _( "Hero" );
     case OBJ_NOTHING_SPECIAL:
         return _( "Nothing Special" );
@@ -532,7 +532,7 @@ bool MP2::isWeekLife( const MapObjectType objectType )
     case OBJ_CITY_OF_DEAD:
     case OBJ_TROLL_BRIDGE:
     // for AI
-    case OBJ_HEROES:
+    case OBJ_HERO:
         return true;
     default:
         break;
@@ -592,7 +592,7 @@ bool MP2::isWaterActionObject( const MapObjectType objectType )
     case OBJ_DERELICT_SHIP:
     case OBJ_FLOTSAM:
     // Heroes cannot be placed on water by the original editor, but they can board a boat
-    case OBJ_HEROES:
+    case OBJ_HERO:
     case OBJ_MAGELLANS_MAPS:
     case OBJ_MERMAID:
     case OBJ_SEA_CHEST:
@@ -773,7 +773,7 @@ bool MP2::isNeedStayFront( const MapObjectType objectType )
     case OBJ_BARRIER:
     case OBJ_BOAT:
     case OBJ_BUOY:
-    case OBJ_HEROES:
+    case OBJ_HERO:
     case OBJ_JAIL:
     case OBJ_MERMAID:
     case OBJ_MONSTER:
@@ -800,7 +800,7 @@ int MP2::getActionObjectDirection( const MapObjectType objectType )
     case OBJ_COAST:
     case OBJ_FLOTSAM:
     case OBJ_GENIE_LAMP:
-    case OBJ_HEROES:
+    case OBJ_HERO:
     case OBJ_JAIL:
     case OBJ_MONSTER:
     case OBJ_RANDOM_ARTIFACT:
@@ -975,7 +975,7 @@ bool MP2::doesObjectNeedExtendedMetadata( const MP2::MapObjectType type )
     case OBJ_BOTTLE:
     case OBJ_CASTLE:
     case OBJ_EVENT:
-    case OBJ_HEROES:
+    case OBJ_HERO:
     case OBJ_JAIL:
     case OBJ_RANDOM_CASTLE:
     case OBJ_RANDOM_TOWN:

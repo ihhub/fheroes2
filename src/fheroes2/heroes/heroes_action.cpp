@@ -1875,7 +1875,7 @@ namespace
             return;
         }
 
-        assert( world.GetTiles( index_to ).GetObject() != MP2::OBJ_HEROES );
+        assert( world.GetTiles( index_to ).GetObject() != MP2::OBJ_HERO );
 
         AudioManager::PlaySound( M82::KILLFADE );
         hero.ShowPath( false );
@@ -3296,7 +3296,7 @@ namespace
         if ( !hero.isObjectTypeVisited( objectType, Visit::GLOBAL ) ) {
             hero.SetVisited( dst_index, Visit::GLOBAL );
 
-            const MapsIndexes eyeMagiIndexes = Maps::GetObjectPositions( MP2::OBJ_EYE_OF_MAGI, true );
+            const MapsIndexes eyeMagiIndexes = Maps::GetObjectPositions( MP2::OBJ_EYE_OF_MAGI );
             if ( !eyeMagiIndexes.empty() ) {
                 Interface::AdventureMap & I = Interface::AdventureMap::Get();
 
@@ -3643,7 +3643,7 @@ void Heroes::Action( int tileIndex )
     case MP2::OBJ_CASTLE:
         ActionToCastle( *this, tileIndex );
         break;
-    case MP2::OBJ_HEROES:
+    case MP2::OBJ_HERO:
         ActionToHeroes( *this, tileIndex );
         break;
 

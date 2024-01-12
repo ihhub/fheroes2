@@ -276,7 +276,7 @@ namespace
 
         // scan for a hero around
         if ( !isEditorMode ) {
-            for ( const int32_t idx : Maps::ScanAroundObject( tileIndex, MP2::OBJ_HEROES, false ) ) {
+            for ( const int32_t idx : Maps::ScanAroundObject( tileIndex, MP2::OBJ_HERO, false ) ) {
                 const Heroes * hero = world.GetTiles( idx ).getHero();
                 assert( hero != nullptr );
 
@@ -1297,7 +1297,7 @@ namespace Maps
 
     std::vector<fheroes2::ObjectRenderingInfo> getEditorHeroSpritesPerTile( const Tiles & tile )
     {
-        assert( tile.GetObject() == MP2::OBJ_HEROES );
+        assert( tile.GetObject() == MP2::OBJ_HERO );
 
         const uint32_t icnIndex = tile.GetObjectSpriteIndex();
         const int icnId{ ICN::MINIHERO };

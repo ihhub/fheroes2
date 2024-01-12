@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-04 12:56+0000\n"
+"POT-Creation-Date: 2024-01-11 14:17+0000\n"
 "PO-Revision-Date: 2023-12-25 14:31+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -3400,6 +3400,31 @@ msgstr "Klicka här för att välja denna klass."
 msgid "Click to select this color."
 msgstr "Klicka här för att välja denna färgen."
 
+#, fuzzy
+msgid "Select Dwelling:"
+msgstr "Välj Besvärjelse"
+
+msgid "Mine placing"
+msgstr ""
+
+#, fuzzy
+msgid ""
+"Resource\n"
+"type:"
+msgstr "Resurs"
+
+#, fuzzy
+msgid "%{mineName} appearance:"
+msgstr "%{race}n %{name}"
+
+#, fuzzy
+msgid "Click to select %{object} as the resource generator to be placed."
+msgstr "Klicka här för att välja vilket scenario som ska spelas."
+
+#, fuzzy
+msgid "Select Power Up Object:"
+msgstr "Välj Havsföremål:"
+
 msgid "Map Type:\n"
 msgstr "Karttyp:\n"
 
@@ -3735,7 +3760,15 @@ msgid "Towns cannot be placed on water."
 msgstr "Städer kan inte placeras på vatten."
 
 #, fuzzy
+msgid "Mines cannot be placed on water."
+msgstr "Varelser kan inte placeras på vatten."
+
+#, fuzzy
 msgid "Dwellings cannot be placed on water."
+msgstr "Städer kan inte placeras på vatten."
+
+#, fuzzy
+msgid "Power-ups cannot be placed on water."
 msgstr "Städer kan inte placeras på vatten."
 
 msgid "Used to place %{object}."

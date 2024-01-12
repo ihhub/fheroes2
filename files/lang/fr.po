@@ -1,12 +1,12 @@
 # French translation for fheroes2
-# Copyright (C) 2021 - 2022 fheroes2 team <fhomm2@gmail.com>
+# Copyright (C) 2021 - 2024 fheroes2 team <fhomm2@gmail.com>
 # This file is distributed under the same license as the fheroes2 package.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-04 12:56+0000\n"
+"POT-Creation-Date: 2024-01-11 14:17+0000\n"
 "PO-Revision-Date: 2024-01-12 16:54+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -3455,6 +3455,31 @@ msgstr "Cliquez ici pour sélectionner cet alignement"
 msgid "Click to select this color."
 msgstr "Cliquez ici pour sélectionner ce couleur."
 
+#, fuzzy
+msgid "Select Dwelling:"
+msgstr "Choisir sort :"
+
+msgid "Mine placing"
+msgstr ""
+
+#, fuzzy
+msgid ""
+"Resource\n"
+"type:"
+msgstr "Ressource"
+
+#, fuzzy
+msgid "%{mineName} appearance:"
+msgstr "%{name} le %{race}"
+
+#, fuzzy
+msgid "Click to select %{object} as the resource generator to be placed."
+msgstr "Cliquez ici pour sélectionner le scénario à jouer."
+
+#, fuzzy
+msgid "Select Power Up Object:"
+msgstr "Choix d'élément (océan) :"
+
 msgid "Map Type:\n"
 msgstr "Type de carte :\n"
 
@@ -3783,8 +3808,16 @@ msgstr "Les éléments liés à la mer doivent être placés sur l'eau."
 msgid "Towns cannot be placed on water."
 msgstr "Les villages ne peuvent pas être placés sur l'eau."
 
+#, fuzzy
+msgid "Mines cannot be placed on water."
+msgstr "Ce sort ne peut pas être jeté en mer."
+
 msgid "Dwellings cannot be placed on water."
 msgstr "Les demeures ne peuvent pas être placées sur l'eau."
+
+#, fuzzy
+msgid "Power-ups cannot be placed on water."
+msgstr "Ce sort ne peut pas être jeté en mer."
 
 msgid "Used to place %{object}."
 msgstr "Permet de placer %{object}."
