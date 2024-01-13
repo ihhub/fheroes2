@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-11 14:17+0000\n"
+"POT-Creation-Date: 2024-01-13 09:39+0000\n"
 "PO-Revision-Date: 2023-08-26 23:09+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: https://discord.com/"
@@ -3442,6 +3442,18 @@ msgid "Click to select %{object} as the resource generator to be placed."
 msgstr "Kliknij tutaj, aby wybrać scenariusz, który chcesz rozegrać."
 
 #, fuzzy
+msgid "Select Mountain Object:"
+msgstr "Wybierz artefakt:"
+
+#, fuzzy
+msgid "Select Rock Object:"
+msgstr "Wybierz artefakt:"
+
+#, fuzzy
+msgid "Select Tree Object:"
+msgstr "Wybierz artefakt:"
+
+#, fuzzy
 msgid "Select Power Up Object:"
 msgstr "Wybierz artefakt:"
 
@@ -3774,6 +3786,18 @@ msgstr ""
 
 #, fuzzy
 msgid "Artifacts cannot be placed on water."
+msgstr "To zaklęcie nie może być rzucone z łodzi."
+
+#, fuzzy
+msgid "Mountains cannot be placed on water."
+msgstr "To zaklęcie nie może być rzucone z łodzi."
+
+#, fuzzy
+msgid "Rocks cannot be placed on water."
+msgstr "To zaklęcie nie może być rzucone z łodzi."
+
+#, fuzzy
+msgid "Trees cannot be placed on water."
 msgstr "To zaklęcie nie może być rzucone z łodzi."
 
 #, fuzzy

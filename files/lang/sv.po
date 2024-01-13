@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-11 14:17+0000\n"
+"POT-Creation-Date: 2024-01-13 09:39+0000\n"
 "PO-Revision-Date: 2023-12-25 14:31+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -3422,6 +3422,18 @@ msgid "Click to select %{object} as the resource generator to be placed."
 msgstr "Klicka här för att välja vilket scenario som ska spelas."
 
 #, fuzzy
+msgid "Select Mountain Object:"
+msgstr "Välj Havsföremål:"
+
+#, fuzzy
+msgid "Select Rock Object:"
+msgstr "Välj Havsföremål:"
+
+#, fuzzy
+msgid "Select Tree Object:"
+msgstr "Välj Havsföremål:"
+
+#, fuzzy
 msgid "Select Power Up Object:"
 msgstr "Välj Havsföremål:"
 
@@ -3752,6 +3764,18 @@ msgstr "Hjältar kan inte placeras på vatten."
 
 msgid "Artifacts cannot be placed on water."
 msgstr "Artefakter kan inte placeras på vatten."
+
+#, fuzzy
+msgid "Mountains cannot be placed on water."
+msgstr "Varelser kan inte placeras på vatten."
+
+#, fuzzy
+msgid "Rocks cannot be placed on water."
+msgstr "Städer kan inte placeras på vatten."
+
+#, fuzzy
+msgid "Trees cannot be placed on water."
+msgstr "Skatter kan inte placeras på vatten."
 
 msgid "Ocean object must be placed on water."
 msgstr "Havsföremål måste placeras på vatten."
