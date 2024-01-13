@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-11 14:17+0000\n"
+"POT-Creation-Date: 2024-01-13 09:39+0000\n"
 "PO-Revision-Date: 2023-09-12 11:08+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
@@ -3480,6 +3480,18 @@ msgid "Click to select %{object} as the resource generator to be placed."
 msgstr "Klik her for at vælge, hvilket kort du vil spille på."
 
 #, fuzzy
+msgid "Select Mountain Object:"
+msgstr "Vælg hav-objekt:"
+
+#, fuzzy
+msgid "Select Rock Object:"
+msgstr "Vælg hav-objekt:"
+
+#, fuzzy
+msgid "Select Tree Object:"
+msgstr "Vælg hav-objekt:"
+
+#, fuzzy
 msgid "Select Power Up Object:"
 msgstr "Vælg hav-objekt:"
 
@@ -3807,6 +3819,18 @@ msgstr "Helte kan ikke placeres på vand."
 
 msgid "Artifacts cannot be placed on water."
 msgstr "Artefakter kan ikke placeres på vand."
+
+#, fuzzy
+msgid "Mountains cannot be placed on water."
+msgstr "Monstre kan ikke placeres på vand."
+
+#, fuzzy
+msgid "Rocks cannot be placed on water."
+msgstr "Monstre kan ikke placeres på vand."
+
+#, fuzzy
+msgid "Trees cannot be placed on water."
+msgstr "Skatte kan ikke placeres på vand."
 
 msgid "Ocean object must be placed on water."
 msgstr "Hav-objekter må kun placeres på vand."

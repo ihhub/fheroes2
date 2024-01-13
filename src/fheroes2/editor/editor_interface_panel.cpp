@@ -964,6 +964,21 @@ namespace Interface
                 }
             }
 
+            if ( le.MouseClickLeft( _landscapeObjectButtonsRect[LandscapeObjectBrush::MOUNTAINS] ) ) {
+                handleObjectMouseClick( Dialog::selectMountainType );
+                return res;
+            }
+
+            if ( le.MouseClickLeft( _landscapeObjectButtonsRect[LandscapeObjectBrush::ROCKS] ) ) {
+                handleObjectMouseClick( Dialog::selectRockType );
+                return res;
+            }
+
+            if ( le.MouseClickLeft( _landscapeObjectButtonsRect[LandscapeObjectBrush::TREES] ) ) {
+                handleObjectMouseClick( Dialog::selectTreeType );
+                return res;
+            }
+
             if ( le.MouseClickLeft( _landscapeObjectButtonsRect[LandscapeObjectBrush::WATER_OBJECTS] ) ) {
                 handleObjectMouseClick( Dialog::selectLandscapeOceanObjectType );
                 return res;

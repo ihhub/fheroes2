@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-11 14:17+0000\n"
+"POT-Creation-Date: 2024-01-13 09:39+0000\n"
 "PO-Revision-Date: 2023-09-24 16:05+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Czech <cs@li.org>\n"
@@ -3423,6 +3423,18 @@ msgid "Click to select %{object} as the resource generator to be placed."
 msgstr "Kliknout sem pro výběr scénáře."
 
 #, fuzzy
+msgid "Select Mountain Object:"
+msgstr "Artefakt"
+
+#, fuzzy
+msgid "Select Rock Object:"
+msgstr "Artefakt"
+
+#, fuzzy
+msgid "Select Tree Object:"
+msgstr "Artefakt"
+
+#, fuzzy
 msgid "Select Power Up Object:"
 msgstr "Artefakt"
 
@@ -3746,6 +3758,18 @@ msgstr ""
 
 msgid "Artifacts cannot be placed on water."
 msgstr ""
+
+#, fuzzy
+msgid "Mountains cannot be placed on water."
+msgstr "Toto město nemůže být povýšeno na hrad."
+
+#, fuzzy
+msgid "Rocks cannot be placed on water."
+msgstr "Toto město nemůže být povýšeno na hrad."
+
+#, fuzzy
+msgid "Trees cannot be placed on water."
+msgstr "Toto město nemůže být povýšeno na hrad."
 
 msgid "Ocean object must be placed on water."
 msgstr ""

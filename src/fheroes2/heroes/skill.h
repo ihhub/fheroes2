@@ -143,8 +143,9 @@ namespace Skill
         Secondary * FindSkill( int );
 
         void AddSkill( const Skill::Secondary & );
-        void FindSkillsForLevelUp( int race, uint32_t seedSkill1, uint32_t seedSkill2, Secondary &, Secondary & ) const;
         void FillMax( const Skill::Secondary & );
+
+        std::pair<Secondary, Secondary> FindSkillsForLevelUp( const int race, const uint32_t firstSkillSeed, uint32_t const secondSkillSeed ) const;
 
         std::string String() const;
 

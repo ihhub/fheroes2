@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-11 14:17+0000\n"
+"POT-Creation-Date: 2024-01-13 09:39+0000\n"
 "PO-Revision-Date: 2023-09-11 20:22+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3428,6 +3428,18 @@ msgid "Click to select %{object} as the resource generator to be placed."
 msgstr "Klikni sem a vyber scenár, ktorý chceš hrať."
 
 #, fuzzy
+msgid "Select Mountain Object:"
+msgstr "Objekty oceánu"
+
+#, fuzzy
+msgid "Select Rock Object:"
+msgstr "Objekty oceánu"
+
+#, fuzzy
+msgid "Select Tree Object:"
+msgstr "Objekty oceánu"
+
+#, fuzzy
 msgid "Select Power Up Object:"
 msgstr "Objekty oceánu"
 
@@ -3755,6 +3767,18 @@ msgstr ""
 
 #, fuzzy
 msgid "Artifacts cannot be placed on water."
+msgstr "Toto kúzlo nemožno použiť na lodi."
+
+#, fuzzy
+msgid "Mountains cannot be placed on water."
+msgstr "Toto kúzlo nemožno použiť na lodi."
+
+#, fuzzy
+msgid "Rocks cannot be placed on water."
+msgstr "Toto kúzlo nemožno použiť na lodi."
+
+#, fuzzy
+msgid "Trees cannot be placed on water."
 msgstr "Toto kúzlo nemožno použiť na lodi."
 
 #, fuzzy
