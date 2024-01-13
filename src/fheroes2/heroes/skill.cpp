@@ -96,12 +96,12 @@ namespace
         return 0;
     }
 
-    int SecondaryPriorityFromRace( const int race, const std::vector<int> & exclude, const uint32_t seed )
+    int SecondaryPriorityFromRace( const int race, const std::vector<int> & blacklist, const uint32_t seed )
     {
         Rand::Queue parts( MAXSECONDARYSKILL );
 
         for ( auto skill : allSecondarySkills ) {
-            if ( std::find( exclude.begin(), exclude.end(), skill ) != exclude.end() ) {
+            if ( std::find( blacklist.begin(), blacklist.end(), skill ) != blacklist.end() ) {
                 continue;
             }
 
