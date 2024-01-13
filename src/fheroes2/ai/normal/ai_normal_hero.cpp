@@ -361,14 +361,24 @@ namespace
                 return false;
             }
 
-            if ( !hero.HaveSpellBook() || hero.HaveSpell( spell, true )
-                 || ( 3 == spell.Level() && Skill::Level::NONE == hero.GetLevelSkill( Skill::Secondary::WISDOM ) ) ) {
+            if ( !hero.HaveSpellBook() ) {
                 return false;
             }
 
-            if ( hero.isVisited( tile, Visit::GLOBAL ) && !isSpellUsedByAI( spell.GetID() ) ) {
+            if ( spell.Level() == 3 && hero.GetLevelSkill( Skill::Secondary::WISDOM ) == Skill::Level::NONE ) {
+                // No reason to visit this shrine as the hero cannot learn this spell.
                 return false;
             }
+
+            if ( !hero.isVisited( tile, Visit::GLOBAL ) ) {
+                // This shrine has not been visited by any hero. It's worth to do it.
+                return true;
+            }
+
+            if ( hero.HaveSpell( spell, true ) || !isSpellUsedByAI( spell.GetID() ) ) {
+                return false;
+            }
+
             return true;
         }
 
