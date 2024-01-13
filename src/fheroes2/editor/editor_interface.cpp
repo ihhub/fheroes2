@@ -827,6 +827,66 @@ namespace Interface
                 setObjectOnTileAsAction( tile, groupType, _editorPanel.getSelectedObjectType() );
             }
         }
+        else if ( groupType == Maps::ObjectGroup::LANDSCAPE_MOUNTAINS ) {
+            const auto & objectInfo = getObjectInfo( groupType, _editorPanel.getSelectedObjectType() );
+
+            if ( !isObjectPlacementAllowed( objectInfo, tilePos ) ) {
+                _warningMessage.reset( _( "Objects cannot be placed outside the map." ) );
+                return;
+            }
+
+            if ( !verifyObjectCondition( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return !tileToCheck.isWater(); } ) ) {
+                _warningMessage.reset( _( "Mountains cannot be placed on water." ) );
+                return;
+            }
+
+            if ( !verifyObjectCondition( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return Maps::isClearGround( tileToCheck ); } ) ) {
+                _warningMessage.reset( _( "Choose a tile which does not contain any objects." ) );
+                return;
+            }
+
+            setObjectOnTileAsAction( tile, groupType, _editorPanel.getSelectedObjectType() );
+        }
+        else if ( groupType == Maps::ObjectGroup::LANDSCAPE_ROCKS ) {
+            const auto & objectInfo = getObjectInfo( groupType, _editorPanel.getSelectedObjectType() );
+
+            if ( !isObjectPlacementAllowed( objectInfo, tilePos ) ) {
+                _warningMessage.reset( _( "Objects cannot be placed outside the map." ) );
+                return;
+            }
+
+            if ( !verifyObjectCondition( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return !tileToCheck.isWater(); } ) ) {
+                _warningMessage.reset( _( "Rocks cannot be placed on water." ) );
+                return;
+            }
+
+            if ( !verifyObjectCondition( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return Maps::isClearGround( tileToCheck ); } ) ) {
+                _warningMessage.reset( _( "Choose a tile which does not contain any objects." ) );
+                return;
+            }
+
+            setObjectOnTileAsAction( tile, groupType, _editorPanel.getSelectedObjectType() );
+        }
+        else if ( groupType == Maps::ObjectGroup::LANDSCAPE_TREES ) {
+            const auto & objectInfo = getObjectInfo( groupType, _editorPanel.getSelectedObjectType() );
+
+            if ( !isObjectPlacementAllowed( objectInfo, tilePos ) ) {
+                _warningMessage.reset( _( "Objects cannot be placed outside the map." ) );
+                return;
+            }
+
+            if ( !verifyObjectCondition( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return !tileToCheck.isWater(); } ) ) {
+                _warningMessage.reset( _( "Trees cannot be placed on water." ) );
+                return;
+            }
+
+            if ( !verifyObjectCondition( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return Maps::isClearGround( tileToCheck ); } ) ) {
+                _warningMessage.reset( _( "Choose a tile which does not contain any objects." ) );
+                return;
+            }
+
+            setObjectOnTileAsAction( tile, groupType, _editorPanel.getSelectedObjectType() );
+        }
         else if ( groupType == Maps::ObjectGroup::ADVENTURE_WATER || groupType == Maps::ObjectGroup::LANDSCAPE_WATER ) {
             const auto & objectInfo = getObjectInfo( groupType, _editorPanel.getSelectedObjectType() );
 

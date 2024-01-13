@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-11 14:17+0000\n"
+"POT-Creation-Date: 2024-01-13 09:39+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3458,6 +3458,18 @@ msgid "Click to select %{object} as the resource generator to be placed."
 msgstr "Кликни тук, за да избереш кой сценарий да играеш."
 
 #, fuzzy
+msgid "Select Mountain Object:"
+msgstr "Океански обекти"
+
+#, fuzzy
+msgid "Select Rock Object:"
+msgstr "Океански обекти"
+
+#, fuzzy
+msgid "Select Tree Object:"
+msgstr "Океански обекти"
+
+#, fuzzy
 msgid "Select Power Up Object:"
 msgstr "Океански обекти"
 
@@ -3788,6 +3800,18 @@ msgstr "Героите не могат да бъдат поставени на �
 
 #, fuzzy
 msgid "Artifacts cannot be placed on water."
+msgstr "Това заклинание не може да се направи на кораб."
+
+#, fuzzy
+msgid "Mountains cannot be placed on water."
+msgstr "Чудовищата не могат да се поставят върху вода."
+
+#, fuzzy
+msgid "Rocks cannot be placed on water."
+msgstr "Чудовищата не могат да се поставят върху вода."
+
+#, fuzzy
+msgid "Trees cannot be placed on water."
 msgstr "Това заклинание не може да се направи на кораб."
 
 #, fuzzy
