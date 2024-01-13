@@ -249,3 +249,14 @@ bool Difficulty::allowAIToBuildLevel6Dwellings( const int difficulty )
     }
     return true;
 }
+
+bool Difficulty::allowAIToTransferArmiesAndArtifactsBetweenHeroes( const int difficulty )
+{
+    switch ( difficulty ) {
+    case Difficulty::EASY:
+        return false;
+    default:
+        break;
+    }
+    return true;
+}

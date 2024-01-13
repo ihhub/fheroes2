@@ -181,8 +181,10 @@ namespace
             }
 
             // Assign the courier role and remove them so they aren't counted towards the median strength
-            heroList.back().hero->setAIRole( Heroes::Role::COURIER );
-            heroList.pop_back();
+            if ( Difficulty::allowAIToTransferArmiesAndArtifactsBetweenHeroes( Game::getDifficulty() ) ) {
+                heroList.back().hero->setAIRole( Heroes::Role::COURIER );
+                heroList.pop_back();
+            }
 
             if ( heroList.size() > 2 ) {
                 // We still have a plenty of heroes. In this case lets create a Scout hero to uncover the fog.

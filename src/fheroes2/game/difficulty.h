@@ -70,6 +70,8 @@ namespace Difficulty
 
     bool allowAIToBuildLevel5Dwellings( const int difficulty );
     bool allowAIToBuildLevel6Dwellings( const int difficulty );
+
+    bool allowAIToTransferArmiesAndArtifactsBetweenHeroes( const int difficulty );
 }
 
 #endif
