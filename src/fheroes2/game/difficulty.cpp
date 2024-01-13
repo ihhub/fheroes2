@@ -226,3 +226,26 @@ bool Difficulty::allowAIToDevelopCastlesOnlyOnEvenDays( const int difficulty )
     }
     return false;
 }
+
+bool Difficulty::allowAIToBuildLevel5Dwellings( const int difficulty )
+{
+    switch ( difficulty ) {
+    case Difficulty::EASY:
+        return false;
+    default:
+        break;
+    }
+    return true;
+}
+
+bool Difficulty::allowAIToBuildLevel6Dwellings( const int difficulty )
+{
+    switch ( difficulty ) {
+    case Difficulty::EASY:
+    case Difficulty::NORMAL:
+        return false;
+    default:
+        break;
+    }
+    return true;
+}
