@@ -3116,20 +3116,6 @@ namespace fheroes2
         uint8_t center_y = static_cast<uint8_t>( std::max( 1, ( height / 2 ) - height % 2 ) );
         // offsetting provides better visibility
         float scale = ( outsideColor - insideColor - offset ) / static_cast<float>( center_y );
-        // bottom Half
-        for ( uint8_t pos_y = center_y; pos_y <= height; pos_y++ ) {
-            uint8_t val = static_cast<uint8_t>( insideColor + abs( center_y - pos_y ) * scale );
-
-            uint8_t * rowStart = inData + static_cast<ptrdiff_t>( pos_y * width );
-            uint8_t * rowEnd = inData + static_cast<ptrdiff_t>( ( pos_y + 1 ) * width );
-            uint8_t * inTrans = inTransform + static_cast<ptrdiff_t>( pos_y * width );
-
-            for ( ; rowStart != rowEnd; ++rowStart, ++inTrans ) {
-                if ( *inTrans == 0 ) {
-                    *rowStart = val;
-                }
-            }
-        }
 
         // top Half
         for ( uint8_t neg_y = 0; neg_y <= center_y; neg_y++ ) {
@@ -3138,8 +3124,31 @@ namespace fheroes2
             uint8_t * neg_rowEnd = inData + static_cast<ptrdiff_t>( ( neg_y + 1 ) * width );
             uint8_t * neg_inTrans = inTransform + static_cast<ptrdiff_t>( neg_y * width );
             for ( ; neg_rowStart != neg_rowEnd; ++neg_rowStart, ++neg_inTrans ) {
-                if ( *neg_inTrans == 0 || neg_y == 0 ) {
+                if ( *neg_inTrans == 0 && *neg_rowStart < 20 ) {
                     *neg_rowStart = neg_Val;
+                }
+                else if ( *neg_rowStart < std::min(insideColor,outsideColor) ) {
+                    *neg_inTrans = 1;
+                }
+            }
+        }
+
+        // bottom Half
+        for ( uint8_t pos_y = center_y; pos_y <= height; pos_y++ ) {
+            uint8_t val = static_cast<uint8_t>( insideColor + abs( center_y - pos_y ) * scale );
+
+            uint8_t * rowStart = inData + static_cast<ptrdiff_t>( pos_y * width );
+            uint8_t * rowEnd = inData + static_cast<ptrdiff_t>( ( pos_y + 1 ) * width );
+            uint8_t * inTrans = inTransform + static_cast<ptrdiff_t>( pos_y * width );
+
+            for ( ; rowStart != rowEnd; rowStart++, inTrans++ ) {
+                if ( *inTrans == 0 ) {
+                    if ( *rowStart < 21 ) {
+                        *rowStart = val;
+                    }
+                    else if ( *rowStart < std::min( insideColor, outsideColor ) ) {
+                        *inTrans = 1;
+                    }
                 }
             }
         }
