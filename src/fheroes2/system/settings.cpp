@@ -93,7 +93,7 @@ std::string Settings::GetVersion()
 
 Settings::Settings()
     : _resolutionInfo( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT )
-    , game_difficulty( Difficulty::NORMAL )
+    , _gameDifficulty( Difficulty::NORMAL )
     , sound_volume( 6 )
     , music_volume( 6 )
     , _musicType( MUSIC_EXTERNAL )
@@ -1056,10 +1056,10 @@ void Settings::resetFirstGameRun()
 
 StreamBase & operator<<( StreamBase & msg, const Settings & conf )
 {
-    return msg << conf._gameLanguage << conf.current_maps_file << conf.game_difficulty << conf.game_type << conf.preferably_count_players << conf.players;
+    return msg << conf._gameLanguage << conf.current_maps_file << conf._gameDifficulty << conf.game_type << conf.preferably_count_players << conf.players;
 }
 
 StreamBase & operator>>( StreamBase & msg, Settings & conf )
 {
-    return msg >> conf._loadedFileLanguage >> conf.current_maps_file >> conf.game_difficulty >> conf.game_type >> conf.preferably_count_players >> conf.players;
+    return msg >> conf._loadedFileLanguage >> conf.current_maps_file >> conf._gameDifficulty >> conf.game_type >> conf.preferably_count_players >> conf.players;
 }
