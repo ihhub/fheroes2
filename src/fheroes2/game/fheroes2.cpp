@@ -166,6 +166,7 @@ namespace
                         bestResolution = info;
                     }
                 }
+
                 display.setResolution( bestResolution );
             }
             else {

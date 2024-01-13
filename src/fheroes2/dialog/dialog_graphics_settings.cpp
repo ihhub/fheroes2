@@ -220,7 +220,7 @@ namespace
                 fheroes2::showStandardTextMessage( _( "V-Sync" ), _( "The V-Sync option can be enabled to resolve flickering issues on some monitors." ), 0 );
             }
             else if ( le.MousePressRight( windowSwitchDisplayRoi ) ) {
-                fheroes2::showStandardTextMessage( _( "Display Selection" ), _( "Toggle Between available Displays, Restart Required to take Effect" ), 0 );
+                fheroes2::showStandardTextMessage( _( "Display Selection" ), _( "Toggle Between available Displays" ), 0 );
             }
             else if ( le.MousePressRight( windowSystemInfoRoi ) ) {
                 fheroes2::showStandardTextMessage( _( "System Info" ), _( "Show extra information such as FPS and current time." ), 0 );
