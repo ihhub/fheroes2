@@ -249,7 +249,6 @@ namespace fheroes2
     void openGraphicsSettingsDialog( const std::function<void()> & updateUI )
     {
         Settings & conf = Settings::Get();
-        fheroes2::Display & display = fheroes2::Display::instance();
 
         SelectedWindow windowType = SelectedWindow::Configuration;
         while ( windowType != SelectedWindow::Exit ) {
@@ -280,7 +279,7 @@ namespace fheroes2
                 windowType = SelectedWindow::Configuration;
                 break;
             case SelectedWindow::SwitchDisplay: {
-                display.changeDisplayEngine( ( fheroes2::engine().getDisplayId() + 1 ) % fheroes2::engine().getNumberOfVideoDisplays() );
+                fheroes2::Display::instance().changeDisplayEngine( ( fheroes2::engine().getDisplayId() + 1 ) % fheroes2::engine().getNumberOfVideoDisplays() );
                 conf.Save( Settings::configFileName );
                 windowType = SelectedWindow::Configuration;
                 break;
