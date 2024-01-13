@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-11 14:17+0000\n"
+"POT-Creation-Date: 2024-01-13 09:39+0000\n"
 "PO-Revision-Date: 2023-11-12 16:27+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -3452,6 +3452,18 @@ msgid "Click to select %{object} as the resource generator to be placed."
 msgstr "Нажмите сюда чтобы выбрать сценарий."
 
 #, fuzzy
+msgid "Select Mountain Object:"
+msgstr "Объекты океана"
+
+#, fuzzy
+msgid "Select Rock Object:"
+msgstr "Объекты океана"
+
+#, fuzzy
+msgid "Select Tree Object:"
+msgstr "Объекты океана"
+
+#, fuzzy
 msgid "Select Power Up Object:"
 msgstr "Объекты океана"
 
@@ -3782,6 +3794,18 @@ msgstr "Героев нельзя размещать на воде."
 
 msgid "Artifacts cannot be placed on water."
 msgstr "Артефакты нельзя размещать на воде."
+
+#, fuzzy
+msgid "Mountains cannot be placed on water."
+msgstr "Монстров нельзя размещать на воде."
+
+#, fuzzy
+msgid "Rocks cannot be placed on water."
+msgstr "Монстров нельзя размещать на воде."
+
+#, fuzzy
+msgid "Trees cannot be placed on water."
+msgstr "Сокровища нельзя размещать на воде."
 
 #, fuzzy
 msgid "Ocean object must be placed on water."

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-11 14:17+0000\n"
+"POT-Creation-Date: 2024-01-13 09:39+0000\n"
 "PO-Revision-Date: 2023-09-04 21:55+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -3425,6 +3425,18 @@ msgid "Click to select %{object} as the resource generator to be placed."
 msgstr "Kattints ide, hogy kiválaszd melyik Küldetéssel játszol."
 
 #, fuzzy
+msgid "Select Mountain Object:"
+msgstr "Tengeri objektum kiválasztása:"
+
+#, fuzzy
+msgid "Select Rock Object:"
+msgstr "Tengeri objektum kiválasztása:"
+
+#, fuzzy
+msgid "Select Tree Object:"
+msgstr "Tengeri objektum kiválasztása:"
+
+#, fuzzy
 msgid "Select Power Up Object:"
 msgstr "Tengeri objektum kiválasztása:"
 
@@ -3750,6 +3762,18 @@ msgstr "Vízen nem helyezhetők el hősök."
 
 msgid "Artifacts cannot be placed on water."
 msgstr "Vízen nem helyezhetők el varázstárgyak."
+
+#, fuzzy
+msgid "Mountains cannot be placed on water."
+msgstr "Vízen nem helyezhetők el lények."
+
+#, fuzzy
+msgid "Rocks cannot be placed on water."
+msgstr "Vízen nem helyezhetők el városok."
+
+#, fuzzy
+msgid "Trees cannot be placed on water."
+msgstr "Vízen nem helyezhetők el kincsek."
 
 msgid "Ocean object must be placed on water."
 msgstr "Tengeri objektumot vízre kell elhelyezni."
