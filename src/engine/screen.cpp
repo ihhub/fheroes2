@@ -1507,7 +1507,8 @@ namespace fheroes2
 
     int BaseRenderEngine::getNumberOfVideoDisplays()
     {
-        if ( int displayCount = SDL_GetNumVideoDisplays(); displayCount > 0 ) {
+        int displayCount = SDL_GetNumVideoDisplays();
+        if ( displayCount > 0 ) {
             return displayCount;
         }
         ERROR_LOG( "Failed to Get Number of Displays, description: " << SDL_GetError() );

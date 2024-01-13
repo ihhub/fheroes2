@@ -149,7 +149,7 @@ namespace fheroes2
             _displayId = display;
         }
 
-        int getNumberOfVideoDisplays();
+        static int getNumberOfVideoDisplays();
         const char * getDisplayName( const int display );
 
     protected:
