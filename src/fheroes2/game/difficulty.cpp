@@ -214,3 +214,15 @@ bool Difficulty::allowAIToSplitWeakStacks( const int difficulty )
     }
     return true;
 }
+
+bool Difficulty::allowAIToDevelopCastlesOnlyOnEvenDays( const int difficulty )
+{
+    switch ( difficulty ) {
+    case Difficulty::EASY:
+    case Difficulty::NORMAL:
+        return true;
+    default:
+        break;
+    }
+    return false;
+}

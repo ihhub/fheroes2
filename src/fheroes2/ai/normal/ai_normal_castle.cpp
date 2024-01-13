@@ -31,6 +31,8 @@
 #include "army_troop.h"
 #include "battle_tower.h"
 #include "castle.h"
+#include "difficulty.h"
+#include "game.h"
 #include "heroes.h"
 #include "kingdom.h"
 #include "maps_tiles.h"
@@ -155,8 +157,12 @@ namespace AI
 
     bool CastleDevelopment( Castle & castle, int safetyFactor, int spellLevel )
     {
+        if ( Difficulty::allowAIToDevelopCastlesOnlyOnEvenDays( Game::getDifficulty() ) && world.CountDay() % 2 != 0 ) {
+            return false;
+        }
+
         if ( castle.isCastle() && !castle.isBuild( BUILD_WELL ) && world.CountDay() > 6 ) {
-            // return right away - if you can't buy Well you can't buy anything else
+            // If you can't build Well, you won't be able to build anything else
             return BuildIfPossible( castle, BUILD_WELL );
         }
 
@@ -167,7 +173,7 @@ namespace AI
         const size_t neighbourRegions = world.getRegion( world.GetTiles( castle.GetIndex() ).GetRegion() ).getNeighboursCount();
         const bool islandOrPeninsula = neighbourRegions < 3;
 
-        // force building a shipyard, +1 to cost check since we can have 0 neighbours
+        // Force building a shipyard, +1 to cost check since we can have 0 neighbours
         if ( islandOrPeninsula && BuildIfEnoughFunds( castle, BUILD_SHIPYARD, static_cast<uint32_t>( neighbourRegions + 1 ) ) ) {
             return true;
         }
