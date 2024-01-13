@@ -26,7 +26,6 @@
 #include <algorithm>
 #include <array>
 #include <cassert>
-#include <iterator>
 #include <unordered_set>
 
 #include "artifact.h"
