@@ -27,6 +27,7 @@
 #include <array>
 #include <cassert>
 #include <iterator>
+#include <unordered_set>
 
 #include "artifact.h"
 #include "artifact_info.h"
@@ -96,12 +97,12 @@ namespace
         return 0;
     }
 
-    int SecondaryPriorityFromRace( const int race, const std::vector<int> & blacklist, const uint32_t seed )
+    int SecondaryPriorityFromRace( const int race, const std::unordered_set<int> & blacklist, const uint32_t seed )
     {
         Rand::Queue parts( MAXSECONDARYSKILL );
 
         for ( auto skill : allSecondarySkills ) {
-            if ( std::find( blacklist.begin(), blacklist.end(), skill ) != blacklist.end() ) {
+            if ( blacklist.find( skill ) != blacklist.end() ) {
                 continue;
             }
 
@@ -736,7 +737,7 @@ void Skill::SecSkills::FillMax( const Skill::Secondary & skill )
 std::pair<Skill::Secondary, Skill::Secondary> Skill::SecSkills::FindSkillsForLevelUp( const int race, const uint32_t firstSkillSeed,
                                                                                       uint32_t const secondSkillSeed ) const
 {
-    std::vector<int> blacklist;
+    std::unordered_set<int> blacklist;
     blacklist.reserve( MAXSECONDARYSKILL + HEROESMAXSKILL );
 
     for ( const Secondary & skill : *this ) {
@@ -744,12 +745,17 @@ std::pair<Skill::Secondary, Skill::Secondary> Skill::SecSkills::FindSkillsForLev
             continue;
         }
 
-        blacklist.push_back( skill.Skill() );
+        blacklist.insert( skill.Skill() );
     }
 
     if ( Count() >= HEROESMAXSKILL ) {
-        std::copy_if( allSecondarySkills.begin(), allSecondarySkills.end(), std::back_inserter( blacklist ),
-                      [this]( const int skill ) { return GetLevel( skill ) == Level::NONE; } );
+        for ( const int skill : allSecondarySkills ) {
+            if ( GetLevel( skill ) != Level::NONE ) {
+                continue;
+            }
+
+            blacklist.insert( skill );
+        }
     }
 
     // Wisdom should be offered to the heroes of "magic" classes on a mandatory basis at least once every three level-ups, regardless of its probability in accordance
@@ -763,7 +769,7 @@ std::pair<Skill::Secondary, Skill::Secondary> Skill::SecSkills::FindSkillsForLev
             return false;
         }
 
-        if ( std::find( blacklist.begin(), blacklist.end(), Skill::Secondary::WISDOM ) != blacklist.end() ) {
+        if ( blacklist.find( Skill::Secondary::WISDOM ) != blacklist.end() ) {
             return false;
         }
 
@@ -790,7 +796,7 @@ std::pair<Skill::Secondary, Skill::Secondary> Skill::SecSkills::FindSkillsForLev
         return result;
     }
 
-    blacklist.push_back( result.first.Skill() );
+    blacklist.insert( result.first.Skill() );
 
     result.second = levelUpSingleSkill( SecondaryPriorityFromRace( race, blacklist, secondSkillSeed ) );
     assert( result.first.Skill() != result.second.Skill() );
