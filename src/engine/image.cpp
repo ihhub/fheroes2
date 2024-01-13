@@ -3127,7 +3127,7 @@ namespace fheroes2
                 if ( *neg_inTrans == 0 && *neg_rowStart < 20 ) {
                     *neg_rowStart = neg_Val;
                 }
-                else if ( *neg_rowStart < std::min(insideColor,outsideColor) ) {
+                else if ( *neg_rowStart < std::min( insideColor, outsideColor ) ) {
                     *neg_inTrans = 1;
                 }
             }
