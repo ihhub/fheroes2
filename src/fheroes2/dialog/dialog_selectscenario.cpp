@@ -109,7 +109,7 @@ namespace
             body.add( { _( "The Succession Wars" ), fheroes2::FontType::normalWhite() } );
             break;
         case GameVersion::PRICE_OF_LOYALTY:
-            body.add( { _( "The Price of Loyalty" ), fheroes2::FontType::normalWhite() } );
+            body.add( { _( "Price of Loyalty" ), fheroes2::FontType::normalWhite() } );
             break;
         case GameVersion::RESURRECTION:
             body.add( { _( "Resurrection" ), fheroes2::FontType::normalWhite() } );
