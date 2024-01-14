@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-02 13:33+0000\n"
+"POT-Creation-Date: 2024-01-13 09:39+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3436,6 +3436,43 @@ msgstr "Кликни тук, за да избереш кой сценарий д
 msgid "Click to select this color."
 msgstr "Кликни тук, за да избереш кой сценарий да играеш."
 
+#, fuzzy
+msgid "Select Dwelling:"
+msgstr "Избери заклинание:"
+
+msgid "Mine placing"
+msgstr ""
+
+#, fuzzy
+msgid ""
+"Resource\n"
+"type:"
+msgstr "Ресурс"
+
+#, fuzzy
+msgid "%{mineName} appearance:"
+msgstr "%{name} %{race}"
+
+#, fuzzy
+msgid "Click to select %{object} as the resource generator to be placed."
+msgstr "Кликни тук, за да избереш кой сценарий да играеш."
+
+#, fuzzy
+msgid "Select Mountain Object:"
+msgstr "Океански обекти"
+
+#, fuzzy
+msgid "Select Rock Object:"
+msgstr "Океански обекти"
+
+#, fuzzy
+msgid "Select Tree Object:"
+msgstr "Океански обекти"
+
+#, fuzzy
+msgid "Select Power Up Object:"
+msgstr "Океански обекти"
+
 msgid "Map Type:\n"
 msgstr "Тип на карта:\n"
 
@@ -3766,11 +3803,35 @@ msgid "Artifacts cannot be placed on water."
 msgstr "Това заклинание не може да се направи на кораб."
 
 #, fuzzy
+msgid "Mountains cannot be placed on water."
+msgstr "Чудовищата не могат да се поставят върху вода."
+
+#, fuzzy
+msgid "Rocks cannot be placed on water."
+msgstr "Чудовищата не могат да се поставят върху вода."
+
+#, fuzzy
+msgid "Trees cannot be placed on water."
+msgstr "Това заклинание не може да се направи на кораб."
+
+#, fuzzy
 msgid "Ocean object must be placed on water."
 msgstr "Това заклинание не може да се направи на кораб."
 
 #, fuzzy
 msgid "Towns cannot be placed on water."
+msgstr "Чудовищата не могат да се поставят върху вода."
+
+#, fuzzy
+msgid "Mines cannot be placed on water."
+msgstr "Чудовищата не могат да се поставят върху вода."
+
+#, fuzzy
+msgid "Dwellings cannot be placed on water."
+msgstr "Чудовищата не могат да се поставят върху вода."
+
+#, fuzzy
+msgid "Power-ups cannot be placed on water."
 msgstr "Чудовищата не могат да се поставят върху вода."
 
 #, fuzzy

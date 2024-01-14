@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-02 13:33+0000\n"
+"POT-Creation-Date: 2024-01-13 09:39+0000\n"
 "PO-Revision-Date: 2022-10-25 08:52+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Dutch <nl@li.org>\n"
@@ -3317,6 +3317,41 @@ msgstr ""
 msgid "Click to select this color."
 msgstr ""
 
+#, fuzzy
+msgid "Select Dwelling:"
+msgstr "Selecteer spreuk doelwit"
+
+msgid "Mine placing"
+msgstr ""
+
+msgid ""
+"Resource\n"
+"type:"
+msgstr ""
+
+#, fuzzy
+msgid "%{mineName} appearance:"
+msgstr "%{name} de %{race}"
+
+msgid "Click to select %{object} as the resource generator to be placed."
+msgstr ""
+
+#, fuzzy
+msgid "Select Mountain Object:"
+msgstr "Selecteer spreuk doelwit"
+
+#, fuzzy
+msgid "Select Rock Object:"
+msgstr "Selecteer spreuk doelwit"
+
+#, fuzzy
+msgid "Select Tree Object:"
+msgstr "Selecteer spreuk doelwit"
+
+#, fuzzy
+msgid "Select Power Up Object:"
+msgstr "Selecteer spreuk doelwit"
+
 msgid "Map Type:\n"
 msgstr ""
 
@@ -3621,10 +3656,28 @@ msgstr ""
 msgid "Artifacts cannot be placed on water."
 msgstr ""
 
+msgid "Mountains cannot be placed on water."
+msgstr ""
+
+msgid "Rocks cannot be placed on water."
+msgstr ""
+
+msgid "Trees cannot be placed on water."
+msgstr ""
+
 msgid "Ocean object must be placed on water."
 msgstr ""
 
 msgid "Towns cannot be placed on water."
+msgstr ""
+
+msgid "Mines cannot be placed on water."
+msgstr ""
+
+msgid "Dwellings cannot be placed on water."
+msgstr ""
+
+msgid "Power-ups cannot be placed on water."
 msgstr ""
 
 msgid "Used to place %{object}."

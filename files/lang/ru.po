@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-02 13:33+0000\n"
+"POT-Creation-Date: 2024-01-13 09:39+0000\n"
 "PO-Revision-Date: 2023-11-12 16:27+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -3430,6 +3430,43 @@ msgstr "Нажмите сюда чтобы выбрать сценарий."
 msgid "Click to select this color."
 msgstr "Нажмите сюда чтобы выбрать сценарий."
 
+#, fuzzy
+msgid "Select Dwelling:"
+msgstr "Выберите заклинание:"
+
+msgid "Mine placing"
+msgstr ""
+
+#, fuzzy
+msgid ""
+"Resource\n"
+"type:"
+msgstr "Ресурс"
+
+#, fuzzy
+msgid "%{mineName} appearance:"
+msgstr "%{name} %{race}"
+
+#, fuzzy
+msgid "Click to select %{object} as the resource generator to be placed."
+msgstr "Нажмите сюда чтобы выбрать сценарий."
+
+#, fuzzy
+msgid "Select Mountain Object:"
+msgstr "Объекты океана"
+
+#, fuzzy
+msgid "Select Rock Object:"
+msgstr "Объекты океана"
+
+#, fuzzy
+msgid "Select Tree Object:"
+msgstr "Объекты океана"
+
+#, fuzzy
+msgid "Select Power Up Object:"
+msgstr "Объекты океана"
+
 msgid "Map Type:\n"
 msgstr "Тип карты:\n"
 
@@ -3759,11 +3796,35 @@ msgid "Artifacts cannot be placed on water."
 msgstr "Артефакты нельзя размещать на воде."
 
 #, fuzzy
+msgid "Mountains cannot be placed on water."
+msgstr "Монстров нельзя размещать на воде."
+
+#, fuzzy
+msgid "Rocks cannot be placed on water."
+msgstr "Монстров нельзя размещать на воде."
+
+#, fuzzy
+msgid "Trees cannot be placed on water."
+msgstr "Сокровища нельзя размещать на воде."
+
+#, fuzzy
 msgid "Ocean object must be placed on water."
 msgstr "Героев нельзя размещать на воде."
 
 #, fuzzy
 msgid "Towns cannot be placed on water."
+msgstr "Монстров нельзя размещать на воде."
+
+#, fuzzy
+msgid "Mines cannot be placed on water."
+msgstr "Монстров нельзя размещать на воде."
+
+#, fuzzy
+msgid "Dwellings cannot be placed on water."
+msgstr "Монстров нельзя размещать на воде."
+
+#, fuzzy
+msgid "Power-ups cannot be placed on water."
 msgstr "Монстров нельзя размещать на воде."
 
 #, fuzzy

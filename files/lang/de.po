@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-02 13:33+0000\n"
-"PO-Revision-Date: 2023-04-09 23:51+0200\n"
+"POT-Creation-Date: 2024-01-13 09:39+0000\n"
+"PO-Revision-Date: 2023-12-22 00:32+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: de\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.3.2\n"
+"X-Generator: Poedit 3.2.2\n"
 
 msgid ""
 "BATTLE\n"
@@ -52,7 +52,7 @@ msgid "QUIT"
 msgstr "BEEND."
 
 msgid "CANCEL"
-msgstr "ABBR."
+msgstr "ABBRUCH"
 
 msgid "OKAY"
 msgstr "OKAY"
@@ -3445,6 +3445,43 @@ msgstr "Hier klicken, um auszuwählen, welches Szenario gespielt werden soll."
 msgid "Click to select this color."
 msgstr "Hier klicken, um auszuwählen, welches Szenario gespielt werden soll."
 
+#, fuzzy
+msgid "Select Dwelling:"
+msgstr "Zauberspruch auswählen:"
+
+msgid "Mine placing"
+msgstr ""
+
+#, fuzzy
+msgid ""
+"Resource\n"
+"type:"
+msgstr "Ressource"
+
+#, fuzzy
+msgid "%{mineName} appearance:"
+msgstr "%{name} (%{race})"
+
+#, fuzzy
+msgid "Click to select %{object} as the resource generator to be placed."
+msgstr "Hier klicken, um auszuwählen, welches Szenario gespielt werden soll."
+
+#, fuzzy
+msgid "Select Mountain Object:"
+msgstr "Ozean-Objekte"
+
+#, fuzzy
+msgid "Select Rock Object:"
+msgstr "Ozean-Objekte"
+
+#, fuzzy
+msgid "Select Tree Object:"
+msgstr "Ozean-Objekte"
+
+#, fuzzy
+msgid "Select Power Up Object:"
+msgstr "Ozean-Objekte"
+
 msgid "Map Type:\n"
 msgstr "Kartentyp:\n"
 
@@ -3781,11 +3818,35 @@ msgid "Artifacts cannot be placed on water."
 msgstr "Monster können nicht auf Wasser plaziert werden."
 
 #, fuzzy
+msgid "Mountains cannot be placed on water."
+msgstr "Monster können nicht auf Wasser plaziert werden."
+
+#, fuzzy
+msgid "Rocks cannot be placed on water."
+msgstr "Monster können nicht auf Wasser plaziert werden."
+
+#, fuzzy
+msgid "Trees cannot be placed on water."
+msgstr "Monster können nicht auf Wasser plaziert werden."
+
+#, fuzzy
 msgid "Ocean object must be placed on water."
 msgstr "Monster können nicht auf Wasser plaziert werden."
 
 #, fuzzy
 msgid "Towns cannot be placed on water."
+msgstr "Monster können nicht auf Wasser plaziert werden."
+
+#, fuzzy
+msgid "Mines cannot be placed on water."
+msgstr "Monster können nicht auf Wasser plaziert werden."
+
+#, fuzzy
+msgid "Dwellings cannot be placed on water."
+msgstr "Monster können nicht auf Wasser plaziert werden."
+
+#, fuzzy
+msgid "Power-ups cannot be placed on water."
 msgstr "Monster können nicht auf Wasser plaziert werden."
 
 #, fuzzy

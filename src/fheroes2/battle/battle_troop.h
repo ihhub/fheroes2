@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -181,6 +181,8 @@ namespace Battle
         uint32_t GetDead() const;
         uint32_t GetHitPoints() const;
 
+        // Returns the cost of this unit, suitable for calculating the cost of surrendering the army (see
+        // the implementation for details). Discounts are not applied when calculating this cost.
         Funds GetSurrenderCost() const;
 
         uint32_t GetShots() const override
@@ -271,7 +273,9 @@ namespace Battle
         int GetSpellMagic( Rand::DeterministicRandomGenerator & randomGenerator ) const;
 
         const HeroBase * GetCommander() const;
-        const HeroBase * GetCurrentOrArmyCommander() const; // commander of the army with the current unit color (if valid), commander of the unit's army otherwise
+        // If the color of the current unit is valid (i.e. this unit is not under the influence of a Berserker spell), then returns the commander of the army with the
+        // corresponding color. Otherwise, returns the commander of the unit's army.
+        const HeroBase * GetCurrentOrArmyCommander() const;
 
         // Checks whether the attacker will fight the defender in melee
         static bool isHandFighting( const Unit & attacker, const Unit & defender );

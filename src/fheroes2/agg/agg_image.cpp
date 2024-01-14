@@ -121,7 +121,8 @@ namespace
                                                 ICN::BUTTON_MAPSIZE_LARGE,
                                                 ICN::BUTTON_MAPSIZE_XLARGE,
                                                 ICN::BUTTON_MAPSIZE_ALL,
-                                                ICN::BUTTON_MAP_SELECT,
+                                                ICN::BUTTON_MAP_SELECT_GOOD,
+                                                ICN::BUTTON_MAP_SELECT_EVIL,
                                                 ICN::BUTTON_STANDARD_GAME,
                                                 ICN::BUTTON_CAMPAIGN_GAME,
                                                 ICN::BUTTON_MULTIPLAYER_GAME,
@@ -816,8 +817,8 @@ namespace fheroes2
                     break;
                 }
 
-                const int32_t textWidth = 86;
-                createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], textWidth, gettext_noop( "CANCEL" ), isEvilInterface );
+                getTextAdaptedButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "CANCEL" ),
+                                      isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON, isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK );
 
                 break;
             }
@@ -1289,43 +1290,29 @@ namespace fheroes2
 
                 break;
             }
-            case ICN::BUTTON_MAP_SELECT: {
+            case ICN::BUTTON_MAP_SELECT_EVIL:
+            case ICN::BUTTON_MAP_SELECT_GOOD: {
                 _icnVsSprite[id].resize( 2 );
+                const bool isEvilInterface = ( id == ICN::BUTTON_MAP_SELECT_EVIL );
 
                 if ( useOriginalResources() ) {
                     _icnVsSprite[id][0] = GetICN( ICN::NGEXTRA, 64 );
                     _icnVsSprite[id][1] = GetICN( ICN::NGEXTRA, 65 );
+                    if ( isEvilInterface ) {
+                        const std::vector<uint8_t> & goodToEvilPalette = PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_INTERFACE );
+                        fheroes2::ApplyPalette( _icnVsSprite[id][0], goodToEvilPalette );
+                        fheroes2::ApplyPalette( _icnVsSprite[id][1], goodToEvilPalette );
+                    }
                     break;
                 }
 
-                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
-                    Sprite & out = _icnVsSprite[id][i];
+                getTextAdaptedButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "SELECT" ), ICN::EMPTY_MAP_SELECT_BUTTON, ICN::UNKNOWN );
 
-                    const Sprite & originalButton = GetICN( ICN::NGEXTRA, 64 + i );
-                    const int32_t originalHeight = originalButton.height();
-                    const int32_t originalWidth = originalButton.width();
-                    const int32_t extensionWidth = 5;
-                    out.resize( originalWidth + extensionWidth, originalHeight );
-                    out.reset();
-
-                    const int32_t rightPartWidth = 3 + i;
-                    const int32_t leftPartWidth = originalWidth - rightPartWidth;
-
-                    // copy left main body of button.
-                    fheroes2::Copy( originalButton, 0, 0, out, 0, 0, leftPartWidth, originalHeight );
-
-                    // copy middle extending part of button.
-                    fheroes2::Copy( originalButton, 9, 0, out, leftPartWidth, 0, extensionWidth, originalHeight );
-
-                    // copy terminating right margin of the button.
-                    fheroes2::Copy( originalButton, leftPartWidth, 0, out, leftPartWidth + extensionWidth, 0, rightPartWidth, originalHeight );
-
-                    // clean the button.
-                    const int32_t leftMarginWidth = 6 - i;
-                    Fill( out, leftMarginWidth, 2 + 2 * i, out.width() - rightPartWidth - leftMarginWidth, 15 - i, getButtonFillingColor( i == 0 ) );
+                if ( isEvilInterface ) {
+                    const std::vector<uint8_t> & goodToEvilPalette = PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_INTERFACE );
+                    fheroes2::ApplyPalette( _icnVsSprite[id][0], goodToEvilPalette );
+                    fheroes2::ApplyPalette( _icnVsSprite[id][1], goodToEvilPalette );
                 }
-
-                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "SELECT" ), { 7, 3 }, { 6, 4 }, { 76, 15 }, fheroes2::FontColor::WHITE );
 
                 break;
             }
@@ -1899,21 +1886,16 @@ namespace fheroes2
                 _icnVsSprite[id].resize( 2 );
 
                 const bool isEvilInterface = ( id == ICN::UNIFORM_EVIL_CANCEL_BUTTON );
-                const int baseIcnId = isEvilInterface ? ICN::SYSTEME : ICN::SYSTEM;
 
                 if ( useOriginalResources() ) {
+                    const int baseIcnId = isEvilInterface ? ICN::SYSTEME : ICN::SYSTEM;
                     _icnVsSprite[id][0] = GetICN( baseIcnId, 3 );
                     _icnVsSprite[id][1] = GetICN( baseIcnId, 4 );
                     break;
                 }
 
-                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
-                    Sprite & out = _icnVsSprite[id][i];
-                    out = GetICN( baseIcnId, 11 + i );
-                }
-
-                const fheroes2::FontColor buttonFontColor = isEvilInterface ? fheroes2::FontColor::GRAY : fheroes2::FontColor::WHITE;
-                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "CANCEL" ), { 7, 5 }, { 6, 6 }, { 86, 16 }, buttonFontColor );
+                getTextAdaptedButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "CANCEL" ),
+                                      isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON, isEvilInterface ? ICN::UNIFORMBAK_EVIL : ICN::UNIFORMBAK_GOOD );
 
                 break;
             }
@@ -2651,7 +2633,8 @@ namespace fheroes2
             case ICN::BUTTON_MAPSIZE_LARGE:
             case ICN::BUTTON_MAPSIZE_XLARGE:
             case ICN::BUTTON_MAPSIZE_ALL:
-            case ICN::BUTTON_MAP_SELECT:
+            case ICN::BUTTON_MAP_SELECT_GOOD:
+            case ICN::BUTTON_MAP_SELECT_EVIL:
             case ICN::BUTTON_STANDARD_GAME:
             case ICN::BUTTON_CAMPAIGN_GAME:
             case ICN::BUTTON_MULTIPLAYER_GAME:
@@ -3709,6 +3692,107 @@ namespace fheroes2
                 }
                 return true;
             }
+            case ICN::DIFFICULTY_ICON_EASY:
+            case ICN::DIFFICULTY_ICON_NORMAL:
+            case ICN::DIFFICULTY_ICON_HARD:
+            case ICN::DIFFICULTY_ICON_EXPERT:
+            case ICN::DIFFICULTY_ICON_IMPOSSIBLE: {
+                const int originalIcnId = ICN::NGHSBKG;
+
+                const fheroes2::Sprite & originalBackground = GetICN( originalIcnId, 0 );
+
+                if ( !originalBackground.empty() ) {
+                    _icnVsSprite[id].resize( 2 );
+
+                    int32_t iconOffsetX = 0;
+
+                    switch ( id ) {
+                    case ICN::DIFFICULTY_ICON_EASY:
+                        iconOffsetX = 24;
+                        break;
+                    case ICN::DIFFICULTY_ICON_NORMAL:
+                        iconOffsetX = 101;
+                        break;
+                    case ICN::DIFFICULTY_ICON_HARD:
+                        iconOffsetX = 177;
+                        break;
+                    case ICN::DIFFICULTY_ICON_EXPERT:
+                        iconOffsetX = 254;
+                        break;
+                    case ICN::DIFFICULTY_ICON_IMPOSSIBLE:
+                        iconOffsetX = 331;
+                        break;
+                    default:
+                        // Did you add a new difficulty?
+                        assert( 0 );
+                    }
+
+                    const int32_t iconSideLength = 65;
+                    const int32_t iconOffsetY = 94;
+
+                    _icnVsSprite[id][0] = Crop( originalBackground, iconOffsetX, iconOffsetY, iconSideLength, iconSideLength );
+                    _icnVsSprite[id][0].setPosition( 0, 0 );
+
+                    // Generate Evil Icons
+                    _icnVsSprite[id][1] = _icnVsSprite[id][0];
+
+                    const std::vector<uint8_t> & goodToEvilPalette = PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_INTERFACE );
+                    fheroes2::ApplyPalette( _icnVsSprite[id][0], _icnVsSprite[id][1], goodToEvilPalette );
+                }
+
+                return true;
+            }
+            case ICN::METALLIC_BORDERED_TEXTBOX_GOOD: {
+                const int originalIcnId = ICN::NGHSBKG;
+
+                const fheroes2::Sprite & originalBackground = GetICN( originalIcnId, 0 );
+
+                if ( !originalBackground.empty() ) {
+                    _icnVsSprite[id].resize( 1 );
+
+                    const int32_t boxWidth = 371;
+                    const int32_t boxHeight = 30;
+                    const int32_t goodOriginalBoxOffsetX = 24;
+                    const int32_t goodOriginalBoxOffsetY = 40;
+
+                    _icnVsSprite[id][0] = Crop( originalBackground, goodOriginalBoxOffsetX, goodOriginalBoxOffsetY, boxWidth, boxHeight );
+                    _icnVsSprite[id][0].setPosition( 0, 0 );
+
+                    // Copy red pattern and cover up embedded button.
+                    const fheroes2::Sprite & redPart = fheroes2::Flip( Crop( originalBackground, 80, 45, 81, 19 ), true, false );
+                    Copy( redPart, 0, 0, _icnVsSprite[id][0], 284, 5, 81, 19 );
+                }
+
+                return true;
+            }
+            case ICN::METALLIC_BORDERED_TEXTBOX_EVIL: {
+                const fheroes2::Sprite & originalEvilBackground = GetICN( ICN::CAMPBKGE, 0 );
+
+                if ( !originalEvilBackground.empty() ) {
+                    _icnVsSprite[id].resize( 1 );
+
+                    const int32_t boxWidth = 371;
+                    const int32_t boxHeight = 30;
+                    _icnVsSprite[id][0].resize( boxWidth, boxHeight );
+                    _icnVsSprite[id][0].reset();
+
+                    const int32_t evilOriginalBoxOffsetX = 26;
+                    const int32_t evilOriginalBoxOffsetY = 27;
+                    const int32_t upperPartHeight = 20;
+
+                    // The metallic box frame in campbkge is slightly taller than the one in nghsbkg. The width is the same.
+                    Copy( originalEvilBackground, evilOriginalBoxOffsetX, evilOriginalBoxOffsetY, _icnVsSprite[id][0], 0, 0, boxWidth, upperPartHeight );
+
+                    Copy( originalEvilBackground, evilOriginalBoxOffsetX, evilOriginalBoxOffsetY + upperPartHeight + 14, _icnVsSprite[id][0], 0, upperPartHeight,
+                          boxWidth, 10 );
+
+                    // Copy red central part.
+                    const fheroes2::Sprite goodBox = GetICN( ICN::METALLIC_BORDERED_TEXTBOX_GOOD, 0 );
+                    Copy( goodBox, 6, 5, _icnVsSprite[id][0], 6, 5, 359, 19 );
+                }
+
+                return true;
+            }
             case ICN::TWNWUP_5: {
                 LoadOriginalICN( id );
                 if ( !_icnVsSprite[id].empty() && _icnVsSprite[id].front().width() == 84 && _icnVsSprite[id].front().height() == 256 ) {
@@ -4093,6 +4177,20 @@ namespace fheroes2
                 if ( !original.empty() ) {
                     _icnVsSprite[id][0] = Crop( original, 0, 0, 37, 230 );
                 }
+                return true;
+            }
+            case ICN::UNIFORMBAK_GOOD:
+            case ICN::UNIFORMBAK_EVIL: {
+                _icnVsSprite[id].resize( 1 );
+                const bool isEvilInterface = ( id == ICN::UNIFORMBAK_EVIL );
+                const fheroes2::Sprite & original = GetICN( isEvilInterface ? ICN::BUYBUILE : ICN::BUYBUILD, 1 );
+                if ( !original.empty() ) {
+                    _icnVsSprite[id][0].resize( 246, 45 );
+                    _icnVsSprite[id][0].reset();
+                    Copy( original, 0, 0, _icnVsSprite[id][0], 0, 0, 123, 45 );
+                    Copy( original, 0, 0, _icnVsSprite[id][0], 123, 0, 123, 45 );
+                }
+
                 return true;
             }
             case ICN::WELLBKG_EVIL: {
@@ -4512,6 +4610,32 @@ namespace fheroes2
                     FillTransform( pressed, pressed.width() - 3, 1, 2, 1, 1 );
                     FillTransform( pressed, pressed.width() - 2, 2, 2, 1, 1 );
                     FillTransform( pressed, pressed.width() - 1, 3, 1, pressed.height() - 6, 1 );
+                }
+
+                return true;
+            }
+            case ICN::EMPTY_MAP_SELECT_BUTTON: {
+                const int32_t originalId = ICN::NGEXTRA;
+                loadICN( originalId );
+
+                if ( _icnVsSprite[originalId].size() < 80 ) {
+                    return true;
+                }
+
+                _icnVsSprite[id].resize( 2 );
+
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    const Sprite & original = GetICN( originalId, 64 + i );
+
+                    Sprite & out = _icnVsSprite[id][i];
+                    // the empty button needs to widened by 1 px so that when it is divided by 3 in resizeButton() in ui_tools.h it will
+                    // give an integer result
+                    out.resize( original.width() + 1, original.height() );
+
+                    Copy( original, 0, 0, out, 0, 0, original.width() - 5, original.height() );
+                    Copy( original, original.width() - 6, 0, out, original.width() - 5, 0, 6, original.height() );
+
+                    Fill( out, 6 - i, 2 + 2 * i, 72, 15 - i, getButtonFillingColor( i == 0 ) );
                 }
 
                 return true;

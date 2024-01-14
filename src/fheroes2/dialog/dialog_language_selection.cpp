@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2023                                             *
+ *   Copyright (C) 2021 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -20,15 +20,16 @@
 
 #include "dialog_language_selection.h"
 
+#include <algorithm>
 #include <cassert>
 #include <cstddef>
 #include <cstdint>
+#include <memory>
 #include <string>
 
 #include "agg_image.h"
 #include "cursor.h"
 #include "game_hotkeys.h"
-#include "gamedefs.h"
 #include "icn.h"
 #include "image.h"
 #include "interface_list.h"
@@ -41,10 +42,14 @@
 #include "ui_dialog.h"
 #include "ui_scrollbar.h"
 #include "ui_text.h"
+#include "ui_window.h"
 
 namespace
 {
-    const int editBoxLength = 266;
+    const int32_t verticalPaddingAreasHight = 30;
+    const int32_t textAreaWidth = 270;
+    const int32_t scrollBarAreaWidth = 48;
+    const int32_t paddingLeftSide = 24;
 
     class LanguageList : public Interface::ListBox<fheroes2::SupportedLanguage>
     {
@@ -65,13 +70,12 @@ namespace
             fheroes2::LanguageSwitcher languageSwitcher( language );
             const fheroes2::Text languageName( fheroes2::getLanguageName( language ),
                                                isSelected ? fheroes2::FontType::normalYellow() : fheroes2::FontType::normalWhite() );
-            languageName.draw( ( editBoxLength - languageName.width() ) / 2 + offsetX, offsetY, fheroes2::Display::instance() );
+            languageName.draw( ( textAreaWidth - languageName.width() ) / 2 + offsetX, offsetY, fheroes2::Display::instance() );
         }
 
-        void RedrawBackground( const fheroes2::Point & dst ) override
+        void RedrawBackground( const fheroes2::Point & /* unused */ ) override
         {
-            const fheroes2::Sprite & panel = fheroes2::AGG::GetICN( ICN::REQBKG, 0 );
-            fheroes2::Blit( panel, fheroes2::Display::instance(), dst.x, dst.y );
+            _listBackground->restore();
         }
 
         void ActionCurrentUp() override
@@ -104,84 +108,135 @@ namespace
             return _isDoubleClicked;
         }
 
+        int getCurrentId() const
+        {
+            return _currentId;
+        }
+
+        void initListBackgroundRestorer( fheroes2::Rect roi )
+        {
+            _listBackground = std::make_unique<fheroes2::ImageRestorer>( fheroes2::Display::instance(), roi.x, roi.y, roi.width, roi.height );
+        }
+
+        void updateScrollBarImage()
+        {
+            const int32_t scrollBarWidth = _scrollbar.width();
+
+            setScrollBarImage( fheroes2::generateScrollbarSlider( _scrollbar, false, _scrollbar.getArea().height, VisibleItemCount(), _size(),
+                                                                  { 0, 0, scrollBarWidth, 8 }, { 0, 7, scrollBarWidth, 8 } ) );
+            _scrollbar.moveToIndex( _topId );
+        }
+
     private:
         bool _isDoubleClicked;
+        std::unique_ptr<fheroes2::ImageRestorer> _listBackground;
     };
 
-    void redrawDialogInfo( const fheroes2::Rect & windowRoi, const fheroes2::SupportedLanguage & language )
+    void redrawDialogInfo( const fheroes2::Rect & listRoi, const fheroes2::SupportedLanguage & language )
     {
         fheroes2::Display & display = fheroes2::Display::instance();
 
-        const fheroes2::Text title( _( "Select Game Language:" ), fheroes2::FontType::normalYellow() );
-        title.draw( windowRoi.x + ( windowRoi.width - title.width() ) / 2, windowRoi.y + 30, display );
+        const fheroes2::FontType fontType = fheroes2::FontType::normalYellow();
 
-        const fheroes2::Text selectedLanguage( fheroes2::getLanguageName( language ), fheroes2::FontType::normalYellow() );
-        selectedLanguage.draw( windowRoi.x + ( editBoxLength - selectedLanguage.width() ) / 2 + 41, windowRoi.y + 287 + ( 19 - selectedLanguage.height() + 2 ) / 2,
+        const fheroes2::Text title( _( "Select Game Language:" ), fontType );
+        title.draw( listRoi.x + ( listRoi.width - title.width() ) / 2, listRoi.y - ( verticalPaddingAreasHight + title.height() + 2 ) / 2, display );
+
+        const fheroes2::Text selectedLanguage( fheroes2::getLanguageName( language ), fontType );
+        selectedLanguage.draw( listRoi.x + ( listRoi.width - selectedLanguage.width() ) / 2, listRoi.y + listRoi.height + 12 + ( 21 - selectedLanguage.height() ) / 2 + 2,
                                display );
     }
 
     bool getLanguage( const std::vector<fheroes2::SupportedLanguage> & languages, fheroes2::SupportedLanguage chosenLanguage )
     {
-        fheroes2::Display & display = fheroes2::Display::instance();
-
+        // setup cursor
         const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
-        const fheroes2::Sprite & window = fheroes2::AGG::GetICN( ICN::REQBKG, 0 );
-        const fheroes2::Sprite & windowShadow = fheroes2::AGG::GetICN( ICN::REQBKG, 1 );
+        const int32_t listHeightDeduction = 112;
+        const int32_t listAreaOffsetY = 3;
+        const int32_t listAreaHeightDeduction = 4;
 
-        const fheroes2::Point dialogOffset( ( display.width() - window.width() ) / 2, ( display.height() - window.height() ) / 2 );
-        const fheroes2::Point shadowOffset( dialogOffset.x - BORDERWIDTH, dialogOffset.y );
+        // If we don't have many languagues, we reduce the maximum dialog height,
+        // but not less than enough for 11 elements.
+        // We also limit the maximum list height to 22 lines.
+        const int32_t maxDialogHeight = fheroes2::getFontHeight( fheroes2::FontSize::NORMAL ) * std::clamp( static_cast<int32_t>( languages.size() ), 11, 22 )
+                                        + listAreaOffsetY + listAreaHeightDeduction + listHeightDeduction;
 
-        fheroes2::ImageRestorer restorer( display, shadowOffset.x, shadowOffset.y, window.width() + BORDERWIDTH, window.height() + BORDERWIDTH );
-        const fheroes2::Rect roi( dialogOffset.x, dialogOffset.y, window.width(), window.height() );
+        fheroes2::Display & display = fheroes2::Display::instance();
 
-        fheroes2::Blit( windowShadow, display, roi.x - BORDERWIDTH, roi.y + BORDERWIDTH );
+        // Dialog height is also capped with the current screen height.
+        fheroes2::StandardWindow background( paddingLeftSide + textAreaWidth + scrollBarAreaWidth + 3, std::min( display.height() - 100, maxDialogHeight ), true,
+                                             display );
 
-        fheroes2::Button buttonOk( roi.x + 34, roi.y + 315, ICN::BUTTON_SMALL_OKAY_GOOD, 0, 1 );
-        fheroes2::Button buttonCancel( roi.x + 244, roi.y + 315, ICN::BUTTON_SMALL_CANCEL_GOOD, 0, 1 );
+        const fheroes2::Rect roi( background.activeArea() );
+        const fheroes2::Rect listRoi( roi.x + paddingLeftSide, roi.y + 37, textAreaWidth, roi.height - listHeightDeduction );
 
-        LanguageList items( roi.getPosition() );
+        // We divide the list: language list and selected language.
+        const fheroes2::Rect selectedLangRoi( listRoi.x, listRoi.y + listRoi.height + 12, listRoi.width, 21 );
+        background.applyTextBackgroundShading( selectedLangRoi );
+        background.applyTextBackgroundShading( { listRoi.x, listRoi.y, listRoi.width, listRoi.height } );
 
-        items.RedrawBackground( roi.getPosition() );
-        items.SetScrollButtonUp( ICN::REQUESTS, 5, 6, { roi.x + 327, roi.y + 55 } );
-        items.SetScrollButtonDn( ICN::REQUESTS, 7, 8, { roi.x + 327, roi.y + 257 } );
+        fheroes2::ImageRestorer titleBackground( fheroes2::Display::instance(), roi.x, listRoi.y - verticalPaddingAreasHight, roi.width, verticalPaddingAreasHight );
+        fheroes2::ImageRestorer selectedLangBackground( fheroes2::Display::instance(), selectedLangRoi.x, selectedLangRoi.y, listRoi.width, selectedLangRoi.height );
+        fheroes2::ImageRestorer buttonsBackground( fheroes2::Display::instance(), roi.x, selectedLangRoi.y + selectedLangRoi.height + 10, roi.width,
+                                                   verticalPaddingAreasHight );
 
-        const fheroes2::Sprite & originalSlider = fheroes2::AGG::GetICN( ICN::ESCROLL, 3 );
-        const fheroes2::Image scrollbarSlider = fheroes2::generateScrollbarSlider( originalSlider, false, 180, 11, static_cast<int32_t>( languages.size() ),
-                                                                                   { 0, 0, originalSlider.width(), 8 }, { 0, 7, originalSlider.width(), 8 } );
-        items.setScrollBarArea( { roi.x + 328, roi.y + 73, 12, 180 } );
-        items.setScrollBarImage( scrollbarSlider );
-        items.SetAreaMaxItems( 11 );
-        items.SetAreaItems( { roi.x + 41, roi.y + 55 + 3, editBoxLength, 215 } );
+        LanguageList listBox( roi.getPosition() );
 
+        listBox.initListBackgroundRestorer( listRoi );
+
+        const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
+
+        // Prepare OKAY and CANCEL buttons and render their shadows.
+        fheroes2::Button buttonOk;
+        fheroes2::Button buttonCancel;
+        background.renderOkayCancelButtons( buttonOk, buttonCancel, isEvilInterface );
+
+        listBox.SetAreaItems( { listRoi.x, listRoi.y + 3, listRoi.width - 3, listRoi.height - 4 } );
+
+        int32_t scrollbarOffsetX = roi.x + roi.width - 35;
+        background.renderScrollbarBackground( { scrollbarOffsetX, listRoi.y, listRoi.width, listRoi.height }, isEvilInterface );
+
+        const int listIcnId = isEvilInterface ? ICN::SCROLLE : ICN::SCROLL;
+        const int32_t topPartHeight = 19;
+        ++scrollbarOffsetX;
+
+        listBox.SetScrollButtonUp( listIcnId, 0, 1, { scrollbarOffsetX, listRoi.y + 1 } );
+        listBox.SetScrollButtonDn( listIcnId, 2, 3, { scrollbarOffsetX, listRoi.y + listRoi.height - 15 } );
+        listBox.setScrollBarArea( { scrollbarOffsetX + 2, listRoi.y + topPartHeight, 10, listRoi.height - 2 * topPartHeight } );
+        listBox.setScrollBarImage( fheroes2::AGG::GetICN( listIcnId, 4 ) );
+        listBox.SetAreaMaxItems( ( listRoi.height - 7 ) / fheroes2::getFontHeight( fheroes2::FontSize::NORMAL ) );
         std::vector<fheroes2::SupportedLanguage> temp = languages;
-        items.SetListContent( temp );
+        listBox.SetListContent( temp );
+        listBox.updateScrollBarImage();
 
         for ( size_t i = 0; i < languages.size(); ++i ) {
             if ( languages[i] == chosenLanguage ) {
-                items.SetCurrent( i );
+                listBox.SetCurrent( i );
                 break;
             }
         }
 
-        items.Redraw();
+        listBox.Redraw();
 
-        buttonOk.draw();
-        buttonCancel.draw();
+        redrawDialogInfo( listRoi, chosenLanguage );
 
-        redrawDialogInfo( roi, chosenLanguage );
-
-        display.render();
+        display.render( background.totalArea() );
 
         LocalEvent & le = LocalEvent::Get();
         while ( le.HandleEvents() ) {
             le.MousePressLeft( buttonOk.area() ) && buttonOk.isEnabled() ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
             le.MousePressLeft( buttonCancel.area() ) ? buttonCancel.drawOnPress() : buttonCancel.drawOnRelease();
 
-            items.QueueEventProcessing();
+            if ( le.MousePressRight( listRoi ) ) {
+                continue;
+            }
+
+            const int listId = listBox.getCurrentId();
+            listBox.QueueEventProcessing();
+            const bool needRedraw = listId != listBox.getCurrentId();
 
             if ( ( buttonOk.isEnabled() && le.MouseClickLeft( buttonOk.area() ) ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY )
-                 || items.isDoubleClicked() ) {
+                 || listBox.isDoubleClicked() ) {
                 return true;
             }
 
@@ -200,23 +255,25 @@ namespace
                 fheroes2::showMessage( header, body, 0 );
             }
 
-            if ( items.isSelected() ) {
-                const fheroes2::SupportedLanguage newChosenLanguage = items.GetCurrent();
-                if ( newChosenLanguage != chosenLanguage ) {
-                    chosenLanguage = newChosenLanguage;
-                    Settings::Get().setGameLanguage( fheroes2::getLanguageAbbreviation( chosenLanguage ) );
-                }
-            }
-
-            if ( !items.IsNeedRedraw() ) {
+            if ( !listBox.IsNeedRedraw() ) {
                 continue;
             }
 
-            items.Redraw();
-            buttonOk.draw();
-            buttonCancel.draw();
-            redrawDialogInfo( roi, chosenLanguage );
-            display.render();
+            if ( needRedraw ) {
+                const fheroes2::SupportedLanguage newChosenLanguage = listBox.GetCurrent();
+                if ( newChosenLanguage != chosenLanguage ) {
+                    chosenLanguage = newChosenLanguage;
+                    Settings::Get().setGameLanguage( fheroes2::getLanguageAbbreviation( chosenLanguage ) );
+                    titleBackground.restore();
+                    selectedLangBackground.restore();
+                    redrawDialogInfo( listRoi, chosenLanguage );
+                    buttonsBackground.restore();
+                    background.renderOkayCancelButtons( buttonOk, buttonCancel, isEvilInterface );
+                }
+            }
+
+            listBox.Redraw();
+            display.render( roi );
         }
 
         return false;

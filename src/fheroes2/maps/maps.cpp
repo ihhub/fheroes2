@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -57,7 +57,7 @@ namespace
         return result;
     }
 
-    Maps::Indexes MapsIndexesObject( const MP2::MapObjectType objectType, const bool ignoreHeroes = true )
+    Maps::Indexes MapsIndexesObject( const MP2::MapObjectType objectType, const bool ignoreHeroes )
     {
         Maps::Indexes result;
         const int32_t size = static_cast<int32_t>( world.getSize() );
@@ -487,9 +487,21 @@ Maps::Indexes Maps::ScanAroundObjectWithDistance( const int32_t center, const ui
     return MapsIndexesFilteredObject( results, objectType );
 }
 
-Maps::Indexes Maps::GetObjectPositions( const MP2::MapObjectType objectType, bool ignoreHeroes )
+bool Maps::doesObjectExistOnMap( const MP2::MapObjectType objectType )
 {
-    return MapsIndexesObject( objectType, ignoreHeroes );
+    const int32_t size = static_cast<int32_t>( world.getSize() );
+    for ( int32_t idx = 0; idx < size; ++idx ) {
+        if ( world.GetTiles( idx ).GetObject( false ) == objectType ) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+Maps::Indexes Maps::GetObjectPositions( const MP2::MapObjectType objectType )
+{
+    return MapsIndexesObject( objectType, true );
 }
 
 Maps::Indexes Maps::GetObjectPositions( int32_t center, const MP2::MapObjectType objectType, bool ignoreHeroes )

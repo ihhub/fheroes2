@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-02 13:33+0000\n"
+"POT-Creation-Date: 2024-01-13 09:39+0000\n"
 "PO-Revision-Date: 2022-10-25 08:56+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
@@ -3352,6 +3352,43 @@ msgid "Click to select this color."
 msgstr "Clique aqui para selecionar o cenário a jogar."
 
 #, fuzzy
+msgid "Select Dwelling:"
+msgstr "Magia"
+
+msgid "Mine placing"
+msgstr ""
+
+#, fuzzy
+msgid ""
+"Resource\n"
+"type:"
+msgstr "Custo de recursos:"
+
+#, fuzzy
+msgid "%{mineName} appearance:"
+msgstr "%{name} a %{race}"
+
+#, fuzzy
+msgid "Click to select %{object} as the resource generator to be placed."
+msgstr "Clique aqui para selecionar o cenário a jogar."
+
+#, fuzzy
+msgid "Select Mountain Object:"
+msgstr "Artefato"
+
+#, fuzzy
+msgid "Select Rock Object:"
+msgstr "Artefato"
+
+#, fuzzy
+msgid "Select Tree Object:"
+msgstr "Artefato"
+
+#, fuzzy
+msgid "Select Power Up Object:"
+msgstr "Artefato"
+
+#, fuzzy
 msgid "Map Type:\n"
 msgstr "Tamano do Mapa"
 
@@ -3693,11 +3730,35 @@ msgid "Artifacts cannot be placed on water."
 msgstr "Esta cidade não pode ser transformada em castelo."
 
 #, fuzzy
+msgid "Mountains cannot be placed on water."
+msgstr "Esta cidade não pode ser transformada em castelo."
+
+#, fuzzy
+msgid "Rocks cannot be placed on water."
+msgstr "Esta cidade não pode ser transformada em castelo."
+
+#, fuzzy
+msgid "Trees cannot be placed on water."
+msgstr "Esta cidade não pode ser transformada em castelo."
+
+#, fuzzy
 msgid "Ocean object must be placed on water."
 msgstr "Esta cidade não pode ser transformada em castelo."
 
 #, fuzzy
 msgid "Towns cannot be placed on water."
+msgstr "Esta cidade não pode ser transformada em castelo."
+
+#, fuzzy
+msgid "Mines cannot be placed on water."
+msgstr "Esta cidade não pode ser transformada em castelo."
+
+#, fuzzy
+msgid "Dwellings cannot be placed on water."
+msgstr "Esta cidade não pode ser transformada em castelo."
+
+#, fuzzy
+msgid "Power-ups cannot be placed on water."
 msgstr "Esta cidade não pode ser transformada em castelo."
 
 #, fuzzy
