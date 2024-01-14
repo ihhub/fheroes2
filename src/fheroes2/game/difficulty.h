@@ -26,6 +26,8 @@
 #include <cstdint>
 #include <string>
 
+#include "castle.h"
+
 namespace Difficulty
 {
     // !!! IMPORTANT !!!
@@ -67,9 +69,7 @@ namespace Difficulty
     bool allowAIToSplitWeakStacks( const int difficulty );
 
     bool allowAIToDevelopCastlesOnlyOnEvenDays( const int difficulty, const bool isCampaign );
-
-    bool allowAIToBuildLevel5Dwellings( const int difficulty, const bool isCampaign );
-    bool allowAIToBuildLevel6Dwellings( const int difficulty, const bool isCampaign );
+    bool allowAIToBuildCastleBuilding( const int difficulty, const bool isCampaign, const building_t building );
 }
 
 #endif

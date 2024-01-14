@@ -140,11 +140,7 @@ namespace AI
     bool Build( Castle & castle, const std::vector<BuildOrder> & buildOrderList, const uint32_t multiplier = 1 )
     {
         for ( const BuildOrder & order : buildOrderList ) {
-            // Only the construction of the corresponding dwellings is limited, but not their upgrade
-            if ( order.building == DWELLING_MONSTER5 && !Difficulty::allowAIToBuildLevel5Dwellings( Game::getDifficulty(), Game::isCampaign() ) ) {
-                continue;
-            }
-            if ( order.building == DWELLING_MONSTER6 && !Difficulty::allowAIToBuildLevel6Dwellings( Game::getDifficulty(), Game::isCampaign() ) ) {
+            if ( !Difficulty::allowAIToBuildCastleBuilding( Game::getDifficulty(), Game::isCampaign(), order.building ) ) {
                 continue;
             }
 

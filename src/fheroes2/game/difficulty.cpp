@@ -228,24 +228,12 @@ bool Difficulty::allowAIToDevelopCastlesOnlyOnEvenDays( const int difficulty, co
     return false;
 }
 
-bool Difficulty::allowAIToBuildLevel5Dwellings( const int difficulty, const bool isCampaign )
+bool Difficulty::allowAIToBuildCastleBuilding( const int difficulty, const bool /* isCampaign */, const building_t building )
 {
     switch ( difficulty ) {
     case Difficulty::EASY:
-        return isCampaign;
-    default:
-        break;
-    }
-    return true;
-}
-
-bool Difficulty::allowAIToBuildLevel6Dwellings( const int difficulty, const bool isCampaign )
-{
-    switch ( difficulty ) {
-    case Difficulty::EASY:
-        return false;
-    case Difficulty::NORMAL:
-        return isCampaign;
+        // Only the construction of the corresponding dwelling is limited, but not its upgrade
+        return building != DWELLING_MONSTER6;
     default:
         break;
     }
