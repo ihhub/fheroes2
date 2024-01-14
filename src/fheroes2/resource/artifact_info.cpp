@@ -76,7 +76,7 @@ namespace
               {},
               {} },
             { gettext_noop( "Medal of Valor" ),
-              gettext_noop( "The %{name} increases the hero's morale by %{count}." ),
+              gettext_noop( "The %{name} increases the morale of the hero's army by %{count}." ),
               gettext_noop( "Freeing a virtuous maiden from the clutches of an evil overlord, you are granted a Medal of Valor by the King's herald." ),
               {},
               {} },
