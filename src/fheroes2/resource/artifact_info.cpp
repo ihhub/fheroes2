@@ -312,7 +312,7 @@ namespace
               {},
               {} },
             { gettext_noop( "Book of Elements" ),
-              gettext_noop( "The %{name} doubles the effectiveness for all of the hero's summoning spells." ),
+              gettext_noop( "The %{name} doubles the effectiveness of all of the hero's summoning spells." ),
               gettext_noop(
                   "You come across a conjurer who begs to accompany you and your army awhile for safety. You agree, and he offers as payment a copy of the book of the elements." ),
               {},
