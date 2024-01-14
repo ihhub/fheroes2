@@ -1938,11 +1938,196 @@ namespace
             objects.emplace_back( std::move( object ) );
         }
 
-        // Mossy roots, swamp terrain.In original editor called "Nothing Special".
+        // Mossy roots, swamp terrain. In original editor called "Nothing Special".
         {
             Maps::ObjectInfo object{ MP2::OBJ_NOTHING_SPECIAL };
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 213U, fheroes2::Point{ 0, 0 }, MP2::OBJ_NOTHING_SPECIAL, Maps::OBJECT_LAYER );
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 212U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NOTHING_SPECIAL, Maps::OBJECT_LAYER );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Crack, lava terrain.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_NONE };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 1U, fheroes2::Point{ 0, 0 }, MP2::OBJ_NONE, Maps::TERRAIN_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 0U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::TERRAIN_LAYER );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Medium crater (wide), lava terrain.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_CRATER };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 8U, fheroes2::Point{ 0, 0 }, MP2::OBJ_CRATER, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 2U, fheroes2::Point{ -2, -1 }, MP2::OBJ_CRATER, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 3U, fheroes2::Point{ -1, -1 }, MP2::OBJ_CRATER, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 4U, fheroes2::Point{ 0, -1 }, MP2::OBJ_CRATER, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 5U, fheroes2::Point{ 1, -1 }, MP2::OBJ_CRATER, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 6U, fheroes2::Point{ -2, 0 }, MP2::OBJ_CRATER, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 7U, fheroes2::Point{ -1, 0 }, MP2::OBJ_CRATER, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 9U, fheroes2::Point{ 1, 0 }, MP2::OBJ_CRATER, Maps::OBJECT_LAYER );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Medium crater (high), lava terrain.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_CRATER };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 15U, fheroes2::Point{ 0, 0 }, MP2::OBJ_CRATER, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 12U, fheroes2::Point{ -1, -1 }, MP2::OBJ_CRATER, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 13U, fheroes2::Point{ 0, -1 }, MP2::OBJ_CRATER, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 14U, fheroes2::Point{ -1, 0 }, MP2::OBJ_CRATER, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 16U, fheroes2::Point{ -1, 1 }, MP2::OBJ_CRATER, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 17U, fheroes2::Point{ 0, 1 }, MP2::OBJ_CRATER, Maps::OBJECT_LAYER );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Small lava pool, lava terrain.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_LAVAPOOL };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 20U, fheroes2::Point{ 0, 0 }, MP2::OBJ_LAVAPOOL, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 18U, fheroes2::Point{ 0, -1 }, MP2::OBJ_LAVAPOOL, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 19U, fheroes2::Point{ -1, 0 }, MP2::OBJ_LAVAPOOL, Maps::OBJECT_LAYER );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Passable lava, lava terrain.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_NONE };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 24U, fheroes2::Point{ 0, 0 }, MP2::OBJ_NONE, Maps::TERRAIN_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 21U, fheroes2::Point{ 0, -1 }, MP2::OBJ_NONE, Maps::TERRAIN_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 22U, fheroes2::Point{ 1, -1 }, MP2::OBJ_NONE, Maps::TERRAIN_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 23U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::TERRAIN_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 25U, fheroes2::Point{ 1, 0 }, MP2::OBJ_NONE, Maps::TERRAIN_LAYER );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Dug hole, lava terrain.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_NONE };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 26U, fheroes2::Point{ 0, 0 }, MP2::OBJ_NONE, Maps::TERRAIN_LAYER );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Big lava pool, lava terrain.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_LAVAPOOL };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 36U, fheroes2::Point{ 0, 0 }, MP2::OBJ_LAVAPOOL, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 27U, fheroes2::Point{ -3, -1 }, MP2::OBJ_LAVAPOOL, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 28U, fheroes2::Point{ -2, -1 }, MP2::OBJ_LAVAPOOL, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 29U, fheroes2::Point{ -1, -1 }, MP2::OBJ_LAVAPOOL, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 30U, fheroes2::Point{ 0, -1 }, MP2::OBJ_LAVAPOOL, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 31U, fheroes2::Point{ 1, -1 }, MP2::OBJ_LAVAPOOL, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 32U, fheroes2::Point{ 2, -1 }, MP2::OBJ_LAVAPOOL, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 33U, fheroes2::Point{ -3, 0 }, MP2::OBJ_LAVAPOOL, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 34U, fheroes2::Point{ -2, 0 }, MP2::OBJ_LAVAPOOL, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 35U, fheroes2::Point{ -1, 0 }, MP2::OBJ_LAVAPOOL, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 37U, fheroes2::Point{ 1, 0 }, MP2::OBJ_LAVAPOOL, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 38U, fheroes2::Point{ 2, 0 }, MP2::OBJ_LAVAPOOL, Maps::OBJECT_LAYER );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Medium lava pool, lava terrain.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_LAVAPOOL };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 43U, fheroes2::Point{ 0, 0 }, MP2::OBJ_LAVAPOOL, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 39U, fheroes2::Point{ -1, -1 }, MP2::OBJ_LAVAPOOL, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 40U, fheroes2::Point{ 0, -1 }, MP2::OBJ_LAVAPOOL, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 41U, fheroes2::Point{ 1, -1 }, MP2::OBJ_LAVAPOOL, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 42U, fheroes2::Point{ -1, 0 }, MP2::OBJ_LAVAPOOL, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 44U, fheroes2::Point{ 1, 0 }, MP2::OBJ_LAVAPOOL, Maps::OBJECT_LAYER );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Medium (little lifted) lava pool, lava terrain.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_LAVAPOOL };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 51U, fheroes2::Point{ 0, 0 }, MP2::OBJ_LAVAPOOL, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 46U, fheroes2::Point{ -1, -1 }, MP2::OBJ_LAVAPOOL, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 47U, fheroes2::Point{ 0, -1 }, MP2::OBJ_LAVAPOOL, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 48U, fheroes2::Point{ 1, -1 }, MP2::OBJ_LAVAPOOL, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 50U, fheroes2::Point{ -1, 0 }, MP2::OBJ_LAVAPOOL, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 52U, fheroes2::Point{ 1, 0 }, MP2::OBJ_LAVAPOOL, Maps::OBJECT_LAYER );
+
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 49U, fheroes2::Point{ -2, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Small lava streams, lava terrain.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_LAVAPOOL };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 56U, fheroes2::Point{ 0, 0 }, MP2::OBJ_LAVAPOOL, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 53U, fheroes2::Point{ -1, -1 }, MP2::OBJ_LAVAPOOL, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 54U, fheroes2::Point{ 0, -1 }, MP2::OBJ_LAVAPOOL, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 55U, fheroes2::Point{ -1, 0 }, MP2::OBJ_LAVAPOOL, Maps::OBJECT_LAYER );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Small lava streams, lava terrain.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_LAVAPOOL };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 59U, fheroes2::Point{ 0, 0 }, MP2::OBJ_LAVAPOOL, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 57U, fheroes2::Point{ 0, -1 }, MP2::OBJ_LAVAPOOL, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 58U, fheroes2::Point{ -1, 0 }, MP2::OBJ_LAVAPOOL, Maps::OBJECT_LAYER );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Small lava streams, lava terrain.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_LAVAPOOL };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 63U, fheroes2::Point{ 0, 0 }, MP2::OBJ_LAVAPOOL, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 60U, fheroes2::Point{ -1, -1 }, MP2::OBJ_LAVAPOOL, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 61U, fheroes2::Point{ 0, -1 }, MP2::OBJ_LAVAPOOL, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 62U, fheroes2::Point{ -1, 0 }, MP2::OBJ_LAVAPOOL, Maps::OBJECT_LAYER );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Medium lava streams, lava terrain.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_LAVAPOOL };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 67U, fheroes2::Point{ 0, 0 }, MP2::OBJ_LAVAPOOL, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 65U, fheroes2::Point{ 1, -1 }, MP2::OBJ_LAVAPOOL, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 66U, fheroes2::Point{ -1, 0 }, MP2::OBJ_LAVAPOOL, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 68U, fheroes2::Point{ 1, 0 }, MP2::OBJ_LAVAPOOL, Maps::OBJECT_LAYER );
+
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 64U, fheroes2::Point{ 0, -1 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Medium lava streams, lava terrain.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_LAVAPOOL };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 72U, fheroes2::Point{ 0, 0 }, MP2::OBJ_LAVAPOOL, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 69U, fheroes2::Point{ -1, -1 }, MP2::OBJ_LAVAPOOL, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 70U, fheroes2::Point{ 0, -1 }, MP2::OBJ_LAVAPOOL, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 73U, fheroes2::Point{ 1, 0 }, MP2::OBJ_LAVAPOOL, Maps::OBJECT_LAYER );
+
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 71U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Smoking volcano crater (without the mountain), lava terrain.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_VOLCANO };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 98U, fheroes2::Point{ 0, 0 }, MP2::OBJ_VOLCANO, Maps::OBJECT_LAYER );
+            object.groundLevelParts.back().animationFrames = 9;
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 78U, fheroes2::Point{ 0, -1 }, MP2::OBJ_VOLCANO, Maps::OBJECT_LAYER );
+            object.groundLevelParts.back().animationFrames = 9;
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 88U, fheroes2::Point{ -1, 0 }, MP2::OBJ_VOLCANO, Maps::OBJECT_LAYER );
+            object.groundLevelParts.back().animationFrames = 9;
 
             objects.emplace_back( std::move( object ) );
         }
