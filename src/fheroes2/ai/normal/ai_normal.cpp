@@ -168,13 +168,13 @@ namespace AI
         double value = 0;
 
         Resource::forEach( funds.GetValidItems(), [this, &funds, &value]( const int res ) {
-                const int amount = funds.Get( res );
-                if ( amount <= 0 ) {
-                    return;
-                }
+            const int amount = funds.Get( res );
+            if ( amount <= 0 ) {
+                return;
+            }
 
-                value += amount * getResourcePriorityModifier( res, false );
-            } );
+            value += amount * getResourcePriorityModifier( res, false );
+        } );
 
         return value;
     }
