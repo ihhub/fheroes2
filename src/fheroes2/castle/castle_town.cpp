@@ -357,7 +357,7 @@ Castle::ConstructionDialogResult Castle::openConstructionDialog( uint32_t & dwel
     const std::string descriptionSpreadArmyFormat(
         _( "'Spread' combat formation spreads the castle's units from the top to the bottom of the battlefield, with at least one empty space between each unit." ) );
     const std::string descriptionGroupedArmyFormat(
-        _( "'Grouped' combat formation bunches the castle's units together in the center of it's side of the battlefield." ) );
+        _( "'Grouped' combat formation bunches the castle's units together in the center of the castle's side of the battlefield." ) );
     const fheroes2::Point pointSpreadArmyFormat( rectSpreadArmyFormat.x - 1, rectSpreadArmyFormat.y - 1 );
     const fheroes2::Point pointGroupedArmyFormat( rectGroupedArmyFormat.x - 1, rectGroupedArmyFormat.y - 1 );
     const fheroes2::Rect armyFormatRenderRect( pointSpreadArmyFormat, { rectGroupedArmyFormat.x + rectGroupedArmyFormat.width - pointSpreadArmyFormat.x + 1,
