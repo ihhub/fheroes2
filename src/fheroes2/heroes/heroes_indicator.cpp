@@ -226,7 +226,7 @@ SpellPointsIndicator::SpellPointsIndicator( const Heroes * hero )
     _area.height = 36;
 
     _description = _(
-        "%{name} currently has %{point} spell points out of a maximum of %{max}. The maximum number of spell points is 10 times the hero's knowledge. It is occasionally possible to have more than the hero's maximum spell points via special events." );
+        "%{name} currently has %{point} spell points out of a maximum of %{max}. The maximum number of spell points is 10 times the hero's knowledge. It is occasionally possible for the hero to have more than their maximum spell points via special events." );
 
     StringReplace( _description, "%{name}", _hero->GetName() );
     StringReplace( _description, "%{point}", _hero->GetSpellPoints() );
