@@ -2450,6 +2450,160 @@ namespace
 
             objects.emplace_back( std::move( object ) );
         }
+
+        // Crack, wasteland terrain.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_NONE };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 6U, fheroes2::Point{ 0, 0 }, MP2::OBJ_NONE, Maps::TERRAIN_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 5U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::TERRAIN_LAYER );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Cactus, wasteland terrain.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_CACTUS };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 14U, fheroes2::Point{ 0, 0 }, MP2::OBJ_CACTUS, Maps::OBJECT_LAYER );
+
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 13U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 12U, fheroes2::Point{ 0, -1 }, MP2::OBJ_CACTUS );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Cactus, wasteland terrain.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_CACTUS };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 16U, fheroes2::Point{ 0, 0 }, MP2::OBJ_CACTUS, Maps::OBJECT_LAYER );
+
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 15U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Cow scull, wasteland terrain.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_NOTHING_SPECIAL };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 17U, fheroes2::Point{ 0, 0 }, MP2::OBJ_NOTHING_SPECIAL, Maps::OBJECT_LAYER );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Shrub, wasteland terrain.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_SHRUB };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 57U, fheroes2::Point{ 0, 0 }, MP2::OBJ_SHRUB, Maps::OBJECT_LAYER );
+
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 56U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Big crack, wasteland terrain.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_CRATER };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 64U, fheroes2::Point{ 0, 0 }, MP2::OBJ_CRATER, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 58U, fheroes2::Point{ -2, -1 }, MP2::OBJ_CRATER, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 59U, fheroes2::Point{ -1, -1 }, MP2::OBJ_CRATER, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 62U, fheroes2::Point{ -2, 0 }, MP2::OBJ_CRATER, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 63U, fheroes2::Point{ -1, 0 }, MP2::OBJ_CRATER, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 65U, fheroes2::Point{ 1, 0 }, MP2::OBJ_CRATER, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 68U, fheroes2::Point{ 0, 1 }, MP2::OBJ_CRATER, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 69U, fheroes2::Point{ 1, 1 }, MP2::OBJ_CRATER, Maps::OBJECT_LAYER );
+
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 60U, fheroes2::Point{ 0, -1 }, MP2::OBJ_NONE, Maps::TERRAIN_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 61U, fheroes2::Point{ 1, -1 }, MP2::OBJ_NONE, Maps::TERRAIN_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 66U, fheroes2::Point{ -2, 1 }, MP2::OBJ_NONE, Maps::TERRAIN_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 67U, fheroes2::Point{ -1, 1 }, MP2::OBJ_NONE, Maps::TERRAIN_LAYER );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Dug hole, wasteland terrain.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_NONE };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 70U, fheroes2::Point{ 0, 0 }, MP2::OBJ_NONE, Maps::TERRAIN_LAYER );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Shrub, wasteland terrain. 2 variants.
+        for ( uint32_t count = 0; count < 2; ++count ) {
+            const uint32_t offset = 71U + count * 1U;
+            Maps::ObjectInfo object{ MP2::OBJ_SHRUB };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, offset + 0U, fheroes2::Point{ 0, 0 }, MP2::OBJ_SHRUB, Maps::OBJECT_LAYER );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Tar pit, wasteland terrain.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_TAR_PIT };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 113U, fheroes2::Point{ 0, 0 }, MP2::OBJ_TAR_PIT, Maps::OBJECT_LAYER );
+            object.groundLevelParts.back().animationFrames = 10;
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 76U, fheroes2::Point{ -2, -1 }, MP2::OBJ_TAR_PIT, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 77U, fheroes2::Point{ -1, -1 }, MP2::OBJ_TAR_PIT, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 78U, fheroes2::Point{ 0, -1 }, MP2::OBJ_TAR_PIT, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 80U, fheroes2::Point{ -3, 0 }, MP2::OBJ_TAR_PIT, Maps::OBJECT_LAYER );
+            object.groundLevelParts.back().animationFrames = 10;
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 91U, fheroes2::Point{ -2, 0 }, MP2::OBJ_TAR_PIT, Maps::OBJECT_LAYER );
+            object.groundLevelParts.back().animationFrames = 10;
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 102U, fheroes2::Point{ -1, 0 }, MP2::OBJ_TAR_PIT, Maps::OBJECT_LAYER );
+            object.groundLevelParts.back().animationFrames = 10;
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 124U, fheroes2::Point{ 1, 0 }, MP2::OBJ_TAR_PIT, Maps::OBJECT_LAYER );
+            object.groundLevelParts.back().animationFrames = 10;
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 135U, fheroes2::Point{ 2, 0 }, MP2::OBJ_TAR_PIT, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 136U, fheroes2::Point{ -3, 1 }, MP2::OBJ_TAR_PIT, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 137U, fheroes2::Point{ -2, 1 }, MP2::OBJ_TAR_PIT, Maps::OBJECT_LAYER );
+            object.groundLevelParts.back().animationFrames = 10;
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 148U, fheroes2::Point{ -1, 1 }, MP2::OBJ_TAR_PIT, Maps::OBJECT_LAYER );
+            object.groundLevelParts.back().animationFrames = 10;
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 159U, fheroes2::Point{ 0, 1 }, MP2::OBJ_TAR_PIT, Maps::OBJECT_LAYER );
+            object.groundLevelParts.back().animationFrames = 10;
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 170U, fheroes2::Point{ 1, 1 }, MP2::OBJ_TAR_PIT, Maps::OBJECT_LAYER );
+            object.groundLevelParts.back().animationFrames = 10;
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 181U, fheroes2::Point{ 2, 1 }, MP2::OBJ_TAR_PIT, Maps::OBJECT_LAYER );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Crack, wasteland terrain.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_CRATER };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 225U, fheroes2::Point{ 0, 0 }, MP2::OBJ_CRATER, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 221U, fheroes2::Point{ -1, -1 }, MP2::OBJ_CRATER, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 222U, fheroes2::Point{ 0, -1 }, MP2::OBJ_CRATER, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 223U, fheroes2::Point{ 1, -1 }, MP2::OBJ_CRATER, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 224U, fheroes2::Point{ -1, 0 }, MP2::OBJ_CRATER, Maps::OBJECT_LAYER );
+
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 226U, fheroes2::Point{ 1, 0 }, MP2::OBJ_NONE, Maps::TERRAIN_LAYER );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Crack (vertical), wasteland terrain.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_CRATER };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 230U, fheroes2::Point{ 0, 0 }, MP2::OBJ_CRATER, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 227U, fheroes2::Point{ -1, -1 }, MP2::OBJ_CRATER, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 228U, fheroes2::Point{ 0, -1 }, MP2::OBJ_CRATER, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 229U, fheroes2::Point{ -1, 0 }, MP2::OBJ_CRATER, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 231U, fheroes2::Point{ -1, 1 }, MP2::OBJ_CRATER, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 232U, fheroes2::Point{ 0, 1 }, MP2::OBJ_CRATER, Maps::OBJECT_LAYER );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Crack (horizontal), wasteland terrain.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_CRATER };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 234U, fheroes2::Point{ 0, 0 }, MP2::OBJ_CRATER, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 233U, fheroes2::Point{ -1, 0 }, MP2::OBJ_CRATER, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 235U, fheroes2::Point{ 1, 0 }, MP2::OBJ_CRATER, Maps::OBJECT_LAYER );
+
+            objects.emplace_back( std::move( object ) );
+        }
     }
 
     void populateLandscapeTownBasements( std::vector<Maps::ObjectInfo> & objects )
