@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-13 09:39+0000\n"
-"PO-Revision-Date: 2023-12-22 01:17+0100\n"
+"PO-Revision-Date: 2024-01-14 15:56+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
 "Language: fr\n"
@@ -1932,7 +1932,7 @@ msgid "Archibald"
 msgstr "Archibald"
 
 msgid "The Price of Loyalty"
-msgstr "Le prix de la loyauté"
+msgstr "Price of Loyalty"
 
 msgid "Voyage Home"
 msgstr "Le voyage de retour"
@@ -2568,7 +2568,7 @@ msgid ""
 "The Castle improves the town's defense and increases its income to %{count} "
 "gold per day."
 msgstr ""
-"Le château améliore la défense du village et augmente ses revenus totals à "
+"Le château améliore la défense du village et augmente ses revenus totaux à "
 "%{count} pièces d'or par jour."
 
 msgid ""
@@ -3453,7 +3453,7 @@ msgid "Click to select this class."
 msgstr "Cliquez ici pour sélectionner cet alignement"
 
 msgid "Click to select this color."
-msgstr "Cliquez ici pour sélectionner ce couleur."
+msgstr "Cliquez ici pour sélectionner cette couleur."
 
 #, fuzzy
 msgid "Select Dwelling:"
@@ -3847,7 +3847,7 @@ msgid "Used to place %{object}."
 msgstr "Permet de placer %{object}."
 
 msgid "Select object type"
-msgstr "Choix l'élément"
+msgstr "Choix d'élément"
 
 msgid ""
 "Click here to\n"
@@ -3881,7 +3881,7 @@ msgid "Mountains"
 msgstr "Montagnes"
 
 msgid "Rocks"
-msgstr "Roches"
+msgstr "Rochers"
 
 msgid "Trees"
 msgstr "Arbres"
@@ -4013,7 +4013,7 @@ msgid "Monsters Mode"
 msgstr "Mode créatures"
 
 msgid "Used to place monsters on the map."
-msgstr "Permet de placer les créatures sur la carte."
+msgstr "Permet de placer des créatures sur la carte."
 
 msgid "Allows you to draw streams by clicking and dragging."
 msgstr ""
@@ -4464,7 +4464,7 @@ msgid "hotkey|select all map sizes"
 msgstr ""
 
 msgid "hotkey|hotseat game"
-msgstr "Jeu de tour de rôle"
+msgstr "Partie à tour de rôle"
 
 msgid "hotkey|battle only game"
 msgstr "Mode bataille"
@@ -4473,13 +4473,13 @@ msgid "hotkey|choose the original campaign"
 msgstr "Sélectionner la campagne originale"
 
 msgid "hotkey|choose the expansion campaign"
-msgstr "Sélectionner la campagne disc"
+msgstr "Sélectionner la campagne de l'extension"
 
 msgid "hotkey|map editor main menu"
 msgstr "Menu principal de l'éditeur"
 
 msgid "hotkey|new map menu"
-msgstr "Menu de création de cartes"
+msgstr "Menu de création de carte"
 
 msgid "hotkey|load map menu"
 msgstr "Menu de chargement de cartes"
@@ -4497,13 +4497,13 @@ msgid "hotkey|redo last action"
 msgstr "Refaire la dernière action"
 
 msgid "hotkey|roland campaign"
-msgstr "Campagne Roland"
+msgstr "Campagne de Roland"
 
 msgid "hotkey|archibald campaign"
-msgstr "Campagne Archibald"
+msgstr "Campagne d'Archibald"
 
 msgid "hotkey|the price of loyalty campaign"
-msgstr "La campagne Le prix de la loyauté"
+msgstr "La campagne de \"Price of Loyalty\""
 
 msgid "hotkey|voyage home campaign"
 msgstr "La campagne Le voyage de retour"
@@ -4527,7 +4527,7 @@ msgid "hotkey|view campaign intro"
 msgstr "Voir l'intro de la campagne"
 
 msgid "hotkey|select campaign difficulty"
-msgstr "Choisir difficulté de la campagne"
+msgstr "Choisir la difficulté de la campagne"
 
 msgid "hotkey|restart campaign scenario"
 msgstr "Recommencer le scénario de campagne"
@@ -4575,7 +4575,7 @@ msgid "hotkey|next town"
 msgstr "Village suivant"
 
 msgid "hotkey|end turn"
-msgstr ""
+msgstr "Fin du tour"
 
 msgid "hotkey|file options"
 msgstr "Options fichier"
@@ -4587,10 +4587,10 @@ msgid "hotkey|puzzle map"
 msgstr ""
 
 msgid "hotkey|scenario information"
-msgstr "Informations de scénario"
+msgstr "Informations du scénario"
 
 msgid "hotkey|dig for artifact"
-msgstr ""
+msgstr "Creuser pour l'artéfact"
 
 msgid "hotkey|view world"
 msgstr ""
@@ -4653,28 +4653,28 @@ msgid "hotkey|battle options"
 msgstr "Options de la bataille"
 
 msgid "hotkey|skip turn in battle"
-msgstr "Sauter le tour dans le combat"
+msgstr "Passer le tour dans le combat"
 
 msgid "hotkey|cast battle spell"
-msgstr "Lancer sortilège de combat"
+msgstr "Lancer sortilège de bataille"
 
 msgid "hotkey|dwelling level 1"
-msgstr "Demeure niveau 1"
+msgstr "Demeure de niveau 1"
 
 msgid "hotkey|dwelling level 2"
-msgstr "Demeure niveau 2"
+msgstr "Demeure de niveau 2"
 
 msgid "hotkey|dwelling level 3"
-msgstr "Demeure niveau 3"
+msgstr "Demeure de niveau 3"
 
 msgid "hotkey|dwelling level 4"
-msgstr "Demeure niveau 4"
+msgstr "Demeure de niveau 4"
 
 msgid "hotkey|dwelling level 5"
-msgstr "Demeure niveau 5"
+msgstr "Demeure de niveau 5"
 
 msgid "hotkey|dwelling level 6"
-msgstr "Demeure niveau 6"
+msgstr "Demeure de niveau 6"
 
 msgid "hotkey|well"
 msgstr "Puits"
@@ -4698,19 +4698,19 @@ msgid "hotkey|construction screen"
 msgstr "Écran de construction"
 
 msgid "hotkey|buy all monsters in well"
-msgstr "Récruiter toutes les créatures dans le puits"
+msgstr "Enroller toutes les créatures dans le puits"
 
 msgid "hotkey|split stack by half"
-msgstr "Répartition en deux la troupe"
+msgstr "Diviser la troupe en deux"
 
 msgid "hotkey|split stack by one"
-msgstr "Détachez une troupe"
+msgstr "Détacher une créature de la troupe"
 
 msgid "hotkey|join stacks"
-msgstr "Rejoindre le troupes"
+msgstr "Fusionner les troupes"
 
 msgid "hotkey|upgrade troop"
-msgstr "Améliorer un troupe"
+msgstr "Améliorer une troupe"
 
 msgid "hotkey|dismiss hero or troop"
 msgstr "Renvoyer un héros ou une troupe"
@@ -5341,9 +5341,9 @@ msgid ""
 "Start the Hero's movement along the current path or re-visit the object "
 "occupied by the Hero. Press and hold this button to reset the Hero's path."
 msgstr ""
-"Lance le déplacement du héros le long de la trajectoire actuelle ou revisite "
-"l'objet occupé par le héros. Appuyez sur ce bouton et maintenez-le enfoncé "
-"pour réinitialiser la trajectoire du héros."
+"Commence le déplacement du héros selon le chemin choisi ou revisite l'objet "
+"occupé par le héros. Appuyez sur ce bouton et maintenez-le enfoncé pour "
+"réinitialiser le chemin du héros."
 
 msgid "Kingdom Summary"
 msgstr "Informations sur votre royaume"
@@ -7265,7 +7265,7 @@ msgid ""
 "There are no boats available and no ocean adjacent to the hero where this "
 "spell will work."
 msgstr ""
-"Il n'y a pas de bâteau disponible ni de mer adjacent au héros où ce "
+"Il n'y a pas de bâteau disponible ni de mer adjacente au héros où ce "
 "sortilège peut fonctionner."
 
 msgid "There are no boats available for this spell."
@@ -7684,7 +7684,7 @@ msgid ""
 "%{skill} allows the hero to negotiate with monsters who are weaker than "
 "their army."
 msgstr ""
-"%{skill} permet le héros de négocier avec des monstres plus faibles que son "
+"%{skill} permet au héros de négocier avec des monstres plus faibles que son "
 "armée."
 
 msgid ""
@@ -7902,7 +7902,7 @@ msgid ""
 "Bad luck sometimes falls on the hero's units in combat, causing their "
 "attacks to only do half damage."
 msgstr ""
-"La malchance s'abat parfois sur les troupes de héros au combat, leurs "
+"La malchance s'abat parfois sur les troupes du héros au combat, leurs "
 "attaques ne faisant que la moitié des dégâts."
 
 msgid ""
