@@ -338,7 +338,7 @@ msgid ""
 "Zounds...\n"
 "%{monster}"
 msgstr ""
-"Ezernyi\n"
+"Seregnyi\n"
 "%{monster}"
 
 msgid ""
