@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-13 09:39+0000\n"
-"PO-Revision-Date: 2024-01-14 15:56+0100\n"
+"PO-Revision-Date: 2024-01-14 16:08+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
 "Language: fr\n"
@@ -4419,10 +4419,10 @@ msgid "hotkey|toggle text support mode"
 msgstr "Basculer en mode texte"
 
 msgid "hotkey|new game"
-msgstr "Nouveau jeu"
+msgstr "Nouveau partie"
 
 msgid "hotkey|load game"
-msgstr "Charger jeu"
+msgstr "Chargez une partie"
 
 msgid "hotkey|highscores"
 msgstr "Écran des meilleurs scores"
@@ -4431,13 +4431,13 @@ msgid "hotkey|credits"
 msgstr "Crédits"
 
 msgid "hotkey|standard game"
-msgstr "Jeu standard"
+msgstr "Partie standard"
 
 msgid "hotkey|campaign game"
-msgstr "Mode campagne"
+msgstr "Partie campagne"
 
 msgid "hotkey|multi-player game"
-msgstr "Jeu multijoueur"
+msgstr "Partie multijoueur"
 
 msgid "hotkey|settings"
 msgstr "Paramètres"
@@ -4557,7 +4557,7 @@ msgid "hotkey|world map down right"
 msgstr ""
 
 msgid "hotkey|save game"
-msgstr ""
+msgstr "Sauvegarder la partie"
 
 msgid "hotkey|next hero"
 msgstr "Héros suivant"
