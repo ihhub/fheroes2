@@ -370,7 +370,7 @@ msgid "army|Swarm"
 msgstr "Többszáz"
 
 msgid "army|Zounds"
-msgstr "Ezred"
+msgstr "Sereg"
 
 msgid "army|Legion"
 msgstr "Légió"
