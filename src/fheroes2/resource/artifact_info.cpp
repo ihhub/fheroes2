@@ -265,7 +265,7 @@ namespace
               {},
               {} },
             { gettext_noop( "Ice Cloak" ),
-              gettext_noop( "The %{name} halves all damage the hero's troops receives from cold spells." ),
+              gettext_noop( "The %{name} halves all damage the hero's troops receive from cold spells." ),
               gettext_noop(
                   "Responding to the panicked cries of a damsel in distress, you discover a young woman fleeing from a hungry bear. You slay the beast in the nick of time, and the grateful Sorceress weaves a magic cloak from the bear's hide." ),
               {},
