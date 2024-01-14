@@ -1164,17 +1164,20 @@ namespace AI
             // Since we should not expose the resource type let's assume that it gives 6 resources, 1 each and 400 gold.
             const Funds loot{ 1, 1, 1, 1, 1, 1, 400 };
 
-            double value = 0;
+            const double value = getFundsValueBasedOnPriority( loot );
+            assert( value > 0 );
 
-            Resource::forEach( loot.GetValidItems(), [this, &loot, &value]( const int res ) {
-                const int amount = loot.Get( res );
-                if ( amount <= 0 ) {
-                    return;
-                }
+            return value;
+        }
 
-                value += amount * getResourcePriorityModifier( res, false );
-            } );
+        case MP2::OBJ_MAGIC_GARDEN: {
+            // Magic Garden has visual representation whether it was visited so verify that is has resources.
+            assert( doesTileContainValuableItems( tile ) );
 
+            // Magic Garden can have either 5 gems or 500 gold. Since, 5 is not divisible by 2, let's put 3 instead.
+            const Funds loot{ 0, 0, 0, 0, 0, 3, 250 };
+
+            const double value = getFundsValueBasedOnPriority( loot );
             assert( value > 0 );
 
             return value;
@@ -1182,22 +1185,12 @@ namespace AI
 
         case MP2::OBJ_DERELICT_SHIP:
         case MP2::OBJ_LEAN_TO:
-        case MP2::OBJ_MAGIC_GARDEN:
         case MP2::OBJ_RESOURCE:
         case MP2::OBJ_WATER_WHEEL:
         case MP2::OBJ_WINDMILL: {
             const Funds loot = getFundsFromTile( tile );
 
-            double value = 0;
-
-            Resource::forEach( loot.GetValidItems(), [this, &loot, &value]( const int res ) {
-                const int amount = loot.Get( res );
-                if ( amount <= 0 ) {
-                    return;
-                }
-
-                value += amount * getResourcePriorityModifier( res, false );
-            } );
+           const double value = getFundsValueBasedOnPriority( loot );
 
             // This object could have already been visited
             if ( value < 1 ) {
@@ -1219,18 +1212,9 @@ namespace AI
             // In total, we should use 175 gold and 5 wood.
             const Funds loot{ 0, 5, 0, 0, 0, 0, 175 };
 
-            double value = 0;
-
-            Resource::forEach( loot.GetValidItems(), [this, &loot, &value]( const int res ) {
-                const int amount = loot.Get( res );
-                if ( amount <= 0 ) {
-                    return;
-                }
-
-                value += amount * getResourcePriorityModifier( res, false );
-            } );
-
+            const double value = getFundsValueBasedOnPriority( loot );
             assert( value > 0 );
+
             return value;
         }
 
