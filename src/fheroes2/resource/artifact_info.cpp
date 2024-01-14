@@ -241,7 +241,7 @@ namespace
               {},
               {} },
             { gettext_noop( "Evil Eye" ),
-              gettext_noop( "The %{name} reduces the hero's casting cost of curse spells by half." ),
+              gettext_noop( "The %{name} reduces the casting cost of curse spells by half." ),
               gettext_noop(
                   "While venturing into a decrepit hut you find the Skeleton of a long dead witch. Investigation of the remains reveals a glass eye rolling around inside an empty skull." ),
               {},
@@ -259,7 +259,7 @@ namespace
               {},
               {} },
             { gettext_noop( "Skullcap" ),
-              gettext_noop( "The %{name} halves the hero's casting cost of all mind influencing spells." ),
+              gettext_noop( "The %{name} halves the casting cost of all mind influencing spells." ),
               gettext_noop(
                   "A brief stop at an improbable rural inn yields an exchange of money, tales, and accidentally, luggage. You find a magical skullcap in your new backpack." ),
               {},
