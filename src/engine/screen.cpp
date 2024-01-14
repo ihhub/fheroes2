@@ -938,6 +938,34 @@ namespace
             }
         }
 
+        uint8_t getCurrentDisplayIndex() const override
+        {
+            return _displayIndex;
+        }
+
+        void setDisplayIndex( const uint8_t display ) override
+        {
+            _displayIndex = display;
+
+            clear();
+        }
+
+        uint8_t getMaximumDisplays() const override
+        {
+            int displayCount = SDL_GetNumVideoDisplays();
+            if ( displayCount > 0 ) {
+                return static_cast<uint8_t>( displayCount );
+            }
+            ERROR_LOG( "Failed to Get Number of Displays, description: " << SDL_GetError() );
+            // there should be one display at least
+            return 1;
+        }
+
+        const char * getDisplayName( const uint8_t display ) override
+        {
+            return SDL_GetDisplayName( display );
+        }
+
     protected:
         RenderEngine()
             : _window( nullptr )
@@ -945,8 +973,10 @@ namespace
             , _renderer( nullptr )
             , _texture( nullptr )
             , _driverIndex( -1 )
+            , _displayIndex( 0 )
             , _prevWindowPos( SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED )
             , _isVSyncEnabled( false )
+
         {
             // Do nothing.
         }
@@ -1059,8 +1089,8 @@ namespace
             uint32_t flags = SDL_WINDOW_SHOWN;
 
             // SDL_GetNumVideoDisplays starts from 1 so we add 1 to our variable
-            if ( getDisplayId() + 1 > getNumberOfVideoDisplays() ) {
-                setDisplayId( 0 );
+            if ( getCurrentDisplayIndex() + 1 > getMaximumDisplays() ) {
+                setDisplayIndex( 0 );
             }
 
             if ( isFullScreen ) {
@@ -1080,8 +1110,8 @@ namespace
 
 #if defined( _WIN32 )
 
-            _window = SDL_CreateWindow( _previousWindowTitle.data(), SDL_WINDOWPOS_CENTERED_DISPLAY( getDisplayId() ), SDL_WINDOWPOS_CENTERED_DISPLAY( getDisplayId() ),
-                                        resolutionInfo.screenWidth, resolutionInfo.screenHeight, flags );
+            _window = SDL_CreateWindow( _previousWindowTitle.data(), SDL_WINDOWPOS_CENTERED_DISPLAY( getCurrentDisplayIndex() ),
+                                        SDL_WINDOWPOS_CENTERED_DISPLAY( getCurrentDisplayIndex() ), resolutionInfo.screenWidth, resolutionInfo.screenHeight, flags );
 #else
             _window = SDL_CreateWindow( _previousWindowTitle.data(), _prevWindowPos.x, _prevWindowPos.y, resolutionInfo.screenWidth, resolutionInfo.screenHeight, flags );
 #endif
@@ -1167,12 +1197,19 @@ namespace
             return ( _window != nullptr ) && ( ( SDL_GetWindowFlags( _window ) & SDL_WINDOW_MOUSE_FOCUS ) == SDL_WINDOW_MOUSE_FOCUS );
         }
 
+        bool isAllocated() const override
+        {
+            // we should check for at least one of the variables destroyed in clear function
+            return _window != nullptr;
+        }
+
     private:
         SDL_Window * _window;
         SDL_Surface * _surface;
         SDL_Renderer * _renderer;
         SDL_Texture * _texture;
         int _driverIndex;
+        uint8_t _displayIndex;
 
         std::string _previousWindowTitle;
         fheroes2::Point _prevWindowPos;
@@ -1345,7 +1382,7 @@ namespace fheroes2
     void Display::setResolution( ResolutionInfo info )
     {
         if ( width() > 0 && height() > 0 && info.gameWidth == width() && info.gameHeight == height() && info.screenWidth == _screenSize.width
-             && info.screenHeight == _screenSize.height ) // nothing to resize
+             && info.screenHeight == _screenSize.height && _engine->isAllocated() ) // nothing to resize
             return;
 
         const bool isFullScreen = _engine->isFullScreen();
@@ -1364,26 +1401,6 @@ namespace fheroes2
         _screenSize = { info.screenWidth, info.screenHeight };
 
         // To detect some UI artifacts by invalid code let's put all transform data into pixel skipping mode.
-        std::fill( transform(), transform() + width() * height(), static_cast<uint8_t>( 1 ) );
-    }
-
-    void Display::changeDisplayEngine( int displayId )
-    {
-        _engine->setDisplayId( displayId );
-
-        const bool isFullScreen = _engine->isFullScreen();
-
-        Size currentRes = _engine->getCurrentScreenResolution();
-        ResolutionInfo resInfo( currentRes.width, currentRes.height );
-
-        // deallocate engine resources
-        _engine->clear();
-
-        _engine->allocate( resInfo, isFullScreen );
-
-        Image::resize( resInfo.gameWidth, resInfo.gameHeight );
-        _screenSize = { resInfo.screenWidth, resInfo.screenHeight };
-
         std::fill( transform(), transform() + width() * height(), static_cast<uint8_t>( 1 ) );
     }
 
@@ -1503,21 +1520,5 @@ namespace fheroes2
     Cursor & cursor()
     {
         return *( Display::instance()._cursor );
-    }
-
-    int BaseRenderEngine::getNumberOfVideoDisplays()
-    {
-        int displayCount = SDL_GetNumVideoDisplays();
-        if ( displayCount > 0 ) {
-            return displayCount;
-        }
-        ERROR_LOG( "Failed to Get Number of Displays, description: " << SDL_GetError() );
-        // there should be one display at least
-        return 1;
-    }
-
-    const char * BaseRenderEngine::getDisplayName( const int display )
-    {
-        return SDL_GetDisplayName( display );
     }
 }

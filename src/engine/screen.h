@@ -139,24 +139,30 @@ namespace fheroes2
             return _nearestScaling;
         }
 
-        int getDisplayId() const
+        virtual uint8_t getCurrentDisplayIndex() const
         {
-            return _displayId;
+            return 0;
         }
 
-        void setDisplayId( const int display )
+        virtual void setDisplayIndex( const uint8_t )
         {
-            _displayId = display;
+            // Do Nothing
         }
 
-        static int getNumberOfVideoDisplays();
-        const char * getDisplayName( const int display );
+        virtual uint8_t getMaximumDisplays() const
+        {
+            return 1;
+        }
+
+        virtual const char * getDisplayName( const uint8_t )
+        {
+            return "";
+        }
 
     protected:
         BaseRenderEngine()
             : _isFullScreen( false )
             , _nearestScaling( false )
-            , _displayId( 0 )
 
         {
             // Do nothing.
@@ -177,6 +183,11 @@ namespace fheroes2
             return false;
         }
 
+        virtual bool isAllocated() const
+        {
+            return true;
+        }
+
         virtual bool isMouseCursorActive() const
         {
             return false;
@@ -194,8 +205,6 @@ namespace fheroes2
         bool _isFullScreen;
 
         bool _nearestScaling;
-
-        int _displayId;
     };
 
     class Display : public Image
@@ -229,7 +238,7 @@ namespace fheroes2
 
         void setResolution( ResolutionInfo info );
 
-        void changeDisplayEngine( int displayId );
+        void changeDisplayEngine( uint8_t displayId );
 
         bool isDefaultSize() const
         {

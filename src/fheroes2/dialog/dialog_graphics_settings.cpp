@@ -67,9 +67,9 @@ namespace
 
     void drawDisplay( const fheroes2::Rect & optionRoi )
     {
-        int displayId = fheroes2::engine().getDisplayId();
+        uint8_t displayIndex = fheroes2::engine().getCurrentDisplayIndex();
         fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::GAME_OPTION_ICON, 1 ), _( "Display ID" ),
-                              std::to_string( displayId + 1 ) + ": " + fheroes2::engine().getDisplayName( displayId ), fheroes2::UiOptionTextWidth::TWO_ELEMENTS_ROW );
+                              std::to_string( displayIndex + 1 ) + ": " + fheroes2::engine().getDisplayName( displayIndex ), fheroes2::UiOptionTextWidth::TWO_ELEMENTS_ROW );
     }
 
     void drawResolution( const fheroes2::Rect & optionRoi )
@@ -279,7 +279,13 @@ namespace fheroes2
                 windowType = SelectedWindow::Configuration;
                 break;
             case SelectedWindow::SwitchDisplay: {
-                fheroes2::Display::instance().changeDisplayEngine( ( fheroes2::engine().getDisplayId() + 1 ) % fheroes2::engine().getNumberOfVideoDisplays() );
+                fheroes2::BaseRenderEngine & engine = fheroes2::engine();
+                engine.setDisplayIndex( ( engine.getCurrentDisplayIndex() + 1 ) % engine.getMaximumDisplays() );
+
+                fheroes2::Display & display = fheroes2::Display::instance();
+                const fheroes2::ResolutionInfo currentResolution{ display.width(), display.height(), display.screenSize().width, display.screenSize().height };
+                display.setResolution( currentResolution );
+
                 conf.Save( Settings::configFileName );
                 windowType = SelectedWindow::Configuration;
                 break;
