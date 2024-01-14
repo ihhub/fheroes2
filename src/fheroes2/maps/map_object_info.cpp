@@ -1831,7 +1831,7 @@ namespace
             objects.emplace_back( std::move( object ) );
         }
 
-        // Small wide swampy water lake, swamp terrain. 3 variants. In original editor called "Nothing Special" and "Shrub".
+        // Small wide swampy water lake, swamp terrain. 3 variants. In original editor is called "Nothing Special" and "Shrub".
         for ( uint32_t count = 0; count < 3; ++count ) {
             const uint32_t offset = 150U + count * 3U;
             Maps::ObjectInfo object{ MP2::OBJ_WATER_LAKE };
@@ -1842,7 +1842,7 @@ namespace
             objects.emplace_back( std::move( object ) );
         }
 
-        // Small swampy water lake, swamp terrain. In original editor called "Nothing Special".
+        // Small swampy water lake, swamp terrain. In original editor is called "Nothing Special".
         {
             Maps::ObjectInfo object{ MP2::OBJ_WATER_LAKE };
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 160U, fheroes2::Point{ 0, 0 }, MP2::OBJ_WATER_LAKE, Maps::OBJECT_LAYER );
@@ -1883,7 +1883,7 @@ namespace
             objects.emplace_back( std::move( object ) );
         }
 
-        // Rotten roots, swamp terrain. 2 variants. In original editor called "Nothing Special".
+        // Rotten roots, swamp terrain. 2 variants. In original editor is called "Nothing Special".
         for ( uint32_t count = 0; count < 2; ++count ) {
             const uint32_t offset = 188U + count * 2U;
             Maps::ObjectInfo object{ MP2::OBJ_NOTHING_SPECIAL };
@@ -1893,7 +1893,7 @@ namespace
             objects.emplace_back( std::move( object ) );
         }
 
-        // Small rotten roots, swamp terrain. 2 variants. In original editor called "Nothing Special".
+        // Small rotten roots, swamp terrain. 2 variants. In original editor is called "Nothing Special".
         {
             Maps::ObjectInfo object{ MP2::OBJ_NOTHING_SPECIAL };
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 192U, fheroes2::Point{ 0, 0 }, MP2::OBJ_NOTHING_SPECIAL, Maps::OBJECT_LAYER );
@@ -1938,7 +1938,7 @@ namespace
             objects.emplace_back( std::move( object ) );
         }
 
-        // Mossy roots, swamp terrain. In original editor called "Nothing Special".
+        // Mossy roots, swamp terrain. In original editor is called "Nothing Special".
         {
             Maps::ObjectInfo object{ MP2::OBJ_NOTHING_SPECIAL };
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 213U, fheroes2::Point{ 0, 0 }, MP2::OBJ_NOTHING_SPECIAL, Maps::OBJECT_LAYER );
@@ -2128,6 +2128,124 @@ namespace
             object.groundLevelParts.back().animationFrames = 9;
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 88U, fheroes2::Point{ -1, 0 }, MP2::OBJ_VOLCANO, Maps::OBJECT_LAYER );
             object.groundLevelParts.back().animationFrames = 9;
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Crack, desert terrain.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_NONE };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDSRT, 1U, fheroes2::Point{ 0, 0 }, MP2::OBJ_NONE, Maps::TERRAIN_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDSRT, 0U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::TERRAIN_LAYER );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Tiny cactus, desert terrain. 3 variants.
+        for ( uint32_t count = 0; count < 3; ++count ) {
+            const uint32_t offset = 30U + count * 1U;
+            Maps::ObjectInfo object{ MP2::OBJ_CACTUS };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDSRT, offset + 0U, fheroes2::Point{ 0, 0 }, MP2::OBJ_CACTUS, Maps::OBJECT_LAYER );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Medium cactus, desert terrain. 2 variants.
+        for ( uint32_t count = 0; count < 2; ++count ) {
+            const uint32_t offset = 33U + count * 2U;
+            Maps::ObjectInfo object{ MP2::OBJ_CACTUS };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDSRT, offset + 1U, fheroes2::Point{ 0, 0 }, MP2::OBJ_CACTUS, Maps::OBJECT_LAYER );
+
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDSRT, offset + 0U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Medium cactus, desert terrain.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_CACTUS };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDSRT, 39U, fheroes2::Point{ 0, 0 }, MP2::OBJ_CACTUS, Maps::OBJECT_LAYER );
+
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDSRT, 38U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDSRT, 37U, fheroes2::Point{ 0, -1 }, MP2::OBJ_CACTUS );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Small cactus, desert terrain.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_CACTUS };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDSRT, 40U, fheroes2::Point{ 0, 0 }, MP2::OBJ_CACTUS, Maps::OBJECT_LAYER );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Medium cactus, desert terrain.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_CACTUS };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDSRT, 42U, fheroes2::Point{ 0, 0 }, MP2::OBJ_CACTUS, Maps::OBJECT_LAYER );
+
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDSRT, 41U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Medium cactus, desert terrain.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_CACTUS };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDSRT, 45U, fheroes2::Point{ 0, 0 }, MP2::OBJ_CACTUS, Maps::OBJECT_LAYER );
+
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDSRT, 44U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDSRT, 43U, fheroes2::Point{ 0, -1 }, MP2::OBJ_CACTUS );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Medium cactus, desert terrain.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_CACTUS };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDSRT, 48U, fheroes2::Point{ 0, 0 }, MP2::OBJ_CACTUS, Maps::OBJECT_LAYER );
+
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDSRT, 47U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Small cactus, desert terrain.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_CACTUS };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDSRT, 49U, fheroes2::Point{ 0, 0 }, MP2::OBJ_CACTUS, Maps::OBJECT_LAYER );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Medium cactus, desert terrain. 2 variants.
+        for ( uint32_t count = 0; count < 2; ++count ) {
+            const uint32_t offset = 50U + count * 2U;
+            Maps::ObjectInfo object{ MP2::OBJ_CACTUS };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDSRT, offset + 1U, fheroes2::Point{ 0, 0 }, MP2::OBJ_CACTUS, Maps::OBJECT_LAYER );
+
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDSRT, offset + 0U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Dug hole, desert terrain.
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_NONE };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDSRT, 68U, fheroes2::Point{ 0, 0 }, MP2::OBJ_NONE, Maps::TERRAIN_LAYER );
+
+            objects.emplace_back( std::move( object ) );
+        }
+
+        // Big hole, desert terrain.  In original editor is called "Nothing Special".
+        {
+            Maps::ObjectInfo object{ MP2::OBJ_NOTHING_SPECIAL };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDSRT, 111U, fheroes2::Point{ 0, 0 }, MP2::OBJ_NOTHING_SPECIAL, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDSRT, 110U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NOTHING_SPECIAL, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDSRT, 112U, fheroes2::Point{ 1, 0 }, MP2::OBJ_NOTHING_SPECIAL, Maps::OBJECT_LAYER );
 
             objects.emplace_back( std::move( object ) );
         }
