@@ -359,7 +359,7 @@ namespace
               {},
               {} },
             { gettext_noop( "Pendant of Death" ),
-              gettext_noop( "The %{name} makes all the hero's troops immune to holy spells." ),
+              gettext_noop( "The %{name} makes all of the hero's troops immune to holy spells." ),
               gettext_noop(
                   "A quick and deadly battle with a Necromancer wins you his magical pendant. Later, a Wizard tells you that the pendant protects undead under your control from holy word spells." ),
               {},
