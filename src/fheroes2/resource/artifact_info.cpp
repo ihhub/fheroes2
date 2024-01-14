@@ -277,7 +277,7 @@ namespace
               {},
               {} },
             { gettext_noop( "Lightning Helm" ),
-              gettext_noop( "The %{name} halves all damage the hero's troops receives from lightning spells." ),
+              gettext_noop( "The %{name} halves all damage the hero's troops receive from lightning spells." ),
               gettext_noop(
                   "A traveling tinker in need of supplies offers you a helm with a thunderbolt design on its top in exchange for food and water. Curious, you accept, and later find out that the helm is magical." ),
               {},
