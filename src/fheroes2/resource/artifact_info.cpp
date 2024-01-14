@@ -382,7 +382,7 @@ namespace
               {},
               {} },
             { gettext_noop( "Statesman's Quill" ),
-              gettext_noop( "The %{name} reduces the cost of surrender to %{count} percent of the total cost of troops the hero have in their army." ),
+              gettext_noop( "The %{name} reduces the cost of surrender to %{count} percent of the total cost of troops the hero has in their army." ),
               gettext_noop(
                   "You pause to help a diplomat with a broken axle fix his problem. In gratitude, he gives you a writing quill with magical properties which he says will \"help people see things your way\"." ),
               {},
