@@ -1161,7 +1161,6 @@ namespace AI
         }
         case MP2::OBJ_CAMPFIRE:
         case MP2::OBJ_DERELICT_SHIP:
-        case MP2::OBJ_FLOTSAM:
         case MP2::OBJ_LEAN_TO:
         case MP2::OBJ_MAGIC_GARDEN:
         case MP2::OBJ_RESOURCE:
@@ -1187,6 +1186,34 @@ namespace AI
 
             return value;
         }
+
+        case MP2::OBJ_FLOTSAM: {
+            // Flotsam has the following chances and resources:
+            // - 25%: 500 gold + 10 wood
+            // - 25%: 200 gold + 5 wood
+            // - 25%: 5 wood
+            // - 25%: empty
+            // Therefore, use an average value as an estimation of a possible reward of picking this object.
+            // The AI must not know precise reward from this object as it would be called cheating.
+            // For all cases we have: 700 gold and 20 wood. So we divide by 4 to get an average number of resources.
+            // In total, we should use 175 gold and 5 wood.
+            const Funds loot( 0, 5, 0, 0, 0, 0, 175 );
+
+            double value = 0;
+
+            Resource::forEach( loot.GetValidItems(), [this, &loot, &value]( const int res ) {
+                const int amount = loot.Get( res );
+                if ( amount <= 0 ) {
+                    return;
+                }
+
+                value += amount * getResourcePriorityModifier( res, false );
+            } );
+
+            assert( value > 0 );
+            return value;
+        }
+
         case MP2::OBJ_LIGHTHOUSE: {
             // TODO: add more complex logic for cases when AI has boats.
             if ( getColorFromTile( tile ) == hero.GetColor() ) {
