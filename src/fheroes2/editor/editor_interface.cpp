@@ -915,8 +915,8 @@ namespace Interface
                 return;
             }
 
-            if ( !verifyObjectCondition( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return tileToCheck.isWater(); } ) ) {
-                _warningMessage.reset( _( "Landscape object must be placed on water." ) );
+            if ( !verifyObjectCondition( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return !tileToCheck.isWater(); } ) ) {
+                _warningMessage.reset( _( "Landscape objects cannot be placed on water." ) );
                 return;
             }
 

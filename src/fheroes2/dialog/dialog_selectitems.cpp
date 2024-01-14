@@ -462,9 +462,9 @@ namespace
 
             const fheroes2::Sprite & image = fheroes2::generateMapObjectImage( _objectInfo[objectId] );
             const int32_t imageHeight = image.height();
-            if ( imageHeight > TILEWIDTH * 2 ) {
+            if ( imageHeight > TILEWIDTH * 3 ) {
                 // Reduce the size of very tall images to fit the list.
-                const double ratio = imageHeight / ( TILEWIDTH * 2. );
+                const double ratio = imageHeight / ( TILEWIDTH * 3. );
                 fheroes2::Image resized( static_cast<int32_t>( image.width() / ratio ), static_cast<int32_t>( imageHeight / ratio ) );
                 fheroes2::Resize( image, resized );
                 renderItem( resized, getObjectName( _objectInfo[objectId] ), { posX, posY }, _imageOffsetX, _textOffsetX, _offsetY / 2, isSelected );
@@ -1274,7 +1274,7 @@ int Dialog::selectLandscapeMiscellaneousObjectType( const int objectType )
 {
     const auto & objectInfo = Maps::getObjectsByGroup( Maps::ObjectGroup::LANDSCAPE_MISCELLANEOUS );
 
-    DwellingTypeSelection listbox( objectInfo, { 420, fheroes2::Display::instance().height() - 180 }, _( "Select Landscape Object:" ) );
+    GenericObjectTypeSelection listbox( objectInfo, { 420, fheroes2::Display::instance().height() - 180 }, _( "Select Landscape Object:" ) );
 
     return selectObjectType( objectType, objectInfo.size(), listbox );
 }
