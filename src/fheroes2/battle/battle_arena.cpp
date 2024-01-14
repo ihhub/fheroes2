@@ -411,12 +411,15 @@ void Battle::Arena::TurnTroop( Unit * troop, const Units & orderHistory )
             // Pending actions from the user interface (such as toggling auto battle) have "already occurred" and
             // therefore should be handled first, before any other actions. Just skip the rest of the branches.
         }
-        else if ( !troop->isValid() ) {
-            // Looks like the unit is dead
+        else if ( troop->GetSpeed() == Speed::STANDING ) {
+            // Unit has either finished its turn, is dead, or has become immovable due to some spell. Even if the
+            // unit died or has become immovable during its turn without performing any action, its turn is still
+            // considered completed.
+            troop->SetModes( TR_MOVED );
+
             endOfTurn = true;
         }
         else if ( troop->Modes( MORALE_BAD ) ) {
-            // Bad morale
             actions.emplace_back( Command::MORALE, troop->GetUID(), false );
         }
         else {
@@ -450,25 +453,18 @@ void Battle::Arena::TurnTroop( Unit * troop, const Units & orderHistory )
                 UpdateOrderOfUnits( *_army1, *_army2, troop, GetOppositeColor( troop->GetArmyColor() ), orderHistory, *_orderOfUnits );
             }
 
-            // Check if the battle is over
             if ( !BattleValid() ) {
                 endOfTurn = true;
                 break;
             }
 
-            const bool isSkipsMove = troop->Modes( TR_SKIP );
-
-            // Good morale
-            if ( troop->isValid() && troop->Modes( TR_MOVED ) && troop->Modes( MORALE_GOOD ) && !troop->isImmovable() && !isSkipsMove ) {
+            if ( troop->Modes( MORALE_GOOD ) && troop->Modes( TR_MOVED ) && !troop->Modes( TR_SKIP ) && troop->GetSpeed( false, true ) > Speed::STANDING ) {
                 actions.emplace_back( Command::MORALE, troop->GetUID(), true );
             }
         }
 
-        if ( troop->Modes( TR_MOVED ) ) {
-            endOfTurn = true;
-        }
-
-        board.removeDeadUnits();
+        // There should be no dead units on the board at the end of each iteration
+        assert( std::all_of( board.begin(), board.end(), []( const Cell & cell ) { return ( cell.GetUnit() == nullptr || cell.GetUnit()->isValid() ); } ) );
     }
 }
 
