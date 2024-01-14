@@ -347,7 +347,7 @@ namespace
               {},
               {} },
             { gettext_noop( "Seeing-eye Pendant" ),
-              gettext_noop( "The %{name} makes all the hero's troops immune to blindness spells." ),
+              gettext_noop( "The %{name} makes all of the hero's troops immune to blindness spells." ),
               gettext_noop(
                   "You come upon a very old woman, long blind from cataracts and dying alone. You tend to her final needs and promise a proper burial. Grateful, she gives you a magic pendant emblazoned with a stylized eye. It lets you see with your eyes closed." ),
               {},
