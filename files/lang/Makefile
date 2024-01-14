@@ -47,6 +47,10 @@ de.mo dk.mo es.mo fr.mo it.mo nb.mo pt.mo sv.mo nl.mo: %.mo: %.po
 tr.mo: tr.po
 	$(call MSGFMT,CP1254)
 	
+# Lithaunian uses CP1257
+lt.mo: lt.po
+	$(call MSGFMT,CP1257)
+	
 # Vietnamese uses CP1258
 vi.mo: vi.po
 	$(call MSGFMT,CP1258)
