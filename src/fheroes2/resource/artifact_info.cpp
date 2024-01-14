@@ -552,7 +552,7 @@ namespace
                   "Upon cresting a small hill, you come upon a ridiculous looking sight. A Sprite is attempting to carry a Scepter that is almost as big as it is. Trying not to laugh, you ask, \"Need help?\" The Sprite glares at you and answers: \"You think this is funny? Fine. You can carry it. I much prefer flying anyway.\"" ),
               {},
               {} },
-            { gettext_noop( "Masthead" ), gettext_noop( "The %{name} boosts the hero's luck and morale by %{count} each in sea combat." ), gettext_noop( "An old seaman tells you a tale of an enchanted masthead that he used in his youth to rally his crew during times of trouble. He then hands you a faded map that shows where he hid it. After much exploring, you find it stashed underneath a nearby dock." ), {}, {} },
+            { gettext_noop( "Masthead" ), gettext_noop( "The %{name} boosts the hero's troops' luck and morale by %{count} each in sea combat." ), gettext_noop( "An old seaman tells you a tale of an enchanted masthead that he used in his youth to rally his crew during times of trouble. He then hands you a faded map that shows where he hid it. After much exploring, you find it stashed underneath a nearby dock." ), {}, {} },
             { gettext_noop( "Sphere of Negation" ),
               gettext_noop( "The %{name} disables all spell casting, for both sides, in combat." ),
               gettext_noop(
