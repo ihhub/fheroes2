@@ -330,7 +330,7 @@ namespace
               {},
               {} },
             { gettext_noop( "Pendant of Free Will" ),
-              gettext_noop( "The %{name} makes all the hero's troops immune to hypnotize spells." ),
+              gettext_noop( "The %{name} makes all of the hero's troops immune to hypnotize spells." ),
               gettext_noop(
                   "Responding to cries for help, you find river Sprites making a sport of dunking an old man. Feeling vengeful, you rescue the man and drag a Sprite onto dry land for awhile. The Sprite, uncomfortable in the air, gives you a magic pendant to let him go." ),
               {},
