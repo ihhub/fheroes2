@@ -306,7 +306,7 @@ namespace
               {},
               {} },
             { gettext_noop( "Ankh" ),
-              gettext_noop( "The %{name} doubles the effectiveness of all the hero's resurrect and animate spells." ),
+              gettext_noop( "The %{name} doubles the effectiveness of all of the hero's resurrect and animate spells." ),
               gettext_noop(
                   "A fierce windstorm reveals the entrance to a buried tomb. Your investigation reveals that the tomb has already been looted, but the thieves overlooked an ankh on a silver chain in the dark." ),
               {},
