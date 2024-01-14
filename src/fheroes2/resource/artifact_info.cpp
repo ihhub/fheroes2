@@ -342,7 +342,7 @@ namespace
               {},
               {} },
             { gettext_noop( "Serenity Pendant" ),
-              gettext_noop( "The %{name} makes all the hero's troops immune to berserk spells." ),
+              gettext_noop( "The %{name} makes all of the hero's troops immune to berserk spells." ),
               gettext_noop( "The sounds of combat draw you to the scene of a fight between an old Barbarian and an eight-headed Hydra. Your timely intervention swings the battle in favor of the man, and he rewards you with a pendant he used to use to calm his mind for battle." ),
               {},
               {} },
