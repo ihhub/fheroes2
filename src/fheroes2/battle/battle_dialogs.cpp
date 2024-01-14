@@ -526,12 +526,12 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
     LoopedAnimationSequence sequence;
 
     fheroes2::FontType summaryTitleFont = fheroes2::FontType::normalWhite();
-    if ( ( res.army1 & RESULT_WINS ) && ( attackerIsHuman ) ) {
+    if ( ( res.army1 & RESULT_WINS ) && attackerIsHuman ) {
         GetSummaryParams( res.army1, res.army2, _army1->GetCommander(), res.exp1, _army2->GetSurrenderCost(), sequence, title, surrenderText, outcomeText );
         summaryTitleFont = fheroes2::FontType::normalYellow();
         AudioManager::PlayMusic( MUS::BATTLEWIN, Music::PlaybackMode::PLAY_ONCE );
     }
-    else if ( ( res.army2 & RESULT_WINS ) && ( defenderIsHuman ) ) {
+    else if ( ( res.army2 & RESULT_WINS ) && defenderIsHuman ) {
         GetSummaryParams( res.army2, res.army1, _army2->GetCommander(), res.exp2, _army1->GetSurrenderCost(), sequence, title, surrenderText, outcomeText );
         summaryTitleFont = fheroes2::FontType::normalYellow();
         AudioManager::PlayMusic( MUS::BATTLEWIN, Music::PlaybackMode::PLAY_ONCE );
@@ -645,6 +645,8 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
 
     LocalEvent & le = LocalEvent::Get();
 
+    int sequenceId = sequence.id();
+
     while ( le.HandleEvents() ) {
         le.MousePressLeft( buttonOk.area() ) ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
         if ( allowToRestart ) {
@@ -669,10 +671,14 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
 
         // animation
         if ( Game::validateAnimationDelay( Game::BATTLE_DIALOG_DELAY ) && !sequence.nextFrame() ) {
-            const fheroes2::Sprite & base = fheroes2::AGG::GetICN( sequence.id(), 0 );
+            if ( sequenceId != sequence.id() ) {
+                sequenceId = sequence.id();
+                const fheroes2::Sprite & base = fheroes2::AGG::GetICN( sequenceId, 0 );
+
+                Copy( base, 0, 0, display, animationRoi.x + base.x(), animationRoi.y + base.y(), base.width(), base.height() );
+            }
             const fheroes2::Sprite & sequenceCurrent = fheroes2::AGG::GetICN( sequence.id(), sequence.frameId() );
 
-            Copy( base, 0, 0, display, animationRoi.x + sequenceBase.x(), animationRoi.y + sequenceBase.y(), base.width(), base.height() );
             fheroes2::Blit( sequenceCurrent, display, animationRoi.x + sequenceCurrent.x(), animationRoi.y + sequenceCurrent.y() );
             display.render( animationRoi );
         }
@@ -751,10 +757,14 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
                     }
                     // animation
                     if ( Game::validateAnimationDelay( Game::BATTLE_DIALOG_DELAY ) && !sequence.nextFrame() ) {
-                        const fheroes2::Sprite & base = fheroes2::AGG::GetICN( sequence.id(), 0 );
+                        if ( sequenceId != sequence.id() ) {
+                            sequenceId = sequence.id();
+                            const fheroes2::Sprite & base = fheroes2::AGG::GetICN( sequenceId, 0 );
+
+                            Copy( base, 0, 0, display, animationRoi.x + base.x(), animationRoi.y + base.y(), base.width(), base.height() );
+                        }
                         const fheroes2::Sprite & sequenceCurrent = fheroes2::AGG::GetICN( sequence.id(), sequence.frameId() );
 
-                        Copy( base, 0, 0, display, animationRoi.x + sequenceBase.x(), animationRoi.y + sequenceBase.y(), base.width(), base.height() );
                         fheroes2::Blit( sequenceCurrent, display, animationRoi.x + sequenceCurrent.x(), animationRoi.y + sequenceCurrent.y() );
                         display.render( animationRoi );
                     }
