@@ -86,7 +86,7 @@ public:
     bool AllTroopsAreTheSame() const;
 
     bool JoinTroop( const Troop & troop );
-    bool JoinTroop( const Monster & mons, uint32_t count, bool emptySlotFirst );
+    bool JoinTroop( const Monster & mons, const uint32_t count, const bool emptySlotFirst );
     bool CanJoinTroop( const Monster & ) const;
 
     virtual double GetStrength() const;

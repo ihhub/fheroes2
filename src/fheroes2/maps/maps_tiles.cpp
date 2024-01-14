@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -553,7 +553,7 @@ void Maps::Tiles::setTerrain( const uint16_t terrainImageIndex, const bool horiz
 
 Heroes * Maps::Tiles::getHero() const
 {
-    return MP2::OBJ_HEROES == _mainObjectType && Heroes::isValidId( _occupantHeroId ) ? world.GetHeroes( _occupantHeroId ) : nullptr;
+    return MP2::OBJ_HERO == _mainObjectType && Heroes::isValidId( _occupantHeroId ) ? world.GetHeroes( _occupantHeroId ) : nullptr;
 }
 
 void Maps::Tiles::setHero( Heroes * hero )
@@ -567,7 +567,7 @@ void Maps::Tiles::setHero( Heroes * hero )
         assert( hero->GetID() >= std::numeric_limits<HeroIDType>::min() && hero->GetID() < std::numeric_limits<HeroIDType>::max() );
         _occupantHeroId = static_cast<HeroIDType>( hero->GetID() );
 
-        SetObject( MP2::OBJ_HEROES );
+        SetObject( MP2::OBJ_HERO );
     }
     else {
         hero = getHero();
@@ -591,7 +591,7 @@ fheroes2::Point Maps::Tiles::GetCenter() const
 
 MP2::MapObjectType Maps::Tiles::GetObject( bool ignoreObjectUnderHero /* true */ ) const
 {
-    if ( !ignoreObjectUnderHero && MP2::OBJ_HEROES == _mainObjectType ) {
+    if ( !ignoreObjectUnderHero && MP2::OBJ_HERO == _mainObjectType ) {
         const Heroes * hero = getHero();
         return hero ? hero->getObjectTypeUnderHero() : MP2::OBJ_NONE;
     }
@@ -991,7 +991,7 @@ std::string Maps::Tiles::String() const
     case MP2::OBJ_MONSTER:
         os << "monster count   : " << getMonsterCountFromTile( *this ) << std::endl;
         break;
-    case MP2::OBJ_HEROES: {
+    case MP2::OBJ_HERO: {
         const Heroes * hero = getHero();
         if ( hero )
             os << hero->String();
@@ -1087,12 +1087,12 @@ bool Maps::Tiles::isPassableFrom( const int direction, const bool fromWater, con
     }
 
     // From the ground we can get to the water tile only if this tile contains a certain object.
-    if ( !fromWater && tileIsWater && _mainObjectType != MP2::OBJ_SHIPWRECK && _mainObjectType != MP2::OBJ_HEROES && _mainObjectType != MP2::OBJ_BOAT ) {
+    if ( !fromWater && tileIsWater && _mainObjectType != MP2::OBJ_SHIPWRECK && _mainObjectType != MP2::OBJ_HERO && _mainObjectType != MP2::OBJ_BOAT ) {
         return false;
     }
 
     // Tiles on which allied heroes are located are inaccessible
-    if ( _mainObjectType == MP2::OBJ_HEROES ) {
+    if ( _mainObjectType == MP2::OBJ_HERO ) {
         const Heroes * hero = getHero();
         assert( hero != nullptr );
 

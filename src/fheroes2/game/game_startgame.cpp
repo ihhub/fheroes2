@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -454,7 +454,7 @@ int Interface::AdventureMap::GetCursorFocusCastle( const Castle & castle, const 
         break;
     }
 
-    case MP2::OBJ_HEROES: {
+    case MP2::OBJ_HERO: {
         const Heroes * hero = tile.getHero();
 
         if ( hero ) {
@@ -491,7 +491,7 @@ int Interface::AdventureMap::GetCursorFocusShipmaster( const Heroes & hero, cons
         break;
     }
 
-    case MP2::OBJ_HEROES: {
+    case MP2::OBJ_HERO: {
         const Heroes * otherHero = tile.getHero();
 
         if ( otherHero ) {
@@ -552,7 +552,7 @@ int Interface::AdventureMap::_getCursorNoFocus( const Maps::Tiles & tile )
         }
         break;
     }
-    case MP2::OBJ_HEROES: {
+    case MP2::OBJ_HERO: {
         const Heroes * hero = tile.getHero();
         if ( hero && hero->GetColor() == Settings::Get().CurrentColor() ) {
             return Cursor::HEROES;
@@ -613,7 +613,7 @@ int Interface::AdventureMap::GetCursorFocusHeroes( const Heroes & hero, const Ma
         break;
     }
 
-    case MP2::OBJ_HEROES: {
+    case MP2::OBJ_HERO: {
         const Heroes * otherHero = tile.getHero();
 
         if ( otherHero ) {
@@ -1520,7 +1520,7 @@ void Interface::AdventureMap::mouseCursorAreaPressRight( const int32_t tileIndex
             break;
         }
 
-        case MP2::OBJ_HEROES: {
+        case MP2::OBJ_HERO: {
             const Heroes * heroes = tile.getHero();
 
             if ( heroes ) {

@@ -66,6 +66,16 @@ namespace Dialog
     void selectTownType( int & type, int & color );
 
     int selectDwellingType( const int dwellingType );
+
+    void selectMineType( int32_t & type, int32_t & color );
+
+    int selectMountainType( const int mountainType );
+
+    int selectRockType( const int rockType );
+
+    int selectTreeType( const int treeType );
+
+    int selectPowerUpObjectType( const int powerUpObjectType );
 }
 
 #endif

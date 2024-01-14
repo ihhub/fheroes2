@@ -2225,7 +2225,7 @@ bool Castle::HasBoatNearby() const
         }
 
         const MP2::MapObjectType objectType = tile.GetObject();
-        return ( objectType == MP2::OBJ_BOAT || objectType == MP2::OBJ_HEROES );
+        return ( objectType == MP2::OBJ_BOAT || objectType == MP2::OBJ_HERO );
     };
 
     const int32_t index = Maps::GetIndexFromAbsPoint( possibleSeaTile.x, possibleSeaTile.y );

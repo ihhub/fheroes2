@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-04 14:14+0000\n"
+"POT-Creation-Date: 2024-01-13 09:39+0000\n"
 "PO-Revision-Date: 2023-09-04 21:55+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -3400,6 +3400,43 @@ msgstr "Kattints az osztály kiválasztásához."
 msgid "Click to select this color."
 msgstr "Kattints a szín kiválasztásához."
 
+#, fuzzy
+msgid "Select Dwelling:"
+msgstr "Varázslat kiválasztása:"
+
+msgid "Mine placing"
+msgstr ""
+
+#, fuzzy
+msgid ""
+"Resource\n"
+"type:"
+msgstr "Erőforrás"
+
+#, fuzzy
+msgid "%{mineName} appearance:"
+msgstr "%{name} a %{race}"
+
+#, fuzzy
+msgid "Click to select %{object} as the resource generator to be placed."
+msgstr "Kattints ide, hogy kiválaszd melyik Küldetéssel játszol."
+
+#, fuzzy
+msgid "Select Mountain Object:"
+msgstr "Tengeri objektum kiválasztása:"
+
+#, fuzzy
+msgid "Select Rock Object:"
+msgstr "Tengeri objektum kiválasztása:"
+
+#, fuzzy
+msgid "Select Tree Object:"
+msgstr "Tengeri objektum kiválasztása:"
+
+#, fuzzy
+msgid "Select Power Up Object:"
+msgstr "Tengeri objektum kiválasztása:"
+
 msgid "Map Type:\n"
 msgstr "Térképtípus:\n"
 
@@ -3723,16 +3760,34 @@ msgstr "Vízen nem helyezhetők el hősök."
 msgid "Artifacts cannot be placed on water."
 msgstr "Vízen nem helyezhetők el varázstárgyak."
 
+#, fuzzy
+msgid "Mountains cannot be placed on water."
+msgstr "Vízen nem helyezhetők el lények."
+
+#, fuzzy
+msgid "Rocks cannot be placed on water."
+msgstr "Vízen nem helyezhetők el városok."
+
+#, fuzzy
+msgid "Trees cannot be placed on water."
+msgstr "Vízen nem helyezhetők el kincsek."
+
 msgid "Ocean object must be placed on water."
 msgstr "Tengeri objektumot vízre kell elhelyezni."
 
 msgid "Towns cannot be placed on water."
 msgstr "Vízen nem helyezhetők el városok."
 
+msgid "Mines cannot be placed on water."
+msgstr "Vízen nem helyezhetők el bányák."
+
 msgid "Dwellings cannot be placed on water."
 msgstr "Vízen nem helyezhetők el toborzóhelyek."
 
-msgid "Used to place %{object}."
+msgid "Power-ups cannot be placed on water."
+msgstr "Vízen nem helyezhetők el képességnövelő tárgyak."
+
+sgid "Used to place %{object}."
 msgstr "%{object} elhelyezésére való."
 
 msgid "Select object type"
