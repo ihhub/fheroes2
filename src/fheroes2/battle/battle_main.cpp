@@ -175,7 +175,7 @@ namespace
         SpellStorage new_spells;
         new_spells.reserve( 10 );
 
-        const Skill::Secondary eagleeye( Skill::Secondary::EAGLEEYE, hero.GetLevelSkill( Skill::Secondary::EAGLEEYE ) );
+        const Skill::Secondary eagleeye( Skill::Secondary::EAGLE_EYE, hero.GetLevelSkill( Skill::Secondary::EAGLE_EYE ) );
 
         // filter spells
         for ( const Spell & sp : spells ) {
@@ -464,7 +464,7 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, int32_t mapsindex )
             }
         }
 
-        if ( winnerHero && loserHero && winnerHero->GetLevelSkill( Skill::Secondary::EAGLEEYE ) && loserHero->isHeroes() ) {
+        if ( winnerHero && loserHero && winnerHero->GetLevelSkill( Skill::Secondary::EAGLE_EYE ) && loserHero->isHeroes() ) {
             eagleEyeSkillAction( *winnerHero, arena.GetUsageSpells(), winnerHero->isControlHuman(), randomGenerator );
         }
 

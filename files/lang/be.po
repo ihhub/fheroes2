@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-04 12:56+0000\n"
+"POT-Creation-Date: 2024-01-13 09:39+0000\n"
 "PO-Revision-Date: 2022-09-23 16:01+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3208,6 +3208,42 @@ msgstr "Пстрыкніце сюды, каб выбраць сцэнар"
 msgid "Click to select this color."
 msgstr "Пстрыкніце сюды, каб выбраць сцэнар"
 
+#, fuzzy
+msgid "Select Dwelling:"
+msgstr "Хобіты"
+
+msgid "Mine placing"
+msgstr ""
+
+msgid ""
+"Resource\n"
+"type:"
+msgstr ""
+
+#, fuzzy
+msgid "%{mineName} appearance:"
+msgstr "%{race} %{name}"
+
+#, fuzzy
+msgid "Click to select %{object} as the resource generator to be placed."
+msgstr "Пстрыкніце сюды, каб выбраць сцэнар"
+
+#, fuzzy
+msgid "Select Mountain Object:"
+msgstr "Мова"
+
+#, fuzzy
+msgid "Select Rock Object:"
+msgstr "Мова"
+
+#, fuzzy
+msgid "Select Tree Object:"
+msgstr "Мова"
+
+#, fuzzy
+msgid "Select Power Up Object:"
+msgstr "Мова"
+
 msgid "Map Type:\n"
 msgstr ""
 
@@ -3529,13 +3565,28 @@ msgstr ""
 msgid "Artifacts cannot be placed on water."
 msgstr ""
 
+msgid "Mountains cannot be placed on water."
+msgstr ""
+
+msgid "Rocks cannot be placed on water."
+msgstr ""
+
+msgid "Trees cannot be placed on water."
+msgstr ""
+
 msgid "Ocean object must be placed on water."
 msgstr ""
 
 msgid "Towns cannot be placed on water."
 msgstr ""
 
+msgid "Mines cannot be placed on water."
+msgstr ""
+
 msgid "Dwellings cannot be placed on water."
+msgstr ""
+
+msgid "Power-ups cannot be placed on water."
 msgstr ""
 
 msgid "Used to place %{object}."

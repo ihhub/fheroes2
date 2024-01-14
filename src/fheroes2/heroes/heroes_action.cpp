@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -985,10 +985,6 @@ namespace
         DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() )
 
         const Skill::Secondary & skill = getSecondarySkillFromWitchsHut( world.GetTiles( dst_index ) );
-
-        // If this assertion blows up the object is not set properly.
-        assert( skill.isValid() );
-
         if ( skill.isValid() ) {
             std::string msg = _( "You approach the hut and observe a witch inside studying an ancient tome on %{skill}.\n\n" );
             const std::string & skill_name = Skill::Secondary::String( skill.Skill() );
@@ -1027,6 +1023,10 @@ namespace
                                            Dialog::OK, { &secondarySkillUI } );
                 }
             }
+        }
+        else {
+            // A broken object?
+            assert( 0 );
         }
 
         hero.SetVisited( dst_index, Visit::GLOBAL );
@@ -1875,7 +1875,7 @@ namespace
             return;
         }
 
-        assert( world.GetTiles( index_to ).GetObject() != MP2::OBJ_HEROES );
+        assert( world.GetTiles( index_to ).GetObject() != MP2::OBJ_HERO );
 
         AudioManager::PlaySound( M82::KILLFADE );
         hero.ShowPath( false );
@@ -3296,7 +3296,7 @@ namespace
         if ( !hero.isObjectTypeVisited( objectType, Visit::GLOBAL ) ) {
             hero.SetVisited( dst_index, Visit::GLOBAL );
 
-            const MapsIndexes eyeMagiIndexes = Maps::GetObjectPositions( MP2::OBJ_EYE_OF_MAGI, true );
+            const MapsIndexes eyeMagiIndexes = Maps::GetObjectPositions( MP2::OBJ_EYE_OF_MAGI );
             if ( !eyeMagiIndexes.empty() ) {
                 Interface::AdventureMap & I = Interface::AdventureMap::Get();
 
@@ -3643,7 +3643,7 @@ void Heroes::Action( int tileIndex )
     case MP2::OBJ_CASTLE:
         ActionToCastle( *this, tileIndex );
         break;
-    case MP2::OBJ_HEROES:
+    case MP2::OBJ_HERO:
         ActionToHeroes( *this, tileIndex );
         break;
 

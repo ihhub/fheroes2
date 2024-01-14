@@ -2229,9 +2229,8 @@ void Battle::Interface::_redrawCoverStatic()
 
         for ( const Cell & cell : board ) {
             const Position pos = Position::GetReachable( *_currentUnit, cell.GetIndex() );
-
             if ( pos.GetHead() != nullptr ) {
-                assert( !_currentUnit->isWide() || pos.GetTail() != nullptr );
+                assert( pos.isValidForUnit( _currentUnit ) );
 
                 fheroes2::Blit( shadowImage, _mainSurface, cell.GetPos().x, cell.GetPos().y );
             }
@@ -2526,9 +2525,8 @@ int Battle::Interface::GetBattleCursor( std::string & statusMsg ) const
 
         if ( unit == nullptr || _currentUnit == unit ) {
             const Position pos = Position::GetReachable( *_currentUnit, index_pos );
-
             if ( pos.GetHead() != nullptr ) {
-                assert( !_currentUnit->isWide() || pos.GetTail() != nullptr );
+                assert( pos.isValidForUnit( _currentUnit ) );
 
                 if ( pos.GetHead()->GetIndex() == _currentUnit->GetHeadIndex() ) {
                     assert( !_currentUnit->isWide() || pos.GetTail()->GetIndex() == _currentUnit->GetTailIndex() );

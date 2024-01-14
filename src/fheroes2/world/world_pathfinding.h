@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2023                                             *
+ *   Copyright (C) 2020 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -22,6 +22,7 @@
 
 #include <cstdint>
 #include <list>
+#include <utility>
 #include <vector>
 
 #include "color.h"
@@ -161,7 +162,10 @@ public:
     void reEvaluateIfNeeded( const Heroes & hero );
     void reEvaluateIfNeeded( const int start, const int color, const double armyStrength, const uint8_t skill );
 
-    int getFogDiscoveryTile( const Heroes & hero, bool & isTerritoryExpansion );
+    // Finds the most profitable tile for fog discovery. Returns a pair consisting of the tile index (-1 if no suitable tile
+    // was found) and a boolean value, which takes the value true if there is fog next to this tile (that is, most likely,
+    // through this tile hero can get into some new areas), and false otherwise.
+    std::pair<int32_t, bool> getFogDiscoveryTile( const Heroes & hero );
 
     // Used for cases when heroes are stuck because one hero might be blocking the way and we have to move him.
     int getNearestTileToMove( const Heroes & hero );
