@@ -21,6 +21,7 @@
 #include "image.h"
 
 #include <algorithm>
+#include <cassert>
 #include <cmath>
 #include <cstddef>
 #include <cstdlib>
@@ -502,11 +503,7 @@ namespace fheroes2
         if ( !empty() ) {
             const size_t totalSize = static_cast<size_t>( _width ) * _height;
             memset( image(), value, totalSize );
-
-            if ( !_singleLayer ) {
-                // For double-layer image: set the transform layer not to skip all data.
-                memset( transform(), static_cast<uint8_t>( 0 ), totalSize );
-            }
+            memset( transform(), static_cast<uint8_t>( 0 ), totalSize );
         }
     }
 
@@ -522,8 +519,7 @@ namespace fheroes2
             return;
         }
 
-        // Allocate memory only for the used layers.
-        const size_t size = static_cast<size_t>( width_ ) * height_ * ( _singleLayer ? 1 : 2 );
+        const size_t size = static_cast<size_t>( width_ ) * height_ * 2;
 
         _data.reset( new uint8_t[size] );
 
@@ -536,11 +532,8 @@ namespace fheroes2
         if ( !empty() ) {
             const size_t totalSize = static_cast<size_t>( _width ) * _height;
             memset( image(), static_cast<uint8_t>( 0 ), totalSize );
-
-            if ( !_singleLayer ) {
-                // Set the transform layer to skip all data.
-                memset( transform(), static_cast<uint8_t>( 1 ), totalSize );
-            }
+            // Set the transform layer to skip all data.
+            memset( transform(), static_cast<uint8_t>( 1 ), totalSize );
         }
     }
 
@@ -552,8 +545,7 @@ namespace fheroes2
             return;
         }
 
-        // Allocate memory and copy data only for the used layers.
-        const size_t size = static_cast<size_t>( image._width ) * image._height * ( _singleLayer ? 1 : 2 );
+        const size_t size = static_cast<size_t>( image._width ) * image._height * 2;
 
         _singleLayer = image._singleLayer;
 
