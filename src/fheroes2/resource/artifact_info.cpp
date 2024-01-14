@@ -336,7 +336,7 @@ namespace
               {},
               {} },
             { gettext_noop( "Pendant of Life" ),
-              gettext_noop( "The %{name} makes all the hero's troops immune to death spells." ),
+              gettext_noop( "The %{name} makes all of the hero's troops immune to death spells." ),
               gettext_noop(
                   "A brief roadside encounter with a small caravan and a game of knucklebones wins a magic pendant. Its former owner says that it protects from Necromancers' death spells." ),
               {},
