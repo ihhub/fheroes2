@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-13 09:39+0000\n"
-"PO-Revision-Date: 2024-01-14 16:08+0100\n"
+"PO-Revision-Date: 2024-01-14 17:06+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
 "Language: fr\n"
@@ -954,7 +954,7 @@ msgid "Start"
 msgstr "Commencer"
 
 msgid "Start the battle."
-msgstr "Commencer la bataille"
+msgstr "Commencer la bataille."
 
 msgid "Exit"
 msgstr "Quitter"
@@ -1935,13 +1935,13 @@ msgid "The Price of Loyalty"
 msgstr "Price of Loyalty"
 
 msgid "Voyage Home"
-msgstr "Le voyage de retour"
+msgstr "Le retour"
 
 msgid "Wizard's Isle"
-msgstr "L'île du sorcier"
+msgstr "L'archipel"
 
 msgid "Descendants"
-msgstr "Descendants"
+msgstr "Les héritiers"
 
 msgid "The %{building} produces %{monster}."
 msgstr "Le %{building} produit des %{monster}."
@@ -3441,7 +3441,7 @@ msgid "Click to select castle placing."
 msgstr "Cliquez pour déterminer le placement du château."
 
 msgid "%{color} %{race} %{townOrCastle}"
-msgstr " %{townOrCastle} %{race} %{color}"
+msgstr "%{townOrCastle} %{race} %{color}"
 
 msgid "race|Neutral"
 msgstr "Neutre"
@@ -3450,7 +3450,7 @@ msgid "You will place"
 msgstr "Placerez"
 
 msgid "Click to select this class."
-msgstr "Cliquez ici pour sélectionner cet alignement"
+msgstr "Cliquez ici pour sélectionner cet alignement."
 
 msgid "Click to select this color."
 msgstr "Cliquez ici pour sélectionner cette couleur."
@@ -4506,13 +4506,13 @@ msgid "hotkey|the price of loyalty campaign"
 msgstr "La campagne de \"Price of Loyalty\""
 
 msgid "hotkey|voyage home campaign"
-msgstr "La campagne Le voyage de retour"
+msgstr "La campagne de \"Le retour\""
 
 msgid "hotkey|wizard's isle campaign"
-msgstr "La campagne L'île du sorcier"
+msgstr "La campagne de \"L'archipel\""
 
 msgid "hotkey|descendants campaign"
-msgstr "La campagne Descendants"
+msgstr "La campagne de \"Les héritiers\""
 
 msgid "hotkey|select first campaign bonus"
 msgstr "Choisir le premier bonus de campagne"
