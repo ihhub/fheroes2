@@ -271,7 +271,7 @@ namespace
               {},
               {} },
             { gettext_noop( "Fire Cloak" ),
-              gettext_noop( "The %{name} halves all damage the hero's troops receives from fire spells." ),
+              gettext_noop( "The %{name} halves all damage the hero's troops receive from fire spells." ),
               gettext_noop(
                   "You've come upon a fight between a Necromancer and a Paladin. The Necromancer blasts the Paladin with a fire bolt, bringing him to his knees. Acting quickly, you slay the evil one before the final blow. The grateful Paladin gives you the fire cloak that saved him." ),
               {},
