@@ -324,7 +324,7 @@ namespace
               {},
               {} },
             { gettext_noop( "Holy Pendant" ),
-              gettext_noop( "The %{name} makes all the hero's troops immune to curse spells." ),
+              gettext_noop( "The %{name} makes all of the hero's troops immune to curse spells." ),
               gettext_noop(
                   "In your wanderings you come across a hermit living in a small, tidy hut. Impressed with your mission, he takes time out from his meditations to bless and give you a charm against curses." ),
               {},
