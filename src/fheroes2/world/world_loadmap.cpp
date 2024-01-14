@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -216,7 +216,7 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
 
     const bool checkPoLObjects = !Settings::Get().isPriceOfLoyaltySupported() && isOriginalMp2File;
 
-    MapsIndexes vec_object; // index maps for OBJ_CASTLE, OBJ_HEROES, OBJ_SIGN, OBJ_BOTTLE, OBJ_EVENT
+    MapsIndexes vec_object; // index maps for OBJ_CASTLE, OBJ_HERO, OBJ_SIGN, OBJ_BOTTLE, OBJ_EVENT
     vec_object.reserve( 128 );
 
     for ( int32_t i = 0; i < worldSize; ++i ) {
@@ -536,7 +536,7 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
                     }
                 }
                 break;
-            case MP2::OBJ_HEROES:
+            case MP2::OBJ_HERO:
                 if ( MP2::MP2_HEROES_STRUCTURE_SIZE != pblock.size() ) {
                     DEBUG_LOG( DBG_GAME, DBG_WARN,
                                "read heroes: "
@@ -912,7 +912,7 @@ bool World::updateTileMetadata( Maps::Tiles & tile, const MP2::MapObjectType obj
         // We need information from an Ultimate artifact for later use. We will reset metadata later.
         break;
 
-    case MP2::OBJ_HEROES: {
+    case MP2::OBJ_HERO: {
         // remove map editor sprite
         if ( tile.getObjectIcnType() == MP2::OBJ_ICN_TYPE_MINIHERO )
             tile.Remove( tile.GetObjectUID() );

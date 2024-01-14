@@ -217,7 +217,7 @@ namespace
         const MP2::MapObjectType object = tile.GetObject();
         const int32_t tileIndex = tile.GetIndex();
 
-        if ( object == MP2::OBJ_HEROES ) {
+        if ( object == MP2::OBJ_HERO ) {
             const Heroes * hero = tile.getHero();
             // TODO: this function can be called when the game world is not fully initialized yet
             if ( hero == nullptr ) {
@@ -782,7 +782,7 @@ namespace AI
 
             _mapActionObjects.emplace_back( idx, objectType );
 
-            if ( objectType == MP2::OBJ_HEROES ) {
+            if ( objectType == MP2::OBJ_HERO ) {
                 const Heroes * hero = tile.getHero();
                 assert( hero != nullptr );
 

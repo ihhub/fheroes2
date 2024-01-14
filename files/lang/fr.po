@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-10 08:55+0000\n"
+"POT-Creation-Date: 2024-01-13 09:39+0000\n"
 "PO-Revision-Date: 2023-12-22 01:17+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -3494,6 +3494,22 @@ msgstr "%{name} le %{race}"
 msgid "Click to select %{object} as the resource generator to be placed."
 msgstr "Cliquez ici pour sélectionner le scénario à jouer."
 
+#, fuzzy
+msgid "Select Mountain Object:"
+msgstr "Choix d'élément (océan) :"
+
+#, fuzzy
+msgid "Select Rock Object:"
+msgstr "Choix d'élément (océan) :"
+
+#, fuzzy
+msgid "Select Tree Object:"
+msgstr "Choix d'élément (océan) :"
+
+#, fuzzy
+msgid "Select Power Up Object:"
+msgstr "Choix d'élément (océan) :"
+
 msgid "Map Type:\n"
 msgstr "Type de carte :\n"
 
@@ -3818,6 +3834,18 @@ msgstr ""
 msgid "Artifacts cannot be placed on water."
 msgstr "Les artéfacts ne peuvent pas être placés sur l'eau."
 
+#, fuzzy
+msgid "Mountains cannot be placed on water."
+msgstr "Ce sort ne peut pas être jeté en mer."
+
+#, fuzzy
+msgid "Rocks cannot be placed on water."
+msgstr "Ce sort ne peut pas être jeté en mer."
+
+#, fuzzy
+msgid "Trees cannot be placed on water."
+msgstr "Les trésors ne peuvent pas être placés sur l'eau."
+
 msgid "Ocean object must be placed on water."
 msgstr "Les éléments liés à la mer doivent être placés sur l'eau."
 
@@ -3831,6 +3859,10 @@ msgstr "Ce sort ne peut pas être jeté en mer."
 
 #, fuzzy
 msgid "Dwellings cannot be placed on water."
+msgstr "Ce sort ne peut pas être jeté en mer."
+
+#, fuzzy
+msgid "Power-ups cannot be placed on water."
 msgstr "Ce sort ne peut pas être jeté en mer."
 
 #, fuzzy

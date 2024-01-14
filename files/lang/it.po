@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-10 08:55+0000\n"
+"POT-Creation-Date: 2024-01-13 09:39+0000\n"
 "PO-Revision-Date: 2022-12-03 04:36+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <it@li.org>\n"
@@ -3311,6 +3311,22 @@ msgid "Click to select %{object} as the resource generator to be placed."
 msgstr ""
 
 #, fuzzy
+msgid "Select Mountain Object:"
+msgstr "Scegli artefatto:"
+
+#, fuzzy
+msgid "Select Rock Object:"
+msgstr "Scegli artefatto:"
+
+#, fuzzy
+msgid "Select Tree Object:"
+msgstr "Scegli artefatto:"
+
+#, fuzzy
+msgid "Select Power Up Object:"
+msgstr "Scegli artefatto:"
+
+#, fuzzy
 msgid "Map Type:\n"
 msgstr "Tipo di mappa"
 
@@ -3645,6 +3661,15 @@ msgstr ""
 msgid "Artifacts cannot be placed on water."
 msgstr ""
 
+msgid "Mountains cannot be placed on water."
+msgstr ""
+
+msgid "Rocks cannot be placed on water."
+msgstr ""
+
+msgid "Trees cannot be placed on water."
+msgstr ""
+
 msgid "Ocean object must be placed on water."
 msgstr ""
 
@@ -3655,6 +3680,9 @@ msgid "Mines cannot be placed on water."
 msgstr ""
 
 msgid "Dwellings cannot be placed on water."
+msgstr ""
+
+msgid "Power-ups cannot be placed on water."
 msgstr ""
 
 msgid "Used to place %{object}."

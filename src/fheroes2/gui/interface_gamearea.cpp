@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -492,9 +492,9 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
             const bool isTileUnderFog = ( tile.getFogDirection() == DIRECTION_ALL ) && renderFog;
 
             switch ( objectType ) {
-            case MP2::OBJ_HEROES: {
+            case MP2::OBJ_HERO: {
                 if ( _interface.isEditor() ) {
-                    const uint8_t alphaValue = getObjectAlphaValue( tile.GetIndex(), MP2::OBJ_HEROES );
+                    const uint8_t alphaValue = getObjectAlphaValue( tile.GetIndex(), MP2::OBJ_HERO );
 
                     auto spriteInfo = getEditorHeroSpritesPerTile( tile );
 

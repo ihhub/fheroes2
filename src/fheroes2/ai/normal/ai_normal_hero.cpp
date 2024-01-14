@@ -361,14 +361,24 @@ namespace
                 return false;
             }
 
-            if ( !hero.HaveSpellBook() || hero.HaveSpell( spell, true )
-                 || ( 3 == spell.Level() && Skill::Level::NONE == hero.GetLevelSkill( Skill::Secondary::WISDOM ) ) ) {
+            if ( !hero.HaveSpellBook() ) {
                 return false;
             }
 
-            if ( hero.isVisited( tile, Visit::GLOBAL ) && !isSpellUsedByAI( spell.GetID() ) ) {
+            if ( spell.Level() == 3 && hero.GetLevelSkill( Skill::Secondary::WISDOM ) == Skill::Level::NONE ) {
+                // No reason to visit this shrine as the hero cannot learn this spell.
                 return false;
             }
+
+            if ( !hero.isVisited( tile, Visit::GLOBAL ) ) {
+                // This shrine has not been visited by any hero. It's worth to do it.
+                return true;
+            }
+
+            if ( hero.HaveSpell( spell, true ) || !isSpellUsedByAI( spell.GetID() ) ) {
+                return false;
+            }
+
             return true;
         }
 
@@ -588,7 +598,7 @@ namespace
         case MP2::OBJ_MONSTER:
             return isHeroStrongerThan( tile, objectType, ai, heroArmyStrength, ( hero.isLosingGame() ? 1.0 : AI::ARMY_ADVANTAGE_MEDIUM ) );
 
-        case MP2::OBJ_HEROES: {
+        case MP2::OBJ_HERO: {
             const Heroes * otherHero = tile.getHero();
             assert( otherHero != nullptr );
 
@@ -611,11 +621,7 @@ namespace
                 return AIShouldVisitCastle( hero, index, heroArmyStrength );
             }
 
-            if ( army.isStrongerThan( otherHero->GetArmy(), hero.isLosingGame() ? AI::ARMY_ADVANTAGE_DESPERATE : AI::ARMY_ADVANTAGE_SMALL ) ) {
-                return true;
-            }
-
-            break;
+            return army.isStrongerThan( otherHero->GetArmy(), hero.isLosingGame() ? AI::ARMY_ADVANTAGE_DESPERATE : AI::ARMY_ADVANTAGE_SMALL );
         }
 
         case MP2::OBJ_CASTLE:
@@ -794,7 +800,7 @@ namespace
             return 0.8;
         case MP2::OBJ_ALCHEMIST_LAB:
         case MP2::OBJ_ARTIFACT:
-        case MP2::OBJ_HEROES:
+        case MP2::OBJ_HERO:
         case MP2::OBJ_MINE:
         case MP2::OBJ_SAWMILL:
             return 0.9;
@@ -989,7 +995,7 @@ namespace AI
 
             return calculateCastleValue( castle );
         }
-        case MP2::OBJ_HEROES: {
+        case MP2::OBJ_HERO: {
             const Heroes * otherHero = tile.getHero();
             if ( !otherHero ) {
                 // How is it even possible?
@@ -1049,6 +1055,11 @@ namespace AI
                     // Apply a bonus so that the AI prefers to eliminate the threat if possible instead of guarding its castle
                     value = std::max( value, calculateCastleValue( castle ) * 2 );
                 }
+            }
+            else if ( otherHero->GetControl() == CONTROL_AI ) {
+                // AI heroes should not attack other AI heroes so aggressively as human heroes.
+                // This is done to avoid situations when human players just wait when AI heroes kill each other.
+                value *= 0.8;
             }
 
             return value;
@@ -1551,7 +1562,7 @@ namespace AI
 
             return calculateCastleValue( castle );
         }
-        case MP2::OBJ_HEROES: {
+        case MP2::OBJ_HERO: {
             const Heroes * otherHero = tile.getHero();
             if ( !otherHero ) {
                 // How is it even possible?
@@ -1564,6 +1575,7 @@ namespace AI
                     // The other hero has a lower role. Do not waste time for meeting. Let him to come.
                     return valueToIgnore;
                 }
+
                 if ( hero.getAIRole() == otherHero->getAIRole()
                      && hero.getStatsValue() + Difficulty::getMinStatDiffBetweenAIRoles( Game::getDifficulty() ) + 1 > otherHero->getStatsValue() ) {
                     // Two heroes are almost identical. No reason to meet.
@@ -1610,6 +1622,11 @@ namespace AI
                     // Apply a bonus so that the AI prefers to eliminate the threat if possible instead of guarding its castle
                     value = std::max( value, calculateCastleValue( castle ) * 2 );
                 }
+            }
+            else if ( otherHero->GetControl() == CONTROL_AI ) {
+                // AI heroes should not attack other AI heroes so aggressively as human heroes.
+                // This is done to avoid situations when human players just wait when AI heroes kill each other.
+                value *= 0.8;
             }
 
             return value;
@@ -1749,7 +1766,7 @@ namespace AI
         const MP2::MapObjectType objectType = tile.GetObject();
 
         switch ( objectType ) {
-        case MP2::OBJ_HEROES: {
+        case MP2::OBJ_HERO: {
             const Heroes * otherHero = tile.getHero();
             if ( !otherHero ) {
                 // How is it even possible?
@@ -2023,7 +2040,7 @@ namespace AI
         std::set<int> objectIndexes;
 
         for ( const auto & actionObject : _mapActionObjects ) {
-            if ( actionObject.second == MP2::OBJ_HEROES ) {
+            if ( actionObject.second == MP2::OBJ_HERO ) {
                 assert( world.GetTiles( actionObject.first ).getHero() != nullptr );
             }
 
@@ -2095,7 +2112,7 @@ namespace AI
 
                     break;
                 }
-                case MP2::OBJ_HEROES: {
+                case MP2::OBJ_HERO: {
                     const Heroes * anotherHero = destinationTile.getHero();
                     if ( anotherHero == nullptr ) {
                         assert( 0 );
@@ -2254,7 +2271,7 @@ namespace AI
 
     void Normal::updatePriorityTargets( Heroes & hero, int32_t tileIndex, const MP2::MapObjectType objectType )
     {
-        if ( objectType != MP2::OBJ_CASTLE && objectType != MP2::OBJ_HEROES ) {
+        if ( objectType != MP2::OBJ_CASTLE && objectType != MP2::OBJ_HERO ) {
             // Priorities are only for castles and heroes at the moment.
             return;
         }
@@ -2283,7 +2300,7 @@ namespace AI
             if ( objectType == MP2::OBJ_CASTLE ) {
                 updateCastle();
             }
-            else if ( objectType == MP2::OBJ_HEROES ) {
+            else if ( objectType == MP2::OBJ_HERO ) {
                 const Maps::Tiles & tile = world.GetTiles( tileIndex );
 
                 const Heroes * anotherHero = tile.getHero();

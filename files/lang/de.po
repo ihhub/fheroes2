@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-10 08:55+0000\n"
+"POT-Creation-Date: 2024-01-13 09:39+0000\n"
 "PO-Revision-Date: 2023-12-22 00:32+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3466,6 +3466,22 @@ msgstr "%{name} (%{race})"
 msgid "Click to select %{object} as the resource generator to be placed."
 msgstr "Hier klicken, um auszuwählen, welches Szenario gespielt werden soll."
 
+#, fuzzy
+msgid "Select Mountain Object:"
+msgstr "Ozean-Objekte"
+
+#, fuzzy
+msgid "Select Rock Object:"
+msgstr "Ozean-Objekte"
+
+#, fuzzy
+msgid "Select Tree Object:"
+msgstr "Ozean-Objekte"
+
+#, fuzzy
+msgid "Select Power Up Object:"
+msgstr "Ozean-Objekte"
+
 msgid "Map Type:\n"
 msgstr "Kartentyp:\n"
 
@@ -3802,6 +3818,18 @@ msgid "Artifacts cannot be placed on water."
 msgstr "Monster können nicht auf Wasser plaziert werden."
 
 #, fuzzy
+msgid "Mountains cannot be placed on water."
+msgstr "Monster können nicht auf Wasser plaziert werden."
+
+#, fuzzy
+msgid "Rocks cannot be placed on water."
+msgstr "Monster können nicht auf Wasser plaziert werden."
+
+#, fuzzy
+msgid "Trees cannot be placed on water."
+msgstr "Monster können nicht auf Wasser plaziert werden."
+
+#, fuzzy
 msgid "Ocean object must be placed on water."
 msgstr "Monster können nicht auf Wasser plaziert werden."
 
@@ -3815,6 +3843,10 @@ msgstr "Monster können nicht auf Wasser plaziert werden."
 
 #, fuzzy
 msgid "Dwellings cannot be placed on water."
+msgstr "Monster können nicht auf Wasser plaziert werden."
+
+#, fuzzy
+msgid "Power-ups cannot be placed on water."
 msgstr "Monster können nicht auf Wasser plaziert werden."
 
 #, fuzzy
