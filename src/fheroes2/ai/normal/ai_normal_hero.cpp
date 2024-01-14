@@ -1159,7 +1159,27 @@ namespace AI
             // A bottle is useless to AI as it contains only a message but it might block path.
             return 0;
         }
-        case MP2::OBJ_CAMPFIRE:
+        case MP2::OBJ_CAMPFIRE: {
+            // A campfire has 4-6 random resources plus 400-600 gold so we use an average to get evaluation.
+            // Since we should not expose the resource type let's assume that it gives 6 resources, 1 each and 400 gold.
+            const Funds loot{ 1, 1, 1, 1, 1, 1, 400 };
+
+            double value = 0;
+
+            Resource::forEach( loot.GetValidItems(), [this, &loot, &value]( const int res ) {
+                const int amount = loot.Get( res );
+                if ( amount <= 0 ) {
+                    return;
+                }
+
+                value += amount * getResourcePriorityModifier( res, false );
+            } );
+
+            assert( value > 0 );
+
+            return value;
+        }
+
         case MP2::OBJ_DERELICT_SHIP:
         case MP2::OBJ_LEAN_TO:
         case MP2::OBJ_MAGIC_GARDEN:
@@ -1197,7 +1217,7 @@ namespace AI
             // The AI must not know precise reward from this object as it would be called cheating.
             // For all cases we have: 700 gold and 20 wood. So we divide by 4 to get an average number of resources.
             // In total, we should use 175 gold and 5 wood.
-            const Funds loot( 0, 5, 0, 0, 0, 0, 175 );
+            const Funds loot{ 0, 5, 0, 0, 0, 0, 175 };
 
             double value = 0;
 
