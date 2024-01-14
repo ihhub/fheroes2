@@ -442,7 +442,7 @@ void Battle::GetSummaryParams( const uint32_t res1, const uint32_t res2, const H
 
         if ( res2 & RESULT_SURRENDER ) {
             title.append( _( "The enemy has surrendered!" ) );
-            surrenderText.append( _( "They hand over %{gold} gold in shame." ) );
+            surrenderText.append( _( "Their cowardice costs them %{gold} gold." ) );
             StringReplace( surrenderText, "%{gold}", surrenderCost );
         }
         else if ( res2 & RESULT_RETREAT ) {
@@ -508,15 +508,16 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
     // Set the cursor image. After this dialog the Game Area or the Battlefield will be shown, so it does not require a cursor restorer.
     Cursor::Get().SetThemes( Cursor::POINTER );
 
-    fheroes2::StandardWindow background( bsTextWidth + 16, 424, true, display );
+    fheroes2::StandardWindow background( bsTextWidth + 25, 424, true, display );
 
     const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
 
-    const fheroes2::Sprite animationBorder = Crop( fheroes2::AGG::GetICN( isEvilInterface ? ICN::WINLOSEE : ICN::WINLOSE, 0 ), 43, 32, 231, 133 );
+    const fheroes2::Sprite & originalBorderImage = fheroes2::AGG::GetICN( isEvilInterface ? ICN::WINLOSEE : ICN::WINLOSE, 0 );
+    const fheroes2::Rect animationBorderRoi{ 43, 32, 231, 133 };
 
-    const fheroes2::Rect roi( background.activeArea() );
-    const fheroes2::Rect animationRoi( roi.x + ( ( roi.width - animationBorder.width() ) / 2 ) + 4, roi.y + 21, animationBorder.width(), animationBorder.height() );
-    Copy( animationBorder, 0, 0, display, animationRoi.x - 4, animationRoi.y - 4, animationRoi.width, animationRoi.height );
+    const fheroes2::Rect & roi( background.activeArea() );
+    const fheroes2::Rect animationRoi( roi.x + ( ( roi.width - animationBorderRoi.width ) / 2 ) + 4, roi.y + 21, animationBorderRoi.width, animationBorderRoi.height );
+    Copy( originalBorderImage, animationBorderRoi.x, animationBorderRoi.y, display, animationRoi.x - 4, animationRoi.y - 4, animationRoi.width, animationRoi.height );
 
     // Setup summary texts according to results and get the corresponding animation sequence.
     std::string surrenderText;
