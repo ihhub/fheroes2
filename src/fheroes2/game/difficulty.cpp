@@ -228,12 +228,12 @@ bool Difficulty::allowAIToDevelopCastlesOnlyOnEvenDays( const int difficulty, co
     return false;
 }
 
-bool Difficulty::allowAIToBuildCastleBuilding( const int difficulty, const bool /* isCampaign */, const building_t building )
+bool Difficulty::allowAIToBuildCastleBuilding( const int difficulty, const bool isCampaign, const building_t building )
 {
     switch ( difficulty ) {
     case Difficulty::EASY:
         // Only the construction of the corresponding dwelling is limited, but not its upgrade
-        return building != DWELLING_MONSTER6;
+        return isCampaign || building != DWELLING_MONSTER6;
     default:
         break;
     }
