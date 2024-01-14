@@ -3787,7 +3787,7 @@ msgstr "Vízen nem helyezhetők el toborzóhelyek."
 msgid "Power-ups cannot be placed on water."
 msgstr "Vízen nem helyezhetők el képességnövelő tárgyak."
 
-sgid "Used to place %{object}."
+msgid "Used to place %{object}."
 msgstr "%{object} elhelyezésére való."
 
 msgid "Select object type"
