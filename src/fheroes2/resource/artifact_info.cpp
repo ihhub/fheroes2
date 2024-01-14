@@ -301,7 +301,7 @@ namespace
               {},
               {} },
             { gettext_noop( "Snake-Ring" ),
-              gettext_noop( "The %{name} halves the hero's casting cost of all their bless spells." ),
+              gettext_noop( "The %{name} halves the casting cost of all of the hero's bless spells." ),
               gettext_noop( "You've found an oddly shaped ring on the finger of a long dead traveler. The ring looks like a snake biting its own tail." ),
               {},
               {} },
