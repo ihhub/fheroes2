@@ -86,7 +86,7 @@ int Game::getDifficulty()
         return configuration.GameDifficulty();
     }
 
-    // Difficulty of campaign games depends on both the complexity of a particular campaign map and the difficulty settings set by the player
+    // Difficulty of campaign games depends on both the difficulty of a particular campaign map and the difficulty settings set by the player
     return std::clamp( configuration.getCurrentMapInfo().difficulty + Campaign::CampaignSaveData::Get().getDifficulty(), static_cast<int>( Difficulty::EASY ),
                        static_cast<int>( Difficulty::IMPOSSIBLE ) );
 }
