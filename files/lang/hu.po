@@ -7553,15 +7553,15 @@ msgid "%{skill} allows the hero to learn fifth level spells."
 msgstr ""
 "%{skill} képessé teszi a hőst 5. szintű varázslatok megtanulására."
 
-msgid "%{skill} regenerates one additional spell point per day to your hero."
+msgid "%{skill} regenerates one additional spell point per day to the hero."
 msgid_plural ""
-"%{skill} regenerates %{count} additional spell points per day to your hero."
+"%{skill} regenerates %{count} additional spell points per day to the hero."
 msgstr[0] ""
 "%{skill} naponta eggyel növeli a hős varázspontjainak újratermelődését."
 msgstr[1] ""
 "%{skill} naponta %{count}-vel növeli a hős varázspontjainak újratermelődését."
 
-msgid "%{skill} increases your hero's luck by %{count}."
+msgid "%{skill} increases the hero's luck by %{count}."
 msgstr "%{skill} ennyivel növeli a hős szerencséjét: %{count}."
 
 msgid ""
