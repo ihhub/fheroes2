@@ -353,7 +353,7 @@ namespace
               {},
               {} },
             { gettext_noop( "Kinetic Pendant" ),
-              gettext_noop( "The %{name} makes all the hero's troops immune to paralyze spells." ),
+              gettext_noop( "The %{name} makes all of the hero's troops immune to paralyze spells." ),
               gettext_noop(
                   "You come across a golem wearing a glowing pendant and blocking your way. Acting on a hunch, you cut the pendant from its neck. Deprived of its power source, the golem breaks down, leaving you with the magical pendant." ),
               {},
