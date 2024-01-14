@@ -215,46 +215,37 @@ bool Difficulty::allowAIToSplitWeakStacks( const int difficulty )
     return true;
 }
 
-bool Difficulty::allowAIToDevelopCastlesOnlyOnEvenDays( const int difficulty )
+bool Difficulty::allowAIToDevelopCastlesOnlyOnEvenDays( const int difficulty, const bool isCampaign )
 {
     switch ( difficulty ) {
     case Difficulty::EASY:
-    case Difficulty::NORMAL:
         return true;
+    case Difficulty::NORMAL:
+        return !isCampaign;
     default:
         break;
     }
     return false;
 }
 
-bool Difficulty::allowAIToBuildLevel5Dwellings( const int difficulty )
+bool Difficulty::allowAIToBuildLevel5Dwellings( const int difficulty, const bool isCampaign )
 {
     switch ( difficulty ) {
     case Difficulty::EASY:
-        return false;
+        return isCampaign;
     default:
         break;
     }
     return true;
 }
 
-bool Difficulty::allowAIToBuildLevel6Dwellings( const int difficulty )
+bool Difficulty::allowAIToBuildLevel6Dwellings( const int difficulty, const bool isCampaign )
 {
     switch ( difficulty ) {
     case Difficulty::EASY:
+        return false;
     case Difficulty::NORMAL:
-        return false;
-    default:
-        break;
-    }
-    return true;
-}
-
-bool Difficulty::allowAIToTransferArmiesAndArtifactsBetweenHeroes( const int difficulty )
-{
-    switch ( difficulty ) {
-    case Difficulty::EASY:
-        return false;
+        return isCampaign;
     default:
         break;
     }

@@ -72,18 +72,23 @@ namespace Game
     void AnimateDelaysInitialize();
 }
 
-// Returns the difficulty level based on the type of game.
+bool Game::isCampaign()
+{
+    return Settings::Get().isCampaignGameType();
+}
+
 int Game::getDifficulty()
 {
     const Settings & configuration = Settings::Get();
-    if ( configuration.isCampaignGameType() ) {
-        int difficulty = configuration.getCurrentMapInfo().difficulty;
-        const int difficultyAdjustment = Campaign::CampaignSaveData::Get().getDifficulty();
-        difficulty += difficultyAdjustment;
-        return std::clamp( difficulty, static_cast<int>( Difficulty::EASY ), static_cast<int>( Difficulty::IMPOSSIBLE ) );
+
+    // Difficulty of non-campaign games depends only on the difficulty settings set by the player
+    if ( !configuration.isCampaignGameType() ) {
+        return configuration.GameDifficulty();
     }
 
-    return configuration.GameDifficulty();
+    // Difficulty of campaign games depends on both the complexity of a particular campaign map and the difficulty settings set by the player
+    return std::clamp( configuration.getCurrentMapInfo().difficulty + Campaign::CampaignSaveData::Get().getDifficulty(), static_cast<int>( Difficulty::EASY ),
+                       static_cast<int>( Difficulty::IMPOSSIBLE ) );
 }
 
 void Game::LoadPlayers( const std::string & mapFileName, Players & players )

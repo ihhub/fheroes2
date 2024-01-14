@@ -141,10 +141,10 @@ namespace AI
     {
         for ( const BuildOrder & order : buildOrderList ) {
             // Only the construction of the corresponding dwellings is limited, but not their upgrade
-            if ( order.building == DWELLING_MONSTER5 && !Difficulty::allowAIToBuildLevel5Dwellings( Game::getDifficulty() ) ) {
+            if ( order.building == DWELLING_MONSTER5 && !Difficulty::allowAIToBuildLevel5Dwellings( Game::getDifficulty(), Game::isCampaign() ) ) {
                 continue;
             }
-            if ( order.building == DWELLING_MONSTER6 && !Difficulty::allowAIToBuildLevel6Dwellings( Game::getDifficulty() ) ) {
+            if ( order.building == DWELLING_MONSTER6 && !Difficulty::allowAIToBuildLevel6Dwellings( Game::getDifficulty(), Game::isCampaign() ) ) {
                 continue;
             }
 
@@ -165,7 +165,7 @@ namespace AI
 
     bool CastleDevelopment( Castle & castle, int safetyFactor, int spellLevel )
     {
-        if ( Difficulty::allowAIToDevelopCastlesOnlyOnEvenDays( Game::getDifficulty() ) && world.CountDay() % 2 != 0 ) {
+        if ( Difficulty::allowAIToDevelopCastlesOnlyOnEvenDays( Game::getDifficulty(), Game::isCampaign() ) && world.CountDay() % 2 != 0 ) {
             return false;
         }
 

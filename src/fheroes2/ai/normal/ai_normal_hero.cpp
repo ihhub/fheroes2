@@ -605,10 +605,6 @@ namespace
             const bool otherHeroInCastle = ( otherHero->inCastle() != nullptr );
 
             if ( hero.GetColor() == otherHero->GetColor() ) {
-                if ( !Difficulty::allowAIToTransferArmiesAndArtifactsBetweenHeroes( Game::getDifficulty() ) ) {
-                    return false;
-                }
-
                 if ( hero.hasMetWithHero( otherHero->GetID() ) ) {
                     return false;
                 }

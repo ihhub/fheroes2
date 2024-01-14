@@ -66,12 +66,10 @@ namespace Difficulty
     // Returns true if AI should avoid having free slots in the army
     bool allowAIToSplitWeakStacks( const int difficulty );
 
-    bool allowAIToDevelopCastlesOnlyOnEvenDays( const int difficulty );
+    bool allowAIToDevelopCastlesOnlyOnEvenDays( const int difficulty, const bool isCampaign );
 
-    bool allowAIToBuildLevel5Dwellings( const int difficulty );
-    bool allowAIToBuildLevel6Dwellings( const int difficulty );
-
-    bool allowAIToTransferArmiesAndArtifactsBetweenHeroes( const int difficulty );
+    bool allowAIToBuildLevel5Dwellings( const int difficulty, const bool isCampaign );
+    bool allowAIToBuildLevel6Dwellings( const int difficulty, const bool isCampaign );
 }
 
 #endif
