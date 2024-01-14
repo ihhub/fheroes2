@@ -365,7 +365,7 @@ namespace
               {},
               {} },
             { gettext_noop( "Wand of Negation" ),
-              gettext_noop( "The %{name} makes all the hero's troops immune to dispel magic spells." ),
+              gettext_noop( "The %{name} makes all of the hero's troops immune to dispel magic spells." ),
               gettext_noop(
                   "You meet an old Wizard friend of yours traveling in the opposite direction. He presents  you with a gift: A wand that prevents the use of the dispel magic spell on your allies." ),
               {},
