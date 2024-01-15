@@ -2505,7 +2505,11 @@ namespace fheroes2
                     Copy( in, 0, 0, out, 3, 3, in.width(), in.height() );
                     out.setPosition( in.x() - 2, in.y() - 2 );
                     ApplyVerticalGradient( out, PAL::ColorRanges::YELLOW_END - 4, PAL::ColorRanges::YELLOW_START, 1, PAL::ColorRanges::BROWN_START + 18 );
-                    fheroes2::updateShadow( out, { -1, 2 }, 2, false );
+
+                    const fheroes2::Sprite contourBlack = CreateContour( out, 0 );
+                    Blit( contourBlack, out );
+                    const fheroes2::Sprite contourGray = CreateContour( out, 62 );
+                    Blit( contourGray, out );
                 }
                 return true;
             }
@@ -2521,7 +2525,11 @@ namespace fheroes2
                     Copy( in, 0, 0, out, 3, 3, in.width(), in.height() );
                     out.setPosition( in.x() - 2, in.y() - 2 );
                     ApplyVerticalGradient( out, PAL::ColorRanges::YELLOW_END - 4, PAL::ColorRanges::YELLOW_START, 1, PAL::ColorRanges::BROWN_START + 18 );
-                    fheroes2::updateShadow( out, { -1, 2 }, 2, false );
+
+                    const fheroes2::Sprite contourBlack = CreateContour( out, 0 );
+                    Blit( contourBlack, out );
+                    const fheroes2::Sprite contourGray = CreateContour( out, 62 );
+                    Blit( contourGray, out );
                 }
                 return true;
             }

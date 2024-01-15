@@ -3166,8 +3166,5 @@ namespace fheroes2
             fheroes2::Sprite cnt = CreateContour( image, borderColor );
             Blit( cnt, image );
         }
-
-        const fheroes2::Sprite contourBlack = CreateContour( image, 0 );
-        Blit( contourBlack, image );
     }
 }
