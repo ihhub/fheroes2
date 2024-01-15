@@ -69,7 +69,8 @@ namespace
     {
         uint8_t displayIndex = fheroes2::engine().getCurrentDisplayIndex();
         fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::GAME_OPTION_ICON, 1 ), _( "Display ID" ),
-                              std::to_string( displayIndex + 1 ) + ": " + fheroes2::engine().getDisplayName( displayIndex ), fheroes2::UiOptionTextWidth::TWO_ELEMENTS_ROW );
+                              std::to_string( displayIndex + 1 ) + ": " + fheroes2::engine().getDisplayName( displayIndex ),
+                              fheroes2::UiOptionTextWidth::TWO_ELEMENTS_ROW );
     }
 
     void drawResolution( const fheroes2::Rect & optionRoi )
@@ -140,10 +141,7 @@ namespace
         const fheroes2::Sprite & dialog = fheroes2::AGG::GetICN( ( isEvilInterface ? ICN::CSPANBKE : ICN::CSPANBKG ), 0 );
         const fheroes2::Sprite & dialogShadow = fheroes2::AGG::GetICN( ( isEvilInterface ? ICN::CSPANBKE : ICN::CSPANBKG ), 1 );
 
-        fheroes2::Sprite placeholder = fheroes2::AGG::GetICN( Settings::Get().isEvilInterfaceEnabled() ? ICN::SURDRBKE : ICN::SURDRBKG, 0 );
-        // the image taken from other big ICN and cropping it's background with adequate size
-        // the offsets are staticly fixed based on original image
-        placeholder = fheroes2::Crop( placeholder, 50, 30, dialog.width() - BORDERWIDTH * 2 - 20, optionWindowSize + 20 );
+        const fheroes2::Sprite secondRowBackground = fheroes2::AGG::GetICN( Settings::Get().isEvilInterfaceEnabled() ? ICN::SURDRBKE : ICN::SURDRBKG, 0 );
 
         const fheroes2::Point dialogOffset( ( display.width() - dialog.width() ) / 2, ( display.height() - dialog.height() ) / 2 );
         const fheroes2::Point shadowOffset( dialogOffset.x - BORDERWIDTH, dialogOffset.y );
@@ -154,8 +152,12 @@ namespace
 
         fheroes2::Blit( dialogShadow, display, windowRoi.x - BORDERWIDTH, windowRoi.y + BORDERWIDTH );
         fheroes2::Blit( dialog, display, windowRoi.x, windowRoi.y );
+
+        // the image taken from other big ICN and cropping it's background with adequate size
+        // the offsets are staticly fixed based on original image
         // filling the empty spaces on the second row alongside with it's shadow
-        fheroes2::Blit( placeholder, display, windowRoi.x + BORDERWIDTH + 10, windowRoi.y + optionOffset.y - 10 + offsetBetweenOptions.height );
+        fheroes2::Blit( secondRowBackground, 50, 30, display, windowRoi.x + BORDERWIDTH + 10, windowRoi.y + optionOffset.y - 10 + offsetBetweenOptions.height,
+                        dialog.width() - BORDERWIDTH * 2 - 20, optionWindowSize + 20 );
 
         fheroes2::ImageRestorer emptyDialogRestorer( display, windowRoi.x, windowRoi.y, windowRoi.width, windowRoi.height );
 
