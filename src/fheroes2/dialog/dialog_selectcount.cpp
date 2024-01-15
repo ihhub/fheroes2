@@ -404,14 +404,14 @@ int Dialog::ArmySplitTroop( uint32_t freeSlots, const uint32_t redistributeMax, 
 
     std::string msg( _( "How many %{troops} to move?" ) );
     StringReplace( msg, "%{troops}", troopName );
-    const fheroes2::Text title( msg, fheroes2::FontType::normalWhite() );
-    const int32_t textHeight = title.rows( BOXAREA_WIDTH ) * title.height();
+    const fheroes2::Text titleText( std::move(msg), fheroes2::FontType::normalWhite() );
+    const int32_t titleHeight = titleText.rows( BOXAREA_WIDTH ) * titleText.height();
 
     const fheroes2::Text slotSeparationText( _( "Fast separation into slots:" ), fheroes2::FontType::normalWhite() );
-    const int32_t text2Height = slotSeparationText.rows( BOXAREA_WIDTH ) * slotSeparationText.height();
+    const int32_t bodyHeight = slotSeparationText.rows( BOXAREA_WIDTH ) * slotSeparationText.height();
 
     const int defaultYPosition = 160;
-    const int boxHeight = freeSlots > 1 ? 56 + spacer + textHeight + text2Height : 45;
+    const int boxHeight = freeSlots > 1 ? 56 + spacer + titleHeight + bodyHeight : 45;
     const int boxYPosition = defaultYPosition + ( ( display.height() - display.DEFAULT_HEIGHT ) / 2 ) - boxHeight;
 
     const NonFixedFrameBox box( boxHeight, boxYPosition, true );
@@ -419,10 +419,11 @@ int Dialog::ArmySplitTroop( uint32_t freeSlots, const uint32_t redistributeMax, 
 
     const fheroes2::Rect & pos = box.GetArea();
     const int center = pos.x + pos.width / 2;
+    const int textTopOffset = 13;
 
-    title.draw( pos.x, pos.y + 2, BOXAREA_WIDTH, display );
+    titleText.draw( pos.x, pos.y + 2, BOXAREA_WIDTH, display );
 
-    sel.SetPos( fheroes2::Point( pos.x + 70, pos.y + 13 + textHeight ) );
+    sel.SetPos( fheroes2::Point( pos.x + 70, pos.y + textTopOffset + titleHeight ) );
     sel.Redraw();
 
     fheroes2::MovableSprite ssp;
@@ -441,10 +442,10 @@ int Dialog::ArmySplitTroop( uint32_t freeSlots, const uint32_t redistributeMax, 
 
             const int spriteWidth = sprites[i].width();
             const int offset = spriteWidth * ( 2 * static_cast<int>( i ) + 1 - static_cast<int>( freeSlots ) ) / 2;
-            vrts[i] = fheroes2::Rect( center + offset + deltaXStart + i * deltaX, pos.y + 13 + textHeight + text2Height + 45, spriteWidth, sprites[i].height() );
+            vrts[i] = fheroes2::Rect( center + offset + deltaXStart + i * deltaX, pos.y + textTopOffset + titleHeight + bodyHeight + 45, spriteWidth, sprites[i].height() );
         }
 
-        slotSeparationText.draw( pos.x, pos.y + 13 + textHeight + 37, BOXAREA_WIDTH, display );
+        slotSeparationText.draw( pos.x, pos.y + textTopOffset + titleHeight + 37, BOXAREA_WIDTH, display );
 
         for ( uint32_t i = 0; i < freeSlots - 1; ++i ) {
             fheroes2::Blit( sprites[i], display, vrts[i].x, vrts[i].y );
@@ -464,7 +465,7 @@ int Dialog::ArmySplitTroop( uint32_t freeSlots, const uint32_t redistributeMax, 
     fheroes2::ButtonGroup btnGroups( box.GetArea(), Dialog::OK | Dialog::CANCEL );
     btnGroups.draw();
 
-    const fheroes2::Point minMaxButtonOffset( pos.x + 165, pos.y + 13 + textHeight );
+    const fheroes2::Point minMaxButtonOffset( pos.x + 165, pos.y + textTopOffset + titleHeight );
     const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
     fheroes2::Button buttonMax( minMaxButtonOffset.x, minMaxButtonOffset.y, isEvilInterface ? ICN::UNIFORM_EVIL_MAX_BUTTON : ICN::UNIFORM_GOOD_MAX_BUTTON, 0, 1 );
     fheroes2::Button buttonMin( minMaxButtonOffset.x, minMaxButtonOffset.y, isEvilInterface ? ICN::UNIFORM_EVIL_MIN_BUTTON : ICN::UNIFORM_GOOD_MIN_BUTTON, 0, 1 );
