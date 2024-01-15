@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-13 09:39+0000\n"
+"POT-Creation-Date: 2024-01-14 15:05+0000\n"
 "PO-Revision-Date: 2023-08-26 23:09+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: https://discord.com/"
@@ -1906,7 +1906,8 @@ msgstr "Roland"
 msgid "Archibald"
 msgstr "Archibald"
 
-msgid "The Price of Loyalty"
+#, fuzzy
+msgid "Price of Loyalty"
 msgstr "Cena Lojalności"
 
 msgid "Voyage Home"
@@ -3462,6 +3463,9 @@ msgstr "Typ Mapy:\n"
 
 msgid "The Succession Wars"
 msgstr "Wojna o Sukcesję"
+
+msgid "The Price of Loyalty"
+msgstr "Cena Lojalności"
 
 #, fuzzy
 msgid "Resurrection"

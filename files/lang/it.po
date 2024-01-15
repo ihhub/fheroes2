@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-13 09:39+0000\n"
+"POT-Creation-Date: 2024-01-14 15:05+0000\n"
 "PO-Revision-Date: 2022-12-03 04:36+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <it@li.org>\n"
@@ -1765,7 +1765,7 @@ msgstr "Rolando"
 msgid "Archibald"
 msgstr ""
 
-msgid "The Price of Loyalty"
+msgid "Price of Loyalty"
 msgstr ""
 
 msgid "Voyage Home"
@@ -3331,6 +3331,9 @@ msgid "Map Type:\n"
 msgstr "Tipo di mappa"
 
 msgid "The Succession Wars"
+msgstr ""
+
+msgid "The Price of Loyalty"
 msgstr ""
 
 #, fuzzy

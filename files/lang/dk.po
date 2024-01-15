@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-13 09:39+0000\n"
+"POT-Creation-Date: 2024-01-14 15:05+0000\n"
 "PO-Revision-Date: 2023-09-12 11:08+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
@@ -1932,7 +1932,8 @@ msgstr "Roland"
 msgid "Archibald"
 msgstr "Archibald"
 
-msgid "The Price of Loyalty"
+#, fuzzy
+msgid "Price of Loyalty"
 msgstr "Prisen for Loyalitet"
 
 msgid "Voyage Home"
@@ -3500,6 +3501,9 @@ msgstr "Korttype:\n"
 
 msgid "The Succession Wars"
 msgstr "Arvefølgekrigene"
+
+msgid "The Price of Loyalty"
+msgstr "Prisen for Loyalitet"
 
 #, fuzzy
 msgid "Resurrection"
