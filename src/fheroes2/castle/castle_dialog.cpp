@@ -43,6 +43,7 @@
 #include "game.h"
 #include "game_delays.h"
 #include "game_hotkeys.h"
+#include "game_interface.h"
 #include "gamedefs.h"
 #include "heroes.h"
 #include "heroes_base.h"
@@ -55,7 +56,6 @@
 #include "monster.h"
 #include "mus.h"
 #include "screen.h"
-#include "settings.h"
 #include "statusbar.h"
 #include "tools.h"
 #include "translations.h"
@@ -406,7 +406,7 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
                 result = CastleDialogReturnValue::Close;
 
                 // disable fast scroll for resolutions where the exit button is directly above the border
-                Settings::Get().SetFastScroll( false );
+                Interface::AdventureMap::Get().getGameArea().SetFastScroll( false );
 
                 // Fade-out castle dialog.
                 fheroes2::fadeOutDisplay( dialogRoi, !isDefaultScreenSize );

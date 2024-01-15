@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -116,11 +116,6 @@ public:
         return game_difficulty;
     }
 
-    bool isFastScrollEnabled() const
-    {
-        return fast_scroll_enabled;
-    }
-
     const std::string & getGameLanguage() const
     {
         return _gameLanguage;
@@ -223,11 +218,6 @@ public:
     void SetGameDifficulty( const int difficulty )
     {
         game_difficulty = difficulty;
-    }
-
-    void SetFastScroll( const bool enable )
-    {
-        fast_scroll_enabled = enable;
     }
 
     void SetBattleGrid( bool );
@@ -384,7 +374,6 @@ private:
     int heroes_speed;
     int ai_speed;
     int scroll_speed;
-    bool fast_scroll_enabled = true;
     int battle_speed;
 
     int game_type;

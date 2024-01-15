@@ -1134,7 +1134,7 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
             else if ( isScrollBottom( le.GetMouseCursor() ) )
                 scrollPosition |= SCROLL_BOTTOM;
 
-            if ( scrollPosition != SCROLL_NONE && Settings::Get().isFastScrollEnabled() ) {
+            if ( scrollPosition != SCROLL_NONE && _gameArea.isFastScrollEnabled() ) {
                 if ( Game::validateAnimationDelay( Game::SCROLL_START_DELAY ) ) {
                     if ( fastScrollRepeatCount < fastScrollStartThreshold ) {
                         ++fastScrollRepeatCount;
@@ -1156,7 +1156,7 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
         // re-enable fast scroll once the cursor leaves the border area
         if ( !isScrollLeft( le.GetMouseCursor() ) && !isScrollRight( le.GetMouseCursor() ) && !isScrollTop( le.GetMouseCursor() )
              && !isScrollBottom( le.GetMouseCursor() ) ) {
-            Settings::Get().SetFastScroll( true );
+            _gameArea.SetFastScroll( true );
         }
 
         const bool isHiddenInterface = conf.isHideInterfaceEnabled();
