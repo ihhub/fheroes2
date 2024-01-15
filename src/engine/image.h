@@ -319,5 +319,5 @@ namespace fheroes2
 
     void updateShadow( Image & image, const Point & shadowOffset, const uint8_t transformId, const bool connectCorners );
 
-    void ApplyVerticalGradient( fheroes2::Image & image, uint8_t outsideColor, uint8_t insideColor, uint8_t borderWidth, uint8_t borderColor );
+    void ApplyVerticalGradient( fheroes2::Image & image, const uint8_t outsideColor, const uint8_t insideColor, const uint8_t borderWidth, const uint8_t borderColor );
 }

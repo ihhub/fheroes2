@@ -3106,16 +3106,17 @@ namespace fheroes2
             }
         }
     }
-    void ApplyVerticalGradient( fheroes2::Image & image, uint8_t outsideColor, uint8_t insideColor, uint8_t borderWidth, uint8_t borderColor )
+
+    void ApplyVerticalGradient( fheroes2::Image & image, const uint8_t outsideColor, const uint8_t insideColor, const uint8_t borderWidth, const uint8_t borderColor )
     {
         const int32_t height = image.height();
         const int32_t width = image.width();
         uint8_t * inData = image.image();
         uint8_t * inTransform = image.transform();
 
-        uint8_t center_y = static_cast<uint8_t>( std::max( 1, ( height / 2 ) - height % 2 ) );
+        const uint8_t center_y = static_cast<uint8_t>( std::max( 1, ( height / 2 ) - height % 2 ) );
         // offsetting provides better visibility
-        float scale = ( outsideColor - insideColor ) / static_cast<float>( center_y );
+        const float scale = ( outsideColor - insideColor ) / static_cast<float>( center_y );
 
         // top Half
         for ( uint8_t neg_y = 0; neg_y <= center_y; neg_y++ ) {
@@ -3166,7 +3167,7 @@ namespace fheroes2
             Blit( cnt, image );
         }
 
-        fheroes2::Sprite cnt = CreateContour( image, 0 );
-        Blit( cnt, image );
+        const fheroes2::Sprite contourBlack = CreateContour( image, 0 );
+        Blit( contourBlack, image );
     }
 }

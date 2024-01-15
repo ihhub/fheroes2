@@ -5791,6 +5791,8 @@ namespace fheroes2
         icnVsSprite[ICN::GRAY_FONT].clear();
         icnVsSprite[ICN::GRAY_SMALL_FONT].clear();
         icnVsSprite[ICN::WHITE_LARGE_FONT].clear();
+        icnVsSprite[ICN::GOLDEN_GRADIENT_FONT].clear();
+        icnVsSprite[ICN::GOLDEN_GRADIENT_LARGE_FONT].clear();
     }
 
     bool isAlphabetSupported( const SupportedLanguage language )
