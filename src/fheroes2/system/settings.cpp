@@ -375,8 +375,8 @@ std::string Settings::String() const
     os << std::endl << "# video mode: in-game width x in-game height : on-screen width x on-screen height" << std::endl;
     os << "videomode = " << display.width() << "x" << display.height() << ":" << display.screenSize().width << "x" << display.screenSize().height << std::endl;
 
-    os << std::endl << "# Display Index (defaults to First Display)" << std::endl;
-    os << "display = " << fheroes2::engine().getCurrentDisplayIndex() << std::endl;
+    os << std::endl << "# Display Index" << std::endl;
+    os << "display = " << static_cast<int>(fheroes2::engine().getCurrentDisplayIndex()) << std::endl;
 
     os << std::endl << "# music: original, expansion, external" << std::endl;
     os << "music = " << musicType << std::endl;
