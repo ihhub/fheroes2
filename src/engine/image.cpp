@@ -2289,8 +2289,7 @@ namespace fheroes2
                     }
 
                     if ( transformOutY != nullptr ) {
-                        // 'in' image is single-layer, 'out' image is double-layer (with the transform layer).
-                        // Set 'in' image transform data not to skip image data.
+                        // Set 'out' image transform data not to skip image data.
                         memset( transformOutY, static_cast<uint8_t>( 0 ), width );
 
                         transformOutY += widthOut;
@@ -2332,12 +2331,11 @@ namespace fheroes2
             const uint8_t * imageInY = in.image() + offsetIn + ( height - 1 ) * widthIn;
 
             if ( in.singleLayer() ) {
-                // 'in' image is single-layer, 'out' image is double-layer (with the  transform layer).
                 for ( ; imageOutY != imageOutYEnd; imageOutY += widthOut, imageInY -= widthIn ) {
                     memcpy( imageOutY, imageInY, static_cast<size_t>( width ) );
 
                     if ( transformOutY != nullptr ) {
-                        // Set 'in' image transform data not to skip image data.
+                        // Set 'out' image transform data not to skip image data.
                         memset( transformOutY, static_cast<uint8_t>( 0 ), width );
 
                         transformOutY += widthOut;
