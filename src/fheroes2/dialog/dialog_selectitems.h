@@ -76,6 +76,8 @@ namespace Dialog
     int selectTreeType( const int treeType );
 
     int selectPowerUpObjectType( const int powerUpObjectType );
+
+    int selectAdventureMiscellaneousObjectType( const int objectType );
 }
 
 #endif
