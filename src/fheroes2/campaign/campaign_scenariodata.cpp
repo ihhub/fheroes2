@@ -843,7 +843,7 @@ namespace Campaign
         case Campaign::ARCHIBALD_CAMPAIGN:
             return _( "Archibald" );
         case Campaign::PRICE_OF_LOYALTY_CAMPAIGN:
-            return _( "The Price of Loyalty" );
+            return _( "Price of Loyalty" );
         case Campaign::VOYAGE_HOME_CAMPAIGN:
             return _( "Voyage Home" );
         case Campaign::WIZARDS_ISLE_CAMPAIGN:

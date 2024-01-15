@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-13 09:39+0000\n"
+"POT-Creation-Date: 2024-01-14 15:05+0000\n"
 "PO-Revision-Date: 2024-01-15 20:28+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -1931,7 +1931,7 @@ msgstr "Roland"
 msgid "Archibald"
 msgstr "Archibald"
 
-msgid "The Price of Loyalty"
+msgid "Price of Loyalty"
 msgstr "Price of Loyalty"
 
 msgid "Voyage Home"
@@ -3497,6 +3497,9 @@ msgstr "Type de carte :\n"
 
 msgid "The Succession Wars"
 msgstr "The Succession Wars"
+
+msgid "The Price of Loyalty"
+msgstr "Le prix de la loyauté"
 
 msgid "Resurrection"
 msgstr "Résurrection"

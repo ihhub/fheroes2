@@ -509,7 +509,7 @@ namespace
         }
 
         // Small 1-tile rocks, grass terrain. 4 variants.
-        for ( uint32_t count = 0; count < 4; count++ ) {
+        for ( uint32_t count = 0; count < 4; ++count ) {
             const uint32_t offset = 42U + count * 2U;
             Maps::ObjectInfo object{ MP2::OBJ_ROCK };
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNGRAS, offset + 1U, fheroes2::Point{ 0, 0 }, MP2::OBJ_ROCK, Maps::OBJECT_LAYER );
@@ -552,7 +552,7 @@ namespace
         }
 
         // Small 1-tile rocks, grass terrain. 2 variants.
-        for ( uint32_t count = 0; count < 2; count++ ) {
+        for ( uint32_t count = 0; count < 2; ++count ) {
             const uint32_t offset = 29U + count * 2U;
             Maps::ObjectInfo object{ MP2::OBJ_ROCK };
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSNOW, offset + 1U, fheroes2::Point{ 0, 0 }, MP2::OBJ_ROCK, Maps::OBJECT_LAYER );
@@ -790,7 +790,7 @@ namespace
         }
 
         // Tall rocks, wasteland terrain. 4 variants.
-        for ( uint32_t count = 0; count < 4; count++ ) {
+        for ( uint32_t count = 0; count < 4; ++count ) {
             const uint32_t offset = 44U + count * 3U;
 
             Maps::ObjectInfo object{ MP2::OBJ_ROCK };
@@ -1006,7 +1006,7 @@ namespace
         }
 
         // Dead trees (1-tile), snow terrain. 5 variants.
-        for ( uint32_t count = 0; count < 5; count++ ) {
+        for ( uint32_t count = 0; count < 5; ++count ) {
             const uint32_t offset = 66U + count * 3U;
 
             Maps::ObjectInfo object{ MP2::OBJ_DEAD_TREE };
@@ -1036,7 +1036,7 @@ namespace
         }
 
         // Dead trees (2-tile), swamp terrain. 2 variants.
-        for ( uint32_t count = 0; count < 2; count++ ) {
+        for ( uint32_t count = 0; count < 2; ++count ) {
             const uint32_t offset = 168U + count * 5U;
 
             Maps::ObjectInfo object{ MP2::OBJ_DEAD_TREE };
@@ -1063,7 +1063,7 @@ namespace
         }
 
         // Tall palms, desert terrain. 3 variants.
-        for ( uint32_t count = 0; count < 3; count++ ) {
+        for ( uint32_t count = 0; count < 3; ++count ) {
             const uint32_t offset = 4U + count * 3U;
 
             Maps::ObjectInfo object{ MP2::OBJ_TREES };
@@ -1078,7 +1078,7 @@ namespace
         }
 
         // Small palms, desert terrain. 3 variants.
-        for ( uint32_t count = 0; count < 3; count++ ) {
+        for ( uint32_t count = 0; count < 3; ++count ) {
             const uint32_t offset = 23U + count * 2U;
 
             Maps::ObjectInfo object{ MP2::OBJ_TREES };

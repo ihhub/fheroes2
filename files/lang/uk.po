@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-13 09:39+0000\n"
+"POT-Creation-Date: 2024-01-14 15:05+0000\n"
 "PO-Revision-Date: 2023-09-06 08:41+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -1916,7 +1916,8 @@ msgstr "Роланд"
 msgid "Archibald"
 msgstr "Арчібальд"
 
-msgid "The Price of Loyalty"
+#, fuzzy
+msgid "Price of Loyalty"
 msgstr "Ціна Вірності"
 
 msgid "Voyage Home"
@@ -3402,6 +3403,9 @@ msgstr "Тип мапи:\n"
 
 msgid "The Succession Wars"
 msgstr "Війни за Спадщину"
+
+msgid "The Price of Loyalty"
+msgstr "Ціна Вірності"
 
 #, fuzzy
 msgid "Resurrection"
