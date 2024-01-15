@@ -31,6 +31,7 @@
 #include "interface_buttons.h"
 #include "interface_cpanel.h"
 #include "interface_icons.h"
+#include "interface_status.h"
 #include "players.h"
 
 class Castle;
@@ -103,6 +104,11 @@ namespace Interface
             return controlPanel;
         }
 
+        StatusWindow & getStatusWindow()
+        {
+            return _statusWindow;
+        }
+
         void SetFocus( Heroes *, const bool retainScrollBarPosition );
         void SetFocus( Castle * );
         void ResetFocus( const int priority, const bool retainScrollBarPosition );
@@ -153,16 +159,19 @@ namespace Interface
         static int GetCursorFocusCastle( const Castle & castle, const Maps::Tiles & tile );
         static int GetCursorFocusHeroes( const Heroes & hero, const Maps::Tiles & tile );
         static int GetCursorFocusShipmaster( const Heroes & hero, const Maps::Tiles & tile );
+        static int _getCursorNoFocus( const Maps::Tiles & tile );
         static int GetCursorTileIndex( int32_t dstIndex );
 
         void ShowPathOrStartMoveHero( Heroes * hero, const int32_t destinationIdx );
         void MoveHeroFromArrowKeys( Heroes & hero, const int direction );
+        void _startHeroMove( Heroes & hero );
 
         fheroes2::GameMode HumanTurn( const bool isload );
 
         IconsPanel iconsPanel;
         ButtonsArea buttonsArea;
         ControlPanel controlPanel;
+        StatusWindow _statusWindow;
 
         bool _lockRedraw;
     };

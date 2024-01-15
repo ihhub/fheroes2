@@ -24,6 +24,7 @@
 #include <cassert>
 #include <cstdint>
 #include <memory>
+#include <utility>
 #include <vector>
 
 #include "agg_image.h"
@@ -67,7 +68,10 @@ namespace
         {
             _restorer.restore();
 
-            const fheroes2::Text text( StringUpper( KeySymGetName( _key ) ), fheroes2::FontType::normalYellow() );
+            fheroes2::MultiFontText text;
+            text.add( fheroes2::Text{ _( "Hotkey: " ), fheroes2::FontType::normalYellow() } );
+            text.add( fheroes2::Text{ StringUpper( KeySymGetName( _key ) ), fheroes2::FontType::normalWhite() } );
+
             _restorer.update( offset.x, offset.y, BOXAREA_WIDTH, text.height() );
 
             text.draw( offset.x, offset.y, BOXAREA_WIDTH, output );
@@ -115,16 +119,16 @@ namespace
         mutable bool _keyChanged{ false };
     };
 
-    class HotKeyList : public Interface::ListBox<Game::HotKeyEvent>
+    class HotKeyList : public Interface::ListBox<std::pair<Game::HotKeyEvent, Game::HotKeyCategory>>
     {
     public:
-        using Interface::ListBox<Game::HotKeyEvent>::ListBox;
+        using Interface::ListBox<std::pair<Game::HotKeyEvent, Game::HotKeyCategory>>::ListBox;
 
-        using Interface::ListBox<Game::HotKeyEvent>::ActionListSingleClick;
-        using Interface::ListBox<Game::HotKeyEvent>::ActionListPressRight;
-        using Interface::ListBox<Game::HotKeyEvent>::ActionListDoubleClick;
+        using Interface::ListBox<std::pair<Game::HotKeyEvent, Game::HotKeyCategory>>::ActionListSingleClick;
+        using Interface::ListBox<std::pair<Game::HotKeyEvent, Game::HotKeyCategory>>::ActionListPressRight;
+        using Interface::ListBox<std::pair<Game::HotKeyEvent, Game::HotKeyCategory>>::ActionListDoubleClick;
 
-        void RedrawItem( const Game::HotKeyEvent & hotKeyEvent, int32_t offsetX, int32_t offsetY, bool current ) override
+        void RedrawItem( const std::pair<Game::HotKeyEvent, Game::HotKeyCategory> & hotKeyEvent, int32_t offsetX, int32_t offsetY, bool current ) override
         {
             fheroes2::Display & display = fheroes2::Display::instance();
 
@@ -132,11 +136,11 @@ namespace
 
             offsetY += 2;
 
-            fheroes2::Text name( _( Game::getHotKeyEventNameByEventId( hotKeyEvent ) ), fontType );
+            fheroes2::Text name( _( Game::getHotKeyEventNameByEventId( hotKeyEvent.first ) ), fontType );
             name.fitToOneRow( keyDescriptionLength );
             name.draw( offsetX + 4, offsetY, display );
 
-            fheroes2::Text hotkey( Game::getHotKeyNameByEventId( hotKeyEvent ), fontType );
+            fheroes2::Text hotkey( Game::getHotKeyNameByEventId( hotKeyEvent.first ), fontType );
             hotkey.fitToOneRow( hotKeyLength );
             hotkey.draw( offsetX + keyDescriptionLength + 9, offsetY, hotKeyLength, display );
         }
@@ -156,20 +160,30 @@ namespace
             // Do nothing.
         }
 
-        void ActionListSingleClick( Game::HotKeyEvent & /*unused*/ ) override
+        void ActionListSingleClick( std::pair<Game::HotKeyEvent, Game::HotKeyCategory> & /*unused*/ ) override
         {
             // Do nothing.
         }
 
-        void ActionListPressRight( Game::HotKeyEvent & hotKeyEvent ) override
+        void ActionListPressRight( std::pair<Game::HotKeyEvent, Game::HotKeyCategory> & hotKeyEvent ) override
         {
-            fheroes2::showMessage( fheroes2::Text{ _( Game::getHotKeyEventNameByEventId( hotKeyEvent ) ), fheroes2::FontType::normalWhite() },
-                                   fheroes2::Text{ Game::getHotKeyNameByEventId( hotKeyEvent ), fheroes2::FontType::normalYellow() }, Dialog::ZERO );
+            fheroes2::MultiFontText title;
+
+            title.add( fheroes2::Text{ _( "Category: " ), fheroes2::FontType::normalYellow() } );
+            title.add( fheroes2::Text{ _( Game::getHotKeyCategoryName( hotKeyEvent.second ) ), fheroes2::FontType::normalWhite() } );
+            title.add( fheroes2::Text{ "\n\n", fheroes2::FontType::normalWhite() } );
+            title.add( fheroes2::Text{ _( "Event: " ), fheroes2::FontType::normalYellow() } );
+            title.add( fheroes2::Text{ _( Game::getHotKeyEventNameByEventId( hotKeyEvent.first ) ), fheroes2::FontType::normalWhite() } );
+            title.add( fheroes2::Text{ "\n\n", fheroes2::FontType::normalWhite() } );
+            title.add( fheroes2::Text{ _( "Hotkey: " ), fheroes2::FontType::normalYellow() } );
+            title.add( fheroes2::Text{ Game::getHotKeyNameByEventId( hotKeyEvent.first ), fheroes2::FontType::normalWhite() } );
+
+            fheroes2::showMessage( fheroes2::Text{}, title, Dialog::ZERO );
         }
 
-        void ActionListDoubleClick( Game::HotKeyEvent & hotKeyEvent ) override
+        void ActionListDoubleClick( std::pair<Game::HotKeyEvent, Game::HotKeyCategory> & hotKeyEvent ) override
         {
-            HotKeyElement hotKeyUI( Game::getHotKeyForEvent( hotKeyEvent ), fheroes2::Display::instance() );
+            HotKeyElement hotKeyUI( Game::getHotKeyForEvent( hotKeyEvent.first ), fheroes2::Display::instance() );
 
             // Okay and Cancel events are special cases as they are used in dialogs. By default we need to disable these events to allow to be set any key for an event.
             // Global events (that work on all screens) must be disabled as well.
@@ -183,8 +197,15 @@ namespace
             Game::setHotKeyForEvent( Game::HotKeyEvent::GLOBAL_TOGGLE_FULLSCREEN, fheroes2::Key::NONE );
             Game::setHotKeyForEvent( Game::HotKeyEvent::GLOBAL_TOGGLE_TEXT_SUPPORT_MODE, fheroes2::Key::NONE );
 
-            const int returnValue = fheroes2::showMessage( fheroes2::Text{ _( Game::getHotKeyEventNameByEventId( hotKeyEvent ) ), fheroes2::FontType::normalWhite() },
-                                                           fheroes2::Text{ "", fheroes2::FontType::normalWhite() }, Dialog::OK | Dialog::CANCEL, { &hotKeyUI } );
+            fheroes2::MultiFontText title;
+
+            title.add( fheroes2::Text{ _( "Category: " ), fheroes2::FontType::normalYellow() } );
+            title.add( fheroes2::Text{ _( Game::getHotKeyCategoryName( hotKeyEvent.second ) ), fheroes2::FontType::normalWhite() } );
+            title.add( fheroes2::Text{ "\n\n", fheroes2::FontType::normalWhite() } );
+            title.add( fheroes2::Text{ _( "Event: " ), fheroes2::FontType::normalYellow() } );
+            title.add( fheroes2::Text{ _( Game::getHotKeyEventNameByEventId( hotKeyEvent.first ) ), fheroes2::FontType::normalWhite() } );
+
+            const int returnValue = fheroes2::showMessage( fheroes2::Text{}, title, Dialog::OK | Dialog::CANCEL, { &hotKeyUI } );
 
             Game::setHotKeyForEvent( Game::HotKeyEvent::DEFAULT_OKAY, okayEventKey );
             Game::setHotKeyForEvent( Game::HotKeyEvent::DEFAULT_CANCEL, cancelEventKey );
@@ -198,7 +219,7 @@ namespace
                 return;
             }
 
-            Game::setHotKeyForEvent( hotKeyEvent, hotKeyUI.getKey() );
+            Game::setHotKeyForEvent( hotKeyEvent.first, hotKeyUI.getKey() );
             Game::HotKeySave();
         }
 
@@ -246,50 +267,20 @@ namespace fheroes2
         const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
 
         // Prepare OKAY button and render its shadow.
+        fheroes2::Button buttonOk;
         const int buttonOkIcn = isEvilInterface ? ICN::BUTTON_SMALL_OKAY_EVIL : ICN::BUTTON_SMALL_OKAY_GOOD;
-        const fheroes2::Sprite & buttonOkSprite = fheroes2::AGG::GetICN( buttonOkIcn, 0 );
-        fheroes2::Button buttonOk( roi.x + ( roi.width - buttonOkSprite.width() ) / 2, roi.y + roi.height - 32, buttonOkIcn, 0, 1 );
-        fheroes2::addGradientShadow( buttonOkSprite, display, buttonOk.area().getPosition(), { -5, 5 } );
-        buttonOk.draw();
+        background.renderButton( buttonOk, buttonOkIcn, 0, 1, { 0, 7 }, StandardWindow::Padding::BOTTOM_CENTER );
 
         HotKeyList listbox( roi.getPosition() );
         listbox.initListBackgroundRestorer( listRoi );
         listbox.SetAreaItems( { listRoi.x, listRoi.y + 3, listRoi.width - 3, listRoi.height - 4 } );
 
-        // Render the scrollbar.
-        const fheroes2::Sprite & scrollBar = fheroes2::AGG::GetICN( isEvilInterface ? ICN::ADVBORDE : ICN::ADVBORD, 0 );
         int32_t scrollbarOffsetX = roi.x + roi.width - 35;
+        background.renderScrollbarBackground( { scrollbarOffsetX, listRoi.y, listRoi.width, listRoi.height }, isEvilInterface );
 
-        // Top part of scrollbar background.
         const int32_t topPartHeight = 19;
-        const int32_t scrollBarWidth = 16;
-        fheroes2::Copy( scrollBar, 536, 176, display, scrollbarOffsetX, listRoi.y, scrollBarWidth, topPartHeight );
-
-        // Middle part of scrollbar background.
-        int32_t offsetY = topPartHeight;
-        const int32_t middlePartHeight = 88;
-        const int32_t middlePartCount = ( listRoi.height - 2 * topPartHeight + middlePartHeight - 1 ) / middlePartHeight;
-
-        for ( int32_t i = 0; i < middlePartCount; ++i ) {
-            fheroes2::Copy( scrollBar, 536, 196, display, scrollbarOffsetX, listRoi.y + offsetY, scrollBarWidth,
-                            std::min( middlePartHeight, listRoi.height - offsetY - topPartHeight ) );
-            offsetY += middlePartHeight;
-        }
-
-        // Bottom part of scrollbar background.
-        fheroes2::Copy( scrollBar, 536, 285, display, scrollbarOffsetX, listRoi.y + listRoi.height - topPartHeight, scrollBarWidth, topPartHeight );
-
         const int listIcnId = isEvilInterface ? ICN::SCROLLE : ICN::SCROLL;
-
         ++scrollbarOffsetX;
-
-        // Make scrollbar shadow.
-        for ( uint8_t i = 0; i < 4; ++i ) {
-            const uint8_t transformId = i + 2;
-            const int32_t sizeCorrection = i + 1;
-            fheroes2::ApplyTransform( display, scrollbarOffsetX - transformId, listRoi.y + sizeCorrection, 1, listRoi.height - sizeCorrection, transformId );
-            fheroes2::ApplyTransform( display, scrollbarOffsetX - transformId, listRoi.y + listRoi.height + i, scrollBarWidth, 1, transformId );
-        }
 
         listbox.SetScrollButtonUp( listIcnId, 0, 1, { scrollbarOffsetX, listRoi.y + 1 } );
         listbox.SetScrollButtonDn( listIcnId, 2, 3, { scrollbarOffsetX, listRoi.y + listRoi.height - 15 } );
@@ -297,9 +288,9 @@ namespace fheroes2
         listbox.setScrollBarImage( fheroes2::AGG::GetICN( listIcnId, 4 ) );
         listbox.SetAreaMaxItems( ( listRoi.height - 7 ) / fheroes2::getFontHeight( fheroes2::FontSize::NORMAL ) );
 
-        std::vector<Game::HotKeyEvent> hoKeyEvents = Game::getAllHotKeyEvents();
+        std::vector<std::pair<Game::HotKeyEvent, Game::HotKeyCategory>> hotKeyEvents = Game::getAllHotKeyEvents();
 
-        listbox.SetListContent( hoKeyEvents );
+        listbox.SetListContent( hotKeyEvents );
         listbox.updateScrollBarImage();
         listbox.Redraw();
 

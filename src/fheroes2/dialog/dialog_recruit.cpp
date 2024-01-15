@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -45,7 +45,6 @@
 #include "math_base.h"
 #include "monster.h"
 #include "pal.h"
-#include "payment.h"
 #include "resource.h"
 #include "screen.h"
 #include "settings.h"
@@ -95,7 +94,7 @@ namespace
     }
 }
 
-void RedrawCurrentInfo( const fheroes2::Point & pos, const uint32_t result, const payment_t & paymentMonster, const payment_t & paymentCosts, const Funds & funds,
+void RedrawCurrentInfo( const fheroes2::Point & pos, const uint32_t result, const Funds & paymentMonster, const Funds & paymentCosts, const Funds & funds,
                         const std::string & label, const fheroes2::Image & background = {} )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
@@ -157,7 +156,7 @@ void RedrawResourceInfo( const int resourceIcnIndex, const fheroes2::Point & pos
 void RedrawMonsterInfo( const fheroes2::Rect & pos, const Monster & monster, const uint32_t available, const bool showTotalSum )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
-    const payment_t paymentMonster = monster.GetCost();
+    const Funds paymentMonster = monster.GetCost();
     const bool needExtraResources = 2 == paymentMonster.GetValidItemsCount();
 
     // Recruit monster text.
@@ -262,13 +261,13 @@ Troop Dialog::RecruitMonster( const Monster & monster0, const uint32_t available
 
     // Calculate max count.
     Monster monster = monster0;
-    payment_t paymentMonster = monster.GetCost();
+    Funds paymentMonster = monster.GetCost();
     const Kingdom & kingdom = world.GetKingdom( Settings::Get().CurrentColor() );
 
     uint32_t max = CalculateMax( monster, kingdom, available );
     uint32_t result = max;
 
-    payment_t paymentCosts( paymentMonster * result );
+    Funds paymentCosts( paymentMonster * result );
 
     const fheroes2::Size windowSize{ 299, 272 };
     const fheroes2::Point dialogOffset( ( display.width() - windowSize.width ) / 2, ( display.height() - windowSize.height ) / 2 + windowOffsetY );
@@ -298,16 +297,17 @@ Troop Dialog::RecruitMonster( const Monster & monster0, const uint32_t available
     drawCostPerTroopFrame( display, dst_pt );
 
     // Prepare buttons.
-    dst_pt.x = dialogOffset.x + 18;
+    const int32_t backgroundMargin = 18;
+    dst_pt.x = dialogOffset.x + backgroundMargin;
     dst_pt.y = dialogOffset.y + 233;
 
     int buttonId = isEvilInterface ? ICN::BUTTON_SMALL_OKAY_EVIL : ICN::BUTTON_SMALL_OKAY_GOOD;
     fheroes2::Button buttonOk( dst_pt.x, dst_pt.y, buttonId, 0, 1 );
     drawButtonShadow( display, buttonId, 0, dst_pt );
 
-    dst_pt.x = dialogOffset.x + 181;
-
     buttonId = isEvilInterface ? ICN::BUTTON_SMALL_CANCEL_EVIL : ICN::BUTTON_SMALL_CANCEL_GOOD;
+    const int32_t buttonCancelWidth = fheroes2::AGG ::GetICN( buttonId, 0 ).width();
+    dst_pt.x = dialogOffset.x + windowSize.width - backgroundMargin - buttonCancelWidth;
     fheroes2::Button buttonCancel( dst_pt.x, dst_pt.y, buttonId, 0, 1 );
     drawButtonShadow( display, buttonId, 0, dst_pt );
 
@@ -505,6 +505,15 @@ Troop Dialog::RecruitMonster( const Monster & monster0, const uint32_t available
             fheroes2::Copy( background, 0, 0, display, dialogOffset.x, dialogOffset.y, windowSize.width, windowSize.height );
 
             max = CalculateMax( monster, kingdom, available );
+
+            if ( max == 0 ) {
+                buttonMin.disable();
+                buttonMax.disable();
+            }
+            else if ( !buttonMax.isEnabled() && !buttonMin.isEnabled() ) {
+                buttonMin.enable();
+            }
+
             result = max;
             paymentMonster = monster.GetCost();
             paymentCosts = paymentMonster * result;

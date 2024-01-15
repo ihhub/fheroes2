@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2023                                             *
+ *   Copyright (C) 2020 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -126,6 +126,14 @@ namespace
             // center of the empty button.
             releasedOffset = { 5, 52 };
             pressedOffset = { 4, 53 };
+            break;
+        case ICN::EMPTY_MAP_SELECT_BUTTON:
+            font = fheroes2::FontColor::WHITE;
+            textMargin = 2 + 2;
+            minimumTextAreaWidth = 60;
+            backgroundBorders = 6 + 3;
+            releasedOffset = { 6, 3 };
+            pressedOffset = { 5, 4 };
             break;
         default:
             // Was a new empty button template added?
@@ -282,6 +290,12 @@ namespace fheroes2
     void Button::setICNInfo( int icnId, uint32_t releasedIndex, uint32_t pressedIndex )
     {
         _icnId = icnId;
+        _releasedIndex = releasedIndex;
+        _pressedIndex = pressedIndex;
+    }
+
+    void Button::setICNIndexes( const uint32_t releasedIndex, const uint32_t pressedIndex )
+    {
         _releasedIndex = releasedIndex;
         _pressedIndex = pressedIndex;
     }
@@ -459,22 +473,27 @@ namespace fheroes2
         return Dialog::ZERO;
     }
 
-    ButtonRestorer::ButtonRestorer( ButtonBase & button, Image & area )
+    ButtonRestorer::ButtonRestorer( ButtonBase & button )
         : _button( button )
-        , _area( area )
-        , _isDisabled( button.isDisabled() )
+        , _isEnabled( button.isEnabled() )
     {
-        if ( !_isDisabled ) {
+        if ( _isEnabled ) {
+            Display & display = Display::instance();
+
             _button.disable();
-            _button.draw( _area );
+            _button.draw( display );
+            display.render( _button.area() );
         }
     }
 
     ButtonRestorer::~ButtonRestorer()
     {
-        if ( !_isDisabled ) {
+        if ( _isEnabled ) {
+            Display & display = Display::instance();
+
             _button.enable();
-            _button.draw( _area );
+            _button.draw( display );
+            display.render( _button.area() );
         }
     }
 

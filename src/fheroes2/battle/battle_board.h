@@ -65,15 +65,12 @@ namespace Battle
 
         Board & operator=( const Board & ) = delete;
 
-        void Reset();
+        void removeDeadUnits();
 
         void SetArea( const fheroes2::Rect & );
 
         int32_t GetIndexAbsPosition( const fheroes2::Point & ) const;
         std::vector<Unit *> GetNearestTroops( const Unit * startUnit, const std::vector<Unit *> & blackList );
-
-        void SetEnemyQuality( const Unit & ) const;
-        void SetPositionQuality( const Unit & ) const;
 
         void SetCobjObjects( const Maps::Tiles & tile, std::mt19937 & gen );
         void SetCovrObjects( int icn );
@@ -81,18 +78,21 @@ namespace Battle
         static std::string GetMoatInfo();
 
         static Cell * GetCell( const int32_t position, const int dir = CENTER );
+
         static bool isNearIndexes( const int32_t index1, const int32_t index2 );
         static bool isValidIndex( const int32_t index );
+        // Returns true if the given index is considered to be inside the castle from the point of view of castle defense,
+        // otherwise returns false. Indexes of destructible walls are considered to be located inside the castle.
         static bool isCastleIndex( const int32_t index );
         static bool isMoatIndex( const int32_t index, const Unit & unit );
         static bool isOutOfWallsIndex( const int32_t index );
-        static bool isNegativeDistance( const int32_t index1, const int32_t index2 );
-        static int DistanceFromOriginX( const int32_t index, const bool reflect );
+
         static int GetReflectDirection( const int dir );
         static int GetDirection( const int32_t index1, const int32_t index2 );
-        static int32_t DoubleCellAttackValue( const Unit & attacker, const Unit & target, const int32_t from, const int32_t targetCell );
-        static int32_t OptimalAttackTarget( const Unit & attacker, const Unit & target, const int32_t from );
-        static int32_t OptimalAttackValue( const Unit & attacker, const Unit & target, const int32_t from );
+
+        // Returns the distance to the cell with the given index from the given edge of the battlefield along the X axis. The
+        // distance from the edges of the battlefield to the cells closest to them is counted as one.
+        static uint32_t GetDistanceFromBoardEdgeAlongXAxis( const int32_t index, const bool fromRightEdge );
 
         // Returns the distance between two cells with the given indexes. If any of the indexes is not valid, then returns 0.
         static uint32_t GetDistance( const int32_t index1, const int32_t index2 );
@@ -101,21 +101,35 @@ namespace Battle
         // both positions closest to each other. If any of the positions is not valid, then returns 0.
         static uint32_t GetDistance( const Position & pos1, const Position & pos2 );
 
+        // Returns the distance between the given position and the cell with the given index. The distance is calculated as
+        // the distance between the cell with the given index and the cell closest to it, which is part of the given position.
+        // If either the position or the index is not valid, then returns 0.
+        static uint32_t GetDistance( const Position & pos, const int32_t index );
+
         static bool isValidDirection( const int32_t index, const int dir );
         static int32_t GetIndexDirection( const int32_t index, const int dir );
+
         static Indexes GetDistanceIndexes( const int32_t center, const uint32_t radius );
+        static Indexes GetDistanceIndexes( const Unit & unit, const uint32_t radius );
+        static Indexes GetDistanceIndexes( const Position & pos, const uint32_t radius );
+
         static Indexes GetAroundIndexes( const int32_t center );
         static Indexes GetAroundIndexes( const Unit & unit );
-        static Indexes GetAroundIndexes( const Position & position );
+        static Indexes GetAroundIndexes( const Position & pos );
+
         static Indexes GetMoveWideIndexes( const int32_t head, const bool reflect );
+
         static bool isValidMirrorImageIndex( const int32_t index, const Unit * unit );
 
-        // Checks whether a given unit is (in principle) capable of attacking during the current turn from a cell with a given index
+        // Checks whether a given unit is (in principle) capable of attacking in melee during the current turn from a cell with
+        // a given index
         static bool CanAttackFromCell( const Unit & unit, const int32_t from );
-        // Checks whether this attacker is able to attack the target during the current turn from a position corresponding to a given index
+        // Checks whether the attacker is able to attack the target in melee during the current turn from a position corresponding
+        // to the given index
         static bool CanAttackTargetFromPosition( const Unit & attacker, const Unit & target, const int32_t dst );
 
-        static Indexes GetAdjacentEnemies( const Unit & unit );
+        // Returns the indexes of the cells closest to the given unit occupied by enemies
+        static Indexes GetAdjacentEnemiesIndexes( const Unit & unit );
 
     private:
         void SetCobjObject( const int icn, const uint32_t dst );

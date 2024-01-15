@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -43,7 +43,9 @@
 #include "heroes.h"
 #include "kingdom.h"
 #include "logging.h"
+#include "map_format_info.h"
 #include "maps.h"
+#include "maps_fileinfo.h"
 #include "maps_objects.h"
 #include "maps_tiles.h"
 #include "maps_tiles_helper.h"
@@ -118,7 +120,7 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
 
     StreamFile fs;
     if ( !fs.open( filename, "rb" ) ) {
-        DEBUG_LOG( DBG_GAME, DBG_WARN, "Map file not found " << filename.c_str() )
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "Map file not found " << filename )
         return false;
     }
 
@@ -130,7 +132,7 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
 
     const size_t totalFileSize = fs.size();
     if ( totalFileSize < MP2::MP2_MAP_INFO_SIZE ) {
-        DEBUG_LOG( DBG_GAME, DBG_WARN, "Map file " << filename.c_str() << " is corrupted" )
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "Map file " << filename << " is corrupted" )
         return false;
     }
 
@@ -180,7 +182,7 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
     const int32_t worldSize = width * height;
 
     if ( totalFileSize < MP2::MP2_MAP_INFO_SIZE + static_cast<size_t>( worldSize ) * MP2::MP2_TILE_STRUCTURE_SIZE + MP2::MP2_ADDON_COUNT_SIZE ) {
-        DEBUG_LOG( DBG_GAME, DBG_WARN, "Map file " << filename.c_str() << " is corrupted" )
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "Map file " << filename << " is corrupted" )
         return false;
     }
 
@@ -193,7 +195,7 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
 
     if ( totalFileSize < MP2::MP2_MAP_INFO_SIZE + static_cast<size_t>( worldSize ) * MP2::MP2_TILE_STRUCTURE_SIZE + addonCount * MP2::MP2_ADDON_STRUCTURE_SIZE
                              + MP2::MP2_ADDON_COUNT_SIZE ) {
-        DEBUG_LOG( DBG_GAME, DBG_WARN, "Map file " << filename.c_str() << " is corrupted" )
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "Map file " << filename << " is corrupted" )
         return false;
     }
 
@@ -214,7 +216,7 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
 
     const bool checkPoLObjects = !Settings::Get().isPriceOfLoyaltySupported() && isOriginalMp2File;
 
-    MapsIndexes vec_object; // index maps for OBJ_CASTLE, OBJ_HEROES, OBJ_SIGN, OBJ_BOTTLE, OBJ_EVENT
+    MapsIndexes vec_object; // index maps for OBJ_CASTLE, OBJ_HERO, OBJ_SIGN, OBJ_BOTTLE, OBJ_EVENT
     vec_object.reserve( 128 );
 
     for ( int32_t i = 0; i < worldSize; ++i ) {
@@ -274,7 +276,7 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
     fs.seek( afterAddonInfoPos );
 
     if ( totalFileSize < afterAddonInfoPos + static_cast<size_t>( MP2::MP2_CASTLE_COUNT * MP2::MP2_CASTLE_POSITION_SIZE ) ) {
-        DEBUG_LOG( DBG_GAME, DBG_WARN, "Map file " << filename.c_str() << " is corrupted" )
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "Map file " << filename << " is corrupted" )
         return false;
     }
 
@@ -336,7 +338,7 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
     if ( totalFileSize
          < afterAddonInfoPos
                + static_cast<size_t>( MP2::MP2_CASTLE_COUNT * MP2::MP2_CASTLE_POSITION_SIZE + MP2::MP2_CAPTURE_OBJECT_COUNT * MP2::MP2_CAPTURE_OBJECT_POSITION_SIZE ) ) {
-        DEBUG_LOG( DBG_GAME, DBG_WARN, "Map file " << filename.c_str() << " is corrupted" )
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "Map file " << filename << " is corrupted" )
         return false;
     }
 
@@ -364,7 +366,7 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
         case 0x05: // Gems mine.
         case 0x06: // Gold mine.
             // TODO: should we verify the mine type by something?
-            map_captureobj.Set( Maps::GetIndexFromAbsPoint( posX, posY ), MP2::OBJ_MINES, Color::NONE );
+            map_captureobj.Set( Maps::GetIndexFromAbsPoint( posX, posY ), MP2::OBJ_MINE, Color::NONE );
             break;
         case 0x64:
             map_captureobj.Set( Maps::GetIndexFromAbsPoint( posX, posY ), MP2::OBJ_LIGHTHOUSE, Color::NONE );
@@ -401,7 +403,7 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
         const uint32_t h = fs.get();
 
         if ( fs.tell() == fs.size() ) {
-            DEBUG_LOG( DBG_GAME, DBG_WARN, "Map file " << filename.c_str() << " is corrupted" )
+            DEBUG_LOG( DBG_GAME, DBG_WARN, "Map file " << filename << " is corrupted" )
             return false;
         }
 
@@ -517,8 +519,9 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
 
                     // Byte 17 determines whether the hero has a custom portrait, and byte 18 contains the custom portrait ID. If the hero has a custom portrait, then we
                     // should directly use the hero corresponding to this portrait, if possible.
-                    if ( pblock[17] && pblock[18] <= Heroes::JARKONAS ) {
-                        hero = vec_heroes.Get( pblock[18] );
+                    // MP2 format stores hero IDs start from 0, while fheroes2 engine starts from 1.
+                    if ( pblock[17] && pblock[18] + 1 <= Heroes::JARKONAS ) {
+                        hero = vec_heroes.Get( pblock[18] + 1 );
                     }
 
                     if ( !hero || !hero->isAvailableForHire() ) {
@@ -533,7 +536,7 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
                     }
                 }
                 break;
-            case MP2::OBJ_HEROES:
+            case MP2::OBJ_HERO:
                 if ( MP2::MP2_HEROES_STRUCTURE_SIZE != pblock.size() ) {
                     DEBUG_LOG( DBG_GAME, DBG_WARN,
                                "read heroes: "
@@ -553,8 +556,9 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
 
                         // Byte 17 determines whether the hero has a custom portrait, and byte 18 contains the custom portrait ID. If the hero has a custom portrait, then
                         // we should directly use the hero corresponding to this portrait, if possible.
-                        if ( pblock[17] && pblock[18] <= Heroes::JARKONAS ) {
-                            hero = vec_heroes.Get( pblock[18] );
+                        // MP2 format stores hero IDs start from 0, while fheroes2 engine starts from 1.
+                        if ( pblock[17] && pblock[18] + 1 <= Heroes::JARKONAS ) {
+                            hero = vec_heroes.Get( pblock[18] + 1 );
                         }
 
                         if ( !hero || !hero->isAvailableForHire() ) {
@@ -642,19 +646,34 @@ bool World::LoadMapMP2( const std::string & filename, const bool isOriginalMp2Fi
     // clear artifact flags to correctly generate random artifacts
     fheroes2::ResetArtifactStats();
 
-    const Settings & conf = Settings::Get();
+    const Maps::FileInfo & mapInfo = Settings::Get().getCurrentMapInfo();
 
     // do not let the player get a random artifact that allows him to win the game
-    if ( ( conf.ConditionWins() & GameOver::WINS_ARTIFACT ) == GameOver::WINS_ARTIFACT && !conf.WinsFindUltimateArtifact() ) {
-        fheroes2::ExcludeArtifactFromRandom( conf.WinsFindArtifactID() );
+    if ( ( mapInfo.ConditionWins() & GameOver::WINS_ARTIFACT ) == GameOver::WINS_ARTIFACT && !mapInfo.WinsFindUltimateArtifact() ) {
+        fheroes2::ExcludeArtifactFromRandom( mapInfo.WinsFindArtifactID() );
     }
 
     if ( !ProcessNewMap( filename, checkPoLObjects ) ) {
         return false;
     }
 
-    DEBUG_LOG( DBG_GAME, DBG_INFO, "end load" )
+    DEBUG_LOG( DBG_GAME, DBG_INFO, "Loading of MP2 map is completed." )
     return true;
+}
+
+bool World::loadResurrectionMap( const std::string & filename )
+{
+    Reset();
+    Defaults();
+
+    Maps::Map_Format::MapFormat map;
+    if ( !Maps::Map_Format::loadMap( filename, map ) ) {
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "Map file '" << filename << "' is corrupted or missing." )
+        return false;
+    }
+
+    // TODO: return true once we add logic for loading an entire map.
+    return false;
 }
 
 bool World::ProcessNewMap( const std::string & filename, const bool checkPoLObjects )
@@ -675,18 +694,32 @@ bool World::ProcessNewMap( const std::string & filename, const bool checkPoLObje
     // add castles to kingdoms
     vec_kingdoms.AddCastles( vec_castles );
 
-    const Settings & conf = Settings::Get();
+    const Maps::FileInfo & mapInfo = Settings::Get().getCurrentMapInfo();
 
     // update wins, loss conditions
-    if ( GameOver::WINS_HERO & conf.ConditionWins() ) {
-        const Heroes * hero = GetHeroes( conf.WinsMapsPositionObject() );
-        heroes_cond_wins = hero ? hero->GetID() : Heroes::UNKNOWN;
-    }
-    if ( GameOver::LOSS_HERO & conf.ConditionLoss() ) {
-        Heroes * hero = GetHeroes( conf.LossMapsPositionObject() );
-        heroes_cond_loss = hero ? hero->GetID() : Heroes::UNKNOWN;
+    if ( GameOver::WINS_HERO & mapInfo.ConditionWins() ) {
+        const fheroes2::Point & pos = mapInfo.WinsMapsPositionObject();
 
-        if ( hero ) {
+        const Heroes * hero = GetHeroes( pos );
+        if ( hero == nullptr ) {
+            heroes_cond_wins = Heroes::UNKNOWN;
+            ERROR_LOG( "A winning condition hero at location ['" << pos.x << ", " << pos.y << "'] is not found." )
+        }
+        else {
+            heroes_cond_wins = hero->GetID();
+        }
+    }
+
+    if ( GameOver::LOSS_HERO & mapInfo.ConditionLoss() ) {
+        const fheroes2::Point & pos = mapInfo.LossMapsPositionObject();
+
+        Heroes * hero = GetHeroes( pos );
+        if ( hero == nullptr ) {
+            heroes_cond_loss = Heroes::UNKNOWN;
+            ERROR_LOG( "A loosing condition hero at location ['" << pos.x << ", " << pos.y << "'] is not found." )
+        }
+        else {
+            heroes_cond_loss = hero->GetID();
             hero->SetModes( Heroes::NOTDISMISS | Heroes::CUSTOM );
         }
     }
@@ -825,7 +858,7 @@ bool World::updateTileMetadata( Maps::Tiles & tile, const MP2::MapObjectType obj
     case MP2::OBJ_HALFLING_HOLE:
     case MP2::OBJ_LEAN_TO:
     case MP2::OBJ_MAGIC_GARDEN:
-    case MP2::OBJ_MINES:
+    case MP2::OBJ_MINE:
     case MP2::OBJ_MONSTER:
     case MP2::OBJ_PEASANT_HUT:
     case MP2::OBJ_PYRAMID:
@@ -879,7 +912,7 @@ bool World::updateTileMetadata( Maps::Tiles & tile, const MP2::MapObjectType obj
         // We need information from an Ultimate artifact for later use. We will reset metadata later.
         break;
 
-    case MP2::OBJ_HEROES: {
+    case MP2::OBJ_HERO: {
         // remove map editor sprite
         if ( tile.getObjectIcnType() == MP2::OBJ_ICN_TYPE_MINIHERO )
             tile.Remove( tile.GetObjectUID() );

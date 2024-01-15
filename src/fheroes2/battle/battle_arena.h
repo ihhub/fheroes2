@@ -33,6 +33,7 @@
 
 #include "battle.h"
 #include "battle_board.h"
+#include "battle_cell.h"
 #include "battle_command.h"
 #include "battle_grave.h"
 #include "battle_pathfinding.h"
@@ -55,7 +56,6 @@ namespace Battle
     class Bridge;
     class Catapult;
     class Force;
-    class Position;
     class Units;
     class Unit;
     class Interface;
@@ -171,12 +171,26 @@ namespace Battle
             return _battlePathfinder.getAllAvailableMoves( unit );
         }
 
+        // Returns the position on the path for the given unit to the given position, which is reachable on the current
+        // turn and is as close as possible to the destination (excluding the current position of the unit). If the given
+        // position is unreachable by the given unit, then an empty Position object is returned.
+        Position getClosestReachablePosition( const Unit & unit, const Position & position )
+        {
+            return _battlePathfinder.getClosestReachablePosition( unit, position );
+        }
+
         void ApplyAction( Command & );
 
-        TargetsInfo GetTargetsForSpells( const HeroBase * hero, const Spell & spell, int32_t dest, bool * playResistSound = nullptr );
+        // Returns a list of targets that will be affected by the given spell casted by the given hero and applied
+        // to a cell with a given index. This method can be used by external code to evaluate the applicability of
+        // a spell, and does not use probabilistic mechanisms to determine units resisting the given spell.
+        TargetsInfo GetTargetsForSpell( const HeroBase * hero, const Spell & spell, const int32_t dst )
+        {
+            return GetTargetsForSpell( hero, spell, dst, false, nullptr );
+        }
 
         bool isSpellcastDisabled() const;
-        bool isDisableCastSpell( const Spell &, std::string * msg = nullptr );
+        bool isDisableCastSpell( const Spell & spell, std::string * msg = nullptr ) const;
 
         bool GraveyardAllowResurrect( const int32_t index, const Spell & spell ) const;
         const Unit * GraveyardLastTroop( const int32_t index ) const;
@@ -186,12 +200,6 @@ namespace Battle
         bool CanSurrenderOpponent( int color ) const;
         bool CanRetreatOpponent( int color ) const;
 
-        void ApplyActionSpellSummonElemental( const Command &, const Spell & );
-        void ApplyActionSpellMirrorImage( Command & );
-        void ApplyActionSpellTeleport( Command & );
-        void ApplyActionSpellEarthQuake( const Command & );
-        void ApplyActionSpellDefaults( Command &, const Spell & );
-
         bool IsShootingPenalty( const Unit &, const Unit & ) const;
 
         int GetICNCovr() const
@@ -199,11 +207,9 @@ namespace Battle
             return icn_covr;
         }
 
-        uint32_t GetCastleTargetValue( int ) const;
+        uint32_t GetCastleTargetValue( const CastleDefenseElement target ) const;
 
         int32_t GetFreePositionNearHero( const int heroColor ) const;
-
-        const Rand::DeterministicRandomGenerator & GetRandomGenerator() const;
 
         static Board * GetBoard();
         static Tower * GetTower( const TowerType type );
@@ -234,37 +240,49 @@ namespace Battle
         void TurnTroop( Unit * troop, const Units & orderHistory );
         void TowerAction( const Tower & );
 
-        void SetCastleTargetValue( int, uint32_t );
+        void SetCastleTargetValue( const CastleDefenseElement target, const uint32_t value );
         void CatapultAction();
 
         TargetsInfo GetTargetsForDamage( const Unit & attacker, Unit & defender, const int32_t dst, const int dir ) const;
+        TargetsInfo GetTargetsForSpell( const HeroBase * hero, const Spell & spell, const int32_t dst, bool applyRandomMagicResistance, bool * playResistSound );
 
         static void TargetsApplyDamage( Unit & attacker, TargetsInfo & targets, uint32_t & resurrected );
         static void TargetsApplySpell( const HeroBase * hero, const Spell & spell, TargetsInfo & targets );
 
-        std::vector<int> GetCastleTargets() const;
-        TargetsInfo TargetsForChainLightning( const HeroBase * hero, int32_t attackedTroopIndex );
-        std::vector<Unit *> FindChainLightningTargetIndexes( const HeroBase * hero, Unit * firstUnit );
+        TargetsInfo TargetsForChainLightning( const HeroBase * hero, const int32_t attackedTroopIndex, const bool applyRandomMagicResistance );
+        std::vector<Unit *> FindChainLightningTargetIndexes( const HeroBase * hero, Unit * firstUnit, const bool applyRandomMagicResistance );
 
-        void ApplyActionRetreat( const Command & );
-        void ApplyActionSurrender( const Command & );
-        void ApplyActionAttack( Command & );
-        void ApplyActionMove( Command & );
-        void ApplyActionEnd( Command & );
-        void ApplyActionSkip( Command & );
-        void ApplyActionMorale( Command & );
-        void ApplyActionSpellCast( Command & );
-        void ApplyActionTower( Command & );
-        void ApplyActionCatapult( Command & );
+        std::vector<CastleDefenseElement> GetEarthQuakeTargets() const;
+
+        void ApplyActionRetreat( const Command & cmd );
+        void ApplyActionSurrender( const Command & cmd );
+        void ApplyActionAttack( Command & cmd );
+        void ApplyActionMove( Command & cmd );
+        void ApplyActionSkip( Command & cmd );
+        void ApplyActionMorale( Command & cmd );
+        void ApplyActionSpellCast( Command & cmd );
+        void ApplyActionTower( Command & cmd );
+        void ApplyActionCatapult( Command & cmd );
         void ApplyActionAutoSwitch( Command & cmd );
         void ApplyActionAutoFinish( const Command & cmd );
 
+        void ApplyActionSpellSummonElemental( const Command & cmd, const Spell & spell );
+        void ApplyActionSpellMirrorImage( Command & cmd );
+        void ApplyActionSpellTeleport( Command & cmd );
+        void ApplyActionSpellEarthQuake( const Command & cmd );
+        void ApplyActionSpellDefaults( Command & cmd, const Spell & spell );
+
+        // Moves the given unit to a position where the index of the head cell is equal to 'dst'. If 'dst' is -1,
+        // then this method does nothing. Otherwise, it's the caller's responsibility to make sure that this position
+        // is reachable for the given unit on the current turn before calling this method.
+        void moveUnit( Unit * unit, const int32_t dst );
+
         // Performs an actual attack of one unit (defender) by another unit (attacker), applying the attacker's
-        // built-in magic, if necessary. If the specified index of the target cell of the attack (dst) is negative,
+        // built-in magic, if necessary. If the specified index of the target cell of the attack (tgt) is negative,
         // then an attempt will be made to calculate it automatically based on the adjacency of the unit cells. If
         // the specified direction of the attack (dir) is negative, then an attempt will be made to calculate it
         // automatically. When an attack is made by firing a shot, the dir should be UNKNOWN (zero).
-        void BattleProcess( Unit & attacker, Unit & defender, int32_t dst = -1, int dir = -1 );
+        void BattleProcess( Unit & attacker, Unit & defender, int32_t tgt = -1, int dir = -1 );
 
         // Creates and returns a fully combat-ready elemental, which will be already placed on the board. It's
         // the caller's responsibility to make sure that a given spell is capable of creating an elemental
@@ -306,6 +324,11 @@ namespace Battle
         // A set of colors of players for whom the auto-battle mode is enabled
         int _autoBattleColors;
 
+        // This random number generator should only be used in code that is equally used by both AI and the human
+        // player - that is, in code related to the processing of battle commands. It cannot be safely used in other
+        // places (for example, in code that performs situation assessment or AI decision-making) because in this
+        // case the battles performed by AI will not be reproducible by a human player when performing exactly the
+        // same actions.
         Rand::DeterministicRandomGenerator & _randomGenerator;
 
         TroopsUidGenerator _uidGenerator;

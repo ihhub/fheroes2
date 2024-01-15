@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -26,6 +26,7 @@
 
 #include <cstddef>
 #include <cstdint>
+#include <optional>
 #include <string>
 #include <utility>
 #include <vector>
@@ -35,8 +36,8 @@
 #include "battle_cell.h"
 #include "bitmodes.h"
 #include "math_base.h"
-#include "payment.h"
 #include "players.h"
+#include "resource.h"
 
 class Spell;
 class HeroBase;
@@ -74,7 +75,7 @@ namespace Battle
     class Unit : public ArmyTroop, public BitModes, public Control
     {
     public:
-        Unit( const Troop & t, const Position & pos, const bool ref, const Rand::DeterministicRandomGenerator & randomGenerator, const uint32_t uid );
+        Unit( const Troop & t, const Position & pos, const bool ref, const uint32_t uid );
         Unit( const Unit & ) = delete;
 
         Unit & operator=( const Unit & ) = delete;
@@ -99,8 +100,8 @@ namespace Battle
             mirror = ptr;
         }
 
-        void SetRandomMorale();
-        void SetRandomLuck();
+        void SetRandomMorale( Rand::DeterministicRandomGenerator & randomGenerator );
+        void SetRandomLuck( Rand::DeterministicRandomGenerator & randomGenerator );
         void NewTurn();
 
         bool isFlying() const;
@@ -116,8 +117,7 @@ namespace Battle
         }
 
         bool isHaveDamage() const;
-
-        bool OutOfWalls() const;
+        bool isOutOfCastleWalls() const;
 
         std::string String( bool more = false ) const;
 
@@ -162,17 +162,28 @@ namespace Battle
         int GetControl() const override;
         int GetCurrentControl() const;
 
+        // Returns the current speed of the unit, optionally performing additional checks in accordance
+        // with the call arguments. If 'skipStandingCheck' is set to false, then the method returns
+        // Speed::STANDING if the unit is immovable due to spells cast on it or if this unit is dead
+        // (contains 0 fighters). Additionally, if 'skipMovedCheck' is set to false, then this method
+        // returns Speed::STANDING if the unit has already completed its turn. If 'skipStandingCheck'
+        // is set to true, then the value of 'skipMovedCheck' doesn't matter.
         uint32_t GetSpeed( const bool skipStandingCheck, const bool skipMovedCheck ) const;
 
-        uint32_t GetDamage( const Unit & ) const;
+        uint32_t GetDamage( const Unit & enemy, Rand::DeterministicRandomGenerator & randomGenerator ) const;
 
-        int32_t GetScoreQuality( const Unit & ) const;
+        // Returns the threat level of this unit, calculated as if it attacked the 'defender' unit.
+        // If 'defenderPos' is set, then it will be used as the 'defender' unit's position, otherwise
+        // the actual position of this unit will be used. See the implementation for details.
+        int32_t evaluateThreatForUnit( const Unit & defender, const std::optional<Position> defenderPos = {} ) const;
 
         uint32_t GetInitialCount() const;
         uint32_t GetDead() const;
         uint32_t GetHitPoints() const;
 
-        payment_t GetSurrenderCost() const;
+        // Returns the cost of this unit, suitable for calculating the cost of surrendering the army (see
+        // the implementation for details). Discounts are not applied when calculating this cost.
+        Funds GetSurrenderCost() const;
 
         uint32_t GetShots() const override
         {
@@ -192,8 +203,8 @@ namespace Battle
         // in similar circumstances.
         uint32_t EstimateRetaliatoryDamage( const uint32_t damageTaken ) const;
 
-        bool ApplySpell( const Spell &, const HeroBase * hero, TargetInfo & );
-        bool AllowApplySpell( const Spell &, const HeroBase * hero, std::string * msg = nullptr, bool forceApplyToAlly = false ) const;
+        bool ApplySpell( const Spell & spell, const HeroBase * applyingHero, TargetInfo & target );
+        bool AllowApplySpell( const Spell & spell, const HeroBase * applyingHero, const bool forceApplyToAlly = false ) const;
         bool isUnderSpellEffect( const Spell & spell ) const;
         std::vector<Spell> getCurrentSpellEffects() const;
 
@@ -202,7 +213,8 @@ namespace Battle
         // Sets whether a unit performs a retaliatory attack while being blinded (i.e. with reduced efficiency)
         void SetBlindRetaliation( bool value );
 
-        uint32_t CalculateSpellDamage( const Spell & spell, uint32_t spellPoints, const HeroBase * hero, uint32_t targetDamage, bool ignoreDefendingHero ) const;
+        uint32_t CalculateSpellDamage( const Spell & spell, uint32_t spellPoints, const HeroBase * applyingHero, const uint32_t targetDamage,
+                                       const bool ignoreDefendingHero ) const;
 
         bool SwitchAnimation( int rule, bool reverse = false );
         bool SwitchAnimation( const std::vector<int> & animationList, bool reverse = false );
@@ -257,11 +269,13 @@ namespace Battle
         bool UpdateDirection( const fheroes2::Rect & );
         void PostKilledAction();
 
-        uint32_t GetMagicResist( const Spell & spell, const uint32_t attackingArmySpellPower, const HeroBase * attackingHero ) const;
-        int GetSpellMagic() const;
+        uint32_t GetMagicResist( const Spell & spell, const HeroBase * applyingHero ) const;
+        int GetSpellMagic( Rand::DeterministicRandomGenerator & randomGenerator ) const;
 
         const HeroBase * GetCommander() const;
-        const HeroBase * GetCurrentOrArmyCommander() const; // commander of the army with the current unit color (if valid), commander of the unit's army otherwise
+        // If the color of the current unit is valid (i.e. this unit is not under the influence of a Berserker spell), then returns the commander of the army with the
+        // corresponding color. Otherwise, returns the commander of the unit's army.
+        const HeroBase * GetCurrentOrArmyCommander() const;
 
         // Checks whether the attacker will fight the defender in melee
         static bool isHandFighting( const Unit & attacker, const Unit & defender );
@@ -285,18 +299,15 @@ namespace Battle
         AnimationState animation;
 
     private:
-        bool canReach( int index ) const;
-        bool canReach( const Unit & unit ) const;
-
         uint32_t ApplyDamage( const uint32_t dmg );
         uint32_t Resurrect( const uint32_t points, const bool allow_overflow, const bool skip_dead );
 
         // Applies a damage-causing spell to this unit
-        void SpellApplyDamage( const Spell & spell, const uint32_t spellPoints, const HeroBase * hero, TargetInfo & target );
+        void SpellApplyDamage( const Spell & spell, const uint32_t spellPoints, const HeroBase * applyingHero, TargetInfo & target );
         // Applies a restoring or reviving spell to this unit
-        void SpellRestoreAction( const Spell & spell, const uint32_t spellPoints, const HeroBase * hero );
+        void SpellRestoreAction( const Spell & spell, const uint32_t spellPoints, const HeroBase * applyingHero );
         // Applies a spell to this unit that changes its parameters
-        void SpellModesAction( const Spell & spell, uint32_t duration, const HeroBase * hero );
+        void SpellModesAction( const Spell & spell, uint32_t duration, const HeroBase * applyingHero );
 
         // Adds a temporary affection (usually a spell effect) with the specified duration. Only one affection can be added.
         void addAffection( const uint32_t mode, const uint32_t duration );
@@ -322,8 +333,6 @@ namespace Battle
         bool _blindRetaliation;
 
         uint8_t customAlphaMask;
-
-        const Rand::DeterministicRandomGenerator & _randomGenerator;
     };
 }
 

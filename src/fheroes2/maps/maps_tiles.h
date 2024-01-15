@@ -27,16 +27,17 @@
 #include <cstdint>
 #include <list>
 #include <string>
+#include <utility>
 #include <vector>
 
 #include "color.h"
 #include "direction.h"
 #include "ground.h"
+#include "heroes.h"
 #include "math_base.h"
 #include "mp2.h"
 #include "world_regions.h"
 
-class Heroes;
 class StreamBase;
 
 namespace Maps
@@ -66,7 +67,11 @@ namespace Maps
 
         ~TilesAddon() = default;
 
-        TilesAddon & operator=( const TilesAddon & ) = delete;
+        // Returns true if it can be passed be hero/boat: addon's layer type is SHADOW or TERRAIN.
+        bool isPassabilityTransparent() const
+        {
+            return _layerType == SHADOW_LAYER || _layerType == TERRAIN_LAYER;
+        }
 
         bool operator==( const TilesAddon & addon ) const
         {
@@ -86,8 +91,6 @@ namespace Maps
         uint8_t _imageIndex{ 255 };
     };
 
-    using Addons = std::list<TilesAddon>;
-
     class Tiles
     {
     public:
@@ -96,8 +99,7 @@ namespace Maps
         bool operator==( const Tiles & tile ) const
         {
             return ( _addonBottomLayer == tile._addonBottomLayer ) && ( _addonTopLayer == tile._addonTopLayer ) && ( _index == tile._index )
-                   && ( _terrainImageIndex == tile._terrainImageIndex ) && ( _terrainFlags == tile._terrainFlags ) && ( _uid == tile._uid )
-                   && ( _layerType == tile._layerType ) && ( _objectIcnType == tile._objectIcnType ) && ( _imageIndex == tile._imageIndex )
+                   && ( _terrainImageIndex == tile._terrainImageIndex ) && ( _terrainFlags == tile._terrainFlags ) && ( _mainAddon == tile._mainAddon )
                    && ( _mainObjectType == tile._mainObjectType ) && ( _metadata == tile._metadata ) && ( _tilePassabilityDirections == tile._tilePassabilityDirections )
                    && ( _isTileMarkedAsRoad == tile._isTileMarkedAsRoad ) && ( _occupantHeroId == tile._occupantHeroId );
         }
@@ -108,6 +110,11 @@ namespace Maps
         }
 
         void Init( int32_t index, const MP2::mp2tile_t & mp2 );
+
+        void setIndex( const int32_t index )
+        {
+            _index = index;
+        }
 
         int32_t GetIndex() const
         {
@@ -120,37 +127,37 @@ namespace Maps
 
         MP2::ObjectIcnType getObjectIcnType() const
         {
-            return _objectIcnType;
+            return _mainAddon._objectIcnType;
         }
 
         void setObjectIcnType( const MP2::ObjectIcnType type )
         {
-            _objectIcnType = type;
+            _mainAddon._objectIcnType = type;
         }
 
         uint8_t GetObjectSpriteIndex() const
         {
-            return _imageIndex;
+            return _mainAddon._imageIndex;
         }
 
         void setObjectSpriteIndex( const uint8_t index )
         {
-            _imageIndex = index;
+            _mainAddon._imageIndex = index;
         }
 
         uint32_t GetObjectUID() const
         {
-            return _uid;
+            return _mainAddon._uid;
         }
 
         void setObjectUID( const uint32_t uid )
         {
-            _uid = uid;
+            _mainAddon._uid = uid;
         }
 
         uint8_t getLayerType() const
         {
-            return _layerType;
+            return _mainAddon._layerType;
         }
 
         uint16_t GetPassable() const
@@ -178,6 +185,9 @@ namespace Maps
             return objectType == _mainObjectType;
         }
 
+        // Returns true if tile's main and bottom layer addons do not contain any objects: layer type is SHADOW or TERRAIN.
+        bool isPassabilityTransparent() const;
+
         // Checks whether it is possible to move into this tile from the specified direction
         bool isPassableFrom( const int direction ) const
         {
@@ -202,8 +212,8 @@ namespace Maps
         bool isShadow() const;
         bool GoodForUltimateArtifact() const;
 
-        TilesAddon * FindAddonLevel1( uint32_t uniq1 );
-        TilesAddon * FindAddonLevel2( uint32_t uniq2 );
+        TilesAddon * getBottomLayerAddon( const uint32_t uid );
+        TilesAddon * getTopLayerAddon( const uint32_t uid );
 
         void SetObject( const MP2::MapObjectType objectType );
 
@@ -222,8 +232,8 @@ namespace Maps
 
         void resetObjectSprite()
         {
-            _objectIcnType = MP2::OBJ_ICN_TYPE_UNKNOWN;
-            _imageIndex = 255;
+            _mainAddon._objectIcnType = MP2::OBJ_ICN_TYPE_UNKNOWN;
+            _mainAddon._imageIndex = 255;
         }
 
         void FixObject();
@@ -257,19 +267,31 @@ namespace Maps
 
         void pushTopLayerAddon( const MP2::mp2addon_t & ma );
 
-        const Addons & getBottomLayerAddons() const
+        void pushTopLayerAddon( TilesAddon ta )
+        {
+            _addonTopLayer.emplace_back( ta );
+        }
+
+        const std::list<TilesAddon> & getBottomLayerAddons() const
         {
             return _addonBottomLayer;
         }
 
-        Addons & getBottomLayerAddons()
+        std::list<TilesAddon> & getBottomLayerAddons()
         {
             return _addonBottomLayer;
         }
 
-        const Addons & getTopLayerAddons() const
+        const std::list<TilesAddon> & getTopLayerAddons() const
         {
             return _addonTopLayer;
+        }
+
+        void moveMainAddonToBottomLayer()
+        {
+            if ( _mainAddon._objectIcnType != MP2::OBJ_ICN_TYPE_UNKNOWN ) {
+                _addonBottomLayer.emplace_back( _mainAddon );
+            }
         }
 
         void AddonsSort();
@@ -343,18 +365,13 @@ namespace Maps
 
         static int32_t getIndexOfMainTile( const Maps::Tiles & tile );
 
-        void swap( TilesAddon & addon ) noexcept;
+        void swap( TilesAddon & addon ) noexcept
+        {
+            std::swap( addon, _mainAddon );
+        }
 
         // Update tile or bottom layer object image index.
         static void updateTileObjectIcnIndex( Maps::Tiles & tile, const uint32_t uid, const uint8_t newIndex );
-
-        // The old code was using weird quantity based values which were very hard to understand.
-        // Since we must have backwards compatibility we need to do the conversion.
-        void quantityIntoMetadata( const uint8_t quantityValue1, const uint8_t quantityValue2, const uint32_t additionalMetadata );
-
-        // The old code stored an unknown artifact ID as 103. This prevented from adding new artifacts without breaking compatibility every time we do such.
-        // This method serves to fix incorrect artifact IDs.
-        void fixOldArtifactIDs();
 
     private:
         TilesAddon * getAddonWithFlag( const uint32_t uid );
@@ -375,31 +392,19 @@ namespace Maps
         friend StreamBase & operator<<( StreamBase &, const Tiles & );
         friend StreamBase & operator>>( StreamBase &, Tiles & );
 
-        static uint8_t convertOldMainObjectType( const uint8_t mainObjectType );
-
         // The following members are used in the Editor and in the game.
 
-        Addons _addonBottomLayer;
+        TilesAddon _mainAddon;
 
-        Addons _addonTopLayer;
+        std::list<TilesAddon> _addonBottomLayer;
+
+        std::list<TilesAddon> _addonTopLayer;
 
         int32_t _index{ 0 };
 
         uint16_t _terrainImageIndex{ 0 };
 
         uint8_t _terrainFlags{ 0 };
-
-        // Unique identifier of an object. UID can be shared among multiple object parts if an object is bigger than 1 tile.
-        uint32_t _uid{ 0 };
-
-        // Layer type shows how the object is rendered on Adventure Map. See ObjectLayerType enumeration.
-        uint8_t _layerType{ OBJECT_LAYER };
-
-        // The type of object which correlates to ICN id. See MP2::getIcnIdFromObjectIcnType() function for more details.
-        MP2::ObjectIcnType _objectIcnType{ MP2::OBJ_ICN_TYPE_UNKNOWN };
-
-        // Image index to define which part of the object is. This index corresponds to an index in ICN objects storing multiple sprites (images).
-        uint8_t _imageIndex{ 255 };
 
         MP2::MapObjectType _mainObjectType{ MP2::OBJ_NONE };
 
@@ -409,19 +414,17 @@ namespace Maps
 
         bool _isTileMarkedAsRoad{ false };
 
-        // This member holds Hero ID that is incremented by 1.
-        // TODO: once hero IDs are going to be updated change the logic for this member as well.
-        uint8_t _occupantHeroId{ 0 };
+        uint8_t _occupantHeroId{ Heroes::UNKNOWN };
 
         // The following members are only used in the game.
 
         uint8_t _fogColors{ Color::ALL };
 
-        // Fog direction to render fog in Game Area.
-        uint16_t _fogDirection{ DIRECTION_ALL };
-
         // Heroes can only summon neutral empty boats or empty boats belonging to their kingdom.
         uint8_t _boatOwnerColor{ Color::NONE };
+
+        // Fog direction to render fog in Game Area.
+        uint16_t _fogDirection{ DIRECTION_ALL };
 
         // This field does not persist in savegame.
         uint32_t _region{ REGION_NODE_BLOCKED };

@@ -26,7 +26,6 @@
 #include "gamedefs.h"
 #include "interface_gamearea.h"
 #include "interface_radar.h"
-#include "interface_status.h"
 #include "math_base.h"
 #include "screen.h"
 
@@ -63,7 +62,6 @@ namespace Interface
         explicit BaseInterface( const bool isEditor_ )
             : _gameArea( *this )
             , _radar( *this )
-            , _statusWindow( *this )
             , _isEditor( isEditor_ )
         {
             // Do nothing
@@ -122,11 +120,6 @@ namespace Interface
             return _radar;
         }
 
-        StatusWindow & getStatusWindow()
-        {
-            return _statusWindow;
-        }
-
         static fheroes2::GameMode EventExit();
 
         virtual bool useMouseDragMovement()
@@ -153,7 +146,6 @@ namespace Interface
 
         GameArea _gameArea;
         Radar _radar;
-        StatusWindow _statusWindow;
 
         uint32_t _redraw{ 0 };
 

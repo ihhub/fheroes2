@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2023                                             *
+ *   Copyright (C) 2020 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -1271,6 +1271,11 @@ namespace fheroes2
         Copy( in, 0, 0, out, 0, 0, in.width(), in.height() );
     }
 
+    void Copy( const Image & in, int32_t inX, int32_t inY, Image & out, const Rect & outRoi )
+    {
+        Copy( in, inX, inY, out, outRoi.x, outRoi.y, outRoi.width, outRoi.height );
+    }
+
     void Copy( const Image & in, int32_t inX, int32_t inY, Image & out, int32_t outX, int32_t outY, int32_t width, int32_t height )
     {
         if ( !Verify( in, inX, inY, out, outX, outY, width, height ) ) {
@@ -2214,7 +2219,15 @@ namespace fheroes2
         const int32_t width = in.width();
         const int32_t height = in.height();
 
-        Image out( width, height );
+        Image out;
+
+        if ( in.singleLayer() ) {
+            // Make the result of Fill to have the same layers as the input image.
+            out._disableTransformLayer();
+        }
+
+        out.resize( width, height );
+
         if ( !horizontally && !vertically ) {
             Copy( in, out );
             return out;
@@ -2550,7 +2563,7 @@ namespace fheroes2
 
     Sprite makeShadow( const Sprite & in, const Point & shadowOffset, const uint8_t transformId )
     {
-        if ( in.empty() || in.singleLayer() || shadowOffset.x > 0 || shadowOffset.y < 0 ) {
+        if ( in.empty() || shadowOffset.x > 0 || shadowOffset.y < 0 ) {
             return {};
         }
 
@@ -2562,6 +2575,13 @@ namespace fheroes2
         out.reset();
 
         assert( !out.empty() );
+
+        if ( in.singleLayer() ) {
+            // In this case we add a shadow of the fully non-transparent rectangular 'in' image.
+            FillTransform( out, 0, shadowOffset.y, width, height, transformId );
+
+            return out;
+        }
 
         const int32_t widthOut = out.width();
 
@@ -2641,6 +2661,25 @@ namespace fheroes2
         for ( ; imageIn != imageInEnd; ++imageIn, ++transformIn ) {
             if ( *transformIn == 0 && *imageIn == colorId ) { // modify pixels with transform value 0
                 *transformIn = transformId;
+            }
+        }
+    }
+
+    void ReplaceTransformIdByColorId( Image & image, const uint8_t transformId, const uint8_t colorId )
+    {
+        if ( image.empty() || image.singleLayer() ) {
+            return;
+        }
+
+        const int32_t size = image.width() * image.height();
+
+        uint8_t * imageIn = image.image();
+        uint8_t * transformIn = image.transform();
+        const uint8_t * imageInEnd = imageIn + size;
+        for ( ; imageIn != imageInEnd; ++imageIn, ++transformIn ) {
+            if ( *transformIn == transformId ) {
+                *transformIn = 0U;
+                *imageIn = colorId;
             }
         }
     }

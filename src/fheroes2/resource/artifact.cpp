@@ -37,13 +37,12 @@
 #include "agg_image.h"
 #include "dialog.h"
 #include "dialog_selectitems.h"
-#include "game_io.h"
 #include "gamedefs.h"
 #include "heroes.h"
 #include "icn.h"
 #include "logging.h"
+#include "maps_fileinfo.h"
 #include "rand.h"
-#include "save_format_version.h"
 #include "serialize.h"
 #include "settings.h"
 #include "skill.h"
@@ -251,8 +250,10 @@ int Artifact::Level() const
     case SWORD_ANDURAN:
     case SPADE_NECROMANCY:
     case HEART_FIRE:
-    case HEART_ICE:
-        return Settings::Get().isCurrentMapPriceOfLoyalty() ? ART_LOYALTY | LoyaltyLevel() : ART_LOYALTY;
+    case HEART_ICE: {
+        const GameVersion version = Settings::Get().getCurrentMapInfo().version;
+        return ( version == GameVersion::PRICE_OF_LOYALTY || version == GameVersion::RESURRECTION ) ? ART_LOYALTY | LoyaltyLevel() : ART_LOYALTY;
+    }
 
     default:
         break;
@@ -499,20 +500,7 @@ StreamBase & operator<<( StreamBase & msg, const Artifact & art )
 
 StreamBase & operator>>( StreamBase & msg, Artifact & art )
 {
-    msg >> art.id >> art.ext;
-
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE1_1005_RELEASE, "Remove the logic below." );
-    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_PRE1_1005_RELEASE ) {
-        // Old save formats contain different values for artifacts.
-        if ( art.id == 103 ) {
-            art.id = Artifact::UNKNOWN;
-        }
-        else {
-            ++art.id;
-        }
-    }
-
-    return msg;
+    return msg >> art.id >> art.ext;
 }
 
 BagArtifacts::BagArtifacts()
@@ -854,8 +842,11 @@ bool BagArtifacts::PushArtifact( const Artifact & art )
 void BagArtifacts::RemoveArtifact( const Artifact & art )
 {
     iterator it = std::find( begin(), end(), art );
-    if ( it != end() )
-        ( *it ).Reset();
+    if ( it == end() ) {
+        return;
+    }
+
+    it->Reset();
 }
 
 bool BagArtifacts::isFull() const
@@ -1196,16 +1187,22 @@ bool ArtifactsBar::ActionBarLeftMouseSingleClick( Artifact & art )
     }
     else {
         if ( can_change ) {
-            const Artifact newArtifact = Dialog::selectArtifact();
+            art = Dialog::selectArtifact( Artifact::UNKNOWN );
 
-            if ( isMagicBook( newArtifact ) ) {
+            if ( isMagicBook( art ) ) {
+                art.Reset();
+
                 const_cast<Heroes *>( _hero )->SpellBookActivate();
             }
-            else {
-                art = newArtifact;
+            else if ( art.GetID() == Artifact::SPELL_SCROLL ) {
+                const int spellId = Dialog::selectSpell( Spell::RANDOM, true ).GetID();
 
-                if ( art.GetID() == Artifact::SPELL_SCROLL ) {
-                    art.SetSpell( Spell::RANDOM );
+                if ( spellId == Spell::NONE ) {
+                    // No spell for the Spell Scroll artifact was selected - cancel the artifact selection.
+                    art.Reset();
+                }
+                else {
+                    art.SetSpell( spellId );
                 }
             }
         }
@@ -1233,7 +1230,12 @@ bool ArtifactsBar::ActionBarRightMouseHold( Artifact & art )
 
     if ( art.isValid() ) {
         if ( can_change ) {
-            art.Reset();
+            if ( isMagicBook( art ) ) {
+                const_cast<Heroes *>( _hero )->SpellBookDeactivate();
+            }
+            else {
+                art.Reset();
+            }
         }
         else {
             fheroes2::ArtifactDialogElement( art ).showPopup( Dialog::ZERO );

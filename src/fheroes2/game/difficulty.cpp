@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -128,7 +128,7 @@ int Difficulty::GetHeroMovementBonus( int difficulty )
     return 0;
 }
 
-double Difficulty::GetAIRetreatRatio( int difficulty )
+double Difficulty::getArmyStrengthRatioForAIRetreat( const int difficulty )
 {
     switch ( difficulty ) {
     case Difficulty::NORMAL:
@@ -142,6 +142,11 @@ double Difficulty::GetAIRetreatRatio( int difficulty )
         break;
     }
     return 100.0 / 6.0;
+}
+
+uint32_t Difficulty::getGoldReserveRatioForAISurrender( const int /* difficulty */ )
+{
+    return 10;
 }
 
 uint32_t Difficulty::GetDimensionDoorLimit( int difficulty )

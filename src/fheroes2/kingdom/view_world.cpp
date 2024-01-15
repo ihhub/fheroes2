@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2023                                             *
+ *   Copyright (C) 2021 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -246,7 +246,7 @@ namespace
             }
 
 #if defined( SAVE_WORLD_MAP )
-            fheroes2::Save( cachedImages[3], Settings::Get().MapsName() + saveFilePrefix + ".bmp" );
+            fheroes2::Save( cachedImages[3], Settings::Get().getCurrentMapInfo().name + saveFilePrefix + ".bmp" );
 #endif
         }
     };
@@ -375,7 +375,7 @@ namespace
 
                 for ( uint32_t i = 0; i < objectCount; ++i ) {
                     switch ( objectTypes[i] ) {
-                    case MP2::OBJ_HEROES: {
+                    case MP2::OBJ_HERO: {
                         if ( revealHeroes || !tile.isFog( color ) ) {
                             const Heroes * hero = world.GetHeroes( tile.GetCenter() );
                             if ( hero ) {
@@ -405,7 +405,7 @@ namespace
                     }
 
                     case MP2::OBJ_ALCHEMIST_LAB:
-                    case MP2::OBJ_MINES:
+                    case MP2::OBJ_MINE:
                     case MP2::OBJ_SAWMILL:
                         if ( revealMines || !tile.isFog( color ) ) {
                             const uint32_t colorOffset = colorToOffsetICN( getColorFromTile( tile ) );

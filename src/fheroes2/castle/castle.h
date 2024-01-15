@@ -153,8 +153,12 @@ public:
         return ( building & BUILD_CASTLE ) != 0;
     }
 
-    bool HaveNearlySea() const;
-    bool PresentBoat() const;
+    bool HasSeaAccess() const;
+    bool HasBoatNearby() const;
+
+    // Returns a tile ID where it is possible to place a boat or -1 if it is not.
+    int32_t getTileIndexToPlaceBoat() const;
+
     bool AllowBuyHero( std::string * = nullptr ) const;
     bool isPosition( const fheroes2::Point & pt ) const override;
     bool isNecromancyShrineBuild() const;
@@ -254,12 +258,13 @@ public:
     }
 
     bool BuyBuilding( uint32_t );
-    bool AllowBuyBoat() const;
-    bool BuyBoat() const;
     uint32_t GetBuildingRequirement( uint32_t ) const;
 
     int CheckBuyBuilding( const uint32_t build ) const;
     static int GetAllBuildingStatus( const Castle & );
+
+    bool AllowBuyBoat( const bool checkPayment ) const;
+    bool BuyBoat() const;
 
     void Scout() const;
 
@@ -373,9 +378,9 @@ namespace CastleDialog
         uint32_t _build;
     };
 
-    struct builds_t
+    struct BuildingRenderInfo
     {
-        builds_t( building_t b, const fheroes2::Rect & r )
+        BuildingRenderInfo( building_t b, const fheroes2::Rect & r )
             : id( b )
             , coord( r )
         {}
@@ -389,7 +394,7 @@ namespace CastleDialog
         fheroes2::Rect coord;
     };
 
-    struct CacheBuildings : std::vector<builds_t>
+    struct CacheBuildings : std::vector<BuildingRenderInfo>
     {
         CacheBuildings( const Castle &, const fheroes2::Point & );
     };

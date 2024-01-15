@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -158,7 +158,7 @@ namespace MP2
         OBJ_NON_ACTION_DRAGON_CITY = 20,
         OBJ_NON_ACTION_LIGHTHOUSE = 21,
         OBJ_NON_ACTION_WATER_WHEEL = 22,
-        OBJ_NON_ACTION_MINES = 23,
+        OBJ_NON_ACTION_MINE = 23,
         OBJ_NON_ACTION_MONSTER = 24, // Never set in maps.
         OBJ_NON_ACTION_OBELISK = 25,
         OBJ_NON_ACTION_OASIS = 26,
@@ -190,7 +190,7 @@ namespace MP2
         OBJ_NON_ACTION_RANDOM_MONSTER_MEDIUM = 52, // Never set in maps.
         OBJ_NON_ACTION_RANDOM_MONSTER_STRONG = 53, // Never set in maps.
         OBJ_NON_ACTION_RANDOM_MONSTER_VERY_STRONG = 54, // Never set in maps.
-        OBJ_NON_ACTION_HEROES = 55, // Never set in maps. This type is used for any types of heroes, including random.
+        OBJ_NON_ACTION_HERO = 55, // Never set in maps. This type is used for any types of heroes, including random.
         OBJ_NOTHING_SPECIAL = 56,
         OBJ_MOSSY_ROCK = 57, // It is a Rock with moss for Swamp terrain. ICN::OBJNSWMP, images 138-139. In the original game it has no name.
         OBJ_NON_ACTION_WATCH_TOWER = 58,
@@ -233,7 +233,7 @@ namespace MP2
         OBJ_NON_ACTION_MAGIC_GARDEN = 95, // Never set in maps.
         OBJ_NON_ACTION_OBSERVATION_TOWER = 96,
         OBJ_NON_ACTION_FREEMANS_FOUNDRY = 97,
-        OBJ_REEFS = 98, // Never set in maps. Not in use within the original Editor.
+        OBJ_REEFS = 98, // Never used within the original Editor.
         OBJ_TREES = 99,
         OBJ_MOUNTAINS = 100,
         OBJ_VOLCANO = 101,
@@ -292,7 +292,7 @@ namespace MP2
         OBJ_DRAGON_CITY = OBJ_NON_ACTION_DRAGON_CITY + OBJ_ACTION_OBJECT_TYPE,
         OBJ_LIGHTHOUSE = OBJ_NON_ACTION_LIGHTHOUSE + OBJ_ACTION_OBJECT_TYPE,
         OBJ_WATER_WHEEL = OBJ_NON_ACTION_WATER_WHEEL + OBJ_ACTION_OBJECT_TYPE,
-        OBJ_MINES = OBJ_NON_ACTION_MINES + OBJ_ACTION_OBJECT_TYPE,
+        OBJ_MINE = OBJ_NON_ACTION_MINE + OBJ_ACTION_OBJECT_TYPE,
         OBJ_MONSTER = OBJ_NON_ACTION_MONSTER + OBJ_ACTION_OBJECT_TYPE,
         OBJ_OBELISK = OBJ_NON_ACTION_OBELISK + OBJ_ACTION_OBJECT_TYPE,
         OBJ_OASIS = OBJ_NON_ACTION_OASIS + OBJ_ACTION_OBJECT_TYPE,
@@ -324,7 +324,7 @@ namespace MP2
         OBJ_RANDOM_MONSTER_MEDIUM = OBJ_NON_ACTION_RANDOM_MONSTER_MEDIUM + OBJ_ACTION_OBJECT_TYPE,
         OBJ_RANDOM_MONSTER_STRONG = OBJ_NON_ACTION_RANDOM_MONSTER_STRONG + OBJ_ACTION_OBJECT_TYPE,
         OBJ_RANDOM_MONSTER_VERY_STRONG = OBJ_NON_ACTION_RANDOM_MONSTER_VERY_STRONG + OBJ_ACTION_OBJECT_TYPE,
-        OBJ_HEROES, // This type is used for any types of heroes, including random.
+        OBJ_HERO = OBJ_NON_ACTION_HERO + OBJ_ACTION_OBJECT_TYPE, // This type is used for any types of heroes, including random.
         OBJ_ACTION_NOTHING_SPECIAL = OBJ_NOTHING_SPECIAL + OBJ_ACTION_OBJECT_TYPE, // Never set in maps.
         OBJ_ACTION_MOSSY_ROCK = OBJ_MOSSY_ROCK + OBJ_ACTION_OBJECT_TYPE, // Never set in maps.
         OBJ_WATCH_TOWER = OBJ_NON_ACTION_WATCH_TOWER + OBJ_ACTION_OBJECT_TYPE,

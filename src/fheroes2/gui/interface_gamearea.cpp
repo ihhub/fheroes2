@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -297,9 +297,8 @@ namespace
 
         // There is a tile below the current.
         const Maps::Tiles & tileBelow = world.GetTiles( x, y + 1 );
-        const Maps::Addons & lowerTileAddons = tileBelow.getTopLayerAddons();
 
-        for ( const Maps::TilesAddon & lowerAddon : lowerTileAddons ) {
+        for ( const Maps::TilesAddon & lowerAddon : tileBelow.getTopLayerAddons() ) {
             if ( lowerAddon._uid == uid ) {
                 // This is a tall object.
                 return true;
@@ -493,9 +492,9 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
             const bool isTileUnderFog = ( tile.getFogDirection() == DIRECTION_ALL ) && renderFog;
 
             switch ( objectType ) {
-            case MP2::OBJ_HEROES: {
+            case MP2::OBJ_HERO: {
                 if ( _interface.isEditor() ) {
-                    const uint8_t alphaValue = getObjectAlphaValue( tile.GetIndex(), MP2::OBJ_HEROES );
+                    const uint8_t alphaValue = getObjectAlphaValue( tile.GetIndex(), MP2::OBJ_HERO );
 
                     auto spriteInfo = getEditorHeroSpritesPerTile( tile );
 
@@ -573,7 +572,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
             }
 
             // These are parts of original action objects which must be rendered under heroes.
-            if ( objectType == MP2::OBJ_MINES ) {
+            if ( objectType == MP2::OBJ_MINE ) {
                 auto spriteInfo = getMineGuardianSpritesPerTile( tile );
                 if ( !spriteInfo.empty() ) {
                     const uint8_t alphaValue = getObjectAlphaValue( tile.GetObjectUID() );

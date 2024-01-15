@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -148,12 +148,12 @@ namespace
         {
             // On some OSes like Windows, the path may contain '\' symbols. This symbol doesn't exist in the resources.
             // To avoid this we have to replace all '\' symbols by '/' symbols.
-            std::string fullPath = info.file;
+            std::string fullPath = info.filename;
 
             // TODO: Make '\' symbol in small font to properly show file path in OS familiar style.
             StringReplace( fullPath, "\\", "/" );
 
-            const fheroes2::Text header( ResizeToShortName( info.file ), fheroes2::FontType::normalYellow() );
+            const fheroes2::Text header( ResizeToShortName( info.filename ), fheroes2::FontType::normalYellow() );
 
             fheroes2::MultiFontText body;
 
@@ -206,7 +206,7 @@ namespace
 
     void FileInfoListBox::RedrawItem( const Maps::FileInfo & info, int32_t dstx, int32_t dsty, bool current )
     {
-        std::string savname( System::GetBasename( info.file ) );
+        std::string savname( System::GetBasename( info.filename ) );
 
         if ( savname.empty() ) {
             return;
@@ -258,22 +258,23 @@ namespace
 
     MapsFileInfoList getSortedMapsFileInfoList()
     {
-        ListFiles list1;
-        list1.ReadDir( Game::GetSaveDir(), Game::GetSaveFileExtension(), false );
+        ListFiles files;
+        files.ReadDir( Game::GetSaveDir(), Game::GetSaveFileExtension(), false );
 
-        MapsFileInfoList list2( list1.size() );
-        size_t saveFileCount = 0;
-        for ( const std::string & saveFile : list1 ) {
-            if ( list2[saveFileCount].ReadSAV( saveFile ) ) {
-                ++saveFileCount;
+        MapsFileInfoList mapInfos;
+        mapInfos.reserve( files.size() );
+
+        for ( std::string & saveFile : files ) {
+            Maps::FileInfo mapInfo;
+
+            if ( Game::LoadSAV2FileInfo( std::move( saveFile ), mapInfo ) ) {
+                mapInfos.emplace_back( std::move( mapInfo ) );
             }
         }
-        if ( saveFileCount != list2.size() ) {
-            list2.resize( saveFileCount );
-        }
-        std::sort( list2.begin(), list2.end(), Maps::FileInfo::FileSorting );
 
-        return list2;
+        std::sort( mapInfos.begin(), mapInfos.end(), Maps::FileInfo::sortByFileName );
+
+        return mapInfos;
     }
 
     std::string selectFileListSimple( const std::string & header, const std::string & lastfile, const bool isEditing )
@@ -298,7 +299,7 @@ namespace
         // Dialog height is also capped with the current screen height.
         fheroes2::StandardWindow background( maxFileNameWidth + 204, std::min( display.height() - 100, maxDialogHeight ), true, display );
 
-        const fheroes2::Rect area = background.activeArea();
+        const fheroes2::Rect area( background.activeArea() );
         const fheroes2::Rect listRoi( area.x + 24, area.y + 37, area.width - 75, area.height - listHeightDeduction );
         const fheroes2::Rect textInputRoi( listRoi.x, listRoi.y + listRoi.height + 12, maxFileNameWidth + 8, 21 );
         const int32_t dateTimeoffsetX = textInputRoi.x + textInputRoi.width;
@@ -316,20 +317,13 @@ namespace
         const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
 
         // Prepare OKAY and CANCEL buttons and render their shadows.
-        const int buttonOkIcn = isEvilInterface ? ICN::BUTTON_SMALL_OKAY_EVIL : ICN::BUTTON_SMALL_OKAY_GOOD;
-        const int32_t buttonOffsetY = area.y + area.height - 32;
-        fheroes2::Button buttonOk( area.x + 18, buttonOffsetY, buttonOkIcn, 0, 1 );
-        fheroes2::addGradientShadow( fheroes2::AGG::GetICN( buttonOkIcn, 0 ), display, buttonOk.area().getPosition(), { -5, 5 } );
+        fheroes2::Button buttonOk;
         if ( !isEditing && lists.empty() ) {
             buttonOk.disable();
         }
-        buttonOk.draw();
+        fheroes2::Button buttonCancel;
 
-        const int buttonCancelIcn = isEvilInterface ? ICN::BUTTON_SMALL_CANCEL_EVIL : ICN::BUTTON_SMALL_CANCEL_GOOD;
-        const fheroes2::Sprite & buttonCancelSprite = fheroes2::AGG::GetICN( buttonCancelIcn, 0 );
-        fheroes2::Button buttonCancel( area.x + area.width - buttonCancelSprite.width() - 18, buttonOffsetY, buttonCancelIcn, 0, 1 );
-        fheroes2::addGradientShadow( buttonCancelSprite, display, buttonCancel.area().getPosition(), { -5, 5 } );
-        buttonCancel.draw();
+        background.renderOkayCancelButtons( buttonOk, buttonCancel, isEvilInterface );
 
         // Virtual keyboard button is used only in save game mode (when 'isEditing' is true ).
         std::unique_ptr<fheroes2::ButtonSprite> buttonVirtualKB;
@@ -341,40 +335,12 @@ namespace
 
         listbox.SetAreaItems( { listRoi.x, listRoi.y + 3, listRoi.width - listAreaOffsetY, listRoi.height - listAreaHeightDeduction } );
 
-        // Render the scrollbar.
-        const fheroes2::Sprite & scrollBar = fheroes2::AGG::GetICN( isEvilInterface ? ICN::ADVBORDE : ICN::ADVBORD, 0 );
         int32_t scrollbarOffsetX = area.x + area.width - 35;
-
-        // Top part of scrollbar background.
-        const int32_t topPartHeight = 19;
-        const int32_t scrollBarWidth = 16;
-        fheroes2::Copy( scrollBar, 536, 176, display, scrollbarOffsetX, listRoi.y, scrollBarWidth, topPartHeight );
-
-        // Middle part of scrollbar background.
-        int32_t offsetY = topPartHeight;
-        const int32_t middlePartHeight = 88;
-        const int32_t middlePartCount = ( listRoi.height - 2 * topPartHeight + middlePartHeight - 1 ) / middlePartHeight;
-
-        for ( int32_t i = 0; i < middlePartCount; ++i ) {
-            fheroes2::Copy( scrollBar, 536, 196, display, scrollbarOffsetX, listRoi.y + offsetY, scrollBarWidth,
-                            std::min( middlePartHeight, listRoi.height - offsetY - topPartHeight ) );
-            offsetY += middlePartHeight;
-        }
-
-        // Bottom part of scrollbar background.
-        fheroes2::Copy( scrollBar, 536, 285, display, scrollbarOffsetX, listRoi.y + listRoi.height - topPartHeight, scrollBarWidth, topPartHeight );
+        background.renderScrollbarBackground( { scrollbarOffsetX, listRoi.y, listRoi.width, listRoi.height }, isEvilInterface );
 
         const int listIcnId = isEvilInterface ? ICN::SCROLLE : ICN::SCROLL;
-
+        const int32_t topPartHeight = 19;
         ++scrollbarOffsetX;
-
-        // Make scrollbar shadow.
-        for ( uint8_t i = 0; i < 4; ++i ) {
-            const uint8_t transformId = i + 2;
-            const int32_t sizeCorrection = i + 1;
-            fheroes2::ApplyTransform( display, scrollbarOffsetX - transformId, listRoi.y + sizeCorrection, 1, listRoi.height - sizeCorrection, transformId );
-            fheroes2::ApplyTransform( display, scrollbarOffsetX - transformId, listRoi.y + listRoi.height + i, scrollBarWidth, 1, transformId );
-        }
 
         listbox.SetScrollButtonUp( listIcnId, 0, 1, { scrollbarOffsetX, listRoi.y + 1 } );
         listbox.SetScrollButtonDn( listIcnId, 2, 3, { scrollbarOffsetX, listRoi.y + listRoi.height - 15 } );
@@ -393,7 +359,7 @@ namespace
 
             MapsFileInfoList::iterator it = lists.begin();
             for ( ; it != lists.end(); ++it ) {
-                if ( ( *it ).file == lastfile ) {
+                if ( ( *it ).filename == lastfile ) {
                     break;
                 }
             }
@@ -411,7 +377,7 @@ namespace
         }
 
         if ( filename.empty() && listbox.isSelected() ) {
-            filename = ResizeToShortName( listbox.GetCurrent().file );
+            filename = ResizeToShortName( listbox.GetCurrent().filename );
             charInsertPos = filename.size();
         }
 
@@ -422,17 +388,9 @@ namespace
         title.draw( area.x + ( area.width - title.width() ) / 2, area.y + 16, display );
 
         if ( isEditing ) {
-            // Generate and render a button to open the Virtual Keyboard window.
-            fheroes2::Sprite released;
-            fheroes2::Sprite pressed;
-
-            const int32_t buttonWidth = buttonCancelSprite.width() / 2;
-
-            makeButtonSprites( released, pressed, "...", buttonWidth, isEvilInterface, false );
-            buttonVirtualKB = std::make_unique<fheroes2::ButtonSprite>( area.x + ( area.width - buttonWidth ) / 2, buttonOffsetY, released, pressed );
-
-            fheroes2::addGradientShadow( released, display, buttonVirtualKB->area().getPosition(), { -5, 5 } );
-            buttonVirtualKB->draw();
+            // Render a button to open the Virtual Keyboard window.
+            buttonVirtualKB = std::make_unique<fheroes2::ButtonSprite>();
+            background.renderButtonSprite( *buttonVirtualKB, "...", 48, { 0, 7 }, isEvilInterface, fheroes2::StandardWindow::Padding::BOTTOM_CENTER );
 
             Game::passAnimationDelay( Game::DelayType::CURSOR_BLINK_DELAY );
         }
@@ -474,7 +432,7 @@ namespace
                     result = System::concatPath( Game::GetSaveDir(), filename + Game::GetSaveFileExtension() );
                 }
                 else if ( isListboxSelected ) {
-                    result = listbox.GetCurrent().file;
+                    result = listbox.GetCurrent().filename;
                 }
             }
             else if ( le.MouseClickLeft( buttonCancel.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
@@ -537,11 +495,14 @@ namespace
             }
 
             if ( !isEditing && le.KeyPress( fheroes2::Key::KEY_DELETE ) && isListboxSelected ) {
+                listbox.SetCurrent( listId );
+                listbox.Redraw();
+
                 std::string msg( _( "Are you sure you want to delete file:" ) );
                 msg.append( "\n\n" );
-                msg.append( System::GetBasename( listbox.GetCurrent().file ) );
+                msg.append( System::GetBasename( listbox.GetCurrent().filename ) );
                 if ( Dialog::YES == fheroes2::showStandardTextMessage( _( "Warning!" ), msg, Dialog::YES | Dialog::NO ) ) {
-                    System::Unlink( listbox.GetCurrent().file );
+                    System::Unlink( listbox.GetCurrent().filename );
                     listbox.RemoveSelected();
                     if ( lists.empty() || filename.empty() ) {
                         buttonOk.disable();
@@ -550,8 +511,7 @@ namespace
                     }
 
                     listbox.updateScrollBarImage();
-
-                    listbox.SetListContent( lists );
+                    listbox.SetCurrent( std::max( listId - 1, 0 ) );
                 }
 
                 needRedraw = true;
@@ -572,7 +532,7 @@ namespace
             }
 
             if ( needRedraw ) {
-                const std::string selectedFileName = isListboxSelected ? ResizeToShortName( listbox.GetCurrent().file ) : "";
+                const std::string selectedFileName = isListboxSelected ? ResizeToShortName( listbox.GetCurrent().filename ) : "";
                 if ( isListboxSelected && lastSelectedSaveFileName != selectedFileName ) {
                     lastSelectedSaveFileName = selectedFileName;
                     filename = selectedFileName;
@@ -596,7 +556,7 @@ namespace
                 }
             }
 
-            display.render( background.activeArea() );
+            display.render( area );
         }
 
         return result;

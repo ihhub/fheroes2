@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2023                                             *
+ *   Copyright (C) 2020 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -139,7 +139,7 @@ void Interface::PlayersInfo::UpdateInfo( Players & players, const fheroes2::Poin
 bool Interface::PlayersInfo::SwapPlayers( Player & player1, Player & player2 ) const
 {
     const Settings & conf = Settings::Get();
-    const Maps::FileInfo & fi = conf.CurrentFileInfo();
+    const Maps::FileInfo & mapInfo = conf.getCurrentMapInfo();
 
     const int player1Color = player1.GetColor();
     const int player2Color = player2.GetColor();
@@ -149,7 +149,7 @@ bool Interface::PlayersInfo::SwapPlayers( Player & player1, Player & player2 ) c
     if ( player1.isControlAI() == player2.isControlAI() ) {
         swap = true;
     }
-    else if ( ( player1Color & fi.AllowCompHumanColors() ) && ( player2Color & fi.AllowCompHumanColors() ) ) {
+    else if ( ( player1Color & mapInfo.AllowCompHumanColors() ) && ( player2Color & mapInfo.AllowCompHumanColors() ) ) {
         const int humans = conf.GetPlayers().GetColors( CONTROL_HUMAN, true );
 
         if ( humans & player1Color ) {
@@ -174,7 +174,7 @@ bool Interface::PlayersInfo::SwapPlayers( Player & player1, Player & player2 ) c
         player2.setHandicapStatus( player1HandicapStatus );
         player1.setHandicapStatus( player2HandicapStatus );
 
-        if ( player1Race != player2Race && conf.AllowChangeRace( player1Color ) && conf.AllowChangeRace( player2Color ) ) {
+        if ( player1Race != player2Race && mapInfo.AllowChangeRace( player1Color ) && mapInfo.AllowChangeRace( player2Color ) ) {
             player1.SetRace( player2Race );
             player2.SetRace( player1Race );
         }
@@ -250,7 +250,7 @@ void Interface::PlayersInfo::RedrawInfo( const bool displayInGameInfo ) const
 {
     const Settings & conf = Settings::Get();
     fheroes2::Display & display = fheroes2::Display::instance();
-    const Maps::FileInfo & fi = conf.CurrentFileInfo();
+    const Maps::FileInfo & mapInfo = conf.getCurrentMapInfo();
 
     const int32_t playerCount = static_cast<int32_t>( conf.GetPlayers().size() );
     const uint32_t humanColors = conf.GetPlayers().GetColors( CONTROL_HUMAN, true );
@@ -264,7 +264,7 @@ void Interface::PlayersInfo::RedrawInfo( const bool displayInGameInfo ) const
             // Current human.
             playerTypeIcnIndex = 9 + Color::GetIndex( info.player->GetColor() );
         }
-        else if ( fi.ComputerOnlyColors() & info.player->GetColor() ) {
+        else if ( mapInfo.ComputerOnlyColors() & info.player->GetColor() ) {
             // Computer only.
             playerTypeIcnIndex = 15 + Color::GetIndex( info.player->GetColor() );
         }
@@ -298,7 +298,7 @@ void Interface::PlayersInfo::RedrawInfo( const bool displayInGameInfo ) const
         name.draw( info.playerTypeRoi.x + 2 + ( maximumTextWidth - name.width() ) / 2, info.playerTypeRoi.y + info.playerTypeRoi.height + 1, display );
 
         // 2. redraw class
-        const bool isActivePlayer = displayInGameInfo ? info.player->isPlay() : conf.AllowChangeRace( info.player->GetColor() );
+        const bool isActivePlayer = displayInGameInfo ? info.player->isPlay() : mapInfo.AllowChangeRace( info.player->GetColor() );
 
         uint32_t classIcnIndex = 0;
         switch ( info.player->GetRace() ) {
@@ -424,10 +424,8 @@ bool Interface::PlayersInfo::QueueEventProcessing()
 
     if ( le.MouseWheelUp() ) {
         Player * player = GetFromClassClick( le.GetMouseCursor() );
-        if ( player != nullptr ) {
-            if ( conf.AllowChangeRace( player->GetColor() ) ) {
-                changeRaceToPrev( *player );
-            }
+        if ( player != nullptr && conf.getCurrentMapInfo().AllowChangeRace( player->GetColor() ) ) {
+            changeRaceToPrev( *player );
 
             return true;
         }
@@ -437,20 +435,17 @@ bool Interface::PlayersInfo::QueueEventProcessing()
 
     if ( le.MouseWheelDn() ) {
         Player * player = GetFromClassClick( le.GetMouseCursor() );
-        if ( player != nullptr ) {
-            if ( conf.AllowChangeRace( player->GetColor() ) ) {
-                changeRaceToNext( *player );
-            }
+        if ( player != nullptr && conf.getCurrentMapInfo().AllowChangeRace( player->GetColor() ) ) {
+            changeRaceToNext( *player );
 
             return true;
         }
-
         return false;
     }
 
     Player * player = GetFromOpponentClick( le.GetMouseCursor() );
     if ( player != nullptr ) {
-        const Maps::FileInfo & fi = conf.CurrentFileInfo();
+        const Maps::FileInfo & fi = conf.getCurrentMapInfo();
 
         if ( conf.IsGameType( Game::TYPE_MULTI ) ) {
             if ( currentSelectedPlayer == nullptr ) {
@@ -466,7 +461,7 @@ bool Interface::PlayersInfo::QueueEventProcessing()
         else {
             const int playerColor = player->GetColor();
 
-            if ( playerColor & fi.AllowHumanColors() ) {
+            if ( playerColor & fi.colorsAvailableForHumans ) {
                 const int human = conf.GetPlayers().GetColors( CONTROL_HUMAN, true );
 
                 if ( playerColor != human ) {
@@ -501,10 +496,8 @@ bool Interface::PlayersInfo::QueueEventProcessing()
     }
 
     player = GetFromClassClick( le.GetMouseCursor() );
-    if ( player != nullptr ) {
-        if ( conf.AllowChangeRace( player->GetColor() ) ) {
-            changeRaceToNext( *player );
-        }
+    if ( player != nullptr && conf.getCurrentMapInfo().AllowChangeRace( player->GetColor() ) ) {
+        changeRaceToNext( *player );
 
         return true;
     }

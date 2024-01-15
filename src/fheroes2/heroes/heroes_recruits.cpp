@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -21,10 +21,13 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "heroes_recruits.h"
+
 #include <cassert>
 
+#include "game_io.h"
 #include "heroes.h"
-#include "heroes_recruits.h"
+#include "save_format_version.h"
 #include "serialize.h"
 #include "world.h"
 
@@ -124,5 +127,12 @@ StreamBase & operator<<( StreamBase & msg, const Recruit & recruit )
 
 StreamBase & operator>>( StreamBase & msg, Recruit & recruit )
 {
-    return msg >> recruit._id >> recruit._surrenderDay;
+    msg >> recruit._id >> recruit._surrenderDay;
+
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1010_RELEASE, "Remove the logic below." );
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1010_RELEASE ) {
+        ++recruit._id;
+    }
+
+    return msg;
 }

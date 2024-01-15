@@ -61,7 +61,7 @@ namespace
     {
         enum
         {
-            IS_PRICE_OF_LOYALTY_MAP = 0x4000
+            REQUIRES_POL_RESOURCES = 0x4000
         };
 
         HeaderSAV()
@@ -82,8 +82,8 @@ namespace
             info.worldWeek = worldWeek;
             info.worldMonth = worldMonth;
 
-            if ( fi.version == GameVersion::PRICE_OF_LOYALTY ) {
-                status |= IS_PRICE_OF_LOYALTY_MAP;
+            if ( fi.version != GameVersion::SUCCESSION_WARS ) {
+                status |= REQUIRES_POL_RESOURCES;
             }
         }
 
@@ -128,7 +128,7 @@ bool Game::Save( const std::string & filePath, const bool autoSave /* = false */
 
     // Header
     fs << SAV2ID3 << std::to_string( saveFileVersion ) << saveFileVersion
-       << HeaderSAV( conf.CurrentFileInfo(), conf.GameType(), world.GetDay(), world.GetWeek(), world.GetMonth() );
+       << HeaderSAV( conf.getCurrentMapInfo(), conf.GameType(), world.GetDay(), world.GetWeek(), world.GetMonth() );
     fs.close();
 
     ZStreamBuf zb;
@@ -176,7 +176,7 @@ fheroes2::GameMode Game::Load( const std::string & filePath )
     fs >> savId;
 
     if ( savId != SAV2ID3 ) {
-        DEBUG_LOG( DBG_GAME, DBG_WARN, "Invalid SAV2ID in the file " << filePath )
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "Invalid file identifier in the file " << filePath )
 
         showGenericErrorMessage();
 
@@ -232,27 +232,12 @@ fheroes2::GameMode Game::Load( const std::string & filePath )
         return fheroes2::GameMode::CANCEL;
     }
 
-    if ( ( header.status & HeaderSAV::IS_PRICE_OF_LOYALTY_MAP ) && !conf.isPriceOfLoyaltySupported() ) {
-        fheroes2::showStandardTextMessage(
-            _( "Error" ), _( "This file was saved for a \"The Price of Loyalty\" map, but the corresponding game assets have not been provided to the engine." ),
-            Dialog::OK );
+    if ( ( header.status & HeaderSAV::REQUIRES_POL_RESOURCES ) && !conf.isPriceOfLoyaltySupported() ) {
+        fheroes2::showStandardTextMessage( _( "Error" ),
+                                           _( "This save file requires \"The Price of Loyalty\" game assets, but they have not been provided to the engine." ),
+                                           Dialog::OK );
 
         return fheroes2::GameMode::CANCEL;
-    }
-
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE2_1002_RELEASE, "Remove the logic below." );
-    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_PRE2_1002_RELEASE ) {
-        uint16_t zippedSaveFileVersion = 0;
-        zb >> zippedSaveFileVersion;
-
-        if ( zippedSaveFileVersion != saveFileVersion ) {
-            DEBUG_LOG( DBG_GAME, DBG_WARN,
-                       "In the file " << filePath << " the file version " << saveFileVersion << " does not match the zipped one " << zippedSaveFileVersion )
-
-            showGenericErrorMessage();
-
-            return fheroes2::GameMode::CANCEL;
-        }
     }
 
     zb >> World::Get() >> conf >> GameOver::Result::Get();
@@ -281,7 +266,7 @@ fheroes2::GameMode Game::Load( const std::string & filePath )
     }
 
     // Settings should contain the full path to the current map file, if this map is available
-    conf.SetMapsFile( Settings::GetLastFile( "maps", System::GetBasename( conf.MapsFile() ) ) );
+    conf.getCurrentMapInfo().filename = Settings::GetLastFile( "maps", System::GetBasename( conf.getCurrentMapInfo().filename ) );
 
     if ( !conf.loadedFileLanguage().empty() && conf.loadedFileLanguage() != "en" && conf.loadedFileLanguage() != conf.getGameLanguage() ) {
         std::string warningMessage( _( "This saved game is localized to '" ) );
@@ -315,7 +300,7 @@ bool Game::LoadSAV2FileInfo( std::string filePath, Maps::FileInfo & fileInfo )
     fs >> savId;
 
     if ( savId != SAV2ID3 ) {
-        DEBUG_LOG( DBG_GAME, DBG_WARN, "Invalid SAV2ID in the file " << filePath )
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "Invalid file identifier in the file " << filePath )
         return false;
     }
 
@@ -340,7 +325,7 @@ bool Game::LoadSAV2FileInfo( std::string filePath, Maps::FileInfo & fileInfo )
     }
 
     fileInfo = std::move( header.info );
-    fileInfo.file = std::move( filePath );
+    fileInfo.filename = std::move( filePath );
 
     return true;
 }
@@ -372,7 +357,7 @@ std::string Game::GetSaveDir()
 
 std::string Game::GetSaveFileBaseName()
 {
-    std::string baseName = Settings::Get().CurrentFileInfo().name;
+    std::string baseName = Settings::Get().getCurrentMapInfo().name;
 
     // Replace all non-ASCII characters by exclamation marks
     std::replace_if(

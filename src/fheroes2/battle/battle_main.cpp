@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -22,6 +22,7 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <cassert>
 #include <cstddef>
 #include <cstdint>
 #include <memory>
@@ -38,6 +39,7 @@
 #include "battle_arena.h"
 #include "battle_army.h"
 #include "campaign_savedata.h"
+#include "captain.h"
 #include "dialog.h"
 #include "game.h"
 #include "heroes.h"
@@ -47,6 +49,7 @@
 #include "monster.h"
 #include "players.h"
 #include "rand.h"
+#include "resource.h"
 #include "settings.h"
 #include "skill.h"
 #include "spell.h"
@@ -56,12 +59,6 @@
 #include "ui_dialog.h"
 #include "ui_text.h"
 #include "world.h"
-
-namespace Battle
-{
-    void EagleEyeSkillAction( HeroBase &, const SpellStorage &, bool, const Rand::DeterministicRandomGenerator & randomGenerator );
-    void NecromancySkillAction( HeroBase & hero, const uint32_t enemyTroopsKilled, const bool isControlHuman );
-}
 
 namespace
 {
@@ -169,6 +166,115 @@ namespace
 
         return 0;
     }
+
+    void eagleEyeSkillAction( HeroBase & hero, const SpellStorage & spells, bool local, Rand::DeterministicRandomGenerator & randomGenerator )
+    {
+        if ( spells.empty() || !hero.HaveSpellBook() )
+            return;
+
+        SpellStorage new_spells;
+        new_spells.reserve( 10 );
+
+        const Skill::Secondary eagleeye( Skill::Secondary::EAGLE_EYE, hero.GetLevelSkill( Skill::Secondary::EAGLE_EYE ) );
+
+        // filter spells
+        for ( const Spell & sp : spells ) {
+            if ( hero.HaveSpell( sp ) ) {
+                continue;
+            }
+
+            switch ( eagleeye.Level() ) {
+            case Skill::Level::BASIC:
+                // 20%
+                if ( 3 > sp.Level() && eagleeye.GetValues() >= randomGenerator.Get( 1, 100 ) )
+                    new_spells.push_back( sp );
+                break;
+            case Skill::Level::ADVANCED:
+                // 30%
+                if ( 4 > sp.Level() && eagleeye.GetValues() >= randomGenerator.Get( 1, 100 ) )
+                    new_spells.push_back( sp );
+                break;
+            case Skill::Level::EXPERT:
+                // 40%
+                if ( 5 > sp.Level() && eagleeye.GetValues() >= randomGenerator.Get( 1, 100 ) )
+                    new_spells.push_back( sp );
+                break;
+            default:
+                break;
+            }
+        }
+
+        // add new spell
+        if ( local ) {
+            for ( const Spell & sp : new_spells ) {
+                std::string msg = _( "Through eagle-eyed observation, %{name} is able to learn the magic spell %{spell}." );
+                StringReplace( msg, "%{name}", hero.GetName() );
+                StringReplace( msg, "%{spell}", sp.GetName() );
+                Game::PlayPickupSound();
+
+                const fheroes2::SpellDialogElement spellUI( sp, &hero );
+                fheroes2::showMessage( fheroes2::Text( "", {} ), fheroes2::Text( msg, fheroes2::FontType::normalWhite() ), Dialog::OK, { &spellUI } );
+            }
+        }
+
+        hero.AppendSpellsToBook( new_spells, true );
+    }
+
+    void necromancySkillAction( HeroBase & hero, const uint32_t enemyTroopsKilled, const bool isControlHuman )
+    {
+        Army & army = hero.GetArmy();
+
+        if ( 0 == enemyTroopsKilled || ( army.isFullHouse() && !army.HasMonster( Monster::SKELETON ) ) )
+            return;
+
+        const uint32_t necromancyPercent = GetNecromancyPercent( hero );
+
+        uint32_t raiseCount = std::max( enemyTroopsKilled * necromancyPercent / 100, 1U );
+        army.JoinTroop( Monster::SKELETON, raiseCount, false );
+
+        if ( isControlHuman ) {
+            Battle::Arena::DialogBattleNecromancy( raiseCount );
+        }
+
+        DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "raise: " << raiseCount << " skeletons" )
+    }
+
+    Kingdom * getKingdomOfCommander( const HeroBase * commander )
+    {
+        if ( commander == nullptr ) {
+            return nullptr;
+        }
+
+        if ( commander->isHeroes() ) {
+            const Heroes * hero = dynamic_cast<const Heroes *>( commander );
+            assert( hero != nullptr );
+
+            return &hero->GetKingdom();
+        }
+
+        if ( commander->isCaptain() ) {
+            const Captain * captain = dynamic_cast<const Captain *>( commander );
+            assert( captain != nullptr );
+
+            return &world.GetKingdom( captain->GetColor() );
+        }
+
+        assert( 0 );
+        return nullptr;
+    }
+
+    void restoreFundsOfCommandersKingdom( const HeroBase * commander, const Funds & initialFunds )
+    {
+        Kingdom * kingdom = getKingdomOfCommander( commander );
+        assert( kingdom != nullptr );
+
+        const Funds fundsDiff = kingdom->GetFunds() - initialFunds;
+        assert( kingdom->AllowPayment( fundsDiff ) );
+
+        kingdom->OddFundsResource( fundsDiff );
+
+        assert( kingdom->GetFunds() == initialFunds );
+    }
 }
 
 Battle::Result Battle::Loader( Army & army1, Army & army2, int32_t mapsindex )
@@ -189,33 +295,57 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, int32_t mapsindex )
         return result;
     }
 
-    // pre battle army1
     HeroBase * commander1 = army1.GetCommander();
-    uint32_t initialSpellPoints1 = 0;
-
     if ( commander1 ) {
         commander1->ActionPreBattle();
 
         if ( army1.isControlAI() ) {
             AI::Get().HeroesPreBattle( *commander1, true );
         }
-
-        initialSpellPoints1 = commander1->GetSpellPoints();
     }
 
-    // pre battle army2
-    HeroBase * commander2 = army2.GetCommander();
-    uint32_t initialSpellPoints2 = 0;
+    const uint32_t initialSpellPoints1 = [commander1]() -> uint32_t {
+        if ( commander1 == nullptr ) {
+            return 0;
+        }
 
+        return commander1->GetSpellPoints();
+    }();
+
+    const Funds initialFunds1 = [commander1]() -> Funds {
+        const Kingdom * kingdom = getKingdomOfCommander( commander1 );
+        if ( kingdom == nullptr ) {
+            return {};
+        }
+
+        return kingdom->GetFunds();
+    }();
+
+    HeroBase * commander2 = army2.GetCommander();
     if ( commander2 ) {
         commander2->ActionPreBattle();
 
         if ( army2.isControlAI() ) {
             AI::Get().HeroesPreBattle( *commander2, false );
         }
-
-        initialSpellPoints2 = commander2->GetSpellPoints();
     }
+
+    const uint32_t initialSpellPoints2 = [commander2]() -> uint32_t {
+        if ( commander2 == nullptr ) {
+            return 0;
+        }
+
+        return commander2->GetSpellPoints();
+    }();
+
+    const Funds initialFunds2 = [commander2]() -> Funds {
+        const Kingdom * kingdom = getKingdomOfCommander( commander2 );
+        if ( kingdom == nullptr ) {
+            return {};
+        }
+
+        return kingdom->GetFunds();
+    }();
 
     const bool isHumanBattle = army1.isControlHuman() || army2.isControlHuman();
 
@@ -242,8 +372,7 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, int32_t mapsindex )
 
     const uint32_t battleSeed = computeBattleSeed( mapsindex, world.GetMapSeed(), army1, army2 );
 
-    bool isBattleOver = false;
-    while ( !isBattleOver ) {
+    while ( true ) {
         Rand::DeterministicRandomGenerator randomGenerator( battleSeed );
         Arena arena( army1, army2, mapsindex, showBattle, randomGenerator );
 
@@ -265,7 +394,6 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, int32_t mapsindex )
                                                               : std::vector<Artifact>();
 
         if ( showBattle ) {
-            // fade arena
             const bool clearMessageLog = ( result.army1 & ( RESULT_RETREAT | RESULT_SURRENDER ) ) || ( result.army2 & ( RESULT_RETREAT | RESULT_SURRENDER ) );
             arena.FadeArena( clearMessageLog );
         }
@@ -274,24 +402,27 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, int32_t mapsindex )
             // If dialog returns true we will restart battle in manual mode
             showBattle = true;
 
-            // Reset army commander state
+            // Reset the state of army commanders and the state of their kingdoms' finances (one of them could spend gold to surrender, and the other could accept this
+            // gold). Please note that heroes can also surrender to castle captains.
             if ( commander1 ) {
                 commander1->SetSpellPoints( initialSpellPoints1 );
+
+                restoreFundsOfCommandersKingdom( commander1, initialFunds1 );
             }
             if ( commander2 ) {
                 commander2->SetSpellPoints( initialSpellPoints2 );
+
+                restoreFundsOfCommandersKingdom( commander2, initialFunds2 );
             }
 
             continue;
         }
 
-        isBattleOver = true;
-
         if ( loserHero != nullptr && loserAbandoned ) {
-            // if a hero lost the battle and didn't flee or surrender, they lose all artifacts
+            // If a hero lost the battle and didn't flee or surrender, they lose all artifacts
             clearArtifacts( loserHero->GetBagArtifacts() );
 
-            // if the other army also had a hero, some artifacts may be captured by them
+            // If the other army also had a hero, some artifacts may be captured by them
             if ( winnerHero != nullptr ) {
                 BagArtifacts & bag = winnerHero->GetBagArtifacts();
 
@@ -306,49 +437,51 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, int32_t mapsindex )
 
             if ( loserHero->isControlAI() ) {
                 const Heroes * loserAdventureHero = dynamic_cast<const Heroes *>( loserHero );
-
                 if ( loserAdventureHero != nullptr && conf.isCampaignGameType() ) {
                     Campaign::CampaignSaveData::Get().setEnemyDefeatedAward( loserAdventureHero->GetID() );
                 }
             }
         }
 
-        // save count troop
         arena.GetForce1().SyncArmyCount();
         arena.GetForce2().SyncArmyCount();
 
-        // after battle army1
         if ( commander1 ) {
-            if ( army1.isControlAI() )
+            if ( army1.isControlAI() ) {
                 AI::Get().HeroesAfterBattle( *commander1, true );
-            else
+            }
+            else {
                 commander1->ActionAfterBattle();
+            }
         }
 
-        // after battle army2
         if ( commander2 ) {
-            if ( army2.isControlAI() )
+            if ( army2.isControlAI() ) {
                 AI::Get().HeroesAfterBattle( *commander2, false );
-            else
+            }
+            else {
                 commander2->ActionAfterBattle();
+            }
         }
 
-        // eagle eye capability
-        if ( winnerHero && loserHero && winnerHero->GetLevelSkill( Skill::Secondary::EAGLEEYE ) && loserHero->isHeroes() )
-            EagleEyeSkillAction( *winnerHero, arena.GetUsageSpells(), winnerHero->isControlHuman(), randomGenerator );
+        if ( winnerHero && loserHero && winnerHero->GetLevelSkill( Skill::Secondary::EAGLE_EYE ) && loserHero->isHeroes() ) {
+            eagleEyeSkillAction( *winnerHero, arena.GetUsageSpells(), winnerHero->isControlHuman(), randomGenerator );
+        }
 
-        // necromancy capability
-        if ( winnerHero && winnerHero->GetLevelSkill( Skill::Secondary::NECROMANCY ) )
-            NecromancySkillAction( *winnerHero, result.killed, winnerHero->isControlHuman() );
+        if ( winnerHero && winnerHero->GetLevelSkill( Skill::Secondary::NECROMANCY ) ) {
+            necromancySkillAction( *winnerHero, result.killed, winnerHero->isControlHuman() );
+        }
 
         if ( winnerHero ) {
             const Heroes * kingdomHero = dynamic_cast<const Heroes *>( winnerHero );
-
             if ( kingdomHero ) {
                 Kingdom & kingdom = kingdomHero->GetKingdom();
+
                 kingdom.SetLastBattleWinHero( *kingdomHero );
             }
         }
+
+        break;
     }
 
     DEBUG_LOG( DBG_BATTLE, DBG_INFO, "army1 " << army1.String() )
@@ -357,7 +490,7 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, int32_t mapsindex )
     army1.resetInvalidMonsters();
     army2.resetInvalidMonsters();
 
-    // reset the hero's army to the minimum army if the hero retreated or was defeated
+    // Reset the hero's army to the minimum army if the hero retreated or was defeated
     if ( commander1 && commander1->isHeroes() && ( !army1.isValid() || ( result.army1 & RESULT_RETREAT ) ) ) {
         army1.Reset( false );
     }
@@ -368,77 +501,6 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, int32_t mapsindex )
     DEBUG_LOG( DBG_BATTLE, DBG_INFO, "army1: " << ( result.army1 & RESULT_WINS ? "wins" : "loss" ) << ", army2: " << ( result.army2 & RESULT_WINS ? "wins" : "loss" ) )
 
     return result;
-}
-
-void Battle::EagleEyeSkillAction( HeroBase & hero, const SpellStorage & spells, bool local, const Rand::DeterministicRandomGenerator & randomGenerator )
-{
-    if ( spells.empty() || !hero.HaveSpellBook() )
-        return;
-
-    SpellStorage new_spells;
-    new_spells.reserve( 10 );
-
-    const Skill::Secondary eagleeye( Skill::Secondary::EAGLEEYE, hero.GetLevelSkill( Skill::Secondary::EAGLEEYE ) );
-
-    // filter spells
-    for ( SpellStorage::const_iterator it = spells.begin(); it != spells.end(); ++it ) {
-        const Spell & sp = *it;
-        if ( !hero.HaveSpell( sp ) ) {
-            switch ( eagleeye.Level() ) {
-            case Skill::Level::BASIC:
-                // 20%
-                if ( 3 > sp.Level() && eagleeye.GetValues() >= randomGenerator.Get( 1, 100 ) )
-                    new_spells.push_back( sp );
-                break;
-            case Skill::Level::ADVANCED:
-                // 30%
-                if ( 4 > sp.Level() && eagleeye.GetValues() >= randomGenerator.Get( 1, 100 ) )
-                    new_spells.push_back( sp );
-                break;
-            case Skill::Level::EXPERT:
-                // 40%
-                if ( 5 > sp.Level() && eagleeye.GetValues() >= randomGenerator.Get( 1, 100 ) )
-                    new_spells.push_back( sp );
-                break;
-            default:
-                break;
-            }
-        }
-    }
-
-    // add new spell
-    for ( SpellStorage::const_iterator it = new_spells.begin(); it != new_spells.end(); ++it ) {
-        const Spell & sp = *it;
-        if ( local ) {
-            std::string msg = _( "Through eagle-eyed observation, %{name} is able to learn the magic spell %{spell}." );
-            StringReplace( msg, "%{name}", hero.GetName() );
-            StringReplace( msg, "%{spell}", sp.GetName() );
-            Game::PlayPickupSound();
-
-            const fheroes2::SpellDialogElement spellUI( sp, &hero );
-            fheroes2::showMessage( fheroes2::Text( "", {} ), fheroes2::Text( msg, fheroes2::FontType::normalWhite() ), Dialog::OK, { &spellUI } );
-        }
-    }
-
-    hero.AppendSpellsToBook( new_spells, true );
-}
-
-void Battle::NecromancySkillAction( HeroBase & hero, const uint32_t enemyTroopsKilled, const bool isControlHuman )
-{
-    Army & army = hero.GetArmy();
-
-    if ( 0 == enemyTroopsKilled || ( army.isFullHouse() && !army.HasMonster( Monster::SKELETON ) ) )
-        return;
-
-    const uint32_t necromancyPercent = GetNecromancyPercent( hero );
-
-    uint32_t raiseCount = std::max( enemyTroopsKilled * necromancyPercent / 100, 1U );
-    army.JoinTroop( Monster::SKELETON, raiseCount, false );
-
-    if ( isControlHuman )
-        Arena::DialogBattleNecromancy( raiseCount );
-
-    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "raise: " << raiseCount << " skeletons" )
 }
 
 uint32_t Battle::Result::AttackerResult() const

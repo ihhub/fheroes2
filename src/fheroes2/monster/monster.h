@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -27,7 +27,7 @@
 #include <cstdint>
 
 #include "monster_info.h"
-#include "payment.h"
+#include "resource.h"
 
 class Spell;
 
@@ -266,7 +266,7 @@ public:
         return isAbilityPresent( fheroes2::MonsterAbilityType::ALL_ADJACENT_CELL_MELEE_ATTACK );
     }
 
-    bool ignoreRetaliation() const
+    bool isIgnoringRetaliation() const
     {
         return isAbilityPresent( fheroes2::MonsterAbilityType::NO_ENEMY_RETALIATION );
     }
@@ -293,9 +293,9 @@ public:
         return UNKNOWN < id ? id - 1 : 0;
     }
 
-    payment_t GetCost() const
+    Funds GetCost() const
     {
-        return payment_t( fheroes2::getMonsterData( id ).generalStats.cost );
+        return Funds( fheroes2::getMonsterData( id ).generalStats.cost );
     }
 
     uint32_t GetDwelling() const;
@@ -313,7 +313,7 @@ public:
 
 protected:
     // Returns the cost of an upgrade if a monster has an upgrade. Otherwise returns no resources.
-    payment_t GetUpgradeCost() const;
+    Funds GetUpgradeCost() const;
 
     static Monster FromDwelling( int race, uint32_t dw );
 

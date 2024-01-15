@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -30,6 +30,7 @@
 #include <ostream>
 #include <set>
 #include <string>
+#include <type_traits>
 #include <utility>
 #include <vector>
 
@@ -62,6 +63,86 @@
 
 namespace
 {
+    int32_t calculateAttackTarget( const Battle::Unit & attackingUnit, const Battle::Position & attackPosition, const Battle::Unit & defendingUnit )
+    {
+        const int32_t attackPositionHeadIdx = attackPosition.GetHead() ? attackPosition.GetHead()->GetIndex() : -1;
+        const int32_t attackPositionTailIdx = attackPosition.GetTail() ? attackPosition.GetTail()->GetIndex() : -1;
+
+        assert( attackPositionHeadIdx != -1 && ( attackingUnit.isWide() ? attackPositionTailIdx != -1 : attackPositionTailIdx == -1 ) );
+
+        if ( Battle::Board::CanAttackFromCell( attackingUnit, attackPositionHeadIdx ) ) {
+            // The defender's head cell is near the head cell of the attack position
+            if ( Battle::Board::isNearIndexes( attackPositionHeadIdx, defendingUnit.GetHeadIndex() ) ) {
+                return defendingUnit.GetHeadIndex();
+            }
+
+            // The defender's tail cell is near the head cell of the attack position
+            if ( defendingUnit.isWide() && Battle::Board::isNearIndexes( attackPositionHeadIdx, defendingUnit.GetTailIndex() ) ) {
+                return defendingUnit.GetTailIndex();
+            }
+        }
+
+        if ( Battle::Board::CanAttackFromCell( attackingUnit, attackPositionTailIdx ) ) {
+            // The defender's head cell is near the tail cell of the attack position
+            if ( Battle::Board::isNearIndexes( attackPositionTailIdx, defendingUnit.GetHeadIndex() ) ) {
+                return defendingUnit.GetHeadIndex();
+            }
+
+            // The defender's tail cell is near the tail cell of the attack position
+            if ( defendingUnit.isWide() && Battle::Board::isNearIndexes( attackPositionTailIdx, defendingUnit.GetTailIndex() ) ) {
+                return defendingUnit.GetTailIndex();
+            }
+        }
+
+        // Attack position is not near the defender, this is most likely a shot
+        return defendingUnit.GetHeadIndex();
+    }
+
+    int calculateAttackDirection( const Battle::Unit & attackingUnit, const Battle::Position & attackPosition, const int32_t attackTargetIdx )
+    {
+        const int32_t attackPositionHeadIdx = attackPosition.GetHead() ? attackPosition.GetHead()->GetIndex() : -1;
+        const int32_t attackPositionTailIdx = attackPosition.GetTail() ? attackPosition.GetTail()->GetIndex() : -1;
+
+        assert( attackPositionHeadIdx != -1 && ( attackingUnit.isWide() ? attackPositionTailIdx != -1 : attackPositionTailIdx == -1 ) );
+
+        // The target cell of the attack is near the head cell of the attack position
+        if ( Battle::Board::CanAttackFromCell( attackingUnit, attackPositionHeadIdx ) && Battle::Board::isNearIndexes( attackPositionHeadIdx, attackTargetIdx ) ) {
+            return Battle::Board::GetDirection( attackPositionHeadIdx, attackTargetIdx );
+        }
+
+        // The target cell of the attack is near the tail cell of the attack position
+        if ( Battle::Board::CanAttackFromCell( attackingUnit, attackPositionTailIdx ) && Battle::Board::isNearIndexes( attackPositionTailIdx, attackTargetIdx ) ) {
+            return Battle::Board::GetDirection( attackPositionTailIdx, attackTargetIdx );
+        }
+
+        // Attack position is not near the defender, this is most likely a shot
+        return Battle::UNKNOWN;
+    }
+
+    bool checkMoveParams( const Battle::Unit * unit, const int32_t dst )
+    {
+        assert( unit != nullptr && unit->isValid() );
+
+        // "Moving" a unit to its current position is not allowed
+        if ( unit->GetHeadIndex() == dst ) {
+            return false;
+        }
+
+        const Battle::Position pos = Battle::Position::GetReachable( *unit, dst );
+        if ( pos.GetHead() == nullptr ) {
+            return false;
+        }
+
+        assert( pos.isValidForUnit( unit ) );
+
+        // Index of the destination cell should correspond to the index of the head cell of the target position and nothing else
+        if ( pos.GetHead()->GetIndex() != dst ) {
+            return false;
+        }
+
+        return true;
+    }
+
     std::pair<uint32_t, uint32_t> getEarthquakeDamageRange( const HeroBase * commander )
     {
         const int spellPower = commander->GetPower();
@@ -78,53 +159,19 @@ namespace
             return { 1, 3 };
         }
 
-        DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "unexpected spellPower value: " << spellPower << " for commander " << commander )
+        DEBUG_LOG( DBG_BATTLE, DBG_WARN, "unexpected spellPower value: " << spellPower << " for commander " << commander )
         return { 0, 0 };
     }
 }
 
-void Battle::Arena::BattleProcess( Unit & attacker, Unit & defender, int32_t dst /* = -1 */, int dir /* = -1 */ )
+void Battle::Arena::BattleProcess( Unit & attacker, Unit & defender, int32_t tgt /* = -1 */, int dir /* = -1 */ )
 {
-    const auto calculateDst = []( const Unit & attackingUnit, const Unit & defendingUnit ) {
-        // The defender's head cell is near the attacker's head cell
-        if ( Board::isNearIndexes( attackingUnit.GetHeadIndex(), defendingUnit.GetHeadIndex() ) ) {
-            return defendingUnit.GetHeadIndex();
-        }
-        // The defender's tail cell is near the attacker's head cell
-        if ( defendingUnit.isWide() && Board::isNearIndexes( attackingUnit.GetHeadIndex(), defendingUnit.GetTailIndex() ) ) {
-            return defendingUnit.GetTailIndex();
-        }
-        // The defender's head cell is near the attacker's tail cell
-        if ( attackingUnit.isWide() && Board::isNearIndexes( attackingUnit.GetTailIndex(), defendingUnit.GetHeadIndex() ) ) {
-            return defendingUnit.GetHeadIndex();
-        }
-        // The defender's tail cell is near the attacker's tail cell
-        if ( attackingUnit.isWide() && defendingUnit.isWide() && Board::isNearIndexes( attackingUnit.GetTailIndex(), defendingUnit.GetTailIndex() ) ) {
-            return defendingUnit.GetTailIndex();
-        }
-        // Units don't stand next to each other, this is most likely a shot
-        return defendingUnit.GetHeadIndex();
-    };
-
-    const auto calculateDir = []( const Unit & attackingUnit, const int32_t attackDst ) -> int {
-        // The target cell of the attack is near the attacker's head cell
-        if ( Board::isNearIndexes( attackingUnit.GetHeadIndex(), attackDst ) ) {
-            return Board::GetDirection( attackingUnit.GetHeadIndex(), attackDst );
-        }
-        // The target cell of the attack is near the attacker's tail cell
-        if ( attackingUnit.isWide() && Board::isNearIndexes( attackingUnit.GetTailIndex(), attackDst ) ) {
-            return Board::GetDirection( attackingUnit.GetTailIndex(), attackDst );
-        }
-        // Units don't stand next to each other, this is most likely a shot
-        return UNKNOWN;
-    };
-
-    if ( dst < 0 ) {
-        dst = calculateDst( attacker, defender );
+    if ( tgt < 0 ) {
+        tgt = calculateAttackTarget( attacker, attacker.GetPosition(), defender );
     }
 
     if ( dir < 0 ) {
-        dir = calculateDir( attacker, dst );
+        dir = calculateAttackDirection( attacker, attacker.GetPosition(), tgt );
     }
 
     // UNKNOWN attack direction is only allowed for archers
@@ -132,10 +179,10 @@ void Battle::Arena::BattleProcess( Unit & attacker, Unit & defender, int32_t dst
 
     // This is a direct attack, update the direction for both the attacker and the defender
     if ( dir ) {
-        const auto directionIsValidForAttack = []( const Unit & attackingUnit, const int32_t attackDst, const int attackDir ) {
+        const auto directionIsValidForAttack = []( const Unit & attackingUnit, const int32_t attackTgt, const int attackDir ) {
             assert( attackingUnit.isWide() );
 
-            const int32_t attackSrc = Board::GetIndexDirection( attackDst, Board::GetReflectDirection( attackDir ) );
+            const int32_t attackSrc = Board::GetIndexDirection( attackTgt, Board::GetReflectDirection( attackDir ) );
             // Attacker should attack either from his head cell or from his tail cell, otherwise something strange happens
             assert( attackSrc == attackingUnit.GetHeadIndex() || attackSrc == attackingUnit.GetTailIndex() );
 
@@ -143,39 +190,39 @@ void Battle::Arena::BattleProcess( Unit & attacker, Unit & defender, int32_t dst
         };
 
         if ( attacker.isWide() ) {
-            if ( !directionIsValidForAttack( attacker, dst, dir ) ) {
+            if ( !directionIsValidForAttack( attacker, tgt, dir ) ) {
                 attacker.SetReflection( !attacker.isReflect() );
             }
         }
         else {
-            attacker.UpdateDirection( board[dst].GetPos() );
+            attacker.UpdateDirection( board[tgt].GetPos() );
         }
 
-        if ( !attacker.ignoreRetaliation() && defender.AllowResponse() ) {
-            const int32_t responseDst = calculateDst( defender, attacker );
-            const int responseDir = calculateDir( defender, responseDst );
+        if ( !attacker.isIgnoringRetaliation() && defender.AllowResponse() ) {
+            const int32_t responseTgt = calculateAttackTarget( defender, defender.GetPosition(), attacker );
+            const int responseDir = calculateAttackDirection( defender, defender.GetPosition(), responseTgt );
 
             if ( defender.isWide() ) {
-                if ( !directionIsValidForAttack( defender, responseDst, responseDir ) ) {
+                if ( !directionIsValidForAttack( defender, responseTgt, responseDir ) ) {
                     defender.SetReflection( !defender.isReflect() );
                 }
             }
             else {
-                defender.UpdateDirection( board[responseDst].GetPos() );
+                defender.UpdateDirection( board[responseTgt].GetPos() );
             }
         }
     }
     // This is a shot, update the direction for the attacker only
     else {
-        // For shooters we get the target position (not the 'dst') to take into account the wide units.
+        // For shooters we get the target position (not the 'tgt') to take into account the wide units.
         attacker.UpdateDirection( defender.GetRectPosition() );
     }
 
     // Update the attacker's luck right before the attack
-    attacker.SetRandomLuck();
+    attacker.SetRandomLuck( _randomGenerator );
 
     // Do damage first
-    TargetsInfo attackTargets = GetTargetsForDamage( attacker, defender, dst, dir );
+    TargetsInfo attackTargets = GetTargetsForDamage( attacker, defender, tgt, dir );
 
     if ( _interface ) {
         _interface->RedrawActionAttackPart1( attacker, defender, attackTargets );
@@ -189,7 +236,7 @@ void Battle::Arena::BattleProcess( Unit & attacker, Unit & defender, int32_t dst
     }
 
     // Then apply the attacker's built-in spell
-    const Spell spell = attacker.GetSpellMagic();
+    const Spell spell = attacker.GetSpellMagic( _randomGenerator );
 
     if ( spell.isValid() ) {
         // Only single target spells and special built-in only spells are allowed
@@ -205,7 +252,7 @@ void Battle::Arena::BattleProcess( Unit & attacker, Unit & defender, int32_t dst
             if ( !attackTarget.defender->isValid() ) {
                 continue;
             }
-            if ( !attackTarget.defender->AllowApplySpell( spell, attackTarget.defender->GetCommander(), nullptr, true ) ) {
+            if ( !attackTarget.defender->AllowApplySpell( spell, nullptr ) ) {
                 continue;
             }
 
@@ -254,46 +301,132 @@ void Battle::Arena::BattleProcess( Unit & attacker, Unit & defender, int32_t dst
     attacker.PostAttackAction();
 }
 
+void Battle::Arena::moveUnit( Unit * unit, const int32_t dst )
+{
+    if ( dst == -1 ) {
+        return;
+    }
+
+    assert( checkMoveParams( unit, dst ) );
+
+    Position pos = Position::GetReachable( *unit, dst );
+    assert( pos.isValidForUnit( unit ) );
+
+    DEBUG_LOG( DBG_BATTLE, DBG_TRACE,
+               unit->String() << ", dst: " << dst << ", (head: " << pos.GetHead()->GetIndex() << ", tail: " << ( unit->isWide() ? pos.GetTail()->GetIndex() : -1 )
+                              << ")" )
+
+    Position finalPos;
+
+    if ( unit->isFlying() ) {
+        unit->UpdateDirection( pos.GetRect() );
+
+        if ( unit->isReflect() != pos.isReflect() ) {
+            pos.Swap();
+        }
+
+        if ( _interface ) {
+            _interface->RedrawActionFly( *unit, pos );
+        }
+        else if ( _bridge ) {
+            const int32_t dstHead = pos.GetHead()->GetIndex();
+            const int32_t dstTail = unit->isWide() ? pos.GetTail()->GetIndex() : -1;
+
+            // Lower the bridge if the unit needs to land on it
+            if ( _bridge->NeedDown( *unit, dstHead ) || ( unit->isWide() && _bridge->NeedDown( *unit, dstTail ) ) ) {
+                _bridge->ActionDown();
+            }
+
+            unit->SetPosition( pos );
+
+            // Raise the bridge if possible after the unit has completed its movement
+            if ( _bridge->AllowUp() ) {
+                _bridge->ActionUp();
+            }
+        }
+
+        finalPos = pos;
+    }
+    else {
+        const int32_t initialHead = unit->GetHeadIndex();
+
+        const Indexes path = GetPath( *unit, pos );
+        assert( !path.empty() );
+
+        if ( _interface ) {
+            _interface->RedrawActionMove( *unit, path );
+        }
+        else if ( _bridge ) {
+            for ( const int32_t idx : path ) {
+                if ( _bridge->NeedDown( *unit, idx ) ) {
+                    _bridge->ActionDown();
+                }
+
+                if ( unit->isWide() && unit->GetTailIndex() == idx ) {
+                    unit->SetReflection( !unit->isReflect() );
+                }
+                else {
+                    unit->SetPosition( idx );
+                }
+
+                if ( _bridge->AllowUp() ) {
+                    _bridge->ActionUp();
+                }
+            }
+        }
+
+        if ( unit->isWide() ) {
+            const int32_t dstHead = path.back();
+            const int32_t dstTail = path.size() > 1 ? path[path.size() - 2] : initialHead;
+
+            finalPos.Set( dstHead, true, ( Board::GetDirection( dstHead, dstTail ) & RIGHT_SIDE ) != 0 );
+        }
+        else {
+            finalPos.Set( path.back(), false, unit->isReflect() );
+        }
+    }
+
+    unit->SetPosition( finalPos );
+    unit->UpdateDirection();
+}
+
 void Battle::Arena::ApplyAction( Command & cmd )
 {
     switch ( cmd.GetType() ) {
-    case CommandType::MSG_BATTLE_CAST:
+    case CommandType::SPELLCAST:
         ApplyActionSpellCast( cmd );
         break;
-    case CommandType::MSG_BATTLE_ATTACK:
+    case CommandType::ATTACK:
         ApplyActionAttack( cmd );
         break;
-    case CommandType::MSG_BATTLE_MOVE:
+    case CommandType::MOVE:
         ApplyActionMove( cmd );
         break;
-    case CommandType::MSG_BATTLE_SKIP:
+    case CommandType::SKIP:
         ApplyActionSkip( cmd );
         break;
-    case CommandType::MSG_BATTLE_END_TURN:
-        ApplyActionEnd( cmd );
-        break;
-    case CommandType::MSG_BATTLE_MORALE:
+    case CommandType::MORALE:
         ApplyActionMorale( cmd );
         break;
 
-    case CommandType::MSG_BATTLE_TOWER:
+    case CommandType::TOWER:
         ApplyActionTower( cmd );
         break;
-    case CommandType::MSG_BATTLE_CATAPULT:
+    case CommandType::CATAPULT:
         ApplyActionCatapult( cmd );
         break;
 
-    case CommandType::MSG_BATTLE_RETREAT:
+    case CommandType::RETREAT:
         ApplyActionRetreat( cmd );
         break;
-    case CommandType::MSG_BATTLE_SURRENDER:
+    case CommandType::SURRENDER:
         ApplyActionSurrender( cmd );
         break;
 
-    case CommandType::MSG_BATTLE_AUTO_SWITCH:
+    case CommandType::AUTO_SWITCH:
         ApplyActionAutoSwitch( cmd );
         break;
-    case CommandType::MSG_BATTLE_AUTO_FINISH:
+    case CommandType::AUTO_FINISH:
         ApplyActionAutoFinish( cmd );
         break;
 
@@ -304,295 +437,348 @@ void Battle::Arena::ApplyAction( Command & cmd )
 
 void Battle::Arena::ApplyActionSpellCast( Command & cmd )
 {
-    const Spell spell( cmd.GetValue() );
+    const auto checkParameters = []( const Spell & spell, const HeroBase * commander ) {
+        if ( !spell.isCombat() ) {
+            return false;
+        }
+
+        const Arena * arena = GetArena();
+        assert( arena != nullptr );
+
+        if ( arena->isDisableCastSpell( spell ) ) {
+            return false;
+        }
+
+        if ( commander == nullptr || !commander->CanCastSpell( spell ) ) {
+            return false;
+        }
+
+        return true;
+    };
+
+    const Spell spell( cmd.GetNextValue() );
 
     HeroBase * commander = GetCurrentForce().GetCommander();
 
-    if ( spell.isCombat() && !isDisableCastSpell( spell ) && commander && commander->CanCastSpell( spell ) ) {
-        DEBUG_LOG( DBG_BATTLE, DBG_TRACE, commander->GetName() << ", color: " << Color::String( commander->GetColor() ) << ", spell: " << spell.GetName() )
+    if ( !checkParameters( spell, commander ) ) {
+        ERROR_LOG( "Invalid parameters: " << spell.GetName() )
 
-        // uniq spells action
-        switch ( spell.GetID() ) {
-        case Spell::TELEPORT:
-            ApplyActionSpellTeleport( cmd );
-            break;
+#ifdef WITH_DEBUG
+        assert( 0 );
+#endif
 
-        case Spell::EARTHQUAKE:
-            ApplyActionSpellEarthQuake( cmd );
-            break;
-
-        case Spell::MIRRORIMAGE:
-            ApplyActionSpellMirrorImage( cmd );
-            break;
-
-        case Spell::SUMMONEELEMENT:
-        case Spell::SUMMONAELEMENT:
-        case Spell::SUMMONFELEMENT:
-        case Spell::SUMMONWELEMENT:
-            ApplyActionSpellSummonElemental( cmd, spell );
-            break;
-
-        default:
-            ApplyActionSpellDefaults( cmd, spell );
-            break;
-        }
-
-        commander->SetModes( Heroes::SPELLCASTED );
-        commander->SpellCasted( spell );
-
-        // save spell for "eagle eye" capability
-        usage_spells.Append( spell );
+        return;
     }
-    else {
-        DEBUG_LOG( DBG_BATTLE, DBG_WARN, "incorrect param: " << spell.GetName() )
+
+    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, commander->GetName() << ", color: " << Color::String( commander->GetColor() ) << ", spell: " << spell.GetName() )
+
+    switch ( spell.GetID() ) {
+    case Spell::TELEPORT:
+        ApplyActionSpellTeleport( cmd );
+        break;
+
+    case Spell::EARTHQUAKE:
+        ApplyActionSpellEarthQuake( cmd );
+        break;
+
+    case Spell::MIRRORIMAGE:
+        ApplyActionSpellMirrorImage( cmd );
+        break;
+
+    case Spell::SUMMONEELEMENT:
+    case Spell::SUMMONAELEMENT:
+    case Spell::SUMMONFELEMENT:
+    case Spell::SUMMONWELEMENT:
+        ApplyActionSpellSummonElemental( cmd, spell );
+        break;
+
+    default:
+        ApplyActionSpellDefaults( cmd, spell );
+        break;
     }
+
+    commander->SetModes( Heroes::SPELLCASTED );
+    commander->SpellCasted( spell );
+
+    // Save the spell for the Eagle Eye skill
+    usage_spells.Append( spell );
 }
 
 void Battle::Arena::ApplyActionAttack( Command & cmd )
 {
-    const uint32_t attackerUID = cmd.GetValue();
-    const uint32_t defenderUID = cmd.GetValue();
-    const int32_t dst = cmd.GetValue();
-    const int32_t dir = cmd.GetValue();
+    const auto checkParameters = []( const Unit * attacker, const Unit * defender, const int32_t dst, int32_t tgt, int dir ) {
+        if ( attacker == nullptr || !attacker->isValid() ) {
+            return false;
+        }
+
+        if ( defender == nullptr || !defender->isValid() ) {
+            return false;
+        }
+
+        if ( attacker->Modes( TR_MOVED ) ) {
+            return false;
+        }
+
+        if ( attacker->GetCurrentColor() == defender->GetColor() ) {
+            return false;
+        }
+
+        // Attacker can attack from his current position without performing a move (in this case, the index of the destination cell should be -1)
+        if ( dst != -1 && !checkMoveParams( attacker, dst ) ) {
+            return false;
+        }
+
+        if ( attacker->isArchers() && !attacker->isHandFighting() ) {
+            // Non-blocked archer can only attack by shooting from his current position
+            if ( dst != -1 ) {
+                return false;
+            }
+
+            if ( tgt < 0 ) {
+                tgt = calculateAttackTarget( *attacker, attacker->GetPosition(), *defender );
+            }
+
+            if ( dir < 0 ) {
+                dir = calculateAttackDirection( *attacker, attacker->GetPosition(), tgt );
+            }
+
+            if ( !defender->GetPosition().contains( tgt ) ) {
+                return false;
+            }
+
+            // Non-blocked archers cannot attack "from a direction"
+            if ( dir != UNKNOWN ) {
+                return false;
+            }
+
+            return true;
+        }
+
+        const Position attackPos = ( dst == -1 ? attacker->GetPosition() : Position::GetReachable( *attacker, dst ) );
+        if ( attackPos.GetHead() == nullptr ) {
+            return false;
+        }
+
+        assert( attackPos.isValidForUnit( attacker ) );
+
+        if ( tgt < 0 ) {
+            tgt = calculateAttackTarget( *attacker, attackPos, *defender );
+        }
+
+        if ( dir < 0 ) {
+            dir = calculateAttackDirection( *attacker, attackPos, tgt );
+        }
+
+        if ( !defender->GetPosition().contains( tgt ) ) {
+            return false;
+        }
+
+        // Melee attacks are only possible from a certain direction
+        if ( dir == UNKNOWN ) {
+            return false;
+        }
+
+        const int32_t attackIdx
+            = ( Board::isValidDirection( tgt, Board::GetReflectDirection( dir ) ) ? Board::GetIndexDirection( tgt, Board::GetReflectDirection( dir ) ) : -1 );
+
+        if ( !attackPos.contains( attackIdx ) ) {
+            return false;
+        }
+
+        // Attack from a specified cell may be prohibited - for example, if this cell belongs to a castle moat
+        if ( !Board::CanAttackFromCell( *attacker, attackIdx ) ) {
+            return false;
+        }
+
+        return true;
+    };
+
+    const uint32_t attackerUID = cmd.GetNextValue();
+    const uint32_t defenderUID = cmd.GetNextValue();
+    const int32_t dst = cmd.GetNextValue();
+    const int32_t tgt = cmd.GetNextValue();
+    const int dir = cmd.GetNextValue();
 
     Unit * attacker = GetTroopUID( attackerUID );
     Unit * defender = GetTroopUID( defenderUID );
 
-    if ( attacker && attacker->isValid() && defender && defender->isValid() && ( attacker->GetCurrentColor() != defender->GetColor() ) ) {
-        DEBUG_LOG( DBG_BATTLE, DBG_TRACE, attacker->String() << " to " << defender->String() )
+    if ( !checkParameters( attacker, defender, dst, tgt, dir ) ) {
+        ERROR_LOG( "Invalid parameters: "
+                   << "attacker uid: " << GetHexString( attackerUID ) << ", defender uid: " << GetHexString( defenderUID ) << ", dst: " << dst << ", tgt: " << tgt
+                   << ", dir: " << dir )
 
-        const bool handfighting = Unit::isHandFighting( *attacker, *defender );
-        const bool doubleAttack = attacker->isDoubleAttack();
+#ifdef WITH_DEBUG
+        assert( 0 );
+#endif
 
-        if ( attacker->isArchers() || handfighting ) {
-            defender->SetBlindRetaliation( defender->Modes( SP_BLIND ) );
+        return;
+    }
 
-            BattleProcess( *attacker, *defender, dst, dir );
+    moveUnit( attacker, dst );
 
-            if ( defender->isValid() ) {
-                if ( handfighting && !attacker->ignoreRetaliation() && defender->AllowResponse() ) {
-                    BattleProcess( *defender, *attacker );
-                    defender->SetResponse();
-                }
+    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, attacker->String() << " to " << defender->String() )
 
-                if ( doubleAttack && attacker->isValid() && !attacker->isImmovable() ) {
-                    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "double attack" )
-                    BattleProcess( *attacker, *defender, dst, dir );
-                }
-            }
+    const bool handfighting = Unit::isHandFighting( *attacker, *defender );
+    const bool doubleAttack = attacker->isDoubleAttack();
 
-            defender->SetBlindRetaliation( false );
+    defender->SetBlindRetaliation( defender->Modes( SP_BLIND ) );
 
-            // Berserk and Hypnotize spells should only be removed after an attack initiated by this unit, but not after its retaliatory attack
-            attacker->removeAffection( SP_BERSERKER | SP_HYPNOTIZE );
+    BattleProcess( *attacker, *defender, tgt, dir );
 
-            // Reflect attacker only if he is alive.
-            if ( attacker->isValid() ) {
-                attacker->UpdateDirection();
-            }
-
-            // Reflect defender only if he is alive.
-            if ( defender->isValid() ) {
-                defender->UpdateDirection();
-            }
+    if ( defender->isValid() ) {
+        if ( handfighting && !attacker->isIgnoringRetaliation() && defender->AllowResponse() ) {
+            BattleProcess( *defender, *attacker );
+            defender->SetResponse();
         }
-        else {
-            DEBUG_LOG( DBG_BATTLE, DBG_WARN, "incorrect param: " << attacker->String( true ) << " and " << defender->String( true ) )
+
+        if ( doubleAttack && attacker->isValid() && !attacker->isImmovable() ) {
+            DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "double attack" )
+
+            BattleProcess( *attacker, *defender, tgt, dir );
         }
     }
-    else {
-        DEBUG_LOG( DBG_BATTLE, DBG_WARN,
-                   "incorrect param: "
-                       << "uid: " << GetHexString( attackerUID ) << ", uid: " << GetHexString( defenderUID ) )
+
+    defender->SetBlindRetaliation( false );
+
+    // Berserk and Hypnotize spells should only be removed after an attack initiated by this unit, but not after its retaliatory attack
+    attacker->removeAffection( SP_BERSERKER | SP_HYPNOTIZE );
+
+    // Reflect attacker only if he is alive.
+    if ( attacker->isValid() ) {
+        attacker->UpdateDirection();
     }
+
+    // Reflect defender only if he is alive.
+    if ( defender->isValid() ) {
+        defender->UpdateDirection();
+    }
+
+    attacker->SetModes( TR_MOVED );
 }
 
 void Battle::Arena::ApplyActionMove( Command & cmd )
 {
-    const uint32_t uid = cmd.GetValue();
-    const int32_t dst = cmd.GetValue();
+    const auto checkParameters = []( const Unit * unit, const int32_t dst ) {
+        if ( unit == nullptr || !unit->isValid() ) {
+            return false;
+        }
+
+        if ( unit->Modes( TR_MOVED ) ) {
+            return false;
+        }
+
+        if ( !checkMoveParams( unit, dst ) ) {
+            return false;
+        }
+
+        return true;
+    };
+
+    const uint32_t uid = cmd.GetNextValue();
+    const int32_t dst = cmd.GetNextValue();
 
     Unit * unit = GetTroopUID( uid );
-    const Cell * cell = Board::GetCell( dst );
 
-    if ( unit && unit->isValid() && cell && cell->isPassableForUnit( *unit ) ) {
-        const int32_t initialHead = unit->GetHeadIndex();
+    if ( !checkParameters( unit, dst ) ) {
+        ERROR_LOG( "Invalid parameters: "
+                   << "uid: " << GetHexString( uid ) << ", dst: " << dst )
 
-        Position pos = Position::GetPosition( *unit, dst );
-        assert( pos.GetHead() != nullptr && ( !unit->isWide() || pos.GetTail() != nullptr ) );
+#ifdef WITH_DEBUG
+        assert( 0 );
+#endif
 
-        DEBUG_LOG( DBG_BATTLE, DBG_TRACE,
-                   unit->String() << ", dst: " << dst << ", (head: " << pos.GetHead()->GetIndex() << ", tail: " << ( unit->isWide() ? pos.GetTail()->GetIndex() : -1 )
-                                  << ")" )
-
-        Position finalPos;
-
-        if ( unit->isFlying() ) {
-            unit->UpdateDirection( pos.GetRect() );
-
-            if ( unit->isReflect() != pos.isReflect() ) {
-                pos.Swap();
-            }
-
-            if ( _interface ) {
-                _interface->RedrawActionFly( *unit, pos );
-            }
-            else if ( _bridge ) {
-                const int32_t dstHead = pos.GetHead()->GetIndex();
-                const int32_t dstTail = unit->isWide() ? pos.GetTail()->GetIndex() : -1;
-
-                // Lower the bridge if the unit needs to land on it
-                if ( _bridge->NeedDown( *unit, dstHead ) || ( unit->isWide() && _bridge->NeedDown( *unit, dstTail ) ) ) {
-                    _bridge->ActionDown();
-                }
-
-                unit->SetPosition( pos );
-
-                // Raise the bridge if possible after the unit has completed its movement
-                if ( _bridge->AllowUp() ) {
-                    _bridge->ActionUp();
-                }
-            }
-
-            finalPos = pos;
-        }
-        else {
-            const Indexes path = GetPath( *unit, pos );
-
-            if ( path.empty() ) {
-                DEBUG_LOG( DBG_BATTLE, DBG_WARN,
-                           "path is empty: " << unit->String() << " to "
-                                             << "dst: " << dst )
-                return;
-            }
-
-            if ( _interface ) {
-                _interface->RedrawActionMove( *unit, path );
-            }
-            else if ( _bridge ) {
-                for ( const int32_t idx : path ) {
-                    if ( _bridge->NeedDown( *unit, idx ) ) {
-                        _bridge->ActionDown();
-                    }
-
-                    if ( unit->isWide() && unit->GetTailIndex() == idx ) {
-                        unit->SetReflection( !unit->isReflect() );
-                    }
-                    else {
-                        unit->SetPosition( idx );
-                    }
-
-                    if ( _bridge->AllowUp() ) {
-                        _bridge->ActionUp();
-                    }
-                }
-            }
-
-            if ( unit->isWide() ) {
-                const int32_t dstHead = path.back();
-                const int32_t dstTail = path.size() > 1 ? path[path.size() - 2] : initialHead;
-
-                finalPos.Set( dstHead, true, ( Board::GetDirection( dstHead, dstTail ) & RIGHT_SIDE ) != 0 );
-            }
-            else {
-                finalPos.Set( path.back(), false, unit->isReflect() );
-            }
-        }
-
-        unit->SetPosition( finalPos );
-        unit->UpdateDirection();
+        return;
     }
-    else {
-        DEBUG_LOG( DBG_BATTLE, DBG_WARN,
-                   "incorrect param: "
-                       << "uid: " << GetHexString( uid ) << ", dst: " << dst )
-    }
+
+    moveUnit( unit, dst );
+
+    unit->SetModes( TR_MOVED );
 }
 
 void Battle::Arena::ApplyActionSkip( Command & cmd )
 {
-    const uint32_t uid = cmd.GetValue();
+    const auto checkParameters = []( const Unit * unit ) {
+        if ( unit == nullptr || !unit->isValid() ) {
+            return false;
+        }
+
+        if ( unit->Modes( TR_MOVED ) ) {
+            return false;
+        }
+
+        return true;
+    };
+
+    const uint32_t uid = cmd.GetNextValue();
 
     Unit * unit = GetTroopUID( uid );
 
-    if ( unit && unit->isValid() ) {
-        if ( !unit->Modes( TR_MOVED ) ) {
-            unit->SetModes( TR_SKIP );
-            unit->SetModes( TR_MOVED );
+    if ( !checkParameters( unit ) ) {
+        ERROR_LOG( "Invalid parameters: "
+                   << "uid: " << GetHexString( uid ) )
 
-            if ( _interface ) {
-                _interface->RedrawActionSkipStatus( *unit );
-            }
+#ifdef WITH_DEBUG
+        assert( 0 );
+#endif
 
-            DEBUG_LOG( DBG_BATTLE, DBG_TRACE, unit->String() )
-        }
-        else {
-            DEBUG_LOG( DBG_BATTLE, DBG_WARN, "unit has already completed its turn: " << unit->String() )
-        }
+        return;
     }
-    else {
-        DEBUG_LOG( DBG_BATTLE, DBG_WARN,
-                   "incorrect param: "
-                       << "uid: " << GetHexString( uid ) )
-    }
-}
 
-void Battle::Arena::ApplyActionEnd( Command & cmd )
-{
-    const uint32_t uid = cmd.GetValue();
+    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, unit->String() )
 
-    Unit * unit = GetTroopUID( uid );
+    unit->SetModes( TR_SKIP );
+    unit->SetModes( TR_MOVED );
 
-    if ( unit ) {
-        if ( !unit->Modes( TR_MOVED ) ) {
-            unit->SetModes( TR_MOVED );
-
-            DEBUG_LOG( DBG_BATTLE, DBG_TRACE, unit->String() )
-        }
-        else {
-            DEBUG_LOG( DBG_BATTLE, DBG_INFO, "unit has already completed its turn: " << unit->String() )
-        }
-    }
-    else {
-        DEBUG_LOG( DBG_BATTLE, DBG_WARN,
-                   "incorrect param: "
-                       << "uid: " << GetHexString( uid ) )
+    if ( _interface ) {
+        _interface->RedrawActionSkipStatus( *unit );
     }
 }
 
 void Battle::Arena::ApplyActionMorale( Command & cmd )
 {
-    const uint32_t uid = cmd.GetValue();
-    const int32_t morale = cmd.GetValue();
+    const auto checkParameters = []( const Unit * unit, const bool morale ) {
+        if ( unit == nullptr || !unit->isValid() ) {
+            return false;
+        }
+
+        if ( morale ) {
+            if ( !unit->AllModes( TR_MOVED | MORALE_GOOD ) ) {
+                return false;
+            }
+        }
+        else {
+            if ( !unit->Modes( MORALE_BAD ) || unit->Modes( TR_MOVED ) ) {
+                return false;
+            }
+        }
+
+        return true;
+    };
+
+    const uint32_t uid = cmd.GetNextValue();
+    const bool morale = cmd.GetNextValue();
 
     Unit * unit = GetTroopUID( uid );
 
-    if ( unit == nullptr || !unit->isValid() ) {
-        DEBUG_LOG( DBG_BATTLE, DBG_WARN,
-                   "incorrect param: "
-                       << "uid: " << GetHexString( uid ) )
+    if ( !checkParameters( unit, morale ) ) {
+        ERROR_LOG( "Invalid parameters: "
+                   << "uid: " << GetHexString( uid ) << ", morale: " << ( morale ? "good" : "bad" ) )
+
+#ifdef WITH_DEBUG
+        assert( 0 );
+#endif
 
         return;
     }
 
+    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, ( morale ? "good" : "bad" ) << " to " << unit->String() )
+
     // Good morale
     if ( morale ) {
-        if ( !unit->AllModes( TR_MOVED | MORALE_GOOD ) ) {
-            DEBUG_LOG( DBG_BATTLE, DBG_WARN, "unit is in an invalid state: " << unit->String( true ) )
-
-            return;
-        }
-
         unit->ResetModes( TR_MOVED | MORALE_GOOD );
     }
     // Bad morale
     else {
-        if ( !unit->Modes( MORALE_BAD ) || unit->Modes( TR_MOVED ) ) {
-            DEBUG_LOG( DBG_BATTLE, DBG_WARN, "unit is in an invalid state: " << unit->String( true ) )
-
-            return;
-        }
-
         unit->ResetModes( MORALE_BAD );
         unit->SetModes( TR_MOVED );
     }
@@ -600,52 +786,96 @@ void Battle::Arena::ApplyActionMorale( Command & cmd )
     if ( _interface ) {
         _interface->RedrawActionMorale( *unit, morale != 0 );
     }
-
-    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, ( morale ? "good" : "bad" ) << " to " << unit->String() )
 }
 
-void Battle::Arena::ApplyActionRetreat( const Command & /*cmd*/ )
+void Battle::Arena::ApplyActionRetreat( const Command & /* cmd */ )
 {
-    if ( CanRetreatOpponent( _currentColor ) ) {
-        if ( _army1->GetColor() == _currentColor ) {
-            result_game.army1 = RESULT_RETREAT;
-        }
-        else if ( _army2->GetColor() == _currentColor ) {
-            result_game.army2 = RESULT_RETREAT;
-        }
-        DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "color: " << Color::String( _currentColor ) )
+    if ( !CanRetreatOpponent( _currentColor ) ) {
+        ERROR_LOG( "Preconditions were not met" )
+
+#ifdef WITH_DEBUG
+        assert( 0 );
+#endif
+
+        return;
+    }
+
+    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "color: " << Color::String( _currentColor ) )
+
+    if ( _army1->GetColor() == _currentColor ) {
+        result_game.army1 = RESULT_RETREAT;
+    }
+    else if ( _army2->GetColor() == _currentColor ) {
+        result_game.army2 = RESULT_RETREAT;
     }
     else {
-        DEBUG_LOG( DBG_BATTLE, DBG_WARN, "CanRetreatOpponent check failed" )
+        assert( 0 );
     }
 }
 
-void Battle::Arena::ApplyActionSurrender( const Command & /*cmd*/ )
+void Battle::Arena::ApplyActionSurrender( const Command & /* cmd */ )
 {
-    if ( CanSurrenderOpponent( _currentColor ) ) {
+    const auto checkPreconditions = []( const Funds & cost ) {
+        const Arena * arena = GetArena();
+        assert( arena != nullptr );
+
+        if ( !arena->CanSurrenderOpponent( arena->GetCurrentColor() ) ) {
+            return false;
+        }
+
+        if ( !world.GetKingdom( arena->GetCurrentColor() ).AllowPayment( cost ) ) {
+            return false;
+        }
+
+        return true;
+    };
+
+    if ( _army1->GetColor() == _currentColor ) {
         Funds cost;
 
-        if ( _army1->GetColor() == _currentColor )
-            cost.gold = _army1->GetSurrenderCost();
-        else if ( _army2->GetColor() == _currentColor )
-            cost.gold = _army2->GetSurrenderCost();
+        cost.gold = _army1->GetSurrenderCost();
 
-        if ( world.GetKingdom( _currentColor ).AllowPayment( cost ) ) {
-            if ( _army1->GetColor() == _currentColor ) {
-                result_game.army1 = RESULT_SURRENDER;
-                world.GetKingdom( _currentColor ).OddFundsResource( cost );
-                world.GetKingdom( _army2->GetColor() ).AddFundsResource( cost );
-            }
-            else if ( _army2->GetColor() == _currentColor ) {
-                result_game.army2 = RESULT_SURRENDER;
-                world.GetKingdom( _currentColor ).OddFundsResource( cost );
-                world.GetKingdom( _army1->GetColor() ).AddFundsResource( cost );
-            }
-            DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "color: " << Color::String( _currentColor ) )
+        if ( !checkPreconditions( cost ) ) {
+            ERROR_LOG( "Preconditions were not met" )
+
+#ifdef WITH_DEBUG
+            assert( 0 );
+#endif
+
+            return;
         }
+
+        DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "color: " << Color::String( _currentColor ) )
+
+        world.GetKingdom( _army1->GetColor() ).OddFundsResource( cost );
+        world.GetKingdom( _army2->GetColor() ).AddFundsResource( cost );
+
+        result_game.army1 = RESULT_SURRENDER;
+    }
+    else if ( _army2->GetColor() == _currentColor ) {
+        Funds cost;
+
+        cost.gold = _army2->GetSurrenderCost();
+
+        if ( !checkPreconditions( cost ) ) {
+            ERROR_LOG( "Preconditions were not met" )
+
+#ifdef WITH_DEBUG
+            assert( 0 );
+#endif
+
+            return;
+        }
+
+        DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "color: " << Color::String( _currentColor ) )
+
+        world.GetKingdom( _army2->GetColor() ).OddFundsResource( cost );
+        world.GetKingdom( _army1->GetColor() ).AddFundsResource( cost );
+
+        result_game.army2 = RESULT_SURRENDER;
     }
     else {
-        DEBUG_LOG( DBG_BATTLE, DBG_WARN, "incorrect param" )
+        assert( 0 );
     }
 }
 
@@ -674,7 +904,7 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForDamage( const Unit & attacker, U
 
     // first target
     res.defender = &defender;
-    res.damage = attacker.GetDamage( defender );
+    res.damage = attacker.GetDamage( defender, _randomGenerator );
 
     // Genie special attack
     if ( attacker.GetID() == Monster::GENIE && _randomGenerator.Get( 1, 10 ) == 2 && defender.GetHitPoints() / 2 > res.damage ) {
@@ -704,7 +934,7 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForDamage( const Unit & attacker, U
 
         if ( enemy && consideredTargets.insert( enemy ).second ) {
             res.defender = enemy;
-            res.damage = attacker.GetDamage( *enemy );
+            res.damage = attacker.GetDamage( *enemy, _randomGenerator );
 
             targets.push_back( res );
         }
@@ -718,7 +948,7 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForDamage( const Unit & attacker, U
 
             if ( enemy && enemy->GetColor() != attacker.GetCurrentColor() && consideredTargets.insert( enemy ).second ) {
                 res.defender = enemy;
-                res.damage = attacker.GetDamage( *enemy );
+                res.damage = attacker.GetDamage( *enemy, _randomGenerator );
 
                 targets.push_back( res );
             }
@@ -733,7 +963,7 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForDamage( const Unit & attacker, U
 
             if ( enemy && consideredTargets.insert( enemy ).second ) {
                 res.defender = enemy;
-                res.damage = attacker.GetDamage( *enemy );
+                res.damage = attacker.GetDamage( *enemy, _randomGenerator );
 
                 targets.push_back( res );
             }
@@ -754,18 +984,16 @@ void Battle::Arena::TargetsApplySpell( const HeroBase * hero, const Spell & spel
     }
 }
 
-std::vector<Battle::Unit *> Battle::Arena::FindChainLightningTargetIndexes( const HeroBase * hero, Unit * firstUnit )
+std::vector<Battle::Unit *> Battle::Arena::FindChainLightningTargetIndexes( const HeroBase * hero, Unit * firstUnit, const bool applyRandomMagicResistance )
 {
     std::vector<Unit *> result = { firstUnit };
     std::vector<Unit *> ignoredTroops = { firstUnit };
 
     std::vector<Unit *> foundTroops = board.GetNearestTroops( result.back(), ignoredTroops );
 
-    const int heroSpellPower = hero ? hero->GetPower() : 0;
-
     // Filter those which are fully immuned
     for ( size_t i = 0; i < foundTroops.size(); ) {
-        if ( foundTroops[i]->GetMagicResist( Spell::CHAINLIGHTNING, heroSpellPower, hero ) >= 100 ) {
+        if ( foundTroops[i]->GetMagicResist( Spell::CHAINLIGHTNING, hero ) >= 100 ) {
             ignoredTroops.push_back( foundTroops[i] );
             foundTroops.erase( foundTroops.begin() + i );
         }
@@ -777,9 +1005,10 @@ std::vector<Battle::Unit *> Battle::Arena::FindChainLightningTargetIndexes( cons
     while ( result.size() != CHAIN_LIGHTNING_CREATURE_COUNT && !foundTroops.empty() ) {
         bool targetFound = false;
         for ( size_t i = 0; i < foundTroops.size(); ++i ) {
-            const int32_t resist = foundTroops[i]->GetMagicResist( Spell::CHAINLIGHTNING, heroSpellPower, hero );
-            assert( resist >= 0 );
-            if ( resist < static_cast<int32_t>( _randomGenerator.Get( 1, 100 ) ) ) {
+            const uint32_t resist = foundTroops[i]->GetMagicResist( Spell::CHAINLIGHTNING, hero );
+            assert( resist < 100 );
+
+            if ( !applyRandomMagicResistance || resist < _randomGenerator.Get( 1, 100 ) ) {
                 ignoredTroops.push_back( foundTroops[i] );
                 result.push_back( foundTroops[i] );
                 foundTroops.erase( foundTroops.begin() + i );
@@ -803,7 +1032,7 @@ std::vector<Battle::Unit *> Battle::Arena::FindChainLightningTargetIndexes( cons
     return result;
 }
 
-Battle::TargetsInfo Battle::Arena::TargetsForChainLightning( const HeroBase * hero, int32_t attackedTroopIndex )
+Battle::TargetsInfo Battle::Arena::TargetsForChainLightning( const HeroBase * hero, const int32_t attackedTroopIndex, const bool applyRandomMagicResistance )
 {
     Unit * unit = GetTroopBoard( attackedTroopIndex );
     if ( unit == nullptr ) {
@@ -813,9 +1042,9 @@ Battle::TargetsInfo Battle::Arena::TargetsForChainLightning( const HeroBase * he
 
     TargetsInfo targets;
 
-    const uint32_t firstUnitResist = unit->GetMagicResist( Spell::CHAINLIGHTNING, 0, hero );
+    const uint32_t firstUnitResist = unit->GetMagicResist( Spell::CHAINLIGHTNING, hero );
 
-    if ( firstUnitResist >= _randomGenerator.Get( 1, 100 ) ) {
+    if ( firstUnitResist >= 100 || ( applyRandomMagicResistance && firstUnitResist >= _randomGenerator.Get( 1, 100 ) ) ) {
         targets.emplace_back();
         TargetInfo & res = targets.back();
         res.defender = unit;
@@ -823,7 +1052,7 @@ Battle::TargetsInfo Battle::Arena::TargetsForChainLightning( const HeroBase * he
         return targets;
     }
 
-    const std::vector<Unit *> targetUnits = FindChainLightningTargetIndexes( hero, unit );
+    const std::vector<Unit *> targetUnits = FindChainLightningTargetIndexes( hero, unit, applyRandomMagicResistance );
     for ( size_t i = 0; i < targetUnits.size(); ++i ) {
         targets.emplace_back();
         TargetInfo & res = targets.back();
@@ -835,7 +1064,8 @@ Battle::TargetsInfo Battle::Arena::TargetsForChainLightning( const HeroBase * he
     return targets;
 }
 
-Battle::TargetsInfo Battle::Arena::GetTargetsForSpells( const HeroBase * hero, const Spell & spell, int32_t dest, bool * playResistSound /* = nullptr */ )
+Battle::TargetsInfo Battle::Arena::GetTargetsForSpell( const HeroBase * hero, const Spell & spell, const int32_t dst, bool applyRandomMagicResistance,
+                                                       bool * playResistSound )
 {
     TargetsInfo targets;
     targets.reserve( 8 );
@@ -844,7 +1074,7 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForSpells( const HeroBase * hero, c
         *playResistSound = true;
     }
 
-    Unit * target = GetTroopBoard( dest );
+    Unit * target = GetTroopBoard( dst );
 
     // from spells
     switch ( spell.GetID() ) {
@@ -869,11 +1099,9 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForSpells( const HeroBase * hero, c
         targets.push_back( res );
     }
 
-    bool ignoreMagicResistance = false;
-
     // resurrect spell? get target from graveyard
-    if ( nullptr == target && GraveyardAllowResurrect( dest, spell ) ) {
-        target = GetTroopUID( graveyard.GetLastTroopUID( dest ) );
+    if ( nullptr == target && GraveyardAllowResurrect( dst, spell ) ) {
+        target = GetTroopUID( graveyard.GetLastTroopUID( dst ) );
 
         if ( target && target->AllowApplySpell( spell, hero ) && consideredTargets.insert( target ).second ) {
             res.defender = target;
@@ -885,7 +1113,7 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForSpells( const HeroBase * hero, c
         // check other spells
         switch ( spell.GetID() ) {
         case Spell::CHAINLIGHTNING: {
-            for ( const TargetInfo & spellTarget : TargetsForChainLightning( hero, dest ) ) {
+            for ( const TargetInfo & spellTarget : TargetsForChainLightning( hero, dst, applyRandomMagicResistance ) ) {
                 assert( spellTarget.defender != nullptr );
 
                 if ( consideredTargets.insert( spellTarget.defender ).second ) {
@@ -897,10 +1125,12 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForSpells( const HeroBase * hero, c
                 }
             }
 
-            ignoreMagicResistance = true;
+            // Magic resistance has already been applied in the process of selecting targets for Chain Lightning
+            applyRandomMagicResistance = false;
 
+            // TODO: remove this temporary assertion
             if ( playResistSound ) {
-                *playResistSound = true;
+                assert( *playResistSound );
             }
             break;
         }
@@ -910,7 +1140,7 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForSpells( const HeroBase * hero, c
         case Spell::METEORSHOWER:
         case Spell::COLDRING:
         case Spell::FIREBLAST: {
-            for ( const int32_t index : Board::GetDistanceIndexes( dest, ( spell == Spell::FIREBLAST ? 2 : 1 ) ) ) {
+            for ( const int32_t index : Board::GetDistanceIndexes( dst, ( spell == Spell::FIREBLAST ? 2 : 1 ) ) ) {
                 Unit * targetUnit = GetTroopBoard( index );
 
                 if ( targetUnit && targetUnit->AllowApplySpell( spell, hero ) && consideredTargets.insert( targetUnit ).second ) {
@@ -961,14 +1191,13 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForSpells( const HeroBase * hero, c
         }
     }
 
-    if ( !ignoreMagicResistance ) {
-        // Mark magically resistant troops
-        for ( auto & tgt : targets ) {
-            const uint32_t resist = tgt.defender->GetMagicResist( spell, hero ? hero->GetPower() : 0, hero );
+    // Mark magically resistant troops
+    for ( auto & tgt : targets ) {
+        const uint32_t resist = tgt.defender->GetMagicResist( spell, hero );
+        assert( resist < 100 );
 
-            if ( 0 < resist && 100 > resist && resist >= _randomGenerator.Get( 1, 100 ) ) {
-                tgt.resist = true;
-            }
+        if ( applyRandomMagicResistance && resist >= _randomGenerator.Get( 1, 100 ) ) {
+            tgt.resist = true;
         }
     }
 
@@ -977,77 +1206,142 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForSpells( const HeroBase * hero, c
 
 void Battle::Arena::ApplyActionTower( Command & cmd )
 {
-    const uint32_t type = cmd.GetValue();
-    const uint32_t uid = cmd.GetValue();
+    const auto checkParameters = []( const Tower * tower, const Unit * unit ) {
+        if ( tower == nullptr || !tower->isValid() ) {
+            return false;
+        }
+
+        if ( unit == nullptr || !unit->isValid() ) {
+            return false;
+        }
+
+        return true;
+    };
+
+    const uint32_t type = cmd.GetNextValue();
+    const uint32_t uid = cmd.GetNextValue();
 
     Tower * tower = GetTower( static_cast<TowerType>( type ) );
     Unit * unit = GetTroopUID( uid );
 
-    if ( unit && unit->isValid() && tower ) {
-        DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "tower: " << type << ", attack to " << unit->String() )
+    if ( !checkParameters( tower, unit ) ) {
+        ERROR_LOG( "Invalid parameters: "
+                   << "tower: " << type << ", uid: " << GetHexString( uid ) )
 
-        TargetInfo target;
-        target.defender = unit;
-        target.damage = tower->GetDamage( *unit );
+#ifdef WITH_DEBUG
+        assert( 0 );
+#endif
 
-        if ( _interface )
-            _interface->RedrawActionTowerPart1( *tower, *unit );
-        unit->ApplyDamage( *tower, target.damage, target.killed, nullptr );
-        if ( _interface )
-            _interface->RedrawActionTowerPart2( *tower, target );
+        return;
     }
-    else {
-        DEBUG_LOG( DBG_BATTLE, DBG_WARN,
-                   "incorrect param: "
-                       << "tower: " << type << ", uid: " << GetHexString( uid ) )
+
+    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "tower: " << type << ", target: " << unit->String() )
+
+    TargetInfo target;
+    target.defender = unit;
+    target.damage = tower->GetDamage( *unit, _randomGenerator );
+
+    if ( _interface ) {
+        _interface->RedrawActionTowerPart1( *tower, *unit );
+    }
+
+    unit->ApplyDamage( *tower, target.damage, target.killed, nullptr );
+
+    if ( _interface ) {
+        _interface->RedrawActionTowerPart2( *tower, target );
     }
 }
 
 void Battle::Arena::ApplyActionCatapult( Command & cmd )
 {
-    if ( _catapult ) {
-        uint32_t shots = cmd.GetValue();
+    if ( _catapult == nullptr ) {
+        ERROR_LOG( "Preconditions were not met" )
 
-        while ( shots-- ) {
-            const int target = cmd.GetValue();
-            const uint32_t damage = cmd.GetValue();
-            const bool hit = cmd.GetValue() != 0;
+#ifdef WITH_DEBUG
+        assert( 0 );
+#endif
 
-            if ( target ) {
-                if ( _interface ) {
-                    _interface->RedrawActionCatapultPart1( target, hit );
-                }
-
-                if ( hit ) {
-                    SetCastleTargetValue( target, GetCastleTargetValue( target ) - damage );
-                    if ( _interface ) {
-                        // Continue animating the smoke cloud after changing the "health" of the building.
-                        _interface->RedrawActionCatapultPart2( target );
-                    }
-                }
-
-                DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "target: " << target << ", damage: " << damage << ", hit: " << hit )
-            }
-        }
+        return;
     }
-    else {
-        DEBUG_LOG( DBG_BATTLE, DBG_WARN, "incorrect param" )
+
+    uint32_t shots = cmd.GetNextValue();
+
+    while ( shots-- ) {
+        const CastleDefenseElement target = static_cast<CastleDefenseElement>( cmd.GetNextValue() );
+        const uint32_t damage = cmd.GetNextValue();
+        const bool hit = cmd.GetNextValue() != 0;
+
+        if ( target == CastleDefenseElement::NONE ) {
+            continue;
+        }
+
+        const uint32_t castleTargetValue = GetCastleTargetValue( target );
+
+        using TargetUnderlyingType = std::underlying_type_t<decltype( target )>;
+
+        if ( castleTargetValue < damage ) {
+            ERROR_LOG( "Invalid parameters: "
+                       << "target: " << static_cast<TargetUnderlyingType>( target ) << ", damage: " << damage << ", hit: " << ( hit ? "yes" : "no" ) )
+
+#ifdef WITH_DEBUG
+            assert( 0 );
+#endif
+
+            return;
+        }
+
+        DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "target: " << static_cast<TargetUnderlyingType>( target ) << ", damage: " << damage << ", hit: " << ( hit ? "yes" : "no" ) )
+
+        if ( _interface ) {
+            _interface->RedrawActionCatapultPart1( target, hit );
+        }
+
+        if ( !hit ) {
+            continue;
+        }
+
+        SetCastleTargetValue( target, castleTargetValue - damage );
+
+        if ( _interface ) {
+            // Continue animating the smoke cloud after changing the "health" of the building.
+            _interface->RedrawActionCatapultPart2( target );
+        }
     }
 }
 
 void Battle::Arena::ApplyActionAutoSwitch( Command & cmd )
 {
-    const int color = cmd.GetValue();
+    const auto checkParameters = []( const int color ) {
+        const Arena * arena = GetArena();
+        assert( arena != nullptr );
 
-    if ( ( color != GetArmy1Color() && color != GetArmy2Color() ) || ( getForce( color ).GetControl() & CONTROL_AI ) ) {
-        DEBUG_LOG( DBG_BATTLE, DBG_WARN,
-                   "incorrect param: "
-                       << "color: " << Color::String( color ) << " (" << color << ")" )
+        if ( color != arena->GetArmy1Color() && color != arena->GetArmy2Color() ) {
+            return false;
+        }
+
+        if ( arena->getForce( color ).GetControl() & CONTROL_AI ) {
+            return false;
+        }
+
+        return true;
+    };
+
+    const int color = cmd.GetNextValue();
+
+    if ( !checkParameters( color ) ) {
+        ERROR_LOG( "Invalid parameters: "
+                   << "color: " << Color::String( color ) << " (" << color << ")" )
+
+#ifdef WITH_DEBUG
+        assert( 0 );
+#endif
 
         return;
     }
 
     _autoBattleColors ^= color;
+
+    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "color: " << Color::String( color ) << ", status: " << ( ( _autoBattleColors & color ) ? "on" : "off" ) )
 
     if ( _interface ) {
         const Player * player = Players::Get( color );
@@ -1058,8 +1352,6 @@ void Battle::Arena::ApplyActionAutoSwitch( Command & cmd )
 
         _interface->SetStatus( msg, true );
     }
-
-    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "color: " << Color::String( color ) << ", status: " << ( ( _autoBattleColors & color ) ? "on" : "off" ) )
 }
 
 void Battle::Arena::ApplyActionAutoFinish( const Command & /* cmd */ )
@@ -1067,14 +1359,20 @@ void Battle::Arena::ApplyActionAutoFinish( const Command & /* cmd */ )
     const int army1Control = GetForce1().GetControl();
     const int army2Control = GetForce2().GetControl();
 
-    const int army1Color = GetArmy1Color();
-    const int army2Color = GetArmy2Color();
-
     if ( !( army1Control & CONTROL_HUMAN ) && !( army2Control & CONTROL_HUMAN ) ) {
-        DEBUG_LOG( DBG_BATTLE, DBG_WARN, "no human-controlled player participates in the battle, auto finish disabled" )
+        ERROR_LOG( "Preconditions were not met" )
+
+#ifdef WITH_DEBUG
+        assert( 0 );
+#endif
 
         return;
     }
+
+    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "finishing the battle" )
+
+    const int army1Color = GetArmy1Color();
+    const int army2Color = GetArmy2Color();
 
     if ( army1Control & CONTROL_HUMAN ) {
         _autoBattleColors |= army1Color;
@@ -1084,12 +1382,36 @@ void Battle::Arena::ApplyActionAutoFinish( const Command & /* cmd */ )
     }
 
     _interface.reset();
-
-    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "finishing the battle" )
 }
 
-void Battle::Arena::ApplyActionSpellSummonElemental( const Command & /*cmd*/, const Spell & spell )
+void Battle::Arena::ApplyActionSpellSummonElemental( const Command & /* cmd */, const Spell & spell )
 {
+    const auto checkPreconditions = []() {
+        const Arena * arena = GetArena();
+        assert( arena != nullptr );
+
+        if ( arena->GetCurrentCommander() == nullptr ) {
+            return false;
+        }
+
+        const int32_t idx = arena->GetFreePositionNearHero( arena->GetCurrentColor() );
+        if ( !Board::isValidIndex( idx ) ) {
+            return false;
+        }
+
+        return true;
+    };
+
+    if ( !checkPreconditions() ) {
+        ERROR_LOG( "Preconditions were not met" )
+
+#ifdef WITH_DEBUG
+        assert( 0 );
+#endif
+
+        return;
+    }
+
     Unit * elem = CreateElemental( spell );
     assert( elem != nullptr );
 
@@ -1104,13 +1426,21 @@ void Battle::Arena::ApplyActionSpellSummonElemental( const Command & /*cmd*/, co
 
 void Battle::Arena::ApplyActionSpellDefaults( Command & cmd, const Spell & spell )
 {
-    const HeroBase * commander = GetCurrentCommander();
-    assert( commander != nullptr );
+    const int32_t dst = cmd.GetNextValue();
 
-    const int32_t dst = cmd.GetValue();
+    const HeroBase * commander = GetCurrentCommander();
+    if ( commander == nullptr ) {
+        ERROR_LOG( "Preconditions were not met" )
+
+#ifdef WITH_DEBUG
+        assert( 0 );
+#endif
+
+        return;
+    }
 
     bool playResistSound = false;
-    TargetsInfo targets = GetTargetsForSpells( commander, spell, dst, &playResistSound );
+    TargetsInfo targets = GetTargetsForSpell( commander, spell, dst, true, &playResistSound );
     TargetsInfo resistTargets;
 
     if ( _interface ) {
@@ -1134,53 +1464,87 @@ void Battle::Arena::ApplyActionSpellDefaults( Command & cmd, const Spell & spell
 
     TargetsApplySpell( commander, spell, targets );
 
-    if ( _interface )
+    if ( _interface ) {
         _interface->RedrawActionSpellCastPart2( spell, targets );
+    }
 }
 
 void Battle::Arena::ApplyActionSpellTeleport( Command & cmd )
 {
-    const int32_t src = cmd.GetValue();
-    const int32_t dst = cmd.GetValue();
+    const auto checkParameters = []( const Unit * unit, const Cell * cell ) {
+        if ( unit == nullptr || !unit->isValid() ) {
+            return false;
+        }
+
+        if ( !cell->isPassableForUnit( *unit ) ) {
+            return false;
+        }
+
+        const Arena * arena = GetArena();
+        assert( arena != nullptr );
+
+        if ( arena->GetCurrentCommander() == nullptr ) {
+            return false;
+        }
+
+        return true;
+    };
+
+    const int32_t src = cmd.GetNextValue();
+    const int32_t dst = cmd.GetNextValue();
 
     Unit * unit = GetTroopBoard( src );
     const Cell * cell = Board::GetCell( dst );
 
-    if ( unit && unit->isValid() && cell && cell->isPassableForUnit( *unit ) ) {
-        const Position pos = Position::GetPosition( *unit, dst );
-        assert( pos.GetHead() != nullptr && ( !unit->isWide() || pos.GetTail() != nullptr ) );
+    if ( !checkParameters( unit, cell ) ) {
+        ERROR_LOG( "Invalid parameters: "
+                   << "src: " << src << ", dst: " << dst )
 
-        if ( _interface ) {
-            const HeroBase * commander = GetCurrentCommander();
-            assert( commander != nullptr );
+#ifdef WITH_DEBUG
+        assert( 0 );
+#endif
 
-            TargetInfo targetInfo;
-            targetInfo.defender = unit;
-
-            TargetsInfo targetsInfo;
-            targetsInfo.push_back( targetInfo );
-
-            _interface->RedrawActionSpellCastStatus( Spell( Spell::TELEPORT ), src, commander->GetName(), targetsInfo );
-            _interface->RedrawActionTeleportSpell( *unit, pos.GetHead()->GetIndex() );
-        }
-
-        unit->SetPosition( pos );
-
-        DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "src: " << src << ", dst: " << dst )
+        return;
     }
-    else {
-        DEBUG_LOG( DBG_BATTLE, DBG_WARN,
-                   "incorrect param: "
-                       << "src: " << src << ", dst: " << dst )
+
+    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "src: " << src << ", dst: " << dst )
+
+    const Position pos = Position::GetPosition( *unit, dst );
+    assert( pos.isValidForUnit( unit ) );
+
+    if ( _interface ) {
+        const HeroBase * commander = GetCurrentCommander();
+        assert( commander != nullptr );
+
+        TargetInfo targetInfo;
+        targetInfo.defender = unit;
+
+        TargetsInfo targetsInfo;
+        targetsInfo.push_back( targetInfo );
+
+        _interface->RedrawActionSpellCastStatus( Spell( Spell::TELEPORT ), src, commander->GetName(), targetsInfo );
+        _interface->RedrawActionTeleportSpell( *unit, pos.GetHead()->GetIndex() );
     }
+
+    unit->SetPosition( pos );
 }
 
-void Battle::Arena::ApplyActionSpellEarthQuake( const Command & /*cmd*/ )
+void Battle::Arena::ApplyActionSpellEarthQuake( const Command & /* cmd */ )
 {
     const HeroBase * commander = GetCurrentCommander();
-    assert( commander != nullptr );
+    if ( commander == nullptr ) {
+        ERROR_LOG( "Preconditions were not met" )
 
-    std::vector<int> targets = GetCastleTargets();
+#ifdef WITH_DEBUG
+        assert( 0 );
+#endif
+
+        return;
+    }
+
+    std::vector<CastleDefenseElement> targets = GetEarthQuakeTargets();
+
+    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "number of targets: " << targets.size() )
 
     if ( _interface ) {
         _interface->RedrawActionSpellCastStatus( Spell( Spell::EARTHQUAKE ), -1, commander->GetName(), {} );
@@ -1209,64 +1573,82 @@ void Battle::Arena::ApplyActionSpellEarthQuake( const Command & /*cmd*/ )
     if ( _towers[2] && _towers[2]->isValid() && _randomGenerator.Get( 1 ) ) {
         _towers[2]->SetDestroy();
     }
-
-    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "spell: " << Spell( Spell::EARTHQUAKE ).GetName() << ", targets: " << targets.size() )
 }
 
 void Battle::Arena::ApplyActionSpellMirrorImage( Command & cmd )
 {
-    const int32_t who = cmd.GetValue();
+    const auto checkParameters = []( const Unit * unit ) {
+        if ( unit == nullptr || !unit->isValid() ) {
+            return false;
+        }
+
+        const Arena * arena = GetArena();
+        assert( arena != nullptr );
+
+        if ( arena->GetCurrentCommander() == nullptr ) {
+            return false;
+        }
+
+        return true;
+    };
+
+    const int32_t who = cmd.GetNextValue();
+
     Unit * unit = GetTroopBoard( who );
 
-    if ( unit && unit->isValid() ) {
-        Indexes distances = Board::GetDistanceIndexes( unit->GetHeadIndex(), 4 );
+    if ( !checkParameters( unit ) ) {
+        ERROR_LOG( "Invalid parameters: "
+                   << "who: " << who )
 
-        const int32_t centerIndex = unit->GetHeadIndex();
-        std::sort( distances.begin(), distances.end(), [centerIndex]( const int32_t index1, const int32_t index2 ) {
-            return Board::GetDistance( centerIndex, index1 ) < Board::GetDistance( centerIndex, index2 );
-        } );
+#ifdef WITH_DEBUG
+        assert( 0 );
+#endif
 
-        Indexes::const_iterator it = std::find_if( distances.begin(), distances.end(), [unit]( const int32_t v ) { return Board::isValidMirrorImageIndex( v, unit ); } );
-        if ( it != distances.end() ) {
-            const HeroBase * commander = GetCurrentCommander();
-            assert( commander != nullptr );
+        return;
+    }
 
-            const Spell mirrorImageSpell( Spell::MIRRORIMAGE );
+    Indexes distances = Board::GetDistanceIndexes( unit->GetHeadIndex(), 4 );
 
-            TargetInfo targetInfo;
-            targetInfo.defender = unit;
+    const int32_t centerIndex = unit->GetHeadIndex();
+    std::sort( distances.begin(), distances.end(), [centerIndex]( const int32_t index1, const int32_t index2 ) {
+        return Board::GetDistance( centerIndex, index1 ) < Board::GetDistance( centerIndex, index2 );
+    } );
 
-            TargetsInfo targetsInfo;
-            targetsInfo.push_back( targetInfo );
+    Indexes::const_iterator it = std::find_if( distances.begin(), distances.end(), [unit]( const int32_t v ) { return Board::isValidMirrorImageIndex( v, unit ); } );
+    if ( it != distances.end() ) {
+        const HeroBase * commander = GetCurrentCommander();
+        assert( commander != nullptr );
 
-            TargetsApplySpell( commander, mirrorImageSpell, targetsInfo );
+        const Spell mirrorImageSpell( Spell::MIRRORIMAGE );
 
-            Unit * mirrorUnit = CreateMirrorImage( *unit );
-            assert( mirrorUnit != nullptr );
+        TargetInfo targetInfo;
+        targetInfo.defender = unit;
 
-            const Position pos = Position::GetPosition( *mirrorUnit, *it );
-            assert( pos.GetHead() != nullptr && ( !mirrorUnit->isWide() || pos.GetTail() != nullptr ) );
+        TargetsInfo targetsInfo;
+        targetsInfo.push_back( targetInfo );
 
-            DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "set position: " << pos.GetHead()->GetIndex() )
+        TargetsApplySpell( commander, mirrorImageSpell, targetsInfo );
 
-            if ( _interface ) {
-                _interface->RedrawActionSpellCastStatus( mirrorImageSpell, who, commander->GetName(), targetsInfo );
-                _interface->RedrawActionMirrorImageSpell( *unit, pos );
-            }
+        Unit * mirrorUnit = CreateMirrorImage( *unit );
+        assert( mirrorUnit != nullptr );
 
-            mirrorUnit->SetPosition( pos );
+        const Position pos = Position::GetPosition( *mirrorUnit, *it );
+        assert( pos.isValidForUnit( mirrorUnit ) );
+
+        DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "set position: " << pos.GetHead()->GetIndex() )
+
+        if ( _interface ) {
+            _interface->RedrawActionSpellCastStatus( mirrorImageSpell, who, commander->GetName(), targetsInfo );
+            _interface->RedrawActionMirrorImageSpell( *unit, pos );
         }
-        else {
-            DEBUG_LOG( DBG_BATTLE, DBG_WARN, "no suitable position found" )
 
-            if ( _interface ) {
-                _interface->SetStatus( _( "Spell failed!" ), true );
-            }
-        }
+        mirrorUnit->SetPosition( pos );
     }
     else {
-        DEBUG_LOG( DBG_BATTLE, DBG_WARN,
-                   "incorrect param: "
-                       << "who: " << who )
+        DEBUG_LOG( DBG_BATTLE, DBG_WARN, "no suitable position found" )
+
+        if ( _interface ) {
+            _interface->SetStatus( _( "Spell failed!" ), true );
+        }
     }
 }

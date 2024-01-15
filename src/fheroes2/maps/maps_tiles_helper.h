@@ -36,6 +36,8 @@ namespace Maps
 {
     class Tiles;
 
+    struct ObjectInfo;
+
     // ATTENTION: If you add any new enumeration make sure that value 0 corresponds to empty / visited object
     //            so we don't need to write special logic in resetObjectInfoOnTile().
 
@@ -76,7 +78,23 @@ namespace Maps
         FIGHT_50_GHOSTS_AND_GET_2000_GOLD_WITH_ARTIFACT = 4
     };
 
-    // Only for MP2::OBJ_MINES.
+    enum ObjectErasureType : uint32_t
+    {
+        NONE = 0x00,
+        // Terrain objects are objects that are placed in editor using a terrain palette in objects placing mode.
+        TERRAIN_OBJECTS = 0x01,
+        CASTLES = 0x02,
+        MONSTERS = 0x04,
+        HEROES = 0x08,
+        ARTIFACTS = 0x10,
+        STREAMS = 0x20,
+        ROADS = 0x40,
+        TREASURES = 0x80,
+
+        ALL_OBJECTS = TERRAIN_OBJECTS | CASTLES | MONSTERS | HEROES | ARTIFACTS | STREAMS | ROADS | TREASURES,
+    };
+
+    // Only for MP2::OBJ_MINE.
     int32_t getMineSpellIdFromTile( const Tiles & tile );
     void setMineSpellOnTile( Tiles & tile, const int32_t spellId );
     void removeMineSpellFromTile( Tiles & tile );
@@ -164,7 +182,11 @@ namespace Maps
     bool updateRoadOnTile( Tiles & tile, const bool setRoad );
     bool updateStreamOnTile( Tiles & tile, const bool setStream );
 
-    void setRandomMonsterOnTile( Tiles & tile, const Monster & mons );
+    // Removes object and all its parts in around tiles by UID. Returns true is object is found and removed.
+    bool removeObject( Tiles & tile, const uint32_t uid );
+    bool removeObjectTypeFromTile( Tiles & tile, const MP2::ObjectIcnType objectIcnType );
+    bool eraseObjectsOnTiles( const int32_t startTileId, const int32_t endTileId, const uint32_t objectTypesToErase );
+    bool eraseOjects( Tiles & tile, const uint32_t objectTypesToErase );
 
-    void setEditorHeroOnTile( Tiles & tile, const int32_t heroType );
+    void setObjectOnTile( Tiles & tile, const ObjectInfo & info );
 }

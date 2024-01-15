@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2023                                                    *
+ *   Copyright (C) 2023 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -42,17 +42,16 @@
 #include "direction.h"
 #include "ground.h"
 #include "logging.h"
+#include "map_object_info.h"
 #include "maps.h"
 #include "maps_tiles.h"
 #include "math_base.h"
 #include "monster.h"
 #include "mp2.h"
-#include "payment.h"
 #include "profit.h"
 #include "race.h"
 #include "rand.h"
 #include "resource.h"
-#include "save_format_version.h"
 #include "skill.h"
 #include "spell.h"
 #include "tools.h"
@@ -215,7 +214,9 @@ namespace
             Maps::Tiles & topTile = world.GetTiles( top );
             topTile.Remove( tile.GetObjectUID() );
 
-            if ( topTile.GetObject() == MP2::OBJ_JAIL ) {
+            if ( topTile.GetObject() == MP2::OBJ_JAIL && topTile.GetObjectUID() == 0 ) {
+                // Since the main object was removed from the tile is it safe to mark it as empty, even if other non-main objects exist.
+                // This is not ideal but it doesn't break things.
                 topTile.setAsEmpty();
                 topTile.FixObject();
             }
@@ -225,7 +226,9 @@ namespace
                 Maps::Tiles & leftTile = world.GetTiles( Maps::GetDirectionIndex( top, Direction::LEFT ) );
                 leftTile.Remove( tile.GetObjectUID() );
 
-                if ( leftTile.GetObject() == MP2::OBJ_JAIL ) {
+                if ( leftTile.GetObject() == MP2::OBJ_JAIL && leftTile.GetObjectUID() == 0 ) {
+                    // Since the main object was removed from the tile is it safe to mark it as empty, even if other non-main objects exist.
+                    // This is not ideal but it doesn't break things.
                     leftTile.setAsEmpty();
                     leftTile.FixObject();
                 }
@@ -1168,6 +1171,109 @@ namespace
             }
         }
     }
+
+    // Checks all layers in tiles around for given UID and if it is found removes this object part
+    // and initiates a new search around this tile using recursive call of this function.
+    void removeUidFromTilesAround( const int32_t centerTileIndex, const uint32_t uid )
+    {
+        for ( const int32_t tileIndex : Maps::getAroundIndexes( centerTileIndex ) ) {
+            Maps::Tiles & currentTile = world.GetTiles( tileIndex );
+
+            if ( currentTile.GetObjectUID() == uid ) {
+                currentTile.Remove( uid );
+                removeUidFromTilesAround( tileIndex, uid );
+                return;
+            }
+
+            for ( const Maps::TilesAddon & addon : currentTile.getBottomLayerAddons() ) {
+                if ( addon._uid == uid ) {
+                    currentTile.Remove( uid );
+                    removeUidFromTilesAround( tileIndex, uid );
+                    return;
+                }
+            }
+
+            for ( const Maps::TilesAddon & addon : currentTile.getTopLayerAddons() ) {
+                if ( addon._uid == uid ) {
+                    currentTile.Remove( uid );
+                    removeUidFromTilesAround( tileIndex, uid );
+                    return;
+                }
+            }
+        }
+    }
+
+    void placeObjectOnTile( const Maps::Tiles & tile, const Maps::ObjectInfo & info )
+    {
+        assert( !info.empty() );
+
+        const uint32_t uid = Maps::getNewObjectUID();
+        const fheroes2::Point mainTilePos = tile.GetCenter();
+
+        for ( const auto & partInfo : info.groundLevelParts ) {
+            const fheroes2::Point pos = mainTilePos + partInfo.tileOffset;
+            const bool isMainObject = ( partInfo.layerType != Maps::SHADOW_LAYER && partInfo.layerType != Maps::TERRAIN_LAYER );
+
+            if ( !Maps::isValidAbsPoint( pos.x, pos.y ) ) {
+                // Only shadow and terrain layer object parts are allowed not to be placed.
+                assert( !isMainObject );
+                continue;
+            }
+
+            Maps::Tiles & currentTile = world.GetTiles( pos.x, pos.y );
+
+            if ( !isMainObject ) {
+                // Shadows and terrain object do not change main tile information.
+                currentTile.pushBottomLayerAddon( Maps::TilesAddon( partInfo.layerType, uid, partInfo.icnType, static_cast<uint8_t>( partInfo.icnIndex ) ) );
+                continue;
+            }
+
+            // It is important that the type of the object is set properly for this layer.
+            assert( partInfo.objectType != MP2::OBJ_NONE );
+
+            bool setObjectType = true;
+            if ( !MP2::isActionObject( partInfo.objectType ) ) {
+                for ( const auto & addon : currentTile.getTopLayerAddons() ) {
+                    const MP2::MapObjectType type = Maps::getObjectTypeByIcn( addon._objectIcnType, addon._imageIndex );
+                    if ( type != MP2::OBJ_NONE ) {
+                        setObjectType = false;
+                        break;
+                    }
+                }
+            }
+
+            if ( setObjectType ) {
+                currentTile.SetObject( partInfo.objectType );
+            }
+
+            currentTile.moveMainAddonToBottomLayer();
+
+            currentTile.setObjectUID( uid );
+            currentTile.setObjectIcnType( partInfo.icnType );
+
+            using TileImageIndexType = decltype( currentTile.GetObjectSpriteIndex() );
+            static_assert( std::is_same_v<TileImageIndexType, uint8_t>, "Type of GetObjectSpriteIndex() has been changed, check the logic below" );
+
+            currentTile.setObjectSpriteIndex( static_cast<uint8_t>( partInfo.icnIndex ) );
+        }
+
+        for ( const auto & partInfo : info.topLevelParts ) {
+            const fheroes2::Point pos = mainTilePos + partInfo.tileOffset;
+            if ( !Maps::isValidAbsPoint( pos.x, pos.y ) ) {
+                // This shouldn't happen as the object must be verified before placement.
+                assert( 0 );
+                continue;
+            }
+
+            Maps::Tiles & currentTile = world.GetTiles( pos.x, pos.y );
+
+            currentTile.pushTopLayerAddon( Maps::TilesAddon( Maps::OBJECT_LAYER, uid, partInfo.icnType, static_cast<uint8_t>( partInfo.icnIndex ) ) );
+
+            if ( partInfo.objectType != MP2::OBJ_NONE && !MP2::isActionObject( currentTile.GetObject() ) ) {
+                currentTile.SetObject( partInfo.objectType );
+            }
+        }
+    }
 }
 
 namespace Maps
@@ -1273,7 +1379,7 @@ namespace Maps
 
     int32_t getMineSpellIdFromTile( const Tiles & tile )
     {
-        if ( tile.GetObject( false ) != MP2::OBJ_MINES ) {
+        if ( tile.GetObject( false ) != MP2::OBJ_MINE ) {
             // Why are you calling this function for an unsupported object type?
             assert( 0 );
             return Spell::NONE;
@@ -1284,7 +1390,7 @@ namespace Maps
 
     void setMineSpellOnTile( Tiles & tile, const int32_t spellId )
     {
-        if ( tile.GetObject( false ) != MP2::OBJ_MINES ) {
+        if ( tile.GetObject( false ) != MP2::OBJ_MINE ) {
             // Why are you calling this function for an unsupported object type?
             assert( 0 );
             return;
@@ -1295,7 +1401,7 @@ namespace Maps
 
     void removeMineSpellFromTile( Tiles & tile )
     {
-        if ( tile.GetObject( false ) != MP2::OBJ_MINES ) {
+        if ( tile.GetObject( false ) != MP2::OBJ_MINE ) {
             // Why are you calling this function for an unsupported object type?
             assert( 0 );
             return;
@@ -1308,7 +1414,7 @@ namespace Maps
     {
         switch ( tile.GetObject( false ) ) {
         case MP2::OBJ_ALCHEMIST_LAB:
-        case MP2::OBJ_MINES:
+        case MP2::OBJ_MINE:
         case MP2::OBJ_SAWMILL:
             return { static_cast<int>( tile.metadata()[0] ), tile.metadata()[1] };
         default:
@@ -1345,6 +1451,11 @@ namespace Maps
         case MP2::OBJ_SHRINE_THIRD_CIRCLE:
         case MP2::OBJ_PYRAMID:
             tile.metadata()[0] = spellId;
+            break;
+        case MP2::OBJ_ARTIFACT:
+            // Only the Spell Scroll artifact can have a spell set.
+            assert( tile.metadata()[0] == Artifact::SPELL_SCROLL );
+            tile.metadata()[1] = spellId;
             break;
         default:
             // Why are you calling this function for an unsupported object type?
@@ -1892,12 +2003,6 @@ namespace Maps
                 count += Rand::Get( 1, 3 );
             }
 
-            static_assert( LAST_SUPPORTED_FORMAT_VERSION <= FORMAT_VERSION_PRE1_1005_RELEASE, "Remove the check below." );
-            if ( count == 0 ) {
-                // The fix for the case when the Troll Bridge or City of Dead with NONE tile color, has 0 creatures (fixed in PR #7246).
-                count += Rand::Get( 1, 3 );
-            }
-
             break;
 
         case MP2::OBJ_DRAGON_CITY:
@@ -1906,12 +2011,6 @@ namespace Maps
             }
             else if ( getColorFromTile( tile ) != Color::NONE ) {
                 // If the Dragon City has been captured or has 0 creatures, its population is increased by 1 dragon per week.
-                ++count;
-            }
-
-            static_assert( LAST_SUPPORTED_FORMAT_VERSION <= FORMAT_VERSION_PRE1_1005_RELEASE, "Remove the check below." );
-            if ( count == 0 ) {
-                // The fix for the case when the Dragon City with NONE tile color, has 0 creatures (fixed in PR #7246).
                 ++count;
             }
 
@@ -2407,7 +2506,7 @@ namespace Maps
             break;
         }
 
-        case MP2::OBJ_MINES: {
+        case MP2::OBJ_MINE: {
             assert( isFirstLoad );
 
             switch ( tile.GetObjectSpriteIndex() ) {
@@ -2686,7 +2785,7 @@ namespace Maps
         assert( tile.GetObject( false ) == MP2::OBJ_ABANDONED_MINE );
         assert( tile.GetObjectUID() != 0 );
 
-        const payment_t info = ProfitConditions::FromMine( resource );
+        const Funds info = ProfitConditions::FromMine( resource );
         std::optional<uint32_t> resourceCount;
 
         switch ( resource ) {
@@ -2761,9 +2860,9 @@ namespace Maps
             if ( Maps::isValidDirection( tile.GetIndex(), directionVector ) ) {
                 Tiles & mineTile = world.GetTiles( Maps::GetDirectionIndex( tile.GetIndex(), directionVector ) );
                 if ( ( mineTile.GetObject() == MP2::OBJ_NON_ACTION_ABANDONED_MINE )
-                     && ( mineTile.GetObjectUID() == tile.GetObjectUID() || mineTile.FindAddonLevel1( tile.GetObjectUID() )
-                          || mineTile.FindAddonLevel2( tile.GetObjectUID() ) ) ) {
-                    mineTile.SetObject( MP2::OBJ_NON_ACTION_MINES );
+                     && ( mineTile.GetObjectUID() == tile.GetObjectUID() || mineTile.getBottomLayerAddon( tile.GetObjectUID() )
+                          || mineTile.getTopLayerAddon( tile.GetObjectUID() ) ) ) {
+                    mineTile.SetObject( MP2::OBJ_NON_ACTION_MINE );
                 }
             }
         };
@@ -2793,7 +2892,7 @@ namespace Maps
                 rightTile.setObjectSpriteIndex( imageIndexTemp );
             }
 
-            TilesAddon * addon = rightTile.FindAddonLevel1( tile.GetObjectUID() );
+            TilesAddon * addon = rightTile.getBottomLayerAddon( tile.GetObjectUID() );
 
             if ( addon ) {
                 restoreRightSprite( addon->_objectIcnType, addon->_imageIndex );
@@ -2998,65 +3097,152 @@ namespace Maps
         }
     }
 
-    void setRandomMonsterOnTile( Tiles & tile, const Monster & mons )
+    bool removeObjectTypeFromTile( Tiles & tile, const MP2::ObjectIcnType objectIcnType )
     {
-        switch ( mons.GetID() ) {
-        case Monster::RANDOM_MONSTER:
-            tile.SetObject( MP2::OBJ_RANDOM_MONSTER );
-            break;
-        case Monster::RANDOM_MONSTER_LEVEL_1:
-            tile.SetObject( MP2::OBJ_RANDOM_MONSTER_WEAK );
-            break;
-        case Monster::RANDOM_MONSTER_LEVEL_2:
-            tile.SetObject( MP2::OBJ_RANDOM_MONSTER_MEDIUM );
-            break;
-        case Monster::RANDOM_MONSTER_LEVEL_3:
-            tile.SetObject( MP2::OBJ_RANDOM_MONSTER_STRONG );
-            break;
-        case Monster::RANDOM_MONSTER_LEVEL_4:
-            tile.SetObject( MP2::OBJ_RANDOM_MONSTER_VERY_STRONG );
+        if ( tile.getObjectIdByObjectIcnType( objectIcnType ) == 0 ) {
+            // There is no such object on this tile.
+            return false;
+        }
+
+        // TODO: Improve this code to remove the multi-tile objects.
+        tile.removeObjects( objectIcnType );
+
+        // For some objects we should set tile object type as empty and reset the metadata.
+        switch ( objectIcnType ) {
+        case MP2::OBJ_ICN_TYPE_MONS32:
+        case MP2::OBJ_ICN_TYPE_MINIHERO:
+            resetObjectMetadata( tile );
+            tile.setAsEmpty();
             break;
         default:
-            // It is not even a random monster!
-            assert( 0 );
-            return;
+            break;
         }
 
-        if ( tile.getObjectIcnType() != MP2::OBJ_ICN_TYPE_UNKNOWN ) {
-            // If there is another object sprite here (shadow for example) push it down to add-ons.
-            tile.pushBottomLayerAddon( TilesAddon( tile.getLayerType(), tile.GetObjectUID(), tile.getObjectIcnType(), tile.GetObjectSpriteIndex() ) );
-        }
-
-        tile.setObjectUID( getNewObjectUID() );
-        tile.setObjectIcnType( MP2::OBJ_ICN_TYPE_MONS32 );
-
-        using TileImageIndexType = decltype( tile.GetObjectSpriteIndex() );
-        static_assert( std::is_same_v<TileImageIndexType, uint8_t>, "Type of GetObjectSpriteIndex() has been changed, check the logic below" );
-
-        const uint32_t monsSpriteIndex = static_cast<uint32_t>( mons.GetID() - 1 );
-        assert( monsSpriteIndex >= std::numeric_limits<TileImageIndexType>::min() && monsSpriteIndex <= std::numeric_limits<TileImageIndexType>::max() );
-
-        tile.setObjectSpriteIndex( static_cast<TileImageIndexType>( monsSpriteIndex ) );
+        return true;
     }
 
-    void setEditorHeroOnTile( Tiles & tile, const int32_t heroType )
+    bool removeObject( Tiles & tile, const uint32_t uid )
     {
-        tile.SetObject( MP2::OBJ_HEROES );
-
-        if ( tile.getObjectIcnType() != MP2::OBJ_ICN_TYPE_UNKNOWN ) {
-            // If there is another object sprite here (shadow for example) push it down to add-ons.
-            tile.pushBottomLayerAddon( TilesAddon( tile.getLayerType(), tile.GetObjectUID(), tile.getObjectIcnType(), tile.GetObjectSpriteIndex() ) );
+        if ( uid == 0 ) {
+            // There is no such object on this tile.
+            return false;
         }
 
-        // No object exists on this tile. Add one.
-        tile.setObjectUID( getNewObjectUID() );
-        tile.setObjectIcnType( MP2::OBJ_ICN_TYPE_MINIHERO );
+        tile.Remove( uid );
 
-        using TileImageIndexType = decltype( tile.GetObjectSpriteIndex() );
-        static_assert( std::is_same_v<TileImageIndexType, uint8_t>, "Type of GetObjectSpriteIndex() has been changed, check the logic below" );
+        // An object may occupy several tiles, we recursively check all around tiles for its parts by UID.
+        removeUidFromTilesAround( tile.GetIndex(), uid );
 
-        assert( heroType >= std::numeric_limits<TileImageIndexType>::min() && heroType <= std::numeric_limits<TileImageIndexType>::max() );
+        resetObjectMetadata( tile );
 
-        tile.setObjectSpriteIndex( static_cast<TileImageIndexType>( heroType ) );
+        // TODO: Improve this code to properly update '_mainObjectType' in the case when
+        // there is a non-action objects placed under the current (action) object.
+        tile.setAsEmpty();
+
+        return true;
+    }
+
+    bool eraseObjectsOnTiles( const int32_t startTileId, const int32_t endTileId, const uint32_t objectTypesToErase )
+    {
+        if ( objectTypesToErase == ObjectErasureType::NONE ) {
+            // Nothing to erase.
+            return false;
+        }
+
+        const int32_t mapWidth = world.w();
+        const int32_t maxTileId = mapWidth * world.h() - 1;
+        if ( startTileId < 0 || startTileId > maxTileId || endTileId < 0 || endTileId > maxTileId ) {
+            return false;
+        }
+
+        const fheroes2::Point startTileOffset = GetPoint( startTileId );
+        const fheroes2::Point endTileOffset = GetPoint( endTileId );
+
+        const int32_t startX = std::min( startTileOffset.x, endTileOffset.x );
+        const int32_t startY = std::min( startTileOffset.y, endTileOffset.y );
+        const int32_t endX = std::max( startTileOffset.x, endTileOffset.x );
+        const int32_t endY = std::max( startTileOffset.y, endTileOffset.y );
+
+        bool needRedraw = false;
+
+        for ( int32_t y = startY; y <= endY; ++y ) {
+            const int32_t tileOffset = y * mapWidth;
+            for ( int32_t x = startX; x <= endX; ++x ) {
+                needRedraw |= eraseOjects( world.GetTiles( x + tileOffset ), objectTypesToErase );
+            }
+        }
+
+        return needRedraw;
+    }
+
+    bool eraseOjects( Tiles & tile, const uint32_t objectTypesToErase )
+    {
+        if ( objectTypesToErase == ObjectErasureType::NONE ) {
+            // Nothing to erase.
+            return false;
+        }
+
+        bool needRedraw = false;
+
+        if ( objectTypesToErase & ObjectErasureType::ROADS ) {
+            needRedraw |= updateRoadOnTile( tile, false );
+        }
+        if ( objectTypesToErase & ObjectErasureType::STREAMS ) {
+            needRedraw |= updateStreamOnTile( tile, false );
+        }
+        if ( objectTypesToErase & ObjectErasureType::MONSTERS ) {
+            needRedraw |= removeObjectTypeFromTile( tile, MP2::OBJ_ICN_TYPE_MONS32 );
+        }
+        if ( objectTypesToErase & ObjectErasureType::HEROES ) {
+            // TODO: Implement hero removal from other objects (castles, windmills, mines, etc.)
+            // without corrupting their object data. Do this through 'OBJ_HERO' (possibly like 'hero.Dismiss()').
+            needRedraw |= removeObjectTypeFromTile( tile, MP2::OBJ_ICN_TYPE_MINIHERO );
+        }
+        if ( objectTypesToErase & ObjectErasureType::TREASURES && tile.getObjectIcnType() == MP2::OBJ_ICN_TYPE_OBJNRSRC ) {
+            needRedraw |= removeObject( tile, tile.GetObjectUID() );
+        }
+        if ( objectTypesToErase & ObjectErasureType::ARTIFACTS && tile.getObjectIcnType() == MP2::OBJ_ICN_TYPE_OBJNARTI ) {
+            needRedraw |= removeObject( tile, tile.GetObjectUID() );
+        }
+
+        return needRedraw;
+    }
+
+    void setObjectOnTile( Tiles & tile, const ObjectInfo & info )
+    {
+        assert( !info.empty() );
+
+        switch ( info.objectType ) {
+        case MP2::OBJ_MONSTER:
+            setMonsterOnTile( tile, static_cast<int32_t>( info.metadata[0] ), 0 );
+            // Since setMonsterOnTile() function interprets 0 as a random number of monsters it is important to set the correct value.
+            setMonsterCountOnTile( tile, 0 );
+            return;
+        case MP2::OBJ_RESOURCE:
+            // Setting just 1 resource is enough. It doesn't matter as we are not saving this value into the map format.
+            placeObjectOnTile( tile, info );
+            setResourceOnTile( tile, static_cast<int>( info.metadata[0] ), 1 );
+            return;
+        case MP2::OBJ_ARTIFACT:
+            placeObjectOnTile( tile, info );
+            // The artifact ID is stored in metadata[0]. It is used by the other engine functions.
+            tile.metadata()[0] = info.metadata[0];
+            return;
+        case MP2::OBJ_ALCHEMIST_LAB:
+        case MP2::OBJ_MINE:
+        case MP2::OBJ_SAWMILL:
+            placeObjectOnTile( tile, info );
+            // Set resource type and income per day.
+            tile.metadata()[0] = info.metadata[0];
+            tile.metadata()[1] = info.metadata[1];
+            world.updatePassabilities();
+            return;
+        default:
+            break;
+        }
+
+        placeObjectOnTile( tile, info );
+
+        world.updatePassabilities();
     }
 }

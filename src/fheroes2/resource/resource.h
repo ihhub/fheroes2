@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -44,11 +44,6 @@ struct cost_t
     uint8_t gems;
 };
 
-#define COST_NONE                                                                                                                                                        \
-    {                                                                                                                                                                    \
-        0, 0, 0, 0, 0, 0, 0                                                                                                                                              \
-    }
-
 namespace Resource
 {
     enum
@@ -83,24 +78,29 @@ public:
     Funds & operator-=( const Funds & );
     Funds & operator=( const cost_t & );
 
-    bool operator>=( const Funds & ) const;
-    bool operator<( const Funds & funds ) const
+    bool operator==( const Funds & other ) const;
+    bool operator>=( const Funds & other ) const;
+
+    bool operator<( const Funds & other ) const
     {
-        return !operator>=( funds );
+        return !operator>=( other );
     }
 
     Funds max( const Funds & ) const;
+
     int32_t Get( int rs ) const;
     int32_t * GetPtr( int rs );
 
     int getLowestQuotient( const Funds & ) const;
+
     int GetValidItems() const;
     uint32_t GetValidItemsCount() const;
-    void Trim(); // set all values to be >= 0
-
     std::pair<int, int32_t> getFirstValidResource() const;
 
+    // Sets all values to be >= 0
+    void Trim();
     void Reset();
+
     std::string String() const;
 
     int32_t wood;
