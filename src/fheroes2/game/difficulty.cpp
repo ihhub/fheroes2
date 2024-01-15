@@ -215,17 +215,17 @@ bool Difficulty::allowAIToSplitWeakStacks( const int difficulty )
     return true;
 }
 
-bool Difficulty::allowAIToDevelopCastlesOnlyOnEvenDays( const int difficulty, const bool isCampaign )
+bool Difficulty::allowAIToDevelopCastlesOnDay( const int difficulty, const bool isCampaign, const uint32_t day )
 {
     switch ( difficulty ) {
     case Difficulty::EASY:
-        return true;
+        return day % 2 == 0;
     case Difficulty::NORMAL:
-        return !isCampaign;
+        return isCampaign || day % 2 == 0;
     default:
         break;
     }
-    return false;
+    return true;
 }
 
 bool Difficulty::allowAIToBuildCastleBuilding( const int difficulty, const bool isCampaign, const building_t building )

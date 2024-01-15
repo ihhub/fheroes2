@@ -161,7 +161,7 @@ namespace AI
 
     bool CastleDevelopment( Castle & castle, int safetyFactor, int spellLevel )
     {
-        if ( Difficulty::allowAIToDevelopCastlesOnlyOnEvenDays( Game::getDifficulty(), Game::isCampaign() ) && world.CountDay() % 2 != 0 ) {
+        if ( !Difficulty::allowAIToDevelopCastlesOnDay( Game::getDifficulty(), Game::isCampaign(), world.CountDay() ) ) {
             return false;
         }
 

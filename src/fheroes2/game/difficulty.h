@@ -68,7 +68,7 @@ namespace Difficulty
     // Returns true if AI should avoid having free slots in the army
     bool allowAIToSplitWeakStacks( const int difficulty );
 
-    bool allowAIToDevelopCastlesOnlyOnEvenDays( const int difficulty, const bool isCampaign );
+    bool allowAIToDevelopCastlesOnDay( const int difficulty, const bool isCampaign, const uint32_t day );
     bool allowAIToBuildCastleBuilding( const int difficulty, const bool isCampaign, const building_t building );
 }
 
