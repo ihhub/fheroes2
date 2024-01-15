@@ -3162,7 +3162,7 @@ namespace fheroes2
         }
 
         for ( uint8_t i = 0; i < borderWidth; i++ ) {
-            fheroes2::Image cnt = CreateContour( image, 0 );
+            fheroes2::Sprite cnt = CreateContour( image, 0 );
             Blit( cnt, image );
         }
     }
