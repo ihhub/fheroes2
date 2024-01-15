@@ -1190,7 +1190,7 @@ namespace AI
         case MP2::OBJ_WINDMILL: {
             const Funds loot = getFundsFromTile( tile );
 
-           const double value = getFundsValueBasedOnPriority( loot );
+            const double value = getFundsValueBasedOnPriority( loot );
 
             // This object could have already been visited
             if ( value < 1 ) {
