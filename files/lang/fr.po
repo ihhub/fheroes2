@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-13 09:39+0000\n"
-"PO-Revision-Date: 2024-01-14 17:06+0100\n"
+"PO-Revision-Date: 2024-01-15 20:28+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
 "Language: fr\n"
@@ -3240,10 +3240,10 @@ msgid "treeOfKnowledge|free"
 msgstr "gratuit"
 
 msgid "already claimed"
-msgstr "déjà gagné"
+msgstr "récompense non disponible"
 
 msgid "not claimed"
-msgstr "non gagné"
+msgstr "récompense disponible"
 
 msgid "already knows this skill"
 msgstr "connaît déjà cette compétence"
@@ -3423,7 +3423,7 @@ msgid "Select Ocean Object:"
 msgstr "Choix d'élément (océan) :"
 
 msgid "Castle/town placing"
-msgstr "Placement de villages/chateaux"
+msgstr "Choix du Village à placer"
 
 msgid "doubleLinedRace|Neutral"
 msgstr "Neutre"
@@ -3435,7 +3435,7 @@ msgid "Click to start placing the selected castle/town."
 msgstr "Cliquez pour commencer le placement du village/château sélectionné."
 
 msgid "Click to select town placing."
-msgstr "Cliquez pour déterminer le placement du village."
+msgstr "Cliquez pour sélectionner le village."
 
 msgid "Click to select castle placing."
 msgstr "Cliquez pour déterminer le placement du château."
@@ -3447,7 +3447,7 @@ msgid "race|Neutral"
 msgstr "Neutre"
 
 msgid "You will place"
-msgstr "Placerez"
+msgstr "Vous avez choisi de placer"
 
 msgid "Click to select this class."
 msgstr "Cliquez ici pour sélectionner cet alignement."
@@ -3760,7 +3760,7 @@ msgid "Best Monster:"
 msgstr "Meilleure créature :"
 
 msgid "Map filename"
-msgstr "Nom du fichier de la carte"
+msgstr "Nom de fichier pour la carte"
 
 # Needs line break to have insectile space but keep partie and ? together.
 msgid ""
@@ -3983,7 +3983,7 @@ msgid "Used to draw the underlying grass, dirt, water, etc. on the map."
 msgstr ""
 
 msgid "Landscape Objects Mode"
-msgstr "Mode d'éléments de paysage"
+msgstr "Éléments de paysage"
 
 msgid ""
 "Used to place landscape objects (mountains, rocks, trees, etc.) on the map."
@@ -3996,7 +3996,7 @@ msgid "Used for special editing of monsters, heroes and towns."
 msgstr "Permet d'éditer les monstres, les héros et les villes."
 
 msgid "Adventure Objects Mode"
-msgstr "Mode d'éléments d'aventure"
+msgstr "Éléments d'aventure"
 
 msgid ""
 "Used to place adventure objects (artifacts, dwellings, mines, treasures, "
@@ -4004,13 +4004,13 @@ msgid ""
 msgstr ""
 
 msgid "Kingdom Objects Mode"
-msgstr "Mode de royaumes"
+msgstr "Royaumes"
 
 msgid "Used to place kingdom objects (towns, castles and heroes) on the map."
 msgstr ""
 
 msgid "Monsters Mode"
-msgstr "Mode créatures"
+msgstr "Créatures"
 
 msgid "Used to place monsters on the map."
 msgstr "Permet de placer des créatures sur la carte."
@@ -4025,7 +4025,7 @@ msgid "Allows you to draw roads by clicking and dragging."
 msgstr ""
 
 msgid "Road Mode"
-msgstr "Mode Route"
+msgstr "Routes"
 
 msgid "Erase Mode"
 msgstr ""
@@ -4395,22 +4395,22 @@ msgid "View High Scores for Campaigns."
 msgstr "Voir l'écran des meilleurs scores."
 
 msgid "hotkey|default okay event"
-msgstr "Interaction de confirmer par défaut"
+msgstr "Confirmer l'action prédéfinie"
 
 msgid "hotkey|default cancel event"
-msgstr "Interaction d'annuler par défaut"
+msgstr "Annuler l'action en cours"
 
 msgid "hotkey|default left"
-msgstr "Interaction à gauche par défaut"
+msgstr "Direction gauche"
 
 msgid "hotkey|default right"
-msgstr "Interaction à droite par défaut"
+msgstr "Direction droite"
 
 msgid "hotkey|default up"
-msgstr "Interaction en haut par défaut"
+msgstr "Direction haut"
 
 msgid "hotkey|default down"
-msgstr "Interaction en bas par défaut"
+msgstr "Direction bas"
 
 msgid "hotkey|toggle fullscreen"
 msgstr "Basculer en plein écran"
@@ -4479,10 +4479,10 @@ msgid "hotkey|map editor main menu"
 msgstr "Menu principal de l'éditeur"
 
 msgid "hotkey|new map menu"
-msgstr "Menu de création de carte"
+msgstr "Menu de nouvelle carte"
 
 msgid "hotkey|load map menu"
-msgstr "Menu de chargement de cartes"
+msgstr "Menu de chargement de carte"
 
 msgid "hotkey|new map from scratch"
 msgstr "Nouvelle carte à partir de zéro"
@@ -4745,7 +4745,7 @@ msgid "Battle Screen"
 msgstr "Écran de bataille"
 
 msgid "Town Screen"
-msgstr "Écran de village"
+msgstr "Écran de ville"
 
 msgid "Army Actions"
 msgstr "Interactions de l'armée"
@@ -5191,7 +5191,7 @@ msgstr ""
 "votre jeu. Ce taux sera appliqué à votre score final."
 
 msgid "Click to accept these settings and start a new game."
-msgstr "Cliquez pour accepter ces paramètres et démarrer un nouveau jeu."
+msgstr "Cliquez pour accepter ces paramètres et démarrer un nouveau partie."
 
 msgid "Click to return to the main menu."
 msgstr "Cliquez pour revenir au menu principal."
