@@ -387,6 +387,8 @@ Battle::Arena::~Arena()
 
 void Battle::Arena::TurnTroop( Unit * troop, const Units & orderHistory )
 {
+    assert( troop && troop->isValid() );
+
     DEBUG_LOG( DBG_BATTLE, DBG_TRACE, troop->String( true ) )
 
     if ( troop->isAffectedByMorale() ) {
