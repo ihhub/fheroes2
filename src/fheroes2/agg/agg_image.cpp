@@ -2502,9 +2502,9 @@ namespace fheroes2
                     Sprite & out = _icnVsSprite[id][i];
                     out.resize( in.width() + 3, in.height() + 2 );
                     out.reset();
-                    Copy( in, 0, 0, out, 1, 1, in.width(), in.height() );
+                    Copy( in, 0, 0, out, 1, 2, in.width(), in.height() );
                     out.setPosition( in.x() - 1, in.y() - 1 );
-                    ApplyVerticalGradient( out, PAL::ColorRanges::YELLOW_END, PAL::ColorRanges::YELLOW_START, 4, 1 );
+                    ApplyVerticalGradient( out, PAL::ColorRanges::YELLOW_END - 4, PAL::ColorRanges::YELLOW_START, 1, PAL::ColorRanges::BROWN_START + 18 );
                     fheroes2::updateShadow( out, { -1, 2 }, 2, false );
                 }
                 return true;
@@ -2518,9 +2518,9 @@ namespace fheroes2
                     Sprite & out = _icnVsSprite[id][i];
                     out.resize( in.width() + 3, in.height() + 2 );
                     out.reset();
-                    Copy( in, 0, 0, out, 1, 1, in.width(), in.height() );
+                    Copy( in, 0, 0, out, 1, 2, in.width(), in.height() );
                     out.setPosition( in.x() - 1, in.y() - 1 );
-                    ApplyVerticalGradient( out, PAL::ColorRanges::YELLOW_END, PAL::ColorRanges::YELLOW_START, 4, 2 );
+                    ApplyVerticalGradient( out, PAL::ColorRanges::YELLOW_END - 4, PAL::ColorRanges::YELLOW_START, 1, PAL::ColorRanges::BROWN_START + 18 );
                     fheroes2::updateShadow( out, { -1, 2 }, 2, false );
                 }
                 return true;
