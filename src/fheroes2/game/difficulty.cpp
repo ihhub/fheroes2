@@ -219,8 +219,6 @@ bool Difficulty::allowAIToDevelopCastlesOnDay( const int difficulty, const bool 
 {
     switch ( difficulty ) {
     case Difficulty::EASY:
-        return day % 2 == 0;
-    case Difficulty::NORMAL:
         return isCampaign || day % 2 == 0;
     default:
         break;
