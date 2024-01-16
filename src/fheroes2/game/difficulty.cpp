@@ -82,7 +82,7 @@ double Difficulty::getGoldIncomeBonusForAI( const int difficulty )
     return 0;
 }
 
-double Difficulty::GetUnitGrowthBonusForAI( const int difficulty, const bool isCampaign, const building_t dwelling )
+double Difficulty::GetUnitGrowthBonusForAI( const int difficulty, const bool /* isCampaign */, const building_t /* dwelling */ )
 {
     // In the original game AI has a cheeky monster growth bonus depending on difficulty:
     // Easy - 0.0 (no bonus)
@@ -101,8 +101,7 @@ double Difficulty::GetUnitGrowthBonusForAI( const int difficulty, const bool isC
     switch ( difficulty ) {
     case Difficulty::EASY:
     case Difficulty::NORMAL:
-        // Unit growth may be reduced compared to the original growth value
-        return isCampaign || dwelling != DWELLING_MONSTER6 ? 0 : -0.5;
+        return 0;
     case Difficulty::HARD:
         return 0.14;
     case Difficulty::EXPERT:
