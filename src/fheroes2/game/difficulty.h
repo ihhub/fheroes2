@@ -49,7 +49,7 @@ namespace Difficulty
     double getGoldIncomeBonusForAI( const int difficulty );
 
     // Returns an extra growth bonus modifier for AI based on difficulty level.
-    double GetUnitGrowthBonusForAI( const int difficulty );
+    double GetUnitGrowthBonusForAI( const int difficulty, const bool isCampaign, const building_t dwelling );
 
     int GetHeroMovementBonus( int difficulty );
 
