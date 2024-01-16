@@ -298,7 +298,7 @@ double Artifact::getArtifactValue() const
             break;
         case fheroes2::ArtifactBonusType::NECROMANCY_SKILL:
         case fheroes2::ArtifactBonusType::SURRENDER_COST_REDUCTION_PERCENT:
-            artifactValue += static_cast<double>( bonus.value ) / 10.0;
+            artifactValue += static_cast<double>( bonus.value ) / 5.0;
             break;
         case fheroes2::ArtifactBonusType::EVERY_COMBAT_SPELL_DURATION:
         case fheroes2::ArtifactBonusType::SPELL_POINTS_DAILY_GENERATION:
