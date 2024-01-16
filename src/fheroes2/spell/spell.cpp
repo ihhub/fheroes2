@@ -492,8 +492,7 @@ bool Spell::canCastCombatSpell( std::string * res ) const
 
         if ( opposingForce.onlyHasUneadAndMonsters( { Monster::PEASANT, Monster::CRUSADER } ) ) {
             if ( res != nullptr ) {
-                *res = _(
-                    "Crusaders and undead creatures cannot be affected by this spell and peasants have no range of damage, so this spell will have no effect." );
+                *res = _( "Crusaders and undead creatures cannot be affected by this spell and peasants have no range of damage, so this spell will have no effect." );
             }
             return false;
         }
