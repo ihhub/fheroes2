@@ -278,7 +278,7 @@ msgid ""
 "Several\n"
 "%{monster}"
 msgstr ""
-"Parę\n"
+"Kilka\n"
 "%{monster}"
 
 msgid ""
@@ -292,7 +292,7 @@ msgid ""
 "Lots of\n"
 "%{monster}"
 msgstr ""
-"Mnóstwo\n"
+"Dużo\n"
 "%{monster}"
 
 msgid ""
@@ -334,13 +334,13 @@ msgid "army|Few"
 msgstr "Mało"
 
 msgid "army|Several"
-msgstr "Parę"
+msgstr "Kilka"
 
 msgid "army|Pack"
 msgstr "Grupa"
 
 msgid "army|Lots"
-msgstr "Mnóstwo"
+msgstr "Dużo"
 
 msgid "army|Horde"
 msgstr "Horda"
@@ -349,7 +349,7 @@ msgid "army|Throng"
 msgstr "Tłum"
 
 msgid "army|Swarm"
-msgstr "Mrowie"
+msgstr "Mnóstwo"
 
 msgid "army|Zounds"
 msgstr "Setki"
