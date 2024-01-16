@@ -45,6 +45,7 @@
 #include "icn.h"
 #include "image.h"
 #include "interface_base.h"
+#include "interface_gamearea.h"
 #include "interface_icons.h"
 #include "interface_list.h"
 #include "kingdom.h"

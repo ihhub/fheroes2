@@ -49,6 +49,7 @@
 #include "heroes_base.h"
 #include "icn.h"
 #include "image.h"
+#include "interface_gamearea.h"
 #include "kingdom.h"
 #include "localevent.h"
 #include "m82.h"

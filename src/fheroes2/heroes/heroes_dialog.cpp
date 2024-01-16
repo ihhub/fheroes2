@@ -40,6 +40,7 @@
 #include "heroes_indicator.h"
 #include "icn.h"
 #include "image.h"
+#include "interface_gamearea.h"
 #include "kingdom.h"
 #include "localevent.h"
 #include "math_base.h"
