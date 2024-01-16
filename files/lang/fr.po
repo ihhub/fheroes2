@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-14 15:05+0000\n"
-"PO-Revision-Date: 2024-01-15 20:28+0100\n"
+"PO-Revision-Date: 2024-01-16 10:19+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
 "Language: fr\n"
@@ -3438,7 +3438,7 @@ msgid "Click to select town placing."
 msgstr "Cliquez pour sélectionner le village."
 
 msgid "Click to select castle placing."
-msgstr "Cliquez pour déterminer le placement du château."
+msgstr "Cliquez pour sélectionner le château."
 
 msgid "%{color} %{race} %{townOrCastle}"
 msgstr "%{townOrCastle} %{race} %{color}"
@@ -4488,7 +4488,7 @@ msgid "hotkey|load map menu"
 msgstr "Menu de chargement de carte"
 
 msgid "hotkey|new map from scratch"
-msgstr "Nouvelle carte à partir de zéro"
+msgstr "Carte vierge"
 
 msgid "hotkey|new random map"
 msgstr "Nouvelle carte aléatoire"
@@ -4506,16 +4506,16 @@ msgid "hotkey|archibald campaign"
 msgstr "Campagne d'Archibald"
 
 msgid "hotkey|the price of loyalty campaign"
-msgstr "La campagne de \"Price of Loyalty\""
+msgstr "La campagne \"Price of Loyalty\""
 
 msgid "hotkey|voyage home campaign"
-msgstr "La campagne de \"Le retour\""
+msgstr "La campagne \"Le retour\""
 
 msgid "hotkey|wizard's isle campaign"
-msgstr "La campagne de \"L'archipel\""
+msgstr "La campagne \"L'archipel\""
 
 msgid "hotkey|descendants campaign"
-msgstr "La campagne de \"Les héritiers\""
+msgstr "La campagne \"Les héritiers\""
 
 msgid "hotkey|select first campaign bonus"
 msgstr "Choisir le premier bonus de campagne"
@@ -4647,13 +4647,13 @@ msgid "hotkey|surrender during battle"
 msgstr "Reddition en combat"
 
 msgid "hotkey|toggle battle auto mode"
-msgstr "Basculer mode auto en combat"
+msgstr "Basculer mode combat"
 
 msgid "hotkey|finish the battle in auto mode"
 msgstr "Finir la bataille en mode auto"
 
 msgid "hotkey|battle options"
-msgstr "Options de la bataille"
+msgstr "Options de bataille"
 
 msgid "hotkey|skip turn in battle"
 msgstr "Passer le tour dans le combat"
@@ -5194,7 +5194,7 @@ msgstr ""
 "votre jeu. Ce taux sera appliqué à votre score final."
 
 msgid "Click to accept these settings and start a new game."
-msgstr "Cliquez pour accepter ces paramètres et démarrer un nouveau partie."
+msgstr "Cliquez pour accepter ces paramètres et démarrer une nouvelle partie."
 
 msgid "Click to return to the main menu."
 msgstr "Cliquez pour revenir au menu principal."
@@ -7672,7 +7672,7 @@ msgid ""
 "by %{count} percent."
 msgstr ""
 "%{skill} augmente de %{count} pour cent les dégâts infligés par les "
-"créatures du héros qui attaquent à distance."
+"créatures qui attaquent à distance dans l'armée du héros."
 
 msgid "%{skill} increases the hero's movement points by %{count} percent."
 msgstr ""
