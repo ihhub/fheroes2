@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-14 15:05+0000\n"
-"PO-Revision-Date: 2024-01-16 10:19+0100\n"
+"PO-Revision-Date: 2024-01-16 12:52+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
 "Language: fr\n"
@@ -3455,42 +3455,38 @@ msgstr "Cliquez ici pour sélectionner cet alignement."
 msgid "Click to select this color."
 msgstr "Cliquez ici pour sélectionner cette couleur."
 
-#, fuzzy
 msgid "Select Dwelling:"
-msgstr "Choisir sort :"
+msgstr "Séléctionner demeure :"
 
 msgid "Mine placing"
-msgstr ""
+msgstr "Choix de la mine à placer"
 
-#, fuzzy
 msgid ""
 "Resource\n"
 "type:"
-msgstr "Ressource"
+msgstr ""
+"Type de\n"
+"ressource :"
 
-#, fuzzy
 msgid "%{mineName} appearance:"
-msgstr "%{name} le %{race}"
+msgstr "Aspect de %{mineName} :"
 
-#, fuzzy
 msgid "Click to select %{object} as the resource generator to be placed."
-msgstr "Cliquez ici pour sélectionner le scénario à jouer."
+msgstr ""
+"Cliquez ici pour sélectionner %{objet} comme générateur de ressources à "
+"placer."
 
-#, fuzzy
 msgid "Select Mountain Object:"
-msgstr "Choix d'élément (océan) :"
+msgstr "Choix d'élément (montagnes) :"
 
-#, fuzzy
 msgid "Select Rock Object:"
-msgstr "Choix d'élément (océan) :"
+msgstr "Choix d'élément (rochers) :"
 
-#, fuzzy
 msgid "Select Tree Object:"
-msgstr "Choix d'élément (océan) :"
+msgstr "Choix d'élément (arbres) :"
 
-#, fuzzy
 msgid "Select Power Up Object:"
-msgstr "Choix d'élément (océan) :"
+msgstr "Choix d'élément (bonus) :"
 
 msgid "Map Type:\n"
 msgstr "Type de carte :\n"
@@ -3770,16 +3766,21 @@ msgid ""
 "Are you sure you want to load a new map? (Any unsaved changes to the current "
 "map will be lost.)"
 msgstr ""
+"Voulez-vous vraiement charger une carte ? (Toutes les modifications non "
+"enregistrées seront perdues.)"
 
 # Needs line break to have insectile space but keep partie and ? together.
 msgid ""
 "Are you sure you want to create a new map? (Any unsaved changes to the "
 "current map will be lost.)"
 msgstr ""
+"Voulez-vous vraiement créer une nouvelle carte ? (Toutes les modifications "
+"non enregistrées seront perdues.)"
 
 msgid ""
 "Create a new map, either from scratch or using the random map generator."
 msgstr ""
+"Créer une nouvelle carte à la main ou à l'aide du générateur aléatoire."
 
 msgid "New Map"
 msgstr "Nouvelle carte"
@@ -3788,46 +3789,43 @@ msgid "Load Map"
 msgstr "Charger une carte"
 
 msgid "Load an existing map."
-msgstr ""
+msgstr "Charger une carte existant."
 
 msgid "Save Map"
 msgstr "Sauvegarder la carte"
 
 msgid "Save the current map."
-msgstr ""
+msgstr "Sauvegarder la carte actuelle."
 
 msgid "Quit out of the map editor."
-msgstr ""
+msgstr "Quitter l'éditeur."
 
 msgid "Objects cannot be placed outside the map."
 msgstr "Les élements ne peuvent pas être placés en dehors de la carte."
 
 msgid "Monsters cannot be placed on water."
-msgstr ""
+msgstr "Les créatures ne peuvent pas être placées sur l'eau."
 
 msgid "Choose a tile which does not contain any objects."
-msgstr ""
+msgstr "Sélectionnez une case qui n'est pas déjà occupée."
 
 msgid "Treasures cannot be placed on water."
 msgstr "Les trésors ne peuvent pas être placés sur l'eau."
 
 msgid "Heroes cannot be placed on water."
-msgstr ""
+msgstr "Les héros ne peuvent pas être placés sur l'eau."
 
 msgid "Artifacts cannot be placed on water."
 msgstr "Les artéfacts ne peuvent pas être placés sur l'eau."
 
-#, fuzzy
 msgid "Mountains cannot be placed on water."
-msgstr "Ce sort ne peut pas être jeté en mer."
+msgstr "Les montagnes ne peuvent pas être placées sur l'eau."
 
-#, fuzzy
 msgid "Rocks cannot be placed on water."
-msgstr "Ce sort ne peut pas être jeté en mer."
+msgstr "Les rochers ne peuvent pas être placés sur l'eau."
 
-#, fuzzy
 msgid "Trees cannot be placed on water."
-msgstr "Les trésors ne peuvent pas être placés sur l'eau."
+msgstr "Les arbres ne peuvent pas être placés sur l'eau."
 
 msgid "Ocean object must be placed on water."
 msgstr "Les éléments liés à la mer doivent être placés sur l'eau."
@@ -3835,16 +3833,14 @@ msgstr "Les éléments liés à la mer doivent être placés sur l'eau."
 msgid "Towns cannot be placed on water."
 msgstr "Les villages ne peuvent pas être placés sur l'eau."
 
-#, fuzzy
 msgid "Mines cannot be placed on water."
-msgstr "Ce sort ne peut pas être jeté en mer."
+msgstr "Les mines ne peuvent pas être placées sur l'eau."
 
 msgid "Dwellings cannot be placed on water."
 msgstr "Les demeures ne peuvent pas être placées sur l'eau."
 
-#, fuzzy
 msgid "Power-ups cannot be placed on water."
-msgstr "Ce sort ne peut pas être jeté en mer."
+msgstr "Les bonus ne peuvent pas être placés sur l'eau."
 
 msgid "Used to place %{object}."
 msgstr "Permet de placer %{object}."
@@ -3870,15 +3866,17 @@ msgid ""
 "Cell\n"
 "Details"
 msgstr ""
+"Details\n"
+"cellule"
 
 msgid "Roads"
 msgstr "Routes"
 
 msgid "Streams"
-msgstr ""
+msgstr "Rivières"
 
 msgid "Erase"
-msgstr ""
+msgstr "Effacer"
 
 msgid "Mountains"
 msgstr "Montagnes"
@@ -3917,7 +3915,7 @@ msgid "Heroes"
 msgstr "Héros"
 
 msgid "Terrain"
-msgstr ""
+msgstr "Terrains"
 
 msgid "Castles"
 msgstr "Châteaux"
@@ -3926,11 +3924,15 @@ msgid ""
 "Draws terrain in\n"
 "%{size} by %{size} square increments."
 msgstr ""
+"Place le terrain sélectionné sur la carte\n"
+"(précision: %{size} cases sur %{size})."
 
 msgid ""
 "Erases objects in\n"
 "%{size} by %{size} square increments."
 msgstr ""
+"Efface des éléments sélectionnés sur la carte\n"
+"(précision: %{size} cases sur %{size})."
 
 msgid "Small Brush"
 msgstr "Petit pinceau"
@@ -3965,7 +3967,7 @@ msgid "No special modifiers."
 msgstr ""
 
 msgid "Toggle the erasure of %{type} objects."
-msgstr ""
+msgstr "Activer l'effacement d'éléments de type %{type}."
 
 msgid ""
 "Objects of this type will be deleted with the Erase tool. Left-click here to "
@@ -3980,7 +3982,7 @@ msgid ""
 msgstr ""
 
 msgid "Terrain Mode"
-msgstr ""
+msgstr "Terrains"
 
 msgid "Used to draw the underlying grass, dirt, water, etc. on the map."
 msgstr ""
@@ -3993,7 +3995,7 @@ msgid ""
 msgstr ""
 
 msgid "Detail Mode"
-msgstr ""
+msgstr "Details"
 
 msgid "Used for special editing of monsters, heroes and towns."
 msgstr "Permet d'éditer les monstres, les héros et les villes."
@@ -4022,7 +4024,7 @@ msgid "Allows you to draw streams by clicking and dragging."
 msgstr ""
 
 msgid "Stream Mode"
-msgstr ""
+msgstr "Rivières"
 
 msgid "Allows you to draw roads by clicking and dragging."
 msgstr ""
@@ -4031,7 +4033,7 @@ msgid "Road Mode"
 msgstr "Routes"
 
 msgid "Erase Mode"
-msgstr ""
+msgstr "Effacement"
 
 msgid "Used to erase objects from the map."
 msgstr ""
@@ -4476,13 +4478,13 @@ msgid "hotkey|choose the original campaign"
 msgstr "Sélectionner la campagne originale"
 
 msgid "hotkey|choose the expansion campaign"
-msgstr "Sélectionner la campagne de l'extension"
+msgstr "Choisir les campagnes de l'extension \"The Price of Loyalty\""
 
 msgid "hotkey|map editor main menu"
 msgstr "Menu principal de l'éditeur"
 
 msgid "hotkey|new map menu"
-msgstr "Menu de nouvelle carte"
+msgstr "Nouvelle carte"
 
 msgid "hotkey|load map menu"
 msgstr "Menu de chargement de carte"
@@ -4736,7 +4738,7 @@ msgid "Default Actions"
 msgstr "Interactions par défaut"
 
 msgid "Global Actions"
-msgstr "Interactions globals"
+msgstr "Interactions globales"
 
 msgid "Main Menu"
 msgstr "Menu principal"
