@@ -100,10 +100,9 @@ double Difficulty::GetUnitGrowthBonusForAI( const int difficulty, const bool isC
 
     switch ( difficulty ) {
     case Difficulty::EASY:
+    case Difficulty::NORMAL:
         // Unit growth may be reduced compared to the original growth value
         return isCampaign || dwelling != DWELLING_MONSTER6 ? 0 : -0.5;
-    case Difficulty::NORMAL:
-        return 0;
     case Difficulty::HARD:
         return 0.14;
     case Difficulty::EXPERT:
