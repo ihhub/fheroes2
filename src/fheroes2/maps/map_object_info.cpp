@@ -2950,7 +2950,7 @@ namespace
         {
             Maps::ObjectInfo object{ MP2::OBJ_TRADING_POST };
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 213U, fheroes2::Point{ 0, 0 }, MP2::OBJ_TRADING_POST, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 202U, fheroes2::Point{ -1, 0 }, MP2::OBJ_TRADING_POST, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 202U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NON_ACTION_TRADING_POST, Maps::OBJECT_LAYER );
             object.groundLevelParts.back().animationFrames = 10;
 
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 201U, fheroes2::Point{ -2, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
@@ -2965,7 +2965,7 @@ namespace
         {
             Maps::ObjectInfo object{ MP2::OBJ_TRADING_POST };
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMULT, 111U, fheroes2::Point{ 0, 0 }, MP2::OBJ_TRADING_POST, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMULT, 104U, fheroes2::Point{ -1, 0 }, MP2::OBJ_TRADING_POST, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMULT, 104U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NON_ACTION_TRADING_POST, Maps::OBJECT_LAYER );
             object.groundLevelParts.back().animationFrames = 6;
 
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMULT, 97U, fheroes2::Point{ -2, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
@@ -2979,15 +2979,15 @@ namespace
 
         // Lighthouse, generic terrain.
         {
-            Maps::ObjectInfo object{ MP2::OBJ_TRADING_POST };
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 73U, fheroes2::Point{ 0, 0 }, MP2::OBJ_TRADING_POST, Maps::OBJECT_LAYER );
+            Maps::ObjectInfo object{ MP2::OBJ_LIGHTHOUSE };
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 73U, fheroes2::Point{ 0, 0 }, MP2::OBJ_LIGHTHOUSE, Maps::OBJECT_LAYER );
 
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 60U, fheroes2::Point{ -2, -1 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 71U, fheroes2::Point{ -2, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 72U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
 
-            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 59U, fheroes2::Point{ 0, -2 }, MP2::OBJ_NON_ACTION_TRADING_POST );
-            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 61U, fheroes2::Point{ 0, -1 }, MP2::OBJ_NON_ACTION_TRADING_POST );
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 59U, fheroes2::Point{ 0, -2 }, MP2::OBJ_NON_ACTION_LIGHTHOUSE );
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 61U, fheroes2::Point{ 0, -1 }, MP2::OBJ_NON_ACTION_LIGHTHOUSE );
             object.topLevelParts.back().animationFrames = 9;
 
             objects.emplace_back( std::move( object ) );
