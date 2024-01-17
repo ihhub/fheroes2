@@ -597,10 +597,10 @@ namespace fheroes2
     Sprite & Sprite::operator=( Sprite && sprite ) noexcept
     {
         if ( this != &sprite ) {
-            Image::operator=( std::move( sprite ) );
-
             std::swap( _x, sprite._x );
             std::swap( _y, sprite._y );
+
+            Image::operator=( std::move( sprite ) );
         }
 
         return *this;
@@ -1362,6 +1362,9 @@ namespace fheroes2
             return contour;
         }
 
+        // This assertion is needed to convince SonarQube that we will not dereference the null pointer to 'contour' image data.
+        assert( !contour.empty() );
+
         const uint8_t * inY = image.transform();
         uint8_t * outImageY = contour.image();
         uint8_t * outTransformY = contour.transform();
@@ -1376,12 +1379,12 @@ namespace fheroes2
             const bool isNotBottomRow = ( y < reducedHeight );
 
             for ( int32_t x = 0; x < width; ++x, ++inX ) {
-                if ( *inX > 0 && *inX < 6 ) { // 1 is to skip, 2 - 5 types of shadows
-                    if ( ( x > 0 && *( inX - 1 ) == 0 ) || ( x < reducedWidth && *( inX + 1 ) == 0 ) || ( isNotTopRow && *( inX - width ) == 0 )
-                         || ( isNotBottomRow && *( inX + width ) == 0 ) ) {
-                        outImageY[x] = value;
-                        outTransformY[x] = 0;
-                    }
+                // Draw contour only on transparent pixel ( 1 ) or shadow ( 2 - 5 )
+                if ( *inX > 0 && *inX < 6
+                     && ( ( x > 0 && *( inX - 1 ) == 0 ) || ( x < reducedWidth && *( inX + 1 ) == 0 ) || ( isNotTopRow && *( inX - width ) == 0 )
+                          || ( isNotBottomRow && *( inX + width ) == 0 ) ) ) {
+                    outImageY[x] = value;
+                    outTransformY[x] = 0;
                 }
             }
         }
@@ -2263,6 +2266,9 @@ namespace fheroes2
             return;
         }
 
+        // This assertion is needed to convince SonarQube that we will not dereference the null pointer to 'in' and 'out' images data.
+        assert( !in.empty() && !out.empty() );
+
         const int32_t widthIn = in.width();
         const int32_t widthOut = out.width();
 
@@ -2270,7 +2276,7 @@ namespace fheroes2
         const int32_t offsetIn = inY * widthIn + inX;
 
         uint8_t * imageOutY = out.image() + offsetOut;
-        const uint8_t * imageOutYEnd = imageOutY + widthOut * height;
+        const uint8_t * imageOutYEnd = imageOutY + static_cast<ptrdiff_t>( widthOut ) * height;
 
         // If image is single-layer then pointer to its transform layer is 'nullptr'.
         uint8_t * transformOutY = out.singleLayer() ? nullptr : out.transform() + offsetOut;
@@ -2328,7 +2334,7 @@ namespace fheroes2
             }
         }
         else if ( !horizontally && vertically ) {
-            const uint8_t * imageInY = in.image() + offsetIn + ( height - 1 ) * widthIn;
+            const uint8_t * imageInY = in.image() + offsetIn + static_cast<ptrdiff_t>( height - 1 ) * widthIn;
 
             if ( in.singleLayer() ) {
                 for ( ; imageOutY != imageOutYEnd; imageOutY += widthOut, imageInY -= widthIn ) {
