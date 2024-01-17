@@ -65,14 +65,6 @@ namespace
                                         optionWindowSize, optionWindowSize };
     const fheroes2::Rect switchDisplayRoi{ optionOffset.x + offsetBetweenOptions.width * 2, optionOffset.y, optionWindowSize, optionWindowSize };
 
-    void drawDisplay( const fheroes2::Rect & optionRoi )
-    {
-        uint8_t displayIndex = fheroes2::engine().getCurrentDisplayIndex();
-        fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::GAME_OPTION_ICON, 1 ), _( "Display ID" ),
-                              std::to_string( displayIndex + 1 ) + ": " + fheroes2::engine().getDisplayName( displayIndex ),
-                              fheroes2::UiOptionTextWidth::TWO_ELEMENTS_ROW );
-    }
-
     void drawResolution( const fheroes2::Rect & optionRoi )
     {
         const fheroes2::Display & display = fheroes2::Display::instance();
@@ -132,6 +124,14 @@ namespace
         fheroes2::drawOption( optionRoi, image, _( "System Info" ), isSystemInfoDisplayed ? _( "on" ) : _( "off" ), fheroes2::UiOptionTextWidth::TWO_ELEMENTS_ROW );
     }
 
+    void drawDisplay( const fheroes2::Rect & optionRoi )
+    {
+        const uint8_t displayIndex = fheroes2::engine().getCurrentDisplayIndex();
+        fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::GAME_OPTION_ICON, 1 ), _( "Display Index" ),
+                              std::to_string( displayIndex + 1 ) + ": " + fheroes2::engine().getDisplayName( displayIndex ),
+                              fheroes2::UiOptionTextWidth::TWO_ELEMENTS_ROW );
+    }
+
     SelectedWindow showConfigurationWindow()
     {
         fheroes2::Display & display = fheroes2::Display::instance();
@@ -141,7 +141,7 @@ namespace
         const fheroes2::Sprite & dialog = fheroes2::AGG::GetICN( ( isEvilInterface ? ICN::CSPANBKE : ICN::CSPANBKG ), 0 );
         const fheroes2::Sprite & dialogShadow = fheroes2::AGG::GetICN( ( isEvilInterface ? ICN::CSPANBKE : ICN::CSPANBKG ), 1 );
 
-        const fheroes2::Sprite secondRowBackground = fheroes2::AGG::GetICN( Settings::Get().isEvilInterfaceEnabled() ? ICN::SURDRBKE : ICN::SURDRBKG, 0 );
+        const fheroes2::Sprite & secondRowBackground = fheroes2::AGG::GetICN( Settings::Get().isEvilInterfaceEnabled() ? ICN::SURDRBKE : ICN::SURDRBKG, 0 );
 
         const fheroes2::Point dialogOffset( ( display.width() - dialog.width() ) / 2, ( display.height() - dialog.height() ) / 2 );
         const fheroes2::Point shadowOffset( dialogOffset.x - BORDERWIDTH, dialogOffset.y );
@@ -153,9 +153,8 @@ namespace
         fheroes2::Blit( dialogShadow, display, windowRoi.x - BORDERWIDTH, windowRoi.y + BORDERWIDTH );
         fheroes2::Blit( dialog, display, windowRoi.x, windowRoi.y );
 
-        // the image taken from other big ICN and cropping it's background with adequate size
-        // the offsets are staticly fixed based on original image
-        // filling the empty spaces on the second row alongside with it's shadow
+        // The Image is taken from another big ICN and cropped its background with adequate size
+        // The Offsets are staticly fixed based on original image to Fill the empty spaces on the second row alongside with it's shadow
         fheroes2::Blit( secondRowBackground, 50, 30, display, windowRoi.x + BORDERWIDTH + 10, windowRoi.y + optionOffset.y - 10 + offsetBetweenOptions.height,
                         dialog.width() - BORDERWIDTH * 2 - 20, optionWindowSize + 20 );
 
@@ -167,7 +166,7 @@ namespace
         const fheroes2::Rect windowSystemInfoRoi( systemInfoRoi + windowRoi.getPosition() );
         const fheroes2::Rect windowSwitchDisplayRoi( switchDisplayRoi + windowRoi.getPosition() );
 
-        const auto drawOptions = [&windowResolutionRoi, &windowModeRoi, &windowVSyncRoi, &windowSystemInfoRoi, &windowSwitchDisplayRoi]() {
+        const auto drawOptions = [&windowResolutionRoi, &windowModeRoi, &windowVSyncRoi, &windowSwitchDisplayRoi, &windowSystemInfoRoi]() {
             drawResolution( windowResolutionRoi );
             drawMode( windowModeRoi );
             drawVSync( windowVSyncRoi );

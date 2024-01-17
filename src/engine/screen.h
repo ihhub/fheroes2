@@ -146,7 +146,7 @@ namespace fheroes2
 
         virtual void setDisplayIndex( const uint8_t )
         {
-            // Do Nothing
+            // Do Nothing.
         }
 
         virtual uint8_t getMaximumDisplays() const
@@ -163,7 +163,6 @@ namespace fheroes2
         BaseRenderEngine()
             : _isFullScreen( false )
             , _nearestScaling( false )
-
         {
             // Do nothing.
         }
@@ -237,8 +236,6 @@ namespace fheroes2
         void resize( int32_t width_, int32_t height_ ) override;
 
         void setResolution( ResolutionInfo info );
-
-        void changeDisplayEngine( uint8_t displayId );
 
         bool isDefaultSize() const
         {
