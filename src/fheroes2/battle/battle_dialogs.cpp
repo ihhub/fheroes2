@@ -592,11 +592,11 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
         upperText.draw( summaryRoi.x, summaryBodyOffset + remainingSummaryBodyHeight / 2 - ( upperText.height( summaryRoi.width ) / 2 ), summaryRoi.width, display );
     }
 
-    // battlefield casualties
+    // Battlefield casualties
     fheroes2::Text text( _( "Battlefield Casualties" ), fheroes2::FontType::smallWhite() );
     text.draw( summaryRoi.x + ( summaryRoi.width - text.width() ) / 2, casualtiesOffsetY, display );
 
-    // attacker
+    // Attacker
     text.set( _( "Attacker" ), fheroes2::FontType::smallWhite() );
     text.draw( summaryRoi.x + ( summaryRoi.width - text.width() ) / 2, casualtiesOffsetY + 15, display );
 
@@ -668,7 +668,7 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
             }
         }
 
-        // animation
+        // Animation
         if ( Game::validateAnimationDelay( Game::BATTLE_DIALOG_DELAY ) && !sequence.nextFrame() ) {
             if ( sequenceId != sequence.id() ) {
                 sequenceId = sequence.id();
@@ -719,6 +719,7 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
             if ( !isWinnerHuman && !art.isUltimate() ) {
                 continue;
             }
+
             const char * currentArtifact = art.GetName();
             if ( previousArtifact == currentArtifact ) {
                 if ( isWinnerHuman && !art.isUltimate() ) {
@@ -726,7 +727,20 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
                 }
                 continue;
             }
-            if ( art.isUltimate() ) {
+
+            if ( !art.isUltimate() ) {
+                // Only draw the regular artifact header once.
+                if ( !needHeaderRedraw ) {
+                    artMsg = _( "You have captured an enemy artifact!" );
+
+                    const fheroes2::Text box( artMsg, fheroes2::FontType::normalYellow() );
+                    box.draw( summaryRoi.x, summaryRoi.y, summaryRoi.width, display );
+
+                    needHeaderRedraw = true;
+                }
+                Game::PlayPickupSound();
+            }
+            else {
                 // Ultimate artifacts are always displayed after all the regular artifacts.
                 if ( needHeaderRedraw ) {
                     artifactHeader.restore();
@@ -744,25 +758,11 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
 
                 needHeaderRedraw = true;
             }
-            // Only draw the regular artifact header once.
-            else if ( !needHeaderRedraw ) {
-                Game::PlayPickupSound();
-                artMsg = _( "You have captured an enemy artifact!" );
-
-                const fheroes2::Text box( artMsg, fheroes2::FontType::normalYellow() );
-                box.draw( summaryRoi.x, summaryRoi.y, summaryRoi.width, display );
-
-                needHeaderRedraw = true;
-            }
-            else {
-                Game::PlayPickupSound();
-            }
-
-            artifactName.restore();
 
             const fheroes2::Sprite & artifact = fheroes2::AGG::GetICN( ICN::ARTIFACT, art.IndexSprite64() );
-
             Copy( artifact, 0, 0, display, artifactArea.x + 8, artifactArea.y + 8, artifact.width(), artifact.height() );
+
+            artifactName.restore();
 
             const fheroes2::Text artName( currentArtifact, fheroes2::FontType::smallWhite() );
             artName.draw( summaryRoi.x, artifactArea.y + border.height() + 7, summaryRoi.width, display );
@@ -774,7 +774,7 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
             while ( le.HandleEvents() ) {
                 le.MousePressLeft( buttonOk.area() ) ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
 
-                // display captured artifact info on right click
+                // Display captured artifact info on right click
                 if ( le.MousePressRight( artifactArea ) ) {
                     fheroes2::ArtifactDialogElement( art ).showPopup( Dialog::ZERO );
                 }
@@ -784,7 +784,7 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
                 else if ( le.MousePressRight( buttonOk.area() ) ) {
                     fheroes2::showStandardTextMessage( _( "Okay" ), _( "Exit this menu." ), Dialog::ZERO );
                 }
-                // animation
+                // Animation
                 if ( Game::validateAnimationDelay( Game::BATTLE_DIALOG_DELAY ) && !sequence.nextFrame() ) {
                     if ( sequenceId != sequence.id() ) {
                         sequenceId = sequence.id();
