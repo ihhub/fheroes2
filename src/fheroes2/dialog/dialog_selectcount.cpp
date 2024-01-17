@@ -443,7 +443,7 @@ int Dialog::ArmySplitTroop( uint32_t freeSlots, const uint32_t redistributeMax, 
 
             const int spriteWidth = sprites[i].width();
             const int offset = spriteWidth * ( 2 * static_cast<int>( i ) + 1 - static_cast<int>( freeSlots ) ) / 2;
-            vrts[i] = fheroes2::Rect( center + offset + deltaXStart + i * deltaX, pos.y + textTopOffset + titleHeight + bodyHeight + 45, spriteWidth, sprites[i].height() );
+            vrts[i] = fheroes2::Rect( center + offset + deltaXStart + static_cast<int>( i ) * deltaX, pos.y + textTopOffset + titleHeight + bodyHeight + 45, spriteWidth, sprites[i].height() );
         }
 
         slotSeparationText.draw( pos.x, pos.y + textTopOffset + titleHeight + 37, BOXAREA_WIDTH, display );
