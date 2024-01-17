@@ -722,6 +722,7 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
 
             const char * currentArtifact = art.GetName();
             if ( previousArtifact == currentArtifact ) {
+                // Sound is never played for Ultimate Artifact messages.
                 if ( isWinnerHuman && !art.isUltimate() ) {
                     Game::PlayPickupSound();
                 }
