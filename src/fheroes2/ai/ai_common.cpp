@@ -42,7 +42,6 @@
 #include "payment.h"
 #include "resource.h"
 #include "resource_trading.h"
-#include "settings.h"
 
 namespace AI
 {
