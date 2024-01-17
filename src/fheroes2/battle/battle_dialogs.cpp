@@ -633,8 +633,7 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
                                  { buttonHorizontalMargin, buttonVerticalMargin }, fheroes2::StandardWindow::Padding::BOTTOM_RIGHT );
     }
 
-    const int buttonOkICN = isEvilInterface ? ( allowToRestart ? ICN::BUTTON_SMALL_OKAY_EVIL : ICN::BUTTON_SMALLER_OKAY_EVIL )
-                                            : ( allowToRestart ? ICN::BUTTON_SMALL_OKAY_GOOD : ICN::BUTTON_SMALLER_OKAY_GOOD );
+    const int buttonOkICN = isEvilInterface ? ICN::BUTTON_SMALL_OKAY_EVIL : ICN::BUTTON_SMALL_OKAY_GOOD;
 
     fheroes2::Button buttonOk;
     const fheroes2::StandardWindow::Padding buttonOkPadding
@@ -688,86 +687,115 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
         const HeroBase * winner = ( res.army1 & RESULT_WINS ? _army1->GetCommander() : ( res.army2 & RESULT_WINS ? _army2->GetCommander() : nullptr ) );
         const HeroBase * loser = ( res.army1 & RESULT_LOSS ? _army1->GetCommander() : ( res.army2 & RESULT_LOSS ? _army2->GetCommander() : nullptr ) );
 
-        // Can't transfer artifacts
+        // Cannot transfer artifacts
         if ( winner == nullptr || loser == nullptr ) {
+            return false;
+        }
+        const bool isWinnerHuman = winner && winner->isControlHuman();
+
+        // Nothing to do if the AI won and there are no Ultimate Artifacts.
+        if ( !isWinnerHuman && !loser->GetBagArtifacts().ContainUltimateArtifact() ) {
             return false;
         }
 
         summaryBackground.restore();
 
-        const bool isWinnerHuman = winner && winner->isControlHuman();
-        const int newButtonOkIcn = isEvilInterface ? ICN::BUTTON_SMALLER_OKAY_EVIL : ICN::BUTTON_SMALLER_OKAY_GOOD;
-
-        background.renderButton( buttonOk, newButtonOkIcn, 0, 1, { 0, buttonVerticalMargin }, fheroes2::StandardWindow::Padding::BOTTOM_CENTER );
+        background.renderButton( buttonOk, buttonOkICN, 0, 1, { 0, buttonVerticalMargin }, fheroes2::StandardWindow::Padding::BOTTOM_CENTER );
 
         const fheroes2::Sprite & border = fheroes2::AGG::GetICN( ICN::WINLOSEB, 0 );
         const fheroes2::Rect artifactArea( summaryRoi.x + ( summaryRoi.width - border.width() ) / 2, casualtiesOffsetY + 38, border.width(), border.height() );
         Copy( border, 0, 0, display, artifactArea.x, artifactArea.y, artifactArea.width, artifactArea.height );
 
-        fheroes2::ImageRestorer artifactHeader( display, summaryRoi.x, summaryRoi.y, summaryRoi.width, 40 );
+        fheroes2::ImageRestorer artifactHeader( display, summaryRoi.x, summaryRoi.y, summaryRoi.width, 66 );
         fheroes2::ImageRestorer artifactName( display, summaryRoi.x, artifactArea.y + artifactArea.height, summaryRoi.width, 18 );
+        std::string artMsg;
+
+        bool needHeaderRedraw = false;
+        const char * previousArtifact = "";
 
         display.render( summaryRoi );
-
         for ( const Artifact & art : artifacts ) {
-            if ( isWinnerHuman || art.isUltimate() ) { // always show the message for ultimate artifacts
-
-                std::string artMsg;
-                if ( art.isUltimate() ) {
-                    if ( isWinnerHuman ) {
-                        artMsg = _( "As you reach for the %{name}, it mysteriously disappears." );
-                    }
-                    else {
-                        artMsg = _( "As your enemy reaches for the %{name}, it mysteriously disappears." );
-                    }
-                    StringReplace( artMsg, "%{name}", art.GetName() );
-                }
-                else {
-                    artMsg = _( "You have captured an enemy artifact!" );
+            // Only the Ultimate Artifacts are shown for both the winner and loser's dialogs. Skip if it is a regular artifact and the AI won.
+            if ( !isWinnerHuman && !art.isUltimate() ) {
+                continue;
+            }
+            const char * currentArtifact = art.GetName();
+            if ( previousArtifact == currentArtifact ) {
+                if ( isWinnerHuman && !art.isUltimate() ) {
                     Game::PlayPickupSound();
                 }
-
-                artifactHeader.restore();
-                artifactName.restore();
+                continue;
+            }
+            if ( art.isUltimate() ) {
+                // Ultimate artifacts are always displayed after all the regular artifacts.
+                if ( needHeaderRedraw ) {
+                    artifactHeader.restore();
+                }
+                if ( isWinnerHuman ) {
+                    artMsg = _( "As you reach for the %{name}, it mysteriously disappears." );
+                }
+                else {
+                    artMsg = _( "As your enemy reaches for the %{name}, it mysteriously disappears." );
+                }
+                StringReplace( artMsg, "%{name}", currentArtifact );
 
                 const fheroes2::Text box( artMsg, fheroes2::FontType::normalYellow() );
                 box.draw( summaryRoi.x, summaryRoi.y, summaryRoi.width, display );
 
-                const fheroes2::Sprite & artifact = fheroes2::AGG::GetICN( ICN::ARTIFACT, art.IndexSprite64() );
+                needHeaderRedraw = true;
+            }
+            // Only draw the regular artifact header once.
+            else if ( !needHeaderRedraw ) {
+                Game::PlayPickupSound();
+                artMsg = _( "You have captured an enemy artifact!" );
 
-                Copy( artifact, 0, 0, display, artifactArea.x + 8, artifactArea.y + 8, artifact.width(), artifact.height() );
+                const fheroes2::Text box( artMsg, fheroes2::FontType::normalYellow() );
+                box.draw( summaryRoi.x, summaryRoi.y, summaryRoi.width, display );
 
-                const fheroes2::Text artName( art.GetName(), fheroes2::FontType::smallWhite() );
-                artName.draw( summaryRoi.x, artifactArea.y + border.height() + 7, summaryRoi.width, display );
+                needHeaderRedraw = true;
+            }
+            else {
+                Game::PlayPickupSound();
+            }
 
-                display.render( summaryRoi );
+            artifactName.restore();
 
-                while ( le.HandleEvents() ) {
-                    le.MousePressLeft( buttonOk.area() ) ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
+            const fheroes2::Sprite & artifact = fheroes2::AGG::GetICN( ICN::ARTIFACT, art.IndexSprite64() );
 
-                    // display captured artifact info on right click
-                    if ( le.MousePressRight( artifactArea ) ) {
-                        fheroes2::ArtifactDialogElement( art ).showPopup( Dialog::ZERO );
+            Copy( artifact, 0, 0, display, artifactArea.x + 8, artifactArea.y + 8, artifact.width(), artifact.height() );
+
+            const fheroes2::Text artName( currentArtifact, fheroes2::FontType::smallWhite() );
+            artName.draw( summaryRoi.x, artifactArea.y + border.height() + 7, summaryRoi.width, display );
+
+            previousArtifact = currentArtifact;
+
+            display.render( summaryRoi );
+
+            while ( le.HandleEvents() ) {
+                le.MousePressLeft( buttonOk.area() ) ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
+
+                // display captured artifact info on right click
+                if ( le.MousePressRight( artifactArea ) ) {
+                    fheroes2::ArtifactDialogElement( art ).showPopup( Dialog::ZERO );
+                }
+                else if ( le.MouseClickLeft( buttonOk.area() ) || Game::HotKeyCloseWindow() ) {
+                    break;
+                }
+                else if ( le.MousePressRight( buttonOk.area() ) ) {
+                    fheroes2::showStandardTextMessage( _( "Okay" ), _( "Exit this menu." ), Dialog::ZERO );
+                }
+                // animation
+                if ( Game::validateAnimationDelay( Game::BATTLE_DIALOG_DELAY ) && !sequence.nextFrame() ) {
+                    if ( sequenceId != sequence.id() ) {
+                        sequenceId = sequence.id();
+                        const fheroes2::Sprite & base = fheroes2::AGG::GetICN( sequenceId, 0 );
+
+                        Copy( base, 0, 0, display, animationRoi.x + base.x(), animationRoi.y + base.y(), base.width(), base.height() );
                     }
-                    else if ( le.MouseClickLeft( buttonOk.area() ) || Game::HotKeyCloseWindow() ) {
-                        break;
-                    }
-                    else if ( le.MousePressRight( buttonOk.area() ) ) {
-                        fheroes2::showStandardTextMessage( _( "Okay" ), _( "Exit this menu." ), Dialog::ZERO );
-                    }
-                    // animation
-                    if ( Game::validateAnimationDelay( Game::BATTLE_DIALOG_DELAY ) && !sequence.nextFrame() ) {
-                        if ( sequenceId != sequence.id() ) {
-                            sequenceId = sequence.id();
-                            const fheroes2::Sprite & base = fheroes2::AGG::GetICN( sequenceId, 0 );
+                    const fheroes2::Sprite & sequenceCurrent = fheroes2::AGG::GetICN( sequence.id(), sequence.frameId() );
 
-                            Copy( base, 0, 0, display, animationRoi.x + base.x(), animationRoi.y + base.y(), base.width(), base.height() );
-                        }
-                        const fheroes2::Sprite & sequenceCurrent = fheroes2::AGG::GetICN( sequence.id(), sequence.frameId() );
-
-                        fheroes2::Blit( sequenceCurrent, display, animationRoi.x + sequenceCurrent.x(), animationRoi.y + sequenceCurrent.y() );
-                        display.render( animationRoi );
-                    }
+                    fheroes2::Blit( sequenceCurrent, display, animationRoi.x + sequenceCurrent.x(), animationRoi.y + sequenceCurrent.y() );
+                    display.render( animationRoi );
                 }
             }
         }
