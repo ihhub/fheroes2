@@ -1183,9 +1183,41 @@ namespace AI
             return value;
         }
 
+        case MP2::OBJ_RESOURCE: {
+            const Funds loot = getFundsFromTile( tile );
+
+            // Resource object has visual representation of the type of resources.
+            const auto & [resourceType, resourceCount] = loot.getFirstValidResource();
+
+            Funds estimatedResource;
+
+            switch ( resourceType ) {
+            case Resource::GOLD:
+                estimatedResource = Funds( resourceType, 750 );
+                break;
+            case Resource::WOOD:
+            case Resource::ORE:
+                estimatedResource = Funds( resourceType, 7 );
+                break;
+            case Resource::MERCURY:
+            case Resource::SULFUR:
+            case Resource::CRYSTAL:
+            case Resource::GEMS:
+                estimatedResource = Funds( resourceType, 4 );
+                break;
+            default:
+                assert( 0 );
+                break;
+            }
+
+            const double value = getFundsValueBasedOnPriority( estimatedResource );
+            assert( value > 0 );
+
+            return value;
+        }
+
         case MP2::OBJ_DERELICT_SHIP:
         case MP2::OBJ_LEAN_TO:
-        case MP2::OBJ_RESOURCE:
         case MP2::OBJ_WATER_WHEEL:
         case MP2::OBJ_WINDMILL: {
             const Funds loot = getFundsFromTile( tile );
