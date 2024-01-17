@@ -508,7 +508,7 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
     // Set the cursor image. After this dialog the Game Area or the Battlefield will be shown, so it does not require a cursor restorer.
     Cursor::Get().SetThemes( Cursor::POINTER );
 
-    fheroes2::StandardWindow background( bsTextWidth + 25, 424, true, display );
+    fheroes2::StandardWindow background( bsTextWidth + 32, 424, true, display );
 
     const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
 
@@ -572,32 +572,35 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
         summaryBodyOffset += box.height( summaryRoi.width );
         remainingSummaryBodyHeight -= box.height( summaryRoi.width );
     }
+
+    const fheroes2::FontType bodyFont = fheroes2::FontType::normalWhite();
     if ( !outcomeText.empty() ) {
         if ( !surrenderText.empty() ) {
             // Divide the main text area evenly between the two texts bodies by splitting it into 3 equal parts.
-            const fheroes2::Text upperText( surrenderText, fheroes2::FontType::normalWhite() );
-            const fheroes2::Text lowerText( outcomeText, fheroes2::FontType::normalWhite() );
+            const fheroes2::Text upperText( surrenderText, bodyFont );
+            const fheroes2::Text lowerText( outcomeText, bodyFont );
             const int32_t inbetweenSpace = ( remainingSummaryBodyHeight - upperText.height( summaryRoi.width ) - lowerText.height( summaryRoi.width ) ) / 3;
             upperText.draw( summaryRoi.x, summaryBodyOffset + inbetweenSpace, summaryRoi.width, display );
 
             lowerText.draw( summaryRoi.x, summaryBodyOffset + upperText.height( summaryRoi.width ) + inbetweenSpace * 2, summaryRoi.width, display );
         }
         else {
-            const fheroes2::Text upperText( outcomeText, fheroes2::FontType::normalWhite() );
+            const fheroes2::Text upperText( outcomeText, bodyFont );
             upperText.draw( summaryRoi.x, summaryBodyOffset + remainingSummaryBodyHeight / 2 - ( upperText.height( summaryRoi.width ) / 2 ), summaryRoi.width, display );
         }
     }
     else if ( !surrenderText.empty() ) {
-        const fheroes2::Text upperText( surrenderText, fheroes2::FontType::normalWhite() );
+        const fheroes2::Text upperText( surrenderText, bodyFont );
         upperText.draw( summaryRoi.x, summaryBodyOffset + remainingSummaryBodyHeight / 2 - ( upperText.height( summaryRoi.width ) / 2 ), summaryRoi.width, display );
     }
 
     // Battlefield casualties
-    fheroes2::Text text( _( "Battlefield Casualties" ), fheroes2::FontType::smallWhite() );
+    const fheroes2::FontType casualtiesFont = fheroes2::FontType::smallWhite();
+    fheroes2::Text text( _( "Battlefield Casualties" ), casualtiesFont );
     text.draw( summaryRoi.x + ( summaryRoi.width - text.width() ) / 2, casualtiesOffsetY, display );
 
     // Attacker
-    text.set( _( "Attacker" ), fheroes2::FontType::smallWhite() );
+    text.set( _( "Attacker" ), casualtiesFont );
     text.draw( summaryRoi.x + ( summaryRoi.width - text.width() ) / 2, casualtiesOffsetY + 15, display );
 
     const Troops killed1 = _army1->GetKilledTroops();
@@ -607,19 +610,19 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
         Army::drawSingleDetailedMonsterLine( killed1, summaryRoi.x + 13, casualtiesOffsetY + 36, roi.width - 47 );
     }
     else {
-        text.set( _( "None" ), fheroes2::FontType::smallWhite() );
+        text.set( _( "None" ), casualtiesFont );
         text.draw( summaryRoi.x + ( summaryRoi.width - text.width() ) / 2, casualtiesOffsetY + 30, display );
     }
 
     // defender
-    text.set( _( "Defender" ), fheroes2::FontType::smallWhite() );
+    text.set( _( "Defender" ), casualtiesFont );
     text.draw( summaryRoi.x + ( summaryRoi.width - text.width() ) / 2, casualtiesOffsetY + 75, display );
 
     if ( killed2.isValid() ) {
         Army::drawSingleDetailedMonsterLine( killed2, summaryRoi.x + 13, casualtiesOffsetY + 96, roi.width - 47 );
     }
     else {
-        text.set( _( "None" ), fheroes2::FontType::smallWhite() );
+        text.set( _( "None" ), casualtiesFont );
         text.draw( summaryRoi.x + ( summaryRoi.width - text.width() ) / 2, casualtiesOffsetY + 90, display );
     }
 
