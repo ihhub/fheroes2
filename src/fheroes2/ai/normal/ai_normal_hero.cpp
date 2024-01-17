@@ -1123,8 +1123,7 @@ namespace AI
             }
 
             // This is an average gold amount you can get from a treasure chest or sea chest.
-            const Funds funds{ Resource::GOLD, 1500 };
-            return funds.gold * getResourcePriorityModifier( Resource::GOLD, false );
+            return getFundsValueBasedOnPriority( { Resource::GOLD, 1500 } );
         }
         case MP2::OBJ_DAEMON_CAVE: {
             // If this cave is already empty, then we should never come here
@@ -1134,7 +1133,7 @@ namespace AI
             }
 
             // Daemon Cave always gives 2500 Gold after a battle and AI always chooses to fight the demon's servants and doesn't roll the dice
-            return 2500 * getResourcePriorityModifier( Resource::GOLD, false );
+            return getFundsValueBasedOnPriority( { Resource::GOLD, 2500 } );
         }
         case MP2::OBJ_GRAVEYARD:
         case MP2::OBJ_SHIPWRECK:
