@@ -225,21 +225,6 @@ namespace AI
         assert( army.isValid() );
     }
 
-    bool CanPurchaseHero( const Kingdom & kingdom )
-    {
-        if ( kingdom.GetCountCastle() == 0 ) {
-            return false;
-        }
-
-        if ( kingdom.GetColor() == Settings::Get().CurrentColor() ) {
-            // This is the AI's current turn.
-            return kingdom.AllowPayment( PaymentConditions::RecruitHero() );
-        }
-
-        // This is not the current turn for the AI so we need to roughly calculate the possible future income on the next day.
-        return kingdom.AllowPayment( PaymentConditions::RecruitHero() - kingdom.GetIncome() );
-    }
-
     std::optional<Funds> calculateMarketplaceTransaction( const Kingdom & kingdom, const Funds & fundsToObtain )
     {
         const uint32_t marketplaceCount = kingdom.GetCountMarketplace();

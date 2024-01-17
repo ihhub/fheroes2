@@ -133,7 +133,7 @@ double Difficulty::getArmyStrengthRatioForAIRetreat( const int difficulty )
     switch ( difficulty ) {
     case Difficulty::NORMAL:
         return 100.0 / 7.5;
-    case Difficulty::HARD: // fall-through
+    case Difficulty::HARD:
     case Difficulty::EXPERT:
         return 100.0 / 8.5;
     case Difficulty::IMPOSSIBLE:

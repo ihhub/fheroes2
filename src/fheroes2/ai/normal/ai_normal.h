@@ -221,8 +221,6 @@ namespace AI
         bool isHeroWorthSaving( const Heroes & hero ) const;
         bool isCommanderCanSpellcast( const Battle::Arena & arena, const HeroBase * commander ) const;
 
-        bool checkRetreatCondition( const Heroes & hero ) const;
-
         static double commanderMaximumSpellDamageValue( const HeroBase & commander );
 
         // When this limit of turns without deaths is exceeded for an attacking AI-controlled hero,

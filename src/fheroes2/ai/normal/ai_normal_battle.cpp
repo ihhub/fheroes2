@@ -495,17 +495,6 @@ namespace AI
                && !commander->Modes( Heroes::SPELLCASTED ) && !arena.isSpellcastDisabled();
     }
 
-    bool BattlePlanner::checkRetreatCondition( const Heroes & hero ) const
-    {
-        if ( !_considerRetreat || hero.isControlHuman() || hero.isLosingGame() || !isHeroWorthSaving( hero ) || !CanPurchaseHero( hero.GetKingdom() ) ) {
-            return false;
-        }
-
-        // Retreat if remaining army strength is a fraction of enemy's
-        // Consider taking speed/turn order into account in the future
-        return _myArmyStrength * Difficulty::getArmyStrengthRatioForAIRetreat( Game::getDifficulty() ) < _enemyArmyStrength;
-    }
-
     bool BattlePlanner::isUnitFaster( const Unit & currentUnit, const Unit & target ) const
     {
         if ( currentUnit.isFlying() == target.isFlying() )
@@ -594,24 +583,7 @@ namespace AI
 
         // Step 2. Check retreat/surrender condition
         const Heroes * actualHero = dynamic_cast<const Heroes *>( _commander );
-        if ( actualHero && checkRetreatCondition( *actualHero ) ) {
-            const auto farewellSpellcast = [this, &arena, &currentUnit, &actions]() {
-                if ( !isCommanderCanSpellcast( arena, _commander ) ) {
-                    return;
-                }
-
-                // Cast a spell with maximum damage
-                const SpellSelection & bestSpell = selectBestSpell( arena, currentUnit, true );
-                if ( bestSpell.spellID == -1 ) {
-                    return;
-                }
-
-                actions.emplace_back( Command::SPELLCAST, bestSpell.spellID, bestSpell.cell );
-
-                DEBUG_LOG( DBG_BATTLE, DBG_INFO,
-                           arena.GetCurrentCommander()->GetName() << " casts " << Spell( bestSpell.spellID ).GetName() << " on cell " << bestSpell.cell )
-            };
-
+        if ( actualHero ) {
             enum class Outcome
             {
                 ContinueBattle,
@@ -620,6 +592,24 @@ namespace AI
             };
 
             const Outcome outcome = [this, &arena, actualHero]() {
+                if ( !_considerRetreat ) {
+                    return Outcome::ContinueBattle;
+                }
+
+                // Human-controlled heroes should not retreat or surrender during auto/instant battles
+                if ( actualHero->isControlHuman() ) {
+                    return Outcome::ContinueBattle;
+                }
+
+                if ( !isHeroWorthSaving( *actualHero ) ) {
+                    return Outcome::ContinueBattle;
+                }
+
+                // TODO: consider taking speed/turn order into account in the future
+                if ( _myArmyStrength * Difficulty::getArmyStrengthRatioForAIRetreat( Game::getDifficulty() ) >= _enemyArmyStrength ) {
+                    return Outcome::ContinueBattle;
+                }
+
                 const Force & force = arena.getForce( _myColor );
                 const Kingdom & kingdom = actualHero->GetKingdom();
 
@@ -653,6 +643,23 @@ namespace AI
 
                 return Outcome::Surrender;
             }();
+
+            const auto farewellSpellcast = [this, &arena, &currentUnit, &actions]() {
+                if ( !isCommanderCanSpellcast( arena, _commander ) ) {
+                    return;
+                }
+
+                // Cast a spell with maximum damage
+                const SpellSelection & bestSpell = selectBestSpell( arena, currentUnit, true );
+                if ( bestSpell.spellID == -1 ) {
+                    return;
+                }
+
+                actions.emplace_back( Command::SPELLCAST, bestSpell.spellID, bestSpell.cell );
+
+                DEBUG_LOG( DBG_BATTLE, DBG_INFO,
+                           arena.GetCurrentCommander()->GetName() << " casts " << Spell( bestSpell.spellID ).GetName() << " on cell " << bestSpell.cell )
+            };
 
             switch ( outcome ) {
             case Outcome::ContinueBattle:

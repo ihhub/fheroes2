@@ -51,7 +51,7 @@ namespace Difficulty
 
     int GetHeroMovementBonus( int difficulty );
 
-    // Returns the ratio of the strength of the enemy army to the strength of the AI army, above which the AI decides to retreat from the battlefield
+    // Returns the ratio of the strength of the enemy army to the strength of the AI army, above which the AI decides to surrender or retreat from the battlefield
     double getArmyStrengthRatioForAIRetreat( const int difficulty );
 
     // Returns the minimum ratio of the AI kingdom's gold reserve to the cost of surrender, at which the AI will prefer surrender to retreat from the battlefield
