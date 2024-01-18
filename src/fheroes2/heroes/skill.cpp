@@ -507,20 +507,33 @@ std::string Skill::Secondary::GetDescription( const Heroes & hero ) const
         str = _n( "%{skill} increases the hero's viewable area by one square.", "%{skill} increases the hero's viewable area by %{count} squares.", count );
         break;
     }
-    case DIPLOMACY:
-        str = _( "%{skill} allows the hero to negotiate with monsters who are weaker than their army." );
+    case DIPLOMACY: {
+        str = _(
+            "%{skill} allows the hero to negotiate with monsters who are weaker than their army, and reduces the cost of surrender." );
+        str += "\n\n";
+        uint32_t percent = 40;
         switch ( Level() ) {
         case Level::BASIC:
         case Level::ADVANCED:
             str.append( _( "Approximately %{count} percent of the creatures may offer to join the hero." ) );
+            str += "\n\n";
+            str.append( _( "The cost of surrender is reduced to %{percent} percent of the total cost of troops in the army." ) );
+            if ( Level() == Level::ADVANCED ) {
+                percent = 30;
+            }
             break;
         case Level::EXPERT:
             str.append( _( "All of the creatures may offer to join the hero." ) );
+            str += "\n\n";
+            str.append( _( "The cost of surrender is reduced to %{percent} percent of the total cost of troops in the army." ) );
+            percent = 20;
             break;
         default:
             break;
         }
+        StringReplace( str, "%{percent}", percent );
         break;
+    }
     case NAVIGATION: {
         str = _( "%{skill} increases the hero's movement points over water by %{count} percent." );
         break;
@@ -554,7 +567,7 @@ std::string Skill::Secondary::GetDescription( const Heroes & hero ) const
         str = _( "%{skill} increases the hero's luck by %{count}." );
         break;
     }
-    case BALLISTICS:
+    case BALLISTICS: {
         switch ( Level() ) {
         case Level::BASIC:
             str = _( "%{skill} gives the hero's catapult shots a greater chance to hit and do damage to castle walls." );
@@ -569,7 +582,8 @@ std::string Skill::Secondary::GetDescription( const Heroes & hero ) const
             break;
         }
         break;
-    case EAGLE_EYE:
+    }
+    case EAGLE_EYE: {
         switch ( Level() ) {
         case Level::BASIC:
             str = _( "%{skill} gives the hero a %{count} percent chance to learn any given 1st or 2nd level spell that was cast by an enemy during combat." );
@@ -584,15 +598,17 @@ std::string Skill::Secondary::GetDescription( const Heroes & hero ) const
             break;
         }
         break;
+    }
     case NECROMANCY: {
         count += Skill::GetNecromancyPercent( hero ) - hero.GetSecondaryValues( Skill::Secondary::NECROMANCY );
         name = GetNameWithBonus( hero );
         str = _( "%{skill} allows %{count} percent of the creatures killed in combat to be brought back from the dead as Skeletons." );
         break;
     }
-    case ESTATES:
+    case ESTATES: {
         str = _( "The hero produces %{count} gold pieces per day as tax revenue from estates." );
         break;
+    }
     default:
         // Are you sure that you are passing the correct secondary skill type?
         assert( 0 );
