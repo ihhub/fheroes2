@@ -1734,11 +1734,11 @@ namespace
             Maps::ObjectInfo object{ MP2::OBJ_WATER_LAKE };
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 113U, fheroes2::Point{ 0, 0 }, MP2::OBJ_WATER_LAKE, Maps::OBJECT_LAYER );
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 108U, fheroes2::Point{ -1, -1 }, MP2::OBJ_WATER_LAKE, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 110U, fheroes2::Point{ 1, -1 }, MP2::OBJ_WATER_LAKE, Maps::OBJECT_LAYER );
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 109U, fheroes2::Point{ 0, -1 }, MP2::OBJ_WATER_LAKE, Maps::OBJECT_LAYER );
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 112U, fheroes2::Point{ -1, 0 }, MP2::OBJ_WATER_LAKE, Maps::OBJECT_LAYER );
 
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 107U, fheroes2::Point{ -2, -1 }, MP2::OBJ_NONE, Maps::TERRAIN_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 110U, fheroes2::Point{ 1, -1 }, MP2::OBJ_NONE, Maps::TERRAIN_LAYER );
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 111U, fheroes2::Point{ -2, 0 }, MP2::OBJ_NONE, Maps::TERRAIN_LAYER );
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSWMP, 114U, fheroes2::Point{ 1, 0 }, MP2::OBJ_NONE, Maps::TERRAIN_LAYER );
 
@@ -2124,10 +2124,11 @@ namespace
             Maps::ObjectInfo object{ MP2::OBJ_VOLCANO };
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 98U, fheroes2::Point{ 0, 0 }, MP2::OBJ_VOLCANO, Maps::OBJECT_LAYER );
             object.groundLevelParts.back().animationFrames = 9;
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 78U, fheroes2::Point{ 0, -1 }, MP2::OBJ_VOLCANO, Maps::OBJECT_LAYER );
-            object.groundLevelParts.back().animationFrames = 9;
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 88U, fheroes2::Point{ -1, 0 }, MP2::OBJ_VOLCANO, Maps::OBJECT_LAYER );
             object.groundLevelParts.back().animationFrames = 9;
+
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNLAVA, 78U, fheroes2::Point{ 0, -1 }, MP2::OBJ_VOLCANO );
+            object.topLevelParts.back().animationFrames = 9;
 
             objects.emplace_back( std::move( object ) );
         }
