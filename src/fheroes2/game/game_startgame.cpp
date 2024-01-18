@@ -433,8 +433,14 @@ void ShowWarningLostTownsDialog()
         Game::DialogPlayers( myKingdom.GetColor(), _( "Beware!" ),
                              _( "%{color} player, this is your last day to capture a town, or you will be banished from this land." ) );
     }
-    else if ( lostTownDays > 0 && lostTownDays <= Game::GetLostTownDays() ) {
-        std::string str = _( "%{color} player, you only have %{day} days left to capture a town, or you will be banished from this land." );
+    else if ( lostTownDays > 0 ) {
+        std::string str;
+        if ( lostTownDays <= Game::GetLostTownDays() ) {
+            str = _( "%{color} player, you only have %{day} days left to capture a town, or you will be banished from this land." );
+        }
+        else {
+            str = _( "%{color} player, you have lost your last town. If you do not conquer another town in next week, you will be eliminated." );
+        }
         StringReplace( str, "%{day}", lostTownDays );
         Game::DialogPlayers( myKingdom.GetColor(), _( "Beware!" ), str );
     }
@@ -1399,16 +1405,8 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
 
         if ( myKingdom.isPlay() ) {
             // these warnings should be shown at the end of the turn
-            if ( myCastles.empty() ) {
-                const uint32_t lostTownDays = myKingdom.GetLostTownDays();
-
-                if ( lostTownDays > Game::GetLostTownDays() ) {
-                    Game::DialogPlayers( conf.CurrentColor(), _( "Beware!" ),
-                                         _( "%{color} player, you have lost your last town. If you do not conquer another town in next week, you will be eliminated." ) );
-                }
-                else if ( lostTownDays == 1 ) {
-                    Game::DialogPlayers( conf.CurrentColor(), _( "Defeat!" ), _( "%{color} player, your heroes abandon you, and you are banished from this land." ) );
-                }
+            if ( myCastles.empty() && myKingdom.GetLostTownDays() == 1 ) {
+                Game::DialogPlayers( conf.CurrentColor(), _( "Defeat!" ), _( "%{color} player, your heroes abandon you, and you are banished from this land." ) );
             }
 
             if ( !conf.isAutoSaveAtBeginningOfTurnEnabled() ) {
