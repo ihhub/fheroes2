@@ -875,7 +875,6 @@ uint32_t Skill::GetDiplomacySurrenderPercent( const int level )
     default:
         return 0;
     }
-    
 }
 
 StreamBase & Skill::operator<<( StreamBase & msg, const Primary & skill )
