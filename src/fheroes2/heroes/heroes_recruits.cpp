@@ -115,6 +115,7 @@ void Recruits::appendSurrenderedHero( Heroes & hero, const uint32_t heroSurrende
 
     hero.SetModes( Heroes::RECRUIT );
 
+    // The original game offers to hire only the hero who retreated or surrendered last. fheroes2 offers to hire up to the last two heroes of this kind.
     Recruit & recruit = ( first.getSurrenderDay() > second.getSurrenderDay() ? second : first );
 
     recruit = Recruit( hero, heroSurrenderDay );

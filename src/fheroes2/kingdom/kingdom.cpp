@@ -542,7 +542,8 @@ uint32_t Kingdom::GetLostTownDays() const
 
 const Recruits & Kingdom::GetRecruits()
 {
-    // At the beginning of a new week, it is necessary to offer one native hero
+    // At the beginning of a new week, in case there are no heroes who retreated or surrendered on the last day of the previous week and should be available for hire
+    // (this mechanic is an extension of fheroes2 and is missing from the original game), it is necessary to offer one native hero
     const bool offerNativeHero = ( recruits.GetID1() == Heroes::UNKNOWN && recruits.GetID2() == Heroes::UNKNOWN );
     // Special hero given as a campaign award
     Heroes * specialHireableHero = nullptr;
@@ -918,8 +919,8 @@ std::set<Heroes *> Kingdoms::resetRecruits()
     for ( Kingdom & kingdom : kingdoms ) {
         Recruits & recruits = kingdom.GetCurrentRecruits();
 
-        // Heroes who surrendered on Sunday should still be available for recruitment next week in
-        // the same kingdom, provided that this kingdom is still playable
+        // Heroes who retreated or surrendered on the last day of the previous week should still be available for recruitment next week in the same kingdom, provided that
+        // this kingdom is still playable. This mechanic is an extension of fheroes2 and is missing from the original game.
         if ( !kingdom.isPlay() || world.CountDay() - recruits.getSurrenderDayOfHero1() > 1 ) {
             recruits.SetHero1( nullptr );
         }
