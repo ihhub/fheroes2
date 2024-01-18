@@ -225,7 +225,10 @@ uint32_t Battle::Force::GetSurrenderCost() const
         }
         const int diplomacyLevel = commander->GetLevelSkill( Skill::Secondary::DIPLOMACY );
         if ( diplomacyLevel > Skill::Level::NONE ) {
-            mod *= ( Skill::GetDiplomacySurrenderPercent( diplomacyLevel ) * 0.02 );
+            // The modifier is always multiplied by two, normally to negate the 0.5 modifier from regular surrender, but also when there are artifacts present
+            // even if the 0.5 modifier for normal surrender has already been negated by setting mod = 1.
+            mod *= 2;
+            mod *= ( Skill::GetDiplomacySurrenderPercent( commander->GetLevelSkill( Skill::Secondary::DIPLOMACY ) ) / 100.0 );
         }
 
         result *= mod;
