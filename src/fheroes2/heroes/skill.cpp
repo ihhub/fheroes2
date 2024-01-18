@@ -523,7 +523,7 @@ std::string Skill::Secondary::GetDescription( const Heroes & hero ) const
         }
         str += "\n\n";
         str.append( _( "The cost of surrender is reduced to %{percent} percent of the total cost of troops in the army." ) );
-        StringReplace( str, "%{percent}", GetDiplomacySurrenderPercent( Level() ) );
+        StringReplace( str, "%{percent}", GetDiplomacySurrenderCostDiscount( Level() ) );
         break;
     }
     case NAVIGATION: {
@@ -863,7 +863,7 @@ uint32_t Skill::GetNecromancyPercent( const HeroBase & hero )
     return std::min( percent, 100u );
 }
 
-uint32_t Skill::GetDiplomacySurrenderPercent( const int level )
+uint32_t Skill::GetDiplomacySurrenderCostDiscount( const int level )
 {
     switch ( level ) {
     case Level::BASIC:

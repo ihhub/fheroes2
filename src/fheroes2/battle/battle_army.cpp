@@ -228,7 +228,7 @@ uint32_t Battle::Force::GetSurrenderCost() const
             // The modifier is always multiplied by two, normally to negate the 0.5 modifier from regular surrender, but also when there are
             // artifacts present, even if the 0.5 modifier for normal surrender already has been negated by setting mod = 1.
             mod *= 2;
-            mod *= ( Skill::GetDiplomacySurrenderPercent( commander->GetLevelSkill( Skill::Secondary::DIPLOMACY ) ) / 100.0 );
+            mod *= ( Skill::GetDiplomacySurrenderCostDiscount( commander->GetLevelSkill( Skill::Secondary::DIPLOMACY ) ) / 100.0 );
         }
 
         result *= mod;
