@@ -24,7 +24,6 @@
 #define H2SPELL_H
 
 #include <cstdint>
-#include <string>
 #include <vector>
 
 #define DEFAULT_SPELL_DURATION 3
