@@ -223,19 +223,9 @@ uint32_t Battle::Force::GetSurrenderCost() const
                 mod = mod * value / 100;
             }
         }
-
-        switch ( commander->GetLevelSkill( Skill::Secondary::DIPLOMACY ) ) {
-        case Skill::Level::BASIC:
-            mod *= 0.8;
-            break;
-        case Skill::Level::ADVANCED:
-            mod *= 0.6;
-            break;
-        case Skill::Level::EXPERT:
-            mod *= 0.4;
-            break;
-        default:
-            break;
+        const int diplomacyLevel = commander->GetLevelSkill( Skill::Secondary::DIPLOMACY );
+        if ( diplomacyLevel > Skill::Level::NONE ) {
+            mod *= ( Skill::GetDiplomacySurrenderPercent( diplomacyLevel ) * 0.02 );
         }
 
         result *= mod;

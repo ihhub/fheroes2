@@ -510,25 +510,20 @@ std::string Skill::Secondary::GetDescription( const Heroes & hero ) const
     case DIPLOMACY: {
         str = _( "%{skill} allows the hero to negotiate with monsters who are weaker than their army, and reduces the cost of surrender." );
         str += "\n\n";
-        uint32_t percent = 40;
         switch ( Level() ) {
         case Level::BASIC:
         case Level::ADVANCED:
             str.append( _( "Approximately %{count} percent of the creatures may offer to join the hero." ) );
-            if ( Level() == Level::ADVANCED ) {
-                percent = 30;
-            }
             break;
         case Level::EXPERT:
             str.append( _( "All of the creatures may offer to join the hero." ) );
-            percent = 20;
             break;
         default:
             break;
         }
         str += "\n\n";
         str.append( _( "The cost of surrender is reduced to %{percent} percent of the total cost of troops in the army." ) );
-        StringReplace( str, "%{percent}", percent );
+        StringReplace( str, "%{percent}", GetDiplomacySurrenderPercent( Level() ) );
         break;
     }
     case NAVIGATION: {
@@ -866,6 +861,21 @@ uint32_t Skill::GetNecromancyPercent( const HeroBase & hero )
     percent += 10 * GetNecromancyBonus( hero );
     // cap at 100% bonus
     return std::min( percent, 100u );
+}
+
+uint32_t Skill::GetDiplomacySurrenderPercent( const int level )
+{
+    switch ( level ) {
+    case Level::BASIC:
+        return 40;
+    case Level::ADVANCED:
+        return 30;
+    case Level::EXPERT:
+        return 20;
+    default:
+        return 0;
+    }
+    
 }
 
 StreamBase & Skill::operator<<( StreamBase & msg, const Primary & skill )
