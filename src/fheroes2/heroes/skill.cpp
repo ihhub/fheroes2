@@ -508,8 +508,7 @@ std::string Skill::Secondary::GetDescription( const Heroes & hero ) const
         break;
     }
     case DIPLOMACY: {
-        str = _(
-            "%{skill} allows the hero to negotiate with monsters who are weaker than their army, and reduces the cost of surrender." );
+        str = _( "%{skill} allows the hero to negotiate with monsters who are weaker than their army, and reduces the cost of surrender." );
         str += "\n\n";
         uint32_t percent = 40;
         switch ( Level() ) {
