@@ -54,7 +54,6 @@
 #include "heroes.h"
 #include "heroes_base.h"
 #include "icn.h"
-#include "kingdom.h"
 #include "localevent.h"
 #include "logging.h"
 #include "maps.h"
