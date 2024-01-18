@@ -403,8 +403,11 @@ bool HeroBase::CanCastSpell( const Spell & spell, std::string * res /* = nullptr
         return false;
     }
 
-    if ( spell.isCombat() ) {
-        return spell.canCastCombatSpell( res );
+    if ( spell.isCombat() && !spell.canCastCombatSpell() ) {
+        if ( res ) {
+            *res = _( "This spell will have no effect!" );
+        }
+        return false;
     }
 
     if ( spell.isAdventure() ) {

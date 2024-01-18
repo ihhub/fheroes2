@@ -437,7 +437,7 @@ uint32_t Spell::IndexSprite() const
     return spells[id].imageId;
 }
 
-bool Spell::canCastCombatSpell( std::string * res ) const
+bool Spell::canCastCombatSpell() const
 {
     const Battle::Arena * arena = Battle::GetArena();
     assert( arena != nullptr );
@@ -445,71 +445,24 @@ bool Spell::canCastCombatSpell( std::string * res ) const
     const Battle::Force & opposingForce = arena->getOpposingForce();
 
     if ( *this == Spell::BLESS || *this == Spell::MASSBLESS ) {
-        if ( playerForce.onlyHasMonster( Monster::PEASANT ) ) {
-            if ( res != nullptr ) {
-                *res = _( "Peasants have no range of damage, so this spell will have no effect." );
-            }
-            return false;
-        }
-        if ( playerForce.allUnitsUndead() ) {
-            if ( res != nullptr ) {
-                *res = _( "Undead creatures cannot be affected by this spell." );
-            }
+        if ( playerForce.onlyHasMonster( Monster::PEASANT ) || playerForce.allUnitsUndead() ) {
             return false;
         }
     }
     else if ( *this == Spell::CURSE || *this == Spell::MASSCURSE ) {
-        if ( opposingForce.onlyHasMonster( Monster::PEASANT ) ) {
-            if ( res != nullptr ) {
-                *res = _( "Peasants have no range of damage, so this spell will have no effect." );
-            }
-            return false;
-        }
-        if ( opposingForce.allUnitsUndead() ) {
-            if ( res != nullptr ) {
-                *res = _( "Undead creatures cannot be affected by this spell." );
-            }
-            return false;
-        }
-        if ( opposingForce.onlyHasMonster( Monster::CRUSADER ) ) {
-            if ( res != nullptr ) {
-                *res = _( "Crusaders cannot be affected by this spell." );
-            }
-            return false;
-        }
-        if ( opposingForce.onlyHasUneadAndMonsters( { Monster::CRUSADER } ) ) {
-            if ( res != nullptr ) {
-                *res = _( "Crusaders and undead creatures cannot be affected by this spell." );
-            }
-            return false;
-        }
-        if ( opposingForce.onlyHasUneadAndMonsters( { Monster::PEASANT } ) ) {
-            if ( res != nullptr ) {
-                *res = _( "Undead creatures cannot be affected by this spell and peasants have no range of damage, so this spell will have no effect" );
-            }
-            return false;
-        }
-
-        if ( opposingForce.onlyHasUneadAndMonsters( { Monster::PEASANT, Monster::CRUSADER } ) ) {
-            if ( res != nullptr ) {
-                *res = _( "Crusaders and undead creatures cannot be affected by this spell and peasants have no range of damage, so this spell will have no effect." );
-            }
+        if ( opposingForce.onlyHasMonster( Monster::PEASANT ) || opposingForce.allUnitsUndead() || opposingForce.onlyHasMonster( Monster::CRUSADER )
+             || opposingForce.onlyHasUneadAndMonsters( { Monster::CRUSADER } ) || opposingForce.onlyHasUneadAndMonsters( { Monster::PEASANT } )
+             || opposingForce.onlyHasUneadAndMonsters( { Monster::PEASANT, Monster::CRUSADER } ) ) {
             return false;
         }
     }
     else if ( *this == Spell::SHIELD || *this == Spell::MASSSHIELD ) {
         if ( !opposingForce.hasArchers() ) {
-            if ( res != nullptr ) {
-                *res = _( "The opposing hero's army does not include any ranged creatures, so this spell will have no effect." );
-            }
             return false;
         }
     }
     else if ( *this == Spell::DRAGONSLAYER ) {
         if ( !opposingForce.hasDragons() ) {
-            if ( res != nullptr ) {
-                *res = _( "The opposing hero's army does not include any dragons, so this spell will have no effect." );
-            }
             return false;
         }
     }
