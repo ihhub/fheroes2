@@ -815,7 +815,7 @@ bool Battle::Arena::CanSurrenderOpponent( int color ) const
 {
     const HeroBase * hero = getCommander( color );
     const HeroBase * enemyHero = getEnemyCommander( color );
-    return hero && hero->isHeroes() && enemyHero && ( enemyHero->isHeroes() || enemyHero->isCaptain() ) && !world.GetKingdom( hero->GetColor() ).GetCastles().empty();
+    return hero && hero->isHeroes() && enemyHero && ( enemyHero->isHeroes() || enemyHero->isCaptain() );
 }
 
 bool Battle::Arena::CanRetreatOpponent( int color ) const
