@@ -516,21 +516,19 @@ std::string Skill::Secondary::GetDescription( const Heroes & hero ) const
         case Level::BASIC:
         case Level::ADVANCED:
             str.append( _( "Approximately %{count} percent of the creatures may offer to join the hero." ) );
-            str += "\n\n";
-            str.append( _( "The cost of surrender is reduced to %{percent} percent of the total cost of troops in the army." ) );
             if ( Level() == Level::ADVANCED ) {
                 percent = 30;
             }
             break;
         case Level::EXPERT:
             str.append( _( "All of the creatures may offer to join the hero." ) );
-            str += "\n\n";
-            str.append( _( "The cost of surrender is reduced to %{percent} percent of the total cost of troops in the army." ) );
             percent = 20;
             break;
         default:
             break;
         }
+        str += "\n\n";
+        str.append( _( "The cost of surrender is reduced to %{percent} percent of the total cost of troops in the army." ) );
         StringReplace( str, "%{percent}", percent );
         break;
     }
