@@ -1114,7 +1114,7 @@ namespace Interface
             return;
         }
 
-        Maps::setObjectOnTile( tile, objectInfo );
+        Maps::setObjectOnTile( tile, objectInfo, true );
         Maps::addObjectToMap( _mapFormat, tile.GetIndex(), groupType, static_cast<uint32_t>( objectIndex ) );
 
         _redraw |= mapUpdateFlags;

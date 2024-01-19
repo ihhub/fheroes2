@@ -188,5 +188,5 @@ namespace Maps
     bool eraseObjectsOnTiles( const int32_t startTileId, const int32_t endTileId, const uint32_t objectTypesToErase );
     bool eraseOjects( Tiles & tile, const uint32_t objectTypesToErase );
 
-    void setObjectOnTile( Tiles & tile, const ObjectInfo & info );
+    void setObjectOnTile( Tiles & tile, const ObjectInfo & info, const bool updateMapPassabilities );
 }

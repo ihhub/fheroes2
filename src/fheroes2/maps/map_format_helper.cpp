@@ -70,6 +70,8 @@ namespace Maps
             readTileObjects( world.GetTiles( static_cast<int32_t>( i ) ), map.tiles[i] );
         }
 
+        world.updatePassabilities();
+
         return true;
     }
 
@@ -113,7 +115,9 @@ namespace Maps
             }
 
             setLastObjectUID( object.id - 1 );
-            setObjectOnTile( tile, objectInfos[object.index] );
+            // We don't update map passabilities as it is a very expensive process.
+            // Let's do it once everything is being loaded.
+            setObjectOnTile( tile, objectInfos[object.index], false );
         }
     }
 
