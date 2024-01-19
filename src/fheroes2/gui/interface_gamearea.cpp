@@ -321,7 +321,7 @@ Interface::GameArea::GameArea( BaseInterface & interface )
     , _mouseDraggingInitiated( false )
     , _mouseDraggingMovement( false )
     , _needRedrawByMouseDragging( false )
-    , _fastScroll( true )
+    , _isFastScrollEnabled( true )
 {
     // Do nothing.
 }

@@ -868,8 +868,8 @@ void Kingdom::openOverviewDialog()
 
         // Exit this dialog.
         if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() ) {
-            // disable fast scroll for resolutions where the exit button is directly above the border
-            Interface::AdventureMap::Get().getGameArea().SetFastScroll( false );
+            // Disable fast scroll for resolutions where the exit button is directly above the border.
+            Interface::AdventureMap::Get().getGameArea().setFastScrollStatus( false );
 
             // Fade-out Kingdom overview dialog.
             fheroes2::fadeOutDisplay( background.activeArea(), !isDefaultScreenSize );

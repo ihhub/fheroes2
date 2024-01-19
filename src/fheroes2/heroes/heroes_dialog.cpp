@@ -294,8 +294,8 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
 
         // exit
         if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() ) {
-            // disable fast scroll for resolutions where the exit button is directly above the border
-            Interface::AdventureMap::Get().getGameArea().SetFastScroll( false );
+            // Disable fast scroll for resolutions where the exit button is directly above the border.
+            Interface::AdventureMap::Get().getGameArea().setFastScrollStatus( false );
 
             // Fade-out hero dialog.
             fheroes2::fadeOutDisplay( dialogRoi, !isDefaultScreenSize );

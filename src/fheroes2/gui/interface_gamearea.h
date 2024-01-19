@@ -265,12 +265,12 @@ namespace Interface
 
         bool isFastScrollEnabled() const
         {
-            return _fastScroll;
+            return _isFastScrollEnabled;
         }
 
-        void SetFastScroll( const bool enable )
+        void setFastScrollStatus( const bool enable )
         {
-            _fastScroll = enable;
+            _isFastScrollEnabled = enable;
         }
 
     private:
@@ -300,7 +300,7 @@ namespace Interface
         bool _mouseDraggingInitiated;
         bool _mouseDraggingMovement;
         bool _needRedrawByMouseDragging;
-        bool _fastScroll;
+        bool _isFastScrollEnabled;
 
         // Returns middle point of window ROI.
         fheroes2::Point _middlePoint() const

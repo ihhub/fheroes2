@@ -1153,9 +1153,9 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
             fastScrollRepeatCount = 0;
         }
 
-        // re-enable fast scroll once the cursor leaves the vulnerable parts of the border area
+        // Re-enable fast scroll once the cursor leaves the vulnerable parts of the border area.
         if ( !isScrollRight( le.GetMouseCursor() ) && !isScrollBottom( le.GetMouseCursor() ) ) {
-            _gameArea.SetFastScroll( true );
+            _gameArea.setFastScrollStatus( true );
         }
 
         const bool isHiddenInterface = conf.isHideInterfaceEnabled();

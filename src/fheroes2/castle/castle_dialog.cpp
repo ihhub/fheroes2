@@ -406,8 +406,8 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
             if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() ) {
                 result = CastleDialogReturnValue::Close;
 
-                // disable fast scroll for resolutions where the exit button is directly above the border
-                Interface::AdventureMap::Get().getGameArea().SetFastScroll( false );
+                // Disable fast scroll for resolutions where the exit button is directly above the border.
+                Interface::AdventureMap::Get().getGameArea().setFastScrollStatus( false );
 
                 // Fade-out castle dialog.
                 fheroes2::fadeOutDisplay( dialogRoi, !isDefaultScreenSize );
