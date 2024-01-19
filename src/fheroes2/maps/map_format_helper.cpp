@@ -25,6 +25,7 @@
 #include <cstddef>
 #include <cstdint>
 #include <list>
+#include <memory>
 #include <set>
 #include <vector>
 
