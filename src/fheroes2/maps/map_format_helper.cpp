@@ -76,7 +76,7 @@ namespace Maps
 
         // Read objects from all tiles and place them based on their IDs.
         auto sortObjects = []( const IndexedObjectInfo & left, const IndexedObjectInfo & right ) { return left.info->id < right.info->id; };
-        std::set<IndexedObjectInfo, decltype( sortObjects )> sortedObjects( sortObjects );
+        std::multiset<IndexedObjectInfo, decltype( sortObjects )> sortedObjects( sortObjects );
 
         for ( size_t i = 0; i < map.tiles.size(); ++i ) {
             for ( const auto & object : map.tiles[i].objects ) {
