@@ -38,7 +38,8 @@ namespace Maps
 
     bool saveMapInEditor( Map_Format::MapFormat & map );
 
-    void readTile( Tiles & tile, const Map_Format::TileInfo & info );
+    void readTileTerrain( Tiles & tile, const Map_Format::TileInfo & info );
+    void readTileObjects( Tiles & tile, const Map_Format::TileInfo & info );
 
     void writeTile( const Tiles & tile, Map_Format::TileInfo & info );
 

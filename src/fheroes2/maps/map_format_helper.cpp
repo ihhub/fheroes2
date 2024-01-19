@@ -63,7 +63,11 @@ namespace Maps
         }
 
         for ( size_t i = 0; i < map.tiles.size(); ++i ) {
-            readTile( world.GetTiles( static_cast<int32_t>( i ) ), map.tiles[i] );
+            readTileTerrain( world.GetTiles( static_cast<int32_t>( i ) ), map.tiles[i] );
+        }
+
+        for ( size_t i = 0; i < map.tiles.size(); ++i ) {
+            readTileObjects( world.GetTiles( static_cast<int32_t>( i ) ), map.tiles[i] );
         }
 
         return true;
@@ -86,10 +90,13 @@ namespace Maps
         return true;
     }
 
-    void readTile( Tiles & tile, const Map_Format::TileInfo & info )
+    void readTileTerrain( Tiles & tile, const Map_Format::TileInfo & info )
     {
         tile.setTerrain( info.terrainIndex, info.terrainFlag & 2, info.terrainFlag & 1 );
+    }
 
+    void readTileObjects( Tiles & tile, const Map_Format::TileInfo & info )
+    {
         for ( const auto & object : info.objects ) {
             const auto & objectInfos = getObjectsByGroup( object.group );
             if ( object.index >= objectInfos.size() ) {
