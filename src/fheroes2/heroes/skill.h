@@ -44,6 +44,7 @@ namespace Skill
 
     uint32_t GetNecromancyBonus( const HeroBase & hero );
     uint32_t GetNecromancyPercent( const HeroBase & hero );
+    uint32_t GetDiplomacySurrenderCostDiscount( const int level );
 
     namespace Level
     {
