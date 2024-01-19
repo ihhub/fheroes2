@@ -131,7 +131,7 @@ namespace
     }
 
     bool isConditionValid( const std::vector<fheroes2::Point> & offsets, const fheroes2::Point & mainTilePos,
-        const std::function<bool( const Maps::Tiles & tile )> & condition )
+                           const std::function<bool( const Maps::Tiles & tile )> & condition )
     {
         if ( offsets.empty() ) {
             return true;
@@ -154,13 +154,13 @@ namespace
     }
 
     bool checkConditionForOccupiedTiles( const Maps::ObjectInfo & info, const fheroes2::Point & mainTilePos,
-        const std::function<bool( const Maps::Tiles & tile )> & condition )
+                                         const std::function<bool( const Maps::Tiles & tile )> & condition )
     {
         return isConditionValid( Maps::getGroundLevelOccupiedTileOffset( info ), mainTilePos, condition );
     }
 
     bool checkConditionForUsedTiles( const Maps::ObjectInfo & info, const fheroes2::Point & mainTilePos,
-        const std::function<bool( const Maps::Tiles & tile )> & condition )
+                                     const std::function<bool( const Maps::Tiles & tile )> & condition )
     {
         return isConditionValid( Maps::getGroundLevelUsedTileOffset( info ), mainTilePos, condition );
     }
