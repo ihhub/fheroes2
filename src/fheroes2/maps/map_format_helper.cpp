@@ -83,7 +83,7 @@ namespace Maps
                 IndexedObjectInfo info;
                 info.tileIndex = static_cast<int32_t>( i );
                 info.info = &object;
-                sortedObjects.emplace( std::move( info ) );
+                sortedObjects.emplace( info );
             }
         }
 
