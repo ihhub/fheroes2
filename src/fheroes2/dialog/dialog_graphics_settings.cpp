@@ -153,8 +153,8 @@ namespace
         fheroes2::Blit( dialogShadow, display, windowRoi.x - BORDERWIDTH, windowRoi.y + BORDERWIDTH );
         fheroes2::Blit( dialog, display, windowRoi.x, windowRoi.y );
 
-        // The Image is taken from another big ICN and cropped its background with adequate size
-        // The Offsets are staticly fixed based on original image to Fill the empty spaces on the second row alongside with it's shadow
+        // The image is taken from another big ICN and cropped, with its background at an adequate size.
+        // The offsets are statically fixed based on the original image to fill the empty spaces on the second row alongside it's shadow.
         fheroes2::Blit( secondRowBackground, 50, 30, display, windowRoi.x + BORDERWIDTH + 10, windowRoi.y + optionOffset.y - 10 + offsetBetweenOptions.height,
                         dialog.width() - BORDERWIDTH * 2 - 20, optionWindowSize + 20 );
 

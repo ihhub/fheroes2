@@ -950,12 +950,11 @@ namespace
 
             SDL_GetWindowPosition( _window, &_prevWindowPos.x, &_prevWindowPos.y );
 
-            // SDL_GetNumVideoDisplays starts from 1 instead of 0
-            if ( display + 1 > getMaximumDisplays() ) {
-                _displayIndex = 0;
+            if ( display < getMaximumDisplays() ) {
+                _displayIndex = display;
             }
             else {
-                _displayIndex = display;
+                _displayIndex = 0;
             }
 
             clear();
@@ -1199,7 +1198,7 @@ namespace
 
         bool isAllocated() const override
         {
-            // We Should Check for at Least One of the Variables Destroyed in Clear()
+            // We should check for at least one of the variables destroyed in Clear()
             return _window != nullptr;
         }
 

@@ -146,7 +146,7 @@ namespace fheroes2
 
         virtual void setDisplayIndex( const uint8_t )
         {
-            // Do Nothing.
+            // Do nothing.
         }
 
         virtual uint8_t getMaximumDisplays() const
