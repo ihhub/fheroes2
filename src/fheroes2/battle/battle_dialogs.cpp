@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -1000,7 +1000,7 @@ int Battle::Arena::DialogBattleHero( const HeroBase & hero, const bool buttons, 
         else if ( le.MousePressRight( btnSurrender.area() ) && _currentColor == hero.GetColor() && !hero.isCaptain() ) {
             fheroes2::showStandardTextMessage(
                 _( "Surrender" ),
-                _( "Surrendering costs gold. However if you pay the ransom, the hero and all of his or her surviving creatures will be available to recruit again." ),
+                _( "Surrendering costs gold. However if you pay the ransom, the hero and all of his or her surviving creatures will be available to recruit again. The cost of surrender is half of the total cost of the non-temporary troops remaining in the army." ),
                 Dialog::ZERO );
         }
         else if ( le.MousePressRight( portraitArea ) && actionHero != nullptr ) {
