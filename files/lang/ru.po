@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-13 09:39+0000\n"
+"POT-Creation-Date: 2024-01-19 14:45+0000\n"
 "PO-Revision-Date: 2023-11-12 16:27+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -677,9 +677,12 @@ msgstr ""
 "Отступить героем, бросив Ваших существ на произвол судьбы. Вы сможете нанять "
 "этого героя снова, но с войском, соответствующим герою-новичку."
 
+#, fuzzy
 msgid ""
 "Surrendering costs gold. However if you pay the ransom, the hero and all of "
-"his or her surviving creatures will be available to recruit again."
+"his or her surviving creatures will be available to recruit again. The cost "
+"of surrender is half of the total cost of the non-temporary troops remaining "
+"in the army."
 msgstr ""
 "Капитуляция стоит денег. Однако, если Вы заплатите выкуп, героя можно будет "
 "нанять вместе со всеми выжившими существами."
@@ -1922,7 +1925,8 @@ msgstr "Роланд"
 msgid "Archibald"
 msgstr "Арчибальд"
 
-msgid "The Price of Loyalty"
+#, fuzzy
+msgid "Price of Loyalty"
 msgstr "Цена верности"
 
 msgid "Voyage Home"
@@ -2636,16 +2640,18 @@ msgstr "без артефактов."
 msgid "Recruit %{name} the %{race}"
 msgstr "Нанять %{name}, %{race}"
 
+#, fuzzy
 msgid ""
-"'Spread' combat formation spreads your armies from the top to the bottom of "
-"the battlefield, with at least one empty space between each army."
+"'Spread' combat formation spreads the castle's units from the top to the "
+"bottom of the battlefield, with at least one empty space between each unit."
 msgstr ""
 "Разомкнутый боевой порядок предписывает Вашей армии занять позиции по всей "
 "ширине стартового расположения войск в бою с интервалами между отрядами."
 
+#, fuzzy
 msgid ""
-"'Grouped' combat formation bunches your army together in the center of your "
-"side of the battlefield."
+"'Grouped' combat formation bunches the castle's units together in the center "
+"of the castle's side of the battlefield."
 msgstr ""
 "Сомкнутый боевой порядок предписывает отрядам Вашей армии организовать "
 "плотное построение посередине стартового расположения войск в бою."
@@ -3472,6 +3478,9 @@ msgstr "Тип карты:\n"
 
 msgid "The Succession Wars"
 msgstr "Война за престол"
+
+msgid "The Price of Loyalty"
+msgstr "Цена верности"
 
 #, fuzzy
 msgid "Resurrection"
@@ -7269,6 +7278,22 @@ msgstr ""
 msgid "%{name} the %{race} (Level %{level})"
 msgstr "%{race} %{name} (уровень %{level})"
 
+#, fuzzy
+msgid ""
+"'Spread' combat formation spreads the hero's units from the top to the "
+"bottom of the battlefield, with at least one empty space between each unit."
+msgstr ""
+"Разомкнутый боевой порядок предписывает Вашей армии занять позиции по всей "
+"ширине стартового расположения войск в бою с интервалами между отрядами."
+
+#, fuzzy
+msgid ""
+"'Grouped' combat formation bunches the hero's army together in the center of "
+"their side of the battlefield."
+msgstr ""
+"Сомкнутый боевой порядок предписывает отрядам Вашей армии организовать "
+"плотное построение посередине стартового расположения войск в бою."
+
 msgid "Are you sure you want to dismiss this Hero?"
 msgstr "Вы действительно хотите уволить героя?"
 
@@ -7330,11 +7355,12 @@ msgstr ""
 msgid "Level %{level}"
 msgstr "Уровень %{level}"
 
+#, fuzzy
 msgid ""
 "%{name} currently has %{point} spell points out of a maximum of %{max}. The "
-"maximum number of spell points is 10 times your knowledge. It is "
-"occasionally possible to have more than your maximum spell points via "
-"special events."
+"maximum number of spell points is 10 times the hero's knowledge. It is "
+"occasionally possible for the hero to have more than their maximum spell "
+"points via special events."
 msgstr ""
 "%{name} имеет %{point} очков магии из максимальных %{max}. Максимальное "
 "число очков магии - количество очков знания в десятикратном размере. "
@@ -7609,7 +7635,7 @@ msgstr[2] "%{skill} увеличивает радиус обзора героя 
 #, fuzzy
 msgid ""
 "%{skill} allows the hero to negotiate with monsters who are weaker than "
-"their army."
+"their army, and reduces the cost of surrender."
 msgstr ""
 "%{skill} позволяет Вам вести переговоры с войсками, которые слабее Вас. "
 
@@ -7622,6 +7648,14 @@ msgstr ""
 #, fuzzy
 msgid "All of the creatures may offer to join the hero."
 msgstr "Все существа могут предложить присоединиться к Вашей армии."
+
+#, fuzzy
+msgid ""
+"The cost of surrender is reduced to %{percent} percent of the total cost of "
+"troops in the army."
+msgstr ""
+"%{name} снижает стоимость сдачи до %{count} процентов от общей стоимости "
+"войска."
 
 #, fuzzy
 msgid ""
@@ -9061,43 +9095,53 @@ msgstr "Эту вещь нельзя продать."
 msgid "Invalid Artifact"
 msgstr "Некорректный артефакт"
 
-msgid "The %{name} increases your knowledge by %{count}."
+#, fuzzy
+msgid "The %{name} increases the hero's knowledge by %{count}."
 msgstr "%{name} увеличивает Знания на %{count}."
 
 msgid "Ultimate Book of Knowledge"
 msgstr "Книга Всезнания"
 
-msgid "The %{name} increases your attack skill by %{count}."
+#, fuzzy
+msgid "The %{name} increases the hero's attack skill by %{count}."
 msgstr "%{name} увеличивает Атаку на %{count}."
 
 msgid "Ultimate Sword of Dominion"
 msgstr "Меч Всевластия"
 
-msgid "The %{name} increases your defense skill by %{count}."
+#, fuzzy
+msgid "The %{name} increases the hero's defense skill by %{count}."
 msgstr "%{name} увеличивает Защиту на %{count}."
 
 msgid "Ultimate Cloak of Protection"
 msgstr "Защитная Накидка"
 
-msgid "The %{name} increases your spell power by %{count}."
+#, fuzzy
+msgid "The %{name} increases the hero's spell power by %{count}."
 msgstr "%{name} увеличивает Силу магии на %{count}."
 
 msgid "Ultimate Wand of Magic"
 msgstr "Жезл Магии"
 
-msgid "The %{name} increases your attack and defense skills by %{count} each."
+#, fuzzy
+msgid ""
+"The %{name} increases the hero's attack and defense skills by %{count} each."
 msgstr "%{name} увеличивает Вашу Атаку и Защиту на %{count}."
 
 msgid "Ultimate Shield"
 msgstr "Всемогущий Щит"
 
-msgid "The %{name} increases your spell power and knowledge by %{count} each."
+#, fuzzy
+msgid ""
+"The %{name} increases the hero's spell power and knowledge by %{count} each."
 msgstr "%{name} увеличивает Вашу Силу магии и Знания на %{count}."
 
 msgid "Ultimate Staff"
 msgstr "Всемогущий Посох"
 
-msgid "The %{name} increases each of your basic skills by %{count} points."
+#, fuzzy
+msgid ""
+"The %{name} increases each of the hero's basic skills by %{count} points."
 msgstr "%{name} увеличивает все основные параметры на %{count}."
 
 msgid "Ultimate Crown"
@@ -9155,7 +9199,8 @@ msgstr ""
 msgid "Medal of Valor"
 msgstr "Медаль Отваги"
 
-msgid "The %{name} increases your morale by %{count}."
+#, fuzzy
+msgid "The %{name} increases the morale of the hero's army by %{count}."
 msgstr "%{name} увеличивает Вашу мораль на %{count}."
 
 msgid ""
@@ -9198,7 +9243,9 @@ msgstr ""
 msgid "Fizbin of Misfortune"
 msgstr "Символ Неудачи"
 
-msgid "The %{name} greatly decreases your morale by %{count}."
+#, fuzzy
+msgid ""
+"The %{name} greatly decreases the morale of the hero's army by %{count}."
 msgstr "%{name} снижает Вашу мораль на %{count}."
 
 msgid ""
@@ -9223,7 +9270,8 @@ msgstr ""
 msgid "Armored Gauntlets of Protection"
 msgstr "Защитная Перчатка"
 
-msgid "The %{name} increase your defense skill by %{count}."
+#, fuzzy
+msgid "The %{name} increase the hero's defense skill by %{count}."
 msgstr "%{name} увеличивает силу защиты на %{count}."
 
 msgid ""
@@ -9259,7 +9307,8 @@ msgstr ""
 msgid "Ballista of Quickness"
 msgstr "Баллиста"
 
-msgid "The %{name} gives your catapult one extra shot per combat round."
+#, fuzzy
+msgid "The %{name} gives the hero's catapult one extra shot per combat round."
 msgstr ""
 "%{name} позволяет произвести один дополнительный выстрел из катапульты за "
 "ход."
@@ -9363,7 +9412,8 @@ msgstr ""
 msgid "Endless Sack of Gold"
 msgstr "Бездонный Мешок Золота"
 
-msgid "The %{name} provides you with %{count} gold per day."
+#, fuzzy
+msgid "The %{name} provides the hero with %{count} gold per day."
 msgstr "%{name} ежедневно приносит Вам %{count} золотых."
 
 msgid ""
@@ -9401,7 +9451,8 @@ msgstr ""
 msgid "Nomad Boots of Mobility"
 msgstr "Башмаки Кочевника"
 
-msgid "The %{name} increase your movement on land."
+#, fuzzy
+msgid "The %{name} increase the hero's movement on land."
 msgstr "%{name} увеличивают Ваше передвижение по земле."
 
 msgid ""
@@ -9427,7 +9478,8 @@ msgstr ""
 msgid "Lucky Rabbit's Foot"
 msgstr "Кроличья Лапка"
 
-msgid "The %{name} increases your luck in combat by %{count}."
+#, fuzzy
+msgid "The %{name} increases the luck of the hero's army by %{count}."
 msgstr "%{name} увеличивает Вашу удачу в бою на %{count}."
 
 msgid ""
@@ -9473,7 +9525,8 @@ msgstr ""
 msgid "True Compass of Mobility"
 msgstr "Компас"
 
-msgid "The %{name} increases your movement on land and sea."
+#, fuzzy
+msgid "The %{name} increases the hero's movement on land and sea."
 msgstr "%{name} увеличивает Ваше передвижение по земле и воде."
 
 msgid ""
@@ -9487,7 +9540,8 @@ msgstr ""
 msgid "Sailor's Astrolabe of Mobility"
 msgstr "Астролябия"
 
-msgid "The %{name} increases your movement on sea."
+#, fuzzy
+msgid "The %{name} increases the hero's movement on sea."
 msgstr "%{name} увеличивает Ваше передвижение по воде."
 
 msgid ""
@@ -9516,7 +9570,9 @@ msgstr ""
 msgid "Enchanted Hourglass"
 msgstr "Зачарованные Часы"
 
-msgid "The %{name} extends the duration of all your spells by %{count} turns."
+#, fuzzy
+msgid ""
+"The %{name} extends the duration of all the hero's spells by %{count} turns."
 msgstr "%{name} увеличивает длительность всех заклинаний на %{count} ход."
 
 msgid ""
@@ -9531,7 +9587,8 @@ msgstr ""
 msgid "Gold Watch"
 msgstr "Золотые Часы"
 
-msgid "The %{name} doubles the effectiveness of your hypnotize spells."
+#, fuzzy
+msgid "The %{name} doubles the effectiveness of the hero's hypnotize spells."
 msgstr "%{name} удваивают эффект заклинаний гипноза."
 
 msgid ""
@@ -9560,7 +9617,9 @@ msgstr ""
 msgid "Ice Cloak"
 msgstr "Ледяная Накидка"
 
-msgid "The %{name} halves all damage your troops take from cold spells."
+#, fuzzy
+msgid ""
+"The %{name} halves all damage the hero's troops receive from cold spells."
 msgstr ""
 "%{name} снижает вдвое весь урон нанесённый Вашим отрядам заклинаниями холода."
 
@@ -9576,7 +9635,9 @@ msgstr ""
 msgid "Fire Cloak"
 msgstr "Огненная Накидка"
 
-msgid "The %{name} halves all damage your troops take from fire spells."
+#, fuzzy
+msgid ""
+"The %{name} halves all damage the hero's troops receive from fire spells."
 msgstr ""
 "%{name} снижает вдвое весь урон нанесённый Вашим отрядам заклинаниями огня."
 
@@ -9595,7 +9656,10 @@ msgstr ""
 msgid "Lightning Helm"
 msgstr "Громовой Шлем"
 
-msgid "The %{name} halves all damage your troops take from lightning spells."
+#, fuzzy
+msgid ""
+"The %{name} halves all damage the hero's troops receive from lightning "
+"spells."
 msgstr ""
 "%{name} снижает вдвое весь урон нанесённый Вашим отрядам заклинаниями молний."
 
@@ -9611,9 +9675,10 @@ msgstr ""
 msgid "Evercold Icicle"
 msgstr "Нетающий Лёд"
 
+#, fuzzy
 msgid ""
-"The %{name} causes your cold spells to do %{count} percent more damage to "
-"enemy troops."
+"The %{name} causes the hero's cold spells to do %{count} percent more damage "
+"to enemy troops."
 msgstr "%{name} увеличивает на %{count} процентов урон от заклинаний холода."
 
 msgid ""
@@ -9628,9 +9693,10 @@ msgstr ""
 msgid "Everhot Lava Rock"
 msgstr "Горячий Камень"
 
+#, fuzzy
 msgid ""
-"The %{name} causes your fire spells to do %{count} percent more damage to "
-"enemy troops."
+"The %{name} causes the hero's fire spells to do %{count} percent more damage "
+"to enemy troops."
 msgstr "%{name} увеличивает на %{count} процентов урон от заклинаний огня."
 
 msgid ""
@@ -9646,9 +9712,10 @@ msgstr ""
 msgid "Lightning Rod"
 msgstr "Жезл Молний"
 
+#, fuzzy
 msgid ""
-"The %{name} causes your lightning spells to do %{count} percent more damage "
-"to enemy troops."
+"The %{name} causes the hero's lightning spells to do %{count} percent more "
+"damage to enemy troops."
 msgstr "%{name} увеличивает на %{count} процентов урон от заклинаний молнии."
 
 msgid ""
@@ -9665,7 +9732,8 @@ msgstr ""
 msgid "Snake-Ring"
 msgstr "Кольцо Змеи"
 
-msgid "The %{name} halves the casting cost of all your bless spells."
+#, fuzzy
+msgid "The %{name} halves the casting cost of all of the hero's bless spells."
 msgstr "%{name} снижает стоимость всех заклинаний благословения."
 
 msgid ""
@@ -9678,9 +9746,10 @@ msgstr ""
 msgid "Ankh"
 msgstr "Символ Жизни"
 
+#, fuzzy
 msgid ""
-"The %{name} doubles the effectiveness of all your resurrect and animate "
-"spells."
+"The %{name} doubles the effectiveness of all of the hero's resurrect and "
+"animate spells."
 msgstr "%{name} удваивает эффективность всех Ваших заклинаний оживления."
 
 msgid ""
@@ -9695,7 +9764,9 @@ msgstr ""
 msgid "Book of Elements"
 msgstr "Книга Стихий"
 
-msgid "The %{name} doubles the effectiveness of all your summoning spells."
+#, fuzzy
+msgid ""
+"The %{name} doubles the effectiveness of all of the hero's summoning spells."
 msgstr "%{name} удваивает эффективность всех Ваших заклинаний призыва."
 
 msgid ""
@@ -9726,7 +9797,8 @@ msgstr ""
 msgid "Holy Pendant"
 msgstr "Святой Кулон"
 
-msgid "The %{name} makes all your troops immune to curse spells."
+#, fuzzy
+msgid "The %{name} makes all of the hero's troops immune to curse spells."
 msgstr ""
 "%{name} делает все Ваши отряды невосприимчивыми к заклинаниям проклятия."
 
@@ -9742,7 +9814,8 @@ msgstr ""
 msgid "Pendant of Free Will"
 msgstr "Подвеска Свободы"
 
-msgid "The %{name} makes all your troops immune to hypnotize spells."
+#, fuzzy
+msgid "The %{name} makes all of the hero's troops immune to hypnotize spells."
 msgstr ""
 "%{name} воли делает все Ваши отряды невосприимчивыми к заклинаниям гипноза."
 
@@ -9760,7 +9833,8 @@ msgstr ""
 msgid "Pendant of Life"
 msgstr "Кулон Жизни"
 
-msgid "The %{name} makes all your troops immune to death spells."
+#, fuzzy
+msgid "The %{name} makes all of the hero's troops immune to death spells."
 msgstr "%{name} делает все Ваши отряды невосприимчивыми к заклинаниям смерти."
 
 msgid ""
@@ -9775,7 +9849,8 @@ msgstr ""
 msgid "Serenity Pendant"
 msgstr "Подвеска Покоя"
 
-msgid "The %{name} makes all your troops immune to berserk spells."
+#, fuzzy
+msgid "The %{name} makes all of the hero's troops immune to berserk spells."
 msgstr "%{name} делает все Ваши отряды невосприимчивыми к заклинанию берсерка."
 
 msgid ""
@@ -9793,7 +9868,8 @@ msgstr ""
 msgid "Seeing-eye Pendant"
 msgstr "Всевидящий Глаз"
 
-msgid "The %{name} makes all your troops immune to blindness spells."
+#, fuzzy
+msgid "The %{name} makes all of the hero's troops immune to blindness spells."
 msgstr ""
 "%{name} делает все Ваши отряды невосприимчивыми к заклинанию ослепления."
 
@@ -9810,7 +9886,8 @@ msgstr ""
 msgid "Kinetic Pendant"
 msgstr "Кулон Стремительности"
 
-msgid "The %{name} makes all your troops immune to paralyze spells."
+#, fuzzy
+msgid "The %{name} makes all of the hero's troops immune to paralyze spells."
 msgstr "%{name} делает все Ваши отряды невосприимчивыми к заклинанию паралича."
 
 msgid ""
@@ -9825,7 +9902,8 @@ msgstr ""
 msgid "Pendant of Death"
 msgstr "Кулон Смерти"
 
-msgid "The %{name} makes all your troops immune to holy spells."
+#, fuzzy
+msgid "The %{name} makes all of the hero's troops immune to holy spells."
 msgstr ""
 "%{name} делает все Ваши отряды невосприимчивыми к заклинаниям изгнания "
 "нежити."
@@ -9842,7 +9920,9 @@ msgstr ""
 msgid "Wand of Negation"
 msgstr "Посох Отрицания"
 
-msgid "The %{name} makes all your troops immune to dispel magic spells."
+#, fuzzy
+msgid ""
+"The %{name} makes all of the hero's troops immune to dispel magic spells."
 msgstr "%{name} делает все Ваши отряды невосприимчивыми к заклинаниям смерти."
 
 msgid ""
@@ -9857,9 +9937,10 @@ msgstr ""
 msgid "Golden Bow"
 msgstr "Золотой Лук"
 
+#, fuzzy
 msgid ""
-"The %{name} eliminates the %{count} percent penalty for your troops shooting "
-"past obstacles (e.g. castle walls)."
+"The %{name} eliminates the %{count} percent penalty for the hero's troops "
+"shooting past obstacles (e.g. castle walls)."
 msgstr ""
 "%{name} уменьшает на %{count} процентов штраф при стрельбе за преграды."
 
@@ -9873,8 +9954,9 @@ msgstr ""
 msgid "Telescope"
 msgstr "Телескоп"
 
+#, fuzzy
 msgid ""
-"The %{name} increases the amount of terrain your hero reveals when "
+"The %{name} increases the amount of terrain the hero reveals when "
 "adventuring by %{count} extra square."
 msgstr "%{name} увеличивает радиус обзора героя на %{count} клетку."
 
@@ -9894,9 +9976,10 @@ msgstr ""
 msgid "Statesman's Quill"
 msgstr "Перо Дипломата"
 
+#, fuzzy
 msgid ""
 "The %{name} reduces the cost of surrender to %{count} percent of the total "
-"cost of troops you have in your army."
+"cost of troops the hero has in their army."
 msgstr ""
 "%{name} снижает стоимость сдачи до %{count} процентов от общей стоимости "
 "войска."
@@ -9913,7 +9996,9 @@ msgstr ""
 msgid "Wizard's Hat"
 msgstr "Шляпа Мага"
 
-msgid "The %{name} increases the duration of your spells by %{count} turns."
+#, fuzzy
+msgid ""
+"The %{name} increases the duration of the hero's spells by %{count} turns."
 msgstr ""
 "%{name} увеличивает продолжительность всех Ваших заклинаний на %{count} "
 "ходов."
@@ -9931,7 +10016,8 @@ msgstr ""
 msgid "Power Ring"
 msgstr "Кольцо Силы"
 
-msgid "The %{name} returns %{count} extra spell points per day to your hero."
+#, fuzzy
+msgid "The %{name} returns %{count} extra spell points per day to the hero."
 msgstr "%{name} восстанавливает %{count} очка магии в день."
 
 msgid ""
@@ -9947,7 +10033,10 @@ msgstr ""
 msgid "Ammo Cart"
 msgstr "Оружейный Обоз"
 
-msgid "The %{name} provides endless ammunition for all your troops that shoot."
+#, fuzzy
+msgid ""
+"The %{name} provides endless ammunition for all of the hero's troops that "
+"shoot."
 msgstr "%{name} обеспечивает бесконечными боеприпасами всех Ваших стрелков."
 
 msgid ""
@@ -9961,7 +10050,8 @@ msgstr ""
 msgid "Tax Lien"
 msgstr "Долговая Расписка"
 
-msgid "The %{name} costs you %{count} gold pieces per day."
+#, fuzzy
+msgid "The %{name} costs the hero %{count} gold pieces per day."
 msgstr "%{name} стоит Вам %{count} золотых ежедневно."
 
 msgid ""
@@ -9978,7 +10068,8 @@ msgstr ""
 msgid "Hideous Mask"
 msgstr "Ужасная Маска"
 
-msgid "The %{name} prevents all 'wandering' armies from joining your hero."
+#, fuzzy
+msgid "The %{name} prevents all 'wandering' armies from joining the hero."
 msgstr "%{name} не позволяет нейтральным войскам вступать в Вашу армию."
 
 msgid ""
@@ -10137,7 +10228,8 @@ msgstr ""
 msgid "Magic Book"
 msgstr "Волшебная Книга"
 
-msgid "The %{name} enables you to cast spells."
+#, fuzzy
+msgid "The %{name} enables the hero to cast spells."
 msgstr "%{name} позволяет использовать заклинания."
 
 msgid "Dummy 1"
@@ -10158,8 +10250,9 @@ msgstr "Болванка 4"
 msgid "Spell Scroll"
 msgstr "Свиток Заклинания"
 
+#, fuzzy
 msgid ""
-"This %{name} gives your hero the ability to cast the %{spell} spell if your "
+"This %{name} gives the hero the ability to cast the %{spell} spell if the "
 "hero has a Magic Book."
 msgstr ""
 "%{name} позволяет Вашему герою произносить заклинание %{spell}, если он "
@@ -10179,8 +10272,9 @@ msgstr ""
 msgid "Arm of the Martyr"
 msgstr "Рука Мученика"
 
+#, fuzzy
 msgid ""
-"The %{name} increases your spell power by %{count} but adds the undead "
+"The %{name} increases the hero's spell power by %{count} but adds the undead "
 "morale penalty."
 msgstr ""
 "%{name} увеличивает силу магии на %{count}, но добавляет штраф к морали, как "
@@ -10202,7 +10296,8 @@ msgstr ""
 msgid "Breastplate of Anduran"
 msgstr "Кираса Андурана"
 
-msgid "The %{name} increases your defense by %{count}."
+#, fuzzy
+msgid "The %{name} increases the hero's defense by %{count}."
 msgstr "%{name} увеличивает силу защиты на %{count}."
 
 msgid ""
@@ -10238,9 +10333,11 @@ msgstr ""
 msgid "Battle Garb of Anduran"
 msgstr "Боевой Доспех Андурана"
 
+#, fuzzy
 msgid ""
 "The %{name} combines the powers of the three Anduran artifacts. It provides "
-"maximum luck and morale for your troops and gives you the Town Portal spell."
+"maximum luck and morale for the hero's troops and gives the hero the Town "
+"Portal spell."
 msgstr ""
 "%{name} сочетает в себе силу трёх артефактов Андурана. Он увеличивает удачу "
 "и мораль ваших войск, а также даёт Вам заклинание 'Портал города'."
@@ -10256,9 +10353,10 @@ msgstr ""
 msgid "Crystal Ball"
 msgstr "Кристальный Шар"
 
+#, fuzzy
 msgid ""
-"The %{name} lets you get more specific information about monsters, enemy "
-"heroes, and castles nearby the hero who holds it."
+"The %{name} lets the hero get more specific information about monsters, "
+"enemy heroes, and castles nearby the hero."
 msgstr ""
 "%{name} предоставляет подробную информацию о монстрах, вражеских героях и "
 "замках, рядом с которыми стоит герой."
@@ -10378,7 +10476,10 @@ msgstr ""
 msgid "Masthead"
 msgstr "Наконечник Мачты"
 
-msgid "The %{name} boosts your luck and morale by %{count} each in sea combat."
+#, fuzzy
+msgid ""
+"The %{name} boosts the hero's troops' luck and morale by %{count} each in "
+"sea combat."
 msgstr ""
 "%{name}, при сражениях на воде, увеличивает ваши удачу и мораль на %{count}."
 
@@ -10400,7 +10501,8 @@ msgstr ""
 msgid "Staff of Wizardry"
 msgstr "Волшебный Посох"
 
-msgid "The %{name} boosts your spell power by %{count}."
+#, fuzzy
+msgid "The %{name} boosts the hero's spell power by %{count}."
 msgstr "%{name} увеличивает силу магии на %{count}."
 
 msgid ""
@@ -10416,7 +10518,8 @@ msgstr ""
 msgid "Sword Breaker"
 msgstr "Мечелом"
 
-msgid "The %{name} increases your defense by %{count} and attack by 1."
+#, fuzzy
+msgid "The %{name} increases the hero's defense by %{count} and attack by 1."
 msgstr "%{name} увеличивает силу защиты на %{count}, и атаки на 1."
 
 msgid ""
@@ -10445,7 +10548,8 @@ msgstr ""
 msgid "Spade of Necromancy"
 msgstr "Лопата Могильщика"
 
-msgid "The %{name} gives you increased necromancy skill."
+#, fuzzy
+msgid "The %{name} gives the hero increased necromancy skill."
 msgstr "%{name} увеличивает навык искусства Некромантов."
 
 msgid ""
