@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-14 15:05+0000\n"
-"PO-Revision-Date: 2024-01-16 13:26+0100\n"
+"PO-Revision-Date: 2024-01-19 18:40+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
 "Language: fr\n"
@@ -3240,10 +3240,10 @@ msgid "treeOfKnowledge|free"
 msgstr "gratuit"
 
 msgid "already claimed"
-msgstr "récompense non disponible"
+msgstr "XP déjà acquise"
 
 msgid "not claimed"
-msgstr "récompense disponible"
+msgstr "XP non acquise"
 
 msgid "already knows this skill"
 msgstr "connaît déjà cette compétence"
@@ -3423,7 +3423,7 @@ msgid "Select Ocean Object:"
 msgstr "Choix d'élément (océan) :"
 
 msgid "Castle/town placing"
-msgstr "Choix du Village à placer"
+msgstr "Choix du village à placer"
 
 msgid "doubleLinedRace|Neutral"
 msgstr "Neutre"
@@ -3789,7 +3789,7 @@ msgid "Load Map"
 msgstr "Charger une carte"
 
 msgid "Load an existing map."
-msgstr "Charger une carte existant."
+msgstr "Charger une carte existante."
 
 msgid "Save Map"
 msgstr "Sauvegarder la carte"
@@ -4735,10 +4735,10 @@ msgstr ""
 "uniquement au prochain tour."
 
 msgid "Default Actions"
-msgstr "Interactions par défaut"
+msgstr "Actions par défaut"
 
 msgid "Global Actions"
-msgstr "Interactions globales"
+msgstr "Action globales"
 
 msgid "Main Menu"
 msgstr "Menu principal"
@@ -8356,7 +8356,7 @@ msgid "Nothing Special"
 msgstr "Rien de spécial"
 
 msgid "Mossy Rock"
-msgstr "Roche moussue"
+msgstr "Rocher moussue"
 
 msgid "Watch Tower"
 msgstr "Tour de guet"
