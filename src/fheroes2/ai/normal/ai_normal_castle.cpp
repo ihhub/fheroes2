@@ -139,8 +139,11 @@ namespace AI
 {
     bool Build( Castle & castle, const std::vector<BuildOrder> & buildOrderList, const uint32_t multiplier = 1 )
     {
+        const int gameDifficulty = Game::getDifficulty();
+        const bool isGameCampaign = Game::isCampaign();
+
         for ( const BuildOrder & order : buildOrderList ) {
-            if ( !Difficulty::allowAIToBuildCastleBuilding( Game::getDifficulty(), Game::isCampaign(), order.building ) ) {
+            if ( !Difficulty::allowAIToBuildCastleBuilding( gameDifficulty, isGameCampaign, order.building ) ) {
                 continue;
             }
 
