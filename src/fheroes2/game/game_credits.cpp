@@ -258,9 +258,6 @@ namespace
         const fheroes2::Sprite & goblin = fheroes2::AGG::GetICN( ICN::GOBLIN, 27 );
         fheroes2::Blit( goblin, output, output.width() - goblin.width() * 2, output.height() - goblin.height() - 10, true );
 
-        fheroes2::Image resizedOutput( 640, 480 );
-        fheroes2::Resize( output, 0, 0, output.width(), output.height(), resizedOutput, 0, 0, resizedOutput.width(), resizedOutput.height() );
-
         return output;
     }
 
