@@ -486,7 +486,13 @@ namespace AI
 
     bool BattlePlanner::isHeroWorthSaving( const Heroes & hero ) const
     {
-        return hero.GetLevel() > 2 || !hero.GetBagArtifacts().empty();
+        if ( hero.GetLevel() > 2 ) {
+            return true;
+        }
+
+        const BagArtifacts & artifactsBag = hero.GetBagArtifacts();
+
+        return std::any_of( artifactsBag.begin(), artifactsBag.end(), []( const Artifact & art ) { return art.isValid() && art.GetID() != Artifact::MAGIC_BOOK; } );
     }
 
     bool BattlePlanner::isCommanderCanSpellcast( const Arena & arena, const HeroBase * commander ) const
