@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -23,20 +23,10 @@
 
 #include "cursor.h"
 
-#include <cassert>
-
 #include "agg_image.h"
 #include "icn.h"
 #include "image.h"
 #include "localevent.h"
-#include "screen.h"
-
-Cursor::Cursor()
-    : theme( NONE )
-    , _monochromeCursorThemes( false )
-{
-    // Do nothing.
-}
 
 Cursor & Cursor::Get()
 {
@@ -44,16 +34,10 @@ Cursor & Cursor::Get()
     return _cursor;
 }
 
-int Cursor::Themes() const
-{
-    assert( theme <= CURSOR_HERO_BOAT_ACTION_8 );
-    return theme;
-}
-
 bool Cursor::SetThemes( int name, bool force )
 {
-    if ( force || theme != name ) {
-        theme = name;
+    if ( force || _theme != name ) {
+        _theme = name;
 
         // Video pointer cannot be properly rendered in black-white so we have to force to use color cursor.
         int icnID = ( _monochromeCursorThemes && ( name != Cursor::POINTER_VIDEO ) ) ? ICN::MONO_CURSOR_ADVMBW : ICN::ADVMCO;
@@ -85,7 +69,7 @@ bool Cursor::SetThemes( int name, bool force )
 
 void Cursor::setCustomImage( const fheroes2::Image & image, const fheroes2::Point & offset )
 {
-    theme = NONE;
+    _theme = NONE;
 
     fheroes2::cursor().update( image, -offset.x, -offset.y );
 
@@ -121,6 +105,7 @@ void Cursor::SetOffset( int name, const fheroes2::Point & defaultOffset )
     case Cursor::WAR_POINTER:
         _offset = { 0, 0 };
         break;
+
     case Cursor::CURSOR_HERO_FIGHT:
     case Cursor::CURSOR_HERO_FIGHT_2:
     case Cursor::CURSOR_HERO_FIGHT_3:
@@ -203,7 +188,7 @@ int Cursor::DistanceThemes( const int theme, uint32_t distance )
     case CURSOR_HERO_MEET:
     case CURSOR_HERO_ACTION:
     case CURSOR_HERO_BOAT_ACTION:
-        return theme + distance - 1;
+        return theme + static_cast<int>( distance ) - 1;
     default:
         break;
     }
@@ -238,27 +223,19 @@ int Cursor::WithoutDistanceThemes( const int theme )
     return theme;
 }
 
-CursorRestorer::CursorRestorer()
-    : _theme( Cursor::Get().Themes() )
-    , _visible( fheroes2::cursor().isVisible() )
-{}
-
 CursorRestorer::CursorRestorer( const bool visible, const int theme )
-    : CursorRestorer()
 {
-    Cursor::Get().SetThemes( theme );
+    if ( visible ) {
+        // Theme update is needed only if cursor is visible.
+        Cursor::Get().SetThemes( theme );
+    }
 
     fheroes2::cursor().show( visible );
 }
 
 CursorRestorer::~CursorRestorer()
 {
-    fheroes2::Cursor & cursorRenderer = fheroes2::cursor();
-    Cursor & cursorIcon = Cursor::Get();
+    Cursor::Get().SetThemes( _theme );
 
-    if ( cursorRenderer.isVisible() != _visible || cursorIcon.Themes() != _theme ) {
-        cursorIcon.SetThemes( _theme );
-
-        cursorRenderer.show( _visible );
-    }
+    fheroes2::cursor().show( _visible );
 }

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -23,9 +23,11 @@
 #ifndef H2CURSOR_H
 #define H2CURSOR_H
 
+#include <cassert>
 #include <cstdint>
 
 #include "math_base.h"
+#include "screen.h"
 
 namespace fheroes2
 {
@@ -185,7 +187,12 @@ public:
     static int WithoutDistanceThemes( const int theme );
     static void Refresh();
 
-    int Themes() const;
+    int Themes() const
+    {
+        assert( _theme <= CURSOR_HERO_BOAT_ACTION_8 );
+        return _theme;
+    }
+
     bool SetThemes( int name, bool force = false );
 
     void setCustomImage( const fheroes2::Image & image, const fheroes2::Point & offset );
@@ -200,23 +207,23 @@ public:
     }
 
 private:
-    Cursor();
+    Cursor() = default;
     ~Cursor() = default;
 
     void SetOffset( int name, const fheroes2::Point & defaultOffset );
     void Move( int32_t x, int32_t y ) const;
 
-    int theme;
+    int _theme{ Cursor::CursorType::NONE };
 
     fheroes2::Point _offset;
 
-    bool _monochromeCursorThemes;
+    bool _monochromeCursorThemes{ false };
 };
 
 class CursorRestorer
 {
 public:
-    CursorRestorer();
+    CursorRestorer() = default;
     CursorRestorer( const bool visible, const int theme ); // For convenience, also sets visibility and theme of the cursor
     CursorRestorer( const CursorRestorer & ) = delete;
 
@@ -225,8 +232,8 @@ public:
     CursorRestorer & operator=( const CursorRestorer & ) = delete;
 
 private:
-    const int _theme;
-    const bool _visible;
+    const int _theme{ Cursor::Get().Themes() };
+    const bool _visible{ fheroes2::cursor().isVisible() };
 };
 
 #endif
