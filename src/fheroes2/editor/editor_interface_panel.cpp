@@ -1037,6 +1037,10 @@ namespace Interface
                 handleObjectMouseClick( Dialog::selectPowerUpObjectType );
                 return res;
             }
+            if ( le.MouseClickLeft( _adventureObjectButtonsRect[AdventureObjectBrush::ADVENTURE_MISC] ) ) {
+                handleObjectMouseClick( Dialog::selectAdventureMiscellaneousObjectType );
+                return res;
+            }
         }
         else if ( _selectedInstrument == Instrument::KINGDOM_OBJECTS ) {
             for ( size_t i = 0; i < _kingdomObjectButtonsRect.size(); ++i ) {
