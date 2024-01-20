@@ -1326,8 +1326,8 @@ void Maps::Tiles::fixTileObjectType( Tiles & tile )
     }
 
     // Oasis object has 2 top tiles being marked as part of bottom object layer while in reality they should be at the top level.
-    if ( originalObjectType == MP2::OBJ_NON_ACTION_OASIS && tile._mainAddon._objectIcnType == MP2::OBJ_ICN_TYPE_OBJNDSRT && ( tile._mainAddon._imageIndex == 105 ||
-        tile._mainAddon._imageIndex == 106 ) ) {
+    if ( originalObjectType == MP2::OBJ_NON_ACTION_OASIS && tile._mainAddon._objectIcnType == MP2::OBJ_ICN_TYPE_OBJNDSRT
+         && ( tile._mainAddon._imageIndex == 105 || tile._mainAddon._imageIndex == 106 ) ) {
         tile._addonTopLayer.emplace_back();
         std::swap( tile._addonTopLayer.back(), tile._mainAddon );
 
