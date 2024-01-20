@@ -26,6 +26,8 @@
 #include <cstdint>
 #include <string>
 
+#include "castle.h"
+
 namespace Difficulty
 {
     // !!! IMPORTANT !!!
@@ -47,7 +49,7 @@ namespace Difficulty
     double getGoldIncomeBonusForAI( const int difficulty );
 
     // Returns an extra growth bonus modifier for AI based on difficulty level.
-    double GetUnitGrowthBonusForAI( const int difficulty );
+    double GetUnitGrowthBonusForAI( const int difficulty, const bool isCampaign, const building_t dwelling );
 
     int GetHeroMovementBonus( int difficulty );
 
@@ -65,6 +67,9 @@ namespace Difficulty
 
     // Returns true if AI should avoid having free slots in the army
     bool allowAIToSplitWeakStacks( const int difficulty );
+
+    bool allowAIToDevelopCastlesOnDay( const int difficulty, const bool isCampaign, const uint32_t day );
+    bool allowAIToBuildCastleBuilding( const int difficulty, const bool isCampaign, const building_t building );
 }
 
 #endif

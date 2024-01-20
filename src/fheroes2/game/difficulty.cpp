@@ -82,7 +82,7 @@ double Difficulty::getGoldIncomeBonusForAI( const int difficulty )
     return 0;
 }
 
-double Difficulty::GetUnitGrowthBonusForAI( const int difficulty )
+double Difficulty::GetUnitGrowthBonusForAI( const int difficulty, const bool /* isCampaign */, const building_t /* dwelling */ )
 {
     // In the original game AI has a cheeky monster growth bonus depending on difficulty:
     // Easy - 0.0 (no bonus)
@@ -209,6 +209,29 @@ bool Difficulty::allowAIToSplitWeakStacks( const int difficulty )
     case Difficulty::EASY:
     case Difficulty::NORMAL:
         return false;
+    default:
+        break;
+    }
+    return true;
+}
+
+bool Difficulty::allowAIToDevelopCastlesOnDay( const int difficulty, const bool isCampaign, const uint32_t day )
+{
+    switch ( difficulty ) {
+    case Difficulty::EASY:
+        return isCampaign || day % 2 == 0;
+    default:
+        break;
+    }
+    return true;
+}
+
+bool Difficulty::allowAIToBuildCastleBuilding( const int difficulty, const bool isCampaign, const building_t building )
+{
+    switch ( difficulty ) {
+    case Difficulty::EASY:
+        // Only the construction of the corresponding dwelling is limited, but not its upgrade
+        return isCampaign || building != DWELLING_MONSTER6;
     default:
         break;
     }

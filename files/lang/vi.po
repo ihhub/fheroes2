@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-19 14:45+0000\n"
+"POT-Creation-Date: 2024-01-20 09:21+0000\n"
 "PO-Revision-Date: 2023-12-20 19:47+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -552,6 +552,9 @@ msgstr "OK"
 msgid "The enemy has surrendered!"
 msgstr "Kẻ địch đã đầu hàng!"
 
+msgid "Their cowardice costs them %{gold} gold."
+msgstr ""
+
 msgid "The enemy has fled!"
 msgstr "Kẻ thù đã bỏ chạy!"
 
@@ -568,12 +571,14 @@ msgstr "Kẻ hèn nhát %{name} chạy trốn khỏi trận chiến."
 msgid "%{name} surrenders to the enemy, and departs in shame."
 msgstr "%{name} đầu hàng kẻ thù và nhục nhã ra đi."
 
-msgid "Your force suffer a bitter defeat, and %{name} abandons your cause."
+#, fuzzy
+msgid "Your forces suffer a bitter defeat, and %{name} abandons your cause."
 msgstr ""
 "Lực lượng của ngươi bị thất bại nặng nề và %{name} từ bỏ chính nghĩa của "
 "ngươi."
 
-msgid "Your force suffer a bitter defeat."
+#, fuzzy
+msgid "Your forces suffer a bitter defeat."
 msgstr "Lực lượng của ngươi bị thất bại nặng nề."
 
 msgid "Battlefield Casualties"
@@ -585,14 +590,25 @@ msgstr "Bên công"
 msgid "Defender"
 msgstr "Bên thủ"
 
+#, fuzzy
+msgid "Click to leave the battle results."
+msgstr "Nhấp để áp dụng độ phân giải đã chọn."
+
+#, fuzzy
+msgid "Click to restart the battle in manual mode."
+msgstr "Nhấp để quay lại màn hình chính."
+
+msgid "Restart"
+msgstr "Chơi lại"
+
+msgid "You have captured an enemy artifact!"
+msgstr "Ngươi đã chiếm được một bảo vật của kẻ thù!"
+
 msgid "As you reach for the %{name}, it mysteriously disappears."
 msgstr "Khi ngươi chạm tới %{name}, nó biến mất một cách bí ẩn."
 
 msgid "As your enemy reaches for the %{name}, it mysteriously disappears."
 msgstr "Khi kẻ thù của ngươi chạm tới %{name}, nó biến mất một cách bí ẩn."
-
-msgid "You have captured an enemy artifact!"
-msgstr "Ngươi đã chiếm được một bảo vật của kẻ thù!"
 
 msgid "Necromancy!"
 msgstr "Chiêu hồn!"
@@ -3467,6 +3483,10 @@ msgstr "Chọn Đối tượng Đại dương:"
 msgid "Select Power Up Object:"
 msgstr "Chọn Đối tượng Đại dương:"
 
+#, fuzzy
+msgid "Select Adventure Object:"
+msgstr "Chọn Đối tượng Đại dương:"
+
 msgid "Map Type:\n"
 msgstr "Kiểu Bản đồ:\n"
 
@@ -3821,6 +3841,10 @@ msgstr "Thị trấn không thể đặt trên nước."
 #, fuzzy
 msgid "Power-ups cannot be placed on water."
 msgstr "Thị trấn không thể đặt trên nước."
+
+#, fuzzy
+msgid "Adventure objects cannot be placed on water."
+msgstr "Tướng không thể đặt trên nước."
 
 #, fuzzy
 msgid "Used to place %{object}."
@@ -4194,9 +4218,6 @@ msgid ""
 msgstr ""
 "Chọn độ khó của chiến dịch. Điều này có thể được hạ xuống bất cứ lúc nào "
 "trong chiến dịch."
-
-msgid "Restart"
-msgstr "Chơi lại"
 
 msgid "Restart the current scenario."
 msgstr "Chơi lại kịch bản hiện tại."

@@ -270,13 +270,8 @@ bool Battle::Arena::isAnyTowerPresent()
 }
 
 Battle::Arena::Arena( Army & army1, Army & army2, const int32_t tileIndex, const bool isShowInterface, Rand::DeterministicRandomGenerator & randomGenerator )
-    : _currentColor( Color::NONE )
-    , _lastActiveUnitArmyColor( -1 ) // Be aware of unknown color
-    , castle( world.getCastleEntrance( Maps::GetPoint( tileIndex ) ) )
+    : castle( world.getCastleEntrance( Maps::GetPoint( tileIndex ) ) )
     , _isTown( castle != nullptr )
-    , icn_covr( ICN::UNKNOWN )
-    , current_turn( 0 )
-    , _autoBattleColors( 0 )
     , _randomGenerator( randomGenerator )
 {
     usage_spells.reserve( 20 );
@@ -354,10 +349,11 @@ Battle::Arena::Arena( Army & army1, Army & army2, const int32_t tileIndex, const
     {
         std::mt19937 seededGen( world.GetMapSeed() + static_cast<uint32_t>( tileIndex ) );
 
-        icn_covr = Rand::GetWithGen( 0, 99, seededGen ) < 40 ? GetCovr( world.GetTiles( tileIndex ).GetGround(), seededGen ) : ICN::UNKNOWN;
+        _covrIcnId = Rand::GetWithGen( 0, 99, seededGen ) < 40 ? GetCovr( world.GetTiles( tileIndex ).GetGround(), seededGen ) : ICN::UNKNOWN;
 
-        if ( icn_covr != ICN::UNKNOWN )
-            board.SetCovrObjects( icn_covr );
+        if ( _covrIcnId != ICN::UNKNOWN ) {
+            board.SetCovrObjects( _covrIcnId );
+        }
 
         board.SetCobjObjects( world.GetTiles( tileIndex ), seededGen );
     }
@@ -384,15 +380,17 @@ Battle::Arena::~Arena()
     arena = nullptr;
 }
 
-void Battle::Arena::TurnTroop( Unit * troop, const Units & orderHistory )
+void Battle::Arena::UnitTurn( const Units & orderHistory )
 {
-    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, troop->String( true ) )
+    assert( _currentUnit && _currentUnit->isValid() );
 
-    if ( troop->isAffectedByMorale() ) {
-        troop->SetRandomMorale( _randomGenerator );
+    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, _currentUnit->String( true ) )
+
+    if ( _currentUnit->isAffectedByMorale() ) {
+        _currentUnit->SetRandomMorale( _randomGenerator );
     }
 
-    assert( !troop->AllModes( MORALE_GOOD | MORALE_BAD ) );
+    assert( !_currentUnit->AllModes( MORALE_GOOD | MORALE_BAD ) );
 
     bool endOfTurn = false;
 
@@ -410,27 +408,30 @@ void Battle::Arena::TurnTroop( Unit * troop, const Units & orderHistory )
             // Pending actions from the user interface (such as toggling auto battle) have "already occurred" and
             // therefore should be handled first, before any other actions. Just skip the rest of the branches.
         }
-        else if ( !troop->isValid() ) {
-            // Looks like the unit is dead
+        else if ( _currentUnit->GetSpeed() == Speed::STANDING ) {
+            // Unit has either finished its turn, is dead, or has become immovable due to some spell. Even if the
+            // unit died or has become immovable during its turn without performing any action, its turn is still
+            // considered completed.
+            _currentUnit->SetModes( TR_MOVED );
+
             endOfTurn = true;
         }
-        else if ( troop->Modes( MORALE_BAD ) ) {
-            // Bad morale
-            actions.emplace_back( Command::MORALE, troop->GetUID(), false );
+        else if ( _currentUnit->Modes( MORALE_BAD ) ) {
+            actions.emplace_back( Command::MORALE, _currentUnit->GetUID(), false );
         }
         else {
             // This unit will certainly perform at least one full-fledged action
-            _lastActiveUnitArmyColor = troop->GetArmyColor();
+            _lastActiveUnitArmyColor = _currentUnit->GetArmyColor();
 
             if ( _bridge ) {
-                _bridge->SetPassability( *troop );
+                _bridge->SetPassability( *_currentUnit );
             }
 
-            if ( ( troop->GetCurrentControl() & CONTROL_AI ) || ( troop->GetCurrentColor() & _autoBattleColors ) ) {
-                AI::Get().BattleTurn( *this, *troop, actions );
+            if ( ( _currentUnit->GetCurrentControl() & CONTROL_AI ) || ( _currentUnit->GetCurrentColor() & _autoBattleColors ) ) {
+                AI::Get().BattleTurn( *this, *_currentUnit, actions );
             }
             else {
-                HumanTurn( *troop, actions );
+                HumanTurn( *_currentUnit, actions );
             }
         }
 
@@ -446,28 +447,21 @@ void Battle::Arena::TurnTroop( Unit * troop, const Units & orderHistory )
 
             if ( _orderOfUnits ) {
                 // Applied action could kill someone or affect the speed of some unit, update the order of units
-                UpdateOrderOfUnits( *_army1, *_army2, troop, GetOppositeColor( troop->GetArmyColor() ), orderHistory, *_orderOfUnits );
+                UpdateOrderOfUnits( *_army1, *_army2, _currentUnit, GetOppositeColor( _currentUnit->GetArmyColor() ), orderHistory, *_orderOfUnits );
             }
 
-            // Check if the battle is over
             if ( !BattleValid() ) {
                 endOfTurn = true;
                 break;
             }
 
-            const bool isSkipsMove = troop->Modes( TR_SKIP );
-
-            // Good morale
-            if ( troop->isValid() && troop->Modes( TR_MOVED ) && troop->Modes( MORALE_GOOD ) && !troop->isImmovable() && !isSkipsMove ) {
-                actions.emplace_back( Command::MORALE, troop->GetUID(), true );
+            if ( _currentUnit->AllModes( TR_MOVED | MORALE_GOOD ) && !_currentUnit->Modes( TR_SKIP ) && _currentUnit->GetSpeed( false, true ) > Speed::STANDING ) {
+                actions.emplace_back( Command::MORALE, _currentUnit->GetUID(), true );
             }
         }
 
-        if ( troop->Modes( TR_MOVED ) ) {
-            endOfTurn = true;
-        }
-
-        board.removeDeadUnits();
+        // There should be no dead units on the board at the end of each iteration
+        assert( std::all_of( board.begin(), board.end(), []( const Cell & cell ) { return ( cell.GetUnit() == nullptr || cell.GetUnit()->isValid() ); } ) );
     }
 }
 
@@ -478,9 +472,9 @@ bool Battle::Arena::BattleValid() const
 
 void Battle::Arena::Turns()
 {
-    ++current_turn;
+    ++_turnNumber;
 
-    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, current_turn )
+    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, _turnNumber )
 
     if ( _interface ) {
         _interface->RedrawActionNewTurn();
@@ -505,20 +499,23 @@ void Battle::Arena::Turns()
 
         while ( BattleValid() ) {
             // We can get the nullptr here if there are no units left waiting for their turn
-            Unit * troop = GetCurrentUnit( *_army1, *_army2, GetOppositeColor( _lastActiveUnitArmyColor ) );
+            _currentUnit = GetCurrentUnit( *_army1, *_army2, GetOppositeColor( _lastActiveUnitArmyColor ) );
 
-            if ( _orderOfUnits && troop ) {
+            if ( _orderOfUnits ) {
                 // Add unit to the history
-                orderHistory.push_back( troop );
+                if ( _currentUnit ) {
+                    orderHistory.push_back( _currentUnit );
+                }
 
                 // Update the order of units
-                UpdateOrderOfUnits( *_army1, *_army2, troop, GetOppositeColor( troop->GetArmyColor() ), orderHistory, *_orderOfUnits );
+                UpdateOrderOfUnits( *_army1, *_army2, _currentUnit, GetOppositeColor( _currentUnit ? _currentUnit->GetArmyColor() : _lastActiveUnitArmyColor ),
+                                    orderHistory, *_orderOfUnits );
             }
 
             if ( castle ) {
                 // Catapult acts either during the turn of the first unit from the attacking army, or at the end of the
                 // turn if none of the units from the attacking army are able to act (for example, all are blinded)
-                if ( !catapultActed && ( troop == nullptr || troop->GetColor() == _army1->GetColor() ) ) {
+                if ( !catapultActed && ( _currentUnit == nullptr || _currentUnit->GetColor() == _army1->GetColor() ) ) {
                     CatapultAction();
 
                     catapultActed = true;
@@ -526,8 +523,8 @@ void Battle::Arena::Turns()
 
                 // Castle towers act either during the turn of the first unit from the defending army, or at the end of
                 // the turn if none of the units from the defending army are able to act (for example, all are blinded)
-                if ( !towersActed && ( troop == nullptr || troop->GetColor() == _army2->GetColor() ) ) {
-                    const auto towerAction = [this, &orderHistory, troop]( const size_t idx ) {
+                if ( !towersActed && ( _currentUnit == nullptr || _currentUnit->GetColor() == _army2->GetColor() ) ) {
+                    const auto towerAction = [this, &orderHistory]( const size_t idx ) {
                         assert( idx < std::size( _towers ) );
 
                         if ( _towers[idx] == nullptr || !_towers[idx]->isValid() ) {
@@ -536,9 +533,11 @@ void Battle::Arena::Turns()
 
                         TowerAction( *_towers[idx] );
 
-                        if ( _orderOfUnits && troop ) {
+                        if ( _orderOfUnits ) {
                             // Tower could kill someone, update the order of units
-                            UpdateOrderOfUnits( *_army1, *_army2, troop, GetOppositeColor( troop->GetArmyColor() ), orderHistory, *_orderOfUnits );
+                            UpdateOrderOfUnits( *_army1, *_army2, _currentUnit,
+                                                GetOppositeColor( _currentUnit ? _currentUnit->GetArmyColor() : _lastActiveUnitArmyColor ), orderHistory,
+                                                *_orderOfUnits );
                         }
                     };
 
@@ -555,14 +554,12 @@ void Battle::Arena::Turns()
                 }
             }
 
-            if ( troop == nullptr ) {
+            if ( _currentUnit == nullptr ) {
                 // There are no units left waiting for their turn
                 break;
             }
 
-            _currentColor = troop->GetCurrentOrArmyColor();
-
-            TurnTroop( troop, orderHistory );
+            UnitTurn( orderHistory );
         }
     }
 
@@ -739,7 +736,13 @@ int Battle::Arena::GetArmy2Color() const
 
 int Battle::Arena::GetCurrentColor() const
 {
-    return _currentColor;
+    // This method should never be called in cases where there may not be an active unit
+    if ( _currentUnit == nullptr ) {
+        assert( 0 );
+        return Color::NONE;
+    }
+
+    return _currentUnit->GetCurrentOrArmyColor();
 }
 
 int Battle::Arena::GetOppositeColor( const int col ) const
@@ -877,7 +880,7 @@ bool Battle::Arena::isDisableCastSpell( const Spell & spell, std::string * msg /
                 return true;
             }
 
-            if ( 0 > GetFreePositionNearHero( _currentColor ) ) {
+            if ( 0 > GetFreePositionNearHero( GetCurrentColor() ) ) {
                 if ( msg ) {
                     *msg = _( "There is no open space adjacent to your hero where you can summon an Elemental to." );
                 }
@@ -1093,7 +1096,7 @@ const HeroBase * Battle::Arena::getEnemyCommander( const int color ) const
 
 const HeroBase * Battle::Arena::GetCurrentCommander() const
 {
-    return getCommander( _currentColor );
+    return getCommander( GetCurrentColor() );
 }
 
 Battle::Unit * Battle::Arena::CreateElemental( const Spell & spell )
@@ -1104,7 +1107,7 @@ Battle::Unit * Battle::Arena::CreateElemental( const Spell & spell )
     const HeroBase * hero = GetCurrentCommander();
     assert( hero != nullptr );
 
-    const int32_t idx = GetFreePositionNearHero( _currentColor );
+    const int32_t idx = GetFreePositionNearHero( GetCurrentColor() );
     assert( Board::isValidIndex( idx ) );
 
     const Monster mons( spell );
@@ -1216,7 +1219,7 @@ Battle::Force & Battle::Arena::getEnemyForce( const int color ) const
 
 Battle::Force & Battle::Arena::GetCurrentForce() const
 {
-    return getForce( _currentColor );
+    return getForce( GetCurrentColor() );
 }
 
 Battle::Result & Battle::Arena::GetResult()
@@ -1226,7 +1229,11 @@ Battle::Result & Battle::Arena::GetResult()
 
 bool Battle::Arena::AutoBattleInProgress() const
 {
-    if ( _autoBattleColors & _currentColor ) {
+    if ( _currentUnit == nullptr ) {
+        return false;
+    }
+
+    if ( _autoBattleColors & GetCurrentColor() ) {
         // Auto battle mode cannot be enabled for a player controlled by AI
         assert( !( GetCurrentForce().GetControl() & CONTROL_AI ) );
 
@@ -1238,5 +1245,9 @@ bool Battle::Arena::AutoBattleInProgress() const
 
 bool Battle::Arena::CanToggleAutoBattle() const
 {
+    if ( _currentUnit == nullptr ) {
+        return false;
+    }
+
     return !( GetCurrentForce().GetControl() & CONTROL_AI );
 }

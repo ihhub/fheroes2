@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-19 14:45+0000\n"
+"POT-Creation-Date: 2024-01-20 09:21+0000\n"
 "PO-Revision-Date: 2023-09-03 18:42+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -555,6 +555,9 @@ msgstr "Bekreft"
 msgid "The enemy has surrendered!"
 msgstr "Fienden overga seg!"
 
+msgid "Their cowardice costs them %{gold} gold."
+msgstr ""
+
 msgid "The enemy has fled!"
 msgstr "Fienden rømte!"
 
@@ -572,10 +575,12 @@ msgstr "Den feige %{name} rømmer fra kampen."
 msgid "%{name} surrenders to the enemy, and departs in shame."
 msgstr "%{name} gir opp kampen mot fienden og forlater slagmarken i skam."
 
-msgid "Your force suffer a bitter defeat, and %{name} abandons your cause."
+#, fuzzy
+msgid "Your forces suffer a bitter defeat, and %{name} abandons your cause."
 msgstr "Hæren din lider et bittert nederlag og %{name} forlater din sak."
 
-msgid "Your force suffer a bitter defeat."
+#, fuzzy
+msgid "Your forces suffer a bitter defeat."
 msgstr "Hæren din lider et bittert nederlag."
 
 msgid "Battlefield Casualties"
@@ -587,14 +592,25 @@ msgstr "Angripende side"
 msgid "Defender"
 msgstr "Forsvarende side"
 
+#, fuzzy
+msgid "Click to leave the battle results."
+msgstr "Trykk for å bruke den valgte oppløsningen."
+
+#, fuzzy
+msgid "Click to restart the battle in manual mode."
+msgstr "Klikk her for å dra tilbake til hovedmenyen."
+
+msgid "Restart"
+msgstr "Start på nytt"
+
+msgid "You have captured an enemy artifact!"
+msgstr "Du har overtatt en av fiendens skatter!"
+
 msgid "As you reach for the %{name}, it mysteriously disappears."
 msgstr "Idet du skal til å gripe %{name} forsvinner den på mystisk vis."
 
 msgid "As your enemy reaches for the %{name}, it mysteriously disappears."
 msgstr "Idet fienden din skal til å ta %{name} forsvinner den på mystisk vis."
-
-msgid "You have captured an enemy artifact!"
-msgstr "Du har overtatt en av fiendens skatter!"
 
 msgid "Necromancy!"
 msgstr "Sortekunst!"
@@ -3514,6 +3530,10 @@ msgstr "Sjøting"
 msgid "Select Power Up Object:"
 msgstr "Sjøting"
 
+#, fuzzy
+msgid "Select Adventure Object:"
+msgstr "Sjøting"
+
 msgid "Map Type:\n"
 msgstr "Kart-type:\n"
 
@@ -3882,6 +3902,10 @@ msgstr "Denne trolldommen kan ikke brukes på et skip."
 
 #, fuzzy
 msgid "Power-ups cannot be placed on water."
+msgstr "Denne trolldommen kan ikke brukes på et skip."
+
+#, fuzzy
+msgid "Adventure objects cannot be placed on water."
 msgstr "Denne trolldommen kan ikke brukes på et skip."
 
 #, fuzzy
@@ -4267,9 +4291,6 @@ msgid ""
 msgstr ""
 "Velg vanskelighetsgrad for felttoget. Dette kan nedjusteres når som helst "
 "senere i felttoget."
-
-msgid "Restart"
-msgstr "Start på nytt"
 
 msgid "Restart the current scenario."
 msgstr "Start det nåværende kartet på nytt."

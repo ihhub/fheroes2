@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-19 14:45+0000\n"
+"POT-Creation-Date: 2024-01-20 09:21+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -560,6 +560,9 @@ msgstr "Добре"
 msgid "The enemy has surrendered!"
 msgstr "Врагът се предаде!"
 
+msgid "Their cowardice costs them %{gold} gold."
+msgstr ""
+
 msgid "The enemy has fled!"
 msgstr "Врагът побягва!"
 
@@ -575,11 +578,13 @@ msgstr "Страхливият %{name} бяга от битката."
 msgid "%{name} surrenders to the enemy, and departs in shame."
 msgstr "%{name} се предава на врага и си тръгва засрамен."
 
-msgid "Your force suffer a bitter defeat, and %{name} abandons your cause."
+#, fuzzy
+msgid "Your forces suffer a bitter defeat, and %{name} abandons your cause."
 msgstr ""
 "Твойте сили претърпяват горчиво поражение и %{name} изоставя каузата ти."
 
-msgid "Your force suffer a bitter defeat."
+#, fuzzy
+msgid "Your forces suffer a bitter defeat."
 msgstr "Твойте сили претърпяват горчиво поражение."
 
 msgid "Battlefield Casualties"
@@ -591,14 +596,25 @@ msgstr "Нападател"
 msgid "Defender"
 msgstr "Защитник"
 
+#, fuzzy
+msgid "Click to leave the battle results."
+msgstr "Кликни, за да приложиш избраната резолюция."
+
+#, fuzzy
+msgid "Click to restart the battle in manual mode."
+msgstr "Кликни, за да се върнеш към главното меню."
+
+msgid "Restart"
+msgstr "Рестарт"
+
+msgid "You have captured an enemy artifact!"
+msgstr "Ти си заловил вражески артефакт!"
+
 msgid "As you reach for the %{name}, it mysteriously disappears."
 msgstr "Когато посягаш към %{name}, той мистериозно изчезва."
 
 msgid "As your enemy reaches for the %{name}, it mysteriously disappears."
 msgstr "Когато врагът ти посяга към %{name}, той мистериозно изчезва."
-
-msgid "You have captured an enemy artifact!"
-msgstr "Ти си заловил вражески артефакт!"
 
 msgid "Necromancy!"
 msgstr "Некромантия!"
@@ -3479,6 +3495,10 @@ msgstr "Океански обекти"
 msgid "Select Power Up Object:"
 msgstr "Океански обекти"
 
+#, fuzzy
+msgid "Select Adventure Object:"
+msgstr "Океански обекти"
+
 msgid "Map Type:\n"
 msgstr "Тип на карта:\n"
 
@@ -3842,6 +3862,10 @@ msgstr "Чудовищата не могат да се поставят върх
 #, fuzzy
 msgid "Power-ups cannot be placed on water."
 msgstr "Чудовищата не могат да се поставят върху вода."
+
+#, fuzzy
+msgid "Adventure objects cannot be placed on water."
+msgstr "Героите не могат да бъдат поставени на вода."
 
 #, fuzzy
 msgid "Used to place %{object}."
@@ -4228,9 +4252,6 @@ msgid ""
 msgstr ""
 "Избери трудността на кампанията. Това може да бъде намалено по всяко време "
 "на кампанията."
-
-msgid "Restart"
-msgstr "Рестарт"
 
 msgid "Restart the current scenario."
 msgstr "Рестартирай текущия сценарий."
