@@ -93,9 +93,8 @@ namespace
             return;
         }
 
-        const uint32_t puzzleSize = static_cast<uint32_t>( pzl.size() );
-        for ( uint32_t i = 0; i < puzzleSize; ++i ) {
-            const fheroes2::Sprite & piece = fheroes2::AGG::GetICN( ICN::PUZZLE, i );
+        for ( size_t i = 0; i < pzl.size(); ++i ) {
+            const fheroes2::Sprite & piece = fheroes2::AGG::GetICN( ICN::PUZZLE, static_cast<uint32_t>( i ) );
 
             fheroes2::Blit( piece, display, dstx + piece.x() - BORDERWIDTH, dsty + piece.y() - BORDERWIDTH );
         }
@@ -118,7 +117,6 @@ namespace
         const std::vector<Game::DelayType> delayTypes = { Game::PUZZLE_FADE_DELAY };
         Game::passAnimationDelay( Game::PUZZLE_FADE_DELAY );
 
-        const uint32_t puzzleSize = static_cast<uint32_t>( pzl.size() );
         int alpha = 250;
 
         while ( alpha >= 0 && le.HandleEvents( Game::isDelayNeeded( delayTypes ) ) ) {
@@ -131,8 +129,8 @@ namespace
             if ( Game::validateAnimationDelay( Game::PUZZLE_FADE_DELAY ) ) {
                 fheroes2::Copy( sf, 0, 0, display, dstx, dsty, sf.width(), sf.height() );
 
-                for ( uint32_t i = 0; i < puzzleSize; ++i ) {
-                    const fheroes2::Sprite & piece = fheroes2::AGG::GetICN( ICN::PUZZLE, i );
+                for ( size_t i = 0; i < pzl.size(); ++i ) {
+                    const fheroes2::Sprite & piece = fheroes2::AGG::GetICN( ICN::PUZZLE, static_cast<uint32_t>( i ) );
 
                     uint8_t pieceAlpha = 255;
                     if ( pzl.test( i ) )
