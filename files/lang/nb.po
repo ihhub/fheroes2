@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-20 03:11+0000\n"
+"POT-Creation-Date: 2024-01-20 09:21+0000\n"
 "PO-Revision-Date: 2023-09-03 18:42+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3530,6 +3530,10 @@ msgstr "Sjøting"
 msgid "Select Power Up Object:"
 msgstr "Sjøting"
 
+#, fuzzy
+msgid "Select Adventure Object:"
+msgstr "Sjøting"
+
 msgid "Map Type:\n"
 msgstr "Kart-type:\n"
 
@@ -3898,6 +3902,10 @@ msgstr "Denne trolldommen kan ikke brukes på et skip."
 
 #, fuzzy
 msgid "Power-ups cannot be placed on water."
+msgstr "Denne trolldommen kan ikke brukes på et skip."
+
+#, fuzzy
+msgid "Adventure objects cannot be placed on water."
 msgstr "Denne trolldommen kan ikke brukes på et skip."
 
 #, fuzzy

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-20 03:11+0000\n"
+"POT-Creation-Date: 2024-01-20 09:21+0000\n"
 "PO-Revision-Date: 2022-12-03 04:36+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <it@li.org>\n"
@@ -3345,6 +3345,10 @@ msgid "Select Power Up Object:"
 msgstr "Scegli artefatto:"
 
 #, fuzzy
+msgid "Select Adventure Object:"
+msgstr "Scegli artefatto:"
+
+#, fuzzy
 msgid "Map Type:\n"
 msgstr "Tipo di mappa"
 
@@ -3705,6 +3709,10 @@ msgstr ""
 
 msgid "Power-ups cannot be placed on water."
 msgstr ""
+
+#, fuzzy
+msgid "Adventure objects cannot be placed on water."
+msgstr "Opzioni Avventura"
 
 msgid "Used to place %{object}."
 msgstr ""

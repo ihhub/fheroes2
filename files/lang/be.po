@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-20 03:11+0000\n"
+"POT-Creation-Date: 2024-01-20 09:21+0000\n"
 "PO-Revision-Date: 2022-09-23 16:01+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3262,6 +3262,10 @@ msgstr "Мова"
 msgid "Select Power Up Object:"
 msgstr "Мова"
 
+#, fuzzy
+msgid "Select Adventure Object:"
+msgstr "Мова"
+
 msgid "Map Type:\n"
 msgstr ""
 
@@ -3609,6 +3613,9 @@ msgid "Dwellings cannot be placed on water."
 msgstr ""
 
 msgid "Power-ups cannot be placed on water."
+msgstr ""
+
+msgid "Adventure objects cannot be placed on water."
 msgstr ""
 
 msgid "Used to place %{object}."

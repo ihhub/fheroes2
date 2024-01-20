@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-20 03:11+0000\n"
+"POT-Creation-Date: 2024-01-20 09:21+0000\n"
 "PO-Revision-Date: 2023-12-25 14:31+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -3446,6 +3446,10 @@ msgstr "Välj Trädföremål:"
 msgid "Select Power Up Object:"
 msgstr "Välj Kraftökningsföremål:"
 
+#, fuzzy
+msgid "Select Adventure Object:"
+msgstr "Välj Trädföremål:"
+
 msgid "Map Type:\n"
 msgstr "Karttyp:\n"
 
@@ -3800,6 +3804,10 @@ msgstr "Bostäder kan inte placeras på vatten."
 
 msgid "Power-ups cannot be placed on water."
 msgstr "Kraftökningar kan inte placeras på vatten."
+
+#, fuzzy
+msgid "Adventure objects cannot be placed on water."
+msgstr "Hjältar kan inte placeras på vatten."
 
 msgid "Used to place %{object}."
 msgstr "Används för att placera %{object}."
@@ -10243,8 +10251,8 @@ msgid ""
 "The %{name} lets the hero get more specific information about monsters, "
 "enemy heroes, and castles nearby the hero."
 msgstr ""
-"%{name} ger mer specifik information om varelser, fiendehjältar och slott som "
-"befinner sig nära hjälten."
+"%{name} ger mer specifik information om varelser, fiendehjältar och slott "
+"som befinner sig nära hjälten."
 
 msgid ""
 "You come upon a caravan of gypsies who are feasting and fortifying their "
