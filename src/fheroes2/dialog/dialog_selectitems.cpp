@@ -1271,6 +1271,15 @@ int Dialog::selectDwellingType( const int dwellingType )
     return selectObjectType( dwellingType, objectInfo.size(), listbox );
 }
 
+int Dialog::selectLandscapeMiscellaneousObjectType( const int objectType )
+{
+    const auto & objectInfo = Maps::getObjectsByGroup( Maps::ObjectGroup::LANDSCAPE_MISCELLANEOUS );
+
+    GenericObjectTypeSelection listbox( objectInfo, { 420, fheroes2::Display::instance().height() - 180 }, _( "Select Landscape Object:" ) );
+
+    return selectObjectType( objectType, objectInfo.size(), listbox );
+}
+
 void Dialog::selectMineType( int32_t & type, int32_t & color )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
