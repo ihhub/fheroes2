@@ -42,7 +42,6 @@
 #include "gamedefs.h"
 #include "icn.h"
 #include "image.h"
-#include "interface_base.h"
 #include "interface_gamearea.h"
 #include "interface_radar.h"
 #include "localevent.h"
@@ -62,11 +61,7 @@ namespace
 {
     bool ClosedTilesExists( const Puzzle & pzl, const std::vector<uint8_t> & zone )
     {
-        for ( const uint8_t tile : zone ) {
-            if ( !pzl.test( tile ) )
-                return true;
-        }
-        return false;
+        return std::any_of( zone.begin(), zone.end(), [&pzl]( const uint8_t tile ) { return !pzl.test( tile ); } );
     }
 
     void ZoneOpenFirstTiles( Puzzle & pzl, size_t & opens, const std::vector<uint8_t> & zone )
@@ -91,13 +86,14 @@ namespace
 
         // Immediately reveal the entire puzzle in developer mode
         if ( IS_DEVEL() ) {
-            fheroes2::Blit( sf, display, dstx, dsty );
+            fheroes2::Copy( sf, 0, 0, display, dstx, dsty, sf.width(), sf.height() );
 
             return;
         }
 
-        for ( size_t i = 0; i < pzl.size(); ++i ) {
-            const fheroes2::Sprite & piece = fheroes2::AGG::GetICN( ICN::PUZZLE, static_cast<uint32_t>( i ) );
+        const uint32_t puzzleSize = static_cast<uint32_t>( pzl.size() );
+        for ( uint32_t i = 0; i < puzzleSize; ++i ) {
+            const fheroes2::Sprite & piece = fheroes2::AGG::GetICN( ICN::PUZZLE, i );
 
             fheroes2::Blit( piece, display, dstx + piece.x() - BORDERWIDTH, dsty + piece.y() - BORDERWIDTH );
         }
@@ -117,6 +113,7 @@ namespace
         const std::vector<Game::DelayType> delayTypes = { Game::PUZZLE_FADE_DELAY };
         Game::passAnimationDelay( Game::PUZZLE_FADE_DELAY );
 
+        const uint32_t puzzleSize = static_cast<uint32_t>( pzl.size() );
         int alpha = 250;
 
         while ( alpha >= 0 && le.HandleEvents( Game::isDelayNeeded( delayTypes ) ) ) {
@@ -127,10 +124,10 @@ namespace
             }
 
             if ( Game::validateAnimationDelay( Game::PUZZLE_FADE_DELAY ) ) {
-                fheroes2::Blit( sf, display, dstx, dsty );
+                fheroes2::Copy( sf, 0, 0, display, dstx, dsty, sf.width(), sf.height() );
 
-                for ( size_t i = 0; i < pzl.size(); ++i ) {
-                    const fheroes2::Sprite & piece = fheroes2::AGG::GetICN( ICN::PUZZLE, static_cast<uint32_t>( i ) );
+                for ( uint32_t i = 0; i < puzzleSize; ++i ) {
+                    const fheroes2::Sprite & piece = fheroes2::AGG::GetICN( ICN::PUZZLE, i );
 
                     uint8_t pieceAlpha = 255;
                     if ( pzl.test( i ) )
@@ -163,15 +160,17 @@ namespace
 
         const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
 
-        const Interface::Radar & radar = Interface::AdventureMap::Get().getRadar();
-        const fheroes2::Rect & radarArea = radar.GetArea();
+        // Puzzle map is called only for the Adventure Map, not Editor.
+        Interface::AdventureMap & adventureMapInterface = Interface::AdventureMap::Get();
+        const fheroes2::Rect & radarArea = adventureMapInterface.getRadar().GetArea();
 
         fheroes2::ImageRestorer back( display, BORDERWIDTH, BORDERWIDTH, sf.width(), sf.height() );
         fheroes2::ImageRestorer radarRestorer( display, radarArea.x, radarArea.y, radarArea.width, radarArea.height );
 
         fheroes2::fadeOutDisplay( back.rect(), false );
 
-        fheroes2::Blit( fheroes2::AGG::GetICN( ( isEvilInterface ? ICN::EVIWPUZL : ICN::VIEWPUZL ), 0 ), display, radarArea.x, radarArea.y );
+        fheroes2::Copy( fheroes2::AGG::GetICN( ( isEvilInterface ? ICN::EVIWPUZL : ICN::VIEWPUZL ), 0 ), 0, 0, display, radarArea );
+        display.updateNextRenderRoi( radarArea );
 
         fheroes2::Button buttonExit( radarArea.x + 32, radarArea.y + radarArea.height - 37,
                                      ( isEvilInterface ? ICN::BUTTON_EXIT_PUZZLE_DIM_DOOR_EVIL : ICN::BUTTON_EXIT_PUZZLE_DIM_DOOR_GOOD ), 0, 1 );
@@ -189,8 +188,9 @@ namespace
 
         while ( !earlyExit && le.HandleEvents() ) {
             le.MousePressLeft( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
-            if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() )
+            if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() ) {
                 break;
+            }
         }
 
         // Fade from puzzle map to adventure map.
@@ -200,21 +200,28 @@ namespace
         display.updateNextRenderRoi( radarArea );
         fheroes2::fadeInDisplay( back.rect(), false );
 
-        radar.SetRedraw( Interface::REDRAW_RADAR_CURSOR );
+        adventureMapInterface.getGameArea().SetUpdateCursor();
     }
 
     void ShowExtendedDialog( const Puzzle & pzl, const fheroes2::Image & sf )
     {
         fheroes2::Display & display = fheroes2::Display::instance();
 
-        const fheroes2::Rect & gameArea = Interface::AdventureMap::Get().getGameArea().GetROI();
+        // Puzzle map is called only for the Adventure Map, not Editor.
+        Interface::AdventureMap & adventureMapInterface = Interface::AdventureMap::Get();
+        Interface::GameArea & gameArea = adventureMapInterface.getGameArea();
+        const fheroes2::Rect & gameAreaRoi = gameArea.GetROI();
+        const Interface::Radar & radar = adventureMapInterface.getRadar();
+        const fheroes2::Rect & radarArea = radar.GetArea();
 
-        const fheroes2::StandardWindow border( gameArea.x + ( gameArea.width - sf.width() ) / 2, gameArea.y + ( gameArea.height - sf.height() ) / 2, sf.width(),
-                                               sf.height(), false );
+        const fheroes2::ImageRestorer radarRestorer( display, radarArea.x, radarArea.y, radarArea.width, radarArea.height );
 
-        fheroes2::Rect blitArea = border.activeArea();
+        const fheroes2::StandardWindow border( gameAreaRoi.x + ( gameAreaRoi.width - sf.width() ) / 2, gameAreaRoi.y + ( gameAreaRoi.height - sf.height() ) / 2,
+                                               sf.width(), sf.height(), false );
 
-        fheroes2::Image background( blitArea.width, blitArea.height );
+        const fheroes2::Rect puzzleArea = border.activeArea();
+
+        fheroes2::Image background( puzzleArea.width, puzzleArea.height );
 
         const Settings & conf = Settings::Get();
         const bool isEvilInterface = conf.isEvilInterfaceEnabled();
@@ -227,56 +234,51 @@ namespace
             background.fill( fheroes2::GetColorId( 128, 64, 32 ) );
         }
 
-        fheroes2::Blit( background, display, blitArea.x, blitArea.y );
-
-        const Interface::Radar & radar = Interface::AdventureMap::Get().getRadar();
-        const fheroes2::Rect & radarRect = radar.GetRect();
-        const fheroes2::Rect & radarArea = radar.GetArea();
+        fheroes2::Copy( background, 0, 0, display, puzzleArea );
 
         fheroes2::Button buttonExit( radarArea.x + 32, radarArea.y + radarArea.height - 37,
                                      ( isEvilInterface ? ICN::BUTTON_EXIT_PUZZLE_DIM_DOOR_EVIL : ICN::BUTTON_EXIT_PUZZLE_DIM_DOOR_GOOD ), 0, 1 );
+
+        const fheroes2::Rect & radarRect = radar.GetRect();
 
         const std::function<fheroes2::Rect()> drawControlPanel = [&display, isEvilInterface, isHideInterface, &radarRect, &radarArea, &buttonExit]() {
             if ( isHideInterface ) {
                 Dialog::FrameBorder::RenderRegular( radarRect );
             }
 
-            fheroes2::Blit( fheroes2::AGG::GetICN( ( isEvilInterface ? ICN::EVIWPUZL : ICN::VIEWPUZL ), 0 ), display, radarArea.x, radarArea.y );
+            fheroes2::Copy( fheroes2::AGG::GetICN( ( isEvilInterface ? ICN::EVIWPUZL : ICN::VIEWPUZL ), 0 ), 0, 0, display, radarArea );
+            display.updateNextRenderRoi( radarArea );
 
             buttonExit.draw();
 
             return radarRect;
         };
 
-        drawPuzzle( pzl, sf, blitArea.x, blitArea.y );
+        drawPuzzle( pzl, sf, puzzleArea.x, puzzleArea.y );
         drawControlPanel();
 
         display.updateNextRenderRoi( border.totalArea() );
         fheroes2::fadeInDisplay( border.activeArea(), true );
 
-        const bool earlyExit = revealPuzzle( pzl, sf, blitArea.x, blitArea.y, buttonExit, isHideInterface ? &drawControlPanel : nullptr );
+        const bool earlyExit = revealPuzzle( pzl, sf, puzzleArea.x, puzzleArea.y, buttonExit, isHideInterface ? &drawControlPanel : nullptr );
 
         LocalEvent & le = LocalEvent::Get();
 
         while ( le.HandleEvents() && !earlyExit ) {
             le.MousePressLeft( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
-            if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() )
+            if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() ) {
                 break;
+            }
         }
 
         fheroes2::fadeOutDisplay( border.activeArea(), true );
 
-        radar.SetRedraw( Interface::REDRAW_RADAR_CURSOR );
+        gameArea.SetUpdateCursor();
     }
 }
 
 Puzzle::Puzzle()
 {
-    zone1_order = { 0, 1, 2, 3, 4, 5, 6, 11, 12, 17, 18, 23, 24, 29, 30, 35, 36, 41, 42, 43, 44, 45, 46, 47 };
-    zone2_order = { 7, 8, 9, 10, 13, 16, 19, 22, 25, 28, 31, 34, 37, 38, 39, 40 };
-    zone3_order = { 14, 15, 32, 33 };
-    zone4_order = { 20, 21, 26, 27 };
-
     Rand::Shuffle( zone1_order );
     Rand::Shuffle( zone2_order );
     Rand::Shuffle( zone3_order );
