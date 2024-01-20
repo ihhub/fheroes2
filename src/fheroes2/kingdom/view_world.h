@@ -50,25 +50,42 @@ class ViewWorld
 public:
     static void ViewWorldWindow( const int32_t color, const ViewWorldMode mode, Interface::BaseInterface & interface );
 
-    struct ZoomROIs
+    class ZoomROIs
     {
-        ZoomROIs( const ZoomLevel zoomLevel, const fheroes2::Point & centerInPixels );
+    public:
+        ZoomROIs( const ZoomLevel zoomLevel, const fheroes2::Point & centerInPixels, const fheroes2::Rect & visibleScreenInPixels );
 
         bool zoomIn( const bool cycle );
         bool zoomOut( const bool cycle );
         bool ChangeCenter( const fheroes2::Point & centerInPixels );
 
-        const fheroes2::Rect & GetROIinPixels() const;
+        const fheroes2::Rect & GetROIinPixels() const
+        {
+            return _roiForZoomLevels[static_cast<uint8_t>( _zoomLevel )];
+        }
+
         fheroes2::Rect GetROIinTiles() const;
+
+        ZoomLevel getZoomLevel() const
+        {
+            return _zoomLevel;
+        }
+
+        fheroes2::Point getCenter() const
+        {
+            return _center;
+        }
+
+    private:
+        void _updateZoomLevels();
+
+        bool _updateCenter();
+        bool _changeZoom( const ZoomLevel newLevel );
 
         ZoomLevel _zoomLevel{ ZoomLevel::ZoomLevel1 };
         fheroes2::Point _center;
         std::array<fheroes2::Rect, 4> _roiForZoomLevels;
-
-    private:
-        void _updateZoomLevels();
-        bool _updateCenter();
-        bool _changeZoom( const ZoomLevel newLevel );
+        fheroes2::Rect _visibleROI;
     };
 };
 
