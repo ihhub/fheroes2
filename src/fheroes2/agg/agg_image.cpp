@@ -3020,7 +3020,7 @@ namespace fheroes2
                     const Sprite & in = original[i];
                     Sprite & out = _icnVsSprite[id][i];
                     out.resize( in.width() * 2, in.height() * 2 );
-                    Resize( in, out, true );
+                    SubpixelResize( in, out );
                     out.setPosition( in.x() * 2, in.y() * 2 );
                 }
                 return true;
@@ -4878,7 +4878,7 @@ namespace fheroes2
                 resizedIcn.resize( resizedWidth, resizedHeight );
                 resizedIcn.setPosition( static_cast<int32_t>( std::lround( originalIcn.x() * scaleFactor ) ) + offsetX,
                                         static_cast<int32_t>( std::lround( originalIcn.y() * scaleFactor ) ) + offsetY );
-                Resize( originalIcn, resizedIcn, false );
+                Resize( originalIcn, resizedIcn );
             }
             else {
                 // No need to resize but we have to update the offset.

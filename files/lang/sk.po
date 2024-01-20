@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-19 14:45+0000\n"
+"POT-Creation-Date: 2024-01-20 03:11+0000\n"
 "PO-Revision-Date: 2023-09-11 20:22+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -554,6 +554,9 @@ msgstr "Ok"
 msgid "The enemy has surrendered!"
 msgstr "Nepriateľ sa vzdal!"
 
+msgid "Their cowardice costs them %{gold} gold."
+msgstr ""
+
 msgid "The enemy has fled!"
 msgstr "Nepriateľ utiekol!"
 
@@ -569,10 +572,12 @@ msgstr "%{name} zbabelo uteká z boja."
 msgid "%{name} surrenders to the enemy, and departs in shame."
 msgstr "%{name} sa vzdáva nepriateľovi a hanobne odchádza."
 
-msgid "Your force suffer a bitter defeat, and %{name} abandons your cause."
+#, fuzzy
+msgid "Your forces suffer a bitter defeat, and %{name} abandons your cause."
 msgstr "Tvoje vojská sú porazené a %{name} ťa opúšťa."
 
-msgid "Your force suffer a bitter defeat."
+#, fuzzy
+msgid "Your forces suffer a bitter defeat."
 msgstr "Tvoje vojská sú porazené."
 
 msgid "Battlefield Casualties"
@@ -584,14 +589,25 @@ msgstr "Útočník"
 msgid "Defender"
 msgstr "Obranca"
 
+#, fuzzy
+msgid "Click to leave the battle results."
+msgstr "Klikni pre výber zvoleného rozlíšenia."
+
+#, fuzzy
+msgid "Click to restart the battle in manual mode."
+msgstr "Kliknutím sa vrátiš do hlavnej ponuky."
+
+msgid "Restart"
+msgstr "Reštart"
+
+msgid "You have captured an enemy artifact!"
+msgstr "Získal si nepriateľov artefakt!"
+
 msgid "As you reach for the %{name}, it mysteriously disappears."
 msgstr "Akonáhle siahaš po %{name}, náhle mizne."
 
 msgid "As your enemy reaches for the %{name}, it mysteriously disappears."
 msgstr "Akonáhle nepriateľ siaha po %{name}, náhle mizne."
-
-msgid "You have captured an enemy artifact!"
-msgstr "Získal si nepriateľov artefakt!"
 
 msgid "Necromancy!"
 msgstr "Nekromancia!"
@@ -4181,9 +4197,6 @@ msgid ""
 "Select the campaign difficulty. This can be lowered at any point during the "
 "campaign."
 msgstr "Zvoľ obtiažnosť kampane. Neskôr sa bude dať kedykoľvek znížiť."
-
-msgid "Restart"
-msgstr "Reštart"
 
 msgid "Restart the current scenario."
 msgstr "Začni terajší scenár od začiatku."

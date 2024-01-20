@@ -462,10 +462,11 @@ namespace
 
             const fheroes2::Sprite & image = fheroes2::generateMapObjectImage( _objectInfo[objectId] );
             const int32_t imageHeight = image.height();
-            if ( imageHeight > TILEWIDTH * 2 ) {
+            const int32_t imageWidth = image.width();
+            if ( imageHeight > TILEWIDTH * 3 || imageWidth > TILEWIDTH * 5 ) {
                 // Reduce the size of very tall images to fit the list.
-                const double ratio = imageHeight / ( TILEWIDTH * 2. );
-                fheroes2::Image resized( static_cast<int32_t>( image.width() / ratio ), static_cast<int32_t>( imageHeight / ratio ) );
+                const double ratio = std::max( imageHeight / ( TILEWIDTH * 3. ), imageWidth / ( TILEWIDTH * 5. ) );
+                fheroes2::Image resized( static_cast<int32_t>( imageWidth / ratio ), static_cast<int32_t>( imageHeight / ratio ) );
                 fheroes2::Resize( image, resized );
                 renderItem( resized, getObjectName( _objectInfo[objectId] ), { posX, posY }, _imageOffsetX, _textOffsetX, _offsetY / 2, isSelected );
             }
@@ -1590,4 +1591,13 @@ int Dialog::selectPowerUpObjectType( const int powerUpObjectType )
     PowerUpObjectTypeSelection listbox( objectInfo, { 420, fheroes2::Display::instance().height() - 180 }, _( "Select Power Up Object:" ) );
 
     return selectObjectType( powerUpObjectType, objectInfo.size(), listbox );
+}
+
+int Dialog::selectAdventureMiscellaneousObjectType( const int objectType )
+{
+    const auto & objectInfo = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS );
+
+    GenericObjectTypeSelection listbox( objectInfo, { 420, fheroes2::Display::instance().height() - 180 }, _( "Select Adventure Object:" ) );
+
+    return selectObjectType( objectType, objectInfo.size(), listbox );
 }

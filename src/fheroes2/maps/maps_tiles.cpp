@@ -165,8 +165,8 @@ namespace
     // Define VERIFY_SHADOW_SPRITES macro to be able to use these functions.
     bool isShadowImage( const fheroes2::Image & image )
     {
-        // The image can't be empty.
-        assert( !image.empty() );
+        // The image can't be empty and must have transform layer.
+        assert( !image.empty() && !image.singleLayer() );
         if ( image.empty() )
             return false;
 
