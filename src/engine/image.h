@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2023                                             *
+ *   Copyright (C) 2020 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -28,7 +28,7 @@
 
 namespace fheroes2
 {
-    // Image contains image layer and transform layer.
+    // Image always contains an image layer and if image is not a single-layer then also a transform layer.
     // - image layer contains visible pixels which are copy to a destination image
     // - transform layer is used to apply some transformation to an image on which we draw the current one. For example, shadowing
     class Image
@@ -77,13 +77,14 @@ namespace fheroes2
         }
 
         void reset(); // makes image fully transparent (transform layer is set to 1)
+
         void clear(); // makes the image empty
 
         // Fill 'image' layer with given value, setting 'transform' layer to 0.
         void fill( const uint8_t value );
 
         // This is an optional indicator for image processing functions.
-        // The whole image still consists of 2 layers but transform layer might be ignored in computations.
+        // The whole image still consists of 2 layers but transform layer might be ignored in computations
         bool singleLayer() const
         {
             return _singleLayer;
