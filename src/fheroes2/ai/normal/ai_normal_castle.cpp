@@ -31,6 +31,8 @@
 #include "army_troop.h"
 #include "battle_tower.h"
 #include "castle.h"
+#include "difficulty.h"
+#include "game.h"
 #include "heroes.h"
 #include "kingdom.h"
 #include "maps_tiles.h"
@@ -137,7 +139,14 @@ namespace AI
 {
     bool Build( Castle & castle, const std::vector<BuildOrder> & buildOrderList, const uint32_t multiplier = 1 )
     {
+        const int gameDifficulty = Game::getDifficulty();
+        const bool isGameCampaign = Game::isCampaign();
+
         for ( const BuildOrder & order : buildOrderList ) {
+            if ( !Difficulty::allowAIToBuildCastleBuilding( gameDifficulty, isGameCampaign, order.building ) ) {
+                continue;
+            }
+
             const uint32_t fundsMultiplier = order.priority * multiplier;
 
             if ( fundsMultiplier == 1 ) {
@@ -155,8 +164,12 @@ namespace AI
 
     bool CastleDevelopment( Castle & castle, int safetyFactor, int spellLevel )
     {
+        if ( !Difficulty::allowAIToDevelopCastlesOnDay( Game::getDifficulty(), Game::isCampaign(), world.CountDay() ) ) {
+            return false;
+        }
+
         if ( castle.isCastle() && !castle.isBuild( BUILD_WELL ) && world.CountDay() > 6 ) {
-            // return right away - if you can't buy Well you can't buy anything else
+            // If you can't build Well, you won't be able to build anything else
             return BuildIfPossible( castle, BUILD_WELL );
         }
 
@@ -167,7 +180,7 @@ namespace AI
         const size_t neighbourRegions = world.getRegion( world.GetTiles( castle.GetIndex() ).GetRegion() ).getNeighboursCount();
         const bool islandOrPeninsula = neighbourRegions < 3;
 
-        // force building a shipyard, +1 to cost check since we can have 0 neighbours
+        // Force building a shipyard, +1 to cost check since we can have 0 neighbours
         if ( islandOrPeninsula && BuildIfEnoughFunds( castle, BUILD_SHIPYARD, static_cast<uint32_t>( neighbourRegions + 1 ) ) ) {
             return true;
         }

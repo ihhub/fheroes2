@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-19 14:45+0000\n"
+"POT-Creation-Date: 2024-01-20 09:21+0000\n"
 "PO-Revision-Date: 2022-10-25 08:56+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -516,6 +516,9 @@ msgstr ""
 msgid "The enemy has surrendered!"
 msgstr "Inamicul s-a predat!"
 
+msgid "Their cowardice costs them %{gold} gold."
+msgstr ""
+
 msgid "The enemy has fled!"
 msgstr "Inamicul a fugit!"
 
@@ -531,11 +534,13 @@ msgstr "Lașul %{name} fuge de luptă."
 msgid "%{name} surrenders to the enemy, and departs in shame."
 msgstr "%{name} se predă inamicului și pleacă rușinat."
 
-msgid "Your force suffer a bitter defeat, and %{name} abandons your cause."
+#, fuzzy
+msgid "Your forces suffer a bitter defeat, and %{name} abandons your cause."
 msgstr ""
 "Forțele tale suferă o înfrângere amară, iar %{name} îți abandonează cauza."
 
-msgid "Your force suffer a bitter defeat."
+#, fuzzy
+msgid "Your forces suffer a bitter defeat."
 msgstr "Forța ta a suferit o înfrângere amară."
 
 msgid "Battlefield Casualties"
@@ -547,15 +552,25 @@ msgstr "Atacator"
 msgid "Defender"
 msgstr "Apărător"
 
+msgid "Click to leave the battle results."
+msgstr ""
+
+#, fuzzy
+msgid "Click to restart the battle in manual mode."
+msgstr "Ești sigur că vrei să termini bătălia în modul automat?"
+
+msgid "Restart"
+msgstr ""
+
+msgid "You have captured an enemy artifact!"
+msgstr "Ai capturat un artefact inamic!"
+
 msgid "As you reach for the %{name}, it mysteriously disappears."
 msgstr "Atunci când te apropii de %{name}, acesta dispare în mod misterios."
 
 msgid "As your enemy reaches for the %{name}, it mysteriously disappears."
 msgstr ""
 "În timp ce inamicul tău ajunge la %{name}, acesta dispare în mod misterios."
-
-msgid "You have captured an enemy artifact!"
-msgstr "Ai capturat un artefact inamic!"
 
 msgid "Necromancy!"
 msgstr "Necromanție!"
@@ -3242,6 +3257,10 @@ msgstr "Selectați ținta vrăjii"
 msgid "Select Power Up Object:"
 msgstr "Selectați ținta vrăjii"
 
+#, fuzzy
+msgid "Select Adventure Object:"
+msgstr "Selectați ținta vrăjii"
+
 msgid "Map Type:\n"
 msgstr ""
 
@@ -3573,6 +3592,9 @@ msgstr ""
 msgid "Power-ups cannot be placed on water."
 msgstr ""
 
+msgid "Adventure objects cannot be placed on water."
+msgstr ""
+
 msgid "Used to place %{object}."
 msgstr ""
 
@@ -3896,9 +3918,6 @@ msgstr ""
 msgid ""
 "Select the campaign difficulty. This can be lowered at any point during the "
 "campaign."
-msgstr ""
-
-msgid "Restart"
 msgstr ""
 
 msgid "Restart the current scenario."

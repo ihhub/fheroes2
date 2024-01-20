@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-19 14:45+0000\n"
+"POT-Creation-Date: 2024-01-20 09:21+0000\n"
 "PO-Revision-Date: 2023-09-06 08:41+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -562,6 +562,9 @@ msgstr "Добре"
 msgid "The enemy has surrendered!"
 msgstr "Ворог капітулював!"
 
+msgid "Their cowardice costs them %{gold} gold."
+msgstr ""
+
 msgid "The enemy has fled!"
 msgstr "Ворог втік!"
 
@@ -577,10 +580,12 @@ msgstr "Боягузливий %{name} тікає від бою."
 msgid "%{name} surrenders to the enemy, and departs in shame."
 msgstr "%{name} здається ворогу та відходить з ганьбою."
 
-msgid "Your force suffer a bitter defeat, and %{name} abandons your cause."
+#, fuzzy
+msgid "Your forces suffer a bitter defeat, and %{name} abandons your cause."
 msgstr "Ваше військо зазнає гіркої поразки і %{name} полишає Вас."
 
-msgid "Your force suffer a bitter defeat."
+#, fuzzy
+msgid "Your forces suffer a bitter defeat."
 msgstr "Ваше військо зазнає гіркої поразки."
 
 msgid "Battlefield Casualties"
@@ -592,14 +597,24 @@ msgstr "Нападник"
 msgid "Defender"
 msgstr "Захисник"
 
+msgid "Click to leave the battle results."
+msgstr ""
+
+#, fuzzy
+msgid "Click to restart the battle in manual mode."
+msgstr "завершити битву у автоматичному режимі"
+
+msgid "Restart"
+msgstr ""
+
+msgid "You have captured an enemy artifact!"
+msgstr "Ви заволоділи артефактом ворога!"
+
 msgid "As you reach for the %{name}, it mysteriously disappears."
 msgstr "%{name} загадково щезає, щойно ви спробували його забрати."
 
 msgid "As your enemy reaches for the %{name}, it mysteriously disappears."
 msgstr "%{name} загадково щезає, щойно ваш ворог спробував його забрати."
-
-msgid "You have captured an enemy artifact!"
-msgstr "Ви заволоділи артефактом ворога!"
 
 msgid "Necromancy!"
 msgstr "Некромантія!"
@@ -3401,6 +3416,10 @@ msgstr "Оберіть Артефакти:"
 msgid "Select Power Up Object:"
 msgstr "Оберіть Артефакти:"
 
+#, fuzzy
+msgid "Select Adventure Object:"
+msgstr "Оберіть Артефакти:"
+
 msgid "Map Type:\n"
 msgstr "Тип мапи:\n"
 
@@ -3741,6 +3760,10 @@ msgstr "Це Місто не можна покращити до Замку."
 msgid "Power-ups cannot be placed on water."
 msgstr "Це Місто не можна покращити до Замку."
 
+#, fuzzy
+msgid "Adventure objects cannot be placed on water."
+msgstr "Це Місто не можна покращити до Замку."
+
 msgid "Used to place %{object}."
 msgstr ""
 
@@ -4073,9 +4096,6 @@ msgstr ""
 msgid ""
 "Select the campaign difficulty. This can be lowered at any point during the "
 "campaign."
-msgstr ""
-
-msgid "Restart"
 msgstr ""
 
 msgid "Restart the current scenario."

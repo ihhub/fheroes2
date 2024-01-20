@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-19 14:45+0000\n"
+"POT-Creation-Date: 2024-01-20 09:21+0000\n"
 "PO-Revision-Date: 2022-09-23 16:14+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Lithuanian <lt@li.org>\n"
@@ -486,6 +486,9 @@ msgstr "Gerai"
 msgid "The enemy has surrendered!"
 msgstr "Priešas pasidavė!"
 
+msgid "Their cowardice costs them %{gold} gold."
+msgstr ""
+
 msgid "The enemy has fled!"
 msgstr "Priešas pabėgo!"
 
@@ -501,10 +504,10 @@ msgstr ""
 msgid "%{name} surrenders to the enemy, and departs in shame."
 msgstr ""
 
-msgid "Your force suffer a bitter defeat, and %{name} abandons your cause."
+msgid "Your forces suffer a bitter defeat, and %{name} abandons your cause."
 msgstr ""
 
-msgid "Your force suffer a bitter defeat."
+msgid "Your forces suffer a bitter defeat."
 msgstr ""
 
 msgid "Battlefield Casualties"
@@ -516,14 +519,25 @@ msgstr ""
 msgid "Defender"
 msgstr ""
 
+msgid "Click to leave the battle results."
+msgstr ""
+
+#, fuzzy
+msgid "Click to restart the battle in manual mode."
+msgstr ""
+"Ar tikrai norite perrašyti anksčiau tuo pačiu pavadinimu įrašytą failą?"
+
+msgid "Restart"
+msgstr ""
+
+msgid "You have captured an enemy artifact!"
+msgstr "Jūs gavote magišką artefaktą iš priešo!"
+
 msgid "As you reach for the %{name}, it mysteriously disappears."
 msgstr ""
 
 msgid "As your enemy reaches for the %{name}, it mysteriously disappears."
 msgstr ""
-
-msgid "You have captured an enemy artifact!"
-msgstr "Jūs gavote magišką artefaktą iš priešo!"
 
 msgid "Necromancy!"
 msgstr ""
@@ -3276,6 +3290,10 @@ msgid "Select Power Up Object:"
 msgstr "Magiškas artefaktas"
 
 #, fuzzy
+msgid "Select Adventure Object:"
+msgstr "Magiškas artefaktas"
+
+#, fuzzy
 msgid "Map Type:\n"
 msgstr "Pasaulio dydis"
 
@@ -3627,6 +3645,9 @@ msgstr ""
 msgid "Power-ups cannot be placed on water."
 msgstr ""
 
+msgid "Adventure objects cannot be placed on water."
+msgstr ""
+
 #, fuzzy
 msgid "Used to place %{object}."
 msgstr "Rasti magišką artefaktą '%{name}'"
@@ -3965,9 +3986,6 @@ msgstr ""
 msgid ""
 "Select the campaign difficulty. This can be lowered at any point during the "
 "campaign."
-msgstr ""
-
-msgid "Restart"
 msgstr ""
 
 msgid "Restart the current scenario."

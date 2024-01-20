@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2023                                             *
+ *   Copyright (C) 2020 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -479,8 +479,9 @@ namespace fheroes2
         const double redCoeff = 4.0 - darkredStrength / 280.0;
         const double greenBlueCoeff = 4.0 - darkredStrength / 80.0;
 
-        Image out( width, height );
+        Image out;
         out._disableTransformLayer();
+        out.resize( width, height );
 
         uint8_t * imageOutX = out.image();
         const uint8_t * imageIn = in.image();
@@ -538,7 +539,7 @@ namespace fheroes2
 
     Image CreateRippleEffect( const Image & in, const int32_t frameId, const double scaleX /* = 0.05 */, const double waveFrequency /* = 20.0 */ )
     {
-        if ( in.empty() ) {
+        if ( in.empty() || in.singleLayer() ) {
             return {};
         }
 

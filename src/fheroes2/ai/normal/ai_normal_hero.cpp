@@ -604,7 +604,11 @@ namespace
 
             const bool otherHeroInCastle = ( otherHero->inCastle() != nullptr );
 
-            if ( hero.GetColor() == otherHero->GetColor() && !hero.hasMetWithHero( otherHero->GetID() ) ) {
+            if ( hero.GetColor() == otherHero->GetColor() ) {
+                if ( hero.hasMetWithHero( otherHero->GetID() ) ) {
+                    return false;
+                }
+
                 return !otherHeroInCastle;
             }
 
@@ -1123,8 +1127,7 @@ namespace AI
             }
 
             // This is an average gold amount you can get from a treasure chest or sea chest.
-            const Funds funds{ Resource::GOLD, 1500 };
-            return funds.gold * getResourcePriorityModifier( Resource::GOLD, false );
+            return getFundsValueBasedOnPriority( { Resource::GOLD, 1500 } );
         }
         case MP2::OBJ_DAEMON_CAVE: {
             // If this cave is already empty, then we should never come here
@@ -1134,7 +1137,7 @@ namespace AI
             }
 
             // Daemon Cave always gives 2500 Gold after a battle and AI always chooses to fight the demon's servants and doesn't roll the dice
-            return 2500 * getResourcePriorityModifier( Resource::GOLD, false );
+            return getFundsValueBasedOnPriority( { Resource::GOLD, 2500 } );
         }
         case MP2::OBJ_GRAVEYARD:
         case MP2::OBJ_SHIPWRECK:
@@ -1159,26 +1162,70 @@ namespace AI
             // A bottle is useless to AI as it contains only a message but it might block path.
             return 0;
         }
-        case MP2::OBJ_CAMPFIRE:
+        case MP2::OBJ_CAMPFIRE: {
+            // A campfire has 4-6 random resources plus 400-600 gold so we use an average to get evaluation.
+            // Since we should not expose the resource type let's assume that it gives 6 resources, 1 each and 400 gold.
+            const Funds loot{ 1, 1, 1, 1, 1, 1, 400 };
+
+            const double value = getFundsValueBasedOnPriority( loot );
+            assert( value > 0 );
+
+            return value;
+        }
+
+        case MP2::OBJ_MAGIC_GARDEN: {
+            // Magic Garden has visual representation whether it was visited so verify that is has resources.
+            assert( doesTileContainValuableItems( tile ) );
+
+            // Magic Garden can have either 5 gems or 500 gold. Since, 5 is not divisible by 2, let's put 3 instead.
+            const Funds loot{ 0, 0, 0, 0, 0, 3, 250 };
+
+            const double value = getFundsValueBasedOnPriority( loot );
+            assert( value > 0 );
+
+            return value;
+        }
+
+        case MP2::OBJ_RESOURCE: {
+            const Funds loot = getFundsFromTile( tile );
+
+            // Resource object has visual representation of the type of resources.
+            const auto & [resourceType, resourceCount] = loot.getFirstValidResource();
+
+            Funds estimatedResource;
+
+            switch ( resourceType ) {
+            case Resource::GOLD:
+                estimatedResource = Funds( resourceType, 750 );
+                break;
+            case Resource::WOOD:
+            case Resource::ORE:
+                estimatedResource = Funds( resourceType, 7 );
+                break;
+            case Resource::MERCURY:
+            case Resource::SULFUR:
+            case Resource::CRYSTAL:
+            case Resource::GEMS:
+                estimatedResource = Funds( resourceType, 4 );
+                break;
+            default:
+                assert( 0 );
+                break;
+            }
+
+            const double value = getFundsValueBasedOnPriority( estimatedResource );
+            assert( value > 0 );
+
+            return value;
+        }
+
         case MP2::OBJ_DERELICT_SHIP:
-        case MP2::OBJ_FLOTSAM:
         case MP2::OBJ_LEAN_TO:
-        case MP2::OBJ_MAGIC_GARDEN:
-        case MP2::OBJ_RESOURCE:
         case MP2::OBJ_WATER_WHEEL:
         case MP2::OBJ_WINDMILL: {
             const Funds loot = getFundsFromTile( tile );
 
-            double value = 0;
-
-            Resource::forEach( loot.GetValidItems(), [this, &loot, &value]( const int res ) {
-                const int amount = loot.Get( res );
-                if ( amount <= 0 ) {
-                    return;
-                }
-
-                value += amount * getResourcePriorityModifier( res, false );
-            } );
+            const double value = getFundsValueBasedOnPriority( loot );
 
             // This object could have already been visited
             if ( value < 1 ) {
@@ -1187,6 +1234,25 @@ namespace AI
 
             return value;
         }
+
+        case MP2::OBJ_FLOTSAM: {
+            // Flotsam has the following chances and resources:
+            // - 25%: 500 gold + 10 wood
+            // - 25%: 200 gold + 5 wood
+            // - 25%: 5 wood
+            // - 25%: empty
+            // Therefore, use an average value as an estimation of a possible reward of picking this object.
+            // The AI must not know precise reward from this object as it would be called cheating.
+            // For all cases we have: 700 gold and 20 wood. So we divide by 4 to get an average number of resources.
+            // In total, we should use 175 gold and 5 wood.
+            const Funds loot{ 0, 5, 0, 0, 0, 0, 175 };
+
+            const double value = getFundsValueBasedOnPriority( loot );
+            assert( value > 0 );
+
+            return value;
+        }
+
         case MP2::OBJ_LIGHTHOUSE: {
             // TODO: add more complex logic for cases when AI has boats.
             if ( getColorFromTile( tile ) == hero.GetColor() ) {

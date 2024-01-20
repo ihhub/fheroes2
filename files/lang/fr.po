@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-19 14:45+0000\n"
+"POT-Creation-Date: 2024-01-20 09:21+0000\n"
 "PO-Revision-Date: 2023-12-22 01:17+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -565,6 +565,9 @@ msgstr "OK"
 msgid "The enemy has surrendered!"
 msgstr "L'ennemi s'est rendu !"
 
+msgid "Their cowardice costs them %{gold} gold."
+msgstr ""
+
 msgid "The enemy has fled!"
 msgstr "L'ennemi a pris la fuite !"
 
@@ -580,10 +583,12 @@ msgstr "%{name} fuit la bataille avec lâcheté."
 msgid "%{name} surrenders to the enemy, and departs in shame."
 msgstr "%{name} se rend à l'ennemi et part, son nom couvert de honte."
 
-msgid "Your force suffer a bitter defeat, and %{name} abandons your cause."
+#, fuzzy
+msgid "Your forces suffer a bitter defeat, and %{name} abandons your cause."
 msgstr "Votre armée subit une défaite amère, et %{name} abandonne votre cause."
 
-msgid "Your force suffer a bitter defeat."
+#, fuzzy
+msgid "Your forces suffer a bitter defeat."
 msgstr "Votre armée subit une défaite amère."
 
 msgid "Battlefield Casualties"
@@ -595,14 +600,25 @@ msgstr "Attaquant"
 msgid "Defender"
 msgstr "Défenseur"
 
+#, fuzzy
+msgid "Click to leave the battle results."
+msgstr "Cliquez pour valider la résolution choisie."
+
+#, fuzzy
+msgid "Click to restart the battle in manual mode."
+msgstr "Cliquez pour revenir au menu principal."
+
+msgid "Restart"
+msgstr "Recommencer"
+
+msgid "You have captured an enemy artifact!"
+msgstr "Vous avez capturé un artéfact ennemi !"
+
 msgid "As you reach for the %{name}, it mysteriously disappears."
 msgstr "Alors que vous vous approchez %{name}, il disparaît mystérieusement."
 
 msgid "As your enemy reaches for the %{name}, it mysteriously disappears."
 msgstr "Tandis que votre ennemi atteint %{name}, il disparaît mystérieusement."
-
-msgid "You have captured an enemy artifact!"
-msgstr "Vous avez capturé un artéfact ennemi !"
 
 msgid "Necromancy!"
 msgstr "Nécromancie !"
@@ -3516,6 +3532,10 @@ msgstr "Choix d'élément (océan) :"
 msgid "Select Power Up Object:"
 msgstr "Choix d'élément (océan) :"
 
+#, fuzzy
+msgid "Select Adventure Object:"
+msgstr "Choix d'élément (océan) :"
+
 msgid "Map Type:\n"
 msgstr "Type de carte :\n"
 
@@ -3875,6 +3895,10 @@ msgid "Power-ups cannot be placed on water."
 msgstr "Ce sort ne peut pas être jeté en mer."
 
 #, fuzzy
+msgid "Adventure objects cannot be placed on water."
+msgstr "Les trésors ne peuvent pas être placés sur l'eau."
+
+#, fuzzy
 msgid "Used to place %{object}."
 msgstr "Permet de placer un artéfact."
 
@@ -4227,9 +4251,6 @@ msgid ""
 msgstr ""
 "Choisissez la difficulté de la campagne. Elle pourra être abaissée à tout "
 "moment au cours de la campagne."
-
-msgid "Restart"
-msgstr "Recommencer"
 
 msgid "Restart the current scenario."
 msgstr "Recommencer le scénario actuel."
