@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2023                                             *
+ *   Copyright (C) 2020 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -34,9 +34,6 @@ namespace fheroes2
 {
     class Cursor;
     class Display;
-
-    int getNumberOfVideoDisplays();
-    const char * getDisplayName( const int display );
 
     struct ResolutionInfo
     {
@@ -142,22 +139,30 @@ namespace fheroes2
             return _nearestScaling;
         }
 
-        int getDisplayId() const
+        virtual uint8_t getCurrentDisplayIndex() const
         {
-            return _displayId;
+            return 0;
         }
 
-        void setDisplayId( const int display )
+        virtual void setDisplayIndex( const uint8_t )
         {
-            _displayId = display;
+            // Do nothing.
+        }
+
+        virtual uint8_t getMaximumDisplays() const
+        {
+            return 1;
+        }
+
+        virtual const char * getDisplayName( const uint8_t )
+        {
+            return "";
         }
 
     protected:
         BaseRenderEngine()
             : _isFullScreen( false )
-            , _displayId( 0 )
             , _nearestScaling( false )
-
         {
             // Do nothing.
         }
@@ -177,6 +182,11 @@ namespace fheroes2
             return false;
         }
 
+        virtual bool isAllocated() const
+        {
+            return true;
+        }
+
         virtual bool isMouseCursorActive() const
         {
             return false;
@@ -192,8 +202,6 @@ namespace fheroes2
 
     private:
         bool _isFullScreen;
-
-        int _displayId;
 
         bool _nearestScaling;
     };

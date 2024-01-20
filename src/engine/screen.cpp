@@ -938,6 +938,45 @@ namespace
             }
         }
 
+        uint8_t getCurrentDisplayIndex() const override
+        {
+            return _displayIndex;
+        }
+
+        void setDisplayIndex( const uint8_t display ) override
+        {
+            if ( display == _displayIndex )
+                return;
+
+            SDL_GetWindowPosition( _window, &_prevWindowPos.x, &_prevWindowPos.y );
+
+            if ( display < getMaximumDisplays() ) {
+                _displayIndex = display;
+            }
+            else {
+                _displayIndex = 0;
+            }
+
+            clear();
+        }
+
+        uint8_t getMaximumDisplays() const override
+        {
+            const int displayCount = SDL_GetNumVideoDisplays();
+            if ( displayCount > 0 ) {
+                return static_cast<uint8_t>( displayCount );
+            }
+
+            ERROR_LOG( "Failed to Get Number of Displays, description: " << SDL_GetError() );
+            // There should be one display at least.
+            return 1;
+        }
+
+        const char * getDisplayName( const uint8_t display ) override
+        {
+            return SDL_GetDisplayName( display );
+        }
+
     protected:
         RenderEngine()
             : _window( nullptr )
@@ -945,6 +984,7 @@ namespace
             , _renderer( nullptr )
             , _texture( nullptr )
             , _driverIndex( -1 )
+            , _displayIndex( 0 )
             , _prevWindowPos( SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED )
             , _isVSyncEnabled( false )
         {
@@ -1055,12 +1095,8 @@ namespace
                 ERROR_LOG( "Failed to set a hint for screen orientation." )
             }
 #endif
-            uint32_t flags = SDL_WINDOW_SHOWN;
 
-            // SDL_GetNumVideoDisplays starts from 1 so we add 1 to our variable
-            if ( getDisplayId() + 1 > SDL_GetNumVideoDisplays() ) {
-                setDisplayId( 0 );
-            }
+            uint32_t flags = SDL_WINDOW_SHOWN;
 
             if ( isFullScreen ) {
 #if defined( _WIN32 )
@@ -1077,13 +1113,8 @@ namespace
 
             flags |= SDL_WINDOW_RESIZABLE;
 
-#if defined( _WIN32 )
-
-            _window = SDL_CreateWindow( _previousWindowTitle.data(), SDL_WINDOWPOS_CENTERED_DISPLAY( getDisplayId() ), SDL_WINDOWPOS_CENTERED_DISPLAY( getDisplayId() ),
-                                        resolutionInfo.screenWidth, resolutionInfo.screenHeight, flags );
-#else
-            _window = SDL_CreateWindow( _previousWindowTitle.data(), _prevWindowPos.x, _prevWindowPos.y, resolutionInfo.screenWidth, resolutionInfo.screenHeight, flags );
-#endif
+            _window = SDL_CreateWindow( _previousWindowTitle.data(), SDL_WINDOWPOS_CENTERED_DISPLAY( getCurrentDisplayIndex() ),
+                                        SDL_WINDOWPOS_CENTERED_DISPLAY( getCurrentDisplayIndex() ), resolutionInfo.screenWidth, resolutionInfo.screenHeight, flags );
             if ( _window == nullptr ) {
                 ERROR_LOG( "Failed to create an application window of " << resolutionInfo.screenWidth << " x " << resolutionInfo.screenHeight
                                                                         << " size. The error: " << SDL_GetError() )
@@ -1166,12 +1197,19 @@ namespace
             return ( _window != nullptr ) && ( ( SDL_GetWindowFlags( _window ) & SDL_WINDOW_MOUSE_FOCUS ) == SDL_WINDOW_MOUSE_FOCUS );
         }
 
+        bool isAllocated() const override
+        {
+            // We should check for at least one of the variables destroyed in Clear()
+            return _window != nullptr;
+        }
+
     private:
         SDL_Window * _window;
         SDL_Surface * _surface;
         SDL_Renderer * _renderer;
         SDL_Texture * _texture;
         int _driverIndex;
+        uint8_t _displayIndex;
 
         std::string _previousWindowTitle;
         fheroes2::Point _prevWindowPos;
@@ -1344,17 +1382,19 @@ namespace fheroes2
     void Display::setResolution( ResolutionInfo info )
     {
         if ( width() > 0 && height() > 0 && info.gameWidth == width() && info.gameHeight == height() && info.screenWidth == _screenSize.width
-             && info.screenHeight == _screenSize.height ) // nothing to resize
+             && info.screenHeight == _screenSize.height && _engine->isAllocated() ) {
+            // Nothing to resize
             return;
+        }
 
         const bool isFullScreen = _engine->isFullScreen();
 
-        // deallocate engine resources
+        // Deallocate engine resources
         _engine->clear();
 
         _prevRoi = {};
 
-        // allocate engine resources
+        // Allocate engine resources
         if ( !_engine->allocate( info, isFullScreen ) ) {
             clear();
         }
@@ -1481,15 +1521,5 @@ namespace fheroes2
     Cursor & cursor()
     {
         return *( Display::instance()._cursor );
-    }
-
-    int getNumberOfVideoDisplays()
-    {
-        return SDL_GetNumVideoDisplays();
-    }
-
-    const char * getDisplayName( const int display )
-    {
-        return SDL_GetDisplayName( display );
     }
 }

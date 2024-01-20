@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -329,7 +329,7 @@ bool Settings::Read( const std::string & filePath )
     }
 
     if ( config.Exists( "display" ) ) {
-        fheroes2::engine().setDisplayId( std::max( config.IntParams( "display" ), 0 ) );
+        fheroes2::engine().setDisplayIndex( static_cast<uint8_t>( std::max( config.IntParams( "display" ), 0 ) ) );
     }
 
     return true;
@@ -377,8 +377,8 @@ std::string Settings::String() const
     os << std::endl << "# video mode: in-game width x in-game height : on-screen width x on-screen height" << std::endl;
     os << "videomode = " << display.width() << "x" << display.height() << ":" << display.screenSize().width << "x" << display.screenSize().height << std::endl;
 
-    os << std::endl << "# Display ID (defaults to First Display)" << std::endl;
-    os << "display = " << fheroes2::engine().getDisplayId() << std::endl;
+    os << std::endl << "# Display Index" << std::endl;
+    os << "display = " << static_cast<int>( fheroes2::engine().getCurrentDisplayIndex() ) << std::endl;
 
     os << std::endl << "# music: original, expansion, external" << std::endl;
     os << "music = " << musicType << std::endl;

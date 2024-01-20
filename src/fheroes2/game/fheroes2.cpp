@@ -166,7 +166,7 @@ namespace
                         bestResolution = info;
                     }
                 }
-                // set display monitor to first monitor available
+
                 display.setResolution( bestResolution );
             }
             else {
