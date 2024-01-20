@@ -2823,6 +2823,7 @@ namespace fheroes2
         else {
             const uint8_t * imageOutYEnd = imageOutY + widthOut * heightRoiOut;
             int32_t idY = 0;
+
             // Pre-calculation of X position
             std::vector<int32_t> positionX( widthRoiOut );
             for ( int32_t x = 0; x < widthRoiOut; ++x ) {
