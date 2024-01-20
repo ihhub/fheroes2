@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2023                                             *
+ *   Copyright (C) 2021 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -464,7 +464,7 @@ namespace
                 assert( 0 );
                 return {};
             }
-        case Skill::Secondary::EAGLEEYE:
+        case Skill::Secondary::EAGLE_EYE:
             switch ( secondarySkillLevel ) {
             case Skill::Level::BASIC:
                 return _( "campaignBonus|Basic Eagle Eye" );
@@ -843,7 +843,7 @@ namespace Campaign
         case Campaign::ARCHIBALD_CAMPAIGN:
             return _( "Archibald" );
         case Campaign::PRICE_OF_LOYALTY_CAMPAIGN:
-            return _( "The Price of Loyalty" );
+            return _( "Price of Loyalty" );
         case Campaign::VOYAGE_HOME_CAMPAIGN:
             return _( "Voyage Home" );
         case Campaign::WIZARDS_ISLE_CAMPAIGN:

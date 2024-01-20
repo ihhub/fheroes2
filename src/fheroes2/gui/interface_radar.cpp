@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -146,8 +146,9 @@ Interface::Radar::Radar( BaseInterface & interface )
     , _radarType( RadarType::WorldMap )
     , _interface( interface )
 {
-    // Radar image can not be transparent so we disable the transform layer to speed up rendering.
+    // Initialize radar image (_map) as a single-layer image.
     _map._disableTransformLayer();
+    _map.resize( RADARWIDTH, RADARWIDTH );
 }
 
 Interface::Radar::Radar( const Radar & radar, const fheroes2::Display & display )
@@ -158,8 +159,9 @@ Interface::Radar::Radar( const Radar & radar, const fheroes2::Display & display 
     , _zoom( radar._zoom )
     , _hide( false )
 {
-    // Radar image can not be transparent so we disable the transform layer to speed up rendering.
+    // Initialize radar image (_map) as a single-layer image.
     _map._disableTransformLayer();
+    _map.resize( RADARWIDTH, RADARWIDTH );
 }
 
 void Interface::Radar::SavePosition()
@@ -327,7 +329,7 @@ void Interface::Radar::RedrawObjects( const int32_t playerColor, const ViewWorld
 
             const MP2::MapObjectType objectType = tile.GetObject( revealOnlyVisible || revealHeroes );
             switch ( objectType ) {
-            case MP2::OBJ_HEROES: {
+            case MP2::OBJ_HERO: {
                 if ( visibleTile || revealHeroes ) {
                     const Heroes * hero = world.GetHeroes( { x, y } );
                     if ( hero ) {

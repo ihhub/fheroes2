@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2023                                                    *
+ *   Copyright (C) 2023 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -21,6 +21,7 @@
 #include "ui_map_object.h"
 
 #if defined( WITH_DEBUG )
+#include <map>
 #include <set>
 #endif
 
@@ -123,9 +124,9 @@ namespace fheroes2
 
 #if defined( WITH_DEBUG )
         // Verify that all offsets are unique.
-        std::set<Point> uniqueOffsets;
+        std::map<MP2::ObjectIcnType, std::set<Point>> uniqueOffsets;
         for ( const auto & objectPart : object.groundLevelParts ) {
-            const auto [dummy, inserted] = uniqueOffsets.emplace( objectPart.tileOffset );
+            const auto [dummy, inserted] = uniqueOffsets[objectPart.icnType].emplace( objectPart.tileOffset );
             if ( !inserted ) {
                 // The object hasn't formed properly!
                 assert( 0 );
@@ -133,7 +134,7 @@ namespace fheroes2
         }
 
         for ( const auto & objectPart : object.topLevelParts ) {
-            const auto [dummy, inserted] = uniqueOffsets.emplace( objectPart.tileOffset );
+            const auto [dummy, inserted] = uniqueOffsets[objectPart.icnType].emplace( objectPart.tileOffset );
             if ( !inserted ) {
                 // The object hasn't formed properly!
                 assert( 0 );

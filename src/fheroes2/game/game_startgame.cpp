@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -454,7 +454,7 @@ int Interface::AdventureMap::GetCursorFocusCastle( const Castle & castle, const 
         break;
     }
 
-    case MP2::OBJ_HEROES: {
+    case MP2::OBJ_HERO: {
         const Heroes * hero = tile.getHero();
 
         if ( hero ) {
@@ -491,7 +491,7 @@ int Interface::AdventureMap::GetCursorFocusShipmaster( const Heroes & hero, cons
         break;
     }
 
-    case MP2::OBJ_HEROES: {
+    case MP2::OBJ_HERO: {
         const Heroes * otherHero = tile.getHero();
 
         if ( otherHero ) {
@@ -552,7 +552,7 @@ int Interface::AdventureMap::_getCursorNoFocus( const Maps::Tiles & tile )
         }
         break;
     }
-    case MP2::OBJ_HEROES: {
+    case MP2::OBJ_HERO: {
         const Heroes * hero = tile.getHero();
         if ( hero && hero->GetColor() == Settings::Get().CurrentColor() ) {
             return Cursor::HEROES;
@@ -613,7 +613,7 @@ int Interface::AdventureMap::GetCursorFocusHeroes( const Heroes & hero, const Ma
         break;
     }
 
-    case MP2::OBJ_HEROES: {
+    case MP2::OBJ_HERO: {
         const Heroes * otherHero = tile.getHero();
 
         if ( otherHero ) {
@@ -748,27 +748,31 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
 
         res = fheroes2::GameMode::END_TURN;
 
-        bool isFirstAIPlayer = true;
+        // All bonuses for AI must be applied on the first AI player turn, not the first player in general.
+        // This prevents human players from abusing AI bonuses.
+        bool applyAIBonuses = true;
 
         for ( const Player * player : sortedPlayers ) {
             assert( player != nullptr );
 
-            const int playerColor = player->GetColor();
-
-            Kingdom & kingdom = world.GetKingdom( playerColor );
-
-            if ( skipTurns && !player->isColor( conf.CurrentColor() ) ) {
-                if ( kingdom.isPlay() && kingdom.GetControl() == CONTROL_AI ) {
-                    // Only the first AI player can trigger AI bonuses.
-                    // Since this player is the one the bonuses have been applied.
-                    isFirstAIPlayer = false;
+            if ( skipTurns ) {
+                // Game saves can only be performed during a human player's turn (including when it is under temporary AI control
+                // in the case of a debug build), and human players always go first in the turn queue. If we skipped all the human
+                // players and still haven't found the current player, then something is clearly wrong here.
+                if ( player->GetControl() == CONTROL_AI ) {
+                    break;
                 }
 
-                continue;
+                if ( !player->isColor( conf.CurrentColor() ) ) {
+                    continue;
+                }
             }
 
             // player with conf.CurrentColor() was found, there is no need for further skips
             skipTurns = false;
+
+            const int playerColor = player->GetColor();
+            Kingdom & kingdom = world.GetKingdom( playerColor );
 
             if ( kingdom.isPlay() ) {
                 DEBUG_LOG( DBG_GAME, DBG_INFO, world.DateString() << ", color: " << Color::String( playerColor ) << ", resource: " << kingdom.GetFunds().String() )
@@ -823,11 +827,10 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
                     // TODO: remove this temporary assertion
                     assert( res == fheroes2::GameMode::END_TURN );
 
-                    if ( isFirstAIPlayer ) {
-                        isFirstAIPlayer = false;
-                        // All bonuses for AI must be applied on the first AI player turn, not the first player in general.
-                        // This prevents human players to abuse AI bonuses.
+                    if ( applyAIBonuses ) {
                         world.NewDayAI();
+
+                        applyAIBonuses = false;
                     }
 
                     Cursor::Get().SetThemes( Cursor::WAIT );
@@ -1520,7 +1523,7 @@ void Interface::AdventureMap::mouseCursorAreaPressRight( const int32_t tileIndex
             break;
         }
 
-        case MP2::OBJ_HEROES: {
+        case MP2::OBJ_HERO: {
             const Heroes * heroes = tile.getHero();
 
             if ( heroes ) {

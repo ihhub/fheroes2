@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -44,6 +44,7 @@ namespace Skill
 
     uint32_t GetNecromancyBonus( const HeroBase & hero );
     uint32_t GetNecromancyPercent( const HeroBase & hero );
+    uint32_t GetDiplomacySurrenderCostDiscount( const int level );
 
     namespace Level
     {
@@ -76,7 +77,7 @@ namespace Skill
             MYSTICISM = 9,
             LUCK = 10,
             BALLISTICS = 11,
-            EAGLEEYE = 12,
+            EAGLE_EYE = 12,
             NECROMANCY = 13,
             ESTATES = 14
         };
@@ -143,8 +144,9 @@ namespace Skill
         Secondary * FindSkill( int );
 
         void AddSkill( const Skill::Secondary & );
-        void FindSkillsForLevelUp( int race, uint32_t seedSkill1, uint32_t seedSkill2, Secondary &, Secondary & ) const;
         void FillMax( const Skill::Secondary & );
+
+        std::pair<Secondary, Secondary> FindSkillsForLevelUp( const int race, const uint32_t firstSkillSeed, uint32_t const secondSkillSeed ) const;
 
         std::string String() const;
 

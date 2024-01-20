@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2023                                             *
+ *   Copyright (C) 2021 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -194,8 +194,8 @@ namespace
         explicit CacheForMapWithResources( const ViewWorldMode viewMode )
         {
             for ( int32_t i = 0; i < zoomLevels; ++i ) {
-                cachedImages[i].resize( world.w() * tileSizePerZoomLevel[i], world.h() * tileSizePerZoomLevel[i] );
                 cachedImages[i]._disableTransformLayer();
+                cachedImages[i].resize( world.w() * tileSizePerZoomLevel[i], world.h() * tileSizePerZoomLevel[i] );
             }
 
             const int32_t blockSizeX = 18;
@@ -214,8 +214,9 @@ namespace
             const int32_t redrawAreaCenterY = blockSizeY * TILEWIDTH / 2;
 
             // Create temporary image where we will draw blocks of the main map on
-            fheroes2::Image temporaryImg( redrawAreaWidth, redrawAreaHeight );
+            fheroes2::Image temporaryImg;
             temporaryImg._disableTransformLayer();
+            temporaryImg.resize( redrawAreaWidth, redrawAreaHeight );
 
             Interface::GameArea gamearea = Interface::AdventureMap::Get().getGameArea();
             gamearea.SetAreaPosition( 0, 0, redrawAreaWidth, redrawAreaHeight );
@@ -375,7 +376,7 @@ namespace
 
                 for ( uint32_t i = 0; i < objectCount; ++i ) {
                     switch ( objectTypes[i] ) {
-                    case MP2::OBJ_HEROES: {
+                    case MP2::OBJ_HERO: {
                         if ( revealHeroes || !tile.isFog( color ) ) {
                             const Heroes * hero = world.GetHeroes( tile.GetCenter() );
                             if ( hero ) {

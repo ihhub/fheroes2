@@ -38,6 +38,7 @@
 
 #include "ai.h"
 #include "ai_normal.h"
+#include "army.h"
 #include "artifact.h"
 #include "artifact_info.h"
 #include "battle.h"
@@ -106,7 +107,7 @@ namespace AI
 
     std::pair<int32_t, int> optimalAttackVector( const Unit & attacker, const Unit & target, const Position & attackPos )
     {
-        assert( attackPos.GetHead() != nullptr && ( !attacker.isWide() || attackPos.GetTail() != nullptr ) );
+        assert( attackPos.isValidForUnit( attacker ) );
         assert( Board::CanAttackTargetFromPosition( attacker, target, attackPos.GetHead()->GetIndex() ) );
 
         const Position & targetPos = target.GetPosition();
@@ -156,7 +157,7 @@ namespace AI
 
     int32_t optimalAttackValue( const Unit & attacker, const Unit & target, const Position & attackPos )
     {
-        assert( attackPos.GetHead() != nullptr && ( !attacker.isWide() || attackPos.GetTail() != nullptr ) );
+        assert( attackPos.isValidForUnit( attacker ) );
 
         if ( attacker.isAllAdjacentCellsAttack() ) {
             const Board * board = Arena::GetBoard();
@@ -224,7 +225,7 @@ namespace AI
                     continue;
                 }
 
-                assert( !attacker.isWide() || pos.GetTail() != nullptr );
+                assert( pos.isValidForUnit( attacker ) );
 
                 const uint32_t dist = Board::GetDistance( pos, enemyUnit->GetPosition() );
                 assert( dist > 0 );
@@ -283,7 +284,7 @@ namespace AI
                 continue;
             }
 
-            assert( !unit->isWide() || nearbyPos.GetTail() != nullptr );
+            assert( nearbyPos.isValidForUnit( unit ) );
 
             return true;
         }
@@ -403,7 +404,7 @@ namespace AI
         for ( const auto & [stepPos, stepThreatLevel] : pathStepsThreatLevels ) {
             // We need to get as close to the target as possible (taking into account the threat level)
             if ( targetIdx == -1 || stepThreatLevel < lowestThreat || std::fabs( stepThreatLevel - lowestThreat ) < 0.001 ) {
-                assert( stepPos.GetHead() != nullptr && ( !currentUnit.isWide() || stepPos.GetTail() != nullptr ) );
+                assert( stepPos.isValidForUnit( currentUnit ) );
 
                 lowestThreat = stepThreatLevel;
                 // When moving along the path, the direction of a wide unit at some steps may be reversed in relation to the target one. Detect this and use the proper
@@ -432,7 +433,7 @@ namespace AI
                 continue;
             }
 
-            assert( !currentUnit.isWide() || pos.GetTail() != nullptr );
+            assert( pos.isValidForUnit( currentUnit ) );
 
             const uint32_t dist = Board::GetDistance( pos, target.GetPosition() );
             assert( dist > 0 );
@@ -460,7 +461,7 @@ namespace AI
         {
             const Position pos = Position::GetReachable( currentUnit, idx );
             if ( pos.GetHead() != nullptr ) {
-                assert( pos.GetHead() != nullptr && ( !currentUnit.isWide() || pos.GetTail() != nullptr ) );
+                assert( pos.isValidForUnit( currentUnit ) );
 
                 return pos.GetHead()->GetIndex();
             }
@@ -468,10 +469,10 @@ namespace AI
 
         // If there is no such position, then use the last position on the path to the cell with the specified index
         const Position dstPos = Position::GetPosition( currentUnit, idx );
-        assert( dstPos.GetHead() != nullptr && ( !currentUnit.isWide() || dstPos.GetTail() != nullptr ) );
+        assert( dstPos.isValidForUnit( currentUnit ) );
 
         const Position pos = arena.getClosestReachablePosition( currentUnit, dstPos );
-        assert( pos.GetHead() != nullptr && ( !currentUnit.isWide() || pos.GetTail() != nullptr ) );
+        assert( pos.isValidForUnit( currentUnit ) );
 
         return pos.GetHead()->GetIndex();
     }
@@ -502,7 +503,7 @@ namespace AI
 
         // Retreat if remaining army strength is a fraction of enemy's
         // Consider taking speed/turn order into account in the future
-        return _myArmyStrength * Difficulty::GetAIRetreatRatio( Game::getDifficulty() ) < _enemyArmyStrength;
+        return _myArmyStrength * Difficulty::getArmyStrengthRatioForAIRetreat( Game::getDifficulty() ) < _enemyArmyStrength;
     }
 
     bool BattlePlanner::isUnitFaster( const Unit & currentUnit, const Unit & target ) const
@@ -589,7 +590,7 @@ namespace AI
         // Step 1. Analyze current battle state and update variables
         analyzeBattleState( arena, currentUnit );
 
-        DEBUG_LOG( DBG_BATTLE, DBG_TRACE, currentUnit.GetName() << " begin the turn, color: " << Color::String( _myColor ) )
+        DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " begin the turn, color: " << Color::String( _myColor ) )
 
         // Step 2. Check retreat/surrender condition
         const Heroes * actualHero = dynamic_cast<const Heroes *>( _commander );
@@ -611,8 +612,52 @@ namespace AI
                            arena.GetCurrentCommander()->GetName() << " casts " << Spell( bestSpell.spellID ).GetName() << " on cell " << bestSpell.cell )
             };
 
-            // Try to retreat first
-            if ( arena.CanRetreatOpponent( _myColor ) ) {
+            enum class Outcome
+            {
+                ContinueBattle,
+                Retreat,
+                Surrender
+            };
+
+            const Outcome outcome = [this, &arena, actualHero]() {
+                const Force & force = arena.getForce( _myColor );
+                const Kingdom & kingdom = actualHero->GetKingdom();
+
+                const bool canRetreat = arena.CanRetreatOpponent( _myColor );
+                const bool canSurrender = arena.CanSurrenderOpponent( _myColor );
+
+                if ( !canRetreat ) {
+                    if ( !canSurrender ) {
+                        return Outcome::ContinueBattle;
+                    }
+
+                    if ( !kingdom.AllowPayment( { Resource::GOLD, force.GetSurrenderCost() } ) ) {
+                        return Outcome::ContinueBattle;
+                    }
+
+                    return Outcome::Surrender;
+                }
+
+                if ( !canSurrender ) {
+                    return Outcome::Retreat;
+                }
+
+                if ( force.getStrengthOfArmyRemainingInCaseOfSurrender() < Army::getStrengthOfAverageStartingArmy( actualHero ) ) {
+                    return Outcome::Retreat;
+                }
+
+                if ( !kingdom.AllowPayment( Funds{ Resource::GOLD, force.GetSurrenderCost() }
+                                            * Difficulty::getGoldReserveRatioForAISurrender( Game::getDifficulty() ) ) ) {
+                    return Outcome::Retreat;
+                }
+
+                return Outcome::Surrender;
+            }();
+
+            switch ( outcome ) {
+            case Outcome::ContinueBattle:
+                break;
+            case Outcome::Retreat:
                 farewellSpellcast();
 
                 actions.emplace_back( Command::RETREAT );
@@ -620,22 +665,17 @@ namespace AI
                 DEBUG_LOG( DBG_BATTLE, DBG_INFO, arena.GetCurrentCommander()->GetName() << " retreats" )
 
                 return actions;
-            }
+            case Outcome::Surrender:
+                farewellSpellcast();
 
-            // If it is impossible to retreat (for example, when defending a castle), then try to surrender
-            if ( arena.CanSurrenderOpponent( _myColor ) ) {
-                const uint32_t cost = arena.getForce( _myColor ).GetSurrenderCost();
-                const Kingdom & kingdom = actualHero->GetKingdom();
+                actions.emplace_back( Command::SURRENDER );
 
-                if ( kingdom.AllowPayment( { Resource::GOLD, cost } ) ) {
-                    farewellSpellcast();
+                DEBUG_LOG( DBG_BATTLE, DBG_INFO, arena.GetCurrentCommander()->GetName() << " surrenders" )
 
-                    actions.emplace_back( Command::SURRENDER );
-
-                    DEBUG_LOG( DBG_BATTLE, DBG_INFO, arena.GetCurrentCommander()->GetName() << " surrenders for " << cost << " gold" )
-
-                    return actions;
-                }
+                return actions;
+            default:
+                assert( 0 );
+                break;
             }
         }
 
@@ -673,15 +713,13 @@ namespace AI
             }
 
             // Melee unit final stage - add actions to the queue
-            DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " melee phase end, target cell: " << target.cell )
-
             if ( target.cell != -1 ) {
                 // The target cell of the movement must be the cell that the unit's head will occupy
                 const int32_t moveTargetIdx = getUnitMovementTarget( arena, currentUnit, target.cell );
 
                 if ( target.unit ) {
                     const Position attackPos = Position::GetReachable( currentUnit, moveTargetIdx );
-                    assert( attackPos.GetHead() != nullptr && ( !currentUnit.isWide() || attackPos.GetTail() != nullptr ) );
+                    assert( attackPos.isValidForUnit( currentUnit ) );
 
                     const auto [attackTargetIdx, attackDirection] = optimalAttackVector( currentUnit, *target.unit, attackPos );
 
@@ -909,7 +947,7 @@ namespace AI
         // distance attack capabilities.
         _cautiousOffensive = ( enemyArcherRatio < 0.15 );
 
-        DEBUG_LOG( DBG_BATTLE, DBG_TRACE,
+        DEBUG_LOG( DBG_BATTLE, DBG_INFO,
                    ( _defensiveTactics ? "Defensive" : ( _cautiousOffensive ? "Cautious offensive" : "Offensive" ) )
                        << " tactics have been chosen. Army strength: " << _myArmyStrength << ", shooters strength: " << _myShootersStrength
                        << ", enemy army strength: " << _enemyArmyStrength << ", enemy shooters strength: " << _enemyShootersStrength )
@@ -950,7 +988,7 @@ namespace AI
                         const int32_t headIdx = unitToRemove.GetHeadIndex();
                         const int32_t tailIdx = unitToRemove.GetTailIndex();
 
-                        assert( headIdx != -1 && ( !unitToRemove.isWide() || tailIdx != -1 ) );
+                        assert( headIdx != -1 && ( unitToRemove.isWide() ? tailIdx != -1 : tailIdx == -1 ) );
 
                         unitToRestore = getUnitOnCell( headIdx );
                         assert( unitToRestore == &unitToRemove );
@@ -973,7 +1011,7 @@ namespace AI
                         const int32_t headIdx = unitToRestore->GetHeadIndex();
                         const int32_t tailIdx = unitToRestore->GetTailIndex();
 
-                        assert( headIdx != -1 && ( !unitToRestore->isWide() || tailIdx != -1 ) );
+                        assert( headIdx != -1 && ( unitToRestore->isWide() ? tailIdx != -1 : tailIdx == -1 ) );
 
                         setUnitForCell( headIdx, unitToRestore );
 
@@ -1274,12 +1312,16 @@ namespace AI
 
                     target.cell = outcome.fromIndex;
                     target.unit = enemy;
+
+                    DEBUG_LOG( DBG_BATTLE, DBG_TRACE,
+                               "- Set attack priority on " << enemy->GetName() << ", attack value: " << outcome.attackValue
+                                                           << ", position value: " << outcome.positionValue )
                 }
             }
         }
 
         if ( target.unit ) {
-            DEBUG_LOG( DBG_BATTLE, DBG_TRACE, currentUnit.GetName() << " attacking " << target.unit->GetName() << " from cell " << target.cell )
+            DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " attacking " << target.unit->GetName() << " from cell " << target.cell )
 
             return target;
         }
@@ -1314,7 +1356,7 @@ namespace AI
                 maxPriority = unitPriority;
 
                 const Position pos = Position::GetPosition( currentUnit, nearestCellInfo.idx );
-                assert( pos.GetHead() != nullptr && ( !currentUnit.isWide() || pos.GetTail() != nullptr ) );
+                assert( pos.isValidForUnit( currentUnit ) );
 
                 const Indexes path = arena.GetPath( currentUnit, pos );
                 assert( !path.empty() );
@@ -1353,7 +1395,7 @@ namespace AI
                     continue;
                 }
 
-                assert( pos.GetHead() != nullptr && ( !currentUnit.isWide() || pos.GetTail() != nullptr ) );
+                assert( pos.isValidForUnit( currentUnit ) );
 
                 const uint32_t moveDist = arena.CalculateMoveDistance( currentUnit, pos );
                 if ( target.cell == -1 || moveDist < shortestDist ) {
@@ -1496,7 +1538,7 @@ namespace AI
                             continue;
                         }
 
-                        assert( !currentUnit.isWide() || pos.GetTail() != nullptr );
+                        assert( pos.isValidForUnit( currentUnit ) );
                         assert( Board::GetDistance( pos, frnd->GetPosition() ) == 1 );
 
                         if ( !arena.isPositionReachable( currentUnit, pos, false ) ) {
@@ -1562,31 +1604,76 @@ namespace AI
                 target.cell = bestCoverCellInfo.idx;
                 target.unit = nullptr;
 
-                MeleeAttackOutcome bestOutcome;
+                // If the archer is blocked by enemy units, it is necessary to attack them immediately, or at least take the best position to attack
+                {
+                    MeleeAttackOutcome bestOutcome;
 
-                for ( const int idx : adjacentEnemiesIndexes ) {
-                    const Unit * enemy = Board::GetCell( idx )->GetUnit();
-                    assert( enemy != nullptr );
+                    for ( const int idx : adjacentEnemiesIndexes ) {
+                        const Unit * enemy = Board::GetCell( idx )->GetUnit();
+                        assert( enemy != nullptr );
 
-                    const MeleeAttackOutcome outcome = BestAttackOutcome( currentUnit, *enemy, valuesOfAttackPositions );
+                        const MeleeAttackOutcome outcome = BestAttackOutcome( currentUnit, *enemy, valuesOfAttackPositions );
 
-                    if ( IsOutcomeImproved( outcome, bestOutcome ) ) {
-                        bestOutcome = outcome;
+                        if ( IsOutcomeImproved( outcome, bestOutcome ) ) {
+                            bestOutcome = outcome;
 
-                        target.cell = outcome.fromIndex;
-                        target.unit = outcome.canAttackImmediately ? enemy : nullptr;
+                            target.cell = outcome.fromIndex;
+                            target.unit = outcome.canAttackImmediately ? enemy : nullptr;
+
+                            DEBUG_LOG( DBG_BATTLE, DBG_TRACE,
+                                       "- Set attack priority on " << enemy->GetName() << ", attack value: " << outcome.attackValue
+                                                                   << ", position value: " << outcome.positionValue )
+                        }
                     }
                 }
 
                 // If we have reached this point, then the unit should be able to either cover the archer or approach any of the enemies blocking that archer - although
                 // perhaps without performing an immediate attack
                 assert( Board::isValidIndex( target.cell ) );
+
+                // The unit is going to attack one of the enemy units that blocked the archer, nothing else needs to be done
+                if ( target.unit != nullptr ) {
+                    continue;
+                }
+
+                // It makes sense for a unit that ignores retaliation to attack neighboring enemy units, even if it is covering an archer, since in this case it will not
+                // receive unnecessary retaliatory damage (which could affect the duration of the cover). Also, archers with the ability to shoot at area may not always
+                // attack enemy units in close proximity to friendly units due to fear of friendly fire, so covering friendly units should help by attacking enemy units
+                // next to them.
+                if ( !currentUnit.isIgnoringRetaliation() && !frnd->isAbilityPresent( fheroes2::MonsterAbilityType::AREA_SHOT ) ) {
+                    continue;
+                }
+
+                // If the decision is made to attack one of the neighboring enemy units (if any) while covering the archer, then we should choose the best target
+                {
+                    int32_t bestAttackValue = 0;
+
+                    for ( const Unit * enemy : enemies ) {
+                        assert( enemy != nullptr );
+
+                        if ( !Board::CanAttackTargetFromPosition( currentUnit, *enemy, target.cell ) ) {
+                            continue;
+                        }
+
+                        const Position pos = Position::GetReachable( currentUnit, target.cell );
+                        assert( pos.isValidForUnit( currentUnit ) );
+
+                        const int32_t attackValue = optimalAttackValue( currentUnit, *enemy, pos );
+                        if ( bestAttackValue < attackValue ) {
+                            bestAttackValue = attackValue;
+
+                            target.unit = enemy;
+
+                            DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "- Set attack priority on " << enemy->GetName() << ", attack value: " << attackValue )
+                        }
+                    }
+                }
             }
         }
 
         if ( target.cell != -1 ) {
             if ( target.unit ) {
-                DEBUG_LOG( DBG_BATTLE, DBG_TRACE, currentUnit.GetName() << " attacking " << target.unit->GetName() << " from cell " << target.cell )
+                DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " attacking " << target.unit->GetName() << " from cell " << target.cell )
             }
             else {
                 DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " covering friendly archers, moving to cell " << target.cell )
@@ -1615,11 +1702,15 @@ namespace AI
 
                     target.cell = outcome.fromIndex;
                     target.unit = outcome.canAttackImmediately ? enemy : nullptr;
+
+                    DEBUG_LOG( DBG_BATTLE, DBG_TRACE,
+                               "- Set attack priority on " << enemy->GetName() << ", attack value: " << outcome.attackValue
+                                                           << ", position value: " << outcome.positionValue )
                 }
             }
 
             if ( target.unit ) {
-                DEBUG_LOG( DBG_BATTLE, DBG_TRACE, currentUnit.GetName() << " attacking " << target.unit->GetName() << " from cell " << target.cell )
+                DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " attacking " << target.unit->GetName() << " from cell " << target.cell )
             }
         }
 
