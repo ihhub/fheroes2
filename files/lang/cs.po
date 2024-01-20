@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-20 09:21+0000\n"
+"POT-Creation-Date: 2024-01-20 17:57+0000\n"
 "PO-Revision-Date: 2023-09-24 16:05+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Czech <cs@li.org>\n"
@@ -3427,6 +3427,10 @@ msgstr "Kliknout sem pro výběr scénáře."
 msgid "Select Dwelling:"
 msgstr "Seslat kouzlo"
 
+#, fuzzy
+msgid "Select Landscape Object:"
+msgstr "Artefakt"
+
 msgid "Mine placing"
 msgstr ""
 
@@ -3802,6 +3806,10 @@ msgstr "Toto město nemůže být povýšeno na hrad."
 
 msgid "Ocean object must be placed on water."
 msgstr ""
+
+#, fuzzy
+msgid "Landscape objects cannot be placed on water."
+msgstr "Toto město nemůže být povýšeno na hrad."
 
 #, fuzzy
 msgid "Towns cannot be placed on water."

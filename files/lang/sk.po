@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-20 09:21+0000\n"
+"POT-Creation-Date: 2024-01-20 17:57+0000\n"
 "PO-Revision-Date: 2023-09-11 20:22+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3432,6 +3432,10 @@ msgstr "Klikni sem a vyber scenár, ktorý chceš hrať."
 msgid "Select Dwelling:"
 msgstr "Zvoľ kúzlo:"
 
+#, fuzzy
+msgid "Select Landscape Object:"
+msgstr "Objekty oceánu"
+
 msgid "Mine placing"
 msgstr ""
 
@@ -3812,6 +3816,10 @@ msgstr "Toto kúzlo nemožno použiť na lodi."
 
 #, fuzzy
 msgid "Ocean object must be placed on water."
+msgstr "Toto kúzlo nemožno použiť na lodi."
+
+#, fuzzy
+msgid "Landscape objects cannot be placed on water."
 msgstr "Toto kúzlo nemožno použiť na lodi."
 
 #, fuzzy
