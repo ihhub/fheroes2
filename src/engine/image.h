@@ -309,11 +309,10 @@ namespace fheroes2
     // Use this function only when you need to convert transform value into non-transparent pixel with the given color.
     void ReplaceTransformIdByColorId( Image & image, const uint8_t transformId, const uint8_t colorId );
 
-    // Please remember that subpixel accuracy resizing is extremely slow!
-    void Resize( const Image & in, Image & out, const bool isSubpixelAccuracy = false );
+    void Resize( const Image & in, Image & out );
 
     void Resize( const Image & in, const int32_t inX, const int32_t inY, const int32_t widthRoiIn, const int32_t heightRoiIn, Image & out, const int32_t outX,
-                 const int32_t outY, const int32_t widthRoiOut, const int32_t heightRoiOut, const bool isSubpixelAccuracy = false );
+                 const int32_t outY, const int32_t widthRoiOut, const int32_t heightRoiOut );
 
     // Please use value from the main palette only
     void SetPixel( Image & image, const int32_t x, const int32_t y, const uint8_t value );
@@ -324,6 +323,11 @@ namespace fheroes2
     void SetTransformPixel( Image & image, const int32_t x, const int32_t y, const uint8_t value );
 
     Image Stretch( const Image & in, int32_t inX, int32_t inY, int32_t widthIn, int32_t heightIn, const int32_t widthOut, const int32_t heightOut );
+
+    void SubpixelResize( const Image & in, Image & out );
+
+    void SubpixelResize( const Image & in, const int32_t inX, const int32_t inY, const int32_t widthRoiIn, const int32_t heightRoiIn, Image & out, const int32_t outX,
+                         const int32_t outY, const int32_t widthRoiOut, const int32_t heightRoiOut );
 
     void Transpose( const Image & in, Image & out );
 

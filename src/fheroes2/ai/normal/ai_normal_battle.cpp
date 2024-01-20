@@ -1637,8 +1637,10 @@ namespace AI
                 }
 
                 // It makes sense for a unit that ignores retaliation to attack neighboring enemy units, even if it is covering an archer, since in this case it will not
-                // receive unnecessary retaliatory damage (which could affect the duration of the cover)
-                if ( !currentUnit.isIgnoringRetaliation() ) {
+                // receive unnecessary retaliatory damage (which could affect the duration of the cover). Also, archers with the ability to shoot at area may not always
+                // attack enemy units in close proximity to friendly units due to fear of friendly fire, so covering friendly units should help by attacking enemy units
+                // next to them.
+                if ( !currentUnit.isIgnoringRetaliation() && !frnd->isAbilityPresent( fheroes2::MonsterAbilityType::AREA_SHOT ) ) {
                     continue;
                 }
 
