@@ -43,7 +43,7 @@ namespace Difficulty
 
     std::string String( int );
 
-    int GetScoutingBonus( int difficulty );
+    int GetScoutingBonusForAI( int difficulty );
 
     // Returns an extra gold bonus modifier for AI based on difficulty level.
     double getGoldIncomeBonusForAI( const int difficulty );
@@ -51,7 +51,7 @@ namespace Difficulty
     // Returns an extra growth bonus modifier for AI based on difficulty level.
     double GetUnitGrowthBonusForAI( const int difficulty, const bool isCampaign, const building_t dwelling );
 
-    int GetHeroMovementBonus( int difficulty );
+    int GetHeroMovementBonusForAI( int difficulty );
 
     bool allowAIToRetreat( const int difficulty, const bool isCampaign );
     bool allowAIToSurrender( const int difficulty, const bool isCampaign );
@@ -62,7 +62,7 @@ namespace Difficulty
     // Returns the minimum ratio of the AI kingdom's gold reserve to the cost of surrender, at which the AI will prefer surrender to retreat from the battlefield
     uint32_t getGoldReserveRatioForAISurrender( const int difficulty );
 
-    uint32_t GetDimensionDoorLimit( int difficulty );
+    uint32_t GetDimensionDoorLimitForAI( int difficulty );
 
     bool areAIHeroRolesAllowed( const int difficulty );
 

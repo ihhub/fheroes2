@@ -47,7 +47,7 @@ std::string Difficulty::String( int difficulty )
     return "Unknown";
 }
 
-int Difficulty::GetScoutingBonus( int difficulty )
+int Difficulty::GetScoutingBonusForAI( int difficulty )
 {
     switch ( difficulty ) {
     case Difficulty::NORMAL:
@@ -116,7 +116,7 @@ double Difficulty::GetUnitGrowthBonusForAI( const int difficulty, const bool /* 
     return 0;
 }
 
-int Difficulty::GetHeroMovementBonus( int difficulty )
+int Difficulty::GetHeroMovementBonusForAI( int difficulty )
 {
     switch ( difficulty ) {
     case Difficulty::EXPERT:
@@ -159,7 +159,7 @@ uint32_t Difficulty::getGoldReserveRatioForAISurrender( const int /* difficulty 
     return 10;
 }
 
-uint32_t Difficulty::GetDimensionDoorLimit( int difficulty )
+uint32_t Difficulty::GetDimensionDoorLimitForAI( int difficulty )
 {
     switch ( difficulty ) {
     case Difficulty::EASY:
