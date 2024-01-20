@@ -1096,12 +1096,12 @@ namespace Interface
                 return;
             }
 
-            if ( !verifyObjectCondition( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return !tileToCheck.isWater(); } ) ) {
+            if ( !checkConditionForUsedTiles( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return !tileToCheck.isWater(); } ) ) {
                 _warningMessage.reset( _( "Adventure objects cannot be placed on water." ) );
                 return;
             }
 
-            if ( !verifyObjectCondition( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return Maps::isClearGround( tileToCheck ); } ) ) {
+            if ( !checkConditionForOccupiedTiles( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return Maps::isClearGround( tileToCheck ); } ) ) {
                 _warningMessage.reset( _( "Choose a tile which does not contain any objects." ) );
                 return;
             }
