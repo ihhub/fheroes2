@@ -58,7 +58,7 @@ namespace
 
         uint8_t * image = out.image();
         const uint8_t * transform = out.transform();
-        const uint8_t * imageEnd = image + out.width() * out.height();
+        const uint8_t * imageEnd = image + static_cast<ptrdiff_t>( out.width() ) * out.height();
 
         for ( ; image != imageEnd; ++image, ++transform ) {
             if ( *transform == 0 ) {
