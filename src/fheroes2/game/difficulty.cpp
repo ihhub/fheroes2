@@ -128,6 +128,16 @@ int Difficulty::GetHeroMovementBonus( int difficulty )
     return 0;
 }
 
+bool Difficulty::allowAIToRetreat( const int /* difficulty */, const bool /* isCampaign */ )
+{
+    return true;
+}
+
+bool Difficulty::allowAIToSurrender( const int /* difficulty */, const bool /* isCampaign */ )
+{
+    return true;
+}
+
 double Difficulty::getArmyStrengthRatioForAIRetreat( const int difficulty )
 {
     switch ( difficulty ) {

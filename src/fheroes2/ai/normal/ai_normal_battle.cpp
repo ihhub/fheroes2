@@ -605,16 +605,19 @@ namespace AI
                     return Outcome::ContinueBattle;
                 }
 
+                const int gameDifficulty = Game::getDifficulty();
+                const bool isGameCampaign = Game::isCampaign();
+
                 // TODO: consider taking speed/turn order into account in the future
-                if ( _myArmyStrength * Difficulty::getArmyStrengthRatioForAIRetreat( Game::getDifficulty() ) >= _enemyArmyStrength ) {
+                if ( _myArmyStrength * Difficulty::getArmyStrengthRatioForAIRetreat( gameDifficulty ) >= _enemyArmyStrength ) {
                     return Outcome::ContinueBattle;
                 }
 
                 const Force & force = arena.getForce( _myColor );
                 const Kingdom & kingdom = actualHero->GetKingdom();
 
-                const bool canRetreat = arena.CanRetreatOpponent( _myColor );
-                const bool canSurrender = arena.CanSurrenderOpponent( _myColor );
+                const bool canRetreat = ( Difficulty::allowAIToRetreat( gameDifficulty, isGameCampaign ) && arena.CanRetreatOpponent( _myColor ) );
+                const bool canSurrender = ( Difficulty::allowAIToSurrender( gameDifficulty, isGameCampaign ) && arena.CanSurrenderOpponent( _myColor ) );
 
                 if ( !canRetreat ) {
                     if ( !canSurrender ) {
@@ -636,8 +639,7 @@ namespace AI
                     return Outcome::Retreat;
                 }
 
-                if ( !kingdom.AllowPayment( Funds{ Resource::GOLD, force.GetSurrenderCost() }
-                                            * Difficulty::getGoldReserveRatioForAISurrender( Game::getDifficulty() ) ) ) {
+                if ( !kingdom.AllowPayment( Funds{ Resource::GOLD, force.GetSurrenderCost() } * Difficulty::getGoldReserveRatioForAISurrender( gameDifficulty ) ) ) {
                     return Outcome::Retreat;
                 }
 

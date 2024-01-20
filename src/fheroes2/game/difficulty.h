@@ -53,6 +53,9 @@ namespace Difficulty
 
     int GetHeroMovementBonus( int difficulty );
 
+    bool allowAIToRetreat( const int difficulty, const bool isCampaign );
+    bool allowAIToSurrender( const int difficulty, const bool isCampaign );
+
     // Returns the ratio of the strength of the enemy army to the strength of the AI army, above which the AI decides to surrender or retreat from the battlefield
     double getArmyStrengthRatioForAIRetreat( const int difficulty );
 
