@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-19 14:45+0000\n"
+"POT-Creation-Date: 2024-01-20 03:11+0000\n"
 "PO-Revision-Date: 2023-09-12 11:08+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
@@ -553,6 +553,9 @@ msgstr "Okay"
 msgid "The enemy has surrendered!"
 msgstr "Fjenden har overgivet sig!"
 
+msgid "Their cowardice costs them %{gold} gold."
+msgstr ""
+
 msgid "The enemy has fled!"
 msgstr "Fjenden er flygtet!"
 
@@ -568,10 +571,12 @@ msgstr "Den kujonagtige %{name} flygter fra kampen."
 msgid "%{name} surrenders to the enemy, and departs in shame."
 msgstr "%{name} overgiver sig til fjenden, og træder fra med skam."
 
-msgid "Your force suffer a bitter defeat, and %{name} abandons your cause."
+#, fuzzy
+msgid "Your forces suffer a bitter defeat, and %{name} abandons your cause."
 msgstr "Din styrke lider et bittert nederlag, og %{name} opgiver din sag."
 
-msgid "Your force suffer a bitter defeat."
+#, fuzzy
+msgid "Your forces suffer a bitter defeat."
 msgstr "Din styrke lider et bittert nederlag."
 
 msgid "Battlefield Casualties"
@@ -583,15 +588,26 @@ msgstr "Angriber"
 msgid "Defender"
 msgstr "Forsvarer"
 
+#, fuzzy
+msgid "Click to leave the battle results."
+msgstr "Klik for at godkende valgte opløsning."
+
+#, fuzzy
+msgid "Click to restart the battle in manual mode."
+msgstr "Klik her for at vende tilbage til hovedmenuen."
+
+msgid "Restart"
+msgstr "Genstart"
+
+msgid "You have captured an enemy artifact!"
+msgstr "Du har stjålet et af fjendens artefakter!"
+
 msgid "As you reach for the %{name}, it mysteriously disappears."
 msgstr "Lige som du rækker ud efter %{name}, forsvinder det mysteriøst."
 
 msgid "As your enemy reaches for the %{name}, it mysteriously disappears."
 msgstr ""
 "Lige som din fjende rækker ud efter %{name}, forsvinder det mysteriøst."
-
-msgid "You have captured an enemy artifact!"
-msgstr "Du har stjålet et af fjendens artefakter!"
 
 msgid "Necromancy!"
 msgstr "Nekromanti!"
@@ -4239,9 +4255,6 @@ msgid ""
 "campaign."
 msgstr ""
 "Vælg felttogets niveau. Dette kan sænkes når som helst under felttoget."
-
-msgid "Restart"
-msgstr "Genstart"
 
 msgid "Restart the current scenario."
 msgstr "Genstart det igangværende scenarie."

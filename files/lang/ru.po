@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-19 14:45+0000\n"
+"POT-Creation-Date: 2024-01-20 03:11+0000\n"
 "PO-Revision-Date: 2023-11-12 16:27+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -559,6 +559,9 @@ msgstr "Принять"
 msgid "The enemy has surrendered!"
 msgstr "Враг капитулировал!"
 
+msgid "Their cowardice costs them %{gold} gold."
+msgstr ""
+
 msgid "The enemy has fled!"
 msgstr "Враг сбежал!"
 
@@ -574,10 +577,12 @@ msgstr "Струсив, %{name} бежит с поля битвы."
 msgid "%{name} surrenders to the enemy, and departs in shame."
 msgstr "%{name} сдаётся врагу и уходит с позором."
 
-msgid "Your force suffer a bitter defeat, and %{name} abandons your cause."
+#, fuzzy
+msgid "Your forces suffer a bitter defeat, and %{name} abandons your cause."
 msgstr "Ваши войска потерпели поражение и %{name} покидает Вас."
 
-msgid "Your force suffer a bitter defeat."
+#, fuzzy
+msgid "Your forces suffer a bitter defeat."
 msgstr "Ваши войска потерпели поражение."
 
 msgid "Battlefield Casualties"
@@ -589,6 +594,20 @@ msgstr "Нападавший"
 msgid "Defender"
 msgstr "Оборонявшийся"
 
+#, fuzzy
+msgid "Click to leave the battle results."
+msgstr "Нажмите, чтобы применить выбранное разрешение экрана."
+
+#, fuzzy
+msgid "Click to restart the battle in manual mode."
+msgstr "Нажмите для возврата в главное меню."
+
+msgid "Restart"
+msgstr "Начать сначала"
+
+msgid "You have captured an enemy artifact!"
+msgstr "Вы захватили вражеский артефакт!"
+
 msgid "As you reach for the %{name}, it mysteriously disappears."
 msgstr ""
 "Когда Вы притрагиваетесь к артефакту %{name}, он таинственным образом "
@@ -598,9 +617,6 @@ msgid "As your enemy reaches for the %{name}, it mysteriously disappears."
 msgstr ""
 "Когда Ваш враг притрагивается к артефакту %{name}, тот таинственным образом "
 "исчезает."
-
-msgid "You have captured an enemy artifact!"
-msgstr "Вы захватили вражеский артефакт!"
 
 msgid "Necromancy!"
 msgstr "Некромантия!"
@@ -4211,9 +4227,6 @@ msgid ""
 "Select the campaign difficulty. This can be lowered at any point during the "
 "campaign."
 msgstr "Выбор сложности кампании. Сложность можно понизить в любой момент."
-
-msgid "Restart"
-msgstr "Начать сначала"
 
 msgid "Restart the current scenario."
 msgstr "Начать сначала текущий сценарий."
