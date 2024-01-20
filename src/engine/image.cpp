@@ -2691,17 +2691,17 @@ namespace fheroes2
         }
     }
 
-    void Resize( const Image & in, Image & out, const bool isSubpixelAccuracy )
+    void Resize( const Image & in, Image & out )
     {
         if ( in.empty() || out.empty() ) {
             return;
         }
 
-        Resize( in, 0, 0, in.width(), in.height(), out, 0, 0, out.width(), out.height(), isSubpixelAccuracy );
+        Resize( in, 0, 0, in.width(), in.height(), out, 0, 0, out.width(), out.height() );
     }
 
     void Resize( const Image & in, const int32_t inX, const int32_t inY, const int32_t widthRoiIn, const int32_t heightRoiIn, Image & out, const int32_t outX,
-                 const int32_t outY, const int32_t widthRoiOut, const int32_t heightRoiOut, const bool isSubpixelAccuracy )
+                 const int32_t outY, const int32_t widthRoiOut, const int32_t heightRoiOut )
     {
         if ( !Validate( in, inX, inY, widthRoiIn, heightRoiIn ) || !Validate( out, outX, outY, widthRoiOut, heightRoiOut ) ) {
             return;
@@ -2721,146 +2721,83 @@ namespace fheroes2
         const uint8_t * imageInY = in.image() + offsetInY;
         uint8_t * imageOutY = out.image() + offsetOutY;
 
-        if ( isSubpixelAccuracy ) {
-            std::vector<double> positionX( widthRoiOut );
-            for ( int32_t x = 0; x < widthRoiOut; ++x ) {
-                positionX[x] = static_cast<double>( x * widthRoiIn ) / widthRoiOut;
-            }
+        const uint8_t * imageOutYEnd = imageOutY + static_cast<ptrdiff_t>( widthOut ) * heightRoiOut;
+        int32_t idY = 0;
 
-            const uint8_t * gamePalette = getGamePalette();
+        // Pre-calculation of X position
+        std::vector<int32_t> positionX( widthRoiOut );
+        for ( int32_t x = 0; x < widthRoiOut; ++x ) {
+            positionX[x] = ( x * widthRoiIn ) / widthRoiOut;
+        }
 
-            if ( in.singleLayer() && out.singleLayer() ) {
-                for ( int32_t y = 0; y < heightRoiOut; ++y, imageOutY += widthOut ) {
-                    const double posY = static_cast<double>( y * heightRoiIn ) / heightRoiOut;
-                    const int32_t startY = static_cast<int32_t>( posY );
-                    const double coeffY = posY - startY;
+        if ( in.singleLayer() ) {
+            if ( !out.singleLayer() ) {
+                // In this case we make the output image fully non-transparent in the given output area.
 
-                    uint8_t * imageOutX = imageOutY;
+                uint8_t * transformY = out.transform() + static_cast<ptrdiff_t>( outY ) * widthOut + outX;
+                const uint8_t * transformYEnd = transformY + static_cast<ptrdiff_t>( heightRoiOut ) * widthOut;
 
-                    for ( int32_t x = 0; x < widthRoiOut; ++x, ++imageOutX ) {
-                        const double posX = positionX[x];
-                        const int32_t startX = static_cast<int32_t>( posX );
-                        const int32_t offsetIn = startY * widthIn + startX;
-
-                        const uint8_t * imageInX = imageInY + offsetIn;
-
-                        if ( posX < widthRoiIn - 1 && posY < heightRoiIn - 1 ) {
-                            const double coeffX = posX - startX;
-                            const double coeff1 = ( 1 - coeffX ) * ( 1 - coeffY );
-                            const double coeff2 = coeffX * ( 1 - coeffY );
-                            const double coeff3 = ( 1 - coeffX ) * coeffY;
-                            const double coeff4 = coeffX * coeffY;
-
-                            const uint8_t * id1 = gamePalette + static_cast<uint32_t>( *imageInX ) * 3;
-                            const uint8_t * id2 = gamePalette + static_cast<uint32_t>( *( imageInX + 1 ) ) * 3;
-                            const uint8_t * id3 = gamePalette + static_cast<uint32_t>( *( imageInX + widthIn ) ) * 3;
-                            const uint8_t * id4 = gamePalette + static_cast<uint32_t>( *( imageInX + widthIn + 1 ) ) * 3;
-
-                            const double red = *id1 * coeff1 + *id2 * coeff2 + *id3 * coeff3 + *id4 * coeff4 + 0.5;
-                            const double green = *( id1 + 1 ) * coeff1 + *( id2 + 1 ) * coeff2 + *( id3 + 1 ) * coeff3 + *( id4 + 1 ) * coeff4 + 0.5;
-                            const double blue = *( id1 + 2 ) * coeff1 + *( id2 + 2 ) * coeff2 + *( id3 + 2 ) * coeff3 + *( id4 + 2 ) * coeff4 + 0.5;
-
-                            *imageOutX = GetPALColorId( static_cast<uint8_t>( red ), static_cast<uint8_t>( green ), static_cast<uint8_t>( blue ) );
-                        }
-                        else {
-                            *imageOutX = *imageInX;
-                        }
-                    }
+                for ( ; transformY != transformYEnd; transformY += widthOut ) {
+                    memset( transformY, static_cast<uint8_t>( 0 ), widthRoiOut );
                 }
             }
-            else {
-                const uint8_t * transformInY = in.transform() + offsetInY;
-                uint8_t * transformOutY = out.transform() + offsetOutY;
 
-                for ( int32_t y = 0; y < heightRoiOut; ++y, imageOutY += widthOut, transformOutY += widthOut ) {
-                    const double posY = static_cast<double>( y * heightRoiIn ) / heightRoiOut;
-                    const int32_t startY = static_cast<int32_t>( posY );
-                    const double coeffY = posY - startY;
+            for ( ; imageOutY != imageOutYEnd; imageOutY += widthOut, ++idY ) {
+                uint8_t * imageOutX = imageOutY;
 
-                    uint8_t * imageOutX = imageOutY;
-                    uint8_t * transformOutX = transformOutY;
+                const int32_t offset = ( ( idY * heightRoiIn ) / heightRoiOut ) * widthIn;
+                const uint8_t * imageInX = imageInY + offset;
 
-                    for ( int32_t x = 0; x < widthRoiOut; ++x, ++imageOutX, ++transformOutX ) {
-                        const double posX = positionX[x];
-                        const int32_t startX = static_cast<int32_t>( posX );
-                        const int32_t offsetIn = startY * widthIn + startX;
+                for ( const int32_t posX : positionX ) {
+                    *imageOutX = *( imageInX + posX );
+                    ++imageOutX;
+                }
+            }
+        }
+        else if ( out.singleLayer() ) {
+            const uint8_t * transformInY = in.transform() + offsetInY;
 
-                        const uint8_t * imageInX = imageInY + offsetIn;
-                        const uint8_t * transformInX = transformInY + offsetIn;
+            for ( ; imageOutY != imageOutYEnd; imageOutY += widthOut, ++idY ) {
+                uint8_t * imageOutX = imageOutY;
 
-                        if ( posX < widthIn - 1 && posY < heightRoiIn - 1 ) {
-                            if ( *transformInX == 0 && *( transformInX + 1 ) == 0 && *( transformInX + widthRoiIn ) == 0 && *( transformInX + widthRoiIn + 1 ) == 0 ) {
-                                const double coeffX = posX - startX;
-                                const double coeff1 = ( 1 - coeffX ) * ( 1 - coeffY );
-                                const double coeff2 = coeffX * ( 1 - coeffY );
-                                const double coeff3 = ( 1 - coeffX ) * coeffY;
-                                const double coeff4 = coeffX * coeffY;
+                const int32_t offset = ( ( idY * heightRoiIn ) / heightRoiOut ) * widthIn;
+                const uint8_t * imageInX = imageInY + offset;
+                const uint8_t * transformInX = transformInY + offset;
 
-                                const uint8_t * id1 = gamePalette + static_cast<uint32_t>( *imageInX ) * 3;
-                                const uint8_t * id2 = gamePalette + static_cast<uint32_t>( *( imageInX + 1 ) ) * 3;
-                                const uint8_t * id3 = gamePalette + static_cast<uint32_t>( *( imageInX + widthIn ) ) * 3;
-                                const uint8_t * id4 = gamePalette + static_cast<uint32_t>( *( imageInX + widthIn + 1 ) ) * 3;
-
-                                const double red = *id1 * coeff1 + *id2 * coeff2 + *id3 * coeff3 + *id4 * coeff4 + 0.5;
-                                const double green = *( id1 + 1 ) * coeff1 + *( id2 + 1 ) * coeff2 + *( id3 + 1 ) * coeff3 + *( id4 + 1 ) * coeff4 + 0.5;
-                                const double blue = *( id1 + 2 ) * coeff1 + *( id2 + 2 ) * coeff2 + *( id3 + 2 ) * coeff3 + *( id4 + 2 ) * coeff4 + 0.5;
-
-                                *imageOutX = GetPALColorId( static_cast<uint8_t>( red ), static_cast<uint8_t>( green ), static_cast<uint8_t>( blue ) );
-                            }
-                            else {
-                                *imageOutX = *imageInX;
-                            }
+                for ( const int32_t posX : positionX ) {
+                    const uint8_t * transformIn = transformInX + posX;
+                    if ( *transformIn > 0 ) {
+                        if ( *transformIn != 1 ) {
+                            // Apply a transformation.
+                            *imageOutX = *( transformTable + static_cast<ptrdiff_t>( *transformIn ) * 256 + *imageOutX );
                         }
-                        else {
-                            *imageOutX = *imageInX;
-                        }
-
-                        *transformOutX = *transformInX;
                     }
+                    else {
+                        *imageOutX = *( imageInX + posX );
+                    }
+
+                    ++imageOutX;
                 }
             }
         }
         else {
-            const uint8_t * imageOutYEnd = imageOutY + widthOut * heightRoiOut;
-            int32_t idY = 0;
+            // Both 'in' and 'out' are double-layer.
+            const uint8_t * transformInY = in.transform() + offsetInY;
+            uint8_t * transformOutY = out.transform() + offsetOutY;
 
-            // Pre-calculation of X position
-            std::vector<int32_t> positionX( widthRoiOut );
-            for ( int32_t x = 0; x < widthRoiOut; ++x ) {
-                positionX[x] = ( x * widthRoiIn ) / widthRoiOut;
-            }
+            for ( ; imageOutY != imageOutYEnd; imageOutY += widthOut, transformOutY += widthOut, ++idY ) {
+                uint8_t * imageOutX = imageOutY;
+                uint8_t * transformOutX = transformOutY;
 
-            if ( in.singleLayer() && out.singleLayer() ) {
-                for ( ; imageOutY != imageOutYEnd; imageOutY += widthOut, ++idY ) {
-                    uint8_t * imageOutX = imageOutY;
+                const int32_t offset = ( ( idY * heightRoiIn ) / heightRoiOut ) * widthIn;
+                const uint8_t * imageInX = imageInY + offset;
+                const uint8_t * transformInX = transformInY + offset;
 
-                    const int32_t offset = ( ( idY * heightRoiIn ) / heightRoiOut ) * widthIn;
-                    const uint8_t * imageInX = imageInY + offset;
-
-                    for ( const int32_t posX : positionX ) {
-                        *imageOutX = *( imageInX + posX );
-                        ++imageOutX;
-                    }
-                }
-            }
-            else {
-                const uint8_t * transformInY = in.transform() + offsetInY;
-                uint8_t * transformOutY = out.transform() + offsetOutY;
-
-                for ( ; imageOutY != imageOutYEnd; imageOutY += widthOut, transformOutY += widthOut, ++idY ) {
-                    uint8_t * imageOutX = imageOutY;
-                    uint8_t * transformOutX = transformOutY;
-
-                    const int32_t offset = ( ( idY * heightRoiIn ) / heightRoiOut ) * widthIn;
-                    const uint8_t * imageInX = imageInY + offset;
-                    const uint8_t * transformInX = transformInY + offset;
-
-                    for ( const int32_t posX : positionX ) {
-                        *imageOutX = *( imageInX + posX );
-                        *transformOutX = *( transformInX + posX );
-                        ++imageOutX;
-                        ++transformOutX;
-                    }
+                for ( const int32_t posX : positionX ) {
+                    *imageOutX = *( imageInX + posX );
+                    *transformOutX = *( transformInX + posX );
+                    ++imageOutX;
+                    ++transformOutX;
                 }
             }
         }
@@ -2976,6 +2913,157 @@ namespace fheroes2
         Copy( in, inX + widthIn - cornerWidth, inY + heightIn - cornerHeight, out, widthOut - cornerWidth, heightOut - cornerHeight, cornerWidth, cornerHeight );
 
         return out;
+    }
+
+    void SubpixelResize( const Image & in, Image & out )
+    {
+        if ( in.empty() || out.empty() ) {
+            return;
+        }
+
+        SubpixelResize( in, 0, 0, in.width(), in.height(), out, 0, 0, out.width(), out.height() );
+    }
+
+    void SubpixelResize( const Image & in, const int32_t inX, const int32_t inY, const int32_t widthRoiIn, const int32_t heightRoiIn, Image & out, const int32_t outX,
+                         const int32_t outY, const int32_t widthRoiOut, const int32_t heightRoiOut )
+    {
+        if ( !Validate( in, inX, inY, widthRoiIn, heightRoiIn ) || !Validate( out, outX, outY, widthRoiOut, heightRoiOut ) ) {
+            return;
+        }
+
+        if ( widthRoiIn == widthRoiOut && heightRoiIn == heightRoiOut ) {
+            Copy( in, inX, inY, out, outX, outY, widthRoiIn, heightRoiIn );
+            return;
+        }
+
+        const int32_t widthIn = in.width();
+        const int32_t widthOut = out.width();
+
+        const int32_t offsetInY = inY * widthIn + inX;
+        const int32_t offsetOutY = outY * widthOut + outX;
+
+        const uint8_t * imageInY = in.image() + offsetInY;
+        uint8_t * imageOutY = out.image() + offsetOutY;
+
+        std::vector<double> positionX( widthRoiOut );
+        for ( int32_t x = 0; x < widthRoiOut; ++x ) {
+            positionX[x] = static_cast<double>( x * widthRoiIn ) / widthRoiOut;
+        }
+
+        const uint8_t * gamePalette = getGamePalette();
+
+        if ( in.singleLayer() ) {
+            if ( !out.singleLayer() ) {
+                // In this case we make the output image fully non-transparent in the given output area.
+
+                uint8_t * transformY = out.transform() + static_cast<ptrdiff_t>( outY ) * widthOut + outX;
+                const uint8_t * transformYEnd = transformY + static_cast<ptrdiff_t>( heightRoiOut ) * widthOut;
+
+                for ( ; transformY != transformYEnd; transformY += widthOut ) {
+                    memset( transformY, static_cast<uint8_t>( 0 ), widthRoiOut );
+                }
+            }
+
+            for ( int32_t y = 0; y < heightRoiOut; ++y, imageOutY += widthOut ) {
+                const double posY = static_cast<double>( y * heightRoiIn ) / heightRoiOut;
+                const int32_t startY = static_cast<int32_t>( posY ) * widthIn;
+                const double coeffY = posY - static_cast<int32_t>( posY );
+
+                uint8_t * imageOutX = imageOutY;
+
+                for ( int32_t x = 0; x < widthRoiOut; ++x, ++imageOutX ) {
+                    const double posX = positionX[x];
+                    const int32_t startX = static_cast<int32_t>( posX );
+                    const int32_t offsetIn = startY + startX;
+
+                    const uint8_t * imageInX = imageInY + offsetIn;
+
+                    if ( posX < widthRoiIn - 1 && posY < heightRoiIn - 1 ) {
+                        const double coeffX = posX - startX;
+                        const double coeff1 = ( 1 - coeffX ) * ( 1 - coeffY );
+                        const double coeff2 = coeffX * ( 1 - coeffY );
+                        const double coeff3 = ( 1 - coeffX ) * coeffY;
+                        const double coeff4 = coeffX * coeffY;
+
+                        const uint8_t * id1 = gamePalette + static_cast<size_t>( *imageInX ) * 3;
+                        const uint8_t * id2 = gamePalette + static_cast<size_t>( *( imageInX + 1 ) ) * 3;
+                        const uint8_t * id3 = gamePalette + static_cast<size_t>( *( imageInX + widthIn ) ) * 3;
+                        const uint8_t * id4 = gamePalette + static_cast<size_t>( *( imageInX + widthIn + 1 ) ) * 3;
+
+                        const double red = *id1 * coeff1 + *id2 * coeff2 + *id3 * coeff3 + *id4 * coeff4 + 0.5;
+                        const double green = *( id1 + 1 ) * coeff1 + *( id2 + 1 ) * coeff2 + *( id3 + 1 ) * coeff3 + *( id4 + 1 ) * coeff4 + 0.5;
+                        const double blue = *( id1 + 2 ) * coeff1 + *( id2 + 2 ) * coeff2 + *( id3 + 2 ) * coeff3 + *( id4 + 2 ) * coeff4 + 0.5;
+
+                        *imageOutX = GetPALColorId( static_cast<uint8_t>( red ), static_cast<uint8_t>( green ), static_cast<uint8_t>( blue ) );
+                    }
+                    else {
+                        *imageOutX = *imageInX;
+                    }
+                }
+            }
+        }
+        else {
+            const uint8_t * transformInY = in.transform() + offsetInY;
+            const bool isOutNotSingleLayer = !out.singleLayer();
+            uint8_t * transformOutY = isOutNotSingleLayer ? ( out.transform() + offsetOutY ) : nullptr;
+
+            for ( int32_t y = 0; y < heightRoiOut; ++y, imageOutY += widthOut ) {
+                const double posY = static_cast<double>( y * heightRoiIn ) / heightRoiOut;
+                const int32_t startY = static_cast<int32_t>( posY ) * widthIn;
+                const double coeffY = posY - static_cast<int32_t>( posY );
+
+                uint8_t * imageOutX = imageOutY;
+                uint8_t * transformOutX = transformOutY;
+
+                for ( int32_t x = 0; x < widthRoiOut; ++x, ++imageOutX ) {
+                    const double posX = positionX[x];
+                    const int32_t startX = static_cast<int32_t>( posX );
+                    const int32_t offsetIn = startY + startX;
+
+                    const uint8_t * imageInX = imageInY + offsetIn;
+                    const uint8_t * transformInX = transformInY + offsetIn;
+
+                    if ( posX < widthIn - 1 && posY < heightRoiIn - 1 && *transformInX == 0 && *( transformInX + 1 ) == 0 && *( transformInX + widthRoiIn ) == 0
+                         && *( transformInX + widthRoiIn + 1 ) == 0 ) {
+                        const double coeffX = posX - startX;
+                        const double coeff1 = ( 1 - coeffX ) * ( 1 - coeffY );
+                        const double coeff2 = coeffX * ( 1 - coeffY );
+                        const double coeff3 = ( 1 - coeffX ) * coeffY;
+                        const double coeff4 = coeffX * coeffY;
+
+                        const uint8_t * id1 = gamePalette + static_cast<size_t>( *imageInX ) * 3;
+                        const uint8_t * id2 = gamePalette + static_cast<size_t>( *( imageInX + 1 ) ) * 3;
+                        const uint8_t * id3 = gamePalette + static_cast<size_t>( *( imageInX + widthIn ) ) * 3;
+                        const uint8_t * id4 = gamePalette + static_cast<size_t>( *( imageInX + widthIn + 1 ) ) * 3;
+
+                        const double red = *id1 * coeff1 + *id2 * coeff2 + *id3 * coeff3 + *id4 * coeff4 + 0.5;
+                        const double green = *( id1 + 1 ) * coeff1 + *( id2 + 1 ) * coeff2 + *( id3 + 1 ) * coeff3 + *( id4 + 1 ) * coeff4 + 0.5;
+                        const double blue = *( id1 + 2 ) * coeff1 + *( id2 + 2 ) * coeff2 + *( id3 + 2 ) * coeff3 + *( id4 + 2 ) * coeff4 + 0.5;
+
+                        *imageOutX = GetPALColorId( static_cast<uint8_t>( red ), static_cast<uint8_t>( green ), static_cast<uint8_t>( blue ) );
+                    }
+                    else {
+                        if ( isOutNotSingleLayer || *transformInX == 0 ) {
+                            // Output image is double-layer or single-layer with non-transparent current pixel.
+                            *imageOutX = *imageInX;
+                        }
+                        else if ( *transformInX != 1 ) {
+                            // Apply a transformation.
+                            *imageOutX = *( transformTable + static_cast<ptrdiff_t>( *transformInX ) * 256 + *imageOutX );
+                        }
+                    }
+
+                    if ( isOutNotSingleLayer ) {
+                        *transformOutX = *transformInX;
+                        ++transformOutX;
+                    }
+                }
+
+                if ( isOutNotSingleLayer ) {
+                    transformOutY += widthOut;
+                }
+            }
+        }
     }
 
     void Transpose( const Image & in, Image & out )

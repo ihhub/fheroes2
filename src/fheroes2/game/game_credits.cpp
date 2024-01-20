@@ -729,14 +729,14 @@ void Game::ShowCredits( const bool keepMainMenuBorders )
         fheroes2::Sprite resizedPage;
         resizedPage._disableTransformLayer();
         resizedPage.resize( creditsRoi.width, resizedPageHeight );
-        fheroes2::Resize( page, resizedPage, false );
+        fheroes2::Resize( page, resizedPage );
         page = std::move( resizedPage );
     }
 
     fheroes2::Sprite header;
     header._disableTransformLayer();
     header.resize( creditsRoi.width, creditsRoi.height - resizedPageHeight );
-    fheroes2::Resize( generateHeader(), header, false );
+    fheroes2::Resize( generateHeader(), header );
 
     AnimationSequence sequence( static_cast<int32_t>( pages.size() ) );
 
