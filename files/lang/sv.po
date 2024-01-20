@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-19 14:45+0000\n"
-"PO-Revision-Date: 2024-01-19 18:29+0100\n"
+"POT-Creation-Date: 2024-01-20 03:11+0000\n"
+"PO-Revision-Date: 2023-12-25 14:31+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "Language: sv\n"
@@ -557,6 +557,9 @@ msgstr "OK"
 msgid "The enemy has surrendered!"
 msgstr "Fienden har kapitulerat!"
 
+msgid "Their cowardice costs them %{gold} gold."
+msgstr ""
+
 msgid "The enemy has fled!"
 msgstr "Fienden har flytt!"
 
@@ -572,11 +575,13 @@ msgstr "Fegisen %{name} flyr från striden."
 msgid "%{name} surrenders to the enemy, and departs in shame."
 msgstr "%{name} ger sig till fienden och ger sig av i skam."
 
-msgid "Your force suffer a bitter defeat, and %{name} abandons your cause."
+#, fuzzy
+msgid "Your forces suffer a bitter defeat, and %{name} abandons your cause."
 msgstr ""
 "Dina trupper lider en bitter förlust och %{name} lämnar dig och dina trupper."
 
-msgid "Your force suffer a bitter defeat."
+#, fuzzy
+msgid "Your forces suffer a bitter defeat."
 msgstr "Dina trupper lider en bitter förlust."
 
 msgid "Battlefield Casualties"
@@ -588,14 +593,25 @@ msgstr "Angripare"
 msgid "Defender"
 msgstr "Försvarare"
 
+#, fuzzy
+msgid "Click to leave the battle results."
+msgstr "Klicka här för att anta den valda upplösningen."
+
+#, fuzzy
+msgid "Click to restart the battle in manual mode."
+msgstr "Klicka för att gå tillbaka till huvudmenyn."
+
+msgid "Restart"
+msgstr "Omstart"
+
+msgid "You have captured an enemy artifact!"
+msgstr "Du har tillfångatagit fiendens artefakt!"
+
 msgid "As you reach for the %{name}, it mysteriously disappears."
 msgstr "När du försöker ta %{name}, så försvinner den plötsligt."
 
 msgid "As your enemy reaches for the %{name}, it mysteriously disappears."
 msgstr "När fienden försöker ta %{name}, så försvinner den plöstligt."
-
-msgid "You have captured an enemy artifact!"
-msgstr "Du har tillfångatagit fiendens artefakt!"
 
 msgid "Necromancy!"
 msgstr "Svartkonst!"
@@ -4149,9 +4165,6 @@ msgid ""
 "campaign."
 msgstr ""
 "Välj kampanjsvårighet. Svårighetsgraden kan sänkas senare under kampanjen."
-
-msgid "Restart"
-msgstr "Omstart"
 
 msgid "Restart the current scenario."
 msgstr "Omstarta nuvarande scenario."

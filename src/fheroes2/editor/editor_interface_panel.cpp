@@ -117,8 +117,9 @@ namespace
 
     fheroes2::Image makeInstrumentPanelBackground( const int32_t width, const int32_t height )
     {
-        fheroes2::Image background( width, height );
+        fheroes2::Image background;
         background._disableTransformLayer();
+        background.resize( width, height );
         fheroes2::StandardWindow::renderBackgroundImage( background, { 0, 0, width, height }, 0, Settings::Get().isEvilInterfaceEnabled() );
 
         // Make background borders: it consists of rectangles with different transform shading.

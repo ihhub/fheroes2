@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-19 14:45+0000\n"
+"POT-Creation-Date: 2024-01-20 03:11+0000\n"
 "PO-Revision-Date: 2022-10-25 08:56+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
@@ -508,6 +508,9 @@ msgstr "OK"
 msgid "The enemy has surrendered!"
 msgstr "O inimigo desistiu!"
 
+msgid "Their cowardice costs them %{gold} gold."
+msgstr ""
+
 msgid "The enemy has fled!"
 msgstr "O inimigo fugiu!"
 
@@ -523,10 +526,10 @@ msgstr "O covarde %{name} fugiu da batalha."
 msgid "%{name} surrenders to the enemy, and departs in shame."
 msgstr "%{name} rende-se ao inimigo, e retira-se na vergonha."
 
-msgid "Your force suffer a bitter defeat, and %{name} abandons your cause."
+msgid "Your forces suffer a bitter defeat, and %{name} abandons your cause."
 msgstr ""
 
-msgid "Your force suffer a bitter defeat."
+msgid "Your forces suffer a bitter defeat."
 msgstr ""
 
 msgid "Battlefield Casualties"
@@ -538,14 +541,25 @@ msgstr "Agressor"
 msgid "Defender"
 msgstr "Defensor"
 
+#, fuzzy
+msgid "Click to leave the battle results."
+msgstr "Salvar o jogo atual."
+
+#, fuzzy
+msgid "Click to restart the battle in manual mode."
+msgstr "Clique para retornar ao menu principal."
+
+msgid "Restart"
+msgstr ""
+
+msgid "You have captured an enemy artifact!"
+msgstr "Vou capturou um artefato inimigo!"
+
 msgid "As you reach for the %{name}, it mysteriously disappears."
 msgstr ""
 
 msgid "As your enemy reaches for the %{name}, it mysteriously disappears."
 msgstr ""
-
-msgid "You have captured an enemy artifact!"
-msgstr "Vou capturou um artefato inimigo!"
 
 #, fuzzy
 msgid "Necromancy!"
@@ -4120,9 +4134,6 @@ msgstr ""
 msgid ""
 "Select the campaign difficulty. This can be lowered at any point during the "
 "campaign."
-msgstr ""
-
-msgid "Restart"
 msgstr ""
 
 #, fuzzy

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-19 14:45+0000\n"
+"POT-Creation-Date: 2024-01-20 03:11+0000\n"
 "PO-Revision-Date: 2023-12-13 05:57+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -562,6 +562,9 @@ msgstr "Vale"
 msgid "The enemy has surrendered!"
 msgstr "¡El enemigo se ha rendido!"
 
+msgid "Their cowardice costs them %{gold} gold."
+msgstr ""
+
 msgid "The enemy has fled!"
 msgstr "¡El enemigo ha huido!"
 
@@ -577,10 +580,12 @@ msgstr "El cobarde %{name} huye de la batalla."
 msgid "%{name} surrenders to the enemy, and departs in shame."
 msgstr "%{name} se rinde al enemigo, marchandose avergonzado."
 
-msgid "Your force suffer a bitter defeat, and %{name} abandons your cause."
+#, fuzzy
+msgid "Your forces suffer a bitter defeat, and %{name} abandons your cause."
 msgstr "Tus fuerzas sufren una amarga derrota, y  %{name} abandona tu causa."
 
-msgid "Your force suffer a bitter defeat."
+#, fuzzy
+msgid "Your forces suffer a bitter defeat."
 msgstr "Tus fuerzas sufren una amarga derrota."
 
 msgid "Battlefield Casualties"
@@ -592,14 +597,25 @@ msgstr "Agresor"
 msgid "Defender"
 msgstr "Defensor"
 
+#, fuzzy
+msgid "Click to leave the battle results."
+msgstr "Haz clic para volver al menú principal"
+
+#, fuzzy
+msgid "Click to restart the battle in manual mode."
+msgstr "Haz clic para volver al menú principal"
+
+msgid "Restart"
+msgstr ""
+
+msgid "You have captured an enemy artifact!"
+msgstr "¡Has capturado un artefacto enemigo!"
+
 msgid "As you reach for the %{name}, it mysteriously disappears."
 msgstr ""
 
 msgid "As your enemy reaches for the %{name}, it mysteriously disappears."
 msgstr ""
-
-msgid "You have captured an enemy artifact!"
-msgstr "¡Has capturado un artefacto enemigo!"
 
 msgid "Necromancy!"
 msgstr "¡Nigromancia!"
@@ -4217,9 +4233,6 @@ msgstr ""
 msgid ""
 "Select the campaign difficulty. This can be lowered at any point during the "
 "campaign."
-msgstr ""
-
-msgid "Restart"
 msgstr ""
 
 #, fuzzy
