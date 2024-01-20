@@ -71,7 +71,7 @@ public:
             return _zoomLevel;
         }
 
-        fheroes2::Point getCenter() const
+        const fheroes2::Point & getCenter() const
         {
             return _center;
         }
