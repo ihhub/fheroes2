@@ -41,6 +41,7 @@
 #include "heroes.h"
 #include "icn.h"
 #include "logging.h"
+#include "maps_fileinfo.h"
 #include "rand.h"
 #include "serialize.h"
 #include "settings.h"
@@ -249,8 +250,10 @@ int Artifact::Level() const
     case SWORD_ANDURAN:
     case SPADE_NECROMANCY:
     case HEART_FIRE:
-    case HEART_ICE:
-        return Settings::Get().isCurrentMapPriceOfLoyalty() ? ART_LOYALTY | LoyaltyLevel() : ART_LOYALTY;
+    case HEART_ICE: {
+        const GameVersion version = Settings::Get().getCurrentMapInfo().version;
+        return ( version == GameVersion::PRICE_OF_LOYALTY || version == GameVersion::RESURRECTION ) ? ART_LOYALTY | LoyaltyLevel() : ART_LOYALTY;
+    }
 
     default:
         break;
@@ -839,8 +842,11 @@ bool BagArtifacts::PushArtifact( const Artifact & art )
 void BagArtifacts::RemoveArtifact( const Artifact & art )
 {
     iterator it = std::find( begin(), end(), art );
-    if ( it != end() )
-        ( *it ).Reset();
+    if ( it == end() ) {
+        return;
+    }
+
+    it->Reset();
 }
 
 bool BagArtifacts::isFull() const
@@ -1185,6 +1191,7 @@ bool ArtifactsBar::ActionBarLeftMouseSingleClick( Artifact & art )
 
             if ( isMagicBook( art ) ) {
                 art.Reset();
+
                 const_cast<Heroes *>( _hero )->SpellBookActivate();
             }
             else if ( art.GetID() == Artifact::SPELL_SCROLL ) {
@@ -1223,7 +1230,12 @@ bool ArtifactsBar::ActionBarRightMouseHold( Artifact & art )
 
     if ( art.isValid() ) {
         if ( can_change ) {
-            art.Reset();
+            if ( isMagicBook( art ) ) {
+                const_cast<Heroes *>( _hero )->SpellBookDeactivate();
+            }
+            else {
+                art.Reset();
+            }
         }
         else {
             fheroes2::ArtifactDialogElement( art ).showPopup( Dialog::ZERO );

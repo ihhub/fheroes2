@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -81,7 +81,7 @@ namespace Dialog
         BUTTONS = ( YES | OK | NO | CANCEL )
     };
 
-    int AdventureOptions( bool enabledig );
+    int AdventureOptions( const bool enableDig );
     fheroes2::GameMode FileOptions();
     std::string SelectFileLoad();
     std::string SelectFileSave();
@@ -163,17 +163,39 @@ namespace Dialog
     {
     public:
         explicit FrameBorder( int v = BORDERWIDTH );
-        explicit FrameBorder( const fheroes2::Size & );
         FrameBorder( const fheroes2::Size &, const fheroes2::Image & );
 
-        int BorderWidth() const;
-        int BorderHeight() const;
+        int BorderWidth() const
+        {
+            return border;
+        }
+
+        int BorderHeight() const
+        {
+            return border;
+        }
+
         void SetPosition( int32_t posx, int32_t posy, int32_t encw, int32_t ench );
 
-        bool isValid() const;
-        const fheroes2::Rect & GetRect() const;
-        const fheroes2::Rect & GetArea() const;
-        const fheroes2::Rect & GetTop() const;
+        bool isValid() const
+        {
+            return rect.width != 0 && rect.height != 0;
+        }
+
+        const fheroes2::Rect & GetRect() const
+        {
+            return rect;
+        }
+
+        const fheroes2::Rect & GetArea() const
+        {
+            return area;
+        }
+
+        const fheroes2::Rect & GetTop() const
+        {
+            return top;
+        }
 
         static void RenderRegular( const fheroes2::Rect & dstrt );
         static void RenderOther( const fheroes2::Image &, const fheroes2::Rect & );

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -344,7 +344,7 @@ public:
 
     void setObjectTypeUnderHero( const MP2::MapObjectType objectType )
     {
-        _objectTypeUnderHero = ( ( objectType != MP2::OBJ_HEROES ) ? objectType : MP2::OBJ_NONE );
+        _objectTypeUnderHero = ( ( objectType != MP2::OBJ_HERO ) ? objectType : MP2::OBJ_NONE );
     }
 
     const fheroes2::Point & GetPatrolCenter() const
@@ -524,8 +524,23 @@ public:
 
     fheroes2::Point getCurrentPixelOffset() const;
 
-    void FadeOut( const fheroes2::Point & offset = fheroes2::Point() ) const;
-    void FadeIn( const fheroes2::Point & offset = fheroes2::Point() ) const;
+    // Performs a hero fade-out animation with the given speed multiplier and an optional offset
+    void FadeOut( const int animSpeedMultiplier, const fheroes2::Point & offset = fheroes2::Point() ) const;
+
+    // Performs a hero fade-in animation with the given speed multiplier and an optional offset
+    void FadeIn( const int animSpeedMultiplier, const fheroes2::Point & offset = fheroes2::Point() ) const;
+
+    // Performs a hero fade-out animation with an optional offset at the lowest possible speed
+    void FadeOut( const fheroes2::Point & offset = fheroes2::Point() ) const
+    {
+        FadeOut( 1, offset );
+    }
+
+    // Performs a hero fade-in animation with an optional offset at the lowest possible speed
+    void FadeIn( const fheroes2::Point & offset = fheroes2::Point() ) const
+    {
+        FadeIn( 1, offset );
+    }
 
     void Scout( const int tileIndex ) const;
     int GetScoutingDistance() const;

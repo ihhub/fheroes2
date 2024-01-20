@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2023                                             *
+ *   Copyright (C) 2020 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -24,6 +24,7 @@
 #include <cassert>
 #include <cstddef>
 #include <cstdint>
+#include <functional>
 #include <set>
 #include <tuple>
 #include <vector>
@@ -43,14 +44,14 @@ namespace Battle
 {
     void BattlePathfinder::reEvaluateIfNeeded( const Unit & unit )
     {
-        assert( unit.GetHeadIndex() != -1 && ( !unit.isWide() || unit.GetTailIndex() != -1 ) );
+        assert( unit.GetHeadIndex() != -1 && ( unit.isWide() ? unit.GetTailIndex() != -1 : unit.GetTailIndex() == -1 ) );
 
         const Board * board = Arena::GetBoard();
         assert( board != nullptr );
 
         // Passability of the board cells can change during the unit's turn even without its intervention (for example, because of a hero's spell cast),
         // we need to keep track of this
-        std::bitset<ARENASIZE> boardStatus;
+        std::array<bool, ARENASIZE> boardStatus{};
         for ( const Cell & cell : *board ) {
             const int32_t cellIdx = cell.GetIndex();
             assert( Board::isValidIndex( cellIdx ) );
@@ -60,7 +61,7 @@ namespace Battle
 
         auto currentSettings = std::tie( _pathStart, _speed, _isWide, _isFlying, _color, _boardStatus );
         const auto newSettings = std::make_tuple( BattleNodeIndex{ unit.GetHeadIndex(), unit.GetTailIndex() }, unit.GetSpeed(), unit.isWide(), unit.isFlying(),
-                                                  unit.GetColor(), boardStatus );
+                                                  unit.GetColor(), std::cref( boardStatus ) );
 
         // If all the current parameters match the parameters for which the current cache was built, then there is no need to rebuild it
         if ( currentSettings == newSettings ) {
@@ -84,7 +85,7 @@ namespace Battle
                     continue;
                 }
 
-                assert( !_isWide || pos.GetTail() != nullptr );
+                assert( pos.isValidForUnit( unit ) );
 
                 const int32_t headCellIdx = pos.GetHead()->GetIndex();
                 const int32_t tailCellIdx = pos.GetTail() ? pos.GetTail()->GetIndex() : -1;

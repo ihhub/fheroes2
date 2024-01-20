@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -438,18 +438,20 @@ namespace Battle
         void RedrawBackground( const fheroes2::Point & /* unused*/ ) override
         {
             fheroes2::Display & display = fheroes2::Display::instance();
-            const fheroes2::Sprite & sp1 = fheroes2::AGG::GetICN( ICN::DROPLISL, 10 );
-            const fheroes2::Sprite & sp2 = fheroes2::AGG::GetICN( ICN::DROPLISL, 12 );
-            const fheroes2::Sprite & sp3 = fheroes2::AGG::GetICN( ICN::DROPLISL, 11 );
+
             const int32_t ax = buttonPgUp.area().x;
             const int32_t ah = buttonPgDn.area().y - ( buttonPgUp.area().y + buttonPgUp.area().height );
 
             const fheroes2::Rect & borderRect = border.GetRect();
             Dialog::FrameBorder::RenderOther( fheroes2::AGG::GetICN( ICN::TEXTBAK2, 0 ), borderRect );
 
+            const fheroes2::Sprite & sp3 = fheroes2::AGG::GetICN( ICN::DROPLISL, 11 );
             for ( int32_t i = 0; i < ( ah / sp3.height() ); ++i ) {
                 fheroes2::Copy( sp3, 0, 0, display, ax, buttonPgUp.area().y + buttonPgUp.area().height + ( sp3.height() * i ), sp3.width(), sp3.height() );
             }
+
+            const fheroes2::Sprite & sp1 = fheroes2::AGG::GetICN( ICN::DROPLISL, 10 );
+            const fheroes2::Sprite & sp2 = fheroes2::AGG::GetICN( ICN::DROPLISL, 12 );
 
             fheroes2::Copy( sp1, 0, 0, display, ax, buttonPgUp.area().y + buttonPgUp.area().height, sp1.width(), sp1.height() );
             fheroes2::Copy( sp2, 0, 0, display, ax, buttonPgDn.area().y - sp2.height(), sp2.width(), sp2.height() );
@@ -1243,9 +1245,6 @@ Battle::Interface::Interface( Arena & battleArena, const int32_t tileIndex )
     // Shadow that fits the hexagon grid.
     _hexagonGridShadow = DrawHexagonShadow( 4, 1 );
 
-    // As '_mainSurface' is used to prepare battlefield screen to render on display it does not need to have a transform layer.
-    _mainSurface._disableTransformLayer();
-
     btn_auto.setICNInfo( ICN::TEXTBAR, 4, 5 );
     btn_settings.setICNInfo( ICN::TEXTBAR, 6, 7 );
 
@@ -1278,13 +1277,13 @@ Battle::Interface::Interface( Arena & battleArena, const int32_t tileIndex )
     }
     status.SetLogs( listlog.get() );
 
-    // Battlefield area excludes the lower part where the status log is located.
-    _mainSurface.resize( area.width, battlefieldHeight );
-    _battleGround.resize( area.width, battlefieldHeight );
-
     // As `_battleGround` and '_mainSurface' are used to prepare battlefield screen to render on display they do not need to have a transform layer.
     _battleGround._disableTransformLayer();
     _mainSurface._disableTransformLayer();
+
+    // Battlefield area excludes the lower part where the status log is located.
+    _mainSurface.resize( area.width, battlefieldHeight );
+    _battleGround.resize( area.width, battlefieldHeight );
 
     AudioManager::ResetAudio();
 }
@@ -2230,9 +2229,8 @@ void Battle::Interface::_redrawCoverStatic()
 
         for ( const Cell & cell : board ) {
             const Position pos = Position::GetReachable( *_currentUnit, cell.GetIndex() );
-
             if ( pos.GetHead() != nullptr ) {
-                assert( !_currentUnit->isWide() || pos.GetTail() != nullptr );
+                assert( pos.isValidForUnit( _currentUnit ) );
 
                 fheroes2::Blit( shadowImage, _mainSurface, cell.GetPos().x, cell.GetPos().y );
             }
@@ -2527,9 +2525,8 @@ int Battle::Interface::GetBattleCursor( std::string & statusMsg ) const
 
         if ( unit == nullptr || _currentUnit == unit ) {
             const Position pos = Position::GetReachable( *_currentUnit, index_pos );
-
             if ( pos.GetHead() != nullptr ) {
-                assert( !_currentUnit->isWide() || pos.GetTail() != nullptr );
+                assert( pos.isValidForUnit( _currentUnit ) );
 
                 if ( pos.GetHead()->GetIndex() == _currentUnit->GetHeadIndex() ) {
                     assert( !_currentUnit->isWide() || pos.GetTail()->GetIndex() == _currentUnit->GetTailIndex() );
@@ -3058,8 +3055,9 @@ void Battle::Interface::FadeArena( const bool clearMessageLog )
     Redraw();
 
     const fheroes2::Rect srt = border.GetArea();
-    fheroes2::Image top( srt.width, srt.height );
+    fheroes2::Image top;
     top._disableTransformLayer();
+    top.resize( srt.width, srt.height );
 
     fheroes2::Copy( display, srt.x, srt.y, top, 0, 0, srt.width, srt.height );
     fheroes2::FadeDisplayWithPalette( top, srt.getPosition(), 5, 300, 5 );
@@ -5493,8 +5491,9 @@ void Battle::Interface::RedrawActionDeathWaveSpell( const int32_t strength )
         area.height -= listlog->GetArea().height;
     }
 
-    fheroes2::Image battleFieldCopy( area.width, area.height );
+    fheroes2::Image battleFieldCopy;
     battleFieldCopy._disableTransformLayer();
+    battleFieldCopy.resize( area.width, area.height );
     fheroes2::Copy( _mainSurface, 0, 0, battleFieldCopy, 0, 0, area.width, area.height );
 
     // The death wave horizontal length in pixels.
@@ -5518,9 +5517,10 @@ void Battle::Interface::RedrawActionDeathWaveSpell( const int32_t strength )
     int32_t position = waveStep;
     fheroes2::Display & display = fheroes2::Display::instance();
 
-    // Prepare the blank image for the Death Wave spell effect with the transform layer equal to "0"
-    fheroes2::Image spellEffect( waveLength, area.height );
+    // Prepare the blank image for the Death Wave spell effect.
+    fheroes2::Image spellEffect;
     spellEffect._disableTransformLayer();
+    spellEffect.resize( waveLength, area.height );
 
     AudioManager::PlaySound( M82::MNRDEATH );
 
@@ -5623,8 +5623,9 @@ void Battle::Interface::RedrawActionHolyShoutSpell( const uint8_t strength )
         area.height -= listlog->GetArea().height;
     }
 
-    fheroes2::Image battleFieldCopy( area.width, area.height );
+    fheroes2::Image battleFieldCopy;
     battleFieldCopy._disableTransformLayer();
+    battleFieldCopy.resize( area.width, area.height );
     fheroes2::Copy( _mainSurface, 0, 0, battleFieldCopy, 0, 0, area.width, area.height );
 
     _currentUnit = nullptr;
@@ -5759,12 +5760,12 @@ void Battle::Interface::RedrawActionArmageddonSpell()
 
     area.height -= 37;
 
-    fheroes2::Image spriteWhitening( area.width, area.height );
-    fheroes2::Image spriteReddish( area.width, area.height );
+    fheroes2::Image spriteWhitening;
     spriteWhitening._disableTransformLayer();
-    spriteReddish._disableTransformLayer();
+    spriteWhitening.resize( area.width, area.height );
+
     fheroes2::Copy( _mainSurface, area.x, area.y, spriteWhitening, 0, 0, area.width, area.height );
-    fheroes2::Copy( _mainSurface, area.x, area.y, spriteReddish, 0, 0, area.width, area.height );
+    fheroes2::Image spriteReddish = spriteWhitening;
 
     cursor.SetThemes( Cursor::WAR_POINTER );
 
@@ -5831,8 +5832,9 @@ void Battle::Interface::RedrawActionEarthQuakeSpell( const std::vector<CastleDef
 
     cursor.SetThemes( Cursor::WAR_POINTER );
 
-    fheroes2::Image sprite( area.width, area.height );
+    fheroes2::Image sprite;
     sprite._disableTransformLayer();
+    sprite.resize( area.width, area.height );
     fheroes2::Copy( _mainSurface, area.x, area.y, sprite, 0, 0, area.width, area.height );
 
     _currentUnit = nullptr;

@@ -665,10 +665,8 @@ namespace Campaign
     {
         assert( !_scenarios.empty() );
         for ( const ScenarioData & scenario : _scenarios ) {
-            if ( scenario.getScenarioInfoId() == scenarioInfoId ) {
-                if ( scenario.getNextScenarios().empty() ) {
-                    return true;
-                }
+            if ( ( scenario.getScenarioInfoId() == scenarioInfoId ) && scenario.getNextScenarios().empty() ) {
+                return true;
             }
         }
 
@@ -727,7 +725,7 @@ namespace Campaign
             }
             break;
         case ARCHIBALD_CAMPAIGN:
-            if ( scenarioInfoId.scenarioId == 10 ) {
+            if ( scenarioInfoId.scenarioId == 5 || scenarioInfoId.scenarioId == 10 ) {
                 allAIPlayersInAlliance = true;
             }
             break;

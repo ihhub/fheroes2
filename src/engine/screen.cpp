@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2023                                             *
+ *   Copyright (C) 2020 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -277,17 +277,15 @@ namespace
                     for ( ; out != outEnd; ++out, ++in )
                         *out = *( transform + *in );
                 }
-                else if ( surface->format->BitsPerPixel == 8 ) {
-                    if ( surface->pixels != imageIn ) {
-                        if ( imageWidth % 4 != 0 ) {
-                            const int32_t screenWidth = ( imageWidth / 4 ) * 4 + 4;
-                            for ( int32_t i = 0; i < imageHeight; ++i ) {
-                                memcpy( static_cast<uint8_t *>( surface->pixels ) + screenWidth * i, imageIn + imageWidth * i, static_cast<size_t>( imageWidth ) );
-                            }
+                else if ( ( surface->format->BitsPerPixel == 8 ) && ( surface->pixels != imageIn ) ) {
+                    if ( imageWidth % 4 != 0 ) {
+                        const int32_t screenWidth = ( imageWidth / 4 ) * 4 + 4;
+                        for ( int32_t i = 0; i < imageHeight; ++i ) {
+                            memcpy( static_cast<uint8_t *>( surface->pixels ) + screenWidth * i, imageIn + imageWidth * i, static_cast<size_t>( imageWidth ) );
                         }
-                        else {
-                            memcpy( surface->pixels, imageIn, static_cast<size_t>( imageWidth * imageHeight ) );
-                        }
+                    }
+                    else {
+                        memcpy( surface->pixels, imageIn, static_cast<size_t>( imageWidth ) * imageHeight );
                     }
                 }
             }
@@ -307,15 +305,13 @@ namespace
                             *outX = *( transform + *inX );
                     }
                 }
-                else if ( surface->format->BitsPerPixel == 8 ) {
-                    if ( surface->pixels != imageIn ) {
-                        const int32_t screenWidth = ( imageWidth / 4 ) * 4 + 4;
-                        const int32_t screenOffset = roi.x + roi.y * screenWidth;
-                        const int32_t imageOffset = roi.x + roi.y * imageWidth;
-                        for ( int32_t i = 0; i < roi.height; ++i ) {
-                            memcpy( static_cast<uint8_t *>( surface->pixels ) + screenWidth * i + screenOffset, imageIn + imageOffset + imageWidth * i,
-                                    static_cast<size_t>( roi.width ) );
-                        }
+                else if ( ( surface->format->BitsPerPixel == 8 ) && ( surface->pixels != imageIn ) ) {
+                    const int32_t screenWidth = ( imageWidth / 4 ) * 4 + 4;
+                    const int32_t screenOffset = roi.x + roi.y * screenWidth;
+                    const int32_t imageOffset = roi.x + roi.y * imageWidth;
+                    for ( int32_t i = 0; i < roi.height; ++i ) {
+                        memcpy( static_cast<uint8_t *>( surface->pixels ) + screenWidth * i + screenOffset, imageIn + imageOffset + imageWidth * i,
+                                static_cast<size_t>( roi.width ) );
                     }
                 }
             }
@@ -363,6 +359,12 @@ namespace
 
         SDL_Surface * generateIconSurface( const fheroes2::Image & icon )
         {
+            if ( icon.empty() || icon.singleLayer() ) {
+                // What are you trying to do? Icon should have not empty both image and transform layers.
+                assert( 0 );
+                return nullptr;
+            }
+
             SDL_Surface * surface = SDL_CreateRGBSurface( 0, icon.width(), icon.height(), 32, 0xFF, 0xFF00, 0xFF0000, 0xFF000000 );
             if ( surface == nullptr ) {
                 ERROR_LOG( "Failed to create a surface of " << icon.width() << " x " << icon.height() << " size for cursor. The error: " << SDL_GetError() )
@@ -436,7 +438,7 @@ namespace
 
         void update( const fheroes2::Image & image, int32_t offsetX, int32_t offsetY ) override
         {
-            if ( image.empty() ) {
+            if ( image.empty() || image.singleLayer() ) {
                 // What are you trying to do? Set an invisible cursor? Use hide() method!
                 assert( 0 );
                 return;
@@ -539,9 +541,10 @@ namespace
             return new RenderCursor;
         }
 
-    protected:
+    private:
+        SDL_Cursor * _cursor{ nullptr };
+
         RenderCursor()
-            : _cursor( nullptr )
         {
             _emulation = false;
 
@@ -550,9 +553,6 @@ namespace
                 ERROR_LOG( "Failed to set cursor state. The error value: " << returnCode << ", description: " << SDL_GetError() )
             }
         }
-
-    private:
-        SDL_Cursor * _cursor;
 
         void clear()
         {
@@ -1360,10 +1360,9 @@ namespace fheroes2
         }
 
         Image::resize( info.gameWidth, info.gameHeight );
-        _screenSize = { info.screenWidth, info.screenHeight };
+        Image::reset();
 
-        // To detect some UI artifacts by invalid code let's put all transform data into pixel skipping mode.
-        std::fill( transform(), transform() + width() * height(), static_cast<uint8_t>( 1 ) );
+        _screenSize = { info.screenWidth, info.screenHeight };
     }
 
     Display & Display::instance()

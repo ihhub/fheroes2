@@ -27,6 +27,11 @@
 #include <memory>
 #include <utility>
 
+namespace Maps::Map_Format
+{
+    struct MapFormat;
+}
+
 namespace fheroes2
 {
     class HistoryManager;
@@ -45,7 +50,7 @@ namespace fheroes2
     class ActionCreator
     {
     public:
-        explicit ActionCreator( HistoryManager & manager );
+        explicit ActionCreator( HistoryManager & manager, Maps::Map_Format::MapFormat & mapFormat );
 
         ~ActionCreator();
 

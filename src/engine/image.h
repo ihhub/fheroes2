@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2023                                             *
+ *   Copyright (C) 2020 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -28,7 +28,7 @@
 
 namespace fheroes2
 {
-    // Image contains image layer and transform layer.
+    // Image always contains an image layer and if image is not a single-layer then also a transform layer.
     // - image layer contains visible pixels which are copy to a destination image
     // - transform layer is used to apply some transformation to an image on which we draw the current one. For example, shadowing
     class Image
@@ -77,13 +77,14 @@ namespace fheroes2
         }
 
         void reset(); // makes image fully transparent (transform layer is set to 1)
+
         void clear(); // makes the image empty
 
         // Fill 'image' layer with given value, setting 'transform' layer to 0.
         void fill( const uint8_t value );
 
         // This is an optional indicator for image processing functions.
-        // The whole image still consists of 2 layers but transform layer might be ignored in computations.
+        // The whole image still consists of 2 layers but transform layer might be ignored in computations
         bool singleLayer() const
         {
             return _singleLayer;
@@ -144,9 +145,11 @@ namespace fheroes2
     public:
         explicit ImageRestorer( Image & image );
         ImageRestorer( Image & image, const int32_t x_, const int32_t y_, const int32_t width, const int32_t height );
-        ~ImageRestorer(); // restore method will be call upon object's destruction
 
         ImageRestorer( const ImageRestorer & ) = delete;
+
+        // Restores the original image if necessary, see the implementation for details
+        ~ImageRestorer();
 
         void update( const int32_t x_, const int32_t y_, const int32_t width, const int32_t height );
 
@@ -176,6 +179,7 @@ namespace fheroes2
         }
 
         void restore();
+
         void reset()
         {
             _isRestored = true;
@@ -233,6 +237,7 @@ namespace fheroes2
     void Blit( const Image & in, const Point & inPos, Image & out, const Point & outPos, const Size & size, bool flip = false );
 
     void Copy( const Image & in, Image & out );
+    void Copy( const Image & in, int32_t inX, int32_t inY, Image & out, const Rect & outRoi );
     void Copy( const Image & in, int32_t inX, int32_t inY, Image & out, int32_t outX, int32_t outY, int32_t width, int32_t height );
 
     // Copies transform the layer from in to out. Both images must be of the same size.
@@ -291,6 +296,9 @@ namespace fheroes2
 
     // Use this function only when you need to convert pixel value into transform layer
     void ReplaceColorIdByTransformId( Image & image, const uint8_t colorId, const uint8_t transformId );
+
+    // Use this function only when you need to convert transform value into non-transparent pixel with the given color.
+    void ReplaceTransformIdByColorId( Image & image, const uint8_t transformId, const uint8_t colorId );
 
     // Please remember that subpixel accuracy resizing is extremely slow!
     void Resize( const Image & in, Image & out, const bool isSubpixelAccuracy = false );

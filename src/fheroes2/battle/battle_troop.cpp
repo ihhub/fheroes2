@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -194,6 +194,9 @@ void Battle::Unit::SetPosition( const int32_t idx )
 
 void Battle::Unit::SetPosition( const Position & pos )
 {
+    // Position may be empty if this unit is a castle tower
+    assert( pos.isValidForUnit( this ) || pos.isEmpty() );
+
     if ( position.GetHead() ) {
         position.GetHead()->SetUnit( nullptr );
     }
@@ -366,7 +369,7 @@ bool Battle::Unit::isFlying() const
     return ArmyTroop::isFlying() && !Modes( SP_SLOW );
 }
 
-bool Battle::Unit::OutOfWalls() const
+bool Battle::Unit::isOutOfCastleWalls() const
 {
     return Board::isOutOfWallsIndex( GetHeadIndex() ) || ( isWide() && Board::isOutOfWallsIndex( GetTailIndex() ) );
 }
@@ -1124,7 +1127,7 @@ int32_t Battle::Unit::evaluateThreatForUnit( const Unit & defender, const std::o
                 return false;
             }
 
-            if ( attacker.ignoreRetaliation() ) {
+            if ( attacker.isIgnoringRetaliation() ) {
                 return false;
             }
 

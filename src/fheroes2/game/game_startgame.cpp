@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -132,10 +132,26 @@ namespace
 
 fheroes2::GameMode Game::StartBattleOnly()
 {
-    Battle::Only main;
+    static Battle::Only battleOnlySetup;
 
-    if ( main.ChangeSettings() )
-        main.StartBattle();
+    world.generateBattleOnlyMap();
+
+    bool reset = false;
+    bool allowBackup = true;
+
+    while ( battleOnlySetup.setup( allowBackup, reset ) ) {
+        allowBackup = false;
+
+        if ( reset ) {
+            world.generateBattleOnlyMap();
+            battleOnlySetup.reset();
+            reset = false;
+            continue;
+        }
+
+        battleOnlySetup.StartBattle();
+        break;
+    }
 
     return fheroes2::GameMode::MAIN_MENU;
 }
@@ -438,7 +454,7 @@ int Interface::AdventureMap::GetCursorFocusCastle( const Castle & castle, const 
         break;
     }
 
-    case MP2::OBJ_HEROES: {
+    case MP2::OBJ_HERO: {
         const Heroes * hero = tile.getHero();
 
         if ( hero ) {
@@ -475,7 +491,7 @@ int Interface::AdventureMap::GetCursorFocusShipmaster( const Heroes & hero, cons
         break;
     }
 
-    case MP2::OBJ_HEROES: {
+    case MP2::OBJ_HERO: {
         const Heroes * otherHero = tile.getHero();
 
         if ( otherHero ) {
@@ -536,7 +552,7 @@ int Interface::AdventureMap::_getCursorNoFocus( const Maps::Tiles & tile )
         }
         break;
     }
-    case MP2::OBJ_HEROES: {
+    case MP2::OBJ_HERO: {
         const Heroes * hero = tile.getHero();
         if ( hero && hero->GetColor() == Settings::Get().CurrentColor() ) {
             return Cursor::HEROES;
@@ -597,7 +613,7 @@ int Interface::AdventureMap::GetCursorFocusHeroes( const Heroes & hero, const Ma
         break;
     }
 
-    case MP2::OBJ_HEROES: {
+    case MP2::OBJ_HERO: {
         const Heroes * otherHero = tile.getHero();
 
         if ( otherHero ) {
@@ -1217,7 +1233,7 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
             if ( hero ) {
                 bool resetHeroSprite = false;
                 if ( heroAnimationFrameCount > 0 ) {
-                    const int32_t heroMovementSkipValue = Game::HumanHeroAnimSkip();
+                    const int32_t heroMovementSkipValue = Game::HumanHeroAnimSpeedMultiplier();
 
                     _gameArea.ShiftCenter( { heroAnimationOffset.x * heroMovementSkipValue, heroAnimationOffset.y * heroMovementSkipValue } );
                     _gameArea.SetRedraw();
@@ -1263,7 +1279,7 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
                                 // Do not generate a frame as we are going to do it later.
                                 Interface::AdventureMap::RedrawLocker redrawLocker( Interface::AdventureMap::Get() );
 
-                                const int32_t heroMovementSkipValue = Game::HumanHeroAnimSkip();
+                                const int32_t heroMovementSkipValue = Game::HumanHeroAnimSpeedMultiplier();
 
                                 heroAnimationOffset = movement;
                                 _gameArea.ShiftCenter( movement );
@@ -1483,7 +1499,7 @@ void Interface::AdventureMap::mouseCursorAreaPressRight( const int32_t tileIndex
     const Settings & conf = Settings::Get();
     const Maps::Tiles & tile = world.GetTiles( tileIndex );
 
-    DEBUG_LOG( DBG_DEVEL, DBG_INFO, std::endl << tile.String() )
+    DEBUG_LOG( DBG_DEVEL, DBG_INFO, '\n' << tile.String() )
 
     if ( !IS_DEVEL() && tile.isFog( conf.CurrentColor() ) ) {
         Dialog::QuickInfo( tile );
@@ -1504,7 +1520,7 @@ void Interface::AdventureMap::mouseCursorAreaPressRight( const int32_t tileIndex
             break;
         }
 
-        case MP2::OBJ_HEROES: {
+        case MP2::OBJ_HERO: {
             const Heroes * heroes = tile.getHero();
 
             if ( heroes ) {

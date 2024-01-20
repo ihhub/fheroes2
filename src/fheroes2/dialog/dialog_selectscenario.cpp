@@ -96,7 +96,7 @@ namespace
     {
         // On some OSes like Windows, the path may contain '\' symbols. This symbol doesn't exist in the resources.
         // To avoid this we have to replace all '\' symbols by '/' symbols.
-        std::string fullPath = info.file;
+        std::string fullPath = info.filename;
         StringReplace( fullPath, "\\", "/" );
 
         fheroes2::Text header( info.name, fheroes2::FontType::normalYellow() );
@@ -110,6 +110,9 @@ namespace
             break;
         case GameVersion::PRICE_OF_LOYALTY:
             body.add( { _( "The Price of Loyalty" ), fheroes2::FontType::normalWhite() } );
+            break;
+        case GameVersion::RESURRECTION:
+            body.add( { _( "Resurrection" ), fheroes2::FontType::normalWhite() } );
             break;
         default:
             // Did you add a new map version? Add the logic above!
@@ -127,7 +130,7 @@ namespace
     {
         std::string msg;
 
-        switch ( info.lossConditions ) {
+        switch ( info.lossConditionType ) {
         case Maps::FileInfo::LOSS_EVERYTHING:
             msg = _( "Lose all your heroes and towns." );
             break;
@@ -153,7 +156,7 @@ namespace
     {
         std::string msg;
 
-        switch ( info.victoryConditions ) {
+        switch ( info.victoryConditionType ) {
         case Maps::FileInfo::VICTORY_DEFEAT_EVERYONE:
             msg = _( "Defeat all enemy heroes and towns." );
             break;
@@ -182,13 +185,12 @@ namespace
 
     size_t GetInitialMapId( const MapsFileInfoList & lists )
     {
-        const Settings & conf = Settings::Get();
+        const Maps::FileInfo & mapInfo = Settings::Get().getCurrentMapInfo();
 
-        const std::string & mapName = conf.CurrentFileInfo().name;
-        const std::string & mapFileName = System::GetBasename( conf.CurrentFileInfo().file );
+        const std::string & mapFileName = System::GetBasename( mapInfo.filename );
         size_t mapId = 0;
         for ( MapsFileInfoList::const_iterator mapIter = lists.begin(); mapIter != lists.end(); ++mapIter, ++mapId ) {
-            if ( ( mapIter->name == mapName ) && ( System::GetBasename( mapIter->file ) == mapFileName ) ) {
+            if ( ( mapIter->name == mapInfo.name ) && ( System::GetBasename( mapIter->filename ) == mapFileName ) ) {
                 return mapId;
             }
         }
@@ -233,8 +235,8 @@ void ScenarioListBox::_renderScenarioListItem( const Maps::FileInfo & info, fher
     _renderMapIcon( info.width, display, _offsetX + SCENARIO_LIST_MAP_SIZE_OFFSET_X, dsty );
     fheroes2::Blit( _getMapTypeIcon( info.version ), display, _offsetX + SCENARIO_LIST_MAP_TYPE_OFFSET_X, dsty );
     _renderMapName( info, current, dsty, display );
-    fheroes2::Blit( _getWinConditionsIcon( info.victoryConditions ), display, _offsetX + SCENARIO_LIST_VICTORY_CONDITION_OFFSET_X, dsty );
-    fheroes2::Blit( _getLossConditionsIcon( info.lossConditions ), display, _offsetX + SCENARIO_LIST_LOSS_CONDITION_OFFSET_X, dsty );
+    fheroes2::Blit( _getWinConditionsIcon( info.victoryConditionType ), display, _offsetX + SCENARIO_LIST_VICTORY_CONDITION_OFFSET_X, dsty );
+    fheroes2::Blit( _getLossConditionsIcon( info.lossConditionType ), display, _offsetX + SCENARIO_LIST_LOSS_CONDITION_OFFSET_X, dsty );
 }
 
 void ScenarioListBox::_renderSelectedScenarioInfo( fheroes2::Display & display, const fheroes2::Point & dst )
@@ -249,9 +251,9 @@ void ScenarioListBox::_renderSelectedScenarioInfo( fheroes2::Display & display, 
     mapNameText.draw( GetCenteredTextXCoordinate( dst.x + SELECTED_SCENARIO_MAP_NAME_OFFSET_X, SELECTED_SCENARIO_MAP_NAME_WIDTH, mapNameText.width() ),
                       dst.y + SELECTED_SCENARIO_GENERAL_OFFSET_Y + 2, display );
 
-    fheroes2::Blit( _getWinConditionsIcon( info.victoryConditions ), display, dst.x + SELECTED_SCENARIO_VICTORY_CONDITION_OFFSET_X,
+    fheroes2::Blit( _getWinConditionsIcon( info.victoryConditionType ), display, dst.x + SELECTED_SCENARIO_VICTORY_CONDITION_OFFSET_X,
                     dst.y + SELECTED_SCENARIO_GENERAL_OFFSET_Y );
-    fheroes2::Blit( _getLossConditionsIcon( info.lossConditions ), display, dst.x + SELECTED_SCENARIO_LOSS_CONDITION_OFFSET_X,
+    fheroes2::Blit( _getLossConditionsIcon( info.lossConditionType ), display, dst.x + SELECTED_SCENARIO_LOSS_CONDITION_OFFSET_X,
                     dst.y + SELECTED_SCENARIO_GENERAL_OFFSET_Y );
 
     fheroes2::Text difficultyLabelText( _( "Map difficulty:" ), fheroes2::FontType::normalWhite() );
@@ -342,7 +344,20 @@ const fheroes2::Sprite & ScenarioListBox::_getPlayersCountIcon( const uint8_t co
 
 const fheroes2::Sprite & ScenarioListBox::_getMapTypeIcon( const GameVersion version )
 {
-    return fheroes2::AGG::GetICN( ICN::MAP_TYPE_ICON, version == GameVersion::PRICE_OF_LOYALTY ? 1 : 0 );
+    switch ( version ) {
+    case GameVersion::SUCCESSION_WARS:
+        return fheroes2::AGG::GetICN( ICN::MAP_TYPE_ICON, 0 );
+    case GameVersion::PRICE_OF_LOYALTY:
+        return fheroes2::AGG::GetICN( ICN::MAP_TYPE_ICON, 1 );
+    case GameVersion::RESURRECTION:
+        return fheroes2::AGG::GetICN( ICN::MAP_TYPE_ICON, 2 );
+    default:
+        // Did you add a new game version? Add the corresponding logic above!
+        assert( 0 );
+        break;
+    }
+
+    return fheroes2::AGG::GetICN( ICN::UNKNOWN, 0 );
 }
 
 const fheroes2::Sprite & ScenarioListBox::_getWinConditionsIcon( const uint8_t condition )
@@ -640,6 +655,7 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & allMaps 
         else if ( le.MousePressRight( sizeMaps ) || le.MousePressRight( curMapSize ) )
             ShowToolTip( _( "Size Icon" ), _( "Indicates whether the map\nis small (36 x 36), medium\n(72 x 72), large (108 x 108),\nor extra large (144 x 144)." ) );
         else if ( le.MousePressRight( mapTypes ) || le.MousePressRight( curMapType ) )
+            // TODO: update this tooltip once the Editor is out for public.
             ShowToolTip( _( "Map Type" ), _( "Indicates whether the map is made for \"The Succession Wars\" or \"The Price of Loyalty\" version of the game." ) );
         else if ( le.MousePressRight( mapNames ) ) {
             const Maps::FileInfo * item = listbox.GetFromPosition( le.GetMouseCursor() );

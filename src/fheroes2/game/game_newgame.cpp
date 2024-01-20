@@ -52,7 +52,6 @@
 #include "image.h"
 #include "localevent.h"
 #include "logging.h"
-#include "maps_fileinfo.h"
 #include "math_base.h"
 #include "mus.h"
 #include "screen.h"
@@ -63,7 +62,6 @@
 #include "ui_dialog.h"
 #include "ui_text.h"
 #include "ui_tool.h"
-#include "world.h"
 
 namespace
 {
@@ -144,7 +142,7 @@ fheroes2::GameMode Game::NewStandard()
 {
     Settings & conf = Settings::Get();
     if ( conf.isCampaignGameType() )
-        conf.SetCurrentFileInfo( Maps::FileInfo() );
+        conf.SetCurrentFileInfo( {} );
     conf.SetGameType( Game::TYPE_STANDARD );
     conf.SetPreferablyCountPlayers( 0 );
     return fheroes2::GameMode::SELECT_SCENARIO;
@@ -162,11 +160,10 @@ fheroes2::GameMode Game::NewHotSeat()
 {
     Settings & conf = Settings::Get();
     if ( conf.isCampaignGameType() )
-        conf.SetCurrentFileInfo( Maps::FileInfo() );
+        conf.SetCurrentFileInfo( {} );
 
     if ( conf.IsGameType( Game::TYPE_BATTLEONLY ) ) {
         conf.SetPreferablyCountPlayers( 2 );
-        world.NewMaps( 10, 10 );
 
         // Redraw the main menu screen without multiplayer sub-menu to show it after the battle using screen restorer.
         fheroes2::drawMainMenuScreen();
@@ -176,7 +173,7 @@ fheroes2::GameMode Game::NewHotSeat()
     else {
         conf.SetGameType( Game::TYPE_HOTSEAT );
         const uint32_t select = SelectCountPlayers();
-        if ( select ) {
+        if ( select > 0 ) {
             conf.SetPreferablyCountPlayers( select );
             return fheroes2::GameMode::SELECT_SCENARIO;
         }

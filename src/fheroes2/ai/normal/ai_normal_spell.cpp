@@ -56,7 +56,10 @@ namespace AI
     double ReduceEffectivenessByDistance( const Unit & unit )
     {
         // Reduce spell effectiveness if unit already crossed the battlefield
-        return Board::DistanceFromOriginX( unit.GetHeadIndex(), unit.isReflect() );
+        const uint32_t result = Board::GetDistanceFromBoardEdgeAlongXAxis( unit.GetHeadIndex(), unit.isReflect() );
+        assert( result > 0 );
+
+        return result;
     }
 
     SpellSelection BattlePlanner::selectBestSpell( Arena & arena, const Battle::Unit & currentUnit, bool retreating ) const
@@ -77,7 +80,7 @@ namespace AI
         // Hero should conserve spellpoints if already spent more than half or his army is stronger
         // Threshold is 0.04 when armies are equal (= 20% of single unit)
         double spellValueThreshold = _myArmyStrength * _myArmyStrength / _enemyArmyStrength * 0.04;
-        if ( _enemyShooterStr / _enemyArmyStrength > 0.5 ) {
+        if ( _enemyShootersStrength / _enemyArmyStrength > 0.5 ) {
             spellValueThreshold *= 0.5;
         }
         if ( _commander->GetSpellPoints() * 2 < _commander->GetMaxSpellPoints() ) {
@@ -145,22 +148,27 @@ namespace AI
         const auto damageHeuristic = [this, spellDamage, &spell, retreating]( const Unit * unit, const double armyStrength, const double armySpeed ) {
             const uint32_t damage = spellDamage * ( 100 - unit->GetMagicResist( spell, _commander ) ) / 100;
 
-            // If we're retreating we don't care about partial damage, only actual units killed
+            // If the unit is immune to this spell, then no one will be killed, no strength will be lost and the unit will not be woken up if it is disabled
+            if ( damage == 0 ) {
+                return 0.0;
+            }
+
+            // If we retreat, we are not interested in partial damage, but only in the number of units actually killed
             if ( retreating ) {
                 return unit->GetMonsterStrength() * unit->HowManyWillBeKilled( damage );
             }
 
-            // Otherwise calculate amount of strength lost (% of unit times total strength)
+            // If the unit will be completely destroyed, then use its full strength plus a bonus for destroying the stack
             const uint32_t hitpoints = unit->Modes( CAP_MIRRORIMAGE ) ? 1 : unit->GetHitPoints();
             if ( damage >= hitpoints ) {
-                // bonus for finishing a stack
                 const double bonus = ( unit->GetSpeed() > armySpeed ) ? 0.07 : 0.035;
                 return unit->GetStrength() + armyStrength * bonus;
             }
 
+            // Otherwise use the amount of strength lost (% of the total unit's strength)
             double unitPercentageLost = std::min( static_cast<double>( damage ) / hitpoints, 1.0 );
 
-            // Penalty for waking up disabled unit (if you kill only 30%, rest 70% is your penalty)
+            // Penalty for waking up disabled unit (if you kill only 30%, the remaining 70% is your penalty)
             if ( unit->isImmovable() ) {
                 unitPercentageLost += unitPercentageLost - 1.0;
             }
@@ -347,12 +355,7 @@ namespace AI
         case Spell::MASSCURSE:
             ratio = 0.15;
             break;
-        case Spell::BERSERKER: {
-            if ( targetIsLast )
-                return 0.0;
-            ratio = 0.85;
-            break;
-        }
+        case Spell::BERSERKER:
         case Spell::PARALYZE: {
             if ( targetIsLast )
                 return 0.0;

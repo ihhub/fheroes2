@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2023                                                    *
+ *   Copyright (C) 2023 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -22,16 +22,20 @@
 
 #include <cstdint>
 #include <functional>
+#include <string>
 
 #include "editor_interface_panel.h"
 #include "game_mode.h"
 #include "history_manager.h"
 #include "interface_base.h"
+#include "map_format_info.h"
+#include "timing.h"
 
 namespace Maps
 {
     class Tiles;
-    struct ObjectInfo;
+
+    enum class ObjectGroup : int32_t;
 }
 
 namespace Interface
@@ -47,7 +51,7 @@ namespace Interface
         void reset() override;
 
         // Start Map Editor interface main function.
-        fheroes2::GameMode startEdit();
+        fheroes2::GameMode startEdit( const bool isNewMap );
 
         static fheroes2::GameMode eventLoadMap();
         static fheroes2::GameMode eventNewMap();
@@ -83,15 +87,56 @@ namespace Interface
             _cursorUpdater = cursorUpdater;
         }
 
+        bool loadMap( const std::string & filePath );
+
     private:
+        class WarningMessage
+        {
+        public:
+            explicit WarningMessage( EditorInterface & interface )
+                : _interface( interface )
+            {
+                // Do nothing.
+            }
+
+            void reset( const char * info )
+            {
+                _message = info;
+
+                _interface.setRedraw( REDRAW_GAMEAREA );
+
+                _timer.reset();
+            }
+
+            bool isValid() const
+            {
+                return _timer.getS() < 5 && ( _message != nullptr );
+            }
+
+            const char * message() const
+            {
+                return _message;
+            }
+
+        private:
+            EditorInterface & _interface;
+
+            const char * _message{ nullptr };
+
+            fheroes2::Time _timer;
+        };
+
         EditorInterface()
             : BaseInterface( true )
             , _editorPanel( *this )
+            , _warningMessage( *this )
         {
             // Do nothing.
         }
 
-        void setObjectOnTile( Maps::Tiles & tile, const Maps::ObjectInfo & objectInfo );
+        void setObjectOnTile( Maps::Tiles & tile, const Maps::ObjectGroup groupType, const int32_t objectIndex );
+
+        void setObjectOnTileAsAction( Maps::Tiles & tile, const Maps::ObjectGroup groupType, const int32_t objectIndex );
 
         void handleObjectMouseLeftClick( Maps::Tiles & tile );
 
@@ -103,5 +148,9 @@ namespace Interface
         std::function<void( const int32_t )> _cursorUpdater;
 
         fheroes2::HistoryManager _historyManager;
+
+        Maps::Map_Format::MapFormat _mapFormat;
+
+        WarningMessage _warningMessage;
     };
 }

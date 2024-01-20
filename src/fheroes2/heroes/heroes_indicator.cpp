@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -23,6 +23,7 @@
 
 #include "heroes_indicator.h"
 
+#include <cassert>
 #include <cstdint>
 #include <cstdlib>
 #include <utility>
@@ -33,6 +34,7 @@
 #include "heroes.h"
 #include "icn.h"
 #include "localevent.h"
+#include "screen.h"
 #include "tools.h"
 #include "translations.h"
 #include "ui_dialog.h"
@@ -45,65 +47,70 @@ namespace fheroes2
         if ( morale == Morale::BLOOD ) {
             return _( "Blood Morale" );
         }
+
         std::string str = _( "%{morale} Morale" );
+
         StringReplace( str, "%{morale}", Morale::String( morale ) );
+
         return str;
     }
 
     std::string LuckString( const int luck )
     {
         std::string str = _( "%{luck} Luck" );
+
         StringReplace( str, "%{luck}", Luck::String( luck ) );
+
         return str;
     }
 }
 
-const fheroes2::Rect & HeroesIndicator::GetArea() const
+HeroesIndicator::HeroesIndicator( const Heroes * hero )
+    : _hero( hero )
+    , _back( fheroes2::Display::instance() )
 {
-    return area;
+    assert( _hero != nullptr );
 }
 
-void HeroesIndicator::SetHero( const Heroes * hero )
+const fheroes2::Rect & HeroesIndicator::GetArea() const
 {
-    _hero = hero;
+    return _area;
 }
 
 void HeroesIndicator::SetPos( const fheroes2::Point & pt )
 {
-    area.x = pt.x;
-    area.y = pt.y;
-    _back.update( area.x, area.y, area.width, area.height );
+    _area.x = pt.x;
+    _area.y = pt.y;
+
+    _back.update( _area.x, _area.y, _area.width, _area.height );
 }
 
 void LuckIndicator::Redraw()
 {
-    if ( !_hero ) {
-        return;
-    }
-
     std::string modificators;
-    luck = _hero->GetLuckWithModificators( &modificators );
+    _luck = _hero->GetLuckWithModificators( &modificators );
 
-    descriptions.clear();
-    descriptions.append( Luck::Description( luck ) );
-    descriptions.append( "\n\n" );
-    descriptions.append( _( "Current Luck Modifiers:" ) );
-    descriptions.append( "\n\n" );
+    _description.clear();
+    _description.append( Luck::Description( _luck ) );
+    _description.append( "\n\n" );
+    _description.append( _( "Current Luck Modifiers:" ) );
+    _description.append( "\n\n" );
 
-    const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::HSICONS, ( 0 > luck ? 3 : ( 0 < luck ? 2 : 6 ) ) );
+    const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::HSICONS, ( 0 > _luck ? 3 : ( 0 < _luck ? 2 : 6 ) ) );
     const int32_t inter = 6;
-    int32_t count = ( 0 == luck ? 1 : std::abs( luck ) );
-    int32_t cx = area.x + ( area.width - ( sprite.width() + inter * ( count - 1 ) ) ) / 2;
-    const int32_t cy = area.y + ( area.height - sprite.height() ) / 2;
+    int32_t count = ( 0 == _luck ? 1 : std::abs( _luck ) );
+    int32_t cx = _area.x + ( _area.width - ( sprite.width() + inter * ( count - 1 ) ) ) / 2;
+    const int32_t cy = _area.y + ( _area.height - sprite.height() ) / 2;
 
     if ( modificators.empty() ) {
-        descriptions.append( _( "None" ) );
+        _description.append( _( "None" ) );
     }
     else {
-        descriptions.append( modificators );
+        _description.append( modificators );
     }
 
     _back.restore();
+
     fheroes2::Display & display = fheroes2::Display::instance();
 
     while ( count-- ) {
@@ -116,48 +123,45 @@ void LuckIndicator::QueueEventProcessing( const LuckIndicator & indicator )
 {
     LocalEvent & le = LocalEvent::Get();
 
-    if ( le.MouseClickLeft( indicator.area ) ) {
-        fheroes2::showStandardTextMessage( fheroes2::LuckString( indicator.luck ), indicator.descriptions, Dialog::OK );
+    if ( le.MouseClickLeft( indicator._area ) ) {
+        fheroes2::showStandardTextMessage( fheroes2::LuckString( indicator._luck ), indicator._description, Dialog::OK );
     }
-    else if ( le.MousePressRight( indicator.area ) ) {
-        fheroes2::showStandardTextMessage( fheroes2::LuckString( indicator.luck ), indicator.descriptions, Dialog::ZERO );
+    else if ( le.MousePressRight( indicator._area ) ) {
+        fheroes2::showStandardTextMessage( fheroes2::LuckString( indicator._luck ), indicator._description, Dialog::ZERO );
     }
 }
 
 void MoraleIndicator::Redraw()
 {
-    if ( !_hero ) {
-        return;
-    }
-
     std::string modificators;
-    morale = _hero->GetMoraleWithModificators( &modificators );
+    _morale = _hero->GetMoraleWithModificators( &modificators );
 
-    descriptions.clear();
-    descriptions.append( Morale::Description( morale ) );
-    descriptions.append( "\n\n" );
-    descriptions.append( _( "Current Morale Modifiers:" ) );
-    descriptions.append( "\n\n" );
+    _description.clear();
+    _description.append( Morale::Description( _morale ) );
+    _description.append( "\n\n" );
+    _description.append( _( "Current Morale Modifiers:" ) );
+    _description.append( "\n\n" );
 
     if ( modificators.empty() ) {
-        descriptions.append( _( "None" ) );
+        _description.append( _( "None" ) );
     }
     else {
-        descriptions.append( modificators );
+        _description.append( modificators );
     }
 
     if ( _hero->GetArmy().AllTroopsAreUndead() ) {
-        descriptions.append( "\n\n" );
-        descriptions.append( _( "Entire army is undead, so morale does not apply." ) );
+        _description.append( "\n\n" );
+        _description.append( _( "Entire army is undead, so morale does not apply." ) );
     }
 
-    const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::HSICONS, ( 0 > morale ? 5 : ( 0 < morale ? 4 : 7 ) ) );
+    const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::HSICONS, ( 0 > _morale ? 5 : ( 0 < _morale ? 4 : 7 ) ) );
     const int32_t inter = 6;
-    int32_t count = ( 0 == morale ? 1 : std::abs( morale ) );
-    int32_t cx = area.x + ( area.width - ( sprite.width() + inter * ( count - 1 ) ) ) / 2;
-    const int32_t cy = area.y + ( area.height - sprite.height() ) / 2;
+    int32_t count = ( 0 == _morale ? 1 : std::abs( _morale ) );
+    int32_t cx = _area.x + ( _area.width - ( sprite.width() + inter * ( count - 1 ) ) ) / 2;
+    const int32_t cy = _area.y + ( _area.height - sprite.height() ) / 2;
 
     _back.restore();
+
     fheroes2::Display & display = fheroes2::Display::instance();
 
     while ( count-- ) {
@@ -170,89 +174,81 @@ void MoraleIndicator::QueueEventProcessing( const MoraleIndicator & indicator )
 {
     LocalEvent & le = LocalEvent::Get();
 
-    if ( le.MouseClickLeft( indicator.area ) ) {
-        fheroes2::showStandardTextMessage( fheroes2::MoraleString( indicator.morale ), indicator.descriptions, Dialog::OK );
+    if ( le.MouseClickLeft( indicator._area ) ) {
+        fheroes2::showStandardTextMessage( fheroes2::MoraleString( indicator._morale ), indicator._description, Dialog::OK );
     }
-    else if ( le.MousePressRight( indicator.area ) ) {
-        fheroes2::showStandardTextMessage( fheroes2::MoraleString( indicator.morale ), indicator.descriptions, Dialog::ZERO );
+    else if ( le.MousePressRight( indicator._area ) ) {
+        fheroes2::showStandardTextMessage( fheroes2::MoraleString( indicator._morale ), indicator._description, Dialog::ZERO );
     }
 }
 
 ExperienceIndicator::ExperienceIndicator( const Heroes * hero )
     : HeroesIndicator( hero )
 {
-    area.width = 35;
-    area.height = 36;
+    _area.width = 35;
+    _area.height = 36;
 
-    descriptions = _( "Current experience %{exp1}.\n Next level %{exp2}." );
-    if ( _hero ) {
-        const uint32_t experience = _hero->GetExperience();
-        StringReplace( descriptions, "%{exp1}", experience );
-        StringReplace( descriptions, "%{exp2}", Heroes::GetExperienceFromLevel( Heroes::GetLevelFromExperience( experience ) ) );
-    }
+    _description = _( "Current experience %{exp1}.\n Next level %{exp2}." );
+
+    const uint32_t experience = _hero->GetExperience();
+    StringReplace( _description, "%{exp1}", experience );
+    StringReplace( _description, "%{exp2}", Heroes::GetExperienceFromLevel( Heroes::GetLevelFromExperience( experience ) ) );
 }
 
 void ExperienceIndicator::Redraw() const
 {
-    if ( !_hero ) {
-        return;
-    }
-
     fheroes2::Display & display = fheroes2::Display::instance();
 
-    const fheroes2::Sprite & sprite3 = fheroes2::AGG::GetICN( ICN::HSICONS, 1 );
-    fheroes2::Blit( sprite3, display, area.x, area.y );
+    const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::HSICONS, 1 );
+    fheroes2::Blit( sprite, display, _area.x, _area.y );
 
     const fheroes2::Text text( std::to_string( _hero->GetExperience() ), fheroes2::FontType::smallWhite() );
-    text.draw( area.x + 17 - text.width() / 2, area.y + 25, display );
+    text.draw( _area.x + 17 - text.width() / 2, _area.y + 25, display );
 }
 
 void ExperienceIndicator::QueueEventProcessing() const
 {
     LocalEvent & le = LocalEvent::Get();
 
-    if ( le.MouseClickLeft( area ) || le.MousePressRight( area ) ) {
+    if ( le.MouseClickLeft( _area ) || le.MousePressRight( _area ) ) {
         std::string message = _( "Level %{level}" );
+
         StringReplace( message, "%{level}", _hero->GetLevel() );
-        fheroes2::showStandardTextMessage( std::move( message ), descriptions, ( le.MousePressRight() ? Dialog::ZERO : Dialog::OK ) );
+
+        fheroes2::showStandardTextMessage( std::move( message ), _description, ( le.MousePressRight() ? Dialog::ZERO : Dialog::OK ) );
     }
 }
 
 SpellPointsIndicator::SpellPointsIndicator( const Heroes * hero )
     : HeroesIndicator( hero )
 {
-    area.width = 35;
-    area.height = 36;
+    _area.width = 35;
+    _area.height = 36;
 
-    descriptions = _(
-        "%{name} currently has %{point} spell points out of a maximum of %{max}. The maximum number of spell points is 10 times your knowledge. It is occasionally possible to have more than your maximum spell points via special events." );
-    if ( _hero ) {
-        StringReplace( descriptions, "%{name}", _hero->GetName() );
-        StringReplace( descriptions, "%{point}", _hero->GetSpellPoints() );
-        StringReplace( descriptions, "%{max}", _hero->GetMaxSpellPoints() );
-    }
+    _description = _(
+        "%{name} currently has %{point} spell points out of a maximum of %{max}. The maximum number of spell points is 10 times the hero's knowledge. It is occasionally possible for the hero to have more than their maximum spell points via special events." );
+
+    StringReplace( _description, "%{name}", _hero->GetName() );
+    StringReplace( _description, "%{point}", _hero->GetSpellPoints() );
+    StringReplace( _description, "%{max}", _hero->GetMaxSpellPoints() );
 }
 
 void SpellPointsIndicator::Redraw() const
 {
-    if ( !_hero ) {
-        return;
-    }
-
     fheroes2::Display & display = fheroes2::Display::instance();
 
-    const fheroes2::Sprite & sprite3 = fheroes2::AGG::GetICN( ICN::HSICONS, 8 );
-    fheroes2::Blit( sprite3, display, area.x, area.y );
+    const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::HSICONS, 8 );
+    fheroes2::Blit( sprite, display, _area.x, _area.y );
 
     const fheroes2::Text text( std::to_string( _hero->GetSpellPoints() ) + "/" + std::to_string( _hero->GetMaxSpellPoints() ), fheroes2::FontType::smallWhite() );
-    text.draw( area.x + sprite3.width() / 2 - text.width() / 2, area.y + 23, display );
+    text.draw( _area.x + sprite.width() / 2 - text.width() / 2, _area.y + 23, display );
 }
 
 void SpellPointsIndicator::QueueEventProcessing() const
 {
     LocalEvent & le = LocalEvent::Get();
 
-    if ( le.MouseClickLeft( area ) || le.MousePressRight( area ) ) {
-        fheroes2::showStandardTextMessage( _( "Spell Points" ), descriptions, ( le.MousePressRight() ? Dialog::ZERO : Dialog::OK ) );
+    if ( le.MouseClickLeft( _area ) || le.MousePressRight( _area ) ) {
+        fheroes2::showStandardTextMessage( _( "Spell Points" ), _description, ( le.MousePressRight() ? Dialog::ZERO : Dialog::OK ) );
     }
 }

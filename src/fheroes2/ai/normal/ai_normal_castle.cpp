@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2023                                             *
+ *   Copyright (C) 2020 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -234,6 +234,24 @@ namespace AI
         }
 
         return Build( castle, supportingDefensiveStructures, 10 );
+    }
+
+    void Normal::CastlePreBattle( Castle & castle )
+    {
+        Heroes * hero = world.GetHero( castle );
+        if ( hero == nullptr ) {
+            return;
+        }
+
+        Army & army = hero->GetArmy();
+
+        if ( !army.ArrangeForCastleDefense( castle.GetArmy() ) ) {
+            return;
+        }
+
+        // Optimization cannot be performed if we have not received any reinforcements from the garrison, otherwise the actual placement of units during the battle will
+        // differ from that observed by the enemy player before the start of the battle
+        OptimizeTroopsOrder( army );
     }
 
     void Normal::updateKingdomBudget( const Kingdom & kingdom )
