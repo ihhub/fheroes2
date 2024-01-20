@@ -2891,7 +2891,7 @@ namespace fheroes2
                         if ( *transformIn > 0 ) {
                             if ( *transformIn != 1 ) {
                                 // Apply a transformation.
-                                *imageOutX = *( transformTable + ( *transformIn ) * 256 + *imageOutX );
+                                *imageOutX = *( transformTable + static_cast<ptrdiff_t>( *transformIn ) * 256 + *imageOutX );
                             }
                         }
                         else {
