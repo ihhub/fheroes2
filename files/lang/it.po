@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-19 14:45+0000\n"
+"POT-Creation-Date: 2024-01-20 03:11+0000\n"
 "PO-Revision-Date: 2022-12-03 04:36+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <it@li.org>\n"
@@ -499,6 +499,9 @@ msgstr "Okay"
 msgid "The enemy has surrendered!"
 msgstr "Il nemico si è ceduto!"
 
+msgid "Their cowardice costs them %{gold} gold."
+msgstr ""
+
 msgid "The enemy has fled!"
 msgstr "L'avversario è scappato!"
 
@@ -514,12 +517,14 @@ msgstr "Il vigliacco %{name} si scappa dalla battaglia."
 msgid "%{name} surrenders to the enemy, and departs in shame."
 msgstr ""
 
-msgid "Your force suffer a bitter defeat, and %{name} abandons your cause."
+#, fuzzy
+msgid "Your forces suffer a bitter defeat, and %{name} abandons your cause."
 msgstr ""
 "Il tuo esercito subisce una sconfitta amara, e %{name} abbandona la tua "
 "causa."
 
-msgid "Your force suffer a bitter defeat."
+#, fuzzy
+msgid "Your forces suffer a bitter defeat."
 msgstr "Il tuo esercito subisce una sconfitta amara."
 
 msgid "Battlefield Casualties"
@@ -531,14 +536,25 @@ msgstr "Attaccante"
 msgid "Defender"
 msgstr "Difensore"
 
+#, fuzzy
+msgid "Click to leave the battle results."
+msgstr "Clicca per salvare la partita in corso."
+
+#, fuzzy
+msgid "Click to restart the battle in manual mode."
+msgstr "Sei sicuro di voler congedare queste forze?"
+
+msgid "Restart"
+msgstr ""
+
+msgid "You have captured an enemy artifact!"
+msgstr "Hai ottenuto un artefatto nemico!"
+
 msgid "As you reach for the %{name}, it mysteriously disappears."
 msgstr ""
 
 msgid "As your enemy reaches for the %{name}, it mysteriously disappears."
 msgstr ""
-
-msgid "You have captured an enemy artifact!"
-msgstr "Hai ottenuto un artefatto nemico!"
 
 msgid "Necromancy!"
 msgstr "Negromanzia!"
@@ -4039,9 +4055,6 @@ msgstr ""
 msgid ""
 "Select the campaign difficulty. This can be lowered at any point during the "
 "campaign."
-msgstr ""
-
-msgid "Restart"
 msgstr ""
 
 #, fuzzy

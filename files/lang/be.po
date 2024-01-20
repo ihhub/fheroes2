@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-19 14:45+0000\n"
+"POT-Creation-Date: 2024-01-20 03:11+0000\n"
 "PO-Revision-Date: 2022-09-23 16:01+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -510,6 +510,9 @@ msgstr "Добра"
 msgid "The enemy has surrendered!"
 msgstr "Вораг здаўся!"
 
+msgid "Their cowardice costs them %{gold} gold."
+msgstr ""
+
 msgid "The enemy has fled!"
 msgstr "Вораг уцёк!"
 
@@ -525,10 +528,12 @@ msgstr "%{name} баязліва ўцякае з поля бітвы."
 msgid "%{name} surrenders to the enemy, and departs in shame."
 msgstr "%{name} здаўся ворагу і сышоў з ганьбай."
 
-msgid "Your force suffer a bitter defeat, and %{name} abandons your cause."
+#, fuzzy
+msgid "Your forces suffer a bitter defeat, and %{name} abandons your cause."
 msgstr "Вашыя войскі былі знішчаны, а %{name} пакідае вас."
 
-msgid "Your force suffer a bitter defeat."
+#, fuzzy
+msgid "Your forces suffer a bitter defeat."
 msgstr "Вашыя войскі былі знішчаны."
 
 msgid "Battlefield Casualties"
@@ -540,6 +545,20 @@ msgstr "Нападнік"
 msgid "Defender"
 msgstr "Абаронца"
 
+#, fuzzy
+msgid "Click to leave the battle results."
+msgstr "Пстрыкні, каб ухваліць абранае раздзяленне."
+
+#, fuzzy
+msgid "Click to restart the battle in manual mode."
+msgstr "Пстрыкні, каб вярнуцца ў галоўнае меню."
+
+msgid "Restart"
+msgstr ""
+
+msgid "You have captured an enemy artifact!"
+msgstr "Вы захапілі варожы артэфакт!"
+
 msgid "As you reach for the %{name}, it mysteriously disappears."
 msgstr ""
 "Сярод вашых трафеяў апынуўся артэфакт - %{name}! Але як толькі вы "
@@ -547,9 +566,6 @@ msgstr ""
 
 msgid "As your enemy reaches for the %{name}, it mysteriously disappears."
 msgstr "Як толькі вораг дабраўся да артэфакту - %{name}, той містычна знік."
-
-msgid "You have captured an enemy artifact!"
-msgstr "Вы захапілі варожы артэфакт!"
 
 msgid "Necromancy!"
 msgstr ""
@@ -3933,9 +3949,6 @@ msgstr ""
 msgid ""
 "Select the campaign difficulty. This can be lowered at any point during the "
 "campaign."
-msgstr ""
-
-msgid "Restart"
 msgstr ""
 
 msgid "Restart the current scenario."

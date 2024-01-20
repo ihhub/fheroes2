@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-19 14:45+0000\n"
+"POT-Creation-Date: 2024-01-20 03:11+0000\n"
 "PO-Revision-Date: 2023-08-26 23:09+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: https://discord.com/"
@@ -541,6 +541,9 @@ msgstr "Ok"
 msgid "The enemy has surrendered!"
 msgstr "Przeciwnik się poddał!"
 
+msgid "Their cowardice costs them %{gold} gold."
+msgstr ""
+
 msgid "The enemy has fled!"
 msgstr "Przeciwnik uciekł!"
 
@@ -556,10 +559,12 @@ msgstr "%{name} tchórzliwie ucieka z pola bitwy."
 msgid "%{name} surrenders to the enemy, and departs in shame."
 msgstr "%{name} poddaje się wrogowi i odchodzi w hańbie."
 
-msgid "Your force suffer a bitter defeat, and %{name} abandons your cause."
+#, fuzzy
+msgid "Your forces suffer a bitter defeat, and %{name} abandons your cause."
 msgstr "Twoje wojska ponoszą dotkliwą klęskę, a %{name} opuszcza cię."
 
-msgid "Your force suffer a bitter defeat."
+#, fuzzy
+msgid "Your forces suffer a bitter defeat."
 msgstr "Twoje wojska ponoszą dotkliwą klęskę."
 
 msgid "Battlefield Casualties"
@@ -571,6 +576,20 @@ msgstr "Atakujący"
 msgid "Defender"
 msgstr "Obrońca"
 
+#, fuzzy
+msgid "Click to leave the battle results."
+msgstr "Użyj wskazanej rozdzielczości."
+
+#, fuzzy
+msgid "Click to restart the battle in manual mode."
+msgstr "Kliknij, aby wrócić do głównego menu."
+
+msgid "Restart"
+msgstr "Rozpocznij od nowa"
+
+msgid "You have captured an enemy artifact!"
+msgstr "Udało ci się zdobyć artefakt przeciwnika!"
+
 msgid "As you reach for the %{name}, it mysteriously disappears."
 msgstr "Gdy sięgasz po artefakt %{name}, przedmiot w tajemniczy sposób znika."
 
@@ -578,9 +597,6 @@ msgid "As your enemy reaches for the %{name}, it mysteriously disappears."
 msgstr ""
 "Gdy przeciwnik sięga po artefakt %{name}, przedmiot w tajemniczy sposób "
 "znika."
-
-msgid "You have captured an enemy artifact!"
-msgstr "Udało ci się zdobyć artefakt przeciwnika!"
 
 msgid "Necromancy!"
 msgstr "Nekromancja!"
@@ -4194,9 +4210,6 @@ msgid ""
 "campaign."
 msgstr ""
 "Wybierz stopień trudności. Tego ustawienia nie będziesz mógł później zmienić."
-
-msgid "Restart"
-msgstr "Rozpocznij od nowa"
 
 msgid "Restart the current scenario."
 msgstr "Rozpocznij od nowa obecny scenariusz."

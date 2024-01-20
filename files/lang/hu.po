@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-19 14:45+0000\n"
+"POT-Creation-Date: 2024-01-20 03:11+0000\n"
 "PO-Revision-Date: 2023-09-04 21:55+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -547,6 +547,9 @@ msgstr "OK"
 msgid "The enemy has surrendered!"
 msgstr "Az ellenség megadta magát!"
 
+msgid "Their cowardice costs them %{gold} gold."
+msgstr ""
+
 msgid "The enemy has fled!"
 msgstr "Az ellenség elmenekült!"
 
@@ -562,12 +565,14 @@ msgstr "A gyáva %{name} elmenekül a csatából."
 msgid "%{name} surrenders to the enemy, and departs in shame."
 msgstr "%{name} megadja magát az ellenségnek, és szégyenteljesen elvonul."
 
-msgid "Your force suffer a bitter defeat, and %{name} abandons your cause."
+#, fuzzy
+msgid "Your forces suffer a bitter defeat, and %{name} abandons your cause."
 msgstr ""
 "A sereged vereséget szenvedett, ezért %{name} - elpártolva ügyedtől - "
 "otthagy téged."
 
-msgid "Your force suffer a bitter defeat."
+#, fuzzy
+msgid "Your forces suffer a bitter defeat."
 msgstr "A sereged vereséget szenvedett."
 
 msgid "Battlefield Casualties"
@@ -579,14 +584,25 @@ msgstr "Támadó"
 msgid "Defender"
 msgstr "Védekező"
 
+#, fuzzy
+msgid "Click to leave the battle results."
+msgstr "Kattints a kiválasztott képernyőfelbontás alkalmazásához."
+
+#, fuzzy
+msgid "Click to restart the battle in manual mode."
+msgstr "Kattints a főmenübe való visszatéréshez."
+
+msgid "Restart"
+msgstr "Újra"
+
+msgid "You have captured an enemy artifact!"
+msgstr "Megszereztél egy tárgyat az ellenségtől!"
+
 msgid "As you reach for the %{name}, it mysteriously disappears."
 msgstr "Amint %{name} felé nyúlsz, az hirtelen eltűnik."
 
 msgid "As your enemy reaches for the %{name}, it mysteriously disappears."
 msgstr "Amint %{name} felé nyúl az ellenség, az hirtelen eltűnik."
-
-msgid "You have captured an enemy artifact!"
-msgstr "Megszereztél egy tárgyat az ellenségtől!"
 
 msgid "Necromancy!"
 msgstr "Nekromancia!"
@@ -4169,9 +4185,6 @@ msgid ""
 msgstr ""
 "A hadjárat nehézségének kiválasztása. Ez bármikor csökkenthető a hadjárat "
 "során."
-
-msgid "Restart"
-msgstr "Újra"
 
 msgid "Restart the current scenario."
 msgstr "Aktuális küldetés újraindítása."
