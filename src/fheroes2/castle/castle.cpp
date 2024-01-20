@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -26,6 +26,7 @@
 #include <algorithm>
 #include <array>
 #include <cassert>
+#include <cmath>
 #include <iterator>
 #include <ostream>
 
@@ -917,10 +918,10 @@ void Castle::ActionNewWeekAIBonuses()
         return;
     }
 
-    static const std::array<uint32_t, 6> basicDwellings
+    static const std::array<building_t, 6> basicDwellings
         = { DWELLING_MONSTER1, DWELLING_MONSTER2, DWELLING_MONSTER3, DWELLING_MONSTER4, DWELLING_MONSTER5, DWELLING_MONSTER6 };
 
-    for ( const uint32_t dwellingId : basicDwellings ) {
+    for ( const building_t dwellingId : basicDwellings ) {
         uint32_t * dwellingMonsters = GetDwelling( dwellingId );
         if ( dwellingMonsters == nullptr ) {
             // Such dwelling (or its upgrade) has not been built.
@@ -937,7 +938,22 @@ void Castle::ActionNewWeekAIBonuses()
             originalGrowth += GetGrownWel2();
         }
 
-        *dwellingMonsters += static_cast<uint32_t>( originalGrowth * Difficulty::GetUnitGrowthBonusForAI( Game::getDifficulty() ) );
+        if ( originalGrowth == 0 ) {
+            continue;
+        }
+
+        const long bonusGrowth = std::lround( originalGrowth * Difficulty::GetUnitGrowthBonusForAI( Game::getDifficulty(), Game::isCampaign(), dwellingId ) );
+        if ( bonusGrowth >= 0 ) {
+            *dwellingMonsters += bonusGrowth;
+
+            continue;
+        }
+
+        // If the original unit growth is non-zero, then the total unit growth after the application of penalties should be at least one unit
+        const uint32_t growthPenalty = std::min( static_cast<uint32_t>( -bonusGrowth ), originalGrowth - 1 );
+        assert( *dwellingMonsters > growthPenalty );
+
+        *dwellingMonsters -= growthPenalty;
     }
 }
 
@@ -2225,7 +2241,7 @@ bool Castle::HasBoatNearby() const
         }
 
         const MP2::MapObjectType objectType = tile.GetObject();
-        return ( objectType == MP2::OBJ_BOAT || objectType == MP2::OBJ_HEROES );
+        return ( objectType == MP2::OBJ_BOAT || objectType == MP2::OBJ_HERO );
     };
 
     const int32_t index = Maps::GetIndexFromAbsPoint( possibleSeaTile.x, possibleSeaTile.y );
@@ -2731,14 +2747,18 @@ void Castle::JoinRNDArmy()
 
 void Castle::ActionPreBattle()
 {
-    Heroes * hero = world.GetHero( *this );
-    if ( hero ) {
-        hero->GetArmy().ArrangeForCastleDefense( army );
-    }
-
     if ( isControlAI() ) {
         AI::Get().CastlePreBattle( *this );
+
+        return;
     }
+
+    Heroes * hero = world.GetHero( *this );
+    if ( hero == nullptr ) {
+        return;
+    }
+
+    hero->GetArmy().ArrangeForCastleDefense( army );
 }
 
 void Castle::ActionAfterBattle( bool attacker_wins )

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -82,6 +82,8 @@ namespace
         // TODO: remove this setting once the Editor goes public.
         GLOBAL_ENABLE_EDITOR = 0x40000000
     };
+
+    const int defaultSpeedDelay{ 5 };
 }
 
 std::string Settings::GetVersion()
@@ -91,13 +93,13 @@ std::string Settings::GetVersion()
 
 Settings::Settings()
     : _resolutionInfo( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT )
-    , game_difficulty( Difficulty::NORMAL )
+    , _gameDifficulty( Difficulty::NORMAL )
     , sound_volume( 6 )
     , music_volume( 6 )
     , _musicType( MUSIC_EXTERNAL )
     , _controllerPointerSpeed( 10 )
-    , heroes_speed( DEFAULT_SPEED_DELAY )
-    , ai_speed( DEFAULT_SPEED_DELAY )
+    , heroes_speed( defaultSpeedDelay )
+    , ai_speed( defaultSpeedDelay )
     , scroll_speed( SCROLL_SPEED_NORMAL )
     , battle_speed( DEFAULT_BATTLE_SPEED )
     , game_type( 0 )
@@ -1054,10 +1056,10 @@ void Settings::resetFirstGameRun()
 
 StreamBase & operator<<( StreamBase & msg, const Settings & conf )
 {
-    return msg << conf._gameLanguage << conf.current_maps_file << conf.game_difficulty << conf.game_type << conf.preferably_count_players << conf.players;
+    return msg << conf._gameLanguage << conf.current_maps_file << conf._gameDifficulty << conf.game_type << conf.preferably_count_players << conf.players;
 }
 
 StreamBase & operator>>( StreamBase & msg, Settings & conf )
 {
-    return msg >> conf._loadedFileLanguage >> conf.current_maps_file >> conf.game_difficulty >> conf.game_type >> conf.preferably_count_players >> conf.players;
+    return msg >> conf._loadedFileLanguage >> conf.current_maps_file >> conf._gameDifficulty >> conf.game_type >> conf.preferably_count_players >> conf.players;
 }

@@ -85,13 +85,13 @@ namespace fheroes2
         std::function<void()> _preRenderer;
         std::function<void()> _postRenderer;
 
-        bool _enableRenderers{ false };
-        bool _enableCycling{ false };
-
         fheroes2::Time _cyclingTimer;
         fheroes2::Time _lastRenderCall;
 
         uint32_t _cyclingCounter{ 0 };
+
+        bool _enableRenderers{ false };
+        bool _enableCycling{ false };
 
         static const uint64_t _cyclingInterval{ 220 };
     };

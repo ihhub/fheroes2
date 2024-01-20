@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2022 - 2023                                             *
+ *   Copyright (C) 2022 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -53,7 +53,8 @@ namespace
 
     fheroes2::Sprite addContour( fheroes2::Sprite & input, const fheroes2::Point & contourOffset, const uint8_t colorId )
     {
-        if ( input.empty() || contourOffset.x > 0 || contourOffset.y < 0 || ( -contourOffset.x >= input.width() ) || ( contourOffset.y >= input.height() ) ) {
+        if ( input.empty() || input.singleLayer() || contourOffset.x > 0 || contourOffset.y < 0 || ( -contourOffset.x >= input.width() )
+             || ( contourOffset.y >= input.height() ) ) {
             return input;
         }
 

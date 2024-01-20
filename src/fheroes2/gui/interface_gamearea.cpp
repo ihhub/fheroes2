@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -492,9 +492,9 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
             const bool isTileUnderFog = ( tile.getFogDirection() == DIRECTION_ALL ) && renderFog;
 
             switch ( objectType ) {
-            case MP2::OBJ_HEROES: {
+            case MP2::OBJ_HERO: {
                 if ( _interface.isEditor() ) {
-                    const uint8_t alphaValue = getObjectAlphaValue( tile.GetIndex(), MP2::OBJ_HEROES );
+                    const uint8_t alphaValue = getObjectAlphaValue( tile.GetIndex(), MP2::OBJ_HERO );
 
                     auto spriteInfo = getEditorHeroSpritesPerTile( tile );
 
@@ -572,7 +572,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
             }
 
             // These are parts of original action objects which must be rendered under heroes.
-            if ( objectType == MP2::OBJ_MINES ) {
+            if ( objectType == MP2::OBJ_MINE ) {
                 auto spriteInfo = getMineGuardianSpritesPerTile( tile );
                 if ( !spriteInfo.empty() ) {
                     const uint8_t alphaValue = getObjectAlphaValue( tile.GetObjectUID() );
@@ -855,8 +855,9 @@ fheroes2::Image Interface::GameArea::GenerateUltimateArtifactAreaSurface( const 
         return fheroes2::Image();
     }
 
-    fheroes2::Image result( 448, 448 );
+    fheroes2::Image result;
     result._disableTransformLayer();
+    result.resize( 448, 448 );
 
     // Make a temporary copy
     GameArea gamearea = AdventureMap::Get().getGameArea();
@@ -874,7 +875,6 @@ fheroes2::Image Interface::GameArea::GenerateUltimateArtifactAreaSurface( const 
 
     fheroes2::Blit( marker, result, markerPos.x, markerPos.y + 8 );
     fheroes2::ApplyPalette( result, PAL::GetPalette( PAL::PaletteType::TAN ) );
-    result._disableTransformLayer();
 
     return result;
 }

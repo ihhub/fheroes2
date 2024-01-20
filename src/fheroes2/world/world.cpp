@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -82,7 +82,7 @@ namespace
             }
 
             const MP2::MapObjectType objectType = indexedTile.GetObject( true );
-            if ( objectType == MP2::OBJ_CASTLE || objectType == MP2::OBJ_HEROES || objectType == MP2::OBJ_MONSTER ) {
+            if ( objectType == MP2::OBJ_CASTLE || objectType == MP2::OBJ_HERO || objectType == MP2::OBJ_MONSTER ) {
                 return true;
             }
         }
@@ -226,35 +226,21 @@ uint32_t CapturedObjects::GetCount( int obj, int col ) const
     return result;
 }
 
-uint32_t CapturedObjects::GetCountMines( int type, int col ) const
+uint32_t CapturedObjects::GetCountMines( const int resourceType, const int ownerColor ) const
 {
-    uint32_t result = 0;
+    uint32_t count = 0;
+    const ObjectColor correctObject( MP2::OBJ_MINE, ownerColor );
 
-    const ObjectColor objcol1( MP2::OBJ_MINES, col );
-    const ObjectColor objcol2( MP2::OBJ_HEROES, col );
-
-    for ( const_iterator it = begin(); it != end(); ++it ) {
-        const ObjectColor & objcol = ( *it ).second.objcol;
-
-        if ( objcol == objcol1 || objcol == objcol2 ) {
-            // scan for find mines
-            const uint8_t index = world.GetTiles( ( *it ).first ).GetObjectSpriteIndex();
-
-            // index sprite EXTRAOVR
-            if ( 0 == index && Resource::ORE == type )
-                ++result;
-            else if ( 1 == index && Resource::SULFUR == type )
-                ++result;
-            else if ( 2 == index && Resource::CRYSTAL == type )
-                ++result;
-            else if ( 3 == index && Resource::GEMS == type )
-                ++result;
-            else if ( 4 == index && Resource::GOLD == type )
-                ++result;
+    for ( const auto & [tileIndex, objectInfo] : *this ) {
+        if ( correctObject == objectInfo.objcol ) {
+            const int32_t mineResource = Maps::getDailyIncomeObjectResources( world.GetTiles( tileIndex ) ).getFirstValidResource().first;
+            if ( resourceType == mineResource ) {
+                ++count;
+            }
         }
     }
 
-    return result;
+    return count;
 }
 
 int CapturedObjects::GetColor( int32_t index ) const
@@ -273,7 +259,7 @@ void CapturedObjects::ClearFog( int colors )
             int scoutingDistance = 0;
 
             switch ( objcol.first ) {
-            case MP2::OBJ_MINES:
+            case MP2::OBJ_MINE:
             case MP2::OBJ_ALCHEMIST_LAB:
             case MP2::OBJ_SAWMILL:
                 scoutingDistance = 2;
@@ -633,7 +619,7 @@ void World::MonthOfMonstersAction( const Monster & mons )
         const int32_t tileId = tile.GetIndex();
         const MP2::MapObjectType objectType = tile.GetObject( true );
 
-        if ( objectType == MP2::OBJ_CASTLE || objectType == MP2::OBJ_HEROES || objectType == MP2::OBJ_MONSTER ) {
+        if ( objectType == MP2::OBJ_CASTLE || objectType == MP2::OBJ_HERO || objectType == MP2::OBJ_MONSTER ) {
             excludeTiles.emplace( tileId );
             continue;
         }
@@ -1332,14 +1318,14 @@ void World::PostLoad( const bool setTilePassabilities )
     // Cache all tiles that that contain stone liths of a certain type (depending on object sprite index).
     _allTeleports.clear();
 
-    for ( const int32_t index : Maps::GetObjectPositions( MP2::OBJ_STONE_LITHS, true ) ) {
+    for ( const int32_t index : Maps::GetObjectPositions( MP2::OBJ_STONE_LITHS ) ) {
         _allTeleports[GetTiles( index ).GetObjectSpriteIndex()].push_back( index );
     }
 
     // Cache all tiles that contain a certain part of the whirlpool (depending on object sprite index).
     _allWhirlpools.clear();
 
-    for ( const int32_t index : Maps::GetObjectPositions( MP2::OBJ_WHIRLPOOL, true ) ) {
+    for ( const int32_t index : Maps::GetObjectPositions( MP2::OBJ_WHIRLPOOL ) ) {
         _allWhirlpools[GetTiles( index ).GetObjectSpriteIndex()].push_back( index );
     }
 

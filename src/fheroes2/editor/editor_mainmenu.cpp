@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2023                                                    *
+ *   Copyright (C) 2023 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -38,8 +38,6 @@
 #include "icn.h"
 #include "localevent.h"
 #include "logging.h"
-#include "map_format_helper.h"
-#include "map_format_info.h"
 #include "maps.h"
 #include "maps_fileinfo.h"
 #include "math_base.h"
@@ -50,6 +48,7 @@
 #include "ui_dialog.h"
 #include "ui_tool.h"
 #include "world.h"
+#include "world_object_uid.h"
 
 namespace
 {
@@ -259,10 +258,13 @@ namespace Editor
                 if ( mapSize != Maps::ZERO ) {
                     world.generateForEditor( mapSize );
 
+                    // Reset object UID to keep track of newly added objects.
+                    Maps::resetObjectUID();
+
                     fheroes2::fadeOutDisplay();
                     Game::setDisplayFadeIn();
 
-                    return Interface::EditorInterface::Get().startEdit();
+                    return Interface::EditorInterface::Get().startEdit( true );
                 }
                 return fheroes2::GameMode::EDITOR_NEW_MAP;
             }
@@ -300,7 +302,7 @@ namespace Editor
 
         fheroes2::validateFadeInAndRender();
 
-        const MapsFileInfoList lists = Maps::getResurrectionMapFileInfos();
+        const MapsFileInfoList lists = Maps::getResurrectionMapFileInfos( true, false );
         if ( lists.empty() ) {
             fheroes2::showStandardTextMessage( _( "Warning" ), _( "No maps available!" ), Dialog::OK );
             return fheroes2::GameMode::EDITOR_MAIN_MENU;
@@ -311,20 +313,14 @@ namespace Editor
             return fheroes2::GameMode::EDITOR_MAIN_MENU;
         }
 
-        Maps::Map_Format::MapFormat map;
-        if ( !Maps::Map_Format::loadMap( fileInfo->filename, map ) ) {
-            fheroes2::showStandardTextMessage( _( "Warning!" ), "Failed to load the map.", Dialog::OK );
-            return fheroes2::GameMode::CANCEL;
-        }
-
-        if ( !Maps::readMapInEditor( map ) ) {
-            fheroes2::showStandardTextMessage( _( "Warning!" ), "Failed to read the map.", Dialog::OK );
+        Interface::EditorInterface & editorInterface = Interface::EditorInterface::Get();
+        if ( !editorInterface.loadMap( fileInfo->filename ) ) {
             return fheroes2::GameMode::CANCEL;
         }
 
         fheroes2::fadeOutDisplay();
         Game::setDisplayFadeIn();
 
-        return Interface::EditorInterface::Get().startEdit();
+        return Interface::EditorInterface::Get().startEdit( false );
     }
 }

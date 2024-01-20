@@ -230,7 +230,7 @@ void CastleRedrawCurrentBuilding( const Castle & castle, const fheroes2::Point &
 
     // redraw all builds
     if ( BUILD_NOTHING == fadeBuilding.GetBuild() ) {
-        for ( const CastleDialog::builds_t & currentBuild : orders ) {
+        for ( const CastleDialog::BuildingRenderInfo & currentBuild : orders ) {
             if ( castle.isBuild( currentBuild.id ) ) {
                 CastleDialog::CastleRedrawBuilding( castle, dst_pt, currentBuild.id, animationIndex );
                 CastleDialog::CastleRedrawBuildingExtended( castle, dst_pt, currentBuild.id, animationIndex );
@@ -242,7 +242,7 @@ void CastleRedrawCurrentBuilding( const Castle & castle, const fheroes2::Point &
     }
     // redraw build with alpha
     else if ( orders.cend() != std::find( orders.cbegin(), orders.cend(), fadeBuilding.GetBuild() ) ) {
-        for ( const CastleDialog::builds_t & currentBuild : orders ) {
+        for ( const CastleDialog::BuildingRenderInfo & currentBuild : orders ) {
             if ( castle.isBuild( currentBuild.id ) ) {
                 CastleDialog::CastleRedrawBuilding( castle, dst_pt, currentBuild.id, animationIndex );
                 if ( currentBuild.id == BUILD_SHIPYARD && fadeBuilding.GetBuild() == BUILD_SHIPYARD ) {

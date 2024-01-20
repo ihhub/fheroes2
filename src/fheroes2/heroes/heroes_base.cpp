@@ -176,7 +176,13 @@ Spell HeroBase::OpenSpellBook( const SpellBook::Filter filter, const bool canCas
 
 SpellStorage HeroBase::getAllSpells() const
 {
+    // If the hero doesn't have a spell book, then spell scrolls are useless
+    if ( !HaveSpellBook() ) {
+        return {};
+    }
+
     SpellStorage storage;
+
     storage.Append( spell_book );
     storage.Append( bag_artifacts );
 
@@ -203,6 +209,16 @@ void HeroBase::AppendSpellsToBook( const SpellStorage & spells, const bool witho
 bool HeroBase::SpellBookActivate()
 {
     return !HaveSpellBook() && bag_artifacts.PushArtifact( Artifact::MAGIC_BOOK );
+}
+
+void HeroBase::SpellBookDeactivate()
+{
+    bag_artifacts.RemoveArtifact( Artifact::MAGIC_BOOK );
+
+    // Hero should not have more than one spell book
+    assert( !HaveSpellBook() );
+
+    spell_book.clear();
 }
 
 bool HeroBase::hasArtifact( const Artifact & art ) const
@@ -534,7 +550,7 @@ bool HeroBase::CanCastSpell( const Spell & spell, std::string * res /* = nullptr
             const Maps::Tiles & tile = world.GetTiles( hero->GetIndex() );
             const MP2::MapObjectType object = tile.GetObject( false );
 
-            if ( MP2::OBJ_MINES != object ) {
+            if ( MP2::OBJ_MINE != object ) {
                 if ( res != nullptr ) {
                     *res = _( "You must be standing on the entrance to a mine (sawmills and alchemist labs do not count) to cast this spell." );
                 }

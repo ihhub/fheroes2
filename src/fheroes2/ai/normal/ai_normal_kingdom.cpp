@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2023                                             *
+ *   Copyright (C) 2020 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -217,7 +217,7 @@ namespace
         const MP2::MapObjectType object = tile.GetObject();
         const int32_t tileIndex = tile.GetIndex();
 
-        if ( object == MP2::OBJ_HEROES ) {
+        if ( object == MP2::OBJ_HERO ) {
             const Heroes * hero = tile.getHero();
             // TODO: this function can be called when the game world is not fully initialized yet
             if ( hero == nullptr ) {
@@ -305,12 +305,19 @@ namespace AI
             recruit = castle.RecruitHero( secondRecruit );
         }
 
-        if ( recruit && buyArmy ) {
+        if ( recruit == nullptr ) {
+            return false;
+        }
+
+        if ( buyArmy ) {
             CastleTurn( castle, underThreat );
             reinforceHeroInCastle( *recruit, castle, kingdom.GetFunds() );
         }
+        else {
+            OptimizeTroopsOrder( recruit->GetArmy() );
+        }
 
-        return recruit != nullptr;
+        return true;
     }
 
     void Normal::reinforceHeroInCastle( Heroes & hero, Castle & castle, const Funds & budget )
@@ -709,7 +716,7 @@ namespace AI
             return;
         }
 
-        // reset indicator
+        // Reset the turn progress indicator
         Interface::StatusWindow & status = Interface::AdventureMap::Get().getStatusWindow();
         status.DrawAITurnProgress( 0 );
 
@@ -733,10 +740,9 @@ namespace AI
             hero->ResetModes( Heroes::SLEEPER );
             hero->setDimensionDoorUsage( 0 );
 
-            const double strength = hero->GetArmy().GetStrength();
-            _combinedHeroStrength += strength;
-            if ( !hero->Modes( Heroes::PATROL ) )
+            if ( !hero->Modes( Heroes::PATROL ) ) {
                 ++availableHeroCount;
+            }
 
             if ( hero->HaveSpell( Spell::VIEWALL ) && ( !bestHeroToViewAll || hero->HasSecondarySkill( Skill::Secondary::MYSTICISM ) ) ) {
                 bestHeroToViewAll = hero;
@@ -747,12 +753,13 @@ namespace AI
             underViewSpell = true;
         }
 
-        const int mapSize = world.w() * world.h();
         _priorityTargets.clear();
         _enemyArmies.clear();
         _mapActionObjects.clear();
         _regions.clear();
         _regions.resize( world.getRegionCount() );
+
+        const int mapSize = world.w() * world.h();
 
         for ( int idx = 0; idx < mapSize; ++idx ) {
             const Maps::Tiles & tile = world.GetTiles( idx );
@@ -775,7 +782,7 @@ namespace AI
 
             _mapActionObjects.emplace_back( idx, objectType );
 
-            if ( objectType == MP2::OBJ_HEROES ) {
+            if ( objectType == MP2::OBJ_HERO ) {
                 const Heroes * hero = tile.getHero();
                 assert( hero != nullptr );
 
@@ -892,7 +899,7 @@ namespace AI
 
         status.DrawAITurnProgress( 9 );
 
-        // sync up castle list (if conquered new ones during the turn)
+        // Sync the list of castles (if new ones were captured during the turn)
         if ( castles.size() != sortedCastleList.size() ) {
             evaluateRegionSafety();
             sortedCastleList = getSortedCastleList( castles, castlesInDanger );
@@ -903,6 +910,16 @@ namespace AI
             if ( entry.castle != nullptr ) {
                 CastleTurn( *entry.castle, entry.underThreat );
             }
+        }
+
+        // For heroes in castles or towns, transfer their slowest troops to the garrison at the end of the turn to try to get a movement bonus on the next turn
+        for ( Heroes * hero : heroes ) {
+            Castle * castle = hero->inCastleMutable();
+            if ( castle == nullptr ) {
+                continue;
+            }
+
+            transferSlowestTroopsToGarrison( hero, castle );
         }
 
         status.DrawAITurnProgress( 10 );

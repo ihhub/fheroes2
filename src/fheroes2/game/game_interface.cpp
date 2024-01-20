@@ -52,6 +52,7 @@ Interface::AdventureMap::AdventureMap()
     , iconsPanel( *this )
     , buttonsArea( *this )
     , controlPanel( *this )
+    , _statusWindow( *this )
     , _lockRedraw( false )
 {
     AdventureMap::reset();
@@ -182,7 +183,7 @@ int32_t Interface::AdventureMap::GetDimensionDoorDestination( const int32_t from
     const fheroes2::Rect & radarArea = _radar.GetArea();
 
     fheroes2::Button buttonExit( radarArea.x + 32, radarArea.y + radarArea.height - 37,
-                                 ( isEvilInterface ? ICN::BUTTON_EXIT_PUZZLE_DDOOR_EVIL : ICN::BUTTON_EXIT_PUZZLE_DDOOR_GOOD ), 0, 1 );
+                                 ( isEvilInterface ? ICN::BUTTON_EXIT_PUZZLE_DIM_DOOR_EVIL : ICN::BUTTON_EXIT_PUZZLE_DIM_DOOR_GOOD ), 0, 1 );
 
     const auto drawControlPanel = [&display, isEvilInterface, isHideInterface, &radarRect, &radarArea, &buttonExit]() {
         if ( isHideInterface ) {

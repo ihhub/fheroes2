@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -971,12 +971,15 @@ namespace ICN
         RECR2BKG_EVIL,
         STONEBAK_EVIL,
         STONEBAK_SMALL_POL,
+        UNIFORMBAK_GOOD,
+        UNIFORMBAK_EVIL,
         REDBAK_SMALL_VERTICAL,
         WELLBKG_EVIL,
         CASLWIND_EVIL,
         CASLXTRA_EVIL,
         RECRBKG_EVIL,
         STRIP_BACKGROUND_EVIL,
+        EDITBTNS_EVIL,
 
         GOOD_CAMPAIGN_BUTTONS,
         EVIL_CAMPAIGN_BUTTONS,
@@ -997,6 +1000,7 @@ namespace ICN
         EMPTY_POL_BUTTON,
         EMPTY_GUILDWELL_BUTTON,
         EMPTY_VERTICAL_GOOD_BUTTON,
+        EMPTY_MAP_SELECT_BUTTON,
 
         BUTTON_STANDARD_GAME,
         BUTTON_CAMPAIGN_GAME,
@@ -1045,8 +1049,8 @@ namespace ICN
         BUTTON_SMALL_EXIT_EVIL,
         BUTTON_EXIT_HEROES_MEETING,
         BUTTON_EXIT_TOWN,
-        BUTTON_EXIT_PUZZLE_DDOOR_GOOD,
-        BUTTON_EXIT_PUZZLE_DDOOR_EVIL,
+        BUTTON_EXIT_PUZZLE_DIM_DOOR_GOOD,
+        BUTTON_EXIT_PUZZLE_DIM_DOOR_EVIL,
         BUTTON_SMALL_DISMISS_GOOD,
         BUTTON_SMALL_DISMISS_EVIL,
         BUTTON_SMALL_UPGRADE_GOOD,
@@ -1058,7 +1062,9 @@ namespace ICN
         BUTTON_SMALL_MAX_GOOD,
         BUTTON_SMALL_MAX_EVIL,
 
+        BUTTON_EXIT_GOOD,
         BUTTON_RESET_GOOD,
+        BUTTON_START_GOOD,
 
         BUTTON_CASTLE_GOOD,
         BUTTON_CASTLE_EVIL,
@@ -1075,7 +1081,8 @@ namespace ICN
         BUTTON_MAPSIZE_XLARGE,
         BUTTON_MAPSIZE_ALL,
 
-        BUTTON_MAP_SELECT,
+        BUTTON_MAP_SELECT_GOOD,
+        BUTTON_MAP_SELECT_EVIL,
 
         BUTTON_GUILDWELL_EXIT,
         BUTTON_VIEWWORLD_EXIT_GOOD,
@@ -1088,6 +1095,15 @@ namespace ICN
         BUTTON_HSCORES_VERTICAL_STANDARD,
 
         GAME_OPTION_ICON,
+
+        DIFFICULTY_ICON_EASY,
+        DIFFICULTY_ICON_NORMAL,
+        DIFFICULTY_ICON_HARD,
+        DIFFICULTY_ICON_EXPERT,
+        DIFFICULTY_ICON_IMPOSSIBLE,
+
+        METALLIC_BORDERED_TEXTBOX_GOOD,
+        METALLIC_BORDERED_TEXTBOX_EVIL,
 
         // IMPORTANT! Put any new entry just above this one.
         LASTICN

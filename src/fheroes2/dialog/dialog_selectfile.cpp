@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -258,22 +258,23 @@ namespace
 
     MapsFileInfoList getSortedMapsFileInfoList()
     {
-        ListFiles list1;
-        list1.ReadDir( Game::GetSaveDir(), Game::GetSaveFileExtension(), false );
+        ListFiles files;
+        files.ReadDir( Game::GetSaveDir(), Game::GetSaveFileExtension(), false );
 
-        MapsFileInfoList list2( list1.size() );
-        size_t saveFileCount = 0;
-        for ( const std::string & saveFile : list1 ) {
-            if ( list2[saveFileCount].ReadSAV( saveFile ) ) {
-                ++saveFileCount;
+        MapsFileInfoList mapInfos;
+        mapInfos.reserve( files.size() );
+
+        for ( std::string & saveFile : files ) {
+            Maps::FileInfo mapInfo;
+
+            if ( Game::LoadSAV2FileInfo( std::move( saveFile ), mapInfo ) ) {
+                mapInfos.emplace_back( std::move( mapInfo ) );
             }
         }
-        if ( saveFileCount != list2.size() ) {
-            list2.resize( saveFileCount );
-        }
-        std::sort( list2.begin(), list2.end(), Maps::FileInfo::FileSorting );
 
-        return list2;
+        std::sort( mapInfos.begin(), mapInfos.end(), Maps::FileInfo::sortByFileName );
+
+        return mapInfos;
     }
 
     std::string selectFileListSimple( const std::string & header, const std::string & lastfile, const bool isEditing )
@@ -555,7 +556,7 @@ namespace
                 }
             }
 
-            display.render( background.activeArea() );
+            display.render( area );
         }
 
         return result;

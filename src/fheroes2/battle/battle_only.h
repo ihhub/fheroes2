@@ -117,6 +117,8 @@ namespace Battle
 
             uint8_t armyId{ 0 };
 
+            bool needRedraw{ false };
+
             void reset();
         };
 
@@ -126,13 +128,15 @@ namespace Battle
 
         bool _backupCompleted{ false };
 
-        void RedrawBaseInfo( const fheroes2::Point & top ) const;
+        void redrawOpponents( const fheroes2::Point & top ) const;
+
+        void redrawOpponentsStats( const fheroes2::Point & top ) const;
 
         static void updateHero( ArmyInfo & info, const fheroes2::Point & offset );
 
         static void updateArmyUI( ArmyUI & ui, Heroes * hero, const fheroes2::Point & offset, const uint8_t armyId );
 
-        static void copyHero( Heroes & in, Heroes & out );
+        static void copyHero( const Heroes & in, Heroes & out );
     };
 }
 

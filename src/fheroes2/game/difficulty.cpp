@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -82,7 +82,7 @@ double Difficulty::getGoldIncomeBonusForAI( const int difficulty )
     return 0;
 }
 
-double Difficulty::GetUnitGrowthBonusForAI( const int difficulty )
+double Difficulty::GetUnitGrowthBonusForAI( const int difficulty, const bool /* isCampaign */, const building_t /* dwelling */ )
 {
     // In the original game AI has a cheeky monster growth bonus depending on difficulty:
     // Easy - 0.0 (no bonus)
@@ -128,7 +128,7 @@ int Difficulty::GetHeroMovementBonus( int difficulty )
     return 0;
 }
 
-double Difficulty::GetAIRetreatRatio( int difficulty )
+double Difficulty::getArmyStrengthRatioForAIRetreat( const int difficulty )
 {
     switch ( difficulty ) {
     case Difficulty::NORMAL:
@@ -142,6 +142,11 @@ double Difficulty::GetAIRetreatRatio( int difficulty )
         break;
     }
     return 100.0 / 6.0;
+}
+
+uint32_t Difficulty::getGoldReserveRatioForAISurrender( const int /* difficulty */ )
+{
+    return 10;
 }
 
 uint32_t Difficulty::GetDimensionDoorLimit( int difficulty )
@@ -204,6 +209,29 @@ bool Difficulty::allowAIToSplitWeakStacks( const int difficulty )
     case Difficulty::EASY:
     case Difficulty::NORMAL:
         return false;
+    default:
+        break;
+    }
+    return true;
+}
+
+bool Difficulty::allowAIToDevelopCastlesOnDay( const int difficulty, const bool isCampaign, const uint32_t day )
+{
+    switch ( difficulty ) {
+    case Difficulty::EASY:
+        return isCampaign || day % 2 == 0;
+    default:
+        break;
+    }
+    return true;
+}
+
+bool Difficulty::allowAIToBuildCastleBuilding( const int difficulty, const bool isCampaign, const building_t building )
+{
+    switch ( difficulty ) {
+    case Difficulty::EASY:
+        // Only the construction of the corresponding dwelling is limited, but not its upgrade
+        return isCampaign || building != DWELLING_MONSTER6;
     default:
         break;
     }

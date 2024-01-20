@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2012 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -80,12 +80,21 @@ namespace Battle
 
         bool isValid( const bool considerBattlefieldArmy = true ) const;
         bool HasMonster( const Monster & ) const;
+
         uint32_t GetDeadHitPoints() const;
         uint32_t GetDeadCounts() const;
+
         int GetColor() const;
         int GetControl() const;
+
+        // Returns the cost of surrender (in units of gold) for the current army on the battlefield
         uint32_t GetSurrenderCost() const;
+
+        // Returns the strength of the army that will remain in case of surrender (not taking into account the hero's bonuses)
+        double getStrengthOfArmyRemainingInCaseOfSurrender() const;
+
         Troops GetKilledTroops() const;
+
         bool animateIdleUnits() const;
         void resetIdleAnimation() const;
 

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2023                                             *
+ *   Copyright (C) 2020 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -44,7 +44,7 @@ namespace Battle
 {
     void BattlePathfinder::reEvaluateIfNeeded( const Unit & unit )
     {
-        assert( unit.GetHeadIndex() != -1 && ( !unit.isWide() || unit.GetTailIndex() != -1 ) );
+        assert( unit.GetHeadIndex() != -1 && ( unit.isWide() ? unit.GetTailIndex() != -1 : unit.GetTailIndex() == -1 ) );
 
         const Board * board = Arena::GetBoard();
         assert( board != nullptr );
@@ -85,7 +85,7 @@ namespace Battle
                     continue;
                 }
 
-                assert( !_isWide || pos.GetTail() != nullptr );
+                assert( pos.isValidForUnit( unit ) );
 
                 const int32_t headCellIdx = pos.GetHead()->GetIndex();
                 const int32_t tailCellIdx = pos.GetTail() ? pos.GetTail()->GetIndex() : -1;

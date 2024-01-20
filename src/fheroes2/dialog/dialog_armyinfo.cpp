@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -231,7 +231,7 @@ namespace
         text.draw( dst_pt.x, dst_pt.y + 2, display );
     }
 
-    fheroes2::Sprite GetModesSprite( uint32_t mod )
+    const fheroes2::Sprite & GetModesSprite( const uint32_t mod )
     {
         switch ( mod ) {
         case Battle::SP_BLOODLUST:
@@ -268,7 +268,7 @@ namespace
             break;
         }
 
-        return {};
+        return fheroes2::AGG::GetICN( ICN::UNKNOWN, 0 );
     }
 
     std::vector<std::pair<fheroes2::Rect, Spell>> DrawBattleStats( const fheroes2::Point & dst, const Troop & b )

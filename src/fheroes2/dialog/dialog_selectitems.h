@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2011 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -59,9 +59,25 @@ namespace Dialog
 
     int selectTreasureType( const int resourceType );
 
-    int selectOceanObjectType( const int resourceType );
+    int selectOceanObjectType( const int objectType );
+
+    int selectLandscapeOceanObjectType( const int objectType );
 
     void selectTownType( int & type, int & color );
+
+    int selectDwellingType( const int dwellingType );
+
+    void selectMineType( int32_t & type, int32_t & color );
+
+    int selectMountainType( const int mountainType );
+
+    int selectRockType( const int rockType );
+
+    int selectTreeType( const int treeType );
+
+    int selectPowerUpObjectType( const int powerUpObjectType );
+
+    int selectAdventureMiscellaneousObjectType( const int objectType );
 }
 
 #endif

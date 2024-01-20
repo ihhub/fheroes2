@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -20,9 +20,10 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
+#include "race.h"
+
 #include <cassert>
 
-#include "race.h"
 #include "rand.h"
 #include "translations.h"
 
@@ -104,6 +105,25 @@ int Race::Rand()
     }
 
     return Race::NECR;
+}
+
+bool Race::isMagicalRace( const int race )
+{
+    switch ( race ) {
+    case KNGT:
+    case BARB:
+        return false;
+    case SORC:
+    case WRLK:
+    case WZRD:
+    case NECR:
+        return true;
+    default:
+        assert( 0 );
+        break;
+    }
+
+    return false;
 }
 
 uint8_t Race::IndexToRace( const int index )

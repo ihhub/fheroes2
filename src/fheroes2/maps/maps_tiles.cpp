@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -165,8 +165,8 @@ namespace
     // Define VERIFY_SHADOW_SPRITES macro to be able to use these functions.
     bool isShadowImage( const fheroes2::Image & image )
     {
-        // The image can't be empty.
-        assert( !image.empty() );
+        // The image can't be empty and must have transform layer.
+        assert( !image.empty() && !image.singleLayer() );
         if ( image.empty() )
             return false;
 
@@ -297,7 +297,7 @@ namespace
         case MP2::OBJ_CASTLE:
         case MP2::OBJ_WAGON_CAMP:
         case MP2::OBJ_FAERIE_RING:
-        case MP2::OBJ_MINES:
+        case MP2::OBJ_MINE:
         case MP2::OBJ_SAWMILL:
         case MP2::OBJ_WATER_ALTAR:
         case MP2::OBJ_AIR_ALTAR:
@@ -553,7 +553,7 @@ void Maps::Tiles::setTerrain( const uint16_t terrainImageIndex, const bool horiz
 
 Heroes * Maps::Tiles::getHero() const
 {
-    return MP2::OBJ_HEROES == _mainObjectType && Heroes::isValidId( _occupantHeroId ) ? world.GetHeroes( _occupantHeroId ) : nullptr;
+    return MP2::OBJ_HERO == _mainObjectType && Heroes::isValidId( _occupantHeroId ) ? world.GetHeroes( _occupantHeroId ) : nullptr;
 }
 
 void Maps::Tiles::setHero( Heroes * hero )
@@ -567,7 +567,7 @@ void Maps::Tiles::setHero( Heroes * hero )
         assert( hero->GetID() >= std::numeric_limits<HeroIDType>::min() && hero->GetID() < std::numeric_limits<HeroIDType>::max() );
         _occupantHeroId = static_cast<HeroIDType>( hero->GetID() );
 
-        SetObject( MP2::OBJ_HEROES );
+        SetObject( MP2::OBJ_HERO );
     }
     else {
         hero = getHero();
@@ -591,7 +591,7 @@ fheroes2::Point Maps::Tiles::GetCenter() const
 
 MP2::MapObjectType Maps::Tiles::GetObject( bool ignoreObjectUnderHero /* true */ ) const
 {
-    if ( !ignoreObjectUnderHero && MP2::OBJ_HEROES == _mainObjectType ) {
+    if ( !ignoreObjectUnderHero && MP2::OBJ_HERO == _mainObjectType ) {
         const Heroes * hero = getHero();
         return hero ? hero->getObjectTypeUnderHero() : MP2::OBJ_NONE;
     }
@@ -991,7 +991,7 @@ std::string Maps::Tiles::String() const
     case MP2::OBJ_MONSTER:
         os << "monster count   : " << getMonsterCountFromTile( *this ) << std::endl;
         break;
-    case MP2::OBJ_HEROES: {
+    case MP2::OBJ_HERO: {
         const Heroes * hero = getHero();
         if ( hero )
             os << hero->String();
@@ -1087,12 +1087,12 @@ bool Maps::Tiles::isPassableFrom( const int direction, const bool fromWater, con
     }
 
     // From the ground we can get to the water tile only if this tile contains a certain object.
-    if ( !fromWater && tileIsWater && _mainObjectType != MP2::OBJ_SHIPWRECK && _mainObjectType != MP2::OBJ_HEROES && _mainObjectType != MP2::OBJ_BOAT ) {
+    if ( !fromWater && tileIsWater && _mainObjectType != MP2::OBJ_SHIPWRECK && _mainObjectType != MP2::OBJ_HERO && _mainObjectType != MP2::OBJ_BOAT ) {
         return false;
     }
 
     // Tiles on which allied heroes are located are inaccessible
-    if ( _mainObjectType == MP2::OBJ_HEROES ) {
+    if ( _mainObjectType == MP2::OBJ_HERO ) {
         const Heroes * hero = getHero();
         assert( hero != nullptr );
 
@@ -1208,7 +1208,7 @@ void Maps::Tiles::setOwnershipFlag( const MP2::MapObjectType objectType, const i
         break;
 
     case MP2::OBJ_WATER_WHEEL:
-    case MP2::OBJ_MINES:
+    case MP2::OBJ_MINE:
         objectSpriteIndex += 128 + 14;
         if ( Maps::isValidDirection( _index, Direction::TOP ) ) {
             Maps::Tiles & tile = world.GetTiles( Maps::GetDirectionIndex( _index, Direction::TOP ) );
@@ -1443,6 +1443,7 @@ void Maps::Tiles::fixTileObjectType( Tiles & tile )
 
 void Maps::Tiles::Remove( uint32_t uniqID )
 {
+    // TODO: this method must update the type of the main object
     _addonBottomLayer.remove_if( [uniqID]( const Maps::TilesAddon & v ) { return v._uid == uniqID; } );
     _addonTopLayer.remove_if( [uniqID]( const Maps::TilesAddon & v ) { return v._uid == uniqID; } );
 
@@ -1737,8 +1738,9 @@ int32_t Maps::Tiles::getIndexOfMainTile( const Maps::Tiles & tile )
 
     // Main tile is usually at the bottom of the object so let's start from there. Also there are no objects having tiles below more than 1 row.
     for ( int32_t y = radiusOfSearch; y >= -1; --y ) {
+        const int32_t offsetX = tileIndex + y * mapWidth;
         for ( int32_t x = -radiusOfSearch; x <= radiusOfSearch; ++x ) {
-            const int32_t index = tileIndex + y * mapWidth + x;
+            const int32_t index = offsetX + x;
             if ( Maps::isValidAbsIndex( index ) ) {
                 const Maps::Tiles & foundTile = world.GetTiles( index );
                 if ( foundTile.GetObject( false ) != correctedObjectType ) {

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -86,6 +86,8 @@ namespace AI
     class Base
     {
     public:
+        virtual ~Base() = default;
+
         virtual void KingdomTurn( Kingdom & kingdom ) = 0;
         virtual void BattleTurn( Battle::Arena & arena, const Battle::Unit & unit, Battle::Actions & actions ) = 0;
 
@@ -118,8 +120,6 @@ namespace AI
         // Should be called at the beginning of the battle even if no AI-controlled players are
         // involved in the battle - because of the possibility of using instant or auto battle
         virtual void battleBegins() = 0;
-
-        virtual ~Base() = default;
 
         virtual void tradingPostVisitEvent( Kingdom & kingdom ) = 0;
 
@@ -165,7 +165,12 @@ namespace AI
     // returns false.
     bool BuildIfEnoughFunds( Castle & castle, const building_t building, const uint32_t fundsMultiplier );
 
-    void OptimizeTroopsOrder( Army & hero );
+    // Performs the pre-battle arrangement of the given army, see the implementation for details
+    void OptimizeTroopsOrder( Army & army );
+
+    // Transfers the slowest troops from the hero's army to the garrison to try to get a movement bonus on the next turn
+    void transferSlowestTroopsToGarrison( Heroes * hero, Castle * castle );
+
     bool CanPurchaseHero( const Kingdom & kingdom );
 
     // Calculates a marketplace transaction, after which the kingdom would be able to make a payment in the amount of
