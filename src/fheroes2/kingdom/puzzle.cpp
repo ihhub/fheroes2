@@ -86,6 +86,8 @@ namespace
 
         // Immediately reveal the entire puzzle in developer mode
         if ( IS_DEVEL() ) {
+            assert( sf.singleLayer() );
+
             fheroes2::Copy( sf, 0, 0, display, dstx, dsty, sf.width(), sf.height() );
 
             return;
@@ -106,6 +108,9 @@ namespace
         if ( IS_DEVEL() ) {
             return false;
         }
+
+        // The game area puzzle image should be single-layer.
+        assert( sf.singleLayer() );
 
         fheroes2::Display & display = fheroes2::Display::instance();
         LocalEvent & le = LocalEvent::Get();
@@ -219,7 +224,7 @@ namespace
         const fheroes2::StandardWindow border( gameAreaRoi.x + ( gameAreaRoi.width - sf.width() ) / 2, gameAreaRoi.y + ( gameAreaRoi.height - sf.height() ) / 2,
                                                sf.width(), sf.height(), false );
 
-        const fheroes2::Rect puzzleArea = border.activeArea();
+        const fheroes2::Rect & puzzleArea = border.activeArea();
 
         fheroes2::Image background( puzzleArea.width, puzzleArea.height );
 
