@@ -38,6 +38,7 @@
 #include "battle_grave.h"
 #include "battle_pathfinding.h"
 #include "battle_tower.h"
+#include "icn.h"
 #include "spell.h"
 #include "spell_storage.h"
 
@@ -99,9 +100,9 @@ namespace Battle
         bool AutoBattleInProgress() const;
         bool CanToggleAutoBattle() const;
 
-        uint32_t GetCurrentTurn() const
+        uint32_t GetTurnNumber() const
         {
-            return current_turn;
+            return _turnNumber;
         }
 
         Result & GetResult();
@@ -204,7 +205,7 @@ namespace Battle
 
         int GetICNCovr() const
         {
-            return icn_covr;
+            return _covrIcnId;
         }
 
         uint32_t GetCastleTargetValue( const CastleDefenseElement target ) const;
@@ -236,8 +237,8 @@ namespace Battle
 
     private:
         void HumanTurn( const Unit &, Actions & );
+        void UnitTurn( const Units & orderHistory );
 
-        void TurnTroop( Unit * troop, const Units & orderHistory );
         void TowerAction( const Tower & );
 
         void SetCastleTargetValue( const CastleDefenseElement target, const uint32_t value );
@@ -296,11 +297,12 @@ namespace Battle
         std::unique_ptr<Force> _army2;
         std::shared_ptr<Units> _orderOfUnits;
 
-        // The color of the army, whose turn it is to perform an action
-        int _currentColor;
+        // The unit that is currently active. Please note that some battle actions (e.g. catapult or castle tower shots) can be performed without an active unit.
+        Unit * _currentUnit{ nullptr };
+
         // The color of the army of the last unit that performed a full-fledged action (skipping a turn due to
-        // bad morale is not considered as such)
-        int _lastActiveUnitArmyColor;
+        // bad morale is not considered as such).
+        int _lastActiveUnitArmyColor{ -1 };
 
         const Castle * castle;
         // Is the battle taking place in a town or a castle
@@ -318,11 +320,11 @@ namespace Battle
 
         Board board;
         BattlePathfinder _battlePathfinder;
-        int icn_covr;
+        int _covrIcnId{ ICN::UNKNOWN };
 
-        uint32_t current_turn;
+        uint32_t _turnNumber{ 0 };
         // A set of colors of players for whom the auto-battle mode is enabled
-        int _autoBattleColors;
+        int _autoBattleColors{ 0 };
 
         // This random number generator should only be used in code that is equally used by both AI and the human
         // player - that is, in code related to the processing of battle commands. It cannot be safely used in other

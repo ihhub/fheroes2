@@ -2612,7 +2612,7 @@ int Battle::Interface::GetBattleCursor( std::string & statusMsg ) const
     }
 
     statusMsg = _( "Turn %{turn}" );
-    StringReplace( statusMsg, "%{turn}", arena.GetCurrentTurn() );
+    StringReplace( statusMsg, "%{turn}", arena.GetTurnNumber() );
 
     return Cursor::WAR_NONE;
 }
@@ -3464,7 +3464,7 @@ void Battle::Interface::RedrawActionNewTurn() const
     }
 
     std::string msg = _( "Turn %{turn}" );
-    StringReplace( msg, "%{turn}", arena.GetCurrentTurn() );
+    StringReplace( msg, "%{turn}", arena.GetTurnNumber() );
 
     listlog->AddMessage( std::move( msg ) );
 }

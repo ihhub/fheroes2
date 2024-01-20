@@ -903,7 +903,8 @@ int Battle::Arena::DialogBattleHero( const HeroBase & hero, const bool buttons, 
     Cursor & cursor = Cursor::Get();
     cursor.SetThemes( Cursor::POINTER );
 
-    const bool readonly = _currentColor != hero.GetColor() || !buttons;
+    const int currentColor = GetCurrentColor();
+    const bool readonly = currentColor != hero.GetColor() || !buttons;
     const fheroes2::Sprite & dialog = fheroes2::AGG::GetICN( ( conf.isEvilInterfaceEnabled() ? ICN::VGENBKGE : ICN::VGENBKG ), 0 );
 
     const fheroes2::Point dialogShadow( 15, 15 );
@@ -921,7 +922,7 @@ int Battle::Arena::DialogBattleHero( const HeroBase & hero, const bool buttons, 
     pos_rt.width -= dialogShadow.x;
 
     const fheroes2::Rect portraitArea( pos_rt.x + 7, pos_rt.y + 35, 113, 108 );
-    const Heroes * actionHero = ( _currentColor == hero.GetColor() ) ? dynamic_cast<const Heroes *>( &hero ) : nullptr;
+    const Heroes * actionHero = ( currentColor == hero.GetColor() ) ? dynamic_cast<const Heroes *>( &hero ) : nullptr;
 
     hero.PortraitRedraw( pos_rt.x + 12, pos_rt.y + 42, PORT_BIG, display );
     int col = ( Color::NONE == hero.GetColor() ? 1 : Color::GetIndex( hero.GetColor() ) + 1 );
@@ -1008,15 +1009,15 @@ int Battle::Arena::DialogBattleHero( const HeroBase & hero, const bool buttons, 
 
         if ( buttons ) {
             // The Cast Spell is available for a hero and a captain.
-            if ( le.MouseCursor( btnCast.area() ) && _currentColor == hero.GetColor() ) {
+            if ( le.MouseCursor( btnCast.area() ) && currentColor == hero.GetColor() ) {
                 statusMessage = _( "Cast Spell" );
             }
             // The retreat is available during a player's turn only. A captain cannot retreat.
-            else if ( le.MouseCursor( btnRetreat.area() ) && _currentColor == hero.GetColor() && !hero.isCaptain() ) {
+            else if ( le.MouseCursor( btnRetreat.area() ) && currentColor == hero.GetColor() && !hero.isCaptain() ) {
                 statusMessage = _( "Retreat" );
             }
             // The surrender is available during a player's turn only. A captain cannot surrender.
-            else if ( le.MouseCursor( btnSurrender.area() ) && _currentColor == hero.GetColor() && !hero.isCaptain() ) {
+            else if ( le.MouseCursor( btnSurrender.area() ) && currentColor == hero.GetColor() && !hero.isCaptain() ) {
                 statusMessage = _( "Surrender" );
             }
             else if ( le.MouseCursor( btnClose.area() ) ) {
@@ -1066,18 +1067,18 @@ int Battle::Arena::DialogBattleHero( const HeroBase & hero, const bool buttons, 
             fheroes2::fadeInDisplay( _interface->GetInterfaceRoi(), !display.isDefaultSize() );
         }
 
-        if ( le.MousePressRight( btnCast.area() ) && _currentColor == hero.GetColor() ) {
+        if ( le.MousePressRight( btnCast.area() ) && currentColor == hero.GetColor() ) {
             fheroes2::showStandardTextMessage(
                 _( "Cast Spell" ), _( "Cast a magical spell. You may only cast one spell per combat round. The round is reset when every creature has had a turn." ),
                 Dialog::ZERO );
         }
-        else if ( le.MousePressRight( btnRetreat.area() ) && _currentColor == hero.GetColor() && !hero.isCaptain() ) {
+        else if ( le.MousePressRight( btnRetreat.area() ) && currentColor == hero.GetColor() && !hero.isCaptain() ) {
             fheroes2::showStandardTextMessage(
                 _( "Retreat" ),
                 _( "Retreat your hero, abandoning your creatures. Your hero will be available for you to recruit again, however, the hero will have only a novice hero's forces." ),
                 Dialog::ZERO );
         }
-        else if ( le.MousePressRight( btnSurrender.area() ) && _currentColor == hero.GetColor() && !hero.isCaptain() ) {
+        else if ( le.MousePressRight( btnSurrender.area() ) && currentColor == hero.GetColor() && !hero.isCaptain() ) {
             fheroes2::showStandardTextMessage(
                 _( "Surrender" ),
                 _( "Surrendering costs gold. However if you pay the ransom, the hero and all of his or her surviving creatures will be available to recruit again. The cost of surrender is half of the total cost of the non-temporary troops remaining in the army." ),
