@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-20 03:11+0000\n"
+"POT-Creation-Date: 2024-01-20 09:21+0000\n"
 "PO-Revision-Date: 2023-09-24 16:05+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Czech <cs@li.org>\n"
@@ -3461,6 +3461,10 @@ msgid "Select Power Up Object:"
 msgstr "Artefakt"
 
 #, fuzzy
+msgid "Select Adventure Object:"
+msgstr "Artefakt"
+
+#, fuzzy
 msgid "Map Type:\n"
 msgstr "Velikost mapy"
 
@@ -3813,6 +3817,10 @@ msgstr "Toto město nemůže být povýšeno na hrad."
 
 #, fuzzy
 msgid "Power-ups cannot be placed on water."
+msgstr "Toto město nemůže být povýšeno na hrad."
+
+#, fuzzy
+msgid "Adventure objects cannot be placed on water."
 msgstr "Toto město nemůže být povýšeno na hrad."
 
 #, fuzzy

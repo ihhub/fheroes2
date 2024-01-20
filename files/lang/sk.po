@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-20 03:11+0000\n"
+"POT-Creation-Date: 2024-01-20 09:21+0000\n"
 "PO-Revision-Date: 2023-09-11 20:22+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3465,6 +3465,10 @@ msgstr "Objekty oceánu"
 msgid "Select Power Up Object:"
 msgstr "Objekty oceánu"
 
+#, fuzzy
+msgid "Select Adventure Object:"
+msgstr "Objekty oceánu"
+
 msgid "Map Type:\n"
 msgstr "Typ mapy:\n"
 
@@ -3824,6 +3828,10 @@ msgstr "Toto kúzlo nemožno použiť na lodi."
 
 #, fuzzy
 msgid "Power-ups cannot be placed on water."
+msgstr "Toto kúzlo nemožno použiť na lodi."
+
+#, fuzzy
+msgid "Adventure objects cannot be placed on water."
 msgstr "Toto kúzlo nemožno použiť na lodi."
 
 #, fuzzy

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-20 03:11+0000\n"
+"POT-Creation-Date: 2024-01-20 09:21+0000\n"
 "PO-Revision-Date: 2023-08-26 23:09+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: https://discord.com/"
@@ -3479,6 +3479,10 @@ msgstr "Wybierz artefakt:"
 msgid "Select Power Up Object:"
 msgstr "Wybierz artefakt:"
 
+#, fuzzy
+msgid "Select Adventure Object:"
+msgstr "Wybierz artefakt:"
+
 msgid "Map Type:\n"
 msgstr "Typ Mapy:\n"
 
@@ -3843,6 +3847,10 @@ msgstr "To zaklęcie nie może być rzucone z łodzi."
 
 #, fuzzy
 msgid "Power-ups cannot be placed on water."
+msgstr "To zaklęcie nie może być rzucone z łodzi."
+
+#, fuzzy
+msgid "Adventure objects cannot be placed on water."
 msgstr "To zaklęcie nie może być rzucone z łodzi."
 
 #, fuzzy

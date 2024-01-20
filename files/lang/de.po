@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-20 03:11+0000\n"
+"POT-Creation-Date: 2024-01-20 09:21+0000\n"
 "PO-Revision-Date: 2023-12-22 00:32+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3504,6 +3504,10 @@ msgstr "Ozean-Objekte"
 msgid "Select Power Up Object:"
 msgstr "Ozean-Objekte"
 
+#, fuzzy
+msgid "Select Adventure Object:"
+msgstr "Ozean-Objekte"
+
 msgid "Map Type:\n"
 msgstr "Kartentyp:\n"
 
@@ -3872,6 +3876,10 @@ msgstr "Monster können nicht auf Wasser plaziert werden."
 
 #, fuzzy
 msgid "Power-ups cannot be placed on water."
+msgstr "Monster können nicht auf Wasser plaziert werden."
+
+#, fuzzy
+msgid "Adventure objects cannot be placed on water."
 msgstr "Monster können nicht auf Wasser plaziert werden."
 
 #, fuzzy
