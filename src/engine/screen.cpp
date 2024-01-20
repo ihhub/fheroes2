@@ -966,8 +966,9 @@ namespace
             if ( displayCount > 0 ) {
                 return static_cast<uint8_t>( displayCount );
             }
+
             ERROR_LOG( "Failed to Get Number of Displays, description: " << SDL_GetError() );
-            // there should be one display at least
+            // There should be one display at least.
             return 1;
         }
 
