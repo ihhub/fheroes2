@@ -696,6 +696,10 @@ namespace
 
         std::string getObjectName( const Maps::ObjectInfo & info ) override
         {
+            if ( info.objectType == MP2::OBJ_NONE ) {
+                return _( "Terrain object" );
+            }
+
             return MP2::StringObject( info.objectType );
         }
     };
