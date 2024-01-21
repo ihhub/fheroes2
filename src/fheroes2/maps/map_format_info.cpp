@@ -34,6 +34,22 @@ namespace
 
     // This value is set to avoid any corrupted files to be processed.
     const size_t minFileSize{ 128 };
+
+    template <typename TType, size_t TSize>
+    void readArray( StreamBase & stream, std::array<TType, TSize> & values )
+    {
+        std::vector<TType> temp;
+        stream >> temp;
+
+        if ( values.size() != temp.size() ) {
+            // This is a corrupted file!
+            assert( 0 );
+            values = { 0 };
+        }
+        else {
+            std::copy_n( temp.begin(), values.size(), values.begin() );
+        }
+    }
 }
 
 namespace Maps::Map_Format
@@ -75,55 +91,54 @@ namespace Maps::Map_Format
 
     StreamBase & operator>>( StreamBase & msg, StandardObjectMetadata & metadata )
     {
-        std::vector<uint32_t> temp;
-        msg >> temp;
-
-        if ( metadata.metadata.size() != temp.size() ) {
-            // This is a corrupted file!
-            assert( 0 );
-            metadata.metadata = { 0 };
-        }
-        else {
-            std::copy_n( temp.begin(), metadata.metadata.size(), metadata.metadata.begin() );
-        }
+        readArray( msg, metadata.metadata );
 
         return msg;
     }
 
     StreamBase & operator<<( StreamBase & msg, const CastleMetadata & metadata )
     {
-        return msg << metadata.customName << metadata.defenderMonsterType << metadata.defenderMonsterCount;
+        return msg << metadata.customName << metadata.defenderMonsterType << metadata.defenderMonsterCount << metadata.isCaptainAvailable << metadata.builtBuildings
+                   << metadata.bannedBuildings << metadata.mustHaveSpells << metadata.bannedSpells << metadata.availableToHireMonsterCount;
     }
 
     StreamBase & operator>>( StreamBase & msg, CastleMetadata & metadata )
     {
         msg >> metadata.customName;
 
-        std::vector<uint32_t> temp;
-        msg >> temp;
+        readArray( msg, metadata.defenderMonsterType );
+        readArray( msg, metadata.defenderMonsterCount );
 
-        if ( metadata.defenderMonsterType.size() != temp.size() ) {
-            // This is a corrupted file!
-            assert( 0 );
-            metadata.defenderMonsterType = { 0 };
-        }
-        else {
-            std::copy_n( temp.begin(), metadata.defenderMonsterType.size(), metadata.defenderMonsterType.begin() );
-        }
+        msg >> metadata.isCaptainAvailable >> metadata.builtBuildings >> metadata.bannedBuildings >> metadata.mustHaveSpells >> metadata.bannedSpells;
 
-        temp.clear();
-        msg >> temp;
-
-        if ( metadata.defenderMonsterCount.size() != temp.size() ) {
-            // This is a corrupted file!
-            assert( 0 );
-            metadata.defenderMonsterCount = { 0 };
-        }
-        else {
-            std::copy_n( temp.begin(), metadata.defenderMonsterCount.size(), metadata.defenderMonsterCount.begin() );
-        }
+        readArray( msg, metadata.availableToHireMonsterCount );
 
         return msg;
+    }
+
+    StreamBase & operator<<( StreamBase & msg, const HeroMetadata & metadata )
+    {
+        return msg << metadata.customName << metadata.customPortrait << metadata.armyMonsterType << metadata.armyMonsterCount << metadata.artifact
+                   << metadata.artifactMetadata << metadata.availableSpells << metadata.isOnPatrol << metadata.patrolRadius << metadata.secondarySkill
+                   << metadata.secondarySkillLevel << metadata.customLevel << metadata.customExperience << metadata.customAttack << metadata.customDefence
+                   << metadata.customKnowledge << metadata.customSpellPower << metadata.magicPoints;
+    }
+
+    StreamBase & operator>>( StreamBase & msg, HeroMetadata & metadata )
+    {
+        msg >> metadata.customName >> metadata.customPortrait;
+        
+        readArray( msg, metadata.armyMonsterType );
+        readArray( msg, metadata.armyMonsterCount );
+        readArray( msg, metadata.artifact );
+        readArray( msg, metadata.artifactMetadata );
+        msg >> metadata.availableSpells >> metadata.isOnPatrol >> metadata.patrolRadius;
+        
+        readArray( msg, metadata.secondarySkill );
+        readArray( msg, metadata.secondarySkillLevel );
+
+        return msg >> metadata.customLevel >> metadata.customExperience >> metadata.customAttack >> metadata.customDefence >> metadata.customKnowledge
+                   >> metadata.customSpellPower >> metadata.magicPoints;
     }
 
     StreamBase & operator<<( StreamBase & msg, const BaseMapFormat & map )
@@ -142,13 +157,13 @@ namespace Maps::Map_Format
 
     StreamBase & operator<<( StreamBase & msg, const MapFormat & map )
     {
-        return msg << static_cast<const BaseMapFormat &>( map ) << map.additionalInfo << map.tiles << map.standardMetadata << map.castleMetadata;
+        return msg << static_cast<const BaseMapFormat &>( map ) << map.additionalInfo << map.tiles << map.standardMetadata << map.castleMetadata << map.heroMetadata;
     }
 
     StreamBase & operator>>( StreamBase & msg, MapFormat & map )
     {
         // TODO: verify the correctness of metadata.
-        return msg >> static_cast<BaseMapFormat &>( map ) >> map.additionalInfo >> map.tiles >> map.standardMetadata >> map.castleMetadata;
+        return msg >> static_cast<BaseMapFormat &>( map ) >> map.additionalInfo >> map.tiles >> map.standardMetadata >> map.castleMetadata >> map.heroMetadata;
     }
 
     bool loadBaseMap( const std::string & path, BaseMapFormat & map )
