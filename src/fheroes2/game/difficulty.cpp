@@ -138,6 +138,11 @@ bool Difficulty::allowAIToSurrender( const int /* difficulty */, const bool /* i
     return true;
 }
 
+int Difficulty::getMinHeroLevelForAIRetreat( const int /* difficulty */ )
+{
+    return 3;
+}
+
 double Difficulty::getArmyStrengthRatioForAIRetreat( const int difficulty )
 {
     switch ( difficulty ) {

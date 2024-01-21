@@ -638,7 +638,7 @@ namespace AI
                     }
 
                     // Otherwise, if this hero is relatively experienced, then he should think about retreating so that he can be hired again later
-                    return actualHero->GetLevel() > 2;
+                    return actualHero->GetLevel() >= Difficulty::getMinHeroLevelForAIRetreat( gameDifficulty );
                 }();
 
                 const bool considerSurrender = [this, &arena, actualHero, gameDifficulty, isGameCampaign, hasArtifacts, &kingdom]() {
@@ -675,7 +675,7 @@ namespace AI
                     }
 
                     // Otherwise, if this hero is relatively experienced, then he should think about surrendering so that he can be hired again later
-                    return actualHero->GetLevel() > 2;
+                    return actualHero->GetLevel() >= Difficulty::getMinHeroLevelForAIRetreat( gameDifficulty );
                 }();
 
                 const Force & force = arena.getForce( _myColor );

@@ -56,6 +56,9 @@ namespace Difficulty
     bool allowAIToRetreat( const int difficulty, const bool isCampaign );
     bool allowAIToSurrender( const int difficulty, const bool isCampaign );
 
+    // Returns the minimum hero level at which the AI can consider the possibility of surrender or retreat from the battlefield for this hero
+    int getMinHeroLevelForAIRetreat( const int difficulty );
+
     // Returns the ratio of the strength of the enemy army to the strength of the AI army, above which the AI decides to surrender or retreat from the battlefield
     double getArmyStrengthRatioForAIRetreat( const int difficulty );
 
