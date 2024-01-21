@@ -2037,7 +2037,7 @@ namespace
             Maps::ObjectInfo object{ MP2::OBJ_OASIS };
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDSRT, 108U, fheroes2::Point{ 0, 0 }, MP2::OBJ_OASIS, Maps::OBJECT_LAYER );
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDSRT, 109U, fheroes2::Point{ 1, 0 }, MP2::OBJ_OASIS, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDSRT, 107U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NON_ACTION_OASIS, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDSRT, 107U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
 
             object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDSRT, 106U, fheroes2::Point{ 1, -1 }, MP2::OBJ_NON_ACTION_OASIS );
             object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDSRT, 105U, fheroes2::Point{ 0, -1 }, MP2::OBJ_NON_ACTION_OASIS );
