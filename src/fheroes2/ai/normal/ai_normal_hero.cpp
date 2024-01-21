@@ -1014,8 +1014,8 @@ namespace AI
                 }
 
                 if ( hero.getAIRole() == otherHero->getAIRole()
-                     && hero.getStatsValue() + Difficulty::getMinStatDiffBetweenAIRoles( Game::getDifficulty() ) > otherHero->getStatsValue() ) {
-                    // Two heroes are almost identical. No reason to meet.
+                     && hero.getStatsValue() + Difficulty::getMinStatDiffForAIHeroesMeeting( Game::getDifficulty() ) > otherHero->getStatsValue() ) {
+                    // Either this hero is superior or approximately equal to another hero in terms of stats. Do not waste time for meeting. Let him to come.
                     return valueToIgnore;
                 }
 
@@ -1643,8 +1643,8 @@ namespace AI
                 }
 
                 if ( hero.getAIRole() == otherHero->getAIRole()
-                     && hero.getStatsValue() + Difficulty::getMinStatDiffBetweenAIRoles( Game::getDifficulty() ) + 1 > otherHero->getStatsValue() ) {
-                    // Two heroes are almost identical. No reason to meet.
+                     && hero.getStatsValue() + Difficulty::getMinStatDiffForAIHeroesMeeting( Game::getDifficulty() ) + 1 > otherHero->getStatsValue() ) {
+                    // Either this hero is superior or approximately equal to another hero in terms of stats. Do not waste time for meeting. Let him to come.
                     return valueToIgnore;
                 }
 

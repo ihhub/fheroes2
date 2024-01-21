@@ -193,7 +193,7 @@ bool Difficulty::areAIHeroRolesAllowed( const int difficulty )
     return true;
 }
 
-int Difficulty::getMinStatDiffBetweenAIRoles( const int difficulty )
+int Difficulty::getMinStatDiffForAIHeroesMeeting( const int difficulty )
 {
     switch ( difficulty ) {
     case Difficulty::EASY:
