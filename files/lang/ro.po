@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-20 03:11+0000\n"
+"POT-Creation-Date: 2024-01-20 17:57+0000\n"
 "PO-Revision-Date: 2022-10-25 08:56+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3226,6 +3226,10 @@ msgstr ""
 msgid "Select Dwelling:"
 msgstr "Selectați ținta vrăjii"
 
+#, fuzzy
+msgid "Select Landscape Object:"
+msgstr "Selectați ținta vrăjii"
+
 msgid "Mine placing"
 msgstr ""
 
@@ -3255,6 +3259,10 @@ msgstr "Selectați ținta vrăjii"
 
 #, fuzzy
 msgid "Select Power Up Object:"
+msgstr "Selectați ținta vrăjii"
+
+#, fuzzy
+msgid "Select Adventure Object:"
 msgstr "Selectați ținta vrăjii"
 
 msgid "Map Type:\n"
@@ -3576,6 +3584,9 @@ msgstr ""
 msgid "Ocean object must be placed on water."
 msgstr ""
 
+msgid "Landscape objects cannot be placed on water."
+msgstr ""
+
 msgid "Towns cannot be placed on water."
 msgstr ""
 
@@ -3586,6 +3597,9 @@ msgid "Dwellings cannot be placed on water."
 msgstr ""
 
 msgid "Power-ups cannot be placed on water."
+msgstr ""
+
+msgid "Adventure objects cannot be placed on water."
 msgstr ""
 
 msgid "Used to place %{object}."

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-20 03:11+0000\n"
+"POT-Creation-Date: 2024-01-20 17:57+0000\n"
 "PO-Revision-Date: 2023-12-22 01:17+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -3499,6 +3499,10 @@ msgstr "Cliquez ici pour sélectionner le scénario à jouer."
 msgid "Select Dwelling:"
 msgstr "Choisir sort :"
 
+#, fuzzy
+msgid "Select Landscape Object:"
+msgstr "Choix d'élément (océan) :"
+
 msgid "Mine placing"
 msgstr ""
 
@@ -3530,6 +3534,10 @@ msgstr "Choix d'élément (océan) :"
 
 #, fuzzy
 msgid "Select Power Up Object:"
+msgstr "Choix d'élément (océan) :"
+
+#, fuzzy
+msgid "Select Adventure Object:"
 msgstr "Choix d'élément (océan) :"
 
 msgid "Map Type:\n"
@@ -3875,6 +3883,10 @@ msgid "Ocean object must be placed on water."
 msgstr "Les éléments liés à la mer doivent être placés sur l'eau."
 
 #, fuzzy
+msgid "Landscape objects cannot be placed on water."
+msgstr "Les trésors ne peuvent pas être placés sur l'eau."
+
+#, fuzzy
 msgid "Towns cannot be placed on water."
 msgstr "Ce sort ne peut pas être jeté en mer."
 
@@ -3889,6 +3901,10 @@ msgstr "Ce sort ne peut pas être jeté en mer."
 #, fuzzy
 msgid "Power-ups cannot be placed on water."
 msgstr "Ce sort ne peut pas être jeté en mer."
+
+#, fuzzy
+msgid "Adventure objects cannot be placed on water."
+msgstr "Les trésors ne peuvent pas être placés sur l'eau."
 
 #, fuzzy
 msgid "Used to place %{object}."

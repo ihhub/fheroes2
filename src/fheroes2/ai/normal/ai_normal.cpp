@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2023                                             *
+ *   Copyright (C) 2020 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -30,6 +30,7 @@
 #include "pairs.h"
 #include "profit.h"
 #include "rand.h"
+#include "resource.h"
 #include "route.h"
 #include "world.h"
 
@@ -160,6 +161,22 @@ namespace AI
         }
 
         return prio;
+    }
+
+    double Normal::getFundsValueBasedOnPriority( const Funds & funds ) const
+    {
+        double value = 0;
+
+        Resource::forEach( funds.GetValidItems(), [this, &funds, &value]( const int res ) {
+            const int amount = funds.Get( res );
+            if ( amount <= 0 ) {
+                return;
+            }
+
+            value += amount * getResourcePriorityModifier( res, false );
+        } );
+
+        return value;
     }
 
     void Normal::updateMapActionObjectCache( const int mapIndex )

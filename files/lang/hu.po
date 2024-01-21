@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-20 03:11+0000\n"
+"POT-Creation-Date: 2024-01-20 17:57+0000\n"
 "PO-Revision-Date: 2023-09-04 21:55+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -3429,6 +3429,10 @@ msgstr "Kattints a szín kiválasztásához."
 msgid "Select Dwelling:"
 msgstr "Varázslat kiválasztása:"
 
+#, fuzzy
+msgid "Select Landscape Object:"
+msgstr "Tengeri objektum kiválasztása:"
+
 msgid "Mine placing"
 msgstr ""
 
@@ -3460,6 +3464,10 @@ msgstr "Tengeri objektum kiválasztása:"
 
 #, fuzzy
 msgid "Select Power Up Object:"
+msgstr "Tengeri objektum kiválasztása:"
+
+#, fuzzy
+msgid "Select Adventure Object:"
 msgstr "Tengeri objektum kiválasztása:"
 
 msgid "Map Type:\n"
@@ -3803,6 +3811,10 @@ msgstr "Vízen nem helyezhetők el kincsek."
 msgid "Ocean object must be placed on water."
 msgstr "Tengeri objektumot vízre kell elhelyezni."
 
+#, fuzzy
+msgid "Landscape objects cannot be placed on water."
+msgstr "Vízen nem helyezhetők el hősök."
+
 msgid "Towns cannot be placed on water."
 msgstr "Vízen nem helyezhetők el városok."
 
@@ -3817,6 +3829,10 @@ msgstr "Vízen nem helyezhetők el városok."
 #, fuzzy
 msgid "Power-ups cannot be placed on water."
 msgstr "Vízen nem helyezhetők el városok."
+
+#, fuzzy
+msgid "Adventure objects cannot be placed on water."
+msgstr "Vízen nem helyezhetők el hősök."
 
 #, fuzzy
 msgid "Used to place %{object}."

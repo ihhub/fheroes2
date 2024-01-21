@@ -984,6 +984,11 @@ namespace Interface
                 handleObjectMouseClick( Dialog::selectLandscapeOceanObjectType );
                 return res;
             }
+
+            if ( le.MouseClickLeft( _landscapeObjectButtonsRect[LandscapeObjectBrush::LANDSCAPE_MISC] ) ) {
+                handleObjectMouseClick( Dialog::selectLandscapeMiscellaneousObjectType );
+                return res;
+            }
         }
         else if ( _selectedInstrument == Instrument::ADVENTURE_OBJECTS ) {
             for ( size_t i = 0; i < _adventureObjectButtonsRect.size(); ++i ) {
@@ -1035,6 +1040,10 @@ namespace Interface
             }
             if ( le.MouseClickLeft( _adventureObjectButtonsRect[AdventureObjectBrush::POWER_UPS] ) ) {
                 handleObjectMouseClick( Dialog::selectPowerUpObjectType );
+                return res;
+            }
+            if ( le.MouseClickLeft( _adventureObjectButtonsRect[AdventureObjectBrush::ADVENTURE_MISC] ) ) {
+                handleObjectMouseClick( Dialog::selectAdventureMiscellaneousObjectType );
                 return res;
             }
         }

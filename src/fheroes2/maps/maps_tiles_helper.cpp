@@ -3208,7 +3208,7 @@ namespace Maps
         return needRedraw;
     }
 
-    void setObjectOnTile( Tiles & tile, const ObjectInfo & info )
+    void setObjectOnTile( Tiles & tile, const ObjectInfo & info, const bool updateMapPassabilities )
     {
         assert( !info.empty() );
 
@@ -3235,7 +3235,10 @@ namespace Maps
             // Set resource type and income per day.
             tile.metadata()[0] = info.metadata[0];
             tile.metadata()[1] = info.metadata[1];
-            world.updatePassabilities();
+
+            if ( updateMapPassabilities ) {
+                world.updatePassabilities();
+            }
             return;
         default:
             break;
@@ -3243,6 +3246,8 @@ namespace Maps
 
         placeObjectOnTile( tile, info );
 
-        world.updatePassabilities();
+        if ( updateMapPassabilities ) {
+            world.updatePassabilities();
+        }
     }
 }

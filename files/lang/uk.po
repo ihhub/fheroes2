@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-20 03:11+0000\n"
+"POT-Creation-Date: 2024-01-20 17:57+0000\n"
 "PO-Revision-Date: 2023-09-06 08:41+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3384,6 +3384,10 @@ msgstr "Натисніть щоб побачити наступне місто."
 msgid "Select Dwelling:"
 msgstr "Оберіть Закляття:"
 
+#, fuzzy
+msgid "Select Landscape Object:"
+msgstr "Оберіть Артефакти:"
+
 msgid "Mine placing"
 msgstr ""
 
@@ -3414,6 +3418,10 @@ msgstr "Оберіть Артефакти:"
 
 #, fuzzy
 msgid "Select Power Up Object:"
+msgstr "Оберіть Артефакти:"
+
+#, fuzzy
+msgid "Select Adventure Object:"
 msgstr "Оберіть Артефакти:"
 
 msgid "Map Type:\n"
@@ -3741,6 +3749,10 @@ msgid "Ocean object must be placed on water."
 msgstr ""
 
 #, fuzzy
+msgid "Landscape objects cannot be placed on water."
+msgstr "Це Місто не можна покращити до Замку."
+
+#, fuzzy
 msgid "Towns cannot be placed on water."
 msgstr "Це Місто не можна покращити до Замку."
 
@@ -3754,6 +3766,10 @@ msgstr "Це Місто не можна покращити до Замку."
 
 #, fuzzy
 msgid "Power-ups cannot be placed on water."
+msgstr "Це Місто не можна покращити до Замку."
+
+#, fuzzy
+msgid "Adventure objects cannot be placed on water."
 msgstr "Це Місто не можна покращити до Замку."
 
 msgid "Used to place %{object}."
