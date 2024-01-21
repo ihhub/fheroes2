@@ -127,18 +127,18 @@ namespace Maps::Map_Format
     StreamBase & operator>>( StreamBase & msg, HeroMetadata & metadata )
     {
         msg >> metadata.customName >> metadata.customPortrait;
-        
+
         readArray( msg, metadata.armyMonsterType );
         readArray( msg, metadata.armyMonsterCount );
         readArray( msg, metadata.artifact );
         readArray( msg, metadata.artifactMetadata );
         msg >> metadata.availableSpells >> metadata.isOnPatrol >> metadata.patrolRadius;
-        
+
         readArray( msg, metadata.secondarySkill );
         readArray( msg, metadata.secondarySkillLevel );
 
         return msg >> metadata.customLevel >> metadata.customExperience >> metadata.customAttack >> metadata.customDefence >> metadata.customKnowledge
-                   >> metadata.customSpellPower >> metadata.magicPoints;
+               >> metadata.customSpellPower >> metadata.magicPoints;
     }
 
     StreamBase & operator<<( StreamBase & msg, const BaseMapFormat & map )
