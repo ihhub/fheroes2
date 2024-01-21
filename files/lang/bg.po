@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-20 09:21+0000\n"
+"POT-Creation-Date: 2024-01-20 17:57+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3462,6 +3462,10 @@ msgstr "Кликни тук, за да избереш кой сценарий д
 msgid "Select Dwelling:"
 msgstr "Избери заклинание:"
 
+#, fuzzy
+msgid "Select Landscape Object:"
+msgstr "Океански обекти"
+
 msgid "Mine placing"
 msgstr ""
 
@@ -3846,6 +3850,10 @@ msgstr "Това заклинание не може да се направи н�
 #, fuzzy
 msgid "Ocean object must be placed on water."
 msgstr "Това заклинание не може да се направи на кораб."
+
+#, fuzzy
+msgid "Landscape objects cannot be placed on water."
+msgstr "Героите не могат да бъдат поставени на вода."
 
 #, fuzzy
 msgid "Towns cannot be placed on water."

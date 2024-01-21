@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-20 09:21+0000\n"
+"POT-Creation-Date: 2024-01-20 17:57+0000\n"
 "PO-Revision-Date: 2022-10-25 08:56+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
@@ -3374,6 +3374,10 @@ msgstr "Clique aqui para selecionar o cenário a jogar."
 msgid "Select Dwelling:"
 msgstr "Magia"
 
+#, fuzzy
+msgid "Select Landscape Object:"
+msgstr "Artefato"
+
 msgid "Mine placing"
 msgstr ""
 
@@ -3769,6 +3773,10 @@ msgstr "Esta cidade não pode ser transformada em castelo."
 
 #, fuzzy
 msgid "Ocean object must be placed on water."
+msgstr "Esta cidade não pode ser transformada em castelo."
+
+#, fuzzy
+msgid "Landscape objects cannot be placed on water."
 msgstr "Esta cidade não pode ser transformada em castelo."
 
 #, fuzzy

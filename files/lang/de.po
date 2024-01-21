@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-20 09:21+0000\n"
+"POT-Creation-Date: 2024-01-20 17:57+0000\n"
 "PO-Revision-Date: 2023-12-22 00:32+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3471,6 +3471,10 @@ msgstr "Hier klicken, um auszuwählen, welches Szenario gespielt werden soll."
 msgid "Select Dwelling:"
 msgstr "Zauberspruch auswählen:"
 
+#, fuzzy
+msgid "Select Landscape Object:"
+msgstr "Ozean-Objekte"
+
 msgid "Mine placing"
 msgstr ""
 
@@ -3860,6 +3864,10 @@ msgstr "Monster können nicht auf Wasser plaziert werden."
 
 #, fuzzy
 msgid "Ocean object must be placed on water."
+msgstr "Monster können nicht auf Wasser plaziert werden."
+
+#, fuzzy
+msgid "Landscape objects cannot be placed on water."
 msgstr "Monster können nicht auf Wasser plaziert werden."
 
 #, fuzzy
