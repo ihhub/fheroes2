@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-13 09:39+0000\n"
+"POT-Creation-Date: 2024-01-20 17:57+0000\n"
 "PO-Revision-Date: 2023-12-13 05:57+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -562,6 +562,9 @@ msgstr "Vale"
 msgid "The enemy has surrendered!"
 msgstr "¡El enemigo se ha rendido!"
 
+msgid "Their cowardice costs them %{gold} gold."
+msgstr ""
+
 msgid "The enemy has fled!"
 msgstr "¡El enemigo ha huido!"
 
@@ -577,10 +580,12 @@ msgstr "El cobarde %{name} huye de la batalla."
 msgid "%{name} surrenders to the enemy, and departs in shame."
 msgstr "%{name} se rinde al enemigo, marchandose avergonzado."
 
-msgid "Your force suffer a bitter defeat, and %{name} abandons your cause."
+#, fuzzy
+msgid "Your forces suffer a bitter defeat, and %{name} abandons your cause."
 msgstr "Tus fuerzas sufren una amarga derrota, y  %{name} abandona tu causa."
 
-msgid "Your force suffer a bitter defeat."
+#, fuzzy
+msgid "Your forces suffer a bitter defeat."
 msgstr "Tus fuerzas sufren una amarga derrota."
 
 msgid "Battlefield Casualties"
@@ -592,14 +597,25 @@ msgstr "Agresor"
 msgid "Defender"
 msgstr "Defensor"
 
+#, fuzzy
+msgid "Click to leave the battle results."
+msgstr "Haz clic para volver al menú principal"
+
+#, fuzzy
+msgid "Click to restart the battle in manual mode."
+msgstr "Haz clic para volver al menú principal"
+
+msgid "Restart"
+msgstr ""
+
+msgid "You have captured an enemy artifact!"
+msgstr "¡Has capturado un artefacto enemigo!"
+
 msgid "As you reach for the %{name}, it mysteriously disappears."
 msgstr ""
 
 msgid "As your enemy reaches for the %{name}, it mysteriously disappears."
 msgstr ""
-
-msgid "You have captured an enemy artifact!"
-msgstr "¡Has capturado un artefacto enemigo!"
 
 msgid "Necromancy!"
 msgstr "¡Nigromancia!"
@@ -680,9 +696,12 @@ msgstr ""
 "para que lo reclutes, sin embargo, el héroe tendrá los reclutas de un novato "
 "(como cualquier otro héroe)."
 
+#, fuzzy
 msgid ""
 "Surrendering costs gold. However if you pay the ransom, the hero and all of "
-"his or her surviving creatures will be available to recruit again."
+"his or her surviving creatures will be available to recruit again. The cost "
+"of surrender is half of the total cost of the non-temporary troops remaining "
+"in the army."
 msgstr ""
 "Rendirse cuesta oro. Sin embargo, si pagas el rescate, el héroe y todas sus "
 "criaturas supervivientes estarán disponibles para ser reclutadas otra vez."
@@ -1872,7 +1891,8 @@ msgstr "Roland"
 msgid "Archibald"
 msgstr "Archibald"
 
-msgid "The Price of Loyalty"
+#, fuzzy
+msgid "Price of Loyalty"
 msgstr "El Precio de la Lealtad"
 
 msgid "Voyage Home"
@@ -2638,17 +2658,19 @@ msgstr "sin artefactos."
 msgid "Recruit %{name} the %{race}"
 msgstr "Reclutar a %{name} el %{race}"
 
+#, fuzzy
 msgid ""
-"'Spread' combat formation spreads your armies from the top to the bottom of "
-"the battlefield, with at least one empty space between each army."
+"'Spread' combat formation spreads the castle's units from the top to the "
+"bottom of the battlefield, with at least one empty space between each unit."
 msgstr ""
 "La formación 'Desplegada' de combate disemina tus ejércitos desde la parte "
 "superior a la inferior del campo de batalla con al menos un espacio vacio "
 "entre unidades."
 
+#, fuzzy
 msgid ""
-"'Grouped' combat formation bunches your army together in the center of your "
-"side of the battlefield."
+"'Grouped' combat formation bunches the castle's units together in the center "
+"of the castle's side of the battlefield."
 msgstr ""
 "La formación 'Agrupada' de combate aglutina tu ejercito en el centro de tu "
 "flanco del campo de batalla."
@@ -3447,6 +3469,10 @@ msgstr "Haga clic aquí para seleccionar el escenario donde jugar."
 msgid "Select Dwelling:"
 msgstr "Seleccionar objetivo del hechizo"
 
+#, fuzzy
+msgid "Select Landscape Object:"
+msgstr "Artefactos"
+
 msgid "Mine placing"
 msgstr ""
 
@@ -3481,12 +3507,19 @@ msgid "Select Power Up Object:"
 msgstr "Artefactos"
 
 #, fuzzy
+msgid "Select Adventure Object:"
+msgstr "Artefactos"
+
+#, fuzzy
 msgid "Map Type:\n"
 msgstr "Tamaño del Mapa"
 
 #, fuzzy
 msgid "The Succession Wars"
 msgstr "El Otro Lado"
+
+msgid "The Price of Loyalty"
+msgstr "El Precio de la Lealtad"
 
 #, fuzzy
 msgid "Resurrection"
@@ -3836,6 +3869,10 @@ msgid "Ocean object must be placed on water."
 msgstr "Este pueblo no se puede actualizar a castillo."
 
 #, fuzzy
+msgid "Landscape objects cannot be placed on water."
+msgstr "Este pueblo no se puede actualizar a castillo."
+
+#, fuzzy
 msgid "Towns cannot be placed on water."
 msgstr "Este pueblo no se puede actualizar a castillo."
 
@@ -3849,6 +3886,10 @@ msgstr "Este pueblo no se puede actualizar a castillo."
 
 #, fuzzy
 msgid "Power-ups cannot be placed on water."
+msgstr "Este pueblo no se puede actualizar a castillo."
+
+#, fuzzy
+msgid "Adventure objects cannot be placed on water."
 msgstr "Este pueblo no se puede actualizar a castillo."
 
 #, fuzzy
@@ -4208,9 +4249,6 @@ msgstr ""
 msgid ""
 "Select the campaign difficulty. This can be lowered at any point during the "
 "campaign."
-msgstr ""
-
-msgid "Restart"
 msgstr ""
 
 #, fuzzy
@@ -7297,6 +7335,23 @@ msgstr ""
 msgid "%{name} the %{race} (Level %{level})"
 msgstr "%{name}, %{race} ( Nivel %{level} )"
 
+#, fuzzy
+msgid ""
+"'Spread' combat formation spreads the hero's units from the top to the "
+"bottom of the battlefield, with at least one empty space between each unit."
+msgstr ""
+"La formación 'Desplegada' de combate disemina tus ejércitos desde la parte "
+"superior a la inferior del campo de batalla con al menos un espacio vacio "
+"entre unidades."
+
+#, fuzzy
+msgid ""
+"'Grouped' combat formation bunches the hero's army together in the center of "
+"their side of the battlefield."
+msgstr ""
+"La formación 'Agrupada' de combate aglutina tu ejercito en el centro de tu "
+"flanco del campo de batalla."
+
 msgid "Are you sure you want to dismiss this Hero?"
 msgstr "¿Estas seguro que quieres despedir este Héroe?"
 
@@ -7365,11 +7420,12 @@ msgstr ""
 msgid "Level %{level}"
 msgstr "Nivel %{level}"
 
+#, fuzzy
 msgid ""
 "%{name} currently has %{point} spell points out of a maximum of %{max}. The "
-"maximum number of spell points is 10 times your knowledge. It is "
-"occasionally possible to have more than your maximum spell points via "
-"special events."
+"maximum number of spell points is 10 times the hero's knowledge. It is "
+"occasionally possible for the hero to have more than their maximum spell "
+"points via special events."
 msgstr ""
 "%{name} actualmente tiene %{point} puntos de Maná de un total de %{max}. El "
 "máximo número de puntos de Maná es 10 veces tu conocimiento. Ocasionalmente "
@@ -7648,7 +7704,7 @@ msgstr[1] ""
 #, fuzzy
 msgid ""
 "%{skill} allows the hero to negotiate with monsters who are weaker than "
-"their army."
+"their army, and reduces the cost of surrender."
 msgstr ""
 "%{skill} te permite negociar con monstruos que sean más débiles que tu "
 "grupo. "
@@ -7661,6 +7717,11 @@ msgstr "Todas las criaturas se nos unirán..."
 #, fuzzy
 msgid "All of the creatures may offer to join the hero."
 msgstr "Todas las criaturas se nos unirán..."
+
+msgid ""
+"The cost of surrender is reduced to %{percent} percent of the total cost of "
+"troops in the army."
+msgstr ""
 
 #, fuzzy
 msgid ""
@@ -9120,44 +9181,57 @@ msgstr ""
 msgid "Invalid Artifact"
 msgstr "Artefacto"
 
-msgid "The %{name} increases your knowledge by %{count}."
-msgstr ""
+#, fuzzy
+msgid "The %{name} increases the hero's knowledge by %{count}."
+msgstr "El %{nombre} incrementa tu moral."
 
 msgid "Ultimate Book of Knowledge"
 msgstr "Libro Definitivo del Conocimiento"
 
-msgid "The %{name} increases your attack skill by %{count}."
+#, fuzzy
+msgid "The %{name} increases the hero's attack skill by %{count}."
 msgstr ""
+"La Estatua incrementa los ingresos de tus ciudades en %{count} por día."
 
 msgid "Ultimate Sword of Dominion"
 msgstr "Espada Final de la Dominación"
 
-msgid "The %{name} increases your defense skill by %{count}."
+#, fuzzy
+msgid "The %{name} increases the hero's defense skill by %{count}."
 msgstr ""
+"La Estatua incrementa los ingresos de tus ciudades en %{count} por día."
 
 msgid "Ultimate Cloak of Protection"
 msgstr "Capa Final de la Protección"
 
-msgid "The %{name} increases your spell power by %{count}."
-msgstr ""
+#, fuzzy
+msgid "The %{name} increases the hero's spell power by %{count}."
+msgstr "El %{nombre} incrementa tu moral."
 
 msgid "Ultimate Wand of Magic"
 msgstr "Varíta Final de la Magia"
 
-msgid "The %{name} increases your attack and defense skills by %{count} each."
+#, fuzzy
+msgid ""
+"The %{name} increases the hero's attack and defense skills by %{count} each."
 msgstr ""
+"La Estatua incrementa los ingresos de tus ciudades en %{count} por día."
 
 msgid "Ultimate Shield"
 msgstr "El Escudo Supremo"
 
-msgid "The %{name} increases your spell power and knowledge by %{count} each."
-msgstr ""
+#, fuzzy
+msgid ""
+"The %{name} increases the hero's spell power and knowledge by %{count} each."
+msgstr "El %{nombre} incrementa tu moral."
 
 msgid "Ultimate Staff"
 msgstr "El Cayado Supremo"
 
-msgid "The %{name} increases each of your basic skills by %{count} points."
-msgstr ""
+#, fuzzy
+msgid ""
+"The %{name} increases each of the hero's basic skills by %{count} points."
+msgstr "El %{nombre} incrementa tu moral."
 
 msgid "Ultimate Crown"
 msgstr "La Corona Suprema"
@@ -9209,7 +9283,7 @@ msgid "Medal of Valor"
 msgstr "La Medalla de Valor"
 
 #, fuzzy
-msgid "The %{name} increases your morale by %{count}."
+msgid "The %{name} increases the morale of the hero's army by %{count}."
 msgstr "El %{nombre} incrementa tu moral."
 
 msgid ""
@@ -9244,8 +9318,10 @@ msgstr ""
 msgid "Fizbin of Misfortune"
 msgstr "El Fizbin de la Mala Suerte"
 
-msgid "The %{name} greatly decreases your morale by %{count}."
-msgstr ""
+#, fuzzy
+msgid ""
+"The %{name} greatly decreases the morale of the hero's army by %{count}."
+msgstr "El %{nombre} incrementa tu moral."
 
 msgid ""
 "You stumble upon a medal lying alongside the empty road. Adding the medal to "
@@ -9264,8 +9340,10 @@ msgstr ""
 msgid "Armored Gauntlets of Protection"
 msgstr "Guanteletes Blindados de Protección"
 
-msgid "The %{name} increase your defense skill by %{count}."
+#, fuzzy
+msgid "The %{name} increase the hero's defense skill by %{count}."
 msgstr ""
+"La Estatua incrementa los ingresos de tus ciudades en %{count} por día."
 
 msgid ""
 "You encounter the infamous Black Knight! After a grueling duel ending in a "
@@ -9292,7 +9370,7 @@ msgstr ""
 msgid "Ballista of Quickness"
 msgstr "Ballesta de Rapidez"
 
-msgid "The %{name} gives your catapult one extra shot per combat round."
+msgid "The %{name} gives the hero's catapult one extra shot per combat round."
 msgstr ""
 
 msgid ""
@@ -9372,8 +9450,11 @@ msgstr ""
 msgid "Endless Sack of Gold"
 msgstr "La Saca inagotable de Oro"
 
-msgid "The %{name} provides you with %{count} gold per day."
+#, fuzzy
+msgid "The %{name} provides the hero with %{count} gold per day."
 msgstr ""
+"Has tomado el control de una mina de cristal. Te proveerá con %{count} "
+"unidades de cristal al día."
 
 msgid ""
 "A little leprechaun dances gleefully around a magic sack. Seeing you "
@@ -9402,8 +9483,10 @@ msgstr ""
 msgid "Nomad Boots of Mobility"
 msgstr "Las Botas Nómadas de la Movilidad"
 
-msgid "The %{name} increase your movement on land."
+#, fuzzy
+msgid "The %{name} increase the hero's movement on land."
 msgstr ""
+"La Estatua incrementa los ingresos de tus ciudades en %{count} por día."
 
 msgid ""
 "A Nomad trader seeks protection from a tribe of Goblins. For your "
@@ -9425,7 +9508,7 @@ msgid "Lucky Rabbit's Foot"
 msgstr "Pata de Conejo de la Suerte"
 
 #, fuzzy
-msgid "The %{name} increases your luck in combat by %{count}."
+msgid "The %{name} increases the luck of the hero's army by %{count}."
 msgstr ""
 "La Estatua incrementa los ingresos de tus ciudades en %{count} por día."
 
@@ -9463,8 +9546,10 @@ msgstr ""
 msgid "True Compass of Mobility"
 msgstr "Brújula de la Verdera Movilidad"
 
-msgid "The %{name} increases your movement on land and sea."
+#, fuzzy
+msgid "The %{name} increases the hero's movement on land and sea."
 msgstr ""
+"La Estatua incrementa los ingresos de tus ciudades en %{count} por día."
 
 msgid ""
 "An old man claiming to be an inventor asks you to try his latest invention. "
@@ -9474,8 +9559,10 @@ msgstr ""
 msgid "Sailor's Astrolabe of Mobility"
 msgstr "Astrolabio del Marinero  de la Movilidad"
 
-msgid "The %{name} increases your movement on sea."
+#, fuzzy
+msgid "The %{name} increases the hero's movement on sea."
 msgstr ""
+"La Estatua incrementa los ingresos de tus ciudades en %{count} por día."
 
 msgid ""
 "An old sea captain is being tortured by Ogres. You save him, and in return "
@@ -9497,7 +9584,8 @@ msgstr ""
 msgid "Enchanted Hourglass"
 msgstr "Reloj de Arena Encantado"
 
-msgid "The %{name} extends the duration of all your spells by %{count} turns."
+msgid ""
+"The %{name} extends the duration of all the hero's spells by %{count} turns."
 msgstr ""
 
 msgid ""
@@ -9509,7 +9597,7 @@ msgstr ""
 msgid "Gold Watch"
 msgstr "Reloj de Oro"
 
-msgid "The %{name} doubles the effectiveness of your hypnotize spells."
+msgid "The %{name} doubles the effectiveness of the hero's hypnotize spells."
 msgstr ""
 
 msgid ""
@@ -9532,7 +9620,8 @@ msgstr ""
 msgid "Ice Cloak"
 msgstr "Capa de Hielo"
 
-msgid "The %{name} halves all damage your troops take from cold spells."
+msgid ""
+"The %{name} halves all damage the hero's troops receive from cold spells."
 msgstr ""
 
 msgid ""
@@ -9544,7 +9633,8 @@ msgstr ""
 msgid "Fire Cloak"
 msgstr "Capa de Fuego"
 
-msgid "The %{name} halves all damage your troops take from fire spells."
+msgid ""
+"The %{name} halves all damage the hero's troops receive from fire spells."
 msgstr ""
 
 msgid ""
@@ -9557,7 +9647,9 @@ msgstr ""
 msgid "Lightning Helm"
 msgstr "Casco Relampagueante"
 
-msgid "The %{name} halves all damage your troops take from lightning spells."
+msgid ""
+"The %{name} halves all damage the hero's troops receive from lightning "
+"spells."
 msgstr ""
 
 msgid ""
@@ -9570,8 +9662,8 @@ msgid "Evercold Icicle"
 msgstr "Carámbano del Frío Eterno"
 
 msgid ""
-"The %{name} causes your cold spells to do %{count} percent more damage to "
-"enemy troops."
+"The %{name} causes the hero's cold spells to do %{count} percent more damage "
+"to enemy troops."
 msgstr ""
 
 msgid ""
@@ -9584,8 +9676,8 @@ msgid "Everhot Lava Rock"
 msgstr "Roca de Lava del Calor Eterno"
 
 msgid ""
-"The %{name} causes your fire spells to do %{count} percent more damage to "
-"enemy troops."
+"The %{name} causes the hero's fire spells to do %{count} percent more damage "
+"to enemy troops."
 msgstr ""
 
 msgid ""
@@ -9599,8 +9691,8 @@ msgid "Lightning Rod"
 msgstr "Vara Relampagueante"
 
 msgid ""
-"The %{name} causes your lightning spells to do %{count} percent more damage "
-"to enemy troops."
+"The %{name} causes the hero's lightning spells to do %{count} percent more "
+"damage to enemy troops."
 msgstr ""
 
 msgid ""
@@ -9613,7 +9705,7 @@ msgstr ""
 msgid "Snake-Ring"
 msgstr "Anillo-Serpiente"
 
-msgid "The %{name} halves the casting cost of all your bless spells."
+msgid "The %{name} halves the casting cost of all of the hero's bless spells."
 msgstr ""
 
 msgid ""
@@ -9625,8 +9717,8 @@ msgid "Ankh"
 msgstr "Llave de la Vida"
 
 msgid ""
-"The %{name} doubles the effectiveness of all your resurrect and animate "
-"spells."
+"The %{name} doubles the effectiveness of all of the hero's resurrect and "
+"animate spells."
 msgstr ""
 
 msgid ""
@@ -9638,7 +9730,8 @@ msgstr ""
 msgid "Book of Elements"
 msgstr "Libro de los Elementos"
 
-msgid "The %{name} doubles the effectiveness of all your summoning spells."
+msgid ""
+"The %{name} doubles the effectiveness of all of the hero's summoning spells."
 msgstr ""
 
 msgid ""
@@ -9662,7 +9755,7 @@ msgstr ""
 msgid "Holy Pendant"
 msgstr "Colgante Sagrado"
 
-msgid "The %{name} makes all your troops immune to curse spells."
+msgid "The %{name} makes all of the hero's troops immune to curse spells."
 msgstr ""
 
 msgid ""
@@ -9674,7 +9767,7 @@ msgstr ""
 msgid "Pendant of Free Will"
 msgstr "Colgante de la Voluntad Libre"
 
-msgid "The %{name} makes all your troops immune to hypnotize spells."
+msgid "The %{name} makes all of the hero's troops immune to hypnotize spells."
 msgstr ""
 
 msgid ""
@@ -9687,7 +9780,7 @@ msgstr ""
 msgid "Pendant of Life"
 msgstr "Colgante de la Vida"
 
-msgid "The %{name} makes all your troops immune to death spells."
+msgid "The %{name} makes all of the hero's troops immune to death spells."
 msgstr ""
 
 msgid ""
@@ -9699,7 +9792,7 @@ msgstr ""
 msgid "Serenity Pendant"
 msgstr "Colgane de la Serenidad"
 
-msgid "The %{name} makes all your troops immune to berserk spells."
+msgid "The %{name} makes all of the hero's troops immune to berserk spells."
 msgstr ""
 
 msgid ""
@@ -9712,7 +9805,7 @@ msgstr ""
 msgid "Seeing-eye Pendant"
 msgstr "Colgante Visionario"
 
-msgid "The %{name} makes all your troops immune to blindness spells."
+msgid "The %{name} makes all of the hero's troops immune to blindness spells."
 msgstr ""
 
 msgid ""
@@ -9725,7 +9818,7 @@ msgstr ""
 msgid "Kinetic Pendant"
 msgstr "Colgante Cinético"
 
-msgid "The %{name} makes all your troops immune to paralyze spells."
+msgid "The %{name} makes all of the hero's troops immune to paralyze spells."
 msgstr ""
 
 msgid ""
@@ -9737,7 +9830,7 @@ msgstr ""
 msgid "Pendant of Death"
 msgstr "Colgante de la Muerte"
 
-msgid "The %{name} makes all your troops immune to holy spells."
+msgid "The %{name} makes all of the hero's troops immune to holy spells."
 msgstr ""
 
 msgid ""
@@ -9749,7 +9842,8 @@ msgstr ""
 msgid "Wand of Negation"
 msgstr "Varita de la Negación"
 
-msgid "The %{name} makes all your troops immune to dispel magic spells."
+msgid ""
+"The %{name} makes all of the hero's troops immune to dispel magic spells."
 msgstr ""
 
 msgid ""
@@ -9762,8 +9856,8 @@ msgid "Golden Bow"
 msgstr "El Arco Dorado"
 
 msgid ""
-"The %{name} eliminates the %{count} percent penalty for your troops shooting "
-"past obstacles (e.g. castle walls)."
+"The %{name} eliminates the %{count} percent penalty for the hero's troops "
+"shooting past obstacles (e.g. castle walls)."
 msgstr ""
 
 msgid ""
@@ -9774,10 +9868,13 @@ msgstr ""
 msgid "Telescope"
 msgstr "Telescopio"
 
+#, fuzzy
 msgid ""
-"The %{name} increases the amount of terrain your hero reveals when "
+"The %{name} increases the amount of terrain the hero reveals when "
 "adventuring by %{count} extra square."
 msgstr ""
+"El Pozo incrementa el ritmo de crecimiento de todas las moradas en %{count} "
+"criaturas por semana."
 
 msgid ""
 "A merchant from far away lands trades you a new invention of his people for "
@@ -9792,7 +9889,7 @@ msgstr "Pluma de Estadista"
 
 msgid ""
 "The %{name} reduces the cost of surrender to %{count} percent of the total "
-"cost of troops you have in your army."
+"cost of troops the hero has in their army."
 msgstr ""
 
 msgid ""
@@ -9804,8 +9901,10 @@ msgstr ""
 msgid "Wizard's Hat"
 msgstr "Sombrero de Mago"
 
-msgid "The %{name} increases the duration of your spells by %{count} turns."
-msgstr ""
+#, fuzzy
+msgid ""
+"The %{name} increases the duration of the hero's spells by %{count} turns."
+msgstr "El %{nombre} incrementa tu moral."
 
 msgid ""
 "You see a Wizard fleeing from a Griffin and riding like the wind. The Wizard "
@@ -9818,7 +9917,7 @@ msgid "Power Ring"
 msgstr "Anillo de Poder"
 
 #, fuzzy
-msgid "The %{name} returns %{count} extra spell points per day to your hero."
+msgid "The %{name} returns %{count} extra spell points per day to the hero."
 msgstr ""
 "Has tomado el control de una mina de cristal. Te proveerá con %{count} "
 "unidades de cristal al día."
@@ -9833,7 +9932,9 @@ msgstr ""
 msgid "Ammo Cart"
 msgstr "Carro de Munición"
 
-msgid "The %{name} provides endless ammunition for all your troops that shoot."
+msgid ""
+"The %{name} provides endless ammunition for all of the hero's troops that "
+"shoot."
 msgstr ""
 
 msgid ""
@@ -9845,7 +9946,7 @@ msgid "Tax Lien"
 msgstr "La Tasa de Embargo"
 
 #, fuzzy
-msgid "The %{name} costs you %{count} gold pieces per day."
+msgid "The %{name} costs the hero %{count} gold pieces per day."
 msgstr ""
 "Has tomado el control de una mina de cristal. Te proveerá con %{count} "
 "unidades de cristal al día."
@@ -9860,7 +9961,7 @@ msgstr ""
 msgid "Hideous Mask"
 msgstr "Máscara Horrenda"
 
-msgid "The %{name} prevents all 'wandering' armies from joining your hero."
+msgid "The %{name} prevents all 'wandering' armies from joining the hero."
 msgstr ""
 
 msgid ""
@@ -9988,8 +10089,9 @@ msgstr ""
 msgid "Magic Book"
 msgstr "Libro de Hechizos"
 
-msgid "The %{name} enables you to cast spells."
-msgstr ""
+#, fuzzy
+msgid "The %{name} enables the hero to cast spells."
+msgstr "¡El %{name} resiste el hechizo!"
 
 #, fuzzy
 msgid "Dummy 1"
@@ -10016,7 +10118,7 @@ msgstr "Pegamino del Hechizo"
 
 #, fuzzy
 msgid ""
-"This %{name} gives your hero the ability to cast the %{spell} spell if your "
+"This %{name} gives the hero the ability to cast the %{spell} spell if the "
 "hero has a Magic Book."
 msgstr ""
 "Este %{name} le da a tu héroe la habilidad de lanzar el hechizo %{spell} si "
@@ -10036,10 +10138,12 @@ msgstr ""
 msgid "Arm of the Martyr"
 msgstr "Brazo del Martir"
 
+#, fuzzy
 msgid ""
-"The %{name} increases your spell power by %{count} but adds the undead "
+"The %{name} increases the hero's spell power by %{count} but adds the undead "
 "morale penalty."
 msgstr ""
+"La Estatua incrementa los ingresos de tus ciudades en %{count} por día."
 
 msgid ""
 "One of the less intelligent members of your party picks up an arm off of the "
@@ -10056,8 +10160,9 @@ msgstr ""
 msgid "Breastplate of Anduran"
 msgstr "Peto de Anduran"
 
-msgid "The %{name} increases your defense by %{count}."
-msgstr ""
+#, fuzzy
+msgid "The %{name} increases the hero's defense by %{count}."
+msgstr "El %{nombre} incrementa tu moral."
 
 msgid ""
 "You come upon a sign. It reads: \"Here lies the body of Anduran. Bow and "
@@ -10092,7 +10197,8 @@ msgstr "Traje de Batalla de Anduran"
 
 msgid ""
 "The %{name} combines the powers of the three Anduran artifacts. It provides "
-"maximum luck and morale for your troops and gives you the Town Portal spell."
+"maximum luck and morale for the hero's troops and gives the hero the Town "
+"Portal spell."
 msgstr ""
 
 msgid ""
@@ -10109,8 +10215,8 @@ msgid "Crystal Ball"
 msgstr "Bola de Cristal"
 
 msgid ""
-"The %{name} lets you get more specific information about monsters, enemy "
-"heroes, and castles nearby the hero who holds it."
+"The %{name} lets the hero get more specific information about monsters, "
+"enemy heroes, and castles nearby the hero."
 msgstr ""
 
 msgid ""
@@ -10231,8 +10337,12 @@ msgstr ""
 msgid "Masthead"
 msgstr "El Mástil"
 
-msgid "The %{name} boosts your luck and morale by %{count} each in sea combat."
+#, fuzzy
+msgid ""
+"The %{name} boosts the hero's troops' luck and morale by %{count} each in "
+"sea combat."
 msgstr ""
+"La Estatua incrementa los ingresos de tus ciudades en %{count} por día."
 
 msgid "Sphere of Negation"
 msgstr "La Esfera de la Negación"
@@ -10252,8 +10362,9 @@ msgstr ""
 msgid "Staff of Wizardry"
 msgstr "El Cayado de Brujería"
 
-msgid "The %{name} boosts your spell power by %{count}."
-msgstr ""
+#, fuzzy
+msgid "The %{name} boosts the hero's spell power by %{count}."
+msgstr "El %{nombre} incrementa tu moral."
 
 msgid ""
 "While out scaring up game, your troops find a mysterious staff levitating "
@@ -10269,8 +10380,10 @@ msgstr ""
 msgid "Sword Breaker"
 msgstr "El Quebranta Espadas"
 
-msgid "The %{name} increases your defense by %{count} and attack by 1."
+#, fuzzy
+msgid "The %{name} increases the hero's defense by %{count} and attack by 1."
 msgstr ""
+"La Estatua incrementa los ingresos de tus ciudades en %{count} por día."
 
 msgid ""
 "A former Captain of the Guard admires your quest and gives you the enchanted "
@@ -10299,7 +10412,7 @@ msgstr ""
 msgid "Spade of Necromancy"
 msgstr "Pica de Nigromancia"
 
-msgid "The %{name} gives you increased necromancy skill."
+msgid "The %{name} gives the hero increased necromancy skill."
 msgstr ""
 
 msgid ""

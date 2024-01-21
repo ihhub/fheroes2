@@ -790,7 +790,9 @@ void Battle::Arena::ApplyActionMorale( Command & cmd )
 
 void Battle::Arena::ApplyActionRetreat( const Command & /* cmd */ )
 {
-    if ( !CanRetreatOpponent( _currentColor ) ) {
+    const int currentColor = GetCurrentColor();
+
+    if ( !CanRetreatOpponent( currentColor ) ) {
         ERROR_LOG( "Preconditions were not met" )
 
 #ifdef WITH_DEBUG
@@ -800,12 +802,12 @@ void Battle::Arena::ApplyActionRetreat( const Command & /* cmd */ )
         return;
     }
 
-    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "color: " << Color::String( _currentColor ) )
+    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "color: " << Color::String( currentColor ) )
 
-    if ( _army1->GetColor() == _currentColor ) {
+    if ( _army1->GetColor() == currentColor ) {
         result_game.army1 = RESULT_RETREAT;
     }
-    else if ( _army2->GetColor() == _currentColor ) {
+    else if ( _army2->GetColor() == currentColor ) {
         result_game.army2 = RESULT_RETREAT;
     }
     else {
@@ -830,7 +832,9 @@ void Battle::Arena::ApplyActionSurrender( const Command & /* cmd */ )
         return true;
     };
 
-    if ( _army1->GetColor() == _currentColor ) {
+    const int currentColor = GetCurrentColor();
+
+    if ( _army1->GetColor() == currentColor ) {
         Funds cost;
 
         cost.gold = _army1->GetSurrenderCost();
@@ -845,14 +849,14 @@ void Battle::Arena::ApplyActionSurrender( const Command & /* cmd */ )
             return;
         }
 
-        DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "color: " << Color::String( _currentColor ) )
+        DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "color: " << Color::String( currentColor ) )
 
         world.GetKingdom( _army1->GetColor() ).OddFundsResource( cost );
         world.GetKingdom( _army2->GetColor() ).AddFundsResource( cost );
 
         result_game.army1 = RESULT_SURRENDER;
     }
-    else if ( _army2->GetColor() == _currentColor ) {
+    else if ( _army2->GetColor() == currentColor ) {
         Funds cost;
 
         cost.gold = _army2->GetSurrenderCost();
@@ -867,7 +871,7 @@ void Battle::Arena::ApplyActionSurrender( const Command & /* cmd */ )
             return;
         }
 
-        DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "color: " << Color::String( _currentColor ) )
+        DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "color: " << Color::String( currentColor ) )
 
         world.GetKingdom( _army2->GetColor() ).OddFundsResource( cost );
         world.GetKingdom( _army1->GetColor() ).AddFundsResource( cost );

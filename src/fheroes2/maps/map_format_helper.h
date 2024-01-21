@@ -30,6 +30,7 @@ namespace Maps
     {
         struct MapFormat;
         struct TileInfo;
+        struct ObjectInfo;
     }
 
     enum class ObjectGroup : int32_t;
@@ -38,7 +39,8 @@ namespace Maps
 
     bool saveMapInEditor( Map_Format::MapFormat & map );
 
-    void readTile( Tiles & tile, const Map_Format::TileInfo & info );
+    void readTileTerrain( Tiles & tile, const Map_Format::TileInfo & info );
+    void readTileObject( Tiles & tile, const Map_Format::ObjectInfo & object );
 
     void writeTile( const Tiles & tile, Map_Format::TileInfo & info );
 

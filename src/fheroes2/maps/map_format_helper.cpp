@@ -25,6 +25,8 @@
 #include <cstddef>
 #include <cstdint>
 #include <list>
+#include <memory>
+#include <set>
 #include <vector>
 
 #include "map_format_info.h"
@@ -44,6 +46,13 @@ namespace
         object.group = group;
         object.index = index;
     }
+
+    struct IndexedObjectInfo
+    {
+        int32_t tileIndex{ -1 };
+
+        const Maps::Map_Format::ObjectInfo * info{ nullptr };
+    };
 }
 
 namespace Maps
@@ -63,8 +72,28 @@ namespace Maps
         }
 
         for ( size_t i = 0; i < map.tiles.size(); ++i ) {
-            readTile( world.GetTiles( static_cast<int32_t>( i ) ), map.tiles[i] );
+            readTileTerrain( world.GetTiles( static_cast<int32_t>( i ) ), map.tiles[i] );
         }
+
+        // Read objects from all tiles and place them based on their IDs.
+        auto sortObjects = []( const IndexedObjectInfo & left, const IndexedObjectInfo & right ) { return left.info->id < right.info->id; };
+        std::multiset<IndexedObjectInfo, decltype( sortObjects )> sortedObjects( sortObjects );
+
+        for ( size_t i = 0; i < map.tiles.size(); ++i ) {
+            for ( const auto & object : map.tiles[i].objects ) {
+                IndexedObjectInfo info;
+                info.tileIndex = static_cast<int32_t>( i );
+                info.info = &object;
+                sortedObjects.emplace( info );
+            }
+        }
+
+        for ( const auto & info : sortedObjects ) {
+            assert( info.info != nullptr );
+            readTileObject( world.GetTiles( info.tileIndex ), *info.info );
+        }
+
+        world.updatePassabilities();
 
         return true;
     }
@@ -86,28 +115,31 @@ namespace Maps
         return true;
     }
 
-    void readTile( Tiles & tile, const Map_Format::TileInfo & info )
+    void readTileTerrain( Tiles & tile, const Map_Format::TileInfo & info )
     {
         tile.setTerrain( info.terrainIndex, info.terrainFlag & 2, info.terrainFlag & 1 );
+    }
 
-        for ( const auto & object : info.objects ) {
-            const auto & objectInfos = getObjectsByGroup( object.group );
-            if ( object.index >= objectInfos.size() ) {
-                // This is a bad map format!
-                assert( 0 );
-                continue;
-            }
-
-            // Object UID is set through global object UID counter. Therefore, we need to update it before running the operation.
-            if ( object.id == 0 ) {
-                // This object UID is not set!
-                assert( 0 );
-                continue;
-            }
-
-            setLastObjectUID( object.id - 1 );
-            setObjectOnTile( tile, objectInfos[object.index] );
+    void readTileObject( Tiles & tile, const Map_Format::ObjectInfo & object )
+    {
+        const auto & objectInfos = getObjectsByGroup( object.group );
+        if ( object.index >= objectInfos.size() ) {
+            // This is a bad map format!
+            assert( 0 );
+            return;
         }
+
+        // Object UID is set through global object UID counter. Therefore, we need to update it before running the operation.
+        if ( object.id == 0 ) {
+            // This object UID is not set!
+            assert( 0 );
+            return;
+        }
+
+        setLastObjectUID( object.id - 1 );
+        // We don't update map passabilities as it is a very expensive process.
+        // Let's do it once everything is being loaded.
+        setObjectOnTile( tile, objectInfos[object.index], false );
     }
 
     void writeTile( const Tiles & tile, Map_Format::TileInfo & info )

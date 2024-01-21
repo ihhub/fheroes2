@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -355,8 +355,9 @@ Castle::ConstructionDialogResult Castle::openConstructionDialog( uint32_t & dwel
     const fheroes2::Rect rectSpreadArmyFormat( cur_pt.x + 550, cur_pt.y + 220, spriteSpreadArmyFormat.width(), spriteSpreadArmyFormat.height() );
     const fheroes2::Rect rectGroupedArmyFormat( cur_pt.x + 585, cur_pt.y + 220, spriteGroupedArmyFormat.width(), spriteGroupedArmyFormat.height() );
     const std::string descriptionSpreadArmyFormat(
-        _( "'Spread' combat formation spreads your armies from the top to the bottom of the battlefield, with at least one empty space between each army." ) );
-    const std::string descriptionGroupedArmyFormat( _( "'Grouped' combat formation bunches your army together in the center of your side of the battlefield." ) );
+        _( "'Spread' combat formation spreads the castle's units from the top to the bottom of the battlefield, with at least one empty space between each unit." ) );
+    const std::string descriptionGroupedArmyFormat(
+        _( "'Grouped' combat formation bunches the castle's units together in the center of the castle's side of the battlefield." ) );
     const fheroes2::Point pointSpreadArmyFormat( rectSpreadArmyFormat.x - 1, rectSpreadArmyFormat.y - 1 );
     const fheroes2::Point pointGroupedArmyFormat( rectGroupedArmyFormat.x - 1, rectGroupedArmyFormat.y - 1 );
     const fheroes2::Rect armyFormatRenderRect( pointSpreadArmyFormat, { rectGroupedArmyFormat.x + rectGroupedArmyFormat.width - pointSpreadArmyFormat.x + 1,
@@ -428,8 +429,9 @@ Castle::ConstructionDialogResult Castle::openConstructionDialog( uint32_t & dwel
         hero1->PortraitRedraw( dst_pt.x, dst_pt.y, PORT_BIG, display );
     }
     else {
-        fheroes2::Image noHeroPortrait( rectHero1.width, rectHero1.height );
+        fheroes2::Image noHeroPortrait;
         noHeroPortrait._disableTransformLayer();
+        noHeroPortrait.resize( rectHero1.width, rectHero1.height );
         noHeroPortrait.fill( 0 );
         fheroes2::Copy( noHeroPortrait, 0, 0, display, rectHero1.x, rectHero1.y, rectHero1.width, rectHero1.height );
     }
@@ -448,8 +450,9 @@ Castle::ConstructionDialogResult Castle::openConstructionDialog( uint32_t & dwel
         hero2->PortraitRedraw( dst_pt.x, dst_pt.y, PORT_BIG, display );
     }
     else {
-        fheroes2::Image noHeroPortrait( rectHero2.width, rectHero2.height );
+        fheroes2::Image noHeroPortrait;
         noHeroPortrait._disableTransformLayer();
+        noHeroPortrait.resize( rectHero2.width, rectHero2.height );
         noHeroPortrait.fill( 0 );
         fheroes2::Copy( noHeroPortrait, 0, 0, display, rectHero2.x, rectHero2.y, rectHero2.width, rectHero2.height );
     }

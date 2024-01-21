@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2023                                                    *
+ *   Copyright (C) 2023 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -188,5 +188,5 @@ namespace Maps
     bool eraseObjectsOnTiles( const int32_t startTileId, const int32_t endTileId, const uint32_t objectTypesToErase );
     bool eraseOjects( Tiles & tile, const uint32_t objectTypesToErase );
 
-    void setObjectOnTile( Tiles & tile, const ObjectInfo & info );
+    void setObjectOnTile( Tiles & tile, const ObjectInfo & info, const bool updateMapPassabilities );
 }

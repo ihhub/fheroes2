@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2023                                             *
+ *   Copyright (C) 2020 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -153,8 +153,9 @@ namespace
         const fheroes2::Sprite & background = fheroes2::AGG::GetICN( ICN::CBKGLAVA, 0 );
         assert( background.height() < fheroes2::Display::DEFAULT_HEIGHT );
 
-        fheroes2::Sprite output( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT - background.height() );
+        fheroes2::Sprite output;
         output._disableTransformLayer();
+        output.resize( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT - background.height() );
         output.fill( 0 );
 
         const fheroes2::Text caption( "fheroes2 engine (" + Settings::GetVersion() + ")", fheroes2::FontType::normalYellow() );
@@ -256,9 +257,6 @@ namespace
 
         const fheroes2::Sprite & goblin = fheroes2::AGG::GetICN( ICN::GOBLIN, 27 );
         fheroes2::Blit( goblin, output, output.width() - goblin.width() * 2, output.height() - goblin.height() - 10, true );
-
-        fheroes2::Image resizedOutput( 640, 480 );
-        fheroes2::Resize( output, 0, 0, output.width(), output.height(), resizedOutput, 0, 0, resizedOutput.width(), resizedOutput.height() );
 
         return output;
     }
@@ -728,15 +726,17 @@ void Game::ShowCredits( const bool keepMainMenuBorders )
     // Resize the credits pages. 'creditsRoi' is made using Main Menu background parameters that were already properly calculated for the current resolution.
     const int32_t resizedPageHeight = creditsRoi.width * pages.front().height() / pages.front().width();
     for ( fheroes2::Sprite & page : pages ) {
-        fheroes2::Sprite resizedPage( creditsRoi.width, resizedPageHeight );
+        fheroes2::Sprite resizedPage;
         resizedPage._disableTransformLayer();
-        fheroes2::Resize( page, resizedPage, false );
+        resizedPage.resize( creditsRoi.width, resizedPageHeight );
+        fheroes2::Resize( page, resizedPage );
         page = std::move( resizedPage );
     }
 
-    fheroes2::Sprite header( creditsRoi.width, creditsRoi.height - resizedPageHeight );
+    fheroes2::Sprite header;
     header._disableTransformLayer();
-    fheroes2::Resize( generateHeader(), header, false );
+    header.resize( creditsRoi.width, creditsRoi.height - resizedPageHeight );
+    fheroes2::Resize( generateHeader(), header );
 
     AnimationSequence sequence( static_cast<int32_t>( pages.size() ) );
 
