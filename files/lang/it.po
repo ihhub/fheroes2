@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-20 09:21+0000\n"
+"POT-Creation-Date: 2024-01-20 17:57+0000\n"
 "PO-Revision-Date: 2022-12-03 04:36+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <it@li.org>\n"
@@ -3312,6 +3312,10 @@ msgstr "Clicca per andare alla città succ."
 msgid "Select Dwelling:"
 msgstr "Scegli magia:"
 
+#, fuzzy
+msgid "Select Landscape Object:"
+msgstr "Scegli artefatto:"
+
 msgid "Mine placing"
 msgstr ""
 
@@ -3697,6 +3701,10 @@ msgstr ""
 
 msgid "Ocean object must be placed on water."
 msgstr ""
+
+#, fuzzy
+msgid "Landscape objects cannot be placed on water."
+msgstr "Opzioni Avventura"
 
 msgid "Towns cannot be placed on water."
 msgstr ""

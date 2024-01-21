@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-20 09:21+0000\n"
+"POT-Creation-Date: 2024-01-20 17:57+0000\n"
 "PO-Revision-Date: 2023-09-12 11:08+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
@@ -3484,6 +3484,10 @@ msgstr "Klik her for at vælge, hvilket kort du vil spille på."
 msgid "Select Dwelling:"
 msgstr "Vælg magi:"
 
+#, fuzzy
+msgid "Select Landscape Object:"
+msgstr "Vælg hav-objekt:"
+
 msgid "Mine placing"
 msgstr ""
 
@@ -3863,6 +3867,10 @@ msgstr "Skatte kan ikke placeres på vand."
 
 msgid "Ocean object must be placed on water."
 msgstr "Hav-objekter må kun placeres på vand."
+
+#, fuzzy
+msgid "Landscape objects cannot be placed on water."
+msgstr "Helte kan ikke placeres på vand."
 
 #, fuzzy
 msgid "Towns cannot be placed on water."

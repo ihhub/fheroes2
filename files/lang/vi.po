@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-20 09:21+0000\n"
+"POT-Creation-Date: 2024-01-20 17:57+0000\n"
 "PO-Revision-Date: 2023-12-20 19:47+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3450,6 +3450,10 @@ msgstr "Nhấp để chọn màu này."
 msgid "Select Dwelling:"
 msgstr "Chọn Phép:"
 
+#, fuzzy
+msgid "Select Landscape Object:"
+msgstr "Chọn Đối tượng Đại dương:"
+
 msgid "Mine placing"
 msgstr ""
 
@@ -3826,6 +3830,10 @@ msgstr "Kho báu không thể đặt trên nước."
 
 msgid "Ocean object must be placed on water."
 msgstr "Đối tượng đại dương phải đặt trên mặt nước."
+
+#, fuzzy
+msgid "Landscape objects cannot be placed on water."
+msgstr "Tướng không thể đặt trên nước."
 
 msgid "Towns cannot be placed on water."
 msgstr "Thị trấn không thể đặt trên nước."

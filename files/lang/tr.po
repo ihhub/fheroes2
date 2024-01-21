@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-20 09:21+0000\n"
+"POT-Creation-Date: 2024-01-20 17:57+0000\n"
 "PO-Revision-Date: 2022-10-01 20:20+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Turkish <tr@li.org>\n"
@@ -3165,6 +3165,10 @@ msgstr ""
 msgid "Select Dwelling:"
 msgstr "Büyü hedefini seç"
 
+#, fuzzy
+msgid "Select Landscape Object:"
+msgstr "Büyü hedefini seç"
+
 msgid "Mine placing"
 msgstr ""
 
@@ -3517,6 +3521,9 @@ msgid "Trees cannot be placed on water."
 msgstr ""
 
 msgid "Ocean object must be placed on water."
+msgstr ""
+
+msgid "Landscape objects cannot be placed on water."
 msgstr ""
 
 msgid "Towns cannot be placed on water."

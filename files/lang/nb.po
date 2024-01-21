@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-20 09:21+0000\n"
+"POT-Creation-Date: 2024-01-20 17:57+0000\n"
 "PO-Revision-Date: 2023-09-03 18:42+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3497,6 +3497,10 @@ msgstr "Klikk her for å velge hvilket kart du vil spille."
 msgid "Select Dwelling:"
 msgstr "Velg trolldom:"
 
+#, fuzzy
+msgid "Select Landscape Object:"
+msgstr "Sjøting"
+
 msgid "Mine placing"
 msgstr ""
 
@@ -3886,6 +3890,10 @@ msgstr "Denne trolldommen kan ikke brukes på et skip."
 
 #, fuzzy
 msgid "Ocean object must be placed on water."
+msgstr "Denne trolldommen kan ikke brukes på et skip."
+
+#, fuzzy
+msgid "Landscape objects cannot be placed on water."
 msgstr "Denne trolldommen kan ikke brukes på et skip."
 
 #, fuzzy

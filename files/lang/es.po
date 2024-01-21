@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-20 09:21+0000\n"
+"POT-Creation-Date: 2024-01-20 17:57+0000\n"
 "PO-Revision-Date: 2023-12-13 05:57+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -3469,6 +3469,10 @@ msgstr "Haga clic aquí para seleccionar el escenario donde jugar."
 msgid "Select Dwelling:"
 msgstr "Seleccionar objetivo del hechizo"
 
+#, fuzzy
+msgid "Select Landscape Object:"
+msgstr "Artefactos"
+
 msgid "Mine placing"
 msgstr ""
 
@@ -3862,6 +3866,10 @@ msgstr "Este pueblo no se puede actualizar a castillo."
 
 #, fuzzy
 msgid "Ocean object must be placed on water."
+msgstr "Este pueblo no se puede actualizar a castillo."
+
+#, fuzzy
+msgid "Landscape objects cannot be placed on water."
 msgstr "Este pueblo no se puede actualizar a castillo."
 
 #, fuzzy
