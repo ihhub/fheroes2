@@ -579,7 +579,7 @@ namespace
 
     void showQuickInfo( const Castle & castle, const fheroes2::Point & position, const bool showOnRadar, const fheroes2::Rect & areaToRestore )
     {
-        const CursorRestorer cursorRestorer( false, Cursor::POINTER );
+        const CursorRestorer cursorRestorer( false );
 
         // Update radar if needed
         RadarUpdater radarUpdater( showOnRadar, castle.GetCenter(), areaToRestore );
@@ -701,7 +701,7 @@ namespace
     void showQuickInfo( const HeroBase & hero, const fheroes2::Point & position, const bool showOnRadar, const fheroes2::Rect & areaToRestore,
                         const std::optional<bool> showFullInfo )
     {
-        const CursorRestorer cursorRestorer( false, Cursor::POINTER );
+        const CursorRestorer cursorRestorer( false );
 
         // Update radar if needed
         RadarUpdater radarUpdater( showOnRadar, hero.GetCenter(), areaToRestore );

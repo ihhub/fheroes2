@@ -54,7 +54,7 @@ namespace Interface
 
     void displayStandardPopupWindow( std::string text, const fheroes2::Rect & interfaceArea )
     {
-        const CursorRestorer cursorRestorer( false, Cursor::POINTER );
+        const CursorRestorer cursorRestorer( false );
 
         const fheroes2::Sprite & windowImage = fheroes2::AGG::GetICN( ICN::QWIKINFO, 0 );
 

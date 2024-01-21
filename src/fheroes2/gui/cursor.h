@@ -224,7 +224,10 @@ class CursorRestorer
 {
 public:
     CursorRestorer() = default;
-    CursorRestorer( const bool visible, const int theme ); // For convenience, also sets visibility and theme of the cursor
+    // Use only to hide a cursor. Previous cursor visibility and theme will be restored when this object is destroyed.
+    explicit CursorRestorer( const bool visible );
+    // Use to set cursor visibility and theme of the cursor. Previous cursor visibility and theme will be restored when this object is destroyed.
+    CursorRestorer( const bool visible, const int theme );
     CursorRestorer( const CursorRestorer & ) = delete;
 
     ~CursorRestorer();

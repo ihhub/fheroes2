@@ -123,7 +123,7 @@ namespace Video
         const bool isLooped = ( action == VideoAction::LOOP_VIDEO || action == VideoAction::PLAY_TILL_AUDIO_END );
 
         // Hide mouse cursor.
-        const CursorRestorer cursorRestorer( false, Cursor::Get().Themes() );
+        const CursorRestorer cursorRestorer( false );
 
         fheroes2::Display & display = fheroes2::Display::instance();
         display.fill( 0 );
