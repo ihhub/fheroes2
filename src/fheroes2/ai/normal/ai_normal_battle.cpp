@@ -628,7 +628,7 @@ namespace AI
                         return true;
                     }
 
-                    // Otherwise, if this hero is the last one, and the kingdom has no more castles, then there is no point in retreating
+                    // Otherwise, if this hero is the last one, and the kingdom has no castles, then there is no point in retreating
                     if ( kingdom.GetHeroes().size() == 1 ) {
                         assert( kingdom.GetHeroes().at( 0 ) == actualHero );
 
@@ -656,8 +656,8 @@ namespace AI
                         return true;
                     }
 
-                    // Otherwise, if this hero is the last one, and either there are no more castles in the kingdom, or he is defending the last castle, then there is no
-                    // point in surrendering
+                    // Otherwise, if this hero is the last one, and either the kingdom has no castles, or this hero is defending the last castle, then there is no point
+                    // in surrendering
                     if ( kingdom.GetHeroes().size() == 1 ) {
                         assert( kingdom.GetHeroes().at( 0 ) == actualHero );
 
