@@ -5249,7 +5249,7 @@ msgstr "%{color} játékos köre."
 
 msgid ""
 "%{color} player, you have lost your last town. If you do not conquer another "
-"town in next week, you will be eliminated."
+"town in the next week, you will be eliminated."
 msgstr ""
 "Kedves %{color} játékos, elvesztetted az utolsó városod is, ha nem szerzel "
 "egy másik várost a következő héten, akkor elbuktad a játékot."

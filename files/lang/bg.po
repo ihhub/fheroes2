@@ -5319,7 +5319,7 @@ msgstr "Ход на %{color} играч."
 
 msgid ""
 "%{color} player, you have lost your last town. If you do not conquer another "
-"town in next week, you will be eliminated."
+"town in the next week, you will be eliminated."
 msgstr ""
 "%{color} играч, загуби последния си град. Ако не завладееш друг град през "
 "следващата седмица, ще бъдеш елиминиран."

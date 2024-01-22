@@ -5293,7 +5293,7 @@ msgstr "%{color} gracz - nowa tura."
 
 msgid ""
 "%{color} player, you have lost your last town. If you do not conquer another "
-"town in next week, you will be eliminated."
+"town in the next week, you will be eliminated."
 msgstr ""
 "%{color}, twoje ostatnie miasto zostało podbite. Jeśli nie zdołasz zdobyć "
 "innego miasta w ciągu tygodnia, gra się dla ciebie skończy."

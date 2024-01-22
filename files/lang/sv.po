@@ -5234,7 +5234,7 @@ msgstr "%{color} spelares tur."
 
 msgid ""
 "%{color} player, you have lost your last town. If you do not conquer another "
-"town in next week, you will be eliminated."
+"town in the next week, you will be eliminated."
 msgstr ""
 "%{color} spelare, du har förlorat din sista stad. Om du inte erövrar en stad "
 "nästa vecka kommer du att bli eliminerad."
