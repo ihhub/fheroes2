@@ -2,7 +2,7 @@ name: Pull Request
 
 on:
   pull_request:
-    branches: [ master ]
+    branches: [ masterX ]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}

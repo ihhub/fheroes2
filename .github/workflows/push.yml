@@ -2,7 +2,7 @@ name: Push
 
 on:
   push:
-    branches: [ master ]
+    branches: [ masterX ]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
