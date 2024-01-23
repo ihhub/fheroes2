@@ -38,7 +38,7 @@ jobs:
     - name: Set environment variables
       run: |
         mkdir clang-tidy-result
-        unzip clang-tidy-result.zip -d clang-tidy-result
+        unzip -j clang-tidy-result.zip -d clang-tidy-result
         echo "PR_ID=$(cat clang-tidy-result/pr-id.txt)" >> "$GITHUB_ENV"
         echo "PR_HEAD_REPO=$(cat clang-tidy-result/pr-head-repo.txt)" >> "$GITHUB_ENV"
         echo "PR_HEAD_SHA=$(cat clang-tidy-result/pr-head-sha.txt)" >> "$GITHUB_ENV"
@@ -70,7 +70,7 @@ jobs:
     - name: Extract analysis results
       run: |
         mkdir clang-tidy-result
-        unzip clang-tidy-result.zip -d clang-tidy-result
+        unzip -j clang-tidy-result.zip -d clang-tidy-result
     - uses: fheroes2/clang-tidy-pr-comments@master
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
