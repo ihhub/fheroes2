@@ -24,7 +24,6 @@
 #include <array>
 #include <cassert>
 #include <cstddef>
-#include <tuple>
 #include <type_traits>
 
 #include "serialize.h"
