@@ -1406,8 +1406,9 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
                 const uint32_t lostTownDays = myKingdom.GetLostTownDays();
 
                 if ( lostTownDays > Game::GetLostTownDays() ) {
-                    Game::DialogPlayers( conf.CurrentColor(), _( "Beware!" ),
-                                         _( "%{color} player, you have lost your last town. If you do not conquer another town in the next week, you will be eliminated." ) );
+                    Game::DialogPlayers(
+                        conf.CurrentColor(), _( "Beware!" ),
+                        _( "%{color} player, you have lost your last town. If you do not conquer another town in the next week, you will be eliminated." ) );
                 }
                 else if ( lostTownDays == 1 ) {
                     Game::DialogPlayers( conf.CurrentColor(), _( "Defeat!" ), _( "%{color} player, your heroes abandon you, and you are banished from this land." ) );
