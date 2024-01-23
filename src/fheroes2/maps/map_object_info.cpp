@@ -26,6 +26,7 @@
 #include <cstddef>
 #include <initializer_list>
 #include <memory>
+#include <tuple>
 #include <utility>
 
 #include "artifact.h"
