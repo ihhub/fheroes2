@@ -276,7 +276,7 @@ namespace AI
 
             assert( fromResBalanceAmount > 0 && toResBalanceAmount < 0 );
 
-            const int32_t tradeCost = fheroes2::getTradeCost( marketplaceCount, fromRes, toRes );
+            const int32_t tradeCost =  fheroes2::getTradeCost( marketplaceCount, fromRes, toRes );
             assert( tradeCost > 0 );
 
             int32_t * fromResTransactionAmount = plannedTransaction.GetPtr( fromRes );
