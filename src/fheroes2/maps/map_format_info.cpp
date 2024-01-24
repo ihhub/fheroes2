@@ -20,10 +20,8 @@
 
 #include "map_format_info.h"
 
-#include <algorithm>
 #include <array>
 #include <cstddef>
-#include <tuple>
 #include <type_traits>
 
 #include "serialize.h"
