@@ -22,7 +22,6 @@
 
 #include <algorithm>
 #include <array>
-#include <cassert>
 #include <cstddef>
 #include <tuple>
 #include <type_traits>
@@ -35,22 +34,6 @@ namespace
 
     // This value is set to avoid any corrupted files to be processed.
     const size_t minFileSize{ 128 };
-
-    template <typename TType, size_t TSize>
-    void readArray( StreamBase & stream, std::array<TType, TSize> & values )
-    {
-        std::vector<TType> temp;
-        stream >> temp;
-
-        if ( values.size() != temp.size() ) {
-            // This is a corrupted file!
-            assert( 0 );
-            values = { 0 };
-        }
-        else {
-            std::copy_n( temp.begin(), values.size(), values.begin() );
-        }
-    }
 }
 
 namespace Maps::Map_Format
@@ -92,9 +75,7 @@ namespace Maps::Map_Format
 
     StreamBase & operator>>( StreamBase & msg, StandardObjectMetadata & metadata )
     {
-        readArray( msg, metadata.metadata );
-
-        return msg;
+        return msg >> metadata.metadata;
     }
 
     StreamBase & operator<<( StreamBase & msg, const CastleMetadata & metadata )
@@ -105,16 +86,8 @@ namespace Maps::Map_Format
 
     StreamBase & operator>>( StreamBase & msg, CastleMetadata & metadata )
     {
-        msg >> metadata.customName;
-
-        readArray( msg, metadata.defenderMonsterType );
-        readArray( msg, metadata.defenderMonsterCount );
-
-        msg >> metadata.isCaptainAvailable >> metadata.builtBuildings >> metadata.bannedBuildings >> metadata.mustHaveSpells >> metadata.bannedSpells;
-
-        readArray( msg, metadata.availableToHireMonsterCount );
-
-        return msg;
+        return msg >> metadata.customName >> metadata.defenderMonsterType >> metadata.defenderMonsterCount >> metadata.isCaptainAvailable >> metadata.builtBuildings
+                   >> metadata.bannedBuildings >> metadata.mustHaveSpells >> metadata.bannedSpells >> metadata.availableToHireMonsterCount;
     }
 
     StreamBase & operator<<( StreamBase & msg, const HeroMetadata & metadata )
@@ -127,19 +100,10 @@ namespace Maps::Map_Format
 
     StreamBase & operator>>( StreamBase & msg, HeroMetadata & metadata )
     {
-        msg >> metadata.customName >> metadata.customPortrait;
-
-        readArray( msg, metadata.armyMonsterType );
-        readArray( msg, metadata.armyMonsterCount );
-        readArray( msg, metadata.artifact );
-        readArray( msg, metadata.artifactMetadata );
-        msg >> metadata.availableSpells >> metadata.isOnPatrol >> metadata.patrolRadius;
-
-        readArray( msg, metadata.secondarySkill );
-        readArray( msg, metadata.secondarySkillLevel );
-
-        return msg >> metadata.customLevel >> metadata.customExperience >> metadata.customAttack >> metadata.customDefence >> metadata.customKnowledge
-               >> metadata.customSpellPower >> metadata.magicPoints;
+        return msg >> metadata.customName >> metadata.customPortrait >> metadata.armyMonsterType >> metadata.armyMonsterCount >> metadata.artifact
+                   >> metadata.artifactMetadata >> metadata.availableSpells >> metadata.isOnPatrol >> metadata.patrolRadius >> metadata.secondarySkill
+                   >> metadata.secondarySkillLevel >> metadata.customLevel >> metadata.customExperience >> metadata.customAttack >> metadata.customDefence
+                   >> metadata.customKnowledge >> metadata.customSpellPower >> metadata.magicPoints;
     }
 
     StreamBase & operator<<( StreamBase & msg, const BaseMapFormat & map )

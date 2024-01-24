@@ -1867,19 +1867,6 @@ StreamBase & Maps::operator>>( StreamBase & msg, Tiles & tile )
 
     tile._mainObjectType = static_cast<MP2::MapObjectType>( mainObjectType );
 
-    msg >> tile._fogColors;
-
-    // We want to verify the size of array being present in the file.
-    std::vector<uint32_t> temp;
-    msg >> temp;
-
-    if ( tile._metadata.size() != temp.size() ) {
-        // This is a corrupted file!
-        assert( 0 );
-    }
-    else {
-        std::copy_n( temp.begin(), tile._metadata.size(), tile._metadata.begin() );
-    }
-
-    return msg >> tile._occupantHeroId >> tile._isTileMarkedAsRoad >> tile._addonBottomLayer >> tile._addonTopLayer >> tile._mainAddon._layerType >> tile._boatOwnerColor;
+    return msg >> tile._fogColors >> tile._metadata >> tile._occupantHeroId >> tile._isTileMarkedAsRoad >> tile._addonBottomLayer >> tile._addonTopLayer
+               >> tile._mainAddon._layerType >> tile._boatOwnerColor;
 }

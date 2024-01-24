@@ -26,6 +26,7 @@
 
 #include <algorithm>
 #include <array>
+#include <cassert>
 #include <cstdint>
 #include <cstdio>
 #include <functional>
@@ -170,6 +171,25 @@ public:
             *this >> pr;
             v.emplace( std::move( pr ) );
         }
+        return *this;
+    }
+
+    template <class Type, size_t Count>
+    StreamBase & operator>>( std::array<Type, Count> & data )
+    {
+        const uint32_t size = get32();
+        if ( size != data.size() ) {
+            // This is a corrupted file!
+            assert( 0 );
+            data = {};
+
+            return *this;
+        }
+
+        for ( auto & value : data ) {
+            *this >> value;
+        }
+
         return *this;
     }
 
