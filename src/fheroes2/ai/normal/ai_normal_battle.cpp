@@ -604,16 +604,25 @@ namespace AI
                     return Outcome::ContinueBattle;
                 }
 
-                const bool hasArtifacts = [actualHero]() {
+                const bool hasValuableArtifacts = [actualHero]() {
                     const BagArtifacts & artifactsBag = actualHero->GetBagArtifacts();
 
-                    return std::any_of( artifactsBag.begin(), artifactsBag.end(),
-                                        []( const Artifact & art ) { return art.isValid() && art.GetID() != Artifact::MAGIC_BOOK; } );
+                    return std::any_of( artifactsBag.begin(), artifactsBag.end(), []( const Artifact & art ) {
+                        if ( !art.isValid() ) {
+                            return false;
+                        }
+
+                        if ( art.GetID() == Artifact::MAGIC_BOOK ) {
+                            return false;
+                        }
+
+                        return !fheroes2::getArtifactData( art.GetID() ).bonuses.empty();
+                    } );
                 }();
 
                 const Kingdom & kingdom = actualHero->GetKingdom();
 
-                const bool considerRetreat = [this, &arena, actualHero, gameDifficulty, isGameCampaign, hasArtifacts, &kingdom]() {
+                const bool considerRetreat = [this, &arena, actualHero, gameDifficulty, isGameCampaign, hasValuableArtifacts, &kingdom]() {
                     if ( !Difficulty::allowAIToRetreat( gameDifficulty, isGameCampaign ) ) {
                         return false;
                     }
@@ -622,9 +631,9 @@ namespace AI
                         return false;
                     }
 
-                    // If the hero has artifacts, he should in any case consider retreating so that these artifacts do not end up at the disposal of the enemy, especially
-                    // in the case of an alliance war
-                    if ( hasArtifacts ) {
+                    // If the hero has valuable artifacts, he should in any case consider retreating so that these artifacts do not end up at the disposal of the enemy,
+                    // especially in the case of an alliance war
+                    if ( hasValuableArtifacts ) {
                         return true;
                     }
 
@@ -641,7 +650,7 @@ namespace AI
                     return actualHero->GetLevel() >= Difficulty::getMinHeroLevelForAIRetreat( gameDifficulty );
                 }();
 
-                const bool considerSurrender = [this, &arena, actualHero, gameDifficulty, isGameCampaign, hasArtifacts, &kingdom]() {
+                const bool considerSurrender = [this, &arena, actualHero, gameDifficulty, isGameCampaign, hasValuableArtifacts, &kingdom]() {
                     if ( !Difficulty::allowAIToSurrender( gameDifficulty, isGameCampaign ) ) {
                         return false;
                     }
@@ -650,9 +659,9 @@ namespace AI
                         return false;
                     }
 
-                    // If the hero has artifacts, he should in any case consider surrendering so that these artifacts do not end up at the disposal of the enemy,
+                    // If the hero has valuable artifacts, he should in any case consider surrendering so that these artifacts do not end up at the disposal of the enemy,
                     // especially in the case of an alliance war
-                    if ( hasArtifacts ) {
+                    if ( hasValuableArtifacts ) {
                         return true;
                     }
 
