@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-20 03:11+0000\n"
+"POT-Creation-Date: 2024-01-24 13:18+0000\n"
 "PO-Revision-Date: 2023-11-12 16:27+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -3456,6 +3456,10 @@ msgstr "Нажмите сюда чтобы выбрать сценарий."
 msgid "Select Dwelling:"
 msgstr "Выберите заклинание:"
 
+#, fuzzy
+msgid "Select Landscape Object:"
+msgstr "Объекты океана"
+
 msgid "Mine placing"
 msgstr ""
 
@@ -3487,6 +3491,10 @@ msgstr "Объекты океана"
 
 #, fuzzy
 msgid "Select Power Up Object:"
+msgstr "Объекты океана"
+
+#, fuzzy
+msgid "Select Adventure Object:"
 msgstr "Объекты океана"
 
 msgid "Map Type:\n"
@@ -3837,6 +3845,10 @@ msgid "Ocean object must be placed on water."
 msgstr "Героев нельзя размещать на воде."
 
 #, fuzzy
+msgid "Landscape objects cannot be placed on water."
+msgstr "Героев нельзя размещать на воде."
+
+#, fuzzy
 msgid "Towns cannot be placed on water."
 msgstr "Монстров нельзя размещать на воде."
 
@@ -3851,6 +3863,10 @@ msgstr "Монстров нельзя размещать на воде."
 #, fuzzy
 msgid "Power-ups cannot be placed on water."
 msgstr "Монстров нельзя размещать на воде."
+
+#, fuzzy
+msgid "Adventure objects cannot be placed on water."
+msgstr "Героев нельзя размещать на воде."
 
 #, fuzzy
 msgid "Used to place %{object}."
@@ -5286,9 +5302,10 @@ msgstr ""
 msgid "%{color} player's turn."
 msgstr "Ход игрока: %{color}"
 
+#, fuzzy
 msgid ""
 "%{color} player, you have lost your last town. If you do not conquer another "
-"town in next week, you will be eliminated."
+"town in the next week, you will be eliminated."
 msgstr ""
 "%{color} игрок, Вы потеряли последний город. Если Вы не захватите какой-либо "
 "город в течение 7 дней, то потерпите поражение."

@@ -317,6 +317,7 @@ namespace AI
         double getScoutObjectValue( const Heroes & hero, const int index, const double valueToIgnore, const uint32_t distanceToObject ) const;
         int getCourierMainTarget( const Heroes & hero, const AIWorldPathfinder & pathfinder, double lowestPossibleValue ) const;
         double getResourcePriorityModifier( const int resource, const bool isMine ) const;
+        double getFundsValueBasedOnPriority( const Funds & funds ) const;
 
         void updatePriorityTargets( Heroes & hero, const int32_t tileIndex, const MP2::MapObjectType objectType );
         void updateKingdomBudget( const Kingdom & kingdom );

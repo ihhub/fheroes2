@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-20 03:11+0000\n"
+"POT-Creation-Date: 2024-01-24 13:18+0000\n"
 "PO-Revision-Date: 2023-08-26 23:09+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: https://discord.com/"
@@ -3446,6 +3446,10 @@ msgstr "Kliknij tutaj, aby wybrać scenariusz, który chcesz rozegrać."
 msgid "Select Dwelling:"
 msgstr "Wybierz zaklęcie:"
 
+#, fuzzy
+msgid "Select Landscape Object:"
+msgstr "Wybierz artefakt:"
+
 msgid "Mine placing"
 msgstr ""
 
@@ -3477,6 +3481,10 @@ msgstr "Wybierz artefakt:"
 
 #, fuzzy
 msgid "Select Power Up Object:"
+msgstr "Wybierz artefakt:"
+
+#, fuzzy
+msgid "Select Adventure Object:"
 msgstr "Wybierz artefakt:"
 
 msgid "Map Type:\n"
@@ -3830,6 +3838,10 @@ msgid "Ocean object must be placed on water."
 msgstr "To zaklęcie nie może być rzucone z łodzi."
 
 #, fuzzy
+msgid "Landscape objects cannot be placed on water."
+msgstr "To zaklęcie nie może być rzucone z łodzi."
+
+#, fuzzy
 msgid "Towns cannot be placed on water."
 msgstr "To zaklęcie nie może być rzucone z łodzi."
 
@@ -3843,6 +3855,10 @@ msgstr "To zaklęcie nie może być rzucone z łodzi."
 
 #, fuzzy
 msgid "Power-ups cannot be placed on water."
+msgstr "To zaklęcie nie może być rzucone z łodzi."
+
+#, fuzzy
+msgid "Adventure objects cannot be placed on water."
 msgstr "To zaklęcie nie może być rzucone z łodzi."
 
 #, fuzzy
@@ -5275,9 +5291,10 @@ msgstr ""
 msgid "%{color} player's turn."
 msgstr "%{color} gracz - nowa tura."
 
+#, fuzzy
 msgid ""
 "%{color} player, you have lost your last town. If you do not conquer another "
-"town in next week, you will be eliminated."
+"town in the next week, you will be eliminated."
 msgstr ""
 "%{color}, twoje ostatnie miasto zostało podbite. Jeśli nie zdołasz zdobyć "
 "innego miasta w ciągu tygodnia, gra się dla ciebie skończy."

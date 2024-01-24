@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2023                                                    *
+ *   Copyright (C) 2023 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -182,15 +182,16 @@ namespace
 
         drawOptions();
 
-        const auto refreshWindow = [&drawOptions, &emptyDialogRestorer, &display]() {
-            emptyDialogRestorer.restore();
-            drawOptions();
-            display.render( emptyDialogRestorer.rect() );
-        };
-
         const fheroes2::Point buttonOffset( 112 + windowRoi.x, 252 + windowRoi.y );
         fheroes2::Button okayButton( buttonOffset.x, buttonOffset.y, isEvilInterface ? ICN::BUTTON_SMALL_OKAY_EVIL : ICN::BUTTON_SMALL_OKAY_GOOD, 0, 1 );
         okayButton.draw();
+
+        const auto refreshWindow = [&drawOptions, &emptyDialogRestorer, &okayButton, &display]() {
+            emptyDialogRestorer.restore();
+            drawOptions();
+            okayButton.draw();
+            display.render( emptyDialogRestorer.rect() );
+        };
 
         display.render();
 

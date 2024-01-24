@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-20 03:11+0000\n"
+"POT-Creation-Date: 2024-01-24 13:18+0000\n"
 "PO-Revision-Date: 2023-09-03 18:42+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3497,6 +3497,10 @@ msgstr "Klikk her for å velge hvilket kart du vil spille."
 msgid "Select Dwelling:"
 msgstr "Velg trolldom:"
 
+#, fuzzy
+msgid "Select Landscape Object:"
+msgstr "Sjøting"
+
 msgid "Mine placing"
 msgstr ""
 
@@ -3528,6 +3532,10 @@ msgstr "Sjøting"
 
 #, fuzzy
 msgid "Select Power Up Object:"
+msgstr "Sjøting"
+
+#, fuzzy
+msgid "Select Adventure Object:"
 msgstr "Sjøting"
 
 msgid "Map Type:\n"
@@ -3885,6 +3893,10 @@ msgid "Ocean object must be placed on water."
 msgstr "Denne trolldommen kan ikke brukes på et skip."
 
 #, fuzzy
+msgid "Landscape objects cannot be placed on water."
+msgstr "Denne trolldommen kan ikke brukes på et skip."
+
+#, fuzzy
 msgid "Towns cannot be placed on water."
 msgstr "Denne trolldommen kan ikke brukes på et skip."
 
@@ -3898,6 +3910,10 @@ msgstr "Denne trolldommen kan ikke brukes på et skip."
 
 #, fuzzy
 msgid "Power-ups cannot be placed on water."
+msgstr "Denne trolldommen kan ikke brukes på et skip."
+
+#, fuzzy
+msgid "Adventure objects cannot be placed on water."
 msgstr "Denne trolldommen kan ikke brukes på et skip."
 
 #, fuzzy
@@ -5356,9 +5372,10 @@ msgstr ""
 msgid "%{color} player's turn."
 msgstr "%{color} spillers tur."
 
+#, fuzzy
 msgid ""
 "%{color} player, you have lost your last town. If you do not conquer another "
-"town in next week, you will be eliminated."
+"town in the next week, you will be eliminated."
 msgstr ""
 "%{color} spiller, du har mistet den siste byen din. Hvis du ikke tar over en "
 "ny by innen neste uke vil du bli slått ut."

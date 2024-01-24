@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-20 03:11+0000\n"
+"POT-Creation-Date: 2024-01-24 13:18+0000\n"
 "PO-Revision-Date: 2023-12-13 05:57+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -3469,6 +3469,10 @@ msgstr "Haga clic aquí para seleccionar el escenario donde jugar."
 msgid "Select Dwelling:"
 msgstr "Seleccionar objetivo del hechizo"
 
+#, fuzzy
+msgid "Select Landscape Object:"
+msgstr "Artefactos"
+
 msgid "Mine placing"
 msgstr ""
 
@@ -3500,6 +3504,10 @@ msgstr "Artefactos"
 
 #, fuzzy
 msgid "Select Power Up Object:"
+msgstr "Artefactos"
+
+#, fuzzy
+msgid "Select Adventure Object:"
 msgstr "Artefactos"
 
 #, fuzzy
@@ -3861,6 +3869,10 @@ msgid "Ocean object must be placed on water."
 msgstr "Este pueblo no se puede actualizar a castillo."
 
 #, fuzzy
+msgid "Landscape objects cannot be placed on water."
+msgstr "Este pueblo no se puede actualizar a castillo."
+
+#, fuzzy
 msgid "Towns cannot be placed on water."
 msgstr "Este pueblo no se puede actualizar a castillo."
 
@@ -3874,6 +3886,10 @@ msgstr "Este pueblo no se puede actualizar a castillo."
 
 #, fuzzy
 msgid "Power-ups cannot be placed on water."
+msgstr "Este pueblo no se puede actualizar a castillo."
+
+#, fuzzy
+msgid "Adventure objects cannot be placed on water."
 msgstr "Este pueblo no se puede actualizar a castillo."
 
 #, fuzzy
@@ -5319,9 +5335,10 @@ msgstr ""
 msgid "%{color} player's turn."
 msgstr "Turno del jugador %{color}."
 
+#, fuzzy
 msgid ""
 "%{color} player, you have lost your last town. If you do not conquer another "
-"town in next week, you will be eliminated."
+"town in the next week, you will be eliminated."
 msgstr ""
 "Jugador %{color}, has perdido tu última ciudad. Si no conquistas ótra la "
 "próxima semana serás eliminado."

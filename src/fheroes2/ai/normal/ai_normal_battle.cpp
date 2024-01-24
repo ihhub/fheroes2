@@ -530,7 +530,7 @@ namespace AI
             return false;
         }
 
-        const uint32_t currentTurnNumber = arena.GetCurrentTurn();
+        const uint32_t currentTurnNumber = arena.GetTurnNumber();
         assert( currentTurnNumber > 0 );
 
         // This is the beginning of a new turn and we still haven't gone beyond the limit on the number of turns without deaths

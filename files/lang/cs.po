@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-20 03:11+0000\n"
+"POT-Creation-Date: 2024-01-24 13:18+0000\n"
 "PO-Revision-Date: 2023-09-24 16:05+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Czech <cs@li.org>\n"
@@ -3427,6 +3427,10 @@ msgstr "Kliknout sem pro výběr scénáře."
 msgid "Select Dwelling:"
 msgstr "Seslat kouzlo"
 
+#, fuzzy
+msgid "Select Landscape Object:"
+msgstr "Artefakt"
+
 msgid "Mine placing"
 msgstr ""
 
@@ -3458,6 +3462,10 @@ msgstr "Artefakt"
 
 #, fuzzy
 msgid "Select Power Up Object:"
+msgstr "Artefakt"
+
+#, fuzzy
+msgid "Select Adventure Object:"
 msgstr "Artefakt"
 
 #, fuzzy
@@ -3800,6 +3808,10 @@ msgid "Ocean object must be placed on water."
 msgstr ""
 
 #, fuzzy
+msgid "Landscape objects cannot be placed on water."
+msgstr "Toto město nemůže být povýšeno na hrad."
+
+#, fuzzy
 msgid "Towns cannot be placed on water."
 msgstr "Toto město nemůže být povýšeno na hrad."
 
@@ -3813,6 +3825,10 @@ msgstr "Toto město nemůže být povýšeno na hrad."
 
 #, fuzzy
 msgid "Power-ups cannot be placed on water."
+msgstr "Toto město nemůže být povýšeno na hrad."
+
+#, fuzzy
+msgid "Adventure objects cannot be placed on water."
 msgstr "Toto město nemůže být povýšeno na hrad."
 
 #, fuzzy
@@ -5233,9 +5249,10 @@ msgstr ""
 msgid "%{color} player's turn."
 msgstr "Táhne %{color} hráč."
 
+#, fuzzy
 msgid ""
 "%{color} player, you have lost your last town. If you do not conquer another "
-"town in next week, you will be eliminated."
+"town in the next week, you will be eliminated."
 msgstr ""
 "%{color} hráči, přišel jsi o své poslední město. Pokud do týdne nedobiješ "
 "nějaké město, tak budeš vyloučen ze hry."

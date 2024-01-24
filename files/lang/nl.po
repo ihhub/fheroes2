@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-20 03:11+0000\n"
+"POT-Creation-Date: 2024-01-24 13:18+0000\n"
 "PO-Revision-Date: 2022-10-25 08:52+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Dutch <nl@li.org>\n"
@@ -3341,6 +3341,10 @@ msgstr ""
 msgid "Select Dwelling:"
 msgstr "Selecteer spreuk doelwit"
 
+#, fuzzy
+msgid "Select Landscape Object:"
+msgstr "Selecteer spreuk doelwit"
+
 msgid "Mine placing"
 msgstr ""
 
@@ -3370,6 +3374,10 @@ msgstr "Selecteer spreuk doelwit"
 
 #, fuzzy
 msgid "Select Power Up Object:"
+msgstr "Selecteer spreuk doelwit"
+
+#, fuzzy
+msgid "Select Adventure Object:"
 msgstr "Selecteer spreuk doelwit"
 
 msgid "Map Type:\n"
@@ -3691,6 +3699,9 @@ msgstr ""
 msgid "Ocean object must be placed on water."
 msgstr ""
 
+msgid "Landscape objects cannot be placed on water."
+msgstr ""
+
 msgid "Towns cannot be placed on water."
 msgstr ""
 
@@ -3701,6 +3712,9 @@ msgid "Dwellings cannot be placed on water."
 msgstr ""
 
 msgid "Power-ups cannot be placed on water."
+msgstr ""
+
+msgid "Adventure objects cannot be placed on water."
 msgstr ""
 
 msgid "Used to place %{object}."
@@ -5019,7 +5033,7 @@ msgstr ""
 
 msgid ""
 "%{color} player, you have lost your last town. If you do not conquer another "
-"town in next week, you will be eliminated."
+"town in the next week, you will be eliminated."
 msgstr ""
 
 msgid ""

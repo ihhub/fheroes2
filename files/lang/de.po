@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-20 03:11+0000\n"
+"POT-Creation-Date: 2024-01-24 13:18+0000\n"
 "PO-Revision-Date: 2023-12-22 00:32+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3471,6 +3471,10 @@ msgstr "Hier klicken, um auszuwählen, welches Szenario gespielt werden soll."
 msgid "Select Dwelling:"
 msgstr "Zauberspruch auswählen:"
 
+#, fuzzy
+msgid "Select Landscape Object:"
+msgstr "Ozean-Objekte"
+
 msgid "Mine placing"
 msgstr ""
 
@@ -3502,6 +3506,10 @@ msgstr "Ozean-Objekte"
 
 #, fuzzy
 msgid "Select Power Up Object:"
+msgstr "Ozean-Objekte"
+
+#, fuzzy
+msgid "Select Adventure Object:"
 msgstr "Ozean-Objekte"
 
 msgid "Map Type:\n"
@@ -3859,6 +3867,10 @@ msgid "Ocean object must be placed on water."
 msgstr "Monster können nicht auf Wasser plaziert werden."
 
 #, fuzzy
+msgid "Landscape objects cannot be placed on water."
+msgstr "Monster können nicht auf Wasser plaziert werden."
+
+#, fuzzy
 msgid "Towns cannot be placed on water."
 msgstr "Monster können nicht auf Wasser plaziert werden."
 
@@ -3872,6 +3884,10 @@ msgstr "Monster können nicht auf Wasser plaziert werden."
 
 #, fuzzy
 msgid "Power-ups cannot be placed on water."
+msgstr "Monster können nicht auf Wasser plaziert werden."
+
+#, fuzzy
+msgid "Adventure objects cannot be placed on water."
 msgstr "Monster können nicht auf Wasser plaziert werden."
 
 #, fuzzy
@@ -5343,9 +5359,10 @@ msgstr ""
 msgid "%{color} player's turn."
 msgstr "Spieler %{color} ist dran."
 
+#, fuzzy
 msgid ""
 "%{color} player, you have lost your last town. If you do not conquer another "
-"town in next week, you will be eliminated."
+"town in the next week, you will be eliminated."
 msgstr ""
 "Spieler %{color}, Ihr habt Eure letzte Stadt verloren. Wenn Ihr in der "
 "nächsten Woche keine Stadt erobert, werdet Ihr aus diesem Land verbannt."
