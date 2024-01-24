@@ -1868,5 +1868,5 @@ StreamBase & Maps::operator>>( StreamBase & msg, Tiles & tile )
     tile._mainObjectType = static_cast<MP2::MapObjectType>( mainObjectType );
 
     return msg >> tile._fogColors >> tile._metadata >> tile._occupantHeroId >> tile._isTileMarkedAsRoad >> tile._addonBottomLayer >> tile._addonTopLayer
-               >> tile._mainAddon._layerType >> tile._boatOwnerColor;
+           >> tile._mainAddon._layerType >> tile._boatOwnerColor;
 }

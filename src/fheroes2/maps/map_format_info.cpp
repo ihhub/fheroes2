@@ -87,7 +87,7 @@ namespace Maps::Map_Format
     StreamBase & operator>>( StreamBase & msg, CastleMetadata & metadata )
     {
         return msg >> metadata.customName >> metadata.defenderMonsterType >> metadata.defenderMonsterCount >> metadata.isCaptainAvailable >> metadata.builtBuildings
-                   >> metadata.bannedBuildings >> metadata.mustHaveSpells >> metadata.bannedSpells >> metadata.availableToHireMonsterCount;
+               >> metadata.bannedBuildings >> metadata.mustHaveSpells >> metadata.bannedSpells >> metadata.availableToHireMonsterCount;
     }
 
     StreamBase & operator<<( StreamBase & msg, const HeroMetadata & metadata )
@@ -101,9 +101,9 @@ namespace Maps::Map_Format
     StreamBase & operator>>( StreamBase & msg, HeroMetadata & metadata )
     {
         return msg >> metadata.customName >> metadata.customPortrait >> metadata.armyMonsterType >> metadata.armyMonsterCount >> metadata.artifact
-                   >> metadata.artifactMetadata >> metadata.availableSpells >> metadata.isOnPatrol >> metadata.patrolRadius >> metadata.secondarySkill
-                   >> metadata.secondarySkillLevel >> metadata.customLevel >> metadata.customExperience >> metadata.customAttack >> metadata.customDefence
-                   >> metadata.customKnowledge >> metadata.customSpellPower >> metadata.magicPoints;
+               >> metadata.artifactMetadata >> metadata.availableSpells >> metadata.isOnPatrol >> metadata.patrolRadius >> metadata.secondarySkill
+               >> metadata.secondarySkillLevel >> metadata.customLevel >> metadata.customExperience >> metadata.customAttack >> metadata.customDefence
+               >> metadata.customKnowledge >> metadata.customSpellPower >> metadata.magicPoints;
     }
 
     StreamBase & operator<<( StreamBase & msg, const BaseMapFormat & map )
