@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-20 03:11+0000\n"
-"PO-Revision-Date: 2024-01-20 10:58+0100\n"
+"PO-Revision-Date: 2024-01-24 16:03+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
 "Language: fr\n"
@@ -3890,11 +3890,11 @@ msgstr ""
 "Details\n"
 "cellule"
 
-msgid "Roads"
-msgstr "Routes"
+msgid "editorErasure|Roads"
+msgstr "de routes"
 
-msgid "Streams"
-msgstr "Rivières"
+msgid "editorErasure|Streams"
+msgstr "de rivières"
 
 msgid "Erase"
 msgstr "Effacer"
@@ -3914,8 +3914,8 @@ msgstr "Éléments d'eau"
 msgid "Miscellaneous"
 msgstr "Divers"
 
-msgid "Artifacts"
-msgstr "Artéfacts"
+msgid "editorErasure|Artifacts"
+msgstr "d'artéfacts"
 
 msgid "Dwellings"
 msgstr "Demeures"
@@ -3926,20 +3926,38 @@ msgstr "Mines"
 msgid "Power-ups"
 msgstr "Bonus"
 
-msgid "Treasures"
-msgstr "Trésors"
+msgid "editorErasure|Treasures"
+msgstr "de trésors"
 
 msgid "Towns"
 msgstr "Villages"
 
+msgid "editorErasure|Heroes"
+msgstr "de héros"
+
+msgid "editorErasure|Terrain"
+msgstr "de terrains"
+
+msgid "editorErasure|Castles"
+msgstr "de châteaux"
+
+msgid "editorErasure|Monsters"
+msgstr "de monstres"
+
 msgid "Heroes"
 msgstr "Héros"
 
-msgid "Terrain"
-msgstr "Terrains"
+msgid "Artifacts"
+msgstr "Artéfacts"
 
-msgid "Castles"
-msgstr "Châteaux"
+msgid "Roads"
+msgstr "Routes"
+
+msgid "Streams"
+msgstr "Rivières"
+
+msgid "Treasures"
+msgstr "Trésors"
 
 msgid ""
 "Draws terrain in\n"
@@ -3988,7 +4006,7 @@ msgid "No special modifiers."
 msgstr ""
 
 msgid "Toggle the erasure of %{type} objects."
-msgstr "Activer l'effacement d'éléments de type %{type}."
+msgstr "Activer l'effacement %{type}."
 
 msgid ""
 "Objects of this type will be deleted with the Erase tool. Left-click here to "
@@ -8399,7 +8417,7 @@ msgid "Nothing Special"
 msgstr "Rien de spécial"
 
 msgid "Mossy Rock"
-msgstr "Rocher moussue"
+msgstr "Mousse et rochers"
 
 msgid "Watch Tower"
 msgstr "Tour de guet"
