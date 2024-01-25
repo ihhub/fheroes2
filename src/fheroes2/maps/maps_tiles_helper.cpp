@@ -3268,7 +3268,7 @@ namespace Maps
             if ( updateMapPassabilities ) {
                 world.updatePassabilities();
             }
-            return true;;
+            return true;
         default:
             break;
         }
