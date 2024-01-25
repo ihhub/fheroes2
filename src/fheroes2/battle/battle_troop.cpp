@@ -404,7 +404,7 @@ bool Battle::Unit::isHandFighting( const Unit & attacker, const Unit & defender 
     assert( attacker.isValid() );
 
     // Towers never fight in close combat
-    if ( attacker.Modes( CAP_TOWER ) ) {
+    if ( attacker.Modes( CAP_TOWER ) || defender.Modes( CAP_TOWER ) ) {
         return false;
     }
 
