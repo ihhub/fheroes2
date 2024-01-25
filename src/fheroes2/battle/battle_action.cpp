@@ -298,7 +298,7 @@ void Battle::Arena::BattleProcess( Unit & attacker, Unit & defender, int32_t tgt
         }
     }
 
-    attacker.PostAttackAction();
+    attacker.PostAttackAction( defender );
 }
 
 void Battle::Arena::moveUnit( Unit * unit, const int32_t dst )
@@ -959,7 +959,7 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForDamage( const Unit & attacker, U
         }
     }
     // lich cloud damage
-    else if ( attacker.isAbilityPresent( fheroes2::MonsterAbilityType::AREA_SHOT ) && !attacker.isHandFighting() ) {
+    else if ( attacker.isAbilityPresent( fheroes2::MonsterAbilityType::AREA_SHOT ) && !Unit::isHandFighting( attacker, defender ) ) {
         for ( const int32_t nearbyIdx : Board::GetAroundIndexes( dst ) ) {
             assert( Board::GetCell( nearbyIdx ) != nullptr );
 

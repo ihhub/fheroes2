@@ -3481,7 +3481,7 @@ void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, const Unit & d
     const fheroes2::Rect & pos1 = attacker.GetRectPosition();
     const fheroes2::Rect & pos2 = defender.GetRectPosition();
 
-    const bool archer = attacker.isArchers() && !attacker.isHandFighting();
+    const bool archer = attacker.isArchers() && !Unit::isHandFighting( attacker, defender );
     const bool isDoubleCell = attacker.isDoubleCellAttack() && 2 == targets.size();
 
     // redraw luck animation
@@ -3489,7 +3489,7 @@ void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, const Unit & d
         RedrawActionLuck( attacker );
     }
 
-    AudioManager::PlaySound( attacker.M82Attk() );
+    AudioManager::PlaySound( attacker.M82Attk( defender ) );
 
     // long distance attack animation
     if ( archer ) {
@@ -3660,7 +3660,7 @@ void Battle::Interface::RedrawActionWincesKills( const TargetsInfo & targets, Un
 
     // If this was a Lich attack, we should render an explosion cloud over the target unit immediately after the projectile hits the target,
     // along with the unit kill/wince animation.
-    const bool drawLichCloud = ( attacker != nullptr ) && ( defender != nullptr ) && attacker->isArchers() && !attacker->isHandFighting()
+    const bool drawLichCloud = ( attacker != nullptr ) && ( defender != nullptr ) && attacker->isArchers() && !Unit::isHandFighting( *attacker, *defender )
                                && attacker->isAbilityPresent( fheroes2::MonsterAbilityType::AREA_SHOT );
 
     // Play sound only if it is not already playing.

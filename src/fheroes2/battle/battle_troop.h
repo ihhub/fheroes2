@@ -172,10 +172,9 @@ namespace Battle
 
         uint32_t GetDamage( const Unit & enemy, Rand::DeterministicRandomGenerator & randomGenerator ) const;
 
-        // Returns the threat level of this unit, calculated as if it attacked the 'defender' unit.
-        // If 'defenderPos' is set, then it will be used as the 'defender' unit's position, otherwise
-        // the actual position of this unit will be used. See the implementation for details.
-        int32_t evaluateThreatForUnit( const Unit & defender, const std::optional<Position> defenderPos = {} ) const;
+        // Returns the threat level of this unit, calculated as if it attacked the 'defender' unit. See
+        // the implementation for details.
+        int32_t evaluateThreatForUnit( const Unit & defender ) const;
 
         uint32_t GetInitialCount() const;
         uint32_t GetDead() const;
@@ -208,7 +207,7 @@ namespace Battle
         bool isUnderSpellEffect( const Spell & spell ) const;
         std::vector<Spell> getCurrentSpellEffects() const;
 
-        void PostAttackAction();
+        void PostAttackAction( const Unit & enemy );
 
         // Sets whether a unit performs a retaliatory attack while being blinded (i.e. with reduced efficiency)
         void SetBlindRetaliation( bool value );
@@ -246,7 +245,7 @@ namespace Battle
 
         fheroes2::Point GetStartMissileOffset( size_t ) const;
 
-        int M82Attk() const;
+        int M82Attk( const Unit & enemy ) const;
         int M82Kill() const;
         int M82Move() const;
         int M82Wnce() const;

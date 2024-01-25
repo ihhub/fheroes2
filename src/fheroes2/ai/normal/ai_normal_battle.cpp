@@ -72,8 +72,8 @@ namespace AI
     struct MeleeAttackOutcome
     {
         int32_t fromIndex = -1;
-        double attackValue = -INT32_MAX;
-        double positionValue = -INT32_MAX;
+        double attackValue = INT32_MIN;
+        double positionValue = INT32_MIN;
         bool canAttackImmediately = false;
     };
 
@@ -394,7 +394,8 @@ namespace AI
                     continue;
                 }
 
-                stepThreatLevel += enemy->evaluateThreatForUnit( currentUnit, stepPos );
+                // Rough estimate: the threat assessment is performed for the current position of the unit, not its new position at this step
+                stepThreatLevel += enemy->evaluateThreatForUnit( currentUnit );
             }
         }
 
@@ -1175,9 +1176,15 @@ namespace AI
             BattleTargetPair target;
             int32_t bestOutcome = INT32_MIN;
 
-            for ( const int32_t cellIdx : Board::GetAdjacentEnemiesIndexes( currentUnit ) ) {
-                const Unit * enemy = Board::GetCell( cellIdx )->GetUnit();
+            for ( const Unit * enemy : enemies ) {
                 assert( enemy != nullptr );
+
+                const uint32_t dist = Board::GetDistance( currentUnit.GetPosition(), enemy->GetPosition() );
+                assert( dist > 0 );
+
+                if ( dist != 1 ) {
+                    continue;
+                }
 
                 const int32_t archerMeleeDmg = [&currentUnit, enemy]() {
                     if ( currentUnit.Modes( SP_CURSE ) ) {
@@ -1551,21 +1558,38 @@ namespace AI
                     return {};
                 }();
 
-                const Indexes adjacentEnemiesIndexes = Board::GetAdjacentEnemiesIndexes( *frnd );
+                const std::vector<const Unit *> adjacentEnemies = [&enemies, frnd]() {
+                    std::vector<const Unit *> result;
+                    result.reserve( enemies.size() );
+
+                    for ( const Unit * enemy : enemies ) {
+                        assert( enemy != nullptr );
+
+                        const uint32_t dist = Board::GetDistance( frnd->GetPosition(), enemy->GetPosition() );
+                        assert( dist > 0 );
+
+                        if ( dist != 1 ) {
+                            continue;
+                        }
+
+                        result.push_back( enemy );
+                    }
+
+                    return result;
+                }();
 
                 // If our archer is not blocked by enemy units, but the unit nevertheless cannot cover that archer, then ignore that archer
-                if ( bestCoverCellInfo.idx == -1 && adjacentEnemiesIndexes.empty() ) {
+                if ( bestCoverCellInfo.idx == -1 && adjacentEnemies.empty() ) {
                     continue;
                 }
 
                 // Either the unit can cover the friendly archer, or the archer is blocked by enemy units, which do not allow our unit to approach. As the distance to
                 // estimate the archer's value, we take the smallest of the distance that must be overcome to cover the archer and the distance that must be overcome to
                 // approach the nearest of the enemies blocking him.
-                const auto [eitherFrndOrAdjEnemyIsReachable, dist] = [&arena, &currentUnit, &bestCoverCellInfo, &adjacentEnemiesIndexes]() {
+                const auto [eitherFrndOrAdjEnemyIsReachable, dist] = [&arena, &currentUnit, &bestCoverCellInfo, &adjacentEnemies]() {
                     std::pair<bool, uint32_t> result{ bestCoverCellInfo.idx != -1, bestCoverCellInfo.dist };
 
-                    for ( const int idx : adjacentEnemiesIndexes ) {
-                        const Unit * enemy = Board::GetCell( idx )->GetUnit();
+                    for ( const Unit * enemy : adjacentEnemies ) {
                         assert( enemy != nullptr );
 
                         const CellDistanceInfo nearestToEnemyCellInfo = findNearestCellNextToUnit( arena, currentUnit, *enemy );
@@ -1608,8 +1632,7 @@ namespace AI
                 {
                     MeleeAttackOutcome bestOutcome;
 
-                    for ( const int idx : adjacentEnemiesIndexes ) {
-                        const Unit * enemy = Board::GetCell( idx )->GetUnit();
+                    for ( const Unit * enemy : adjacentEnemies ) {
                         assert( enemy != nullptr );
 
                         const MeleeAttackOutcome outcome = BestAttackOutcome( currentUnit, *enemy, valuesOfAttackPositions );

@@ -128,9 +128,6 @@ namespace Battle
         // to the given index
         static bool CanAttackTargetFromPosition( const Unit & attacker, const Unit & target, const int32_t dst );
 
-        // Returns the indexes of the cells closest to the given unit occupied by enemies
-        static Indexes GetAdjacentEnemiesIndexes( const Unit & unit );
-
     private:
         void SetCobjObject( const int icn, const uint32_t dst );
     };
