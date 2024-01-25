@@ -676,7 +676,7 @@ bool World::loadResurrectionMap( const std::string & filename )
     width = map.size;
     height = map.size;
 
-    vec_tiles.resize( width * height );
+    vec_tiles.resize( static_cast<size_t>( width ) * height );
 
     if ( !Maps::readAllTiles( map ) ) {
         return false;
