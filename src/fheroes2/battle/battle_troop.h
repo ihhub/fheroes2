@@ -150,7 +150,11 @@ namespace Battle
             return ArmyTroop::GetColor();
         }
 
-        int GetColor() const override;
+        int GetColor() const override
+        {
+            return GetArmyColor();
+        }
+
         // Returns the current color of the unit according to its current combat state (the unit
         // may be under a spell that changes its affiliation).
         int GetCurrentColor() const;

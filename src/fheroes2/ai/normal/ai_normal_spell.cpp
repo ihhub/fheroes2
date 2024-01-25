@@ -74,8 +74,12 @@ namespace AI
         }
 
         const SpellStorage allSpells = _commander->getAllSpells();
-        const Units friendly( arena.getForce( _myColor ).getUnits(), true );
-        const Units enemies( arena.getEnemyForce( _myColor ).getUnits(), true );
+
+        const Units friendly( arena.getForce( _myColor ).getUnits(), Units::FilterOptions::EmptyUnits );
+        const Units enemies( arena.getEnemyForce( _myColor ).getUnits(), Units::FilterOptions::EmptyUnits );
+
+        const Units trueFriendly( arena.getForce( _myColor ).getUnits(), Units::FilterOptions::EmptyUnitsAndUnitsThatChangedSides );
+        const Units trueEnemies( arena.getEnemyForce( _myColor ).getUnits(), Units::FilterOptions::EmptyUnitsAndUnitsThatChangedSides );
 
         // Hero should conserve spellpoints if already spent more than half or his army is stronger
         // Threshold is 0.04 when armies are equal (= 20% of single unit)
@@ -121,10 +125,10 @@ namespace AI
                 checkSelectBestSpell( spell, spellResurrectValue( spell, arena ) );
             }
             else if ( spell.isApplyToFriends() ) {
-                checkSelectBestSpell( spell, spellEffectValue( spell, friendly ) );
+                checkSelectBestSpell( spell, spellEffectValue( spell, trueFriendly ) );
             }
             else if ( spell.isApplyToEnemies() ) {
-                checkSelectBestSpell( spell, spellEffectValue( spell, enemies ) );
+                checkSelectBestSpell( spell, spellEffectValue( spell, trueEnemies ) );
             }
         }
 
@@ -363,8 +367,6 @@ namespace AI
             break;
         }
         case Spell::HYPNOTIZE: {
-            if ( targetIsLast )
-                return 0.0;
             ratio = 1.5;
             break;
         }

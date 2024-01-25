@@ -1233,6 +1233,10 @@ int32_t Battle::Unit::evaluateThreatForUnit( const Unit & defender ) const
 
         attackerThreat *= -2;
     }
+    // Negative value of units that changed the side
+    else if ( attacker.GetColor() != attacker.GetCurrentColor() ) {
+        attackerThreat *= -1;
+    }
     // Ignore disabled enemy units
     else if ( attacker.isImmovable() ) {
         attackerThreat = 0;
@@ -1757,11 +1761,6 @@ fheroes2::Point Battle::Unit::GetCenterPoint() const
 fheroes2::Point Battle::Unit::GetStartMissileOffset( size_t direction ) const
 {
     return animation.getProjectileOffset( direction );
-}
-
-int Battle::Unit::GetColor() const
-{
-    return GetArmyColor();
 }
 
 int Battle::Unit::GetCurrentColor() const

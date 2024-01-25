@@ -41,16 +41,15 @@ namespace Battle
     class Units : public std::vector<Unit *>
     {
     public:
+        enum class FilterOptions
+        {
+            EmptyUnits,
+            EmptyUnitsAndSpecifiedUnit,
+            EmptyUnitsAndUnitsThatChangedSides
+        };
+
         Units();
-
-        // Creates a shallow copy of 'units' (only pointers are copied), removing
-        // invalid units (i.e. empty slots) if requested
-        Units( const Units & units, const bool isRemoveInvalidUnits );
-
-        // Creates a shallow copy of 'units' (only pointers are copied), removing
-        // invalid units (i.e. empty slots) as well as the specified unit
-        Units( const Units & units, const Unit * unitToRemove );
-
+        Units( const Units & units, const FilterOptions options, const Unit * unitToRemove = nullptr );
         Units( const Units & ) = delete;
 
         virtual ~Units() = default;

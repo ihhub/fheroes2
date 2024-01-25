@@ -49,34 +49,45 @@ Battle::Units::Units()
     reserve( unitSizeCapacity );
 }
 
-Battle::Units::Units( const Units & units, const bool isRemoveInvalidUnits )
+Battle::Units::Units( const Units & units, const FilterOptions options, const Unit * unitToRemove /* = nullptr */ )
 {
     reserve( unitSizeCapacity < units.size() ? units.size() : unitSizeCapacity );
     assign( units.begin(), units.end() );
 
-    if ( isRemoveInvalidUnits ) {
-        erase( std::remove_if( begin(), end(),
-                               []( const Unit * unit ) {
-                                   assert( unit != nullptr );
+    const auto filterPredicate = [options, unitToRemove]() -> std::function<bool( const Unit * )> {
+        switch ( options ) {
+        case FilterOptions::EmptyUnits:
+            assert( unitToRemove == nullptr );
 
-                                   return !unit->isValid();
-                               } ),
-               end() );
-    }
-}
+            return []( const Unit * unit ) {
+                assert( unit != nullptr );
 
-Battle::Units::Units( const Units & units, const Unit * unitToRemove )
-{
-    reserve( unitSizeCapacity < units.size() ? units.size() : unitSizeCapacity );
-    assign( units.begin(), units.end() );
+                return unit->isEmpty();
+            };
+        case FilterOptions::EmptyUnitsAndSpecifiedUnit:
+            return [unitToRemove]( const Unit * unit ) {
+                assert( unit != nullptr );
 
-    erase( std::remove_if( begin(), end(),
-                           [unitToRemove]( const Unit * unit ) {
-                               assert( unit != nullptr );
+                return unit->isEmpty() || unit == unitToRemove;
+            };
+        case FilterOptions::EmptyUnitsAndUnitsThatChangedSides:
+            assert( unitToRemove == nullptr );
 
-                               return !unit->isValid() || unit == unitToRemove;
-                           } ),
-           end() );
+            return []( const Unit * unit ) {
+                assert( unit != nullptr );
+
+                return unit->isEmpty() || unit->GetColor() != unit->GetCurrentColor();
+            };
+        default:
+            assert( 0 );
+            break;
+        }
+
+        // std::bad_function_call will be thrown when calling operator()
+        return {};
+    }();
+
+    erase( std::remove_if( begin(), end(), filterPredicate ), end() );
 }
 
 void Battle::Units::SortFastest()
