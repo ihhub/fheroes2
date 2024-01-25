@@ -1154,7 +1154,7 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
         }
 
         // Re-enable fast scroll once the cursor leaves the vulnerable parts of the border area.
-        if ( !isFastScrollVulnerableArea( le.GetMouseCursor() ) ) {
+        if ( !isScrollRight( le.GetMouseCursor() ) && !isScrollBottom( le.GetMouseCursor() ) ) {
             _gameArea.setFastScrollStatus( true );
         }
 
