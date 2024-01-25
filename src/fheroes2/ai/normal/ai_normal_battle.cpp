@@ -608,15 +608,10 @@ namespace AI
                     const BagArtifacts & artifactsBag = actualHero->GetBagArtifacts();
 
                     return std::any_of( artifactsBag.begin(), artifactsBag.end(), []( const Artifact & art ) {
-                        if ( !art.isValid() ) {
-                            return false;
-                        }
+                        const fheroes2::ArtifactData & artifactData = fheroes2::getArtifactData( art.GetID() );
 
-                        if ( art.GetID() == Artifact::MAGIC_BOOK ) {
-                            return false;
-                        }
-
-                        return !fheroes2::getArtifactData( art.GetID() ).bonuses.empty();
+                        return std::any_of( artifactData.bonuses.begin(), artifactData.bonuses.end(),
+                                            []( const fheroes2::ArtifactBonus & bonus ) { return bonus.type != fheroes2::ArtifactBonusType::NONE; } );
                     } );
                 }();
 
