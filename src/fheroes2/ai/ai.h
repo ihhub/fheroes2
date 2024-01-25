@@ -171,8 +171,6 @@ namespace AI
     // Transfers the slowest troops from the hero's army to the garrison to try to get a movement bonus on the next turn
     void transferSlowestTroopsToGarrison( Heroes * hero, Castle * castle );
 
-    bool CanPurchaseHero( const Kingdom & kingdom );
-
     // Calculates a marketplace transaction, after which the kingdom would be able to make a payment in the amount of
     // at least 'fundsToObtain'. Returns the corresponding transaction if it was found, otherwise returns an empty
     // result. In order to receive the necessary funds, the returned transaction must be deducted from the funds of
