@@ -484,26 +484,10 @@ namespace AI
         }
     }
 
-    bool BattlePlanner::isHeroWorthSaving( const Heroes & hero ) const
-    {
-        return hero.GetLevel() > 2 || !hero.GetBagArtifacts().empty();
-    }
-
     bool BattlePlanner::isCommanderCanSpellcast( const Arena & arena, const HeroBase * commander ) const
     {
         return commander && ( !commander->isControlHuman() || Settings::Get().BattleAutoSpellcast() ) && commander->HaveSpellBook()
                && !commander->Modes( Heroes::SPELLCASTED ) && !arena.isSpellcastDisabled();
-    }
-
-    bool BattlePlanner::checkRetreatCondition( const Heroes & hero ) const
-    {
-        if ( !_considerRetreat || hero.isControlHuman() || hero.isLosingGame() || !isHeroWorthSaving( hero ) || !CanPurchaseHero( hero.GetKingdom() ) ) {
-            return false;
-        }
-
-        // Retreat if remaining army strength is a fraction of enemy's
-        // Consider taking speed/turn order into account in the future
-        return _myArmyStrength * Difficulty::getArmyStrengthRatioForAIRetreat( Game::getDifficulty() ) < _enemyArmyStrength;
     }
 
     bool BattlePlanner::isUnitFaster( const Unit & currentUnit, const Unit & target ) const
@@ -594,7 +578,139 @@ namespace AI
 
         // Step 2. Check retreat/surrender condition
         const Heroes * actualHero = dynamic_cast<const Heroes *>( _commander );
-        if ( actualHero && checkRetreatCondition( *actualHero ) ) {
+        if ( actualHero ) {
+            enum class Outcome
+            {
+                ContinueBattle,
+                Retreat,
+                Surrender
+            };
+
+            const Outcome outcome = [this, &arena, actualHero]() {
+                if ( !_considerRetreat ) {
+                    return Outcome::ContinueBattle;
+                }
+
+                // Human-controlled heroes should not retreat or surrender during auto/instant battles
+                if ( actualHero->isControlHuman() ) {
+                    return Outcome::ContinueBattle;
+                }
+
+                const int gameDifficulty = Game::getDifficulty();
+                const bool isGameCampaign = Game::isCampaign();
+
+                // TODO: consider taking speed/turn order into account in the future
+                if ( _myArmyStrength * Difficulty::getArmyStrengthRatioForAIRetreat( gameDifficulty ) >= _enemyArmyStrength ) {
+                    return Outcome::ContinueBattle;
+                }
+
+                const bool hasValuableArtifacts = [actualHero]() {
+                    const BagArtifacts & artifactsBag = actualHero->GetBagArtifacts();
+
+                    return std::any_of( artifactsBag.begin(), artifactsBag.end(), []( const Artifact & art ) {
+                        const fheroes2::ArtifactData & artifactData = fheroes2::getArtifactData( art.GetID() );
+
+                        return std::any_of( artifactData.bonuses.begin(), artifactData.bonuses.end(),
+                                            []( const fheroes2::ArtifactBonus & bonus ) { return bonus.type != fheroes2::ArtifactBonusType::NONE; } );
+                    } );
+                }();
+
+                const Kingdom & kingdom = actualHero->GetKingdom();
+
+                const bool considerRetreat = [this, &arena, actualHero, gameDifficulty, isGameCampaign, hasValuableArtifacts, &kingdom]() {
+                    if ( !Difficulty::allowAIToRetreat( gameDifficulty, isGameCampaign ) ) {
+                        return false;
+                    }
+
+                    if ( !arena.CanRetreatOpponent( _myColor ) ) {
+                        return false;
+                    }
+
+                    // If the hero has valuable artifacts, he should in any case consider retreating so that these artifacts do not end up at the disposal of the enemy,
+                    // especially in the case of an alliance war
+                    if ( hasValuableArtifacts ) {
+                        return true;
+                    }
+
+                    // Otherwise, if this hero is the last one, and the kingdom has no castles, then there is no point in retreating
+                    if ( kingdom.GetHeroes().size() == 1 ) {
+                        assert( kingdom.GetHeroes().at( 0 ) == actualHero );
+
+                        if ( kingdom.GetCastles().empty() ) {
+                            return false;
+                        }
+                    }
+
+                    // Otherwise, if this hero is relatively experienced, then he should think about retreating so that he can be hired again later
+                    return actualHero->GetLevel() >= Difficulty::getMinHeroLevelForAIRetreat( gameDifficulty );
+                }();
+
+                const bool considerSurrender = [this, &arena, actualHero, gameDifficulty, isGameCampaign, hasValuableArtifacts, &kingdom]() {
+                    if ( !Difficulty::allowAIToSurrender( gameDifficulty, isGameCampaign ) ) {
+                        return false;
+                    }
+
+                    if ( !arena.CanSurrenderOpponent( _myColor ) ) {
+                        return false;
+                    }
+
+                    // If the hero has valuable artifacts, he should in any case consider surrendering so that these artifacts do not end up at the disposal of the enemy,
+                    // especially in the case of an alliance war
+                    if ( hasValuableArtifacts ) {
+                        return true;
+                    }
+
+                    // Otherwise, if this hero is the last one, and either the kingdom has no castles, or this hero is defending the last castle, then there is no point
+                    // in surrendering
+                    if ( kingdom.GetHeroes().size() == 1 ) {
+                        assert( kingdom.GetHeroes().at( 0 ) == actualHero );
+
+                        const VecCastles & castles = kingdom.GetCastles();
+                        if ( castles.empty() ) {
+                            return false;
+                        }
+
+                        const Castle * castle = actualHero->inCastle();
+                        if ( castle && castles.size() == 1 ) {
+                            assert( castles.at( 0 ) == castle );
+
+                            return false;
+                        }
+                    }
+
+                    // Otherwise, if this hero is relatively experienced, then he should think about surrendering so that he can be hired again later
+                    return actualHero->GetLevel() >= Difficulty::getMinHeroLevelForAIRetreat( gameDifficulty );
+                }();
+
+                const Force & force = arena.getForce( _myColor );
+
+                if ( !considerRetreat ) {
+                    if ( !considerSurrender ) {
+                        return Outcome::ContinueBattle;
+                    }
+
+                    if ( !kingdom.AllowPayment( { Resource::GOLD, force.GetSurrenderCost() } ) ) {
+                        return Outcome::ContinueBattle;
+                    }
+
+                    return Outcome::Surrender;
+                }
+
+                if ( !considerSurrender ) {
+                    return Outcome::Retreat;
+                }
+
+                if ( force.getStrengthOfArmyRemainingInCaseOfSurrender() < Army::getStrengthOfAverageStartingArmy( actualHero ) ) {
+                    return Outcome::Retreat;
+                }
+
+                if ( !kingdom.AllowPayment( Funds{ Resource::GOLD, force.GetSurrenderCost() } * Difficulty::getGoldReserveRatioForAISurrender( gameDifficulty ) ) ) {
+                    return Outcome::Retreat;
+                }
+
+                return Outcome::Surrender;
+            }();
+
             const auto farewellSpellcast = [this, &arena, &currentUnit, &actions]() {
                 if ( !isCommanderCanSpellcast( arena, _commander ) ) {
                     return;
@@ -611,48 +727,6 @@ namespace AI
                 DEBUG_LOG( DBG_BATTLE, DBG_INFO,
                            arena.GetCurrentCommander()->GetName() << " casts " << Spell( bestSpell.spellID ).GetName() << " on cell " << bestSpell.cell )
             };
-
-            enum class Outcome
-            {
-                ContinueBattle,
-                Retreat,
-                Surrender
-            };
-
-            const Outcome outcome = [this, &arena, actualHero]() {
-                const Force & force = arena.getForce( _myColor );
-                const Kingdom & kingdom = actualHero->GetKingdom();
-
-                const bool canRetreat = arena.CanRetreatOpponent( _myColor );
-                const bool canSurrender = arena.CanSurrenderOpponent( _myColor );
-
-                if ( !canRetreat ) {
-                    if ( !canSurrender ) {
-                        return Outcome::ContinueBattle;
-                    }
-
-                    if ( !kingdom.AllowPayment( { Resource::GOLD, force.GetSurrenderCost() } ) ) {
-                        return Outcome::ContinueBattle;
-                    }
-
-                    return Outcome::Surrender;
-                }
-
-                if ( !canSurrender ) {
-                    return Outcome::Retreat;
-                }
-
-                if ( force.getStrengthOfArmyRemainingInCaseOfSurrender() < Army::getStrengthOfAverageStartingArmy( actualHero ) ) {
-                    return Outcome::Retreat;
-                }
-
-                if ( !kingdom.AllowPayment( Funds{ Resource::GOLD, force.GetSurrenderCost() }
-                                            * Difficulty::getGoldReserveRatioForAISurrender( Game::getDifficulty() ) ) ) {
-                    return Outcome::Retreat;
-                }
-
-                return Outcome::Surrender;
-            }();
 
             switch ( outcome ) {
             case Outcome::ContinueBattle:
