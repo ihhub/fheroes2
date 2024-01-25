@@ -41,7 +41,7 @@ namespace Battle
     class Units : public std::vector<Unit *>
     {
     public:
-        enum class FilterOptions
+        enum class FilterType
         {
             EmptyUnits,
             EmptyUnitsAndSpecifiedUnit,
@@ -49,7 +49,7 @@ namespace Battle
         };
 
         Units();
-        Units( const Units & units, const FilterOptions options, const Unit * unitToRemove = nullptr );
+        Units( const Units & units, const FilterType filterType, const Unit * unitToRemove = nullptr );
         Units( const Units & ) = delete;
 
         virtual ~Units() = default;

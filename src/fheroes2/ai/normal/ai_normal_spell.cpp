@@ -75,11 +75,11 @@ namespace AI
 
         const SpellStorage allSpells = _commander->getAllSpells();
 
-        const Units friendly( arena.getForce( _myColor ).getUnits(), Units::FilterOptions::EmptyUnits );
-        const Units enemies( arena.getEnemyForce( _myColor ).getUnits(), Units::FilterOptions::EmptyUnits );
+        const Units friendly( arena.getForce( _myColor ).getUnits(), Units::FilterType::EmptyUnits );
+        const Units enemies( arena.getEnemyForce( _myColor ).getUnits(), Units::FilterType::EmptyUnits );
 
-        const Units trueFriendly( arena.getForce( _myColor ).getUnits(), Units::FilterOptions::EmptyUnitsAndUnitsThatChangedSides );
-        const Units trueEnemies( arena.getEnemyForce( _myColor ).getUnits(), Units::FilterOptions::EmptyUnitsAndUnitsThatChangedSides );
+        const Units trueFriendly( arena.getForce( _myColor ).getUnits(), Units::FilterType::EmptyUnitsAndUnitsThatChangedSides );
+        const Units trueEnemies( arena.getEnemyForce( _myColor ).getUnits(), Units::FilterType::EmptyUnitsAndUnitsThatChangedSides );
 
         // Hero should conserve spellpoints if already spent more than half or his army is stronger
         // Threshold is 0.04 when armies are equal (= 20% of single unit)

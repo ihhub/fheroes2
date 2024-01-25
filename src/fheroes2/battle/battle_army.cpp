@@ -50,14 +50,14 @@ Battle::Units::Units()
     reserve( unitSizeCapacity );
 }
 
-Battle::Units::Units( const Units & units, const FilterOptions options, const Unit * unitToRemove /* = nullptr */ )
+Battle::Units::Units( const Units & units, const FilterType filterType, const Unit * unitToRemove /* = nullptr */ )
 {
     reserve( unitSizeCapacity < units.size() ? units.size() : unitSizeCapacity );
     assign( units.begin(), units.end() );
 
-    const auto filterPredicate = [options, unitToRemove]() -> std::function<bool( const Unit * )> {
-        switch ( options ) {
-        case FilterOptions::EmptyUnits:
+    const auto filterPredicate = [filterType, unitToRemove]() -> std::function<bool( const Unit * )> {
+        switch ( filterType ) {
+        case FilterType::EmptyUnits:
             assert( unitToRemove == nullptr );
 
             return []( const Unit * unit ) {
@@ -65,13 +65,13 @@ Battle::Units::Units( const Units & units, const FilterOptions options, const Un
 
                 return unit->isEmpty();
             };
-        case FilterOptions::EmptyUnitsAndSpecifiedUnit:
+        case FilterType::EmptyUnitsAndSpecifiedUnit:
             return [unitToRemove]( const Unit * unit ) {
                 assert( unit != nullptr );
 
                 return unit->isEmpty() || unit == unitToRemove;
             };
-        case FilterOptions::EmptyUnitsAndUnitsThatChangedSides:
+        case FilterType::EmptyUnitsAndUnitsThatChangedSides:
             assert( unitToRemove == nullptr );
 
             return []( const Unit * unit ) {
