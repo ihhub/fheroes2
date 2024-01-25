@@ -43,6 +43,7 @@
 #include "heroes.h"
 #include "kingdom.h"
 #include "logging.h"
+#include "map_format_helper.h"
 #include "map_format_info.h"
 #include "maps.h"
 #include "maps_fileinfo.h"
@@ -669,6 +670,15 @@ bool World::loadResurrectionMap( const std::string & filename )
     Maps::Map_Format::MapFormat map;
     if ( !Maps::Map_Format::loadMap( filename, map ) ) {
         DEBUG_LOG( DBG_GAME, DBG_WARN, "Map file '" << filename << "' is corrupted or missing." )
+        return false;
+    }
+
+    width = map.size;
+    height = map.size;
+
+    vec_tiles.resize( width * height );
+
+    if ( !Maps::readAllTiles( map ) ) {
         return false;
     }
 

@@ -990,9 +990,12 @@ namespace Interface
                 return;
             }
 
-            const fheroes2::ActionCreator action( _historyManager, _mapFormat );
+            fheroes2::ActionCreator action( _historyManager, _mapFormat );
 
-            setObjectOnTile( tile, Maps::ObjectGroup::LANDSCAPE_TOWN_BASEMENTS, basementId );
+            if ( !setObjectOnTile( tile, Maps::ObjectGroup::LANDSCAPE_TOWN_BASEMENTS, basementId ) ) {
+                action.abort();
+                return;
+            }
 
             // Since the whole object consists of multiple "objects" we have to put the same ID for all of them.
             // Every time an object is being placed on a map the counter is going to be increased by 1.
@@ -1002,17 +1005,26 @@ namespace Interface
 
             Maps::setLastObjectUID( objectId );
 
-            setObjectOnTile( tile, groupType, type );
+            if ( !setObjectOnTile( tile, groupType, type ) ) {
+                action.abort();
+                return;
+            }
 
             // Add flags.
             assert( tile.GetIndex() > 0 && tile.GetIndex() < world.w() * world.h() - 1 );
             Maps::setLastObjectUID( objectId );
 
-            setObjectOnTile( world.GetTiles( tile.GetIndex() - 1 ), Maps::ObjectGroup::LANDSCAPE_FLAGS, color * 2 );
+            if ( !setObjectOnTile( world.GetTiles( tile.GetIndex() - 1 ), Maps::ObjectGroup::LANDSCAPE_FLAGS, color * 2 ) ) {
+                action.abort();
+                return;
+            }
 
             Maps::setLastObjectUID( objectId );
 
-            setObjectOnTile( world.GetTiles( tile.GetIndex() + 1 ), Maps::ObjectGroup::LANDSCAPE_FLAGS, color * 2 + 1 );
+            if ( !setObjectOnTile( world.GetTiles( tile.GetIndex() + 1 ), Maps::ObjectGroup::LANDSCAPE_FLAGS, color * 2 + 1 ) ) {
+                action.abort();
+                return;
+            }
         }
         else if ( groupType == Maps::ObjectGroup::ADVENTURE_MINES ) {
             int32_t type = -1;
@@ -1042,9 +1054,12 @@ namespace Interface
                 return;
             }
 
-            const fheroes2::ActionCreator action( _historyManager, _mapFormat );
+            fheroes2::ActionCreator action( _historyManager, _mapFormat );
 
-            setObjectOnTile( tile, groupType, type );
+            if ( !setObjectOnTile( tile, groupType, type ) ) {
+                action.abort();
+                return;
+            }
 
             // TODO: Place owner flag according to the color state.
         }
@@ -1125,26 +1140,33 @@ namespace Interface
         }
     }
 
-    void EditorInterface::setObjectOnTile( Maps::Tiles & tile, const Maps::ObjectGroup groupType, const int32_t objectIndex )
+    bool EditorInterface::setObjectOnTile( Maps::Tiles & tile, const Maps::ObjectGroup groupType, const int32_t objectIndex )
     {
         const auto & objectInfo = getObjectInfo( groupType, objectIndex );
         if ( objectInfo.empty() ) {
             // Check your logic as you are trying to insert an empty object!
             assert( 0 );
-            return;
+            return false;
         }
 
-        Maps::setObjectOnTile( tile, objectInfo, true );
+        _redraw |= mapUpdateFlags;
+
+        if ( !Maps::setObjectOnTile( tile, objectInfo, true ) ) {
+            return false;
+        }
+
         Maps::addObjectToMap( _mapFormat, tile.GetIndex(), groupType, static_cast<uint32_t>( objectIndex ) );
 
-        _redraw |= mapUpdateFlags;
+        return true;
     }
 
     void EditorInterface::setObjectOnTileAsAction( Maps::Tiles & tile, const Maps::ObjectGroup groupType, const int32_t objectIndex )
     {
-        const fheroes2::ActionCreator action( _historyManager, _mapFormat );
+        fheroes2::ActionCreator action( _historyManager, _mapFormat );
 
-        setObjectOnTile( tile, groupType, objectIndex );
+        if ( !setObjectOnTile( tile, groupType, objectIndex ) ) {
+            action.abort();
+        }
     }
 
     bool EditorInterface::loadMap( const std::string & filePath )

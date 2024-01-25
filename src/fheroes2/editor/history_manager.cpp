@@ -112,6 +112,7 @@ namespace fheroes2
 
     ActionCreator::~ActionCreator()
     {
+
         auto * action = dynamic_cast<MapAction *>( _action.get() );
         if ( action == nullptr ) {
             // How is it even possible?
@@ -120,6 +121,11 @@ namespace fheroes2
         }
 
         try {
+            if ( _aborted ) {
+                action->undo();
+                return;
+            }
+
             if ( action->prepare() ) {
                 _manager.add( std::move( _action ) );
             }

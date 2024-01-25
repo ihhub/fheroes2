@@ -58,10 +58,17 @@ namespace fheroes2
 
         ActionCreator & operator=( const ActionCreator & ) = delete;
 
+        void abort()
+        {
+            _aborted = true;
+        }
+
     private:
         HistoryManager & _manager;
 
         std::unique_ptr<Action> _action;
+
+        bool _aborted{ false };
     };
 
     class HistoryManager
