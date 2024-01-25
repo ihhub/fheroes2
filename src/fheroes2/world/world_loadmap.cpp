@@ -682,8 +682,16 @@ bool World::loadResurrectionMap( const std::string & filename )
         return false;
     }
 
-    // TODO: return true once we add logic for loading an entire map.
-    return false;
+    // Clear artifact flags to correctly generate random artifacts.
+    fheroes2::ResetArtifactStats();
+
+    if ( !ProcessNewMap( filename, false ) ) {
+        return false;
+    }
+
+    DEBUG_LOG( DBG_GAME, DBG_INFO, "Loading of FH2 map is completed." )
+
+    return true;
 }
 
 bool World::ProcessNewMap( const std::string & filename, const bool checkPoLObjects )
