@@ -52,23 +52,24 @@ namespace fheroes2
     public:
         explicit ActionCreator( HistoryManager & manager, Maps::Map_Format::MapFormat & mapFormat );
 
-        ~ActionCreator();
+        ~ActionCreator()
+        {
+            if ( _action ) {
+                // The action wasn't committed. Undo all the changes.
+                _action->undo();
+            }
+        }
 
         ActionCreator( const ActionCreator & ) = delete;
 
         ActionCreator & operator=( const ActionCreator & ) = delete;
 
-        void abort()
-        {
-            _aborted = true;
-        }
+        void commit();
 
     private:
         HistoryManager & _manager;
 
         std::unique_ptr<Action> _action;
-
-        bool _aborted{ false };
     };
 
     class HistoryManager

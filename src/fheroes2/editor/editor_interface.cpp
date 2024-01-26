@@ -472,16 +472,20 @@ namespace Interface
                 if ( isCursorOverGamearea && _editorPanel.getBrushArea().width == 0 ) {
                     if ( _editorPanel.isTerrainEdit() ) {
                         // Fill the selected area in terrain edit mode.
-                        const fheroes2::ActionCreator action( _historyManager, _mapFormat );
+                        fheroes2::ActionCreator action( _historyManager, _mapFormat );
 
                         const int groundId = _editorPanel.selectedGroundType();
                         Maps::setTerrainOnTiles( _selectedTile, _tileUnderCursor, groundId );
+
+                        action.commit();
                     }
                     else if ( _editorPanel.isEraseMode() ) {
                         // Erase objects in the selected area.
-                        const fheroes2::ActionCreator action( _historyManager, _mapFormat );
+                        fheroes2::ActionCreator action( _historyManager, _mapFormat );
 
                         Maps::eraseObjectsOnTiles( _selectedTile, _tileUnderCursor, _editorPanel.getEraseTypes() );
+
+                        action.commit();
                     }
                 }
 
@@ -667,7 +671,7 @@ namespace Interface
 
             const int groundId = _editorPanel.selectedGroundType();
 
-            const fheroes2::ActionCreator action( _historyManager, _mapFormat );
+            fheroes2::ActionCreator action( _historyManager, _mapFormat );
 
             if ( brushSize.width > 0 ) {
                 const fheroes2::Point indices = getBrushAreaIndicies( brushSize, tileIndex );
@@ -684,37 +688,47 @@ namespace Interface
             }
 
             _redraw |= mapUpdateFlags;
+
+            action.commit();
         }
         else if ( _editorPanel.isRoadDraw() ) {
-            const fheroes2::ActionCreator action( _historyManager, _mapFormat );
+            fheroes2::ActionCreator action( _historyManager, _mapFormat );
 
             if ( Maps::updateRoadOnTile( tile, true ) ) {
                 _redraw |= mapUpdateFlags;
+
+                action.commit();
             }
         }
         else if ( _editorPanel.isStreamDraw() ) {
-            const fheroes2::ActionCreator action( _historyManager, _mapFormat );
+            fheroes2::ActionCreator action( _historyManager, _mapFormat );
 
             if ( Maps::updateStreamOnTile( tile, true ) ) {
                 _redraw |= mapUpdateFlags;
+
+                action.commit();
             }
         }
         else if ( _editorPanel.isEraseMode() ) {
             const fheroes2::Rect brushSize = _editorPanel.getBrushArea();
             assert( brushSize.width == brushSize.height );
 
-            const fheroes2::ActionCreator action( _historyManager, _mapFormat );
+            fheroes2::ActionCreator action( _historyManager, _mapFormat );
 
             if ( brushSize.width > 1 ) {
                 const fheroes2::Point indices = getBrushAreaIndicies( brushSize, tileIndex );
 
                 if ( Maps::eraseObjectsOnTiles( indices.x, indices.y, _editorPanel.getEraseTypes() ) ) {
                     _redraw |= mapUpdateFlags;
+
+                    action.commit();
                 }
             }
             else {
                 if ( Maps::eraseOjects( tile, _editorPanel.getEraseTypes() ) ) {
                     _redraw |= mapUpdateFlags;
+
+                    action.commit();
                 }
 
                 if ( brushSize.width == 0 ) {
@@ -993,7 +1007,6 @@ namespace Interface
             fheroes2::ActionCreator action( _historyManager, _mapFormat );
 
             if ( !setObjectOnTile( tile, Maps::ObjectGroup::LANDSCAPE_TOWN_BASEMENTS, basementId ) ) {
-                action.abort();
                 return;
             }
 
@@ -1006,7 +1019,6 @@ namespace Interface
             Maps::setLastObjectUID( objectId );
 
             if ( !setObjectOnTile( tile, groupType, type ) ) {
-                action.abort();
                 return;
             }
 
@@ -1015,16 +1027,16 @@ namespace Interface
             Maps::setLastObjectUID( objectId );
 
             if ( !setObjectOnTile( world.GetTiles( tile.GetIndex() - 1 ), Maps::ObjectGroup::LANDSCAPE_FLAGS, color * 2 ) ) {
-                action.abort();
                 return;
             }
 
             Maps::setLastObjectUID( objectId );
 
             if ( !setObjectOnTile( world.GetTiles( tile.GetIndex() + 1 ), Maps::ObjectGroup::LANDSCAPE_FLAGS, color * 2 + 1 ) ) {
-                action.abort();
                 return;
             }
+
+            action.commit();
         }
         else if ( groupType == Maps::ObjectGroup::ADVENTURE_MINES ) {
             int32_t type = -1;
@@ -1057,11 +1069,11 @@ namespace Interface
             fheroes2::ActionCreator action( _historyManager, _mapFormat );
 
             if ( !setObjectOnTile( tile, groupType, type ) ) {
-                action.abort();
                 return;
             }
 
             // TODO: Place owner flag according to the color state.
+            action.commit();
         }
         else if ( groupType == Maps::ObjectGroup::ADVENTURE_DWELLINGS ) {
             const auto & objectInfo = getObjectInfo( groupType, _editorPanel.getSelectedObjectType() );
@@ -1164,8 +1176,8 @@ namespace Interface
     {
         fheroes2::ActionCreator action( _historyManager, _mapFormat );
 
-        if ( !setObjectOnTile( tile, groupType, objectIndex ) ) {
-            action.abort();
+        if ( setObjectOnTile( tile, groupType, objectIndex ) ) {
+            action.commit();
         }
     }
 

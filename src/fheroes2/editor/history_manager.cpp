@@ -110,21 +110,16 @@ namespace fheroes2
         _action = std::make_unique<MapAction>( mapFormat );
     }
 
-    ActionCreator::~ActionCreator()
+    void ActionCreator::commit()
     {
         auto * action = dynamic_cast<MapAction *>( _action.get() );
         if ( action == nullptr ) {
-            // How is it even possible?
+            // How is it even possible? Did you call this method twice?
             assert( 0 );
             return;
         }
 
         try {
-            if ( _aborted ) {
-                action->undo();
-                return;
-            }
-
             if ( action->prepare() ) {
                 _manager.add( std::move( _action ) );
             }
