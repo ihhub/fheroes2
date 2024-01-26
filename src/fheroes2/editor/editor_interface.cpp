@@ -37,6 +37,7 @@
 #include "game.h"
 #include "game_delays.h"
 #include "game_hotkeys.h"
+#include "game_static.h"
 #include "gamedefs.h"
 #include "ground.h"
 #include "history_manager.h"
@@ -58,6 +59,7 @@
 #include "settings.h"
 #include "spell.h"
 #include "system.h"
+#include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
 #include "ui_dialog.h"
@@ -795,6 +797,29 @@ namespace Interface
 
             if ( !checkConditionForOccupiedTiles( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return Maps::isClearGround( tileToCheck ); } ) ) {
                 _warningMessage.reset( _( "Choose a tile which does not contain any objects." ) );
+                return;
+            }
+
+            // Heroes are limited by 8 so all attempts to set more than 8 heroes must be prevented.
+            const auto & objects = Maps::getObjectsByGroup( groupType );
+
+            const uint32_t color = objectInfo.metadata[0];
+            size_t heroCount = 0;
+            for ( const auto & mapTile : _mapFormat.tiles ) {
+                for ( const auto & object : mapTile.objects ) {
+                    if ( object.group == groupType ) {
+                        assert( object.index < objects.size() );
+                        if ( objects[object.index].metadata[0] == color ) {
+                            ++heroCount;
+                        }
+                    }
+                }
+            }
+
+            if ( heroCount >= GameStatic::GetKingdomMaxHeroes() ) {
+                std::string warning( _( "Maximum %{count} heroes of the same color can be placed." ) );
+                StringReplace( warning, "%{count}", GameStatic::GetKingdomMaxHeroes() );
+                _warningMessage.reset( std::move( warning ) );
                 return;
             }
 
