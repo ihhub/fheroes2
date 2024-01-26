@@ -405,7 +405,7 @@ int Dialog::ArmySplitTroop( uint32_t freeSlots, const uint32_t redistributeMax, 
 
     std::string msg( _( "How many %{troops} to move?" ) );
     StringReplace( msg, "%{troops}", troopName );
-    const fheroes2::Text titleText( std::move(msg), fheroes2::FontType::normalWhite() );
+    const fheroes2::Text titleText( std::move( msg ), fheroes2::FontType::normalWhite() );
     const int32_t titleHeight = titleText.rows( BOXAREA_WIDTH ) * titleText.height();
 
     const fheroes2::Text slotSeparationText( _( "Fast separation into slots:" ), fheroes2::FontType::normalWhite() );
