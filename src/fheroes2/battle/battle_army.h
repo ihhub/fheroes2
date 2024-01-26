@@ -61,9 +61,9 @@ namespace Battle
             reserve( units.size() );
             assign( units.begin(), units.end() );
 
-            const auto filterPredicate = []( const auto... params ) {
+            const auto filterPredicateGenerator = []( const auto... filterParams ) {
                 if constexpr ( filterType == FilterType::EMPTY_UNITS ) {
-                    static_assert( sizeof...( params ) == 0 );
+                    static_assert( sizeof...( filterParams ) == 0 );
 
                     return []( const Unit * unit ) {
                         assert( unit != nullptr );
@@ -72,16 +72,16 @@ namespace Battle
                     };
                 }
                 else if constexpr ( filterType == FilterType::EMPTY_UNITS_AND_SPECIFIED_UNIT ) {
-                    static_assert( sizeof...( params ) == 1 );
+                    static_assert( sizeof...( filterParams ) == 1 );
 
-                    return [unitToRemove = std::get<0>( std::tie( params... ) )]( const Unit * unit ) {
+                    return [unitToRemove = std::get<0>( std::tie( filterParams... ) )]( const Unit * unit ) {
                         assert( unit != nullptr );
 
                         return unit->isEmpty() || unit == unitToRemove;
                     };
                 }
                 else if constexpr ( filterType == FilterType::EMPTY_UNITS_AND_UNITS_THAT_CHANGED_SIDES ) {
-                    static_assert( sizeof...( params ) == 0 );
+                    static_assert( sizeof...( filterParams ) == 0 );
 
                     return []( const Unit * unit ) {
                         assert( unit != nullptr );
@@ -95,7 +95,7 @@ namespace Battle
                 }
             };
 
-            erase( std::remove_if( begin(), end(), filterPredicate( params... ) ), end() );
+            erase( std::remove_if( begin(), end(), filterPredicateGenerator( params... ) ), end() );
         }
 
         Units( const Units & ) = delete;
