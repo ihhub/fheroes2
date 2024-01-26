@@ -801,7 +801,7 @@ namespace Interface
                 return;
             }
 
-            // Heroes are limited by 8 so all attempts to set more than 8 heroes must be prevented.
+            // Heroes are limited to 8 per color so all attempts to set more than 8 heroes must be prevented.
             const auto & objects = Maps::getObjectsByGroup( groupType );
 
             const uint32_t color = objectInfo.metadata[0];
@@ -818,7 +818,7 @@ namespace Interface
             }
 
             if ( heroCount >= GameStatic::GetKingdomMaxHeroes() ) {
-                std::string warning( _( "Maximum %{count} heroes of the same color can be placed on the map." ) );
+                std::string warning( _( "A maximum of %{count} heroes of the same color can be placed on the map." ) );
                 StringReplace( warning, "%{count}", GameStatic::GetKingdomMaxHeroes() );
                 _warningMessage.reset( std::move( warning ) );
                 return;
