@@ -1138,6 +1138,7 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
                 }
             }
         }
+
         if ( res != fheroes2::GameMode::CANCEL ) {
             break;
         }
