@@ -24,8 +24,11 @@
 #ifndef H2BATTLE_ARMY_H
 #define H2BATTLE_ARMY_H
 
+#include <algorithm>
 #include <cassert>
 #include <cstdint>
+#include <tuple>
+#include <type_traits>
 #include <vector>
 
 #include "army.h"
