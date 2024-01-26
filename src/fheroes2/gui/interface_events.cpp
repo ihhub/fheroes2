@@ -128,6 +128,16 @@ void Interface::AdventureMap::_startHeroMove( Heroes & hero )
     Game::passAnimationDelay( Game::DelayType::CURRENT_HERO_DELAY );
 }
 
+void Interface::AdventureMap::EventSwitchHero( Heroes * selectedHero )
+{
+    if ( selectedHero == nullptr || selectedHero == GetFocusHeroes() || selectedHero->GetColor() != Settings::Get().GetPlayers().getCurrentColor() ) {
+        return;
+    }
+
+    SetFocus( selectedHero, false );
+    RedrawFocus();
+}
+
 void Interface::AdventureMap::EventNextHero()
 {
     const Kingdom & myKingdom = world.GetKingdom( Settings::Get().CurrentColor() );

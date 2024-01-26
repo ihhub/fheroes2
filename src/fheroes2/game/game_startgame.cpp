@@ -622,6 +622,9 @@ int Interface::AdventureMap::GetCursorFocusHeroes( const Heroes & hero, const Ma
             }
 
             if ( hero.GetColor() == otherHero->GetColor() ) {
+                if ( HotKeyHoldEvent( Game::HotKeyEvent::WORLD_SELECT_HERO ) ) {
+                    return Cursor::HEROES;
+                }
                 const int cursor = Cursor::DistanceThemes( Cursor::CURSOR_HERO_MEET, hero.getNumOfTravelDays( tile.GetIndex() ) );
 
                 return cursor != Cursor::POINTER ? cursor : Cursor::HEROES;
@@ -1121,6 +1124,20 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
                 EventOpenFocus();
         }
 
+        if ( HotKeyHoldEvent( Game::HotKeyEvent::WORLD_SELECT_HERO ) && GetFocusHeroes() ) {
+            if ( isMovingHero ) {
+                stopHero = true;
+            }
+            const fheroes2::Point & mousePosition = le.GetMouseCursor();
+            const int32_t index = _gameArea.GetValidTileIdFromPoint( mousePosition );
+            Heroes * selectedHero = world.GetTiles( index ).getHero();
+            if ( selectedHero && selectedHero != GetFocusHeroes() ) {
+                cursor.SetThemes( GetCursorTileIndex( _gameArea.GetValidTileIdFromPoint( le.GetMouseCursor() ) ) );
+                if ( le.MouseClickLeft() ) {
+                    EventSwitchCurrentHero( selectedHero );
+                }
+            }
+        }
         if ( res != fheroes2::GameMode::CANCEL ) {
             break;
         }
@@ -1539,4 +1556,9 @@ void Interface::AdventureMap::mouseCursorAreaPressRight( const int32_t tileIndex
             break;
         }
     }
+}
+void Interface::AdventureMap::mouseCursorAreaLongPressLeft( const int32_t tileIndex )
+{
+    const Maps::Tiles & tile = world.GetTiles( tileIndex );
+    EventSwitchCurrentHero( tile.getHero() );
 }

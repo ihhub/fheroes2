@@ -1115,6 +1115,11 @@ namespace Interface
         Editor::showPopupWindow( world.GetTiles( tileIndex ) );
     }
 
+    void EditorInterface::mouseCursorAreaLongPressLeft( const int32_t /*Unused*/ )
+    {
+        // Do nothing.
+    }
+
     void EditorInterface::updateCursor( const int32_t tileIndex )
     {
         if ( _cursorUpdater && tileIndex >= 0 ) {

@@ -122,6 +122,7 @@ namespace Interface
         void EventPuzzleMaps() const;
         static fheroes2::GameMode EventScenarioInformation();
         void EventSystemDialog() const;
+        void EventSwitchHero( Heroes * selectedHero );
         void EventNextHero();
         void EventNextTown();
         fheroes2::GameMode EventHeroMovement();
@@ -147,6 +148,7 @@ namespace Interface
 
         void mouseCursorAreaClickLeft( const int32_t tileIndex ) override;
         void mouseCursorAreaPressRight( const int32_t tileIndex ) const override;
+        void mouseCursorAreaLongPressLeft( const int32_t tileIndex ) override;
 
         void updateCursor( const int32_t tileIndex ) override;
 
