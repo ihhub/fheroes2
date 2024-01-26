@@ -23,8 +23,6 @@
 
 #include "battle_army.h"
 
-#include <algorithm>
-#include <cassert>
 #include <cstddef>
 
 #include "army_troop.h"
