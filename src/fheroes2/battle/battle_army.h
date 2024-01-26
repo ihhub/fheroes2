@@ -24,8 +24,10 @@
 #ifndef H2BATTLE_ARMY_H
 #define H2BATTLE_ARMY_H
 
+#include <algorithm>
 #include <cassert>
 #include <cstdint>
+#include <iterator>
 #include <tuple>
 #include <type_traits>
 #include <vector>
@@ -46,14 +48,15 @@ namespace Battle
     public:
         enum class FilterType
         {
-            EMPTY_UNITS,
-            EMPTY_UNITS_AND_SPECIFIED_UNIT,
-            EMPTY_UNITS_AND_UNITS_THAT_CHANGED_SIDES
+            REMOVE_INVALID_UNITS,
+            REMOVE_INVALID_UNITS_AND_SPECIFIED_UNIT,
+            REMOVE_INVALID_UNITS_AND_UNITS_THAT_CHANGED_SIDES
         };
 
-        static constexpr std::integral_constant<FilterType, FilterType::EMPTY_UNITS> FILTER_OUT_EMPTY_UNITS{};
-        static constexpr std::integral_constant<FilterType, FilterType::EMPTY_UNITS_AND_SPECIFIED_UNIT> FILTER_OUT_EMPTY_UNITS_AND_SPECIFIED_UNIT{};
-        static constexpr std::integral_constant<FilterType, FilterType::EMPTY_UNITS_AND_UNITS_THAT_CHANGED_SIDES> FILTER_OUT_EMPTY_UNITS_AND_UNITS_THAT_CHANGED_SIDES{};
+        static constexpr std::integral_constant<FilterType, FilterType::REMOVE_INVALID_UNITS> REMOVE_INVALID_UNITS{};
+        static constexpr std::integral_constant<FilterType, FilterType::REMOVE_INVALID_UNITS_AND_SPECIFIED_UNIT> REMOVE_INVALID_UNITS_AND_SPECIFIED_UNIT{};
+        static constexpr std::integral_constant<FilterType, FilterType::REMOVE_INVALID_UNITS_AND_UNITS_THAT_CHANGED_SIDES>
+            REMOVE_INVALID_UNITS_AND_UNITS_THAT_CHANGED_SIDES{};
 
         Units();
 
@@ -61,34 +64,33 @@ namespace Battle
         Units( const Units & units, std::integral_constant<FilterType, filterType> /* tag */, const Types... params )
         {
             reserve( units.size() );
-            assign( units.begin(), units.end() );
 
             const auto filterPredicateGenerator = []( const auto... filterParams ) {
-                if constexpr ( filterType == FilterType::EMPTY_UNITS ) {
+                if constexpr ( filterType == FilterType::REMOVE_INVALID_UNITS ) {
                     static_assert( sizeof...( filterParams ) == 0 );
 
                     return []( const Unit * unit ) {
                         assert( unit != nullptr );
 
-                        return unit->isEmpty();
+                        return unit->isValid();
                     };
                 }
-                else if constexpr ( filterType == FilterType::EMPTY_UNITS_AND_SPECIFIED_UNIT ) {
+                else if constexpr ( filterType == FilterType::REMOVE_INVALID_UNITS_AND_SPECIFIED_UNIT ) {
                     static_assert( sizeof...( filterParams ) == 1 );
 
                     return [unitToRemove = std::get<0>( std::tie( filterParams... ) )]( const Unit * unit ) {
                         assert( unit != nullptr );
 
-                        return unit->isEmpty() || unit == unitToRemove;
+                        return unit->isValid() && unit != unitToRemove;
                     };
                 }
-                else if constexpr ( filterType == FilterType::EMPTY_UNITS_AND_UNITS_THAT_CHANGED_SIDES ) {
+                else if constexpr ( filterType == FilterType::REMOVE_INVALID_UNITS_AND_UNITS_THAT_CHANGED_SIDES ) {
                     static_assert( sizeof...( filterParams ) == 0 );
 
                     return []( const Unit * unit ) {
                         assert( unit != nullptr );
 
-                        return unit->isEmpty() || unit->GetColor() != unit->GetCurrentColor();
+                        return unit->isValid() && unit->GetColor() == unit->GetCurrentColor();
                     };
                 }
                 else {
@@ -97,7 +99,7 @@ namespace Battle
                 }
             };
 
-            erase( std::remove_if( begin(), end(), filterPredicateGenerator( params... ) ), end() );
+            std::copy_if( units.begin(), units.end(), std::back_inserter( *this ), filterPredicateGenerator( params... ) );
         }
 
         Units( const Units & ) = delete;
