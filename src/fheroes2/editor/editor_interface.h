@@ -23,6 +23,7 @@
 #include <cstdint>
 #include <functional>
 #include <string>
+#include <utility>
 
 #include "editor_interface_panel.h"
 #include "game_mode.h"
