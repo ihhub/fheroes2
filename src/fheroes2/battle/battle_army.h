@@ -24,7 +24,6 @@
 #ifndef H2BATTLE_ARMY_H
 #define H2BATTLE_ARMY_H
 
-#include <algorithm>
 #include <cassert>
 #include <cstdint>
 #include <tuple>
