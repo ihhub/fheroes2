@@ -1134,7 +1134,7 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
             if ( selectedHero && selectedHero != GetFocusHeroes() ) {
                 cursor.SetThemes( GetCursorTileIndex( _gameArea.GetValidTileIdFromPoint( le.GetMouseCursor() ) ) );
                 if ( le.MouseClickLeft() ) {
-                    EventSwitchCurrentHero( selectedHero );
+                    EventSwitchFocusedHero( selectedHero );
                 }
             }
         }
@@ -1560,5 +1560,5 @@ void Interface::AdventureMap::mouseCursorAreaPressRight( const int32_t tileIndex
 void Interface::AdventureMap::mouseCursorAreaLongPressLeft( const int32_t tileIndex )
 {
     const Maps::Tiles & tile = world.GetTiles( tileIndex );
-    EventSwitchCurrentHero( tile.getHero() );
+    EventSwitchFocusedHero( tile.getHero() );
 }
