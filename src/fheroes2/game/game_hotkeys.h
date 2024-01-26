@@ -99,6 +99,7 @@ namespace Game
         //
         WORLD_SAVE_GAME,
         WORLD_NEXT_HERO,
+        WORLD_SELECT_HERO,
         WORLD_START_HERO_MOVEMENT,
         WORLD_CAST_SPELL,
         WORLD_SLEEP_HERO,
