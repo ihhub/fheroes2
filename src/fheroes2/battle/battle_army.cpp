@@ -50,47 +50,6 @@ Battle::Units::Units()
     reserve( unitSizeCapacity );
 }
 
-Battle::Units::Units( const Units & units, const FilterType filterType, const Unit * unitToRemove /* = nullptr */ )
-{
-    reserve( unitSizeCapacity < units.size() ? units.size() : unitSizeCapacity );
-    assign( units.begin(), units.end() );
-
-    const auto filterPredicate = [filterType, unitToRemove]() -> std::function<bool( const Unit * )> {
-        switch ( filterType ) {
-        case FilterType::EmptyUnits:
-            assert( unitToRemove == nullptr );
-
-            return []( const Unit * unit ) {
-                assert( unit != nullptr );
-
-                return unit->isEmpty();
-            };
-        case FilterType::EmptyUnitsAndSpecifiedUnit:
-            return [unitToRemove]( const Unit * unit ) {
-                assert( unit != nullptr );
-
-                return unit->isEmpty() || unit == unitToRemove;
-            };
-        case FilterType::EmptyUnitsAndUnitsThatChangedSides:
-            assert( unitToRemove == nullptr );
-
-            return []( const Unit * unit ) {
-                assert( unit != nullptr );
-
-                return unit->isEmpty() || unit->GetColor() != unit->GetCurrentColor();
-            };
-        default:
-            assert( 0 );
-            break;
-        }
-
-        // std::bad_function_call will be thrown when calling operator()
-        return {};
-    }();
-
-    erase( std::remove_if( begin(), end(), filterPredicate ), end() );
-}
-
 void Battle::Units::SortFastest()
 {
     // It is important to maintain the initial order of units having the same speed for the proper operation of the unit turn queue

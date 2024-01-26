@@ -198,7 +198,7 @@ namespace AI
     PositionValues evaluatePotentialAttackPositions( Arena & arena, const Unit & attacker )
     {
         // Attacking unit can be under the influence of the Hypnotize spell
-        Units enemies( arena.getEnemyForce( attacker.GetCurrentColor() ).getUnits(), Units::FilterType::EmptyUnitsAndSpecifiedUnit, &attacker );
+        Units enemies( arena.getEnemyForce( attacker.GetCurrentColor() ).getUnits(), Units::FILTER_OUT_EMPTY_UNITS_AND_SPECIFIED_UNIT, &attacker );
 
         // For each position near enemy units, select the maximum attack value among neighboring enemy melee units, and then add the sum of the attack values of
         // neighboring enemy archers to encourage the use of attacking positions that block these archers
@@ -1033,7 +1033,7 @@ namespace AI
         Actions actions;
 
         // Current unit can be under the influence of the Hypnotize spell
-        const Units enemies( arena.getEnemyForce( _myColor ).getUnits(), Units::FilterType::EmptyUnitsAndSpecifiedUnit, &currentUnit );
+        const Units enemies( arena.getEnemyForce( _myColor ).getUnits(), Units::FILTER_OUT_EMPTY_UNITS_AND_SPECIFIED_UNIT, &currentUnit );
 
         // Assess the current threat level and decide whether to retreat to another position
         const int32_t retreatPositionIndex = [&arena, &currentUnit, &enemies]() {
@@ -1373,7 +1373,7 @@ namespace AI
         const PositionValues valuesOfAttackPositions = evaluatePotentialAttackPositions( arena, currentUnit );
 
         // Current unit can be under the influence of the Hypnotize spell
-        const Units enemies( arena.getEnemyForce( _myColor ).getUnits(), Units::FilterType::EmptyUnitsAndSpecifiedUnit, &currentUnit );
+        const Units enemies( arena.getEnemyForce( _myColor ).getUnits(), Units::FILTER_OUT_EMPTY_UNITS_AND_SPECIFIED_UNIT, &currentUnit );
 
         // 1. Choose the best target within reach, if any
         {
@@ -1500,9 +1500,9 @@ namespace AI
 
         const PositionValues valuesOfAttackPositions = evaluatePotentialAttackPositions( arena, currentUnit );
 
-        const Units friendly( arena.getForce( _myColor ).getUnits(), Units::FilterType::EmptyUnitsAndSpecifiedUnit, &currentUnit );
+        const Units friendly( arena.getForce( _myColor ).getUnits(), Units::FILTER_OUT_EMPTY_UNITS_AND_SPECIFIED_UNIT, &currentUnit );
         // Current unit can be under the influence of the Hypnotize spell
-        const Units enemies( arena.getEnemyForce( _myColor ).getUnits(), Units::FilterType::EmptyUnitsAndSpecifiedUnit, &currentUnit );
+        const Units enemies( arena.getEnemyForce( _myColor ).getUnits(), Units::FILTER_OUT_EMPTY_UNITS_AND_SPECIFIED_UNIT, &currentUnit );
 
         // 1. Cover our archers and attack enemy units blocking them, if there are any. Units whose affiliation has been changed should not cover the archers, because
         // such units will block them instead of covering them.

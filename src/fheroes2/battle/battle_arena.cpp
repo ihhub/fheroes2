@@ -159,8 +159,8 @@ namespace
 
     Battle::Unit * GetCurrentUnit( const Battle::Force & army1, const Battle::Force & army2, const int preferredColor )
     {
-        Battle::Units units1( army1.getUnits(), Battle::Units::FilterType::EmptyUnits );
-        Battle::Units units2( army2.getUnits(), Battle::Units::FilterType::EmptyUnits );
+        Battle::Units units1( army1.getUnits(), Battle::Units::FILTER_OUT_EMPTY_UNITS );
+        Battle::Units units2( army2.getUnits(), Battle::Units::FILTER_OUT_EMPTY_UNITS );
 
         units1.SortFastest();
         units2.SortFastest();
@@ -180,8 +180,8 @@ namespace
     {
         orderOfUnits.assign( orderHistory.begin(), orderHistory.end() );
 
-        Battle::Units units1( army1.getUnits(), Battle::Units::FilterType::EmptyUnits );
-        Battle::Units units2( army2.getUnits(), Battle::Units::FilterType::EmptyUnits );
+        Battle::Units units1( army1.getUnits(), Battle::Units::FILTER_OUT_EMPTY_UNITS );
+        Battle::Units units2( army2.getUnits(), Battle::Units::FILTER_OUT_EMPTY_UNITS );
 
         units1.SortFastest();
         units2.SortFastest();
