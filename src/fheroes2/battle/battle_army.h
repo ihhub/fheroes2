@@ -24,10 +24,12 @@
 #ifndef H2BATTLE_ARMY_H
 #define H2BATTLE_ARMY_H
 
+#include <cassert>
 #include <cstdint>
 #include <vector>
 
 #include "army.h"
+#include "battle_troop.h"
 #include "bitmodes.h"
 #include "monster.h"
 
@@ -35,7 +37,6 @@ class HeroBase;
 
 namespace Battle
 {
-    class Unit;
     class TroopsUidGenerator;
 
     class Units : public std::vector<Unit *>
