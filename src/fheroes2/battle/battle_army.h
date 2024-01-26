@@ -60,6 +60,7 @@ namespace Battle
 
         Units();
 
+        // Creates a shallow copy of 'units' (only pointers are copied) by applying a filter according to the specified tag
         template <FilterType filterType, typename... Types>
         Units( const Units & units, std::integral_constant<FilterType, filterType> /* tag */, const Types... params )
         {
