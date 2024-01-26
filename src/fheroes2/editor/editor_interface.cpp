@@ -817,7 +817,7 @@ namespace Interface
             }
 
             if ( heroCount >= GameStatic::GetKingdomMaxHeroes() ) {
-                std::string warning( _( "Maximum %{count} heroes of the same color can be placed." ) );
+                std::string warning( _( "Maximum %{count} heroes of the same color can be placed on the map." ) );
                 StringReplace( warning, "%{count}", GameStatic::GetKingdomMaxHeroes() );
                 _warningMessage.reset( std::move( warning ) );
                 return;
