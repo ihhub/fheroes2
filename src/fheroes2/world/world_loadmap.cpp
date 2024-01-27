@@ -684,14 +684,14 @@ bool World::loadResurrectionMap( const std::string & filename )
 
     // Read and populate objects.
     const auto & townObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::KINGDOM_TOWNS );
-    
+
     for ( size_t tileId = 0; tileId < map.tiles.size(); ++tileId ) {
         const auto & tile = map.tiles[tileId];
-    
+
         for ( const auto & object : tile.objects ) {
             if ( object.group == Maps::ObjectGroup::KINGDOM_TOWNS ) {
                 const uint32_t race = townObjects[object.index].metadata[0];
-    
+
                 Castle * castle = new Castle( static_cast<int32_t>( tileId ) % width, static_cast<int32_t>( tileId ) / width, race );
                 const uint8_t color = Maps::getTownColorIndex( map, tileId, object.id );
                 castle->SetColor( 1 << color );

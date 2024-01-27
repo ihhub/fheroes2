@@ -403,7 +403,7 @@ namespace Maps
             assert( 0 );
             return 0;
         }
-        
+
         return static_cast<uint8_t>( leftFlagColor );
     }
 }
