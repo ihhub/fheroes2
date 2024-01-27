@@ -241,8 +241,6 @@ namespace Maps
 
                     const uint32_t race = metadata[1];
                     heroRacesPresent[color] |= ( 1 << race );
-
-                    break;
                 }
                 else if ( object.group == ObjectGroup::KINGDOM_TOWNS ) {
                     assert( object.index < townObjects.size() );
@@ -258,8 +256,6 @@ namespace Maps
 
                     const uint32_t race = townObjects[object.index].metadata[0];
                     townRacesPresent[color] |= ( 1 << race );
-
-                    break;
                 }
             }
         }
