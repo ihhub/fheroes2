@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-27 00:02+0000\n"
-"PO-Revision-Date: 2024-01-27 11:01+0300\n"
+"PO-Revision-Date: 2024-01-27 11:10+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
 "Language: ru\n"
@@ -200,7 +200,7 @@ msgid "MIN"
 msgstr "МИН"
 
 msgid "RESET"
-msgstr ""
+msgstr "СБРОС"
 
 msgid "START"
 msgstr "НАЧАТЬ"
@@ -209,7 +209,7 @@ msgid "CASTLE"
 msgstr "ЗАМОК"
 
 msgid "TOWN"
-msgstr ""
+msgstr "ГОРОД"
 
 msgid ""
 "D\n"
@@ -555,7 +555,7 @@ msgid "The enemy has surrendered!"
 msgstr "Враг капитулировал!"
 
 msgid "Their cowardice costs them %{gold} gold."
-msgstr ""
+msgstr "Трусость обошлась им в %{gold} золота."
 
 msgid "The enemy has fled!"
 msgstr "Враг сбежал!"
@@ -979,10 +979,10 @@ msgid "Exit"
 msgstr "Закрыть"
 
 msgid "Reset"
-msgstr ""
+msgstr "Сбросить"
 
 msgid "Reset to default settings."
-msgstr ""
+msgstr "Сбросить до значений по умолчанию."
 
 msgid "Please select another hero."
 msgstr "Пожалуйста, выберите другого героя."
@@ -3057,10 +3057,10 @@ msgstr ""
 "кадров в секунду) и текущее время."
 
 msgid "Hotkey: "
-msgstr ""
+msgstr "Горячая клавиша: "
 
 msgid "Category: "
-msgstr ""
+msgstr "Категория: "
 
 msgid "Event: "
 msgstr "Событие: "
@@ -3210,7 +3210,7 @@ msgid "already claimed"
 msgstr "уже получен"
 
 msgid "not claimed"
-msgstr ""
+msgstr "не получен"
 
 msgid "already knows this skill"
 msgstr "уже знаете"
@@ -3416,7 +3416,7 @@ msgid "race|Neutral"
 msgstr "Нейтральный"
 
 msgid "You will place"
-msgstr ""
+msgstr "Вы будете размещать"
 
 msgid "Click to select this class."
 msgstr "Нажмите сюда чтобы выбрать эту фракцию."
@@ -3431,7 +3431,7 @@ msgid "Select Landscape Object:"
 msgstr "Выберите объект ландшафта:"
 
 msgid "Mine placing"
-msgstr ""
+msgstr "Размещение шахт"
 
 msgid ""
 "Resource\n"
@@ -3786,7 +3786,7 @@ msgstr "Героев нельзя размещать на воде."
 
 msgid ""
 "A maximum of %{count} heroes of the same color can be placed on the map."
-msgstr ""
+msgstr "На карте можно разместить максимум %{count} героев одного цвета."
 
 msgid "Artifacts cannot be placed on water."
 msgstr "Артефакты нельзя размещать на воде."
@@ -3847,6 +3847,8 @@ msgid ""
 "Cell\n"
 "Details"
 msgstr ""
+"Детали\n"
+"объекта"
 
 msgid "Roads"
 msgstr "Дороги"
@@ -4732,10 +4734,10 @@ msgid "Default Actions"
 msgstr "Стандартные действия."
 
 msgid "Global Actions"
-msgstr ""
+msgstr "Общие действия"
 
 msgid "Main Menu"
-msgstr ""
+msgstr "Главное меню"
 
 msgid "World Map"
 msgstr "Карта мира"
@@ -4747,7 +4749,7 @@ msgid "Town Screen"
 msgstr "Экран города"
 
 msgid "Army Actions"
-msgstr ""
+msgstr "Действия армии"
 
 msgid "Editor"
 msgstr "Редактор"
