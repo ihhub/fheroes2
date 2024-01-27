@@ -119,14 +119,8 @@ namespace fheroes2
             return;
         }
 
-        try {
-            if ( action->prepare() ) {
-                _manager.add( std::move( _action ) );
-            }
-        }
-        catch ( ... ) {
-            // If an exception happens here then something is very wrong with the code.
-            assert( 0 );
+        if ( action->prepare() ) {
+            _manager.add( std::move( _action ) );
         }
     }
 }
