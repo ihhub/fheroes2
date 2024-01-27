@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-24 13:18+0000\n"
+"POT-Creation-Date: 2024-01-27 00:02+0000\n"
 "PO-Revision-Date: 2023-09-11 20:22+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3796,6 +3796,10 @@ msgid "Treasures cannot be placed on water."
 msgstr "Toto kúzlo nemožno použiť na lodi."
 
 msgid "Heroes cannot be placed on water."
+msgstr ""
+
+msgid ""
+"A maximum of %{count} heroes of the same color can be placed on the map."
 msgstr ""
 
 #, fuzzy
