@@ -3147,13 +3147,13 @@ namespace fheroes2
                     // Make Landscape Miscellaneous objects button.
                     Blit( GetICN( ICN::OBJNDIRT, 73 ), 8, 0, _icnVsSprite[id][10], 1, 1, 24, 24 );
 
-                    // Make erase Dwellings button image.
+                    // Make Dwellings button image.
                     Blit( GetICN( ICN::OBJNMULT, 114 ), 7, 0, _icnVsSprite[id][11], 1, 1, 24, 24 );
 
-                    // Make erase Mines button image.
+                    // Make Mines button image.
                     Blit( GetICN( ICN::MTNMULT, 82 ), 8, 4, _icnVsSprite[id][12], 1, 1, 24, 24 );
 
-                    // Make erase Power-ups button image.
+                    // Make Power-ups button image.
                     Blit( GetICN( ICN::OBJNMULT, 72 ), 0, 6, _icnVsSprite[id][13], 1, 1, 24, 24 );
 
                     // Make Adventure Water objects button.

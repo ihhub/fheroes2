@@ -3221,10 +3221,10 @@ namespace Maps
             // without corrupting their object data. Do this through 'OBJ_HERO' (possibly like 'hero.Dismiss()').
             needRedraw |= removeObjectTypeFromTile( tile, MP2::OBJ_ICN_TYPE_MINIHERO );
         }
-        if ( objectTypesToErase & ObjectErasureType::TREASURES && tile.getObjectIcnType() == MP2::OBJ_ICN_TYPE_OBJNRSRC ) {
+        if ( objectTypesToErase & ObjectErasureType::ADVENTURE_PICKABLE && tile.getObjectIcnType() == MP2::OBJ_ICN_TYPE_OBJNRSRC ) {
             needRedraw |= removeObject( tile, tile.GetObjectUID() );
         }
-        if ( objectTypesToErase & ObjectErasureType::ARTIFACTS && tile.getObjectIcnType() == MP2::OBJ_ICN_TYPE_OBJNARTI ) {
+        if ( objectTypesToErase & ObjectErasureType::ADVENTURE_PICKABLE && tile.getObjectIcnType() == MP2::OBJ_ICN_TYPE_OBJNARTI ) {
             needRedraw |= removeObject( tile, tile.GetObjectUID() );
         }
 

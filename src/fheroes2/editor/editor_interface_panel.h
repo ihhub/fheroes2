@@ -215,10 +215,10 @@ namespace Interface
         };
 
         // This array represents the order of object-to-erase images on the erase tool panel (from left to right, from top to bottom).
-        const std::array<uint32_t, 8> _eraseButtonObjectTypes{ Maps::ObjectErasureType::TERRAIN_OBJECTS, Maps::ObjectErasureType::CASTLES,
-                                                               Maps::ObjectErasureType::MONSTERS,        Maps::ObjectErasureType::HEROES,
-                                                               Maps::ObjectErasureType::ARTIFACTS,       Maps::ObjectErasureType::ROADS,
-                                                               Maps::ObjectErasureType::STREAMS,         Maps::ObjectErasureType::TREASURES };
+        const std::array<uint32_t, 8> _eraseButtonObjectTypes{ Maps::ObjectErasureType::LANDSCAPE, Maps::ObjectErasureType::ADVENTURE_NON_PICKABLE,
+                                                               Maps::ObjectErasureType::CASTLES,   Maps::ObjectErasureType::ADVENTURE_PICKABLE,
+                                                               Maps::ObjectErasureType::MONSTERS,  Maps::ObjectErasureType::HEROES,
+                                                               Maps::ObjectErasureType::ROADS,     Maps::ObjectErasureType::STREAMS };
 
         EditorInterface & _interface;
 

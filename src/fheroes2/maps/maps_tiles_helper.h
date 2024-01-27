@@ -82,16 +82,16 @@ namespace Maps
     {
         NONE = 0x00,
         // Terrain objects are objects that are placed in editor using a terrain palette in objects placing mode.
-        TERRAIN_OBJECTS = 0x01,
-        CASTLES = 0x02,
-        MONSTERS = 0x04,
-        HEROES = 0x08,
-        ARTIFACTS = 0x10,
-        STREAMS = 0x20,
-        ROADS = 0x40,
-        TREASURES = 0x80,
+        LANDSCAPE = 0x01,
+        ADVENTURE_NON_PICKABLE = 0x02,
+        CASTLES = 0x04,
+        ADVENTURE_PICKABLE = 0x08,
+        MONSTERS = 0x10,
+        HEROES = 0x20,
+        STREAMS = 0x40,
+        ROADS = 0x80,
 
-        ALL_OBJECTS = TERRAIN_OBJECTS | CASTLES | MONSTERS | HEROES | ARTIFACTS | STREAMS | ROADS | TREASURES,
+        ALL_OBJECTS = LANDSCAPE | ADVENTURE_NON_PICKABLE | CASTLES | ADVENTURE_PICKABLE | MONSTERS | HEROES | STREAMS | ROADS,
     };
 
     // Only for MP2::OBJ_MINE.
