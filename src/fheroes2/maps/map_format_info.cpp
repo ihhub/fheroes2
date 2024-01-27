@@ -107,15 +107,15 @@ namespace Maps::Map_Format
     StreamBase & operator<<( StreamBase & msg, const BaseMapFormat & map )
     {
         return msg << map.version << map.isCampaign << map.difficulty << map.availablePlayerColors << map.humanPlayerColors << map.computerPlayerColors << map.alliances
-                   << map.victoryConditionType << map.isVictoryConditionApplicableForAI << map.allowNormalVictory << map.victoryConditionMetadata << map.lossCondition
-                   << map.lossConditionMetadata << map.size << map.name << map.description;
+                   << map.playerRace << map.victoryConditionType << map.isVictoryConditionApplicableForAI << map.allowNormalVictory << map.victoryConditionMetadata
+                   << map.lossCondition << map.lossConditionMetadata << map.size << map.name << map.description;
     }
 
     StreamBase & operator>>( StreamBase & msg, BaseMapFormat & map )
     {
         return msg >> map.version >> map.isCampaign >> map.difficulty >> map.availablePlayerColors >> map.humanPlayerColors >> map.computerPlayerColors >> map.alliances
-               >> map.victoryConditionType >> map.isVictoryConditionApplicableForAI >> map.allowNormalVictory >> map.victoryConditionMetadata >> map.lossCondition
-               >> map.lossConditionMetadata >> map.size >> map.name >> map.description;
+               >> map.playerRace >> map.victoryConditionType >> map.isVictoryConditionApplicableForAI >> map.allowNormalVictory >> map.victoryConditionMetadata
+               >> map.lossCondition >> map.lossConditionMetadata >> map.size >> map.name >> map.description;
     }
 
     StreamBase & operator<<( StreamBase & msg, const MapFormat & map )

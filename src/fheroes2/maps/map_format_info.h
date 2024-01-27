@@ -145,6 +145,9 @@ namespace Maps::Map_Format
         uint8_t computerPlayerColors{ 0 };
         std::vector<uint8_t> alliances;
 
+        // Only 6 players are allowed per map.
+        std::array<uint8_t, 6> playerRace{ 0 };
+
         uint8_t victoryConditionType{ 0 };
         bool isVictoryConditionApplicableForAI{ false };
         bool allowNormalVictory{ false };

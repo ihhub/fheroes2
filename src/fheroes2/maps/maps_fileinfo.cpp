@@ -411,6 +411,20 @@ bool Maps::FileInfo::readResurrectionMap( std::string filePath, const bool isFor
     colorsAvailableForHumans = map.humanPlayerColors;
     colorsAvailableForComp = map.computerPlayerColors;
 
+    races = map.playerRace;
+
+    victoryConditionType = VICTORY_DEFEAT_EVERYONE;
+    compAlsoWins = true;
+    allowNormalVictory = true;
+
+    lossConditionType = LOSS_EVERYTHING;
+
+    for ( size_t i = 0; i < races.size(); ++i ) {
+        if ( races[i] == Race::RAND ) {
+            colorsOfRandomRaces |= static_cast<uint8_t>( 1 << i );
+        }
+    }
+
     version = GameVersion::RESURRECTION;
 
     if ( !isForEditor && colorsAvailableForHumans == 0 ) {

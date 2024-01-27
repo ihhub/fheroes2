@@ -34,6 +34,7 @@
 #include "maps_tiles.h"
 #include "maps_tiles_helper.h"
 #include "mp2.h"
+#include "race.h"
 #include "world.h"
 #include "world_object_uid.h"
 
@@ -189,5 +190,220 @@ namespace Maps
         assert( uid > 0 );
 
         addObjectToTile( map.tiles[tileId], group, index, uid );
+    }
+
+    void updateMapPlayers( Map_Format::MapFormat & map )
+    {
+        static_assert( Color::BLUE == 1 << 0, "The kingdom color values have changed. You are going to break map format!" );
+        static_assert( Color::GREEN == 1 << 1, "The kingdom color values have changed. You are going to break map format!" );
+        static_assert( Color::RED == 1 << 2, "The kingdom color values have changed. You are going to break map format!" );
+        static_assert( Color::YELLOW == 1 << 3, "The kingdom color values have changed. You are going to break map format!" );
+        static_assert( Color::ORANGE == 1 << 4, "The kingdom color values have changed. You are going to break map format!" );
+        static_assert( Color::PURPLE == 1 << 5, "The kingdom color values have changed. You are going to break map format!" );
+
+        static_assert( Race::NONE == 0, "The race values have changed. You are going to break map format!" );
+        static_assert( Race::KNGT == 1 << 0, "The race values have changed. You are going to break map format!" );
+        static_assert( Race::BARB == 1 << 1, "The race values have changed. You are going to break map format!" );
+        static_assert( Race::SORC == 1 << 2, "The race values have changed. You are going to break map format!" );
+        static_assert( Race::WRLK == 1 << 3, "The race values have changed. You are going to break map format!" );
+        static_assert( Race::WZRD == 1 << 4, "The race values have changed. You are going to break map format!" );
+        static_assert( Race::NECR == 1 << 5, "The race values have changed. You are going to break map format!" );
+        static_assert( Race::MULT == 1 << 6, "The race values have changed. You are going to break map format!" );
+        static_assert( Race::RAND == 1 << 7, "The race values have changed. You are going to break map format!" );
+
+        const size_t mainColors{ 6 };
+
+        assert( map.playerRace.size() == mainColors );
+
+        // Gather all information about all kingdom colors and races.
+        std::array<bool, mainColors> heroColorsPresent{ false };
+        // Towns can be neutral so 1 more color for them.
+        std::array<bool, mainColors + 1> townColorsPresent{ false };
+        std::array<uint8_t, mainColors> heroRacesPresent{ 0 };
+        std::array<uint8_t, mainColors> townRacesPresent{ 0 };
+
+        const auto & heroObjects = getObjectsByGroup( ObjectGroup::KINGDOM_HEROES );
+        const auto & townObjects = getObjectsByGroup( ObjectGroup::KINGDOM_TOWNS );
+
+        for ( size_t tileIndex = 0; tileIndex < map.tiles.size(); ++tileIndex ) {
+            const auto & mapTile = map.tiles[tileIndex];
+
+            for ( const auto & object : mapTile.objects ) {
+                if ( object.group == ObjectGroup::KINGDOM_HEROES ) {
+                    assert( object.index < heroObjects.size() );
+
+                    const auto & metadata = heroObjects[object.index].metadata;
+
+                    const uint32_t color = metadata[0];
+                    assert( color < heroColorsPresent.size() );
+
+                    heroColorsPresent[color] = true;
+
+                    const uint32_t race = metadata[1];
+                    heroRacesPresent[color] |= ( 1 << race );
+
+                    break;
+                }
+                else if ( object.group == ObjectGroup::KINGDOM_TOWNS ) {
+                    assert( object.index < townObjects.size() );
+
+                    // Towns and Castles have 2 flags on both sides on the entrance. Verify, that they exist and have the same color.
+                    assert( tileIndex > 0 && tileIndex < map.tiles.size() - 1 );
+
+                    const uint8_t color = getTownColorIndex( map, tileIndex, object.id );
+
+                    assert( color < townColorsPresent.size() );
+
+                    townColorsPresent[color] = true;
+
+                    const uint32_t race = townObjects[object.index].metadata[0];
+                    townRacesPresent[color] |= ( 1 << race );
+
+                    break;
+                }
+            }
+        }
+
+        // Update map format settings based on the gathered information.
+        uint8_t numberOfColorsPresent = 0;
+
+        map.availablePlayerColors = 0;
+        for ( size_t i = 0; i < mainColors; ++i ) {
+            if ( heroColorsPresent[i] || townColorsPresent[i] ) {
+                assert( heroRacesPresent[i] != 0 || townRacesPresent[i] != 0 );
+
+                map.availablePlayerColors += static_cast<uint8_t>( 1 << i );
+
+                ++numberOfColorsPresent;
+
+                map.playerRace[i] &= ( heroRacesPresent[i] | townRacesPresent[i] );
+
+                if ( map.playerRace[i] == 0 ) {
+                    map.playerRace[i] = ( heroRacesPresent[i] | townRacesPresent[i] );
+                }
+            }
+            else {
+                assert( heroRacesPresent[i] == 0 && townRacesPresent[i] == 0 );
+
+                map.playerRace[i] = 0;
+            }
+        }
+
+        map.computerPlayerColors = map.computerPlayerColors & map.availablePlayerColors;
+        map.humanPlayerColors = map.humanPlayerColors & map.availablePlayerColors;
+
+        if ( map.availablePlayerColors > 0 ) {
+            // Human and computer player colors might be set previously. If they are, do not update them.
+            for ( size_t i = 0; i < mainColors; ++i ) {
+                const uint8_t color = static_cast<uint8_t>( 1 << i );
+                if ( ( map.availablePlayerColors & color ) != 0 && ( map.computerPlayerColors & color ) == 0 && ( map.humanPlayerColors & color ) == 0 ) {
+                    // This color was not set for anyone.
+                    map.computerPlayerColors |= color;
+                    map.humanPlayerColors |= color;
+                }
+            }
+
+            // Make sure that at least one human color exist.
+            if ( map.humanPlayerColors == 0 ) {
+                for ( size_t i = 0; i < mainColors; ++i ) {
+                    const uint8_t color = static_cast<uint8_t>( 1 << i );
+                    if ( ( map.availablePlayerColors & color ) != 0 ) {
+                        map.humanPlayerColors |= color;
+                        break;
+                    }
+                }
+            }
+
+            // If only color present this color cannot be used by AI.
+            if ( numberOfColorsPresent == 1 ) {
+                map.computerPlayerColors = 0;
+            }
+
+            if ( !map.alliances.empty() ) {
+                // Verify that alliances are set correctly:
+                // - each alliance has at least one color
+                // - no color should be repeated more than once
+                std::array<bool, mainColors> usedAllianceColors{ false };
+
+                for ( auto iter = map.alliances.begin(); iter != map.alliances.end(); ) {
+                    uint8_t & allianceColors = *iter;
+
+                    for ( size_t i = 0; i < mainColors; ++i ) {
+                        const uint8_t color = static_cast<uint8_t>( 1 << i );
+                        if ( ( allianceColors & color ) != 0 && usedAllianceColors[i] ) {
+                            // This color is used in another alliance. Remove it from here.
+                            allianceColors = allianceColors & ( ~color );
+                        }
+                    }
+
+                    if ( allianceColors == 0 ) {
+                        // This alliance is invalid.
+                        iter = map.alliances.erase( iter );
+                        continue;
+                    }
+
+                    ++iter;
+                }
+
+                if ( map.alliances.size() == 1 ) {
+                    // Everyone cannot be in one alliance!
+                    map.alliances.clear();
+                }
+                else {
+                    // Check that all colors being used in alliances. If not then add missing colors to the last alliance.
+                    for ( size_t i = 0; i < mainColors; ++i ) {
+                        const uint8_t color = static_cast<uint8_t>( 1 << i );
+                        if ( ( map.availablePlayerColors & color ) != 0 && !usedAllianceColors[i] ) {
+                            map.alliances.back() |= color;
+                        }
+                    }
+                }
+            }
+        }
+        else {
+            // No colors are set so no alliances should exist.
+            map.alliances = {};
+
+            // No races are set.
+            map.playerRace = {};
+        }
+    }
+
+    uint8_t getTownColorIndex( const Map_Format::MapFormat & map, const size_t tileIndex, const uint32_t id )
+    {
+        if ( tileIndex >= map.tiles.size() ) {
+            assert( 0 );
+            return 0;
+        }
+
+        const auto & flagObjects = getObjectsByGroup( ObjectGroup::LANDSCAPE_FLAGS );
+
+        uint32_t leftFlagColor = 0;
+        uint32_t rightFlagColor = 0;
+
+        for ( const auto & tempObject : map.tiles[tileIndex - 1].objects ) {
+            if ( tempObject.group == ObjectGroup::LANDSCAPE_FLAGS && tempObject.id == id ) {
+                assert( tempObject.index < flagObjects.size() );
+
+                leftFlagColor = flagObjects[tempObject.index].metadata[0];
+                break;
+            }
+        }
+
+        for ( const auto & tempObject : map.tiles[tileIndex + 1].objects ) {
+            if ( tempObject.group == ObjectGroup::LANDSCAPE_FLAGS && tempObject.id == id ) {
+                assert( tempObject.index < flagObjects.size() );
+
+                rightFlagColor = flagObjects[tempObject.index].metadata[0];
+                break;
+            }
+        }
+
+        if ( leftFlagColor != rightFlagColor ) {
+            assert( 0 );
+            return 0;
+        }
+        
+        return static_cast<uint8_t>( leftFlagColor );
     }
 }

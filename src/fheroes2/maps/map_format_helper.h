@@ -46,4 +46,8 @@ namespace Maps
     void writeTile( const Tiles & tile, Map_Format::TileInfo & info );
 
     void addObjectToMap( Map_Format::MapFormat & map, const int32_t tileId, const ObjectGroup group, const uint32_t index );
+
+    void updateMapPlayers( Map_Format::MapFormat & map );
+
+    uint8_t getTownColorIndex( const Map_Format::MapFormat & map, const size_t tileIndex, const uint32_t id );
 }
