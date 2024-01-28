@@ -21,6 +21,7 @@
 #include "map_format_helper.h"
 
 #include <algorithm>
+#include <array>
 #include <cassert>
 #include <cstddef>
 #include <cstdint>
@@ -29,6 +30,7 @@
 #include <set>
 #include <vector>
 
+#include "color.h"
 #include "map_format_info.h"
 #include "map_object_info.h"
 #include "maps_tiles.h"
