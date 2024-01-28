@@ -380,10 +380,10 @@ namespace Maps
         }
         else {
             // No colors are set so no alliances should exist.
-            map.alliances = {};
+            map.alliances = { 0 };
 
             // No races are set.
-            map.playerRace = {};
+            map.playerRace = { 0 };
         }
     }
 
