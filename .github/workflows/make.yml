@@ -3,6 +3,9 @@ name: Make
 on:
   workflow_call:
 
+permissions:
+  contents: write
+
 jobs:
   make:
     strategy:

@@ -5,6 +5,9 @@ on:
     workflows: [ Clang-Tidy ]
     types: [ completed ]
 
+permissions:
+  pull-requests: write
+
 jobs:
   comment:
     name: Clang-Tidy comments

@@ -3,6 +3,8 @@ name: Code style check
 on:
   workflow_call:
 
+permissions: {}
+
 jobs:
   style:
     name: Code style check
