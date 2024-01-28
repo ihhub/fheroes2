@@ -283,6 +283,26 @@ namespace Maps
 
                 map.playerRace[i] = 0;
             }
+
+            // Only one race can be present.
+            if ( ( map.playerRace[i] & Race::RAND ) != 0 ) {
+                map.playerRace[i] = Race::RAND;
+            }
+            if ( ( map.playerRace[i] & Race::MULT ) != 0 ) {
+                map.playerRace[i] = Race::MULT;
+            }
+            else {
+                size_t raceCount = 0;
+                for ( uint8_t raceIdx = 0; raceIdx < 6; ++raceIdx ) {
+                    if ( ( map.playerRace[i] & ( 1 << raceIdx ) ) != 0 ) {
+                        ++raceCount;
+                    }
+                }
+
+                if ( raceCount > 1 ) {
+                    map.playerRace[i] = Race::MULT;
+                }
+            }
         }
 
         map.computerPlayerColors = map.computerPlayerColors & map.availablePlayerColors;
