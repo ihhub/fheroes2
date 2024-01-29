@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -44,7 +44,6 @@
 // hardcore defines: interface
 #define RADARWIDTH 144
 #define BORDERWIDTH 16
-#define DEADZONE 3
 
 // ai/hero speed
 #define DEFAULT_BATTLE_SPEED 4

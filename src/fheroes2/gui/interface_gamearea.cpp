@@ -29,6 +29,7 @@
 #include <deque>
 #include <list>
 #include <map>
+#include <math.h>
 #include <ostream>
 #include <type_traits>
 
@@ -949,6 +950,7 @@ void Interface::GameArea::setFastScrollStatus( const bool enable )
 bool Interface::GameArea::mouseIndicatesFastScroll( const fheroes2::Point & mousePosition )
 {
     const fheroes2::Display & display = fheroes2::Display::instance();
+    constexpr int DEADZONE = 3;
 
     if ( Interface::BaseInterface::isScrollLeft( _mousePositionForFastScroll ) ) {
         if ( mousePosition.x > _mousePositionForFastScroll.x ) {
