@@ -22,29 +22,42 @@ jobs:
       uses: actions/github-script@v7
       with:
         script: |
-          let artifacts = await github.rest.actions.listWorkflowRunArtifacts({
+          const artifacts = await github.rest.actions.listWorkflowRunArtifacts({
               owner: context.repo.owner,
               repo: context.repo.repo,
               run_id: ${{ github.event.workflow_run.id }},
           });
-          let matchArtifact = artifacts.data.artifacts.filter((artifact) => {
+          const matchArtifact = artifacts.data.artifacts.filter((artifact) => {
               return artifact.name == "clang-tidy-result"
           })[0];
-          let download = await github.rest.actions.downloadArtifact({
+          const download = await github.rest.actions.downloadArtifact({
               owner: context.repo.owner,
               repo: context.repo.repo,
               artifact_id: matchArtifact.id,
               archive_format: "zip",
           });
-          let fs = require("fs");
+          const fs = require("fs");
           fs.writeFileSync("${{ github.workspace }}/clang-tidy-result.zip", Buffer.from(download.data));
-    - name: Set environment variables
+    - name: Extract analysis results
       run: |
         mkdir clang-tidy-result
         unzip -j clang-tidy-result.zip -d clang-tidy-result
-        echo "PR_ID=$(cat clang-tidy-result/pr-id.txt)" >> "$GITHUB_ENV"
-        echo "PR_HEAD_REPO=$(cat clang-tidy-result/pr-head-repo.txt)" >> "$GITHUB_ENV"
-        echo "PR_HEAD_SHA=$(cat clang-tidy-result/pr-head-sha.txt)" >> "$GITHUB_ENV"
+    - name: Set environment variables
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const assert = require("node:assert").strict;
+          const fs = require("fs");
+          function exportVar(varName, fileName, regEx) {
+              const val = fs.readFileSync("${{ github.workspace }}/clang-tidy-result/" + fileName, {
+                  encoding: "ascii"
+              }).trimEnd();
+              assert.ok(regEx.test(val), "Invalid value format for " + varName);
+              core.exportVariable(varName, val);
+          }
+          exportVar("PR_ID", "pr-id.txt", /^[0-9]+$/);
+          exportVar("PR_HEAD_REPO", "pr-head-repo.txt", /^[-./0-9A-Z_a-z]+$/);
+          exportVar("PR_HEAD_SHA", "pr-head-sha.txt", /^[0-9A-Fa-f]+$/);
     - uses: actions/checkout@v4
       with:
         repository: ${{ env.PR_HEAD_REPO }}
@@ -54,21 +67,21 @@ jobs:
       uses: actions/github-script@v7
       with:
         script: |
-          let artifacts = await github.rest.actions.listWorkflowRunArtifacts({
+          const artifacts = await github.rest.actions.listWorkflowRunArtifacts({
               owner: context.repo.owner,
               repo: context.repo.repo,
               run_id: ${{ github.event.workflow_run.id }},
           });
-          let matchArtifact = artifacts.data.artifacts.filter((artifact) => {
+          const matchArtifact = artifacts.data.artifacts.filter((artifact) => {
               return artifact.name == "clang-tidy-result"
           })[0];
-          let download = await github.rest.actions.downloadArtifact({
+          const download = await github.rest.actions.downloadArtifact({
               owner: context.repo.owner,
               repo: context.repo.repo,
               artifact_id: matchArtifact.id,
               archive_format: "zip",
           });
-          let fs = require("fs");
+          const fs = require("fs");
           fs.writeFileSync("${{ github.workspace }}/clang-tidy-result.zip", Buffer.from(download.data));
     - name: Extract analysis results
       run: |
