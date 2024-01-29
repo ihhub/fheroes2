@@ -7593,7 +7593,7 @@ msgstr "%{skill} ökar hjältens steg med %{count} procent."
 msgid "%{skill} increases the hero's viewable area by one square."
 msgid_plural "%{skill} increases the hero's viewable area by %{count} squares."
 msgstr[0] "%{skill} ökar hjältens siktradie med %{count} ruta."
-msgstr[1] "%{skill} ökar hjältens sikt med %{count} rutor."
+msgstr[1] "%{skill} ökar hjältens siktradie med %{count} rutor."
 
 msgid ""
 "%{skill} allows the hero to negotiate with monsters who are weaker than "
