@@ -957,56 +957,44 @@ bool Interface::GameArea::mouseIndicatesFastScroll( const fheroes2::Point & mous
             // Movement is away from the border, we need to update the checking point.
             _mousePositionForFastScroll = mousePosition;
         }
-        else if ( mousePosition.x < _mousePositionForFastScroll.x ) {
-            // Movement is towards the border, we re-enable the fast scroll.
+        else if ( mousePosition.x < _mousePositionForFastScroll.x
+                  || abs( mousePosition.y - _mousePositionForFastScroll.y ) > DEADZONE && mousePosition.x <= 0 ) {
+            // Movement is towards or along the border, we re-enable the fast scroll.
             return true;
-        }
-        else if ( abs( mousePosition.y - _mousePositionForFastScroll.y ) > DEADZONE && mousePosition.x <= 0 ) {
-            // Movement is along the border and on the edge of the screen, we re-enable the fast scroll.
-            return true;
-        }
+        } 
     }
     else if ( Interface::BaseInterface::isScrollRight( _mousePositionForFastScroll ) ) {
         if ( mousePosition.x < _mousePositionForFastScroll.x ) {
             // Movement is away from the border, we need to update the checking point.
             _mousePositionForFastScroll = mousePosition;
         }
-        else if ( mousePosition.x > _mousePositionForFastScroll.x ) {
-            // Movement is towards the border, we re-enable the fast scroll.
+        else if ( mousePosition.x > _mousePositionForFastScroll.x
+                  || abs( mousePosition.y - _mousePositionForFastScroll.y ) > DEADZONE && mousePosition.x >= display.width() ) {
+            // Movement is towards or along the border, we re-enable the fast scroll.
             return true;
-        }
-        else if ( abs( mousePosition.y - _mousePositionForFastScroll.y ) > DEADZONE && mousePosition.x >= display.width() ) {
-            // Movement is along the border and on the edge of the screen, we re-enable the fast scroll.
-            return true;
-        }
+        } 
     }
     else if ( Interface::BaseInterface::isScrollTop( _mousePositionForFastScroll ) ) {
         if ( mousePosition.y > _mousePositionForFastScroll.y ) {
             // Movement is away from the border, we need to update the checking point.
             _mousePositionForFastScroll = mousePosition;
         }
-        else if ( mousePosition.y < _mousePositionForFastScroll.y ) {
-            // Movement is towards the border, we re-enable the fast scroll.
+        else if ( mousePosition.y < _mousePositionForFastScroll.y
+                  || abs( mousePosition.x - _mousePositionForFastScroll.x ) > DEADZONE && mousePosition.y <= 0 ) {
+            // Movement is towards or along the border, we re-enable the fast scroll.
             return true;
-        }
-        else if ( abs( mousePosition.x - _mousePositionForFastScroll.x ) > DEADZONE && mousePosition.y <= 0 ) {
-            // Movement is along the border and on the edge of the screen, we re-enable the fast scroll.
-            return true;
-        }
+        } 
     }
     else if ( Interface::BaseInterface::isScrollBottom( _mousePositionForFastScroll ) ) {
         if ( mousePosition.y < _mousePositionForFastScroll.y ) {
             // Movement is away from the border, we need to update the checking point.
             _mousePositionForFastScroll = mousePosition;
         }
-        else if ( mousePosition.y > _mousePositionForFastScroll.y ) {
-            // Movement is towards the border, we re-enable the fast scroll.
+        else if ( mousePosition.y > _mousePositionForFastScroll.y
+                  || abs( mousePosition.x - _mousePositionForFastScroll.x ) > DEADZONE && mousePosition.y >= display.height() ) {
+            // Movement is towards or along the border, we re-enable the fast scroll.
             return true;
-        }
-        else if ( abs( mousePosition.x - _mousePositionForFastScroll.x ) > DEADZONE && mousePosition.y >= display.height() ) {
-            // Movement is along the border and on the edge of the screen, we re-enable the fast scroll.
-            return true;
-        }
+        } 
     }
     else {
         // We have left the scroll borders, fast scrolling can definitely be re-enabled.
