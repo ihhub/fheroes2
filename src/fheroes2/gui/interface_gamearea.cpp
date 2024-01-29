@@ -937,6 +937,85 @@ void Interface::GameArea::SetScroll( int direct )
     scrollTime.reset();
 }
 
+void Interface::GameArea::setFastScrollStatus( const bool enable )
+{
+    _isFastScrollEnabled = enable;
+
+    // Remember the reference point for re-enabling checks later on.
+    LocalEvent & le = LocalEvent::Get();
+    _mousePositionForFastScroll = le.GetMouseCursor();
+}
+
+bool Interface::GameArea::mouseIndicatesFastScroll( const fheroes2::Point & mousePosition )
+{
+    const fheroes2::Display & display = fheroes2::Display::instance();
+
+    if ( Interface::BaseInterface::isScrollLeft( _mousePositionForFastScroll ) ) {
+        if ( mousePosition.x > _mousePositionForFastScroll.x ) {
+            // Movement is away from the border, we need to update the checking point.
+            _mousePositionForFastScroll = mousePosition;
+        }
+        else if ( mousePosition.x < _mousePositionForFastScroll.x ) {
+            // Movement is towards the border, we re-enable the fast scroll.
+            return true;
+        }
+        else if ( abs( mousePosition.y - _mousePositionForFastScroll.y ) > DEADZONE && mousePosition.x <= 0 ) {
+            // Movement is along the border and on the edge of the screen, we re-enable the fast scroll.
+            return true;
+        }
+    }
+    else if ( Interface::BaseInterface::isScrollRight( _mousePositionForFastScroll ) ) {
+        if ( mousePosition.x < _mousePositionForFastScroll.x ) {
+            // Movement is away from the border, we need to update the checking point.
+            _mousePositionForFastScroll = mousePosition;
+        }
+        else if ( mousePosition.x > _mousePositionForFastScroll.x ) {
+            // Movement is towards the border, we re-enable the fast scroll.
+            return true;
+        }
+        else if ( abs( mousePosition.y - _mousePositionForFastScroll.y ) > DEADZONE && mousePosition.x >= display.width() ) {
+            // Movement is along the border and on the edge of the screen, we re-enable the fast scroll.
+            return true;
+        }
+    }
+    else if ( Interface::BaseInterface::isScrollTop( _mousePositionForFastScroll ) ) {
+        if ( mousePosition.y > _mousePositionForFastScroll.y ) {
+            // Movement is away from the border, we need to update the checking point.
+            _mousePositionForFastScroll = mousePosition;
+        }
+        else if ( mousePosition.y < _mousePositionForFastScroll.y ) {
+            // Movement is towards the border, we re-enable the fast scroll.
+            return true;
+        }
+        else if ( abs( mousePosition.x - _mousePositionForFastScroll.x ) > DEADZONE && mousePosition.y <= 0 ) {
+            // Movement is along the border and on the edge of the screen, we re-enable the fast scroll.
+            return true;
+        }
+    }
+    else if ( Interface::BaseInterface::isScrollBottom( _mousePositionForFastScroll ) ) {
+        if ( mousePosition.y < _mousePositionForFastScroll.y ) {
+            // Movement is away from the border, we need to update the checking point.
+            _mousePositionForFastScroll = mousePosition;
+        }
+        else if ( mousePosition.y > _mousePositionForFastScroll.y ) {
+            // Movement is towards the border, we re-enable the fast scroll.
+            return true;
+        }
+        else if ( abs( mousePosition.x - _mousePositionForFastScroll.x ) > DEADZONE && mousePosition.y >= display.height() ) {
+            // Movement is along the border and on the edge of the screen, we re-enable the fast scroll.
+            return true;
+        }
+    }
+    else {
+        // We have left the scroll borders, fast scrolling can definitely be re-enabled.
+        return true;
+    }
+
+    // We haven't left the borders, but the direction of the mouse movement within the borders
+    // does not indicate that the user wants to perform the fast scroll right now.
+    return false;
+}
+
 void Interface::GameArea::QueueEventProcessing( bool isCursorOverGamearea )
 {
     LocalEvent & le = LocalEvent::Get();

@@ -268,10 +268,9 @@ namespace Interface
             return _isFastScrollEnabled;
         }
 
-        void setFastScrollStatus( const bool enable )
-        {
-            _isFastScrollEnabled = enable;
-        }
+        void setFastScrollStatus( const bool enable );
+
+        bool mouseIndicatesFastScroll( const fheroes2::Point & mousePosition );
 
     private:
         BaseInterface & _interface;
@@ -297,6 +296,7 @@ namespace Interface
         mutable std::vector<std::shared_ptr<BaseObjectAnimationInfo>> _animationInfo;
 
         fheroes2::Point _lastMouseDragPosition;
+        fheroes2::Point _mousePositionForFastScroll;
         bool _mouseDraggingInitiated;
         bool _mouseDraggingMovement;
         bool _needRedrawByMouseDragging;
