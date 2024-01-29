@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-27 00:02+0000\n"
-"PO-Revision-Date: 2023-12-25 14:31+0100\n"
+"PO-Revision-Date: 2024-01-29 16:46+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "Language: sv\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Launchpad-Export-Date: 2013-10-09 02:01+0000\n"
-"X-Generator: Poedit 3.4\n"
+"X-Generator: Poedit 3.4.2\n"
 
 msgid ""
 "BATTLE\n"
@@ -558,7 +558,7 @@ msgid "The enemy has surrendered!"
 msgstr "Fienden har kapitulerat!"
 
 msgid "Their cowardice costs them %{gold} gold."
-msgstr ""
+msgstr "Deras feghet kostar dem %{gold} guld."
 
 msgid "The enemy has fled!"
 msgstr "Fienden har flytt!"
@@ -575,12 +575,10 @@ msgstr "Fegisen %{name} flyr från striden."
 msgid "%{name} surrenders to the enemy, and departs in shame."
 msgstr "%{name} ger sig till fienden och ger sig av i skam."
 
-#, fuzzy
 msgid "Your forces suffer a bitter defeat, and %{name} abandons your cause."
 msgstr ""
 "Dina trupper lider en bitter förlust och %{name} lämnar dig och dina trupper."
 
-#, fuzzy
 msgid "Your forces suffer a bitter defeat."
 msgstr "Dina trupper lider en bitter förlust."
 
@@ -593,13 +591,11 @@ msgstr "Angripare"
 msgid "Defender"
 msgstr "Försvarare"
 
-#, fuzzy
 msgid "Click to leave the battle results."
-msgstr "Klicka här för att anta den valda upplösningen."
+msgstr "Klicka här för att lämna stridsresultaten."
 
-#, fuzzy
 msgid "Click to restart the battle in manual mode."
-msgstr "Klicka för att gå tillbaka till huvudmenyn."
+msgstr "Klicka här för att omstarta striden manuellt."
 
 msgid "Restart"
 msgstr "Omstart"
@@ -2255,10 +2251,10 @@ msgid "Den"
 msgstr "Lya"
 
 msgid "Adobe"
-msgstr "Boning"
+msgstr "Adobe"
 
 msgid "Upg. Adobe"
-msgstr "Uppg. Boning"
+msgstr "Uppg. Adobe"
 
 msgid "Bridge"
 msgstr "Bro"
@@ -2516,7 +2512,7 @@ msgid ""
 "The Well increases the growth rate of all dwellings by %{count} creatures "
 "per week."
 msgstr ""
-"Brunnen ökar produktionen i alla bostäder med %{count} varelser per vecka."
+"Brunnen ökar produktionen i alla boningar med %{count} varelser per vecka."
 
 msgid "The Statue increases the town's income by %{count} gold per day."
 msgstr "Statyn ökar stadens inkomst med %{count} guld per dag."
@@ -3420,9 +3416,8 @@ msgstr "Klicka här för att välja denna färgen."
 msgid "Select Dwelling:"
 msgstr "Välj Bostad:"
 
-#, fuzzy
 msgid "Select Landscape Object:"
-msgstr "Välj Havsföremål:"
+msgstr "Välj Landskapsföremål:"
 
 msgid "Mine placing"
 msgstr "Gruvplacering"
@@ -3450,9 +3445,8 @@ msgstr "Välj Trädföremål:"
 msgid "Select Power Up Object:"
 msgstr "Välj Kraftökningsföremål:"
 
-#, fuzzy
 msgid "Select Adventure Object:"
-msgstr "Välj Trädföremål:"
+msgstr "Välj Äventyrsföremål:"
 
 msgid "Map Type:\n"
 msgstr "Karttyp:\n"
@@ -3784,7 +3778,7 @@ msgstr "Hjältar kan inte placeras på vatten."
 
 msgid ""
 "A maximum of %{count} heroes of the same color can be placed on the map."
-msgstr ""
+msgstr "Maximalt %{count} hjältar med samma färg kan placeras på kartan."
 
 msgid "Artifacts cannot be placed on water."
 msgstr "Artefakter kan inte placeras på vatten."
@@ -3801,9 +3795,8 @@ msgstr "Träd kan inte placeras på vatten."
 msgid "Ocean object must be placed on water."
 msgstr "Havsföremål måste placeras på vatten."
 
-#, fuzzy
 msgid "Landscape objects cannot be placed on water."
-msgstr "Hjältar kan inte placeras på vatten."
+msgstr "Landskapsföremål kan inte placeras på vatten."
 
 msgid "Towns cannot be placed on water."
 msgstr "Städer kan inte placeras på vatten."
@@ -3817,9 +3810,8 @@ msgstr "Bostäder kan inte placeras på vatten."
 msgid "Power-ups cannot be placed on water."
 msgstr "Kraftökningar kan inte placeras på vatten."
 
-#, fuzzy
 msgid "Adventure objects cannot be placed on water."
-msgstr "Hjältar kan inte placeras på vatten."
+msgstr "Äventyrsföremål kan inte placeras på vatten."
 
 msgid "Used to place %{object}."
 msgstr "Används för att placera %{object}."
@@ -3996,7 +3988,7 @@ msgid ""
 "Used to place adventure objects (artifacts, dwellings, mines, treasures, "
 "etc.) on the map."
 msgstr ""
-"Används för att placera äventyrsföremål (artefakter, bostäder, gruvor, "
+"Används för att placera äventyrsföremål (artefakter, boningar, gruvor, "
 "skatter osv) på kartan."
 
 msgid "Kingdom Objects Mode"
@@ -5208,7 +5200,7 @@ msgid " All populations are halved."
 msgstr " All populationer är halverade."
 
 msgid " All dwellings increase population."
-msgstr " Alla bostäder ökar sin population."
+msgstr " Alla boningar ökar sin population."
 
 msgid "New Month!"
 msgstr "Ny Månad!"
@@ -5236,13 +5228,12 @@ msgstr ""
 msgid "%{color} player's turn."
 msgstr "%{color} spelares tur."
 
-#, fuzzy
 msgid ""
 "%{color} player, you have lost your last town. If you do not conquer another "
 "town in the next week, you will be eliminated."
 msgstr ""
 "%{color} spelare, du har förlorat din sista stad. Om du inte erövrar en stad "
-"nästa vecka kommer du att bli eliminerad."
+"nästa vecka så kommer du att bli eliminerad."
 
 msgid ""
 "%{color} player, your heroes abandon you, and you are banished from this "
@@ -6485,7 +6476,7 @@ msgstr ""
 "Accepterar du det?"
 
 msgid "As you approach the dwelling, you notice that there is no one here."
-msgstr "När du närmar dig bostaden upptäcker du att det inte är någon där."
+msgstr "När du närmar dig boningen upptäcker du att det inte är någon där."
 
 msgid ""
 "You search the ruins, but the Medusas that used to live here are gone. "
@@ -7601,7 +7592,7 @@ msgstr "%{skill} ökar hjältens steg med %{count} procent."
 
 msgid "%{skill} increases the hero's viewable area by one square."
 msgid_plural "%{skill} increases the hero's viewable area by %{count} squares."
-msgstr[0] "%{skill} ökar hjältens sikt med %{count} ruta."
+msgstr[0] "%{skill} ökar hjältens siktradie med %{count} ruta."
 msgstr[1] "%{skill} ökar hjältens sikt med %{count} rutor."
 
 msgid ""
