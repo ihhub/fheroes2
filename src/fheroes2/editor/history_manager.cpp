@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2023                                                    *
+ *   Copyright (C) 2023 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -110,23 +110,17 @@ namespace fheroes2
         _action = std::make_unique<MapAction>( mapFormat );
     }
 
-    ActionCreator::~ActionCreator()
+    void ActionCreator::commit()
     {
         auto * action = dynamic_cast<MapAction *>( _action.get() );
         if ( action == nullptr ) {
-            // How is it even possible?
+            // How is it even possible? Did you call this method twice?
             assert( 0 );
             return;
         }
 
-        try {
-            if ( action->prepare() ) {
-                _manager.add( std::move( _action ) );
-            }
-        }
-        catch ( ... ) {
-            // If an exception happens here then something is very wrong with the code.
-            assert( 0 );
+        if ( action->prepare() ) {
+            _manager.add( std::move( _action ) );
         }
     }
 }

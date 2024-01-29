@@ -218,10 +218,7 @@ namespace AI
 
         bool isPositionLocatedInDefendedArea( const Battle::Unit & currentUnit, const Battle::Position & pos ) const;
         bool isUnitFaster( const Battle::Unit & currentUnit, const Battle::Unit & target ) const;
-        bool isHeroWorthSaving( const Heroes & hero ) const;
         bool isCommanderCanSpellcast( const Battle::Arena & arena, const HeroBase * commander ) const;
-
-        bool checkRetreatCondition( const Heroes & hero ) const;
 
         static double commanderMaximumSpellDamageValue( const HeroBase & commander );
 

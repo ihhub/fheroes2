@@ -47,7 +47,7 @@ std::string Difficulty::String( int difficulty )
     return "Unknown";
 }
 
-int Difficulty::GetScoutingBonus( int difficulty )
+int Difficulty::GetScoutingBonusForAI( int difficulty )
 {
     switch ( difficulty ) {
     case Difficulty::NORMAL:
@@ -116,7 +116,7 @@ double Difficulty::GetUnitGrowthBonusForAI( const int difficulty, const bool /* 
     return 0;
 }
 
-int Difficulty::GetHeroMovementBonus( int difficulty )
+int Difficulty::GetHeroMovementBonusForAI( int difficulty )
 {
     switch ( difficulty ) {
     case Difficulty::EXPERT:
@@ -128,12 +128,27 @@ int Difficulty::GetHeroMovementBonus( int difficulty )
     return 0;
 }
 
+bool Difficulty::allowAIToRetreat( const int /* difficulty */, const bool /* isCampaign */ )
+{
+    return true;
+}
+
+bool Difficulty::allowAIToSurrender( const int /* difficulty */, const bool /* isCampaign */ )
+{
+    return true;
+}
+
+int Difficulty::getMinHeroLevelForAIRetreat( const int /* difficulty */ )
+{
+    return 3;
+}
+
 double Difficulty::getArmyStrengthRatioForAIRetreat( const int difficulty )
 {
     switch ( difficulty ) {
     case Difficulty::NORMAL:
         return 100.0 / 7.5;
-    case Difficulty::HARD: // fall-through
+    case Difficulty::HARD:
     case Difficulty::EXPERT:
         return 100.0 / 8.5;
     case Difficulty::IMPOSSIBLE:
@@ -149,7 +164,7 @@ uint32_t Difficulty::getGoldReserveRatioForAISurrender( const int /* difficulty 
     return 10;
 }
 
-uint32_t Difficulty::GetDimensionDoorLimit( int difficulty )
+uint32_t Difficulty::GetDimensionDoorLimitForAI( int difficulty )
 {
     switch ( difficulty ) {
     case Difficulty::EASY:
@@ -183,7 +198,7 @@ bool Difficulty::areAIHeroRolesAllowed( const int difficulty )
     return true;
 }
 
-int Difficulty::getMinStatDiffBetweenAIRoles( const int difficulty )
+int Difficulty::getMinStatDiffForAIHeroesMeeting( const int difficulty )
 {
     switch ( difficulty ) {
     case Difficulty::EASY:

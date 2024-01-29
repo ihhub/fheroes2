@@ -1203,19 +1203,40 @@ namespace
         }
     }
 
-    void placeObjectOnTile( const Maps::Tiles & tile, const Maps::ObjectInfo & info )
+    bool placeObjectOnTile( const Maps::Tiles & tile, const Maps::ObjectInfo & info )
     {
         assert( !info.empty() );
 
-        const uint32_t uid = Maps::getNewObjectUID();
+        // Verify that the object is allowed to be placed.
         const fheroes2::Point mainTilePos = tile.GetCenter();
 
         for ( const auto & partInfo : info.groundLevelParts ) {
             const fheroes2::Point pos = mainTilePos + partInfo.tileOffset;
             const bool isMainObject = ( partInfo.layerType != Maps::SHADOW_LAYER && partInfo.layerType != Maps::TERRAIN_LAYER );
 
-            if ( !Maps::isValidAbsPoint( pos.x, pos.y ) ) {
+            if ( !Maps::isValidAbsPoint( pos.x, pos.y ) && isMainObject ) {
                 // Only shadow and terrain layer object parts are allowed not to be placed.
+                assert( 0 );
+                return false;
+            }
+        }
+
+        for ( const auto & partInfo : info.topLevelParts ) {
+            const fheroes2::Point pos = mainTilePos + partInfo.tileOffset;
+            if ( !Maps::isValidAbsPoint( pos.x, pos.y ) ) {
+                // This shouldn't happen as the object must be verified before placement.
+                assert( 0 );
+                return false;
+            }
+        }
+
+        const uint32_t uid = Maps::getNewObjectUID();
+
+        for ( const auto & partInfo : info.groundLevelParts ) {
+            const fheroes2::Point pos = mainTilePos + partInfo.tileOffset;
+            const bool isMainObject = ( partInfo.layerType != Maps::SHADOW_LAYER && partInfo.layerType != Maps::TERRAIN_LAYER );
+
+            if ( !Maps::isValidAbsPoint( pos.x, pos.y ) ) {
                 assert( !isMainObject );
                 continue;
             }
@@ -1273,6 +1294,8 @@ namespace
                 currentTile.SetObject( partInfo.objectType );
             }
         }
+
+        return true;
     }
 }
 
@@ -3208,7 +3231,7 @@ namespace Maps
         return needRedraw;
     }
 
-    void setObjectOnTile( Tiles & tile, const ObjectInfo & info, const bool updateMapPassabilities )
+    bool setObjectOnTile( Tiles & tile, const ObjectInfo & info, const bool updateMapPassabilities )
     {
         assert( !info.empty() );
 
@@ -3217,21 +3240,27 @@ namespace Maps
             setMonsterOnTile( tile, static_cast<int32_t>( info.metadata[0] ), 0 );
             // Since setMonsterOnTile() function interprets 0 as a random number of monsters it is important to set the correct value.
             setMonsterCountOnTile( tile, 0 );
-            return;
+            return true;
         case MP2::OBJ_RESOURCE:
             // Setting just 1 resource is enough. It doesn't matter as we are not saving this value into the map format.
-            placeObjectOnTile( tile, info );
+            if ( !placeObjectOnTile( tile, info ) ) {
+                return false;
+            }
             setResourceOnTile( tile, static_cast<int>( info.metadata[0] ), 1 );
-            return;
+            return true;
         case MP2::OBJ_ARTIFACT:
-            placeObjectOnTile( tile, info );
+            if ( !placeObjectOnTile( tile, info ) ) {
+                return false;
+            }
             // The artifact ID is stored in metadata[0]. It is used by the other engine functions.
             tile.metadata()[0] = info.metadata[0];
-            return;
+            return true;
         case MP2::OBJ_ALCHEMIST_LAB:
         case MP2::OBJ_MINE:
         case MP2::OBJ_SAWMILL:
-            placeObjectOnTile( tile, info );
+            if ( !placeObjectOnTile( tile, info ) ) {
+                return false;
+            }
             // Set resource type and income per day.
             tile.metadata()[0] = info.metadata[0];
             tile.metadata()[1] = info.metadata[1];
@@ -3239,15 +3268,19 @@ namespace Maps
             if ( updateMapPassabilities ) {
                 world.updatePassabilities();
             }
-            return;
+            return true;
         default:
             break;
         }
 
-        placeObjectOnTile( tile, info );
+        if ( !placeObjectOnTile( tile, info ) ) {
+            return false;
+        }
 
         if ( updateMapPassabilities ) {
             world.updatePassabilities();
         }
+
+        return true;
     }
 }
