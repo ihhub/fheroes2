@@ -38,7 +38,7 @@ public:
 
     ZStreamBuf( const ZStreamBuf & ) = delete;
 
-    ~ZStreamBuf() = default;
+    ~ZStreamBuf() override = default;
 
     ZStreamBuf & operator=( const ZStreamBuf & ) = delete;
 
