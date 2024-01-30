@@ -40,6 +40,8 @@ jobs:
       env:
         # Do not update outdated dependencies of installed packages
         HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK: ON
+        # Do not update already installed packages
+        HOMEBREW_NO_INSTALL_UPGRADE: ON
     - name: Build
       run: |
         cmake -B build -G Ninja -DCMAKE_VERBOSE_MAKEFILE=ON -DCMAKE_BUILD_TYPE=Debug -DENABLE_STRICT_COMPILATION=ON \
