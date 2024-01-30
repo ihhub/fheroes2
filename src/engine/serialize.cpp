@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2012 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -270,14 +270,16 @@ StreamBuf::StreamBuf( const uint8_t * buf, size_t bufsz )
 
 StreamBuf & StreamBuf::operator=( StreamBuf && st ) noexcept
 {
-    if ( &st != this ) {
-        StreamBase::operator=( std::move( st ) );
-
-        std::swap( itbeg, st.itbeg );
-        std::swap( itget, st.itget );
-        std::swap( itput, st.itput );
-        std::swap( itend, st.itend );
+    if ( this == &st ) {
+        return *this;
     }
+
+    StreamBase::operator=( std::move( st ) );
+
+    std::swap( itbeg, st.itbeg );
+    std::swap( itget, st.itget );
+    std::swap( itput, st.itput );
+    std::swap( itend, st.itend );
 
     return *this;
 }

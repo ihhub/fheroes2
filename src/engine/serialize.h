@@ -60,6 +60,10 @@ public:
 
     StreamBase & operator=( StreamBase && stream ) noexcept
     {
+        if ( this == &stream ) {
+            return *this;
+        }
+
         std::swap( _flags, stream._flags );
 
         return *this;
