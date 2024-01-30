@@ -202,10 +202,6 @@ StreamBase & StreamBase::operator<<( const fheroes2::Point & point_ )
 }
 
 StreamBuf::StreamBuf( const size_t sz )
-    : itbeg( nullptr )
-    , itget( nullptr )
-    , itput( nullptr )
-    , itend( nullptr )
 {
     if ( sz ) {
         reallocbuf( sz );
@@ -223,24 +219,16 @@ StreamBuf::~StreamBuf()
     delete[] itbeg;
 }
 
-StreamBuf::StreamBuf( StreamBuf && st ) noexcept
-    : StreamBase( std::move( st ) )
-    , itbeg( nullptr )
-    , itget( nullptr )
-    , itput( nullptr )
-    , itend( nullptr )
+StreamBuf::StreamBuf( StreamBuf && stream ) noexcept
+    : StreamBase( std::move( stream ) )
 {
-    std::swap( itbeg, st.itbeg );
-    std::swap( itget, st.itget );
-    std::swap( itput, st.itput );
-    std::swap( itend, st.itend );
+    std::swap( itbeg, stream.itbeg );
+    std::swap( itget, stream.itget );
+    std::swap( itput, stream.itput );
+    std::swap( itend, stream.itend );
 }
 
 StreamBuf::StreamBuf( const std::vector<uint8_t> & buf )
-    : itbeg( nullptr )
-    , itget( nullptr )
-    , itput( nullptr )
-    , itend( nullptr )
 {
     itbeg = const_cast<uint8_t *>( buf.data() );
     itend = itbeg + buf.size();
@@ -248,15 +236,10 @@ StreamBuf::StreamBuf( const std::vector<uint8_t> & buf )
     itput = itend;
 
     setconstbuf( true );
-
     setbigendian( IS_BIGENDIAN );
 }
 
-StreamBuf::StreamBuf( const uint8_t * buf, size_t bufsz )
-    : itbeg( nullptr )
-    , itget( nullptr )
-    , itput( nullptr )
-    , itend( nullptr )
+StreamBuf::StreamBuf( const uint8_t * buf, const size_t bufsz )
 {
     itbeg = const_cast<uint8_t *>( buf );
     itend = itbeg + bufsz;
@@ -264,22 +247,21 @@ StreamBuf::StreamBuf( const uint8_t * buf, size_t bufsz )
     itput = itend;
 
     setconstbuf( true );
-
     setbigendian( IS_BIGENDIAN );
 }
 
-StreamBuf & StreamBuf::operator=( StreamBuf && st ) noexcept
+StreamBuf & StreamBuf::operator=( StreamBuf && stream ) noexcept
 {
-    if ( this == &st ) {
+    if ( this == &stream ) {
         return *this;
     }
 
-    StreamBase::operator=( std::move( st ) );
+    StreamBase::operator=( std::move( stream ) );
 
-    std::swap( itbeg, st.itbeg );
-    std::swap( itget, st.itget );
-    std::swap( itput, st.itput );
-    std::swap( itend, st.itend );
+    std::swap( itbeg, stream.itbeg );
+    std::swap( itget, stream.itget );
+    std::swap( itput, stream.itput );
+    std::swap( itend, stream.itend );
 
     return *this;
 }
