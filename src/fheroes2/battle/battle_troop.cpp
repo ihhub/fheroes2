@@ -1155,7 +1155,7 @@ int32_t Battle::Unit::evaluateThreatForUnit( const Unit & defender ) const
             assert( attacker.GetHitPoints() > 0 );
 
             // Rough but quick estimate
-            attackerThreat += attackerThreat * ( 1.0 - static_cast<double>( retaliatoryDamage ) / static_cast<double>( attacker.GetHitPoints() ) );
+            attackerThreat += attackerThreat * ( 1.0 - std::min( static_cast<double>( retaliatoryDamage ) / static_cast<double>( attacker.GetHitPoints() ), 1.0 ) );
         }
         // Otherwise, estimate the second attack as approximately equal to the first in damage
         else {
