@@ -3,6 +3,8 @@ name: CMake
 on:
   workflow_call:
 
+permissions: {}
+
 jobs:
   cmake:
     strategy:
