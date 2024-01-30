@@ -171,8 +171,6 @@ jobs:
       env:
         # Do not update outdated dependencies of installed packages
         HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK: ON
-        # Do not update already installed packages
-        HOMEBREW_NO_INSTALL_UPGRADE: ON
     - name: Build
       run: |
         make -j 2
