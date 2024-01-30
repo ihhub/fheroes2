@@ -239,17 +239,6 @@ StreamBuf::StreamBuf( const std::vector<uint8_t> & buf )
     setbigendian( IS_BIGENDIAN );
 }
 
-StreamBuf::StreamBuf( const uint8_t * buf, const size_t bufsz )
-{
-    itbeg = const_cast<uint8_t *>( buf );
-    itend = itbeg + bufsz;
-    itget = itbeg;
-    itput = itend;
-
-    setconstbuf( true );
-    setbigendian( IS_BIGENDIAN );
-}
-
 StreamBuf & StreamBuf::operator=( StreamBuf && stream ) noexcept
 {
     if ( this == &stream ) {

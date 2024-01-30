@@ -269,7 +269,6 @@ class StreamBuf : public StreamBase
 public:
     explicit StreamBuf( const size_t sz = 0 );
     explicit StreamBuf( const std::vector<uint8_t> & buf );
-    StreamBuf( const uint8_t * buf, const size_t bufsz );
 
     StreamBuf( const StreamBuf & ) = delete;
     StreamBuf( StreamBuf && stream ) noexcept;
