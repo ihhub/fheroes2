@@ -3,6 +3,8 @@ name: IWYU
 on:
   workflow_call:
 
+permissions: {}
+
 jobs:
   iwyu:
     name: IWYU

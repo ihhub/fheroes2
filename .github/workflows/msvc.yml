@@ -3,6 +3,9 @@ name: MSVC
 on:
   workflow_call:
 
+permissions:
+  contents: write
+
 jobs:
   msvc:
     strategy:

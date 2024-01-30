@@ -6,6 +6,8 @@ on:
       SONAR_TOKEN:
         required: true
 
+permissions: {}
+
 jobs:
   sonarcloud:
     name: SonarCloud Analyzer
