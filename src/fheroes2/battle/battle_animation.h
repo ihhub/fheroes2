@@ -54,13 +54,11 @@ class AnimationSequence final
 public:
     explicit AnimationSequence( const std::vector<int> & seq );
 
-    AnimationSequence( const AnimationSequence & ) = default;
-    AnimationSequence( AnimationSequence && ) = delete;
+    AnimationSequence( const AnimationSequence & ) = delete;
 
     ~AnimationSequence() = default;
 
     AnimationSequence & operator=( const AnimationSequence & ) = delete;
-    AnimationSequence & operator=( AnimationSequence && ) = delete;
 
     AnimationSequence & operator=( const std::vector<int> & rhs );
 
