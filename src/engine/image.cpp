@@ -454,9 +454,9 @@ namespace fheroes2
     Image::Image( Image && image_ ) noexcept
         : _data( std::move( image_._data ) )
     {
-        std::swap( _singleLayer, image_._singleLayer );
         std::swap( _width, image_._width );
         std::swap( _height, image_._height );
+        std::swap( _singleLayer, image_._singleLayer );
     }
 
     Image & Image::operator=( const Image & image_ )
