@@ -276,7 +276,7 @@ bool Battle::Force::onlyHasMonster( const Monster & monster ) const
     return std::all_of( begin(), end(), predicate );
 }
 
-bool Battle::Force::onlyHasUneadAndMonsters( const std::set<Monster> & monsters ) const
+bool Battle::Force::onlyHasUndeadAndMonsters( const std::set<Monster> & monsters ) const
 {
     bool hasUndead = false;
     std::set<Monster> nonUndead;
@@ -303,7 +303,7 @@ bool Battle::Force::hasDragons() const
     return std::any_of( begin(), end(), predicate );
 }
 
-bool Battle::Force::allUnitsUndead() const
+bool Battle::Force::allUnitsAreUndead() const
 {
     const auto predicate = []( const Unit * unit ) { return ( unit->isEmpty() || ( unit->isValid() && unit->isUndead() ) ); };
     return std::all_of( begin(), end(), predicate );

@@ -445,14 +445,14 @@ bool Spell::canCastCombatSpell() const
     const Battle::Force & opposingForce = arena->getOpposingForce();
 
     if ( *this == Spell::BLESS || *this == Spell::MASSBLESS ) {
-        if ( playerForce.onlyHasMonster( Monster::PEASANT ) || playerForce.allUnitsUndead() ) {
+        if ( playerForce.onlyHasMonster( Monster::PEASANT ) || playerForce.allUnitsAreUndead() ) {
             return false;
         }
     }
     else if ( *this == Spell::CURSE || *this == Spell::MASSCURSE ) {
-        if ( opposingForce.onlyHasMonster( Monster::PEASANT ) || opposingForce.allUnitsUndead() || opposingForce.onlyHasMonster( Monster::CRUSADER )
-             || opposingForce.onlyHasUneadAndMonsters( { Monster::CRUSADER } ) || opposingForce.onlyHasUneadAndMonsters( { Monster::PEASANT } )
-             || opposingForce.onlyHasUneadAndMonsters( { Monster::PEASANT, Monster::CRUSADER } ) ) {
+        if ( opposingForce.onlyHasMonster( Monster::PEASANT ) || opposingForce.allUnitsAreUndead() || opposingForce.onlyHasMonster( Monster::CRUSADER )
+             || opposingForce.onlyHasUndeadAndMonsters( { Monster::CRUSADER } ) || opposingForce.onlyHasUndeadAndMonsters( { Monster::PEASANT } )
+             || opposingForce.onlyHasUndeadAndMonsters( { Monster::PEASANT, Monster::CRUSADER } ) ) {
             return false;
         }
     }

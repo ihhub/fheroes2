@@ -142,19 +142,19 @@ public:
     Monster( int race, uint32_t dw );
     virtual ~Monster() = default;
 
-    bool operator==( const Monster & m ) const
+    bool operator==( const Monster & monster ) const
     {
-        return id == m.id;
+        return id == monster.id;
     }
 
-    bool operator!=( const Monster & m ) const
+    bool operator!=( const Monster & monster ) const
     {
-        return id != m.id;
+        return id != monster.id;
     }
 
-    bool operator<( const Monster & m ) const
+    bool operator<( const Monster & monster ) const
     {
-        return id < m.id;
+        return id < monster.id;
     }
 
     int GetID() const
