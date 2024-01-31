@@ -683,15 +683,22 @@ bool World::loadResurrectionMap( const std::string & filename )
         return false;
     }
 
+    if ( !Maps::updateMapPlayers( map ) ) {
+        return false;
+    }
+
     // Read and populate objects.
     const auto & townObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::KINGDOM_TOWNS );
+    const auto & heroObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::KINGDOM_HEROES );
 
     for ( size_t tileId = 0; tileId < map.tiles.size(); ++tileId ) {
         const auto & tile = map.tiles[tileId];
 
         for ( const auto & object : tile.objects ) {
             if ( object.group == Maps::ObjectGroup::KINGDOM_TOWNS ) {
-                const uint32_t race = townObjects[object.index].metadata[0];
+                const uint32_t race = ( 1 << townObjects[object.index].metadata[0] );
+
+                assert( race != Race::RAND );
 
                 Castle * castle = new Castle( static_cast<int32_t>( tileId ) % width, static_cast<int32_t>( tileId ) / width, static_cast<int>( race ) );
                 const uint8_t color = Maps::getTownColorIndex( map, tileId, object.id );
@@ -700,6 +707,26 @@ bool World::loadResurrectionMap( const std::string & filename )
                 vec_castles.AddCastle( castle );
 
                 map_captureobj.Set( static_cast<int32_t>( tileId ), MP2::OBJ_CASTLE, Color::NONE );
+            }
+            else if ( object.group == Maps::ObjectGroup::KINGDOM_HEROES ) {
+                const auto & metadata = heroObjects[object.index].metadata;
+
+                const uint32_t color = ( 1 << metadata[0] );
+                uint32_t race = ( 1 << metadata[1] );
+
+                const Kingdom & kingdom = GetKingdom( color );
+
+                assert( race != Race::RAND );
+
+                // Check if the kingdom has exceeded the limit on hired heroes
+                if ( kingdom.AllowRecruitHero( false ) ) {
+                    Heroes * hero = GetHeroForHire( race );
+                    if ( hero != nullptr ) {
+                        hero->SetCenter( { static_cast<int32_t>( tileId ) % width, static_cast<int32_t>( tileId ) / width } );
+
+                        hero->SetColor( color );
+                    }
+                }
             }
         }
     }
@@ -963,8 +990,9 @@ bool World::updateTileMetadata( Maps::Tiles & tile, const MP2::MapObjectType obj
 
     case MP2::OBJ_HERO: {
         // remove map editor sprite
-        if ( tile.getObjectIcnType() == MP2::OBJ_ICN_TYPE_MINIHERO )
+        if ( tile.getObjectIcnType() == MP2::OBJ_ICN_TYPE_MINIHERO ) {
             tile.Remove( tile.GetObjectUID() );
+        }
 
         Heroes * chosenHero = GetHeroes( Maps::GetPoint( tile.GetIndex() ) );
         assert( chosenHero != nullptr );
