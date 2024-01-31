@@ -6320,14 +6320,13 @@ void Battle::Interface::CheckGlobalEvents( LocalEvent & le )
 
     // Interrupting auto battle
     if ( arena.AutoBattleInProgress() && arena.CanToggleAutoBattle()
-         && ( le.MouseClickLeft( btn_auto.area() )
-              || ( le.KeyPress()
-                   && ( Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_AUTO_SWITCH )
-                        || ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL )
-                             && fheroes2::showMessage( fheroes2::Text( "", {} ),
-                                                       fheroes2::Text( _( "Are you sure you want to interrupt the auto battle?" ), fheroes2::FontType::normalWhite() ),
-                                                       Dialog::YES | Dialog::NO )
-                                    == Dialog::YES ) ) ) ) ) {
+         && ( ( le.MouseClickLeft( btn_auto.area() )
+                || ( le.KeyPress()
+                     && ( Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_AUTO_SWITCH ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) ) )
+              && fheroes2::showMessage( fheroes2::Text( "", {} ),
+                                        fheroes2::Text( _( "Are you sure you want to interrupt the auto battle?" ), fheroes2::FontType::normalWhite() ),
+                                        Dialog::YES | Dialog::NO )
+                     == Dialog::YES ) ) {
         _interruptAutoBattleForColor = arena.GetCurrentColor();
     }
 }
