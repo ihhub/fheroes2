@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -54,6 +54,7 @@
 #include "math_base.h"
 #include "monster.h"
 #include "mus.h"
+#include "payment.h"
 #include "screen.h"
 #include "statusbar.h"
 #include "tools.h"
@@ -270,6 +271,9 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
             break;
         default:
             if ( build != BUILD_NOTHING ) {
+                auto remainingFunds = GetKingdom().GetFunds() - PaymentConditions::BuyBuilding( race, build );
+                remainingFunds.Trim();
+                fheroes2::drawResourcePanel( remainingFunds, display, dialogRoi.getPosition() );
                 AudioManager::PlaySound( M82::BUILDTWN );
                 fadeBuilding.StartFadeBuilding( build );
             }
