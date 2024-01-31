@@ -102,7 +102,7 @@ jobs:
             CXX: aarch64-linux-gnu-g++
             AR: aarch64-linux-gnu-ar
         - name: macOS SDL2
-          os: macos-11
+          os: macos-12
           dependencies: sdl2 sdl2_mixer sdl2_image
           env:
             FHEROES2_STRICT_COMPILATION: ON
