@@ -696,11 +696,11 @@ bool World::loadResurrectionMap( const std::string & filename )
 
         for ( const auto & object : tile.objects ) {
             if ( object.group == Maps::ObjectGroup::KINGDOM_TOWNS ) {
-                const uint32_t race = ( 1 << townObjects[object.index].metadata[0] );
+                const int race = ( 1 << townObjects[object.index].metadata[0] );
 
                 assert( race != Race::RAND );
 
-                Castle * castle = new Castle( static_cast<int32_t>( tileId ) % width, static_cast<int32_t>( tileId ) / width, static_cast<int>( race ) );
+                Castle * castle = new Castle( static_cast<int32_t>( tileId ) % width, static_cast<int32_t>( tileId ) / width, race );
                 const uint8_t color = Maps::getTownColorIndex( map, tileId, object.id );
                 castle->SetColor( 1 << color );
 
@@ -711,8 +711,8 @@ bool World::loadResurrectionMap( const std::string & filename )
             else if ( object.group == Maps::ObjectGroup::KINGDOM_HEROES ) {
                 const auto & metadata = heroObjects[object.index].metadata;
 
-                const uint32_t color = ( 1 << metadata[0] );
-                uint32_t race = ( 1 << metadata[1] );
+                const int color = ( 1 << metadata[0] );
+                const int race = ( 1 << metadata[1] );
 
                 const Kingdom & kingdom = GetKingdom( color );
 
