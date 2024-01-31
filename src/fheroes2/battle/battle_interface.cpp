@@ -6319,7 +6319,7 @@ void Battle::Interface::CheckGlobalEvents( LocalEvent & le )
     }
 
     // Interrupting auto battle
-    if ( arena.AutoBattleInProgress() && arena.CanToggleAutoBattle()
+    if ( ( arena.AutoBattleInProgress() || arena.EnemyOfAIHasAutoBattleInProgress() )
          && ( ( le.MouseClickLeft( btn_auto.area() )
                 || ( le.KeyPress()
                      && ( Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_AUTO_SWITCH ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) ) )
@@ -6327,7 +6327,16 @@ void Battle::Interface::CheckGlobalEvents( LocalEvent & le )
                                         fheroes2::Text( _( "Are you sure you want to interrupt the auto battle?" ), fheroes2::FontType::normalWhite() ),
                                         Dialog::YES | Dialog::NO )
                      == Dialog::YES ) ) {
-        _interruptAutoBattleForColor = arena.GetCurrentColor();
+        // Identify which color requested the auto battle interrupt.
+        auto color = arena.GetCurrentColor();
+        if ( arena.GetCurrentForce().GetControl() & CONTROL_AI ) {
+            color = arena.GetOppositeColor( color );
+        }
+
+        // Interrupt, but only if the color identified belongs to a human player.
+        if ( !( arena.getForce( color ).GetControl() & CONTROL_AI ) ) {
+            _interruptAutoBattleForColor = color;
+        }
     }
 }
 

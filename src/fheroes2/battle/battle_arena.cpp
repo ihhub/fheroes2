@@ -1243,6 +1243,20 @@ bool Battle::Arena::AutoBattleInProgress() const
     return false;
 }
 
+bool Battle::Arena::EnemyOfAIHasAutoBattleInProgress() const
+{
+    if ( _currentUnit == nullptr ) {
+        return false;
+    }
+
+    if ( ( GetCurrentForce().GetControl() & CONTROL_AI ) && !( getEnemyForce( GetCurrentColor() ).GetControl() & CONTROL_AI )
+         && ( _autoBattleColors & getEnemyForce( GetCurrentColor() ).GetColor() ) ) {
+        return true;
+    }
+
+    return false;
+}
+
 bool Battle::Arena::CanToggleAutoBattle() const
 {
     if ( _currentUnit == nullptr ) {

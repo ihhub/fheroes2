@@ -98,6 +98,7 @@ namespace Battle
         bool BattleValid() const;
 
         bool AutoBattleInProgress() const;
+        bool EnemyOfAIHasAutoBattleInProgress() const;
         bool CanToggleAutoBattle() const;
 
         uint32_t GetTurnNumber() const
