@@ -6318,15 +6318,26 @@ void Battle::Interface::CheckGlobalEvents( LocalEvent & le )
         }
     }
 
-    // Interrupting auto battle
-    if ( ( arena.AutoBattleInProgress() || arena.EnemyOfAIHasAutoBattleInProgress() )
-         && ( ( le.MouseClickLeft() || le.MouseClickRight()
-                || ( le.KeyPress()
-                     && ( Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_AUTO_SWITCH ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) ) )
-              && fheroes2::showMessage( fheroes2::Text( "", {} ),
-                                        fheroes2::Text( _( "Are you sure you want to interrupt the auto battle?" ), fheroes2::FontType::normalWhite() ),
-                                        Dialog::YES | Dialog::NO )
-                     == Dialog::YES ) ) {
+    // Check if auto battle interruption was requested.
+    InterruptAutoBattle( le );
+}
+
+void Battle::Interface::InterruptAutoBattle( LocalEvent & le )
+{
+    // Interrupt only if automation is currently on.
+    if ( !arena.AutoBattleInProgress() && !arena.EnemyOfAIHasAutoBattleInProgress() ) {
+        return;
+    }
+
+    if ( !le.MouseClickLeft() && !le.MouseClickRight() && !Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_AUTO_SWITCH )
+         && !Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
+        return;
+    }
+
+    auto interrupt = fheroes2::showMessage( fheroes2::Text( "", {} ),
+                                            fheroes2::Text( _( "Are you sure you want to interrupt the auto battle?" ), fheroes2::FontType::normalWhite() ),
+                                            Dialog::YES | Dialog::NO );
+    if ( interrupt == Dialog::YES ) {
         // Identify which color requested the auto battle interrupt.
         auto color = arena.GetCurrentColor();
         if ( arena.GetCurrentForce().GetControl() & CONTROL_AI ) {
