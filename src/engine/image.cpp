@@ -454,28 +454,32 @@ namespace fheroes2
     Image::Image( Image && image_ ) noexcept
         : _data( std::move( image_._data ) )
     {
-        std::swap( _singleLayer, image_._singleLayer );
         std::swap( _width, image_._width );
         std::swap( _height, image_._height );
+        std::swap( _singleLayer, image_._singleLayer );
     }
 
     Image & Image::operator=( const Image & image_ )
     {
-        if ( this != &image_ ) {
-            copy( image_ );
+        if ( this == &image_ ) {
+            return *this;
         }
+
+        copy( image_ );
 
         return *this;
     }
 
     Image & Image::operator=( Image && image_ ) noexcept
     {
-        if ( this != &image_ ) {
-            std::swap( _width, image_._width );
-            std::swap( _height, image_._height );
-            std::swap( _data, image_._data );
-            std::swap( _singleLayer, image_._singleLayer );
+        if ( this == &image_ ) {
+            return *this;
         }
+
+        std::swap( _width, image_._width );
+        std::swap( _height, image_._height );
+        std::swap( _data, image_._data );
+        std::swap( _singleLayer, image_._singleLayer );
 
         return *this;
     }
@@ -584,24 +588,28 @@ namespace fheroes2
 
     Sprite & Sprite::operator=( const Sprite & sprite )
     {
-        if ( this != &sprite ) {
-            Image::operator=( sprite );
-
-            _x = sprite._x;
-            _y = sprite._y;
+        if ( this == &sprite ) {
+            return *this;
         }
+
+        Image::operator=( sprite );
+
+        _x = sprite._x;
+        _y = sprite._y;
 
         return *this;
     }
 
     Sprite & Sprite::operator=( Sprite && sprite ) noexcept
     {
-        if ( this != &sprite ) {
-            std::swap( _x, sprite._x );
-            std::swap( _y, sprite._y );
-
-            Image::operator=( std::move( sprite ) );
+        if ( this == &sprite ) {
+            return *this;
         }
+
+        Image::operator=( std::move( sprite ) );
+
+        std::swap( _x, sprite._x );
+        std::swap( _y, sprite._y );
 
         return *this;
     }
