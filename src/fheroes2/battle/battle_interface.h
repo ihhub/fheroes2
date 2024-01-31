@@ -386,7 +386,7 @@ namespace Battle
         void SwitchAllUnitsAnimation( const int32_t animationState ) const;
         void UpdateContourColor();
         void CheckGlobalEvents( LocalEvent & );
-        void InterruptAutoBattle( LocalEvent & );
+        void InterruptAutoBattleIfRequested( LocalEvent & le );
         void SetHeroAnimationReactionToTroopDeath( const int32_t deathColor ) const;
 
         void ProcessingHeroDialogResult( const int result, Actions & actions );

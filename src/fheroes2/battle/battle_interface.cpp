@@ -6318,10 +6318,10 @@ void Battle::Interface::CheckGlobalEvents( LocalEvent & le )
     }
 
     // Check if auto battle interruption was requested.
-    InterruptAutoBattle( le );
+    InterruptAutoBattleIfRequested( le );
 }
 
-void Battle::Interface::InterruptAutoBattle( LocalEvent & le )
+void Battle::Interface::InterruptAutoBattleIfRequested( LocalEvent & le )
 {
     // Interrupt only if automation is currently on.
     if ( !arena.AutoBattleInProgress() && !arena.EnemyOfAIHasAutoBattleInProgress() ) {
