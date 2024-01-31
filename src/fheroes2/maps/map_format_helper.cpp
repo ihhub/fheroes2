@@ -31,6 +31,7 @@
 #include <vector>
 
 #include "color.h"
+#include "gamedefs.h"
 #include "map_format_info.h"
 #include "map_object_info.h"
 #include "maps_tiles.h"
@@ -194,7 +195,7 @@ namespace Maps
         addObjectToTile( map.tiles[tileId], group, index, uid );
     }
 
-    void updateMapPlayers( Map_Format::MapFormat & map )
+    bool updateMapPlayers( Map_Format::MapFormat & map )
     {
         static_assert( Color::BLUE == 1 << 0, "The kingdom color values have changed. You are going to break map format!" );
         static_assert( Color::GREEN == 1 << 1, "The kingdom color values have changed. You are going to break map format!" );
@@ -213,9 +214,13 @@ namespace Maps
         static_assert( Race::MULT == 1 << 6, "The race values have changed. You are going to break map format!" );
         static_assert( Race::RAND == 1 << 7, "The race values have changed. You are going to break map format!" );
 
-        const size_t mainColors{ 6 };
+        constexpr size_t mainColors{ KINGDOMMAX };
 
-        assert( map.playerRace.size() == mainColors );
+        if ( map.playerRace.size() != mainColors ) {
+            // Possibly corrupted map.
+            assert( 0 );
+            return false;
+        }
 
         // Gather all information about all kingdom colors and races.
         std::array<bool, mainColors> heroColorsPresent{ false };
@@ -232,12 +237,18 @@ namespace Maps
 
             for ( const auto & object : mapTile.objects ) {
                 if ( object.group == ObjectGroup::KINGDOM_HEROES ) {
-                    assert( object.index < heroObjects.size() );
+                    if ( object.index >= heroObjects.size() ) {
+                        assert( 0 );
+                        return false;
+                    }
 
                     const auto & metadata = heroObjects[object.index].metadata;
 
                     const uint32_t color = metadata[0];
-                    assert( color < heroColorsPresent.size() );
+                    if ( color >= heroColorsPresent.size() ) {
+                        assert( 0 );
+                        return false;
+                    }
 
                     heroColorsPresent[color] = true;
 
@@ -245,14 +256,20 @@ namespace Maps
                     heroRacesPresent[color] |= ( 1 << race );
                 }
                 else if ( object.group == ObjectGroup::KINGDOM_TOWNS ) {
-                    assert( object.index < townObjects.size() );
+                    if ( object.index >= townObjects.size() ) {
+                        assert( 0 );
+                        return false;
+                    }
 
                     // Towns and Castles have 2 flags on both sides on the entrance. Verify, that they exist and have the same color.
                     assert( tileIndex > 0 && tileIndex < map.tiles.size() - 1 );
 
                     const uint8_t color = getTownColorIndex( map, tileIndex, object.id );
 
-                    assert( color < townColorsPresent.size() );
+                    if ( color >= townColorsPresent.size() ) {
+                        assert( 0 );
+                        return false;
+                    }
 
                     townColorsPresent[color] = true;
 
@@ -385,11 +402,18 @@ namespace Maps
             // No races are set.
             map.playerRace = { 0 };
         }
+
+        return true;
     }
 
     uint8_t getTownColorIndex( const Map_Format::MapFormat & map, const size_t tileIndex, const uint32_t id )
     {
-        if ( tileIndex >= map.tiles.size() ) {
+        if ( map.tiles.empty() ) {
+            assert( 0 );
+            return 0;
+        }
+
+        if ( tileIndex == 0 || tileIndex >= map.tiles.size() - 1 ) {
             assert( 0 );
             return 0;
         }
@@ -401,7 +425,10 @@ namespace Maps
 
         for ( const auto & tempObject : map.tiles[tileIndex - 1].objects ) {
             if ( tempObject.group == ObjectGroup::LANDSCAPE_FLAGS && tempObject.id == id ) {
-                assert( tempObject.index < flagObjects.size() );
+                if ( tempObject.index >= flagObjects.size() ) {
+                    assert( 0 );
+                    return 0;
+                }
 
                 leftFlagColor = flagObjects[tempObject.index].metadata[0];
                 break;
@@ -410,7 +437,10 @@ namespace Maps
 
         for ( const auto & tempObject : map.tiles[tileIndex + 1].objects ) {
             if ( tempObject.group == ObjectGroup::LANDSCAPE_FLAGS && tempObject.id == id ) {
-                assert( tempObject.index < flagObjects.size() );
+                if ( tempObject.index >= flagObjects.size() ) {
+                    assert( 0 );
+                    return 0;
+                }
 
                 rightFlagColor = flagObjects[tempObject.index].metadata[0];
                 break;
