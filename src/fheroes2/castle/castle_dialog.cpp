@@ -55,6 +55,7 @@
 #include "monster.h"
 #include "mus.h"
 #include "payment.h"
+#include "resource.h"
 #include "screen.h"
 #include "statusbar.h"
 #include "tools.h"
