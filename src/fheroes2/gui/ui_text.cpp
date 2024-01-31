@@ -654,7 +654,7 @@ namespace fheroes2
 
         int32_t xOffset = 0;
         int32_t correctedWidth = maxWidth;
-        if ( offsets.size() > 1 ) {
+        if ( offsets.size() > 1 && _isUniformedVerticalAlignment ) {
             // This is a multi-line message. Optimize it to fit the text evenly.
             int32_t startWidth = getMaxWordWidth( reinterpret_cast<const uint8_t *>( _text.data() ), static_cast<int32_t>( _text.size() ), _fontType );
             int32_t endWidth = maxWidth;
@@ -861,7 +861,7 @@ namespace fheroes2
 
         int32_t xOffset = 0;
         int32_t correctedWidth = maxWidth;
-        if ( offsets.size() > 1 ) {
+        if ( offsets.size() > 1 && _isUniformedVerticalAlignment ) {
             // This is a multi-line message. Optimize it to fit the text evenly.
             int32_t startWidth = 1;
             for ( const Text & text : _texts ) {

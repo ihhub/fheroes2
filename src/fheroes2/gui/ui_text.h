@@ -53,7 +53,9 @@ namespace fheroes2
         FontType( const FontSize size_, const FontColor color_ )
             : size( size_ )
             , color( color_ )
-        {}
+        {
+            // Do nothing.
+        }
 
         FontSize size = FontSize::NORMAL;
         FontColor color = FontColor::WHITE;
@@ -130,6 +132,14 @@ namespace fheroes2
 
         // Returns full text. Multi-text class cannot return by reference hence returning by value .
         virtual std::string text() const = 0;
+
+        void setUniformVerticalAlignment( const bool isUniform )
+        {
+            _isUniformedVerticalAlignment = isUniform;
+        }
+
+    protected:
+        bool _isUniformedVerticalAlignment{ true };
     };
 
     class Text : public TextBase
