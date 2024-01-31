@@ -3109,9 +3109,8 @@ void Battle::Interface::EventShowOptions()
 
 void Battle::Interface::EventAutoSwitch( const Unit & unit, Actions & actions )
 {
-    if ( !arena.CanToggleAutoBattle() ) {
-        return;
-    }
+    // TODO: remove this temporary assertion
+    assert( arena.CanToggleAutoBattle() );
 
     actions.emplace_back( Command::AUTO_SWITCH, unit.GetCurrentOrArmyColor() );
 
