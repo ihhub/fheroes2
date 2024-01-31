@@ -1220,7 +1220,7 @@ Battle::Force & Battle::Arena::GetCurrentForce() const
 
 Battle::Force & Battle::Arena::getOpposingForce() const
 {
-    return getForce( _currentColor == _army1->GetColor() ? _army2->GetColor() : _army1->GetColor() );
+    return getForce( GetCurrentColor() == _army1->GetColor() ? _army2->GetColor() : _army1->GetColor() );
 }
 
 Battle::Result & Battle::Arena::GetResult()
