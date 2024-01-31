@@ -6333,12 +6333,12 @@ void Battle::Interface::InterruptAutoBattle( LocalEvent & le )
         return;
     }
 
-    auto interrupt = fheroes2::showMessage( fheroes2::Text( "", {} ),
-                                            fheroes2::Text( _( "Are you sure you want to interrupt the auto battle?" ), fheroes2::FontType::normalWhite() ),
-                                            Dialog::YES | Dialog::NO );
+    const int interrupt = fheroes2::showMessage( fheroes2::Text( "", {} ),
+                                                 fheroes2::Text( _( "Are you sure you want to interrupt the auto battle?" ), fheroes2::FontType::normalWhite() ),
+                                                 Dialog::YES | Dialog::NO );
     if ( interrupt == Dialog::YES ) {
         // Identify which color requested the auto battle interrupt.
-        auto color = arena.GetCurrentColor();
+        int color = arena.GetCurrentColor();
         if ( arena.GetCurrentForce().GetControl() & CONTROL_AI ) {
             color = arena.GetOppositeColor( color );
         }

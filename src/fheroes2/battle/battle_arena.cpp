@@ -1253,7 +1253,7 @@ bool Battle::Arena::EnemyOfAIHasAutoBattleInProgress() const
         return false;
     }
 
-    const auto & enemyForce = getEnemyForce( GetCurrentColor() );
+    const Force & enemyForce = getEnemyForce( GetCurrentColor() );
 
     if ( enemyForce.GetControl() & CONTROL_AI ) {
         return false;
