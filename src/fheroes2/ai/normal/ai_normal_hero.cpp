@@ -491,7 +491,7 @@ namespace
         }
 
         case MP2::OBJ_ARTESIAN_SPRING:
-            return !hero.isVisited( tile, Visit::GLOBAL ) && hero.HaveSpellBook() && hero.GetSpellPoints() < 2 * hero.GetMaxSpellPoints();
+            return !world.isAnyKingdomVisited( objectType, index ) && hero.HaveSpellBook() && hero.GetSpellPoints() < 2 * hero.GetMaxSpellPoints();
 
         case MP2::OBJ_XANADU:
             return !hero.isVisited( tile ) && GameStatic::isHeroWorthyToVisitXanadu( hero );
