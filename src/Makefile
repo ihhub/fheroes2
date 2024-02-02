@@ -1,6 +1,6 @@
 ###########################################################################
 #   fheroes2: https://github.com/ihhub/fheroes2                           #
-#   Copyright (C) 2021 - 2023                                             #
+#   Copyright (C) 2021 - 2024                                             #
 #                                                                         #
 #   This program is free software; you can redistribute it and/or modify  #
 #   it under the terms of the GNU General Public License as published by  #
@@ -143,8 +143,8 @@ endif
 # SDL_LIBS can already be defined in a platform-specific Makefile
 ifeq ($(origin SDL_LIBS),undefined)
 SDL_LIBS := $(shell sdl2-config --libs)
-# Insert -lSDL2_mixer before -lSDL2, but after any previous -L/path/to/lib entries
-SDL_LIBS := $(subst $(firstword $(filter -l%,$(SDL_LIBS))),-lSDL2_mixer $(firstword $(filter -l%,$(SDL_LIBS))),$(SDL_LIBS))
+# Insert -lSDL2_mixer before -lSDL2 or libSDL2.a, but after any previous -L/path/to/lib entries
+SDL_LIBS := $(subst $(firstword $(filter -l% %.a,$(SDL_LIBS))),-lSDL2_mixer $(firstword $(filter -l% %.a,$(SDL_LIBS))),$(SDL_LIBS))
 
 ifdef FHEROES2_WITH_IMAGE
 SDL_LIBS := $(SDL_LIBS) -lSDL2_image $(shell libpng-config --libs)
