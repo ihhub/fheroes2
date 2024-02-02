@@ -272,7 +272,7 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
             break;
         default:
             if ( build != BUILD_NOTHING ) {
-                auto remainingFunds = GetKingdom().GetFunds() - PaymentConditions::BuyBuilding( race, build );
+                Funds remainingFunds = GetKingdom().GetFunds() - PaymentConditions::BuyBuilding( race, build );
                 remainingFunds.Trim();
                 fheroes2::drawResourcePanel( remainingFunds, display, dialogRoi.getPosition() );
                 AudioManager::PlaySound( M82::BUILDTWN );
@@ -721,9 +721,6 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
                     RedrawIcons( *this, hero, dialogRoi.getPosition() );
                     fheroes2::drawCastleName( *this, fheroes2::Display::instance(), dialogRoi.getPosition() );
                 }
-
-                fheroes2::drawResourcePanel( GetKingdom().GetFunds(), display, dialogRoi.getPosition() );
-
                 display.render( dialogRoi );
             }
 
