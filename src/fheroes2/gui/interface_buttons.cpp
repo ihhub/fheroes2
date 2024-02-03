@@ -155,6 +155,9 @@ fheroes2::GameMode Interface::ButtonsArea::QueueEventProcessing()
 
     fheroes2::GameMode res = fheroes2::GameMode::CANCEL;
 
+    // We should disable the fast scroll, because the cursor might be on one of the borders when a dialog gets dismissed.
+    Interface::AdventureMap::Get().getGameArea().setFastScrollStatus( false );
+
     // Move border window
     if ( Settings::Get().ShowButtons() && BorderWindow::QueueEventProcessing() ) {
         SetRedraw();
