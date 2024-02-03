@@ -2773,7 +2773,7 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
         }
         // Switch the auto battle mode on/off
         else if ( Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_AUTO_SWITCH ) ) {
-            EventAutoSwitch( unit, actions );
+            EventStartAutoBattle( unit, actions );
         }
         // Finish the battle in auto mode
         else if ( Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_AUTO_FINISH ) ) {
@@ -3107,10 +3107,17 @@ void Battle::Interface::EventShowOptions()
     humanturn_redraw = true;
 }
 
-void Battle::Interface::EventAutoSwitch( const Unit & unit, Actions & actions )
+void Battle::Interface::EventStartAutoBattle( const Unit & unit, Actions & actions )
 {
     // TODO: remove this temporary assertion
     assert( arena.CanToggleAutoBattle() );
+
+    int startAutoBattle
+        = fheroes2::showMessage( fheroes2::Text( "", {} ), fheroes2::Text( _( "Are you sure you want to enable auto combat?" ), fheroes2::FontType::normalWhite() ),
+                                 Dialog::YES | Dialog::NO );
+    if ( startAutoBattle != Dialog::YES ) {
+        return;
+    }
 
     actions.emplace_back( Command::AUTO_SWITCH, unit.GetCurrentOrArmyColor() );
 
@@ -3140,13 +3147,7 @@ void Battle::Interface::ButtonAutoAction( const Unit & unit, Actions & actions )
     le.MousePressLeft( btn_auto.area() ) ? btn_auto.drawOnPress() : btn_auto.drawOnRelease();
 
     if ( le.MouseClickLeft( btn_auto.area() ) ) {
-        if ( fheroes2::showMessage( fheroes2::Text( "", {} ), fheroes2::Text( _( "Are you sure you want to enable auto combat?" ), fheroes2::FontType::normalWhite() ),
-                                    Dialog::YES | Dialog::NO )
-             != Dialog::YES ) {
-            return;
-        }
-
-        EventAutoSwitch( unit, actions );
+        EventStartAutoBattle( unit, actions );
     }
 }
 
