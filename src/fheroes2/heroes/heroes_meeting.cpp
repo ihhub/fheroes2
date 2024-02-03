@@ -271,7 +271,7 @@ void Heroes::MeetingDialog( Heroes & otherHero )
     text.draw( cur_pt.x + 320 - text.width() / 2, cur_pt.y + 29, display );
 
     const int iconsH1XOffset = 34;
-    const int iconsH2XOffset = 570;
+    const int iconsH2XOffset = 571;
     const int portraitYOffset = 72;
 
     // portrait
