@@ -431,7 +431,9 @@ void Battle::Arena::UnitTurn( const Units & orderHistory )
                 AI::Get().BattleTurn( *this, *_currentUnit, actions );
             }
             else {
-                HumanTurn( *_currentUnit, actions );
+                assert( _interface != nullptr );
+
+                _interface->HumanTurn( *_currentUnit, actions );
             }
         }
 
@@ -599,12 +601,6 @@ void Battle::Arena::Turns()
         const Force * army_loss = ( result_game.army1 & RESULT_LOSS ? _army1.get() : ( result_game.army2 & RESULT_LOSS ? _army2.get() : nullptr ) );
         result_game.killed = army_loss ? army_loss->GetDeadCounts() : 0;
     }
-}
-
-void Battle::Arena::HumanTurn( const Unit & b, Actions & a )
-{
-    if ( _interface )
-        _interface->HumanTurn( b, a );
 }
 
 void Battle::Arena::TowerAction( const Tower & twr )
