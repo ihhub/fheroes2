@@ -968,7 +968,7 @@ bool Interface::GameArea::mouseIndicatesFastScroll( const fheroes2::Point & mous
             _mousePositionForFastScroll = mousePosition;
         }
         else if ( mousePosition.x > _mousePositionForFastScroll.x
-                  || ( abs( mousePosition.y - _mousePositionForFastScroll.y ) > DEADZONE && mousePosition.x >= display.width() ) ) {
+                  || ( abs( mousePosition.y - _mousePositionForFastScroll.y ) > DEADZONE && mousePosition.x >= display.width() - 1 ) ) {
             // Movement is towards or along the border, we re-enable the fast scroll.
             return true;
         }
@@ -989,7 +989,7 @@ bool Interface::GameArea::mouseIndicatesFastScroll( const fheroes2::Point & mous
             _mousePositionForFastScroll = mousePosition;
         }
         else if ( mousePosition.y > _mousePositionForFastScroll.y
-                  || ( abs( mousePosition.x - _mousePositionForFastScroll.x ) > DEADZONE && mousePosition.y >= display.height() ) ) {
+                  || ( abs( mousePosition.x - _mousePositionForFastScroll.x ) > DEADZONE && mousePosition.y >= display.height() - 1 ) ) {
             // Movement is towards or along the border, we re-enable the fast scroll.
             return true;
         }
