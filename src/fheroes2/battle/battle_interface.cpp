@@ -6353,10 +6353,7 @@ void Battle::Interface::InterruptAutoBattleIfRequested( LocalEvent & le )
                                                  fheroes2::Text( _( "Are you sure you want to interrupt the auto battle?" ), fheroes2::FontType::normalWhite() ),
                                                  Dialog::YES | Dialog::NO );
     if ( interrupt == Dialog::YES ) {
-        // Interrupt, but only if the color identified belongs to a human player.
-        if ( !( arena.getForce( color ).GetControl() & CONTROL_AI ) ) {
-            _interruptAutoBattleForColor = color;
-        }
+        _interruptAutoBattleForColor = color;
     }
 }
 
