@@ -3109,8 +3109,9 @@ void Battle::Interface::EventShowOptions()
 
 void Battle::Interface::EventStartAutoBattle( const Unit & unit, Actions & actions )
 {
-    // TODO: remove this temporary assertion
+    // TODO: remove these temporary assertions
     assert( arena.CanToggleAutoBattle() );
+    assert( !arena.AutoBattleInProgress() );
 
     int startAutoBattle
         = fheroes2::showMessage( fheroes2::Text( "", {} ), fheroes2::Text( _( "Are you sure you want to enable auto combat?" ), fheroes2::FontType::normalWhite() ),
