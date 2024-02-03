@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-27 00:02+0000\n"
+"POT-Creation-Date: 2024-02-03 03:27+0000\n"
 "PO-Revision-Date: 2023-12-22 00:32+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3972,13 +3972,29 @@ msgstr "Städte"
 msgid "Heroes"
 msgstr "Helden"
 
-#, fuzzy
-msgid "Terrain"
-msgstr "Gelände-Modus"
+msgid "editorErasure|Terrain"
+msgstr ""
 
-#, fuzzy
-msgid "Castles"
-msgstr "Burg"
+msgid "editorErasure|Castles"
+msgstr ""
+
+msgid "editorErasure|Monsters"
+msgstr ""
+
+msgid "editorErasure|Heroes"
+msgstr ""
+
+msgid "editorErasure|Artifacts"
+msgstr ""
+
+msgid "editorErasure|Roads"
+msgstr ""
+
+msgid "editorErasure|Streams"
+msgstr ""
+
+msgid "editorErasure|Treasures"
+msgstr ""
 
 msgid ""
 "Draws terrain in\n"
@@ -11518,6 +11534,14 @@ msgstr ""
 "Die neueste Version des Spiels finden Sie unter\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#, fuzzy
+#~ msgid "Terrain"
+#~ msgstr "Gelände-Modus"
+
+#, fuzzy
+#~ msgid "Castles"
+#~ msgstr "Burg"
 
 #, fuzzy
 #~ msgid "Ocean object"
