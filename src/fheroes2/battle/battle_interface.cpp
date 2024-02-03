@@ -2771,7 +2771,7 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
         else if ( Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_OPTIONS ) ) {
             EventShowOptions();
         }
-        // Switch the auto battle mode on/off
+        // Switch the auto battle mode on
         else if ( Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_AUTO_SWITCH ) ) {
             EventStartAutoBattle( unit, actions );
         }
@@ -6341,7 +6341,7 @@ void Battle::Interface::InterruptAutoBattleIfRequested( LocalEvent & le )
     }
 
     // The battle interruption is already scheduled, no need for the dialog.
-    if (color == _interruptAutoBattleForColor) {
+    if ( color == _interruptAutoBattleForColor ) {
         return;
     }
 
