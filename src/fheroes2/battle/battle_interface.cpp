@@ -6333,16 +6333,21 @@ void Battle::Interface::InterruptAutoBattleIfRequested( LocalEvent & le )
         return;
     }
 
+    // Identify which color requested the auto battle interrupt.
+    int color = arena.GetCurrentColor();
+    if ( arena.GetCurrentForce().GetControl() & CONTROL_AI ) {
+        color = arena.GetOppositeColor( color );
+    }
+
+    // The battle interruption is already scheduled, no need for the dialog.
+    if (color == _interruptAutoBattleForColor) {
+        return;
+    }
+
     const int interrupt = fheroes2::showMessage( fheroes2::Text( "", {} ),
                                                  fheroes2::Text( _( "Are you sure you want to interrupt the auto battle?" ), fheroes2::FontType::normalWhite() ),
                                                  Dialog::YES | Dialog::NO );
     if ( interrupt == Dialog::YES ) {
-        // Identify which color requested the auto battle interrupt.
-        int color = arena.GetCurrentColor();
-        if ( arena.GetCurrentForce().GetControl() & CONTROL_AI ) {
-            color = arena.GetOppositeColor( color );
-        }
-
         // Interrupt, but only if the color identified belongs to a human player.
         if ( !( arena.getForce( color ).GetControl() & CONTROL_AI ) ) {
             _interruptAutoBattleForColor = color;
