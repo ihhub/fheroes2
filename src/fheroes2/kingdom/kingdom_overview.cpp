@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2012 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -45,7 +45,6 @@
 #include "icn.h"
 #include "image.h"
 #include "interface_base.h"
-#include "interface_gamearea.h"
 #include "interface_icons.h"
 #include "interface_list.h"
 #include "kingdom.h"
@@ -868,9 +867,6 @@ void Kingdom::openOverviewDialog()
 
         // Exit this dialog.
         if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() ) {
-            // Disable fast scroll for resolutions where the exit button is directly above the border.
-            Interface::AdventureMap::Get().getGameArea().setFastScrollStatus( false );
-
             // Fade-out Kingdom overview dialog.
             fheroes2::fadeOutDisplay( background.activeArea(), !isDefaultScreenSize );
             if ( isDefaultScreenSize ) {
