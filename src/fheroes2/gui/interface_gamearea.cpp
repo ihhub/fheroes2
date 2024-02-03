@@ -951,7 +951,7 @@ bool Interface::GameArea::mouseIndicatesFastScroll( const fheroes2::Point & mous
     constexpr int DEADZONE = 3;
 
     // Remember the initial reference point for re-enabling checks later on.
-    if (_resetMousePositionForFastScroll) {
+    if ( _resetMousePositionForFastScroll ) {
         _mousePositionForFastScroll = mousePosition;
         _resetMousePositionForFastScroll = false;
     }
