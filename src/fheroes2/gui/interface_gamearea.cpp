@@ -322,7 +322,8 @@ Interface::GameArea::GameArea( BaseInterface & interface )
     , _mouseDraggingInitiated( false )
     , _mouseDraggingMovement( false )
     , _needRedrawByMouseDragging( false )
-    , _isFastScrollEnabled( true )
+    , _isFastScrollEnabled( false )
+    , _resetMousePositionForFastScroll( false )
 {
     // Do nothing.
 }
@@ -941,16 +942,19 @@ void Interface::GameArea::SetScroll( int direct )
 void Interface::GameArea::setFastScrollStatus( const bool enable )
 {
     _isFastScrollEnabled = enable;
-
-    // Remember the reference point for re-enabling checks later on.
-    LocalEvent & le = LocalEvent::Get();
-    _mousePositionForFastScroll = le.GetMouseCursor();
+    _resetMousePositionForFastScroll = true;
 }
 
 bool Interface::GameArea::mouseIndicatesFastScroll( const fheroes2::Point & mousePosition )
 {
     const fheroes2::Display & display = fheroes2::Display::instance();
     constexpr int DEADZONE = 3;
+
+    // Remember the initial reference point for re-enabling checks later on.
+    if (_resetMousePositionForFastScroll) {
+        _mousePositionForFastScroll = mousePosition;
+        _resetMousePositionForFastScroll = false;
+    }
 
     if ( Interface::BaseInterface::isScrollLeft( _mousePositionForFastScroll ) ) {
         if ( mousePosition.x > _mousePositionForFastScroll.x ) {

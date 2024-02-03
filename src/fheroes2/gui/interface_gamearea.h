@@ -301,6 +301,7 @@ namespace Interface
         bool _mouseDraggingMovement;
         bool _needRedrawByMouseDragging;
         bool _isFastScrollEnabled;
+        bool _resetMousePositionForFastScroll;
 
         // Returns middle point of window ROI.
         fheroes2::Point _middlePoint() const
