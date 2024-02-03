@@ -6345,6 +6345,9 @@ void Battle::Interface::InterruptAutoBattleIfRequested( LocalEvent & le )
         return;
     }
 
+    // Right now there should be no pending auto battle interruptions.
+    assert( _interruptAutoBattleForColor == 0 );
+
     const int interrupt = fheroes2::showMessage( fheroes2::Text( "", {} ),
                                                  fheroes2::Text( _( "Are you sure you want to interrupt the auto battle?" ), fheroes2::FontType::normalWhite() ),
                                                  Dialog::YES | Dialog::NO );
