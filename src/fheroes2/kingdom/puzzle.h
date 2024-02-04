@@ -36,7 +36,8 @@ class Puzzle : public std::bitset<PUZZLETILES>
 {
 public:
     Puzzle();
-    Puzzle & operator=( const char * );
+
+    Puzzle & operator=( const char * str );
 
     void Update( uint32_t open, uint32_t total );
     void ShowMapsDialog() const;
