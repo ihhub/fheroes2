@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-03 03:27+0000\n"
-"PO-Revision-Date: 2024-02-04 18:03+0100\n"
+"PO-Revision-Date: 2024-02-04 19:17+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
 "Language: fr\n"
@@ -561,7 +561,7 @@ msgid "The enemy has surrendered!"
 msgstr "L'ennemi s'est rendu !"
 
 msgid "Their cowardice costs them %{gold} gold."
-msgstr "Sa couardise lui coûte %{gold} pièce d'or."
+msgstr "Sa couardise lui coûte %{gold} pièces d'or."
 
 msgid "The enemy has fled!"
 msgstr "L'ennemi a pris la fuite !"
@@ -694,7 +694,7 @@ msgstr ""
 "Se rendre prisonnier coûte de l'or. Toutefois, si vous payez la rançon, le "
 "héros et toutes les créatures survivantes pourront être recrutés de nouveau. "
 "Le coût de la reddition est égal à la moitié du coût total des troupes non "
-"temporaires restant dans l'armée."
+"temporaires restantes dans l'armée."
 
 msgid "Open Hero Screen to view full information about the hero."
 msgstr ""
@@ -4502,19 +4502,19 @@ msgid "hotkey|select map"
 msgstr "Sélectionner carte"
 
 msgid "hotkey|select small map size"
-msgstr "Voyez la taille petite de mappes"
+msgstr "Voir les mappes de taille petite"
 
 msgid "hotkey|select medium map size"
-msgstr "Voyez la taille moyenne de mappes"
+msgstr "Voir les mappes de taille moyenne"
 
 msgid "hotkey|select large map size"
-msgstr "Voyez la taille grande de mappes"
+msgstr "Voir les mappes de taille grande"
 
 msgid "hotkey|select extra large map size"
-msgstr "Voyez la taille très grande de mappes"
+msgstr "Voir les mappes de taille très grande"
 
 msgid "hotkey|select all map sizes"
-msgstr "Voyez toutes les tailles de mappe"
+msgstr "Voir toutes les mappes"
 
 msgid "hotkey|hotseat game"
 msgstr "Partie à tour de rôle"
@@ -4586,28 +4586,28 @@ msgid "hotkey|restart campaign scenario"
 msgstr "Recommencer le scénario de campagne"
 
 msgid "hotkey|world map left"
-msgstr ""
+msgstr "Déplacement vers la gauche dans la mappe du monde"
 
 msgid "hotkey|world map right"
-msgstr ""
+msgstr "Déplacement vers la droite dans la mappe du monde"
 
 msgid "hotkey|world map up"
-msgstr ""
+msgstr "Déplacement vers le haut dans la mappe du monde"
 
 msgid "hotkey|world map down"
-msgstr ""
+msgstr "Déplacement vers le bas dans la mappe du monde"
 
 msgid "hotkey|world map up left"
-msgstr ""
+msgstr "Déplacement vers le haut et la gauche dans la mappe du monde"
 
 msgid "hotkey|world map up right"
-msgstr ""
+msgstr "Déplacement vers le haut et la droite dans la mappe du monde"
 
 msgid "hotkey|world map down left"
-msgstr ""
+msgstr "Déplacement vers le bas et la gauche dans la mappe du monde"
 
 msgid "hotkey|world map down right"
-msgstr ""
+msgstr "Déplacement vers le bas et la droite dans la mappe du monde"
 
 msgid "hotkey|save game"
 msgstr "Sauvegarder la partie"
@@ -4622,7 +4622,7 @@ msgid "hotkey|cast adventure spell"
 msgstr "Lancement de sorts d'aventure."
 
 msgid "hotkey|put hero to sleep"
-msgstr "Mettre le héros à mode \"dormir\""
+msgstr "Mettre le héros en mode \"dormir\""
 
 msgid "hotkey|next town"
 msgstr "Village suivant"
@@ -4637,7 +4637,7 @@ msgid "hotkey|adventure options"
 msgstr "Options d'aventure"
 
 msgid "hotkey|puzzle map"
-msgstr "mappe du puzzle"
+msgstr "Ouvrir la mappe du puzzle"
 
 msgid "hotkey|scenario information"
 msgstr "Informations du scénario"
@@ -4646,31 +4646,31 @@ msgid "hotkey|dig for artifact"
 msgstr "Creuser pour l'artéfact"
 
 msgid "hotkey|view world"
-msgstr "Voyez le monde entier"
+msgstr "Ouvrir la fenêtre Tout voir"
 
 msgid "hotkey|kingdom summary"
 msgstr "Informations du royaume"
 
 msgid "hotkey|default action"
-msgstr ""
+msgstr "Action par défaut"
 
 msgid "hotkey|open focus"
-msgstr ""
+msgstr "Ouvrir l'objet actuel"
 
 msgid "hotkey|system options"
 msgstr "Options système"
 
 msgid "hotkey|scroll left"
-msgstr ""
+msgstr "Défilement gauche"
 
 msgid "hotkey|scroll right"
-msgstr ""
+msgstr "Défilement droite"
 
 msgid "hotkey|scroll up"
-msgstr ""
+msgstr "Défilement en haut"
 
 msgid "hotkey|scroll down"
-msgstr ""
+msgstr "Défilement en bas"
 
 msgid "hotkey|toggle control panel"
 msgstr "Basculer le panneau de commande"
@@ -4694,7 +4694,7 @@ msgid "hotkey|retreat from battle"
 msgstr "Retraite de la bataille"
 
 msgid "hotkey|surrender during battle"
-msgstr "Reddition en combat"
+msgstr "Reddition en bataille"
 
 msgid "hotkey|toggle battle auto mode"
 msgstr "Activer/désactiver le mode combat auto"
@@ -7765,8 +7765,8 @@ msgid ""
 "The cost of surrender is reduced to %{percent} percent of the total cost of "
 "troops in the army."
 msgstr ""
-"%{name} réduit le coût de la reddition à %{count} pour cent du coût total "
-"des troupes que vous avez dans votre armée."
+"Le coût de la reddition est reduite à %{percent} pour cent du coût total des "
+"troupes dans l'armée du héros."
 
 msgid ""
 "%{skill} increases the hero's movement points over water by %{count} percent."
@@ -9495,7 +9495,7 @@ msgid "Endless Sack of Gold"
 msgstr "La besace d'or sans fin"
 
 msgid "The %{name} provides the hero with %{count} gold per day."
-msgstr "%{name} fournit à le héros %{count} pièces d'or par jour."
+msgstr "%{name} fournit au héros %{count} pièces d'or par jour."
 
 msgid ""
 "A little leprechaun dances gleefully around a magic sack. Seeing you "
@@ -10022,7 +10022,7 @@ msgid ""
 "The %{name} eliminates the %{count} percent penalty for the hero's troops "
 "shooting past obstacles (e.g. castle walls)."
 msgstr ""
-"%{name} élimine la pénalité de %{count} pourcent pour les troupes du héros "
+"%{name} élimine la pénalité de %{count} pour cent pour les troupes du héros "
 "qui tirent au-delà des obstacles (par exemple, les murs d'un château)."
 
 msgid ""
@@ -10064,7 +10064,7 @@ msgid ""
 "cost of troops the hero has in their army."
 msgstr ""
 "%{name} réduit le coût de la reddition à %{count} pour cent du coût total "
-"des troupes dans l'armée du héros"
+"des troupes dans l'armée du héros."
 
 msgid ""
 "You pause to help a diplomat with a broken axle fix his problem. In "
