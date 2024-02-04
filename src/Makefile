@@ -66,9 +66,6 @@ ifndef OS
 OS := $(shell uname)
 endif
 
-ifeq ($(OS),Windows_NT)
-PLATFORM := mingw
-endif
 ifeq ($(OS),FreeBSD)
 PLATFORM := bsd
 endif
@@ -152,7 +149,7 @@ endif
 CCFLAGS := $(CCFLAGS) $(SDL_FLAGS)
 LIBS := $(SDL_LIBS) $(LIBS)
 
-export CC CXX AR WINDRES CCFLAGS CFLAGS CXXFLAGS CPPFLAGS LDFLAGS LIBS PLATFORM
+export CC CXX AR CCFLAGS CFLAGS CXXFLAGS CPPFLAGS LDFLAGS LIBS PLATFORM
 
 .PHONY: all clean
 
