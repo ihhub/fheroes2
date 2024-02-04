@@ -264,6 +264,7 @@ void ScenarioListBox::_renderSelectedScenarioInfo( fheroes2::Display & display, 
                          dst.y + SELECTED_SCENARIO_DIFFICULTY_OFFSET_Y, display );
 
     fheroes2::Text descriptionText( info.description, fheroes2::FontType::normalWhite() );
+    descriptionText.setUniformVerticalAlignment( false );
     descriptionText.draw( dst.x + SELECTED_SCENARIO_DESCRIPTION_OFFSET_X, dst.y + SELECTED_SCENARIO_DESCRIPTION_OFFSET_Y + 5, SELECTED_SCENARIO_DESCRIPTION_WIDTH - 2,
                           display );
 }
