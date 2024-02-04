@@ -994,6 +994,7 @@ namespace
 
         fheroes2::Text description( currentDescription, fheroes2::FontType::normalWhite() );
         fheroes2::ImageRestorer restorer( display, textOffset.x, textOffset.y, textWidth, description.height( textWidth ) );
+        description.setUniformVerticalAlignment( false );
         description.draw( textOffset.x, textOffset.y, textWidth, display );
 
         const fheroes2::Text easyName( getCampaignDifficultyText( Campaign::CampaignDifficulty::Easy ), fheroes2::FontType::normalWhite() );
