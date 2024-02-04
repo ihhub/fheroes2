@@ -567,7 +567,8 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
 
     // Draw texts
     if ( !title.empty() ) {
-        const fheroes2::Text box( title, summaryTitleFont );
+        fheroes2::Text box( title, summaryTitleFont );
+        box.setUniformVerticalAlignment( false );
         box.draw( summaryRoi.x, summaryBodyOffset, summaryRoi.width, display );
         summaryBodyOffset += box.height( summaryRoi.width );
         remainingSummaryBodyHeight -= box.height( summaryRoi.width );
@@ -577,15 +578,18 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
     if ( !outcomeText.empty() ) {
         if ( !surrenderText.empty() ) {
             // Divide the main text area evenly between the two texts bodies by splitting it into 3 equal parts.
-            const fheroes2::Text upperText( surrenderText, bodyFont );
-            const fheroes2::Text lowerText( outcomeText, bodyFont );
+            fheroes2::Text upperText( surrenderText, bodyFont );
+            fheroes2::Text lowerText( outcomeText, bodyFont );
             const int32_t inbetweenSpace = ( remainingSummaryBodyHeight - upperText.height( summaryRoi.width ) - lowerText.height( summaryRoi.width ) ) / 3;
+            upperText.setUniformVerticalAlignment( false );
+            lowerText.setUniformVerticalAlignment( false );
             upperText.draw( summaryRoi.x, summaryBodyOffset + inbetweenSpace, summaryRoi.width, display );
 
             lowerText.draw( summaryRoi.x, summaryBodyOffset + upperText.height( summaryRoi.width ) + inbetweenSpace * 2, summaryRoi.width, display );
         }
         else {
-            const fheroes2::Text upperText( outcomeText, bodyFont );
+            fheroes2::Text upperText( outcomeText, bodyFont );
+            upperText.setUniformVerticalAlignment( false );
             upperText.draw( summaryRoi.x, summaryBodyOffset + remainingSummaryBodyHeight / 2 - ( upperText.height( summaryRoi.width ) / 2 ), summaryRoi.width, display );
         }
     }
