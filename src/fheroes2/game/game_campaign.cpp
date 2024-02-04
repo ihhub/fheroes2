@@ -396,6 +396,7 @@ namespace
         campaignMapId.draw( top.x + 172 - campaignMapId.width() / 2, top.y + 99 - campaignMapId.height() / 2, display );
 
         fheroes2::Text mapDescription( scenario.getDescription(), fheroes2::FontType::normalWhite() );
+        mapDescription.setUniformVerticalAlignment( false );
         mapDescription.draw( top.x + 34, top.y + 134, 356, display );
 
         const int textChoiceWidth = 160;
