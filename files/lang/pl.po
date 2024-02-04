@@ -313,7 +313,7 @@ msgid ""
 "A swarm of\n"
 "%{monster}"
 msgstr ""
-"Mnóstwo\n"
+"Mrowie\n"
 "%{monster}"
 
 msgid ""
