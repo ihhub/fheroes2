@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2012 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -127,9 +127,6 @@ namespace Battle
         // Checks whether the attacker is able to attack the target in melee during the current turn from a position corresponding
         // to the given index
         static bool CanAttackTargetFromPosition( const Unit & attacker, const Unit & target, const int32_t dst );
-
-        // Returns the indexes of the cells closest to the given unit occupied by enemies
-        static Indexes GetAdjacentEnemiesIndexes( const Unit & unit );
 
     private:
         void SetCobjObject( const int icn, const uint32_t dst );

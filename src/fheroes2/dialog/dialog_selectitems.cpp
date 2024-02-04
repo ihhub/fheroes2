@@ -1476,10 +1476,15 @@ void Dialog::selectMineType( int32_t & type, int32_t & color )
 
     fheroes2::ImageRestorer appearanceTextBackground( display, 0, 0, 0, 0 );
     // Mine appearance selection text.
-    auto redrawAppearanceText = [&selectedResourceType, &appearanceTextBackground, &listRoi, &display]( const Maps::ObjectInfo & info ) {
+    auto redrawAppearanceText = [selectedResourceType, &appearanceTextBackground, &listRoi, &display]( const Maps::ObjectInfo & info ) {
         std::string mineText( _( "%{mineName} appearance:" ) );
         if ( info.objectType == MP2::OBJ_MINE ) {
             assert( selectedResourceType < 7 );
+
+#ifdef NDEBUG
+            (void)selectedResourceType;
+#endif
+
             StringReplace( mineText, "%{mineName}", Maps::GetMineName( static_cast<int>( info.metadata[0] ) ) );
         }
         else {

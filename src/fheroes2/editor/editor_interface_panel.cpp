@@ -695,21 +695,21 @@ namespace Interface
     {
         switch ( eraseObjectType ) {
         case Maps::ObjectErasureType::TERRAIN_OBJECTS:
-            return _( "Terrain" );
+            return _( "editorErasure|Terrain" );
         case Maps::ObjectErasureType::CASTLES:
-            return _( "Castles" );
+            return _( "editorErasure|Castles" );
         case Maps::ObjectErasureType::MONSTERS:
-            return _( "Monsters" );
+            return _( "editorErasure|Monsters" );
         case Maps::ObjectErasureType::HEROES:
-            return _( "Heroes" );
+            return _( "editorErasure|Heroes" );
         case Maps::ObjectErasureType::ARTIFACTS:
-            return _( "Artifacts" );
+            return _( "editorErasure|Artifacts" );
         case Maps::ObjectErasureType::ROADS:
-            return _( "Roads" );
+            return _( "editorErasure|Roads" );
         case Maps::ObjectErasureType::STREAMS:
-            return _( "Streams" );
+            return _( "editorErasure|Streams" );
         case Maps::ObjectErasureType::TREASURES:
-            return _( "Treasures" );
+            return _( "editorErasure|Treasures" );
         default:
             // Have you added a new object type to erase? Add the logic above!
             assert( 0 );

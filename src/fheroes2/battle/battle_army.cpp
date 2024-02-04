@@ -23,8 +23,6 @@
 
 #include "battle_army.h"
 
-#include <algorithm>
-#include <cassert>
 #include <cstddef>
 
 #include "army_troop.h"
@@ -47,36 +45,6 @@ namespace
 Battle::Units::Units()
 {
     reserve( unitSizeCapacity );
-}
-
-Battle::Units::Units( const Units & units, const bool isRemoveInvalidUnits )
-{
-    reserve( unitSizeCapacity < units.size() ? units.size() : unitSizeCapacity );
-    assign( units.begin(), units.end() );
-
-    if ( isRemoveInvalidUnits ) {
-        erase( std::remove_if( begin(), end(),
-                               []( const Unit * unit ) {
-                                   assert( unit != nullptr );
-
-                                   return !unit->isValid();
-                               } ),
-               end() );
-    }
-}
-
-Battle::Units::Units( const Units & units, const Unit * unitToRemove )
-{
-    reserve( unitSizeCapacity < units.size() ? units.size() : unitSizeCapacity );
-    assign( units.begin(), units.end() );
-
-    erase( std::remove_if( begin(), end(),
-                           [unitToRemove]( const Unit * unit ) {
-                               assert( unit != nullptr );
-
-                               return !unit->isValid() || unit == unitToRemove;
-                           } ),
-           end() );
 }
 
 void Battle::Units::SortFastest()

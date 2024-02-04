@@ -236,7 +236,6 @@ namespace Battle
         };
 
     private:
-        void HumanTurn( const Unit &, Actions & );
         void UnitTurn( const Units & orderHistory );
 
         void TowerAction( const Tower & );
