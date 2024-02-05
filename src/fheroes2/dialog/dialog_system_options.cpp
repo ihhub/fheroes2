@@ -398,9 +398,7 @@ namespace
             if ( isTextSupportModeEnabled != conf.isTextSupportModeEnabled() ) {
                 isTextSupportModeEnabled = conf.isTextSupportModeEnabled();
 
-                emptyDialogRestorer.restore();
-                drawOptions();
-                okayButton.draw();
+                refreshWindow();
 
                 display.render( emptyDialogRestorer.rect() );
             }
