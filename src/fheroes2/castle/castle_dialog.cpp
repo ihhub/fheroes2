@@ -584,6 +584,7 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
                             const fheroes2::ButtonRestorer exitRestorer( buttonExit );
                             if ( Dialog::OK == Dialog::BuyBoat( AllowBuyBoat( true ) ) ) {
                                 BuyBoat();
+                                fheroes2::drawResourcePanel( GetKingdom().GetFunds(), display, dialogRoi.getPosition() );
                                 fadeBuilding.StartFadeBuilding( BUILD_SHIPYARD );
                             }
                             break;
