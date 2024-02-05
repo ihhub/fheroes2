@@ -934,35 +934,8 @@ namespace fheroes2
                     break;
                 }
 
-                const int baseIcnID = isEvilInterface ? ICN::SYSTEME : ICN::SYSTEM;
-
-                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
-                    Sprite & out = _icnVsSprite[id][i];
-                    const Sprite & originalButton = GetICN( baseIcnID, 11 + i );
-                    const int extendedAmount = 14;
-                    out.resize( originalButton.width() + extendedAmount, originalButton.height() );
-                    out.reset();
-
-                    const int widthEndPart = 4 + 2 * i;
-                    const int widthFirstPart = originalButton.width() - widthEndPart;
-                    const int widthMiddlePart = extendedAmount + i;
-                    const int offsetXEndPart = widthFirstPart + widthMiddlePart;
-                    const int startOffsetXMiddlePart = 36;
-
-                    // Copy left main body of button.
-                    fheroes2::Copy( originalButton, 0, 0, out, 0, 0, widthFirstPart, originalButton.height() );
-
-                    // Copy middle body of button.
-                    fheroes2::Copy( originalButton, originalButton.width() - startOffsetXMiddlePart, 0, out, widthFirstPart, 0, widthMiddlePart,
-                                    originalButton.height() );
-
-                    // Copy terminating right margin of the button.
-                    fheroes2::Copy( originalButton, originalButton.width() - widthEndPart, 0, out, offsetXEndPart, 0, widthEndPart, originalButton.height() );
-                }
-
-                const fheroes2::FontColor buttonFontColor = isEvilInterface ? fheroes2::FontColor::GRAY : fheroes2::FontColor::WHITE;
-                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "TRADE" ), { 6, 5 }, { 4, 6 }, { 100, 16 }, buttonFontColor );
-
+                getTextAdaptedButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "TRADE" ),
+                                      isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON, isEvilInterface ? ICN::UNIFORMBAK_EVIL : ICN::UNIFORMBAK_GOOD );
                 break;
             }
             case ICN::BUTTON_SMALL_YES_GOOD:
