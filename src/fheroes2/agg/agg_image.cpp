@@ -1799,14 +1799,14 @@ namespace fheroes2
             case ICN::BUTTON_RESET_GOOD: {
                 _icnVsSprite[id].resize( 2 );
 
-                createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], 80, gettext_noop( "RESET" ), false );
+                getTextAdaptedButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "RESET" ), ICN::EMPTY_GOOD_BUTTON, ICN::STONEBAK );
 
                 break;
             }
             case ICN::BUTTON_START_GOOD: {
                 _icnVsSprite[id].resize( 2 );
 
-                createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], 80, gettext_noop( "START" ), false );
+                getTextAdaptedButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "START" ), ICN::EMPTY_GOOD_BUTTON, ICN::STONEBAK );
 
                 break;
             }
