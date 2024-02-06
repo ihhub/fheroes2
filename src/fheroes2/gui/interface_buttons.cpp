@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -31,7 +31,6 @@
 #include "heroes.h"
 #include "icn.h"
 #include "interface_base.h"
-#include "interface_gamearea.h"
 #include "kingdom.h"
 #include "localevent.h"
 #include "mp2.h"
@@ -155,9 +154,6 @@ fheroes2::GameMode Interface::ButtonsArea::QueueEventProcessing()
     le.MousePressLeft( systemRect ) ? buttonSystem.drawOnPress() : buttonSystem.drawOnRelease();
 
     fheroes2::GameMode res = fheroes2::GameMode::CANCEL;
-
-    // We should disable the fast scroll, because the cursor might be on one of the borders when a dialog gets dismissed.
-    Interface::AdventureMap::Get().getGameArea().setFastScrollStatus( false );
 
     // Move border window
     if ( Settings::Get().ShowButtons() && BorderWindow::QueueEventProcessing() ) {
