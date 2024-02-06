@@ -405,7 +405,7 @@ int Dialog::ArmySplitTroop( uint32_t freeSlots, const uint32_t redistributeMax, 
 
     std::string msg( _( "How many %{troops} to move?" ) );
     StringReplace( msg, "%{troops}", troopName );
-    const fheroes2::Text titleText( std::move(msg), fheroes2::FontType::normalWhite() );
+    const fheroes2::Text titleText( std::move( msg ), fheroes2::FontType::normalWhite() );
     const int32_t titleHeight = titleText.rows( BOXAREA_WIDTH ) * titleText.height();
 
     const fheroes2::Text slotSeparationText( _( "Fast separation into slots:" ), fheroes2::FontType::normalWhite() );
@@ -443,8 +443,8 @@ int Dialog::ArmySplitTroop( uint32_t freeSlots, const uint32_t redistributeMax, 
 
             const int spriteWidth = sprites[i].width();
             const int offset = spriteWidth * ( 2 * static_cast<int>( i ) + 1 - static_cast<int>( freeSlots ) ) / 2;
-            vrts[i]
-                = fheroes2::Rect( center + offset + deltaXStart + i * deltaX, pos.y + textTopOffset + titleHeight + bodyHeight + 45, spriteWidth, sprites[i].height() );
+            vrts[i] = fheroes2::Rect( center + offset + deltaXStart + static_cast<int>( i ) * deltaX, pos.y + textTopOffset + titleHeight + bodyHeight + 45, spriteWidth, 
+                                      sprites[i].height() );
         }
 
         slotSeparationText.draw( pos.x, pos.y + textTopOffset + titleHeight + 37, BOXAREA_WIDTH, display );
