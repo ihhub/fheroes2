@@ -851,15 +851,16 @@ namespace
 
         std::vector<fheroes2::ResolutionInfo> getAvailableResolutions() const override
         {
-            static const std::vector<fheroes2::ResolutionInfo> filteredResolutions = []() {
+            int currentIndex = static_cast<int>( getCurrentDisplayIndex() );
+            static const std::vector<fheroes2::ResolutionInfo> filteredResolutions = [=]() {
                 std::set<fheroes2::ResolutionInfo> resolutionSet;
 
                 const int displayCount = SDL_GetNumVideoDisplays();
                 if ( displayCount > 0 ) {
-                    const int displayModeCount = SDL_GetNumDisplayModes( 0 );
+                    const int displayModeCount = SDL_GetNumDisplayModes( currentIndex );
                     for ( int i = 0; i < displayModeCount; ++i ) {
                         SDL_DisplayMode videoMode;
-                        const int returnCode = SDL_GetDisplayMode( 0, i, &videoMode );
+                        const int returnCode = SDL_GetDisplayMode( currentIndex, i, &videoMode );
                         if ( returnCode < 0 ) {
                             ERROR_LOG( "Failed to get display mode. The error value: " << returnCode << ", description: " << SDL_GetError() )
                         }
@@ -966,7 +967,6 @@ namespace
             if ( displayCount > 0 ) {
                 return static_cast<uint8_t>( displayCount );
             }
-
             ERROR_LOG( "Failed to Get Number of Displays, description: " << SDL_GetError() );
             // There should be one display at least.
             return 1;
@@ -1085,9 +1085,7 @@ namespace
 
             const std::vector<fheroes2::ResolutionInfo> resolutions = getAvailableResolutions();
             assert( !resolutions.empty() );
-            if ( !resolutions.empty() ) {
-                resolutionInfo = GetNearestResolution( resolutionInfo, resolutions );
-            }
+            resolutionInfo = GetNearestResolution( resolutionInfo, resolutions );
 
 #if defined( ANDROID )
             // Same as ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
