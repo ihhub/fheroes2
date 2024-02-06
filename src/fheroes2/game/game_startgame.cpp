@@ -1033,8 +1033,6 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
 
         // hotkeys
         if ( le.KeyPress() ) {
-            // We should disable the fast scroll, because the cursor might be on one of the borders.
-            _gameArea.setFastScrollStatus( false );
             // if the hero is currently moving, pressing any key should stop him
             if ( isMovingHero ) {
                 stopHero = true;

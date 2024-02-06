@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -35,6 +35,8 @@
 
 #include "battle_arena.h"
 #include "dialog.h"
+#include "game_interface.h"
+#include "interface_gamearea.h"
 #include "localevent.h"
 #include "logging.h"
 #include "players.h"
@@ -346,6 +348,10 @@ namespace
 bool Game::HotKeyPressEvent( const HotKeyEvent eventID )
 {
     const LocalEvent & le = LocalEvent::Get();
+    if ( le.KeyPress() ) {
+        // We should disable the fast scroll, because the cursor might be on one of the borders when a dialog gets dismissed.
+        Interface::AdventureMap::Get().getGameArea().setFastScrollStatus( false );
+    }
     return le.KeyPress() && le.KeyValue() == hotKeyEventInfo[hotKeyEventToInt( eventID )].key;
 }
 
