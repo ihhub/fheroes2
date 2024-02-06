@@ -68,7 +68,7 @@
           <li>use CP1257 code page for Lithaunian</li>
           <li>offer the Wisdom skill to the heroes of "magic" classes on a mandatory basis at least once every three level-ups</li>
           <li>implement Mountains, Rocks and Trees placing in the Editor</li>
-          <li>make the AI attack human heroes with higher chance than AI heroes</li>
+          <li>make the AI attack human heroes that have a greater chance to win than the AI heroes</li>
           <li>implement Power-ups object placement in the Editor</li>
           <li>allow AI units that ignore retaliatory strikes to attack neighboring enemy units while covering archers</li>
           <li>avoid visiting Oasis and Watering Hole objects by AI heroes if they bring no benefit</li>
