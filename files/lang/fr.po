@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-03 03:27+0000\n"
-"PO-Revision-Date: 2024-02-06 03:43+0100\n"
+"PO-Revision-Date: 2024-02-06 13:52+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
 "Language: fr\n"
@@ -4586,28 +4586,28 @@ msgid "hotkey|restart campaign scenario"
 msgstr "Recommencer le scénario de campagne"
 
 msgid "hotkey|world map left"
-msgstr "Déplacement vers la gauche sur la carte du monde"
+msgstr "Déplacement vers la gauche"
 
 msgid "hotkey|world map right"
-msgstr "Déplacement vers la droite sur la carte du monde"
+msgstr "Déplacement vers la droite"
 
 msgid "hotkey|world map up"
-msgstr "Déplacement vers le haut sur la carte du monde"
+msgstr "Déplacement vers le haut"
 
 msgid "hotkey|world map down"
-msgstr "Déplacement vers le bas sur la carte du monde"
+msgstr "Déplacement vers le bas"
 
 msgid "hotkey|world map up left"
-msgstr "Déplacement vers le haut et la gauche sur la carte du monde"
+msgstr "Déplacement vers le haut et la gauche"
 
 msgid "hotkey|world map up right"
-msgstr "Déplacement vers le haut et la droite sur la carte du monde"
+msgstr "Déplacement vers le haut et la droite"
 
 msgid "hotkey|world map down left"
-msgstr "Déplacement vers le bas et la gauche sur la carte du monde"
+msgstr "Déplacement vers le bas et la gauche"
 
 msgid "hotkey|world map down right"
-msgstr "Déplacement vers le bas et la droite sur la carte du monde"
+msgstr "Déplacement vers le bas et la droite"
 
 msgid "hotkey|save game"
 msgstr "Sauvegarder la partie"
