@@ -1131,8 +1131,9 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
             const fheroes2::Point & mousePosition = le.GetMouseCursor();
             const int32_t index = _gameArea.GetValidTileIdFromPoint( mousePosition );
             Heroes * selectedHero = world.GetTiles( index ).getHero();
-            if ( selectedHero && selectedHero != GetFocusHeroes() ) {
-                cursor.SetThemes( GetCursorTileIndex( _gameArea.GetValidTileIdFromPoint( le.GetMouseCursor() ) ) );
+            const Heroes * currentHero = GetFocusHeroes();
+            if ( selectedHero != nullptr && selectedHero != currentHero && selectedHero->GetColor() == currentHero->GetColor() ) {
+                cursor.SetThemes( GetCursorTileIndex( index ) );
                 if ( le.MouseClickLeft() ) {
                     EventSwitchFocusedHero( selectedHero );
                 }
@@ -1561,5 +1562,11 @@ void Interface::AdventureMap::mouseCursorAreaPressRight( const int32_t tileIndex
 void Interface::AdventureMap::mouseCursorAreaLongPressLeft( const int32_t tileIndex )
 {
     const Maps::Tiles & tile = world.GetTiles( tileIndex );
-    EventSwitchFocusedHero( tile.getHero() );
+    Heroes * selectedHero = tile.getHero();
+    const Heroes * currentHero = GetFocusHeroes();
+    if ( selectedHero == nullptr || selectedHero == currentHero || selectedHero->GetColor() != currentHero->GetColor() ) {
+        return;
+    }
+
+    EventSwitchFocusedHero( selectedHero );
 }

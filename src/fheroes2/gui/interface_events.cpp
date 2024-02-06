@@ -130,11 +130,6 @@ void Interface::AdventureMap::_startHeroMove( Heroes & hero )
 
 void Interface::AdventureMap::EventSwitchFocusedHero( Heroes * selectedHero )
 {
-    const Heroes * currentHero = GetFocusHeroes();
-    if ( selectedHero == nullptr || selectedHero == currentHero || selectedHero->GetColor() != currentHero->GetColor() ) {
-        return;
-    }
-
     SetFocus( selectedHero, false );
     RedrawFocus();
 }
