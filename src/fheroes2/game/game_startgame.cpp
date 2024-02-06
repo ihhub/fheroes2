@@ -622,7 +622,7 @@ int Interface::AdventureMap::GetCursorFocusHeroes( const Heroes & hero, const Ma
             }
 
             if ( hero.GetColor() == otherHero->GetColor() ) {
-                if ( HotKeyHoldEvent( Game::HotKeyEvent::WORLD_SELECT_HERO ) ) {
+                if ( HotKeyHoldEvent( Game::HotKeyEvent::WORLD_QUICK_SELECT_HERO ) ) {
                     return Cursor::HEROES;
                 }
                 const int cursor = Cursor::DistanceThemes( Cursor::CURSOR_HERO_MEET, hero.getNumOfTravelDays( tile.GetIndex() ) );
@@ -1124,7 +1124,7 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
                 EventOpenFocus();
         }
 
-        if ( HotKeyHoldEvent( Game::HotKeyEvent::WORLD_SELECT_HERO ) && GetFocusHeroes() ) {
+        if ( HotKeyHoldEvent( Game::HotKeyEvent::WORLD_QUICK_SELECT_HERO ) && GetFocusHeroes() ) {
             if ( isMovingHero ) {
                 stopHero = true;
             }
