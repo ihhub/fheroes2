@@ -286,6 +286,7 @@ namespace fheroes2
                 fheroes2::Display & display = fheroes2::Display::instance();
                 const fheroes2::ResolutionInfo currentResolution{ display.width(), display.height(), display.screenSize().width, display.screenSize().height };
                 display.setResolution( currentResolution );
+                updateUI();
 
                 conf.Save( Settings::configFileName );
                 windowType = SelectedWindow::Configuration;
