@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-24 13:18+0000\n"
+"POT-Creation-Date: 2024-02-03 03:27+0000\n"
 "PO-Revision-Date: 2023-09-06 08:41+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3730,6 +3730,10 @@ msgstr ""
 msgid "Heroes cannot be placed on water."
 msgstr ""
 
+msgid ""
+"A maximum of %{count} heroes of the same color can be placed on the map."
+msgstr ""
+
 msgid "Artifacts cannot be placed on water."
 msgstr ""
 
@@ -3845,12 +3849,29 @@ msgstr "Міста"
 msgid "Heroes"
 msgstr ""
 
-msgid "Terrain"
+msgid "editorErasure|Terrain"
 msgstr ""
 
-#, fuzzy
-msgid "Castles"
-msgstr "Замок"
+msgid "editorErasure|Castles"
+msgstr ""
+
+msgid "editorErasure|Monsters"
+msgstr ""
+
+msgid "editorErasure|Heroes"
+msgstr ""
+
+msgid "editorErasure|Artifacts"
+msgstr ""
+
+msgid "editorErasure|Roads"
+msgstr ""
+
+msgid "editorErasure|Streams"
+msgstr ""
+
+msgid "editorErasure|Treasures"
+msgstr ""
 
 msgid ""
 "Draws terrain in\n"
@@ -10484,6 +10505,10 @@ msgstr ""
 "Перевірити нову версію гри на\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#, fuzzy
+#~ msgid "Castles"
+#~ msgstr "Замок"
 
 #, fuzzy
 #~ msgid "Ocean object"

@@ -20,18 +20,18 @@ BinPackParameters: true
 BreakAfterJavaFieldAnnotations: true
 BreakBeforeBraces: Custom
 BraceWrapping:
-    AfterClass: true
-    AfterControlStatement: false
-    AfterEnum: true
-    AfterFunction: true
-    AfterNamespace: true
-    AfterStruct: true
-    AfterUnion: true
-    BeforeCatch: true
-    BeforeElse: true
-    SplitEmptyFunction: false
-    SplitEmptyRecord: false
-    SplitEmptyNamespace: false
+  AfterClass: true
+  AfterControlStatement: false
+  AfterEnum: true
+  AfterFunction: true
+  AfterNamespace: true
+  AfterStruct: true
+  AfterUnion: true
+  BeforeCatch: true
+  BeforeElse: true
+  SplitEmptyFunction: false
+  SplitEmptyRecord: false
+  SplitEmptyNamespace: false
 BreakBeforeBinaryOperators: All
 BreakBeforeTernaryOperators: true
 BreakConstructorInitializers: BeforeComma
@@ -45,25 +45,25 @@ DerivePointerAlignment: false
 FixNamespaceComments: false
 IncludeBlocks: Regroup
 IncludeCategories:
-  - Regex: '^<SDL'
-    CaseSensitive: true
-    Priority: 3
-  - Regex: '^<[^.]+>$'
-    Priority: 1
-  - Regex: '^<'
-    Priority: 2
-  - Regex: '^"'
-    Priority: 4
+- Regex: '^<SDL'
+  CaseSensitive: true
+  Priority: 3
+- Regex: '^<[^.]+>$'
+  Priority: 1
+- Regex: '^<'
+  Priority: 2
+- Regex: '^"'
+  Priority: 4
 IndentCaseLabels: false
 IndentWidth: 4
 IndentWrappedFunctionNames: true
 JavaImportGroups:
-  - 'java'
-  - 'android'
-  - 'androidx'
-  - 'org.apache'
-  - 'org.libsdl'
-  - 'com.github.stephenc'
+- 'java'
+- 'android'
+- 'androidx'
+- 'org.apache'
+- 'org.libsdl'
+- 'com.github.stephenc'
 KeepEmptyLinesAtTheStartOfBlocks: false
 MaxEmptyLinesToKeep: 1
 NamespaceIndentation: All

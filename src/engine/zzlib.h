@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -35,6 +35,12 @@ class ZStreamBuf : public StreamBuf
 {
 public:
     ZStreamBuf() = default;
+
+    ZStreamBuf( const ZStreamBuf & ) = delete;
+
+    ~ZStreamBuf() override = default;
+
+    ZStreamBuf & operator=( const ZStreamBuf & ) = delete;
 
     // Reads & unzips the zipped chunk from the specified file at the specified offset and appends
     // it to the end of the buffer. The current read position of the buffer does not change. Returns

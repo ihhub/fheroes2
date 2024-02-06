@@ -1,6 +1,6 @@
 ###########################################################################
 #   fheroes2: https://github.com/ihhub/fheroes2                           #
-#   Copyright (C) 2021 - 2022                                             #
+#   Copyright (C) 2021 - 2024                                             #
 #                                                                         #
 #   This program is free software; you can redistribute it and/or modify  #
 #   it under the terms of the GNU General Public License as published by  #
@@ -26,16 +26,8 @@ CCFLAGS := $(CCFLAGS) -I../engine
 LIBENGINE := $(LIBENGINE) ../thirdparty/libsmacker/libsmacker.a
 CCFLAGS := $(CCFLAGS) -I../thirdparty/libsmacker
 
-ifeq ($(PLATFORM), mingw)
-RES := ../resources/$(TARGET).res
-RC  := ../resources/fheroes2.rc
-ifdef FHEROES2_WITH_DEBUG
-DEBUGFLAG := -DWITH_DEBUG
-endif
-endif
-
 SOURCEROOT := ../fheroes2
-SOURCEDIR  := $(filter %/, $(wildcard $(SOURCEROOT)/*/)) $(filter %/, $(wildcard $(SOURCEROOT)/*/*/))
+SOURCEDIR  := $(filter %/,$(wildcard $(SOURCEROOT)/*/)) $(filter %/,$(wildcard $(SOURCEROOT)/*/*/))
 POT        := $(TARGET).pot
 
 SEARCH     := $(wildcard $(SOURCEROOT)/*/*.cpp) $(wildcard $(SOURCEROOT)/*/*/*.cpp)
@@ -44,7 +36,7 @@ SEARCH     := $(wildcard $(SOURCEROOT)/*/*.cpp) $(wildcard $(SOURCEROOT)/*/*/*.c
 
 all: $(TARGET)
 
-$(TARGET): $(notdir $(patsubst %.cpp, %.o, $(SEARCH))) $(LIBENGINE) $(RES)
+$(TARGET): $(notdir $(patsubst %.cpp, %.o, $(SEARCH))) $(LIBENGINE)
 	@echo "lnk: $@"
 	$(CXX) -o $@ $^ $(LIBS) $(LDFLAGS)
 
@@ -52,10 +44,6 @@ pot: $(wildcard $(SEARCH))
 	@echo "gen: $(POT)"
 	@xgettext -d $(TARGET) -C -F -k_ -k_n:1,2 -o $(POT) $(sort $(wildcard $(SEARCH)))
 	@sed -i~ -e 's/, c-format//' $(POT)
-
-$(RES): $(RC)
-	@echo "gen: $@"
-	$(WINDRES) -I../fheroes2/system $(DEBUGFLAG) $< -O coff -o $@
 
 VPATH := $(SOURCEDIR)
 
@@ -65,5 +53,5 @@ VPATH := $(SOURCEDIR)
 include $(wildcard *.d)
 
 clean:
-	rm -f *.pot *.pot~ *.o *.d *.exe $(TARGET) $(RES)
+	rm -f *.pot *.pot~ *.o *.d *.exe $(TARGET)
 	rm -rf *.app

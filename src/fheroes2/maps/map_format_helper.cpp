@@ -61,6 +61,17 @@ namespace Maps
     {
         world.generateForEditor( map.size );
 
+        if ( !readAllTiles( map ) ) {
+            return false;
+        }
+
+        world.updatePassabilities();
+
+        return true;
+    }
+
+    bool readAllTiles( const Map_Format::MapFormat & map )
+    {
         assert( static_cast<size_t>( world.w() ) * world.h() == map.tiles.size() );
 
         // We must clear all tiles before writing something on them.
@@ -90,10 +101,10 @@ namespace Maps
 
         for ( const auto & info : sortedObjects ) {
             assert( info.info != nullptr );
-            readTileObject( world.GetTiles( info.tileIndex ), *info.info );
+            if ( !readTileObject( world.GetTiles( info.tileIndex ), *info.info ) ) {
+                return false;
+            }
         }
-
-        world.updatePassabilities();
 
         return true;
     }
@@ -120,26 +131,26 @@ namespace Maps
         tile.setTerrain( info.terrainIndex, info.terrainFlag & 2, info.terrainFlag & 1 );
     }
 
-    void readTileObject( Tiles & tile, const Map_Format::ObjectInfo & object )
+    bool readTileObject( Tiles & tile, const Map_Format::ObjectInfo & object )
     {
         const auto & objectInfos = getObjectsByGroup( object.group );
         if ( object.index >= objectInfos.size() ) {
             // This is a bad map format!
             assert( 0 );
-            return;
+            return false;
         }
 
         // Object UID is set through global object UID counter. Therefore, we need to update it before running the operation.
         if ( object.id == 0 ) {
             // This object UID is not set!
             assert( 0 );
-            return;
+            return false;
         }
 
         setLastObjectUID( object.id - 1 );
         // We don't update map passabilities as it is a very expensive process.
         // Let's do it once everything is being loaded.
-        setObjectOnTile( tile, objectInfos[object.index], false );
+        return setObjectOnTile( tile, objectInfos[object.index], false );
     }
 
     void writeTile( const Tiles & tile, Map_Format::TileInfo & info )

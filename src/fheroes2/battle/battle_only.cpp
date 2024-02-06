@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2011 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -66,7 +66,7 @@ namespace
     const int32_t primarySkillIconSize{ 33 };
 
     const std::array<int32_t, 2> playerColor{ Color::BLUE, Color::RED };
-    const std::array<int32_t, 2> moraleAndLuckOffsetX{ 34, 566 };
+    const std::array<int32_t, 2> moraleAndLuckOffsetX{ 34, 571 };
     const std::array<int32_t, 2> primarySkillOffsetX{ 216, 389 };
     const std::array<int32_t, 2> secondarySkillOffsetX{ 22, 353 };
     const std::array<int32_t, 2> artifactOffsetX{ 23, 367 };

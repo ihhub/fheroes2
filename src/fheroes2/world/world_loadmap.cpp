@@ -43,6 +43,7 @@
 #include "heroes.h"
 #include "kingdom.h"
 #include "logging.h"
+#include "map_format_helper.h"
 #include "map_format_info.h"
 #include "maps.h"
 #include "maps_fileinfo.h"
@@ -672,8 +673,25 @@ bool World::loadResurrectionMap( const std::string & filename )
         return false;
     }
 
-    // TODO: return true once we add logic for loading an entire map.
-    return false;
+    width = map.size;
+    height = map.size;
+
+    vec_tiles.resize( static_cast<size_t>( width ) * height );
+
+    if ( !Maps::readAllTiles( map ) ) {
+        return false;
+    }
+
+    // Clear artifact flags to correctly generate random artifacts.
+    fheroes2::ResetArtifactStats();
+
+    if ( !ProcessNewMap( filename, false ) ) {
+        return false;
+    }
+
+    DEBUG_LOG( DBG_GAME, DBG_INFO, "Loading of FH2 map is completed." )
+
+    return true;
 }
 
 bool World::ProcessNewMap( const std::string & filename, const bool checkPoLObjects )
