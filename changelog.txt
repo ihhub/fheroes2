@@ -1,4 +1,5 @@
 version 1.0.12 (07 February 2024)
+- update the Spanish translation
 - correct icons alignment on the hero meeting screen
 - update the Polish translation
 - fix the retaliation of archers attacked by an ally under the influence of Berserker or Hypnotize spells, improve the AI usage of Hypnotize spell in general
@@ -7,7 +8,7 @@ version 1.0.12 (07 February 2024)
 - fix Oasis object passability
 - always offer one native hero at the beginning of a new week
 - puzzle and View World dialogs rendering improvements
-- implement Landscape Miscellaneous (non action) objects placing in Editor
+- implement Landscape Miscellaneous (non-action) objects placing in Editor
 - fix OKAY button translation for Interface Settings dialog after any setting change
 - make the AI not to know what objects contain
 - fix issue when Blind or Paralyze has been applied to a hypnotized unit during its turn
