@@ -1122,20 +1122,15 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
             // open focus
             else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_OPEN_FOCUS ) )
                 EventOpenFocus();
-        }
-
-        if ( HotKeyHoldEvent( Game::HotKeyEvent::WORLD_QUICK_SELECT_HERO ) && GetFocusHeroes() ) {
-            if ( isMovingHero ) {
-                stopHero = true;
-            }
-            const fheroes2::Point & mousePosition = le.GetMouseCursor();
-            const int32_t index = _gameArea.GetValidTileIdFromPoint( mousePosition );
-            Heroes * selectedHero = world.GetTiles( index ).getHero();
-            const Heroes * currentHero = GetFocusHeroes();
-            if ( selectedHero != nullptr && selectedHero != currentHero && selectedHero->GetColor() == currentHero->GetColor() ) {
-                cursor.SetThemes( GetCursorTileIndex( index ) );
+            else if ( HotKeyHoldEvent( Game::HotKeyEvent::WORLD_QUICK_SELECT_HERO ) ) {
+                const fheroes2::Point & mousePosition = le.GetMouseCursor();
+                const int32_t index = _gameArea.GetValidTileIdFromPoint( mousePosition );
+                // This tells us that this is a hero owned by the current player and that they can meet, so we switch to the helmet cursor.
+                if ( cursor.Themes() == Cursor::CURSOR_HERO_MEET ) {
+                    cursor.SetThemes( GetCursorTileIndex( index ) );
+                }
                 if ( le.MouseClickLeft() ) {
-                    EventSwitchFocusedHero( selectedHero );
+                    EventSwitchFocusedHero( index );
                 }
             }
         }
@@ -1561,12 +1556,5 @@ void Interface::AdventureMap::mouseCursorAreaPressRight( const int32_t tileIndex
 }
 void Interface::AdventureMap::mouseCursorAreaLongPressLeft( const int32_t tileIndex )
 {
-    const Maps::Tiles & tile = world.GetTiles( tileIndex );
-    Heroes * selectedHero = tile.getHero();
-    const Heroes * currentHero = GetFocusHeroes();
-    if ( selectedHero == nullptr || selectedHero == currentHero || selectedHero->GetColor() != currentHero->GetColor() ) {
-        return;
-    }
-
-    EventSwitchFocusedHero( selectedHero );
+    EventSwitchFocusedHero( tileIndex );
 }

@@ -122,7 +122,7 @@ namespace Interface
         void EventPuzzleMaps() const;
         static fheroes2::GameMode EventScenarioInformation();
         void EventSystemDialog() const;
-        void EventSwitchFocusedHero( Heroes * selectedHero );
+        void EventSwitchFocusedHero( const int32_t tileIndex );
         void EventNextHero();
         void EventNextTown();
         fheroes2::GameMode EventHeroMovement();
