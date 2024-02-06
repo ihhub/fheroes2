@@ -68,15 +68,15 @@
           <li>use CP1257 code page for Lithaunian</li>
           <li>offer the Wisdom skill to the heroes of "magic" classes on a mandatory basis at least once every three level-ups</li>
           <li>implement Mountains, Rocks and Trees placing in the Editor</li>
-          <li>make the AI to attack human heroes with higher chance than AI heroes</li>
+          <li>make the AI attack human heroes with higher chance than AI heroes</li>
           <li>implement Power-ups object placement in the Editor</li>
           <li>allow AI units that ignore retaliatory strikes to attack neighboring enemy units while covering archers</li>
           <li>avoid visiting Oasis and Watering Hole objects by AI heroes if they bring no benefit</li>
-          <li>make AI heroes behavior depend on the time spending on map</li>
+          <li>make AI hero behavior depend on the time spent on the map</li>
           <li>improve fog discovery by the AI heroes</li>
           <li>adjust text in the skill popup dialog</li>
           <li>implement Mines placing in the Editor</li>
-          <li>improve AI heroes interaction with Witch's Hut object</li>
+          <li>improve AI hero interaction with Witch's Hut object</li>
           <li>allow the AI-controlled hero to surrender if his kingdom has sufficient gold reserves</li>
           <li>add text width-adapted CANCEL button, change to StandardWindow for Resolution, Language, Adventure, File and Scenario Info dialogs</li>
           <li>update Hungarian translation</li>
@@ -87,7 +87,7 @@
           <li>mark fheroes2 as DPI-aware on Windows</li>
           <li>speed up image loading</li>
           <li>speed up file loading and reduce memory usage on the Adventure Map</li>
-          <li>improve the AI logic for pay to hire dwellings on Adventure Map</li>
+          <li>improve the AI logic for pay-to-hire dwellings on the Adventure Map</li>
           <li>improve the AI heuristics of covering shooters when using defensive tactics</li>
           <li>update buttons and add popup windows for them in Battle Only mode</li>
           <li>use the "cautious offensive" tactics for AI only against melee-only armies without the distant attack potential (including damage spells)</li>
@@ -97,15 +97,15 @@
           <li>use singular Mine form for the corresponding object</li>
           <li>fix inaccurate Jail object removal</li>
           <li>add missing rules for the plural in Hungarian language</li>
-          <li>bound secondary skill name and level within UI area</li>
+          <li>restrict secondary skill name and level to the UI area</li>
           <li>fix too wide text in quick hero info dialog</li>
-          <li>hide swap army/artifact buttons in the Battle Only</li>
+          <li>hide swap army/artifact buttons in the Battle Only mode</li>
           <li>update several text descriptions</li>
           <li>add Campfire object in the Editor</li>
-          <li>take into an account SHIFT and CAPS LOCK being used at the same time</li>
+          <li>take into account SHIFT and CAPS LOCK being used at the same time</li>
           <li>make radar rendering optimization</li>
           <li>fix the AI spell damage estimation logic for units immune to the given spell</li>
-          <li>rework editor instrument groups: add new buttons, rework instrument panel, add evil inerface</li>
+          <li>rework editor instrument groups: add new buttons, rework instrument panel, add evil interface</li>
           <li>fix multiple spellbook-related issues in the Battle Only mode</li>
           <li>update French translation</li>
           <li>show an error when it is not possible to save a game on a hard disk</li>

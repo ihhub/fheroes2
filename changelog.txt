@@ -25,15 +25,15 @@ version 1.0.12 (07 February 2024)
 - use CP1257 code page for Lithaunian
 - offer the Wisdom skill to the heroes of "magic" classes on a mandatory basis at least once every three level-ups
 - implement Mountains, Rocks and Trees placing in the Editor
-- make the AI to attack human heroes with higher chance than AI heroes
+- make the AI attack human heroes with higher chance than AI heroes
 - implement Power-ups object placement in the Editor
 - allow AI units that ignore retaliatory strikes to attack neighboring enemy units while covering archers
 - avoid visiting Oasis and Watering Hole objects by AI heroes if they bring no benefit
-- make AI heroes behavior depend on the time spending on map
+- make AI hero behavior depend on the time spent on the map
 - improve fog discovery by the AI heroes
 - adjust text in the skill popup dialog
 - implement Mines placing in the Editor
-- improve AI heroes interaction with Witch's Hut object
+- improve AI hero interaction with Witch's Hut object
 - allow the AI-controlled hero to surrender if his kingdom has sufficient gold reserves
 - add text width-adapted CANCEL button, change to StandardWindow for Resolution, Language, Adventure, File and Scenario Info dialogs
 - update Hungarian translation
@@ -44,7 +44,7 @@ version 1.0.12 (07 February 2024)
 - mark fheroes2 as DPI-aware on Windows
 - speed up image loading
 - speed up file loading and reduce memory usage on the Adventure Map
-- improve the AI logic for pay to hire dwellings on Adventure Map
+- improve the AI logic for pay-to-hire dwellings on the Adventure Map
 - improve the AI heuristics of covering shooters when using defensive tactics
 - update buttons and add popup windows for them in Battle Only mode
 - use the "cautious offensive" tactics for AI only against melee-only armies without the distant attack potential (including damage spells)
@@ -54,15 +54,15 @@ version 1.0.12 (07 February 2024)
 - use singular Mine form for the corresponding object
 - fix inaccurate Jail object removal
 - add missing rules for the plural in Hungarian language
-- bound secondary skill name and level within UI area
+- restrict secondary skill name and level to the UI area
 - fix too wide text in quick hero info dialog
-- hide swap army/artifact buttons in the Battle Only
+- hide swap army/artifact buttons in the Battle Only mode
 - update several text descriptions
 - add Campfire object in the Editor
-- take into an account SHIFT and CAPS LOCK being used at the same time
+- take into account SHIFT and CAPS LOCK being used at the same time
 - make radar rendering optimization
 - fix the AI spell damage estimation logic for units immune to the given spell
-- rework editor instrument groups: add new buttons, rework instrument panel, add evil inerface
+- rework editor instrument groups: add new buttons, rework instrument panel, add evil interface
 - fix multiple spellbook-related issues in the Battle Only mode
 - update French translation
 - show an error when it is not possible to save a game on a hard disk
