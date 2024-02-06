@@ -348,6 +348,10 @@ namespace
 bool Game::HotKeyPressEvent( const HotKeyEvent eventID )
 {
     const LocalEvent & le = LocalEvent::Get();
+    if ( le.KeyPress() ) {
+        // We should disable the fast scroll, because the cursor might be on one of the borders when a dialog gets dismissed.
+        Interface::AdventureMap::Get().getGameArea().setFastScrollStatus( false );
+    }
     return le.KeyPress() && le.KeyValue() == hotKeyEventInfo[hotKeyEventToInt( eventID )].key;
 }
 
@@ -355,18 +359,6 @@ bool Game::HotKeyHoldEvent( const HotKeyEvent eventID )
 {
     const LocalEvent & le = LocalEvent::Get();
     return le.KeyHold() && le.KeyValue() == hotKeyEventInfo[hotKeyEventToInt( eventID )].key;
-}
-
-bool Game::HotKeyCloseWindow()
-{
-    if ( !HotKeyPressEvent( HotKeyEvent::DEFAULT_CANCEL ) && !HotKeyPressEvent( HotKeyEvent::DEFAULT_OKAY ) ) {
-        return false;
-    }
-
-    // We should disable the fast scroll, because the cursor might be on one of the borders when a dialog gets dismissed.
-    Interface::AdventureMap::Get().getGameArea().setFastScrollStatus( false );
-
-    return true;
 }
 
 fheroes2::Key Game::getHotKeyForEvent( const HotKeyEvent eventID )

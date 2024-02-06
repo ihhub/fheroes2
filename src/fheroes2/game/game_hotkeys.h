@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2022 - 2024                                             *
+ *   Copyright (C) 2022 - 2023                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -184,7 +184,10 @@ namespace Game
     fheroes2::Key getHotKeyForEvent( const HotKeyEvent eventID );
     void setHotKeyForEvent( const HotKeyEvent eventID, const fheroes2::Key key );
 
-    bool HotKeyCloseWindow();
+    inline bool HotKeyCloseWindow()
+    {
+        return HotKeyPressEvent( HotKeyEvent::DEFAULT_CANCEL ) || HotKeyPressEvent( HotKeyEvent::DEFAULT_OKAY );
+    }
 
     std::string getHotKeyNameByEventId( const HotKeyEvent eventID );
 

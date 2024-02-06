@@ -948,7 +948,7 @@ void Interface::GameArea::setFastScrollStatus( const bool enable )
 bool Interface::GameArea::mouseIndicatesFastScroll( const fheroes2::Point & mousePosition )
 {
     const fheroes2::Display & display = fheroes2::Display::instance();
-    constexpr int deadZone = 3;
+    constexpr int32_t deadZone = 3;
 
     // Remember the initial reference point for re-enabling checks later on.
     if ( _resetMousePositionForFastScroll ) {
