@@ -1,4 +1,5 @@
 version 1.0.12 (07 February 2024)
+- update the Russian translation
 - update the Spanish translation
 - correct icons alignment on the hero meeting screen
 - update the Polish translation
