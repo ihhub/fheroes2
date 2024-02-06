@@ -399,8 +399,6 @@ namespace
                 isTextSupportModeEnabled = conf.isTextSupportModeEnabled();
 
                 refreshWindow();
-
-                display.render( emptyDialogRestorer.rect() );
             }
         }
 
