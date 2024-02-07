@@ -1,3 +1,71 @@
+version 1.0.12 (07 February 2024)
+- update the Russian translation
+- update the Spanish translation
+- correct icons alignment on the hero meeting screen
+- update the Polish translation
+- fix the retaliation of archers attacked by an ally under the influence of Berserker or Hypnotize spells, improve the AI usage of Hypnotize spell in general
+- fix incorrect Artesian Spring evaluation by the AI
+- make rules for AI surrender and retreat more unified
+- fix Oasis object passability
+- always offer one native hero at the beginning of a new week
+- puzzle and View World dialogs rendering improvements
+- implement Landscape Miscellaneous (non-action) objects placing in Editor
+- fix OKAY button translation for Interface Settings dialog after any setting change
+- make the AI not to know what objects contain
+- fix issue when Blind or Paralyze has been applied to a hypnotized unit during its turn
+- implement Adventure (action) Miscellaneous objects placing in Editor
+- tune the AI performance at different difficulty levels
+- add surrender cost to battle result dialog
+- improve overall image processing performance
+- update spell points, formations and artifacts descriptions
+- add infos on the cost of surrender
+- allow AI units covering an archer with the AREA_SHOT capability to attack neighboring units on their own
+- use proper name for PoL campaign in High Scores
+- use CP1257 code page for Lithaunian
+- offer the Wisdom skill to the heroes of "magic" classes on a mandatory basis at least once every three level-ups
+- implement Mountains, Rocks and Trees placing in the Editor
+- make the AI attack human heroes that have a greater chance to win than the AI heroes
+- implement Power-ups object placement in the Editor
+- allow AI units that ignore retaliatory strikes to attack neighboring enemy units while covering archers
+- avoid visiting Oasis and Watering Hole objects by AI heroes if they bring no benefit
+- make AI hero behavior depend on the time spent on the map
+- improve fog discovery by the AI heroes
+- adjust text in the skill popup dialog
+- implement Mines placing in the Editor
+- improve AI hero interaction with Witch's Hut object
+- allow the AI-controlled hero to surrender if his kingdom has sufficient gold reserves
+- add text width-adapted CANCEL button, change to StandardWindow for Resolution, Language, Adventure, File and Scenario Info dialogs
+- update Hungarian translation
+- add dwellings into the Editor
+- fix rare fog of war rendering issues
+- allow AI heroes to surrender if the conditions of retreat have been met, but it is impossible to retreat
+- implement the AI logic to transfer the slowest troops to the garrison at the end of the turn to try to get a movement bonus on the next turn
+- mark fheroes2 as DPI-aware on Windows
+- speed up image loading
+- speed up file loading and reduce memory usage on the Adventure Map
+- improve the AI logic for pay-to-hire dwellings on the Adventure Map
+- improve the AI heuristics of covering shooters when using defensive tactics
+- update buttons and add popup windows for them in Battle Only mode
+- use the "cautious offensive" tactics for AI only against melee-only armies without the distant attack potential (including damage spells)
+- update the Swedish translation
+- fix heroes with no names
+- add base code to load new map format files
+- use singular Mine form for the corresponding object
+- fix inaccurate Jail object removal
+- add missing rules for the plural in Hungarian language
+- restrict secondary skill name and level to the UI area
+- fix too wide text in quick hero info dialog
+- hide swap army/artifact buttons in the Battle Only mode
+- update several text descriptions
+- add Campfire object in the Editor
+- take into account SHIFT and CAPS LOCK being used at the same time
+- make radar rendering optimization
+- fix the AI spell damage estimation logic for units immune to the given spell
+- rework editor instrument groups: add new buttons, rework instrument panel, add evil interface
+- fix multiple spellbook-related issues in the Battle Only mode
+- update French translation
+- show an error when it is not possible to save a game on a hard disk
+
 version 1.0.11 (23 December 2023)
 - improve the logic of AI defensive tactics
 - add Tree of Knowledge claimed and cost info to quick info dialog
