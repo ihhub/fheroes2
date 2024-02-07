@@ -9691,13 +9691,12 @@ msgstr ""
 msgid "Golden Bow"
 msgstr "Arany íj"
 
-#, fuzzy
 msgid ""
 "The %{name} eliminates the %{count} percent penalty for the hero's troops "
 "shooting past obstacles (e.g. castle walls)."
 msgstr ""
-"Az %{name} eltörli a(z) %{count} százalékos távolsági lövés büntetést "
-"tereptárgyakon, várfalakon keresztül."
+"Az %{name} eltörli a hős csapatait sújtó %{count} százalékos távolsági lövés "
+"büntetést tereptárgyakon, várfalakon keresztül."
 
 msgid ""
 "A chance meeting with a famous Archer finds you in a game of knucklebones "
@@ -9707,13 +9706,12 @@ msgstr ""
 msgid "Telescope"
 msgstr "Teleszkóp"
 
-#, fuzzy
 msgid ""
 "The %{name} increases the amount of terrain the hero reveals when "
 "adventuring by %{count} extra square."
 msgstr ""
-"A %{name} %{count} egységgel megnöveli a hős által felfedett terület "
-"nagyságát."
+"A %{name} %{count} egységgel megnöveli a hős által a kalandozásai "
+"közben felfedett terület nagyságát."
 
 msgid ""
 "A merchant from far away lands trades you a new invention of his people for "
@@ -9726,11 +9724,12 @@ msgstr ""
 msgid "Statesman's Quill"
 msgstr "Államférfi pennája"
 
-#, fuzzy
 msgid ""
 "The %{name} reduces the cost of surrender to %{count} percent of the total "
 "cost of troops the hero has in their army."
-msgstr "A(z) %{name} %{count} százalékkal csökkenti a megadás költségét."
+msgstr ""
+"Az %{name} a hős seregét alkotó egységek összköltségének %{count} "
+"százalékával csökkenti a megadás költségét."
 
 msgid ""
 "You pause to help a diplomat with a broken axle fix his problem. In "
@@ -9741,10 +9740,9 @@ msgstr ""
 msgid "Wizard's Hat"
 msgstr "Varázslósüveg"
 
-#, fuzzy
 msgid ""
 "The %{name} increases the duration of the hero's spells by %{count} turns."
-msgstr "A %{name} megnöveli a varázslataid hatóidejét %{count} körrel."
+msgstr "A %{name} megnöveli a hős varázslatainak hatóidejét %{count} körrel."
 
 msgid ""
 "You see a Wizard fleeing from a Griffin and riding like the wind. The Wizard "
@@ -9756,11 +9754,8 @@ msgstr ""
 msgid "Power Ring"
 msgstr "Hatalom gyűrűje"
 
-#, fuzzy
 msgid "The %{name} returns %{count} extra spell points per day to the hero."
-msgstr ""
-"A %{name} naponta %{count} ponttal tölti vissza a hősöd lecsökkent "
-"varázserejét."
+msgstr "A %{name} naponta %{count} ponttal tölti vissza a hős lecsökkent varázserejét."
 
 msgid ""
 "You find a small tree that closely resembles the great Warlock Carnauth with "
@@ -9772,11 +9767,10 @@ msgstr ""
 msgid "Ammo Cart"
 msgstr "Lőszeres kordé"
 
-#, fuzzy
 msgid ""
 "The %{name} provides endless ammunition for all of the hero's troops that "
 "shoot."
-msgstr "A %{name} végtelen lőszert ad a távolsági lövő egységeidnek."
+msgstr "A %{name} végtelen lőszert ad a hős távolsági lövő egységeinek."
 
 msgid ""
 "An ammunition cart in the middle of an old battlefield catches your eye. "
@@ -9786,9 +9780,8 @@ msgstr ""
 msgid "Tax Lien"
 msgstr "Adósságlevél"
 
-#, fuzzy
 msgid "The %{name} costs the hero %{count} gold pieces per day."
-msgstr "Az %{name} napi %{count} aranyba kerül neked."
+msgstr "Az %{name} napi %{count} aranyba kerül a hősnek."
 
 msgid ""
 "Your big spending habits have earned you a massive tax bill that you can't "
@@ -9800,9 +9793,8 @@ msgstr ""
 msgid "Hideous Mask"
 msgstr "Förtelmes maszk"
 
-#, fuzzy
 msgid "The %{name} prevents all 'wandering' armies from joining the hero."
-msgstr "A %{name} megakadályozza a kósza lények csatlakozását a csapatodhoz."
+msgstr "A %{name} megakadályozza a kósza lények csatlakozását a hőshöz."
 
 msgid ""
 "Your looting of the grave of Sinfilas Gardolad, the famous shapeshifting "
@@ -9926,9 +9918,8 @@ msgstr ""
 msgid "Magic Book"
 msgstr "Varázskönyv"
 
-#, fuzzy
 msgid "The %{name} enables the hero to cast spells."
-msgstr "A(z) %{name} lehetővé teszi varázslatok megidézését."
+msgstr "A %{name} lehetővé teszi, hogy a hős varázsolhasson."
 
 msgid "Dummy 1"
 msgstr "Próba 1"
@@ -9948,13 +9939,12 @@ msgstr "Próba 4"
 msgid "Spell Scroll"
 msgstr "Varázsige tekercs"
 
-#, fuzzy
 msgid ""
 "This %{name} gives the hero the ability to cast the %{spell} spell if the "
 "hero has a Magic Book."
 msgstr ""
-"A %{name} lehetővé teszi a(z) %{spell} varázslat használatát, ha van "
-"varázskönyved."
+"A %{name} lehetővé teszi a hősnek a(z) %{spell} varázslat használatát, ha van "
+"varázskönyve."
 
 msgid ""
 "You find an elaborate container which houses an old vellum scroll. The runes "
@@ -9966,12 +9956,11 @@ msgstr ""
 msgid "Arm of the Martyr"
 msgstr "Mártír keze"
 
-#, fuzzy
 msgid ""
 "The %{name} increases the hero's spell power by %{count} but adds the undead "
 "morale penalty."
 msgstr ""
-"A %{name} %{count} ponttal növeli a varázserődet, de büntetésként élőhalott "
+"A %{name} %{count} ponttal növeli a hős varázserejét, de büntetésként élőhalott "
 "morált ad."
 
 msgid ""
@@ -9985,9 +9974,8 @@ msgstr ""
 msgid "Breastplate of Anduran"
 msgstr "Anduran mellvértje"
 
-#, fuzzy
 msgid "The %{name} increases the hero's defense by %{count}."
-msgstr "A %{name} %{count} ponttal növeli a védekezőképességedet."
+msgstr "%{name} %{count} ponttal növeli a hős védekezőképességét."
 
 msgid ""
 "You come upon a sign. It reads: \"Here lies the body of Anduran. Bow and "
@@ -10018,14 +10006,13 @@ msgstr ""
 msgid "Battle Garb of Anduran"
 msgstr "Anduran Harci Pajzsa"
 
-#, fuzzy
 msgid ""
 "The %{name} combines the powers of the three Anduran artifacts. It provides "
 "maximum luck and morale for the hero's troops and gives the hero the Town "
 "Portal spell."
 msgstr ""
-"A %{name} összekapcsolja a három Anduran varázstárgy erejét. Maximum "
-"szerencsét és morált, valamint Városkapu varázslatot ad."
+"%{name} összekapcsolja a három Anduran varázstárgy erejét. A hős egységeinek "
+"maximális szerencsét és morált, a hősnek pedig Városkapu varázslatot ad."
 
 msgid ""
 "Out of pity for a poor peasant, you purchase a chest of old junk they are "
@@ -10036,7 +10023,6 @@ msgstr ""
 msgid "Crystal Ball"
 msgstr "Kristálygömb"
 
-#, fuzzy
 msgid ""
 "The %{name} lets the hero get more specific information about monsters, "
 "enemy heroes, and castles nearby the hero."
@@ -10131,13 +10117,12 @@ msgstr ""
 msgid "Masthead"
 msgstr "Árbóc"
 
-#, fuzzy
 msgid ""
 "The %{name} boosts the hero's troops' luck and morale by %{count} each in "
 "sea combat."
 msgstr ""
-"A %{name} %{count} ponttal növeli mind a szerencsédet, mind pedig a "
-"morálodat tengeri ütközetben."
+"Az %{name} %{count} ponttal növeli a hős egységeinek szerencséjét, illetve "
+"morálját tengeri ütközetben."
 
 msgid "Sphere of Negation"
 msgstr "Tagadás gömbje"
@@ -10154,9 +10139,8 @@ msgstr ""
 msgid "Staff of Wizardry"
 msgstr "Varázsjogar"
 
-#, fuzzy
 msgid "The %{name} boosts the hero's spell power by %{count}."
-msgstr "A %{name} %{count} ponttal növeli a varázserődet."
+msgstr "A %{name} %{count} ponttal növeli a hős varázserejét."
 
 msgid ""
 "While out scaring up game, your troops find a mysterious staff levitating "
@@ -10168,9 +10152,8 @@ msgstr ""
 msgid "Sword Breaker"
 msgstr "Kardtörő"
 
-#, fuzzy
 msgid "The %{name} increases the hero's defense by %{count} and attack by 1."
-msgstr "A(z) %{name} eggyel növeli a támadó- és %{count} ponttal a védőerődet."
+msgstr "A %{name} eggyel növeli a hős támadó- és %{count} ponttal a védőerejét."
 
 msgid ""
 "A former Captain of the Guard admires your quest and gives you the enchanted "
@@ -10198,9 +10181,8 @@ msgstr ""
 msgid "Spade of Necromancy"
 msgstr "Nekromancia sírásó lapát"
 
-#, fuzzy
 msgid "The %{name} gives the hero increased necromancy skill."
-msgstr "A %{name} fokozza a Nekromancia képességedet."
+msgstr "A %{name} fokozza a hős Nekromancia képességét."
 
 msgid ""
 "A dirty shovel has been thrust into a dirt mound nearby. Upon investigation, "
