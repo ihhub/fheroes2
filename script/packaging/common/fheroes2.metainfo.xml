@@ -56,7 +56,6 @@
           <li>fix OKAY button translation for Interface Settings dialog after any setting change</li>
           <li>make the AI not to know what objects contain</li>
           <li>fix issue when Blind or Paralyze has been applied to a hypnotized unit during its turn</li>
-          <li>update the Swedish translation</li>
           <li>implement Adventure (action) Miscellaneous objects placing in Editor</li>
           <li>tune the AI performance at different difficulty levels</li>
           <li>add surrender cost to battle result dialog</li>
