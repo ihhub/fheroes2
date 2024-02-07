@@ -72,6 +72,9 @@ endif
 ifeq ($(OS),Darwin)
 PLATFORM := osx
 endif
+ifeq ($(OS),morphos)
+PLATFORM := morphos
+endif
 ifeq ($(OS),Linux)
 PLATFORM := all
 endif

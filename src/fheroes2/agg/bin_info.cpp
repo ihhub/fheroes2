@@ -36,6 +36,10 @@
 #include "monster_info.h"
 #include "serialize.h"
 
+#ifdef __MORPHOS__
+#undef STATIC
+#endif
+
 namespace
 {
     template <typename T>

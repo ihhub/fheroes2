@@ -25,6 +25,10 @@
 #include <list>
 #include <vector>
 
+#ifdef __MORPHOS__
+#undef STATIC
+#endif
+
 #include "battle_animation.h"
 
 class Monster;

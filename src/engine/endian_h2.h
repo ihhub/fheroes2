@@ -82,6 +82,18 @@
 #define be32toh( x ) __bswap32( x )
 #define le32toh( x ) ( x )
 
+#elif defined(TARGET_MORPHOS)
+
+#define BYTE_ORDER BIG_ENDIAN
+#include <SDL_endian.h>
+#define htobe16( x ) ( x )
+#define htole16( x ) SDL_Swap16( x )
+#define be16toh( x ) ( x )
+#define le16toh( x ) SDL_Swap16( x )
+#define htobe32( x ) ( x )
+#define htole32( x ) SDL_Swap32( x )
+#define be32toh( x ) ( x )
+#define le32toh( x ) SDL_Swap32( x )
 #else
 #error "Unsupported platform"
 #endif

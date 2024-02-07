@@ -43,6 +43,10 @@
 #include "endian_h2.h"
 #include "math_base.h"
 
+#ifdef __MORPHOS__
+#undef tell
+#endif
+
 class StreamBase
 {
 public:

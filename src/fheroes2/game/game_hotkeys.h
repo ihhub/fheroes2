@@ -25,6 +25,10 @@
 #include <utility>
 #include <vector>
 
+#ifdef __MORPHOS__
+#undef GLOBAL
+#endif
+
 namespace fheroes2
 {
     enum class Key : int32_t;

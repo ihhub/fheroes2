@@ -57,6 +57,10 @@
 #include "ui_window.h"
 #include "world.h"
 
+#ifdef __MORPHOS__
+#undef STATIC
+#endif
+
 namespace
 {
     void drawButtonShadow( fheroes2::Image & output, const int buttonIcn, const uint32_t icnIndex, const fheroes2::Point & offset )

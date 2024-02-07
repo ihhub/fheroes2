@@ -800,7 +800,9 @@ namespace
 
             uint32_t flags = SDL_GetWindowFlags( _window );
             if ( ( flags & SDL_WINDOW_FULLSCREEN ) == SDL_WINDOW_FULLSCREEN || ( flags & SDL_WINDOW_FULLSCREEN_DESKTOP ) == SDL_WINDOW_FULLSCREEN_DESKTOP ) {
+#ifndef __MORPHOS__
                 flags &= ~SDL_WINDOW_FULLSCREEN_DESKTOP;
+#endif
                 flags &= ~SDL_WINDOW_FULLSCREEN;
             }
             else {
@@ -811,6 +813,8 @@ namespace
                 else {
                     flags |= SDL_WINDOW_FULLSCREEN;
                 }
+#elif __MORPHOS__
+				flags |= SDL_WINDOW_FULLSCREEN;
 #else
                 flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
 #endif
@@ -1065,6 +1069,8 @@ namespace
                 else {
                     flags |= SDL_WINDOW_FULLSCREEN;
                 }
+#elif __MORPHOS__
+				flags |= SDL_WINDOW_FULLSCREEN;
 #else
                 flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
 #endif
@@ -1253,11 +1259,12 @@ namespace
             if ( returnCode < 0 ) {
                 ERROR_LOG( "Failed to set default color for renderer. The error value: " << returnCode << ", description: " << SDL_GetError() )
             }
-
+#ifndef __MORPHOS__	
             returnCode = SDL_SetRenderTarget( _renderer, nullptr );
             if ( returnCode < 0 ) {
                 ERROR_LOG( "Failed to set render target to window. The error value: " << returnCode << ", description: " << SDL_GetError() )
             }
+#endif
 
             if ( SDL_SetHint( SDL_HINT_RENDER_SCALE_QUALITY, ( isNearestScaling() ? "nearest" : "linear" ) ) == SDL_FALSE ) {
                 ERROR_LOG( "Failed to set a linear scale hint for rendering." )

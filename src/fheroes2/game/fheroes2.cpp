@@ -66,6 +66,11 @@
 #include "ui_tool.h"
 #include "zzlib.h"
 
+#ifdef __MORPHOS__
+unsigned long __stack = 1024000;
+static const char *version __attribute__((used)) = "$VER: fheroes2 1.0.12 (07.02.2024) port by BeWorld";
+#endif
+
 namespace
 {
     std::string GetCaption()
@@ -273,9 +278,9 @@ int main( int argc, char ** argv )
     try {
         const fheroes2::HardwareInitializer hardwareInitializer;
         Logging::InitLog();
-
+#ifndef __MORPHOS__
         COUT( GetCaption() )
-
+#endif
         Settings & conf = Settings::Get();
         conf.SetProgramPath( argv[0] );
 

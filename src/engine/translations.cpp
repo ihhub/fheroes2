@@ -268,8 +268,13 @@ namespace
             // Parse encoding.
             if ( stringCount > 0 ) {
                 buf.seek( translationOffset );
+#ifdef __MORPHOS__
+				const uint32_t length2 = buf.getLE32();
+                const uint32_t offset2 = buf.getLE32();
+#else
                 const uint32_t length2 = buf.get32();
                 const uint32_t offset2 = buf.get32();
+#endif
 
                 buf.seek( offset2 );
                 const std::vector<std::string> tags = StringSplit( buf.toString( length2 ), '\n' );
@@ -287,29 +292,44 @@ namespace
             for ( uint32_t index = 0; index < stringCount; ++index ) {
                 buf.seek( originalOffset + index * 8 );
 
-                const uint32_t length1 = buf.get32();
+#ifdef __MORPHOS__				
+                const uint32_t length1 = buf.getLE32();
+#else
+				const uint32_t length1 = buf.get32();
+#endif 
                 if ( length1 == 0 ) {
                     // This is an empty original text. Skip it.
                     --totalTranslationStrings;
                     continue;
                 }
 
-                const uint32_t offset1 = buf.get32();
+#ifdef __MORPHOS__	
+                const uint32_t offset1 = buf.getLE32();
+#else
+				const uint32_t offset1 = buf.get32();
+#endif
                 buf.seek( offset1 );
                 const std::string msg1 = buf.toString( length1 );
 
                 const uint32_t crc = crc32b( msg1.data() );
                 buf.seek( translationOffset + index * 8 );
 
+#ifdef __MORPHOS__	
+				const uint32_t length2 = buf.getLE32();
+#else
                 const uint32_t length2 = buf.get32();
+#endif
                 if ( length2 == 0 ) {
                     // This is an empty translation. Skip it.
                     --totalTranslationStrings;
                     continue;
                 }
 
+#ifdef __MORPHOS__	
+                const uint32_t offset2 = buf.getLE32();
+#else
                 const uint32_t offset2 = buf.get32();
-
+#endif
                 const auto [dummy, inserted] = hash_offsets.try_emplace( crc, Chunk{ offset2, length2 } );
                 if ( !inserted ) {
                     ERROR_LOG( "Clashing hash value for: " << msg1 )

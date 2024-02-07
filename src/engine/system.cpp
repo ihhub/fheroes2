@@ -84,6 +84,8 @@ namespace
         return System::concatPath( "ux0:data", prog );
 #elif defined( TARGET_NINTENDO_SWITCH )
         return System::concatPath( "/switch", prog );
+#elif __MORPHOS__
+		return { "PROGDIR:" };
 #elif defined( ANDROID )
         (void)prog;
 
@@ -260,7 +262,10 @@ std::string System::concatPath( const std::string_view left, const std::string_v
     temp.reserve( left.size() + 1 + right.size() );
 
     temp += left;
-    temp += SEPARATOR;
+#ifdef __MORPHOS__
+	if (left != "PROGDIR:")
+#endif
+    	temp += SEPARATOR;
     temp += right;
 
     return temp;
@@ -326,7 +331,11 @@ std::string System::GetDataDirectory( const std::string & prog )
 std::string System::GetDirname( std::string_view path )
 {
     if ( path.empty() ) {
+#ifdef __MORPHOS__
+		return { "PROGDIR:" };
+#else
         return { "." };
+#endif
     }
 
     path = trimTrailingSeparators( path );
@@ -334,10 +343,18 @@ std::string System::GetDirname( std::string_view path )
     const size_t pos = path.rfind( SEPARATOR );
 
     if ( pos == std::string::npos ) {
+#ifdef __MORPHOS__
+		return { "PROGDIR:" };
+#else
         return { "." };
+#endif
     }
     if ( pos == 0 ) {
+#ifdef __MORPHOS__
+		return { "PROGDIR:" };
+#else
         return { std::initializer_list<char>{ SEPARATOR } };
+#endif
     }
 
     // Trailing separators should already be trimmed
@@ -349,7 +366,11 @@ std::string System::GetDirname( std::string_view path )
 std::string System::GetBasename( std::string_view path )
 {
     if ( path.empty() ) {
+#ifdef __MORPHOS__
+		return { "PROGDIR:" };
+#else
         return { "." };
+#endif
     }
 
     path = trimTrailingSeparators( path );
@@ -449,7 +470,7 @@ bool System::Unlink( const std::string & path )
 #endif
 }
 
-#if !defined( _WIN32 ) && !defined( ANDROID )
+#if !defined( _WIN32 ) && !defined( ANDROID ) && !defined(__MORPHOS__)
 // based on: https://github.com/OneSadCookie/fcaseopen
 bool System::GetCaseInsensitivePath( const std::string & path, std::string & correctedPath )
 {
