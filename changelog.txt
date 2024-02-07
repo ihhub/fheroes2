@@ -13,7 +13,6 @@ version 1.0.12 (07 February 2024)
 - fix OKAY button translation for Interface Settings dialog after any setting change
 - make the AI not to know what objects contain
 - fix issue when Blind or Paralyze has been applied to a hypnotized unit during its turn
-- update the Swedish translation
 - implement Adventure (action) Miscellaneous objects placing in Editor
 - tune the AI performance at different difficulty levels
 - add surrender cost to battle result dialog
