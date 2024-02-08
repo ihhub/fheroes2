@@ -314,9 +314,6 @@ int main( int argc, char ** argv )
         fheroes2::setGamePalette( AGG::getDataFromAggFile( "KB.PAL" ) );
         fheroes2::Display::instance().changePalette( nullptr, true );
 
-        // load BIN data
-        Bin_Info::InitBinInfo();
-
         // init game data
         Game::Init();
 
