@@ -1076,6 +1076,9 @@ void Interface::GameArea::QueueEventProcessing( bool isCursorOverGamearea )
     else if ( le.MousePressRight( tileROI ) ) {
         _interface.mouseCursorAreaPressRight( index );
     }
+    else if ( le.MouseLongPressLeft( tileROI ) ) {
+        _interface.mouseCursorAreaLongPressLeft( index );
+    }
 
     // The cursor may have moved after mouse click events.
     index = GetValidTileIdFromPoint( le.GetMouseCursor() );
