@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-03 03:27+0000\n"
+"POT-Creation-Date: 2024-02-08 12:37+0000\n"
 "PO-Revision-Date: 2023-09-24 16:05+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Czech <cs@li.org>\n"
@@ -811,11 +811,11 @@ msgstr "Pruh správ"
 msgid "Shows the results of individual monster's actions."
 msgstr "Zobrazuje následky počínání jednotlivých stvůr."
 
-msgid "Are you sure you want to finish the battle in auto mode?"
-msgstr "Jsi si jist, že chceš dokončit boj v automatickém módu?"
-
 msgid "Are you sure you want to enable auto combat?"
 msgstr "Určitě chceš povolit automatický boj?"
+
+msgid "Are you sure you want to finish the battle in auto mode?"
+msgstr "Jsi si jist, že chceš dokončit boj v automatickém módu?"
 
 msgid "%{name} skip their turn."
 msgstr "%{name} nebudou táhnout."
@@ -3793,6 +3793,9 @@ msgid ""
 "A maximum of %{count} heroes of the same color can be placed on the map."
 msgstr ""
 
+msgid "Failed to update player information."
+msgstr ""
+
 msgid "Artifacts cannot be placed on water."
 msgstr ""
 
@@ -4593,6 +4596,10 @@ msgstr ""
 
 #, fuzzy
 msgid "hotkey|next hero"
+msgstr "Zobrazit následující město"
+
+#, fuzzy
+msgid "hotkey|change to hero under cursor"
 msgstr "Zobrazit následující město"
 
 #, fuzzy

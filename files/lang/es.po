@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-03 03:27+0000\n"
+"POT-Creation-Date: 2024-02-08 12:37+0000\n"
 "PO-Revision-Date: 2024-02-05 05:47+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -817,11 +817,11 @@ msgstr ""
 msgid "Shows the results of individual monster's actions."
 msgstr ""
 
-msgid "Are you sure you want to finish the battle in auto mode?"
-msgstr "¿Estás seguro de que quieres terminar la batalla en modo automático?"
-
 msgid "Are you sure you want to enable auto combat?"
 msgstr "¿Estás seguro de que quieres activar el combate automático?"
+
+msgid "Are you sure you want to finish the battle in auto mode?"
+msgstr "¿Estás seguro de que quieres terminar la batalla en modo automático?"
 
 msgid "%{name} skip their turn."
 msgstr "%{name} se pasan su turno."
@@ -3793,6 +3793,9 @@ msgid ""
 "A maximum of %{count} heroes of the same color can be placed on the map."
 msgstr ""
 
+msgid "Failed to update player information."
+msgstr ""
+
 #, fuzzy
 msgid "Artifacts cannot be placed on water."
 msgstr "Este pueblo no se puede actualizar a castillo."
@@ -4609,6 +4612,10 @@ msgstr ""
 
 #, fuzzy
 msgid "hotkey|next hero"
+msgstr "Mostrar el siguiente héroe"
+
+#, fuzzy
+msgid "hotkey|change to hero under cursor"
 msgstr "Mostrar el siguiente héroe"
 
 #, fuzzy
