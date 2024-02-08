@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -263,6 +263,15 @@ namespace Interface
             return _needRedrawByMouseDragging;
         }
 
+        bool isFastScrollEnabled() const
+        {
+            return _isFastScrollEnabled;
+        }
+
+        void setFastScrollStatus( const bool enable );
+
+        bool mouseIndicatesFastScroll( const fheroes2::Point & mousePosition );
+
     private:
         BaseInterface & _interface;
 
@@ -287,9 +296,12 @@ namespace Interface
         mutable std::vector<std::shared_ptr<BaseObjectAnimationInfo>> _animationInfo;
 
         fheroes2::Point _lastMouseDragPosition;
+        fheroes2::Point _mousePositionForFastScroll;
         bool _mouseDraggingInitiated;
         bool _mouseDraggingMovement;
         bool _needRedrawByMouseDragging;
+        bool _isFastScrollEnabled;
+        bool _resetMousePositionForFastScroll;
 
         // Returns middle point of window ROI.
         fheroes2::Point _middlePoint() const
