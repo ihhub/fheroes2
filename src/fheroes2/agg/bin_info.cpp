@@ -29,7 +29,6 @@
 #include <utility>
 
 #include "agg.h"
-#include "battle_animation.h"
 #include "battle_cell.h"
 #include "logging.h"
 #include "monster.h"
@@ -52,6 +51,7 @@ namespace
     class MonsterAnimCache
     {
     public:
+
         Bin_Info::MonsterAnimInfo getAnimInfo( const int monsterID )
         {
             auto mapIterator = _animMap.find( monsterID );
