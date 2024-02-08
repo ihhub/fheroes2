@@ -54,16 +54,15 @@ namespace
     public:
         Bin_Info::MonsterAnimInfo getAnimInfo( const int monsterID )
         {
-            std::map<int, Bin_Info::MonsterAnimInfo>::iterator mapIterator = _animMap.find( monsterID );
+            auto mapIterator = _animMap.find( monsterID );
             if ( mapIterator != _animMap.end() ) {
                 return mapIterator->second;
             }
-            else {
-                const Bin_Info::MonsterAnimInfo info( monsterID, AGG::getDataFromAggFile( GetFilename( monsterID ) ) );
-                if ( info.isValid() ) {
-                    _animMap[monsterID] = info;
-                    return info;
-                }
+
+            Bin_Info::MonsterAnimInfo info( monsterID, AGG::getDataFromAggFile( GetFilename( monsterID ) ) );
+            if ( info.isValid() ) {
+                _animMap[monsterID] = info;
+                return info;
             }
 
             DEBUG_LOG( DBG_GAME, DBG_WARN, "Missing BIN file data: " << GetFilename( monsterID ) << ", monster ID: " << monsterID )
