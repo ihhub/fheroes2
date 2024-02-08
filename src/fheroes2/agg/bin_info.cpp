@@ -51,7 +51,6 @@ namespace
     class MonsterAnimCache
     {
     public:
-
         Bin_Info::MonsterAnimInfo getAnimInfo( const int monsterID )
         {
             auto mapIterator = _animMap.find( monsterID );
