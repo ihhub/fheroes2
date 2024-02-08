@@ -112,7 +112,7 @@ namespace Bin_Info
                 moveOffset.push_back( static_cast<int>( getValue<int8_t>( data, 5 + moveID * 16, frame ) ) );
             }
 
-            frameXOffset.push_back( moveOffset );
+            frameXOffset.emplace_back( std::move( moveOffset ) );
         }
 
         // Idle animations data
