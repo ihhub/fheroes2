@@ -20,6 +20,7 @@
 
 #pragma once
 
+#include <cstddef>
 #include <cstdint>
 
 namespace Maps
@@ -46,4 +47,8 @@ namespace Maps
     void writeTile( const Tiles & tile, Map_Format::TileInfo & info );
 
     void addObjectToMap( Map_Format::MapFormat & map, const int32_t tileId, const ObjectGroup group, const uint32_t index );
+
+    bool updateMapPlayers( Map_Format::MapFormat & map );
+
+    uint8_t getTownColorIndex( const Map_Format::MapFormat & map, const size_t tileIndex, const uint32_t id );
 }
