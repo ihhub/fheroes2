@@ -1239,6 +1239,25 @@ bool Battle::Arena::AutoBattleInProgress() const
     return false;
 }
 
+bool Battle::Arena::EnemyOfAIHasAutoBattleInProgress() const
+{
+    if ( _currentUnit == nullptr ) {
+        return false;
+    }
+
+    if ( !( GetCurrentForce().GetControl() & CONTROL_AI ) ) {
+        return false;
+    }
+
+    const Force & enemyForce = getEnemyForce( GetCurrentColor() );
+
+    if ( enemyForce.GetControl() & CONTROL_AI ) {
+        return false;
+    }
+
+    return ( _autoBattleColors & enemyForce.GetColor() );
+}
+
 bool Battle::Arena::CanToggleAutoBattle() const
 {
     if ( _currentUnit == nullptr ) {
