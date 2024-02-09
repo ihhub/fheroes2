@@ -85,7 +85,6 @@ private:
 class AnimationReference
 {
 public:
-    AnimationReference();
     explicit AnimationReference( int id );
 
     AnimationReference( const AnimationReference & ) = delete;
