@@ -91,7 +91,6 @@ namespace Bin_Info
         size_t getProjectileID( const double angle ) const;
     };
 
-    void InitBinInfo();
     MonsterAnimInfo GetMonsterInfo( uint32_t monsterID );
 }
 #endif

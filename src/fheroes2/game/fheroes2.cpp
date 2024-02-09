@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -42,7 +42,6 @@
 #include "agg.h"
 #include "agg_image.h"
 #include "audio_manager.h"
-#include "bin_info.h"
 #include "core.h"
 #include "cursor.h"
 #include "dir.h"
@@ -313,9 +312,6 @@ int main( int argc, char ** argv )
         // Load palette.
         fheroes2::setGamePalette( AGG::getDataFromAggFile( "KB.PAL" ) );
         fheroes2::Display::instance().changePalette( nullptr, true );
-
-        // load BIN data
-        Bin_Info::InitBinInfo();
 
         // init game data
         Game::Init();
