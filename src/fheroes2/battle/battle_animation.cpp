@@ -121,10 +121,6 @@ bool AnimationSequence::isValid() const
     return !_seq.empty();
 }
 
-AnimationReference::AnimationReference()
-    : _monsterID( Monster::UNKNOWN )
-{}
-
 AnimationReference::AnimationReference( int monsterID )
     : _monsterID( monsterID )
 {
