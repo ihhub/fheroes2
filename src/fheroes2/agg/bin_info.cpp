@@ -241,7 +241,8 @@ namespace Bin_Info
             for ( uint8_t frame = 0; frame < count; ++frame ) {
                 anim.push_back( static_cast<int>( data[277 + idx * 16 + frame] ) );
             }
-            animationFrames.push_back( anim );
+
+            animationFrames.emplace_back( std::move( anim ) );
         }
 
         if ( monsterID == Monster::WOLF ) { // Wolves have incorrect frame for lower attack animation
