@@ -227,7 +227,7 @@ namespace Maps
         // Towns can be neutral so 1 more color for them.
         std::array<bool, mainColors + 1> townColorsPresent{ false };
         std::array<uint8_t, mainColors> heroRacesPresent{ 0 };
-        std::array<uint8_t, mainColors> townRacesPresent{ 0 };
+        std::array<uint8_t, mainColors + 1> townRacesPresent{ 0 };
 
         const auto & heroObjects = getObjectsByGroup( ObjectGroup::KINGDOM_HEROES );
         const auto & townObjects = getObjectsByGroup( ObjectGroup::KINGDOM_TOWNS );
