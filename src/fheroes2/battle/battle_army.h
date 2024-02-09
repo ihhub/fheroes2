@@ -28,9 +28,9 @@
 #include <cassert>
 #include <cstdint>
 #include <iterator>
+#include <set>
 #include <tuple>
 #include <type_traits>
-#include <set>
 #include <vector>
 
 #include "army.h"
