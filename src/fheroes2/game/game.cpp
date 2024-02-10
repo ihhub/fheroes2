@@ -27,6 +27,7 @@
 #include <cassert>
 #include <cmath>
 #include <map>
+#include <optional>
 #include <utility>
 #include <vector>
 

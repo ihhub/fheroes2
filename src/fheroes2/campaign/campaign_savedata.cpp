@@ -23,7 +23,9 @@
 #include <algorithm>
 #include <cassert>
 #include <cstddef>
+#include <map>
 #include <memory>
+#include <utility>
 
 #include "army.h"
 #include "campaign_data.h"
