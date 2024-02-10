@@ -27,6 +27,7 @@
 
 #include "army.h"
 #include "campaign_data.h"
+#include "difficulty.h"
 #include "serialize.h"
 
 namespace Campaign
@@ -201,5 +202,34 @@ namespace Campaign
         }
 
         return ScenarioLossCondition::STANDARD;
+    }
+
+    std::optional<int> getCurrentScenarioDifficultyLevel()
+    {
+        static const std::map<std::pair<int, int>, int> adjustedDifficultyLevels = { // Roland
+                                                                                     { { ROLAND_CAMPAIGN, 1 }, Difficulty::EASY },
+                                                                                     // Archibald
+                                                                                     { { ARCHIBALD_CAMPAIGN, 1 }, Difficulty::EASY },
+                                                                                     // Descendants
+                                                                                     { { DESCENDANTS_CAMPAIGN, 0 }, Difficulty::EASY },
+                                                                                     { { DESCENDANTS_CAMPAIGN, 5 }, Difficulty::HARD },
+                                                                                     // Wizard's Isle
+                                                                                     { { WIZARDS_ISLE_CAMPAIGN, 3 }, Difficulty::HARD },
+                                                                                     // Voyage Home
+                                                                                     { { VOYAGE_HOME_CAMPAIGN, 0 }, Difficulty::EASY },
+                                                                                     // Price of Loyalty
+                                                                                     { { PRICE_OF_LOYALTY_CAMPAIGN, 0 }, Difficulty::EASY },
+                                                                                     { { PRICE_OF_LOYALTY_CAMPAIGN, 5 }, Difficulty::HARD },
+                                                                                     { { PRICE_OF_LOYALTY_CAMPAIGN, 6 }, Difficulty::HARD },
+                                                                                     { { PRICE_OF_LOYALTY_CAMPAIGN, 7 }, Difficulty::EXPERT } };
+
+        const CampaignSaveData & campaignData = CampaignSaveData::Get();
+
+        const auto iter = adjustedDifficultyLevels.find( { campaignData.getCampaignID(), campaignData.getCurrentScenarioID() } );
+        if ( iter == adjustedDifficultyLevels.end() ) {
+            return {};
+        }
+
+        return iter->second;
     }
 }

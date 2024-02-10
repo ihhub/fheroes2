@@ -22,6 +22,7 @@
 #define H2CAMPAIGN_SAVEDATA_H
 
 #include <cstdint>
+#include <optional>
 #include <vector>
 
 #include "army_troop.h"
@@ -143,6 +144,11 @@ namespace Campaign
 
     // Call this function only when playing campaign scenario.
     ScenarioLossCondition getCurrentScenarioLossCondition();
+
+    // For some scenarios of the original campaign, the difficulty of the scenario does not match the difficulty of the corresponding campaign map (these values are
+    // hard-coded in the game itself). This function returns either the adjusted difficulty for the currently active scenario, if required, or an empty result (and in
+    // that case the complexity of the corresponding campaign map should be used). Call this function only when playing campaign scenario.
+    std::optional<int> getCurrentScenarioDifficultyLevel();
 }
 
 #endif

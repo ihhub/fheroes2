@@ -117,23 +117,22 @@ Kingdom::Kingdom()
 void Kingdom::Init( int clr )
 {
     clear();
+
     color = clr;
 
-    if ( Color::ALL & color ) {
-        // Difficulty calculation is different for campaigns. Difficulty affects only on starting resources for human players.
-        const Settings & configuration = Settings::Get();
-        const int difficultyLevel = ( configuration.isCampaignGameType() ? configuration.getCurrentMapInfo().difficulty : configuration.GameDifficulty() );
+    if ( ( color & Color::ALL ) == 0 ) {
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "Unknown player: " << Color::String( color ) << "(" << static_cast<int>( color ) << ")" )
 
-        resource = _getKingdomStartingResources( difficultyLevel );
+        return;
+    }
 
-        // Some human players can have handicap for resources.
-        const Player * player = Players::Get( color );
-        assert( player != nullptr );
-        resource = getHandicapDependentIncome( resource, player->getHandicapStatus() );
-    }
-    else {
-        DEBUG_LOG( DBG_GAME, DBG_WARN, "Kingdom: unknown player: " << Color::String( color ) << "(" << static_cast<int>( color ) << ")" )
-    }
+    resource = _getKingdomStartingResources( Game::getDifficulty() );
+
+    const Player * player = Players::Get( color );
+    assert( player != nullptr );
+
+    // Some human players can have handicap for resources.
+    resource = getHandicapDependentIncome( resource, player->getHandicapStatus() );
 }
 
 void Kingdom::clear()
