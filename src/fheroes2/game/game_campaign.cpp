@@ -1585,8 +1585,8 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
                 return bonusChoices[*scenarioBonusId];
             }();
 
-            // Scenario bonus related to the starting faction has to be set before calling players.SetStartGame(). If the scenario bonus includes the initial army, then
-            // only the initial faction should still be set.
+            // Scenario bonus related to the starting faction has to be set before calling players.SetStartGame(). If the scenario bonus includes the starting army, then
+            // only the starting faction should still be set.
             if ( scenarioBonus._type == Campaign::ScenarioBonusData::STARTING_RACE || scenarioBonus._type == Campaign::ScenarioBonusData::STARTING_RACE_AND_ARMY ) {
                 SetScenarioBonus( currentScenarioInfoId, { Campaign::ScenarioBonusData::STARTING_RACE, scenarioBonus._subType, scenarioBonus._amount } );
             }
