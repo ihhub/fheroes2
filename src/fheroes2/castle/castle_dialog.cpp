@@ -608,6 +608,9 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
                                 fheroes2::showStandardTextMessage( _( "Town" ), _( "This town may not be upgraded to a castle." ), Dialog::OK );
                             }
                             else if ( Dialog::OK == DialogBuyCastle( true ) ) {
+                                Funds remainingFunds = GetKingdom().GetFunds() - PaymentConditions::BuyBuilding( race, BUILD_CASTLE );
+                                remainingFunds.Trim();
+                                fheroes2::drawResourcePanel( remainingFunds, display, dialogRoi.getPosition() );
                                 AudioManager::PlaySound( M82::BUILDTWN );
                                 fadeBuilding.StartFadeBuilding( BUILD_CASTLE );
                             }
