@@ -768,7 +768,7 @@ namespace Interface
         case Maps::ObjectErasureType::HEROES:
             return _( "editorErasure|Heroes" );
         case Maps::ObjectErasureType::ROADS:
-            return _( "editorErasure|editorErasure|Roads" );
+            return _( "editorErasure|Roads" );
         case Maps::ObjectErasureType::STREAMS:
             return _( "editorErasure|Streams" );
         default:
