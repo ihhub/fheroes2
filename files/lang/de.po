@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-27 00:02+0000\n"
+"POT-Creation-Date: 2024-02-08 12:37+0000\n"
 "PO-Revision-Date: 2023-12-22 00:32+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -801,11 +801,11 @@ msgstr "Nachrichtenleiste"
 msgid "Shows the results of individual monster's actions."
 msgstr "Ergebnisse der Aktionen der einzelnen Monster anzeigen."
 
-msgid "Are you sure you want to finish the battle in auto mode?"
-msgstr "Seid Ihr sicher, dass Ihr den Kampf im Automodus beenden möchtet?"
-
 msgid "Are you sure you want to enable auto combat?"
 msgstr "Wollt Ihr den automatischen Kampfmodus wirklich aktivieren?"
+
+msgid "Are you sure you want to finish the battle in auto mode?"
+msgstr "Seid Ihr sicher, dass Ihr den Kampf im Automodus beenden möchtet?"
 
 msgid "%{name} skip their turn."
 msgstr "%{name} setzt den Zug aus."
@@ -3850,6 +3850,9 @@ msgid ""
 "A maximum of %{count} heroes of the same color can be placed on the map."
 msgstr ""
 
+msgid "Failed to update player information."
+msgstr ""
+
 #, fuzzy
 msgid "Artifacts cannot be placed on water."
 msgstr "Monster können nicht auf Wasser plaziert werden."
@@ -3972,13 +3975,29 @@ msgstr "Städte"
 msgid "Heroes"
 msgstr "Helden"
 
-#, fuzzy
-msgid "Terrain"
-msgstr "Gelände-Modus"
+msgid "editorErasure|Terrain"
+msgstr ""
 
-#, fuzzy
-msgid "Castles"
-msgstr "Burg"
+msgid "editorErasure|Castles"
+msgstr ""
+
+msgid "editorErasure|Monsters"
+msgstr ""
+
+msgid "editorErasure|Heroes"
+msgstr ""
+
+msgid "editorErasure|Artifacts"
+msgstr ""
+
+msgid "editorErasure|Roads"
+msgstr ""
+
+msgid "editorErasure|Streams"
+msgstr ""
+
+msgid "editorErasure|Treasures"
+msgstr ""
 
 msgid ""
 "Draws terrain in\n"
@@ -4657,6 +4676,10 @@ msgid "hotkey|save game"
 msgstr "Spiel speichern"
 
 msgid "hotkey|next hero"
+msgstr "Nächster Held"
+
+#, fuzzy
+msgid "hotkey|change to hero under cursor"
 msgstr "Nächster Held"
 
 #, fuzzy
@@ -11518,6 +11541,14 @@ msgstr ""
 "Die neueste Version des Spiels finden Sie unter\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#, fuzzy
+#~ msgid "Terrain"
+#~ msgstr "Gelände-Modus"
+
+#, fuzzy
+#~ msgid "Castles"
+#~ msgstr "Burg"
 
 #, fuzzy
 #~ msgid "Ocean object"

@@ -159,8 +159,8 @@ namespace
 
     Battle::Unit * GetCurrentUnit( const Battle::Force & army1, const Battle::Force & army2, const int preferredColor )
     {
-        Battle::Units units1( army1.getUnits(), true );
-        Battle::Units units2( army2.getUnits(), true );
+        Battle::Units units1( army1.getUnits(), Battle::Units::REMOVE_INVALID_UNITS );
+        Battle::Units units2( army2.getUnits(), Battle::Units::REMOVE_INVALID_UNITS );
 
         units1.SortFastest();
         units2.SortFastest();
@@ -180,8 +180,8 @@ namespace
     {
         orderOfUnits.assign( orderHistory.begin(), orderHistory.end() );
 
-        Battle::Units units1( army1.getUnits(), true );
-        Battle::Units units2( army2.getUnits(), true );
+        Battle::Units units1( army1.getUnits(), Battle::Units::REMOVE_INVALID_UNITS );
+        Battle::Units units2( army2.getUnits(), Battle::Units::REMOVE_INVALID_UNITS );
 
         units1.SortFastest();
         units2.SortFastest();
@@ -431,7 +431,9 @@ void Battle::Arena::UnitTurn( const Units & orderHistory )
                 AI::Get().BattleTurn( *this, *_currentUnit, actions );
             }
             else {
-                HumanTurn( *_currentUnit, actions );
+                assert( _interface != nullptr );
+
+                _interface->HumanTurn( *_currentUnit, actions );
             }
         }
 
@@ -599,12 +601,6 @@ void Battle::Arena::Turns()
         const Force * army_loss = ( result_game.army1 & RESULT_LOSS ? _army1.get() : ( result_game.army2 & RESULT_LOSS ? _army2.get() : nullptr ) );
         result_game.killed = army_loss ? army_loss->GetDeadCounts() : 0;
     }
-}
-
-void Battle::Arena::HumanTurn( const Unit & b, Actions & a )
-{
-    if ( _interface )
-        _interface->HumanTurn( b, a );
 }
 
 void Battle::Arena::TowerAction( const Tower & twr )
@@ -1241,6 +1237,25 @@ bool Battle::Arena::AutoBattleInProgress() const
     }
 
     return false;
+}
+
+bool Battle::Arena::EnemyOfAIHasAutoBattleInProgress() const
+{
+    if ( _currentUnit == nullptr ) {
+        return false;
+    }
+
+    if ( !( GetCurrentForce().GetControl() & CONTROL_AI ) ) {
+        return false;
+    }
+
+    const Force & enemyForce = getEnemyForce( GetCurrentColor() );
+
+    if ( enemyForce.GetControl() & CONTROL_AI ) {
+        return false;
+    }
+
+    return ( _autoBattleColors & enemyForce.GetColor() );
 }
 
 bool Battle::Arena::CanToggleAutoBattle() const

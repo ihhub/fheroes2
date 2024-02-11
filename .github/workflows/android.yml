@@ -10,6 +10,9 @@ on:
       ANDROID_KEY_PASSWORD:
         required: false
 
+permissions:
+  contents: write
+
 env:
   KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE }}
 

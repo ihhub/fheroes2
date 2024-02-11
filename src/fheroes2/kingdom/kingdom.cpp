@@ -897,6 +897,7 @@ void Kingdoms::AddHeroes( const AllHeroes & heroes )
     for ( Heroes * hero : heroes ) {
         assert( hero != nullptr );
 
+        // Skip neutral heroes.
         if ( hero->GetColor() != Color::NONE ) {
             GetKingdom( hero->GetColor() ).AddHero( hero );
         }
@@ -906,9 +907,12 @@ void Kingdoms::AddHeroes( const AllHeroes & heroes )
 void Kingdoms::AddCastles( const AllCastles & castles )
 {
     for ( const Castle * castle : castles ) {
-        // skip gray color
-        if ( castle->GetColor() )
+        assert( castle != nullptr );
+
+        // Skip neutral castles and towns.
+        if ( castle->GetColor() != Color::NONE ) {
             GetKingdom( castle->GetColor() ).AddCastle( castle );
+        }
     }
 }
 

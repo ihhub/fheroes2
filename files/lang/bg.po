@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-27 00:02+0000\n"
+"POT-Creation-Date: 2024-02-08 12:37+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -821,11 +821,11 @@ msgstr "Лента за съобщения"
 msgid "Shows the results of individual monster's actions."
 msgstr "Покажи резултатите от действията на отделните чудовища."
 
-msgid "Are you sure you want to finish the battle in auto mode?"
-msgstr "Сигурен ли си че искаш да презапишеш запазената игра с това име?"
-
 msgid "Are you sure you want to enable auto combat?"
 msgstr "Сигурен ли си, че искаш да активираш автоматичните битки?"
+
+msgid "Are you sure you want to finish the battle in auto mode?"
+msgstr "Сигурен ли си че искаш да презапишеш запазената игра с това име?"
 
 msgid "%{name} skip their turn."
 msgstr "%{name} пропускат своя ред."
@@ -3835,6 +3835,9 @@ msgid ""
 "A maximum of %{count} heroes of the same color can be placed on the map."
 msgstr ""
 
+msgid "Failed to update player information."
+msgstr ""
+
 #, fuzzy
 msgid "Artifacts cannot be placed on water."
 msgstr "Това заклинание не може да се направи на кораб."
@@ -3955,11 +3958,29 @@ msgstr "Градове"
 msgid "Heroes"
 msgstr "Герой"
 
-msgid "Terrain"
-msgstr "Терен"
+msgid "editorErasure|Terrain"
+msgstr ""
 
-msgid "Castles"
-msgstr "Замъци"
+msgid "editorErasure|Castles"
+msgstr ""
+
+msgid "editorErasure|Monsters"
+msgstr ""
+
+msgid "editorErasure|Heroes"
+msgstr ""
+
+msgid "editorErasure|Artifacts"
+msgstr ""
+
+msgid "editorErasure|Roads"
+msgstr ""
+
+msgid "editorErasure|Streams"
+msgstr ""
+
+msgid "editorErasure|Treasures"
+msgstr ""
 
 msgid ""
 "Draws terrain in\n"
@@ -4635,6 +4656,10 @@ msgid "hotkey|save game"
 msgstr "запази играта"
 
 msgid "hotkey|next hero"
+msgstr "следващия герой"
+
+#, fuzzy
+msgid "hotkey|change to hero under cursor"
 msgstr "следващия герой"
 
 msgid "hotkey|start hero movement"
@@ -11325,6 +11350,12 @@ msgstr ""
 "Проверете най-новата версия на играта на\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Terrain"
+#~ msgstr "Терен"
+
+#~ msgid "Castles"
+#~ msgstr "Замъци"
 
 #, fuzzy
 #~ msgid "Ocean object"

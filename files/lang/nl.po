@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-27 00:02+0000\n"
+"POT-Creation-Date: 2024-02-08 12:37+0000\n"
 "PO-Revision-Date: 2022-10-25 08:52+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Dutch <nl@li.org>\n"
@@ -779,13 +779,13 @@ msgstr "Brichtenbalk"
 msgid "Shows the results of individual monster's actions."
 msgstr "Toont de resultaten van de acties van individuele monsters."
 
-msgid "Are you sure you want to finish the battle in auto mode?"
-msgstr ""
-"Weet je zeker dat je het gevecht in de automatische modus wilt beëindigen?"
-
 #, fuzzy
 msgid "Are you sure you want to enable auto combat?"
 msgstr "Weet je zeker dat je je wilt terugtrekken?"
+
+msgid "Are you sure you want to finish the battle in auto mode?"
+msgstr ""
+"Weet je zeker dat je het gevecht in de automatische modus wilt beëindigen?"
 
 msgid "%{name} skip their turn."
 msgstr "%{name} slaat zijn beurt over."
@@ -3688,6 +3688,9 @@ msgid ""
 "A maximum of %{count} heroes of the same color can be placed on the map."
 msgstr ""
 
+msgid "Failed to update player information."
+msgstr ""
+
 msgid "Artifacts cannot be placed on water."
 msgstr ""
 
@@ -3790,10 +3793,28 @@ msgstr ""
 msgid "Heroes"
 msgstr ""
 
-msgid "Terrain"
+msgid "editorErasure|Terrain"
 msgstr ""
 
-msgid "Castles"
+msgid "editorErasure|Castles"
+msgstr ""
+
+msgid "editorErasure|Monsters"
+msgstr ""
+
+msgid "editorErasure|Heroes"
+msgstr ""
+
+msgid "editorErasure|Artifacts"
+msgstr ""
+
+msgid "editorErasure|Roads"
+msgstr ""
+
+msgid "editorErasure|Streams"
+msgstr ""
+
+msgid "editorErasure|Treasures"
 msgstr ""
 
 msgid ""
@@ -4417,6 +4438,9 @@ msgid "hotkey|save game"
 msgstr ""
 
 msgid "hotkey|next hero"
+msgstr ""
+
+msgid "hotkey|change to hero under cursor"
 msgstr ""
 
 msgid "hotkey|start hero movement"

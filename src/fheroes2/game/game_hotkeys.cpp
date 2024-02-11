@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -35,6 +35,8 @@
 
 #include "battle_arena.h"
 #include "dialog.h"
+#include "game_interface.h"
+#include "interface_gamearea.h"
 #include "localevent.h"
 #include "logging.h"
 #include "players.h"
@@ -200,6 +202,8 @@ namespace
             = { Game::HotKeyCategory::WORLD_MAP, gettext_noop( "hotkey|save game" ), fheroes2::Key::KEY_S };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::WORLD_NEXT_HERO )]
             = { Game::HotKeyCategory::WORLD_MAP, gettext_noop( "hotkey|next hero" ), fheroes2::Key::KEY_H };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::WORLD_QUICK_SELECT_HERO )]
+            = { Game::HotKeyCategory::WORLD_MAP, gettext_noop( "hotkey|change to hero under cursor" ), fheroes2::Key::KEY_LEFT_SHIFT };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::WORLD_START_HERO_MOVEMENT )]
             = { Game::HotKeyCategory::WORLD_MAP, gettext_noop( "hotkey|start hero movement" ), fheroes2::Key::KEY_M };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::WORLD_CAST_SPELL )]
@@ -346,6 +350,10 @@ namespace
 bool Game::HotKeyPressEvent( const HotKeyEvent eventID )
 {
     const LocalEvent & le = LocalEvent::Get();
+    if ( le.KeyPress() ) {
+        // We should disable the fast scroll, because the cursor might be on one of the borders when a dialog gets dismissed.
+        Interface::AdventureMap::Get().getGameArea().setFastScrollStatus( false );
+    }
     return le.KeyPress() && le.KeyValue() == hotKeyEventInfo[hotKeyEventToInt( eventID )].key;
 }
 

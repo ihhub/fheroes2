@@ -2771,9 +2771,9 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
         else if ( Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_OPTIONS ) ) {
             EventShowOptions();
         }
-        // Switch the auto battle mode on/off
+        // Switch the auto battle mode on
         else if ( Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_AUTO_SWITCH ) ) {
-            EventAutoSwitch( unit, actions );
+            EventStartAutoBattle( unit, actions );
         }
         // Finish the battle in auto mode
         else if ( Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_AUTO_FINISH ) ) {
@@ -3107,9 +3107,16 @@ void Battle::Interface::EventShowOptions()
     humanturn_redraw = true;
 }
 
-void Battle::Interface::EventAutoSwitch( const Unit & unit, Actions & actions )
+void Battle::Interface::EventStartAutoBattle( const Unit & unit, Actions & actions )
 {
-    if ( !arena.CanToggleAutoBattle() ) {
+    // TODO: remove these temporary assertions
+    assert( arena.CanToggleAutoBattle() );
+    assert( !arena.AutoBattleInProgress() );
+
+    int startAutoBattle
+        = fheroes2::showMessage( fheroes2::Text( "", {} ), fheroes2::Text( _( "Are you sure you want to enable auto combat?" ), fheroes2::FontType::normalWhite() ),
+                                 Dialog::YES | Dialog::NO );
+    if ( startAutoBattle != Dialog::YES ) {
         return;
     }
 
@@ -3141,13 +3148,7 @@ void Battle::Interface::ButtonAutoAction( const Unit & unit, Actions & actions )
     le.MousePressLeft( btn_auto.area() ) ? btn_auto.drawOnPress() : btn_auto.drawOnRelease();
 
     if ( le.MouseClickLeft( btn_auto.area() ) ) {
-        if ( fheroes2::showMessage( fheroes2::Text( "", {} ), fheroes2::Text( _( "Are you sure you want to enable auto combat?" ), fheroes2::FontType::normalWhite() ),
-                                    Dialog::YES | Dialog::NO )
-             != Dialog::YES ) {
-            return;
-        }
-
-        EventAutoSwitch( unit, actions );
+        EventStartAutoBattle( unit, actions );
     }
 }
 
@@ -3481,7 +3482,7 @@ void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, const Unit & d
     const fheroes2::Rect & pos1 = attacker.GetRectPosition();
     const fheroes2::Rect & pos2 = defender.GetRectPosition();
 
-    const bool archer = attacker.isArchers() && !attacker.isHandFighting();
+    const bool archer = attacker.isArchers() && !Unit::isHandFighting( attacker, defender );
     const bool isDoubleCell = attacker.isDoubleCellAttack() && 2 == targets.size();
 
     // redraw luck animation
@@ -3489,7 +3490,7 @@ void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, const Unit & d
         RedrawActionLuck( attacker );
     }
 
-    AudioManager::PlaySound( attacker.M82Attk() );
+    AudioManager::PlaySound( attacker.M82Attk( defender ) );
 
     // long distance attack animation
     if ( archer ) {
@@ -3660,7 +3661,7 @@ void Battle::Interface::RedrawActionWincesKills( const TargetsInfo & targets, Un
 
     // If this was a Lich attack, we should render an explosion cloud over the target unit immediately after the projectile hits the target,
     // along with the unit kill/wince animation.
-    const bool drawLichCloud = ( attacker != nullptr ) && ( defender != nullptr ) && attacker->isArchers() && !attacker->isHandFighting()
+    const bool drawLichCloud = ( attacker != nullptr ) && ( defender != nullptr ) && attacker->isArchers() && !Unit::isHandFighting( *attacker, *defender )
                                && attacker->isAbilityPresent( fheroes2::MonsterAbilityType::AREA_SHOT );
 
     // Play sound only if it is not already playing.
@@ -6318,17 +6319,41 @@ void Battle::Interface::CheckGlobalEvents( LocalEvent & le )
         }
     }
 
-    // Interrupting auto battle
-    if ( arena.AutoBattleInProgress() && arena.CanToggleAutoBattle()
-         && ( le.MouseClickLeft( btn_auto.area() )
-              || ( le.KeyPress()
-                   && ( Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_AUTO_SWITCH )
-                        || ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL )
-                             && fheroes2::showMessage( fheroes2::Text( "", {} ),
-                                                       fheroes2::Text( _( "Are you sure you want to interrupt the auto battle?" ), fheroes2::FontType::normalWhite() ),
-                                                       Dialog::YES | Dialog::NO )
-                                    == Dialog::YES ) ) ) ) ) {
-        _interruptAutoBattleForColor = arena.GetCurrentColor();
+    // Check if auto battle interruption was requested.
+    InterruptAutoBattleIfRequested( le );
+}
+
+void Battle::Interface::InterruptAutoBattleIfRequested( LocalEvent & le )
+{
+    // Interrupt only if automation is currently on.
+    if ( !arena.AutoBattleInProgress() && !arena.EnemyOfAIHasAutoBattleInProgress() ) {
+        return;
+    }
+
+    if ( !le.MouseClickLeft() && !le.MouseClickRight() && !Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_AUTO_SWITCH )
+         && !Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
+        return;
+    }
+
+    // Identify which color requested the auto battle interrupt.
+    int color = arena.GetCurrentColor();
+    if ( arena.GetCurrentForce().GetControl() & CONTROL_AI ) {
+        color = arena.GetOppositeColor( color );
+    }
+
+    // The battle interruption is already scheduled, no need for the dialog.
+    if ( color == _interruptAutoBattleForColor ) {
+        return;
+    }
+
+    // Right now there should be no pending auto battle interruptions.
+    assert( _interruptAutoBattleForColor == 0 );
+
+    const int interrupt = fheroes2::showMessage( fheroes2::Text( "", {} ),
+                                                 fheroes2::Text( _( "Are you sure you want to interrupt the auto battle?" ), fheroes2::FontType::normalWhite() ),
+                                                 Dialog::YES | Dialog::NO );
+    if ( interrupt == Dialog::YES ) {
+        _interruptAutoBattleForColor = color;
     }
 }
 

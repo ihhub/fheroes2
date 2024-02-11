@@ -312,6 +312,11 @@ namespace Interface
                         continue;
                     }
 
+                    if ( !Maps::updateMapPlayers( _mapFormat ) ) {
+                        fheroes2::showStandardTextMessage( _( "Warning!" ), "The map is corrupted.", Dialog::OK );
+                        continue;
+                    }
+
                     const std::string mapDirectory = System::concatPath( dataPath, "maps" );
 
                     if ( !System::IsDirectory( mapDirectory ) && !System::MakeDirectory( mapDirectory ) ) {
@@ -839,6 +844,10 @@ namespace Interface
             }
 
             setObjectOnTileAsAction( tile, groupType, _editorPanel.getSelectedObjectType() );
+
+            if ( !Maps::updateMapPlayers( _mapFormat ) ) {
+                _warningMessage.reset( _( "Failed to update player information." ) );
+            }
         }
         else if ( groupType == Maps::ObjectGroup::ADVENTURE_ARTIFACTS ) {
             const auto & objectInfo = getObjectInfo( groupType, _editorPanel.getSelectedObjectType() );
@@ -1063,6 +1072,10 @@ namespace Interface
             }
 
             action.commit();
+
+            if ( !Maps::updateMapPlayers( _mapFormat ) ) {
+                _warningMessage.reset( _( "Failed to update player information." ) );
+            }
         }
         else if ( groupType == Maps::ObjectGroup::ADVENTURE_MINES ) {
             int32_t type = -1;
@@ -1166,6 +1179,11 @@ namespace Interface
     void EditorInterface::mouseCursorAreaPressRight( const int32_t tileIndex ) const
     {
         Editor::showPopupWindow( world.GetTiles( tileIndex ) );
+    }
+
+    void EditorInterface::mouseCursorAreaLongPressLeft( const int32_t /*Unused*/ )
+    {
+        // Do nothing.
     }
 
     void EditorInterface::updateCursor( const int32_t tileIndex )

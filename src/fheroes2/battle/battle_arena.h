@@ -98,6 +98,7 @@ namespace Battle
         bool BattleValid() const;
 
         bool AutoBattleInProgress() const;
+        bool EnemyOfAIHasAutoBattleInProgress() const;
         bool CanToggleAutoBattle() const;
 
         uint32_t GetTurnNumber() const
@@ -236,7 +237,6 @@ namespace Battle
         };
 
     private:
-        void HumanTurn( const Unit &, Actions & );
         void UnitTurn( const Units & orderHistory );
 
         void TowerAction( const Tower & );

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-27 00:02+0000\n"
+"POT-Creation-Date: 2024-02-08 12:37+0000\n"
 "PO-Revision-Date: 2023-09-12 11:08+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
@@ -813,11 +813,11 @@ msgstr "Beskedlinje"
 msgid "Shows the results of individual monster's actions."
 msgstr "Viser resultater for individuelle monstres handlinger."
 
-msgid "Are you sure you want to finish the battle in auto mode?"
-msgstr "Er du sikker på, at du vil færdiggøre denne kamp automatisk?"
-
 msgid "Are you sure you want to enable auto combat?"
 msgstr "Er du sikker på, at du vil aktivere autokamp?"
+
+msgid "Are you sure you want to finish the battle in auto mode?"
+msgstr "Er du sikker på, at du vil færdiggøre denne kamp automatisk?"
 
 msgid "%{name} skip their turn."
 msgstr "%{name} skipper deres tur."
@@ -3854,6 +3854,9 @@ msgid ""
 "A maximum of %{count} heroes of the same color can be placed on the map."
 msgstr ""
 
+msgid "Failed to update player information."
+msgstr ""
+
 msgid "Artifacts cannot be placed on water."
 msgstr "Artefakter kan ikke placeres på vand."
 
@@ -3972,11 +3975,29 @@ msgstr "Byer"
 msgid "Heroes"
 msgstr "Helte"
 
-msgid "Terrain"
-msgstr "Terræn-tilstand"
+msgid "editorErasure|Terrain"
+msgstr ""
 
-msgid "Castles"
-msgstr "Borge"
+msgid "editorErasure|Castles"
+msgstr ""
+
+msgid "editorErasure|Monsters"
+msgstr ""
+
+msgid "editorErasure|Heroes"
+msgstr ""
+
+msgid "editorErasure|Artifacts"
+msgstr ""
+
+msgid "editorErasure|Roads"
+msgstr ""
+
+msgid "editorErasure|Streams"
+msgstr ""
+
+msgid "editorErasure|Treasures"
+msgstr ""
 
 msgid ""
 "Draws terrain in\n"
@@ -4646,6 +4667,10 @@ msgid "hotkey|save game"
 msgstr "Gem spil"
 
 msgid "hotkey|next hero"
+msgstr "Næste helt"
+
+#, fuzzy
+msgid "hotkey|change to hero under cursor"
 msgstr "Næste helt"
 
 msgid "hotkey|start hero movement"
@@ -11391,6 +11416,12 @@ msgstr ""
 "Check den nyeste version af spillet på\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Terrain"
+#~ msgstr "Terræn-tilstand"
+
+#~ msgid "Castles"
+#~ msgstr "Borge"
 
 #~ msgid "Ocean object"
 #~ msgstr "Hav-objekt"

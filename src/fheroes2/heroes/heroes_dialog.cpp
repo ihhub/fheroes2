@@ -33,12 +33,14 @@
 #include "cursor.h"
 #include "dialog.h"
 #include "game_hotkeys.h"
+#include "game_interface.h"
 #include "gamedefs.h"
 #include "heroes.h"
 #include "heroes_base.h"
 #include "heroes_indicator.h"
 #include "icn.h"
 #include "image.h"
+#include "interface_gamearea.h"
 #include "kingdom.h"
 #include "localevent.h"
 #include "math_base.h"
@@ -292,6 +294,9 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
 
         // exit
         if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() ) {
+            // Disable fast scroll for resolutions where the exit button is directly above the border.
+            Interface::AdventureMap::Get().getGameArea().setFastScrollStatus( false );
+
             // Fade-out hero dialog.
             fheroes2::fadeOutDisplay( dialogRoi, !isDefaultScreenSize );
 

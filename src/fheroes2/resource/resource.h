@@ -76,7 +76,7 @@ public:
     Funds & operator*=( uint32_t mul );
     Funds & operator/=( const int32_t div );
     Funds & operator-=( const Funds & );
-    Funds & operator=( const cost_t & );
+    Funds & operator=( const cost_t & cost );
 
     bool operator==( const Funds & other ) const;
     bool operator>=( const Funds & other ) const;
