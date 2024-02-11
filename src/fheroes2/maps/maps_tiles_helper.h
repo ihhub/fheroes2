@@ -20,6 +20,7 @@
 #pragma once
 
 #include <cstdint>
+#include <set>
 #include <utility>
 
 #include "army_troop.h"
@@ -189,4 +190,7 @@ namespace Maps
     bool eraseOjects( Tiles & tile, const uint32_t objectTypesToErase );
 
     bool setObjectOnTile( Tiles & tile, const ObjectInfo & info, const bool updateMapPassabilities );
+
+    // Returns UIDs in given area for all objects in the OBJECT_LAYER.
+    std::set<uint32_t> getObjectUidsInArea( const int32_t startTileId, const int32_t endTileId );
 }

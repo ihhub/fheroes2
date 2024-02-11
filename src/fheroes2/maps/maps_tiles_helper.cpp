@@ -3151,8 +3151,6 @@ namespace Maps
             return false;
         }
 
-        tile.Remove( uid );
-
         // An object may occupy several tiles, we recursively check all around tiles for its parts by UID.
         removeUidFromTilesAround( tile.GetIndex(), uid );
 
@@ -3282,5 +3280,48 @@ namespace Maps
         }
 
         return true;
+    }
+    std::set<uint32_t> getObjectUidsInArea( const int32_t startTileId, const int32_t endTileId )
+    {
+        const int32_t mapWidth = world.w();
+        const int32_t maxTileId = mapWidth * world.h() - 1;
+        if ( startTileId < 0 || startTileId > maxTileId || endTileId < 0 || endTileId > maxTileId ) {
+            return {};
+        }
+
+        const fheroes2::Point startTileOffset = GetPoint( startTileId );
+        const fheroes2::Point endTileOffset = GetPoint( endTileId );
+
+        const int32_t startX = std::min( startTileOffset.x, endTileOffset.x );
+        const int32_t startY = std::min( startTileOffset.y, endTileOffset.y );
+        const int32_t endX = std::max( startTileOffset.x, endTileOffset.x );
+        const int32_t endY = std::max( startTileOffset.y, endTileOffset.y );
+
+        std::set<uint32_t> objectsUids;
+
+        for ( int32_t y = startY; y <= endY; ++y ) {
+            const int32_t tileOffset = y * mapWidth;
+            for ( int32_t x = startX; x <= endX; ++x ) {
+                const Maps::Tiles & currentTile = world.GetTiles( x + tileOffset );
+
+                if ( currentTile.GetObjectUID() != 0 && ( currentTile.getLayerType() == OBJECT_LAYER || currentTile.getLayerType() == TERRAIN_LAYER ) ) {
+                    objectsUids.insert( currentTile.GetObjectUID() );
+                }
+
+                for ( const Maps::TilesAddon & addon : currentTile.getBottomLayerAddons() ) {
+                    if ( addon._uid != 0 && ( addon._layerType == OBJECT_LAYER || addon._layerType == TERRAIN_LAYER ) ) {
+                        objectsUids.insert( addon._uid );
+                    }
+                }
+
+                for ( const Maps::TilesAddon & addon : currentTile.getTopLayerAddons() ) {
+                    if ( addon._uid != 0 && ( addon._layerType == OBJECT_LAYER || addon._layerType == TERRAIN_LAYER ) ) {
+                        objectsUids.insert( addon._uid );
+                    }
+                }
+            }
+        }
+
+        return objectsUids;
     }
 }

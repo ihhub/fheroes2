@@ -25,6 +25,7 @@
 #include <cassert>
 #include <cstddef>
 #include <memory>
+#include <set>
 #include <string>
 #include <vector>
 
@@ -725,12 +726,61 @@ namespace Interface
 
             if ( brushSize.width > 1 ) {
                 const fheroes2::Point indices = getBrushAreaIndicies( brushSize, tileIndex );
+                // '_mapFormat' stores only object's main (action) tile so initially we do search for objects in 'tiles'.
+                std::set<uint32_t> objectsUids = Maps::getObjectUidsInArea( indices.x, indices.y );
 
-                if ( Maps::eraseObjectsOnTiles( indices.x, indices.y, _editorPanel.getEraseTypes() ) ) {
-                    _redraw |= mapUpdateFlags;
+                std::vector<Maps::ObjectGroup> objectGroups = _editorPanel.getEraseObjectGroups();
 
-                    action.commit();
+                // Filter objects by group and remove them from '_mapFormat' and 'tiles'.
+                for ( auto mapTile = _mapFormat.tiles.begin(); mapTile != _mapFormat.tiles.end(); ++mapTile ) {
+                    if ( objectsUids.empty() ) {
+                        break;
+                    }
+
+                    if ( mapTile->objects.empty() ) {
+                        continue;
+                    }
+
+                    for ( auto object = mapTile->objects.begin(); object != mapTile->objects.end(); ) {
+                        if ( objectsUids.find( object->id ) == objectsUids.end()
+                             || std::none_of( objectGroups.begin(), objectGroups.end(),
+                                              [&object]( const Maps::ObjectGroup group ) { return group == object->group; } ) ) {
+                            ++object;
+                            continue;
+                        }
+
+                        // TODO: Make a proper function to remove all types of objects from the 'world tiles' not to do full reload of '_mapForma'.
+
+                        // TODO: Do a special map object remove for the complex object - town/castle.
+
+                        if ( object->group != Maps::ObjectGroup::KINGDOM_TOWNS && object->group != Maps::ObjectGroup::LANDSCAPE_FLAGS
+                             && object->group != Maps::ObjectGroup::LANDSCAPE_TOWN_BASEMENTS ) {
+                            objectsUids.erase( object->id );
+                        }
+
+                        // TODO: Fix roads.
+                        if ( object->group == Maps::ObjectGroup::ROADS ) {
+                            const int32_t tileId = static_cast<int32_t>( mapTile - _mapFormat.tiles.begin() );
+
+                            assert( tileId >= 0 && tileId < world.getSize() );
+
+                            if ( Maps::updateRoadOnTile( world.GetTiles( tileId ), false ) ) {
+                                object = mapTile->objects.erase( object );
+                            }
+                        }
+                        else {
+                            object = mapTile->objects.erase( object );
+                        }
+
+                        if ( objectsUids.empty() ) {
+                            break;
+                        }
+                    }
                 }
+
+                Maps::readMapInEditor( _mapFormat );
+                action.commit();
+                _redraw |= mapUpdateFlags;
             }
             else {
                 if ( Maps::eraseOjects( tile, _editorPanel.getEraseTypes() ) ) {
