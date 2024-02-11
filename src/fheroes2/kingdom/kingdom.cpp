@@ -114,7 +114,7 @@ Kingdom::Kingdom()
     // Do nothing.
 }
 
-void Kingdom::Init( int clr )
+void Kingdom::Init( const int clr )
 {
     clear();
 
