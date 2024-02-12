@@ -310,8 +310,6 @@ namespace Interface
 
         if ( _eraseTypes & Maps::ObjectErasureType::CASTLES ) {
             objectGroups.push_back( Maps::ObjectGroup::KINGDOM_TOWNS );
-            objectGroups.push_back( Maps::ObjectGroup::LANDSCAPE_TOWN_BASEMENTS );
-            objectGroups.push_back( Maps::ObjectGroup::LANDSCAPE_FLAGS );
         }
 
         if ( _eraseTypes & Maps::ObjectErasureType::ADVENTURE_PICKABLE ) {

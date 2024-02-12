@@ -24,6 +24,7 @@
 #include <array>
 #include <cassert>
 #include <cstddef>
+#include <iterator>
 #include <memory>
 #include <set>
 #include <string>
@@ -167,6 +168,94 @@ namespace
                                      const std::function<bool( const Maps::Tiles & tile )> & condition )
     {
         return isConditionValid( Maps::getGroundLevelUsedTileOffset( info ), mainTilePos, condition );
+    }
+
+    bool removeObjects( Maps::Map_Format::MapFormat & mapFormat, fheroes2::Point tileAreaIndices, std::vector<Maps::ObjectGroup> objectGroups )
+    {
+        // '_mapFormat' stores only object's main (action) tile so initially we do search for objects in 'tiles'.
+        std::set<uint32_t> objectsUids = Maps::getObjectUidsInArea( tileAreaIndices.x, tileAreaIndices.y );
+
+        if ( objectsUids.empty() ) {
+            return false;
+        }
+
+        bool needRedraw = false;
+
+        // Filter objects by group and remove them from '_mapFormat'.
+        for ( std::vector<Maps::Map_Format::TileInfo>::iterator mapTile = mapFormat.tiles.begin(); mapTile != mapFormat.tiles.end(); ++mapTile ) {
+            if ( mapTile->objects.empty() ) {
+                continue;
+            }
+
+            for ( auto object = mapTile->objects.begin(); object != mapTile->objects.end(); ) {
+                if ( objectsUids.find( object->id ) == objectsUids.end()
+                     || std::none_of( objectGroups.begin(), objectGroups.end(), [&object]( const Maps::ObjectGroup group ) { return group == object->group; } ) ) {
+                    ++object;
+                    continue;
+                }
+
+                // The object with this UID is found, remove UID not to search for it more.
+                objectsUids.erase( object->id );
+
+                if ( object->group == Maps::ObjectGroup::KINGDOM_TOWNS ) {
+                    // Towns and castles consist of four objects. We need to search them all and remove from map.
+                    const uint32_t objectId = object->id;
+                    auto findTownPart = [objectId]( std::vector<Maps::Map_Format::TileInfo>::iterator tileToSearch, const Maps::ObjectGroup group ) {
+                        std::vector<Maps::Map_Format::ObjectInfo>::iterator foundObject
+                            = std::find_if( tileToSearch->objects.begin(), tileToSearch->objects.end(),
+                                            [objectId, group]( const Maps::Map_Format::ObjectInfo & mapObject ) {
+                                                return mapObject.group == group && mapObject.id == objectId;
+                                            } );
+                        assert( foundObject != tileToSearch->objects.end() );
+                        return foundObject;
+                    };
+
+                    // Remove the town object.
+                    mapTile->objects.erase( object );
+
+                    // Town basement is also located at this tile. Find and remove it.
+                    mapTile->objects.erase( findTownPart( mapTile, Maps::ObjectGroup::LANDSCAPE_TOWN_BASEMENTS ) );
+
+                    // Remove flags.
+                    assert( mapTile != mapFormat.tiles.begin() );
+                    const std::vector<Maps::Map_Format::TileInfo>::iterator pteviousTile = mapTile - 1;
+                    pteviousTile->objects.erase( findTownPart( pteviousTile, Maps::ObjectGroup::LANDSCAPE_FLAGS ) );
+
+                    assert( mapTile != mapFormat.tiles.end() );
+                    const std::vector<Maps::Map_Format::TileInfo>::iterator nextTile = mapTile + 1;
+                    nextTile->objects.erase( findTownPart( nextTile, Maps::ObjectGroup::LANDSCAPE_FLAGS ) );
+
+                    // Two objects were removed from different places. Start the search from begin.
+                    object = mapTile->objects.begin();
+
+                    needRedraw = true;
+                }
+                else if ( object->group == Maps::ObjectGroup::ROADS ) {
+                    const int32_t tileId = static_cast<int32_t>( std::distance( mapFormat.tiles.begin(), mapTile ) );
+
+                    assert( tileId >= 0 && tileId < static_cast<int32_t>( world.getSize() ) );
+
+                    needRedraw |= Maps::updateRoadOnTile( world.GetTiles( tileId ), false );
+                }
+                else if ( object->group == Maps::ObjectGroup::STREAMS ) {
+                    const int32_t tileId = static_cast<int32_t>( std::distance( mapFormat.tiles.begin(), mapTile ) );
+
+                    assert( tileId >= 0 && tileId < static_cast<int32_t>( world.getSize() ) );
+
+                    needRedraw |= Maps::updateStreamOnTile( world.GetTiles( tileId ), false );
+                }
+                else {
+                    object = mapTile->objects.erase( object );
+                    needRedraw = true;
+                }
+
+                if ( objectsUids.empty() ) {
+                    break;
+                }
+            }
+        }
+
+        return needRedraw;
     }
 }
 
@@ -492,9 +581,13 @@ namespace Interface
                         // Erase objects in the selected area.
                         fheroes2::ActionCreator action( _historyManager, _mapFormat );
 
-                        Maps::eraseObjectsOnTiles( _selectedTile, _tileUnderCursor, _editorPanel.getEraseTypes() );
+                        if ( removeObjects( _mapFormat, { _selectedTile, _tileUnderCursor }, _editorPanel.getEraseObjectGroups() ) ) {
+                            action.commit();
+                            _redraw |= mapUpdateFlags;
 
-                        action.commit();
+                            // TODO: Make a proper function to remove all types of objects from the 'world tiles' not to do full reload of '_mapFormat'.
+                            Maps::readMapInEditor( _mapFormat );
+                        }
                     }
                 }
 
@@ -724,75 +817,18 @@ namespace Interface
 
             fheroes2::ActionCreator action( _historyManager, _mapFormat );
 
-            if ( brushSize.width > 1 ) {
-                const fheroes2::Point indices = getBrushAreaIndicies( brushSize, tileIndex );
-                // '_mapFormat' stores only object's main (action) tile so initially we do search for objects in 'tiles'.
-                std::set<uint32_t> objectsUids = Maps::getObjectUidsInArea( indices.x, indices.y );
-
-                std::vector<Maps::ObjectGroup> objectGroups = _editorPanel.getEraseObjectGroups();
-
-                // Filter objects by group and remove them from '_mapFormat' and 'tiles'.
-                for ( auto mapTile = _mapFormat.tiles.begin(); mapTile != _mapFormat.tiles.end(); ++mapTile ) {
-                    if ( objectsUids.empty() ) {
-                        break;
-                    }
-
-                    if ( mapTile->objects.empty() ) {
-                        continue;
-                    }
-
-                    for ( auto object = mapTile->objects.begin(); object != mapTile->objects.end(); ) {
-                        if ( objectsUids.find( object->id ) == objectsUids.end()
-                             || std::none_of( objectGroups.begin(), objectGroups.end(),
-                                              [&object]( const Maps::ObjectGroup group ) { return group == object->group; } ) ) {
-                            ++object;
-                            continue;
-                        }
-
-                        // TODO: Make a proper function to remove all types of objects from the 'world tiles' not to do full reload of '_mapForma'.
-
-                        // TODO: Do a special map object remove for the complex object - town/castle.
-
-                        if ( object->group != Maps::ObjectGroup::KINGDOM_TOWNS && object->group != Maps::ObjectGroup::LANDSCAPE_FLAGS
-                             && object->group != Maps::ObjectGroup::LANDSCAPE_TOWN_BASEMENTS ) {
-                            objectsUids.erase( object->id );
-                        }
-
-                        // TODO: Fix roads.
-                        if ( object->group == Maps::ObjectGroup::ROADS ) {
-                            const int32_t tileId = static_cast<int32_t>( mapTile - _mapFormat.tiles.begin() );
-
-                            assert( tileId >= 0 && tileId < world.getSize() );
-
-                            if ( Maps::updateRoadOnTile( world.GetTiles( tileId ), false ) ) {
-                                object = mapTile->objects.erase( object );
-                            }
-                        }
-                        else {
-                            object = mapTile->objects.erase( object );
-                        }
-
-                        if ( objectsUids.empty() ) {
-                            break;
-                        }
-                    }
-                }
-
-                Maps::readMapInEditor( _mapFormat );
+            const fheroes2::Point indices = getBrushAreaIndicies( brushSize, tileIndex );
+            if ( removeObjects( _mapFormat, indices, _editorPanel.getEraseObjectGroups() ) ) {
                 action.commit();
                 _redraw |= mapUpdateFlags;
+
+                // TODO: Make a proper function to remove all types of objects from the 'world tiles' not to do full reload of '_mapFormat'.
+                Maps::readMapInEditor( _mapFormat );
             }
-            else {
-                if ( Maps::eraseOjects( tile, _editorPanel.getEraseTypes() ) ) {
-                    _redraw |= mapUpdateFlags;
 
-                    action.commit();
-                }
-
-                if ( brushSize.width == 0 ) {
-                    // This is a case when area was not selected but a single tile was clicked.
-                    _selectedTile = -1;
-                }
+            if ( brushSize.width == 0 ) {
+                // This is a case when area was not selected but a single tile was clicked.
+                _selectedTile = -1;
             }
         }
         else if ( _editorPanel.isObjectMode() ) {
