@@ -4571,9 +4571,8 @@ msgstr "játék mentése"
 msgid "hotkey|next hero"
 msgstr "következő hős"
 
-#, fuzzy
 msgid "hotkey|change to hero under cursor"
-msgstr "következő hős"
+msgstr "váltás a kurzor alatti hősre"
 
 msgid "hotkey|start hero movement"
 msgstr "hős mozgásának megkezdése"
