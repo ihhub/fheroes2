@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2023                                                    *
+ *   Copyright (C) 2023 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -54,7 +54,7 @@ namespace Interface
 
     void displayStandardPopupWindow( std::string text, const fheroes2::Rect & interfaceArea )
     {
-        const CursorRestorer cursorRestorer( false, Cursor::POINTER );
+        const CursorRestorer cursorRestorer( false );
 
         const fheroes2::Sprite & windowImage = fheroes2::AGG::GetICN( ICN::QWIKINFO, 0 );
 

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2023                                             *
+ *   Copyright (C) 2020 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -29,7 +29,6 @@
 #include <utility>
 
 #include "agg.h"
-#include "battle_animation.h"
 #include "battle_cell.h"
 #include "logging.h"
 #include "monster.h"
@@ -43,20 +42,41 @@ namespace
     {
         return fheroes2::getLEValue<T>( reinterpret_cast<const char *>( data ), base, offset );
     }
+
+    const char * GetFilename( const int monsterId )
+    {
+        return fheroes2::getMonsterData( monsterId ).binFileName;
+    }
+
+    class MonsterAnimCache
+    {
+    public:
+        Bin_Info::MonsterAnimInfo getAnimInfo( const int monsterID )
+        {
+            auto mapIterator = _animMap.find( monsterID );
+            if ( mapIterator != _animMap.end() ) {
+                return mapIterator->second;
+            }
+
+            Bin_Info::MonsterAnimInfo info( monsterID, AGG::getDataFromAggFile( GetFilename( monsterID ) ) );
+            if ( info.isValid() ) {
+                _animMap[monsterID] = info;
+                return info;
+            }
+
+            DEBUG_LOG( DBG_GAME, DBG_WARN, "Missing BIN file data: " << GetFilename( monsterID ) << ", monster ID: " << monsterID )
+            return {};
+        }
+
+    private:
+        std::map<int, Bin_Info::MonsterAnimInfo> _animMap;
+    };
+
+    MonsterAnimCache _infoCache;
 }
 
 namespace Bin_Info
 {
-    class MonsterAnimCache
-    {
-    public:
-        AnimationReference createAnimReference( int monsterID ) const;
-        MonsterAnimInfo getAnimInfo( int monsterID );
-
-    private:
-        std::map<int, MonsterAnimInfo> _animMap;
-    };
-
     const size_t CORRECT_FRM_LENGTH = 821;
 
     // When base unit and its upgrade use the same FRM file (e.g. Archer and Ranger)
@@ -64,14 +84,6 @@ namespace Bin_Info
     const double MOVE_SPEED_UPGRADE = 0.12;
     const double SHOOT_SPEED_UPGRADE = 0.08;
     const double RANGER_SHOOT_SPEED = 0.78;
-
-    std::map<int, AnimationReference> animRefs;
-    MonsterAnimCache _infoCache;
-
-    const char * GetFilename( int monsterId )
-    {
-        return fheroes2::getMonsterData( monsterId ).binFileName;
-    }
 
     MonsterAnimInfo::MonsterAnimInfo( int monsterID, const std::vector<uint8_t> & bytes )
         : moveSpeed( 450 )
@@ -99,7 +111,7 @@ namespace Bin_Info
                 moveOffset.push_back( static_cast<int>( getValue<int8_t>( data, 5 + moveID * 16, frame ) ) );
             }
 
-            frameXOffset.push_back( moveOffset );
+            frameXOffset.emplace_back( std::move( moveOffset ) );
         }
 
         // Idle animations data
@@ -229,7 +241,8 @@ namespace Bin_Info
             for ( uint8_t frame = 0; frame < count; ++frame ) {
                 anim.push_back( static_cast<int>( data[277 + idx * 16 + frame] ) );
             }
-            animationFrames.push_back( anim );
+
+            animationFrames.emplace_back( std::move( anim ) );
         }
 
         if ( monsterID == Monster::WOLF ) { // Wolves have incorrect frame for lower attack animation
@@ -460,25 +473,6 @@ namespace Bin_Info
         }
     }
 
-    MonsterAnimInfo MonsterAnimCache::getAnimInfo( int monsterID )
-    {
-        std::map<int, MonsterAnimInfo>::iterator mapIterator = _animMap.find( monsterID );
-        if ( mapIterator != _animMap.end() ) {
-            return mapIterator->second;
-        }
-        else {
-            const MonsterAnimInfo info( monsterID, AGG::getDataFromAggFile( Bin_Info::GetFilename( monsterID ) ) );
-            if ( info.isValid() ) {
-                _animMap[monsterID] = info;
-                return info;
-            }
-            else {
-                DEBUG_LOG( DBG_GAME, DBG_WARN, "missing BIN FRM data: " << Bin_Info::GetFilename( monsterID ) << ", index: " << monsterID )
-            }
-        }
-        return MonsterAnimInfo();
-    }
-
     bool MonsterAnimInfo::isValid() const
     {
         if ( animationFrames.size() != SHOOT3_END + 1 )
@@ -516,19 +510,8 @@ namespace Bin_Info
         return angles.size() - 1;
     }
 
-    AnimationReference MonsterAnimCache::createAnimReference( int monsterID ) const
-    {
-        return AnimationReference( monsterID );
-    }
-
     MonsterAnimInfo GetMonsterInfo( uint32_t monsterID )
     {
         return _infoCache.getAnimInfo( monsterID );
-    }
-
-    void InitBinInfo()
-    {
-        for ( int i = Monster::UNKNOWN; i < Monster::WATER_ELEMENT + 1; ++i )
-            animRefs[i] = _infoCache.createAnimReference( i );
     }
 }

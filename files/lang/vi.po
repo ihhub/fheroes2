@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-03 03:27+0000\n"
+"POT-Creation-Date: 2024-02-08 12:37+0000\n"
 "PO-Revision-Date: 2023-12-20 19:47+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -815,11 +815,11 @@ msgstr "Thanh Tin nhắn"
 msgid "Shows the results of individual monster's actions."
 msgstr "Hiển thị kết quả hành động của từng quái vật."
 
-msgid "Are you sure you want to finish the battle in auto mode?"
-msgstr "Ngươi có chắc chắn muốn kết thúc trận chiến ở chế độ tự động không?"
-
 msgid "Are you sure you want to enable auto combat?"
 msgstr "Ngươi có chắc chắn muốn bật chiến đấu tự động?"
+
+msgid "Are you sure you want to finish the battle in auto mode?"
+msgstr "Ngươi có chắc chắn muốn kết thúc trận chiến ở chế độ tự động không?"
 
 msgid "%{name} skip their turn."
 msgstr "%{name} bỏ lượt."
@@ -3817,6 +3817,9 @@ msgid ""
 "A maximum of %{count} heroes of the same color can be placed on the map."
 msgstr ""
 
+msgid "Failed to update player information."
+msgstr ""
+
 msgid "Artifacts cannot be placed on water."
 msgstr "Bảo vật không thể đặt trên nước."
 
@@ -4619,6 +4622,10 @@ msgid "hotkey|save game"
 msgstr "lưu trò chơi"
 
 msgid "hotkey|next hero"
+msgstr "tướng tiếp theo"
+
+#, fuzzy
+msgid "hotkey|change to hero under cursor"
 msgstr "tướng tiếp theo"
 
 msgid "hotkey|start hero movement"

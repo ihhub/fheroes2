@@ -2659,7 +2659,7 @@ namespace
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWBA, icnOffset + 4, fheroes2::Point{ 2, 0 }, MP2::OBJ_NON_ACTION_CASTLE, Maps::OBJECT_LAYER );
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWBA, icnOffset + 5, fheroes2::Point{ -2, 1 }, MP2::OBJ_NON_ACTION_CASTLE, Maps::OBJECT_LAYER );
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWBA, icnOffset + 6, fheroes2::Point{ -1, 1 }, MP2::OBJ_NON_ACTION_CASTLE, Maps::OBJECT_LAYER );
-            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWBA, icnOffset + 7, fheroes2::Point{ 0, 1 }, MP2::OBJ_NON_ACTION_CASTLE, Maps::OBJECT_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWBA, icnOffset + 7, fheroes2::Point{ 0, 1 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWBA, icnOffset + 8, fheroes2::Point{ 1, 1 }, MP2::OBJ_NON_ACTION_CASTLE, Maps::OBJECT_LAYER );
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNTWBA, icnOffset + 9, fheroes2::Point{ 2, 1 }, MP2::OBJ_NON_ACTION_CASTLE, Maps::OBJECT_LAYER );
 
@@ -4503,7 +4503,7 @@ namespace
     {
         assert( objects.empty() );
 
-        auto addTown = [&objects]( const MP2::MapObjectType mainObjectType, const uint8_t townIcnOffset, const uint8_t shadowIcnOffset,
+        auto addTown = [&objects]( const MP2::MapObjectType mainObjectType, const uint8_t race, const uint8_t townIcnOffset, const uint8_t shadowIcnOffset,
                                    const MP2::ObjectIcnType townIcnType, const MP2::ObjectIcnType shadowIcnType ) {
             assert( MP2::isActionObject( mainObjectType ) );
 
@@ -4545,24 +4545,23 @@ namespace
             object.topLevelParts.emplace_back( townIcnType, townIcnOffset + 5, fheroes2::Point{ 2, -2 }, secondaryObjectType );
             object.topLevelParts.emplace_back( townIcnType, townIcnOffset + 0, fheroes2::Point{ 0, -3 }, secondaryObjectType );
 
+            object.metadata[0] = race;
+
             objects.emplace_back( std::move( object ) );
         };
 
         // Castle and town sprites: Knight, Barbarian, Sorceress, Warlock, Wizard, Necromancer.
         // First goes castle, then town, then the next race.
-        for ( uint8_t race = 0; race < 6 * 2; ++race ) {
-            const uint8_t icnOffset = race * 16;
+        for ( uint8_t i = 0; i < 6 * 2; ++i ) {
+            const uint8_t icnOffset = i * 16;
+            const uint8_t race = i / 2;
 
-            addTown( MP2::OBJ_CASTLE, icnOffset, icnOffset, MP2::OBJ_ICN_TYPE_OBJNTOWN, MP2::OBJ_ICN_TYPE_OBJNTWSH );
+            addTown( MP2::OBJ_CASTLE, race, icnOffset, icnOffset, MP2::OBJ_ICN_TYPE_OBJNTOWN, MP2::OBJ_ICN_TYPE_OBJNTWSH );
         }
 
         // Random castle/town
-        for ( uint8_t i = 0; i < 2; ++i ) {
-            const uint8_t icnOffset = i * 16;
-            const MP2::MapObjectType mainObjectType = ( i == 0 ) ? MP2::OBJ_RANDOM_CASTLE : MP2::OBJ_RANDOM_TOWN;
-
-            addTown( mainObjectType, icnOffset, icnOffset + 32, MP2::OBJ_ICN_TYPE_OBJNTWRD, MP2::OBJ_ICN_TYPE_OBJNTWRD );
-        }
+        addTown( MP2::OBJ_RANDOM_CASTLE, 7, 0, 32, MP2::OBJ_ICN_TYPE_OBJNTWRD, MP2::OBJ_ICN_TYPE_OBJNTWRD );
+        addTown( MP2::OBJ_RANDOM_TOWN, 7, 16, 16 + 32, MP2::OBJ_ICN_TYPE_OBJNTWRD, MP2::OBJ_ICN_TYPE_OBJNTWRD );
     }
 
     void populateMonsters( std::vector<Maps::ObjectInfo> & objects )

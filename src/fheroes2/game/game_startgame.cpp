@@ -622,6 +622,9 @@ int Interface::AdventureMap::GetCursorFocusHeroes( const Heroes & hero, const Ma
             }
 
             if ( hero.GetColor() == otherHero->GetColor() ) {
+                if ( HotKeyHoldEvent( Game::HotKeyEvent::WORLD_QUICK_SELECT_HERO ) ) {
+                    return Cursor::HEROES;
+                }
                 const int cursor = Cursor::DistanceThemes( Cursor::CURSOR_HERO_MEET, hero.getNumOfTravelDays( tile.GetIndex() ) );
 
                 return cursor != Cursor::POINTER ? cursor : Cursor::HEROES;
@@ -1119,6 +1122,16 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
             // open focus
             else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_OPEN_FOCUS ) )
                 EventOpenFocus();
+            else if ( HotKeyHoldEvent( Game::HotKeyEvent::WORLD_QUICK_SELECT_HERO ) ) {
+                const int32_t index = _gameArea.GetValidTileIdFromPoint( le.GetMouseCursor() );
+                // This tells us that this is a hero owned by the current player and that they can meet, so we switch to the helmet cursor.
+                if ( cursor.Themes() == Cursor::CURSOR_HERO_MEET ) {
+                    cursor.SetThemes( GetCursorTileIndex( index ) );
+                }
+                if ( le.MouseClickLeft() ) {
+                    EventSwitchFocusedHero( index );
+                }
+            }
         }
 
         if ( res != fheroes2::GameMode::CANCEL ) {
@@ -1137,7 +1150,7 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
             else if ( isScrollBottom( le.GetMouseCursor() ) )
                 scrollPosition |= SCROLL_BOTTOM;
 
-            if ( scrollPosition != SCROLL_NONE ) {
+            if ( scrollPosition != SCROLL_NONE && _gameArea.isFastScrollEnabled() ) {
                 if ( Game::validateAnimationDelay( Game::SCROLL_START_DELAY ) ) {
                     if ( fastScrollRepeatCount < fastScrollStartThreshold ) {
                         ++fastScrollRepeatCount;
@@ -1154,6 +1167,11 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
         }
         else {
             fastScrollRepeatCount = 0;
+        }
+
+        // Re-enable fast scroll if the cursor movement indicates the need
+        if ( !_gameArea.isFastScrollEnabled() && _gameArea.mouseIndicatesFastScroll( le.GetMouseCursor() ) ) {
+            _gameArea.setFastScrollStatus( true );
         }
 
         const bool isHiddenInterface = conf.isHideInterfaceEnabled();
@@ -1539,4 +1557,9 @@ void Interface::AdventureMap::mouseCursorAreaPressRight( const int32_t tileIndex
             break;
         }
     }
+}
+
+void Interface::AdventureMap::mouseCursorAreaLongPressLeft( const int32_t tileIndex )
+{
+    EventSwitchFocusedHero( tileIndex );
 }

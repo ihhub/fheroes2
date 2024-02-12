@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -139,12 +139,15 @@ void Dialog::GameInfo()
     text.draw( shadowOffset.x + CONDITION_LABEL_OFFSET, shadowOffset.y + 347, CONDITION_LABEL_WIDTH, display );
 
     text.set( GameOver::GetActualDescription( mapInfo.ConditionWins() ), fheroes2::FontType::smallWhite() );
+    text.setUniformVerticalAlignment( false );
     text.draw( shadowOffset.x + CONDITION_DESCRIPTION_OFFSET, shadowOffset.y + 350, CONDITION_DESCRIPTION_WIDTH, display );
 
     text.set( _( "Loss\nConditions" ), fheroes2::FontType::smallWhite() );
+    text.setUniformVerticalAlignment( true );
     text.draw( shadowOffset.x + CONDITION_LABEL_OFFSET, shadowOffset.y + 392, CONDITION_LABEL_WIDTH, display );
 
     text.set( GameOver::GetActualDescription( mapInfo.ConditionLoss() ), fheroes2::FontType::smallWhite() );
+    text.setUniformVerticalAlignment( false );
     text.draw( shadowOffset.x + CONDITION_DESCRIPTION_OFFSET, shadowOffset.y + 398, CONDITION_DESCRIPTION_WIDTH, display );
 
     const int buttonOkIcnId = ICN::BUTTON_SMALL_OKAY_GOOD;

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-03 03:27+0000\n"
+"POT-Creation-Date: 2024-02-08 12:37+0000\n"
 "PO-Revision-Date: 2023-09-03 18:42+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -816,11 +816,11 @@ msgstr "Kamplogg"
 msgid "Shows the results of individual monster's actions."
 msgstr "Viser en logg over alle krigernes trekk."
 
-msgid "Are you sure you want to finish the battle in auto mode?"
-msgstr "Er du sikker på at du vil fullføre kampen med automatiske trekk?"
-
 msgid "Are you sure you want to enable auto combat?"
 msgstr "Er du sikker på at du ønsker å skru på autokamp?"
+
+msgid "Are you sure you want to finish the battle in auto mode?"
+msgstr "Er du sikker på at du vil fullføre kampen med automatiske trekk?"
 
 msgid "%{name} skip their turn."
 msgstr "Troppen med %{name} hoppet over turen sin."
@@ -3876,6 +3876,9 @@ msgid ""
 "A maximum of %{count} heroes of the same color can be placed on the map."
 msgstr ""
 
+msgid "Failed to update player information."
+msgstr ""
+
 #, fuzzy
 msgid "Artifacts cannot be placed on water."
 msgstr "Denne trolldommen kan ikke brukes på et skip."
@@ -4695,6 +4698,10 @@ msgid "hotkey|save game"
 msgstr "Lagre parti"
 
 msgid "hotkey|next hero"
+msgstr "Neste helt"
+
+#, fuzzy
+msgid "hotkey|change to hero under cursor"
 msgstr "Neste helt"
 
 #, fuzzy

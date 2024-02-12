@@ -524,7 +524,9 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected, const in
     fheroes2::Button buttonDismiss( dst_pt.x, dst_pt.y, dismissButtonIcnID, 0, 1 );
 
     const int exitButtonIcnID = isEvilInterface ? ICN::BUTTON_SMALL_EXIT_EVIL : ICN::BUTTON_SMALL_EXIT_GOOD;
-    dst_pt.x = pos_rt.x + 415;
+    const int32_t exitWidth = fheroes2::AGG::GetICN( exitButtonIcnID, 0 ).width();
+    const int32_t interfaceAdjustment = isEvilInterface ? 0 : 18;
+    dst_pt.x = pos_rt.x + sprite_dialog.width() - 58 - exitWidth + interfaceAdjustment;
     dst_pt.y = pos_rt.y + 221;
     fheroes2::Button buttonExit( dst_pt.x, dst_pt.y, exitButtonIcnID, 0, 1 );
 

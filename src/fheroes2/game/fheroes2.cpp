@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -42,7 +42,6 @@
 #include "agg.h"
 #include "agg_image.h"
 #include "audio_manager.h"
-#include "bin_info.h"
 #include "core.h"
 #include "cursor.h"
 #include "dir.h"
@@ -156,24 +155,20 @@ namespace
             const Settings & conf = Settings::Get();
 
             fheroes2::Display & display = fheroes2::Display::instance();
+            fheroes2::ResolutionInfo bestResolution{ conf.currentResolutionInfo() };
+
             if ( conf.isFirstGameRun() && System::isHandheldDevice() ) {
                 // We do not show resolution dialog for first run on handheld devices. In this case it is wise to set 'widest' resolution by default.
                 const std::vector<fheroes2::ResolutionInfo> resolutions = fheroes2::engine().getAvailableResolutions();
-                fheroes2::ResolutionInfo bestResolution{ conf.currentResolutionInfo() };
 
                 for ( const fheroes2::ResolutionInfo & info : resolutions ) {
                     if ( info.gameWidth > bestResolution.gameWidth && info.gameHeight == bestResolution.gameHeight ) {
                         bestResolution = info;
                     }
                 }
-
-                display.setResolution( bestResolution );
-            }
-            else {
-                display.setResolution( conf.currentResolutionInfo() );
             }
 
-            display.fill( 0 ); // start from a black screen
+            display.setResolution( bestResolution );
 
             fheroes2::engine().setTitle( GetCaption() );
 
@@ -313,9 +308,6 @@ int main( int argc, char ** argv )
         // Load palette.
         fheroes2::setGamePalette( AGG::getDataFromAggFile( "KB.PAL" ) );
         fheroes2::Display::instance().changePalette( nullptr, true );
-
-        // load BIN data
-        Bin_Info::InitBinInfo();
 
         // init game data
         Game::Init();

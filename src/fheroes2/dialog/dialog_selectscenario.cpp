@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -77,7 +77,7 @@ namespace
         SELECTED_SCENARIO_DIFFICULTY_HEIGHT = 20,
         SELECTED_SCENARIO_DESCRIPTION_OFFSET_X = 42,
         SELECTED_SCENARIO_DESCRIPTION_OFFSET_Y = 318,
-        SELECTED_SCENARIO_DESCRIPTION_WIDTH = 292,
+        SELECTED_SCENARIO_DESCRIPTION_BOX_WIDTH = 292,
         SELECTED_SCENARIO_DESCRIPTION_HEIGHT = 90,
         SELECTED_SCENARIO_GENERAL_OFFSET_Y = 265,
         // COMMON
@@ -264,8 +264,9 @@ void ScenarioListBox::_renderSelectedScenarioInfo( fheroes2::Display & display, 
                          dst.y + SELECTED_SCENARIO_DIFFICULTY_OFFSET_Y, display );
 
     fheroes2::Text descriptionText( info.description, fheroes2::FontType::normalWhite() );
-    descriptionText.draw( dst.x + SELECTED_SCENARIO_DESCRIPTION_OFFSET_X, dst.y + SELECTED_SCENARIO_DESCRIPTION_OFFSET_Y + 5, SELECTED_SCENARIO_DESCRIPTION_WIDTH - 2,
-                          display );
+    descriptionText.setUniformVerticalAlignment( false );
+    descriptionText.draw( dst.x + SELECTED_SCENARIO_DESCRIPTION_OFFSET_X + 4, dst.y + SELECTED_SCENARIO_DESCRIPTION_OFFSET_Y + 3,
+                          SELECTED_SCENARIO_DESCRIPTION_BOX_WIDTH - 8, display );
 }
 
 void ScenarioListBox::_renderMapName( const Maps::FileInfo & info, bool selected, const int32_t & baseYOffset, fheroes2::Display & display ) const
@@ -445,7 +446,7 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & allMaps 
     const fheroes2::Rect curDifficulty( rt.x + SELECTED_SCENARIO_DIFFICULTY_OFFSET_X, rt.y + SELECTED_SCENARIO_DIFFICULTY_OFFSET_Y, SELECTED_SCENARIO_DIFFICULTY_WIDTH,
                                         SELECTED_SCENARIO_DIFFICULTY_HEIGHT );
     const fheroes2::Rect curDescription( rt.x + SELECTED_SCENARIO_DESCRIPTION_OFFSET_X, rt.y + SELECTED_SCENARIO_DESCRIPTION_OFFSET_Y,
-                                         SELECTED_SCENARIO_DESCRIPTION_WIDTH, SELECTED_SCENARIO_DESCRIPTION_HEIGHT );
+                                         SELECTED_SCENARIO_DESCRIPTION_BOX_WIDTH, SELECTED_SCENARIO_DESCRIPTION_HEIGHT );
 
     fheroes2::Button buttonOk( rt.x + 140, rt.y + 410, ICN::BUTTON_SMALL_OKAY_GOOD, 0, 1 );
 

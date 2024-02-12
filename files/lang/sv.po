@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-03 03:27+0000\n"
+"POT-Creation-Date: 2024-02-08 12:37+0000\n"
 "PO-Revision-Date: 2023-12-25 14:31+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -815,11 +815,11 @@ msgstr "Textfält"
 msgid "Shows the results of individual monster's actions."
 msgstr "Visa resultaten av en varelses handlingar."
 
-msgid "Are you sure you want to finish the battle in auto mode?"
-msgstr "Är du säker på att du vill fortsätta striden i automatiskt läge?"
-
 msgid "Are you sure you want to enable auto combat?"
 msgstr "Är du säker på att du vill aktivera automatisk strid?"
+
+msgid "Are you sure you want to finish the battle in auto mode?"
+msgstr "Är du säker på att du vill fortsätta striden i automatiskt läge?"
 
 msgid "%{name} skip their turn."
 msgstr "%{name} hoppar över rundan."
@@ -3780,6 +3780,9 @@ msgid ""
 "A maximum of %{count} heroes of the same color can be placed on the map."
 msgstr "Maximalt %{count} hjältar med samma färg kan placeras på kartan."
 
+msgid "Failed to update player information."
+msgstr ""
+
 msgid "Artifacts cannot be placed on water."
 msgstr "Artefakter kan inte placeras på vatten."
 
@@ -4566,6 +4569,10 @@ msgid "hotkey|save game"
 msgstr "Spara spel"
 
 msgid "hotkey|next hero"
+msgstr "Nästa hjälte"
+
+#, fuzzy
+msgid "hotkey|change to hero under cursor"
 msgstr "Nästa hjälte"
 
 msgid "hotkey|start hero movement"

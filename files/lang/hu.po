@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-03 03:27+0000\n"
+"POT-Creation-Date: 2024-02-08 12:37+0000\n"
 "PO-Revision-Date: 2023-09-04 21:55+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -802,11 +802,11 @@ msgstr "Üzenetsáv"
 msgid "Shows the results of individual monster's actions."
 msgstr "Mutatja egy lény tevékenységének eredményét."
 
-msgid "Are you sure you want to finish the battle in auto mode?"
-msgstr "Biztos vagy benne hogy automatikus módban kívánod befejezni a csatát?"
-
 msgid "Are you sure you want to enable auto combat?"
 msgstr "Biztos, hogy be akarod kapcsolni az automata csatát?"
+
+msgid "Are you sure you want to finish the battle in auto mode?"
+msgstr "Biztos vagy benne hogy automatikus módban kívánod befejezni a csatát?"
 
 msgid "%{name} skip their turn."
 msgstr "%{name} kihagynak egy kört."
@@ -3778,6 +3778,9 @@ msgid ""
 msgstr ""
 "Maximum %{count} hős helyezhető el a térképen ugyanabból a színből."
 
+msgid "Failed to update player information."
+msgstr ""
+
 msgid "Artifacts cannot be placed on water."
 msgstr "Vízen nem helyezhetők el varázstárgyak."
 
@@ -4566,6 +4569,10 @@ msgid "hotkey|save game"
 msgstr "játék mentése"
 
 msgid "hotkey|next hero"
+msgstr "következő hős"
+
+#, fuzzy
+msgid "hotkey|change to hero under cursor"
 msgstr "következő hős"
 
 msgid "hotkey|start hero movement"
