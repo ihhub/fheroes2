@@ -169,6 +169,6 @@ namespace Maps
 
     bool setObjectOnTile( Tiles & tile, const ObjectInfo & info, const bool updateMapPassabilities );
 
-    // Returns UIDs in given area for all objects in the OBJECT_LAYER.
+    // Returns UIDs in given area for all objects in the OBJECT and TERRAIN layers.
     std::set<uint32_t> getObjectUidsInArea( const int32_t startTileId, const int32_t endTileId );
 }
