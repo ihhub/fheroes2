@@ -183,12 +183,6 @@ namespace Maps
     bool updateRoadOnTile( Tiles & tile, const bool setRoad );
     bool updateStreamOnTile( Tiles & tile, const bool setStream );
 
-    // Removes object and all its parts in around tiles by UID. Returns true is object is found and removed.
-    bool removeObject( Tiles & tile, const uint32_t uid );
-    bool removeObjectTypeFromTile( Tiles & tile, const MP2::ObjectIcnType objectIcnType );
-    bool eraseObjectsOnTiles( const int32_t startTileId, const int32_t endTileId, const uint32_t objectTypesToErase );
-    bool eraseOjects( Tiles & tile, const uint32_t objectTypesToErase );
-
     bool setObjectOnTile( Tiles & tile, const ObjectInfo & info, const bool updateMapPassabilities );
 
     // Returns UIDs in given area for all objects in the OBJECT_LAYER.
