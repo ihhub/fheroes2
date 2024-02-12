@@ -1172,37 +1172,6 @@ namespace
         }
     }
 
-    // Checks all layers in tiles around for given UID and if it is found removes this object part
-    // and initiates a new search around this tile using recursive call of this function.
-    void removeUidFromTilesAround( const int32_t centerTileIndex, const uint32_t uid )
-    {
-        for ( const int32_t tileIndex : Maps::getAroundIndexes( centerTileIndex ) ) {
-            Maps::Tiles & currentTile = world.GetTiles( tileIndex );
-
-            if ( currentTile.GetObjectUID() == uid ) {
-                currentTile.Remove( uid );
-                removeUidFromTilesAround( tileIndex, uid );
-                return;
-            }
-
-            for ( const Maps::TilesAddon & addon : currentTile.getBottomLayerAddons() ) {
-                if ( addon._uid == uid ) {
-                    currentTile.Remove( uid );
-                    removeUidFromTilesAround( tileIndex, uid );
-                    return;
-                }
-            }
-
-            for ( const Maps::TilesAddon & addon : currentTile.getTopLayerAddons() ) {
-                if ( addon._uid == uid ) {
-                    currentTile.Remove( uid );
-                    removeUidFromTilesAround( tileIndex, uid );
-                    return;
-                }
-            }
-        }
-    }
-
     bool placeObjectOnTile( const Maps::Tiles & tile, const Maps::ObjectInfo & info )
     {
         assert( !info.empty() );
