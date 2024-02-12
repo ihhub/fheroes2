@@ -29,7 +29,6 @@
 #include "ground.h"
 #include "image.h"
 #include "map_object_info.h"
-#include "maps_tiles_helper.h"
 #include "math_base.h"
 #include "ui_button.h"
 
