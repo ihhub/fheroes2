@@ -79,22 +79,6 @@ namespace Maps
         FIGHT_50_GHOSTS_AND_GET_2000_GOLD_WITH_ARTIFACT = 4
     };
 
-    enum ObjectErasureType : uint32_t
-    {
-        NONE = 0x00,
-        // Terrain objects are objects that are placed in editor using a terrain palette in objects placing mode.
-        LANDSCAPE = 0x01,
-        ADVENTURE_NON_PICKABLE = 0x02,
-        CASTLES = 0x04,
-        ADVENTURE_PICKABLE = 0x08,
-        MONSTERS = 0x10,
-        HEROES = 0x20,
-        STREAMS = 0x40,
-        ROADS = 0x80,
-
-        ALL_OBJECTS = LANDSCAPE | ADVENTURE_NON_PICKABLE | CASTLES | ADVENTURE_PICKABLE | MONSTERS | HEROES | STREAMS | ROADS,
-    };
-
     // Only for MP2::OBJ_MINE.
     int32_t getMineSpellIdFromTile( const Tiles & tile );
     void setMineSpellOnTile( Tiles & tile, const int32_t spellId );

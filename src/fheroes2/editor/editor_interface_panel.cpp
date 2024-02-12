@@ -286,13 +286,13 @@ namespace Interface
 
     std::vector<Maps::ObjectGroup> EditorPanel::getEraseObjectGroups() const
     {
-        if ( _eraseTypes == Maps::ObjectErasureType::NONE ) {
+        if ( _eraseTypes == ObjectErasureType::ERASE_NONE ) {
             return {};
         }
 
         std::vector<Maps::ObjectGroup> objectGroups;
 
-        if ( _eraseTypes & Maps::ObjectErasureType::LANDSCAPE ) {
+        if ( _eraseTypes & ObjectErasureType::ERASE_LANDSCAPE ) {
             objectGroups.push_back( Maps::ObjectGroup::LANDSCAPE_MOUNTAINS );
             objectGroups.push_back( Maps::ObjectGroup::LANDSCAPE_ROCKS );
             objectGroups.push_back( Maps::ObjectGroup::LANDSCAPE_TREES );
@@ -300,7 +300,7 @@ namespace Interface
             objectGroups.push_back( Maps::ObjectGroup::LANDSCAPE_MISCELLANEOUS );
         }
 
-        if ( _eraseTypes & Maps::ObjectErasureType::ADVENTURE_NON_PICKABLE ) {
+        if ( _eraseTypes & ObjectErasureType::ERASE_ADVENTURE_NON_PICKABLE ) {
             objectGroups.push_back( Maps::ObjectGroup::ADVENTURE_DWELLINGS );
             objectGroups.push_back( Maps::ObjectGroup::ADVENTURE_MINES );
             objectGroups.push_back( Maps::ObjectGroup::ADVENTURE_POWER_UPS );
@@ -308,29 +308,29 @@ namespace Interface
             objectGroups.push_back( Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS );
         }
 
-        if ( _eraseTypes & Maps::ObjectErasureType::CASTLES ) {
+        if ( _eraseTypes & ObjectErasureType::ERASE_TOWNS ) {
             objectGroups.push_back( Maps::ObjectGroup::KINGDOM_TOWNS );
         }
 
-        if ( _eraseTypes & Maps::ObjectErasureType::ADVENTURE_PICKABLE ) {
+        if ( _eraseTypes & ObjectErasureType::ERASE_ADVENTURE_PICKABLE ) {
             objectGroups.push_back( Maps::ObjectGroup::ADVENTURE_ARTIFACTS );
             objectGroups.push_back( Maps::ObjectGroup::ADVENTURE_TREASURES );
             objectGroups.push_back( Maps::ObjectGroup::ADVENTURE_WATER );
         }
 
-        if ( _eraseTypes & Maps::ObjectErasureType::MONSTERS ) {
+        if ( _eraseTypes & ObjectErasureType::ERASE_MONSTERS ) {
             objectGroups.push_back( Maps::ObjectGroup::MONSTERS );
         }
 
-        if ( _eraseTypes & Maps::ObjectErasureType::HEROES ) {
+        if ( _eraseTypes & ObjectErasureType::ERASE_HEROES ) {
             objectGroups.push_back( Maps::ObjectGroup::KINGDOM_HEROES );
         }
 
-        if ( _eraseTypes & Maps::ObjectErasureType::STREAMS ) {
+        if ( _eraseTypes & ObjectErasureType::ERASE_STREAMS ) {
             objectGroups.push_back( Maps::ObjectGroup::STREAMS );
         }
 
-        if ( _eraseTypes & Maps::ObjectErasureType::ROADS ) {
+        if ( _eraseTypes & ObjectErasureType::ERASE_ROADS ) {
             objectGroups.push_back( Maps::ObjectGroup::ROADS );
         }
 
@@ -753,21 +753,21 @@ namespace Interface
     const char * EditorPanel::_getEraseObjectTypeName( const uint32_t eraseObjectType )
     {
         switch ( eraseObjectType ) {
-        case Maps::ObjectErasureType::LANDSCAPE:
+        case ObjectErasureType::ERASE_LANDSCAPE:
             return _( "editorErasure|Landscape objects" );
-        case Maps::ObjectErasureType::ADVENTURE_NON_PICKABLE:
+        case ObjectErasureType::ERASE_ADVENTURE_NON_PICKABLE:
             return _( "editorErasure|Adventure non pickable objects" );
-        case Maps::ObjectErasureType::CASTLES:
+        case ObjectErasureType::ERASE_TOWNS:
             return _( "editorErasure|Castles" );
-        case Maps::ObjectErasureType::ADVENTURE_PICKABLE:
+        case ObjectErasureType::ERASE_ADVENTURE_PICKABLE:
             return _( "editorErasure|Adventure pickable objects" );
-        case Maps::ObjectErasureType::MONSTERS:
+        case ObjectErasureType::ERASE_MONSTERS:
             return _( "editorErasure|Monsters" );
-        case Maps::ObjectErasureType::HEROES:
+        case ObjectErasureType::ERASE_HEROES:
             return _( "editorErasure|Heroes" );
-        case Maps::ObjectErasureType::ROADS:
+        case ObjectErasureType::ERASE_ROADS:
             return _( "editorErasure|Roads" );
-        case Maps::ObjectErasureType::STREAMS:
+        case ObjectErasureType::ERASE_STREAMS:
             return _( "editorErasure|Streams" );
         default:
             // Have you added a new object type to erase? Add the logic above!
@@ -1169,7 +1169,7 @@ namespace Interface
                 }
                 else if ( le.MouseLongPressLeft( _eraseButtonsRect[i] ) ) {
                     _eraseTypes = ( _eraseButtonObjectTypes[i] & _eraseTypes ) ? _eraseButtonObjectTypes[i]
-                                                                               : ( Maps::ObjectErasureType::ALL_OBJECTS & ~_eraseButtonObjectTypes[i] );
+                                                                               : ( ObjectErasureType::ERASE_ALL_OBJECTS & ~_eraseButtonObjectTypes[i] );
                     setRedraw();
                 }
             }
