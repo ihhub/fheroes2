@@ -24,11 +24,9 @@
 #include <array>
 #include <cassert>
 #include <cstddef>
-#include <iterator>
 #include <memory>
 #include <set>
 #include <string>
-#include <vector>
 
 #include "agg_image.h"
 #include "artifact.h"

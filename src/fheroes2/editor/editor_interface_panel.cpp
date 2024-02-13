@@ -26,7 +26,6 @@
 #include <string>
 #include <tuple>
 #include <utility>
-#include <vector>
 
 #include "agg_image.h"
 #include "cursor.h"
