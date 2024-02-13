@@ -117,8 +117,9 @@ namespace
 
     fheroes2::Image makeInstrumentPanelBackground( const int32_t width, const int32_t height )
     {
-        fheroes2::Image background( width, height );
+        fheroes2::Image background;
         background._disableTransformLayer();
+        background.resize( width, height );
         fheroes2::StandardWindow::renderBackgroundImage( background, { 0, 0, width, height }, 0, Settings::Get().isEvilInterfaceEnabled() );
 
         // Make background borders: it consists of rectangles with different transform shading.
@@ -694,21 +695,21 @@ namespace Interface
     {
         switch ( eraseObjectType ) {
         case Maps::ObjectErasureType::TERRAIN_OBJECTS:
-            return _( "Terrain" );
+            return _( "editorErasure|Terrain" );
         case Maps::ObjectErasureType::CASTLES:
-            return _( "Castles" );
+            return _( "editorErasure|Castles" );
         case Maps::ObjectErasureType::MONSTERS:
-            return _( "Monsters" );
+            return _( "editorErasure|Monsters" );
         case Maps::ObjectErasureType::HEROES:
-            return _( "Heroes" );
+            return _( "editorErasure|Heroes" );
         case Maps::ObjectErasureType::ARTIFACTS:
-            return _( "Artifacts" );
+            return _( "editorErasure|Artifacts" );
         case Maps::ObjectErasureType::ROADS:
-            return _( "Roads" );
+            return _( "editorErasure|Roads" );
         case Maps::ObjectErasureType::STREAMS:
-            return _( "Streams" );
+            return _( "editorErasure|Streams" );
         case Maps::ObjectErasureType::TREASURES:
-            return _( "Treasures" );
+            return _( "editorErasure|Treasures" );
         default:
             // Have you added a new object type to erase? Add the logic above!
             assert( 0 );
@@ -983,6 +984,11 @@ namespace Interface
                 handleObjectMouseClick( Dialog::selectLandscapeOceanObjectType );
                 return res;
             }
+
+            if ( le.MouseClickLeft( _landscapeObjectButtonsRect[LandscapeObjectBrush::LANDSCAPE_MISC] ) ) {
+                handleObjectMouseClick( Dialog::selectLandscapeMiscellaneousObjectType );
+                return res;
+            }
         }
         else if ( _selectedInstrument == Instrument::ADVENTURE_OBJECTS ) {
             for ( size_t i = 0; i < _adventureObjectButtonsRect.size(); ++i ) {
@@ -1034,6 +1040,10 @@ namespace Interface
             }
             if ( le.MouseClickLeft( _adventureObjectButtonsRect[AdventureObjectBrush::POWER_UPS] ) ) {
                 handleObjectMouseClick( Dialog::selectPowerUpObjectType );
+                return res;
+            }
+            if ( le.MouseClickLeft( _adventureObjectButtonsRect[AdventureObjectBrush::ADVENTURE_MISC] ) ) {
+                handleObjectMouseClick( Dialog::selectAdventureMiscellaneousObjectType );
                 return res;
             }
         }

@@ -542,12 +542,14 @@ uint32_t Kingdom::GetLostTownDays() const
 
 const Recruits & Kingdom::GetRecruits()
 {
-    // In the first week, it is necessary to offer one native hero (or a hero given as a campaign award)
-    const bool offerNativeHero = world.CountWeek() < 2 && recruits.GetID1() == Heroes::UNKNOWN && recruits.GetID2() == Heroes::UNKNOWN;
+    // At the beginning of a new week, in case there are no heroes who retreated or surrendered on the last day of the previous week and should be available for hire
+    // (this mechanic is an extension of fheroes2 and is missing from the original game), it is necessary to offer one native hero
+    const bool offerNativeHero = ( recruits.GetID1() == Heroes::UNKNOWN && recruits.GetID2() == Heroes::UNKNOWN );
     // Special hero given as a campaign award
     Heroes * specialHireableHero = nullptr;
 
-    if ( isControlHuman() && Settings::Get().isCampaignGameType() && offerNativeHero ) {
+    // If there is a hero received as a campaign award, then this hero should be offered instead of a native hero at the beginning of the first week
+    if ( isControlHuman() && Settings::Get().isCampaignGameType() && offerNativeHero && world.CountWeek() < 2 ) {
         const std::vector<Campaign::CampaignAwardData> obtainedAwards = Campaign::CampaignSaveData::Get().getObtainedCampaignAwards();
 
         for ( const auto & obtainedAward : obtainedAwards ) {
@@ -895,6 +897,7 @@ void Kingdoms::AddHeroes( const AllHeroes & heroes )
     for ( Heroes * hero : heroes ) {
         assert( hero != nullptr );
 
+        // Skip neutral heroes.
         if ( hero->GetColor() != Color::NONE ) {
             GetKingdom( hero->GetColor() ).AddHero( hero );
         }
@@ -904,9 +907,12 @@ void Kingdoms::AddHeroes( const AllHeroes & heroes )
 void Kingdoms::AddCastles( const AllCastles & castles )
 {
     for ( const Castle * castle : castles ) {
-        // skip gray color
-        if ( castle->GetColor() )
+        assert( castle != nullptr );
+
+        // Skip neutral castles and towns.
+        if ( castle->GetColor() != Color::NONE ) {
             GetKingdom( castle->GetColor() ).AddCastle( castle );
+        }
     }
 }
 
@@ -917,8 +923,8 @@ std::set<Heroes *> Kingdoms::resetRecruits()
     for ( Kingdom & kingdom : kingdoms ) {
         Recruits & recruits = kingdom.GetCurrentRecruits();
 
-        // Heroes who surrendered on Sunday should still be available for recruitment next week in
-        // the same kingdom, provided that this kingdom is still playable
+        // Heroes who retreated or surrendered on the last day of the previous week should still be available for recruitment next week in the same kingdom, provided that
+        // this kingdom is still playable. This mechanic is an extension of fheroes2 and is missing from the original game.
         if ( !kingdom.isPlay() || world.CountDay() - recruits.getSurrenderDayOfHero1() > 1 ) {
             recruits.SetHero1( nullptr );
         }

@@ -218,10 +218,7 @@ namespace AI
 
         bool isPositionLocatedInDefendedArea( const Battle::Unit & currentUnit, const Battle::Position & pos ) const;
         bool isUnitFaster( const Battle::Unit & currentUnit, const Battle::Unit & target ) const;
-        bool isHeroWorthSaving( const Heroes & hero ) const;
         bool isCommanderCanSpellcast( const Battle::Arena & arena, const HeroBase * commander ) const;
-
-        bool checkRetreatCondition( const Heroes & hero ) const;
 
         static double commanderMaximumSpellDamageValue( const HeroBase & commander );
 
@@ -317,6 +314,7 @@ namespace AI
         double getScoutObjectValue( const Heroes & hero, const int index, const double valueToIgnore, const uint32_t distanceToObject ) const;
         int getCourierMainTarget( const Heroes & hero, const AIWorldPathfinder & pathfinder, double lowestPossibleValue ) const;
         double getResourcePriorityModifier( const int resource, const bool isMine ) const;
+        double getFundsValueBasedOnPriority( const Funds & funds ) const;
 
         void updatePriorityTargets( Heroes & hero, const int32_t tileIndex, const MP2::MapObjectType objectType );
         void updateKingdomBudget( const Kingdom & kingdom );

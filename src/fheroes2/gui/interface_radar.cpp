@@ -146,8 +146,9 @@ Interface::Radar::Radar( BaseInterface & interface )
     , _radarType( RadarType::WorldMap )
     , _interface( interface )
 {
-    // Radar image can not be transparent so we disable the transform layer to speed up rendering.
+    // Initialize radar image (_map) as a single-layer image.
     _map._disableTransformLayer();
+    _map.resize( RADARWIDTH, RADARWIDTH );
 }
 
 Interface::Radar::Radar( const Radar & radar, const fheroes2::Display & display )
@@ -158,8 +159,9 @@ Interface::Radar::Radar( const Radar & radar, const fheroes2::Display & display 
     , _zoom( radar._zoom )
     , _hide( false )
 {
-    // Radar image can not be transparent so we disable the transform layer to speed up rendering.
+    // Initialize radar image (_map) as a single-layer image.
     _map._disableTransformLayer();
+    _map.resize( RADARWIDTH, RADARWIDTH );
 }
 
 void Interface::Radar::SavePosition()

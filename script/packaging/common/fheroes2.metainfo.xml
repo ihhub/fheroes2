@@ -37,6 +37,80 @@
     <control>touch</control>
   </recommends>
   <releases>
+    <release date="2024-02-07" version="v1.0.12">
+      <url>https://github.com/ihhub/fheroes2/releases/tag/1.0.12</url>
+      <description>
+        <p>Changes in v1.0.12 (07 February 2024):</p>
+        <ul>
+          <li>update the Russian translation</li>
+          <li>update the Spanish translation</li>
+          <li>correct icons alignment on the hero meeting screen</li>
+          <li>update the Polish translation</li>
+          <li>fix the retaliation of archers attacked by an ally under the influence of Berserker or Hypnotize spells, improve the AI usage of Hypnotize spell in general</li>
+          <li>fix incorrect Artesian Spring evaluation by the AI</li>
+          <li>make rules for AI surrender and retreat more unified</li>
+          <li>fix Oasis object passability</li>
+          <li>always offer one native hero at the beginning of a new week</li>
+          <li>puzzle and View World dialogs rendering improvements</li>
+          <li>implement Landscape Miscellaneous (non-action) objects placing in Editor</li>
+          <li>fix OKAY button translation for Interface Settings dialog after any setting change</li>
+          <li>make the AI not to know what objects contain</li>
+          <li>fix issue when Blind or Paralyze has been applied to a hypnotized unit during its turn</li>
+          <li>implement Adventure (action) Miscellaneous objects placing in Editor</li>
+          <li>tune the AI performance at different difficulty levels</li>
+          <li>add surrender cost to battle result dialog</li>
+          <li>improve overall image processing performance</li>
+          <li>update spell points, formations and artifacts descriptions</li>
+          <li>add infos on the cost of surrender</li>
+          <li>allow AI units covering an archer with the AREA_SHOT capability to attack neighboring units on their own</li>
+          <li>use proper name for PoL campaign in High Scores</li>
+          <li>use CP1257 code page for Lithaunian</li>
+          <li>offer the Wisdom skill to the heroes of "magic" classes on a mandatory basis at least once every three level-ups</li>
+          <li>implement Mountains, Rocks and Trees placing in the Editor</li>
+          <li>make the AI attack human heroes that have a greater chance to win than the AI heroes</li>
+          <li>implement Power-ups object placement in the Editor</li>
+          <li>allow AI units that ignore retaliatory strikes to attack neighboring enemy units while covering archers</li>
+          <li>avoid visiting Oasis and Watering Hole objects by AI heroes if they bring no benefit</li>
+          <li>make AI hero behavior depend on the time spent on the map</li>
+          <li>improve fog discovery by the AI heroes</li>
+          <li>adjust text in the skill popup dialog</li>
+          <li>implement Mines placing in the Editor</li>
+          <li>improve AI hero interaction with Witch's Hut object</li>
+          <li>allow the AI-controlled hero to surrender if his kingdom has sufficient gold reserves</li>
+          <li>add text width-adapted CANCEL button, change to StandardWindow for Resolution, Language, Adventure, File and Scenario Info dialogs</li>
+          <li>update Hungarian translation</li>
+          <li>add dwellings into the Editor</li>
+          <li>fix rare fog of war rendering issues</li>
+          <li>allow AI heroes to surrender if the conditions of retreat have been met, but it is impossible to retreat</li>
+          <li>implement the AI logic to transfer the slowest troops to the garrison at the end of the turn to try to get a movement bonus on the next turn</li>
+          <li>mark fheroes2 as DPI-aware on Windows</li>
+          <li>speed up image loading</li>
+          <li>speed up file loading and reduce memory usage on the Adventure Map</li>
+          <li>improve the AI logic for pay-to-hire dwellings on the Adventure Map</li>
+          <li>improve the AI heuristics of covering shooters when using defensive tactics</li>
+          <li>update buttons and add popup windows for them in Battle Only mode</li>
+          <li>use the "cautious offensive" tactics for AI only against melee-only armies without the distant attack potential (including damage spells)</li>
+          <li>update the Swedish translation</li>
+          <li>fix heroes with no names</li>
+          <li>add base code to load new map format files</li>
+          <li>use singular Mine form for the corresponding object</li>
+          <li>fix inaccurate Jail object removal</li>
+          <li>add missing rules for the plural in Hungarian language</li>
+          <li>restrict secondary skill name and level to the UI area</li>
+          <li>fix too wide text in quick hero info dialog</li>
+          <li>hide swap army/artifact buttons in the Battle Only mode</li>
+          <li>update several text descriptions</li>
+          <li>add Campfire object in the Editor</li>
+          <li>take into account SHIFT and CAPS LOCK being used at the same time</li>
+          <li>make radar rendering optimization</li>
+          <li>fix the AI spell damage estimation logic for units immune to the given spell</li>
+          <li>rework editor instrument groups: add new buttons, rework instrument panel, add evil interface</li>
+          <li>fix multiple spellbook-related issues in the Battle Only mode</li>
+          <li>update French translation</li>
+          <li>show an error when it is not possible to save a game on a hard disk</li>
+        </ul>
+      </description>
+    </release>
     <release date="2023-12-23" version="v1.0.11">
       <url>https://github.com/ihhub/fheroes2/releases/tag/1.0.11</url>
       <description>

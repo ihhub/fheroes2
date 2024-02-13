@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -113,7 +113,7 @@ public:
 
     int GameDifficulty() const
     {
-        return game_difficulty;
+        return _gameDifficulty;
     }
 
     const std::string & getGameLanguage() const
@@ -217,7 +217,7 @@ public:
 
     void SetGameDifficulty( const int difficulty )
     {
-        game_difficulty = difficulty;
+        _gameDifficulty = difficulty;
     }
 
     void SetBattleGrid( bool );
@@ -357,7 +357,7 @@ private:
     BitModes _optGlobal;
 
     fheroes2::ResolutionInfo _resolutionInfo;
-    int game_difficulty;
+    int _gameDifficulty;
 
     std::string path_program;
 

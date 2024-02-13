@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2023                                             *
+ *   Copyright (C) 2020 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -123,7 +123,7 @@ namespace Video
         const bool isLooped = ( action == VideoAction::LOOP_VIDEO || action == VideoAction::PLAY_TILL_AUDIO_END );
 
         // Hide mouse cursor.
-        const CursorRestorer cursorRestorer( false, Cursor::Get().Themes() );
+        const CursorRestorer cursorRestorer( false );
 
         fheroes2::Display & display = fheroes2::Display::instance();
         display.fill( 0 );

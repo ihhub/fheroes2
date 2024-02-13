@@ -1335,6 +1335,10 @@ void Army::Reset( const bool defaultArmy /* = false */ )
     }
 
     const int race = commander->GetRace();
+    // Sometimes heroes created solely for the purpose of showing an avatar may not have a race
+    if ( race == Race::NONE ) {
+        return;
+    }
 
     if ( !defaultArmy ) {
         JoinTroop( { race, DWELLING_MONSTER1 }, 1, false );

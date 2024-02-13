@@ -462,10 +462,11 @@ namespace
 
             const fheroes2::Sprite & image = fheroes2::generateMapObjectImage( _objectInfo[objectId] );
             const int32_t imageHeight = image.height();
-            if ( imageHeight > TILEWIDTH * 2 ) {
+            const int32_t imageWidth = image.width();
+            if ( imageHeight > TILEWIDTH * 3 || imageWidth > TILEWIDTH * 5 ) {
                 // Reduce the size of very tall images to fit the list.
-                const double ratio = imageHeight / ( TILEWIDTH * 2. );
-                fheroes2::Image resized( static_cast<int32_t>( image.width() / ratio ), static_cast<int32_t>( imageHeight / ratio ) );
+                const double ratio = std::max( imageHeight / ( TILEWIDTH * 3. ), imageWidth / ( TILEWIDTH * 5. ) );
+                fheroes2::Image resized( static_cast<int32_t>( imageWidth / ratio ), static_cast<int32_t>( imageHeight / ratio ) );
                 fheroes2::Resize( image, resized );
                 renderItem( resized, getObjectName( _objectInfo[objectId] ), { posX, posY }, _imageOffsetX, _textOffsetX, _offsetY / 2, isSelected );
             }
@@ -695,6 +696,10 @@ namespace
 
         std::string getObjectName( const Maps::ObjectInfo & info ) override
         {
+            if ( info.objectType == MP2::OBJ_NONE ) {
+                return _( "Terrain object" );
+            }
+
             return MP2::StringObject( info.objectType );
         }
     };
@@ -1270,6 +1275,15 @@ int Dialog::selectDwellingType( const int dwellingType )
     return selectObjectType( dwellingType, objectInfo.size(), listbox );
 }
 
+int Dialog::selectLandscapeMiscellaneousObjectType( const int objectType )
+{
+    const auto & objectInfo = Maps::getObjectsByGroup( Maps::ObjectGroup::LANDSCAPE_MISCELLANEOUS );
+
+    GenericObjectTypeSelection listbox( objectInfo, { 420, fheroes2::Display::instance().height() - 180 }, _( "Select Landscape Object:" ) );
+
+    return selectObjectType( objectType, objectInfo.size(), listbox );
+}
+
 void Dialog::selectMineType( int32_t & type, int32_t & color )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
@@ -1462,10 +1476,15 @@ void Dialog::selectMineType( int32_t & type, int32_t & color )
 
     fheroes2::ImageRestorer appearanceTextBackground( display, 0, 0, 0, 0 );
     // Mine appearance selection text.
-    auto redrawAppearanceText = [&selectedResourceType, &appearanceTextBackground, &listRoi, &display]( const Maps::ObjectInfo & info ) {
+    auto redrawAppearanceText = [selectedResourceType, &appearanceTextBackground, &listRoi, &display]( const Maps::ObjectInfo & info ) {
         std::string mineText( _( "%{mineName} appearance:" ) );
         if ( info.objectType == MP2::OBJ_MINE ) {
             assert( selectedResourceType < 7 );
+
+#ifdef NDEBUG
+            (void)selectedResourceType;
+#endif
+
             StringReplace( mineText, "%{mineName}", Maps::GetMineName( static_cast<int>( info.metadata[0] ) ) );
         }
         else {
@@ -1590,4 +1609,13 @@ int Dialog::selectPowerUpObjectType( const int powerUpObjectType )
     PowerUpObjectTypeSelection listbox( objectInfo, { 420, fheroes2::Display::instance().height() - 180 }, _( "Select Power Up Object:" ) );
 
     return selectObjectType( powerUpObjectType, objectInfo.size(), listbox );
+}
+
+int Dialog::selectAdventureMiscellaneousObjectType( const int objectType )
+{
+    const auto & objectInfo = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS );
+
+    GenericObjectTypeSelection listbox( objectInfo, { 420, fheroes2::Display::instance().height() - 180 }, _( "Select Adventure Object:" ) );
+
+    return selectObjectType( objectType, objectInfo.size(), listbox );
 }

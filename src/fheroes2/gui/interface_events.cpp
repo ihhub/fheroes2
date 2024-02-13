@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2012 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -126,6 +126,17 @@ void Interface::AdventureMap::_startHeroMove( Heroes & hero )
     // and to stop handling mouse click events until hero stops. Otherwise there could be a rare case
     // when double click is faster than this delay and the second click will also be handled which should not happen.
     Game::passAnimationDelay( Game::DelayType::CURRENT_HERO_DELAY );
+}
+
+void Interface::AdventureMap::EventSwitchFocusedHero( const int32_t tileIndex )
+{
+    Heroes * selectedHero = world.GetTiles( tileIndex ).getHero();
+    const Heroes * currentHero = GetFocusHeroes();
+    if ( selectedHero == nullptr || selectedHero == currentHero || selectedHero->GetColor() != currentHero->GetColor() ) {
+        return;
+    }
+    SetFocus( selectedHero, false );
+    RedrawFocus();
 }
 
 void Interface::AdventureMap::EventNextHero()

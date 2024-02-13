@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2023                                             *
+ *   Copyright (C) 2020 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -396,6 +396,7 @@ namespace
         campaignMapId.draw( top.x + 172 - campaignMapId.width() / 2, top.y + 99 - campaignMapId.height() / 2, display );
 
         fheroes2::Text mapDescription( scenario.getDescription(), fheroes2::FontType::normalWhite() );
+        mapDescription.setUniformVerticalAlignment( false );
         mapDescription.draw( top.x + 34, top.y + 134, 356, display );
 
         const int textChoiceWidth = 160;
@@ -993,6 +994,7 @@ namespace
 
         fheroes2::Text description( currentDescription, fheroes2::FontType::normalWhite() );
         fheroes2::ImageRestorer restorer( display, textOffset.x, textOffset.y, textWidth, description.height( textWidth ) );
+        description.setUniformVerticalAlignment( false );
         description.draw( textOffset.x, textOffset.y, textWidth, display );
 
         const fheroes2::Text easyName( getCampaignDifficultyText( Campaign::CampaignDifficulty::Easy ), fheroes2::FontType::normalWhite() );

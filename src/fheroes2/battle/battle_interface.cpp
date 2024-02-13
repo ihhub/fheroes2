@@ -1245,9 +1245,6 @@ Battle::Interface::Interface( Arena & battleArena, const int32_t tileIndex )
     // Shadow that fits the hexagon grid.
     _hexagonGridShadow = DrawHexagonShadow( 4, 1 );
 
-    // As '_mainSurface' is used to prepare battlefield screen to render on display it does not need to have a transform layer.
-    _mainSurface._disableTransformLayer();
-
     btn_auto.setICNInfo( ICN::TEXTBAR, 4, 5 );
     btn_settings.setICNInfo( ICN::TEXTBAR, 6, 7 );
 
@@ -1280,13 +1277,13 @@ Battle::Interface::Interface( Arena & battleArena, const int32_t tileIndex )
     }
     status.SetLogs( listlog.get() );
 
-    // Battlefield area excludes the lower part where the status log is located.
-    _mainSurface.resize( area.width, battlefieldHeight );
-    _battleGround.resize( area.width, battlefieldHeight );
-
     // As `_battleGround` and '_mainSurface' are used to prepare battlefield screen to render on display they do not need to have a transform layer.
     _battleGround._disableTransformLayer();
     _mainSurface._disableTransformLayer();
+
+    // Battlefield area excludes the lower part where the status log is located.
+    _mainSurface.resize( area.width, battlefieldHeight );
+    _battleGround.resize( area.width, battlefieldHeight );
 
     AudioManager::ResetAudio();
 }
@@ -2615,7 +2612,7 @@ int Battle::Interface::GetBattleCursor( std::string & statusMsg ) const
     }
 
     statusMsg = _( "Turn %{turn}" );
-    StringReplace( statusMsg, "%{turn}", arena.GetCurrentTurn() );
+    StringReplace( statusMsg, "%{turn}", arena.GetTurnNumber() );
 
     return Cursor::WAR_NONE;
 }
@@ -2774,9 +2771,9 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
         else if ( Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_OPTIONS ) ) {
             EventShowOptions();
         }
-        // Switch the auto battle mode on/off
+        // Switch the auto battle mode on
         else if ( Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_AUTO_SWITCH ) ) {
-            EventAutoSwitch( unit, actions );
+            EventStartAutoBattle( unit, actions );
         }
         // Finish the battle in auto mode
         else if ( Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_AUTO_FINISH ) ) {
@@ -3058,8 +3055,9 @@ void Battle::Interface::FadeArena( const bool clearMessageLog )
     Redraw();
 
     const fheroes2::Rect srt = border.GetArea();
-    fheroes2::Image top( srt.width, srt.height );
+    fheroes2::Image top;
     top._disableTransformLayer();
+    top.resize( srt.width, srt.height );
 
     fheroes2::Copy( display, srt.x, srt.y, top, 0, 0, srt.width, srt.height );
     fheroes2::FadeDisplayWithPalette( top, srt.getPosition(), 5, 300, 5 );
@@ -3109,9 +3107,16 @@ void Battle::Interface::EventShowOptions()
     humanturn_redraw = true;
 }
 
-void Battle::Interface::EventAutoSwitch( const Unit & unit, Actions & actions )
+void Battle::Interface::EventStartAutoBattle( const Unit & unit, Actions & actions )
 {
-    if ( !arena.CanToggleAutoBattle() ) {
+    // TODO: remove these temporary assertions
+    assert( arena.CanToggleAutoBattle() );
+    assert( !arena.AutoBattleInProgress() );
+
+    int startAutoBattle
+        = fheroes2::showMessage( fheroes2::Text( "", {} ), fheroes2::Text( _( "Are you sure you want to enable auto combat?" ), fheroes2::FontType::normalWhite() ),
+                                 Dialog::YES | Dialog::NO );
+    if ( startAutoBattle != Dialog::YES ) {
         return;
     }
 
@@ -3143,13 +3148,7 @@ void Battle::Interface::ButtonAutoAction( const Unit & unit, Actions & actions )
     le.MousePressLeft( btn_auto.area() ) ? btn_auto.drawOnPress() : btn_auto.drawOnRelease();
 
     if ( le.MouseClickLeft( btn_auto.area() ) ) {
-        if ( fheroes2::showMessage( fheroes2::Text( "", {} ), fheroes2::Text( _( "Are you sure you want to enable auto combat?" ), fheroes2::FontType::normalWhite() ),
-                                    Dialog::YES | Dialog::NO )
-             != Dialog::YES ) {
-            return;
-        }
-
-        EventAutoSwitch( unit, actions );
+        EventStartAutoBattle( unit, actions );
     }
 }
 
@@ -3466,7 +3465,7 @@ void Battle::Interface::RedrawActionNewTurn() const
     }
 
     std::string msg = _( "Turn %{turn}" );
-    StringReplace( msg, "%{turn}", arena.GetCurrentTurn() );
+    StringReplace( msg, "%{turn}", arena.GetTurnNumber() );
 
     listlog->AddMessage( std::move( msg ) );
 }
@@ -3483,7 +3482,7 @@ void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, const Unit & d
     const fheroes2::Rect & pos1 = attacker.GetRectPosition();
     const fheroes2::Rect & pos2 = defender.GetRectPosition();
 
-    const bool archer = attacker.isArchers() && !attacker.isHandFighting();
+    const bool archer = attacker.isArchers() && !Unit::isHandFighting( attacker, defender );
     const bool isDoubleCell = attacker.isDoubleCellAttack() && 2 == targets.size();
 
     // redraw luck animation
@@ -3491,7 +3490,7 @@ void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, const Unit & d
         RedrawActionLuck( attacker );
     }
 
-    AudioManager::PlaySound( attacker.M82Attk() );
+    AudioManager::PlaySound( attacker.M82Attk( defender ) );
 
     // long distance attack animation
     if ( archer ) {
@@ -3662,7 +3661,7 @@ void Battle::Interface::RedrawActionWincesKills( const TargetsInfo & targets, Un
 
     // If this was a Lich attack, we should render an explosion cloud over the target unit immediately after the projectile hits the target,
     // along with the unit kill/wince animation.
-    const bool drawLichCloud = ( attacker != nullptr ) && ( defender != nullptr ) && attacker->isArchers() && !attacker->isHandFighting()
+    const bool drawLichCloud = ( attacker != nullptr ) && ( defender != nullptr ) && attacker->isArchers() && !Unit::isHandFighting( *attacker, *defender )
                                && attacker->isAbilityPresent( fheroes2::MonsterAbilityType::AREA_SHOT );
 
     // Play sound only if it is not already playing.
@@ -5493,8 +5492,9 @@ void Battle::Interface::RedrawActionDeathWaveSpell( const int32_t strength )
         area.height -= listlog->GetArea().height;
     }
 
-    fheroes2::Image battleFieldCopy( area.width, area.height );
+    fheroes2::Image battleFieldCopy;
     battleFieldCopy._disableTransformLayer();
+    battleFieldCopy.resize( area.width, area.height );
     fheroes2::Copy( _mainSurface, 0, 0, battleFieldCopy, 0, 0, area.width, area.height );
 
     // The death wave horizontal length in pixels.
@@ -5518,9 +5518,10 @@ void Battle::Interface::RedrawActionDeathWaveSpell( const int32_t strength )
     int32_t position = waveStep;
     fheroes2::Display & display = fheroes2::Display::instance();
 
-    // Prepare the blank image for the Death Wave spell effect with the transform layer equal to "0"
-    fheroes2::Image spellEffect( waveLength, area.height );
+    // Prepare the blank image for the Death Wave spell effect.
+    fheroes2::Image spellEffect;
     spellEffect._disableTransformLayer();
+    spellEffect.resize( waveLength, area.height );
 
     AudioManager::PlaySound( M82::MNRDEATH );
 
@@ -5623,8 +5624,9 @@ void Battle::Interface::RedrawActionHolyShoutSpell( const uint8_t strength )
         area.height -= listlog->GetArea().height;
     }
 
-    fheroes2::Image battleFieldCopy( area.width, area.height );
+    fheroes2::Image battleFieldCopy;
     battleFieldCopy._disableTransformLayer();
+    battleFieldCopy.resize( area.width, area.height );
     fheroes2::Copy( _mainSurface, 0, 0, battleFieldCopy, 0, 0, area.width, area.height );
 
     _currentUnit = nullptr;
@@ -5759,12 +5761,12 @@ void Battle::Interface::RedrawActionArmageddonSpell()
 
     area.height -= 37;
 
-    fheroes2::Image spriteWhitening( area.width, area.height );
-    fheroes2::Image spriteReddish( area.width, area.height );
+    fheroes2::Image spriteWhitening;
     spriteWhitening._disableTransformLayer();
-    spriteReddish._disableTransformLayer();
+    spriteWhitening.resize( area.width, area.height );
+
     fheroes2::Copy( _mainSurface, area.x, area.y, spriteWhitening, 0, 0, area.width, area.height );
-    fheroes2::Copy( _mainSurface, area.x, area.y, spriteReddish, 0, 0, area.width, area.height );
+    fheroes2::Image spriteReddish = spriteWhitening;
 
     cursor.SetThemes( Cursor::WAR_POINTER );
 
@@ -5831,8 +5833,9 @@ void Battle::Interface::RedrawActionEarthQuakeSpell( const std::vector<CastleDef
 
     cursor.SetThemes( Cursor::WAR_POINTER );
 
-    fheroes2::Image sprite( area.width, area.height );
+    fheroes2::Image sprite;
     sprite._disableTransformLayer();
+    sprite.resize( area.width, area.height );
     fheroes2::Copy( _mainSurface, area.x, area.y, sprite, 0, 0, area.width, area.height );
 
     _currentUnit = nullptr;
@@ -6316,17 +6319,41 @@ void Battle::Interface::CheckGlobalEvents( LocalEvent & le )
         }
     }
 
-    // Interrupting auto battle
-    if ( arena.AutoBattleInProgress() && arena.CanToggleAutoBattle()
-         && ( le.MouseClickLeft( btn_auto.area() )
-              || ( le.KeyPress()
-                   && ( Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_AUTO_SWITCH )
-                        || ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL )
-                             && fheroes2::showMessage( fheroes2::Text( "", {} ),
-                                                       fheroes2::Text( _( "Are you sure you want to interrupt the auto battle?" ), fheroes2::FontType::normalWhite() ),
-                                                       Dialog::YES | Dialog::NO )
-                                    == Dialog::YES ) ) ) ) ) {
-        _interruptAutoBattleForColor = arena.GetCurrentColor();
+    // Check if auto battle interruption was requested.
+    InterruptAutoBattleIfRequested( le );
+}
+
+void Battle::Interface::InterruptAutoBattleIfRequested( LocalEvent & le )
+{
+    // Interrupt only if automation is currently on.
+    if ( !arena.AutoBattleInProgress() && !arena.EnemyOfAIHasAutoBattleInProgress() ) {
+        return;
+    }
+
+    if ( !le.MouseClickLeft() && !le.MouseClickRight() && !Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_AUTO_SWITCH )
+         && !Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
+        return;
+    }
+
+    // Identify which color requested the auto battle interrupt.
+    int color = arena.GetCurrentColor();
+    if ( arena.GetCurrentForce().GetControl() & CONTROL_AI ) {
+        color = arena.GetOppositeColor( color );
+    }
+
+    // The battle interruption is already scheduled, no need for the dialog.
+    if ( color == _interruptAutoBattleForColor ) {
+        return;
+    }
+
+    // Right now there should be no pending auto battle interruptions.
+    assert( _interruptAutoBattleForColor == 0 );
+
+    const int interrupt = fheroes2::showMessage( fheroes2::Text( "", {} ),
+                                                 fheroes2::Text( _( "Are you sure you want to interrupt the auto battle?" ), fheroes2::FontType::normalWhite() ),
+                                                 Dialog::YES | Dialog::NO );
+    if ( interrupt == Dialog::YES ) {
+        _interruptAutoBattleForColor = color;
     }
 }
 

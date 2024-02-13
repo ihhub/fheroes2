@@ -23,6 +23,7 @@
 #include <algorithm>
 #include <array>
 #include <cassert>
+#include <cstddef>
 #include <memory>
 #include <string>
 #include <vector>
@@ -37,6 +38,7 @@
 #include "game.h"
 #include "game_delays.h"
 #include "game_hotkeys.h"
+#include "game_static.h"
 #include "gamedefs.h"
 #include "ground.h"
 #include "history_manager.h"
@@ -58,6 +60,7 @@
 #include "settings.h"
 #include "spell.h"
 #include "system.h"
+#include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
 #include "ui_dialog.h"
@@ -130,14 +133,14 @@ namespace
         return true;
     }
 
-    bool verifyObjectCondition( const Maps::ObjectInfo & info, const fheroes2::Point & mainTilePos, const std::function<bool( const Maps::Tiles & tile )> & condition )
+    bool isConditionValid( const std::vector<fheroes2::Point> & offsets, const fheroes2::Point & mainTilePos,
+                           const std::function<bool( const Maps::Tiles & tile )> & condition )
     {
-        assert( condition );
-
-        const auto & offsets = Maps::getGroundLevelOccupiedTileOffset( info );
         if ( offsets.empty() ) {
             return true;
         }
+
+        assert( condition );
 
         for ( const auto & offset : offsets ) {
             const fheroes2::Point temp{ mainTilePos.x + offset.x, mainTilePos.y + offset.y };
@@ -151,6 +154,18 @@ namespace
         }
 
         return true;
+    }
+
+    bool checkConditionForOccupiedTiles( const Maps::ObjectInfo & info, const fheroes2::Point & mainTilePos,
+                                         const std::function<bool( const Maps::Tiles & tile )> & condition )
+    {
+        return isConditionValid( Maps::getGroundLevelOccupiedTileOffset( info ), mainTilePos, condition );
+    }
+
+    bool checkConditionForUsedTiles( const Maps::ObjectInfo & info, const fheroes2::Point & mainTilePos,
+                                     const std::function<bool( const Maps::Tiles & tile )> & condition )
+    {
+        return isConditionValid( Maps::getGroundLevelUsedTileOffset( info ), mainTilePos, condition );
     }
 }
 
@@ -294,6 +309,11 @@ namespace Interface
                     const std::string dataPath = System::GetDataDirectory( "fheroes2" );
                     if ( dataPath.empty() ) {
                         fheroes2::showStandardTextMessage( _( "Warning!" ), "Unable to locate data directory to save the map.", Dialog::OK );
+                        continue;
+                    }
+
+                    if ( !Maps::updateMapPlayers( _mapFormat ) ) {
+                        fheroes2::showStandardTextMessage( _( "Warning!" ), "The map is corrupted.", Dialog::OK );
                         continue;
                     }
 
@@ -460,16 +480,20 @@ namespace Interface
                 if ( isCursorOverGamearea && _editorPanel.getBrushArea().width == 0 ) {
                     if ( _editorPanel.isTerrainEdit() ) {
                         // Fill the selected area in terrain edit mode.
-                        const fheroes2::ActionCreator action( _historyManager, _mapFormat );
+                        fheroes2::ActionCreator action( _historyManager, _mapFormat );
 
                         const int groundId = _editorPanel.selectedGroundType();
                         Maps::setTerrainOnTiles( _selectedTile, _tileUnderCursor, groundId );
+
+                        action.commit();
                     }
                     else if ( _editorPanel.isEraseMode() ) {
                         // Erase objects in the selected area.
-                        const fheroes2::ActionCreator action( _historyManager, _mapFormat );
+                        fheroes2::ActionCreator action( _historyManager, _mapFormat );
 
                         Maps::eraseObjectsOnTiles( _selectedTile, _tileUnderCursor, _editorPanel.getEraseTypes() );
+
+                        action.commit();
                     }
                 }
 
@@ -655,7 +679,7 @@ namespace Interface
 
             const int groundId = _editorPanel.selectedGroundType();
 
-            const fheroes2::ActionCreator action( _historyManager, _mapFormat );
+            fheroes2::ActionCreator action( _historyManager, _mapFormat );
 
             if ( brushSize.width > 0 ) {
                 const fheroes2::Point indices = getBrushAreaIndicies( brushSize, tileIndex );
@@ -672,37 +696,47 @@ namespace Interface
             }
 
             _redraw |= mapUpdateFlags;
+
+            action.commit();
         }
         else if ( _editorPanel.isRoadDraw() ) {
-            const fheroes2::ActionCreator action( _historyManager, _mapFormat );
+            fheroes2::ActionCreator action( _historyManager, _mapFormat );
 
             if ( Maps::updateRoadOnTile( tile, true ) ) {
                 _redraw |= mapUpdateFlags;
+
+                action.commit();
             }
         }
         else if ( _editorPanel.isStreamDraw() ) {
-            const fheroes2::ActionCreator action( _historyManager, _mapFormat );
+            fheroes2::ActionCreator action( _historyManager, _mapFormat );
 
             if ( Maps::updateStreamOnTile( tile, true ) ) {
                 _redraw |= mapUpdateFlags;
+
+                action.commit();
             }
         }
         else if ( _editorPanel.isEraseMode() ) {
             const fheroes2::Rect brushSize = _editorPanel.getBrushArea();
             assert( brushSize.width == brushSize.height );
 
-            const fheroes2::ActionCreator action( _historyManager, _mapFormat );
+            fheroes2::ActionCreator action( _historyManager, _mapFormat );
 
             if ( brushSize.width > 1 ) {
                 const fheroes2::Point indices = getBrushAreaIndicies( brushSize, tileIndex );
 
                 if ( Maps::eraseObjectsOnTiles( indices.x, indices.y, _editorPanel.getEraseTypes() ) ) {
                     _redraw |= mapUpdateFlags;
+
+                    action.commit();
                 }
             }
             else {
                 if ( Maps::eraseOjects( tile, _editorPanel.getEraseTypes() ) ) {
                     _redraw |= mapUpdateFlags;
+
+                    action.commit();
                 }
 
                 if ( brushSize.width == 0 ) {
@@ -736,12 +770,12 @@ namespace Interface
                 return;
             }
 
-            if ( !verifyObjectCondition( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return !tileToCheck.isWater(); } ) ) {
+            if ( !checkConditionForUsedTiles( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return !tileToCheck.isWater(); } ) ) {
                 _warningMessage.reset( _( "Monsters cannot be placed on water." ) );
                 return;
             }
 
-            if ( !verifyObjectCondition( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return Maps::isClearGround( tileToCheck ); } ) ) {
+            if ( !checkConditionForOccupiedTiles( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return Maps::isClearGround( tileToCheck ); } ) ) {
                 _warningMessage.reset( _( "Choose a tile which does not contain any objects." ) );
                 return;
             }
@@ -756,12 +790,12 @@ namespace Interface
                 return;
             }
 
-            if ( !verifyObjectCondition( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return !tileToCheck.isWater(); } ) ) {
+            if ( !checkConditionForUsedTiles( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return !tileToCheck.isWater(); } ) ) {
                 _warningMessage.reset( _( "Treasures cannot be placed on water." ) );
                 return;
             }
 
-            if ( !verifyObjectCondition( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return Maps::isClearGround( tileToCheck ); } ) ) {
+            if ( !checkConditionForOccupiedTiles( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return Maps::isClearGround( tileToCheck ); } ) ) {
                 _warningMessage.reset( _( "Choose a tile which does not contain any objects." ) );
                 return;
             }
@@ -776,17 +810,44 @@ namespace Interface
                 return;
             }
 
-            if ( !verifyObjectCondition( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return !tileToCheck.isWater(); } ) ) {
+            if ( !checkConditionForUsedTiles( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return !tileToCheck.isWater(); } ) ) {
                 _warningMessage.reset( _( "Heroes cannot be placed on water." ) );
                 return;
             }
 
-            if ( !verifyObjectCondition( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return Maps::isClearGround( tileToCheck ); } ) ) {
+            if ( !checkConditionForOccupiedTiles( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return Maps::isClearGround( tileToCheck ); } ) ) {
                 _warningMessage.reset( _( "Choose a tile which does not contain any objects." ) );
                 return;
             }
 
+            // Heroes are limited to 8 per color so all attempts to set more than 8 heroes must be prevented.
+            const auto & objects = Maps::getObjectsByGroup( groupType );
+
+            const uint32_t color = objectInfo.metadata[0];
+            size_t heroCount = 0;
+            for ( const auto & mapTile : _mapFormat.tiles ) {
+                for ( const auto & object : mapTile.objects ) {
+                    if ( object.group == groupType ) {
+                        assert( object.index < objects.size() );
+                        if ( objects[object.index].metadata[0] == color ) {
+                            ++heroCount;
+                        }
+                    }
+                }
+            }
+
+            if ( heroCount >= GameStatic::GetKingdomMaxHeroes() ) {
+                std::string warning( _( "A maximum of %{count} heroes of the same color can be placed on the map." ) );
+                StringReplace( warning, "%{count}", GameStatic::GetKingdomMaxHeroes() );
+                _warningMessage.reset( std::move( warning ) );
+                return;
+            }
+
             setObjectOnTileAsAction( tile, groupType, _editorPanel.getSelectedObjectType() );
+
+            if ( !Maps::updateMapPlayers( _mapFormat ) ) {
+                _warningMessage.reset( _( "Failed to update player information." ) );
+            }
         }
         else if ( groupType == Maps::ObjectGroup::ADVENTURE_ARTIFACTS ) {
             const auto & objectInfo = getObjectInfo( groupType, _editorPanel.getSelectedObjectType() );
@@ -796,12 +857,12 @@ namespace Interface
                 return;
             }
 
-            if ( !verifyObjectCondition( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return !tileToCheck.isWater(); } ) ) {
+            if ( !checkConditionForUsedTiles( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return !tileToCheck.isWater(); } ) ) {
                 _warningMessage.reset( _( "Artifacts cannot be placed on water." ) );
                 return;
             }
 
-            if ( !verifyObjectCondition( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return Maps::isClearGround( tileToCheck ); } ) ) {
+            if ( !checkConditionForOccupiedTiles( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return Maps::isClearGround( tileToCheck ); } ) ) {
                 _warningMessage.reset( _( "Choose a tile which does not contain any objects." ) );
                 return;
             }
@@ -835,12 +896,12 @@ namespace Interface
                 return;
             }
 
-            if ( !verifyObjectCondition( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return !tileToCheck.isWater(); } ) ) {
+            if ( !checkConditionForUsedTiles( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return !tileToCheck.isWater(); } ) ) {
                 _warningMessage.reset( _( "Mountains cannot be placed on water." ) );
                 return;
             }
 
-            if ( !verifyObjectCondition( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return Maps::isClearGround( tileToCheck ); } ) ) {
+            if ( !checkConditionForOccupiedTiles( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return Maps::isClearGround( tileToCheck ); } ) ) {
                 _warningMessage.reset( _( "Choose a tile which does not contain any objects." ) );
                 return;
             }
@@ -855,12 +916,12 @@ namespace Interface
                 return;
             }
 
-            if ( !verifyObjectCondition( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return !tileToCheck.isWater(); } ) ) {
+            if ( !checkConditionForUsedTiles( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return !tileToCheck.isWater(); } ) ) {
                 _warningMessage.reset( _( "Rocks cannot be placed on water." ) );
                 return;
             }
 
-            if ( !verifyObjectCondition( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return Maps::isClearGround( tileToCheck ); } ) ) {
+            if ( !checkConditionForOccupiedTiles( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return Maps::isClearGround( tileToCheck ); } ) ) {
                 _warningMessage.reset( _( "Choose a tile which does not contain any objects." ) );
                 return;
             }
@@ -875,12 +936,12 @@ namespace Interface
                 return;
             }
 
-            if ( !verifyObjectCondition( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return !tileToCheck.isWater(); } ) ) {
+            if ( !checkConditionForUsedTiles( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return !tileToCheck.isWater(); } ) ) {
                 _warningMessage.reset( _( "Trees cannot be placed on water." ) );
                 return;
             }
 
-            if ( !verifyObjectCondition( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return Maps::isClearGround( tileToCheck ); } ) ) {
+            if ( !checkConditionForOccupiedTiles( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return Maps::isClearGround( tileToCheck ); } ) ) {
                 _warningMessage.reset( _( "Choose a tile which does not contain any objects." ) );
                 return;
             }
@@ -895,12 +956,32 @@ namespace Interface
                 return;
             }
 
-            if ( !verifyObjectCondition( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return tileToCheck.isWater(); } ) ) {
+            if ( !checkConditionForUsedTiles( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return tileToCheck.isWater(); } ) ) {
                 _warningMessage.reset( _( "Ocean object must be placed on water." ) );
                 return;
             }
 
-            if ( !verifyObjectCondition( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return Maps::isClearGround( tileToCheck ); } ) ) {
+            if ( !checkConditionForOccupiedTiles( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return Maps::isClearGround( tileToCheck ); } ) ) {
+                _warningMessage.reset( _( "Choose a tile which does not contain any objects." ) );
+                return;
+            }
+
+            setObjectOnTileAsAction( tile, groupType, _editorPanel.getSelectedObjectType() );
+        }
+        else if ( groupType == Maps::ObjectGroup::LANDSCAPE_MISCELLANEOUS ) {
+            const auto & objectInfo = getObjectInfo( groupType, _editorPanel.getSelectedObjectType() );
+
+            if ( !isObjectPlacementAllowed( objectInfo, tilePos ) ) {
+                _warningMessage.reset( _( "Objects cannot be placed outside the map." ) );
+                return;
+            }
+
+            if ( !checkConditionForUsedTiles( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return !tileToCheck.isWater(); } ) ) {
+                _warningMessage.reset( _( "Landscape objects cannot be placed on water." ) );
+                return;
+            }
+
+            if ( !checkConditionForOccupiedTiles( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return Maps::isClearGround( tileToCheck ); } ) ) {
                 _warningMessage.reset( _( "Choose a tile which does not contain any objects." ) );
                 return;
             }
@@ -938,29 +1019,31 @@ namespace Interface
                 return;
             }
 
-            if ( !verifyObjectCondition( townObjectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return !tileToCheck.isWater(); } ) ) {
+            if ( !checkConditionForUsedTiles( townObjectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return !tileToCheck.isWater(); } ) ) {
                 _warningMessage.reset( _( "Towns cannot be placed on water." ) );
                 return;
             }
 
-            if ( !verifyObjectCondition( basementObjectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return !tileToCheck.isWater(); } ) ) {
+            if ( !checkConditionForUsedTiles( basementObjectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return !tileToCheck.isWater(); } ) ) {
                 _warningMessage.reset( _( "Towns cannot be placed on water." ) );
                 return;
             }
 
-            if ( !verifyObjectCondition( townObjectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return Maps::isClearGround( tileToCheck ); } ) ) {
+            if ( !checkConditionForOccupiedTiles( townObjectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return Maps::isClearGround( tileToCheck ); } ) ) {
                 _warningMessage.reset( _( "Choose a tile which does not contain any objects." ) );
                 return;
             }
 
-            if ( !verifyObjectCondition( basementObjectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return Maps::isClearGround( tileToCheck ); } ) ) {
+            if ( !checkConditionForOccupiedTiles( basementObjectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return Maps::isClearGround( tileToCheck ); } ) ) {
                 _warningMessage.reset( _( "Choose a tile which does not contain any objects." ) );
                 return;
             }
 
-            const fheroes2::ActionCreator action( _historyManager, _mapFormat );
+            fheroes2::ActionCreator action( _historyManager, _mapFormat );
 
-            setObjectOnTile( tile, Maps::ObjectGroup::LANDSCAPE_TOWN_BASEMENTS, basementId );
+            if ( !setObjectOnTile( tile, Maps::ObjectGroup::LANDSCAPE_TOWN_BASEMENTS, basementId ) ) {
+                return;
+            }
 
             // Since the whole object consists of multiple "objects" we have to put the same ID for all of them.
             // Every time an object is being placed on a map the counter is going to be increased by 1.
@@ -970,17 +1053,29 @@ namespace Interface
 
             Maps::setLastObjectUID( objectId );
 
-            setObjectOnTile( tile, groupType, type );
+            if ( !setObjectOnTile( tile, groupType, type ) ) {
+                return;
+            }
 
             // Add flags.
             assert( tile.GetIndex() > 0 && tile.GetIndex() < world.w() * world.h() - 1 );
             Maps::setLastObjectUID( objectId );
 
-            setObjectOnTile( world.GetTiles( tile.GetIndex() - 1 ), Maps::ObjectGroup::LANDSCAPE_FLAGS, color * 2 );
+            if ( !setObjectOnTile( world.GetTiles( tile.GetIndex() - 1 ), Maps::ObjectGroup::LANDSCAPE_FLAGS, color * 2 ) ) {
+                return;
+            }
 
             Maps::setLastObjectUID( objectId );
 
-            setObjectOnTile( world.GetTiles( tile.GetIndex() + 1 ), Maps::ObjectGroup::LANDSCAPE_FLAGS, color * 2 + 1 );
+            if ( !setObjectOnTile( world.GetTiles( tile.GetIndex() + 1 ), Maps::ObjectGroup::LANDSCAPE_FLAGS, color * 2 + 1 ) ) {
+                return;
+            }
+
+            action.commit();
+
+            if ( !Maps::updateMapPlayers( _mapFormat ) ) {
+                _warningMessage.reset( _( "Failed to update player information." ) );
+            }
         }
         else if ( groupType == Maps::ObjectGroup::ADVENTURE_MINES ) {
             int32_t type = -1;
@@ -1000,21 +1095,24 @@ namespace Interface
                 return;
             }
 
-            if ( !verifyObjectCondition( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return !tileToCheck.isWater(); } ) ) {
+            if ( !checkConditionForUsedTiles( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return !tileToCheck.isWater(); } ) ) {
                 _warningMessage.reset( _( "Mines cannot be placed on water." ) );
                 return;
             }
 
-            if ( !verifyObjectCondition( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return Maps::isClearGround( tileToCheck ); } ) ) {
+            if ( !checkConditionForOccupiedTiles( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return Maps::isClearGround( tileToCheck ); } ) ) {
                 _warningMessage.reset( _( "Choose a tile which does not contain any objects." ) );
                 return;
             }
 
-            const fheroes2::ActionCreator action( _historyManager, _mapFormat );
+            fheroes2::ActionCreator action( _historyManager, _mapFormat );
 
-            setObjectOnTile( tile, groupType, type );
+            if ( !setObjectOnTile( tile, groupType, type ) ) {
+                return;
+            }
 
             // TODO: Place owner flag according to the color state.
+            action.commit();
         }
         else if ( groupType == Maps::ObjectGroup::ADVENTURE_DWELLINGS ) {
             const auto & objectInfo = getObjectInfo( groupType, _editorPanel.getSelectedObjectType() );
@@ -1024,12 +1122,12 @@ namespace Interface
                 return;
             }
 
-            if ( !verifyObjectCondition( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return !tileToCheck.isWater(); } ) ) {
+            if ( !checkConditionForUsedTiles( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return !tileToCheck.isWater(); } ) ) {
                 _warningMessage.reset( _( "Dwellings cannot be placed on water." ) );
                 return;
             }
 
-            if ( !verifyObjectCondition( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return Maps::isClearGround( tileToCheck ); } ) ) {
+            if ( !checkConditionForOccupiedTiles( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return Maps::isClearGround( tileToCheck ); } ) ) {
                 _warningMessage.reset( _( "Choose a tile which does not contain any objects." ) );
                 return;
             }
@@ -1044,12 +1142,32 @@ namespace Interface
                 return;
             }
 
-            if ( !verifyObjectCondition( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return !tileToCheck.isWater(); } ) ) {
+            if ( !checkConditionForUsedTiles( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return !tileToCheck.isWater(); } ) ) {
                 _warningMessage.reset( _( "Power-ups cannot be placed on water." ) );
                 return;
             }
 
-            if ( !verifyObjectCondition( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return Maps::isClearGround( tileToCheck ); } ) ) {
+            if ( !checkConditionForOccupiedTiles( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return Maps::isClearGround( tileToCheck ); } ) ) {
+                _warningMessage.reset( _( "Choose a tile which does not contain any objects." ) );
+                return;
+            }
+
+            setObjectOnTileAsAction( tile, groupType, _editorPanel.getSelectedObjectType() );
+        }
+        else if ( groupType == Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS ) {
+            const auto & objectInfo = getObjectInfo( groupType, _editorPanel.getSelectedObjectType() );
+
+            if ( !isObjectPlacementAllowed( objectInfo, tilePos ) ) {
+                _warningMessage.reset( _( "Objects cannot be placed outside the map." ) );
+                return;
+            }
+
+            if ( !checkConditionForUsedTiles( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return !tileToCheck.isWater(); } ) ) {
+                _warningMessage.reset( _( "Adventure objects cannot be placed on water." ) );
+                return;
+            }
+
+            if ( !checkConditionForOccupiedTiles( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return Maps::isClearGround( tileToCheck ); } ) ) {
                 _warningMessage.reset( _( "Choose a tile which does not contain any objects." ) );
                 return;
             }
@@ -1063,6 +1181,11 @@ namespace Interface
         Editor::showPopupWindow( world.GetTiles( tileIndex ) );
     }
 
+    void EditorInterface::mouseCursorAreaLongPressLeft( const int32_t /*Unused*/ )
+    {
+        // Do nothing.
+    }
+
     void EditorInterface::updateCursor( const int32_t tileIndex )
     {
         if ( _cursorUpdater && tileIndex >= 0 ) {
@@ -1073,26 +1196,33 @@ namespace Interface
         }
     }
 
-    void EditorInterface::setObjectOnTile( Maps::Tiles & tile, const Maps::ObjectGroup groupType, const int32_t objectIndex )
+    bool EditorInterface::setObjectOnTile( Maps::Tiles & tile, const Maps::ObjectGroup groupType, const int32_t objectIndex )
     {
         const auto & objectInfo = getObjectInfo( groupType, objectIndex );
         if ( objectInfo.empty() ) {
             // Check your logic as you are trying to insert an empty object!
             assert( 0 );
-            return;
+            return false;
         }
 
-        Maps::setObjectOnTile( tile, objectInfo );
+        _redraw |= mapUpdateFlags;
+
+        if ( !Maps::setObjectOnTile( tile, objectInfo, true ) ) {
+            return false;
+        }
+
         Maps::addObjectToMap( _mapFormat, tile.GetIndex(), groupType, static_cast<uint32_t>( objectIndex ) );
 
-        _redraw |= mapUpdateFlags;
+        return true;
     }
 
     void EditorInterface::setObjectOnTileAsAction( Maps::Tiles & tile, const Maps::ObjectGroup groupType, const int32_t objectIndex )
     {
-        const fheroes2::ActionCreator action( _historyManager, _mapFormat );
+        fheroes2::ActionCreator action( _historyManager, _mapFormat );
 
-        setObjectOnTile( tile, groupType, objectIndex );
+        if ( setObjectOnTile( tile, groupType, objectIndex ) ) {
+            action.commit();
+        }
     }
 
     bool EditorInterface::loadMap( const std::string & filePath )

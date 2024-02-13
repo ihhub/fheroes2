@@ -67,6 +67,8 @@ namespace Dialog
 
     int selectDwellingType( const int dwellingType );
 
+    int selectLandscapeMiscellaneousObjectType( const int objectType );
+
     void selectMineType( int32_t & type, int32_t & color );
 
     int selectMountainType( const int mountainType );
@@ -76,6 +78,8 @@ namespace Dialog
     int selectTreeType( const int treeType );
 
     int selectPowerUpObjectType( const int powerUpObjectType );
+
+    int selectAdventureMiscellaneousObjectType( const int objectType );
 }
 
 #endif

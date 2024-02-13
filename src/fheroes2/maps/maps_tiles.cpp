@@ -165,8 +165,8 @@ namespace
     // Define VERIFY_SHADOW_SPRITES macro to be able to use these functions.
     bool isShadowImage( const fheroes2::Image & image )
     {
-        // The image can't be empty.
-        assert( !image.empty() );
+        // The image can't be empty and must have transform layer.
+        assert( !image.empty() && !image.singleLayer() );
         if ( image.empty() )
             return false;
 
@@ -1325,6 +1325,15 @@ void Maps::Tiles::fixTileObjectType( Tiles & tile )
         return;
     }
 
+    // Oasis object has 2 top tiles being marked as part of bottom object layer while in reality they should be at the top level.
+    if ( originalObjectType == MP2::OBJ_NON_ACTION_OASIS && tile._mainAddon._objectIcnType == MP2::OBJ_ICN_TYPE_OBJNDSRT
+         && ( tile._mainAddon._imageIndex == 105 || tile._mainAddon._imageIndex == 106 ) ) {
+        tile._addonTopLayer.emplace_back();
+        std::swap( tile._addonTopLayer.back(), tile._mainAddon );
+
+        return;
+    }
+
     // Original Editor marks Reefs as Stones. We're fixing this issue by changing the type of the object without changing the content of a tile.
     // This is also required in order to properly calculate Reefs' passability.
     if ( originalObjectType == MP2::OBJ_ROCK && isValidReefsSprite( tile._mainAddon._objectIcnType, tile._mainAddon._imageIndex ) ) {
@@ -1867,19 +1876,6 @@ StreamBase & Maps::operator>>( StreamBase & msg, Tiles & tile )
 
     tile._mainObjectType = static_cast<MP2::MapObjectType>( mainObjectType );
 
-    msg >> tile._fogColors;
-
-    // We want to verify the size of array being present in the file.
-    std::vector<uint32_t> temp;
-    msg >> temp;
-
-    if ( tile._metadata.size() != temp.size() ) {
-        // This is a corrupted file!
-        assert( 0 );
-    }
-    else {
-        std::copy_n( temp.begin(), tile._metadata.size(), tile._metadata.begin() );
-    }
-
-    return msg >> tile._occupantHeroId >> tile._isTileMarkedAsRoad >> tile._addonBottomLayer >> tile._addonTopLayer >> tile._mainAddon._layerType >> tile._boatOwnerColor;
+    return msg >> tile._fogColors >> tile._metadata >> tile._occupantHeroId >> tile._isTileMarkedAsRoad >> tile._addonBottomLayer >> tile._addonTopLayer
+           >> tile._mainAddon._layerType >> tile._boatOwnerColor;
 }

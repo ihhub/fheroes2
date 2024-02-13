@@ -991,57 +991,6 @@ bool Battle::Board::CanAttackTargetFromPosition( const Unit & attacker, const Un
     return false;
 }
 
-Battle::Indexes Battle::Board::GetAdjacentEnemiesIndexes( const Unit & unit )
-{
-    Indexes result;
-    const bool isWide = unit.isWide();
-    const int armyColor = unit.GetArmyColor();
-    result.reserve( isWide ? 8 : 6 );
-
-    const int leftmostIndex = ( isWide && !unit.isReflect() ) ? unit.GetTailIndex() : unit.GetHeadIndex();
-    const int x = leftmostIndex % ARENAW;
-    const int y = leftmostIndex / ARENAW;
-    const int mod = y % 2;
-
-    const auto validateAndInsert = [&result, armyColor]( const int index ) {
-        const Unit * vUnit = GetCell( index )->GetUnit();
-        if ( vUnit && armyColor != vUnit->GetArmyColor() )
-            result.push_back( index );
-    };
-
-    if ( y > 0 ) {
-        const int topRowIndex = ( y - 1 ) * ARENAW + x - mod;
-        if ( x - mod >= 0 )
-            validateAndInsert( topRowIndex );
-
-        if ( x < ARENAW - 1 )
-            validateAndInsert( topRowIndex + 1 );
-
-        if ( isWide && x < ARENAW - 2 )
-            validateAndInsert( topRowIndex + 2 );
-    }
-
-    if ( x > 0 )
-        validateAndInsert( leftmostIndex - 1 );
-
-    if ( x < ARENAW - ( isWide ? 2 : 1 ) )
-        validateAndInsert( leftmostIndex + ( isWide ? 2 : 1 ) );
-
-    if ( y < ARENAH - 1 ) {
-        const int bottomRowIndex = ( y + 1 ) * ARENAW + x - mod;
-        if ( x - mod >= 0 )
-            validateAndInsert( bottomRowIndex );
-
-        if ( x < ARENAW - 1 )
-            validateAndInsert( bottomRowIndex + 1 );
-
-        if ( isWide && x < ARENAW - 2 )
-            validateAndInsert( bottomRowIndex + 2 );
-    }
-
-    return result;
-}
-
 std::string Battle::Board::GetMoatInfo()
 {
     std::string msg = _( "The Moat reduces by -%{count} the defense skill of any unit and slows to half movement rate." );

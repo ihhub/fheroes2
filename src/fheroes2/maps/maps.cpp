@@ -357,7 +357,7 @@ void Maps::ClearFog( const int32_t tileIndex, int scoutingDistance, const int pl
     const Kingdom & kingdom = world.GetKingdom( playerColor );
     const bool isAIPlayer = kingdom.isControlAI();
     if ( isAIPlayer ) {
-        scoutingDistance += Difficulty::GetScoutingBonus( Game::getDifficulty() );
+        scoutingDistance += Difficulty::GetScoutingBonusForAI( Game::getDifficulty() );
     }
 
     const int alliedColors = Players::GetPlayerFriends( playerColor );
@@ -423,7 +423,7 @@ int32_t Maps::getFogTileCountToBeRevealed( const int32_t tileIndex, int scouting
     // AI is cheating!
     const bool isAIPlayer = world.GetKingdom( playerColor ).isControlAI();
     if ( isAIPlayer ) {
-        scoutingDistance += Difficulty::GetScoutingBonus( Game::getDifficulty() );
+        scoutingDistance += Difficulty::GetScoutingBonusForAI( Game::getDifficulty() );
     }
 
     const int revealRadiusSquared = scoutingDistance * scoutingDistance + 4; // constant factor for "backwards compatibility"

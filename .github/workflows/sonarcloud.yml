@@ -6,6 +6,8 @@ on:
       SONAR_TOKEN:
         required: true
 
+permissions: {}
+
 jobs:
   sonarcloud:
     name: SonarCloud Analyzer
@@ -37,7 +39,7 @@ jobs:
         sudo apt-get -y install libsdl2-dev libsdl2-mixer-dev libsdl2-image-dev
     - uses: SonarSource/sonarcloud-github-c-cpp@v2
     - name: Prepare SonarCloud cfamily cache
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         path: ~/.sonar-cfamily-cache
         key: sonarcloud-cfamily-cache-${{ hashFiles( 'src/**/*.c', 'src/**/*.cpp', 'src/**/*.h' ) }}

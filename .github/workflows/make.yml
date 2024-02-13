@@ -3,6 +3,9 @@ name: Make
 on:
   workflow_call:
 
+permissions:
+  contents: write
+
 jobs:
   make:
     strategy:
@@ -99,7 +102,7 @@ jobs:
             CXX: aarch64-linux-gnu-g++
             AR: aarch64-linux-gnu-ar
         - name: macOS SDL2
-          os: macos-11
+          os: macos-12
           dependencies: sdl2 sdl2_mixer sdl2_image
           env:
             FHEROES2_STRICT_COMPILATION: ON
@@ -235,7 +238,7 @@ jobs:
         sudo apt-get -y update
         sudo apt-get -y install libgcc1 gettext
     - name: Prepare Vita SDK cache
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         path: ~/.vitasdk-cache
         key: make-vitasdk-cache-${{ github.sha }}

@@ -3,6 +3,10 @@ name: Translation update
 on:
   workflow_call:
 
+permissions:
+  contents: write
+  pull-requests: write
+
 jobs:
   translation:
     name: Translation update
@@ -86,20 +90,20 @@ jobs:
       uses: actions/github-script@v7
       with:
         script: |
-          let pr = await github.rest.pulls.create({
+          const pr = await github.rest.pulls.create({
               owner: context.repo.owner,
               repo: context.repo.repo,
               title: "Update translation files",
               head: "${{ env.PR_BRANCH }}",
               base: "${{ github.ref }}",
           });
-          let assigneesPromise = github.rest.issues.addAssignees({
+          const assigneesPromise = github.rest.issues.addAssignees({
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: pr.data.number,
               assignees: ["${{ github.actor }}"],
           });
-          let labelsPromise = github.rest.issues.addLabels({
+          const labelsPromise = github.rest.issues.addLabels({
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: pr.data.number,

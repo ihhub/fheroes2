@@ -873,8 +873,8 @@ namespace fheroes2
                     break;
                 }
 
-                const int32_t textWidth = 108;
-                createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], textWidth, gettext_noop( "ACCEPT" ), isEvilInterface );
+                getTextAdaptedButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "ACCEPT" ),
+                                      isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON, isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK );
 
                 break;
             }
@@ -894,8 +894,8 @@ namespace fheroes2
                     break;
                 }
 
-                const int32_t textWidth = 108;
-                createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], textWidth, gettext_noop( "DECLINE" ), isEvilInterface );
+                getTextAdaptedButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "DECLINE" ),
+                                      isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON, isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK );
 
                 break;
             }
@@ -934,35 +934,8 @@ namespace fheroes2
                     break;
                 }
 
-                const int baseIcnID = isEvilInterface ? ICN::SYSTEME : ICN::SYSTEM;
-
-                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
-                    Sprite & out = _icnVsSprite[id][i];
-                    const Sprite & originalButton = GetICN( baseIcnID, 11 + i );
-                    const int extendedAmount = 14;
-                    out.resize( originalButton.width() + extendedAmount, originalButton.height() );
-                    out.reset();
-
-                    const int widthEndPart = 4 + 2 * i;
-                    const int widthFirstPart = originalButton.width() - widthEndPart;
-                    const int widthMiddlePart = extendedAmount + i;
-                    const int offsetXEndPart = widthFirstPart + widthMiddlePart;
-                    const int startOffsetXMiddlePart = 36;
-
-                    // Copy left main body of button.
-                    fheroes2::Copy( originalButton, 0, 0, out, 0, 0, widthFirstPart, originalButton.height() );
-
-                    // Copy middle body of button.
-                    fheroes2::Copy( originalButton, originalButton.width() - startOffsetXMiddlePart, 0, out, widthFirstPart, 0, widthMiddlePart,
-                                    originalButton.height() );
-
-                    // Copy terminating right margin of the button.
-                    fheroes2::Copy( originalButton, originalButton.width() - widthEndPart, 0, out, offsetXEndPart, 0, widthEndPart, originalButton.height() );
-                }
-
-                const fheroes2::FontColor buttonFontColor = isEvilInterface ? fheroes2::FontColor::GRAY : fheroes2::FontColor::WHITE;
-                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "TRADE" ), { 6, 5 }, { 4, 6 }, { 100, 16 }, buttonFontColor );
-
+                getTextAdaptedButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "TRADE" ),
+                                      isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON, isEvilInterface ? ICN::UNIFORMBAK_EVIL : ICN::UNIFORMBAK_GOOD );
                 break;
             }
             case ICN::BUTTON_SMALL_YES_GOOD:
@@ -1023,8 +996,8 @@ namespace fheroes2
                     break;
                 }
 
-                const int32_t textWidth = 85;
-                createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], textWidth, gettext_noop( "EXIT" ), isEvilInterface );
+                getTextAdaptedButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "EXIT" ), isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON,
+                                      isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK );
 
                 break;
             }
@@ -1115,8 +1088,8 @@ namespace fheroes2
                     break;
                 }
 
-                const int32_t textWidth = 110;
-                createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], textWidth, gettext_noop( "DISMISS" ), isEvilInterface );
+                getTextAdaptedButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "DISMISS" ),
+                                      isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON, isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK );
 
                 break;
             }
@@ -1132,8 +1105,8 @@ namespace fheroes2
                     break;
                 }
 
-                const int32_t textWidth = 110;
-                createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], textWidth, gettext_noop( "UPGRADE" ), isEvilInterface );
+                getTextAdaptedButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "UPGRADE" ),
+                                      isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON, isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK );
 
                 break;
             }
@@ -1149,8 +1122,8 @@ namespace fheroes2
                     break;
                 }
 
-                const int32_t textWidth = 102;
-                createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], textWidth, gettext_noop( "RESTART" ), isEvilInterface );
+                getTextAdaptedButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "RESTART" ),
+                                      isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON, isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK );
 
                 break;
             }
@@ -1799,14 +1772,14 @@ namespace fheroes2
             case ICN::BUTTON_RESET_GOOD: {
                 _icnVsSprite[id].resize( 2 );
 
-                createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], 80, gettext_noop( "RESET" ), false );
+                getTextAdaptedButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "RESET" ), ICN::EMPTY_GOOD_BUTTON, ICN::STONEBAK );
 
                 break;
             }
             case ICN::BUTTON_START_GOOD: {
                 _icnVsSprite[id].resize( 2 );
 
-                createNormalButton( _icnVsSprite[id][0], _icnVsSprite[id][1], 80, gettext_noop( "START" ), false );
+                getTextAdaptedButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "START" ), ICN::EMPTY_GOOD_BUTTON, ICN::STONEBAK );
 
                 break;
             }
@@ -1912,13 +1885,8 @@ namespace fheroes2
                     break;
                 }
 
-                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
-                    Sprite & out = _icnVsSprite[id][i];
-                    out = GetICN( isEvilInterface ? ICN::SYSTEME : ICN::SYSTEM, 11 + i );
-                }
-
-                const fheroes2::FontColor buttonFontColor = isEvilInterface ? fheroes2::FontColor::GRAY : fheroes2::FontColor::WHITE;
-                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "EXIT" ), { 7, 5 }, { 6, 6 }, { 86, 16 }, buttonFontColor );
+                getTextAdaptedButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "EXIT" ), isEvilInterface ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON,
+                                      isEvilInterface ? ICN::UNIFORMBAK_EVIL : ICN::UNIFORMBAK_GOOD );
 
                 break;
             }
@@ -3020,7 +2988,7 @@ namespace fheroes2
                     const Sprite & in = original[i];
                     Sprite & out = _icnVsSprite[id][i];
                     out.resize( in.width() * 2, in.height() * 2 );
-                    Resize( in, out, true );
+                    SubpixelResize( in, out );
                     out.setPosition( in.x() * 2, in.y() * 2 );
                 }
                 return true;
@@ -3145,7 +3113,7 @@ namespace fheroes2
                     Blit( GetICN( ICN::OBJNWAT2, 2 ), 5, 0, _icnVsSprite[id][9], 1, 4, 24, 21 );
 
                     // Make Landscape Miscellaneous objects button.
-                    Blit( GetICN( ICN::OBJNMUL2, 16 ), 3, 0, _icnVsSprite[id][10], 1, 4, 24, 19 );
+                    Blit( GetICN( ICN::OBJNDIRT, 73 ), 8, 0, _icnVsSprite[id][10], 1, 1, 24, 24 );
 
                     // Make erase Dwellings button image.
                     Blit( GetICN( ICN::OBJNMULT, 114 ), 7, 0, _icnVsSprite[id][11], 1, 1, 24, 24 );
@@ -4878,7 +4846,7 @@ namespace fheroes2
                 resizedIcn.resize( resizedWidth, resizedHeight );
                 resizedIcn.setPosition( static_cast<int32_t>( std::lround( originalIcn.x() * scaleFactor ) ) + offsetX,
                                         static_cast<int32_t>( std::lround( originalIcn.y() * scaleFactor ) ) + offsetY );
-                Resize( originalIcn, resizedIcn, false );
+                Resize( originalIcn, resizedIcn );
             }
             else {
                 // No need to resize but we have to update the offset.

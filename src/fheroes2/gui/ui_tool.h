@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2023                                             *
+ *   Copyright (C) 2020 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -43,7 +43,12 @@ namespace fheroes2
         MovableSprite();
         MovableSprite( int32_t width_, int32_t height_, int32_t x_, int32_t y_ );
         explicit MovableSprite( const Sprite & sprite );
+
+        MovableSprite( const MovableSprite & ) = delete;
+
         ~MovableSprite() override;
+
+        MovableSprite & operator=( const MovableSprite & ) = delete;
 
         MovableSprite & operator=( const Sprite & sprite );
 
@@ -79,6 +84,7 @@ namespace fheroes2
     {
     public:
         explicit MovableText( Image & output );
+
         MovableText( const MovableText & ) = delete;
 
         ~MovableText() = default;
@@ -103,6 +109,7 @@ namespace fheroes2
     {
     public:
         SystemInfoRenderer();
+
         SystemInfoRenderer( const SystemInfoRenderer & ) = delete;
 
         ~SystemInfoRenderer() = default;
@@ -126,7 +133,12 @@ namespace fheroes2
     {
     public:
         explicit TimedEventValidator( std::function<bool()> verification, const uint64_t delayBeforeFirstUpdateMs = 500, const uint64_t delayBetweenUpdateMs = 100 );
+
+        TimedEventValidator( const TimedEventValidator & ) = delete;
+
         ~TimedEventValidator() override = default;
+
+        TimedEventValidator & operator=( const TimedEventValidator & ) = delete;
 
         bool isDelayPassed();
 
@@ -144,6 +156,7 @@ namespace fheroes2
     {
     public:
         ScreenPaletteRestorer();
+
         ScreenPaletteRestorer( const ScreenPaletteRestorer & ) = delete;
 
         ~ScreenPaletteRestorer();
@@ -158,13 +171,13 @@ namespace fheroes2
         GameInterfaceTypeRestorer() = delete;
         explicit GameInterfaceTypeRestorer( const bool isEvilInterface_ );
 
+        GameInterfaceTypeRestorer( const GameInterfaceTypeRestorer & ) = delete;
+
         ~GameInterfaceTypeRestorer();
 
-        GameInterfaceTypeRestorer( const GameInterfaceTypeRestorer & ) = delete;
         GameInterfaceTypeRestorer & operator=( const GameInterfaceTypeRestorer & ) = delete;
 
         const bool isEvilInterface;
-
         const bool isOriginalEvilInterface;
     };
 

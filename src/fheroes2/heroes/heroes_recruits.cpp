@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -115,6 +115,7 @@ void Recruits::appendSurrenderedHero( Heroes & hero, const uint32_t heroSurrende
 
     hero.SetModes( Heroes::RECRUIT );
 
+    // The original game offers to hire only the hero who retreated or surrendered last. fheroes2 offers to hire up to the last two heroes of this kind.
     Recruit & recruit = ( first.getSurrenderDay() > second.getSurrenderDay() ? second : first );
 
     recruit = Recruit( hero, heroSurrenderDay );

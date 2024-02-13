@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -410,6 +410,20 @@ bool Maps::FileInfo::readResurrectionMap( std::string filePath, const bool isFor
     kingdomColors = map.availablePlayerColors;
     colorsAvailableForHumans = map.humanPlayerColors;
     colorsAvailableForComp = map.computerPlayerColors;
+
+    races = map.playerRace;
+
+    victoryConditionType = VICTORY_DEFEAT_EVERYONE;
+    compAlsoWins = true;
+    allowNormalVictory = true;
+
+    lossConditionType = LOSS_EVERYTHING;
+
+    for ( size_t i = 0; i < races.size(); ++i ) {
+        if ( races[i] == Race::RAND ) {
+            colorsOfRandomRaces |= static_cast<uint8_t>( 1 << i );
+        }
+    }
 
     version = GameVersion::RESURRECTION;
 

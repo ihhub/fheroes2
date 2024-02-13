@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2023                                                    *
+ *   Copyright (C) 2024                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -129,6 +129,7 @@ namespace Interface
 
         virtual void mouseCursorAreaClickLeft( const int32_t tileIndex ) = 0;
         virtual void mouseCursorAreaPressRight( const int32_t tileIndex ) const = 0;
+        virtual void mouseCursorAreaLongPressLeft( const int32_t tileIndex ) = 0;
 
         // Regenerates the game area and updates the panel positions depending on the UI settings
         virtual void reset() = 0;
