@@ -1585,9 +1585,9 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
                 return bonusChoices[*scenarioBonusId];
             }();
 
-            // starting faction scenario bonus has to be called before players.SetStartGame()
+            // Scenario bonus related to the starting faction has to be set before calling players.SetStartGame(). If the scenario bonus includes the starting army, then
+            // only the starting faction should still be set.
             if ( scenarioBonus._type == Campaign::ScenarioBonusData::STARTING_RACE || scenarioBonus._type == Campaign::ScenarioBonusData::STARTING_RACE_AND_ARMY ) {
-                // but the army has to be set after starting the game, so first only set the race
                 SetScenarioBonus( currentScenarioInfoId, { Campaign::ScenarioBonusData::STARTING_RACE, scenarioBonus._subType, scenarioBonus._amount } );
             }
 
@@ -1595,6 +1595,9 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
             if ( isBetrayalScenario( currentScenarioInfoId ) ) {
                 campaignSaveData.removeAllAwards();
             }
+
+            // Scenario difficulty must be set before loading the map, because it is used during the map loading process.
+            campaignSaveData.setDifficulty( currentDifficulty );
 
             Players & players = conf.GetPlayers();
             players.SetStartGame();
@@ -1615,7 +1618,7 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
             // Fade-out screen before loading a scenario.
             fheroes2::fadeOutDisplay();
 
-            // meanwhile, the others should be called after players.SetStartGame()
+            // The rest of the scenario bonuses should be set after calling players.SetStartGame().
             if ( scenarioBonus._type != Campaign::ScenarioBonusData::STARTING_RACE ) {
                 SetScenarioBonus( currentScenarioInfoId, scenarioBonus );
             }
@@ -1623,7 +1626,6 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
             applyObtainedCampaignAwards( currentScenarioInfoId, campaignSaveData.getObtainedCampaignAwards() );
 
             campaignSaveData.setCurrentScenarioInfo( currentScenarioInfoId, scenarioBonusId.value_or( -1 ) );
-            campaignSaveData.setDifficulty( currentDifficulty );
 
             return fheroes2::GameMode::START_GAME;
         }
