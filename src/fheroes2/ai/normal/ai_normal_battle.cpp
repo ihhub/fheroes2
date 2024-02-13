@@ -53,6 +53,7 @@
 #include "color.h"
 #include "difficulty.h"
 #include "game.h"
+#include "game_static.h"
 #include "heroes.h"
 #include "heroes_base.h"
 #include "kingdom.h"
@@ -951,7 +952,7 @@ namespace AI
                 _myShootersStrength += towerStr;
 
                 if ( !attackerIgnoresCover ) {
-                    _enemyShootersStrength /= 1.5;
+                    _enemyShootersStrength /= 1 + ( GameStatic::getCastleWallRangedPenalty() / 100.0 );
                 }
             }
             else {
@@ -959,7 +960,7 @@ namespace AI
                 _enemyShootersStrength += towerStr;
 
                 if ( !attackerIgnoresCover ) {
-                    _myShootersStrength /= 1.5;
+                    _myShootersStrength /= 1 + ( GameStatic::getCastleWallRangedPenalty() / 100.0 );
                 }
             }
         }
