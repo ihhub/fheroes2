@@ -61,6 +61,7 @@
 #include "monster_info.h"
 #include "resource.h"
 #include "settings.h"
+#include "skill.h"
 #include "speed.h"
 #include "spell.h"
 
