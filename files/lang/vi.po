@@ -1,12 +1,11 @@
 # Vietnamese translation of fheroes2
-# Copyright (C) 2023 fheroes2 team <fhomm2@gmail.com>
+# Copyright (C) 2024 fheroes2 team <fhomm2@gmail.com>
 # This file is distributed under the same license as the fheroes2 package.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-
 "POT-Creation-Date: 2024-01-20 03:11+0000\n"
 "PO-Revision-Date: 2023-12-20 19:47+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
@@ -3465,7 +3464,6 @@ msgstr "%{name} cái %{race}"
 msgid "Click to select %{object} as the resource generator to be placed."
 msgstr "Nhấp vào đây để chọn kịch bản để chơi."
 
-
 #, fuzzy
 msgid "Select Mountain Object:"
 msgstr "Chọn Đối tượng Đại dương:"
@@ -3800,10 +3798,6 @@ msgstr "Chọn một ô mà không chứa bất kỳ đối tượng nào."
 
 msgid "Treasures cannot be placed on water."
 msgstr "Kho báu không thể đặt trên nước."
-
-msgid "Heroes"
-msgstr "Tướng"
-
 
 msgid "Heroes cannot be placed on water."
 msgstr "Tướng không thể đặt trên nước."
