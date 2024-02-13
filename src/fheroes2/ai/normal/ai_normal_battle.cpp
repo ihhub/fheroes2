@@ -933,8 +933,20 @@ namespace AI
 
         // Mark as castle siege only if any tower is present. If no towers present then nothing to defend and most likely all walls are destroyed as well.
         if ( castle && Arena::isAnyTowerPresent() ) {
-            const bool attackerIgnoresCover
-                = arena.GetForce1().GetCommander()->GetBagArtifacts().isArtifactBonusPresent( fheroes2::ArtifactBonusType::NO_SHOOTING_PENALTY );
+            const bool attackerIgnoresCover = [&arena]() {
+                const HeroBase * commander = arena.GetForce1().GetCommander();
+                assert( commander != nullptr );
+
+                if ( commander->GetBagArtifacts().isArtifactBonusPresent( fheroes2::ArtifactBonusType::NO_SHOOTING_PENALTY ) ) {
+                    return true;
+                }
+
+                if ( commander->GetLevelSkill( Skill::Secondary::ARCHERY ) != Skill::Level::NONE ) {
+                    return true;
+                }
+
+                return false;
+            }();
 
             const auto getTowerStrength = []( const Tower * tower ) { return ( tower && tower->isValid() ) ? tower->GetStrength() : 0; };
 
