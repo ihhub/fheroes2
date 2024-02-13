@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2023                                             *
+ *   Copyright (C) 2020 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -81,16 +81,16 @@ namespace fheroes2
             return _area;
         }
 
+        bool isVertical() const
+        {
+            return _area.width < _area.height;
+        }
+
     private:
         Rect _area;
         int _minIndex;
         int _maxIndex;
         int _currentIndex;
-
-        bool _isVertical() const
-        {
-            return _area.width < _area.height;
-        }
     };
 
     // The original scrollbar slider has fixed size. This is a not user-friendly solution as on big screens it might look extremely tiny.

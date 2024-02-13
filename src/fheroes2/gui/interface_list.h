@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -327,6 +327,10 @@ namespace Interface
             le.MousePressLeft( buttonPgUp.area() ) ? buttonPgUp.drawOnPress() : buttonPgUp.drawOnRelease();
             le.MousePressLeft( buttonPgDn.area() ) ? buttonPgDn.drawOnPress() : buttonPgDn.drawOnRelease();
 
+            if ( !le.MousePressLeft() ) {
+                _dragInProgress = false;
+            }
+
             if ( !IsValid() ) {
                 return false;
             }
@@ -417,7 +421,7 @@ namespace Interface
 
                 return true;
             }
-            if ( le.MousePressLeft( _scrollbar.getArea() ) && ( _size() > maxItems ) ) {
+            if ( ( le.MousePressLeft( _scrollbar.getArea() ) || le.MousePressLeft( rtAreaItems ) ) && ( _size() > maxItems ) ) {
                 const fheroes2::Point mousePosition = le.GetMouseCursor();
 
                 const int32_t prevScrollbarX = _scrollbar.x();
@@ -425,7 +429,31 @@ namespace Interface
 
                 UpdateScrollbarRange();
 
-                _scrollbar.moveToPos( mousePosition );
+                if ( le.MousePressLeft( _scrollbar.getArea() ) ) {
+                    _scrollbar.moveToPos( mousePosition );
+                }
+
+                if ( le.MousePressLeft( rtAreaItems ) ) {
+                    if ( !_dragInProgress ) {
+                        // Remember where has the drag started.
+                        ptReference = mousePosition;
+                        _dragInProgress = true;
+                    }
+
+                    fheroes2::Point deltaPoint = ptReference - mousePosition;
+                    int delta = ( _scrollbar.isVertical() ? deltaPoint.y : deltaPoint.x );
+                    int itemSize = ( _scrollbar.isVertical() ? rtAreaItems.height : rtAreaItems.width ) / maxItems;
+
+                    // We have dragged past the size of one list-item.
+                    if ( std::abs( delta ) > itemSize ) {
+                        // Scroll the list accordingly, update the drag start reference point.
+                        _scrollbar.moveToIndex( _scrollbar.currentIndex() + delta / itemSize );
+                        ptReference = mousePosition;
+
+                        // Disable the leftclick on the list, so finishing the drag does not result in clicking on the list-item.
+                        _lockClick = true;
+                    }
+                }
 
                 // We don't need to render the scrollbar if it's position is not changed.
                 if ( ( _scrollbar.x() == prevScrollbarX ) && ( _scrollbar.y() == prevScrollbarY ) ) {
@@ -462,14 +490,21 @@ namespace Interface
                         return true;
 
                     if ( le.MouseClickLeft( rtAreaItems ) ) {
-                        if ( id == _currentId ) {
-                            ActionListDoubleClick( item, mousePos, rtAreaItems.x, rtAreaItems.y + offsetY );
+                        if ( !_lockClick ) {
+                            // This is a legitimate click.
+                            if ( id == _currentId ) {
+                                ActionListDoubleClick( item, mousePos, rtAreaItems.x, rtAreaItems.y + offsetY );
+                            }
+                            else {
+                                _currentId = id;
+                                ActionListSingleClick( item, mousePos, rtAreaItems.x, rtAreaItems.y + offsetY );
+                            }
+                            return true;
                         }
                         else {
-                            _currentId = id;
-                            ActionListSingleClick( item, mousePos, rtAreaItems.x, rtAreaItems.y + offsetY );
+                            // This was a pseudo-click triggered by mouse-up when finishing the drag.
+                            _lockClick = false;
                         }
-                        return true;
                     }
 
                     if ( le.MousePressRight( rtAreaItems ) ) {
@@ -479,6 +514,10 @@ namespace Interface
                 }
 
                 needRedraw = false;
+            }
+            if ( le.MouseReleaseLeft() ) {
+                // There is definitely no drag in progress, we make sure not to disable legitimate clicks.
+                _lockClick = false;
             }
 
             return false;
@@ -509,10 +548,13 @@ namespace Interface
         int maxItems{ 0 };
 
         fheroes2::Point ptRedraw;
+        fheroes2::Point ptReference;
 
         bool useHotkeys{ true };
 
         bool _updateScrollbar{ false };
+        bool _dragInProgress{ false };
+        bool _lockClick{ false };
 
         fheroes2::TimedEventValidator _timedButtonPgUp;
         fheroes2::TimedEventValidator _timedButtonPgDn;
