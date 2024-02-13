@@ -64,8 +64,9 @@ int Difficulty::GetScoutingBonusForAI( int difficulty )
     return 0;
 }
 
-double Difficulty::getGoldIncomeBonusForAI( const int difficulty )
+double Difficulty::getGoldIncomeBonusForAI( const int /* difficulty */ )
 {
+    /*
     switch ( difficulty ) {
     case Difficulty::EASY:
         // It is deduction from the income.
@@ -79,10 +80,11 @@ double Difficulty::getGoldIncomeBonusForAI( const int difficulty )
     default:
         break;
     }
+    */
     return 0;
 }
 
-double Difficulty::GetUnitGrowthBonusForAI( const int difficulty, const bool /* isCampaign */, const building_t /* dwelling */ )
+double Difficulty::GetUnitGrowthBonusForAI( const int /* difficulty */, const bool /* isCampaign */, const building_t /* dwelling */ )
 {
     // In the original game AI has a cheeky monster growth bonus depending on difficulty:
     // Easy - 0.0 (no bonus)
@@ -98,6 +100,7 @@ double Difficulty::GetUnitGrowthBonusForAI( const int difficulty, const bool /* 
     // Completely removing these bonuses might break some maps and they become unplayable.
     // Therefore, these bonuses are reduced by 5% which is the value of noise in many processes / systems.
 
+    /*
     switch ( difficulty ) {
     case Difficulty::EASY:
     case Difficulty::NORMAL:
@@ -113,6 +116,7 @@ double Difficulty::GetUnitGrowthBonusForAI( const int difficulty, const bool /* 
         assert( 0 );
         break;
     }
+    */
     return 0;
 }
 
