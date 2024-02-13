@@ -23,6 +23,7 @@
 #include <array>
 #include <cstdint>
 #include <functional>
+#include <set>
 #include <vector>
 
 #include "game_mode.h"
@@ -86,7 +87,7 @@ namespace Interface
             return _eraseTypes;
         }
 
-        std::vector<Maps::ObjectGroup> getEraseObjectGroups() const;
+        std::set<Maps::ObjectGroup> getEraseObjectGroups() const;
 
         bool showAreaSelectRect() const
         {

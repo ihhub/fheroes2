@@ -3141,11 +3141,15 @@ namespace Maps
 
         return true;
     }
+
     std::set<uint32_t> getObjectUidsInArea( const int32_t startTileId, const int32_t endTileId )
     {
         const int32_t mapWidth = world.w();
         const int32_t maxTileId = mapWidth * world.h() - 1;
+
         if ( startTileId < 0 || startTileId > maxTileId || endTileId < 0 || endTileId > maxTileId ) {
+            // Why are you trying to get object UID outside of the map? Check the logic of the caller function.
+            assert( 0 );
             return {};
         }
 

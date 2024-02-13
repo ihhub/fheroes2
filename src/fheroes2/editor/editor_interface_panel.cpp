@@ -284,54 +284,46 @@ namespace Interface
         return {};
     }
 
-    std::vector<Maps::ObjectGroup> EditorPanel::getEraseObjectGroups() const
+    std::set<Maps::ObjectGroup> EditorPanel::getEraseObjectGroups() const
     {
         if ( _eraseTypes == ObjectErasureType::ERASE_NONE ) {
             return {};
         }
 
-        std::vector<Maps::ObjectGroup> objectGroups;
+        std::set<Maps::ObjectGroup> objectGroups;
 
         if ( _eraseTypes & ObjectErasureType::ERASE_LANDSCAPE ) {
-            objectGroups.push_back( Maps::ObjectGroup::LANDSCAPE_MOUNTAINS );
-            objectGroups.push_back( Maps::ObjectGroup::LANDSCAPE_ROCKS );
-            objectGroups.push_back( Maps::ObjectGroup::LANDSCAPE_TREES );
-            objectGroups.push_back( Maps::ObjectGroup::LANDSCAPE_WATER );
-            objectGroups.push_back( Maps::ObjectGroup::LANDSCAPE_MISCELLANEOUS );
+            objectGroups.insert( { Maps::ObjectGroup::LANDSCAPE_MOUNTAINS, Maps::ObjectGroup::LANDSCAPE_ROCKS, Maps::ObjectGroup::LANDSCAPE_TREES,
+                                   Maps::ObjectGroup::LANDSCAPE_WATER, Maps::ObjectGroup::LANDSCAPE_MISCELLANEOUS } );
         }
 
         if ( _eraseTypes & ObjectErasureType::ERASE_ADVENTURE_NON_PICKABLE ) {
-            objectGroups.push_back( Maps::ObjectGroup::ADVENTURE_DWELLINGS );
-            objectGroups.push_back( Maps::ObjectGroup::ADVENTURE_MINES );
-            objectGroups.push_back( Maps::ObjectGroup::ADVENTURE_POWER_UPS );
-            objectGroups.push_back( Maps::ObjectGroup::ADVENTURE_WATER );
-            objectGroups.push_back( Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS );
+            objectGroups.insert( { Maps::ObjectGroup::ADVENTURE_DWELLINGS, Maps::ObjectGroup::ADVENTURE_MINES, Maps::ObjectGroup::ADVENTURE_POWER_UPS,
+                                   Maps::ObjectGroup::ADVENTURE_WATER, Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS } );
         }
 
         if ( _eraseTypes & ObjectErasureType::ERASE_TOWNS ) {
-            objectGroups.push_back( Maps::ObjectGroup::KINGDOM_TOWNS );
+            objectGroups.insert( Maps::ObjectGroup::KINGDOM_TOWNS );
         }
 
         if ( _eraseTypes & ObjectErasureType::ERASE_ADVENTURE_PICKABLE ) {
-            objectGroups.push_back( Maps::ObjectGroup::ADVENTURE_ARTIFACTS );
-            objectGroups.push_back( Maps::ObjectGroup::ADVENTURE_TREASURES );
-            objectGroups.push_back( Maps::ObjectGroup::ADVENTURE_WATER );
+            objectGroups.insert( { Maps::ObjectGroup::ADVENTURE_ARTIFACTS, Maps::ObjectGroup::ADVENTURE_TREASURES, Maps::ObjectGroup::ADVENTURE_WATER } );
         }
 
         if ( _eraseTypes & ObjectErasureType::ERASE_MONSTERS ) {
-            objectGroups.push_back( Maps::ObjectGroup::MONSTERS );
+            objectGroups.insert( Maps::ObjectGroup::MONSTERS );
         }
 
         if ( _eraseTypes & ObjectErasureType::ERASE_HEROES ) {
-            objectGroups.push_back( Maps::ObjectGroup::KINGDOM_HEROES );
+            objectGroups.insert( Maps::ObjectGroup::KINGDOM_HEROES );
         }
 
         if ( _eraseTypes & ObjectErasureType::ERASE_STREAMS ) {
-            objectGroups.push_back( Maps::ObjectGroup::STREAMS );
+            objectGroups.insert( Maps::ObjectGroup::STREAMS );
         }
 
         if ( _eraseTypes & ObjectErasureType::ERASE_ROADS ) {
-            objectGroups.push_back( Maps::ObjectGroup::ROADS );
+            objectGroups.insert( Maps::ObjectGroup::ROADS );
         }
 
         return objectGroups;
