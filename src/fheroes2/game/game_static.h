@@ -63,6 +63,7 @@ namespace GameStatic
     int32_t ObjectVisitedModifiers( const MP2::MapObjectType objectType );
 
     int GetBattleMoatReduceDefense();
+    // Returns the percentage penalty for the damage dealt by shooters firing at targets protected by castle walls.
     uint32_t getCastleWallRangedPenalty();
 
     const Skill::stats_t * GetSkillStats( int race );
