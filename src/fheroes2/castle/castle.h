@@ -179,7 +179,7 @@ public:
     }
 
     // This method must be called only at the time of map loading and only for castles with empty names.
-    void setName( const std::set<std::string> & usedNames );
+    void setName( const std::set<std::string, std::less<>> & usedNames );
 
     int GetControl() const override;
 

@@ -85,7 +85,7 @@ namespace
     {
         // Find castles with no names.
         std::vector<Castle *> castleWithNoName;
-        std::set<std::string> castleNames;
+        std::set<std::string, std::less<>> castleNames;
 
         for ( Castle * castle : castles ) {
             if ( castle == nullptr ) {

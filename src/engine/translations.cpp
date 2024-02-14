@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -321,28 +321,31 @@ namespace
     };
 
     MOFile * current = nullptr;
-    std::map<std::string, MOFile> domains;
+    std::map<std::string, MOFile, std::less<>> domains;
 }
 
 namespace Translation
 {
     bool bindDomain( const char * domain, const char * file )
     {
-        std::string str( domain );
-
         // Search for already loaded domain or load from file
-        std::map<std::string, MOFile>::iterator it = domains.find( str );
+        const auto it = domains.find( domain );
         if ( it != domains.end() ) {
-            current = &( *it ).second;
+            current = &it->second;
             return true;
         }
-        if ( !domains[str].open( file ) )
-            return false;
 
-        current = &domains[str];
+        if ( !domains[domain].open( file ) ) {
+            return false;
+        }
+
+        current = &domains[domain];
 
         // Update locale
-        current->domain = str;
+        current->domain = domain;
+
+        const std::string & str = current->domain;
+
         if ( str == "af" || str == "afrikaans" )
             current->locale = LocaleType::LOCALE_AF;
         else if ( str == "ar" || str == "arabic" )
