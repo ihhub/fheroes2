@@ -177,6 +177,22 @@ namespace
         return ~crc;
     }
 
+    constexpr uint32_t djb2a( const std::string_view str )
+    {
+        uint32_t hash = 5381;
+
+        for ( unsigned char chr : str ) {
+            hash = ( ( hash << 5 ) + hash ) ^ chr;
+        }
+
+        return hash;
+    }
+
+    constexpr uint32_t operator"" _djb2a( const char * str, const size_t len )
+    {
+        return djb2a( { str, len } );
+    }
+
     std::string getTag( const std::string & str, const std::string & tag, const std::string & sep )
     {
         if ( str.size() > tag.size() && str.rfind( tag, 0 ) == 0 ) {
@@ -343,79 +359,120 @@ namespace Translation
 
         // Update locale
         current->domain = domain;
+        current->locale = [domain]() {
+            switch ( djb2a( domain ) ) {
+            case "af"_djb2a:
+            case "afrikaans"_djb2a:
+                return LocaleType::LOCALE_AF;
+            case "ar"_djb2a:
+            case "arabic"_djb2a:
+                return LocaleType::LOCALE_AR;
+            case "be"_djb2a:
+            case "belarusian"_djb2a:
+                return LocaleType::LOCALE_BE;
+            case "bg"_djb2a:
+            case "bulgarian"_djb2a:
+                return LocaleType::LOCALE_BG;
+            case "ca"_djb2a:
+            case "catalan"_djb2a:
+                return LocaleType::LOCALE_CA;
+            case "dk"_djb2a:
+            case "danish"_djb2a:
+                return LocaleType::LOCALE_DK;
+            case "de"_djb2a:
+            case "german"_djb2a:
+                return LocaleType::LOCALE_DE;
+            case "el"_djb2a:
+            case "greek"_djb2a:
+                return LocaleType::LOCALE_EL;
+            case "es"_djb2a:
+            case "spanish"_djb2a:
+                return LocaleType::LOCALE_ES;
+            case "et"_djb2a:
+            case "estonian"_djb2a:
+                return LocaleType::LOCALE_ET;
+            case "eu"_djb2a:
+            case "basque"_djb2a:
+                return LocaleType::LOCALE_EU;
+            case "fi"_djb2a:
+            case "finnish"_djb2a:
+                return LocaleType::LOCALE_FI;
+            case "fr"_djb2a:
+            case "french"_djb2a:
+                return LocaleType::LOCALE_FR;
+            case "gl"_djb2a:
+            case "galician"_djb2a:
+                return LocaleType::LOCALE_GL;
+            case "he"_djb2a:
+            case "hebrew"_djb2a:
+                return LocaleType::LOCALE_HE;
+            case "hr"_djb2a:
+            case "croatian"_djb2a:
+                return LocaleType::LOCALE_HR;
+            case "hu"_djb2a:
+            case "hungarian"_djb2a:
+                return LocaleType::LOCALE_HU;
+            case "id"_djb2a:
+            case "indonesian"_djb2a:
+                return LocaleType::LOCALE_ID;
+            case "it"_djb2a:
+            case "italian"_djb2a:
+                return LocaleType::LOCALE_IT;
+            case "la"_djb2a:
+            case "latin"_djb2a:
+                return LocaleType::LOCALE_LA;
+            case "lt"_djb2a:
+            case "lithuanian"_djb2a:
+                return LocaleType::LOCALE_LT;
+            case "lv"_djb2a:
+            case "latvian"_djb2a:
+                return LocaleType::LOCALE_LV;
+            case "mk"_djb2a:
+            case "macedonia"_djb2a:
+                return LocaleType::LOCALE_MK;
+            case "nb"_djb2a:
+            case "norwegian"_djb2a:
+                return LocaleType::LOCALE_NB;
+            case "nl"_djb2a:
+            case "dutch"_djb2a:
+                return LocaleType::LOCALE_NL;
+            case "pl"_djb2a:
+            case "polish"_djb2a:
+                return LocaleType::LOCALE_PL;
+            case "pt"_djb2a:
+            case "portuguese"_djb2a:
+                return LocaleType::LOCALE_PT;
+            case "ro"_djb2a:
+            case "romanian"_djb2a:
+                return LocaleType::LOCALE_RO;
+            case "ru"_djb2a:
+            case "russian"_djb2a:
+                return LocaleType::LOCALE_RU;
+            case "sk"_djb2a:
+            case "slovak"_djb2a:
+                return LocaleType::LOCALE_SK;
+            case "sl"_djb2a:
+            case "slovenian"_djb2a:
+                return LocaleType::LOCALE_SL;
+            case "sr"_djb2a:
+            case "serbian"_djb2a:
+                return LocaleType::LOCALE_SR;
+            case "sv"_djb2a:
+            case "swedish"_djb2a:
+                return LocaleType::LOCALE_SV;
+            case "tr"_djb2a:
+            case "turkish"_djb2a:
+                return LocaleType::LOCALE_TR;
+            case "uk"_djb2a:
+            case "ukrainian"_djb2a:
+                return LocaleType::LOCALE_UK;
+            default:
+                break;
+            }
 
-        const std::string & str = current->domain;
+            return LocaleType::LOCALE_EN;
+        }();
 
-        if ( str == "af" || str == "afrikaans" )
-            current->locale = LocaleType::LOCALE_AF;
-        else if ( str == "ar" || str == "arabic" )
-            current->locale = LocaleType::LOCALE_AR;
-        else if ( str == "be" || str == "belarusian" )
-            current->locale = LocaleType::LOCALE_BE;
-        else if ( str == "bg" || str == "bulgarian" )
-            current->locale = LocaleType::LOCALE_BG;
-        else if ( str == "ca" || str == "catalan" )
-            current->locale = LocaleType::LOCALE_CA;
-        else if ( str == "dk" || str == "danish" )
-            current->locale = LocaleType::LOCALE_DK;
-        else if ( str == "de" || str == "german" )
-            current->locale = LocaleType::LOCALE_DE;
-        else if ( str == "el" || str == "greek" )
-            current->locale = LocaleType::LOCALE_EL;
-        else if ( str == "es" || str == "spanish" )
-            current->locale = LocaleType::LOCALE_ES;
-        else if ( str == "et" || str == "estonian" )
-            current->locale = LocaleType::LOCALE_ET;
-        else if ( str == "eu" || str == "basque" )
-            current->locale = LocaleType::LOCALE_EU;
-        else if ( str == "fi" || str == "finnish" )
-            current->locale = LocaleType::LOCALE_FI;
-        else if ( str == "fr" || str == "french" )
-            current->locale = LocaleType::LOCALE_FR;
-        else if ( str == "gl" || str == "galician" )
-            current->locale = LocaleType::LOCALE_GL;
-        else if ( str == "he" || str == "hebrew" )
-            current->locale = LocaleType::LOCALE_HE;
-        else if ( str == "hr" || str == "croatian" )
-            current->locale = LocaleType::LOCALE_HR;
-        else if ( str == "hu" || str == "hungarian" )
-            current->locale = LocaleType::LOCALE_HU;
-        else if ( str == "id" || str == "indonesian" )
-            current->locale = LocaleType::LOCALE_ID;
-        else if ( str == "it" || str == "italian" )
-            current->locale = LocaleType::LOCALE_IT;
-        else if ( str == "la" || str == "latin" )
-            current->locale = LocaleType::LOCALE_LA;
-        else if ( str == "lt" || str == "lithuanian" )
-            current->locale = LocaleType::LOCALE_LT;
-        else if ( str == "lv" || str == "latvian" )
-            current->locale = LocaleType::LOCALE_LV;
-        else if ( str == "mk" || str == "macedonia" )
-            current->locale = LocaleType::LOCALE_MK;
-        else if ( str == "nb" || str == "norwegian" )
-            current->locale = LocaleType::LOCALE_NB;
-        else if ( str == "nl" || str == "dutch" )
-            current->locale = LocaleType::LOCALE_NL;
-        else if ( str == "pl" || str == "polish" )
-            current->locale = LocaleType::LOCALE_PL;
-        else if ( str == "pt" || str == "portuguese" )
-            current->locale = LocaleType::LOCALE_PT;
-        else if ( str == "ro" || str == "romanian" )
-            current->locale = LocaleType::LOCALE_RO;
-        else if ( str == "ru" || str == "russian" )
-            current->locale = LocaleType::LOCALE_RU;
-        else if ( str == "sk" || str == "slovak" )
-            current->locale = LocaleType::LOCALE_SK;
-        else if ( str == "sl" || str == "slovenian" )
-            current->locale = LocaleType::LOCALE_SL;
-        else if ( str == "sr" || str == "serbian" )
-            current->locale = LocaleType::LOCALE_SR;
-        else if ( str == "sv" || str == "swedish" )
-            current->locale = LocaleType::LOCALE_SV;
-        else if ( str == "tr" || str == "turkish" )
-            current->locale = LocaleType::LOCALE_TR;
-        else if ( str == "uk" || str == "ukrainian" )
-            current->locale = LocaleType::LOCALE_UK;
         return true;
     }
 
