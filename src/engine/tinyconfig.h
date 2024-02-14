@@ -24,6 +24,7 @@
 #ifndef TINYCONFIG_H
 #define TINYCONFIG_H
 
+#include <functional>
 #include <map>
 #include <string>
 

@@ -28,6 +28,7 @@
 #include <cassert>
 #include <cstring>
 #include <fstream>
+#include <functional>
 #include <map>
 #include <set>
 #include <type_traits>
