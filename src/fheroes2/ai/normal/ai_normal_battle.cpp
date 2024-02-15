@@ -53,6 +53,7 @@
 #include "color.h"
 #include "difficulty.h"
 #include "game.h"
+#include "game_static.h"
 #include "heroes.h"
 #include "heroes_base.h"
 #include "kingdom.h"
@@ -60,6 +61,7 @@
 #include "monster_info.h"
 #include "resource.h"
 #include "settings.h"
+#include "skill.h"
 #include "speed.h"
 #include "spell.h"
 
@@ -932,8 +934,20 @@ namespace AI
 
         // Mark as castle siege only if any tower is present. If no towers present then nothing to defend and most likely all walls are destroyed as well.
         if ( castle && Arena::isAnyTowerPresent() ) {
-            const bool attackerIgnoresCover
-                = arena.GetForce1().GetCommander()->GetBagArtifacts().isArtifactBonusPresent( fheroes2::ArtifactBonusType::NO_SHOOTING_PENALTY );
+            const bool attackerIgnoresCover = [&arena]() {
+                const HeroBase * commander = arena.GetForce1().GetCommander();
+                assert( commander != nullptr );
+
+                if ( commander->GetBagArtifacts().isArtifactBonusPresent( fheroes2::ArtifactBonusType::NO_SHOOTING_PENALTY ) ) {
+                    return true;
+                }
+
+                if ( commander->GetLevelSkill( Skill::Secondary::ARCHERY ) != Skill::Level::NONE ) {
+                    return true;
+                }
+
+                return false;
+            }();
 
             const auto getTowerStrength = []( const Tower * tower ) { return ( tower && tower->isValid() ) ? tower->GetStrength() : 0; };
 
@@ -951,7 +965,7 @@ namespace AI
                 _myShootersStrength += towerStr;
 
                 if ( !attackerIgnoresCover ) {
-                    _enemyShootersStrength /= 1.5;
+                    _enemyShootersStrength /= 1 + ( GameStatic::getCastleWallRangedPenalty() / 100.0 );
                 }
             }
             else {
@@ -959,7 +973,7 @@ namespace AI
                 _enemyShootersStrength += towerStr;
 
                 if ( !attackerIgnoresCover ) {
-                    _myShootersStrength /= 1.5;
+                    _myShootersStrength /= 1 + ( GameStatic::getCastleWallRangedPenalty() / 100.0 );
                 }
             }
         }
