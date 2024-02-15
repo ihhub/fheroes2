@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-08 12:37+0000\n"
+"POT-Creation-Date: 2024-02-15 00:16+0000\n"
 "PO-Revision-Date: 2023-09-06 08:41+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -932,7 +932,8 @@ msgstr "Створено Дзеркального Фантома."
 msgid "The mirror image is destroyed!"
 msgstr "Фантомний загін знищений!"
 
-msgid "Are you sure you want to interrupt the auto battle?"
+#, fuzzy
+msgid "Are you sure you want to interrupt the auto combat?"
 msgstr "Ви впевнені, що хочете перервати автоматичний бій?"
 
 msgid "Error"
@@ -7024,10 +7025,11 @@ msgstr "%{skill} усуває штраф за переміщення по нер
 #, fuzzy
 msgid ""
 "%{skill} increases the damage done by the hero's range attacking creatures "
-"by %{count} percent."
+"by %{count} percent and eliminates the %{penalty} percent penalty for the "
+"hero's troops shooting past obstacles (e.g. castle walls)."
 msgstr ""
-"%{skill} підвищує шкоду від істот, що атакують з відстані на %{count} "
-"відсотків."
+"%{name} прибирає %{count} відсотків штрафу, що накладається на ваші війська "
+"під час пострілів через перепони (подібні замковим стінам)."
 
 #, fuzzy
 msgid "%{skill} increases the hero's movement points by %{count} percent."
@@ -10511,6 +10513,14 @@ msgstr ""
 "Перевірити нову версію гри на\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#, fuzzy
+#~ msgid ""
+#~ "%{skill} increases the damage done by the hero's range attacking "
+#~ "creatures by %{count} percent."
+#~ msgstr ""
+#~ "%{skill} підвищує шкоду від істот, що атакують з відстані на %{count} "
+#~ "відсотків."
 
 #, fuzzy
 #~ msgid "Castles"

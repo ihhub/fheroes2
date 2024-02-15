@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-08 12:37+0000\n"
+"POT-Creation-Date: 2024-02-15 00:16+0000\n"
 "PO-Revision-Date: 2023-08-26 23:09+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: https://discord.com/"
@@ -911,7 +911,8 @@ msgstr "Stworzono lustrzane odbicie."
 msgid "The mirror image is destroyed!"
 msgstr "Zniszczono lustrzane odbicie!"
 
-msgid "Are you sure you want to interrupt the auto battle?"
+#, fuzzy
+msgid "Are you sure you want to interrupt the auto combat?"
 msgstr "Czy na pewno chcesz przerwać tryb automatyczny?"
 
 msgid "Error"
@@ -7680,10 +7681,11 @@ msgstr ""
 #, fuzzy
 msgid ""
 "%{skill} increases the damage done by the hero's range attacking creatures "
-"by %{count} percent."
+"by %{count} percent and eliminates the %{penalty} percent penalty for the "
+"hero's troops shooting past obstacles (e.g. castle walls)."
 msgstr ""
-"O %{count} procent zwiększa obrażenia zadawane przez jednostki atakujące na "
-"odległość."
+"%{name} eliminuje %{count} procent kary dla twoich oddziałów strzelających "
+"przez przeszkody (np. zamkowe mury)"
 
 #, fuzzy
 msgid "%{skill} increases the hero's movement points by %{count} percent."
@@ -11381,6 +11383,14 @@ msgstr ""
 "Możesz pobrać najnowszą wersję gry ze strony:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#, fuzzy
+#~ msgid ""
+#~ "%{skill} increases the damage done by the hero's range attacking "
+#~ "creatures by %{count} percent."
+#~ msgstr ""
+#~ "O %{count} procent zwiększa obrażenia zadawane przez jednostki atakujące "
+#~ "na odległość."
 
 #, fuzzy
 #~ msgid "Castles"

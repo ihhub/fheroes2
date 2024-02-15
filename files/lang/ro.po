@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-08 12:37+0000\n"
+"POT-Creation-Date: 2024-02-15 00:16+0000\n"
 "PO-Revision-Date: 2022-10-25 08:56+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -890,7 +890,8 @@ msgstr "Se creează o imagine în oglindă."
 msgid "The mirror image is destroyed!"
 msgstr "Imaginea în oglindă este distrusă!"
 
-msgid "Are you sure you want to interrupt the auto battle?"
+#, fuzzy
+msgid "Are you sure you want to interrupt the auto combat?"
 msgstr "Ești sigur că vrei să întrerupi lupta automată?"
 
 msgid "Error"
@@ -6844,7 +6845,8 @@ msgstr ""
 
 msgid ""
 "%{skill} increases the damage done by the hero's range attacking creatures "
-"by %{count} percent."
+"by %{count} percent and eliminates the %{penalty} percent penalty for the "
+"hero's troops shooting past obstacles (e.g. castle walls)."
 msgstr ""
 
 msgid "%{skill} increases the hero's movement points by %{count} percent."
