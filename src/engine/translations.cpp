@@ -366,118 +366,129 @@ namespace Translation
         // Update locale
         current->domain = domain;
         current->locale = [domain]() {
+            // Additional check in case of hash collisions. This function should only receive a certain predefined set of strings (no arbitrary strings) as a domain name,
+            // therefore, theoretically, there should be no hash collisions.
+            const auto validateDomain = [domain = std::string_view{ domain }]( const LocaleType locale, const auto... validDomains ) {
+                if ( ( ( domain == validDomains ) || ... ) ) {
+                    return locale;
+                }
+
+                assert( 0 );
+                return LocaleType::LOCALE_EN;
+            };
+
             switch ( djb2a( domain ) ) {
             case "af"_djb2a:
             case "afrikaans"_djb2a:
-                return LocaleType::LOCALE_AF;
+                return validateDomain( LocaleType::LOCALE_AF, "af", "afrikaans" );
             case "ar"_djb2a:
             case "arabic"_djb2a:
-                return LocaleType::LOCALE_AR;
+                return validateDomain( LocaleType::LOCALE_AR, "ar", "arabic" );
             case "be"_djb2a:
             case "belarusian"_djb2a:
-                return LocaleType::LOCALE_BE;
+                return validateDomain( LocaleType::LOCALE_BE, "be", "belarusian" );
             case "bg"_djb2a:
             case "bulgarian"_djb2a:
-                return LocaleType::LOCALE_BG;
+                return validateDomain( LocaleType::LOCALE_BG, "bg", "bulgarian" );
             case "ca"_djb2a:
             case "catalan"_djb2a:
-                return LocaleType::LOCALE_CA;
+                return validateDomain( LocaleType::LOCALE_CA, "ca", "catalan" );
             case "cs"_djb2a:
             case "czech"_djb2a:
-                return LocaleType::LOCALE_CS;
+                return validateDomain( LocaleType::LOCALE_CS, "cs", "czech" );
             case "dk"_djb2a:
             case "danish"_djb2a:
-                return LocaleType::LOCALE_DK;
+                return validateDomain( LocaleType::LOCALE_DK, "dk", "danish" );
             case "de"_djb2a:
             case "german"_djb2a:
-                return LocaleType::LOCALE_DE;
+                return validateDomain( LocaleType::LOCALE_DE, "de", "german" );
             case "el"_djb2a:
             case "greek"_djb2a:
-                return LocaleType::LOCALE_EL;
+                return validateDomain( LocaleType::LOCALE_EL, "el", "greek" );
             case "es"_djb2a:
             case "spanish"_djb2a:
-                return LocaleType::LOCALE_ES;
+                return validateDomain( LocaleType::LOCALE_ES, "es", "spanish" );
             case "et"_djb2a:
             case "estonian"_djb2a:
-                return LocaleType::LOCALE_ET;
+                return validateDomain( LocaleType::LOCALE_ET, "et", "estonian" );
             case "eu"_djb2a:
             case "basque"_djb2a:
-                return LocaleType::LOCALE_EU;
+                return validateDomain( LocaleType::LOCALE_EU, "eu", "basque" );
             case "fi"_djb2a:
             case "finnish"_djb2a:
-                return LocaleType::LOCALE_FI;
+                return validateDomain( LocaleType::LOCALE_FI, "fi", "finnish" );
             case "fr"_djb2a:
             case "french"_djb2a:
-                return LocaleType::LOCALE_FR;
+                return validateDomain( LocaleType::LOCALE_FR, "fr", "french" );
             case "gl"_djb2a:
             case "galician"_djb2a:
-                return LocaleType::LOCALE_GL;
+                return validateDomain( LocaleType::LOCALE_GL, "gl", "galician" );
             case "he"_djb2a:
             case "hebrew"_djb2a:
-                return LocaleType::LOCALE_HE;
+                return validateDomain( LocaleType::LOCALE_HE, "he", "hebrew" );
             case "hr"_djb2a:
             case "croatian"_djb2a:
-                return LocaleType::LOCALE_HR;
+                return validateDomain( LocaleType::LOCALE_HR, "hr", "croatian" );
             case "hu"_djb2a:
             case "hungarian"_djb2a:
-                return LocaleType::LOCALE_HU;
+                return validateDomain( LocaleType::LOCALE_HU, "hu", "hungarian" );
             case "id"_djb2a:
             case "indonesian"_djb2a:
-                return LocaleType::LOCALE_ID;
+                return validateDomain( LocaleType::LOCALE_ID, "id", "indonesian" );
             case "it"_djb2a:
             case "italian"_djb2a:
-                return LocaleType::LOCALE_IT;
+                return validateDomain( LocaleType::LOCALE_IT, "it", "italian" );
             case "la"_djb2a:
             case "latin"_djb2a:
-                return LocaleType::LOCALE_LA;
+                return validateDomain( LocaleType::LOCALE_LA, "la", "latin" );
             case "lt"_djb2a:
             case "lithuanian"_djb2a:
-                return LocaleType::LOCALE_LT;
+                return validateDomain( LocaleType::LOCALE_LT, "lt", "lithuanian" );
             case "lv"_djb2a:
             case "latvian"_djb2a:
-                return LocaleType::LOCALE_LV;
+                return validateDomain( LocaleType::LOCALE_LV, "lv", "latvian" );
             case "mk"_djb2a:
             case "macedonian"_djb2a:
-                return LocaleType::LOCALE_MK;
+                return validateDomain( LocaleType::LOCALE_MK, "mk", "macedonian" );
             case "nb"_djb2a:
             case "norwegian"_djb2a:
-                return LocaleType::LOCALE_NB;
+                return validateDomain( LocaleType::LOCALE_NB, "nb", "norwegian" );
             case "nl"_djb2a:
             case "dutch"_djb2a:
-                return LocaleType::LOCALE_NL;
+                return validateDomain( LocaleType::LOCALE_NL, "nl", "dutch" );
             case "pl"_djb2a:
             case "polish"_djb2a:
-                return LocaleType::LOCALE_PL;
+                return validateDomain( LocaleType::LOCALE_PL, "pl", "polish" );
             case "pt"_djb2a:
             case "portuguese"_djb2a:
-                return LocaleType::LOCALE_PT;
+                return validateDomain( LocaleType::LOCALE_PT, "pt", "portuguese" );
             case "ro"_djb2a:
             case "romanian"_djb2a:
-                return LocaleType::LOCALE_RO;
+                return validateDomain( LocaleType::LOCALE_RO, "ro", "romanian" );
             case "ru"_djb2a:
             case "russian"_djb2a:
-                return LocaleType::LOCALE_RU;
+                return validateDomain( LocaleType::LOCALE_RU, "ru", "russian" );
             case "sk"_djb2a:
             case "slovak"_djb2a:
-                return LocaleType::LOCALE_SK;
+                return validateDomain( LocaleType::LOCALE_SK, "sk", "slovak" );
             case "sl"_djb2a:
             case "slovenian"_djb2a:
-                return LocaleType::LOCALE_SL;
+                return validateDomain( LocaleType::LOCALE_SL, "sl", "slovenian" );
             case "sr"_djb2a:
             case "serbian"_djb2a:
-                return LocaleType::LOCALE_SR;
+                return validateDomain( LocaleType::LOCALE_SR, "sr", "serbian" );
             case "sv"_djb2a:
             case "swedish"_djb2a:
-                return LocaleType::LOCALE_SV;
+                return validateDomain( LocaleType::LOCALE_SV, "sv", "swedish" );
             case "tr"_djb2a:
             case "turkish"_djb2a:
-                return LocaleType::LOCALE_TR;
+                return validateDomain( LocaleType::LOCALE_TR, "tr", "turkish" );
             case "uk"_djb2a:
             case "ukrainian"_djb2a:
-                return LocaleType::LOCALE_UK;
+                return validateDomain( LocaleType::LOCALE_UK, "uk", "ukrainian" );
             case "vi"_djb2a:
             case "vietnamese"_djb2a:
-                return LocaleType::LOCALE_VI;
+                return validateDomain( LocaleType::LOCALE_VI, "vi", "vietnamese" );
             default:
                 // Unknown domain
                 assert( 0 );
