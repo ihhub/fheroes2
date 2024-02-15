@@ -921,7 +921,7 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForDamage( const Unit & attacker, U
                 // Replaces damage, not adds extra damage
                 res.damage = std::min( defender.GetHitPoints(), halvingDamage );
 
-                Interface * iface = Arena::GetInterface();
+                Interface * iface = GetInterface();
                 if ( iface ) {
                     std::string str( _n( "%{name} destroys half the enemy troops!", "%{name} destroy half the enemy troops!", attacker.GetCount() ) );
                     StringReplace( str, "%{name}", attacker.GetName() );
