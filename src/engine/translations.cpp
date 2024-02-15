@@ -336,10 +336,12 @@ namespace Translation
         assert( domain != nullptr && *domain != 0 && file != nullptr );
 
         // Search for already loaded domain or load from file
-        const auto it = domains.find( domain );
-        if ( it != domains.end() ) {
-            current = &it->second;
-            return true;
+        {
+            const auto iter = domains.find( domain );
+            if ( iter != domains.end() ) {
+                current = &iter->second;
+                return true;
+            }
         }
 
         if ( !domains[domain].open( file ) ) {
