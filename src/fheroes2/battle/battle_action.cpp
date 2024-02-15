@@ -916,17 +916,18 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForDamage( const Unit & attacker, U
 
         const auto abilityIter = std::find( attackerAbilities.begin(), attackerAbilities.end(), fheroes2::MonsterAbility( fheroes2::MonsterAbilityType::ENEMY_HALFING ) );
         if ( abilityIter != attackerAbilities.end() && _randomGenerator.Get( 1, 100 ) <= abilityIter->percentage ) {
-            const uint32_t numToBeKilled = defender.GetCount() / 2 + defender.GetCount() % 2;
+            const uint32_t halvingDamage = ( defender.GetCount() / 2 + defender.GetCount() % 2 ) * defender.Monster::GetHitPoints();
+            if ( halvingDamage > res.damage ) {
+                // Replaces damage, not adds extra damage
+                res.damage = std::min( defender.GetHitPoints(), halvingDamage );
 
-            // Replaces damage, not adds extra damage
-            res.damage = std::min( defender.GetHitPoints(), numToBeKilled * defender.Monster::GetHitPoints() );
+                Interface * iface = Arena::GetInterface();
+                if ( iface ) {
+                    std::string str( _n( "%{name} destroys half the enemy troops!", "%{name} destroy half the enemy troops!", attacker.GetCount() ) );
+                    StringReplace( str, "%{name}", attacker.GetName() );
 
-            Interface * iface = Arena::GetInterface();
-            if ( iface ) {
-                std::string str( _n( "%{name} destroys half the enemy troops!", "%{name} destroy half the enemy troops!", attacker.GetCount() ) );
-                StringReplace( str, "%{name}", attacker.GetName() );
-
-                iface->SetStatus( str, true );
+                    iface->SetStatus( str, true );
+                }
             }
         }
     }
