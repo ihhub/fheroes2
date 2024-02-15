@@ -71,7 +71,7 @@ namespace
     }
 }
 
-TinyConfig::TinyConfig( char sep /* = '=' */, char com /* = ';' */ )
+TinyConfig::TinyConfig( const char sep, const char com )
     : separator( sep )
     , comment( com )
 {}
