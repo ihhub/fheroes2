@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-08 12:37+0000\n"
+"POT-Creation-Date: 2024-02-15 00:16+0000\n"
 "PO-Revision-Date: 2023-12-20 19:47+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -914,7 +914,8 @@ msgstr "Hình ảnh phản chiếu được tạo ra."
 msgid "The mirror image is destroyed!"
 msgstr "Hình ảnh phản chiếu đã mất đi!"
 
-msgid "Are you sure you want to interrupt the auto battle?"
+#, fuzzy
+msgid "Are you sure you want to interrupt the auto combat?"
 msgstr "Ngươi có chắc chắn muốn làm gián đoạn trận chiến tự động không?"
 
 msgid "Error"
@@ -7690,10 +7691,11 @@ msgstr "%{skill} loại bỏ hình phạt di chuyển đối với địa hình 
 #, fuzzy
 msgid ""
 "%{skill} increases the damage done by the hero's range attacking creatures "
-"by %{count} percent."
+"by %{count} percent and eliminates the %{penalty} percent penalty for the "
+"hero's troops shooting past obstacles (e.g. castle walls)."
 msgstr ""
-"%{skill} tăng sát thương do các sinh vật tấn công trong phạm vi gây ra thêm "
-"%{count} phần trăm."
+"%{name} loại bỏ hình phạt %{count} phần trăm đối với quân của ngươi bắn qua "
+"chướng ngại vật (ví dụ: tường lâu đài)."
 
 #, fuzzy
 msgid "%{skill} increases the hero's movement points by %{count} percent."
@@ -11380,6 +11382,14 @@ msgstr ""
 "Kiểm tra phiên bản mới nhất của trò chơi tại\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#, fuzzy
+#~ msgid ""
+#~ "%{skill} increases the damage done by the hero's range attacking "
+#~ "creatures by %{count} percent."
+#~ msgstr ""
+#~ "%{skill} tăng sát thương do các sinh vật tấn công trong phạm vi gây ra "
+#~ "thêm %{count} phần trăm."
 
 #~ msgid "Terrain"
 #~ msgstr "Địa hình"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-08 12:37+0000\n"
+"POT-Creation-Date: 2024-02-15 00:16+0000\n"
 "PO-Revision-Date: 2023-09-12 11:08+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
@@ -916,7 +916,8 @@ msgstr "Spejlbilledet er skabt."
 msgid "The mirror image is destroyed!"
 msgstr "Spejlbilledet er ødelagt!"
 
-msgid "Are you sure you want to interrupt the auto battle?"
+#, fuzzy
+msgid "Are you sure you want to interrupt the auto combat?"
 msgstr "Er du sikker på, at du vil afbryde autokampen?"
 
 msgid "Error"
@@ -7731,9 +7732,11 @@ msgstr "%{skill} eliminerer bevægelsesbesvær i ujævnt terræn."
 #, fuzzy
 msgid ""
 "%{skill} increases the damage done by the hero's range attacking creatures "
-"by %{count} percent."
+"by %{count} percent and eliminates the %{penalty} percent penalty for the "
+"hero's troops shooting past obstacles (e.g. castle walls)."
 msgstr ""
-"%{skill} øger skaden forårsaget af skydende væsner med %{count} procent."
+"%{name} eliminerer %{count}-procentstraffen for dine tropper, der skyder "
+"forbi forhindringer (f.eks. borgmure)."
 
 #, fuzzy
 msgid "%{skill} increases the hero's movement points by %{count} percent."
@@ -11416,6 +11419,13 @@ msgstr ""
 "Check den nyeste version af spillet på\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#, fuzzy
+#~ msgid ""
+#~ "%{skill} increases the damage done by the hero's range attacking "
+#~ "creatures by %{count} percent."
+#~ msgstr ""
+#~ "%{skill} øger skaden forårsaget af skydende væsner med %{count} procent."
 
 #~ msgid "Terrain"
 #~ msgstr "Terræn-tilstand"
