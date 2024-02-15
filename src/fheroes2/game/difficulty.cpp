@@ -64,23 +64,21 @@ int Difficulty::GetScoutingBonusForAI( int difficulty )
     return 0;
 }
 
-double Difficulty::getGoldIncomeBonusForAI( const int /* difficulty */ )
+double Difficulty::getGoldIncomeBonusForAI( const int difficulty )
 {
-    /*
     switch ( difficulty ) {
     case Difficulty::EASY:
         // It is deduction from the income.
         return -0.25;
     case Difficulty::HARD:
-        return 0.29;
+        return 0.5;
     case Difficulty::EXPERT:
-        return 0.45;
+        return 1.0;
     case Difficulty::IMPOSSIBLE:
-        return 0.6;
+        return 2.0;
     default:
         break;
     }
-    */
     return 0;
 }
 
