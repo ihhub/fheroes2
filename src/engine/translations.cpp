@@ -366,7 +366,7 @@ namespace Translation
         // Update locale
         current->domain = domain;
         current->locale = [domain]() {
-            // Additional check in case of hash collisions. This function should only receive a certain predefined set of strings (no arbitrary strings) as a domain name,
+            // Additional check for hash collisions. This function should only receive a certain predefined set of strings (no arbitrary strings) as a domain name,
             // therefore, theoretically, there should be no hash collisions.
             const auto validateDomain = [domain = std::string_view{ domain }]( const LocaleType locale, const auto... validDomains ) {
                 if ( ( ( domain == validDomains ) || ... ) ) {
