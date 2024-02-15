@@ -943,9 +943,10 @@ namespace
 
         fheroes2::MovableSprite selection( selectionImage );
 
-        const char * easyDescription = _( "Choose this difficulty if you want to prefer game story over challenge. AI is weaker in comparison with normal difficulty." );
-        const char * normalDescription = _( "Choose this difficulty to enjoy the campaign as per the original design." );
-        const char * hardDescription = _( "Choose this difficulty if you want challenge. AI is stronger in comparison with normal difficulty." );
+        const char * easyDescription
+            = _( "Choose this difficulty if you want to experience the game's story at a lower challenge. The AI will be weaker than in normal difficulty." );
+        const char * normalDescription = _( "Choose this difficulty to experience the campaign as per the original design." );
+        const char * hardDescription = _( "Choose this difficulty if you want a challenge. The AI will be stronger than in normal difficulty." );
 
         const std::array<fheroes2::Rect, 3> difficultyArea{ fheroes2::Rect( copyToOffset[0].x + 1, windowRoi.y + 37, selectionImage.width(), selectionImage.height() ),
                                                             fheroes2::Rect( copyToOffset[1].x + 1, windowRoi.y + 37, selectionImage.width(), selectionImage.height() ),

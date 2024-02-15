@@ -258,7 +258,7 @@ std::string Skill::Primary::StringDescription( int skill, const Heroes * hero )
         break;
     case KNOWLEDGE:
         res = _(
-            " The hero's knowledge determines how many spell points the hero may have. Under normal circumstances, a hero is limited to 10 spell points per level of knowledge." );
+            "The hero's knowledge determines how many spell points the hero may have. Under normal circumstances, a hero is limited to 10 spell points per level of knowledge." );
         if ( hero )
             hero->GetKnowledge( &ext );
         break;
