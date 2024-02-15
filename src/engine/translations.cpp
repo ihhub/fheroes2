@@ -34,6 +34,7 @@
 #include <ostream>
 #include <string>
 #include <string_view>
+#include <unordered_map>
 #include <utility>
 #include <vector>
 
@@ -179,22 +180,6 @@ namespace
         }
 
         return ~crc;
-    }
-
-    constexpr uint32_t djb2a( const std::string_view str )
-    {
-        uint32_t hash = 5381;
-
-        for ( unsigned char chr : str ) {
-            hash = ( ( hash << 5 ) + hash ) ^ chr;
-        }
-
-        return hash;
-    }
-
-    constexpr uint32_t operator"" _djb2a( const char * str, const size_t len )
-    {
-        return djb2a( { str, len } );
     }
 
     std::string getTag( const std::string & str, const std::string & tag, const std::string & sep )
@@ -366,136 +351,125 @@ namespace Translation
         // Update locale
         current->domain = domain;
         current->locale = [domain]() {
-            // Additional check for hash collisions. This function should only receive a certain predefined set of strings (no arbitrary strings) as a domain name,
-            // therefore, theoretically, there should be no hash collisions.
-            const auto validateDomain = [domain = std::string_view{ domain }]( const LocaleType locale, const auto... validDomains ) {
-                if ( ( ( domain == validDomains ) || ... ) ) {
-                    return locale;
-                }
+            static const std::unordered_map<std::string_view, LocaleType> domainToLocale{ // Afrikaans
+                                                                                          { "af", LocaleType::LOCALE_AF },
+                                                                                          { "afrikaans", LocaleType::LOCALE_AF },
+                                                                                          // Arabic
+                                                                                          { "ar", LocaleType::LOCALE_AR },
+                                                                                          { "arabic", LocaleType::LOCALE_AR },
+                                                                                          // Belarusian
+                                                                                          { "be", LocaleType::LOCALE_BE },
+                                                                                          { "belarusian", LocaleType::LOCALE_BE },
+                                                                                          // Bulgarian
+                                                                                          { "bg", LocaleType::LOCALE_BG },
+                                                                                          { "bulgarian", LocaleType::LOCALE_BG },
+                                                                                          // Catalan
+                                                                                          { "ca", LocaleType::LOCALE_CA },
+                                                                                          { "catalan", LocaleType::LOCALE_CA },
+                                                                                          // Czech
+                                                                                          { "cs", LocaleType::LOCALE_CS },
+                                                                                          { "czech", LocaleType::LOCALE_CS },
+                                                                                          // Danish
+                                                                                          { "dk", LocaleType::LOCALE_DK },
+                                                                                          { "danish", LocaleType::LOCALE_DK },
+                                                                                          // German
+                                                                                          { "de", LocaleType::LOCALE_DE },
+                                                                                          { "german", LocaleType::LOCALE_DE },
+                                                                                          // Greek
+                                                                                          { "el", LocaleType::LOCALE_EL },
+                                                                                          { "greek", LocaleType::LOCALE_EL },
+                                                                                          // Spanish
+                                                                                          { "es", LocaleType::LOCALE_ES },
+                                                                                          { "spanish", LocaleType::LOCALE_ES },
+                                                                                          // Estonian
+                                                                                          { "et", LocaleType::LOCALE_ET },
+                                                                                          { "estonian", LocaleType::LOCALE_ET },
+                                                                                          // Basque
+                                                                                          { "eu", LocaleType::LOCALE_EU },
+                                                                                          { "basque", LocaleType::LOCALE_EU },
+                                                                                          // Finnish
+                                                                                          { "fi", LocaleType::LOCALE_FI },
+                                                                                          { "finnish", LocaleType::LOCALE_FI },
+                                                                                          // French
+                                                                                          { "fr", LocaleType::LOCALE_FR },
+                                                                                          { "french", LocaleType::LOCALE_FR },
+                                                                                          // Galician
+                                                                                          { "gl", LocaleType::LOCALE_GL },
+                                                                                          { "galician", LocaleType::LOCALE_GL },
+                                                                                          // Hebrew
+                                                                                          { "he", LocaleType::LOCALE_HE },
+                                                                                          { "hebrew", LocaleType::LOCALE_HE },
+                                                                                          // Croatian
+                                                                                          { "hr", LocaleType::LOCALE_HR },
+                                                                                          { "croatian", LocaleType::LOCALE_HR },
+                                                                                          // Hungarian
+                                                                                          { "hu", LocaleType::LOCALE_HU },
+                                                                                          { "hungarian", LocaleType::LOCALE_HU },
+                                                                                          // Indonesian
+                                                                                          { "id", LocaleType::LOCALE_ID },
+                                                                                          { "indonesian", LocaleType::LOCALE_ID },
+                                                                                          // Italian
+                                                                                          { "it", LocaleType::LOCALE_IT },
+                                                                                          { "italian", LocaleType::LOCALE_IT },
+                                                                                          // Latin
+                                                                                          { "la", LocaleType::LOCALE_LA },
+                                                                                          { "latin", LocaleType::LOCALE_LA },
+                                                                                          // Lithuanian
+                                                                                          { "lt", LocaleType::LOCALE_LT },
+                                                                                          { "lithuanian", LocaleType::LOCALE_LT },
+                                                                                          // Latvian
+                                                                                          { "lv", LocaleType::LOCALE_LV },
+                                                                                          { "latvian", LocaleType::LOCALE_LV },
+                                                                                          // Macedonian
+                                                                                          { "mk", LocaleType::LOCALE_MK },
+                                                                                          { "macedonian", LocaleType::LOCALE_MK },
+                                                                                          // Norwegian
+                                                                                          { "nb", LocaleType::LOCALE_NB },
+                                                                                          { "norwegian", LocaleType::LOCALE_NB },
+                                                                                          // Dutch
+                                                                                          { "nl", LocaleType::LOCALE_NL },
+                                                                                          { "dutch", LocaleType::LOCALE_NL },
+                                                                                          // Polish
+                                                                                          { "pl", LocaleType::LOCALE_PL },
+                                                                                          { "polish", LocaleType::LOCALE_PL },
+                                                                                          // Portuguese
+                                                                                          { "pt", LocaleType::LOCALE_PT },
+                                                                                          { "portuguese", LocaleType::LOCALE_PT },
+                                                                                          // Romanian
+                                                                                          { "ro", LocaleType::LOCALE_RO },
+                                                                                          { "romanian", LocaleType::LOCALE_RO },
+                                                                                          // Russian
+                                                                                          { "ru", LocaleType::LOCALE_RU },
+                                                                                          { "russian", LocaleType::LOCALE_RU },
+                                                                                          // Slovak
+                                                                                          { "sk", LocaleType::LOCALE_SK },
+                                                                                          { "slovak", LocaleType::LOCALE_SK },
+                                                                                          // Slovenian
+                                                                                          { "sl", LocaleType::LOCALE_SL },
+                                                                                          { "slovenian", LocaleType::LOCALE_SL },
+                                                                                          // Serbian
+                                                                                          { "sr", LocaleType::LOCALE_SR },
+                                                                                          { "serbian", LocaleType::LOCALE_SR },
+                                                                                          // Swedish
+                                                                                          { "sv", LocaleType::LOCALE_SV },
+                                                                                          { "swedish", LocaleType::LOCALE_SV },
+                                                                                          // Turkish
+                                                                                          { "tr", LocaleType::LOCALE_TR },
+                                                                                          { "turkish", LocaleType::LOCALE_TR },
+                                                                                          // Ukrainian
+                                                                                          { "uk", LocaleType::LOCALE_UK },
+                                                                                          { "ukrainian", LocaleType::LOCALE_UK },
+                                                                                          // Vietnamese
+                                                                                          { "vi", LocaleType::LOCALE_VI },
+                                                                                          { "vietnamese", LocaleType::LOCALE_VI } };
 
+            const auto iter = domainToLocale.find( domain );
+            if ( iter == domainToLocale.end() ) {
                 assert( 0 );
                 return LocaleType::LOCALE_EN;
-            };
-
-            switch ( djb2a( domain ) ) {
-            case "af"_djb2a:
-            case "afrikaans"_djb2a:
-                return validateDomain( LocaleType::LOCALE_AF, "af", "afrikaans" );
-            case "ar"_djb2a:
-            case "arabic"_djb2a:
-                return validateDomain( LocaleType::LOCALE_AR, "ar", "arabic" );
-            case "be"_djb2a:
-            case "belarusian"_djb2a:
-                return validateDomain( LocaleType::LOCALE_BE, "be", "belarusian" );
-            case "bg"_djb2a:
-            case "bulgarian"_djb2a:
-                return validateDomain( LocaleType::LOCALE_BG, "bg", "bulgarian" );
-            case "ca"_djb2a:
-            case "catalan"_djb2a:
-                return validateDomain( LocaleType::LOCALE_CA, "ca", "catalan" );
-            case "cs"_djb2a:
-            case "czech"_djb2a:
-                return validateDomain( LocaleType::LOCALE_CS, "cs", "czech" );
-            case "dk"_djb2a:
-            case "danish"_djb2a:
-                return validateDomain( LocaleType::LOCALE_DK, "dk", "danish" );
-            case "de"_djb2a:
-            case "german"_djb2a:
-                return validateDomain( LocaleType::LOCALE_DE, "de", "german" );
-            case "el"_djb2a:
-            case "greek"_djb2a:
-                return validateDomain( LocaleType::LOCALE_EL, "el", "greek" );
-            case "es"_djb2a:
-            case "spanish"_djb2a:
-                return validateDomain( LocaleType::LOCALE_ES, "es", "spanish" );
-            case "et"_djb2a:
-            case "estonian"_djb2a:
-                return validateDomain( LocaleType::LOCALE_ET, "et", "estonian" );
-            case "eu"_djb2a:
-            case "basque"_djb2a:
-                return validateDomain( LocaleType::LOCALE_EU, "eu", "basque" );
-            case "fi"_djb2a:
-            case "finnish"_djb2a:
-                return validateDomain( LocaleType::LOCALE_FI, "fi", "finnish" );
-            case "fr"_djb2a:
-            case "french"_djb2a:
-                return validateDomain( LocaleType::LOCALE_FR, "fr", "french" );
-            case "gl"_djb2a:
-            case "galician"_djb2a:
-                return validateDomain( LocaleType::LOCALE_GL, "gl", "galician" );
-            case "he"_djb2a:
-            case "hebrew"_djb2a:
-                return validateDomain( LocaleType::LOCALE_HE, "he", "hebrew" );
-            case "hr"_djb2a:
-            case "croatian"_djb2a:
-                return validateDomain( LocaleType::LOCALE_HR, "hr", "croatian" );
-            case "hu"_djb2a:
-            case "hungarian"_djb2a:
-                return validateDomain( LocaleType::LOCALE_HU, "hu", "hungarian" );
-            case "id"_djb2a:
-            case "indonesian"_djb2a:
-                return validateDomain( LocaleType::LOCALE_ID, "id", "indonesian" );
-            case "it"_djb2a:
-            case "italian"_djb2a:
-                return validateDomain( LocaleType::LOCALE_IT, "it", "italian" );
-            case "la"_djb2a:
-            case "latin"_djb2a:
-                return validateDomain( LocaleType::LOCALE_LA, "la", "latin" );
-            case "lt"_djb2a:
-            case "lithuanian"_djb2a:
-                return validateDomain( LocaleType::LOCALE_LT, "lt", "lithuanian" );
-            case "lv"_djb2a:
-            case "latvian"_djb2a:
-                return validateDomain( LocaleType::LOCALE_LV, "lv", "latvian" );
-            case "mk"_djb2a:
-            case "macedonian"_djb2a:
-                return validateDomain( LocaleType::LOCALE_MK, "mk", "macedonian" );
-            case "nb"_djb2a:
-            case "norwegian"_djb2a:
-                return validateDomain( LocaleType::LOCALE_NB, "nb", "norwegian" );
-            case "nl"_djb2a:
-            case "dutch"_djb2a:
-                return validateDomain( LocaleType::LOCALE_NL, "nl", "dutch" );
-            case "pl"_djb2a:
-            case "polish"_djb2a:
-                return validateDomain( LocaleType::LOCALE_PL, "pl", "polish" );
-            case "pt"_djb2a:
-            case "portuguese"_djb2a:
-                return validateDomain( LocaleType::LOCALE_PT, "pt", "portuguese" );
-            case "ro"_djb2a:
-            case "romanian"_djb2a:
-                return validateDomain( LocaleType::LOCALE_RO, "ro", "romanian" );
-            case "ru"_djb2a:
-            case "russian"_djb2a:
-                return validateDomain( LocaleType::LOCALE_RU, "ru", "russian" );
-            case "sk"_djb2a:
-            case "slovak"_djb2a:
-                return validateDomain( LocaleType::LOCALE_SK, "sk", "slovak" );
-            case "sl"_djb2a:
-            case "slovenian"_djb2a:
-                return validateDomain( LocaleType::LOCALE_SL, "sl", "slovenian" );
-            case "sr"_djb2a:
-            case "serbian"_djb2a:
-                return validateDomain( LocaleType::LOCALE_SR, "sr", "serbian" );
-            case "sv"_djb2a:
-            case "swedish"_djb2a:
-                return validateDomain( LocaleType::LOCALE_SV, "sv", "swedish" );
-            case "tr"_djb2a:
-            case "turkish"_djb2a:
-                return validateDomain( LocaleType::LOCALE_TR, "tr", "turkish" );
-            case "uk"_djb2a:
-            case "ukrainian"_djb2a:
-                return validateDomain( LocaleType::LOCALE_UK, "uk", "ukrainian" );
-            case "vi"_djb2a:
-            case "vietnamese"_djb2a:
-                return validateDomain( LocaleType::LOCALE_VI, "vi", "vietnamese" );
-            default:
-                // Unknown domain
-                assert( 0 );
-                break;
             }
 
-            return LocaleType::LOCALE_EN;
+            return iter->second;
         }();
 
         return true;
