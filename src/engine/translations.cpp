@@ -25,6 +25,7 @@
 
 #include <algorithm>
 #include <array>
+#include <cassert>
 #include <cstddef>
 #include <cstdint>
 #include <cstring>
@@ -144,7 +145,8 @@ namespace
         LOCALE_SR,
         LOCALE_SV,
         LOCALE_TR,
-        LOCALE_UK
+        LOCALE_UK,
+        LOCALE_VI
     };
 
     struct Chunk
@@ -346,6 +348,8 @@ namespace Translation
 {
     bool bindDomain( const char * domain, const char * file )
     {
+        assert( domain != nullptr && *domain != 0 && file != nullptr );
+
         // Search for already loaded domain or load from file
         const auto it = domains.find( domain );
         if ( it != domains.end() ) {
@@ -378,6 +382,9 @@ namespace Translation
             case "ca"_djb2a:
             case "catalan"_djb2a:
                 return LocaleType::LOCALE_CA;
+            case "cs"_djb2a:
+            case "czech"_djb2a:
+                return LocaleType::LOCALE_CS;
             case "dk"_djb2a:
             case "danish"_djb2a:
                 return LocaleType::LOCALE_DK;
@@ -430,7 +437,7 @@ namespace Translation
             case "latvian"_djb2a:
                 return LocaleType::LOCALE_LV;
             case "mk"_djb2a:
-            case "macedonia"_djb2a:
+            case "macedonian"_djb2a:
                 return LocaleType::LOCALE_MK;
             case "nb"_djb2a:
             case "norwegian"_djb2a:
@@ -468,7 +475,12 @@ namespace Translation
             case "uk"_djb2a:
             case "ukrainian"_djb2a:
                 return LocaleType::LOCALE_UK;
+            case "vi"_djb2a:
+            case "vietnamese"_djb2a:
+                return LocaleType::LOCALE_VI;
             default:
+                // Unknown domain
+                assert( 0 );
                 break;
             }
 
