@@ -444,12 +444,12 @@ namespace
             gettext_noop( "Your rival, the Kingdom of Harondale, is attacking weak towns on your border! Recover from their first strike and crush them completely!" ),
             gettext_noop(
                 "Find your wayward son Joseph who is rumored to be living in the desolate lands. Do it before the first day of the third month or it will be of no help to your family." ),
-            gettext_noop( "Rescue your crazy uncle Ivan. Find him before the first day of the fourth month or it will be no help to your kingdom." ),
+            gettext_noop( "Rescue your crazy uncle Ivan. Find him before the first day of the fourth month or it will be of no help to your kingdom." ),
             gettext_noop(
                 "Destroy the barbarians who are attacking the southern border of your kingdom! Recover your fallen towns, and then invade the jungle kingdom. Leave no enemy standing." ),
             gettext_noop( "Retake the castle of Ivory Gates, which has fallen due to treachery." ),
             gettext_noop(
-                "Gain the favor of the elves. They will not allow trees to be chopped down, so they will send you wood every 2 weeks. You must complete your mission before the first day of the seventh month, or the kingdom will surely fall." ),
+                "Gain the favor of the elves. They will not allow trees to be chopped down, so we will send you wood every 2 weeks. You must complete your mission before the first day of the seventh month, or the kingdom will surely fall." ),
             gettext_noop( "This is the final battle against your rival kingdom of Harondale. Eliminate everyone, and don't lose the hero Jarkonas VI." ) };
         std::vector<Campaign::ScenarioData> scenarioDatas;
         scenarioDatas.reserve( 8 );
@@ -863,12 +863,12 @@ namespace Campaign
             return description;
         }
         case CampaignAwardData::TYPE_GET_ARTIFACT: {
-            std::string description( _( "\"%{artifact}\" artifact will be carried over the scenario." ) );
+            std::string description( _( "\"%{artifact}\" artifact will be carried over in the campaign." ) );
             StringReplace( description, "%{artifact}", Artifact( _subType ).GetName() );
             return description;
         }
         case CampaignAwardData::TYPE_CARRY_OVER_FORCES: {
-            return _( "The army will be carried over the scenario." );
+            return _( "The army will be carried over in the campaign." );
         }
         case CampaignAwardData::TYPE_RESOURCE_BONUS: {
             std::string description( _( "The kingdom will have +%{count} %{resource} each day." ) );
@@ -877,17 +877,17 @@ namespace Campaign
             return description;
         }
         case CampaignAwardData::TYPE_GET_SPELL: {
-            std::string description( _( "\"%{spell}\" spell will be carried over the scenario." ) );
+            std::string description( _( "The \"%{spell}\" spell will be carried over in the campaign." ) );
             StringReplace( description, "%{spell}", Spell( _subType ).GetName() );
             return description;
         }
         case CampaignAwardData::TYPE_HIREABLE_HERO: {
-            std::string description( _( "%{hero} can be hired in the scenario." ) );
+            std::string description( _( "%{hero} can be hired during scenarios." ) );
             StringReplace( description, "%{hero}", Heroes( _subType, 0 ).GetName() );
             return description;
         }
         case CampaignAwardData::TYPE_DEFEAT_ENEMY_HERO: {
-            std::string description( _( "%{hero} has been defeated and will not appear in the subsequent scenarios." ) );
+            std::string description( _( "%{hero} has been defeated and will not appear in subsequent scenarios." ) );
             StringReplace( description, "%{hero}", Heroes( _subType, 0 ).GetName() );
             return description;
         }
