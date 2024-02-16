@@ -582,7 +582,7 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & allMaps 
 
         if ( le.MouseClickLeft( buttonSelectSmall.area() ) || HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_MAP_SIZE_SMALL ) ) {
             if ( small.empty() ) {
-                fheroes2::showStandardTextMessage( "", _( "No maps exist of that size." ), Dialog::OK );
+                fheroes2::showStandardTextMessage( "", _( "No maps exist at that size." ), Dialog::OK );
                 currentPressedButton->drawOnPress();
             }
             else {
@@ -595,7 +595,7 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & allMaps 
         }
         else if ( le.MouseClickLeft( buttonSelectMedium.area() ) || HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_MAP_SIZE_MEDIUM ) ) {
             if ( medium.empty() ) {
-                fheroes2::showStandardTextMessage( "", _( "No maps exist of that size." ), Dialog::OK );
+                fheroes2::showStandardTextMessage( "", _( "No maps exist at that size." ), Dialog::OK );
                 currentPressedButton->drawOnPress();
             }
             else {
@@ -608,7 +608,7 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & allMaps 
         }
         else if ( le.MouseClickLeft( buttonSelectLarge.area() ) || HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_MAP_SIZE_LARGE ) ) {
             if ( large.empty() ) {
-                fheroes2::showStandardTextMessage( "", _( "No maps exist of that size." ), Dialog::OK );
+                fheroes2::showStandardTextMessage( "", _( "No maps exist at that size." ), Dialog::OK );
                 currentPressedButton->drawOnPress();
             }
             else {
@@ -621,7 +621,7 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & allMaps 
         }
         else if ( le.MouseClickLeft( buttonSelectXLarge.area() ) || HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_MAP_SIZE_EXTRA_LARGE ) ) {
             if ( xlarge.empty() ) {
-                fheroes2::showStandardTextMessage( "", _( "No maps exist of that size." ), Dialog::OK );
+                fheroes2::showStandardTextMessage( "", _( "No maps exist at that size." ), Dialog::OK );
                 currentPressedButton->drawOnPress();
             }
             else {
