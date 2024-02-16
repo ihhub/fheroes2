@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2023                                             *
+ *   Copyright (C) 2021 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -185,7 +185,7 @@ namespace
                 "The local lords refuse to swear allegiance to Roland, and must be subdued. They are wealthy and powerful, so be prepared for a tough fight. Capture all enemy castles to win." ),
             gettext_noop(
                 "Your task is to defend the Dwarves against Archibald's forces. Capture all of the enemy towns and castles to win, and be sure not to lose all of the dwarf towns at once, or the enemy will have won." ),
-            gettext_noop( "You will face four allied enemies in a straightforward fight for resource and treasure. Capture all of the enemy castles for victory." ),
+            gettext_noop( "You will face four allied enemies in a straightforward fight for resources and treasure. Capture all of the enemy castles for victory." ),
             gettext_noop(
                 "Your enemies are allied against you and start close by, so be ready to come out fighting. You will need to own all four castles in this small valley to win." ),
             gettext_noop(

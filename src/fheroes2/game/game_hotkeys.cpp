@@ -134,7 +134,7 @@ namespace
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::MAIN_MENU_MAP_SIZE_ALL )]
             = { Game::HotKeyCategory::MAIN_MENU, gettext_noop( "hotkey|select all map sizes" ), fheroes2::Key::KEY_A };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::MAIN_MENU_HOTSEAT )]
-            = { Game::HotKeyCategory::MAIN_MENU, gettext_noop( "hotkey|hotseat game" ), fheroes2::Key::KEY_H };
+            = { Game::HotKeyCategory::MAIN_MENU, gettext_noop( "hotkey|hot seat game" ), fheroes2::Key::KEY_H };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::MAIN_MENU_BATTLEONLY )]
             = { Game::HotKeyCategory::MAIN_MENU, gettext_noop( "hotkey|battle only game" ), fheroes2::Key::KEY_B };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::MAIN_MENU_NEW_ORIGINAL_CAMPAIGN )]
