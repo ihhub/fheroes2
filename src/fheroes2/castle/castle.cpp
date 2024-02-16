@@ -1034,7 +1034,7 @@ bool Castle::AllowBuyHero( std::string * msg ) const
 
     if ( !myKingdom.AllowRecruitHero( true ) ) {
         if ( msg ) {
-            *msg = _( "Cannot afford a Hero" );
+            *msg = _( "Cannot afford a Hero." );
         }
         return false;
     }

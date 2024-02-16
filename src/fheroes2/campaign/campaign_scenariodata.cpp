@@ -739,7 +739,7 @@ namespace Campaign
         }
         case ScenarioBonusData::STARTING_RACE:
         case ScenarioBonusData::STARTING_RACE_AND_ARMY: {
-            std::string description( _( "The starting race of the scenario will be %{race}." ) );
+            std::string description( _( "The starting alignment of the scenario will be %{race}." ) );
             StringReplace( description, "%{race}", Race::String( _subType ) );
             return description;
         }
