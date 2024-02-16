@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-15 00:16+0000\n"
+"POT-Creation-Date: 2024-02-16 01:10+0000\n"
 "PO-Revision-Date: 2023-09-11 20:22+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -1119,8 +1119,9 @@ msgstr ""
 "nepriateľské mestá a hrady pre výhru, no uisti sa, že nestratíš všetky "
 "trpasličie mestá naraz, inak nepriateľ vyhrá."
 
+#, fuzzy
 msgid ""
-"You will face four allied enemies in a straightforward fight for resource "
+"You will face four allied enemies in a straightforward fight for resources "
 "and treasure. Capture all of the enemy castles for victory."
 msgstr ""
 "V priamom boji o zdroje a poklady budeš čeliť štyrom nepriateľom v "
@@ -4177,20 +4178,23 @@ msgstr "Ťažká"
 msgid "Campaign Difficulty"
 msgstr "Obtiažnosť kampane"
 
+#, fuzzy
 msgid ""
-"Choose this difficulty if you want to prefer game story over challenge. AI "
-"is weaker in comparison with normal difficulty."
+"Choose this difficulty if you want to experience the game's story at a lower "
+"challenge. The AI will be weaker than in normal difficulty."
 msgstr ""
 "Zvoľ túto obtiažnosť pokiaľ preferuješ príbeh nad výzvou. Počítač je slabší "
 "v porovnaní s normálnou obtiažnosťou."
 
+#, fuzzy
 msgid ""
-"Choose this difficulty to enjoy the campaign as per the original design."
+"Choose this difficulty to experience the campaign as per the original design."
 msgstr "Zvoľ túto obtiažnosť pre pôžitok z pôvodne mieneného návrhu."
 
+#, fuzzy
 msgid ""
-"Choose this difficulty if you want challenge. AI is stronger in comparison "
-"with normal difficulty."
+"Choose this difficulty if you want a challenge. The AI will be stronger than "
+"in normal difficulty."
 msgstr ""
 "Zvoľ túto obtiažnosť pokiaľ chceš výzvu. Počítač je silnejší v porovnaní s "
 "normálnou obtiažnosťou."
@@ -4511,7 +4515,8 @@ msgstr "zvoľ mapy veľkosti extra veľká"
 msgid "hotkey|select all map sizes"
 msgstr "zvoľ mapy všetkých veľkostí"
 
-msgid "hotkey|hotseat game"
+#, fuzzy
+msgid "hotkey|hot seat game"
 msgstr "horúce kreslo"
 
 msgid "hotkey|battle only game"
@@ -7432,7 +7437,7 @@ msgstr "Tvoja Sila kúziel určuje dĺžku alebo silu kúzla."
 
 #, fuzzy
 msgid ""
-" The hero's knowledge determines how many spell points the hero may have. "
+"The hero's knowledge determines how many spell points the hero may have. "
 "Under normal circumstances, a hero is limited to 10 spell points per level "
 "of knowledge."
 msgstr ""

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-15 00:16+0000\n"
+"POT-Creation-Date: 2024-02-16 01:10+0000\n"
 "PO-Revision-Date: 2023-12-20 19:47+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -1111,8 +1111,9 @@ msgstr ""
 "đồng thời đảm bảo không để mất tất cả các thị trấn của người lùn cùng một "
 "lúc, nếu không kẻ thù sẽ chiến thắng."
 
+#, fuzzy
 msgid ""
-"You will face four allied enemies in a straightforward fight for resource "
+"You will face four allied enemies in a straightforward fight for resources "
 "and treasure. Capture all of the enemy castles for victory."
 msgstr ""
 "Ngươi sẽ đối mặt với bốn kẻ thù đồng minh trong một cuộc chiến đơn giản để "
@@ -4190,20 +4191,23 @@ msgstr "Khó"
 msgid "Campaign Difficulty"
 msgstr "Độ khó Chiến dịch"
 
+#, fuzzy
 msgid ""
-"Choose this difficulty if you want to prefer game story over challenge. AI "
-"is weaker in comparison with normal difficulty."
+"Choose this difficulty if you want to experience the game's story at a lower "
+"challenge. The AI will be weaker than in normal difficulty."
 msgstr ""
 "Chọn độ khó này nếu ngươi muốn thích câu chuyện trò chơi hơn thử thách. AI "
 "yếu hơn so với độ khó bình thường."
 
+#, fuzzy
 msgid ""
-"Choose this difficulty to enjoy the campaign as per the original design."
+"Choose this difficulty to experience the campaign as per the original design."
 msgstr "Chọn độ khó này để tận hưởng chiến dịch theo thiết kế ban đầu."
 
+#, fuzzy
 msgid ""
-"Choose this difficulty if you want challenge. AI is stronger in comparison "
-"with normal difficulty."
+"Choose this difficulty if you want a challenge. The AI will be stronger than "
+"in normal difficulty."
 msgstr ""
 "Chọn độ khó này nếu ngươi muốn thử thách. AI mạnh hơn so với độ khó bình "
 "thường."
@@ -4526,7 +4530,8 @@ msgstr "chọn bản đồ cỡ siêu lớn"
 msgid "hotkey|select all map sizes"
 msgstr "chọn tất cả các bản đồ"
 
-msgid "hotkey|hotseat game"
+#, fuzzy
+msgid "hotkey|hot seat game"
 msgstr "trò chơi ghế nóng"
 
 msgid "hotkey|battle only game"
@@ -7495,7 +7500,7 @@ msgstr ""
 
 #, fuzzy
 msgid ""
-" The hero's knowledge determines how many spell points the hero may have. "
+"The hero's knowledge determines how many spell points the hero may have. "
 "Under normal circumstances, a hero is limited to 10 spell points per level "
 "of knowledge."
 msgstr ""
