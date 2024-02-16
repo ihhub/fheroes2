@@ -117,7 +117,7 @@ namespace
                     case MP2::OBJ_NON_ACTION_SHIPWRECK:
                     case MP2::OBJ_DERELICT_SHIP:
                     case MP2::OBJ_NON_ACTION_DERELICT_SHIP: {
-                        std::string modRobber = _( "graveyard|%{object} robber" );
+                        std::string modRobber = _( "shipAndGraveyard|%{object} robber" );
                         StringReplace( modRobber, "%{object}", MP2::StringObject( objectType ) );
                         strs->append( modRobber );
                         break;
