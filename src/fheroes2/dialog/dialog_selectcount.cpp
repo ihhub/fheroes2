@@ -405,7 +405,7 @@ int Dialog::ArmySplitTroop( uint32_t freeSlots, const uint32_t redistributeMax, 
     const int spacer = 10;
     const fheroes2::Text header( troopName, fheroes2::FontType::normalYellow() );
     const int32_t headerHeight = header.height() + 6;
-    
+
     const std::string msg( _( "How many units do you wish to move?" ) );
     fheroes2::Text titleText( std::move( msg ), fheroes2::FontType::normalWhite() );
     titleText.setUniformVerticalAlignment( false );
