@@ -410,12 +410,13 @@ bool Interface::PlayersInfo::QueueEventProcessing()
 
         player = getPlayerFromHandicapRoi( le.GetMouseCursor() );
         if ( player != nullptr ) {
-            fheroes2::showMessage( fheroes2::Text( _( "Handicap" ), fheroes2::FontType::normalYellow() ),
-                                   fheroes2::Text( _( "This lets you change the handicap of a particular player. Only humans may be handicapped. Handicapped players "
-                                                      "start with fewer resources and earn 15 or 30% fewer resources per turn for mild and severe handicaps, "
-                                                      "respectively." ),
-                                                   fheroes2::FontType::normalWhite() ),
-                                   Dialog::ZERO );
+            fheroes2::
+                showMessage( fheroes2::Text( _( "Handicap" ), fheroes2::FontType::normalYellow() ),
+                             fheroes2::Text( _( "This lets you change the handicap of a particular player. Only human players may have a handicap. Handicapped players "
+                                                "start with fewer resources and earn 15 or 30% fewer resources per turn for mild and severe handicaps, "
+                                                "respectively." ),
+                                             fheroes2::FontType::normalWhite() ),
+                             Dialog::ZERO );
             return true;
         }
 

@@ -655,26 +655,29 @@ std::string BuildingInfo::GetConditionDescription() const
 
     case BUILD_DISABLE:
         if ( building == BUILD_SHIPYARD ) {
-            res = _( "Cannot build %{name} because the castle is too far away from an ocean." );
+            res = _( "Cannot build %{name}. The castle is too far away from an ocean." );
             StringReplace( res, "%{name}", Castle::GetStringBuilding( BUILD_SHIPYARD, castle.GetRace() ) );
         }
         else {
-            res = _( "disable build." );
+            // There are currently no other buildings in the Castle Options that can be disabled than the shipyard.
+            // If you added a new disabled building then please add a relevant string.
+            assert( 0 );
+            res = _( "This building has been disabled." );
         }
         break;
 
     case LACK_RESOURCES:
-        res = _( "Cannot afford %{name}." );
+        res = _( "Cannot afford the %{name}." );
         StringReplace( res, "%{name}", GetName() );
         break;
 
     case ALREADY_BUILT:
-        res = _( "%{name} is already built." );
+        res = _( "The %{name} is already built." );
         StringReplace( res, "%{name}", GetName() );
         break;
 
     case REQUIRES_BUILD:
-        res = _( "Cannot build %{name}." );
+        res = _( "Cannot build the %{name}." );
         StringReplace( res, "%{name}", GetName() );
         break;
 
