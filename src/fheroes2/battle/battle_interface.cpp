@@ -4227,7 +4227,7 @@ void Battle::Interface::RedrawActionResistSpell( const Unit & target, const bool
     if ( playSound ) {
         AudioManager::PlaySound( M82::RSBRYFZL );
     }
-    std::string str( _( "The %{name} resist the spell!" ) );
+    std::string str( _n( "The %{name} resists the spell!", "The %{name} resist the spell!", target.GetCount() ) );
     StringReplaceWithLowercase( str, "%{name}", target.GetName() );
     status.SetMessage( str, true );
     status.SetMessage( "", false );
@@ -4572,27 +4572,28 @@ void Battle::Interface::RedrawActionSpellCastPart2( const Spell & spell, const T
 void Battle::Interface::RedrawActionMonsterSpellCastStatus( const Spell & spell, const Unit & attacker, const TargetInfo & target )
 {
     std::string msg;
+    const uint32_t attackerCount = attacker.GetCount();
 
     switch ( spell.GetID() ) {
     case Spell::BLIND:
-        msg = _( "The %{attacker}' attack blinds the %{target}!" );
+        msg = _n( "The %{attacker}'s attack blinds the %{target}!", "The %{attacker}' attack blinds the %{target}!", attackerCount );
         break;
     case Spell::PETRIFY:
-        msg = _( "The %{attacker}' gaze turns the %{target} to stone!" );
+        msg = _n( "The %{attacker}'s gaze turns the %{target} to stone!", "The %{attacker}' gaze turns the %{target} to stone!", attackerCount );
         break;
     case Spell::CURSE:
-        msg = _( "The %{attacker}' curse falls upon the %{target}!" );
+        msg = _n( "The %{attacker}'s curse falls upon the %{target}!", "The %{attacker}' curse falls upon the %{target}!", attackerCount );
         break;
     case Spell::PARALYZE:
-        msg = _( "The %{target} are paralyzed by the %{attacker}!" );
+        msg = _n( "The %{target} are paralyzed by the %{attacker}!", "The %{target} are paralyzed by the %{attacker}!", attackerCount );
         break;
     case Spell::DISPEL:
-        msg = _( "The %{attacker} dispel all good spells on your %{target}!" );
+        msg = _n( "The %{attacker} dispels all good spells on your %{target}!", "The %{attacker} dispel all good spells on your %{target}!", attackerCount );
         break;
     default:
         // Did you add a new monster spell casting ability? Add the logic above!
         assert( 0 );
-        msg = _( "The %{attacker} cast %{spell} on %{target}!" );
+        msg = _n( "The %{attacker} casts %{spell} on the %{target}!", "The %{attacker} cast %{spell} on the %{target}!", attackerCount );
         StringReplace( msg, "%{spell}", spell.GetName() );
         break;
     }
