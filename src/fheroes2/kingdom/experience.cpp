@@ -30,6 +30,6 @@ namespace fheroes2
 
     const char * getExperienceDescription()
     {
-        return _( "Experience allows your heroes to go up levels, increasing their primary and secondary skills." );
+        return _( "Experience allows your heroes to gain levels, increasing their primary and secondary skills." );
     }
 }
