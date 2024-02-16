@@ -541,18 +541,18 @@ bool Interface::PlayersInfo::readOnlyEventProcessing()
         switch ( player->getHandicapStatus() ) {
         case Player::HandicapStatus::NONE:
             fheroes2::showMessage( fheroes2::Text( _( "No Handicap" ), fheroes2::FontType::normalYellow() ),
-                                   fheroes2::Text( _( "No special restrictions on start resources and earning them per turn." ), fheroes2::FontType::normalWhite() ),
+                                   fheroes2::Text( _( "No special restrictions on starting resources and resource income per turn." ), fheroes2::FontType::normalWhite() ),
                                    Dialog::ZERO );
             break;
         case Player::HandicapStatus::MILD:
             fheroes2::showMessage( fheroes2::Text( _( "Mild Handicap" ), fheroes2::FontType::normalYellow() ),
-                                   fheroes2::Text( _( "Mild handicapped players start with fewer resources and earn 15% fewer resources per turn." ),
+                                   fheroes2::Text( _( "Players with mild handicap start with fewer resources and earn 15% fewer resources per turn." ),
                                                    fheroes2::FontType::normalWhite() ),
                                    Dialog::ZERO );
             break;
         case Player::HandicapStatus::SEVERE:
             fheroes2::showMessage( fheroes2::Text( _( "Severe Handicap" ), fheroes2::FontType::normalYellow() ),
-                                   fheroes2::Text( _( "Severe handicapped players start with fewer resources and earn 30% fewer resources per turn." ),
+                                   fheroes2::Text( _( "Players with severe handicap start with fewer resources and earn 30% fewer resources per turn." ),
                                                    fheroes2::FontType::normalWhite() ),
                                    Dialog::ZERO );
             break;

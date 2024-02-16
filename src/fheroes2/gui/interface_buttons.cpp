@@ -197,7 +197,7 @@ fheroes2::GameMode Interface::ButtonsArea::QueueEventProcessing()
             Dialog::ZERO );
     }
     else if ( le.MousePressRight( kingdomRect ) ) {
-        fheroes2::showStandardTextMessage( _( "Kingdom Summary" ), _( "View a Summary of your Kingdom." ), Dialog::ZERO );
+        fheroes2::showStandardTextMessage( _( "Kingdom Summary" ), _( "View a summary of your Kingdom." ), Dialog::ZERO );
     }
     else if ( le.MousePressRight( spellRect ) ) {
         fheroes2::showStandardTextMessage( _( "Cast Spell" ), _( "Cast an adventure spell." ), Dialog::ZERO );
