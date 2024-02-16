@@ -403,12 +403,13 @@ int Dialog::ArmySplitTroop( uint32_t freeSlots, const uint32_t redistributeMax, 
 
     const uint32_t min = std::min( 1U, redistributeMax );
     const int spacer = 10;
-
-    std::string msg( _( "How many %{troops} do you wish to move?" ) );
-    StringReplace( msg, "%{troops}", troopName );
+    const fheroes2::Text header( troopName, fheroes2::FontType::normalYellow() );
+    const int32_t headerHeight = header.height() + 6;
+    
+    const std::string msg( _( "How many units do you wish to move?" ) );
     fheroes2::Text titleText( std::move( msg ), fheroes2::FontType::normalWhite() );
     titleText.setUniformVerticalAlignment( false );
-    const int32_t titleHeight = titleText.rows( BOXAREA_WIDTH ) * titleText.height();
+    const int32_t titleHeight = headerHeight + titleText.rows( BOXAREA_WIDTH ) * titleText.height();
 
     fheroes2::Text slotSeparationText( _( "Select how many slots to separate into:" ), fheroes2::FontType::normalWhite() );
     slotSeparationText.setUniformVerticalAlignment( false );
@@ -425,7 +426,8 @@ int Dialog::ArmySplitTroop( uint32_t freeSlots, const uint32_t redistributeMax, 
     const int center = pos.x + pos.width / 2;
     const int textTopOffset = 13;
 
-    titleText.draw( pos.x, pos.y + 2, BOXAREA_WIDTH, display );
+    header.draw( pos.x, pos.y + 2, BOXAREA_WIDTH, display );
+    titleText.draw( pos.x, pos.y + 2 + headerHeight, BOXAREA_WIDTH, display );
 
     sel.SetPos( fheroes2::Point( pos.x + 70, pos.y + textTopOffset + titleHeight ) );
     sel.Redraw();
