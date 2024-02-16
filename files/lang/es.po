@@ -1,5 +1,5 @@
 # Spanish translation for fheroes2
-# Copyright (C) 2022 fheroes2 team <fhomm2@gmail.com>
+# Copyright (C) 2024 fheroes2 team <fhomm2@gmail.com>
 # This file is distributed under the same license as the fheroes2 package.
 #
 msgid ""
@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-16 01:10+0000\n"
-"PO-Revision-Date: 2024-02-05 05:47+0100\n"
+"PO-Revision-Date: 2024-02-16 05:07+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
 "Language: es\n"
@@ -161,7 +161,7 @@ msgstr ""
 "SIÓN"
 
 msgid "HOT SEAT"
-msgstr ""
+msgstr "ASIENTO CALIENTE"
 
 msgid "2 PLAYERS"
 msgstr ""
@@ -213,7 +213,7 @@ msgid "CASTLE"
 msgstr "CASTILLO"
 
 msgid "TOWN"
-msgstr ""
+msgstr "CIUDAD"
 
 msgid ""
 "D\n"
@@ -647,7 +647,7 @@ msgid "Spell Points"
 msgstr "Maná"
 
 msgid "Hero's Options"
-msgstr "Opciones de Héroe"
+msgstr "Opciones del Héroe"
 
 msgid "Cast Spell"
 msgstr "Lanzar Hechizo"
@@ -930,7 +930,6 @@ msgstr "Reflejo creado."
 msgid "The mirror image is destroyed!"
 msgstr ""
 
-#, fuzzy
 msgid "Are you sure you want to interrupt the auto combat?"
 msgstr "¿Estas seguro de que quieres interrumpir la batalla automática?"
 
@@ -965,7 +964,7 @@ msgid ""
 "Through eagle-eyed observation, %{name} is able to learn the magic spell "
 "%{spell}."
 msgstr ""
-"Mediante la observación del ojo de halcón, %{name} es capaz de aprender el "
+"Mediante la observación del ojo de aquila, %{name} es capaz de aprender el "
 "hechizo mágico %{spell}."
 
 msgid "Human"
@@ -978,7 +977,7 @@ msgid "Start"
 msgstr ""
 
 msgid "Start the battle."
-msgstr "Comienza la batalla."
+msgstr "Comenzar la batalla."
 
 msgid "Exit"
 msgstr "Salir"
@@ -1071,7 +1070,7 @@ msgid "Annexation"
 msgstr "Anexión"
 
 msgid "Force of Arms"
-msgstr "La Fuerza de las Armas"
+msgstr "Fuerza de las Armas"
 
 msgid "Save the Dwarves"
 msgstr "Salva a los Enanos"
@@ -1899,9 +1898,8 @@ msgstr ""
 msgid "disable build."
 msgstr ""
 
-#, fuzzy
 msgid "Cannot afford %{name}."
-msgstr "No se puede pagar el %{name}"
+msgstr "Recursos insuficientes para construir %{name}."
 
 msgid "%{name} is already built."
 msgstr "El %{name} ya está construido."
@@ -4852,7 +4850,7 @@ msgid "' language, but the current language of the game is '"
 msgstr ""
 
 msgid "Hot Seat"
-msgstr "Asiento caliente."
+msgstr "Asiento caliente"
 
 msgid ""
 "Play a Hot Seat game, where 2 to 4 players play around the same computer, "
@@ -5130,7 +5128,7 @@ msgstr ""
 "Todo está perdido."
 
 msgid "Defeat!"
-msgstr ""
+msgstr "¡Derrota!"
 
 msgid ""
 "Base score: %{score}\n"
@@ -5450,10 +5448,10 @@ msgstr "¿Estás seguro que quieres reiniciar? (Tu partida actual se perderá.)"
 
 msgid "Are you sure you want to overwrite the save with this name?"
 msgstr ""
-"¿Estás seguro de que quieres sobreescribir el guardado con este nombre?"
+"¿Estás seguro de que quieres sobreescribir la guardada con este nombre?"
 
 msgid "Game saved successfully."
-msgstr "Partida grabada con éxito."
+msgstr "Partida guardada con éxito."
 
 msgid "There was an issue during saving."
 msgstr ""
@@ -5955,16 +5953,18 @@ msgid ""
 "You come across an old wagon left by a trader who didn't quite make it to "
 "safe terrain."
 msgstr ""
+"Te encuentras con una vieja carreta abandonada por un comerciante que no "
+"llegó a terreno seguro."
 
 msgid "Unfortunately, others have found it first, and the wagon is empty."
 msgstr ""
 "Desafortunadamente, otros han estado aquí antes, y el vagón está vacío."
 
 msgid "Searching inside, you find the %{artifact}."
-msgstr ""
+msgstr "Buscando dentro, encuentras %{artifact}."
 
 msgid "Inside, you find some of the wagon's cargo still intact."
-msgstr ""
+msgstr "Dentro, descubres que parte de la carga aún está allí."
 
 msgid "You search through the flotsam, and find some wood and some gold."
 msgstr ""
@@ -5977,7 +5977,7 @@ msgid "You search through the flotsam, but find nothing."
 msgstr "Buscas entre los restos del naufragio pero no encuentras nada."
 
 msgid "Shrine of the 1st Circle"
-msgstr "Capilla del Primer Círculo"
+msgstr "Santuario del Primer Círculo"
 
 msgid ""
 "You come across a small shrine attended by a group of novice acolytes.\n"
@@ -5989,7 +5989,7 @@ msgstr ""
 "'%{spell}'."
 
 msgid "Shrine of the 2nd Circle"
-msgstr "Altar del Segundo Círculo"
+msgstr "Santuario del Segundo Círculo"
 
 msgid ""
 "You come across an ornate shrine attended by a group of rotund friars.\n"
@@ -6001,7 +6001,7 @@ msgstr ""
 "'%{spell}'."
 
 msgid "Shrine of the 3rd Circle"
-msgstr "Altar del Tercer Círculo"
+msgstr "Santuario del Tercer Círculo"
 
 msgid ""
 "You come across a lavish shrine attended by a group of high priests.\n"
@@ -7434,6 +7434,8 @@ msgid ""
 "\n"
 " for a fee of %{gold} gold."
 msgstr ""
+"\n"
+" por un precio de %{gold} piezas de oro."
 
 msgid "These weak creatures will surely flee before us."
 msgstr "Esas débiles criaturas seguramente huirán nada más vernos."
@@ -7455,13 +7457,12 @@ msgstr ""
 "La potencia de hechizo del héroe determina la longitud o el poder de los "
 "hechizos."
 
-#, fuzzy
 msgid ""
 "The hero's knowledge determines how many spell points the hero may have. "
 "Under normal circumstances, a hero is limited to 10 spell points per level "
 "of knowledge."
 msgstr ""
-" El conocimiento del héroe determina el número máximo de puntos de Maná que "
+"El conocimiento del héroe determina el número máximo de puntos de Maná que "
 "el héroe puede alcanzar. Bajo circunstancias normales, un héroe está "
 "limitado a 10 puntos de Maná por nivel de conocimiento."
 
@@ -7651,14 +7652,14 @@ msgstr ""
 msgid "%{skill} eliminates the movement penalty for rough terrain."
 msgstr "La %{skill} elimina la penalización de movimiento por terreno agreste."
 
-#, fuzzy
 msgid ""
 "%{skill} increases the damage done by the hero's range attacking creatures "
 "by %{count} percent and eliminates the %{penalty} percent penalty for the "
 "hero's troops shooting past obstacles (e.g. castle walls)."
 msgstr ""
 "El %{skill} aumenta un %{count}% el daño infligido por las criaturas "
-"atacantes a distancia del héroe."
+"atacantes a distancia del héroe y elimina la penalización del %{penalty}% al "
+"disparar más allá de obstáculos (por ejemplo, muros de castillos)."
 
 msgid "%{skill} increases the hero's movement points by %{count} percent."
 msgstr ""
@@ -7680,7 +7681,7 @@ msgstr ""
 msgid ""
 "Approximately %{count} percent of the creatures may offer to join the hero."
 msgstr ""
-"Aproximadamente el %{count} de las criaturas pueden ofrecer unirse al héroe."
+"Aproximadamente el %{count}% de las criaturas pueden ofrecer unirse al héroe."
 
 msgid "All of the creatures may offer to join the hero."
 msgstr "Todas las criaturas pueden ofrecer unirse al héroe."
@@ -9590,6 +9591,8 @@ msgid ""
 "The %{name} halves all damage the hero's troops receive from lightning "
 "spells."
 msgstr ""
+"%{name} reduce a la mitad todo el daño que las tropas del héroe reciben de "
+"hechizos de rayo."
 
 msgid ""
 "A traveling tinker in need of supplies offers you a helm with a thunderbolt "
@@ -9620,6 +9623,8 @@ msgid ""
 "The %{name} causes the hero's fire spells to do %{count} percent more damage "
 "to enemy troops."
 msgstr ""
+"%{name} hace que los hechizos de fuego del héroe hagan un %{count}% más de "
+"daño a las tropas enemigas."
 
 msgid ""
 "Your wanderings bring you into contact with a tribe of ape-like beings using "
@@ -9635,6 +9640,8 @@ msgid ""
 "The %{name} causes the hero's lightning spells to do %{count} percent more "
 "damage to enemy troops."
 msgstr ""
+"%{name} hace que los hechizos de rayo del héroe hagan un %{count}% más de "
+"daño a las tropas enemigas."
 
 msgid ""
 "While waiting out a storm, a lighting bolt strikes a nearby cottage's "
@@ -9648,6 +9655,8 @@ msgstr "El Anillo-Serpiente"
 
 msgid "The %{name} halves the casting cost of all of the hero's bless spells."
 msgstr ""
+"%{name} reduce a la mitad el coste de lanzamiento de todos los hechizos de "
+"bendición del héroe."
 
 msgid ""
 "You've found an oddly shaped ring on the finger of a long dead traveler. The "
@@ -9661,6 +9670,8 @@ msgid ""
 "The %{name} doubles the effectiveness of all of the hero's resurrect and "
 "animate spells."
 msgstr ""
+"%{name} duplica la eficacia de todos los hechizos de resurrección y animar "
+"del héroe."
 
 msgid ""
 "A fierce windstorm reveals the entrance to a buried tomb. Your investigation "
@@ -9674,6 +9685,7 @@ msgstr "El Libro de los Elementos"
 msgid ""
 "The %{name} doubles the effectiveness of all of the hero's summoning spells."
 msgstr ""
+"%{name} duplica la eficacia de todos los hechizos de invocación del héroe."
 
 msgid ""
 "You come across a conjurer who begs to accompany you and your army awhile "
@@ -9686,6 +9698,8 @@ msgstr "El Anillo Elemental"
 
 msgid "The %{name} halves the casting cost of all summoning spells."
 msgstr ""
+"%{name} reduce a la mitad el coste de lanzamiento de todos los hechizos de "
+"invocación."
 
 msgid ""
 "While pausing to rest, you notice a bobcat climbing a short tree to get at a "
@@ -9698,6 +9712,8 @@ msgstr "El Colgante Sagrado"
 
 msgid "The %{name} makes all of the hero's troops immune to curse spells."
 msgstr ""
+"%{name} hace que todas las tropas del héroe sean inmunes a los hechizos de "
+"maldición."
 
 msgid ""
 "In your wanderings you come across a hermit living in a small, tidy hut. "
@@ -9710,6 +9726,8 @@ msgstr "El Colgante de la Voluntad Libre"
 
 msgid "The %{name} makes all of the hero's troops immune to hypnotize spells."
 msgstr ""
+"%{name} hace que todas las tropas del héroe sean inmunes a los hechizos de "
+"hipnotizar."
 
 msgid ""
 "Responding to cries for help, you find river Sprites making a sport of "
@@ -9723,6 +9741,8 @@ msgstr "El Colgante de la Vida"
 
 msgid "The %{name} makes all of the hero's troops immune to death spells."
 msgstr ""
+"%{name} hace que todas las tropas del héroe sean inmunes a los hechizos de "
+"muerte."
 
 msgid ""
 "A brief roadside encounter with a small caravan and a game of knucklebones "
@@ -9735,6 +9755,8 @@ msgstr "El Colgante de la Serenidad"
 
 msgid "The %{name} makes all of the hero's troops immune to berserk spells."
 msgstr ""
+"%{name} hace que todas las tropas del héroe sean inmunes a los hechizos de "
+"berserk."
 
 msgid ""
 "The sounds of combat draw you to the scene of a fight between an old "
@@ -9748,6 +9770,8 @@ msgstr "El Colgante Visionario"
 
 msgid "The %{name} makes all of the hero's troops immune to blindness spells."
 msgstr ""
+"%{name} hace que todas las tropas del héroe sean inmunes a los hechizos de "
+"ceguera."
 
 msgid ""
 "You come upon a very old woman, long blind from cataracts and dying alone. "
@@ -9761,6 +9785,8 @@ msgstr "El Colgante Cinético"
 
 msgid "The %{name} makes all of the hero's troops immune to paralyze spells."
 msgstr ""
+"%{name} hace que todas las tropas del héroe sean inmunes a los hechizos de "
+"paralizar."
 
 msgid ""
 "You come across a golem wearing a glowing pendant and blocking your way. "
@@ -9773,6 +9799,8 @@ msgstr "El Colgante de la Muerte"
 
 msgid "The %{name} makes all of the hero's troops immune to holy spells."
 msgstr ""
+"%{name} hace que todas las tropas del héroe sean inmunes a los hechizos "
+"sagrados."
 
 msgid ""
 "A quick and deadly battle with a Necromancer wins you his magical pendant. "
@@ -9786,6 +9814,8 @@ msgstr "La Varita de la Negación"
 msgid ""
 "The %{name} makes all of the hero's troops immune to dispel magic spells."
 msgstr ""
+"%{name} hace que todas las tropas del héroe sean inmunes a los hechizos de "
+"disipar."
 
 msgid ""
 "You meet an old Wizard friend of yours traveling in the opposite direction. "
@@ -9800,6 +9830,8 @@ msgid ""
 "The %{name} eliminates the %{count} percent penalty for the hero's troops "
 "shooting past obstacles (e.g. castle walls)."
 msgstr ""
+"%{name} elimina la penalización del %{count}% para las tropas del héroe que "
+"disparan más allá de obstáculos (por ejemplo, muros de castillos)."
 
 msgid ""
 "A chance meeting with a famous Archer finds you in a game of knucklebones "
@@ -9831,6 +9863,8 @@ msgid ""
 "The %{name} reduces the cost of surrender to %{count} percent of the total "
 "cost of troops the hero has in their army."
 msgstr ""
+"%{name} reduce el coste de la rendición al %{count}% del coste total de las "
+"tropas que el héroe tiene en su ejército."
 
 msgid ""
 "You pause to help a diplomat with a broken axle fix his problem. In "
@@ -9873,6 +9907,8 @@ msgid ""
 "The %{name} provides endless ammunition for all of the hero's troops that "
 "shoot."
 msgstr ""
+"%{name} proporciona munición infinita para todas las tropas del héroe que "
+"disparan."
 
 msgid ""
 "An ammunition cart in the middle of an old battlefield catches your eye. "
@@ -9896,7 +9932,7 @@ msgid "Hideous Mask"
 msgstr "La Máscara Horrenda"
 
 msgid "The %{name} prevents all 'wandering' armies from joining the hero."
-msgstr ""
+msgstr "%{name} impide que todos los ejércitos \"errantes\" se unan al héroe."
 
 msgid ""
 "Your looting of the grave of Sinfilas Gardolad, the famous shapeshifting "
@@ -9909,7 +9945,7 @@ msgid "Endless Pouch of Sulfur"
 msgstr "La Bolsa Inagotable de Sulfuro"
 
 msgid "The %{name} provides %{count} unit of sulfur per day."
-msgstr ""
+msgstr "%{name} proporciona %{count} unidades de azufre al día."
 
 msgid ""
 "You visit an alchemist who, upon seeing your army, is swayed by the "
@@ -9921,7 +9957,7 @@ msgid "Endless Vial of Mercury"
 msgstr "El Frasco Inagotable de Mercurio"
 
 msgid "The %{name} provides %{count} unit of mercury per day."
-msgstr ""
+msgstr "%{name} proporciona %{count} unidades de mercurio al día."
 
 msgid ""
 "A brief stop at a hastily abandoned Wizard's tower turns up a magical vial "
@@ -9933,7 +9969,7 @@ msgid "Endless Pouch of Gems"
 msgstr "La Bolsa Inagotable de Gemas"
 
 msgid "The %{name} provides %{count} unit of gems per day."
-msgstr ""
+msgstr "%{name} proporciona %{count} unidades de gemas al día."
 
 msgid ""
 "A short rainstorm brings forth a rainbow...and you can see the end of it. "
@@ -9946,7 +9982,7 @@ msgid "Endless Cord of Wood"
 msgstr "La Cuerda Interminable de Madera"
 
 msgid "The %{name} provides %{count} unit of wood per day."
-msgstr ""
+msgstr "%{name} proporciona %{count} unidades de madera al día."
 
 msgid ""
 "Pausing to rest and light a cook fire, you pull wood out of a nearby pile of "
@@ -9959,7 +9995,7 @@ msgid "Endless Cart of Ore"
 msgstr "El Carro de Piedra Inagotable"
 
 msgid "The %{name} provides %{count} unit of ore per day."
-msgstr ""
+msgstr "%{name} proporciona %{count} unidades de mineral al día."
 
 msgid ""
 "You've found a Goblin weapon smithy making weapons for use against humans. "
@@ -10594,7 +10630,7 @@ msgstr ""
 "las criaturas."
 
 msgid "Elemental Storm"
-msgstr "LLuvia de Meteoritos"
+msgstr "Tormenta Elemental"
 
 msgid "Magical elements pour down on the battlefield, damaging all creatures."
 msgstr ""
@@ -10727,7 +10763,7 @@ msgid "Summon Air Elemental"
 msgstr "LLamar al Elemental del Aire"
 
 msgid "Summons Air Elementals to fight for your army."
-msgstr "LLama a los Elementales del Aire para combatir en tu ejercito."
+msgstr "LLama a los Elementales del Aire para luchar en tu ejercito."
 
 msgid "Summon Fire Elemental"
 msgstr "LLamar al Elemental del Fuego"
@@ -10736,7 +10772,7 @@ msgid "Summons Fire Elementals to fight for your army."
 msgstr "LLama a los Elementales del Fuego para luchar en tu ejercito."
 
 msgid "Summon Water Elemental"
-msgstr "LLamar Elemental del Agua"
+msgstr "LLamar al Elemental del Agua"
 
 msgid "Summons Water Elementals to fight for your army."
 msgstr "LLama a los Elementales del Agua para luchar en tu ejercito."
@@ -10751,7 +10787,7 @@ msgid "Causes all mines across the land to become visible."
 msgstr "Hace que todas las minas del territorio sean visibles."
 
 msgid "View Mines"
-msgstr "Ver minas"
+msgstr "Ver Minas"
 
 msgid "Causes all resources across the land to become visible."
 msgstr "Hace que todos los recursos del territorio sean visibles."
@@ -10840,19 +10876,19 @@ msgstr ""
 "recursos para nadie."
 
 msgid "Set Earth Guardian"
-msgstr "Establecer guardian de la Tierra"
+msgstr "Establecer Guardián de la Tierra"
 
 msgid "Sets Earth Elementals to guard a mine against enemy armies."
 msgstr "Ordena a los Elementales de la Tierra que protejan una mina."
 
 msgid "Set Air Guardian"
-msgstr "Establecer guardian del aire"
+msgstr "Establecer Guardián del Aire"
 
 msgid "Sets Air Elementals to guard a mine against enemy armies."
 msgstr "Ordena a los Elementales del Aire que protejan una mina."
 
 msgid "Set Fire Guardian"
-msgstr "Establecer guardia del fuego"
+msgstr "Establecer Guardián del Fuego"
 
 msgid "Sets Fire Elementals to guard a mine against enemy armies."
 msgstr ""
@@ -10860,7 +10896,7 @@ msgstr ""
 "enemigos."
 
 msgid "Set Water Guardian"
-msgstr "Establecer guardia del agua"
+msgstr "Establecer Guardián del Agua"
 
 msgid "Sets Water Elementals to guard a mine against enemy armies."
 msgstr "Ordenar que los Elementales del Agua protejan una mina."
@@ -10945,23 +10981,24 @@ msgstr "Ver %{spell}"
 msgid "This spell does %{damage} points of damage."
 msgstr "Este hechizo hace %{damage} de daño."
 
-#, fuzzy
 msgid ""
 "This spell summons\n"
 "%{count} %{monster}."
-msgstr "Lanzar %{spell} sobre %{monster}"
+msgstr ""
+"Este hechizo llama a\n"
+"%{count} %{monster}."
 
 msgid "This spell restores %{hp} HP."
-msgstr ""
+msgstr "Este hechizo restaura %{hp} PV."
 
 msgid "This spell summons %{count} %{monster} to guard the mine."
 msgstr ""
 
 msgid "The nearest town is %{town}."
-msgstr ""
+msgstr "La ciudad más cercana es %{town}."
 
 msgid "This town is occupied by your hero %{hero}."
-msgstr ""
+msgstr "Esta ciudad está ocupada por el héroe %{hero}."
 
 msgid ""
 "This spell controls up to\n"
