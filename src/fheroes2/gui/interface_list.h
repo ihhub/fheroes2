@@ -438,6 +438,9 @@ namespace Interface
                         // Remember where has the drag started.
                         ptReference = mousePosition;
                         _dragInProgress = true;
+
+                        // We have just started the drag, it might as well be a legitimate click.
+                        _lockClick = false;
                     }
 
                     fheroes2::Point deltaPoint = ptReference - mousePosition;
@@ -489,22 +492,16 @@ namespace Interface
                     if ( ActionListCursor( item, mousePos ) )
                         return true;
 
-                    if ( le.MouseClickLeft( rtAreaItems ) ) {
-                        if ( !_lockClick ) {
-                            // This is a legitimate click.
-                            if ( id == _currentId ) {
-                                ActionListDoubleClick( item, mousePos, rtAreaItems.x, rtAreaItems.y + offsetY );
-                            }
-                            else {
-                                _currentId = id;
-                                ActionListSingleClick( item, mousePos, rtAreaItems.x, rtAreaItems.y + offsetY );
-                            }
-                            return true;
+                    if ( le.MouseClickLeft( rtAreaItems ) && !_lockClick ) {
+                        // This is a legitimate click and not a mouse-up on a finished drag.
+                        if ( id == _currentId ) {
+                            ActionListDoubleClick( item, mousePos, rtAreaItems.x, rtAreaItems.y + offsetY );
                         }
                         else {
-                            // This was a pseudo-click triggered by mouse-up when finishing the drag.
-                            _lockClick = false;
+                            _currentId = id;
+                            ActionListSingleClick( item, mousePos, rtAreaItems.x, rtAreaItems.y + offsetY );
                         }
+                        return true;
                     }
 
                     if ( le.MousePressRight( rtAreaItems ) ) {
@@ -514,10 +511,6 @@ namespace Interface
                 }
 
                 needRedraw = false;
-            }
-            if ( le.MouseReleaseLeft() ) {
-                // There is definitely no drag in progress, we make sure not to disable legitimate clicks.
-                _lockClick = false;
             }
 
             return false;
