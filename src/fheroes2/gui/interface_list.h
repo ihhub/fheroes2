@@ -327,10 +327,6 @@ namespace Interface
             le.MousePressLeft( buttonPgUp.area() ) ? buttonPgUp.drawOnPress() : buttonPgUp.drawOnRelease();
             le.MousePressLeft( buttonPgDn.area() ) ? buttonPgDn.drawOnPress() : buttonPgDn.drawOnRelease();
 
-            if ( !le.MousePressLeft() ) {
-                _dragInProgress = false;
-            }
-
             if ( !IsValid() ) {
                 return false;
             }
@@ -434,10 +430,10 @@ namespace Interface
                 }
 
                 if ( le.MousePressLeft( rtAreaItems ) ) {
-                    if ( !_dragInProgress ) {
+                    if ( !le.isDragInProgress() ) {
                         // Remember where has the drag started.
                         ptReference = mousePosition;
-                        _dragInProgress = true;
+                        le.setDragStatus( true );
 
                         // We have just started the drag, it might as well be a legitimate click.
                         _lockClick = false;
@@ -546,7 +542,6 @@ namespace Interface
         bool useHotkeys{ true };
 
         bool _updateScrollbar{ false };
-        bool _dragInProgress{ false };
         bool _lockClick{ false };
 
         fheroes2::TimedEventValidator _timedButtonPgUp;

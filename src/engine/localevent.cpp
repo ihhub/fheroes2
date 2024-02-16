@@ -667,6 +667,7 @@ LocalEvent::LocalEvent()
     : modes( 0 )
     , key_value( fheroes2::Key::NONE )
     , mouse_button( 0 )
+    , _isDragInProgress( false )
     , _mouseButtonLongPressDelay( mouseButtonLongPressTimeout )
 {}
 
@@ -705,6 +706,9 @@ void LocalEvent::OpenTouchpad()
 LocalEvent & LocalEvent::Get()
 {
     static LocalEvent le;
+    if ( !le.MousePressLeft() ) {
+        le._isDragInProgress = false;
+    }
 
     return le;
 }

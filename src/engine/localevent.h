@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2008 by Josh Matthews <josh@joshmatthews.net>           *
@@ -306,6 +306,16 @@ public:
         }
     }
 
+    bool isDragInProgress() const
+    {
+        return _isDragInProgress;
+    }
+
+    void setDragStatus( const bool inProgress )
+    {
+        _isDragInProgress = inProgress;
+    }
+
 private:
     LocalEvent();
 
@@ -364,6 +374,7 @@ private:
     uint32_t modes;
     fheroes2::Key key_value;
     int mouse_button;
+    bool _isDragInProgress;
 
     fheroes2::Point mouse_pl; // press left
     fheroes2::Point mouse_pm; // press middle
