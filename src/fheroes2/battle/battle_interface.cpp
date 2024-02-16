@@ -3391,7 +3391,7 @@ void Battle::Interface::RedrawTroopDefaultDelay( Unit & unit )
 
 void Battle::Interface::RedrawActionSkipStatus( const Unit & unit )
 {
-    std::string msg = _( "%{name} skip their turn." );
+    std::string msg = _n( "The %{name} skips their turn.", "The %{name} skip their turn.", unit.GetCount() );
     StringReplaceWithLowercase( msg, "%{name}", unit.GetName() );
 
     status.SetMessage( msg, true );
