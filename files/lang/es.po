@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-15 00:16+0000\n"
-"PO-Revision-Date: 2024-02-16 02:38+0100\n"
+"PO-Revision-Date: 2024-02-16 03:21+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
 "Language: es\n"
@@ -647,7 +647,7 @@ msgid "Spell Points"
 msgstr "Maná"
 
 msgid "Hero's Options"
-msgstr "Opciones de Héroe"
+msgstr "Opciones del Héroe"
 
 msgid "Cast Spell"
 msgstr "Lanzar Hechizo"
@@ -930,7 +930,6 @@ msgstr "Reflejo creado."
 msgid "The mirror image is destroyed!"
 msgstr ""
 
-#, fuzzy
 msgid "Are you sure you want to interrupt the auto combat?"
 msgstr "¿Estas seguro de que quieres interrumpir la batalla automática?"
 
@@ -965,7 +964,7 @@ msgid ""
 "Through eagle-eyed observation, %{name} is able to learn the magic spell "
 "%{spell}."
 msgstr ""
-"Mediante la observación del ojo de halcón, %{name} es capaz de aprender el "
+"Mediante la observación del ojo de aquila, %{name} es capaz de aprender el "
 "hechizo mágico %{spell}."
 
 msgid "Human"
@@ -978,7 +977,7 @@ msgid "Start"
 msgstr ""
 
 msgid "Start the battle."
-msgstr "Comienza la batalla."
+msgstr "Comenzar la batalla."
 
 msgid "Exit"
 msgstr "Salir"
@@ -1071,7 +1070,7 @@ msgid "Annexation"
 msgstr "Anexión"
 
 msgid "Force of Arms"
-msgstr "La Fuerza de las Armas"
+msgstr "Fuerza de las Armas"
 
 msgid "Save the Dwarves"
 msgstr "Salva a los Enanos"
@@ -1899,9 +1898,8 @@ msgstr ""
 msgid "disable build."
 msgstr ""
 
-#, fuzzy
 msgid "Cannot afford %{name}."
-msgstr "No se puede pagar el %{name}"
+msgstr "Recursos insuficientes para construir %{name}."
 
 msgid "%{name} is already built."
 msgstr "El %{name} ya está construido."
@@ -5449,10 +5447,10 @@ msgstr "¿Estás seguro que quieres reiniciar? (Tu partida actual se perderá.)"
 
 msgid "Are you sure you want to overwrite the save with this name?"
 msgstr ""
-"¿Estás seguro de que quieres sobreescribir el guardado con este nombre?"
+"¿Estás seguro de que quieres sobreescribir la guardada con este nombre?"
 
 msgid "Game saved successfully."
-msgstr "Partida grabada con éxito."
+msgstr "Partida guardada con éxito."
 
 msgid "There was an issue during saving."
 msgstr ""
@@ -5960,7 +5958,7 @@ msgstr ""
 "Desafortunadamente, otros han estado aquí antes, y el vagón está vacío."
 
 msgid "Searching inside, you find the %{artifact}."
-msgstr ""
+msgstr "Buscando dentro, encuentras %{artifact}."
 
 msgid "Inside, you find some of the wagon's cargo still intact."
 msgstr ""
@@ -5976,7 +5974,7 @@ msgid "You search through the flotsam, but find nothing."
 msgstr "Buscas entre los restos del naufragio pero no encuentras nada."
 
 msgid "Shrine of the 1st Circle"
-msgstr "Capilla del Primer Círculo"
+msgstr "Santuario del Primer Círculo"
 
 msgid ""
 "You come across a small shrine attended by a group of novice acolytes.\n"
@@ -5988,7 +5986,7 @@ msgstr ""
 "'%{spell}'."
 
 msgid "Shrine of the 2nd Circle"
-msgstr "Altar del Segundo Círculo"
+msgstr "Santuario del Segundo Círculo"
 
 msgid ""
 "You come across an ornate shrine attended by a group of rotund friars.\n"
@@ -6000,7 +5998,7 @@ msgstr ""
 "'%{spell}'."
 
 msgid "Shrine of the 3rd Circle"
-msgstr "Altar del Tercer Círculo"
+msgstr "Santuario del Tercer Círculo"
 
 msgid ""
 "You come across a lavish shrine attended by a group of high priests.\n"
@@ -7678,7 +7676,7 @@ msgstr ""
 msgid ""
 "Approximately %{count} percent of the creatures may offer to join the hero."
 msgstr ""
-"Aproximadamente el %{count} de las criaturas pueden ofrecer unirse al héroe."
+"Aproximadamente el %{count}% de las criaturas pueden ofrecer unirse al héroe."
 
 msgid "All of the creatures may offer to join the hero."
 msgstr "Todas las criaturas pueden ofrecer unirse al héroe."
@@ -10592,7 +10590,7 @@ msgstr ""
 "las criaturas."
 
 msgid "Elemental Storm"
-msgstr "LLuvia de Meteoritos"
+msgstr "Tormenta Elemental"
 
 msgid "Magical elements pour down on the battlefield, damaging all creatures."
 msgstr ""
@@ -10626,13 +10624,13 @@ msgid ""
 msgstr ""
 
 msgid "Cold Ray"
-msgstr "Rayo Frío"
+msgstr "Rayo de Frío"
 
 msgid "Drains body heat from a single enemy unit."
 msgstr "Absorbe el calor del cuerpo de una sola unidad enemiga."
 
 msgid "Cold Ring"
-msgstr "Anillo Frío"
+msgstr "Anillo de Frío"
 
 msgid ""
 "Drains body heat from all units surrounding the center point, but not "
@@ -10725,7 +10723,7 @@ msgid "Summon Air Elemental"
 msgstr "LLamar al Elemental del Aire"
 
 msgid "Summons Air Elementals to fight for your army."
-msgstr "LLama a los Elementales del Aire para combatir en tu ejercito."
+msgstr "LLama a los Elementales del Aire para luchar en tu ejercito."
 
 msgid "Summon Fire Elemental"
 msgstr "LLamar al Elemental del Fuego"
@@ -10734,7 +10732,7 @@ msgid "Summons Fire Elementals to fight for your army."
 msgstr "LLama a los Elementales del Fuego para luchar en tu ejercito."
 
 msgid "Summon Water Elemental"
-msgstr "LLamar Elemental del Agua"
+msgstr "LLamar al Elemental del Agua"
 
 msgid "Summons Water Elementals to fight for your army."
 msgstr "LLama a los Elementales del Agua para luchar en tu ejercito."
@@ -10749,7 +10747,7 @@ msgid "Causes all mines across the land to become visible."
 msgstr "Hace que todas las minas del territorio sean visibles."
 
 msgid "View Mines"
-msgstr "Ver minas"
+msgstr "Ver Minas"
 
 msgid "Causes all resources across the land to become visible."
 msgstr "Hace que todos los recursos del territorio sean visibles."
@@ -10838,19 +10836,19 @@ msgstr ""
 "recursos para nadie."
 
 msgid "Set Earth Guardian"
-msgstr "Establecer guardian de la Tierra"
+msgstr "Establecer Guardian de la Tierra"
 
 msgid "Sets Earth Elementals to guard a mine against enemy armies."
 msgstr "Ordena a los Elementales de la Tierra que protejan una mina."
 
 msgid "Set Air Guardian"
-msgstr "Establecer guardian del aire"
+msgstr "Establecer Guardian del Aire"
 
 msgid "Sets Air Elementals to guard a mine against enemy armies."
 msgstr "Ordena a los Elementales del Aire que protejan una mina."
 
 msgid "Set Fire Guardian"
-msgstr "Establecer guardia del fuego"
+msgstr "Establecer Guardia del Fuego"
 
 msgid "Sets Fire Elementals to guard a mine against enemy armies."
 msgstr ""
@@ -10858,7 +10856,7 @@ msgstr ""
 "enemigos."
 
 msgid "Set Water Guardian"
-msgstr "Establecer guardia del agua"
+msgstr "Establecer Guardia del Agua"
 
 msgid "Sets Water Elementals to guard a mine against enemy armies."
 msgstr "Ordenar que los Elementales del Agua protejan una mina."
