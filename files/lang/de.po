@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-15 00:16+0000\n"
+"POT-Creation-Date: 2024-02-16 01:10+0000\n"
 "PO-Revision-Date: 2023-12-22 00:32+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -1103,8 +1103,9 @@ msgstr ""
 "achtet darauf, nicht alle Zwergenstädte auf einmal zu verlieren, denn sonst "
 "hat der Feind gewonnen."
 
+#, fuzzy
 msgid ""
-"You will face four allied enemies in a straightforward fight for resource "
+"You will face four allied enemies in a straightforward fight for resources "
 "and treasure. Capture all of the enemy castles for victory."
 msgstr ""
 "Ihr werdet vier verbündeten Feinden in einem direkten Kampf um Ressourcen "
@@ -4239,21 +4240,24 @@ msgstr "Schwer"
 msgid "Campaign Difficulty"
 msgstr "Feldzugschwierigkeit"
 
+#, fuzzy
 msgid ""
-"Choose this difficulty if you want to prefer game story over challenge. AI "
-"is weaker in comparison with normal difficulty."
+"Choose this difficulty if you want to experience the game's story at a lower "
+"challenge. The AI will be weaker than in normal difficulty."
 msgstr ""
 "Wenn Ihr die Geschichte der Herausforderung vorzieht: Die KI ist im "
 "Vergleich zum normalen Schwierigkeitsgrad schwächer."
 
+#, fuzzy
 msgid ""
-"Choose this difficulty to enjoy the campaign as per the original design."
+"Choose this difficulty to experience the campaign as per the original design."
 msgstr ""
 "Wählt diesen Schwierigkeitsgrad, um den Feldzug wie im Original zu spielen."
 
+#, fuzzy
 msgid ""
-"Choose this difficulty if you want challenge. AI is stronger in comparison "
-"with normal difficulty."
+"Choose this difficulty if you want a challenge. The AI will be stronger than "
+"in normal difficulty."
 msgstr ""
 "Stellt Euch der Herausforderung! Die KI ist im Vergleich zum normalen "
 "Schwierigkeitsgrad stärker."
@@ -4578,7 +4582,8 @@ msgstr "Extra große Karten auswählen"
 msgid "hotkey|select all map sizes"
 msgstr "Alle Kartengrößen auswählen"
 
-msgid "hotkey|hotseat game"
+#, fuzzy
+msgid "hotkey|hot seat game"
 msgstr "\"Heißer Stuhl\" Spiel"
 
 msgid "hotkey|battle only game"
@@ -7622,7 +7627,7 @@ msgstr "Eure Zauberkraft bestimmt die Länge oder Stärke eines Zaubers."
 
 #, fuzzy
 msgid ""
-" The hero's knowledge determines how many spell points the hero may have. "
+"The hero's knowledge determines how many spell points the hero may have. "
 "Under normal circumstances, a hero is limited to 10 spell points per level "
 "of knowledge."
 msgstr ""

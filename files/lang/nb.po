@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-15 00:16+0000\n"
+"POT-Creation-Date: 2024-02-16 01:10+0000\n"
 "PO-Revision-Date: 2023-09-03 18:42+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -1126,8 +1126,9 @@ msgstr ""
 "dvergebyene til samme tid, ellers vinner fienden."
 
 # rett fram?
+#, fuzzy
 msgid ""
-"You will face four allied enemies in a straightforward fight for resource "
+"You will face four allied enemies in a straightforward fight for resources "
 "and treasure. Capture all of the enemy castles for victory."
 msgstr ""
 "Du vil møte fire allierte fiender i en renspikket kamp om råvarer og "
@@ -4259,22 +4260,25 @@ msgstr "Vanskelig"
 msgid "Campaign Difficulty"
 msgstr "Felttogsnivå"
 
+#, fuzzy
 msgid ""
-"Choose this difficulty if you want to prefer game story over challenge. AI "
-"is weaker in comparison with normal difficulty."
+"Choose this difficulty if you want to experience the game's story at a lower "
+"challenge. The AI will be weaker than in normal difficulty."
 msgstr ""
 "Velg dette nivået hvis du kun er ute etter å oppleve historien. Motstanderne "
 "dine vil være svakere enn ved middels nivå."
 
+#, fuzzy
 msgid ""
-"Choose this difficulty to enjoy the campaign as per the original design."
+"Choose this difficulty to experience the campaign as per the original design."
 msgstr ""
 "Velg dette nivået for å oppleve felttoget slik som det opprinnelig var "
 "tiltenkt."
 
+#, fuzzy
 msgid ""
-"Choose this difficulty if you want challenge. AI is stronger in comparison "
-"with normal difficulty."
+"Choose this difficulty if you want a challenge. The AI will be stronger than "
+"in normal difficulty."
 msgstr ""
 "Velg nivået hvis du ønsker en utfordring. Motstanderne dine vil være "
 "sterkere enn ved middels nivå."
@@ -4600,7 +4604,8 @@ msgstr "Velg ekstra store kart"
 msgid "hotkey|select all map sizes"
 msgstr "Velg alle kart"
 
-msgid "hotkey|hotseat game"
+#, fuzzy
+msgid "hotkey|hot seat game"
 msgstr "Byttespillingsparti"
 
 msgid "hotkey|battle only game"
@@ -7611,7 +7616,7 @@ msgstr "Kraften din bestemmer varigheten og styrken til trolldommene dine."
 
 #, fuzzy
 msgid ""
-" The hero's knowledge determines how many spell points the hero may have. "
+"The hero's knowledge determines how many spell points the hero may have. "
 "Under normal circumstances, a hero is limited to 10 spell points per level "
 "of knowledge."
 msgstr ""
