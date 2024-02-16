@@ -497,7 +497,7 @@ std::string Skill::Secondary::GetDescription( const Heroes & hero ) const
         break;
     case ARCHERY: {
         str = _(
-            "%{skill} increases the damage done by the hero's range attacking creatures by %{count} percent and eliminates the %{penalty} percent penalty for the hero's troops shooting past obstacles (e.g. castle walls)." );
+            "%{skill} increases the damage done by the hero's range attacking creatures by %{count} percent, and eliminates the %{penalty} percent penalty when shooting past obstacles (e.g. castle walls)." );
         StringReplace( str, "%{penalty}", GameStatic::getCastleWallRangedPenalty() );
         break;
     }
