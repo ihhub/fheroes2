@@ -499,8 +499,17 @@ namespace
     void replaceArmy( Army & army, const std::vector<Troop> & troops )
     {
         army.Clean();
-        for ( size_t i = 0; i < troops.size(); ++i )
-            army.GetTroop( i )->Set( troops[i] );
+
+        const size_t size = std::min( army.Size(), troops.size() );
+
+        for ( size_t i = 0; i < size; ++i ) {
+            Troop * troop = army.GetTroop( i );
+            assert( troop != nullptr );
+
+            troop->Set( troops[i] );
+        }
+
+        assert( army.isValid() );
     }
 
     void setHeroAndArmyBonus( Heroes * hero, const Campaign::ScenarioInfoId & scenarioInfoId )
