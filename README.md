@@ -22,6 +22,13 @@ Please follow the [**installation guide**](docs/INSTALL.md) to download and inst
 
 [![Github Downloads](https://img.shields.io/github/downloads/ihhub/fheroes2/total.svg)](https://github.com/ihhub/fheroes2/releases)
 
+## Build in Docker
+
+```
+bash script/demo/download_demo_version.sh
+./docker.sh
+```
+
 ## Copyright
 
 All rights for the original game and its resources belong to former The 3DO Company. These rights were transferred to Ubisoft.

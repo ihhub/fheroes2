@@ -212,3 +212,18 @@ if(NOT MACOS_APP_BUNDLE)
 			)
 	endif(WIN32)
 endif(NOT MACOS_APP_BUNDLE)
+
+set(CPACK_GENERATOR "DEB")
+set(CPACK_DEBIAN_PACKAGE_MAINTAINER "Your Name") # replace with your name
+set(CPACK_DEBIAN_PACKAGE_SHLIBDEPS ON)
+set(CPACK_PACKAGE_VERSION_MAJOR "${PROJECT_VERSION_MAJOR}")
+set(CPACK_PACKAGE_VERSION_MINOR "${PROJECT_VERSION_MINOR}")
+set(CPACK_PACKAGE_VERSION_PATCH "${PROJECT_VERSION_PATCH}")
+set(CPACK_DEBIAN_PACKAGE_DEPENDS "libstdc++6, libc6, libgcc1, libsdl2-2.0-0, libsdl2-mixer-2.0-0, zlib1g")
+set(CPACK_PACKAGE_DESCRIPTION "fheroes2 game")
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "fheroes2 is a free implementation of Heroes of the Might and Magic II engine.")
+set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/LICENSE")
+set(CPACK_PACKAGE_CONTACT "your-email@example.com") # replace with your email
+set(CPACK_DEBIAN_PACKAGE_SECTION "games")
+
+include(CPack)
