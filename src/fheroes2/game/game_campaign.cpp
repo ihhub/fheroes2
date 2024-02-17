@@ -943,8 +943,7 @@ namespace
 
         fheroes2::MovableSprite selection( selectionImage );
 
-        const char * easyDescription
-            = _( "Choose this difficulty to experience the game's story with less challenge. The AI will be weaker than at Normal difficulty." );
+        const char * easyDescription = _( "Choose this difficulty to experience the game's story with less challenge. The AI will be weaker than at Normal difficulty." );
         const char * normalDescription = _( "Choose this difficulty to experience the campaign as per the original design." );
         const char * hardDescription = _( "Choose this difficulty if you want more challenge. The AI will be stronger than at Normal difficulty." );
 
@@ -1539,7 +1538,8 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
         }
         else if ( le.MousePressRight( buttonViewIntro.area() ) ) {
             fheroes2::showMessage( fheroes2::Text( _( "View Intro" ), fheroes2::FontType::normalYellow() ),
-                                   fheroes2::Text( _( "View the intro video for the current state of the campaign." ), fheroes2::FontType::normalWhite() ), Dialog::ZERO );
+                                   fheroes2::Text( _( "View the intro video for the current state of the campaign." ), fheroes2::FontType::normalWhite() ),
+                                   Dialog::ZERO );
         }
         else if ( le.MousePressRight( buttonDifficulty.area() ) ) {
             fheroes2::showMessage( fheroes2::Text( _( "Campaign Difficulty" ), fheroes2::FontType::normalYellow() ),

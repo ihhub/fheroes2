@@ -541,7 +541,8 @@ bool Interface::PlayersInfo::readOnlyEventProcessing()
         switch ( player->getHandicapStatus() ) {
         case Player::HandicapStatus::NONE:
             fheroes2::showMessage( fheroes2::Text( _( "No Handicap" ), fheroes2::FontType::normalYellow() ),
-                                   fheroes2::Text( _( "No special restrictions on starting resources and resource income per turn." ), fheroes2::FontType::normalWhite() ),
+                                   fheroes2::Text( _( "No special restrictions on starting resources and resource income per turn." ),
+                                                   fheroes2::FontType::normalWhite() ),
                                    Dialog::ZERO );
             break;
         case Player::HandicapStatus::MILD:

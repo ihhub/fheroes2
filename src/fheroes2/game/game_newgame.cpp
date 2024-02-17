@@ -629,9 +629,10 @@ fheroes2::GameMode Game::NewMulti()
 
         // right info
         if ( le.MousePressRight( buttonHotSeat.area() ) )
-            fheroes2::showStandardTextMessage(
-                _( "Hot Seat" ), _( "Play a Hot Seat game, where 2 to 4 players play on the same device, switching into the 'Hot Seat' when it is their turn." ),
-                Dialog::ZERO );
+            fheroes2::
+                showStandardTextMessage( _( "Hot Seat" ),
+                                         _( "Play a Hot Seat game, where 2 to 4 players play on the same device, switching into the 'Hot Seat' when it is their turn." ),
+                                         Dialog::ZERO );
         if ( le.MousePressRight( buttonCancelGame.area() ) )
             fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Cancel back to the main menu." ), Dialog::ZERO );
     }
