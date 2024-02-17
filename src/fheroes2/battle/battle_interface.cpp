@@ -4585,7 +4585,7 @@ void Battle::Interface::RedrawActionMonsterSpellCastStatus( const Spell & spell,
         msg = _n( "The %{attacker}'s curse falls upon the %{target}!", "The %{attacker}' curse falls upon the %{target}!", attackerCount );
         break;
     case Spell::PARALYZE:
-        msg = _n( "The %{target} are paralyzed by the %{attacker}!", "The %{target} are paralyzed by the %{attacker}!", attackerCount );
+        msg = _n( "The %{target} is paralyzed by the %{attacker}!", "The %{target} are paralyzed by the %{attacker}!", target.defender->GetCount() );
         break;
     case Spell::DISPEL:
         msg = _n( "The %{attacker} dispels all good spells on your %{target}!", "The %{attacker} dispel all good spells on your %{target}!", attackerCount );
@@ -4598,7 +4598,7 @@ void Battle::Interface::RedrawActionMonsterSpellCastStatus( const Spell & spell,
         break;
     }
 
-    StringReplaceWithLowercase( msg, "%{attacker}", attacker.GetMultiName() );
+    StringReplaceWithLowercase( msg, "%{attacker}", attacker.GetName() );
     StringReplaceWithLowercase( msg, "%{target}", target.defender->GetName() );
 
     status.SetMessage( msg, true );

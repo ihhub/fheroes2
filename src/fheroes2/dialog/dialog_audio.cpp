@@ -231,7 +231,7 @@ namespace Dialog
                 fheroes2::showStandardTextMessage( _( "Music Type" ), _( "Change the type of music." ), 0 );
             }
             else if ( le.MousePressRight( audio3D ) ) {
-                fheroes2::showStandardTextMessage( _( "3D Audio" ), _( "Toggle the 3D effects of foreground sounds." ), 0 );
+                fheroes2::showStandardTextMessage( _( "3D Audio" ), _( "Toggle the 3D effect of foreground sounds." ), 0 );
             }
             else if ( le.MousePressRight( buttonOkay.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Okay" ), _( "Exit this menu." ), 0 );

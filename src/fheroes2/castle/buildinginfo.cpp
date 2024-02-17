@@ -660,7 +660,7 @@ std::string BuildingInfo::GetConditionDescription() const
         }
         else {
             // There are currently no other buildings in the Castle Options that can be disabled than the shipyard.
-            // If you added a new disabled building then please add a relevant string.
+            // If you have added a new disabled building then you need to add a relevant string.
             assert( 0 );
             res = _( "This building has been disabled." );
         }
