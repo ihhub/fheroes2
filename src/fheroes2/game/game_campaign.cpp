@@ -41,6 +41,7 @@
 #include "campaign_data.h"
 #include "campaign_savedata.h"
 #include "campaign_scenariodata.h"
+#include "color.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
