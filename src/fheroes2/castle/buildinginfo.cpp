@@ -659,8 +659,7 @@ std::string BuildingInfo::GetConditionDescription() const
             StringReplace( res, "%{name}", Castle::GetStringBuilding( BUILD_SHIPYARD, castle.GetRace() ) );
         }
         else {
-            // There are currently no other buildings in the Castle Options that can be disabled than the shipyard.
-            // If you have added a new disabled building then you need to add a relevant string.
+            // TODO: Add future disabled buildings here when it is made possible in the Editor.
             assert( 0 );
             res = _( "This building has been disabled." );
         }
