@@ -97,9 +97,6 @@ public:
         return !heroes.empty();
     }
 
-    void SetLastBattleWinHero( const Heroes & hero );
-    Heroes * GetLastBattleWinHero() const;
-
     void appendSurrenderedHero( Heroes & hero );
 
     Heroes * GetBestHero() const;
@@ -207,7 +204,6 @@ private:
     friend StreamBase & operator>>( StreamBase &, Kingdom & );
 
     int color;
-    int _lastBattleWinHeroID;
     Funds resource;
 
     uint32_t lost_town_days;

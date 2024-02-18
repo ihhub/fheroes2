@@ -1196,12 +1196,16 @@ fheroes2::GameMode Game::CompleteCampaignScenario( const bool isLoadingSaveFile 
         }
 
         if ( awardType == Campaign::CampaignAwardData::AwardType::TYPE_CARRY_OVER_FORCES ) {
-            const Kingdom & humanKingdom = world.GetKingdom( Players::HumanColors() );
+            const VecHeroes & humanKingdomHeroes = world.GetKingdom( Players::HumanColors() ).GetHeroes();
 
-            const Heroes * lastBattleWinHero = humanKingdom.GetLastBattleWinHero();
+            // In the original game, troops for carry over are taken from the one of the heroes available in the kingdom who was hired first (including the hero
+            // originally present on the map at the beginning of the scenario).
+            if ( !humanKingdomHeroes.empty() ) {
+                const Heroes * hero = humanKingdomHeroes.front();
+                assert( hero != nullptr );
 
-            if ( lastBattleWinHero )
-                saveData.setCarryOverTroops( lastBattleWinHero->GetArmy() );
+                saveData.setCarryOverTroops( hero->GetArmy() );
+            }
         }
 
         saveData.addCampaignAward( obtainableAward._id );
