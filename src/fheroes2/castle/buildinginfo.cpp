@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -655,26 +655,28 @@ std::string BuildingInfo::GetConditionDescription() const
 
     case BUILD_DISABLE:
         if ( building == BUILD_SHIPYARD ) {
-            res = _( "Cannot build %{name} because the castle is too far away from an ocean." );
+            res = _( "Cannot build %{name}. The castle is too far away from an ocean." );
             StringReplace( res, "%{name}", Castle::GetStringBuilding( BUILD_SHIPYARD, castle.GetRace() ) );
         }
         else {
-            res = _( "disable build." );
+            // TODO: Add future disabled buildings here when it is made possible in the Editor.
+            assert( 0 );
+            res = _( "This building has been disabled." );
         }
         break;
 
     case LACK_RESOURCES:
-        res = _( "Cannot afford %{name}." );
+        res = _( "Cannot afford the %{name}." );
         StringReplace( res, "%{name}", GetName() );
         break;
 
     case ALREADY_BUILT:
-        res = _( "%{name} is already built." );
+        res = _( "The %{name} is already built." );
         StringReplace( res, "%{name}", GetName() );
         break;
 
     case REQUIRES_BUILD:
-        res = _( "Cannot build %{name}." );
+        res = _( "Cannot build the %{name}." );
         StringReplace( res, "%{name}", GetName() );
         break;
 

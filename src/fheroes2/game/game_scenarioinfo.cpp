@@ -394,7 +394,7 @@ namespace
                 else if ( 0 <= GetRectIndex( coordDifficulty, le.GetMouseCursor() ) ) {
                     fheroes2::showStandardTextMessage(
                         _( "Game Difficulty" ),
-                        _( "This lets you change the starting difficulty at which you will play. Higher difficulty levels start you of with fewer resources, and at the higher settings, give extra resources to the computer." ),
+                        _( "This lets you change the starting difficulty at which you will play. Higher difficulty levels start you off with fewer resources, and at the higher settings, give extra resources to the computer." ),
                         Dialog::ZERO );
                 }
                 else if ( le.MousePressRight( ratingRoi ) ) {
