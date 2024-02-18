@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-16 01:10+0000\n"
+"POT-Creation-Date: 2024-02-18 14:42+0000\n"
 "PO-Revision-Date: 2023-12-20 19:47+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -450,9 +450,10 @@ msgid ""
 msgstr ""
 "Không có không gian trống nào gần tướng của ngươi để triệu hồi một Nguyên tố."
 
+#, fuzzy
 msgid ""
-"The Moat reduces by -%{count} the defense skill of any unit and slows to "
-"half movement rate."
+"The Moat reduces the defense skill of troops trapped in it by %{count} and "
+"restricts their movement range."
 msgstr ""
 "Hào giảm -%{count} kỹ năng phòng thủ của bất kỳ đơn vị nào và làm chậm một "
 "nửa tốc độ di chuyển."
@@ -821,8 +822,10 @@ msgstr "Ngươi có chắc chắn muốn bật chiến đấu tự động?"
 msgid "Are you sure you want to finish the battle in auto mode?"
 msgstr "Ngươi có chắc chắn muốn kết thúc trận chiến ở chế độ tự động không?"
 
-msgid "%{name} skip their turn."
-msgstr "%{name} bỏ lượt."
+#, fuzzy
+msgid "The %{name} skips their turn."
+msgid_plural "The %{name} skip their turn."
+msgstr[0] "%{name} bỏ lượt."
 
 msgid "%{attacker} does %{damage} damage."
 msgid_plural "%{attacker} do %{damage} damage."
@@ -847,8 +850,10 @@ msgstr[0] "1 %{unit} được hồi sinh."
 msgid "Moved %{monster}: from [%{src}] to [%{dst}]."
 msgstr "Chuyển %{monster}: từ [%{src}] tới [%{dst}]."
 
-msgid "The %{name} resist the spell!"
-msgstr "Quái vật %{name} kháng phép này!"
+#, fuzzy
+msgid "The %{name} resists the spell!"
+msgid_plural "The %{name} resist the spell!"
+msgstr[0] "Quái vật %{name} kháng phép này!"
 
 msgid "%{name} casts %{spell} on the %{troop}."
 msgstr "%{name} niệm phép %{spell} lên %{troop}."
@@ -874,24 +879,36 @@ msgstr "Phép %{spell} gây %{damage} sát thương cho một sinh vật sống.
 msgid "The %{spell} does %{damage} damage to all living creatures."
 msgstr "Phép %{spell} gây %{damage} sát thương cho tất cả sinh vật sống."
 
-msgid "The %{attacker}' attack blinds the %{target}!"
-msgstr "Tướng %{attacker}' tấn công phép mù vào mục tiêu %{target}!"
+#, fuzzy
+msgid "The %{attacker}'s attack blinds the %{target}!"
+msgid_plural "The %{attacker}' attack blinds the %{target}!"
+msgstr[0] "Tướng %{attacker}' tấn công phép mù vào mục tiêu %{target}!"
 
-msgid "The %{attacker}' gaze turns the %{target} to stone!"
-msgstr "Cái nhìn của %{attacker}' biến %{target} thành đá!"
+#, fuzzy
+msgid "The %{attacker}'s gaze turns the %{target} to stone!"
+msgid_plural "The %{attacker}' gaze turns the %{target} to stone!"
+msgstr[0] "Cái nhìn của %{attacker}' biến %{target} thành đá!"
 
-msgid "The %{attacker}' curse falls upon the %{target}!"
-msgstr "Tướng %{attacker}' nguyền rủa lên tất cả %{target}!"
+#, fuzzy
+msgid "The %{attacker}'s curse falls upon the %{target}!"
+msgid_plural "The %{attacker}' curse falls upon the %{target}!"
+msgstr[0] "Tướng %{attacker}' nguyền rủa lên tất cả %{target}!"
 
-msgid "The %{target} are paralyzed by the %{attacker}!"
-msgstr "Mục tiêu %{target} đã bị %{attacker} hóa đá!"
+#, fuzzy
+msgid "The %{target} is paralyzed by the %{attacker}!"
+msgid_plural "The %{target} are paralyzed by the %{attacker}!"
+msgstr[0] "Mục tiêu %{target} đã bị %{attacker} hóa đá!"
 
-msgid "The %{attacker} dispel all good spells on your %{target}!"
-msgstr ""
+#, fuzzy
+msgid "The %{attacker} dispels all good spells on your %{target}!"
+msgid_plural "The %{attacker} dispel all good spells on your %{target}!"
+msgstr[0] ""
 "Tên %{attacker} xua tan mọi phép thuật tốt trên quân %{target} của ngươi!"
 
-msgid "The %{attacker} cast %{spell} on %{target}!"
-msgstr "Tên %{attacker} niệm phép %{spell} lên %{target}!"
+#, fuzzy
+msgid "The %{attacker} casts %{spell} on the %{target}!"
+msgid_plural "The %{attacker} cast %{spell} on the %{target}!"
+msgstr[0] "Tên %{attacker} niệm phép %{spell} lên %{target}!"
 
 msgid "Bad luck descends on the %{attacker}."
 msgstr "Vận rủi giáng xuống %{attacker}."
@@ -1444,9 +1461,10 @@ msgstr ""
 "sống ở những vùng đất hoang vắng. Hãy làm điều đó trước ngày đầu tiên của "
 "tháng thứ ba nếu không nó sẽ chẳng giúp ích được gì cho gia đình ngươi."
 
+#, fuzzy
 msgid ""
 "Rescue your crazy uncle Ivan. Find him before the first day of the fourth "
-"month or it will be no help to your kingdom."
+"month or it will be of no help to your kingdom."
 msgstr ""
 "Giải cứu chú Ivan điên rồ của ngươi. Tìm anh ta trước ngày đầu tiên của "
 "tháng thứ tư, nếu không sẽ chẳng ích gì cho vương quốc của ngươi."
@@ -1463,9 +1481,10 @@ msgstr ""
 msgid "Retake the castle of Ivory Gates, which has fallen due to treachery."
 msgstr "Chiếm lại lâu đài Ivory Gates đã sụp đổ do bị phản bội."
 
+#, fuzzy
 msgid ""
 "Gain the favor of the elves. They will not allow trees to be chopped down, "
-"so they will send you wood every 2 weeks. You must complete your mission "
+"so we will send you wood every 2 weeks. You must complete your mission "
 "before the first day of the seventh month, or the kingdom will surely fall."
 msgstr ""
 "Giành được sự ưu ái của yêu tinh. Họ sẽ không cho phép chặt cây, vì vậy họ "
@@ -1587,23 +1606,27 @@ msgstr " sẽ luôn chạy trốn khỏi quân đội của ngươi."
 msgid " will be willing to join your army."
 msgstr " sẽ sẵn sàng gia nhập quân đội của ngươi."
 
-msgid "\"%{artifact}\" artifact will be carried over the scenario."
+#, fuzzy
+msgid "\"%{artifact}\" artifact will be carried over in the campaign."
 msgstr "\"%{artifact}\" bảo vật sẽ được chuyển qua màn tiếp theo."
 
-msgid "The army will be carried over the scenario."
+#, fuzzy
+msgid "The army will be carried over in the campaign."
 msgstr "Quân lính sẽ được chuyển qua màn tiếp theo."
 
 msgid "The kingdom will have +%{count} %{resource} each day."
 msgstr "Vương quốc sẽ có +%{count} %{resource} mỗi ngày."
 
-msgid "\"%{spell}\" spell will be carried over the scenario."
+#, fuzzy
+msgid "The \"%{spell}\" spell will be carried over in the campaign."
 msgstr "\"%{spell}\" phép thuật sẽ được chuyển qua màn tiếp theo."
 
-msgid "%{hero} can be hired in the scenario."
+#, fuzzy
+msgid "%{hero} can be hired during scenarios."
 msgstr "%{hero} có thể thuê ở màn này."
 
-msgid ""
-"%{hero} has been defeated and will not appear in the subsequent scenarios."
+#, fuzzy
+msgid "%{hero} has been defeated and will not appear in subsequent scenarios."
 msgstr "%{hero} đã chết và không thể xuất hiện ở các màn phụ."
 
 msgid "The dwarves recognize their allies and gladly join your forces."
@@ -1891,8 +1914,9 @@ msgstr "Nâng cao Thông thái"
 msgid "campaignBonus|Expert Wisdom"
 msgstr "Chuyên gia Thông thái"
 
+#, fuzzy
 msgid ""
-"The main hero will have \"%{artifact}\" artifact at the start of the "
+"The main hero will have the \"%{artifact}\" artifact at the start of the "
 "scenario."
 msgstr "Tướng chính sẽ có bảo vật \"%{artifact}\" khi bắt đầu kịch bản."
 
@@ -1914,15 +1938,18 @@ msgid ""
 "The main hero will have %{count} %{monster} at the start of the scenario."
 msgstr "Tướng chính sẽ nhận %{count} quái %{monster} khi bắt đầu kịch bản."
 
+#, fuzzy
 msgid ""
-"The main hero will have \"%{spell}\" spell at the start of the scenario."
+"The main hero will have the \"%{spell}\" spell at the start of the scenario."
 msgstr "Tướng chính sẽ có phép \"%{spell}\" khi bắt đầu kịch bản."
 
-msgid "The starting race of the scenario will be %{race}."
+#, fuzzy
+msgid "The starting alignment of the scenario will be %{race}."
 msgstr "Chủng tộc của kịch bản sẽ là %{race}."
 
+#, fuzzy
 msgid ""
-"The main hero will have additional %{count} %{skill} at the start of the "
+"The main hero will receive a +%{count} to their %{skill} at the start of the "
 "scenario."
 msgstr "Tướng chính sẽ có thêm %{count} kỹ năng %{skill} khi bắt đầu kịch bản."
 
@@ -1963,19 +1990,23 @@ msgstr "Không thể xây dựng. Ngươi đã xây dựng ở đây ngày hôm 
 msgid "For this action it is necessary to build a castle first."
 msgstr "Đối với hành động này, trước tiên cần phải xây dựng một lâu đài."
 
-msgid "Cannot build %{name} because the castle is too far away from an ocean."
+#, fuzzy
+msgid "Cannot build %{name}. The castle is too far away from an ocean."
 msgstr "Không thể xây %{name} vì lâu đài quá xa một đại dương."
 
-msgid "disable build."
-msgstr "xây dựng bị vô hiệu."
+msgid "This building has been disabled."
+msgstr ""
 
-msgid "Cannot afford %{name}."
+#, fuzzy
+msgid "Cannot afford the %{name}."
 msgstr "Không đủ khả năng %{name}."
 
-msgid "%{name} is already built."
+#, fuzzy
+msgid "The %{name} is already built."
 msgstr "%{name} đã được xây."
 
-msgid "Cannot build %{name}."
+#, fuzzy
+msgid "Cannot build the %{name}."
 msgstr "Không thể xây %{name}."
 
 msgid "Build %{name}."
@@ -2203,7 +2234,8 @@ msgstr "Không thể chiêu mộ - ngươi đang có một Tướng trong thị 
 msgid "Cannot recruit - you have too many Heroes."
 msgstr "Không thể chiêu mộ - ngươi đang có quá nhiều Tướng."
 
-msgid "Cannot afford a Hero"
+#, fuzzy
+msgid "Cannot afford a Hero."
 msgstr "Không thể có được một Tướng"
 
 msgid "There is no room in the garrison for this army."
@@ -2684,6 +2716,14 @@ msgstr "Đội hình Dàn trải"
 msgid "Grouped Formation"
 msgstr "Đội hình Tập trung"
 
+#, fuzzy
+msgid "Click to show the next town."
+msgstr "Nhấp để xem thị trấn sau."
+
+#, fuzzy
+msgid "Click to show the previous town."
+msgstr "Nhấp để xem thị trấn trước."
+
 msgid "Set garrison combat formation to 'Spread'"
 msgstr "Đặt đội hình chiến đấu đồn trú thành 'Dàn trải'"
 
@@ -2895,7 +2935,8 @@ msgstr "Chuyển đổi mức âm thanh nền trước."
 msgid "Change the type of music."
 msgstr "Thay đổi loại nhạc."
 
-msgid "Toggle 3D effects of foreground sounds."
+#, fuzzy
+msgid "Toggle the 3D effect of foreground sounds."
 msgstr "Chuyển đổi hiệu ứng 3D của âm thanh nền trước."
 
 msgid "Build a new ship:"
@@ -3051,9 +3092,6 @@ msgstr "Cửa sổ"
 msgid "V-Sync"
 msgstr "V-Sync"
 
-msgid "on"
-msgstr "bật"
-
 msgid "FPS"
 msgstr "FPS"
 
@@ -3129,9 +3167,6 @@ msgstr "Chuyển đổi loại giao diện ngươi muốn sử dụng."
 
 msgid "Toggle interface visibility."
 msgstr "Chuyển đổi khả năng hiển thị giao diện."
-
-msgid "Toggle colored cursor on or off. This is only an esthetic choice."
-msgstr "Bật hoặc tắt con trỏ màu. Đây chỉ là một sự lựa chọn thẩm mỹ."
 
 msgid "Sets the speed at which you scroll the window."
 msgstr "Đặt tốc độ cuộn cửa sổ."
@@ -3532,7 +3567,8 @@ msgstr "Tiêu diệt một tướng cụ thể."
 msgid "Find a specific artifact."
 msgstr "Tìm một bảo vật cụ thể."
 
-msgid "Your side defeats the opposing side."
+#, fuzzy
+msgid "Your side must defeat the opposing side."
 msgstr "Phe của ngươi đánh bại phe đối lập."
 
 msgid "Accumulate a large amount of gold."
@@ -3547,7 +3583,8 @@ msgstr "Độ khó bản đồ:"
 msgid "N"
 msgstr "N"
 
-msgid "No maps exist at that size"
+#, fuzzy
+msgid "No maps exist at that size."
 msgstr "Không có bản đồ nào ở cỡ này"
 
 msgid "Small Maps"
@@ -3583,9 +3620,10 @@ msgstr "Xem tất cả các bản đồ, bất kể kích thước."
 msgid "Players Icon"
 msgstr "Biểu tượng Người chơi"
 
+#, fuzzy
 msgid ""
 "Indicates how many players total are in the scenario. Any positions not "
-"occupied by humans will be occupied by computer players."
+"occupied by human players will be occupied by computer players."
 msgstr ""
 "Cho biết tổng số người chơi trong kịch bản. Bất kỳ vị trí nào không có con "
 "người chiếm giữ sẽ do người chơi máy tính chiếm giữ."
@@ -3667,9 +3705,10 @@ msgstr "Thủ công"
 msgid "Change the speed at which your heroes move on the main screen."
 msgstr "Thay đổi tốc độ di chuyển của các tướng trên màn hình chính."
 
+#, fuzzy
 msgid ""
-"Sets the speed that A.I. heroes move at. You can also elect not to view A.I. "
-"movement at all."
+"Sets the speed that computer heroes move at. You can also elect not to view "
+"computer movement at all."
 msgstr ""
 "Đặt tốc độ mà tướng A.I. di chuyển. Ngươi cũng có thể chọn không xem tướng A."
 "I. di chuyển."
@@ -4193,8 +4232,8 @@ msgstr "Độ khó Chiến dịch"
 
 #, fuzzy
 msgid ""
-"Choose this difficulty if you want to experience the game's story at a lower "
-"challenge. The AI will be weaker than in normal difficulty."
+"Choose this difficulty to experience the game's story with less challenge. "
+"The AI will be weaker than at Normal difficulty."
 msgstr ""
 "Chọn độ khó này nếu ngươi muốn thích câu chuyện trò chơi hơn thử thách. AI "
 "yếu hơn so với độ khó bình thường."
@@ -4206,8 +4245,8 @@ msgstr "Chọn độ khó này để tận hưởng chiến dịch theo thiết 
 
 #, fuzzy
 msgid ""
-"Choose this difficulty if you want a challenge. The AI will be stronger than "
-"in normal difficulty."
+"Choose this difficulty if you want more challenge. The AI will be stronger "
+"than at Normal difficulty."
 msgstr ""
 "Chọn độ khó này nếu ngươi muốn thử thách. AI mạnh hơn so với độ khó bình "
 "thường."
@@ -4247,7 +4286,8 @@ msgstr "Bắt đầu kịch bản đã chọn."
 msgid "View Intro"
 msgstr "Xem Giới thiệu"
 
-msgid "View Intro videos for the current state of the campaign."
+#, fuzzy
+msgid "View the intro video for the current state of the campaign."
 msgstr "Xem video Giới thiệu để biết trạng thái hiện tại của chiến dịch."
 
 msgid ""
@@ -4491,7 +4531,8 @@ msgstr "trò chơi mới"
 msgid "hotkey|load game"
 msgstr "tải trò chơi"
 
-msgid "hotkey|highscores"
+#, fuzzy
+msgid "hotkey|high scores"
 msgstr "điểm cao"
 
 msgid "hotkey|credits"
@@ -4570,7 +4611,8 @@ msgstr "chiến dịch roland"
 msgid "hotkey|archibald campaign"
 msgstr "chiến dịch archibald"
 
-msgid "hotkey|the price of loyalty campaign"
+#, fuzzy
+msgid "hotkey|price of loyalty campaign"
 msgstr "chiến dịch giá của lòng trung thành"
 
 msgid "hotkey|voyage home campaign"
@@ -4894,9 +4936,10 @@ msgid "Welcome to Heroes of Might and Magic II powered by fheroes2 engine!"
 msgstr ""
 "Chào mừng tới Heroes of Might and Magic II cung cấp bởi mã nguồn fheroes2!"
 
+#, fuzzy
 msgid ""
 "Welcome to Heroes of Might and Magic II powered by the fheroes2 engine!\n"
-"Before starting the game please select a game resolution."
+"Before starting the game, please select a game resolution."
 msgstr ""
 "Chào mừng tới Heroes of Might and Magic II cung cấp bởi mã nguồn fheroes2! "
 "Trước khi bắt đầu hãy chọn độ phân giải của trò chơi."
@@ -4955,9 +4998,10 @@ msgstr "Thay đổi ngôn ngữ, độ phân giải và các cài đặt của t
 msgid "Game Settings"
 msgstr "Cài đặt Trò chơi"
 
+#, fuzzy
 msgid ""
-"Required video files for campaign selection window are missing. Please make "
-"sure that all necessary files are present in the system."
+"The required video files for the campaign selection window are missing. "
+"Please make sure that all necessary files are present in the system."
 msgstr ""
 "File video cần thiết cho chiến dịch bị thiếu. Hãy đảm bảo tất cả các file "
 "cần thiết có sẵn trong hệ thống."
@@ -5000,12 +5044,28 @@ msgstr ""
 "Khách đợi chủ nhà thiết lập trò chơi, sau đó sẽ tự động được thêm vào. Có "
 "thể có nhiều khách cho trò chơi TCP/IP."
 
+#, fuzzy
+msgid ""
+"A multi-player game, with several human players competing against each other "
+"on a single map."
+msgstr ""
+"Một trò chơi nhiều người chơi, trong đó một số người chơi sẽ đấu với nhau "
+"trên một bản đồ."
+
 msgid "Battle Only"
 msgstr "Chỉ Chiến đấu"
 
 msgid "Setup and play a battle without loading any map."
 msgstr ""
 "Thiết lập và chơi một trận chiến mà không cần phải tải bất cứ bản đồ nào."
+
+#, fuzzy
+msgid ""
+"Play a Hot Seat game, where 2 to 4 players play on the same device, "
+"switching into the 'Hot Seat' when it is their turn."
+msgstr ""
+"Chơi chế độ Ghế nóng, trong đó 2 đến 4 người chơi cùng chơi quanh một máy "
+"tính, chuyển sang 'Ghế nóng' khi đến lượt của họ."
 
 msgid "2 Players"
 msgstr "2 người chơi"
@@ -5137,6 +5197,9 @@ msgstr ""
 "Đánh bại tất cả tướng của kẻ thù và chiếm được tất cả các thị trấn và lâu "
 "đài của kẻ thù."
 
+msgid "Your side defeats the opposing side."
+msgstr "Phe của ngươi đánh bại phe đối lập."
+
 msgid "Run out of time. (Fail to win by a certain point.)"
 msgstr "Hết thời gian. Không thể giành chiến thắng với thời gian nhất định."
 
@@ -5221,9 +5284,10 @@ msgstr "Kịch bản"
 msgid "Game Difficulty"
 msgstr "Độ khó Trò chơi"
 
+#, fuzzy
 msgid ""
 "This lets you change the starting difficulty at which you will play. Higher "
-"difficulty levels start you of with fewer resources, and at the higher "
+"difficulty levels start you off with fewer resources, and at the higher "
 "settings, give extra resources to the computer."
 msgstr ""
 "Điều này cho phép thay đổi độ khó ban đầu mà ngươi sẽ chơi. Mức độ khó cao "
@@ -5395,7 +5459,8 @@ msgstr ""
 msgid "Kingdom Summary"
 msgstr "Tổng quát Vương quốc"
 
-msgid "View a Summary of your Kingdom."
+#, fuzzy
+msgid "View a summary of your Kingdom."
 msgstr "Xem Tổng quát về Vương quốc."
 
 msgid "Cast an adventure spell."
@@ -5404,7 +5469,8 @@ msgstr "Niệm một câu thần chú khám phá."
 msgid "End Turn"
 msgstr "Kết thúc Lượt"
 
-msgid "End your turn and left the computer take its turn."
+#, fuzzy
+msgid "End your turn and let the computer take its turn."
 msgstr "Kết thúc lượt của ngươi và để máy tính đi lượt của nó."
 
 msgid "Adventure Options"
@@ -5538,10 +5604,12 @@ msgstr ""
 msgid "Handicap"
 msgstr "Chấp"
 
+#, fuzzy
 msgid ""
-"This lets you change the handicap of a particular player. Only humans may be "
-"handicapped. Handicapped players start with fewer resources and earn 15 or "
-"30% fewer resources per turn for mild and severe handicaps, respectively."
+"This lets you change the handicap of a particular player. Only human players "
+"may have a handicap. Handicapped players start with fewer resources and earn "
+"15 or 30% fewer resources per turn for mild and severe handicaps, "
+"respectively."
 msgstr ""
 "Điều này cho phép ngươi thay đổi điểm chấp của một người chơi cụ thể. Chỉ có "
 "con người mới có thể bị khuyết tật. Người chơi bị khuyết tật bắt đầu với ít "
@@ -5554,15 +5622,18 @@ msgstr "người chơi mầu %{color}"
 msgid "No Handicap"
 msgstr "Không Chấp"
 
-msgid "No special restrictions on start resources and earning them per turn."
+#, fuzzy
+msgid ""
+"No special restrictions on starting resources and resource income per turn."
 msgstr ""
 "Không có hạn chế đặc biệt nào về tài nguyên bắt đầu và kiếm chúng mỗi lượt."
 
 msgid "Mild Handicap"
 msgstr "Chấp Ít"
 
+#, fuzzy
 msgid ""
-"Mild handicapped players start with fewer resources and earn 15% fewer "
+"Players with mild handicap start with fewer resources and earn 15% fewer "
 "resources per turn."
 msgstr ""
 "Người chơi chấp ít bắt đầu với ít tài nguyên hơn và kiếm được ít tài nguyên "
@@ -5571,8 +5642,9 @@ msgstr ""
 msgid "Severe Handicap"
 msgstr "Chấp Nhiều"
 
+#, fuzzy
 msgid ""
-"Severe handicapped players start with fewer resources and earn 30% fewer "
+"Players with severe handicap start with fewer resources and earn 30% fewer "
 "resources per turn."
 msgstr ""
 "Người chơi chấp nhiều bắt đầu với ít tài nguyên hơn và kiếm được ít tài "
@@ -5667,10 +5739,12 @@ msgstr "Tiếng Việt"
 msgid ", FPS: "
 msgstr ", FPS: "
 
-msgid "%{object} robber"
+#, fuzzy
+msgid "shipAndGraveyard|%{object} robber"
 msgstr "%{object} cướp"
 
-msgid "%{object} raided"
+#, fuzzy
+msgid "pyramid|%{object} raided"
 msgstr "%{object} lính"
 
 msgid "Ector"
@@ -6109,11 +6183,12 @@ msgid "The mermaids silently entice you to return later and be blessed again."
 msgstr ""
 "Các nàng tiên cá âm thầm dụ dỗ ngươi quay lại sau và được ban phước lần nữa."
 
+#, fuzzy
 msgid ""
 "The magical, soothing beauty of the Mermaids reaches you and your crew.\n"
 "Just for a moment, you forget your worries and bask in the beauty of the "
 "moment.\n"
-"The mermaids charms bless you with increased luck for your next combat."
+"The mermaids' charms bless you with increased luck for your next combat."
 msgstr ""
 "Vẻ đẹp huyền diệu, êm dịu của Nàng tiên cá sẽ đến với ngươi và phi hành đoàn "
 "của ngươi.\n"
@@ -6879,9 +6954,10 @@ msgstr ""
 "này đề nghị bán cho ngươi những bản đồ biển mà ông ấy đã làm khi còn trẻ với "
 "giá 1.000 vàng. Ngươi có muốn mua bản đồ không?"
 
+#, fuzzy
 msgid ""
-"The captain sighs. \"You don't have enough money, eh?  You can't expect me "
-"to give my maps away for free!\""
+"The captain sighs. \"You don't have enough money, eh? You can't expect me to "
+"give my maps away for free!\""
 msgstr ""
 "Thuyền trưởng thở dài. \"Ngươi không có đủ tiền phải không? Ngươi không thể "
 "mong đợi tôi tặng bản đồ của mình miễn phí!\""
@@ -7696,8 +7772,8 @@ msgstr "%{skill} loại bỏ hình phạt di chuyển đối với địa hình 
 #, fuzzy
 msgid ""
 "%{skill} increases the damage done by the hero's range attacking creatures "
-"by %{count} percent and eliminates the %{penalty} percent penalty for the "
-"hero's troops shooting past obstacles (e.g. castle walls)."
+"by %{count} percent, and eliminates the %{penalty} percent penalty when "
+"shooting past obstacles (e.g. castle walls)."
 msgstr ""
 "%{name} loại bỏ hình phạt %{count} phần trăm đối với quân của ngươi bắn qua "
 "chướng ngại vật (ví dụ: tường lâu đài)."
@@ -7903,8 +7979,9 @@ msgstr "Đỏ"
 msgid "Experience"
 msgstr "Kinh nghiệm"
 
+#, fuzzy
 msgid ""
-"Experience allows your heroes to go up levels, increasing their primary and "
+"Experience allows your heroes to gain levels, increasing their primary and "
 "secondary skills."
 msgstr ""
 "Kinh nghiệm cho phép các tướng của ngươi tăng cấp, tăng các kỹ năng chính và "
@@ -7957,7 +8034,7 @@ msgstr ""
 
 #, fuzzy
 msgid ""
-"Bad luck sometimes falls on the hero's units in combat, causing their "
+"Negative luck sometimes falls on the hero's units in combat, causing their "
 "attacks to only do half damage."
 msgstr ""
 "Vận rủi đôi khi rơi vào quân đội của ngươi trong chiến đấu, khiến đòn tấn "
@@ -7973,7 +8050,7 @@ msgstr ""
 
 #, fuzzy
 msgid ""
-"Good luck sometimes lets the hero's units get lucky attacks (double "
+"Positive luck sometimes lets the hero's units get lucky attacks (double "
 "strength) in combat."
 msgstr ""
 "May mắn tốt đôi khi giúp quân đội của ngươi nhận được những đòn tấn công may "
@@ -8001,7 +8078,7 @@ msgid "morale|Blood!"
 msgstr "Máu chiến!"
 
 #, fuzzy
-msgid "Bad morale may cause the hero's units to freeze in combat."
+msgid "Negative morale may cause the hero's units to freeze in combat."
 msgstr ""
 "Tinh thần tồi tệ có thể khiến quân đội của ngươi tê liệt trong chiến đấu."
 
@@ -8014,7 +8091,7 @@ msgstr ""
 "phước với các cuộc tấn công bổ sung hoặc đóng băng trong chiến đấu."
 
 #, fuzzy
-msgid "Good morale may give the hero's units extra attacks in combat."
+msgid "Positive morale may give the hero's units extra attacks in combat."
 msgstr ""
 "Tinh thần tốt có thể mang lại cho quân đội của ngươi nhiều đòn tấn công hơn "
 "trong chiến đấu."
@@ -11387,6 +11464,15 @@ msgstr ""
 "Kiểm tra phiên bản mới nhất của trò chơi tại\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "disable build."
+#~ msgstr "xây dựng bị vô hiệu."
+
+#~ msgid "on"
+#~ msgstr "bật"
+
+#~ msgid "Toggle colored cursor on or off. This is only an esthetic choice."
+#~ msgstr "Bật hoặc tắt con trỏ màu. Đây chỉ là một sự lựa chọn thẩm mỹ."
 
 #, fuzzy
 #~ msgid ""
