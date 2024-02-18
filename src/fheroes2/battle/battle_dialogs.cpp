@@ -940,7 +940,7 @@ int Battle::Arena::DialogBattleHero( const HeroBase & hero, const bool buttons, 
     text.draw( tp.x, tp.y + 2, display );
 
     const fheroes2::Point statsTextOffset{ pos_rt.x + 148 - dialogShadow.x, pos_rt.y + 40 };
-    const int32_t maxStatsTextWidth{ 111 };
+    const int32_t maxStatsTextWidth{ 109 };
     const int32_t statsTextRowHeight{ 11 };
 
     str = _( "Attack" ) + std::string( ": " ) + std::to_string( hero.GetAttack() );
