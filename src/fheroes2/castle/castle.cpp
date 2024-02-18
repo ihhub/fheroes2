@@ -2658,7 +2658,7 @@ bool Castle::BuyBoat() const
     return true;
 }
 
-void Castle::setName( const std::set<std::string> & usedNames )
+void Castle::setName( const std::set<std::string, std::less<>> & usedNames )
 {
     assert( name.empty() );
 

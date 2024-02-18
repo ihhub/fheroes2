@@ -28,6 +28,7 @@
 #include <cassert>
 #include <cstring>
 #include <fstream>
+#include <functional>
 #include <map>
 #include <set>
 #include <type_traits>
@@ -405,7 +406,7 @@ void Game::HotKeysLoad( const std::string & filename )
         isFilePresent = config.Load( filename );
 
         if ( isFilePresent ) {
-            std::map<std::string, fheroes2::Key> nameToKey;
+            std::map<std::string, fheroes2::Key, std::less<>> nameToKey;
             for ( int32_t i = static_cast<int32_t>( fheroes2::Key::NONE ); i < static_cast<int32_t>( fheroes2::Key::LAST_KEY ); ++i ) {
                 const fheroes2::Key key = static_cast<fheroes2::Key>( i );
                 nameToKey.try_emplace( StringUpper( KeySymGetName( key ) ), key );
