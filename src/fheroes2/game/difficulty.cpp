@@ -61,6 +61,7 @@ int Difficulty::GetScoutingBonusForAI( int difficulty )
     default:
         break;
     }
+
     return 0;
 }
 
@@ -79,42 +80,21 @@ double Difficulty::getGoldIncomeBonusForAI( const int difficulty )
     default:
         break;
     }
+
     return 0;
 }
 
-double Difficulty::GetUnitGrowthBonusForAI( const int /* difficulty */, const bool /* isCampaign */, const building_t /* dwelling */ )
+double Difficulty::GetUnitGrowthBonusForAI( const int difficulty, const bool /* isCampaign */, const building_t /* dwelling */ )
 {
-    // In the original game AI has a cheeky monster growth bonus depending on difficulty:
-    // Easy - 0.0 (no bonus)
-    // Normal - 0.0 (no bonus)
-    // Hard - 0.20 (or 20% extra)
-    // Expert - 0.32 (or 32% extra)
-    // Impossible - 0.44 (or 44% extra)
-    // This bonus was introduced to compensate weak AI in the game.
-    //
-    // However, with introduction of proper AI in this engine AI has become much stronger and some maps are impossible to beat.
-    // Also this bonus can be abused by players while capturing AI castles on a first day of a week.
-    //
-    // Completely removing these bonuses might break some maps and they become unplayable.
-    // Therefore, these bonuses are reduced by 5% which is the value of noise in many processes / systems.
-
-    /*
     switch ( difficulty ) {
-    case Difficulty::EASY:
-    case Difficulty::NORMAL:
-        return 0;
-    case Difficulty::HARD:
-        return 0.14;
     case Difficulty::EXPERT:
-        return 0.254;
+        return 0.25;
     case Difficulty::IMPOSSIBLE:
-        return 0.368;
+        return 0.33;
     default:
-        // Did you add a new difficulty level? Add the logic above!
-        assert( 0 );
         break;
     }
-    */
+
     return 0;
 }
 
@@ -127,6 +107,7 @@ int Difficulty::GetHeroMovementBonusForAI( int difficulty )
     default:
         break;
     }
+
     return 0;
 }
 
@@ -158,6 +139,7 @@ double Difficulty::getArmyStrengthRatioForAIRetreat( const int difficulty )
     default:
         break;
     }
+
     return 100.0 / 6.0;
 }
 
@@ -178,6 +160,7 @@ uint32_t Difficulty::GetDimensionDoorLimitForAI( int difficulty )
     default:
         break;
     }
+
     return UINT32_MAX;
 }
 
@@ -229,6 +212,7 @@ bool Difficulty::allowAIToSplitWeakStacks( const int difficulty )
     default:
         break;
     }
+
     return true;
 }
 
@@ -240,6 +224,7 @@ bool Difficulty::allowAIToDevelopCastlesOnDay( const int difficulty, const bool 
     default:
         break;
     }
+
     return true;
 }
 
@@ -252,5 +237,6 @@ bool Difficulty::allowAIToBuildCastleBuilding( const int difficulty, const bool 
     default:
         break;
     }
+
     return true;
 }
