@@ -701,8 +701,11 @@ namespace
     // the rest will be applied based on the situation required
     void applyObtainedCampaignAwards( const Campaign::ScenarioInfoId & currentScenarioInfoId, const std::vector<Campaign::CampaignAwardData> & awards )
     {
+        const int humanColor = Players::HumanColors();
+        assert( Color::Count( humanColor ) == 1 );
+
         const Players & sortedPlayers = Settings::Get().GetPlayers();
-        const Kingdom & humanKingdom = world.GetKingdom( Players::HumanColors() );
+        const Kingdom & humanKingdom = world.GetKingdom( humanColor );
 
         for ( size_t i = 0; i < awards.size(); ++i ) {
             if ( currentScenarioInfoId.scenarioId < awards[i]._startScenarioID ) {
@@ -1196,7 +1199,10 @@ fheroes2::GameMode Game::CompleteCampaignScenario( const bool isLoadingSaveFile 
         }
 
         if ( awardType == Campaign::CampaignAwardData::AwardType::TYPE_CARRY_OVER_FORCES ) {
-            const VecHeroes & humanKingdomHeroes = world.GetKingdom( Players::HumanColors() ).GetHeroes();
+            const int humanColor = Players::HumanColors();
+            assert( Color::Count( humanColor ) == 1 );
+
+            const VecHeroes & humanKingdomHeroes = world.GetKingdom( humanColor ).GetHeroes();
 
             // In the original game, troops for carry over are taken from the one of the heroes available in the kingdom who was hired first (including the hero
             // originally present on the map at the beginning of the scenario).
