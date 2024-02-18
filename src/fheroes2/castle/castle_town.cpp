@@ -669,10 +669,10 @@ Castle::ConstructionDialogResult Castle::openConstructionDialog( uint32_t & dwel
             fheroes2::fadeInDisplay( restorer.rect(), !display.isDefaultSize() );
         }
         else if ( le.MousePressRight( buttonNextCastleArea ) ) {
-            fheroes2::showStandardTextMessage( _( "Show next town" ), _( "Click to show next town." ), Dialog::ZERO );
+            fheroes2::showStandardTextMessage( _( "Show next town" ), _( "Click to show the next town." ), Dialog::ZERO );
         }
         else if ( le.MousePressRight( buttonPrevCastleArea ) ) {
-            fheroes2::showStandardTextMessage( _( "Show previous town" ), _( "Click to show previous town." ), Dialog::ZERO );
+            fheroes2::showStandardTextMessage( _( "Show previous town" ), _( "Click to show the previous town." ), Dialog::ZERO );
         }
 
         // status info

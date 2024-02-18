@@ -547,7 +547,7 @@ uint32_t Battle::Unit::CalculateDamageUnit( const Unit & enemy, double dmg ) con
 
             // Penalty for damage to castle defenders behind the castle walls
             if ( arena->IsShootingPenalty( *this, enemy ) ) {
-                dmg /= 2;
+                dmg *= 1 - ( GameStatic::getCastleWallRangedPenalty() / 100.0 );
             }
 
             // The Shield spell does not affect the damage of the castle towers

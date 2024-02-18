@@ -3391,7 +3391,7 @@ void Battle::Interface::RedrawTroopDefaultDelay( Unit & unit )
 
 void Battle::Interface::RedrawActionSkipStatus( const Unit & unit )
 {
-    std::string msg = _( "%{name} skip their turn." );
+    std::string msg = _n( "The %{name} skips their turn.", "The %{name} skip their turn.", unit.GetCount() );
     StringReplaceWithLowercase( msg, "%{name}", unit.GetName() );
 
     status.SetMessage( msg, true );
@@ -4227,7 +4227,7 @@ void Battle::Interface::RedrawActionResistSpell( const Unit & target, const bool
     if ( playSound ) {
         AudioManager::PlaySound( M82::RSBRYFZL );
     }
-    std::string str( _( "The %{name} resist the spell!" ) );
+    std::string str( _n( "The %{name} resists the spell!", "The %{name} resist the spell!", target.GetCount() ) );
     StringReplaceWithLowercase( str, "%{name}", target.GetName() );
     status.SetMessage( str, true );
     status.SetMessage( "", false );
@@ -4572,32 +4572,33 @@ void Battle::Interface::RedrawActionSpellCastPart2( const Spell & spell, const T
 void Battle::Interface::RedrawActionMonsterSpellCastStatus( const Spell & spell, const Unit & attacker, const TargetInfo & target )
 {
     std::string msg;
+    const uint32_t attackerCount = attacker.GetCount();
 
     switch ( spell.GetID() ) {
     case Spell::BLIND:
-        msg = _( "The %{attacker}' attack blinds the %{target}!" );
+        msg = _n( "The %{attacker}'s attack blinds the %{target}!", "The %{attacker}' attack blinds the %{target}!", attackerCount );
         break;
     case Spell::PETRIFY:
-        msg = _( "The %{attacker}' gaze turns the %{target} to stone!" );
+        msg = _n( "The %{attacker}'s gaze turns the %{target} to stone!", "The %{attacker}' gaze turns the %{target} to stone!", attackerCount );
         break;
     case Spell::CURSE:
-        msg = _( "The %{attacker}' curse falls upon the %{target}!" );
+        msg = _n( "The %{attacker}'s curse falls upon the %{target}!", "The %{attacker}' curse falls upon the %{target}!", attackerCount );
         break;
     case Spell::PARALYZE:
-        msg = _( "The %{target} are paralyzed by the %{attacker}!" );
+        msg = _n( "The %{target} is paralyzed by the %{attacker}!", "The %{target} are paralyzed by the %{attacker}!", target.defender->GetCount() );
         break;
     case Spell::DISPEL:
-        msg = _( "The %{attacker} dispel all good spells on your %{target}!" );
+        msg = _n( "The %{attacker} dispels all good spells on your %{target}!", "The %{attacker} dispel all good spells on your %{target}!", attackerCount );
         break;
     default:
         // Did you add a new monster spell casting ability? Add the logic above!
         assert( 0 );
-        msg = _( "The %{attacker} cast %{spell} on %{target}!" );
+        msg = _n( "The %{attacker} casts %{spell} on the %{target}!", "The %{attacker} cast %{spell} on the %{target}!", attackerCount );
         StringReplace( msg, "%{spell}", spell.GetName() );
         break;
     }
 
-    StringReplaceWithLowercase( msg, "%{attacker}", attacker.GetMultiName() );
+    StringReplaceWithLowercase( msg, "%{attacker}", attacker.GetName() );
     StringReplaceWithLowercase( msg, "%{target}", target.defender->GetName() );
 
     status.SetMessage( msg, true );
@@ -6350,7 +6351,7 @@ void Battle::Interface::InterruptAutoBattleIfRequested( LocalEvent & le )
     assert( _interruptAutoBattleForColor == 0 );
 
     const int interrupt = fheroes2::showMessage( fheroes2::Text( "", {} ),
-                                                 fheroes2::Text( _( "Are you sure you want to interrupt the auto battle?" ), fheroes2::FontType::normalWhite() ),
+                                                 fheroes2::Text( _( "Are you sure you want to interrupt the auto combat?" ), fheroes2::FontType::normalWhite() ),
                                                  Dialog::YES | Dialog::NO );
     if ( interrupt == Dialog::YES ) {
         _interruptAutoBattleForColor = color;

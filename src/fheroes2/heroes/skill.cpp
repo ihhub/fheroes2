@@ -258,7 +258,7 @@ std::string Skill::Primary::StringDescription( int skill, const Heroes * hero )
         break;
     case KNOWLEDGE:
         res = _(
-            " The hero's knowledge determines how many spell points the hero may have. Under normal circumstances, a hero is limited to 10 spell points per level of knowledge." );
+            "The hero's knowledge determines how many spell points the hero may have. Under normal circumstances, a hero is limited to 10 spell points per level of knowledge." );
         if ( hero )
             hero->GetKnowledge( &ext );
         break;
@@ -496,7 +496,9 @@ std::string Skill::Secondary::GetDescription( const Heroes & hero ) const
         }
         break;
     case ARCHERY: {
-        str = _( "%{skill} increases the damage done by the hero's range attacking creatures by %{count} percent." );
+        str = _(
+            "%{skill} increases the damage done by the hero's range attacking creatures by %{count} percent, and eliminates the %{penalty} percent penalty when shooting past obstacles (e.g. castle walls)." );
+        StringReplace( str, "%{penalty}", GameStatic::getCastleWallRangedPenalty() );
         break;
     }
     case LOGISTICS: {
