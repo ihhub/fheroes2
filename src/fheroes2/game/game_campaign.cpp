@@ -754,7 +754,15 @@ namespace
                 assert( hero != nullptr );
 
                 if ( hero != nullptr ) {
-                    replaceArmy( hero->GetArmy(), Campaign::CampaignSaveData::Get().getCarryOverTroops() );
+                    Army & heroArmy = hero->GetArmy();
+                    const std::vector<Troop> & carryOverTroops = Campaign::CampaignSaveData::Get().getCarryOverTroops();
+
+                    if ( std::any_of( carryOverTroops.begin(), carryOverTroops.end(), []( const Troop & troop ) { return troop.isValid(); } ) ) {
+                        replaceArmy( heroArmy, carryOverTroops );
+                    }
+                    else {
+                        heroArmy.Reset();
+                    }
                 }
 
                 break;
