@@ -28,6 +28,7 @@
 #include <cassert>
 #include <cstring>
 #include <fstream>
+#include <functional>
 #include <map>
 #include <set>
 #include <type_traits>
@@ -109,7 +110,7 @@ namespace
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::MAIN_MENU_LOAD_GAME )]
             = { Game::HotKeyCategory::MAIN_MENU, gettext_noop( "hotkey|load game" ), fheroes2::Key::KEY_L };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::MAIN_MENU_HIGHSCORES )]
-            = { Game::HotKeyCategory::MAIN_MENU, gettext_noop( "hotkey|highscores" ), fheroes2::Key::KEY_H };
+            = { Game::HotKeyCategory::MAIN_MENU, gettext_noop( "hotkey|high scores" ), fheroes2::Key::KEY_H };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::MAIN_MENU_CREDITS )]
             = { Game::HotKeyCategory::MAIN_MENU, gettext_noop( "hotkey|credits" ), fheroes2::Key::KEY_C };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::MAIN_MENU_STANDARD )]
@@ -134,7 +135,7 @@ namespace
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::MAIN_MENU_MAP_SIZE_ALL )]
             = { Game::HotKeyCategory::MAIN_MENU, gettext_noop( "hotkey|select all map sizes" ), fheroes2::Key::KEY_A };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::MAIN_MENU_HOTSEAT )]
-            = { Game::HotKeyCategory::MAIN_MENU, gettext_noop( "hotkey|hotseat game" ), fheroes2::Key::KEY_H };
+            = { Game::HotKeyCategory::MAIN_MENU, gettext_noop( "hotkey|hot seat game" ), fheroes2::Key::KEY_H };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::MAIN_MENU_BATTLEONLY )]
             = { Game::HotKeyCategory::MAIN_MENU, gettext_noop( "hotkey|battle only game" ), fheroes2::Key::KEY_B };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::MAIN_MENU_NEW_ORIGINAL_CAMPAIGN )]
@@ -162,7 +163,7 @@ namespace
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::CAMPAIGN_ARCHIBALD )]
             = { Game::HotKeyCategory::CAMPAIGN, gettext_noop( "hotkey|archibald campaign" ), fheroes2::Key::KEY_2 };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::CAMPAIGN_PRICE_OF_LOYALTY )]
-            = { Game::HotKeyCategory::CAMPAIGN, gettext_noop( "hotkey|the price of loyalty campaign" ), fheroes2::Key::KEY_1 };
+            = { Game::HotKeyCategory::CAMPAIGN, gettext_noop( "hotkey|price of loyalty campaign" ), fheroes2::Key::KEY_1 };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::CAMPAIGN_VOYAGE_HOME )]
             = { Game::HotKeyCategory::CAMPAIGN, gettext_noop( "hotkey|voyage home campaign" ), fheroes2::Key::KEY_2 };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::CAMPAIGN_WIZARDS_ISLE )]
@@ -405,7 +406,7 @@ void Game::HotKeysLoad( const std::string & filename )
         isFilePresent = config.Load( filename );
 
         if ( isFilePresent ) {
-            std::map<std::string, fheroes2::Key> nameToKey;
+            std::map<std::string, fheroes2::Key, std::less<>> nameToKey;
             for ( int32_t i = static_cast<int32_t>( fheroes2::Key::NONE ); i < static_cast<int32_t>( fheroes2::Key::LAST_KEY ); ++i ) {
                 const fheroes2::Key key = static_cast<fheroes2::Key>( i );
                 nameToKey.try_emplace( StringUpper( KeySymGetName( key ) ), key );

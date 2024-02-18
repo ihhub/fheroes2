@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2022                                                    *
+ *   Copyright (C) 2022 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -231,7 +231,7 @@ namespace Dialog
                 fheroes2::showStandardTextMessage( _( "Music Type" ), _( "Change the type of music." ), 0 );
             }
             else if ( le.MousePressRight( audio3D ) ) {
-                fheroes2::showStandardTextMessage( _( "3D Audio" ), _( "Toggle 3D effects of foreground sounds." ), 0 );
+                fheroes2::showStandardTextMessage( _( "3D Audio" ), _( "Toggle the 3D effect of foreground sounds." ), 0 );
             }
             else if ( le.MousePressRight( buttonOkay.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Okay" ), _( "Exit this menu." ), 0 );

@@ -26,6 +26,7 @@
 #include <cassert>
 #include <cstddef>
 #include <cstdint>
+#include <functional>
 #include <memory>
 #include <ostream>
 #include <set>
@@ -85,7 +86,7 @@ namespace
     {
         // Find castles with no names.
         std::vector<Castle *> castleWithNoName;
-        std::set<std::string> castleNames;
+        std::set<std::string, std::less<>> castleNames;
 
         for ( Castle * castle : castles ) {
             if ( castle == nullptr ) {
