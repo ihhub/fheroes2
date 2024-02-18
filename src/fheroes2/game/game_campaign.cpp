@@ -960,9 +960,9 @@ namespace
 
         fheroes2::MovableSprite selection( selectionImage );
 
-        const char * easyDescription = _( "Choose this difficulty if you want to prefer game story over challenge. AI is weaker in comparison with normal difficulty." );
-        const char * normalDescription = _( "Choose this difficulty to enjoy the campaign as per the original design." );
-        const char * hardDescription = _( "Choose this difficulty if you want challenge. AI is stronger in comparison with normal difficulty." );
+        const char * easyDescription = _( "Choose this difficulty to experience the game's story with less challenge. The AI will be weaker than at Normal difficulty." );
+        const char * normalDescription = _( "Choose this difficulty to experience the campaign as per the original design." );
+        const char * hardDescription = _( "Choose this difficulty if you want more challenge. The AI will be stronger than at Normal difficulty." );
 
         const std::array<fheroes2::Rect, 3> difficultyArea{ fheroes2::Rect( copyToOffset[0].x + 1, windowRoi.y + 37, selectionImage.width(), selectionImage.height() ),
                                                             fheroes2::Rect( copyToOffset[1].x + 1, windowRoi.y + 37, selectionImage.width(), selectionImage.height() ),
@@ -1555,7 +1555,8 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
         }
         else if ( le.MousePressRight( buttonViewIntro.area() ) ) {
             fheroes2::showMessage( fheroes2::Text( _( "View Intro" ), fheroes2::FontType::normalYellow() ),
-                                   fheroes2::Text( _( "View Intro videos for the current state of the campaign." ), fheroes2::FontType::normalWhite() ), Dialog::ZERO );
+                                   fheroes2::Text( _( "View the intro video for the current state of the campaign." ), fheroes2::FontType::normalWhite() ),
+                                   Dialog::ZERO );
         }
         else if ( le.MousePressRight( buttonDifficulty.area() ) ) {
             fheroes2::showMessage( fheroes2::Text( _( "Campaign Difficulty" ), fheroes2::FontType::normalYellow() ),

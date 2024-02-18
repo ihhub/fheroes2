@@ -715,7 +715,7 @@ namespace Campaign
     {
         switch ( _type ) {
         case ScenarioBonusData::ARTIFACT: {
-            std::string description( _( "The main hero will have \"%{artifact}\" artifact at the start of the scenario." ) );
+            std::string description( _( "The main hero will have the \"%{artifact}\" artifact at the start of the scenario." ) );
             StringReplace( description, "%{artifact}", Artifact( _subType ).GetName() );
             return description;
         }
@@ -733,18 +733,18 @@ namespace Campaign
             return description;
         }
         case ScenarioBonusData::SPELL: {
-            std::string description( _( "The main hero will have \"%{spell}\" spell at the start of the scenario." ) );
+            std::string description( _( "The main hero will have the \"%{spell}\" spell at the start of the scenario." ) );
             StringReplace( description, "%{spell}", Spell( _subType ).GetName() );
             return description;
         }
         case ScenarioBonusData::STARTING_RACE:
         case ScenarioBonusData::STARTING_RACE_AND_ARMY: {
-            std::string description( _( "The starting race of the scenario will be %{race}." ) );
+            std::string description( _( "The starting alignment of the scenario will be %{race}." ) );
             StringReplace( description, "%{race}", Race::String( _subType ) );
             return description;
         }
         case ScenarioBonusData::SKILL_PRIMARY: {
-            std::string description( _( "The main hero will have additional %{count} %{skill} at the start of the scenario." ) );
+            std::string description( _( "The main hero will receive a +%{count} to their %{skill} at the start of the scenario." ) );
             StringReplace( description, "%{count}", std::to_string( _amount ) );
             StringReplace( description, "%{skill}", Skill::Primary::String( _subType ) );
             return description;

@@ -26,6 +26,7 @@
 #include <algorithm>
 #include <cassert>
 #include <cstring>
+#include <functional>
 #include <limits>
 #include <list>
 #include <locale>
@@ -85,7 +86,7 @@ namespace
     MapsFileInfoList getValidMaps( const ListFiles & mapFiles, const bool isMultiplayer, const bool isForEditor, const bool isOriginalMapFormat )
     {
         // create a list of unique maps (based on the map file name) and filter it by the preferred number of players
-        std::map<std::string, Maps::FileInfo> uniqueMaps;
+        std::map<std::string, Maps::FileInfo, std::less<>> uniqueMaps;
 
         const Settings & conf = Settings::Get();
         const int prefNumOfPlayers = conf.PreferablyCountPlayers();

@@ -375,7 +375,7 @@ namespace
             }
             else if ( le.MousePressRight( windowEnemySpeedRoi ) ) {
                 fheroes2::showStandardTextMessage( _( "Enemy Speed" ),
-                                                   _( "Sets the speed that A.I. heroes move at. You can also elect not to view A.I. movement at all." ), 0 );
+                                                   _( "Sets the speed that computer heroes move at. You can also elect not to view computer movement at all." ), 0 );
             }
             else if ( le.MousePressRight( windowHotKeyRoi ) ) {
                 fheroes2::showStandardTextMessage( _( "Hot Keys" ), _( "Check and configure all the hot keys present in the game." ), 0 );

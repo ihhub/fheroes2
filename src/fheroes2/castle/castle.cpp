@@ -1034,7 +1034,7 @@ bool Castle::AllowBuyHero( std::string * msg ) const
 
     if ( !myKingdom.AllowRecruitHero( true ) ) {
         if ( msg ) {
-            *msg = _( "Cannot afford a Hero" );
+            *msg = _( "Cannot afford a Hero." );
         }
         return false;
     }
@@ -2658,7 +2658,7 @@ bool Castle::BuyBoat() const
     return true;
 }
 
-void Castle::setName( const std::set<std::string> & usedNames )
+void Castle::setName( const std::set<std::string, std::less<>> & usedNames )
 {
     assert( name.empty() );
 
