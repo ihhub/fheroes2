@@ -1205,7 +1205,7 @@ fheroes2::GameMode Game::CompleteCampaignScenario( const bool isLoadingSaveFile 
 
             const VecHeroes & humanKingdomHeroes = world.GetKingdom( humanColor ).GetHeroes();
 
-            // In the original game, carry-over troops are taken from a hero who was hired least recently and who is still in the kingdom (I.E. still "alive"). A starting 
+            // In the original game, carry-over troops are taken from a hero who was hired least recently and who is still in the kingdom (I.E. still "alive"). A starting
             // hero will count as first if they are still alive since the beginning, but if they are rehired then they take a new place in the queue of heroes.
             if ( !humanKingdomHeroes.empty() ) {
                 const Heroes * hero = humanKingdomHeroes.front();
