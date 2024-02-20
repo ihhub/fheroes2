@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-18 14:42+0000\n"
-"PO-Revision-Date: 2024-02-20 21:01+0100\n"
+"PO-Revision-Date: 2024-02-20 21:12+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
 "Language: fr\n"
@@ -3855,6 +3855,7 @@ msgstr "Les héros ne peuvent pas être placés sur l'eau."
 msgid ""
 "A maximum of %{count} heroes of the same color can be placed on the map."
 msgstr ""
+"Un maximum de %{count} héros de la même couleur peut être placé sur la carte."
 
 msgid "Failed to update player information."
 msgstr ""
@@ -4029,7 +4030,7 @@ msgid ""
 msgstr ""
 
 msgid "Traversable only by boat."
-msgstr ""
+msgstr "Traversable uniquement par bateau."
 
 msgid "No special modifiers."
 msgstr ""
@@ -4104,22 +4105,23 @@ msgid "Erase Mode"
 msgstr "Effacement"
 
 msgid "Used to erase objects from the map."
-msgstr ""
+msgstr "Permet d'effacer des objets de la carte."
 
 msgid "Change between zoom and normal view."
-msgstr ""
+msgstr "Passer de la vue zoom à la vue normale."
 
 msgid "Magnify"
-msgstr ""
+msgstr "Agrandir"
 
 msgid "Undo"
-msgstr ""
+msgstr "Annuler"
 
 msgid "Undo your last action."
-msgstr ""
+msgstr "Annuler votre dernière action."
 
 msgid "Create a new map either from scratch or using the random map generator."
 msgstr ""
+"Créer une nouvelle carte à la main ou à l'aide du générateur aléatoire."
 
 msgid "Edit map title, description, and other general information."
 msgstr ""
@@ -4148,13 +4150,13 @@ msgid "Cancel back to the main menu."
 msgstr "Annuler et revenir au menu principal."
 
 msgid "From Scratch"
-msgstr ""
+msgstr "À la main"
 
 msgid "Start from scratch with a blank map."
-msgstr ""
+msgstr "Partir de zéro avec une carte vierge."
 
 msgid "Create a randomly generated map."
-msgstr ""
+msgstr "Créer une carte générée de manière aléatoire."
 
 msgid "Random"
 msgstr "Aléatoire"
@@ -11236,37 +11238,37 @@ msgid "Random Spell"
 msgstr "Sort aléatoire"
 
 msgid "Randomly selected spell of any level."
-msgstr ""
+msgstr "Sortilège choisi au hasard, de n'importe quel niveau."
 
 msgid "Random 1st Level Spell"
 msgstr "Sort aléatoire de 1er niveau"
 
 msgid "Randomly selected 1st level spell."
-msgstr ""
+msgstr "Sortilège de 1er niveau choisi au hasard."
 
 msgid "Random 2nd Level Spell"
-msgstr ""
+msgstr "Sortilège aléatoire de 2ème niveau"
 
 msgid "Randomly selected 2nd level spell."
-msgstr ""
+msgstr "Sortilège de 2ème niveau choisi au hasard."
 
 msgid "Random 3rd Level Spell"
-msgstr ""
+msgstr "Sortilège aléatoire de 3ème niveau"
 
 msgid "Randomly selected 3rd level spell."
-msgstr ""
+msgstr "Sortilège de 3ème niveau choisi au hasard."
 
 msgid "Random 4th Level Spell"
-msgstr ""
+msgstr "Sortilège aléatoire de 4ème niveau"
 
 msgid "Randomly selected 4th level spell."
-msgstr ""
+msgstr "Sortilège de 4ème niveau choisi au hasard."
 
 msgid "Random 5th Level Spell"
-msgstr ""
+msgstr "Sortilège aléatoire de 5ème niveau"
 
 msgid "Randomly selected 5th level spell."
-msgstr ""
+msgstr "Sortilège de 5ème niveau choisi au hasard."
 
 msgid "Petrification"
 msgstr "Pétrification"
