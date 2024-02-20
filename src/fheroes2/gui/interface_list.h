@@ -417,7 +417,7 @@ namespace Interface
 
                 return true;
             }
-            if ( ( le.MousePressLeft( _scrollbar.getArea() ) || le.MousePressLeft( rtAreaItems ) ) && ( _size() > maxItems ) ) {
+            if ( le.MousePressLeft( _scrollbar.getArea() ) || le.MousePressLeft( rtAreaItems ) ) {
                 const fheroes2::Point mousePosition = le.GetMouseCursor();
 
                 const int32_t prevScrollbarX = _scrollbar.x();
@@ -425,7 +425,7 @@ namespace Interface
 
                 UpdateScrollbarRange();
 
-                if ( le.MousePressLeft( _scrollbar.getArea() ) ) {
+                if ( le.MousePressLeft( _scrollbar.getArea() ) && ( _size() > maxItems ) ) {
                     _scrollbar.moveToPos( mousePosition );
                 }
 
