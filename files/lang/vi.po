@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-20 03:11+0000\n"
-"PO-Revision-Date: 2023-12-20 19:47+0700\n"
+"PO-Revision-Date: 2024-02-20 08:49+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: vi\n"
@@ -3806,7 +3806,7 @@ msgid "Artifacts cannot be placed on water."
 msgstr "Bảo vật không thể đặt trên nước."
 
 msgid "Mountains cannot be placed on water."
-msgstr "Quái vật không thể đặt trên nước."
+msgstr "Núi không thể đặt trên nước."
 
 #, fuzzy
 msgid "Rocks cannot be placed on water."
@@ -3823,7 +3823,7 @@ msgid "Towns cannot be placed on water."
 msgstr "Thị trấn không thể đặt trên nước."
 
 msgid "Mines cannot be placed on water."
-msgstr "Quái vật không thể đặt trên nước."
+msgstr "Mỏ không thể đặt trên nước."
 
 #, fuzzy
 msgid "Dwellings cannot be placed on water."
