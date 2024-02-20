@@ -320,7 +320,7 @@ void Kingdom::AddHero( Heroes * hero )
 void Kingdom::RemoveHero( const Heroes * hero )
 {
     if ( hero == nullptr ) {
-        // Why are trying to delete a non existing hero?
+        // Why are you trying to delete a non-existing hero?
         assert( 0 );
         return;
     }
