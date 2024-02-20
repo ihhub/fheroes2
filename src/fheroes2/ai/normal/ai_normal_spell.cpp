@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2023                                             *
+ *   Copyright (C) 2021 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -74,8 +74,12 @@ namespace AI
         }
 
         const SpellStorage allSpells = _commander->getAllSpells();
-        const Units friendly( arena.getForce( _myColor ).getUnits(), true );
-        const Units enemies( arena.getEnemyForce( _myColor ).getUnits(), true );
+
+        const Units friendly( arena.getForce( _myColor ).getUnits(), Units::REMOVE_INVALID_UNITS );
+        const Units enemies( arena.getEnemyForce( _myColor ).getUnits(), Units::REMOVE_INVALID_UNITS );
+
+        const Units trueFriendly( arena.getForce( _myColor ).getUnits(), Units::REMOVE_INVALID_UNITS_AND_UNITS_THAT_CHANGED_SIDES );
+        const Units trueEnemies( arena.getEnemyForce( _myColor ).getUnits(), Units::REMOVE_INVALID_UNITS_AND_UNITS_THAT_CHANGED_SIDES );
 
         // Hero should conserve spellpoints if already spent more than half or his army is stronger
         // Threshold is 0.04 when armies are equal (= 20% of single unit)
@@ -121,10 +125,10 @@ namespace AI
                 checkSelectBestSpell( spell, spellResurrectValue( spell, arena ) );
             }
             else if ( spell.isApplyToFriends() ) {
-                checkSelectBestSpell( spell, spellEffectValue( spell, friendly ) );
+                checkSelectBestSpell( spell, spellEffectValue( spell, trueFriendly ) );
             }
             else if ( spell.isApplyToEnemies() ) {
-                checkSelectBestSpell( spell, spellEffectValue( spell, enemies ) );
+                checkSelectBestSpell( spell, spellEffectValue( spell, trueEnemies ) );
             }
         }
 
@@ -363,8 +367,6 @@ namespace AI
             break;
         }
         case Spell::HYPNOTIZE: {
-            if ( targetIsLast )
-                return 0.0;
             ratio = 1.5;
             break;
         }

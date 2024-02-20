@@ -53,6 +53,7 @@
 #include "color.h"
 #include "difficulty.h"
 #include "game.h"
+#include "game_static.h"
 #include "heroes.h"
 #include "heroes_base.h"
 #include "kingdom.h"
@@ -60,6 +61,7 @@
 #include "monster_info.h"
 #include "resource.h"
 #include "settings.h"
+#include "skill.h"
 #include "speed.h"
 #include "spell.h"
 
@@ -72,8 +74,8 @@ namespace AI
     struct MeleeAttackOutcome
     {
         int32_t fromIndex = -1;
-        double attackValue = -INT32_MAX;
-        double positionValue = -INT32_MAX;
+        double attackValue = INT32_MIN;
+        double positionValue = INT32_MIN;
         bool canAttackImmediately = false;
     };
 
@@ -198,7 +200,7 @@ namespace AI
     PositionValues evaluatePotentialAttackPositions( Arena & arena, const Unit & attacker )
     {
         // Attacking unit can be under the influence of the Hypnotize spell
-        Units enemies( arena.getEnemyForce( attacker.GetCurrentColor() ).getUnits(), &attacker );
+        Units enemies( arena.getEnemyForce( attacker.GetCurrentColor() ).getUnits(), Units::REMOVE_INVALID_UNITS_AND_SPECIFIED_UNIT, &attacker );
 
         // For each position near enemy units, select the maximum attack value among neighboring enemy melee units, and then add the sum of the attack values of
         // neighboring enemy archers to encourage the use of attacking positions that block these archers
@@ -394,7 +396,8 @@ namespace AI
                     continue;
                 }
 
-                stepThreatLevel += enemy->evaluateThreatForUnit( currentUnit, stepPos );
+                // Rough estimate: the threat assessment is performed for the current position of the unit, not its new position at this step
+                stepThreatLevel += enemy->evaluateThreatForUnit( currentUnit );
             }
         }
 
@@ -484,26 +487,10 @@ namespace AI
         }
     }
 
-    bool BattlePlanner::isHeroWorthSaving( const Heroes & hero ) const
-    {
-        return hero.GetLevel() > 2 || !hero.GetBagArtifacts().empty();
-    }
-
     bool BattlePlanner::isCommanderCanSpellcast( const Arena & arena, const HeroBase * commander ) const
     {
         return commander && ( !commander->isControlHuman() || Settings::Get().BattleAutoSpellcast() ) && commander->HaveSpellBook()
                && !commander->Modes( Heroes::SPELLCASTED ) && !arena.isSpellcastDisabled();
-    }
-
-    bool BattlePlanner::checkRetreatCondition( const Heroes & hero ) const
-    {
-        if ( !_considerRetreat || hero.isControlHuman() || hero.isLosingGame() || !isHeroWorthSaving( hero ) || !CanPurchaseHero( hero.GetKingdom() ) ) {
-            return false;
-        }
-
-        // Retreat if remaining army strength is a fraction of enemy's
-        // Consider taking speed/turn order into account in the future
-        return _myArmyStrength * Difficulty::getArmyStrengthRatioForAIRetreat( Game::getDifficulty() ) < _enemyArmyStrength;
     }
 
     bool BattlePlanner::isUnitFaster( const Unit & currentUnit, const Unit & target ) const
@@ -530,7 +517,7 @@ namespace AI
             return false;
         }
 
-        const uint32_t currentTurnNumber = arena.GetCurrentTurn();
+        const uint32_t currentTurnNumber = arena.GetTurnNumber();
         assert( currentTurnNumber > 0 );
 
         // This is the beginning of a new turn and we still haven't gone beyond the limit on the number of turns without deaths
@@ -594,7 +581,139 @@ namespace AI
 
         // Step 2. Check retreat/surrender condition
         const Heroes * actualHero = dynamic_cast<const Heroes *>( _commander );
-        if ( actualHero && checkRetreatCondition( *actualHero ) ) {
+        if ( actualHero ) {
+            enum class Outcome
+            {
+                ContinueBattle,
+                Retreat,
+                Surrender
+            };
+
+            const Outcome outcome = [this, &arena, actualHero]() {
+                if ( !_considerRetreat ) {
+                    return Outcome::ContinueBattle;
+                }
+
+                // Human-controlled heroes should not retreat or surrender during auto/instant battles
+                if ( actualHero->isControlHuman() ) {
+                    return Outcome::ContinueBattle;
+                }
+
+                const int gameDifficulty = Game::getDifficulty();
+                const bool isGameCampaign = Game::isCampaign();
+
+                // TODO: consider taking speed/turn order into account in the future
+                if ( _myArmyStrength * Difficulty::getArmyStrengthRatioForAIRetreat( gameDifficulty ) >= _enemyArmyStrength ) {
+                    return Outcome::ContinueBattle;
+                }
+
+                const bool hasValuableArtifacts = [actualHero]() {
+                    const BagArtifacts & artifactsBag = actualHero->GetBagArtifacts();
+
+                    return std::any_of( artifactsBag.begin(), artifactsBag.end(), []( const Artifact & art ) {
+                        const fheroes2::ArtifactData & artifactData = fheroes2::getArtifactData( art.GetID() );
+
+                        return std::any_of( artifactData.bonuses.begin(), artifactData.bonuses.end(),
+                                            []( const fheroes2::ArtifactBonus & bonus ) { return bonus.type != fheroes2::ArtifactBonusType::NONE; } );
+                    } );
+                }();
+
+                const Kingdom & kingdom = actualHero->GetKingdom();
+
+                const bool considerRetreat = [this, &arena, actualHero, gameDifficulty, isGameCampaign, hasValuableArtifacts, &kingdom]() {
+                    if ( !Difficulty::allowAIToRetreat( gameDifficulty, isGameCampaign ) ) {
+                        return false;
+                    }
+
+                    if ( !arena.CanRetreatOpponent( _myColor ) ) {
+                        return false;
+                    }
+
+                    // If the hero has valuable artifacts, he should in any case consider retreating so that these artifacts do not end up at the disposal of the enemy,
+                    // especially in the case of an alliance war
+                    if ( hasValuableArtifacts ) {
+                        return true;
+                    }
+
+                    // Otherwise, if this hero is the last one, and the kingdom has no castles, then there is no point in retreating
+                    if ( kingdom.GetHeroes().size() == 1 ) {
+                        assert( kingdom.GetHeroes().at( 0 ) == actualHero );
+
+                        if ( kingdom.GetCastles().empty() ) {
+                            return false;
+                        }
+                    }
+
+                    // Otherwise, if this hero is relatively experienced, then he should think about retreating so that he can be hired again later
+                    return actualHero->GetLevel() >= Difficulty::getMinHeroLevelForAIRetreat( gameDifficulty );
+                }();
+
+                const bool considerSurrender = [this, &arena, actualHero, gameDifficulty, isGameCampaign, hasValuableArtifacts, &kingdom]() {
+                    if ( !Difficulty::allowAIToSurrender( gameDifficulty, isGameCampaign ) ) {
+                        return false;
+                    }
+
+                    if ( !arena.CanSurrenderOpponent( _myColor ) ) {
+                        return false;
+                    }
+
+                    // If the hero has valuable artifacts, he should in any case consider surrendering so that these artifacts do not end up at the disposal of the enemy,
+                    // especially in the case of an alliance war
+                    if ( hasValuableArtifacts ) {
+                        return true;
+                    }
+
+                    // Otherwise, if this hero is the last one, and either the kingdom has no castles, or this hero is defending the last castle, then there is no point
+                    // in surrendering
+                    if ( kingdom.GetHeroes().size() == 1 ) {
+                        assert( kingdom.GetHeroes().at( 0 ) == actualHero );
+
+                        const VecCastles & castles = kingdom.GetCastles();
+                        if ( castles.empty() ) {
+                            return false;
+                        }
+
+                        const Castle * castle = actualHero->inCastle();
+                        if ( castle && castles.size() == 1 ) {
+                            assert( castles.at( 0 ) == castle );
+
+                            return false;
+                        }
+                    }
+
+                    // Otherwise, if this hero is relatively experienced, then he should think about surrendering so that he can be hired again later
+                    return actualHero->GetLevel() >= Difficulty::getMinHeroLevelForAIRetreat( gameDifficulty );
+                }();
+
+                const Force & force = arena.getForce( _myColor );
+
+                if ( !considerRetreat ) {
+                    if ( !considerSurrender ) {
+                        return Outcome::ContinueBattle;
+                    }
+
+                    if ( !kingdom.AllowPayment( { Resource::GOLD, force.GetSurrenderCost() } ) ) {
+                        return Outcome::ContinueBattle;
+                    }
+
+                    return Outcome::Surrender;
+                }
+
+                if ( !considerSurrender ) {
+                    return Outcome::Retreat;
+                }
+
+                if ( force.getStrengthOfArmyRemainingInCaseOfSurrender() < Army::getStrengthOfAverageStartingArmy( actualHero ) ) {
+                    return Outcome::Retreat;
+                }
+
+                if ( !kingdom.AllowPayment( Funds{ Resource::GOLD, force.GetSurrenderCost() } * Difficulty::getGoldReserveRatioForAISurrender( gameDifficulty ) ) ) {
+                    return Outcome::Retreat;
+                }
+
+                return Outcome::Surrender;
+            }();
+
             const auto farewellSpellcast = [this, &arena, &currentUnit, &actions]() {
                 if ( !isCommanderCanSpellcast( arena, _commander ) ) {
                     return;
@@ -611,48 +730,6 @@ namespace AI
                 DEBUG_LOG( DBG_BATTLE, DBG_INFO,
                            arena.GetCurrentCommander()->GetName() << " casts " << Spell( bestSpell.spellID ).GetName() << " on cell " << bestSpell.cell )
             };
-
-            enum class Outcome
-            {
-                ContinueBattle,
-                Retreat,
-                Surrender
-            };
-
-            const Outcome outcome = [this, &arena, actualHero]() {
-                const Force & force = arena.getForce( _myColor );
-                const Kingdom & kingdom = actualHero->GetKingdom();
-
-                const bool canRetreat = arena.CanRetreatOpponent( _myColor );
-                const bool canSurrender = arena.CanSurrenderOpponent( _myColor );
-
-                if ( !canRetreat ) {
-                    if ( !canSurrender ) {
-                        return Outcome::ContinueBattle;
-                    }
-
-                    if ( !kingdom.AllowPayment( { Resource::GOLD, force.GetSurrenderCost() } ) ) {
-                        return Outcome::ContinueBattle;
-                    }
-
-                    return Outcome::Surrender;
-                }
-
-                if ( !canSurrender ) {
-                    return Outcome::Retreat;
-                }
-
-                if ( force.getStrengthOfArmyRemainingInCaseOfSurrender() < Army::getStrengthOfAverageStartingArmy( actualHero ) ) {
-                    return Outcome::Retreat;
-                }
-
-                if ( !kingdom.AllowPayment( Funds{ Resource::GOLD, force.GetSurrenderCost() }
-                                            * Difficulty::getGoldReserveRatioForAISurrender( Game::getDifficulty() ) ) ) {
-                    return Outcome::Retreat;
-                }
-
-                return Outcome::Surrender;
-            }();
 
             switch ( outcome ) {
             case Outcome::ContinueBattle:
@@ -857,8 +934,20 @@ namespace AI
 
         // Mark as castle siege only if any tower is present. If no towers present then nothing to defend and most likely all walls are destroyed as well.
         if ( castle && Arena::isAnyTowerPresent() ) {
-            const bool attackerIgnoresCover
-                = arena.GetForce1().GetCommander()->GetBagArtifacts().isArtifactBonusPresent( fheroes2::ArtifactBonusType::NO_SHOOTING_PENALTY );
+            const bool attackerIgnoresCover = [&arena]() {
+                const HeroBase * commander = arena.GetForce1().GetCommander();
+                assert( commander != nullptr );
+
+                if ( commander->GetBagArtifacts().isArtifactBonusPresent( fheroes2::ArtifactBonusType::NO_SHOOTING_PENALTY ) ) {
+                    return true;
+                }
+
+                if ( commander->GetLevelSkill( Skill::Secondary::ARCHERY ) != Skill::Level::NONE ) {
+                    return true;
+                }
+
+                return false;
+            }();
 
             const auto getTowerStrength = []( const Tower * tower ) { return ( tower && tower->isValid() ) ? tower->GetStrength() : 0; };
 
@@ -876,7 +965,7 @@ namespace AI
                 _myShootersStrength += towerStr;
 
                 if ( !attackerIgnoresCover ) {
-                    _enemyShootersStrength /= 1.5;
+                    _enemyShootersStrength /= 1 + ( GameStatic::getCastleWallRangedPenalty() / 100.0 );
                 }
             }
             else {
@@ -884,7 +973,7 @@ namespace AI
                 _enemyShootersStrength += towerStr;
 
                 if ( !attackerIgnoresCover ) {
-                    _myShootersStrength /= 1.5;
+                    _myShootersStrength /= 1 + ( GameStatic::getCastleWallRangedPenalty() / 100.0 );
                 }
             }
         }
@@ -958,7 +1047,7 @@ namespace AI
         Actions actions;
 
         // Current unit can be under the influence of the Hypnotize spell
-        const Units enemies( arena.getEnemyForce( _myColor ).getUnits(), &currentUnit );
+        const Units enemies( arena.getEnemyForce( _myColor ).getUnits(), Units::REMOVE_INVALID_UNITS_AND_SPECIFIED_UNIT, &currentUnit );
 
         // Assess the current threat level and decide whether to retreat to another position
         const int32_t retreatPositionIndex = [&arena, &currentUnit, &enemies]() {
@@ -1175,9 +1264,15 @@ namespace AI
             BattleTargetPair target;
             int32_t bestOutcome = INT32_MIN;
 
-            for ( const int32_t cellIdx : Board::GetAdjacentEnemiesIndexes( currentUnit ) ) {
-                const Unit * enemy = Board::GetCell( cellIdx )->GetUnit();
+            for ( const Unit * enemy : enemies ) {
                 assert( enemy != nullptr );
+
+                const uint32_t dist = Board::GetDistance( currentUnit.GetPosition(), enemy->GetPosition() );
+                assert( dist > 0 );
+
+                if ( dist != 1 ) {
+                    continue;
+                }
 
                 const int32_t archerMeleeDmg = [&currentUnit, enemy]() {
                     if ( currentUnit.Modes( SP_CURSE ) ) {
@@ -1212,7 +1307,7 @@ namespace AI
         // Archers are able to shoot
         else {
             BattleTargetPair target;
-            double highestPriority = -1;
+            double highestPriority = INT32_MIN;
 
             for ( const Unit * enemy : enemies ) {
                 assert( enemy != nullptr );
@@ -1292,7 +1387,7 @@ namespace AI
         const PositionValues valuesOfAttackPositions = evaluatePotentialAttackPositions( arena, currentUnit );
 
         // Current unit can be under the influence of the Hypnotize spell
-        const Units enemies( arena.getEnemyForce( _myColor ).getUnits(), &currentUnit );
+        const Units enemies( arena.getEnemyForce( _myColor ).getUnits(), Units::REMOVE_INVALID_UNITS_AND_SPECIFIED_UNIT, &currentUnit );
 
         // 1. Choose the best target within reach, if any
         {
@@ -1419,9 +1514,9 @@ namespace AI
 
         const PositionValues valuesOfAttackPositions = evaluatePotentialAttackPositions( arena, currentUnit );
 
-        const Units friendly( arena.getForce( _myColor ).getUnits(), &currentUnit );
+        const Units friendly( arena.getForce( _myColor ).getUnits(), Units::REMOVE_INVALID_UNITS_AND_SPECIFIED_UNIT, &currentUnit );
         // Current unit can be under the influence of the Hypnotize spell
-        const Units enemies( arena.getEnemyForce( _myColor ).getUnits(), &currentUnit );
+        const Units enemies( arena.getEnemyForce( _myColor ).getUnits(), Units::REMOVE_INVALID_UNITS_AND_SPECIFIED_UNIT, &currentUnit );
 
         // 1. Cover our archers and attack enemy units blocking them, if there are any. Units whose affiliation has been changed should not cover the archers, because
         // such units will block them instead of covering them.
@@ -1551,21 +1646,38 @@ namespace AI
                     return {};
                 }();
 
-                const Indexes adjacentEnemiesIndexes = Board::GetAdjacentEnemiesIndexes( *frnd );
+                const std::vector<const Unit *> adjacentEnemies = [&enemies, frnd]() {
+                    std::vector<const Unit *> result;
+                    result.reserve( enemies.size() );
+
+                    for ( const Unit * enemy : enemies ) {
+                        assert( enemy != nullptr );
+
+                        const uint32_t dist = Board::GetDistance( frnd->GetPosition(), enemy->GetPosition() );
+                        assert( dist > 0 );
+
+                        if ( dist != 1 ) {
+                            continue;
+                        }
+
+                        result.push_back( enemy );
+                    }
+
+                    return result;
+                }();
 
                 // If our archer is not blocked by enemy units, but the unit nevertheless cannot cover that archer, then ignore that archer
-                if ( bestCoverCellInfo.idx == -1 && adjacentEnemiesIndexes.empty() ) {
+                if ( bestCoverCellInfo.idx == -1 && adjacentEnemies.empty() ) {
                     continue;
                 }
 
                 // Either the unit can cover the friendly archer, or the archer is blocked by enemy units, which do not allow our unit to approach. As the distance to
                 // estimate the archer's value, we take the smallest of the distance that must be overcome to cover the archer and the distance that must be overcome to
                 // approach the nearest of the enemies blocking him.
-                const auto [eitherFrndOrAdjEnemyIsReachable, dist] = [&arena, &currentUnit, &bestCoverCellInfo, &adjacentEnemiesIndexes]() {
+                const auto [eitherFrndOrAdjEnemyIsReachable, dist] = [&arena, &currentUnit, &bestCoverCellInfo, &adjacentEnemies]() {
                     std::pair<bool, uint32_t> result{ bestCoverCellInfo.idx != -1, bestCoverCellInfo.dist };
 
-                    for ( const int idx : adjacentEnemiesIndexes ) {
-                        const Unit * enemy = Board::GetCell( idx )->GetUnit();
+                    for ( const Unit * enemy : adjacentEnemies ) {
                         assert( enemy != nullptr );
 
                         const CellDistanceInfo nearestToEnemyCellInfo = findNearestCellNextToUnit( arena, currentUnit, *enemy );
@@ -1608,8 +1720,7 @@ namespace AI
                 {
                     MeleeAttackOutcome bestOutcome;
 
-                    for ( const int idx : adjacentEnemiesIndexes ) {
-                        const Unit * enemy = Board::GetCell( idx )->GetUnit();
+                    for ( const Unit * enemy : adjacentEnemies ) {
                         assert( enemy != nullptr );
 
                         const MeleeAttackOutcome outcome = BestAttackOutcome( currentUnit, *enemy, valuesOfAttackPositions );

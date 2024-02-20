@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2023                                             *
+ *   Copyright (C) 2021 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -21,6 +21,7 @@
 #pragma once
 
 #include <cstdint>
+#include <functional>
 #include <map>
 #include <set>
 #include <string>
@@ -43,11 +44,11 @@ namespace fheroes2
         // Returns non-empty vector if requested file exists.
         std::vector<uint8_t> getFile( const std::string & fileName );
 
-        std::set<std::string> getAllFileNames() const;
+        std::set<std::string, std::less<>> getAllFileNames() const;
 
     private:
         // Relationship between file name in non-capital letters and its offset from the start of the archive.
-        std::map<std::string, std::pair<uint32_t, uint32_t>> _fileNameAndOffset;
+        std::map<std::string, std::pair<uint32_t, uint32_t>, std::less<>> _fileNameAndOffset;
 
         // Stream for reading h2d file.
         StreamFile _fileStream;
@@ -66,7 +67,7 @@ namespace fheroes2
         bool add( H2DReader & reader );
 
     private:
-        std::map<std::string, std::vector<uint8_t>> _fileData;
+        std::map<std::string, std::vector<uint8_t>, std::less<>> _fileData;
     };
 
     bool readImageFromH2D( H2DReader & reader, const std::string & name, Sprite & image );

@@ -3,6 +3,8 @@ name: Clang Analyzer
 on:
   workflow_call:
 
+permissions: {}
+
 jobs:
   clang:
     name: Clang Analyzer

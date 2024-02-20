@@ -136,8 +136,14 @@ namespace fheroes2
 
     MovableSprite & MovableSprite::operator=( const Sprite & sprite )
     {
+        if ( this == &sprite ) {
+            return *this;
+        }
+
         Sprite::operator=( sprite );
+
         _restorer.update( x(), y(), width(), height() );
+
         return *this;
     }
 

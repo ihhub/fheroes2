@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2023                                             *
+ *   Copyright (C) 2021 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -655,22 +655,28 @@ namespace fheroes2
         int32_t xOffset = 0;
         int32_t correctedWidth = maxWidth;
         if ( offsets.size() > 1 ) {
-            // This is a multi-line message. Optimize it to fit the text evenly.
-            int32_t startWidth = getMaxWordWidth( reinterpret_cast<const uint8_t *>( _text.data() ), static_cast<int32_t>( _text.size() ), _fontType );
-            int32_t endWidth = maxWidth;
-            while ( startWidth + 1 < endWidth ) {
-                const int32_t currentWidth = ( endWidth + startWidth ) / 2;
-                std::deque<Point> tempOffsets;
-                getMultiRowInfo( reinterpret_cast<const uint8_t *>( _text.data() ), static_cast<int32_t>( _text.size() ), currentWidth, _fontType, fontHeight,
-                                 tempOffsets );
+            if ( _isUniformedVerticalAlignment ) {
+                // This is a multi-line message. Optimize it to fit the text evenly.
+                int32_t startWidth = getMaxWordWidth( reinterpret_cast<const uint8_t *>( _text.data() ), static_cast<int32_t>( _text.size() ), _fontType );
+                int32_t endWidth = maxWidth;
+                while ( startWidth + 1 < endWidth ) {
+                    const int32_t currentWidth = ( endWidth + startWidth ) / 2;
+                    std::deque<Point> tempOffsets;
+                    getMultiRowInfo( reinterpret_cast<const uint8_t *>( _text.data() ), static_cast<int32_t>( _text.size() ), currentWidth, _fontType, fontHeight,
+                                     tempOffsets );
 
-                if ( tempOffsets.size() > offsets.size() ) {
-                    startWidth = currentWidth;
-                    continue;
+                    if ( tempOffsets.size() > offsets.size() ) {
+                        startWidth = currentWidth;
+                        continue;
+                    }
+
+                    correctedWidth = currentWidth;
+                    endWidth = currentWidth;
                 }
-
-                correctedWidth = currentWidth;
-                endWidth = currentWidth;
+            }
+            else {
+                // This is a multi-lined message and we try to fit as many words on every line as possible.
+                correctedWidth = width( maxWidth );
             }
         }
         else {
@@ -862,36 +868,42 @@ namespace fheroes2
         int32_t xOffset = 0;
         int32_t correctedWidth = maxWidth;
         if ( offsets.size() > 1 ) {
-            // This is a multi-line message. Optimize it to fit the text evenly.
-            int32_t startWidth = 1;
-            for ( const Text & text : _texts ) {
-                const int32_t maxWordWidth
-                    = getMaxWordWidth( reinterpret_cast<const uint8_t *>( text._text.data() ), static_cast<int32_t>( text._text.size() ), text._fontType );
-                if ( startWidth < maxWordWidth ) {
-                    startWidth = maxWordWidth;
-                }
-            }
-
-            int32_t endWidth = maxWidth;
-            while ( startWidth + 1 < endWidth ) {
-                const int32_t currentWidth = ( endWidth + startWidth ) / 2;
-                std::deque<Point> tempOffsets;
+            if ( _isUniformedVerticalAlignment ) {
+                // This is a multi-line message. Optimize it to fit the text evenly.
+                int32_t startWidth = 1;
                 for ( const Text & text : _texts ) {
-                    getMultiRowInfo( reinterpret_cast<const uint8_t *>( text._text.data() ), static_cast<int32_t>( text._text.size() ), currentWidth, text._fontType,
-                                     maxFontHeight, tempOffsets );
+                    const int32_t maxWordWidth
+                        = getMaxWordWidth( reinterpret_cast<const uint8_t *>( text._text.data() ), static_cast<int32_t>( text._text.size() ), text._fontType );
+                    if ( startWidth < maxWordWidth ) {
+                        startWidth = maxWordWidth;
+                    }
                 }
 
-                if ( tempOffsets.size() > offsets.size() ) {
-                    startWidth = currentWidth;
-                    continue;
+                int32_t endWidth = maxWidth;
+                while ( startWidth + 1 < endWidth ) {
+                    const int32_t currentWidth = ( endWidth + startWidth ) / 2;
+                    std::deque<Point> tempOffsets;
+                    for ( const Text & text : _texts ) {
+                        getMultiRowInfo( reinterpret_cast<const uint8_t *>( text._text.data() ), static_cast<int32_t>( text._text.size() ), currentWidth, text._fontType,
+                                         maxFontHeight, tempOffsets );
+                    }
+
+                    if ( tempOffsets.size() > offsets.size() ) {
+                        startWidth = currentWidth;
+                        continue;
+                    }
+
+                    correctedWidth = currentWidth;
+                    endWidth = currentWidth;
+                    std::swap( offsets, tempOffsets );
                 }
 
-                correctedWidth = currentWidth;
-                endWidth = currentWidth;
-                std::swap( offsets, tempOffsets );
+                xOffset = ( maxWidth - correctedWidth ) / 2;
             }
-
-            xOffset = ( maxWidth - correctedWidth ) / 2;
+            else {
+                // This is a multi-lined message and we try to fit as many words on every line as possible.
+                correctedWidth = width( maxWidth );
+            }
         }
         else {
             // This is a single-line message. Find its length and center it according to the maximum width.

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2012 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -202,10 +202,6 @@ StreamBase & StreamBase::operator<<( const fheroes2::Point & point_ )
 }
 
 StreamBuf::StreamBuf( const size_t sz )
-    : itbeg( nullptr )
-    , itget( nullptr )
-    , itput( nullptr )
-    , itend( nullptr )
 {
     if ( sz ) {
         reallocbuf( sz );
@@ -223,24 +219,16 @@ StreamBuf::~StreamBuf()
     delete[] itbeg;
 }
 
-StreamBuf::StreamBuf( StreamBuf && st ) noexcept
-    : StreamBase( std::move( st ) )
-    , itbeg( nullptr )
-    , itget( nullptr )
-    , itput( nullptr )
-    , itend( nullptr )
+StreamBuf::StreamBuf( StreamBuf && stream ) noexcept
+    : StreamBase( std::move( stream ) )
 {
-    std::swap( itbeg, st.itbeg );
-    std::swap( itget, st.itget );
-    std::swap( itput, st.itput );
-    std::swap( itend, st.itend );
+    std::swap( itbeg, stream.itbeg );
+    std::swap( itget, stream.itget );
+    std::swap( itput, stream.itput );
+    std::swap( itend, stream.itend );
 }
 
 StreamBuf::StreamBuf( const std::vector<uint8_t> & buf )
-    : itbeg( nullptr )
-    , itget( nullptr )
-    , itput( nullptr )
-    , itend( nullptr )
 {
     itbeg = const_cast<uint8_t *>( buf.data() );
     itend = itbeg + buf.size();
@@ -248,36 +236,21 @@ StreamBuf::StreamBuf( const std::vector<uint8_t> & buf )
     itput = itend;
 
     setconstbuf( true );
-
     setbigendian( IS_BIGENDIAN );
 }
 
-StreamBuf::StreamBuf( const uint8_t * buf, size_t bufsz )
-    : itbeg( nullptr )
-    , itget( nullptr )
-    , itput( nullptr )
-    , itend( nullptr )
+StreamBuf & StreamBuf::operator=( StreamBuf && stream ) noexcept
 {
-    itbeg = const_cast<uint8_t *>( buf );
-    itend = itbeg + bufsz;
-    itget = itbeg;
-    itput = itend;
-
-    setconstbuf( true );
-
-    setbigendian( IS_BIGENDIAN );
-}
-
-StreamBuf & StreamBuf::operator=( StreamBuf && st ) noexcept
-{
-    if ( &st != this ) {
-        StreamBase::operator=( std::move( st ) );
-
-        std::swap( itbeg, st.itbeg );
-        std::swap( itget, st.itget );
-        std::swap( itput, st.itput );
-        std::swap( itend, st.itend );
+    if ( this == &stream ) {
+        return *this;
     }
+
+    StreamBase::operator=( std::move( stream ) );
+
+    std::swap( itbeg, stream.itbeg );
+    std::swap( itget, stream.itget );
+    std::swap( itput, stream.itput );
+    std::swap( itend, stream.itend );
 
     return *this;
 }

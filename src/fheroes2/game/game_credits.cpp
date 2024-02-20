@@ -307,6 +307,7 @@ namespace
                                 "Benjamin Hughes\n"
                                 "Brandon Wright\n"
                                 "Connor Townsend\n"
+                                "Grigoris Papadourakis\n"
                                 "Hajler\n"
                                 "Kiril Lipatov\n"
                                 "Kresimir Condic\n"
@@ -692,7 +693,7 @@ void Game::ShowCredits( const bool keepMainMenuBorders )
     const fheroes2::Rect creditsRoi( mainMenuBackground.x(), mainMenuBackground.y(), mainMenuBackground.width(), mainMenuBackground.height() );
 
     // Hide mouse cursor.
-    const CursorRestorer cursorRestorer( false, Cursor::POINTER );
+    const CursorRestorer cursorRestorer( false );
 
     std::unique_ptr<fheroes2::ImageRestorer> restorer;
 

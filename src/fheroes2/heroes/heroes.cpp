@@ -117,14 +117,14 @@ namespace
                     case MP2::OBJ_NON_ACTION_SHIPWRECK:
                     case MP2::OBJ_DERELICT_SHIP:
                     case MP2::OBJ_NON_ACTION_DERELICT_SHIP: {
-                        std::string modRobber = _( "%{object} robber" );
+                        std::string modRobber = _( "shipAndGraveyard|%{object} robber" );
                         StringReplace( modRobber, "%{object}", MP2::StringObject( objectType ) );
                         strs->append( modRobber );
                         break;
                     }
                     case MP2::OBJ_PYRAMID:
                     case MP2::OBJ_NON_ACTION_PYRAMID: {
-                        std::string modRaided = _( "%{object} raided" );
+                        std::string modRaided = _( "pyramid|%{object} raided" );
                         StringReplace( modRaided, "%{object}", MP2::StringObject( objectType ) );
                         strs->append( modRaided );
                         break;
@@ -812,7 +812,7 @@ uint32_t Heroes::GetMaxMovePoints( const bool onWater ) const
 
     // AI-controlled heroes receive additional movement bonus depending on the game difficulty
     if ( isControlAI() ) {
-        result += Difficulty::GetHeroMovementBonus( Game::getDifficulty() );
+        result += Difficulty::GetHeroMovementBonusForAI( Game::getDifficulty() );
     }
 
     return result;

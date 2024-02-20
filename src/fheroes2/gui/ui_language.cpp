@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2023                                             *
+ *   Copyright (C) 2021 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -23,6 +23,7 @@
 #include <algorithm>
 #include <cassert>
 #include <cstdint>
+#include <functional>
 #include <map>
 #include <set>
 #include <utility>
@@ -46,7 +47,7 @@ namespace
                                                                             { 0x1CEBD099, fheroes2::SupportedLanguage::Czech } }; // CD Projekt
 
     // Strings in this map must in lower case and non translatable.
-    const std::map<std::string, fheroes2::SupportedLanguage> languageName
+    const std::map<std::string, fheroes2::SupportedLanguage, std::less<>> languageName
         = { { "pl", fheroes2::SupportedLanguage::Polish },     { "polish", fheroes2::SupportedLanguage::Polish },
             { "de", fheroes2::SupportedLanguage::German },     { "german", fheroes2::SupportedLanguage::German },
             { "fr", fheroes2::SupportedLanguage::French },     { "french", fheroes2::SupportedLanguage::French },

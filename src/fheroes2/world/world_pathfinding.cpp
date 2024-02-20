@@ -1201,7 +1201,7 @@ std::vector<IndexObject> AIWorldPathfinder::getObjectsOnTheWay( const int target
 
 std::list<Route::Step> AIWorldPathfinder::getDimensionDoorPath( const Heroes & hero, int targetIndex ) const
 {
-    uint32_t difficultyLimit = Difficulty::GetDimensionDoorLimit( Game::getDifficulty() );
+    uint32_t difficultyLimit = Difficulty::GetDimensionDoorLimitForAI( Game::getDifficulty() );
     const uint32_t spellsUsedThisTurn = hero.getDimensionDoorUses();
     if ( hero.GetIndex() == targetIndex || spellsUsedThisTurn >= difficultyLimit ) {
         return {};

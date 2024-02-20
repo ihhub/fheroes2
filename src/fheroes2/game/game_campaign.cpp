@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2023                                             *
+ *   Copyright (C) 2020 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -396,6 +396,7 @@ namespace
         campaignMapId.draw( top.x + 172 - campaignMapId.width() / 2, top.y + 99 - campaignMapId.height() / 2, display );
 
         fheroes2::Text mapDescription( scenario.getDescription(), fheroes2::FontType::normalWhite() );
+        mapDescription.setUniformVerticalAlignment( false );
         mapDescription.draw( top.x + 34, top.y + 134, 356, display );
 
         const int textChoiceWidth = 160;
@@ -942,9 +943,9 @@ namespace
 
         fheroes2::MovableSprite selection( selectionImage );
 
-        const char * easyDescription = _( "Choose this difficulty if you want to prefer game story over challenge. AI is weaker in comparison with normal difficulty." );
-        const char * normalDescription = _( "Choose this difficulty to enjoy the campaign as per the original design." );
-        const char * hardDescription = _( "Choose this difficulty if you want challenge. AI is stronger in comparison with normal difficulty." );
+        const char * easyDescription = _( "Choose this difficulty to experience the game's story with less challenge. The AI will be weaker than at Normal difficulty." );
+        const char * normalDescription = _( "Choose this difficulty to experience the campaign as per the original design." );
+        const char * hardDescription = _( "Choose this difficulty if you want more challenge. The AI will be stronger than at Normal difficulty." );
 
         const std::array<fheroes2::Rect, 3> difficultyArea{ fheroes2::Rect( copyToOffset[0].x + 1, windowRoi.y + 37, selectionImage.width(), selectionImage.height() ),
                                                             fheroes2::Rect( copyToOffset[1].x + 1, windowRoi.y + 37, selectionImage.width(), selectionImage.height() ),
@@ -993,6 +994,7 @@ namespace
 
         fheroes2::Text description( currentDescription, fheroes2::FontType::normalWhite() );
         fheroes2::ImageRestorer restorer( display, textOffset.x, textOffset.y, textWidth, description.height( textWidth ) );
+        description.setUniformVerticalAlignment( false );
         description.draw( textOffset.x, textOffset.y, textWidth, display );
 
         const fheroes2::Text easyName( getCampaignDifficultyText( Campaign::CampaignDifficulty::Easy ), fheroes2::FontType::normalWhite() );
@@ -1536,7 +1538,8 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
         }
         else if ( le.MousePressRight( buttonViewIntro.area() ) ) {
             fheroes2::showMessage( fheroes2::Text( _( "View Intro" ), fheroes2::FontType::normalYellow() ),
-                                   fheroes2::Text( _( "View Intro videos for the current state of the campaign." ), fheroes2::FontType::normalWhite() ), Dialog::ZERO );
+                                   fheroes2::Text( _( "View the intro video for the current state of the campaign." ), fheroes2::FontType::normalWhite() ),
+                                   Dialog::ZERO );
         }
         else if ( le.MousePressRight( buttonDifficulty.area() ) ) {
             fheroes2::showMessage( fheroes2::Text( _( "Campaign Difficulty" ), fheroes2::FontType::normalYellow() ),
@@ -1583,9 +1586,9 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
                 return bonusChoices[*scenarioBonusId];
             }();
 
-            // starting faction scenario bonus has to be called before players.SetStartGame()
+            // Scenario bonus related to the starting faction has to be set before calling players.SetStartGame(). If the scenario bonus includes the starting army, then
+            // only the starting faction should still be set.
             if ( scenarioBonus._type == Campaign::ScenarioBonusData::STARTING_RACE || scenarioBonus._type == Campaign::ScenarioBonusData::STARTING_RACE_AND_ARMY ) {
-                // but the army has to be set after starting the game, so first only set the race
                 SetScenarioBonus( currentScenarioInfoId, { Campaign::ScenarioBonusData::STARTING_RACE, scenarioBonus._subType, scenarioBonus._amount } );
             }
 
@@ -1593,6 +1596,9 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
             if ( isBetrayalScenario( currentScenarioInfoId ) ) {
                 campaignSaveData.removeAllAwards();
             }
+
+            // Scenario difficulty must be set before loading the map, because it is used during the map loading process.
+            campaignSaveData.setDifficulty( currentDifficulty );
 
             Players & players = conf.GetPlayers();
             players.SetStartGame();
@@ -1613,7 +1619,7 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
             // Fade-out screen before loading a scenario.
             fheroes2::fadeOutDisplay();
 
-            // meanwhile, the others should be called after players.SetStartGame()
+            // The rest of the scenario bonuses should be set after calling players.SetStartGame().
             if ( scenarioBonus._type != Campaign::ScenarioBonusData::STARTING_RACE ) {
                 SetScenarioBonus( currentScenarioInfoId, scenarioBonus );
             }
@@ -1621,7 +1627,6 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
             applyObtainedCampaignAwards( currentScenarioInfoId, campaignSaveData.getObtainedCampaignAwards() );
 
             campaignSaveData.setCurrentScenarioInfo( currentScenarioInfoId, scenarioBonusId.value_or( -1 ) );
-            campaignSaveData.setDifficulty( currentDifficulty );
 
             return fheroes2::GameMode::START_GAME;
         }

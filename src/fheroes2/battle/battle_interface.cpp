@@ -2612,7 +2612,7 @@ int Battle::Interface::GetBattleCursor( std::string & statusMsg ) const
     }
 
     statusMsg = _( "Turn %{turn}" );
-    StringReplace( statusMsg, "%{turn}", arena.GetCurrentTurn() );
+    StringReplace( statusMsg, "%{turn}", arena.GetTurnNumber() );
 
     return Cursor::WAR_NONE;
 }
@@ -2771,9 +2771,9 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
         else if ( Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_OPTIONS ) ) {
             EventShowOptions();
         }
-        // Switch the auto battle mode on/off
+        // Switch the auto battle mode on
         else if ( Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_AUTO_SWITCH ) ) {
-            EventAutoSwitch( unit, actions );
+            EventStartAutoBattle( unit, actions );
         }
         // Finish the battle in auto mode
         else if ( Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_AUTO_FINISH ) ) {
@@ -3107,9 +3107,16 @@ void Battle::Interface::EventShowOptions()
     humanturn_redraw = true;
 }
 
-void Battle::Interface::EventAutoSwitch( const Unit & unit, Actions & actions )
+void Battle::Interface::EventStartAutoBattle( const Unit & unit, Actions & actions )
 {
-    if ( !arena.CanToggleAutoBattle() ) {
+    // TODO: remove these temporary assertions
+    assert( arena.CanToggleAutoBattle() );
+    assert( !arena.AutoBattleInProgress() );
+
+    int startAutoBattle
+        = fheroes2::showMessage( fheroes2::Text( "", {} ), fheroes2::Text( _( "Are you sure you want to enable auto combat?" ), fheroes2::FontType::normalWhite() ),
+                                 Dialog::YES | Dialog::NO );
+    if ( startAutoBattle != Dialog::YES ) {
         return;
     }
 
@@ -3141,13 +3148,7 @@ void Battle::Interface::ButtonAutoAction( const Unit & unit, Actions & actions )
     le.MousePressLeft( btn_auto.area() ) ? btn_auto.drawOnPress() : btn_auto.drawOnRelease();
 
     if ( le.MouseClickLeft( btn_auto.area() ) ) {
-        if ( fheroes2::showMessage( fheroes2::Text( "", {} ), fheroes2::Text( _( "Are you sure you want to enable auto combat?" ), fheroes2::FontType::normalWhite() ),
-                                    Dialog::YES | Dialog::NO )
-             != Dialog::YES ) {
-            return;
-        }
-
-        EventAutoSwitch( unit, actions );
+        EventStartAutoBattle( unit, actions );
     }
 }
 
@@ -3390,7 +3391,7 @@ void Battle::Interface::RedrawTroopDefaultDelay( Unit & unit )
 
 void Battle::Interface::RedrawActionSkipStatus( const Unit & unit )
 {
-    std::string msg = _( "%{name} skip their turn." );
+    std::string msg = _n( "The %{name} skips their turn.", "The %{name} skip their turn.", unit.GetCount() );
     StringReplaceWithLowercase( msg, "%{name}", unit.GetName() );
 
     status.SetMessage( msg, true );
@@ -3464,7 +3465,7 @@ void Battle::Interface::RedrawActionNewTurn() const
     }
 
     std::string msg = _( "Turn %{turn}" );
-    StringReplace( msg, "%{turn}", arena.GetCurrentTurn() );
+    StringReplace( msg, "%{turn}", arena.GetTurnNumber() );
 
     listlog->AddMessage( std::move( msg ) );
 }
@@ -3481,7 +3482,7 @@ void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, const Unit & d
     const fheroes2::Rect & pos1 = attacker.GetRectPosition();
     const fheroes2::Rect & pos2 = defender.GetRectPosition();
 
-    const bool archer = attacker.isArchers() && !attacker.isHandFighting();
+    const bool archer = attacker.isArchers() && !Unit::isHandFighting( attacker, defender );
     const bool isDoubleCell = attacker.isDoubleCellAttack() && 2 == targets.size();
 
     // redraw luck animation
@@ -3489,7 +3490,7 @@ void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, const Unit & d
         RedrawActionLuck( attacker );
     }
 
-    AudioManager::PlaySound( attacker.M82Attk() );
+    AudioManager::PlaySound( attacker.M82Attk( defender ) );
 
     // long distance attack animation
     if ( archer ) {
@@ -3660,7 +3661,7 @@ void Battle::Interface::RedrawActionWincesKills( const TargetsInfo & targets, Un
 
     // If this was a Lich attack, we should render an explosion cloud over the target unit immediately after the projectile hits the target,
     // along with the unit kill/wince animation.
-    const bool drawLichCloud = ( attacker != nullptr ) && ( defender != nullptr ) && attacker->isArchers() && !attacker->isHandFighting()
+    const bool drawLichCloud = ( attacker != nullptr ) && ( defender != nullptr ) && attacker->isArchers() && !Unit::isHandFighting( *attacker, *defender )
                                && attacker->isAbilityPresent( fheroes2::MonsterAbilityType::AREA_SHOT );
 
     // Play sound only if it is not already playing.
@@ -4226,7 +4227,7 @@ void Battle::Interface::RedrawActionResistSpell( const Unit & target, const bool
     if ( playSound ) {
         AudioManager::PlaySound( M82::RSBRYFZL );
     }
-    std::string str( _( "The %{name} resist the spell!" ) );
+    std::string str( _n( "The %{name} resists the spell!", "The %{name} resist the spell!", target.GetCount() ) );
     StringReplaceWithLowercase( str, "%{name}", target.GetName() );
     status.SetMessage( str, true );
     status.SetMessage( "", false );
@@ -4571,32 +4572,33 @@ void Battle::Interface::RedrawActionSpellCastPart2( const Spell & spell, const T
 void Battle::Interface::RedrawActionMonsterSpellCastStatus( const Spell & spell, const Unit & attacker, const TargetInfo & target )
 {
     std::string msg;
+    const uint32_t attackerCount = attacker.GetCount();
 
     switch ( spell.GetID() ) {
     case Spell::BLIND:
-        msg = _( "The %{attacker}' attack blinds the %{target}!" );
+        msg = _n( "The %{attacker}'s attack blinds the %{target}!", "The %{attacker}' attack blinds the %{target}!", attackerCount );
         break;
     case Spell::PETRIFY:
-        msg = _( "The %{attacker}' gaze turns the %{target} to stone!" );
+        msg = _n( "The %{attacker}'s gaze turns the %{target} to stone!", "The %{attacker}' gaze turns the %{target} to stone!", attackerCount );
         break;
     case Spell::CURSE:
-        msg = _( "The %{attacker}' curse falls upon the %{target}!" );
+        msg = _n( "The %{attacker}'s curse falls upon the %{target}!", "The %{attacker}' curse falls upon the %{target}!", attackerCount );
         break;
     case Spell::PARALYZE:
-        msg = _( "The %{target} are paralyzed by the %{attacker}!" );
+        msg = _n( "The %{target} is paralyzed by the %{attacker}!", "The %{target} are paralyzed by the %{attacker}!", target.defender->GetCount() );
         break;
     case Spell::DISPEL:
-        msg = _( "The %{attacker} dispel all good spells on your %{target}!" );
+        msg = _n( "The %{attacker} dispels all good spells on your %{target}!", "The %{attacker} dispel all good spells on your %{target}!", attackerCount );
         break;
     default:
         // Did you add a new monster spell casting ability? Add the logic above!
         assert( 0 );
-        msg = _( "The %{attacker} cast %{spell} on %{target}!" );
+        msg = _n( "The %{attacker} casts %{spell} on the %{target}!", "The %{attacker} cast %{spell} on the %{target}!", attackerCount );
         StringReplace( msg, "%{spell}", spell.GetName() );
         break;
     }
 
-    StringReplaceWithLowercase( msg, "%{attacker}", attacker.GetMultiName() );
+    StringReplaceWithLowercase( msg, "%{attacker}", attacker.GetName() );
     StringReplaceWithLowercase( msg, "%{target}", target.defender->GetName() );
 
     status.SetMessage( msg, true );
@@ -6318,17 +6320,41 @@ void Battle::Interface::CheckGlobalEvents( LocalEvent & le )
         }
     }
 
-    // Interrupting auto battle
-    if ( arena.AutoBattleInProgress() && arena.CanToggleAutoBattle()
-         && ( le.MouseClickLeft( btn_auto.area() )
-              || ( le.KeyPress()
-                   && ( Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_AUTO_SWITCH )
-                        || ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL )
-                             && fheroes2::showMessage( fheroes2::Text( "", {} ),
-                                                       fheroes2::Text( _( "Are you sure you want to interrupt the auto battle?" ), fheroes2::FontType::normalWhite() ),
-                                                       Dialog::YES | Dialog::NO )
-                                    == Dialog::YES ) ) ) ) ) {
-        _interruptAutoBattleForColor = arena.GetCurrentColor();
+    // Check if auto battle interruption was requested.
+    InterruptAutoBattleIfRequested( le );
+}
+
+void Battle::Interface::InterruptAutoBattleIfRequested( LocalEvent & le )
+{
+    // Interrupt only if automation is currently on.
+    if ( !arena.AutoBattleInProgress() && !arena.EnemyOfAIHasAutoBattleInProgress() ) {
+        return;
+    }
+
+    if ( !le.MouseClickLeft() && !le.MouseClickRight() && !Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_AUTO_SWITCH )
+         && !Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
+        return;
+    }
+
+    // Identify which color requested the auto battle interrupt.
+    int color = arena.GetCurrentColor();
+    if ( arena.GetCurrentForce().GetControl() & CONTROL_AI ) {
+        color = arena.GetOppositeColor( color );
+    }
+
+    // The battle interruption is already scheduled, no need for the dialog.
+    if ( color == _interruptAutoBattleForColor ) {
+        return;
+    }
+
+    // Right now there should be no pending auto battle interruptions.
+    assert( _interruptAutoBattleForColor == 0 );
+
+    const int interrupt = fheroes2::showMessage( fheroes2::Text( "", {} ),
+                                                 fheroes2::Text( _( "Are you sure you want to interrupt the auto combat?" ), fheroes2::FontType::normalWhite() ),
+                                                 Dialog::YES | Dialog::NO );
+    if ( interrupt == Dialog::YES ) {
+        _interruptAutoBattleForColor = color;
     }
 }
 

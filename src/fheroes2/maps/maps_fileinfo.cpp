@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -26,6 +26,7 @@
 #include <algorithm>
 #include <cassert>
 #include <cstring>
+#include <functional>
 #include <limits>
 #include <list>
 #include <locale>
@@ -85,7 +86,7 @@ namespace
     MapsFileInfoList getValidMaps( const ListFiles & mapFiles, const bool isMultiplayer, const bool isForEditor, const bool isOriginalMapFormat )
     {
         // create a list of unique maps (based on the map file name) and filter it by the preferred number of players
-        std::map<std::string, Maps::FileInfo> uniqueMaps;
+        std::map<std::string, Maps::FileInfo, std::less<>> uniqueMaps;
 
         const Settings & conf = Settings::Get();
         const int prefNumOfPlayers = conf.PreferablyCountPlayers();
@@ -410,6 +411,20 @@ bool Maps::FileInfo::readResurrectionMap( std::string filePath, const bool isFor
     kingdomColors = map.availablePlayerColors;
     colorsAvailableForHumans = map.humanPlayerColors;
     colorsAvailableForComp = map.computerPlayerColors;
+
+    races = map.playerRace;
+
+    victoryConditionType = VICTORY_DEFEAT_EVERYONE;
+    compAlsoWins = true;
+    allowNormalVictory = true;
+
+    lossConditionType = LOSS_EVERYTHING;
+
+    for ( size_t i = 0; i < races.size(); ++i ) {
+        if ( races[i] == Race::RAND ) {
+            colorsOfRandomRaces |= static_cast<uint8_t>( 1 << i );
+        }
+    }
 
     version = GameVersion::RESURRECTION;
 

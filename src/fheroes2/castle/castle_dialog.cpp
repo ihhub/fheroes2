@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -43,17 +43,21 @@
 #include "game.h"
 #include "game_delays.h"
 #include "game_hotkeys.h"
+#include "game_interface.h"
 #include "gamedefs.h"
 #include "heroes.h"
 #include "heroes_base.h"
 #include "icn.h"
 #include "image.h"
+#include "interface_gamearea.h"
 #include "kingdom.h"
 #include "localevent.h"
 #include "m82.h"
 #include "math_base.h"
 #include "monster.h"
 #include "mus.h"
+#include "payment.h"
+#include "resource.h"
 #include "screen.h"
 #include "statusbar.h"
 #include "tools.h"
@@ -270,6 +274,9 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
             break;
         default:
             if ( build != BUILD_NOTHING ) {
+                Funds remainingFunds = GetKingdom().GetFunds() - PaymentConditions::BuyBuilding( race, build );
+                remainingFunds.Trim();
+                fheroes2::drawResourcePanel( remainingFunds, display, dialogRoi.getPosition() );
                 AudioManager::PlaySound( M82::BUILDTWN );
                 fadeBuilding.StartFadeBuilding( build );
             }
@@ -403,6 +410,9 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
             // Check buttons for closing this castle's window.
             if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() ) {
                 result = CastleDialogReturnValue::Close;
+
+                // Disable fast scroll for resolutions where the exit button is directly above the border.
+                Interface::AdventureMap::Get().getGameArea().setFastScrollStatus( false );
 
                 // Fade-out castle dialog.
                 fheroes2::fadeOutDisplay( dialogRoi, !isDefaultScreenSize );
@@ -579,6 +589,7 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
                             const fheroes2::ButtonRestorer exitRestorer( buttonExit );
                             if ( Dialog::OK == Dialog::BuyBoat( AllowBuyBoat( true ) ) ) {
                                 BuyBoat();
+                                fheroes2::drawResourcePanel( GetKingdom().GetFunds(), display, dialogRoi.getPosition() );
                                 fadeBuilding.StartFadeBuilding( BUILD_SHIPYARD );
                             }
                             break;
@@ -602,6 +613,9 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
                                 fheroes2::showStandardTextMessage( _( "Town" ), _( "This town may not be upgraded to a castle." ), Dialog::OK );
                             }
                             else if ( Dialog::OK == DialogBuyCastle( true ) ) {
+                                Funds remainingFunds = GetKingdom().GetFunds() - PaymentConditions::BuyBuilding( race, BUILD_CASTLE );
+                                remainingFunds.Trim();
+                                fheroes2::drawResourcePanel( remainingFunds, display, dialogRoi.getPosition() );
                                 AudioManager::PlaySound( M82::BUILDTWN );
                                 fadeBuilding.StartFadeBuilding( BUILD_CASTLE );
                             }
@@ -716,9 +730,6 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
                     RedrawIcons( *this, hero, dialogRoi.getPosition() );
                     fheroes2::drawCastleName( *this, fheroes2::Display::instance(), dialogRoi.getPosition() );
                 }
-
-                fheroes2::drawResourcePanel( GetKingdom().GetFunds(), display, dialogRoi.getPosition() );
-
                 display.render( dialogRoi );
             }
 

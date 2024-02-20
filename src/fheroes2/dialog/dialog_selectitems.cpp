@@ -696,6 +696,10 @@ namespace
 
         std::string getObjectName( const Maps::ObjectInfo & info ) override
         {
+            if ( info.objectType == MP2::OBJ_NONE ) {
+                return _( "Terrain object" );
+            }
+
             return MP2::StringObject( info.objectType );
         }
     };
@@ -1271,6 +1275,15 @@ int Dialog::selectDwellingType( const int dwellingType )
     return selectObjectType( dwellingType, objectInfo.size(), listbox );
 }
 
+int Dialog::selectLandscapeMiscellaneousObjectType( const int objectType )
+{
+    const auto & objectInfo = Maps::getObjectsByGroup( Maps::ObjectGroup::LANDSCAPE_MISCELLANEOUS );
+
+    GenericObjectTypeSelection listbox( objectInfo, { 420, fheroes2::Display::instance().height() - 180 }, _( "Select Landscape Object:" ) );
+
+    return selectObjectType( objectType, objectInfo.size(), listbox );
+}
+
 void Dialog::selectMineType( int32_t & type, int32_t & color )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
@@ -1463,10 +1476,15 @@ void Dialog::selectMineType( int32_t & type, int32_t & color )
 
     fheroes2::ImageRestorer appearanceTextBackground( display, 0, 0, 0, 0 );
     // Mine appearance selection text.
-    auto redrawAppearanceText = [&selectedResourceType, &appearanceTextBackground, &listRoi, &display]( const Maps::ObjectInfo & info ) {
+    auto redrawAppearanceText = [selectedResourceType, &appearanceTextBackground, &listRoi, &display]( const Maps::ObjectInfo & info ) {
         std::string mineText( _( "%{mineName} appearance:" ) );
         if ( info.objectType == MP2::OBJ_MINE ) {
             assert( selectedResourceType < 7 );
+
+#ifdef NDEBUG
+            (void)selectedResourceType;
+#endif
+
             StringReplace( mineText, "%{mineName}", Maps::GetMineName( static_cast<int>( info.metadata[0] ) ) );
         }
         else {

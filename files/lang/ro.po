@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-20 03:11+0000\n"
+"POT-Creation-Date: 2024-02-18 14:42+0000\n"
 "PO-Revision-Date: 2022-10-25 08:56+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -409,9 +409,10 @@ msgstr ""
 "Nu există niciun spațiu deschis adiacent eroului tău în care să invoci un "
 "elemental."
 
+#, fuzzy
 msgid ""
-"The Moat reduces by -%{count} the defense skill of any unit and slows to "
-"half movement rate."
+"The Moat reduces the defense skill of troops trapped in it by %{count} and "
+"restricts their movement range."
 msgstr ""
 "Șanțul reduce cu -%{count} abilitatea de apărare a oricărei unități și "
 "reduce la jumătate viteza de mișcare."
@@ -780,15 +781,19 @@ msgstr "Bara de mesaje"
 msgid "Shows the results of individual monster's actions."
 msgstr "Afișează rezultatele acțiunilor individuale ale monștrilor."
 
-msgid "Are you sure you want to finish the battle in auto mode?"
-msgstr "Ești sigur că vrei să termini bătălia în modul automat?"
-
 #, fuzzy
 msgid "Are you sure you want to enable auto combat?"
 msgstr "Ești sigur că vrei să te retragi?"
 
-msgid "%{name} skip their turn."
-msgstr "%{name} și-a sărit rândul."
+msgid "Are you sure you want to finish the battle in auto mode?"
+msgstr "Ești sigur că vrei să termini bătălia în modul automat?"
+
+#, fuzzy
+msgid "The %{name} skips their turn."
+msgid_plural "The %{name} skip their turn."
+msgstr[0] "%{name} și-a sărit rândul."
+msgstr[1] "%{name} și-a sărit rândul."
+msgstr[2] "%{name} și-a sărit rândul."
 
 msgid "%{attacker} does %{damage} damage."
 msgid_plural "%{attacker} do %{damage} damage."
@@ -824,8 +829,12 @@ msgstr[2] ""
 msgid "Moved %{monster}: from [%{src}] to [%{dst}]."
 msgstr "%{monster} mutat: de la [%{src}] la [%{dst}]."
 
-msgid "The %{name} resist the spell!"
-msgstr "%{name} rezistă la vrajă!"
+#, fuzzy
+msgid "The %{name} resists the spell!"
+msgid_plural "The %{name} resist the spell!"
+msgstr[0] "%{name} rezistă la vrajă!"
+msgstr[1] "%{name} rezistă la vrajă!"
+msgstr[2] "%{name} rezistă la vrajă!"
 
 msgid "%{name} casts %{spell} on the %{troop}."
 msgstr "%{name} aruncă %{spell} asupra lui %{troop}."
@@ -851,23 +860,47 @@ msgstr "Vraja %{spell} provoacă daune %{damage} unei creaturi vii."
 msgid "The %{spell} does %{damage} damage to all living creatures."
 msgstr "Vraja %{spell} provoacă daune %{damage} tuturor creaturilor vii."
 
-msgid "The %{attacker}' attack blinds the %{target}!"
-msgstr "Atacul %{attacker}' îl orbește pe %{target}!"
+#, fuzzy
+msgid "The %{attacker}'s attack blinds the %{target}!"
+msgid_plural "The %{attacker}' attack blinds the %{target}!"
+msgstr[0] "Atacul %{attacker}' îl orbește pe %{target}!"
+msgstr[1] "Atacul %{attacker}' îl orbește pe %{target}!"
+msgstr[2] "Atacul %{attacker}' îl orbește pe %{target}!"
 
-msgid "The %{attacker}' gaze turns the %{target} to stone!"
-msgstr "Privirea %{attacker}' îl transformă pe %{target} în piatră!"
+#, fuzzy
+msgid "The %{attacker}'s gaze turns the %{target} to stone!"
+msgid_plural "The %{attacker}' gaze turns the %{target} to stone!"
+msgstr[0] "Privirea %{attacker}' îl transformă pe %{target} în piatră!"
+msgstr[1] "Privirea %{attacker}' îl transformă pe %{target} în piatră!"
+msgstr[2] "Privirea %{attacker}' îl transformă pe %{target} în piatră!"
 
-msgid "The %{attacker}' curse falls upon the %{target}!"
-msgstr "Blestemul lui %{attacker}' cade asupra lui %{target}!"
+#, fuzzy
+msgid "The %{attacker}'s curse falls upon the %{target}!"
+msgid_plural "The %{attacker}' curse falls upon the %{target}!"
+msgstr[0] "Blestemul lui %{attacker}' cade asupra lui %{target}!"
+msgstr[1] "Blestemul lui %{attacker}' cade asupra lui %{target}!"
+msgstr[2] "Blestemul lui %{attacker}' cade asupra lui %{target}!"
 
-msgid "The %{target} are paralyzed by the %{attacker}!"
-msgstr "%{target} sunt paralizați de %{attacker}!"
+#, fuzzy
+msgid "The %{target} is paralyzed by the %{attacker}!"
+msgid_plural "The %{target} are paralyzed by the %{attacker}!"
+msgstr[0] "%{target} sunt paralizați de %{attacker}!"
+msgstr[1] "%{target} sunt paralizați de %{attacker}!"
+msgstr[2] "%{target} sunt paralizați de %{attacker}!"
 
-msgid "The %{attacker} dispel all good spells on your %{target}!"
-msgstr "%{attacker} risipește toate vrăjile bune asupra %{target} tale!"
+#, fuzzy
+msgid "The %{attacker} dispels all good spells on your %{target}!"
+msgid_plural "The %{attacker} dispel all good spells on your %{target}!"
+msgstr[0] "%{attacker} risipește toate vrăjile bune asupra %{target} tale!"
+msgstr[1] "%{attacker} risipește toate vrăjile bune asupra %{target} tale!"
+msgstr[2] "%{attacker} risipește toate vrăjile bune asupra %{target} tale!"
 
-msgid "The %{attacker} cast %{spell} on %{target}!"
-msgstr "%{attacker} a aruncat %{spell} pe %{target}!"
+#, fuzzy
+msgid "The %{attacker} casts %{spell} on the %{target}!"
+msgid_plural "The %{attacker} cast %{spell} on the %{target}!"
+msgstr[0] "%{attacker} a aruncat %{spell} pe %{target}!"
+msgstr[1] "%{attacker} a aruncat %{spell} pe %{target}!"
+msgstr[2] "%{attacker} a aruncat %{spell} pe %{target}!"
 
 msgid "Bad luck descends on the %{attacker}."
 msgstr "Ghinionul coboară asupra %{attacker}."
@@ -890,7 +923,8 @@ msgstr "Se creează o imagine în oglindă."
 msgid "The mirror image is destroyed!"
 msgstr "Imaginea în oglindă este distrusă!"
 
-msgid "Are you sure you want to interrupt the auto battle?"
+#, fuzzy
+msgid "Are you sure you want to interrupt the auto combat?"
 msgstr "Ești sigur că vrei să întrerupi lupta automată?"
 
 msgid "Error"
@@ -1091,8 +1125,9 @@ msgstr ""
 "Capturează toate orașele și castelele inamice pentru a câștiga și asigură-te "
 "că nu pierzi toate orașele piticilor deodată, altfel inamicul va câștiga."
 
+#, fuzzy
 msgid ""
-"You will face four allied enemies in a straightforward fight for resource "
+"You will face four allied enemies in a straightforward fight for resources "
 "and treasure. Capture all of the enemy castles for victory."
 msgstr ""
 "Te vei confrunta cu patru inamici aliați într-o luptă directă pentru resurse "
@@ -1366,7 +1401,7 @@ msgstr ""
 
 msgid ""
 "Rescue your crazy uncle Ivan. Find him before the first day of the fourth "
-"month or it will be no help to your kingdom."
+"month or it will be of no help to your kingdom."
 msgstr ""
 
 msgid ""
@@ -1380,7 +1415,7 @@ msgstr ""
 
 msgid ""
 "Gain the favor of the elves. They will not allow trees to be chopped down, "
-"so they will send you wood every 2 weeks. You must complete your mission "
+"so we will send you wood every 2 weeks. You must complete your mission "
 "before the first day of the seventh month, or the kingdom will surely fall."
 msgstr ""
 
@@ -1477,23 +1512,22 @@ msgstr ""
 msgid " will be willing to join your army."
 msgstr ""
 
-msgid "\"%{artifact}\" artifact will be carried over the scenario."
+msgid "\"%{artifact}\" artifact will be carried over in the campaign."
 msgstr ""
 
-msgid "The army will be carried over the scenario."
+msgid "The army will be carried over in the campaign."
 msgstr ""
 
 msgid "The kingdom will have +%{count} %{resource} each day."
 msgstr ""
 
-msgid "\"%{spell}\" spell will be carried over the scenario."
+msgid "The \"%{spell}\" spell will be carried over in the campaign."
 msgstr ""
 
-msgid "%{hero} can be hired in the scenario."
+msgid "%{hero} can be hired during scenarios."
 msgstr ""
 
-msgid ""
-"%{hero} has been defeated and will not appear in the subsequent scenarios."
+msgid "%{hero} has been defeated and will not appear in subsequent scenarios."
 msgstr ""
 
 msgid "The dwarves recognize their allies and gladly join your forces."
@@ -1763,7 +1797,7 @@ msgid "campaignBonus|Expert Wisdom"
 msgstr ""
 
 msgid ""
-"The main hero will have \"%{artifact}\" artifact at the start of the "
+"The main hero will have the \"%{artifact}\" artifact at the start of the "
 "scenario."
 msgstr ""
 
@@ -1782,14 +1816,14 @@ msgid ""
 msgstr ""
 
 msgid ""
-"The main hero will have \"%{spell}\" spell at the start of the scenario."
+"The main hero will have the \"%{spell}\" spell at the start of the scenario."
 msgstr ""
 
-msgid "The starting race of the scenario will be %{race}."
+msgid "The starting alignment of the scenario will be %{race}."
 msgstr ""
 
 msgid ""
-"The main hero will have additional %{count} %{skill} at the start of the "
+"The main hero will receive a +%{count} to their %{skill} at the start of the "
 "scenario."
 msgstr ""
 
@@ -1829,20 +1863,23 @@ msgstr ""
 msgid "For this action it is necessary to build a castle first."
 msgstr ""
 
-msgid "Cannot build %{name} because the castle is too far away from an ocean."
+msgid "Cannot build %{name}. The castle is too far away from an ocean."
 msgstr ""
 
-msgid "disable build."
+msgid "This building has been disabled."
 msgstr ""
 
-msgid "Cannot afford %{name}."
-msgstr ""
+#, fuzzy
+msgid "Cannot afford the %{name}."
+msgstr "Mută %{name}"
 
-msgid "%{name} is already built."
-msgstr ""
+#, fuzzy
+msgid "The %{name} is already built."
+msgstr "Imaginea în oglindă este distrusă!"
 
-msgid "Cannot build %{name}."
-msgstr ""
+#, fuzzy
+msgid "Cannot build the %{name}."
+msgstr "Mută %{name}"
 
 msgid "Build %{name}."
 msgstr ""
@@ -2069,8 +2106,9 @@ msgstr ""
 msgid "Cannot recruit - you have too many Heroes."
 msgstr ""
 
-msgid "Cannot afford a Hero"
-msgstr ""
+#, fuzzy
+msgid "Cannot afford a Hero."
+msgstr "Nu poți muta ultima trupă"
 
 msgid "There is no room in the garrison for this army."
 msgstr ""
@@ -2509,6 +2547,12 @@ msgstr ""
 msgid "Grouped Formation"
 msgstr ""
 
+msgid "Click to show the next town."
+msgstr ""
+
+msgid "Click to show the previous town."
+msgstr ""
+
 msgid "Set garrison combat formation to 'Spread'"
 msgstr ""
 
@@ -2699,7 +2743,7 @@ msgstr ""
 msgid "Change the type of music."
 msgstr ""
 
-msgid "Toggle 3D effects of foreground sounds."
+msgid "Toggle the 3D effect of foreground sounds."
 msgstr ""
 
 msgid "Build a new ship:"
@@ -2844,10 +2888,6 @@ msgstr ""
 msgid "V-Sync"
 msgstr ""
 
-#, fuzzy
-msgid "on"
-msgstr "Nimic"
-
 msgid "FPS"
 msgstr ""
 
@@ -2921,9 +2961,6 @@ msgid "Toggle the type of interface you want to use."
 msgstr ""
 
 msgid "Toggle interface visibility."
-msgstr ""
-
-msgid "Toggle colored cursor on or off. This is only an esthetic choice."
 msgstr ""
 
 msgid "Sets the speed at which you scroll the window."
@@ -3226,6 +3263,10 @@ msgstr ""
 msgid "Select Dwelling:"
 msgstr "Selectați ținta vrăjii"
 
+#, fuzzy
+msgid "Select Landscape Object:"
+msgstr "Selectați ținta vrăjii"
+
 msgid "Mine placing"
 msgstr ""
 
@@ -3255,6 +3296,10 @@ msgstr "Selectați ținta vrăjii"
 
 #, fuzzy
 msgid "Select Power Up Object:"
+msgstr "Selectați ținta vrăjii"
+
+#, fuzzy
+msgid "Select Adventure Object:"
 msgstr "Selectați ținta vrăjii"
 
 msgid "Map Type:\n"
@@ -3296,7 +3341,7 @@ msgstr ""
 msgid "Find a specific artifact."
 msgstr ""
 
-msgid "Your side defeats the opposing side."
+msgid "Your side must defeat the opposing side."
 msgstr ""
 
 msgid "Accumulate a large amount of gold."
@@ -3311,7 +3356,7 @@ msgstr ""
 msgid "N"
 msgstr ""
 
-msgid "No maps exist at that size"
+msgid "No maps exist at that size."
 msgstr ""
 
 msgid "Small Maps"
@@ -3349,7 +3394,7 @@ msgstr ""
 
 msgid ""
 "Indicates how many players total are in the scenario. Any positions not "
-"occupied by humans will be occupied by computer players."
+"occupied by human players will be occupied by computer players."
 msgstr ""
 
 msgid ""
@@ -3420,8 +3465,8 @@ msgid "Change the speed at which your heroes move on the main screen."
 msgstr ""
 
 msgid ""
-"Sets the speed that A.I. heroes move at. You can also elect not to view A.I. "
-"movement at all."
+"Sets the speed that computer heroes move at. You can also elect not to view "
+"computer movement at all."
 msgstr ""
 
 msgid "Change the interface settings of the game."
@@ -3561,6 +3606,13 @@ msgstr ""
 msgid "Heroes cannot be placed on water."
 msgstr ""
 
+msgid ""
+"A maximum of %{count} heroes of the same color can be placed on the map."
+msgstr ""
+
+msgid "Failed to update player information."
+msgstr ""
+
 msgid "Artifacts cannot be placed on water."
 msgstr ""
 
@@ -3576,6 +3628,9 @@ msgstr ""
 msgid "Ocean object must be placed on water."
 msgstr ""
 
+msgid "Landscape objects cannot be placed on water."
+msgstr ""
+
 msgid "Towns cannot be placed on water."
 msgstr ""
 
@@ -3586,6 +3641,9 @@ msgid "Dwellings cannot be placed on water."
 msgstr ""
 
 msgid "Power-ups cannot be placed on water."
+msgstr ""
+
+msgid "Adventure objects cannot be placed on water."
 msgstr ""
 
 msgid "Used to place %{object}."
@@ -3656,10 +3714,28 @@ msgstr ""
 msgid "Heroes"
 msgstr ""
 
-msgid "Terrain"
+msgid "editorErasure|Terrain"
 msgstr ""
 
-msgid "Castles"
+msgid "editorErasure|Castles"
+msgstr ""
+
+msgid "editorErasure|Monsters"
+msgstr ""
+
+msgid "editorErasure|Heroes"
+msgstr ""
+
+msgid "editorErasure|Artifacts"
+msgstr ""
+
+msgid "editorErasure|Roads"
+msgstr ""
+
+msgid "editorErasure|Streams"
+msgstr ""
+
+msgid "editorErasure|Treasures"
 msgstr ""
 
 msgid ""
@@ -3867,17 +3943,17 @@ msgid "Campaign Difficulty"
 msgstr ""
 
 msgid ""
-"Choose this difficulty if you want to prefer game story over challenge. AI "
-"is weaker in comparison with normal difficulty."
+"Choose this difficulty to experience the game's story with less challenge. "
+"The AI will be weaker than at Normal difficulty."
 msgstr ""
 
 msgid ""
-"Choose this difficulty to enjoy the campaign as per the original design."
+"Choose this difficulty to experience the campaign as per the original design."
 msgstr ""
 
 msgid ""
-"Choose this difficulty if you want challenge. AI is stronger in comparison "
-"with normal difficulty."
+"Choose this difficulty if you want more challenge. The AI will be stronger "
+"than at Normal difficulty."
 msgstr ""
 
 msgid ""
@@ -3905,7 +3981,7 @@ msgstr ""
 msgid "View Intro"
 msgstr ""
 
-msgid "View Intro videos for the current state of the campaign."
+msgid "View the intro video for the current state of the campaign."
 msgstr ""
 
 msgid ""
@@ -4144,7 +4220,7 @@ msgstr ""
 msgid "hotkey|load game"
 msgstr ""
 
-msgid "hotkey|highscores"
+msgid "hotkey|high scores"
 msgstr ""
 
 msgid "hotkey|credits"
@@ -4183,8 +4259,9 @@ msgstr ""
 msgid "hotkey|select all map sizes"
 msgstr ""
 
-msgid "hotkey|hotseat game"
-msgstr ""
+#, fuzzy
+msgid "hotkey|hot seat game"
+msgstr "Personalizează opțiunile sistemului"
 
 msgid "hotkey|battle only game"
 msgstr ""
@@ -4224,8 +4301,9 @@ msgstr ""
 msgid "hotkey|archibald campaign"
 msgstr ""
 
-msgid "hotkey|the price of loyalty campaign"
-msgstr ""
+#, fuzzy
+msgid "hotkey|price of loyalty campaign"
+msgstr "Personalizează opțiunile sistemului"
 
 msgid "hotkey|voyage home campaign"
 msgstr ""
@@ -4282,6 +4360,9 @@ msgid "hotkey|save game"
 msgstr ""
 
 msgid "hotkey|next hero"
+msgstr ""
+
+msgid "hotkey|change to hero under cursor"
 msgstr ""
 
 msgid "hotkey|start hero movement"
@@ -4543,7 +4624,7 @@ msgstr ""
 
 msgid ""
 "Welcome to Heroes of Might and Magic II powered by the fheroes2 engine!\n"
-"Before starting the game please select a game resolution."
+"Before starting the game, please select a game resolution."
 msgstr ""
 
 msgid "Please Remember"
@@ -4597,8 +4678,8 @@ msgid "Game Settings"
 msgstr ""
 
 msgid ""
-"Required video files for campaign selection window are missing. Please make "
-"sure that all necessary files are present in the system."
+"The required video files for the campaign selection window are missing. "
+"Please make sure that all necessary files are present in the system."
 msgstr ""
 
 msgid ""
@@ -4634,10 +4715,20 @@ msgid ""
 "in. There can be multiple guests for TCP/IP games."
 msgstr ""
 
+msgid ""
+"A multi-player game, with several human players competing against each other "
+"on a single map."
+msgstr ""
+
 msgid "Battle Only"
 msgstr ""
 
 msgid "Setup and play a battle without loading any map."
+msgstr ""
+
+msgid ""
+"Play a Hot Seat game, where 2 to 4 players play on the same device, "
+"switching into the 'Hot Seat' when it is their turn."
 msgstr ""
 
 msgid "2 Players"
@@ -4747,6 +4838,9 @@ msgstr ""
 msgid "Defeat all enemy heroes and capture all enemy towns and castles."
 msgstr ""
 
+msgid "Your side defeats the opposing side."
+msgstr ""
+
 msgid "Run out of time. (Fail to win by a certain point.)"
 msgstr ""
 
@@ -4833,7 +4927,7 @@ msgstr ""
 
 msgid ""
 "This lets you change the starting difficulty at which you will play. Higher "
-"difficulty levels start you of with fewer resources, and at the higher "
+"difficulty levels start you off with fewer resources, and at the higher "
 "settings, give extra resources to the computer."
 msgstr ""
 
@@ -4903,7 +4997,7 @@ msgstr ""
 
 msgid ""
 "%{color} player, you have lost your last town. If you do not conquer another "
-"town in next week, you will be eliminated."
+"town in the next week, you will be eliminated."
 msgstr ""
 
 msgid ""
@@ -4989,7 +5083,7 @@ msgstr ""
 msgid "Kingdom Summary"
 msgstr ""
 
-msgid "View a Summary of your Kingdom."
+msgid "View a summary of your Kingdom."
 msgstr ""
 
 msgid "Cast an adventure spell."
@@ -4998,7 +5092,7 @@ msgstr ""
 msgid "End Turn"
 msgstr ""
 
-msgid "End your turn and left the computer take its turn."
+msgid "End your turn and let the computer take its turn."
 msgstr ""
 
 msgid "Adventure Options"
@@ -5106,9 +5200,10 @@ msgstr ""
 
 #
 msgid ""
-"This lets you change the handicap of a particular player. Only humans may be "
-"handicapped. Handicapped players start with fewer resources and earn 15 or "
-"30% fewer resources per turn for mild and severe handicaps, respectively."
+"This lets you change the handicap of a particular player. Only human players "
+"may have a handicap. Handicapped players start with fewer resources and earn "
+"15 or 30% fewer resources per turn for mild and severe handicaps, "
+"respectively."
 msgstr ""
 
 msgid "%{color} player"
@@ -5117,7 +5212,8 @@ msgstr ""
 msgid "No Handicap"
 msgstr ""
 
-msgid "No special restrictions on start resources and earning them per turn."
+msgid ""
+"No special restrictions on starting resources and resource income per turn."
 msgstr ""
 
 msgid "Mild Handicap"
@@ -5125,7 +5221,7 @@ msgstr ""
 
 #
 msgid ""
-"Mild handicapped players start with fewer resources and earn 15% fewer "
+"Players with mild handicap start with fewer resources and earn 15% fewer "
 "resources per turn."
 msgstr ""
 
@@ -5134,7 +5230,7 @@ msgstr ""
 
 #
 msgid ""
-"Severe handicapped players start with fewer resources and earn 30% fewer "
+"Players with severe handicap start with fewer resources and earn 30% fewer "
 "resources per turn."
 msgstr ""
 
@@ -5226,10 +5322,10 @@ msgstr "Vezi %{name}"
 msgid ", FPS: "
 msgstr ""
 
-msgid "%{object} robber"
+msgid "shipAndGraveyard|%{object} robber"
 msgstr ""
 
-msgid "%{object} raided"
+msgid "pyramid|%{object} raided"
 msgstr ""
 
 msgid "Ector"
@@ -5602,7 +5698,7 @@ msgid ""
 "The magical, soothing beauty of the Mermaids reaches you and your crew.\n"
 "Just for a moment, you forget your worries and bask in the beauty of the "
 "moment.\n"
-"The mermaids charms bless you with increased luck for your next combat."
+"The mermaids' charms bless you with increased luck for your next combat."
 msgstr ""
 
 msgid ""
@@ -6141,8 +6237,8 @@ msgid ""
 msgstr ""
 
 msgid ""
-"The captain sighs. \"You don't have enough money, eh?  You can't expect me "
-"to give my maps away for free!\""
+"The captain sighs. \"You don't have enough money, eh? You can't expect me to "
+"give my maps away for free!\""
 msgstr ""
 
 msgid ""
@@ -6611,7 +6707,7 @@ msgid "The hero's spell power determines the duration or power of a spell."
 msgstr ""
 
 msgid ""
-" The hero's knowledge determines how many spell points the hero may have. "
+"The hero's knowledge determines how many spell points the hero may have. "
 "Under normal circumstances, a hero is limited to 10 spell points per level "
 "of knowledge."
 msgstr ""
@@ -6802,7 +6898,8 @@ msgstr ""
 
 msgid ""
 "%{skill} increases the damage done by the hero's range attacking creatures "
-"by %{count} percent."
+"by %{count} percent, and eliminates the %{penalty} percent penalty when "
+"shooting past obstacles (e.g. castle walls)."
 msgstr ""
 
 msgid "%{skill} increases the hero's movement points by %{count} percent."
@@ -6966,7 +7063,7 @@ msgid "Experience"
 msgstr ""
 
 msgid ""
-"Experience allows your heroes to go up levels, increasing their primary and "
+"Experience allows your heroes to gain levels, increasing their primary and "
 "secondary skills."
 msgstr ""
 
@@ -7016,7 +7113,7 @@ msgid "luck|Irish"
 msgstr ""
 
 msgid ""
-"Bad luck sometimes falls on the hero's units in combat, causing their "
+"Negative luck sometimes falls on the hero's units in combat, causing their "
 "attacks to only do half damage."
 msgstr ""
 
@@ -7026,7 +7123,7 @@ msgid ""
 msgstr ""
 
 msgid ""
-"Good luck sometimes lets the hero's units get lucky attacks (double "
+"Positive luck sometimes lets the hero's units get lucky attacks (double "
 "strength) in combat."
 msgstr ""
 
@@ -7052,7 +7149,7 @@ msgid "morale|Blood!"
 msgstr ""
 
 #, fuzzy
-msgid "Bad morale may cause the hero's units to freeze in combat."
+msgid "Negative morale may cause the hero's units to freeze in combat."
 msgstr "Moralul scăzut face ca %{monster} să înghețe de panică."
 
 msgid ""
@@ -7060,8 +7157,9 @@ msgid ""
 "attacks or freeze in combat."
 msgstr ""
 
-msgid "Good morale may give the hero's units extra attacks in combat."
-msgstr ""
+#, fuzzy
+msgid "Positive morale may give the hero's units extra attacks in combat."
+msgstr "Moralul scăzut face ca %{monster} să înghețe de panică."
 
 msgid "Knight"
 msgstr ""
@@ -9953,6 +10051,10 @@ msgid ""
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
 msgstr ""
+
+#, fuzzy
+#~ msgid "on"
+#~ msgstr "Nimic"
 
 #~ msgid "vs"
 #~ msgstr "contra"

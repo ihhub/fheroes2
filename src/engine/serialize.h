@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2012 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -26,6 +26,7 @@
 
 #include <algorithm>
 #include <array>
+#include <cassert>
 #include <cstdint>
 #include <cstdio>
 #include <functional>
@@ -46,6 +47,7 @@ class StreamBase
 {
 public:
     StreamBase() = default;
+
     StreamBase( const StreamBase & ) = delete;
 
     StreamBase( StreamBase && stream ) noexcept
@@ -59,12 +61,16 @@ public:
 
     StreamBase & operator=( StreamBase && stream ) noexcept
     {
+        if ( this == &stream ) {
+            return *this;
+        }
+
         std::swap( _flags, stream._flags );
 
         return *this;
     }
 
-    void setbigendian( bool );
+    void setbigendian( bool f );
 
     bool isconstbuf() const
     {
@@ -173,6 +179,25 @@ public:
         return *this;
     }
 
+    template <class Type, size_t Count>
+    StreamBase & operator>>( std::array<Type, Count> & data )
+    {
+        const uint32_t size = get32();
+        if ( size != data.size() ) {
+            // This is a corrupted file!
+            assert( 0 );
+            data = {};
+
+            return *this;
+        }
+
+        for ( auto & value : data ) {
+            *this >> value;
+        }
+
+        return *this;
+    }
+
     template <class Type1, class Type2>
     StreamBase & operator<<( const std::pair<Type1, Type2> & p )
     {
@@ -225,8 +250,8 @@ protected:
     virtual size_t tellg() = 0;
     virtual size_t tellp() = 0;
 
-    void setconstbuf( bool );
-    void setfail( bool );
+    void setconstbuf( bool f );
+    void setfail( bool f );
 
 private:
     enum : uint32_t
@@ -243,16 +268,15 @@ class StreamBuf : public StreamBase
 {
 public:
     explicit StreamBuf( const size_t sz = 0 );
-    StreamBuf( const StreamBuf & st ) = delete;
-    StreamBuf( StreamBuf && st ) noexcept;
+    explicit StreamBuf( const std::vector<uint8_t> & buf );
 
-    explicit StreamBuf( const std::vector<uint8_t> & );
-    StreamBuf( const uint8_t *, size_t );
+    StreamBuf( const StreamBuf & ) = delete;
+    StreamBuf( StreamBuf && stream ) noexcept;
 
     ~StreamBuf() override;
 
-    StreamBuf & operator=( const StreamBuf & st ) = delete;
-    StreamBuf & operator=( StreamBuf && st ) noexcept;
+    StreamBuf & operator=( const StreamBuf & ) = delete;
+    StreamBuf & operator=( StreamBuf && stream ) noexcept;
 
     const uint8_t * data() const
     {
@@ -317,23 +341,22 @@ protected:
 
     friend class ZStreamBuf;
 
-    uint8_t * itbeg;
-    uint8_t * itget;
-    uint8_t * itput;
-    uint8_t * itend;
+    uint8_t * itbeg{ nullptr };
+    uint8_t * itget{ nullptr };
+    uint8_t * itput{ nullptr };
+    uint8_t * itend{ nullptr };
 };
 
 class StreamFile : public StreamBase
 {
 public:
     StreamFile() = default;
-    StreamFile( const StreamFile & ) = delete;
-    StreamFile( StreamFile && ) = delete;
 
-    StreamFile & operator=( const StreamFile & ) = delete;
-    StreamFile & operator=( StreamFile && ) = delete;
+    StreamFile( const StreamFile & ) = delete;
 
     ~StreamFile() override = default;
+
+    StreamFile & operator=( const StreamFile & ) = delete;
 
     size_t size();
     size_t tell();

@@ -26,6 +26,7 @@
 #include <cassert>
 #include <cstddef>
 #include <cstdint>
+#include <functional>
 #include <memory>
 #include <ostream>
 #include <set>
@@ -43,7 +44,9 @@
 #include "heroes.h"
 #include "kingdom.h"
 #include "logging.h"
+#include "map_format_helper.h"
 #include "map_format_info.h"
+#include "map_object_info.h"
 #include "maps.h"
 #include "maps_fileinfo.h"
 #include "maps_objects.h"
@@ -83,7 +86,7 @@ namespace
     {
         // Find castles with no names.
         std::vector<Castle *> castleWithNoName;
-        std::set<std::string> castleNames;
+        std::set<std::string, std::less<>> castleNames;
 
         for ( Castle * castle : castles ) {
             if ( castle == nullptr ) {
@@ -672,8 +675,82 @@ bool World::loadResurrectionMap( const std::string & filename )
         return false;
     }
 
-    // TODO: return true once we add logic for loading an entire map.
-    return false;
+    width = map.size;
+    height = map.size;
+
+    vec_tiles.resize( static_cast<size_t>( width ) * height );
+
+    if ( !Maps::readAllTiles( map ) ) {
+        return false;
+    }
+
+    if ( !Maps::updateMapPlayers( map ) ) {
+        return false;
+    }
+
+    // Read and populate objects.
+    const auto & townObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::KINGDOM_TOWNS );
+    const auto & heroObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::KINGDOM_HEROES );
+
+    for ( size_t tileId = 0; tileId < map.tiles.size(); ++tileId ) {
+        const auto & tile = map.tiles[tileId];
+
+        for ( const auto & object : tile.objects ) {
+            if ( object.group == Maps::ObjectGroup::KINGDOM_TOWNS ) {
+                const int race = ( 1 << townObjects[object.index].metadata[0] );
+
+                assert( race != Race::RAND );
+
+                Castle * castle = new Castle( static_cast<int32_t>( tileId ) % width, static_cast<int32_t>( tileId ) / width, race );
+                const uint8_t color = Maps::getTownColorIndex( map, tileId, object.id );
+                castle->SetColor( 1 << color );
+
+                vec_castles.AddCastle( castle );
+
+                map_captureobj.Set( static_cast<int32_t>( tileId ), MP2::OBJ_CASTLE, Color::NONE );
+            }
+            else if ( object.group == Maps::ObjectGroup::KINGDOM_HEROES ) {
+                const auto & metadata = heroObjects[object.index].metadata;
+
+                const int color = ( 1 << metadata[0] );
+                const int race = ( 1 << metadata[1] );
+
+                const Kingdom & kingdom = GetKingdom( color );
+
+                assert( race != Race::RAND );
+
+                // Check if the kingdom has exceeded the limit on hired heroes
+                if ( kingdom.AllowRecruitHero( false ) ) {
+                    Heroes * hero = GetHeroForHire( race );
+                    if ( hero != nullptr ) {
+                        hero->SetCenter( { static_cast<int32_t>( tileId ) % width, static_cast<int32_t>( tileId ) / width } );
+
+                        hero->SetColor( color );
+                    }
+                }
+            }
+        }
+    }
+
+    fixCastleNames( vec_castles );
+
+    const Maps::FileInfo & mapInfo = Settings::Get().getCurrentMapInfo();
+
+    // do not let the player get a random artifact that allows him to win the game
+    if ( ( mapInfo.ConditionWins() & GameOver::WINS_ARTIFACT ) == GameOver::WINS_ARTIFACT && !mapInfo.WinsFindUltimateArtifact() ) {
+        fheroes2::ExcludeArtifactFromRandom( mapInfo.WinsFindArtifactID() );
+    }
+
+    // Clear artifact flags to correctly generate random artifacts.
+    fheroes2::ResetArtifactStats();
+
+    if ( !ProcessNewMap( filename, false ) ) {
+        return false;
+    }
+
+    DEBUG_LOG( DBG_GAME, DBG_INFO, "Loading of FH2 map is completed." )
+
+    return true;
 }
 
 bool World::ProcessNewMap( const std::string & filename, const bool checkPoLObjects )
@@ -914,8 +991,9 @@ bool World::updateTileMetadata( Maps::Tiles & tile, const MP2::MapObjectType obj
 
     case MP2::OBJ_HERO: {
         // remove map editor sprite
-        if ( tile.getObjectIcnType() == MP2::OBJ_ICN_TYPE_MINIHERO )
+        if ( tile.getObjectIcnType() == MP2::OBJ_ICN_TYPE_MINIHERO ) {
             tile.Remove( tile.GetObjectUID() );
+        }
 
         Heroes * chosenHero = GetHeroes( Maps::GetPoint( tile.GetIndex() ) );
         assert( chosenHero != nullptr );
