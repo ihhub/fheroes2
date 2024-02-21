@@ -1163,7 +1163,7 @@ int32_t Battle::Unit::evaluateThreatForUnit( const Unit & defender ) const
         }
     }
 
-    if ( attacker.isAbilityPresent( fheroes2::MonsterAbilityType::ENEMY_HALFING ) ) {
+    if ( attacker.isAbilityPresent( fheroes2::MonsterAbilityType::ENEMY_HALVING ) ) {
         attackerThreat *= 2;
     }
 
