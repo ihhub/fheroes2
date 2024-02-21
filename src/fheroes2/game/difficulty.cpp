@@ -69,7 +69,6 @@ Funds Difficulty::getResourceIncomeBonusForAI( const int difficulty )
 {
     switch ( difficulty ) {
     case Difficulty::EXPERT:
-        return { 2, 2, 1, 1, 1, 1, 0 };
     case Difficulty::IMPOSSIBLE:
         return { 2, 2, 1, 1, 1, 1, 0 };
     default:
