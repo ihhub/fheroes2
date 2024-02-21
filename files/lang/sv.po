@@ -5649,7 +5649,7 @@ msgid ", FPS: "
 msgstr ", FPS: "
 
 msgid "shipAndGraveyard|%{object} robber"
-msgstr "%{object}plundrare"
+msgstr "%{object}splundrare"
 
 msgid "pyramid|%{object} raided"
 msgstr "%{object} plundrat"
