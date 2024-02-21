@@ -84,17 +84,8 @@ double Difficulty::getGoldIncomeBonusForAI( const int difficulty )
     return 0;
 }
 
-double Difficulty::GetUnitGrowthBonusForAI( const int difficulty, const bool /* isCampaign */, const building_t /* dwelling */ )
+double Difficulty::GetUnitGrowthBonusForAI( const int /* difficulty */, const bool /* isCampaign */, const building_t /* dwelling */ )
 {
-    switch ( difficulty ) {
-    case Difficulty::EXPERT:
-        return 0.25;
-    case Difficulty::IMPOSSIBLE:
-        return 0.33;
-    default:
-        break;
-    }
-
     return 0;
 }
 
