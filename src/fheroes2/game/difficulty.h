@@ -27,6 +27,7 @@
 #include <string>
 
 #include "castle.h"
+#include "resource.h"
 
 namespace Difficulty
 {
