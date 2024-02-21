@@ -940,7 +940,7 @@ int Battle::Arena::DialogBattleHero( const HeroBase & hero, const bool buttons, 
     text.draw( tp.x, tp.y + 2, display );
 
     const fheroes2::Point statsTextOffset{ pos_rt.x + 148 - dialogShadow.x, pos_rt.y + 40 };
-    const int32_t maxStatsTextWidth{ 111 };
+    const int32_t maxStatsTextWidth{ 109 };
     const int32_t statsTextRowHeight{ 11 };
 
     str = _( "Attack" ) + std::string( ": " ) + std::to_string( hero.GetAttack() );
@@ -965,19 +965,23 @@ int Battle::Arena::DialogBattleHero( const HeroBase & hero, const bool buttons, 
     text.draw( tp.x, tp.y + 2, display );
     str = _( "Morale" ) + std::string( ": " ) + Morale::String( hero.GetMorale() );
     text.set( str, fheroes2::FontType::smallWhite() );
-    tp.x = statsTextOffset.x + ( maxStatsTextWidth - text.width() ) / 2;
+    tp.x = statsTextOffset.x;
     tp.y += statsTextRowHeight;
-    text.draw( tp.x, tp.y + 2, display );
+    text.setUniformVerticalAlignment( false );
+    text.draw( tp.x, tp.y + 2, maxStatsTextWidth, display );
+    tp.y += text.height( maxStatsTextWidth );
     str = _( "Luck" ) + std::string( ": " ) + Luck::String( hero.GetLuck() );
     text.set( str, fheroes2::FontType::smallWhite() );
-    tp.x = statsTextOffset.x + ( maxStatsTextWidth - text.width() ) / 2;
-    tp.y += statsTextRowHeight;
-    text.draw( tp.x, tp.y + 2, display );
+    tp.x = statsTextOffset.x;
+    text.draw( tp.x, tp.y + 2, maxStatsTextWidth, display );
+    tp.y += text.height( maxStatsTextWidth );
     str = _( "Spell Points" ) + std::string( ": " ) + std::to_string( hero.GetSpellPoints() ) + "/" + std::to_string( hero.GetMaxSpellPoints() );
     text.set( str, fheroes2::FontType::smallWhite() );
-    tp.x = statsTextOffset.x + ( maxStatsTextWidth - text.width() ) / 2;
-    tp.y += statsTextRowHeight * 2;
-    text.draw( tp.x, tp.y + 2, display );
+    tp.x = statsTextOffset.x;
+    // By default the spell points should have one line of space between it and the Luck, but if there isn't
+    // any space due to morale and luck taking up four lines, then move it down to the lowest line.
+    const int32_t compensation = ( tp.y - ( statsTextOffset.y + 88 ) ) == 0 ? 11 : 0;
+    text.draw( tp.x, statsTextOffset.y + 79 + compensation, maxStatsTextWidth, display );
 
     fheroes2::Button btnCast( pos_rt.x + 15, pos_rt.y + 148, ICN::VIEWGEN, 9, 10 );
     fheroes2::Button btnRetreat( pos_rt.x + 74, pos_rt.y + 148, ICN::VIEWGEN, 11, 12 );
