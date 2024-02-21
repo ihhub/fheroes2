@@ -69,6 +69,8 @@ namespace Difficulty
     // Returns the minimum ratio of the AI kingdom's gold reserve to the cost of surrender, at which the AI will prefer surrender to retreat from the battlefield
     uint32_t getGoldReserveRatioForAISurrender( const int difficulty );
 
+    // Returns the limit on the number of times the Dimension Door spell can be cast, which is applied to each of the AI-controlled heroes individually during one AI
+    // turn
     uint32_t GetDimensionDoorLimitForAI( int difficulty );
 
     bool areAIHeroRolesAllowed( const int difficulty );
