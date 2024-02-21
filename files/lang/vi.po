@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-20 03:11+0000\n"
-"PO-Revision-Date: 2024-02-21 16:30+0700\n"
+"PO-Revision-Date: 2024-02-21 18:18+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: vi\n"
@@ -453,8 +453,6 @@ msgid ""
 "The Moat reduces the defense skill of troops trapped in it by %{count} and "
 "restricts their movement range."
 msgstr ""
-"Hào giảm -%{count} kỹ năng phòng thủ của bất kỳ đơn vị nào và hạn chế phạm "
-"vi di chuyển của chúng."
 
 msgid "Speed: %{speed}"
 msgstr "Tốc độ: %{speed}"
@@ -571,10 +569,10 @@ msgid "%{name} surrenders to the enemy, and departs in shame."
 msgstr "%{name} đầu hàng kẻ thù và nhục nhã ra đi."
 
 msgid "Your forces suffer a bitter defeat, and %{name} abandons your cause."
-msgstr "Lực lượng của ngươi bị thất bại cay đắng và %{name} từ bỏ ngươi."
+msgstr ""
 
 msgid "Your forces suffer a bitter defeat."
-msgstr "Lực lượng của ngươi bị thất bại cay đắng."
+msgstr ""
 
 msgid "Battlefield Casualties"
 msgstr "Thương vong Chiến trường"
@@ -586,10 +584,10 @@ msgid "Defender"
 msgstr "Bên thủ"
 
 msgid "Click to leave the battle results."
-msgstr "Nhấp để thoát kết quả trận chiến."
+msgstr ""
 
 msgid "Click to restart the battle in manual mode."
-msgstr "Nhấp để chơi lại trận chiến ở chế độ thủ công."
+msgstr ""
 
 msgid "Restart"
 msgstr "Chơi lại"
@@ -683,10 +681,6 @@ msgid ""
 "of surrender is half of the total cost of the non-temporary troops remaining "
 "in the army."
 msgstr ""
-"Đầu hàng tốn vàng. Tuy nhiên, nếu bạn trả tiền chuộc, anh hùng và tất cả "
-"sinh vật còn sống của anh ta hoặc cô ta sẽ sẵn sàng để chiêu mộ lại. Chi phí "
-"đầu hàng bằng một nửa tổng chi phí của quân không tạm thời còn lại trong "
-"quân đội."
 
 msgid "Open Hero Screen to view full information about the hero."
 msgstr "Mở Màn hình Tướng để xem thông tin đầy đủ về Tướng."
@@ -816,7 +810,7 @@ msgstr "Ngươi có chắc chắn muốn kết thúc trận chiến ở chế đ
 
 msgid "The %{name} skips their turn."
 msgid_plural "The %{name} skip their turn."
-msgstr[0] "%{name} bỏ lượt của họ."
+msgstr[0] ""
 
 msgid "%{attacker} does %{damage} damage."
 msgid_plural "%{attacker} do %{damage} damage."
@@ -843,7 +837,7 @@ msgstr "Chuyển %{monster}: từ [%{src}] tới [%{dst}]."
 
 msgid "The %{name} resists the spell!"
 msgid_plural "The %{name} resist the spell!"
-msgstr[0] "%{name} kháng phép này!"
+msgstr[0] ""
 
 msgid "%{name} casts %{spell} on the %{troop}."
 msgstr "%{name} niệm phép %{spell} lên %{troop}."
@@ -871,7 +865,7 @@ msgstr "Phép %{spell} gây %{damage} sát thương cho tất cả sinh vật s�
 
 msgid "The %{attacker}'s attack blinds the %{target}!"
 msgid_plural "The %{attacker}' attack blinds the %{target}!"
-msgstr[0] "%{attacker}' tấn công phép mù vào mục tiêu %{target}!"
+msgstr[0] ""
 
 #, fuzzy
 msgid "The %{attacker}'s gaze turns the %{target} to stone!"
@@ -885,16 +879,15 @@ msgstr[0] "Tướng %{attacker}' nguyền rủa lên tất cả %{target}!"
 
 msgid "The %{target} is paralyzed by the %{attacker}!"
 msgid_plural "The %{target} are paralyzed by the %{attacker}!"
-msgstr[0] "Mục tiêu %{target} bị hóa đá bởi %{attacker}!"
+msgstr[0] ""
 
 msgid "The %{attacker} dispels all good spells on your %{target}!"
 msgid_plural "The %{attacker} dispel all good spells on your %{target}!"
 msgstr[0] ""
-"%{attacker} xua tan mọi phép thuật tốt trên quân %{target} của ngươi!"
 
 msgid "The %{attacker} casts %{spell} on the %{target}!"
 msgid_plural "The %{attacker} cast %{spell} on the %{target}!"
-msgstr[0] "%{attacker} niệm phép %{spell} lên %{target}!"
+msgstr[0] ""
 
 msgid "Bad luck descends on the %{attacker}."
 msgstr "Vận rủi giáng xuống %{attacker}."
@@ -918,7 +911,7 @@ msgid "The mirror image is destroyed!"
 msgstr "Hình ảnh phản chiếu đã mất đi!"
 
 msgid "Are you sure you want to interrupt the auto combat?"
-msgstr "Ngươi có chắc muốn dừng trận chiến tự động không?"
+msgstr ""
 
 msgid "Error"
 msgstr "Lỗi"
@@ -961,7 +954,7 @@ msgid "AI"
 msgstr "AI"
 
 msgid "Start"
-msgstr "Bắt đầu"
+msgstr ""
 
 msgid "Start the battle."
 msgstr "Bắt đầu trận chiến."
@@ -970,10 +963,10 @@ msgid "Exit"
 msgstr "Thoát"
 
 msgid "Reset"
-msgstr "Khôi phục"
+msgstr ""
 
 msgid "Reset to default settings."
-msgstr "Khôi phục thiết lập mặc định."
+msgstr ""
 
 msgid "Please select another hero."
 msgstr "Hãy chọn một tướng khác."
@@ -1115,9 +1108,6 @@ msgid ""
 "You will face four allied enemies in a straightforward fight for resources "
 "and treasure. Capture all of the enemy castles for victory."
 msgstr ""
-"Ngươi sẽ đối mặt với bốn kẻ thù đồng minh trong một cuộc chiến đơn giản để "
-"giành lấy tài nguyên và kho báu. Chiếm tất cả các lâu đài của kẻ thù để "
-"giành chiến thắng."
 
 msgid ""
 "Your enemies are allied against you and start close by, so be ready to come "
@@ -1447,8 +1437,6 @@ msgid ""
 "Rescue your crazy uncle Ivan. Find him before the first day of the fourth "
 "month or it will be of no help to your kingdom."
 msgstr ""
-"Giải cứu chú Ivan điên rồ của ngươi. Tìm anh ta trước ngày đầu tiên của "
-"tháng thứ tư nếu không sẽ chẳng ích gì cho vương quốc của ngươi."
 
 msgid ""
 "Destroy the barbarians who are attacking the southern border of your "
@@ -1467,9 +1455,6 @@ msgid ""
 "so we will send you wood every 2 weeks. You must complete your mission "
 "before the first day of the seventh month, or the kingdom will surely fall."
 msgstr ""
-"Giành được sự ưu ái của yêu tinh. Họ sẽ không cho phép chặt cây, vì vậy họ "
-"sẽ gửi cho ngươi gỗ 2 tuần một lần. Ngươi phải hoàn thành nhiệm vụ của mình "
-"trước ngày đầu tiên của tháng thứ bảy, hoặc vương quốc chắc chắn sẽ sụp đổ."
 
 msgid ""
 "This is the final battle against your rival kingdom of Harondale. Eliminate "
@@ -1586,22 +1571,22 @@ msgid " will be willing to join your army."
 msgstr " sẽ sẵn sàng gia nhập quân đội của ngươi."
 
 msgid "\"%{artifact}\" artifact will be carried over in the campaign."
-msgstr "\"%{artifact}\" bảo vật sẽ được chuyển tiếp trong chiến dịch."
+msgstr ""
 
 msgid "The army will be carried over in the campaign."
-msgstr "Quân lính sẽ được chuyển tiếp trong chiến dịch."
+msgstr ""
 
 msgid "The kingdom will have +%{count} %{resource} each day."
 msgstr "Vương quốc sẽ có +%{count} %{resource} mỗi ngày."
 
 msgid "The \"%{spell}\" spell will be carried over in the campaign."
-msgstr "\"%{spell}\" phép thuật sẽ được chuyển tiếp trong chiến dịch."
+msgstr ""
 
 msgid "%{hero} can be hired during scenarios."
-msgstr "%{hero} có thể thuê trong kịch bản."
+msgstr ""
 
 msgid "%{hero} has been defeated and will not appear in subsequent scenarios."
-msgstr "%{hero} đã bị tiêu diệt và không thể xuất hiện ở các màn phụ."
+msgstr ""
 
 msgid "The dwarves recognize their allies and gladly join your forces."
 msgstr ""
@@ -1891,7 +1876,7 @@ msgstr "Chuyên gia Thông thái"
 msgid ""
 "The main hero will have the \"%{artifact}\" artifact at the start of the "
 "scenario."
-msgstr "Tướng chính sẽ có bảo vật \"%{artifact}\" khi bắt đầu của kịch bản."
+msgstr ""
 
 msgid ""
 "The kingdom will receive %{amount} additional %{resource} at the start of "
@@ -1913,17 +1898,15 @@ msgstr "Tướng chính sẽ nhận %{count} quái %{monster} khi bắt đầu k
 
 msgid ""
 "The main hero will have the \"%{spell}\" spell at the start of the scenario."
-msgstr "Tướng chính sẽ có phép \"%{spell}\" khi bắt đầu của kịch bản."
+msgstr ""
 
 msgid "The starting alignment of the scenario will be %{race}."
-msgstr "Chủng tộc ban đầu của kịch bản sẽ là %{race}."
+msgstr ""
 
 msgid ""
 "The main hero will receive a +%{count} to their %{skill} at the start of the "
 "scenario."
 msgstr ""
-"Tướng chính sẽ nhận thêm + %{count} vào kỹ năng %{skill} khi bắt đầu kịch "
-"bản."
 
 msgid "The main hero will have %{skill} at the start of the scenario."
 msgstr "Tướng chính sẽ có kỹ năng %{skill} khi bắt đầu kịch bản."
@@ -1965,10 +1948,10 @@ msgid "Cannot build %{name}. The castle is too far away from an ocean."
 msgstr "Không thể xây %{name}. Lâu đài quá xa một đại dương."
 
 msgid "This building has been disabled."
-msgstr "Nhà này đã bị vô hiệu hóa."
+msgstr ""
 
 msgid "Cannot afford the %{name}."
-msgstr "Không đủ khả năng chi trả %{name}."
+msgstr ""
 
 msgid "The %{name} is already built."
 msgstr "%{name} đã được xây."
@@ -2202,7 +2185,7 @@ msgid "Cannot recruit - you have too many Heroes."
 msgstr "Không thể chiêu mộ - ngươi đang có quá nhiều Tướng."
 
 msgid "Cannot afford a Hero."
-msgstr "Không thể có được một Tướng."
+msgstr ""
 
 msgid "There is no room in the garrison for this army."
 msgstr "Không có chỗ trong đồn trú cho đội quân này."
@@ -2534,7 +2517,7 @@ msgstr ""
 "mỗi tuần."
 
 msgid "The Statue increases the town's income by %{count} gold per day."
-msgstr "Tượng tăng thu nhập cho thị trấn thêm %{count} vàng mỗi ngày."
+msgstr ""
 
 msgid "The Left Turret provides extra firepower during castle combat."
 msgstr "Tháp pháo Trái cung cấp thêm hỏa lực khi chiến đấu trong lâu đài."
@@ -3440,13 +3423,13 @@ msgid "Click to select this color."
 msgstr "Nhấp để chọn màu này."
 
 msgid "Select Dwelling:"
-msgstr "Chọn Nhà lính:"
+msgstr ""
 
 msgid "Select Landscape Object:"
-msgstr "Chọn Đối tượng Cảnh quan:"
+msgstr ""
 
 msgid "Mine placing"
-msgstr "Đặt mỏ"
+msgstr ""
 
 msgid ""
 "Resource\n"
@@ -3456,25 +3439,25 @@ msgstr ""
 "tài nguyên"
 
 msgid "%{mineName} appearance:"
-msgstr "%{mineName} hình dáng:"
+msgstr ""
 
 msgid "Click to select %{object} as the resource generator to be placed."
-msgstr "Nhấp để chọn đối tượng %{object} là tài nguyên để xắp đặt."
+msgstr ""
 
 msgid "Select Mountain Object:"
-msgstr "Chọn Đối tượng Núi:"
+msgstr ""
 
 msgid "Select Rock Object:"
-msgstr "Chọn Đối tượng Đá:"
+msgstr ""
 
 msgid "Select Tree Object:"
-msgstr "Chọn Đối tượng Cây:"
+msgstr ""
 
 msgid "Select Power Up Object:"
-msgstr "Chọn Đối tượng Nâng cấp:"
+msgstr ""
 
 msgid "Select Adventure Object:"
-msgstr "Chọn Đối tượng Phiêu lưu:"
+msgstr ""
 
 msgid "Map Type:\n"
 msgstr "Kiểu Bản đồ:\n"
@@ -3516,7 +3499,7 @@ msgid "Find a specific artifact."
 msgstr "Tìm một bảo vật cụ thể."
 
 msgid "Your side must defeat the opposing side."
-msgstr "Phe của ngươi phải đánh bại phe đối lập."
+msgstr ""
 
 msgid "Accumulate a large amount of gold."
 msgstr "Tích lũy một lượng lớn vàng."
@@ -3531,7 +3514,7 @@ msgid "N"
 msgstr "N"
 
 msgid "No maps exist at that size."
-msgstr "Không có bản đồ nào ở cỡ này."
+msgstr ""
 
 msgid "Small Maps"
 msgstr "Bản đồ Nhỏ"
@@ -3654,8 +3637,6 @@ msgid ""
 "Sets the speed that computer heroes move at. You can also elect not to view "
 "computer movement at all."
 msgstr ""
-"Đặt tốc độ mà tướng máy tính di chuyển. Ngươi cũng có thể chọn không xem "
-"tướng máy tính di chuyển."
 
 msgid "Change the interface settings of the game."
 msgstr "Thay đổi giao diện của trò chơi."
@@ -3800,10 +3781,10 @@ msgstr "Tướng không thể đặt trên nước."
 
 msgid ""
 "A maximum of %{count} heroes of the same color can be placed on the map."
-msgstr "Có thể đặt tối đa %{count} tướng cùng màu trên bản đồ."
+msgstr ""
 
 msgid "Failed to update player information."
-msgstr "Cập nhật thông tin người chơi thất bại."
+msgstr ""
 
 msgid "Artifacts cannot be placed on water."
 msgstr "Bảo vật không thể đặt trên nước."
@@ -3812,16 +3793,16 @@ msgid "Mountains cannot be placed on water."
 msgstr "Núi không thể đặt trên nước."
 
 msgid "Rocks cannot be placed on water."
-msgstr "Đá không thể đặt trên nước."
+msgstr ""
 
 msgid "Trees cannot be placed on water."
-msgstr "Cây không thể đặt trên nước."
+msgstr ""
 
 msgid "Ocean object must be placed on water."
 msgstr "Đối tượng đại dương phải đặt trên mặt nước."
 
 msgid "Landscape objects cannot be placed on water."
-msgstr "Đối tượng cảnh quan thể đặt trên nước."
+msgstr ""
 
 msgid "Towns cannot be placed on water."
 msgstr "Thị trấn không thể đặt trên nước."
@@ -3830,38 +3811,34 @@ msgid "Mines cannot be placed on water."
 msgstr "Mỏ không thể đặt trên nước."
 
 msgid "Dwellings cannot be placed on water."
-msgstr "Nhà lính không thể đặt trên nước."
+msgstr ""
 
 msgid "Power-ups cannot be placed on water."
-msgstr "Nhà nâng cấp không thể đặt trên nước."
+msgstr ""
 
 msgid "Adventure objects cannot be placed on water."
-msgstr "Đối tượng phiêu lưu thể đặt trên nước."
+msgstr ""
 
 msgid "Used to place %{object}."
-msgstr "Dùng để đặt %{object}."
+msgstr ""
 
 msgid "Select object type"
-msgstr "Chọn loại đối tượng"
+msgstr ""
 
 msgid ""
 "Click here to\n"
 "select a monster."
 msgstr ""
-"Nhấp vào đây\n"
-"để chọn một quái vật."
 
 msgid ""
 "Click here to\n"
 "select another monster."
 msgstr ""
-"Nhấp vào đây\n"
-"để chọn một quái vật khác."
 
 msgid ""
 "Cell\n"
 "Details"
-msgstr "Chi tiết Ô"
+msgstr ""
 
 msgid "Roads"
 msgstr "Đường"
@@ -3870,7 +3847,7 @@ msgid "Streams"
 msgstr "Suối"
 
 msgid "Erase"
-msgstr "Xóa"
+msgstr ""
 
 msgid "Mountains"
 msgstr "Núi"
@@ -3882,10 +3859,10 @@ msgid "Trees"
 msgstr "Cây"
 
 msgid "Water Objects"
-msgstr "Đối tượng Nước"
+msgstr ""
 
 msgid "Miscellaneous"
-msgstr "Khác"
+msgstr ""
 
 msgid "Artifacts"
 msgstr "Bảo vật"
@@ -3897,7 +3874,7 @@ msgid "Mines"
 msgstr "Mỏ"
 
 msgid "Power-ups"
-msgstr "Nâng cấp"
+msgstr ""
 
 msgid "Treasures"
 msgstr "Kho báu"
@@ -4008,11 +3985,11 @@ msgid "Used to draw the underlying grass, dirt, water, etc. on the map."
 msgstr "Dùng để vẽ cỏ, bụi bẩn, nước, v.v. lên bản đồ."
 
 msgid "Landscape Objects Mode"
-msgstr "Chế độ Đối tượng Cảnh quan"
+msgstr ""
 
 msgid ""
 "Used to place landscape objects (mountains, rocks, trees, etc.) on the map."
-msgstr "Dùng để đặt các vật thể cảnh quan (núi, đá, cây, v.v.v) lên bản đồ."
+msgstr ""
 
 msgid "Detail Mode"
 msgstr "Chế độ Chi tiết"
@@ -4021,22 +3998,18 @@ msgid "Used for special editing of monsters, heroes and towns."
 msgstr "Dùng để hiệu chỉnh đặc biệt cho quái vật, tướng và thị trấn."
 
 msgid "Adventure Objects Mode"
-msgstr "Chế độ Đối tượng Phiêu lưu"
+msgstr ""
 
 msgid ""
 "Used to place adventure objects (artifacts, dwellings, mines, treasures, "
 "etc.) on the map."
 msgstr ""
-"Dùng để đặt các đối tượng phiêu lưu (bảo vật, nhà lính, mỏ, kho báu, v.v.v) "
-"lên bản đồ."
 
 msgid "Kingdom Objects Mode"
-msgstr "Chế độ Đối tượng Vương quốc"
+msgstr ""
 
 msgid "Used to place kingdom objects (towns, castles and heroes) on the map."
 msgstr ""
-"Dùng để đặt các vật thể đối tượng vương quốc (thị trấn, lâu đài, tướng) lên "
-"bản đồ."
 
 msgid "Monsters Mode"
 msgstr "Chế độ Quái vật"
