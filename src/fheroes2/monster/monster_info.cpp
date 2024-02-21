@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2023                                             *
+ *   Copyright (C) 2021 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -91,7 +91,7 @@ namespace
             monsterSpecial += 0.3;
         }
 
-        if ( isAbilityPresent( abilities, fheroes2::MonsterAbilityType::ENEMY_HALFING ) ) {
+        if ( isAbilityPresent( abilities, fheroes2::MonsterAbilityType::ENEMY_HALVING ) ) {
             monsterSpecial += 1;
         }
 
@@ -521,7 +521,7 @@ namespace
         monsterData[Monster::GHOST].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::FLYING );
         monsterData[Monster::GHOST].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::UNDEAD );
 
-        monsterData[Monster::GENIE].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::ENEMY_HALFING, 20, 0 );
+        monsterData[Monster::GENIE].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::ENEMY_HALVING, 10, 0 );
         monsterData[Monster::GENIE].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::FLYING );
 
         monsterData[Monster::MEDUSA].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::DOUBLE_HEX_SIZE );
@@ -680,7 +680,7 @@ namespace fheroes2
             return _( "Cloud attack" );
         case MonsterAbilityType::MORAL_DECREMENT:
             return _( "Decreases enemy's morale by " ) + std::to_string( ability.value );
-        case MonsterAbilityType::ENEMY_HALFING:
+        case MonsterAbilityType::ENEMY_HALVING:
             return std::to_string( ability.percentage ) + _( "% chance to halve enemy" );
         case MonsterAbilityType::SOUL_EATER:
             return _( "Soul Eater" );
