@@ -85,7 +85,9 @@ namespace
     Funds getHandicapDependentIncome( const Funds & original, const Player::HandicapStatus handicapStatus )
     {
         const int32_t handicapPercentage = getHandicapIncomePercentage( handicapStatus );
+
         Funds corrected( original );
+
         corrected.wood = std::min( corrected.wood, ( corrected.wood * handicapPercentage + 99 ) / 100 );
         corrected.mercury = std::min( corrected.mercury, ( corrected.mercury * handicapPercentage + 99 ) / 100 );
         corrected.ore = std::min( corrected.ore, ( corrected.ore * handicapPercentage + 99 ) / 100 );
@@ -660,7 +662,7 @@ uint32_t Kingdom::GetMaxHeroes()
     return GameStatic::GetKingdomMaxHeroes();
 }
 
-Funds Kingdom::GetIncome( int type /* INCOME_ALL */ ) const
+Funds Kingdom::GetIncome( int type /* = INCOME_ALL */ ) const
 {
     Funds totalIncome;
 
@@ -719,15 +721,28 @@ Funds Kingdom::GetIncome( int type /* INCOME_ALL */ ) const
         }
     }
 
-    if ( isControlAI() && totalIncome.gold > 0 ) {
-        const int32_t bonusGold = static_cast<int32_t>( totalIncome.gold * Difficulty::getGoldIncomeBonusForAI( Game::getDifficulty() ) );
+    if ( isControlAI() ) {
+        const Funds incomeBonus = Difficulty::getResourceIncomeBonusForAI( Game::getDifficulty() );
+        if ( incomeBonus.GetValidItemsCount() != 0 ) {
+            DEBUG_LOG( DBG_AI, DBG_TRACE, "AI bonus to the resource income has been applied to " << Color::String( color ) << ": " << incomeBonus.String() );
 
-        totalIncome.gold += bonusGold;
+            totalIncome += incomeBonus;
+        }
+
+        const int32_t goldBonus = static_cast<int32_t>( totalIncome.gold * Difficulty::getGoldIncomeBonusForAI( Game::getDifficulty() ) );
+        if ( goldBonus != 0 ) {
+            DEBUG_LOG( DBG_AI, DBG_TRACE,
+                       "AI bonus to the gold income has been applied to " << Color::String( color ) << ", original income: " << totalIncome.gold
+                                                                          << ", bonus income: " << goldBonus );
+
+            totalIncome.gold += goldBonus;
+        }
     }
 
-    // Some human players can have handicap for resources.
     const Player * player = Players::Get( color );
     assert( player != nullptr );
+
+    // Some human players can have handicap for resources.
     return getHandicapDependentIncome( totalIncome, player->getHandicapStatus() );
 }
 
