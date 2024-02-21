@@ -237,7 +237,7 @@ bool Difficulty::allowAIToBuildCastleBuilding( const int difficulty, const bool 
     switch ( difficulty ) {
     case Difficulty::EASY:
         // Only the construction of the corresponding dwelling is limited, but not its upgrade
-        return isCampaign || building != DWELLING_MONSTER6;
+        return isCampaign || ( building != DWELLING_MONSTER6 && building != BUILD_MAGEGUILD5 );
     default:
         break;
     }
