@@ -942,7 +942,7 @@ void Castle::ActionNewWeekAIBonuses()
             continue;
         }
 
-        const long bonusGrowth = std::lround( originalGrowth * Difficulty::GetUnitGrowthBonusForAI( Game::getDifficulty(), Game::isCampaign(), dwellingId ) );
+        const long bonusGrowth = std::lround( originalGrowth * Difficulty::GetUnitGrowthBonusForAI( Game::getDifficulty(), Game::isCampaign(), race, dwellingId ) );
         if ( bonusGrowth >= 0 ) {
             *dwellingMonsters += bonusGrowth;
 

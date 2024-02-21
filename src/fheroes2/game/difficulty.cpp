@@ -97,7 +97,7 @@ double Difficulty::getGoldIncomeBonusForAI( const int difficulty )
     return 0;
 }
 
-double Difficulty::GetUnitGrowthBonusForAI( const int /* difficulty */, const bool /* isCampaign */, const building_t /* dwelling */ )
+double Difficulty::GetUnitGrowthBonusForAI( const int /* difficulty */, const bool /* isCampaign */, const int /* race */, const building_t /* dwelling */ )
 {
     return 0;
 }
