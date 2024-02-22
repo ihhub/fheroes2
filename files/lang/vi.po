@@ -383,7 +383,6 @@ msgstr "Bội số"
 msgid "Troops of %{count} alignments -%{penalty}"
 msgstr "Quân của %{count} sắp hàng -%{penalty}"
 
-#, fuzzy
 msgid "Some undead in army -1"
 msgstr "Trong đội có xác sống -1"
 
@@ -867,12 +866,10 @@ msgid "The %{attacker}'s attack blinds the %{target}!"
 msgid_plural "The %{attacker}' attack blinds the %{target}!"
 msgstr[0] ""
 
-#, fuzzy
 msgid "The %{attacker}'s gaze turns the %{target} to stone!"
 msgid_plural "The %{attacker}' gaze turns the %{target} to stone!"
 msgstr[0] "Cái nhìn của %{attacker}' biến %{target} thành đá!"
 
-#, fuzzy
 msgid "The %{attacker}'s curse falls upon the %{target}!"
 msgid_plural "The %{attacker}' curse falls upon the %{target}!"
 msgstr[0] "Tướng %{attacker}' nguyền rủa lên tất cả %{target}!"
@@ -5495,7 +5492,6 @@ msgstr ""
 msgid "Mild Handicap"
 msgstr "Chấp Ít"
 
-#, fuzzy
 msgid ""
 "Players with mild handicap start with fewer resources and earn 15% fewer "
 "resources per turn."
@@ -5506,7 +5502,6 @@ msgstr ""
 msgid "Severe Handicap"
 msgstr "Chấp Nhiều"
 
-#, fuzzy
 msgid ""
 "Players with severe handicap start with fewer resources and earn 30% fewer "
 "resources per turn."
@@ -7613,7 +7608,6 @@ msgstr ""
 msgid "%{skill} eliminates the movement penalty for rough terrain."
 msgstr "%{skill} loại bỏ hình phạt di chuyển đối với địa hình gồ ghề."
 
-#, fuzzy
 msgid ""
 "%{skill} increases the damage done by the hero's range attacking creatures "
 "by %{count} percent, and eliminates the %{penalty} percent penalty when "
@@ -7629,7 +7623,6 @@ msgid "%{skill} increases the hero's viewable area by one square."
 msgid_plural "%{skill} increases the hero's viewable area by %{count} squares."
 msgstr[0] ""
 
-#, fuzzy
 msgid ""
 "%{skill} allows the hero to negotiate with monsters who are weaker than "
 "their army, and reduces the cost of surrender."
@@ -7643,7 +7636,6 @@ msgstr ""
 msgid "All of the creatures may offer to join the hero."
 msgstr ""
 
-#, fuzzy
 msgid ""
 "The cost of surrender is reduced to %{percent} percent of the total cost of "
 "troops in the army."
@@ -10187,7 +10179,6 @@ msgstr "Bù nhìn 4"
 msgid "Spell Scroll"
 msgstr "Sách Phép"
 
-#, fuzzy
 msgid ""
 "This %{name} gives the hero the ability to cast the %{spell} spell if the "
 "hero has a Magic Book."
@@ -10209,7 +10200,6 @@ msgstr ""
 msgid "Arm of the Martyr"
 msgstr "Cánh tay Liệt sĩ"
 
-#, fuzzy
 msgid ""
 "The %{name} increases the hero's spell power by %{count} but adds the undead "
 "morale penalty."
@@ -10233,7 +10223,6 @@ msgstr ""
 msgid "Breastplate of Anduran"
 msgstr "Áo giáp của Anduran"
 
-#, fuzzy
 msgid "The %{name} increases the hero's defense by %{count}."
 msgstr "%{name} tăng khả năng phòng thủ của ngươi thêm %{count}."
 
@@ -10271,7 +10260,6 @@ msgstr ""
 msgid "Battle Garb of Anduran"
 msgstr "Chiến Bào của Anduran"
 
-#, fuzzy
 msgid ""
 "The %{name} combines the powers of the three Anduran artifacts. It provides "
 "maximum luck and morale for the hero's troops and gives the hero the Town "
@@ -10293,7 +10281,6 @@ msgstr ""
 msgid "Crystal Ball"
 msgstr "Quả cầu Pha lê"
 
-#, fuzzy
 msgid ""
 "The %{name} lets the hero get more specific information about monsters, "
 "enemy heroes, and castles nearby the hero."
@@ -10421,7 +10408,6 @@ msgstr ""
 msgid "Masthead"
 msgstr "Tiêu đề"
 
-#, fuzzy
 msgid ""
 "The %{name} boosts the hero's troops' luck and morale by %{count} each in "
 "sea combat."
@@ -10450,7 +10436,6 @@ msgstr ""
 msgid "Staff of Wizardry"
 msgstr "Gậy Phù thủy"
 
-#, fuzzy
 msgid "The %{name} boosts the hero's spell power by %{count}."
 msgstr "%{name} tăng sức mạnh phép thuật của ngươi thêm %{count}."
 
@@ -10468,7 +10453,6 @@ msgstr ""
 msgid "Sword Breaker"
 msgstr "Kẻ phá Kiếm"
 
-#, fuzzy
 msgid "The %{name} increases the hero's defense by %{count} and attack by 1."
 msgstr ""
 "%{name} tăng khả năng phòng thủ của ngươi thêm %{count} và tấn công thêm 1."
@@ -10499,7 +10483,6 @@ msgstr ""
 msgid "Spade of Necromancy"
 msgstr "Thuổng của Chiêu hồn"
 
-#, fuzzy
 msgid "The %{name} gives the hero increased necromancy skill."
 msgstr "%{name} giúp ngươi tăng kỹ năng chiêu hồn."
 
