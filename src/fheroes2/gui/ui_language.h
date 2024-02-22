@@ -24,6 +24,8 @@
 #include <string>
 #include <vector>
 
+#include "char_encoding.h"
+
 namespace fheroes2
 {
     enum class SupportedLanguage : uint8_t
@@ -52,6 +54,8 @@ namespace fheroes2
         Ukrainian,
         Vietnamese
     };
+
+    Encoding::CodePage getCodePage( const SupportedLanguage language );
 
     class LanguageSwitcher
     {
