@@ -176,6 +176,8 @@ namespace Maps
     // Determine the fog direction in the area between min and max positions for given player(s) color code and store it in corresponding tile data.
     void updateFogDirectionsInArea( const fheroes2::Point & minPos, const fheroes2::Point & maxPos, const int32_t color );
 
+    bool doesTileHaveObjectUID( const Tiles & tile, const uint32_t uid );
+
     // The functions below are used only in the map Editor.
 
     void setTerrainOnTiles( const int32_t startTileId, const int32_t endTileId, const int groundId );

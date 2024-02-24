@@ -3120,6 +3120,27 @@ namespace Maps
         }
     }
 
+    bool doesTileHaveObjectUID( const Tiles & tile, const uint32_t uid )
+    {
+        if ( tile.GetObjectUID() == uid ) {
+            return true;
+        }
+
+        for ( const TilesAddon & addon : tile.getBottomLayerAddons() ) {
+            if ( addon._uid == uid ) {
+                return true;
+            }
+        }
+
+        for ( const TilesAddon & addon : tile.getTopLayerAddons() ) {
+            if ( addon._uid == uid ) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     bool removeObjectTypeFromTile( Tiles & tile, const MP2::ObjectIcnType objectIcnType )
     {
         if ( tile.getObjectIdByObjectIcnType( objectIcnType ) == 0 ) {
