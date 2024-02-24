@@ -28,7 +28,6 @@
 #include <cassert>
 #include <cstdint>
 #include <cstdlib>
-#include <deque>
 #include <iostream>
 #include <limits>
 #include <set>
