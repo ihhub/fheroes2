@@ -3158,14 +3158,14 @@ namespace Maps
             traversedIndex.emplace( indexToTraverse.front() );
 
             for ( const int direction : directions ) {
-                if ( !Maps::isValidDirection( indexToTraverse.front(), direction ) ) {
+                if ( !isValidDirection( indexToTraverse.front(), direction ) ) {
                     continue;
                 }
 
                 const int32_t newIndex = Maps::GetDirectionIndex( indexToTraverse.front(), direction );
-                const Maps::Tiles & newTile = world.GetTiles( newIndex );
+                const Tiles & newTile = world.GetTiles( newIndex );
 
-                if ( Maps::doesTileHaveObjectUID( newTile, uid ) && traversedIndex.count( newIndex ) == 0 ) {
+                if ( doesTileHaveObjectUID( newTile, uid ) && traversedIndex.count( newIndex ) == 0 ) {
                     if ( ( newIndex / world.w() ) != startY ) {
                         return false;
                     }
