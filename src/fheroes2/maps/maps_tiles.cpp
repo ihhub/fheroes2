@@ -249,6 +249,7 @@ namespace
     }
 #endif
 
+    // An object is considered as short if its height is no more than 1 tile.
     bool isShortObject( const uint32_t uid, const int32_t startIndex )
     {
         const int32_t startY = startIndex / world.w();
