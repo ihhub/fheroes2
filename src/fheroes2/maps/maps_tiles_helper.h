@@ -178,6 +178,9 @@ namespace Maps
 
     bool doesTileHaveObjectUID( const Tiles & tile, const uint32_t uid );
 
+    // An object is considered as short if its height is no more than 1 tile.
+    bool isMainObjectShort( const Tiles & tile );
+
     // The functions below are used only in the map Editor.
 
     void setTerrainOnTiles( const int32_t startTileId, const int32_t endTileId, const int groundId );

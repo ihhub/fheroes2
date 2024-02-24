@@ -249,42 +249,6 @@ namespace
     }
 #endif
 
-    // An object is considered as short if its height is no more than 1 tile.
-    bool isShortObject( const uint32_t uid, const int32_t startIndex )
-    {
-        const int32_t startY = startIndex / world.w();
-
-        std::deque<int32_t> indexToTraverse{ startIndex };
-        std::set<int32_t> traversedIndex;
-
-        const Directions & directions = Direction::All();
-
-        while ( !indexToTraverse.empty() ) {
-            traversedIndex.emplace( indexToTraverse.front() );
-
-            for ( const int direction : directions ) {
-                if ( !Maps::isValidDirection( indexToTraverse.front(), direction ) ) {
-                    continue;
-                }
-
-                const int32_t newIndex = Maps::GetDirectionIndex( indexToTraverse.front(), direction );
-                const Maps::Tiles & tile = world.GetTiles( newIndex );
-
-                if ( Maps::doesTileHaveObjectUID( tile, uid ) && traversedIndex.count( newIndex ) == 0 ) {
-                    if ( ( newIndex / world.w() ) != startY ) {
-                        return false;
-                    }
-
-                    indexToTraverse.emplace_back( newIndex );
-                }
-            }
-
-            indexToTraverse.pop_front();
-        }
-
-        return true;
-    }
-
     bool isDetachedObjectType( const MP2::MapObjectType objectType )
     {
         // Some objects do not take into account other objects below them.
@@ -785,7 +749,7 @@ void Maps::Tiles::updatePassability()
             const MP2::MapObjectType bottomTileObjectType = bottomTile.GetObject( false );
             const MP2::MapObjectType correctedObjectType = MP2::getBaseActionObjectType( bottomTileObjectType );
 
-            const bool isBottomObjectShort = isShortObject( bottomTile.GetObjectUID(), bottomTile.GetIndex() );
+            const bool isBottomObjectShort = isMainObjectShort( bottomTile );
 
             if ( MP2::isActionObject( bottomTileObjectType ) ) {
                 if ( ( MP2::getActionObjectDirection( bottomTileObjectType ) & Direction::TOP ) == 0 ) {
