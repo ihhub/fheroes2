@@ -256,7 +256,7 @@ namespace
         std::deque<int32_t> indexToTraverse{ startIndex };
         std::set<int32_t> traversedIndex;
 
-        const Directions directions = Direction::All();
+        const Directions & directions = Direction::All();
 
         while ( !indexToTraverse.empty() ) {
             traversedIndex.emplace( indexToTraverse.front() );
