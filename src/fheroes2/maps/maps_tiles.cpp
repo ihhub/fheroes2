@@ -651,6 +651,17 @@ int Maps::Tiles::getBoatDirection() const
 
 int Maps::Tiles::getOriginalPassability() const
 {
+    // Run through all objects in this tile and create the passability based on all of them.
+    if ( isValidReefsSprite( _mainAddon._objectIcnType, _mainAddon._imageIndex ) ) {
+        return 0;
+    }
+
+    for ( const TilesAddon & addon : _addonBottomLayer ) {
+        if ( isValidReefsSprite( addon._objectIcnType, addon._imageIndex ) ) {
+            return 0;
+        }
+    }
+
     const MP2::MapObjectType objectType = GetObject( false );
 
     if ( MP2::isActionObject( objectType ) ) {
@@ -660,16 +671,6 @@ int Maps::Tiles::getOriginalPassability() const
     if ( _mainAddon._objectIcnType == MP2::OBJ_ICN_TYPE_UNKNOWN || _mainAddon.isPassabilityTransparent() || isShadow() ) {
         // No object exists. Make it fully passable.
         return DIRECTION_ALL;
-    }
-
-    if ( isValidReefsSprite( _mainAddon._objectIcnType, _mainAddon._imageIndex ) ) {
-        return 0;
-    }
-
-    for ( const TilesAddon & addon : _addonBottomLayer ) {
-        if ( isValidReefsSprite( addon._objectIcnType, addon._imageIndex ) ) {
-            return 0;
-        }
     }
 
     // Objects have fixed passability.
