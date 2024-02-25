@@ -68,19 +68,19 @@ int Difficulty::GetScoutingBonusForAI( int difficulty )
 
 Funds Difficulty::getResourceIncomeBonusForAI( const int difficulty )
 {
-    const auto getIncomeFromCertainNumberOfResourceMinesExceptGold = []( const uint32_t numOfMines ) {
+    const auto getIncomeFromSetsOfResourceMines = []( const uint32_t numOfSets ) {
         Funds result;
 
         Resource::forEach( ( Resource::ALL & ~Resource::GOLD ), [&result]( const int res ) { result += ProfitConditions::FromMine( res ); } );
 
-        return result * numOfMines;
+        return result * numOfSets;
     };
 
     switch ( difficulty ) {
     case Difficulty::EXPERT:
-        return getIncomeFromCertainNumberOfResourceMinesExceptGold( 1 );
+        return getIncomeFromSetsOfResourceMines( 1 );
     case Difficulty::IMPOSSIBLE:
-        return getIncomeFromCertainNumberOfResourceMinesExceptGold( 2 );
+        return getIncomeFromSetsOfResourceMines( 2 );
     default:
         break;
     }
