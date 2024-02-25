@@ -25,6 +25,7 @@
 
 #include <cassert>
 
+#include "profit.h"
 #include "translations.h"
 
 std::string Difficulty::String( int difficulty )
@@ -67,10 +68,19 @@ int Difficulty::GetScoutingBonusForAI( int difficulty )
 
 Funds Difficulty::getResourceIncomeBonusForAI( const int difficulty )
 {
+    const auto getIncomeFromCertainNumberOfResourceMinesExceptGold = []( const uint32_t numOfMines ) {
+        Funds result;
+
+        Resource::forEach( ( Resource::ALL & ~Resource::GOLD ), [&result]( const int res ) { result += ProfitConditions::FromMine( res ); } );
+
+        return result * numOfMines;
+    };
+
     switch ( difficulty ) {
     case Difficulty::EXPERT:
+        return getIncomeFromCertainNumberOfResourceMinesExceptGold( 1 );
     case Difficulty::IMPOSSIBLE:
-        return { 2, 2, 1, 1, 1, 1, 0 };
+        return getIncomeFromCertainNumberOfResourceMinesExceptGold( 2 );
     default:
         break;
     }
@@ -85,11 +95,11 @@ double Difficulty::getGoldIncomeBonusForAI( const int difficulty )
         // It is deduction from the income.
         return -0.25;
     case Difficulty::HARD:
-        return 0.5;
-    case Difficulty::EXPERT:
         return 1.0;
-    case Difficulty::IMPOSSIBLE:
+    case Difficulty::EXPERT:
         return 2.0;
+    case Difficulty::IMPOSSIBLE:
+        return 3.0;
     default:
         break;
     }
