@@ -651,7 +651,7 @@ int Maps::Tiles::getBoatDirection() const
 
 int Maps::Tiles::getOriginalPassability() const
 {
-    // Run through all objects in this tile and create the passability based on all of them.
+    // Run through all objects in this tile and calculate the passability based on all of them.
     if ( isValidReefsSprite( _mainAddon._objectIcnType, _mainAddon._imageIndex ) ) {
         return 0;
     }
