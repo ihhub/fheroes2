@@ -720,6 +720,8 @@ DwellingsBar::DwellingsBar( Castle & cstl, const fheroes2::Size & sz )
 {
     backsf.reset();
 
+    content.reserve( CountBits( DWELLING_MONSTERS ) );
+
     for ( uint32_t dw = DWELLING_MONSTER1; dw <= DWELLING_MONSTER6; dw <<= 1 ) {
         content.emplace_back( dw );
     }
