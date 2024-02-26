@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-18 14:42+0000\n"
-"PO-Revision-Date: 2024-02-26 13:23+0200\n"
+"PO-Revision-Date: 2024-02-26 18:00+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: uk\n"
@@ -53,20 +53,24 @@ msgstr "ІНФО"
 msgid "QUIT"
 msgstr "ВИЙТИ"
 
+# Скасувати - правильний варіант перекладу, адже відміняють лише дієслова як частину мови.
 msgid "CANCEL"
-msgstr "ВІДМІНА"
+msgstr "СКАСУВАТИ"
 
 msgid "OKAY"
-msgstr "ДОБРЕ"
+msgstr "ГАРАЗД"
 
+# Гаразд - це питоме колоритне українське слово, що позначає згоду або підтвердження. Слово "добре" скоріше прикметник та епітет, яке менше підходить для згоди.
 msgid "smallerButton|OKAY"
 msgstr "ГАРАЗД"
 
 msgid "ACCEPT"
 msgstr "ПРИЙНЯТИ"
 
+# Відхилити - є правильним перкладом. Дієслово, що позначає неприйняття пропозиції, змін тощо.
+# Відмінити - стосується лише відміни дієслів як частини мови.
 msgid "DECLINE"
-msgstr "ВІДМІНИТИ"
+msgstr "ВІДХИЛИТИ"
 
 msgid "LEARN"
 msgstr "ВИВЧИТИ"
