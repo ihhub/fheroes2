@@ -477,6 +477,57 @@ namespace Battle
 
         BridgeMovementAnimation _bridgeAnimation;
 
+        struct SwipeAttack
+        {
+            void clear()
+            {
+                swipeSrcCellIndex = -1;
+                swipeDstCellIndex = -1;
+                isValid = false;
+                swipeSrcTheme = 0;
+                swipeDstTheme = 0;
+            }
+
+            void storeSrc( int theme, int32_t index )
+            {
+                clear();
+                swipeSrcTheme = theme;
+                swipeSrcCellIndex = index;
+            }
+
+            void storeDst( int theme, int32_t index )
+            {
+                isValid = true;
+                swipeDstTheme = theme;
+                swipeDstCellIndex = index;
+            }
+
+            bool isValidSwipeAttackDestination( int theme, int32_t index, int32_t head, int32_t tail )
+            {
+                if ( !Board::isNearIndexes( swipeSrcCellIndex, index ) ) {
+                    return false;
+                }
+
+                if ( theme < Cursor::SWORD_TOPRIGHT || theme > Cursor::SWORD_BOTTOM ) {
+                    return false;
+                }
+
+                if ( swipeSrcTheme != Cursor::WAR_MOVE && swipeSrcTheme != Cursor::WAR_FLY && swipeSrcCellIndex != head && swipeSrcCellIndex != tail ) {
+                    return false;
+                }
+
+                return true;
+            }
+
+            int32_t swipeSrcCellIndex;
+            int32_t swipeDstCellIndex;
+            bool isValid;
+            int swipeSrcTheme;
+            int swipeDstTheme;
+        };
+
+        SwipeAttack _swipeAttack;
+
         // TODO: While currently we don't need to persist 'UnitSpellEffectInfos' between render functions,
         // this may be needed in the future (for example, in expansion) to display some sprites over
         // troops for some time (e.g. long duration spell effects or other permanent effects).
@@ -521,6 +572,11 @@ namespace Battle
             void setIntent( const BoardActionIntent & intent )
             {
                 _intent = intent;
+            }
+
+            void clearStoredIntent()
+            {
+                _storedIntent = BoardActionIntent{};
             }
 
             bool isConfirmed()

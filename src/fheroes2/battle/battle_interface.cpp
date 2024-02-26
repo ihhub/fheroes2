@@ -1171,6 +1171,7 @@ Battle::Interface::Interface( Arena & battleArena, const int32_t tileIndex )
     , _teleportSpellSrcIdx( -1 )
     , listlog( nullptr )
     , _bridgeAnimation( { false, BridgeMovementAnimation::UP_POSITION } )
+    , _swipeAttack( { -1, -1, false, 0, 0 } )
 {
     Cursor::Get().SetThemes( Cursor::WAR_POINTER );
 
@@ -2798,6 +2799,12 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
     const fheroes2::Rect turnOrderRect = _turnOrder + _interfacePosition.getPosition();
     const int32_t battleFieldHeight = _interfacePosition.height - status.height - ( listlog->isOpenLog() ? listlog->GetArea().height : 0 );
     const fheroes2::Rect battleFieldRect{ _interfacePosition.x, _interfacePosition.y, _interfacePosition.width, battleFieldHeight };
+
+    // Swipe attack motion finished, but the destination was outside the arena. We need to clear the swipe attack state.
+    if ( !le.isDragInProgress() && Board::isValidIndex( _swipeAttack.swipeSrcCellIndex ) && !Board::isValidIndex( index_pos ) ) {
+        _swipeAttack.clear();
+    }
+
     if ( listlog && listlog->isOpenLog() && ( le.MouseCursor( listlog->GetArea() ) || le.MousePressLeft( listlog->GetArea() ) ) ) {
         cursor.SetThemes( Cursor::WAR_POINTER );
 
@@ -2927,7 +2934,32 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
         }
     }
     else if ( le.MouseCursor( battleFieldRect ) ) {
-        const int themes = GetBattleCursor( msg );
+        int themes = GetBattleCursor( msg );
+
+        if ( _swipeAttack.isValid ) {
+            // The swipe attack motion is either in progress or has finished.
+            if ( index_pos == _swipeAttack.swipeDstCellIndex ) {
+                // The cursor is above the stored destination, we should display the stored attack theme.
+                themes = _swipeAttack.swipeDstTheme;
+            }
+            else {
+                // The cursor has left the destination. Abort the swipe attack.
+                _swipeAttack.clear();
+                boardActionIntentUpdater.clearStoredIntent();
+            }
+        }
+        else if ( _swipeAttack.isValidSwipeAttackDestination( themes, index_pos, _currentUnit->GetHeadIndex(), _currentUnit->GetTailIndex() ) ) {
+            // Valid swipe attack target cell. Calculate the attack angle based on destination and source cells.
+            int direction = Board::GetDirection( index_pos, _swipeAttack.swipeSrcCellIndex );
+            themes = GetSwordCursorDirection( direction );
+
+            // Remember the swipe destination cell and theme.
+            _swipeAttack.storeDst( themes, index_pos );
+
+            // Clear any pending intents. We don't want to confirm previous actions by performing swipe attack motion.
+            boardActionIntentUpdater.clearStoredIntent();
+        }
+
         cursor.SetThemes( themes );
 
         const Cell * cell = Board::GetCell( index_pos );
@@ -2942,10 +2974,25 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
             boardActionIntentUpdater.setIntent( { themes, index_pos } );
 
             if ( le.MouseClickLeft( battleFieldRect ) ) {
-                MouseLeftClickBoardAction( themes, *cell, boardActionIntentUpdater.isConfirmed(), actions );
+                bool isConfirmed = boardActionIntentUpdater.isConfirmed();
+
+                if ( isConfirmed ) {
+                    // Intent is confirmed, it is safe to clear the swipe state (regardless of the intent and the input method).
+                    _swipeAttack.clear();
+                }
+
+                MouseLeftClickBoardAction( themes, *cell, isConfirmed, actions );
             }
             else if ( le.MousePressRight() ) {
                 MousePressRightBoardAction( *cell );
+            }
+            else if ( le.MousePressLeft( battleFieldRect ) ) {
+                if ( !le.isDragInProgress() && !_swipeAttack.isValid ) {
+                    le.registerDrag();
+
+                    // Remember the swipe source cell and theme.
+                    _swipeAttack.storeSrc( themes, index_pos );
+                }
             }
         }
         else {
