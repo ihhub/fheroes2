@@ -32,7 +32,6 @@
 #include "image.h"
 #include "interface_itemsbar.h"
 #include "math_base.h"
-#include "monster.h"
 #include "resource.h"
 
 namespace fheroes2
