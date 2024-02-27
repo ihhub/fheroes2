@@ -1960,7 +1960,6 @@ msgstr "Roland"
 msgid "Archibald"
 msgstr "Archibald"
 
-#, fuzzy
 msgid "Price of Loyalty"
 msgstr "Giá của Lòng Trung Thành"
 
@@ -1999,11 +1998,9 @@ msgstr ""
 msgid "Cannot afford the %{name}."
 msgstr "Không đủ khả năng %{name}."
 
-#, fuzzy
 msgid "The %{name} is already built."
 msgstr "%{name} đã được xây."
 
-#, fuzzy
 msgid "Cannot build the %{name}."
 msgstr "Không thể xây %{name}."
 
@@ -2590,7 +2587,6 @@ msgstr ""
 "Hào làm chậm các đơn vị tấn công. Bất kỳ đơn vị nào đi vào hào đều phải kết "
 "thúc lượt của mình ở đó và trở nên dễ bị tấn công hơn."
 
-#, fuzzy
 msgid ""
 "The Castle improves the town's defense and increases its income to %{count} "
 "gold per day."
@@ -2692,7 +2688,6 @@ msgstr "không có bảo vật."
 msgid "Recruit %{name} the %{race}"
 msgstr "Chiêu mộ %{name} của chủng tộc %{race}"
 
-#, fuzzy
 msgid ""
 "'Spread' combat formation spreads the castle's units from the top to the "
 "bottom of the battlefield, with at least one empty space between each unit."
@@ -2700,7 +2695,6 @@ msgstr ""
 "Đội hình chiến đấu 'Dàn trải' dàn quân của ngươi từ trên xuống dưới của "
 "chiến trường, với ít nhất một khoảng trống giữa mỗi quân."
 
-#, fuzzy
 msgid ""
 "'Grouped' combat formation bunches the castle's units together in the center "
 "of the castle's side of the battlefield."
@@ -2714,11 +2708,9 @@ msgstr "Đội hình Dàn trải"
 msgid "Grouped Formation"
 msgstr "Đội hình Tập trung"
 
-#, fuzzy
 msgid "Click to show the next town."
 msgstr "Nhấp để xem thị trấn sau."
 
-#, fuzzy
 msgid "Click to show the previous town."
 msgstr "Nhấp để xem thị trấn trước."
 
@@ -2933,7 +2925,6 @@ msgstr "Chuyển đổi mức âm thanh nền trước."
 msgid "Change the type of music."
 msgstr "Thay đổi loại nhạc."
 
-#, fuzzy
 msgid "Toggle the 3D effect of foreground sounds."
 msgstr "Chuyển đổi hiệu ứng 3D của âm thanh nền trước."
 
@@ -3617,7 +3608,6 @@ msgstr "Xem tất cả các bản đồ, bất kể kích thước."
 msgid "Players Icon"
 msgstr "Biểu tượng Người chơi"
 
-#, fuzzy
 msgid ""
 "Indicates how many players total are in the scenario. Any positions not "
 "occupied by human players will be occupied by computer players."
@@ -3702,7 +3692,6 @@ msgstr "Thủ công"
 msgid "Change the speed at which your heroes move on the main screen."
 msgstr "Thay đổi tốc độ di chuyển của các tướng trên màn hình chính."
 
-#, fuzzy
 msgid ""
 "Sets the speed that computer heroes move at. You can also elect not to view "
 "computer movement at all."
@@ -3935,7 +3924,6 @@ msgstr "Chế độ Xóa"
 msgid "Mountains"
 msgstr "Núi"
 
-#, fuzzy
 msgid "Rocks"
 msgstr "Đá"
 
@@ -4229,7 +4217,6 @@ msgstr ""
 "Chọn độ khó này nếu ngươi muốn thích câu chuyện trò chơi hơn thử thách. AI "
 "yếu hơn so với độ khó bình thường."
 
-#, fuzzy
 msgid ""
 "Choose this difficulty to experience the campaign as per the original design."
 msgstr "Chọn độ khó này để tận hưởng chiến dịch theo thiết kế ban đầu."
@@ -4522,7 +4509,6 @@ msgstr "trò chơi mới"
 msgid "hotkey|load game"
 msgstr "tải trò chơi"
 
-#, fuzzy
 msgid "hotkey|high scores"
 msgstr "điểm cao"
 
@@ -4562,7 +4548,6 @@ msgstr "chọn bản đồ cỡ siêu lớn"
 msgid "hotkey|select all map sizes"
 msgstr "chọn tất cả các bản đồ"
 
-#, fuzzy
 msgid "hotkey|hot seat game"
 msgstr "trò chơi ghế nóng"
 
@@ -4602,7 +4587,6 @@ msgstr "chiến dịch roland"
 msgid "hotkey|archibald campaign"
 msgstr "chiến dịch archibald"
 
-#, fuzzy
 msgid "hotkey|price of loyalty campaign"
 msgstr "chiến dịch giá của lòng trung thành"
 
@@ -5274,7 +5258,6 @@ msgstr "Kịch bản"
 msgid "Game Difficulty"
 msgstr "Độ khó Trò chơi"
 
-#, fuzzy
 msgid ""
 "This lets you change the starting difficulty at which you will play. Higher "
 "difficulty levels start you off with fewer resources, and at the higher "
@@ -5354,7 +5337,6 @@ msgstr ""
 msgid "%{color} player's turn."
 msgstr "Lượt người chơi màu %{color}."
 
-#, fuzzy
 msgid ""
 "%{color} player, you have lost your last town. If you do not conquer another "
 "town in the next week, you will be eliminated."
@@ -5459,7 +5441,6 @@ msgstr "Niệm một câu thần chú khám phá."
 msgid "End Turn"
 msgstr "Kết thúc Lượt"
 
-#, fuzzy
 msgid "End your turn and let the computer take its turn."
 msgstr "Kết thúc lượt của ngươi và để máy tính đi lượt của nó."
 
@@ -5621,7 +5602,6 @@ msgstr ""
 msgid "Mild Handicap"
 msgstr "Chấp Ít"
 
-#, fuzzy
 msgid ""
 "Players with mild handicap start with fewer resources and earn 15% fewer "
 "resources per turn."
@@ -5632,7 +5612,6 @@ msgstr ""
 msgid "Severe Handicap"
 msgstr "Chấp Nhiều"
 
-#, fuzzy
 msgid ""
 "Players with severe handicap start with fewer resources and earn 30% fewer "
 "resources per turn."
@@ -6173,7 +6152,6 @@ msgid "The mermaids silently entice you to return later and be blessed again."
 msgstr ""
 "Các nàng tiên cá âm thầm dụ dỗ ngươi quay lại sau và được ban phước lần nữa."
 
-#, fuzzy
 msgid ""
 "The magical, soothing beauty of the Mermaids reaches you and your crew.\n"
 "Just for a moment, you forget your worries and bask in the beauty of the "
@@ -6944,7 +6922,6 @@ msgstr ""
 "này đề nghị bán cho ngươi những bản đồ biển mà ông ấy đã làm khi còn trẻ với "
 "giá 1.000 vàng. Ngươi có muốn mua bản đồ không?"
 
-#, fuzzy
 msgid ""
 "The captain sighs. \"You don't have enough money, eh? You can't expect me to "
 "give my maps away for free!\""
@@ -7419,7 +7396,6 @@ msgstr ""
 msgid "%{name} the %{race} (Level %{level})"
 msgstr "%{name} chủng tộc %{race} (Cấp %{level})"
 
-#, fuzzy
 msgid ""
 "'Spread' combat formation spreads the hero's units from the top to the "
 "bottom of the battlefield, with at least one empty space between each unit."
@@ -7427,7 +7403,6 @@ msgstr ""
 "Đội hình chiến đấu 'Dàn trải' dàn quân của ngươi từ trên xuống dưới của "
 "chiến trường, với ít nhất một khoảng trống giữa mỗi quân."
 
-#, fuzzy
 msgid ""
 "'Grouped' combat formation bunches the hero's army together in the center of "
 "their side of the battlefield."
@@ -7496,7 +7471,6 @@ msgstr ""
 msgid "Level %{level}"
 msgstr "Cấp bậc %{level}"
 
-#, fuzzy
 msgid ""
 "%{name} currently has %{point} spell points out of a maximum of %{max}. The "
 "maximum number of spell points is 10 times the hero's knowledge. It is "
@@ -8471,7 +8445,6 @@ msgstr "Ngẫu nhiên Quái vật - mạnh"
 msgid "Random Monster - very strong"
 msgstr "Ngẫu nhiên Quái vật - rất mạnh"
 
-#, fuzzy
 msgid "Hero"
 msgstr "Tướng"
 
@@ -10421,7 +10394,6 @@ msgstr "Bù nhìn 4"
 msgid "Spell Scroll"
 msgstr "Sách Phép"
 
-#, fuzzy
 msgid ""
 "This %{name} gives the hero the ability to cast the %{spell} spell if the "
 "hero has a Magic Book."
@@ -10443,7 +10415,6 @@ msgstr ""
 msgid "Arm of the Martyr"
 msgstr "Cánh tay Liệt sĩ"
 
-#, fuzzy
 msgid ""
 "The %{name} increases the hero's spell power by %{count} but adds the undead "
 "morale penalty."
@@ -10467,7 +10438,6 @@ msgstr ""
 msgid "Breastplate of Anduran"
 msgstr "Áo giáp của Anduran"
 
-#, fuzzy
 msgid "The %{name} increases the hero's defense by %{count}."
 msgstr "%{name} tăng khả năng phòng thủ của ngươi thêm %{count}."
 
@@ -10505,7 +10475,6 @@ msgstr ""
 msgid "Battle Garb of Anduran"
 msgstr "Chiến Bào của Anduran"
 
-#, fuzzy
 msgid ""
 "The %{name} combines the powers of the three Anduran artifacts. It provides "
 "maximum luck and morale for the hero's troops and gives the hero the Town "
@@ -10527,7 +10496,6 @@ msgstr ""
 msgid "Crystal Ball"
 msgstr "Quả cầu Pha lê"
 
-#, fuzzy
 msgid ""
 "The %{name} lets the hero get more specific information about monsters, "
 "enemy heroes, and castles nearby the hero."
@@ -10655,7 +10623,6 @@ msgstr ""
 msgid "Masthead"
 msgstr "Tiêu đề"
 
-#, fuzzy
 msgid ""
 "The %{name} boosts the hero's troops' luck and morale by %{count} each in "
 "sea combat."
@@ -10684,7 +10651,6 @@ msgstr ""
 msgid "Staff of Wizardry"
 msgstr "Gậy Phù thủy"
 
-#, fuzzy
 msgid "The %{name} boosts the hero's spell power by %{count}."
 msgstr "%{name} tăng sức mạnh phép thuật của ngươi thêm %{count}."
 
@@ -10702,7 +10668,6 @@ msgstr ""
 msgid "Sword Breaker"
 msgstr "Kẻ phá Kiếm"
 
-#, fuzzy
 msgid "The %{name} increases the hero's defense by %{count} and attack by 1."
 msgstr ""
 "%{name} tăng khả năng phòng thủ của ngươi thêm %{count} và tấn công thêm 1."
@@ -10733,7 +10698,6 @@ msgstr ""
 msgid "Spade of Necromancy"
 msgstr "Thuổng của Chiêu hồn"
 
-#, fuzzy
 msgid "The %{name} gives the hero increased necromancy skill."
 msgstr "%{name} giúp ngươi tăng kỹ năng chiêu hồn."
 
