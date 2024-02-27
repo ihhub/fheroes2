@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-20 03:11+0000\n"
-"PO-Revision-Date: 2024-02-21 19:52+0700\n"
+"PO-Revision-Date: 2024-02-20 08:49+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: vi\n"
@@ -383,6 +383,7 @@ msgstr "Bội số"
 msgid "Troops of %{count} alignments -%{penalty}"
 msgstr "Quân của %{count} sắp hàng -%{penalty}"
 
+#, fuzzy
 msgid "Some undead in army -1"
 msgstr "Trong đội có xác sống -1"
 
@@ -448,10 +449,13 @@ msgid ""
 msgstr ""
 "Không có không gian trống nào gần tướng của ngươi để triệu hồi một Nguyên tố."
 
+#, fuzzy
 msgid ""
 "The Moat reduces the defense skill of troops trapped in it by %{count} and "
 "restricts their movement range."
 msgstr ""
+"Hào giảm -%{count} kỹ năng phòng thủ của bất kỳ đơn vị nào và làm chậm một "
+"nửa tốc độ di chuyển."
 
 msgid "Speed: %{speed}"
 msgstr "Tốc độ: %{speed}"
@@ -567,11 +571,15 @@ msgstr "Kẻ hèn nhát %{name} chạy trốn khỏi trận chiến."
 msgid "%{name} surrenders to the enemy, and departs in shame."
 msgstr "%{name} đầu hàng kẻ thù và nhục nhã ra đi."
 
+#, fuzzy
 msgid "Your forces suffer a bitter defeat, and %{name} abandons your cause."
 msgstr ""
+"Lực lượng của ngươi bị thất bại nặng nề và %{name} từ bỏ chính nghĩa của "
+"ngươi."
 
+#, fuzzy
 msgid "Your forces suffer a bitter defeat."
-msgstr ""
+msgstr "Lực lượng của ngươi bị thất bại nặng nề."
 
 msgid "Battlefield Casualties"
 msgstr "Thương vong Chiến trường"
@@ -582,11 +590,13 @@ msgstr "Bên công"
 msgid "Defender"
 msgstr "Bên thủ"
 
+#, fuzzy
 msgid "Click to leave the battle results."
-msgstr ""
+msgstr "Nhấp để áp dụng độ phân giải đã chọn."
 
+#, fuzzy
 msgid "Click to restart the battle in manual mode."
-msgstr ""
+msgstr "Nhấp để quay lại màn hình chính."
 
 msgid "Restart"
 msgstr "Chơi lại"
@@ -674,12 +684,16 @@ msgstr ""
 "để ngươi chiêu mộ lại, tuy nhiên, tướng sẽ chỉ có lực lượng của một tướng "
 "mới."
 
+#, fuzzy
 msgid ""
 "Surrendering costs gold. However if you pay the ransom, the hero and all of "
 "his or her surviving creatures will be available to recruit again. The cost "
 "of surrender is half of the total cost of the non-temporary troops remaining "
 "in the army."
 msgstr ""
+"Đầu hàng tốn vàng. Tuy nhiên, nếu ngươi trả tiền chuộc, tướng và tất cả "
+"những sinh vật còn sống sót của anh ta hoặc cô ta sẽ sẵn sàng để chiêu mộ "
+"lại."
 
 msgid "Open Hero Screen to view full information about the hero."
 msgstr "Mở Màn hình Tướng để xem thông tin đầy đủ về Tướng."
@@ -807,9 +821,10 @@ msgstr "Ngươi có chắc chắn muốn bật chiến đấu tự động?"
 msgid "Are you sure you want to finish the battle in auto mode?"
 msgstr "Ngươi có chắc chắn muốn kết thúc trận chiến ở chế độ tự động không?"
 
+#, fuzzy
 msgid "The %{name} skips their turn."
 msgid_plural "The %{name} skip their turn."
-msgstr[0] ""
+msgstr[0] "%{name} bỏ lượt."
 
 msgid "%{attacker} does %{damage} damage."
 msgid_plural "%{attacker} do %{damage} damage."
@@ -834,9 +849,10 @@ msgstr[0] "1 %{unit} được hồi sinh."
 msgid "Moved %{monster}: from [%{src}] to [%{dst}]."
 msgstr "Chuyển %{monster}: từ [%{src}] tới [%{dst}]."
 
+#, fuzzy
 msgid "The %{name} resists the spell!"
 msgid_plural "The %{name} resist the spell!"
-msgstr[0] ""
+msgstr[0] "Quái vật %{name} kháng phép này!"
 
 msgid "%{name} casts %{spell} on the %{troop}."
 msgstr "%{name} niệm phép %{spell} lên %{troop}."
@@ -862,29 +878,36 @@ msgstr "Phép %{spell} gây %{damage} sát thương cho một sinh vật sống.
 msgid "The %{spell} does %{damage} damage to all living creatures."
 msgstr "Phép %{spell} gây %{damage} sát thương cho tất cả sinh vật sống."
 
+#, fuzzy
 msgid "The %{attacker}'s attack blinds the %{target}!"
 msgid_plural "The %{attacker}' attack blinds the %{target}!"
-msgstr[0] ""
+msgstr[0] "Tướng %{attacker}' tấn công phép mù vào mục tiêu %{target}!"
 
+#, fuzzy
 msgid "The %{attacker}'s gaze turns the %{target} to stone!"
 msgid_plural "The %{attacker}' gaze turns the %{target} to stone!"
 msgstr[0] "Cái nhìn của %{attacker}' biến %{target} thành đá!"
 
+#, fuzzy
 msgid "The %{attacker}'s curse falls upon the %{target}!"
 msgid_plural "The %{attacker}' curse falls upon the %{target}!"
 msgstr[0] "Tướng %{attacker}' nguyền rủa lên tất cả %{target}!"
 
+#, fuzzy
 msgid "The %{target} is paralyzed by the %{attacker}!"
 msgid_plural "The %{target} are paralyzed by the %{attacker}!"
-msgstr[0] ""
+msgstr[0] "Mục tiêu %{target} đã bị %{attacker} hóa đá!"
 
+#, fuzzy
 msgid "The %{attacker} dispels all good spells on your %{target}!"
 msgid_plural "The %{attacker} dispel all good spells on your %{target}!"
 msgstr[0] ""
+"Tên %{attacker} xua tan mọi phép thuật tốt trên quân %{target} của ngươi!"
 
+#, fuzzy
 msgid "The %{attacker} casts %{spell} on the %{target}!"
 msgid_plural "The %{attacker} cast %{spell} on the %{target}!"
-msgstr[0] ""
+msgstr[0] "Tên %{attacker} niệm phép %{spell} lên %{target}!"
 
 msgid "Bad luck descends on the %{attacker}."
 msgstr "Vận rủi giáng xuống %{attacker}."
@@ -907,8 +930,9 @@ msgstr "Hình ảnh phản chiếu được tạo ra."
 msgid "The mirror image is destroyed!"
 msgstr "Hình ảnh phản chiếu đã mất đi!"
 
+#, fuzzy
 msgid "Are you sure you want to interrupt the auto combat?"
-msgstr ""
+msgstr "Ngươi có chắc chắn muốn làm gián đoạn trận chiến tự động không?"
 
 msgid "Error"
 msgstr "Lỗi"
@@ -950,8 +974,9 @@ msgstr "Con người"
 msgid "AI"
 msgstr "AI"
 
+#, fuzzy
 msgid "Start"
-msgstr ""
+msgstr "Chơi lại"
 
 msgid "Start the battle."
 msgstr "Bắt đầu trận chiến."
