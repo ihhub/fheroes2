@@ -9932,7 +9932,7 @@ msgstr "Sách Nguyên tố"
 msgid ""
 "The %{name} doubles the effectiveness of all of the hero's summoning spells."
 msgstr ""
-"%{name} tăng gấp đôi hiệu quả của tất cả các phép thuật triệu hồi của ngươi."
+"%{name} tăng gấp đôi hiệu quả của tất cả các phép thuật triệu hồi của tướng."
 
 msgid ""
 "You come across a conjurer who begs to accompany you and your army awhile "
@@ -9963,9 +9963,8 @@ msgstr ""
 msgid "Holy Pendant"
 msgstr "Mặt dây Thánh"
 
-#, fuzzy
 msgid "The %{name} makes all of the hero's troops immune to curse spells."
-msgstr "%{name} làm cho tất cả quân đội của ngươi miễn nhiễm với các bùa chú."
+msgstr "%{name} làm cho tất cả quân đội của tướng miễn nhiễm với các bùa chú."
 
 msgid ""
 "In your wanderings you come across a hermit living in a small, tidy hut. "
@@ -9980,10 +9979,9 @@ msgstr ""
 msgid "Pendant of Free Will"
 msgstr "Mặt dây Ý chí Tự do"
 
-#, fuzzy
 msgid "The %{name} makes all of the hero's troops immune to hypnotize spells."
 msgstr ""
-"%{name} làm cho tất cả quân của ngươi miễn nhiễm với các phép thuật thôi "
+"%{name} làm cho tất cả quân của tướng miễn nhiễm với các phép thuật thôi "
 "miên."
 
 msgid ""
@@ -10001,9 +9999,8 @@ msgstr ""
 msgid "Pendant of Life"
 msgstr "Mặt dây của Sự sống"
 
-#, fuzzy
 msgid "The %{name} makes all of the hero's troops immune to death spells."
-msgstr "%{name} làm cho tất cả quân của ngươi miễn nhiễm với bùa chết."
+msgstr "%{name} làm cho tất cả quân của tướng miễn nhiễm với bùa chết."
 
 msgid ""
 "A brief roadside encounter with a small caravan and a game of knucklebones "
@@ -10017,10 +10014,9 @@ msgstr ""
 msgid "Serenity Pendant"
 msgstr "Mặt dây Thanh thản"
 
-#, fuzzy
 msgid "The %{name} makes all of the hero's troops immune to berserk spells."
 msgstr ""
-"%{name} làm cho tất cả quân của ngươi miễn nhiễm với các phép thuật điên "
+"%{name} làm cho tất cả quân của tướng miễn nhiễm với các phép thuật điên "
 "cuồng."
 
 msgid ""
@@ -10038,9 +10034,8 @@ msgstr ""
 msgid "Seeing-eye Pendant"
 msgstr "Mặt dây Mắt nhìn"
 
-#, fuzzy
 msgid "The %{name} makes all of the hero's troops immune to blindness spells."
-msgstr "%{name} làm cho tất cả quân của người miễn nhiễm với bùa mù."
+msgstr "%{name} làm cho tất cả quân của tướng miễn nhiễm với bùa mù."
 
 msgid ""
 "You come upon a very old woman, long blind from cataracts and dying alone. "
@@ -10057,10 +10052,9 @@ msgstr ""
 msgid "Kinetic Pendant"
 msgstr "Mặt dây Động học"
 
-#, fuzzy
 msgid "The %{name} makes all of the hero's troops immune to paralyze spells."
 msgstr ""
-"%{name} làm cho tất cả quân của ngươi miễn nhiễm với các phép thuật làm tê "
+"%{name} làm cho tất cả quân của tướng miễn nhiễm với các phép thuật làm tê "
 "liệt."
 
 msgid ""
@@ -10075,10 +10069,9 @@ msgstr ""
 msgid "Pendant of Death"
 msgstr "Mặt dây Chết chóc"
 
-#, fuzzy
 msgid "The %{name} makes all of the hero's troops immune to holy spells."
 msgstr ""
-"%{name} làm cho tất cả quân đội của ngươi miễn nhiễm với các phép thuật thần "
+"%{name} làm cho tất cả quân đội của tướng miễn nhiễm với các phép thuật thần "
 "thánh."
 
 msgid ""
@@ -10094,11 +10087,10 @@ msgstr ""
 msgid "Wand of Negation"
 msgstr "Đũa phép Phủ định"
 
-#, fuzzy
 msgid ""
 "The %{name} makes all of the hero's troops immune to dispel magic spells."
 msgstr ""
-"%{name} làm cho tất cả quân của ngươi miễn nhiễm với các phép thuật xua tan."
+"%{name} làm cho tất cả quân của tướng miễn nhiễm với các phép thuật xua tan."
 
 msgid ""
 "You meet an old Wizard friend of yours traveling in the opposite direction. "
@@ -10112,12 +10104,11 @@ msgstr ""
 msgid "Golden Bow"
 msgstr "Cung Vàng"
 
-#, fuzzy
 msgid ""
 "The %{name} eliminates the %{count} percent penalty for the hero's troops "
 "shooting past obstacles (e.g. castle walls)."
 msgstr ""
-"%{name} loại bỏ hình phạt %{count} phần trăm đối với quân của ngươi bắn qua "
+"%{name} loại bỏ hình phạt %{count} phần trăm đối với quân của tướng bắn qua "
 "chướng ngại vật (ví dụ: tường lâu đài)."
 
 msgid ""
@@ -10130,13 +10121,12 @@ msgstr ""
 msgid "Telescope"
 msgstr "Kính viễn vọng"
 
-#, fuzzy
 msgid ""
 "The %{name} increases the amount of terrain the hero reveals when "
 "adventuring by %{count} extra square."
 msgstr ""
-"%{name} tăng số lượng địa hình mà tướng của ngươi phát hiện khi phiêu lưu "
-"thêm %{count} ô vuông."
+"%{name} tăng số lượng địa hình mà tướng phát hiện khi phiêu lưu thêm "
+"%{count} ô vuông."
 
 msgid ""
 "A merchant from far away lands trades you a new invention of his people for "
@@ -10154,13 +10144,12 @@ msgstr ""
 msgid "Statesman's Quill"
 msgstr "Bút lông của Statesman"
 
-#, fuzzy
 msgid ""
 "The %{name} reduces the cost of surrender to %{count} percent of the total "
 "cost of troops the hero has in their army."
 msgstr ""
 "%{name} giảm chi phí đầu hàng xuống %{count} phần trăm tổng chi phí quân đội "
-"ngươi có trong quân đội của mình."
+"tướng có trong quân đội của mình."
 
 msgid ""
 "You pause to help a diplomat with a broken axle fix his problem. In "
@@ -10175,11 +10164,10 @@ msgstr ""
 msgid "Wizard's Hat"
 msgstr "Mũ Phù thủy"
 
-#, fuzzy
 msgid ""
 "The %{name} increases the duration of the hero's spells by %{count} turns."
 msgstr ""
-"%{name} tăng thời lượng sử dụng phép thuật của ngươi thêm %{count} lượt."
+"%{name} tăng thời lượng sử dụng phép thuật của tướng thêm %{count} lượt."
 
 msgid ""
 "You see a Wizard fleeing from a Griffin and riding like the wind. The Wizard "
@@ -10195,10 +10183,8 @@ msgstr ""
 msgid "Power Ring"
 msgstr "Nhẫn Sức mạnh"
 
-#, fuzzy
 msgid "The %{name} returns %{count} extra spell points per day to the hero."
-msgstr ""
-"%{name} phục hồi %{count} điểm phép bổ sung mỗi ngày cho tướng của ngươi."
+msgstr "%{name} phục hồi %{count} điểm phép bổ sung mỗi ngày cho tướng."
 
 msgid ""
 "You find a small tree that closely resembles the great Warlock Carnauth with "
@@ -10214,11 +10200,10 @@ msgstr ""
 msgid "Ammo Cart"
 msgstr "Xe Đạn"
 
-#, fuzzy
 msgid ""
 "The %{name} provides endless ammunition for all of the hero's troops that "
 "shoot."
-msgstr "%{name} cung cấp vô số đạn dược cho tất cả quân của ngươi bắn."
+msgstr "%{name} cung cấp vô số đạn dược cho tất cả quân của tướng bắn."
 
 msgid ""
 "An ammunition cart in the middle of an old battlefield catches your eye. "
@@ -10230,9 +10215,8 @@ msgstr ""
 msgid "Tax Lien"
 msgstr "Giữ Thuế"
 
-#, fuzzy
 msgid "The %{name} costs the hero %{count} gold pieces per day."
-msgstr "%{name} làm ngươi tốn %{count} vàng mỗi ngày."
+msgstr "%{name} làm tướng tốn %{count} vàng mỗi ngày."
 
 msgid ""
 "Your big spending habits have earned you a massive tax bill that you can't "
@@ -10249,11 +10233,9 @@ msgstr ""
 msgid "Hideous Mask"
 msgstr "Mặt nạ Gớm ghiếc"
 
-#, fuzzy
 msgid "The %{name} prevents all 'wandering' armies from joining the hero."
 msgstr ""
-"%{name} ngăn chặn tất cả các đội quân 'lang thang' tham gia cùng tướng của "
-"ngươi."
+"%{name} ngăn chặn tất cả các đội quân 'lang thang' tham gia cùng tướng."
 
 msgid ""
 "Your looting of the grave of Sinfilas Gardolad, the famous shapeshifting "
@@ -10418,9 +10400,8 @@ msgstr ""
 msgid "Magic Book"
 msgstr "Sách Phép"
 
-#, fuzzy
 msgid "The %{name} enables the hero to cast spells."
-msgstr "%{name} cho phép ngươi sử dụng phép thuật."
+msgstr "%{name} cho phép tướng sử dụng phép thuật."
 
 msgid "Dummy 1"
 msgstr "Bù nhìn 1"
