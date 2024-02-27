@@ -383,7 +383,6 @@ msgstr "Bội số"
 msgid "Troops of %{count} alignments -%{penalty}"
 msgstr "Quân của %{count} sắp hàng -%{penalty}"
 
-#, fuzzy
 msgid "Some undead in army -1"
 msgstr "Trong đội có xác sống -1"
 
