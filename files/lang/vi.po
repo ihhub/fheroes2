@@ -978,9 +978,8 @@ msgstr "AI"
 msgid "Start"
 msgstr "Chơi lại"
 
-#, fuzzy
 msgid "Start the battle."
-msgstr "Quay lại trận chiến."
+msgstr "Bắt đầu trận chiến."
 
 msgid "Exit"
 msgstr "Thoát"
@@ -1991,7 +1990,7 @@ msgstr "Đối với hành động này, trước tiên cần phải xây dựng
 
 #, fuzzy
 msgid "Cannot build %{name}. The castle is too far away from an ocean."
-msgstr "Không thể xây %{name} vì lâu đài quá xa một đại dương."
+msgstr "Không thể xây %{name}. Lâu đài quá xa một đại dương."
 
 msgid "This building has been disabled."
 msgstr ""
@@ -3491,11 +3490,12 @@ msgstr "Chọn Đối tượng Đại dương:"
 msgid "Mine placing"
 msgstr ""
 
-#, fuzzy
 msgid ""
 "Resource\n"
 "type:"
-msgstr "Tài nguyên"
+msgstr ""
+"Kiểu\n"
+"tài nguyên"
 
 #, fuzzy
 msgid "%{mineName} appearance:"
@@ -4104,15 +4104,11 @@ msgstr "Chế độ Vật thể"
 msgid "Used to place kingdom objects (towns, castles and heroes) on the map."
 msgstr "Dùng để đặt các vật thể (núi, cây, kho báu, v.v.v) lên bản đồ."
 
-#, fuzzy
 msgid "Monsters Mode"
-msgstr "Quái vật"
+msgstr "Chế độ Quái vật"
 
-#, fuzzy
 msgid "Used to place monsters on the map."
-msgstr ""
-"Dùng để đặt\n"
-"một nhóm quái vật."
+msgstr "Dùng để đặt quái vật lên bản đồ."
 
 msgid "Allows you to draw streams by clicking and dragging."
 msgstr "Cho phép vẽ suối bằng cách nhấp và kéo."
@@ -4931,12 +4927,11 @@ msgid "Welcome to Heroes of Might and Magic II powered by fheroes2 engine!"
 msgstr ""
 "Chào mừng tới Heroes of Might and Magic II cung cấp bởi mã nguồn fheroes2!"
 
-#, fuzzy
 msgid ""
 "Welcome to Heroes of Might and Magic II powered by the fheroes2 engine!\n"
 "Before starting the game, please select a game resolution."
 msgstr ""
-"Chào mừng tới Heroes of Might and Magic II cung cấp bởi mã nguồn fheroes2! "
+"Chào mừng tới Heroes of Might and Magic II cung cấp bởi mã nguồn fheroes2!\n"
 "Trước khi bắt đầu hãy chọn độ phân giải của trò chơi."
 
 msgid "Please Remember"
@@ -9798,11 +9793,10 @@ msgstr ""
 msgid "Fire Cloak"
 msgstr "Áo Lửa"
 
-#, fuzzy
 msgid ""
 "The %{name} halves all damage the hero's troops receive from fire spells."
 msgstr ""
-"%{name} giảm một nửa tổng thiệt hại mà quân của ngươi phải gánh chịu từ các "
+"%{name} giảm một nửa tổng thiệt hại mà quân của tướng phải gánh chịu từ các "
 "phép thuật lửa."
 
 msgid ""
@@ -9819,12 +9813,11 @@ msgstr ""
 msgid "Lightning Helm"
 msgstr "Mũ Sét"
 
-#, fuzzy
 msgid ""
 "The %{name} halves all damage the hero's troops receive from lightning "
 "spells."
 msgstr ""
-"%{name} giảm một nửa tất cả sát thương mà quân của ngươi phải gánh chịu từ "
+"%{name} giảm một nửa tất cả sát thương mà quân của tướng phải gánh chịu từ "
 "các phép thuật sét."
 
 msgid ""
@@ -9840,12 +9833,11 @@ msgstr ""
 msgid "Evercold Icicle"
 msgstr "Băng lạnh Bất tận"
 
-#, fuzzy
 msgid ""
 "The %{name} causes the hero's cold spells to do %{count} percent more damage "
 "to enemy troops."
 msgstr ""
-"%{name} khiến các phép thuật lạnh lùng của ngươi gây thêm %{count} phần trăm "
+"%{name} khiến các phép thuật lạnh lùng của tướng gây thêm %{count} phần trăm "
 "sát thương cho quân địch."
 
 msgid ""
@@ -9860,12 +9852,11 @@ msgstr ""
 msgid "Everhot Lava Rock"
 msgstr "Nham thạch nóng Vô tận"
 
-#, fuzzy
 msgid ""
 "The %{name} causes the hero's fire spells to do %{count} percent more damage "
 "to enemy troops."
 msgstr ""
-"%{name} khiến phép thuật lửa của ngươi gây thêm %{count} phần trăm sát "
+"%{name} khiến phép thuật lửa của tướng gây thêm %{count} phần trăm sát "
 "thương cho quân địch."
 
 msgid ""
@@ -9883,12 +9874,11 @@ msgstr ""
 msgid "Lightning Rod"
 msgstr "Quyền trượng Sét"
 
-#, fuzzy
 msgid ""
 "The %{name} causes the hero's lightning spells to do %{count} percent more "
 "damage to enemy troops."
 msgstr ""
-"%{name} khiến phép thuật sét của ngươi gây thêm %{count} phần trăm sát "
+"%{name} khiến phép thuật sét của tướng gây thêm %{count} phần trăm sát "
 "thương cho quân địch."
 
 msgid ""
@@ -9904,11 +9894,10 @@ msgstr ""
 msgid "Snake-Ring"
 msgstr "Vòng Rắn"
 
-#, fuzzy
 msgid "The %{name} halves the casting cost of all of the hero's bless spells."
 msgstr ""
 "%{name} giảm một nửa chi phí thi triển tất cả các phép thuật ban phước của "
-"ngươi."
+"tướng."
 
 msgid ""
 "You've found an oddly shaped ring on the finger of a long dead traveler. The "
@@ -9920,13 +9909,12 @@ msgstr ""
 msgid "Ankh"
 msgstr ""
 
-#, fuzzy
 msgid ""
 "The %{name} doubles the effectiveness of all of the hero's resurrect and "
 "animate spells."
 msgstr ""
 "%{name} tăng gấp đôi hiệu quả của tất cả các phép thuật hồi sinh và tái sinh "
-"của ngươi."
+"của tướng."
 
 msgid ""
 "A fierce windstorm reveals the entrance to a buried tomb. Your investigation "
