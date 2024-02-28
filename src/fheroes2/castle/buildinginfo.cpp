@@ -714,20 +714,17 @@ void BuildingInfo::SetStatusMessage( StatusBar & bar ) const
     }
 }
 
-DwellingItem::DwellingItem( const Castle & castle, uint32_t dw )
-{
-    type = castle.GetActualDwelling( dw );
-    mons = Monster( castle.GetRace(), type );
-}
-
 DwellingsBar::DwellingsBar( Castle & cstl, const fheroes2::Size & sz )
     : castle( cstl )
     , backsf( sz.width, sz.height )
 {
     backsf.reset();
 
-    for ( uint32_t dw = DWELLING_MONSTER1; dw <= DWELLING_MONSTER6; dw <<= 1 )
-        content.emplace_back( castle, dw );
+    content.reserve( CountBits( DWELLING_MONSTERS ) );
+
+    for ( uint32_t dw = DWELLING_MONSTER1; dw <= DWELLING_MONSTER6; dw <<= 1 ) {
+        content.emplace_back( dw );
+    }
 
     SetContent( content );
 
@@ -742,42 +739,50 @@ void DwellingsBar::RedrawBackground( const fheroes2::Rect & pos, fheroes2::Image
 
 void DwellingsBar::RedrawItem( DwellingItem & dwl, const fheroes2::Rect & pos, fheroes2::Image & dstsf )
 {
-    const fheroes2::Sprite & mons32 = fheroes2::AGG::GetICN( ICN::MONS32, dwl.mons.GetSpriteIndex() );
+    const uint32_t dwType = castle.GetActualDwelling( dwl.dwType );
+    const Monster mons{ castle.GetRace(), dwType };
+
+    const fheroes2::Sprite & mons32 = fheroes2::AGG::GetICN( ICN::MONS32, mons.GetSpriteIndex() );
     fheroes2::Blit( mons32, dstsf, pos.x + ( pos.width - mons32.width() ) / 2, pos.y + ( pos.height - 3 - mons32.height() ) );
 
-    if ( castle.isBuild( dwl.type ) ) {
-        // Available units for hire.
-        fheroes2::Text text( std::to_string( castle.getMonstersInDwelling( dwl.type ) ), fheroes2::FontType::smallWhite() );
-        text.draw( pos.x + pos.width - text.width() - 3, pos.y + pos.height - text.height() + 1, dstsf );
-
-        uint32_t grown = dwl.mons.GetGrown();
-        if ( castle.isBuild( BUILD_WELL ) )
-            grown += Castle::GetGrownWell();
-        if ( castle.isBuild( BUILD_WEL2 ) && DWELLING_MONSTER1 == dwl.type )
-            grown += Castle::GetGrownWel2();
-
-        // Dwelling's growth.
-        text.set( "+" + std::to_string( grown ), fheroes2::FontType::smallYellow() );
-        text.draw( pos.x + pos.width - text.width() - 3, pos.y + 4, dstsf );
-    }
-    else {
+    if ( !castle.isBuild( dwType ) ) {
         fheroes2::Blit( fheroes2::AGG::GetICN( ICN::CSLMARKER, 0 ), dstsf, pos.x + pos.width - 10, pos.y + 4 );
+
+        return;
     }
+
+    // Units available for hire.
+    fheroes2::Text text( std::to_string( castle.getMonstersInDwelling( dwType ) ), fheroes2::FontType::smallWhite() );
+    text.draw( pos.x + pos.width - text.width() - 3, pos.y + pos.height - text.height() + 1, dstsf );
+
+    uint32_t grown = mons.GetGrown();
+    if ( castle.isBuild( BUILD_WELL ) ) {
+        grown += Castle::GetGrownWell();
+    }
+    if ( castle.isBuild( BUILD_WEL2 ) && DWELLING_MONSTER1 == dwType ) {
+        grown += Castle::GetGrownWel2();
+    }
+
+    // Dwelling's growth.
+    text.set( "+" + std::to_string( grown ), fheroes2::FontType::smallYellow() );
+    text.draw( pos.x + pos.width - text.width() - 3, pos.y + 4, dstsf );
 }
 
 bool DwellingsBar::ActionBarLeftMouseSingleClick( DwellingItem & dwl )
 {
-    if ( castle.isBuild( dwl.type ) ) {
-        castle.RecruitMonster( Dialog::RecruitMonster( dwl.mons, castle.getMonstersInDwelling( dwl.type ), true, -60 ) );
+    const uint32_t dwType = castle.GetActualDwelling( dwl.dwType );
+
+    if ( castle.isBuild( dwType ) ) {
+        castle.RecruitMonster( Dialog::RecruitMonster( { castle.GetRace(), dwType }, castle.getMonstersInDwelling( dwType ), true, -60 ) );
     }
     else if ( !castle.isBuild( BUILD_CASTLE ) )
         fheroes2::showStandardTextMessage( "", GetBuildConditionDescription( NEED_CASTLE ), Dialog::OK );
     else {
-        const BuildingInfo dwelling( castle, static_cast<building_t>( dwl.type ) );
+        const BuildingInfo dwelling( castle, static_cast<building_t>( dwType ) );
 
         if ( dwelling.DialogBuyBuilding( true ) ) {
             AudioManager::PlaySound( M82::BUILDTWN );
-            castle.BuyBuilding( dwl.type );
+            castle.BuyBuilding( dwType );
         }
     }
 
@@ -786,7 +791,9 @@ bool DwellingsBar::ActionBarLeftMouseSingleClick( DwellingItem & dwl )
 
 bool DwellingsBar::ActionBarRightMouseHold( DwellingItem & dwl )
 {
-    Dialog::DwellingInfo( dwl.mons, castle.getMonstersInDwelling( dwl.type ) );
+    const uint32_t dwType = castle.GetActualDwelling( dwl.dwType );
+
+    Dialog::DwellingInfo( { castle.GetRace(), dwType }, castle.getMonstersInDwelling( dwType ) );
 
     return true;
 }
