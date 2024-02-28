@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-18 14:42+0000\n"
-"PO-Revision-Date: 2024-02-26 18:00+0200\n"
+"PO-Revision-Date: 2024-02-28 18:31+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: uk\n"
@@ -202,15 +202,11 @@ msgstr "МІН"
 msgid "RESET"
 msgstr ""
 
-#, fuzzy
 msgid "START"
-msgstr "РЕСТАРТ"
+msgstr "ПОЧАТИ"
 
-#, fuzzy
 msgid "CASTLE"
-msgstr ""
-"МІСТА/\n"
-"ЗАМКИ"
+msgstr "ЗАМОК"
 
 msgid "TOWN"
 msgstr ""
@@ -1025,7 +1021,7 @@ msgid "Reset"
 msgstr ""
 
 msgid "Reset to default settings."
-msgstr ""
+msgstr "Скинути до налаштувань за замовчуванням."
 
 msgid "Please select another hero."
 msgstr "Будь ласка, оберіть іншого героя."
