@@ -1986,7 +1986,6 @@ msgstr "Không thể xây dựng. Ngươi đã xây dựng ở đây ngày hôm 
 msgid "For this action it is necessary to build a castle first."
 msgstr "Đối với hành động này, trước tiên cần phải xây dựng một lâu đài."
 
-#, fuzzy
 msgid "Cannot build %{name}. The castle is too far away from an ocean."
 msgstr "Không thể xây %{name}. Lâu đài quá xa một đại dương."
 
