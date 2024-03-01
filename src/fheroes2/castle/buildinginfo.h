@@ -80,7 +80,7 @@ private:
 
 struct DwellingItem
 {
-    DwellingItem( const uint32_t dw )
+    explicit DwellingItem( const uint32_t dw )
         : dwType( dw )
     {}
 
