@@ -77,10 +77,12 @@ Funds Difficulty::getResourceIncomeBonusForAI( const int difficulty )
     };
 
     switch ( difficulty ) {
-    case Difficulty::EXPERT:
+    case Difficulty::HARD:
         return getIncomeFromSetsOfResourceMines( 1 );
-    case Difficulty::IMPOSSIBLE:
+    case Difficulty::EXPERT:
         return getIncomeFromSetsOfResourceMines( 2 );
+    case Difficulty::IMPOSSIBLE:
+        return getIncomeFromSetsOfResourceMines( 3 );
     default:
         break;
     }
