@@ -28,8 +28,6 @@
 #include "ai.h"
 #include "ai_normal.h"
 #include "army.h"
-#include "army_troop.h"
-#include "battle_tower.h"
 #include "castle.h"
 #include "difficulty.h"
 #include "game.h"
