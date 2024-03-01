@@ -115,6 +115,7 @@ namespace AI
 
         virtual void Reset();
         virtual void resetPathfinder() = 0;
+
         virtual bool isValidHeroObject( const Heroes & hero, const int32_t index, const bool underHero ) = 0;
 
         // Should be called at the beginning of the battle even if no AI-controlled players are
@@ -124,9 +125,9 @@ namespace AI
         virtual void tradingPostVisitEvent( Kingdom & kingdom ) = 0;
 
     protected:
-        int _personality = NONE;
-
         Base() = default;
+
+        int _personality = NONE;
 
     private:
         friend StreamBase & operator<<( StreamBase &, const AI::Base & );

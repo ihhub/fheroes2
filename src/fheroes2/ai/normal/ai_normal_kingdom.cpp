@@ -269,7 +269,7 @@ namespace
 
 namespace AI
 {
-    bool Normal::recruitHero( Castle & castle, bool buyArmy, bool underThreat )
+    bool Normal::recruitHero( Castle & castle, bool buyArmy )
     {
         Kingdom & kingdom = castle.GetKingdom();
         const Recruits & rec = kingdom.GetRecruits();
@@ -310,7 +310,6 @@ namespace AI
         }
 
         if ( buyArmy ) {
-            CastleTurn( castle, underThreat );
             reinforceHeroInCastle( *recruit, castle, kingdom.GetFunds() );
         }
         else {
@@ -928,13 +927,15 @@ namespace AI
     bool Normal::purchaseNewHeroes( const std::vector<AICastle> & sortedCastleList, const std::set<int> & castlesInDanger, const int32_t availableHeroCount,
                                     const bool moreTasksForHeroes )
     {
-        const bool slowEarlyGame = world.CountDay() < 5 && sortedCastleList.size() == 1;
+        const bool isEarlyGameWithSingleCastle = world.CountDay() < 5 && sortedCastleList.size() == 1;
         int32_t heroLimit = world.w() / Maps::SMALL + 1;
 
-        if ( _personality == EXPLORER )
+        if ( _personality == EXPLORER ) {
             ++heroLimit;
-        if ( slowEarlyGame )
+        }
+        if ( isEarlyGameWithSingleCastle ) {
             heroLimit = 2;
+        }
 
         if ( availableHeroCount >= heroLimit ) {
             return false;
@@ -977,7 +978,7 @@ namespace AI
         }
 
         // target found, buy hero
-        return recruitmentCastle && recruitHero( *recruitmentCastle, !slowEarlyGame, false );
+        return recruitmentCastle && recruitHero( *recruitmentCastle, !isEarlyGameWithSingleCastle );
     }
 
     void Normal::tradingPostVisitEvent( Kingdom & /*kingdom*/ )
