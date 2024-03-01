@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-18 14:42+0000\n"
-"PO-Revision-Date: 2023-12-25 14:31+0100\n"
+"POT-Creation-Date: 2024-02-29 21:49+0000\n"
+"PO-Revision-Date: 2024-02-19 16:13+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "Language: sv\n"
@@ -449,12 +449,11 @@ msgid ""
 msgstr ""
 "Det finns ingen fri plats intill din hjälte för att inkalla ett elementväsen."
 
-#, fuzzy
 msgid ""
 "The Moat reduces the defense skill of troops trapped in it by %{count} and "
 "restricts their movement range."
 msgstr ""
-"Vallgraven sänker en varelses Försvar med -%{count} och halverar dennes "
+"Vallgraven sänker en varelses Försvar med %{count} och halverar dennes "
 "hastighet."
 
 msgid "Speed: %{speed}"
@@ -822,7 +821,6 @@ msgstr "Är du säker på att du vill aktivera automatisk strid?"
 msgid "Are you sure you want to finish the battle in auto mode?"
 msgstr "Är du säker på att du vill fortsätta striden i automatiskt läge?"
 
-#, fuzzy
 msgid "The %{name} skips their turn."
 msgid_plural "The %{name} skip their turn."
 msgstr[0] "%{name} hoppar över rundan."
@@ -856,7 +854,6 @@ msgstr[1] "%{count} %{unit} återuppväcks."
 msgid "Moved %{monster}: from [%{src}] to [%{dst}]."
 msgstr "Flyttade %{monster}: från [%{src}] till [%{dst}]."
 
-#, fuzzy
 msgid "The %{name} resists the spell!"
 msgid_plural "The %{name} resist the spell!"
 msgstr[0] "%{name} motstår besvärjelsen!"
@@ -886,37 +883,31 @@ msgstr "Besvärjelsen %{spell} ger %{damage} skada till en levande varelse."
 msgid "The %{spell} does %{damage} damage to all living creatures."
 msgstr "Besvärjelsen %{spell} ger %{damage} skada till alla levande varelser."
 
-#, fuzzy
 msgid "The %{attacker}'s attack blinds the %{target}!"
 msgid_plural "The %{attacker}' attack blinds the %{target}!"
-msgstr[0] "%{attacker}nas anfall förblindar %{target}na!"
+msgstr[0] "%{attacker}ens anfall förblindar %{target}na!"
 msgstr[1] "%{attacker}nas anfall förblindar %{target}na!"
 
-#, fuzzy
 msgid "The %{attacker}'s gaze turns the %{target} to stone!"
 msgid_plural "The %{attacker}' gaze turns the %{target} to stone!"
-msgstr[0] "%{attacker}nas blick förvandlar %{target} till sten!"
+msgstr[0] "%{attacker}ens blick förvandlar %{target} till sten!"
 msgstr[1] "%{attacker}nas blick förvandlar %{target} till sten!"
 
-#, fuzzy
 msgid "The %{attacker}'s curse falls upon the %{target}!"
 msgid_plural "The %{attacker}' curse falls upon the %{target}!"
-msgstr[0] "%{attacker}nas förbannelse drabbar %{target}"
+msgstr[0] "%{attacker}ens förbannelse drabbar %{target}"
 msgstr[1] "%{attacker}nas förbannelse drabbar %{target}"
 
-#, fuzzy
 msgid "The %{target} is paralyzed by the %{attacker}!"
 msgid_plural "The %{target} are paralyzed by the %{attacker}!"
-msgstr[0] "%{name} blev paralyserade av %{attacker}na!"
-msgstr[1] "%{name} blev paralyserade av %{attacker}na!"
+msgstr[0] "%{name} blev paralyserad av %{attacker}!"
+msgstr[1] "%{name} blev paralyserade av %{attacker}!"
 
-#, fuzzy
 msgid "The %{attacker} dispels all good spells on your %{target}!"
 msgid_plural "The %{attacker} dispel all good spells on your %{target}!"
 msgstr[0] "%{attacker} skingrar alla godartade besvärjelser från %{target}!"
 msgstr[1] "%{attacker} skingrar alla godartade besvärjelser från %{target}!"
 
-#, fuzzy
 msgid "The %{attacker} casts %{spell} on the %{target}!"
 msgid_plural "The %{attacker} cast %{spell} on the %{target}!"
 msgstr[0] "%{attacker} kastar %{spell} på %{target}!"
@@ -943,7 +934,6 @@ msgstr "Spegelbild skapas."
 msgid "The mirror image is destroyed!"
 msgstr "Spegelbilden förstörs!"
 
-#, fuzzy
 msgid "Are you sure you want to interrupt the auto combat?"
 msgstr "Är du säker på att du vill avbryta den automatiska striden?"
 
@@ -1139,7 +1129,6 @@ msgstr ""
 "fiendestäder och slott för att vinna, och försäkra dig om att inte förlora "
 "kontrollen över samtliga dvärgstäder för i så fall har fienden vunnit."
 
-#, fuzzy
 msgid ""
 "You will face four allied enemies in a straightforward fight for resources "
 "and treasure. Capture all of the enemy castles for victory."
@@ -1175,7 +1164,7 @@ msgid ""
 msgstr ""
 "Ansamla en så stor armé som möjligt och inta fiendeslottet inom 8 veckor. Du "
 "har endast en motståndare, men du måste färdas långt för att nå "
-"fiendeslottet. Dina trupper som du har i scenariots slut följer med dig till "
+"fiendeslottet. Dina trupper som du har i scenariets slut följer med dig till "
 "slutstriden."
 
 msgid ""
@@ -1459,13 +1448,12 @@ msgstr ""
 "Finn din egensinnige son Joseph som ryktas befinna sig i ensligt land. Finn "
 "honom innan den tredje månadens första dag annars är det för sent."
 
-#, fuzzy
 msgid ""
 "Rescue your crazy uncle Ivan. Find him before the first day of the fourth "
 "month or it will be of no help to your kingdom."
 msgstr ""
 "Rädda din farbror Ivan. Hitta honom inom 4 månader, annars kommer det inte "
-"till någon hjälp för ditt kungarike."
+"vara till någon hjälp för ditt kungarike."
 
 msgid ""
 "Destroy the barbarians who are attacking the southern border of your "
@@ -1479,13 +1467,12 @@ msgid "Retake the castle of Ivory Gates, which has fallen due to treachery."
 msgstr ""
 "Återta slottet Elfenbensportarna, som har fallit på grund av förräderi."
 
-#, fuzzy
 msgid ""
 "Gain the favor of the elves. They will not allow trees to be chopped down, "
 "so we will send you wood every 2 weeks. You must complete your mission "
 "before the first day of the seventh month, or the kingdom will surely fall."
 msgstr ""
-"Få alvernas gunst. De tillåter inte att träd huggs ner så de kommer att "
+"Få alvernas gunst. De tillåter inte att träd huggs ner så vi kommer att "
 "förse dig med Trä varannan vecka. Du måste vara klar med ditt uppdrag innan "
 "första dagen på sjunde månaden, annars så lär kungariket falla."
 
@@ -1603,26 +1590,21 @@ msgstr " kommer alltid att fly från din armé."
 msgid " will be willing to join your army."
 msgstr " är villiga att ansluta till din armé."
 
-#, fuzzy
 msgid "\"%{artifact}\" artifact will be carried over in the campaign."
-msgstr "\"%{artifact}\" kommer följa med till nästa scenario."
+msgstr "\"%{artifact}\" kommer följa med i kampanjen."
 
-#, fuzzy
 msgid "The army will be carried over in the campaign."
-msgstr "Armén kommer följa med till nästa scenerio."
+msgstr "Armén kommer följa med i kampanjen."
 
 msgid "The kingdom will have +%{count} %{resource} each day."
 msgstr "Riket kommer få +%{count} %{resource} varje dag."
 
-#, fuzzy
 msgid "The \"%{spell}\" spell will be carried over in the campaign."
-msgstr "%{spell}besvärjelsen kommer följa med till nästa scenario."
+msgstr "%{spell}besvärjelsen kommer följa med i kampanjen."
 
-#, fuzzy
 msgid "%{hero} can be hired during scenarios."
-msgstr "%{hero} kan rekryteras i detta scenario."
+msgstr "%{hero} kan rekryteras under scenarierna."
 
-#, fuzzy
 msgid "%{hero} has been defeated and will not appear in subsequent scenarios."
 msgstr ""
 "%{hero} har besegrats och kommer inte vara med i efterföljande scenarier."
@@ -1910,46 +1892,42 @@ msgstr "Avancerad Visdom"
 msgid "campaignBonus|Expert Wisdom"
 msgstr "Expert Visdom"
 
-#, fuzzy
 msgid ""
 "The main hero will have the \"%{artifact}\" artifact at the start of the "
 "scenario."
-msgstr "Huvudhjälten kommer ha \"%{artifact}\" i början av scenariot."
+msgstr "Huvudhjälten kommer ha \"%{artifact}\" i början av scenariet."
 
 msgid ""
 "The kingdom will receive %{amount} additional %{resource} at the start of "
 "the scenario."
 msgstr ""
-"Riket kommer få ytterligare %{amount} %{resource} i början av scenariot."
+"Riket kommer få ytterligare %{amount} %{resource} i början av scenariet."
 
 msgid ""
 "The kingdom will have %{amount} less %{resource} at the start of the "
 "scenario."
-msgstr "Riket kommer ha %{amount} mindre %{resource} i början av scenariot."
+msgstr "Riket kommer ha %{amount} mindre %{resource} i början av scenariet."
 
 msgid ""
 "The main hero will have %{count} %{monster} at the start of the scenario."
-msgstr "Huvudhjälten kommer ha %{count} %{monster} i början av scenariot."
+msgstr "Huvudhjälten kommer ha %{count} %{monster} i början av scenariet."
 
-#, fuzzy
 msgid ""
 "The main hero will have the \"%{spell}\" spell at the start of the scenario."
 msgstr ""
-"Huvudhjälten kommer ha \"%{spell}\"-besvärjelsen i början av scenariot."
+"Huvudhjälten kommer ha \"%{spell}\"-besvärjelsen i början av scenariet."
 
-#, fuzzy
 msgid "The starting alignment of the scenario will be %{race}."
-msgstr "Scenariots startklass är %{race}."
+msgstr "Scenariets startklass är %{race}."
 
-#, fuzzy
 msgid ""
 "The main hero will receive a +%{count} to their %{skill} at the start of the "
 "scenario."
 msgstr ""
-"Huvudhjälten kommer ha ytterligare %{count} i %{skill} i början av scenariot."
+"Huvudhjälten kommer ha ytterligare %{count} i %{skill} i början av scenariet."
 
 msgid "The main hero will have %{skill} at the start of the scenario."
-msgstr "Huvudhjälten kommer ha %{skill} i början av scenariot."
+msgstr "Huvudhjälten kommer ha %{skill} i början av scenariet."
 
 msgid "Roland"
 msgstr "Roland"
@@ -1984,22 +1962,18 @@ msgstr "Kan inte byggas. Du har redan byggt här idag."
 msgid "For this action it is necessary to build a castle first."
 msgstr "För denna åtgärd är det nödvändigt att först bygga ett slott."
 
-#, fuzzy
 msgid "Cannot build %{name}. The castle is too far away from an ocean."
-msgstr "Kan ej bygga %{name}. Slottet är för långt borta från hav."
+msgstr "Kan ej bygga %{name}. Slottet är för långt borta från ett hav."
 
 msgid "This building has been disabled."
-msgstr ""
+msgstr "Byggnaden har inaktiverats."
 
-#, fuzzy
 msgid "Cannot afford the %{name}."
 msgstr "Har inte råd med %{name}."
 
-#, fuzzy
 msgid "The %{name} is already built."
 msgstr "%{name} har redan byggts."
 
-#, fuzzy
 msgid "Cannot build the %{name}."
 msgstr "Kan inte bygga %{name}."
 
@@ -2228,9 +2202,8 @@ msgstr "Kan inte rekrytera - du har redan en Hjälte i denna stad."
 msgid "Cannot recruit - you have too many Heroes."
 msgstr "Kan inte rekrytera - du har för många Hjältar."
 
-#, fuzzy
 msgid "Cannot afford a Hero."
-msgstr "Har inte råd med en hjälte"
+msgstr "Har inte råd med en Hjälte."
 
 msgid "There is no room in the garrison for this army."
 msgstr "Det finns ingen plats i garnisonen för denna armé."
@@ -2698,11 +2671,9 @@ msgstr "Utspridd formation"
 msgid "Grouped Formation"
 msgstr "Grupperad formation"
 
-#, fuzzy
 msgid "Click to show the next town."
 msgstr "Klicka för att visa nästa stad."
 
-#, fuzzy
 msgid "Click to show the previous town."
 msgstr "Klicka för att visa föregående stad."
 
@@ -2770,7 +2741,7 @@ msgid "Scenario Information"
 msgstr "Scenarioinformation"
 
 msgid "View information on the scenario you are currently playing."
-msgstr "Visa information om scenariot som du spelar."
+msgstr "Visa information om scenariet som du spelar."
 
 msgid "Dig for the Ultimate Artifact."
 msgstr "Gräv efter den Främsta Artefakten."
@@ -2915,7 +2886,6 @@ msgstr "Välj ljudnivå för ljudeffekter."
 msgid "Change the type of music."
 msgstr "Ändra musiktyp."
 
-#, fuzzy
 msgid "Toggle the 3D effect of foreground sounds."
 msgstr "Aktivera 3D-funktion för ljudeffekter."
 
@@ -3532,9 +3502,8 @@ msgstr "Besegra en viss hjälte."
 msgid "Find a specific artifact."
 msgstr "Hitta en viss artefakt."
 
-#, fuzzy
 msgid "Your side must defeat the opposing side."
-msgstr "Din sida besegrar motståndarsidan."
+msgstr "Din sida måste besegra motståndarsidan."
 
 msgid "Accumulate a large amount of gold."
 msgstr "Samla ihop en stor summa guld."
@@ -3548,9 +3517,8 @@ msgstr "Kartsvårighet:"
 msgid "N"
 msgstr "N"
 
-#, fuzzy
 msgid "No maps exist at that size."
-msgstr "Finns inga kartor av den storleken"
+msgstr "Finns inga kartor av den storleken."
 
 msgid "Small Maps"
 msgstr "Små Kartor"
@@ -3585,7 +3553,6 @@ msgstr "Visa alla kartor, oavsett storlek."
 msgid "Players Icon"
 msgstr "Spelarikon"
 
-#, fuzzy
 msgid ""
 "Indicates how many players total are in the scenario. Any positions not "
 "occupied by human players will be occupied by computer players."
@@ -3674,7 +3641,6 @@ msgstr "Manuell"
 msgid "Change the speed at which your heroes move on the main screen."
 msgstr "Ändra hastigheten för dina hjältars rörelser på kartan."
 
-#, fuzzy
 msgid ""
 "Sets the speed that computer heroes move at. You can also elect not to view "
 "computer movement at all."
@@ -3830,7 +3796,7 @@ msgid ""
 msgstr "Maximalt %{count} hjältar med samma färg kan placeras på kartan."
 
 msgid "Failed to update player information."
-msgstr ""
+msgstr "Misslyckades att uppdatera spelarinformation."
 
 msgid "Artifacts cannot be placed on water."
 msgstr "Artefakter kan inte placeras på vatten."
@@ -3939,28 +3905,28 @@ msgid "Heroes"
 msgstr "Hjältar"
 
 msgid "editorErasure|Terrain"
-msgstr ""
+msgstr "Terräng"
 
 msgid "editorErasure|Castles"
-msgstr ""
+msgstr "Slott"
 
 msgid "editorErasure|Monsters"
-msgstr ""
+msgstr "Varelser"
 
 msgid "editorErasure|Heroes"
-msgstr ""
+msgstr "Hjältar"
 
 msgid "editorErasure|Artifacts"
-msgstr ""
+msgstr "Artefakter"
 
 msgid "editorErasure|Roads"
-msgstr ""
+msgstr "Vägar"
 
 msgid "editorErasure|Streams"
-msgstr ""
+msgstr "Floder"
 
 msgid "editorErasure|Treasures"
-msgstr ""
+msgstr "Skatter"
 
 msgid ""
 "Draws terrain in\n"
@@ -4184,7 +4150,6 @@ msgstr "Svår"
 msgid "Campaign Difficulty"
 msgstr "Kampanjsvårighet"
 
-#, fuzzy
 msgid ""
 "Choose this difficulty to experience the game's story with less challenge. "
 "The AI will be weaker than at Normal difficulty."
@@ -4192,19 +4157,17 @@ msgstr ""
 "Välj denna svårighetsgrad om du föredrar att följa historien framför "
 "utmaningen. Datorn är svagare i jämförelse med normal svårighetsgrad."
 
-#, fuzzy
 msgid ""
 "Choose this difficulty to experience the campaign as per the original design."
 msgstr ""
-"Välj denna svårighetsgrad för att uppleva kampanjen som den är tänkt att "
-"upplevas."
+"Välj denna svårighetsgrad för att uppleva kampanjen som den ursprungligen är "
+"tänkt att upplevas."
 
-#, fuzzy
 msgid ""
 "Choose this difficulty if you want more challenge. The AI will be stronger "
 "than at Normal difficulty."
 msgstr ""
-"Välj denna svårighetsgrad om du vill ha en utmaning. Datorn är starka i "
+"Välj denna svårighetsgrad om du vill ha en utmaning. Datorn är starkare i "
 "jämförelse med normal svårighetsgrad."
 
 msgid ""
@@ -4237,14 +4200,13 @@ msgstr ""
 "%{rating}"
 
 msgid "Start the selected scenario."
-msgstr "Påbörja valt scenario."
+msgstr "Påbörja valt scenarie."
 
 msgid "View Intro"
 msgstr "Visa Intro"
 
-#, fuzzy
 msgid "View the intro video for the current state of the campaign."
-msgstr "Visa introvideor för nuvarande kampanjkarta."
+msgstr "Visa introduktionsvideon för nuvarande kampanjscenarie."
 
 msgid ""
 "Select the campaign difficulty. This can be lowered at any point during the "
@@ -4253,7 +4215,7 @@ msgstr ""
 "Välj kampanjsvårighet. Svårighetsgraden kan sänkas senare under kampanjen."
 
 msgid "Restart the current scenario."
-msgstr "Omstarta nuvarande scenario."
+msgstr "Omstarta nuvarande scenarie."
 
 msgid "Difficulty"
 msgstr "Svårighetsgrad"
@@ -4271,7 +4233,7 @@ msgid "Are you sure you want to restart this scenario?"
 msgstr "Är du säker på att du vill omstarta detta scernaiot?"
 
 msgid "Campaign Scenario loading failure"
-msgstr "Ladda Kampanjscenariot misslyckades"
+msgstr "Ladda Kampanjscenariet misslyckades"
 
 msgid "Please make sure that campaign files are correct and present."
 msgstr "Kolla om Kampanjfilerna finns och är korrekta."
@@ -4486,7 +4448,6 @@ msgstr "Nytt spel"
 msgid "hotkey|load game"
 msgstr "Ladda spel"
 
-#, fuzzy
 msgid "hotkey|high scores"
 msgstr "Poänglista"
 
@@ -4526,7 +4487,6 @@ msgstr "Välj extra stor kartstorlek"
 msgid "hotkey|select all map sizes"
 msgstr "Välj alla kartstorlekar"
 
-#, fuzzy
 msgid "hotkey|hot seat game"
 msgstr "Heta stolen"
 
@@ -4566,9 +4526,8 @@ msgstr "Rolands kampanj"
 msgid "hotkey|archibald campaign"
 msgstr "Archibalds kampanj"
 
-#, fuzzy
 msgid "hotkey|price of loyalty campaign"
-msgstr "Lojalitetens pris kampanj"
+msgstr "Lojalitetens pris-kampanj"
 
 msgid "hotkey|voyage home campaign"
 msgstr "Hemresekampanjen"
@@ -4595,7 +4554,7 @@ msgid "hotkey|select campaign difficulty"
 msgstr "Välj kampanjsvårighet"
 
 msgid "hotkey|restart campaign scenario"
-msgstr "Omstarta kampanjscenario"
+msgstr "Omstarta kampanjscenarie"
 
 msgid "hotkey|world map left"
 msgstr "Kartvy: Väster"
@@ -4627,9 +4586,8 @@ msgstr "Spara spel"
 msgid "hotkey|next hero"
 msgstr "Nästa hjälte"
 
-#, fuzzy
 msgid "hotkey|change to hero under cursor"
-msgstr "Nästa hjälte"
+msgstr "Byt till hjälte under muspekaren"
 
 msgid "hotkey|start hero movement"
 msgstr "Påbörja hjälteförflyttning"
@@ -4890,13 +4848,12 @@ msgstr "Var Hälsad!"
 msgid "Welcome to Heroes of Might and Magic II powered by fheroes2 engine!"
 msgstr "Välkommen till Heroes of Might and Magic II genom fheroes2 spelmotor!"
 
-#, fuzzy
 msgid ""
 "Welcome to Heroes of Might and Magic II powered by the fheroes2 engine!\n"
 "Before starting the game, please select a game resolution."
 msgstr ""
-"Välkommen till Heroes of Might and Magic II genom fheroes2 spelmotor. Välj "
-"spelupplösning innan du börjar spelet."
+"Välkommen till Heroes of Might and Magic II genom fheroes2 spelmotor. \n"
+"Välj spelupplösning innan du börjar spelet."
 
 msgid "Please Remember"
 msgstr "Kom ihåg"
@@ -4956,7 +4913,6 @@ msgstr "Ändra spelets språk, upplösning och inställningar."
 msgid "Game Settings"
 msgstr "Spelinställningar"
 
-#, fuzzy
 msgid ""
 "The required video files for the campaign selection window are missing. "
 "Please make sure that all necessary files are present in the system."
@@ -5003,7 +4959,6 @@ msgstr ""
 "Gästen väntar på att värden ska sätta igång spelet, sen läggs till "
 "automatiskt. Det kan finnas flera gäster för TCP/IP-spel."
 
-#, fuzzy
 msgid ""
 "A multi-player game, with several human players competing against each other "
 "on a single map."
@@ -5017,13 +4972,12 @@ msgstr "Endast Strid"
 msgid "Setup and play a battle without loading any map."
 msgstr "Konfigurera och spela en strid utan någon karta."
 
-#, fuzzy
 msgid ""
 "Play a Hot Seat game, where 2 to 4 players play on the same device, "
 "switching into the 'Hot Seat' when it is their turn."
 msgstr ""
 "Spela Heta stolen, där 2 till 4 spelare spelar på samma dator och sätter sig "
-"i den 'Heta stolen' när det är sin tur."
+"på den 'Heta stolen' när det är dennes tur."
 
 msgid "2 Players"
 msgstr "2 Spelare"
@@ -5242,7 +5196,7 @@ msgid "Rating %{rating}%"
 msgstr "Ranking %{rating}%"
 
 msgid "Click here to select which scenario to play."
-msgstr "Klicka här för att välja vilket scenario som ska spelas."
+msgstr "Klicka här för att välja vilket scenarie som ska spelas."
 
 msgid "Scenario"
 msgstr "Scenario"
@@ -5250,7 +5204,6 @@ msgstr "Scenario"
 msgid "Game Difficulty"
 msgstr "Spelsvårighet"
 
-#, fuzzy
 msgid ""
 "This lets you change the starting difficulty at which you will play. Higher "
 "difficulty levels start you off with fewer resources, and at the higher "
@@ -5424,7 +5377,6 @@ msgstr ""
 msgid "Kingdom Summary"
 msgstr "Rikessammanfattning"
 
-#, fuzzy
 msgid "View a summary of your Kingdom."
 msgstr "Visa en sammanfattning av ditt Rike."
 
@@ -5434,7 +5386,6 @@ msgstr "Kasta en kartbesvärjelse."
 msgid "End Turn"
 msgstr "Avsluta Runda"
 
-#, fuzzy
 msgid "End your turn and let the computer take its turn."
 msgstr "Avsluta din runda och låt datorn göra sin runda."
 
@@ -5567,7 +5518,6 @@ msgid "Handicap"
 msgstr "Handikapp"
 
 #
-#, fuzzy
 msgid ""
 "This lets you change the handicap of a particular player. Only human players "
 "may have a handicap. Handicapped players start with fewer resources and earn "
@@ -5584,7 +5534,6 @@ msgstr "%{color} spelare"
 msgid "No Handicap"
 msgstr "Inget Handikapp"
 
-#, fuzzy
 msgid ""
 "No special restrictions on starting resources and resource income per turn."
 msgstr "Inga restriktioner för startresurser eller resursintäkter per dag."
@@ -5593,7 +5542,6 @@ msgid "Mild Handicap"
 msgstr "Milt Handikapp"
 
 #
-#, fuzzy
 msgid ""
 "Players with mild handicap start with fewer resources and earn 15% fewer "
 "resources per turn."
@@ -5605,7 +5553,6 @@ msgid "Severe Handicap"
 msgstr "Gravt Handikapp"
 
 #
-#, fuzzy
 msgid ""
 "Players with severe handicap start with fewer resources and earn 30% fewer "
 "resources per turn."
@@ -5701,11 +5648,9 @@ msgstr "Vietnamesiska"
 msgid ", FPS: "
 msgstr ", FPS: "
 
-#, fuzzy
 msgid "shipAndGraveyard|%{object} robber"
-msgstr "%{object} plundrare"
+msgstr "%{object}splundrare"
 
-#, fuzzy
 msgid "pyramid|%{object} raided"
 msgstr "%{object} plundrat"
 
@@ -6142,7 +6087,6 @@ msgstr ""
 "Sjöjungfrurna lockar dig tyst att komma tillbaka senare och bli välsignad "
 "igen."
 
-#, fuzzy
 msgid ""
 "The magical, soothing beauty of the Mermaids reaches you and your crew.\n"
 "Just for a moment, you forget your worries and bask in the beauty of the "
@@ -6889,7 +6833,6 @@ msgstr ""
 "dig att köpa hans kartor, som han själv har gjort i hans yngre dagar, för "
 "1,000 guld. Vill du köpa kartorna?"
 
-#, fuzzy
 msgid ""
 "The captain sighs. \"You don't have enough money, eh? You can't expect me to "
 "give my maps away for free!\""
@@ -7500,7 +7443,6 @@ msgstr "Hjältens Försvar ger en bonus till varje varelses Försvar."
 msgid "The hero's spell power determines the duration or power of a spell."
 msgstr "Hjältens Trollkonst bestämmer besvärjelsens längd eller styrka."
 
-#, fuzzy
 msgid ""
 "The hero's knowledge determines how many spell points the hero may have. "
 "Under normal circumstances, a hero is limited to 10 spell points per level "
@@ -7696,14 +7638,14 @@ msgstr ""
 msgid "%{skill} eliminates the movement penalty for rough terrain."
 msgstr "%{skill} tar bort hjältens förflyttningshandikapp för grov terräng."
 
-#, fuzzy
 msgid ""
 "%{skill} increases the damage done by the hero's range attacking creatures "
 "by %{count} percent, and eliminates the %{penalty} percent penalty when "
 "shooting past obstacles (e.g. castle walls)."
 msgstr ""
-"%{name} sänker handikappet med %{count} procent för hjältens varelsers "
-"projektiler när de passerar hinder, exempelvis slottsmurar."
+"%{name} ökar skadan från hjältens skjutande varelser med %{count} procent "
+"och tar bort %{penalty} procent av straffet när projektiler passerar hinder, "
+"exempelvis slottsmurar."
 
 msgid "%{skill} increases the hero's movement points by %{count} percent."
 msgstr "%{skill} ökar hjältens steg med %{count} procent."
@@ -7886,7 +7828,6 @@ msgstr "Rött"
 msgid "Experience"
 msgstr "Erfarenhet"
 
-#, fuzzy
 msgid ""
 "Experience allows your heroes to gain levels, increasing their primary and "
 "secondary skills."
@@ -7939,7 +7880,6 @@ msgstr "Fantastisk"
 msgid "luck|Irish"
 msgstr "Irländsk"
 
-#, fuzzy
 msgid ""
 "Negative luck sometimes falls on the hero's units in combat, causing their "
 "attacks to only do half damage."
@@ -7954,7 +7894,6 @@ msgstr ""
 "Normal tur innebär att hjältens trupper kommer varken att få lyckosamma "
 "eller oturliga attacker."
 
-#, fuzzy
 msgid ""
 "Positive luck sometimes lets the hero's units get lucky attacks (double "
 "strength) in combat."
@@ -7982,7 +7921,6 @@ msgstr "Fantastisk"
 msgid "morale|Blood!"
 msgstr "Blod!"
 
-#, fuzzy
 msgid "Negative morale may cause the hero's units to freeze in combat."
 msgstr "Låg stridsmoral kan få hjältens trupper att låsa sig i strid."
 
@@ -7993,7 +7931,6 @@ msgstr ""
 "Neutral stridsmoral innebär att hjältens arméer aldrig kommer att bli "
 "välsignade eller låsta i strid."
 
-#, fuzzy
 msgid "Positive morale may give the hero's units extra attacks in combat."
 msgstr "Hög stridsmoral kan ge hjältens trupper extra attacker i strid."
 
