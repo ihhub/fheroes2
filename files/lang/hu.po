@@ -3520,7 +3520,7 @@ msgid "N"
 msgstr "N"
 
 msgid "No maps exist at that size."
-msgstr "Nincs ilyen méretű térkép"
+msgstr "Nincs ilyen méretű térkép."
 
 msgid "Small Maps"
 msgstr "Kicsi térképek"
