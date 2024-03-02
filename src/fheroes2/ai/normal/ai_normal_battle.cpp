@@ -680,12 +680,7 @@ namespace AI
 
                     // Otherwise, if some high-level units remain in the hero's army after the surrender, then it makes sense to keep them
                     const std::vector<Troop> remainingTroops = force.getTroopsRemainingInCaseOfSurrender();
-                    if ( std::any_of( remainingTroops.begin(), remainingTroops.end(), []( const Troop & troop ) { return troop.GetMonsterLevel() >= 5; } ) ) {
-                        return true;
-                    }
-
-                    // Otherwise, there is no point in surrendering
-                    return false;
+                    return std::any_of( remainingTroops.begin(), remainingTroops.end(), []( const Troop & troop ) { return troop.GetMonsterLevel() >= 5; } );
                 }();
 
                 if ( !considerRetreat ) {
