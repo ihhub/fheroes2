@@ -38,7 +38,7 @@
 
 #include "ai.h"
 #include "ai_normal.h"
-#include "army.h"
+#include "army_troop.h"
 #include "artifact.h"
 #include "artifact_info.h"
 #include "battle.h"

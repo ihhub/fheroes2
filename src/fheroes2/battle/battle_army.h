@@ -38,6 +38,7 @@
 #include "monster.h"
 
 class HeroBase;
+class Troop;
 
 namespace Battle
 {
