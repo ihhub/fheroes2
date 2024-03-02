@@ -149,11 +149,6 @@ double Difficulty::getArmyStrengthRatioForAIRetreat( const int difficulty )
     return 100.0 / 6.0;
 }
 
-uint32_t Difficulty::getGoldReserveRatioForAISurrender( const int /* difficulty */ )
-{
-    return 10;
-}
-
 uint32_t Difficulty::GetDimensionDoorLimitForAI( int difficulty )
 {
     switch ( difficulty ) {
