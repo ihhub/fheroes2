@@ -307,9 +307,10 @@ void Battle::Force::SyncArmyCount()
     }
 }
 
-double Battle::Force::getStrengthOfArmyRemainingInCaseOfSurrender() const
+std::vector<Troop> Battle::Force::getTroopsRemainingInCaseOfSurrender() const
 {
-    double result = 0.0;
+    std::vector<Troop> result;
+    result.reserve( army.Size() );
 
     // Consider only the state of the original army
     for ( uint32_t index = 0; index < army.Size(); ++index ) {
@@ -323,10 +324,22 @@ double Battle::Force::getStrengthOfArmyRemainingInCaseOfSurrender() const
             continue;
         }
 
+        const Monster mons = unit->GetMonster();
+        if ( !mons.isValid() ) {
+            continue;
+        }
+
         // Consider only the number of units that will remain in the army after the end of the battle (in particular, don't take into account the number of
         // non-true-resurrected units)
-        result += Troop{ unit->GetMonster(), unit->GetDead() > unit->GetInitialCount() ? 0 : unit->GetInitialCount() - unit->GetDead() }.GetStrength();
+        const uint32_t count = ( unit->GetDead() > unit->GetInitialCount() ? 0 : unit->GetInitialCount() - unit->GetDead() );
+        if ( count == 0 ) {
+            continue;
+        }
+
+        result.emplace_back( mons, count );
     }
+
+    assert( std::all_of( result.begin(), result.end(), []( const Troop & troop ) { return troop.isValid(); } ) );
 
     return result;
 }

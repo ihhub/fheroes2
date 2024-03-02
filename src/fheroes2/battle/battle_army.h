@@ -142,8 +142,8 @@ namespace Battle
         // Returns the cost of surrender (in units of gold) for the current army on the battlefield
         uint32_t GetSurrenderCost() const;
 
-        // Returns the strength of the army that will remain in case of surrender (not taking into account the hero's bonuses)
-        double getStrengthOfArmyRemainingInCaseOfSurrender() const;
+        // Returns the troops that will remain in case of surrender. Only valid troops are returned (no empty slots allowed).
+        std::vector<Troop> getTroopsRemainingInCaseOfSurrender() const;
 
         Troops GetKilledTroops() const;
 

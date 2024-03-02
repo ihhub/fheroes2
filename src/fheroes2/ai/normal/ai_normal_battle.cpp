@@ -600,7 +600,6 @@ namespace AI
                 }
 
                 const int gameDifficulty = Game::getDifficulty();
-                const bool isGameCampaign = Game::isCampaign();
 
                 // TODO: consider taking speed/turn order into account in the future
                 if ( _myArmyStrength * Difficulty::getArmyStrengthRatioForAIRetreat( gameDifficulty ) >= _enemyArmyStrength ) {
@@ -618,13 +617,10 @@ namespace AI
                     } );
                 }();
 
+                const Force & force = arena.getForce( _myColor );
                 const Kingdom & kingdom = actualHero->GetKingdom();
 
-                const bool considerRetreat = [this, &arena, actualHero, gameDifficulty, isGameCampaign, hasValuableArtifacts, &kingdom]() {
-                    if ( !Difficulty::allowAIToRetreat( gameDifficulty, isGameCampaign ) ) {
-                        return false;
-                    }
-
+                const bool considerRetreat = [this, &arena, actualHero, gameDifficulty, hasValuableArtifacts, &kingdom]() {
                     if ( !arena.CanRetreatOpponent( _myColor ) ) {
                         return false;
                     }
@@ -648,11 +644,7 @@ namespace AI
                     return actualHero->GetLevel() >= Difficulty::getMinHeroLevelForAIRetreat( gameDifficulty );
                 }();
 
-                const bool considerSurrender = [this, &arena, actualHero, gameDifficulty, isGameCampaign, hasValuableArtifacts, &kingdom]() {
-                    if ( !Difficulty::allowAIToSurrender( gameDifficulty, isGameCampaign ) ) {
-                        return false;
-                    }
-
+                const bool considerSurrender = [this, &arena, actualHero, gameDifficulty, hasValuableArtifacts, &force, &kingdom]() {
                     if ( !arena.CanSurrenderOpponent( _myColor ) ) {
                         return false;
                     }
@@ -682,10 +674,19 @@ namespace AI
                     }
 
                     // Otherwise, if this hero is relatively experienced, then he should think about surrendering so that he can be hired again later
-                    return actualHero->GetLevel() >= Difficulty::getMinHeroLevelForAIRetreat( gameDifficulty );
-                }();
+                    if ( actualHero->GetLevel() >= Difficulty::getMinHeroLevelForAIRetreat( gameDifficulty ) ) {
+                        return true;
+                    }
 
-                const Force & force = arena.getForce( _myColor );
+                    // Otherwise, if some high-level units remain in the hero's army after the surrender, then it makes sense to keep them
+                    const std::vector<Troop> remainingTroops = force.getTroopsRemainingInCaseOfSurrender();
+                    if ( std::any_of( remainingTroops.begin(), remainingTroops.end(), []( const Troop & troop ) { return troop.GetMonsterLevel() >= 5; } ) ) {
+                        return true;
+                    }
+
+                    // Otherwise, there is no point in surrendering
+                    return false;
+                }();
 
                 if ( !considerRetreat ) {
                     if ( !considerSurrender ) {
@@ -700,10 +701,6 @@ namespace AI
                 }
 
                 if ( !considerSurrender ) {
-                    return Outcome::Retreat;
-                }
-
-                if ( force.getStrengthOfArmyRemainingInCaseOfSurrender() < Army::getStrengthOfAverageStartingArmy( actualHero ) ) {
                     return Outcome::Retreat;
                 }
 

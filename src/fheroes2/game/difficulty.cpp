@@ -127,16 +127,6 @@ int Difficulty::GetHeroMovementBonusForAI( int difficulty )
     return 0;
 }
 
-bool Difficulty::allowAIToRetreat( const int /* difficulty */, const bool /* isCampaign */ )
-{
-    return true;
-}
-
-bool Difficulty::allowAIToSurrender( const int /* difficulty */, const bool /* isCampaign */ )
-{
-    return true;
-}
-
 int Difficulty::getMinHeroLevelForAIRetreat( const int /* difficulty */ )
 {
     return 3;
