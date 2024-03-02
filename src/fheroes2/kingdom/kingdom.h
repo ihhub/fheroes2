@@ -84,22 +84,18 @@ public:
     bool AllowPayment( const Funds & ) const;
     bool AllowRecruitHero( bool check_payment ) const;
 
-    // Return true if this kingdom can recruit heroes, false otherwise. For
-    // example this function will return false when kingdom has one town that
-    // cannot be upgraded to a castle.
+    // Returns true if this kingdom can recruit heroes, false otherwise. For example, this function returns false if there is only one town in the kingdom that cannot be
+    // upgraded to a castle.
     bool canRecruitHeroes() const
     {
         return std::any_of( castles.begin(), castles.end(), []( const Castle * castle ) { return ( castle->isCastle() || castle->Modes( Castle::ALLOWCASTLE ) ); } );
     }
 
-    // Return true if this kingdom has any heroes, false otherwise.
+    // Returns true if this kingdom has any heroes, false otherwise.
     bool hasHeroes() const
     {
         return !heroes.empty();
     }
-
-    void SetLastBattleWinHero( const Heroes & hero );
-    Heroes * GetLastBattleWinHero() const;
 
     void appendSurrenderedHero( Heroes & hero );
 
@@ -208,7 +204,6 @@ private:
     friend StreamBase & operator>>( StreamBase &, Kingdom & );
 
     int color;
-    int _lastBattleWinHeroID;
     Funds resource;
 
     uint32_t lost_town_days;
