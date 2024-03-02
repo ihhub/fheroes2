@@ -41,6 +41,7 @@
 #include "campaign_data.h"
 #include "campaign_savedata.h"
 #include "campaign_scenariodata.h"
+#include "color.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
@@ -499,8 +500,17 @@ namespace
     void replaceArmy( Army & army, const std::vector<Troop> & troops )
     {
         army.Clean();
-        for ( size_t i = 0; i < troops.size(); ++i )
-            army.GetTroop( i )->Set( troops[i] );
+
+        const size_t size = std::min( army.Size(), troops.size() );
+
+        for ( size_t i = 0; i < size; ++i ) {
+            Troop * troop = army.GetTroop( i );
+            assert( troop != nullptr );
+
+            troop->Set( troops[i] );
+        }
+
+        assert( army.isValid() );
     }
 
     void setHeroAndArmyBonus( Heroes * hero, const Campaign::ScenarioInfoId & scenarioInfoId )
@@ -692,8 +702,11 @@ namespace
     // the rest will be applied based on the situation required
     void applyObtainedCampaignAwards( const Campaign::ScenarioInfoId & currentScenarioInfoId, const std::vector<Campaign::CampaignAwardData> & awards )
     {
+        const int humanColor = Players::HumanColors();
+        assert( Color::Count( humanColor ) == 1 );
+
         const Players & sortedPlayers = Settings::Get().GetPlayers();
-        const Kingdom & humanKingdom = world.GetKingdom( Players::HumanColors() );
+        const Kingdom & humanKingdom = world.GetKingdom( humanColor );
 
         for ( size_t i = 0; i < awards.size(); ++i ) {
             if ( currentScenarioInfoId.scenarioId < awards[i]._startScenarioID ) {
@@ -745,7 +758,15 @@ namespace
                 assert( hero != nullptr );
 
                 if ( hero != nullptr ) {
-                    replaceArmy( hero->GetArmy(), Campaign::CampaignSaveData::Get().getCarryOverTroops() );
+                    Army & heroArmy = hero->GetArmy();
+                    const std::vector<Troop> & carryOverTroops = Campaign::CampaignSaveData::Get().getCarryOverTroops();
+
+                    if ( std::any_of( carryOverTroops.begin(), carryOverTroops.end(), []( const Troop & troop ) { return troop.isValid(); } ) ) {
+                        replaceArmy( heroArmy, carryOverTroops );
+                    }
+                    else {
+                        heroArmy.Reset();
+                    }
                 }
 
                 break;
@@ -1179,12 +1200,19 @@ fheroes2::GameMode Game::CompleteCampaignScenario( const bool isLoadingSaveFile 
         }
 
         if ( awardType == Campaign::CampaignAwardData::AwardType::TYPE_CARRY_OVER_FORCES ) {
-            const Kingdom & humanKingdom = world.GetKingdom( Players::HumanColors() );
+            const int humanColor = Players::HumanColors();
+            assert( Color::Count( humanColor ) == 1 );
 
-            const Heroes * lastBattleWinHero = humanKingdom.GetLastBattleWinHero();
+            const VecHeroes & humanKingdomHeroes = world.GetKingdom( humanColor ).GetHeroes();
 
-            if ( lastBattleWinHero )
-                saveData.setCarryOverTroops( lastBattleWinHero->GetArmy() );
+            // In the original game, carry-over troops are taken from a hero who was hired least recently and who is still in the kingdom (I.E. still "alive"). A starting
+            // hero will count as first if they are still alive since the beginning, but if they are rehired then they take a new place in the queue of heroes.
+            if ( !humanKingdomHeroes.empty() ) {
+                const Heroes * hero = humanKingdomHeroes.front();
+                assert( hero != nullptr );
+
+                saveData.setCarryOverTroops( hero->GetArmy() );
+            }
         }
 
         saveData.addCampaignAward( obtainableAward._id );
