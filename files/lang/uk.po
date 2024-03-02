@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-18 14:42+0000\n"
-"PO-Revision-Date: 2023-09-06 08:41+0300\n"
+"PO-Revision-Date: 2024-02-28 18:31+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: uk\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
-"X-Generator: Poedit 3.4\n"
+"X-Generator: Poedit 3.2.2\n"
 
 msgid ""
 "BATTLE\n"
@@ -53,20 +53,24 @@ msgstr "ІНФО"
 msgid "QUIT"
 msgstr "ВИЙТИ"
 
+# Скасувати - правильний варіант перекладу, адже відміняють лише дієслова як частину мови.
 msgid "CANCEL"
-msgstr "ВІДМІНА"
+msgstr "СКАСУВАТИ"
 
 msgid "OKAY"
-msgstr "ДОБРЕ"
+msgstr "ГАРАЗД"
 
+# Гаразд - це питоме колоритне українське слово, що позначає згоду або підтвердження. Слово "добре" скоріше прикметник та епітет, яке менше підходить для згоди.
 msgid "smallerButton|OKAY"
-msgstr "ДОБРЕ"
+msgstr "ГАРАЗД"
 
 msgid "ACCEPT"
 msgstr "ПРИЙНЯТИ"
 
+# Відхилити - є правильним перкладом. Дієслово, що позначає неприйняття пропозиції, змін тощо.
+# Відмінити - стосується лише відміни дієслів як частини мови.
 msgid "DECLINE"
-msgstr "ВІДМІНИТИ"
+msgstr "ВІДХИЛИТИ"
 
 msgid "LEARN"
 msgstr "ВИВЧИТИ"
@@ -198,15 +202,11 @@ msgstr "МІН"
 msgid "RESET"
 msgstr ""
 
-#, fuzzy
 msgid "START"
-msgstr "РЕСТАРТ"
+msgstr "ПОЧАТИ"
 
-#, fuzzy
 msgid "CASTLE"
-msgstr ""
-"МІСТА/\n"
-"ЗАМКИ"
+msgstr "ЗАМОК"
 
 msgid "TOWN"
 msgstr ""
@@ -1021,7 +1021,7 @@ msgid "Reset"
 msgstr ""
 
 msgid "Reset to default settings."
-msgstr ""
+msgstr "Скинути до налаштувань за замовчуванням."
 
 msgid "Please select another hero."
 msgstr "Будь ласка, оберіть іншого героя."
