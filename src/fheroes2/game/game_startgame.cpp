@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -132,10 +132,26 @@ namespace
 
 fheroes2::GameMode Game::StartBattleOnly()
 {
-    Battle::Only main;
+    static Battle::Only battleOnlySetup;
 
-    if ( main.ChangeSettings() )
-        main.StartBattle();
+    world.generateBattleOnlyMap();
+
+    bool reset = false;
+    bool allowBackup = true;
+
+    while ( battleOnlySetup.setup( allowBackup, reset ) ) {
+        allowBackup = false;
+
+        if ( reset ) {
+            world.generateBattleOnlyMap();
+            battleOnlySetup.reset();
+            reset = false;
+            continue;
+        }
+
+        battleOnlySetup.StartBattle();
+        break;
+    }
 
     return fheroes2::GameMode::MAIN_MENU;
 }
@@ -263,6 +279,7 @@ void Game::OpenCastleDialog( Castle & castle, bool updateFocus /* = true */, con
 
         // The castle garrison can change
         adventureMapInterface.RedrawFocus();
+        adventureMapInterface.ResetFocus( Interface::GetFocusType(), false );
 
         // Fade-in game screen only for 640x480 resolution.
         if ( fheroes2::Display::instance().isDefaultSize() ) {
@@ -356,7 +373,6 @@ void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus, const bool renderB
                 adventureMapInterface.ResetFocus( GameFocus::HEROES, false );
             }
         }
-
         // The hero's army can change
         adventureMapInterface.RedrawFocus();
 
@@ -438,7 +454,7 @@ int Interface::AdventureMap::GetCursorFocusCastle( const Castle & castle, const 
         break;
     }
 
-    case MP2::OBJ_HEROES: {
+    case MP2::OBJ_HERO: {
         const Heroes * hero = tile.getHero();
 
         if ( hero ) {
@@ -475,7 +491,7 @@ int Interface::AdventureMap::GetCursorFocusShipmaster( const Heroes & hero, cons
         break;
     }
 
-    case MP2::OBJ_HEROES: {
+    case MP2::OBJ_HERO: {
         const Heroes * otherHero = tile.getHero();
 
         if ( otherHero ) {
@@ -519,6 +535,31 @@ int Interface::AdventureMap::GetCursorFocusShipmaster( const Heroes & hero, cons
             }
         }
 
+        break;
+    }
+
+    return Cursor::POINTER;
+}
+
+int Interface::AdventureMap::_getCursorNoFocus( const Maps::Tiles & tile )
+{
+    switch ( tile.GetObject() ) {
+    case MP2::OBJ_NON_ACTION_CASTLE:
+    case MP2::OBJ_CASTLE: {
+        const Castle * castle = world.getCastle( tile.GetCenter() );
+        if ( castle && castle->GetColor() == Settings::Get().CurrentColor() ) {
+            return Cursor::CASTLE;
+        }
+        break;
+    }
+    case MP2::OBJ_HERO: {
+        const Heroes * hero = tile.getHero();
+        if ( hero && hero->GetColor() == Settings::Get().CurrentColor() ) {
+            return Cursor::HEROES;
+        }
+        break;
+    }
+    default:
         break;
     }
 
@@ -572,7 +613,7 @@ int Interface::AdventureMap::GetCursorFocusHeroes( const Heroes & hero, const Ma
         break;
     }
 
-    case MP2::OBJ_HEROES: {
+    case MP2::OBJ_HERO: {
         const Heroes * otherHero = tile.getHero();
 
         if ( otherHero ) {
@@ -581,6 +622,9 @@ int Interface::AdventureMap::GetCursorFocusHeroes( const Heroes & hero, const Ma
             }
 
             if ( hero.GetColor() == otherHero->GetColor() ) {
+                if ( HotKeyHoldEvent( Game::HotKeyEvent::WORLD_QUICK_SELECT_HERO ) ) {
+                    return Cursor::HEROES;
+                }
                 const int cursor = Cursor::DistanceThemes( Cursor::CURSOR_HERO_MEET, hero.getNumOfTravelDays( tile.GetIndex() ) );
 
                 return cursor != Cursor::POINTER ? cursor : Cursor::HEROES;
@@ -640,6 +684,9 @@ int Interface::AdventureMap::GetCursorTileIndex( int32_t dstIndex )
 
     case GameFocus::CASTLE:
         return GetCursorFocusCastle( *GetFocusCastle(), tile );
+
+    case GameFocus::UNSEL:
+        return _getCursorNoFocus( tile );
 
     default:
         break;
@@ -704,27 +751,31 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
 
         res = fheroes2::GameMode::END_TURN;
 
-        bool isFirstAIPlayer = true;
+        // All bonuses for AI must be applied on the first AI player turn, not the first player in general.
+        // This prevents human players from abusing AI bonuses.
+        bool applyAIBonuses = true;
 
         for ( const Player * player : sortedPlayers ) {
             assert( player != nullptr );
 
-            const int playerColor = player->GetColor();
-
-            Kingdom & kingdom = world.GetKingdom( playerColor );
-
-            if ( skipTurns && !player->isColor( conf.CurrentColor() ) ) {
-                if ( kingdom.isPlay() && kingdom.GetControl() == CONTROL_AI ) {
-                    // Only the first AI player can trigger AI bonuses.
-                    // Since this player is the one the bonuses have been applied.
-                    isFirstAIPlayer = false;
+            if ( skipTurns ) {
+                // Game saves can only be performed during a human player's turn (including when it is under temporary AI control
+                // in the case of a debug build), and human players always go first in the turn queue. If we skipped all the human
+                // players and still haven't found the current player, then something is clearly wrong here.
+                if ( player->GetControl() == CONTROL_AI ) {
+                    break;
                 }
 
-                continue;
+                if ( !player->isColor( conf.CurrentColor() ) ) {
+                    continue;
+                }
             }
 
             // player with conf.CurrentColor() was found, there is no need for further skips
             skipTurns = false;
+
+            const int playerColor = player->GetColor();
+            Kingdom & kingdom = world.GetKingdom( playerColor );
 
             if ( kingdom.isPlay() ) {
                 DEBUG_LOG( DBG_GAME, DBG_INFO, world.DateString() << ", color: " << Color::String( playerColor ) << ", resource: " << kingdom.GetFunds().String() )
@@ -779,11 +830,10 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
                     // TODO: remove this temporary assertion
                     assert( res == fheroes2::GameMode::END_TURN );
 
-                    if ( isFirstAIPlayer ) {
-                        isFirstAIPlayer = false;
-                        // All bonuses for AI must be applied on the first AI player turn, not the first player in general.
-                        // This prevents human players to abuse AI bonuses.
+                    if ( applyAIBonuses ) {
                         world.NewDayAI();
+
+                        applyAIBonuses = false;
                     }
 
                     Cursor::Get().SetThemes( Cursor::WAIT );
@@ -1072,6 +1122,16 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
             // open focus
             else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_OPEN_FOCUS ) )
                 EventOpenFocus();
+            else if ( HotKeyHoldEvent( Game::HotKeyEvent::WORLD_QUICK_SELECT_HERO ) ) {
+                const int32_t index = _gameArea.GetValidTileIdFromPoint( le.GetMouseCursor() );
+                // This tells us that this is a hero owned by the current player and that they can meet, so we switch to the helmet cursor.
+                if ( cursor.Themes() == Cursor::CURSOR_HERO_MEET ) {
+                    cursor.SetThemes( GetCursorTileIndex( index ) );
+                }
+                if ( le.MouseClickLeft() ) {
+                    EventSwitchFocusedHero( index );
+                }
+            }
         }
 
         if ( res != fheroes2::GameMode::CANCEL ) {
@@ -1090,7 +1150,7 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
             else if ( isScrollBottom( le.GetMouseCursor() ) )
                 scrollPosition |= SCROLL_BOTTOM;
 
-            if ( scrollPosition != SCROLL_NONE ) {
+            if ( scrollPosition != SCROLL_NONE && _gameArea.isFastScrollEnabled() ) {
                 if ( Game::validateAnimationDelay( Game::SCROLL_START_DELAY ) ) {
                     if ( fastScrollRepeatCount < fastScrollStartThreshold ) {
                         ++fastScrollRepeatCount;
@@ -1107,6 +1167,11 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
         }
         else {
             fastScrollRepeatCount = 0;
+        }
+
+        // Re-enable fast scroll if the cursor movement indicates the need
+        if ( !_gameArea.isFastScrollEnabled() && _gameArea.mouseIndicatesFastScroll( le.GetMouseCursor() ) ) {
+            _gameArea.setFastScrollStatus( true );
         }
 
         const bool isHiddenInterface = conf.isHideInterfaceEnabled();
@@ -1189,7 +1254,7 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
             if ( hero ) {
                 bool resetHeroSprite = false;
                 if ( heroAnimationFrameCount > 0 ) {
-                    const int32_t heroMovementSkipValue = Game::HumanHeroAnimSkip();
+                    const int32_t heroMovementSkipValue = Game::HumanHeroAnimSpeedMultiplier();
 
                     _gameArea.ShiftCenter( { heroAnimationOffset.x * heroMovementSkipValue, heroAnimationOffset.y * heroMovementSkipValue } );
                     _gameArea.SetRedraw();
@@ -1222,9 +1287,6 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
                             Interface::AdventureMap::RedrawLocker redrawLocker( Interface::AdventureMap::Get() );
 
                             _gameArea.SetCenter( hero->GetCenter() );
-                            ResetFocus( GameFocus::HEROES, true );
-
-                            RedrawFocus();
 
                             if ( stopHero ) {
                                 stopHero = false;
@@ -1238,14 +1300,11 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
                                 // Do not generate a frame as we are going to do it later.
                                 Interface::AdventureMap::RedrawLocker redrawLocker( Interface::AdventureMap::Get() );
 
-                                const int32_t heroMovementSkipValue = Game::HumanHeroAnimSkip();
+                                const int32_t heroMovementSkipValue = Game::HumanHeroAnimSpeedMultiplier();
 
                                 heroAnimationOffset = movement;
                                 _gameArea.ShiftCenter( movement );
 
-                                Game::SetUpdateSoundsOnFocusUpdate( false );
-                                ResetFocus( GameFocus::HEROES, true );
-                                Game::SetUpdateSoundsOnFocusUpdate( true );
                                 heroAnimationFrameCount = 32 - heroMovementSkipValue;
                                 heroAnimationSpriteId = hero->GetSpriteIndex();
                                 if ( heroMovementSkipValue < 4 ) {
@@ -1365,8 +1424,9 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
                 const uint32_t lostTownDays = myKingdom.GetLostTownDays();
 
                 if ( lostTownDays > Game::GetLostTownDays() ) {
-                    Game::DialogPlayers( conf.CurrentColor(), _( "Beware!" ),
-                                         _( "%{color} player, you have lost your last town. If you do not conquer another town in next week, you will be eliminated." ) );
+                    Game::DialogPlayers(
+                        conf.CurrentColor(), _( "Beware!" ),
+                        _( "%{color} player, you have lost your last town. If you do not conquer another town in the next week, you will be eliminated." ) );
                 }
                 else if ( lostTownDays == 1 ) {
                     Game::DialogPlayers( conf.CurrentColor(), _( "Defeat!" ), _( "%{color} player, your heroes abandon you, and you are banished from this land." ) );
@@ -1461,7 +1521,7 @@ void Interface::AdventureMap::mouseCursorAreaPressRight( const int32_t tileIndex
     const Settings & conf = Settings::Get();
     const Maps::Tiles & tile = world.GetTiles( tileIndex );
 
-    DEBUG_LOG( DBG_DEVEL, DBG_INFO, std::endl << tile.String() )
+    DEBUG_LOG( DBG_DEVEL, DBG_INFO, '\n' << tile.String() )
 
     if ( !IS_DEVEL() && tile.isFog( conf.CurrentColor() ) ) {
         Dialog::QuickInfo( tile );
@@ -1482,7 +1542,7 @@ void Interface::AdventureMap::mouseCursorAreaPressRight( const int32_t tileIndex
             break;
         }
 
-        case MP2::OBJ_HEROES: {
+        case MP2::OBJ_HERO: {
             const Heroes * heroes = tile.getHero();
 
             if ( heroes ) {
@@ -1497,4 +1557,9 @@ void Interface::AdventureMap::mouseCursorAreaPressRight( const int32_t tileIndex
             break;
         }
     }
+}
+
+void Interface::AdventureMap::mouseCursorAreaLongPressLeft( const int32_t tileIndex )
+{
+    EventSwitchFocusedHero( tileIndex );
 }

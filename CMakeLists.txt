@@ -199,7 +199,7 @@ if(NOT MACOS_APP_BUNDLE)
 			DESTINATION ${CMAKE_INSTALL_DOCDIR}/homm2
 			)
 		install(
-			FILES script/packaging/common/fheroes2.appdata.xml
+			FILES script/packaging/common/fheroes2.metainfo.xml
 			DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/metainfo
 			)
 		install(

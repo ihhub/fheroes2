@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-23 00:14+0000\n"
+"POT-Creation-Date: 2024-02-18 14:42+0000\n"
 "PO-Revision-Date: 2022-09-23 16:01+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -190,6 +190,19 @@ msgstr ""
 msgid "MIN"
 msgstr "МІН"
 
+msgid "RESET"
+msgstr ""
+
+#, fuzzy
+msgid "START"
+msgstr "НАНОВА"
+
+msgid "CASTLE"
+msgstr ""
+
+msgid "TOWN"
+msgstr ""
+
 msgid ""
 "D\n"
 "I\n"
@@ -340,7 +353,7 @@ msgstr ""
 msgid "Troops of %{count} alignments -%{penalty}"
 msgstr ""
 
-msgid "Some undead in group -1"
+msgid "Some undead in army -1"
 msgstr ""
 
 msgid "View %{name}"
@@ -405,8 +418,8 @@ msgid ""
 msgstr ""
 
 msgid ""
-"The Moat reduces by -%{count} the defense skill of any unit and slows to "
-"half movement rate."
+"The Moat reduces the defense skill of troops trapped in it by %{count} and "
+"restricts their movement range."
 msgstr ""
 
 msgid "Speed: %{speed}"
@@ -497,6 +510,9 @@ msgstr "Добра"
 msgid "The enemy has surrendered!"
 msgstr "Вораг здаўся!"
 
+msgid "Their cowardice costs them %{gold} gold."
+msgstr ""
+
 msgid "The enemy has fled!"
 msgstr "Вораг уцёк!"
 
@@ -512,10 +528,12 @@ msgstr "%{name} баязліва ўцякае з поля бітвы."
 msgid "%{name} surrenders to the enemy, and departs in shame."
 msgstr "%{name} здаўся ворагу і сышоў з ганьбай."
 
-msgid "Your force suffer a bitter defeat, and %{name} abandons your cause."
+#, fuzzy
+msgid "Your forces suffer a bitter defeat, and %{name} abandons your cause."
 msgstr "Вашыя войскі былі знішчаны, а %{name} пакідае вас."
 
-msgid "Your force suffer a bitter defeat."
+#, fuzzy
+msgid "Your forces suffer a bitter defeat."
 msgstr "Вашыя войскі былі знішчаны."
 
 msgid "Battlefield Casualties"
@@ -527,6 +545,20 @@ msgstr "Нападнік"
 msgid "Defender"
 msgstr "Абаронца"
 
+#, fuzzy
+msgid "Click to leave the battle results."
+msgstr "Пстрыкні, каб ухваліць абранае раздзяленне."
+
+#, fuzzy
+msgid "Click to restart the battle in manual mode."
+msgstr "Пстрыкні, каб вярнуцца ў галоўнае меню."
+
+msgid "Restart"
+msgstr ""
+
+msgid "You have captured an enemy artifact!"
+msgstr "Вы захапілі варожы артэфакт!"
+
 msgid "As you reach for the %{name}, it mysteriously disappears."
 msgstr ""
 "Сярод вашых трафеяў апынуўся артэфакт - %{name}! Але як толькі вы "
@@ -534,9 +566,6 @@ msgstr ""
 
 msgid "As your enemy reaches for the %{name}, it mysteriously disappears."
 msgstr "Як толькі вораг дабраўся да артэфакту - %{name}, той містычна знік."
-
-msgid "You have captured an enemy artifact!"
-msgstr "Вы захапілі варожы артэфакт!"
 
 msgid "Necromancy!"
 msgstr ""
@@ -611,7 +640,9 @@ msgstr ""
 
 msgid ""
 "Surrendering costs gold. However if you pay the ransom, the hero and all of "
-"his or her surviving creatures will be available to recruit again."
+"his or her surviving creatures will be available to recruit again. The cost "
+"of surrender is half of the total cost of the non-temporary troops remaining "
+"in the army."
 msgstr ""
 
 msgid "Open Hero Screen to view full information about the hero."
@@ -732,15 +763,19 @@ msgstr ""
 msgid "Shows the results of individual monster's actions."
 msgstr ""
 
-msgid "Are you sure you want to finish the battle in auto mode?"
-msgstr ""
-
 #, fuzzy
 msgid "Are you sure you want to enable auto combat?"
 msgstr "Вы ўпэўненыя, што хочаце выйсці?"
 
-msgid "%{name} skip their turn."
+msgid "Are you sure you want to finish the battle in auto mode?"
 msgstr ""
+
+#, fuzzy
+msgid "The %{name} skips their turn."
+msgid_plural "The %{name} skip their turn."
+msgstr[0] "У горадзе ўжо ёсць %{name}."
+msgstr[1] "У горадзе ўжо ёсць %{name}."
+msgstr[2] "У горадзе ўжо ёсць %{name}."
 
 msgid "%{attacker} does %{damage} damage."
 msgid_plural "%{attacker} do %{damage} damage."
@@ -775,8 +810,12 @@ msgstr[2] ""
 msgid "Moved %{monster}: from [%{src}] to [%{dst}]."
 msgstr ""
 
-msgid "The %{name} resist the spell!"
-msgstr ""
+#, fuzzy
+msgid "The %{name} resists the spell!"
+msgid_plural "The %{name} resist the spell!"
+msgstr[0] "У горадзе ўжо ёсць %{name}."
+msgstr[1] "У горадзе ўжо ёсць %{name}."
+msgstr[2] "У горадзе ўжо ёсць %{name}."
 
 msgid "%{name} casts %{spell} on the %{troop}."
 msgstr ""
@@ -802,23 +841,41 @@ msgstr ""
 msgid "The %{spell} does %{damage} damage to all living creatures."
 msgstr ""
 
-msgid "The %{attacker}' attack blinds the %{target}!"
-msgstr ""
+msgid "The %{attacker}'s attack blinds the %{target}!"
+msgid_plural "The %{attacker}' attack blinds the %{target}!"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
-msgid "The %{attacker}' gaze turns the %{target} to stone!"
-msgstr ""
+msgid "The %{attacker}'s gaze turns the %{target} to stone!"
+msgid_plural "The %{attacker}' gaze turns the %{target} to stone!"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
-msgid "The %{attacker}' curse falls upon the %{target}!"
-msgstr ""
+msgid "The %{attacker}'s curse falls upon the %{target}!"
+msgid_plural "The %{attacker}' curse falls upon the %{target}!"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
-msgid "The %{target} are paralyzed by the %{attacker}!"
-msgstr ""
+msgid "The %{target} is paralyzed by the %{attacker}!"
+msgid_plural "The %{target} are paralyzed by the %{attacker}!"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
-msgid "The %{attacker} dispel all good spells on your %{target}!"
-msgstr ""
+msgid "The %{attacker} dispels all good spells on your %{target}!"
+msgid_plural "The %{attacker} dispel all good spells on your %{target}!"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
-msgid "The %{attacker} cast %{spell} on %{target}!"
-msgstr ""
+msgid "The %{attacker} casts %{spell} on the %{target}!"
+msgid_plural "The %{attacker} cast %{spell} on the %{target}!"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 msgid "Bad luck descends on the %{attacker}."
 msgstr ""
@@ -841,8 +898,9 @@ msgstr ""
 msgid "The mirror image is destroyed!"
 msgstr ""
 
-msgid "Are you sure you want to interrupt the auto battle?"
-msgstr ""
+#, fuzzy
+msgid "Are you sure you want to interrupt the auto combat?"
+msgstr "Вы ўпэўненыя, што хочаце выйсці?"
 
 msgid "Error"
 msgstr "Памылка"
@@ -882,6 +940,22 @@ msgstr "Чалавек"
 msgid "AI"
 msgstr "Кампутар"
 
+msgid "Start"
+msgstr ""
+
+#, fuzzy
+msgid "Start the battle."
+msgstr "Вярнуцца да бою."
+
+msgid "Exit"
+msgstr "Выхад"
+
+msgid "Reset"
+msgstr ""
+
+msgid "Reset to default settings."
+msgstr ""
+
 msgid "Please select another hero."
 msgstr "Калі ласка, выбярыце іншага героя."
 
@@ -897,13 +971,7 @@ msgstr ""
 msgid "Set Knowledge Skill"
 msgstr ""
 
-msgid "%{race1} %{name1}"
-msgstr ""
-
-msgid "vs"
-msgstr "супраць"
-
-msgid "%{race2} %{name2}"
+msgid "%{race1} %{name1} vs %{race2} %{name2}"
 msgstr ""
 
 msgid "Monsters"
@@ -927,11 +995,6 @@ msgstr ""
 #, fuzzy
 msgid "The %{name} is destroyed."
 msgstr "У горадзе ўжо ёсць %{name}."
-
-msgid ""
-"The %{artifact} artifact is in effect for this battle, disabling %{spell} "
-"spell."
-msgstr ""
 
 msgid "%{count} %{name} rises from the dead!"
 msgid_plural "%{count} %{name} rise from the dead!"
@@ -1032,8 +1095,9 @@ msgstr ""
 "захапіце ўсе варожыя гарады і замкі. Сачыце за тым, каб не страціць адразу "
 "ўсе гарады гномаў, іначай вораг пераможа."
 
+#, fuzzy
 msgid ""
-"You will face four allied enemies in a straightforward fight for resource "
+"You will face four allied enemies in a straightforward fight for resources "
 "and treasure. Capture all of the enemy castles for victory."
 msgstr ""
 "Вы сутыкнёцеся з чатырма ворагамі-хаўруснікамі ў бітве за рэсурсы і скарбы. "
@@ -1304,7 +1368,7 @@ msgstr ""
 
 msgid ""
 "Rescue your crazy uncle Ivan. Find him before the first day of the fourth "
-"month or it will be no help to your kingdom."
+"month or it will be of no help to your kingdom."
 msgstr ""
 
 msgid ""
@@ -1318,7 +1382,7 @@ msgstr ""
 
 msgid ""
 "Gain the favor of the elves. They will not allow trees to be chopped down, "
-"so they will send you wood every 2 weeks. You must complete your mission "
+"so we will send you wood every 2 weeks. You must complete your mission "
 "before the first day of the seventh month, or the kingdom will surely fall."
 msgstr ""
 
@@ -1415,23 +1479,22 @@ msgstr ""
 msgid " will be willing to join your army."
 msgstr ""
 
-msgid "\"%{artifact}\" artifact will be carried over the scenario."
+msgid "\"%{artifact}\" artifact will be carried over in the campaign."
 msgstr ""
 
-msgid "The army will be carried over the scenario."
+msgid "The army will be carried over in the campaign."
 msgstr ""
 
 msgid "The kingdom will have +%{count} %{resource} each day."
 msgstr ""
 
-msgid "\"%{spell}\" spell will be carried over the scenario."
+msgid "The \"%{spell}\" spell will be carried over in the campaign."
 msgstr ""
 
-msgid "%{hero} can be hired in the scenario."
+msgid "%{hero} can be hired during scenarios."
 msgstr ""
 
-msgid ""
-"%{hero} has been defeated and will not appear in the subsequent scenarios."
+msgid "%{hero} has been defeated and will not appear in subsequent scenarios."
 msgstr ""
 
 msgid "The dwarves recognize their allies and gladly join your forces."
@@ -1701,7 +1764,7 @@ msgid "campaignBonus|Expert Wisdom"
 msgstr ""
 
 msgid ""
-"The main hero will have \"%{artifact}\" artifact at the start of the "
+"The main hero will have the \"%{artifact}\" artifact at the start of the "
 "scenario."
 msgstr ""
 
@@ -1720,14 +1783,14 @@ msgid ""
 msgstr ""
 
 msgid ""
-"The main hero will have \"%{spell}\" spell at the start of the scenario."
+"The main hero will have the \"%{spell}\" spell at the start of the scenario."
 msgstr ""
 
-msgid "The starting race of the scenario will be %{race}."
+msgid "The starting alignment of the scenario will be %{race}."
 msgstr ""
 
 msgid ""
-"The main hero will have additional %{count} %{skill} at the start of the "
+"The main hero will receive a +%{count} to their %{skill} at the start of the "
 "scenario."
 msgstr ""
 
@@ -1741,7 +1804,7 @@ msgid "Archibald"
 msgstr "Арчыбальд"
 
 #, fuzzy
-msgid "The Price of Loyalty"
+msgid "Price of Loyalty"
 msgstr "Кошт вернасці"
 
 msgid "Voyage Home"
@@ -1769,19 +1832,22 @@ msgid "For this action it is necessary to build a castle first."
 msgstr ""
 
 #, fuzzy
-msgid "Cannot build %{name} because the castle is too far away from an ocean."
+msgid "Cannot build %{name}. The castle is too far away from an ocean."
 msgstr "Нельга пабудаваць %{name}, бо замак занадта далёка ад вады."
 
-msgid "disable build."
+msgid "This building has been disabled."
 msgstr ""
 
-msgid "Cannot afford %{name}."
+#, fuzzy
+msgid "Cannot afford the %{name}."
 msgstr "Нельга пабудаваць."
 
-msgid "%{name} is already built."
+#, fuzzy
+msgid "The %{name} is already built."
 msgstr "У горадзе ўжо ёсць %{name}."
 
-msgid "Cannot build %{name}."
+#, fuzzy
+msgid "Cannot build the %{name}."
 msgstr "%{name}. Нельга пабудаваць."
 
 msgid "Build %{name}."
@@ -2009,8 +2075,9 @@ msgstr ""
 msgid "Cannot recruit - you have too many Heroes."
 msgstr ""
 
-msgid "Cannot afford a Hero"
-msgstr ""
+#, fuzzy
+msgid "Cannot afford a Hero."
+msgstr "Нельга пабудаваць."
 
 msgid "There is no room in the garrison for this army."
 msgstr ""
@@ -2330,7 +2397,7 @@ msgid ""
 msgstr ""
 
 #, fuzzy
-msgid "The Statue increases your town's income by %{count} gold per day."
+msgid "The Statue increases the town's income by %{count} gold per day."
 msgstr "Статуя павялічвае гарадcкія зборы на %{count} штодзень."
 
 msgid "The Left Turret provides extra firepower during castle combat."
@@ -2353,9 +2420,10 @@ msgstr ""
 "Роў запавольвае атакуючыя войскі. Любое войска, якое ўвайшло ў роў не можа "
 "рухацца далей і павінна скончыць свой ход, а таксама горш абараняецца."
 
+#, fuzzy
 msgid ""
-"The Castle improves town defense and increases income to %{count} gold per "
-"day."
+"The Castle improves the town's defense and increases its income to %{count} "
+"gold per day."
 msgstr ""
 "Замак узмацняе абарону горада і павялічвае гарадcкія зборы да %{count} "
 "золата штодзень."
@@ -2386,9 +2454,6 @@ msgid ""
 "You must purchase a spell book to use the mage guild, but you currently have "
 "no room for a spell book. Try giving one of your artifacts to another hero."
 msgstr ""
-
-msgid "Exit"
-msgstr "Выхад"
 
 msgid "Click to show next town."
 msgstr ""
@@ -2448,13 +2513,13 @@ msgid "Recruit %{name} the %{race}"
 msgstr "Рэкрутаваць %{race} %{name}"
 
 msgid ""
-"'Spread' combat formation spreads your armies from the top to the bottom of "
-"the battlefield, with at least one empty space between each army."
+"'Spread' combat formation spreads the castle's units from the top to the "
+"bottom of the battlefield, with at least one empty space between each unit."
 msgstr ""
 
 msgid ""
-"'Grouped' combat formation bunches your army together in the center of your "
-"side of the battlefield."
+"'Grouped' combat formation bunches the castle's units together in the center "
+"of the castle's side of the battlefield."
 msgstr ""
 
 msgid "Spread Formation"
@@ -2462,6 +2527,14 @@ msgstr ""
 
 msgid "Grouped Formation"
 msgstr ""
+
+#, fuzzy
+msgid "Click to show the next town."
+msgstr "Пстрыкніце сюды, каб выбраць сцэнар"
+
+#, fuzzy
+msgid "Click to show the previous town."
+msgstr "Пстрыкні, каб ухваліць абранае раздзяленне."
 
 msgid "Set garrison combat formation to 'Spread'"
 msgstr ""
@@ -2653,7 +2726,8 @@ msgstr "Змяніць гучнасць гукаў на пярэднім пла�
 msgid "Change the type of music."
 msgstr "Змяніць тып музыкі."
 
-msgid "Toggle 3D effects of foreground sounds."
+#, fuzzy
+msgid "Toggle the 3D effect of foreground sounds."
 msgstr "Укл/выкл 3D эфекты гукаў на пярэднім плане."
 
 msgid "Build a new ship:"
@@ -2801,9 +2875,6 @@ msgstr "Аконны"
 msgid "V-Sync"
 msgstr "Вертыкальная сінхранізацыя"
 
-msgid "on"
-msgstr "укл."
-
 msgid "FPS"
 msgstr ""
 
@@ -2828,6 +2899,15 @@ msgstr ""
 
 msgid "Show extra information such as FPS and current time."
 msgstr "Паказваць FPS і бягучы час."
+
+msgid "Hotkey: "
+msgstr ""
+
+msgid "Category: "
+msgstr ""
+
+msgid "Event: "
+msgstr ""
 
 msgid "Hot Keys:"
 msgstr "Гарачыя клавішы:"
@@ -2872,9 +2952,6 @@ msgstr ""
 
 msgid "Toggle interface visibility."
 msgstr ""
-
-msgid "Toggle colored cursor on or off. This is only an esthetic choice."
-msgstr "Укл/выкл каляровы курсор. Гэта ўплывае толькі на візуал."
 
 msgid "Sets the speed at which you scroll the window."
 msgstr ""
@@ -2954,6 +3031,16 @@ msgid "(empty)"
 msgstr ""
 
 msgid "already learned"
+msgstr ""
+
+#, fuzzy
+msgid "treeOfKnowledge|free"
+msgstr "Веды"
+
+msgid "already claimed"
+msgstr ""
+
+msgid "not claimed"
 msgstr ""
 
 msgid "already knows this skill"
@@ -3101,12 +3188,12 @@ msgstr ""
 msgid "Accept the choice made."
 msgstr "Ухваліць выбар."
 
-msgid "Unknown Hero"
-msgstr ""
-
 #, fuzzy
 msgid "%{color} %{race} hero"
 msgstr "%{color} гулец"
+
+msgid "Terrain object"
+msgstr ""
 
 msgid "Select Skill:"
 msgstr ""
@@ -3123,11 +3210,113 @@ msgstr ""
 msgid "Select Hero:"
 msgstr ""
 
+#, fuzzy
+msgid "Select Treasure:"
+msgstr "Мова"
+
+#, fuzzy
+msgid "Select Ocean Object:"
+msgstr "Мова"
+
+#, fuzzy
+msgid "Castle/town placing"
+msgstr "Наладкі замка"
+
+msgid "doubleLinedRace|Neutral"
+msgstr ""
+
+msgid "race|Random"
+msgstr ""
+"Выпад-\n"
+"ковы"
+
+#, fuzzy
+msgid "Click to start placing the selected castle/town."
+msgstr "Пстрыкні, каб ухваліць абранае раздзяленне."
+
+#, fuzzy
+msgid "Click to select town placing."
+msgstr "Пстрыкніце сюды, каб выбраць сцэнар"
+
+#, fuzzy
+msgid "Click to select castle placing."
+msgstr "Пстрыкніце сюды, каб выбраць сцэнар"
+
+#, fuzzy
+msgid "%{color} %{race} %{townOrCastle}"
+msgstr "%{color} гулец"
+
+msgid "race|Neutral"
+msgstr ""
+
+msgid "You will place"
+msgstr ""
+
+#, fuzzy
+msgid "Click to select this class."
+msgstr "Пстрыкніце сюды, каб выбраць сцэнар"
+
+#, fuzzy
+msgid "Click to select this color."
+msgstr "Пстрыкніце сюды, каб выбраць сцэнар"
+
+#, fuzzy
+msgid "Select Dwelling:"
+msgstr "Хобіты"
+
+#, fuzzy
+msgid "Select Landscape Object:"
+msgstr "Мова"
+
+msgid "Mine placing"
+msgstr ""
+
+msgid ""
+"Resource\n"
+"type:"
+msgstr ""
+
+#, fuzzy
+msgid "%{mineName} appearance:"
+msgstr "%{race} %{name}"
+
+#, fuzzy
+msgid "Click to select %{object} as the resource generator to be placed."
+msgstr "Пстрыкніце сюды, каб выбраць сцэнар"
+
+#, fuzzy
+msgid "Select Mountain Object:"
+msgstr "Мова"
+
+#, fuzzy
+msgid "Select Rock Object:"
+msgstr "Мова"
+
+#, fuzzy
+msgid "Select Tree Object:"
+msgstr "Мова"
+
+#, fuzzy
+msgid "Select Power Up Object:"
+msgstr "Мова"
+
+#, fuzzy
+msgid "Select Adventure Object:"
+msgstr "Мова"
+
 msgid "Map Type:\n"
 msgstr ""
 
 msgid "The Succession Wars"
 msgstr ""
+
+#, fuzzy
+msgid "The Price of Loyalty"
+msgstr "Кошт вернасці"
+
+#, fuzzy
+msgid "Resurrection"
+msgstr "Раздзяленне экрана"
 
 msgid "Lose all your heroes and towns."
 msgstr "Страціціь усіх герояў і гарады."
@@ -3156,7 +3345,8 @@ msgstr "Перамагчы акрэсленага героя."
 msgid "Find a specific artifact."
 msgstr "Адшукаць акрэслены артэфакт."
 
-msgid "Your side defeats the opposing side."
+#, fuzzy
+msgid "Your side must defeat the opposing side."
 msgstr "Ваш бок перамагае супрацьлеглы."
 
 msgid "Accumulate a large amount of gold."
@@ -3171,7 +3361,8 @@ msgstr "Складанасць мапы:"
 msgid "N"
 msgstr ""
 
-msgid "No maps exist at that size"
+#, fuzzy
+msgid "No maps exist at that size."
 msgstr "Няма мап абранага памеру"
 
 msgid "Small Maps"
@@ -3207,9 +3398,10 @@ msgstr "Паказваць усе мапы, незалежна ад памеру
 msgid "Players Icon"
 msgstr "Іконка гульцоў"
 
+#, fuzzy
 msgid ""
 "Indicates how many players total are in the scenario. Any positions not "
-"occupied by humans will be occupied by computer players."
+"occupied by human players will be occupied by computer players."
 msgstr ""
 "Паказвае колькасць гульцоў у сцэнары. За не занятыя асобамі пазіцыі будзе "
 "гуляць кампутар."
@@ -3290,8 +3482,8 @@ msgid "Change the speed at which your heroes move on the main screen."
 msgstr ""
 
 msgid ""
-"Sets the speed that A.I. heroes move at. You can also elect not to view A.I. "
-"movement at all."
+"Sets the speed that computer heroes move at. You can also elect not to view "
+"computer movement at all."
 msgstr ""
 
 #, fuzzy
@@ -3383,6 +3575,9 @@ msgstr ""
 msgid "Best Monster:"
 msgstr ""
 
+msgid "Map filename"
+msgstr ""
+
 msgid ""
 "Are you sure you want to load a new map? (Any unsaved changes to the current "
 "map will be lost.)"
@@ -3419,7 +3614,7 @@ msgstr "Назва абранай мапы."
 msgid "Quit out of the map editor."
 msgstr ""
 
-msgid "Monster"
+msgid "Objects cannot be placed outside the map."
 msgstr ""
 
 msgid "Monsters cannot be placed on water."
@@ -3428,60 +3623,146 @@ msgstr ""
 msgid "Choose a tile which does not contain any objects."
 msgstr ""
 
-msgid "Heroes"
+msgid "Treasures cannot be placed on water."
 msgstr ""
 
 msgid "Heroes cannot be placed on water."
 msgstr ""
 
-msgid "Ocean Objects"
+msgid ""
+"A maximum of %{count} heroes of the same color can be placed on the map."
 msgstr ""
 
-msgid "Grass Objects"
+msgid "Failed to update player information."
 msgstr ""
 
-msgid "Snow Objects"
+msgid "Artifacts cannot be placed on water."
 msgstr ""
 
-msgid "Swamp Objects"
+msgid "Mountains cannot be placed on water."
 msgstr ""
 
-msgid "Lava Objects"
+msgid "Rocks cannot be placed on water."
 msgstr ""
 
-msgid "Desert Objects"
+msgid "Trees cannot be placed on water."
 msgstr ""
 
-msgid "Dirt Objects"
+msgid "Ocean object must be placed on water."
 msgstr ""
 
-msgid "Wasteland Objects"
+msgid "Landscape objects cannot be placed on water."
 msgstr ""
 
-msgid "Beach Objects"
+msgid "Towns cannot be placed on water."
+msgstr ""
+
+msgid "Mines cannot be placed on water."
+msgstr ""
+
+msgid "Dwellings cannot be placed on water."
+msgstr ""
+
+msgid "Power-ups cannot be placed on water."
+msgstr ""
+
+msgid "Adventure objects cannot be placed on water."
+msgstr ""
+
+msgid "Used to place %{object}."
+msgstr ""
+
+#, fuzzy
+msgid "Select object type"
+msgstr "Мова"
+
+#, fuzzy
+msgid ""
+"Click here to\n"
+"select a monster."
+msgstr "Пстрыкніце сюды, каб выбраць сцэнар"
+
+#, fuzzy
+msgid ""
+"Click here to\n"
+"select another monster."
+msgstr "Калі ласка, выбярыце іншага героя."
+
+msgid ""
+"Cell\n"
+"Details"
+msgstr ""
+
+msgid "Roads"
+msgstr ""
+
+msgid "Streams"
+msgstr ""
+
+msgid "Erase"
+msgstr ""
+
+msgid "Mountains"
+msgstr ""
+
+msgid "Rocks"
+msgstr ""
+
+msgid "Trees"
+msgstr ""
+
+#, fuzzy
+msgid "Water Objects"
+msgstr "Вадзяныя элементалі"
+
+msgid "Miscellaneous"
+msgstr ""
+
+msgid "Artifacts"
+msgstr ""
+
+#, fuzzy
+msgid "Dwellings"
+msgstr "Хобіты"
+
+msgid "Mines"
+msgstr ""
+
+msgid "Power-ups"
+msgstr ""
+
+msgid "Treasures"
 msgstr ""
 
 #, fuzzy
 msgid "Towns"
 msgstr "Горад"
 
-msgid "Artifacts"
+msgid "Heroes"
 msgstr ""
 
-msgid "Treasures"
+msgid "editorErasure|Terrain"
 msgstr ""
 
-msgid "Terrain"
+msgid "editorErasure|Castles"
 msgstr ""
 
-#, fuzzy
-msgid "Castles"
-msgstr "Замак"
-
-msgid "Roads"
+msgid "editorErasure|Monsters"
 msgstr ""
 
-msgid "Streams"
+msgid "editorErasure|Heroes"
+msgstr ""
+
+msgid "editorErasure|Artifacts"
+msgstr ""
+
+msgid "editorErasure|Roads"
+msgstr ""
+
+msgid "editorErasure|Streams"
+msgstr ""
+
+msgid "editorErasure|Treasures"
 msgstr ""
 
 msgid ""
@@ -3529,30 +3810,6 @@ msgstr ""
 msgid "No special modifiers."
 msgstr ""
 
-msgid "Used to place objects most appropriate for use on %{terrain}."
-msgstr ""
-
-msgid ""
-"Used to place\n"
-"a town or castle."
-msgstr ""
-
-msgid ""
-"Used to place\n"
-"a monster group."
-msgstr ""
-
-msgid "Used to place a hero."
-msgstr ""
-
-msgid "Used to place an artifact."
-msgstr ""
-
-msgid ""
-"Used to place\n"
-"a resource or treasure."
-msgstr ""
-
 msgid "Toggle the erasure of %{type} objects."
 msgstr ""
 
@@ -3574,10 +3831,11 @@ msgstr ""
 msgid "Used to draw the underlying grass, dirt, water, etc. on the map."
 msgstr ""
 
-msgid "Object Mode"
+msgid "Landscape Objects Mode"
 msgstr ""
 
-msgid "Used to place objects (mountains, trees, treasure, etc.) on the map."
+msgid ""
+"Used to place landscape objects (mountains, rocks, trees, etc.) on the map."
 msgstr ""
 
 msgid "Detail Mode"
@@ -3586,6 +3844,28 @@ msgstr ""
 #, fuzzy
 msgid "Used for special editing of monsters, heroes and towns."
 msgstr "Знішчыць усіх варожых герояў і захапіць усе варожыя гарады."
+
+msgid "Adventure Objects Mode"
+msgstr ""
+
+msgid ""
+"Used to place adventure objects (artifacts, dwellings, mines, treasures, "
+"etc.) on the map."
+msgstr ""
+
+#, fuzzy
+msgid "Kingdom Objects Mode"
+msgstr "Прыбытак каралеўства"
+
+msgid "Used to place kingdom objects (towns, castles and heroes) on the map."
+msgstr ""
+
+#, fuzzy
+msgid "Monsters Mode"
+msgstr "Майстры мечнікі"
+
+msgid "Used to place monsters on the map."
+msgstr ""
 
 msgid "Allows you to draw streams by clicking and dragging."
 msgstr ""
@@ -3700,17 +3980,17 @@ msgid "Campaign Difficulty"
 msgstr ""
 
 msgid ""
-"Choose this difficulty if you want to prefer game story over challenge. AI "
-"is weaker in comparison with normal difficulty."
+"Choose this difficulty to experience the game's story with less challenge. "
+"The AI will be weaker than at Normal difficulty."
 msgstr ""
 
 msgid ""
-"Choose this difficulty to enjoy the campaign as per the original design."
+"Choose this difficulty to experience the campaign as per the original design."
 msgstr ""
 
 msgid ""
-"Choose this difficulty if you want challenge. AI is stronger in comparison "
-"with normal difficulty."
+"Choose this difficulty if you want more challenge. The AI will be stronger "
+"than at Normal difficulty."
 msgstr ""
 
 msgid ""
@@ -3738,15 +4018,12 @@ msgstr ""
 msgid "View Intro"
 msgstr "Паглядзець уступ"
 
-msgid "View Intro videos for the current state of the campaign."
+msgid "View the intro video for the current state of the campaign."
 msgstr ""
 
 msgid ""
 "Select the campaign difficulty. This can be lowered at any point during the "
 "campaign."
-msgstr ""
-
-msgid "Restart"
 msgstr ""
 
 msgid "Restart the current scenario."
@@ -3937,6 +4214,9 @@ msgstr ""
 msgid "Your Name"
 msgstr "Вашае імя"
 
+msgid "Unknown Hero"
+msgstr ""
+
 msgid "Standard"
 msgstr ""
 
@@ -3979,8 +4259,9 @@ msgstr ""
 msgid "hotkey|load game"
 msgstr ""
 
-msgid "hotkey|highscores"
-msgstr ""
+#, fuzzy
+msgid "hotkey|high scores"
+msgstr "Найлепшыя дасягненні"
 
 msgid "hotkey|credits"
 msgstr ""
@@ -4022,8 +4303,9 @@ msgstr ""
 msgid "hotkey|select all map sizes"
 msgstr ""
 
-msgid "hotkey|hotseat game"
-msgstr ""
+#, fuzzy
+msgid "hotkey|hot seat game"
+msgstr "Звычайная гульня"
 
 msgid "hotkey|battle only game"
 msgstr ""
@@ -4068,7 +4350,7 @@ msgid "hotkey|archibald campaign"
 msgstr ""
 
 #, fuzzy
-msgid "hotkey|the price of loyalty campaign"
+msgid "hotkey|price of loyalty campaign"
 msgstr "Кошт вернасці"
 
 msgid "hotkey|voyage home campaign"
@@ -4127,6 +4409,9 @@ msgid "hotkey|save game"
 msgstr ""
 
 msgid "hotkey|next hero"
+msgstr ""
+
+msgid "hotkey|change to hero under cursor"
 msgstr ""
 
 #, fuzzy
@@ -4299,6 +4584,32 @@ msgid ""
 "place only on the next turn."
 msgstr ""
 
+msgid "Default Actions"
+msgstr ""
+
+msgid "Global Actions"
+msgstr ""
+
+msgid "Main Menu"
+msgstr ""
+
+msgid "World Map"
+msgstr "Мапа свету"
+
+#, fuzzy
+msgid "Battle Screen"
+msgstr "Экран героя"
+
+#, fuzzy
+msgid "Town Screen"
+msgstr "Экран героя"
+
+msgid "Army Actions"
+msgstr ""
+
+msgid "Editor"
+msgstr ""
+
 msgid "The save file is corrupted."
 msgstr ""
 
@@ -4315,8 +4626,8 @@ msgid "This file contains a save with an invalid game type."
 msgstr ""
 
 msgid ""
-"This file was saved for a \"The Price of Loyalty\" map, but the "
-"corresponding game assets have not been provided to the engine."
+"This save file requires \"The Price of Loyalty\" game assets, but they have "
+"not been provided to the engine."
 msgstr ""
 
 msgid "This saved game is localized to '"
@@ -4368,7 +4679,7 @@ msgstr "Выйсці з Heroes of Might and Magic II."
 #, fuzzy
 msgid ""
 "Welcome to Heroes of Might and Magic II powered by the fheroes2 engine!\n"
-"Before starting the game please select a game resolution."
+"Before starting the game, please select a game resolution."
 msgstr "Выйсці з Heroes of Might and Magic II."
 
 msgid "Please Remember"
@@ -4399,9 +4710,6 @@ msgid ""
 "Enjoy the game!"
 msgstr ""
 
-msgid "Editor"
-msgstr ""
-
 msgid "The Editor requires \"The Price of Loyalty\" expansion files to work."
 msgstr ""
 
@@ -4426,9 +4734,10 @@ msgstr "Змяніць мову, раздзяленне экрана і нала
 msgid "Game Settings"
 msgstr "Налады гульні"
 
+#, fuzzy
 msgid ""
-"Required video files for campaign selection window are missing. Please make "
-"sure that all necessary files are present in the system."
+"The required video files for the campaign selection window are missing. "
+"Please make sure that all necessary files are present in the system."
 msgstr ""
 "Бракуе відэя файлаў для абранай кампаніі. Праверце, ці ўсе неабходныя файлы "
 "былі скапіяваны."
@@ -4466,11 +4775,25 @@ msgid ""
 "in. There can be multiple guests for TCP/IP games."
 msgstr ""
 
+#, fuzzy
+msgid ""
+"A multi-player game, with several human players competing against each other "
+"on a single map."
+msgstr "Супрацьстаянне некалькіх асобаў на адной мапе."
+
 msgid "Battle Only"
 msgstr "Асобны бой"
 
 msgid "Setup and play a battle without loading any map."
 msgstr "Наладзь і згуляй бітву, не загружаючы мапу."
+
+#, fuzzy
+msgid ""
+"Play a Hot Seat game, where 2 to 4 players play on the same device, "
+"switching into the 'Hot Seat' when it is their turn."
+msgstr ""
+"Гуляй за адным кампутарам з адной-пяццю іншымі асобамі, перадаючы кіраванне "
+"па чарзе."
 
 msgid "2 Players"
 msgstr "2 гульцы"
@@ -4579,6 +4902,9 @@ msgstr ""
 msgid "Defeat all enemy heroes and capture all enemy towns and castles."
 msgstr ""
 
+msgid "Your side defeats the opposing side."
+msgstr "Ваш бок перамагае супрацьлеглы."
+
 msgid "Run out of time. (Fail to win by a certain point.)"
 msgstr ""
 
@@ -4663,9 +4989,10 @@ msgstr "Сцэнар"
 msgid "Game Difficulty"
 msgstr "Складанасць"
 
+#, fuzzy
 msgid ""
 "This lets you change the starting difficulty at which you will play. Higher "
-"difficulty levels start you of with fewer resources, and at the higher "
+"difficulty levels start you off with fewer resources, and at the higher "
 "settings, give extra resources to the computer."
 msgstr ""
 "Дазваляе змяніць пачаткувую складанасць гульні. З падвышэннем узроўню "
@@ -4738,7 +5065,7 @@ msgstr ""
 
 msgid ""
 "%{color} player, you have lost your last town. If you do not conquer another "
-"town in next week, you will be eliminated."
+"town in the next week, you will be eliminated."
 msgstr ""
 
 msgid ""
@@ -4824,7 +5151,8 @@ msgstr ""
 msgid "Kingdom Summary"
 msgstr "Зводка аб каралеўстве"
 
-msgid "View a Summary of your Kingdom."
+#, fuzzy
+msgid "View a summary of your Kingdom."
 msgstr "Праглядзець зводку аб каралеўстве."
 
 msgid "Cast an adventure spell."
@@ -4833,7 +5161,7 @@ msgstr ""
 msgid "End Turn"
 msgstr ""
 
-msgid "End your turn and left the computer take its turn."
+msgid "End your turn and let the computer take its turn."
 msgstr ""
 
 msgid "Adventure Options"
@@ -4900,9 +5228,6 @@ msgstr ""
 msgid "A miniature view of the known world. Left click to move viewing area."
 msgstr ""
 
-msgid "World Map"
-msgstr "Мапа свету"
-
 msgid "Month: %{month} Week: %{week}"
 msgstr "Месяц: %{month} Тыдзень: %{week}"
 
@@ -4949,10 +5274,12 @@ msgid "Handicap"
 msgstr "Перашкода"
 
 #
+#, fuzzy
 msgid ""
-"This lets you change the handicap of a particular player. Only humans may be "
-"handicapped. Handicapped players start with fewer resources and earn 15 or "
-"30% fewer resources per turn for mild and severe handicaps, respectively."
+"This lets you change the handicap of a particular player. Only human players "
+"may have a handicap. Handicapped players start with fewer resources and earn "
+"15 or 30% fewer resources per turn for mild and severe handicaps, "
+"respectively."
 msgstr ""
 "Дазваляе перашкодзіць асобе, якая праз гэта пачне гульню з меншай колькасцю "
 "рэсурсаў і будзе атрымліваць на 15 альбо 30% менш рэсурсаў за ход з лёгкай і "
@@ -4964,7 +5291,8 @@ msgstr "%{color} гулец"
 msgid "No Handicap"
 msgstr ""
 
-msgid "No special restrictions on start resources and earning them per turn."
+msgid ""
+"No special restrictions on starting resources and resource income per turn."
 msgstr ""
 
 msgid "Mild Handicap"
@@ -4972,7 +5300,7 @@ msgstr ""
 
 #
 msgid ""
-"Mild handicapped players start with fewer resources and earn 15% fewer "
+"Players with mild handicap start with fewer resources and earn 15% fewer "
 "resources per turn."
 msgstr ""
 
@@ -4981,7 +5309,7 @@ msgstr ""
 
 #
 msgid ""
-"Severe handicapped players start with fewer resources and earn 30% fewer "
+"Players with severe handicap start with fewer resources and earn 30% fewer "
 "resources per turn."
 msgstr ""
 
@@ -5073,10 +5401,10 @@ msgstr "Праглядзець %{name}"
 msgid ", FPS: "
 msgstr ""
 
-msgid "%{object} robber"
+msgid "shipAndGraveyard|%{object} robber"
 msgstr ""
 
-msgid "%{object} raided"
+msgid "pyramid|%{object} raided"
 msgstr ""
 
 msgid "Ector"
@@ -5449,7 +5777,7 @@ msgid ""
 "The magical, soothing beauty of the Mermaids reaches you and your crew.\n"
 "Just for a moment, you forget your worries and bask in the beauty of the "
 "moment.\n"
-"The mermaids charms bless you with increased luck for your next combat."
+"The mermaids' charms bless you with increased luck for your next combat."
 msgstr ""
 
 msgid ""
@@ -5988,8 +6316,8 @@ msgid ""
 msgstr ""
 
 msgid ""
-"The captain sighs. \"You don't have enough money, eh?  You can't expect me "
-"to give my maps away for free!\""
+"The captain sighs. \"You don't have enough money, eh? You can't expect me to "
+"give my maps away for free!\""
 msgstr ""
 
 msgid ""
@@ -6329,6 +6657,16 @@ msgstr ""
 msgid "%{name} the %{race} (Level %{level})"
 msgstr ""
 
+msgid ""
+"'Spread' combat formation spreads the hero's units from the top to the "
+"bottom of the battlefield, with at least one empty space between each unit."
+msgstr ""
+
+msgid ""
+"'Grouped' combat formation bunches the hero's army together in the center of "
+"their side of the battlefield."
+msgstr ""
+
 msgid "Are you sure you want to dismiss this Hero?"
 msgstr ""
 
@@ -6390,24 +6728,24 @@ msgstr ""
 
 msgid ""
 "%{name} currently has %{point} spell points out of a maximum of %{max}. The "
-"maximum number of spell points is 10 times your knowledge. It is "
-"occasionally possible to have more than your maximum spell points via "
-"special events."
+"maximum number of spell points is 10 times the hero's knowledge. It is "
+"occasionally possible for the hero to have more than their maximum spell "
+"points via special events."
 msgstr ""
 
 msgid "%{name1} meets %{name2}"
-msgstr ""
-
-msgid "Town Portal"
-msgstr ""
-
-msgid "Select town to port to."
 msgstr ""
 
 msgid "Enemy heroes are now fully identifiable."
 msgstr ""
 
 msgid "Identify Hero"
+msgstr ""
+
+msgid "Select town to port to."
+msgstr ""
+
+msgid "Town Portal"
 msgstr ""
 
 msgid "The creatures are willing to join us!"
@@ -6433,19 +6771,19 @@ msgstr ""
 msgid "I fear these creatures are in the mood for a fight."
 msgstr ""
 
-msgid "Your attack skill is a bonus added to each creature's attack skill."
+msgid "The hero's attack skill is a bonus added to each unit's attack skill."
 msgstr ""
 
-msgid "Your defense skill is a bonus added to each creature's defense skill."
+msgid "The hero's defense skill is a bonus added to each unit's defense skill."
 msgstr ""
 
-msgid "Your spell power determines the length or power of a spell."
+msgid "The hero's spell power determines the duration or power of a spell."
 msgstr ""
 
 msgid ""
-"Your knowledge determines how many spell points your hero may have. Under "
-"normal circumstances, a hero is limited to 10 spell points per level of "
-"knowledge."
+"The hero's knowledge determines how many spell points the hero may have. "
+"Under normal circumstances, a hero is limited to 10 spell points per level "
+"of knowledge."
 msgstr ""
 
 msgid "Current Modifiers:"
@@ -6633,85 +6971,92 @@ msgid "%{skill} eliminates the movement penalty for rough terrain."
 msgstr ""
 
 msgid ""
-"%{skill} increases the damage done by range attacking creatures by %{count} "
-"percent."
+"%{skill} increases the damage done by the hero's range attacking creatures "
+"by %{count} percent, and eliminates the %{penalty} percent penalty when "
+"shooting past obstacles (e.g. castle walls)."
 msgstr ""
 
-msgid "%{skill} increases your hero's movement points by %{count} percent."
+msgid "%{skill} increases the hero's movement points by %{count} percent."
 msgstr ""
 
-msgid "%{skill} increases your hero's viewable area by one square."
-msgid_plural ""
-"%{skill} increases your hero's viewable area by %{count} squares."
+msgid "%{skill} increases the hero's viewable area by one square."
+msgid_plural "%{skill} increases the hero's viewable area by %{count} squares."
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
 msgid ""
-"%{skill} allows you to negotiate with monsters who are weaker than your "
-"group. "
-msgstr ""
-
-msgid "Approximately %{count} percent of the creatures may offer to join you."
-msgstr ""
-
-msgid "All of the creatures may offer to join you."
+"%{skill} allows the hero to negotiate with monsters who are weaker than "
+"their army, and reduces the cost of surrender."
 msgstr ""
 
 msgid ""
-"%{skill} increases your hero's movement points over water by %{count} "
-"percent."
+"Approximately %{count} percent of the creatures may offer to join the hero."
 msgstr ""
 
-msgid "%{skill} increases your hero's troops morale by %{count}."
+msgid "All of the creatures may offer to join the hero."
 msgstr ""
 
-msgid "%{skill} allows your hero to learn third level spells."
+msgid ""
+"The cost of surrender is reduced to %{percent} percent of the total cost of "
+"troops in the army."
 msgstr ""
 
-msgid "%{skill} allows your hero to learn fourth level spells."
+msgid ""
+"%{skill} increases the hero's movement points over water by %{count} percent."
 msgstr ""
 
-msgid "%{skill} allows your hero to learn fifth level spells."
+#, fuzzy
+msgid "%{skill} increases the hero's troops morale by %{count}."
+msgstr "Статуя павялічвае гарадcкія зборы на %{count} штодзень."
+
+msgid "%{skill} allows the hero to learn third level spells."
 msgstr ""
 
-msgid "%{skill} regenerates one additional spell point per day to your hero."
+msgid "%{skill} allows the hero to learn fourth level spells."
+msgstr ""
+
+msgid "%{skill} allows the hero to learn fifth level spells."
+msgstr ""
+
+msgid "%{skill} regenerates one additional spell point per day to the hero."
 msgid_plural ""
-"%{skill} regenerates %{count} additional spell points per day to your hero."
+"%{skill} regenerates %{count} additional spell points per day to the hero."
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-msgid "%{skill} increases your hero's luck by %{count}."
-msgstr ""
+#, fuzzy
+msgid "%{skill} increases the hero's luck by %{count}."
+msgstr "Статуя павялічвае гарадcкія зборы на %{count} штодзень."
 
 msgid ""
-"%{skill} gives your hero's catapult shots a greater chance to hit and do "
+"%{skill} gives the hero's catapult shots a greater chance to hit and do "
 "damage to castle walls."
 msgstr ""
 
 msgid ""
-"%{skill} gives your hero's catapult an extra shot, and each shot has a "
+"%{skill} gives the hero's catapult an extra shot, and each shot has a "
 "greater chance to hit and do damage to castle walls."
 msgstr ""
 
 msgid ""
-"%{skill} gives your hero's catapult an extra shot, and each shot "
+"%{skill} gives the hero's catapult an extra shot, and each shot "
 "automatically destroys any wall, except a fortified wall in a Knight castle."
 msgstr ""
 
 msgid ""
-"%{skill} gives your hero a %{count} percent chance to learn any given 1st or "
+"%{skill} gives the hero a %{count} percent chance to learn any given 1st or "
 "2nd level spell that was cast by an enemy during combat."
 msgstr ""
 
 msgid ""
-"%{skill} gives your hero a %{count} percent chance to learn any given 3rd "
+"%{skill} gives the hero a %{count} percent chance to learn any given 3rd "
 "level spell (or below) that was cast by an enemy during combat."
 msgstr ""
 
 msgid ""
-"%{skill} gives your hero a %{count} percent chance to learn any given 4th "
+"%{skill} gives the hero a %{count} percent chance to learn any given 4th "
 "level spell (or below) that was cast by an enemy during combat."
 msgstr ""
 
@@ -6721,7 +7066,7 @@ msgid ""
 msgstr ""
 
 msgid ""
-"Your hero produces %{count} gold pieces per day as tax revenue from estates."
+"The hero produces %{count} gold pieces per day as tax revenue from estates."
 msgstr ""
 
 msgid "Blue"
@@ -6794,7 +7139,7 @@ msgid "Experience"
 msgstr ""
 
 msgid ""
-"Experience allows your heroes to go up levels, increasing their primary and "
+"Experience allows your heroes to gain levels, increasing their primary and "
 "secondary skills."
 msgstr ""
 
@@ -6844,18 +7189,18 @@ msgid "luck|Irish"
 msgstr "Багатая"
 
 msgid ""
-"Bad luck sometimes falls on your armies in combat, causing their attacks to "
-"only do half damage."
+"Negative luck sometimes falls on the hero's units in combat, causing their "
+"attacks to only do half damage."
 msgstr ""
 
 msgid ""
-"Neutral luck means your armies will never get lucky or unlucky attacks on "
-"the enemy."
+"Neutral luck means the hero's units will never get lucky or unlucky attacks "
+"on the enemy."
 msgstr ""
 
 msgid ""
-"Good luck sometimes lets your armies get lucky attacks (double strength) in "
-"combat."
+"Positive luck sometimes lets the hero's units get lucky attacks (double "
+"strength) in combat."
 msgstr ""
 
 msgid "morale|Treason"
@@ -6879,15 +7224,15 @@ msgstr "Выдатная"
 msgid "morale|Blood!"
 msgstr "Лютая"
 
-msgid "Bad morale may cause your armies to freeze in combat."
+msgid "Negative morale may cause the hero's units to freeze in combat."
 msgstr ""
 
 msgid ""
-"Neutral morale means your armies will never be blessed with extra attacks or "
-"freeze in combat."
+"Neutral morale means the hero's units will never be blessed with extra "
+"attacks or freeze in combat."
 msgstr ""
 
-msgid "Good morale may give your armies extra attacks in combat."
+msgid "Positive morale may give the hero's units extra attacks in combat."
 msgstr ""
 
 msgid "Knight"
@@ -6909,14 +7254,6 @@ msgid "Necromancer"
 msgstr "Некрамант"
 
 msgid "Multi"
-msgstr ""
-
-msgid "race|Random"
-msgstr ""
-"Выпад-\n"
-"ковы"
-
-msgid "race|Neutral"
 msgstr ""
 
 msgid "doubleLined|Knight"
@@ -6950,9 +7287,6 @@ msgid "doubleLinedRace|Random"
 msgstr ""
 "Выпад-\n"
 "ковы"
-
-msgid "doubleLinedRace|Neutral"
-msgstr ""
 
 msgid "speed|Standing"
 msgstr "На месцы"
@@ -7208,7 +7542,7 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-msgid "Mines"
+msgid "Monster"
 msgstr ""
 
 msgid "Obelisk"
@@ -7297,6 +7631,10 @@ msgstr ""
 
 msgid "Random Monster - very strong"
 msgstr ""
+
+#, fuzzy
+msgid "Hero"
+msgstr "Даведацца аб героі"
 
 msgid "Nothing Special"
 msgstr ""
@@ -7416,12 +7754,6 @@ msgid "Freeman's Foundry"
 msgstr ""
 
 msgid "Reefs"
-msgstr ""
-
-msgid "Trees"
-msgstr ""
-
-msgid "Mountains"
 msgstr ""
 
 msgid "Volcano"
@@ -8063,44 +8395,54 @@ msgstr ""
 msgid "Invalid Artifact"
 msgstr ""
 
-msgid "The %{name} increases your knowledge by %{count}."
-msgstr ""
+#, fuzzy
+msgid "The %{name} increases the hero's knowledge by %{count}."
+msgstr "Статуя павялічвае гарадcкія зборы на %{count} штодзень."
 
 msgid "Ultimate Book of Knowledge"
 msgstr ""
 
-msgid "The %{name} increases your attack skill by %{count}."
-msgstr ""
+#, fuzzy
+msgid "The %{name} increases the hero's attack skill by %{count}."
+msgstr "Статуя павялічвае гарадcкія зборы на %{count} штодзень."
 
 msgid "Ultimate Sword of Dominion"
 msgstr ""
 
-msgid "The %{name} increases your defense skill by %{count}."
-msgstr ""
+#, fuzzy
+msgid "The %{name} increases the hero's defense skill by %{count}."
+msgstr "Статуя павялічвае гарадcкія зборы на %{count} штодзень."
 
 msgid "Ultimate Cloak of Protection"
 msgstr ""
 
-msgid "The %{name} increases your spell power by %{count}."
-msgstr ""
+#, fuzzy
+msgid "The %{name} increases the hero's spell power by %{count}."
+msgstr "Статуя павялічвае гарадcкія зборы на %{count} штодзень."
 
 msgid "Ultimate Wand of Magic"
 msgstr ""
 
-msgid "The %{name} increases your attack and defense skills by %{count} each."
-msgstr ""
+#, fuzzy
+msgid ""
+"The %{name} increases the hero's attack and defense skills by %{count} each."
+msgstr "Статуя павялічвае гарадcкія зборы на %{count} штодзень."
 
 msgid "Ultimate Shield"
 msgstr ""
 
-msgid "The %{name} increases your spell power and knowledge by %{count} each."
-msgstr ""
+#, fuzzy
+msgid ""
+"The %{name} increases the hero's spell power and knowledge by %{count} each."
+msgstr "Статуя павялічвае гарадcкія зборы на %{count} штодзень."
 
 msgid "Ultimate Staff"
 msgstr ""
 
-msgid "The %{name} increases each of your basic skills by %{count} points."
-msgstr ""
+#, fuzzy
+msgid ""
+"The %{name} increases each of the hero's basic skills by %{count} points."
+msgstr "Статуя павялічвае гарадcкія зборы на %{count} штодзень."
 
 msgid "Ultimate Crown"
 msgstr ""
@@ -8149,7 +8491,7 @@ msgid "Medal of Valor"
 msgstr ""
 
 #, fuzzy
-msgid "The %{name} increases your morale by %{count}."
+msgid "The %{name} increases the morale of the hero's army by %{count}."
 msgstr "Статуя павялічвае гарадcкія зборы на %{count} штодзень."
 
 msgid ""
@@ -8184,8 +8526,10 @@ msgstr ""
 msgid "Fizbin of Misfortune"
 msgstr ""
 
-msgid "The %{name} greatly decreases your morale by %{count}."
-msgstr ""
+#, fuzzy
+msgid ""
+"The %{name} greatly decreases the morale of the hero's army by %{count}."
+msgstr "Статуя павялічвае гарадcкія зборы на %{count} штодзень."
 
 msgid ""
 "You stumble upon a medal lying alongside the empty road. Adding the medal to "
@@ -8204,8 +8548,9 @@ msgstr ""
 msgid "Armored Gauntlets of Protection"
 msgstr ""
 
-msgid "The %{name} increase your defense skill by %{count}."
-msgstr ""
+#, fuzzy
+msgid "The %{name} increase the hero's defense skill by %{count}."
+msgstr "Статуя павялічвае гарадcкія зборы на %{count} штодзень."
 
 msgid ""
 "You encounter the infamous Black Knight! After a grueling duel ending in a "
@@ -8232,7 +8577,7 @@ msgstr ""
 msgid "Ballista of Quickness"
 msgstr ""
 
-msgid "The %{name} gives your catapult one extra shot per combat round."
+msgid "The %{name} gives the hero's catapult one extra shot per combat round."
 msgstr ""
 
 msgid ""
@@ -8312,8 +8657,9 @@ msgstr ""
 msgid "Endless Sack of Gold"
 msgstr ""
 
-msgid "The %{name} provides you with %{count} gold per day."
-msgstr ""
+#, fuzzy
+msgid "The %{name} provides the hero with %{count} gold per day."
+msgstr "Статуя павялічвае гарадcкія зборы на %{count} штодзень."
 
 msgid ""
 "A little leprechaun dances gleefully around a magic sack. Seeing you "
@@ -8342,8 +8688,9 @@ msgstr ""
 msgid "Nomad Boots of Mobility"
 msgstr ""
 
-msgid "The %{name} increase your movement on land."
-msgstr ""
+#, fuzzy
+msgid "The %{name} increase the hero's movement on land."
+msgstr "Статуя павялічвае гарадcкія зборы на %{count} штодзень."
 
 msgid ""
 "A Nomad trader seeks protection from a tribe of Goblins. For your "
@@ -8365,7 +8712,7 @@ msgid "Lucky Rabbit's Foot"
 msgstr ""
 
 #, fuzzy
-msgid "The %{name} increases your luck in combat by %{count}."
+msgid "The %{name} increases the luck of the hero's army by %{count}."
 msgstr "Статуя павялічвае гарадcкія зборы на %{count} штодзень."
 
 msgid ""
@@ -8402,8 +8749,9 @@ msgstr ""
 msgid "True Compass of Mobility"
 msgstr ""
 
-msgid "The %{name} increases your movement on land and sea."
-msgstr ""
+#, fuzzy
+msgid "The %{name} increases the hero's movement on land and sea."
+msgstr "Статуя павялічвае гарадcкія зборы на %{count} штодзень."
 
 msgid ""
 "An old man claiming to be an inventor asks you to try his latest invention. "
@@ -8413,8 +8761,9 @@ msgstr ""
 msgid "Sailor's Astrolabe of Mobility"
 msgstr ""
 
-msgid "The %{name} increases your movement on sea."
-msgstr ""
+#, fuzzy
+msgid "The %{name} increases the hero's movement on sea."
+msgstr "Статуя павялічвае гарадcкія зборы на %{count} штодзень."
 
 msgid ""
 "An old sea captain is being tortured by Ogres. You save him, and in return "
@@ -8436,7 +8785,8 @@ msgstr ""
 msgid "Enchanted Hourglass"
 msgstr ""
 
-msgid "The %{name} extends the duration of all your spells by %{count} turns."
+msgid ""
+"The %{name} extends the duration of all the hero's spells by %{count} turns."
 msgstr ""
 
 msgid ""
@@ -8448,7 +8798,7 @@ msgstr ""
 msgid "Gold Watch"
 msgstr ""
 
-msgid "The %{name} doubles the effectiveness of your hypnotize spells."
+msgid "The %{name} doubles the effectiveness of the hero's hypnotize spells."
 msgstr ""
 
 msgid ""
@@ -8471,7 +8821,8 @@ msgstr ""
 msgid "Ice Cloak"
 msgstr ""
 
-msgid "The %{name} halves all damage your troops take from cold spells."
+msgid ""
+"The %{name} halves all damage the hero's troops receive from cold spells."
 msgstr ""
 
 msgid ""
@@ -8483,7 +8834,8 @@ msgstr ""
 msgid "Fire Cloak"
 msgstr ""
 
-msgid "The %{name} halves all damage your troops take from fire spells."
+msgid ""
+"The %{name} halves all damage the hero's troops receive from fire spells."
 msgstr ""
 
 msgid ""
@@ -8496,7 +8848,9 @@ msgstr ""
 msgid "Lightning Helm"
 msgstr ""
 
-msgid "The %{name} halves all damage your troops take from lightning spells."
+msgid ""
+"The %{name} halves all damage the hero's troops receive from lightning "
+"spells."
 msgstr ""
 
 msgid ""
@@ -8509,8 +8863,8 @@ msgid "Evercold Icicle"
 msgstr ""
 
 msgid ""
-"The %{name} causes your cold spells to do %{count} percent more damage to "
-"enemy troops."
+"The %{name} causes the hero's cold spells to do %{count} percent more damage "
+"to enemy troops."
 msgstr ""
 
 msgid ""
@@ -8523,8 +8877,8 @@ msgid "Everhot Lava Rock"
 msgstr ""
 
 msgid ""
-"The %{name} causes your fire spells to do %{count} percent more damage to "
-"enemy troops."
+"The %{name} causes the hero's fire spells to do %{count} percent more damage "
+"to enemy troops."
 msgstr ""
 
 msgid ""
@@ -8538,8 +8892,8 @@ msgid "Lightning Rod"
 msgstr ""
 
 msgid ""
-"The %{name} causes your lightning spells to do %{count} percent more damage "
-"to enemy troops."
+"The %{name} causes the hero's lightning spells to do %{count} percent more "
+"damage to enemy troops."
 msgstr ""
 
 msgid ""
@@ -8552,7 +8906,7 @@ msgstr ""
 msgid "Snake-Ring"
 msgstr ""
 
-msgid "The %{name} halves the casting cost of all your bless spells."
+msgid "The %{name} halves the casting cost of all of the hero's bless spells."
 msgstr ""
 
 msgid ""
@@ -8564,8 +8918,8 @@ msgid "Ankh"
 msgstr ""
 
 msgid ""
-"The %{name} doubles the effectiveness of all your resurrect and animate "
-"spells."
+"The %{name} doubles the effectiveness of all of the hero's resurrect and "
+"animate spells."
 msgstr ""
 
 msgid ""
@@ -8577,7 +8931,8 @@ msgstr ""
 msgid "Book of Elements"
 msgstr ""
 
-msgid "The %{name} doubles the effectiveness of all your summoning spells."
+msgid ""
+"The %{name} doubles the effectiveness of all of the hero's summoning spells."
 msgstr ""
 
 msgid ""
@@ -8601,7 +8956,7 @@ msgstr ""
 msgid "Holy Pendant"
 msgstr ""
 
-msgid "The %{name} makes all your troops immune to curse spells."
+msgid "The %{name} makes all of the hero's troops immune to curse spells."
 msgstr ""
 
 msgid ""
@@ -8613,7 +8968,7 @@ msgstr ""
 msgid "Pendant of Free Will"
 msgstr ""
 
-msgid "The %{name} makes all your troops immune to hypnotize spells."
+msgid "The %{name} makes all of the hero's troops immune to hypnotize spells."
 msgstr ""
 
 msgid ""
@@ -8626,7 +8981,7 @@ msgstr ""
 msgid "Pendant of Life"
 msgstr ""
 
-msgid "The %{name} makes all your troops immune to death spells."
+msgid "The %{name} makes all of the hero's troops immune to death spells."
 msgstr ""
 
 msgid ""
@@ -8638,7 +8993,7 @@ msgstr ""
 msgid "Serenity Pendant"
 msgstr ""
 
-msgid "The %{name} makes all your troops immune to berserk spells."
+msgid "The %{name} makes all of the hero's troops immune to berserk spells."
 msgstr ""
 
 msgid ""
@@ -8651,7 +9006,7 @@ msgstr ""
 msgid "Seeing-eye Pendant"
 msgstr ""
 
-msgid "The %{name} makes all your troops immune to blindness spells."
+msgid "The %{name} makes all of the hero's troops immune to blindness spells."
 msgstr ""
 
 msgid ""
@@ -8664,7 +9019,7 @@ msgstr ""
 msgid "Kinetic Pendant"
 msgstr ""
 
-msgid "The %{name} makes all your troops immune to paralyze spells."
+msgid "The %{name} makes all of the hero's troops immune to paralyze spells."
 msgstr ""
 
 msgid ""
@@ -8676,7 +9031,7 @@ msgstr ""
 msgid "Pendant of Death"
 msgstr ""
 
-msgid "The %{name} makes all your troops immune to holy spells."
+msgid "The %{name} makes all of the hero's troops immune to holy spells."
 msgstr ""
 
 msgid ""
@@ -8688,7 +9043,8 @@ msgstr ""
 msgid "Wand of Negation"
 msgstr ""
 
-msgid "The %{name} makes all your troops immune to dispel magic spells."
+msgid ""
+"The %{name} makes all of the hero's troops immune to dispel magic spells."
 msgstr ""
 
 msgid ""
@@ -8701,8 +9057,8 @@ msgid "Golden Bow"
 msgstr ""
 
 msgid ""
-"The %{name} eliminates the %{count} percent penalty for your troops shooting "
-"past obstacles (e.g. castle walls)."
+"The %{name} eliminates the %{count} percent penalty for the hero's troops "
+"shooting past obstacles (e.g. castle walls)."
 msgstr ""
 
 msgid ""
@@ -8714,7 +9070,7 @@ msgid "Telescope"
 msgstr ""
 
 msgid ""
-"The %{name} increases the amount of terrain your hero reveals when "
+"The %{name} increases the amount of terrain the hero reveals when "
 "adventuring by %{count} extra square."
 msgstr ""
 
@@ -8731,7 +9087,7 @@ msgstr ""
 
 msgid ""
 "The %{name} reduces the cost of surrender to %{count} percent of the total "
-"cost of troops you have in your army."
+"cost of troops the hero has in their army."
 msgstr ""
 
 msgid ""
@@ -8743,8 +9099,10 @@ msgstr ""
 msgid "Wizard's Hat"
 msgstr ""
 
-msgid "The %{name} increases the duration of your spells by %{count} turns."
-msgstr ""
+#, fuzzy
+msgid ""
+"The %{name} increases the duration of the hero's spells by %{count} turns."
+msgstr "Статуя павялічвае гарадcкія зборы на %{count} штодзень."
 
 msgid ""
 "You see a Wizard fleeing from a Griffin and riding like the wind. The Wizard "
@@ -8756,7 +9114,7 @@ msgstr ""
 msgid "Power Ring"
 msgstr ""
 
-msgid "The %{name} returns %{count} extra spell points per day to your hero."
+msgid "The %{name} returns %{count} extra spell points per day to the hero."
 msgstr ""
 
 msgid ""
@@ -8769,7 +9127,9 @@ msgstr ""
 msgid "Ammo Cart"
 msgstr ""
 
-msgid "The %{name} provides endless ammunition for all your troops that shoot."
+msgid ""
+"The %{name} provides endless ammunition for all of the hero's troops that "
+"shoot."
 msgstr ""
 
 msgid ""
@@ -8780,8 +9140,9 @@ msgstr ""
 msgid "Tax Lien"
 msgstr ""
 
-msgid "The %{name} costs you %{count} gold pieces per day."
-msgstr ""
+#, fuzzy
+msgid "The %{name} costs the hero %{count} gold pieces per day."
+msgstr "Статуя павялічвае гарадcкія зборы на %{count} штодзень."
 
 msgid ""
 "Your big spending habits have earned you a massive tax bill that you can't "
@@ -8793,7 +9154,7 @@ msgstr ""
 msgid "Hideous Mask"
 msgstr ""
 
-msgid "The %{name} prevents all 'wandering' armies from joining your hero."
+msgid "The %{name} prevents all 'wandering' armies from joining the hero."
 msgstr ""
 
 msgid ""
@@ -8918,7 +9279,7 @@ msgstr ""
 msgid "Magic Book"
 msgstr ""
 
-msgid "The %{name} enables you to cast spells."
+msgid "The %{name} enables the hero to cast spells."
 msgstr ""
 
 msgid "Dummy 1"
@@ -8940,7 +9301,7 @@ msgid "Spell Scroll"
 msgstr ""
 
 msgid ""
-"This %{name} gives your hero the ability to cast the %{spell} spell if your "
+"This %{name} gives the hero the ability to cast the %{spell} spell if the "
 "hero has a Magic Book."
 msgstr ""
 
@@ -8954,10 +9315,11 @@ msgstr ""
 msgid "Arm of the Martyr"
 msgstr ""
 
+#, fuzzy
 msgid ""
-"The %{name} increases your spell power by %{count} but adds the undead "
+"The %{name} increases the hero's spell power by %{count} but adds the undead "
 "morale penalty."
-msgstr ""
+msgstr "Статуя павялічвае гарадcкія зборы на %{count} штодзень."
 
 msgid ""
 "One of the less intelligent members of your party picks up an arm off of the "
@@ -8970,8 +9332,9 @@ msgstr ""
 msgid "Breastplate of Anduran"
 msgstr ""
 
-msgid "The %{name} increases your defense by %{count}."
-msgstr ""
+#, fuzzy
+msgid "The %{name} increases the hero's defense by %{count}."
+msgstr "Статуя павялічвае гарадcкія зборы на %{count} штодзень."
 
 msgid ""
 "You come upon a sign. It reads: \"Here lies the body of Anduran. Bow and "
@@ -8999,7 +9362,8 @@ msgstr ""
 
 msgid ""
 "The %{name} combines the powers of the three Anduran artifacts. It provides "
-"maximum luck and morale for your troops and gives you the Town Portal spell."
+"maximum luck and morale for the hero's troops and gives the hero the Town "
+"Portal spell."
 msgstr ""
 
 msgid ""
@@ -9012,8 +9376,8 @@ msgid "Crystal Ball"
 msgstr ""
 
 msgid ""
-"The %{name} lets you get more specific information about monsters, enemy "
-"heroes, and castles nearby the hero who holds it."
+"The %{name} lets the hero get more specific information about monsters, "
+"enemy heroes, and castles nearby the hero."
 msgstr ""
 
 msgid ""
@@ -9099,8 +9463,11 @@ msgstr ""
 msgid "Masthead"
 msgstr ""
 
-msgid "The %{name} boosts your luck and morale by %{count} each in sea combat."
-msgstr ""
+#, fuzzy
+msgid ""
+"The %{name} boosts the hero's troops' luck and morale by %{count} each in "
+"sea combat."
+msgstr "Статуя павялічвае гарадcкія зборы на %{count} штодзень."
 
 msgid "Sphere of Negation"
 msgstr ""
@@ -9117,8 +9484,9 @@ msgstr ""
 msgid "Staff of Wizardry"
 msgstr ""
 
-msgid "The %{name} boosts your spell power by %{count}."
-msgstr ""
+#, fuzzy
+msgid "The %{name} boosts the hero's spell power by %{count}."
+msgstr "Статуя павялічвае гарадcкія зборы на %{count} штодзень."
 
 msgid ""
 "While out scaring up game, your troops find a mysterious staff levitating "
@@ -9130,8 +9498,9 @@ msgstr ""
 msgid "Sword Breaker"
 msgstr ""
 
-msgid "The %{name} increases your defense by %{count} and attack by 1."
-msgstr ""
+#, fuzzy
+msgid "The %{name} increases the hero's defense by %{count} and attack by 1."
+msgstr "Статуя павялічвае гарадcкія зборы на %{count} штодзень."
 
 msgid ""
 "A former Captain of the Guard admires your quest and gives you the enchanted "
@@ -9152,13 +9521,16 @@ msgstr ""
 msgid "Spade of Necromancy"
 msgstr ""
 
-msgid "The %{name} gives you increased necromancy skill."
+msgid "The %{name} gives the hero increased necromancy skill."
 msgstr ""
 
 msgid ""
 "A dirty shovel has been thrust into a dirt mound nearby. Upon investigation, "
 "you discover it to be the enchanted shovel of the Gravediggers, long thought "
 "lost by mortals."
+msgstr ""
+
+msgid "spellBonus|selected by user"
 msgstr ""
 
 msgid "Wood"
@@ -9614,6 +9986,45 @@ msgstr ""
 msgid "Sets Water Elementals to guard a mine against enemy armies."
 msgstr ""
 
+#, fuzzy
+msgid "Random Spell"
+msgstr ""
+"Выпад-\n"
+"ковы"
+
+msgid "Randomly selected spell of any level."
+msgstr ""
+
+msgid "Random 1st Level Spell"
+msgstr ""
+
+msgid "Randomly selected 1st level spell."
+msgstr ""
+
+msgid "Random 2nd Level Spell"
+msgstr ""
+
+msgid "Randomly selected 2nd level spell."
+msgstr ""
+
+msgid "Random 3rd Level Spell"
+msgstr ""
+
+msgid "Randomly selected 3rd level spell."
+msgstr ""
+
+msgid "Random 4th Level Spell"
+msgstr ""
+
+msgid "Randomly selected 4th level spell."
+msgstr ""
+
+msgid "Random 5th Level Spell"
+msgstr ""
+
+msgid "Randomly selected 5th level spell."
+msgstr ""
+
 msgid "Petrification"
 msgstr ""
 
@@ -9733,3 +10144,16 @@ msgid ""
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
 msgstr ""
+
+#~ msgid "on"
+#~ msgstr "укл."
+
+#~ msgid "Toggle colored cursor on or off. This is only an esthetic choice."
+#~ msgstr "Укл/выкл каляровы курсор. Гэта ўплывае толькі на візуал."
+
+#, fuzzy
+#~ msgid "Castles"
+#~ msgstr "Замак"
+
+#~ msgid "vs"
+#~ msgstr "супраць"

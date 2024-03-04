@@ -148,9 +148,11 @@ namespace
     }
 }
 
-void ListFiles::Append( const ListFiles & files )
+void ListFiles::Append( ListFiles && files )
 {
-    insert( end(), files.begin(), files.end() );
+    for ( std::string & file : files ) {
+        emplace_back( std::move( file ) );
+    }
 }
 
 void ListFiles::ReadDir( const std::string & path, const std::string & filter, bool sensitive )

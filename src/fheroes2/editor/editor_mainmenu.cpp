@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2023                                                    *
+ *   Copyright (C) 2023 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -48,6 +48,7 @@
 #include "ui_dialog.h"
 #include "ui_tool.h"
 #include "world.h"
+#include "world_object_uid.h"
 
 namespace
 {
@@ -255,13 +256,15 @@ namespace Editor
             if ( le.MouseClickLeft( scratchMap.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::EDITOR_FROM_SCRATCH_MAP_MENU ) ) {
                 const Maps::mapsize_t mapSize = selectMapSize();
                 if ( mapSize != Maps::ZERO ) {
-                    // TODO: Put this call to the 'world' instance to a separate '.cpp' file were will be all map editing functions.
-                    world.NewMaps( mapSize, mapSize );
+                    world.generateForEditor( mapSize );
+
+                    // Reset object UID to keep track of newly added objects.
+                    Maps::resetObjectUID();
 
                     fheroes2::fadeOutDisplay();
                     Game::setDisplayFadeIn();
 
-                    return Interface::EditorInterface::Get().startEdit();
+                    return Interface::EditorInterface::Get().startEdit( true );
                 }
                 return fheroes2::GameMode::EDITOR_NEW_MAP;
             }
@@ -299,21 +302,25 @@ namespace Editor
 
         fheroes2::validateFadeInAndRender();
 
-        const MapsFileInfoList lists = Maps::prepareResurrectionMapsFileInfoList();
+        const MapsFileInfoList lists = Maps::getResurrectionMapFileInfos( true, false );
         if ( lists.empty() ) {
             fheroes2::showStandardTextMessage( _( "Warning" ), _( "No maps available!" ), Dialog::OK );
             return fheroes2::GameMode::EDITOR_MAIN_MENU;
         }
 
         const Maps::FileInfo * fileInfo = Dialog::SelectScenario( lists );
-
-        if ( fileInfo ) {
-            fheroes2::showStandardTextMessage( _( "Warning!" ), "You have selected:\n" + fileInfo->name + "\n But the Map Editor is still in development.", Dialog::OK );
-        }
-        else {
-            showWIPInfo();
+        if ( fileInfo == nullptr ) {
+            return fheroes2::GameMode::EDITOR_MAIN_MENU;
         }
 
-        return fheroes2::GameMode::EDITOR_MAIN_MENU;
+        Interface::EditorInterface & editorInterface = Interface::EditorInterface::Get();
+        if ( !editorInterface.loadMap( fileInfo->filename ) ) {
+            return fheroes2::GameMode::CANCEL;
+        }
+
+        fheroes2::fadeOutDisplay();
+        Game::setDisplayFadeIn();
+
+        return Interface::EditorInterface::Get().startEdit( false );
     }
 }

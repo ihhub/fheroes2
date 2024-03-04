@@ -37,6 +37,8 @@ namespace fheroes2
 
 namespace Color
 {
+    // !!! IMPORTANT !!!
+    // Do NOT change the order of the items as they are used for the map format.
     enum : uint8_t
     {
         NONE = 0x00,

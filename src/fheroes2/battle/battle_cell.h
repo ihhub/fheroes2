@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -53,12 +53,14 @@ namespace Battle
         AROUND = RIGHT_SIDE | LEFT_SIDE
     };
 
-    class Cell
+    class Cell final
     {
     public:
         explicit Cell( const int32_t idx );
         Cell( const Cell & ) = delete;
         Cell( Cell && ) = default;
+
+        ~Cell() = default;
 
         Cell & operator=( const Cell & ) = delete;
         Cell & operator=( Cell && ) = delete;
@@ -93,7 +95,7 @@ namespace Battle
         std::array<fheroes2::Point, 7> _coord;
     };
 
-    class Position : protected std::pair<Cell *, Cell *>
+    class Position final : protected std::pair<Cell *, Cell *>
     {
     public:
         Position()
@@ -102,8 +104,9 @@ namespace Battle
 
         void Set( const int32_t head, const bool wide, const bool reflect );
         void Swap();
+
         bool isReflect() const;
-        bool contains( int cellIndex ) const;
+        bool contains( const int32_t idx ) const;
 
         // Returns the position that a given unit would occupy after moving to the cell
         // with a given index (without taking into account the pathfinder's info) or an
@@ -116,11 +119,40 @@ namespace Battle
         // the position reachability instead of the speed returned by 'unit'.
         static Position GetReachable( const Unit & unit, const int32_t dst, const std::optional<uint32_t> speed = {} );
 
+        bool isEmpty() const;
+
+        bool isValidForUnit( const Unit & unit ) const;
+
+        bool isValidForUnit( const Unit * unit ) const
+        {
+            if ( unit == nullptr ) {
+                return false;
+            }
+
+            return isValidForUnit( *unit );
+        }
+
         fheroes2::Rect GetRect() const;
-        Cell * GetHead();
-        const Cell * GetHead() const;
-        Cell * GetTail();
-        const Cell * GetTail() const;
+
+        const Cell * GetHead() const
+        {
+            return first;
+        }
+
+        const Cell * GetTail() const
+        {
+            return second;
+        }
+
+        Cell * GetHead()
+        {
+            return first;
+        }
+
+        Cell * GetTail()
+        {
+            return second;
+        }
 
         bool operator<( const Position & other ) const;
     };

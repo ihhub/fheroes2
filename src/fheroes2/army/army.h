@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -86,7 +86,7 @@ public:
     bool AllTroopsAreTheSame() const;
 
     bool JoinTroop( const Troop & troop );
-    bool JoinTroop( const Monster & mons, uint32_t count, bool emptySlotFirst );
+    bool JoinTroop( const Monster & mons, const uint32_t count, const bool emptySlotFirst );
     bool CanJoinTroop( const Monster & ) const;
 
     virtual double GetStrength() const;
@@ -173,6 +173,9 @@ public:
 
     static NeutralMonsterJoiningCondition GetJoinSolution( const Heroes &, const Maps::Tiles &, const Troop & );
 
+    // Returns the strength of the average starting army for a given hero (not taking into account the hero's bonuses)
+    static double getStrengthOfAverageStartingArmy( const Heroes * hero );
+
     static void drawSingleDetailedMonsterLine( const Troops & troops, int32_t cx, int32_t cy, int32_t width );
     static void drawMultipleMonsterLines( const Troops & troops, int32_t posX, int32_t posY, int32_t lineWidth, bool isCompact, const bool isDetailedView,
                                           const bool isGarrisonView = false, const uint32_t thievesGuildsCount = 0 );
@@ -189,9 +192,11 @@ public:
     ~Army() override = default;
 
     const Troops & getTroops() const;
-    // Soft reset means reset to the default army (a few T1 and T2 units).
-    // Hard reset means reset to the minimum army (strictly one T1 unit).
-    void Reset( const bool soft = false );
+
+    // Resets the army. If the army doesn't have a commanding hero, then it makes the army empty. Otherwise, if 'defaultArmy' is set to true, then it creates a default
+    // army of the commanding hero's faction (several units of level 1 and 2). Otherwise, a minimum army is created, consisting of exactly one monster of the first level
+    // of the commanding hero's faction.
+    void Reset( const bool defaultArmy = false );
     void setFromTile( const Maps::Tiles & tile );
 
     int GetColor() const;
@@ -246,9 +251,10 @@ public:
 
     void resetInvalidMonsters() const;
 
-    // Performs the pre-battle arrangement for the castle (or town) defense, trying to add reinforcements from the garrison. The
-    // logic of combining troops for the castle defense differs from the original game, see the implementation for details.
-    void ArrangeForCastleDefense( Army & garrison );
+    // Performs the pre-battle arrangement for the castle (or town) defense, trying to add reinforcements from the garrison. Returns
+    // true if at least one unit from the garrison was moved to the army as reinforcements, otherwise returns false. The logic of
+    // combining troops for the castle defense differs from the original game, see the implementation for details.
+    bool ArrangeForCastleDefense( Army & garrison );
     // Optimizes the arrangement of troops to pass through the whirlpool (moves one weakest unit to a separate slot, if possible)
     void ArrangeForWhirlpool();
 

@@ -314,7 +314,7 @@ fheroes2::GameMode Game::DisplayHighScores( const bool isCampaign )
             inputPlayerName( playerName );
 
             selectedEntryIndex = highScoreDataContainer.registerScoreStandard(
-                { std::move( lang ), playerName, Settings::Get().CurrentFileInfo().name, completionTime, daysPassed, rating, world.GetMapSeed() } );
+                { std::move( lang ), playerName, Settings::Get().getCurrentMapInfo().name, completionTime, daysPassed, rating, world.GetMapSeed() } );
         }
 
         highScoreDataContainer.save( highScoreDataPath );

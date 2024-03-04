@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -28,26 +28,17 @@
 
 namespace ObjLav2
 {
-    bool isAction( uint32_t index );
     bool isShadow( const uint8_t index );
-    int GetPassable( const uint8_t index );
-    int GetActionObject( uint32_t index );
 }
 
 namespace ObjLav3
 {
-    bool isAction( uint32_t index );
     bool isShadow( const uint8_t index );
-    int GetPassable( const uint8_t index );
-    int GetActionObject( uint32_t index );
 }
 
 namespace ObjLava
 {
-    bool isAction( uint32_t index );
     bool isShadow( const uint8_t index );
-    int GetPassable( const uint8_t index );
-    int GetActionObject( uint32_t index );
 }
 
 #endif

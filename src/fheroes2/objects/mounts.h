@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -26,22 +26,14 @@
 
 #include <cstdint>
 
-#include "mp2.h"
-
 namespace ObjMnts1
 {
-    bool isAction( uint32_t index );
     bool isShadow( const uint8_t index );
-    int GetPassable( int icn, const uint8_t index );
-    MP2::MapObjectType GetActionObject( uint32_t index );
 }
 
 namespace ObjMnts2
 {
-    bool isAction( uint32_t index );
     bool isShadow( const uint8_t index );
-    int GetPassable( int icn, const uint8_t index );
-    MP2::MapObjectType GetActionObject( uint32_t index );
 }
 
 #endif

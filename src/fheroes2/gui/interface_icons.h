@@ -35,7 +35,7 @@
 class Castle;
 class Heroes;
 
-enum icons_t
+enum icons_t : uint8_t
 {
     ICON_HEROES = 0x01,
     ICON_CASTLES = 0x02,

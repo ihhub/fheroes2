@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2023                                             *
+ *   Copyright (C) 2021 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -96,9 +96,9 @@ namespace fheroes2
         return _fileStream.getRaw( it->second.second );
     }
 
-    std::set<std::string> H2DReader::getAllFileNames() const
+    std::set<std::string, std::less<>> H2DReader::getAllFileNames() const
     {
-        std::set<std::string> names;
+        std::set<std::string, std::less<>> names;
 
         for ( const auto & value : _fileNameAndOffset ) {
             names.insert( value.first );
@@ -160,7 +160,7 @@ namespace fheroes2
 
     bool H2DWriter::add( H2DReader & reader )
     {
-        const std::set<std::string> names = reader.getAllFileNames();
+        const std::set<std::string, std::less<>> names = reader.getAllFileNames();
 
         for ( const std::string & name : names ) {
             if ( !add( name, reader.getFile( name ) ) ) {
@@ -173,6 +173,9 @@ namespace fheroes2
 
     bool readImageFromH2D( H2DReader & reader, const std::string & name, Sprite & image )
     {
+        // TODO: Store in h2d images the 'isSingleLayer' state to disable and skip transform layer for such images.
+        assert( !image.singleLayer() );
+
         const std::vector<uint8_t> & data = reader.getFile( name );
         if ( data.size() < 4 + 4 + 4 + 4 + 1 ) {
             // Empty or invalid image.
@@ -191,7 +194,6 @@ namespace fheroes2
         const size_t size = static_cast<size_t>( width * height );
         image.resize( width, height );
         memcpy( image.image(), data.data() + 4 + 4 + 4 + 4, size );
-        // TODO: Store in h2d images the 'isSingleLayer' state to disable and skip transform layer for such images.
         memcpy( image.transform(), data.data() + 4 + 4 + 4 + 4 + size, size );
 
         image.setPosition( x, y );
@@ -201,7 +203,8 @@ namespace fheroes2
 
     bool writeImageToH2D( H2DWriter & writer, const std::string & name, const Sprite & image )
     {
-        assert( !image.empty() );
+        // TODO: Store in h2d images the 'isSingleLayer' state to disable and skip transform layer for such images.
+        assert( !image.empty() && !image.singleLayer() );
 
         StreamBuf stream;
         stream.putLE32( static_cast<uint32_t>( image.width() ) );

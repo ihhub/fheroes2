@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2023                                                    *
+ *   Copyright (C) 2023 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -35,6 +35,8 @@ class Spell;
 namespace Maps
 {
     class Tiles;
+
+    struct ObjectInfo;
 
     // ATTENTION: If you add any new enumeration make sure that value 0 corresponds to empty / visited object
     //            so we don't need to write special logic in resetObjectInfoOnTile().
@@ -92,7 +94,7 @@ namespace Maps
         ALL_OBJECTS = TERRAIN_OBJECTS | CASTLES | MONSTERS | HEROES | ARTIFACTS | STREAMS | ROADS | TREASURES,
     };
 
-    // Only for MP2::OBJ_MINES.
+    // Only for MP2::OBJ_MINE.
     int32_t getMineSpellIdFromTile( const Tiles & tile );
     void setMineSpellOnTile( Tiles & tile, const int32_t spellId );
     void removeMineSpellFromTile( Tiles & tile );
@@ -180,10 +182,11 @@ namespace Maps
     bool updateRoadOnTile( Tiles & tile, const bool setRoad );
     bool updateStreamOnTile( Tiles & tile, const bool setStream );
 
-    void setRandomMonsterOnTile( Tiles & tile, const Monster & mons );
-    void setEditorHeroOnTile( Tiles & tile, const int32_t heroType );
-
+    // Removes object and all its parts in around tiles by UID. Returns true is object is found and removed.
+    bool removeObject( Tiles & tile, const uint32_t uid );
     bool removeObjectTypeFromTile( Tiles & tile, const MP2::ObjectIcnType objectIcnType );
     bool eraseObjectsOnTiles( const int32_t startTileId, const int32_t endTileId, const uint32_t objectTypesToErase );
     bool eraseOjects( Tiles & tile, const uint32_t objectTypesToErase );
+
+    bool setObjectOnTile( Tiles & tile, const ObjectInfo & info, const bool updateMapPassabilities );
 }

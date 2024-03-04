@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -50,7 +50,7 @@ namespace Maps
     using Indexes = MapsIndexes;
 
     const char * SizeString( int size );
-    const char * GetMinesName( int res );
+    const char * GetMineName( const int resourceType );
 
     int GetDirection( int from, int to );
     int32_t GetDirectionIndex( const int32_t from, const int direction );
@@ -84,7 +84,12 @@ namespace Maps
     // tile without triggering a monster attack.
     Indexes getMonstersProtectingTile( const int32_t tileIndex, const bool checkObjectOnTile = true );
 
-    Indexes GetObjectPositions( const MP2::MapObjectType objectType, bool ignoreHeroes );
+    // This function always ignores heroes.
+    bool doesObjectExistOnMap( const MP2::MapObjectType objectType );
+
+    // This function always ignores heroes.
+    Indexes GetObjectPositions( const MP2::MapObjectType objectType );
+
     Indexes GetObjectPositions( int32_t center, const MP2::MapObjectType objectType, bool ignoreHeroes );
 
     void ClearFog( const int32_t tileIndex, int scoutingDistance, const int playerColor );

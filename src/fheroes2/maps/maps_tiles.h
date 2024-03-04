@@ -67,6 +67,12 @@ namespace Maps
 
         ~TilesAddon() = default;
 
+        // Returns true if it can be passed be hero/boat: addon's layer type is SHADOW or TERRAIN.
+        bool isPassabilityTransparent() const
+        {
+            return _layerType == SHADOW_LAYER || _layerType == TERRAIN_LAYER;
+        }
+
         bool operator==( const TilesAddon & addon ) const
         {
             return ( _uid == addon._uid ) && ( _layerType == addon._layerType ) && ( _objectIcnType == addon._objectIcnType ) && ( _imageIndex == addon._imageIndex );
@@ -104,6 +110,11 @@ namespace Maps
         }
 
         void Init( int32_t index, const MP2::mp2tile_t & mp2 );
+
+        void setIndex( const int32_t index )
+        {
+            _index = index;
+        }
 
         int32_t GetIndex() const
         {
@@ -173,6 +184,9 @@ namespace Maps
         {
             return objectType == _mainObjectType;
         }
+
+        // Returns true if tile's main and bottom layer addons do not contain any objects: layer type is SHADOW or TERRAIN.
+        bool isPassabilityTransparent() const;
 
         // Checks whether it is possible to move into this tile from the specified direction
         bool isPassableFrom( const int direction ) const
@@ -253,6 +267,11 @@ namespace Maps
 
         void pushTopLayerAddon( const MP2::mp2addon_t & ma );
 
+        void pushTopLayerAddon( TilesAddon ta )
+        {
+            _addonTopLayer.emplace_back( ta );
+        }
+
         const std::list<TilesAddon> & getBottomLayerAddons() const
         {
             return _addonBottomLayer;
@@ -266,6 +285,13 @@ namespace Maps
         const std::list<TilesAddon> & getTopLayerAddons() const
         {
             return _addonTopLayer;
+        }
+
+        void moveMainAddonToBottomLayer()
+        {
+            if ( _mainAddon._objectIcnType != MP2::OBJ_ICN_TYPE_UNKNOWN ) {
+                _addonBottomLayer.emplace_back( _mainAddon );
+            }
         }
 
         void AddonsSort();
@@ -394,11 +420,11 @@ namespace Maps
 
         uint8_t _fogColors{ Color::ALL };
 
-        // Fog direction to render fog in Game Area.
-        uint16_t _fogDirection{ DIRECTION_ALL };
-
         // Heroes can only summon neutral empty boats or empty boats belonging to their kingdom.
         uint8_t _boatOwnerColor{ Color::NONE };
+
+        // Fog direction to render fog in Game Area.
+        uint16_t _fogDirection{ DIRECTION_ALL };
 
         // This field does not persist in savegame.
         uint32_t _region{ REGION_NODE_BLOCKED };

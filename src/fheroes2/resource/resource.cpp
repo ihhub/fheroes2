@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -28,6 +28,7 @@
 #include <cstddef>
 #include <memory>
 #include <ostream>
+#include <tuple>
 #include <utility>
 #include <vector>
 
@@ -353,9 +354,16 @@ Funds & Funds::operator/=( const int32_t div )
     return *this;
 }
 
-bool Funds::operator>=( const Funds & pm ) const
+bool Funds::operator==( const Funds & other ) const
 {
-    return wood >= pm.wood && mercury >= pm.mercury && ore >= pm.ore && sulfur >= pm.sulfur && crystal >= pm.crystal && gems >= pm.gems && gold >= pm.gold;
+    return std::tie( wood, mercury, ore, sulfur, crystal, gems, gold )
+           == std::tie( other.wood, other.mercury, other.ore, other.sulfur, other.crystal, other.gems, other.gold );
+}
+
+bool Funds::operator>=( const Funds & other ) const
+{
+    return wood >= other.wood && mercury >= other.mercury && ore >= other.ore && sulfur >= other.sulfur && crystal >= other.crystal && gems >= other.gems
+           && gold >= other.gold;
 }
 
 std::string Funds::String() const

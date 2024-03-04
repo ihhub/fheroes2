@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2023                                             *
+ *   Copyright (C) 2021 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -241,15 +241,16 @@ namespace
 
         drawOptions();
 
-        const auto refreshWindow = [&drawOptions, &emptyDialogRestorer, &display]() {
-            emptyDialogRestorer.restore();
-            drawOptions();
-            display.render( emptyDialogRestorer.rect() );
-        };
-
         const fheroes2::Point buttonOffset( 112 + windowRoi.x, 362 + windowRoi.y );
         fheroes2::Button okayButton( buttonOffset.x, buttonOffset.y, isEvilInterface ? ICN::BUTTON_SMALL_OKAY_EVIL : ICN::BUTTON_SMALL_OKAY_GOOD, 0, 1 );
         okayButton.draw();
+
+        const auto refreshWindow = [&drawOptions, &emptyDialogRestorer, &okayButton, &display]() {
+            emptyDialogRestorer.restore();
+            drawOptions();
+            okayButton.draw();
+            display.render( emptyDialogRestorer.rect() );
+        };
 
         display.render();
 
@@ -374,7 +375,7 @@ namespace
             }
             else if ( le.MousePressRight( windowEnemySpeedRoi ) ) {
                 fheroes2::showStandardTextMessage( _( "Enemy Speed" ),
-                                                   _( "Sets the speed that A.I. heroes move at. You can also elect not to view A.I. movement at all." ), 0 );
+                                                   _( "Sets the speed that computer heroes move at. You can also elect not to view computer movement at all." ), 0 );
             }
             else if ( le.MousePressRight( windowHotKeyRoi ) ) {
                 fheroes2::showStandardTextMessage( _( "Hot Keys" ), _( "Check and configure all the hot keys present in the game." ), 0 );
@@ -397,10 +398,7 @@ namespace
             if ( isTextSupportModeEnabled != conf.isTextSupportModeEnabled() ) {
                 isTextSupportModeEnabled = conf.isTextSupportModeEnabled();
 
-                emptyDialogRestorer.restore();
-                drawOptions();
-
-                display.render( emptyDialogRestorer.rect() );
+                refreshWindow();
             }
         }
 

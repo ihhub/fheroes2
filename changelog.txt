@@ -1,3 +1,145 @@
+version 1.0.12 (07 February 2024)
+- update the Russian translation
+- update the Spanish translation
+- correct icons alignment on the hero meeting screen
+- update the Polish translation
+- fix the retaliation of archers attacked by an ally under the influence of Berserker or Hypnotize spells, improve the AI usage of Hypnotize spell in general
+- fix incorrect Artesian Spring evaluation by the AI
+- make rules for AI surrender and retreat more unified
+- fix Oasis object passability
+- always offer one native hero at the beginning of a new week
+- puzzle and View World dialogs rendering improvements
+- implement Landscape Miscellaneous (non-action) objects placing in Editor
+- fix OKAY button translation for Interface Settings dialog after any setting change
+- make the AI not to know what objects contain
+- fix issue when Blind or Paralyze has been applied to a hypnotized unit during its turn
+- implement Adventure (action) Miscellaneous objects placing in Editor
+- tune the AI performance at different difficulty levels
+- add surrender cost to battle result dialog
+- improve overall image processing performance
+- update spell points, formations and artifacts descriptions
+- add infos on the cost of surrender
+- allow AI units covering an archer with the AREA_SHOT capability to attack neighboring units on their own
+- use proper name for PoL campaign in High Scores
+- use CP1257 code page for Lithaunian
+- offer the Wisdom skill to the heroes of "magic" classes on a mandatory basis at least once every three level-ups
+- implement Mountains, Rocks and Trees placing in the Editor
+- make the AI attack human heroes that have a greater chance to win than the AI heroes
+- implement Power-ups object placement in the Editor
+- allow AI units that ignore retaliatory strikes to attack neighboring enemy units while covering archers
+- avoid visiting Oasis and Watering Hole objects by AI heroes if they bring no benefit
+- make AI hero behavior depend on the time spent on the map
+- improve fog discovery by the AI heroes
+- adjust text in the skill popup dialog
+- implement Mines placing in the Editor
+- improve AI hero interaction with Witch's Hut object
+- allow the AI-controlled hero to surrender if his kingdom has sufficient gold reserves
+- add text width-adapted CANCEL button, change to StandardWindow for Resolution, Language, Adventure, File and Scenario Info dialogs
+- update Hungarian translation
+- add dwellings into the Editor
+- fix rare fog of war rendering issues
+- allow AI heroes to surrender if the conditions of retreat have been met, but it is impossible to retreat
+- implement the AI logic to transfer the slowest troops to the garrison at the end of the turn to try to get a movement bonus on the next turn
+- mark fheroes2 as DPI-aware on Windows
+- speed up image loading
+- speed up file loading and reduce memory usage on the Adventure Map
+- improve the AI logic for pay-to-hire dwellings on the Adventure Map
+- improve the AI heuristics of covering shooters when using defensive tactics
+- update buttons and add popup windows for them in Battle Only mode
+- use the "cautious offensive" tactics for AI only against melee-only armies without the distant attack potential (including damage spells)
+- update the Swedish translation
+- fix heroes with no names
+- add base code to load new map format files
+- use singular Mine form for the corresponding object
+- fix inaccurate Jail object removal
+- add missing rules for the plural in Hungarian language
+- restrict secondary skill name and level to the UI area
+- fix too wide text in quick hero info dialog
+- hide swap army/artifact buttons in the Battle Only mode
+- update several text descriptions
+- add Campfire object in the Editor
+- take into account SHIFT and CAPS LOCK being used at the same time
+- make radar rendering optimization
+- fix the AI spell damage estimation logic for units immune to the given spell
+- rework editor instrument groups: add new buttons, rework instrument panel, add evil interface
+- fix multiple spellbook-related issues in the Battle Only mode
+- update French translation
+- show an error when it is not possible to save a game on a hard disk
+
+version 1.0.11 (23 December 2023)
+- improve the logic of AI defensive tactics
+- add Tree of Knowledge claimed and cost info to quick info dialog
+- add a different object popup window logic for the Editor
+- implement town and castle placing in the Editor
+- update the Spanish translation
+- update the French translation and add missing offset for an A with accent
+- update Bulgarian translation
+- increase width and height of the Campaign Difficulty selection dialog
+- make speed of fade-in & fade-out animations for AI-controlled heroes dependent on the AI speed setting
+- speed up battle pathfinder logic
+- update Spanish translation
+- add Spanish and Portuguese button font letters
+- fix invalid focus update after AI hero battle
+- update Danish translation
+- speed up the original map format reading
+- fix a crash with castle overlapping inside a map
+- add basic logic to load and save maps through Editor UI
+- add text rendering within a given ROI
+- do not show quick info for hidden buttons inside castle building info dialog
+- add missing AI team alliance to Evil campaign's 6th scenario
+- update Swedish translation
+- update Hungarian translation
+- update Vietnamese Translation
+- fix update of the morale/luck indicator when changing the hero in the Battle Only mode
+- add base map file format for the Editor
+- add Hotkeys categories for the future UI improvements
+- fix scroll location on file deletion
+- rework Battle Only mode
+- add cell selection in Details mode for the Editor
+- speed up map loading for New Game
+- allow application closure by close button if no resources available
+- fix multi-font text offset calculation
+- properly evaluate potential attack positions for wide units
+- correctly manage touch device events
+- add ability to place Ocean Objects within the Editor
+
+version 1.0.10 (18 November 2023)
+- update Russian translation
+- rework Town Portal dialog
+- add artifact placement in the Editor
+- make Oracle dialog use selected interface mode (Good/Evil)
+- add treasure placement in the Editor
+- update hero status after digging on the Adventure Map
+- fix player names overlapping in Oracle and Thieves' Guild dialogs
+- fix dialog frames not being consistent for the same size windows
+- speed up monochrome cursors loading
+- fix rendering issue in Kingdom Overview dialog while dismissing a hero
+- fix castle and hero lists' updates after dismissing a hero in Kingdom Overview dialog
+- fix invalid attack positions from moat during battle
+- add support for right SHIFT, CTRL and ALT hotkeys
+- AI takes into account the spell immunity when calculating the effectiveness of mass damage spells
+- update Hungarian translation
+- fix incorrect AI estimation for moves during battle when a battlefield contains objects
+- update Vietnamese translation
+- fix several issues with loading ICN resources
+- add support for the future new heroes
+- fix the logic of purchasing a boat in a shipyard
+- increase the priority of those enemy units that have not yet got their turn, for proper AI decision making
+- add hero action button image
+- fix spelling in campaign text
+- display 0 shots during battle for archers with no shots left
+- fix random generator in normal and auto-combat modes
+- fix castle dialog rendering issues
+- adjust welcome window text at the first game launch
+- teach AI to use the marketplace to accelerate the development of their castles
+- update German translation
+- implement erase tool in the Editor
+- fix recruit dialog's MIN/MAX buttons when switching between creature upgrades
+- update Swedish translation
+- show proper Quick Info window for a hero during battle
+- fix troops' sprites overlapping in quick info
+- prioritize hiring those heroes whose portraits are not used by scenario specific heroes
+
 version 1.0.9 (11 October 2023)
 - add "tent visited" info to barrier quick info dialog
 - update Vietnamese translation

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2023                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Josh Matthews  <josh@joshmatthews.net>          *
@@ -122,7 +122,7 @@ public:
     void SetSpellPoints( const uint32_t points );
     bool isPotentSpellcaster() const;
 
-    // Returns all spells present in Magic Book and in Scrolls.
+    // Returns all spells that the hero can cast (including spells from the spell book and spell scrolls)
     SpellStorage getAllSpells() const;
 
     const SpellStorage & getMagicBookSpells() const
@@ -142,7 +142,11 @@ public:
     bool HaveSpell( const Spell & spell, const bool skip_bag = false ) const;
     void AppendSpellToBook( const Spell &, const bool without_wisdom = false );
     void AppendSpellsToBook( const SpellStorage &, const bool without_wisdom = false );
+
+    // Adds the spell book to the artifact bag if it is not already there. Returns true if the spell book was actually added to the artifact bag, otherwise returns false.
     bool SpellBookActivate();
+    // Removes the spell book artifact from the artifact bag, if it is there, and removes all spells from the hero's spell book.
+    void SpellBookDeactivate();
 
     BagArtifacts & GetBagArtifacts()
     {
@@ -159,8 +163,8 @@ public:
     void LoadDefaults( const int type, const int race );
 
 protected:
-    friend StreamBase & operator<<( StreamBase &, const HeroBase & );
-    friend StreamBase & operator>>( StreamBase &, HeroBase & );
+    friend StreamBase & operator<<( StreamBase & msg, const HeroBase & hero );
+    friend StreamBase & operator>>( StreamBase & msg, HeroBase & hero );
 
     uint32_t magic_point;
     uint32_t move_point;
@@ -169,7 +173,7 @@ protected:
     BagArtifacts bag_artifacts;
 };
 
-StreamBase & operator<<( StreamBase &, const HeroBase & );
-StreamBase & operator>>( StreamBase &, HeroBase & );
+StreamBase & operator<<( StreamBase & msg, const HeroBase & hero );
+StreamBase & operator>>( StreamBase & msg, HeroBase & hero );
 
 #endif

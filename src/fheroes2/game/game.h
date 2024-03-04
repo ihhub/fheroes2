@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -100,7 +100,6 @@ namespace Game
     void DialogPlayers( int color, std::string title, std::string message );
 
     uint32_t getAdventureMapAnimationIndex();
-
     void updateAdventureMapAnimationIndex();
 
     uint32_t GetRating();
@@ -108,14 +107,21 @@ namespace Game
     uint32_t GetLostTownDays();
     uint32_t GetWhirlpoolPercent();
     uint32_t SelectCountPlayers();
+
     void PlayPickupSound();
+
     void OpenHeroesDialog( Heroes & hero, bool updateFocus, const bool renderBackgroundDialog, const bool disableDismiss = false );
     void OpenCastleDialog( Castle & castle, bool updateFocus = true, const bool renderBackgroundDialog = true );
-    // Returns the difficulty level based on the type of game.
-    int getDifficulty();
+
     void LoadPlayers( const std::string & mapFileName, Players & players );
-    void saveDifficulty( const int difficulty );
     void SavePlayers( const std::string & mapFileName, const Players & players );
+
+    // Returns true if the currently active game is a campaign, otherwise returns false
+    bool isCampaign();
+
+    // Returns the difficulty level of the currently active game, depending on its type (see the implementation for details)
+    int getDifficulty();
+    void saveDifficulty( const int difficulty );
 
     int32_t GetStep4Player( const int32_t currentId, const int32_t width, const int32_t totalCount );
 

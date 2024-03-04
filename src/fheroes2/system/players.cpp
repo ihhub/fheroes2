@@ -324,40 +324,38 @@ void Players::Init( int colors )
 
 void Players::Init( const Maps::FileInfo & fi )
 {
-    if ( fi.kingdomColors ) {
-        clear();
-        const Colors vcolors( fi.kingdomColors );
-
-        Player * first = nullptr;
-
-        for ( Colors::const_iterator it = vcolors.begin(); it != vcolors.end(); ++it ) {
-            Player * player = new Player( *it );
-            player->SetRace( fi.KingdomRace( *it ) );
-            player->SetControl( CONTROL_AI );
-            player->SetFriends( *it | fi.unions[Color::GetIndex( *it )] );
-
-            if ( ( *it & fi.HumanOnlyColors() ) && Settings::Get().IsGameType( Game::TYPE_MULTI ) )
-                player->SetControl( CONTROL_HUMAN );
-            else if ( *it & fi.AllowHumanColors() )
-                player->SetControl( player->GetControl() | CONTROL_HUMAN );
-
-            if ( !first && ( player->GetControl() & CONTROL_HUMAN ) )
-                first = player;
-
-            push_back( player );
-            _players[Color::GetIndex( *it )] = back();
-        }
-
-        if ( first )
-            first->SetControl( CONTROL_HUMAN );
-
-        DEBUG_LOG( DBG_GAME, DBG_INFO, "Players: " << String() )
+    if ( fi.kingdomColors == 0 ) {
+        DEBUG_LOG( DBG_GAME, DBG_INFO, "No players are set." )
+        return;
     }
-    else {
-        DEBUG_LOG( DBG_GAME, DBG_INFO,
-                   "Players: "
-                       << "unknown colors" )
+
+    clear();
+    const Colors vcolors( fi.kingdomColors );
+
+    Player * first = nullptr;
+
+    for ( const int color : vcolors ) {
+        Player * player = new Player( color );
+        player->SetRace( fi.KingdomRace( color ) );
+        player->SetControl( CONTROL_AI );
+        player->SetFriends( color | fi.unions[Color::GetIndex( color )] );
+
+        if ( ( color & fi.HumanOnlyColors() ) && Settings::Get().IsGameType( Game::TYPE_MULTI ) )
+            player->SetControl( CONTROL_HUMAN );
+        else if ( color & fi.colorsAvailableForHumans )
+            player->SetControl( player->GetControl() | CONTROL_HUMAN );
+
+        if ( !first && ( player->GetControl() & CONTROL_HUMAN ) )
+            first = player;
+
+        push_back( player );
+        _players[Color::GetIndex( color )] = back();
     }
+
+    if ( first )
+        first->SetControl( CONTROL_HUMAN );
+
+    DEBUG_LOG( DBG_GAME, DBG_INFO, "Players: " << String() )
 }
 
 void Players::Set( const int color, Player * player )

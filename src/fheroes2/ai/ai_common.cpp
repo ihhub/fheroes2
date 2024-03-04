@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2023                                             *
+ *   Copyright (C) 2020 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -35,13 +35,13 @@
 #include "color.h"
 #include "difficulty.h"
 #include "game.h"
+#include "heroes.h"
 #include "kingdom.h"
 #include "logging.h"
 #include "normal/ai_normal.h"
 #include "payment.h"
 #include "resource.h"
 #include "resource_trading.h"
-#include "settings.h"
 
 namespace AI
 {
@@ -102,10 +102,8 @@ namespace AI
             return;
         }
 
-        // Optimize troops placement in case of a battle
         army.MergeSameMonsterTroops();
 
-        // Validate and pick the troops
         std::vector<Troop> archers;
         std::vector<Troop> others;
 
@@ -121,21 +119,23 @@ namespace AI
             }
         }
 
-        // Sort troops by tactical priority. For melee:
-        // 1. Faster units first
-        // 2. Flyers first
-        // 3. Finally if unit type and speed is same, compare by strength
+        // Sort troops by tactical priority. For melee units, the order of comparison is as follows:
+        // 1. Comparison by speed (faster units first);
+        // 2. Comparison by type (flying units first);
+        // 3. Comparison by strength.
         std::sort( others.begin(), others.end(), []( const Troop & left, const Troop & right ) {
-            if ( left.GetSpeed() == right.GetSpeed() ) {
-                if ( left.isFlying() == right.isFlying() ) {
-                    return left.GetStrength() < right.GetStrength();
-                }
+            if ( left.GetSpeed() != right.GetSpeed() ) {
+                return left.GetSpeed() < right.GetSpeed();
+            }
+
+            if ( left.isFlying() != right.isFlying() ) {
                 return right.isFlying();
             }
-            return left.GetSpeed() < right.GetSpeed();
+
+            return left.GetStrength() < right.GetStrength();
         } );
 
-        // Archers sorted purely by strength.
+        // Archers are sorted solely by strength
         std::sort( archers.begin(), archers.end(), []( const Troop & left, const Troop & right ) { return left.GetStrength() < right.GetStrength(); } );
 
         std::vector<size_t> slotOrder = { 2, 1, 3, 0, 4 };
@@ -157,15 +157,17 @@ namespace AI
             break;
         }
 
-        // Re-arrange troops in army
         army.Clean();
+
         for ( const size_t slot : slotOrder ) {
             if ( !archers.empty() ) {
                 army.GetTroop( slot )->Set( archers.back() );
+
                 archers.pop_back();
             }
             else if ( !others.empty() ) {
                 army.GetTroop( slot )->Set( others.back() );
+
                 others.pop_back();
             }
             else {
@@ -179,19 +181,47 @@ namespace AI
         }
     }
 
-    bool CanPurchaseHero( const Kingdom & kingdom )
+    void transferSlowestTroopsToGarrison( Heroes * hero, Castle * castle )
     {
-        if ( kingdom.GetCountCastle() == 0 ) {
-            return false;
+        assert( hero != nullptr && castle != nullptr );
+
+        Army & army = hero->GetArmy();
+        Army & garrison = castle->GetArmy();
+
+        // Make efforts to get free slots in the garrison to move troops there
+        garrison.MergeSameMonsterTroops();
+
+        std::vector<Troop *> armyTroops;
+        armyTroops.reserve( army.Size() );
+
+        for ( size_t i = 0; i < army.Size(); ++i ) {
+            Troop * troop = army.GetTroop( i );
+            assert( troop != nullptr );
+
+            if ( troop->isEmpty() ) {
+                continue;
+            }
+
+            armyTroops.push_back( troop );
         }
 
-        if ( kingdom.GetColor() == Settings::Get().CurrentColor() ) {
-            // This is the AI's current turn.
-            return kingdom.AllowPayment( PaymentConditions::RecruitHero() );
+        assert( !armyTroops.empty() );
+
+        // Move the slowest units first
+        std::sort( armyTroops.begin(), armyTroops.end(), Army::SlowestTroop );
+
+        // At least one of the fastest units should remain in the hero's army
+        armyTroops.pop_back();
+
+        for ( Troop * troop : armyTroops ) {
+            if ( !garrison.JoinTroop( *troop ) ) {
+                break;
+            }
+
+            troop->Reset();
         }
 
-        // This is not the current turn for the AI so we need to roughly calculate the possible future income on the next day.
-        return kingdom.AllowPayment( PaymentConditions::RecruitHero() - kingdom.GetIncome() );
+        assert( army.isValid() );
     }
 
     std::optional<Funds> calculateMarketplaceTransaction( const Kingdom & kingdom, const Funds & fundsToObtain )

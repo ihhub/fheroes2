@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2012 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -26,11 +26,14 @@
 
 #include <algorithm>
 #include <array>
+#include <cassert>
 #include <cstdint>
 #include <cstdio>
+#include <functional>
 #include <iterator>
 #include <list>
 #include <map>
+#include <memory>
 #include <string>
 #include <tuple>
 #include <type_traits>
@@ -43,16 +46,13 @@
 class StreamBase
 {
 public:
-    StreamBase()
-        : flags( 0 )
-    {}
+    StreamBase() = default;
 
     StreamBase( const StreamBase & ) = delete;
 
     StreamBase( StreamBase && stream ) noexcept
-        : flags( 0 )
     {
-        std::swap( flags, stream.flags );
+        std::swap( _flags, stream._flags );
     }
 
     virtual ~StreamBase() = default;
@@ -61,26 +61,30 @@ public:
 
     StreamBase & operator=( StreamBase && stream ) noexcept
     {
-        std::swap( flags, stream.flags );
+        if ( this == &stream ) {
+            return *this;
+        }
+
+        std::swap( _flags, stream._flags );
 
         return *this;
     }
 
-    void setbigendian( bool );
+    void setbigendian( bool f );
 
     bool isconstbuf() const
     {
-        return ( flags & 0x00001000 ) != 0;
+        return ( _flags & CONST_BUF ) != 0;
     }
 
     bool fail() const
     {
-        return flags & 0x00000001;
+        return ( _flags & FAILURE ) != 0;
     }
 
     bool bigendian() const
     {
-        return ( flags & 0x80000000 ) != 0;
+        return ( _flags & BIGENDIAN ) != 0;
     }
 
     virtual void skip( size_t ) = 0;
@@ -175,6 +179,25 @@ public:
         return *this;
     }
 
+    template <class Type, size_t Count>
+    StreamBase & operator>>( std::array<Type, Count> & data )
+    {
+        const uint32_t size = get32();
+        if ( size != data.size() ) {
+            // This is a corrupted file!
+            assert( 0 );
+            data = {};
+
+            return *this;
+        }
+
+        for ( auto & value : data ) {
+            *this >> value;
+        }
+
+        return *this;
+    }
+
     template <class Type1, class Type2>
     StreamBase & operator<<( const std::pair<Type1, Type2> & p )
     {
@@ -219,34 +242,41 @@ public:
     }
 
 protected:
-    size_t flags;
-
     virtual uint8_t get8() = 0;
     virtual void put8( const uint8_t ) = 0;
 
-    virtual size_t sizeg() const = 0;
-    virtual size_t sizep() const = 0;
-    virtual size_t tellg() const = 0;
-    virtual size_t tellp() const = 0;
+    virtual size_t sizeg() = 0;
+    virtual size_t sizep() = 0;
+    virtual size_t tellg() = 0;
+    virtual size_t tellp() = 0;
 
-    void setconstbuf( bool );
-    void setfail( bool );
+    void setconstbuf( bool f );
+    void setfail( bool f );
+
+private:
+    enum : uint32_t
+    {
+        FAILURE = 0x00000001,
+        CONST_BUF = 0x00000002,
+        BIGENDIAN = 0x00000004
+    };
+
+    uint32_t _flags{ 0 };
 };
 
 class StreamBuf : public StreamBase
 {
 public:
     explicit StreamBuf( const size_t sz = 0 );
-    StreamBuf( const StreamBuf & st ) = delete;
-    StreamBuf( StreamBuf && st ) noexcept;
+    explicit StreamBuf( const std::vector<uint8_t> & buf );
 
-    explicit StreamBuf( const std::vector<uint8_t> & );
-    StreamBuf( const uint8_t *, size_t );
+    StreamBuf( const StreamBuf & ) = delete;
+    StreamBuf( StreamBuf && stream ) noexcept;
 
     ~StreamBuf() override;
 
-    StreamBuf & operator=( const StreamBuf & st ) = delete;
-    StreamBuf & operator=( StreamBuf && st ) noexcept;
+    StreamBuf & operator=( const StreamBuf & ) = delete;
+    StreamBuf & operator=( StreamBuf && stream ) noexcept;
 
     const uint8_t * data() const
     {
@@ -264,7 +294,7 @@ public:
         itput += size;
     }
 
-    size_t size() const
+    size_t size()
     {
         return sizeg();
     }
@@ -299,10 +329,10 @@ public:
 protected:
     void reset();
 
-    size_t tellg() const override;
-    size_t tellp() const override;
-    size_t sizeg() const override;
-    size_t sizep() const override;
+    size_t tellg() override;
+    size_t tellp() override;
+    size_t sizeg() override;
+    size_t sizep() override;
 
     void reallocbuf( size_t size );
 
@@ -311,28 +341,27 @@ protected:
 
     friend class ZStreamBuf;
 
-    uint8_t * itbeg;
-    uint8_t * itget;
-    uint8_t * itput;
-    uint8_t * itend;
+    uint8_t * itbeg{ nullptr };
+    uint8_t * itget{ nullptr };
+    uint8_t * itput{ nullptr };
+    uint8_t * itend{ nullptr };
 };
 
 class StreamFile : public StreamBase
 {
 public:
-    StreamFile();
+    StreamFile() = default;
+
     StreamFile( const StreamFile & ) = delete;
-    StreamFile( StreamFile && ) = delete;
+
+    ~StreamFile() override = default;
 
     StreamFile & operator=( const StreamFile & ) = delete;
-    StreamFile & operator=( StreamFile && ) = delete;
 
-    ~StreamFile() override;
+    size_t size();
+    size_t tell();
 
-    size_t size() const;
-    size_t tell() const;
-
-    bool open( const std::string &, const std::string & mode );
+    bool open( const std::string & fn, const std::string & mode );
     void close();
 
     // 0 stands for full data.
@@ -359,31 +388,45 @@ public:
     std::string toString( const size_t size = 0 );
 
 protected:
-    size_t sizeg() const override;
-    size_t sizep() const override;
-    size_t tellg() const override;
-    size_t tellp() const override;
+    size_t sizeg() override;
+    size_t sizep() override;
+    size_t tellg() override;
+    size_t tellp() override;
 
     uint8_t get8() override;
     void put8( const uint8_t v ) override;
 
 private:
-    std::FILE * _file;
+    std::unique_ptr<std::FILE, std::function<int( std::FILE * )>> _file{ nullptr, std::fclose };
 
     template <typename T>
     T getUint()
     {
-        if ( !_file )
+        if ( !_file ) {
             return 0;
+        }
+
         T val;
-        return std::fread( &val, sizeof( T ), 1, _file ) == 1 ? val : 0;
+
+        if ( std::fread( &val, sizeof( T ), 1, _file.get() ) != 1 ) {
+            setfail( true );
+
+            return 0;
+        }
+
+        return val;
     }
 
     template <typename T>
     void putUint( const T val )
     {
-        if ( _file )
-            std::fwrite( &val, sizeof( T ), 1, _file );
+        if ( !_file ) {
+            return;
+        }
+
+        if ( std::fwrite( &val, sizeof( T ), 1, _file.get() ) != 1 ) {
+            setfail( true );
+        }
     }
 };
 

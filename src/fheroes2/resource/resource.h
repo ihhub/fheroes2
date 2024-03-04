@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -44,11 +44,6 @@ struct cost_t
     uint8_t gems;
 };
 
-#define COST_NONE                                                                                                                                                        \
-    {                                                                                                                                                                    \
-        0, 0, 0, 0, 0, 0, 0                                                                                                                                              \
-    }
-
 namespace Resource
 {
     enum
@@ -81,12 +76,14 @@ public:
     Funds & operator*=( uint32_t mul );
     Funds & operator/=( const int32_t div );
     Funds & operator-=( const Funds & );
-    Funds & operator=( const cost_t & );
+    Funds & operator=( const cost_t & cost );
 
-    bool operator>=( const Funds & ) const;
-    bool operator<( const Funds & funds ) const
+    bool operator==( const Funds & other ) const;
+    bool operator>=( const Funds & other ) const;
+
+    bool operator<( const Funds & other ) const
     {
-        return !operator>=( funds );
+        return !operator>=( other );
     }
 
     Funds max( const Funds & ) const;

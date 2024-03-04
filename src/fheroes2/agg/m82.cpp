@@ -253,7 +253,7 @@ M82::SoundType M82::getAdventureMapTileSound( const Maps::Tiles & tile )
     case MP2::OBJ_WATER_LAKE:
     case MP2::OBJ_WATERING_HOLE:
         return LOOP0013;
-    case MP2::OBJ_MINES:
+    case MP2::OBJ_MINE:
         return LOOP0015;
     case MP2::OBJ_SAWMILL:
         return LOOP0016;

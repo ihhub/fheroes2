@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -52,6 +52,7 @@
 #include "image.h"
 #include "interface_base.h"
 #include "interface_gamearea.h"
+#include "interface_icons.h"
 #include "interface_radar.h"
 #include "interface_status.h"
 #include "kingdom.h"
@@ -984,10 +985,6 @@ namespace
         DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() )
 
         const Skill::Secondary & skill = getSecondarySkillFromWitchsHut( world.GetTiles( dst_index ) );
-
-        // If this assertion blows up the object is not set properly.
-        assert( skill.isValid() );
-
         if ( skill.isValid() ) {
             std::string msg = _( "You approach the hut and observe a witch inside studying an ancient tome on %{skill}.\n\n" );
             const std::string & skill_name = Skill::Secondary::String( skill.Skill() );
@@ -1027,6 +1024,10 @@ namespace
                 }
             }
         }
+        else {
+            // A broken object?
+            assert( 0 );
+        }
 
         hero.SetVisited( dst_index, Visit::GLOBAL );
     }
@@ -1058,7 +1059,7 @@ namespace
             msg = visited
                       ? _( "The mermaids silently entice you to return later and be blessed again." )
                       : _(
-                          "The magical, soothing beauty of the Mermaids reaches you and your crew.\nJust for a moment, you forget your worries and bask in the beauty of the moment.\nThe mermaids charms bless you with increased luck for your next combat." );
+                          "The magical, soothing beauty of the Mermaids reaches you and your crew.\nJust for a moment, you forget your worries and bask in the beauty of the moment.\nThe mermaids' charms bless you with increased luck for your next combat." );
             break;
 
         default:
@@ -1874,7 +1875,7 @@ namespace
             return;
         }
 
-        assert( world.GetTiles( index_to ).GetObject() != MP2::OBJ_HEROES );
+        assert( world.GetTiles( index_to ).GetObject() != MP2::OBJ_HERO );
 
         AudioManager::PlaySound( M82::KILLFADE );
         hero.ShowPath( false );
@@ -1964,7 +1965,7 @@ namespace
                     radarRoi.height = 2;
                     break;
                 case MP2::OBJ_ALCHEMIST_LAB:
-                case MP2::OBJ_MINES:
+                case MP2::OBJ_MINE:
                     --radarRoi.x;
                     --radarRoi.y;
                     radarRoi.width = 3;
@@ -1987,7 +1988,7 @@ namespace
 
             const auto removeObjectProtection = [&tile]() {
                 // Clear any metadata related to spells
-                if ( tile.GetObject( false ) == MP2::OBJ_MINES ) {
+                if ( tile.GetObject( false ) == MP2::OBJ_MINE ) {
                     removeMineSpellFromTile( tile );
                 }
             };
@@ -2016,9 +2017,9 @@ namespace
                     body = _( "You gain control of a sawmill. It will provide you with %{count} units of wood per day." );
                     break;
 
-                case MP2::OBJ_MINES: {
+                case MP2::OBJ_MINE: {
                     resource = getDailyIncomeObjectResources( tile ).getFirstValidResource().first;
-                    header = Maps::GetMinesName( resource );
+                    header = Maps::GetMineName( resource );
 
                     switch ( resource ) {
                     case Resource::ORE:
@@ -2130,7 +2131,7 @@ namespace
                 hero.IncreaseExperience( result.GetExperienceAttacker() );
 
                 Maps::restoreAbandonedMine( tile, Resource::GOLD );
-                hero.setObjectTypeUnderHero( MP2::OBJ_MINES );
+                hero.setObjectTypeUnderHero( MP2::OBJ_MINE );
                 setColorOnTile( tile, hero.GetColor() );
 
                 // TODO: make a function that will automatically get the object size in tiles and return a ROI for radar update.
@@ -2715,7 +2716,7 @@ namespace
                 const MusicalEffectPlayer musicalEffectPlayer( MUS::WATCHTOWER );
 
                 fheroes2::showStandardTextMessage( title,
-                                                   _( "The captain sighs. \"You don't have enough money, eh?  You can't expect me to give my maps away for free!\"" ),
+                                                   _( "The captain sighs. \"You don't have enough money, eh? You can't expect me to give my maps away for free!\"" ),
                                                    Dialog::OK );
             }
         }
@@ -2740,11 +2741,9 @@ namespace
             }
 
             const Artifact & art = event_maps->artifact;
-            if ( art.isValid() ) {
-                if ( hero.PickupArtifact( art ) ) {
-                    artifactUI.reset( new fheroes2::ArtifactDialogElement( art ) );
-                    AudioManager::PlaySound( M82::TREASURE );
-                }
+            if ( art.isValid() && hero.PickupArtifact( art ) ) {
+                artifactUI = std::make_unique<fheroes2::ArtifactDialogElement>( art );
+                AudioManager::PlaySound( M82::TREASURE );
             }
 
             std::vector<const fheroes2::DialogElement *> elementUI;
@@ -2857,6 +2856,7 @@ namespace
                         fheroes2::showStandardTextMessage( title, msg, Dialog::OK );
                     }
                 }
+                hero.SetVisited( dst_index, Visit::GLOBAL );
             }
 
             if ( increaseExperience ) {
@@ -3260,7 +3260,9 @@ namespace
                 _( "In a dazzling display of daring, you break into the local jail and free the hero imprisoned there, who, in return, pledges loyalty to your cause." ),
                 Dialog::OK );
 
-            Interface::AdventureMap::Get().getGameArea().runSingleObjectAnimation(
+            Interface::AdventureMap & adventureMapInterface = Interface::AdventureMap::Get();
+
+            adventureMapInterface.getGameArea().runSingleObjectAnimation(
                 std::make_shared<Interface::ObjectFadingOutInfo>( tile.GetObjectUID(), tile.GetIndex(), tile.GetObject() ) );
 
             // TODO: add hero fading in animation together with jail animation.
@@ -3268,6 +3270,9 @@ namespace
 
             if ( prisoner ) {
                 prisoner->Recruit( hero.GetColor(), Maps::GetPoint( dst_index ) );
+
+                // Update the kingdom heroes list including the scrollbar.
+                adventureMapInterface.GetIconsPanel().ResetIcons( ICON_HEROES );
             }
         }
         else {
@@ -3291,7 +3296,7 @@ namespace
         if ( !hero.isObjectTypeVisited( objectType, Visit::GLOBAL ) ) {
             hero.SetVisited( dst_index, Visit::GLOBAL );
 
-            const MapsIndexes eyeMagiIndexes = Maps::GetObjectPositions( MP2::OBJ_EYE_OF_MAGI, true );
+            const MapsIndexes eyeMagiIndexes = Maps::GetObjectPositions( MP2::OBJ_EYE_OF_MAGI );
             if ( !eyeMagiIndexes.empty() ) {
                 Interface::AdventureMap & I = Interface::AdventureMap::Get();
 
@@ -3638,7 +3643,7 @@ void Heroes::Action( int tileIndex )
     case MP2::OBJ_CASTLE:
         ActionToCastle( *this, tileIndex );
         break;
-    case MP2::OBJ_HEROES:
+    case MP2::OBJ_HERO:
         ActionToHeroes( *this, tileIndex );
         break;
 
@@ -3768,7 +3773,7 @@ void Heroes::Action( int tileIndex )
 
     // capture color object
     case MP2::OBJ_ALCHEMIST_LAB:
-    case MP2::OBJ_MINES:
+    case MP2::OBJ_MINE:
     case MP2::OBJ_SAWMILL:
     case MP2::OBJ_LIGHTHOUSE:
         ActionToCaptureObject( *this, objectType, tileIndex );

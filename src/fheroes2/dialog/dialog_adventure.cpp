@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -21,106 +21,110 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "agg_image.h"
+#include <cstdint>
+
 #include "cursor.h"
 #include "dialog.h"
 #include "game_hotkeys.h"
-#include "gamedefs.h"
 #include "icn.h"
-#include "image.h"
 #include "localevent.h"
-#include "math_base.h"
 #include "screen.h"
 #include "settings.h"
 #include "translations.h"
 #include "ui_button.h"
 #include "ui_dialog.h"
+#include "ui_window.h"
 
-int Dialog::AdventureOptions( bool enabledig )
+namespace
 {
-    // preload
-    const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
-    const int apanbkg = isEvilInterface ? ICN::APANBKGE : ICN::APANBKG;
-    const int apanel = isEvilInterface ? ICN::APANELE : ICN::APANEL;
+    int selectAdventureOption( const bool enableDig )
+    {
+        // setup cursor
+        const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
-    // setup cursor
-    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
+        fheroes2::Display & display = fheroes2::Display::instance();
 
-    // image box
-    const fheroes2::Sprite & box = fheroes2::AGG::GetICN( apanbkg, 0 );
+        fheroes2::StandardWindow background( 289, 204, true, display );
 
-    // The sprite contains shadow area at left and bottom side so to center it we have to subtract it
-    fheroes2::Display & display = fheroes2::Display::instance();
-    fheroes2::Point rb( ( display.width() - box.width() - BORDERWIDTH ) / 2, ( display.height() - box.height() + BORDERWIDTH ) / 2 );
-    fheroes2::ImageRestorer back( display, rb.x, rb.y, box.width(), box.height() );
-    fheroes2::Blit( box, display, rb.x, rb.y );
+        fheroes2::Button buttonWorld;
+        fheroes2::Button buttonPuzzle;
+        fheroes2::Button buttonInfo;
+        fheroes2::Button buttonDig;
+        fheroes2::Button buttonCancel;
 
-    LocalEvent & le = LocalEvent::Get();
+        const int32_t largeButtonsXOffset = 30;
+        const int32_t largeButtonsYOffset = 15;
 
-    fheroes2::Button buttonWorld( rb.x + 62, rb.y + 30, apanel, 0, 1 );
-    fheroes2::Button buttonPuzzle( rb.x + 195, rb.y + 30, apanel, 2, 3 );
-    fheroes2::Button buttonInfo( rb.x + 62, rb.y + 107, isEvilInterface ? ICN::BUTTON_INFO_EVIL : ICN::BUTTON_INFO_GOOD, 0, 1 );
-    fheroes2::Button buttonDig( rb.x + 195, rb.y + 107, apanel, 6, 7 );
-    fheroes2::Button buttonCancel( rb.x + 128, rb.y + 184, isEvilInterface ? ICN::BUTTON_SMALL_CANCEL_EVIL : ICN::BUTTON_SMALL_CANCEL_GOOD, 0, 1 );
+        const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
+        const int apanel = isEvilInterface ? ICN::APANELE : ICN::APANEL;
 
-    if ( !enabledig )
-        buttonDig.disable();
+        background.renderButton( buttonWorld, apanel, 0, 1, { largeButtonsXOffset, largeButtonsYOffset }, fheroes2::StandardWindow::Padding::TOP_LEFT );
+        background.renderButton( buttonPuzzle, apanel, 2, 3, { largeButtonsXOffset, largeButtonsYOffset }, fheroes2::StandardWindow::Padding::TOP_RIGHT );
+        background.renderButton( buttonInfo, isEvilInterface ? ICN::BUTTON_INFO_EVIL : ICN::BUTTON_INFO_GOOD, 0, 1, { largeButtonsXOffset, largeButtonsYOffset + 2 },
+                                 fheroes2::StandardWindow::Padding::CENTER_LEFT );
+        background.renderButton( buttonDig, apanel, 6, 7, { largeButtonsXOffset, largeButtonsYOffset + 2 }, fheroes2::StandardWindow::Padding::CENTER_RIGHT );
+        background.renderButton( buttonCancel, isEvilInterface ? ICN::BUTTON_SMALL_CANCEL_EVIL : ICN::BUTTON_SMALL_CANCEL_GOOD, 0, 1, { 0, 11 },
+                                 fheroes2::StandardWindow::Padding::BOTTOM_CENTER );
 
-    buttonWorld.draw();
-    buttonPuzzle.draw();
-    buttonInfo.draw();
-    buttonDig.draw();
-    buttonCancel.draw();
-
-    display.render();
-
-    int result = Dialog::ZERO;
-
-    // dialog menu loop
-    while ( le.HandleEvents() ) {
-        le.MousePressLeft( buttonWorld.area() ) ? buttonWorld.drawOnPress() : buttonWorld.drawOnRelease();
-        le.MousePressLeft( buttonPuzzle.area() ) ? buttonPuzzle.drawOnPress() : buttonPuzzle.drawOnRelease();
-        le.MousePressLeft( buttonInfo.area() ) ? buttonInfo.drawOnPress() : buttonInfo.drawOnRelease();
-        le.MousePressLeft( buttonDig.area() ) ? buttonDig.drawOnPress() : buttonDig.drawOnRelease();
-        le.MousePressLeft( buttonCancel.area() ) ? buttonCancel.drawOnPress() : buttonCancel.drawOnRelease();
-
-        if ( le.MouseClickLeft( buttonWorld.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::WORLD_VIEW_WORLD ) ) {
-            result = Dialog::WORLD;
-            break;
-        }
-        if ( le.MouseClickLeft( buttonPuzzle.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::WORLD_PUZZLE_MAP ) ) {
-            result = Dialog::PUZZLE;
-            break;
-        }
-        if ( le.MouseClickLeft( buttonInfo.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::WORLD_SCENARIO_INFORMATION ) ) {
-            result = Dialog::INFO;
-            break;
-        }
-        if ( ( le.MouseClickLeft( buttonDig.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::WORLD_DIG_ARTIFACT ) ) && buttonDig.isEnabled() ) {
-            result = Dialog::DIG;
-            break;
-        }
-        if ( le.MouseClickLeft( buttonCancel.area() ) || Game::HotKeyCloseWindow() ) {
-            result = Dialog::CANCEL;
-            break;
+        if ( !enableDig ) {
+            buttonDig.disable();
+            buttonDig.draw();
         }
 
-        // right info
-        if ( le.MousePressRight( buttonWorld.area() ) )
-            fheroes2::showStandardTextMessage( _( "View World" ), _( "View the entire world." ), Dialog::ZERO );
-        if ( le.MousePressRight( buttonPuzzle.area() ) )
-            fheroes2::showStandardTextMessage( _( "Puzzle" ), _( "View the obelisk puzzle." ), Dialog::ZERO );
-        if ( le.MousePressRight( buttonInfo.area() ) )
-            fheroes2::showStandardTextMessage( _( "Scenario Information" ), _( "View information on the scenario you are currently playing." ), Dialog::ZERO );
-        if ( le.MousePressRight( buttonDig.area() ) )
-            fheroes2::showStandardTextMessage( _( "Digging" ), _( "Dig for the Ultimate Artifact." ), Dialog::ZERO );
-        if ( le.MousePressRight( buttonCancel.area() ) )
-            fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Exit this menu without doing anything." ), Dialog::ZERO );
+        display.render( background.totalArea() );
+
+        int result = Dialog::ZERO;
+
+        LocalEvent & le = LocalEvent::Get();
+
+        // dialog menu loop
+        while ( le.HandleEvents() ) {
+            le.MousePressLeft( buttonWorld.area() ) ? buttonWorld.drawOnPress() : buttonWorld.drawOnRelease();
+            le.MousePressLeft( buttonPuzzle.area() ) ? buttonPuzzle.drawOnPress() : buttonPuzzle.drawOnRelease();
+            le.MousePressLeft( buttonInfo.area() ) ? buttonInfo.drawOnPress() : buttonInfo.drawOnRelease();
+            le.MousePressLeft( buttonDig.area() ) ? buttonDig.drawOnPress() : buttonDig.drawOnRelease();
+            le.MousePressLeft( buttonCancel.area() ) ? buttonCancel.drawOnPress() : buttonCancel.drawOnRelease();
+
+            if ( le.MouseClickLeft( buttonWorld.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::WORLD_VIEW_WORLD ) ) {
+                result = Dialog::WORLD;
+                break;
+            }
+            if ( le.MouseClickLeft( buttonPuzzle.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::WORLD_PUZZLE_MAP ) ) {
+                result = Dialog::PUZZLE;
+                break;
+            }
+            if ( le.MouseClickLeft( buttonInfo.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::WORLD_SCENARIO_INFORMATION ) ) {
+                result = Dialog::INFO;
+                break;
+            }
+            if ( enableDig && ( le.MouseClickLeft( buttonDig.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::WORLD_DIG_ARTIFACT ) ) ) {
+                result = Dialog::DIG;
+                break;
+            }
+            if ( le.MouseClickLeft( buttonCancel.area() ) || Game::HotKeyCloseWindow() ) {
+                result = Dialog::CANCEL;
+                break;
+            }
+
+            // right info
+            if ( le.MousePressRight( buttonWorld.area() ) )
+                fheroes2::showStandardTextMessage( _( "View World" ), _( "View the entire world." ), Dialog::ZERO );
+            else if ( le.MousePressRight( buttonPuzzle.area() ) )
+                fheroes2::showStandardTextMessage( _( "Puzzle" ), _( "View the obelisk puzzle." ), Dialog::ZERO );
+            else if ( le.MousePressRight( buttonInfo.area() ) )
+                fheroes2::showStandardTextMessage( _( "Scenario Information" ), _( "View information on the scenario you are currently playing." ), Dialog::ZERO );
+            else if ( le.MousePressRight( buttonDig.area() ) )
+                fheroes2::showStandardTextMessage( _( "Digging" ), _( "Dig for the Ultimate Artifact." ), Dialog::ZERO );
+            else if ( le.MousePressRight( buttonCancel.area() ) )
+                fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Exit this menu without doing anything." ), Dialog::ZERO );
+        }
+
+        return result;
     }
+}
 
-    // restore background
-    back.restore();
-    display.render();
-
+int Dialog::AdventureOptions( const bool enableDig )
+{
+    const int result = selectAdventureOption( enableDig );
     return result;
 }

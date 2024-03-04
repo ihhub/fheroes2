@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2023                                             *
+ *   Copyright (C) 2021 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -24,10 +24,11 @@
 #include <string>
 #include <vector>
 
+#include "image.h"
+#include "math_base.h"
+
 namespace fheroes2
 {
-    class Image;
-
     enum class FontSize : uint8_t
     {
         SMALL,
@@ -52,7 +53,9 @@ namespace fheroes2
         FontType( const FontSize size_, const FontColor color_ )
             : size( size_ )
             , color( color_ )
-        {}
+        {
+            // Do nothing.
+        }
 
         FontSize size = FontSize::NORMAL;
         FontColor color = FontColor::WHITE;
@@ -107,16 +110,36 @@ namespace fheroes2
         virtual int32_t rows( const int32_t maxWidth ) const = 0;
 
         // Draw text as a single line text.
-        virtual void draw( const int32_t x, const int32_t y, Image & output ) const = 0;
+        void draw( const int32_t x, const int32_t y, Image & output ) const
+        {
+            drawInRoi( x, y, output, { 0, 0, output.width(), output.height() } );
+        }
 
         // Draw text as a multi-line limited by width of a line. The text will be centered according to the provided maximum width.
-        virtual void draw( const int32_t x, const int32_t y, const int32_t maxWidth, Image & output ) const = 0;
+        void draw( const int32_t x, const int32_t y, const int32_t maxWidth, Image & output ) const
+        {
+            drawInRoi( x, y, maxWidth, output, { 0, 0, output.width(), output.height() } );
+        }
+
+        // Draw text as a single line text within a given image ROI.
+        virtual void drawInRoi( const int32_t x, const int32_t y, Image & output, const Rect & imageRoi ) const = 0;
+
+        // Draw text as a multi-line within a given image ROI and limited by width of a line. The text will be centered according to the provided maximum width.
+        virtual void drawInRoi( const int32_t x, const int32_t y, const int32_t maxWidth, Image & output, const Rect & imageRoi ) const = 0;
 
         // Returns true if nothing to draw.
         virtual bool empty() const = 0;
 
-        // Returns full text. Multi-text class cannot return by reference hence returning by value.
+        // Returns full text. Multi-text class cannot return by reference hence returning by value .
         virtual std::string text() const = 0;
+
+        void setUniformVerticalAlignment( const bool isUniform )
+        {
+            _isUniformedVerticalAlignment = isUniform;
+        }
+
+    protected:
+        bool _isUniformedVerticalAlignment{ true };
     };
 
     class Text : public TextBase
@@ -141,8 +164,8 @@ namespace fheroes2
 
         int32_t rows( const int32_t maxWidth ) const override;
 
-        void draw( const int32_t x, const int32_t y, Image & output ) const override;
-        void draw( const int32_t x, const int32_t y, const int32_t maxWidth, Image & output ) const override;
+        void drawInRoi( const int32_t x, const int32_t y, Image & output, const Rect & imageRoi ) const override;
+        void drawInRoi( const int32_t x, const int32_t y, const int32_t maxWidth, Image & output, const Rect & imageRoi ) const override;
 
         bool empty() const override;
 
@@ -175,8 +198,8 @@ namespace fheroes2
 
         int32_t rows( const int32_t maxWidth ) const override;
 
-        void draw( const int32_t x, const int32_t y, Image & output ) const override;
-        void draw( const int32_t x, const int32_t y, const int32_t maxWidth, Image & output ) const override;
+        void drawInRoi( const int32_t x, const int32_t y, Image & output, const Rect & imageRoi ) const override;
+        void drawInRoi( const int32_t x, const int32_t y, const int32_t maxWidth, Image & output, const Rect & imageRoi ) const override;
 
         bool empty() const override;
 

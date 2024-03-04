@@ -20,12 +20,13 @@
 
 #pragma once
 
+#include <cstdint>
 #include <string>
 #include <vector>
 
 namespace fheroes2
 {
-    enum class SupportedLanguage : int
+    enum class SupportedLanguage : uint8_t
     {
         English = 0, // default language for all versions of the game.
         French, // GOG version

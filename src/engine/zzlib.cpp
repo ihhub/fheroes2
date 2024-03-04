@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -170,7 +170,7 @@ bool ZStreamBuf::read( const std::string & fn, const size_t offset /* = 0 */ )
     return !fail();
 }
 
-bool ZStreamBuf::write( const std::string & fn, const bool append /* = false */ ) const
+bool ZStreamBuf::write( const std::string & fn, const bool append /* = false */ )
 {
     StreamFile sf;
     sf.setbigendian( true );
@@ -195,27 +195,30 @@ bool ZStreamBuf::write( const std::string & fn, const bool append /* = false */ 
 
 fheroes2::Image CreateImageFromZlib( int32_t width, int32_t height, const uint8_t * imageData, size_t imageSize, bool doubleLayer )
 {
-    if ( imageData == nullptr || imageSize == 0 || width <= 0 || height <= 0 )
-        return fheroes2::Image();
+    if ( imageData == nullptr || imageSize == 0 || width <= 0 || height <= 0 ) {
+        return {};
+    }
 
     const std::vector<uint8_t> & uncompressedData = zlibDecompress( imageData, imageSize );
     if ( doubleLayer && ( uncompressedData.size() & 1 ) == 1 ) {
-        return fheroes2::Image();
+        return {};
     }
 
     const size_t uncompressedSize = doubleLayer ? uncompressedData.size() / 2 : uncompressedData.size();
 
-    if ( static_cast<size_t>( width * height ) != uncompressedSize )
-        return fheroes2::Image();
+    if ( static_cast<size_t>( width * height ) != uncompressedSize ) {
+        return {};
+    }
 
-    fheroes2::Image out( width, height );
+    fheroes2::Image out;
+    if ( !doubleLayer ) {
+        out._disableTransformLayer();
+    }
+    out.resize( width, height );
 
     std::memcpy( out.image(), uncompressedData.data(), uncompressedSize );
     if ( doubleLayer ) {
         std::memcpy( out.transform(), uncompressedData.data() + uncompressedSize, uncompressedSize );
-    }
-    else {
-        std::fill( out.transform(), out.transform() + uncompressedSize, static_cast<uint8_t>( 0 ) );
     }
     return out;
 }

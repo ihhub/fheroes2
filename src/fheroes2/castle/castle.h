@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -27,6 +27,7 @@
 #include <array>
 #include <cstddef>
 #include <cstdint>
+#include <functional>
 #include <map>
 #include <set>
 #include <string>
@@ -179,7 +180,7 @@ public:
     }
 
     // This method must be called only at the time of map loading and only for castles with empty names.
-    void setName( const std::set<std::string> & usedNames );
+    void setName( const std::set<std::string, std::less<>> & usedNames );
 
     int GetControl() const override;
 
@@ -378,9 +379,9 @@ namespace CastleDialog
         uint32_t _build;
     };
 
-    struct builds_t
+    struct BuildingRenderInfo
     {
-        builds_t( building_t b, const fheroes2::Rect & r )
+        BuildingRenderInfo( building_t b, const fheroes2::Rect & r )
             : id( b )
             , coord( r )
         {}
@@ -394,7 +395,7 @@ namespace CastleDialog
         fheroes2::Rect coord;
     };
 
-    struct CacheBuildings : std::vector<builds_t>
+    struct CacheBuildings : std::vector<BuildingRenderInfo>
     {
         CacheBuildings( const Castle &, const fheroes2::Point & );
     };

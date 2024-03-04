@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2023                                                    *
+ *   Copyright (C) 2024                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -26,7 +26,6 @@
 #include "gamedefs.h"
 #include "interface_gamearea.h"
 #include "interface_radar.h"
-#include "interface_status.h"
 #include "math_base.h"
 #include "screen.h"
 
@@ -63,7 +62,6 @@ namespace Interface
         explicit BaseInterface( const bool isEditor_ )
             : _gameArea( *this )
             , _radar( *this )
-            , _statusWindow( *this )
             , _isEditor( isEditor_ )
         {
             // Do nothing
@@ -122,11 +120,6 @@ namespace Interface
             return _radar;
         }
 
-        StatusWindow & getStatusWindow()
-        {
-            return _statusWindow;
-        }
-
         static fheroes2::GameMode EventExit();
 
         virtual bool useMouseDragMovement()
@@ -136,6 +129,7 @@ namespace Interface
 
         virtual void mouseCursorAreaClickLeft( const int32_t tileIndex ) = 0;
         virtual void mouseCursorAreaPressRight( const int32_t tileIndex ) const = 0;
+        virtual void mouseCursorAreaLongPressLeft( const int32_t tileIndex ) = 0;
 
         // Regenerates the game area and updates the panel positions depending on the UI settings
         virtual void reset() = 0;
@@ -153,7 +147,6 @@ namespace Interface
 
         GameArea _gameArea;
         Radar _radar;
-        StatusWindow _statusWindow;
 
         uint32_t _redraw{ 0 };
 

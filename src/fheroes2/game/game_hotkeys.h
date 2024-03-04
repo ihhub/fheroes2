@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2022 - 2023                                             *
+ *   Copyright (C) 2022 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -22,6 +22,7 @@
 
 #include <cstdint>
 #include <string>
+#include <utility>
 #include <vector>
 
 namespace fheroes2
@@ -98,6 +99,7 @@ namespace Game
         //
         WORLD_SAVE_GAME,
         WORLD_NEXT_HERO,
+        WORLD_QUICK_SELECT_HERO,
         WORLD_START_HERO_MOVEMENT,
         WORLD_CAST_SPELL,
         WORLD_SLEEP_HERO,
@@ -164,6 +166,19 @@ namespace Game
         NO_EVENT,
     };
 
+    enum class HotKeyCategory : uint8_t
+    {
+        DEFAULT,
+        GLOBAL,
+        MAIN_MENU,
+        CAMPAIGN,
+        WORLD_MAP,
+        BATTLE,
+        TOWN,
+        ARMY,
+        EDITOR,
+    };
+
     bool HotKeyPressEvent( const HotKeyEvent eventID );
     bool HotKeyHoldEvent( const HotKeyEvent eventID );
 
@@ -179,11 +194,13 @@ namespace Game
 
     const char * getHotKeyEventNameByEventId( const HotKeyEvent eventID );
 
-    std::vector<Game::HotKeyEvent> getAllHotKeyEvents();
+    std::vector<std::pair<HotKeyEvent, HotKeyCategory>> getAllHotKeyEvents();
 
     void globalKeyDownEvent( const fheroes2::Key key, const int32_t modifier );
 
     void HotKeysLoad( const std::string & filename );
 
     void HotKeySave();
+
+    const char * getHotKeyCategoryName( const HotKeyCategory category );
 }

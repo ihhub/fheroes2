@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2012 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -23,8 +23,6 @@
 
 #include "battle_grave.h"
 
-// TODO: this header is redundant here, but detected as required by IWYU with older compilers
-// IWYU pragma: no_include <type_traits>
 #include <algorithm>
 #include <cassert>
 #include <utility>
@@ -50,7 +48,7 @@ Battle::Indexes Battle::Graveyard::GetOccupiedCells() const
 
 void Battle::Graveyard::AddTroop( const Unit & unit )
 {
-    assert( Board::isValidIndex( unit.GetHeadIndex() ) && ( !unit.isWide() || Board::isValidIndex( unit.GetTailIndex() ) ) );
+    assert( Board::isValidIndex( unit.GetHeadIndex() ) && ( unit.isWide() ? Board::isValidIndex( unit.GetTailIndex() ) : !Board::isValidIndex( unit.GetTailIndex() ) ) );
 
     Graveyard & graveyard = *this;
 
@@ -63,7 +61,7 @@ void Battle::Graveyard::AddTroop( const Unit & unit )
 
 void Battle::Graveyard::RemoveTroop( const Unit & unit )
 {
-    assert( Board::isValidIndex( unit.GetHeadIndex() ) && ( !unit.isWide() || Board::isValidIndex( unit.GetTailIndex() ) ) );
+    assert( Board::isValidIndex( unit.GetHeadIndex() ) && ( unit.isWide() ? Board::isValidIndex( unit.GetTailIndex() ) : !Board::isValidIndex( unit.GetTailIndex() ) ) );
 
     const auto removeUIDFromIndex = [this]( const int32_t idx, const uint32_t uid ) {
         const auto idxIter = find( idx );

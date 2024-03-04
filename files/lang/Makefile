@@ -1,6 +1,6 @@
 ###########################################################################
 #   fheroes2: https://github.com/ihhub/fheroes2                           #
-#   Copyright (C) 2023                                                    #
+#   Copyright (C) 2024                                                    #
 #                                                                         #
 #   This program is free software; you can redistribute it and/or modify  #
 #   it under the terms of the GNU General Public License as published by  #
@@ -46,6 +46,10 @@ de.mo dk.mo es.mo fr.mo it.mo nb.mo pt.mo sv.mo nl.mo: %.mo: %.po
 # Turkish uses CP1254
 tr.mo: tr.po
 	$(call MSGFMT,CP1254)
+	
+# Lithaunian uses CP1257
+lt.mo: lt.po
+	$(call MSGFMT,CP1257)
 	
 # Vietnamese uses CP1258
 vi.mo: vi.po

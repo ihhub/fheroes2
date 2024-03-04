@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2023                                                    *
+ *   Copyright (C) 2023 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -27,6 +27,11 @@
 #include <memory>
 #include <utility>
 
+namespace Maps::Map_Format
+{
+    struct MapFormat;
+}
+
 namespace fheroes2
 {
     class HistoryManager;
@@ -45,13 +50,21 @@ namespace fheroes2
     class ActionCreator
     {
     public:
-        explicit ActionCreator( HistoryManager & manager );
+        explicit ActionCreator( HistoryManager & manager, Maps::Map_Format::MapFormat & mapFormat );
 
-        ~ActionCreator();
+        ~ActionCreator()
+        {
+            if ( _action ) {
+                // The action wasn't committed. Undo all the changes.
+                _action->undo();
+            }
+        }
 
         ActionCreator( const ActionCreator & ) = delete;
 
         ActionCreator & operator=( const ActionCreator & ) = delete;
+
+        void commit();
 
     private:
         HistoryManager & _manager;

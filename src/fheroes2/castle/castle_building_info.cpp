@@ -864,7 +864,7 @@ namespace fheroes2
         case BUILD_WELL:
             return _( "The Well increases the growth rate of all dwellings by %{count} creatures per week." );
         case BUILD_STATUE:
-            return _( "The Statue increases your town's income by %{count} gold per day." );
+            return _( "The Statue increases the town's income by %{count} gold per day." );
         case BUILD_LEFTTURRET:
             return _( "The Left Turret provides extra firepower during castle combat." );
         case BUILD_RIGHTTURRET:
@@ -874,7 +874,7 @@ namespace fheroes2
         case BUILD_MOAT:
             return _( "The Moat slows attacking units. Any unit entering the moat must end its turn there and becomes more vulnerable to attack." );
         case BUILD_CASTLE:
-            return _( "The Castle improves town defense and increases income to %{count} gold per day." );
+            return _( "The Castle improves the town's defense and increases its income to %{count} gold per day." );
         case BUILD_TENT:
             return _( "The Tent provides workers to build a castle, provided the materials and the gold are available." );
         case BUILD_CAPTAIN:
@@ -1072,7 +1072,7 @@ namespace fheroes2
             break;
         case Race::NECR:
             priorities.emplace_back( BUILD_SPEC );
-            if ( version == GameVersion::PRICE_OF_LOYALTY ) {
+            if ( version == GameVersion::PRICE_OF_LOYALTY || version == GameVersion::RESURRECTION ) {
                 priorities.emplace_back( BUILD_SHRINE );
             }
             priorities.emplace_back( BUILD_TENT );

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -231,7 +231,7 @@ namespace
         text.draw( dst_pt.x, dst_pt.y + 2, display );
     }
 
-    fheroes2::Sprite GetModesSprite( uint32_t mod )
+    const fheroes2::Sprite & GetModesSprite( const uint32_t mod )
     {
         switch ( mod ) {
         case Battle::SP_BLOODLUST:
@@ -268,7 +268,7 @@ namespace
             break;
         }
 
-        return {};
+        return fheroes2::AGG::GetICN( ICN::UNKNOWN, 0 );
     }
 
     std::vector<std::pair<fheroes2::Rect, Spell>> DrawBattleStats( const fheroes2::Point & dst, const Troop & b )
@@ -524,7 +524,9 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected, const in
     fheroes2::Button buttonDismiss( dst_pt.x, dst_pt.y, dismissButtonIcnID, 0, 1 );
 
     const int exitButtonIcnID = isEvilInterface ? ICN::BUTTON_SMALL_EXIT_EVIL : ICN::BUTTON_SMALL_EXIT_GOOD;
-    dst_pt.x = pos_rt.x + 415;
+    const int32_t exitWidth = fheroes2::AGG::GetICN( exitButtonIcnID, 0 ).width();
+    const int32_t interfaceAdjustment = isEvilInterface ? 0 : 18;
+    dst_pt.x = pos_rt.x + sprite_dialog.width() - 58 - exitWidth + interfaceAdjustment;
     dst_pt.y = pos_rt.y + 221;
     fheroes2::Button buttonExit( dst_pt.x, dst_pt.y, exitButtonIcnID, 0, 1 );
 

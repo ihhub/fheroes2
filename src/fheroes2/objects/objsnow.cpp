@@ -21,14 +21,12 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "objsnow.h"
+
 #include <algorithm>
 #include <bitset>
-#include <iterator>
 #include <vector>
 
-#include "direction.h"
-#include "mp2.h"
-#include "objsnow.h"
 #include "tools.h"
 
 namespace
@@ -38,60 +36,7 @@ namespace
                                                  108, 109, 110, 111, 120, 121, 122, 123, 124, 125, 126, 127, 137, 140, 142, 144, 148, 193, 203, 207 } );
 }
 
-int ObjSnow::GetPassable( const uint8_t index )
-{
-    const uint8_t disabled[] = { 22, 26, 27, 28, 30, 32, 34, 35, 37, 38, 39, 81, 82, 83, 84, 197, 198 };
-    const uint8_t restricted[] = { 2,  12, 41, 42, 43, 44, 45, 49, 50, 55,  56,  57,  60,  64,  65,  68,  71,  74,  77,  80, 85,
-                                   86, 87, 88, 89, 90, 91, 92, 94, 95, 132, 149, 151, 159, 177, 184, 199, 200, 202, 208, 210 };
-
-    if ( isShadow( index ) )
-        return DIRECTION_ALL;
-    else if ( isAction( index ) || std::end( disabled ) != std::find( disabled, std::end( disabled ), index ) )
-        return 0;
-
-    return std::end( restricted ) != std::find( restricted, std::end( restricted ), index ) ? DIRECTION_CENTER_ROW | DIRECTION_BOTTOM_ROW : DIRECTION_ALL;
-}
-
-bool ObjSnow::isAction( uint32_t index )
-{
-    return MP2::OBJ_NONE != GetActionObject( index );
-}
-
 bool ObjSnow::isShadow( const uint8_t index )
 {
     return objSnowShadowBitset[index];
-}
-
-int ObjSnow::GetActionObject( uint32_t index )
-{
-    switch ( index ) {
-    case 3:
-        return MP2::OBJ_CAVE;
-    case 13:
-        return MP2::OBJ_LEAN_TO;
-    case 128:
-        return MP2::OBJ_WINDMILL;
-    case 138:
-        return MP2::OBJ_WATCH_TOWER;
-    case 141:
-        return MP2::OBJ_OBELISK;
-    case 143:
-        return MP2::OBJ_SIGN;
-    case 150:
-        return MP2::OBJ_ALCHEMIST_TOWER;
-    case 160:
-        return MP2::OBJ_GRAVEYARD;
-    case 191:
-        return MP2::OBJ_WATER_WHEEL;
-    case 194:
-        return MP2::OBJ_MAGIC_WELL;
-    case 201:
-        return MP2::OBJ_SAWMILL;
-    case 209:
-        return MP2::OBJ_GRAVEYARD;
-    default:
-        break;
-    }
-
-    return MP2::OBJ_NONE;
 }

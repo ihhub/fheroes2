@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -31,6 +31,7 @@
 #include "interface_buttons.h"
 #include "interface_cpanel.h"
 #include "interface_icons.h"
+#include "interface_status.h"
 #include "players.h"
 
 class Castle;
@@ -103,6 +104,11 @@ namespace Interface
             return controlPanel;
         }
 
+        StatusWindow & getStatusWindow()
+        {
+            return _statusWindow;
+        }
+
         void SetFocus( Heroes *, const bool retainScrollBarPosition );
         void SetFocus( Castle * );
         void ResetFocus( const int priority, const bool retainScrollBarPosition );
@@ -116,6 +122,7 @@ namespace Interface
         void EventPuzzleMaps() const;
         static fheroes2::GameMode EventScenarioInformation();
         void EventSystemDialog() const;
+        void EventSwitchFocusedHero( const int32_t tileIndex );
         void EventNextHero();
         void EventNextTown();
         fheroes2::GameMode EventHeroMovement();
@@ -141,6 +148,7 @@ namespace Interface
 
         void mouseCursorAreaClickLeft( const int32_t tileIndex ) override;
         void mouseCursorAreaPressRight( const int32_t tileIndex ) const override;
+        void mouseCursorAreaLongPressLeft( const int32_t tileIndex ) override;
 
         void updateCursor( const int32_t tileIndex ) override;
 
@@ -153,16 +161,19 @@ namespace Interface
         static int GetCursorFocusCastle( const Castle & castle, const Maps::Tiles & tile );
         static int GetCursorFocusHeroes( const Heroes & hero, const Maps::Tiles & tile );
         static int GetCursorFocusShipmaster( const Heroes & hero, const Maps::Tiles & tile );
+        static int _getCursorNoFocus( const Maps::Tiles & tile );
         static int GetCursorTileIndex( int32_t dstIndex );
 
         void ShowPathOrStartMoveHero( Heroes * hero, const int32_t destinationIdx );
         void MoveHeroFromArrowKeys( Heroes & hero, const int direction );
+        void _startHeroMove( Heroes & hero );
 
         fheroes2::GameMode HumanTurn( const bool isload );
 
         IconsPanel iconsPanel;
         ButtonsArea buttonsArea;
         ControlPanel controlPanel;
+        StatusWindow _statusWindow;
 
         bool _lockRedraw;
     };
