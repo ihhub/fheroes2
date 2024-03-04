@@ -1036,32 +1036,36 @@ namespace
                 break;
             }
 
+            bool updateInfo = false;
+
             if ( le.MousePressRight( buttonOk.area() ) ) {
                 const fheroes2::Text header( _( "Okay" ), fheroes2::FontType::normalYellow() );
                 const fheroes2::Text body( _( "Exit this menu." ), fheroes2::FontType::normalWhite() );
 
                 fheroes2::showMessage( header, body, 0 );
+                updateInfo = true;
             }
             else if ( le.MousePressRight( difficultyArea[0] ) ) {
                 const fheroes2::Text header( getCampaignDifficultyText( Campaign::CampaignDifficulty::Easy ), fheroes2::FontType::normalYellow() );
                 const fheroes2::Text body( easyDescription, fheroes2::FontType::normalWhite() );
 
                 fheroes2::showMessage( header, body, 0 );
+                updateInfo = true;
             }
             else if ( le.MousePressRight( difficultyArea[1] ) ) {
                 const fheroes2::Text header( getCampaignDifficultyText( Campaign::CampaignDifficulty::Normal ), fheroes2::FontType::normalYellow() );
                 const fheroes2::Text body( normalDescription, fheroes2::FontType::normalWhite() );
 
                 fheroes2::showMessage( header, body, 0 );
+                updateInfo = true;
             }
             else if ( le.MousePressRight( difficultyArea[2] ) ) {
                 const fheroes2::Text header( getCampaignDifficultyText( Campaign::CampaignDifficulty::Hard ), fheroes2::FontType::normalYellow() );
                 const fheroes2::Text body( hardDescription, fheroes2::FontType::normalWhite() );
 
                 fheroes2::showMessage( header, body, 0 );
+                updateInfo = true;
             }
-
-            bool updateInfo = false;
 
             if ( allowedSelection[0] && le.MouseClickLeft( difficultyArea[0] ) ) {
                 currentDescription = easyDescription;
@@ -1685,6 +1689,7 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
         else if ( le.MousePressRight( areaDaysSpent ) ) {
             fheroes2::showMessage( fheroes2::Text( _( "Days spent" ), fheroes2::FontType::normalYellow() ),
                                    fheroes2::Text( _( "The number of days spent on this campaign." ), fheroes2::FontType::normalWhite() ), Dialog::ZERO );
+            updateDisplay = true;
         }
         else if ( le.MouseClickLeft( buttonDifficulty.area() ) || HotKeyPressEvent( HotKeyEvent::CAMPAIGN_SELECT_DIFFICULTY ) ) {
             if ( campaignSaveData.isStarting() && !allowToRestart ) {
