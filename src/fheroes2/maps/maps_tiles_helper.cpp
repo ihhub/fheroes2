@@ -268,12 +268,18 @@ namespace
     // Returns the direction vector bits from 'centerTileIndex' where '_tileIsRoad' bit is set for the tiles around.
     int getRoadDirecton( const Maps::Tiles & tile )
     {
+        // Castle entrance (active tile) is considered as a road, but it is not a real road so it should not be taken into account here.
+        // TODO: Redo the roads placing and direction check to use Map_Format instead of 'world' tiles.
+        MP2::MapObjectType objectType = tile.GetObject( true );
+        int roadDirection
+            = ( tile.isRoad() && objectType != MP2::OBJ_CASTLE && objectType != MP2::OBJ_RANDOM_TOWN && objectType != MP2::OBJ_RANDOM_CASTLE ) ? Direction::CENTER : 0;
         const int32_t centerTileIndex = tile.GetIndex();
-        int roadDirection = ( tile.isRoad() ) ? Direction::CENTER : 0;
         const Maps::Indexes around = Maps::getAroundIndexes( centerTileIndex );
 
         for ( const int32_t tileIndex : around ) {
-            if ( world.GetTiles( tileIndex ).isRoad() ) {
+            const Maps::Tiles & currentTile = world.GetTiles( tileIndex );
+            objectType = currentTile.GetObject( true );
+            if ( currentTile.isRoad() && objectType != MP2::OBJ_CASTLE && objectType != MP2::OBJ_RANDOM_TOWN && objectType != MP2::OBJ_RANDOM_CASTLE ) {
                 roadDirection |= Maps::GetDirection( centerTileIndex, tileIndex );
             }
         }
