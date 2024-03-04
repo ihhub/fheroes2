@@ -96,9 +96,9 @@ namespace fheroes2
         return _fileStream.getRaw( it->second.second );
     }
 
-    std::set<std::string> H2DReader::getAllFileNames() const
+    std::set<std::string, std::less<>> H2DReader::getAllFileNames() const
     {
-        std::set<std::string> names;
+        std::set<std::string, std::less<>> names;
 
         for ( const auto & value : _fileNameAndOffset ) {
             names.insert( value.first );
@@ -160,7 +160,7 @@ namespace fheroes2
 
     bool H2DWriter::add( H2DReader & reader )
     {
-        const std::set<std::string> names = reader.getAllFileNames();
+        const std::set<std::string, std::less<>> names = reader.getAllFileNames();
 
         for ( const std::string & name : names ) {
             if ( !add( name, reader.getFile( name ) ) ) {

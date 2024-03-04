@@ -105,7 +105,6 @@ bool HeroesStrongestArmy( const Heroes * h1, const Heroes * h2 )
 
 Kingdom::Kingdom()
     : color( Color::NONE )
-    , _lastBattleWinHeroID( 0 )
     , lost_town_days( 0 )
     , visited_tents_colors( 0 )
     , _topCastleInKingdomView( -1 )
@@ -320,32 +319,33 @@ void Kingdom::AddHero( Heroes * hero )
 
 void Kingdom::RemoveHero( const Heroes * hero )
 {
-    if ( hero != nullptr ) {
-        if ( !heroes.empty() ) {
-            auto it = std::find( heroes.begin(), heroes.end(), hero );
-            assert( it != heroes.end() );
-            if ( it != heroes.end() ) {
-                heroes.erase( it );
-            }
-        }
-
-        Player * player = Players::Get( GetColor() );
-
-        if ( player && player->GetFocus().GetHeroes() == hero ) {
-            player->GetFocus().Reset();
-        }
-
-        assert( hero != nullptr );
-
-        AI::Get().HeroesRemove( *hero );
-    }
-    else {
-        // Why are trying to delete a non existing hero?
+    if ( hero == nullptr ) {
+        // Why are you trying to delete a non-existing hero?
         assert( 0 );
+        return;
     }
 
-    if ( isLoss() )
+    if ( !heroes.empty() ) {
+        auto it = std::find( heroes.begin(), heroes.end(), hero );
+        assert( it != heroes.end() );
+        if ( it != heroes.end() ) {
+            heroes.erase( it );
+        }
+    }
+
+    Player * player = Players::Get( GetColor() );
+
+    if ( player && player->GetFocus().GetHeroes() == hero ) {
+        player->GetFocus().Reset();
+    }
+
+    assert( hero != nullptr );
+
+    AI::Get().HeroesRemove( *hero );
+
+    if ( isLoss() ) {
         LossPostActions();
+    }
 }
 
 void Kingdom::AddCastle( const Castle * castle )
@@ -838,16 +838,6 @@ Kingdom & Kingdoms::GetKingdom( int color )
     return kingdoms[6];
 }
 
-void Kingdom::SetLastBattleWinHero( const Heroes & hero )
-{
-    _lastBattleWinHeroID = hero.GetID();
-}
-
-Heroes * Kingdom::GetLastBattleWinHero() const
-{
-    return Heroes::UNKNOWN != _lastBattleWinHeroID ? world.GetHeroes( _lastBattleWinHeroID ) : nullptr;
-}
-
 void Kingdom::appendSurrenderedHero( Heroes & hero )
 {
     recruits.appendSurrenderedHero( hero, world.CountDay() );
@@ -1009,18 +999,19 @@ cost_t Kingdom::_getKingdomStartingResources( const int difficulty ) const
 StreamBase & operator<<( StreamBase & msg, const Kingdom & kingdom )
 {
     return msg << kingdom.modes << kingdom.color << kingdom.resource << kingdom.lost_town_days << kingdom.castles << kingdom.heroes << kingdom.recruits
-               << kingdom.visit_object << kingdom.puzzle_maps << kingdom.visited_tents_colors << kingdom._lastBattleWinHeroID << kingdom._topCastleInKingdomView
-               << kingdom._topHeroInKingdomView;
+               << kingdom.visit_object << kingdom.puzzle_maps << kingdom.visited_tents_colors << kingdom._topCastleInKingdomView << kingdom._topHeroInKingdomView;
 }
 
 StreamBase & operator>>( StreamBase & msg, Kingdom & kingdom )
 {
     msg >> kingdom.modes >> kingdom.color >> kingdom.resource >> kingdom.lost_town_days >> kingdom.castles >> kingdom.heroes >> kingdom.recruits >> kingdom.visit_object
-        >> kingdom.puzzle_maps >> kingdom.visited_tents_colors >> kingdom._lastBattleWinHeroID;
+        >> kingdom.puzzle_maps >> kingdom.visited_tents_colors;
 
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1010_RELEASE, "Remove the logic below." );
-    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1010_RELEASE ) {
-        ++kingdom._lastBattleWinHeroID;
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1100_RELEASE, "Remove the logic below." );
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1100_RELEASE ) {
+        int dummy;
+
+        msg >> dummy;
     }
 
     return msg >> kingdom._topCastleInKingdomView >> kingdom._topHeroInKingdomView;

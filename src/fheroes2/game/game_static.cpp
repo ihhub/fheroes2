@@ -270,6 +270,11 @@ int GameStatic::GetBattleMoatReduceDefense()
     return 3;
 }
 
+uint32_t GameStatic::getCastleWallRangedPenalty()
+{
+    return 50;
+}
+
 uint32_t GameStatic::getMovementPointBonus( const MP2::MapObjectType objectType )
 {
     switch ( objectType ) {

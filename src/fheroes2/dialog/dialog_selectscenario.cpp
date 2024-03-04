@@ -170,7 +170,7 @@ namespace
             msg = _( "Find a specific artifact." );
             break;
         case Maps::FileInfo::VICTORY_DEFEAT_OTHER_SIDE:
-            msg = _( "Your side defeats the opposing side." );
+            msg = _( "Your side must defeat the opposing side." );
             break;
         case Maps::FileInfo::VICTORY_COLLECT_ENOUGH_GOLD:
             msg = _( "Accumulate a large amount of gold." );
@@ -582,7 +582,7 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & allMaps 
 
         if ( le.MouseClickLeft( buttonSelectSmall.area() ) || HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_MAP_SIZE_SMALL ) ) {
             if ( small.empty() ) {
-                fheroes2::showStandardTextMessage( "", _( "No maps exist at that size" ), Dialog::OK );
+                fheroes2::showStandardTextMessage( "", _( "No maps exist at that size." ), Dialog::OK );
                 currentPressedButton->drawOnPress();
             }
             else {
@@ -595,7 +595,7 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & allMaps 
         }
         else if ( le.MouseClickLeft( buttonSelectMedium.area() ) || HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_MAP_SIZE_MEDIUM ) ) {
             if ( medium.empty() ) {
-                fheroes2::showStandardTextMessage( "", _( "No maps exist at that size" ), Dialog::OK );
+                fheroes2::showStandardTextMessage( "", _( "No maps exist at that size." ), Dialog::OK );
                 currentPressedButton->drawOnPress();
             }
             else {
@@ -608,7 +608,7 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & allMaps 
         }
         else if ( le.MouseClickLeft( buttonSelectLarge.area() ) || HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_MAP_SIZE_LARGE ) ) {
             if ( large.empty() ) {
-                fheroes2::showStandardTextMessage( "", _( "No maps exist at that size" ), Dialog::OK );
+                fheroes2::showStandardTextMessage( "", _( "No maps exist at that size." ), Dialog::OK );
                 currentPressedButton->drawOnPress();
             }
             else {
@@ -621,7 +621,7 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & allMaps 
         }
         else if ( le.MouseClickLeft( buttonSelectXLarge.area() ) || HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_MAP_SIZE_EXTRA_LARGE ) ) {
             if ( xlarge.empty() ) {
-                fheroes2::showStandardTextMessage( "", _( "No maps exist at that size" ), Dialog::OK );
+                fheroes2::showStandardTextMessage( "", _( "No maps exist at that size." ), Dialog::OK );
                 currentPressedButton->drawOnPress();
             }
             else {
@@ -652,7 +652,7 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & allMaps 
             ShowToolTip( _( "All Maps" ), _( "View all maps, regardless of size." ) );
         else if ( le.MousePressRight( countPlayers ) || le.MousePressRight( curCountPlayer ) )
             ShowToolTip( _( "Players Icon" ),
-                         _( "Indicates how many players total are in the scenario. Any positions not occupied by humans will be occupied by computer players." ) );
+                         _( "Indicates how many players total are in the scenario. Any positions not occupied by human players will be occupied by computer players." ) );
         else if ( le.MousePressRight( sizeMaps ) || le.MousePressRight( curMapSize ) )
             ShowToolTip( _( "Size Icon" ), _( "Indicates whether the map\nis small (36 x 36), medium\n(72 x 72), large (108 x 108),\nor extra large (144 x 144)." ) );
         else if ( le.MousePressRight( mapTypes ) || le.MousePressRight( curMapType ) )

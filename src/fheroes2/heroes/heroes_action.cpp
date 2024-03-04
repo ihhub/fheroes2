@@ -1059,7 +1059,7 @@ namespace
             msg = visited
                       ? _( "The mermaids silently entice you to return later and be blessed again." )
                       : _(
-                          "The magical, soothing beauty of the Mermaids reaches you and your crew.\nJust for a moment, you forget your worries and bask in the beauty of the moment.\nThe mermaids charms bless you with increased luck for your next combat." );
+                          "The magical, soothing beauty of the Mermaids reaches you and your crew.\nJust for a moment, you forget your worries and bask in the beauty of the moment.\nThe mermaids' charms bless you with increased luck for your next combat." );
             break;
 
         default:
@@ -2716,7 +2716,7 @@ namespace
                 const MusicalEffectPlayer musicalEffectPlayer( MUS::WATCHTOWER );
 
                 fheroes2::showStandardTextMessage( title,
-                                                   _( "The captain sighs. \"You don't have enough money, eh?  You can't expect me to give my maps away for free!\"" ),
+                                                   _( "The captain sighs. \"You don't have enough money, eh? You can't expect me to give my maps away for free!\"" ),
                                                    Dialog::OK );
             }
         }

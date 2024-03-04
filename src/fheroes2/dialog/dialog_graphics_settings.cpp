@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2022 - 2023                                             *
+ *   Copyright (C) 2022 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -99,7 +99,7 @@ namespace
     {
         const bool isVSyncEnabled = Settings::Get().isVSyncEnabled();
 
-        fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::SPANEL, isVSyncEnabled ? 18 : 19 ), _( "V-Sync" ), isVSyncEnabled ? _( "on" ) : _( "off" ),
+        fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::SPANEL, isVSyncEnabled ? 18 : 19 ), _( "V-Sync" ), isVSyncEnabled ? _( "On" ) : _( "Off" ),
                               fheroes2::UiOptionTextWidth::TWO_ELEMENTS_ROW );
     }
 
@@ -117,7 +117,7 @@ namespace
         }
         info.draw( ( image.width() - info.width() ) / 2, ( image.height() - info.height() ) / 2, image );
 
-        fheroes2::drawOption( optionRoi, image, _( "System Info" ), isSystemInfoDisplayed ? _( "on" ) : _( "off" ), fheroes2::UiOptionTextWidth::TWO_ELEMENTS_ROW );
+        fheroes2::drawOption( optionRoi, image, _( "System Info" ), isSystemInfoDisplayed ? _( "On" ) : _( "Off" ), fheroes2::UiOptionTextWidth::TWO_ELEMENTS_ROW );
     }
 
     SelectedWindow showConfigurationWindow()
