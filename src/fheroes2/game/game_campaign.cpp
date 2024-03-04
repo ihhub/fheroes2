@@ -41,6 +41,7 @@
 #include "campaign_data.h"
 #include "campaign_savedata.h"
 #include "campaign_scenariodata.h"
+#include "color.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
@@ -499,8 +500,17 @@ namespace
     void replaceArmy( Army & army, const std::vector<Troop> & troops )
     {
         army.Clean();
-        for ( size_t i = 0; i < troops.size(); ++i )
-            army.GetTroop( i )->Set( troops[i] );
+
+        const size_t size = std::min( army.Size(), troops.size() );
+
+        for ( size_t i = 0; i < size; ++i ) {
+            Troop * troop = army.GetTroop( i );
+            assert( troop != nullptr );
+
+            troop->Set( troops[i] );
+        }
+
+        assert( army.isValid() );
     }
 
     void setHeroAndArmyBonus( Heroes * hero, const Campaign::ScenarioInfoId & scenarioInfoId )
@@ -692,8 +702,11 @@ namespace
     // the rest will be applied based on the situation required
     void applyObtainedCampaignAwards( const Campaign::ScenarioInfoId & currentScenarioInfoId, const std::vector<Campaign::CampaignAwardData> & awards )
     {
+        const int humanColor = Players::HumanColors();
+        assert( Color::Count( humanColor ) == 1 );
+
         const Players & sortedPlayers = Settings::Get().GetPlayers();
-        const Kingdom & humanKingdom = world.GetKingdom( Players::HumanColors() );
+        const Kingdom & humanKingdom = world.GetKingdom( humanColor );
 
         for ( size_t i = 0; i < awards.size(); ++i ) {
             if ( currentScenarioInfoId.scenarioId < awards[i]._startScenarioID ) {
@@ -745,7 +758,15 @@ namespace
                 assert( hero != nullptr );
 
                 if ( hero != nullptr ) {
-                    replaceArmy( hero->GetArmy(), Campaign::CampaignSaveData::Get().getCarryOverTroops() );
+                    Army & heroArmy = hero->GetArmy();
+                    const std::vector<Troop> & carryOverTroops = Campaign::CampaignSaveData::Get().getCarryOverTroops();
+
+                    if ( std::any_of( carryOverTroops.begin(), carryOverTroops.end(), []( const Troop & troop ) { return troop.isValid(); } ) ) {
+                        replaceArmy( heroArmy, carryOverTroops );
+                    }
+                    else {
+                        heroArmy.Reset();
+                    }
                 }
 
                 break;
@@ -943,9 +964,9 @@ namespace
 
         fheroes2::MovableSprite selection( selectionImage );
 
-        const char * easyDescription = _( "Choose this difficulty if you want to prefer game story over challenge. AI is weaker in comparison with normal difficulty." );
-        const char * normalDescription = _( "Choose this difficulty to enjoy the campaign as per the original design." );
-        const char * hardDescription = _( "Choose this difficulty if you want challenge. AI is stronger in comparison with normal difficulty." );
+        const char * easyDescription = _( "Choose this difficulty to experience the game's story with less challenge. The AI will be weaker than at Normal difficulty." );
+        const char * normalDescription = _( "Choose this difficulty to experience the campaign as per the original design." );
+        const char * hardDescription = _( "Choose this difficulty if you want more challenge. The AI will be stronger than at Normal difficulty." );
 
         const std::array<fheroes2::Rect, 3> difficultyArea{ fheroes2::Rect( copyToOffset[0].x + 1, windowRoi.y + 37, selectionImage.width(), selectionImage.height() ),
                                                             fheroes2::Rect( copyToOffset[1].x + 1, windowRoi.y + 37, selectionImage.width(), selectionImage.height() ),
@@ -1179,12 +1200,19 @@ fheroes2::GameMode Game::CompleteCampaignScenario( const bool isLoadingSaveFile 
         }
 
         if ( awardType == Campaign::CampaignAwardData::AwardType::TYPE_CARRY_OVER_FORCES ) {
-            const Kingdom & humanKingdom = world.GetKingdom( Players::HumanColors() );
+            const int humanColor = Players::HumanColors();
+            assert( Color::Count( humanColor ) == 1 );
 
-            const Heroes * lastBattleWinHero = humanKingdom.GetLastBattleWinHero();
+            const VecHeroes & humanKingdomHeroes = world.GetKingdom( humanColor ).GetHeroes();
 
-            if ( lastBattleWinHero )
-                saveData.setCarryOverTroops( lastBattleWinHero->GetArmy() );
+            // In the original game, carry-over troops are taken from a hero who was hired least recently and who is still in the kingdom (I.E. still "alive"). A starting
+            // hero will count as first if they are still alive since the beginning, but if they are rehired then they take a new place in the queue of heroes.
+            if ( !humanKingdomHeroes.empty() ) {
+                const Heroes * hero = humanKingdomHeroes.front();
+                assert( hero != nullptr );
+
+                saveData.setCarryOverTroops( hero->GetArmy() );
+            }
         }
 
         saveData.addCampaignAward( obtainableAward._id );
@@ -1538,7 +1566,8 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
         }
         else if ( le.MousePressRight( buttonViewIntro.area() ) ) {
             fheroes2::showMessage( fheroes2::Text( _( "View Intro" ), fheroes2::FontType::normalYellow() ),
-                                   fheroes2::Text( _( "View Intro videos for the current state of the campaign." ), fheroes2::FontType::normalWhite() ), Dialog::ZERO );
+                                   fheroes2::Text( _( "View the intro video for the current state of the campaign." ), fheroes2::FontType::normalWhite() ),
+                                   Dialog::ZERO );
         }
         else if ( le.MousePressRight( buttonDifficulty.area() ) ) {
             fheroes2::showMessage( fheroes2::Text( _( "Campaign Difficulty" ), fheroes2::FontType::normalYellow() ),
@@ -1585,9 +1614,9 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
                 return bonusChoices[*scenarioBonusId];
             }();
 
-            // starting faction scenario bonus has to be called before players.SetStartGame()
+            // Scenario bonus related to the starting faction has to be set before calling players.SetStartGame(). If the scenario bonus includes the starting army, then
+            // only the starting faction should still be set.
             if ( scenarioBonus._type == Campaign::ScenarioBonusData::STARTING_RACE || scenarioBonus._type == Campaign::ScenarioBonusData::STARTING_RACE_AND_ARMY ) {
-                // but the army has to be set after starting the game, so first only set the race
                 SetScenarioBonus( currentScenarioInfoId, { Campaign::ScenarioBonusData::STARTING_RACE, scenarioBonus._subType, scenarioBonus._amount } );
             }
 
@@ -1595,6 +1624,9 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
             if ( isBetrayalScenario( currentScenarioInfoId ) ) {
                 campaignSaveData.removeAllAwards();
             }
+
+            // Scenario difficulty must be set before loading the map, because it is used during the map loading process.
+            campaignSaveData.setDifficulty( currentDifficulty );
 
             Players & players = conf.GetPlayers();
             players.SetStartGame();
@@ -1615,7 +1647,7 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
             // Fade-out screen before loading a scenario.
             fheroes2::fadeOutDisplay();
 
-            // meanwhile, the others should be called after players.SetStartGame()
+            // The rest of the scenario bonuses should be set after calling players.SetStartGame().
             if ( scenarioBonus._type != Campaign::ScenarioBonusData::STARTING_RACE ) {
                 SetScenarioBonus( currentScenarioInfoId, scenarioBonus );
             }
@@ -1623,7 +1655,6 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
             applyObtainedCampaignAwards( currentScenarioInfoId, campaignSaveData.getObtainedCampaignAwards() );
 
             campaignSaveData.setCurrentScenarioInfo( currentScenarioInfoId, scenarioBonusId.value_or( -1 ) );
-            campaignSaveData.setDifficulty( currentDifficulty );
 
             return fheroes2::GameMode::START_GAME;
         }

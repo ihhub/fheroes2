@@ -117,14 +117,14 @@ namespace
                     case MP2::OBJ_NON_ACTION_SHIPWRECK:
                     case MP2::OBJ_DERELICT_SHIP:
                     case MP2::OBJ_NON_ACTION_DERELICT_SHIP: {
-                        std::string modRobber = _( "%{object} robber" );
+                        std::string modRobber = _( "shipAndGraveyard|%{object} robber" );
                         StringReplace( modRobber, "%{object}", MP2::StringObject( objectType ) );
                         strs->append( modRobber );
                         break;
                     }
                     case MP2::OBJ_PYRAMID:
                     case MP2::OBJ_NON_ACTION_PYRAMID: {
-                        std::string modRaided = _( "%{object} raided" );
+                        std::string modRaided = _( "pyramid|%{object} raided" );
                         StringReplace( modRaided, "%{object}", MP2::StringObject( objectType ) );
                         strs->append( modRaided );
                         break;
@@ -2283,9 +2283,9 @@ StreamBase & operator>>( StreamBase & msg, Heroes & hero )
     // Heroes
     msg >> hero.name >> col >> hero.experience >> hero.secondary_skills >> hero.army >> hero._id >> hero.portrait >> hero._race;
 
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1100_RELEASE, "Remove the logic below." );
-    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1100_RELEASE ) {
-        // Before FORMAT_VERSION_1100_RELEASE we did not check that a custom hero name is empty set inside the original map.
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE1_1100_RELEASE, "Remove the logic below." );
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_PRE1_1100_RELEASE ) {
+        // Before FORMAT_VERSION_PRE1_1100_RELEASE we did not check that a custom hero name is empty set inside the original map.
         // This leads to assertion rise while rendering text. Also, it is incorrect to have a hero with no name.
         if ( hero.name.empty() ) {
             hero.name = Heroes::GetName( hero._id );
