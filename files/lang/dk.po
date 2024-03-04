@@ -7,8 +7,8 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-18 14:42+0000\n"
-"PO-Revision-Date: 2024-02-27 22:05+0100\n"
-"Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
+"PO-Revision-Date: 2024-03-04 09:33+0100\n"
+"Last-Translator: Stisen1\n"
 "Language-Team: Danish (Denmark)\n"
 "Language: da\n"
 "MIME-Version: 1.0\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Loco-Source-Locale: da_DK\n"
 "X-Launchpad-Export-Date: 2010-05-27 09:12+0000\n"
-"X-Generator: Poedit 3.4.2\n"
+"X-Generator: Poedit 3.2.2\n"
 "X-Loco-Parser: loco_parse_po\n"
 
 msgid ""
@@ -897,19 +897,23 @@ msgid_plural "The %{target} are paralyzed by the %{attacker}!"
 msgstr[0] "Enheden %{target} paralyseres af troppen med %{attacker}!"
 msgstr[1] "Enheden %{target} paralyseres af troppen med %{attacker}!"
 
-#, fuzzy
 msgid "The %{attacker} dispels all good spells on your %{target}!"
 msgid_plural "The %{attacker} dispel all good spells on your %{target}!"
 msgstr[0] ""
-"Troppen med %{attacker} fordriver alt det gode magi fra din %{target}!"
+"Troppen med %{attacker} fordriver alle positive besværgelser fra heltens "
+"%{target}!"
 msgstr[1] ""
-"Troppen med %{attacker} fordriver alt det gode magi fra din %{target}!"
+"Troppen med %{attacker} fordriver alle positive besværgelser fra heltens "
+"%{target}!"
 
-#, fuzzy
 msgid "The %{attacker} casts %{spell} on the %{target}!"
 msgid_plural "The %{attacker} cast %{spell} on the %{target}!"
-msgstr[0] "Troppen med %{attacker} kaster %{spell} på %{target}!"
-msgstr[1] "Troppen med %{attacker} kaster %{spell} på %{target}!"
+msgstr[0] ""
+"Troppen med %{attacker} kaster besværgelsen %{spell} på troppen med "
+"%{target}!"
+msgstr[1] ""
+"Troppen med %{attacker} kaster besværgelsen %{spell} på troppen med "
+"%{target}!"
 
 msgid "Bad luck descends on the %{attacker}."
 msgstr "Sort uheld sænker sig over troppen med %{attacker}."
@@ -1457,15 +1461,14 @@ msgstr ""
 "Hvis du ikke gør det inden første dag i den tredje måned, hjælper det ikke "
 "din familie."
 
-#, fuzzy
 msgid ""
 "Rescue your crazy uncle Ivan. Find him before the first day of the fourth "
 "month or it will be of no help to your kingdom."
 msgstr ""
 "Red din skøre onkel Ivan.\n"
 "\n"
-"Hvis du ikke finder ham inden den første dag i den fjerde måned, vil han "
-"ikke være nogen hjælp for dit rige."
+"Hvis du ikke finder ham inden den første dag i den fjerde måned, vil "
+"eftersøgningen have været forgæves for dit rige."
 
 msgid ""
 "Destroy the barbarians who are attacking the southern border of your "
@@ -1786,7 +1789,7 @@ msgid "campaignBonus|Stealth Shield"
 msgstr "Skalkeskjold"
 
 msgid "campaignBonus|Tax Lien"
-msgstr "Skattepant"
+msgstr "Pantebrevet"
 
 msgid "campaignBonus|Thunder Mace"
 msgstr "Morgenstjerne"
@@ -2008,9 +2011,8 @@ msgstr "%{name}et kan ikke bygges, da borgen er for langt fra vand."
 msgid "This building has been disabled."
 msgstr "Denne bygning er blevet deaktiveret."
 
-#, fuzzy
 msgid "Cannot afford the %{name}."
-msgstr "%{name} er for dyr at bygge."
+msgstr "Ikke nok resurser til byggeriet af %{name}."
 
 msgid "The %{name} is already built."
 msgstr "Bygningen %{name} er allerede blevet bygget."
@@ -2480,7 +2482,8 @@ msgid ""
 msgstr "Krystalhaven øger tilvæksten af feer med %{count} om ugen."
 
 msgid "The Dungeon increases the income of the town by %{count} gold per day."
-msgstr "Fangehullet øger byens indkomst med %{count} guldstykker om dagen."
+msgstr ""
+"Fangehullet øger dit riges guldindkomst med %{count} guldstykker om dagen."
 
 msgid "The Waterfall increases production of Centaurs by %{count} per week."
 msgstr "Vandfaldet øger tilvæksten af kentaurer med %{count} om ugen."
@@ -2576,9 +2579,8 @@ msgstr ""
 "gør det også muligt at få en oversigt over byens væsener. Du kan desuden "
 "hverve dem herfra."
 
-#, fuzzy
 msgid "The Statue increases the town's income by %{count} gold per day."
-msgstr "Statuen øger din bys indkomst med %{count} guldstykker om dagen."
+msgstr "Statuen øger dit riges guldindkomst med %{count} guldstykker om dagen."
 
 msgid "The Left Turret provides extra firepower during castle combat."
 msgstr ""
@@ -2606,13 +2608,12 @@ msgstr ""
 "voldgraven, ender sin tur dér. Så længe den befinder sig her, vil den "
 "desuden være mere sårbar overfor angreb."
 
-#, fuzzy
 msgid ""
 "The Castle improves the town's defense and increases its income to %{count} "
 "gold per day."
 msgstr ""
 "Borgen forstærker byens forsvar mod angreb. Borgen øger desuden dit riges "
-"indkomst med %{count} guldstykker om dagen."
+"guldindkomst med %{count} guldstykker om dagen."
 
 msgid ""
 "The Tent provides workers to build a castle, provided the materials and the "
@@ -2728,11 +2729,9 @@ msgstr "Spredt formation"
 msgid "Grouped Formation"
 msgstr "Gruppeformation"
 
-#, fuzzy
 msgid "Click to show the next town."
 msgstr "Klik for at se næste by."
 
-#, fuzzy
 msgid "Click to show the previous town."
 msgstr "Klik for at se forrige by."
 
@@ -2954,9 +2953,8 @@ msgstr "Indstil niveau for forgrundslyde."
 msgid "Change the type of music."
 msgstr "Ændr musikstil."
 
-#, fuzzy
 msgid "Toggle the 3D effect of foreground sounds."
-msgstr "Indstil 3D effekter for forgrundslyde."
+msgstr "Skift 3D-effekter for forgrundslyde."
 
 msgid "Build a new ship:"
 msgstr "Byg et nyt skib:"
@@ -3545,9 +3543,8 @@ msgstr "Arvefølgekrigene"
 msgid "The Price of Loyalty"
 msgstr "Prisen for Loyalitet"
 
-#, fuzzy
 msgid "Resurrection"
-msgstr "Genoplivelse"
+msgstr "Opstandelse"
 
 msgid "Lose all your heroes and towns."
 msgstr "Mist alle dine helte og byer."
@@ -3915,9 +3912,8 @@ msgstr "Helte kan ikke placeres på vand."
 msgid "Used to place %{object}."
 msgstr "Bruges til at placere en helt."
 
-#, fuzzy
 msgid "Select object type"
-msgstr "Vælg hav-objekt:"
+msgstr "Vælg objekttype:"
 
 #, fuzzy
 msgid ""
@@ -3944,9 +3940,8 @@ msgstr "Veje"
 msgid "Streams"
 msgstr "Å-tilstand"
 
-#, fuzzy
 msgid "Erase"
-msgstr "Viskelæder"
+msgstr "udviske"
 
 msgid "Mountains"
 msgstr "Bjerge"
@@ -4086,9 +4081,8 @@ msgid "Used to draw the underlying grass, dirt, water, etc. on the map."
 msgstr ""
 "Bruges til at tegne det underliggende græs, jord, vand, osv. på kortet."
 
-#, fuzzy
 msgid "Landscape Objects Mode"
-msgstr "Objekt-tilstand"
+msgstr "Landskabsobjekt-tilstand"
 
 #, fuzzy
 msgid ""
@@ -4102,9 +4096,8 @@ msgstr "Detalje-tilstand"
 msgid "Used for special editing of monsters, heroes and towns."
 msgstr "Bruges til specialredigering af væsener, helte og byer."
 
-#, fuzzy
 msgid "Adventure Objects Mode"
-msgstr "Eventyrindstillinger"
+msgstr "Eventyr objekt-tilstand"
 
 #, fuzzy
 msgid ""
@@ -4113,18 +4106,16 @@ msgid ""
 msgstr ""
 "Bruges til at placere objekter (bjerge, træer, skatte, osv.) på kortet."
 
-#, fuzzy
 msgid "Kingdom Objects Mode"
-msgstr "Objekt-tilstand"
+msgstr "Kongerigeobjekt-tilstand"
 
 #, fuzzy
 msgid "Used to place kingdom objects (towns, castles and heroes) on the map."
 msgstr ""
 "Bruges til at placere objekter (bjerge, træer, skatte, osv.) på kortet."
 
-#, fuzzy
 msgid "Monsters Mode"
-msgstr "Monstre"
+msgstr "Væsen-tilstand"
 
 #, fuzzy
 msgid "Used to place monsters on the map."
@@ -4544,7 +4535,6 @@ msgstr "Nyt spil"
 msgid "hotkey|load game"
 msgstr "Indlæs spil"
 
-#, fuzzy
 msgid "hotkey|high scores"
 msgstr "Ranglister"
 
@@ -4584,7 +4574,6 @@ msgstr "Vælg ekstrastor kortstørrelse"
 msgid "hotkey|select all map sizes"
 msgstr "Vælg alle kortstørrelser"
 
-#, fuzzy
 msgid "hotkey|hot seat game"
 msgstr "Lokalt spil"
 
@@ -4619,23 +4608,22 @@ msgid "hotkey|redo last action"
 msgstr "Gentag forrige handling"
 
 msgid "hotkey|roland campaign"
-msgstr "Rolands felttog"
+msgstr "Felttoget: Roland"
 
 msgid "hotkey|archibald campaign"
-msgstr "Archibalds felttog"
+msgstr "Felttoget: Archibald"
 
-#, fuzzy
 msgid "hotkey|price of loyalty campaign"
-msgstr "Felttoget Prisen for Loyalitet"
+msgstr "Felttoget: Prisen for Loyalitet"
 
 msgid "hotkey|voyage home campaign"
-msgstr "Felttoget Hjemrejse"
+msgstr "Felttoget: Hjemrejse"
 
 msgid "hotkey|wizard's isle campaign"
-msgstr "Felttoget Troldmændenes Ø"
+msgstr "Felttoget: Troldmændenes Ø"
 
 msgid "hotkey|descendants campaign"
-msgstr "Felttoget Efterkommere"
+msgstr "Felttoget: Efterkommere"
 
 msgid "hotkey|select first campaign bonus"
 msgstr "Vælg felttogsbonus nr.1"
@@ -4685,9 +4673,8 @@ msgstr "Gem spil"
 msgid "hotkey|next hero"
 msgstr "Næste helt"
 
-#, fuzzy
 msgid "hotkey|change to hero under cursor"
-msgstr "Næste helt"
+msgstr "Skift til markeret helt"
 
 msgid "hotkey|start hero movement"
 msgstr "Fortsæt heltebevægelse"
@@ -5168,7 +5155,7 @@ msgid ""
 "You have built up over %{count} gold in your treasury.\n"
 "All enemies bow before your wealth and power."
 msgstr ""
-"Du har opbygget over %{count} guldstykker i dit skatkammer.\n"
+"Du har akkumuleret over %{count} guldstykker i dit skatkammer.\n"
 "Alle fjender bøjer sig for din rigdom og magt!"
 
 msgid "Victory!"
@@ -5185,7 +5172,7 @@ msgid ""
 "The enemy has built up over %{count} gold in his treasury.\n"
 "You must bow done in defeat before his wealth and power."
 msgstr ""
-"Fjenden har opbygget over %{count} guldstykker i sit skatkammer.\n"
+"Fjenden har akkumuleret over %{count} guldstykker i sit skatkammer.\n"
 "Med dette nederlag skal du nu bøje dig for hans rigdom og magt!"
 
 msgid "You have been eliminated from the game!!!"
@@ -5259,7 +5246,7 @@ msgid "Find the '%{name}' artifact."
 msgstr "Find artefaktet '%{name}'."
 
 msgid "Accumulate %{count} gold."
-msgstr "Saml %{count} guldstykker."
+msgstr "Akkumuler %{count} guldstykker."
 
 msgid ""
 ", or you may win by defeating all enemy heroes and capturing all enemy towns "
@@ -5769,13 +5756,11 @@ msgstr "Vietnamesisk"
 msgid ", FPS: "
 msgstr ", FPS:"
 
-#, fuzzy
 msgid "shipAndGraveyard|%{object} robber"
-msgstr "%{object} røv"
+msgstr "%{object} plyndr"
 
-#, fuzzy
 msgid "pyramid|%{object} raided"
-msgstr "%{object} røvet"
+msgstr "%{object} plyndret"
 
 msgid "Ector"
 msgstr "Hektor"
@@ -7830,21 +7815,20 @@ msgstr ""
 "%{skill} øger din helts daglige bevægelsespoint over vand med %{count} "
 "procent."
 
-#, fuzzy
 msgid "%{skill} increases the hero's troops morale by %{count}."
-msgstr "%{skill} øger din helts moral med %{count} point."
+msgstr "%{skill} øger din helts troppers moral med %{count} point."
 
-#, fuzzy
 msgid "%{skill} allows the hero to learn third level spells."
-msgstr "%{skill} giver din helt mulighed for at lære magi på tredje niveau."
+msgstr ""
+"%{skill} gør det muligt for din helt at lære besværgelser af tredje niveau."
 
-#, fuzzy
 msgid "%{skill} allows the hero to learn fourth level spells."
-msgstr "%{skill} giver din helt mulighed for at lære magi på fjerde niveau."
+msgstr ""
+"%{skill} gør det muligt for din helt at lære besværgelser af fjerde niveau."
 
-#, fuzzy
 msgid "%{skill} allows the hero to learn fifth level spells."
-msgstr "%{skill} giver din helt mulighed for at lære magi på femte niveau."
+msgstr ""
+"%{skill} gør det muligt for din helt at lære besværgelser af femte niveau."
 
 #, fuzzy
 msgid "%{skill} regenerates one additional spell point per day to the hero."
@@ -9310,7 +9294,7 @@ msgid "Golden Goose"
 msgstr "Den Gyldne Gås"
 
 msgid "The %{name} brings in an income of %{count} gold per day."
-msgstr "%{name} øger kongerigets indkomst med %{count} guldstykker om dagen."
+msgstr "%{name} øger dit riges guldindkomst med %{count} guldstykker om dagen."
 
 msgid "Arcane Necklace of Magic"
 msgstr "Den Magiske Mystikhalskæde"
@@ -9574,9 +9558,8 @@ msgstr ""
 msgid "Endless Sack of Gold"
 msgstr "Den Uudtømmelige Guldsæk"
 
-#, fuzzy
 msgid "The %{name} provides the hero with %{count} gold per day."
-msgstr "%{name} giver dig %{count} guldstykker om dagen."
+msgstr "%{name} øger dit riges guldindkomst med %{count} guldstykker om dagen."
 
 msgid ""
 "A little leprechaun dances gleefully around a magic sack. Seeing you "
@@ -10223,9 +10206,10 @@ msgstr ""
 msgid "Tax Lien"
 msgstr "Pantebrevet"
 
-#, fuzzy
 msgid "The %{name} costs the hero %{count} gold pieces per day."
-msgstr "Det koster dig %{count} guldstykker om dagen, at have %{name} på dig."
+msgstr ""
+"%{name} koster dit rige %{count} guldstykker om dagen, så længe din helt er "
+"i besiddelse af det."
 
 msgid ""
 "Your big spending habits have earned you a massive tax bill that you can't "
@@ -10690,9 +10674,8 @@ msgstr ""
 msgid "Staff of Wizardry"
 msgstr "Troldmandsstav"
 
-#, fuzzy
 msgid "The %{name} boosts the hero's spell power by %{count}."
-msgstr "%{name} øger din magikraft med %{count} point."
+msgstr "%{name} øger din helts magikraft med %{count} point."
 
 msgid ""
 "While out scaring up game, your troops find a mysterious staff levitating "
@@ -10708,9 +10691,9 @@ msgstr ""
 msgid "Sword Breaker"
 msgstr "Sværdbrækkeren"
 
-#, fuzzy
 msgid "The %{name} increases the hero's defense by %{count} and attack by 1."
-msgstr "%{name} øger både din angrebs- og forsvarsevne med %{count} point."
+msgstr ""
+"%{name} øger både din helts angrebs- og forsvarsevne med %{count} point."
 
 msgid ""
 "A former Captain of the Guard admires your quest and gives you the enchanted "
@@ -10738,9 +10721,8 @@ msgstr ""
 msgid "Spade of Necromancy"
 msgstr "Nekromantikerens Spade"
 
-#, fuzzy
 msgid "The %{name} gives the hero increased necromancy skill."
-msgstr "%{name} dine nekromantiske evne."
+msgstr "%{name} øger din helts nekromantiske evne."
 
 msgid ""
 "A dirty shovel has been thrust into a dirt mound nearby. Upon investigation, "
