@@ -852,7 +852,7 @@ namespace
         std::vector<fheroes2::ResolutionInfo> getAvailableResolutions() const override
         {
             int currentIndex = static_cast<int>( getCurrentDisplayIndex() );
-            static const std::vector<fheroes2::ResolutionInfo> filteredResolutions = [=]() {
+            std::vector<fheroes2::ResolutionInfo> filteredResolutions = [=]() {
                 std::set<fheroes2::ResolutionInfo> resolutionSet;
 
                 const int displayCount = SDL_GetNumVideoDisplays();
