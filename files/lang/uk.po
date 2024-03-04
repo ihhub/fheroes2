@@ -8595,7 +8595,7 @@ msgid "View %{name} Info"
 msgstr ""
 
 msgid "Move %{name}"
-msgstr "Перемістити  %{name}"
+msgstr "Перемістити %{name}"
 
 msgid "Cannot move the Spellbook"
 msgstr "Неможливо перемістити книгу заклинань"
