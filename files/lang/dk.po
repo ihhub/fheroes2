@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-18 14:42+0000\n"
-"PO-Revision-Date: 2024-03-04 09:33+0100\n"
+"PO-Revision-Date: 2024-03-04 10:07+0100\n"
 "Last-Translator: Stisen1\n"
 "Language-Team: Danish (Denmark)\n"
 "Language: da\n"
@@ -1618,24 +1618,24 @@ msgstr " vil altid flygte i rædsel for din hær."
 msgid " will be willing to join your army."
 msgstr " vil velvilligt tilslutte sig din hær."
 
-#, fuzzy
 msgid "\"%{artifact}\" artifact will be carried over in the campaign."
-msgstr "\"%{artifact}\" artefaktet vil blive bragt videre til næste scenarie."
+msgstr ""
+"Artefaktet \"%{artifact}\" viderebringes til et af felttogets senere "
+"scenarier."
 
-#, fuzzy
 msgid "The army will be carried over in the campaign."
-msgstr "Hæren vil blive bragt videre til næste scenarie."
+msgstr "Hæren viderebringes til et af felttogets senere scenarier."
 
 msgid "The kingdom will have +%{count} %{resource} each day."
 msgstr "Kongeriget vil have +%{count} %{resource} om dagen."
 
-#, fuzzy
 msgid "The \"%{spell}\" spell will be carried over in the campaign."
-msgstr "Besværgelsen \"%{spell}\" vil følge med til næste scenarie."
+msgstr ""
+"Besværgelsen \"%{spell}\" viderebringes til et af felttogets senere "
+"scenarier."
 
-#, fuzzy
 msgid "%{hero} can be hired during scenarios."
-msgstr "I dette scenarie kan %{hero} rekrutteres."
+msgstr "Helten %{hero} kan rekrutteres i løbet af scenarier."
 
 #, fuzzy
 msgid "%{hero} has been defeated and will not appear in subsequent scenarios."
@@ -1937,19 +1937,19 @@ msgid ""
 "The kingdom will receive %{amount} additional %{resource} at the start of "
 "the scenario."
 msgstr ""
-"I dette scenarie vil dit kongerige starte med %{amount} ekstra mængder "
-"%{resource}."
+"Dit kongerige vil modtage %{amount} ekstra mængder %{resource} i starten af "
+"scenariet."
 
 msgid ""
 "The kingdom will have %{amount} less %{resource} at the start of the "
 "scenario."
 msgstr ""
-"I dette scenarie vil dit kongerige starte med %{amount} mindre mængder "
-"%{resource}."
+"Dit kongerige vil modtage %{amount} færre mængder %{resource} i starten af "
+"scenariet."
 
 msgid ""
 "The main hero will have %{count} %{monster} at the start of the scenario."
-msgstr "I dette scenarie vil din hovedhelt starte med %{count} %{monster}."
+msgstr "Din hovedhelt vil modtage %{count} %{monster} i starten af scenariet."
 
 #, fuzzy
 msgid ""
@@ -1957,9 +1957,10 @@ msgid ""
 msgstr ""
 "I dette scenarie vil din hovedhelt starte med besværgelsen \"%{spell}\"."
 
-#, fuzzy
 msgid "The starting alignment of the scenario will be %{race}."
-msgstr "Begynd scenariet med %{race}-klassen."
+msgstr ""
+"Dit kongerige har et tilhørsforhold til klassen %{race} i starten af "
+"scenariet."
 
 #, fuzzy
 msgid ""
@@ -1970,7 +1971,7 @@ msgstr ""
 "%{skill}."
 
 msgid "The main hero will have %{skill} at the start of the scenario."
-msgstr "Hovedhelten vil i dette scenarie starte med at have lært %{skill}."
+msgstr "Hovedhelten vil have lært %{skill} i starten af scenariet."
 
 msgid "Roland"
 msgstr "Roland"
@@ -11078,7 +11079,7 @@ msgid "Greatly increases a unit's attack skill vs. Dragons."
 msgstr "Øger i høj grad en trops angrebsevne mod drager."
 
 msgid "Blood Lust"
-msgstr "Blodlyst"
+msgstr "Blodtørst"
 
 msgid "Increases a unit's attack skill."
 msgstr "Øger en trops angrebsevne."
