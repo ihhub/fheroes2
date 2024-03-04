@@ -188,19 +188,31 @@ namespace
                 continue;
             }
 
-            for ( auto object = mapTile.objects.begin(); object != mapTile.objects.end(); ) {
-                if ( objectsUids.find( object->id ) == objectsUids.end()
-                     || std::none_of( objectGroups.begin(), objectGroups.end(), [&object]( const Maps::ObjectGroup group ) { return group == object->group; } ) ) {
-                    ++object;
+            for ( auto objectIter = mapTile.objects.begin(); objectIter != mapTile.objects.end(); ) {
+                // LANDSCAPE_FLAGS and LANDSCAPE_TOWN_BASEMENTS are special objects that should be erased only when erasing the main object.
+                if ( objectIter->group == Maps::ObjectGroup::LANDSCAPE_FLAGS || objectIter->group == Maps::ObjectGroup::LANDSCAPE_TOWN_BASEMENTS
+                     || objectsUids.find( objectIter->id ) == objectsUids.end() ) {
+                    // No main object UID was found.
+                    ++objectIter;
                     continue;
                 }
 
                 // The object with this UID is found, remove UID not to search for it more.
-                objectsUids.erase( object->id );
+                objectsUids.erase( objectIter->id );
 
-                if ( object->group == Maps::ObjectGroup::KINGDOM_TOWNS ) {
+                if ( std::none_of( objectGroups.begin(), objectGroups.end(), [&objectIter]( const Maps::ObjectGroup group ) { return group == objectIter->group; } ) ) {
+                    // This object is not in the selected to erase groups.
+                    if ( objectsUids.empty() ) {
+                        break;
+                    }
+
+                    ++objectIter;
+                    continue;
+                }
+
+                if ( objectIter->group == Maps::ObjectGroup::KINGDOM_TOWNS ) {
                     // Towns and castles consist of four objects. We need to search them all and remove from map.
-                    const uint32_t objectId = object->id;
+                    const uint32_t objectId = objectIter->id;
 
                     auto findTownPart = [objectId]( const Maps::Map_Format::TileInfo & tileToSearch, const Maps::ObjectGroup group ) {
                         auto foundObjectIter = std::find_if( tileToSearch.objects.begin(), tileToSearch.objects.end(),
@@ -215,7 +227,7 @@ namespace
                     };
 
                     // Remove the town object.
-                    mapTile.objects.erase( object );
+                    mapTile.objects.erase( objectIter );
 
                     // Town basement is also located at this tile. Find and remove it.
                     mapTile.objects.erase( findTownPart( mapTile, Maps::ObjectGroup::LANDSCAPE_TOWN_BASEMENTS ) );
@@ -230,22 +242,26 @@ namespace
                     nextMapTile.objects.erase( findTownPart( nextMapTile, Maps::ObjectGroup::LANDSCAPE_FLAGS ) );
 
                     // Two objects have been removed from this tile. Start search from the beginning.
-                    object = mapTile.objects.begin();
+                    objectIter = mapTile.objects.begin();
 
                     needRedraw = true;
                 }
-                else if ( object->group == Maps::ObjectGroup::ROADS ) {
+                else if ( objectIter->group == Maps::ObjectGroup::ROADS ) {
                     assert( mapTileIndex < world.getSize() );
 
                     needRedraw |= Maps::updateRoadOnTile( world.GetTiles( static_cast<int32_t>( mapTileIndex ) ), false );
+
+                    ++objectIter;
                 }
-                else if ( object->group == Maps::ObjectGroup::STREAMS ) {
+                else if ( objectIter->group == Maps::ObjectGroup::STREAMS ) {
                     assert( mapTileIndex < world.getSize() );
 
                     needRedraw |= Maps::updateStreamOnTile( world.GetTiles( static_cast<int32_t>( mapTileIndex ) ), false );
+
+                    ++objectIter;
                 }
                 else {
-                    object = mapTile.objects.erase( object );
+                    objectIter = mapTile.objects.erase( objectIter );
                     needRedraw = true;
                 }
 
