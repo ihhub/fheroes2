@@ -963,6 +963,10 @@ namespace
 
         uint8_t getMaximumDisplays() const override
         {
+            if ( !isAllocated() )
+                // If engine is not allocated returning highest uint8_t number
+                return 255;
+
             const int displayCount = SDL_GetNumVideoDisplays();
             if ( displayCount > 0 ) {
                 return static_cast<uint8_t>( displayCount );
@@ -1110,7 +1114,8 @@ namespace
             }
 
             flags |= SDL_WINDOW_RESIZABLE;
-
+            int tmp = getCurrentDisplayIndex();
+            _CRT_UNUSED( tmp );
             _window = SDL_CreateWindow( _previousWindowTitle.data(), SDL_WINDOWPOS_CENTERED_DISPLAY( getCurrentDisplayIndex() ),
                                         SDL_WINDOWPOS_CENTERED_DISPLAY( getCurrentDisplayIndex() ), resolutionInfo.screenWidth, resolutionInfo.screenHeight, flags );
             if ( _window == nullptr ) {
