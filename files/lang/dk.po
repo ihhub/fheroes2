@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-18 14:42+0000\n"
-"PO-Revision-Date: 2024-03-04 11:28+0100\n"
+"PO-Revision-Date: 2024-03-04 10:47+0100\n"
 "Last-Translator: Stisen1\n"
 "Language-Team: Danish (Denmark)\n"
 "Language: da\n"
@@ -9217,49 +9217,54 @@ msgstr "Magibogen er bundet til den enkelte helt."
 msgid "Invalid Artifact"
 msgstr "Ugyldigt artefakt"
 
+#, fuzzy
 msgid "The %{name} increases the hero's knowledge by %{count}."
-msgstr "%{name} øger heltens kundskab med %{count} point."
+msgstr "%{name} øger din kundskab med %{count} point."
 
 msgid "Ultimate Book of Knowledge"
 msgstr "Den Ultimative Bog for Kundskab"
 
+#, fuzzy
 msgid "The %{name} increases the hero's attack skill by %{count}."
-msgstr "%{name} øger angrebsevnen for heltens tropper med %{count} point."
+msgstr "%{name} øger dine væseners angrebsevne med %{count} point."
 
 msgid "Ultimate Sword of Dominion"
 msgstr "Det Ultimative Herredømmesværd"
 
+#, fuzzy
 msgid "The %{name} increases the hero's defense skill by %{count}."
-msgstr "%{name} øger forsvarsevnen for heltens tropper med %{count} point."
+msgstr "%{name} øger dine væseners forsvarsevne med %{count} point."
 
 msgid "Ultimate Cloak of Protection"
 msgstr "Den Ultimative Beskyttelseskappe"
 
+#, fuzzy
 msgid "The %{name} increases the hero's spell power by %{count}."
-msgstr "%{name} øger heltens magikraft med %{count} point."
+msgstr "%{name} øger din magikraft med %{count} point."
 
 msgid "Ultimate Wand of Magic"
 msgstr "Den Ultimative Tryllestav"
 
+#, fuzzy
 msgid ""
 "The %{name} increases the hero's attack and defense skills by %{count} each."
-msgstr ""
-"%{name} øger både angrebs- og forsvarsevnen for heltens tropper med %{count} "
-"point."
+msgstr "%{name} øger både din angrebs- og forsvarsevne med %{count} point."
 
 msgid "Ultimate Shield"
 msgstr "Det Ultimative Skjold"
 
+#, fuzzy
 msgid ""
 "The %{name} increases the hero's spell power and knowledge by %{count} each."
-msgstr "%{name} øger både heltens magikraft og kundskab med %{count} point."
+msgstr "%{name} øger både din magikraft og kundskab med %{count} point."
 
 msgid "Ultimate Staff"
 msgstr "Den Ultimative Stav"
 
+#, fuzzy
 msgid ""
 "The %{name} increases each of the hero's basic skills by %{count} points."
-msgstr "%{name} øger alle heltens primære evner med %{count} point."
+msgstr "%{name} øger alle dine primære evner med %{count} point."
 
 msgid "Ultimate Crown"
 msgstr "Den Ultimative Krone"
@@ -9317,8 +9322,9 @@ msgstr ""
 msgid "Medal of Valor"
 msgstr "Hædersmedaljen"
 
+#, fuzzy
 msgid "The %{name} increases the morale of the hero's army by %{count}."
-msgstr "%{name} øger moralen for heltens tropper med %{count} point."
+msgstr "%{name} øger din moral med %{count} point."
 
 msgid ""
 "Freeing a virtuous maiden from the clutches of an evil overlord, you are "
@@ -9361,10 +9367,10 @@ msgstr ""
 msgid "Fizbin of Misfortune"
 msgstr "Fizbin Ulykkesmedaljen"
 
+#, fuzzy
 msgid ""
 "The %{name} greatly decreases the morale of the hero's army by %{count}."
-msgstr ""
-"%{name} reducerer markant moralen for heltens tropper med %{count} point."
+msgstr "%{name} reducerer din moral markant med %{count} point."
 
 msgid ""
 "You stumble upon a medal lying alongside the empty road. Adding the medal to "
@@ -9388,8 +9394,9 @@ msgstr ""
 msgid "Armored Gauntlets of Protection"
 msgstr "Værnerens Pansrede Handsker"
 
+#, fuzzy
 msgid "The %{name} increase the hero's defense skill by %{count}."
-msgstr "%{name} øger forsvarsevne for heltens tropper med %{count} point."
+msgstr "%{name} øger din forsvarsevne med %{count} point."
 
 msgid ""
 "You encounter the infamous Black Knight! After a grueling duel ending in a "
@@ -9425,10 +9432,9 @@ msgstr ""
 msgid "Ballista of Quickness"
 msgstr "Den Hastfulde Ballista"
 
+#, fuzzy
 msgid "The %{name} gives the hero's catapult one extra shot per combat round."
-msgstr ""
-"%{name} giver heltens katapult et ekstra skud per kamprunde, under "
-"belejringskamp."
+msgstr "%{name} giver din katapult et ekstra skud per kamprunde."
 
 msgid ""
 "Walking through the ruins of an ancient walled city, you find the instrument "
@@ -9571,8 +9577,9 @@ msgstr ""
 msgid "Nomad Boots of Mobility"
 msgstr "Nomadens Syvmilestøvler"
 
+#, fuzzy
 msgid "The %{name} increase the hero's movement on land."
-msgstr "%{name} øger heltens bevægelsespoint til lands."
+msgstr "%{name} øger heltens skridtpoint på land."
 
 msgid ""
 "A Nomad trader seeks protection from a tribe of Goblins. For your "
@@ -9600,8 +9607,9 @@ msgstr ""
 msgid "Lucky Rabbit's Foot"
 msgstr "Den Heldige Kaninfod"
 
+#, fuzzy
 msgid "The %{name} increases the luck of the hero's army by %{count}."
-msgstr "%{name} øger heldet for heltens tropper med %{count} point."
+msgstr "%{name} øger dit held i kamp med %{count} point."
 
 msgid ""
 "A traveling merchant offers you a rabbit's foot, made of gleaming silver "
@@ -9647,8 +9655,9 @@ msgstr ""
 msgid "True Compass of Mobility"
 msgstr "Det sande Kompas for Bevægelighed."
 
+#, fuzzy
 msgid "The %{name} increases the hero's movement on land and sea."
-msgstr "%{name} øger heltens bevægelsespoint, både til lands og til vands."
+msgstr "%{name} øger dine skridtpoint til lands og til vands."
 
 msgid ""
 "An old man claiming to be an inventor asks you to try his latest invention. "
@@ -9660,8 +9669,9 @@ msgstr ""
 msgid "Sailor's Astrolabe of Mobility"
 msgstr "Søfarerens Astrolabium for Bevægelighed"
 
+#, fuzzy
 msgid "The %{name} increases the hero's movement on sea."
-msgstr "%{name} øger heltens bevægelsespoint til vands."
+msgstr "%{name} øger dine bevægelsespoint til søs."
 
 msgid ""
 "An old sea captain is being tortured by Ogres. You save him, and in return "
@@ -9689,11 +9699,11 @@ msgstr ""
 msgid "Enchanted Hourglass"
 msgstr "Det Fortryllede Timeglas"
 
+#, fuzzy
 msgid ""
 "The %{name} extends the duration of all the hero's spells by %{count} turns."
 msgstr ""
-"%{name} forlænger varigheden på alle heltens besværgelser med %{count} "
-"runder."
+"%{name} forlænger alle dine besværgelsers varighed med %{count} runder."
 
 msgid ""
 "A surprise turn in the landscape finds you in the midst of a grisly scene: "
@@ -9707,8 +9717,9 @@ msgstr ""
 msgid "Gold Watch"
 msgstr "Gulduret"
 
+#, fuzzy
 msgid "The %{name} doubles the effectiveness of the hero's hypnotize spells."
-msgstr "%{name} fordobler effektiviteten på heltens hypnosebesværgelser."
+msgstr "%{name} fordobler dine hypnosebesværgelsers effektivitet."
 
 msgid ""
 "In reward for helping his cart out of a ditch, a traveling potion salesman "
@@ -10087,12 +10098,13 @@ msgstr ""
 msgid "Statesman's Quill"
 msgstr "Statsmandens Fjerpen"
 
+#, fuzzy
 msgid ""
 "The %{name} reduces the cost of surrender to %{count} percent of the total "
 "cost of troops the hero has in their army."
 msgstr ""
-"%{name} reducerer overgivelsesprisen til %{count}% af de samlede "
-"omkostninger for tropper, helten har i sin hær."
+"%{name} reducerer prisen for overgivelse til %{count}% af de samlede "
+"omkostninger for tropper, du har i din hær."
 
 msgid ""
 "You pause to help a diplomat with a broken axle fix his problem. In "
@@ -10106,10 +10118,10 @@ msgstr ""
 msgid "Wizard's Hat"
 msgstr "Troldmandshatten"
 
+#, fuzzy
 msgid ""
 "The %{name} increases the duration of the hero's spells by %{count} turns."
-msgstr ""
-"%{name} forlænger varigheden på heltens besværgelser med %{count} runder."
+msgstr "%{name} øger dine besværgelsers varighed med %{count} runder."
 
 msgid ""
 "You see a Wizard fleeing from a Griffin and riding like the wind. The Wizard "
@@ -10125,8 +10137,9 @@ msgstr ""
 msgid "Power Ring"
 msgstr "Kraftringen"
 
+#, fuzzy
 msgid "The %{name} returns %{count} extra spell points per day to the hero."
-msgstr "%{name} returnerer helten %{count} ekstra magipoint om dagen."
+msgstr "%{name} returnerer %{count} ekstra magipoint om dagen til din helt."
 
 msgid ""
 "You find a small tree that closely resembles the great Warlock Carnauth with "
@@ -10142,10 +10155,11 @@ msgstr ""
 msgid "Ammo Cart"
 msgstr "Ammunitionsvognen"
 
+#, fuzzy
 msgid ""
 "The %{name} provides endless ammunition for all of the hero's troops that "
 "shoot."
-msgstr "%{name} giver heltens skydende tropper uendelig ammunition."
+msgstr "%{name} giver dine skydende tropper uendelig ammunition."
 
 msgid ""
 "An ammunition cart in the middle of an old battlefield catches your eye. "
@@ -10176,8 +10190,9 @@ msgstr ""
 msgid "Hideous Mask"
 msgstr "Den Hæslige Maske"
 
+#, fuzzy
 msgid "The %{name} prevents all 'wandering' armies from joining the hero."
-msgstr "%{name} forhindrer alle 'vandrende' hære i at tilslutte sig helten."
+msgstr "%{name} forhindrer alle 'vandrende' hære i at tilslutte sig din helt."
 
 msgid ""
 "Your looting of the grave of Sinfilas Gardolad, the famous shapeshifting "
@@ -10342,8 +10357,9 @@ msgstr ""
 msgid "Magic Book"
 msgstr "Magibog"
 
+#, fuzzy
 msgid "The %{name} enables the hero to cast spells."
-msgstr "%{name} gør det muligt for helten at kaste besværgelser."
+msgstr "%{name} gør det muligt for dig at kaste besværgelser."
 
 msgid "Dummy 1"
 msgstr "Pladsholder 1"
@@ -10363,12 +10379,13 @@ msgstr "Pladsholder 4"
 msgid "Spell Scroll"
 msgstr "Trolddomsrulle"
 
+#, fuzzy
 msgid ""
 "This %{name} gives the hero the ability to cast the %{spell} spell if the "
 "hero has a Magic Book."
 msgstr ""
-"%{name} gør det muligt for helten at kaste besværgelsen %{spell}, hvis denne "
-"har en magibog."
+"%{name} giver din helt mulighed for at kaste besværgelsen %{spell}, hvis din "
+"helt har en magibog."
 
 msgid ""
 "You find an elaborate container which houses an old vellum scroll. The runes "
@@ -10384,12 +10401,13 @@ msgstr ""
 msgid "Arm of the Martyr"
 msgstr "Martyrens Arm"
 
+#, fuzzy
 msgid ""
 "The %{name} increases the hero's spell power by %{count} but adds the undead "
 "morale penalty."
 msgstr ""
-"%{name} øger heltens magikraft med %{count} point, men tilfører dennes hær "
-"moralstraffen for at have udøde i blandt sig."
+"%{name} øger magikraft med %{count} point, men tilfører din hær den udøde "
+"moralstraf."
 
 msgid ""
 "One of the less intelligent members of your party picks up an arm off of the "
@@ -10407,8 +10425,9 @@ msgstr ""
 msgid "Breastplate of Anduran"
 msgstr "Andurans Brynje"
 
+#, fuzzy
 msgid "The %{name} increases the hero's defense by %{count}."
-msgstr "%{name} øger forsvarsevnen for heltens tropper med %{count} point."
+msgstr "%{name} øger din forsvarsevne med %{count} point."
 
 msgid ""
 "You come upon a sign. It reads: \"Here lies the body of Anduran. Bow and "
@@ -10444,14 +10463,15 @@ msgstr ""
 msgid "Battle Garb of Anduran"
 msgstr "Andurans Udstyr"
 
+#, fuzzy
 msgid ""
 "The %{name} combines the powers of the three Anduran artifacts. It provides "
 "maximum luck and morale for the hero's troops and gives the hero the Town "
 "Portal spell."
 msgstr ""
 "%{name} kombinerer kræfterne fra Andurans tre artefakter. \n"
-"Det giver helten Byportal-besværgelsen samt maksimerer troppernes held og "
-"moral i kamp."
+"Det maksimerer dine troppers held og moral og giver dig Byportal-"
+"besværgelsen."
 
 msgid ""
 "Out of pity for a poor peasant, you purchase a chest of old junk they are "
@@ -10466,12 +10486,13 @@ msgstr ""
 msgid "Crystal Ball"
 msgstr "Krystalkuglen"
 
+#, fuzzy
 msgid ""
 "The %{name} lets the hero get more specific information about monsters, "
 "enemy heroes, and castles nearby the hero."
 msgstr ""
-"%{name} gør det muligt for helten, at få flere specifikke informationer om "
-"væsener, fjendens helte og borge, som er i nærheden af denne."
+"%{name} giver dig mulighed for at få mere specifik information om væsener, "
+"fjendens helte og borge i nærheden af den helten, som bærer den."
 
 msgid ""
 "You come upon a caravan of gypsies who are feasting and fortifying their "
@@ -10592,11 +10613,13 @@ msgstr ""
 msgid "Masthead"
 msgstr "Masthovedet"
 
+#, fuzzy
 msgid ""
 "The %{name} boosts the hero's troops' luck and morale by %{count} each in "
 "sea combat."
 msgstr ""
-"%{name} øger held og moral for heltens tropper med %{count} point, i søkamp."
+"%{name} øger troppernes held og moral med %{count} point, når de kæmper til "
+"søs."
 
 msgid "Sphere of Negation"
 msgstr "Negationskuglen"
