@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-18 14:42+0000\n"
-"PO-Revision-Date: 2024-03-04 12:52+0100\n"
+"PO-Revision-Date: 2024-03-04 13:44+0100\n"
 "Last-Translator: Stisen1\n"
 "Language-Team: Danish (Denmark)\n"
 "Language: da\n"
@@ -2609,7 +2609,7 @@ msgid ""
 "The Castle improves the town's defense and increases its income to %{count} "
 "gold per day."
 msgstr ""
-"Borgen forstærker byens forsvar mod angreb. Borgen øger desuden dit riges "
+"Borgen forstærker byens forsvar mod angreb. Borgen øger desuden byens "
 "guldindkomst med %{count} guldstykker om dagen."
 
 msgid ""
@@ -3930,7 +3930,7 @@ msgid "Streams"
 msgstr "Å-tilstand"
 
 msgid "Erase"
-msgstr "udviske"
+msgstr "Udviske"
 
 msgid "Mountains"
 msgstr "Bjerge"
@@ -7547,13 +7547,12 @@ msgstr ""
 msgid "The hero's spell power determines the duration or power of a spell."
 msgstr "Din magikraft bestemmer dine besværgelsers styrke og varighed."
 
-#, fuzzy
 msgid ""
 "The hero's knowledge determines how many spell points the hero may have. "
 "Under normal circumstances, a hero is limited to 10 spell points per level "
 "of knowledge."
 msgstr ""
-"Din kundskab bestemmer hvor meget mana din helt må have. Under normale "
+"Din kundskab bestemmer hvor meget mana helten må have. Under normale "
 "omstændigheder er en helt begrænset til at have 10 mana per level i kundskab."
 
 msgid "Current Modifiers:"
@@ -7756,7 +7755,7 @@ msgstr "%{skill} øger heltens bevægelsespoint med %{count} procent."
 msgid "%{skill} increases the hero's viewable area by one square."
 msgid_plural "%{skill} increases the hero's viewable area by %{count} squares."
 msgstr[0] "%{skill} øger heltens sigtbarhed med én firkant."
-msgstr[1] "%{skill} øger din helts sigtbarhed med %{count} firkanter."
+msgstr[1] "%{skill} øger heltens sigtbarhed med %{count} firkanter."
 
 #, fuzzy
 msgid ""
@@ -7790,25 +7789,25 @@ msgstr ""
 "%{skill} øger heltens daglige bevægelsespoint over vand med %{count} procent."
 
 msgid "%{skill} increases the hero's troops morale by %{count}."
-msgstr "%{skill} øger din helts troppers moral med %{count} point."
+msgstr "%{skill} øger moralen for heltens tropper med %{count} point."
 
 msgid "%{skill} allows the hero to learn third level spells."
 msgstr ""
-"%{skill} gør det muligt for din helt at lære besværgelser af tredje niveau."
+"%{skill} gør det muligt for helten at lære besværgelser af tredje niveau."
 
 msgid "%{skill} allows the hero to learn fourth level spells."
 msgstr ""
-"%{skill} gør det muligt for din helt at lære besværgelser af fjerde niveau."
+"%{skill} gør det muligt for helten at lære besværgelser af fjerde niveau."
 
 msgid "%{skill} allows the hero to learn fifth level spells."
 msgstr ""
-"%{skill} gør det muligt for din helt at lære besværgelser af femte niveau."
+"%{skill} gør det muligt for helten at lære besværgelser af femte niveau."
 
 msgid "%{skill} regenerates one additional spell point per day to the hero."
 msgid_plural ""
 "%{skill} regenerates %{count} additional spell points per day to the hero."
 msgstr[0] "%{skill} regenerer ét af heltens mana per dag."
-msgstr[1] "%{skill} regenerer %{count} af din helts mana per dag."
+msgstr[1] "%{skill} regenerer %{count} af heltens mana per dag."
 
 msgid "%{skill} increases the hero's luck by %{count}."
 msgstr "%{skill} øger held for heltens tropper med %{count} point."
@@ -7820,45 +7819,40 @@ msgstr ""
 "%{skill} giver heltens katapultskud en større chance for at ramme og gøre "
 "skade på borgens mure."
 
-#, fuzzy
 msgid ""
 "%{skill} gives the hero's catapult an extra shot, and each shot has a "
 "greater chance to hit and do damage to castle walls."
 msgstr ""
-"%{skill} giver din helts katapult et ekstra skud, og hvert skud har en "
-"større chance for at ramme og skade borgens mure."
+"%{skill} giver heltens katapult et ekstra skud, og hvert skud har en større "
+"chance for at ramme og skade borgens mure."
 
-#, fuzzy
 msgid ""
 "%{skill} gives the hero's catapult an extra shot, and each shot "
 "automatically destroys any wall, except a fortified wall in a Knight castle."
 msgstr ""
-"%{skill} giver din helts katapult et ekstra skud, og hvert skud ødelægger "
+"%{skill} giver heltens katapult et ekstra skud, og hvert skud ødelægger "
 "automatisk enhver mur, undtagen en befæstet mur i en ridderborg."
 
-#, fuzzy
 msgid ""
 "%{skill} gives the hero a %{count} percent chance to learn any given 1st or "
 "2nd level spell that was cast by an enemy during combat."
 msgstr ""
 "%{skill} giver %{count} procent chance, for at lære en given besværgelse af "
-"1-2.niveau, som en fjendtlig helt har kastet i løbet af en kamp mod din helt."
+"1-2.niveau, som en fjendtlig helt har kastet i løbet af en kamp."
 
-#, fuzzy
 msgid ""
 "%{skill} gives the hero a %{count} percent chance to learn any given 3rd "
 "level spell (or below) that was cast by an enemy during combat."
 msgstr ""
 "%{skill} giver %{count} procent chance, for at lære en given besværgelse af "
-"1-3.niveau, som en fjendtlig helt har kastet i løbet af en kamp mod din helt."
+"1-3.niveau, som en fjendtlig helt har kastet i løbet af en kamp."
 
-#, fuzzy
 msgid ""
 "%{skill} gives the hero a %{count} percent chance to learn any given 4th "
 "level spell (or below) that was cast by an enemy during combat."
 msgstr ""
 "%{skill} giver %{count} procent chance, for at lære en given besværgelse af "
-"1-4.niveau, som en fjendtlig helt har kastet i løbet af en kamp mod din helt."
+"1-4.niveau, som en fjendtlig helt har kastet i løbet af en kamp."
 
 msgid ""
 "%{skill} allows %{count} percent of the creatures killed in combat to be "
@@ -7867,12 +7861,11 @@ msgstr ""
 "%{skill} tillader %{count} procent af de væsener, der blev dræbt i kamp, at "
 "blive bragt tilbage fra de døde som skeletter."
 
-#, fuzzy
 msgid ""
 "The hero produces %{count} gold pieces per day as tax revenue from estates."
 msgstr ""
-"Med sit adelskab producerer din helt %{count} guldstykker om dagen som "
-"skatteindtægter ."
+"Med sit adelskab producerer helten %{count} guldstykker om dagen som "
+"skatteindtægter."
 
 msgid "Blue"
 msgstr "Blå"
@@ -10129,9 +10122,8 @@ msgstr ""
 msgid "Power Ring"
 msgstr "Kraftringen"
 
-#, fuzzy
 msgid "The %{name} returns %{count} extra spell points per day to the hero."
-msgstr "%{name} returnerer %{count} ekstra magipoint om dagen til din helt."
+msgstr "%{name} returnerer helten %{count} ekstra magipoint om dagen."
 
 msgid ""
 "You find a small tree that closely resembles the great Warlock Carnauth with "
@@ -10180,9 +10172,8 @@ msgstr ""
 msgid "Hideous Mask"
 msgstr "Den Hæslige Maske"
 
-#, fuzzy
 msgid "The %{name} prevents all 'wandering' armies from joining the hero."
-msgstr "%{name} forhindrer alle 'vandrende' hære i at tilslutte sig din helt."
+msgstr "%{name} forhindrer alle 'vandrende' hære i at tilslutte sig helten."
 
 msgid ""
 "Your looting of the grave of Sinfilas Gardolad, the famous shapeshifting "
@@ -10369,13 +10360,12 @@ msgstr "Pladsholder 4"
 msgid "Spell Scroll"
 msgstr "Trolddomsrulle"
 
-#, fuzzy
 msgid ""
 "This %{name} gives the hero the ability to cast the %{spell} spell if the "
 "hero has a Magic Book."
 msgstr ""
-"%{name} giver din helt mulighed for at kaste besværgelsen %{spell}, hvis din "
-"helt har en magibog."
+"%{name} giver helten mulighed for at kaste besværgelsen %{spell}, hvis denne "
+"har en magibog."
 
 msgid ""
 "You find an elaborate container which houses an old vellum scroll. The runes "
@@ -11331,7 +11321,7 @@ msgid "The nearest town is %{town}."
 msgstr "Den nærmeste by er %{town}."
 
 msgid "This town is occupied by your hero %{hero}."
-msgstr "Denne by er besat af din helt %{hero}."
+msgstr "Denne by er besat af helten %{hero}."
 
 msgid ""
 "This spell controls up to\n"
