@@ -767,7 +767,7 @@ namespace
             objects.emplace_back( std::move( object ) );
         }
 
-         // Wide low rock, wasteland terrain.
+        // Wide low rock, wasteland terrain.
         {
             Maps::ObjectInfo object{ MP2::OBJ_ROCK };
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNCRCK, 34U, fheroes2::Point{ 0, 0 }, MP2::OBJ_ROCK, Maps::OBJECT_LAYER );
