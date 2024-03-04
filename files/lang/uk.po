@@ -3261,10 +3261,10 @@ msgid "Defenders:"
 msgstr "Захисники:"
 
 msgid "Unknown"
-msgstr ""
+msgstr "Невідомо"
 
 msgid "%{name} (Level %{level})"
-msgstr ""
+msgstr "%{name} (Рівень %{level})"
 
 msgid "Attack:"
 msgstr "Атака:"
@@ -3285,46 +3285,46 @@ msgid "Move Points:"
 msgstr "Очки Руху:"
 
 msgid "Uncharted Territory"
-msgstr ""
+msgstr "Незвідана територія"
 
 msgid "Cost per troop:"
-msgstr ""
+msgstr "Вартість однієї істоти"
 
 msgid "Available: %{count}"
-msgstr ""
+msgstr "Доступно: %{count}"
 
 msgid "Number to buy:"
-msgstr ""
+msgstr "Скільки придбати:"
 
 msgid "Recruit selected monsters."
-msgstr ""
+msgstr "Найняти обраних монстрів."
 
 msgid "Select maximum monsters to be recruited."
-msgstr ""
+msgstr "Обрати максимально доступну для найму кількість монстрів."
 
 msgid "Select only 1 monster to be recruited."
-msgstr ""
+msgstr "Обрати лише одного монстра для найму."
 
 msgid "Select Game Resolution:"
 msgstr "Обрати Розділову Здатність:"
 
 msgid "Click to apply the selected resolution."
-msgstr ""
+msgstr "Натисніть, щоб встановити обрану розділову здатність."
 
 msgid "Click to apply the entered text."
-msgstr ""
+msgstr "Натисніть, щоб підтвердити введений текст."
 
 msgid "Click to open the Virtual Keyboard dialog."
-msgstr ""
+msgstr "Натисніть, щоб відкрити вікно Віртуальної Клавіатури."
 
 msgid "Open Virtual Keyboard"
-msgstr ""
+msgstr "Відкрити Віртуальну Клавіатуру"
 
 msgid "How many troops to move?"
-msgstr ""
+msgstr "Як багато військ перемістити?"
 
 msgid "Fast separation into slots:"
-msgstr ""
+msgstr "Швидке розподілення по слотах."
 
 msgid "Map: "
 msgstr "Мапа: "
@@ -3334,42 +3334,48 @@ msgid ""
 "\n"
 "Month: "
 msgstr ""
+"\n"
+"\n"
+"Місяць: "
 
 msgid ", Week: "
-msgstr ""
+msgstr ", Тиждень: "
 
 msgid ", Day: "
-msgstr ""
+msgstr ", День: "
 
 msgid ""
 "\n"
 "\n"
 "Location: "
 msgstr ""
+"\n"
+"\n"
+"Розташування: "
 
 msgid "Click to save the current game."
-msgstr ""
+msgstr "Натисніть, щоб зберегти поточну гру."
 
 msgid "Click to load a previously saved game."
-msgstr ""
+msgstr "Натисніть, щоб завантажити збережену гру."
 
 msgid "Are you sure you want to delete file:"
-msgstr ""
+msgstr "Ви впевнені, що хочете видалити файл:"
 
 msgid "Warning!"
-msgstr ""
+msgstr "Попередження!"
 
 msgid "File to Save:"
-msgstr ""
+msgstr "Зберегти файли:"
 
 msgid "File to Load:"
-msgstr ""
+msgstr "Завантажити файли:"
 
 msgid "Accept the choice made."
-msgstr ""
+msgstr "Підтвердити ваш вибір."
 
 msgid "%{color} %{race} hero"
-msgstr ""
+msgstr "%{color} %{race} герой"
 
 #, fuzzy
 msgid "Terrain object"
@@ -3491,46 +3497,47 @@ msgid "Resurrection"
 msgstr "Воскресіння"
 
 msgid "Lose all your heroes and towns."
-msgstr ""
+msgstr "Втратити всіх ваших героїв та міста."
 
 msgid "Lose a specific town."
-msgstr ""
+msgstr "Втратити певне місто."
 
 msgid "Lose a specific hero."
-msgstr ""
+msgstr "Втратити певного героя."
 
 msgid "Run out of time. Fail to win by a certain point."
-msgstr ""
+msgstr "Не встигнути вчасно."
 
 msgid "Loss Condition"
-msgstr ""
+msgstr "Умови програшу"
 
 msgid "Defeat all enemy heroes and towns."
-msgstr ""
+msgstr "Здолати всіх ворожих героїв та захопити всі їх міста."
 
 msgid "Capture a specific town."
-msgstr ""
+msgstr "Захопити певне місто."
 
 msgid "Defeat a specific hero."
-msgstr ""
+msgstr "Перемогти певного героя."
 
 msgid "Find a specific artifact."
-msgstr ""
+msgstr "Знайти певний артефакт."
 
+#, fuzzy
 msgid "Your side must defeat the opposing side."
-msgstr ""
+msgstr "Ваш союз перемагає ворожий."
 
 msgid "Accumulate a large amount of gold."
-msgstr ""
+msgstr "Зібрати певну кількість золота."
 
 msgid "Victory Condition"
-msgstr ""
+msgstr "Умови перемоги."
 
 msgid "Map difficulty:"
 msgstr "Складність мапи:"
 
 msgid "N"
-msgstr ""
+msgstr "Н"
 
 #, fuzzy
 msgid "No maps exist at that size."
@@ -3540,19 +3547,19 @@ msgid "Small Maps"
 msgstr "Маленькі Мапи"
 
 msgid "View only maps of size small (36 x 36)."
-msgstr "Дивитися лише мапи малого розміру (36 x 36)."
+msgstr "Показати лише мапи малого розміру (36 x 36)."
 
 msgid "Medium Maps"
-msgstr ""
+msgstr "Середні мапи"
 
 msgid "View only maps of size medium (72 x 72)."
-msgstr ""
+msgstr "Показати лише мапи середнього розміру (72 x 72)."
 
 msgid "Large Maps"
-msgstr ""
+msgstr "Великі мапи"
 
 msgid "View only maps of size large (108 x 108)."
-msgstr ""
+msgstr "Показати лише мапи великого розміру (108 x 108)."
 
 msgid "Extra Large Maps"
 msgstr "Надвеликі Мапи"
@@ -3564,15 +3571,17 @@ msgid "All Maps"
 msgstr "Усі мапи"
 
 msgid "View all maps, regardless of size."
-msgstr ""
+msgstr "Показати всі мапи, незалежно від розміру."
 
 msgid "Players Icon"
-msgstr ""
+msgstr "Кількість гравців"
 
 msgid ""
 "Indicates how many players total are in the scenario. Any positions not "
 "occupied by human players will be occupied by computer players."
 msgstr ""
+"Визначає, як багато гравців присутні у сценарії. Всі слоти, не зайняті "
+"гравцями-людьми, будуть зайняті комп'ютерними гравцями."
 
 msgid ""
 "Indicates whether the map\n"
@@ -3580,26 +3589,32 @@ msgid ""
 "(72 x 72), large (108 x 108),\n"
 "or extra large (144 x 144)."
 msgstr ""
+"Визначає розмір мапи:\n"
+"маленькі (36 x 36), середні\n"
+"(72 x 72), великі (108 x 108),\n"
+"надвеликі (144 x 144)."
 
 msgid "Size Icon"
-msgstr ""
+msgstr "Іконка розміру"
 
 msgid ""
 "Indicates whether the map is made for \"The Succession Wars\" or \"The Price "
 "of Loyalty\" version of the game."
 msgstr ""
+"Визначає створена для версії \"Війни за Спадщину\" або для версії \"Ціна "
+"Вірності\"."
 
 msgid "Map Type"
 msgstr "Тип мапи"
 
 msgid "Selected Name"
-msgstr ""
+msgstr "Назва"
 
 msgid "The name of the currently selected map."
-msgstr ""
+msgstr "Назва обраної мапи"
 
 msgid "Selected Map Difficulty"
-msgstr ""
+msgstr "Складність обраної мапи"
 
 msgid ""
 "The map difficulty of the currently selected map. The map difficulty is "
@@ -3607,44 +3622,51 @@ msgid ""
 "or stronger enemies, fewer resources, or other special conditions making "
 "things tougher for the human player."
 msgstr ""
+"Складність обраної вами мапи. Складність визначається автором сценарію. "
+"Висока складність мапи може передбачати сильніших ворогів, меншу кількість "
+"ресурсів або додаткові умови, що можуть зробити гру складнішою для гравця-"
+"людини."
 
 msgid "Selected Description"
-msgstr ""
+msgstr "Опис"
 
 msgid "The description of the currently selected map."
-msgstr ""
+msgstr "Опис обраної вами мапи."
 
 msgid "Jump"
-msgstr ""
+msgstr "Стрибками"
 
 msgid "Hero Speed"
-msgstr ""
+msgstr "Швидкість Героїв"
 
 msgid "Don't Show"
-msgstr ""
+msgstr "Не показувати"
 
 msgid "Enemy Speed"
-msgstr ""
+msgstr "Швидкість Ворогів"
 
 msgid "Auto Resolve"
-msgstr ""
+msgstr "Автобитва"
 
 msgid "Auto, No Spells"
-msgstr ""
+msgstr "Автобитва, без заклять"
 
 msgid "Battles"
-msgstr ""
+msgstr "Битви"
 
 msgid "autoBattle|Manual"
-msgstr ""
+msgstr "autoBattle|Вручну"
 
 msgid "Change the speed at which your heroes move on the main screen."
 msgstr ""
+"Змінює швидкість, з якою ваші герої пересуватимуться по стратегічній мапі."
 
 msgid ""
 "Sets the speed that computer heroes move at. You can also elect not to view "
 "computer movement at all."
 msgstr ""
+"Встановлює швидкість, з якою рухаються ворожі герої. Ви також можете "
+"вимкнути перегляд всіх ворожих переміщень."
 
 msgid "Change the interface settings of the game."
 msgstr "Змінити налаштування інтерфейсу гри."
@@ -3653,85 +3675,85 @@ msgid "Interface Settings"
 msgstr "Налаштування Інтерфейсу"
 
 msgid "Toggle instant battle mode."
-msgstr ""
+msgstr "Перемикає режим миттєвої битви."
 
 msgid "Att."
-msgstr ""
+msgstr "Атк"
 
 msgid "Def."
-msgstr ""
+msgstr "Зах"
 
 msgid "Power"
-msgstr ""
+msgstr "Сила"
 
 msgid "Knowl"
-msgstr ""
+msgstr "Знання"
 
 msgid "1st"
-msgstr ""
+msgstr "1-ий"
 
 msgid "2nd"
-msgstr ""
+msgstr "2-ий"
 
 msgid "3rd"
-msgstr ""
+msgstr "3-тій"
 
 msgid "4th"
-msgstr ""
+msgstr "4-тий"
 
 msgid "5th"
-msgstr ""
+msgstr "5-тий"
 
 msgid "6th"
-msgstr ""
+msgstr "6-тий"
 
 msgid "Oracle: Player Rankings"
-msgstr ""
+msgstr "Оракул: Рейтинги Гравців"
 
 msgid "Thieves' Guild: Player Rankings"
-msgstr ""
+msgstr "Гільдія Злодіїв: Рейтинги Гравців"
 
 msgid "Number of Towns:"
-msgstr ""
+msgstr "Кількість міст:"
 
 msgid "Number of Castles:"
-msgstr ""
+msgstr "Кількість замків:"
 
 msgid "Number of Heroes:"
-msgstr ""
+msgstr "Кількість героїв:"
 
 msgid "Gold in Treasury:"
-msgstr ""
+msgstr "Золота у скарбниці:"
 
 msgid "Wood & Ore:"
-msgstr ""
+msgstr "Дерево та Руда"
 
 msgid "Gems, Cr, Slf & Mer:"
-msgstr ""
+msgstr "Цінні Ресурси:"
 
 msgid "Obelisks Found:"
-msgstr ""
+msgstr "Знайдено Обелісків:"
 
 msgid "Artifacts:"
-msgstr ""
+msgstr "Артефакти:"
 
 msgid "Total Army Strength:"
-msgstr ""
+msgstr "Загальна сила війська:"
 
 msgid "Income:"
-msgstr ""
+msgstr "Прибутки:"
 
 msgid "Best Hero:"
-msgstr ""
+msgstr "Найсильніший Герой:"
 
 msgid "Best Hero Stats:"
-msgstr ""
+msgstr "Хар-ки найсильнішого Героя:"
 
 msgid "Personality:"
-msgstr ""
+msgstr "Особистість:"
 
 msgid "Best Monster:"
-msgstr ""
+msgstr "Найсильніший монстр:"
 
 #, fuzzy
 msgid "Map filename"
@@ -3741,15 +3763,19 @@ msgid ""
 "Are you sure you want to load a new map? (Any unsaved changes to the current "
 "map will be lost.)"
 msgstr ""
+"Ви певні, що хочете завантажити іншу мапу? (Всі незбережені зміни у поточній "
+"мапі будуть втрачені.)"
 
 msgid ""
 "Are you sure you want to create a new map? (Any unsaved changes to the "
 "current map will be lost.)"
 msgstr ""
+"Ви певні, що хочете створити нову мапу? (Всі незбережені зміни у поточній "
+"мапі будуть втрачені.)"
 
 msgid ""
 "Create a new map, either from scratch or using the random map generator."
-msgstr ""
+msgstr "Створіть нову мапу самотужки, або скористайтесь генератором мап."
 
 msgid "New Map"
 msgstr "Нова Гра"
@@ -3758,7 +3784,7 @@ msgid "Load Map"
 msgstr "Завантажити Гру"
 
 msgid "Load an existing map."
-msgstr ""
+msgstr "Завантажити існуючу мапу."
 
 msgid "Save Map"
 msgstr "Зберегти Мапу"
@@ -3767,22 +3793,22 @@ msgid "Save the current map."
 msgstr "Збережіть поточну мапу."
 
 msgid "Quit out of the map editor."
-msgstr ""
+msgstr "Вийти з редактора мап."
 
 msgid "Objects cannot be placed outside the map."
 msgstr ""
 
 msgid "Monsters cannot be placed on water."
-msgstr ""
+msgstr "Монстрів не можна розмістити на воді."
 
 msgid "Choose a tile which does not contain any objects."
-msgstr ""
+msgstr "Оберіть клітинку, не зайняту жодними об'єктами."
 
 msgid "Treasures cannot be placed on water."
 msgstr ""
 
 msgid "Heroes cannot be placed on water."
-msgstr ""
+msgstr "Героїв не можна розмістити на воді."
 
 msgid ""
 "A maximum of %{count} heroes of the same color can be placed on the map."
@@ -3858,10 +3884,10 @@ msgid ""
 msgstr ""
 
 msgid "Roads"
-msgstr ""
+msgstr "Дороги"
 
 msgid "Streams"
-msgstr ""
+msgstr "Струмки"
 
 msgid "Erase"
 msgstr ""
@@ -3884,7 +3910,7 @@ msgid "Miscellaneous"
 msgstr ""
 
 msgid "Artifacts"
-msgstr ""
+msgstr "Артефакти"
 
 #, fuzzy
 msgid "Dwellings"
@@ -3904,10 +3930,11 @@ msgid "Towns"
 msgstr "Міста"
 
 msgid "Heroes"
-msgstr ""
+msgstr "Герої"
 
+#, fuzzy
 msgid "editorErasure|Terrain"
-msgstr ""
+msgstr "Місцевість"
 
 msgid "editorErasure|Castles"
 msgstr ""
@@ -3921,11 +3948,13 @@ msgstr ""
 msgid "editorErasure|Artifacts"
 msgstr ""
 
+#, fuzzy
 msgid "editorErasure|Roads"
-msgstr ""
+msgstr "Дороги"
 
+#, fuzzy
 msgid "editorErasure|Streams"
-msgstr ""
+msgstr "Струмки"
 
 msgid "editorErasure|Treasures"
 msgstr ""
@@ -3934,37 +3963,43 @@ msgid ""
 "Draws terrain in\n"
 "%{size} by %{size} square increments."
 msgstr ""
+"Заповнює територію в\n"
+"зоні розміром %{size} на %{size}"
 
 msgid ""
 "Erases objects in\n"
 "%{size} by %{size} square increments."
 msgstr ""
+"Видаляє об'єкти в\n"
+"зоні розміром %{size} на %{size}"
 
 msgid "Small Brush"
 msgstr "Маленька кисть"
 
 msgid "Medium Brush"
-msgstr ""
+msgstr "Середня кисть"
 
 msgid "Large Brush"
-msgstr ""
+msgstr "Велика кисть"
 
 msgid "Area Fill"
-msgstr ""
+msgstr "Заповнити зону"
 
 msgid "Used to click and drag for filling in large areas."
-msgstr ""
+msgstr "Використовується для заповнення великих зон"
 
 msgid "Clear Area"
-msgstr ""
+msgstr "Очистити зону"
 
 msgid "Used to click and drag for clearing large areas."
-msgstr ""
+msgstr "Використовується для очищення великих зон"
 
 msgid ""
 "Costs %{rate} times normal movement for all heroes. (Pathfinding reduces or "
 "eliminates the penalty.)"
 msgstr ""
+"Витрачає в %{rate} рази більше очок руху для всіх героїв. (Пошук шляху "
+"зменшує або анулює штраф.)"
 
 msgid "Traversable only by boat."
 msgstr ""
@@ -4373,7 +4408,7 @@ msgid "Your Name"
 msgstr "Ваше Ім'я"
 
 msgid "Unknown Hero"
-msgstr ""
+msgstr "Невідомий Герой"
 
 msgid "Standard"
 msgstr ""
@@ -4561,9 +4596,8 @@ msgstr ""
 msgid "hotkey|change to hero under cursor"
 msgstr ""
 
-#, fuzzy
 msgid "hotkey|start hero movement"
-msgstr "звичайна Гра"
+msgstr "почати рух героя"
 
 msgid "hotkey|cast adventure spell"
 msgstr ""
@@ -4905,7 +4939,7 @@ msgid ""
 msgstr ""
 
 msgid "Guest"
-msgstr ""
+msgstr "Гость"
 
 msgid ""
 "The guest waits for the host to set up the game, then is automatically added "
@@ -5268,14 +5302,15 @@ msgstr ""
 msgid "Select the next Hero."
 msgstr ""
 
-#, fuzzy
 msgid "Hero Movement"
-msgstr "Затінення Сітки"
+msgstr "Рух Героя"
 
 msgid ""
 "Start the Hero's movement along the current path or re-visit the object "
 "occupied by the Hero. Press and hold this button to reset the Hero's path."
 msgstr ""
+"Почати Рух героя по обраному шляху, або заново відвідати об'єкт, зайнятий "
+"Героєм. Затисніть та утримуйте цю клавішу, щоб скинути маршрут Героя."
 
 msgid "Kingdom Summary"
 msgstr ""
@@ -6785,10 +6820,8 @@ msgid ""
 "This spell will have no effect."
 msgstr ""
 
-#, fuzzy
 msgid "This hero is already in a town, so this spell will have no effect."
-msgstr ""
-"Цей герой вже перебуває у місті, то ж ви не можете використати це закляття."
+msgstr "Цей герой вже перебуває у місті, то ж закляття не матиме ефекту."
 
 msgid ""
 "The nearest town is %{town}.\n"
