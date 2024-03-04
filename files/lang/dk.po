@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-18 14:42+0000\n"
-"PO-Revision-Date: 2024-03-04 10:47+0100\n"
+"PO-Revision-Date: 2024-03-04 12:52+0100\n"
 "Last-Translator: Stisen1\n"
 "Language-Team: Danish (Denmark)\n"
 "Language: da\n"
@@ -900,10 +900,10 @@ msgstr[1] "Enheden %{target} paralyseres af troppen med %{attacker}!"
 msgid "The %{attacker} dispels all good spells on your %{target}!"
 msgid_plural "The %{attacker} dispel all good spells on your %{target}!"
 msgstr[0] ""
-"Troppen med %{attacker} fordriver alle positive besværgelser fra heltens "
+"Troppen med %{attacker} fordriver alle positive besværgelser fra troppen med "
 "%{target}!"
 msgstr[1] ""
-"Troppen med %{attacker} fordriver alle positive besværgelser fra heltens "
+"Troppen med %{attacker} fordriver alle positive besværgelser fra troppen med "
 "%{target}!"
 
 msgid "The %{attacker} casts %{spell} on the %{target}!"
@@ -2480,8 +2480,7 @@ msgid ""
 msgstr "Krystalhaven øger tilvæksten af feer med %{count} om ugen."
 
 msgid "The Dungeon increases the income of the town by %{count} gold per day."
-msgstr ""
-"Fangehullet øger dit riges guldindkomst med %{count} guldstykker om dagen."
+msgstr "Fangehullet øger byens guldindkomst med %{count} guldstykker om dagen."
 
 msgid "The Waterfall increases production of Centaurs by %{count} per week."
 msgstr "Vandfaldet øger tilvæksten af kentaurer med %{count} om ugen."
@@ -2578,7 +2577,7 @@ msgstr ""
 "hverve dem herfra."
 
 msgid "The Statue increases the town's income by %{count} gold per day."
-msgstr "Statuen øger dit riges guldindkomst med %{count} guldstykker om dagen."
+msgstr "Statuen øger byens guldindkomst med %{count} guldstykker om dagen."
 
 msgid "The Left Turret provides extra firepower during castle combat."
 msgstr ""
@@ -7751,14 +7750,12 @@ msgstr ""
 "%{name} eliminerer %{count}-procentstraffen for dine tropper, der skyder "
 "forbi forhindringer (f.eks. borgmure)."
 
-#, fuzzy
 msgid "%{skill} increases the hero's movement points by %{count} percent."
-msgstr "%{skill} øger din helts bevægelsespoint med %{count} procent."
+msgstr "%{skill} øger heltens bevægelsespoint med %{count} procent."
 
-#, fuzzy
 msgid "%{skill} increases the hero's viewable area by one square."
 msgid_plural "%{skill} increases the hero's viewable area by %{count} squares."
-msgstr[0] "%{skill} øger din helts sigtbarhed med én firkant."
+msgstr[0] "%{skill} øger heltens sigtbarhed med én firkant."
 msgstr[1] "%{skill} øger din helts sigtbarhed med %{count} firkanter."
 
 #, fuzzy
@@ -7787,12 +7784,10 @@ msgstr ""
 "%{name} reducerer prisen for overgivelse til %{count}% af de samlede "
 "omkostninger for tropper, du har i din hær."
 
-#, fuzzy
 msgid ""
 "%{skill} increases the hero's movement points over water by %{count} percent."
 msgstr ""
-"%{skill} øger din helts daglige bevægelsespoint over vand med %{count} "
-"procent."
+"%{skill} øger heltens daglige bevægelsespoint over vand med %{count} procent."
 
 msgid "%{skill} increases the hero's troops morale by %{count}."
 msgstr "%{skill} øger din helts troppers moral med %{count} point."
@@ -7809,23 +7804,20 @@ msgid "%{skill} allows the hero to learn fifth level spells."
 msgstr ""
 "%{skill} gør det muligt for din helt at lære besværgelser af femte niveau."
 
-#, fuzzy
 msgid "%{skill} regenerates one additional spell point per day to the hero."
 msgid_plural ""
 "%{skill} regenerates %{count} additional spell points per day to the hero."
-msgstr[0] "%{skill} regenerer ét af din helts mana per dag."
+msgstr[0] "%{skill} regenerer ét af heltens mana per dag."
 msgstr[1] "%{skill} regenerer %{count} af din helts mana per dag."
 
-#, fuzzy
 msgid "%{skill} increases the hero's luck by %{count}."
-msgstr "%{skill} øger din helts held med %{count} point."
+msgstr "%{skill} øger held for heltens tropper med %{count} point."
 
-#, fuzzy
 msgid ""
 "%{skill} gives the hero's catapult shots a greater chance to hit and do "
 "damage to castle walls."
 msgstr ""
-"%{skill} giver din helts katapultskud en større chance for at ramme og gøre "
+"%{skill} giver heltens katapultskud en større chance for at ramme og gøre "
 "skade på borgens mure."
 
 #, fuzzy
@@ -9273,7 +9265,7 @@ msgid "Golden Goose"
 msgstr "Den Gyldne Gås"
 
 msgid "The %{name} brings in an income of %{count} gold per day."
-msgstr "%{name} øger dit riges guldindkomst med %{count} guldstykker om dagen."
+msgstr "%{name} bringer en guldindkomst med %{count} guldstykker om dagen."
 
 msgid "Arcane Necklace of Magic"
 msgstr "Den Magiske Mystikhalskæde"
@@ -9538,7 +9530,7 @@ msgid "Endless Sack of Gold"
 msgstr "Den Uudtømmelige Guldsæk"
 
 msgid "The %{name} provides the hero with %{count} gold per day."
-msgstr "%{name} øger dit riges guldindkomst med %{count} guldstykker om dagen."
+msgstr "%{name} bringer en guldindkomst med %{count} guldstykker om dagen."
 
 msgid ""
 "A little leprechaun dances gleefully around a magic sack. Seeing you "
@@ -10172,9 +10164,7 @@ msgid "Tax Lien"
 msgstr "Pantebrevet"
 
 msgid "The %{name} costs the hero %{count} gold pieces per day."
-msgstr ""
-"%{name} koster dit rige %{count} guldstykker om dagen, så længe din helt er "
-"i besiddelse af det."
+msgstr "%{name} koster helten %{count} guldstykker om dagen."
 
 msgid ""
 "Your big spending habits have earned you a massive tax bill that you can't "
@@ -10640,7 +10630,7 @@ msgid "Staff of Wizardry"
 msgstr "Troldmandsstav"
 
 msgid "The %{name} boosts the hero's spell power by %{count}."
-msgstr "%{name} øger din helts magikraft med %{count} point."
+msgstr "%{name} øger heltens magikraft med %{count} point."
 
 msgid ""
 "While out scaring up game, your troops find a mysterious staff levitating "
@@ -10657,8 +10647,7 @@ msgid "Sword Breaker"
 msgstr "Sværdbrækkeren"
 
 msgid "The %{name} increases the hero's defense by %{count} and attack by 1."
-msgstr ""
-"%{name} øger både din helts angrebs- og forsvarsevne med %{count} point."
+msgstr "%{name} øger både heltens angrebs- og forsvarsevne med %{count} point."
 
 msgid ""
 "A former Captain of the Guard admires your quest and gives you the enchanted "
@@ -10687,7 +10676,7 @@ msgid "Spade of Necromancy"
 msgstr "Nekromantikerens Spade"
 
 msgid "The %{name} gives the hero increased necromancy skill."
-msgstr "%{name} øger din helts nekromantiske evne."
+msgstr "%{name} øger heltens nekromantiske evne."
 
 msgid ""
 "A dirty shovel has been thrust into a dirt mound nearby. Upon investigation, "
