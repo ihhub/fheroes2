@@ -308,12 +308,12 @@ public:
 
     bool isDragInProgress() const
     {
-        return _isDragInProgress;
+        return modes & DRAG_ONGOING;
     }
 
-    void setDragStatus( const bool inProgress )
+    void RegisterDrag()
     {
-        _isDragInProgress = inProgress;
+        SetModes( DRAG_ONGOING );
     }
 
 private:
@@ -353,6 +353,8 @@ private:
         MOUSE_TOUCH = 0x0020,
         // Key on the keyboard is currently being held down
         KEY_HOLD = 0x0040,
+        // Key on the keyboard is currently being held down
+        DRAG_ONGOING = 0x0080,
     };
 
     enum
@@ -374,7 +376,6 @@ private:
     uint32_t modes;
     fheroes2::Key key_value;
     int mouse_button;
-    bool _isDragInProgress;
 
     fheroes2::Point mouse_pl; // press left
     fheroes2::Point mouse_pm; // press middle

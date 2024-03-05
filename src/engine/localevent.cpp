@@ -667,7 +667,6 @@ LocalEvent::LocalEvent()
     : modes( 0 )
     , key_value( fheroes2::Key::NONE )
     , mouse_button( 0 )
-    , _isDragInProgress( false )
     , _mouseButtonLongPressDelay( mouseButtonLongPressTimeout )
 {}
 
@@ -988,7 +987,7 @@ void LocalEvent::HandleTouchEvent( const SDL_TouchFingerEvent & event )
 
                 ResetModes( MOUSE_PRESSED );
                 SetModes( MOUSE_RELEASED );
-                _isDragInProgress = false;
+                ResetModes( DRAG_ONGOING );
             }
 
             mouse_button = SDL_BUTTON_LEFT;
@@ -1014,7 +1013,7 @@ void LocalEvent::HandleTouchEvent( const SDL_TouchFingerEvent & event )
             ResetModes( MOUSE_PRESSED );
             SetModes( MOUSE_RELEASED );
             SetModes( MOUSE_TOUCH );
-            _isDragInProgress = false;
+            ResetModes( DRAG_ONGOING );
         }
 
         mouse_button = SDL_BUTTON_RIGHT;
@@ -1084,7 +1083,7 @@ void LocalEvent::HandleControllerButtonEvent( const SDL_ControllerButtonEvent & 
         else {
             ResetModes( MOUSE_PRESSED );
             SetModes( MOUSE_RELEASED );
-            _isDragInProgress = false;
+            ResetModes( DRAG_ONGOING );
         }
 
         if ( button.button == SDL_CONTROLLER_BUTTON_A ) {
@@ -1314,7 +1313,7 @@ void LocalEvent::HandleMouseButtonEvent( const SDL_MouseButtonEvent & button )
     else {
         ResetModes( MOUSE_PRESSED );
         SetModes( MOUSE_RELEASED );
-        _isDragInProgress = false;
+        ResetModes( DRAG_ONGOING );
     }
 
     mouse_button = button.button;

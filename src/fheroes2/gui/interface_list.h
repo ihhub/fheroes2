@@ -433,7 +433,7 @@ namespace Interface
                     if ( !le.isDragInProgress() ) {
                         // Remember where has the drag started.
                         _dragStartPos = mousePosition;
-                        le.setDragStatus( true );
+                        le.RegisterDrag();
 
                         // We have just started the drag, it might as well be a legitimate click.
                         _lockClick = false;
