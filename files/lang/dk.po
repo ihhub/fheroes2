@@ -7972,7 +7972,7 @@ msgid ""
 "Negative luck sometimes falls on the hero's units in combat, causing their "
 "attacks to only do half damage."
 msgstr ""
-"Negativt held falder nogle gange på heltens tropper i kamp, ​​hvilket halverer "
+"Negativt held falder nogle gange på heltens tropper i kamp, hvilket halverer "
 "deres angrebsskade."
 
 msgid ""
