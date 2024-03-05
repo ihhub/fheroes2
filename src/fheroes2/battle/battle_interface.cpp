@@ -2798,8 +2798,7 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
     const fheroes2::Rect turnOrderRect = _turnOrder + _interfacePosition.getPosition();
     const int32_t battleFieldHeight = _interfacePosition.height - status.height - ( listlog->isOpenLog() ? listlog->GetArea().height : 0 );
     const fheroes2::Rect battleFieldRect{ _interfacePosition.x, _interfacePosition.y, _interfacePosition.width, battleFieldHeight };
-    if ( listlog && listlog->isOpenLog() && ( le.MouseCursor( listlog->GetArea() ) || le.MousePressLeft( listlog->GetArea() ) ) )
-    {
+    if ( listlog && listlog->isOpenLog() && ( le.MouseCursor( listlog->GetArea() ) || le.MousePressLeft( listlog->GetArea() ) ) ) {
         cursor.SetThemes( Cursor::WAR_POINTER );
 
         listlog->QueueEventProcessing();
