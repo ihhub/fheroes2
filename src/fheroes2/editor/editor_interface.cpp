@@ -583,7 +583,7 @@ namespace Interface
             }
 
             if ( _selectedTile > -1 && le.MouseReleaseLeft() ) {
-                if ( isCursorOverGamearea && _editorPanel.getBrushArea().width == 0 ) {
+                if ( isCursorOverGamearea && _tileUnderCursor > -1 && _editorPanel.getBrushArea().width == 0 ) {
                     if ( _editorPanel.isTerrainEdit() ) {
                         // Fill the selected area in terrain edit mode.
                         fheroes2::ActionCreator action( _historyManager, _mapFormat );
