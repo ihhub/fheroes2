@@ -432,22 +432,22 @@ namespace Interface
                 if ( le.MousePressLeft( rtAreaItems ) ) {
                     if ( !le.isDragInProgress() ) {
                         // Remember where has the drag started.
-                        ptReference = mousePosition;
+                        _dragStartPos = mousePosition;
                         le.setDragStatus( true );
 
                         // We have just started the drag, it might as well be a legitimate click.
                         _lockClick = false;
                     }
 
-                    fheroes2::Point deltaPoint = ptReference - mousePosition;
-                    int delta = ( _scrollbar.isVertical() ? deltaPoint.y : deltaPoint.x );
-                    int itemSize = ( _scrollbar.isVertical() ? rtAreaItems.height : rtAreaItems.width ) / maxItems;
+                    const fheroes2::Point deltaPoint = _dragStartPos - mousePosition;
+                    const int delta = ( _scrollbar.isVertical() ? deltaPoint.y : deltaPoint.x );
+                    const int itemSize = ( _scrollbar.isVertical() ? rtAreaItems.height : rtAreaItems.width ) / maxItems;
 
                     // We have dragged past the size of one list-item.
                     if ( std::abs( delta ) > itemSize ) {
                         // Scroll the list accordingly, update the drag start reference point.
                         _scrollbar.moveToIndex( _scrollbar.currentIndex() + delta / itemSize );
-                        ptReference = mousePosition;
+                        _dragStartPos = mousePosition;
 
                         // Disable the leftclick on the list, so finishing the drag does not result in clicking on the list-item.
                         _lockClick = true;
@@ -488,7 +488,7 @@ namespace Interface
                     if ( ActionListCursor( item, mousePos ) )
                         return true;
 
-                    if ( le.MouseClickLeft( rtAreaItems ) && !_lockClick ) {
+                    if ( !_lockClick && le.MouseClickLeft( rtAreaItems ) ) {
                         // This is a legitimate click and not a mouse-up on a finished drag.
                         if ( id == _currentId ) {
                             ActionListDoubleClick( item, mousePos, rtAreaItems.x, rtAreaItems.y + offsetY );
@@ -537,7 +537,7 @@ namespace Interface
         int maxItems{ 0 };
 
         fheroes2::Point ptRedraw;
-        fheroes2::Point ptReference;
+        fheroes2::Point _dragStartPos;
 
         bool useHotkeys{ true };
 
