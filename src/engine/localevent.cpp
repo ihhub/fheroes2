@@ -706,9 +706,6 @@ void LocalEvent::OpenTouchpad()
 LocalEvent & LocalEvent::Get()
 {
     static LocalEvent le;
-    if ( !le.MousePressLeft() ) {
-        le._isDragInProgress = false;
-    }
 
     return le;
 }
@@ -991,6 +988,7 @@ void LocalEvent::HandleTouchEvent( const SDL_TouchFingerEvent & event )
 
                 ResetModes( MOUSE_PRESSED );
                 SetModes( MOUSE_RELEASED );
+                _isDragInProgress = false;
             }
 
             mouse_button = SDL_BUTTON_LEFT;
@@ -1016,6 +1014,7 @@ void LocalEvent::HandleTouchEvent( const SDL_TouchFingerEvent & event )
             ResetModes( MOUSE_PRESSED );
             SetModes( MOUSE_RELEASED );
             SetModes( MOUSE_TOUCH );
+            _isDragInProgress = false;
         }
 
         mouse_button = SDL_BUTTON_RIGHT;
@@ -1085,6 +1084,7 @@ void LocalEvent::HandleControllerButtonEvent( const SDL_ControllerButtonEvent & 
         else {
             ResetModes( MOUSE_PRESSED );
             SetModes( MOUSE_RELEASED );
+            _isDragInProgress = false;
         }
 
         if ( button.button == SDL_CONTROLLER_BUTTON_A ) {
@@ -1314,6 +1314,7 @@ void LocalEvent::HandleMouseButtonEvent( const SDL_MouseButtonEvent & button )
     else {
         ResetModes( MOUSE_PRESSED );
         SetModes( MOUSE_RELEASED );
+        _isDragInProgress = false;
     }
 
     mouse_button = button.button;
