@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-18 14:42+0000\n"
-"PO-Revision-Date: 2024-03-04 14:58+0100\n"
+"PO-Revision-Date: 2024-03-05 13:55+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
 "Language: da\n"
@@ -1482,14 +1482,13 @@ msgid "Retake the castle of Ivory Gates, which has fallen due to treachery."
 msgstr ""
 "Genindtag borgen kaldet Ivory Gates, som er faldet på grund af forræderi."
 
-#, fuzzy
 msgid ""
 "Gain the favor of the elves. They will not allow trees to be chopped down, "
 "so we will send you wood every 2 weeks. You must complete your mission "
 "before the first day of the seventh month, or the kingdom will surely fall."
 msgstr ""
 "Vind elvernes gunst. De vil ikke tillade, at deres træer bliver fældet. Så "
-"de sender dig træ hver anden uge. \n"
+"vi sender dig træ hver anden uge. \n"
 "\n"
 "Du taber dette scenarie, hvis du ikke fuldfører din mission inden den første "
 "dag i den syvende måned. Ellers vil Elverrigerne helt sikkert falde."
@@ -1891,13 +1890,13 @@ msgid "campaignBonus|Expert Navigation"
 msgstr "Eks. navigation"
 
 msgid "campaignBonus|Basic Necromancy"
-msgstr "Beg. nekromantik"
+msgstr "Beg. nekromanti"
 
 msgid "campaignBonus|Advanced Necromancy"
-msgstr "Øvet nekromantik"
+msgstr "Øvet nekromanti"
 
 msgid "campaignBonus|Expert Necromancy"
-msgstr "Eks. nekromantik"
+msgstr "Eks. nekromanti"
 
 msgid "campaignBonus|Basic Pathfinding"
 msgstr "Beg. stifinding"
@@ -2563,7 +2562,7 @@ msgstr ""
 "Tyvelaug du har, jo flere informationer får du."
 
 msgid "The Tavern increases morale for troops defending the castle."
-msgstr "Kroen øger de forsvarende styrkers moral med 2 point."
+msgstr "Kroen øger de forsvarende styrkers moral med to point."
 
 msgid "The Shipyard allows ships to be built."
 msgstr "Skibsværftet gør det muligt at bygge skibe."
@@ -2705,20 +2704,20 @@ msgstr "uden artefakter."
 msgid "Recruit %{name} the %{race}"
 msgstr "Rekruttér %{race}en %{name}"
 
-#, fuzzy
 msgid ""
 "'Spread' combat formation spreads the castle's units from the top to the "
 "bottom of the battlefield, with at least one empty space between each unit."
 msgstr ""
-"'spredt' kampformation spreder dine tropper fra top til bund på slagmarken, "
-"med mindst én tom plads mellem hver enhed."
+"'Spredt' kampformation spreder borgens tropper, fra top til bund på "
+"slagmarken, med mindst én tom plads mellem hver enhed på borgens side af "
+"slagmarken."
 
-#, fuzzy
 msgid ""
 "'Grouped' combat formation bunches the castle's units together in the center "
 "of the castle's side of the battlefield."
 msgstr ""
-"'gruppe'-formation samler dine tropper i midten af din side på slagmarken."
+"'Gruppe'-formation samler borgens tropper i midten af borgens side af "
+"slagmarken."
 
 msgid "Spread Formation"
 msgstr "Spredt formation"
@@ -3621,13 +3620,12 @@ msgstr "Vis alle kort, uanset størrelse."
 msgid "Players Icon"
 msgstr "Spiller-ikon"
 
-#, fuzzy
 msgid ""
 "Indicates how many players total are in the scenario. Any positions not "
 "occupied by human players will be occupied by computer players."
 msgstr ""
 "Angiver, hvor mange spillere der er i alt i scenariet. Alle positioner, der "
-"ikke er besat af mennesker, vil blive besat af computerspillere."
+"ikke er besat af menneskelige spillere, vil blive besat af AI-spillere."
 
 msgid ""
 "Indicates whether the map\n"
@@ -3706,13 +3704,12 @@ msgstr "Manuelt"
 msgid "Change the speed at which your heroes move on the main screen."
 msgstr "Vælg hvor hurtigt dine helte skal flytte sig på hovedskærmen."
 
-#, fuzzy
 msgid ""
 "Sets the speed that computer heroes move at. You can also elect not to view "
 "computer movement at all."
 msgstr ""
-"Bestemmer hvor hurtigt AI-helte flytter sig. Du kan også vælge slet ikke at "
-"se på, når de rør på sig."
+"Bestemmer hvor hurtigt AI-spillernes helte bevæger sig. Du kan også vælge "
+"ikke at se deres bevægelser overhovedet."
 
 msgid "Change the interface settings of the game."
 msgstr "Ændr spillets brugerfladeindstillinger."
@@ -4219,27 +4216,25 @@ msgstr "Svær"
 msgid "Campaign Difficulty"
 msgstr "Felttogsniveau"
 
-#, fuzzy
 msgid ""
 "Choose this difficulty to experience the game's story with less challenge. "
 "The AI will be weaker than at Normal difficulty."
 msgstr ""
-"Vælg dette niveau, hvis du foretrækker spilhistorie frem for udfordring. AI "
-"er svagere sammenlignet med niveauet normal."
+"Vælg dette niveau, for at opleve felttoget med mindre udfordring. AI-"
+"spillerne vil være svagere end de vil være på 'normal'."
 
-#, fuzzy
 msgid ""
 "Choose this difficulty to experience the campaign as per the original design."
 msgstr ""
-"Vælg dette niveau for at nyde felttoget i henhold til det originale design."
+"Vælg dette niveau, for at opleve felttoget i henhold til det originale "
+"design."
 
-#, fuzzy
 msgid ""
 "Choose this difficulty if you want more challenge. The AI will be stronger "
 "than at Normal difficulty."
 msgstr ""
-"Vælg dette niveau, hvis du ønsker udfordring. AI er stærkere sammenlignet "
-"med normal niveau."
+"Vælg dette niveau, for at opleve felttoget med større udfordring. AI-"
+"spillerne vil være stærkere end de vil være på 'normal'."
 
 msgid ""
 "Congratulations!\n"
@@ -4276,9 +4271,8 @@ msgstr "Start det valgte scenarie."
 msgid "View Intro"
 msgstr "Vis intro"
 
-#, fuzzy
 msgid "View the intro video for the current state of the campaign."
-msgstr "Vis intro videoer for felttogets nuværende stadie."
+msgstr "Vis introvideoer til felttogets nuværende stadie."
 
 msgid ""
 "Select the campaign difficulty. This can be lowered at any point during the "
@@ -4867,13 +4861,12 @@ msgstr "Sidste understøttede version: "
 msgid "This file contains a save with an invalid game type."
 msgstr "Denne fil indeholder et gemt spil af en invalid spiltype."
 
-#, fuzzy
 msgid ""
 "This save file requires \"The Price of Loyalty\" game assets, but they have "
 "not been provided to the engine."
 msgstr ""
-"Denne fil blev gemt som et \"Prisen for loyalitet\" kort, men de tilsvarende "
-"spilaktiver er ikke blevet leveret til spilmotoren."
+"Den gemte fil kræver 'Prisen for loyalitet's spilaktiver, men de er ikke "
+"blevet leveret til spilmotoren."
 
 msgid "This saved game is localized to '"
 msgstr "Dette gemte spil er lokaliseret til '"
@@ -5280,15 +5273,14 @@ msgstr "Kort"
 msgid "Game Difficulty"
 msgstr "Spil-niveau"
 
-#, fuzzy
 msgid ""
 "This lets you change the starting difficulty at which you will play. Higher "
 "difficulty levels start you off with fewer resources, and at the higher "
 "settings, give extra resources to the computer."
 msgstr ""
-"Dette lader dig ændre startsværhedsgraden, som du vil spille med. Højere "
-"niveauer starter dig med færre ressourcer, og ved de højere indstillinger "
-"giver du ekstra resurser til computeren."
+"Dette lader dig ændre start-niveau, som du vil spille på. Højere niveauer "
+"giver dig færre resurser at starte med, mens AI-spillere til gengæld får "
+"ekstra resurser at starte med."
 
 msgid "Difficulty Rating"
 msgstr "Niveau-bedømmelse"
@@ -5600,17 +5592,16 @@ msgstr ""
 msgid "Handicap"
 msgstr "Handicap"
 
-#, fuzzy
 msgid ""
 "This lets you change the handicap of a particular player. Only human players "
 "may have a handicap. Handicapped players start with fewer resources and earn "
 "15 or 30% fewer resources per turn for mild and severe handicaps, "
 "respectively."
 msgstr ""
-"Dette lader dig ændre handicappet for en bestemt spiller. Kun mennesker må "
-"være handicappede. Handicappede spillere starter med færre resurser og "
-"tjener 15 eller 30 % færre resurser per omgang for henholdsvis milde og "
-"svære handicap."
+"Dette lader dig ændre handicappet for en bestemt spiller. Kun menneskelige "
+"spillere må have et handicap. Handicappede spillere starter med færre "
+"resurser og tjener 15 eller 30% færre resurser pr. omgang for henholdsvis "
+"milde og svære handicap."
 
 msgid "%{color} player"
 msgstr "%{color} spiller"
@@ -5618,33 +5609,30 @@ msgstr "%{color} spiller"
 msgid "No Handicap"
 msgstr "Intet handicap"
 
-#, fuzzy
 msgid ""
 "No special restrictions on starting resources and resource income per turn."
 msgstr ""
-"Ingen særlige begrænsninger for startresurser og indkomst af disse per tur."
+"Ingen særlige begrænsninger for startresurser og resurseindkomst af per tur."
 
 msgid "Mild Handicap"
 msgstr "Mildt handicap"
 
-#, fuzzy
 msgid ""
 "Players with mild handicap start with fewer resources and earn 15% fewer "
 "resources per turn."
 msgstr ""
-"Mildt handicappede spillere starter med færre resurser og tjener 15 % færre "
+"Spillere med mildt handicap starter med færre resurser og tjener 15% færre "
 "resurser per tur."
 
 msgid "Severe Handicap"
 msgstr "Svært handicap"
 
-#, fuzzy
 msgid ""
 "Players with severe handicap start with fewer resources and earn 30% fewer "
 "resources per turn."
 msgstr ""
-"Svært handicappede spillere starter med færre resurser og tjener 30 % færre "
-"resurser per tur."
+"Spillere med alvorligt handicap starter med færre resurser og tjener 30% "
+"færre resurser per tur."
 
 msgid "View %{skill} Info"
 msgstr "Vis info om %{skill}"
@@ -6173,7 +6161,6 @@ msgstr ""
 "Havfruerne lokker dig lydløst til at vende tilbage senere, for igen at blive "
 "velsignet."
 
-#, fuzzy
 msgid ""
 "The magical, soothing beauty of the Mermaids reaches you and your crew.\n"
 "Just for a moment, you forget your worries and bask in the beauty of the "
@@ -6183,7 +6170,7 @@ msgstr ""
 "Du og dit mandskab beskuer havfruernes magiske, beroligende skønhed.\n"
 "For en stund, glemmer du dine bekymringer og soler dig i øjeblikkets "
 "skønhed.\n"
-"Havfruernes charme velsigner dig med øget held til din næste kamp."
+"Havfruernes tryllesange velsigner dig med øget held til din næste kamp."
 
 msgid ""
 "You come upon the pyramid of a great and ancient king.\n"
@@ -6933,13 +6920,12 @@ msgstr ""
 "dig at købe det for 1.000 guldstykker. \n"
 "Ønsker du at købe kortet?"
 
-#, fuzzy
 msgid ""
 "The captain sighs. \"You don't have enough money, eh? You can't expect me to "
 "give my maps away for free!\""
 msgstr ""
-"Kaptajnen sukker. \"Du har ikke penge nok, hva'?  Du kan ikke forvente, at "
-"jeg giver mine kort væk gratis!\""
+"Kaptajnen sukker. \"Du har ikke penge nok, hva'? Du kan ikke forvente, at "
+"jeg giver mine søkort væk gratis!\""
 
 msgid ""
 "You come upon an obelisk made from a type of stone you have never seen "
@@ -7405,20 +7391,19 @@ msgstr ""
 msgid "%{name} the %{race} (Level %{level})"
 msgstr "%{race}en %{name} (Level %{level})"
 
-#, fuzzy
 msgid ""
 "'Spread' combat formation spreads the hero's units from the top to the "
 "bottom of the battlefield, with at least one empty space between each unit."
 msgstr ""
-"'spredt' kampformation spreder dine tropper fra top til bund på slagmarken, "
-"med mindst én tom plads mellem hver enhed."
+"'Spredt' kampformation spreder heltens hær, fra top til bund på deres side "
+"af slagmarken, med mindst én tom plads mellem hver trop."
 
-#, fuzzy
 msgid ""
 "'Grouped' combat formation bunches the hero's army together in the center of "
 "their side of the battlefield."
 msgstr ""
-"'gruppe'-formation samler dine tropper i midten af din side på slagmarken."
+"'Gruppe'-kampformation samler heltens hær i midten af deres side af "
+"slagmarken."
 
 msgid "Are you sure you want to dismiss this Hero?"
 msgstr "Er du sikker på, du vil bortvise denne helt?"
@@ -7481,16 +7466,16 @@ msgstr ""
 msgid "Level %{level}"
 msgstr "Level %{level}"
 
-#, fuzzy
 msgid ""
 "%{name} currently has %{point} spell points out of a maximum of %{max}. The "
 "maximum number of spell points is 10 times the hero's knowledge. It is "
 "occasionally possible for the hero to have more than their maximum spell "
 "points via special events."
 msgstr ""
-"%{name} har i øjeblikket %{point} mana ud af et maksimum på %{max}. Det "
-"maksimale antal mana er 10 gange din kundskabspoint. Det er lejlighedsvis "
-"muligt, at have mere end dine maksimale mana gennem særlige hændelser."
+"%{name} har i øjeblikket %{point} magipoint ud af et maksantal på %{max}. "
+"Maksantallet af magipoint er 10 gange heltens kundskabspoint. Af og til er "
+"det muligt for helten, at have mere end deres maksantal magipoint via "
+"særlige begivenheder."
 
 msgid "%{name1} meets %{name2}"
 msgstr "%{name1} møder %{name2}"
@@ -7531,21 +7516,20 @@ msgstr "Disse svage væsener vil sikkert flygte fra os."
 msgid "I fear these creatures are in the mood for a fight."
 msgstr "Jeg frygter at disse væsener er i humør til at slås."
 
-#, fuzzy
 msgid "The hero's attack skill is a bonus added to each unit's attack skill."
 msgstr ""
-"Din angrebsevne er en bonus, der lægges til hver af dine troppers "
-"angrebsevner."
+"Heltens angrebsevne angiver en mængde bonuspoint, der tillægges troppernes "
+"angrebsevne."
 
-#, fuzzy
 msgid "The hero's defense skill is a bonus added to each unit's defense skill."
 msgstr ""
-"Din forsvarsevne er en bonus, der lægges til hver af dine troppers "
-"forsvarsevner."
+"Heltens forsvarsevne angiver en mængde bonuspoint, der tillægges troppernes "
+"forsvarsevne."
 
-#, fuzzy
 msgid "The hero's spell power determines the duration or power of a spell."
-msgstr "Din magikraft bestemmer dine besværgelsers styrke og varighed."
+msgstr ""
+"Heltens magikraft er en mængde bonuspoint, der bestemmer den kraft og "
+"varighed besværgelser har."
 
 msgid ""
 "The hero's knowledge determines how many spell points the hero may have. "
@@ -7601,7 +7585,7 @@ msgid "Eagle Eye"
 msgstr "Ørneblik"
 
 msgid "Necromancy"
-msgstr "Nekromantik"
+msgstr "Nekromanti"
 
 msgid "Estates"
 msgstr "Adelskab"
@@ -7712,19 +7696,19 @@ msgid "Expert Ballistics"
 msgstr "Ekspert ballistik"
 
 msgid "Advanced Necromancy"
-msgstr "Øvet nekromantik"
+msgstr "Øvet nekromanti"
 
 msgid "Basic Estates"
 msgstr "Begynder adelskab"
 
 msgid "Basic Necromancy"
-msgstr "Begynder nekromantik"
+msgstr "Begynder nekromanti"
 
 msgid "Expert Eagle Eye"
 msgstr "Ekspert ørneblik"
 
 msgid "Expert Necromancy"
-msgstr "Ekspert nekromantik"
+msgstr "Ekspert nekromanti"
 
 msgid "Advanced Estates"
 msgstr "Øvet adelskab"
@@ -7740,13 +7724,13 @@ msgstr ""
 msgid "%{skill} eliminates the movement penalty for rough terrain."
 msgstr "%{skill} eliminerer bevægelsesbesvær i ujævnt terræn."
 
-#, fuzzy
 msgid ""
 "%{skill} increases the damage done by the hero's range attacking creatures "
 "by %{count} percent, and eliminates the %{penalty} percent penalty when "
 "shooting past obstacles (e.g. castle walls)."
 msgstr ""
-"%{name} eliminerer %{count}-procentstraffen for dine tropper, der skyder "
+"%{skill} øger den skade, som heltens skydende tropper forårsager, med "
+"%{count} procent, og eliminerer %{penalty} procentstraffen, når de skyder "
 "forbi forhindringer (f.eks. borgmure)."
 
 msgid "%{skill} increases the hero's movement points by %{count} percent."
@@ -7757,31 +7741,27 @@ msgid_plural "%{skill} increases the hero's viewable area by %{count} squares."
 msgstr[0] "%{skill} øger heltens sigtbarhed med én firkant."
 msgstr[1] "%{skill} øger heltens sigtbarhed med %{count} firkanter."
 
-#, fuzzy
 msgid ""
 "%{skill} allows the hero to negotiate with monsters who are weaker than "
 "their army, and reduces the cost of surrender."
 msgstr ""
-"%{skill} giver dig mulighed for at forhandle med grupper af væsener, der er "
-"svagere end din egen. "
+"%{skill} giver helten mulighed for at forhandle med grupper af væsener, der "
+"er svagere end sin egen, og reducerer omkostningerne ved overgivelse."
 
-#, fuzzy
 msgid ""
 "Approximately %{count} percent of the creatures may offer to join the hero."
 msgstr ""
-"Cirka %{count} procent af væsenerne kan tilbyde at tilslutte sig din hær."
+"Cirka %{count} procent af væsenerne vil tilbyde at tilslutte sig heltens hær."
 
-#, fuzzy
 msgid "All of the creatures may offer to join the hero."
-msgstr "Alle disse væsener er villige til at slutte sig til dig."
+msgstr "Alle disse væsener tilbyder at tilslutte sig til heltens hær."
 
-#, fuzzy
 msgid ""
 "The cost of surrender is reduced to %{percent} percent of the total cost of "
 "troops in the army."
 msgstr ""
-"%{name} reducerer prisen for overgivelse til %{count}% af de samlede "
-"omkostninger for tropper, du har i din hær."
+"Omkostningerne ved overgivelse er reduceret til %{percent} procent af de "
+"samlede omkostninger for tropper i hæren."
 
 msgid ""
 "%{skill} increases the hero's movement points over water by %{count} percent."
@@ -7936,13 +7916,12 @@ msgstr "Rødt"
 msgid "Experience"
 msgstr "Erfaringspoint"
 
-#, fuzzy
 msgid ""
 "Experience allows your heroes to gain levels, increasing their primary and "
 "secondary skills."
 msgstr ""
-"Erfaringspoint giver dine helte mulighed for at stige i niveau, og derved "
-"øge deres primære og sekundære evner."
+"Erfaringspoint giver dine helte mulighed for at stige i niveauer, hvilket "
+"øger deres primære og sekundære evner."
 
 msgid "Hero/Stats"
 msgstr "Helt/Egenskaber"
@@ -7989,29 +7968,26 @@ msgstr "Fremragende"
 msgid "luck|Irish"
 msgstr "Svineheldig"
 
-#, fuzzy
 msgid ""
 "Negative luck sometimes falls on the hero's units in combat, causing their "
 "attacks to only do half damage."
 msgstr ""
-"Nogle gange bliver dine tropper ramt af uheld i kamp, hvilket får deres "
-"angreb til kun at gøre halv skade mod fjenden."
+"Negativt held falder nogle gange på heltens tropper i kamp, hvilket halverer "
+"deres angrebsskade."
 
-#, fuzzy
 msgid ""
 "Neutral luck means the hero's units will never get lucky or unlucky attacks "
 "on the enemy."
 msgstr ""
-"Neutralt held betyder, at dine tropper hverken får heldige eller uheldige "
-"angreb mod fjenden."
+"Neutralt held betyder, at heltens tropper hverken giver heldig eller uheldig "
+"angrebsskade."
 
-#, fuzzy
 msgid ""
 "Positive luck sometimes lets the hero's units get lucky attacks (double "
 "strength) in combat."
 msgstr ""
-"Nogle gange bliver dine tropper ramt af held og lykke. Heldige angreb "
-"fordobler skaden mod fjender."
+"Positivt held falder nogle gange på heltens tropper i kamp, hvilket "
+"fordobler deres angrebsskade."
 
 msgid "morale|Treason"
 msgstr "Horribel"
@@ -8032,23 +8008,20 @@ msgid "morale|Great"
 msgstr "Fremragende"
 
 msgid "morale|Blood!"
-msgstr "Blodtørstende!"
+msgstr "Blodig!"
 
-#, fuzzy
 msgid "Negative morale may cause the hero's units to freeze in combat."
-msgstr "Dårlig moral kan få dine tropper til at fryse i kamp."
+msgstr "Negativ moral kan få heltens tropper til at fryse i kamp."
 
-#, fuzzy
 msgid ""
 "Neutral morale means the hero's units will never be blessed with extra "
 "attacks or freeze in combat."
 msgstr ""
-"Neutral moral betyder, at dine tropper hverken velsignes med ekstra træk "
+"Neutral moral betyder, at heltens tropper hverken velsignes med ekstra træk "
 "eller fryser i kamp."
 
-#, fuzzy
 msgid "Positive morale may give the hero's units extra attacks in combat."
-msgstr "God moral kan give dine tropper ekstra træk i kamp."
+msgstr "Positiv moral kan give heltens tropper ekstra træk i kamp."
 
 msgid "Knight"
 msgstr "Ridder"
@@ -9202,54 +9175,47 @@ msgstr "Magibogen er bundet til den enkelte helt."
 msgid "Invalid Artifact"
 msgstr "Ugyldigt artefakt"
 
-#, fuzzy
 msgid "The %{name} increases the hero's knowledge by %{count}."
-msgstr "%{name} øger din kundskab med %{count} point."
+msgstr "%{name} øger heltens kundskab med %{count} point."
 
 msgid "Ultimate Book of Knowledge"
 msgstr "Den Ultimative Bog for Kundskab"
 
-#, fuzzy
 msgid "The %{name} increases the hero's attack skill by %{count}."
-msgstr "%{name} øger dine væseners angrebsevne med %{count} point."
+msgstr "%{name} øger angrebsevnen for heltens tropper med %{count} point."
 
 msgid "Ultimate Sword of Dominion"
 msgstr "Det Ultimative Herredømmesværd"
 
-#, fuzzy
 msgid "The %{name} increases the hero's defense skill by %{count}."
-msgstr "%{name} øger dine væseners forsvarsevne med %{count} point."
+msgstr "%{name} øger forsvarsevnen for heltens tropper med %{count} point."
 
 msgid "Ultimate Cloak of Protection"
 msgstr "Den Ultimative Beskyttelseskappe"
 
-#, fuzzy
 msgid "The %{name} increases the hero's spell power by %{count}."
-msgstr "%{name} øger din magikraft med %{count} point."
+msgstr "%{name} øger heltens magikraft med %{count} point."
 
 msgid "Ultimate Wand of Magic"
 msgstr "Den Ultimative Tryllestav"
 
-#, fuzzy
 msgid ""
 "The %{name} increases the hero's attack and defense skills by %{count} each."
-msgstr "%{name} øger både din angrebs- og forsvarsevne med %{count} point."
+msgstr "%{name} øger heltens angrebs- og forsvarsevne med %{count} point."
 
 msgid "Ultimate Shield"
 msgstr "Det Ultimative Skjold"
 
-#, fuzzy
 msgid ""
 "The %{name} increases the hero's spell power and knowledge by %{count} each."
-msgstr "%{name} øger både din magikraft og kundskab med %{count} point."
+msgstr "%{name} øger heltens magikraft og kundskab med %{count} point."
 
 msgid "Ultimate Staff"
 msgstr "Den Ultimative Stav"
 
-#, fuzzy
 msgid ""
 "The %{name} increases each of the hero's basic skills by %{count} points."
-msgstr "%{name} øger alle dine primære evner med %{count} point."
+msgstr "%{name} øger alle heltens primære evner med %{count} point."
 
 msgid "Ultimate Crown"
 msgstr "Den Ultimative Krone"
@@ -9307,9 +9273,8 @@ msgstr ""
 msgid "Medal of Valor"
 msgstr "Hædersmedaljen"
 
-#, fuzzy
 msgid "The %{name} increases the morale of the hero's army by %{count}."
-msgstr "%{name} øger din moral med %{count} point."
+msgstr "%{name} øger moralen for heltens tropper med %{count} point."
 
 msgid ""
 "Freeing a virtuous maiden from the clutches of an evil overlord, you are "
@@ -9352,10 +9317,10 @@ msgstr ""
 msgid "Fizbin of Misfortune"
 msgstr "Fizbin Ulykkesmedaljen"
 
-#, fuzzy
 msgid ""
 "The %{name} greatly decreases the morale of the hero's army by %{count}."
-msgstr "%{name} reducerer din moral markant med %{count} point."
+msgstr ""
+"%{name} reducerer markant moralen for heltens tropper med %{count} point."
 
 msgid ""
 "You stumble upon a medal lying alongside the empty road. Adding the medal to "
@@ -9379,9 +9344,8 @@ msgstr ""
 msgid "Armored Gauntlets of Protection"
 msgstr "Værnerens Pansrede Handsker"
 
-#, fuzzy
 msgid "The %{name} increase the hero's defense skill by %{count}."
-msgstr "%{name} øger din forsvarsevne med %{count} point."
+msgstr "%{name} øger heltens forsvarsevne med %{count} point."
 
 msgid ""
 "You encounter the infamous Black Knight! After a grueling duel ending in a "
@@ -9417,9 +9381,8 @@ msgstr ""
 msgid "Ballista of Quickness"
 msgstr "Den Hastfulde Ballista"
 
-#, fuzzy
 msgid "The %{name} gives the hero's catapult one extra shot per combat round."
-msgstr "%{name} giver din katapult et ekstra skud per kamprunde."
+msgstr "%{name} giver heltens katapult et ekstra skud per kamprunde."
 
 msgid ""
 "Walking through the ruins of an ancient walled city, you find the instrument "
@@ -9562,9 +9525,8 @@ msgstr ""
 msgid "Nomad Boots of Mobility"
 msgstr "Nomadens Syvmilestøvler"
 
-#, fuzzy
 msgid "The %{name} increase the hero's movement on land."
-msgstr "%{name} øger heltens skridtpoint på land."
+msgstr "%{name} øger heltens bevægelsespoint til lands."
 
 msgid ""
 "A Nomad trader seeks protection from a tribe of Goblins. For your "
@@ -9592,9 +9554,8 @@ msgstr ""
 msgid "Lucky Rabbit's Foot"
 msgstr "Den Heldige Kaninfod"
 
-#, fuzzy
 msgid "The %{name} increases the luck of the hero's army by %{count}."
-msgstr "%{name} øger dit held i kamp med %{count} point."
+msgstr "%{name} øger heldet for heltens tropper med %{count} point."
 
 msgid ""
 "A traveling merchant offers you a rabbit's foot, made of gleaming silver "
@@ -9640,9 +9601,8 @@ msgstr ""
 msgid "True Compass of Mobility"
 msgstr "Det sande Kompas for Bevægelighed."
 
-#, fuzzy
 msgid "The %{name} increases the hero's movement on land and sea."
-msgstr "%{name} øger dine skridtpoint til lands og til vands."
+msgstr "%{name} øger heltens bevægelsespoint, både til lands og til vands."
 
 msgid ""
 "An old man claiming to be an inventor asks you to try his latest invention. "
@@ -9654,9 +9614,8 @@ msgstr ""
 msgid "Sailor's Astrolabe of Mobility"
 msgstr "Søfarerens Astrolabium for Bevægelighed"
 
-#, fuzzy
 msgid "The %{name} increases the hero's movement on sea."
-msgstr "%{name} øger dine bevægelsespoint til søs."
+msgstr "%{name} øger heltens bevægelsespoint til vands."
 
 msgid ""
 "An old sea captain is being tortured by Ogres. You save him, and in return "
@@ -9684,11 +9643,11 @@ msgstr ""
 msgid "Enchanted Hourglass"
 msgstr "Det Fortryllede Timeglas"
 
-#, fuzzy
 msgid ""
 "The %{name} extends the duration of all the hero's spells by %{count} turns."
 msgstr ""
-"%{name} forlænger alle dine besværgelsers varighed med %{count} runder."
+"%{name} forlænger varigheden på alle heltens besværgelser med %{count} "
+"runder."
 
 msgid ""
 "A surprise turn in the landscape finds you in the midst of a grisly scene: "
@@ -9702,9 +9661,8 @@ msgstr ""
 msgid "Gold Watch"
 msgstr "Gulduret"
 
-#, fuzzy
 msgid "The %{name} doubles the effectiveness of the hero's hypnotize spells."
-msgstr "%{name} fordobler dine hypnosebesværgelsers effektivitet."
+msgstr "%{name} fordobler effektiviteten på heltens hypnosebesværgelser."
 
 msgid ""
 "In reward for helping his cart out of a ditch, a traveling potion salesman "
@@ -10083,13 +10041,12 @@ msgstr ""
 msgid "Statesman's Quill"
 msgstr "Statsmandens Fjerpen"
 
-#, fuzzy
 msgid ""
 "The %{name} reduces the cost of surrender to %{count} percent of the total "
 "cost of troops the hero has in their army."
 msgstr ""
-"%{name} reducerer prisen for overgivelse til %{count}% af de samlede "
-"omkostninger for tropper, du har i din hær."
+"%{name} reducerer overgivelsesprisen til %{count} procent af de samlede "
+"omkostninger for tropper, helten har i sin hær."
 
 msgid ""
 "You pause to help a diplomat with a broken axle fix his problem. In "
@@ -10103,10 +10060,10 @@ msgstr ""
 msgid "Wizard's Hat"
 msgstr "Troldmandshatten"
 
-#, fuzzy
 msgid ""
 "The %{name} increases the duration of the hero's spells by %{count} turns."
-msgstr "%{name} øger dine besværgelsers varighed med %{count} runder."
+msgstr ""
+"%{name} forlænger varigheden på heltens besværgelser med %{count} runder."
 
 msgid ""
 "You see a Wizard fleeing from a Griffin and riding like the wind. The Wizard "
@@ -10139,11 +10096,10 @@ msgstr ""
 msgid "Ammo Cart"
 msgstr "Ammunitionsvognen"
 
-#, fuzzy
 msgid ""
 "The %{name} provides endless ammunition for all of the hero's troops that "
 "shoot."
-msgstr "%{name} giver dine skydende tropper uendelig ammunition."
+msgstr "%{name} giver heltens skydende tropper uendelig ammunition."
 
 msgid ""
 "An ammunition cart in the middle of an old battlefield catches your eye. "
@@ -10338,9 +10294,8 @@ msgstr ""
 msgid "Magic Book"
 msgstr "Magibog"
 
-#, fuzzy
 msgid "The %{name} enables the hero to cast spells."
-msgstr "%{name} gør det muligt for dig at kaste besværgelser."
+msgstr "%{name} gør det muligt for helten at kaste besværgelser."
 
 msgid "Dummy 1"
 msgstr "Pladsholder 1"
@@ -10381,13 +10336,12 @@ msgstr ""
 msgid "Arm of the Martyr"
 msgstr "Martyrens Arm"
 
-#, fuzzy
 msgid ""
 "The %{name} increases the hero's spell power by %{count} but adds the undead "
 "morale penalty."
 msgstr ""
-"%{name} øger magikraft med %{count} point, men tilfører din hær den udøde "
-"moralstraf."
+"%{name} øger heltens magikraft med %{count} point, men tilfører dennes hær "
+"moralstraffen for at have udøde i blandt sig."
 
 msgid ""
 "One of the less intelligent members of your party picks up an arm off of the "
@@ -10405,9 +10359,8 @@ msgstr ""
 msgid "Breastplate of Anduran"
 msgstr "Andurans Brynje"
 
-#, fuzzy
 msgid "The %{name} increases the hero's defense by %{count}."
-msgstr "%{name} øger din forsvarsevne med %{count} point."
+msgstr "%{name} øger forsvarsevne for heltens tropper med %{count} point."
 
 msgid ""
 "You come upon a sign. It reads: \"Here lies the body of Anduran. Bow and "
@@ -10443,15 +10396,14 @@ msgstr ""
 msgid "Battle Garb of Anduran"
 msgstr "Andurans Udstyr"
 
-#, fuzzy
 msgid ""
 "The %{name} combines the powers of the three Anduran artifacts. It provides "
 "maximum luck and morale for the hero's troops and gives the hero the Town "
 "Portal spell."
 msgstr ""
 "%{name} kombinerer kræfterne fra Andurans tre artefakter. \n"
-"Det maksimerer dine troppers held og moral og giver dig Byportal-"
-"besværgelsen."
+"Det giver helten Byportal-besværgelsen samt maksimerer troppernes held og "
+"moral i kamp."
 
 msgid ""
 "Out of pity for a poor peasant, you purchase a chest of old junk they are "
@@ -10466,13 +10418,12 @@ msgstr ""
 msgid "Crystal Ball"
 msgstr "Krystalkuglen"
 
-#, fuzzy
 msgid ""
 "The %{name} lets the hero get more specific information about monsters, "
 "enemy heroes, and castles nearby the hero."
 msgstr ""
-"%{name} giver dig mulighed for at få mere specifik information om væsener, "
-"fjendens helte og borge i nærheden af den helten, som bærer den."
+"%{name} gør det muligt for helten, at få flere specifikke informationer om "
+"væsener, fjendens helte og borge, som er i nærheden af denne."
 
 msgid ""
 "You come upon a caravan of gypsies who are feasting and fortifying their "
@@ -10593,13 +10544,11 @@ msgstr ""
 msgid "Masthead"
 msgstr "Masthovedet"
 
-#, fuzzy
 msgid ""
 "The %{name} boosts the hero's troops' luck and morale by %{count} each in "
 "sea combat."
 msgstr ""
-"%{name} øger troppernes held og moral med %{count} point, når de kæmper til "
-"søs."
+"%{name} øger held og moral for heltens tropper med %{count} point, i søkamp."
 
 msgid "Sphere of Negation"
 msgstr "Negationskuglen"
