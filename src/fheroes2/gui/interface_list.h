@@ -433,14 +433,13 @@ namespace Interface
                     if ( !le.isDragInProgress() ) {
                         // Remember where has the drag started.
                         _dragStartPos = mousePosition;
-                        le.RegisterDrag();
+                        le.registerDrag();
 
                         // We have just started the drag, it might as well be a legitimate click.
                         _lockClick = false;
                     }
 
-                    const fheroes2::Point deltaPoint = _dragStartPos - mousePosition;
-                    const int delta = ( _scrollbar.isVertical() ? deltaPoint.y : deltaPoint.x );
+                    const int delta = ( _scrollbar.isVertical() ? ( _dragStartPos.y - mousePosition.y ) : ( _dragStartPos.x - mousePosition.x ) );
                     const int itemSize = ( _scrollbar.isVertical() ? rtAreaItems.height : rtAreaItems.width ) / maxItems;
 
                     // We have dragged past the size of one list-item.

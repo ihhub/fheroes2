@@ -311,7 +311,7 @@ public:
         return modes & DRAG_ONGOING;
     }
 
-    void RegisterDrag()
+    void registerDrag()
     {
         SetModes( DRAG_ONGOING );
     }
