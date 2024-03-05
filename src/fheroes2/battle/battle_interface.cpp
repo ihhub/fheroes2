@@ -2798,7 +2798,13 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
     const fheroes2::Rect turnOrderRect = _turnOrder + _interfacePosition.getPosition();
     const int32_t battleFieldHeight = _interfacePosition.height - status.height - ( listlog->isOpenLog() ? listlog->GetArea().height : 0 );
     const fheroes2::Rect battleFieldRect{ _interfacePosition.x, _interfacePosition.y, _interfacePosition.width, battleFieldHeight };
-    if ( Arena::GetTower( TowerType::TWR_CENTER ) && le.MouseCursor( mainTowerRect ) ) {
+    if ( listlog && listlog->isOpenLog() && ( le.MouseCursor( listlog->GetArea() ) || le.MousePressLeft( listlog->GetArea() ) ) )
+    {
+        cursor.SetThemes( Cursor::WAR_POINTER );
+
+        listlog->QueueEventProcessing();
+    }
+    else if ( Arena::GetTower( TowerType::TWR_CENTER ) && le.MouseCursor( mainTowerRect ) ) {
         cursor.SetThemes( Cursor::WAR_INFO );
         msg = _( "View Ballista info" );
 
@@ -2920,11 +2926,6 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
             arena.DialogBattleHero( *_opponent2->GetHero(), false, status );
             humanturn_redraw = true;
         }
-    }
-    else if ( listlog && listlog->isOpenLog() && le.MouseCursor( listlog->GetArea() ) ) {
-        cursor.SetThemes( Cursor::WAR_POINTER );
-
-        listlog->QueueEventProcessing();
     }
     else if ( le.MouseCursor( battleFieldRect ) ) {
         const int themes = GetBattleCursor( msg );
