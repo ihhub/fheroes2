@@ -25,6 +25,7 @@
 #include <cassert>
 #include <cstdint>
 #include <cstdlib>
+#include <deque>
 #include <initializer_list>
 #include <limits>
 #include <list>
@@ -3118,6 +3119,65 @@ namespace Maps
                 }
             }
         }
+    }
+
+    bool doesTileHaveObjectUID( const Tiles & tile, const uint32_t uid )
+    {
+        if ( tile.GetObjectUID() == uid ) {
+            return true;
+        }
+
+        for ( const TilesAddon & addon : tile.getBottomLayerAddons() ) {
+            if ( addon._uid == uid ) {
+                return true;
+            }
+        }
+
+        for ( const TilesAddon & addon : tile.getTopLayerAddons() ) {
+            if ( addon._uid == uid ) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    bool isMainObjectShort( const Tiles & tile )
+    {
+        const uint32_t uid = tile.GetObjectUID();
+        const int32_t startIndex = tile.GetIndex();
+
+        const int32_t startY = startIndex / world.w();
+
+        std::deque<int32_t> indexToTraverse{ startIndex };
+        std::set<int32_t> traversedIndex;
+
+        const Directions & directions = Direction::All();
+
+        while ( !indexToTraverse.empty() ) {
+            traversedIndex.emplace( indexToTraverse.front() );
+
+            for ( const int direction : directions ) {
+                if ( !isValidDirection( indexToTraverse.front(), direction ) ) {
+                    continue;
+                }
+
+                const int32_t newIndex = Maps::GetDirectionIndex( indexToTraverse.front(), direction );
+                const Tiles & newTile = world.GetTiles( newIndex );
+
+                if ( doesTileHaveObjectUID( newTile, uid ) && traversedIndex.count( newIndex ) == 0 ) {
+                    if ( ( newIndex / world.w() ) != startY ) {
+                        return false;
+                    }
+
+                    indexToTraverse.emplace_back( newIndex );
+                }
+            }
+
+            indexToTraverse.pop_front();
+        }
+
+        return true;
     }
 
     bool removeObjectTypeFromTile( Tiles & tile, const MP2::ObjectIcnType objectIcnType )

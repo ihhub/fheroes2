@@ -248,48 +248,6 @@ namespace
     }
 #endif
 
-    bool isShortObject( const MP2::MapObjectType objectType )
-    {
-        // Some objects allow middle moves even being attached to the bottom.
-        // These object actually don't have any sprites on tiles above them within addon 2 level objects.
-        // TODO: find a better way to do not hardcode values here.
-
-        switch ( objectType ) {
-        case MP2::OBJ_HALFLING_HOLE:
-        case MP2::OBJ_NON_ACTION_HALFLING_HOLE:
-        case MP2::OBJ_LEAN_TO:
-        case MP2::OBJ_WATER_LAKE:
-        case MP2::OBJ_TAR_PIT:
-        case MP2::OBJ_MERCENARY_CAMP:
-        case MP2::OBJ_NON_ACTION_MERCENARY_CAMP:
-        case MP2::OBJ_STANDING_STONES:
-        case MP2::OBJ_SHRINE_FIRST_CIRCLE:
-        case MP2::OBJ_SHRINE_SECOND_CIRCLE:
-        case MP2::OBJ_SHRINE_THIRD_CIRCLE:
-        case MP2::OBJ_MAGIC_GARDEN:
-        case MP2::OBJ_RUINS:
-        case MP2::OBJ_NON_ACTION_RUINS:
-        case MP2::OBJ_SIGN:
-        case MP2::OBJ_IDOL:
-        case MP2::OBJ_STONE_LITHS:
-        case MP2::OBJ_NON_ACTION_STONE_LITHS:
-        case MP2::OBJ_WAGON:
-        case MP2::OBJ_WAGON_CAMP:
-        case MP2::OBJ_NON_ACTION_WAGON_CAMP:
-        case MP2::OBJ_GOBLIN_HUT:
-        case MP2::OBJ_FAERIE_RING:
-        case MP2::OBJ_NON_ACTION_FAERIE_RING:
-        case MP2::OBJ_BARRIER:
-        case MP2::OBJ_MAGIC_WELL:
-        case MP2::OBJ_NOTHING_SPECIAL:
-            return true;
-        default:
-            break;
-        }
-
-        return false;
-    }
-
     bool isDetachedObjectType( const MP2::MapObjectType objectType )
     {
         // Some objects do not take into account other objects below them.
@@ -507,7 +465,7 @@ void Maps::Tiles::Init( int32_t index, const MP2::mp2tile_t & mp2 )
         _isTileMarkedAsRoad = true;
     }
 
-    if ( mp2.mapObjectType == MP2::OBJ_NONE && ( layerType == Maps::ObjectLayerType::SHADOW_LAYER || layerType == Maps::ObjectLayerType::TERRAIN_LAYER ) ) {
+    if ( _mainObjectType == MP2::OBJ_NONE && ( layerType == Maps::ObjectLayerType::SHADOW_LAYER || layerType == Maps::ObjectLayerType::TERRAIN_LAYER ) ) {
         // If an object sits on shadow or terrain layer then we should put it as a bottom layer add-on.
         if ( bottomObjectIcnType != MP2::ObjectIcnType::OBJ_ICN_TYPE_UNKNOWN ) {
             _addonBottomLayer.emplace_back( layerType, mp2.level1ObjectUID, bottomObjectIcnType, mp2.bottomIcnImageIndex );
@@ -693,6 +651,17 @@ int Maps::Tiles::getBoatDirection() const
 
 int Maps::Tiles::getOriginalPassability() const
 {
+    // Run through all objects in this tile and calculate the passability based on all of them.
+    if ( isValidReefsSprite( _mainAddon._objectIcnType, _mainAddon._imageIndex ) ) {
+        return 0;
+    }
+
+    for ( const TilesAddon & addon : _addonBottomLayer ) {
+        if ( isValidReefsSprite( addon._objectIcnType, addon._imageIndex ) ) {
+            return 0;
+        }
+    }
+
     const MP2::MapObjectType objectType = GetObject( false );
 
     if ( MP2::isActionObject( objectType ) ) {
@@ -702,16 +671,6 @@ int Maps::Tiles::getOriginalPassability() const
     if ( _mainAddon._objectIcnType == MP2::OBJ_ICN_TYPE_UNKNOWN || _mainAddon.isPassabilityTransparent() || isShadow() ) {
         // No object exists. Make it fully passable.
         return DIRECTION_ALL;
-    }
-
-    if ( isValidReefsSprite( _mainAddon._objectIcnType, _mainAddon._imageIndex ) ) {
-        return 0;
-    }
-
-    for ( const TilesAddon & addon : _addonBottomLayer ) {
-        if ( isValidReefsSprite( addon._objectIcnType, addon._imageIndex ) ) {
-            return 0;
-        }
     }
 
     // Objects have fixed passability.
@@ -790,9 +749,11 @@ void Maps::Tiles::updatePassability()
             const MP2::MapObjectType bottomTileObjectType = bottomTile.GetObject( false );
             const MP2::MapObjectType correctedObjectType = MP2::getBaseActionObjectType( bottomTileObjectType );
 
+            const bool isBottomObjectShort = isMainObjectShort( bottomTile );
+
             if ( MP2::isActionObject( bottomTileObjectType ) ) {
                 if ( ( MP2::getActionObjectDirection( bottomTileObjectType ) & Direction::TOP ) == 0 ) {
-                    if ( isShortObject( bottomTileObjectType ) ) {
+                    if ( isBottomObjectShort ) {
                         _tilePassabilityDirections &= ~Direction::BOTTOM;
                     }
                     else {
@@ -802,10 +763,10 @@ void Maps::Tiles::updatePassability()
                 }
             }
             else if ( bottomTile._mainObjectType != MP2::OBJ_NONE && correctedObjectType != bottomTileObjectType && MP2::isActionObject( correctedObjectType )
-                      && isShortObject( correctedObjectType ) && ( bottomTile.getOriginalPassability() & Direction::TOP ) == 0 ) {
+                      && isBottomObjectShort && ( bottomTile.getOriginalPassability() & Direction::TOP ) == 0 ) {
                 _tilePassabilityDirections &= ~Direction::BOTTOM;
             }
-            else if ( isShortObject( bottomTileObjectType )
+            else if ( isBottomObjectShort
                       || ( !bottomTile.containsAnyObjectIcnType( getValidObjectIcnTypes() )
                            && ( isCombinedObject( objectType ) || isCombinedObject( bottomTileObjectType ) ) ) ) {
                 _tilePassabilityDirections &= ~Direction::BOTTOM;
