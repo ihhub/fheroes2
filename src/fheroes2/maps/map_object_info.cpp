@@ -3141,11 +3141,11 @@ namespace
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC1, 119U, fheroes2::Point{ 1, 0 }, MP2::OBJ_NON_ACTION_AIR_ALTAR, Maps::OBJECT_LAYER );
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC1, 117U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NON_ACTION_AIR_ALTAR, Maps::OBJECT_LAYER );
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC1, 116U, fheroes2::Point{ -2, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC1, 112U, fheroes2::Point{ -2, -1 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
 
             object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC1, 115U, fheroes2::Point{ 1, -1 }, MP2::OBJ_NON_ACTION_AIR_ALTAR );
             object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC1, 114U, fheroes2::Point{ 0, -1 }, MP2::OBJ_NON_ACTION_AIR_ALTAR );
             object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC1, 113U, fheroes2::Point{ -1, -1 }, MP2::OBJ_NONE );
-            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_X_LOC1, 112U, fheroes2::Point{ -2, -1 }, MP2::OBJ_NONE );
 
             objects.emplace_back( std::move( object ) );
         }
@@ -3310,7 +3310,7 @@ namespace
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 27U, fheroes2::Point{ 1, 0 }, MP2::OBJ_NON_ACTION_ALCHEMIST_LAB, Maps::OBJECT_LAYER );
             object.groundLevelParts.back().animationFrames = 6;
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 24U, fheroes2::Point{ -2, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
-            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 20U, fheroes2::Point{ -2, -1 }, MP2::OBJ_NONE );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 20U, fheroes2::Point{ -2, -1 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
             object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 21U, fheroes2::Point{ -1, -1 }, MP2::OBJ_NON_ACTION_ALCHEMIST_LAB );
             object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 22U, fheroes2::Point{ 0, -1 }, MP2::OBJ_NON_ACTION_ALCHEMIST_LAB );
             object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMUL2, 23U, fheroes2::Point{ 1, -1 }, MP2::OBJ_NON_ACTION_ALCHEMIST_LAB );
@@ -3330,7 +3330,7 @@ namespace
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSNOW, 148U, fheroes2::Point{ -2, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSNOW, 151U, fheroes2::Point{ 1, 0 }, MP2::OBJ_NON_ACTION_ALCHEMIST_LAB, Maps::OBJECT_LAYER );
             object.groundLevelParts.back().animationFrames = 6;
-            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSNOW, 144U, fheroes2::Point{ -2, -1 }, MP2::OBJ_NONE );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSNOW, 144U, fheroes2::Point{ -2, -1 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
             object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSNOW, 145U, fheroes2::Point{ -1, -1 }, MP2::OBJ_NON_ACTION_ALCHEMIST_LAB );
             object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSNOW, 146U, fheroes2::Point{ 0, -1 }, MP2::OBJ_NON_ACTION_ALCHEMIST_LAB );
             object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNSNOW, 147U, fheroes2::Point{ 1, -1 }, MP2::OBJ_NON_ACTION_ALCHEMIST_LAB );
@@ -4051,8 +4051,8 @@ namespace
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDIRT, 197U, fheroes2::Point{ -1, 0 }, MP2::OBJ_ORACLE, Maps::OBJECT_LAYER );
 
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDIRT, 196U, fheroes2::Point{ -2, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDIRT, 193U, fheroes2::Point{ -2, -1 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
 
-            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDIRT, 193U, fheroes2::Point{ -2, -1 }, MP2::OBJ_NONE );
             object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDIRT, 194U, fheroes2::Point{ -1, -1 }, MP2::OBJ_NON_ACTION_ORACLE );
             object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDIRT, 195U, fheroes2::Point{ 0, -1 }, MP2::OBJ_NON_ACTION_ORACLE );
 
@@ -4300,8 +4300,8 @@ namespace
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDSRT, 81U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NON_ACTION_PYRAMID, Maps::OBJECT_LAYER );
 
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDSRT, 80U, fheroes2::Point{ -2, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDSRT, 77U, fheroes2::Point{ -2, -1 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
 
-            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDSRT, 77U, fheroes2::Point{ -2, -1 }, MP2::OBJ_NONE );
             object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDSRT, 78U, fheroes2::Point{ -1, -1 }, MP2::OBJ_NON_ACTION_PYRAMID );
             object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDSRT, 79U, fheroes2::Point{ 0, -1 }, MP2::OBJ_NON_ACTION_PYRAMID );
 
