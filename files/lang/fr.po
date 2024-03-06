@@ -2002,7 +2002,7 @@ msgid "Cannot build %{name}. The castle is too far away from an ocean."
 msgstr "Impossible de construire %{name} - le château est trop loin de l'eau."
 
 msgid "This building has been disabled."
-msgstr "La construction de ce bâtiment est prohibée."
+msgstr "La construction de ce bâtiment est désactivée pour ce château."
 
 msgid "Cannot afford the %{name}."
 msgstr "Impossible d'acheter %{name}."
