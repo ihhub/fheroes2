@@ -1028,7 +1028,7 @@ void Interface::GameArea::QueueEventProcessing( bool isCursorOverGamearea )
         _mouseDraggingMovement = true;
     }
 
-    if ( _mouseDraggingMovement ) {
+    if ( _mouseDraggingMovement && le.MousePressLeft( GetROI() ) ) {
         if ( _lastMouseDragPosition == mousePosition ) {
             _needRedrawByMouseDragging = false;
         }
