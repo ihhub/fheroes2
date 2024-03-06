@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-18 14:42+0000\n"
+"POT-Creation-Date: 2024-03-06 00:56+0000\n"
 "PO-Revision-Date: 2023-08-26 23:09+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: https://discord.com/"
@@ -3367,11 +3367,13 @@ msgstr "Kliknij, aby otworzyć wirtualną klawiaturę."
 msgid "Open Virtual Keyboard"
 msgstr "Otwórz wirtualną klawiaturę"
 
-msgid "How many troops to move?"
+#, fuzzy
+msgid "How many units do you wish to move?"
 msgstr "Ile jednostek przenieść?"
 
-msgid "Fast separation into slots:"
-msgstr "Szybki podział na sloty:"
+#, fuzzy
+msgid "Select how many slots to separate into:"
+msgstr "Wybierz miasto docelowe."
 
 msgid "Map: "
 msgstr "Nazwa mapy: "
@@ -11476,6 +11478,9 @@ msgstr ""
 "Możesz pobrać najnowszą wersję gry ze strony:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Fast separation into slots:"
+#~ msgstr "Szybki podział na sloty:"
 
 #~ msgid "disable build."
 #~ msgstr "nie można zbudować."

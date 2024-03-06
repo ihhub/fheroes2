@@ -2049,6 +2049,12 @@ namespace AI
             }
 
             if ( hideAIMovements || !AIIsShowAnimationForHero( hero, colors ) ) {
+                // A hero might have been moving with visible animation for humans till he reaches the area
+                // where animation is not needed. This can be in the middle of movement between tiles.
+                // In this case it is important to reset animation sprite to make sure that the hero is
+                // ready for jump steps.
+                hero.resetHeroSprite();
+
                 hero.Move( true );
                 recenterNeeded = true;
 
