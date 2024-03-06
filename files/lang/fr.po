@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-06 00:56+0000\n"
+"POT-Creation-Date: 2024-03-06 22:25+0000\n"
 "PO-Revision-Date: 2024-02-06 13:52+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -4000,11 +4000,20 @@ msgstr "Villages"
 msgid "Heroes"
 msgstr "Héros"
 
-msgid "editorErasure|Terrain"
-msgstr "de terrains"
+#, fuzzy
+msgid "editorErasure|Landscape objects"
+msgstr "de héros"
+
+#, fuzzy
+msgid "editorErasure|Adventure non pickable objects"
+msgstr "d'artéfacts"
 
 msgid "editorErasure|Castles"
 msgstr "de châteaux"
+
+#, fuzzy
+msgid "editorErasure|Adventure pickable objects"
+msgstr "d'artéfacts"
 
 msgid "editorErasure|Monsters"
 msgstr "de monstres"
@@ -4012,17 +4021,11 @@ msgstr "de monstres"
 msgid "editorErasure|Heroes"
 msgstr "de héros"
 
-msgid "editorErasure|Artifacts"
-msgstr "d'artéfacts"
-
 msgid "editorErasure|Roads"
 msgstr "de routes"
 
 msgid "editorErasure|Streams"
 msgstr "de rivières"
-
-msgid "editorErasure|Treasures"
-msgstr "de trésors"
 
 msgid ""
 "Draws terrain in\n"
@@ -11461,6 +11464,12 @@ msgstr ""
 "Téléchargez la dernière version du jeu sur\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "editorErasure|Terrain"
+#~ msgstr "de terrains"
+
+#~ msgid "editorErasure|Treasures"
+#~ msgstr "de trésors"
 
 #~ msgid "Fast separation into slots:"
 #~ msgstr "Répartition rapide :"

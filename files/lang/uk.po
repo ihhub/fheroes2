@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-06 00:56+0000\n"
+"POT-Creation-Date: 2024-03-06 22:25+0000\n"
 "PO-Revision-Date: 2024-03-04 10:28+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3934,19 +3934,23 @@ msgid "Heroes"
 msgstr "Герої"
 
 #, fuzzy
-msgid "editorErasure|Terrain"
-msgstr "Місцевість"
+msgid "editorErasure|Landscape objects"
+msgstr "Дороги"
+
+msgid "editorErasure|Adventure non pickable objects"
+msgstr ""
 
 msgid "editorErasure|Castles"
 msgstr ""
+
+#, fuzzy
+msgid "editorErasure|Adventure pickable objects"
+msgstr "Струмки"
 
 msgid "editorErasure|Monsters"
 msgstr ""
 
 msgid "editorErasure|Heroes"
-msgstr ""
-
-msgid "editorErasure|Artifacts"
 msgstr ""
 
 #, fuzzy
@@ -3956,9 +3960,6 @@ msgstr "Дороги"
 #, fuzzy
 msgid "editorErasure|Streams"
 msgstr "Струмки"
-
-msgid "editorErasure|Treasures"
-msgstr ""
 
 msgid ""
 "Draws terrain in\n"
@@ -10664,6 +10665,10 @@ msgstr ""
 "Перевірити нову версію гри на\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#, fuzzy
+#~ msgid "editorErasure|Terrain"
+#~ msgstr "Місцевість"
 
 #~ msgid "Fast separation into slots:"
 #~ msgstr "Швидке розподілення по слотах."
