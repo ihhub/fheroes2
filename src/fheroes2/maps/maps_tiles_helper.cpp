@@ -268,12 +268,18 @@ namespace
     // Returns the direction vector bits from 'centerTileIndex' where '_tileIsRoad' bit is set for the tiles around.
     int getRoadDirecton( const Maps::Tiles & tile )
     {
+        // Castle entrance (active tile) is considered as a road, but it is not a real road so it should not be taken into account here.
+        // TODO: Redo the roads placing and direction check to use Map_Format instead of 'world' tiles.
+        MP2::MapObjectType objectType = tile.GetObject( true );
+        int roadDirection
+            = ( tile.isRoad() && objectType != MP2::OBJ_CASTLE && objectType != MP2::OBJ_RANDOM_TOWN && objectType != MP2::OBJ_RANDOM_CASTLE ) ? Direction::CENTER : 0;
         const int32_t centerTileIndex = tile.GetIndex();
-        int roadDirection = ( tile.isRoad() ) ? Direction::CENTER : 0;
         const Maps::Indexes around = Maps::getAroundIndexes( centerTileIndex );
 
         for ( const int32_t tileIndex : around ) {
-            if ( world.GetTiles( tileIndex ).isRoad() ) {
+            const Maps::Tiles & currentTile = world.GetTiles( tileIndex );
+            objectType = currentTile.GetObject( true );
+            if ( currentTile.isRoad() && objectType != MP2::OBJ_CASTLE && objectType != MP2::OBJ_RANDOM_TOWN && objectType != MP2::OBJ_RANDOM_CASTLE ) {
                 roadDirection |= Maps::GetDirection( centerTileIndex, tileIndex );
             }
         }
@@ -1168,37 +1174,6 @@ namespace
         for ( const int direction : { Direction::LEFT, Direction::TOP, Direction::RIGHT, Direction::BOTTOM } ) {
             if ( Maps::isValidDirection( centerTileIndex, direction ) ) {
                 updateStreamSpriteOnTile( world.GetTiles( Maps::GetDirectionIndex( centerTileIndex, direction ) ), false );
-            }
-        }
-    }
-
-    // Checks all layers in tiles around for given UID and if it is found removes this object part
-    // and initiates a new search around this tile using recursive call of this function.
-    void removeUidFromTilesAround( const int32_t centerTileIndex, const uint32_t uid )
-    {
-        for ( const int32_t tileIndex : Maps::getAroundIndexes( centerTileIndex ) ) {
-            Maps::Tiles & currentTile = world.GetTiles( tileIndex );
-
-            if ( currentTile.GetObjectUID() == uid ) {
-                currentTile.Remove( uid );
-                removeUidFromTilesAround( tileIndex, uid );
-                return;
-            }
-
-            for ( const Maps::TilesAddon & addon : currentTile.getBottomLayerAddons() ) {
-                if ( addon._uid == uid ) {
-                    currentTile.Remove( uid );
-                    removeUidFromTilesAround( tileIndex, uid );
-                    return;
-                }
-            }
-
-            for ( const Maps::TilesAddon & addon : currentTile.getTopLayerAddons() ) {
-                if ( addon._uid == uid ) {
-                    currentTile.Remove( uid );
-                    removeUidFromTilesAround( tileIndex, uid );
-                    return;
-                }
             }
         }
     }
@@ -3120,117 +3095,6 @@ namespace Maps
         }
     }
 
-    bool removeObjectTypeFromTile( Tiles & tile, const MP2::ObjectIcnType objectIcnType )
-    {
-        if ( tile.getObjectIdByObjectIcnType( objectIcnType ) == 0 ) {
-            // There is no such object on this tile.
-            return false;
-        }
-
-        // TODO: Improve this code to remove the multi-tile objects.
-        tile.removeObjects( objectIcnType );
-
-        // For some objects we should set tile object type as empty and reset the metadata.
-        switch ( objectIcnType ) {
-        case MP2::OBJ_ICN_TYPE_MONS32:
-        case MP2::OBJ_ICN_TYPE_MINIHERO:
-            resetObjectMetadata( tile );
-            tile.setAsEmpty();
-            break;
-        default:
-            break;
-        }
-
-        return true;
-    }
-
-    bool removeObject( Tiles & tile, const uint32_t uid )
-    {
-        if ( uid == 0 ) {
-            // There is no such object on this tile.
-            return false;
-        }
-
-        tile.Remove( uid );
-
-        // An object may occupy several tiles, we recursively check all around tiles for its parts by UID.
-        removeUidFromTilesAround( tile.GetIndex(), uid );
-
-        resetObjectMetadata( tile );
-
-        // TODO: Improve this code to properly update '_mainObjectType' in the case when
-        // there is a non-action objects placed under the current (action) object.
-        tile.setAsEmpty();
-
-        return true;
-    }
-
-    bool eraseObjectsOnTiles( const int32_t startTileId, const int32_t endTileId, const uint32_t objectTypesToErase )
-    {
-        if ( objectTypesToErase == ObjectErasureType::NONE ) {
-            // Nothing to erase.
-            return false;
-        }
-
-        const int32_t mapWidth = world.w();
-        const int32_t maxTileId = mapWidth * world.h() - 1;
-        if ( startTileId < 0 || startTileId > maxTileId || endTileId < 0 || endTileId > maxTileId ) {
-            return false;
-        }
-
-        const fheroes2::Point startTileOffset = GetPoint( startTileId );
-        const fheroes2::Point endTileOffset = GetPoint( endTileId );
-
-        const int32_t startX = std::min( startTileOffset.x, endTileOffset.x );
-        const int32_t startY = std::min( startTileOffset.y, endTileOffset.y );
-        const int32_t endX = std::max( startTileOffset.x, endTileOffset.x );
-        const int32_t endY = std::max( startTileOffset.y, endTileOffset.y );
-
-        bool needRedraw = false;
-
-        for ( int32_t y = startY; y <= endY; ++y ) {
-            const int32_t tileOffset = y * mapWidth;
-            for ( int32_t x = startX; x <= endX; ++x ) {
-                needRedraw |= eraseOjects( world.GetTiles( x + tileOffset ), objectTypesToErase );
-            }
-        }
-
-        return needRedraw;
-    }
-
-    bool eraseOjects( Tiles & tile, const uint32_t objectTypesToErase )
-    {
-        if ( objectTypesToErase == ObjectErasureType::NONE ) {
-            // Nothing to erase.
-            return false;
-        }
-
-        bool needRedraw = false;
-
-        if ( objectTypesToErase & ObjectErasureType::ROADS ) {
-            needRedraw |= updateRoadOnTile( tile, false );
-        }
-        if ( objectTypesToErase & ObjectErasureType::STREAMS ) {
-            needRedraw |= updateStreamOnTile( tile, false );
-        }
-        if ( objectTypesToErase & ObjectErasureType::MONSTERS ) {
-            needRedraw |= removeObjectTypeFromTile( tile, MP2::OBJ_ICN_TYPE_MONS32 );
-        }
-        if ( objectTypesToErase & ObjectErasureType::HEROES ) {
-            // TODO: Implement hero removal from other objects (castles, windmills, mines, etc.)
-            // without corrupting their object data. Do this through 'OBJ_HERO' (possibly like 'hero.Dismiss()').
-            needRedraw |= removeObjectTypeFromTile( tile, MP2::OBJ_ICN_TYPE_MINIHERO );
-        }
-        if ( objectTypesToErase & ObjectErasureType::TREASURES && tile.getObjectIcnType() == MP2::OBJ_ICN_TYPE_OBJNRSRC ) {
-            needRedraw |= removeObject( tile, tile.GetObjectUID() );
-        }
-        if ( objectTypesToErase & ObjectErasureType::ARTIFACTS && tile.getObjectIcnType() == MP2::OBJ_ICN_TYPE_OBJNARTI ) {
-            needRedraw |= removeObject( tile, tile.GetObjectUID() );
-        }
-
-        return needRedraw;
-    }
-
     bool setObjectOnTile( Tiles & tile, const ObjectInfo & info, const bool updateMapPassabilities )
     {
         assert( !info.empty() );
@@ -3282,5 +3146,52 @@ namespace Maps
         }
 
         return true;
+    }
+
+    std::set<uint32_t> getObjectUidsInArea( const int32_t startTileId, const int32_t endTileId )
+    {
+        const int32_t mapWidth = world.w();
+        const int32_t maxTileId = mapWidth * world.h() - 1;
+
+        if ( startTileId < 0 || startTileId > maxTileId || endTileId < 0 || endTileId > maxTileId ) {
+            // Why are you trying to get object UID outside of the map? Check the logic of the caller function.
+            assert( 0 );
+            return {};
+        }
+
+        const fheroes2::Point startTileOffset = GetPoint( startTileId );
+        const fheroes2::Point endTileOffset = GetPoint( endTileId );
+
+        const int32_t startX = std::min( startTileOffset.x, endTileOffset.x );
+        const int32_t startY = std::min( startTileOffset.y, endTileOffset.y );
+        const int32_t endX = std::max( startTileOffset.x, endTileOffset.x );
+        const int32_t endY = std::max( startTileOffset.y, endTileOffset.y );
+
+        std::set<uint32_t> objectsUids;
+
+        for ( int32_t y = startY; y <= endY; ++y ) {
+            const int32_t tileOffset = y * mapWidth;
+            for ( int32_t x = startX; x <= endX; ++x ) {
+                const Maps::Tiles & currentTile = world.GetTiles( x + tileOffset );
+
+                if ( currentTile.GetObjectUID() != 0 && ( currentTile.getLayerType() == OBJECT_LAYER || currentTile.getLayerType() == TERRAIN_LAYER ) ) {
+                    objectsUids.insert( currentTile.GetObjectUID() );
+                }
+
+                for ( const Maps::TilesAddon & addon : currentTile.getBottomLayerAddons() ) {
+                    if ( addon._uid != 0 && ( addon._layerType == OBJECT_LAYER || addon._layerType == TERRAIN_LAYER ) ) {
+                        objectsUids.insert( addon._uid );
+                    }
+                }
+
+                for ( const Maps::TilesAddon & addon : currentTile.getTopLayerAddons() ) {
+                    if ( addon._uid != 0 && ( addon._layerType == OBJECT_LAYER || addon._layerType == TERRAIN_LAYER ) ) {
+                        objectsUids.insert( addon._uid );
+                    }
+                }
+            }
+        }
+
+        return objectsUids;
     }
 }
