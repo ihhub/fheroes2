@@ -1,13 +1,13 @@
 # Vietnamese translation of fheroes2
-# Copyright (C) 2023 fheroes2 team <fhomm2@gmail.com>
+# Copyright (C) 2024 fheroes2 team <fhomm2@gmail.com>
 # This file is distributed under the same license as the fheroes2 package.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-18 14:42+0000\n"
-"PO-Revision-Date: 2023-12-20 19:47+0700\n"
+"POT-Creation-Date: 2024-03-06 00:56+0000\n"
+"PO-Revision-Date: 2024-02-20 08:49+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: vi\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 3.4.1\n"
+"X-Generator: Poedit 3.4.2\n"
 
 msgid ""
 "BATTLE\n"
@@ -197,7 +197,6 @@ msgstr "MIN"
 msgid "RESET"
 msgstr "CÀI LẠI"
 
-#, fuzzy
 msgid "START"
 msgstr "LÀM LẠI"
 
@@ -2761,7 +2760,7 @@ msgid "Town Population Information and Statistics"
 msgstr "Thông tin và Thống kê Dân số Thị trấn"
 
 msgid "Damage"
-msgstr "Thiệt hại"
+msgstr "Sát thương"
 
 msgid "HP"
 msgstr "Máu"
@@ -2810,10 +2809,10 @@ msgstr ""
 "một kỹ năng do ngươi lựa chọn."
 
 msgid "Attack Skill"
-msgstr "Kỹ năng Tấn công"
+msgstr "Tấn công"
 
 msgid "Defense Skill"
-msgstr "Kỹ năng Phòng thủ"
+msgstr "Phòng thủ"
 
 msgid "Shots"
 msgstr "Bắn"
@@ -3262,16 +3261,14 @@ msgstr "(rỗng)"
 msgid "already learned"
 msgstr "đã học"
 
-#, fuzzy
 msgid "treeOfKnowledge|free"
-msgstr "Cây Tri thức"
+msgstr "miễn phí"
 
-#, fuzzy
 msgid "already claimed"
-msgstr "đã học"
+msgstr "đã yêu cầu"
 
 msgid "not claimed"
-msgstr ""
+msgstr "chưa yêu cầu"
 
 msgid "already knows this skill"
 msgstr "đã biết kỹ năng này"
@@ -3369,11 +3366,13 @@ msgstr "Nhấp để mở Bàn phím Ảo."
 msgid "Open Virtual Keyboard"
 msgstr "Mở Bàn phím Ảo"
 
-msgid "How many troops to move?"
+#, fuzzy
+msgid "How many units do you wish to move?"
 msgstr "Bao nhiêu quân sẽ được di chuyển?"
 
-msgid "Fast separation into slots:"
-msgstr "Chia nhanh vào các ô:"
+#, fuzzy
+msgid "Select how many slots to separate into:"
+msgstr "Chọn thị trấn để dịch chuyển tới."
 
 msgid "Map: "
 msgstr "Bản đồ: "
@@ -3864,9 +3863,8 @@ msgstr ""
 msgid "Artifacts cannot be placed on water."
 msgstr "Bảo vật không thể đặt trên nước."
 
-#, fuzzy
 msgid "Mountains cannot be placed on water."
-msgstr "Quái vật không thể đặt trên nước."
+msgstr "Núi không thể đặt trên nước."
 
 #, fuzzy
 msgid "Rocks cannot be placed on water."
@@ -3886,9 +3884,8 @@ msgstr "Tướng không thể đặt trên nước."
 msgid "Towns cannot be placed on water."
 msgstr "Thị trấn không thể đặt trên nước."
 
-#, fuzzy
 msgid "Mines cannot be placed on water."
-msgstr "Quái vật không thể đặt trên nước."
+msgstr "Mỏ không thể đặt trên nước."
 
 #, fuzzy
 msgid "Dwellings cannot be placed on water."
@@ -11464,6 +11461,9 @@ msgstr ""
 "Kiểm tra phiên bản mới nhất của trò chơi tại\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Fast separation into slots:"
+#~ msgstr "Chia nhanh vào các ô:"
 
 #~ msgid "disable build."
 #~ msgstr "xây dựng bị vô hiệu."
