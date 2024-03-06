@@ -38,7 +38,6 @@
 
 #include "ai.h"
 #include "ai_normal.h"
-#include "army_troop.h"
 #include "artifact.h"
 #include "artifact_info.h"
 #include "battle.h"
@@ -656,12 +655,6 @@ namespace AI
                     return true;
                 }();
 
-                const auto checkThatRemainingTroopsAreWorthSaving = [&force]() {
-                    const std::vector<Troop> remainingTroops = force.getTroopsRemainingInCaseOfSurrender();
-
-                    return std::any_of( remainingTroops.begin(), remainingTroops.end(), []( const Troop & troop ) { return troop.GetMonsterLevel() >= 5; } );
-                };
-
                 if ( !arena.CanRetreatOpponent( _myColor ) ) {
                     if ( !isAbleToSurrender ) {
                         return Outcome::ContinueBattle;
@@ -683,22 +676,12 @@ namespace AI
                         return Outcome::Surrender;
                     }
 
-                    // Otherwise, if this hero's remaining troops are worth saving, then it makes sense to save them by surrendering
-                    if ( checkThatRemainingTroopsAreWorthSaving() ) {
-                        return Outcome::Surrender;
-                    }
-
                     // Otherwise, there is no point in surrendering
                     return Outcome::ContinueBattle;
                 }
 
-                // If the hero is able to surrender, can be rehired, and his remaining troops are worth saving, then it makes sense to save them by surrendering
-                if ( isAbleToSurrender && isPossibleToReHire && checkThatRemainingTroopsAreWorthSaving() ) {
-                    return Outcome::Surrender;
-                }
-
-                // Otherwise, if this hero has valuable artifacts, he should retreat so that these artifacts do not end up at the disposal of the enemy, especially in the
-                // case of an alliance war
+                // If the hero has valuable artifacts, he should retreat so that these artifacts do not end up at the disposal of the enemy, especially in the case of an
+                // alliance war
                 if ( hasValuableArtifacts ) {
                     return Outcome::Retreat;
                 }
