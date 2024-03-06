@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-20 03:11+0000\n"
+"POT-Creation-Date: 2024-03-06 00:56+0000\n"
 "PO-Revision-Date: 2024-02-20 08:49+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3366,11 +3366,13 @@ msgstr "Nhấp để mở Bàn phím Ảo."
 msgid "Open Virtual Keyboard"
 msgstr "Mở Bàn phím Ảo"
 
-msgid "How many troops to move?"
+#, fuzzy
+msgid "How many units do you wish to move?"
 msgstr "Bao nhiêu quân sẽ được di chuyển?"
 
-msgid "Fast separation into slots:"
-msgstr "Chia nhanh vào các ô:"
+#, fuzzy
+msgid "Select how many slots to separate into:"
+msgstr "Chọn thị trấn để dịch chuyển tới."
 
 msgid "Map: "
 msgstr "Bản đồ: "
@@ -11459,6 +11461,9 @@ msgstr ""
 "Kiểm tra phiên bản mới nhất của trò chơi tại\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Fast separation into slots:"
+#~ msgstr "Chia nhanh vào các ô:"
 
 #~ msgid "disable build."
 #~ msgstr "xây dựng bị vô hiệu."

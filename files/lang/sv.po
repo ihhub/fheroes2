@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-29 21:49+0000\n"
+"POT-Creation-Date: 2024-03-06 00:56+0000\n"
 "PO-Revision-Date: 2024-02-19 16:13+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -3314,11 +3314,13 @@ msgstr "Klicka här för att öppna det virtuella tangentbordet."
 msgid "Open Virtual Keyboard"
 msgstr "Öppna virtuellt tangentbord."
 
-msgid "How many troops to move?"
+#, fuzzy
+msgid "How many units do you wish to move?"
 msgstr "Antal trupper att flytta?"
 
-msgid "Fast separation into slots:"
-msgstr "Snabbseparering till platser:"
+#, fuzzy
+msgid "Select how many slots to separate into:"
+msgstr "Välj stad att teleportera till."
 
 msgid "Map: "
 msgstr "Karta: "
@@ -11210,6 +11212,9 @@ msgstr ""
 "Den senaste versionen av spelet finns på:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Fast separation into slots:"
+#~ msgstr "Snabbseparering till platser:"
 
 #~ msgid "disable build."
 #~ msgstr "Inaktivera bygge"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-03 10:39+0000\n"
+"POT-Creation-Date: 2024-03-06 00:56+0000\n"
 "PO-Revision-Date: 2023-09-04 21:55+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -3316,11 +3316,13 @@ msgstr "Kattints a virtuális billentyűzet dialógusablak megnyitásához."
 msgid "Open Virtual Keyboard"
 msgstr "Virtuális billentyűzet megnyitása"
 
-msgid "How many troops to move?"
+#, fuzzy
+msgid "How many units do you wish to move?"
 msgstr "Hány egységet mozgassunk?"
 
-msgid "Fast separation into slots:"
-msgstr "Gyors szétosztás:"
+#, fuzzy
+msgid "Select how many slots to separate into:"
+msgstr "Válaszd ki, melyik városba szeretnél menni."
 
 msgid "Map: "
 msgstr "Térkép: "
@@ -11004,6 +11006,9 @@ msgstr ""
 "Letöltheted a legújabb verziót innen:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Fast separation into slots:"
+#~ msgstr "Gyors szétosztás:"
 
 #~ msgid "disable build."
 #~ msgstr "építés letiltása."

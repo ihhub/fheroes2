@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-18 14:42+0000\n"
+"POT-Creation-Date: 2024-03-06 00:56+0000\n"
 "PO-Revision-Date: 2023-09-11 20:22+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3356,11 +3356,13 @@ msgstr "Klikni pre otvorenie dialógu virtuálnej klávesnice."
 msgid "Open Virtual Keyboard"
 msgstr "Otvor virtuálnu klávesnicu"
 
-msgid "How many troops to move?"
+#, fuzzy
+msgid "How many units do you wish to move?"
 msgstr "Koľko jednotiek na presun?"
 
-msgid "Fast separation into slots:"
-msgstr "Rýchle rozdelenie do polí:"
+#, fuzzy
+msgid "Select how many slots to separate into:"
+msgstr "Vyber mesto, do ktorého sa chceš preniesť."
 
 msgid "Map: "
 msgstr "Mapa: "
@@ -11340,6 +11342,9 @@ msgstr ""
 "Pozri si najnovšiu verziu hry na\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Fast separation into slots:"
+#~ msgstr "Rýchle rozdelenie do polí:"
 
 #~ msgid "disable build."
 #~ msgstr "budovanie zakázané."

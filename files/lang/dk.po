@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-18 14:42+0000\n"
+"POT-Creation-Date: 2024-03-06 00:56+0000\n"
 "PO-Revision-Date: 2024-03-05 13:55+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
@@ -3378,11 +3378,13 @@ msgstr "Klik for at åbne dialogboksen Virtuelt Tastatur."
 msgid "Open Virtual Keyboard"
 msgstr "Åben Virtuel Tastatur"
 
-msgid "How many troops to move?"
+#, fuzzy
+msgid "How many units do you wish to move?"
 msgstr "Angiv antal per trop"
 
-msgid "Fast separation into slots:"
-msgstr "Hurtigfordel:"
+#, fuzzy
+msgid "Select how many slots to separate into:"
+msgstr "Vælg den by, du gerne vil havne i."
 
 msgid "Map: "
 msgstr "Kort:"
@@ -11343,6 +11345,9 @@ msgstr ""
 "Check den nyeste version af spillet på\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Fast separation into slots:"
+#~ msgstr "Hurtigfordel:"
 
 #~ msgid "disable build."
 #~ msgstr "deaktiver byggeri."
