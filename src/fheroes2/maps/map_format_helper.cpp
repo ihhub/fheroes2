@@ -389,7 +389,12 @@ namespace Maps
                     for ( size_t i = 0; i < mainColors; ++i ) {
                         const uint8_t color = static_cast<uint8_t>( 1 << i );
                         if ( ( map.availablePlayerColors & color ) != 0 && !usedAllianceColors[i] ) {
-                            map.alliances.back() |= color;
+                            if ( map.alliances.empty() ) {
+                                map.alliances.push_back( color );
+                            }
+                            else {
+                                map.alliances.back() |= color;
+                            }
                         }
                     }
                 }

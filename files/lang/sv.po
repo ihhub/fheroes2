@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-06 00:56+0000\n"
+"POT-Creation-Date: 2024-03-06 22:25+0000\n"
 "PO-Revision-Date: 2024-02-19 16:13+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -3906,11 +3906,20 @@ msgstr "Städer"
 msgid "Heroes"
 msgstr "Hjältar"
 
-msgid "editorErasure|Terrain"
-msgstr "Terräng"
+#, fuzzy
+msgid "editorErasure|Landscape objects"
+msgstr "Hjältar"
+
+#, fuzzy
+msgid "editorErasure|Adventure non pickable objects"
+msgstr "Artefakter"
 
 msgid "editorErasure|Castles"
 msgstr "Slott"
+
+#, fuzzy
+msgid "editorErasure|Adventure pickable objects"
+msgstr "Artefakter"
 
 msgid "editorErasure|Monsters"
 msgstr "Varelser"
@@ -3918,17 +3927,11 @@ msgstr "Varelser"
 msgid "editorErasure|Heroes"
 msgstr "Hjältar"
 
-msgid "editorErasure|Artifacts"
-msgstr "Artefakter"
-
 msgid "editorErasure|Roads"
 msgstr "Vägar"
 
 msgid "editorErasure|Streams"
 msgstr "Floder"
-
-msgid "editorErasure|Treasures"
-msgstr "Skatter"
 
 msgid ""
 "Draws terrain in\n"
@@ -11212,6 +11215,12 @@ msgstr ""
 "Den senaste versionen av spelet finns på:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "editorErasure|Terrain"
+#~ msgstr "Terräng"
+
+#~ msgid "editorErasure|Treasures"
+#~ msgstr "Skatter"
 
 #~ msgid "Fast separation into slots:"
 #~ msgstr "Snabbseparering till platser:"

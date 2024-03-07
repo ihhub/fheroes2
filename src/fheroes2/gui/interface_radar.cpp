@@ -479,7 +479,7 @@ void Interface::Radar::QueueEventProcessing()
     }
     else if ( le.MouseCursor( rect ) ) {
         // move cursor
-        if ( le.MouseClickLeft() || le.MousePressLeft() ) {
+        if ( le.MouseClickLeft( rect ) || le.MousePressLeft( rect ) ) {
             _mouseDraggingMovement = true;
             const fheroes2::Point & pt = le.GetMouseCursor();
 
@@ -508,7 +508,7 @@ bool Interface::Radar::QueueEventProcessingForWorldView( ViewWorld::ZoomROIs & r
 
     // move cursor
     if ( le.MouseCursor( rect ) ) {
-        if ( le.MouseClickLeft() || le.MousePressLeft() ) {
+        if ( le.MouseClickLeft( rect ) || le.MousePressLeft( rect ) ) {
             const fheroes2::Point & pt = le.GetMouseCursor();
 
             if ( rect & pt ) {

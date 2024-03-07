@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2008 by Josh Matthews <josh@joshmatthews.net>           *
@@ -306,6 +306,16 @@ public:
         }
     }
 
+    bool isDragInProgress() const
+    {
+        return modes & DRAG_ONGOING;
+    }
+
+    void registerDrag()
+    {
+        SetModes( DRAG_ONGOING );
+    }
+
 private:
     LocalEvent();
 
@@ -343,6 +353,8 @@ private:
         MOUSE_TOUCH = 0x0020,
         // Key on the keyboard is currently being held down
         KEY_HOLD = 0x0040,
+        // Some UI component registered the start of drag motion
+        DRAG_ONGOING = 0x0080,
     };
 
     enum

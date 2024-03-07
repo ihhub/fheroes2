@@ -20,6 +20,7 @@
 #pragma once
 
 #include <cstdint>
+#include <set>
 #include <utility>
 
 #include "army_troop.h"
@@ -76,22 +77,6 @@ namespace Maps
         FIGHT_15_GHOSTS_AND_GET_2000_GOLD = 2,
         FIGHT_25_GHOSTS_AND_GET_5000_GOLD = 3,
         FIGHT_50_GHOSTS_AND_GET_2000_GOLD_WITH_ARTIFACT = 4
-    };
-
-    enum ObjectErasureType : uint32_t
-    {
-        NONE = 0x00,
-        // Terrain objects are objects that are placed in editor using a terrain palette in objects placing mode.
-        TERRAIN_OBJECTS = 0x01,
-        CASTLES = 0x02,
-        MONSTERS = 0x04,
-        HEROES = 0x08,
-        ARTIFACTS = 0x10,
-        STREAMS = 0x20,
-        ROADS = 0x40,
-        TREASURES = 0x80,
-
-        ALL_OBJECTS = TERRAIN_OBJECTS | CASTLES | MONSTERS | HEROES | ARTIFACTS | STREAMS | ROADS | TREASURES,
     };
 
     // Only for MP2::OBJ_MINE.
@@ -182,11 +167,8 @@ namespace Maps
     bool updateRoadOnTile( Tiles & tile, const bool setRoad );
     bool updateStreamOnTile( Tiles & tile, const bool setStream );
 
-    // Removes object and all its parts in around tiles by UID. Returns true is object is found and removed.
-    bool removeObject( Tiles & tile, const uint32_t uid );
-    bool removeObjectTypeFromTile( Tiles & tile, const MP2::ObjectIcnType objectIcnType );
-    bool eraseObjectsOnTiles( const int32_t startTileId, const int32_t endTileId, const uint32_t objectTypesToErase );
-    bool eraseOjects( Tiles & tile, const uint32_t objectTypesToErase );
-
     bool setObjectOnTile( Tiles & tile, const ObjectInfo & info, const bool updateMapPassabilities );
+
+    // Returns UIDs in given area for all objects in the OBJECT and TERRAIN layers.
+    std::set<uint32_t> getObjectUidsInArea( const int32_t startTileId, const int32_t endTileId );
 }
