@@ -502,7 +502,7 @@ namespace Battle
                 swipeDstCellIndex = index;
             }
 
-            bool isValidSwipeAttackDestination( int theme, int32_t index, int32_t head, int32_t tail )
+            bool isValidSwipeAttackDestination( int theme, int32_t index, int32_t head, int32_t tail ) const
             {
                 if ( !Board::isNearIndexes( swipeSrcCellIndex, index ) ) {
                     return false;
