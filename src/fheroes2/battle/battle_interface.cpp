@@ -2796,12 +2796,23 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
     // Add offsets to inner objects
     const fheroes2::Rect mainTowerRect = main_tower + _interfacePosition.getPosition();
     const fheroes2::Rect turnOrderRect = _turnOrder + _interfacePosition.getPosition();
-    const int32_t battleFieldHeight = _interfacePosition.height - status.height - ( listlog->isOpenLog() ? listlog->GetArea().height : 0 );
-    const fheroes2::Rect battleFieldRect{ _interfacePosition.x, _interfacePosition.y, _interfacePosition.width, battleFieldHeight };
-    if ( listlog && listlog->isOpenLog() && ( le.MouseCursor( listlog->GetArea() ) || le.MousePressLeft( listlog->GetArea() ) ) ) {
+    fheroes2::Rect battleFieldRect{ _interfacePosition.x, _interfacePosition.y, _interfacePosition.width, _interfacePosition.height - status.height };
+
+    fheroes2::Rect lislogRect;
+    const bool isListlogOpen = listlog && listlog->isOpenLog();
+
+    if ( isListlogOpen ) {
+        lislogRect = listlog->GetArea();
+        battleFieldRect.height -= lislogRect.height;
+    }
+
+    if ( isListlogOpen && ( le.MouseCursor( lislogRect ) || le.MousePressLeft( lislogRect ) ) ) {
         cursor.SetThemes( Cursor::WAR_POINTER );
 
-        listlog->QueueEventProcessing();
+        if ( listlog->QueueEventProcessing() ) {
+            listlog->Redraw();
+            fheroes2::Display::instance().render( lislogRect );
+        }
     }
     else if ( Arena::GetTower( TowerType::TWR_CENTER ) && le.MouseCursor( mainTowerRect ) ) {
         cursor.SetThemes( Cursor::WAR_INFO );
