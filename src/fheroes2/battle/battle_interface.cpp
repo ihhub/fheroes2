@@ -2747,6 +2747,10 @@ void Battle::Interface::HumanTurn( const Unit & unit, Actions & actions )
             Redraw();
             humanturn_redraw = false;
         }
+        else if ( listlog && listlog->IsNeedRedraw() ) {
+            listlog->Redraw();
+            fheroes2::Display::instance().render( listlog->GetArea() );
+        }
     }
 
     popup.Reset();
@@ -2809,10 +2813,7 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
     if ( isListlogOpen && ( le.MouseCursor( lislogRect ) || le.MousePressLeft( lislogRect ) ) ) {
         cursor.SetThemes( Cursor::WAR_POINTER );
 
-        if ( listlog->QueueEventProcessing() ) {
-            listlog->Redraw();
-            fheroes2::Display::instance().render( lislogRect );
-        }
+        listlog->QueueEventProcessing();
     }
     else if ( Arena::GetTower( TowerType::TWR_CENTER ) && le.MouseCursor( mainTowerRect ) ) {
         cursor.SetThemes( Cursor::WAR_INFO );
