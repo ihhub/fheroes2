@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-06 00:56+0000\n"
+"POT-Creation-Date: 2024-03-06 22:25+0000\n"
 "PO-Revision-Date: 2024-02-05 20:41+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -3958,10 +3958,17 @@ msgstr "Города"
 msgid "Heroes"
 msgstr "Герои"
 
-msgid "editorErasure|Terrain"
+#, fuzzy
+msgid "editorErasure|Landscape objects"
+msgstr "Выберите объект ландшафта:"
+
+msgid "editorErasure|Adventure non pickable objects"
 msgstr ""
 
 msgid "editorErasure|Castles"
+msgstr ""
+
+msgid "editorErasure|Adventure pickable objects"
 msgstr ""
 
 msgid "editorErasure|Monsters"
@@ -3970,16 +3977,10 @@ msgstr ""
 msgid "editorErasure|Heroes"
 msgstr ""
 
-msgid "editorErasure|Artifacts"
-msgstr ""
-
 msgid "editorErasure|Roads"
 msgstr ""
 
 msgid "editorErasure|Streams"
-msgstr ""
-
-msgid "editorErasure|Treasures"
 msgstr ""
 
 msgid ""
