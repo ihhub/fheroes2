@@ -693,7 +693,7 @@ Funds Kingdom::GetIncome( int type /* INCOME_ALL */ ) const
         }
     }
 
-    if ( ( type & INCOME_CAMPAIGN_BONUS ) && Settings::Get().isCampaignGameType() ) {
+    if ( isControlHuman() && ( type & INCOME_CAMPAIGN_BONUS ) && Settings::Get().isCampaignGameType() ) {
         const std::vector<Campaign::CampaignAwardData> awards = Campaign::CampaignSaveData::Get().getObtainedCampaignAwards();
         for ( const Campaign::CampaignAwardData & award : awards ) {
             if ( award._type != Campaign::CampaignAwardData::TYPE_RESOURCE_BONUS ) {
