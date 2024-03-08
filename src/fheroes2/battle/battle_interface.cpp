@@ -2972,7 +2972,7 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
             boardActionIntentUpdater.setIntent( { themes, index_pos } );
 
             if ( le.MouseClickLeft( battleFieldRect ) ) {
-                bool isConfirmed = boardActionIntentUpdater.isConfirmed();
+                const bool isConfirmed = boardActionIntentUpdater.isConfirmed();
 
                 if ( isConfirmed ) {
                     // Intent is confirmed, it is safe to clear the swipe state (regardless of the intent and the input method).
