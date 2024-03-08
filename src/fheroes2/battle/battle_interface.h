@@ -479,18 +479,8 @@ namespace Battle
 
         struct SwipeAttack
         {
-            void clear()
-            {
-                swipeSrcCellIndex = -1;
-                swipeDstCellIndex = -1;
-                isValid = false;
-                swipeSrcTheme = 0;
-                swipeDstTheme = 0;
-            }
-
             void storeSrc( int theme, int32_t index )
             {
-                clear();
                 swipeSrcTheme = theme;
                 swipeSrcCellIndex = index;
             }
@@ -519,11 +509,11 @@ namespace Battle
                 return true;
             }
 
-            int32_t swipeSrcCellIndex;
-            int32_t swipeDstCellIndex;
-            bool isValid;
-            int swipeSrcTheme;
-            int swipeDstTheme;
+            int32_t swipeSrcCellIndex{ -1 };
+            int32_t swipeDstCellIndex{ -1 };
+            bool isValid{ false };
+            int swipeSrcTheme{ Cursor::NONE };
+            int swipeDstTheme{ Cursor::NONE };
         };
 
         SwipeAttack _swipeAttack;
@@ -572,11 +562,6 @@ namespace Battle
             void setIntent( const BoardActionIntent & intent )
             {
                 _intent = intent;
-            }
-
-            void clearStoredIntent()
-            {
-                _storedIntent = BoardActionIntent{};
             }
 
             bool isConfirmed()

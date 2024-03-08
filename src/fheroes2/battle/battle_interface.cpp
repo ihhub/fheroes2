@@ -1171,7 +1171,6 @@ Battle::Interface::Interface( Arena & battleArena, const int32_t tileIndex )
     , _teleportSpellSrcIdx( -1 )
     , listlog( nullptr )
     , _bridgeAnimation( { false, BridgeMovementAnimation::UP_POSITION } )
-    , _swipeAttack( { -1, -1, false, 0, 0 } )
 {
     Cursor::Get().SetThemes( Cursor::WAR_POINTER );
 
@@ -2802,7 +2801,7 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
 
     // Swipe attack motion finished, but the destination was outside the arena. We need to clear the swipe attack state.
     if ( !le.isDragInProgress() && Board::isValidIndex( _swipeAttack.swipeSrcCellIndex ) && !Board::isValidIndex( index_pos ) ) {
-        _swipeAttack.clear();
+        _swipeAttack = {};
     }
 
     if ( listlog && listlog->isOpenLog() && ( le.MouseCursor( listlog->GetArea() ) || le.MousePressLeft( listlog->GetArea() ) ) ) {
@@ -2944,8 +2943,8 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
             }
             else {
                 // The cursor has left the destination. Abort the swipe attack.
-                _swipeAttack.clear();
-                boardActionIntentUpdater.clearStoredIntent();
+                _swipeAttack = {};
+                _boardActionIntent = {};
             }
         }
         else if ( _swipeAttack.isValidSwipeAttackDestination( themes, index_pos, _currentUnit->GetHeadIndex(), _currentUnit->GetTailIndex() ) ) {
@@ -2957,7 +2956,7 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
             _swipeAttack.storeDst( themes, index_pos );
 
             // Clear any pending intents. We don't want to confirm previous actions by performing swipe attack motion.
-            boardActionIntentUpdater.clearStoredIntent();
+            _boardActionIntent = {};
         }
 
         cursor.SetThemes( themes );
@@ -2978,7 +2977,7 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
 
                 if ( isConfirmed ) {
                     // Intent is confirmed, it is safe to clear the swipe state (regardless of the intent and the input method).
-                    _swipeAttack.clear();
+                    _swipeAttack = {};
                 }
 
                 MouseLeftClickBoardAction( themes, *cell, isConfirmed, actions );
@@ -2991,6 +2990,7 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
                     le.registerDrag();
 
                     // Remember the swipe source cell and theme.
+                    _swipeAttack = {};
                     _swipeAttack.storeSrc( themes, index_pos );
                 }
             }
