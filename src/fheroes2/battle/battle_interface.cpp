@@ -2800,7 +2800,7 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
     const fheroes2::Rect battleFieldRect{ _interfacePosition.x, _interfacePosition.y, _interfacePosition.width, battleFieldHeight };
 
     // Swipe attack motion finished, but the destination was outside the arena. We need to clear the swipe attack state.
-    if ( !le.isDragInProgress() && Board::isValidIndex( _swipeAttack.swipeSrcCellIndex ) && !Board::isValidIndex( index_pos ) ) {
+    if ( !le.isDragInProgress() && Board::isValidIndex( _swipeAttack.srcCellIndex ) && !Board::isValidIndex( index_pos ) ) {
         _swipeAttack = {};
     }
 
@@ -2935,11 +2935,11 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
     else if ( le.MouseCursor( battleFieldRect ) ) {
         int themes = GetBattleCursor( msg );
 
-        if ( _swipeAttack.isValid ) {
+        if ( _swipeAttack.isValid() ) {
             // The swipe attack motion is either in progress or has finished.
-            if ( index_pos == _swipeAttack.swipeDstCellIndex ) {
+            if ( index_pos == _swipeAttack.dstCellIndex ) {
                 // The cursor is above the stored destination, we should display the stored attack theme.
-                themes = _swipeAttack.swipeDstTheme;
+                themes = _swipeAttack.dstTheme;
             }
             else {
                 // The cursor has left the destination. Abort the swipe attack.
@@ -2947,12 +2947,12 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
                 _boardActionIntent = {};
             }
         }
-        else if ( _swipeAttack.isValidSwipeAttackDestination( themes, index_pos, _currentUnit->GetHeadIndex(), _currentUnit->GetTailIndex() ) ) {
+        else if ( _swipeAttack.isValidDestination( themes, index_pos ) ) {
             // Valid swipe attack target cell. Calculate the attack angle based on destination and source cells.
-            themes = GetSwordCursorDirection( Board::GetDirection( index_pos, _swipeAttack.swipeSrcCellIndex ) );
+            themes = GetSwordCursorDirection( Board::GetDirection( index_pos, _swipeAttack.srcCellIndex ) );
 
             // Remember the swipe destination cell and theme.
-            _swipeAttack.storeDst( themes, index_pos );
+            _swipeAttack.setDst( themes, index_pos );
 
             // Clear any pending intents. We don't want to confirm previous actions by performing swipe attack motion.
             _boardActionIntent = {};
@@ -2985,12 +2985,12 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
                 MousePressRightBoardAction( *cell );
             }
             else if ( le.MousePressLeft( battleFieldRect ) ) {
-                if ( !le.isDragInProgress() && !_swipeAttack.isValid ) {
+                if ( !le.isDragInProgress() && !_swipeAttack.isValid() ) {
                     le.registerDrag();
 
                     // Remember the swipe source cell and theme.
                     _swipeAttack = {};
-                    _swipeAttack.storeSrc( themes, index_pos );
+                    _swipeAttack.setSrc( themes, index_pos, _currentUnit );
                 }
             }
         }

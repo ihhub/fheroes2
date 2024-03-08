@@ -34,6 +34,7 @@
 #include "battle.h"
 #include "battle_animation.h"
 #include "battle_board.h"
+#include "battle_troop.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "icn.h"
@@ -479,22 +480,26 @@ namespace Battle
 
         struct SwipeAttack
         {
-            void storeSrc( int theme, int32_t index )
+            void setSrc( int theme, int32_t index, const Unit * unit )
             {
-                swipeSrcTheme = theme;
-                swipeSrcCellIndex = index;
+                currentUnit = unit;
+                srcTheme = theme;
+                srcCellIndex = index;
             }
 
-            void storeDst( int theme, int32_t index )
+            void setDst( int theme, int32_t index )
             {
-                isValid = true;
-                swipeDstTheme = theme;
-                swipeDstCellIndex = index;
+                dstTheme = theme;
+                dstCellIndex = index;
             }
 
-            bool isValidSwipeAttackDestination( int theme, int32_t index, int32_t head, int32_t tail ) const
+            bool isValidDestination( int theme, int32_t index ) const
             {
-                if ( !Board::isNearIndexes( swipeSrcCellIndex, index ) ) {
+                if ( !currentUnit ) {
+                    return false;
+                }
+
+                if ( !Board::isNearIndexes( srcCellIndex, index ) ) {
                     return false;
                 }
 
@@ -502,18 +507,24 @@ namespace Battle
                     return false;
                 }
 
-                if ( swipeSrcTheme != Cursor::WAR_MOVE && swipeSrcTheme != Cursor::WAR_FLY && swipeSrcCellIndex != head && swipeSrcCellIndex != tail ) {
+                if ( srcTheme != Cursor::WAR_MOVE && srcTheme != Cursor::WAR_FLY && srcCellIndex != currentUnit->GetHeadIndex()
+                     && srcCellIndex != currentUnit->GetTailIndex() ) {
                     return false;
                 }
 
                 return true;
             }
 
-            int32_t swipeSrcCellIndex{ -1 };
-            int32_t swipeDstCellIndex{ -1 };
-            bool isValid{ false };
-            int swipeSrcTheme{ Cursor::NONE };
-            int swipeDstTheme{ Cursor::NONE };
+            bool isValid() const
+            {
+                return isValidDestination( dstTheme, dstCellIndex );
+            }
+
+            const Unit * currentUnit{ nullptr };
+            int32_t srcCellIndex{ -1 };
+            int32_t dstCellIndex{ -1 };
+            int srcTheme{ Cursor::NONE };
+            int dstTheme{ Cursor::NONE };
         };
 
         SwipeAttack _swipeAttack;
