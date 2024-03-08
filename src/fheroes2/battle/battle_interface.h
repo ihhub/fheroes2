@@ -62,7 +62,6 @@ namespace Battle
     class Position;
     class StatusListBox;
     class Tower;
-    class Unit;
     class Units;
 
     void DialogBattleSettings();
