@@ -2949,8 +2949,7 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
         }
         else if ( _swipeAttack.isValidSwipeAttackDestination( themes, index_pos, _currentUnit->GetHeadIndex(), _currentUnit->GetTailIndex() ) ) {
             // Valid swipe attack target cell. Calculate the attack angle based on destination and source cells.
-            int direction = Board::GetDirection( index_pos, _swipeAttack.swipeSrcCellIndex );
-            themes = GetSwordCursorDirection( direction );
+            themes = GetSwordCursorDirection( Board::GetDirection( index_pos, _swipeAttack.swipeSrcCellIndex ) );
 
             // Remember the swipe destination cell and theme.
             _swipeAttack.storeDst( themes, index_pos );
