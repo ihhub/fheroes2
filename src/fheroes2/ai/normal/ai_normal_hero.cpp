@@ -889,6 +889,32 @@ namespace
 
         return 30;
     }
+
+    class AIWorldPathfinderStateRestorer
+    {
+    public:
+        explicit AIWorldPathfinderStateRestorer( AIWorldPathfinder & pathfinder )
+            : _pathfinder( pathfinder )
+            , _originalMinimalArmyStrengthAdvantage( _pathfinder.getMinimalArmyStrengthAdvantage() )
+            , _originalSpellPointsReserveRatio( _pathfinder.getSpellPointsReserveRatio() )
+        {}
+
+        AIWorldPathfinderStateRestorer( const AIWorldPathfinderStateRestorer & ) = delete;
+
+        ~AIWorldPathfinderStateRestorer()
+        {
+            _pathfinder.setMinimalArmyStrengthAdvantage( _originalMinimalArmyStrengthAdvantage );
+            _pathfinder.setSpellPointsReserveRatio( _originalSpellPointsReserveRatio );
+        }
+
+        AIWorldPathfinderStateRestorer & operator=( const AIWorldPathfinderStateRestorer & ) = delete;
+
+    private:
+        AIWorldPathfinder & _pathfinder;
+
+        const double _originalMinimalArmyStrengthAdvantage;
+        const double _originalSpellPointsReserveRatio;
+    };
 }
 
 namespace AI
@@ -2121,6 +2147,12 @@ namespace AI
         const std::vector<double> enemyThreatPenalties = [this, &hero = std::as_const( hero )]() {
             std::vector<double> result( world.getSize(), 0.0 );
 
+            const AIWorldPathfinderStateRestorer pathfinderStateRestorer( _pathfinder );
+
+            // Use the "optimistic" pathfinder settings for enemy heroes - minimal army advantage, minimal reserve of spell points
+            _pathfinder.setMinimalArmyStrengthAdvantage( ARMY_ADVANTAGE_DESPERATE );
+            _pathfinder.setSpellPointsReserveRatio( 0.1 );
+
             const double heroStrength = hero.GetArmy().GetStrength();
 
             for ( const auto & [dummy, enemyArmy] : _enemyArmies ) {
@@ -2130,7 +2162,7 @@ namespace AI
                 }
 
                 // An enemy hero does not pose a threat if he is approximately equal in strength or weaker than our hero
-                if ( heroStrength * AI::ARMY_ADVANTAGE_SMALL >= enemyArmy.strength ) {
+                if ( heroStrength * ARMY_ADVANTAGE_SMALL >= enemyArmy.strength ) {
                     continue;
                 }
 
@@ -2576,32 +2608,6 @@ namespace AI
         uint32_t currentProgressValue = startProgressValue;
 
         while ( !availableHeroes.empty() ) {
-            class AIWorldPathfinderStateRestorer
-            {
-            public:
-                explicit AIWorldPathfinderStateRestorer( AIWorldPathfinder & pathfinder )
-                    : _pathfinder( pathfinder )
-                    , _originalMinimalArmyStrengthAdvantage( _pathfinder.getMinimalArmyStrengthAdvantage() )
-                    , _originalSpellPointsReserveRatio( _pathfinder.getSpellPointsReserveRatio() )
-                {}
-
-                AIWorldPathfinderStateRestorer( const AIWorldPathfinderStateRestorer & ) = delete;
-
-                ~AIWorldPathfinderStateRestorer()
-                {
-                    _pathfinder.setMinimalArmyStrengthAdvantage( _originalMinimalArmyStrengthAdvantage );
-                    _pathfinder.setSpellPointsReserveRatio( _originalSpellPointsReserveRatio );
-                }
-
-                AIWorldPathfinderStateRestorer & operator=( const AIWorldPathfinderStateRestorer & ) = delete;
-
-            private:
-                AIWorldPathfinder & _pathfinder;
-
-                const double _originalMinimalArmyStrengthAdvantage;
-                const double _originalSpellPointsReserveRatio;
-            };
-
             const AIWorldPathfinderStateRestorer pathfinderStateRestorer( _pathfinder );
 
             Heroes * bestHero = availableHeroes.front().hero;
