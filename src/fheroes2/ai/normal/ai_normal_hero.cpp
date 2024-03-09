@@ -2140,6 +2140,9 @@ namespace AI
                     continue;
                 }
 
+                // Safe tiles should not be located close to a tile accessible to an enemy hero, some margin is needed
+                const uint32_t enemyArmyMovePointsThreshold = enemyArmy.movePoints + Maps::Ground::slowestMovePenalty * 2;
+
                 // Pre-cache the pathfinder database for the enemy hero
                 _pathfinder.reEvaluateIfNeeded( *enemyArmy.hero );
 
@@ -2151,12 +2154,12 @@ namespace AI
                     // within one turn. The potential ability of the enemy hero to use spells to move to this tile (for example, the Dimension Door or Town Portal) is not
                     // considered in this assessment.
                     const uint32_t dist = _pathfinder.getDistance( tileIdx );
-                    if ( dist == 0 || dist > enemyArmy.movePoints ) {
+                    if ( dist == 0 || dist > enemyArmyMovePointsThreshold ) {
                         continue;
                     }
 
                     // The penalty increases linearly as the distance to the enemy hero decreases
-                    result[i] += dangerousTaskPenalty * ( 2.0 - static_cast<double>( dist ) / static_cast<double>( enemyArmy.movePoints ) );
+                    result[i] += dangerousTaskPenalty * ( 2.0 - static_cast<double>( dist ) / static_cast<double>( enemyArmyMovePointsThreshold ) );
                 }
             }
 
