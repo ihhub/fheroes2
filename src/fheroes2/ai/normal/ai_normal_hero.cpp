@@ -788,7 +788,7 @@ namespace
     // Multiply by this value if you are getting a FREE upgrade.
     const double freeMonsterUpgradeModifier = 3;
 
-    const double dangerousTaskPenalty = 20000.0;
+    const double dangerousTaskPenalty = 50000.0;
     const double fogDiscoveryBaseValue = -10000.0;
 
     double getDistanceModifier( const MP2::MapObjectType objectType )
