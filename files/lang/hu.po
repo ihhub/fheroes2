@@ -3316,13 +3316,11 @@ msgstr "Kattints a virtuális billentyűzet dialógusablak megnyitásához."
 msgid "Open Virtual Keyboard"
 msgstr "Virtuális billentyűzet megnyitása"
 
-#, fuzzy
 msgid "How many units do you wish to move?"
-msgstr "Hány egységet mozgassunk?"
+msgstr "Hány egységet szeretnél mozgatni?"
 
-#, fuzzy
 msgid "Select how many slots to separate into:"
-msgstr "Válaszd ki, melyik városba szeretnél menni."
+msgstr "Válaszd ki, hányfelé akarsz szétosztani:"
 
 msgid "Map: "
 msgstr "Térkép: "
@@ -3904,20 +3902,17 @@ msgstr "Városok"
 msgid "Heroes"
 msgstr "Hősök"
 
-#, fuzzy
 msgid "editorErasure|Landscape objects"
-msgstr "Hősök"
+msgstr "Szárazföldi objektumok"
 
-#, fuzzy
 msgid "editorErasure|Adventure non pickable objects"
-msgstr "Varázstárgyak"
+msgstr "Nem felvehető tárgyak a kalandtérképen"
 
 msgid "editorErasure|Castles"
 msgstr "Várak"
 
-#, fuzzy
 msgid "editorErasure|Adventure pickable objects"
-msgstr "Varázstárgyak"
+msgstr "Felvehető tárgyak a kalandtérképen"
 
 msgid "editorErasure|Monsters"
 msgstr "Lények"
