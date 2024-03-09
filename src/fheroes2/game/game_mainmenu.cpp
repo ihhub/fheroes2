@@ -108,12 +108,12 @@ void Game::mainGameLoop( bool isFirstGameRun, bool isProrablyDemoVersion )
             exit = true;
             break;
         case fheroes2::GameMode::MAIN_MENU:
-            result = Game::MainMenu( isFirstGameRun, isProrablyDemoVersion );
+            result = Game::MainMenu( isFirstGameRun );
             isFirstGameRun = false;
-            isProrablyDemoVersion = false;
             break;
         case fheroes2::GameMode::NEW_GAME:
-            result = Game::NewGame();
+            result = Game::NewGame( isProrablyDemoVersion );
+            isProrablyDemoVersion = false;
             break;
         case fheroes2::GameMode::LOAD_GAME:
             result = Game::LoadGame();
@@ -204,7 +204,7 @@ void Game::mainGameLoop( bool isFirstGameRun, bool isProrablyDemoVersion )
     fheroes2::fadeOutDisplay();
 }
 
-fheroes2::GameMode Game::MainMenu( const bool isFirstGameRun, const bool isProrablyDemoVersion )
+fheroes2::GameMode Game::MainMenu( const bool isFirstGameRun )
 {
     // Stop all sounds, but not the music
     AudioManager::stopSounds();
@@ -258,13 +258,6 @@ fheroes2::GameMode Game::MainMenu( const bool isFirstGameRun, const bool isProra
 
         conf.resetFirstGameRun();
         conf.Save( Settings::configFileName );
-
-        if ( isProrablyDemoVersion ) {
-            fheroes2::showStandardTextMessage( _( "Warning!" ),
-                                               _( "You appear to be using the demo version of Heroes of Might and Magic II. "
-                                                  "Please note that this version only allows one map to be played." ),
-                                               Dialog::OK );
-        }
     }
 
     outputMainMenuInTextSupportMode();
