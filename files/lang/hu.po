@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-06 00:56+0000\n"
+"POT-Creation-Date: 2024-03-06 22:25+0000\n"
 "PO-Revision-Date: 2023-09-04 21:55+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -3904,11 +3904,20 @@ msgstr "Városok"
 msgid "Heroes"
 msgstr "Hősök"
 
-msgid "editorErasure|Terrain"
-msgstr "Talaj"
+#, fuzzy
+msgid "editorErasure|Landscape objects"
+msgstr "Hősök"
+
+#, fuzzy
+msgid "editorErasure|Adventure non pickable objects"
+msgstr "Varázstárgyak"
 
 msgid "editorErasure|Castles"
 msgstr "Várak"
+
+#, fuzzy
+msgid "editorErasure|Adventure pickable objects"
+msgstr "Varázstárgyak"
 
 msgid "editorErasure|Monsters"
 msgstr "Lények"
@@ -3916,17 +3925,11 @@ msgstr "Lények"
 msgid "editorErasure|Heroes"
 msgstr "Hősök"
 
-msgid "editorErasure|Artifacts"
-msgstr "Varázstárgyak"
-
 msgid "editorErasure|Roads"
 msgstr "Utak"
 
 msgid "editorErasure|Streams"
 msgstr "Vízfolyások"
-
-msgid "editorErasure|Treasures"
-msgstr "Kincsek"
 
 msgid ""
 "Draws terrain in\n"
@@ -11006,6 +11009,12 @@ msgstr ""
 "Letöltheted a legújabb verziót innen:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "editorErasure|Terrain"
+#~ msgstr "Talaj"
+
+#~ msgid "editorErasure|Treasures"
+#~ msgstr "Kincsek"
 
 #~ msgid "Fast separation into slots:"
 #~ msgstr "Gyors szétosztás:"
