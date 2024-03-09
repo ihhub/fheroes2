@@ -507,7 +507,7 @@ fheroes2::GameMode Game::NewNetwork()
     return fheroes2::GameMode::MAIN_MENU;
 }
 
-fheroes2::GameMode Game::NewGame( const bool isProrablyDemoVersion )
+fheroes2::GameMode Game::NewGame( const bool isProbablyDemoVersion )
 {
     outputNewMenuInTextSupportMode();
 
@@ -548,7 +548,7 @@ fheroes2::GameMode Game::NewGame( const bool isProrablyDemoVersion )
 
     LocalEvent & le = LocalEvent::Get();
 
-    if ( isProrablyDemoVersion ) {
+    if ( isProbablyDemoVersion ) {
         fheroes2::showStandardTextMessage( _( "Warning!" ),
                                            _( "You appear to be using the demo version of Heroes of Might and Magic II. "
                                               "Please note that this version only allows one map to be played." ),

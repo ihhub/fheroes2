@@ -96,7 +96,7 @@ namespace
     }
 }
 
-void Game::mainGameLoop( bool isFirstGameRun, bool isProrablyDemoVersion )
+void Game::mainGameLoop( bool isFirstGameRun, bool isProbablyDemoVersion )
 {
     fheroes2::GameMode result = fheroes2::GameMode::MAIN_MENU;
 
@@ -112,8 +112,8 @@ void Game::mainGameLoop( bool isFirstGameRun, bool isProrablyDemoVersion )
             isFirstGameRun = false;
             break;
         case fheroes2::GameMode::NEW_GAME:
-            result = Game::NewGame( isProrablyDemoVersion );
-            isProrablyDemoVersion = false;
+            result = Game::NewGame( isProbablyDemoVersion );
+            isProbablyDemoVersion = false;
             break;
         case fheroes2::GameMode::LOAD_GAME:
             result = Game::LoadGame();
