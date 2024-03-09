@@ -571,7 +571,7 @@ namespace AI
 
         const int32_t castleIndex = castle.GetIndex();
         // skip precise distance check if army is too far to be a threat
-        if ( Maps::GetApproximateDistance( enemyArmy.index, castleIndex ) * Maps::Ground::roadPenalty > threatDistanceLimit ) {
+        if ( Maps::GetApproximateDistance( enemyArmy.index, castleIndex ) * Maps::Ground::fastestMovePenalty > threatDistanceLimit ) {
             return false;
         }
 

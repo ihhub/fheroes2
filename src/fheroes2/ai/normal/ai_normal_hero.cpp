@@ -2167,9 +2167,14 @@ namespace AI
                     continue;
                 }
 
-                // In theory, this should not be the case
+                // In theory, this should never be the case
                 if ( enemyArmy.movePoints == 0 ) {
                     assert( 0 );
+                    continue;
+                }
+
+                // The enemy hero is too far away and does not pose a threat on the current turn
+                if ( Maps::GetApproximateDistance( hero.GetIndex(), enemyArmy.index ) * Maps::Ground::fastestMovePenalty > hero.GetMovePoints() + enemyArmy.movePoints ) {
                     continue;
                 }
 
