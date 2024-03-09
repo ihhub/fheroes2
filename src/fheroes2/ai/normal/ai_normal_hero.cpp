@@ -2202,7 +2202,7 @@ namespace AI
                   }();
 
                   if ( !ignoreEnemyThreat ) {
-                      assert( destination >= 0 && destination < enemyThreatPenalties.size() );
+                      assert( destination >= 0 && static_cast<size_t>( destination ) < enemyThreatPenalties.size() );
 
                       value -= enemyThreatPenalties[destination];
                   }
