@@ -2188,18 +2188,6 @@ namespace AI
                     const int32_t tileIdx = static_cast<int32_t>( i );
                     assert( Maps::isValidAbsIndex( tileIdx ) );
 
-                    const Maps::Tiles & tile = world.GetTiles( tileIdx );
-                    if ( tile.GetObject() == MP2::OBJ_CASTLE ) {
-                        const Castle * castle = world.getCastleEntrance( Maps::GetPoint( tileIdx ) );
-                        assert( castle != nullptr );
-
-                        // We should strive to defend our castles even if our hero is relatively weak (he can get reinforcements in the castle), so enemy threat penalties
-                        // should not apply to this case.
-                        if ( castle->GetColor() == hero.GetColor() ) {
-                            continue;
-                        }
-                    }
-
                     // A tile is considered safe if the enemy hero does not have access to it (in particular, if it is hidden from him in the fog) or he cannot reach it
                     // within one turn. The potential ability of the enemy hero to use spells to move to this tile (for example, the Dimension Door or Town Portal) is not
                     // considered in this assessment.
@@ -2238,13 +2226,30 @@ namespace AI
                       }
                   }
 
-                  assert( destination >= 0 && static_cast<size_t>( destination ) < enemyThreatPenalties.size() );
+                  const uint32_t heroMovePoints = hero.GetMovePoints();
 
-                  value -= enemyThreatPenalties[destination];
+                  const double enemyThreatPenalty = [&hero, &enemyThreatPenalties, destination, distance, type, heroMovePoints]() {
+                      if ( type == MP2::OBJ_CASTLE ) {
+                          const Castle * castle = world.getCastleEntrance( Maps::GetPoint( destination ) );
+                          assert( castle != nullptr );
+
+                          // We should strive to defend our castles even if our hero is relatively weak (he can get reinforcements in the castle), so enemy threat
+                          // penalties should not apply if our hero is able to reach the castle within one turn.
+                          if ( castle->GetColor() == hero.GetColor() && distance <= heroMovePoints ) {
+                              return 0.0;
+                          }
+                      }
+
+                      assert( destination >= 0 && static_cast<size_t>( destination ) < enemyThreatPenalties.size() );
+
+                      return enemyThreatPenalties[destination];
+                  }();
+
+                  value -= enemyThreatPenalty;
 
                   // Distant object which is out of reach for the current turn must have lower priority.
-                  if ( distance > hero.GetMovePoints() ) {
-                      distance = hero.GetMovePoints() + ( distance - hero.GetMovePoints() ) * 2;
+                  if ( distance > heroMovePoints ) {
+                      distance = heroMovePoints + ( distance - heroMovePoints ) * 2;
                   }
 
                   value = scaleWithDistanceAndTime( value, distance, type );
