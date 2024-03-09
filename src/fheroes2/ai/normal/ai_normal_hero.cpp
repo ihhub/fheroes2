@@ -2094,8 +2094,6 @@ namespace AI
         DEBUG_LOG( DBG_AI, DBG_INFO, "Find Adventure Map target for hero " << hero.GetName() << " at current position " << hero.GetIndex() )
 
         const double lowestPossibleValue = -1.0 * Maps::Ground::slowestMovePenalty * world.getSize();
-        const bool heroInPatrolMode = heroInfo.patrolCenter != -1;
-        const double heroStrength = hero.GetArmy().GetStrength();
 
         int priorityTarget = -1;
         maxPriority = lowestPossibleValue;
@@ -2120,8 +2118,10 @@ namespace AI
 #endif
 
         // Pre-calculate penalties for tiles where there is a threat of enemy attack
-        const std::vector<double> enemyThreatPenalties = [this, heroStrength]() {
+        const std::vector<double> enemyThreatPenalties = [this, &hero = std::as_const( hero )]() {
             std::vector<double> result( world.getSize(), 0.0 );
+
+            const double heroStrength = hero.GetArmy().GetStrength();
 
             for ( const auto & [dummy, enemyArmy] : _enemyArmies ) {
                 // Only enemy heroes are taken into account
@@ -2149,6 +2149,18 @@ namespace AI
                 for ( size_t i = 0; i < result.size(); ++i ) {
                     const int32_t tileIdx = static_cast<int32_t>( i );
                     assert( Maps::isValidAbsIndex( tileIdx ) );
+
+                    const Maps::Tiles & tile = world.GetTiles( tileIdx );
+                    if ( tile.GetObject() == MP2::OBJ_CASTLE ) {
+                        const Castle * castle = world.getCastleEntrance( Maps::GetPoint( tileIdx ) );
+                        assert( castle != nullptr );
+
+                        // We should strive to defend our castles even if our hero is relatively weak (he can get reinforcements in the castle), so enemy threat penalties
+                        // should not apply to this case.
+                        if ( castle->GetColor() == hero.GetColor() ) {
+                            continue;
+                        }
+                    }
 
                     // A tile is considered safe if the enemy hero does not have access to it (in particular, if it is hidden from him in the fog) or he cannot reach it
                     // within one turn. The potential ability of the enemy hero to use spells to move to this tile (for example, the Dimension Door or Town Portal) is not
@@ -2188,27 +2200,9 @@ namespace AI
                       }
                   }
 
-                  const bool ignoreEnemyThreat = [&hero, destination, type]() {
-                      if ( type != MP2::OBJ_CASTLE ) {
-                          return false;
-                      }
+                  assert( destination >= 0 && static_cast<size_t>( destination ) < enemyThreatPenalties.size() );
 
-                      const Castle * castle = world.getCastleEntrance( Maps::GetPoint( destination ) );
-                      if ( castle == nullptr ) {
-                          assert( 0 );
-                          return false;
-                      }
-
-                      // We should strive to defend our castles even if our hero is relatively weak (he can get reinforcements in the castle), so enemy threat penalties
-                      // should not apply to this case.
-                      return ( castle->GetColor() == hero.GetColor() );
-                  }();
-
-                  if ( !ignoreEnemyThreat ) {
-                      assert( destination >= 0 && static_cast<size_t>( destination ) < enemyThreatPenalties.size() );
-
-                      value -= enemyThreatPenalties[destination];
-                  }
+                  value -= enemyThreatPenalties[destination];
 
                   // Distant object which is out of reach for the current turn must have lower priority.
                   if ( distance > hero.GetMovePoints() ) {
@@ -2236,6 +2230,8 @@ namespace AI
                 hero.setAIRole( Heroes::Role::HUNTER );
             }
         }
+
+        const bool heroInPatrolMode = ( heroInfo.patrolCenter != -1 );
 
         for ( const IndexObject & node : _mapActionObjects ) {
             // Skip if hero in patrol mode and object outside of reach
