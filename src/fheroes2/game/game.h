@@ -53,9 +53,9 @@ namespace Game
         TYPE_MULTI = TYPE_HOTSEAT
     };
 
-    void mainGameLoop( bool isFirstGameRun );
+    void mainGameLoop( bool isFirstGameRun, bool isProrablyDemoVersion );
 
-    fheroes2::GameMode MainMenu( bool isFirstGameRun );
+    fheroes2::GameMode MainMenu( const bool isFirstGameRun, const bool isProrablyDemoVersion );
     fheroes2::GameMode NewGame();
     fheroes2::GameMode LoadGame();
     fheroes2::GameMode Credits();

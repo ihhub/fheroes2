@@ -96,7 +96,7 @@ namespace
     }
 }
 
-void Game::mainGameLoop( bool isFirstGameRun )
+void Game::mainGameLoop( bool isFirstGameRun, bool isProrablyDemoVersion )
 {
     fheroes2::GameMode result = fheroes2::GameMode::MAIN_MENU;
 
@@ -108,8 +108,9 @@ void Game::mainGameLoop( bool isFirstGameRun )
             exit = true;
             break;
         case fheroes2::GameMode::MAIN_MENU:
-            result = Game::MainMenu( isFirstGameRun );
+            result = Game::MainMenu( isFirstGameRun, isProrablyDemoVersion );
             isFirstGameRun = false;
+            isProrablyDemoVersion = false;
             break;
         case fheroes2::GameMode::NEW_GAME:
             result = Game::NewGame();
@@ -203,7 +204,7 @@ void Game::mainGameLoop( bool isFirstGameRun )
     fheroes2::fadeOutDisplay();
 }
 
-fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
+fheroes2::GameMode Game::MainMenu( const bool isFirstGameRun, const bool isProrablyDemoVersion )
 {
     // Stop all sounds, but not the music
     AudioManager::stopSounds();
@@ -221,6 +222,7 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
 
     // image background
     fheroes2::drawMainMenuScreen();
+
     if ( isFirstGameRun ) {
         // Fade in Main Menu image before showing messages. This also resets the "need fade" state to have no fade-in after these messages.
         fheroes2::validateFadeInAndRender();
@@ -256,6 +258,11 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
 
         conf.resetFirstGameRun();
         conf.Save( Settings::configFileName );
+
+        if ( isProrablyDemoVersion ) {
+            fheroes2::showStandardTextMessage( _( "Warning!" ), _( "You appear to be using the demo version of Heroes of Might and Magic II. "
+                                                                   "Please note that this version only allows one map to be played." ), Dialog::OK );
+        }
     }
 
     outputMainMenuInTextSupportMode();
