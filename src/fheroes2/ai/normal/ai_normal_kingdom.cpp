@@ -237,7 +237,7 @@ namespace
             // Rough estimate - if the hero is in the castle, then we sum up the power of the castle garrison with the power of the hero's army
             const double threat = castle ? castle->GetArmy().GetStrength() + hero->GetArmy().GetStrength() : hero->GetArmy().GetStrength();
 
-            return AI::EnemyArmy( tileIndex, hero, threat, hero->GetMaxMovePoints() );
+            return AI::EnemyArmy( tileIndex, hero->GetColor(), hero, threat, hero->GetMaxMovePoints() );
         }
 
         if ( object == MP2::OBJ_CASTLE ) {
@@ -260,7 +260,7 @@ namespace
             const double threat = castle->GetArmy().GetStrength();
 
             // 1500 is slightly more than a fresh hero's maximum move points hired in a castle.
-            return AI::EnemyArmy( tileIndex, nullptr, threat, 1500 );
+            return AI::EnemyArmy( tileIndex, castle->GetColor(), nullptr, threat, 1500 );
         }
 
         return {};
@@ -575,7 +575,7 @@ namespace AI
             return false;
         }
 
-        const uint32_t dist = _pathfinder.getDistance( enemyArmy.index, castleIndex, castle.GetColor(), enemyArmy.strength );
+        const uint32_t dist = _pathfinder.getDistance( enemyArmy.index, castleIndex, enemyArmy.color, enemyArmy.strength );
         if ( dist == 0 || dist >= threatDistanceLimit ) {
             return false;
         }

@@ -1368,7 +1368,8 @@ std::list<Route::Step> AIWorldPathfinder::buildPath( const int targetIndex ) con
     return path;
 }
 
-uint32_t AIWorldPathfinder::getDistance( int start, int targetIndex, int color, double armyStrength, uint8_t skill )
+uint32_t AIWorldPathfinder::getDistance( const int start, const int targetIndex, const int color, const double armyStrength,
+                                         const uint8_t skill /* = Skill::Level::EXPERT */ )
 {
     reEvaluateIfNeeded( start, color, armyStrength, skill );
 

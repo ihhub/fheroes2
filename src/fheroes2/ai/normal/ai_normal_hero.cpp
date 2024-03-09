@@ -2087,6 +2087,8 @@ namespace AI
 
     int Normal::getPriorityTarget( const HeroToMove & heroInfo, double & maxPriority )
     {
+        assert( heroInfo.hero != nullptr );
+
         Heroes & hero = *heroInfo.hero;
 
         DEBUG_LOG( DBG_AI, DBG_INFO, "Find Adventure Map target for hero " << hero.GetName() << " at current position " << hero.GetIndex() )
@@ -2117,107 +2119,101 @@ namespace AI
         }
 #endif
 
-        // pre-cache the pathfinder
+        // Pre-calculate penalties for tiles where there is a threat of enemy attack
+        const std::vector<double> enemyThreatPenalties = [this, heroStrength]() {
+            std::vector<double> result( world.getSize(), 0.0 );
+
+            for ( const auto & [dummy, enemyArmy] : _enemyArmies ) {
+                // Only enemy heroes are taken into account
+                if ( enemyArmy.hero == nullptr ) {
+                    continue;
+                }
+
+                // An enemy hero does not pose a threat if he is approximately equal in strength or weaker than our hero
+                if ( heroStrength * AI::ARMY_ADVANTAGE_SMALL >= enemyArmy.strength ) {
+                    continue;
+                }
+
+                // In theory, this should not be the case
+                if ( enemyArmy.movePoints == 0 ) {
+                    assert( 0 );
+                    continue;
+                }
+
+                // Pre-cache the pathfinder database for the enemy hero
+                _pathfinder.reEvaluateIfNeeded( *enemyArmy.hero );
+
+                for ( size_t i = 0; i < result.size(); ++i ) {
+                    const int32_t tileIdx = static_cast<int32_t>( i );
+                    assert( Maps::isValidAbsIndex( tileIdx ) );
+
+                    // A tile is considered safe if the enemy hero does not have access to it (in particular, if it is hidden from him in the fog) or he cannot reach it
+                    // within one turn. The potential ability of the enemy hero to use spells to move to this tile (for example, the Dimension Door or Town Portal) is not
+                    // considered in this assessment.
+                    const uint32_t dist = _pathfinder.getDistance( tileIdx );
+                    if ( dist == 0 || dist > enemyArmy.movePoints ) {
+                        continue;
+                    }
+
+                    // The penalty increases linearly as the distance to the enemy hero decreases
+                    result[i] += dangerousTaskPenalty * ( 2.0 - static_cast<double>( dist ) / static_cast<double>( enemyArmy.movePoints ) );
+                }
+            }
+
+            return result;
+        }();
+
+        // Pre-cache the pathfinder database for our hero
         _pathfinder.reEvaluateIfNeeded( hero );
 
         ObjectValidator objectValidator( hero, _pathfinder, *this );
         ObjectValueStorage valueStorage( hero, *this, lowestPossibleValue );
 
-        const auto getObjectValue = [&objectValidator, &valueStorage, this, heroStrength, &hero]( const int destination, uint32_t & distance, double & value,
-                                                                                                  const MP2::MapObjectType type, const bool isDimensionDoor ) {
-            if ( !isDimensionDoor ) {
-                // Dimension door path does not include any objects on the way.
-                std::vector<IndexObject> list = _pathfinder.getObjectsOnTheWay( destination );
-                for ( const IndexObject & pair : list ) {
-                    if ( objectValidator.isValid( pair.first ) && std::binary_search( _mapActionObjects.begin(), _mapActionObjects.end(), pair ) ) {
-                        const double extraValue = valueStorage.value( pair, 0 ); // object is on the way, we don't loose any movement points.
-                        if ( extraValue > 0 ) {
-                            // There is no need to reduce the quality of the object even if the path has others.
-                            value += extraValue;
-                        }
-                    }
-                }
-            }
+        const auto getObjectValue
+            = [this, &hero = std::as_const( hero ), heroStrength, &enemyThreatPenalties, &objectValidator,
+               &valueStorage]( const int destination, uint32_t & distance, double & value, const MP2::MapObjectType type, const bool isDimensionDoor ) {
+                  // Dimension door path does not include any objects on the way.
+                  if ( !isDimensionDoor ) {
+                      for ( const IndexObject & pair : _pathfinder.getObjectsOnTheWay( destination ) ) {
+                          if ( objectValidator.isValid( pair.first ) && std::binary_search( _mapActionObjects.begin(), _mapActionObjects.end(), pair ) ) {
+                              const double extraValue = valueStorage.value( pair, 0 );
+                              if ( extraValue > 0 ) {
+                                  // There is no need to reduce the quality of the object even if the path has others.
+                                  value += extraValue;
+                              }
+                          }
+                      }
+                  }
 
-            const Maps::Tiles & destinationTile = world.GetTiles( destination );
+                  const bool ignoreEnemyThreat = [&hero, destination, type]() {
+                      if ( type != MP2::OBJ_CASTLE ) {
+                          return false;
+                      }
 
-            // TODO: check nearby enemy heroes and distance to them instead of relying on region stats.
-            const RegionStats & regionStats = _regions[destinationTile.GetRegion()];
+                      const Castle * castle = world.getCastleEntrance( Maps::GetPoint( destination ) );
+                      if ( castle == nullptr ) {
+                          assert( 0 );
+                          return false;
+                      }
 
-            const bool isObjectReachableAtThisTurn = ( distance <= hero.GetMovePoints() );
+                      // We should strive to defend our castles even if our hero is relatively weak (he can get reinforcements in the castle), so enemy threat penalties
+                      // should not apply to this case.
+                      return ( castle->GetColor() == hero.GetColor() );
+                  }();
 
-            // Go into "coward" mode only if the threat is real. Equal by strength heroes rarely attack each other.
-            if ( heroStrength * AI::ARMY_ADVANTAGE_SMALL < regionStats.highestThreat ) {
-                switch ( type ) {
-                case MP2::OBJ_CASTLE: {
-                    const Castle * castle = world.getCastleEntrance( Maps::GetPoint( destination ) );
-                    if ( castle == nullptr ) {
-                        assert( 0 );
-                        break;
-                    }
+                  if ( !ignoreEnemyThreat ) {
+                      assert( destination >= 0 && destination < enemyThreatPenalties.size() );
 
-                    if ( castle->GetColor() == hero.GetColor() ) {
-                        // Friendly castles are always the priority so no penalty for them.
-                        break;
-                    }
+                      value -= enemyThreatPenalties[destination];
+                  }
 
-                    if ( isObjectReachableAtThisTurn ) {
-                        if ( castle->GetGarrisonStrength( hero ) > heroStrength / 2 ) {
-                            value -= dangerousTaskPenalty / 4;
-                        }
-                        else {
-                            value -= dangerousTaskPenalty / 10;
-                        }
-                    }
-                    else if ( castle->GetGarrisonStrength( hero ) > heroStrength / 2 ) {
-                        value -= dangerousTaskPenalty / 2;
-                    }
-                    else {
-                        value -= dangerousTaskPenalty / 3;
-                    }
+                  // Distant object which is out of reach for the current turn must have lower priority.
+                  if ( distance > hero.GetMovePoints() ) {
+                      distance = hero.GetMovePoints() + ( distance - hero.GetMovePoints() ) * 2;
+                  }
 
-                    break;
-                }
-                case MP2::OBJ_HERO: {
-                    const Heroes * anotherHero = destinationTile.getHero();
-                    if ( anotherHero == nullptr ) {
-                        assert( 0 );
-                        break;
-                    }
-
-                    if ( anotherHero->GetColor() == hero.GetColor() ) {
-                        if ( isObjectReachableAtThisTurn ) {
-                            value -= dangerousTaskPenalty / 8;
-                        }
-                        else {
-                            value -= dangerousTaskPenalty / 4;
-                        }
-                    }
-                    else {
-                        if ( isObjectReachableAtThisTurn ) {
-                            value -= dangerousTaskPenalty / 8;
-                        }
-                        else {
-                            value -= dangerousTaskPenalty / 2;
-                        }
-                    }
-
-                    break;
-                }
-                default:
-                    // It is better to avoid all other objects if the current hero is under a big threat.
-                    value -= dangerousTaskPenalty;
-                    break;
-                }
-            }
-
-            if ( !isObjectReachableAtThisTurn ) {
-                // Distant object which is out of reach for the current turn must have lower priority.
-                distance = hero.GetMovePoints() + ( distance - hero.GetMovePoints() ) * 2;
-            }
-
-            value = scaleWithDistanceAndTime( value, distance, type );
-        };
+                  value = scaleWithDistanceAndTime( value, distance, type );
+              };
 
         // Set baseline target if it's a special role
         if ( hero.getAIRole() == Heroes::Role::COURIER ) {
@@ -2240,37 +2236,40 @@ namespace AI
 
         for ( const IndexObject & node : _mapActionObjects ) {
             // Skip if hero in patrol mode and object outside of reach
-            if ( heroInPatrolMode && Maps::GetApproximateDistance( node.first, heroInfo.patrolCenter ) > heroInfo.patrolDistance )
+            if ( heroInPatrolMode && Maps::GetApproximateDistance( node.first, heroInfo.patrolCenter ) > heroInfo.patrolDistance ) {
                 continue;
+            }
 
-            if ( objectValidator.isValid( node.first ) ) {
-                uint32_t dist = _pathfinder.getDistance( node.first );
+            if ( !objectValidator.isValid( node.first ) ) {
+                continue;
+            }
 
-                bool useDimensionDoor = false;
-                const uint32_t dimensionDoorDist = Route::calculatePathPenalty( _pathfinder.getDimensionDoorPath( hero, node.first ) );
-                if ( dimensionDoorDist > 0 && ( dist == 0 || dimensionDoorDist < dist / 2 ) ) {
-                    dist = dimensionDoorDist;
-                    useDimensionDoor = true;
-                }
+            uint32_t dist = _pathfinder.getDistance( node.first );
 
-                if ( dist == 0 ) {
-                    continue;
-                }
+            bool useDimensionDoor = false;
+            const uint32_t dimensionDoorDist = Route::calculatePathPenalty( _pathfinder.getDimensionDoorPath( hero, node.first ) );
+            if ( dimensionDoorDist > 0 && ( dist == 0 || dimensionDoorDist < dist / 2 ) ) {
+                dist = dimensionDoorDist;
+                useDimensionDoor = true;
+            }
 
-                double value = valueStorage.value( node, dist );
-                getObjectValue( node.first, dist, value, static_cast<MP2::MapObjectType>( node.second ), useDimensionDoor );
+            if ( dist == 0 ) {
+                continue;
+            }
 
-                if ( dist && value > maxPriority ) {
-                    maxPriority = value;
-                    priorityTarget = node.first;
+            double value = valueStorage.value( node, dist );
+            getObjectValue( node.first, dist, value, static_cast<MP2::MapObjectType>( node.second ), useDimensionDoor );
+
+            if ( dist && value > maxPriority ) {
+                maxPriority = value;
+                priorityTarget = node.first;
 #ifdef WITH_DEBUG
-                    objectType = static_cast<MP2::MapObjectType>( node.second );
+                objectType = static_cast<MP2::MapObjectType>( node.second );
 #endif
 
-                    DEBUG_LOG( DBG_AI, DBG_TRACE,
-                               hero.GetName() << ": valid object at " << node.first << " value is " << value << " ("
-                                              << MP2::StringObject( static_cast<MP2::MapObjectType>( node.second ) ) << ")" )
-                }
+                DEBUG_LOG( DBG_AI, DBG_TRACE,
+                           hero.GetName() << ": valid object at " << node.first << " value is " << value << " ("
+                                          << MP2::StringObject( static_cast<MP2::MapObjectType>( node.second ) ) << ")" )
             }
         }
 
