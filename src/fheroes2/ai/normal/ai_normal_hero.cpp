@@ -2170,8 +2170,8 @@ namespace AI
         ObjectValueStorage valueStorage( hero, *this, lowestPossibleValue );
 
         const auto getObjectValue
-            = [this, &hero = std::as_const( hero ), heroStrength, &enemyThreatPenalties, &objectValidator,
-               &valueStorage]( const int destination, uint32_t & distance, double & value, const MP2::MapObjectType type, const bool isDimensionDoor ) {
+            = [this, &hero = std::as_const( hero ), &enemyThreatPenalties, &objectValidator, &valueStorage]( const int destination, uint32_t & distance, double & value,
+                                                                                                             const MP2::MapObjectType type, const bool isDimensionDoor ) {
                   // Dimension door path does not include any objects on the way.
                   if ( !isDimensionDoor ) {
                       for ( const IndexObject & pair : _pathfinder.getObjectsOnTheWay( destination ) ) {
