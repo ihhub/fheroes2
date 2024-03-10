@@ -306,8 +306,13 @@ namespace Interface
         const uint32_t combinedRedraw = _redraw | force;
 
         if ( combinedRedraw & REDRAW_GAMEAREA ) {
+            uint32_t renderFlags = LEVEL_OBJECTS | LEVEL_HEROES | LEVEL_ROUTES;
+            if ( combinedRedraw & REDRAW_PASSABILITIES ) {
+                renderFlags |= LEVEL_PASSABILITIES;
+            }
+
             // Render all except the fog.
-            _gameArea.Redraw( display, LEVEL_OBJECTS | LEVEL_HEROES | LEVEL_ROUTES );
+            _gameArea.Redraw( display, renderFlags );
 
             if ( _warningMessage.isValid() ) {
                 const fheroes2::Rect & roi = _gameArea.GetROI();
@@ -636,6 +641,9 @@ namespace Interface
                 }
 
                 if ( needRedraw() ) {
+                    if ( conf.isEditorPassabilityEnabled() ) {
+                        _redraw |= REDRAW_PASSABILITIES;
+                    }
                     redraw( 0 );
 
                     // If this assertion blows up it means that we are holding a RedrawLocker lock for rendering which should not happen.

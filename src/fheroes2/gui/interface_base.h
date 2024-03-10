@@ -53,7 +53,10 @@ namespace Interface
         // The next value is base for Map Editor interface.
         REDRAW_PANEL = 0x100,
 
-        REDRAW_ALL = 0x1FF
+        REDRAW_ALL = 0x1FF,
+
+        // This option is only for the Editor.
+        REDRAW_PASSABILITIES = 0x200
     };
 
     class BaseInterface

@@ -739,21 +739,24 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 
     const bool drawTowns = ( flag & LEVEL_TOWNS );
 
-#ifdef WITH_DEBUG
-    if ( IS_DEVEL() ) {
-        // redraw grid
-        if ( flag & LEVEL_ALL ) {
-            const int32_t friendColors = Players::FriendColors();
+    bool drawPassabilities = ( flag & LEVEL_PASSABILITIES );
 
-            for ( int32_t y = minY; y < maxY; ++y ) {
-                for ( int32_t x = minX; x < maxX; ++x ) {
-                    redrawPassable( world.GetTiles( x, y ), dst, friendColors, *this );
-                }
+#ifdef WITH_DEBUG
+    if ( IS_DEVEL() && ( flag & LEVEL_ALL ) ) {
+        drawPassabilities = true;
+    }
+#endif
+
+    if ( drawPassabilities ) {
+        const int32_t friendColors = Players::FriendColors();
+
+        for ( int32_t y = minY; y < maxY; ++y ) {
+            for ( int32_t x = minX; x < maxX; ++x ) {
+                redrawPassable( world.GetTiles( x, y ), dst, friendColors, *this );
             }
         }
     }
     else {
-#endif
         // redraw fog
         if ( renderFog ) {
             for ( int32_t y = minY; y < maxY; ++y ) {
@@ -775,9 +778,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                 }
             }
         }
-#ifdef WITH_DEBUG
     }
-#endif
 
     updateObjectAnimationInfo();
 }
