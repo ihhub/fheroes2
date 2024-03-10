@@ -890,32 +890,6 @@ namespace
 
         return 30;
     }
-
-    class AIWorldPathfinderStateRestorer
-    {
-    public:
-        explicit AIWorldPathfinderStateRestorer( AIWorldPathfinder & pathfinder )
-            : _pathfinder( pathfinder )
-            , _originalMinimalArmyStrengthAdvantage( _pathfinder.getMinimalArmyStrengthAdvantage() )
-            , _originalSpellPointsReserveRatio( _pathfinder.getSpellPointsReserveRatio() )
-        {}
-
-        AIWorldPathfinderStateRestorer( const AIWorldPathfinderStateRestorer & ) = delete;
-
-        ~AIWorldPathfinderStateRestorer()
-        {
-            _pathfinder.setMinimalArmyStrengthAdvantage( _originalMinimalArmyStrengthAdvantage );
-            _pathfinder.setSpellPointsReserveRatio( _originalSpellPointsReserveRatio );
-        }
-
-        AIWorldPathfinderStateRestorer & operator=( const AIWorldPathfinderStateRestorer & ) = delete;
-
-    private:
-        AIWorldPathfinder & _pathfinder;
-
-        const double _originalMinimalArmyStrengthAdvantage;
-        const double _originalSpellPointsReserveRatio;
-    };
 }
 
 namespace AI
@@ -2152,7 +2126,7 @@ namespace AI
 
             // Use the "optimistic" pathfinder settings for enemy heroes - minimal army advantage, minimal reserve of spell points
             _pathfinder.setMinimalArmyStrengthAdvantage( ARMY_ADVANTAGE_DESPERATE );
-            _pathfinder.setSpellPointsReserveRatio( 0.1 );
+            _pathfinder.setSpellPointsReserveRatio( 0.0 );
 
             const double heroStrength = hero.GetArmy().GetStrength();
 

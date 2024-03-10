@@ -147,9 +147,7 @@ private:
 class AIWorldPathfinder final : public WorldPathfinder
 {
 public:
-    explicit AIWorldPathfinder( double advantage )
-        : _minimalArmyStrengthAdvantage( advantage )
-    {}
+    AIWorldPathfinder() = default;
 
     AIWorldPathfinder( const AIWorldPathfinder & ) = delete;
 

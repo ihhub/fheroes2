@@ -253,6 +253,32 @@ namespace AI
         bool _cautiousOffensive = false;
     };
 
+    class AIWorldPathfinderStateRestorer
+    {
+    public:
+        explicit AIWorldPathfinderStateRestorer( AIWorldPathfinder & pathfinder )
+            : _pathfinder( pathfinder )
+            , _originalMinimalArmyStrengthAdvantage( _pathfinder.getMinimalArmyStrengthAdvantage() )
+            , _originalSpellPointsReserveRatio( _pathfinder.getSpellPointsReserveRatio() )
+        {}
+
+        AIWorldPathfinderStateRestorer( const AIWorldPathfinderStateRestorer & ) = delete;
+
+        ~AIWorldPathfinderStateRestorer()
+        {
+            _pathfinder.setMinimalArmyStrengthAdvantage( _originalMinimalArmyStrengthAdvantage );
+            _pathfinder.setSpellPointsReserveRatio( _originalSpellPointsReserveRatio );
+        }
+
+        AIWorldPathfinderStateRestorer & operator=( const AIWorldPathfinderStateRestorer & ) = delete;
+
+    private:
+        AIWorldPathfinder & _pathfinder;
+
+        const double _originalMinimalArmyStrengthAdvantage;
+        const double _originalSpellPointsReserveRatio;
+    };
+
     class Normal : public Base
     {
     public:

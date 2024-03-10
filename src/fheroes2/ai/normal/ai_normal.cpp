@@ -37,10 +37,8 @@
 namespace AI
 {
     Normal::Normal()
-        : _pathfinder( ARMY_ADVANTAGE_LARGE )
-    {
-        _personality = Rand::Get( AI::WARRIOR, AI::EXPLORER );
-    }
+        : Base( Rand::Get( WARRIOR, EXPLORER ) )
+    {}
 
     void Normal::resetPathfinder()
     {

@@ -1378,7 +1378,12 @@ uint32_t AIWorldPathfinder::getDistance( const int start, const int targetIndex,
 
 void AIWorldPathfinder::setMinimalArmyStrengthAdvantage( const double advantage )
 {
-    if ( advantage <= 0 || std::fabs( _minimalArmyStrengthAdvantage - advantage ) <= 0.001 ) {
+    if ( advantage < 0.0 ) {
+        assert( 0 );
+        return;
+    }
+
+    if ( std::fabs( _minimalArmyStrengthAdvantage - advantage ) <= 0.001 ) {
         return;
     }
 
@@ -1389,7 +1394,12 @@ void AIWorldPathfinder::setMinimalArmyStrengthAdvantage( const double advantage 
 
 void AIWorldPathfinder::setSpellPointsReserveRatio( const double ratio )
 {
-    if ( ratio <= 0 || std::fabs( _spellPointsReserveRatio - ratio ) <= 0.001 ) {
+    if ( ratio < 0.0 || ratio > 1.0 ) {
+        assert( 0 );
+        return;
+    }
+
+    if ( std::fabs( _spellPointsReserveRatio - ratio ) <= 0.001 ) {
         return;
     }
 

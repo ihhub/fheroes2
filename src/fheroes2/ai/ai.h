@@ -124,13 +124,15 @@ namespace AI
         virtual void tradingPostVisitEvent( Kingdom & kingdom ) = 0;
 
     protected:
-        int _personality = NONE;
+        int _personality{ NONE };
 
-        Base() = default;
+        explicit Base( const int personality )
+            : _personality( personality )
+        {}
 
     private:
-        friend StreamBase & operator<<( StreamBase &, const AI::Base & );
-        friend StreamBase & operator>>( StreamBase &, AI::Base & );
+        friend StreamBase & operator<<( StreamBase &, const Base & );
+        friend StreamBase & operator>>( StreamBase &, Base & );
     };
 
     // AI type selector, can be used sometime in the future
