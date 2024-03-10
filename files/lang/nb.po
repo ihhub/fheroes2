@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-06 22:25+0000\n"
+"POT-Creation-Date: 2024-03-10 10:14+0000\n"
 "PO-Revision-Date: 2023-09-03 18:42+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -5143,6 +5143,13 @@ msgid ""
 msgstr ""
 "Gjesten venter på at verten setter opp partiet og blir deretter automatisk "
 "lagt til. Det kan være flere gjester for TCP/IP-parti."
+
+msgid ""
+"fheroes2 needs data files from the original Heroes of Might and Magic II to "
+"operate. You appear to be using the demo version of Heroes of Might and "
+"Magic II for this purpose. Please note that only one scenario will be "
+"available in this setup."
+msgstr ""
 
 #, fuzzy
 msgid ""
@@ -11657,88 +11664,3 @@ msgstr ""
 "Finn den siste oppdateringen av spillet på\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid "Fast separation into slots:"
-#~ msgstr "Hurtigfordeling:"
-
-# bygning? usikker funksjon
-#~ msgid "disable build."
-#~ msgstr "Bygning fjernet."
-
-#~ msgid "on"
-#~ msgstr "på"
-
-#~ msgid "Toggle colored cursor on or off. This is only an esthetic choice."
-#~ msgstr "Skru farget markør av eller på. Dette er kun smak og behag."
-
-#, fuzzy
-#~ msgid ""
-#~ "%{skill} increases the damage done by the hero's range attacking "
-#~ "creatures by %{count} percent."
-#~ msgstr ""
-#~ "%{skill} gjør at krigerne dine som angriper på avstand skader %{count} "
-#~ "prosent mer."
-
-#, fuzzy
-#~ msgid "Terrain"
-#~ msgstr "Terrengmodus"
-
-#, fuzzy
-#~ msgid "Castles"
-#~ msgstr "Borg"
-
-#, fuzzy
-#~ msgid "Ocean object"
-#~ msgstr "Sjøting"
-
-#~ msgid "Ocean Objects"
-#~ msgstr "Sjøting"
-
-#~ msgid "Grass Objects"
-#~ msgstr "Gressting"
-
-#~ msgid "Snow Objects"
-#~ msgstr "Snøting"
-
-#~ msgid "Swamp Objects"
-#~ msgstr "Myrting"
-
-#~ msgid "Lava Objects"
-#~ msgstr "Lavating"
-
-#~ msgid "Desert Objects"
-#~ msgstr "Ørkenting"
-
-#~ msgid "Dirt Objects"
-#~ msgstr "Grusting"
-
-#~ msgid "Beach Objects"
-#~ msgstr "Strandting"
-
-#~ msgid "Used to place objects most appropriate for use on %{terrain}."
-#~ msgstr ""
-#~ "Brukes til å plassere ting som passer best på terreng av typen %{terrain}."
-
-#~ msgid ""
-#~ "Used to place\n"
-#~ "a town or castle."
-#~ msgstr ""
-#~ "Brukes til å plassere\n"
-#~ "en by eller borg."
-
-#~ msgid "Used to place an artifact."
-#~ msgstr "Brukes til å plassere en gjenstand."
-
-#~ msgid ""
-#~ "Used to place\n"
-#~ "a resource or treasure."
-#~ msgstr "Brukes til å plassere en råvare eller en verdifull gjenstand."
-
-#~ msgid "%{race1} %{name1}"
-#~ msgstr "%{race1}en %{name1}"
-
-#~ msgid "vs"
-#~ msgstr "mot"
-
-#~ msgid "%{race2} %{name2}"
-#~ msgstr "%{race2}en %{name2}"
