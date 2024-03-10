@@ -2173,13 +2173,14 @@ namespace AI
                     continue;
                 }
 
-                // The enemy hero is too far away and does not pose a threat on the current turn
-                if ( Maps::GetApproximateDistance( hero.GetIndex(), enemyArmy.index ) * Maps::Ground::fastestMovePenalty > hero.GetMovePoints() + enemyArmy.movePoints ) {
-                    continue;
-                }
-
                 // Safe tiles should not be located close to a tile accessible to an enemy hero, some margin is needed
                 const uint32_t enemyArmyMovePointsThreshold = enemyArmy.movePoints + Maps::Ground::slowestMovePenalty * 2;
+
+                // The enemy hero is too far away and does not pose a threat on the current turn
+                if ( Maps::GetApproximateDistance( hero.GetIndex(), enemyArmy.index ) * Maps::Ground::fastestMovePenalty
+                     > hero.GetMovePoints() + enemyArmyMovePointsThreshold ) {
+                    continue;
+                }
 
                 // Pre-cache the pathfinder database for the enemy hero
                 _pathfinder.reEvaluateIfNeeded( *enemyArmy.hero );
