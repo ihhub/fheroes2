@@ -2197,7 +2197,8 @@ namespace AI
                         continue;
                     }
 
-                    // The penalty increases linearly as the distance to the enemy hero decreases
+                    // The penalty is cumulative (i.e. this is the sum of the penalties from all threatening heroes), the penalty from each threatening hero increases
+                    // linearly as the distance to that hero decreases
                     result[i] += dangerousTaskPenalty * ( 2.0 - static_cast<double>( dist ) / static_cast<double>( enemyArmyMovePointsThreshold ) );
                 }
             }
