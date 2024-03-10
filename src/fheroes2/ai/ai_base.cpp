@@ -24,8 +24,6 @@
 #include "ai.h"
 #include "heroes_base.h"
 #include "mp2.h"
-#include "serialize.h"
-#include "translations.h"
 
 class Castle;
 class Heroes;

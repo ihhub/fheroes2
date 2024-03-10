@@ -29,7 +29,6 @@
 #include "maps_tiles.h"
 #include "pairs.h"
 #include "profit.h"
-#include "rand.h"
 #include "resource.h"
 #include "route.h"
 #include "world.h"

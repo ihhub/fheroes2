@@ -25,7 +25,6 @@
 #define H2PLAYERS_H
 
 #include <cstdint>
-#include <memory>
 #include <string>
 #include <utility>
 #include <vector>

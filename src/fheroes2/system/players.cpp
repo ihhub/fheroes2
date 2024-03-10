@@ -27,8 +27,8 @@
 #include <array>
 #include <cassert>
 #include <ostream>
+#include <type_traits>
 
-#include "ai.h"
 #include "castle.h"
 #include "game.h"
 #include "game_io.h"
@@ -37,13 +37,11 @@
 #include "logging.h"
 #include "maps.h"
 #include "maps_fileinfo.h"
-#include "normal/ai_normal.h"
 #include "race.h"
 #include "rand.h"
 #include "save_format_version.h"
 #include "serialize.h"
 #include "settings.h"
-#include "translations.h"
 #include "world.h"
 
 namespace
