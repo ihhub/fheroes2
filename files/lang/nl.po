@@ -10167,16 +10167,3 @@ msgid ""
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
 msgstr ""
-
-#~ msgid "disable build."
-#~ msgstr "bouwen uitschakelen."
-
-#, fuzzy
-#~ msgid "on"
-#~ msgstr "Geen"
-
-#~ msgid "vs"
-#~ msgstr "tegen"
-
-#~ msgid "%{race2} %{name2}"
-#~ msgstr "%{race2} %{name2}"

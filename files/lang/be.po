@@ -10152,16 +10152,3 @@ msgid ""
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
 msgstr ""
-
-#~ msgid "on"
-#~ msgstr "укл."
-
-#~ msgid "Toggle colored cursor on or off. This is only an esthetic choice."
-#~ msgstr "Укл/выкл каляровы курсор. Гэта ўплывае толькі на візуал."
-
-#, fuzzy
-#~ msgid "Castles"
-#~ msgstr "Замак"
-
-#~ msgid "vs"
-#~ msgstr "супраць"

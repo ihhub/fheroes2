@@ -10059,13 +10059,3 @@ msgid ""
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
 msgstr ""
-
-#, fuzzy
-#~ msgid "on"
-#~ msgstr "Nimic"
-
-#~ msgid "vs"
-#~ msgstr "contra"
-
-#~ msgid "%{race2} %{name2}"
-#~ msgstr "%{race2} %{name2}"

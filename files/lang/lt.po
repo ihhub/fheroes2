@@ -10232,15 +10232,3 @@ msgid ""
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
 msgstr ""
-
-#, fuzzy
-#~ msgid "on"
-#~ msgstr "Miestelis"
-
-#, fuzzy
-#~ msgid "Castles"
-#~ msgstr "Pilis"
-
-#, fuzzy
-#~ msgid "%{race2} %{name2}"
-#~ msgstr "Žiūrėti %{name}"

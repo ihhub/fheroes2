@@ -11151,32 +11151,3 @@ msgstr ""
 "Puedes descargar la última versión del juego desde el sítio:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid "Fast separation into slots:"
-#~ msgstr "Distribución rápida del ejército en espacios vacíos:"
-
-#~ msgid "on"
-#~ msgstr "activado"
-
-#~ msgid "Toggle colored cursor on or off. This is only an esthetic choice."
-#~ msgstr "Activa o desactiva el cursor de color. Elección estética."
-
-#, fuzzy
-#~ msgid "Castles"
-#~ msgstr "Castillo"
-
-#, fuzzy
-#~ msgid "Ocean object"
-#~ msgstr "Paraje baldio"
-
-#, fuzzy
-#~ msgid "Desert Objects"
-#~ msgstr "Tienda del Desierto"
-
-#, fuzzy
-#~ msgid "%{race1} %{name1}"
-#~ msgstr "%{name1} se reune con %{name2}"
-
-#, fuzzy
-#~ msgid "%{race2} %{name2}"
-#~ msgstr "%{name1} se reune con %{name2}"

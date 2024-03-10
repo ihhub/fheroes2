@@ -10579,23 +10579,3 @@ msgid ""
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
 msgstr ""
-
-#, fuzzy
-#~ msgid "on"
-#~ msgstr "Nenhum"
-
-#, fuzzy
-#~ msgid "Castles"
-#~ msgstr "Castelo"
-
-#, fuzzy
-#~ msgid "Ocean object"
-#~ msgstr "Terreno Baldio"
-
-#, fuzzy
-#~ msgid "Desert Objects"
-#~ msgstr "Deserto"
-
-#, fuzzy
-#~ msgid "%{race2} %{name2}"
-#~ msgstr "Ver %{name}"

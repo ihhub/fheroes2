@@ -9975,13 +9975,3 @@ msgid ""
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
 msgstr ""
-
-#, fuzzy
-#~ msgid "on"
-#~ msgstr "Hiç"
-
-#~ msgid "vs"
-#~ msgstr "karşı"
-
-#~ msgid "%{race2} %{name2}"
-#~ msgstr "%{race2} %{name2}"

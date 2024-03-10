@@ -10637,27 +10637,3 @@ msgstr ""
 "Nejnovější verzi hry nalezneš na\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid "disable build."
-#~ msgstr "zakázat stavění."
-
-#~ msgid "on"
-#~ msgstr "zap"
-
-#~ msgid "Toggle colored cursor on or off. This is only an esthetic choice."
-#~ msgstr "Přepnout barevný kurzor zap/vyp. Toto je jenom volba vzhledu."
-
-#, fuzzy
-#~ msgid "Castles"
-#~ msgstr "Hrad"
-
-#, fuzzy
-#~ msgid "Ocean object"
-#~ msgstr "Pustina"
-
-#, fuzzy
-#~ msgid "Desert Objects"
-#~ msgstr "Pouštní stan"
-
-#~ msgid "vs"
-#~ msgstr "versus"

@@ -10465,32 +10465,3 @@ msgstr ""
 "Scopri l'ultima versione del gioco su\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid "Fast separation into slots:"
-#~ msgstr "Distribuzione rapida ai riquadri liberi:"
-
-#~ msgid "disable build."
-#~ msgstr "costruzione disabilitata."
-
-#, fuzzy
-#~ msgid "on"
-#~ msgstr "1"
-
-#, fuzzy
-#~ msgid "Castles"
-#~ msgstr "Castello"
-
-#, fuzzy
-#~ msgid "Ocean object"
-#~ msgstr "Nessun oggetto"
-
-#, fuzzy
-#~ msgid "Snow Objects"
-#~ msgstr "Nessun oggetto"
-
-#, fuzzy
-#~ msgid "Desert Objects"
-#~ msgstr "Tenda da Deserto"
-
-#~ msgid "vs"
-#~ msgstr "contro"
