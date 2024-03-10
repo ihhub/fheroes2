@@ -229,7 +229,7 @@ namespace Editor
 {
     void openEditorSettings()
     {
-        // We should make file writing only once.
+        // We should make configuration file writing only once to avoid extra I/O operations.
         bool saveConfiguration = false;
         Settings & conf = Settings::Get();
 

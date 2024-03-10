@@ -737,8 +737,6 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
         }
     }
 
-    const bool drawTowns = ( flag & LEVEL_TOWNS );
-
     bool drawPassabilities = ( flag & LEVEL_PASSABILITIES );
 
 #ifdef WITH_DEBUG
@@ -756,23 +754,22 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
             }
         }
     }
-    else {
-        // redraw fog
-        if ( renderFog ) {
-            for ( int32_t y = minY; y < maxY; ++y ) {
-                for ( int32_t x = minX; x < maxX; ++x ) {
-                    const Maps::Tiles & tile = world.GetTiles( x, y );
+    else if ( renderFog ) {
+        const bool drawTowns = ( flag & LEVEL_TOWNS );
 
-                    if ( tile.getFogDirection() != Direction::UNKNOWN ) {
-                        drawFog( tile, dst, *this );
+        for ( int32_t y = minY; y < maxY; ++y ) {
+            for ( int32_t x = minX; x < maxX; ++x ) {
+                const Maps::Tiles & tile = world.GetTiles( x, y );
 
-                        if ( drawTowns ) {
-                            drawByObjectIcnType( tile, dst, *this, MP2::OBJ_ICN_TYPE_OBJNTWBA );
+                if ( tile.getFogDirection() != Direction::UNKNOWN ) {
+                    drawFog( tile, dst, *this );
 
-                            const MP2::MapObjectType objectType = tile.GetObject( false );
-                            if ( objectType == MP2::OBJ_CASTLE || objectType == MP2::OBJ_NON_ACTION_CASTLE ) {
-                                drawByObjectIcnType( tile, dst, *this, MP2::OBJ_ICN_TYPE_OBJNTOWN );
-                            }
+                    if ( drawTowns ) {
+                        drawByObjectIcnType( tile, dst, *this, MP2::OBJ_ICN_TYPE_OBJNTWBA );
+
+                        const MP2::MapObjectType objectType = tile.GetObject( false );
+                        if ( objectType == MP2::OBJ_CASTLE || objectType == MP2::OBJ_NON_ACTION_CASTLE ) {
+                            drawByObjectIcnType( tile, dst, *this, MP2::OBJ_ICN_TYPE_OBJNTOWN );
                         }
                     }
                 }
