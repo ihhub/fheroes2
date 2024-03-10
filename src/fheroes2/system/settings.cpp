@@ -123,6 +123,8 @@ Settings::Settings()
     _gameOptions.SetModes( GAME_BATTLE_SHOW_MOVE_SHADOW );
     _gameOptions.SetModes( GAME_BATTLE_AUTO_RESOLVE );
 
+    _editorOptions.SetModes( EDITOR_ANIMATION );
+
     if ( System::isHandheldDevice() ) {
         // Due to the nature of handheld devices having small screens in general it is good to make fullscreen option by default.
         _gameOptions.SetModes( GAME_FULLSCREEN );

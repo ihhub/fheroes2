@@ -629,7 +629,9 @@ namespace Interface
             if ( res == fheroes2::GameMode::CANCEL ) {
                 // map objects animation
                 if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
-                    Game::updateAdventureMapAnimationIndex();
+                    if ( conf.isEditorAnimationEnabled() ) {
+                        Game::updateAdventureMapAnimationIndex();
+                    }
                     _redraw |= REDRAW_GAMEAREA;
                 }
 
