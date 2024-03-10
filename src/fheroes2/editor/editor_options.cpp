@@ -116,7 +116,8 @@ namespace
             fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::ESPANEL, 5 ), _( "Passability" ), _( "On" ), fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
         }
         else {
-            fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::ESPANEL, 4 ), _( "Passability" ), _( "Off" ), fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
+            fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::ESPANEL, 4 ), _( "Show Passability" ), _( "No" ),
+                                  fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
         }
     }
 
@@ -214,7 +215,7 @@ namespace
                 fheroes2::showStandardTextMessage( _( "Animation" ), _( "Toggle animation of the objects." ), 0 );
             }
             else if ( le.MousePressRight( windowPassabilityRoi ) ) {
-                fheroes2::showStandardTextMessage( _( "Passability" ), _( "Toggle objects' passability display." ), 0 );
+                fheroes2::showStandardTextMessage( _( "Show Passability" ), _( "Toggle display of objects' passability." ), 0 );
             }
             else if ( le.MousePressRight( okayButton.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Okay" ), _( "Exit this menu." ), 0 );
@@ -229,7 +230,7 @@ namespace Editor
 {
     void openEditorSettings()
     {
-        // We should make configuration file writing only once to avoid extra I/O operations.
+        // We should write to the configuration file only once to avoid extra I/O operations.
         bool saveConfiguration = false;
         Settings & conf = Settings::Get();
 
@@ -237,7 +238,7 @@ namespace Editor
             Interface::EditorInterface & editorInterface = Interface::EditorInterface::Get();
 
             editorInterface.reset();
-            // Since radar interface has a restorer we must redraw it first to avoid the restorer do some nasty work.
+            // Since the radar interface has a restorer we must redraw it first to avoid the restorer doing something nasty.
             editorInterface.redraw( Interface::REDRAW_RADAR );
 
             uint32_t redrawOptions = Interface::REDRAW_ALL;
