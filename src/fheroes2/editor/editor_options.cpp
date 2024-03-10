@@ -30,8 +30,8 @@
 #include "dialog_graphics_settings.h"
 #include "dialog_hotkeys.h"
 #include "dialog_language_selection.h"
+#include "editor_interface.h"
 #include "game_hotkeys.h"
-#include "game_interface.h"
 #include "gamedefs.h"
 #include "icn.h"
 #include "image.h"
@@ -233,14 +233,19 @@ namespace Editor
         bool saveConfiguration = false;
         Settings & conf = Settings::Get();
 
-        auto redrawAdventureMap = []() {
-            Interface::AdventureMap & adventureMap = Interface::AdventureMap::Get();
+        auto redrawAdventureMap = [&conf]() {
+            Interface::EditorInterface & editorInterface = Interface::EditorInterface::Get();
 
-            adventureMap.reset();
+            editorInterface.reset();
             // Since radar interface has a restorer we must redraw it first to avoid the restorer do some nasty work.
-            adventureMap.redraw( Interface::REDRAW_RADAR );
+            editorInterface.redraw( Interface::REDRAW_RADAR );
 
-            adventureMap.redraw( Interface::REDRAW_ALL & ( ~Interface::REDRAW_RADAR ) );
+            uint32_t redrawOptions = Interface::REDRAW_ALL;
+            if ( conf.isEditorPassabilityEnabled() ) {
+                redrawOptions |= Interface::REDRAW_PASSABILITIES;
+            }
+
+            editorInterface.redraw( redrawOptions & ( ~Interface::REDRAW_RADAR ) );
         };
 
         DialogAction action = DialogAction::Configuration;
@@ -301,6 +306,8 @@ namespace Editor
             case DialogAction::Passabiility:
                 conf.setEditorPassability( !conf.isEditorPassabilityEnabled() );
                 saveConfiguration = true;
+
+                redrawAdventureMap();
 
                 action = DialogAction::Configuration;
                 break;
