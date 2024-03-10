@@ -53,11 +53,12 @@ namespace Battle
 
 namespace AI
 {
-    enum class AI_TYPE : int
+    enum class AIType : int
     {
         NORMAL
     };
-    enum AI_PERSONALITY
+
+    enum AIPersonality : int
     {
         NONE,
         WARRIOR,
@@ -136,7 +137,7 @@ namespace AI
     };
 
     // AI type selector, can be used sometime in the future
-    Base & Get( AI_TYPE type = AI_TYPE::NORMAL );
+    Base & Get( const AIType type = AIType::NORMAL );
 
     // Definitions are in the ai_hero_action.cpp
 
