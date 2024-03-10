@@ -167,8 +167,6 @@ namespace
 
         display.render();
 
-        bool isTextSupportModeEnabled = conf.isTextSupportModeEnabled();
-
         LocalEvent & le = LocalEvent::Get();
         while ( le.HandleEvents() ) {
             if ( le.MousePressLeft( okayButton.area() ) ) {
@@ -220,16 +218,6 @@ namespace
             }
             else if ( le.MousePressRight( okayButton.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Okay" ), _( "Exit this menu." ), 0 );
-            }
-
-            // Text support mode can be toggled using a global hotkey, we need to properly reflect this change in the UI
-            if ( isTextSupportModeEnabled != conf.isTextSupportModeEnabled() ) {
-                isTextSupportModeEnabled = conf.isTextSupportModeEnabled();
-
-                emptyDialogRestorer.restore();
-                drawOptions();
-
-                display.render( emptyDialogRestorer.rect() );
             }
         }
 
