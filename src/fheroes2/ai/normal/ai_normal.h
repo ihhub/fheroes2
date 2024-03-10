@@ -282,7 +282,7 @@ namespace AI
     class Normal : public Base
     {
     public:
-        Normal();
+        Normal() = default;
 
         void KingdomTurn( Kingdom & kingdom ) override;
         void BattleTurn( Battle::Arena & arena, const Battle::Unit & currentUnit, Battle::Actions & actions ) override;

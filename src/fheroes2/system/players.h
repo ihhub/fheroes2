@@ -30,6 +30,7 @@
 #include <utility>
 #include <vector>
 
+#include "ai_personality.h"
 #include "bitmodes.h"
 #include "color.h"
 
@@ -38,11 +39,6 @@ class StreamBase;
 namespace Maps
 {
     struct FileInfo;
-}
-
-namespace AI
-{
-    class Base;
 }
 
 class Castle;
@@ -207,7 +203,7 @@ protected:
     int friends;
     std::string name;
     Focus focus;
-    std::shared_ptr<AI::Base> _ai;
+    AI::Personality _aiPersonality{ AI::Personality::NONE };
     HandicapStatus _handicapStatus;
 
 #if defined( WITH_DEBUG )

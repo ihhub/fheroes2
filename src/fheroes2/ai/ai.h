@@ -58,14 +58,6 @@ namespace AI
         NORMAL
     };
 
-    enum AIPersonality : int
-    {
-        NONE,
-        WARRIOR,
-        BUILDER,
-        EXPLORER
-    };
-
     // Although AI heroes are capable to find their own tasks strategic AI should be able to focus them on most critical tasks
     enum class PriorityTaskType : int
     {
@@ -111,9 +103,6 @@ namespace AI
         virtual void CastlePreBattle( Castle & castle );
         virtual void CastleAfterBattle( Castle & castle, bool attackerWins );
 
-        virtual int GetPersonality() const; // To be utilized in future.
-        virtual std::string GetPersonalityString() const;
-
         virtual void Reset();
         virtual void resetPathfinder() = 0;
         virtual bool isValidHeroObject( const Heroes & hero, const int32_t index, const bool underHero ) = 0;
@@ -125,15 +114,7 @@ namespace AI
         virtual void tradingPostVisitEvent( Kingdom & kingdom ) = 0;
 
     protected:
-        int _personality{ NONE };
-
-        explicit Base( const int personality )
-            : _personality( personality )
-        {}
-
-    private:
-        friend StreamBase & operator<<( StreamBase &, const Base & );
-        friend StreamBase & operator>>( StreamBase &, Base & );
+        Base() = default;
     };
 
     // AI type selector, can be used sometime in the future
@@ -184,9 +165,6 @@ namespace AI
     // of at least 'fundsToObtain'. If the necessary funds cannot be obtained as a result of trading, then the current
     // funds of the kingdom remain unchanged. Returns true if the trade was successful, otherwise returns false.
     bool tradeAtMarketplace( Kingdom & kingdom, const Funds & fundsToObtain );
-
-    StreamBase & operator<<( StreamBase &, const AI::Base & );
-    StreamBase & operator>>( StreamBase &, AI::Base & );
 }
 
 #endif

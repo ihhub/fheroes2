@@ -32,9 +32,10 @@
     <ClCompile Include="src\fheroes2\agg\m82.cpp" />
     <ClCompile Include="src\fheroes2\agg\mus.cpp" />
     <ClCompile Include="src\fheroes2\agg\xmi.cpp" />
+    <ClCompile Include="src\fheroes2\ai\ai_base.cpp" />
     <ClCompile Include="src\fheroes2\ai\ai_common.cpp" />
     <ClCompile Include="src\fheroes2\ai\ai_hero_action.cpp" />
-    <ClCompile Include="src\fheroes2\ai\ai_base.cpp" />
+    <ClCompile Include="src\fheroes2\ai\ai_personality.cpp" />
     <ClCompile Include="src\fheroes2\ai\normal\ai_normal.cpp" />
     <ClCompile Include="src\fheroes2\ai\normal\ai_normal_battle.cpp" />
     <ClCompile Include="src\fheroes2\ai\normal\ai_normal_castle.cpp" />
@@ -273,6 +274,7 @@
     <ClInclude Include="src\fheroes2\agg\til.h" />
     <ClInclude Include="src\fheroes2\agg\xmi.h" />
     <ClInclude Include="src\fheroes2\ai\ai.h" />
+    <ClInclude Include="src\fheroes2\ai\ai_personality.h" />
     <ClInclude Include="src\fheroes2\ai\normal\ai_normal.h" />
     <ClInclude Include="src\fheroes2\army\army.h" />
     <ClInclude Include="src\fheroes2\army\army_bar.h" />

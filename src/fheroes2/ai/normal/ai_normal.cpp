@@ -36,10 +36,6 @@
 
 namespace AI
 {
-    Normal::Normal()
-        : Base( Rand::Get( WARRIOR, EXPLORER ) )
-    {}
-
     void Normal::resetPathfinder()
     {
         _pathfinder.reset();

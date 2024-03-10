@@ -43,6 +43,7 @@
 #include "save_format_version.h"
 #include "serialize.h"
 #include "settings.h"
+#include "translations.h"
 #include "world.h"
 
 namespace
@@ -105,14 +106,16 @@ Player::Player( int col )
     , color( col )
     , race( Race::NONE )
     , friends( col )
-    , _ai( std::make_shared<AI::Normal>() )
     , _handicapStatus( HandicapStatus::NONE )
 #if defined( WITH_DEBUG )
     , _isAIAutoControlMode( false )
     , _isAIAutoControlModePlanned( false )
 #endif
 {
-    // Do nothing.
+    using AIPersonalityUnderlyingType = std::underlying_type_t<decltype( _aiPersonality )>;
+
+    _aiPersonality = static_cast<AI::Personality>(
+        Rand::Get( static_cast<AIPersonalityUnderlyingType>( AI::Personality::WARRIOR ), static_cast<AIPersonalityUnderlyingType>( AI::Personality::EXPLORER ) ) );
 }
 
 std::string Player::GetDefaultName() const
@@ -143,7 +146,7 @@ int Player::GetControl() const
 
 std::string Player::GetPersonalityString() const
 {
-    return _ai->GetPersonalityString();
+    return AI::getPersonalityString( _aiPersonality );
 }
 
 bool Player::isPlay() const
@@ -250,11 +253,12 @@ StreamBase & operator>>( StreamBase & msg, Focus & focus )
 
 StreamBase & operator<<( StreamBase & msg, const Player & player )
 {
+    using AIPersonalityUnderlyingType = std::underlying_type_t<decltype( player._aiPersonality )>;
+
     const BitModes & modes = player;
 
-    assert( player._ai != nullptr );
-    msg << modes << player.control << player.color << player.race << player.friends << player.name << player.focus << *player._ai
-        << static_cast<uint8_t>( player._handicapStatus );
+    msg << modes << player.control << player.color << player.race << player.friends << player.name << player.focus
+        << static_cast<AIPersonalityUnderlyingType>( player._aiPersonality ) << static_cast<uint8_t>( player._handicapStatus );
     return msg;
 }
 
@@ -272,11 +276,15 @@ StreamBase & operator>>( StreamBase & msg, Player & player )
 
     msg >> player.control >> player.color >> player.race >> player.friends >> player.name >> player.focus;
 
-    assert( player._ai );
-    msg >> *player._ai;
+    using AIPersonalityUnderlyingType = std::underlying_type_t<decltype( player._aiPersonality )>;
+    static_assert( std::is_same_v<AIPersonalityUnderlyingType, int>, "Type of _aiPersonality has been changed, check the logic below" );
+
+    AIPersonalityUnderlyingType aiPersonality;
+    msg >> aiPersonality;
+
+    player._aiPersonality = static_cast<AI::Personality>( aiPersonality );
 
     uint8_t handicapStatusInt;
-
     msg >> handicapStatusInt;
 
     player._handicapStatus = static_cast<Player::HandicapStatus>( handicapStatusInt );

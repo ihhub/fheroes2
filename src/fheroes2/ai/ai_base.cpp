@@ -32,27 +32,6 @@ class Heroes;
 
 namespace AI
 {
-    int Base::GetPersonality() const
-    {
-        return _personality;
-    }
-
-    std::string Base::GetPersonalityString() const
-    {
-        switch ( _personality ) {
-        case WARRIOR:
-            return _( "Warrior" );
-        case BUILDER:
-            return _( "Builder" );
-        case EXPLORER:
-            return _( "Explorer" );
-        default:
-            break;
-        }
-
-        return _( "None" );
-    }
-
     void Base::Reset()
     {
         // Do nothing.
@@ -131,15 +110,5 @@ namespace AI
     void Base::HeroesPostLoad( Heroes & )
     {
         // Do nothing.
-    }
-
-    StreamBase & operator<<( StreamBase & msg, const AI::Base & instance )
-    {
-        return msg << instance._personality;
-    }
-
-    StreamBase & operator>>( StreamBase & msg, AI::Base & instance )
-    {
-        return msg >> instance._personality;
     }
 }

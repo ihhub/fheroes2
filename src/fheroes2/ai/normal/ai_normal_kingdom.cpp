@@ -938,12 +938,7 @@ namespace AI
                                     const bool moreTasksForHeroes )
     {
         const bool slowEarlyGame = world.CountDay() < 5 && sortedCastleList.size() == 1;
-        int32_t heroLimit = world.w() / Maps::SMALL + 1;
-
-        if ( _personality == EXPLORER )
-            ++heroLimit;
-        if ( slowEarlyGame )
-            heroLimit = 2;
+        const int32_t heroLimit = slowEarlyGame ? 2 : world.w() / Maps::SMALL + 2;
 
         if ( availableHeroCount >= heroLimit ) {
             return false;
