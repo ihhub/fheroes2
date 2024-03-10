@@ -306,7 +306,7 @@ namespace Interface
         const uint32_t combinedRedraw = _redraw | force;
 
         if ( combinedRedraw & REDRAW_GAMEAREA ) {
-            uint32_t renderFlags = LEVEL_OBJECTS | LEVEL_HEROES | LEVEL_ROUTES;
+            int renderFlags = LEVEL_OBJECTS | LEVEL_HEROES | LEVEL_ROUTES;
             if ( combinedRedraw & REDRAW_PASSABILITIES ) {
                 renderFlags |= LEVEL_PASSABILITIES;
             }
