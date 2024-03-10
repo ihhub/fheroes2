@@ -135,7 +135,7 @@ public:
         control = ctl;
     }
 
-    void SetPlay( bool );
+    void SetPlay( const bool f );
 
     void SetFriends( int f )
     {

@@ -104,17 +104,13 @@ Player::Player( int col )
     , color( col )
     , race( Race::NONE )
     , friends( col )
+    , _aiPersonality( static_cast<AI::Personality>( Rand::Get( static_cast<uint32_t>( AI::Personality::WARRIOR ), static_cast<uint32_t>( AI::Personality::EXPLORER ) ) ) )
     , _handicapStatus( HandicapStatus::NONE )
 #if defined( WITH_DEBUG )
     , _isAIAutoControlMode( false )
     , _isAIAutoControlModePlanned( false )
 #endif
-{
-    using AIPersonalityUnderlyingType = std::underlying_type_t<decltype( _aiPersonality )>;
-
-    _aiPersonality = static_cast<AI::Personality>(
-        Rand::Get( static_cast<AIPersonalityUnderlyingType>( AI::Personality::WARRIOR ), static_cast<AIPersonalityUnderlyingType>( AI::Personality::EXPLORER ) ) );
-}
+{}
 
 std::string Player::GetDefaultName() const
 {
@@ -162,12 +158,14 @@ void Player::SetName( const std::string & newName )
     }
 }
 
-void Player::SetPlay( bool f )
+void Player::SetPlay( const bool f )
 {
-    if ( f )
+    if ( f ) {
         SetModes( ST_INGAME );
-    else
+    }
+    else {
         ResetModes( ST_INGAME );
+    }
 }
 
 void Player::setHandicapStatus( const HandicapStatus status )
