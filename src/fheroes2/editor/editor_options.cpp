@@ -22,19 +22,14 @@
 
 #include <cassert>
 #include <cstdint>
-#include <string>
-#include <utility>
 #include <vector>
 
 #include "agg_image.h"
-#include "cursor.h"
 #include "dialog.h"
 #include "dialog_audio.h"
 #include "dialog_graphics_settings.h"
 #include "dialog_hotkeys.h"
-#include "dialog_interface_settings.h"
 #include "dialog_language_selection.h"
-#include "game_delays.h"
 #include "game_hotkeys.h"
 #include "game_interface.h"
 #include "gamedefs.h"
@@ -43,6 +38,7 @@
 #include "interface_base.h"
 #include "localevent.h"
 #include "math_base.h"
+#include "render_processor.h"
 #include "screen.h"
 #include "settings.h"
 #include "translations.h"
@@ -304,6 +300,13 @@ namespace Editor
             case DialogAction::Animation:
                 conf.setEditorAnimation( !conf.isEditorAnimationEnabled() );
                 saveConfiguration = true;
+
+                if ( conf.isEditorAnimationEnabled() ) {
+                    fheroes2::RenderProcessor::instance().startColorCycling();
+                }
+                else {
+                    fheroes2::RenderProcessor::instance().stopColorCycling();
+                }
 
                 action = DialogAction::Configuration;
                 break;
