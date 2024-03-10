@@ -253,16 +253,15 @@ namespace
         std::unique_ptr<fheroes2::h2d::H2DInitializer> _h2dInitializer;
     };
 
-    // This function checks the possible situation when a user uses a demo version
-    // of the game. There is no 100% way to detect it so many things are made with
-    // assumptions.
+    // This function checks for a possible situation when a user uses a demo version
+    // of the game. There is no 100% certain way to detect this, so assumptions are made.
     bool isProbablyDemoVersion()
     {
         if ( Settings::Get().isPriceOfLoyaltySupported() ) {
             return false;
         }
 
-        // A demo version of the game only has 1 map.
+        // The demo version of the game only has 1 map.
         const ListFiles maps = Settings::FindFiles( "maps", ".mp2", false );
         return maps.size() == 1;
     }

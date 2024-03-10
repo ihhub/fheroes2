@@ -550,8 +550,9 @@ fheroes2::GameMode Game::NewGame( const bool isProbablyDemoVersion )
 
     if ( isProbablyDemoVersion ) {
         fheroes2::showStandardTextMessage( _( "Warning!" ),
-                                           _( "You appear to be using the demo version of Heroes of Might and Magic II. "
-                                              "Please note that this version only allows one map to be played." ),
+                                           _( "fheroes2 needs data files from the original Heroes of Might and Magic II to operate. "
+                                              "You appear to be using the demo version of Heroes of Might and Magic II for this purpose. "
+                                              "Please note that only one scenario will be available in this setup." ),
                                            Dialog::OK );
     }
 
