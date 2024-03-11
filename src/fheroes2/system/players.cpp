@@ -57,16 +57,24 @@ namespace
 
     void resetFocus( Player * player )
     {
-        if ( player ) {
-            player->GetFocus().Reset();
+        if ( player == nullptr ) {
+            return;
         }
+
+        player->GetFocus().Reset();
     }
 
     void fixMultiControl( Player * player )
     {
-        if ( player && player->GetControl() == ( CONTROL_HUMAN | CONTROL_AI ) ) {
-            player->SetControl( CONTROL_AI );
+        if ( player == nullptr ) {
+            return;
         }
+
+        if ( player->GetControl() != ( CONTROL_HUMAN | CONTROL_AI ) ) {
+            return;
+        }
+
+        player->SetControl( CONTROL_AI );
     }
 
     void removeAlreadySelectedRaces( const Player * player, std::vector<int> & availableRaces )
@@ -79,16 +87,25 @@ namespace
 
     void fixRandomRace( Player * player, std::vector<int> & availableRaces )
     {
-        if ( player && player->GetRace() == Race::RAND ) {
-            if ( availableRaces.empty() ) {
-                player->SetRace( Race::Rand() );
-            }
-            else {
-                const int raceIndex = Rand::Get( 0, static_cast<uint32_t>( availableRaces.size() - 1 ) );
-                player->SetRace( availableRaces[raceIndex] );
-                availableRaces.erase( availableRaces.begin() + raceIndex );
-            }
+        if ( player == nullptr ) {
+            return;
         }
+
+        if ( player->GetRace() != Race::RAND ) {
+            return;
+        }
+
+        if ( availableRaces.empty() ) {
+            player->SetRace( Race::Rand() );
+
+            return;
+        }
+
+        const size_t raceIndex = Rand::Get( 0, static_cast<uint32_t>( availableRaces.size() - 1 ) );
+
+        player->SetRace( availableRaces[raceIndex] );
+
+        availableRaces.erase( availableRaces.begin() + raceIndex );
     }
 }
 
