@@ -2149,25 +2149,39 @@ namespace AI
 
                 // Safe tiles should not be located close to a tile accessible to an enemy hero, some margin is needed
                 const uint32_t enemyArmyMovePointsThreshold = enemyArmy.movePoints + Maps::Ground::slowestMovePenalty * 2;
+                // If the enemy hero can't cross paths with our hero anywhere, then it makes sense to use a rough but quick estimate. Otherwise, an accurate but
+                // relatively slow estimate will be used.
+                const bool useRoughEstimate = ( Maps::GetApproximateDistance( hero.GetIndex(), enemyArmy.index ) * Maps::Ground::fastestMovePenalty
+                                                > hero.GetMovePoints() + enemyArmyMovePointsThreshold );
 
-                // The enemy hero is too far away and does not pose a threat on the current turn
-                if ( Maps::GetApproximateDistance( hero.GetIndex(), enemyArmy.index ) * Maps::Ground::fastestMovePenalty
-                     > hero.GetMovePoints() + enemyArmyMovePointsThreshold ) {
-                    continue;
+                if ( !useRoughEstimate ) {
+                    // Pre-cache the pathfinder database for the enemy hero
+                    _pathfinder.reEvaluateIfNeeded( *enemyArmy.hero );
                 }
-
-                // Pre-cache the pathfinder database for the enemy hero
-                _pathfinder.reEvaluateIfNeeded( *enemyArmy.hero );
 
                 for ( size_t i = 0; i < result.size(); ++i ) {
                     const int32_t tileIdx = static_cast<int32_t>( i );
                     assert( Maps::isValidAbsIndex( tileIdx ) );
 
-                    // A tile is considered safe if the enemy hero does not have access to it (in particular, if it is hidden from him in the fog) or he cannot reach it
-                    // within one turn. The potential ability of the enemy hero to use spells to move to this tile (for example, the Dimension Door or Town Portal) is not
-                    // considered in this assessment.
-                    const uint32_t dist = _pathfinder.getDistance( tileIdx );
-                    if ( dist == 0 || dist > enemyArmyMovePointsThreshold ) {
+                    const auto [dist, isTileConsideredSafe] = [this, enemyArmyIdx = enemyArmy.index, enemyArmyMovePointsThreshold, useRoughEstimate, tileIdx]() {
+                        if ( useRoughEstimate ) {
+                            const uint32_t dist = Maps::GetApproximateDistance( tileIdx, enemyArmyIdx ) * Maps::Ground::fastestMovePenalty;
+
+                            // When using a rough estimate, a tile is considered safe if the enemy hero cannot reach it within one turn, even if the path from the enemy
+                            // hero to this tile is straight and with a minimum movement penalty. The potential ability of the enemy hero to use spells to move to this
+                            // tile (for example, the Dimension Door or Town Portal) is not considered in this assessment.
+                            return std::make_pair( dist, dist > enemyArmyMovePointsThreshold );
+                        }
+
+                        const uint32_t dist = _pathfinder.getDistance( tileIdx );
+
+                        // When using an accurate estimate, a tile is considered safe if the enemy hero does not have access to it (in particular, if it is hidden from
+                        // him in the fog) or he cannot reach it within one turn. The potential ability of the enemy hero to use spells to move to this tile (for example,
+                        // the Dimension Door or Town Portal) is not considered in this assessment.
+                        return std::make_pair( dist, dist == 0 || dist > enemyArmyMovePointsThreshold );
+                    }();
+
+                    if ( isTileConsideredSafe ) {
                         continue;
                     }
 
