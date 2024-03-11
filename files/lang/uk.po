@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-06 22:25+0000\n"
+"POT-Creation-Date: 2024-03-10 10:14+0000\n"
 "PO-Revision-Date: 2024-03-04 10:28+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -4946,6 +4946,13 @@ msgstr "Гость"
 msgid ""
 "The guest waits for the host to set up the game, then is automatically added "
 "in. There can be multiple guests for TCP/IP games."
+msgstr ""
+
+msgid ""
+"fheroes2 needs data files from the original Heroes of Might and Magic II to "
+"operate. You appear to be using the demo version of Heroes of Might and "
+"Magic II for this purpose. Please note that only one scenario will be "
+"available in this setup."
 msgstr ""
 
 msgid ""
@@ -10665,41 +10672,3 @@ msgstr ""
 "Перевірити нову версію гри на\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#, fuzzy
-#~ msgid "editorErasure|Terrain"
-#~ msgstr "Місцевість"
-
-#~ msgid "Fast separation into slots:"
-#~ msgstr "Швидке розподілення по слотах."
-
-#~ msgid "disable build."
-#~ msgstr "будівництво недоступне."
-
-#~ msgid "on"
-#~ msgstr "увімк."
-
-#, fuzzy
-#~ msgid ""
-#~ "%{skill} increases the damage done by the hero's range attacking "
-#~ "creatures by %{count} percent."
-#~ msgstr ""
-#~ "%{skill} підвищує шкоду від істот, що атакують з відстані на %{count} "
-#~ "відсотків."
-
-#, fuzzy
-#~ msgid "Castles"
-#~ msgstr "Замок"
-
-#, fuzzy
-#~ msgid "Ocean object"
-#~ msgstr "Порожнє місце"
-
-#~ msgid "Desert Objects"
-#~ msgstr "Об'єкти Пустелі"
-
-#~ msgid "vs"
-#~ msgstr "проти"
-
-#~ msgid "%{race2} %{name2}"
-#~ msgstr "%{race2} %{name2}"

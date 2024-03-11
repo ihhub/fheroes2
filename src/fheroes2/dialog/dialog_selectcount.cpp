@@ -254,7 +254,7 @@ bool Dialog::InputString( const std::string & header, std::string & res, const s
     const fheroes2::Rect & box_rt = box.GetArea();
 
     if ( !title.empty() ) {
-        titlebox.draw( box_rt.x + ( box_rt.width - textbox.width() ) / 2, box_rt.y + 12, BOXAREA_WIDTH, display );
+        titlebox.draw( box_rt.x, box_rt.y + 12, BOXAREA_WIDTH, display );
     }
 
     // text

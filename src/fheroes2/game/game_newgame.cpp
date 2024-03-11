@@ -507,7 +507,7 @@ fheroes2::GameMode Game::NewNetwork()
     return fheroes2::GameMode::MAIN_MENU;
 }
 
-fheroes2::GameMode Game::NewGame()
+fheroes2::GameMode Game::NewGame( const bool isProbablyDemoVersion )
 {
     outputNewMenuInTextSupportMode();
 
@@ -547,6 +547,14 @@ fheroes2::GameMode Game::NewGame()
     fheroes2::validateFadeInAndRender();
 
     LocalEvent & le = LocalEvent::Get();
+
+    if ( isProbablyDemoVersion ) {
+        fheroes2::showStandardTextMessage( _( "Warning!" ),
+                                           _( "fheroes2 needs data files from the original Heroes of Might and Magic II to operate. "
+                                              "You appear to be using the demo version of Heroes of Might and Magic II for this purpose. "
+                                              "Please note that only one scenario will be available in this setup." ),
+                                           Dialog::OK );
+    }
 
     while ( le.HandleEvents() ) {
         le.MousePressLeft( buttonStandardGame.area() ) ? buttonStandardGame.drawOnPress() : buttonStandardGame.drawOnRelease();

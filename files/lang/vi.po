@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-06 22:25+0000\n"
+"POT-Creation-Date: 2024-03-10 10:14+0000\n"
 "PO-Revision-Date: 2024-02-20 08:49+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -5041,6 +5041,13 @@ msgid ""
 msgstr ""
 "Khách đợi chủ nhà thiết lập trò chơi, sau đó sẽ tự động được thêm vào. Có "
 "thể có nhiều khách cho trò chơi TCP/IP."
+
+msgid ""
+"fheroes2 needs data files from the original Heroes of Might and Magic II to "
+"operate. You appear to be using the demo version of Heroes of Might and "
+"Magic II for this purpose. Please note that only one scenario will be "
+"available in this setup."
+msgstr ""
 
 #, fuzzy
 msgid ""
@@ -11462,82 +11469,3 @@ msgstr ""
 "Kiểm tra phiên bản mới nhất của trò chơi tại\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid "Fast separation into slots:"
-#~ msgstr "Chia nhanh vào các ô:"
-
-#~ msgid "disable build."
-#~ msgstr "xây dựng bị vô hiệu."
-
-#~ msgid "on"
-#~ msgstr "bật"
-
-#~ msgid "Toggle colored cursor on or off. This is only an esthetic choice."
-#~ msgstr "Bật hoặc tắt con trỏ màu. Đây chỉ là một sự lựa chọn thẩm mỹ."
-
-#, fuzzy
-#~ msgid ""
-#~ "%{skill} increases the damage done by the hero's range attacking "
-#~ "creatures by %{count} percent."
-#~ msgstr ""
-#~ "%{skill} tăng sát thương do các sinh vật tấn công trong phạm vi gây ra "
-#~ "thêm %{count} phần trăm."
-
-#~ msgid "Terrain"
-#~ msgstr "Địa hình"
-
-#~ msgid "Castles"
-#~ msgstr "Lâu đài"
-
-#~ msgid "Ocean object"
-#~ msgstr "Đối tượng đại dương"
-
-#~ msgid "Ocean Objects"
-#~ msgstr "Đối tượng Đại dương"
-
-#~ msgid "Grass Objects"
-#~ msgstr "Đối tượng Cỏ"
-
-#~ msgid "Snow Objects"
-#~ msgstr "Đối tượng Tuyết"
-
-#~ msgid "Swamp Objects"
-#~ msgstr "Đối tượng Đầm lầy"
-
-#~ msgid "Lava Objects"
-#~ msgstr "Đối tượng Nham thạch"
-
-#~ msgid "Desert Objects"
-#~ msgstr "Đối tượng Sa mạc"
-
-#~ msgid "Dirt Objects"
-#~ msgstr "Đối tượng Bùn"
-
-#~ msgid "Beach Objects"
-#~ msgstr "Đối tượng Biển"
-
-#~ msgid "Used to place objects most appropriate for use on %{terrain}."
-#~ msgstr "Dùng để đặt các vật thể thích hợp nhất để sử dụng trên %{terrain}."
-
-#~ msgid ""
-#~ "Used to place\n"
-#~ "a town or castle."
-#~ msgstr ""
-#~ "Để đặt vị trí\n"
-#~ "một thị trấn hoặc lâu đài."
-
-#~ msgid "Used to place an artifact."
-#~ msgstr "Dùng để đặt một bảo vật."
-
-#~ msgid ""
-#~ "Used to place\n"
-#~ "a resource or treasure."
-#~ msgstr ""
-#~ "Dùng để đặt\n"
-#~ "một tài nguyên hoặc kho báu."
-
-#~ msgid "vs"
-#~ msgstr "vs"
-
-#~ msgid "%{race2} %{name2}"
-#~ msgstr "%{race2} %{name2}"
