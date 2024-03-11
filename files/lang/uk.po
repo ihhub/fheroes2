@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-03-10 10:14+0000\n"
-"PO-Revision-Date: 2024-03-11 17:03+0200\n"
+"PO-Revision-Date: 2024-03-11 17:36+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: uk\n"
@@ -2944,7 +2944,7 @@ msgid "Total: "
 msgstr "Загалом: "
 
 msgid "Need: "
-msgstr "Потрібно:"
+msgstr "Потрібно: "
 
 msgid "Load Game"
 msgstr "Завантажити Гру"
@@ -2980,13 +2980,13 @@ msgid "Graphics"
 msgstr "Графіка"
 
 msgid "Black & White"
-msgstr "Чорно-біле"
+msgstr "Чорно-білий"
 
 msgid "Mouse Cursor"
 msgstr "Вказівник миші"
 
 msgid "Color"
-msgstr "Колір"
+msgstr "Кольоровий"
 
 msgid "Text Support"
 msgstr "Текстовий опис"
