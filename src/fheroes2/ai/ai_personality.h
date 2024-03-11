@@ -32,5 +32,6 @@ namespace AI
         EXPLORER
     };
 
+    Personality getRandomPersonality();
     std::string getPersonalityString( const Personality personality );
 }

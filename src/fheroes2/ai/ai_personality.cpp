@@ -20,7 +20,13 @@
 
 #include "ai_personality.h"
 
+#include "rand.h"
 #include "translations.h"
+
+AI::Personality AI::getRandomPersonality()
+{
+    return Rand::Get( Personality::WARRIOR, Personality::EXPLORER );
+}
 
 std::string AI::getPersonalityString( const Personality personality )
 {

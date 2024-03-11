@@ -110,7 +110,8 @@ public:
         SEVERE, // 30% fewer resources per turn
     };
 
-    explicit Player( int col = Color::NONE );
+    explicit Player( const int col = Color::NONE );
+
     ~Player() override = default;
 
     bool isColor( int col ) const

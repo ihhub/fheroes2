@@ -54,37 +54,40 @@ namespace
     {
         ST_INGAME = 0x2000
     };
-}
 
-void PlayerFocusReset( Player * player )
-{
-    if ( player )
-        player->GetFocus().Reset();
-}
-
-void PlayerFixMultiControl( Player * player )
-{
-    if ( player && player->GetControl() == ( CONTROL_HUMAN | CONTROL_AI ) )
-        player->SetControl( CONTROL_AI );
-}
-
-void PlayerRemoveAlreadySelectedRaces( const Player * player, std::vector<int> & availableRaces )
-{
-    const int raceToRemove = player->GetRace();
-    availableRaces.erase( remove_if( availableRaces.begin(), availableRaces.end(), [raceToRemove]( const int race ) { return raceToRemove == race; } ),
-                          availableRaces.end() );
-}
-
-void PlayerFixRandomRace( Player * player, std::vector<int> & availableRaces )
-{
-    if ( player && player->GetRace() == Race::RAND ) {
-        if ( availableRaces.empty() ) {
-            player->SetRace( Race::Rand() );
+    void resetFocus( Player * player )
+    {
+        if ( player ) {
+            player->GetFocus().Reset();
         }
-        else {
-            const int raceIndex = Rand::Get( 0, static_cast<uint32_t>( availableRaces.size() - 1 ) );
-            player->SetRace( availableRaces[raceIndex] );
-            availableRaces.erase( availableRaces.begin() + raceIndex );
+    }
+
+    void fixMultiControl( Player * player )
+    {
+        if ( player && player->GetControl() == ( CONTROL_HUMAN | CONTROL_AI ) ) {
+            player->SetControl( CONTROL_AI );
+        }
+    }
+
+    void removeAlreadySelectedRaces( const Player * player, std::vector<int> & availableRaces )
+    {
+        const int raceToRemove = player->GetRace();
+
+        availableRaces.erase( remove_if( availableRaces.begin(), availableRaces.end(), [raceToRemove]( const int race ) { return raceToRemove == race; } ),
+                              availableRaces.end() );
+    }
+
+    void fixRandomRace( Player * player, std::vector<int> & availableRaces )
+    {
+        if ( player && player->GetRace() == Race::RAND ) {
+            if ( availableRaces.empty() ) {
+                player->SetRace( Race::Rand() );
+            }
+            else {
+                const int raceIndex = Rand::Get( 0, static_cast<uint32_t>( availableRaces.size() - 1 ) );
+                player->SetRace( availableRaces[raceIndex] );
+                availableRaces.erase( availableRaces.begin() + raceIndex );
+            }
         }
     }
 }
@@ -99,12 +102,12 @@ bool Control::isControlHuman() const
     return ( CONTROL_HUMAN & GetControl() ) != 0;
 }
 
-Player::Player( int col )
+Player::Player( const int col /* = Color::NONE */ )
     : control( CONTROL_NONE )
     , color( col )
     , race( Race::NONE )
     , friends( col )
-    , _aiPersonality( static_cast<AI::Personality>( Rand::Get( static_cast<uint32_t>( AI::Personality::WARRIOR ), static_cast<uint32_t>( AI::Personality::EXPLORER ) ) ) )
+    , _aiPersonality( AI::getRandomPersonality() )
     , _handicapStatus( HandicapStatus::NONE )
 #if defined( WITH_DEBUG )
     , _isAIAutoControlMode( false )
@@ -481,18 +484,22 @@ std::vector<int> Players::getInPlayOpponents( const int color )
 void Players::SetPlayerInGame( int color, bool f )
 {
     Player * player = Get( color );
-    if ( player )
-        player->SetPlay( f );
+    if ( player == nullptr ) {
+        return;
+    }
+
+    player->SetPlay( f );
 }
 
 void Players::SetStartGame()
 {
-    vector<int> races = { Race::KNGT, Race::BARB, Race::SORC, Race::WRLK, Race::WZRD, Race::NECR };
+    std::vector<int> races = { Race::KNGT, Race::BARB, Race::SORC, Race::WRLK, Race::WZRD, Race::NECR };
+
     for_each( begin(), end(), []( Player * player ) { player->SetPlay( true ); } );
-    for_each( begin(), end(), []( Player * player ) { PlayerFocusReset( player ); } );
-    for_each( begin(), end(), [&races]( const Player * player ) { PlayerRemoveAlreadySelectedRaces( player, races ); } );
-    for_each( begin(), end(), [&races]( Player * player ) { PlayerFixRandomRace( player, races ); } );
-    for_each( begin(), end(), []( Player * player ) { PlayerFixMultiControl( player ); } );
+    for_each( begin(), end(), []( Player * player ) { resetFocus( player ); } );
+    for_each( begin(), end(), [&races]( const Player * player ) { removeAlreadySelectedRaces( player, races ); } );
+    for_each( begin(), end(), [&races]( Player * player ) { fixRandomRace( player, races ); } );
+    for_each( begin(), end(), []( Player * player ) { fixMultiControl( player ); } );
 
     _currentColor = Color::NONE;
     humanColors = Color::NONE;
