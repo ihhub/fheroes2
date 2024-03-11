@@ -34,6 +34,7 @@
 #include "battle.h"
 #include "battle_animation.h"
 #include "battle_board.h"
+#include "battle_troop.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "icn.h"
@@ -61,7 +62,6 @@ namespace Battle
     class Position;
     class StatusListBox;
     class Tower;
-    class Unit;
     class Units;
 
     void DialogBattleSettings();
@@ -476,6 +476,57 @@ namespace Battle
         };
 
         BridgeMovementAnimation _bridgeAnimation;
+
+        struct SwipeAttack
+        {
+            void setSrc( int theme, int32_t index, const Unit * unit )
+            {
+                currentUnit = unit;
+                srcTheme = theme;
+                srcCellIndex = index;
+            }
+
+            void setDst( int theme, int32_t index )
+            {
+                dstTheme = theme;
+                dstCellIndex = index;
+            }
+
+            bool isValidDestination( int theme, int32_t index ) const
+            {
+                if ( !currentUnit ) {
+                    return false;
+                }
+
+                if ( !Board::isNearIndexes( srcCellIndex, index ) ) {
+                    return false;
+                }
+
+                if ( theme < Cursor::SWORD_TOPRIGHT || theme > Cursor::SWORD_BOTTOM ) {
+                    return false;
+                }
+
+                if ( srcTheme != Cursor::WAR_MOVE && srcTheme != Cursor::WAR_FLY && srcCellIndex != currentUnit->GetHeadIndex()
+                     && srcCellIndex != currentUnit->GetTailIndex() ) {
+                    return false;
+                }
+
+                return true;
+            }
+
+            bool isValid() const
+            {
+                return isValidDestination( dstTheme, dstCellIndex );
+            }
+
+            const Unit * currentUnit{ nullptr };
+            int32_t srcCellIndex{ -1 };
+            int32_t dstCellIndex{ -1 };
+            int srcTheme{ Cursor::NONE };
+            int dstTheme{ Cursor::NONE };
+        };
+
+        SwipeAttack _swipeAttack;
 
         // TODO: While currently we don't need to persist 'UnitSpellEffectInfos' between render functions,
         // this may be needed in the future (for example, in expansion) to display some sprites over
