@@ -2164,6 +2164,11 @@ namespace AI
                     assert( Maps::isValidAbsIndex( tileIdx ) );
 
                     const auto [distToTile, isTileConsideredSafe] = [this, enemyArmyIdx = enemyArmy.index, enemyArmyMovePointsThreshold, useRoughEstimate, tileIdx]() {
+                        // The tile on which the enemy hero is located is always considered unsafe
+                        if ( tileIdx == enemyArmyIdx ) {
+                            return std::make_pair( static_cast<uint32_t>( 0 ), false );
+                        }
+
                         if ( useRoughEstimate ) {
                             const uint32_t dist = Maps::GetApproximateDistance( tileIdx, enemyArmyIdx ) * Maps::Ground::fastestMovePenalty;
 
