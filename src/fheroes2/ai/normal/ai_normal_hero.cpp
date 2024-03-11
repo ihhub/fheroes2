@@ -2163,7 +2163,7 @@ namespace AI
                     const int32_t tileIdx = static_cast<int32_t>( i );
                     assert( Maps::isValidAbsIndex( tileIdx ) );
 
-                    const auto [dist, isTileConsideredSafe] = [this, enemyArmyIdx = enemyArmy.index, enemyArmyMovePointsThreshold, useRoughEstimate, tileIdx]() {
+                    const auto [distToTile, isTileConsideredSafe] = [this, enemyArmyIdx = enemyArmy.index, enemyArmyMovePointsThreshold, useRoughEstimate, tileIdx]() {
                         if ( useRoughEstimate ) {
                             const uint32_t dist = Maps::GetApproximateDistance( tileIdx, enemyArmyIdx ) * Maps::Ground::fastestMovePenalty;
 
@@ -2187,7 +2187,7 @@ namespace AI
 
                     // The penalty is cumulative (i.e. this is the sum of the penalties from all threatening heroes), the penalty from each threatening hero increases
                     // linearly as the distance to that hero decreases
-                    result[i] += dangerousTaskPenalty * ( 2.0 - static_cast<double>( dist ) / static_cast<double>( enemyArmyMovePointsThreshold ) );
+                    result[i] += dangerousTaskPenalty * ( 2.0 - static_cast<double>( distToTile ) / static_cast<double>( enemyArmyMovePointsThreshold ) );
                 }
             }
 
