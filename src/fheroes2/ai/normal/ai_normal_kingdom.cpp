@@ -519,6 +519,12 @@ namespace AI
         // if no our heroes exist. So we are temporary removing them from the map.
         const TemporaryHeroEraser heroEraser( kingdom.GetHeroes() );
 
+        const AIWorldPathfinderStateRestorer pathfinderStateRestorer( _pathfinder );
+
+        // Use the "optimistic" pathfinder settings for enemy armies - minimal army advantage, minimal reserve of spell points
+        _pathfinder.setMinimalArmyStrengthAdvantage( ARMY_ADVANTAGE_DESPERATE );
+        _pathfinder.setSpellPointsReserveRatio( 0.0 );
+
         for ( const auto & [dummy, enemyArmy] : _enemyArmies ) {
             for ( const Castle * castle : kingdom.GetCastles() ) {
                 if ( castle == nullptr ) {
@@ -542,6 +548,12 @@ namespace AI
         // if no our heroes exist. So we are temporary removing them from the map.
         const TemporaryHeroEraser heroEraser( kingdom.GetHeroes() );
 
+        const AIWorldPathfinderStateRestorer pathfinderStateRestorer( _pathfinder );
+
+        // Use the "optimistic" pathfinder settings for enemy armies - minimal army advantage, minimal reserve of spell points
+        _pathfinder.setMinimalArmyStrengthAdvantage( ARMY_ADVANTAGE_DESPERATE );
+        _pathfinder.setSpellPointsReserveRatio( 0.0 );
+
         for ( const Castle * castle : kingdom.GetCastles() ) {
             if ( castle == nullptr ) {
                 // How is it even possible? Check the logic!
@@ -559,6 +571,12 @@ namespace AI
         // if no our heroes exist. So we are temporary removing them from the map.
         const TemporaryHeroEraser heroEraser( castle.GetKingdom().GetHeroes() );
 
+        const AIWorldPathfinderStateRestorer pathfinderStateRestorer( _pathfinder );
+
+        // Use the "optimistic" pathfinder settings for enemy armies - minimal army advantage, minimal reserve of spell points
+        _pathfinder.setMinimalArmyStrengthAdvantage( ARMY_ADVANTAGE_DESPERATE );
+        _pathfinder.setSpellPointsReserveRatio( 0.0 );
+
         for ( const auto & [dummy, enemyArmy] : _enemyArmies ) {
             updateIndividualPriorityForCastle( castle, enemyArmy );
         }
@@ -575,16 +593,7 @@ namespace AI
             return false;
         }
 
-        const uint32_t dist = [this, &enemyArmy, castleIndex]() {
-            const AIWorldPathfinderStateRestorer pathfinderStateRestorer( _pathfinder );
-
-            // Use the "optimistic" pathfinder settings for enemy armies - minimal army advantage, minimal reserve of spell points
-            _pathfinder.setMinimalArmyStrengthAdvantage( ARMY_ADVANTAGE_DESPERATE );
-            _pathfinder.setSpellPointsReserveRatio( 0.0 );
-
-            return _pathfinder.getDistance( enemyArmy.index, castleIndex, enemyArmy.color, enemyArmy.strength );
-        }();
-
+        const uint32_t dist = _pathfinder.getDistance( enemyArmy.index, castleIndex, enemyArmy.color, enemyArmy.strength );
         if ( dist == 0 || dist >= threatDistanceLimit ) {
             return false;
         }
