@@ -170,11 +170,11 @@ int DialogSelectSecondary( const std::string & name, const int primarySkillType,
         le.MousePressLeft( button_learn2.area() ) ? button_learn2.drawOnPress() : button_learn2.drawOnRelease();
         le.MousePressLeft( button_hero.area() ) ? button_hero.drawOnPress() : button_hero.drawOnRelease();
 
-        if ( le.MouseClickLeft( button_learn1.area() ) ) {
+        if ( le.MouseClickLeft( button_learn1.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_LEFT ) ) {
             return sec1.Skill();
         }
 
-        if ( le.MouseClickLeft( button_learn2.area() ) ) {
+        if ( le.MouseClickLeft( button_learn2.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_RIGHT ) ) {
             return sec2.Skill();
         }
 
