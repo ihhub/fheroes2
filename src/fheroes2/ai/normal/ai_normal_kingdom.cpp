@@ -901,6 +901,8 @@ namespace AI
         // Sync the list of castles (if new ones were captured during the turn)
         if ( castles.size() != sortedCastleList.size() ) {
             evaluateRegionSafety();
+
+            castlesInDanger = findCastlesInDanger( kingdom );
             sortedCastleList = getSortedCastleList( castles, castlesInDanger );
         }
 
