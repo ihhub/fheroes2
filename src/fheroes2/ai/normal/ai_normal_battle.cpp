@@ -655,6 +655,8 @@ namespace AI
                     return true;
                 }();
 
+                const int minHeroTotalPrimarySkillLevelForRetreat = 10;
+
                 if ( !arena.CanRetreatOpponent( _myColor ) ) {
                     if ( !isAbleToSurrender ) {
                         return Outcome::ContinueBattle;
@@ -672,7 +674,7 @@ namespace AI
                     }
 
                     // Otherwise, if this hero is relatively experienced, then he should surrender so that he can be hired again later
-                    if ( actualHero->GetLevel() >= Difficulty::getMinHeroLevelForAIRetreat( gameDifficulty ) ) {
+                    if ( actualHero->getTotalPrimarySkillLevel() >= minHeroTotalPrimarySkillLevelForRetreat ) {
                         return Outcome::Surrender;
                     }
 
@@ -692,7 +694,7 @@ namespace AI
                 }
 
                 // Otherwise, if this hero is relatively experienced, then he should retreat so that he can be hired again later
-                if ( actualHero->GetLevel() >= Difficulty::getMinHeroLevelForAIRetreat( gameDifficulty ) ) {
+                if ( actualHero->getTotalPrimarySkillLevel() >= minHeroTotalPrimarySkillLevelForRetreat ) {
                     return Outcome::Retreat;
                 }
 

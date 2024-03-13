@@ -127,11 +127,6 @@ int Difficulty::GetHeroMovementBonusForAI( int difficulty )
     return 0;
 }
 
-int Difficulty::getMinHeroLevelForAIRetreat( const int /* difficulty */ )
-{
-    return 3;
-}
-
 double Difficulty::getArmyStrengthRatioForAIRetreat( const int difficulty )
 {
     switch ( difficulty ) {

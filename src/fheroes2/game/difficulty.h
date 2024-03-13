@@ -57,9 +57,6 @@ namespace Difficulty
 
     int GetHeroMovementBonusForAI( int difficulty );
 
-    // Returns the minimum hero level at which the AI can consider the possibility of surrender or retreat from the battlefield for this hero
-    int getMinHeroLevelForAIRetreat( const int difficulty );
-
     // Returns the ratio of the strength of the enemy army to the strength of the AI army, above which the AI decides to surrender or retreat from the battlefield
     double getArmyStrengthRatioForAIRetreat( const int difficulty );
 
