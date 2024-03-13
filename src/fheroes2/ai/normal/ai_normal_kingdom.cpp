@@ -480,12 +480,16 @@ namespace AI
     std::vector<AICastle> Normal::getSortedCastleList( const VecCastles & castles, const std::set<int> & castlesInDanger )
     {
         std::vector<AICastle> sortedCastleList;
+        sortedCastleList.reserve( castles.size() );
+
         for ( Castle * castle : castles ) {
-            if ( !castle )
+            if ( castle == nullptr ) {
                 continue;
+            }
 
             const int32_t castleIndex = castle->GetIndex();
             const uint32_t regionID = world.GetTiles( castleIndex ).GetRegion();
+
             sortedCastleList.emplace_back( castle, castlesInDanger.count( castleIndex ) > 0, _regions[regionID].safetyFactor, castle->getBuildingValue() );
         }
 
@@ -569,7 +573,8 @@ namespace AI
         const uint32_t threatDistanceLimit = 3000;
 
         const int32_t castleIndex = castle.GetIndex();
-        // skip precise distance check if army is too far to be a threat
+
+        // Skip precise distance check if army is too far to be a threat
         if ( Maps::GetApproximateDistance( enemyArmy.index, castleIndex ) * Maps::Ground::roadPenalty > threatDistanceLimit ) {
             return false;
         }
