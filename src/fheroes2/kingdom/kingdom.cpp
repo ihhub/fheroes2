@@ -25,8 +25,6 @@
 
 #include <algorithm>
 #include <cassert>
-#include <cstddef>
-#include <memory>
 #include <ostream>
 #include <string>
 #include <vector>
@@ -244,19 +242,6 @@ void Kingdom::ActionNewDayResourceUpdate( const std::function<void( const EventD
     // Skip the income for the first day
     if ( world.CountDay() > 1 ) {
         AddFundsResource( GetIncome() );
-
-        // Resource bonuses from campaign awards
-        if ( isControlHuman() && Settings::Get().isCampaignGameType() ) {
-            const std::vector<Campaign::CampaignAwardData> campaignAwards = Campaign::CampaignSaveData::Get().getObtainedCampaignAwards();
-
-            for ( size_t i = 0; i < campaignAwards.size(); ++i ) {
-                if ( campaignAwards[i]._type != Campaign::CampaignAwardData::TYPE_RESOURCE_BONUS ) {
-                    continue;
-                }
-
-                AddFundsResource( Funds( campaignAwards[i]._subType, campaignAwards[i]._amount ) );
-            }
-        }
     }
 
     const bool isAIPlayer = ( GetControl() == CONTROL_AI );
@@ -710,7 +695,7 @@ Funds Kingdom::GetIncome( int type /* = INCOME_ALL */ ) const
         }
     }
 
-    if ( ( type & INCOME_CAMPAIGN_BONUS ) && Settings::Get().isCampaignGameType() ) {
+    if ( isControlHuman() && ( type & INCOME_CAMPAIGN_BONUS ) && Settings::Get().isCampaignGameType() ) {
         const std::vector<Campaign::CampaignAwardData> awards = Campaign::CampaignSaveData::Get().getObtainedCampaignAwards();
         for ( const Campaign::CampaignAwardData & award : awards ) {
             if ( award._type != Campaign::CampaignAwardData::TYPE_RESOURCE_BONUS ) {

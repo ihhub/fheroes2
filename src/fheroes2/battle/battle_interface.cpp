@@ -2747,6 +2747,10 @@ void Battle::Interface::HumanTurn( const Unit & unit, Actions & actions )
             Redraw();
             humanturn_redraw = false;
         }
+        else if ( listlog && listlog->IsNeedRedraw() ) {
+            listlog->Redraw();
+            fheroes2::Display::instance().render( listlog->GetArea() );
+        }
     }
 
     popup.Reset();
@@ -2796,7 +2800,29 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
     // Add offsets to inner objects
     const fheroes2::Rect mainTowerRect = main_tower + _interfacePosition.getPosition();
     const fheroes2::Rect turnOrderRect = _turnOrder + _interfacePosition.getPosition();
-    if ( Arena::GetTower( TowerType::TWR_CENTER ) && le.MouseCursor( mainTowerRect ) ) {
+    fheroes2::Rect battleFieldRect{ _interfacePosition.x, _interfacePosition.y, _interfacePosition.width, _interfacePosition.height - status.height };
+
+    // Swipe attack motion finished, but the destination was outside the arena. We need to clear the swipe attack state.
+    if ( !le.isDragInProgress() && Board::isValidIndex( _swipeAttack.srcCellIndex ) && !Board::isValidIndex( index_pos ) ) {
+        _swipeAttack = {};
+    }
+
+    bool doListlogProcessing = listlog && listlog->isOpenLog();
+
+    if ( doListlogProcessing ) {
+        const fheroes2::Rect & lislogRect = listlog->GetArea();
+        battleFieldRect.height -= lislogRect.height;
+
+        // Do battle log event processing only if mouse pointer is over it.
+        doListlogProcessing = le.MouseCursor( lislogRect ) || le.MousePressLeft( lislogRect );
+    }
+
+    if ( doListlogProcessing ) {
+        cursor.SetThemes( Cursor::WAR_POINTER );
+
+        listlog->QueueEventProcessing();
+    }
+    else if ( Arena::GetTower( TowerType::TWR_CENTER ) && le.MouseCursor( mainTowerRect ) ) {
         cursor.SetThemes( Cursor::WAR_INFO );
         msg = _( "View Ballista info" );
 
@@ -2919,13 +2945,32 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
             humanturn_redraw = true;
         }
     }
-    else if ( listlog && listlog->isOpenLog() && le.MouseCursor( listlog->GetArea() ) ) {
-        cursor.SetThemes( Cursor::WAR_POINTER );
+    else if ( le.MouseCursor( battleFieldRect ) ) {
+        int themes = GetBattleCursor( msg );
 
-        listlog->QueueEventProcessing();
-    }
-    else if ( le.MouseCursor( { _interfacePosition.x, _interfacePosition.y, _interfacePosition.width, _interfacePosition.height - status.height } ) ) {
-        const int themes = GetBattleCursor( msg );
+        if ( _swipeAttack.isValid() ) {
+            // The swipe attack motion is either in progress or has finished.
+            if ( index_pos == _swipeAttack.dstCellIndex ) {
+                // The cursor is above the stored destination, we should display the stored attack theme.
+                themes = _swipeAttack.dstTheme;
+            }
+            else {
+                // The cursor has left the destination. Abort the swipe attack.
+                _swipeAttack = {};
+                _boardActionIntent = {};
+            }
+        }
+        else if ( _swipeAttack.isValidDestination( themes, index_pos ) ) {
+            // Valid swipe attack target cell. Calculate the attack angle based on destination and source cells.
+            themes = GetSwordCursorDirection( Board::GetDirection( index_pos, _swipeAttack.srcCellIndex ) );
+
+            // Remember the swipe destination cell and theme.
+            _swipeAttack.setDst( themes, index_pos );
+
+            // Clear any pending intents. We don't want to confirm previous actions by performing swipe attack motion.
+            _boardActionIntent = {};
+        }
+
         cursor.SetThemes( themes );
 
         const Cell * cell = Board::GetCell( index_pos );
@@ -2939,11 +2984,27 @@ void Battle::Interface::HumanBattleTurn( const Unit & unit, Actions & actions, s
 
             boardActionIntentUpdater.setIntent( { themes, index_pos } );
 
-            if ( le.MouseClickLeft() ) {
-                MouseLeftClickBoardAction( themes, *cell, boardActionIntentUpdater.isConfirmed(), actions );
+            if ( le.MouseClickLeft( battleFieldRect ) ) {
+                const bool isConfirmed = boardActionIntentUpdater.isConfirmed();
+
+                if ( isConfirmed ) {
+                    // Intent is confirmed, it is safe to clear the swipe state (regardless of the intent and the input method).
+                    _swipeAttack = {};
+                }
+
+                MouseLeftClickBoardAction( themes, *cell, isConfirmed, actions );
             }
             else if ( le.MousePressRight() ) {
                 MousePressRightBoardAction( *cell );
+            }
+            else if ( le.MousePressLeft( battleFieldRect ) ) {
+                if ( !le.isDragInProgress() && !_swipeAttack.isValid() ) {
+                    le.registerDrag();
+
+                    // Remember the swipe source cell and theme.
+                    _swipeAttack = {};
+                    _swipeAttack.setSrc( themes, index_pos, _currentUnit );
+                }
             }
         }
         else {

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-06 00:56+0000\n"
+"POT-Creation-Date: 2024-03-10 10:14+0000\n"
 "PO-Revision-Date: 2023-08-26 23:09+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: https://discord.com/"
@@ -3999,10 +3999,17 @@ msgstr "Miasta"
 msgid "Heroes"
 msgstr "Bohaterowie"
 
-msgid "editorErasure|Terrain"
+#, fuzzy
+msgid "editorErasure|Landscape objects"
+msgstr "Wybierz artefakt:"
+
+msgid "editorErasure|Adventure non pickable objects"
 msgstr ""
 
 msgid "editorErasure|Castles"
+msgstr ""
+
+msgid "editorErasure|Adventure pickable objects"
 msgstr ""
 
 msgid "editorErasure|Monsters"
@@ -4011,16 +4018,10 @@ msgstr ""
 msgid "editorErasure|Heroes"
 msgstr ""
 
-msgid "editorErasure|Artifacts"
-msgstr ""
-
 msgid "editorErasure|Roads"
 msgstr ""
 
 msgid "editorErasure|Streams"
-msgstr ""
-
-msgid "editorErasure|Treasures"
 msgstr ""
 
 msgid ""
@@ -5067,6 +5068,13 @@ msgid ""
 msgstr ""
 "Gość czeka, aż gospodarz rozpocznie grę, a następnie włącza się do niej "
 "automatycznie. W grze opartej na połączeniach TCP/IP może być wielu gości."
+
+msgid ""
+"fheroes2 needs data files from the original Heroes of Might and Magic II to "
+"operate. You appear to be using the demo version of Heroes of Might and "
+"Magic II for this purpose. Please note that only one scenario will be "
+"available in this setup."
+msgstr ""
 
 #, fuzzy
 msgid ""
@@ -11478,50 +11486,3 @@ msgstr ""
 "Możesz pobrać najnowszą wersję gry ze strony:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid "Fast separation into slots:"
-#~ msgstr "Szybki podział na sloty:"
-
-#~ msgid "disable build."
-#~ msgstr "nie można zbudować."
-
-#~ msgid "on"
-#~ msgstr "włączone"
-
-#~ msgid "Toggle colored cursor on or off. This is only an esthetic choice."
-#~ msgstr ""
-#~ "Zmień kursor na kolorowy lub czarno-biały. Wybór ma jedynie charakter "
-#~ "estetyczny."
-
-#, fuzzy
-#~ msgid ""
-#~ "%{skill} increases the damage done by the hero's range attacking "
-#~ "creatures by %{count} percent."
-#~ msgstr ""
-#~ "O %{count} procent zwiększa obrażenia zadawane przez jednostki atakujące "
-#~ "na odległość."
-
-#, fuzzy
-#~ msgid "Castles"
-#~ msgstr "Zamek"
-
-#, fuzzy
-#~ msgid "Ocean object"
-#~ msgstr "Brak obiektu"
-
-#, fuzzy
-#~ msgid "Snow Objects"
-#~ msgstr "Brak obiektu"
-
-#, fuzzy
-#~ msgid "Desert Objects"
-#~ msgstr "Namiot na pustyni"
-
-#~ msgid "%{race1} %{name1}"
-#~ msgstr "%{race1} %{name1}"
-
-#~ msgid "vs"
-#~ msgstr "vs"
-
-#~ msgid "%{race2} %{name2}"
-#~ msgstr "%{race2} %{name2}"

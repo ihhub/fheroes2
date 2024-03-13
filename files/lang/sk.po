@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-06 00:56+0000\n"
+"POT-Creation-Date: 2024-03-10 10:14+0000\n"
 "PO-Revision-Date: 2023-09-11 20:22+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3986,10 +3986,17 @@ msgstr "Mestá"
 msgid "Heroes"
 msgstr "Hrdinovia"
 
-msgid "editorErasure|Terrain"
+#, fuzzy
+msgid "editorErasure|Landscape objects"
+msgstr "Objekty oceánu"
+
+msgid "editorErasure|Adventure non pickable objects"
 msgstr ""
 
 msgid "editorErasure|Castles"
+msgstr ""
+
+msgid "editorErasure|Adventure pickable objects"
 msgstr ""
 
 msgid "editorErasure|Monsters"
@@ -3998,16 +4005,10 @@ msgstr ""
 msgid "editorErasure|Heroes"
 msgstr ""
 
-msgid "editorErasure|Artifacts"
-msgstr ""
-
 msgid "editorErasure|Roads"
 msgstr ""
 
 msgid "editorErasure|Streams"
-msgstr ""
-
-msgid "editorErasure|Treasures"
 msgstr ""
 
 msgid ""
@@ -5054,6 +5055,13 @@ msgid ""
 msgstr ""
 "Hosť počká, kým hostiteľ nastaví hru, a potom sa automaticky pridá do hry. "
 "Pri hrách cez TCP/IP môže byť viacero hostí."
+
+msgid ""
+"fheroes2 needs data files from the original Heroes of Might and Magic II to "
+"operate. You appear to be using the demo version of Heroes of Might and "
+"Magic II for this purpose. Please note that only one scenario will be "
+"available in this setup."
+msgstr ""
 
 #, fuzzy
 msgid ""
@@ -11342,89 +11350,3 @@ msgstr ""
 "Pozri si najnovšiu verziu hry na\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid "Fast separation into slots:"
-#~ msgstr "Rýchle rozdelenie do polí:"
-
-#~ msgid "disable build."
-#~ msgstr "budovanie zakázané."
-
-#~ msgid "on"
-#~ msgstr "zapnuté"
-
-#~ msgid "Toggle colored cursor on or off. This is only an esthetic choice."
-#~ msgstr "Prepni farebný kurzor. Toto je len estetická voľba."
-
-#, fuzzy
-#~ msgid ""
-#~ "%{skill} increases the damage done by the hero's range attacking "
-#~ "creatures by %{count} percent."
-#~ msgstr ""
-#~ "%{skill} zvyšuje poškodenie spôsobené bojovníkmi útočiacimi na diaľku o "
-#~ "%{count} percent."
-
-#, fuzzy
-#~ msgid "Terrain"
-#~ msgstr "Režim terénu"
-
-#, fuzzy
-#~ msgid "Castles"
-#~ msgstr "Hrad"
-
-#, fuzzy
-#~ msgid "Ocean object"
-#~ msgstr "Objekty oceánu"
-
-#~ msgid "Ocean Objects"
-#~ msgstr "Objekty oceánu"
-
-#~ msgid "Grass Objects"
-#~ msgstr "Objekty trávy"
-
-#~ msgid "Snow Objects"
-#~ msgstr "Objekty snehu"
-
-#~ msgid "Swamp Objects"
-#~ msgstr "Objekty močiara"
-
-#~ msgid "Lava Objects"
-#~ msgstr "Objekty lávy"
-
-#~ msgid "Desert Objects"
-#~ msgstr "Objekty púšte"
-
-#~ msgid "Dirt Objects"
-#~ msgstr "Objekty hliny"
-
-#~ msgid "Beach Objects"
-#~ msgstr "Objekty pláže"
-
-#~ msgid "Used to place objects most appropriate for use on %{terrain}."
-#~ msgstr ""
-#~ "Slúži na umiestnenie objektov najvhodnejších na použitie na %{terrain}."
-
-#~ msgid ""
-#~ "Used to place\n"
-#~ "a town or castle."
-#~ msgstr ""
-#~ "Slúži na umiestnenie\n"
-#~ "mesta alebo hradu."
-
-#~ msgid "Used to place an artifact."
-#~ msgstr "Slúži na umiestnenie artefaktu."
-
-#~ msgid ""
-#~ "Used to place\n"
-#~ "a resource or treasure."
-#~ msgstr ""
-#~ "Slúži na umiestnenie\n"
-#~ "zdroja alebo pokladu."
-
-#~ msgid "%{race1} %{name1}"
-#~ msgstr "%{race1} %{name1}"
-
-#~ msgid "vs"
-#~ msgstr "proti"
-
-#~ msgid "%{race2} %{name2}"
-#~ msgstr "%{race2} %{name2}"
