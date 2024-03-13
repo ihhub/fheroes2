@@ -901,62 +901,6 @@ void Castle::ActionNewWeek()
     }
 }
 
-void Castle::ActionNewWeekAIBonuses()
-{
-    if ( world.GetWeekType().GetType() == WeekName::PLAGUE ) {
-        // No growth bonus can be applied.
-        return;
-    }
-
-    if ( !isControlAI() ) {
-        // No AI - no perks!
-        return;
-    }
-
-    if ( GetColor() == Color::NONE ) {
-        // Neutrals aren't considered as AI players.
-        return;
-    }
-
-    static const std::array<building_t, 6> basicDwellings
-        = { DWELLING_MONSTER1, DWELLING_MONSTER2, DWELLING_MONSTER3, DWELLING_MONSTER4, DWELLING_MONSTER5, DWELLING_MONSTER6 };
-
-    for ( const building_t dwellingId : basicDwellings ) {
-        uint32_t * dwellingMonsters = GetDwelling( dwellingId );
-        if ( dwellingMonsters == nullptr ) {
-            // Such dwelling (or its upgrade) has not been built.
-            continue;
-        }
-
-        uint32_t originalGrowth = Monster( race, GetActualDwelling( dwellingId ) ).GetGrown();
-
-        if ( building & BUILD_WELL ) {
-            originalGrowth += GetGrownWell();
-        }
-
-        if ( ( dwellingId == DWELLING_MONSTER1 ) && ( building & BUILD_WEL2 ) ) {
-            originalGrowth += GetGrownWel2();
-        }
-
-        if ( originalGrowth == 0 ) {
-            continue;
-        }
-
-        const long bonusGrowth = std::lround( originalGrowth * Difficulty::GetUnitGrowthBonusForAI( Game::getDifficulty(), Game::isCampaign(), race, dwellingId ) );
-        if ( bonusGrowth >= 0 ) {
-            *dwellingMonsters += bonusGrowth;
-
-            continue;
-        }
-
-        // If the original unit growth is non-zero, then the total unit growth after the application of penalties should be at least one unit
-        const uint32_t growthPenalty = std::min( static_cast<uint32_t>( -bonusGrowth ), originalGrowth - 1 );
-        assert( *dwellingMonsters > growthPenalty );
-
-        *dwellingMonsters -= growthPenalty;
-    }
-}
-
 void Castle::ActionNewMonth() const
 {
     // Do nothing.

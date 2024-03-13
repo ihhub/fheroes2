@@ -52,9 +52,6 @@ namespace Difficulty
     // Returns an extra gold bonus modifier for AI based on difficulty level. This modifier is applied after applying the resource income bonus.
     double getGoldIncomeBonusForAI( const int difficulty );
 
-    // Returns an extra growth bonus modifier for AI based on difficulty level.
-    double GetUnitGrowthBonusForAI( const int difficulty, const bool isCampaign, const int race, const building_t dwelling );
-
     int GetHeroMovementBonusForAI( int difficulty );
 
     // Returns the ratio of the strength of the enemy army to the strength of the AI army, above which the AI decides to surrender or retreat from the battlefield

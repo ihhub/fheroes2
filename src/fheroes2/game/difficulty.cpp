@@ -109,11 +109,6 @@ double Difficulty::getGoldIncomeBonusForAI( const int difficulty )
     return 0;
 }
 
-double Difficulty::GetUnitGrowthBonusForAI( const int /* difficulty */, const bool /* isCampaign */, const int /* race */, const building_t /* dwelling */ )
-{
-    return 0;
-}
-
 int Difficulty::GetHeroMovementBonusForAI( int difficulty )
 {
     switch ( difficulty ) {
