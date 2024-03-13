@@ -190,7 +190,7 @@ namespace Skill
         int getTotalPrimarySkillLevel() const
         {
             return attack + defense + power + knowledge;
-        };
+        }
 
         static const char * String( const int skillType );
         static std::string StringDescription( int, const Heroes * );
