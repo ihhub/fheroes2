@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-18 14:42+0000\n"
-"PO-Revision-Date: 2024-03-14 14:30+0100\n"
+"PO-Revision-Date: 2024-03-14 14:36+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
 "Language: es\n"
@@ -4484,19 +4484,15 @@ msgstr "Puntuaciones más altas"
 msgid "hotkey|credits"
 msgstr ""
 
-#, fuzzy
 msgid "hotkey|standard game"
 msgstr "Juego estandar"
 
-#, fuzzy
 msgid "hotkey|campaign game"
-msgstr "Partida de Campaña."
+msgstr "Partida de Campaña"
 
-#, fuzzy
 msgid "hotkey|multi-player game"
 msgstr "Juego multi-jugador"
 
-#, fuzzy
 msgid "hotkey|settings"
 msgstr "Ajustes"
 
@@ -4521,9 +4517,8 @@ msgstr ""
 msgid "hotkey|select all map sizes"
 msgstr ""
 
-#, fuzzy
 msgid "hotkey|hot seat game"
-msgstr "Juego estandar"
+msgstr "Asiento caliente"
 
 msgid "hotkey|battle only game"
 msgstr ""
@@ -4626,37 +4621,31 @@ msgstr ""
 msgid "hotkey|save game"
 msgstr ""
 
-#, fuzzy
 msgid "hotkey|next hero"
-msgstr "Mostrar el siguiente héroe"
+msgstr "Siguiente héroe"
 
 #, fuzzy
 msgid "hotkey|change to hero under cursor"
 msgstr "Mostrar el siguiente héroe"
 
-#, fuzzy
 msgid "hotkey|start hero movement"
-msgstr "Continuar movimento"
+msgstr "Empezar el desplazamiento del héroe"
 
-#, fuzzy
 msgid "hotkey|cast adventure spell"
-msgstr "Lanzar un hechizo tipo aventura."
+msgstr "Lanzar un hechizo tipo aventura"
 
 msgid "hotkey|put hero to sleep"
 msgstr ""
 
-#, fuzzy
 msgid "hotkey|next town"
-msgstr "Ver ciudad siguiente"
+msgstr "Ciudad siguiente"
 
 msgid "hotkey|end turn"
 msgstr ""
 
-#, fuzzy
 msgid "hotkey|file options"
 msgstr "Opciones de archivo"
 
-#, fuzzy
 msgid "hotkey|adventure options"
 msgstr "Opciones de la Aventura"
 
@@ -4673,7 +4662,6 @@ msgstr ""
 msgid "hotkey|view world"
 msgstr ""
 
-#, fuzzy
 msgid "hotkey|kingdom summary"
 msgstr "Resumen del reino"
 
@@ -4683,9 +4671,8 @@ msgstr ""
 msgid "hotkey|open focus"
 msgstr ""
 
-#, fuzzy
 msgid "hotkey|system options"
-msgstr "Personalizar opciones del sistema"
+msgstr "Opciones del sistema"
 
 msgid "hotkey|scroll left"
 msgstr ""
@@ -4761,18 +4748,15 @@ msgstr ""
 msgid "hotkey|well"
 msgstr ""
 
-#, fuzzy
 msgid "hotkey|marketplace"
 msgstr "Mercado"
 
 msgid "hotkey|mage guild"
 msgstr ""
 
-#, fuzzy
 msgid "hotkey|shipyard"
 msgstr "Astillero"
 
-#, fuzzy
 msgid "hotkey|thieves guild"
 msgstr "Gremio de Ladrones"
 
