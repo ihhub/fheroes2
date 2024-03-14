@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-18 14:42+0000\n"
+"POT-Creation-Date: 2024-03-10 10:14+0000\n"
 "PO-Revision-Date: 2023-12-22 00:32+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3388,11 +3388,13 @@ msgstr "Hier klicken, um die virtuelle Tastatur zu öffnen."
 msgid "Open Virtual Keyboard"
 msgstr "Virtuelle Tastatur öffnen"
 
-msgid "How many troops to move?"
+#, fuzzy
+msgid "How many units do you wish to move?"
 msgstr "Wie viele Truppen sollen verlegt werden?"
 
-msgid "Fast separation into slots:"
-msgstr "Schnelle Aufteilung:"
+#, fuzzy
+msgid "Select how many slots to separate into:"
+msgstr "Zielstadt auswählen."
 
 msgid "Map: "
 msgstr "Karte: "
@@ -4024,10 +4026,17 @@ msgstr "Städte"
 msgid "Heroes"
 msgstr "Helden"
 
-msgid "editorErasure|Terrain"
+#, fuzzy
+msgid "editorErasure|Landscape objects"
+msgstr "Ozean-Objekte"
+
+msgid "editorErasure|Adventure non pickable objects"
 msgstr ""
 
 msgid "editorErasure|Castles"
+msgstr ""
+
+msgid "editorErasure|Adventure pickable objects"
 msgstr ""
 
 msgid "editorErasure|Monsters"
@@ -4036,16 +4045,10 @@ msgstr ""
 msgid "editorErasure|Heroes"
 msgstr ""
 
-msgid "editorErasure|Artifacts"
-msgstr ""
-
 msgid "editorErasure|Roads"
 msgstr ""
 
 msgid "editorErasure|Streams"
-msgstr ""
-
-msgid "editorErasure|Treasures"
 msgstr ""
 
 msgid ""
@@ -5120,6 +5123,13 @@ msgid ""
 msgstr ""
 "Der Gast wartet darauf, dass der Gastgeber das Spiel einrichtet, und wird "
 "dann automatisch hinzugefügt. Bei TCP/IP-Spielen kann es mehrere Gäste geben."
+
+msgid ""
+"fheroes2 needs data files from the original Heroes of Might and Magic II to "
+"operate. You appear to be using the demo version of Heroes of Might and "
+"Magic II for this purpose. Please note that only one scenario will be "
+"available in this setup."
+msgstr ""
 
 #, fuzzy
 msgid ""
@@ -11632,89 +11642,3 @@ msgstr ""
 "Die neueste Version des Spiels finden Sie unter\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid "disable build."
-#~ msgstr "Bauen deaktivieren."
-
-#~ msgid "on"
-#~ msgstr "ein"
-
-#~ msgid "Toggle colored cursor on or off. This is only an esthetic choice."
-#~ msgstr ""
-#~ "Farbigen Cursor ein- oder ausschalten. Dies ist nur eine ästhetische "
-#~ "Entscheidung."
-
-#, fuzzy
-#~ msgid ""
-#~ "%{skill} increases the damage done by the hero's range attacking "
-#~ "creatures by %{count} percent."
-#~ msgstr ""
-#~ "%{skill} erhöht den Schaden von Kreaturen, die aus der Entfernung "
-#~ "angreifen, um %{count} Prozent."
-
-#, fuzzy
-#~ msgid "Terrain"
-#~ msgstr "Gelände-Modus"
-
-#, fuzzy
-#~ msgid "Castles"
-#~ msgstr "Burg"
-
-#, fuzzy
-#~ msgid "Ocean object"
-#~ msgstr "Ozean-Objekte"
-
-#~ msgid "Ocean Objects"
-#~ msgstr "Ozean-Objekte"
-
-#~ msgid "Grass Objects"
-#~ msgstr "Gras-Objekte"
-
-#~ msgid "Snow Objects"
-#~ msgstr "Schnee-Objekte"
-
-#~ msgid "Swamp Objects"
-#~ msgstr "Sumpf-Objekte"
-
-#~ msgid "Lava Objects"
-#~ msgstr "Lava-Objekte"
-
-#~ msgid "Desert Objects"
-#~ msgstr "Wüsten-Objekte"
-
-#~ msgid "Dirt Objects"
-#~ msgstr "Erde-Objekte"
-
-#~ msgid "Beach Objects"
-#~ msgstr "Strand-Objekte"
-
-#~ msgid "Used to place objects most appropriate for use on %{terrain}."
-#~ msgstr ""
-#~ "Wird verwendet, um Objekte zu platzieren, die am besten für die "
-#~ "Verwendung auf %{terrain} geeignet sind."
-
-#~ msgid ""
-#~ "Used to place\n"
-#~ "a town or castle."
-#~ msgstr ""
-#~ "Verwendet, um eine\n"
-#~ "Stadt oder Burg zu platzieren."
-
-#~ msgid "Used to place an artifact."
-#~ msgstr "Wird verwendet, um ein Artefakt zu platzieren."
-
-#~ msgid ""
-#~ "Used to place\n"
-#~ "a resource or treasure."
-#~ msgstr ""
-#~ "Wird verwendet, um eine\n"
-#~ "Ressource oder einen Schatz zu platzieren."
-
-#~ msgid "%{race1} %{name1}"
-#~ msgstr "%{name1} (%{race1})"
-
-#~ msgid "vs"
-#~ msgstr "gegen"
-
-#~ msgid "%{race2} %{name2}"
-#~ msgstr "%{name2} (%{race2})"

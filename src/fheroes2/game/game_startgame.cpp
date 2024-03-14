@@ -1188,6 +1188,12 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
                 stopHero = true;
             }
         }
+        // cursor is over the icons panel
+        else if ( ( !isHiddenInterface || conf.ShowIcons() ) && ( le.MouseCursor( iconsPanel.GetRect() ) || le.MousePressLeft( iconsPanel.GetRect() ) ) ) {
+            cursor.SetThemes( Cursor::POINTER );
+
+            iconsPanel.QueueEventProcessing();
+        }
         // cursor is over the status window
         else if ( ( !isHiddenInterface || conf.ShowStatus() ) && le.MouseCursor( _statusWindow.GetRect() ) ) {
             cursor.SetThemes( Cursor::POINTER );
@@ -1200,12 +1206,6 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
 
             res = buttonsArea.QueueEventProcessing();
             isCursorOverButtons = true;
-        }
-        // cursor is over the icons panel
-        else if ( ( !isHiddenInterface || conf.ShowIcons() ) && le.MouseCursor( iconsPanel.GetRect() ) ) {
-            cursor.SetThemes( Cursor::POINTER );
-
-            iconsPanel.QueueEventProcessing();
         }
         // cursor is over the radar
         else if ( ( !isHiddenInterface || conf.ShowRadar() ) && le.MouseCursor( _radar.GetRect() ) ) {

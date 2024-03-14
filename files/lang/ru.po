@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-18 14:42+0000\n"
+"POT-Creation-Date: 2024-03-10 10:14+0000\n"
 "PO-Revision-Date: 2024-02-05 20:41+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -3364,11 +3364,13 @@ msgstr "Нижмите, чтобы открыть окно виртуально�
 msgid "Open Virtual Keyboard"
 msgstr "Открыть виртуальную клавиатуру"
 
-msgid "How many troops to move?"
+#, fuzzy
+msgid "How many units do you wish to move?"
 msgstr "Сколько существ перенести?"
 
-msgid "Fast separation into slots:"
-msgstr "Быстрое разделение:"
+#, fuzzy
+msgid "Select how many slots to separate into:"
+msgstr "Выберите, куда перенестись."
 
 msgid "Map: "
 msgstr "Карта: "
@@ -3956,10 +3958,17 @@ msgstr "Города"
 msgid "Heroes"
 msgstr "Герои"
 
-msgid "editorErasure|Terrain"
+#, fuzzy
+msgid "editorErasure|Landscape objects"
+msgstr "Выберите объект ландшафта:"
+
+msgid "editorErasure|Adventure non pickable objects"
 msgstr ""
 
 msgid "editorErasure|Castles"
+msgstr ""
+
+msgid "editorErasure|Adventure pickable objects"
 msgstr ""
 
 msgid "editorErasure|Monsters"
@@ -3968,16 +3977,10 @@ msgstr ""
 msgid "editorErasure|Heroes"
 msgstr ""
 
-msgid "editorErasure|Artifacts"
-msgstr ""
-
 msgid "editorErasure|Roads"
 msgstr ""
 
 msgid "editorErasure|Streams"
-msgstr ""
-
-msgid "editorErasure|Treasures"
 msgstr ""
 
 msgid ""
@@ -5018,6 +5021,13 @@ msgid ""
 msgstr ""
 "Гость ждёт пока хост настроит игру, а затем автоматически присоединится к "
 "ней. Для игр по протоколу TCP/IP может быть несколько гостей."
+
+msgid ""
+"fheroes2 needs data files from the original Heroes of Might and Magic II to "
+"operate. You appear to be using the demo version of Heroes of Might and "
+"Magic II for this purpose. Please note that only one scenario will be "
+"available in this setup."
+msgstr ""
 
 #, fuzzy
 msgid ""
@@ -11280,79 +11290,3 @@ msgstr ""
 "Новую версию игры можно найти на сайте:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid "disable build."
-#~ msgstr "отключить строение."
-
-#~ msgid "on"
-#~ msgstr "вкл."
-
-#~ msgid "Toggle colored cursor on or off. This is only an esthetic choice."
-#~ msgstr "Включить или выключить цветной курсор. Это эстетический выбор."
-
-#~ msgid ""
-#~ "%{skill} increases the damage done by the hero's range attacking "
-#~ "creatures by %{count} percent."
-#~ msgstr ""
-#~ "%{skill} увеличивает урон от лучников в армии героя на %{count} процентов."
-
-#~ msgid "Terrain"
-#~ msgstr "Почва"
-
-#~ msgid "Castles"
-#~ msgstr "Замки"
-
-#, fuzzy
-#~ msgid "Ocean object"
-#~ msgstr "Объекты океана"
-
-#~ msgid "Ocean Objects"
-#~ msgstr "Объекты океана"
-
-#~ msgid "Grass Objects"
-#~ msgstr "Объекты травы"
-
-#~ msgid "Snow Objects"
-#~ msgstr "Объекты снега"
-
-#~ msgid "Swamp Objects"
-#~ msgstr "Объекты болота"
-
-#~ msgid "Lava Objects"
-#~ msgstr "Объекты лавы"
-
-#~ msgid "Desert Objects"
-#~ msgstr "Объекты пустыни"
-
-#~ msgid "Dirt Objects"
-#~ msgstr "Объекты грязи"
-
-#~ msgid "Beach Objects"
-#~ msgstr "Объекты побережья"
-
-#~ msgid "Used to place objects most appropriate for use on %{terrain}."
-#~ msgstr ""
-#~ "Используется для размещения объектов, наиболее подходящих ландшафту: "
-#~ "%{terrain}."
-
-#~ msgid ""
-#~ "Used to place\n"
-#~ "a town or castle."
-#~ msgstr "Используется для размещения замков или городов."
-
-#~ msgid "Used to place an artifact."
-#~ msgstr "Используется для размещения артефактов."
-
-#~ msgid ""
-#~ "Used to place\n"
-#~ "a resource or treasure."
-#~ msgstr "Используется для размещения сокровищ или ресурсов."
-
-#~ msgid "%{race1} %{name1}"
-#~ msgstr "%{race1} %{name1}"
-
-#~ msgid "vs"
-#~ msgstr "против"
-
-#~ msgid "%{race2} %{name2}"
-#~ msgstr "%{race2} %{name2}"

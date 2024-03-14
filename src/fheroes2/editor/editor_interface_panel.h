@@ -23,12 +23,12 @@
 #include <array>
 #include <cstdint>
 #include <functional>
+#include <set>
 
 #include "game_mode.h"
 #include "ground.h"
 #include "image.h"
 #include "map_object_info.h"
-#include "maps_tiles_helper.h"
 #include "math_base.h"
 #include "ui_button.h"
 
@@ -85,6 +85,8 @@ namespace Interface
         {
             return _eraseTypes;
         }
+
+        std::set<Maps::ObjectGroup> getEraseObjectGroups() const;
 
         bool showAreaSelectRect() const
         {
@@ -214,11 +216,28 @@ namespace Interface
             BRUSH_SIZE_COUNT = 4U
         };
 
+        enum ObjectErasureType : uint8_t
+        {
+            ERASE_NONE = 0x00,
+            // Terrain objects are objects that are placed in editor using a terrain palette in objects placing mode.
+            ERASE_LANDSCAPE = 0x01,
+            ERASE_ADVENTURE_NON_PICKABLE = 0x02,
+            ERASE_TOWNS = 0x04,
+            ERASE_ADVENTURE_PICKABLE = 0x08,
+            ERASE_MONSTERS = 0x10,
+            ERASE_HEROES = 0x20,
+            ERASE_STREAMS = 0x40,
+            ERASE_ROADS = 0x80,
+
+            ERASE_ALL_OBJECTS
+            = ERASE_LANDSCAPE | ERASE_ADVENTURE_NON_PICKABLE | ERASE_TOWNS | ERASE_ADVENTURE_PICKABLE | ERASE_MONSTERS | ERASE_HEROES | ERASE_STREAMS | ERASE_ROADS,
+        };
+
         // This array represents the order of object-to-erase images on the erase tool panel (from left to right, from top to bottom).
-        const std::array<uint32_t, 8> _eraseButtonObjectTypes{ Maps::ObjectErasureType::TERRAIN_OBJECTS, Maps::ObjectErasureType::CASTLES,
-                                                               Maps::ObjectErasureType::MONSTERS,        Maps::ObjectErasureType::HEROES,
-                                                               Maps::ObjectErasureType::ARTIFACTS,       Maps::ObjectErasureType::ROADS,
-                                                               Maps::ObjectErasureType::STREAMS,         Maps::ObjectErasureType::TREASURES };
+        const std::array<uint32_t, 8> _eraseButtonObjectTypes{ ObjectErasureType::ERASE_LANDSCAPE, ObjectErasureType::ERASE_ADVENTURE_NON_PICKABLE,
+                                                               ObjectErasureType::ERASE_TOWNS,     ObjectErasureType::ERASE_ADVENTURE_PICKABLE,
+                                                               ObjectErasureType::ERASE_MONSTERS,  ObjectErasureType::ERASE_HEROES,
+                                                               ObjectErasureType::ERASE_ROADS,     ObjectErasureType::ERASE_STREAMS };
 
         EditorInterface & _interface;
 
@@ -261,7 +280,7 @@ namespace Interface
         int8_t _selectedAdventureObject{ -1 };
         int8_t _selectedKingdomObject{ -1 };
         uint8_t _selectedBrushSize{ BrushSize::MEDIUM };
-        uint32_t _eraseTypes{ Maps::ObjectErasureType::ALL_OBJECTS };
+        uint32_t _eraseTypes{ ObjectErasureType::ERASE_ALL_OBJECTS };
 
         std::array<int32_t, LandscapeObjectBrush::LANDSCAPE_COUNT> _selectedLandscapeObjectType;
         std::array<int32_t, AdventureObjectBrush::ADVENTURE_COUNT> _selectedAdventureObjectType;
