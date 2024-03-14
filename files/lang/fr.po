@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-03-10 10:14+0000\n"
-"PO-Revision-Date: 2024-03-14 20:10+0100\n"
+"PO-Revision-Date: 2024-03-14 21:44+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
 "Language: fr\n"
@@ -3868,7 +3868,7 @@ msgstr ""
 "carte."
 
 msgid "Failed to update player information."
-msgstr ""
+msgstr "La mise à jour des informations sur les joueurs a échoué."
 
 msgid "Artifacts cannot be placed on water."
 msgstr "Les artéfacts ne peuvent pas être placés sur l'eau."
@@ -3975,20 +3975,17 @@ msgstr "Villages"
 msgid "Heroes"
 msgstr "Héros"
 
-#, fuzzy
 msgid "editorErasure|Landscape objects"
-msgstr "de héros"
+msgstr "de paysages"
 
-#, fuzzy
 msgid "editorErasure|Adventure non pickable objects"
-msgstr "d'artéfacts"
+msgstr "d'éléments d'aventure (non piquables)"
 
 msgid "editorErasure|Castles"
 msgstr "de châteaux"
 
-#, fuzzy
 msgid "editorErasure|Adventure pickable objects"
-msgstr "d'artéfacts"
+msgstr "d'éléments d'aventure (piquables)"
 
 msgid "editorErasure|Monsters"
 msgstr "de monstres"
@@ -4026,27 +4023,31 @@ msgid "Large Brush"
 msgstr "Grand pinceau"
 
 msgid "Area Fill"
-msgstr ""
+msgstr "Remplissage"
 
 msgid "Used to click and drag for filling in large areas."
-msgstr ""
+msgstr "Permet de remplir de vastes zones avec la texture sélectionnée."
 
 msgid "Clear Area"
-msgstr ""
+msgstr "Effacement de zone"
 
 msgid "Used to click and drag for clearing large areas."
 msgstr ""
+"Permet l'effacement de tous les éléments qui se trouvent dans la zone "
+"sélectionné."
 
 msgid ""
 "Costs %{rate} times normal movement for all heroes. (Pathfinding reduces or "
 "eliminates the penalty.)"
 msgstr ""
+"Requiert %{rate} fois les points de mouvement normaux pour tous les héros. "
+"(L'orientation réduit, voire annule cette pénalité)."
 
 msgid "Traversable only by boat."
 msgstr "Traversable uniquement par bateau."
 
 msgid "No special modifiers."
-msgstr ""
+msgstr "Aucun modificateur particulier."
 
 msgid "Toggle the erasure of %{type} objects."
 msgstr "Effacement %{type}."
@@ -4056,12 +4057,20 @@ msgid ""
 "deselect this type. Press and hold this button to deselect all other object "
 "types."
 msgstr ""
+"Les éléments de ce type seront effacés à l'aide de l'outil d'effacement. "
+"Cliquez ici avec le bouton gauche de la souris pour désélectionner ce type "
+"d'élément. Maintenez ce bouton enfoncé pour désélectionner tous les autres "
+"types d'éléments."
 
 msgid ""
 "Objects of this type will NOT be deleted with the Erase tool. Left-click "
 "here to select this type. Press and hold this button to select all other "
 "object types."
 msgstr ""
+"Les éléments de ce type ne seront PAS supprimés avec l'outil d'effacement. "
+"Cliquez ici avec le bouton gauche de la souris pour sélectionner ce type "
+"d'élément. Maintenez ce bouton enfoncé pour sélectionner tous les autres "
+"types d'éléments."
 
 msgid "Terrain Mode"
 msgstr "Terrains"
@@ -4075,6 +4084,8 @@ msgstr "Éléments de paysage"
 msgid ""
 "Used to place landscape objects (mountains, rocks, trees, etc.) on the map."
 msgstr ""
+"Permet de placer des éléments de paysage sur la carte (montagnes, rochers, "
+"arbres, etc.)."
 
 msgid "Detail Mode"
 msgstr "Details"
@@ -4089,12 +4100,16 @@ msgid ""
 "Used to place adventure objects (artifacts, dwellings, mines, treasures, "
 "etc.) on the map."
 msgstr ""
+"Permet de placer des éléments d'aventure sur la carte (artéfacts, demeures, "
+"mines, trésors, etc.)."
 
 msgid "Kingdom Objects Mode"
 msgstr "Royaumes"
 
 msgid "Used to place kingdom objects (towns, castles and heroes) on the map."
 msgstr ""
+"Permet de placer des éléments de royaume sur la carte (villages, châteaux et "
+"héros)."
 
 msgid "Monsters Mode"
 msgstr "Créatures"
@@ -4156,9 +4171,11 @@ msgstr ""
 
 msgid "View the editor system options, which let you customize the editor."
 msgstr ""
+"Affiche les options système de l'éditeur, qui vous permettent de "
+"personnaliser l'application."
 
 msgid "Create a map that is %{size} squares wide and %{size} squares high."
-msgstr ""
+msgstr "Créer une carte de %{size} cases de large sur %{size} cases de haut."
 
 msgid "Cancel back to the New Map menu."
 msgstr "Annuler et revenir au menu de création de carte."
