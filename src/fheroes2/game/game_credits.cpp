@@ -316,22 +316,22 @@ namespace
         name.set( std::move( supporters ), fheroes2::FontType::normalWhite() );
         name.draw( columnStep + ( columnStep - textWidth ) / 2, offsetY, textWidth, output );
 
-        supporters =  "David C Jernberg\n"
-                       "domoyega\n"
-                       "Grigoris Papadourakis\n"
-                       "Hajler\n"
-                       "Hakon\n"
-                       "hommaddict\n"
-                       "Kiril Lipatov\n"
-                       "Kresimir Condic\n"
-                       "Kuza\n"
-                       "Matt Taylor\n"
-                       "Matthew Pfluger\n"
-                       "Michael Van Wambeke\n"
-                       "Siarzuk Piatrouski\n"
-                       "slvclw\n"
-                       "TechnoCore\n"
-                       "William Hoskinson\n";
+        supporters = "David C Jernberg\n"
+                     "domoyega\n"
+                     "Grigoris Papadourakis\n"
+                     "Hajler\n"
+                     "Hakon\n"
+                     "hommaddict\n"
+                     "Kiril Lipatov\n"
+                     "Kresimir Condic\n"
+                     "Kuza\n"
+                     "Matt Taylor\n"
+                     "Matthew Pfluger\n"
+                     "Michael Van Wambeke\n"
+                     "Siarzuk Piatrouski\n"
+                     "slvclw\n"
+                     "TechnoCore\n"
+                     "William Hoskinson\n";
 
         name.set( std::move( supporters ), fheroes2::FontType::normalWhite() );
         name.draw( columnStep * 2 + ( columnStep - textWidth ) / 2, offsetY, textWidth, output );
