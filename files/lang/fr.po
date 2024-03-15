@@ -603,7 +603,7 @@ msgid "Restart"
 msgstr "Recommencer"
 
 msgid "You have captured an enemy artifact!"
-msgstr "Vous vous emparez d'un artéfact de l'ennemi !"
+msgstr "Vous vous emparez d'un artéfact ennemi !"
 
 msgid "As you reach for the %{name}, it mysteriously disappears."
 msgstr "Alors que vous vous approchez %{name}, il disparaît mystérieusement."
@@ -4092,7 +4092,7 @@ msgstr "Details"
 
 msgid "Used for special editing of monsters, heroes and towns."
 msgstr ""
-"Permet de spécifier les paramètres spécifiques des monstres, héros et villes."
+"Permet de spécifier les paramètres spécifiques des monstres, héros et villages."
 
 msgid "Adventure Objects Mode"
 msgstr "Éléments d'aventure"
