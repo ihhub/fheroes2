@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-10 10:14+0000\n"
+"POT-Creation-Date: 2024-03-15 15:56+0000\n"
 "PO-Revision-Date: 2024-02-06 13:52+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -4329,10 +4329,8 @@ msgstr "Dév et support"
 msgid "Special Thanks to"
 msgstr "Remerciements spéciaux à"
 
-msgid "and many other contributors!"
-msgstr "et aux nombreux autres contributeurs !"
-
-msgid "and many-many other supporters!"
+#, fuzzy
+msgid "and many-many other contributors and supporters!"
 msgstr "et beaucoup, beaucoup d'autres supporteurs !"
 
 msgid "Support us at"
@@ -11424,3 +11422,6 @@ msgstr ""
 "Téléchargez la dernière version du jeu sur\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "and many other contributors!"
+#~ msgstr "et aux nombreux autres contributeurs !"
