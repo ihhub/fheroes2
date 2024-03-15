@@ -266,10 +266,10 @@ namespace
         fheroes2::Sprite output = fheroes2::AGG::GetICN( ICN::CBKGLAVA, 0 );
         output._disableTransformLayer();
 
+        const int32_t columnStep = 210;
         const int32_t textInitialOffsetX = output.width() / 2;
         const int32_t textInitialOffsetY = 60;
         const int32_t textWidth = 300;
-        const int32_t textOffsetX = ( textInitialOffsetX - textWidth ) / 2;
 
         int32_t offsetY = textInitialOffsetY;
 
@@ -284,54 +284,61 @@ namespace
                                   "a1exsh\n"
                                   "vincent-grosbois\n"
                                   "eos428\n"
+                                  "Mr-Bajs\n"
                                   "Arthusppp\n"
                                   "felix642\n"
                                   "Vasilenko Alexey\n"
                                   "Andrii Kurdiumov\n"
-                                  "Mr-Bajs\n"
+                                  "Stisen1\n"
                                   "dimag0g\n"
                                   "Effektus\n"
                                   "Laserlicht\n"
-                                  "Stisen1\n"
                                   "Mauri Mustonen\n"
                                   "tau3\n" );
 
         fheroes2::Text name( std::move( contributors ), fheroes2::FontType::normalWhite() );
         const int32_t constributorsHeight = name.height( textWidth );
-        const int32_t contributorCount = name.rows( textWidth );
-        name.draw( textOffsetX, offsetY, textWidth, output );
+        name.draw( ( columnStep - textWidth ) / 2, offsetY, textWidth, output );
 
         std::string supporters( "Aimi Lindschouw\n"
                                 "Aleksei Mazur\n"
+                                "Alex Perry\n"
+                                "Andrei Dyldin\n"
+                                "Andrew Lasinskiy\n"
                                 "Andrew Szucs\n"
                                 "Benjamin Hughes\n"
+                                "Bolsch\n"
                                 "Brandon Wright\n"
                                 "Connor Townsend\n"
-                                "Grigoris Papadourakis\n"
-                                "Hajler\n"
-                                "Kiril Lipatov\n"
-                                "Kresimir Condic\n"
-                                "Kuza\n"
-                                "Matt Taylor\n"
-                                "slvclw\n"
-                                "TechnoCore\n"
-                                "William Hoskinson\n" );
+                                "Christophe Didion\n" );
 
         name.set( std::move( supporters ), fheroes2::FontType::normalWhite() );
-        const int32_t supportersHeight = name.height( textWidth );
-        const int32_t supporterCount = name.rows( textWidth );
-        const int32_t countDifference = ( contributorCount - supporterCount );
-        const int32_t supportersOffset = ( countDifference / 2 ) * ( supportersHeight / supporterCount );
+        name.draw( columnStep + ( columnStep - textWidth ) / 2, offsetY, textWidth, output );
 
-        name.draw( textInitialOffsetX + textOffsetX, offsetY + supportersOffset, textWidth, output );
+        supporters = "David C Jernberg\n"
+                     "domoyega\n"
+                     "Grigoris Papadourakis\n"
+                     "Hajler\n"
+                     "Hakon\n"
+                     "hommaddict\n"
+                     "Kiril Lipatov\n"
+                     "Kresimir Condic\n"
+                     "Kuza\n"
+                     "Matt Taylor\n"
+                     "Matthew Pfluger\n"
+                     "Michael Van Wambeke\n"
+                     "Siarzuk Piatrouski\n"
+                     "slvclw\n"
+                     "TechnoCore\n"
+                     "William Hoskinson\n";
+
+        name.set( std::move( supporters ), fheroes2::FontType::normalWhite() );
+        name.draw( columnStep * 2 + ( columnStep - textWidth ) / 2, offsetY, textWidth, output );
 
         offsetY += constributorsHeight;
 
-        name.set( _( "and many other contributors!" ), fheroes2::FontType::normalWhite() );
-        name.draw( 10, offsetY, textWidth, output );
-
-        name.set( _( "and many-many other supporters!" ), fheroes2::FontType::normalWhite() );
-        name.draw( textInitialOffsetX + textOffsetX, offsetY, textWidth, output );
+        name.set( _( "and many-many other contributors and supporters!" ), fheroes2::FontType::normalWhite() );
+        name.draw( output.width() / 2 - name.width() / 2, offsetY, output );
 
         const fheroes2::Sprite & hydra = fheroes2::AGG::GetICN( ICN::HYDRA, 11 );
 
