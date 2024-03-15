@@ -298,7 +298,6 @@ namespace
 
         fheroes2::Text name( std::move( contributors ), fheroes2::FontType::normalWhite() );
         const int32_t constributorsHeight = name.height( textWidth );
-        const int32_t contributorCount = name.rows( textWidth );
         name.draw( ( columnStep - textWidth ) / 2, offsetY, textWidth, output );
 
         std::string supporters( "Aimi Lindschouw\n"
