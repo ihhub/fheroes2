@@ -85,8 +85,6 @@ Funds Difficulty::getResourceIncomeBonusForAI( const int difficulty, const VecCa
 
             switch ( castle->GetRace() ) {
             case Race::KNGT:
-                result += { 0, 0, 0, 0, 1, 0, 0 }; // 1 unit of Crystal
-                break;
             case Race::BARB:
                 result += { 0, 0, 0, 0, 1, 0, 0 }; // 1 unit of Crystal
                 break;
@@ -94,13 +92,11 @@ Funds Difficulty::getResourceIncomeBonusForAI( const int difficulty, const VecCa
                 result += { 0, 0, 1, 0, 0, 0, 0 }; // 1 unit of Mercury
                 break;
             case Race::WRLK:
+            case Race::NECR:
                 result += { 0, 0, 0, 1, 0, 0, 0 }; // 1 unit of Sulfur
                 break;
             case Race::WZRD:
                 result += { 0, 0, 0, 0, 0, 1, 0 }; // 1 unit of Gems
-                break;
-            case Race::NECR:
-                result += { 0, 0, 0, 1, 0, 0, 0 }; // 1 unit of Sulfur
                 break;
             default:
                 assert( 0 );
