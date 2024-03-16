@@ -47,7 +47,7 @@ namespace Difficulty
     int GetScoutingBonusForAI( int difficulty );
 
     // Returns an extra resource bonus for AI based on difficulty level.
-    Funds getResourceIncomeBonusForAI( const int difficulty );
+    Funds getResourceIncomeBonusForAI( const int difficulty, const VecCastles & castles );
 
     // Returns an extra gold bonus modifier for AI based on difficulty level. This modifier is applied after applying the resource income bonus.
     double getGoldIncomeBonusForAI( const int difficulty );

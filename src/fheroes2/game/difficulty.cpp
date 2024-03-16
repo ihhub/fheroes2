@@ -26,6 +26,7 @@
 #include <cassert>
 
 #include "profit.h"
+#include "race.h"
 #include "translations.h"
 
 std::string Difficulty::String( int difficulty )
@@ -66,7 +67,7 @@ int Difficulty::GetScoutingBonusForAI( int difficulty )
     return 0;
 }
 
-Funds Difficulty::getResourceIncomeBonusForAI( const int difficulty )
+Funds Difficulty::getResourceIncomeBonusForAI( const int difficulty, const VecCastles & castles )
 {
     const auto getIncomeFromSetsOfResourceMines = []( const uint32_t numOfSets ) {
         Funds result;
@@ -76,13 +77,47 @@ Funds Difficulty::getResourceIncomeBonusForAI( const int difficulty )
         return result * numOfSets;
     };
 
+    const auto getIncomeBasedOnCastles = [&castles]() {
+        Funds result;
+
+        for ( const Castle * castle : castles ) {
+            assert( castle != nullptr );
+
+            switch ( castle->GetRace() ) {
+            case Race::KNGT:
+                result += { 0, 0, 0, 0, 1, 0, 0 }; // 1 unit of Crystal
+                break;
+            case Race::BARB:
+                result += { 0, 0, 0, 0, 1, 0, 0 }; // 1 unit of Crystal
+                break;
+            case Race::SORC:
+                result += { 0, 0, 1, 0, 0, 0, 0 }; // 1 unit of Mercury
+                break;
+            case Race::WRLK:
+                result += { 0, 0, 0, 1, 0, 0, 0 }; // 1 unit of Sulfur
+                break;
+            case Race::WZRD:
+                result += { 0, 0, 0, 0, 0, 1, 0 }; // 1 unit of Gems
+                break;
+            case Race::NECR:
+                result += { 0, 0, 0, 1, 0, 0, 0 }; // 1 unit of Sulfur
+                break;
+            default:
+                assert( 0 );
+                break;
+            }
+        }
+
+        return result;
+    };
+
     switch ( difficulty ) {
     case Difficulty::HARD:
         return getIncomeFromSetsOfResourceMines( 1 );
     case Difficulty::EXPERT:
-        return getIncomeFromSetsOfResourceMines( 2 );
+        return getIncomeFromSetsOfResourceMines( 2 ) + getIncomeBasedOnCastles();
     case Difficulty::IMPOSSIBLE:
-        return getIncomeFromSetsOfResourceMines( 3 );
+        return getIncomeFromSetsOfResourceMines( 3 ) + getIncomeBasedOnCastles();
     default:
         break;
     }
