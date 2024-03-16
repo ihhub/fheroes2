@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-10 10:14+0000\n"
+"POT-Creation-Date: 2024-03-15 15:56+0000\n"
 "PO-Revision-Date: 2024-03-05 13:55+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
@@ -4333,10 +4333,8 @@ msgstr "Udv. og support"
 msgid "Special Thanks to"
 msgstr "Særlig tak til"
 
-msgid "and many other contributors!"
-msgstr "og mange andre bidragere!"
-
-msgid "and many-many other supporters!"
+#, fuzzy
+msgid "and many-many other contributors and supporters!"
 msgstr "og mange-mange andre tilhængere!"
 
 msgid "Support us at"
@@ -11355,3 +11353,6 @@ msgstr ""
 "Check den nyeste version af spillet på\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "and many other contributors!"
+#~ msgstr "og mange andre bidragere!"
