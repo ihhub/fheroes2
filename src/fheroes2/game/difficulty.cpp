@@ -78,7 +78,7 @@ Funds Difficulty::getResourceIncomeBonusForAI( const int difficulty, const VecCa
         return result * numOfSets;
     };
 
-    const auto getIncomeBasedOnCastles = [&castles]() {
+    const auto getBonusForCastles = [&castles]() {
         Funds result;
 
         for ( const Castle * castle : castles ) {
@@ -112,9 +112,9 @@ Funds Difficulty::getResourceIncomeBonusForAI( const int difficulty, const VecCa
     case Difficulty::HARD:
         return getIncomeFromSetsOfResourceMines( 1 );
     case Difficulty::EXPERT:
-        return getIncomeFromSetsOfResourceMines( 2 ) + getIncomeBasedOnCastles();
+        return getIncomeFromSetsOfResourceMines( 2 ) + getBonusForCastles();
     case Difficulty::IMPOSSIBLE:
-        return getIncomeFromSetsOfResourceMines( 3 ) + getIncomeBasedOnCastles();
+        return getIncomeFromSetsOfResourceMines( 3 ) + getBonusForCastles();
     default:
         break;
     }
