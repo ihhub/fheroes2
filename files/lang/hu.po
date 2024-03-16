@@ -4263,9 +4263,8 @@ msgstr "Fejl. és támogatás"
 msgid "Special Thanks to"
 msgstr "Külön köszönet"
 
-#, fuzzy
 msgid "and many-many other contributors and supporters!"
-msgstr "és sok-sok egyéb támogatónak!"
+msgstr "és sok-sok egyéb közreműködőnek és támogatónak!"
 
 msgid "Support us at"
 msgstr "Támogass minket itt"
