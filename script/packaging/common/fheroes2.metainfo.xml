@@ -37,6 +37,47 @@
     <control>touch</control>
   </recommends>
   <releases>
+    <release date="2024-03-16" version="v1.0.13">
+      <url>https://github.com/ihhub/fheroes2/releases/tag/1.0.13</url>
+      <description>
+        <p>Changes in v1.0.13 (16 March 2024):</p>
+        <ul>
+          <li>fix Sphinx title offset</li>
+          <li>add a window telling about demo version being used</li>
+          <li>add possibility to "draw" the attack angle between two hexes on touch screens</li>
+          <li>fix double daily resources award</li>
+          <li>fix rendering flaws of battle journal when using scroll bar</li>
+          <li>update the French translation</li>
+          <li>fix delayed cursor in campaign briefing dialog</li>
+          <li>add convenient list scrolling for touch screens</li>
+          <li>fix army split dialog text overflowing the dialog and add troops name</li>
+          <li>fix multiple objects and add missing ones in the Editor</li>
+          <li>fix a crash with AI hero animation</li>
+          <li>fix the troops carry over mechanics for campaign</li>
+          <li>update the Ukrainian translation</li>
+          <li>update the Swedish translation</li>
+          <li>update the Danish translation</li>
+          <li>kingdom Overview screen: automatically update status of castle dwellings that have just been built or upgraded</li>
+          <li>update the Vietnamese Translation</li>
+          <li>fix the mechanics of Genie special ability</li>
+          <li>add multiline stats in hero info window in battle</li>
+          <li>update the Hungarian translation</li>
+          <li>update the Spanish translation</li>
+          <li>fix many typos and improve English strings</li>
+          <li>add info about ranged penalty elimination to archery skill description</li>
+          <li>update combat disabling dialog text</li>
+          <li>adjust the difficulties of campaign scenarios that were hard-coded in the original game</li>
+          <li>update the resource panel immediately after a purchase in a castle</li>
+          <li>speed up application loading</li>
+          <li>add a feature to align the text non-uniformly</li>
+          <li>make several buttons text adapted and fix okay button redraw</li>
+          <li>add quick hero switch feature to the adventure map interface</li>
+          <li>cursor update code improvements</li>
+          <li>fix accidental map scrolling after exiting castle/hero screen</li>
+          <li>auto combat toggling improvements</li>
+        </ul>
+      </description>
+    </release>
     <release date="2024-02-07" version="v1.0.12">
       <url>https://github.com/ihhub/fheroes2/releases/tag/1.0.12</url>
       <description>
