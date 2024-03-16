@@ -25,6 +25,7 @@
 #include <cassert>
 #include <cstddef>
 #include <memory>
+#include <set>
 #include <string>
 #include <vector>
 
@@ -166,6 +167,111 @@ namespace
                                      const std::function<bool( const Maps::Tiles & tile )> & condition )
     {
         return isConditionValid( Maps::getGroundLevelUsedTileOffset( info ), mainTilePos, condition );
+    }
+
+    bool removeObjects( Maps::Map_Format::MapFormat & mapFormat, const int32_t startTileId, const int32_t endTileId, const std::set<Maps::ObjectGroup> & objectGroups )
+    {
+        // '_mapFormat' stores only object's main (action) tile so initially we do search for objects in 'tiles'.
+        std::set<uint32_t> objectsUids = Maps::getObjectUidsInArea( startTileId, endTileId );
+
+        if ( objectsUids.empty() ) {
+            return false;
+        }
+
+        bool needRedraw = false;
+
+        // Filter objects by group and remove them from '_mapFormat'.
+        for ( size_t mapTileIndex = 0; mapTileIndex < mapFormat.tiles.size(); ++mapTileIndex ) {
+            Maps::Map_Format::TileInfo & mapTile = mapFormat.tiles[mapTileIndex];
+
+            if ( mapTile.objects.empty() ) {
+                continue;
+            }
+
+            for ( auto objectIter = mapTile.objects.begin(); objectIter != mapTile.objects.end(); ) {
+                // LANDSCAPE_FLAGS and LANDSCAPE_TOWN_BASEMENTS are special objects that should be erased only when erasing the main object.
+                if ( objectIter->group == Maps::ObjectGroup::LANDSCAPE_FLAGS || objectIter->group == Maps::ObjectGroup::LANDSCAPE_TOWN_BASEMENTS
+                     || objectsUids.find( objectIter->id ) == objectsUids.end() ) {
+                    // No main object UID was found.
+                    ++objectIter;
+                    continue;
+                }
+
+                // The object with this UID is found, remove UID not to search for it more.
+                objectsUids.erase( objectIter->id );
+
+                if ( std::none_of( objectGroups.begin(), objectGroups.end(), [&objectIter]( const Maps::ObjectGroup group ) { return group == objectIter->group; } ) ) {
+                    // This object is not in the selected to erase groups.
+                    if ( objectsUids.empty() ) {
+                        break;
+                    }
+
+                    ++objectIter;
+                    continue;
+                }
+
+                if ( objectIter->group == Maps::ObjectGroup::KINGDOM_TOWNS ) {
+                    // Towns and castles consist of four objects. We need to search them all and remove from map.
+                    const uint32_t objectId = objectIter->id;
+
+                    auto findTownPart = [objectId]( const Maps::Map_Format::TileInfo & tileToSearch, const Maps::ObjectGroup group ) {
+                        auto foundObjectIter = std::find_if( tileToSearch.objects.begin(), tileToSearch.objects.end(),
+                                                             [objectId, group]( const Maps::Map_Format::ObjectInfo & mapObject ) {
+                                                                 return mapObject.group == group && mapObject.id == objectId;
+                                                             } );
+
+                        // The town part should exist on the map. If no then there might be issues in towns placing.
+                        assert( foundObjectIter != tileToSearch.objects.end() );
+
+                        return foundObjectIter;
+                    };
+
+                    // Remove the town object.
+                    mapTile.objects.erase( objectIter );
+
+                    // Town basement is also located at this tile. Find and remove it.
+                    mapTile.objects.erase( findTownPart( mapTile, Maps::ObjectGroup::LANDSCAPE_TOWN_BASEMENTS ) );
+
+                    // Remove flags.
+                    assert( mapTileIndex > 0 );
+                    Maps::Map_Format::TileInfo & previousMapTile = mapFormat.tiles[mapTileIndex - 1];
+                    previousMapTile.objects.erase( findTownPart( previousMapTile, Maps::ObjectGroup::LANDSCAPE_FLAGS ) );
+
+                    assert( mapTileIndex < mapFormat.tiles.size() - 1 );
+                    Maps::Map_Format::TileInfo & nextMapTile = mapFormat.tiles[mapTileIndex + 1];
+                    nextMapTile.objects.erase( findTownPart( nextMapTile, Maps::ObjectGroup::LANDSCAPE_FLAGS ) );
+
+                    // Two objects have been removed from this tile. Start search from the beginning.
+                    objectIter = mapTile.objects.begin();
+
+                    needRedraw = true;
+                }
+                else if ( objectIter->group == Maps::ObjectGroup::ROADS ) {
+                    assert( mapTileIndex < world.getSize() );
+
+                    needRedraw |= Maps::updateRoadOnTile( world.GetTiles( static_cast<int32_t>( mapTileIndex ) ), false );
+
+                    ++objectIter;
+                }
+                else if ( objectIter->group == Maps::ObjectGroup::STREAMS ) {
+                    assert( mapTileIndex < world.getSize() );
+
+                    needRedraw |= Maps::updateStreamOnTile( world.GetTiles( static_cast<int32_t>( mapTileIndex ) ), false );
+
+                    ++objectIter;
+                }
+                else {
+                    objectIter = mapTile.objects.erase( objectIter );
+                    needRedraw = true;
+                }
+
+                if ( objectsUids.empty() ) {
+                    break;
+                }
+            }
+        }
+
+        return needRedraw;
     }
 }
 
@@ -477,7 +583,7 @@ namespace Interface
             }
 
             if ( _selectedTile > -1 && le.MouseReleaseLeft() ) {
-                if ( isCursorOverGamearea && _editorPanel.getBrushArea().width == 0 ) {
+                if ( isCursorOverGamearea && _tileUnderCursor > -1 && _editorPanel.getBrushArea().width == 0 ) {
                     if ( _editorPanel.isTerrainEdit() ) {
                         // Fill the selected area in terrain edit mode.
                         fheroes2::ActionCreator action( _historyManager, _mapFormat );
@@ -491,9 +597,13 @@ namespace Interface
                         // Erase objects in the selected area.
                         fheroes2::ActionCreator action( _historyManager, _mapFormat );
 
-                        Maps::eraseObjectsOnTiles( _selectedTile, _tileUnderCursor, _editorPanel.getEraseTypes() );
+                        if ( removeObjects( _mapFormat, _selectedTile, _tileUnderCursor, _editorPanel.getEraseObjectGroups() ) ) {
+                            action.commit();
+                            _redraw |= mapUpdateFlags;
 
-                        action.commit();
+                            // TODO: Make a proper function to remove all types of objects from the 'world tiles' not to do full reload of '_mapFormat'.
+                            Maps::readMapInEditor( _mapFormat );
+                        }
                     }
                 }
 
@@ -723,26 +833,18 @@ namespace Interface
 
             fheroes2::ActionCreator action( _historyManager, _mapFormat );
 
-            if ( brushSize.width > 1 ) {
-                const fheroes2::Point indices = getBrushAreaIndicies( brushSize, tileIndex );
+            const fheroes2::Point indices = getBrushAreaIndicies( brushSize, tileIndex );
+            if ( removeObjects( _mapFormat, indices.x, indices.y, _editorPanel.getEraseObjectGroups() ) ) {
+                action.commit();
+                _redraw |= mapUpdateFlags;
 
-                if ( Maps::eraseObjectsOnTiles( indices.x, indices.y, _editorPanel.getEraseTypes() ) ) {
-                    _redraw |= mapUpdateFlags;
-
-                    action.commit();
-                }
+                // TODO: Make a proper function to remove all types of objects from the 'world tiles' not to do full reload of '_mapFormat'.
+                Maps::readMapInEditor( _mapFormat );
             }
-            else {
-                if ( Maps::eraseOjects( tile, _editorPanel.getEraseTypes() ) ) {
-                    _redraw |= mapUpdateFlags;
 
-                    action.commit();
-                }
-
-                if ( brushSize.width == 0 ) {
-                    // This is a case when area was not selected but a single tile was clicked.
-                    _selectedTile = -1;
-                }
+            if ( brushSize.width == 0 ) {
+                // This is a case when area was not selected but a single tile was clicked.
+                _selectedTile = -1;
             }
         }
         else if ( _editorPanel.isObjectMode() ) {

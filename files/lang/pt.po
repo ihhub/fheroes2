@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-18 14:42+0000\n"
+"POT-Creation-Date: 2024-03-15 15:56+0000\n"
 "PO-Revision-Date: 2022-10-25 08:56+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
@@ -3264,10 +3264,11 @@ msgstr ""
 msgid "Open Virtual Keyboard"
 msgstr ""
 
-msgid "How many troops to move?"
+#, fuzzy
+msgid "How many units do you wish to move?"
 msgstr "Mover quantas tropas?"
 
-msgid "Fast separation into slots:"
+msgid "Select how many slots to separate into:"
 msgstr ""
 
 msgid "Map: "
@@ -3901,10 +3902,17 @@ msgstr "Cidade"
 msgid "Heroes"
 msgstr "Heróis"
 
-msgid "editorErasure|Terrain"
+#, fuzzy
+msgid "editorErasure|Landscape objects"
+msgstr "Artefato"
+
+msgid "editorErasure|Adventure non pickable objects"
 msgstr ""
 
 msgid "editorErasure|Castles"
+msgstr ""
+
+msgid "editorErasure|Adventure pickable objects"
 msgstr ""
 
 msgid "editorErasure|Monsters"
@@ -3913,16 +3921,10 @@ msgstr ""
 msgid "editorErasure|Heroes"
 msgstr ""
 
-msgid "editorErasure|Artifacts"
-msgstr ""
-
 msgid "editorErasure|Roads"
 msgstr ""
 
 msgid "editorErasure|Streams"
-msgstr ""
-
-msgid "editorErasure|Treasures"
 msgstr ""
 
 msgid ""
@@ -4246,10 +4248,7 @@ msgstr ""
 msgid "Special Thanks to"
 msgstr ""
 
-msgid "and many other contributors!"
-msgstr ""
-
-msgid "and many-many other supporters!"
+msgid "and many-many other contributors and supporters!"
 msgstr ""
 
 msgid "Support us at"
@@ -4969,6 +4968,13 @@ msgid ""
 msgstr ""
 "O convidado espera pelo host configurar o jogo, em seguida, é adicionado "
 "automaticamente dentro. Não pode haver vários convidados para  Jogos TCP/IP."
+
+msgid ""
+"fheroes2 needs data files from the original Heroes of Might and Magic II to "
+"operate. You appear to be using the demo version of Heroes of Might and "
+"Magic II for this purpose. Please note that only one scenario will be "
+"available in this setup."
+msgstr ""
 
 #, fuzzy
 msgid ""
@@ -10570,23 +10576,3 @@ msgid ""
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
 msgstr ""
-
-#, fuzzy
-#~ msgid "on"
-#~ msgstr "Nenhum"
-
-#, fuzzy
-#~ msgid "Castles"
-#~ msgstr "Castelo"
-
-#, fuzzy
-#~ msgid "Ocean object"
-#~ msgstr "Terreno Baldio"
-
-#, fuzzy
-#~ msgid "Desert Objects"
-#~ msgstr "Deserto"
-
-#, fuzzy
-#~ msgid "%{race2} %{name2}"
-#~ msgstr "Ver %{name}"

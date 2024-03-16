@@ -1431,28 +1431,33 @@ void Heroes::SetMove( const bool enable )
         }
 
         // Reset the hero sprite
-        switch ( direction ) {
-        case Direction::TOP:
-            sprite_index = 0;
-            break;
-        case Direction::BOTTOM:
-            sprite_index = 36;
-            break;
-        case Direction::TOP_RIGHT:
-        case Direction::TOP_LEFT:
-            sprite_index = 9;
-            break;
-        case Direction::BOTTOM_RIGHT:
-        case Direction::BOTTOM_LEFT:
-            sprite_index = 27;
-            break;
-        case Direction::RIGHT:
-        case Direction::LEFT:
-            sprite_index = 18;
-            break;
-        default:
-            break;
-        }
+        resetHeroSprite();
+    }
+}
+
+void Heroes::resetHeroSprite()
+{
+    switch ( direction ) {
+    case Direction::TOP:
+        sprite_index = 0;
+        break;
+    case Direction::BOTTOM:
+        sprite_index = 36;
+        break;
+    case Direction::TOP_RIGHT:
+    case Direction::TOP_LEFT:
+        sprite_index = 9;
+        break;
+    case Direction::BOTTOM_RIGHT:
+    case Direction::BOTTOM_LEFT:
+        sprite_index = 27;
+        break;
+    case Direction::RIGHT:
+    case Direction::LEFT:
+        sprite_index = 18;
+        break;
+    default:
+        break;
     }
 }
 
@@ -2283,9 +2288,9 @@ StreamBase & operator>>( StreamBase & msg, Heroes & hero )
     // Heroes
     msg >> hero.name >> col >> hero.experience >> hero.secondary_skills >> hero.army >> hero._id >> hero.portrait >> hero._race;
 
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1100_RELEASE, "Remove the logic below." );
-    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1100_RELEASE ) {
-        // Before FORMAT_VERSION_1100_RELEASE we did not check that a custom hero name is empty set inside the original map.
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE1_1100_RELEASE, "Remove the logic below." );
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_PRE1_1100_RELEASE ) {
+        // Before FORMAT_VERSION_PRE1_1100_RELEASE we did not check that a custom hero name is empty set inside the original map.
         // This leads to assertion rise while rendering text. Also, it is incorrect to have a hero with no name.
         if ( hero.name.empty() ) {
             hero.name = Heroes::GetName( hero._id );

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -32,7 +32,6 @@
 #include "image.h"
 #include "interface_itemsbar.h"
 #include "math_base.h"
-#include "monster.h"
 #include "resource.h"
 
 namespace fheroes2
@@ -81,22 +80,23 @@ private:
 
 struct DwellingItem
 {
-    DwellingItem( const Castle &, uint32_t dw );
+    explicit DwellingItem( const uint32_t dw )
+        : dwType( dw )
+    {}
 
-    uint32_t type;
-    Monster mons;
+    const uint32_t dwType;
 };
 
 class DwellingsBar : public Interface::ItemsBar<DwellingItem>
 {
 public:
-    DwellingsBar( Castle &, const fheroes2::Size & );
+    DwellingsBar( Castle & cstl, const fheroes2::Size & sz );
 
-    void RedrawBackground( const fheroes2::Rect &, fheroes2::Image & ) override;
-    void RedrawItem( DwellingItem &, const fheroes2::Rect &, fheroes2::Image & ) override;
+    void RedrawBackground( const fheroes2::Rect & pos, fheroes2::Image & dstsf ) override;
+    void RedrawItem( DwellingItem & dwl, const fheroes2::Rect & pos, fheroes2::Image & dstsf ) override;
 
-    bool ActionBarLeftMouseSingleClick( DwellingItem & dwelling ) override;
-    bool ActionBarRightMouseHold( DwellingItem & dwelling ) override;
+    bool ActionBarLeftMouseSingleClick( DwellingItem & dwl ) override;
+    bool ActionBarRightMouseHold( DwellingItem & dwl ) override;
 
 protected:
     Castle & castle;

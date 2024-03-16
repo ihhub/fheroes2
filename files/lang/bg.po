@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-18 14:42+0000\n"
+"POT-Creation-Date: 2024-03-15 15:56+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3376,11 +3376,13 @@ msgstr "Щракни, за да отвориш диалоговия прозор
 msgid "Open Virtual Keyboard"
 msgstr "Отвори виртуална клавиатура"
 
-msgid "How many troops to move?"
+#, fuzzy
+msgid "How many units do you wish to move?"
 msgstr "Колко единици ще преместите?"
 
-msgid "Fast separation into slots:"
-msgstr "Бързо разделяне на слотове:"
+#, fuzzy
+msgid "Select how many slots to separate into:"
+msgstr "Избери град за пристанище."
 
 msgid "Map: "
 msgstr "Карта: "
@@ -4006,10 +4008,17 @@ msgstr "Градове"
 msgid "Heroes"
 msgstr "Герой"
 
-msgid "editorErasure|Terrain"
+#, fuzzy
+msgid "editorErasure|Landscape objects"
+msgstr "Океански обекти"
+
+msgid "editorErasure|Adventure non pickable objects"
 msgstr ""
 
 msgid "editorErasure|Castles"
+msgstr ""
+
+msgid "editorErasure|Adventure pickable objects"
 msgstr ""
 
 msgid "editorErasure|Monsters"
@@ -4018,16 +4027,10 @@ msgstr ""
 msgid "editorErasure|Heroes"
 msgstr ""
 
-msgid "editorErasure|Artifacts"
-msgstr ""
-
 msgid "editorErasure|Roads"
 msgstr ""
 
 msgid "editorErasure|Streams"
-msgstr ""
-
-msgid "editorErasure|Treasures"
 msgstr ""
 
 msgid ""
@@ -4386,10 +4389,8 @@ msgstr "Разработка и поддръжка"
 msgid "Special Thanks to"
 msgstr "Специални благодарности на"
 
-msgid "and many other contributors!"
-msgstr "и много други сътрудници!"
-
-msgid "and many-many other supporters!"
+#, fuzzy
+msgid "and many-many other contributors and supporters!"
 msgstr "и много-много други поддръжници!"
 
 msgid "Support us at"
@@ -5092,6 +5093,13 @@ msgid ""
 msgstr ""
 "Гостът чака хостът да настрои играта, след което автоматично се добавя. Може "
 "да има няколко госта за TCP/IP игри."
+
+msgid ""
+"fheroes2 needs data files from the original Heroes of Might and Magic II to "
+"operate. You appear to be using the demo version of Heroes of Might and "
+"Magic II for this purpose. Please note that only one scenario will be "
+"available in this setup."
+msgstr ""
 
 #, fuzzy
 msgid ""
@@ -11441,85 +11449,5 @@ msgstr ""
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
 
-#~ msgid "disable build."
-#~ msgstr "спри изграждането."
-
-#~ msgid "on"
-#~ msgstr "вкл"
-
-#~ msgid "Toggle colored cursor on or off. This is only an esthetic choice."
-#~ msgstr ""
-#~ "Включване/изключване на цветните курсори. Това е само естетически избор."
-
-#, fuzzy
-#~ msgid ""
-#~ "%{skill} increases the damage done by the hero's range attacking "
-#~ "creatures by %{count} percent."
-#~ msgstr ""
-#~ "%{skill} увеличава щетите, нанесени от атакуващи в обхвата същества с "
-#~ "%{count} процента."
-
-#~ msgid "Terrain"
-#~ msgstr "Терен"
-
-#~ msgid "Castles"
-#~ msgstr "Замъци"
-
-#, fuzzy
-#~ msgid "Ocean object"
-#~ msgstr "Океански обекти"
-
-#~ msgid "Ocean Objects"
-#~ msgstr "Океански обекти"
-
-#~ msgid "Grass Objects"
-#~ msgstr "Тревни обекти"
-
-#~ msgid "Snow Objects"
-#~ msgstr "Снежни обекти"
-
-#~ msgid "Swamp Objects"
-#~ msgstr "Блатни обекти"
-
-#~ msgid "Lava Objects"
-#~ msgstr "Лава обекти"
-
-#~ msgid "Desert Objects"
-#~ msgstr "Пустинни обекти"
-
-#~ msgid "Dirt Objects"
-#~ msgstr "Земни обекти"
-
-#~ msgid "Beach Objects"
-#~ msgstr "Плажни обекти"
-
-#~ msgid "Used to place objects most appropriate for use on %{terrain}."
-#~ msgstr ""
-#~ "Използва се за поставяне на обекти, които са най-подходящи за използване "
-#~ "на %{terrain}."
-
-#~ msgid ""
-#~ "Used to place\n"
-#~ "a town or castle."
-#~ msgstr ""
-#~ "Използва се за поставяне\n"
-#~ "на град или замък."
-
-#~ msgid "Used to place an artifact."
-#~ msgstr "Използва се за поставяне на артефакт."
-
-#~ msgid ""
-#~ "Used to place\n"
-#~ "a resource or treasure."
-#~ msgstr ""
-#~ "Използва се за поставяне\n"
-#~ "на ресурс или съкровище."
-
-#~ msgid "%{race1} %{name1}"
-#~ msgstr "%{race1} %{name1}"
-
-#~ msgid "vs"
-#~ msgstr "срещу"
-
-#~ msgid "%{race2} %{name2}"
-#~ msgstr "%{race2} %{name2}"
+#~ msgid "and many other contributors!"
+#~ msgstr "и много други сътрудници!"

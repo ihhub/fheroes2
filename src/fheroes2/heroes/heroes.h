@@ -636,6 +636,8 @@ public:
         return id > UNKNOWN && id < HEROES_COUNT;
     }
 
+    void resetHeroSprite();
+
 private:
     friend StreamBase & operator<<( StreamBase &, const Heroes & );
     friend StreamBase & operator>>( StreamBase &, Heroes & );

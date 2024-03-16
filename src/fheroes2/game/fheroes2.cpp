@@ -252,6 +252,19 @@ namespace
         std::unique_ptr<AGG::AGGInitializer> _aggInitializer;
         std::unique_ptr<fheroes2::h2d::H2DInitializer> _h2dInitializer;
     };
+
+    // This function checks for a possible situation when a user uses a demo version
+    // of the game. There is no 100% certain way to detect this, so assumptions are made.
+    bool isProbablyDemoVersion()
+    {
+        if ( Settings::Get().isPriceOfLoyaltySupported() ) {
+            return false;
+        }
+
+        // The demo version of the game only has 1 map.
+        const ListFiles maps = Settings::FindFiles( "maps", ".mp2", false );
+        return maps.size() == 1;
+    }
 }
 
 int main( int argc, char ** argv )
@@ -325,7 +338,7 @@ int main( int argc, char ** argv )
         try {
             const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
-            Game::mainGameLoop( conf.isFirstGameRun() );
+            Game::mainGameLoop( conf.isFirstGameRun(), isProbablyDemoVersion() );
         }
         catch ( const fheroes2::InvalidDataResources & ex ) {
             ERROR_LOG( ex.what() )
