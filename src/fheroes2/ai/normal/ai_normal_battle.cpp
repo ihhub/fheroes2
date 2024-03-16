@@ -616,15 +616,14 @@ namespace AI
                     } );
                 }();
 
-                const Force & force = arena.getForce( _myColor );
                 const Kingdom & kingdom = actualHero->GetKingdom();
 
-                const bool isAbleToSurrender = [this, &arena, &force, &kingdom]() {
+                const bool isAbleToSurrender = [this, &arena, &kingdom]() {
                     if ( !arena.CanSurrenderOpponent( _myColor ) ) {
                         return false;
                     }
 
-                    return ( kingdom.AllowPayment( { Resource::GOLD, force.GetSurrenderCost() } ) );
+                    return ( kingdom.AllowPayment( { Resource::GOLD, arena.getForce( _myColor ).GetSurrenderCost() } ) );
                 }();
 
                 const bool isPossibleToReHire = [actualHero, &kingdom]() {
