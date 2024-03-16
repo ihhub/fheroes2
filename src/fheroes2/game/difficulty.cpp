@@ -24,6 +24,7 @@
 #include "difficulty.h"
 
 #include <cassert>
+#include <vector>
 
 #include "profit.h"
 #include "race.h"
