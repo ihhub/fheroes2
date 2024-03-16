@@ -623,7 +623,7 @@ namespace AI
                         return false;
                     }
 
-                    return ( kingdom.AllowPayment( { Resource::GOLD, arena.getForce( _myColor ).GetSurrenderCost() } ) );
+                    return kingdom.AllowPayment( { Resource::GOLD, arena.getForce( _myColor ).GetSurrenderCost() } );
                 }();
 
                 const bool isPossibleToReHire = [actualHero, &kingdom]() {
