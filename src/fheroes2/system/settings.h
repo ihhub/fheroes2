@@ -187,7 +187,10 @@ public:
     bool isBattleShowDamageInfoEnabled() const;
     bool isHideInterfaceEnabled() const;
     bool isEvilInterfaceEnabled() const;
+
     bool isEditorEnabled() const;
+    bool isEditorAnimationEnabled() const;
+    bool isEditorPassabilityEnabled() const;
 
     bool LoadedGameVersion() const
     {
@@ -259,6 +262,9 @@ public:
     }
 
     bool setGameLanguage( const std::string & language );
+
+    void setEditorAnimation( const bool enable );
+    void setEditorPassability( const bool enable );
 
     int SoundVolume() const
     {
@@ -353,8 +359,11 @@ private:
 
     static void setDebug( int debug );
 
-    // Global game options (GLOBAL_)
-    BitModes _optGlobal;
+    // Game related options.
+    BitModes _gameOptions;
+
+    // Editor related options.
+    BitModes _editorOptions;
 
     fheroes2::ResolutionInfo _resolutionInfo;
     int _gameDifficulty;
