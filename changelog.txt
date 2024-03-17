@@ -1,3 +1,38 @@
+version 1.0.13 (16 March 2024)
+- fix Sphinx title offset
+- add a window telling about demo version being used
+- add possibility to "draw" the attack angle between two hexes on touch screens
+- fix double daily resources award
+- fix rendering flaws of battle journal when using scroll bar
+- update the French translation
+- fix delayed cursor in campaign briefing dialog
+- add convenient list scrolling for touch screens
+- fix army split dialog text overflowing the dialog and add troops name
+- fix multiple objects and add missing ones in the Editor
+- fix a crash with AI hero animation
+- fix the troops carry over mechanics for campaign
+- update the Ukrainian translation
+- update the Swedish translation
+- update the Danish translation
+- kingdom Overview screen: automatically update status of castle dwellings that have just been built or upgraded
+- update the Vietnamese Translation
+- fix the mechanics of Genie special ability
+- add multiline stats in hero info window in battle
+- update the Hungarian translation
+- update the Spanish translation
+- fix many typos and improve English strings
+- add info about ranged penalty elimination to archery skill description
+- update combat disabling dialog text
+- adjust the difficulties of campaign scenarios that were hard-coded in the original game
+- update the resource panel immediately after a purchase in a castle
+- speed up application loading
+- add a feature to align the text non-uniformly
+- make several buttons text adapted and fix okay button redraw
+- add quick hero switch feature to the adventure map interface
+- cursor update code improvements
+- fix accidental map scrolling after exiting castle/hero screen
+- auto combat toggling improvements
+
 version 1.0.12 (07 February 2024)
 - update the Russian translation
 - update the Spanish translation
