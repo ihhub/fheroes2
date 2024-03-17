@@ -597,8 +597,6 @@ namespace Interface
         _buttonSpecs.draw();
         _buttonFile.draw();
         _buttonSystem.draw();
-
-        display.render( _rectInstrumentPanel );
     }
 
     int32_t EditorPanel::getSelectedObjectType() const
