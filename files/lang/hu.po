@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-15 15:56+0000\n"
+"POT-Creation-Date: 2024-03-17 16:14+0000\n"
 "PO-Revision-Date: 2023-09-04 21:55+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -4127,6 +4127,21 @@ msgstr "Nincs használható térkép!"
 
 msgid "Warning"
 msgstr "Figyelmeztetés"
+
+#, fuzzy
+msgid "Animation"
+msgstr "Birtokbavétel"
+
+#, fuzzy
+msgid "Passability"
+msgstr "Személyiség:"
+
+#, fuzzy
+msgid "Toggle animation of the objects."
+msgstr "%{type} tárgyak törlésének kapcsolója."
+
+msgid "Toggle display of objects' passability."
+msgstr ""
 
 msgid "difficulty|Easy"
 msgstr "Könnyű"

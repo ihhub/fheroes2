@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-16 01:23+0000\n"
+"POT-Creation-Date: 2024-03-17 16:14+0000\n"
 "PO-Revision-Date: 2024-03-16 00:13+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -4205,6 +4205,21 @@ msgstr "Aucune carte disponible !"
 
 msgid "Warning"
 msgstr "Attention"
+
+#, fuzzy
+msgid "Animation"
+msgstr "Annexion"
+
+#, fuzzy
+msgid "Passability"
+msgstr "Personnalité :"
+
+#, fuzzy
+msgid "Toggle animation of the objects."
+msgstr "Effacement %{type}."
+
+msgid "Toggle display of objects' passability."
+msgstr ""
 
 msgid "difficulty|Easy"
 msgstr "Facile"
