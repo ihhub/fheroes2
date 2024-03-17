@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-15 15:56+0000\n"
+"POT-Creation-Date: 2024-03-17 16:14+0000\n"
 "PO-Revision-Date: 2023-08-26 23:09+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: https://discord.com/"
@@ -4214,6 +4214,20 @@ msgstr "Mapy niedostępne!"
 
 msgid "Warning"
 msgstr "Uwaga"
+
+#, fuzzy
+msgid "Animation"
+msgstr "Aneksja"
+
+#, fuzzy
+msgid "Passability"
+msgstr "Osobowość:"
+
+msgid "Toggle animation of the objects."
+msgstr ""
+
+msgid "Toggle display of objects' passability."
+msgstr ""
 
 msgid "difficulty|Easy"
 msgstr "Łatwy"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-15 15:56+0000\n"
+"POT-Creation-Date: 2024-03-17 16:14+0000\n"
 "PO-Revision-Date: 2024-02-16 05:07+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -4152,6 +4152,20 @@ msgstr "¡Ningún mapa disponible!"
 
 msgid "Warning"
 msgstr "Advertencia"
+
+#, fuzzy
+msgid "Animation"
+msgstr "Anexión"
+
+#, fuzzy
+msgid "Passability"
+msgstr "Personalidad:"
+
+msgid "Toggle animation of the objects."
+msgstr ""
+
+msgid "Toggle display of objects' passability."
+msgstr ""
 
 msgid "difficulty|Easy"
 msgstr "Fácil"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-15 15:56+0000\n"
+"POT-Creation-Date: 2024-03-17 16:14+0000\n"
 "PO-Revision-Date: 2024-03-05 13:55+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
@@ -4193,6 +4193,21 @@ msgstr "Intet kort tilgængelig!"
 
 msgid "Warning"
 msgstr "Advarsel"
+
+#, fuzzy
+msgid "Animation"
+msgstr "Anneksering"
+
+#, fuzzy
+msgid "Passability"
+msgstr "Personlighed:"
+
+#, fuzzy
+msgid "Toggle animation of the objects."
+msgstr "Vælg sletning af %{type}objekter til og fra."
+
+msgid "Toggle display of objects' passability."
+msgstr ""
 
 msgid "difficulty|Easy"
 msgstr "Let"

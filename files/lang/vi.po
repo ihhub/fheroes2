@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-15 15:56+0000\n"
+"POT-Creation-Date: 2024-03-17 16:14+0000\n"
 "PO-Revision-Date: 2024-02-20 08:49+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -4200,6 +4200,21 @@ msgstr "Không có bản đồ nào!"
 
 msgid "Warning"
 msgstr "Cảnh báo"
+
+#, fuzzy
+msgid "Animation"
+msgstr "Thôn tính"
+
+#, fuzzy
+msgid "Passability"
+msgstr "Nhân cách:"
+
+#, fuzzy
+msgid "Toggle animation of the objects."
+msgstr "Chuyển đổi tính năng xóa đối tượng %{type}."
+
+msgid "Toggle display of objects' passability."
+msgstr ""
 
 msgid "difficulty|Easy"
 msgstr "Dễ"
