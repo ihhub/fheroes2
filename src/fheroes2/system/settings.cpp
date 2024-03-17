@@ -491,7 +491,7 @@ std::string Settings::String() const
     os << "screen scaling type = " << ( _gameOptions.Modes( GAME_SCREEN_SCALING_TYPE_NEAREST ) ? "nearest" : "linear" ) << std::endl;
 
     if ( _editorOptions.Modes( EDITOR_ENABLE ) ) {
-        os << "editor = beta" << std::endl;
+        os << std::endl << "editor = beta" << std::endl;
 
         os << std::endl << "# show object animation in the Editor: on/off" << std::endl;
         os << "editor animation = " << ( _editorOptions.Modes( EDITOR_ANIMATION ) ? "on" : "off" ) << std::endl;

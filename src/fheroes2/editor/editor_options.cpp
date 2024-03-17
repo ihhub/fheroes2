@@ -49,7 +49,7 @@
 
 namespace
 {
-    enum class DialogAction : int
+    enum class DialogAction : uint8_t
     {
         Configuration,
         Language,
@@ -77,7 +77,7 @@ namespace
     void drawLanguage( const fheroes2::Rect & optionRoi )
     {
         const fheroes2::SupportedLanguage currentLanguage = fheroes2::getLanguageFromAbbreviation( Settings::Get().getGameLanguage() );
-        fheroes2::LanguageSwitcher languageSwitcher( currentLanguage );
+        const fheroes2::LanguageSwitcher languageSwitcher( currentLanguage );
 
         fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::SPANEL, 18 ), _( "Language" ), fheroes2::getLanguageName( currentLanguage ),
                               fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
@@ -113,7 +113,7 @@ namespace
     void drawPassabilityOptions( const fheroes2::Rect & optionRoi )
     {
         if ( Settings::Get().isEditorPassabilityEnabled() ) {
-            fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::ESPANEL, 5 ), _( "Passability" ), _( "On" ), fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
+            fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::ESPANEL, 5 ), _( "Show Passability" ), _( "On" ), fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
         }
         else {
             fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::ESPANEL, 4 ), _( "Show Passability" ), _( "No" ),
@@ -141,7 +141,7 @@ namespace
         fheroes2::Blit( dialogShadow, display, windowRoi.x - BORDERWIDTH, windowRoi.y + BORDERWIDTH );
         fheroes2::Blit( dialog, display, windowRoi.x, windowRoi.y );
 
-        fheroes2::ImageRestorer emptyDialogRestorer( display, windowRoi.x, windowRoi.y, windowRoi.width, windowRoi.height );
+        const fheroes2::ImageRestorer emptyDialogRestorer( display, windowRoi.x, windowRoi.y, windowRoi.width, windowRoi.height );
 
         const int buttonIcnId = isEvilInterface ? ICN::BUTTON_SMALL_OKAY_EVIL : ICN::BUTTON_SMALL_OKAY_GOOD;
 
