@@ -113,7 +113,8 @@ namespace
     void drawPassabilityOptions( const fheroes2::Rect & optionRoi )
     {
         if ( Settings::Get().isEditorPassabilityEnabled() ) {
-            fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::ESPANEL, 5 ), _( "Show Passability" ), _( "On" ), fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
+            fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::ESPANEL, 5 ), _( "Show Passability" ), _( "On" ),
+                                  fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
         }
         else {
             fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::ESPANEL, 4 ), _( "Show Passability" ), _( "No" ),
