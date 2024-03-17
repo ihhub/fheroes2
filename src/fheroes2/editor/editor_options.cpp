@@ -113,11 +113,11 @@ namespace
     void drawPassabilityOptions( const fheroes2::Rect & optionRoi )
     {
         if ( Settings::Get().isEditorPassabilityEnabled() ) {
-            fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::ESPANEL, 5 ), _( "Show Passability" ), _( "Show" ),
+            fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::ESPANEL, 5 ), _( "Passability" ), _( "Show" ),
                                   fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
         }
         else {
-            fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::ESPANEL, 4 ), _( "Show Passability" ), _( "Hide" ),
+            fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::ESPANEL, 4 ), _( "Passability" ), _( "Hide" ),
                                   fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
         }
     }
@@ -216,7 +216,7 @@ namespace
                 fheroes2::showStandardTextMessage( _( "Animation" ), _( "Toggle animation of the objects." ), 0 );
             }
             else if ( le.MousePressRight( windowPassabilityRoi ) ) {
-                fheroes2::showStandardTextMessage( _( "Show Passability" ), _( "Toggle display of objects' passability." ), 0 );
+                fheroes2::showStandardTextMessage( _( "Passability" ), _( "Toggle display of objects' passability." ), 0 );
             }
             else if ( le.MousePressRight( okayButton.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Okay" ), _( "Exit this menu." ), 0 );
