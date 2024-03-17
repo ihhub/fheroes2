@@ -96,7 +96,7 @@ namespace
     }
 }
 
-void Game::mainGameLoop( bool isFirstGameRun )
+void Game::mainGameLoop( bool isFirstGameRun, bool isProbablyDemoVersion )
 {
     fheroes2::GameMode result = fheroes2::GameMode::MAIN_MENU;
 
@@ -112,7 +112,8 @@ void Game::mainGameLoop( bool isFirstGameRun )
             isFirstGameRun = false;
             break;
         case fheroes2::GameMode::NEW_GAME:
-            result = Game::NewGame();
+            result = Game::NewGame( isProbablyDemoVersion );
+            isProbablyDemoVersion = false;
             break;
         case fheroes2::GameMode::LOAD_GAME:
             result = Game::LoadGame();
@@ -203,7 +204,7 @@ void Game::mainGameLoop( bool isFirstGameRun )
     fheroes2::fadeOutDisplay();
 }
 
-fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
+fheroes2::GameMode Game::MainMenu( const bool isFirstGameRun )
 {
     // Stop all sounds, but not the music
     AudioManager::stopSounds();

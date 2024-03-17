@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-06 22:25+0000\n"
+"POT-Creation-Date: 2024-03-15 15:56+0000\n"
 "PO-Revision-Date: 2024-02-19 16:13+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -4267,10 +4267,8 @@ msgstr "Utveckling och Support"
 msgid "Special Thanks to"
 msgstr "Extra Tack till"
 
-msgid "and many other contributors!"
-msgstr "och många andra som bidragit!"
-
-msgid "and many-many other supporters!"
+#, fuzzy
+msgid "and many-many other contributors and supporters!"
 msgstr "och många många andra som gett sitt stöd!"
 
 msgid "Support us at"
@@ -4963,6 +4961,13 @@ msgid ""
 msgstr ""
 "Gästen väntar på att värden ska sätta igång spelet, sen läggs till "
 "automatiskt. Det kan finnas flera gäster för TCP/IP-spel."
+
+msgid ""
+"fheroes2 needs data files from the original Heroes of Might and Magic II to "
+"operate. You appear to be using the demo version of Heroes of Might and "
+"Magic II for this purpose. Please note that only one scenario will be "
+"available in this setup."
+msgstr ""
 
 msgid ""
 "A multi-player game, with several human players competing against each other "
@@ -11216,85 +11221,5 @@ msgstr ""
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
 
-#~ msgid "editorErasure|Terrain"
-#~ msgstr "Terräng"
-
-#~ msgid "editorErasure|Treasures"
-#~ msgstr "Skatter"
-
-#~ msgid "Fast separation into slots:"
-#~ msgstr "Snabbseparering till platser:"
-
-#~ msgid "disable build."
-#~ msgstr "Inaktivera bygge"
-
-#~ msgid "on"
-#~ msgstr "på"
-
-#~ msgid "Toggle colored cursor on or off. This is only an esthetic choice."
-#~ msgstr "Välj färglagd eller svartvit muspekare."
-
-#~ msgid ""
-#~ "%{skill} increases the damage done by the hero's range attacking "
-#~ "creatures by %{count} percent."
-#~ msgstr ""
-#~ "%{skill} ökar skadan för varelser som avfyrar projektiler med %{count} "
-#~ "procent."
-
-#~ msgid "Terrain"
-#~ msgstr "Terräng"
-
-#~ msgid "Castles"
-#~ msgstr "Slott"
-
-#~ msgid "Ocean object"
-#~ msgstr "Havsföremål"
-
-#~ msgid "Ocean Objects"
-#~ msgstr "Havsföremål"
-
-#~ msgid "Grass Objects"
-#~ msgstr "Gräsföremål"
-
-#~ msgid "Snow Objects"
-#~ msgstr "Snöföremål"
-
-#~ msgid "Swamp Objects"
-#~ msgstr "Träskföremål"
-
-#~ msgid "Lava Objects"
-#~ msgstr "Lavaföremål"
-
-#~ msgid "Desert Objects"
-#~ msgstr "Ökenföremål"
-
-#~ msgid "Dirt Objects"
-#~ msgstr "Jordföremål"
-
-#~ msgid "Beach Objects"
-#~ msgstr "Strandföremål"
-
-#~ msgid "Used to place objects most appropriate for use on %{terrain}."
-#~ msgstr "Används för att placera de lämpligare objekten för %{terrain}."
-
-#~ msgid ""
-#~ "Used to place\n"
-#~ "a town or castle."
-#~ msgstr "Används för att placera en stad eller slott."
-
-#~ msgid "Used to place an artifact."
-#~ msgstr "Används för att placera en artefakt."
-
-#~ msgid ""
-#~ "Used to place\n"
-#~ "a resource or treasure."
-#~ msgstr "Används för att placera en resurs eller skatt."
-
-#~ msgid "%{race1} %{name1}"
-#~ msgstr "%{name1} (%{race1})"
-
-#~ msgid "vs"
-#~ msgstr "vs"
-
-#~ msgid "%{race2} %{name2}"
-#~ msgstr "%{name2} (%{race2})"
+#~ msgid "and many other contributors!"
+#~ msgstr "och många andra som bidragit!"

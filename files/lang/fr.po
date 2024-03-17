@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-06 22:25+0000\n"
-"PO-Revision-Date: 2024-02-06 13:52+0100\n"
+"POT-Creation-Date: 2024-03-16 01:23+0000\n"
+"PO-Revision-Date: 2024-03-16 00:13+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
 "Language: fr\n"
@@ -603,7 +603,7 @@ msgid "Restart"
 msgstr "Recommencer"
 
 msgid "You have captured an enemy artifact!"
-msgstr "Vous avez capturé un artéfact ennemi !"
+msgstr "Vous vous emparez d'un artéfact ennemi !"
 
 msgid "As you reach for the %{name}, it mysteriously disappears."
 msgstr "Alors que vous vous approchez %{name}, il disparaît mystérieusement."
@@ -3381,13 +3381,11 @@ msgstr "Cliquez pour ouvrir la fenêtre du clavier virtuel."
 msgid "Open Virtual Keyboard"
 msgstr "Open Virtual Keyboard"
 
-#, fuzzy
 msgid "How many units do you wish to move?"
 msgstr "Troupes à déplacer :"
 
-#, fuzzy
 msgid "Select how many slots to separate into:"
-msgstr "Sélectionnez la destination."
+msgstr "Sélectionnez le nombre de pelotons à former :"
 
 msgid "Map: "
 msgstr "Carte : "
@@ -3870,7 +3868,7 @@ msgstr ""
 "carte."
 
 msgid "Failed to update player information."
-msgstr ""
+msgstr "La mise à jour des informations sur les joueurs a échoué."
 
 msgid "Artifacts cannot be placed on water."
 msgstr "Les artéfacts ne peuvent pas être placés sur l'eau."
@@ -3977,20 +3975,17 @@ msgstr "Villages"
 msgid "Heroes"
 msgstr "Héros"
 
-#, fuzzy
 msgid "editorErasure|Landscape objects"
-msgstr "de héros"
+msgstr "d'éléments de paysage"
 
-#, fuzzy
 msgid "editorErasure|Adventure non pickable objects"
-msgstr "d'artéfacts"
+msgstr "d'éléments d'aventure (non piquables)"
 
 msgid "editorErasure|Castles"
 msgstr "de châteaux"
 
-#, fuzzy
 msgid "editorErasure|Adventure pickable objects"
-msgstr "d'artéfacts"
+msgstr "d'éléments d'aventure (piquables)"
 
 msgid "editorErasure|Monsters"
 msgstr "de monstres"
@@ -4028,27 +4023,31 @@ msgid "Large Brush"
 msgstr "Grand pinceau"
 
 msgid "Area Fill"
-msgstr ""
+msgstr "Remplissage de zone"
 
 msgid "Used to click and drag for filling in large areas."
-msgstr ""
+msgstr "Permet de remplir de vastes zones avec la texture sélectionnée."
 
 msgid "Clear Area"
-msgstr ""
+msgstr "Effacement de zone"
 
 msgid "Used to click and drag for clearing large areas."
 msgstr ""
+"Permet l'effacement de tous les éléments qui se trouvent dans la zone "
+"sélectionné."
 
 msgid ""
 "Costs %{rate} times normal movement for all heroes. (Pathfinding reduces or "
 "eliminates the penalty.)"
 msgstr ""
+"Requiert %{rate} fois les points de mouvement normaux pour tous les héros. "
+"(L'orientation réduit, voire annule cette pénalité)."
 
 msgid "Traversable only by boat."
 msgstr "Traversable uniquement par bateau."
 
 msgid "No special modifiers."
-msgstr ""
+msgstr "Aucun modificateur particulier."
 
 msgid "Toggle the erasure of %{type} objects."
 msgstr "Effacement %{type}."
@@ -4058,12 +4057,20 @@ msgid ""
 "deselect this type. Press and hold this button to deselect all other object "
 "types."
 msgstr ""
+"Les éléments de ce type seront effacés à l'aide de l'outil d'effacement. "
+"Cliquez ici avec le bouton gauche de la souris pour désélectionner ce type "
+"d'élément. Maintenez ce bouton enfoncé pour désélectionner tous les autres "
+"types d'éléments."
 
 msgid ""
 "Objects of this type will NOT be deleted with the Erase tool. Left-click "
 "here to select this type. Press and hold this button to select all other "
 "object types."
 msgstr ""
+"Les éléments de ce type ne seront PAS supprimés avec l'outil d'effacement. "
+"Cliquez ici avec le bouton gauche de la souris pour sélectionner ce type "
+"d'élément. Maintenez ce bouton enfoncé pour sélectionner tous les autres "
+"types d'éléments."
 
 msgid "Terrain Mode"
 msgstr "Terrains"
@@ -4077,12 +4084,16 @@ msgstr "Éléments de paysage"
 msgid ""
 "Used to place landscape objects (mountains, rocks, trees, etc.) on the map."
 msgstr ""
+"Permet de placer des éléments de paysage sur la carte (montagnes, rochers, "
+"arbres, etc.)."
 
 msgid "Detail Mode"
 msgstr "Details"
 
 msgid "Used for special editing of monsters, heroes and towns."
-msgstr "Permet d'éditer les monstres, les héros et les villes."
+msgstr ""
+"Permet de spécifier les paramètres spécifiques des monstres, héros et "
+"villages."
 
 msgid "Adventure Objects Mode"
 msgstr "Éléments d'aventure"
@@ -4091,12 +4102,16 @@ msgid ""
 "Used to place adventure objects (artifacts, dwellings, mines, treasures, "
 "etc.) on the map."
 msgstr ""
+"Permet de placer des éléments d'aventure sur la carte (artéfacts, demeures, "
+"mines, trésors, etc.)."
 
 msgid "Kingdom Objects Mode"
 msgstr "Royaumes"
 
 msgid "Used to place kingdom objects (towns, castles and heroes) on the map."
 msgstr ""
+"Permet de placer des éléments de royaume sur la carte (villages, châteaux et "
+"héros)."
 
 msgid "Monsters Mode"
 msgstr "Créatures"
@@ -4120,7 +4135,7 @@ msgid "Erase Mode"
 msgstr "Effacement"
 
 msgid "Used to erase objects from the map."
-msgstr "Permet d'effacer des objets de la carte."
+msgstr "Permet d'effacer les éléments placés sur la carte."
 
 msgid "Change between zoom and normal view."
 msgstr "Passer de la vue zoom à la vue normale."
@@ -4158,9 +4173,11 @@ msgstr ""
 
 msgid "View the editor system options, which let you customize the editor."
 msgstr ""
+"Affiche les options système de l'éditeur, qui vous permettent de "
+"personnaliser l'application."
 
 msgid "Create a map that is %{size} squares wide and %{size} squares high."
-msgstr ""
+msgstr "Créer une carte de %{size} cases de large sur %{size} cases de haut."
 
 msgid "Cancel back to the New Map menu."
 msgstr "Annuler et revenir au menu de création de carte."
@@ -4262,7 +4279,7 @@ msgid ""
 msgstr ""
 "Score : %{score}\n"
 "\n"
-"Taux :\n"
+"Rang :\n"
 "%{rating}"
 
 msgid "Start the selected scenario."
@@ -4329,11 +4346,8 @@ msgstr "Dév et support"
 msgid "Special Thanks to"
 msgstr "Remerciements spéciaux à"
 
-msgid "and many other contributors!"
-msgstr "et aux nombreux autres contributeurs !"
-
-msgid "and many-many other supporters!"
-msgstr "et beaucoup, beaucoup d'autres supporteurs !"
+msgid "and many-many other contributors and supporters!"
+msgstr "et de nombreux autres contributeurs et soutiens !"
 
 msgid "Support us at"
 msgstr "Soutenez-nous sur"
@@ -4684,7 +4698,7 @@ msgid "hotkey|scenario information"
 msgstr "Informations du scénario"
 
 msgid "hotkey|dig for artifact"
-msgstr "Creuser pour l'artéfact"
+msgstr "Creuser pour trouver l'artéfact"
 
 msgid "hotkey|view world"
 msgstr "Voir le monde entier"
@@ -5032,6 +5046,17 @@ msgid ""
 msgstr ""
 "L'invité attend que l'hôte configure le jeu, puis est automatiquement "
 "ajouté. Il peut y avoir plusieurs invités pour les jeux TCP/IP."
+
+msgid ""
+"fheroes2 needs data files from the original Heroes of Might and Magic II to "
+"operate. You appear to be using the demo version of Heroes of Might and "
+"Magic II for this purpose. Please note that only one scenario will be "
+"available in this setup."
+msgstr ""
+"fheroes2 neccessite les fichiers du jeu d'origine Heroes of Might and Magic "
+"II pour fonctionner. Apparemment vous utilissez la version démo du jeu à "
+"cette fin. Veuillez noter qu'un seul scénario sera disponible dans cette "
+"configuration."
 
 msgid ""
 "A multi-player game, with several human players competing against each other "
@@ -11418,61 +11443,5 @@ msgstr ""
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
 
-#~ msgid "editorErasure|Terrain"
-#~ msgstr "de terrains"
-
-#~ msgid "editorErasure|Treasures"
-#~ msgstr "de trésors"
-
-#~ msgid "Fast separation into slots:"
-#~ msgstr "Répartition rapide :"
-
-#~ msgid "disable build."
-#~ msgstr "désactiver la construction."
-
-#~ msgid "on"
-#~ msgstr "activé"
-
-#~ msgid "Toggle colored cursor on or off. This is only an esthetic choice."
-#~ msgstr ""
-#~ "Basculer le curseur en couleur. Il ne s'agit que d'un choix esthétique."
-
-#~ msgid ""
-#~ "%{skill} increases the damage done by the hero's range attacking "
-#~ "creatures by %{count} percent."
-#~ msgstr ""
-#~ "%{skill} augmente de %{count} pour cent les dégâts infligés par les "
-#~ "créatures qui attaquent à distance dans l'armée du héros."
-
-#~ msgid "Ocean object"
-#~ msgstr "Océan"
-
-#~ msgid "Ocean Objects"
-#~ msgstr "Océan"
-
-#~ msgid "Grass Objects"
-#~ msgstr "Herbe"
-
-#~ msgid "Snow Objects"
-#~ msgstr "Neige"
-
-#~ msgid "Swamp Objects"
-#~ msgstr "Marais"
-
-#~ msgid "Desert Objects"
-#~ msgstr "Désert"
-
-#~ msgid "Dirt Objects"
-#~ msgstr "Boue"
-
-#~ msgid "Beach Objects"
-#~ msgstr "Plage"
-
-#~ msgid "%{race1} %{name1}"
-#~ msgstr "%{race1} le %{name1}"
-
-#~ msgid "vs"
-#~ msgstr "vs"
-
-#~ msgid "%{race2} %{name2}"
-#~ msgstr "%{race2} le %{name2}"
+#~ msgid "and many other contributors!"
+#~ msgstr "et aux nombreux autres contributeurs !"

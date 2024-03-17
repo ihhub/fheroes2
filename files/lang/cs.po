@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-06 22:25+0000\n"
+"POT-Creation-Date: 2024-03-15 15:56+0000\n"
 "PO-Revision-Date: 2023-09-24 16:05+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Czech <cs@li.org>\n"
@@ -4318,10 +4318,7 @@ msgstr ""
 msgid "Special Thanks to"
 msgstr ""
 
-msgid "and many other contributors!"
-msgstr ""
-
-msgid "and many-many other supporters!"
+msgid "and many-many other contributors and supporters!"
 msgstr ""
 
 msgid "Support us at"
@@ -5033,6 +5030,13 @@ msgstr ""
 msgid ""
 "The guest waits for the host to set up the game, then is automatically added "
 "in. There can be multiple guests for TCP/IP games."
+msgstr ""
+
+msgid ""
+"fheroes2 needs data files from the original Heroes of Might and Magic II to "
+"operate. You appear to be using the demo version of Heroes of Might and "
+"Magic II for this purpose. Please note that only one scenario will be "
+"available in this setup."
 msgstr ""
 
 msgid ""
@@ -10630,27 +10634,3 @@ msgstr ""
 "Nejnovější verzi hry nalezneš na\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid "disable build."
-#~ msgstr "zakázat stavění."
-
-#~ msgid "on"
-#~ msgstr "zap"
-
-#~ msgid "Toggle colored cursor on or off. This is only an esthetic choice."
-#~ msgstr "Přepnout barevný kurzor zap/vyp. Toto je jenom volba vzhledu."
-
-#, fuzzy
-#~ msgid "Castles"
-#~ msgstr "Hrad"
-
-#, fuzzy
-#~ msgid "Ocean object"
-#~ msgstr "Pustina"
-
-#, fuzzy
-#~ msgid "Desert Objects"
-#~ msgstr "Pouštní stan"
-
-#~ msgid "vs"
-#~ msgstr "versus"
