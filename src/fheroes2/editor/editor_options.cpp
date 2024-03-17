@@ -235,7 +235,7 @@ namespace Editor
         bool saveConfiguration = false;
         Settings & conf = Settings::Get();
 
-        auto redrawAdventureMap = [&conf]() {
+        auto redrawEditorMap = [&conf]() {
             Interface::EditorInterface & editorInterface = Interface::EditorInterface::Get();
 
             editorInterface.reset();
@@ -272,13 +272,13 @@ namespace Editor
                                                        Dialog::OK );
                 }
 
-                redrawAdventureMap();
+                redrawEditorMap();
                 saveConfiguration = true;
                 action = DialogAction::Configuration;
                 break;
             }
             case DialogAction::Graphics:
-                fheroes2::openGraphicsSettingsDialog( redrawAdventureMap );
+                fheroes2::openGraphicsSettingsDialog( redrawEditorMap );
 
                 action = DialogAction::Configuration;
                 break;
@@ -309,7 +309,7 @@ namespace Editor
                 conf.setEditorPassability( !conf.isEditorPassabilityEnabled() );
                 saveConfiguration = true;
 
-                redrawAdventureMap();
+                redrawEditorMap();
 
                 action = DialogAction::Configuration;
                 break;
