@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2023                                             *
+ *   Copyright (C) 2020 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -24,35 +24,12 @@
 #include "ai.h"
 #include "heroes_base.h"
 #include "mp2.h"
-#include "serialize.h"
-#include "translations.h"
 
 class Castle;
 class Heroes;
 
 namespace AI
 {
-    int Base::GetPersonality() const
-    {
-        return _personality;
-    }
-
-    std::string Base::GetPersonalityString() const
-    {
-        switch ( _personality ) {
-        case WARRIOR:
-            return _( "Warrior" );
-        case BUILDER:
-            return _( "Builder" );
-        case EXPLORER:
-            return _( "Explorer" );
-        default:
-            break;
-        }
-
-        return _( "None" );
-    }
-
     void Base::Reset()
     {
         // Do nothing.
@@ -131,15 +108,5 @@ namespace AI
     void Base::HeroesPostLoad( Heroes & )
     {
         // Do nothing.
-    }
-
-    StreamBase & operator<<( StreamBase & msg, const AI::Base & instance )
-    {
-        return msg << instance._personality;
-    }
-
-    StreamBase & operator>>( StreamBase & msg, AI::Base & instance )
-    {
-        return msg >> instance._personality;
     }
 }

@@ -237,7 +237,7 @@ namespace
             // Rough estimate - if the hero is in the castle, then we sum up the power of the castle garrison with the power of the hero's army
             const double threat = castle ? castle->GetArmy().GetStrength() + hero->GetArmy().GetStrength() : hero->GetArmy().GetStrength();
 
-            return AI::EnemyArmy( tileIndex, hero, threat, hero->GetMaxMovePoints() );
+            return AI::EnemyArmy( tileIndex, hero->GetColor(), hero, threat, hero->GetMaxMovePoints() );
         }
 
         if ( object == MP2::OBJ_CASTLE ) {
@@ -260,7 +260,7 @@ namespace
             const double threat = castle->GetArmy().GetStrength();
 
             // 1500 is slightly more than a fresh hero's maximum move points hired in a castle.
-            return AI::EnemyArmy( tileIndex, nullptr, threat, 1500 );
+            return AI::EnemyArmy( tileIndex, castle->GetColor(), nullptr, threat, 1500 );
         }
 
         return {};
@@ -519,6 +519,12 @@ namespace AI
         // if no our heroes exist. So we are temporary removing them from the map.
         const TemporaryHeroEraser heroEraser( kingdom.GetHeroes() );
 
+        const AIWorldPathfinderStateRestorer pathfinderStateRestorer( _pathfinder );
+
+        // Use the "optimistic" pathfinder settings for enemy armies - minimal army advantage, minimal reserve of spell points
+        _pathfinder.setMinimalArmyStrengthAdvantage( ARMY_ADVANTAGE_DESPERATE );
+        _pathfinder.setSpellPointsReserveRatio( 0.0 );
+
         for ( const auto & [dummy, enemyArmy] : _enemyArmies ) {
             for ( const Castle * castle : kingdom.GetCastles() ) {
                 if ( castle == nullptr ) {
@@ -542,6 +548,12 @@ namespace AI
         // if no our heroes exist. So we are temporary removing them from the map.
         const TemporaryHeroEraser heroEraser( kingdom.GetHeroes() );
 
+        const AIWorldPathfinderStateRestorer pathfinderStateRestorer( _pathfinder );
+
+        // Use the "optimistic" pathfinder settings for enemy armies - minimal army advantage, minimal reserve of spell points
+        _pathfinder.setMinimalArmyStrengthAdvantage( ARMY_ADVANTAGE_DESPERATE );
+        _pathfinder.setSpellPointsReserveRatio( 0.0 );
+
         for ( const Castle * castle : kingdom.GetCastles() ) {
             if ( castle == nullptr ) {
                 // How is it even possible? Check the logic!
@@ -559,6 +571,12 @@ namespace AI
         // if no our heroes exist. So we are temporary removing them from the map.
         const TemporaryHeroEraser heroEraser( castle.GetKingdom().GetHeroes() );
 
+        const AIWorldPathfinderStateRestorer pathfinderStateRestorer( _pathfinder );
+
+        // Use the "optimistic" pathfinder settings for enemy armies - minimal army advantage, minimal reserve of spell points
+        _pathfinder.setMinimalArmyStrengthAdvantage( ARMY_ADVANTAGE_DESPERATE );
+        _pathfinder.setSpellPointsReserveRatio( 0.0 );
+
         for ( const auto & [dummy, enemyArmy] : _enemyArmies ) {
             updateIndividualPriorityForCastle( castle, enemyArmy );
         }
@@ -571,11 +589,11 @@ namespace AI
 
         const int32_t castleIndex = castle.GetIndex();
         // skip precise distance check if army is too far to be a threat
-        if ( Maps::GetApproximateDistance( enemyArmy.index, castleIndex ) * Maps::Ground::roadPenalty > threatDistanceLimit ) {
+        if ( Maps::GetApproximateDistance( enemyArmy.index, castleIndex ) * Maps::Ground::fastestMovePenalty > threatDistanceLimit ) {
             return false;
         }
 
-        const uint32_t dist = _pathfinder.getDistance( enemyArmy.index, castleIndex, castle.GetColor(), enemyArmy.strength );
+        const uint32_t dist = _pathfinder.getDistance( enemyArmy.index, castleIndex, enemyArmy.color, enemyArmy.strength );
         if ( dist == 0 || dist >= threatDistanceLimit ) {
             return false;
         }
@@ -929,12 +947,7 @@ namespace AI
                                     const bool moreTasksForHeroes )
     {
         const bool slowEarlyGame = world.CountDay() < 5 && sortedCastleList.size() == 1;
-        int32_t heroLimit = world.w() / Maps::SMALL + 1;
-
-        if ( _personality == EXPLORER )
-            ++heroLimit;
-        if ( slowEarlyGame )
-            heroLimit = 2;
+        const int32_t heroLimit = slowEarlyGame ? 2 : world.w() / Maps::SMALL + 2;
 
         if ( availableHeroCount >= heroLimit ) {
             return false;

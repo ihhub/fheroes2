@@ -147,9 +147,7 @@ private:
 class AIWorldPathfinder final : public WorldPathfinder
 {
 public:
-    explicit AIWorldPathfinder( double advantage )
-        : _minimalArmyStrengthAdvantage( advantage )
-    {}
+    AIWorldPathfinder() = default;
 
     AIWorldPathfinder( const AIWorldPathfinder & ) = delete;
 
@@ -182,7 +180,7 @@ public:
     std::list<Route::Step> buildPath( const int targetIndex ) const;
 
     // Used for non-hero armies, like castles or monsters
-    uint32_t getDistance( int start, int targetIndex, int color, double armyStrength, uint8_t skill = Skill::Level::EXPERT );
+    uint32_t getDistance( const int start, const int targetIndex, const int color, const double armyStrength, const uint8_t skill = Skill::Level::EXPERT );
     // Faster, but does not re-evaluate the map (exposed method of the base class)
     using WorldPathfinder::getDistance;
 
