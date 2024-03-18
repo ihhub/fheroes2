@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-03-17 16:14+0000\n"
-"PO-Revision-Date: 2024-03-15 11:20+0200\n"
+"PO-Revision-Date: 2024-03-16 18:40+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: uk\n"
@@ -584,7 +584,6 @@ msgid "Your forces suffer a bitter defeat, and %{name} abandons your cause."
 msgstr ""
 "Ваше військо зазнає гіркої поразки і %{name} відмовляється від вашої справи."
 
-#, fuzzy
 msgid "Your forces suffer a bitter defeat."
 msgstr "Ваше військо зазнає гіркої поразки."
 
@@ -963,7 +962,6 @@ msgstr "Створено Дзеркального Фантома."
 msgid "The mirror image is destroyed!"
 msgstr "Фантомний загін знищений!"
 
-#, fuzzy
 msgid "Are you sure you want to interrupt the auto combat?"
 msgstr "Ви впевнені, що хочете перервати автоматичний бій?"
 
@@ -1008,9 +1006,8 @@ msgstr "Комп'ютер"
 msgid "Start"
 msgstr "Почати"
 
-#, fuzzy
 msgid "Start the battle."
-msgstr "Повернутися до битви."
+msgstr "Почати битву."
 
 msgid "Exit"
 msgstr "Вийти"
@@ -1036,9 +1033,8 @@ msgstr "Встановити Силу Магії"
 msgid "Set Knowledge Skill"
 msgstr "Встановити Знання"
 
-#, fuzzy
 msgid "%{race1} %{name1} vs %{race2} %{name2}"
-msgstr "%{race1} %{name1}"
+msgstr "%{race1} %{name1} проти %{race2} %{name2}"
 
 msgid "Monsters"
 msgstr "Монстри"
@@ -3074,7 +3070,7 @@ msgid "Fullscreen"
 msgstr "Повноекранний"
 
 msgid "window|Mode"
-msgstr ""
+msgstr "Режим"
 
 msgid "Windowed"
 msgstr "Віконний"
@@ -3083,7 +3079,7 @@ msgid "V-Sync"
 msgstr "Вертикальна синхронізація"
 
 msgid "FPS"
-msgstr ""
+msgstr "Кадри за секунду"
 
 msgid "System Info"
 msgstr "Системні Параметри"
@@ -3230,7 +3226,7 @@ msgid "Available Trades"
 msgstr "Доступні ресурси"
 
 msgid "n/a"
-msgstr ""
+msgstr "н/д"
 
 msgid "guarded by %{count} %{monster}"
 msgstr "охороняється %{count} %{monster}"
@@ -3239,7 +3235,7 @@ msgid "guarded by "
 msgstr "охороняється "
 
 msgid "(available: %{count})"
-msgstr ""
+msgstr "(доступно: %{count})"
 
 msgid "(empty)"
 msgstr "(порожньо)"
@@ -3247,21 +3243,20 @@ msgstr "(порожньо)"
 msgid "already learned"
 msgstr "вже вивчено"
 
-#, fuzzy
 msgid "treeOfKnowledge|free"
-msgstr "Дерево Знань"
+msgstr "вільно"
 
 msgid "already claimed"
-msgstr ""
+msgstr "вже проголошено"
 
 msgid "not claimed"
-msgstr ""
+msgstr "не проголошено"
 
 msgid "already knows this skill"
 msgstr "вже опанували це вміння"
 
 msgid "already has max skills"
-msgstr ""
+msgstr "вже має найвищі показники"
 
 msgid "(already visited)"
 msgstr "(вже відвідано)"
@@ -3353,7 +3348,6 @@ msgstr "Натисніть, щоб відкрити вікно Віртуаль�
 msgid "Open Virtual Keyboard"
 msgstr "Відкрити Віртуальну Клавіатуру"
 
-#, fuzzy
 msgid "How many units do you wish to move?"
 msgstr "Як багато військ перемістити?"
 
@@ -3411,9 +3405,8 @@ msgstr "Підтвердити ваш вибір."
 msgid "%{color} %{race} hero"
 msgstr "%{color} %{race} герой"
 
-#, fuzzy
 msgid "Terrain object"
-msgstr "Порожнє місце"
+msgstr "Об'єкт місцевості"
 
 msgid "Select Skill:"
 msgstr "Оберіть Навички:"
@@ -3430,65 +3423,58 @@ msgstr "Оберіть Монстра:"
 msgid "Select Hero:"
 msgstr "Оберіть Героя:"
 
-#, fuzzy
 msgid "Select Treasure:"
-msgstr "Оберіть Героя:"
+msgstr "Оберіть скарб:"
 
-#, fuzzy
 msgid "Select Ocean Object:"
-msgstr "Оберіть Артефакти:"
+msgstr "Оберіть артефакти:"
 
 msgid "Castle/town placing"
-msgstr ""
+msgstr "Розміщення замку/міста"
 
 msgid "doubleLinedRace|Neutral"
-msgstr ""
+msgstr "Нейтральний"
 
 msgid "race|Random"
-msgstr ""
+msgstr "Випадкова"
 
 msgid "Click to start placing the selected castle/town."
-msgstr ""
+msgstr "Тицьніть для розміщення вибраного замку/міста"
 
-#, fuzzy
 msgid "Click to select town placing."
-msgstr "Натисніть щоб побачити наступне місто."
+msgstr "Тицьніть щоб вибрати розміщення міста."
 
 msgid "Click to select castle placing."
-msgstr ""
+msgstr "Тицьніть щоб вибрати розміщення міста."
 
 msgid "%{color} %{race} %{townOrCastle}"
 msgstr ""
 
 msgid "race|Neutral"
-msgstr ""
+msgstr "Нейтральний"
 
 msgid "You will place"
-msgstr ""
+msgstr "Розмістити"
 
 msgid "Click to select this class."
-msgstr ""
+msgstr "Тицьніть щоб обрати цей клас."
 
-#, fuzzy
 msgid "Click to select this color."
-msgstr "Натисніть щоб побачити наступне місто."
+msgstr "Тицьніть щоб обрати цей колір."
 
-#, fuzzy
 msgid "Select Dwelling:"
-msgstr "Оберіть Закляття:"
+msgstr "Оберіть помешкання:"
 
-#, fuzzy
 msgid "Select Landscape Object:"
-msgstr "Оберіть Артефакти:"
+msgstr "Вибрати об'єкт місцевості:"
 
 msgid "Mine placing"
-msgstr ""
+msgstr "Розміщення шахти"
 
-#, fuzzy
 msgid ""
 "Resource\n"
 "type:"
-msgstr "Ресурс"
+msgstr "Тип ресурсу:"
 
 #, fuzzy
 msgid "%{mineName} appearance:"
@@ -3497,9 +3483,8 @@ msgstr "%{name} %{race}"
 msgid "Click to select %{object} as the resource generator to be placed."
 msgstr ""
 
-#, fuzzy
 msgid "Select Mountain Object:"
-msgstr "Оберіть Артефакти:"
+msgstr "Вибрати об'єкт гора:"
 
 #, fuzzy
 msgid "Select Rock Object:"
@@ -3526,7 +3511,6 @@ msgstr "Війни за Спадщину"
 msgid "The Price of Loyalty"
 msgstr "Ціна Вірності"
 
-#, fuzzy
 msgid "Resurrection"
 msgstr "Воскресіння"
 
@@ -3557,9 +3541,8 @@ msgstr "Перемогти певного героя."
 msgid "Find a specific artifact."
 msgstr "Знайти певний артефакт."
 
-#, fuzzy
 msgid "Your side must defeat the opposing side."
-msgstr "Ваш союз перемагає ворожий."
+msgstr "Ваш союз мусить перемогти ворожий."
 
 msgid "Accumulate a large amount of gold."
 msgstr "Зібрати певну кількість золота."
@@ -3573,9 +3556,8 @@ msgstr "Складність мапи:"
 msgid "N"
 msgstr "Н"
 
-#, fuzzy
 msgid "No maps exist at that size."
-msgstr "Немає мап такого розміру"
+msgstr "Немає мап такого розміру."
 
 msgid "Small Maps"
 msgstr "Маленькі Мапи"
@@ -3730,16 +3712,16 @@ msgid "2nd"
 msgstr "2-ий"
 
 msgid "3rd"
-msgstr "3-тій"
+msgstr "3-ій"
 
 msgid "4th"
-msgstr "4-тий"
+msgstr "4-ий"
 
 msgid "5th"
-msgstr "5-тий"
+msgstr "5-ий"
 
 msgid "6th"
-msgstr "6-тий"
+msgstr "6-ий"
 
 msgid "Oracle: Player Rankings"
 msgstr "Оракул: Рейтинги Гравців"
@@ -3789,9 +3771,8 @@ msgstr "Особистість:"
 msgid "Best Monster:"
 msgstr "Найсильніший монстр:"
 
-#, fuzzy
 msgid "Map filename"
-msgstr "Розмір Мапи"
+msgstr "Назва файлу мапи"
 
 msgid ""
 "Are you sure you want to load a new map? (Any unsaved changes to the current "
@@ -3830,7 +3811,7 @@ msgid "Quit out of the map editor."
 msgstr "Вийти з редактора мап."
 
 msgid "Objects cannot be placed outside the map."
-msgstr ""
+msgstr "Неможливо розмістити об'єкт поза мапою."
 
 msgid "Monsters cannot be placed on water."
 msgstr "Монстрів не можна розмістити на воді."
@@ -3839,7 +3820,7 @@ msgid "Choose a tile which does not contain any objects."
 msgstr "Оберіть клітинку, не зайняту жодними об'єктами."
 
 msgid "Treasures cannot be placed on water."
-msgstr ""
+msgstr "Скарби неможливо розмістити на воді."
 
 msgid "Heroes cannot be placed on water."
 msgstr "Героїв не можна розмістити на воді."
@@ -3929,16 +3910,14 @@ msgstr ""
 msgid "Mountains"
 msgstr "Гори"
 
-#, fuzzy
 msgid "Rocks"
-msgstr "Скеля"
+msgstr "Скелі"
 
 msgid "Trees"
 msgstr "Дерева"
 
-#, fuzzy
 msgid "Water Objects"
-msgstr "Об'єкти Пустки"
+msgstr "Водні об'єкти"
 
 msgid "Miscellaneous"
 msgstr ""
@@ -3946,9 +3925,8 @@ msgstr ""
 msgid "Artifacts"
 msgstr "Артефакти"
 
-#, fuzzy
 msgid "Dwellings"
-msgstr "Напіврослики"
+msgstr "Житло"
 
 msgid "Mines"
 msgstr "Копальні"
@@ -4037,10 +4015,10 @@ msgstr ""
 "зменшує або анулює штраф.)"
 
 msgid "Traversable only by boat."
-msgstr ""
+msgstr "Прохідний тільки на човні."
 
 msgid "No special modifiers."
-msgstr ""
+msgstr "Ніяких спеціальних модифікаторів."
 
 msgid "Toggle the erasure of %{type} objects."
 msgstr ""
@@ -4123,10 +4101,10 @@ msgid "Magnify"
 msgstr ""
 
 msgid "Undo"
-msgstr ""
+msgstr "Скасувати"
 
 msgid "Undo your last action."
-msgstr ""
+msgstr "Скасуйте останню дію."
 
 msgid "Create a new map either from scratch or using the random map generator."
 msgstr ""
@@ -4225,27 +4203,38 @@ msgid ""
 "Choose this difficulty to experience the game's story with less challenge. "
 "The AI will be weaker than at Normal difficulty."
 msgstr ""
+"Виберіть цю складність, щоб відчути історію гри з меншими труднощами. ШІ "
+"буде слабшим ніж на звичайній складності."
 
 msgid ""
 "Choose this difficulty to experience the campaign as per the original design."
 msgstr ""
+"Виберіть цю складність, щоб пройти кампанію відповідно до початкового задуму."
 
 msgid ""
 "Choose this difficulty if you want more challenge. The AI will be stronger "
 "than at Normal difficulty."
 msgstr ""
+"Виберіть цю складність, якщо хочете більше виклику. ШІ буде сильнішим, ніж "
+"на звичайній складності."
 
 msgid ""
 "Congratulations!\n"
 "\n"
 "Days: %{days}\n"
 msgstr ""
+"Вітання!\n"
+"\n"
+"Дні: %{days}\n"
 
 msgid ""
 "\n"
 "Difficulty: %{difficulty}\n"
 "\n"
 msgstr ""
+"\n"
+"Складність: %{difficulty}\n"
+"\n"
 
 msgid ""
 "Score: %{score}\n"
@@ -4253,49 +4242,56 @@ msgid ""
 "Rating:\n"
 "%{rating}"
 msgstr ""
+"Очки: %{score}\n"
+"\n"
+"Рейтинг:\n"
+"%{rating}"
 
 msgid "Start the selected scenario."
-msgstr ""
+msgstr "Почати вибраний сценарій."
 
 msgid "View Intro"
-msgstr ""
+msgstr "Переглянути вступ"
 
 msgid "View the intro video for the current state of the campaign."
-msgstr ""
+msgstr "Переглянути вступне відео поточного сценарію кампанії."
 
 msgid ""
 "Select the campaign difficulty. This can be lowered at any point during the "
 "campaign."
 msgstr ""
+"Виберіть складність кампанії. Її можна знизити в будь-який момент під час "
+"гри."
 
 msgid "Restart the current scenario."
-msgstr ""
+msgstr "Перезапустити поточний сценарій."
 
 msgid "Difficulty"
-msgstr ""
-"Складність\n"
-"Мапи"
+msgstr "Складність"
 
 msgid ""
 "You have changed to a lower difficulty for the campaign. You will not be "
 "able to revert this after this point. The high score will be calculated "
 "based solely on the new difficulty. Do you want to proceed?"
 msgstr ""
+"Ви перейшли на нижчу складність кампанії. Після цього ви не зможете "
+"повернути цю зміну. Рекорд буде розраховано виключно на основі нової "
+"складності. Бажаєте продовжити?"
 
 msgid "Are you sure you want to restart this scenario?"
-msgstr ""
+msgstr "Ви впевнені, що хочете перезапустити цей сценарій?"
 
 msgid "Campaign Scenario loading failure"
-msgstr ""
+msgstr "Помилка завантаження сценарію кампанії"
 
 msgid "Please make sure that campaign files are correct and present."
-msgstr ""
+msgstr "Будь ласка, переконайтеся, що файли кампанії правильні та присутні."
 
 msgid "Days spent"
-msgstr ""
+msgstr "Витрачено днів"
 
 msgid "The number of days spent on this campaign."
-msgstr ""
+msgstr "Кількість днів, витрачених на цю кампанію."
 
 msgid "Project Coordination and Core Development"
 msgstr ""
@@ -4307,13 +4303,13 @@ msgid "Visit us at "
 msgstr ""
 
 msgid "QA and Support"
-msgstr ""
+msgstr "ЧП та підтримка"
 
 msgid "Dev and Support"
-msgstr ""
+msgstr "Розробка та підтримка"
 
 msgid "Special Thanks to"
-msgstr ""
+msgstr "Особлива подяка"
 
 msgid "and many-many other contributors and supporters!"
 msgstr ""
@@ -4463,7 +4459,7 @@ msgid "View High Scores for Standard Maps."
 msgstr ""
 
 msgid "Campaign"
-msgstr ""
+msgstr "Кампанія"
 
 msgid "View High Scores for Campaigns."
 msgstr ""
@@ -4799,11 +4795,15 @@ msgid ""
 "Do you want to regain control from AI? The effect will take place only on "
 "the next turn."
 msgstr ""
+"Хочете повернутися на ручний контроль? Ефект відбудеться лише на наступний "
+"хід."
 
 msgid ""
 "Do you want to transfer control from you to the AI? The effect will take "
 "place only on the next turn."
 msgstr ""
+"Ви хочете передати управління від вас до ШІ? Ефект відбудеться лише на "
+"наступний хід."
 
 msgid "Default Actions"
 msgstr ""
@@ -4812,24 +4812,22 @@ msgid "Global Actions"
 msgstr ""
 
 msgid "Main Menu"
-msgstr ""
+msgstr "Головне меню"
 
 msgid "World Map"
-msgstr ""
+msgstr "Мапа світу"
 
-#, fuzzy
 msgid "Battle Screen"
-msgstr "Вікно Героя"
+msgstr "Екран бою"
 
-#, fuzzy
 msgid "Town Screen"
-msgstr "Вікно Героя"
+msgstr "Вікно міста"
 
 msgid "Army Actions"
 msgstr ""
 
 msgid "Editor"
-msgstr ""
+msgstr "Редактор"
 
 msgid "The save file is corrupted."
 msgstr "Файл збереження пошкоджений."
@@ -4917,7 +4915,6 @@ msgstr ""
 msgid " button from the "
 msgstr ""
 
-#, fuzzy
 msgid "NEW GAME"
 msgstr ""
 "НОВА\n"
@@ -4937,7 +4934,7 @@ msgstr ""
 "Залишити Heroes of Might and Magic II і повернутися до операційної системи."
 
 msgid "Credits"
-msgstr ""
+msgstr "Титри"
 
 msgid "View the credits screen."
 msgstr ""
@@ -4949,10 +4946,10 @@ msgid "View the high scores screen."
 msgstr ""
 
 msgid "Change language, resolution and settings of the game."
-msgstr ""
+msgstr "Змінити мову, роздільну здатність та налаштування гри."
 
 msgid "Game Settings"
-msgstr ""
+msgstr "Налаштування гри"
 
 msgid ""
 "The required video files for the campaign selection window are missing. "
@@ -4965,10 +4962,10 @@ msgid ""
 msgstr ""
 
 msgid "Original Campaign"
-msgstr ""
+msgstr "Оригінальна кампанія"
 
 msgid "Expansion Campaign"
-msgstr ""
+msgstr "Кампанія доповнення"
 
 msgid "One of the four new campaigns from the Price of Loyalty expansion set."
 msgstr ""
@@ -4985,7 +4982,7 @@ msgid ""
 msgstr ""
 
 msgid "Guest"
-msgstr "Гость"
+msgstr "Гість"
 
 msgid ""
 "The guest waits for the host to set up the game, then is automatically added "
@@ -5230,13 +5227,13 @@ msgid "Click to return to the main menu."
 msgstr ""
 
 msgid "Astrologers proclaim the Month of the %{name}."
-msgstr ""
+msgstr "Астрологи оголошують місяць %{name}."
 
 msgid "Astrologers proclaim the Week of the %{name}."
-msgstr ""
+msgstr "Астрологи оголошують тиждень %{name}."
 
 msgid "After regular growth, the population of %{monster} is doubled!"
-msgstr ""
+msgstr "Після звичайного приросту популяція %{monster} подвоюється!"
 
 msgid ""
 "After regular growth, the population of %{monster} increases by %{count} "
@@ -5252,42 +5249,50 @@ msgid "%{monster} growth +%{count}."
 msgstr ""
 
 msgid " All populations are halved."
-msgstr ""
+msgstr "Все населення зменшується вдвічі."
 
 msgid " All dwellings increase population."
-msgstr ""
+msgstr "Усі житла збільшують кількість мешканців."
 
 msgid "New Month!"
-msgstr ""
+msgstr "Новий місяць!"
 
 msgid "New Week!"
-msgstr ""
+msgstr "Новий тиждень!"
 
 msgid "Beware!"
-msgstr ""
+msgstr "Стережіться!"
 
 msgid ""
 "%{color} player, this is your last day to capture a town, or you will be "
 "banished from this land."
 msgstr ""
+"%{color} гравцю, це ваш останній день щоб захопити місто, інакше вас буде "
+"вигнано з цієї землі."
 
 msgid ""
 "%{color} player, you only have %{day} days left to capture a town, or you "
 "will be banished from this land."
 msgstr ""
+"%{color} гравцю, у вас залишилося лише %{day} днів, щоб захопити місто, "
+"інакше вас буде вигнано з цієї землі."
 
 msgid "%{color} player's turn."
-msgstr ""
+msgstr "%{color} гравець ходить."
 
 msgid ""
 "%{color} player, you have lost your last town. If you do not conquer another "
 "town in the next week, you will be eliminated."
 msgstr ""
+"%{color} гравцю, ви втратили останнє місто. Якщо ви не завоюєте нове місто "
+"протягом наступного тижня, вас буде усунуто."
 
 msgid ""
 "%{color} player, your heroes abandon you, and you are banished from this "
 "land."
 msgstr ""
+"%{color} гравцю, ваші герої покидають вас, а вас самих проганяють з цієї "
+"землі."
 
 msgid "Lord Kilburn"
 msgstr "Лорд Кілбурн"
@@ -5366,59 +5371,65 @@ msgstr ""
 "Героєм. Затисніть та утримуйте цю клавішу, щоб скинути маршрут Героя."
 
 msgid "Kingdom Summary"
-msgstr ""
+msgstr "Загальна інформація по королівству"
 
 msgid "View a summary of your Kingdom."
-msgstr ""
+msgstr "Переглянути загальну інформацію по королівству."
 
 msgid "Cast an adventure spell."
-msgstr ""
+msgstr "Накласти заклинання пригод."
 
 msgid "End Turn"
-msgstr ""
+msgstr "Завершити хід"
 
 msgid "End your turn and let the computer take its turn."
-msgstr ""
+msgstr "Завершити свій хід і дозволити комп'ютеру зробити свій."
 
 msgid "Adventure Options"
-msgstr ""
+msgstr "Параметри пригод"
 
 msgid "Bring up the adventure options menu."
-msgstr ""
+msgstr "Відкрити меню параметрів пригоди."
 
 msgid ""
 "Bring up the file options menu, allowing you to load, save, start a new game "
 "or quit."
 msgstr ""
+"Викликає меню параметрів файлу, що дозволяє завантажити, зберегти, почати "
+"нову гру або вийти з неї."
 
 msgid "Bring up the system options menu, allowing you to customize your game."
-msgstr ""
+msgstr "Відкрити меню системних параметрів, що дозволяє вам налаштувати гру."
 
 msgid ""
 "One or more heroes may still move, are you sure you want to end your turn?"
 msgstr ""
+"Один або кілька героїв все ще можуть рухатися. Ви впевнені, що хочете "
+"завершити свій хід?"
 
 msgid "Are you sure you want to quit?"
-msgstr ""
+msgstr "Ви впевнені, що хочете вийти?"
 
 msgid "Are you sure you want to restart? (Your current game will be lost.)"
-msgstr ""
+msgstr "Ви впевнені, що хочете перезапустити гру? (Поточну гру буде втрачено)."
 
 msgid "Are you sure you want to overwrite the save with this name?"
-msgstr ""
+msgstr "Ви впевнені, що хочете перезаписати збереження з такою назвою?"
 
 msgid "Game saved successfully."
-msgstr ""
+msgstr "Гру збережено успішно."
 
 msgid "There was an issue during saving."
-msgstr ""
+msgstr "Під час збереження виникла проблема."
 
 msgid ""
 "Are you sure you want to load a new game? (Your current game will be lost.)"
 msgstr ""
+"Ви впевнені, що хочете завантажити нову гру? (Ваша поточна гра буде "
+"втрачена)."
 
 msgid "Try looking on land!!!"
-msgstr ""
+msgstr "Спробуйте шукати на суходолі."
 
 msgid ""
 "Searching for the Ultimate Artifact is fruitless. Your hero could not carry "
@@ -5426,62 +5437,76 @@ msgid ""
 msgstr ""
 
 msgid "Digging for artifacts requires a whole day, try again tomorrow."
-msgstr ""
+msgstr "На розкопки артефактів потрібен цілий день, спробуйте ще раз завтра."
 
 msgid ""
 "After spending many hours digging here, you have uncovered the %{artifact}."
-msgstr ""
+msgstr "Провівши багато годин на розкопках, ви знайшли %{artifact}."
 
 msgid "Congratulations!"
-msgstr ""
+msgstr "Вітаємо!"
 
 msgid "Nothing here. Where could it be?"
-msgstr ""
+msgstr "Тут нічого немає. Де б воно могло бути?"
 
 msgid "Try searching on clear ground."
-msgstr ""
+msgstr "Спробуйте шукати на відкритій місцевості."
 
 msgid "A miniature view of the known world. Left click to move viewing area."
 msgstr ""
+"Мініатюрний погляд на відомий світ. Тицьніть лівою кнопкою миші, щоб "
+"перемістити область перегляду."
 
 msgid "Month: %{month} Week: %{week}"
-msgstr ""
+msgstr "Місяць: %{month} Тиждень: %{week}"
 
 msgid "Day: %{day}"
-msgstr ""
+msgstr "День: %{day}"
 
 msgid ""
 "You find a small\n"
 "quantity of %{resource}."
 msgstr ""
+"Ви знайшли\n"
+"трішечки %{resource}."
 
 msgid "Status Window"
-msgstr ""
+msgstr "Вікно статусу"
 
 msgid ""
 "This window provides information on the status of your hero or kingdom, and "
 "shows the date."
 msgstr ""
+"Це вікно містить інформацію про статус вашого героя або королівства, а також "
+"показує дату."
 
 msgid ""
 "This window provides information on the status of your hero or kingdom, and "
 "shows the date. Left click here to cycle through these windows."
 msgstr ""
+"Це вікно надає інформацію про статус вашого героя або королівства, а також "
+"показує дату. Для переходу між цими вікнами, тицьніть лівою кнопкою миші тут."
 
 msgid ""
 "This lets you change player starting positions and colors. A particular "
 "color will always start in a particular location. Some positions may only be "
 "played by a computer player or only by a human player."
 msgstr ""
+"Це дозволяє вам змінювати стартові позиції та кольори гравців. Певний колір "
+"завжди починатиметься в певному місці. На деяких позиціях може грати тільки "
+"комп'ютерний гравець або тільки гравець людина."
 
 msgid ""
 "This lets you change the class of a player. Classes are not always "
 "changeable. Depending on the scenario, a player may receive additional towns "
 "and/or heroes not of their primary alignment."
 msgstr ""
+"Це дозволяє вам змінювати клас гравця. Класи не завжди можна змінити. "
+"Залежно від сценарію, гравець може отримати додаткові міста та/або героїв не "
+"свого класу."
 
 msgid "Handicap"
-msgstr ""
+msgstr "Обмеження"
 
 #
 msgid ""
@@ -5490,37 +5515,47 @@ msgid ""
 "15 or 30% fewer resources per turn for mild and severe handicaps, "
 "respectively."
 msgstr ""
+"Це дозволяє вам накласти обмеження на конкретного гравця. Обмеженими можуть "
+"мати лише гравці-люди. Гравці з обмеженнями починають з меншою кількістю "
+"ресурсів і заробляють на 15 або 30% менше ресурсів за хід для легких і "
+"важких обмежень відповідно."
 
 msgid "%{color} player"
-msgstr ""
+msgstr "%{color} гравець"
 
 msgid "No Handicap"
-msgstr ""
+msgstr "Без обмежень"
 
 msgid ""
 "No special restrictions on starting resources and resource income per turn."
 msgstr ""
+"Немає спеціальних обмежень на початкові ресурси та прибуток від ресурсів за "
+"хід."
 
 msgid "Mild Handicap"
-msgstr ""
+msgstr "Помірні обмеження"
 
 #
 msgid ""
 "Players with mild handicap start with fewer resources and earn 15% fewer "
 "resources per turn."
 msgstr ""
+"Гравці з легкими обмеженнями починають з меншою кількістю ресурсів і "
+"заробляють на 15% менше ресурсів за хід."
 
 msgid "Severe Handicap"
-msgstr ""
+msgstr "Значні обмеження"
 
 #
 msgid ""
 "Players with severe handicap start with fewer resources and earn 30% fewer "
 "resources per turn."
 msgstr ""
+"Гравці з сильними обмеженнями починають з меншою кількістю ресурсів і "
+"заробляють на 30% менше ресурсів за хід."
 
 msgid "View %{skill} Info"
-msgstr ""
+msgstr "Переглянути %{skill} інформацію"
 
 msgid "Keyboard|123"
 msgstr ""
@@ -5532,13 +5567,13 @@ msgid "Keyboard|ABC"
 msgstr ""
 
 msgid "Kingdom Income"
-msgstr ""
+msgstr "Прибутки королівства"
 
 msgid "Kingdom Income per day."
-msgstr ""
+msgstr "Прибутки королівства за день."
 
 msgid "For every lighthouse controlled, your ships will move further each day."
-msgstr ""
+msgstr "За кожен підконтрольний маяк ваші кораблі щодня просуватимуться далі."
 
 msgid "English"
 msgstr ""
@@ -5763,10 +5798,10 @@ msgid "Martine"
 msgstr ""
 
 msgid " gives you maximum morale"
-msgstr ""
+msgstr " надає максимальний бойовий дух"
 
 msgid " gives you maximum luck"
-msgstr ""
+msgstr " надає максимальну удачу"
 
 msgid "You cannot pick up this artifact, you already have a full load!"
 msgstr "У вас нема вільного місця щоб підібрати цей  артефакт!"
@@ -5782,13 +5817,13 @@ msgid "Do you wish to buy one?"
 msgstr "Бажаєте придбати екземпляр?"
 
 msgid "%{count} / day"
-msgstr ""
+msgstr "%{count} / день"
 
 msgid "one"
-msgstr ""
+msgstr " один "
 
 msgid "two"
-msgstr ""
+msgstr " два "
 
 msgid "A whirlpool engulfs your ship. Some of your army has fallen overboard."
 msgstr "Вир поглинає ваш корабель. Частина вашої армії випала за борт."
@@ -6829,7 +6864,7 @@ msgstr ""
 "протягом століть, всього за %{count} %{res}\"."
 
 msgid "(Just bury it around my roots.)"
-msgstr ""
+msgstr "(Просто закопайте його навколо мого коріння)."
 
 msgid "Tears brim in the eyes of the tree."
 msgstr "О очах дерева з'являються сльози."
@@ -6948,10 +6983,12 @@ msgid ""
 "You hear a voice from behind the locked door, \"You don't have enough gold "
 "to pay for my services.\""
 msgstr ""
+"Ви чуєте голос з-за зачинених дверей: \"У вас недостатньо золота, щоб "
+"заплатити за мої послуги\"."
 
 msgid ""
 "You hear a voice from high above in the tower, \"Go away! I can't help you!\""
-msgstr ""
+msgstr "Ви чуєте голос з висоти вежі: \"Йди геть! Я не можу тобі допомогти!\""
 
 msgid ""
 "The head groom speaks to you, \"That is a fine looking horse you have. I am "
@@ -6959,6 +6996,10 @@ msgid ""
 "look to be of poor breeding stock. We have many trained war horses which "
 "would aid your riders greatly. I insist you take them.\""
 msgstr ""
+"Головний конюх каже вам: \"У вас прекрасний кінь. Боюся, що ми не можемо "
+"дати вам кращого, але коні, на яких їде ваша кавалерія, виглядають погано. У "
+"нас є багато тренованих бойових коней, які б дуже допомогли вашим вершникам. "
+"Я наполягаю, щоб ви їх взяли\"."
 
 msgid ""
 "As you approach the stables, the head groom appears, leading a fine looking "
@@ -6966,12 +7007,18 @@ msgid ""
 "grow tired in a week. You must also let me give better horses to your "
 "mounted soldiers, their horses look shoddy and weak.\""
 msgstr ""
+"Коли ви підходите до стайні, з'являється головний конюх, який веде "
+"прекрасного бойового коня. \"Цей кінь допоможе вам прискорити вашу подорож. "
+"На жаль, за тиждень він втомиться. Ви також повинні дозволити мені дати "
+"кращих коней вашим наїзиника, їхні коні виглядають погано і слабко\"."
 
 msgid ""
 "The head groom approaches you and speaks, \"You already have a fine horse, "
 "and have no inexperienced cavalry which might make use of our trained war "
 "horses.\""
 msgstr ""
+"До вас підходить головний конюх і каже: \"У вас вже є чудовий кінь та немає "
+"недосвідченої кавалерії, які б мали зиск з наших вишколених бойових коней\"."
 
 msgid ""
 "As you approach the stables, the head groom appears, leading a fine looking "
@@ -6980,52 +7027,75 @@ msgid ""
 "fresh mount in a week. We also have many fine war horses which could benefit "
 "mounted soldiers, but you have none we can help.\""
 msgstr ""
+"Коли ви підходите до стайні, з'являється головний конюх, який веде "
+"прекрасного бойового коня. \"Цей кінь допоможе вам прискорити вашу подорож. "
+"На жаль, його витривалість зменшиться від важкої їзди, тому ви повинні "
+"повернутися за свіжим конем через тиждень. У нас також є багато чудових "
+"бойових коней, які могли б принести користь кінним воїнам, але у вас таким "
+"нема\"."
 
 msgid "The Arena guards turn you away."
-msgstr ""
+msgstr "Охоронці Арени проганяють вас."
 
 msgid ""
 "You have your crew stop up their ears with wax before the sirens' eerie song "
 "has any chance of luring them to a watery grave."
 msgstr ""
+"Ваша команда має заткнути вуха воском, перш ніж моторошна пісня сирен "
+"встигне заманити їх у водяну могилу."
 
 msgid ""
 "As the sirens sing their eerie song, your small, determined army manages to "
 "overcome the urge to dive headlong into the sea."
 msgstr ""
+"Поки сирени співають свою моторошну пісню, вашій маленькій, рішучій армії "
+"вдається подолати бажання пірнути з головою в море."
 
 msgid ""
 "An eerie wailing song emanates from the sirens perched upon the rocks. Many "
 "of your crew fall under its spell, and dive into the water where they drown. "
 "You are now wiser for the visit, and gain %{exp} experience."
 msgstr ""
+"Моторошне виття лунає від сирен, які сидять на скелях. Багато членів вашої "
+"команди потрапляють під їх чари і пірнають у воду, де тонуть. Ви стали "
+"мудрішими за цей візит і отримали %{exp} досвіду."
 
 msgid ""
 "In a dazzling display of daring, you break into the local jail and free the "
 "hero imprisoned there, who, in return, pledges loyalty to your cause."
 msgstr ""
+"У сліпучому прояві сміливості ви вриваєтеся до місцевої в'язниці і "
+"звільняєте ув'язненого там героя, який, натомість, присягає на вірність "
+"вашій справі."
 
 msgid ""
 "You already have %{count} heroes, and regretfully must leave the prisoner in "
 "this jail to languish in agony for untold days."
 msgstr ""
+"У вас вже є %{count} героїв, і ви, на жаль, мусите залишити в'язня у цій "
+"в'язниці, щоб він мучився в агонії незліченну кількість днів."
 
 msgid ""
 "You enter a rickety hut and talk to the magician who lives there. He tells "
 "you of places near and far which may aid you in your journeys."
 msgstr ""
+"Ви заходите до хиткої хатини і розмовляєте з чарівником, який там живе. Він "
+"розповідає вам про близькі та далекі місця, які можуть допомогти вам у ваших "
+"подорожах."
 
 msgid "This eye seems to be intently studying its surroundings."
-msgstr ""
+msgstr "Здається, це око уважно вивчає навколишній простір."
 
 msgid "You come across a giant Sphinx. The Sphinx remains strangely quiet."
-msgstr ""
+msgstr "Ви натрапляєте на велетенського Сфінкса. Він лишається на диво тихим."
 
 msgid ""
 "\"I have a riddle for you,\" the Sphinx says. \"Answer correctly, and you "
 "shall be rewarded. Answer incorrectly, and you shall be eaten. Do you accept "
 "the challenge?\""
 msgstr ""
+"\"Я маю для тебе загадку, - каже Сфінкс. \"Відповідай правильно і будеш "
+"винагороджений. Відповіси неправильно - будеш з'їдений. Ти приймаєш виклик?\""
 
 msgid ""
 "The Sphinx asks you the following riddle:\n"
@@ -7034,17 +7104,27 @@ msgid ""
 "\n"
 "Your answer?"
 msgstr ""
+"Сфінкс задає вам наступну загадку:\n"
+"\n"
+"'%{riddle}'\n"
+"\n"
+"Ваша відповідь?"
 
 msgid ""
 "\"You guessed incorrectly,\" the Sphinx says, smiling. The Sphinx swipes at "
 "you with a paw, knocking you to the ground. Another blow makes the world go "
 "black, and you know no more."
 msgstr ""
+"\"Ти вгадав неправильно\", - посміхаючись, каже Сфінкс. Він б'є тебе лапою, "
+"збиваючи на землю. Ще один удар - світ занурюється в темряву і ви більше "
+"нічого не бачите."
 
 msgid ""
 "Looking somewhat disappointed, the Sphinx sighs. \"You've answered my riddle "
 "so here's your reward. Now begone.\""
 msgstr ""
+"Виглядаючи дещо розчарованим, Сфінкс зітхає. \"Ти відгадав мою загадку, тож "
+"ось твоя нагорода. А тепер йди геть.\""
 
 msgid ""
 "A magical barrier stands tall before you, blocking your way. Runes on the "
@@ -7052,6 +7132,11 @@ msgid ""
 "\"Speak the key and you may pass.\"\n"
 "As you speak the magic word, the glowing barrier dissolves into nothingness."
 msgstr ""
+"Магічний бар'єр височіє перед вами, перегороджуючи вам шлях. На арці "
+"написано рунами,\n"
+"\"Скажи ключ і зможеш пройти\".\n"
+"Коли ви вимовляєте магічне слово, бар'єр, що світиться, розчиняється в "
+"небутті."
 
 msgid ""
 "A magical barrier stands tall before you, blocking your way. Runes on the "
@@ -7059,6 +7144,10 @@ msgid ""
 "\"Speak the key and you may pass.\"\n"
 "You speak, and nothing happens."
 msgstr ""
+"Магічний бар'єр височіє перед вами, перегороджуючи вам шлях. Руни на арці "
+"свідчать,\n"
+"\"Скажи ключ і зможеш пройти\".\n"
+"Ви говорите, але нічого не відбувається."
 
 msgid ""
 "You enter the tent and see an old woman gazing into a magic gem. She looks "
@@ -7066,6 +7155,10 @@ msgid ""
 "\"In my travels, I have learned much in the way of arcane magic. A great "
 "oracle taught me his skill. I have the answer you seek.\""
 msgstr ""
+"Ви входите до намету і бачите стару жінку, яка вдивляється в чарівний "
+"камінь. Вона піднімає голову і каже,\n"
+"\"У своїх мандрах я багато чого дізналася про таємну магію. Великий оракул "
+"навчив мене своєї майстерності. Я знаю відповідь, яку ти шукаєш\"."
 
 msgid "No spell book is present."
 msgstr "Відсутня книга магії."
@@ -7224,7 +7317,7 @@ msgid ""
 msgstr ""
 
 msgid "Level %{level}"
-msgstr ""
+msgstr "Рівень %{level}"
 
 msgid ""
 "%{name} currently has %{point} spell points out of a maximum of %{max}. The "
