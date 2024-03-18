@@ -3202,6 +3202,43 @@ void Battle::Interface::EventAutoFinish( Actions & actions )
     humanturn_exit = true;
 }
 
+void Battle::Interface::OpenAutoModeDialog( const Unit & unit, Actions & actions ) {
+    LocalEvent & le = LocalEvent::Get();
+
+    fheroes2::Display & display = fheroes2::Display::instance();
+
+    Dialog::FrameBox box( 100, true );
+    const fheroes2::Rect roiArea = box.GetArea();
+    fheroes2::Button cancel( roiArea.x + roiArea.width / 2 - fheroes2::AGG::GetICN(ICN::UNIFORM_GOOD_CANCEL_BUTTON,0).width()/2, roiArea.y + roiArea.height - 20, ICN::UNIFORM_GOOD_CANCEL_BUTTON, 0, 1 );
+    fheroes2::ButtonSprite autoResolve( roiArea.x, roiArea.y + 40, fheroes2::AGG::GetICN( ICN::EMPTY_GOOD_MEDIUM_BUTTON, 0 ),
+                                        fheroes2::AGG::GetICN( ICN::EMPTY_GOOD_MEDIUM_BUTTON, 1 ) );
+    fheroes2::ButtonSprite autoCombat( roiArea.x + roiArea.width - fheroes2::AGG::GetICN( ICN::EMPTY_GOOD_MEDIUM_BUTTON, 0 ).width(), roiArea.y + 40,
+                                       fheroes2::AGG::GetICN( ICN::EMPTY_GOOD_MEDIUM_BUTTON, 0 ),
+                                       fheroes2::AGG::GetICN( ICN::EMPTY_GOOD_MEDIUM_BUTTON, 1 ) );
+
+    cancel.draw();
+    autoResolve.draw();
+    autoCombat.draw();
+    display.render();
+    while ( le.HandleEvents() ) {
+        le.MousePressLeft( cancel.area() ) ? cancel.drawOnPress() : cancel.drawOnRelease();
+        le.MousePressLeft( autoResolve.area() ) ? autoResolve.drawOnPress() : autoResolve.drawOnRelease();
+        le.MousePressLeft( autoCombat.area() ) ? autoCombat.drawOnPress() : autoCombat.drawOnRelease();
+
+
+        if ( le.MouseClickLeft( cancel.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
+            return;
+        }
+        else if ( le.MouseClickLeft( autoResolve.area() ) ) {
+            EventAutoFinish( actions );
+        }
+        else if ( le.MouseClickLeft( autoCombat.area() ) ) {
+            EventStartAutoBattle( unit, actions );
+        }
+        display.render( roiArea );
+    }
+}
+
 void Battle::Interface::ButtonAutoAction( const Unit & unit, Actions & actions )
 {
     LocalEvent & le = LocalEvent::Get();
@@ -3209,7 +3246,7 @@ void Battle::Interface::ButtonAutoAction( const Unit & unit, Actions & actions )
     le.MousePressLeft( btn_auto.area() ) ? btn_auto.drawOnPress() : btn_auto.drawOnRelease();
 
     if ( le.MouseClickLeft( btn_auto.area() ) ) {
-        EventStartAutoBattle( unit, actions );
+        OpenAutoModeDialog( unit, actions );
     }
 }
 
