@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-15 15:56+0000\n"
+"POT-Creation-Date: 2024-03-17 16:14+0000\n"
 "PO-Revision-Date: 2023-09-11 20:22+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -4208,6 +4208,20 @@ msgstr "Žiadne dostupné mapy!"
 
 msgid "Warning"
 msgstr "Pozor"
+
+#, fuzzy
+msgid "Animation"
+msgstr "Anexia"
+
+#, fuzzy
+msgid "Passability"
+msgstr "Osobnosť:"
+
+msgid "Toggle animation of the objects."
+msgstr ""
+
+msgid "Toggle display of objects' passability."
+msgstr ""
 
 msgid "difficulty|Easy"
 msgstr "Ľahká"

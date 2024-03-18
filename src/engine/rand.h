@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -39,9 +39,15 @@ namespace Rand
 
     uint32_t Get( uint32_t from, uint32_t to = 0 );
 
+    template <typename T, typename = typename std::enable_if<std::is_enum<T>::value>::type>
+    T Get( const T from, const T to )
+    {
+        return static_cast<T>( Get( static_cast<uint32_t>( from ), static_cast<uint32_t>( to ) ) );
+    }
+
     uint32_t GetWithSeed( uint32_t from, uint32_t to, uint32_t seed );
 
-    template <typename T, typename std::enable_if<std::is_enum<T>::value>::type * = nullptr>
+    template <typename T, typename = typename std::enable_if<std::is_enum<T>::value>::type>
     T GetWithSeed( const T from, const T to, const uint32_t seed )
     {
         return static_cast<T>( GetWithSeed( static_cast<uint32_t>( from ), static_cast<uint32_t>( to ), seed ) );

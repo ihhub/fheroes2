@@ -51,36 +51,41 @@
 
 namespace
 {
-    enum : uint32_t
+    enum GameOptions : uint32_t
     {
-        GLOBAL_FIRST_RUN = 0x00000001,
-        GLOBAL_SHOW_INTRO = 0x00000002,
-        GLOBAL_PRICELOYALTY = 0x00000004,
-        GLOBAL_RENDER_VSYNC = 0x00000008,
-        GLOBAL_TEXT_SUPPORT_MODE = 0x00000010,
-        GLOBAL_MONOCHROME_CURSOR = 0x00000020,
-        GLOBAL_SHOW_CONTROL_PANEL = 0x00000040,
-        GLOBAL_SHOW_RADAR = 0x00000080,
-        GLOBAL_SHOW_ICONS = 0x00000100,
-        GLOBAL_SHOW_BUTTONS = 0x00000200,
-        GLOBAL_SHOW_STATUS = 0x00000400,
-        GLOBAL_FULLSCREEN = 0x00008000,
-        GLOBAL_3D_AUDIO = 0x00010000,
-        GLOBAL_SYSTEM_INFO = 0x00020000,
-        GLOBAL_CURSOR_SOFT_EMULATION = 0x00040000,
-        GLOBAL_EVIL_INTERFACE = 0x00080000,
-        GLOBAL_HIDE_INTERFACE = 0x00100000,
-        GLOBAL_BATTLE_SHOW_DAMAGE = 0x00200000,
-        GLOBAL_BATTLE_SHOW_TURN_ORDER = 0x00400000,
-        GLOBAL_BATTLE_SHOW_GRID = 0x00800000,
-        GLOBAL_BATTLE_SHOW_MOUSE_SHADOW = 0x01000000,
-        GLOBAL_BATTLE_SHOW_MOVE_SHADOW = 0x02000000,
-        GLOBAL_BATTLE_AUTO_RESOLVE = 0x04000000,
-        GLOBAL_BATTLE_AUTO_SPELLCAST = 0x08000000,
-        GLOBAL_AUTO_SAVE_AT_BEGINNING_OF_TURN = 0x10000000,
-        GLOBAL_SCREEN_SCALING_TYPE_NEAREST = 0x20000000,
-        // TODO: remove this setting once the Editor goes public.
-        GLOBAL_ENABLE_EDITOR = 0x40000000
+        GAME_FIRST_RUN = 0x00000001,
+        GAME_SHOW_INTRO = 0x00000002,
+        GAME_PRICELOYALTY = 0x00000004,
+        GAME_RENDER_VSYNC = 0x00000008,
+        GAME_TEXT_SUPPORT_MODE = 0x00000010,
+        GAME_MONOCHROME_CURSOR = 0x00000020,
+        GAME_SHOW_CONTROL_PANEL = 0x00000040,
+        GAME_SHOW_RADAR = 0x00000080,
+        GAME_SHOW_ICONS = 0x00000100,
+        GAME_SHOW_BUTTONS = 0x00000200,
+        GAME_SHOW_STATUS = 0x00000400,
+        GAME_FULLSCREEN = 0x00008000,
+        GAME_3D_AUDIO = 0x00010000,
+        GAME_SYSTEM_INFO = 0x00020000,
+        GAME_CURSOR_SOFT_EMULATION = 0x00040000,
+        GAME_EVIL_INTERFACE = 0x00080000,
+        GAME_HIDE_INTERFACE = 0x00100000,
+        GAME_BATTLE_SHOW_DAMAGE = 0x00200000,
+        GAME_BATTLE_SHOW_TURN_ORDER = 0x00400000,
+        GAME_BATTLE_SHOW_GRID = 0x00800000,
+        GAME_BATTLE_SHOW_MOUSE_SHADOW = 0x01000000,
+        GAME_BATTLE_SHOW_MOVE_SHADOW = 0x02000000,
+        GAME_BATTLE_AUTO_RESOLVE = 0x04000000,
+        GAME_BATTLE_AUTO_SPELLCAST = 0x08000000,
+        GAME_AUTO_SAVE_AT_BEGINNING_OF_TURN = 0x10000000,
+        GAME_SCREEN_SCALING_TYPE_NEAREST = 0x20000000
+    };
+
+    enum EditorOptions : uint32_t
+    {
+        EDITOR_ENABLE = 0x00000001,
+        EDITOR_ANIMATION = 0x00000002,
+        EDITOR_PASSABILITY = 0x00000004
     };
 
     const int defaultSpeedDelay{ 5 };
@@ -105,22 +110,24 @@ Settings::Settings()
     , game_type( 0 )
     , preferably_count_players( 0 )
 {
-    _optGlobal.SetModes( GLOBAL_FIRST_RUN );
-    _optGlobal.SetModes( GLOBAL_SHOW_INTRO );
+    _gameOptions.SetModes( GAME_FIRST_RUN );
+    _gameOptions.SetModes( GAME_SHOW_INTRO );
 
-    _optGlobal.SetModes( GLOBAL_SHOW_RADAR );
-    _optGlobal.SetModes( GLOBAL_SHOW_ICONS );
-    _optGlobal.SetModes( GLOBAL_SHOW_BUTTONS );
-    _optGlobal.SetModes( GLOBAL_SHOW_STATUS );
+    _gameOptions.SetModes( GAME_SHOW_RADAR );
+    _gameOptions.SetModes( GAME_SHOW_ICONS );
+    _gameOptions.SetModes( GAME_SHOW_BUTTONS );
+    _gameOptions.SetModes( GAME_SHOW_STATUS );
 
-    _optGlobal.SetModes( GLOBAL_BATTLE_SHOW_GRID );
-    _optGlobal.SetModes( GLOBAL_BATTLE_SHOW_MOUSE_SHADOW );
-    _optGlobal.SetModes( GLOBAL_BATTLE_SHOW_MOVE_SHADOW );
-    _optGlobal.SetModes( GLOBAL_BATTLE_AUTO_RESOLVE );
+    _gameOptions.SetModes( GAME_BATTLE_SHOW_GRID );
+    _gameOptions.SetModes( GAME_BATTLE_SHOW_MOUSE_SHADOW );
+    _gameOptions.SetModes( GAME_BATTLE_SHOW_MOVE_SHADOW );
+    _gameOptions.SetModes( GAME_BATTLE_AUTO_RESOLVE );
+
+    _editorOptions.SetModes( EDITOR_ANIMATION );
 
     if ( System::isHandheldDevice() ) {
         // Due to the nature of handheld devices having small screens in general it is good to make fullscreen option by default.
-        _optGlobal.SetModes( GLOBAL_FULLSCREEN );
+        _gameOptions.SetModes( GAME_FULLSCREEN );
 
         // Adventure Map scrolling is disabled by default for handheld devices as it is very hard to navigate on small screens. Use drag and move logic.
         scroll_speed = SCROLL_SPEED_NONE;
@@ -270,10 +277,10 @@ bool Settings::Read( const std::string & filePath )
 
     if ( config.Exists( "show game intro" ) ) {
         if ( config.StrParams( "show game intro" ) == "on" ) {
-            _optGlobal.SetModes( GLOBAL_SHOW_INTRO );
+            _gameOptions.SetModes( GAME_SHOW_INTRO );
         }
         else {
-            _optGlobal.ResetModes( GLOBAL_SHOW_INTRO );
+            _gameOptions.ResetModes( GAME_SHOW_INTRO );
         }
     }
 
@@ -288,11 +295,11 @@ bool Settings::Read( const std::string & filePath )
     if ( config.Exists( "monochrome cursor" ) ) {
         // We cannot set cursor before initializing the system since we read a configuration file before initialization.
         if ( config.StrParams( "monochrome cursor" ) == "on" ) {
-            _optGlobal.SetModes( GLOBAL_MONOCHROME_CURSOR );
+            _gameOptions.SetModes( GAME_MONOCHROME_CURSOR );
             Cursor::Get().setMonochromeCursor( true );
         }
         else {
-            _optGlobal.ResetModes( GLOBAL_MONOCHROME_CURSOR );
+            _gameOptions.ResetModes( GAME_MONOCHROME_CURSOR );
             Cursor::Get().setMonochromeCursor( false );
         }
     }
@@ -311,11 +318,11 @@ bool Settings::Read( const std::string & filePath )
 
     if ( config.Exists( "cursor soft rendering" ) ) {
         if ( config.StrParams( "cursor soft rendering" ) == "on" ) {
-            _optGlobal.SetModes( GLOBAL_CURSOR_SOFT_EMULATION );
+            _gameOptions.SetModes( GAME_CURSOR_SOFT_EMULATION );
             fheroes2::cursor().enableSoftwareEmulation( true );
         }
         else {
-            _optGlobal.ResetModes( GLOBAL_CURSOR_SOFT_EMULATION );
+            _gameOptions.ResetModes( GAME_CURSOR_SOFT_EMULATION );
             fheroes2::cursor().enableSoftwareEmulation( false );
         }
     }
@@ -325,7 +332,15 @@ bool Settings::Read( const std::string & filePath )
     }
 
     if ( config.Exists( "editor" ) && config.StrParams( "editor" ) == "beta" ) {
-        _optGlobal.SetModes( GLOBAL_ENABLE_EDITOR );
+        _editorOptions.SetModes( EDITOR_ENABLE );
+    }
+
+    if ( config.Exists( "editor animation" ) && config.StrParams( "editor animation" ) == "on" ) {
+        _editorOptions.SetModes( EDITOR_ANIMATION );
+    }
+
+    if ( config.Exists( "editor passability" ) && config.StrParams( "editor passability" ) == "on" ) {
+        _editorOptions.SetModes( EDITOR_PASSABILITY );
     }
 
     return true;
@@ -383,7 +398,7 @@ std::string Settings::String() const
     os << "music volume = " << music_volume << std::endl;
 
     os << std::endl << "# run in fullscreen mode: on/off" << std::endl;
-    os << "fullscreen = " << ( _optGlobal.Modes( GLOBAL_FULLSCREEN ) ? "on" : "off" ) << std::endl;
+    os << "fullscreen = " << ( _gameOptions.Modes( GAME_FULLSCREEN ) ? "on" : "off" ) << std::endl;
 
     os << std::endl << "# print debug messages (only for development, see src/engine/logging.h for possible values)" << std::endl;
     os << "debug = " << Logging::getDebugLevel() << std::endl;
@@ -401,31 +416,31 @@ std::string Settings::String() const
     os << "scroll speed = " << scroll_speed << std::endl;
 
     os << std::endl << "# show battle grid: on/off" << std::endl;
-    os << "battle grid = " << ( _optGlobal.Modes( GLOBAL_BATTLE_SHOW_GRID ) ? "on" : "off" ) << std::endl;
+    os << "battle grid = " << ( _gameOptions.Modes( GAME_BATTLE_SHOW_GRID ) ? "on" : "off" ) << std::endl;
 
     os << std::endl << "# show battle shadow movement: on/off" << std::endl;
-    os << "battle shadow movement = " << ( _optGlobal.Modes( GLOBAL_BATTLE_SHOW_MOVE_SHADOW ) ? "on" : "off" ) << std::endl;
+    os << "battle shadow movement = " << ( _gameOptions.Modes( GAME_BATTLE_SHOW_MOVE_SHADOW ) ? "on" : "off" ) << std::endl;
 
     os << std::endl << "# show battle shadow cursor: on/off" << std::endl;
-    os << "battle shadow cursor = " << ( _optGlobal.Modes( GLOBAL_BATTLE_SHOW_MOUSE_SHADOW ) ? "on" : "off" ) << std::endl;
+    os << "battle shadow cursor = " << ( _gameOptions.Modes( GAME_BATTLE_SHOW_MOUSE_SHADOW ) ? "on" : "off" ) << std::endl;
 
     os << std::endl << "# show battle damage information: on/off" << std::endl;
-    os << "battle show damage = " << ( _optGlobal.Modes( GLOBAL_BATTLE_SHOW_DAMAGE ) ? "on" : "off" ) << std::endl;
+    os << "battle show damage = " << ( _gameOptions.Modes( GAME_BATTLE_SHOW_DAMAGE ) ? "on" : "off" ) << std::endl;
 
     os << std::endl << "# auto resolve battles: on/off" << std::endl;
-    os << "auto resolve battles = " << ( _optGlobal.Modes( GLOBAL_BATTLE_AUTO_RESOLVE ) ? "on" : "off" ) << std::endl;
+    os << "auto resolve battles = " << ( _gameOptions.Modes( GAME_BATTLE_AUTO_RESOLVE ) ? "on" : "off" ) << std::endl;
 
     os << std::endl << "# auto combat spell casting: on/off" << std::endl;
-    os << "auto spell casting = " << ( _optGlobal.Modes( GLOBAL_BATTLE_AUTO_SPELLCAST ) ? "on" : "off" ) << std::endl;
+    os << "auto spell casting = " << ( _gameOptions.Modes( GAME_BATTLE_AUTO_SPELLCAST ) ? "on" : "off" ) << std::endl;
 
     os << std::endl << "# show turn order during battle: on/off" << std::endl;
-    os << "battle turn order = " << ( _optGlobal.Modes( GLOBAL_BATTLE_SHOW_TURN_ORDER ) ? "on" : "off" ) << std::endl;
+    os << "battle turn order = " << ( _gameOptions.Modes( GAME_BATTLE_SHOW_TURN_ORDER ) ? "on" : "off" ) << std::endl;
 
     os << std::endl << "# use evil interface style: on/off" << std::endl;
-    os << "use evil interface = " << ( _optGlobal.Modes( GLOBAL_EVIL_INTERFACE ) ? "on" : "off" ) << std::endl;
+    os << "use evil interface = " << ( _gameOptions.Modes( GAME_EVIL_INTERFACE ) ? "on" : "off" ) << std::endl;
 
     os << std::endl << "# hide interface elements on the adventure map: on/off" << std::endl;
-    os << "hide interface = " << ( _optGlobal.Modes( GLOBAL_HIDE_INTERFACE ) ? "on" : "off" ) << std::endl;
+    os << "hide interface = " << ( _gameOptions.Modes( GAME_HIDE_INTERFACE ) ? "on" : "off" ) << std::endl;
 
     os << std::endl << "# position of the radar window on the adventure map when interface elements are hidden" << std::endl;
     os << "radar window position = [ " << pos_radr.x << ", " << pos_radr.y << " ]" << std::endl;
@@ -446,37 +461,43 @@ std::string Settings::String() const
     os << "controller pointer speed = " << _controllerPointerSpeed << std::endl;
 
     os << std::endl << "# first time game run (show additional hints): on/off" << std::endl;
-    os << "first time game run = " << ( _optGlobal.Modes( GLOBAL_FIRST_RUN ) ? "on" : "off" ) << std::endl;
+    os << "first time game run = " << ( _gameOptions.Modes( GAME_FIRST_RUN ) ? "on" : "off" ) << std::endl;
 
     os << std::endl << "# show game intro (splash screen and video): on/off" << std::endl;
-    os << "show game intro = " << ( _optGlobal.Modes( GLOBAL_SHOW_INTRO ) ? "on" : "off" ) << std::endl;
+    os << "show game intro = " << ( _gameOptions.Modes( GAME_SHOW_INTRO ) ? "on" : "off" ) << std::endl;
 
     os << std::endl << "# enable V-Sync (Vertical Synchronization) for rendering" << std::endl;
-    os << "v-sync = " << ( _optGlobal.Modes( GLOBAL_RENDER_VSYNC ) ? "on" : "off" ) << std::endl;
+    os << "v-sync = " << ( _gameOptions.Modes( GAME_RENDER_VSYNC ) ? "on" : "off" ) << std::endl;
 
     os << std::endl << "# enable text support mode to output extra information in console window: on/off" << std::endl;
-    os << "text support mode = " << ( _optGlobal.Modes( GLOBAL_TEXT_SUPPORT_MODE ) ? "on" : "off" ) << std::endl;
+    os << "text support mode = " << ( _gameOptions.Modes( GAME_TEXT_SUPPORT_MODE ) ? "on" : "off" ) << std::endl;
 
     os << std::endl << "# enable monochrome (black and white) cursors in the game: on/off" << std::endl;
-    os << "monochrome cursor = " << ( _optGlobal.Modes( GLOBAL_MONOCHROME_CURSOR ) ? "on" : "off" ) << std::endl;
+    os << "monochrome cursor = " << ( _gameOptions.Modes( GAME_MONOCHROME_CURSOR ) ? "on" : "off" ) << std::endl;
 
     os << std::endl << "# enable 3D audio for objects on Adventure Map: on/off" << std::endl;
-    os << "3d audio = " << ( _optGlobal.Modes( GLOBAL_3D_AUDIO ) ? "on" : "off" ) << std::endl;
+    os << "3d audio = " << ( _gameOptions.Modes( GAME_3D_AUDIO ) ? "on" : "off" ) << std::endl;
 
     os << std::endl << "# display system information: on/off" << std::endl;
-    os << "system info = " << ( _optGlobal.Modes( GLOBAL_SYSTEM_INFO ) ? "on" : "off" ) << std::endl;
+    os << "system info = " << ( _gameOptions.Modes( GAME_SYSTEM_INFO ) ? "on" : "off" ) << std::endl;
 
     os << std::endl << "# should auto save be performed at the beginning of the turn instead of the end of the turn: on/off" << std::endl;
-    os << "auto save at the beginning of the turn = " << ( _optGlobal.Modes( GLOBAL_AUTO_SAVE_AT_BEGINNING_OF_TURN ) ? "on" : "off" ) << std::endl;
+    os << "auto save at the beginning of the turn = " << ( _gameOptions.Modes( GAME_AUTO_SAVE_AT_BEGINNING_OF_TURN ) ? "on" : "off" ) << std::endl;
 
     os << std::endl << "# enable cursor software rendering" << std::endl;
-    os << "cursor soft rendering = " << ( _optGlobal.Modes( GLOBAL_CURSOR_SOFT_EMULATION ) ? "on" : "off" ) << std::endl;
+    os << "cursor soft rendering = " << ( _gameOptions.Modes( GAME_CURSOR_SOFT_EMULATION ) ? "on" : "off" ) << std::endl;
 
     os << std::endl << "# scaling type: nearest or linear (set by default)" << std::endl;
-    os << "screen scaling type = " << ( _optGlobal.Modes( GLOBAL_SCREEN_SCALING_TYPE_NEAREST ) ? "nearest" : "linear" ) << std::endl;
+    os << "screen scaling type = " << ( _gameOptions.Modes( GAME_SCREEN_SCALING_TYPE_NEAREST ) ? "nearest" : "linear" ) << std::endl;
 
-    if ( _optGlobal.Modes( GLOBAL_ENABLE_EDITOR ) ) {
-        os << "editor = beta" << std::endl;
+    if ( _editorOptions.Modes( EDITOR_ENABLE ) ) {
+        os << std::endl << "editor = beta" << std::endl;
+
+        os << std::endl << "# show object animation in the Editor: on/off" << std::endl;
+        os << "editor animation = " << ( _editorOptions.Modes( EDITOR_ANIMATION ) ? "on" : "off" ) << std::endl;
+
+        os << std::endl << "# display object passability in the Editor: on/off" << std::endl;
+        os << "editor passability = " << ( _editorOptions.Modes( EDITOR_PASSABILITY ) ? "on" : "off" ) << std::endl;
     }
 
     return os.str();
@@ -515,6 +536,26 @@ bool Settings::setGameLanguage( const std::string & language )
 
     ERROR_LOG( "Translation file " << fileName << " was not found." )
     return false;
+}
+
+void Settings::setEditorAnimation( const bool enable )
+{
+    if ( enable ) {
+        _editorOptions.SetModes( EDITOR_ANIMATION );
+    }
+    else {
+        _editorOptions.ResetModes( EDITOR_ANIMATION );
+    }
+}
+
+void Settings::setEditorPassability( const bool enable )
+{
+    if ( enable ) {
+        _editorOptions.SetModes( EDITOR_PASSABILITY );
+    }
+    else {
+        _editorOptions.ResetModes( EDITOR_PASSABILITY );
+    }
 }
 
 void Settings::SetProgramPath( const char * argv0 )
@@ -643,40 +684,40 @@ void Settings::SetBattleSpeed( int speed )
 void Settings::setBattleAutoResolve( bool enable )
 {
     if ( enable ) {
-        _optGlobal.SetModes( GLOBAL_BATTLE_AUTO_RESOLVE );
+        _gameOptions.SetModes( GAME_BATTLE_AUTO_RESOLVE );
     }
     else {
-        _optGlobal.ResetModes( GLOBAL_BATTLE_AUTO_RESOLVE );
+        _gameOptions.ResetModes( GAME_BATTLE_AUTO_RESOLVE );
     }
 }
 
 void Settings::setBattleAutoSpellcast( bool enable )
 {
     if ( enable ) {
-        _optGlobal.SetModes( GLOBAL_BATTLE_AUTO_SPELLCAST );
+        _gameOptions.SetModes( GAME_BATTLE_AUTO_SPELLCAST );
     }
     else {
-        _optGlobal.ResetModes( GLOBAL_BATTLE_AUTO_SPELLCAST );
+        _gameOptions.ResetModes( GAME_BATTLE_AUTO_SPELLCAST );
     }
 }
 
 void Settings::setBattleShowTurnOrder( const bool enable )
 {
     if ( enable ) {
-        _optGlobal.SetModes( GLOBAL_BATTLE_SHOW_TURN_ORDER );
+        _gameOptions.SetModes( GAME_BATTLE_SHOW_TURN_ORDER );
     }
     else {
-        _optGlobal.ResetModes( GLOBAL_BATTLE_SHOW_TURN_ORDER );
+        _gameOptions.ResetModes( GAME_BATTLE_SHOW_TURN_ORDER );
     }
 }
 
 void Settings::setFullScreen( const bool enable )
 {
     if ( enable ) {
-        _optGlobal.SetModes( GLOBAL_FULLSCREEN );
+        _gameOptions.SetModes( GAME_FULLSCREEN );
     }
     else {
-        _optGlobal.ResetModes( GLOBAL_FULLSCREEN );
+        _gameOptions.ResetModes( GAME_FULLSCREEN );
     }
 
     if ( enable != fheroes2::engine().isFullScreen() ) {
@@ -688,11 +729,11 @@ void Settings::setFullScreen( const bool enable )
 void Settings::setMonochromeCursor( const bool enable )
 {
     if ( enable ) {
-        _optGlobal.SetModes( GLOBAL_MONOCHROME_CURSOR );
+        _gameOptions.SetModes( GAME_MONOCHROME_CURSOR );
         Cursor::Get().setMonochromeCursor( true );
     }
     else {
-        _optGlobal.ResetModes( GLOBAL_MONOCHROME_CURSOR );
+        _gameOptions.ResetModes( GAME_MONOCHROME_CURSOR );
         Cursor::Get().setMonochromeCursor( false );
     }
 
@@ -702,11 +743,11 @@ void Settings::setMonochromeCursor( const bool enable )
 void Settings::setTextSupportMode( const bool enable )
 {
     if ( enable ) {
-        _optGlobal.SetModes( GLOBAL_TEXT_SUPPORT_MODE );
+        _gameOptions.SetModes( GAME_TEXT_SUPPORT_MODE );
         Logging::setTextSupportMode( true );
     }
     else {
-        _optGlobal.ResetModes( GLOBAL_TEXT_SUPPORT_MODE );
+        _gameOptions.ResetModes( GAME_TEXT_SUPPORT_MODE );
         Logging::setTextSupportMode( false );
     }
 }
@@ -714,21 +755,21 @@ void Settings::setTextSupportMode( const bool enable )
 void Settings::set3DAudio( const bool enable )
 {
     if ( enable ) {
-        _optGlobal.SetModes( GLOBAL_3D_AUDIO );
+        _gameOptions.SetModes( GAME_3D_AUDIO );
     }
     else {
-        _optGlobal.ResetModes( GLOBAL_3D_AUDIO );
+        _gameOptions.ResetModes( GAME_3D_AUDIO );
     }
 }
 
 void Settings::setVSync( const bool enable )
 {
     if ( enable ) {
-        _optGlobal.SetModes( GLOBAL_RENDER_VSYNC );
+        _gameOptions.SetModes( GAME_RENDER_VSYNC );
         fheroes2::engine().setVSync( true );
     }
     else {
-        _optGlobal.ResetModes( GLOBAL_RENDER_VSYNC );
+        _gameOptions.ResetModes( GAME_RENDER_VSYNC );
         fheroes2::engine().setVSync( false );
     }
 }
@@ -736,11 +777,11 @@ void Settings::setVSync( const bool enable )
 void Settings::setSystemInfo( const bool enable )
 {
     if ( enable ) {
-        _optGlobal.SetModes( GLOBAL_SYSTEM_INFO );
+        _gameOptions.SetModes( GAME_SYSTEM_INFO );
         fheroes2::RenderProcessor::instance().enableRenderers();
     }
     else {
-        _optGlobal.ResetModes( GLOBAL_SYSTEM_INFO );
+        _gameOptions.ResetModes( GAME_SYSTEM_INFO );
         fheroes2::RenderProcessor::instance().disableRenderers();
     }
 }
@@ -748,51 +789,51 @@ void Settings::setSystemInfo( const bool enable )
 void Settings::setAutoSaveAtBeginningOfTurn( const bool enable )
 {
     if ( enable ) {
-        _optGlobal.SetModes( GLOBAL_AUTO_SAVE_AT_BEGINNING_OF_TURN );
+        _gameOptions.SetModes( GAME_AUTO_SAVE_AT_BEGINNING_OF_TURN );
     }
     else {
-        _optGlobal.ResetModes( GLOBAL_AUTO_SAVE_AT_BEGINNING_OF_TURN );
+        _gameOptions.ResetModes( GAME_AUTO_SAVE_AT_BEGINNING_OF_TURN );
     }
 }
 
 void Settings::setBattleDamageInfo( const bool enable )
 {
     if ( enable ) {
-        _optGlobal.SetModes( GLOBAL_BATTLE_SHOW_DAMAGE );
+        _gameOptions.SetModes( GAME_BATTLE_SHOW_DAMAGE );
     }
     else {
-        _optGlobal.ResetModes( GLOBAL_BATTLE_SHOW_DAMAGE );
+        _gameOptions.ResetModes( GAME_BATTLE_SHOW_DAMAGE );
     }
 }
 
 void Settings::setHideInterface( const bool enable )
 {
     if ( enable ) {
-        _optGlobal.SetModes( GLOBAL_HIDE_INTERFACE );
+        _gameOptions.SetModes( GAME_HIDE_INTERFACE );
     }
     else {
-        _optGlobal.ResetModes( GLOBAL_HIDE_INTERFACE );
+        _gameOptions.ResetModes( GAME_HIDE_INTERFACE );
     }
 }
 
 void Settings::setEvilInterface( const bool enable )
 {
     if ( enable ) {
-        _optGlobal.SetModes( GLOBAL_EVIL_INTERFACE );
+        _gameOptions.SetModes( GAME_EVIL_INTERFACE );
     }
     else {
-        _optGlobal.ResetModes( GLOBAL_EVIL_INTERFACE );
+        _gameOptions.ResetModes( GAME_EVIL_INTERFACE );
     }
 }
 
 void Settings::setScreenScalingTypeNearest( const bool enable )
 {
     if ( enable ) {
-        _optGlobal.SetModes( GLOBAL_SCREEN_SCALING_TYPE_NEAREST );
+        _gameOptions.SetModes( GAME_SCREEN_SCALING_TYPE_NEAREST );
         fheroes2::engine().setNearestScaling( true );
     }
     else {
-        _optGlobal.ResetModes( GLOBAL_SCREEN_SCALING_TYPE_NEAREST );
+        _gameOptions.ResetModes( GAME_SCREEN_SCALING_TYPE_NEAREST );
         fheroes2::engine().setNearestScaling( false );
     }
 }
@@ -804,107 +845,117 @@ void Settings::SetScrollSpeed( int speed )
 
 bool Settings::isPriceOfLoyaltySupported() const
 {
-    return _optGlobal.Modes( GLOBAL_PRICELOYALTY );
+    return _gameOptions.Modes( GAME_PRICELOYALTY );
 }
 
 bool Settings::isMonochromeCursorEnabled() const
 {
-    return _optGlobal.Modes( GLOBAL_MONOCHROME_CURSOR );
+    return _gameOptions.Modes( GAME_MONOCHROME_CURSOR );
 }
 
 bool Settings::isTextSupportModeEnabled() const
 {
-    return _optGlobal.Modes( GLOBAL_TEXT_SUPPORT_MODE );
+    return _gameOptions.Modes( GAME_TEXT_SUPPORT_MODE );
 }
 
 bool Settings::is3DAudioEnabled() const
 {
-    return _optGlobal.Modes( GLOBAL_3D_AUDIO );
+    return _gameOptions.Modes( GAME_3D_AUDIO );
 }
 
 bool Settings::isSystemInfoEnabled() const
 {
-    return _optGlobal.Modes( GLOBAL_SYSTEM_INFO );
+    return _gameOptions.Modes( GAME_SYSTEM_INFO );
 }
 
 bool Settings::isAutoSaveAtBeginningOfTurnEnabled() const
 {
-    return _optGlobal.Modes( GLOBAL_AUTO_SAVE_AT_BEGINNING_OF_TURN );
+    return _gameOptions.Modes( GAME_AUTO_SAVE_AT_BEGINNING_OF_TURN );
 }
 
 bool Settings::isBattleShowDamageInfoEnabled() const
 {
-    return _optGlobal.Modes( GLOBAL_BATTLE_SHOW_DAMAGE );
+    return _gameOptions.Modes( GAME_BATTLE_SHOW_DAMAGE );
 }
 
 bool Settings::isHideInterfaceEnabled() const
 {
-    return _optGlobal.Modes( GLOBAL_HIDE_INTERFACE );
+    return _gameOptions.Modes( GAME_HIDE_INTERFACE );
 }
 
 bool Settings::isEvilInterfaceEnabled() const
 {
-    return _optGlobal.Modes( GLOBAL_EVIL_INTERFACE );
+    return _gameOptions.Modes( GAME_EVIL_INTERFACE );
 }
 
 bool Settings::isEditorEnabled() const
 {
-    return _optGlobal.Modes( GLOBAL_ENABLE_EDITOR );
+    return _editorOptions.Modes( EDITOR_ENABLE );
+}
+
+bool Settings::isEditorAnimationEnabled() const
+{
+    return _editorOptions.Modes( EDITOR_ANIMATION );
+}
+
+bool Settings::isEditorPassabilityEnabled() const
+{
+    return _editorOptions.Modes( EDITOR_PASSABILITY );
 }
 
 bool Settings::ShowControlPanel() const
 {
-    return _optGlobal.Modes( GLOBAL_SHOW_CONTROL_PANEL );
+    return _gameOptions.Modes( GAME_SHOW_CONTROL_PANEL );
 }
 
 bool Settings::ShowRadar() const
 {
-    return _optGlobal.Modes( GLOBAL_SHOW_RADAR );
+    return _gameOptions.Modes( GAME_SHOW_RADAR );
 }
 
 bool Settings::ShowIcons() const
 {
-    return _optGlobal.Modes( GLOBAL_SHOW_ICONS );
+    return _gameOptions.Modes( GAME_SHOW_ICONS );
 }
 
 bool Settings::ShowButtons() const
 {
-    return _optGlobal.Modes( GLOBAL_SHOW_BUTTONS );
+    return _gameOptions.Modes( GAME_SHOW_BUTTONS );
 }
 
 bool Settings::ShowStatus() const
 {
-    return _optGlobal.Modes( GLOBAL_SHOW_STATUS );
+    return _gameOptions.Modes( GAME_SHOW_STATUS );
 }
 
 bool Settings::BattleShowGrid() const
 {
-    return _optGlobal.Modes( GLOBAL_BATTLE_SHOW_GRID );
+    return _gameOptions.Modes( GAME_BATTLE_SHOW_GRID );
 }
 
 bool Settings::BattleShowMouseShadow() const
 {
-    return _optGlobal.Modes( GLOBAL_BATTLE_SHOW_MOUSE_SHADOW );
+    return _gameOptions.Modes( GAME_BATTLE_SHOW_MOUSE_SHADOW );
 }
 
 bool Settings::BattleShowMoveShadow() const
 {
-    return _optGlobal.Modes( GLOBAL_BATTLE_SHOW_MOVE_SHADOW );
+    return _gameOptions.Modes( GAME_BATTLE_SHOW_MOVE_SHADOW );
 }
 
 bool Settings::BattleAutoResolve() const
 {
-    return _optGlobal.Modes( GLOBAL_BATTLE_AUTO_RESOLVE );
+    return _gameOptions.Modes( GAME_BATTLE_AUTO_RESOLVE );
 }
 
 bool Settings::BattleAutoSpellcast() const
 {
-    return _optGlobal.Modes( GLOBAL_BATTLE_AUTO_SPELLCAST );
+    return _gameOptions.Modes( GAME_BATTLE_AUTO_SPELLCAST );
 }
 
 bool Settings::BattleShowTurnOrder() const
 {
-    return _optGlobal.Modes( GLOBAL_BATTLE_SHOW_TURN_ORDER );
+    return _gameOptions.Modes( GAME_BATTLE_SHOW_TURN_ORDER );
 }
 
 void Settings::setDebug( int debug )
@@ -980,10 +1031,10 @@ bool Settings::isCampaignGameType() const
 void Settings::EnablePriceOfLoyaltySupport( const bool set )
 {
     if ( set ) {
-        _optGlobal.SetModes( GLOBAL_PRICELOYALTY );
+        _gameOptions.SetModes( GAME_PRICELOYALTY );
     }
     else {
-        _optGlobal.ResetModes( GLOBAL_PRICELOYALTY );
+        _gameOptions.ResetModes( GAME_PRICELOYALTY );
         if ( _musicType == MUSIC_MIDI_EXPANSION )
             _musicType = MUSIC_MIDI_ORIGINAL;
     }
@@ -991,67 +1042,67 @@ void Settings::EnablePriceOfLoyaltySupport( const bool set )
 
 void Settings::SetBattleGrid( bool f )
 {
-    f ? _optGlobal.SetModes( GLOBAL_BATTLE_SHOW_GRID ) : _optGlobal.ResetModes( GLOBAL_BATTLE_SHOW_GRID );
+    f ? _gameOptions.SetModes( GAME_BATTLE_SHOW_GRID ) : _gameOptions.ResetModes( GAME_BATTLE_SHOW_GRID );
 }
 
 void Settings::SetBattleMovementShaded( bool f )
 {
-    f ? _optGlobal.SetModes( GLOBAL_BATTLE_SHOW_MOVE_SHADOW ) : _optGlobal.ResetModes( GLOBAL_BATTLE_SHOW_MOVE_SHADOW );
+    f ? _gameOptions.SetModes( GAME_BATTLE_SHOW_MOVE_SHADOW ) : _gameOptions.ResetModes( GAME_BATTLE_SHOW_MOVE_SHADOW );
 }
 
 void Settings::SetBattleMouseShaded( bool f )
 {
-    f ? _optGlobal.SetModes( GLOBAL_BATTLE_SHOW_MOUSE_SHADOW ) : _optGlobal.ResetModes( GLOBAL_BATTLE_SHOW_MOUSE_SHADOW );
+    f ? _gameOptions.SetModes( GAME_BATTLE_SHOW_MOUSE_SHADOW ) : _gameOptions.ResetModes( GAME_BATTLE_SHOW_MOUSE_SHADOW );
 }
 
 void Settings::SetShowControlPanel( bool f )
 {
-    f ? _optGlobal.SetModes( GLOBAL_SHOW_CONTROL_PANEL ) : _optGlobal.ResetModes( GLOBAL_SHOW_CONTROL_PANEL );
+    f ? _gameOptions.SetModes( GAME_SHOW_CONTROL_PANEL ) : _gameOptions.ResetModes( GAME_SHOW_CONTROL_PANEL );
 }
 
 void Settings::SetShowRadar( bool f )
 {
-    f ? _optGlobal.SetModes( GLOBAL_SHOW_RADAR ) : _optGlobal.ResetModes( GLOBAL_SHOW_RADAR );
+    f ? _gameOptions.SetModes( GAME_SHOW_RADAR ) : _gameOptions.ResetModes( GAME_SHOW_RADAR );
 }
 
 void Settings::SetShowIcons( bool f )
 {
-    f ? _optGlobal.SetModes( GLOBAL_SHOW_ICONS ) : _optGlobal.ResetModes( GLOBAL_SHOW_ICONS );
+    f ? _gameOptions.SetModes( GAME_SHOW_ICONS ) : _gameOptions.ResetModes( GAME_SHOW_ICONS );
 }
 
 void Settings::SetShowButtons( bool f )
 {
-    f ? _optGlobal.SetModes( GLOBAL_SHOW_BUTTONS ) : _optGlobal.ResetModes( GLOBAL_SHOW_BUTTONS );
+    f ? _gameOptions.SetModes( GAME_SHOW_BUTTONS ) : _gameOptions.ResetModes( GAME_SHOW_BUTTONS );
 }
 
 void Settings::SetShowStatus( bool f )
 {
-    f ? _optGlobal.SetModes( GLOBAL_SHOW_STATUS ) : _optGlobal.ResetModes( GLOBAL_SHOW_STATUS );
+    f ? _gameOptions.SetModes( GAME_SHOW_STATUS ) : _gameOptions.ResetModes( GAME_SHOW_STATUS );
 }
 
 bool Settings::FullScreen() const
 {
-    return _optGlobal.Modes( GLOBAL_FULLSCREEN );
+    return _gameOptions.Modes( GAME_FULLSCREEN );
 }
 
 bool Settings::isVSyncEnabled() const
 {
-    return _optGlobal.Modes( GLOBAL_RENDER_VSYNC );
+    return _gameOptions.Modes( GAME_RENDER_VSYNC );
 }
 
 bool Settings::isFirstGameRun() const
 {
-    return _optGlobal.Modes( GLOBAL_FIRST_RUN );
+    return _gameOptions.Modes( GAME_FIRST_RUN );
 }
 
 bool Settings::isShowIntro() const
 {
-    return _optGlobal.Modes( GLOBAL_SHOW_INTRO );
+    return _gameOptions.Modes( GAME_SHOW_INTRO );
 }
 
 void Settings::resetFirstGameRun()
 {
-    _optGlobal.ResetModes( GLOBAL_FIRST_RUN );
+    _gameOptions.ResetModes( GAME_FIRST_RUN );
 }
 
 StreamBase & operator<<( StreamBase & msg, const Settings & conf )

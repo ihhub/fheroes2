@@ -788,7 +788,8 @@ namespace
     // Multiply by this value if you are getting a FREE upgrade.
     const double freeMonsterUpgradeModifier = 3;
 
-    const double dangerousTaskPenalty = 20000.0;
+    // TODO: consider making this penalty dynamic
+    const double dangerousTaskPenalty = 50000.0;
     const double fogDiscoveryBaseValue = -10000.0;
 
     double getDistanceModifier( const MP2::MapObjectType objectType )
@@ -2087,13 +2088,13 @@ namespace AI
 
     int Normal::getPriorityTarget( const HeroToMove & heroInfo, double & maxPriority )
     {
+        assert( heroInfo.hero != nullptr );
+
         Heroes & hero = *heroInfo.hero;
 
         DEBUG_LOG( DBG_AI, DBG_INFO, "Find Adventure Map target for hero " << hero.GetName() << " at current position " << hero.GetIndex() )
 
         const double lowestPossibleValue = -1.0 * Maps::Ground::slowestMovePenalty * world.getSize();
-        const bool heroInPatrolMode = heroInfo.patrolCenter != -1;
-        const double heroStrength = hero.GetArmy().GetStrength();
 
         int priorityTarget = -1;
         maxPriority = lowestPossibleValue;
@@ -2117,107 +2118,137 @@ namespace AI
         }
 #endif
 
-        // pre-cache the pathfinder
+        // Pre-calculate penalties for tiles where there is a threat of enemy attack
+        const std::vector<double> enemyThreatPenalties = [this, &hero = std::as_const( hero )]() {
+            std::vector<double> result( world.getSize(), 0.0 );
+
+            const AIWorldPathfinderStateRestorer pathfinderStateRestorer( _pathfinder );
+
+            // Use the "optimistic" pathfinder settings for enemy heroes - minimal army advantage, minimal reserve of spell points
+            _pathfinder.setMinimalArmyStrengthAdvantage( ARMY_ADVANTAGE_DESPERATE );
+            _pathfinder.setSpellPointsReserveRatio( 0.0 );
+
+            const double heroStrength = hero.GetArmy().GetStrength();
+
+            for ( const auto & [dummy, enemyArmy] : _enemyArmies ) {
+                // Only enemy heroes are taken into account
+                if ( enemyArmy.hero == nullptr ) {
+                    continue;
+                }
+
+                // An enemy hero does not pose a threat if he is approximately equal in strength or weaker than our hero
+                if ( heroStrength * ARMY_ADVANTAGE_SMALL >= enemyArmy.strength ) {
+                    continue;
+                }
+
+                // In theory, this should never be the case
+                if ( enemyArmy.movePoints == 0 ) {
+                    assert( 0 );
+                    continue;
+                }
+
+                // Safe tiles should not be located close to a tile accessible to an enemy hero, some margin is needed
+                const uint32_t enemyArmyMovePointsThreshold = enemyArmy.movePoints + Maps::Ground::slowestMovePenalty * 2;
+                // If the enemy hero can't cross paths with our hero anywhere, then it makes sense to use a rough but quick estimate. Otherwise, an accurate but
+                // relatively slow estimate will be used.
+                const bool useRoughEstimate = ( Maps::GetApproximateDistance( hero.GetIndex(), enemyArmy.index ) * Maps::Ground::fastestMovePenalty
+                                                > hero.GetMovePoints() + enemyArmyMovePointsThreshold );
+
+                if ( !useRoughEstimate ) {
+                    // Pre-cache the pathfinder database for the enemy hero
+                    _pathfinder.reEvaluateIfNeeded( *enemyArmy.hero );
+                }
+
+                for ( size_t i = 0; i < result.size(); ++i ) {
+                    const int32_t tileIdx = static_cast<int32_t>( i );
+                    assert( Maps::isValidAbsIndex( tileIdx ) );
+
+                    const auto [distToTile, isTileConsideredSafe] = [this, enemyArmyIdx = enemyArmy.index, enemyArmyMovePointsThreshold, useRoughEstimate, tileIdx]() {
+                        // The tile on which the enemy hero is located is always considered unsafe
+                        if ( tileIdx == enemyArmyIdx ) {
+                            return std::make_pair( static_cast<uint32_t>( 0 ), false );
+                        }
+
+                        if ( useRoughEstimate ) {
+                            const uint32_t dist = Maps::GetApproximateDistance( tileIdx, enemyArmyIdx ) * Maps::Ground::fastestMovePenalty;
+
+                            // When using a rough estimate, a tile is considered safe if the enemy hero cannot reach it within one turn, even if the path from the enemy
+                            // hero to this tile is straight and with a minimum movement penalty. The potential ability of the enemy hero to use spells to move to this
+                            // tile (for example, the Dimension Door or Town Portal) is not considered in this assessment.
+                            return std::make_pair( dist, dist > enemyArmyMovePointsThreshold );
+                        }
+
+                        const uint32_t dist = _pathfinder.getDistance( tileIdx );
+
+                        // When using an accurate estimate, a tile is considered safe if the enemy hero does not have access to it (in particular, if it is hidden from
+                        // him in the fog) or he cannot reach it within one turn. The potential ability of the enemy hero to use spells to move to this tile (for example,
+                        // the Dimension Door or Town Portal) is not considered in this assessment.
+                        return std::make_pair( dist, dist == 0 || dist > enemyArmyMovePointsThreshold );
+                    }();
+
+                    if ( isTileConsideredSafe ) {
+                        continue;
+                    }
+
+                    // The penalty is cumulative (i.e. this is the sum of the penalties from all threatening heroes), the penalty from each threatening hero increases
+                    // linearly as the distance to that hero decreases
+                    result[i] += dangerousTaskPenalty * ( 2.0 - static_cast<double>( distToTile ) / static_cast<double>( enemyArmyMovePointsThreshold ) );
+                }
+            }
+
+            return result;
+        }();
+
+        // Pre-cache the pathfinder database for our hero
         _pathfinder.reEvaluateIfNeeded( hero );
 
         ObjectValidator objectValidator( hero, _pathfinder, *this );
         ObjectValueStorage valueStorage( hero, *this, lowestPossibleValue );
 
-        const auto getObjectValue = [&objectValidator, &valueStorage, this, heroStrength, &hero]( const int destination, uint32_t & distance, double & value,
-                                                                                                  const MP2::MapObjectType type, const bool isDimensionDoor ) {
-            if ( !isDimensionDoor ) {
-                // Dimension door path does not include any objects on the way.
-                std::vector<IndexObject> list = _pathfinder.getObjectsOnTheWay( destination );
-                for ( const IndexObject & pair : list ) {
-                    if ( objectValidator.isValid( pair.first ) && std::binary_search( _mapActionObjects.begin(), _mapActionObjects.end(), pair ) ) {
-                        const double extraValue = valueStorage.value( pair, 0 ); // object is on the way, we don't loose any movement points.
-                        if ( extraValue > 0 ) {
-                            // There is no need to reduce the quality of the object even if the path has others.
-                            value += extraValue;
-                        }
-                    }
-                }
-            }
+        const auto getObjectValue
+            = [this, &hero = std::as_const( hero ), &enemyThreatPenalties, &objectValidator, &valueStorage]( const int destination, uint32_t & distance, double & value,
+                                                                                                             const MP2::MapObjectType type, const bool isDimensionDoor ) {
+                  // Dimension door path does not include any objects on the way.
+                  if ( !isDimensionDoor ) {
+                      for ( const IndexObject & pair : _pathfinder.getObjectsOnTheWay( destination ) ) {
+                          if ( objectValidator.isValid( pair.first ) && std::binary_search( _mapActionObjects.begin(), _mapActionObjects.end(), pair ) ) {
+                              const double extraValue = valueStorage.value( pair, 0 );
+                              if ( extraValue > 0 ) {
+                                  // There is no need to reduce the quality of the object even if the path has others.
+                                  value += extraValue;
+                              }
+                          }
+                      }
+                  }
 
-            const Maps::Tiles & destinationTile = world.GetTiles( destination );
+                  const uint32_t heroMovePoints = hero.GetMovePoints();
 
-            // TODO: check nearby enemy heroes and distance to them instead of relying on region stats.
-            const RegionStats & regionStats = _regions[destinationTile.GetRegion()];
+                  const double enemyThreatPenalty = [&hero, &enemyThreatPenalties, destination, distance, type, heroMovePoints]() {
+                      if ( type == MP2::OBJ_CASTLE ) {
+                          const Castle * castle = world.getCastleEntrance( Maps::GetPoint( destination ) );
+                          assert( castle != nullptr );
 
-            const bool isObjectReachableAtThisTurn = ( distance <= hero.GetMovePoints() );
+                          // We should strive to defend our castles even if our hero is relatively weak (he can get reinforcements in the castle), so enemy threat
+                          // penalties should not apply if our hero is able to reach the castle within one turn.
+                          if ( castle->GetColor() == hero.GetColor() && distance <= heroMovePoints ) {
+                              return 0.0;
+                          }
+                      }
 
-            // Go into "coward" mode only if the threat is real. Equal by strength heroes rarely attack each other.
-            if ( heroStrength * AI::ARMY_ADVANTAGE_SMALL < regionStats.highestThreat ) {
-                switch ( type ) {
-                case MP2::OBJ_CASTLE: {
-                    const Castle * castle = world.getCastleEntrance( Maps::GetPoint( destination ) );
-                    if ( castle == nullptr ) {
-                        assert( 0 );
-                        break;
-                    }
+                      assert( destination >= 0 && static_cast<size_t>( destination ) < enemyThreatPenalties.size() );
 
-                    if ( castle->GetColor() == hero.GetColor() ) {
-                        // Friendly castles are always the priority so no penalty for them.
-                        break;
-                    }
+                      return enemyThreatPenalties[destination];
+                  }();
 
-                    if ( isObjectReachableAtThisTurn ) {
-                        if ( castle->GetGarrisonStrength( hero ) > heroStrength / 2 ) {
-                            value -= dangerousTaskPenalty / 4;
-                        }
-                        else {
-                            value -= dangerousTaskPenalty / 10;
-                        }
-                    }
-                    else if ( castle->GetGarrisonStrength( hero ) > heroStrength / 2 ) {
-                        value -= dangerousTaskPenalty / 2;
-                    }
-                    else {
-                        value -= dangerousTaskPenalty / 3;
-                    }
+                  value -= enemyThreatPenalty;
 
-                    break;
-                }
-                case MP2::OBJ_HERO: {
-                    const Heroes * anotherHero = destinationTile.getHero();
-                    if ( anotherHero == nullptr ) {
-                        assert( 0 );
-                        break;
-                    }
+                  // Distant object which is out of reach for the current turn must have lower priority.
+                  if ( distance > heroMovePoints ) {
+                      distance = heroMovePoints + ( distance - heroMovePoints ) * 2;
+                  }
 
-                    if ( anotherHero->GetColor() == hero.GetColor() ) {
-                        if ( isObjectReachableAtThisTurn ) {
-                            value -= dangerousTaskPenalty / 8;
-                        }
-                        else {
-                            value -= dangerousTaskPenalty / 4;
-                        }
-                    }
-                    else {
-                        if ( isObjectReachableAtThisTurn ) {
-                            value -= dangerousTaskPenalty / 8;
-                        }
-                        else {
-                            value -= dangerousTaskPenalty / 2;
-                        }
-                    }
-
-                    break;
-                }
-                default:
-                    // It is better to avoid all other objects if the current hero is under a big threat.
-                    value -= dangerousTaskPenalty;
-                    break;
-                }
-            }
-
-            if ( !isObjectReachableAtThisTurn ) {
-                // Distant object which is out of reach for the current turn must have lower priority.
-                distance = hero.GetMovePoints() + ( distance - hero.GetMovePoints() ) * 2;
-            }
-
-            value = scaleWithDistanceAndTime( value, distance, type );
-        };
+                  value = scaleWithDistanceAndTime( value, distance, type );
+              };
 
         // Set baseline target if it's a special role
         if ( hero.getAIRole() == Heroes::Role::COURIER ) {
@@ -2238,39 +2269,44 @@ namespace AI
             }
         }
 
+        const bool heroInPatrolMode = ( heroInfo.patrolCenter != -1 );
+
         for ( const IndexObject & node : _mapActionObjects ) {
             // Skip if hero in patrol mode and object outside of reach
-            if ( heroInPatrolMode && Maps::GetApproximateDistance( node.first, heroInfo.patrolCenter ) > heroInfo.patrolDistance )
+            if ( heroInPatrolMode && Maps::GetApproximateDistance( node.first, heroInfo.patrolCenter ) > heroInfo.patrolDistance ) {
                 continue;
+            }
 
-            if ( objectValidator.isValid( node.first ) ) {
-                uint32_t dist = _pathfinder.getDistance( node.first );
+            if ( !objectValidator.isValid( node.first ) ) {
+                continue;
+            }
 
-                bool useDimensionDoor = false;
-                const uint32_t dimensionDoorDist = Route::calculatePathPenalty( _pathfinder.getDimensionDoorPath( hero, node.first ) );
-                if ( dimensionDoorDist > 0 && ( dist == 0 || dimensionDoorDist < dist / 2 ) ) {
-                    dist = dimensionDoorDist;
-                    useDimensionDoor = true;
-                }
+            uint32_t dist = _pathfinder.getDistance( node.first );
 
-                if ( dist == 0 ) {
-                    continue;
-                }
+            bool useDimensionDoor = false;
+            const uint32_t dimensionDoorDist = Route::calculatePathPenalty( _pathfinder.getDimensionDoorPath( hero, node.first ) );
+            if ( dimensionDoorDist > 0 && ( dist == 0 || dimensionDoorDist < dist / 2 ) ) {
+                dist = dimensionDoorDist;
+                useDimensionDoor = true;
+            }
 
-                double value = valueStorage.value( node, dist );
-                getObjectValue( node.first, dist, value, static_cast<MP2::MapObjectType>( node.second ), useDimensionDoor );
+            if ( dist == 0 ) {
+                continue;
+            }
 
-                if ( dist && value > maxPriority ) {
-                    maxPriority = value;
-                    priorityTarget = node.first;
+            double value = valueStorage.value( node, dist );
+            getObjectValue( node.first, dist, value, static_cast<MP2::MapObjectType>( node.second ), useDimensionDoor );
+
+            if ( dist && value > maxPriority ) {
+                maxPriority = value;
+                priorityTarget = node.first;
 #ifdef WITH_DEBUG
-                    objectType = static_cast<MP2::MapObjectType>( node.second );
+                objectType = static_cast<MP2::MapObjectType>( node.second );
 #endif
 
-                    DEBUG_LOG( DBG_AI, DBG_TRACE,
-                               hero.GetName() << ": valid object at " << node.first << " value is " << value << " ("
-                                              << MP2::StringObject( static_cast<MP2::MapObjectType>( node.second ) ) << ")" )
-                }
+                DEBUG_LOG( DBG_AI, DBG_TRACE,
+                           hero.GetName() << ": valid object at " << node.first << " value is " << value << " ("
+                                          << MP2::StringObject( static_cast<MP2::MapObjectType>( node.second ) ) << ")" )
             }
         }
 
@@ -2578,32 +2614,6 @@ namespace AI
         uint32_t currentProgressValue = startProgressValue;
 
         while ( !availableHeroes.empty() ) {
-            class AIWorldPathfinderStateRestorer
-            {
-            public:
-                explicit AIWorldPathfinderStateRestorer( AIWorldPathfinder & pathfinder )
-                    : _pathfinder( pathfinder )
-                    , _originalMinimalArmyStrengthAdvantage( _pathfinder.getMinimalArmyStrengthAdvantage() )
-                    , _originalSpellPointsReserveRatio( _pathfinder.getSpellPointsReserveRatio() )
-                {}
-
-                AIWorldPathfinderStateRestorer( const AIWorldPathfinderStateRestorer & ) = delete;
-
-                ~AIWorldPathfinderStateRestorer()
-                {
-                    _pathfinder.setMinimalArmyStrengthAdvantage( _originalMinimalArmyStrengthAdvantage );
-                    _pathfinder.setSpellPointsReserveRatio( _originalSpellPointsReserveRatio );
-                }
-
-                AIWorldPathfinderStateRestorer & operator=( const AIWorldPathfinderStateRestorer & ) = delete;
-
-            private:
-                AIWorldPathfinder & _pathfinder;
-
-                const double _originalMinimalArmyStrengthAdvantage;
-                const double _originalSpellPointsReserveRatio;
-            };
-
             const AIWorldPathfinderStateRestorer pathfinderStateRestorer( _pathfinder );
 
             Heroes * bestHero = availableHeroes.front().hero;

@@ -165,7 +165,6 @@ namespace
         }
     }
 
-#ifdef WITH_DEBUG
     const fheroes2::Image & PassableViewSurface( const int passable, const bool isActionObject )
     {
         static std::map<std::pair<int, bool>, fheroes2::Image> imageMap;
@@ -257,6 +256,7 @@ namespace
         return imageMap.try_emplace( std::move( key ), std::move( sf ) ).first->second;
     }
 
+#ifdef WITH_DEBUG
     const fheroes2::Image & getDebugFogImage()
     {
         static const fheroes2::Image fog = []() {
@@ -917,17 +917,14 @@ namespace Maps
         if ( friendColors != 0 && tile.isFog( friendColors ) ) {
             area.BlitOnTile( dst, getDebugFogImage(), 0, 0, Maps::GetPoint( tile.GetIndex() ), false, 255 );
         }
+#else
+        (void)friendColors;
+#endif
 
         const bool isActionObject = MP2::isActionObject( tile.GetObject() );
         if ( isActionObject || tile.GetPassable() != DIRECTION_ALL ) {
             area.BlitOnTile( dst, PassableViewSurface( tile.GetPassable(), isActionObject ), 0, 0, Maps::GetPoint( tile.GetIndex() ), false, 255 );
         }
-#else
-        (void)tile;
-        (void)dst;
-        (void)area;
-        (void)friendColors;
-#endif
     }
 
     void redrawBottomLayerObjects( const Tiles & tile, fheroes2::Image & dst, bool isPuzzleDraw, const Interface::GameArea & area, const uint8_t level )

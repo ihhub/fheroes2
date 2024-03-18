@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-15 15:56+0000\n"
+"POT-Creation-Date: 2024-03-17 16:14+0000\n"
 "PO-Revision-Date: 2024-02-19 16:13+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -4127,6 +4127,21 @@ msgstr "Inga kartor tillgängliga!"
 
 msgid "Warning"
 msgstr "Varning"
+
+#, fuzzy
+msgid "Animation"
+msgstr "Annektering"
+
+#, fuzzy
+msgid "Passability"
+msgstr "Personlighet:"
+
+#, fuzzy
+msgid "Toggle animation of the objects."
+msgstr "Aktivera raderingen av %{type}objekt."
+
+msgid "Toggle display of objects' passability."
+msgstr ""
 
 msgid "difficulty|Easy"
 msgstr "Lätt"
