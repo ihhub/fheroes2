@@ -36,6 +36,75 @@
 
 namespace
 {
+    fheroes2::Image resizeHeightButton( const fheroes2::Image & original, const int32_t width, const int32_t height )
+    {
+        assert( height > 0 );
+
+        fheroes2::Image output;
+        output.resize( width, height );
+        output.reset();
+
+        const int32_t originalWidth = original.width();
+        if ( originalWidth >= width ) {
+            fheroes2::Copy( original, 0, 0, output, 0, 0, width / 2, height );
+            const int32_t secondHalf = width - width / 2;
+            fheroes2::Copy( original, originalWidth - secondHalf, 0, output, width - secondHalf, 0, secondHalf, height );
+        }
+        else {
+            const int32_t middleWidth = originalWidth / 3;
+            const int32_t overallMiddleWidth = width - middleWidth * 2;
+            const int32_t middleWidthCount = overallMiddleWidth / middleWidth;
+            const int32_t middleLeftOver = overallMiddleWidth - middleWidthCount * middleWidth;
+
+            fheroes2::Copy( original, 0, 0, output, 0, 0, middleWidth, height );
+            int32_t offsetX = middleWidth;
+            for ( int32_t i = 0; i < middleWidthCount; ++i ) {
+                fheroes2::Copy( original, middleWidth, 0, output, offsetX, 0, middleWidth, height );
+                offsetX += middleWidth;
+            }
+
+            if ( middleLeftOver > 0 ) {
+                fheroes2::Copy( original, middleWidth, 0, output, offsetX, 0, middleLeftOver, height );
+                offsetX += middleLeftOver;
+            }
+
+            const int32_t rightPartWidth = originalWidth - middleWidth * 2;
+            assert( offsetX + rightPartWidth == width );
+
+            fheroes2::Copy( original, originalWidth - rightPartWidth, 0, output, offsetX, 0, rightPartWidth, height );
+        }
+        const int32_t originalHeight = original.height();
+        if ( originalHeight >= height ) {
+            fheroes2::Copy( original, 0, 0, output, 0, 0, width, height / 2 );
+            const int32_t secondHalf = height - height / 2;
+            fheroes2::Copy( original, 0, originalHeight - secondHalf, output, 0, height - secondHalf, width, secondHalf );
+        }
+        else {
+            const int32_t middleHeight = originalHeight / 3;
+            const int32_t overallMiddleHeight = height - middleHeight * 2;
+            const int32_t middleHeightCount = overallMiddleHeight / middleHeight;
+            const int32_t middleLeftOver = overallMiddleHeight - middleHeightCount * middleHeight;
+
+            fheroes2::Copy( original, 0, 0, output, 0, 0, width, middleHeight );
+            int32_t offsetY = middleHeight;
+            for ( int32_t i = 0; i < middleHeightCount; ++i ) {
+                fheroes2::Copy( original, 0, middleHeight, output, 0, offsetY, width, middleHeight );
+                offsetY += middleHeight;
+            }
+
+            if ( middleLeftOver > 0 ) {
+                fheroes2::Copy( original, 0, middleHeight, output, 0, offsetY, width, middleLeftOver );
+                offsetY += middleLeftOver;
+            }
+
+            const int32_t rightPartWidth = originalHeight - middleHeight * 2;
+            assert( offsetY + rightPartWidth == height );
+
+            fheroes2::Copy( original, 0, originalHeight - rightPartWidth, output, 0, offsetY, width, rightPartWidth );
+        }
+
+        return output;
+    }
     fheroes2::Image resizeButton( const fheroes2::Image & original, const int32_t width )
     {
         const int32_t height = original.height();
@@ -679,11 +748,14 @@ namespace fheroes2
 
         const int32_t textAreaWidth = std::clamp( borderedTextWidth, minimumTextAreaWidth, maximumTextAreaWidth );
 
+        const int32_t textHeight = releasedText.height();
+        assert( textHeight > 0 );
+
         assert( textAreaWidth + backgroundBorders > 0 );
 
         // TODO: Make resizeButton() scale in vertical direction too, for vertical and larger buttons.
-        released = resizeButton( AGG::GetICN( emptyButtonIcnID, 0 ), textAreaWidth + backgroundBorders );
-        pressed = resizeButton( AGG::GetICN( emptyButtonIcnID, 1 ), textAreaWidth + backgroundBorders );
+        released = resizeHeightButton( AGG::GetICN( emptyButtonIcnID, 0 ), textAreaWidth + backgroundBorders, textHeight );
+        pressed = resizeHeightButton( AGG::GetICN( emptyButtonIcnID, 1 ), textAreaWidth + backgroundBorders, textHeight );
 
         if ( buttonBackgroundIcnID != ICN::UNKNOWN ) {
             makeTransparentBackground( released, pressed, buttonBackgroundIcnID );
