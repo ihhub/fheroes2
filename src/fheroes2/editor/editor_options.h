@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2024                                             *
+ *   Copyright (C) 2024                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -20,10 +20,7 @@
 
 #pragma once
 
-#define MAJOR_VERSION 1
-#define MINOR_VERSION 0
-#define INTERMEDIATE_VERSION 13
-
-#ifndef BUILD_VERSION
-#define BUILD_VERSION 0
-#endif
+namespace Editor
+{
+    void openEditorSettings();
+}
