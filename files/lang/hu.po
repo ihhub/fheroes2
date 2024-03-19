@@ -4123,17 +4123,15 @@ msgstr "Nincs használható térkép!"
 msgid "Warning"
 msgstr "Figyelmeztetés"
 
-#, fuzzy
 msgid "Animation"
-msgstr "Birtokbavétel"
+msgstr "Animáció"
 
 #, fuzzy
 msgid "Passability"
-msgstr "Személyiség:"
+msgstr ""
 
-#, fuzzy
 msgid "Toggle animation of the objects."
-msgstr "%{type} tárgyak törlésének kapcsolója."
+msgstr "Objektumok animációjának kapcsolója."
 
 msgid "Toggle display of objects' passability."
 msgstr ""
