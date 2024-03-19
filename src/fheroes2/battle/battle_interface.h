@@ -394,7 +394,7 @@ namespace Battle
         void _openBattleSettingsDialog();
         void EventStartAutoBattle( const Unit & unit, Actions & actions );
         void EventAutoFinish( Actions & actions );
-        void ShowAutoModeDialog( const Unit & unit, Actions & actions );
+        void OpenAutoModeDialog( const Unit & unit, Actions & actions );
         void EventShowOptions();
         void ButtonAutoAction( const Unit & unit, Actions & actions );
         void ButtonSettingsAction();
