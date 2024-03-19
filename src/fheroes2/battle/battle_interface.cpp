@@ -3231,9 +3231,11 @@ void Battle::Interface::OpenAutoModeDialog( const Unit & unit, Actions & actions
         }
         else if ( le.MouseClickLeft( autoResolve.area() ) ) {
             EventAutoFinish( actions );
+            return;
         }
         else if ( le.MouseClickLeft( autoCombat.area() ) ) {
             EventStartAutoBattle( unit, actions );
+            return;
         }
         display.render( roiArea );
     }
