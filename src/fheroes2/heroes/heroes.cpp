@@ -55,6 +55,7 @@
 #include "logging.h"
 #include "luck.h"
 #include "m82.h"
+#include "map_format_info.h"
 #include "maps.h"
 #include "maps_fileinfo.h"
 #include "maps_tiles.h"
@@ -492,7 +493,7 @@ void Heroes::LoadFromMP2( const int32_t mapIndex, const int colorType, const int
     if ( doesHeroHaveCustomPortrait ) {
         SetModes( CUSTOM );
 
-        // Portrait sprite index. In should be increased by 1 as in the original game hero IDs start from 0.
+        // Portrait sprite index. It should be increased by 1 as in the original game hero IDs start from 0.
         portrait = dataStream.get() + 1;
 
         if ( !isValidId( portrait ) ) {
@@ -528,7 +529,7 @@ void Heroes::LoadFromMP2( const int32_t mapIndex, const int colorType, const int
     if ( doesHeroHaveCustomSecondarySkills ) {
         SetModes( CUSTOM );
 
-        std::vector<Skill::Secondary> secs( 8 );
+        std::array<Skill::Secondary, 8> secs;
 
         for ( Skill::Secondary & skill : secs ) {
             // Secondary Skill IDs in the MP2 format start from 0, while in the engine they start from 1 due to presence of UNKNOWN skill type.
@@ -604,6 +605,315 @@ void Heroes::LoadFromMP2( const int32_t mapIndex, const int colorType, const int
     }
 
     DEBUG_LOG( DBG_GAME, DBG_INFO, name << ", color: " << Color::String( GetColor() ) << ", race: " << Race::String( _race ) )
+}
+
+void Heroes::setHeroMetadata( const Maps::Map_Format::HeroMetadata & heroMetadata, const int raceType, const bool isEditor )
+{
+    if ( _race != raceType ) {
+        SetModes( CUSTOM );
+
+        _race = raceType;
+    }
+
+    if ( !isEditor ) {
+        // Reset primary skills and initial spell to defaults.
+        HeroBase::LoadDefaults( HeroBase::HEROES, _race );
+    }
+
+    const bool doesHeroHaveCustomArmy
+        = isEditor
+          || std::any_of( heroMetadata.armyMonsterType.begin(), heroMetadata.armyMonsterType.end(), []( const int32_t monsterType ) { return monsterType != 0; } );
+    if ( doesHeroHaveCustomArmy ) {
+        const size_t armySize = 5;
+        assert( heroMetadata.armyMonsterType.size() == armySize );
+        std::array<Troop, armySize> troops;
+        for ( size_t i = 0; i < armySize; ++i ) {
+            if ( heroMetadata.armyMonsterType[i] == Monster::UNKNOWN || heroMetadata.armyMonsterCount[i] == 0 ) {
+                continue;
+            }
+
+            // Set monster type.
+            troops[i].SetMonster( heroMetadata.armyMonsterType[i] );
+            // Set monster count.
+            troops[i].SetCount( heroMetadata.armyMonsterCount[i] );
+        }
+
+        army.Assign( troops.data(), troops.data() + troops.size() );
+    }
+    else {
+        // Reset the army to default
+        army.Reset( true );
+    }
+
+    // Hero's portrait.
+    if ( heroMetadata.customPortrait > 0 ) {
+        SetModes( CUSTOM );
+
+        assert( isValidId( heroMetadata.customPortrait ) );
+
+        // Portrait sprite index.
+        portrait = heroMetadata.customPortrait;
+    }
+
+    const bool doesHeroHaveCustomArtifacts
+        = isEditor || std::any_of( heroMetadata.artifact.begin(), heroMetadata.artifact.end(), []( const int32_t artifact ) { return artifact != 0; } );
+    if ( doesHeroHaveCustomArtifacts ) {
+        // Clear the initial spells and a possible spellBook.
+        SpellBookDeactivate();
+
+        const size_t artifactCount = heroMetadata.artifact.size();
+        assert( artifactCount == 14 );
+        for ( size_t i = 0; i < artifactCount; ++i ) {
+            if ( heroMetadata.artifact[i] == Artifact::UNKNOWN ) {
+                continue;
+            }
+
+            Artifact art( heroMetadata.artifact[i] );
+
+            assert( art.isValid() );
+
+            if ( heroMetadata.artifact[i] == Artifact::SPELL_SCROLL ) {
+                assert( heroMetadata.artifactMetadata[i] != Spell::NONE );
+
+                art.SetSpell( heroMetadata.artifactMetadata[i] );
+            }
+            else if ( heroMetadata.artifact[i] == Artifact::MAGIC_BOOK ) {
+                SpellBookActivate();
+
+                // Add spells to the spell book.
+                for ( int32_t spellId : heroMetadata.availableSpells ) {
+                    if ( spellId == Spell::NONE ) {
+                        continue;
+                    }
+
+                    AppendSpellToBook( spellId, true );
+                }
+            }
+
+            PickupArtifact( art );
+        }
+    }
+
+    const bool doesHeroHaveCustomSecondarySkills
+        = std::any_of( heroMetadata.secondarySkill.begin(), heroMetadata.secondarySkill.end(), []( const int32_t skill ) { return skill != 0; } );
+    if ( doesHeroHaveCustomSecondarySkills ) {
+        SetModes( CUSTOM );
+
+        const size_t skillsCount = 8;
+
+        assert( heroMetadata.secondarySkill.size() == skillsCount );
+
+        std::array<Skill::Secondary, skillsCount> skills;
+
+        for ( size_t i = 0; i < skillsCount; ++i ) {
+            skills[i].SetSkill( heroMetadata.secondarySkill[i] );
+            skills[i].SetLevel( heroMetadata.secondarySkillLevel[i] );
+        }
+
+        secondary_skills = Skill::SecSkills();
+
+        for ( const Skill::Secondary & skill : skills ) {
+            secondary_skills.AddSkill( skill );
+        }
+    }
+    else if ( !isEditor ) {
+        // Reset secondary skills to defaults
+        secondary_skills = Skill::SecSkills( _race );
+    }
+
+    // For Editor we need to fill all the rest ofe 8 skills with the empty ones.
+    if ( isEditor ) {
+        GetSecondarySkills().FillMax( Skill::Secondary() );
+    }
+
+    if ( isEditor || !heroMetadata.customName.empty() ) {
+        SetModes( CUSTOM );
+        name = heroMetadata.customName;
+    }
+
+    if ( heroMetadata.isOnPatrol ) {
+        SetModes( PATROL );
+
+        _patrolCenter = GetCenter();
+        _patrolDistance = heroMetadata.patrolRadius;
+    }
+
+    // Hero's experience.
+    if ( heroMetadata.customExperience > -1 ) {
+        experience = heroMetadata.customExperience;
+    }
+    else if ( isEditor ) {
+        // There is no way to set "default experience" condition, so we will consider 'INT32_MAX' as it.
+        experience = UINT32_MAX;
+    }
+
+    // Level up if needed.
+    if ( !isEditor ) {
+        const int16_t level = heroMetadata.customLevel > -1 ? heroMetadata.customLevel : static_cast<int16_t>( GetLevel() );
+        if ( level > 1 ) {
+            SetModes( CUSTOM );
+
+            for ( int16_t i = 1; i < level; ++i ) {
+                LevelUp( doesHeroHaveCustomSecondarySkills, true );
+            }
+        }
+    }
+
+    // Apply primary Skill base values.
+    attack = heroMetadata.customAttack;
+    defense = heroMetadata.customDefense;
+    knowledge = heroMetadata.customKnowledge;
+    power = heroMetadata.customSpellPower;
+
+    SetSpellPoints( heroMetadata.magicPoints > -1 ? static_cast<uint32_t>( heroMetadata.magicPoints ) : GetMaxSpellPoints() );
+
+    move_point = GetMaxMovePoints();
+}
+
+bool Heroes::getHeroMetadata( Maps::Map_Format::HeroMetadata & heroMetadata ) const
+{
+    bool hasChanges = false;
+
+    const size_t armySize = army.Size();
+    assert( heroMetadata.armyMonsterType.size() == armySize );
+
+    // Update army metadata.
+    for ( size_t i = 0; i < armySize; ++i ) {
+        const Troop * troop = army.GetTroop( i );
+        assert( troop != nullptr );
+
+        if ( const int troopId = troop->GetID(); troopId != heroMetadata.armyMonsterType[i] ) {
+            heroMetadata.armyMonsterType[i] = troopId;
+            hasChanges = true;
+        }
+
+        if ( const int troopCount = troop->GetCount(); troopCount != heroMetadata.armyMonsterCount[i] ) {
+            heroMetadata.armyMonsterCount[i] = troopCount;
+            hasChanges = true;
+        }
+    }
+
+    // Hero's portrait.
+    if ( heroMetadata.customPortrait != portrait ) {
+        heroMetadata.customPortrait = portrait;
+        hasChanges = true;
+    }
+
+    // Hero's artifacts.
+    const size_t artifactCount = bag_artifacts.size();
+    assert( artifactCount == heroMetadata.artifactMetadata.size() );
+    for ( size_t i = 0; i < artifactCount; ++i ) {
+        const int artifactId = bag_artifacts[i].GetID();
+        // The spell scroll may contain a changed spell. Magic book spell are checked in the next loop.
+        if ( heroMetadata.artifact[i] == artifactId && artifactId != Artifact::SPELL_SCROLL ) {
+            continue;
+        }
+
+        if ( artifactId == Artifact::SPELL_SCROLL ) {
+            const int32_t artifactSpellId = bag_artifacts[i].getSpellId();
+
+            assert( artifactSpellId != Spell::NONE );
+
+            if ( heroMetadata.artifactMetadata[i] == artifactSpellId ) {
+                continue;
+            }
+
+            heroMetadata.artifactMetadata[i] = artifactSpellId;
+        }
+
+        heroMetadata.artifact[i] = artifactId;
+
+        hasChanges = true;
+    }
+
+    // Hero's spells.
+    if ( const size_t bookSize = spell_book.size(); bookSize != heroMetadata.availableSpells.size()
+                                                    || !std::equal( spell_book.begin(), spell_book.end(), heroMetadata.availableSpells.begin(),
+                                                                    []( const Spell & spell, const int spellId ) { return spell.GetID() == spellId; } ) ) {
+        // The spells were changed. Make a cope of the Spell Book.
+        heroMetadata.availableSpells.clear();
+        heroMetadata.availableSpells.reserve( bookSize );
+
+        for ( size_t i = 0; i < bookSize; ++i ) {
+            heroMetadata.availableSpells.push_back( spell_book[i].GetID() );
+        }
+
+        hasChanges = true;
+    }
+
+    // Hero's secondary skills.
+    const std::vector<Skill::Secondary> & skills = secondary_skills.ToVector();
+    const size_t skillsSize = skills.size();
+    assert( heroMetadata.secondarySkill.size() == skillsSize && heroMetadata.secondarySkillLevel.size() == skillsSize );
+    for ( size_t i = 0; i < skillsSize; ++i ) {
+        if ( heroMetadata.secondarySkill[i] != skills[i].Skill() ) {
+            heroMetadata.secondarySkill[i] = skills[i].Skill();
+            hasChanges = true;
+        }
+
+        if ( const uint8_t skillLevel = static_cast<uint8_t>( skills[i].Level() ); heroMetadata.secondarySkillLevel[i] != skillLevel ) {
+            heroMetadata.secondarySkillLevel[i] = skillLevel;
+            hasChanges = true;
+        }
+    }
+
+    // Hero's name.
+    if ( heroMetadata.customName != name ) {
+        heroMetadata.customName = name;
+        hasChanges = true;
+    }
+
+    // Patrol mode.
+    if ( const bool patrolMode = Modes( PATROL ); heroMetadata.isOnPatrol != patrolMode ) {
+        heroMetadata.isOnPatrol = patrolMode;
+        hasChanges = true;
+    }
+
+    if ( heroMetadata.patrolRadius != _patrolDistance ) {
+        heroMetadata.patrolRadius = static_cast<uint8_t>( _patrolDistance );
+        hasChanges = true;
+    }
+
+    // Hero's experience.
+    if ( heroMetadata.customExperience != static_cast<int32_t>( experience ) || ( ( experience == UINT32_MAX ) != ( heroMetadata.customExperience == -1 ) ) ) {
+        if ( experience == UINT32_MAX ) {
+            heroMetadata.customExperience = -1;
+        }
+        else {
+            heroMetadata.customExperience = static_cast<int32_t>( experience );
+        }
+        hasChanges = true;
+    }
+
+    // Primary Skill base values.
+    if ( heroMetadata.customAttack != attack ) {
+        heroMetadata.customAttack = static_cast<int16_t>( attack );
+        hasChanges = true;
+    }
+    if ( heroMetadata.customDefense != defense ) {
+        heroMetadata.customDefense = static_cast<int16_t>( defense );
+        hasChanges = true;
+    }
+    if ( heroMetadata.customKnowledge != knowledge ) {
+        heroMetadata.customKnowledge = static_cast<int16_t>( knowledge );
+        hasChanges = true;
+    }
+    if ( heroMetadata.customSpellPower != power ) {
+        heroMetadata.customSpellPower = static_cast<int16_t>( power );
+        hasChanges = true;
+    }
+
+    // Hero's spell points.
+    if ( const uint32_t maxSpellPoints = GetMaxSpellPoints(); maxSpellPoints == magic_point && heroMetadata.magicPoints != -1 ) {
+        heroMetadata.magicPoints = -1;
+        hasChanges = true;
+    }
+    else if ( maxSpellPoints != magic_point && heroMetadata.magicPoints != static_cast<int16_t>( magic_point ) ) {
+        heroMetadata.magicPoints = static_cast<int16_t>( magic_point );
+        hasChanges = true;
+    }
+
+    return hasChanges;
 }
 
 int Heroes::GetRace() const
@@ -1851,12 +2161,12 @@ void Heroes::PortraitRedraw( const int32_t px, const int32_t py, const PortraitT
 
     if ( !port.empty() ) {
         if ( PORT_BIG == type ) {
-            fheroes2::Blit( port, dstsf, px, py );
+            fheroes2::Copy( port, 0, 0, dstsf, px, py, port.width(), port.height() );
             mp.y = 2;
             mp.x = port.width() - 12;
         }
         else if ( PORT_MEDIUM == type ) {
-            fheroes2::Blit( port, dstsf, px, py );
+            fheroes2::Copy( port, 0, 0, dstsf, px, py, port.width(), port.height() );
             mp.x = port.width() - 10;
         }
         else if ( PORT_SMALL == type ) {
@@ -1870,13 +2180,13 @@ void Heroes::PortraitRedraw( const int32_t px, const int32_t py, const PortraitT
             fheroes2::Blit( background, dstsf, px, py );
 
             // Draw mobility.
-            fheroes2::Blit( mobility, dstsf, px, py + mobility.y() );
+            fheroes2::Copy( mobility, 0, 0, dstsf, px, py + mobility.y(), mobility.width(), mobility.height() );
 
             // Draw hero's portrait.
-            fheroes2::Blit( port, dstsf, px + barw + 1, py );
+            fheroes2::Copy( port, 0, 0, dstsf, px + barw + 1, py, port.width(), port.height() );
 
             // Draw mana.
-            fheroes2::Blit( mana, dstsf, px + barw + port.width() + 2, py + mana.y() );
+            fheroes2::Copy( mana, 0, 0, dstsf, px + barw + port.width() + 2, py + mana.y(), mana.width(), mana.height() );
 
             mp.x = 35;
         }

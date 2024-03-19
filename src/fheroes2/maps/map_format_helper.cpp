@@ -193,6 +193,16 @@ namespace Maps
         assert( uid > 0 );
 
         addObjectToTile( map.tiles[tileId], group, index, uid );
+
+        // Towns and heroes has extra metadata.
+        if ( group == ObjectGroup::KINGDOM_HEROES ) {
+            assert( map.heroMetadata.find( uid ) == map.heroMetadata.end() );
+            map.heroMetadata.try_emplace( uid );
+        }
+        else if ( group == ObjectGroup::KINGDOM_TOWNS ) {
+            assert( map.castleMetadata.find( uid ) == map.castleMetadata.end() );
+            map.castleMetadata.try_emplace( uid );
+        }
     }
 
     bool updateMapPlayers( Map_Format::MapFormat & map )

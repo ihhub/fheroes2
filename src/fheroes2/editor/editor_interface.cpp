@@ -245,6 +245,10 @@ namespace
                     // Two objects have been removed from this tile. Start search from the beginning.
                     objectIter = mapTile.objects.begin();
 
+                    // Remove this town metadata.
+                    assert( mapFormat.castleMetadata.find( objectId ) != mapFormat.castleMetadata.end() );
+                    mapFormat.castleMetadata.erase( objectId );
+
                     needRedraw = true;
                 }
                 else if ( objectIter->group == Maps::ObjectGroup::ROADS ) {
@@ -261,11 +265,18 @@ namespace
 
                     ++objectIter;
                 }
+                else if ( objectIter->group == Maps::ObjectGroup::KINGDOM_HEROES ) {
+                    // Remove this hero metadata.
+                    assert( mapFormat.heroMetadata.find( objectIter->id ) != mapFormat.heroMetadata.end() );
+                    mapFormat.heroMetadata.erase( objectIter->id );
+
+                    objectIter = mapTile.objects.erase( objectIter );
+                    needRedraw = true;
+                }
                 else {
                     objectIter = mapTile.objects.erase( objectIter );
                     needRedraw = true;
                 }
-
                 if ( objectsUids.empty() ) {
                     break;
                 }
@@ -796,16 +807,30 @@ namespace Interface
     {
         Maps::Tiles & tile = world.GetTiles( tileIndex );
 
-        Heroes * otherHero = tile.getHero();
-        Castle * otherCastle = world.getCastle( tile.GetCenter() );
+        if ( _editorPanel.isDetailEdit() ) {
+            // Hero is the one-tile object so we can directly search for him in '_mapFormat'.
+            auto foundHero = std::find_if( _mapFormat.tiles[tileIndex].objects.begin(), _mapFormat.tiles[tileIndex].objects.end(),
+                                           []( const Maps::Map_Format::ObjectInfo object ) { return object.group == Maps::ObjectGroup::KINGDOM_HEROES; } );
 
-        if ( otherHero ) {
-            // TODO: Make hero edit dialog: e.g. with functions like in Battle only dialog, but only for one hero.
-            Game::OpenHeroesDialog( *otherHero, true, true );
-        }
-        else if ( otherCastle ) {
-            // TODO: Make Castle edit dialog: e.g. like original build dialog.
-            Game::OpenCastleDialog( *otherCastle );
+            if ( foundHero != _mapFormat.tiles[tileIndex].objects.end() ) {
+                const auto & heroObject = Maps::getObjectsByGroup( Maps::ObjectGroup::KINGDOM_HEROES )[foundHero->index];
+                const int color = ( 1 << heroObject.metadata[0] );
+                const int race = ( 1 << heroObject.metadata[1] );
+
+                // Make a temporary hero to edit his details.
+                Heroes hero;
+                auto heroMetadata = _mapFormat.heroMetadata.find( foundHero->id );
+                if ( heroMetadata != _mapFormat.heroMetadata.end() ) {
+                    hero.setHeroMetadata( _mapFormat.heroMetadata[foundHero->id], race, true );
+                }
+                hero.SetColor( color );
+
+                fheroes2::ActionCreator action( _historyManager, _mapFormat );
+                hero.OpenDialog( false, false, true, true, true, true );
+                if ( hero.getHeroMetadata( _mapFormat.heroMetadata[foundHero->id] ) ) {
+                    action.commit();
+                }
+            }
         }
         else if ( _editorPanel.isTerrainEdit() ) {
             const fheroes2::Rect brushSize = _editorPanel.getBrushArea();

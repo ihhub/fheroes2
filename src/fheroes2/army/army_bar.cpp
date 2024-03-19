@@ -173,13 +173,12 @@ namespace
     }
 }
 
-ArmyBar::ArmyBar( Army * ptr, bool mini, bool ro, bool change /* false */ )
+ArmyBar::ArmyBar( Army * ptr, const bool miniSprites, const bool readOnly, const bool isEditMode /* false */, const bool saveLastTroop /* true */ )
     : spcursor( fheroes2::AGG::GetICN( ICN::STRIP, 1 ) )
-    , _army( nullptr )
-    , use_mini_sprite( mini )
-    , read_only( ro )
-    , can_change( change )
-    , _troopWindowOffsetY( 0 )
+    , use_mini_sprite( miniSprites )
+    , read_only( readOnly )
+    , can_change( isEditMode )
+    , _saveLastTroop( saveLastTroop )
 {
     if ( use_mini_sprite )
         SetBackground( { 43, 43 }, fheroes2::GetColorId( 0, 45, 0 ) );
@@ -344,7 +343,7 @@ bool ArmyBar::ActionBarCursor( ArmyTroop & troop )
 
 bool ArmyBar::ActionBarCursor( ArmyTroop & destTroop, ArmyTroop & selectedTroop )
 {
-    bool save_last_troop = ( selectedTroop.GetArmy()->getTotalCount() <= 1 ) && selectedTroop.GetArmy()->SaveLastTroop();
+    bool save_last_troop = _saveLastTroop && ( selectedTroop.GetArmy()->getTotalCount() <= 1 ) && selectedTroop.GetArmy()->SaveLastTroop();
 
     if ( destTroop.isValid() ) {
         if ( destTroop.GetID() != selectedTroop.GetID() ) {
@@ -492,7 +491,7 @@ bool ArmyBar::ActionBarLeftMouseSingleClick( ArmyTroop & destTroop, ArmyTroop & 
         }
         // destination troop has units and both troops are the same creature type
         else {
-            if ( selectedTroop.GetArmy()->SaveLastTroop() ) { // this is their army's only troop
+            if ( _saveLastTroop && selectedTroop.GetArmy()->SaveLastTroop() ) { // this is their army's only troop
                 // move all but one units to destination
                 destTroop.SetCount( destTroop.GetCount() + selectedTroop.GetCount() - 1 );
                 // leave a single unit behind
@@ -508,7 +507,7 @@ bool ArmyBar::ActionBarLeftMouseSingleClick( ArmyTroop & destTroop, ArmyTroop & 
     }
     else {
         // destination troop is empty, source army would be emptied by moving all
-        if ( selectedTroop.GetArmy()->SaveLastTroop() ) {
+        if ( _saveLastTroop && selectedTroop.GetArmy()->SaveLastTroop() ) {
             // move all but one units into the empty destination slot
             destTroop.Set( selectedTroop, selectedTroop.GetCount() - 1 );
             selectedTroop.SetCount( 1 );
@@ -536,7 +535,7 @@ bool ArmyBar::ActionBarLeftMouseDoubleClick( ArmyTroop & troop )
         int flags = Dialog::BUTTONS;
 
         if ( !read_only ) {
-            if ( !_army->SaveLastTroop() ) {
+            if ( !_saveLastTroop || !_army->SaveLastTroop() ) {
                 flags |= Dialog::DISMISS;
             }
 
@@ -637,7 +636,7 @@ bool ArmyBar::ActionBarRightMouseHold( ArmyTroop & troop )
     if ( troop.isValid() ) {
         ResetSelected();
 
-        if ( can_change && !_army->SaveLastTroop() ) {
+        if ( can_change && ( !_saveLastTroop || !_army->SaveLastTroop() ) ) {
             troop.Reset();
         }
         else {

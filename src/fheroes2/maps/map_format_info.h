@@ -94,8 +94,8 @@ namespace Maps::Map_Format
         // If the name is empty a random name is going to be set by the engine.
         std::string customName;
 
-        // Custom portrait. A negative value means no customization.
-        int32_t customPortrait{ -1 };
+        // Custom portrait. A negative or zero (Heroes::UNKNOWN) value means no customization.
+        int32_t customPortrait{ 0 };
 
         // Custom hero army. Type 0 means not set.
         std::array<int32_t, 5> armyMonsterType{ 0 };
@@ -124,7 +124,7 @@ namespace Maps::Map_Format
         // Primary Skill bonuses. By default they are to 0. They can be positive or negative.
         // These values are applied after hero's basic primary skills' values and after level him up, if required.
         int16_t customAttack{ 0 };
-        int16_t customDefence{ 0 };
+        int16_t customDefense{ 0 };
         int16_t customKnowledge{ 0 };
         int16_t customSpellPower{ 0 };
 

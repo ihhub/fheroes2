@@ -57,6 +57,10 @@ namespace Battle
 namespace Maps
 {
     class Tiles;
+    namespace Map_Format
+    {
+        struct HeroMetadata;
+    }
 }
 
 namespace fheroes2
@@ -297,6 +301,10 @@ public:
 
     void LoadFromMP2( const int32_t mapIndex, const int colorType, const int raceType, const bool isInJail, const std::vector<uint8_t> & data );
 
+    void setHeroMetadata( const Maps::Map_Format::HeroMetadata & heroMetadata, const int raceType, const bool isEditor );
+    // Updates data in heroMetadata and returns true is it has changes.
+    bool getHeroMetadata( Maps::Map_Format::HeroMetadata & heroMetadata ) const;
+
     int GetRace() const override;
     const std::string & GetName() const override;
     int GetColor() const override;
@@ -314,6 +322,14 @@ public:
     double getMeetingValue( const Heroes & otherHero ) const;
     double getRecruitValue() const;
     int getStatsValue() const;
+
+    /*void setAttack( int attack_ )
+    {
+        attack = attack_;
+    }
+    void setDefense();
+    void setPower();
+    void setKnowledge();*/
 
     int GetAttack() const override;
     int GetDefense() const override;
@@ -419,7 +435,7 @@ public:
     // Returns the relative height of mana column near hero's portrait in heroes panel. Returned value will be in range [0; 25].
     int GetManaIndexSprite() const;
 
-    int OpenDialog( const bool readonly, const bool fade, const bool disableDismiss, const bool disableSwitch, const bool renderBackgroundDialog );
+    int OpenDialog( const bool readonly, const bool fade, const bool disableDismiss, const bool disableSwitch, const bool renderBackgroundDialog, const bool isEditor );
     void MeetingDialog( Heroes & );
 
     bool Recruit( const int col, const fheroes2::Point & pt );

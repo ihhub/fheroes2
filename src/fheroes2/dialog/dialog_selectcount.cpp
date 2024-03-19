@@ -237,9 +237,8 @@ bool Dialog::InputString( const std::string & header, std::string & res, const s
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
-    res.clear();
-    res.reserve( 48 );
-    size_t charInsertPos = 0;
+    res.reserve( charLimit == 0 ? 48 : charLimit );
+    size_t charInsertPos = res.size();
 
     const fheroes2::Text titlebox( title, fheroes2::FontType::normalYellow() );
     const fheroes2::Text textbox( header, fheroes2::FontType::normalWhite() );
@@ -266,11 +265,13 @@ bool Dialog::InputString( const std::string & header, std::string & res, const s
     dst_pt.y = box_rt.y + 10 + titleHeight + textbox.height( BOXAREA_WIDTH ) + 10;
     dst_pt.x = box_rt.x + ( box_rt.width - inputArea.width() ) / 2;
     fheroes2::Blit( inputArea, display, dst_pt.x, dst_pt.y );
-    const fheroes2::Rect text_rt( dst_pt.x, dst_pt.y, inputArea.width(), inputArea.height() );
+    fheroes2::Point inputAreaPos( 13, 1 );
+    const fheroes2::Rect text_rt( dst_pt.x + inputAreaPos.x, dst_pt.y + inputAreaPos.y, inputArea.width() - 26, inputArea.height() - 3 );
 
-    fheroes2::Text text( "_", fheroes2::FontType::normalWhite() );
-    fheroes2::Blit( inputArea, display, text_rt.x, text_rt.y );
-    text.draw( text_rt.x + ( text_rt.width - text.width() ) / 2, text_rt.y + 3, display );
+    bool isCursorVisible = true;
+    fheroes2::Text text( insertCharToString( res, charInsertPos, isCursorVisible ? '_' : '\x7F' ), fheroes2::FontType::normalWhite() );
+    text.fitToOneRow( inputArea.width() - textOffset );
+    text.draw( text_rt.x + ( text_rt.width - text.width() ) / 2, text_rt.y + 2, display );
 
     const int okayButtonICNID = isEvilInterface ? ICN::UNIFORM_EVIL_OKAY_BUTTON : ICN::UNIFORM_GOOD_OKAY_BUTTON;
 
@@ -308,8 +309,6 @@ bool Dialog::InputString( const std::string & header, std::string & res, const s
     display.render();
 
     LocalEvent & le = LocalEvent::Get();
-
-    bool isCursorVisible = true;
 
     Game::AnimateResetDelay( Game::DelayType::CURSOR_BLINK_DELAY );
 
@@ -382,8 +381,8 @@ bool Dialog::InputString( const std::string & header, std::string & res, const s
             text.set( insertCharToString( res, charInsertPos, isCursorVisible ? '_' : '\x7F' ), fheroes2::FontType::normalWhite() );
             text.fitToOneRow( inputArea.width() - textOffset );
 
-            fheroes2::Blit( inputArea, display, text_rt.x, text_rt.y );
-            text.draw( text_rt.x + ( text_rt.width - text.width() ) / 2, text_rt.y + 3, display );
+            fheroes2::Copy( inputArea, inputAreaPos.x, inputAreaPos.y, display, text_rt );
+            text.drawInRoi( text_rt.x + ( text_rt.width - text.width() ) / 2, text_rt.y + 2, display, text_rt );
             display.render();
         }
     }

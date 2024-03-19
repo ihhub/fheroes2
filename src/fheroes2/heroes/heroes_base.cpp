@@ -101,16 +101,6 @@ bool HeroBase::isHeroes() const
     return GetType() == HEROES;
 }
 
-uint32_t HeroBase::GetSpellPoints() const
-{
-    return magic_point;
-}
-
-void HeroBase::SetSpellPoints( const uint32_t points )
-{
-    magic_point = points;
-}
-
 bool HeroBase::isPotentSpellcaster() const
 {
     // With knowledge 5 or less there isn't enough spell points to make a difference
