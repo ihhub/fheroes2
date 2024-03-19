@@ -2634,7 +2634,7 @@ msgid "Recruit Hero"
 msgstr "Hős toborzása"
 
 msgid "%{name} is a level %{value} %{race} "
-msgstr "%{name} %{value}. szintű %{race}"
+msgstr "%{name} %{value}. szintű %{race} "
 
 msgid "with %{count} artifacts."
 msgstr "%{count} varázstárggyal"
