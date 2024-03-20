@@ -5255,7 +5255,7 @@ msgid "Astrologers proclaim the Week of the %{name}."
 msgstr "Az asztrológusok kihirdették a(z) %{name} hetét."
 
 msgid "After regular growth, the population of %{monster} is doubled!"
-msgstr "A(z) %{monster} lények népessége megduplázódott!"
+msgstr "A(z) %{monster} népessége megduplázódott!"
 
 msgid ""
 "After regular growth, the population of %{monster} increases by %{count} "
