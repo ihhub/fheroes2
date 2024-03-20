@@ -261,7 +261,7 @@ namespace fheroes2
         }
 
         if(saveConfiguration){
-                conf.Save( Settings::configFileName );
+            conf.Save( Settings::configFileName );
         }
     }
 }
