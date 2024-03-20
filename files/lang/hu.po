@@ -4126,15 +4126,14 @@ msgstr "Figyelmeztetés"
 msgid "Animation"
 msgstr "Animáció"
 
-#, fuzzy
 msgid "Passability"
-msgstr ""
+msgstr "Átjárhatóság"
 
 msgid "Toggle animation of the objects."
 msgstr "Objektumok animációjának kapcsolója."
 
 msgid "Toggle display of objects' passability."
-msgstr ""
+msgstr "Kattints az objektumok átjárhatóságának megjelenítéséhez."
 
 msgid "difficulty|Easy"
 msgstr "Könnyű"
