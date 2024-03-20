@@ -404,13 +404,13 @@ namespace Maps
 
         uint16_t _terrainImageIndex{ 0 };
 
-        uint8_t _terrainFlags{ 0 };
-
         MP2::MapObjectType _mainObjectType{ MP2::OBJ_NONE };
 
         std::array<uint32_t, 3> _metadata{ 0 };
 
         uint16_t _tilePassabilityDirections{ DIRECTION_ALL };
+
+        uint8_t _terrainFlags{ 0 };
 
         bool _isTileMarkedAsRoad{ false };
 
