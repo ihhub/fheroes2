@@ -38,8 +38,8 @@ namespace Maps
         ObjectPartInfo( const MP2::ObjectIcnType icn, const uint32_t index, const fheroes2::Point offset, const MP2::MapObjectType type )
             : tileOffset( offset )
             , icnIndex( index )
-            , icnType( icn )
             , objectType( type )
+            , icnType( icn )
         {
             // Do nothing.
         }
