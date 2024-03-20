@@ -1921,8 +1921,8 @@ std::string Heroes::String() const
 
     if ( !visit_object.empty() ) {
         os << "visit objects   : ";
-        for ( auto it = visit_object.begin(); it != visit_object.end(); ++it ) {
-            os << MP2::StringObject( static_cast<MP2::MapObjectType>( ( *it ).second ) ) << "(" << ( *it ).first << "), ";
+        for ( const auto & info : visit_object ) {
+            os << MP2::StringObject( static_cast<MP2::MapObjectType>( info.second ) ) << "(" << info.first << "), ";
         }
 
         os << std::endl;
