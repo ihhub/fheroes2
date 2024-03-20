@@ -400,11 +400,15 @@ namespace MP2
 
         // IMPORTANT!!! Do not use any of unused entries for new objects. Add new entries below following the instruction.
 
+        // NEVER use this object type in the Editor!
+        // This object type is used to separate objects from the original game from Resurrection expansion's objects.
+        OBJ_RESURRECTION_OBJECT_TYPE = 256,
+
         // This section defines all types of NON-action objects which are not present in the original game.
         // If the object by nature is an action object name it with prefix OBJ_NON_ACTION_.
         // Otherwise, name it with prefix OBJ_.
-        OBJ_SWAMPY_LAKE = 256,
-        OBJ_FROZEN_LAKE = 257,
+        OBJ_SWAMPY_LAKE = 257,
+        OBJ_FROZEN_LAKE = 258,
 
         // This section defines all types of action objects which are not present in the original game.
         // If the object by nature is an action object name it with prefix OBJ_.
