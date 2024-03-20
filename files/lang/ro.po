@@ -490,16 +490,16 @@ msgid "Shadow Cursor"
 msgstr "Cursor de umbră"
 
 msgid "Audio"
-msgstr ""
+msgstr "Audio"
 
 msgid "Settings"
-msgstr ""
+msgstr "Setări"
 
 msgid "Configure"
 msgstr ""
 
 msgid "Hot Keys"
-msgstr ""
+msgstr "Scurtături"
 
 msgid "Damage Info"
 msgstr ""
@@ -2758,25 +2758,25 @@ msgid "off"
 msgstr ""
 
 msgid "Music"
-msgstr ""
+msgstr "Muzică"
 
 msgid "Effects"
-msgstr ""
+msgstr "Efecte"
 
 msgid "MIDI"
-msgstr ""
+msgstr "MIDI"
 
 msgid "MIDI Expansion"
-msgstr ""
+msgstr "MIDI Expansiune"
 
 msgid "External"
-msgstr ""
+msgstr "Extern"
 
 msgid "Music Type"
-msgstr ""
+msgstr "Tip de Muzică"
 
 msgid "3D Audio"
-msgstr ""
+msgstr "Audio 3D"
 
 msgid "Toggle ambient music level."
 msgstr ""
@@ -2824,34 +2824,34 @@ msgid "Save the current game."
 msgstr ""
 
 msgid "Quit"
-msgstr ""
+msgstr "Închide"
 
 msgid "Quit out of Heroes of Might and Magic II."
 msgstr ""
 
 msgid "Language"
-msgstr ""
+msgstr "Limbă"
 
 msgid "Graphics"
-msgstr ""
+msgstr "Grafică"
 
 msgid "Black & White"
-msgstr ""
+msgstr "Alb & Negru"
 
 msgid "Mouse Cursor"
-msgstr ""
+msgstr "Cursor Mouse"
 
 msgid "Color"
-msgstr ""
+msgstr "Colorat"
 
 msgid "Text Support"
-msgstr ""
+msgstr "Suport Text"
 
 msgid "Change the language of the game."
 msgstr ""
 
 msgid "Select Game Language"
-msgstr ""
+msgstr "Selectați Limba"
 
 msgid "Change the graphics settings of the game."
 msgstr ""
@@ -2918,26 +2918,25 @@ msgid "Gift from %{name}"
 msgstr ""
 
 msgid "Resolution"
-msgstr ""
+msgstr "Rezoluție"
 
 msgid "Fullscreen"
-msgstr ""
+msgstr "Ecran Întreg"
 
 msgid "window|Mode"
-msgstr ""
+msgstr "Mod"
 
 msgid "Windowed"
-msgstr ""
+msgstr "Fereastră"
 
 msgid "V-Sync"
-msgstr ""
+msgstr "V-Sync"
 
 msgid "FPS"
 msgstr ""
 
-#, fuzzy
 msgid "System Info"
-msgstr "System Options"
+msgstr "Informații Sistem"
 
 msgid "Change the resolution of the game."
 msgstr ""
@@ -2966,7 +2965,7 @@ msgid "Event: "
 msgstr ""
 
 msgid "Hot Keys:"
-msgstr ""
+msgstr "Scurtături:"
 
 msgid "Evil"
 msgstr ""
@@ -3011,7 +3010,7 @@ msgid "Sets the speed at which you scroll the window."
 msgstr ""
 
 msgid "Select Game Language:"
-msgstr ""
+msgstr "Selectați Limba:"
 
 msgid "Click to choose the selected language."
 msgstr ""
@@ -4075,19 +4074,19 @@ msgid "The number of days spent on this campaign."
 msgstr ""
 
 msgid "Project Coordination and Core Development"
-msgstr ""
+msgstr "Coordonare de Proiect și Dezvoltare"
 
 msgid "Development"
-msgstr ""
+msgstr "Dezvoltare"
 
 msgid "Visit us at "
-msgstr ""
+msgstr "Vizitați-ne la "
 
 msgid "QA and Support"
-msgstr ""
+msgstr "QA și Suport"
 
 msgid "Dev and Support"
-msgstr ""
+msgstr "Dezvoltare și Suport"
 
 msgid "Special Thanks to"
 msgstr ""
@@ -5176,7 +5175,7 @@ msgid ""
 msgstr ""
 
 msgid "Are you sure you want to quit?"
-msgstr ""
+msgstr "Sigur vreți să închideți?"
 
 msgid "Are you sure you want to restart? (Your current game will be lost.)"
 msgstr ""
