@@ -225,6 +225,8 @@ namespace fheroes2
     {
         Settings & conf = Settings::Get();
 
+        bool saveConfiguration = false;
+
         SelectedWindow windowType = SelectedWindow::Configuration;
         while ( windowType != SelectedWindow::Exit ) {
             switch ( windowType ) {
@@ -233,29 +235,33 @@ namespace fheroes2
                 break;
             case SelectedWindow::Resolution:
                 if ( Dialog::SelectResolution() ) {
-                    conf.Save( Settings::configFileName );
+                    saveConfiguration = true;
                 }
                 updateUI();
                 windowType = SelectedWindow::Configuration;
                 break;
             case SelectedWindow::Mode:
                 conf.setFullScreen( !conf.FullScreen() );
-                conf.Save( Settings::configFileName );
+                saveConfiguration = true;
                 windowType = SelectedWindow::Configuration;
                 break;
             case SelectedWindow::VSync:
                 conf.setVSync( !conf.isVSyncEnabled() );
-                conf.Save( Settings::configFileName );
+                saveConfiguration = true;
                 windowType = SelectedWindow::Configuration;
                 break;
             case SelectedWindow::SystemInfo:
                 conf.setSystemInfo( !conf.isSystemInfoEnabled() );
-                conf.Save( Settings::configFileName );
+                saveConfiguration = true;
                 windowType = SelectedWindow::Configuration;
                 break;
             default:
                 return;
             }
+        }
+
+        if(saveConfiguration){
+                conf.Save( Settings::configFileName );
         }
     }
 }
