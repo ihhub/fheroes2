@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-21 12:45+0000\n"
+"POT-Creation-Date: 2024-03-21 15:34+0000\n"
 "PO-Revision-Date: 2023-09-11 20:22+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -8656,6 +8656,13 @@ msgstr "Oltár vyvolávania zeme"
 
 msgid "Water Summoning Altar"
 msgstr "Oltár vyvolávania vody"
+
+#, fuzzy
+msgid "Swampy Lake"
+msgstr "Močiar"
+
+msgid "Frozen Lake"
+msgstr ""
 
 msgid "Unknown Monster"
 msgstr "Neznámy bojovník"
