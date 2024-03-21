@@ -1921,8 +1921,10 @@ std::string Heroes::String() const
 
     if ( !visit_object.empty() ) {
         os << "visit objects   : ";
-        for ( std::list<IndexObject>::const_iterator it = visit_object.begin(); it != visit_object.end(); ++it )
-            os << MP2::StringObject( static_cast<MP2::MapObjectType>( ( *it ).second ) ) << "(" << ( *it ).first << "), ";
+        for ( const auto & info : visit_object ) {
+            os << MP2::StringObject( static_cast<MP2::MapObjectType>( info.second ) ) << "(" << info.first << "), ";
+        }
+
         os << std::endl;
     }
 
@@ -2311,14 +2313,24 @@ StreamBase & operator>>( StreamBase & msg, Heroes & hero )
     }
 
     using ObjectTypeUnderHeroType = std::underlying_type_t<decltype( hero._objectTypeUnderHero )>;
-    static_assert( std::is_same_v<ObjectTypeUnderHeroType, uint8_t>, "Type of _objectTypeUnderHero has been changed, check the logic below." );
+    static_assert( std::is_same_v<ObjectTypeUnderHeroType, uint16_t>, "Type of _objectTypeUnderHero has been changed, check the logic below." );
 
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE1_1009_RELEASE, "Remove the logic below." );
-    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_PRE1_1009_RELEASE ) {
-        int temp = 0;
-        msg >> temp;
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1100_RELEASE, "Remove the logic below." );
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1100_RELEASE ) {
+        static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE1_1009_RELEASE, "Remove the logic below." );
+        if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_PRE1_1009_RELEASE ) {
+            int temp = 0;
+            msg >> temp;
 
-        hero._objectTypeUnderHero = static_cast<MP2::MapObjectType>( temp );
+            hero._objectTypeUnderHero = static_cast<MP2::MapObjectType>( temp );
+        }
+        else {
+            uint8_t temp = 0;
+
+            msg >> temp;
+
+            hero._objectTypeUnderHero = static_cast<MP2::MapObjectType>( temp );
+        }
     }
     else {
         ObjectTypeUnderHeroType temp = 0;

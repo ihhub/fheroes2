@@ -1864,12 +1864,21 @@ StreamBase & Maps::operator>>( StreamBase & msg, Tiles & tile )
     msg >> tile._mainAddon._imageIndex;
 
     using MainObjectTypeUnderlyingType = std::underlying_type_t<decltype( tile._mainObjectType )>;
-    static_assert( std::is_same_v<MainObjectTypeUnderlyingType, uint8_t>, "Type of _mainObjectType has been changed, check the logic below" );
+    static_assert( std::is_same_v<MainObjectTypeUnderlyingType, uint16_t>, "Type of _mainObjectType has been changed, check the logic below" );
 
-    MainObjectTypeUnderlyingType mainObjectType = MP2::OBJ_NONE;
-    msg >> mainObjectType;
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1100_RELEASE, "Remove the logic below." );
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1100_RELEASE ) {
+        uint8_t mainObjectType = static_cast<uint8_t>( MP2::OBJ_NONE );
+        msg >> mainObjectType;
 
-    tile._mainObjectType = static_cast<MP2::MapObjectType>( mainObjectType );
+        tile._mainObjectType = static_cast<MP2::MapObjectType>( mainObjectType );
+    }
+    else {
+        MainObjectTypeUnderlyingType mainObjectType = MP2::OBJ_NONE;
+        msg >> mainObjectType;
+
+        tile._mainObjectType = static_cast<MP2::MapObjectType>( mainObjectType );
+    }
 
     return msg >> tile._fogColors >> tile._metadata >> tile._occupantHeroId >> tile._isTileMarkedAsRoad >> tile._addonBottomLayer >> tile._addonTopLayer
            >> tile._mainAddon._layerType >> tile._boatOwnerColor;
