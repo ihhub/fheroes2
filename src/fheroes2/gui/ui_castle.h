@@ -24,7 +24,7 @@
 #include "math_base.h"
 
 class Castle;
-class Funds;
+struct Funds;
 
 namespace fheroes2
 {

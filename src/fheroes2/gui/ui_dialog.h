@@ -31,7 +31,7 @@
 #include "skill.h"
 #include "spell.h"
 
-class Funds;
+struct Funds;
 class HeroBase;
 class Heroes;
 
