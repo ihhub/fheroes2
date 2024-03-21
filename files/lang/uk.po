@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-17 16:14+0000\n"
-"PO-Revision-Date: 2024-03-16 18:40+0200\n"
+"POT-Creation-Date: 2024-03-21 12:45+0000\n"
+"PO-Revision-Date: 2024-03-20 17:21+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: uk\n"
@@ -383,13 +383,12 @@ msgid "All %{race} troops +1"
 msgstr "Усі війська фракції %{race} +1"
 
 #, fuzzy
-msgid "Multiple"
-msgstr "Різноманітні"
+msgid "NeutralRaceTroops|Neutral"
+msgstr "Нейтральний"
 
 msgid "Troops of %{count} alignments -%{penalty}"
 msgstr "Війська з %{count} рас - %{penalty}"
 
-#, fuzzy
 msgid "Some undead in army -1"
 msgstr "Наявність невмерлих в армії -1"
 
@@ -1621,29 +1620,23 @@ msgstr " завжди тікатимуть від вашого війська."
 msgid " will be willing to join your army."
 msgstr " завжди волітимуть приєднатись до вашого війська."
 
-#, fuzzy
 msgid "\"%{artifact}\" artifact will be carried over in the campaign."
 msgstr "Артефакт \"%{artifact}\" буде перенесений до сценарію."
 
-#, fuzzy
 msgid "The army will be carried over in the campaign."
 msgstr "Військо буде перенесене до сценарію."
 
 msgid "The kingdom will have +%{count} %{resource} each day."
 msgstr "Королівство отримає додатковий прибуток: + %{count} %{resource} щодня."
 
-#, fuzzy
 msgid "The \"%{spell}\" spell will be carried over in the campaign."
 msgstr "Закляття \"%{spell}\" буде перенесено до сценарію."
 
-#, fuzzy
 msgid "%{hero} can be hired during scenarios."
 msgstr "Герой %{hero} буде доступним для найму у сценарії."
 
-#, fuzzy
 msgid "%{hero} has been defeated and will not appear in subsequent scenarios."
-msgstr ""
-"Герой %{hero} був подоланий, і не зможе з'явитися у подальших сценаріях."
+msgstr "Герой %{hero} був подоланий та не з'явиться у подальших сценаріях."
 
 msgid "The dwarves recognize their allies and gladly join your forces."
 msgstr ""
@@ -1926,7 +1919,6 @@ msgstr "Просунута Мудрість"
 msgid "campaignBonus|Expert Wisdom"
 msgstr "Експертна Мудрість"
 
-#, fuzzy
 msgid ""
 "The main hero will have the \"%{artifact}\" artifact at the start of the "
 "scenario."
@@ -1950,16 +1942,13 @@ msgid ""
 "The main hero will have %{count} %{monster} at the start of the scenario."
 msgstr "Головний герой отримає %{count} %{monster} на початку сценарію."
 
-#, fuzzy
 msgid ""
 "The main hero will have the \"%{spell}\" spell at the start of the scenario."
 msgstr "Головний герой буде знати чари \"%{spell}\" на початку сценарію."
 
-#, fuzzy
 msgid "The starting alignment of the scenario will be %{race}."
 msgstr "Початковою расою сценарію буде %{race}."
 
-#, fuzzy
 msgid ""
 "The main hero will receive a +%{count} to their %{skill} at the start of the "
 "scenario."
@@ -1974,7 +1963,6 @@ msgstr "Роланд"
 msgid "Archibald"
 msgstr "Арчібальд"
 
-#, fuzzy
 msgid "Price of Loyalty"
 msgstr "Ціна Вірності"
 
@@ -2002,7 +1990,6 @@ msgstr "Неможливо будувати. Ви вже будували тут
 msgid "For this action it is necessary to build a castle first."
 msgstr "Для цієї дії треба спочатку побудувати замок."
 
-#, fuzzy
 msgid "Cannot build %{name}. The castle is too far away from an ocean."
 msgstr "Неможливо побудувати %{name}, бо замок далеко від води."
 
@@ -2013,11 +2000,9 @@ msgstr ""
 msgid "Cannot afford the %{name}."
 msgstr "%{name} - споруда потребує більше ресурсів."
 
-#, fuzzy
 msgid "The %{name} is already built."
 msgstr "У місті вже є %{name}."
 
-#, fuzzy
 msgid "Cannot build the %{name}."
 msgstr "%{name} - будівництво неможливе."
 
@@ -2904,19 +2889,19 @@ msgid "Effects"
 msgstr "Ефекти"
 
 msgid "MIDI"
-msgstr ""
+msgstr "MIDI"
 
 msgid "MIDI Expansion"
-msgstr ""
+msgstr "MIDI розширений"
 
 msgid "External"
-msgstr ""
+msgstr "Колонки"
 
 msgid "Music Type"
 msgstr "Тип музики"
 
 msgid "3D Audio"
-msgstr ""
+msgstr "3Д звук"
 
 msgid "Toggle ambient music level."
 msgstr "Регулятор гучності фонової музики."
@@ -2997,7 +2982,7 @@ msgid "Change the graphics settings of the game."
 msgstr "Змінити графічні налаштування гри."
 
 msgid "Toggle colored cursor on or off. This is only an aesthetic choice."
-msgstr ""
+msgstr "Перемикає кольоровий/монохромний курсор. Має лише естетичний ефет"
 
 msgid ""
 "Toggle text support mode to output extra information about windows and "
@@ -3091,12 +3076,12 @@ msgid "Select Game Resolution"
 msgstr "Вибрати роздільну здатність"
 
 msgid "Toggle between fullscreen and windowed modes."
-msgstr ""
+msgstr "Змінює режим повноекранний чи віконний."
 
 msgid ""
 "The V-Sync option can be enabled to resolve flickering issues on some "
 "monitors."
-msgstr ""
+msgstr "Верт. синхр. може усунути мерехтіння на деяких моніторах."
 
 msgid "Show extra information such as FPS and current time."
 msgstr "Відобразити додаткову інформацію як FPS та поточний час."
@@ -3830,73 +3815,64 @@ msgid ""
 msgstr ""
 
 msgid "Failed to update player information."
-msgstr ""
+msgstr "Не вдалося оновити інформацію по гравцю."
 
 msgid "Artifacts cannot be placed on water."
-msgstr ""
+msgstr "Артефакт не можна розмістити на воді."
 
-#, fuzzy
 msgid "Mountains cannot be placed on water."
-msgstr "Це Місто не можна покращити до Замку."
+msgstr "Гори не можна розмістити на воді."
 
-#, fuzzy
 msgid "Rocks cannot be placed on water."
-msgstr "Це Місто не можна покращити до Замку."
+msgstr "Скелі не можна розмістити на воді."
 
-#, fuzzy
 msgid "Trees cannot be placed on water."
-msgstr "Це Місто не можна покращити до Замку."
+msgstr "Дерева не можна розмістити на воді."
 
 msgid "Ocean object must be placed on water."
-msgstr ""
+msgstr "Об'єкти океану мають бути розміщені на воді."
 
-#, fuzzy
 msgid "Landscape objects cannot be placed on water."
-msgstr "Це Місто не можна покращити до Замку."
+msgstr "Об'єкти суходолу не можна розмістити на воді."
 
-#, fuzzy
 msgid "Towns cannot be placed on water."
-msgstr "Це Місто не можна покращити до Замку."
+msgstr "Міста не можна розмістити на воді."
 
-#, fuzzy
 msgid "Mines cannot be placed on water."
-msgstr "Це Місто не можна покращити до Замку."
+msgstr "Шахти не можна розмістити на воді."
 
-#, fuzzy
 msgid "Dwellings cannot be placed on water."
-msgstr "Це Місто не можна покращити до Замку."
+msgstr "Житла не можна розмістити на воді."
 
 #, fuzzy
 msgid "Power-ups cannot be placed on water."
 msgstr "Це Місто не можна покращити до Замку."
 
-#, fuzzy
 msgid "Adventure objects cannot be placed on water."
-msgstr "Це Місто не можна покращити до Замку."
+msgstr "Пригодницькі об'єкти не можна розмістити на воді."
 
 msgid "Used to place %{object}."
-msgstr ""
+msgstr "Використовується для розміщення %{object}."
 
-#, fuzzy
 msgid "Select object type"
-msgstr "Оберіть Артефакти:"
+msgstr "Виберііть тип об'єкту"
 
-#, fuzzy
 msgid ""
 "Click here to\n"
 "select a monster."
-msgstr "Натисніть щоб побачити наступне місто."
+msgstr "Натисніть щоб вибрати монстра."
 
-#, fuzzy
 msgid ""
 "Click here to\n"
 "select another monster."
-msgstr "Будь ласка, оберіть іншого героя."
+msgstr "Тицьніть сюди щоб вибрати іншого монстра."
 
 msgid ""
 "Cell\n"
 "Details"
 msgstr ""
+"Стільник\n"
+"Деталі"
 
 msgid "Roads"
 msgstr "Дороги"
@@ -3905,7 +3881,7 @@ msgid "Streams"
 msgstr "Струмки"
 
 msgid "Erase"
-msgstr ""
+msgstr "Стерти"
 
 msgid "Mountains"
 msgstr "Гори"
@@ -3920,7 +3896,7 @@ msgid "Water Objects"
 msgstr "Водні об'єкти"
 
 msgid "Miscellaneous"
-msgstr ""
+msgstr "Різні"
 
 msgid "Artifacts"
 msgstr "Артефакти"
@@ -3931,9 +3907,8 @@ msgstr "Житло"
 msgid "Mines"
 msgstr "Копальні"
 
-#, fuzzy
 msgid "Power-ups"
-msgstr "Квіти"
+msgstr "Підсилювачі"
 
 msgid "Treasures"
 msgstr "Скарби"
@@ -3944,31 +3919,28 @@ msgstr "Міста"
 msgid "Heroes"
 msgstr "Герої"
 
-#, fuzzy
 msgid "editorErasure|Landscape objects"
-msgstr "Дороги"
+msgstr "Ландшафтні об'єкти"
 
 msgid "editorErasure|Adventure non pickable objects"
-msgstr ""
+msgstr "Пригодницькі об'єкти, які не можна вибрати"
 
 msgid "editorErasure|Castles"
-msgstr ""
+msgstr "Замки"
 
 #, fuzzy
 msgid "editorErasure|Adventure pickable objects"
 msgstr "Струмки"
 
 msgid "editorErasure|Monsters"
-msgstr ""
+msgstr "Монстри"
 
 msgid "editorErasure|Heroes"
-msgstr ""
+msgstr "Герої"
 
-#, fuzzy
 msgid "editorErasure|Roads"
 msgstr "Дороги"
 
-#, fuzzy
 msgid "editorErasure|Streams"
 msgstr "Струмки"
 
@@ -10168,12 +10140,11 @@ msgstr ""
 msgid "Crystal Ball"
 msgstr "Кришталева Куля"
 
-#, fuzzy
 msgid ""
 "The %{name} lets the hero get more specific information about monsters, "
 "enemy heroes, and castles nearby the hero."
 msgstr ""
-"%{name} надає вам більш детальну інформацію про монстрів, ворожих героїв та "
+"%{name} надає герою детальнішу інформацію про монстрів, ворожих героїв та "
 "замки, що знаходяться неподалік від власника артефакту."
 
 msgid ""
@@ -10295,7 +10266,6 @@ msgstr ""
 msgid "Masthead"
 msgstr "Вершечок Щогли"
 
-#, fuzzy
 msgid ""
 "The %{name} boosts the hero's troops' luck and morale by %{count} each in "
 "sea combat."
@@ -10319,7 +10289,6 @@ msgstr ""
 msgid "Staff of Wizardry"
 msgstr "Патериця Чаклунства"
 
-#, fuzzy
 msgid "The %{name} boosts the hero's spell power by %{count}."
 msgstr "%{name} посилює вашу Силу Магії на %{count}."
 
@@ -10337,7 +10306,6 @@ msgstr ""
 msgid "Sword Breaker"
 msgstr "Мечолам"
 
-#, fuzzy
 msgid "The %{name} increases the hero's defense by %{count} and attack by 1."
 msgstr "%{name} збільшує ваш Захист на %{count} та Атаку на 1."
 
@@ -10367,9 +10335,8 @@ msgstr ""
 msgid "Spade of Necromancy"
 msgstr "Лопата Некромантії"
 
-#, fuzzy
 msgid "The %{name} gives the hero increased necromancy skill."
-msgstr "%{name} збільшує навичку Некромантії героя-власника."
+msgstr "%{name} збільшує навичку Некромантії героя."
 
 msgid ""
 "A dirty shovel has been thrust into a dirt mound nearby. Upon investigation, "
@@ -10380,7 +10347,7 @@ msgstr ""
 "це зачарована лопата Гробарів, яку смертні давно вважали втраченою."
 
 msgid "spellBonus|selected by user"
-msgstr ""
+msgstr "вибирає користувач"
 
 msgid "Wood"
 msgstr "Дерево"
@@ -11051,3 +11018,6 @@ msgstr ""
 "Перевірити нову версію гри на\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Multiple"
+#~ msgstr "Різноманітні"
