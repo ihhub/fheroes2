@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-17 16:14+0000\n"
+"POT-Creation-Date: 2024-03-21 12:45+0000\n"
 "PO-Revision-Date: 2024-03-15 21:35+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -382,7 +382,8 @@ msgstr "Легион"
 msgid "All %{race} troops +1"
 msgstr "Все существа одной фракции +1"
 
-msgid "Multiple"
+#, fuzzy
+msgid "NeutralRaceTroops|Neutral"
 msgstr "Нейтральный"
 
 msgid "Troops of %{count} alignments -%{penalty}"
@@ -11268,6 +11269,9 @@ msgstr ""
 "Новую версию игры можно найти на сайте:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Multiple"
+#~ msgstr "Нейтральный"
 
 #~ msgid "and many other contributors!"
 #~ msgstr "и многим другим участникам!"
