@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-03-21 12:45+0000\n"
-"PO-Revision-Date: 2024-03-20 17:21+0200\n"
+"PO-Revision-Date: 2024-03-21 18:49+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: uk\n"
@@ -5218,7 +5218,7 @@ msgstr[1] ""
 msgstr[2] ""
 
 msgid "%{monster} growth +%{count}."
-msgstr ""
+msgstr "%{monster} приріст +%{count}."
 
 msgid " All populations are halved."
 msgstr "Все населення зменшується вдвічі."
@@ -5270,67 +5270,67 @@ msgid "Lord Kilburn"
 msgstr "Лорд Кілбурн"
 
 msgid "Tsabu"
-msgstr ""
+msgstr "Цабу"
 
 msgid "Sir Galant"
 msgstr "Сір Галлант"
 
 msgid "Thundax"
-msgstr ""
+msgstr "Тундакс"
 
 msgid "Lord Haart"
-msgstr ""
+msgstr "Лорд Хаарт"
 
 msgid "Ariel"
-msgstr ""
+msgstr "Аріель"
 
 msgid "Rebecca"
-msgstr ""
+msgstr "Ребека"
 
 msgid "Sandro"
-msgstr ""
+msgstr "Сандро"
 
 msgid "Crodo"
-msgstr ""
+msgstr "Кродо"
 
 msgid "Barock"
-msgstr ""
+msgstr "Барок"
 
 msgid "Antoine"
-msgstr ""
+msgstr "Антуан"
 
 msgid "Astra"
-msgstr ""
+msgstr "Астра"
 
 msgid "Agar"
-msgstr ""
+msgstr "Аґар"
 
 msgid "Vatawna"
-msgstr ""
+msgstr "Ватавна"
 
 msgid "Vesper"
-msgstr ""
+msgstr "Веспер"
 
 msgid "Ambrose"
-msgstr ""
+msgstr "Амбрізія"
 
 msgid "Troyan"
-msgstr ""
+msgstr "Троян"
 
 msgid "Jojosh"
-msgstr ""
+msgstr "Джоджош"
 
 msgid "Wrathmont"
-msgstr ""
+msgstr "Вратмонт"
 
 msgid "Maximus"
-msgstr ""
+msgstr "Максімус"
 
 msgid "Next Hero"
-msgstr ""
+msgstr "Наступний герой"
 
 msgid "Select the next Hero."
-msgstr ""
+msgstr "Вибрати наступного героя."
 
 msgid "Hero Movement"
 msgstr "Рух Героя"
@@ -5530,13 +5530,13 @@ msgid "View %{skill} Info"
 msgstr "Переглянути %{skill} інформацію"
 
 msgid "Keyboard|123"
-msgstr ""
+msgstr "123"
 
 msgid "Keyboard|SPACE"
-msgstr ""
+msgstr "ПРОБІЛ"
 
 msgid "Keyboard|ABC"
-msgstr ""
+msgstr "АБВ"
 
 msgid "Kingdom Income"
 msgstr "Прибутки королівства"
@@ -5548,172 +5548,172 @@ msgid "For every lighthouse controlled, your ships will move further each day."
 msgstr "За кожен підконтрольний маяк ваші кораблі щодня просуватимуться далі."
 
 msgid "English"
-msgstr ""
+msgstr "English"
 
 msgid "French"
-msgstr ""
+msgstr "Français"
 
 msgid "Polish"
-msgstr ""
+msgstr "Polski"
 
 msgid "German"
-msgstr ""
+msgstr "Deutsch"
 
 msgid "Russian"
 msgstr ""
 
 msgid "Italian"
-msgstr ""
+msgstr "Italiano"
 
 msgid "Czech"
-msgstr ""
+msgstr "Čeština"
 
 msgid "Norwegian"
-msgstr ""
+msgstr "Norsk"
 
 msgid "Belarusian"
-msgstr ""
+msgstr "Білоруська"
 
 msgid "Bulgarian"
-msgstr ""
+msgstr "Bulgarian"
 
 msgid "Ukrainian"
 msgstr "Українська"
 
 msgid "Romanian"
-msgstr ""
+msgstr "Romanian"
 
 msgid "Spanish"
-msgstr ""
+msgstr "Spanish"
 
 msgid "Swedish"
-msgstr ""
+msgstr "Swedish"
 
 msgid "Portuguese"
-msgstr ""
+msgstr "Portuguese"
 
 msgid "Turkish"
-msgstr ""
+msgstr "Turkish"
 
 msgid "Dutch"
-msgstr ""
+msgstr "Dutch"
 
 msgid "Hungarian"
-msgstr ""
+msgstr "Hungarian"
 
 msgid "Danish"
-msgstr ""
+msgstr "Danish"
 
 msgid "Slovak"
-msgstr ""
+msgstr "Slovak"
 
 msgid "Vietnamese"
-msgstr ""
+msgstr "Vietnamese"
 
 msgid ", FPS: "
-msgstr ""
+msgstr ", кдр/с:"
 
 msgid "shipAndGraveyard|%{object} robber"
-msgstr ""
+msgstr "%{object} грабіжник"
 
 msgid "pyramid|%{object} raided"
-msgstr ""
+msgstr "pyramid|%{object} розкрадач"
 
 msgid "Ector"
 msgstr "Ектор"
 
 msgid "Gwenneth"
-msgstr ""
+msgstr "Ґвеннет"
 
 msgid "Sir Gallant"
 msgstr "Сір Галлант"
 
 msgid "Tyro"
-msgstr ""
+msgstr "Тіроль"
 
 msgid "Dimitry"
-msgstr ""
+msgstr "Дімітрій"
 
 msgid "Ruby"
-msgstr ""
+msgstr "Рубі"
 
 msgid "Crag Hack"
-msgstr ""
+msgstr "Креґ Хек"
 
 msgid "Fineous"
-msgstr ""
+msgstr "Файнеоус"
 
 msgid "Jezebel"
-msgstr ""
+msgstr "Джезебель"
 
 msgid "Atlas"
-msgstr ""
+msgstr "Атлас"
 
 msgid "Ergon"
-msgstr ""
+msgstr "Ергон"
 
 msgid "Jaclyn"
-msgstr ""
+msgstr "Жаклін"
 
 msgid "Gem"
-msgstr ""
+msgstr "Джем"
 
 msgid "Natasha"
-msgstr ""
+msgstr "Наташа"
 
 msgid "Carlawn"
-msgstr ""
+msgstr "Карлоне"
 
 msgid "Luna"
-msgstr ""
+msgstr "Луна"
 
 msgid "Arie"
-msgstr ""
+msgstr "Овен"
 
 msgid "Barok"
-msgstr ""
+msgstr "Барок"
 
 msgid "Kastore"
-msgstr ""
+msgstr "Кастор"
 
 msgid "Falagar"
-msgstr ""
+msgstr "Фалагар"
 
 msgid "Dawn"
-msgstr ""
+msgstr "Світанок"
 
 msgid "Flint"
-msgstr ""
+msgstr "Кремінь"
 
 msgid "Halon"
-msgstr ""
+msgstr "Халон"
 
 msgid "Myra"
-msgstr ""
+msgstr "Міра"
 
 msgid "Myrini"
-msgstr ""
+msgstr "Міріні"
 
 msgid "Wilfrey"
-msgstr ""
+msgstr "Вілфрі"
 
 msgid "Mandigal"
-msgstr ""
+msgstr "Мандигал"
 
 msgid "Sarakin"
-msgstr ""
+msgstr "Саракін"
 
 msgid "Charity"
-msgstr ""
+msgstr "Милосердя"
 
 msgid "Darlana"
-msgstr ""
+msgstr "Дарлане"
 
 msgid "Ranloo"
-msgstr ""
+msgstr "Ранлу"
 
 msgid "Rialdo"
-msgstr ""
+msgstr "Ріальдо"
 
 msgid "Zam"
 msgstr "Зам"
@@ -5722,52 +5722,52 @@ msgid "Zom"
 msgstr "Зом"
 
 msgid "Celia"
-msgstr ""
+msgstr "Селія"
 
 msgid "Roxana"
 msgstr "Роксана"
 
 msgid "Lord Corlagon"
-msgstr ""
+msgstr "Орд Корлагон"
 
 msgid "Lord Halton"
-msgstr ""
+msgstr "Лорд Хальто"
 
 msgid "Sister Eliza"
-msgstr ""
+msgstr "Сестра Еліза"
 
 msgid "Brother Brax"
-msgstr ""
+msgstr "Брат Бракс"
 
 msgid "Dainwin"
-msgstr ""
+msgstr "Дейнвін"
 
 msgid "Joseph"
 msgstr "Джозеф"
 
 msgid "Mog"
-msgstr ""
+msgstr "Моґ"
 
 msgid "Solmyr"
 msgstr "Солмир"
 
 msgid "Ceallach"
-msgstr ""
+msgstr "Сіллах"
 
 msgid "Drakonia"
-msgstr ""
+msgstr "Драконія"
 
 msgid "Elderian"
-msgstr ""
+msgstr "Бузина"
 
 msgid "Gallavant"
-msgstr ""
+msgstr "Галавант"
 
 msgid "Jarkonas"
-msgstr ""
+msgstr "Ярконас"
 
 msgid "Martine"
-msgstr ""
+msgstr "Мартін"
 
 msgid " gives you maximum morale"
 msgstr " надає максимальний бойовий дух"
@@ -7269,10 +7269,10 @@ msgid "Blood Morale"
 msgstr "Кровожерлива"
 
 msgid "%{morale} Morale"
-msgstr ""
+msgstr "моралі"
 
 msgid "%{luck} Luck"
-msgstr ""
+msgstr "вдачі"
 
 msgid "Current Luck Modifiers:"
 msgstr ""
@@ -8073,7 +8073,7 @@ msgid "See Rock City."
 msgstr ""
 
 msgid "This space for rent."
-msgstr ""
+msgstr "Це місце для оренди."
 
 msgid "No object"
 msgstr "Порожнє місце"
@@ -9752,7 +9752,6 @@ msgstr ""
 msgid "Statesman's Quill"
 msgstr "Перо Державника"
 
-#, fuzzy
 msgid ""
 "The %{name} reduces the cost of surrender to %{count} percent of the total "
 "cost of troops the hero has in their army."
@@ -9772,7 +9771,6 @@ msgstr ""
 msgid "Wizard's Hat"
 msgstr "Капелюх Чарівника"
 
-#, fuzzy
 msgid ""
 "The %{name} increases the duration of the hero's spells by %{count} turns."
 msgstr "%{name} підвищує час дії ваших заклять на %{count} ходів."
@@ -9791,9 +9789,8 @@ msgstr ""
 msgid "Power Ring"
 msgstr "Перстень Могутності"
 
-#, fuzzy
 msgid "The %{name} returns %{count} extra spell points per day to the hero."
-msgstr "%{name} щодня відновлює очки мани у кількості: %{count} од."
+msgstr "%{name} щодня відновлює очки мани додатково у кількості: %{count} од."
 
 msgid ""
 "You find a small tree that closely resembles the great Warlock Carnauth with "
@@ -9809,7 +9806,6 @@ msgstr ""
 msgid "Ammo Cart"
 msgstr "Візок з Боєприпасами"
 
-#, fuzzy
 msgid ""
 "The %{name} provides endless ammunition for all of the hero's troops that "
 "shoot."
@@ -9826,7 +9822,6 @@ msgstr ""
 msgid "Tax Lien"
 msgstr "Податкова Застава"
 
-#, fuzzy
 msgid "The %{name} costs the hero %{count} gold pieces per day."
 msgstr "%{name} коштує вам %{count} золотих щодня."
 
@@ -9845,7 +9840,6 @@ msgstr ""
 msgid "Hideous Mask"
 msgstr "Мерзенна Маска"
 
-#, fuzzy
 msgid "The %{name} prevents all 'wandering' armies from joining the hero."
 msgstr ""
 "%{name} не дозволяє всім \"нейтральним\" арміям приєднуватись до вашого "
@@ -10013,7 +10007,6 @@ msgstr ""
 msgid "Magic Book"
 msgstr "Книга Магії"
 
-#, fuzzy
 msgid "The %{name} enables the hero to cast spells."
 msgstr "%{name} дозволяє вам використовувати закляття."
 
@@ -10035,13 +10028,12 @@ msgstr "Заповнювач 4"
 msgid "Spell Scroll"
 msgstr "Чарівний Сувій"
 
-#, fuzzy
 msgid ""
 "This %{name} gives the hero the ability to cast the %{spell} spell if the "
 "hero has a Magic Book."
 msgstr ""
-"Цей %{name} дозволяє вашому герою використовувати закляття %{spell}, якщо у "
-"вашого героя є Книга Магії."
+"Цей %{name} дозволяє вашому герою використовувати закляття %{spell}, якщо "
+"він має Книгу Магії."
 
 msgid ""
 "You find an elaborate container which houses an old vellum scroll. The runes "
@@ -10057,13 +10049,12 @@ msgstr ""
 msgid "Arm of the Martyr"
 msgstr "Рука Мученика"
 
-#, fuzzy
 msgid ""
 "The %{name} increases the hero's spell power by %{count} but adds the undead "
 "morale penalty."
 msgstr ""
 "%{name} збільшує вашу силу магії на %{count}, однак додає штраф до моралі за "
-"присутність невмерлих у війську."
+"присутність немертвих у війську."
 
 msgid ""
 "One of the less intelligent members of your party picks up an arm off of the "
@@ -10080,9 +10071,8 @@ msgstr ""
 msgid "Breastplate of Anduran"
 msgstr "Нагрудник Андурана"
 
-#, fuzzy
 msgid "The %{name} increases the hero's defense by %{count}."
-msgstr "%{name} збільшує ваш Захист на %{count}."
+msgstr "%{name} збільшує захист героя на %{count}."
 
 msgid ""
 "You come upon a sign. It reads: \"Here lies the body of Anduran. Bow and "
@@ -10118,7 +10108,6 @@ msgstr ""
 msgid "Battle Garb of Anduran"
 msgstr "Бойове Вбрання Андурана"
 
-#, fuzzy
 msgid ""
 "The %{name} combines the powers of the three Anduran artifacts. It provides "
 "maximum luck and morale for the hero's troops and gives the hero the Town "
