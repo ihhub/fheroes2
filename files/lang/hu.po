@@ -378,7 +378,6 @@ msgstr "Légió"
 msgid "All %{race} troops +1"
 msgstr "Minden %{race} egység +1"
 
-#, fuzzy
 msgid "NeutralRaceTroops|Neutral"
 msgstr "Semleges"
 
