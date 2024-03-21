@@ -4178,7 +4178,7 @@ namespace
             updateNormalFontLetterShadow( font[186 - 32] );
 
             // a with circumflex.
-            font[226 - 32].resize( font[65].width(), font[65].height() + 4 );
+            font[226 - 32].resize( font[65].width(), font[65].height() + 3 );
             font[226 - 32].reset();
             fheroes2::Copy( font[65], 0, 0, font[226 - 32], 0, 3, font[65].width(), font[65].height() );
             fheroes2::Copy( font[194 - 32], 6, 0, font[226 - 32], 2, 0, 3, 2 );
@@ -4271,7 +4271,7 @@ namespace
             updateSmallFontLetterShadow( font[186 - 32] );
 
             // a with circumflex.
-            font[226 - 32].resize( font[65].width(), font[65].height() + 4 );
+            font[226 - 32].resize( font[65].width(), font[65].height() + 3 );
             font[226 - 32].reset();
             fheroes2::Copy( font[65], 0, 0, font[226 - 32], 0, 3, font[65].width(), font[65].height() );
             fheroes2::Copy( font[194 - 32], 4, 0, font[226 - 32], 2, 0, 3, 2 );
