@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-17 16:14+0000\n"
+"POT-Creation-Date: 2024-03-21 12:12+0000\n"
 "PO-Revision-Date: 2024-03-16 18:40+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -383,8 +383,8 @@ msgid "All %{race} troops +1"
 msgstr "Усі війська фракції %{race} +1"
 
 #, fuzzy
-msgid "Multiple"
-msgstr "Різноманітні"
+msgid "NeutralRaceTroops|Neutral"
+msgstr "Нейтральний"
 
 msgid "Troops of %{count} alignments -%{penalty}"
 msgstr "Війська з %{count} рас - %{penalty}"
@@ -11051,3 +11051,7 @@ msgstr ""
 "Перевірити нову версію гри на\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#, fuzzy
+#~ msgid "Multiple"
+#~ msgstr "Різноманітні"
