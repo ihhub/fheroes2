@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-03-21 12:45+0000\n"
-"PO-Revision-Date: 2024-03-21 18:49+0200\n"
+"PO-Revision-Date: 2024-03-22 09:03+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: uk\n"
@@ -5548,67 +5548,67 @@ msgid "For every lighthouse controlled, your ships will move further each day."
 msgstr "За кожен підконтрольний маяк ваші кораблі щодня просуватимуться далі."
 
 msgid "English"
-msgstr "English"
+msgstr ""
 
 msgid "French"
-msgstr "Français"
+msgstr ""
 
 msgid "Polish"
-msgstr "Polski"
+msgstr ""
 
 msgid "German"
-msgstr "Deutsch"
+msgstr ""
 
 msgid "Russian"
 msgstr ""
 
 msgid "Italian"
-msgstr "Italiano"
+msgstr ""
 
 msgid "Czech"
-msgstr "Čeština"
+msgstr ""
 
 msgid "Norwegian"
-msgstr "Norsk"
+msgstr ""
 
 msgid "Belarusian"
-msgstr "Білоруська"
+msgstr ""
 
 msgid "Bulgarian"
-msgstr "Bulgarian"
+msgstr ""
 
 msgid "Ukrainian"
 msgstr "Українська"
 
 msgid "Romanian"
-msgstr "Romanian"
+msgstr ""
 
 msgid "Spanish"
-msgstr "Spanish"
+msgstr ""
 
 msgid "Swedish"
-msgstr "Swedish"
+msgstr ""
 
 msgid "Portuguese"
-msgstr "Portuguese"
+msgstr ""
 
 msgid "Turkish"
-msgstr "Turkish"
+msgstr ""
 
 msgid "Dutch"
-msgstr "Dutch"
+msgstr ""
 
 msgid "Hungarian"
-msgstr "Hungarian"
+msgstr ""
 
 msgid "Danish"
-msgstr "Danish"
+msgstr ""
 
 msgid "Slovak"
-msgstr "Slovak"
+msgstr ""
 
 msgid "Vietnamese"
-msgstr "Vietnamese"
+msgstr ""
 
 msgid ", FPS: "
 msgstr ", кдр/с:"
@@ -5617,7 +5617,7 @@ msgid "shipAndGraveyard|%{object} robber"
 msgstr "%{object} грабіжник"
 
 msgid "pyramid|%{object} raided"
-msgstr "pyramid|%{object} розкрадач"
+msgstr "%{object} розкрадач"
 
 msgid "Ector"
 msgstr "Ектор"
@@ -5668,7 +5668,7 @@ msgid "Luna"
 msgstr "Луна"
 
 msgid "Arie"
-msgstr "Овен"
+msgstr "Арій"
 
 msgid "Barok"
 msgstr "Барок"
@@ -5728,7 +5728,7 @@ msgid "Roxana"
 msgstr "Роксана"
 
 msgid "Lord Corlagon"
-msgstr "Орд Корлагон"
+msgstr "Лорд Корлагон"
 
 msgid "Lord Halton"
 msgstr "Лорд Хальто"
@@ -7269,10 +7269,10 @@ msgid "Blood Morale"
 msgstr "Кровожерлива"
 
 msgid "%{morale} Morale"
-msgstr "моралі"
+msgstr "%{morale} моралі"
 
 msgid "%{luck} Luck"
-msgstr "вдачі"
+msgstr "%{luck} вдачі"
 
 msgid "Current Luck Modifiers:"
 msgstr ""
