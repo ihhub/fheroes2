@@ -281,15 +281,15 @@ These distributions may not provide the latest version of the game due to their 
 
 #### Game resources
 
-To play the game you need original game resources. You can install them to per-user paths (`man fheroes2` for more info or you
+To play the game you need the original game resources. You can install them to per-user paths (`man fheroes2` for more info, or you
 can install them to the system-wide path (`/usr/share/games/fheroes2`) with `game-data-packager` program (since v70).
-To make resource package:
+To make the resource package:
 
 ```sh
 game-data-packager heroes2 <path_to_installed_original_game>
 apt install ./homm2-data_<version>_all.deb
 ```
-You can get more info about packaging resource by running `game-data-packager heroes2 --help`
+You can get more info about resource packaging by running `game-data-packager heroes2 --help`
 
 <a name="linux-zip-archive"></a>
 ### Linux ZIP archive
