@@ -8509,12 +8509,11 @@ msgstr "Földidéző oltár"
 msgid "Water Summoning Altar"
 msgstr "Vízidéző oltár"
 
-#, fuzzy
 msgid "Swampy Lake"
-msgstr "Mocsár"
+msgstr "Mocsaras tó"
 
 msgid "Frozen Lake"
-msgstr ""
+msgstr "Befagyott tó"
 
 msgid "Unknown Monster"
 msgstr "Ismeretlen lény"
