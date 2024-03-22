@@ -277,7 +277,7 @@ fheroes2 is available from `contrib` repositories for Debian (since 13) and Ubun
 ```sh
 apt install fheroes2
 ```
-These distributions may not provide the latest version of the game due to their relese cycle.
+These distributions may not provide the latest version of the game due to their release cycle.
 
 #### Game resources
 
