@@ -681,7 +681,7 @@ void Heroes::setHeroMetadata( const Maps::Map_Format::HeroMetadata & heroMetadat
                 SpellBookActivate();
 
                 // Add spells to the spell book.
-                for ( int32_t spellId : heroMetadata.availableSpells ) {
+                for ( const int32_t spellId : heroMetadata.availableSpells ) {
                     if ( spellId == Spell::NONE ) {
                         continue;
                     }
@@ -787,7 +787,7 @@ bool Heroes::getHeroMetadata( Maps::Map_Format::HeroMetadata & heroMetadata ) co
             hasChanges = true;
         }
 
-        if ( const int troopCount = troop->GetCount(); troopCount != heroMetadata.armyMonsterCount[i] ) {
+        if ( const int32_t troopCount = static_cast<int32_t>( troop->GetCount() ); troopCount != heroMetadata.armyMonsterCount[i] ) {
             heroMetadata.armyMonsterCount[i] = troopCount;
             hasChanges = true;
         }

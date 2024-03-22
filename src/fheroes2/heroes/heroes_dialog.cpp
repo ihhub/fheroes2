@@ -498,7 +498,7 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
                 if ( le.MouseClickLeft() ) {
                     uint32_t value = GetSpellPoints();
                     if ( Dialog::SelectCount( message, 0, spellPointsMaxValue, value ) ) {
-                        extraSpellPoints = value - GetMaxSpellPoints();
+                        extraSpellPoints = static_cast<int32_t>( value ) - static_cast<int32_t>( GetMaxSpellPoints() );
                         SetSpellPoints( value );
                         spellPointsInfo.Redraw();
                         needRedraw = true;
@@ -719,6 +719,7 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
         }
         else {
             statusBar.ShowMessage( std::move( message ) );
+            message.clear();
         }
 
         if ( needRedraw ) {
