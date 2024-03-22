@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-21 12:45+0000\n"
+"POT-Creation-Date: 2024-03-21 15:34+0000\n"
 "PO-Revision-Date: 2024-02-19 16:13+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -8543,6 +8543,13 @@ msgstr "Jordaltare"
 
 msgid "Water Summoning Altar"
 msgstr "Vattenaltare"
+
+#, fuzzy
+msgid "Swampy Lake"
+msgstr "Träsk"
+
+msgid "Frozen Lake"
+msgstr ""
 
 msgid "Unknown Monster"
 msgstr "Okänt Monster"

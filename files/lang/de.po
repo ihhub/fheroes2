@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-21 12:45+0000\n"
+"POT-Creation-Date: 2024-03-21 15:34+0000\n"
 "PO-Revision-Date: 2023-12-22 00:32+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -8843,6 +8843,13 @@ msgstr "Erdwesen-Altar"
 
 msgid "Water Summoning Altar"
 msgstr "Wasserwesen-Altar"
+
+#, fuzzy
+msgid "Swampy Lake"
+msgstr "Sumpf"
+
+msgid "Frozen Lake"
+msgstr ""
 
 msgid "Unknown Monster"
 msgstr "Unbekanntes Monster"
