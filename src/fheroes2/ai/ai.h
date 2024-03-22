@@ -32,7 +32,7 @@
 #include "rand.h"
 
 class StreamBase;
-class Funds;
+struct Funds;
 class HeroBase;
 class Heroes;
 class Kingdom;

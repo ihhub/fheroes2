@@ -38,8 +38,8 @@ namespace Maps
         ObjectPartInfo( const MP2::ObjectIcnType icn, const uint32_t index, const fheroes2::Point offset, const MP2::MapObjectType type )
             : tileOffset( offset )
             , icnIndex( index )
-            , icnType( icn )
             , objectType( type )
+            , icnType( icn )
         {
             // Do nothing.
         }
@@ -50,11 +50,11 @@ namespace Maps
         // Image index from an ICN resource to render this object part.
         uint32_t icnIndex{ 0 };
 
-        // ICN type associated to this object part. Some objects like towns can have parts coming from different ICN resources.
-        MP2::ObjectIcnType icnType{ MP2::OBJ_ICN_TYPE_UNKNOWN };
-
         // Object type associated with this object part. Not every object part has a type. For example, shadows don't have types.
         MP2::MapObjectType objectType{ MP2::OBJ_NONE };
+
+        // ICN type associated to this object part. Some objects like towns can have parts coming from different ICN resources.
+        MP2::ObjectIcnType icnType{ MP2::OBJ_ICN_TYPE_UNKNOWN };
 
         // The number of following by index images is used to animate this object part.
         // In most cases this value is 0 as the majority of object parts do not have animations.
@@ -95,12 +95,12 @@ namespace Maps
         // It does not matter what layer is set here as it is going to be ignored. For consistency put OBJECT_LAYER to detect any bad logic.
         std::vector<ObjectPartInfo> topLevelParts;
 
-        // Object type. Some objects don't have it like cracks.
-        MP2::MapObjectType objectType{ MP2::OBJ_NONE };
-
         // Some action objects require additional information to be stored.
         // Information stored in this member should be interpret based on a group.
         std::array<uint32_t, 2> metadata{ 0 };
+
+        // Object type. Some objects don't have it like cracks.
+        MP2::MapObjectType objectType{ MP2::OBJ_NONE };
 
         bool empty() const
         {

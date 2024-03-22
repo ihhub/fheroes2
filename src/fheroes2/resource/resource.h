@@ -60,9 +60,8 @@ namespace Resource
     };
 }
 
-class Funds
+struct Funds
 {
-public:
     Funds();
     Funds( int32_t _ore, int32_t _wood, int32_t _mercury, int32_t _sulfur, int32_t _crystal, int32_t _gems, int32_t _gold );
     Funds( int rs, uint32_t count );
