@@ -24,6 +24,7 @@
 #include <array>
 #include <cassert>
 #include <cstddef>
+#include <map>
 #include <memory>
 #include <set>
 #include <string>
@@ -42,6 +43,7 @@
 #include "game_static.h"
 #include "gamedefs.h"
 #include "ground.h"
+#include "heroes.h"
 #include "history_manager.h"
 #include "icn.h"
 #include "image.h"
