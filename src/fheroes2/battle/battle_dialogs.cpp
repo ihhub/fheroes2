@@ -939,7 +939,8 @@ int Battle::Arena::DialogBattleHero( const HeroBase & hero, const bool buttons, 
     fheroes2::Point tp{ pos_rt.x + ( pos_rt.width - text.width() ) / 2, pos_rt.y + 11 };
     text.draw( tp.x, tp.y + 2, display );
 
-    const fheroes2::Point statsTextOffset{ pos_rt.x + 148 - dialogShadow.x, pos_rt.y + 40 };
+    const int32_t letterShadowCompensation = 1;
+    const fheroes2::Point statsTextOffset{ pos_rt.x + 133 + letterShadowCompensation, pos_rt.y + 40 };
     const int32_t maxStatsTextWidth{ 109 };
     const int32_t statsTextRowHeight{ 11 };
 

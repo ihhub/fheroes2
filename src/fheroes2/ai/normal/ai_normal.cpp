@@ -29,19 +29,12 @@
 #include "maps_tiles.h"
 #include "pairs.h"
 #include "profit.h"
-#include "rand.h"
 #include "resource.h"
 #include "route.h"
 #include "world.h"
 
 namespace AI
 {
-    Normal::Normal()
-        : _pathfinder( ARMY_ADVANTAGE_LARGE )
-    {
-        _personality = Rand::Get( AI::WARRIOR, AI::EXPLORER );
-    }
-
     void Normal::resetPathfinder()
     {
         _pathfinder.reset();

@@ -51,7 +51,7 @@ namespace fheroes2
     class Image;
 }
 
-class Funds;
+struct Funds;
 class HeroBase;
 class Heroes;
 class StreamBase;

@@ -45,7 +45,7 @@
 
 namespace AI
 {
-    Base & Get( AI_TYPE /* type */ )
+    Base & Get( const AIType /* type = AIType::NORMAL */ )
     {
         static AI::Normal normal;
         return normal;

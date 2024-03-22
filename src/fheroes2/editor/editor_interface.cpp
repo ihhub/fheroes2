@@ -57,6 +57,7 @@
 #include "maps_tiles_helper.h"
 #include "math_base.h"
 #include "mp2.h"
+#include "render_processor.h"
 #include "screen.h"
 #include "settings.h"
 #include "spell.h"
@@ -306,8 +307,13 @@ namespace Interface
         const uint32_t combinedRedraw = _redraw | force;
 
         if ( combinedRedraw & REDRAW_GAMEAREA ) {
+            int renderFlags = LEVEL_OBJECTS | LEVEL_HEROES | LEVEL_ROUTES;
+            if ( combinedRedraw & REDRAW_PASSABILITIES ) {
+                renderFlags |= LEVEL_PASSABILITIES;
+            }
+
             // Render all except the fog.
-            _gameArea.Redraw( display, LEVEL_OBJECTS | LEVEL_HEROES | LEVEL_ROUTES );
+            _gameArea.Redraw( display, renderFlags );
 
             if ( _warningMessage.isValid() ) {
                 const fheroes2::Rect & roi = _gameArea.GetROI();
@@ -362,6 +368,16 @@ namespace Interface
 
     fheroes2::GameMode Interface::EditorInterface::startEdit( const bool isNewMap )
     {
+        // The Editor has a special option to disable animation. This affects cycling animation as well.
+        // First, we disable it to make sure to enable it back while exiting this function.
+        fheroes2::ScreenPaletteRestorer restorer;
+
+        const Settings & conf = Settings::Get();
+
+        if ( conf.isEditorAnimationEnabled() ) {
+            fheroes2::RenderProcessor::instance().startColorCycling();
+        }
+
         reset();
 
         if ( isNewMap ) {
@@ -372,8 +388,6 @@ namespace Interface
         // Stop all sounds and music.
         AudioManager::ResetAudio();
 
-        const Settings & conf = Settings::Get();
-
         _radar.Build();
         _radar.SetHide( false );
 
@@ -381,7 +395,12 @@ namespace Interface
 
         _gameArea.SetUpdateCursor();
 
-        setRedraw( REDRAW_GAMEAREA | REDRAW_RADAR | REDRAW_PANEL | REDRAW_STATUS | REDRAW_BORDER );
+        uint32_t redrawFlags = REDRAW_GAMEAREA | REDRAW_RADAR | REDRAW_PANEL | REDRAW_STATUS | REDRAW_BORDER;
+        if ( conf.isEditorPassabilityEnabled() ) {
+            redrawFlags |= REDRAW_PASSABILITIES;
+        }
+
+        setRedraw( redrawFlags );
 
         int32_t fastScrollRepeatCount = 0;
         const int32_t fastScrollStartThreshold = 2;
@@ -629,11 +648,16 @@ namespace Interface
             if ( res == fheroes2::GameMode::CANCEL ) {
                 // map objects animation
                 if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
-                    Game::updateAdventureMapAnimationIndex();
+                    if ( conf.isEditorAnimationEnabled() ) {
+                        Game::updateAdventureMapAnimationIndex();
+                    }
                     _redraw |= REDRAW_GAMEAREA;
                 }
 
                 if ( needRedraw() ) {
+                    if ( conf.isEditorPassabilityEnabled() ) {
+                        _redraw |= REDRAW_PASSABILITIES;
+                    }
                     redraw( 0 );
 
                     // If this assertion blows up it means that we are holding a RedrawLocker lock for rendering which should not happen.

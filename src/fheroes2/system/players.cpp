@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2011 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -26,9 +26,10 @@
 #include <algorithm>
 #include <array>
 #include <cassert>
+#include <cstddef>
 #include <ostream>
+#include <type_traits>
 
-#include "ai.h"
 #include "castle.h"
 #include "game.h"
 #include "game_io.h"
@@ -37,7 +38,6 @@
 #include "logging.h"
 #include "maps.h"
 #include "maps_fileinfo.h"
-#include "normal/ai_normal.h"
 #include "race.h"
 #include "rand.h"
 #include "save_format_version.h"
@@ -55,38 +55,58 @@ namespace
     {
         ST_INGAME = 0x2000
     };
-}
 
-void PlayerFocusReset( Player * player )
-{
-    if ( player )
+    void resetFocus( Player * player )
+    {
+        if ( player == nullptr ) {
+            return;
+        }
+
         player->GetFocus().Reset();
-}
+    }
 
-void PlayerFixMultiControl( Player * player )
-{
-    if ( player && player->GetControl() == ( CONTROL_HUMAN | CONTROL_AI ) )
+    void fixMultiControl( Player * player )
+    {
+        if ( player == nullptr ) {
+            return;
+        }
+
+        if ( player->GetControl() != ( CONTROL_HUMAN | CONTROL_AI ) ) {
+            return;
+        }
+
         player->SetControl( CONTROL_AI );
-}
+    }
 
-void PlayerRemoveAlreadySelectedRaces( const Player * player, std::vector<int> & availableRaces )
-{
-    const int raceToRemove = player->GetRace();
-    availableRaces.erase( remove_if( availableRaces.begin(), availableRaces.end(), [raceToRemove]( const int race ) { return raceToRemove == race; } ),
-                          availableRaces.end() );
-}
+    void removeAlreadySelectedRaces( const Player * player, std::vector<int> & availableRaces )
+    {
+        const int raceToRemove = player->GetRace();
 
-void PlayerFixRandomRace( Player * player, std::vector<int> & availableRaces )
-{
-    if ( player && player->GetRace() == Race::RAND ) {
+        availableRaces.erase( remove_if( availableRaces.begin(), availableRaces.end(), [raceToRemove]( const int race ) { return raceToRemove == race; } ),
+                              availableRaces.end() );
+    }
+
+    void fixRandomRace( Player * player, std::vector<int> & availableRaces )
+    {
+        if ( player == nullptr ) {
+            return;
+        }
+
+        if ( player->GetRace() != Race::RAND ) {
+            return;
+        }
+
         if ( availableRaces.empty() ) {
             player->SetRace( Race::Rand() );
+
+            return;
         }
-        else {
-            const int raceIndex = Rand::Get( 0, static_cast<uint32_t>( availableRaces.size() - 1 ) );
-            player->SetRace( availableRaces[raceIndex] );
-            availableRaces.erase( availableRaces.begin() + raceIndex );
-        }
+
+        const size_t raceIndex = Rand::Get( 0, static_cast<uint32_t>( availableRaces.size() - 1 ) );
+
+        player->SetRace( availableRaces[raceIndex] );
+
+        availableRaces.erase( availableRaces.begin() + raceIndex );
     }
 }
 
@@ -100,20 +120,18 @@ bool Control::isControlHuman() const
     return ( CONTROL_HUMAN & GetControl() ) != 0;
 }
 
-Player::Player( int col )
+Player::Player( const int col /* = Color::NONE */ )
     : control( CONTROL_NONE )
     , color( col )
     , race( Race::NONE )
     , friends( col )
-    , _ai( std::make_shared<AI::Normal>() )
+    , _aiPersonality( AI::getRandomPersonality() )
     , _handicapStatus( HandicapStatus::NONE )
 #if defined( WITH_DEBUG )
     , _isAIAutoControlMode( false )
     , _isAIAutoControlModePlanned( false )
 #endif
-{
-    // Do nothing.
-}
+{}
 
 std::string Player::GetDefaultName() const
 {
@@ -143,7 +161,7 @@ int Player::GetControl() const
 
 std::string Player::GetPersonalityString() const
 {
-    return _ai->GetPersonalityString();
+    return AI::getPersonalityString( _aiPersonality );
 }
 
 bool Player::isPlay() const
@@ -161,12 +179,14 @@ void Player::SetName( const std::string & newName )
     }
 }
 
-void Player::SetPlay( bool f )
+void Player::SetPlay( const bool f )
 {
-    if ( f )
+    if ( f ) {
         SetModes( ST_INGAME );
-    else
+    }
+    else {
         ResetModes( ST_INGAME );
+    }
 }
 
 void Player::setHandicapStatus( const HandicapStatus status )
@@ -250,11 +270,12 @@ StreamBase & operator>>( StreamBase & msg, Focus & focus )
 
 StreamBase & operator<<( StreamBase & msg, const Player & player )
 {
+    using AIPersonalityUnderlyingType = std::underlying_type_t<decltype( player._aiPersonality )>;
+
     const BitModes & modes = player;
 
-    assert( player._ai != nullptr );
-    msg << modes << player.control << player.color << player.race << player.friends << player.name << player.focus << *player._ai
-        << static_cast<uint8_t>( player._handicapStatus );
+    msg << modes << player.control << player.color << player.race << player.friends << player.name << player.focus
+        << static_cast<AIPersonalityUnderlyingType>( player._aiPersonality ) << static_cast<uint8_t>( player._handicapStatus );
     return msg;
 }
 
@@ -272,11 +293,15 @@ StreamBase & operator>>( StreamBase & msg, Player & player )
 
     msg >> player.control >> player.color >> player.race >> player.friends >> player.name >> player.focus;
 
-    assert( player._ai );
-    msg >> *player._ai;
+    using AIPersonalityUnderlyingType = std::underlying_type_t<decltype( player._aiPersonality )>;
+    static_assert( std::is_same_v<AIPersonalityUnderlyingType, int>, "Type of _aiPersonality has been changed, check the logic below" );
+
+    AIPersonalityUnderlyingType aiPersonality;
+    msg >> aiPersonality;
+
+    player._aiPersonality = static_cast<AI::Personality>( aiPersonality );
 
     uint8_t handicapStatusInt;
-
     msg >> handicapStatusInt;
 
     player._handicapStatus = static_cast<Player::HandicapStatus>( handicapStatusInt );
@@ -477,18 +502,22 @@ std::vector<int> Players::getInPlayOpponents( const int color )
 void Players::SetPlayerInGame( int color, bool f )
 {
     Player * player = Get( color );
-    if ( player )
-        player->SetPlay( f );
+    if ( player == nullptr ) {
+        return;
+    }
+
+    player->SetPlay( f );
 }
 
 void Players::SetStartGame()
 {
-    vector<int> races = { Race::KNGT, Race::BARB, Race::SORC, Race::WRLK, Race::WZRD, Race::NECR };
+    std::vector<int> races = { Race::KNGT, Race::BARB, Race::SORC, Race::WRLK, Race::WZRD, Race::NECR };
+
     for_each( begin(), end(), []( Player * player ) { player->SetPlay( true ); } );
-    for_each( begin(), end(), []( Player * player ) { PlayerFocusReset( player ); } );
-    for_each( begin(), end(), [&races]( const Player * player ) { PlayerRemoveAlreadySelectedRaces( player, races ); } );
-    for_each( begin(), end(), [&races]( Player * player ) { PlayerFixRandomRace( player, races ); } );
-    for_each( begin(), end(), []( Player * player ) { PlayerFixMultiControl( player ); } );
+    for_each( begin(), end(), []( Player * player ) { resetFocus( player ); } );
+    for_each( begin(), end(), [&races]( const Player * player ) { removeAlreadySelectedRaces( player, races ); } );
+    for_each( begin(), end(), [&races]( Player * player ) { fixRandomRace( player, races ); } );
+    for_each( begin(), end(), []( Player * player ) { fixMultiControl( player ); } );
 
     _currentColor = Color::NONE;
     humanColors = Color::NONE;

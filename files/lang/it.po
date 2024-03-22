@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-10 10:14+0000\n"
+"POT-Creation-Date: 2024-03-21 15:34+0000\n"
 "PO-Revision-Date: 2022-12-03 04:36+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <it@li.org>\n"
@@ -328,8 +328,9 @@ msgstr "Legione"
 msgid "All %{race} troops +1"
 msgstr "Tutte le forze da %{race}: +1"
 
-msgid "Multiple"
-msgstr "Multipli"
+#, fuzzy
+msgid "NeutralRaceTroops|Neutral"
+msgstr "Neutro"
 
 msgid "Troops of %{count} alignments -%{penalty}"
 msgstr "Truppe da 3 fazioni -1"
@@ -4051,6 +4052,20 @@ msgstr ""
 msgid "Warning"
 msgstr ""
 
+#, fuzzy
+msgid "Animation"
+msgstr "Navigazione"
+
+#, fuzzy
+msgid "Passability"
+msgstr "Ruolo:"
+
+msgid "Toggle animation of the objects."
+msgstr ""
+
+msgid "Toggle display of objects' passability."
+msgstr ""
+
 msgid "difficulty|Easy"
 msgstr "Facile"
 
@@ -4180,10 +4195,7 @@ msgstr ""
 msgid "Special Thanks to"
 msgstr ""
 
-msgid "and many other contributors!"
-msgstr ""
-
-msgid "and many-many other supporters!"
+msgid "and many-many other contributors and supporters!"
 msgstr ""
 
 msgid "Support us at"
@@ -8030,6 +8042,13 @@ msgstr "Altare Convocante di Terra"
 msgid "Water Summoning Altar"
 msgstr "Altare Convocante dell'Acqua"
 
+#, fuzzy
+msgid "Swampy Lake"
+msgstr "Palude"
+
+msgid "Frozen Lake"
+msgstr ""
+
 msgid "Unknown Monster"
 msgstr "Mostro sconosciuto"
 
@@ -10465,3 +10484,6 @@ msgstr ""
 "Scopri l'ultima versione del gioco su\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Multiple"
+#~ msgstr "Multipli"

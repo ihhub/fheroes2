@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-10 10:14+0000\n"
+"POT-Creation-Date: 2024-03-21 15:34+0000\n"
 "PO-Revision-Date: 2023-08-26 23:09+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: https://discord.com/"
@@ -360,8 +360,9 @@ msgstr "Legion"
 msgid "All %{race} troops +1"
 msgstr "Wszystkie %{race} oddziały +1"
 
-msgid "Multiple"
-msgstr "Różne"
+#, fuzzy
+msgid "NeutralRaceTroops|Neutral"
+msgstr "Neutralny"
 
 msgid "Troops of %{count} alignments -%{penalty}"
 msgstr "Jednostki z %{count} różnych frakcji -%{penalty}"
@@ -4215,6 +4216,20 @@ msgstr "Mapy niedostępne!"
 msgid "Warning"
 msgstr "Uwaga"
 
+#, fuzzy
+msgid "Animation"
+msgstr "Aneksja"
+
+#, fuzzy
+msgid "Passability"
+msgstr "Osobowość:"
+
+msgid "Toggle animation of the objects."
+msgstr ""
+
+msgid "Toggle display of objects' passability."
+msgstr ""
+
 msgid "difficulty|Easy"
 msgstr "Łatwy"
 
@@ -4359,10 +4374,8 @@ msgstr "Development i wsparcie"
 msgid "Special Thanks to"
 msgstr "Specjalnie podziękowania dla"
 
-msgid "and many other contributors!"
-msgstr "i wielu innych!"
-
-msgid "and many-many other supporters!"
+#, fuzzy
+msgid "and many-many other contributors and supporters!"
 msgstr "i wielu, wielu innym!"
 
 msgid "Support us at"
@@ -8705,6 +8718,13 @@ msgstr "Ołtarz Ziemi"
 msgid "Water Summoning Altar"
 msgstr "Ołtarz Wody"
 
+#, fuzzy
+msgid "Swampy Lake"
+msgstr "Bagno"
+
+msgid "Frozen Lake"
+msgstr ""
+
 msgid "Unknown Monster"
 msgstr "Nieznany potwór"
 
@@ -11486,3 +11506,9 @@ msgstr ""
 "Możesz pobrać najnowszą wersję gry ze strony:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Multiple"
+#~ msgstr "Różne"
+
+#~ msgid "and many other contributors!"
+#~ msgstr "i wielu innych!"

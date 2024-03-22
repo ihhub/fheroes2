@@ -56,6 +56,8 @@ namespace Interface
         LEVEL_ROUTES = 0x04,
         LEVEL_TOWNS = 0x08, // this level is used only for View All / View Towns spells.
 
+        LEVEL_PASSABILITIES = 0x10, // this level is used only by the Editor.
+
         LEVEL_ALL = LEVEL_OBJECTS | LEVEL_HEROES | LEVEL_FOG | LEVEL_ROUTES
     };
 

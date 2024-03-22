@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-10 10:14+0000\n"
+"POT-Creation-Date: 2024-03-21 15:34+0000\n"
 "PO-Revision-Date: 2023-09-24 16:05+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Czech <cs@li.org>\n"
@@ -382,8 +382,8 @@ msgstr "Legie"
 msgid "All %{race} troops +1"
 msgstr "Všechny %{race} jednotky +1"
 
-msgid "Multiple"
-msgstr "Vícero"
+msgid "NeutralRaceTroops|Neutral"
+msgstr ""
 
 msgid "Troops of %{count} alignments -%{penalty}"
 msgstr ""
@@ -4185,6 +4185,20 @@ msgstr "Žádné mapy k dispo!"
 msgid "Warning"
 msgstr "Varování"
 
+#, fuzzy
+msgid "Animation"
+msgstr "Zabrání"
+
+#, fuzzy
+msgid "Passability"
+msgstr "Osobnost:"
+
+msgid "Toggle animation of the objects."
+msgstr ""
+
+msgid "Toggle display of objects' passability."
+msgstr ""
+
 msgid "difficulty|Easy"
 msgstr "Lehká"
 
@@ -4318,10 +4332,7 @@ msgstr ""
 msgid "Special Thanks to"
 msgstr ""
 
-msgid "and many other contributors!"
-msgstr ""
-
-msgid "and many-many other supporters!"
+msgid "and many-many other contributors and supporters!"
 msgstr ""
 
 msgid "Support us at"
@@ -8262,6 +8273,13 @@ msgstr "Oltář přivolání Země"
 msgid "Water Summoning Altar"
 msgstr "Oltář přivolání Vody"
 
+#, fuzzy
+msgid "Swampy Lake"
+msgstr "Bažina"
+
+msgid "Frozen Lake"
+msgstr ""
+
 msgid "Unknown Monster"
 msgstr "Neznámá stvůra"
 
@@ -10637,3 +10655,6 @@ msgstr ""
 "Nejnovější verzi hry nalezneš na\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Multiple"
+#~ msgstr "Vícero"

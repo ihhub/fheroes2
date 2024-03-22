@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-10 10:14+0000\n"
+"POT-Creation-Date: 2024-03-21 15:34+0000\n"
 "PO-Revision-Date: 2022-10-25 08:56+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -29,164 +29,181 @@ msgid ""
 "NEW\n"
 "GAME"
 msgstr ""
+"JOC\n"
+"NOU"
 
 msgid ""
 "SAVE\n"
 "GAME"
 msgstr ""
+"SALVEAZĂ\n"
+"JOCUL"
 
 msgid ""
 "LOAD\n"
 "GAME"
 msgstr ""
+"ÎNCARCĂ\n"
+"JOCUL"
 
 msgid "INFO"
-msgstr ""
+msgstr "INFO"
 
 msgid "QUIT"
-msgstr ""
+msgstr "ÎNCHIDE"
 
 msgid "CANCEL"
-msgstr ""
+msgstr "RENUNȚĂ"
 
 msgid "OKAY"
-msgstr ""
+msgstr "OKAY"
 
 msgid "smallerButton|OKAY"
-msgstr ""
+msgstr "OKAY"
 
 msgid "ACCEPT"
-msgstr ""
+msgstr "ACCEPTĂ"
 
 msgid "DECLINE"
-msgstr ""
+msgstr "REFUZĂ"
 
 msgid "LEARN"
-msgstr ""
+msgstr "ÎNVAȚĂ"
 
 msgid "TRADE"
-msgstr ""
+msgstr "TROC"
 
 msgid "YES"
-msgstr ""
+msgstr "DA"
 
 msgid "NO"
-msgstr ""
+msgstr "NU"
 
 msgid "EXIT"
-msgstr ""
+msgstr "EXIT"
 
 msgid "smallerButton|EXIT"
-msgstr ""
+msgstr "EXIT"
 
 msgid "DISMISS"
-msgstr ""
+msgstr "RENUNȚĂ"
 
 msgid "UPGRADE"
-msgstr ""
+msgstr "AMELIOREAZĂ"
 
 msgid "RESTART"
-msgstr ""
+msgstr "RESTART"
 
 msgid "HEROES"
-msgstr ""
+msgstr "EROI"
 
 msgid ""
 "TOWNS/\n"
 "CASTLES"
 msgstr ""
+"ORAȘE\n"
+"CASTELE"
 
 msgid "S"
-msgstr ""
+msgstr "S"
 
 msgid "M"
-msgstr ""
+msgstr "M"
 
 msgid "L"
-msgstr ""
+msgstr "L"
 
 msgid "X-L"
-msgstr ""
+msgstr "X-L"
 
 msgid "ALL"
-msgstr ""
+msgstr "TOATE"
 
 msgid "SELECT"
-msgstr ""
+msgstr "SELECTEAZĂ"
 
 msgid ""
 "STANDARD\n"
 "GAME"
 msgstr ""
+"JOC\n"
+"STANDARD"
 
 msgid ""
 "CAMPAIGN\n"
 "GAME"
-msgstr ""
+msgstr "CAMPANIE"
 
 msgid ""
 "MULTI-\n"
 "PLAYER\n"
 "GAME"
 msgstr ""
+"JOC\n"
+"MULTI-\n"
+"PLAYER"
 
 msgid "CONFIG"
-msgstr ""
+msgstr "CONFIG"
 
 msgid ""
 "ORIGINAL\n"
 "CAMPAIGN"
 msgstr ""
+"CAMPANIE\n"
+"ORIGINALĂ"
 
 msgid ""
 "EXPANSION\n"
 "CAMPAIGN"
 msgstr ""
+"CAMPANIE\n"
+"EXPANSIUNE"
 
 msgid "HOT SEAT"
 msgstr ""
 
 msgid "2 PLAYERS"
-msgstr ""
+msgstr "2 JUCĂTORI"
 
 msgid "3 PLAYERS"
-msgstr ""
+msgstr "3 JUCĂTORI"
 
 msgid "4 PLAYERS"
-msgstr ""
+msgstr "4 JUCĂTORI"
 
 msgid "5 PLAYERS"
-msgstr ""
+msgstr "5 JUCĂTORI"
 
 msgid "6 PLAYERS"
-msgstr ""
+msgstr "6 JUCĂTORI"
 
 msgid "GIFT"
 msgstr "OFERĂ"
 
 msgid "MAX"
-msgstr ""
+msgstr "MAX"
 
 msgid "DIFFICULTY"
 msgstr "DIFICULTATE"
 
 msgid "VIEW INTRO"
-msgstr ""
+msgstr "VEZI INTRO"
 
 msgid "MIN"
 msgstr "MIN"
 
 msgid "RESET"
-msgstr ""
+msgstr "RESET"
 
 msgid "START"
-msgstr ""
+msgstr "START"
 
 msgid "CASTLE"
-msgstr ""
+msgstr "CASTEL"
 
 msgid "TOWN"
-msgstr ""
+msgstr "ORAȘ"
 
 msgid ""
 "D\n"
@@ -197,6 +214,13 @@ msgid ""
 "S\n"
 "S"
 msgstr ""
+"R\n"
+"E\n"
+"N\n"
+"U\n"
+"N\n"
+"Ț\n"
+"Ă"
 
 msgid ""
 "E\n"
@@ -204,6 +228,10 @@ msgid ""
 "I\n"
 "T"
 msgstr ""
+"E\n"
+"X\n"
+"I\n"
+"T"
 
 msgid ""
 "C\n"
@@ -215,6 +243,14 @@ msgid ""
 "G\n"
 "N"
 msgstr ""
+"C\n"
+"A\n"
+"M\n"
+"P\n"
+"A\n"
+"N\n"
+"I\n"
+"E"
 
 msgid ""
 "S\n"
@@ -226,6 +262,14 @@ msgid ""
 "R\n"
 "D"
 msgstr ""
+"S\n"
+"T\n"
+"A\n"
+"N\n"
+"D\n"
+"A\n"
+"R\n"
+"D"
 
 msgid "Warrior"
 msgstr "Războinic"
@@ -257,7 +301,7 @@ msgid ""
 "A pack of\n"
 "%{monster}"
 msgstr ""
-"O haita de\n"
+"O haită de\n"
 "%{monster}"
 
 msgid ""
@@ -332,8 +376,8 @@ msgstr "(250-499)"
 msgid "All %{race} troops +1"
 msgstr "Toate %{race} forțele +1"
 
-msgid "Multiple"
-msgstr "Multiple"
+msgid "NeutralRaceTroops|Neutral"
+msgstr ""
 
 msgid "Troops of %{count} alignments -%{penalty}"
 msgstr "Trupe cu %{count} aliniamente -%{penalty}"
@@ -3916,6 +3960,19 @@ msgstr ""
 msgid "Warning"
 msgstr "Atenție"
 
+#, fuzzy
+msgid "Animation"
+msgstr "Anexare"
+
+msgid "Passability"
+msgstr ""
+
+msgid "Toggle animation of the objects."
+msgstr ""
+
+msgid "Toggle display of objects' passability."
+msgstr ""
+
 msgid "difficulty|Easy"
 msgstr ""
 
@@ -4035,10 +4092,7 @@ msgstr ""
 msgid "Special Thanks to"
 msgstr ""
 
-msgid "and many other contributors!"
-msgstr ""
-
-msgid "and many-many other supporters!"
+msgid "and many-many other contributors and supporters!"
 msgstr ""
 
 msgid "Support us at"
@@ -7753,6 +7807,12 @@ msgstr ""
 msgid "Water Summoning Altar"
 msgstr ""
 
+msgid "Swampy Lake"
+msgstr ""
+
+msgid "Frozen Lake"
+msgstr ""
+
 msgid "Unknown Monster"
 msgstr ""
 
@@ -10059,3 +10119,6 @@ msgid ""
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
 msgstr ""
+
+#~ msgid "Multiple"
+#~ msgstr "Multiple"

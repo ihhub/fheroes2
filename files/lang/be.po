@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-10 10:14+0000\n"
+"POT-Creation-Date: 2024-03-21 15:34+0000\n"
 "PO-Revision-Date: 2022-09-23 16:01+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -347,7 +347,7 @@ msgstr "Легіён"
 msgid "All %{race} troops +1"
 msgstr ""
 
-msgid "Multiple"
+msgid "NeutralRaceTroops|Neutral"
 msgstr ""
 
 msgid "Troops of %{count} alignments -%{penalty}"
@@ -3953,6 +3953,19 @@ msgstr ""
 msgid "Warning"
 msgstr "Увага"
 
+#, fuzzy
+msgid "Animation"
+msgstr "Анексія"
+
+msgid "Passability"
+msgstr ""
+
+msgid "Toggle animation of the objects."
+msgstr ""
+
+msgid "Toggle display of objects' passability."
+msgstr ""
+
 msgid "difficulty|Easy"
 msgstr "Лёгка"
 
@@ -4073,10 +4086,7 @@ msgstr ""
 msgid "Special Thanks to"
 msgstr ""
 
-msgid "and many other contributors!"
-msgstr ""
-
-msgid "and many-many other supporters!"
+msgid "and many-many other contributors and supporters!"
 msgstr ""
 
 msgid "Support us at"
@@ -7834,6 +7844,12 @@ msgid "Earth Summoning Altar"
 msgstr ""
 
 msgid "Water Summoning Altar"
+msgstr ""
+
+msgid "Swampy Lake"
+msgstr ""
+
+msgid "Frozen Lake"
 msgstr ""
 
 msgid "Unknown Monster"

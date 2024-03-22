@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-10 10:14+0000\n"
+"POT-Creation-Date: 2024-03-21 15:34+0000\n"
 "PO-Revision-Date: 2022-10-01 20:20+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Turkish <tr@li.org>\n"
@@ -332,8 +332,8 @@ msgstr "Lejyon"
 msgid "All %{race} troops +1"
 msgstr "Bütün %{race} askerler +1"
 
-msgid "Multiple"
-msgstr "Çoklu"
+msgid "NeutralRaceTroops|Neutral"
+msgstr ""
 
 msgid "Troops of %{count} alignments -%{penalty}"
 msgstr "Birlikleri %{count} hizala -%{penalty}"
@@ -3846,6 +3846,18 @@ msgstr ""
 msgid "Warning"
 msgstr "Uyarı"
 
+msgid "Animation"
+msgstr ""
+
+msgid "Passability"
+msgstr ""
+
+msgid "Toggle animation of the objects."
+msgstr ""
+
+msgid "Toggle display of objects' passability."
+msgstr ""
+
 msgid "difficulty|Easy"
 msgstr ""
 
@@ -3965,10 +3977,7 @@ msgstr ""
 msgid "Special Thanks to"
 msgstr ""
 
-msgid "and many other contributors!"
-msgstr ""
-
-msgid "and many-many other supporters!"
+msgid "and many-many other contributors and supporters!"
 msgstr ""
 
 msgid "Support us at"
@@ -7669,6 +7678,13 @@ msgstr ""
 msgid "Water Summoning Altar"
 msgstr ""
 
+#, fuzzy
+msgid "Swampy Lake"
+msgstr "Bataklık"
+
+msgid "Frozen Lake"
+msgstr ""
+
 msgid "Unknown Monster"
 msgstr ""
 
@@ -9975,3 +9991,6 @@ msgid ""
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
 msgstr ""
+
+#~ msgid "Multiple"
+#~ msgstr "Çoklu"

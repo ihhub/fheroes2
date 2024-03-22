@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-10 10:14+0000\n"
+"POT-Creation-Date: 2024-03-21 15:34+0000\n"
 "PO-Revision-Date: 2024-02-20 08:49+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -377,8 +377,9 @@ msgstr "Quân đoàn"
 msgid "All %{race} troops +1"
 msgstr "Tất cả binh lính %{race} +1"
 
-msgid "Multiple"
-msgstr "Bội số"
+#, fuzzy
+msgid "NeutralRaceTroops|Neutral"
+msgstr "Trung lập"
 
 msgid "Troops of %{count} alignments -%{penalty}"
 msgstr "Quân của %{count} sắp hàng -%{penalty}"
@@ -4201,6 +4202,21 @@ msgstr "Không có bản đồ nào!"
 msgid "Warning"
 msgstr "Cảnh báo"
 
+#, fuzzy
+msgid "Animation"
+msgstr "Thôn tính"
+
+#, fuzzy
+msgid "Passability"
+msgstr "Nhân cách:"
+
+#, fuzzy
+msgid "Toggle animation of the objects."
+msgstr "Chuyển đổi tính năng xóa đối tượng %{type}."
+
+msgid "Toggle display of objects' passability."
+msgstr ""
+
 msgid "difficulty|Easy"
 msgstr "Dễ"
 
@@ -4343,10 +4359,8 @@ msgstr "Phát triển và Hỗ trợ"
 msgid "Special Thanks to"
 msgstr "Lời cảm ơn Chân thành tới"
 
-msgid "and many other contributors!"
-msgstr "và nhiều những người đóng góp khác!"
-
-msgid "and many-many other supporters!"
+#, fuzzy
+msgid "and many-many other contributors and supporters!"
 msgstr "và nhiều - nhiều những người hỗ trợ khác!"
 
 msgid "Support us at"
@@ -8680,6 +8694,13 @@ msgstr "Bàn thờ Triệu hồi Đất"
 msgid "Water Summoning Altar"
 msgstr "Bàn thờ Triệu hồi Nước"
 
+#, fuzzy
+msgid "Swampy Lake"
+msgstr "Đầm lầy"
+
+msgid "Frozen Lake"
+msgstr ""
+
 msgid "Unknown Monster"
 msgstr "Quái vật Vô danh"
 
@@ -11469,3 +11490,9 @@ msgstr ""
 "Kiểm tra phiên bản mới nhất của trò chơi tại\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Multiple"
+#~ msgstr "Bội số"
+
+#~ msgid "and many other contributors!"
+#~ msgstr "và nhiều những người đóng góp khác!"

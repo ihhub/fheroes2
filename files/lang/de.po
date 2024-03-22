@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-10 10:14+0000\n"
+"POT-Creation-Date: 2024-03-21 15:34+0000\n"
 "PO-Revision-Date: 2023-12-22 00:32+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -357,8 +357,9 @@ msgstr "Legion"
 msgid "All %{race} troops +1"
 msgstr "Alle %{race}-Truppen +1"
 
-msgid "Multiple"
-msgstr "Verschied"
+#, fuzzy
+msgid "NeutralRaceTroops|Neutral"
+msgstr "Neutral"
 
 msgid "Troops of %{count} alignments -%{penalty}"
 msgstr "Truppen aus %{count} Gattungen -%{penalty}"
@@ -4263,6 +4264,20 @@ msgstr "Keine Karten vorhanden!"
 msgid "Warning"
 msgstr "Achtung"
 
+#, fuzzy
+msgid "Animation"
+msgstr "Annektion"
+
+#, fuzzy
+msgid "Passability"
+msgstr "Person:"
+
+msgid "Toggle animation of the objects."
+msgstr ""
+
+msgid "Toggle display of objects' passability."
+msgstr ""
+
 msgid "difficulty|Easy"
 msgstr "Leicht"
 
@@ -4408,10 +4423,8 @@ msgstr "Entwicklung und Support"
 msgid "Special Thanks to"
 msgstr "Besonderen Dank an"
 
-msgid "and many other contributors!"
-msgstr "und viele andere Mitwirkende!"
-
-msgid "and many-many other supporters!"
+#, fuzzy
+msgid "and many-many other contributors and supporters!"
 msgstr "und viele, viele andere Unterstützer!"
 
 msgid "Support us at"
@@ -8831,6 +8844,13 @@ msgstr "Erdwesen-Altar"
 msgid "Water Summoning Altar"
 msgstr "Wasserwesen-Altar"
 
+#, fuzzy
+msgid "Swampy Lake"
+msgstr "Sumpf"
+
+msgid "Frozen Lake"
+msgstr ""
+
 msgid "Unknown Monster"
 msgstr "Unbekanntes Monster"
 
@@ -11642,3 +11662,9 @@ msgstr ""
 "Die neueste Version des Spiels finden Sie unter\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Multiple"
+#~ msgstr "Verschied"
+
+#~ msgid "and many other contributors!"
+#~ msgstr "und viele andere Mitwirkende!"

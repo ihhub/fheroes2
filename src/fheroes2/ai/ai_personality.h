@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2024                                             *
+ *   Copyright (C) 2024                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -17,25 +17,21 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
+
 #pragma once
 
-#include <cstdint>
+#include <string>
 
-#include "math_base.h"
-
-class Castle;
-struct Funds;
-
-namespace fheroes2
+namespace AI
 {
-    class Image;
+    enum class Personality : int
+    {
+        NONE,
+        WARRIOR,
+        BUILDER,
+        EXPLORER
+    };
 
-    void drawCastleIcon( const Castle & castle, Image & output, const Point & offset );
-
-    Rect drawResourcePanel( const Funds & kingdomTreasures, Image & output, const Point & offset );
-
-    void drawCastleName( const Castle & castle, Image & output, const Point & offset );
-
-    void drawCastleDialogBuilding( const int32_t icnId, const uint32_t icnIndex, const Castle & castle, const Point & offset, const Rect & renderArea,
-                                   const uint8_t alpha = 255 );
+    Personality getRandomPersonality();
+    std::string getPersonalityString( const Personality personality );
 }
