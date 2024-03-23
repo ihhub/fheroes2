@@ -155,9 +155,9 @@ namespace Maps::Map_Format
     {
         std::string message;
 
-        uint8_t playerColors{ 0 };
+        uint8_t humanPlayerColors{ 0 };
 
-        bool isApplicableForComputer{ false };
+        uint8_t computerPlayerColors{ 0 };
 
         // Does this event occur only once?
         bool isRecurringEvent{ false };

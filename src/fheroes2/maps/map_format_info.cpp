@@ -126,13 +126,13 @@ namespace Maps::Map_Format
 
     StreamBase & operator<<( StreamBase & msg, const AdventureMapEventMetadata & metadata )
     {
-        return msg << metadata.message << metadata.playerColors << metadata.isApplicableForComputer << metadata.isRecurringEvent << metadata.artifact
+        return msg << metadata.message << metadata.humanPlayerColors << metadata.computerPlayerColors << metadata.isRecurringEvent << metadata.artifact
                    << metadata.resources;
     }
 
     StreamBase & operator>>( StreamBase & msg, AdventureMapEventMetadata & metadata )
     {
-        return msg >> metadata.message >> metadata.playerColors >> metadata.isApplicableForComputer >> metadata.isRecurringEvent >> metadata.artifact
+        return msg >> metadata.message >> metadata.humanPlayerColors >> metadata.computerPlayerColors >> metadata.isRecurringEvent >> metadata.artifact
                >> metadata.resources;
     }
 
