@@ -117,7 +117,7 @@ msgid "X-L"
 msgstr "X-L"
 
 msgid "ALL"
-msgstr "TOATE"
+msgstr "TOT"
 
 msgid "SELECT"
 msgstr "SELECTEAZĂ"
@@ -2803,10 +2803,10 @@ msgid "Need: "
 msgstr ""
 
 msgid "Load Game"
-msgstr ""
+msgstr "Încarcă un joc"
 
 msgid "No save files to load."
-msgstr ""
+msgstr "Nu există fișiere salvate."
 
 msgid "New Game"
 msgstr ""
@@ -2875,16 +2875,16 @@ msgid ""
 msgstr ""
 
 msgid "Rating"
-msgstr ""
+msgstr "Rată"
 
 msgid "Map Size"
 msgstr ""
 
 msgid "Opponents"
-msgstr ""
+msgstr "Oponenți"
 
 msgid "Class"
-msgstr ""
+msgstr "Clasă"
 
 msgid ""
 "Victory\n"
@@ -2990,7 +2990,7 @@ msgid "Slow"
 msgstr ""
 
 msgid "Normal"
-msgstr ""
+msgstr "Normal"
 
 msgid "Fast"
 msgstr ""
@@ -3236,7 +3236,7 @@ msgid "File to Save:"
 msgstr ""
 
 msgid "File to Load:"
-msgstr ""
+msgstr "Încarcă fișierul:"
 
 msgid "Accept the choice made."
 msgstr ""
@@ -3277,7 +3277,7 @@ msgid "doubleLinedRace|Neutral"
 msgstr ""
 
 msgid "race|Random"
-msgstr ""
+msgstr "Aleatorie"
 
 msgid "Click to start placing the selected castle/town."
 msgstr ""
@@ -3395,7 +3395,7 @@ msgid "Victory Condition"
 msgstr ""
 
 msgid "Map difficulty:"
-msgstr ""
+msgstr "Dificultatea hărții:"
 
 msgid "N"
 msgstr ""
@@ -3949,7 +3949,7 @@ msgid "Create a randomly generated map."
 msgstr ""
 
 msgid "Random"
-msgstr ""
+msgstr "Aleatorie"
 
 msgid "Cancel back to the Map Editor main menu."
 msgstr ""
@@ -3974,31 +3974,31 @@ msgid "Toggle display of objects' passability."
 msgstr ""
 
 msgid "difficulty|Easy"
-msgstr ""
+msgstr "Ușor"
 
 msgid "difficulty|Normal"
-msgstr ""
+msgstr "Normal"
 
 msgid "difficulty|Hard"
-msgstr ""
+msgstr "Greu"
 
 msgid "difficulty|Expert"
-msgstr ""
+msgstr "Expert"
 
 msgid "difficulty|Impossible"
-msgstr ""
+msgstr "Imposibil"
 
 msgid "and more..."
 msgstr ""
 
 msgid "Easy"
-msgstr ""
+msgstr "Ușor"
 
 msgid "Hard"
-msgstr ""
+msgstr "Greu"
 
 msgid "Campaign Difficulty"
-msgstr ""
+msgstr "Dificultatea campaniei"
 
 msgid ""
 "Choose this difficulty to experience the game's story with less challenge. "
@@ -4165,7 +4165,7 @@ msgid "Manual and Helpfile"
 msgstr ""
 
 msgid "Scenarios"
-msgstr ""
+msgstr "Scenarii"
 
 msgid "Heroes of Might and Magic II: The Price of Loyalty team"
 msgstr ""
@@ -4964,28 +4964,28 @@ msgid "Major Event!"
 msgstr ""
 
 msgid "Scenario:"
-msgstr ""
+msgstr "Scenariu:"
 
 msgid "Game Difficulty:"
-msgstr ""
+msgstr "Dificultatea jocului:"
 
 msgid "Opponents:"
-msgstr ""
+msgstr "Oponenți:"
 
 msgid "Class:"
-msgstr ""
+msgstr "Clasă:"
 
 msgid "Rating %{rating}%"
-msgstr ""
+msgstr "Rată %{rating}%"
 
 msgid "Click here to select which scenario to play."
 msgstr ""
 
 msgid "Scenario"
-msgstr ""
+msgstr "Scenariu"
 
 msgid "Game Difficulty"
-msgstr ""
+msgstr "Dificultatea jocului"
 
 msgid ""
 "This lets you change the starting difficulty at which you will play. Higher "
@@ -6784,7 +6784,7 @@ msgid "skill|Advanced"
 msgstr ""
 
 msgid "skill|Expert"
-msgstr ""
+msgstr "Expert"
 
 msgid "Pathfinding"
 msgstr ""
@@ -7056,70 +7056,70 @@ msgid ""
 msgstr ""
 
 msgid "Blue"
-msgstr ""
+msgstr "Albastru"
 
 msgid "Green"
-msgstr ""
+msgstr "Verde"
 
 msgid "Red"
-msgstr ""
+msgstr "Roșu"
 
 msgid "Yellow"
-msgstr ""
+msgstr "Galben"
 
 msgid "Orange"
-msgstr ""
+msgstr "Portocaliu"
 
 msgid "Purple"
-msgstr ""
+msgstr "Mov"
 
 msgid "barrier|Aqua"
 msgstr ""
 
 msgid "barrier|Blue"
-msgstr ""
+msgstr "Albastru"
 
 msgid "barrier|Brown"
-msgstr ""
+msgstr "Maro"
 
 msgid "barrier|Gold"
-msgstr ""
+msgstr "Auriu"
 
 msgid "barrier|Green"
-msgstr ""
+msgstr "Verde"
 
 msgid "barrier|Orange"
-msgstr ""
+msgstr "Portocaliu"
 
 msgid "barrier|Purple"
-msgstr ""
+msgstr "Mov"
 
 msgid "barrier|Red"
-msgstr ""
+msgstr "Roșu"
 
 msgid "tent|Aqua"
-msgstr ""
+msgstr "Turcoaz"
 
 msgid "tent|Blue"
-msgstr ""
+msgstr "Albastru"
 
 msgid "tent|Brown"
-msgstr ""
+msgstr "Maro"
 
 msgid "tent|Gold"
-msgstr ""
+msgstr "Auriu"
 
 msgid "tent|Green"
-msgstr ""
+msgstr "Verde"
 
 msgid "tent|Orange"
-msgstr ""
+msgstr "Portocaliu"
 
 msgid "tent|Purple"
-msgstr ""
+msgstr "Mov"
 
 msgid "tent|Red"
-msgstr ""
+msgstr "Roșu"
 
 msgid "Experience"
 msgstr ""
@@ -7163,7 +7163,7 @@ msgid "luck|Bad"
 msgstr ""
 
 msgid "luck|Normal"
-msgstr ""
+msgstr "Normal"
 
 msgid "luck|Good"
 msgstr ""
@@ -7199,7 +7199,7 @@ msgid "morale|Poor"
 msgstr ""
 
 msgid "morale|Normal"
-msgstr ""
+msgstr "Normal"
 
 msgid "morale|Good"
 msgstr ""
@@ -7224,51 +7224,53 @@ msgid "Positive morale may give the hero's units extra attacks in combat."
 msgstr "Moralul scăzut face ca %{monster} să înghețe de panică."
 
 msgid "Knight"
-msgstr ""
+msgstr "Cavaler"
 
 msgid "Barbarian"
-msgstr ""
+msgstr "Barbar"
 
 msgid "Sorceress"
-msgstr ""
+msgstr "Vrăjitoare"
 
 msgid "Warlock"
-msgstr ""
+msgstr "Mag"
 
 msgid "Wizard"
-msgstr ""
+msgstr "Magician"
 
 msgid "Necromancer"
-msgstr ""
+msgstr "Necromant"
 
 msgid "Multi"
-msgstr ""
+msgstr "Multi"
 
 msgid "doubleLined|Knight"
-msgstr ""
+msgstr "Cavaler"
 
 msgid "doubleLined|Barbarian"
-msgstr ""
+msgstr "Barbar"
 
 msgid "doubleLined|Sorceress"
-msgstr ""
+msgstr "Vrăjitoare"
 
 msgid "doubleLined|Warlock"
-msgstr ""
+msgstr "Mag"
 
 msgid "doubleLined|Wizard"
-msgstr ""
+msgstr "Magician"
 
 msgid ""
 "doubleLined|Necro-\n"
 "mancer"
 msgstr ""
+"Necro-\n"
+"mant"
 
 msgid "doubleLinedRace|Multi"
-msgstr ""
+msgstr "Multi"
 
 msgid "doubleLinedRace|Random"
-msgstr ""
+msgstr "Aleatorie"
 
 msgid "speed|Standing"
 msgstr ""
@@ -9529,7 +9531,7 @@ msgid "Gems"
 msgstr ""
 
 msgid "Gold"
-msgstr ""
+msgstr "Aur"
 
 msgid ""
 "There are seven resources in Heroes 2, used to build and improves castles, "
@@ -9963,9 +9965,8 @@ msgstr ""
 msgid "Sets Water Elementals to guard a mine against enemy armies."
 msgstr ""
 
-#, fuzzy
 msgid "Random Spell"
-msgstr "Aruncă vraja"
+msgstr "Vrajă aleatorie"
 
 msgid "Randomly selected spell of any level."
 msgstr ""
