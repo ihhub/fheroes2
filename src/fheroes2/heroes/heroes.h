@@ -301,9 +301,9 @@ public:
 
     void LoadFromMP2( const int32_t mapIndex, const int colorType, const int raceType, const bool isInJail, const std::vector<uint8_t> & data );
 
-    void setHeroMetadata( const Maps::Map_Format::HeroMetadata & heroMetadata, const int raceType, const bool isEditor );
+    void applyHeroMetadata( const Maps::Map_Format::HeroMetadata & heroMetadata, const int raceType, const bool isEditor );
     // Updates data in heroMetadata and returns true is it has changes.
-    bool getHeroMetadata( Maps::Map_Format::HeroMetadata & heroMetadata ) const;
+    bool updateHeroMetadata( Maps::Map_Format::HeroMetadata & heroMetadata ) const;
 
     int GetRace() const override;
     const std::string & GetName() const override;

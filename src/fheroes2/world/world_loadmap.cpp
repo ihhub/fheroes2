@@ -726,6 +726,8 @@ bool World::loadResurrectionMap( const std::string & filename )
                         hero->SetCenter( { static_cast<int32_t>( tileId ) % width, static_cast<int32_t>( tileId ) / width } );
 
                         hero->SetColor( color );
+
+                        hero->applyHeroMetadata( map.heroMetadata[object.id], race, false );
                     }
                 }
             }

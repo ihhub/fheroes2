@@ -820,13 +820,13 @@ namespace Interface
                 Heroes hero;
                 auto heroMetadata = _mapFormat.heroMetadata.find( foundHero->id );
                 if ( heroMetadata != _mapFormat.heroMetadata.end() ) {
-                    hero.setHeroMetadata( _mapFormat.heroMetadata[foundHero->id], race, true );
+                    hero.applyHeroMetadata( _mapFormat.heroMetadata[foundHero->id], race, true );
                 }
                 hero.SetColor( color );
 
                 fheroes2::ActionCreator action( _historyManager, _mapFormat );
                 hero.OpenDialog( false, false, true, true, true, true );
-                if ( hero.getHeroMetadata( _mapFormat.heroMetadata[foundHero->id] ) ) {
+                if ( hero.updateHeroMetadata( _mapFormat.heroMetadata[foundHero->id] ) ) {
                     action.commit();
                 }
             }

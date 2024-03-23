@@ -608,7 +608,7 @@ void Heroes::LoadFromMP2( const int32_t mapIndex, const int colorType, const int
     DEBUG_LOG( DBG_GAME, DBG_INFO, name << ", color: " << Color::String( GetColor() ) << ", race: " << Race::String( _race ) )
 }
 
-void Heroes::setHeroMetadata( const Maps::Map_Format::HeroMetadata & heroMetadata, const int raceType, const bool isEditor )
+void Heroes::applyHeroMetadata( const Maps::Map_Format::HeroMetadata & heroMetadata, const int raceType, const bool isEditor )
 {
     if ( _race != raceType ) {
         SetModes( CUSTOM );
@@ -678,7 +678,8 @@ void Heroes::setHeroMetadata( const Maps::Map_Format::HeroMetadata & heroMetadat
 
                 art.SetSpell( heroMetadata.artifactMetadata[i] );
             }
-            else if ( heroMetadata.artifact[i] == Artifact::MAGIC_BOOK ) {
+
+            if ( heroMetadata.artifact[i] == Artifact::MAGIC_BOOK ) {
                 SpellBookActivate();
 
                 // Add spells to the spell book.
@@ -690,8 +691,9 @@ void Heroes::setHeroMetadata( const Maps::Map_Format::HeroMetadata & heroMetadat
                     AppendSpellToBook( spellId, true );
                 }
             }
-
-            PickupArtifact( art );
+            else {
+                PickupArtifact( art );
+            }
         }
     }
 
@@ -771,7 +773,7 @@ void Heroes::setHeroMetadata( const Maps::Map_Format::HeroMetadata & heroMetadat
     move_point = GetMaxMovePoints();
 }
 
-bool Heroes::getHeroMetadata( Maps::Map_Format::HeroMetadata & heroMetadata ) const
+bool Heroes::updateHeroMetadata( Maps::Map_Format::HeroMetadata & heroMetadata ) const
 {
     bool hasChanges = false;
 
