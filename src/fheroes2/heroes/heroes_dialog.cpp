@@ -414,7 +414,7 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
             selectArtifacts.Redraw( display );
 
             if ( isEditor ) {
-                // Artifacts affects many hero's stats.
+                // Artifacts affect many hero stats.
                 SetSpellPoints( static_cast<uint32_t>( std::max( 0, static_cast<int32_t>( GetMaxSpellPoints() ) + extraSpellPoints ) ) );
                 spellPointsInfo.Redraw();
                 moraleIndicator.Redraw();
@@ -550,7 +550,7 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
         }
         else if ( le.MouseCursor( secskill_bar.GetArea() ) && secskill_bar.QueueEventProcessing( &message ) ) {
             if ( isEditor ) {
-                // The change of secondary skills affects many hero's stats.
+                // The change of secondary skills affects many hero stats.
                 secskill_bar.Redraw( display );
                 moraleIndicator.Redraw();
                 luckIndicator.Redraw();
@@ -693,10 +693,10 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
         else if ( message.empty() ) {
             // Editor related status messages.
             if ( le.MouseCursor( selectArtifacts.GetArea() ) ) {
-                message = _( "Set hero's Artifacts. Right click - to reset Artifact." );
+                message = _( "Set hero's Artifacts. Right-click to reset Artifact." );
             }
             else if ( le.MouseCursor( secskill_bar.GetArea() ) ) {
-                message = _( "Set hero's Secondary Skills. Right click - to reset skill." );
+                message = _( "Set hero's Secondary Skills. Right-click to reset skill." );
             }
             else if ( le.MouseCursor( selectArmy.GetArea() ) ) {
                 message = _( "Set hero's Army. Right click to reset unit." );

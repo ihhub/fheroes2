@@ -195,7 +195,7 @@ namespace Maps
 
         addObjectToTile( map.tiles[tileId], group, index, uid );
 
-        // Towns and heroes has extra metadata.
+        // Towns and heroes have extra metadata.
         if ( group == ObjectGroup::KINGDOM_HEROES ) {
             assert( map.heroMetadata.find( uid ) == map.heroMetadata.end() );
             map.heroMetadata.try_emplace( uid );

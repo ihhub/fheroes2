@@ -724,7 +724,7 @@ void Heroes::applyHeroMetadata( const Maps::Map_Format::HeroMetadata & heroMetad
         secondary_skills = Skill::SecSkills( _race );
     }
 
-    // For Editor we need to fill all the rest ofe 8 skills with the empty ones.
+    // For Editor we need to fill all the rest of the 8 skills with the empty ones.
     if ( isEditor ) {
         GetSecondarySkills().FillMax( Skill::Secondary() );
     }
@@ -833,7 +833,7 @@ bool Heroes::updateHeroMetadata( Maps::Map_Format::HeroMetadata & heroMetadata )
     if ( const size_t bookSize = spell_book.size(); bookSize != heroMetadata.availableSpells.size()
                                                     || !std::equal( spell_book.begin(), spell_book.end(), heroMetadata.availableSpells.begin(),
                                                                     []( const Spell & spell, const int spellId ) { return spell.GetID() == spellId; } ) ) {
-        // The spells were changed. Make a cope of the Spell Book.
+        // The spells were changed. Make a copy of the Spell Book.
         heroMetadata.availableSpells.clear();
         heroMetadata.availableSpells.reserve( bookSize );
 
