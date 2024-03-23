@@ -477,7 +477,7 @@ msgid "Audio"
 msgstr "Áudio"
 
 msgid "Settings"
-msgstr "Configurações"
+msgstr "Configurar"
 
 msgid "Configure"
 msgstr "Configurar"
@@ -796,7 +796,7 @@ msgstr[0] "%{name} resiste ao feitiço!"
 msgstr[1] "%{name} resistem ao feitiço!"
 
 msgid "%{name} casts %{spell} on the %{troop}."
-msgstr "%{name} lança %{spell} sobre %{troop}."
+msgstr "%{name} lança(m) %{spell} sobre %{troop}."
 
 msgid "%{name} casts %{spell}."
 msgstr "%{name} lança %{spell}."
@@ -1623,7 +1623,7 @@ msgid "For this action it is necessary to build a castle first."
 msgstr "Para esta ação, é necessário primeiro a construir um castelo."
 
 msgid "Cannot build %{name}. The castle is too far away from an ocean."
-msgstr "Não é possível construir %{name}. O castelo está muito longe do oceano."
+msgstr "Não é possível construir %{name}. O castelo está longe do oceano."
 
 msgid "This building has been disabled."
 msgstr "Esta edificação foi desativada."
@@ -2094,13 +2094,13 @@ msgid "The Waterfall increases production of Centaurs by %{count} per week."
 msgstr "A Cachoeira aumenta a produção de Centauros em %{count} por semana."
 
 msgid "The Library increases the number of spells in the Guild by one for each level of the guild."
-msgstr "A Biblioteca aumenta o número de magias na Guilda dos Magos em um para cada nível."
+msgstr "A Biblioteca aumenta o número de feitiços na Guilda dos Magos em um para cada nível."
 
 msgid "The Orchard increases production of Halflings by %{count} per week."
 msgstr "O Pomar aumenta a produção de Pequeninos em %{count} por semana."
 
 msgid "The Storm adds +2 to the power of spells of a defending spell caster."
-msgstr "A Tempestade adiciona +2 ao poder de magia de um conjurador em defesa."
+msgstr "A Tempestade adiciona +2 ao poder dos feitiços de um conjurador em defesa."
 
 msgid "The Skull Pile increases production of Skeletons by %{count} per week."
 msgstr "A Pilha de Caveiras aumenta a produção de esqueletos em %{count} por semana."
@@ -2972,7 +2972,7 @@ msgid "doubleLinedRace|Neutral"
 msgstr "Neutra"
 
 msgid "race|Random"
-msgstr "Aleatória"
+msgstr "Aleatório"
 
 msgid "Click to start placing the selected castle/town."
 msgstr "Clique para começar a colocar o castelo/cidade selecionado."
@@ -3320,7 +3320,7 @@ msgid "Monsters cannot be placed on water."
 msgstr "Monstros não podem ser colocados na água."
 
 msgid "Choose a tile which does not contain any objects."
-msgstr "Escolha um azulejo que não contenha nenhum objeto."
+msgstr "Escolha um ladrilho que não contenha nenhum objeto."
 
 msgid "Treasures cannot be placed on water."
 msgstr "Tesouros não podem ser colocados na água."
@@ -3371,7 +3371,7 @@ msgid "Used to place %{object}."
 msgstr "Usado para colocar %{object}."
 
 msgid "Select object type"
-msgstr "Selecione o tipo de objeto"
+msgstr "Selecionar tipo de objeto"
 
 msgid ""
 "Click here to\n"
@@ -3416,7 +3416,7 @@ msgid "Water Objects"
 msgstr "Objetos Aquáticos"
 
 msgid "Miscellaneous"
-msgstr "Miscelânea"
+msgstr "Diversos"
 
 msgid "Artifacts"
 msgstr "Artefatos"
@@ -3428,7 +3428,7 @@ msgid "Mines"
 msgstr "Minas"
 
 msgid "Power-ups"
-msgstr "Power-ups"
+msgstr "Poderes"
 
 msgid "Treasures"
 msgstr "Tesouros"
@@ -4583,7 +4583,7 @@ msgid "Accumulate %{count} gold."
 msgstr "Acumule %{count} de ouro."
 
 msgid ", or you may win by defeating all enemy heroes and capturing all enemy towns and castles."
-msgstr ", ou você pode ganhar derrotando todos os heróis inimigos e capturando todas as cidades e castelos inimigos."
+msgstr ", ou derrote todos os heróis inimigos e capture todas as cidades e castelos inimigos."
 
 msgid "Lose the castle '%{name}'."
 msgstr "Perda o castelo '%{name}'."
@@ -5294,7 +5294,7 @@ msgid ""
 "Unfortunately, you do not have the wisdom to understand the spell, and you are unable to learn it."
 msgstr ""
 "\n"
-"Infelizmente, você não tem a sabedoria para compreender a magia, e é incapaz de aprender."
+"Infelizmente, você não tem a sabedoria para compreender o feitiço, e é incapaz de aprender."
 
 msgid ""
 "\n"
@@ -5386,7 +5386,7 @@ msgid "Unfortunately, you have no Magic Book to record the spell with."
 msgstr "Infelizmente, você não tem nenhum Grimório para gravar esse feitiço."
 
 msgid "Unfortunately, you do not have the wisdom to understand the spell, and you are unable to learn it."
-msgstr "Infelizmente, você não tem a sabedoria para compreender a magia, e é incapaz de aprender."
+msgstr "Infelizmente, você não tem a sabedoria para compreender o feitiço, e é incapaz de aprender."
 
 msgid ""
 "You come upon the pyramid of a great and ancient king.\n"
@@ -6374,7 +6374,7 @@ msgid "Red"
 msgstr "Vermelho"
 
 msgid "Yellow"
-msgstr "amarelo"
+msgstr "Amarelo"
 
 msgid "Orange"
 msgstr "Laranja"
@@ -8472,7 +8472,7 @@ msgid "Staff of Wizardry"
 msgstr "Cajado da Feitiçaria"
 
 msgid "The %{name} boosts the hero's spell power by %{count}."
-msgstr "%{name} aumenta o poder dos feitiços do herói em %{count}."
+msgstr "%{name} aumenta a força mágica do herói em %{count}."
 
 msgid "While out scaring up game, your troops find a mysterious staff levitating about three feet off of the ground. They hand it to you, and you notice an inscription. It reads: \"Brains best brawn and magic beats might. Heed my words, and you'll win every fight.\""
 msgstr "Suas tropas encontram um misterioso bastão levitando a cerca de um metro do chão. Eles o entregam a você, e você percebe uma inscrição. Que diz:: \"A magia se mantém mais poderosa do que qualquer outra coisa. Ouça minhas palavras, e você ganhará todas as lutas.\""
@@ -8924,40 +8924,40 @@ msgid "Sets Water Elementals to guard a mine against enemy armies."
 msgstr "Define Elementais da Água para proteger uma mina contra os exércitos inimigos."
 
 msgid "Random Spell"
-msgstr "Magia Aleatória"
+msgstr "Feitiço Aleatório"
 
 msgid "Randomly selected spell of any level."
-msgstr "Magia de qualquer nível selecionada aleatoriamente."
+msgstr "Feitiço de qualquer nível selecionado aleatoriamente."
 
 msgid "Random 1st Level Spell"
-msgstr "Magia Aleatória de 1º Nível"
+msgstr "Feitiço Aleatório de 1º Nível"
 
 msgid "Randomly selected 1st level spell."
-msgstr "Magia de 1º nível selecionada aleatoriamente."
+msgstr "Feitiço de 1º nível selecionado aleatoriamente."
 
 msgid "Random 2nd Level Spell"
-msgstr "Magia Aleatória de 2º Nível"
+msgstr "Feitiço Aleatório de 2º Nível"
 
 msgid "Randomly selected 2nd level spell."
-msgstr "Magia de 2º nível selecionada aleatoriamente."
+msgstr "Feitiço de 2º nível selecionado aleatoriamente."
 
 msgid "Random 3rd Level Spell"
-msgstr "Magia Aleatória de 3º Nível"
+msgstr "Feitiço Aleatório de 3º Nível"
 
 msgid "Randomly selected 3rd level spell."
-msgstr "Magia de 3º nível selecionada aleatoriamente."
+msgstr "Feitiço de 3º nível selecionado aleatoriamente."
 
 msgid "Random 4th Level Spell"
-msgstr "Magia Aleatória de 4º Nível"
+msgstr "Feitiço Aleatório de 4º Nível"
 
 msgid "Randomly selected 4th level spell."
-msgstr "Magia de 4º nível selecionada aleatoriamente."
+msgstr "Feitiço de 4º nível selecionada aleatoriamente."
 
 msgid "Random 5th Level Spell"
-msgstr "Magia Aleatória de 5º Nível"
+msgstr "Feitiço Aleatório de 5º Nível"
 
 msgid "Randomly selected 5th level spell."
-msgstr "Magia de 5º nível selecionada aleatoriamente."
+msgstr "Feitiço de 5º nível selecionado aleatoriamente."
 
 msgid "Petrification"
 msgstr "Petrificação"
