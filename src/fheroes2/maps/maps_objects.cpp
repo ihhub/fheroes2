@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2013 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -21,6 +21,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "maps_objects.h"
+
 #include <algorithm>
 #include <cassert>
 #include <ostream>
@@ -28,29 +30,10 @@
 
 #include "color.h"
 #include "logging.h"
-#include "maps_objects.h"
-#include "mp2.h"
 #include "rand.h"
 #include "serialize.h"
 #include "tools.h"
 #include "translations.h"
-
-StreamBase & operator<<( StreamBase & msg, const MapObjectSimple & obj )
-{
-    return msg << obj.type << obj.uid << static_cast<const MapPosition &>( obj );
-}
-
-StreamBase & operator>>( StreamBase & msg, MapObjectSimple & obj )
-{
-    return msg >> obj.type >> obj.uid >> static_cast<MapPosition &>( obj );
-}
-
-MapEvent::MapEvent()
-    : MapObjectSimple( MP2::OBJ_EVENT )
-    , computer( false )
-    , cancel( true )
-    , colors( 0 )
-{}
 
 void MapEvent::LoadFromMP2( const int32_t index, const std::vector<uint8_t> & data )
 {
@@ -175,24 +158,6 @@ void MapEvent::LoadFromMP2( const int32_t index, const std::vector<uint8_t> & da
     DEBUG_LOG( DBG_GAME, DBG_INFO, "Ground event at tile " << index << " has event message: " << message )
 }
 
-void MapEvent::SetVisited( int color )
-{
-    if ( cancel )
-        colors = 0;
-    else
-        colors &= ~color;
-}
-
-bool MapEvent::isAllow( int col ) const
-{
-    return ( col & colors ) != 0;
-}
-
-MapSphinx::MapSphinx()
-    : MapObjectSimple( MP2::OBJ_SPHINX )
-    , valid( false )
-{}
-
 void MapSphinx::LoadFromMP2( const int32_t tileIndex, const std::vector<uint8_t> & data )
 {
     assert( data.size() >= MP2::MP2_RIDDLE_STRUCTURE_MIN_SIZE );
@@ -310,37 +275,6 @@ bool MapSphinx::AnswerCorrect( const std::string & answer )
     return std::any_of( answers.begin(), answers.end(), checkAnswer );
 }
 
-void MapSphinx::SetQuiet()
-{
-    valid = false;
-    artifact = Artifact::UNKNOWN;
-    resources.Reset();
-}
-
-StreamBase & operator<<( StreamBase & msg, const MapEvent & obj )
-{
-    return msg << static_cast<const MapObjectSimple &>( obj ) << obj.resources << obj.artifact << obj.computer << obj.cancel << obj.colors << obj.message;
-}
-
-StreamBase & operator>>( StreamBase & msg, MapEvent & obj )
-{
-    return msg >> static_cast<MapObjectSimple &>( obj ) >> obj.resources >> obj.artifact >> obj.computer >> obj.cancel >> obj.colors >> obj.message;
-}
-
-StreamBase & operator<<( StreamBase & msg, const MapSphinx & obj )
-{
-    return msg << static_cast<const MapObjectSimple &>( obj ) << obj.resources << obj.artifact << obj.answers << obj.message << obj.valid;
-}
-
-StreamBase & operator>>( StreamBase & msg, MapSphinx & obj )
-{
-    return msg >> static_cast<MapObjectSimple &>( obj ) >> obj.resources >> obj.artifact >> obj.answers >> obj.message >> obj.valid;
-}
-
-MapSign::MapSign()
-    : MapObjectSimple( MP2::OBJ_SIGN )
-{}
-
 void MapSign::LoadFromMP2( const int32_t mapIndex, const std::vector<uint8_t> & data )
 {
     assert( data.size() >= MP2::MP2_SIGN_STRUCTURE_MIN_SIZE );
@@ -369,6 +303,36 @@ void MapSign::LoadFromMP2( const int32_t mapIndex, const std::vector<uint8_t> & 
     SetIndex( mapIndex );
     SetUID( mapIndex );
     DEBUG_LOG( DBG_GAME, DBG_INFO, "Sign at location " << mapIndex << " has a message: " << message )
+}
+
+StreamBase & operator<<( StreamBase & msg, const MapObjectSimple & obj )
+{
+    return msg << obj.type << obj.uid << static_cast<const MapPosition &>( obj );
+}
+
+StreamBase & operator>>( StreamBase & msg, MapObjectSimple & obj )
+{
+    return msg >> obj.type >> obj.uid >> static_cast<MapPosition &>( obj );
+}
+
+StreamBase & operator<<( StreamBase & msg, const MapEvent & obj )
+{
+    return msg << static_cast<const MapObjectSimple &>( obj ) << obj.resources << obj.artifact << obj.computer << obj.cancel << obj.colors << obj.message;
+}
+
+StreamBase & operator>>( StreamBase & msg, MapEvent & obj )
+{
+    return msg >> static_cast<MapObjectSimple &>( obj ) >> obj.resources >> obj.artifact >> obj.computer >> obj.cancel >> obj.colors >> obj.message;
+}
+
+StreamBase & operator<<( StreamBase & msg, const MapSphinx & obj )
+{
+    return msg << static_cast<const MapObjectSimple &>( obj ) << obj.resources << obj.artifact << obj.answers << obj.message << obj.valid;
+}
+
+StreamBase & operator>>( StreamBase & msg, MapSphinx & obj )
+{
+    return msg >> static_cast<MapObjectSimple &>( obj ) >> obj.resources >> obj.artifact >> obj.answers >> obj.message >> obj.valid;
 }
 
 StreamBase & operator<<( StreamBase & msg, const MapSign & obj )

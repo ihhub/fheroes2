@@ -62,19 +62,42 @@ namespace Resource
 
 struct Funds
 {
-    Funds();
-    Funds( int32_t _ore, int32_t _wood, int32_t _mercury, int32_t _sulfur, int32_t _crystal, int32_t _gems, int32_t _gold );
-    Funds( int rs, uint32_t count );
-    explicit Funds( const cost_t & );
+    Funds() = default;
 
-    Funds operator+( const Funds & ) const;
+    Funds( const int32_t _ore, const int32_t _wood, const int32_t _mercury, const int32_t _sulfur, const int32_t _crystal, const int32_t _gems, const int32_t _gold )
+        : wood( _wood )
+        , mercury( _mercury )
+        , ore( _ore )
+        , sulfur( _sulfur )
+        , crystal( _crystal )
+        , gems( _gems )
+        , gold( _gold )
+    {
+        // Do nothing.
+    }
+
+    Funds( const int type, const uint32_t count );
+
+    explicit Funds( const cost_t & cost )
+        : wood( cost.wood )
+        , mercury( cost.mercury )
+        , ore( cost.ore )
+        , sulfur( cost.sulfur )
+        , crystal( cost.crystal )
+        , gems( cost.gems )
+        , gold( cost.gold )
+    {
+        // Do nothing.
+    }
+
+    Funds operator+( const Funds & pm ) const;
     Funds operator*( uint32_t mul ) const;
-    Funds operator-( const Funds & ) const;
+    Funds operator-( const Funds & pm ) const;
     Funds operator/( const int32_t div ) const;
-    Funds & operator+=( const Funds & );
+    Funds & operator+=( const Funds & pm );
     Funds & operator*=( uint32_t mul );
     Funds & operator/=( const int32_t div );
-    Funds & operator-=( const Funds & );
+    Funds & operator-=( const Funds & pm );
     Funds & operator=( const cost_t & cost );
 
     bool operator==( const Funds & other ) const;
@@ -85,12 +108,12 @@ struct Funds
         return !operator>=( other );
     }
 
-    Funds max( const Funds & ) const;
+    Funds max( const Funds & other ) const;
 
-    int32_t Get( int rs ) const;
+    int32_t Get( const int type ) const;
     int32_t * GetPtr( int rs );
 
-    int getLowestQuotient( const Funds & ) const;
+    int getLowestQuotient( const Funds & divisor ) const;
 
     int GetValidItems() const;
     uint32_t GetValidItemsCount() const;
@@ -102,21 +125,21 @@ struct Funds
 
     std::string String() const;
 
-    int32_t wood;
-    int32_t mercury;
-    int32_t ore;
-    int32_t sulfur;
-    int32_t crystal;
-    int32_t gems;
-    int32_t gold;
+    int32_t wood{ 0 };
+    int32_t mercury{ 0 };
+    int32_t ore{ 0 };
+    int32_t sulfur{ 0 };
+    int32_t crystal{ 0 };
+    int32_t gems{ 0 };
+    int32_t gold{ 0 };
 };
 
-StreamBase & operator<<( StreamBase &, const Funds & );
-StreamBase & operator>>( StreamBase &, Funds & );
+StreamBase & operator<<( StreamBase &, const Funds & res );
+StreamBase & operator>>( StreamBase &, Funds & res );
 
 namespace Resource
 {
-    const char * String( int resource );
+    const char * String( const int resourceType );
 
     const char * getDescription();
 
