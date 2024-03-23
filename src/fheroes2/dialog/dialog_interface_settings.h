@@ -23,5 +23,5 @@
 
 namespace fheroes2
 {
-    void openInterfaceSettingsDialog( const std::function<void()> & updateUI );
+    bool openInterfaceSettingsDialog( const std::function<void()> & updateUI );
 }

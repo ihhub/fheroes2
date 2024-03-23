@@ -273,11 +273,11 @@ namespace fheroes2
                 break;
             }
             case SelectedWindow::Graphics:
-                fheroes2::openGraphicsSettingsDialog( []() { drawMainMenuScreen(); } );
+                saveConfiguration |= fheroes2::openGraphicsSettingsDialog( []() { drawMainMenuScreen(); } );
                 windowType = SelectedWindow::Configuration;
                 break;
             case SelectedWindow::AudioSettings:
-                Dialog::openAudioSettingsDialog( false );
+                saveConfiguration |= Dialog::openAudioSettingsDialog( false );
                 windowType = SelectedWindow::Configuration;
                 break;
             case SelectedWindow::HotKeys:

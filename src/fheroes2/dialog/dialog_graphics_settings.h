@@ -23,5 +23,5 @@
 
 namespace fheroes2
 {
-    void openGraphicsSettingsDialog( const std::function<void()> & updateUI );
+    bool openGraphicsSettingsDialog( const std::function<void()> & updateUI );
 }

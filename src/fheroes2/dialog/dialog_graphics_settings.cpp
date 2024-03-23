@@ -221,7 +221,7 @@ namespace
 
 namespace fheroes2
 {
-    void openGraphicsSettingsDialog( const std::function<void()> & updateUI )
+    bool openGraphicsSettingsDialog( const std::function<void()> & updateUI )
     {
         Settings & conf = Settings::Get();
 
@@ -260,8 +260,6 @@ namespace fheroes2
             }
         }
 
-        if ( saveConfiguration ) {
-             conf.Save( Settings::configFileName );
-        }
+        return saveConfiguration;
     }
 }

@@ -21,5 +21,5 @@
 
 namespace Dialog
 {
-    void openAudioSettingsDialog( const bool fromAdventureMap );
+    bool openAudioSettingsDialog( const bool fromAdventureMap );
 }
