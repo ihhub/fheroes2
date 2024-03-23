@@ -3012,7 +3012,7 @@ msgid ""
 "type:"
 msgstr ""
 "Tipo de\n"
-"Recurso:"
+"recurso:"
 
 msgid "%{mineName} appearance:"
 msgstr "Aparência de %{mineName}:"
@@ -3060,7 +3060,7 @@ msgid "Run out of time. Fail to win by a certain point."
 msgstr "O tempo está se esgotando. Impossibilitado de vencer de um certo ponto."
 
 msgid "Loss Condition"
-msgstr "Condição e Derrota"
+msgstr "Condição de Derrota"
 
 msgid "Defeat all enemy heroes and towns."
 msgstr "Derrotar todos os heróis inimigos e cidades."
@@ -3087,7 +3087,7 @@ msgid "Map difficulty:"
 msgstr "Dificuldade do Mapa:"
 
 msgid "N"
-msgstr ""
+msgstr "N"
 
 msgid "No maps exist at that size."
 msgstr "Não existem mapas com esse tamanho."
@@ -3969,19 +3969,19 @@ msgid "hotkey|select map"
 msgstr "selecionar mapa"
 
 msgid "hotkey|select small map size"
-msgstr "selecionar tamanho de mapa pequeno"
+msgstr "selecionar mapa pequeno"
 
 msgid "hotkey|select medium map size"
-msgstr "selecionar tamanho de mapa médio"
+msgstr "selecionar mapa médio"
 
 msgid "hotkey|select large map size"
-msgstr "selecionar tamanho de mapa grande"
+msgstr "selecionar mapa grande"
 
 msgid "hotkey|select extra large map size"
-msgstr "selecionar tamanho de mapa extra grande"
+msgstr "selecionar mapa extra grande"
 
 msgid "hotkey|select all map sizes"
-msgstr "selecionar todos os tamanhos de mapa"
+msgstr "selecionar todos os mapa"
 
 msgid "hotkey|hot seat game"
 msgstr "jogo em rodízio"
