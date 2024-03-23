@@ -4336,16 +4336,16 @@ msgid "Please Remember"
 msgstr "Por favor, lembre-se"
 
 msgid "You can always change the language, resolution and settings of the game by clicking on the "
-msgstr "Você sempre pode alterar o idioma, a resolução e as configurações do jogo clicando no "
+msgstr "Você sempre pode alterar o idioma, a resolução e as configurações do jogo clicando na "
 
 msgid "door"
-msgstr "porta"
+msgstr "Porta"
 
 msgid " on the left side of the Main Menu, or with the "
-msgstr " no lado esquerdo do Menu Principal ou com o "
+msgstr " no lado esquerdo do Menu Principal ou em "
 
 msgid " button from the "
-msgstr " botão do "
+msgstr " no menu de "
 
 msgid "NEW GAME"
 msgstr "NOVO JOGO"
@@ -4355,7 +4355,7 @@ msgid ""
 "\n"
 "Enjoy the game!"
 msgstr ""
-" menu. \n"
+". \n"
 "\n"
 "Aproveite o jogo!"
 
