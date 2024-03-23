@@ -75,9 +75,6 @@
 #include "world.h"
 #include "world_object_uid.h"
 
-class Castle;
-class Heroes;
-
 namespace
 {
     const uint32_t mapUpdateFlags = Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR;

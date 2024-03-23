@@ -323,14 +323,6 @@ public:
     double getRecruitValue() const;
     int getStatsValue() const;
 
-    /*void setAttack( int attack_ )
-    {
-        attack = attack_;
-    }
-    void setDefense();
-    void setPower();
-    void setKnowledge();*/
-
     int GetAttack() const override;
     int GetDefense() const override;
     int GetPower() const override;
