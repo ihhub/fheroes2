@@ -625,18 +625,9 @@ void Heroes::applyHeroMetadata( const Maps::Map_Format::HeroMetadata & heroMetad
         = isEditor
           || std::any_of( heroMetadata.armyMonsterType.begin(), heroMetadata.armyMonsterType.end(), []( const int32_t monsterType ) { return monsterType != 0; } );
     if ( doesHeroHaveCustomArmy ) {
-        const size_t armySize = 5;
-        assert( heroMetadata.armyMonsterType.size() == armySize );
-        std::array<Troop, armySize> troops;
-        for ( size_t i = 0; i < armySize; ++i ) {
-            if ( heroMetadata.armyMonsterType[i] == Monster::UNKNOWN || heroMetadata.armyMonsterCount[i] == 0 ) {
-                continue;
-            }
-
-            // Set monster type.
-            troops[i].SetMonster( heroMetadata.armyMonsterType[i] );
-            // Set monster count.
-            troops[i].SetCount( heroMetadata.armyMonsterCount[i] );
+        std::vector<Troop> troops( heroMetadata.armyMonsterType.size() );
+        for ( size_t i = 0; i < troops.size(); ++i ) {
+            troops[i] = Troop{ heroMetadata.armyMonsterType[i], static_cast<uint32_t>( heroMetadata.armyMonsterCount[i] ) };
         }
 
         army.Assign( troops.data(), troops.data() + troops.size() );
@@ -665,21 +656,17 @@ void Heroes::applyHeroMetadata( const Maps::Map_Format::HeroMetadata & heroMetad
         const size_t artifactCount = heroMetadata.artifact.size();
         assert( artifactCount == 14 );
         for ( size_t i = 0; i < artifactCount; ++i ) {
-            if ( heroMetadata.artifact[i] == Artifact::UNKNOWN ) {
+            Artifact art( heroMetadata.artifact[i] );
+            if ( !art.isValid() ) {
                 continue;
             }
-
-            Artifact art( heroMetadata.artifact[i] );
-
-            assert( art.isValid() );
 
             if ( heroMetadata.artifact[i] == Artifact::SPELL_SCROLL ) {
                 assert( heroMetadata.artifactMetadata[i] != Spell::NONE );
 
                 art.SetSpell( heroMetadata.artifactMetadata[i] );
             }
-
-            if ( heroMetadata.artifact[i] == Artifact::MAGIC_BOOK ) {
+            else if ( heroMetadata.artifact[i] == Artifact::MAGIC_BOOK ) {
                 SpellBookActivate();
 
                 // Add spells to the spell book.
@@ -702,21 +689,10 @@ void Heroes::applyHeroMetadata( const Maps::Map_Format::HeroMetadata & heroMetad
     if ( doesHeroHaveCustomSecondarySkills ) {
         SetModes( CUSTOM );
 
-        const size_t skillsCount = 8;
+        secondary_skills = {};
 
-        assert( heroMetadata.secondarySkill.size() == skillsCount );
-
-        std::array<Skill::Secondary, skillsCount> skills;
-
-        for ( size_t i = 0; i < skillsCount; ++i ) {
-            skills[i].SetSkill( heroMetadata.secondarySkill[i] );
-            skills[i].SetLevel( heroMetadata.secondarySkillLevel[i] );
-        }
-
-        secondary_skills = Skill::SecSkills();
-
-        for ( const Skill::Secondary & skill : skills ) {
-            secondary_skills.AddSkill( skill );
+        for ( size_t i = 0; i < heroMetadata.secondarySkill.size(); ++i ) {
+            secondary_skills.AddSkill( Skill::Secondary{ heroMetadata.secondarySkill[i], heroMetadata.secondarySkillLevel[i] } );
         }
     }
     else if ( !isEditor ) {
