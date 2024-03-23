@@ -307,7 +307,7 @@ namespace fheroes2
                 windowType = SelectedWindow::Configuration;
                 break;
             default:
-                return;
+                return saveConfiguration;
             }
         }
 
