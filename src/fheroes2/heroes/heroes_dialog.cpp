@@ -470,7 +470,7 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
         else if ( le.MouseCursor( experienceInfo.GetArea() ) ) {
             if ( isEditor ) {
                 message = useDefaultExperience ? _( "Set custom Experience value. Current value is default." )
-                                               : _( "Change Experience value. Right click to reset to default value." );
+                                               : _( "Change Experience value. Right-click to reset to default value." );
 
                 if ( le.MouseClickLeft() ) {
                     uint32_t value = experience;
@@ -699,13 +699,13 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
                 message = _( "Set hero's Secondary Skills. Right-click to reset skill." );
             }
             else if ( le.MouseCursor( selectArmy.GetArea() ) ) {
-                message = _( "Set hero's Army. Right click to reset unit." );
+                message = _( "Set hero's Army. Right-click to reset unit." );
             }
             else if ( le.MouseCursor( portPos ) ) {
-                message = _( "Set hero's portrait. Right click to reset to default." );
+                message = _( "Set hero's portrait. Right-click to reset to default." );
             }
             else if ( le.MouseCursor( titleRoi ) ) {
-                message = _( "Click to change hero's name. Right click to reset to default." );
+                message = _( "Click to change hero's name. Right-click to reset to default." );
             }
             else if ( le.MouseCursor( buttonPatrol.area() ) ) {
                 if ( buttonPatrol.isPressed() ) {
