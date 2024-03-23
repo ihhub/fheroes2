@@ -308,7 +308,6 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
     text.draw( dst_pt.x, dst_pt.y + 2, display );
     RedrawFromResource( pt1, fundsFrom );
 
-    Funds fundsTo;
     int resourceTo = 0;
     const fheroes2::Point pt2( 136 + pos_rt.x, pos_rt.y + 190 );
     std::vector<fheroes2::Rect> rectsTo;

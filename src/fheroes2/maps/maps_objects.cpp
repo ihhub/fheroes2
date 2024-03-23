@@ -29,7 +29,6 @@
 #include "color.h"
 #include "logging.h"
 #include "maps_objects.h"
-#include "mp2.h"
 #include "rand.h"
 #include "serialize.h"
 #include "tools.h"
