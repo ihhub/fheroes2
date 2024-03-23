@@ -130,7 +130,7 @@ namespace MP2
     };
 
     // An object type could be action and non-action. If both parts are present the difference between them must be 128.
-    enum MapObjectType : uint8_t
+    enum MapObjectType : uint16_t
     {
         // This section defines all types of NON-action objects which are present in the original game.
         // If the object by nature is an action object name it with prefix OBJ_NON_ACTION_.
@@ -396,18 +396,26 @@ namespace MP2
         OBJ_FIRE_ALTAR = OBJ_NON_ACTION_FIRE_ALTAR + OBJ_ACTION_OBJECT_TYPE, // Never set in maps.
         OBJ_AIR_ALTAR = OBJ_NON_ACTION_AIR_ALTAR + OBJ_ACTION_OBJECT_TYPE, // Never set in maps.
         OBJ_EARTH_ALTAR = OBJ_NON_ACTION_EARTH_ALTAR + OBJ_ACTION_OBJECT_TYPE, // Never set in maps.
-        OBJ_WATER_ALTAR = OBJ_NON_ACTION_WATER_ALTAR + OBJ_ACTION_OBJECT_TYPE // Never set in maps.
+        OBJ_WATER_ALTAR = OBJ_NON_ACTION_WATER_ALTAR + OBJ_ACTION_OBJECT_TYPE, // Never set in maps.
 
         // IMPORTANT!!! Do not use any of unused entries for new objects. Add new entries below following the instruction.
+
+        // NEVER use this object type in the Editor!
+        // This object type is used to separate objects from the original game from Resurrection expansion's objects.
+        OBJ_RESURRECTION_OBJECT_TYPE = 256,
 
         // This section defines all types of NON-action objects which are not present in the original game.
         // If the object by nature is an action object name it with prefix OBJ_NON_ACTION_.
         // Otherwise, name it with prefix OBJ_.
+        OBJ_SWAMPY_LAKE = 257,
+        OBJ_FROZEN_LAKE = 258,
 
         // This section defines all types of action objects which are not present in the original game.
         // If the object by nature is an action object name it with prefix OBJ_.
         // Otherwise, name it with prefix OBJ_ACTON_.
         // The value of the object must be: non-action object value + OBJ_ACTION_OBJECT_TYPE.
+        OBJ_ACTION_SWAMPY_LAKE = OBJ_SWAMPY_LAKE + OBJ_ACTION_OBJECT_TYPE,
+        OBJ_ACTION_FROZEN_LAKE = OBJ_FROZEN_LAKE + OBJ_ACTION_OBJECT_TYPE,
     };
 
     enum ObjectIcnType : uint8_t

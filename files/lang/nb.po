@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-17 16:14+0000\n"
+"POT-Creation-Date: 2024-03-21 15:34+0000\n"
 "PO-Revision-Date: 2023-09-03 18:42+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -368,8 +368,9 @@ msgstr "Legion"
 msgid "All %{race} troops +1"
 msgstr "Kun styrker av %{race}tilhørighet: +1"
 
-msgid "Multiple"
-msgstr "Flere"
+#, fuzzy
+msgid "NeutralRaceTroops|Neutral"
+msgstr "Nøytral"
 
 msgid "Troops of %{count} alignments -%{penalty}"
 msgstr "Straff for å ha styrker fra %{count} tilhørigheter -%{penalty}"
@@ -8861,6 +8862,13 @@ msgstr "Jordmanende alter"
 msgid "Water Summoning Altar"
 msgstr "Vannmanende alter"
 
+#, fuzzy
+msgid "Swampy Lake"
+msgstr "Myr"
+
+msgid "Frozen Lake"
+msgstr ""
+
 msgid "Unknown Monster"
 msgstr "Ukjent monster"
 
@@ -11676,6 +11684,9 @@ msgstr ""
 "Finn den siste oppdateringen av spillet på\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Multiple"
+#~ msgstr "Flere"
 
 #~ msgid "and many other contributors!"
 #~ msgstr "og mange andre bidragsytere!"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-17 16:14+0000\n"
+"POT-Creation-Date: 2024-03-21 15:34+0000\n"
 "PO-Revision-Date: 2024-02-19 16:13+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -377,8 +377,9 @@ msgstr "Legion"
 msgid "All %{race} troops +1"
 msgstr "Endast %{race}trupper +1"
 
-msgid "Multiple"
-msgstr "Flera"
+#, fuzzy
+msgid "NeutralRaceTroops|Neutral"
+msgstr "Neutral"
 
 msgid "Troops of %{count} alignments -%{penalty}"
 msgstr "Armén består av trupper från %{count} olika klasser, ger -%{penalty}"
@@ -8543,6 +8544,13 @@ msgstr "Jordaltare"
 msgid "Water Summoning Altar"
 msgstr "Vattenaltare"
 
+#, fuzzy
+msgid "Swampy Lake"
+msgstr "Träsk"
+
+msgid "Frozen Lake"
+msgstr ""
+
 msgid "Unknown Monster"
 msgstr "Okänt Monster"
 
@@ -11235,6 +11243,9 @@ msgstr ""
 "Den senaste versionen av spelet finns på:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Multiple"
+#~ msgstr "Flera"
 
 #~ msgid "and many other contributors!"
 #~ msgstr "och många andra som bidragit!"
