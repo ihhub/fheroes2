@@ -804,30 +804,45 @@ namespace Interface
 
     void EditorInterface::mouseCursorAreaClickLeft( const int32_t tileIndex )
     {
+        assert( tileIndex >= 0 && tileIndex < static_cast<int32_t>( world.getSize() ) );
+
         Maps::Tiles & tile = world.GetTiles( tileIndex );
 
         if ( _editorPanel.isDetailEdit() ) {
-            // Hero is the one-tile object so we can directly search for him in '_mapFormat'.
-            auto foundHero = std::find_if( _mapFormat.tiles[tileIndex].objects.begin(), _mapFormat.tiles[tileIndex].objects.end(),
-                                           []( const Maps::Map_Format::ObjectInfo object ) { return object.group == Maps::ObjectGroup::KINGDOM_HEROES; } );
+            for ( const auto & object : _mapFormat.tiles[tileIndex].objects ) {
+                const auto & objectGroupInfo = Maps::getObjectsByGroup( object.group );
+                assert( object.index <= objectGroupInfo.size() );
 
-            if ( foundHero != _mapFormat.tiles[tileIndex].objects.end() ) {
-                const auto & heroObject = Maps::getObjectsByGroup( Maps::ObjectGroup::KINGDOM_HEROES )[foundHero->index];
-                const int color = ( 1 << heroObject.metadata[0] );
-                const int race = ( 1 << heroObject.metadata[1] );
+                const auto & objectInfo = objectGroupInfo[object.index];
+                assert( !objectInfo.groundLevelParts.empty() );
 
-                // Make a temporary hero to edit his details.
-                Heroes hero;
-                auto heroMetadata = _mapFormat.heroMetadata.find( foundHero->id );
-                if ( heroMetadata != _mapFormat.heroMetadata.end() ) {
-                    hero.applyHeroMetadata( _mapFormat.heroMetadata[foundHero->id], race, true );
+                const MP2::MapObjectType objectType = objectInfo.groundLevelParts.front().objectType;
+
+                const bool isActionObject = MP2::isActionObject( objectType );
+                if ( !isActionObject ) {
+                    // Only action objects can have metadata.
+                    continue;
                 }
-                hero.SetColor( color );
 
-                fheroes2::ActionCreator action( _historyManager, _mapFormat );
-                hero.OpenDialog( false, false, true, true, true, true );
-                if ( hero.updateHeroMetadata( _mapFormat.heroMetadata[foundHero->id] ) ) {
-                    action.commit();
+                // TODO: add more code to edit other action objects that have metadata.
+                if ( objectType == MP2::OBJ_HERO ) {
+                    const int color = ( 1 << objectInfo.metadata[0] );
+                    const int race = ( 1 << objectInfo.metadata[1] );
+
+                    // Make a temporary hero to edit his details.
+                    Heroes hero;
+                    auto heroMetadata = _mapFormat.heroMetadata.find( object.id );
+                    if ( heroMetadata != _mapFormat.heroMetadata.end() ) {
+                        hero.applyHeroMetadata( _mapFormat.heroMetadata[object.id], race, true );
+                    }
+
+                    hero.SetColor( color );
+
+                    fheroes2::ActionCreator action( _historyManager, _mapFormat );
+                    hero.OpenDialog( false, false, true, true, true, true );
+                    if ( hero.updateHeroMetadata( _mapFormat.heroMetadata[object.id] ) ) {
+                        action.commit();
+                    }
                 }
             }
         }
