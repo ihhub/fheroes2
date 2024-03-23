@@ -104,6 +104,38 @@ namespace Maps::Map_Format
                >> metadata.customKnowledge >> metadata.customSpellPower >> metadata.magicPoints;
     }
 
+    StreamBase & operator<<( StreamBase & msg, const SphinxMetadata & metadata )
+    {
+        return msg << metadata.question << metadata.answers << metadata.artifact << metadata.resources;
+    }
+
+    StreamBase & operator>>( StreamBase & msg, SphinxMetadata & metadata )
+    {
+        return msg >> metadata.question >> metadata.answers >> metadata.artifact >> metadata.resources;
+    }
+
+    StreamBase & operator<<( StreamBase & msg, const SignMetadata & metadata )
+    {
+        return msg << metadata.message;
+    }
+
+    StreamBase & operator>>( StreamBase & msg, SignMetadata & metadata )
+    {
+        return msg >> metadata.message;
+    }
+
+    StreamBase & operator<<( StreamBase & msg, const AdventureMapEventMetadata & metadata )
+    {
+        return msg << metadata.message << metadata.playerColors << metadata.isApplicableForComputer << metadata.isRecurringEvent << metadata.artifact
+                   << metadata.resources;
+    }
+
+    StreamBase & operator>>( StreamBase & msg, AdventureMapEventMetadata & metadata )
+    {
+        return msg >> metadata.message >> metadata.playerColors >> metadata.isApplicableForComputer >> metadata.isRecurringEvent >> metadata.artifact
+                   >> metadata.resources;
+    }
+
     StreamBase & operator<<( StreamBase & msg, const BaseMapFormat & map )
     {
         return msg << map.version << map.isCampaign << map.difficulty << map.availablePlayerColors << map.humanPlayerColors << map.computerPlayerColors << map.alliances
@@ -120,13 +152,15 @@ namespace Maps::Map_Format
 
     StreamBase & operator<<( StreamBase & msg, const MapFormat & map )
     {
-        return msg << static_cast<const BaseMapFormat &>( map ) << map.additionalInfo << map.tiles << map.standardMetadata << map.castleMetadata << map.heroMetadata;
+        return msg << static_cast<const BaseMapFormat &>( map ) << map.additionalInfo << map.tiles << map.standardMetadata << map.castleMetadata << map.heroMetadata
+                   << map.sphinxMetadata << map.signMetadata << map.adventureMapEventMetadata;
     }
 
     StreamBase & operator>>( StreamBase & msg, MapFormat & map )
     {
         // TODO: verify the correctness of metadata.
-        return msg >> static_cast<BaseMapFormat &>( map ) >> map.additionalInfo >> map.tiles >> map.standardMetadata >> map.castleMetadata >> map.heroMetadata;
+        return msg >> static_cast<BaseMapFormat &>( map ) >> map.additionalInfo >> map.tiles >> map.standardMetadata >> map.castleMetadata >> map.heroMetadata
+                   >> map.sphinxMetadata >> map.signMetadata >> map.adventureMapEventMetadata;
     }
 
     bool loadBaseMap( const std::string & path, BaseMapFormat & map )
