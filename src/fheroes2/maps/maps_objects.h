@@ -44,7 +44,6 @@ public:
         // Do nothing.
     }
 
-
     ~MapObjectSimple() override = default;
 
     int GetType() const

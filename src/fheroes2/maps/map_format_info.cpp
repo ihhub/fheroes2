@@ -133,7 +133,7 @@ namespace Maps::Map_Format
     StreamBase & operator>>( StreamBase & msg, AdventureMapEventMetadata & metadata )
     {
         return msg >> metadata.message >> metadata.playerColors >> metadata.isApplicableForComputer >> metadata.isRecurringEvent >> metadata.artifact
-                   >> metadata.resources;
+               >> metadata.resources;
     }
 
     StreamBase & operator<<( StreamBase & msg, const BaseMapFormat & map )
@@ -160,7 +160,7 @@ namespace Maps::Map_Format
     {
         // TODO: verify the correctness of metadata.
         return msg >> static_cast<BaseMapFormat &>( map ) >> map.additionalInfo >> map.tiles >> map.standardMetadata >> map.castleMetadata >> map.heroMetadata
-                   >> map.sphinxMetadata >> map.signMetadata >> map.adventureMapEventMetadata;
+               >> map.sphinxMetadata >> map.signMetadata >> map.adventureMapEventMetadata;
     }
 
     bool loadBaseMap( const std::string & path, BaseMapFormat & map )
