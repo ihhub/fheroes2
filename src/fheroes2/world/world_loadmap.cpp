@@ -713,11 +713,17 @@ bool World::loadResurrectionMap( const std::string & filename )
                 const auto & metadata = heroObjects[object.index].metadata;
 
                 const int color = ( 1 << metadata[0] );
-                const int race = ( 1 << metadata[1] );
+                int race = ( 1 << metadata[1] );
+
+                // Heroes can not be neutral.
+                assert( color != Color::NONE );
 
                 const Kingdom & kingdom = GetKingdom( color );
 
-                assert( race != Race::RAND );
+                // Set race for random hero according to the kingdom's race.
+                if ( race == Race::RAND ) {
+                    race = kingdom.GetRace();
+                }
 
                 // Check if the kingdom has exceeded the limit on hired heroes
                 if ( kingdom.AllowRecruitHero( false ) ) {
