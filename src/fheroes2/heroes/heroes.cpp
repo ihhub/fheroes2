@@ -872,10 +872,11 @@ bool Heroes::updateHeroMetadata( Maps::Map_Format::HeroMetadata & heroMetadata )
 
     // Primary Skill base values.
     const Skill::stats_t * defaultPrimarySkills = GameStatic::GetSkillStats( _race );
-    const int16_t customAttack = static_cast<int16_t>( attack ) - static_cast<int16_t>( defaultPrimarySkills->initial_primary.attack );
-    const int16_t customDefense = static_cast<int16_t>( defense ) - static_cast<int16_t>( defaultPrimarySkills->initial_primary.defense );
-    const int16_t customSpellPower = static_cast<int16_t>( power ) - static_cast<int16_t>( defaultPrimarySkills->initial_primary.power );
-    const int16_t customKnowledge = static_cast<int16_t>( knowledge ) - static_cast<int16_t>( defaultPrimarySkills->initial_primary.knowledge );
+    const int16_t customAttack = static_cast<int16_t>( attack ) - ( defaultPrimarySkills ? static_cast<int16_t>( defaultPrimarySkills->initial_primary.attack ) : 0 );
+    const int16_t customDefense = static_cast<int16_t>( defense ) - ( defaultPrimarySkills ? static_cast<int16_t>( defaultPrimarySkills->initial_primary.defense ) : 0 );
+    const int16_t customSpellPower = static_cast<int16_t>( power ) - ( defaultPrimarySkills ? static_cast<int16_t>( defaultPrimarySkills->initial_primary.power ) : 0 );
+    const int16_t customKnowledge
+        = static_cast<int16_t>( knowledge ) - ( defaultPrimarySkills ? static_cast<int16_t>( defaultPrimarySkills->initial_primary.knowledge ) : 0 );
 
     if ( heroMetadata.customAttack != customAttack ) {
         heroMetadata.customAttack = customAttack;
