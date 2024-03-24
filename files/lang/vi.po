@@ -3707,7 +3707,7 @@ msgstr "Thay đổi tốc độ di chuyển của các tướng trên màn hình
 
 #, fuzzy
 msgid ""
-"Sets the speed that computer heroes move at. You can also elect not to view "
+"Sets the speed that computer heroes move at. You can also select not to view "
 "computer movement at all."
 msgstr ""
 "Đặt tốc độ mà tướng A.I. di chuyển. Ngươi cũng có thể chọn không xem tướng A."
