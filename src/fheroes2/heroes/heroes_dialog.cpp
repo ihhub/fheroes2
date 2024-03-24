@@ -369,7 +369,7 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
     }
 
     bool needRedraw{ false };
-    int32_t extraSpellPoints{ 0 };
+    bool customSpellPoints{ GetSpellPoints() != GetMaxSpellPoints() };
     std::string message;
 
     // dialog menu loop
@@ -415,7 +415,10 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
 
             if ( isEditor ) {
                 // Artifacts affect many hero stats.
-                SetSpellPoints( static_cast<uint32_t>( std::max( 0, static_cast<int32_t>( GetMaxSpellPoints() ) + extraSpellPoints ) ) );
+                if ( !customSpellPoints ) {
+                    SetSpellPoints( GetMaxSpellPoints() );
+                }
+
                 spellPointsInfo.Redraw();
                 moraleIndicator.Redraw();
                 luckIndicator.Redraw();
@@ -502,7 +505,7 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
                 if ( le.MouseClickLeft() ) {
                     uint32_t value = GetSpellPoints();
                     if ( Dialog::SelectCount( message, 0, spellPointsMaxValue, value ) ) {
-                        extraSpellPoints = static_cast<int32_t>( value ) - static_cast<int32_t>( GetMaxSpellPoints() );
+                        customSpellPoints = true;
                         SetSpellPoints( value );
                         spellPointsInfo.Redraw();
                         needRedraw = true;
@@ -510,7 +513,7 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
                 }
                 else if ( le.MouseClickRight() ) {
                     // Reset spell points modification.
-                    extraSpellPoints = 0;
+                    customSpellPoints = false;
                     SetSpellPoints( GetMaxSpellPoints() );
                     spellPointsInfo.Redraw();
                     needRedraw = true;
@@ -589,7 +592,9 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
                     message = _( "Set Knowledge Skill" );
                     if ( primarySkillEditHandler( knowledge, message ) ) {
                         // Knowledge change affects hero's spell points.
-                        SetSpellPoints( static_cast<uint32_t>( std::max( 0, static_cast<int32_t>( GetMaxSpellPoints() ) + extraSpellPoints ) ) );
+                        if ( !customSpellPoints ) {
+                            SetSpellPoints( GetMaxSpellPoints() );
+                        }
                         spellPointsInfo.Redraw();
                         needRedraw = true;
                     }
