@@ -40,6 +40,7 @@
 #include "kingdom.h"
 #include "localevent.h"
 #include "monster.h"
+#include "pal.h"
 #include "race.h"
 #include "tools.h"
 #include "translations.h"
@@ -236,10 +237,20 @@ void ArmyBar::SetBackground( const fheroes2::Size & sz, const uint8_t fillColor 
 
 void ArmyBar::RedrawBackground( const fheroes2::Rect & pos, fheroes2::Image & dstsf )
 {
-    if ( use_mini_sprite )
-        fheroes2::Blit( backsf, dstsf, pos.x, pos.y );
-    else
-        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STRIP, 2 ), dstsf, pos.x, pos.y );
+    if ( use_mini_sprite ) {
+        fheroes2::Copy( backsf, 0, 0, dstsf, pos );
+    }
+    else {
+        fheroes2::Copy( fheroes2::AGG::GetICN( ICN::STRIP, 2 ), 0, 0, dstsf, pos );
+
+        if ( can_change && !_saveLastTroop && _army->GetOccupiedSlotCount() == 0 ) {
+            // In editor when army is empty it means that default army will be applied on the game start.
+            fheroes2::ApplyPalette( dstsf, pos.x, pos.y, dstsf, pos.x, pos.y, pos.width, pos.height, PAL::GetPalette( PAL::PaletteType::DARKENING ) );
+
+            const fheroes2::Text text( _( "Default\ntroop" ), fheroes2::FontType::normalWhite() );
+            text.drawInRoi( pos.x, pos.y + pos.height / 2 - 17, pos.width, dstsf, pos );
+        }
+    }
 }
 
 void ArmyBar::RedrawItem( ArmyTroop & troop, const fheroes2::Rect & pos, bool selected, fheroes2::Image & dstsf )
@@ -343,7 +354,7 @@ bool ArmyBar::ActionBarCursor( ArmyTroop & troop )
 
 bool ArmyBar::ActionBarCursor( ArmyTroop & destTroop, ArmyTroop & selectedTroop )
 {
-    bool save_last_troop = _saveLastTroop && ( selectedTroop.GetArmy()->getTotalCount() <= 1 ) && selectedTroop.GetArmy()->SaveLastTroop();
+    const bool saveLastTroop = _saveLastTroop && ( selectedTroop.GetArmy()->getTotalCount() <= 1 ) && selectedTroop.GetArmy()->SaveLastTroop();
 
     if ( destTroop.isValid() ) {
         if ( destTroop.GetID() != selectedTroop.GetID() ) {
@@ -351,15 +362,17 @@ bool ArmyBar::ActionBarCursor( ArmyTroop & destTroop, ArmyTroop & selectedTroop 
             StringReplaceWithLowercase( msg, "%{name}", destTroop.GetName() );
             StringReplaceWithLowercase( msg, "%{name2}", selectedTroop.GetName() );
         }
-        else if ( save_last_troop )
+        else if ( saveLastTroop ) {
             msg = _( "Cannot move last troop" );
+        }
         else {
             msg = _( "Combine %{name} armies" );
             StringReplaceWithLowercase( msg, "%{name}", destTroop.GetName() );
         }
     }
-    else if ( save_last_troop )
+    else if ( saveLastTroop ) {
         msg = _( "Cannot move last troop" );
+    }
     else {
         if ( selectedTroop.GetCount() == 1 ) {
             msg = _( "Move the %{name}" );
