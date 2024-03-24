@@ -44,7 +44,7 @@
 
 Funds::Funds( const int type, const uint32_t count )
 {
-    if ( count > 0 ) {
+    if ( count == 0 ) {
         // Nothing to add. Skip it.
         return;
     }
