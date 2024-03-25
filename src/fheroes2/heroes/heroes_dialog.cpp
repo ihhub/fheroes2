@@ -575,10 +575,10 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
             if ( isEditor ) {
                 // In Editor we need to override Primary Skills Bar's event processing except the right mouse button press.
 
-                auto primarySkillEditHandler = [&le, &primskill_bar, &display]( int & skill, const std::string & text ) {
+                auto primarySkillEditHandler = [&le, &primskill_bar, &display]( int & skill, const std::string & text, const uint32_t minValue ) {
                     if ( le.MouseClickLeft() ) {
                         uint32_t value = skill;
-                        if ( Dialog::SelectCount( text, 0, primaryMaxValue, value ) ) {
+                        if ( Dialog::SelectCount( text, minValue, primaryMaxValue, value ) ) {
                             skill = static_cast<int>( value );
                             primskill_bar.Redraw( display );
                             return true;
@@ -589,19 +589,19 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
 
                 if ( le.MouseCursor( attackRoi ) ) {
                     message = _( "Set Attack Skill" );
-                    needRedraw |= primarySkillEditHandler( attack, message );
+                    needRedraw |= primarySkillEditHandler( attack, message, 0 );
                 }
                 else if ( le.MouseCursor( defenseRoi ) ) {
                     message = _( "Set Defense Skill" );
-                    needRedraw |= primarySkillEditHandler( defense, message );
+                    needRedraw |= primarySkillEditHandler( defense, message, 0 );
                 }
                 else if ( le.MouseCursor( powerRoi ) ) {
                     message = _( "Set Power Skill" );
-                    needRedraw |= primarySkillEditHandler( power, message );
+                    needRedraw |= primarySkillEditHandler( power, message, 1 );
                 }
                 else if ( le.MouseCursor( knowledgeRoi ) ) {
                     message = _( "Set Knowledge Skill" );
-                    if ( primarySkillEditHandler( knowledge, message ) ) {
+                    if ( primarySkillEditHandler( knowledge, message, 0 ) ) {
                         // Knowledge change affects hero's spell points.
                         if ( !customSpellPoints ) {
                             SetSpellPoints( GetMaxSpellPoints() );
