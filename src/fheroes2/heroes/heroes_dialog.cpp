@@ -171,8 +171,19 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
         if ( restoreBackground ) {
             fheroes2::Copy( backgroundImage, titleRoi.x - dialogRoi.x, titleRoi.y - dialogRoi.y, display, titleRoi );
         }
-        std::string titleText = _( "%{name} the %{race} (Level %{level})" );
-        StringReplace( titleText, "%{name}", heroName );
+
+        std::string titleText;
+        if ( !heroName.empty() ) {
+            titleText = _( "%{name} the %{race} (Level %{level})" );
+            StringReplace( titleText, "%{name}", heroName );
+        }
+        else if ( heroRace == Race::RAND ) {
+            // In Editor the empty name is a sign that the default random hero (with a random name) will be used on the game start.
+            titleText = _( "Random hero (Level %{level})" );
+        }
+        else {
+            titleText = _( "Random %{race} hero (Level %{level})" );
+        }
         StringReplace( titleText, "%{race}", Race::String( heroRace ) );
         StringReplace( titleText, "%{level}", GetLevel() );
 
