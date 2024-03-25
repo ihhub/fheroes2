@@ -277,7 +277,7 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
     selectArmy.Redraw( display );
 
     // Hero's secondary skills.
-    SecondarySkillsBar secskill_bar( *this, false, isEditor );
+    SecondarySkillsBar secskill_bar( *this, false, isEditor, isEditor );
     secskill_bar.setTableSize( { 8, 1 } );
     secskill_bar.setInBetweenItemsOffset( { 5, 0 } );
     secskill_bar.SetContent( secondary_skills.ToVector() );
