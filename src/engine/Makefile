@@ -20,7 +20,9 @@
 
 TARGET := libengine
 
+ifndef FHEROES2_WITH_SYSTEM_SMACKER
 CCFLAGS := $(CCFLAGS) -I../thirdparty/libsmacker
+endif
 
 .PHONY: all clean
 
