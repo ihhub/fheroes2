@@ -42,36 +42,14 @@
 #include "translations.h"
 #include "ui_text.h"
 
-Funds::Funds()
-    : wood( 0 )
-    , mercury( 0 )
-    , ore( 0 )
-    , sulfur( 0 )
-    , crystal( 0 )
-    , gems( 0 )
-    , gold( 0 )
-{}
-
-Funds::Funds( int32_t _ore, int32_t _wood, int32_t _mercury, int32_t _sulfur, int32_t _crystal, int32_t _gems, int32_t _gold )
-    : wood( _wood )
-    , mercury( _mercury )
-    , ore( _ore )
-    , sulfur( _sulfur )
-    , crystal( _crystal )
-    , gems( _gems )
-    , gold( _gold )
-{}
-
-Funds::Funds( int rs, uint32_t count )
-    : wood( 0 )
-    , mercury( 0 )
-    , ore( 0 )
-    , sulfur( 0 )
-    , crystal( 0 )
-    , gems( 0 )
-    , gold( 0 )
+Funds::Funds( const int type, const uint32_t count )
 {
-    switch ( rs ) {
+    if ( count == 0 ) {
+        // Nothing to add. Skip it.
+        return;
+    }
+
+    switch ( type ) {
     case Resource::ORE:
         ore = count;
         break;
@@ -95,22 +73,10 @@ Funds::Funds( int rs, uint32_t count )
         break;
 
     default:
-        if ( count > 0 ) {
-            DEBUG_LOG( DBG_GAME, DBG_WARN, "Unknown resource is being added to Funds class. Ignore it." )
-        }
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "Unknown resource is being added to Funds class. Ignore it." )
         break;
     }
 }
-
-Funds::Funds( const cost_t & cost )
-    : wood( cost.wood )
-    , mercury( cost.mercury )
-    , ore( cost.ore )
-    , sulfur( cost.sulfur )
-    , crystal( cost.crystal )
-    , gems( cost.gems )
-    , gold( cost.gold )
-{}
 
 int Resource::Rand( const bool includeGold )
 {
@@ -159,9 +125,9 @@ int32_t * Funds::GetPtr( int rs )
     return nullptr;
 }
 
-int32_t Funds::Get( int rs ) const
+int32_t Funds::Get( const int type ) const
 {
-    switch ( rs ) {
+    switch ( type ) {
     case Resource::ORE:
         return ore;
     case Resource::WOOD:
@@ -374,9 +340,9 @@ std::string Funds::String() const
     return os.str();
 }
 
-const char * Resource::String( int resource )
+const char * Resource::String( const int resourceType )
 {
-    switch ( resource ) {
+    switch ( resourceType ) {
     case Resource::WOOD:
         return _( "Wood" );
     case Resource::MERCURY:

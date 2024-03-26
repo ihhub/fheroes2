@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -308,7 +308,6 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
     text.draw( dst_pt.x, dst_pt.y + 2, display );
     RedrawFromResource( pt1, fundsFrom );
 
-    Funds fundsTo;
     int resourceTo = 0;
     const fheroes2::Point pt2( 136 + pos_rt.x, pos_rt.y + 190 );
     std::vector<fheroes2::Rect> rectsTo;
