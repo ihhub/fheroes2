@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2023                                             *
+ *   Copyright (C) 2020 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -139,6 +139,26 @@ namespace fheroes2
             return _nearestScaling;
         }
 
+        virtual uint8_t getCurrentDisplayIndex() const
+        {
+            return 0;
+        }
+
+        virtual void setDisplayIndex( const uint8_t )
+        {
+            // Do nothing.
+        }
+
+        virtual uint8_t getMaximumDisplays() const
+        {
+            return 1;
+        }
+
+        virtual const char * getDisplayName( const uint8_t )
+        {
+            return "";
+        }
+
     protected:
         BaseRenderEngine()
             : _isFullScreen( false )
@@ -160,6 +180,11 @@ namespace fheroes2
         virtual bool allocate( ResolutionInfo & /*unused*/, bool /*unused*/ )
         {
             return false;
+        }
+
+        virtual bool isAllocated() const
+        {
+            return true;
         }
 
         virtual bool isMouseCursorActive() const

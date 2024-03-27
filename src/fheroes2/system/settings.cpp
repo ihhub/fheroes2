@@ -343,6 +343,10 @@ bool Settings::Read( const std::string & filePath )
         _editorOptions.SetModes( EDITOR_PASSABILITY );
     }
 
+    if ( config.Exists( "display" ) ) {
+        fheroes2::engine().setDisplayIndex( static_cast<uint8_t>( std::max( config.IntParams( "display" ), 0 ) ) );
+    }
+
     return true;
 }
 
@@ -387,6 +391,9 @@ std::string Settings::String() const
 
     os << std::endl << "# video mode: in-game width x in-game height : on-screen width x on-screen height" << std::endl;
     os << "videomode = " << display.width() << "x" << display.height() << ":" << display.screenSize().width << "x" << display.screenSize().height << std::endl;
+
+    os << std::endl << "# Display Index" << std::endl;
+    os << "display = " << static_cast<int>( fheroes2::engine().getCurrentDisplayIndex() ) << std::endl;
 
     os << std::endl << "# music: original, expansion, external" << std::endl;
     os << "music = " << musicType << std::endl;

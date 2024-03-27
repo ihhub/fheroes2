@@ -49,17 +49,21 @@ namespace
         Mode,
         VSync,
         SystemInfo,
+        SwitchDisplay,
         Exit
     };
 
-    const fheroes2::Size offsetBetweenOptions{ 118, 110 };
-    const fheroes2::Point optionOffset{ 69, 47 };
+    const fheroes2::Size offsetBetweenOptions{ 92, 110 };
+    const fheroes2::Point optionOffset{ 36, 47 };
     const int32_t optionWindowSize{ 65 };
+    const int32_t centerAlignmentOffset{ offsetBetweenOptions.width / 2 };
 
     const fheroes2::Rect resolutionRoi{ optionOffset.x, optionOffset.y, optionWindowSize, optionWindowSize };
     const fheroes2::Rect modeRoi{ optionOffset.x + offsetBetweenOptions.width, optionOffset.y, optionWindowSize, optionWindowSize };
-    const fheroes2::Rect vSyncRoi{ optionOffset.x, optionOffset.y + offsetBetweenOptions.height, optionWindowSize, optionWindowSize };
-    const fheroes2::Rect systemInfoRoi{ optionOffset.x + offsetBetweenOptions.width, optionOffset.y + offsetBetweenOptions.height, optionWindowSize, optionWindowSize };
+    const fheroes2::Rect vSyncRoi{ optionOffset.x + centerAlignmentOffset, optionOffset.y + offsetBetweenOptions.height, optionWindowSize, optionWindowSize };
+    const fheroes2::Rect systemInfoRoi{ optionOffset.x + offsetBetweenOptions.width + centerAlignmentOffset, optionOffset.y + offsetBetweenOptions.height,
+                                        optionWindowSize, optionWindowSize };
+    const fheroes2::Rect switchDisplayRoi{ optionOffset.x + offsetBetweenOptions.width * 2, optionOffset.y, optionWindowSize, optionWindowSize };
 
     void drawResolution( const fheroes2::Rect & optionRoi )
     {
@@ -120,14 +124,24 @@ namespace
         fheroes2::drawOption( optionRoi, image, _( "System Info" ), isSystemInfoDisplayed ? _( "On" ) : _( "Off" ), fheroes2::UiOptionTextWidth::TWO_ELEMENTS_ROW );
     }
 
+    void drawDisplay( const fheroes2::Rect & optionRoi )
+    {
+        const uint8_t displayIndex = fheroes2::engine().getCurrentDisplayIndex();
+        fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::GAME_OPTION_ICON, 1 ), _( "Display Index" ),
+                              std::to_string( displayIndex + 1 ) + ": " + fheroes2::engine().getDisplayName( displayIndex ),
+                              fheroes2::UiOptionTextWidth::TWO_ELEMENTS_ROW );
+    }
+
     SelectedWindow showConfigurationWindow()
     {
         fheroes2::Display & display = fheroes2::Display::instance();
 
         const Settings & conf = Settings::Get();
         const bool isEvilInterface = conf.isEvilInterfaceEnabled();
-        const fheroes2::Sprite & dialog = fheroes2::AGG::GetICN( ( isEvilInterface ? ICN::ESPANBKG_EVIL : ICN::ESPANBKG ), 0 );
+        const fheroes2::Sprite & dialog = fheroes2::AGG::GetICN( ( isEvilInterface ? ICN::CSPANBKE : ICN::CSPANBKG ), 0 );
         const fheroes2::Sprite & dialogShadow = fheroes2::AGG::GetICN( ( isEvilInterface ? ICN::CSPANBKE : ICN::CSPANBKG ), 1 );
+
+        const fheroes2::Sprite & secondRowBackground = fheroes2::AGG::GetICN( Settings::Get().isEvilInterfaceEnabled() ? ICN::SURDRBKE : ICN::SURDRBKG, 0 );
 
         const fheroes2::Point dialogOffset( ( display.width() - dialog.width() ) / 2, ( display.height() - dialog.height() ) / 2 );
         const fheroes2::Point shadowOffset( dialogOffset.x - BORDERWIDTH, dialogOffset.y );
@@ -139,18 +153,25 @@ namespace
         fheroes2::Blit( dialogShadow, display, windowRoi.x - BORDERWIDTH, windowRoi.y + BORDERWIDTH );
         fheroes2::Blit( dialog, display, windowRoi.x, windowRoi.y );
 
+        // The image is taken from another big ICN and cropped, with its background at an adequate size.
+        // The offsets are statically fixed based on the original image to fill the empty spaces on the second row alongside it's shadow.
+        fheroes2::Blit( secondRowBackground, 50, 30, display, windowRoi.x + BORDERWIDTH + 10, windowRoi.y + optionOffset.y - 10 + offsetBetweenOptions.height,
+                        dialog.width() - BORDERWIDTH * 2 - 20, optionWindowSize + 20 );
+
         fheroes2::ImageRestorer emptyDialogRestorer( display, windowRoi.x, windowRoi.y, windowRoi.width, windowRoi.height );
 
         const fheroes2::Rect windowResolutionRoi( resolutionRoi + windowRoi.getPosition() );
         const fheroes2::Rect windowModeRoi( modeRoi + windowRoi.getPosition() );
         const fheroes2::Rect windowVSyncRoi( vSyncRoi + windowRoi.getPosition() );
         const fheroes2::Rect windowSystemInfoRoi( systemInfoRoi + windowRoi.getPosition() );
+        const fheroes2::Rect windowSwitchDisplayRoi( switchDisplayRoi + windowRoi.getPosition() );
 
-        const auto drawOptions = [&windowResolutionRoi, &windowModeRoi, &windowVSyncRoi, &windowSystemInfoRoi]() {
+        const auto drawOptions = [&windowResolutionRoi, &windowModeRoi, &windowVSyncRoi, &windowSwitchDisplayRoi, &windowSystemInfoRoi]() {
             drawResolution( windowResolutionRoi );
             drawMode( windowModeRoi );
             drawVSync( windowVSyncRoi );
             drawSystemInfo( windowSystemInfoRoi );
+            drawDisplay( windowSwitchDisplayRoi );
         };
 
         drawOptions();
@@ -187,7 +208,9 @@ namespace
             if ( le.MouseClickLeft( windowSystemInfoRoi ) ) {
                 return SelectedWindow::SystemInfo;
             }
-
+            if ( le.MouseClickLeft( windowSwitchDisplayRoi ) ) {
+                return SelectedWindow::SwitchDisplay;
+            }
             if ( le.MousePressRight( windowResolutionRoi ) ) {
                 fheroes2::showStandardTextMessage( _( "Select Game Resolution" ), _( "Change the resolution of the game." ), 0 );
             }
@@ -197,7 +220,10 @@ namespace
             else if ( le.MousePressRight( windowVSyncRoi ) ) {
                 fheroes2::showStandardTextMessage( _( "V-Sync" ), _( "The V-Sync option can be enabled to resolve flickering issues on some monitors." ), 0 );
             }
-            if ( le.MousePressRight( windowSystemInfoRoi ) ) {
+            else if ( le.MousePressRight( windowSwitchDisplayRoi ) ) {
+                fheroes2::showStandardTextMessage( _( "Display Selection" ), _( "Toggle Between available Displays" ), 0 );
+            }
+            else if ( le.MousePressRight( windowSystemInfoRoi ) ) {
                 fheroes2::showStandardTextMessage( _( "System Info" ), _( "Show extra information such as FPS and current time." ), 0 );
             }
             else if ( le.MousePressRight( okayButton.area() ) ) {
@@ -253,6 +279,19 @@ namespace fheroes2
                 conf.Save( Settings::configFileName );
                 windowType = SelectedWindow::Configuration;
                 break;
+            case SelectedWindow::SwitchDisplay: {
+                fheroes2::BaseRenderEngine & engine = fheroes2::engine();
+                engine.setDisplayIndex( ( engine.getCurrentDisplayIndex() + 1 ) % engine.getMaximumDisplays() );
+
+                fheroes2::Display & display = fheroes2::Display::instance();
+                const fheroes2::ResolutionInfo currentResolution{ display.width(), display.height(), display.screenSize().width, display.screenSize().height };
+                display.setResolution( currentResolution );
+                updateUI();
+
+                conf.Save( Settings::configFileName );
+                windowType = SelectedWindow::Configuration;
+                break;
+            }
             default:
                 return;
             }
