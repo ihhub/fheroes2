@@ -24,7 +24,10 @@
 #include "difficulty.h"
 
 #include <cassert>
+#include <vector>
 
+#include "profit.h"
+#include "race.h"
 #include "translations.h"
 
 std::string Difficulty::String( int difficulty )
@@ -61,7 +64,62 @@ int Difficulty::GetScoutingBonusForAI( int difficulty )
     default:
         break;
     }
+
     return 0;
+}
+
+Funds Difficulty::getResourceIncomeBonusForAI( const int difficulty, const VecCastles & castles )
+{
+    const auto getIncomeFromSetsOfResourceMines = []( const uint32_t numOfSets ) {
+        Funds result;
+
+        Resource::forEach( ( Resource::ALL & ~Resource::GOLD ), [&result]( const int res ) { result += ProfitConditions::FromMine( res ); } );
+
+        return result * numOfSets;
+    };
+
+    const auto getBonusForCastles = [&castles]() {
+        Funds result;
+
+        for ( const Castle * castle : castles ) {
+            assert( castle != nullptr );
+
+            switch ( castle->GetRace() ) {
+            case Race::KNGT:
+            case Race::BARB:
+                result += { 0, 0, 0, 0, 1, 0, 0 }; // 1 unit of Crystal
+                break;
+            case Race::SORC:
+                result += { 0, 0, 1, 0, 0, 0, 0 }; // 1 unit of Mercury
+                break;
+            case Race::WRLK:
+            case Race::NECR:
+                result += { 0, 0, 0, 1, 0, 0, 0 }; // 1 unit of Sulfur
+                break;
+            case Race::WZRD:
+                result += { 0, 0, 0, 0, 0, 1, 0 }; // 1 unit of Gems
+                break;
+            default:
+                assert( 0 );
+                break;
+            }
+        }
+
+        return result;
+    };
+
+    switch ( difficulty ) {
+    case Difficulty::HARD:
+        return getIncomeFromSetsOfResourceMines( 1 );
+    case Difficulty::EXPERT:
+        return getIncomeFromSetsOfResourceMines( 2 ) + getBonusForCastles();
+    case Difficulty::IMPOSSIBLE:
+        return getIncomeFromSetsOfResourceMines( 3 ) + getBonusForCastles();
+    default:
+        break;
+    }
+
+    return {};
 }
 
 double Difficulty::getGoldIncomeBonusForAI( const int difficulty )
@@ -71,48 +129,15 @@ double Difficulty::getGoldIncomeBonusForAI( const int difficulty )
         // It is deduction from the income.
         return -0.25;
     case Difficulty::HARD:
-        return 0.29;
+        return 1.0;
     case Difficulty::EXPERT:
-        return 0.45;
+        return 2.0;
     case Difficulty::IMPOSSIBLE:
-        return 0.6;
+        return 3.0;
     default:
         break;
     }
-    return 0;
-}
 
-double Difficulty::GetUnitGrowthBonusForAI( const int difficulty, const bool /* isCampaign */, const building_t /* dwelling */ )
-{
-    // In the original game AI has a cheeky monster growth bonus depending on difficulty:
-    // Easy - 0.0 (no bonus)
-    // Normal - 0.0 (no bonus)
-    // Hard - 0.20 (or 20% extra)
-    // Expert - 0.32 (or 32% extra)
-    // Impossible - 0.44 (or 44% extra)
-    // This bonus was introduced to compensate weak AI in the game.
-    //
-    // However, with introduction of proper AI in this engine AI has become much stronger and some maps are impossible to beat.
-    // Also this bonus can be abused by players while capturing AI castles on a first day of a week.
-    //
-    // Completely removing these bonuses might break some maps and they become unplayable.
-    // Therefore, these bonuses are reduced by 5% which is the value of noise in many processes / systems.
-
-    switch ( difficulty ) {
-    case Difficulty::EASY:
-    case Difficulty::NORMAL:
-        return 0;
-    case Difficulty::HARD:
-        return 0.14;
-    case Difficulty::EXPERT:
-        return 0.254;
-    case Difficulty::IMPOSSIBLE:
-        return 0.368;
-    default:
-        // Did you add a new difficulty level? Add the logic above!
-        assert( 0 );
-        break;
-    }
     return 0;
 }
 
@@ -125,22 +150,8 @@ int Difficulty::GetHeroMovementBonusForAI( int difficulty )
     default:
         break;
     }
+
     return 0;
-}
-
-bool Difficulty::allowAIToRetreat( const int /* difficulty */, const bool /* isCampaign */ )
-{
-    return true;
-}
-
-bool Difficulty::allowAIToSurrender( const int /* difficulty */, const bool /* isCampaign */ )
-{
-    return true;
-}
-
-int Difficulty::getMinHeroLevelForAIRetreat( const int /* difficulty */ )
-{
-    return 3;
 }
 
 double Difficulty::getArmyStrengthRatioForAIRetreat( const int difficulty )
@@ -156,12 +167,8 @@ double Difficulty::getArmyStrengthRatioForAIRetreat( const int difficulty )
     default:
         break;
     }
-    return 100.0 / 6.0;
-}
 
-uint32_t Difficulty::getGoldReserveRatioForAISurrender( const int /* difficulty */ )
-{
-    return 10;
+    return 100.0 / 6.0;
 }
 
 uint32_t Difficulty::GetDimensionDoorLimitForAI( int difficulty )
@@ -176,6 +183,7 @@ uint32_t Difficulty::GetDimensionDoorLimitForAI( int difficulty )
     default:
         break;
     }
+
     return UINT32_MAX;
 }
 
@@ -227,6 +235,7 @@ bool Difficulty::allowAIToSplitWeakStacks( const int difficulty )
     default:
         break;
     }
+
     return true;
 }
 
@@ -238,6 +247,7 @@ bool Difficulty::allowAIToDevelopCastlesOnDay( const int difficulty, const bool 
     default:
         break;
     }
+
     return true;
 }
 
@@ -246,9 +256,10 @@ bool Difficulty::allowAIToBuildCastleBuilding( const int difficulty, const bool 
     switch ( difficulty ) {
     case Difficulty::EASY:
         // Only the construction of the corresponding dwelling is limited, but not its upgrade
-        return isCampaign || building != DWELLING_MONSTER6;
+        return isCampaign || ( building != DWELLING_MONSTER6 && building != BUILD_MAGEGUILD5 );
     default:
         break;
     }
+
     return true;
 }
