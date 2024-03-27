@@ -6157,7 +6157,7 @@ msgid "Eagle Eye"
 msgstr "Olho de Águia"
 
 msgid "Necromancy"
-msgstr "Necromante"
+msgstr "Necromancia"
 
 msgid "Estates"
 msgstr "Riqueza"
