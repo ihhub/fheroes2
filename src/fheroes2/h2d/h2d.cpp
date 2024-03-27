@@ -23,6 +23,8 @@
 #include <ostream>
 #include <stdexcept>
 
+#include <CoreFoundation/CoreFoundation.h>
+
 #include "h2d_file.h"
 #include "logging.h"
 #include "settings.h"
@@ -46,15 +48,31 @@ namespace fheroes2
 {
     namespace h2d
     {
+    
+    std::string get_resources_dir2()
+    {
+    
+        CFArrayRef paths = CFBundleCopyResourceURLsOfType(CFBundleGetMainBundle(), CFSTR("h2d"), NULL);
+        CFURLRef resourceURL = static_cast<CFURLRef>(CFArrayGetValueAtIndex(paths, 0));
+      char resourcePath[PATH_MAX];
+      if (CFURLGetFileSystemRepresentation(resourceURL, true,
+                                           (UInt8 *)resourcePath,
+                                           PATH_MAX))
+      {
+        if (resourceURL != NULL)
+        {
+          CFRelease(resourceURL);
+        }
+        return resourcePath;
+      }
+    
+        return nil;
+    }
+
+    
         H2DInitializer::H2DInitializer()
         {
-            const std::string fileName{ "resurrection.h2d" };
-            std::string filePath;
-            if ( !getH2DFilePath( fileName, filePath ) ) {
-                VERBOSE_LOG( "'" << fileName << "' file cannot be found in the system." )
-                throw std::logic_error( fileName + " is not found." );
-            }
-
+            std::string filePath = get_resources_dir2();
             if ( !reader.open( filePath ) ) {
                 VERBOSE_LOG( "Failed to open '" << filePath << "' file." )
                 throw std::logic_error( std::string( "Cannot open file: " ) + filePath );
