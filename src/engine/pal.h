@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2022                                             *
+ *   Copyright (C) 2020 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -40,6 +40,28 @@ namespace PAL
         DARKENING, // for disabled buttons
         GOOD_TO_EVIL_INTERFACE, // a custom palette for converting Good Interface images into Evil Interface images.
         CUSTOM
+    };
+
+    enum ColorRanges : uint8_t
+    {
+        GRAY_START = 10,
+        GRAY_END = 36,
+        BROWN_START = 37,
+        BROWN_END = 62,
+        BLUE_START = 63,
+        BLUE_END = 84,
+        GREEN_START = 85,
+        GREEN_END = 107,
+        YELLOW_START = 108,
+        YELLOW_END = 130,
+        PURPLE_START = 131,
+        PURPLE_END = 152,
+        CYAN_START = 153,
+        CYAN_END = 174,
+        RED_START = 175,
+        RED_END = 197,
+        ORANGE_START = 198,
+        ORANGE_END = 213
     };
 
     std::vector<uint8_t> GetCyclingPalette( const uint32_t stepId );

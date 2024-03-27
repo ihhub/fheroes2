@@ -3209,4 +3209,71 @@ namespace fheroes2
             }
         }
     }
+
+    void ApplyVerticalGradient( fheroes2::Image & image, const uint8_t outsideColor, const uint8_t insideColor, const uint8_t borderWidth, const uint8_t borderColor )
+    {
+        const int32_t height = image.height();
+        const int32_t width = image.width();
+
+        uint8_t * inData = image.image();
+        uint8_t * inTransform = image.transform();
+
+        uint8_t * outData = image.image();
+
+        const uint8_t center_y = static_cast<uint8_t>( std::max( 1, ( height / 2 ) - height % 2 ) );
+        const float scale = ( outsideColor - insideColor ) / static_cast<float>( center_y );
+
+        // top Half
+        for ( uint8_t top_half_y = 0; top_half_y <= center_y; top_half_y++ ) {
+            uint8_t val = static_cast<uint8_t>( insideColor + abs( center_y - top_half_y ) * scale );
+            uint8_t * th_inRowStart = inData + static_cast<ptrdiff_t>( top_half_y * width );
+            uint8_t * th_outRowStart = outData + static_cast<ptrdiff_t>( top_half_y * width );
+
+            uint8_t * th_inRowEnd = inData + static_cast<ptrdiff_t>( ( top_half_y + 1 ) * width );
+            uint8_t * th_inTrans = inTransform + static_cast<ptrdiff_t>( top_half_y * width );
+
+            for ( ; th_inRowStart != th_inRowEnd; ++th_inRowStart, ++th_inTrans, ++th_outRowStart ) {
+                if ( *th_inTrans == 0 && *th_inRowStart < 21 ) {
+                    *th_outRowStart = val;
+                }
+                else if ( *th_inRowStart < std::min( insideColor, outsideColor ) ) {
+                    *th_inTrans = 1;
+                }
+            }
+        }
+
+        // bottom Half
+        for ( uint8_t btm_half_y = center_y; btm_half_y <= height; btm_half_y++ ) {
+            uint8_t val = static_cast<uint8_t>( insideColor + abs( center_y - btm_half_y ) * scale );
+            uint8_t * bh_inRowStart = inData + static_cast<ptrdiff_t>( btm_half_y * width );
+            uint8_t * bh_outRowStart = outData + static_cast<ptrdiff_t>( btm_half_y * width );
+
+            uint8_t * bh_inRowEnd = inData + static_cast<ptrdiff_t>( ( btm_half_y + 1 ) * width );
+            uint8_t * bh_inTrans = inTransform + static_cast<ptrdiff_t>( btm_half_y * width );
+
+            for ( ; bh_inRowStart != bh_inRowEnd; bh_inRowStart++, bh_inTrans++ ) {
+                if ( *bh_inTrans == 0 ) {
+                    if ( *bh_inRowStart < 21 ) {
+                        *bh_outRowStart = val;
+                    }
+                    else if ( *bh_inRowStart < std::min( insideColor, outsideColor ) ) {
+                        *bh_inTrans = 1;
+                    }
+                }
+            }
+        }
+
+        // first line is broken for unknown reason
+        uint8_t * data = outData;
+        uint8_t * transform = inTransform;
+        const uint8_t * dataEnd = data + width;
+        for ( ; data != dataEnd; ++data, ++transform ) {
+            *transform = 1;
+        }
+
+        for ( uint8_t i = 0; i < borderWidth; i++ ) {
+            fheroes2::Sprite cnt = CreateContour( image, borderColor );
+            Blit( cnt, image );
+        }
+    }
 }
