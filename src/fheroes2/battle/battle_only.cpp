@@ -62,9 +62,6 @@
 
 namespace
 {
-    const uint32_t primaryMaxValue = 20;
-    const int32_t primarySkillIconSize{ 33 };
-
     const std::array<int32_t, 2> playerColor{ Color::BLUE, Color::RED };
     const std::array<int32_t, 2> moraleAndLuckOffsetX{ 34, 571 };
     const std::array<int32_t, 2> primarySkillOffsetX{ 216, 389 };
