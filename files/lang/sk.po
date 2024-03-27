@@ -3707,7 +3707,7 @@ msgstr "Zmeň rýchlosť, ktorou sa tvoji hrdinovia pohybujú v hlavnom okne."
 
 #, fuzzy
 msgid ""
-"Sets the speed that computer heroes move at. You can also elect not to view "
+"Sets the speed that computer heroes move at. You can also select not to view "
 "computer movement at all."
 msgstr ""
 "Nastaví rýchlosť, akou sa hýbu počítačom riadení hrdinovia. Môžeš tiež "

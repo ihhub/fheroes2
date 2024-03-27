@@ -3663,7 +3663,7 @@ msgstr ""
 "Змінює швидкість, з якою ваші герої пересуватимуться по стратегічній мапі."
 
 msgid ""
-"Sets the speed that computer heroes move at. You can also elect not to view "
+"Sets the speed that computer heroes move at. You can also select not to view "
 "computer movement at all."
 msgstr ""
 "Встановлює швидкість, з якою рухаються ворожі герої. Ви також можете "

@@ -3712,7 +3712,7 @@ msgstr ""
 "Change la vitesse à laquelle vos héros se déplacent sur l'écran principal."
 
 msgid ""
-"Sets the speed that computer heroes move at. You can also elect not to view "
+"Sets the speed that computer heroes move at. You can also select not to view "
 "computer movement at all."
 msgstr ""
 "Définit la vitesse à laquelle les héros CPU se déplacent. Vous pouvez "
