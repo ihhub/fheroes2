@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-21 15:34+0000\n"
+"POT-Creation-Date: 2024-03-27 01:17+0000\n"
 "PO-Revision-Date: 2024-03-23 10:51+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3333,10 +3333,12 @@ msgstr "Натисніть, щоб відкрити вікно Віртуаль�
 msgid "Open Virtual Keyboard"
 msgstr "Відкрити Віртуальну Клавіатуру"
 
-msgid "How many units do you wish to move?"
+#, fuzzy
+msgid "How many creatures do you wish to move?"
 msgstr "Як багато військ перемістити?"
 
-msgid "Select how many slots to separate into:"
+#, fuzzy
+msgid "Select how many units to separate into:"
 msgstr "Виберіть, на скільки слотів потрібно розділити:"
 
 msgid "Map: "

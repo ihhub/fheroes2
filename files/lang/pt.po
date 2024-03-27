@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-21 15:34+0000\n"
+"POT-Creation-Date: 2024-03-27 01:17+0000\n"
 "PO-Revision-Date: 2022-10-25 08:56+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
@@ -3265,10 +3265,10 @@ msgid "Open Virtual Keyboard"
 msgstr ""
 
 #, fuzzy
-msgid "How many units do you wish to move?"
+msgid "How many creatures do you wish to move?"
 msgstr "Mover quantas tropas?"
 
-msgid "Select how many slots to separate into:"
+msgid "Select how many units to separate into:"
 msgstr ""
 
 msgid "Map: "
