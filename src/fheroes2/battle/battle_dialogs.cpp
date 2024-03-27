@@ -417,7 +417,7 @@ void Battle::DialogBattleSettings()
             action = openBattleOptionDialog( saveConfiguration );
             break;
         case DialogAction::AudioSettings:
-            Dialog::openAudioSettingsDialog( false );
+            saveConfiguration |= Dialog::openAudioSettingsDialog( false );
             action = DialogAction::Open;
             break;
         case DialogAction::HotKeys:
