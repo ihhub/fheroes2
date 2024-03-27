@@ -37,7 +37,7 @@ namespace Skill
 class PrimarySkillsBar : public Interface::ItemsBar<int>
 {
 public:
-    PrimarySkillsBar( const Heroes * hero, bool mini );
+    PrimarySkillsBar( Heroes * hero, const bool useSmallSize, const bool isEditMode, const bool allowSkillReset );
 
     void SetTextOff( int32_t, int32_t );
     void RedrawBackground( const fheroes2::Rect &, fheroes2::Image & ) override;
@@ -50,9 +50,11 @@ public:
     bool QueueEventProcessing( std::string * = nullptr );
 
 private:
-    const Heroes * _hero;
+    Heroes * _hero;
     fheroes2::Image backsf;
-    const bool useSmallSize;
+    bool _useSmallSize;
+    bool _isEditMode;
+    bool _allowSkillReset;
     std::vector<int> content;
     fheroes2::Point toff;
     std::string msg;

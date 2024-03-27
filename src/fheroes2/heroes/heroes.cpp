@@ -71,7 +71,6 @@
 #include "save_format_version.h"
 #include "serialize.h"
 #include "settings.h"
-#include "skill_static.h"
 #include "speed.h"
 #include "spell_book.h"
 #include "tools.h"
@@ -740,14 +739,17 @@ void Heroes::applyHeroMetadata( const Maps::Map_Format::HeroMetadata & heroMetad
     }
 
     // Apply custom primary Skill values.
-    if ( isEditor || ( heroMetadata.customAttack != 0 ) || ( heroMetadata.customDefense != 0 ) || ( heroMetadata.customSpellPower != 0 )
-         || ( heroMetadata.customKnowledge != 0 ) ) {
-        Skill::Primary::LoadDefaults( HeroBase::HEROES, _race );
-
-        attack += heroMetadata.customAttack;
-        defense += heroMetadata.customDefense;
-        power += heroMetadata.customSpellPower;
-        knowledge += heroMetadata.customKnowledge;
+    if ( isEditor || heroMetadata.customAttack > -1 ) {
+        attack = heroMetadata.customAttack;
+    }
+    if ( isEditor || heroMetadata.customDefense > -1 ) {
+        defense = heroMetadata.customDefense;
+    }
+    if ( isEditor || heroMetadata.customSpellPower > -1 ) {
+        power = heroMetadata.customSpellPower;
+    }
+    if ( isEditor || heroMetadata.customKnowledge > -1 ) {
+        knowledge = heroMetadata.customKnowledge;
     }
 
     SetSpellPoints( heroMetadata.magicPoints > -1 ? static_cast<uint32_t>( heroMetadata.magicPoints ) : GetMaxSpellPoints() );
@@ -871,27 +873,20 @@ bool Heroes::updateHeroMetadata( Maps::Map_Format::HeroMetadata & heroMetadata )
     }
 
     // Primary Skill base values.
-    const Skill::stats_t * defaultPrimarySkills = GameStatic::GetSkillStats( _race );
-    const int16_t customAttack = static_cast<int16_t>( attack ) - ( defaultPrimarySkills ? static_cast<int16_t>( defaultPrimarySkills->initial_primary.attack ) : 0 );
-    const int16_t customDefense = static_cast<int16_t>( defense ) - ( defaultPrimarySkills ? static_cast<int16_t>( defaultPrimarySkills->initial_primary.defense ) : 0 );
-    const int16_t customSpellPower = static_cast<int16_t>( power ) - ( defaultPrimarySkills ? static_cast<int16_t>( defaultPrimarySkills->initial_primary.power ) : 0 );
-    const int16_t customKnowledge
-        = static_cast<int16_t>( knowledge ) - ( defaultPrimarySkills ? static_cast<int16_t>( defaultPrimarySkills->initial_primary.knowledge ) : 0 );
-
-    if ( heroMetadata.customAttack != customAttack ) {
-        heroMetadata.customAttack = customAttack;
+    if ( heroMetadata.customAttack != static_cast<int16_t>( attack ) ) {
+        heroMetadata.customAttack = static_cast<int16_t>( attack );
         hasChanges = true;
     }
-    if ( heroMetadata.customDefense != customDefense ) {
-        heroMetadata.customDefense = customDefense;
+    if ( heroMetadata.customDefense != static_cast<int16_t>( defense ) ) {
+        heroMetadata.customDefense = static_cast<int16_t>( defense );
         hasChanges = true;
     }
-    if ( heroMetadata.customSpellPower != customSpellPower ) {
-        heroMetadata.customSpellPower = customSpellPower;
+    if ( heroMetadata.customSpellPower != static_cast<int16_t>( power ) ) {
+        heroMetadata.customSpellPower = static_cast<int16_t>( power );
         hasChanges = true;
     }
-    if ( heroMetadata.customKnowledge != customKnowledge ) {
-        heroMetadata.customKnowledge = customKnowledge;
+    if ( heroMetadata.customKnowledge != static_cast<int16_t>( knowledge ) ) {
+        heroMetadata.customKnowledge = static_cast<int16_t>( knowledge );
         hasChanges = true;
     }
 

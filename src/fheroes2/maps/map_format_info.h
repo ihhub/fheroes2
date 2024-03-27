@@ -121,12 +121,12 @@ namespace Maps::Map_Format
         int16_t customLevel{ -1 };
         int32_t customExperience{ -1 };
 
-        // Primary Skill bonuses. By default they are to 0. They can be positive or negative.
-        // These values are applied after hero's basic primary skills' values and after level him up, if required.
-        int16_t customAttack{ 0 };
-        int16_t customDefense{ 0 };
-        int16_t customKnowledge{ 0 };
-        int16_t customSpellPower{ 0 };
+        // Primary Skill bonuses. By default they are set to -1 which means that default values will be applied.
+        // These values are applied instead of hero's basic primary skills' values and level-up bonuses.
+        int16_t customAttack{ -1 };
+        int16_t customDefense{ -1 };
+        int16_t customKnowledge{ -1 };
+        int16_t customSpellPower{ -1 };
 
         // The amount of magic points (mana). Negative value means it is not set.
         int16_t magicPoints{ -1 };

@@ -323,6 +323,50 @@ public:
     double getRecruitValue() const;
     int getStatsValue() const;
 
+    void setAttackBaseValue( const int baseValue )
+    {
+        attack = baseValue;
+    }
+
+    void setDefenseBaseValue( const int baseValue )
+    {
+        defense = baseValue;
+    }
+
+    void setPowerBaseValue( const int baseValue )
+    {
+        power = baseValue;
+    }
+
+    void setKnowledgeBaseValue( const int baseValue )
+    {
+        knowledge = baseValue;
+    }
+
+    // Get hero's Attack skill base value without any modificators.
+    int getAttackBaseValue() const
+    {
+        return attack;
+    }
+
+    // Get hero's Defense skill base value without any modificators.
+    int getDefenseBaseValue() const
+    {
+        return defense;
+    }
+
+    // Get hero's Spell Power skill base value without any modificators.
+    int getPowerBaseValue() const
+    {
+        return power;
+    }
+
+    // Get hero's Knowledge skill base value without any modificators.
+    int getKnowledgeBaseValue() const
+    {
+        return knowledge;
+    }
+
     int GetAttack() const override;
     int GetDefense() const override;
     int GetPower() const override;

@@ -65,7 +65,6 @@
 
 namespace
 {
-    const uint32_t primaryMaxValue{ 20 };
     const fheroes2::Size primarySkillIconSize{ 82, 93 };
     const uint32_t experienceMaxValue{ 2990600 };
     const uint32_t spellPointsMaxValue{ 999 };
@@ -195,16 +194,11 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
 
     fheroes2::Point dst_pt( dialogRoi.x + 156, dialogRoi.y + 31 );
 
-    PrimarySkillsBar primskill_bar( this, false );
+    PrimarySkillsBar primskill_bar( this, false, true, true );
     primskill_bar.setTableSize( { 4, 1 } );
     primskill_bar.setInBetweenItemsOffset( { 6, 0 } );
     primskill_bar.setRenderingOffset( dst_pt );
     primskill_bar.Redraw( display );
-
-    const fheroes2::Rect attackRoi( dst_pt.x, dst_pt.y, primarySkillIconSize.width, primarySkillIconSize.height );
-    const fheroes2::Rect defenseRoi( dst_pt.x + primarySkillIconSize.width + 6, dst_pt.y, primarySkillIconSize.width, primarySkillIconSize.height );
-    const fheroes2::Rect powerRoi( dst_pt.x + 2 * ( primarySkillIconSize.width + 6 ), dst_pt.y, primarySkillIconSize.width, primarySkillIconSize.height );
-    const fheroes2::Rect knowledgeRoi( dst_pt.x + 3 * ( primarySkillIconSize.width + 6 ), dst_pt.y, primarySkillIconSize.width, primarySkillIconSize.height );
 
     // Morale indicator.
     dst_pt.x = dialogRoi.x + 514;
@@ -571,53 +565,16 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
                 needRedraw = true;
             }
         }
-        else if ( le.MouseCursor( primskill_bar.GetArea() ) ) {
+        else if ( le.MouseCursor( primskill_bar.GetArea() ) && primskill_bar.QueueEventProcessing( &message ) ) {
             if ( isEditor ) {
-                // In Editor we need to override Primary Skills Bar's event processing except the right mouse button press.
+                primskill_bar.Redraw( display );
 
-                auto primarySkillEditHandler = [&le, &primskill_bar, &display]( int & skill, const std::string & text, const uint32_t minValue ) {
-                    if ( le.MouseClickLeft() ) {
-                        uint32_t value = skill;
-                        if ( Dialog::SelectCount( text, minValue, primaryMaxValue, value ) ) {
-                            skill = static_cast<int>( value );
-                            primskill_bar.Redraw( display );
-                            return true;
-                        }
-                    }
-                    return false;
-                };
-
-                if ( le.MouseCursor( attackRoi ) ) {
-                    message = _( "Set Attack Skill" );
-                    needRedraw |= primarySkillEditHandler( attack, message, 0 );
+                // Hero's Knowledge may have changed.
+                if ( !customSpellPoints ) {
+                    SetSpellPoints( GetMaxSpellPoints() );
                 }
-                else if ( le.MouseCursor( defenseRoi ) ) {
-                    message = _( "Set Defense Skill" );
-                    needRedraw |= primarySkillEditHandler( defense, message, 0 );
-                }
-                else if ( le.MouseCursor( powerRoi ) ) {
-                    message = _( "Set Power Skill" );
-                    needRedraw |= primarySkillEditHandler( power, message, 1 );
-                }
-                else if ( le.MouseCursor( knowledgeRoi ) ) {
-                    message = _( "Set Knowledge Skill" );
-                    if ( primarySkillEditHandler( knowledge, message, 0 ) ) {
-                        // Knowledge change affects hero's spell points.
-                        if ( !customSpellPoints ) {
-                            SetSpellPoints( GetMaxSpellPoints() );
-                        }
-                        spellPointsInfo.Redraw();
-                        needRedraw = true;
-                    }
-                }
-
-                if ( le.MousePressRight() ) {
-                    // In Editor we need to suppress standard Primary Skills Bar's messages.
-                    primskill_bar.QueueEventProcessing();
-                }
-            }
-            else {
-                primskill_bar.QueueEventProcessing( &message );
+                spellPointsInfo.Redraw();
+                needRedraw = true;
             }
         }
         else if ( isEditor && le.MouseClickLeft( portPos ) ) {
