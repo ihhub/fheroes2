@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-03-21 15:34+0000\n"
-"PO-Revision-Date: 2024-03-22 11:26+0200\n"
+"PO-Revision-Date: 2024-03-23 10:51+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: uk\n"
@@ -7139,45 +7139,54 @@ msgid ""
 "This spell costs %{mana} spell points. You have no spell points, so you "
 "cannot cast it."
 msgstr ""
+"Це закляття коштує %{mana} очок мани. У вас немає очок заклинань, тому ви не "
+"можете його застосувати."
 
 msgid ""
 "This spell costs %{mana} spell points. You only have %{point} spell points, "
 "so you cannot cast it."
 msgstr ""
+"Це закляття коштує %{mana} очок мани. У вас є лише %{point}, тому ви не "
+"можете його застосувати."
 
 msgid "The spell was not found."
-msgstr ""
+msgstr "Закляття не знайдено."
 
 msgid "Only heroes can cast this spell."
-msgstr ""
+msgstr "Тільки герої можуть накладати це заклинання."
 
 msgid "This hero is not able to cast adventure spells."
-msgstr ""
+msgstr "Цей герой не здатен використовувати подорожні заклинання."
 
 msgid "Your hero is too tired to cast this spell today. Try again tomorrow."
 msgstr ""
+"Ваш герой занадто втомився, щоб застосувати це закляття сьогодні. Спробуйте "
+"завтра."
 
 msgid "This spell cannot be cast on a boat."
-msgstr ""
+msgstr "Це заклинання не можна застосувати на човні."
 
 msgid "This spell can only be cast near an ocean."
-msgstr ""
+msgstr "Це заклинання можна накласти лише біля океану."
 
 msgid ""
 "There are no boats available and no ocean adjacent to the hero where this "
 "spell will work."
 msgstr ""
+"Біля героя немає ні човнів ні океану, де це заклинання могло б спрацювати."
 
 msgid "There are no boats available for this spell."
-msgstr ""
+msgstr "Для цього заклинання нема доступних човнів."
 
 msgid "There is no ocean adjacent to the hero where this spell will work."
-msgstr "Біля героя немає водойми, то ж ви не можете використати це закляття."
+msgstr "Біля героя немає океану, то ж ви не можете використати це закляття."
 
 msgid ""
 "You do not own any town or castle that is not currently occupied by a hero. "
 "This spell will have no effect."
 msgstr ""
+"Ви не володієте жодним містом або замком, які не зайняті героєм. Це "
+"заклинання не матиме ніякого ефекту."
 
 msgid "This hero is already in a town, so this spell will have no effect."
 msgstr "Цей герой вже перебуває у місті, то ж закляття не матиме ефекту."
@@ -7187,59 +7196,78 @@ msgid ""
 "\n"
 "This town is occupied by your hero %{hero}."
 msgstr ""
+"Найближче місто - %{town}.\n"
+"\n"
+"Це місто зайняте вашим героєм %{hero}."
 
 msgid "This spell is already in effect."
-msgstr ""
+msgstr "Це заклинання вже діє."
 
 msgid ""
 "No opponent neither has nor can have any hero under their command anymore. "
 "Casting this spell will have no effect."
 msgstr ""
+"Жоден з опонентів не має і не може мати під своїм командуванням будь-якого "
+"героя. Дане заклинання не матиме жодного ефекту."
 
 msgid ""
 "No opponent has a hero under their command at this time. Casting this spell "
 "will have no effect."
 msgstr ""
+"Жоден з опонентів не має героя під своїм командуванням в цей час. Дане "
+"заклинання не матиме жодного ефекту."
 
 msgid ""
 "You must be within %{count} spaces of a monster for the Visions spell to "
 "work."
 msgstr ""
+"Щоб закляття Видіння спрацювало, ви повинні знаходитися на відстані %{count} "
+"від монстра."
 
 msgid ""
 "You must be standing on the entrance to a mine (sawmills and alchemist labs "
 "do not count) to cast this spell."
 msgstr ""
+"Щоб накласти це заклинання, ви повинні стояти біля входу в шахту (лісопилки "
+"та алхімічні лабораторії не рахуються)."
 
 msgid "You must first defeat the ghosts guarding the mine to cast this spell."
 msgstr ""
+"Щоб накласти це заклинання, спершу маєте здолати привидів, які охороняють "
+"шахту."
 
 msgid ""
 "There are already at least as many elementals guarding the mine as this hero "
 "can generate. Casting this spell will have no effect."
 msgstr ""
+"Шахту вже охороняє щонайменше стільки елементалів, скільки може згенерувати "
+"цей герой. Застосування цього закляття не матиме жодного ефекту."
 
 msgid "%{name} the %{race} (Level %{level})"
-msgstr ""
+msgstr "%{name} %{race} (Рівень %{level})"
 
 msgid ""
 "'Spread' combat formation spreads the hero's units from the top to the "
 "bottom of the battlefield, with at least one empty space between each unit."
 msgstr ""
+"Розосереджений бойовий стрій розставляє військо  героя згори донизу поля "
+"бою, залишаючи між кожним воїном принаймні одне вільне місце."
 
 msgid ""
 "'Grouped' combat formation bunches the hero's army together in the center of "
 "their side of the battlefield."
 msgstr ""
+"Згуртований бойовий порядок збирає військо героя в центрі своєї частини поля "
+"бою."
 
 msgid "Are you sure you want to dismiss this Hero?"
-msgstr ""
+msgstr "Ви впевнені, що хочете звільнити цього героя?"
 
 msgid "View Experience Info"
-msgstr ""
+msgstr "Переглянути інформацію про досвід"
 
 msgid "View Spell Points Info"
-msgstr ""
+msgstr "Переглянути інформацію про очки магії"
 
 msgid "Set army combat formation to 'Spread'"
 msgstr "Розосередити війська"
@@ -7248,7 +7276,7 @@ msgid "Set army combat formation to 'Grouped'"
 msgstr "Згуртувати війська"
 
 msgid "Exit Hero Screen"
-msgstr ""
+msgstr "Вийти з екрану героя"
 
 msgid "You cannot dismiss a hero in a castle"
 msgstr "Ви не можете звільнити героя в замку."
@@ -7257,7 +7285,7 @@ msgid "Dismissal of %{name} the %{race} is prohibited by scenario"
 msgstr "Звільнення %{name} %{race} заборонено сценарієм"
 
 msgid "Dismiss %{name} the %{race}"
-msgstr ""
+msgstr "Звільнити %{name} %{race}"
 
 msgid "Show previous hero"
 msgstr "Показати попереднього героя"
@@ -7275,18 +7303,20 @@ msgid "%{luck} Luck"
 msgstr "%{luck} вдачі"
 
 msgid "Current Luck Modifiers:"
-msgstr ""
+msgstr "Поточні модифікатори удачі:"
 
 msgid "Current Morale Modifiers:"
-msgstr ""
+msgstr "Поточні модифікатори моралі:"
 
 msgid "Entire army is undead, so morale does not apply."
-msgstr ""
+msgstr "Вся армія - немертві, тому мораль не діє."
 
 msgid ""
 "Current experience %{exp1}.\n"
 " Next level %{exp2}."
 msgstr ""
+"Поточний досвід %{exp1}.\n"
+" Наступний рівень %{exp2}."
 
 msgid "Level %{level}"
 msgstr "Рівень %{level}"
@@ -7297,12 +7327,16 @@ msgid ""
 "occasionally possible for the hero to have more than their maximum spell "
 "points via special events."
 msgstr ""
+"%{name} наразі має %{point} з максимальної кількості %{max}. Максимальна "
+"кількість очок заклинань у 10 разів перевищує рівень знань героя. Іноді "
+"герой може мати більше очок заклинань, ніж передбачено, завдяки спеціальним "
+"подіям."
 
 msgid "%{name1} meets %{name2}"
-msgstr ""
+msgstr "%{name1} зустрічає %{name2}"
 
 msgid "Enemy heroes are now fully identifiable."
-msgstr ""
+msgstr "Ворожі герої тепер повністю ідентифіковані."
 
 msgid "Identify Hero"
 msgstr "Ідентифікувати Героя"
@@ -7329,28 +7363,34 @@ msgid ""
 "\n"
 " for a fee of %{gold} gold."
 msgstr ""
+"\n"
+" за плату в %{gold} золота."
 
 msgid "These weak creatures will surely flee before us."
-msgstr ""
+msgstr "Ці слабкі створіння напевно тікатимуть від нас."
 
 msgid "I fear these creatures are in the mood for a fight."
 msgstr "Боюсь ці істоти налаштовані на бій."
 
-#, fuzzy
 msgid "The hero's attack skill is a bonus added to each unit's attack skill."
-msgstr "кожна з бонусом +%{attack} до вміння Атаки."
+msgstr ""
+"Вміння атаки героя - це бонус, що додається до вміння атаки кожного воїна."
 
 msgid "The hero's defense skill is a bonus added to each unit's defense skill."
 msgstr ""
+"Вміння захисту героя - це бонус, який додається до вміння захисту кожного "
+"воїна."
 
 msgid "The hero's spell power determines the duration or power of a spell."
-msgstr ""
+msgstr "Сила заклинання героя визначає тривалість або потужність заклинання."
 
 msgid ""
 "The hero's knowledge determines how many spell points the hero may have. "
 "Under normal circumstances, a hero is limited to 10 spell points per level "
 "of knowledge."
 msgstr ""
+"Знання героя визначають, скільки очок магії може мати герой. За звичайних "
+"обставин герой обмежений 10 очками за рівень знань."
 
 msgid "Current Modifiers:"
 msgstr "Поточні Модифікатори:"
@@ -7754,28 +7794,28 @@ msgstr ""
 "вторинні навички."
 
 msgid "Hero/Stats"
-msgstr ""
+msgstr "Герой/Статистика"
 
 msgid "Skills"
-msgstr ""
+msgstr "Навички"
 
 msgid "Town/Castle"
-msgstr ""
+msgstr "Місто/Замок"
 
 msgid "Garrison"
-msgstr ""
+msgstr "Гарнізон"
 
 msgid "Gold Per Day:"
-msgstr ""
+msgstr "Золота на день:"
 
 msgid "View Heroes."
-msgstr ""
+msgstr "Дивитись героїв."
 
 msgid "Towns/Castles"
-msgstr ""
+msgstr "Міста/Замки"
 
 msgid "View Towns and Castles."
-msgstr ""
+msgstr "Переглянути міста і замки"
 
 msgid "luck|Cursed"
 msgstr "Проклята"
@@ -7802,16 +7842,22 @@ msgid ""
 "Negative luck sometimes falls on the hero's units in combat, causing their "
 "attacks to only do half damage."
 msgstr ""
+"Іноді, негативна удача спіткає війська героя в бою, через що їхні атаки "
+"завдають лише половину шкоди."
 
 msgid ""
 "Neutral luck means the hero's units will never get lucky or unlucky attacks "
 "on the enemy."
 msgstr ""
+"Нейтральна удача означає, що війська героя ніколи не матимуть вдалі або "
+"невдалі атаки по ворогу."
 
 msgid ""
 "Positive luck sometimes lets the hero's units get lucky attacks (double "
 "strength) in combat."
 msgstr ""
+"Позитивна удача інколи дарує військам героя вдалу атаку (подвійна сила) в "
+"бою."
 
 msgid "morale|Treason"
 msgstr "Зрада"
@@ -7834,17 +7880,18 @@ msgstr "Чудова"
 msgid "morale|Blood!"
 msgstr "Кров!"
 
-#, fuzzy
 msgid "Negative morale may cause the hero's units to freeze in combat."
-msgstr "Через низьку мораль %{monster} завмер у паніці."
+msgstr "Негативна мораль може призвести до заклякання військ героя у бою."
 
 msgid ""
 "Neutral morale means the hero's units will never be blessed with extra "
 "attacks or freeze in combat."
 msgstr ""
+"Нейтральна мораль означає, що війська героя ніколи не будуть обдаровані "
+"додатковими атаками або завмирати в бою."
 
 msgid "Positive morale may give the hero's units extra attacks in combat."
-msgstr "Хороша мораль може надати вашій армії додатковий хід в бою."
+msgstr "Позитивна мораль може надати військам героя додатковий хід в бою."
 
 msgid "Knight"
 msgstr "Лицар"
@@ -8432,12 +8479,11 @@ msgstr "Вівтар Виклику Землі"
 msgid "Water Summoning Altar"
 msgstr "Вівтар Виклику Води"
 
-#, fuzzy
 msgid "Swampy Lake"
-msgstr "Болото"
+msgstr "Болотисте озеро"
 
 msgid "Frozen Lake"
-msgstr ""
+msgstr "Замерзле озеро"
 
 msgid "Unknown Monster"
 msgstr "Невідомий монстр"
@@ -8983,7 +9029,7 @@ msgid "Lightning"
 msgstr "Блискавка"
 
 msgid "% damage from "
-msgstr ""
+msgstr "% шкоди від"
 
 msgid "The three Anduran artifacts magically combine into one."
 msgstr "Три артефакти Андурана магічним чином поєднуються в один."
@@ -8992,7 +9038,7 @@ msgid "View Spells"
 msgstr "Переглянути заклинання"
 
 msgid "View %{name} Info"
-msgstr ""
+msgstr "Переглянути інформацію по %{name}"
 
 msgid "Move %{name}"
 msgstr "Перемістити %{name}"
@@ -9007,50 +9053,49 @@ msgid "Invalid Artifact"
 msgstr ""
 
 msgid "The %{name} increases the hero's knowledge by %{count}."
-msgstr "%{name} підвищує ваше Знання на %{count}."
+msgstr "%{name} підвищує знання героя на %{count}."
 
 msgid "Ultimate Book of Knowledge"
-msgstr ""
+msgstr "Легендарна Книга Знань"
 
 msgid "The %{name} increases the hero's attack skill by %{count}."
-msgstr "%{name} підвищує вашу Атаку на %{count}."
+msgstr "%{name} підвищує навичку атаки героя на %{count}."
 
 msgid "Ultimate Sword of Dominion"
-msgstr ""
+msgstr "Легендарний Меч Панування"
 
 msgid "The %{name} increases the hero's defense skill by %{count}."
-msgstr "%{name} підвищує ваш Захист на %{count}."
+msgstr "%{name} підвищує навичку захисту героя на %{count}."
 
 msgid "Ultimate Cloak of Protection"
-msgstr ""
+msgstr "Легендарний Плащ Захисту"
 
-#, fuzzy
 msgid "The %{name} increases the hero's spell power by %{count}."
-msgstr "%{name} посилює вашу Силу Магії на %{count}."
+msgstr "%{name} збільшує силу магії героя на %{count}."
 
 msgid "Ultimate Wand of Magic"
-msgstr ""
+msgstr "Легендарна Паличка Магії"
 
 msgid ""
 "The %{name} increases the hero's attack and defense skills by %{count} each."
-msgstr "%{name} підвищує ваші Атаку та Захист на %{count} кожного."
+msgstr "%{name} підвищує навички атаки та захисту героя на %{count} кожну."
 
 msgid "Ultimate Shield"
-msgstr ""
+msgstr "Легендарний Щит"
 
 msgid ""
 "The %{name} increases the hero's spell power and knowledge by %{count} each."
-msgstr "%{name} посилює ваші Силу Магії та Знання на %{count} кожне."
+msgstr "%{name} збільшує силу магії та знання героя на %{count} кожне."
 
 msgid "Ultimate Staff"
-msgstr ""
+msgstr "Легендарний Посох"
 
 msgid ""
 "The %{name} increases each of the hero's basic skills by %{count} points."
-msgstr "%{name} збільшує кожну головну навичку героя на %{count}."
+msgstr "%{name} збільшує кожну головну навичку героя на %{count} пунктів."
 
 msgid "Ultimate Crown"
-msgstr ""
+msgstr "Легендарна Корона"
 
 msgid "Golden Goose"
 msgstr "Золотий Гусак"
