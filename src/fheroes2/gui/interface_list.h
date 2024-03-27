@@ -476,16 +476,16 @@ namespace Interface
 
             const fheroes2::Point & mousePos = le.GetMouseCursor();
             if ( rtAreaItems & mousePos ) { // within our rectangle
-                needRedraw = true;
-
                 const int id = ( mousePos.y - rtAreaItems.y ) * maxItems / rtAreaItems.height + _topId;
 
                 if ( id < _size() ) {
                     Item & item = ( *content )[static_cast<size_t>( id )]; // id is always >= 0
                     const int32_t offsetY = ( id - _topId ) * rtAreaItems.height / maxItems;
 
-                    if ( ActionListCursor( item, mousePos ) )
+                    if ( ActionListCursor( item, mousePos ) ) {
+                        needRedraw = true;
                         return true;
+                    }
 
                     if ( !_lockClick && le.MouseClickLeft( rtAreaItems ) ) {
                         // This is a legitimate click and not a mouse-up on a finished drag.
@@ -496,6 +496,8 @@ namespace Interface
                             _currentId = id;
                             ActionListSingleClick( item, mousePos, rtAreaItems.x, rtAreaItems.y + offsetY );
                         }
+                        needRedraw = true;
+
                         return true;
                     }
 
@@ -504,8 +506,6 @@ namespace Interface
                         return true;
                     }
                 }
-
-                needRedraw = false;
             }
 
             return false;
