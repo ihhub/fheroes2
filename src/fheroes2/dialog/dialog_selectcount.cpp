@@ -405,12 +405,12 @@ int Dialog::ArmySplitTroop( uint32_t freeSlots, const uint32_t redistributeMax, 
     const fheroes2::Text header( troopName, fheroes2::FontType::normalYellow() );
     const int32_t headerHeight = header.height() + 6;
 
-    const std::string msg( _( "How many units do you wish to move?" ) );
+    const std::string msg( _( "How many creatures do you wish to move?" ) );
     fheroes2::Text titleText( msg, fheroes2::FontType::normalWhite() );
     titleText.setUniformVerticalAlignment( false );
     const int32_t titleHeight = headerHeight + titleText.rows( BOXAREA_WIDTH ) * titleText.height();
 
-    fheroes2::Text slotSeparationText( _( "Select how many slots to separate into:" ), fheroes2::FontType::normalWhite() );
+    fheroes2::Text slotSeparationText( _( "Select how many units to separate into:" ), fheroes2::FontType::normalWhite() );
     slotSeparationText.setUniformVerticalAlignment( false );
     const int32_t bodyHeight = slotSeparationText.rows( BOXAREA_WIDTH ) * slotSeparationText.height();
 
