@@ -189,6 +189,7 @@ namespace Skill
         static const char * String( const int skillType );
         static std::string StringDescription( int, const Heroes * );
         static int GetInitialSpell( int race );
+        static int getHeroDefaultSkillValue( const int skill, const int race );
 
     protected:
         void LoadDefaults( int type, int race );

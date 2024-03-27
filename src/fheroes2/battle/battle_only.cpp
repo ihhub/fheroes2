@@ -62,9 +62,6 @@
 
 namespace
 {
-    const uint32_t primaryMaxValue = 20;
-    const int32_t primarySkillIconSize{ 33 };
-
     const std::array<int32_t, 2> playerColor{ Color::BLUE, Color::RED };
     const std::array<int32_t, 2> moraleAndLuckOffsetX{ 34, 571 };
     const std::array<int32_t, 2> primarySkillOffsetX{ 216, 389 };
@@ -126,15 +123,6 @@ bool Battle::Only::setup( const bool allowBackup, bool & reset )
 
     armyInfo[0].portraitRoi = { cur_pt.x + 93, cur_pt.y + 72, 101, 93 };
     armyInfo[1].portraitRoi = { cur_pt.x + 445, cur_pt.y + 72, 101, 93 };
-
-    const std::array<fheroes2::Rect, 2> attackRoi{ fheroes2::Rect( cur_pt.x + 215, cur_pt.y + 50, primarySkillIconSize, primarySkillIconSize ),
-                                                   fheroes2::Rect( cur_pt.x + 390, cur_pt.y + 50, primarySkillIconSize, primarySkillIconSize ) };
-    const std::array<fheroes2::Rect, 2> defenseRoi{ fheroes2::Rect( cur_pt.x + 215, cur_pt.y + 83, primarySkillIconSize, primarySkillIconSize ),
-                                                    fheroes2::Rect( cur_pt.x + 390, cur_pt.y + 83, primarySkillIconSize, primarySkillIconSize ) };
-    const std::array<fheroes2::Rect, 2> powerRoi{ fheroes2::Rect( cur_pt.x + 215, cur_pt.y + 116, primarySkillIconSize, primarySkillIconSize ),
-                                                  fheroes2::Rect( cur_pt.x + 390, cur_pt.y + 116, primarySkillIconSize, primarySkillIconSize ) };
-    const std::array<fheroes2::Rect, 2> knowledgeRoi{ fheroes2::Rect( cur_pt.x + 215, cur_pt.y + 149, primarySkillIconSize, primarySkillIconSize ),
-                                                      fheroes2::Rect( cur_pt.x + 390, cur_pt.y + 149, primarySkillIconSize, primarySkillIconSize ) };
 
     armyInfo[0].player.SetControl( armyInfo[0].controlType );
     armyInfo[1].player.SetControl( armyInfo[1].controlType );
@@ -291,46 +279,6 @@ bool Battle::Only::setup( const bool allowBackup, bool & reset )
             needRedrawControlInfo = true;
         }
 
-        for ( const auto & [hero, index] : { std::pair<Heroes *, size_t>( armyInfo[0].hero, 0 ), std::pair<Heroes *, size_t>( armyInfo[1].hero, 1 ) } ) {
-            if ( hero == nullptr ) {
-                continue;
-            }
-
-            if ( le.MouseClickLeft( attackRoi[index] ) ) {
-                uint32_t value = hero->attack;
-                if ( Dialog::SelectCount( _( "Set Attack Skill" ), 0, primaryMaxValue, value ) ) {
-                    hero->attack = static_cast<int>( value );
-
-                    needRedrawOpponentsStats = true;
-                }
-            }
-            else if ( le.MouseClickLeft( defenseRoi[index] ) ) {
-                uint32_t value = hero->defense;
-                if ( Dialog::SelectCount( _( "Set Defense Skill" ), 0, primaryMaxValue, value ) ) {
-                    hero->defense = static_cast<int>( value );
-
-                    needRedrawOpponentsStats = true;
-                }
-            }
-            else if ( le.MouseClickLeft( powerRoi[index] ) ) {
-                uint32_t value = hero->power;
-                if ( Dialog::SelectCount( _( "Set Power Skill" ), 0, primaryMaxValue, value ) ) {
-                    hero->power = static_cast<int>( value );
-
-                    needRedrawOpponentsStats = true;
-                }
-            }
-            else if ( le.MouseClickLeft( knowledgeRoi[index] ) ) {
-                uint32_t value = hero->knowledge;
-                if ( Dialog::SelectCount( _( "Set Knowledge Skill" ), 0, primaryMaxValue, value ) ) {
-                    hero->knowledge = static_cast<int>( value );
-
-                    updateSpellPoints = true;
-                    needRedrawOpponentsStats = true;
-                }
-            }
-        }
-
         for ( const auto & [firstId, secondId] : { std::pair<int32_t, int32_t>{ 0, 1 }, std::pair<int32_t, int32_t>{ 1, 0 } } ) {
             const ArmyUI & firstUI = armyInfo[firstId].ui;
             const ArmyUI & secondUI = armyInfo[secondId].ui;
@@ -374,7 +322,10 @@ bool Battle::Only::setup( const bool allowBackup, bool & reset )
                 LuckIndicator::QueueEventProcessing( *firstUI.luck );
             }
             else if ( firstUI.primarySkill != nullptr && le.MouseCursor( firstUI.primarySkill->GetArea() ) ) {
-                firstUI.primarySkill->QueueEventProcessing();
+                if ( firstUI.primarySkill->QueueEventProcessing() ) {
+                    updateSpellPoints = true;
+                    needRedrawOpponentsStats = true;
+                }
             }
             else if ( firstUI.secondarySkill != nullptr && le.MouseCursor( firstUI.secondarySkill->GetArea() ) && firstUI.secondarySkill->QueueEventProcessing() ) {
                 armyInfo[firstId].needRedraw = true;
@@ -587,7 +538,7 @@ void Battle::Only::updateArmyUI( ArmyUI & ui, Heroes * hero, const fheroes2::Poi
     ui.luck = std::make_unique<LuckIndicator>( hero );
     ui.luck->SetPos( { offset.x + moraleAndLuckOffsetX[armyId], offset.y + 115 } );
 
-    ui.primarySkill = std::make_unique<PrimarySkillsBar>( hero, true );
+    ui.primarySkill = std::make_unique<PrimarySkillsBar>( hero, true, true, false );
     ui.primarySkill->setTableSize( { 1, 4 } );
     ui.primarySkill->setInBetweenItemsOffset( { 0, -1 } );
     ui.primarySkill->SetTextOff( armyId == 0 ? 70 : -70, -25 );

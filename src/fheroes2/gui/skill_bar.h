@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2022                                             *
+ *   Copyright (C) 2020 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -37,7 +37,7 @@ namespace Skill
 class PrimarySkillsBar : public Interface::ItemsBar<int>
 {
 public:
-    PrimarySkillsBar( const Heroes * hero, bool mini );
+    PrimarySkillsBar( Heroes * hero, const bool useSmallSize, const bool isEditMode, const bool allowSkillReset );
 
     void SetTextOff( int32_t, int32_t );
     void RedrawBackground( const fheroes2::Rect &, fheroes2::Image & ) override;
@@ -50,9 +50,11 @@ public:
     bool QueueEventProcessing( std::string * = nullptr );
 
 private:
-    const Heroes * _hero;
+    Heroes * _hero;
     fheroes2::Image backsf;
-    const bool useSmallSize;
+    bool _useSmallSize;
+    bool _isEditMode;
+    bool _allowSkillReset;
     std::vector<int> content;
     fheroes2::Point toff;
     std::string msg;
@@ -61,7 +63,7 @@ private:
 class SecondarySkillsBar : public Interface::ItemsBar<Skill::Secondary>
 {
 public:
-    SecondarySkillsBar( const Heroes & hero, bool mini = true, bool change = false );
+    SecondarySkillsBar( const Heroes & hero, const bool mini = true, const bool change = false, const bool showDefaultSkillsMessage = false );
 
     void RedrawBackground( const fheroes2::Rect &, fheroes2::Image & ) override;
     void RedrawItem( Skill::Secondary &, const fheroes2::Rect &, fheroes2::Image & ) override;
@@ -76,6 +78,7 @@ private:
     fheroes2::Image backsf;
     const bool use_mini_sprite;
     const bool can_change;
+    const bool _showDefaultSkillsMessage;
     std::string msg;
     const Heroes & _hero;
 };

@@ -168,6 +168,7 @@ namespace
                                                 ICN::BUTTON_VIEWWORLD_EXIT_EVIL,
                                                 ICN::BUTTON_VERTICAL_DISMISS,
                                                 ICN::BUTTON_VERTICAL_EXIT,
+                                                ICN::BUTTON_VERTICAL_PATROL,
                                                 ICN::BUTTON_HSCORES_VERTICAL_CAMPAIGN,
                                                 ICN::BUTTON_HSCORES_VERTICAL_EXIT,
                                                 ICN::BUTTON_HSCORES_VERTICAL_STANDARD,
@@ -1950,6 +1951,19 @@ namespace fheroes2
 
                 break;
             }
+            case ICN::BUTTON_VERTICAL_PATROL: {
+                _icnVsSprite[id].resize( 2 );
+
+                // We need to temporarily remove the letter specific X offsets in the font because if not the letters will
+                // be off-centered when we are displaying one letter per line
+                const ButtonFontOffsetRestorer fontReleased( _icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED], -1 );
+                const ButtonFontOffsetRestorer fontPressed( _icnVsSprite[ICN::BUTTON_GOOD_FONT_PRESSED], -1 );
+                getTextAdaptedButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "P\nA\nT\nR\nO\nL" ), ICN::EMPTY_VERTICAL_GOOD_BUTTON,
+                                      ICN::REDBAK_SMALL_VERTICAL );
+
+                break;
+            }
+
             case ICN::BUTTON_HSCORES_VERTICAL_CAMPAIGN:
             case ICN::BUTTON_HSCORES_VERTICAL_EXIT:
             case ICN::BUTTON_HSCORES_VERTICAL_STANDARD: {
@@ -2648,6 +2662,7 @@ namespace fheroes2
             case ICN::BUTTON_VIEWWORLD_EXIT_EVIL:
             case ICN::BUTTON_VERTICAL_DISMISS:
             case ICN::BUTTON_VERTICAL_EXIT:
+            case ICN::BUTTON_VERTICAL_PATROL:
             case ICN::BUTTON_HSCORES_VERTICAL_CAMPAIGN:
             case ICN::BUTTON_HSCORES_VERTICAL_EXIT:
             case ICN::BUTTON_HSCORES_VERTICAL_STANDARD:

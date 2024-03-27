@@ -159,7 +159,7 @@ struct HeroRow
         secSkillsBar->setInBetweenItemsOffset( { -1, 8 } );
         secSkillsBar->SetContent( hero->GetSecondarySkills().ToVector() );
 
-        primSkillsBar = std::make_unique<PrimarySkillsBar>( hero, true );
+        primSkillsBar = std::make_unique<PrimarySkillsBar>( hero, true, false, false );
         primSkillsBar->setTableSize( { 4, 1 } );
         primSkillsBar->setInBetweenItemsOffset( { 2, 0 } );
         primSkillsBar->SetTextOff( 20, -13 );

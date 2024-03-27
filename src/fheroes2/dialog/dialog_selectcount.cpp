@@ -52,8 +52,6 @@
 
 namespace
 {
-    const int32_t textOffset = 24;
-
     void SwitchMaxMinButtons( fheroes2::ButtonBase & minButton, fheroes2::ButtonBase & maxButton, uint32_t currentValue, uint32_t minimumValue )
     {
         const bool isMinValue = ( currentValue <= minimumValue );
@@ -237,9 +235,8 @@ bool Dialog::InputString( const std::string & header, std::string & res, const s
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
-    res.clear();
-    res.reserve( 48 );
-    size_t charInsertPos = 0;
+    res.reserve( charLimit == 0 ? 48 : charLimit );
+    size_t charInsertPos = res.size();
 
     const fheroes2::Text titlebox( title, fheroes2::FontType::normalYellow() );
     const fheroes2::Text textbox( header, fheroes2::FontType::normalWhite() );
@@ -266,11 +263,13 @@ bool Dialog::InputString( const std::string & header, std::string & res, const s
     dst_pt.y = box_rt.y + 10 + titleHeight + textbox.height( BOXAREA_WIDTH ) + 10;
     dst_pt.x = box_rt.x + ( box_rt.width - inputArea.width() ) / 2;
     fheroes2::Blit( inputArea, display, dst_pt.x, dst_pt.y );
-    const fheroes2::Rect text_rt( dst_pt.x, dst_pt.y, inputArea.width(), inputArea.height() );
+    fheroes2::Point inputAreaPos( 13, 1 );
+    const fheroes2::Rect textInputArea( dst_pt.x + inputAreaPos.x, dst_pt.y + inputAreaPos.y, inputArea.width() - 26, inputArea.height() - 3 );
 
-    fheroes2::Text text( "_", fheroes2::FontType::normalWhite() );
-    fheroes2::Blit( inputArea, display, text_rt.x, text_rt.y );
-    text.draw( text_rt.x + ( text_rt.width - text.width() ) / 2, text_rt.y + 3, display );
+    bool isCursorVisible = true;
+    fheroes2::Text text( insertCharToString( res, charInsertPos, isCursorVisible ? '_' : '\x7F' ), fheroes2::FontType::normalWhite() );
+    text.fitToOneRow( textInputArea.width );
+    text.drawInRoi( textInputArea.x + ( textInputArea.width - text.width() ) / 2, textInputArea.y + 2, display, textInputArea );
 
     const int okayButtonICNID = isEvilInterface ? ICN::UNIFORM_EVIL_OKAY_BUTTON : ICN::UNIFORM_GOOD_OKAY_BUTTON;
 
@@ -309,8 +308,6 @@ bool Dialog::InputString( const std::string & header, std::string & res, const s
 
     LocalEvent & le = LocalEvent::Get();
 
-    bool isCursorVisible = true;
-
     Game::AnimateResetDelay( Game::DelayType::CURSOR_BLINK_DELAY );
 
     const bool isInGameKeyboardRequired = System::isVirtualKeyboardSupported();
@@ -331,7 +328,7 @@ bool Dialog::InputString( const std::string & header, std::string & res, const s
             break;
         }
 
-        if ( le.MouseClickLeft( buttonVirtualKB.area() ) || ( isInGameKeyboardRequired && le.MouseClickLeft( text_rt ) ) ) {
+        if ( le.MouseClickLeft( buttonVirtualKB.area() ) || ( isInGameKeyboardRequired && le.MouseClickLeft( textInputArea ) ) ) {
             fheroes2::openVirtualKeyboard( res );
             if ( charLimit > 0 && res.size() > charLimit ) {
                 res.resize( charLimit );
@@ -345,9 +342,9 @@ bool Dialog::InputString( const std::string & header, std::string & res, const s
                 redraw = true;
             }
         }
-        else if ( le.MouseClickLeft( text_rt ) ) {
+        else if ( le.MouseClickLeft( textInputArea ) ) {
             charInsertPos = fheroes2::getTextInputCursorPosition( res, fheroes2::FontType::normalWhite(), charInsertPos, le.GetMouseCursor().x,
-                                                                  text_rt.x + ( text_rt.width - text.width() ) / 2 );
+                                                                  textInputArea.x + ( textInputArea.width - text.width() ) / 2 );
 
             redraw = true;
         }
@@ -380,10 +377,10 @@ bool Dialog::InputString( const std::string & header, std::string & res, const s
             }
 
             text.set( insertCharToString( res, charInsertPos, isCursorVisible ? '_' : '\x7F' ), fheroes2::FontType::normalWhite() );
-            text.fitToOneRow( inputArea.width() - textOffset );
+            text.fitToOneRow( textInputArea.width );
 
-            fheroes2::Blit( inputArea, display, text_rt.x, text_rt.y );
-            text.draw( text_rt.x + ( text_rt.width - text.width() ) / 2, text_rt.y + 3, display );
+            fheroes2::Copy( inputArea, inputAreaPos.x, inputAreaPos.y, display, textInputArea );
+            text.drawInRoi( textInputArea.x + ( textInputArea.width - text.width() ) / 2, textInputArea.y + 2, display, textInputArea );
             display.render();
         }
     }

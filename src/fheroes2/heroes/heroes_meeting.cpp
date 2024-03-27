@@ -195,8 +195,8 @@ private:
 class MeetingPrimarySkillsBar : public PrimarySkillsBar
 {
 public:
-    explicit MeetingPrimarySkillsBar( const Heroes * hero )
-        : PrimarySkillsBar( hero, true )
+    explicit MeetingPrimarySkillsBar( Heroes * hero )
+        : PrimarySkillsBar( hero, true, false, false )
     {}
 
     void RedrawBackground( const fheroes2::Rect &, fheroes2::Image & ) override

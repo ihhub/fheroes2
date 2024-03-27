@@ -656,14 +656,14 @@ Castle::ConstructionDialogResult Castle::openConstructionDialog( uint32_t & dwel
         // Right click
         if ( hero1 && le.MousePressRight( rectHero1 ) ) {
             LocalEvent::GetClean();
-            hero1->OpenDialog( true, true, false, false, false );
+            hero1->OpenDialog( true, true, false, false, false, false );
 
             // Use half fade if game resolution is not 640x480.
             fheroes2::fadeInDisplay( restorer.rect(), !display.isDefaultSize() );
         }
         else if ( hero2 && le.MousePressRight( rectHero2 ) ) {
             LocalEvent::GetClean();
-            hero2->OpenDialog( true, true, false, false, false );
+            hero2->OpenDialog( true, true, false, false, false, false );
 
             // Use half fade if game resolution is not 640x480.
             fheroes2::fadeInDisplay( restorer.rect(), !display.isDefaultSize() );
