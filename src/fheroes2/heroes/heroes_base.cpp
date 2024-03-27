@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -399,6 +399,13 @@ bool HeroBase::CanCastSpell( const Spell & spell, std::string * res /* = nullptr
             // This should not happen for a human-controlled hero (for which this method is usually called with the non-null res)
             assert( 0 );
             *res = _( "The spell was not found." );
+        }
+        return false;
+    }
+
+    if ( spell.isCombat() && !spell.canCastCombatSpell() ) {
+        if ( res ) {
+            *res = _( "This spell will have no effect!" );
         }
         return false;
     }
