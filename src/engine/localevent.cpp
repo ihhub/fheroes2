@@ -30,6 +30,8 @@
 #include <set>
 #include <utility>
 
+#include <settings.h>
+
 #include <SDL_events.h>
 #include <SDL_gamecontroller.h>
 #include <SDL_hints.h>
@@ -48,7 +50,6 @@
 #include "render_processor.h"
 #include "screen.h"
 #include "tools.h"
-#include <settings.h>
 
 namespace
 {
@@ -856,7 +857,6 @@ bool LocalEvent::HandleEvents( const bool sleepAfterEventProcessing, const bool 
             break;
         case SDL_DISPLAYEVENT:
             if ( event.display.event == SDL_DISPLAYEVENT_DISCONNECTED ) {
-               
                 DEBUG_LOG( DBG_ENGINE, DBG_INFO, "The display with id %d was disconnected " << event.display.display );
                 engine.setDisplayIndex( engine.getCurrentDisplayIndex() );
 
