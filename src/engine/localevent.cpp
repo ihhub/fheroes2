@@ -47,7 +47,6 @@
 #include "logging.h"
 #include "render_processor.h"
 #include "screen.h"
-#include "settings.h"
 #include "tools.h"
 
 namespace
@@ -868,10 +867,6 @@ bool LocalEvent::HandleEvents( const bool sleepAfterEventProcessing, const bool 
 
                 display.setResolution( currentResolution );
                 fheroes2::Copy( temp, display );
-
-                // Save new index in conf as well
-                Settings & conf = Settings::Get();
-                conf.Save( Settings::configFileName );
             }
             break;
         default:
