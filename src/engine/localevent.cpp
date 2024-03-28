@@ -30,8 +30,6 @@
 #include <set>
 #include <utility>
 
-#include <settings.h>
-
 #include <SDL_events.h>
 #include <SDL_gamecontroller.h>
 #include <SDL_hints.h>
@@ -49,6 +47,7 @@
 #include "logging.h"
 #include "render_processor.h"
 #include "screen.h"
+#include "settings.h"
 #include "tools.h"
 
 namespace
