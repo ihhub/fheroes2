@@ -855,7 +855,7 @@ bool LocalEvent::HandleEvents( const bool sleepAfterEventProcessing, const bool 
             DEBUG_LOG( DBG_ENGINE, DBG_WARN, "OS indicates low memory. Release some resources." )
             break;
         case SDL_DISPLAYEVENT:
-            if ( event.display.event == SDL_DISPLAYEVENT_DISCONNECTED ) {
+            if ( event.display.event == SDL_DisplayEventID::SDL_DISPLAYEVENT_DISCONNECTED ) {
                 DEBUG_LOG( DBG_ENGINE, DBG_INFO, "The display with id %d was disconnected " << event.display.display );
                 engine.setDisplayIndex( engine.getCurrentDisplayIndex() );
 
