@@ -1362,7 +1362,7 @@ msgid "campaignBonus|Resurrect"
 msgstr "Ressuscitar"
 
 msgid "campaignBonus|Steelskin"
-msgstr "Pele de Aço"
+msgstr "Couraça de Aço"
 
 msgid "campaignBonus|Summon Earth"
 msgstr "Invocar Terra"
@@ -2884,11 +2884,11 @@ msgstr "Clique para abrir o diálogo do Teclado Virtual"
 msgid "Open Virtual Keyboard"
 msgstr "Abrir o teclado virtual"
 
-msgid "How many units do you wish to move?"
-msgstr "Quantas unidades você deseja mover?"
+msgid "How many creatures do you wish to move?"
+msgstr "Quantas criaturas você deseja mover?"
 
-msgid "Select how many slots to separate into:"
-msgstr "Selecione quantos espaços serão separados:"
+msgid "Select how many units to separate into:"
+msgstr "Selecione quantas unidades serão separadas:"
 
 msgid "Map: "
 msgstr "Mapa: "
@@ -7921,7 +7921,7 @@ msgid "Gambler's Lucky Coin"
 msgstr "Moeda da Sorte do Apostador"
 
 msgid "You have captured a mischievous imp who has been terrorizing the region. In exchange for his release, he rewards you with a magical coin."
-msgstr "Você capturou um diabinho que tem aterrorizado a região. Em troca de sua libertação, ele o recompensa com uma moeda mágica."
+msgstr "Você capturou um diabrete que tem aterrorizado a região. Em troca de sua libertação, ele o recompensa com uma moeda mágica."
 
 msgid "Four-Leaf Clover"
 msgstr "Trevo-de-Quatro-Folhas"
@@ -8639,13 +8639,13 @@ msgid "Magically increases the defense skill of the selected creatures."
 msgstr "Aumenta magicamente a habilidade de defesa das criaturas selecionadas."
 
 msgid "Stoneskin"
-msgstr "Pele de Pedra"
+msgstr "Couraça de Pedra"
 
 msgid "Increases the defense skill of the targeted creatures. This is an improved version of Stoneskin."
-msgstr "Aumenta a habilidade de defesa das criaturas alvo. Esta é uma versão melhorada da Pele de Pedra."
+msgstr "Aumenta a habilidade de defesa das criaturas alvo. Esta é uma versão melhorada da Couraça de Pedra."
 
 msgid "Steelskin"
-msgstr "Pele de Aço"
+msgstr "Couraça de Aço"
 
 msgid "Causes the selected creatures to inflict minimum damage."
 msgstr "Faz com que as criaturas selecionadas inflijam o dano mínimo."
