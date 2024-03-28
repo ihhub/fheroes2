@@ -48,6 +48,7 @@
 #include "render_processor.h"
 #include "screen.h"
 #include "tools.h"
+#include <settings.h>
 
 namespace
 {
@@ -737,6 +738,7 @@ bool LocalEvent::HandleEvents( const bool sleepAfterEventProcessing, const bool 
     _mouseCursorRenderArea = {};
 
     fheroes2::Display & display = fheroes2::Display::instance();
+    fheroes2::BaseRenderEngine & engine = fheroes2::engine();
 
     if ( fheroes2::RenderProcessor::instance().isCyclingUpdateRequired() ) {
         // To maintain color cycling animation we need to render the whole frame with an updated palette.
@@ -851,6 +853,27 @@ bool LocalEvent::HandleEvents( const bool sleepAfterEventProcessing, const bool 
             // We need to deallocate some memory but we need to be careful not to deallocate images that are in use at the moment.
             // As of now we have no logic for this so we at least log this event.
             DEBUG_LOG( DBG_ENGINE, DBG_WARN, "OS indicates low memory. Release some resources." )
+            break;
+        case SDL_DISPLAYEVENT:
+            if ( event.display.event == SDL_DISPLAYEVENT_DISCONNECTED ) {
+               
+                DEBUG_LOG( DBG_ENGINE, DBG_INFO, "The display with id %d was disconnected " << event.display.display );
+                engine.setDisplayIndex( engine.getCurrentDisplayIndex() );
+
+                fheroes2::Image temp;
+                assert( display.singleLayer() );
+                temp._disableTransformLayer();
+                fheroes2::Copy( display, temp );
+
+                const fheroes2::ResolutionInfo currentResolution{ display.width(), display.height(), display.screenSize().width, display.screenSize().height };
+
+                display.setResolution( currentResolution );
+                fheroes2::Copy( temp, display );
+
+                // Save new index in conf as well
+                Settings & conf = Settings::Get();
+                conf.Save( Settings::configFileName );
+            }
             break;
         default:
             // If this assertion blows up then we included an event type but we didn't add logic for it.
@@ -1526,7 +1549,7 @@ void LocalEvent::setEventProcessingStates()
     setEventProcessingState( SDL_APP_DIDENTERFOREGROUND, false );
     // SDL_LOCALECHANGED is supported from SDL 2.0.14
     // TODO: we don't process this event. Add the logic.
-    setEventProcessingState( SDL_DISPLAYEVENT, false );
+    setEventProcessingState( SDL_DISPLAYEVENT, true );
     setEventProcessingState( SDL_WINDOWEVENT, true );
     // TODO: verify why disabled processing of this event.
     setEventProcessingState( SDL_SYSWMEVENT, false );
