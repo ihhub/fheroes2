@@ -941,6 +941,9 @@ namespace
 
         uint8_t getCurrentDisplayIndex() const override
         {
+            if ( uint8_t maxDis = getMaximumDisplays(); _displayIndex >= maxDis ) {
+                return maxDis - 1;
+            }
             return _displayIndex;
         }
 
