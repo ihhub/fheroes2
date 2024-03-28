@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2013 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -29,6 +29,7 @@
 #include <vector>
 
 #include "artifact.h"
+#include "mp2.h"
 #include "position.h"
 #include "resource.h"
 
@@ -37,10 +38,13 @@ class StreamBase;
 class MapObjectSimple : public MapPosition
 {
 public:
-    explicit MapObjectSimple( int v = 0 )
+    explicit MapObjectSimple( const int objectType = MP2::OBJ_NONE )
         : uid( 0 )
-        , type( v )
-    {}
+        , type( objectType )
+    {
+        // Do nothing.
+    }
+
     ~MapObjectSimple() override = default;
 
     int GetType() const
@@ -59,67 +63,95 @@ public:
     }
 
 protected:
-    friend StreamBase & operator<<( StreamBase &, const MapObjectSimple & );
-    friend StreamBase & operator>>( StreamBase &, MapObjectSimple & );
+    friend StreamBase & operator<<( StreamBase & msg, const MapObjectSimple & obj );
+    friend StreamBase & operator>>( StreamBase & msg, MapObjectSimple & obj );
 
     uint32_t uid;
     int type;
 };
 
-StreamBase & operator<<( StreamBase &, const MapObjectSimple & );
-StreamBase & operator>>( StreamBase &, MapObjectSimple & );
-
 struct MapEvent : public MapObjectSimple
 {
-    MapEvent();
+    MapEvent()
+        : MapObjectSimple( MP2::OBJ_EVENT )
+    {
+        // Do nothing.
+    }
 
     void LoadFromMP2( const int32_t index, const std::vector<uint8_t> & data );
 
-    bool isAllow( int color ) const;
-    void SetVisited( int color );
+    bool isAllow( const int color ) const
+    {
+        return ( color & colors ) != 0;
+    }
+
+    void SetVisited( const int color )
+    {
+        if ( cancel ) {
+            colors = 0;
+        }
+        else {
+            colors &= ~color;
+        }
+    }
 
     Funds resources;
     Artifact artifact;
-    bool computer;
-    bool cancel;
-    int colors;
+    bool computer{ false };
+    bool cancel{ true };
+    int colors{ 0 };
     std::string message;
 };
 
-StreamBase & operator<<( StreamBase &, const MapEvent & );
-StreamBase & operator>>( StreamBase &, MapEvent & );
-
-using RiddleAnswers = std::list<std::string>;
-
 struct MapSphinx : public MapObjectSimple
 {
-    MapSphinx();
+    MapSphinx()
+        : MapObjectSimple( MP2::OBJ_SPHINX )
+    {
+        // Do nothing.
+    }
 
     void LoadFromMP2( const int32_t tileIndex, const std::vector<uint8_t> & data );
 
     bool AnswerCorrect( const std::string & answer );
-    void SetQuiet();
+
+    void SetQuiet()
+    {
+        valid = false;
+        artifact = Artifact::UNKNOWN;
+        resources.Reset();
+    }
 
     Funds resources;
     Artifact artifact;
-    RiddleAnswers answers;
+    std::list<std::string> answers;
     std::string message;
-    bool valid;
+    bool valid{ false };
 };
-
-StreamBase & operator<<( StreamBase &, const MapSphinx & );
-StreamBase & operator>>( StreamBase &, MapSphinx & );
 
 struct MapSign : public MapObjectSimple
 {
-    MapSign();
+    MapSign()
+        : MapObjectSimple( MP2::OBJ_SIGN )
+    {
+        // Do nothing.
+    }
 
     void LoadFromMP2( const int32_t mapIndex, const std::vector<uint8_t> & data );
 
     std::string message;
 };
 
-StreamBase & operator<<( StreamBase &, const MapSign & );
-StreamBase & operator>>( StreamBase &, MapSign & );
+StreamBase & operator<<( StreamBase & msg, const MapObjectSimple & obj );
+StreamBase & operator>>( StreamBase & msg, MapObjectSimple & obj );
+
+StreamBase & operator<<( StreamBase & msg, const MapEvent & obj );
+StreamBase & operator>>( StreamBase & msg, MapEvent & obj );
+
+StreamBase & operator<<( StreamBase & msg, const MapSphinx & obj );
+StreamBase & operator>>( StreamBase & msg, MapSphinx & obj );
+
+StreamBase & operator<<( StreamBase & msg, const MapSign & obj );
+StreamBase & operator>>( StreamBase & msg, MapSign & obj );
 
 #endif
