@@ -61,11 +61,11 @@ else(MACOS_APP_BUNDLE)
 		)
 
 	add_executable(
-        fheroes2
-        ${FHEROES2_SOURCES}
-        ${CMAKE_CURRENT_SOURCE_DIR}/../resources/fheroes2.manifest
-        ${CMAKE_CURRENT_SOURCE_DIR}/../resources/fheroes2.rc
-        )
+		fheroes2
+		${FHEROES2_SOURCES}
+		${CMAKE_CURRENT_SOURCE_DIR}/../resources/fheroes2.manifest
+		${CMAKE_CURRENT_SOURCE_DIR}/../resources/fheroes2.rc
+		)
 
 	target_compile_definitions(
 		fheroes2
