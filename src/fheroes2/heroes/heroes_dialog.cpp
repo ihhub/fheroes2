@@ -200,6 +200,8 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
     primarySkillsBar.setRenderingOffset( dst_pt );
 
     if ( isEditor ) {
+        // In Editor '-1' means that the primary skill value is reset to its default state.
+        // Here we consider any negative value as a default skill value state.
         primarySkillsBar.setSkillsDefaultValueState( { { Skill::Primary::ATTACK, attack < 0 },
                                                        { Skill::Primary::DEFENSE, defense < 0 },
                                                        { Skill::Primary::POWER, power < 0 },
@@ -714,10 +716,11 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
             // Tell Editor that default experience value is set.
             experience = UINT32_MAX;
         }
+
+        // For Editor '-1' means that the primary skill is reset to its default state.
         if ( primarySkillsBar.isDefaultValue( Skill::Primary::ATTACK ) ) {
             attack = -1;
         }
-
         if ( primarySkillsBar.isDefaultValue( Skill::Primary::DEFENSE ) ) {
             defense = -1;
         }

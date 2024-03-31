@@ -53,9 +53,10 @@ public:
         _isDefault = std::move( isDefault );
     }
 
+    // In Editor any primary skill value may be reset to its default state. This method returns this state for the given skill.
     bool isDefaultValue( const int skill )
     {
-        return _isDefault.find( skill ) != _isDefault.end() && _isDefault[skill];
+        return ( _isDefault.find( skill ) != _isDefault.end() ) && _isDefault[skill];
     }
 
 private:
@@ -64,7 +65,7 @@ private:
     bool _useSmallSize{ false };
     bool _isEditMode{ false };
     bool _allowSkillReset{ false };
-    // The '_isDefault' vector is used only in Editor mode.
+    // The '_isDefault' is used only in Editor mode.
     std::map<int, bool> _isDefault;
     std::vector<int> _content{ Skill::Primary::ATTACK, Skill::Primary::DEFENSE, Skill::Primary::POWER, Skill::Primary::KNOWLEDGE };
     fheroes2::Point toff;
