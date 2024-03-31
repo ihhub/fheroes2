@@ -4845,9 +4845,9 @@ msgid "Hot Seat"
 msgstr "Hot Seat"
 
 msgid ""
-"Play a Hot Seat game, where 2 to 4 players play around the same computer, "
+"Play a Hot Seat game, where 2 to 6 players play around the same computer, "
 "switching into the 'Hot Seat' when it is their turn."
-msgstr "Modo \"Hot Seat\", onde 2 a 4 jogadores jogam no mesmo computador."
+msgstr "Modo \"Hot Seat\", onde 2 a 6 jogadores jogam no mesmo computador."
 
 msgid "A single player game playing out a single map."
 msgstr "Um jogo com um único jogador."
@@ -5006,9 +5006,9 @@ msgstr ""
 
 #, fuzzy
 msgid ""
-"Play a Hot Seat game, where 2 to 4 players play on the same device, "
+"Play a Hot Seat game, where 2 to 6 players play on the same device, "
 "switching into the 'Hot Seat' when it is their turn."
-msgstr "Modo \"Hot Seat\", onde 2 a 4 jogadores jogam no mesmo computador."
+msgstr "Modo \"Hot Seat\", onde 2 a 6 jogadores jogam no mesmo computador."
 
 msgid "2 Players"
 msgstr "2 Jogadores"

@@ -4651,7 +4651,7 @@ msgid "Hot Seat"
 msgstr "За адным кампутарам"
 
 msgid ""
-"Play a Hot Seat game, where 2 to 4 players play around the same computer, "
+"Play a Hot Seat game, where 2 to 6 players play around the same computer, "
 "switching into the 'Hot Seat' when it is their turn."
 msgstr ""
 "Гуляй за адным кампутарам з адной-пяццю іншымі асобамі, перадаючы кіраванне "
@@ -4807,7 +4807,7 @@ msgstr "Наладзь і згуляй бітву, не загружаючы м�
 
 #, fuzzy
 msgid ""
-"Play a Hot Seat game, where 2 to 4 players play on the same device, "
+"Play a Hot Seat game, where 2 to 6 players play on the same device, "
 "switching into the 'Hot Seat' when it is their turn."
 msgstr ""
 "Гуляй за адным кампутарам з адной-пяццю іншымі асобамі, перадаючы кіраванне "

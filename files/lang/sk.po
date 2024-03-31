@@ -4921,10 +4921,10 @@ msgid "Hot Seat"
 msgstr "Horúce kreslo"
 
 msgid ""
-"Play a Hot Seat game, where 2 to 4 players play around the same computer, "
+"Play a Hot Seat game, where 2 to 6 players play around the same computer, "
 "switching into the 'Hot Seat' when it is their turn."
 msgstr ""
-"Zahrajte si hru Horúce kreslo, v ktorej 2 až 4 hráči hrajú pri tom istom "
+"Zahrajte si hru Horúce kreslo, v ktorej 2 až 6 hráči hrajú pri tom istom "
 "počítači a keď sú na rade, prepnú sa do \"horúceho kresla\"."
 
 msgid "A single player game playing out a single map."
@@ -5092,10 +5092,10 @@ msgstr "Nastaviť a hrať bitku bez načítania mapy."
 
 #, fuzzy
 msgid ""
-"Play a Hot Seat game, where 2 to 4 players play on the same device, "
+"Play a Hot Seat game, where 2 to 6 players play on the same device, "
 "switching into the 'Hot Seat' when it is their turn."
 msgstr ""
-"Zahrajte si hru Horúce kreslo, v ktorej 2 až 4 hráči hrajú pri tom istom "
+"Zahrajte si hru Horúce kreslo, v ktorej 2 až 6 hráči hrajú pri tom istom "
 "počítači a keď sú na rade, prepnú sa do \"horúceho kresla\"."
 
 msgid "2 Players"

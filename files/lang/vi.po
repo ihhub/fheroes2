@@ -4913,7 +4913,7 @@ msgid ""
 "Play a Hot Seat game, where 2 to 4 players play around the same computer, "
 "switching into the 'Hot Seat' when it is their turn."
 msgstr ""
-"Chơi chế độ Ghế nóng, trong đó 2 đến 4 người chơi cùng chơi quanh một máy "
+"Chơi chế độ Ghế nóng, trong đó 2 đến 6 người chơi cùng chơi quanh một máy "
 "tính, chuyển sang 'Ghế nóng' khi đến lượt của họ."
 
 msgid "A single player game playing out a single map."
@@ -5080,10 +5080,10 @@ msgstr ""
 
 #, fuzzy
 msgid ""
-"Play a Hot Seat game, where 2 to 4 players play on the same device, "
+"Play a Hot Seat game, where 2 to 6 players play on the same device, "
 "switching into the 'Hot Seat' when it is their turn."
 msgstr ""
-"Chơi chế độ Ghế nóng, trong đó 2 đến 4 người chơi cùng chơi quanh một máy "
+"Chơi chế độ Ghế nóng, trong đó 2 đến 6 người chơi cùng chơi quanh một máy "
 "tính, chuyển sang 'Ghế nóng' khi đến lượt của họ."
 
 msgid "2 Players"

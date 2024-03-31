@@ -4957,10 +4957,10 @@ msgid "Hot Seat"
 msgstr "Горещ стол"
 
 msgid ""
-"Play a Hot Seat game, where 2 to 4 players play around the same computer, "
+"Play a Hot Seat game, where 2 to 6 players play around the same computer, "
 "switching into the 'Hot Seat' when it is their turn."
 msgstr ""
-"Играй игра на \"Гореща седалка\", при която от 2-4 играчи играят на един и "
+"Играй игра на \"Гореща седалка\", при която от 2-6 играчи играят на един и "
 "същ компютър, превключвайки на \"Гореща седалка\", когато им дойде реда."
 
 msgid "A single player game playing out a single map."
@@ -5133,10 +5133,10 @@ msgstr "Настрой и изиграй битка, без да зарежда�
 
 #, fuzzy
 msgid ""
-"Play a Hot Seat game, where 2 to 4 players play on the same device, "
+"Play a Hot Seat game, where 2 to 6 players play on the same device, "
 "switching into the 'Hot Seat' when it is their turn."
 msgstr ""
-"Играй игра на \"Гореща седалка\", при която от 2-4 играчи играят на един и "
+"Играй игра на \"Гореща седалка\", при която от 2-6 играчи играят на един и "
 "същ компютър, превключвайки на \"Гореща седалка\", когато им дойде реда."
 
 msgid "2 Players"

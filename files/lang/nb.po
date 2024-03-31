@@ -5006,10 +5006,10 @@ msgid "Hot Seat"
 msgstr "Byttespilling"
 
 msgid ""
-"Play a Hot Seat game, where 2 to 4 players play around the same computer, "
+"Play a Hot Seat game, where 2 to 6 players play around the same computer, "
 "switching into the 'Hot Seat' when it is their turn."
 msgstr ""
-"Spill en runde byttespilling hvor 2 til 4 spillere rullerer på å spille på "
+"Spill en runde byttespilling hvor 2 til 6 spillere rullerer på å spille på "
 "den samme enheten og bytter plass når det er nestemann sin tur."
 
 msgid "A single player game playing out a single map."
@@ -5180,10 +5180,10 @@ msgstr "Sett opp og spill en kamp uten å laste inn et kart."
 
 #, fuzzy
 msgid ""
-"Play a Hot Seat game, where 2 to 4 players play on the same device, "
+"Play a Hot Seat game, where 2 to 6 players play on the same device, "
 "switching into the 'Hot Seat' when it is their turn."
 msgstr ""
-"Spill en runde byttespilling hvor 2 til 4 spillere rullerer på å spille på "
+"Spill en runde byttespilling hvor 2 til 6 spillere rullerer på å spille på "
 "den samme enheten og bytter plass når det er nestemann sin tur."
 
 msgid "2 Players"
