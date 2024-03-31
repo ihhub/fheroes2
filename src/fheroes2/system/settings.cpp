@@ -331,12 +331,12 @@ bool Settings::Read( const std::string & filePath )
         setScreenScalingTypeNearest( config.StrParams( "screen scaling type" ) == "nearest" );
     }
 
-    if ( config.Exists( "editor animation" ) && config.StrParams( "editor animation" ) == "on" ) {
-        _editorOptions.SetModes( EDITOR_ANIMATION );
+    if ( config.Exists( "editor animation" ) ) {
+        setEditorAnimation( config.StrParams( "editor animation" ) == "on" );
     }
 
-    if ( config.Exists( "editor passability" ) && config.StrParams( "editor passability" ) == "on" ) {
-        _editorOptions.SetModes( EDITOR_PASSABILITY );
+    if ( config.Exists( "editor passability" ) ) {
+        setEditorPassability( config.StrParams( "editor passability" ) == "on" );
     }
 
     return true;
