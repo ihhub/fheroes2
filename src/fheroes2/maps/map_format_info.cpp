@@ -163,7 +163,7 @@ namespace Maps::Map_Format
         compressed << map.additionalInfo << map.tiles << map.standardMetadata << map.castleMetadata << map.heroMetadata << map.sphinxMetadata << map.signMetadata
                    << map.adventureMapEventMetadata;
 
-        std::vector<uint8_t> temp = Compression::compressData( compressed.data(), compressed.size() );
+        const std::vector<uint8_t> temp = Compression::compressData( compressed.data(), compressed.size() );
 
         msg.putRaw( temp.data(), temp.size() );
 
@@ -178,23 +178,26 @@ namespace Maps::Map_Format
         StreamBuf decompressed;
         decompressed.setbigendian( true );
 
-        std::vector<uint8_t> temp = msg.getRaw();
-        if ( temp.empty() ) {
-            // This is a corrupted file.
-            map = {};
-            return msg;
-        }
+        {
+            std::vector<uint8_t> temp = msg.getRaw();
+            if ( temp.empty() ) {
+                // This is a corrupted file.
+                map = {};
+                return msg;
+            }
 
-        std::vector<uint8_t> decompressedData = Compression::decompressData( temp.data(), temp.size() );
-        temp = {};
-        if ( decompressedData.empty() ) {
-            // This is a corrupted file.
-            map = {};
-            return msg;
-        }
+            const std::vector<uint8_t> decompressedData = Compression::decompressData( temp.data(), temp.size() );
+            if ( decompressedData.empty() ) {
+                // This is a corrupted file.
+                map = {};
+                return msg;
+            }
 
-        decompressed.putRaw( decompressedData.data(), decompressedData.size() );
-        decompressedData = {};
+            // Try to free some memory
+            temp = std::vector<uint8_t>{};
+
+            decompressed.putRaw( decompressedData.data(), decompressedData.size() );
+        }
 
         decompressed >> map.additionalInfo >> map.tiles >> map.standardMetadata >> map.castleMetadata >> map.heroMetadata >> map.sphinxMetadata >> map.signMetadata
             >> map.adventureMapEventMetadata;
