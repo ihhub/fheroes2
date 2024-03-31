@@ -383,7 +383,7 @@ public:
     // 0 stands for full data.
     std::vector<uint8_t> getRaw( const size_t size = 0 ) override;
 
-    void putRaw( const void *, size_t ) override;
+    void putRaw( const void * ptr, size_t sz ) override;
 
     std::string toString( const size_t size = 0 );
 

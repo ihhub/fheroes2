@@ -208,7 +208,7 @@ namespace Compression
 
         const size_t uncompressedSize = doubleLayer ? uncompressedData.size() / 2 : uncompressedData.size();
 
-        if ( static_cast<size_t>( width * height ) != uncompressedSize ) {
+        if ( static_cast<size_t>( width ) * height != uncompressedSize ) {
             return {};
         }
 
