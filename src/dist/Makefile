@@ -23,8 +23,10 @@ TARGET := fheroes2
 LIBENGINE := ../engine/libengine.a
 CCFLAGS := $(CCFLAGS) -I../engine
 
+ifndef FHEROES2_WITH_SYSTEM_SMACKER
 LIBENGINE := $(LIBENGINE) ../thirdparty/libsmacker/libsmacker.a
 CCFLAGS := $(CCFLAGS) -I../thirdparty/libsmacker
+endif
 
 SOURCEROOT := ../fheroes2
 SOURCEDIR  := $(filter %/,$(wildcard $(SOURCEROOT)/*/)) $(filter %/,$(wildcard $(SOURCEROOT)/*/*/))

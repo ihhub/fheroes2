@@ -452,12 +452,12 @@ namespace fheroes2
                 break;
             }
             case DialogAction::Graphics:
-                fheroes2::openGraphicsSettingsDialog( redrawAdventureMap );
+                saveConfiguration |= fheroes2::openGraphicsSettingsDialog( redrawAdventureMap );
 
                 action = DialogAction::Configuration;
                 break;
             case DialogAction::AudioSettings:
-                Dialog::openAudioSettingsDialog( true );
+                saveConfiguration |= Dialog::openAudioSettingsDialog( true );
 
                 action = DialogAction::Configuration;
                 break;
@@ -467,7 +467,7 @@ namespace fheroes2
                 action = DialogAction::Configuration;
                 break;
             case DialogAction::InterfaceSettings:
-                fheroes2::openInterfaceSettingsDialog( redrawAdventureMap );
+                saveConfiguration |= fheroes2::openInterfaceSettingsDialog( redrawAdventureMap );
 
                 action = DialogAction::Configuration;
                 break;
