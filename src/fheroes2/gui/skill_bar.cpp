@@ -215,56 +215,60 @@ bool PrimarySkillsBar::ActionBarLeftMouseSingleClick( int & skill )
         return false;
     }
 
-    if ( _isEditMode ) {
-        auto primarySkillEditHandler = [this, &skill]( uint32_t & skillValue, const int baseValue ) {
-            if ( baseValue < 0 ) {
-                // In editor the negative value means that this skill does not use custom value.
-                skillValue = static_cast<uint32_t>( Heroes::getHeroDefaultSkillValue( skill, _hero->GetRace() ) );
-            }
-            else {
-                skillValue = static_cast<uint32_t>( baseValue );
-            }
+    if ( !_isEditMode ) {
+        fheroes2::showStandardTextMessage( Skill::Primary::String( skill ), Skill::Primary::StringDescription( skill, _hero ), Dialog::OK );
 
-            std::string header = _( "Set %{skill} Skill" );
-            StringReplace( header, "%{skill}", Skill::Primary::String( skill ) );
-
-            return Dialog::SelectCount( header, skill == Skill::Primary::POWER ? 1 : 0, 99, skillValue );
-        };
-
-        uint32_t value;
-
-        switch ( skill ) {
-        case Skill::Primary::ATTACK:
-            if ( primarySkillEditHandler( value, _hero->getAttackBaseValue() ) ) {
-                _hero->setAttackBaseValue( static_cast<int>( value ) );
-                return true;
-            }
-            break;
-        case Skill::Primary::DEFENSE:
-            if ( primarySkillEditHandler( value, _hero->getDefenseBaseValue() ) ) {
-                _hero->setDefenseBaseValue( static_cast<int>( value ) );
-                return true;
-            }
-            break;
-        case Skill::Primary::POWER:
-            if ( primarySkillEditHandler( value, _hero->getPowerBaseValue() ) ) {
-                _hero->setPowerBaseValue( static_cast<int>( value ) );
-                return true;
-            }
-            break;
-        case Skill::Primary::KNOWLEDGE:
-            if ( primarySkillEditHandler( value, _hero->getKnowledgeBaseValue() ) ) {
-                _hero->setKnowledgeBaseValue( static_cast<int>( value ) );
-                return true;
-            }
-            break;
-        default:
-            break;
-        }
         return false;
     }
 
-    fheroes2::showStandardTextMessage( Skill::Primary::String( skill ), Skill::Primary::StringDescription( skill, _hero ), Dialog::OK );
+    // The case when we are in Editor mode.
+    auto primarySkillEditHandler = [this, &skill]( uint32_t & skillValue, const int baseValue ) {
+        if ( baseValue < 0 ) {
+            // In editor the negative value means that this skill does not use custom value.
+            skillValue = static_cast<uint32_t>( Heroes::getHeroDefaultSkillValue( skill, _hero->GetRace() ) );
+        }
+        else {
+            skillValue = static_cast<uint32_t>( baseValue );
+        }
+
+        std::string header = _( "Set %{skill} Skill" );
+        StringReplace( header, "%{skill}", Skill::Primary::String( skill ) );
+
+        return Dialog::SelectCount( header, skill == Skill::Primary::POWER ? 1 : 0, 99, skillValue );
+    };
+
+    uint32_t value;
+
+    switch ( skill ) {
+    case Skill::Primary::ATTACK:
+        if ( primarySkillEditHandler( value, _hero->getAttackBaseValue() ) ) {
+            _hero->setAttackBaseValue( static_cast<int>( value ) );
+            return true;
+        }
+        break;
+    case Skill::Primary::DEFENSE:
+        if ( primarySkillEditHandler( value, _hero->getDefenseBaseValue() ) ) {
+            _hero->setDefenseBaseValue( static_cast<int>( value ) );
+            return true;
+        }
+        break;
+    case Skill::Primary::POWER:
+        if ( primarySkillEditHandler( value, _hero->getPowerBaseValue() ) ) {
+            _hero->setPowerBaseValue( static_cast<int>( value ) );
+            return true;
+        }
+        break;
+    case Skill::Primary::KNOWLEDGE:
+        if ( primarySkillEditHandler( value, _hero->getKnowledgeBaseValue() ) ) {
+            _hero->setKnowledgeBaseValue( static_cast<int>( value ) );
+            return true;
+        }
+        break;
+    default:
+        // Are you sure that you are passing the correct skill type?
+        assert( 0 );
+        break;
+    }
 
     return false;
 }
@@ -302,6 +306,8 @@ bool PrimarySkillsBar::ActionBarRightMouseHold( int & skill )
             _hero->setKnowledgeBaseValue( -1 );
             return true;
         default:
+            // Are you sure that you are passing the correct skill type?
+            assert( 0 );
             break;
         }
         return false;

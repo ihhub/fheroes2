@@ -186,6 +186,8 @@ int Skill::Primary::getHeroDefaultSkillValue( const int skill, const int race )
         case KNOWLEDGE:
             return ptr->initial_primary.knowledge;
         default:
+            // Are you sure that you are passing the correct skill type?
+            assert( 0 );
             break;
         }
     }
