@@ -83,7 +83,7 @@ namespace
 
     enum EditorOptions : uint32_t
     {
-        EDITOR_ENABLE = 0x00000001,
+        EDITOR_UNUSED = 0x00000001,
         EDITOR_ANIMATION = 0x00000002,
         EDITOR_PASSABILITY = 0x00000004
     };
@@ -878,11 +878,6 @@ bool Settings::isHideInterfaceEnabled() const
 bool Settings::isEvilInterfaceEnabled() const
 {
     return _gameOptions.Modes( GAME_EVIL_INTERFACE );
-}
-
-bool Settings::isEditorEnabled() const
-{
-    return _editorOptions.Modes( EDITOR_ENABLE );
 }
 
 bool Settings::isEditorAnimationEnabled() const
