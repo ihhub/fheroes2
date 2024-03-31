@@ -225,6 +225,7 @@ void ArmyBar::SetBackground( const fheroes2::Size & sz, const uint8_t fillColor 
 
     setSingleItemSize( sz );
 
+    backsf._disableTransformLayer();
     backsf.resize( sz.width, sz.height );
     backsf.fill( fillColor );
 
