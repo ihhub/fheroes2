@@ -840,7 +840,9 @@ namespace Interface
 
                     fheroes2::ActionCreator action( _historyManager, _mapFormat );
                     hero.OpenDialog( false, false, true, true, true, true );
-                    if ( hero.updateHeroMetadata( _mapFormat.heroMetadata[object.id] ) ) {
+                    Maps::Map_Format::HeroMetadata heroNewMetadata = hero.getHeroMetadata();
+                    if ( heroNewMetadata != _mapFormat.heroMetadata[object.id] ) {
+                        _mapFormat.heroMetadata[object.id] = std::move( heroNewMetadata );
                         action.commit();
                     }
                 }

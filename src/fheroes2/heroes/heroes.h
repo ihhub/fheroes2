@@ -303,7 +303,7 @@ public:
 
     void applyHeroMetadata( const Maps::Map_Format::HeroMetadata & heroMetadata, const int raceType, const bool isEditor );
     // Updates data in heroMetadata and returns true if it has changes.
-    bool updateHeroMetadata( Maps::Map_Format::HeroMetadata & heroMetadata ) const;
+    Maps::Map_Format::HeroMetadata getHeroMetadata() const;
 
     int GetRace() const override;
     const std::string & GetName() const override;
