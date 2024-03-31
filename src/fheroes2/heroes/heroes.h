@@ -57,6 +57,7 @@ namespace Battle
 namespace Maps
 {
     class Tiles;
+
     namespace Map_Format
     {
         struct HeroMetadata;

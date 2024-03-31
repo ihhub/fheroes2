@@ -106,6 +106,7 @@ namespace
         default:
             // Have you added a new race? Correct the logic above!
             assert( 0 );
+            break;
         }
         fheroes2::Copy( racePortrait, 0, 0, output, portPos );
     }

@@ -780,18 +780,16 @@ Maps::Map_Format::HeroMetadata Heroes::getHeroMetadata() const
     const size_t artifactCount = bag_artifacts.size();
     assert( artifactCount == heroMetadata.artifactMetadata.size() );
     for ( size_t i = 0; i < artifactCount; ++i ) {
-        const int artifactId = bag_artifacts[i].GetID();
+        heroMetadata.artifact[i] = bag_artifacts[i].GetID();
         // The spell scroll may contain a spell.
 
-        if ( artifactId == Artifact::SPELL_SCROLL ) {
+        if ( heroMetadata.artifact[i] == Artifact::SPELL_SCROLL ) {
             const int32_t artifactSpellId = bag_artifacts[i].getSpellId();
 
             assert( artifactSpellId != Spell::NONE );
 
             heroMetadata.artifactMetadata[i] = artifactSpellId;
         }
-
-        heroMetadata.artifact[i] = artifactId;
     }
 
     // Hero's spells.

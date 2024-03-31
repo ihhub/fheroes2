@@ -131,7 +131,17 @@ namespace Maps::Map_Format
         // The amount of magic points (mana). Negative value means it is not set.
         int16_t magicPoints{ -1 };
 
-        bool operator==( const HeroMetadata & anotherHeroMetadata ) const;
+        bool operator==( const HeroMetadata & anotherHeroMetadata ) const
+        {
+            return customName == anotherHeroMetadata.customName && customPortrait == anotherHeroMetadata.customPortrait && isOnPatrol == anotherHeroMetadata.isOnPatrol
+                   && patrolRadius == anotherHeroMetadata.patrolRadius && customLevel == anotherHeroMetadata.customLevel
+                   && customExperience == anotherHeroMetadata.customExperience && customAttack == anotherHeroMetadata.customAttack
+                   && customDefense == anotherHeroMetadata.customDefense && customKnowledge == anotherHeroMetadata.customKnowledge
+                   && customSpellPower == anotherHeroMetadata.customSpellPower && armyMonsterType == anotherHeroMetadata.armyMonsterType
+                   && armyMonsterCount == anotherHeroMetadata.armyMonsterCount && artifact == anotherHeroMetadata.artifact
+                   && artifactMetadata == anotherHeroMetadata.artifactMetadata && availableSpells == anotherHeroMetadata.availableSpells
+                   && secondarySkill == anotherHeroMetadata.secondarySkill && secondarySkillLevel == anotherHeroMetadata.secondarySkillLevel;
+        }
 
         bool operator!=( const HeroMetadata & anotherHeroMetadata ) const
         {

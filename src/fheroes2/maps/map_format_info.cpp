@@ -209,28 +209,4 @@ namespace Maps::Map_Format
 
         return true;
     }
-    bool HeroMetadata::operator==( const HeroMetadata & anotherHeroMetadata ) const
-    {
-        {
-            if ( customName != anotherHeroMetadata.customName || customPortrait != anotherHeroMetadata.customPortrait || isOnPatrol != anotherHeroMetadata.isOnPatrol
-                 || patrolRadius != anotherHeroMetadata.patrolRadius || customLevel != anotherHeroMetadata.customLevel
-                 || customExperience != anotherHeroMetadata.customExperience || customAttack != anotherHeroMetadata.customAttack
-                 || customDefense != anotherHeroMetadata.customDefense || customKnowledge != anotherHeroMetadata.customKnowledge
-                 || customSpellPower != anotherHeroMetadata.customSpellPower ) {
-                return false;
-            }
-
-            if ( !std::equal( armyMonsterType.begin(), armyMonsterType.end(), anotherHeroMetadata.armyMonsterType.begin() )
-                 || !std::equal( armyMonsterCount.begin(), armyMonsterCount.end(), anotherHeroMetadata.armyMonsterCount.begin() )
-                 || !std::equal( artifact.begin(), artifact.end(), anotherHeroMetadata.artifact.begin() )
-                 || !std::equal( artifactMetadata.begin(), artifactMetadata.end(), anotherHeroMetadata.artifactMetadata.begin() )
-                 || !std::equal( availableSpells.begin(), availableSpells.end(), anotherHeroMetadata.availableSpells.begin() )
-                 || !std::equal( secondarySkill.begin(), secondarySkill.end(), anotherHeroMetadata.secondarySkill.begin() )
-                 || !std::equal( secondarySkillLevel.begin(), secondarySkillLevel.end(), anotherHeroMetadata.secondarySkillLevel.begin() ) ) {
-                return false;
-            }
-
-            return true;
-        }
-    }
 }
