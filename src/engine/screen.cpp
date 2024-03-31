@@ -89,6 +89,7 @@ namespace
         return resolutions[id];
     }
 
+#if !defined( TARGET_PS_VITA )
     bool IsLowerThanDefaultRes( const fheroes2::ResolutionInfo & value )
     {
         return value.gameWidth < fheroes2::Display::DEFAULT_WIDTH || value.gameHeight < fheroes2::Display::DEFAULT_HEIGHT;
@@ -174,6 +175,7 @@ namespace
 
         return resolutions;
     }
+#endif
 
     std::vector<uint8_t> StandardPaletteIndexes()
     {
