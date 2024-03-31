@@ -734,6 +734,8 @@ namespace Interface
             le.MousePressLeft( buttonQuit.area() ) ? buttonQuit.drawOnPress() : buttonQuit.drawOnRelease();
             le.MousePressLeft( buttonCancel.area() ) ? buttonCancel.drawOnPress() : buttonCancel.drawOnRelease();
 
+            bool redraw = false;
+
             if ( le.MouseClickLeft( buttonNew.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::EDITOR_NEW_MAP_MENU ) ) {
                 if ( eventNewMap() == fheroes2::GameMode::EDITOR_NEW_MAP ) {
                     result = fheroes2::GameMode::EDITOR_NEW_MAP;
@@ -764,18 +766,27 @@ namespace Interface
             }
             else if ( le.MousePressRight( buttonNew.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "New Map" ), _( "Create a new map, either from scratch or using the random map generator." ), Dialog::ZERO );
+                redraw = true;
             }
             else if ( le.MousePressRight( buttonLoad.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Load Map" ), _( "Load an existing map." ), Dialog::ZERO );
+                redraw = true;
             }
             else if ( le.MousePressRight( buttonSave.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Save Map" ), _( "Save the current map." ), Dialog::ZERO );
+                redraw = true;
             }
             else if ( le.MousePressRight( buttonQuit.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Quit" ), _( "Quit out of the map editor." ), Dialog::ZERO );
+                redraw = true;
             }
             else if ( le.MousePressRight( buttonCancel.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Exit this menu without doing anything." ), Dialog::ZERO );
+                redraw = true;
+            }
+
+            if ( redraw ) {
+                display.render( { le.GetMouseCursor().x, le.GetMouseCursor().y, 1, 1 } );
             }
         }
 
