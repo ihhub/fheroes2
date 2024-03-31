@@ -131,28 +131,7 @@ namespace Maps::Map_Format
         // The amount of magic points (mana). Negative value means it is not set.
         int16_t magicPoints{ -1 };
 
-        bool operator==( const HeroMetadata & anotherHeroMetadata ) const
-        {
-            if ( customName != anotherHeroMetadata.customName || customPortrait != anotherHeroMetadata.customPortrait || isOnPatrol != anotherHeroMetadata.isOnPatrol
-                 || patrolRadius != anotherHeroMetadata.patrolRadius || customLevel != anotherHeroMetadata.customLevel
-                 || customExperience != anotherHeroMetadata.customExperience || customAttack != anotherHeroMetadata.customAttack
-                 || customDefense != anotherHeroMetadata.customDefense || customKnowledge != anotherHeroMetadata.customKnowledge
-                 || customSpellPower != anotherHeroMetadata.customSpellPower ) {
-                return false;
-            }
-
-            if ( !equal( armyMonsterType.begin(), armyMonsterType.end(), anotherHeroMetadata.armyMonsterType.begin() )
-                 || !equal( armyMonsterCount.begin(), armyMonsterCount.end(), anotherHeroMetadata.armyMonsterCount.begin() )
-                 || !equal( artifact.begin(), artifact.end(), anotherHeroMetadata.artifact.begin() )
-                 || !equal( artifactMetadata.begin(), artifactMetadata.end(), anotherHeroMetadata.artifactMetadata.begin() )
-                 || !equal( availableSpells.begin(), availableSpells.end(), anotherHeroMetadata.availableSpells.begin() )
-                 || !equal( secondarySkill.begin(), secondarySkill.end(), anotherHeroMetadata.secondarySkill.begin() )
-                 || !equal( secondarySkillLevel.begin(), secondarySkillLevel.end(), anotherHeroMetadata.secondarySkillLevel.begin() ) ) {
-                return false;
-            }
-
-            return true;
-        }
+        bool operator==( const HeroMetadata & anotherHeroMetadata ) const;
 
         bool operator!=( const HeroMetadata & anotherHeroMetadata ) const
         {
