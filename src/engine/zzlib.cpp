@@ -26,12 +26,12 @@
 #include <algorithm>
 #include <cstring>
 #include <ostream>
-#include <vector>
 
 #include <zconf.h>
 #include <zlib.h>
 
 #include "logging.h"
+#include "serialize.h"
 
 namespace
 {

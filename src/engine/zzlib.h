@@ -27,9 +27,11 @@
 #include <cstddef>
 #include <cstdint>
 #include <string>
+#include <vector>
 
 #include "image.h"
-#include "serialize.h"
+
+class StreamBuf;
 
 namespace Compression
 {
