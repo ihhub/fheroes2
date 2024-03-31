@@ -131,7 +131,7 @@ bool Game::Save( const std::string & filePath, const bool autoSave /* = false */
        << HeaderSAV( conf.getCurrentMapInfo(), conf.GameType(), world.GetDay(), world.GetWeek(), world.GetMonth() );
     fs.close();
 
-    ZStreamBuf zb;
+    StreamBuf zb;
     zb.setbigendian( true );
 
     // Game data in ZIP format
@@ -144,7 +144,7 @@ bool Game::Save( const std::string & filePath, const bool autoSave /* = false */
     // End-of-data marker
     zb << SAV2ID3;
 
-    if ( zb.fail() || !zb.write( filePath, true ) ) {
+    if ( zb.fail() || !Compression::writeFile( zb, filePath, true ) ) {
         return false;
     }
 
@@ -221,10 +221,10 @@ fheroes2::GameMode Game::Load( const std::string & filePath )
         return fheroes2::GameMode::CANCEL;
     }
 
-    ZStreamBuf zb;
+    StreamBuf zb;
     zb.setbigendian( true );
 
-    if ( !zb.read( filePath, offset ) ) {
+    if ( !Compression::readFile( zb, filePath, offset ) ) {
         DEBUG_LOG( DBG_GAME, DBG_WARN, "Error uncompressing the file " << filePath )
 
         showGenericErrorMessage();

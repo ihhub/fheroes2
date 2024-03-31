@@ -31,28 +31,23 @@
 #include "image.h"
 #include "serialize.h"
 
-class ZStreamBuf : public StreamBuf
+namespace Compression
 {
-public:
-    ZStreamBuf() = default;
+    std::vector<uint8_t> compressData( const uint8_t * src, const size_t srcSize );
 
-    ZStreamBuf( const ZStreamBuf & ) = delete;
-
-    ~ZStreamBuf() override = default;
-
-    ZStreamBuf & operator=( const ZStreamBuf & ) = delete;
+    std::vector<uint8_t> decompressData( const uint8_t * src, const size_t srcSize, size_t realSize = 0 );
 
     // Reads & unzips the zipped chunk from the specified file at the specified offset and appends
     // it to the end of the buffer. The current read position of the buffer does not change. Returns
     // true on success or false on error.
-    bool read( const std::string & fn, const size_t offset = 0 );
+    bool readFile( StreamBuf & output, const std::string & fn, const size_t offset = 0 );
 
     // Zips the contents of the buffer from the current read position to the end of the buffer and
     // writes (or appends) it to the specified file. The current read position of the buffer does
     // not change. Returns true on success and false on error.
-    bool write( const std::string & fn, const bool append = false );
-};
+    bool writeFile( StreamBuf & input, const std::string & fn, const bool append = false );
 
-fheroes2::Image CreateImageFromZlib( int32_t width, int32_t height, const uint8_t * imageData, size_t imageSize, bool doubleLayer );
+    fheroes2::Image CreateImageFromZlib( int32_t width, int32_t height, const uint8_t * imageData, size_t imageSize, bool doubleLayer );
+}
 
 #endif
