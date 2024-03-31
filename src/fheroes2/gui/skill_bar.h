@@ -23,6 +23,7 @@
 #include <cstdint>
 #include <map>
 #include <string>
+#include <utility>
 #include <vector>
 
 #include "image.h"
@@ -31,10 +32,6 @@
 #include "skill.h"
 
 class Heroes;
-namespace Skill
-{
-    class Secondary;
-}
 
 class PrimarySkillsBar : public Interface::ItemsBar<int>
 {
