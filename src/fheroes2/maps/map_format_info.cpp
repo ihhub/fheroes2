@@ -197,7 +197,7 @@ namespace Maps::Map_Format
         decompressedData = {};
 
         decompressed >> map.additionalInfo >> map.tiles >> map.standardMetadata >> map.castleMetadata >> map.heroMetadata >> map.sphinxMetadata >> map.signMetadata
-                     >> map.adventureMapEventMetadata;
+            >> map.adventureMapEventMetadata;
 
         return msg;
     }
