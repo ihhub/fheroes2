@@ -193,7 +193,7 @@ namespace Maps::Map_Format
                 return msg;
             }
 
-            // Try to free some memory
+            // Let's try to free up some memory
             temp = std::vector<uint8_t>{};
 
             decompressed.putRaw( decompressedData.data(), decompressedData.size() );
