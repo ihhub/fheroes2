@@ -20,7 +20,6 @@
 
 #include "map_format_info.h"
 
-#include <algorithm>
 #include <array>
 #include <cstddef>
 #include <type_traits>
