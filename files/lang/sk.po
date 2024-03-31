@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-21 15:34+0000\n"
+"POT-Creation-Date: 2024-03-27 01:17+0000\n"
 "PO-Revision-Date: 2023-09-11 20:22+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3358,11 +3358,11 @@ msgid "Open Virtual Keyboard"
 msgstr "Otvor virtuálnu klávesnicu"
 
 #, fuzzy
-msgid "How many units do you wish to move?"
+msgid "How many creatures do you wish to move?"
 msgstr "Koľko jednotiek na presun?"
 
 #, fuzzy
-msgid "Select how many slots to separate into:"
+msgid "Select how many units to separate into:"
 msgstr "Vyber mesto, do ktorého sa chceš preniesť."
 
 msgid "Map: "

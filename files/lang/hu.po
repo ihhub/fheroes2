@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-21 15:34+0000\n"
+"POT-Creation-Date: 2024-03-27 01:17+0000\n"
 "PO-Revision-Date: 2023-09-04 21:55+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -378,7 +378,6 @@ msgstr "Légió"
 msgid "All %{race} troops +1"
 msgstr "Minden %{race} egység +1"
 
-#, fuzzy
 msgid "NeutralRaceTroops|Neutral"
 msgstr "Semleges"
 
@@ -2635,7 +2634,7 @@ msgid "Recruit Hero"
 msgstr "Hős toborzása"
 
 msgid "%{name} is a level %{value} %{race} "
-msgstr "%{name} %{value}. szintű %{race}"
+msgstr "%{name} %{value}. szintű %{race} "
 
 msgid "with %{count} artifacts."
 msgstr "%{count} varázstárggyal"
@@ -3317,10 +3316,12 @@ msgstr "Kattints a virtuális billentyűzet dialógusablak megnyitásához."
 msgid "Open Virtual Keyboard"
 msgstr "Virtuális billentyűzet megnyitása"
 
-msgid "How many units do you wish to move?"
+#, fuzzy
+msgid "How many creatures do you wish to move?"
 msgstr "Hány egységet szeretnél mozgatni?"
 
-msgid "Select how many slots to separate into:"
+#, fuzzy
+msgid "Select how many units to separate into:"
 msgstr "Válaszd ki, hányfelé akarsz szétosztani:"
 
 msgid "Map: "
@@ -4124,20 +4125,17 @@ msgstr "Nincs használható térkép!"
 msgid "Warning"
 msgstr "Figyelmeztetés"
 
-#, fuzzy
 msgid "Animation"
-msgstr "Birtokbavétel"
+msgstr "Animáció"
 
-#, fuzzy
 msgid "Passability"
-msgstr "Személyiség:"
+msgstr "Átjárhatóság"
 
-#, fuzzy
 msgid "Toggle animation of the objects."
-msgstr "%{type} tárgyak törlésének kapcsolója."
+msgstr "Objektumok animációjának kapcsolója."
 
 msgid "Toggle display of objects' passability."
-msgstr ""
+msgstr "Kattints az objektumok átjárhatóságának megjelenítéséhez."
 
 msgid "difficulty|Easy"
 msgstr "Könnyű"
@@ -5259,7 +5257,7 @@ msgid "Astrologers proclaim the Week of the %{name}."
 msgstr "Az asztrológusok kihirdették a(z) %{name} hetét."
 
 msgid "After regular growth, the population of %{monster} is doubled!"
-msgstr "A(z) %{monster} lények népessége megduplázódott!"
+msgstr "A(z) %{monster} népessége megduplázódott!"
 
 msgid ""
 "After regular growth, the population of %{monster} increases by %{count} "
@@ -8513,12 +8511,11 @@ msgstr "Földidéző oltár"
 msgid "Water Summoning Altar"
 msgstr "Vízidéző oltár"
 
-#, fuzzy
 msgid "Swampy Lake"
-msgstr "Mocsár"
+msgstr "Mocsaras tó"
 
 msgid "Frozen Lake"
-msgstr ""
+msgstr "Befagyott tó"
 
 msgid "Unknown Monster"
 msgstr "Ismeretlen lény"
