@@ -827,7 +827,7 @@ Maps::Map_Format::HeroMetadata Heroes::getHeroMetadata() const
     heroMetadata.customKnowledge = static_cast<int16_t>( knowledge );
 
     // Hero's spell points.
-    heroMetadata.magicPoints = ( magic_point == GetMaxSpellPoints() ) ? -1 : static_cast<int16_t>( magic_point );
+    heroMetadata.magicPoints = ( magic_point == GetMaxSpellPoints() ) ? static_cast<int16_t>( -1 ) : static_cast<int16_t>( magic_point );
 
     return heroMetadata;
 }

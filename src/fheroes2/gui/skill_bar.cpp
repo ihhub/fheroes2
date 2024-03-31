@@ -31,7 +31,6 @@
 #include "icn.h"
 #include "pal.h"
 #include "screen.h"
-#include "skill.h"
 #include "tools.h"
 #include "translations.h"
 #include "ui_dialog.h"
@@ -56,7 +55,6 @@ PrimarySkillsBar::PrimarySkillsBar( Heroes * hero, const bool useSmallSize, cons
     , _useSmallSize( useSmallSize )
     , _isEditMode( isEditMode )
     , _allowSkillReset( allowSkillReset )
-    , content{ Skill::Primary::ATTACK, Skill::Primary::DEFENSE, Skill::Primary::POWER, Skill::Primary::KNOWLEDGE }
 {
     if ( useSmallSize ) {
         backsf = GetBarBackgroundSprite();
@@ -67,7 +65,7 @@ PrimarySkillsBar::PrimarySkillsBar( Heroes * hero, const bool useSmallSize, cons
         setSingleItemSize( { sprite.width(), sprite.height() } );
     }
 
-    SetContent( content );
+    SetContent( _content );
 }
 
 void PrimarySkillsBar::SetTextOff( int32_t ox, int32_t oy )
@@ -147,8 +145,8 @@ void PrimarySkillsBar::RedrawItem( int & skill, const fheroes2::Rect & pos, fher
 
         std::string skillValueText;
 
-        auto prepareEditModeText = [this, &dstsf, &pos, &skill]( std::string & skillText, int baseValue, const int modificatorValue ) {
-            if ( baseValue < 0 ) {
+        auto prepareEditModeText = [this, &dstsf, &pos, &skill]( int baseValue, const int modificatorValue ) {
+            if ( isDefaultValue( skill ) ) {
                 // In editor the negative value means that this skill does not use custom value.
                 baseValue = Heroes::getHeroDefaultSkillValue( skill, _hero->GetRace() );
 
@@ -159,44 +157,26 @@ void PrimarySkillsBar::RedrawItem( int & skill, const fheroes2::Rect & pos, fher
                 defaultText.drawInRoi( pos.x, pos.y + ( pos.height - defaultText.height() * defaultText.rows( pos.width ) ) / 2 + 2, pos.width, dstsf, pos );
             }
 
-            skillText = "%{withModificators} (%{base})";
-
+            std::string skillText = "%{withModificators} (%{base})";
             StringReplace( skillText, "%{base}", baseValue );
             StringReplace( skillText, "%{withModificators}", baseValue + modificatorValue );
+
+            return skillText;
         };
 
         switch ( skill ) {
         case Skill::Primary::ATTACK:
-            if ( _isEditMode ) {
-                prepareEditModeText( skillValueText, _hero->getAttackBaseValue(), _hero->GetAttackModificator() );
-            }
-            else {
-                skillValueText = std::to_string( _hero->GetAttack() );
-            }
+            skillValueText = _isEditMode ? prepareEditModeText( _hero->getAttackBaseValue(), _hero->GetAttackModificator() ) : std::to_string( _hero->GetAttack() );
             break;
         case Skill::Primary::DEFENSE:
-            if ( _isEditMode ) {
-                prepareEditModeText( skillValueText, _hero->getDefenseBaseValue(), _hero->GetDefenseModificator() );
-            }
-            else {
-                skillValueText = std::to_string( _hero->GetDefense() );
-            }
+            skillValueText = _isEditMode ? prepareEditModeText( _hero->getDefenseBaseValue(), _hero->GetDefenseModificator() ) : std::to_string( _hero->GetDefense() );
             break;
         case Skill::Primary::POWER:
-            if ( _isEditMode ) {
-                prepareEditModeText( skillValueText, _hero->getPowerBaseValue(), _hero->GetPowerModificator() );
-            }
-            else {
-                skillValueText = std::to_string( _hero->GetPower() );
-            }
+            skillValueText = _isEditMode ? prepareEditModeText( _hero->getPowerBaseValue(), _hero->GetPowerModificator() ) : std::to_string( _hero->GetPower() );
             break;
         case Skill::Primary::KNOWLEDGE:
-            if ( _isEditMode ) {
-                prepareEditModeText( skillValueText, _hero->getKnowledgeBaseValue(), _hero->GetKnowledgeModificator() );
-            }
-            else {
-                skillValueText = std::to_string( _hero->GetKnowledge() );
-            }
+            skillValueText
+                = _isEditMode ? prepareEditModeText( _hero->getKnowledgeBaseValue(), _hero->GetKnowledgeModificator() ) : std::to_string( _hero->GetKnowledge() );
             break;
         default:
             // Your primary skill is different. Make sure that the logic is correct!
@@ -224,15 +204,7 @@ bool PrimarySkillsBar::ActionBarLeftMouseSingleClick( int & skill )
     }
 
     // The case when we are in Editor mode.
-    auto primarySkillEditHandler = [this, &skill]( uint32_t & skillValue, const int baseValue ) {
-        if ( baseValue < 0 ) {
-            // In editor the negative value means that this skill does not use custom value.
-            skillValue = static_cast<uint32_t>( Heroes::getHeroDefaultSkillValue( skill, _hero->GetRace() ) );
-        }
-        else {
-            skillValue = static_cast<uint32_t>( baseValue );
-        }
-
+    auto primarySkillEditDialog = [&skill]( uint32_t & skillValue ) {
         std::string header = _( "Set %{skill} Skill" );
         StringReplace( header, "%{skill}", Skill::Primary::String( skill ) );
 
@@ -243,26 +215,34 @@ bool PrimarySkillsBar::ActionBarLeftMouseSingleClick( int & skill )
 
     switch ( skill ) {
     case Skill::Primary::ATTACK:
-        if ( primarySkillEditHandler( value, _hero->getAttackBaseValue() ) ) {
+        value = static_cast<uint32_t>( _hero->getAttackBaseValue() );
+        if ( primarySkillEditDialog( value ) ) {
             _hero->setAttackBaseValue( static_cast<int>( value ) );
+            _isDefault[skill] = false;
             return true;
         }
         break;
     case Skill::Primary::DEFENSE:
-        if ( primarySkillEditHandler( value, _hero->getDefenseBaseValue() ) ) {
+        value = static_cast<uint32_t>( _hero->getDefenseBaseValue() );
+        if ( primarySkillEditDialog( value ) ) {
             _hero->setDefenseBaseValue( static_cast<int>( value ) );
+            _isDefault[skill] = false;
             return true;
         }
         break;
     case Skill::Primary::POWER:
-        if ( primarySkillEditHandler( value, _hero->getPowerBaseValue() ) ) {
+        value = static_cast<uint32_t>( _hero->getPowerBaseValue() );
+        if ( primarySkillEditDialog( value ) ) {
             _hero->setPowerBaseValue( static_cast<int>( value ) );
+            _isDefault[skill] = false;
             return true;
         }
         break;
     case Skill::Primary::KNOWLEDGE:
-        if ( primarySkillEditHandler( value, _hero->getKnowledgeBaseValue() ) ) {
+        value = static_cast<uint32_t>( _hero->getKnowledgeBaseValue() );
+        if ( primarySkillEditDialog( value ) ) {
             _hero->setKnowledgeBaseValue( static_cast<int>( value ) );
+            _isDefault[skill] = false;
             return true;
         }
         break;
@@ -281,41 +261,32 @@ bool PrimarySkillsBar::ActionBarRightMouseHold( int & skill )
         return false;
     }
 
-    if ( _isEditMode && _allowSkillReset ) {
-        switch ( skill ) {
-        case Skill::Primary::ATTACK:
-            if ( _hero->getAttackBaseValue() == -1 ) {
-                return false;
-            }
-            _hero->setAttackBaseValue( -1 );
-            return true;
-        case Skill::Primary::DEFENSE:
-            if ( _hero->getDefenseBaseValue() == -1 ) {
-                return false;
-            }
-            _hero->setDefenseBaseValue( -1 );
-            return true;
-        case Skill::Primary::POWER:
-            if ( _hero->getPowerBaseValue() == -1 ) {
-                return false;
-            }
-            _hero->setPowerBaseValue( -1 );
-            return true;
-        case Skill::Primary::KNOWLEDGE:
-            if ( _hero->getKnowledgeBaseValue() == -1 ) {
-                return false;
-            }
-            _hero->setKnowledgeBaseValue( -1 );
-            return true;
-        default:
-            // Are you sure that you are passing the correct skill type?
-            assert( 0 );
-            break;
-        }
+    if ( !_isEditMode || !_allowSkillReset || isDefaultValue( skill ) ) {
+        fheroes2::showStandardTextMessage( Skill::Primary::String( skill ), Skill::Primary::StringDescription( skill, _hero ), Dialog::ZERO );
+
         return false;
     }
 
-    fheroes2::showStandardTextMessage( Skill::Primary::String( skill ), Skill::Primary::StringDescription( skill, _hero ), Dialog::ZERO );
+    _isDefault[skill] = true;
+
+    switch ( skill ) {
+    case Skill::Primary::ATTACK:
+        _hero->setAttackBaseValue( Heroes::getHeroDefaultSkillValue( skill, _hero->GetRace() ) );
+        return true;
+    case Skill::Primary::DEFENSE:
+        _hero->setDefenseBaseValue( Heroes::getHeroDefaultSkillValue( skill, _hero->GetRace() ) );
+        return true;
+    case Skill::Primary::POWER:
+        _hero->setPowerBaseValue( Heroes::getHeroDefaultSkillValue( skill, _hero->GetRace() ) );
+        return true;
+    case Skill::Primary::KNOWLEDGE:
+        _hero->setKnowledgeBaseValue( Heroes::getHeroDefaultSkillValue( skill, _hero->GetRace() ) );
+        return true;
+    default:
+        // Are you sure that you are passing the correct skill type?
+        assert( 0 );
+        break;
+    }
 
     return false;
 }

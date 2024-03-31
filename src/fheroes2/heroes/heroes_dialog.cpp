@@ -194,11 +194,19 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
 
     fheroes2::Point dst_pt( dialogRoi.x + 156, dialogRoi.y + 31 );
 
-    PrimarySkillsBar primskill_bar( this, false, true, true );
-    primskill_bar.setTableSize( { 4, 1 } );
-    primskill_bar.setInBetweenItemsOffset( { 6, 0 } );
-    primskill_bar.setRenderingOffset( dst_pt );
-    primskill_bar.Redraw( display );
+    PrimarySkillsBar primarySkillsBar( this, false, true, true );
+    primarySkillsBar.setTableSize( { 4, 1 } );
+    primarySkillsBar.setInBetweenItemsOffset( { 6, 0 } );
+    primarySkillsBar.setRenderingOffset( dst_pt );
+
+    if ( isEditor ) {
+        primarySkillsBar.setSkillsDefaultValueState( { { Skill::Primary::ATTACK, attack < 0 },
+                                                       { Skill::Primary::DEFENSE, defense < 0 },
+                                                       { Skill::Primary::POWER, power < 0 },
+                                                       { Skill::Primary::KNOWLEDGE, knowledge < 0 } } );
+    }
+
+    primarySkillsBar.Redraw( display );
 
     // Morale indicator.
     dst_pt.x = dialogRoi.x + 514;
@@ -383,20 +391,8 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
         le.MousePressLeft( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
 
         if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() ) {
-            // Disable fast scroll for resolutions where the exit button is directly above the border.
-            Interface::AdventureMap::Get().getGameArea().setFastScrollStatus( false );
-
-            buttonExit.drawOnPress();
-
-            // Fade-out hero dialog.
-            fheroes2::fadeOutDisplay( dialogRoi, !isDefaultScreenSize );
-
-            if ( isEditor && useDefaultExperience ) {
-                // Tell Editor that default experience value is set.
-                experience = UINT32_MAX;
-            }
-
-            return Dialog::CANCEL;
+            // Exit the dialog handling loop to close it.
+            break;
         }
 
         // Manage hero's army.
@@ -427,7 +423,7 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
                 spellPointsInfo.Redraw();
                 moraleIndicator.Redraw();
                 luckIndicator.Redraw();
-                primskill_bar.Redraw( display );
+                primarySkillsBar.Redraw( display );
             }
 
             needRedraw = true;
@@ -565,9 +561,9 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
                 needRedraw = true;
             }
         }
-        else if ( le.MouseCursor( primskill_bar.GetArea() ) && primskill_bar.QueueEventProcessing( &message ) ) {
+        else if ( le.MouseCursor( primarySkillsBar.GetArea() ) && primarySkillsBar.QueueEventProcessing( &message ) ) {
             if ( isEditor ) {
-                primskill_bar.Redraw( display );
+                primarySkillsBar.Redraw( display );
 
                 // Hero's Knowledge may have changed.
                 if ( !customSpellPoints ) {
@@ -702,6 +698,34 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
         if ( needRedraw ) {
             needRedraw = false;
             display.render( dialogRoi );
+        }
+    }
+
+    // Disable fast scroll for resolutions where the exit button is directly above the border.
+    Interface::AdventureMap::Get().getGameArea().setFastScrollStatus( false );
+
+    buttonExit.drawOnPress();
+
+    // Fade-out hero dialog.
+    fheroes2::fadeOutDisplay( dialogRoi, !isDefaultScreenSize );
+
+    if ( isEditor ) {
+        if ( useDefaultExperience ) {
+            // Tell Editor that default experience value is set.
+            experience = UINT32_MAX;
+        }
+        if ( primarySkillsBar.isDefaultValue( Skill::Primary::ATTACK ) ) {
+            attack = -1;
+        }
+
+        if ( primarySkillsBar.isDefaultValue( Skill::Primary::DEFENSE ) ) {
+            defense = -1;
+        }
+        if ( primarySkillsBar.isDefaultValue( Skill::Primary::POWER ) ) {
+            power = -1;
+        }
+        if ( primarySkillsBar.isDefaultValue( Skill::Primary::KNOWLEDGE ) ) {
+            knowledge = -1;
         }
     }
 

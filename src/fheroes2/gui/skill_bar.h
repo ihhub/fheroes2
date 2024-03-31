@@ -21,12 +21,14 @@
 #pragma once
 
 #include <cstdint>
+#include <map>
 #include <string>
 #include <vector>
 
 #include "image.h"
 #include "interface_itemsbar.h"
 #include "math_base.h"
+#include "skill.h"
 
 class Heroes;
 namespace Skill
@@ -49,13 +51,25 @@ public:
 
     bool QueueEventProcessing( std::string * = nullptr );
 
+    void setSkillsDefaultValueState( std::map<int, bool> isDefault )
+    {
+        _isDefault = std::move( isDefault );
+    }
+
+    bool isDefaultValue( const int skill )
+    {
+        return _isDefault.find( skill ) != _isDefault.end() && _isDefault[skill];
+    }
+
 private:
     Heroes * _hero;
     fheroes2::Image backsf;
-    bool _useSmallSize;
-    bool _isEditMode;
-    bool _allowSkillReset;
-    std::vector<int> content;
+    bool _useSmallSize{ false };
+    bool _isEditMode{ false };
+    bool _allowSkillReset{ false };
+    // The '_isDefault' vector is used only in Editor mode.
+    std::map<int, bool> _isDefault;
+    std::vector<int> _content{ Skill::Primary::ATTACK, Skill::Primary::DEFENSE, Skill::Primary::POWER, Skill::Primary::KNOWLEDGE };
     fheroes2::Point toff;
     std::string msg;
 };
