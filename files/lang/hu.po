@@ -3316,13 +3316,11 @@ msgstr "Kattints a virtuális billentyűzet dialógusablak megnyitásához."
 msgid "Open Virtual Keyboard"
 msgstr "Virtuális billentyűzet megnyitása"
 
-#, fuzzy
 msgid "How many creatures do you wish to move?"
-msgstr "Hány egységet szeretnél mozgatni?"
+msgstr "Hány teremtményt szeretnél mozgatni?"
 
-#, fuzzy
 msgid "Select how many units to separate into:"
-msgstr "Válaszd ki, hányfelé akarsz szétosztani:"
+msgstr "Válaszd ki, hány darabba akarsz szétosztani:"
 
 msgid "Map: "
 msgstr "Térkép: "
