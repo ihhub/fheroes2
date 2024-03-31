@@ -131,20 +131,20 @@ bool Game::Save( const std::string & filePath, const bool autoSave /* = false */
        << HeaderSAV( conf.getCurrentMapInfo(), conf.GameType(), world.GetDay(), world.GetWeek(), world.GetMonth() );
     fs.close();
 
-    StreamBuf zb;
-    zb.setbigendian( true );
+    StreamBuf sb;
+    sb.setbigendian( true );
 
     // Game data in ZIP format
-    zb << World::Get() << Settings::Get() << GameOver::Result::Get();
+    sb << World::Get() << Settings::Get() << GameOver::Result::Get();
 
     if ( conf.isCampaignGameType() ) {
-        zb << Campaign::CampaignSaveData::Get();
+        sb << Campaign::CampaignSaveData::Get();
     }
 
     // End-of-data marker
-    zb << SAV2ID3;
+    sb << SAV2ID3;
 
-    if ( zb.fail() || !Compression::writeFile( zb, filePath, true ) ) {
+    if ( sb.fail() || !Compression::writeFile( sb, filePath, true ) ) {
         return false;
     }
 
@@ -221,10 +221,10 @@ fheroes2::GameMode Game::Load( const std::string & filePath )
         return fheroes2::GameMode::CANCEL;
     }
 
-    StreamBuf zb;
-    zb.setbigendian( true );
+    StreamBuf sb;
+    sb.setbigendian( true );
 
-    if ( !Compression::readFile( zb, filePath, offset ) ) {
+    if ( !Compression::readFile( sb, filePath, offset ) ) {
         DEBUG_LOG( DBG_GAME, DBG_WARN, "Error uncompressing the file " << filePath )
 
         showGenericErrorMessage();
@@ -240,13 +240,13 @@ fheroes2::GameMode Game::Load( const std::string & filePath )
         return fheroes2::GameMode::CANCEL;
     }
 
-    zb >> World::Get() >> conf >> GameOver::Result::Get();
+    sb >> World::Get() >> conf >> GameOver::Result::Get();
 
     fheroes2::GameMode returnValue = fheroes2::GameMode::START_GAME;
 
     if ( conf.isCampaignGameType() ) {
         Campaign::CampaignSaveData & saveData = Campaign::CampaignSaveData::Get();
-        zb >> saveData;
+        sb >> saveData;
 
         if ( !saveData.isStarting() && saveData.getCurrentScenarioInfoId() == saveData.getLastCompletedScenarioInfoID() ) {
             // This is the end of the current scenario. We should show next scenario selection.
@@ -255,9 +255,9 @@ fheroes2::GameMode Game::Load( const std::string & filePath )
     }
 
     uint16_t endOfDataMarker = 0;
-    zb >> endOfDataMarker;
+    sb >> endOfDataMarker;
 
-    if ( zb.fail() || endOfDataMarker != SAV2ID3 ) {
+    if ( sb.fail() || endOfDataMarker != SAV2ID3 ) {
         DEBUG_LOG( DBG_GAME, DBG_WARN, "File " << filePath << " is corrupted" )
 
         showGenericErrorMessage();
