@@ -40,7 +40,7 @@ namespace
 
 namespace Compression
 {
-    std::vector<uint8_t> decompressData( const uint8_t * src, const size_t srcSize, size_t realSize )
+    std::vector<uint8_t> decompressData( const uint8_t * src, const size_t srcSize, size_t realSize /* = 0 */ )
     {
         if ( src == nullptr || srcSize == 0 ) {
             return {};

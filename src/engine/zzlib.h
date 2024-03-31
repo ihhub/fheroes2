@@ -35,8 +35,13 @@ class StreamBuf;
 
 namespace Compression
 {
+    // Zips the input data and returns the compressed data or an empty vector in case of an error.
     std::vector<uint8_t> compressData( const uint8_t * src, const size_t srcSize );
 
+    // Unzips the input data and returns the uncompressed data or an empty vector in case of an error.
+    // The 'realSize' parameter represents the planned size of the decompressed data and is optional
+    // (it is only used to speed up the decompression process). If this parameter is omitted or set to
+    // zero, the size of the decompressed data will be determined automatically.
     std::vector<uint8_t> decompressData( const uint8_t * src, const size_t srcSize, size_t realSize = 0 );
 
     // Reads & unzips the zipped chunk from the specified file at the specified offset and appends
