@@ -21,10 +21,11 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "spell_storage.h"
+
 #include <algorithm>
 
 #include "artifact.h"
-#include "spell_storage.h"
 
 SpellStorage::SpellStorage()
 {
@@ -82,4 +83,18 @@ void SpellStorage::Append( const BagArtifacts & bag )
 void SpellStorage::Append( const Artifact & art )
 {
     Append( Spell( art.getSpellId() ) );
+}
+
+bool SpellStorage::removeSpell( const Spell & spell )
+{
+    if ( spell == Spell::NONE ) {
+        return false;
+    }
+
+    if ( auto foundSpell = std::find( begin(), end(), spell ); foundSpell != end() ) {
+        erase( foundSpell );
+        return true;
+    }
+
+    return false;
 }

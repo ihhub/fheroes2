@@ -48,15 +48,16 @@ public:
 
     bool QueueEventProcessing( std::string * = nullptr );
 
-    void setSkillsDefaultValueState( std::map<int, bool> isDefault )
+    // In Editor primary skills values may be reset to their default state. This method returns this state.
+    bool isDefaultValues() const
     {
-        _isDefault = std::move( isDefault );
+        return _isDefault;
     }
 
-    // In Editor any primary skill value may be reset to its default state. This method returns this state for the given skill.
-    bool isDefaultValue( const int skill )
+    // In Editor primary skills values may be reset to their default state by this method.
+    void useDefaultValues()
     {
-        return ( _isDefault.find( skill ) != _isDefault.end() ) && _isDefault[skill];
+        _isDefault = true;
     }
 
 private:
@@ -66,7 +67,7 @@ private:
     bool _isEditMode{ false };
     bool _allowSkillReset{ false };
     // The '_isDefault' is used only in Editor mode.
-    std::map<int, bool> _isDefault;
+    bool _isDefault{ false };
     std::vector<int> _content{ Skill::Primary::ATTACK, Skill::Primary::DEFENSE, Skill::Primary::POWER, Skill::Primary::KNOWLEDGE };
     fheroes2::Point toff;
     std::string msg;

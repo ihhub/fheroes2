@@ -722,7 +722,7 @@ void Heroes::applyHeroMetadata( const Maps::Map_Format::HeroMetadata & heroMetad
         experience = heroMetadata.customExperience;
     }
     else if ( isEditor ) {
-        // There is no way to set "default experience" condition, so we will consider 'INT32_MAX' as it.
+        // There is no way to set "default experience" condition, so we will consider 'UINT32_MAX' as it.
         experience = UINT32_MAX;
     }
 
@@ -752,7 +752,19 @@ void Heroes::applyHeroMetadata( const Maps::Map_Format::HeroMetadata & heroMetad
         knowledge = heroMetadata.customKnowledge;
     }
 
-    SetSpellPoints( heroMetadata.magicPoints > -1 ? static_cast<uint32_t>( heroMetadata.magicPoints ) : GetMaxSpellPoints() );
+    if ( heroMetadata.magicPoints < 0 ) {
+        // Default Spell points.
+        if ( isEditor ) {
+            // There is no way to set "default spell points" condition, so we will consider 'UINT32_MAX' as it.
+            magic_point = UINT32_MAX;
+        }
+        else {
+            magic_point = GetMaxSpellPoints();
+        }
+    }
+    else {
+        magic_point = static_cast<uint32_t>( heroMetadata.magicPoints );
+    }
 
     move_point = GetMaxMovePoints();
 }
@@ -825,7 +837,7 @@ Maps::Map_Format::HeroMetadata Heroes::getHeroMetadata() const
     heroMetadata.customKnowledge = static_cast<int16_t>( knowledge );
 
     // Hero's spell points.
-    heroMetadata.magicPoints = ( magic_point == GetMaxSpellPoints() ) ? static_cast<int16_t>( -1 ) : static_cast<int16_t>( magic_point );
+    heroMetadata.magicPoints = ( magic_point == UINT32_MAX ) ? static_cast<int16_t>( -1 ) : static_cast<int16_t>( magic_point );
 
     return heroMetadata;
 }

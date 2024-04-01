@@ -146,7 +146,7 @@ void PrimarySkillsBar::RedrawItem( int & skill, const fheroes2::Rect & pos, fher
         std::string skillValueText;
 
         auto prepareEditModeText = [this, &dstsf, &pos, &skill]( int baseValue, const int modificatorValue ) {
-            if ( isDefaultValue( skill ) ) {
+            if ( _isDefault ) {
                 // In editor the negative value means that this skill does not use custom value.
                 baseValue = Heroes::getHeroDefaultSkillValue( skill, _hero->GetRace() );
 
@@ -218,7 +218,7 @@ bool PrimarySkillsBar::ActionBarLeftMouseSingleClick( int & skill )
         value = static_cast<uint32_t>( _hero->getAttackBaseValue() );
         if ( primarySkillEditDialog( value ) ) {
             _hero->setAttackBaseValue( static_cast<int>( value ) );
-            _isDefault[skill] = false;
+            _isDefault = false;
             return true;
         }
         break;
@@ -226,7 +226,7 @@ bool PrimarySkillsBar::ActionBarLeftMouseSingleClick( int & skill )
         value = static_cast<uint32_t>( _hero->getDefenseBaseValue() );
         if ( primarySkillEditDialog( value ) ) {
             _hero->setDefenseBaseValue( static_cast<int>( value ) );
-            _isDefault[skill] = false;
+            _isDefault = false;
             return true;
         }
         break;
@@ -234,7 +234,7 @@ bool PrimarySkillsBar::ActionBarLeftMouseSingleClick( int & skill )
         value = static_cast<uint32_t>( _hero->getPowerBaseValue() );
         if ( primarySkillEditDialog( value ) ) {
             _hero->setPowerBaseValue( static_cast<int>( value ) );
-            _isDefault[skill] = false;
+            _isDefault = false;
             return true;
         }
         break;
@@ -242,7 +242,7 @@ bool PrimarySkillsBar::ActionBarLeftMouseSingleClick( int & skill )
         value = static_cast<uint32_t>( _hero->getKnowledgeBaseValue() );
         if ( primarySkillEditDialog( value ) ) {
             _hero->setKnowledgeBaseValue( static_cast<int>( value ) );
-            _isDefault[skill] = false;
+            _isDefault = false;
             return true;
         }
         break;
@@ -261,40 +261,28 @@ bool PrimarySkillsBar::ActionBarRightMouseHold( int & skill )
         return false;
     }
 
-    if ( !_isEditMode || !_allowSkillReset || isDefaultValue( skill ) ) {
+    if ( !_isEditMode || !_allowSkillReset || _isDefault ) {
         fheroes2::showStandardTextMessage( Skill::Primary::String( skill ), Skill::Primary::StringDescription( skill, _hero ), Dialog::ZERO );
 
         return false;
     }
 
-    _isDefault[skill] = true;
+    // In Editor the Right-click on any primary skill resets all skills to their default state.
+    _isDefault = true;
 
-    switch ( skill ) {
-    case Skill::Primary::ATTACK:
-        _hero->setAttackBaseValue( Heroes::getHeroDefaultSkillValue( skill, _hero->GetRace() ) );
-        return true;
-    case Skill::Primary::DEFENSE:
-        _hero->setDefenseBaseValue( Heroes::getHeroDefaultSkillValue( skill, _hero->GetRace() ) );
-        return true;
-    case Skill::Primary::POWER:
-        _hero->setPowerBaseValue( Heroes::getHeroDefaultSkillValue( skill, _hero->GetRace() ) );
-        return true;
-    case Skill::Primary::KNOWLEDGE:
-        _hero->setKnowledgeBaseValue( Heroes::getHeroDefaultSkillValue( skill, _hero->GetRace() ) );
-        return true;
-    default:
-        // Are you sure that you are passing the correct skill type?
-        assert( 0 );
-        break;
-    }
+    const int heroRace = _hero->GetRace();
+    _hero->setAttackBaseValue( Heroes::getHeroDefaultSkillValue( Skill::Primary::ATTACK, heroRace ) );
+    _hero->setDefenseBaseValue( Heroes::getHeroDefaultSkillValue( Skill::Primary::DEFENSE, heroRace ) );
+    _hero->setPowerBaseValue( Heroes::getHeroDefaultSkillValue( Skill::Primary::POWER, heroRace ) );
+    _hero->setKnowledgeBaseValue( Heroes::getHeroDefaultSkillValue( Skill::Primary::KNOWLEDGE, heroRace ) );
 
-    return false;
+    return true;
 }
 
 bool PrimarySkillsBar::ActionBarCursor( int & skill )
 {
     if ( Skill::Primary::UNKNOWN != skill ) {
-        msg = _isEditMode ? _( "Set %{skill} Skill base value. Right-click to reset to default." ) : _( "View %{skill} Info" );
+        msg = _isEditMode ? _( "Set %{skill} base value. Right-click to reset all skills to default." ) : _( "View %{skill} Info" );
         StringReplace( msg, "%{skill}", Skill::Primary::String( skill ) );
     }
 

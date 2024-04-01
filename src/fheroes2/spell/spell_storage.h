@@ -42,6 +42,7 @@ public:
     void Append( const Spell & );
     void Append( const BagArtifacts & );
     void Append( const Artifact & );
+    bool removeSpell( const Spell & spell );
     bool isPresentSpell( const Spell & ) const;
     std::string String() const;
 };

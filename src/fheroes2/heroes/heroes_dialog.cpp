@@ -203,10 +203,22 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
     if ( isEditor ) {
         // In Editor '-1' means that the primary skill value is reset to its default state.
         // Here we consider any negative value as a default skill value state.
-        primarySkillsBar.setSkillsDefaultValueState( { { Skill::Primary::ATTACK, attack < 0 },
-                                                       { Skill::Primary::DEFENSE, defense < 0 },
-                                                       { Skill::Primary::POWER, power < 0 },
-                                                       { Skill::Primary::KNOWLEDGE, knowledge < 0 } } );
+        if ( attack < 0 && defense < 0 && power < 0 && knowledge < 0 ) {
+            primarySkillsBar.useDefaultValues();
+        }
+
+        if ( attack < 0 ) {
+            attack = Heroes::getHeroDefaultSkillValue( Skill::Primary::ATTACK, _race );
+        }
+        if ( defense < 0 ) {
+            defense = Heroes::getHeroDefaultSkillValue( Skill::Primary::DEFENSE, _race );
+        }
+        if ( power < 0 ) {
+            power = Heroes::getHeroDefaultSkillValue( Skill::Primary::POWER, _race );
+        }
+        if ( knowledge < 0 ) {
+            knowledge = Heroes::getHeroDefaultSkillValue( Skill::Primary::KNOWLEDGE, _race );
+        }
     }
 
     primarySkillsBar.Redraw( display );
@@ -258,6 +270,11 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
     experienceInfo.Redraw();
 
     // Spell points indicator.
+    bool useDefaultSpellPoints = isEditor && ( GetSpellPoints() == UINT32_MAX );
+    if ( useDefaultSpellPoints ) {
+        SetSpellPoints( GetMaxSpellPoints() );
+    }
+
     dst_pt.x += 38;
     dst_pt.y += 2;
     SpellPointsIndicator spellPointsInfo( this );
@@ -385,7 +402,6 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
     }
 
     bool needRedraw{ false };
-    bool customSpellPoints{ GetSpellPoints() != GetMaxSpellPoints() };
     std::string message;
 
     // dialog menu loop
@@ -419,7 +435,7 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
 
             if ( isEditor ) {
                 // Artifacts affect many hero stats.
-                if ( !customSpellPoints ) {
+                if ( useDefaultSpellPoints ) {
                     SetSpellPoints( GetMaxSpellPoints() );
                 }
 
@@ -504,12 +520,13 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
         }
         else if ( le.MouseCursor( spellPointsInfo.GetArea() ) ) {
             if ( isEditor ) {
-                message = _( "Set Spell Points value" );
+                message = useDefaultSpellPoints ? _( "Set custom Spell Points value. Current value is default." )
+                                                : _( "Change Spell Points value. Right-click to reset to default value." );
 
                 if ( le.MouseClickLeft() ) {
                     uint32_t value = GetSpellPoints();
                     if ( Dialog::SelectCount( message, 0, spellPointsMaxValue, value ) ) {
-                        customSpellPoints = true;
+                        useDefaultSpellPoints = false;
                         SetSpellPoints( value );
                         spellPointsInfo.Redraw();
                         needRedraw = true;
@@ -517,7 +534,7 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
                 }
                 else if ( le.MouseClickRight() ) {
                     // Reset spell points modification.
-                    customSpellPoints = false;
+                    useDefaultSpellPoints = true;
                     SetSpellPoints( GetMaxSpellPoints() );
                     spellPointsInfo.Redraw();
                     needRedraw = true;
@@ -569,7 +586,7 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
                 primarySkillsBar.Redraw( display );
 
                 // Hero's Knowledge may have changed.
-                if ( !customSpellPoints ) {
+                if ( useDefaultSpellPoints ) {
                     SetSpellPoints( GetMaxSpellPoints() );
                 }
                 spellPointsInfo.Redraw();
@@ -718,17 +735,16 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
             experience = UINT32_MAX;
         }
 
+        if ( useDefaultSpellPoints ) {
+            // Tell Editor that default Spell Points value is set.
+            SetSpellPoints( UINT32_MAX );
+        }
+
         // For Editor '-1' means that the primary skill is reset to its default state.
-        if ( primarySkillsBar.isDefaultValue( Skill::Primary::ATTACK ) ) {
+        if ( primarySkillsBar.isDefaultValues() ) {
             attack = -1;
-        }
-        if ( primarySkillsBar.isDefaultValue( Skill::Primary::DEFENSE ) ) {
             defense = -1;
-        }
-        if ( primarySkillsBar.isDefaultValue( Skill::Primary::POWER ) ) {
             power = -1;
-        }
-        if ( primarySkillsBar.isDefaultValue( Skill::Primary::KNOWLEDGE ) ) {
             knowledge = -1;
         }
     }

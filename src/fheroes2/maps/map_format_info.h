@@ -137,10 +137,11 @@ namespace Maps::Map_Format
                    && patrolRadius == anotherHeroMetadata.patrolRadius && customLevel == anotherHeroMetadata.customLevel
                    && customExperience == anotherHeroMetadata.customExperience && customAttack == anotherHeroMetadata.customAttack
                    && customDefense == anotherHeroMetadata.customDefense && customKnowledge == anotherHeroMetadata.customKnowledge
-                   && customSpellPower == anotherHeroMetadata.customSpellPower && armyMonsterType == anotherHeroMetadata.armyMonsterType
-                   && armyMonsterCount == anotherHeroMetadata.armyMonsterCount && artifact == anotherHeroMetadata.artifact
-                   && artifactMetadata == anotherHeroMetadata.artifactMetadata && availableSpells == anotherHeroMetadata.availableSpells
-                   && secondarySkill == anotherHeroMetadata.secondarySkill && secondarySkillLevel == anotherHeroMetadata.secondarySkillLevel;
+                   && customSpellPower == anotherHeroMetadata.customSpellPower && magicPoints == anotherHeroMetadata.magicPoints
+                   && armyMonsterType == anotherHeroMetadata.armyMonsterType && armyMonsterCount == anotherHeroMetadata.armyMonsterCount
+                   && artifact == anotherHeroMetadata.artifact && artifactMetadata == anotherHeroMetadata.artifactMetadata
+                   && availableSpells == anotherHeroMetadata.availableSpells && secondarySkill == anotherHeroMetadata.secondarySkill
+                   && secondarySkillLevel == anotherHeroMetadata.secondarySkillLevel;
         }
 
         bool operator!=( const HeroMetadata & anotherHeroMetadata ) const
