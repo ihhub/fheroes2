@@ -1221,7 +1221,7 @@ msgid "Retake the castle of Ivory Gates, which has fallen due to treachery."
 msgstr "Retome o castelo Portões de Marfim, que caiu devido à traição."
 
 msgid "Gain the favor of the elves. They will not allow trees to be chopped down, so we will send you wood every 2 weeks. You must complete your mission before the first day of the seventh month, or the kingdom will surely fall."
-msgstr "Ganhe o favor dos elfos. Eles não permitirão que as árvores sejam cortadas, então eles lhe enviarão madeira a cada 2 semanas. Você deve completar sua missão antes do primeiro dia do sétimo mês, ou o reino certamente cairá."
+msgstr "Ganhe o favor dos elfos. Eles não permitirão que as árvores sejam cortadas, então nós enviar-lhe-emos madeira a cada 2 semanas. Você deve completar sua missão antes do primeiro dia do sétimo mês, ou o reino certamente cairá."
 
 msgid "This is the final battle against your rival kingdom of Harondale. Eliminate everyone, and don't lose the hero Jarkonas VI."
 msgstr "Esta é a batalha final contra seu reino rival de Harondale. Elimine todos, e não perca o herói Jarkonas VI."
