@@ -651,7 +651,7 @@ msgid "%{name} states:"
 msgstr "%{name} declara:"
 
 msgid "Captain of %{name} states:"
-msgstr "Capitão de %{name}:"
+msgstr "Capitão de %{name} declara:"
 
 msgid "\"I will accept your surrender and grant you and your troops safe passage for the price of %{price} gold.\""
 msgstr "\"Aceitarei sua rendição e concederei a você e a suas tropas uma passagem segura pelo preço de %{price} ouro.\""
