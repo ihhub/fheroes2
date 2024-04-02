@@ -1023,7 +1023,7 @@ msgid "The Crown"
 msgstr "A Coroa"
 
 msgid "The Gauntlet"
-msgstr "A Manopla"
+msgstr "A Corrida"
 
 msgid "Betrayal"
 msgstr "Traição"
