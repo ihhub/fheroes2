@@ -1275,7 +1275,7 @@ msgid "Overthrow the entrenched monarchy of Lord Alberon, and claim all the land
 msgstr "Derrube a monarquia entrincheirada de Lorde Alberon e reivindique todas as terras em seu nome. Gallavant não deve morrer."
 
 msgid " bane"
-msgstr " perdição"
+msgstr " flagelo"
 
 msgid " alliance"
 msgstr " aliança"
