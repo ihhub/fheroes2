@@ -2688,7 +2688,9 @@ msgid "Very Fast"
 msgstr "Muito rápido"
 
 msgid "Scroll Speed"
-msgstr "Veloc. Rolagem"
+msgstr ""
+"Velocidade\n"
+"de deslocamento"
 
 msgid "Toggle the type of interface you want to use."
 msgstr "Alterne o tipo de interface que você deseja usar."
