@@ -1050,7 +1050,7 @@ msgid "Your enemies are allied against you and start close by, so be ready to co
 msgstr "Seus inimigos são aliados contra você e começam por perto, portanto esteja pronto para sair lutando. Você precisará possuir todos os quatro castelos neste pequeno vale para vencer."
 
 msgid "The Sorceress' guild of Noraston has requested Roland's aid against an attack from Archibald's allies. Capture all of the enemy castles to win, and don't lose Noraston, or you'll lose the scenario. (Hint: There is an enemy castle on an island in the ocean.)"
-msgstr "A Guilda de Feiticeiras de Noraston solicitou a ajuda de Roland contra um ataque dos aliados de Archibald. Capture todos os castelos inimigos para ganhar, e não perca Noraston, ou você perderá o cenário. (Dica: Há um castelo inimigo em uma ilha no oceano)."
+msgstr "A Guilda das Feiticeiras de Noraston solicitou a ajuda de Roland contra um ataque dos aliados de Archibald. Capture todos os castelos inimigos para ganhar, e não perca Noraston, ou você perderá o cenário. (Dica: Há um castelo inimigo em uma ilha no oceano)."
 
 msgid "Gather as large an army as possible and capture the enemy castle within 8 weeks. You are opposed by only one enemy, but must travel a long way to get to the enemy castle. Any troops you have in your army at the end of this scenario will be with you in the final battle."
 msgstr ""
@@ -1668,7 +1668,7 @@ msgid "Greywind"
 msgstr "Vento Cinzento"
 
 msgid "Portsmith"
-msgstr "Ferreiro do Poto"
+msgstr "Ferraria do Poto"
 
 msgid "Atlantium"
 msgstr "Atlantium"
@@ -1884,10 +1884,10 @@ msgid "Upg. Archery Range"
 msgstr "Campo de Arqueiros Nv.2"
 
 msgid "Blacksmith"
-msgstr "Ferreiro"
+msgstr "Ferraria"
 
 msgid "Upg. Blacksmith"
-msgstr "Ferreiro Nv.2"
+msgstr "Ferraria Nv.2"
 
 msgid "Armory"
 msgstr "Arsenal"
@@ -4208,7 +4208,7 @@ msgid "hotkey|marketplace"
 msgstr "mercado"
 
 msgid "hotkey|mage guild"
-msgstr "guilda de magos"
+msgstr "guilda dos magos"
 
 msgid "hotkey|shipyard"
 msgstr "estaleiro"
