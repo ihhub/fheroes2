@@ -267,6 +267,9 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
     dst_pt.y = dialogRoi.y + ( isEditor ? 76 : 86 );
     ExperienceIndicator experienceInfo( this );
     experienceInfo.SetPos( dst_pt );
+    if ( isEditor ) {
+        experienceInfo.setDefaultState( useDefaultExperience );
+    }
     experienceInfo.Redraw();
 
     // Spell points indicator.
@@ -279,6 +282,9 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
     dst_pt.y += 2;
     SpellPointsIndicator spellPointsInfo( this );
     spellPointsInfo.SetPos( dst_pt );
+    if ( isEditor ) {
+        spellPointsInfo.setDefaultState( useDefaultSpellPoints );
+    }
     spellPointsInfo.Redraw();
 
     // Color "crest" icon.
@@ -500,6 +506,7 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
                     if ( Dialog::SelectCount( _( "Set Experience value" ), 0, experienceMaxValue, value ) ) {
                         useDefaultExperience = false;
                         experience = value;
+                        experienceInfo.setDefaultState( useDefaultExperience );
                         experienceInfo.Redraw();
                         drawTitleText( name, _race, true );
                         needRedraw = true;
@@ -508,6 +515,7 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
                 else if ( le.MouseClickRight() ) {
                     useDefaultExperience = true;
                     experience = GetStartingXp();
+                    experienceInfo.setDefaultState( useDefaultExperience );
                     experienceInfo.Redraw();
                     drawTitleText( name, _race, true );
                     needRedraw = true;
@@ -525,9 +533,10 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
 
                 if ( le.MouseClickLeft() ) {
                     uint32_t value = GetSpellPoints();
-                    if ( Dialog::SelectCount( message, 0, spellPointsMaxValue, value ) ) {
+                    if ( Dialog::SelectCount( _( "Set Spell Points value" ), 0, spellPointsMaxValue, value ) ) {
                         useDefaultSpellPoints = false;
                         SetSpellPoints( value );
+                        spellPointsInfo.setDefaultState( useDefaultSpellPoints );
                         spellPointsInfo.Redraw();
                         needRedraw = true;
                     }
@@ -536,6 +545,7 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
                     // Reset spell points modification.
                     useDefaultSpellPoints = true;
                     SetSpellPoints( GetMaxSpellPoints() );
+                    spellPointsInfo.setDefaultState( useDefaultSpellPoints );
                     spellPointsInfo.Redraw();
                     needRedraw = true;
                 }
@@ -589,6 +599,7 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
                 if ( useDefaultSpellPoints ) {
                     SetSpellPoints( GetMaxSpellPoints() );
                 }
+
                 spellPointsInfo.Redraw();
                 needRedraw = true;
             }
