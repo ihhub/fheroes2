@@ -2676,21 +2676,21 @@ msgid "Interface"
 msgstr "Aparência"
 
 msgid "Slow"
-msgstr "Lento"
+msgstr "Lenta"
 
 msgid "Normal"
 msgstr "Normal"
 
 msgid "Fast"
-msgstr "Rápido"
+msgstr "Rápida"
 
 msgid "Very Fast"
-msgstr "Muito rápido"
+msgstr "Muito Rápido"
 
 msgid "Scroll Speed"
 msgstr ""
 "Velocidade\n"
-"de deslocamento"
+"de Deslocamento"
 
 msgid "Toggle the type of interface you want to use."
 msgstr "Alterne o tipo de interface que você deseja usar."
