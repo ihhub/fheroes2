@@ -2417,7 +2417,7 @@ msgid ""
 msgstr ""
 "As criaturas são persuadidas por sua língua\n"
 "diplomática, e fazem uma oferta:\n"
-" \n"
+"\n"
 
 msgid ""
 "%{offer} of the %{total} %{monster} will join your army, and the rest will leave you alone, for the sum of %{gold} gold.\n"
