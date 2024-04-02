@@ -648,7 +648,7 @@ msgid "Not enough gold (%{gold})"
 msgstr "Ouro insuficiente (%{gold})"
 
 msgid "%{name} states:"
-msgstr "Estado de %{name}:"
+msgstr "%{name} declara:"
 
 msgid "Captain of %{name} states:"
 msgstr "Capitão de %{name}:"
