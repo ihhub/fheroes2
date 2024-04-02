@@ -1836,7 +1836,7 @@ msgid "Troy"
 msgstr "Troia"
 
 msgid "Forder Oaks"
-msgstr "Carvalhos da Fronteira"
+msgstr "Carvalhos Forder"
 
 msgid "Meramec"
 msgstr "Meramec"
