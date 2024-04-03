@@ -3268,7 +3268,7 @@ msgid "Artifacts:"
 msgstr "Artefatos:"
 
 msgid "Total Army Strength:"
-msgstr "Forca Total do Exército:"
+msgstr "Força Total do Exército:"
 
 msgid "Income:"
 msgstr "Renda:"
