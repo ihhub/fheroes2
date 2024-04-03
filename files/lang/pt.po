@@ -5419,7 +5419,7 @@ msgid "You've come upon a mercenary camp practicing their tactics. The mercenari
 msgstr "Você encontrou um campo de mercenários praticando suas táticas. Os mercenários dão-lhe as boas-vindas e convidam-no a treinar com eles."
 
 msgid "\"Go 'way!\", the witch doctor barks, \"you know all I know.\""
-msgstr "\"Vá embora!", rosna o curandeiro, \"Você sabe tudo o que sei.\""
+msgstr "\"Vá embora!\", rosna o curandeiro, \"Você sabe tudo o que sei.\""
 
 msgid "An Orcish witch doctor living in the hut deepens your knowledge of magic by showing you how to cast stones, read portents, and decipher the intricacies of chicken entrails."
 msgstr "Um curandeiro Orc que vive na cabana, aumenta o seu conhecimento de magia, mostrando-lhe como lançar pedras, ler presságio e decifrar as vísceras de frango."
