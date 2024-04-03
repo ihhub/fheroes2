@@ -3728,7 +3728,7 @@ msgid "Difficulty"
 msgstr "Dificuldade"
 
 msgid "You have changed to a lower difficulty for the campaign. You will not be able to revert this after this point. The high score will be calculated based solely on the new difficulty. Do you want to proceed?"
-msgstr "Você mudou para uma dificuldade mais baixa para a campanha. Você não poderá reverter isso após este ponto. A pontuação alta será calculada com base exclusivamente na nova dificuldade. Deseja continuar?"
+msgstr "Você mudou para uma dificuldade mais baixa para a campanha. Você não poderá reverter isso após este ponto. A pontuação final será calculada com base exclusivamente na nova dificuldade. Deseja continuar?"
 
 msgid "Are you sure you want to restart this scenario?"
 msgstr "Você tem certeza de que deseja reiniciar este cenário?"
