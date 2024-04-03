@@ -7911,7 +7911,7 @@ msgid "The %{name} increases the luck of the hero's army by %{count}."
 msgstr "%{name} aumenta a sorte do exército do herói em %{count}."
 
 msgid "A traveling merchant offers you a rabbit's foot, made of gleaming silver fur, for safe passage. The merchant explains the charm will increase your luck in combat."
-msgstr "Um comerciante itinerante lhe oferece um pé de coelho, feito de pêlo prateado cintilante, por uma passagem segura. O comerciante explica o encanto que aumentará sua sorte em combate."
+msgstr "Um comerciante itinerante lhe oferece um pé de coelho, feito de pêlo prateado cintilante, por uma passagem segura. O comerciante explica que o encanto aumentará sua sorte em combate."
 
 msgid "Golden Horseshoe"
 msgstr "Ferradura de Ouro"
