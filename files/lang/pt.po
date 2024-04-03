@@ -8542,13 +8542,13 @@ msgid "Causes a giant fireball to strike the selected area, damaging all nearby 
 msgstr "Faz com que uma bola de fogo gigante atinja a área selecionada, causando danos a todas as criaturas próximas."
 
 msgid "Fireball"
-msgstr "Meteoro"
+msgstr "Bola de Fogo"
 
 msgid "Fireblast"
 msgstr "Rajada de Fogo"
 
 msgid "An improved version of fireball, fireblast affects two hexes around the center point of the spell, rather than one."
-msgstr "Uma versão melhorada do meteoro, a rajada de fogo afeta dois hexágonos ao redor do ponto central do feitiço, em vez de um."
+msgstr "Uma versão melhorada da bola de fogo, a rajada de fogo afeta dois hexágonos ao redor do ponto central do feitiço, em vez de um."
 
 msgid "Causes a bolt of electrical energy to strike the selected creature."
 msgstr "Faz com que um raio de energia elétrica atinja a criatura selecionada."
