@@ -3708,7 +3708,7 @@ msgid "Change the speed at which your heroes move on the main screen."
 msgstr "Vælg hvor hurtigt dine helte skal flytte sig på hovedskærmen."
 
 msgid ""
-"Sets the speed that computer heroes move at. You can also select not to view "
+"Sets the speed that computer heroes move at. You can also elect not to view "
 "computer movement at all."
 msgstr ""
 "Bestemmer hvor hurtigt AI-spillernes helte bevæger sig. Du kan også vælge "

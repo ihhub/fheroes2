@@ -3665,7 +3665,7 @@ msgstr ""
 "Изменить скорость, с которой Ваши герои перемещаются на главном экране."
 
 msgid ""
-"Sets the speed that computer heroes move at. You can also select not to view "
+"Sets the speed that computer heroes move at. You can also elect not to view "
 "computer movement at all."
 msgstr ""
 "Устанавливает скорость, с которой двигаются герои под управлением "
