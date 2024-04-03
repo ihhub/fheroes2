@@ -3908,13 +3908,13 @@ msgid "Standard"
 msgstr "Padrão"
 
 msgid "View High Scores for Standard Maps."
-msgstr "Veja os Recordes para os Mapas Padrões."
+msgstr "Veja as Melhores Pontuações para os Mapas Padrões."
 
 msgid "Campaign"
 msgstr "Campanha"
 
 msgid "View High Scores for Campaigns."
-msgstr "Veja os Recordes para as Campanhas."
+msgstr "Veja as Melhores Pontuações para as Campanhas."
 
 msgid "hotkey|default okay event"
 msgstr "evento padrão de confirmação"
@@ -4374,10 +4374,10 @@ msgid "View the credits screen."
 msgstr "Ver tela dos créditos."
 
 msgid "High Scores"
-msgstr "Recordes"
+msgstr "Melhores Pontuações"
 
 msgid "View the high scores screen."
-msgstr "Ver a tela de recordes."
+msgstr "Ver a tela de melhores pontuações."
 
 msgid "Change language, resolution and settings of the game."
 msgstr "Muda o idioma, a resolução e as configurações do jogo."
@@ -6466,7 +6466,7 @@ msgid "luck|Cursed"
 msgstr "Amaldiçoada"
 
 msgid "luck|Awful"
-msgstr "Desfavorável"
+msgstr "Péssima"
 
 msgid "luck|Bad"
 msgstr "Má"
@@ -6493,13 +6493,13 @@ msgid "Positive luck sometimes lets the hero's units get lucky attacks (double s
 msgstr "Sorte positiva às vezes permite que as unidades do herói obtenham ataques de sorte (dobro de força) em combate."
 
 msgid "morale|Treason"
-msgstr "Péssima"
+msgstr "Traição"
 
 msgid "morale|Awful"
-msgstr "Baixa"
+msgstr "Péssima"
 
 msgid "morale|Poor"
-msgstr "Muito baixa"
+msgstr "Ruim"
 
 msgid "morale|Normal"
 msgstr "Neutra"
