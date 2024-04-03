@@ -3220,22 +3220,22 @@ msgid "Knowl"
 msgstr "Conhec."
 
 msgid "1st"
-msgstr "1º"
+msgstr "1."
 
 msgid "2nd"
-msgstr "2º"
+msgstr "2."
 
 msgid "3rd"
-msgstr "3º"
+msgstr "3."
 
 msgid "4th"
-msgstr "4º"
+msgstr "4."
 
 msgid "5th"
-msgstr "5º"
+msgstr "5."
 
 msgid "6th"
-msgstr "6º"
+msgstr "6."
 
 msgid "Oracle: Player Rankings"
 msgstr "Oráculo: Classificação de Jogadores"
@@ -3947,7 +3947,7 @@ msgid "hotkey|load game"
 msgstr "carregar jogo"
 
 msgid "hotkey|high scores"
-msgstr "pontuações altas"
+msgstr "melhores pontuações"
 
 msgid "hotkey|credits"
 msgstr "créditos"
@@ -8932,34 +8932,34 @@ msgid "Randomly selected spell of any level."
 msgstr "Feitiço de qualquer nível selecionado aleatoriamente."
 
 msgid "Random 1st Level Spell"
-msgstr "Feitiço Aleatório de 1º Nível"
+msgstr "Feitiço Aleatório de 1. Nível"
 
 msgid "Randomly selected 1st level spell."
-msgstr "Feitiço de 1º nível selecionado aleatoriamente."
+msgstr "Feitiço de 1. nível selecionado aleatoriamente."
 
 msgid "Random 2nd Level Spell"
-msgstr "Feitiço Aleatório de 2º Nível"
+msgstr "Feitiço Aleatório de 2. Nível"
 
 msgid "Randomly selected 2nd level spell."
-msgstr "Feitiço de 2º nível selecionado aleatoriamente."
+msgstr "Feitiço de 2. nível selecionado aleatoriamente."
 
 msgid "Random 3rd Level Spell"
-msgstr "Feitiço Aleatório de 3º Nível"
+msgstr "Feitiço Aleatório de 3. Nível"
 
 msgid "Randomly selected 3rd level spell."
-msgstr "Feitiço de 3º nível selecionado aleatoriamente."
+msgstr "Feitiço de 3. nível selecionado aleatoriamente."
 
 msgid "Random 4th Level Spell"
-msgstr "Feitiço Aleatório de 4º Nível"
+msgstr "Feitiço Aleatório de 4. Nível"
 
 msgid "Randomly selected 4th level spell."
-msgstr "Feitiço de 4º nível selecionada aleatoriamente."
+msgstr "Feitiço de 4. nível selecionada aleatoriamente."
 
 msgid "Random 5th Level Spell"
-msgstr "Feitiço Aleatório de 5º Nível"
+msgstr "Feitiço Aleatório de 5. Nível"
 
 msgid "Randomly selected 5th level spell."
-msgstr "Feitiço de 5º nível selecionado aleatoriamente."
+msgstr "Feitiço de 5. nível selecionado aleatoriamente."
 
 msgid "Petrification"
 msgstr "Petrificação"
