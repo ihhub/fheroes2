@@ -21,9 +21,13 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <algorithm>
+#include <cassert>
+#include <cstdint>
 #include <functional>
 #include <memory>
 #include <string>
+#include <utility>
 
 #include "agg_image.h"
 #include "army.h"
@@ -32,6 +36,7 @@
 #include "color.h"
 #include "cursor.h"
 #include "dialog.h"
+#include "dialog_selectitems.h"
 #include "game_hotkeys.h"
 #include "game_interface.h"
 #include "gamedefs.h"
@@ -58,7 +63,57 @@
 #include "ui_tool.h"
 #include "ui_window.h"
 
-int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disableDismiss, const bool disableSwitch, const bool renderBackgroundDialog )
+namespace
+{
+    const fheroes2::Size primarySkillIconSize{ 82, 93 };
+    const uint32_t experienceMaxValue{ 2990600 };
+    const uint32_t spellPointsMaxValue{ 999 };
+
+    void renderRacePortrait( const int race, const fheroes2::Rect & portPos, fheroes2::Image & output )
+    {
+        fheroes2::Image racePortrait( portPos.width, portPos.height );
+
+        auto preparePortrait = [&racePortrait, &portPos]( const int icnId, const int bkgIndex ) {
+            fheroes2::SubpixelResize( fheroes2::AGG::GetICN( ICN::STRIP, bkgIndex ), racePortrait );
+            const fheroes2::Sprite & heroSprite = fheroes2::AGG::GetICN( icnId, 1 );
+            fheroes2::Blit( heroSprite, 0, std::max( 0, heroSprite.height() - portPos.height ), racePortrait, ( portPos.width - heroSprite.width() ) / 2,
+                            std::max( 0, portPos.height - heroSprite.height() ), heroSprite.width(), portPos.height );
+        };
+
+        switch ( race ) {
+        case Race::KNGT:
+            preparePortrait( ICN::CMBTHROK, 4 );
+            break;
+        case Race::BARB:
+            preparePortrait( ICN::CMBTHROB, 5 );
+            break;
+        case Race::SORC:
+            preparePortrait( ICN::CMBTHROS, 6 );
+            break;
+        case Race::WRLK:
+            preparePortrait( ICN::CMBTHROW, 7 );
+            break;
+        case Race::WZRD:
+            preparePortrait( ICN::CMBTHROZ, 8 );
+            break;
+        case Race::NECR:
+            preparePortrait( ICN::CMBTHRON, 9 );
+            break;
+        case Race::RAND:
+            // TODO: Make a portrait for the random hero.
+            preparePortrait( ICN::NOMAD, 10 );
+            break;
+        default:
+            // Have you added a new race? Correct the logic above!
+            assert( 0 );
+            break;
+        }
+        fheroes2::Copy( racePortrait, 0, 0, output, portPos );
+    }
+}
+
+int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disableDismiss, const bool disableSwitch, const bool renderBackgroundDialog,
+                        const bool isEditor )
 {
     // Set the cursor image.This dialog does not require a cursor restorer. It is called from other dialogs that have the same cursor
     // or from the Game Area that will set the appropriate cursor after this dialog is closed.
@@ -89,166 +144,243 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
         fheroes2::fadeOutDisplay( dialogRoi, !isDefaultScreenSize );
     }
 
-    fheroes2::Point cur_pt = { dialogRoi.x, dialogRoi.y };
-    fheroes2::Point dst_pt( cur_pt );
+    const fheroes2::Sprite & backgroundImage = fheroes2::AGG::GetICN( ICN::HEROBKG, 0 );
+    fheroes2::Blit( backgroundImage, display, dialogRoi.x, dialogRoi.y );
+    fheroes2::Blit( fheroes2::AGG::GetICN( Settings::Get().isEvilInterfaceEnabled() ? ICN::HEROEXTE : ICN::HEROEXTG, 0 ), display, dialogRoi.x, dialogRoi.y );
 
-    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::HEROBKG, 0 ), display, dst_pt.x, dst_pt.y );
-    fheroes2::Blit( fheroes2::AGG::GetICN( Settings::Get().isEvilInterfaceEnabled() ? ICN::HEROEXTE : ICN::HEROEXTG, 0 ), display, dst_pt.x, dst_pt.y );
+    // Hero portrait.
+    const fheroes2::Rect portPos( dialogRoi.x + 49, dialogRoi.y + 31, 101, 93 );
+    if ( isEditor && !isValidId( portrait ) ) {
+        renderRacePortrait( _race, portPos, display );
+    }
+    else {
+        PortraitRedraw( portPos.x, portPos.y, PORT_BIG, display );
+    }
 
-    // portrait
-    dst_pt.x = cur_pt.x + 49;
-    dst_pt.y = cur_pt.y + 31;
-    const fheroes2::Rect portPos( dst_pt.x, dst_pt.y, 101, 93 );
-    PortraitRedraw( dst_pt.x, dst_pt.y, PORT_BIG, display );
+    // In Editor there could be set to use "default" experience for hero. This state is transferred by setting 'experience = UINT32_MAX'.
+    bool useDefaultExperience = isEditor && ( experience == UINT32_MAX );
 
-    // name
-    std::string message = _( "%{name} the %{race} (Level %{level})" );
-    StringReplace( message, "%{name}", name );
-    StringReplace( message, "%{race}", Race::String( _race ) );
-    StringReplace( message, "%{level}", GetLevel() );
+    if ( useDefaultExperience ) {
+        experience = GetStartingXp();
+    }
 
-    const fheroes2::Text title( message, fheroes2::FontType::normalWhite() );
-    title.draw( cur_pt.x + 320 - title.width() / 2, cur_pt.y + 3, display );
+    // Dialog title.
+    const fheroes2::Rect titleRoi( dialogRoi.x + 60, dialogRoi.y + 1, 519, 17 );
 
-    PrimarySkillsBar primskill_bar( this, false );
-    primskill_bar.setTableSize( { 4, 1 } );
-    primskill_bar.setInBetweenItemsOffset( { 6, 0 } );
-    primskill_bar.setRenderingOffset( { cur_pt.x + 156, cur_pt.y + 31 } );
-    primskill_bar.Redraw( display );
+    auto drawTitleText = [&display, &titleRoi, &dialogRoi, &backgroundImage, this]( const std::string & heroName, const int heroRace, const bool restoreBackground ) {
+        if ( restoreBackground ) {
+            fheroes2::Copy( backgroundImage, titleRoi.x - dialogRoi.x, titleRoi.y - dialogRoi.y, display, titleRoi );
+        }
 
-    // morale
-    dst_pt.x = cur_pt.x + 514;
-    dst_pt.y = cur_pt.y + 34;
+        std::string titleText;
+        if ( !heroName.empty() ) {
+            titleText = _( "%{name} the %{race} (Level %{level})" );
+            StringReplace( titleText, "%{name}", heroName );
+        }
+        else if ( heroRace == Race::RAND ) {
+            // In Editor the empty name is a sign that the default random hero (with a random name) will be used on the game start.
+            titleText = _( "Random hero (Level %{level})" );
+        }
+        else {
+            titleText = _( "Random %{race} hero (Level %{level})" );
+        }
+        StringReplace( titleText, "%{race}", Race::String( heroRace ) );
+        StringReplace( titleText, "%{level}", GetLevel() );
+
+        const fheroes2::Text title( std::move( titleText ), fheroes2::FontType::normalWhite() );
+        title.drawInRoi( titleRoi.x + ( titleRoi.width - title.width() ) / 2, titleRoi.y + 2, display, titleRoi );
+    };
+
+    drawTitleText( name, _race, false );
+
+    fheroes2::Point dst_pt( dialogRoi.x + 156, dialogRoi.y + 31 );
+
+    PrimarySkillsBar primarySkillsBar( this, false, true, true );
+    primarySkillsBar.setTableSize( { 4, 1 } );
+    primarySkillsBar.setInBetweenItemsOffset( { 6, 0 } );
+    primarySkillsBar.setRenderingOffset( dst_pt );
+
+    if ( isEditor ) {
+        // In Editor '-1' means that the primary skill value is reset to its default state.
+        // Here we consider any negative value as a default skill value state.
+        if ( attack < 0 && defense < 0 && power < 0 && knowledge < 0 ) {
+            primarySkillsBar.useDefaultValues();
+        }
+
+        if ( attack < 0 ) {
+            attack = Heroes::getHeroDefaultSkillValue( Skill::Primary::ATTACK, _race );
+        }
+        if ( defense < 0 ) {
+            defense = Heroes::getHeroDefaultSkillValue( Skill::Primary::DEFENSE, _race );
+        }
+        if ( power < 0 ) {
+            power = Heroes::getHeroDefaultSkillValue( Skill::Primary::POWER, _race );
+        }
+        if ( knowledge < 0 ) {
+            knowledge = Heroes::getHeroDefaultSkillValue( Skill::Primary::KNOWLEDGE, _race );
+        }
+    }
+
+    primarySkillsBar.Redraw( display );
+
+    // Morale indicator.
+    dst_pt.x = dialogRoi.x + 514;
+    dst_pt.y = dialogRoi.y + ( isEditor ? 44 : 34 );
 
     MoraleIndicator moraleIndicator( this );
     moraleIndicator.SetPos( dst_pt );
     moraleIndicator.Redraw();
 
-    // luck
-    dst_pt.x = cur_pt.x + 550;
-    dst_pt.y = cur_pt.y + 34;
+    // Luck indicator.
+    dst_pt.x += 36;
 
     LuckIndicator luckIndicator( this );
     luckIndicator.SetPos( dst_pt );
     luckIndicator.Redraw();
 
-    // army format spread
-    dst_pt.x = cur_pt.x + 516;
-    dst_pt.y = cur_pt.y + 63;
+    // Army format spread icon.
+    dst_pt.x = dialogRoi.x + 516;
+    dst_pt.y = dialogRoi.y + 63;
     const fheroes2::Sprite & sprite1 = fheroes2::AGG::GetICN( ICN::HSICONS, 9 );
-    fheroes2::Blit( sprite1, display, dst_pt.x, dst_pt.y );
-
     const fheroes2::Rect rectSpreadArmyFormat( dst_pt.x, dst_pt.y, sprite1.width(), sprite1.height() );
-    const std::string descriptionSpreadArmyFormat
-        = _( "'Spread' combat formation spreads the hero's units from the top to the bottom of the battlefield, with at least one empty space between each unit." );
     const fheroes2::Point army1_pt( dst_pt.x - 1, dst_pt.y - 1 );
 
-    // army format grouped
-    dst_pt.x = cur_pt.x + 552;
-    dst_pt.y = cur_pt.y + 63;
+    // Army format grouped icon.
+    dst_pt.x = dialogRoi.x + 552;
     const fheroes2::Sprite & sprite2 = fheroes2::AGG::GetICN( ICN::HSICONS, 10 );
-    fheroes2::Blit( sprite2, display, dst_pt.x, dst_pt.y );
-
     const fheroes2::Rect rectGroupedArmyFormat( dst_pt.x, dst_pt.y, sprite2.width(), sprite2.height() );
-    const std::string descriptionGroupedArmyFormat = _( "'Grouped' combat formation bunches the hero's army together in the center of their side of the battlefield." );
     const fheroes2::Point army2_pt( dst_pt.x - 1, dst_pt.y - 1 );
 
-    // cursor format
+    // Army format cursor.
     fheroes2::MovableSprite cursorFormat( fheroes2::AGG::GetICN( ICN::HSICONS, 11 ) );
     const fheroes2::Point cursorFormatPos = army.isSpreadFormation() ? army1_pt : army2_pt;
-    cursorFormat.setPosition( cursorFormatPos.x, cursorFormatPos.y );
 
-    // experience
+    // Do not show Army format in Editor.
+    if ( !isEditor ) {
+        fheroes2::Copy( sprite1, 0, 0, display, rectSpreadArmyFormat );
+        fheroes2::Copy( sprite2, 0, 0, display, rectGroupedArmyFormat );
+        cursorFormat.setPosition( cursorFormatPos.x, cursorFormatPos.y );
+    }
+
+    // Experience indicator.
+    dst_pt.x = dialogRoi.x + 512;
+    dst_pt.y = dialogRoi.y + ( isEditor ? 76 : 86 );
     ExperienceIndicator experienceInfo( this );
-    experienceInfo.SetPos( fheroes2::Point( cur_pt.x + 512, cur_pt.y + 86 ) );
+    experienceInfo.SetPos( dst_pt );
+    if ( isEditor ) {
+        experienceInfo.setDefaultState( useDefaultExperience );
+    }
     experienceInfo.Redraw();
 
-    // spell points
+    // Spell points indicator.
+    bool useDefaultSpellPoints = isEditor && ( GetSpellPoints() == UINT32_MAX );
+    if ( useDefaultSpellPoints ) {
+        SetSpellPoints( GetMaxSpellPoints() );
+    }
+
+    dst_pt.x += 38;
+    dst_pt.y += 2;
     SpellPointsIndicator spellPointsInfo( this );
-    spellPointsInfo.SetPos( fheroes2::Point( cur_pt.x + 550, cur_pt.y + 88 ) );
+    spellPointsInfo.SetPos( dst_pt );
+    if ( isEditor ) {
+        spellPointsInfo.setDefaultState( useDefaultSpellPoints );
+    }
     spellPointsInfo.Redraw();
 
-    // crest
-    dst_pt.x = cur_pt.x + 49;
-    dst_pt.y = cur_pt.y + 130;
+    // Color "crest" icon.
+    dst_pt.x = dialogRoi.x + 49;
+    dst_pt.y = dialogRoi.y + 130;
 
-    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::CREST, Color::NONE == GetColor() ? Color::GetIndex( Settings::Get().CurrentColor() ) : Color::GetIndex( GetColor() ) ),
-                    display, dst_pt.x, dst_pt.y );
+    fheroes2::Copy( fheroes2::AGG::GetICN( ICN::CREST, Color::NONE == GetColor() ? Color::GetIndex( Settings::Get().CurrentColor() ) : Color::GetIndex( GetColor() ) ), 0,
+                    0, display, dst_pt.x, dst_pt.y, portPos.width, portPos.height );
 
-    // monster
-    dst_pt.x = cur_pt.x + 156;
-    dst_pt.y = cur_pt.y + 130;
+    // Hero's army.
+    dst_pt.x = dialogRoi.x + 156;
 
-    ArmyBar selectArmy( &army, false, readonly );
+    // In Editor mode we allow to edit army and remove all customized troops from the army.
+    ArmyBar selectArmy( &army, false, readonly, isEditor, !isEditor );
     selectArmy.setTableSize( { 5, 1 } );
     selectArmy.setRenderingOffset( dst_pt );
     selectArmy.setInBetweenItemsOffset( { 6, 0 } );
     selectArmy.Redraw( display );
 
-    // secskill
-    SecondarySkillsBar secskill_bar( *this, false );
+    // Hero's secondary skills.
+    SecondarySkillsBar secskill_bar( *this, false, isEditor, isEditor );
     secskill_bar.setTableSize( { 8, 1 } );
     secskill_bar.setInBetweenItemsOffset( { 5, 0 } );
     secskill_bar.SetContent( secondary_skills.ToVector() );
-    secskill_bar.setRenderingOffset( { cur_pt.x + 3, cur_pt.y + 233 } );
+    secskill_bar.setRenderingOffset( { dialogRoi.x + 3, dialogRoi.y + 233 } );
     secskill_bar.Redraw( display );
 
-    // bottom small bar
-    dst_pt.x = cur_pt.x + 22;
-    dst_pt.y = cur_pt.y + 460;
+    // Status bar.
+    dst_pt.x = dialogRoi.x + 22;
+    dst_pt.y = dialogRoi.y + 460;
     const fheroes2::Sprite & bar = fheroes2::AGG::GetICN( ICN::HSBTNS, 8 );
-    fheroes2::Blit( bar, display, dst_pt.x, dst_pt.y );
+    fheroes2::Copy( bar, 0, 0, display, dst_pt.x, dst_pt.y, bar.width(), bar.height() );
 
     StatusBar statusBar;
     // Status bar must be smaller due to extra art on both sides.
     statusBar.setRoi( { dst_pt.x + 16, dst_pt.y + 3, bar.width() - 16 * 2, 0 } );
 
-    // artifact bar
-    dst_pt.x = cur_pt.x + 51;
-    dst_pt.y = cur_pt.y + 308;
+    // Artifacts bar.
+    dst_pt.x = dialogRoi.x + 51;
+    dst_pt.y = dialogRoi.y + 308;
 
-    ArtifactsBar selectArtifacts( this, false, readonly, false, true, &statusBar );
+    ArtifactsBar selectArtifacts( this, false, readonly, isEditor, true, &statusBar );
     selectArtifacts.setTableSize( { 7, 2 } );
     selectArtifacts.setInBetweenItemsOffset( { 15, 15 } );
     selectArtifacts.SetContent( GetBagArtifacts() );
     selectArtifacts.setRenderingOffset( dst_pt );
     selectArtifacts.Redraw( display );
 
-    // button prev
-    dst_pt.x = cur_pt.x;
-    dst_pt.y = cur_pt.y + fheroes2::Display::DEFAULT_HEIGHT - 20;
+    // Previous hero button.
+    dst_pt.x = dialogRoi.x;
+    dst_pt.y = dialogRoi.y + fheroes2::Display::DEFAULT_HEIGHT - 20;
     fheroes2::Button buttonPrevHero( dst_pt.x, dst_pt.y, ICN::HSBTNS, 4, 5 );
     fheroes2::TimedEventValidator timedButtonPrevHero( [&buttonPrevHero]() { return buttonPrevHero.isPressed(); } );
     buttonPrevHero.subscribe( &timedButtonPrevHero );
 
-    // button next
-    dst_pt.x = cur_pt.x + fheroes2::Display::DEFAULT_WIDTH - 22;
-    dst_pt.y = cur_pt.y + fheroes2::Display::DEFAULT_HEIGHT - 20;
+    // Next hero button.
+    dst_pt.x += fheroes2::Display::DEFAULT_WIDTH - 22;
     fheroes2::Button buttonNextHero( dst_pt.x, dst_pt.y, ICN::HSBTNS, 6, 7 );
     fheroes2::TimedEventValidator timedButtonNextHero( [&buttonNextHero]() { return buttonNextHero.isPressed(); } );
     buttonNextHero.subscribe( &timedButtonNextHero );
 
-    // button dismiss
-    dst_pt.x = cur_pt.x + 9;
-    dst_pt.y = cur_pt.y + 318;
+    // Hero dismiss button.
+    dst_pt.x = dialogRoi.x + 9;
+    dst_pt.y = dialogRoi.y + 318;
     fheroes2::ButtonSprite buttonDismiss( dst_pt.x, dst_pt.y, fheroes2::AGG::GetICN( ICN::BUTTON_VERTICAL_DISMISS, 0 ),
                                           fheroes2::AGG::GetICN( ICN::BUTTON_VERTICAL_DISMISS, 1 ), fheroes2::AGG::GetICN( ICN::DISMISS_HERO_DISABLED_BUTTON, 0 ) );
-    fheroes2::addGradientShadow( fheroes2::AGG::GetICN( ICN::BUTTON_VERTICAL_DISMISS, 0 ), display, { cur_pt.x + 9, cur_pt.y + 318 }, { -3, 5 } );
-
-    // button exit
-    dst_pt.x = cur_pt.x + 602;
-    dst_pt.y = cur_pt.y + 318;
-    fheroes2::Button buttonExit( dst_pt.x, dst_pt.y, ICN::BUTTON_VERTICAL_EXIT, 0, 1 );
-
-    LocalEvent & le = LocalEvent::Get();
 
     if ( inCastle() || readonly || disableDismiss || Modes( NOTDISMISS ) ) {
         buttonDismiss.disable();
+    }
 
-        if ( readonly || disableDismiss ) {
-            buttonDismiss.hide();
+    if ( isEditor || readonly || disableDismiss ) {
+        buttonDismiss.hide();
+    }
+    else {
+        fheroes2::addGradientShadow( fheroes2::AGG::GetICN( ICN::BUTTON_VERTICAL_DISMISS, 0 ), display, dst_pt, { -3, 5 } );
+    }
+
+    // Hero Patrol mode button (used in Editor).
+    fheroes2::ButtonSprite buttonPatrol( dst_pt.x, dst_pt.y, fheroes2::AGG::GetICN( ICN::BUTTON_VERTICAL_PATROL, 0 ),
+                                         fheroes2::AGG::GetICN( ICN::BUTTON_VERTICAL_PATROL, 1 ) );
+    if ( isEditor ) {
+        fheroes2::addGradientShadow( fheroes2::AGG::GetICN( ICN::BUTTON_VERTICAL_PATROL, 0 ), display, { dialogRoi.x + 9, dialogRoi.y + 318 }, { -3, 5 } );
+        if ( Modes( PATROL ) ) {
+            buttonPatrol.press();
         }
     }
+    else {
+        buttonPatrol.hide();
+    }
+
+    // Exit button.
+    dst_pt.x = dialogRoi.x + 602;
+    fheroes2::Button buttonExit( dst_pt.x, dst_pt.y, ICN::BUTTON_VERTICAL_EXIT, 0, 1 );
+
+    LocalEvent & le = LocalEvent::Get();
 
     if ( readonly || disableSwitch || 2 > GetKingdom().GetHeroes().size() ) {
         buttonNextHero.disable();
@@ -258,6 +390,7 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
     buttonPrevHero.draw();
     buttonNextHero.draw();
     buttonDismiss.draw();
+    buttonPatrol.draw();
     buttonExit.draw();
 
     // Fade-in hero dialog.
@@ -274,148 +407,259 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
         display.render( dialogWithShadowRoi );
     }
 
-    bool redrawMorale = false;
-    bool redrawLuck = false;
-    message.clear();
+    bool needRedraw{ false };
+    std::string message;
 
     // dialog menu loop
     while ( le.HandleEvents() ) {
-        if ( redrawMorale ) {
-            moraleIndicator.Redraw();
-            display.render( dialogRoi );
-            redrawMorale = false;
-        }
+        // Exit this dialog.
+        le.MousePressLeft( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
 
-        if ( redrawLuck ) {
-            luckIndicator.Redraw();
-            display.render( dialogRoi );
-            redrawLuck = false;
-        }
-
-        // exit
         if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() ) {
-            // Disable fast scroll for resolutions where the exit button is directly above the border.
-            Interface::AdventureMap::Get().getGameArea().setFastScrollStatus( false );
-
-            // Fade-out hero dialog.
-            fheroes2::fadeOutDisplay( dialogRoi, !isDefaultScreenSize );
-
-            return Dialog::CANCEL;
+            // Exit the dialog handling loop to close it.
+            break;
         }
 
-        // heroes troops
+        // Manage hero's army.
         if ( le.MouseCursor( selectArmy.GetArea() ) && selectArmy.QueueEventProcessing( &message ) ) {
-            if ( selectArtifacts.isSelected() )
+            if ( selectArtifacts.isSelected() ) {
                 selectArtifacts.ResetSelected();
+            }
             selectArmy.Redraw( display );
+            moraleIndicator.Redraw();
+            luckIndicator.Redraw();
 
-            redrawMorale = true;
-            redrawLuck = true;
+            needRedraw = true;
         }
 
-        if ( le.MouseCursor( selectArtifacts.GetArea() ) && selectArtifacts.QueueEventProcessing( &message ) ) {
-            if ( selectArmy.isSelected() )
+        // Manage hero's artifacts.
+        else if ( le.MouseCursor( selectArtifacts.GetArea() ) && selectArtifacts.QueueEventProcessing( &message ) ) {
+            if ( selectArmy.isSelected() ) {
                 selectArmy.ResetSelected();
+            }
             selectArtifacts.Redraw( display );
 
-            spellPointsInfo.Redraw();
+            if ( isEditor ) {
+                // Artifacts affect many hero stats.
+                if ( useDefaultSpellPoints ) {
+                    SetSpellPoints( GetMaxSpellPoints() );
+                }
 
-            redrawMorale = true;
-            redrawLuck = true;
+                spellPointsInfo.Redraw();
+                moraleIndicator.Redraw();
+                luckIndicator.Redraw();
+                primarySkillsBar.Redraw( display );
+            }
+
+            needRedraw = true;
         }
 
-        // button click or hotkey press
-        le.MousePressLeft( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
-        if ( buttonDismiss.isEnabled() ) {
+        // Dismiss hero.
+        else if ( buttonDismiss.isEnabled() && buttonDismiss.isVisible() ) {
             if ( le.MousePressLeft( buttonDismiss.area() ) || HotKeyPressEvent( Game::HotKeyEvent::ARMY_DISMISS ) ) {
                 buttonDismiss.drawOnPress();
             }
             else {
                 buttonDismiss.drawOnRelease();
             }
+
+            if ( ( le.MouseClickLeft( buttonDismiss.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::ARMY_DISMISS ) )
+                 && Dialog::YES == fheroes2::showStandardTextMessage( GetName(), _( "Are you sure you want to dismiss this Hero?" ), Dialog::YES | Dialog::NO ) ) {
+                // Fade-out hero dialog.
+                fheroes2::fadeOutDisplay( dialogRoi, !isDefaultScreenSize );
+
+                return Dialog::DISMISS;
+            }
         }
-        if ( buttonPrevHero.isEnabled() )
+
+        // Previous hero.
+        if ( buttonPrevHero.isEnabled() ) {
             le.MousePressLeft( buttonPrevHero.area() ) ? buttonPrevHero.drawOnPress() : buttonPrevHero.drawOnRelease();
-        if ( buttonNextHero.isEnabled() )
+            if ( le.MouseClickLeft( buttonPrevHero.area() ) || HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_LEFT ) || timedButtonPrevHero.isDelayPassed() ) {
+                return Dialog::PREV;
+            }
+        }
+
+        // Next hero.
+        if ( buttonNextHero.isEnabled() ) {
             le.MousePressLeft( buttonNextHero.area() ) ? buttonNextHero.drawOnPress() : buttonNextHero.drawOnRelease();
-
-        // prev hero
-        if ( buttonPrevHero.isEnabled()
-             && ( le.MouseClickLeft( buttonPrevHero.area() ) || HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_LEFT ) || timedButtonPrevHero.isDelayPassed() ) ) {
-            return Dialog::PREV;
+            if ( le.MouseClickLeft( buttonNextHero.area() ) || HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_RIGHT ) || timedButtonNextHero.isDelayPassed() ) {
+                return Dialog::NEXT;
+            }
         }
 
-        // next hero
-        if ( buttonNextHero.isEnabled()
-             && ( le.MouseClickLeft( buttonNextHero.area() ) || HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_RIGHT ) || timedButtonNextHero.isDelayPassed() ) ) {
-            return Dialog::NEXT;
-        }
-
-        // dismiss
-        if ( buttonDismiss.isEnabled() && buttonDismiss.isVisible()
-             && ( le.MouseClickLeft( buttonDismiss.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::ARMY_DISMISS ) )
-             && Dialog::YES == fheroes2::showStandardTextMessage( GetName(), _( "Are you sure you want to dismiss this Hero?" ), Dialog::YES | Dialog::NO ) ) {
-            // Fade-out hero dialog.
-            fheroes2::fadeOutDisplay( dialogRoi, !isDefaultScreenSize );
-
-            return Dialog::DISMISS;
-        }
-
-        if ( le.MouseCursor( moraleIndicator.GetArea() ) )
-            MoraleIndicator::QueueEventProcessing( moraleIndicator );
-        else if ( le.MouseCursor( luckIndicator.GetArea() ) )
-            LuckIndicator::QueueEventProcessing( luckIndicator );
-        else if ( le.MouseCursor( experienceInfo.GetArea() ) )
-            experienceInfo.QueueEventProcessing();
-        else if ( le.MouseCursor( spellPointsInfo.GetArea() ) )
-            spellPointsInfo.QueueEventProcessing();
-
-        // left click info
-        if ( !readonly && le.MouseClickLeft( rectSpreadArmyFormat ) && !army.isSpreadFormation() ) {
-            cursorFormat.setPosition( army1_pt.x, army1_pt.y );
-            display.render( dialogRoi );
-            army.SetSpreadFormation( true );
-        }
-        else if ( !readonly && le.MouseClickLeft( rectGroupedArmyFormat ) && army.isSpreadFormation() ) {
-            cursorFormat.setPosition( army2_pt.x, army2_pt.y );
-            display.render( dialogRoi );
-            army.SetSpreadFormation( false );
-        }
-        else if ( le.MouseCursor( secskill_bar.GetArea() ) && secskill_bar.QueueEventProcessing( &message ) ) {
-            display.render( dialogRoi );
-        }
-        else if ( le.MouseCursor( primskill_bar.GetArea() ) && primskill_bar.QueueEventProcessing( &message ) ) {
-            display.render( dialogRoi );
-        }
-
-        // right info
-        if ( le.MousePressRight( portPos ) ) {
-            Dialog::QuickInfo( *this, true );
-        }
-        else if ( le.MousePressRight( rectSpreadArmyFormat ) ) {
-            fheroes2::showStandardTextMessage( _( "Spread Formation" ), descriptionSpreadArmyFormat, Dialog::ZERO );
-        }
-        else if ( le.MousePressRight( rectGroupedArmyFormat ) ) {
-            fheroes2::showStandardTextMessage( _( "Grouped Formation" ), descriptionGroupedArmyFormat, Dialog::ZERO );
-        }
-
-        // status message
         if ( le.MouseCursor( moraleIndicator.GetArea() ) ) {
+            MoraleIndicator::QueueEventProcessing( moraleIndicator );
             message = fheroes2::MoraleString( army.GetMorale() );
         }
         else if ( le.MouseCursor( luckIndicator.GetArea() ) ) {
+            LuckIndicator::QueueEventProcessing( luckIndicator );
             message = fheroes2::LuckString( army.GetLuck() );
         }
-        else if ( le.MouseCursor( experienceInfo.GetArea() ) )
-            message = _( "View Experience Info" );
-        else if ( le.MouseCursor( spellPointsInfo.GetArea() ) )
-            message = _( "View Spell Points Info" );
-        else if ( le.MouseCursor( rectSpreadArmyFormat ) )
-            message = _( "Set army combat formation to 'Spread'" );
-        else if ( le.MouseCursor( rectGroupedArmyFormat ) )
-            message = _( "Set army combat formation to 'Grouped'" );
-        else if ( le.MouseCursor( buttonExit.area() ) )
+        else if ( le.MouseCursor( experienceInfo.GetArea() ) ) {
+            if ( isEditor ) {
+                message = useDefaultExperience ? _( "Set custom Experience value. Current value is default." )
+                                               : _( "Change Experience value. Right-click to reset to default value." );
+
+                if ( le.MouseClickLeft() ) {
+                    uint32_t value = experience;
+                    if ( Dialog::SelectCount( _( "Set Experience value" ), 0, experienceMaxValue, value ) ) {
+                        useDefaultExperience = false;
+                        experience = value;
+                        experienceInfo.setDefaultState( useDefaultExperience );
+                        experienceInfo.Redraw();
+                        drawTitleText( name, _race, true );
+                        needRedraw = true;
+                    }
+                }
+                else if ( le.MouseClickRight() ) {
+                    useDefaultExperience = true;
+                    experience = GetStartingXp();
+                    experienceInfo.setDefaultState( useDefaultExperience );
+                    experienceInfo.Redraw();
+                    drawTitleText( name, _race, true );
+                    needRedraw = true;
+                }
+            }
+            else {
+                message = _( "View Experience Info" );
+                experienceInfo.QueueEventProcessing();
+            }
+        }
+        else if ( le.MouseCursor( spellPointsInfo.GetArea() ) ) {
+            if ( isEditor ) {
+                message = useDefaultSpellPoints ? _( "Set custom Spell Points value. Current value is default." )
+                                                : _( "Change Spell Points value. Right-click to reset to default value." );
+
+                if ( le.MouseClickLeft() ) {
+                    uint32_t value = GetSpellPoints();
+                    if ( Dialog::SelectCount( _( "Set Spell Points value" ), 0, spellPointsMaxValue, value ) ) {
+                        useDefaultSpellPoints = false;
+                        SetSpellPoints( value );
+                        spellPointsInfo.setDefaultState( useDefaultSpellPoints );
+                        spellPointsInfo.Redraw();
+                        needRedraw = true;
+                    }
+                }
+                else if ( le.MouseClickRight() ) {
+                    // Reset spell points modification.
+                    useDefaultSpellPoints = true;
+                    SetSpellPoints( GetMaxSpellPoints() );
+                    spellPointsInfo.setDefaultState( useDefaultSpellPoints );
+                    spellPointsInfo.Redraw();
+                    needRedraw = true;
+                }
+            }
+            else {
+                message = _( "View Spell Points Info" );
+                spellPointsInfo.QueueEventProcessing();
+            }
+        }
+        else if ( isEditor ) {
+            if ( le.MouseClickLeft( titleRoi ) ) {
+                std::string res = name;
+                if ( Dialog::InputString( _( "Enter hero's name" ), res, {}, 30 ) && !res.empty() ) {
+                    name = std::move( res );
+                    drawTitleText( name, _race, true );
+                    needRedraw = true;
+                }
+            }
+            else if ( le.MouseClickRight( titleRoi ) ) {
+                name.clear();
+                drawTitleText( name, _race, true );
+                needRedraw = true;
+            }
+        }
+
+        // left click info
+        if ( !readonly && !isEditor && le.MouseClickLeft( rectSpreadArmyFormat ) && !army.isSpreadFormation() ) {
+            cursorFormat.setPosition( army1_pt.x, army1_pt.y );
+            needRedraw = true;
+            army.SetSpreadFormation( true );
+        }
+        else if ( !readonly && !isEditor && le.MouseClickLeft( rectGroupedArmyFormat ) && army.isSpreadFormation() ) {
+            cursorFormat.setPosition( army2_pt.x, army2_pt.y );
+            needRedraw = true;
+            army.SetSpreadFormation( false );
+        }
+        else if ( le.MouseCursor( secskill_bar.GetArea() ) && secskill_bar.QueueEventProcessing( &message ) ) {
+            if ( isEditor ) {
+                // The change of secondary skills affects many hero stats.
+                secskill_bar.Redraw( display );
+                moraleIndicator.Redraw();
+                luckIndicator.Redraw();
+                needRedraw = true;
+            }
+        }
+        else if ( le.MouseCursor( primarySkillsBar.GetArea() ) && primarySkillsBar.QueueEventProcessing( &message ) ) {
+            if ( isEditor ) {
+                primarySkillsBar.Redraw( display );
+
+                // Hero's Knowledge may have changed.
+                if ( useDefaultSpellPoints ) {
+                    SetSpellPoints( GetMaxSpellPoints() );
+                }
+
+                spellPointsInfo.Redraw();
+                needRedraw = true;
+            }
+        }
+        else if ( isEditor && le.MouseClickLeft( portPos ) ) {
+            const int newPortrait = Dialog::selectHeroes( portrait );
+            if ( newPortrait != Heroes::UNKNOWN ) {
+                portrait = newPortrait;
+                PortraitRedraw( portPos.x, portPos.y, PORT_BIG, display );
+                needRedraw = true;
+            }
+        }
+        else if ( le.MousePressRight( portPos ) ) {
+            if ( isEditor ) {
+                portrait = 0;
+                renderRacePortrait( _race, portPos, display );
+                needRedraw = true;
+            }
+            else {
+                Dialog::QuickInfo( *this, true );
+            }
+        }
+        else if ( buttonPatrol.isVisible() && le.MouseCursor( buttonPatrol.area() ) ) {
+            if ( le.MousePressLeft() && buttonPatrol.isReleased() && !Modes( PATROL ) ) {
+                buttonPatrol.drawOnPress();
+                uint32_t value = _patrolDistance;
+                if ( Dialog::SelectCount( _( "Set patrol radius in tiles" ), 0, 255, value ) ) {
+                    SetModes( PATROL );
+                    _patrolDistance = static_cast<int>( value );
+                }
+                else {
+                    buttonPatrol.drawOnRelease();
+                    ResetModes( PATROL );
+                }
+            }
+            else if ( le.MouseClickLeft() && buttonPatrol.isPressed() && Modes( PATROL ) ) {
+                ResetModes( PATROL );
+            }
+            if ( !Modes( PATROL ) ) {
+                buttonPatrol.drawOnRelease();
+            }
+        }
+        else if ( !isEditor ) {
+            if ( le.MousePressRight( rectSpreadArmyFormat ) ) {
+                fheroes2::showStandardTextMessage(
+                    _( "Spread Formation" ),
+                    _( "'Spread' combat formation spreads the hero's units from the top to the bottom of the battlefield, with at least one empty space between each unit." ),
+                    Dialog::ZERO );
+            }
+            else if ( le.MousePressRight( rectGroupedArmyFormat ) ) {
+                fheroes2::showStandardTextMessage( _( "Grouped Formation" ),
+                                                   _( "'Grouped' combat formation bunches the hero's army together in the center of their side of the battlefield." ),
+                                                   Dialog::ZERO );
+            }
+        }
+
+        // Status messages.
+        if ( le.MouseCursor( buttonExit.area() ) ) {
             message = _( "Exit Hero Screen" );
+        }
         else if ( buttonDismiss.isVisible() && le.MouseCursor( buttonDismiss.area() ) ) {
             if ( inCastle() ) {
                 message = _( "You cannot dismiss a hero in a castle" );
@@ -431,16 +675,88 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
                 StringReplace( message, "%{race}", Race::String( _race ) );
             }
         }
-        else if ( buttonPrevHero.isEnabled() && le.MouseCursor( buttonPrevHero.area() ) )
+        else if ( buttonPrevHero.isEnabled() && le.MouseCursor( buttonPrevHero.area() ) ) {
             message = _( "Show previous hero" );
-        else if ( buttonNextHero.isEnabled() && le.MouseCursor( buttonNextHero.area() ) )
+        }
+        else if ( buttonNextHero.isEnabled() && le.MouseCursor( buttonNextHero.area() ) ) {
             message = _( "Show next hero" );
+        }
+        else if ( !isEditor ) {
+            // These messages are not shown in the Editor mode.
+            if ( le.MouseCursor( rectSpreadArmyFormat ) ) {
+                message = _( "Set army combat formation to 'Spread'" );
+            }
+            else if ( le.MouseCursor( rectGroupedArmyFormat ) ) {
+                message = _( "Set army combat formation to 'Grouped'" );
+            }
+        }
+        else if ( message.empty() ) {
+            // Editor related status messages.
+            if ( le.MouseCursor( selectArtifacts.GetArea() ) ) {
+                message = _( "Set hero's Artifacts. Right-click to reset Artifact." );
+            }
+            else if ( le.MouseCursor( secskill_bar.GetArea() ) ) {
+                message = _( "Set hero's Secondary Skills. Right-click to reset skill." );
+            }
+            else if ( le.MouseCursor( selectArmy.GetArea() ) ) {
+                message = _( "Set hero's Army. Right-click to reset unit." );
+            }
+            else if ( le.MouseCursor( portPos ) ) {
+                message = _( "Set hero's portrait. Right-click to reset to default." );
+            }
+            else if ( le.MouseCursor( titleRoi ) ) {
+                message = _( "Click to change hero's name. Right-click to reset to default." );
+            }
+            else if ( le.MouseCursor( buttonPatrol.area() ) ) {
+                if ( buttonPatrol.isPressed() ) {
+                    message = _( "Hero is in patrol mode in %{tiles} tiles radius. Click to disable it." );
+                    StringReplace( message, "%{tiles}", _patrolDistance );
+                }
+                else {
+                    message = _( "Click to enable hero's patrol mode." );
+                }
+            }
+        }
 
-        if ( message.empty() )
+        if ( message.empty() ) {
             statusBar.ShowMessage( _( "Hero Screen" ) );
+        }
         else {
-            statusBar.ShowMessage( message );
+            statusBar.ShowMessage( std::move( message ) );
             message.clear();
+        }
+
+        if ( needRedraw ) {
+            needRedraw = false;
+            display.render( dialogRoi );
+        }
+    }
+
+    // Disable fast scroll for resolutions where the exit button is directly above the border.
+    Interface::AdventureMap::Get().getGameArea().setFastScrollStatus( false );
+
+    buttonExit.drawOnPress();
+
+    // Fade-out hero dialog.
+    fheroes2::fadeOutDisplay( dialogRoi, !isDefaultScreenSize );
+
+    if ( isEditor ) {
+        if ( useDefaultExperience ) {
+            // Tell Editor that default experience value is set.
+            experience = UINT32_MAX;
+        }
+
+        if ( useDefaultSpellPoints ) {
+            // Tell Editor that default Spell Points value is set.
+            SetSpellPoints( UINT32_MAX );
+        }
+
+        // For Editor '-1' means that the primary skill is reset to its default state.
+        if ( primarySkillsBar.isDefaultValues() ) {
+            attack = -1;
+            defense = -1;
+            power = -1;
+            knowledge = -1;
         }
     }
 

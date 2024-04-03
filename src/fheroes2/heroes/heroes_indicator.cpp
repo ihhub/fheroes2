@@ -202,7 +202,7 @@ void ExperienceIndicator::Redraw() const
     const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::HSICONS, 1 );
     fheroes2::Blit( sprite, display, _area.x, _area.y );
 
-    const fheroes2::Text text( std::to_string( _hero->GetExperience() ), fheroes2::FontType::smallWhite() );
+    const fheroes2::Text text( _isDefault ? "-" : std::to_string( _hero->GetExperience() ), fheroes2::FontType::smallWhite() );
     text.draw( _area.x + 17 - text.width() / 2, _area.y + 25, display );
 }
 
@@ -240,7 +240,9 @@ void SpellPointsIndicator::Redraw() const
     const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::HSICONS, 8 );
     fheroes2::Blit( sprite, display, _area.x, _area.y );
 
-    const fheroes2::Text text( std::to_string( _hero->GetSpellPoints() ) + "/" + std::to_string( _hero->GetMaxSpellPoints() ), fheroes2::FontType::smallWhite() );
+    const fheroes2::Text text( _isDefault ? std::to_string( _hero->GetMaxSpellPoints() )
+                                          : std::to_string( _hero->GetSpellPoints() ) + "/" + std::to_string( _hero->GetMaxSpellPoints() ),
+                               fheroes2::FontType::smallWhite() );
     text.draw( _area.x + sprite.width() / 2 - text.width() / 2, _area.y + 23, display );
 }
 

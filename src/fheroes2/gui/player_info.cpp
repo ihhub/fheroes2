@@ -488,7 +488,7 @@ bool Interface::PlayersInfo::QueueEventProcessing()
         std::string str = _( "%{color} player" );
         StringReplace( str, "%{color}", Color::String( player->GetColor() ) );
 
-        std::string res;
+        std::string res = player->GetName();
         if ( Dialog::InputString( str, res ) && !res.empty() ) {
             player->SetName( res );
         }
