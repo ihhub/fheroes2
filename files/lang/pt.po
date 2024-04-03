@@ -2685,7 +2685,7 @@ msgid "Fast"
 msgstr "Rápida"
 
 msgid "Very Fast"
-msgstr "Muito Rápido"
+msgstr "Muito Rápida"
 
 msgid "Scroll Speed"
 msgstr ""
