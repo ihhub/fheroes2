@@ -6663,7 +6663,7 @@ msgid "week|Bumblebee"
 msgstr "Abelhão"
 
 msgid "week|Locust"
-msgstr "Lagosta"
+msgstr "Gafanhoto"
 
 msgid "week|Earthworm"
 msgstr "Minhoca"
