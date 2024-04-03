@@ -5515,7 +5515,7 @@ msgid "You've come across the spartan quarters of a retired soldier. The soldier
 msgstr "Você se deparou com os aposentos espartanos de um soldado aposentado. O soldado lhe diz que está disposto a dar o artefato %{art} para o primeiro verdadeiro líder que encontrar."
 
 msgid "You've encountered a strange person with a hat and an owl on it. He tells you that he is willing to give %{art} if you have %{skill}."
-msgstr "Você encontrou uma pessoa estranha com um chapéu e uma coruja em cima dele. Ele lhe diz que está disposto a dar o artefato %{art} se você tiver %%{skill}."
+msgstr "Você encontrou uma pessoa estranha com um chapéu e uma coruja em cima dele. Ele lhe diz que está disposto a dar o artefato %{art} se você tiver %{skill}."
 
 msgid "You come upon an ancient artifact. As you reach for it, a pack of Rogues leap out of the brush to guard their stolen loot."
 msgstr "Você se depara com um artefato antigo. Ao alcançá-lo, um grupo de Bandidos saltou dos arbustos para guardar seu saque roubado."
