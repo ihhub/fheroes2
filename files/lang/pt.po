@@ -2737,7 +2737,7 @@ msgstr ""
 "%{skill2}"
 
 msgid "Please inspect our fine wares. If you feel like offering a trade, click on the items you wish to trade with and for."
-msgstr "Por favor, examine nossos excelentes produtos. Se quiser fazer uma troca, clique nos itens trocar e nos que deseja obter."
+msgstr "Por favor, examine nossos excelentes produtos. Se quiser fazer uma troca, clique nos itens que deseja trocar e nos que deseja obter."
 
 msgid "You have received quite a bargain. I expect to make no profit on the deal. Can I interest you in any of my other wares?"
 msgstr "Você está conseguindo uma verdadeira pechincha, acho que não vou ganhar nada com esse negócio, há algo que eu possa lhe oferecer de qualquer um dos meus outros produtos?"
