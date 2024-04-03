@@ -846,6 +846,20 @@ namespace Interface
                         action.commit();
                     }
                 }
+                else if ( objectType == MP2::OBJ_MONSTER ) {
+                    uint32_t monsterCount = 0;
+
+                    auto monsterMetadata = _mapFormat.standardMetadata.find( object.id );
+                    if ( monsterMetadata != _mapFormat.standardMetadata.end() ) {
+                        monsterCount = monsterMetadata->second.metadata[0];
+                    }
+
+                    fheroes2::ActionCreator action( _historyManager, _mapFormat );
+                    if ( Dialog::SelectCount( _( "Set Monster Count" ), 0, 500000, monsterCount ) ) {
+                        _mapFormat.standardMetadata[object.id] = { monsterCount, Monster::JOIN_CONDITION_UNSET, 0 };
+                        action.commit();
+                    }
+                }
             }
         }
         else if ( _editorPanel.isTerrainEdit() ) {
