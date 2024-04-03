@@ -8749,7 +8749,7 @@ msgid "Disrupting Ray"
 msgstr "Raio Degenerador"
 
 msgid "Reduces the defense rating of an enemy unit by three."
-msgstr "Reduz em três vezes o nível de defesa de uma unidade inimiga."
+msgstr "Reduz o valor de defesa de uma unidade inimiga em três pontos."
 
 msgid "Damages all living (non-undead) units in the battle."
 msgstr "Causa danos a todas as unidades vivas (não mortos-vivos) na batalha."
