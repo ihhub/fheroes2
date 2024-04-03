@@ -25,6 +25,7 @@
 #include <type_traits>
 
 #include "serialize.h"
+#include "zzlib.h"
 
 namespace
 {
@@ -152,15 +153,56 @@ namespace Maps::Map_Format
 
     StreamBase & operator<<( StreamBase & msg, const MapFormat & map )
     {
-        return msg << static_cast<const BaseMapFormat &>( map ) << map.additionalInfo << map.tiles << map.standardMetadata << map.castleMetadata << map.heroMetadata
-                   << map.sphinxMetadata << map.signMetadata << map.adventureMapEventMetadata;
+        // Only the base map information is not encoded.
+        // The rest of data must be compressed to prevent manual corruption of the file.
+        msg << static_cast<const BaseMapFormat &>( map );
+
+        StreamBuf compressed;
+        compressed.setbigendian( true );
+
+        compressed << map.additionalInfo << map.tiles << map.standardMetadata << map.castleMetadata << map.heroMetadata << map.sphinxMetadata << map.signMetadata
+                   << map.adventureMapEventMetadata;
+
+        const std::vector<uint8_t> temp = Compression::compressData( compressed.data(), compressed.size() );
+
+        msg.putRaw( temp.data(), temp.size() );
+
+        return msg;
     }
 
     StreamBase & operator>>( StreamBase & msg, MapFormat & map )
     {
         // TODO: verify the correctness of metadata.
-        return msg >> static_cast<BaseMapFormat &>( map ) >> map.additionalInfo >> map.tiles >> map.standardMetadata >> map.castleMetadata >> map.heroMetadata
-               >> map.sphinxMetadata >> map.signMetadata >> map.adventureMapEventMetadata;
+        msg >> static_cast<BaseMapFormat &>( map );
+
+        StreamBuf decompressed;
+        decompressed.setbigendian( true );
+
+        {
+            std::vector<uint8_t> temp = msg.getRaw();
+            if ( temp.empty() ) {
+                // This is a corrupted file.
+                map = {};
+                return msg;
+            }
+
+            const std::vector<uint8_t> decompressedData = Compression::decompressData( temp.data(), temp.size() );
+            if ( decompressedData.empty() ) {
+                // This is a corrupted file.
+                map = {};
+                return msg;
+            }
+
+            // Let's try to free up some memory
+            temp = std::vector<uint8_t>{};
+
+            decompressed.putRaw( decompressedData.data(), decompressedData.size() );
+        }
+
+        decompressed >> map.additionalInfo >> map.tiles >> map.standardMetadata >> map.castleMetadata >> map.heroMetadata >> map.sphinxMetadata >> map.signMetadata
+            >> map.adventureMapEventMetadata;
+
+        return msg;
     }
 
     bool loadBaseMap( const std::string & path, BaseMapFormat & map )

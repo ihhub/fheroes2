@@ -416,7 +416,7 @@ std::vector<uint8_t> StreamBuf::getRaw( size_t sz )
     return v;
 }
 
-void StreamBuf::putRaw( const char * ptr, size_t sz )
+void StreamBuf::putRaw( const void * ptr, size_t sz )
 {
     if ( sz == 0 ) {
         return;
@@ -671,7 +671,7 @@ std::vector<uint8_t> StreamFile::getRaw( const size_t size )
     return v;
 }
 
-void StreamFile::putRaw( const char * ptr, size_t sz )
+void StreamFile::putRaw( const void * ptr, size_t sz )
 {
     if ( !_file ) {
         return;
