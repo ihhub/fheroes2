@@ -3501,7 +3501,7 @@ msgid "Used to click and drag for clearing large areas."
 msgstr "Usado para clicar e arrastar para limpar grandes áreas."
 
 msgid "Costs %{rate} times normal movement for all heroes. (Pathfinding reduces or eliminates the penalty.)"
-msgstr "Custa %{rate} vezes o movimento normal para todos os heróis. (A capacidade de navegação reduz ou elimina a penalidade.)"
+msgstr "Custa %{rate} vezes o movimento normal para todos os heróis. (O Reconhecimento reduz ou elimina a penalidade.)"
 
 msgid "Traversable only by boat."
 msgstr "Apenas transitável por barco."
