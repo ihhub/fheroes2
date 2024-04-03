@@ -855,8 +855,11 @@ namespace Interface
                         monsterCount = monsterMetadata->second.metadata[0];
                     }
 
+                    std::string str = _( "Set %{monster} Count" );
+                    StringReplace( str, "%{monster}", Monster( object.index + 1 ).GetName() );
+
                     fheroes2::ActionCreator action( _historyManager, _mapFormat );
-                    if ( Dialog::SelectCount( _( "Set Monster Count" ), 0, 500000, monsterCount ) ) {
+                    if ( Dialog::SelectCount( str, 0, 500000, monsterCount ) ) {
                         _mapFormat.standardMetadata[object.id] = { monsterCount, Monster::JOIN_CONDITION_UNSET, 0 };
                         action.commit();
                     }
