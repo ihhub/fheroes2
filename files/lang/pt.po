@@ -7965,7 +7965,7 @@ msgid "The %{name} extends the duration of all the hero's spells by %{count} tur
 msgstr "%{name} estende a duração de todos os feitiços do herói em %{count} turnos."
 
 msgid "A surprise turn in the landscape finds you in the midst of a grisly scene: Vultures picking at the aftermath of a terrible battle. Your cursory search of the remains turns up an enchanted hourglass."
-msgstr "Você se vê no meio de uma cena terrível: Abutres bicando os restos de uma terrível batalha. Sua rápida busca nos corpos revela uma ampulheta encantada."
+msgstr "A paisagem muda subitamente e você se encontra em meio a uma cena macabra: Abutres se alimentando dos restos de uma terrível batalha. Sua rápida busca nos corpos revela uma ampulheta encantada."
 
 msgid "Gold Watch"
 msgstr "Relógio de Ouro"
