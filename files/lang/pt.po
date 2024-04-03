@@ -7875,7 +7875,7 @@ msgstr "%{name} fornece ao herói %{count} de ouro por dia."
 
 msgid "A little leprechaun dances gleefully around a magic sack. Seeing you approach, he stops in mid-stride. The little man screams and stamps his foot ferociously, vanishing into thin air. Remembering the old leprechaun saying 'Finders Keepers', you grab the sack and leave."
 msgstr ""
-"Um duendezinho dança alegremente ao redor de um saco mágico. Ao vê-lo se aproximar, ele para no meio do caminho. O homenzinho grita e bate seu pé no chão ferozmente, desaparecendo no ar. Você se lembra do velho duende dizendo 'Achado Não é Roubado', você pega o saco e vai embora."
+"Um duendezinho dança alegremente ao redor de um saco mágico. Ao vê-lo se aproximar, ele para no meio do caminho. O homenzinho grita e bate seu pé no chão ferozmente, desaparecendo no ar. Você se lembra do velho provérbio de duendes 'Achado Não é Roubado', você pega o saco e vai embora."
 
 msgid "Endless Bag of Gold"
 msgstr "Bolsa de Ouro Infinito"
