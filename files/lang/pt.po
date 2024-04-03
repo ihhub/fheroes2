@@ -8569,7 +8569,7 @@ msgid "Teleport"
 msgstr "Teletransporte"
 
 msgid "Teleports the creature you select to any open position on the battlefield."
-msgstr "Teletransporta a criatura que você selecionar para qualquer posição aberta no campo de batalha."
+msgstr "Teletransporta a criatura que você selecionou para qualquer posição aberta no campo de batalha."
 
 msgid "Cure"
 msgstr "Cura"
