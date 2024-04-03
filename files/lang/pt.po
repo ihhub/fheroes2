@@ -5539,7 +5539,7 @@ msgid "After spending hours trying to fish the chest out of the sea, you open it
 msgstr "Depois de passar horas tentando tirar o baú do mar, você o abre, apenas para encontrá-lo vazio."
 
 msgid "After scouring the area, you fall upon a hidden treasure cache. You may take the gold or distribute the gold to the peasants for experience. Do you wish to keep the gold?"
-msgstr "Depois de vasculhar a área, você encontra um tesouro escondido. Você pode levar o ouro ou distribuí-lo entre os camponeses em troca de experiência Você deseja ficar com o ouro?"
+msgstr "Depois de vasculhar a área, você encontra um tesouro escondido. Você pode levar o ouro ou distribuí-lo entre os camponeses em troca de experiência. Você deseja ficar com o ouro?"
 
 msgid "After scouring the area, you fall upon a hidden chest, containing the %{gold} gold pieces."
 msgstr "Depois de vasculhar a área, você encontra um baú escondido, contendo %{gold} peças de ouro."
