@@ -4665,7 +4665,7 @@ msgid " All populations are halved."
 msgstr " Todas as populações foram reduzidas a metade."
 
 msgid " All dwellings increase population."
-msgstr " Todas as estruturas aumentam de população."
+msgstr " Todas as moradias aumentam de população."
 
 msgid "New Month!"
 msgstr "Novo Mês!"
