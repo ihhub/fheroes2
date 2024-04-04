@@ -8283,7 +8283,7 @@ msgid "Taking shelter from a storm in a small cave, you notice a small patch of 
 msgstr "Abrigando-se de uma tempestade em uma pequena caverna, você percebe um pequeno pedaço de cristal em um canto. Curioso, você quebra um pedaço e percebe que o cristal original se reconstruiu. Você decide colocar o pedaço inteiro em uma bolsa e levá-lo com você."
 
 msgid "Spiked Helm"
-msgstr "Elmo Cravado"
+msgstr "Elmo com Espinhos"
 
 msgid "Your army is ambushed by a small tribe of wild (and none too bright) Orcs. You fend them off easily and the survivors flee in all directions. One of the Orcs was wearing a polished spiked helm. Figuring it will make a good souvenir, you take it."
 msgstr "Seu exército é emboscado por uma pequena tribo de Orcs selvagens. Você os afugenta facilmente e os sobreviventes fogem em todas as direções. Um dos Orcs estava usando um elmo cravado polido. Imaginando que ele seria uma boa lembrança, você o leva."
