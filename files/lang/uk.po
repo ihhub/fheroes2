@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-27 01:17+0000\n"
-"PO-Revision-Date: 2024-03-23 10:51+0200\n"
+"POT-Creation-Date: 2024-04-03 04:20+0000\n"
+"PO-Revision-Date: 2024-04-02 09:25+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: uk\n"
@@ -240,6 +240,15 @@ msgstr ""
 "Д"
 
 msgid ""
+"P\n"
+"A\n"
+"T\n"
+"R\n"
+"O\n"
+"L"
+msgstr ""
+
+msgid ""
 "C\n"
 "A\n"
 "M\n"
@@ -391,6 +400,11 @@ msgstr "Війська з %{count} рас - %{penalty}"
 
 msgid "Some undead in army -1"
 msgstr "Наявність невмерлих в армії -1"
+
+msgid ""
+"Default\n"
+"troop"
+msgstr ""
 
 msgid "View %{name}"
 msgstr "Переглянути %{name}"
@@ -1019,18 +1033,6 @@ msgstr "Скинути до налаштувань за замовчування
 
 msgid "Please select another hero."
 msgstr "Будь ласка, оберіть іншого героя."
-
-msgid "Set Attack Skill"
-msgstr "Встановити Атаку"
-
-msgid "Set Defense Skill"
-msgstr "Встановити Захист"
-
-msgid "Set Power Skill"
-msgstr "Встановити Силу Магії"
-
-msgid "Set Knowledge Skill"
-msgstr "Встановити Знання"
 
 msgid "%{race1} %{name1} vs %{race2} %{name2}"
 msgstr "%{race1} %{name1} проти %{race2} %{name2}"
@@ -5528,8 +5530,26 @@ msgstr ""
 "Гравці з сильними обмеженнями починають з меншою кількістю ресурсів і "
 "заробляють на 30% менше ресурсів за хід."
 
+msgid ""
+"Default\n"
+"value"
+msgstr ""
+
+#, fuzzy
+msgid "Set %{skill} Skill"
+msgstr "Встановити Атаку"
+
+msgid "Set %{skill} base value. Right-click to reset all skills to default."
+msgstr ""
+
 msgid "View %{skill} Info"
 msgstr "Переглянути %{skill} інформацію"
+
+#, fuzzy
+msgid ""
+"Default\n"
+"skill"
+msgstr "Захист"
 
 msgid "Keyboard|123"
 msgstr "123"
@@ -7248,6 +7268,49 @@ msgstr ""
 msgid "%{name} the %{race} (Level %{level})"
 msgstr "%{name} %{race} (Рівень %{level})"
 
+#, fuzzy
+msgid "Random hero (Level %{level})"
+msgstr "%{name} (Рівень %{level})"
+
+#, fuzzy
+msgid "Random %{race} hero (Level %{level})"
+msgstr "%{name} %{race} (Рівень %{level})"
+
+msgid "Are you sure you want to dismiss this Hero?"
+msgstr "Ви впевнені, що хочете звільнити цього героя?"
+
+msgid "Set custom Experience value. Current value is default."
+msgstr ""
+
+msgid "Change Experience value. Right-click to reset to default value."
+msgstr ""
+
+#, fuzzy
+msgid "Set Experience value"
+msgstr "Досвід"
+
+msgid "View Experience Info"
+msgstr "Переглянути інформацію про досвід"
+
+msgid "Set custom Spell Points value. Current value is default."
+msgstr ""
+
+msgid "Change Spell Points value. Right-click to reset to default value."
+msgstr ""
+
+#, fuzzy
+msgid "Set Spell Points value"
+msgstr "Мана"
+
+msgid "View Spell Points Info"
+msgstr "Переглянути інформацію про очки магії"
+
+msgid "Enter hero's name"
+msgstr ""
+
+msgid "Set patrol radius in tiles"
+msgstr ""
+
 msgid ""
 "'Spread' combat formation spreads the hero's units from the top to the "
 "bottom of the battlefield, with at least one empty space between each unit."
@@ -7261,21 +7324,6 @@ msgid ""
 msgstr ""
 "Згуртований бойовий порядок збирає військо героя в центрі своєї частини поля "
 "бою."
-
-msgid "Are you sure you want to dismiss this Hero?"
-msgstr "Ви впевнені, що хочете звільнити цього героя?"
-
-msgid "View Experience Info"
-msgstr "Переглянути інформацію про досвід"
-
-msgid "View Spell Points Info"
-msgstr "Переглянути інформацію про очки магії"
-
-msgid "Set army combat formation to 'Spread'"
-msgstr "Розосередити війська"
-
-msgid "Set army combat formation to 'Grouped'"
-msgstr "Згуртувати війська"
 
 msgid "Exit Hero Screen"
 msgstr "Вийти з екрану героя"
@@ -7294,6 +7342,34 @@ msgstr "Показати попереднього героя"
 
 msgid "Show next hero"
 msgstr "Показати наступного героя"
+
+msgid "Set army combat formation to 'Spread'"
+msgstr "Розосередити війська"
+
+msgid "Set army combat formation to 'Grouped'"
+msgstr "Згуртувати війська"
+
+msgid "Set hero's Artifacts. Right-click to reset Artifact."
+msgstr ""
+
+msgid "Set hero's Secondary Skills. Right-click to reset skill."
+msgstr ""
+
+msgid "Set hero's Army. Right-click to reset unit."
+msgstr ""
+
+msgid "Set hero's portrait. Right-click to reset to default."
+msgstr ""
+
+msgid "Click to change hero's name. Right-click to reset to default."
+msgstr ""
+
+msgid "Hero is in patrol mode in %{tiles} tiles radius. Click to disable it."
+msgstr ""
+
+#, fuzzy
+msgid "Click to enable hero's patrol mode."
+msgstr "Тицьніть щоб обрати цей колір."
 
 msgid "Blood Morale"
 msgstr "Кровожерлива"
@@ -9106,20 +9182,24 @@ msgid "The %{name} brings in an income of %{count} gold per day."
 msgstr "%{name} дає прибуток у розмірі %{count} золота на день."
 
 msgid "Arcane Necklace of Magic"
-msgstr ""
+msgstr "Таємниче намисто магії"
 
 msgid ""
 "After rescuing a Sorceress from a cursed tomb, she rewards your heroism with "
 "an exquisite jeweled necklace."
 msgstr ""
+"Врятувавши чародійку з проклятої гробниці, вона винагороджує ваш героїзм "
+"вишуканим коштовним намистом."
 
 msgid "Caster's Bracelet of Magic"
-msgstr ""
+msgstr "Магічний браслет заклинателя"
 
 msgid ""
 "While searching through the rubble of a caved-in mine, you free a group of "
 "trapped Dwarves. Grateful, the leader gives you a golden bracelet."
 msgstr ""
+"Під час пошуків у завалах обваленої шахти ви звільняєте групу гномів, які "
+"опинилися в пастці. Вдячний ватажок дарує вам золотий браслет."
 
 msgid "Mage's Ring of Power"
 msgstr "Магічний Перстень Могутності"
@@ -9134,20 +9214,22 @@ msgstr ""
 "знаходите сліпучий, прикрашений коштовним камінням перстень."
 
 msgid "Witch's Broach of Magic"
-msgstr ""
+msgstr "Відьомська магічна брошка"
 
 msgid ""
 "Alongside the remains of a burnt witch lies a beautiful broach, intricately "
 "designed. Approaching the corpse with caution, you add the broach to your "
 "inventory."
 msgstr ""
+"Поряд з останками спаленої відьми лежить красива протяжка, вигадливого "
+"дизайну. Наблизившись до трупа з обережністю, ви додаєте брошку до свого "
+"інвентарю."
 
 msgid "Medal of Valor"
 msgstr "Медаль за Відвагу"
 
-#, fuzzy
 msgid "The %{name} increases the morale of the hero's army by %{count}."
-msgstr "%{name} підвищує мораль військ Вашого героя на %{count}."
+msgstr "%{name} підвищує мораль військ героя на %{count}."
 
 msgid ""
 "Freeing a virtuous maiden from the clutches of an evil overlord, you are "
@@ -9157,12 +9239,14 @@ msgstr ""
 "Відвагу від королівського герольда."
 
 msgid "Medal of Courage"
-msgstr ""
+msgstr "Медаль за мужність"
 
 msgid ""
 "After saving a young boy from a vicious pack of Wolves, you return him to "
 "his father's manor. The grateful nobleman awards you with a Medal of Courage."
 msgstr ""
+"Врятувавши хлопчика від жорстокої зграї Вовків, ви повертаєте його до "
+"батьківського маєтку. Вдячний дворянин нагороджує вас медаллю за хоробрість."
 
 msgid "Medal of Honor"
 msgstr "Медаль за Честь"
@@ -9175,26 +9259,30 @@ msgstr ""
 "работорговців, вона нагороджує вас Медаллю за Честь."
 
 msgid "Medal of Distinction"
-msgstr ""
+msgstr "Медаль за відзнаку"
 
 msgid ""
 "Ridding the countryside of the hideous Minotaur who made a sport of eating "
 "noblemen's Knights, you are honored with the Medal of Distinction."
 msgstr ""
+"Позбавивши сільську місцевість від огидного Мінотавра, який розважався тим, "
+"що поїдав шляхетних лицарів, ви отримаєте медаль \"За відзнаку\"."
 
 msgid "Fizbin of Misfortune"
-msgstr ""
+msgstr "Медаль нещастя"
 
-#, fuzzy
 msgid ""
 "The %{name} greatly decreases the morale of the hero's army by %{count}."
-msgstr "%{name} підвищує мораль військ Вашого героя на %{count}."
+msgstr "%{name} сильно знижує мораль військ героя на %{count}."
 
 msgid ""
 "You stumble upon a medal lying alongside the empty road. Adding the medal to "
 "your inventory, you become aware that you have acquired the undesirable "
 "Fizbin of Misfortune, greatly decreasing your army's morale."
 msgstr ""
+"Ви спіткаєтесь об медаль, що лежить уздовж порожньої дороги. Додавши медаль "
+"до свого інвентарю, ви усвідомлюєте, що придбали небажаний Фізбін нещастя, "
+"який значно знижує бойовий дух вашої армії."
 
 msgid "Thunder Mace of Dominion"
 msgstr "Громова Булава Панування"
@@ -9217,6 +9305,9 @@ msgid ""
 "You encounter the infamous Black Knight! After a grueling duel ending in a "
 "draw, the Knight, out of respect, offers you a pair of armored gauntlets."
 msgstr ""
+"Ви зустрічаєтесь із сумнозвісним Чорним Лицарем! Після виснажливого "
+"поєдинку, що закінчився внічию, Лицар з поваги пропонує вам пару броньованих "
+"рукавичок."
 
 msgid "Defender Helm of Protection"
 msgstr "Шолом Захисника"
@@ -9229,27 +9320,30 @@ msgstr ""
 "золотого шолома, що був схований під кущем."
 
 msgid "Giant Flail of Dominion"
-msgstr ""
+msgstr "Велетенський молот панування"
 
 msgid ""
 "A clumsy Giant has killed himself with his own flail. Knowing your superior "
 "skill with this weapon, you confidently remove the spectacular flail from "
 "the fallen Giant."
 msgstr ""
+"Незграбний велетень убив себе власним ціпом. Знаючи, що ви чудово володієте "
+"цією зброєю, ви впевнено забираєте ефектний ціпок у вбитого велетня."
 
 msgid "Ballista of Quickness"
 msgstr "Баліста Швидкості"
 
-#, fuzzy
 msgid "The %{name} gives the hero's catapult one extra shot per combat round."
 msgstr ""
-"%{name} надає вашій катапульті додатковий постріл у кожному раунді під час "
+"%{name} надає катапульті героя додатковий постріл у кожному раунді під час "
 "облоги."
 
 msgid ""
 "Walking through the ruins of an ancient walled city, you find the instrument "
 "of the city's destruction, an elaborately crafted ballista."
 msgstr ""
+"Прогулюючись руїнами стародавнього обнесеного мурами міста, ви знаходите "
+"знаряддя його руйнування - ретельно виготовлену балісту."
 
 msgid "Stealth Shield of Protection"
 msgstr "Незримий Щит Захисту"
@@ -9319,13 +9413,16 @@ msgstr ""
 "Покопирсавшись у мішку, він витягає пожовклий сувій та простягає його вам."
 
 msgid "Superior Scroll of Knowledge"
-msgstr ""
+msgstr "Вищий сувій знань"
 
 msgid ""
 "You come across the remains of an ancient Druid. Bones, yellowed with age, "
 "peer from the ragged folds of her robe. Searching the robe, you discover a "
 "scroll hidden in the folds."
 msgstr ""
+"Ви проходите повз останок стародавньої друїдки. З-поміж пожовклих від часу "
+"кісток визирають пошарпані складки її мантії. Обшукуючи мантію, ви знаходите "
+"захований у складках сувій."
 
 msgid "Foremost Scroll of Knowledge"
 msgstr "Древній Сувій Знання"
@@ -9338,11 +9435,10 @@ msgstr ""
 "мантії мертвого Друїда. Обшукуючи мантію, ви знаходите захований у ній сувій."
 
 msgid "Endless Sack of Gold"
-msgstr ""
+msgstr "Нескінченний мішок золота"
 
-#, fuzzy
 msgid "The %{name} provides the hero with %{count} gold per day."
-msgstr "%{name} збільшує видобуток дерева на %{count} в день."
+msgstr "%{name} забезпечує  %{count} в день."
 
 msgid ""
 "A little leprechaun dances gleefully around a magic sack. Seeing you "
@@ -9350,30 +9446,39 @@ msgid ""
 "ferociously, vanishing into thin air. Remembering the old leprechaun saying "
 "'Finders Keepers', you grab the sack and leave."
 msgstr ""
+"Маленький лепрекон весело танцює навколо чарівного мішка. Побачивши, що ви "
+"наближаєтесь, він зупиняється на півдорозі. Маленький чоловічок люто кричить "
+"і тупотить ногою, розчиняючись у повітрі. Пам'ятаючи слова старого леприкона "
+"\"Хто знайшов, той власник\", ви хапаєте мішок і йдете геть."
 
 msgid "Endless Bag of Gold"
-msgstr ""
+msgstr "Нескінченна сумка золота"
 
 msgid ""
 "A noblewoman, separated from her traveling companions, asks for your help. "
 "After escorting her home, she rewards you with a bag filled with gold."
 msgstr ""
+"Знатна жінка, яка відділилася від своїх попутників, просить вас про "
+"допомогу. Провівши її додому, вона винагороджує вас мішком, наповненим "
+"золотом."
 
 msgid "Endless Purse of Gold"
-msgstr ""
+msgstr "Нескінченний золотий гаманець"
 
 msgid ""
 "In your travels, you find a leather purse filled with gold that once "
 "belonged to a great warrior king who had the ability to transform any "
 "inanimate object into gold."
 msgstr ""
+"У своїх мандрах ви знаходите шкіряний гаманець, наповнений золотом, який "
+"колись належав великому королю-воїну, що мав здатність перетворювати на "
+"золото будь-який неживий предмет."
 
 msgid "Nomad Boots of Mobility"
 msgstr "Чоботи Кочівника"
 
-#, fuzzy
 msgid "The %{name} increase the hero's movement on land."
-msgstr "%{name} дають вашому герою додаткові очки руху."
+msgstr "%{name} підвищує здатність пересування герою по суходолу."
 
 msgid ""
 "A Nomad trader seeks protection from a tribe of Goblins. For your "
@@ -9398,137 +9503,163 @@ msgstr ""
 "інвентаря."
 
 msgid "Lucky Rabbit's Foot"
-msgstr ""
+msgstr "Щаслива кроляча лапка"
 
-#, fuzzy
 msgid "The %{name} increases the luck of the hero's army by %{count}."
-msgstr "%{name} підвищує вашу удачу у битві на %{count}."
+msgstr "%{name} підвищує удачу армії героя на %{count}."
 
 msgid ""
 "A traveling merchant offers you a rabbit's foot, made of gleaming silver "
 "fur, for safe passage. The merchant explains the charm will increase your "
 "luck in combat."
 msgstr ""
+"Мандрівний купець пропонує вам кролячу лапку з блискучого сріблястого хутра "
+"для безпечного переходу. Торговець пояснює, що талісман збільшить вашу удачу "
+"в бою."
 
 msgid "Golden Horseshoe"
-msgstr ""
+msgstr "Золота підкова"
 
 msgid ""
 "An ensnared Unicorn whinnies in fright. Murmuring soothing words, you set "
 "her free. Snorting and stamping her front hoof once, she gallops off. "
 "Looking down you see a golden horseshoe."
 msgstr ""
+"Єдиноріг, що потрапив у пастку, злякано скиглить. Бурмочучи заспокійливі "
+"слова, ви звільняєте його. Пирхнувши і тупнувши переднім копитом, вона мчить "
+"геть. Дивлячись вниз, ви бачите золоту підкову."
 
 msgid "Gambler's Lucky Coin"
-msgstr ""
+msgstr "Щаслива монета гравця"
 
 msgid ""
 "You have captured a mischievous imp who has been terrorizing the region. In "
 "exchange for his release, he rewards you with a magical coin."
 msgstr ""
+"Ви захопили в полон біса, який тероризував регіон. В обмін на своє "
+"звільнення він винагороджує вас магічною монетою."
 
 msgid "Four-Leaf Clover"
-msgstr ""
+msgstr "Конюшина чотирилиста"
 
 msgid ""
 "In the middle of a patch of dead and dry vegetation, to your surprise you "
 "find a healthy green four-leaf clover."
 msgstr ""
+"Посеред ділянки мертвої та сухої рослинності ви, на свій подив, знаходите "
+"здорову зелену чотирилисту конюшину."
 
 msgid "True Compass of Mobility"
-msgstr ""
+msgstr "Справжній компас мобільності"
 
-#, fuzzy
 msgid "The %{name} increases the hero's movement on land and sea."
-msgstr "%{name} дають вашому герою додаткові очки руху."
+msgstr "%{name} підвищує дальність руху герою суходолом та морем."
 
 msgid ""
 "An old man claiming to be an inventor asks you to try his latest invention. "
 "He then hands you a compass."
 msgstr ""
+"Старий чоловік, який називає себе винахідником, просить вас випробувати його "
+"останній винахід. Потім він дає вам компас."
 
 msgid "Sailor's Astrolabe of Mobility"
-msgstr ""
+msgstr "Астролябія мобільності моряка"
 
-#, fuzzy
 msgid "The %{name} increases the hero's movement on sea."
-msgstr "%{name} дають вашому герою додаткові очки руху."
+msgstr "%{name} збільшує дальність руху героя морем."
 
 msgid ""
 "An old sea captain is being tortured by Ogres. You save him, and in return "
 "he rewards you with a wondrous instrument to measure the distance of a star."
 msgstr ""
+"Старого морського капітана катують огри. Ви рятуєте його, а натомість він "
+"нагороджує вас дивовижним інструментом для вимірювання відстані до зірки."
 
 msgid "Evil Eye"
-msgstr ""
+msgstr "Лихе Око"
 
 msgid "The %{name} reduces the casting cost of curse spells by half."
-msgstr ""
+msgstr "%{name} зменшує вартість заклинань прокляття вдвічі."
 
 msgid ""
 "While venturing into a decrepit hut you find the Skeleton of a long dead "
 "witch. Investigation of the remains reveals a glass eye rolling around "
 "inside an empty skull."
 msgstr ""
+"Зазирнувши до напівзруйнованої хатини, ви знаходите скелет давно померлої "
+"відьми. Дослідження останків виявляє скляне око, що обертається всередині "
+"порожнього черепа."
 
 msgid "Enchanted Hourglass"
-msgstr ""
+msgstr "Зачарований пісочний годинник"
 
-#, fuzzy
 msgid ""
 "The %{name} extends the duration of all the hero's spells by %{count} turns."
-msgstr "%{name} підвищує час дії ваших заклять на %{count} ходів."
+msgstr "%{name} подовжує тривалість заклять героя на %{count} ходів."
 
 msgid ""
 "A surprise turn in the landscape finds you in the midst of a grisly scene: "
 "Vultures picking at the aftermath of a terrible battle. Your cursory search "
 "of the remains turns up an enchanted hourglass."
 msgstr ""
+"Несподіваний поворот ландшафту призводить до того, що ви опиняєтесь посеред "
+"жахливої сцени: Стерв'ятники обнишпорюють наслідки жахливої битви. Під час "
+"побіжного огляду решток ви знаходите зачарований пісочний годинник."
 
 msgid "Gold Watch"
-msgstr ""
+msgstr "Золотий Годинник"
 
 msgid "The %{name} doubles the effectiveness of the hero's hypnotize spells."
-msgstr ""
+msgstr "%{name} подвоює ефективність заклинань гіпнозу героя."
 
 msgid ""
 "In reward for helping his cart out of a ditch, a traveling potion salesman "
 "gives you a \"magic\" gold watch. Unbeknownst to him, the watch really is "
 "magical."
 msgstr ""
+"У нагороду за те, що ви витягли його віз із кювету, мандрівний продавець "
+"зіль дарує вам \"чарівний\" золотий годинник. Сам того не підозрюючи, "
+"годинник справді чарівний."
 
 msgid "Skullcap"
-msgstr ""
+msgstr "Тюбетейка"
 
 msgid "The %{name} halves the casting cost of all mind influencing spells."
 msgstr ""
+"%{name} вдвічі зменшує вартість всіх заклинань, що впливають на свідомість."
 
 msgid ""
 "A brief stop at an improbable rural inn yields an exchange of money, tales, "
 "and accidentally, luggage. You find a magical skullcap in your new backpack."
 msgstr ""
+"Коротка зупинка в неймовірному сільському заїжджому дворі призводить до "
+"обміну грошима, історіями і, випадково, багажем. У новому рюкзаку ви "
+"знаходите чарівну тюбетейку."
 
 msgid "Ice Cloak"
-msgstr ""
+msgstr "Льодовий плащ"
 
-#, fuzzy
 msgid ""
 "The %{name} halves all damage the hero's troops receive from cold spells."
-msgstr "%{name} надає вашим військам імунітет до Розсіювання Магії."
+msgstr ""
+"%{name} вдвічі зменшує шкоду отриману військами героя від заклинань льоду."
 
 msgid ""
 "Responding to the panicked cries of a damsel in distress, you discover a "
 "young woman fleeing from a hungry bear. You slay the beast in the nick of "
 "time, and the grateful Sorceress weaves a magic cloak from the bear's hide."
 msgstr ""
+"На панічний крик дівчини, що потрапила в біду, ви виявляєте молоду жінку, "
+"яка тікає від голодного ведмедя. Ви вчасно вбиваєте звіра, а вдячна "
+"чарівниця плете з ведмежої шкури чарівний плащ."
 
 msgid "Fire Cloak"
-msgstr ""
+msgstr "Вогняний плащ"
 
-#, fuzzy
 msgid ""
 "The %{name} halves all damage the hero's troops receive from fire spells."
-msgstr "%{name} надає вашим військам імунітет до Розсіювання Магії."
+msgstr ""
+"%{name} вдвічі зменшує шкоду отриману військами героя від заклинань вогню."
 
 msgid ""
 "You've come upon a fight between a Necromancer and a Paladin. The "
@@ -9536,47 +9667,57 @@ msgid ""
 "Acting quickly, you slay the evil one before the final blow. The grateful "
 "Paladin gives you the fire cloak that saved him."
 msgstr ""
+"Ви потрапили на бій між некромантом і паладином. Некромант вражає паладина "
+"вогняною кулею, ставлячи його на коліна. Діючи швидко, ви встигаєте вбити "
+"нечисть до останнього удару. Вдячний паладин віддає вам вогняний плащ, який "
+"його врятував."
 
 msgid "Lightning Helm"
-msgstr ""
+msgstr "Блискавичний шолом"
 
-#, fuzzy
 msgid ""
 "The %{name} halves all damage the hero's troops receive from lightning "
 "spells."
-msgstr "%{name} надає вашим військам імунітет до Розсіювання Магії."
+msgstr ""
+"%{name} вдвічі знижує шкоду отримувану військами героя від заклинань "
+"блискавки."
 
 msgid ""
 "A traveling tinker in need of supplies offers you a helm with a thunderbolt "
 "design on its top in exchange for food and water. Curious, you accept, and "
 "later find out that the helm is magical."
 msgstr ""
+"Мандрівний ремісник, якому потрібні припаси, пропонує вам шолом із "
+"зображенням блискавки на верхівці в обмін на їжу та воду. З цікавості ви "
+"погоджуєтесь, а згодом дізнаєтесь, що шолом чарівний."
 
 msgid "Evercold Icicle"
-msgstr ""
+msgstr "Вічно холодна бурулька"
 
-#, fuzzy
 msgid ""
 "The %{name} causes the hero's cold spells to do %{count} percent more damage "
 "to enemy troops."
 msgstr ""
-"%{name} зменшує вартість капітуляції на %{count} відсотків від загальної "
-"вартості всіх військ, що є у вашій армії."
+"%{name} забезпечує нанесення шкоди льодяними закляттями героя на %{count} "
+"відсотків більше ворожим військам."
 
 msgid ""
 "An icicle withstanding the full heat of the noonday sun attracts your "
 "attention. Intrigued, you break it off, and find that it does not melt in "
 "your hand."
 msgstr ""
+"Бурулька, що витримує спеку полуденного сонця, привертає вашу увагу. "
+"Заінтриговані, ви відламуєте її і виявляєте, що вона не тане у вашій руці."
 
 msgid "Everhot Lava Rock"
-msgstr ""
+msgstr "Вічно гарячий лавовий камінь"
 
-#, fuzzy
 msgid ""
 "The %{name} causes the hero's fire spells to do %{count} percent more damage "
 "to enemy troops."
-msgstr "%{name} підвищує час дії ваших заклять на %{count} ходів."
+msgstr ""
+"%{name} підвищує нанесення шкоди вогняними закляттями героя на %{count} "
+"відсотків більше ворожим військам."
 
 msgid ""
 "Your wanderings bring you into contact with a tribe of ape-like beings using "
@@ -9584,14 +9725,20 @@ msgid ""
 "them and teach them to make fire with sticks. Believing you to be a god, the "
 "apes give you their rock."
 msgstr ""
+"Ваші мандри приводять вас до племені мавпоподібних істот, які використовують "
+"чарівний лавовий камінь, що ніколи не остигає, для розпалювання вогнищ. Ви "
+"жалієте їх і навчаєте добувати вогонь за допомогою палиць. Вважаючи вас "
+"богом, мавпи віддають вам свій камінь."
 
 msgid "Lightning Rod"
-msgstr ""
+msgstr "Блискавковідвід"
 
 msgid ""
 "The %{name} causes the hero's lightning spells to do %{count} percent more "
 "damage to enemy troops."
 msgstr ""
+"The %{name} підвищує нанесення шкоди від заклять блискавки героя на %{count} "
+"відсотків більше ворожим військам."
 
 msgid ""
 "While waiting out a storm, a lighting bolt strikes a nearby cottage's "
@@ -9599,31 +9746,43 @@ msgid ""
 "however, survives intact and makes your hair stand on end when you touch it. "
 "Hmm..."
 msgstr ""
+"Перечікуючи грозу, блискавка влучає у громовідвід сусіднього котеджу, який "
+"плавиться і падає на землю. Однак кінчик громовідводу залишається "
+"неушкодженим і змушує ваше волосся ставати дибки, коли ви торкаєтесь його. "
+"Хм..."
 
 msgid "Snake-Ring"
-msgstr ""
+msgstr "Зміїний перстень"
 
 msgid "The %{name} halves the casting cost of all of the hero's bless spells."
 msgstr ""
+"The %{name} вдвічі зменшує вартість усіх заклинань благословення героя."
 
 msgid ""
 "You've found an oddly shaped ring on the finger of a long dead traveler. The "
 "ring looks like a snake biting its own tail."
 msgstr ""
+"Ви знайшли перстень дивної форми на пальці давно померлого мандрівника. "
+"Перстень схожий на змію, що кусає власний хвіст."
 
 msgid "Ankh"
-msgstr ""
+msgstr "Анк"
 
 msgid ""
 "The %{name} doubles the effectiveness of all of the hero's resurrect and "
 "animate spells."
 msgstr ""
+"The %{name} подвоює ефективність усіх заклинань воскресіння та оживлення "
+"героя."
 
 msgid ""
 "A fierce windstorm reveals the entrance to a buried tomb. Your investigation "
 "reveals that the tomb has already been looted, but the thieves overlooked an "
 "ankh on a silver chain in the dark."
 msgstr ""
+"Сильний буревій відкриває вхід до засипаної гробниці. Ваше розслідування "
+"показує, що гробниця вже була пограбована, але злодії в темряві не помітили "
+"анкх на срібному ланцюжку."
 
 msgid "Book of Elements"
 msgstr ""
@@ -11061,6 +11220,15 @@ msgstr ""
 "Перевірити нову версію гри на\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Set Defense Skill"
+#~ msgstr "Встановити Захист"
+
+#~ msgid "Set Power Skill"
+#~ msgstr "Встановити Силу Магії"
+
+#~ msgid "Set Knowledge Skill"
+#~ msgstr "Встановити Знання"
 
 #~ msgid "Multiple"
 #~ msgstr "Різноманітні"
