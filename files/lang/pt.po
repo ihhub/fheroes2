@@ -8259,7 +8259,7 @@ msgid "Endless Cord of Wood"
 msgstr "Pilha de Madeira Infinita"
 
 msgid "The %{name} provides %{count} unit of wood per day."
-msgstr "%{name} fornece %{count} unidade(s) de madeira por dia."
+msgstr "%{name} fornece %{count} unidade de madeira por dia."
 
 msgid "Pausing to rest and light a cook fire, you pull wood out of a nearby pile of dead wood. As you keep pulling wood from the pile, you notice that it doesn't shrink. You realize to your delight that the wood is enchanted, so you take it along."
 msgstr "Ao parar para descansar e acender uma fogueira, você tira lenha de uma pilha de lenha próxima. Enquanto você continua tirando lenha da pilha, você percebe que ela não diminui. Você percebe para seu deleite que a madeira é encantada, então você a leva junto."
