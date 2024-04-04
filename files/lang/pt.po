@@ -2163,7 +2163,7 @@ msgid "The Shipyard allows ships to be built."
 msgstr "O Estaleiro permite construir barcos."
 
 msgid "The Well increases the growth rate of all dwellings by %{count} creatures per week."
-msgstr "O Poço aumenta a taxa de produção de todas as estruturas em %{count} criaturas por semana."
+msgstr "O Poço aumenta a taxa de produção de todas as moradias em %{count} criaturas por semana."
 
 msgid "The Statue increases the town's income by %{count} gold per day."
 msgstr "A Estátua aumenta a renda da cidade em %{count} de ouro por dia."
