@@ -8293,7 +8293,7 @@ msgstr "Escudo Cravado"
 
 msgid "You come upon a bridge spanning a dry gully. Before you can cross, a Troll steps out from under the bridge and demands payment before it will permit you to pass. You refuse, and the Troll charges, forcing you to slay it. You take its spiked shield as a trophy."
 msgstr ""
-"Você se depara com uma ponte que se estende por um desfiladeiro. Antes que você possa atravessar, um Troll sai de baixo da ponte e exige pagamento para permitir que você passe. Você se recusa, e o Troll o cobra novamente, forçando-o a matá-lo. Você leva seu escudo cravado como um "
+"Você se depara com uma ponte que se estende por um desfiladeiro. Antes que você possa atravessar, um Troll sai de baixo da ponte e exige pagamento para permitir que você passe. Você se recusa, e o Troll o cobra novamente, forçando-o a matá-lo. Você leva seu escudo com espinhos como um "
 "troféu."
 
 msgid "White Pearl"
