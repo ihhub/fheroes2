@@ -5195,7 +5195,7 @@ msgid ""
 "\"Milord, I have been working very hard to provide you with this gold, come back next week for more.\""
 msgstr ""
 "O responsável pelo moinho anuncia:\n"
-"\"Milord, estou trabalhado muito para fornecer este ouro para você, volte na próxima semana para mais.\""
+"\"Milorde, estou trabalhado muito para fornecer este ouro para você, volte na próxima semana para mais.\""
 
 msgid ""
 "The keeper of the mill announces:\n"
