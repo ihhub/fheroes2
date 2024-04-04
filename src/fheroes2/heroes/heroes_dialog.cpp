@@ -49,6 +49,7 @@
 #include "kingdom.h"
 #include "localevent.h"
 #include "math_base.h"
+#include "pal.h"
 #include "race.h"
 #include "screen.h"
 #include "settings.h"
@@ -287,15 +288,52 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
     }
     spellPointsInfo.Redraw();
 
-    // Color "crest" icon.
-    dst_pt.x = dialogRoi.x + 49;
-    dst_pt.y = dialogRoi.y + 130;
+    // Color icon or race change icon for jailed hero details edit.
+    const fheroes2::Rect crestRect( portPos.x, portPos.y + 99, portPos.width, portPos.height );
+    fheroes2::Rect raceRect;
 
-    fheroes2::Copy( fheroes2::AGG::GetICN( ICN::CREST, Color::NONE == GetColor() ? Color::GetIndex( Settings::Get().CurrentColor() ) : Color::GetIndex( GetColor() ) ), 0,
-                    0, display, dst_pt.x, dst_pt.y, portPos.width, portPos.height );
+    auto redrawRace = [&raceRect, &crestRect, &display]( const int race ) {
+        const fheroes2::Sprite & raceSprite = fheroes2::AGG::GetICN( ICN::NGEXTRA, Race::getRaceIcnIndex( race, true ) );
+        fheroes2::Copy( raceSprite, 0, 0, display, raceRect );
+
+        // Update race text background.
+        const int32_t offsetY = raceRect.y - crestRect.y + raceRect.height + 4;
+        const int32_t posY = crestRect.y + offsetY;
+        const int32_t sizeY = crestRect.height - offsetY;
+        fheroes2::ApplyPalette( fheroes2::AGG::GetICN( ICN::STRIP, 3 ), 0, offsetY, display, crestRect.x, posY, crestRect.width, sizeY,
+                                PAL::GetPalette( PAL::PaletteType::DARKENING ) );
+        const fheroes2::Text raceText( Race::String( race ), fheroes2::FontType::smallWhite() );
+        raceText.drawInRoi( crestRect.x, posY, crestRect.width, display, { crestRect.x, posY, crestRect.width, sizeY } );
+    };
+
+    if ( isEditor && Modes( JAIL ) ) {
+        assert( GetColor() == Color::NONE );
+        fheroes2::ApplyPalette( fheroes2::AGG::GetICN( ICN::STRIP, 3 ), 0, 0, display, crestRect.x, crestRect.y, crestRect.width, crestRect.height,
+                                PAL::GetPalette( PAL::PaletteType::DARKENING ) );
+
+        const fheroes2::Text raceText( _( "Hero race:" ), fheroes2::FontType::normalWhite() );
+        raceText.drawInRoi( crestRect.x, crestRect.y + 6, crestRect.width, display, crestRect );
+
+        const fheroes2::Sprite & raceSprite = fheroes2::AGG::GetICN( ICN::NGEXTRA, Race::getRaceIcnIndex( _race, true ) );
+        raceRect.width = raceSprite.width();
+        raceRect.height = raceSprite.height();
+        raceRect.x = crestRect.x + ( crestRect.width - raceRect.width ) / 2;
+        raceRect.y = crestRect.y + ( crestRect.height - raceRect.height ) / 2;
+
+        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::NGEXTRA, 61U ), display, raceRect.x - 5, raceRect.y + 3 );
+
+        redrawRace( _race );
+    }
+    else {
+        // Color "crest" icon.
+        fheroes2::Copy( fheroes2::AGG::GetICN( ICN::CREST,
+                                               Color::NONE == GetColor() ? Color::GetIndex( Settings::Get().CurrentColor() ) : Color::GetIndex( GetColor() ) ),
+                        0, 0, display, crestRect );
+    }
 
     // Hero's army.
     dst_pt.x = dialogRoi.x + 156;
+    dst_pt.y = dialogRoi.y + 130;
 
     // In Editor mode we allow to edit army and remove all customized troops from the army.
     ArmyBar selectArmy( &army, false, readonly, isEditor, !isEditor );
@@ -555,24 +593,7 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
                 spellPointsInfo.QueueEventProcessing();
             }
         }
-        else if ( isEditor ) {
-            if ( le.MouseClickLeft( titleRoi ) ) {
-                std::string res = name;
-                if ( Dialog::InputString( _( "Enter hero's name" ), res, {}, 30 ) && !res.empty() ) {
-                    name = std::move( res );
-                    drawTitleText( name, _race, true );
-                    needRedraw = true;
-                }
-            }
-            else if ( le.MouseClickRight( titleRoi ) ) {
-                name.clear();
-                drawTitleText( name, _race, true );
-                needRedraw = true;
-            }
-        }
-
-        // left click info
-        if ( !readonly && !isEditor && le.MouseClickLeft( rectSpreadArmyFormat ) && !army.isSpreadFormation() ) {
+        else if ( !readonly && !isEditor && le.MouseClickLeft( rectSpreadArmyFormat ) && !army.isSpreadFormation() ) {
             cursorFormat.setPosition( army1_pt.x, army1_pt.y );
             needRedraw = true;
             army.SetSpreadFormation( true );
@@ -642,7 +663,58 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
                 buttonPatrol.drawOnRelease();
             }
         }
-        else if ( !isEditor ) {
+        else if ( isEditor ) {
+            if ( le.MouseClickLeft( titleRoi ) ) {
+                std::string res = name;
+                if ( Dialog::InputString( _( "Enter hero's name" ), res, {}, 30 ) && !res.empty() ) {
+                    name = std::move( res );
+                    drawTitleText( name, _race, true );
+                    needRedraw = true;
+                }
+            }
+            else if ( le.MouseClickRight( titleRoi ) ) {
+                name.clear();
+                drawTitleText( name, _race, true );
+                needRedraw = true;
+            }
+            else if ( le.MouseCursor( raceRect ) ) {
+                assert( !needRedraw );
+                message = _( "Click to change race." );
+                if ( le.MouseClickLeft() || le.MouseWheelDn() ) {
+                    _race = Race::getNextRace( _race );
+                    needRedraw = true;
+                }
+                else if ( le.MouseClickRight() || le.MouseWheelUp() ) {
+                    _race = Race::getPreviousRace( _race );
+                    needRedraw = true;
+                }
+
+                if ( needRedraw ) {
+                    drawTitleText( name, _race, true );
+                    redrawRace( _race );
+
+                    if ( portrait == 0 ) {
+                        renderRacePortrait( _race, portPos, display );
+                    }
+
+                    if ( primarySkillsBar.isDefaultValues() ) {
+                        attack = getHeroDefaultSkillValue( Skill::Primary::ATTACK, _race );
+                        defense = getHeroDefaultSkillValue( Skill::Primary::DEFENSE, _race );
+                        power = getHeroDefaultSkillValue( Skill::Primary::POWER, _race );
+                        knowledge = getHeroDefaultSkillValue( Skill::Primary::KNOWLEDGE, _race );
+                        primarySkillsBar.Redraw( display );
+
+                        if ( useDefaultSpellPoints ) {
+                            SetSpellPoints( GetMaxSpellPoints() );
+                        }
+
+                        spellPointsInfo.Redraw();
+                    }
+                }
+            }
+        }
+        else {
+            // If dialog is opened not in Editor.
             if ( le.MousePressRight( rectSpreadArmyFormat ) ) {
                 fheroes2::showStandardTextMessage(
                     _( "Spread Formation" ),

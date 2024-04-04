@@ -196,7 +196,7 @@ namespace Maps
         addObjectToTile( map.tiles[tileId], group, index, uid );
 
         // Towns and heroes have extra metadata.
-        if ( group == ObjectGroup::KINGDOM_HEROES ) {
+        if ( group == ObjectGroup::KINGDOM_HEROES || isJailObject( group, index ) ) {
             assert( map.heroMetadata.find( uid ) == map.heroMetadata.end() );
             map.heroMetadata.try_emplace( uid );
         }
@@ -469,5 +469,10 @@ namespace Maps
         }
 
         return static_cast<uint8_t>( leftFlagColor );
+    }
+
+    bool isJailObject( const ObjectGroup group, const uint32_t index )
+    {
+        return ( group == Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS && getObjectInfo( group, index ).objectType == MP2::OBJ_JAIL );
     }
 }

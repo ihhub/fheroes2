@@ -99,18 +99,6 @@ namespace
         return { startPos.x + startPos.y * worldWidth, endPos.x + endPos.y * worldWidth };
     }
 
-    const Maps::ObjectInfo & getObjectInfo( const Maps::ObjectGroup group, const int32_t objectType )
-    {
-        const auto & objectInfo = Maps::getObjectsByGroup( group );
-        if ( objectType < 0 || objectType >= static_cast<int32_t>( objectInfo.size() ) ) {
-            assert( 0 );
-            static const Maps::ObjectInfo emptyObjectInfo{ MP2::OBJ_NONE };
-            return emptyObjectInfo;
-        }
-
-        return objectInfo[objectType];
-    }
-
     bool isObjectPlacementAllowed( const Maps::ObjectInfo & info, const fheroes2::Point & mainTilePos )
     {
         // Run through all tile offsets and check that all objects parts can be put on the map.
@@ -264,7 +252,7 @@ namespace
 
                     ++objectIter;
                 }
-                else if ( objectIter->group == Maps::ObjectGroup::KINGDOM_HEROES ) {
+                else if ( objectIter->group == Maps::ObjectGroup::KINGDOM_HEROES || Maps::isJailObject( objectIter->group, objectIter->index ) ) {
                     // Remove this hero metadata.
                     assert( mapFormat.heroMetadata.find( objectIter->id ) != mapFormat.heroMetadata.end() );
                     mapFormat.heroMetadata.erase( objectIter->id );
@@ -825,17 +813,15 @@ namespace Interface
                 }
 
                 // TODO: add more code to edit other action objects that have metadata.
-                if ( objectType == MP2::OBJ_HERO ) {
-                    const int color = ( 1 << objectInfo.metadata[0] );
-                    const int race = ( 1 << objectInfo.metadata[1] );
+                if ( objectType == MP2::OBJ_HERO || objectType == MP2::OBJ_JAIL ) {
+                    assert( _mapFormat.heroMetadata.find( object.id ) != _mapFormat.heroMetadata.end() );
+
+                    const int color = ( objectType == MP2::OBJ_JAIL ) ? Color::NONE : ( 1 << objectInfo.metadata[0] );
+                    const int race = ( objectType == MP2::OBJ_JAIL ) ? _mapFormat.heroMetadata[object.id].jailedHeroRace : ( 1 << objectInfo.metadata[1] );
 
                     // Make a temporary hero to edit his details.
                     Heroes hero;
-                    auto heroMetadata = _mapFormat.heroMetadata.find( object.id );
-                    if ( heroMetadata != _mapFormat.heroMetadata.end() ) {
-                        hero.applyHeroMetadata( _mapFormat.heroMetadata[object.id], race, true );
-                    }
-
+                    hero.applyHeroMetadata( _mapFormat.heroMetadata[object.id], race, objectType == MP2::OBJ_JAIL, true );
                     hero.SetColor( color );
 
                     fheroes2::ActionCreator action( _historyManager, _mapFormat );
@@ -930,7 +916,7 @@ namespace Interface
         const Maps::ObjectGroup groupType = _editorPanel.getSelectedObjectGroup();
 
         if ( groupType == Maps::ObjectGroup::MONSTERS ) {
-            const auto & objectInfo = getObjectInfo( groupType, _editorPanel.getSelectedObjectType() );
+            const auto & objectInfo = Maps::getObjectInfo( groupType, _editorPanel.getSelectedObjectType() );
 
             if ( !isObjectPlacementAllowed( objectInfo, tilePos ) ) {
                 _warningMessage.reset( _( "Objects cannot be placed outside the map." ) );
@@ -950,7 +936,7 @@ namespace Interface
             setObjectOnTileAsAction( tile, groupType, _editorPanel.getSelectedObjectType() );
         }
         else if ( groupType == Maps::ObjectGroup::ADVENTURE_TREASURES ) {
-            const auto & objectInfo = getObjectInfo( groupType, _editorPanel.getSelectedObjectType() );
+            const auto & objectInfo = Maps::getObjectInfo( groupType, _editorPanel.getSelectedObjectType() );
 
             if ( !isObjectPlacementAllowed( objectInfo, tilePos ) ) {
                 _warningMessage.reset( _( "Objects cannot be placed outside the map." ) );
@@ -970,7 +956,7 @@ namespace Interface
             setObjectOnTileAsAction( tile, groupType, _editorPanel.getSelectedObjectType() );
         }
         else if ( groupType == Maps::ObjectGroup::KINGDOM_HEROES ) {
-            const auto & objectInfo = getObjectInfo( groupType, _editorPanel.getSelectedObjectType() );
+            const auto & objectInfo = Maps::getObjectInfo( groupType, _editorPanel.getSelectedObjectType() );
 
             if ( !isObjectPlacementAllowed( objectInfo, tilePos ) ) {
                 _warningMessage.reset( _( "Objects cannot be placed outside the map." ) );
@@ -1017,7 +1003,7 @@ namespace Interface
             }
         }
         else if ( groupType == Maps::ObjectGroup::ADVENTURE_ARTIFACTS ) {
-            const auto & objectInfo = getObjectInfo( groupType, _editorPanel.getSelectedObjectType() );
+            const auto & objectInfo = Maps::getObjectInfo( groupType, _editorPanel.getSelectedObjectType() );
 
             if ( !isObjectPlacementAllowed( objectInfo, tilePos ) ) {
                 _warningMessage.reset( _( "Objects cannot be placed outside the map." ) );
@@ -1056,7 +1042,7 @@ namespace Interface
             }
         }
         else if ( groupType == Maps::ObjectGroup::LANDSCAPE_MOUNTAINS ) {
-            const auto & objectInfo = getObjectInfo( groupType, _editorPanel.getSelectedObjectType() );
+            const auto & objectInfo = Maps::getObjectInfo( groupType, _editorPanel.getSelectedObjectType() );
 
             if ( !isObjectPlacementAllowed( objectInfo, tilePos ) ) {
                 _warningMessage.reset( _( "Objects cannot be placed outside the map." ) );
@@ -1076,7 +1062,7 @@ namespace Interface
             setObjectOnTileAsAction( tile, groupType, _editorPanel.getSelectedObjectType() );
         }
         else if ( groupType == Maps::ObjectGroup::LANDSCAPE_ROCKS ) {
-            const auto & objectInfo = getObjectInfo( groupType, _editorPanel.getSelectedObjectType() );
+            const auto & objectInfo = Maps::getObjectInfo( groupType, _editorPanel.getSelectedObjectType() );
 
             if ( !isObjectPlacementAllowed( objectInfo, tilePos ) ) {
                 _warningMessage.reset( _( "Objects cannot be placed outside the map." ) );
@@ -1096,7 +1082,7 @@ namespace Interface
             setObjectOnTileAsAction( tile, groupType, _editorPanel.getSelectedObjectType() );
         }
         else if ( groupType == Maps::ObjectGroup::LANDSCAPE_TREES ) {
-            const auto & objectInfo = getObjectInfo( groupType, _editorPanel.getSelectedObjectType() );
+            const auto & objectInfo = Maps::getObjectInfo( groupType, _editorPanel.getSelectedObjectType() );
 
             if ( !isObjectPlacementAllowed( objectInfo, tilePos ) ) {
                 _warningMessage.reset( _( "Objects cannot be placed outside the map." ) );
@@ -1116,7 +1102,7 @@ namespace Interface
             setObjectOnTileAsAction( tile, groupType, _editorPanel.getSelectedObjectType() );
         }
         else if ( groupType == Maps::ObjectGroup::ADVENTURE_WATER || groupType == Maps::ObjectGroup::LANDSCAPE_WATER ) {
-            const auto & objectInfo = getObjectInfo( groupType, _editorPanel.getSelectedObjectType() );
+            const auto & objectInfo = Maps::getObjectInfo( groupType, _editorPanel.getSelectedObjectType() );
 
             if ( !isObjectPlacementAllowed( objectInfo, tilePos ) ) {
                 _warningMessage.reset( _( "Objects cannot be placed outside the map." ) );
@@ -1136,7 +1122,7 @@ namespace Interface
             setObjectOnTileAsAction( tile, groupType, _editorPanel.getSelectedObjectType() );
         }
         else if ( groupType == Maps::ObjectGroup::LANDSCAPE_MISCELLANEOUS ) {
-            const auto & objectInfo = getObjectInfo( groupType, _editorPanel.getSelectedObjectType() );
+            const auto & objectInfo = Maps::getObjectInfo( groupType, _editorPanel.getSelectedObjectType() );
 
             if ( !isObjectPlacementAllowed( objectInfo, tilePos ) ) {
                 _warningMessage.reset( _( "Objects cannot be placed outside the map." ) );
@@ -1173,8 +1159,8 @@ namespace Interface
             const int groundType = Maps::Ground::getGroundByImageIndex( tile.getTerrainImageIndex() );
             const int32_t basementId = fheroes2::getTownBasementId( groundType );
 
-            const auto & townObjectInfo = getObjectInfo( groupType, type );
-            const auto & basementObjectInfo = getObjectInfo( Maps::ObjectGroup::LANDSCAPE_TOWN_BASEMENTS, basementId );
+            const auto & townObjectInfo = Maps::getObjectInfo( groupType, type );
+            const auto & basementObjectInfo = Maps::getObjectInfo( Maps::ObjectGroup::LANDSCAPE_TOWN_BASEMENTS, basementId );
 
             if ( !isObjectPlacementAllowed( townObjectInfo, tilePos ) ) {
                 _warningMessage.reset( _( "Objects cannot be placed outside the map." ) );
@@ -1255,7 +1241,7 @@ namespace Interface
                 return;
             }
 
-            const auto & objectInfo = getObjectInfo( groupType, type );
+            const auto & objectInfo = Maps::getObjectInfo( groupType, type );
 
             if ( !isObjectPlacementAllowed( objectInfo, tilePos ) ) {
                 _warningMessage.reset( _( "Objects cannot be placed outside the map." ) );
@@ -1282,7 +1268,7 @@ namespace Interface
             action.commit();
         }
         else if ( groupType == Maps::ObjectGroup::ADVENTURE_DWELLINGS ) {
-            const auto & objectInfo = getObjectInfo( groupType, _editorPanel.getSelectedObjectType() );
+            const auto & objectInfo = Maps::getObjectInfo( groupType, _editorPanel.getSelectedObjectType() );
 
             if ( !isObjectPlacementAllowed( objectInfo, tilePos ) ) {
                 _warningMessage.reset( _( "Objects cannot be placed outside the map." ) );
@@ -1302,7 +1288,7 @@ namespace Interface
             setObjectOnTileAsAction( tile, groupType, _editorPanel.getSelectedObjectType() );
         }
         else if ( groupType == Maps::ObjectGroup::ADVENTURE_POWER_UPS ) {
-            const auto & objectInfo = getObjectInfo( groupType, _editorPanel.getSelectedObjectType() );
+            const auto & objectInfo = Maps::getObjectInfo( groupType, _editorPanel.getSelectedObjectType() );
 
             if ( !isObjectPlacementAllowed( objectInfo, tilePos ) ) {
                 _warningMessage.reset( _( "Objects cannot be placed outside the map." ) );
@@ -1322,7 +1308,7 @@ namespace Interface
             setObjectOnTileAsAction( tile, groupType, _editorPanel.getSelectedObjectType() );
         }
         else if ( groupType == Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS ) {
-            const auto & objectInfo = getObjectInfo( groupType, _editorPanel.getSelectedObjectType() );
+            const auto & objectInfo = Maps::getObjectInfo( groupType, _editorPanel.getSelectedObjectType() );
 
             if ( !isObjectPlacementAllowed( objectInfo, tilePos ) ) {
                 _warningMessage.reset( _( "Objects cannot be placed outside the map." ) );
@@ -1365,7 +1351,7 @@ namespace Interface
 
     bool EditorInterface::setObjectOnTile( Maps::Tiles & tile, const Maps::ObjectGroup groupType, const int32_t objectIndex )
     {
-        const auto & objectInfo = getObjectInfo( groupType, objectIndex );
+        const auto & objectInfo = Maps::getObjectInfo( groupType, objectIndex );
         if ( objectInfo.empty() ) {
             // Check your logic as you are trying to insert an empty object!
             assert( 0 );

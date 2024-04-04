@@ -734,8 +734,25 @@ bool World::loadResurrectionMap( const std::string & filename )
 
                         hero->SetColor( color );
 
-                        hero->applyHeroMetadata( map.heroMetadata[object.id], race, false );
+                        assert( map.heroMetadata.find( object.id ) != map.heroMetadata.end() );
+
+                        hero->applyHeroMetadata( map.heroMetadata[object.id], race, false, false );
                     }
+                }
+            }
+            else if ( Maps::isJailObject( object.group, object.index ) ) {
+                assert( map.heroMetadata.find( object.id ) != map.heroMetadata.end() );
+
+                const int color = Color::NONE;
+                const int race = ( map.heroMetadata[object.id].jailedHeroRace == Race::RAND ) ? Race::Rand() : map.heroMetadata[object.id].jailedHeroRace;
+
+                Heroes * hero = GetHeroForHire( race );
+                if ( hero != nullptr ) {
+                    hero->SetCenter( { static_cast<int32_t>( tileId ) % width, static_cast<int32_t>( tileId ) / width } );
+
+                    hero->SetColor( color );
+
+                    hero->applyHeroMetadata( map.heroMetadata[object.id], race, true, false );
                 }
             }
         }
