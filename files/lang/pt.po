@@ -4413,7 +4413,7 @@ msgid "Guest"
 msgstr "Convidado"
 
 msgid "The guest waits for the host to set up the game, then is automatically added in. There can be multiple guests for TCP/IP games."
-msgstr "O convidado espera pelo anfitrião configurar o jogo, em seguida, é adicionado automaticamente dentro. Não pode haver vários convidados para Jogos TCP/IP."
+msgstr "O convidado espera pelo anfitrião configurar o jogo, em seguida, é adicionado automaticamente dentro. Pode haver vários convidados para Jogos TCP/IP."
 
 msgid "fheroes2 needs data files from the original Heroes of Might and Magic II to operate. You appear to be using the demo version of Heroes of Might and Magic II for this purpose. Please note that only one scenario will be available in this setup."
 msgstr "O fheroes2 precisa dos arquivos de dados do Heroes of Might and Magic II original para funcionar. Parece que você está usando a versão de demonstração do Heroes of Might and Magic II para este fim. Por favor, note que apenas um cenário estará disponível nesta configuração."
