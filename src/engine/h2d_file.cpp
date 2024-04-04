@@ -142,7 +142,7 @@ namespace fheroes2
         }
 
         for ( const auto & data : _fileData ) {
-            fileStream.putRaw( reinterpret_cast<const char *>( data.second.data() ), data.second.size() );
+            fileStream.putRaw( data.second.data(), data.second.size() );
         }
 
         return true;
@@ -213,8 +213,8 @@ namespace fheroes2
         stream.putLE32( static_cast<uint32_t>( image.y() ) );
 
         const size_t imageSize = static_cast<size_t>( image.width() ) * static_cast<size_t>( image.height() );
-        stream.putRaw( reinterpret_cast<const char *>( image.image() ), imageSize );
-        stream.putRaw( reinterpret_cast<const char *>( image.transform() ), imageSize );
+        stream.putRaw( image.image(), imageSize );
+        stream.putRaw( image.transform(), imageSize );
 
         return writer.add( name, stream.getRaw() );
     }
