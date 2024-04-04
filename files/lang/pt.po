@@ -4898,7 +4898,7 @@ msgid ""
 msgstr ""
 
 msgid "Set %{skill} Skill"
-msgstr ""
+msgstr "Definir %{skill}"
 
 msgid "Set %{skill} base value. Right-click to reset all skills to default."
 msgstr ""
