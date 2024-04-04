@@ -8477,7 +8477,7 @@ msgid "The %{name} boosts the hero's spell power by %{count}."
 msgstr "%{name} aumenta a força mágica do herói em %{count}."
 
 msgid "While out scaring up game, your troops find a mysterious staff levitating about three feet off of the ground. They hand it to you, and you notice an inscription. It reads: \"Brains best brawn and magic beats might. Heed my words, and you'll win every fight.\""
-msgstr "Suas tropas encontram um misterioso bastão levitando a cerca de um metro do chão. Eles o entregam a você, e você percebe uma inscrição. Que diz:: \"A magia se mantém mais poderosa do que qualquer outra coisa. Ouça minhas palavras, e você ganhará todas as lutas.\""
+msgstr "Suas tropas encontram um misterioso bastão levitando a cerca de um metro do chão. Eles o entregam a você, e você percebe uma inscrição. Que diz: \"A magia se mantém mais poderosa do que qualquer outra coisa. Ouça minhas palavras, e você ganhará todas as lutas.\""
 
 msgid "Sword Breaker"
 msgstr "Quebra-Espada"
