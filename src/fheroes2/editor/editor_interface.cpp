@@ -856,7 +856,7 @@ namespace Interface
                     }
 
                     std::string str = _( "Set %{monster} Count" );
-                    StringReplace( str, "%{monster}", Monster( object.index + 1 ).GetName() );
+                    StringReplace( str, "%{monster}", Monster( static_cast<int>( object.index ) + 1 ).GetName() );
 
                     fheroes2::ActionCreator action( _historyManager, _mapFormat );
                     if ( Dialog::SelectCount( str, 0, 500000, monsterCount ) ) {
