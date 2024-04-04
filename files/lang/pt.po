@@ -8286,7 +8286,7 @@ msgid "Spiked Helm"
 msgstr "Elmo com Espinhos"
 
 msgid "Your army is ambushed by a small tribe of wild (and none too bright) Orcs. You fend them off easily and the survivors flee in all directions. One of the Orcs was wearing a polished spiked helm. Figuring it will make a good souvenir, you take it."
-msgstr "Seu exército é emboscado por uma pequena tribo de Orcs selvagens. Você os afugenta facilmente e os sobreviventes fogem em todas as direções. Um dos Orcs estava usando um elmo cravado polido. Imaginando que ele seria uma boa lembrança, você o leva."
+msgstr "Seu exército é emboscado por uma pequena tribo de Orcs selvagens. Você os afugenta facilmente e os sobreviventes fogem em todas as direções. Um dos Orcs estava usando um elmo com espinhos polido. Imaginando que ele seria uma boa lembrança, você o leva."
 
 msgid "Spiked Shield"
 msgstr "Escudo Cravado"
