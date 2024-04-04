@@ -8248,7 +8248,7 @@ msgid "Endless Pouch of Gems"
 msgstr "Bolsa de Gema Infinita"
 
 msgid "The %{name} provides %{count} unit of gems per day."
-msgstr "%{name} fornece %{count} unidade(s) de gema por dia."
+msgstr "%{name} fornece %{count} unidade de gema por dia."
 
 msgid "A short rainstorm brings forth a rainbow...and you can see the end of it. Riding quickly, you seize the pot of gold you find there. The leprechaun who owns it, unable to stop you from taking it, offers an endless pouch of gems for the return of his gold. You accept."
 msgstr ""
