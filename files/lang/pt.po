@@ -5202,7 +5202,7 @@ msgid ""
 "\"Milord, I am sorry, there is no gold currently available. Please try again next week.\""
 msgstr ""
 "O responsável pelo moinho anuncia:\n"
-"\"Milord, lamento, não há ouro atualmente disponível. Por favor, tente novamente na próxima semana.\""
+"\"Milorde, lamento, não há ouro atualmente disponível. Por favor, tente novamente na próxima semana.\""
 
 msgid ""
 "You've found an abandoned lean-to.\n"
