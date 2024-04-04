@@ -3912,7 +3912,7 @@ namespace fheroes2
                 LoadOriginalICN( id );
                 if ( _icnVsSprite[id].size() > 99 ) {
                     // This fixes "Golden Bow" (#64) large artifact icon glowing yellow pixel
-                    if (_icnVsSprite[id][64].width() == 64 && _icnVsSprite[id][64].height() == 64) {
+                    if ( _icnVsSprite[id][64].width() == 64 && _icnVsSprite[id][64].height() == 64 ) {
                         Copy( _icnVsSprite[id][64], 35, 24, _icnVsSprite[id][64], 56, 12, 1, 1 );
                     }
 
