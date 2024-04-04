@@ -473,6 +473,6 @@ namespace Maps
 
     bool isJailObject( const ObjectGroup group, const uint32_t index )
     {
-        return ( group == Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS && getObjectInfo( group, index ).objectType == MP2::OBJ_JAIL );
+        return ( group == Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS && getObjectInfo( group, static_cast<int32_t>( index ) ).objectType == MP2::OBJ_JAIL );
     }
 }

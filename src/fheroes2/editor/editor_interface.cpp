@@ -33,6 +33,7 @@
 #include "agg_image.h"
 #include "artifact.h"
 #include "audio_manager.h"
+#include "color.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "dialog_selectitems.h"
