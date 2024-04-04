@@ -3911,6 +3911,11 @@ namespace fheroes2
             case ICN::ARTIFACT:
                 LoadOriginalICN( id );
                 if ( _icnVsSprite[id].size() > 99 ) {
+                    // This fixes "Golden Bow" (#64) large artifact icon glowing yellow pixel
+                    if (_icnVsSprite[id][64].width() == 64 && _icnVsSprite[id][64].height() == 64) {
+                        Copy( _icnVsSprite[id][64], 35, 24, _icnVsSprite[id][64], 56, 12, 1, 1 );
+                    }
+
                     // This fixes "Arm of the Martyr" (#88) and " Sphere of Negation" (#99) artifacts rendering which initially has some incorrect transparent pixels.
                     for ( const int32_t index : { 88, 99 } ) {
                         Sprite & originalImage = _icnVsSprite[id][index];
