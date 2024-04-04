@@ -5188,7 +5188,7 @@ msgid ""
 "\"Milord, I am sorry, there are no resources currently available. Please try again next week.\""
 msgstr ""
 "O responsável pelo moinho anuncia:\n"
-"\"Milord, lamento, não há recursos disponíveis no momento. Por favor, tente novamente na próxima semana.\""
+"\"Milorde, lamento, não há recursos disponíveis no momento. Por favor, tente novamente na próxima semana.\""
 
 msgid ""
 "The keeper of the mill announces:\n"
