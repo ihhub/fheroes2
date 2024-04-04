@@ -6740,7 +6740,7 @@ msgid "week|Bumblebee"
 msgstr "Abelhão"
 
 msgid "week|Locust"
-msgstr "Gafanhoto"
+msgstr "Cigarra"
 
 msgid "week|Earthworm"
 msgstr "Minhoca"
