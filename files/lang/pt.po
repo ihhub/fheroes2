@@ -8412,7 +8412,7 @@ msgid "Heart of Ice"
 msgstr "Coração de Gelo"
 
 msgid "The %{name} provides %{count} percent protection from cold, but doubles the damage taken from fire."
-msgstr "%{name} fornece %{count} porcento de proteção contra o frio, mas duplica os danos causados pelo fogo."
+msgstr "%{name} fornece %{count} por cento de proteção contra o frio, mas duplica os danos causados pelo fogo."
 
 msgid ""
 "Suddenly, a biting coldness engulfs your body. You seize up, falling from your horse. The pain subsides, but you still feel as if your chest is frozen. As you pick yourself up off of the ground, you hear hearty laughter. You turn around just in time to see a Frost Giant run off "
