@@ -2430,7 +2430,7 @@ msgid ""
 "All %{offer} of the %{monster} will join your army for the sum of %{gold} gold.\n"
 "Do you accept?"
 msgstr ""
-"Todos %{offer} dos %{monster} vão se juntar ao seu exército pela soma de %{gold} ouro.\n"
+"Todos %{offer} dos %{monster} vão se juntar ao seu exército pela soma de %{gold} de ouro.\n"
 "Você aceita?"
 
 msgid "(Rate: %{percent})"
@@ -2500,7 +2500,7 @@ msgid "Load a previously saved game."
 msgstr "Carregar um jogo salvo anteriormente."
 
 msgid "Save Game"
-msgstr "Salvar jogo"
+msgstr "Salvar Jogo"
 
 msgid "Save the current game."
 msgstr "Salvar o jogo atual."
@@ -5491,10 +5491,10 @@ msgid "You've pulled a shipwreck survivor from certain death in an unforgiving o
 msgstr "Você tirou um sobrevivente de um naufrágio de uma morte certa em um oceano imperdoável. Agradecido, ele o recompensa por seu ato de bondade, dando-lhe o artefato %{art}."
 
 msgid "A leprechaun offers you the %{art} for the small price of %{gold} Gold."
-msgstr "Um duende lhe oferece o artefato %{art} pelo pequeno preço de %{gold} Ouro."
+msgstr "Um duende lhe oferece o artefato %{art} pelo pequeno preço de %{gold} de Ouro."
 
 msgid "A leprechaun offers you the %{art} for the small price of %{gold} Gold and %{count} %{res}."
-msgstr "Um duende lhe oferece o artefato %{art} pelo pequeno preço de %{gold} Ouro e %{count} de %{res}."
+msgstr "Um duende lhe oferece o artefato %{art} pelo pequeno preço de %{gold} de Ouro e %{count} de %{res}."
 
 msgid "Do you wish to buy this artifact?"
 msgstr "Você deseja comprar este artefato?"
