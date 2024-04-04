@@ -8025,7 +8025,7 @@ msgid "Everhot Lava Rock"
 msgstr "Pedra de Lava Superquente"
 
 msgid "The %{name} causes the hero's fire spells to do %{count} percent more damage to enemy troops."
-msgstr "%{name} faz com que os feitiços de fogo do herói causem %{count} por cento a mais de dano às tropas inimigas."
+msgstr "%{name} faz com que os feitiços de fogo do herói causem %{count} por cento mais de dano às tropas inimigas."
 
 msgid "Your wanderings bring you into contact with a tribe of ape-like beings using a magical lava rock that never cools to light their fires. You take pity on them and teach them to make fire with sticks. Believing you to be a god, the apes give you their rock."
 msgstr ""
