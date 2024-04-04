@@ -5218,7 +5218,7 @@ msgid ""
 "You catch a leprechaun foolishly sleeping amidst a cluster of magic mushrooms.\n"
 "In exchange for his freedom, he guides you to a small pot filled with precious things."
 msgstr ""
-"Você captura um duende dormindo inocentemente em meio a um grupo de cogumelos mágicos.\n"
+"Você captura um duende dormindo descuidadamente em meio a um grupo de cogumelos mágicos.\n"
 "Em troca de sua liberdade, ele o guia para um pequeno pote cheio de coisas preciosas."
 
 msgid ""
