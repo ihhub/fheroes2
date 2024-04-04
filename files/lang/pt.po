@@ -6948,7 +6948,7 @@ msgid "Tree of Knowledge"
 msgstr "Árvore do Conhecimento"
 
 msgid "Witch Doctor's Hut"
-msgstr "Cabana da Bruxa"
+msgstr "Cabana do Curandeiro"
 
 msgid "Temple"
 msgstr "Templo"
