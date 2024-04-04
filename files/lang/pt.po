@@ -8399,7 +8399,7 @@ msgid "Heart of Fire"
 msgstr "Coração de Fogo"
 
 msgid "The %{name} provides %{count} percent protection from fire, but doubles the damage taken from cold."
-msgstr "%{name} fornece %{count} porcento de proteção contra o fogo, mas duplica os danos causados pelo frio."
+msgstr "%{name} fornece %{count} por cento de proteção contra o fogo, mas duplica os danos causados pelo frio."
 
 msgid ""
 "You enter a recently burned glade and come upon a Fire Elemental sitting atop a rock. It looks up, its flaming face contorted in a look of severe pain. It then tosses a glowing object at you. You put up your hands to block it, but it passes right through them and sears itself "
