@@ -29,8 +29,8 @@
 #include <map>
 #include <memory>
 #include <set>
-#include <vector>
 #include <utility>
+#include <vector>
 
 #include "color.h"
 #include "gamedefs.h"
