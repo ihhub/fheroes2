@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-04-03 04:20+0000\n"
-"PO-Revision-Date: 2024-04-02 09:25+0300\n"
+"PO-Revision-Date: 2024-04-05 20:16+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: uk\n"
@@ -3813,7 +3813,7 @@ msgstr "Героїв не можна розмістити на воді."
 
 msgid ""
 "A maximum of %{count} heroes of the same color can be placed on the map."
-msgstr ""
+msgstr "На мапі можна розмістити максимум %{count} героя однакового кольору."
 
 msgid "Failed to update player information."
 msgstr "Не вдалося оновити інформацію по гравцю."
@@ -3845,9 +3845,8 @@ msgstr "Шахти не можна розмістити на воді."
 msgid "Dwellings cannot be placed on water."
 msgstr "Житла не можна розмістити на воді."
 
-#, fuzzy
 msgid "Power-ups cannot be placed on water."
-msgstr "Це Місто не можна покращити до Замку."
+msgstr "Підсилювачі не можуть бути розміщені на воді."
 
 msgid "Adventure objects cannot be placed on water."
 msgstr "Пригодницькі об'єкти не можна розмістити на воді."
@@ -3929,9 +3928,8 @@ msgstr "Пригодницькі об'єкти, які не можна вибр�
 msgid "editorErasure|Castles"
 msgstr "Замки"
 
-#, fuzzy
 msgid "editorErasure|Adventure pickable objects"
-msgstr "Струмки"
+msgstr "Подорожні об'єкти для збору"
 
 msgid "editorErasure|Monsters"
 msgstr "Монстри"
@@ -3994,84 +3992,96 @@ msgid "No special modifiers."
 msgstr "Ніяких спеціальних модифікаторів."
 
 msgid "Toggle the erasure of %{type} objects."
-msgstr ""
+msgstr "Перемикач стирання %{type} об'єктів."
 
 msgid ""
 "Objects of this type will be deleted with the Erase tool. Left-click here to "
 "deselect this type. Press and hold this button to deselect all other object "
 "types."
 msgstr ""
+"Об'єкти цього типу буде видалено за допомогою інструмента \"Гумка\". "
+"Тицьніть тут лівою кнопкою миші, щоб зняти позначку з цього типу. Натисніть "
+"і утримуйте цю кнопку, щоб зняти виділення з усіх інших типів об'єктів."
 
 msgid ""
 "Objects of this type will NOT be deleted with the Erase tool. Left-click "
 "here to select this type. Press and hold this button to select all other "
 "object types."
 msgstr ""
+"Об'єкти цього типу НЕ буде видалено за допомогою інструмента \"Гумка\". "
+"Тицьніть тут лівою кнопкою миші, щоб вибрати цей тип. Натисніть і утримуйте "
+"цю кнопку, щоб вибрати всі інші типи об'єктів."
 
 msgid "Terrain Mode"
-msgstr ""
+msgstr "Режим “Рельєф”"
 
 msgid "Used to draw the underlying grass, dirt, water, etc. on the map."
 msgstr ""
+"Використовується для нанесення на мапу підстилаючої трави, багна, води тощо."
 
 msgid "Landscape Objects Mode"
-msgstr ""
+msgstr "Режим “Об'єкти ландшафту”"
 
 msgid ""
 "Used to place landscape objects (mountains, rocks, trees, etc.) on the map."
 msgstr ""
+"Використовується для розміщення ландшафтних об'єктів (гір, скель, дерев "
+"тощо) на мапі."
 
 msgid "Detail Mode"
-msgstr ""
+msgstr "Режим “Деталізація”"
 
 msgid "Used for special editing of monsters, heroes and towns."
 msgstr ""
+"Використовується для спеціального редагування монстрів, героїв та міст."
 
 msgid "Adventure Objects Mode"
-msgstr ""
+msgstr "Режим “Пригодницькі об'єкти”"
 
 msgid ""
 "Used to place adventure objects (artifacts, dwellings, mines, treasures, "
 "etc.) on the map."
 msgstr ""
+"Використовується для розміщення на мапі пригодницьких об'єктів (артефактів, "
+"жител, шахт, скарбів тощо)."
 
-#, fuzzy
 msgid "Kingdom Objects Mode"
-msgstr "Об'єкти Засніжених Полонин"
+msgstr "Режим \"Об'єкти королівства”"
 
 msgid "Used to place kingdom objects (towns, castles and heroes) on the map."
 msgstr ""
+"Використовується для розміщення об'єктів королівства (міст, замків і героїв) "
+"на мапі."
 
-#, fuzzy
 msgid "Monsters Mode"
-msgstr "Монстри"
+msgstr "Режим “Монстри”"
 
 msgid "Used to place monsters on the map."
-msgstr ""
+msgstr "Використовується для розміщення монстрів на мапі."
 
 msgid "Allows you to draw streams by clicking and dragging."
-msgstr ""
+msgstr "Дозволяє малювати потоки за допомогою тицяння та перетягування."
 
 msgid "Stream Mode"
-msgstr ""
+msgstr "Режим “Струмки”"
 
 msgid "Allows you to draw roads by clicking and dragging."
-msgstr ""
+msgstr "Дозволяє малювати дороги за допомогою клацання та перетягування."
 
 msgid "Road Mode"
-msgstr ""
+msgstr "Режим “Дорога”"
 
 msgid "Erase Mode"
-msgstr ""
+msgstr "Режим “Стирання”"
 
 msgid "Used to erase objects from the map."
-msgstr ""
+msgstr "Використовується для стирання об'єктів з мапи."
 
 msgid "Change between zoom and normal view."
-msgstr ""
+msgstr "Перемикання між масштабуванням і звичайним видом."
 
 msgid "Magnify"
-msgstr ""
+msgstr "Збільшити"
 
 msgid "Undo"
 msgstr "Скасувати"
@@ -4080,54 +4090,60 @@ msgid "Undo your last action."
 msgstr "Скасуйте останню дію."
 
 msgid "Create a new map either from scratch or using the random map generator."
-msgstr ""
+msgstr "Створіть нову мапу з нуля або за допомогою генератора випадкових мап."
 
 msgid "Edit map title, description, and other general information."
-msgstr ""
+msgstr "Редагуйте назву мапи, опис та іншу загальну інформацію."
 
 msgid "Specifications"
 msgstr "Налаштування"
 
 msgid "File Options"
-msgstr ""
+msgstr "Параметри файлу"
 
 msgid ""
 "Open the file options menu, where you can save or load maps, or quit out of "
 "the editor."
 msgstr ""
+"Відкрийте меню параметрів файлу, де ви можете зберегти або завантажити мапу, "
+"або вийти з редактора."
 
 msgid "View the editor system options, which let you customize the editor."
 msgstr ""
+"Перегляд системних параметрів редактора, за допомогою яких ви можете "
+"налаштувати редактор."
 
 msgid "Create a map that is %{size} squares wide and %{size} squares high."
 msgstr ""
+"Створити мапу розміром %{size} квадратів у ширину і %{size} квадратів у "
+"висоту."
 
 msgid "Cancel back to the New Map menu."
-msgstr ""
+msgstr "Повернутися до меню Нова Мапа."
 
 msgid "Cancel back to the main menu."
-msgstr ""
+msgstr "Повернутися до головного меню."
 
 msgid "From Scratch"
-msgstr ""
+msgstr "З чистого аркуша"
 
 msgid "Start from scratch with a blank map."
-msgstr ""
+msgstr "Почати з нуля на чистій мапі."
 
 msgid "Create a randomly generated map."
-msgstr ""
+msgstr "Створити випадково згенеровану мапу."
 
 msgid "Random"
-msgstr "Випадкове місто"
+msgstr "Випадково"
 
 msgid "Cancel back to the Map Editor main menu."
-msgstr ""
+msgstr "Повернутися до головного меню Редактора мап."
 
 msgid "No maps available!"
-msgstr ""
+msgstr "Нема доступних мап!"
 
 msgid "Warning"
-msgstr ""
+msgstr "Попередження"
 
 msgid "Animation"
 msgstr "Анімація"
@@ -4136,10 +4152,10 @@ msgid "Passability"
 msgstr "Прохідність"
 
 msgid "Toggle animation of the objects."
-msgstr ""
+msgstr "Анімації об'єктів умівк/вимк."
 
 msgid "Toggle display of objects' passability."
-msgstr ""
+msgstr "Відображення прохідності об'єктів увімк/вимк."
 
 msgid "difficulty|Easy"
 msgstr "Проста"
@@ -4157,7 +4173,7 @@ msgid "difficulty|Impossible"
 msgstr "Неможлива"
 
 msgid "and more..."
-msgstr ""
+msgstr "і не тільки..."
 
 msgid "Easy"
 msgstr "Легко"
@@ -4427,68 +4443,67 @@ msgid "Standard"
 msgstr "Стандарт"
 
 msgid "View High Scores for Standard Maps."
-msgstr ""
+msgstr "Переглянути рекорди у стандартних мап."
 
 msgid "Campaign"
 msgstr "Кампанія"
 
 msgid "View High Scores for Campaigns."
-msgstr ""
+msgstr "Переглянути рекорди у кампаніях."
 
 msgid "hotkey|default okay event"
-msgstr ""
+msgstr "Підтвердити подію"
 
 msgid "hotkey|default cancel event"
-msgstr ""
+msgstr "Скасувати подію"
 
 msgid "hotkey|default left"
-msgstr ""
+msgstr "ліворуч"
 
 msgid "hotkey|default right"
-msgstr ""
+msgstr "праворуч"
 
 msgid "hotkey|default up"
-msgstr ""
+msgstr "вгору"
 
 msgid "hotkey|default down"
-msgstr ""
+msgstr "вниз"
 
 msgid "hotkey|toggle fullscreen"
-msgstr ""
+msgstr "Повноекранний режим увімк/вимк"
 
 msgid "hotkey|toggle text support mode"
-msgstr ""
+msgstr "Текстовий опис увімк/вимк"
 
 msgid "hotkey|new game"
-msgstr ""
+msgstr "нова гра"
 
 msgid "hotkey|load game"
-msgstr ""
+msgstr "завантажити гру"
 
-#, fuzzy
 msgid "hotkey|high scores"
-msgstr "верф"
+msgstr "рекорди"
 
 msgid "hotkey|credits"
-msgstr ""
+msgstr "титри"
 
 msgid "hotkey|standard game"
-msgstr "звичайна Гра"
+msgstr "звичайна гра"
 
 msgid "hotkey|campaign game"
-msgstr ""
+msgstr "кампанія"
 
 msgid "hotkey|multi-player game"
-msgstr ""
+msgstr "багатокористувацька гра"
 
 msgid "hotkey|settings"
-msgstr ""
+msgstr "налаштування"
 
 msgid "hotkey|quit"
-msgstr ""
+msgstr "вийти"
 
 msgid "hotkey|select map"
-msgstr ""
+msgstr "вибрати мапу"
 
 msgid "hotkey|select small map size"
 msgstr ""
@@ -4777,10 +4792,10 @@ msgstr ""
 "наступний хід."
 
 msgid "Default Actions"
-msgstr ""
+msgstr "Дії по замовчуванню"
 
 msgid "Global Actions"
-msgstr ""
+msgstr "Глобальні дії"
 
 msgid "Main Menu"
 msgstr "Головне меню"
@@ -4795,7 +4810,7 @@ msgid "Town Screen"
 msgstr "Вікно міста"
 
 msgid "Army Actions"
-msgstr ""
+msgstr "Дії армії"
 
 msgid "Editor"
 msgstr "Редактор"
@@ -4804,61 +4819,67 @@ msgid "The save file is corrupted."
 msgstr "Файл збереження пошкоджений."
 
 msgid "Unsupported save format: "
-msgstr ""
+msgstr "Непідтримуваний формат збереження:"
 
 msgid "Current game version: "
-msgstr ""
+msgstr "Поточна версія гри"
 
 msgid "Last supported version: "
-msgstr ""
+msgstr "Остання підтримувана версія:"
 
 msgid "This file contains a save with an invalid game type."
-msgstr ""
+msgstr "Цей файл містить збереження з хибим типом гри."
 
 msgid ""
 "This save file requires \"The Price of Loyalty\" game assets, but they have "
 "not been provided to the engine."
 msgstr ""
+"Цей файл збереження вимагає ігрових ресурсів \"Ціна вірності\", але вони не "
+"були надані рушію."
 
 msgid "This saved game is localized to '"
-msgstr ""
+msgstr "Ця збережена гра знаходиться в '"
 
 msgid "' language, but the current language of the game is '"
-msgstr ""
+msgstr "' мовою, але поточна мова гри - це '"
 
 msgid "Hot Seat"
-msgstr ""
+msgstr "Гаряче сидіння"
 
 msgid ""
 "Play a Hot Seat game, where 2 to 4 players play around the same computer, "
 "switching into the 'Hot Seat' when it is their turn."
 msgstr ""
+"Зіграйте в гру \"Гаряче місце\", де від 2 до 4 гравців грають за одним "
+"комп'ютером, пересідаючи на \"гаряче місце\", коли настає їхня черга."
 
 msgid "A single player game playing out a single map."
-msgstr ""
+msgstr "Гра для одного гравця на одній карті."
 
 msgid "Standard Game"
 msgstr "Стандартна Гра"
 
 msgid "A single player game playing through a series of maps."
-msgstr ""
+msgstr "Гра для одного гравця, що проходить через серію карт."
 
 msgid "Campaign Game"
-msgstr ""
+msgstr "Кампанія"
 
 msgid "Multi-Player Game"
-msgstr ""
+msgstr "Багатокористувацька гра"
 
 msgid ""
 "A multi-player game, with several human players completing against each "
 "other on a single map."
 msgstr ""
+"Багатокористувацька гра, в якій кілька гравців змагаються один проти одного "
+"на одній карті."
 
 msgid "fheroes2 Resurrection Team presents"
 msgstr ""
 
 msgid "Greetings!"
-msgstr ""
+msgstr "Вітання!"
 
 msgid "Welcome to Heroes of Might and Magic II powered by fheroes2 engine!"
 msgstr "Ласкаво просимо до Героїв Меча та Магії 2 на основі рушія fheroes2!"
@@ -4871,15 +4892,17 @@ msgstr ""
 "Перед початком гри, будь ласка, виберіть роздільну здатність екрану."
 
 msgid "Please Remember"
-msgstr ""
+msgstr "Будь ласка, пам'ятайте"
 
 msgid ""
 "You can always change the language, resolution and settings of the game by "
 "clicking on the "
 msgstr ""
+"Ви завжди можете змінити мову, роздільну здатність та налаштування гри, "
+"натиснувши на кнопку "
 
 msgid "door"
-msgstr ""
+msgstr "двері"
 
 msgid " on the left side of the Main Menu, or with the "
 msgstr ""
