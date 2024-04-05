@@ -9618,7 +9618,7 @@ msgstr ""
 "ouro."
 
 msgid "Endless Purse of Gold"
-msgstr "Bornal de Ouro Infinita"
+msgstr "Bornal de Ouro Infinito"
 
 msgid ""
 "In your travels, you find a leather purse filled with gold that once "
