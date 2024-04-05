@@ -30,6 +30,7 @@
 #include <memory>
 #include <set>
 #include <vector>
+#include <utility>
 
 #include "color.h"
 #include "gamedefs.h"
