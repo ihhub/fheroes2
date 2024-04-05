@@ -28,7 +28,6 @@
 #include <vector>
 
 #include "map_object_info.h"
-#include "race.h"
 #include "resource.h"
 
 class StreamBase;
@@ -134,8 +133,8 @@ namespace Maps::Map_Format
         // The amount of magic points (mana). Negative value means it is not set.
         int16_t magicPoints{ -1 };
 
-        // Jailed hero race, used only for jailed heroes. Race for normal heroes is stored in the ObjectInfo metadata.
-        uint8_t jailedHeroRace{ Race::RAND };
+        // Hero race.
+        uint8_t race{ 0 };
 
         bool operator==( const HeroMetadata & anotherHeroMetadata ) const
         {
@@ -143,11 +142,11 @@ namespace Maps::Map_Format
                    && patrolRadius == anotherHeroMetadata.patrolRadius && customLevel == anotherHeroMetadata.customLevel
                    && customExperience == anotherHeroMetadata.customExperience && customAttack == anotherHeroMetadata.customAttack
                    && customDefense == anotherHeroMetadata.customDefense && customKnowledge == anotherHeroMetadata.customKnowledge
-                   && customSpellPower == anotherHeroMetadata.customSpellPower && magicPoints == anotherHeroMetadata.magicPoints
-                   && jailedHeroRace == anotherHeroMetadata.jailedHeroRace && armyMonsterType == anotherHeroMetadata.armyMonsterType
-                   && armyMonsterCount == anotherHeroMetadata.armyMonsterCount && artifact == anotherHeroMetadata.artifact
-                   && artifactMetadata == anotherHeroMetadata.artifactMetadata && availableSpells == anotherHeroMetadata.availableSpells
-                   && secondarySkill == anotherHeroMetadata.secondarySkill && secondarySkillLevel == anotherHeroMetadata.secondarySkillLevel;
+                   && customSpellPower == anotherHeroMetadata.customSpellPower && magicPoints == anotherHeroMetadata.magicPoints && race == anotherHeroMetadata.race
+                   && armyMonsterType == anotherHeroMetadata.armyMonsterType && armyMonsterCount == anotherHeroMetadata.armyMonsterCount
+                   && artifact == anotherHeroMetadata.artifact && artifactMetadata == anotherHeroMetadata.artifactMetadata
+                   && availableSpells == anotherHeroMetadata.availableSpells && secondarySkill == anotherHeroMetadata.secondarySkill
+                   && secondarySkillLevel == anotherHeroMetadata.secondarySkillLevel;
         }
 
         bool operator!=( const HeroMetadata & anotherHeroMetadata ) const

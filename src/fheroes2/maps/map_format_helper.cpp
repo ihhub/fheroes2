@@ -196,13 +196,23 @@ namespace Maps
         addObjectToTile( map.tiles[tileId], group, index, uid );
 
         // Towns and heroes have extra metadata.
-        if ( group == ObjectGroup::KINGDOM_HEROES || isJailObject( group, index ) ) {
-            assert( map.heroMetadata.find( uid ) == map.heroMetadata.end() );
-            map.heroMetadata.try_emplace( uid );
+        if ( group == ObjectGroup::KINGDOM_HEROES ) {
+            auto [heroMetadata, isMetadataEmplaced] = map.heroMetadata.try_emplace( uid );
+            assert( isMetadataEmplaced );
+
+            // Set race according the object metadata.
+            heroMetadata->second.race = static_cast<uint8_t>( 1 << getObjectsByGroup( group )[index].metadata[1] );
         }
         else if ( group == ObjectGroup::KINGDOM_TOWNS ) {
             assert( map.castleMetadata.find( uid ) == map.castleMetadata.end() );
             map.castleMetadata.try_emplace( uid );
+        }
+        else if ( isJailObject( group, index ) ) {
+            auto [heroMetadata, isMetadataEmplaced] = map.heroMetadata.try_emplace( uid );
+            assert( isMetadataEmplaced );
+
+            // Set Random race for the jailed hero by default.
+            heroMetadata->second.race = Race::RAND;
         }
     }
 

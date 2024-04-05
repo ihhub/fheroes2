@@ -818,11 +818,10 @@ namespace Interface
                     assert( _mapFormat.heroMetadata.find( object.id ) != _mapFormat.heroMetadata.end() );
 
                     const int color = ( objectType == MP2::OBJ_JAIL ) ? Color::NONE : ( 1 << objectInfo.metadata[0] );
-                    const int race = ( objectType == MP2::OBJ_JAIL ) ? _mapFormat.heroMetadata[object.id].jailedHeroRace : ( 1 << objectInfo.metadata[1] );
 
                     // Make a temporary hero to edit his details.
                     Heroes hero;
-                    hero.applyHeroMetadata( _mapFormat.heroMetadata[object.id], race, objectType == MP2::OBJ_JAIL, true );
+                    hero.applyHeroMetadata( _mapFormat.heroMetadata[object.id], objectType == MP2::OBJ_JAIL, true );
                     hero.SetColor( color );
 
                     fheroes2::ActionCreator action( _historyManager, _mapFormat );

@@ -608,7 +608,7 @@ void Heroes::LoadFromMP2( const int32_t mapIndex, const int colorType, const int
     DEBUG_LOG( DBG_GAME, DBG_INFO, name << ", color: " << Color::String( GetColor() ) << ", race: " << Race::String( _race ) )
 }
 
-void Heroes::applyHeroMetadata( const Maps::Map_Format::HeroMetadata & heroMetadata, const int raceType, const bool isInJail, const bool isEditor )
+void Heroes::applyHeroMetadata( const Maps::Map_Format::HeroMetadata & heroMetadata, const bool isInJail, const bool isEditor )
 {
     modes = 0;
 
@@ -616,10 +616,10 @@ void Heroes::applyHeroMetadata( const Maps::Map_Format::HeroMetadata & heroMetad
         SetModes( JAIL );
     }
 
-    if ( _race != raceType ) {
+    if ( _race != heroMetadata.race ) {
         SetModes( CUSTOM );
 
-        _race = raceType;
+        _race = heroMetadata.race;
     }
 
     if ( !isEditor ) {
@@ -845,9 +845,8 @@ Maps::Map_Format::HeroMetadata Heroes::getHeroMetadata() const
     // Hero's spell points.
     heroMetadata.magicPoints = ( magic_point == UINT32_MAX ) ? static_cast<int16_t>( -1 ) : static_cast<int16_t>( magic_point );
 
-    if ( Modes( JAIL ) ) {
-        heroMetadata.jailedHeroRace = static_cast<uint8_t>( _race );
-    }
+    // Hero's race.
+    heroMetadata.race = static_cast<uint8_t>( _race );
 
     return heroMetadata;
 }

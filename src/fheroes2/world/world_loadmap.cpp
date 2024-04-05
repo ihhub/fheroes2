@@ -714,7 +714,10 @@ bool World::loadResurrectionMap( const std::string & filename )
                 const auto & metadata = heroObjects[object.index].metadata;
 
                 const int color = ( 1 << metadata[0] );
-                int race = ( 1 << metadata[1] );
+
+                // Check the race correctness.
+                assert( map.heroMetadata.find( object.id ) != map.heroMetadata.end() );
+                assert( map.heroMetadata[object.id].race == ( 1 << metadata[1] ) );
 
                 // Heroes can not be neutral.
                 assert( color != Color::NONE );
@@ -722,21 +725,19 @@ bool World::loadResurrectionMap( const std::string & filename )
                 const Kingdom & kingdom = GetKingdom( color );
 
                 // Set race for random hero according to the kingdom's race.
-                if ( race == Race::RAND ) {
-                    race = kingdom.GetRace();
+                if ( map.heroMetadata[object.id].race == Race::RAND ) {
+                    map.heroMetadata[object.id].race = static_cast<uint8_t>( kingdom.GetRace() );
                 }
 
                 // Check if the kingdom has exceeded the limit on hired heroes
                 if ( kingdom.AllowRecruitHero( false ) ) {
-                    Heroes * hero = GetHeroForHire( race );
+                    Heroes * hero = GetHeroForHire( map.heroMetadata[object.id].race );
                     if ( hero != nullptr ) {
                         hero->SetCenter( { static_cast<int32_t>( tileId ) % width, static_cast<int32_t>( tileId ) / width } );
 
                         hero->SetColor( color );
 
-                        assert( map.heroMetadata.find( object.id ) != map.heroMetadata.end() );
-
-                        hero->applyHeroMetadata( map.heroMetadata[object.id], race, false, false );
+                        hero->applyHeroMetadata( map.heroMetadata[object.id], false, false );
                     }
                 }
             }
@@ -744,15 +745,18 @@ bool World::loadResurrectionMap( const std::string & filename )
                 assert( map.heroMetadata.find( object.id ) != map.heroMetadata.end() );
 
                 const int color = Color::NONE;
-                const int race = ( map.heroMetadata[object.id].jailedHeroRace == Race::RAND ) ? Race::Rand() : map.heroMetadata[object.id].jailedHeroRace;
 
-                Heroes * hero = GetHeroForHire( race );
+                if ( map.heroMetadata[object.id].race == Race::RAND ) {
+                    map.heroMetadata[object.id].race = static_cast<uint8_t>( Race::Rand() );
+                }
+
+                Heroes * hero = GetHeroForHire( map.heroMetadata[object.id].race );
                 if ( hero != nullptr ) {
                     hero->SetCenter( { static_cast<int32_t>( tileId ) % width, static_cast<int32_t>( tileId ) / width } );
 
                     hero->SetColor( color );
 
-                    hero->applyHeroMetadata( map.heroMetadata[object.id], race, true, false );
+                    hero->applyHeroMetadata( map.heroMetadata[object.id], true, false );
                 }
             }
         }

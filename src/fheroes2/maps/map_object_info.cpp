@@ -4810,16 +4810,16 @@ namespace Maps
         return objectData[static_cast<size_t>( group )];
     }
 
-    const Maps::ObjectInfo & getObjectInfo( const Maps::ObjectGroup group, const int32_t objectType )
+    const ObjectInfo & getObjectInfo( const ObjectGroup group, const int32_t objectIndex )
     {
-        const auto & objectInfo = Maps::getObjectsByGroup( group );
-        if ( objectType < 0 || objectType >= static_cast<int32_t>( objectInfo.size() ) ) {
+        const auto & objectInfo = getObjectsByGroup( group );
+        if ( objectIndex < 0 || objectIndex >= static_cast<int32_t>( objectInfo.size() ) ) {
             assert( 0 );
-            static const Maps::ObjectInfo emptyObjectInfo{ MP2::OBJ_NONE };
+            static const ObjectInfo emptyObjectInfo{ MP2::OBJ_NONE };
             return emptyObjectInfo;
         }
 
-        return objectInfo[objectType];
+        return objectInfo[objectIndex];
     }
 
     MP2::MapObjectType getObjectTypeByIcn( const MP2::ObjectIcnType icnType, const uint32_t icnIndex )
