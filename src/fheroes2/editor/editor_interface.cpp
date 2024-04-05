@@ -860,7 +860,7 @@ namespace Interface
 
                     fheroes2::ActionCreator action( _historyManager, _mapFormat );
                     if ( Dialog::SelectCount( str, 0, 500000, monsterCount ) ) {
-                        _mapFormat.standardMetadata[object.id] = { monsterCount, Monster::JOIN_CONDITION_UNSET, 0 };
+                        _mapFormat.standardMetadata[object.id] = { static_cast<int32_t>( monsterCount ), Monster::JOIN_CONDITION_UNSET, 0 };
                         action.commit();
                     }
                 }

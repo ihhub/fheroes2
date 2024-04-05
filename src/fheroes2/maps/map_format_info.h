@@ -54,7 +54,7 @@ namespace Maps::Map_Format
     // This structure should be used for any object that require simple data to be saved into map.
     struct StandardObjectMetadata
     {
-        std::array<uint32_t, 3> metadata{ 0 };
+        std::array<int32_t, 3> metadata{ 0 };
     };
 
     struct CastleMetadata
