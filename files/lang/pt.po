@@ -3251,7 +3251,7 @@ msgid "(not visited)"
 msgstr "(Não visitado)"
 
 msgid "%{color} Barrier"
-msgstr "Barreira Mágica %{color} "
+msgstr "Barreira Mágica %{color}"
 
 msgid "(tent visited)"
 msgstr "(tenda visitada)"
