@@ -195,7 +195,7 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
 
     fheroes2::Point dst_pt( dialogRoi.x + 156, dialogRoi.y + 31 );
 
-    PrimarySkillsBar primarySkillsBar( this, false, true, true );
+    PrimarySkillsBar primarySkillsBar( this, false, isEditor, isEditor );
     primarySkillsBar.setTableSize( { 4, 1 } );
     primarySkillsBar.setInBetweenItemsOffset( { 6, 0 } );
     primarySkillsBar.setRenderingOffset( dst_pt );
