@@ -847,7 +847,7 @@ namespace Interface
                         action.commit();
                     }
                 }
-                else if ( objectType == MP2::OBJ_MONSTER ) {
+                else if ( object.group == Maps::ObjectGroup::MONSTERS ) {
                     uint32_t monsterCount = 0;
 
                     auto monsterMetadata = _mapFormat.standardMetadata.find( object.id );
@@ -860,7 +860,7 @@ namespace Interface
 
                     fheroes2::ActionCreator action( _historyManager, _mapFormat );
                     if ( Dialog::SelectCount( str, 0, 500000, monsterCount ) ) {
-                        _mapFormat.standardMetadata[object.id] = { static_cast<int32_t>( monsterCount ), Monster::JOIN_CONDITION_UNSET, 0 };
+                        _mapFormat.standardMetadata[object.id] = { static_cast<int32_t>( monsterCount ), 0, Monster::JOIN_CONDITION_UNSET };
                         action.commit();
                     }
                 }

@@ -738,6 +738,14 @@ bool World::loadResurrectionMap( const std::string & filename )
                     }
                 }
             }
+            else if ( object.group == Maps::ObjectGroup::MONSTERS ) {
+                const std::array<int32_t, 3> & source = map.standardMetadata[object.id].metadata;
+                std::array<uint32_t, 3> & tileData = vec_tiles[static_cast<int32_t>( tileId )].metadata();
+
+                for ( size_t idx = 0; idx < source.size(); idx++ ) {
+                    tileData[idx] = static_cast<uint32_t>( source[idx] );
+                }
+            }
         }
     }
 
