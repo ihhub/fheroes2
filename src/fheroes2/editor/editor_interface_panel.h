@@ -60,6 +60,11 @@ namespace Interface
             return _selectedInstrument == Instrument::TERRAIN;
         }
 
+        bool isDetailEdit() const
+        {
+            return _selectedInstrument == Instrument::DETAIL;
+        }
+
         bool isRoadDraw() const
         {
             return _selectedInstrument == Instrument::ROAD;

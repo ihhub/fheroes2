@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-27 01:17+0000\n"
+"POT-Creation-Date: 2024-04-03 04:20+0000\n"
 "PO-Revision-Date: 2024-03-05 13:55+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
@@ -233,6 +233,15 @@ msgstr ""
 "D"
 
 msgid ""
+"P\n"
+"A\n"
+"T\n"
+"R\n"
+"O\n"
+"L"
+msgstr ""
+
+msgid ""
 "C\n"
 "A\n"
 "M\n"
@@ -381,6 +390,12 @@ msgstr "Tropper af %{count} tilknytninger -%{penalty}"
 
 msgid "Some undead in army -1"
 msgstr "Der er udøde i hæren -1"
+
+#, fuzzy
+msgid ""
+"Default\n"
+"troop"
+msgstr "Standardhandlinger"
 
 msgid "View %{name}"
 msgstr "Vis %{name}"
@@ -997,18 +1012,6 @@ msgstr "Nulstil til standardindstillinger"
 
 msgid "Please select another hero."
 msgstr "Vælg venligst en anden helt."
-
-msgid "Set Attack Skill"
-msgstr "Indstil angrebsevne"
-
-msgid "Set Defense Skill"
-msgstr "Indstil forsvarsevne"
-
-msgid "Set Power Skill"
-msgstr "Indstil magisk evne"
-
-msgid "Set Knowledge Skill"
-msgstr "Indstil kundskabsevne"
 
 msgid "%{race1} %{name1} vs %{race2} %{name2}"
 msgstr "%{race1} %{name1} vs %{race2} %{name2}"
@@ -5660,8 +5663,26 @@ msgstr ""
 "Spillere med alvorligt handicap starter med færre resurser og tjener 30% "
 "færre resurser per tur."
 
+msgid ""
+"Default\n"
+"value"
+msgstr ""
+
+#, fuzzy
+msgid "Set %{skill} Skill"
+msgstr "Indstil angrebsevne"
+
+msgid "Set %{skill} base value. Right-click to reset all skills to default."
+msgstr ""
+
 msgid "View %{skill} Info"
 msgstr "Vis info om %{skill}"
+
+#, fuzzy
+msgid ""
+"Default\n"
+"skill"
+msgstr "Forsvar"
 
 msgid "Keyboard|123"
 msgstr "123"
@@ -7417,6 +7438,50 @@ msgstr ""
 msgid "%{name} the %{race} (Level %{level})"
 msgstr "%{race}en %{name} (Level %{level})"
 
+#, fuzzy
+msgid "Random hero (Level %{level})"
+msgstr "%{name} (Level %{level})"
+
+#, fuzzy
+msgid "Random %{race} hero (Level %{level})"
+msgstr "%{race}en %{name} (Level %{level})"
+
+msgid "Are you sure you want to dismiss this Hero?"
+msgstr "Er du sikker på, du vil bortvise denne helt?"
+
+msgid "Set custom Experience value. Current value is default."
+msgstr ""
+
+msgid "Change Experience value. Right-click to reset to default value."
+msgstr ""
+
+#, fuzzy
+msgid "Set Experience value"
+msgstr "Erfaringspoint"
+
+msgid "View Experience Info"
+msgstr "Vis erfaringsinfo"
+
+msgid "Set custom Spell Points value. Current value is default."
+msgstr ""
+
+msgid "Change Spell Points value. Right-click to reset to default value."
+msgstr ""
+
+#, fuzzy
+msgid "Set Spell Points value"
+msgstr "Mana"
+
+msgid "View Spell Points Info"
+msgstr "Vis info om mana"
+
+#, fuzzy
+msgid "Enter hero's name"
+msgstr "Mist helten '%{name}'."
+
+msgid "Set patrol radius in tiles"
+msgstr ""
+
 msgid ""
 "'Spread' combat formation spreads the hero's units from the top to the "
 "bottom of the battlefield, with at least one empty space between each unit."
@@ -7430,21 +7495,6 @@ msgid ""
 msgstr ""
 "'Gruppe'-kampformation samler heltens hær i midten af deres side af "
 "slagmarken."
-
-msgid "Are you sure you want to dismiss this Hero?"
-msgstr "Er du sikker på, du vil bortvise denne helt?"
-
-msgid "View Experience Info"
-msgstr "Vis erfaringsinfo"
-
-msgid "View Spell Points Info"
-msgstr "Vis info om mana"
-
-msgid "Set army combat formation to 'Spread'"
-msgstr "Sæt hærens kampformation til 'spredt'"
-
-msgid "Set army combat formation to 'Grouped'"
-msgstr "Sæt hærens kampformation til 'grupperet'"
 
 msgid "Exit Hero Screen"
 msgstr "Forlad helteskærm"
@@ -7463,6 +7513,34 @@ msgstr "Vis forrige helt"
 
 msgid "Show next hero"
 msgstr "Vis næste helt"
+
+msgid "Set army combat formation to 'Spread'"
+msgstr "Sæt hærens kampformation til 'spredt'"
+
+msgid "Set army combat formation to 'Grouped'"
+msgstr "Sæt hærens kampformation til 'grupperet'"
+
+msgid "Set hero's Artifacts. Right-click to reset Artifact."
+msgstr ""
+
+msgid "Set hero's Secondary Skills. Right-click to reset skill."
+msgstr ""
+
+msgid "Set hero's Army. Right-click to reset unit."
+msgstr ""
+
+msgid "Set hero's portrait. Right-click to reset to default."
+msgstr ""
+
+msgid "Click to change hero's name. Right-click to reset to default."
+msgstr ""
+
+msgid "Hero is in patrol mode in %{tiles} tiles radius. Click to disable it."
+msgstr ""
+
+#, fuzzy
+msgid "Click to enable hero's patrol mode."
+msgstr "Klik for at vælge denne farve."
 
 msgid "Blood Morale"
 msgstr "Blodsmoral"
@@ -11376,6 +11454,15 @@ msgstr ""
 "Check den nyeste version af spillet på\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Set Defense Skill"
+#~ msgstr "Indstil forsvarsevne"
+
+#~ msgid "Set Power Skill"
+#~ msgstr "Indstil magisk evne"
+
+#~ msgid "Set Knowledge Skill"
+#~ msgstr "Indstil kundskabsevne"
 
 #~ msgid "Multiple"
 #~ msgstr "Mange"

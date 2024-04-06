@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-27 01:17+0000\n"
+"POT-Creation-Date: 2024-04-03 04:20+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -240,6 +240,15 @@ msgstr ""
 "Д"
 
 msgid ""
+"P\n"
+"A\n"
+"T\n"
+"R\n"
+"O\n"
+"L"
+msgstr ""
+
+msgid ""
 "C\n"
 "A\n"
 "M\n"
@@ -394,6 +403,12 @@ msgstr "Войски от %{count} подравнявания -%{penalty}"
 #, fuzzy
 msgid "Some undead in army -1"
 msgstr "Някои немъртви в група -1"
+
+#, fuzzy
+msgid ""
+"Default\n"
+"troop"
+msgstr "действие по подразбиране"
 
 msgid "View %{name}"
 msgstr "Виж %{name}"
@@ -1013,18 +1028,6 @@ msgstr ""
 
 msgid "Please select another hero."
 msgstr "Моля, избери друг герой."
-
-msgid "Set Attack Skill"
-msgstr "Задайте умение за нападение"
-
-msgid "Set Defense Skill"
-msgstr "Задайте умение за защита"
-
-msgid "Set Power Skill"
-msgstr "Задайте умение за сила"
-
-msgid "Set Knowledge Skill"
-msgstr "Задайте умение за знание"
 
 #, fuzzy
 msgid "%{race1} %{name1} vs %{race2} %{name2}"
@@ -5732,8 +5735,26 @@ msgstr ""
 "Играчите с тежки увреждания започват с по-малко ресурси и печелят с 30% по-"
 "малко ресурси през своя ход."
 
+msgid ""
+"Default\n"
+"value"
+msgstr ""
+
+#, fuzzy
+msgid "Set %{skill} Skill"
+msgstr "Задайте умение за нападение"
+
+msgid "Set %{skill} base value. Right-click to reset all skills to default."
+msgstr ""
+
 msgid "View %{skill} Info"
 msgstr "Виж информация за %{skill}"
+
+#, fuzzy
+msgid ""
+"Default\n"
+"skill"
+msgstr "Защита"
 
 msgid "Keyboard|123"
 msgstr ""
@@ -7468,6 +7489,50 @@ msgid "%{name} the %{race} (Level %{level})"
 msgstr "%{name} е %{race} (Ниво %{level})"
 
 #, fuzzy
+msgid "Random hero (Level %{level})"
+msgstr "%{name} (Ниво %{level})"
+
+#, fuzzy
+msgid "Random %{race} hero (Level %{level})"
+msgstr "%{name} е %{race} (Ниво %{level})"
+
+msgid "Are you sure you want to dismiss this Hero?"
+msgstr "Сигурен ли си, че искаш да отпратиш този герой?"
+
+msgid "Set custom Experience value. Current value is default."
+msgstr ""
+
+msgid "Change Experience value. Right-click to reset to default value."
+msgstr ""
+
+#, fuzzy
+msgid "Set Experience value"
+msgstr "Опит"
+
+msgid "View Experience Info"
+msgstr "Виж информация за опит"
+
+msgid "Set custom Spell Points value. Current value is default."
+msgstr ""
+
+msgid "Change Spell Points value. Right-click to reset to default value."
+msgstr ""
+
+#, fuzzy
+msgid "Set Spell Points value"
+msgstr "Магия"
+
+msgid "View Spell Points Info"
+msgstr "Виж информация за магическите точките"
+
+#, fuzzy
+msgid "Enter hero's name"
+msgstr "Губиш героя: %{name}."
+
+msgid "Set patrol radius in tiles"
+msgstr ""
+
+#, fuzzy
 msgid ""
 "'Spread' combat formation spreads the hero's units from the top to the "
 "bottom of the battlefield, with at least one empty space between each unit."
@@ -7482,21 +7547,6 @@ msgid ""
 msgstr ""
 "\"Групираната\" бойна формация обединява армията ти в центъра от твоята "
 "страна на бойното поле."
-
-msgid "Are you sure you want to dismiss this Hero?"
-msgstr "Сигурен ли си, че искаш да отпратиш този герой?"
-
-msgid "View Experience Info"
-msgstr "Виж информация за опит"
-
-msgid "View Spell Points Info"
-msgstr "Виж информация за магическите точките"
-
-msgid "Set army combat formation to 'Spread'"
-msgstr "Задай армейска бойна формация \"Разпръскване\""
-
-msgid "Set army combat formation to 'Grouped'"
-msgstr "Задай армейска бойна формация \"Групирана\""
 
 msgid "Exit Hero Screen"
 msgstr "Изход от екрана на героя"
@@ -7515,6 +7565,34 @@ msgstr "Покажи предишния герой"
 
 msgid "Show next hero"
 msgstr "Покажи следващия герой"
+
+msgid "Set army combat formation to 'Spread'"
+msgstr "Задай армейска бойна формация \"Разпръскване\""
+
+msgid "Set army combat formation to 'Grouped'"
+msgstr "Задай армейска бойна формация \"Групирана\""
+
+msgid "Set hero's Artifacts. Right-click to reset Artifact."
+msgstr ""
+
+msgid "Set hero's Secondary Skills. Right-click to reset skill."
+msgstr ""
+
+msgid "Set hero's Army. Right-click to reset unit."
+msgstr ""
+
+msgid "Set hero's portrait. Right-click to reset to default."
+msgstr ""
+
+msgid "Click to change hero's name. Right-click to reset to default."
+msgstr ""
+
+msgid "Hero is in patrol mode in %{tiles} tiles radius. Click to disable it."
+msgstr ""
+
+#, fuzzy
+msgid "Click to enable hero's patrol mode."
+msgstr "Кликни тук, за да избереш кой сценарий да играеш."
 
 msgid "Blood Morale"
 msgstr "Кръвен морал"
@@ -11471,6 +11549,15 @@ msgstr ""
 "Проверете най-новата версия на играта на\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Set Defense Skill"
+#~ msgstr "Задайте умение за защита"
+
+#~ msgid "Set Power Skill"
+#~ msgstr "Задайте умение за сила"
+
+#~ msgid "Set Knowledge Skill"
+#~ msgstr "Задайте умение за знание"
 
 #~ msgid "Multiple"
 #~ msgstr "Многократни"

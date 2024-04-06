@@ -104,7 +104,7 @@ namespace
 
 namespace Dialog
 {
-    void openAudioSettingsDialog( const bool fromAdventureMap )
+    bool openAudioSettingsDialog( const bool fromAdventureMap )
     {
         const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
@@ -248,8 +248,6 @@ namespace Dialog
             }
         }
 
-        if ( saveConfig ) {
-            Settings::Get().Save( Settings::configFileName );
-        }
+        return saveConfig;
     }
 }

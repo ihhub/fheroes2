@@ -276,12 +276,12 @@ namespace Editor
                 break;
             }
             case DialogAction::Graphics:
-                fheroes2::openGraphicsSettingsDialog( redrawEditorMap );
+                saveConfiguration |= fheroes2::openGraphicsSettingsDialog( redrawEditorMap );
 
                 action = DialogAction::Configuration;
                 break;
             case DialogAction::AudioSettings:
-                Dialog::openAudioSettingsDialog( true );
+                saveConfiguration |= Dialog::openAudioSettingsDialog( true );
 
                 action = DialogAction::Configuration;
                 break;

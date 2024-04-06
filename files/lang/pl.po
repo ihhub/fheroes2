@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-27 01:17+0000\n"
+"POT-Creation-Date: 2024-04-03 04:20+0000\n"
 "PO-Revision-Date: 2023-08-26 23:09+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: https://discord.com/"
@@ -234,6 +234,15 @@ msgid ""
 msgstr ""
 
 msgid ""
+"P\n"
+"A\n"
+"T\n"
+"R\n"
+"O\n"
+"L"
+msgstr ""
+
+msgid ""
 "C\n"
 "A\n"
 "M\n"
@@ -370,6 +379,12 @@ msgstr "Jednostki z %{count} różnych frakcji -%{penalty}"
 #, fuzzy
 msgid "Some undead in army -1"
 msgstr "Nieumarli w armii -1"
+
+#, fuzzy
+msgid ""
+"Default\n"
+"troop"
+msgstr "domyślna akcja"
 
 msgid "View %{name}"
 msgstr "Obejrzyj jednostkę (%{name})"
@@ -1007,18 +1022,6 @@ msgstr ""
 
 msgid "Please select another hero."
 msgstr "Wybierz innego bohatera."
-
-msgid "Set Attack Skill"
-msgstr "Ustaw wartość Ataku"
-
-msgid "Set Defense Skill"
-msgstr "Ustaw wartość Obrony"
-
-msgid "Set Power Skill"
-msgstr "Ustaw wartość Mocy zaklęć"
-
-msgid "Set Knowledge Skill"
-msgstr "Ustaw wartość Wiedzy"
 
 #, fuzzy
 msgid "%{race1} %{name1} vs %{race2} %{name2}"
@@ -5704,8 +5707,26 @@ msgstr ""
 "Gracze ze znacznymi utrudnieniami zaczynają z mniejszą ilością zasobów oraz "
 "otrzymują o 30% mniej zasobów co turę."
 
+msgid ""
+"Default\n"
+"value"
+msgstr ""
+
+#, fuzzy
+msgid "Set %{skill} Skill"
+msgstr "Ustaw wartość Ataku"
+
+msgid "Set %{skill} base value. Right-click to reset all skills to default."
+msgstr ""
+
 msgid "View %{skill} Info"
 msgstr "Wyświetl informacje o %{skill}"
+
+#, fuzzy
+msgid ""
+"Default\n"
+"skill"
+msgstr "Obrona"
 
 msgid "Keyboard|123"
 msgstr "123"
@@ -7453,6 +7474,50 @@ msgid "%{name} the %{race} (Level %{level})"
 msgstr "%{name}, %{race} (poziom %{level})"
 
 #, fuzzy
+msgid "Random hero (Level %{level})"
+msgstr "%{name} (poziom %{level})"
+
+#, fuzzy
+msgid "Random %{race} hero (Level %{level})"
+msgstr "%{name}, %{race} (poziom %{level})"
+
+msgid "Are you sure you want to dismiss this Hero?"
+msgstr "Czy na pewno chcesz zwolnić tego bohatera?"
+
+msgid "Set custom Experience value. Current value is default."
+msgstr ""
+
+msgid "Change Experience value. Right-click to reset to default value."
+msgstr ""
+
+#, fuzzy
+msgid "Set Experience value"
+msgstr "Doświadczenie"
+
+msgid "View Experience Info"
+msgstr "Doświadczenie - informacje"
+
+msgid "Set custom Spell Points value. Current value is default."
+msgstr ""
+
+msgid "Change Spell Points value. Right-click to reset to default value."
+msgstr ""
+
+#, fuzzy
+msgid "Set Spell Points value"
+msgstr "Pkt. magii"
+
+msgid "View Spell Points Info"
+msgstr "Punkty magii - informacje"
+
+#, fuzzy
+msgid "Enter hero's name"
+msgstr "Przegrywa bohater: %{name}."
+
+msgid "Set patrol radius in tiles"
+msgstr ""
+
+#, fuzzy
 msgid ""
 "'Spread' combat formation spreads the hero's units from the top to the "
 "bottom of the battlefield, with at least one empty space between each unit."
@@ -7467,21 +7532,6 @@ msgid ""
 msgstr ""
 "Wybór zwartej formacji sprawia, że twoja armia zbierze się razem pośrodku "
 "twojej części pola bitwy."
-
-msgid "Are you sure you want to dismiss this Hero?"
-msgstr "Czy na pewno chcesz zwolnić tego bohatera?"
-
-msgid "View Experience Info"
-msgstr "Doświadczenie - informacje"
-
-msgid "View Spell Points Info"
-msgstr "Punkty magii - informacje"
-
-msgid "Set army combat formation to 'Spread'"
-msgstr "Ustaw armię w luźnej formacji"
-
-msgid "Set army combat formation to 'Grouped'"
-msgstr "Ustaw armię w zwartej formacji"
 
 msgid "Exit Hero Screen"
 msgstr "Wyjście z ekranu bohatera"
@@ -7500,6 +7550,34 @@ msgstr "Pokaż poprzedniego bohatera"
 
 msgid "Show next hero"
 msgstr "Pokaż następnego bohatera"
+
+msgid "Set army combat formation to 'Spread'"
+msgstr "Ustaw armię w luźnej formacji"
+
+msgid "Set army combat formation to 'Grouped'"
+msgstr "Ustaw armię w zwartej formacji"
+
+msgid "Set hero's Artifacts. Right-click to reset Artifact."
+msgstr ""
+
+msgid "Set hero's Secondary Skills. Right-click to reset skill."
+msgstr ""
+
+msgid "Set hero's Army. Right-click to reset unit."
+msgstr ""
+
+msgid "Set hero's portrait. Right-click to reset to default."
+msgstr ""
+
+msgid "Click to change hero's name. Right-click to reset to default."
+msgstr ""
+
+msgid "Hero is in patrol mode in %{tiles} tiles radius. Click to disable it."
+msgstr ""
+
+#, fuzzy
+msgid "Click to enable hero's patrol mode."
+msgstr "Kliknij tutaj, aby wybrać scenariusz, który chcesz rozegrać."
 
 msgid "Blood Morale"
 msgstr "Wysokie morale"
@@ -11506,6 +11584,15 @@ msgstr ""
 "Możesz pobrać najnowszą wersję gry ze strony:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Set Defense Skill"
+#~ msgstr "Ustaw wartość Obrony"
+
+#~ msgid "Set Power Skill"
+#~ msgstr "Ustaw wartość Mocy zaklęć"
+
+#~ msgid "Set Knowledge Skill"
+#~ msgstr "Ustaw wartość Wiedzy"
 
 #~ msgid "Multiple"
 #~ msgstr "Różne"
