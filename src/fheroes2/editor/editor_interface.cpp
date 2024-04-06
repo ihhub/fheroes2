@@ -273,6 +273,13 @@ namespace
                     objectIter = mapTile.objects.erase( objectIter );
                     needRedraw = true;
                 }
+                else if ( objectIter->group == Maps::ObjectGroup::MONSTERS ) {
+                    assert( mapFormat.standardMetadata.find( objectIter->id ) != mapFormat.standardMetadata.end() );
+                    mapFormat.standardMetadata.erase( objectIter->id );
+
+                    objectIter = mapTile.objects.erase( objectIter );
+                    needRedraw = true;
+                }
                 else {
                     objectIter = mapTile.objects.erase( objectIter );
                     needRedraw = true;
