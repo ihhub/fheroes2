@@ -845,6 +845,11 @@ namespace Interface
                         _mapFormat.heroMetadata[object.id] = std::move( heroNewMetadata );
                         action.commit();
                     }
+                } else if ( objectType == MP2::OBJ_SIGN ) {
+                    std::string signMessage;
+                    Dialog::InputString( _( "Sign Message" ), signMessage, std::string(), 500 ) );
+                    fheroes2::ActionCreator action( _historyManager, _mapFormat );
+                    _mapFormat.signMetadata[object.id] = { signMessage };
                 }
             }
         }
