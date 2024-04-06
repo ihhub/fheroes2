@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-04-03 04:20+0000\n"
-"PO-Revision-Date: 2024-04-05 20:16+0300\n"
+"PO-Revision-Date: 2024-04-06 16:28+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: uk\n"
@@ -209,7 +209,7 @@ msgid "CASTLE"
 msgstr "ЗАМОК"
 
 msgid "TOWN"
-msgstr "МІСТЕЧКО"
+msgstr "МІСТО"
 
 msgid ""
 "D\n"
@@ -569,7 +569,7 @@ msgid "Exit this menu."
 msgstr "Вийти з цього меню."
 
 msgid "Okay"
-msgstr "Добре"
+msgstr "Гаразд"
 
 msgid "The enemy has surrendered!"
 msgstr "Ворог капітулював!"
@@ -3395,19 +3395,19 @@ msgid "Terrain object"
 msgstr "Об'єкт місцевості"
 
 msgid "Select Skill:"
-msgstr "Оберіть Навички:"
+msgstr "Оберіть навички:"
 
 msgid "Select Spell:"
-msgstr "Оберіть Закляття:"
+msgstr "Оберіть закляття:"
 
 msgid "Select Artifact:"
-msgstr "Оберіть Артефакти:"
+msgstr "Оберіть артефакти:"
 
 msgid "Select Monster:"
-msgstr "Оберіть Монстра:"
+msgstr "Оберіть монстра:"
 
 msgid "Select Hero:"
-msgstr "Оберіть Героя:"
+msgstr "Оберіть героя:"
 
 msgid "Select Treasure:"
 msgstr "Оберіть скарб:"
@@ -3422,7 +3422,7 @@ msgid "doubleLinedRace|Neutral"
 msgstr "Нейтральний"
 
 msgid "race|Random"
-msgstr "Випадкова"
+msgstr "Випадково"
 
 msgid "Click to start placing the selected castle/town."
 msgstr "Тицьніть для розміщення вибраного замку/міста"
@@ -3431,7 +3431,7 @@ msgid "Click to select town placing."
 msgstr "Тицьніть щоб вибрати розміщення міста."
 
 msgid "Click to select castle placing."
-msgstr "Тицьніть щоб вибрати розміщення міста."
+msgstr "Тицьніть щоб вибрати розміщення замку."
 
 msgid "%{color} %{race} %{townOrCastle}"
 msgstr "%{color} %{race} %{townOrCastle}"
@@ -3657,7 +3657,7 @@ msgid "Battles"
 msgstr "Битви"
 
 msgid "autoBattle|Manual"
-msgstr "autoBattle|Вручну"
+msgstr "Вручну"
 
 msgid "Change the speed at which your heroes move on the main screen."
 msgstr ""
@@ -3779,16 +3779,16 @@ msgid ""
 msgstr "Створіть нову мапу самотужки, або скористайтесь генератором мап."
 
 msgid "New Map"
-msgstr "Нова Гра"
+msgstr "Нова мапа"
 
 msgid "Load Map"
-msgstr "Завантажити Гру"
+msgstr "Завантажити мапу"
 
 msgid "Load an existing map."
 msgstr "Завантажити існуючу мапу."
 
 msgid "Save Map"
-msgstr "Зберегти Мапу"
+msgstr "Зберегти мапу"
 
 msgid "Save the current map."
 msgstr "Збережіть поточну мапу."
@@ -3896,7 +3896,7 @@ msgid "Water Objects"
 msgstr "Водні об'єкти"
 
 msgid "Miscellaneous"
-msgstr "Різні"
+msgstr "Різне"
 
 msgid "Artifacts"
 msgstr "Артефакти"
@@ -3923,13 +3923,13 @@ msgid "editorErasure|Landscape objects"
 msgstr "Ландшафтні об'єкти"
 
 msgid "editorErasure|Adventure non pickable objects"
-msgstr "Пригодницькі об'єкти, які не можна вибрати"
+msgstr "пригодницькі статичні об'єкти"
 
 msgid "editorErasure|Castles"
 msgstr "Замки"
 
 msgid "editorErasure|Adventure pickable objects"
-msgstr "Подорожні об'єкти для збору"
+msgstr "подорожні збиральні об'єкти"
 
 msgid "editorErasure|Monsters"
 msgstr "Монстри"
@@ -3992,7 +3992,7 @@ msgid "No special modifiers."
 msgstr "Ніяких спеціальних модифікаторів."
 
 msgid "Toggle the erasure of %{type} objects."
-msgstr "Перемикач стирання %{type} об'єктів."
+msgstr "Видалити %{type}."
 
 msgid ""
 "Objects of this type will be deleted with the Erase tool. Left-click here to "
@@ -4013,14 +4013,14 @@ msgstr ""
 "цю кнопку, щоб вибрати всі інші типи об'єктів."
 
 msgid "Terrain Mode"
-msgstr "Режим “Рельєф”"
+msgstr "Рельєф"
 
 msgid "Used to draw the underlying grass, dirt, water, etc. on the map."
 msgstr ""
 "Використовується для нанесення на мапу підстилаючої трави, багна, води тощо."
 
 msgid "Landscape Objects Mode"
-msgstr "Режим “Об'єкти ландшафту”"
+msgstr "Об'єкти ландшафту"
 
 msgid ""
 "Used to place landscape objects (mountains, rocks, trees, etc.) on the map."
@@ -4029,24 +4029,24 @@ msgstr ""
 "тощо) на мапі."
 
 msgid "Detail Mode"
-msgstr "Режим “Деталізація”"
+msgstr "Деталізація"
 
 msgid "Used for special editing of monsters, heroes and towns."
 msgstr ""
 "Використовується для спеціального редагування монстрів, героїв та міст."
 
 msgid "Adventure Objects Mode"
-msgstr "Режим “Пригодницькі об'єкти”"
+msgstr "Пригодницькі об'єкти"
 
 msgid ""
 "Used to place adventure objects (artifacts, dwellings, mines, treasures, "
 "etc.) on the map."
 msgstr ""
 "Використовується для розміщення на мапі пригодницьких об'єктів (артефактів, "
-"жител, шахт, скарбів тощо)."
+"житла, шахт, скарбів тощо)."
 
 msgid "Kingdom Objects Mode"
-msgstr "Режим \"Об'єкти королівства”"
+msgstr "Об'єкти королівства"
 
 msgid "Used to place kingdom objects (towns, castles and heroes) on the map."
 msgstr ""
@@ -4054,28 +4054,28 @@ msgstr ""
 "на мапі."
 
 msgid "Monsters Mode"
-msgstr "Режим “Монстри”"
+msgstr "Монстри"
 
 msgid "Used to place monsters on the map."
 msgstr "Використовується для розміщення монстрів на мапі."
 
 msgid "Allows you to draw streams by clicking and dragging."
-msgstr "Дозволяє малювати потоки за допомогою тицяння та перетягування."
+msgstr "Дозволяє малювати річки за допомогою тицяння та перетягування."
 
 msgid "Stream Mode"
-msgstr "Режим “Струмки”"
+msgstr "Річки"
 
 msgid "Allows you to draw roads by clicking and dragging."
 msgstr "Дозволяє малювати дороги за допомогою клацання та перетягування."
 
 msgid "Road Mode"
-msgstr "Режим “Дорога”"
+msgstr "Дорога"
 
 msgid "Erase Mode"
-msgstr "Режим “Стирання”"
+msgstr "Стирання"
 
 msgid "Used to erase objects from the map."
-msgstr "Використовується для стирання об'єктів з мапи."
+msgstr "Використовується для видалення об'єктів з мапи."
 
 msgid "Change between zoom and normal view."
 msgstr "Перемикання між масштабуванням і звичайним видом."
