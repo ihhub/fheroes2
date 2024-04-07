@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-27 01:17+0000\n"
+"POT-Creation-Date: 2024-04-03 04:20+0000\n"
 "PO-Revision-Date: 2024-02-16 05:07+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -245,6 +245,15 @@ msgstr ""
 "R"
 
 msgid ""
+"P\n"
+"A\n"
+"T\n"
+"R\n"
+"O\n"
+"L"
+msgstr ""
+
+msgid ""
 "C\n"
 "A\n"
 "M\n"
@@ -395,6 +404,11 @@ msgstr "Tropas de %{count} alineamientos -%{penalty}"
 
 msgid "Some undead in army -1"
 msgstr "Algunos nomuertos en el ejercito -1"
+
+msgid ""
+"Default\n"
+"troop"
+msgstr ""
 
 msgid "View %{name}"
 msgstr "Ver %{name}"
@@ -1008,22 +1022,6 @@ msgstr "Restablecer la configuración predeterminada."
 
 msgid "Please select another hero."
 msgstr "Por favor, selecciona otro héroe."
-
-#, fuzzy
-msgid "Set Attack Skill"
-msgstr "Ataque"
-
-#, fuzzy
-msgid "Set Defense Skill"
-msgstr "Defensa"
-
-#, fuzzy
-msgid "Set Power Skill"
-msgstr "Pot. de Hech."
-
-#, fuzzy
-msgid "Set Knowledge Skill"
-msgstr "Conocimiento"
 
 msgid "%{race1} %{name1} vs %{race2} %{name2}"
 msgstr "%{race1} %{name1} vs %{race2} %{name2}"
@@ -5617,8 +5615,26 @@ msgid ""
 "resources per turn."
 msgstr ""
 
+msgid ""
+"Default\n"
+"value"
+msgstr ""
+
+#, fuzzy
+msgid "Set %{skill} Skill"
+msgstr "Ataque"
+
+msgid "Set %{skill} base value. Right-click to reset all skills to default."
+msgstr ""
+
 msgid "View %{skill} Info"
 msgstr "Ver información de %{skill}"
+
+#, fuzzy
+msgid ""
+"Default\n"
+"skill"
+msgstr "Defensa"
 
 msgid "Keyboard|123"
 msgstr "123"
@@ -7355,6 +7371,50 @@ msgstr ""
 msgid "%{name} the %{race} (Level %{level})"
 msgstr "%{name}, %{race} ( Nivel %{level} )"
 
+#, fuzzy
+msgid "Random hero (Level %{level})"
+msgstr "%{name} ( Nivel %{level} )"
+
+#, fuzzy
+msgid "Random %{race} hero (Level %{level})"
+msgstr "%{name}, %{race} ( Nivel %{level} )"
+
+msgid "Are you sure you want to dismiss this Hero?"
+msgstr "¿Estas seguro que quieres despedir este Héroe?"
+
+msgid "Set custom Experience value. Current value is default."
+msgstr ""
+
+msgid "Change Experience value. Right-click to reset to default value."
+msgstr ""
+
+#, fuzzy
+msgid "Set Experience value"
+msgstr "Experiencia"
+
+msgid "View Experience Info"
+msgstr "Ver información sobre Experiencia"
+
+msgid "Set custom Spell Points value. Current value is default."
+msgstr ""
+
+msgid "Change Spell Points value. Right-click to reset to default value."
+msgstr ""
+
+#, fuzzy
+msgid "Set Spell Points value"
+msgstr "Maná"
+
+msgid "View Spell Points Info"
+msgstr "Ver información sobre Maná"
+
+#, fuzzy
+msgid "Enter hero's name"
+msgstr "Pierdes el héroe: %{name}."
+
+msgid "Set patrol radius in tiles"
+msgstr ""
+
 msgid ""
 "'Spread' combat formation spreads the hero's units from the top to the "
 "bottom of the battlefield, with at least one empty space between each unit."
@@ -7369,21 +7429,6 @@ msgid ""
 msgstr ""
 "La formación 'Agrupada' de combate aglutina las tropas del heroe en el "
 "centro de su lado del campo de batalla."
-
-msgid "Are you sure you want to dismiss this Hero?"
-msgstr "¿Estas seguro que quieres despedir este Héroe?"
-
-msgid "View Experience Info"
-msgstr "Ver información sobre Experiencia"
-
-msgid "View Spell Points Info"
-msgstr "Ver información sobre Maná"
-
-msgid "Set army combat formation to 'Spread'"
-msgstr "Ordenar al ejercito formación Desplegada."
-
-msgid "Set army combat formation to 'Grouped'"
-msgstr "Ordenar al ejercito formación Agrupada"
 
 #, fuzzy
 msgid "Exit Hero Screen"
@@ -7404,6 +7449,34 @@ msgstr "Ver ciudad anterior"
 
 msgid "Show next hero"
 msgstr "Mostrar el siguiente héroe"
+
+msgid "Set army combat formation to 'Spread'"
+msgstr "Ordenar al ejercito formación Desplegada."
+
+msgid "Set army combat formation to 'Grouped'"
+msgstr "Ordenar al ejercito formación Agrupada"
+
+msgid "Set hero's Artifacts. Right-click to reset Artifact."
+msgstr ""
+
+msgid "Set hero's Secondary Skills. Right-click to reset skill."
+msgstr ""
+
+msgid "Set hero's Army. Right-click to reset unit."
+msgstr ""
+
+msgid "Set hero's portrait. Right-click to reset to default."
+msgstr ""
+
+msgid "Click to change hero's name. Right-click to reset to default."
+msgstr ""
+
+msgid "Hero is in patrol mode in %{tiles} tiles radius. Click to disable it."
+msgstr ""
+
+#, fuzzy
+msgid "Click to enable hero's patrol mode."
+msgstr "Haga clic aquí para seleccionar el escenario donde jugar."
 
 #, fuzzy
 msgid "Blood Morale"
@@ -11112,6 +11185,18 @@ msgstr ""
 "Puedes descargar la última versión del juego desde el sítio:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#, fuzzy
+#~ msgid "Set Defense Skill"
+#~ msgstr "Defensa"
+
+#, fuzzy
+#~ msgid "Set Power Skill"
+#~ msgstr "Pot. de Hech."
+
+#, fuzzy
+#~ msgid "Set Knowledge Skill"
+#~ msgstr "Conocimiento"
 
 #~ msgid "Multiple"
 #~ msgstr "Múltiple"
