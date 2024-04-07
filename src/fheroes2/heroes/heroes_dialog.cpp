@@ -297,7 +297,7 @@ int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disable
         fheroes2::Copy( raceSprite, 0, 0, display, raceRect );
 
         // Update race text background.
-        const int32_t offsetY = raceRect.y - crestRect.y + raceRect.height + 4;
+        const int32_t offsetY = raceRect.y - crestRect.y + raceRect.height + 9;
         const int32_t posY = crestRect.y + offsetY;
         const int32_t sizeY = crestRect.height - offsetY;
         fheroes2::ApplyPalette( fheroes2::AGG::GetICN( ICN::STRIP, 3 ), 0, offsetY, display, crestRect.x, posY, crestRect.width, sizeY,
