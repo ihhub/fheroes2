@@ -101,7 +101,7 @@ msgid ""
 "TOWNS/\n"
 "CASTLES"
 msgstr ""
-"ORAȘE\n"
+"ORAȘE/\n"
 "CASTELE"
 
 msgid "S"
@@ -514,7 +514,7 @@ msgid "Settings"
 msgstr "Setări"
 
 msgid "Configure"
-msgstr ""
+msgstr "Configurare"
 
 msgid "Hot Keys"
 msgstr "Scurtături"
@@ -618,9 +618,8 @@ msgstr "Apărător"
 msgid "Click to leave the battle results."
 msgstr ""
 
-#, fuzzy
 msgid "Click to restart the battle in manual mode."
-msgstr "Ești sigur că vrei să termini bătălia în modul automat?"
+msgstr "Dați click pentru a reîncepe bătălia în mod manual."
 
 msgid "Restart"
 msgstr ""
@@ -843,9 +842,8 @@ msgstr "Bara de mesaje"
 msgid "Shows the results of individual monster's actions."
 msgstr "Afișează rezultatele acțiunilor individuale ale monștrilor."
 
-#, fuzzy
 msgid "Are you sure you want to enable auto combat?"
-msgstr "Ești sigur că vrei să te retragi?"
+msgstr "Sigur vreți să activați lupta automată?"
 
 msgid "Are you sure you want to finish the battle in auto mode?"
 msgstr "Ești sigur că vrei să termini bătălia în modul automat?"
@@ -985,15 +983,14 @@ msgstr "Se creează o imagine în oglindă."
 msgid "The mirror image is destroyed!"
 msgstr "Imaginea în oglindă este distrusă!"
 
-#, fuzzy
 msgid "Are you sure you want to interrupt the auto combat?"
-msgstr "Ești sigur că vrei să întrerupi lupta automată?"
+msgstr "Sigur vreți să întrerupeți lupta automată?"
 
 msgid "Error"
 msgstr "Eroare"
 
 msgid "No spells to cast."
-msgstr "Nu sunt vrăji de aruncat."
+msgstr "Nicio vrajă disponibilă."
 
 msgid "Are you sure you want to retreat?"
 msgstr "Ești sigur că vrei să te retragi?"
@@ -1481,7 +1478,7 @@ msgid "Power's End"
 msgstr ""
 
 msgid "The Eternal Scrolls"
-msgstr ""
+msgstr "Pergamentele eterne"
 
 msgid "The Shrouded Isles"
 msgstr ""
@@ -1673,7 +1670,7 @@ msgid "campaignBonus|Fizbin Medal"
 msgstr ""
 
 msgid "campaignBonus|Foremost Scroll"
-msgstr ""
+msgstr "Pergament suprem"
 
 msgid "campaignBonus|Gauntlets"
 msgstr ""
@@ -1685,7 +1682,7 @@ msgid "campaignBonus|Mage's Ring"
 msgstr ""
 
 msgid "campaignBonus|Major Scroll"
-msgstr ""
+msgstr "Pergament major"
 
 msgid "campaignBonus|Medal of Honor"
 msgstr ""
@@ -1694,7 +1691,7 @@ msgid "campaignBonus|Medal of Valor"
 msgstr ""
 
 msgid "campaignBonus|Minor Scroll"
-msgstr ""
+msgstr "Pergament minor"
 
 msgid "campaignBonus|Nomad Boots"
 msgstr ""
@@ -2088,7 +2085,7 @@ msgid "Cathcart"
 msgstr ""
 
 msgid "Elk's Head"
-msgstr ""
+msgstr "Elk's Head"
 
 msgid "Roscomon"
 msgstr ""
@@ -2566,7 +2563,7 @@ msgid "Recruit %{name}"
 msgstr ""
 
 msgid "Month: %{month}, Week: %{week}, Day: %{day}"
-msgstr ""
+msgstr "Luna: %{month}, Săptămâna: %{week}, Ziua: %{day}"
 
 msgid ""
 "You must purchase a spell book to use the mage guild, but you currently have "
@@ -2589,7 +2586,7 @@ msgid "This town may not be upgraded to a castle."
 msgstr ""
 
 msgid "Town"
-msgstr ""
+msgstr "Oraș"
 
 msgid "Exit Castle"
 msgstr ""
@@ -2849,7 +2846,7 @@ msgid "Build a new ship:"
 msgstr ""
 
 msgid "Resource cost:"
-msgstr ""
+msgstr "Costul resursei:"
 
 msgid "Total: "
 msgstr ""
@@ -2858,7 +2855,7 @@ msgid "Need: "
 msgstr ""
 
 msgid "Load Game"
-msgstr "Încarcă un joc"
+msgstr "Încarcă jocul"
 
 msgid "No save files to load."
 msgstr "Nu există fișiere salvate."
@@ -2873,7 +2870,7 @@ msgid "Load a previously saved game."
 msgstr ""
 
 msgid "Save Game"
-msgstr ""
+msgstr "Salvează jocul"
 
 msgid "Save the current game."
 msgstr ""
@@ -3023,37 +3020,37 @@ msgid "Hot Keys:"
 msgstr "Scurtături:"
 
 msgid "Evil"
-msgstr ""
+msgstr "Rău"
 
 msgid "Good"
-msgstr ""
+msgstr "Bun"
 
 msgid "Interface Type"
-msgstr ""
+msgstr "Tipul interfeței"
 
 msgid "Hide"
-msgstr ""
+msgstr "Ascunde"
 
 msgid "Show"
-msgstr ""
+msgstr "Arată"
 
 msgid "Interface"
-msgstr ""
+msgstr "Interfață"
 
 msgid "Slow"
-msgstr ""
+msgstr "Încet"
 
 msgid "Normal"
 msgstr "Normal"
 
 msgid "Fast"
-msgstr ""
+msgstr "Rapid"
 
 msgid "Very Fast"
-msgstr ""
+msgstr "Foarte rapid"
 
 msgid "Scroll Speed"
-msgstr ""
+msgstr "Viteză de defilare"
 
 msgid "Toggle the type of interface you want to use."
 msgstr ""
@@ -3118,7 +3115,7 @@ msgid "Trading Post"
 msgstr ""
 
 msgid "Your Resources"
-msgstr ""
+msgstr "Resursele voastre"
 
 msgid "Available Trades"
 msgstr ""
@@ -3372,6 +3369,8 @@ msgid ""
 "Resource\n"
 "type:"
 msgstr ""
+"Tip de\n"
+"resursă:"
 
 #, fuzzy
 msgid "%{mineName} appearance:"
@@ -3536,28 +3535,28 @@ msgid "The description of the currently selected map."
 msgstr ""
 
 msgid "Jump"
-msgstr ""
+msgstr "Instant"
 
 msgid "Hero Speed"
-msgstr ""
+msgstr "Viteza eroului"
 
 msgid "Don't Show"
 msgstr ""
 
 msgid "Enemy Speed"
-msgstr ""
+msgstr "Viteza inamicilor"
 
 msgid "Auto Resolve"
-msgstr ""
+msgstr "Auto, rezolvă"
 
 msgid "Auto, No Spells"
-msgstr ""
+msgstr "Auto, fără vrăji"
 
 msgid "Battles"
-msgstr ""
+msgstr "Bătălii"
 
 msgid "autoBattle|Manual"
-msgstr ""
+msgstr "Manuale"
 
 msgid "Change the speed at which your heroes move on the main screen."
 msgstr ""
@@ -3571,7 +3570,7 @@ msgid "Change the interface settings of the game."
 msgstr ""
 
 msgid "Interface Settings"
-msgstr ""
+msgstr "Setări interfață"
 
 msgid "Toggle instant battle mode."
 msgstr ""
@@ -3634,7 +3633,7 @@ msgid "Obelisks Found:"
 msgstr ""
 
 msgid "Artifacts:"
-msgstr ""
+msgstr "Artefacte:"
 
 msgid "Total Army Strength:"
 msgstr ""
@@ -3702,7 +3701,7 @@ msgid ""
 msgstr ""
 
 msgid "Editor"
-msgstr ""
+msgstr "Editor"
 
 msgid ""
 "Are you sure you want to load a new map? (Any unsaved changes to the current "
@@ -3728,7 +3727,7 @@ msgid "Load an existing map."
 msgstr ""
 
 msgid "Save Map"
-msgstr ""
+msgstr "Salvează harta"
 
 msgid "Save the current map."
 msgstr ""
@@ -3852,7 +3851,7 @@ msgid "Miscellaneous"
 msgstr ""
 
 msgid "Artifacts"
-msgstr ""
+msgstr "Artefacte"
 
 msgid "Dwellings"
 msgstr ""
@@ -4204,142 +4203,142 @@ msgid "Dev and Support"
 msgstr "Dezvoltare și Suport"
 
 msgid "Special Thanks to"
-msgstr ""
+msgstr "Mulțumiri speciale către"
 
 msgid "and many-many other contributors and supporters!"
-msgstr ""
+msgstr "și mulți alți contributori și suporteri!"
 
 msgid "Support us at"
-msgstr ""
+msgstr "Sprijiniți-ne pe"
 
 msgid "local-donation-platform|https://www.patreon.com/fheroes2"
-msgstr ""
+msgstr "https://www.patreon.com/fheroes2"
 
 msgid "Connect with us at"
-msgstr ""
+msgstr "Conectați-vă cu noi la"
 
 msgid "local-social-network|https://www.facebook.com/groups/fheroes2"
-msgstr ""
+msgstr "https://www.facebook.com/groups/fheroes2"
 
 msgid "Need help with the game?"
-msgstr ""
+msgstr "Aveți nevoie de ajutor cu jocul?"
 
 msgid "Original project before 0.7"
-msgstr ""
+msgstr "Proiectul original înainte de 0.7"
 
 msgid "Heroes of Might and Magic II: The Succession Wars team"
-msgstr ""
+msgstr "Echipa Heroes of Might and Magic II: The Succession Wars"
 
 msgid "Designed and Directed"
-msgstr ""
+msgstr "Proiectat și regizat"
 
 msgid "Programming and Design"
-msgstr ""
+msgstr "Programare și design"
 
 msgid "Executive Producer"
-msgstr ""
+msgstr "Producător Executiv"
 
 msgid "Producer"
-msgstr ""
+msgstr "Producător"
 
 msgid "Additional Design"
-msgstr ""
+msgstr "Design suplimentar"
 
 msgid "Additional Programming"
-msgstr ""
+msgstr "Programare suplimentară"
 
 msgid "Musical Production"
-msgstr ""
+msgstr "Producție muzicală"
 
 msgid "Music and Sound Design"
-msgstr ""
+msgstr "Design de muzică și sunet"
 
 msgid "Vocalists"
-msgstr ""
+msgstr "Vocaliști"
 
 msgid "Art Director"
-msgstr ""
+msgstr "Director Artistic"
 
 msgid "Assistant Art Director"
-msgstr ""
+msgstr "Asistent Director Artistic"
 
 msgid "Artists"
-msgstr ""
+msgstr "Artiști"
 
 msgid "QA Manager"
-msgstr ""
+msgstr "Manager QA"
 
 msgid "QA"
-msgstr ""
+msgstr "QA"
 
 msgid "Writing"
-msgstr ""
+msgstr "Scriere"
 
 msgid "Manual and Helpfile"
-msgstr ""
+msgstr "Manual și fișier de ajutor"
 
 msgid "Scenarios"
 msgstr "Scenarii"
 
 msgid "Heroes of Might and Magic II: The Price of Loyalty team"
-msgstr ""
+msgstr "Echipa Heroes of Might and Magic II: The Price of Loyalty"
 
 msgid "Design Lead"
-msgstr ""
+msgstr "Lider de design"
 
 msgid "Designers"
-msgstr ""
+msgstr "Designeri"
 
 msgid "Programming Lead"
-msgstr ""
+msgstr "Lider de programare"
 
 msgid "Art Lead"
-msgstr ""
+msgstr "Lider artistic"
 
 msgid "Playtesters"
-msgstr ""
+msgstr "Testori"
 
 msgid "Designer"
-msgstr ""
+msgstr "Designer"
 
 msgid "Producers"
 msgstr ""
 
 msgid "QA Managers"
-msgstr ""
+msgstr "Manageri QA"
 
 msgid "Sound Design"
-msgstr ""
+msgstr "Design sunet"
 
 msgid "Town Themes"
-msgstr ""
+msgstr "Tematici de orașe"
 
 msgid "Alto Sax"
-msgstr ""
+msgstr "Sax Alto"
 
 msgid "Harpsichord and Piano"
-msgstr ""
+msgstr "Clavecin și pian"
 
 msgid "Basso Vocal"
-msgstr ""
+msgstr "Bas (voce)"
 
 msgid "Soprano Vocal"
-msgstr ""
+msgstr "Soprano (voce)"
 
 msgid "Recorded at %{recordingStudio}"
-msgstr ""
+msgstr "Înregistrat la %{recordingStudio}"
 
 msgid "credits|Manual"
-msgstr ""
+msgstr "Manual"
 
 msgid "German Consultant"
-msgstr ""
+msgstr "Consultant germană"
 
 msgid "Map Designers"
-msgstr ""
+msgstr "Designeri de hărți"
 
 msgid "Package Design"
-msgstr ""
+msgstr "Design de ambalaj"
 
 msgid "Your Name"
 msgstr ""
@@ -4623,9 +4622,8 @@ msgstr ""
 msgid "hotkey|toggle battle auto mode"
 msgstr ""
 
-#, fuzzy
 msgid "hotkey|finish the battle in auto mode"
-msgstr "Ești sigur că vrei să termini bătălia în modul automat?"
+msgstr "terminați lupta în mod automat"
 
 msgid "hotkey|battle options"
 msgstr ""
@@ -4721,16 +4719,14 @@ msgstr ""
 msgid "Battle Screen"
 msgstr "Ecranul eroului"
 
-#, fuzzy
 msgid "Town Screen"
-msgstr "Ecranul eroului"
+msgstr "Ecranul orașului"
 
 msgid "Army Actions"
 msgstr ""
 
-#, fuzzy
 msgid "The save file is corrupted."
-msgstr "Se creează o imagine în oglindă."
+msgstr "Acest fișier este corupt."
 
 msgid "Unsupported save format: "
 msgstr ""
@@ -4784,18 +4780,23 @@ msgid ""
 msgstr ""
 
 msgid "fheroes2 Resurrection Team presents"
-msgstr ""
+msgstr "Echipa fheroes2 Resurrection prezintă"
 
 msgid "Greetings!"
 msgstr ""
 
 msgid "Welcome to Heroes of Might and Magic II powered by fheroes2 engine!"
 msgstr ""
+"Bine ați venit în Heroes of Might and Magic II (îmbunătățit de motorul "
+"fheroes2)!"
 
 msgid ""
 "Welcome to Heroes of Might and Magic II powered by the fheroes2 engine!\n"
 "Before starting the game, please select a game resolution."
 msgstr ""
+"Bine ați venit în Heroes of Might and Magic II (îmbunătățit de motorul "
+"fheroes2)!\n"
+"Înainte de a începe jocul, selectați rezoluția dorită."
 
 msgid "Please Remember"
 msgstr ""
@@ -4891,6 +4892,10 @@ msgid ""
 "Magic II for this purpose. Please note that only one scenario will be "
 "available in this setup."
 msgstr ""
+"fheroes2 are nevoie de fișierele de date ale jocului original Heroes of Might "
+"and Magic II pentru a funcționa. Se pare că folosiți o versiune demo a Heroes "
+"of Might and Magic II pentru acest scop. În această configurație, doar un "
+"singur scenariu va fi disponibil."
 
 msgid ""
 "A multi-player game, with several human players competing against each other "
@@ -5267,7 +5272,7 @@ msgid "Cast an adventure spell."
 msgstr ""
 
 msgid "End Turn"
-msgstr ""
+msgstr "Termină tura"
 
 msgid "End your turn and let the computer take its turn."
 msgstr ""
@@ -5289,6 +5294,8 @@ msgstr ""
 msgid ""
 "One or more heroes may still move, are you sure you want to end your turn?"
 msgstr ""
+"Unul sau mai mulți dintre eroi se mai poate mișca, sigur doriți să vă "
+"terminați tura?"
 
 msgid "Are you sure you want to quit?"
 msgstr "Sigur vreți să închideți?"
@@ -5328,7 +5335,7 @@ msgid "Congratulations!"
 msgstr ""
 
 msgid "Nothing here. Where could it be?"
-msgstr ""
+msgstr "Nimic aici. Unde poate fi?"
 
 msgid "Try searching on clear ground."
 msgstr ""
@@ -5337,10 +5344,10 @@ msgid "A miniature view of the known world. Left click to move viewing area."
 msgstr ""
 
 msgid "Month: %{month} Week: %{week}"
-msgstr ""
+msgstr "Luna: %{month} Săptămâna: %{week}"
 
 msgid "Day: %{day}"
-msgstr ""
+msgstr "Ziua: %{day}"
 
 msgid ""
 "You find a small\n"
@@ -6681,14 +6688,15 @@ msgid ""
 "oracle taught me his skill. I have the answer you seek.\""
 msgstr ""
 
-#, fuzzy
 msgid "No spell book is present."
-msgstr "Nu sunt vrăji de aruncat."
+msgstr "Cartea de vrăji nu este prezentă."
 
 msgid ""
 "This spell costs %{mana} spell points. You have no spell points, so you "
 "cannot cast it."
 msgstr ""
+"Această vrajă costă %{mana} puncte. Nu aveți suficiente puncte de vrăji, "
+"deci nu o puteți folosi."
 
 msgid ""
 "This spell costs %{mana} spell points. You only have %{point} spell points, "
@@ -6732,9 +6740,9 @@ msgid ""
 "This spell will have no effect."
 msgstr ""
 
-#, fuzzy
 msgid "This hero is already in a town, so this spell will have no effect."
-msgstr "Vraja aceea nu va afecta pe nimeni!"
+msgstr ""
+"Acest erou este deja într-un oraș, deci această vrajă nu va avea niciun efect."
 
 msgid ""
 "The nearest town is %{town}.\n"
@@ -7322,10 +7330,10 @@ msgid ""
 msgstr ""
 
 msgid "Hero/Stats"
-msgstr ""
+msgstr "Erou/Stats"
 
 msgid "Skills"
-msgstr ""
+msgstr "Abilități"
 
 msgid "Town/Castle"
 msgstr ""
@@ -7334,13 +7342,13 @@ msgid "Garrison"
 msgstr ""
 
 msgid "Gold Per Day:"
-msgstr ""
+msgstr "Aur pe zi:"
 
 msgid "View Heroes."
 msgstr ""
 
 msgid "Towns/Castles"
-msgstr ""
+msgstr "Orașe/Castele"
 
 msgid "View Towns and Castles."
 msgstr ""
@@ -7471,22 +7479,22 @@ msgid "speed|Crawling"
 msgstr ""
 
 msgid "speed|Very Slow"
-msgstr ""
+msgstr "Foarte încet"
 
 msgid "speed|Slow"
-msgstr ""
+msgstr "Încet"
 
 msgid "speed|Average"
 msgstr ""
 
 msgid "speed|Fast"
-msgstr ""
+msgstr "Rapid"
 
 msgid "speed|Very Fast"
-msgstr ""
+msgstr "Foarte rapid"
 
 msgid "speed|Ultra Fast"
-msgstr ""
+msgstr "Ultra rapid"
 
 msgid "speed|Blazing"
 msgstr ""
@@ -7630,7 +7638,7 @@ msgid "Gold Mine"
 msgstr ""
 
 msgid "Mine"
-msgstr ""
+msgstr "mină"
 
 msgid "Burma shave."
 msgstr ""
@@ -7726,7 +7734,7 @@ msgid "Oasis"
 msgstr ""
 
 msgid "Resource"
-msgstr ""
+msgstr "Resursă"
 
 msgid "Sawmill"
 msgstr ""
@@ -7765,7 +7773,7 @@ msgstr[1] ""
 msgstr[2] ""
 
 msgid "Artifact"
-msgstr ""
+msgstr "Artifact"
 
 msgid "Mermaid"
 msgstr ""
@@ -7780,7 +7788,7 @@ msgid "Random Artifact"
 msgstr ""
 
 msgid "Random Resource"
-msgstr ""
+msgstr "Resursă aleatorie"
 
 msgid "Random Monster"
 msgstr ""
@@ -7807,7 +7815,7 @@ msgid "Random Monster - very strong"
 msgstr ""
 
 msgid "Hero"
-msgstr ""
+msgstr "Erou"
 
 msgid "Nothing Special"
 msgstr ""
@@ -9490,7 +9498,7 @@ msgid "Dummy 4"
 msgstr ""
 
 msgid "Spell Scroll"
-msgstr ""
+msgstr "Pergament magic"
 
 msgid ""
 "This %{name} gives the hero the ability to cast the %{spell} spell if the "
@@ -10223,7 +10231,7 @@ msgid "You have no Magic Book, so you cannot cast a spell."
 msgstr ""
 
 msgid "No spell to cast."
-msgstr ""
+msgstr "Nicio vrajă disponibilă."
 
 msgid "Your hero has %{point} spell points remaining."
 msgstr ""
@@ -10330,3 +10338,6 @@ msgid ""
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
 msgstr ""
+"Verificați cea mai nouă versiune a jocului la\n"
+"https://github.com/ihhub/\n"
+"fheroes2/releases"
