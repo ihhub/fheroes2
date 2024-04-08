@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-03 04:20+0000\n"
+"POT-Creation-Date: 2024-04-08 03:20+0000\n"
 "PO-Revision-Date: 2023-09-03 18:42+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -7611,6 +7611,10 @@ msgstr "%{name} (Level %{level})"
 msgid "Random %{race} hero (Level %{level})"
 msgstr "%{race}en %{name} (level %{level})"
 
+#, fuzzy
+msgid "Hero race:"
+msgstr "Heltevindu"
+
 msgid "Are you sure you want to dismiss this Hero?"
 msgstr "Er du sikker på at du ønsker å bortvise denne helten?"
 
@@ -7640,12 +7644,16 @@ msgstr "Mana"
 msgid "View Spell Points Info"
 msgstr "Vis info om mana"
 
+msgid "Set patrol radius in tiles"
+msgstr ""
+
 #, fuzzy
 msgid "Enter hero's name"
 msgstr "Mist helten kalt %{name}."
 
-msgid "Set patrol radius in tiles"
-msgstr ""
+#, fuzzy
+msgid "Click to change race."
+msgstr "Klikk for å vise neste by."
 
 #, fuzzy
 msgid ""

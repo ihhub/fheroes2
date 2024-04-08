@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-03 04:20+0000\n"
+"POT-Creation-Date: 2024-04-08 03:20+0000\n"
 "PO-Revision-Date: 2024-02-20 08:49+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -7477,6 +7477,10 @@ msgstr "%{name} (Cấp độ %{level})"
 msgid "Random %{race} hero (Level %{level})"
 msgstr "%{name} chủng tộc %{race} (Cấp %{level})"
 
+#, fuzzy
+msgid "Hero race:"
+msgstr "Màn hình Tướng"
+
 msgid "Are you sure you want to dismiss this Hero?"
 msgstr "Ngươi có chắc chắn muốn giải tán Tướng này không?"
 
@@ -7506,12 +7510,16 @@ msgstr "Điểm Phép thuật"
 msgid "View Spell Points Info"
 msgstr "Xem Thông tin Điểm Phép thuật"
 
+msgid "Set patrol radius in tiles"
+msgstr ""
+
 #, fuzzy
 msgid "Enter hero's name"
 msgstr "Mất tướng: %{name}."
 
-msgid "Set patrol radius in tiles"
-msgstr ""
+#, fuzzy
+msgid "Click to change race."
+msgstr "Nhấp để xem thị trấn sau."
 
 #, fuzzy
 msgid ""

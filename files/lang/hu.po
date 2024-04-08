@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-07 03:37+0000\n"
+"POT-Creation-Date: 2024-04-08 03:20+0000\n"
 "PO-Revision-Date: 2023-09-04 21:55+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -7332,6 +7332,10 @@ msgstr "Véletlenszerű hős (%{level}. szint)"
 msgid "Random %{race} hero (Level %{level})"
 msgstr "Véletlenszerű %{race} hős (%{level}. szint)"
 
+#, fuzzy
+msgid "Hero race:"
+msgstr "Hős képernyő"
+
 msgid "Are you sure you want to dismiss this Hero?"
 msgstr "Biztos, hogy elbocsátod ezt a hőst?"
 
@@ -7362,11 +7366,15 @@ msgstr "Varázspont érték beállítása"
 msgid "View Spell Points Info"
 msgstr "Varázspont információ"
 
+msgid "Set patrol radius in tiles"
+msgstr "Járőrözési sugár beállítása"
+
 msgid "Enter hero's name"
 msgstr "Hős nevének megadása"
 
-msgid "Set patrol radius in tiles"
-msgstr "Járőrözési sugár beállítása"
+#, fuzzy
+msgid "Click to change race."
+msgstr "Kattints a következő város mutatásához."
 
 msgid ""
 "'Spread' combat formation spreads the hero's units from the top to the "
