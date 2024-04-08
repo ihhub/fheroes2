@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-03 04:20+0000\n"
+"POT-Creation-Date: 2024-04-08 03:20+0000\n"
 "PO-Revision-Date: 2023-12-22 00:32+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -7616,6 +7616,10 @@ msgstr "%{name} (Stufe %{level})"
 msgid "Random %{race} hero (Level %{level})"
 msgstr "%{name} (Stufe %{level} %{race})"
 
+#, fuzzy
+msgid "Hero race:"
+msgstr "Heldenbildschirm"
+
 msgid "Are you sure you want to dismiss this Hero?"
 msgstr "Seid Ihr sicher, dass Ihr diesen Helden entlassen wollt?"
 
@@ -7645,12 +7649,16 @@ msgstr "Zauberpunkte"
 msgid "View Spell Points Info"
 msgstr "Infos zu Zauberpunkten anzeigen"
 
+msgid "Set patrol radius in tiles"
+msgstr ""
+
 #, fuzzy
 msgid "Enter hero's name"
 msgstr "Den Helden verlieren: %{name}."
 
-msgid "Set patrol radius in tiles"
-msgstr ""
+#, fuzzy
+msgid "Click to change race."
+msgstr "Klicken um die nächste Stadt anzuzeigen."
 
 #, fuzzy
 msgid ""

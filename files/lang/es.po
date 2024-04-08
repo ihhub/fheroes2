@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-03 04:20+0000\n"
+"POT-Creation-Date: 2024-04-08 03:20+0000\n"
 "PO-Revision-Date: 2024-02-16 05:07+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -7379,6 +7379,10 @@ msgstr "%{name} ( Nivel %{level} )"
 msgid "Random %{race} hero (Level %{level})"
 msgstr "%{name}, %{race} ( Nivel %{level} )"
 
+#, fuzzy
+msgid "Hero race:"
+msgstr "Pantalla de Héroe"
+
 msgid "Are you sure you want to dismiss this Hero?"
 msgstr "¿Estas seguro que quieres despedir este Héroe?"
 
@@ -7408,12 +7412,16 @@ msgstr "Maná"
 msgid "View Spell Points Info"
 msgstr "Ver información sobre Maná"
 
+msgid "Set patrol radius in tiles"
+msgstr ""
+
 #, fuzzy
 msgid "Enter hero's name"
 msgstr "Pierdes el héroe: %{name}."
 
-msgid "Set patrol radius in tiles"
-msgstr ""
+#, fuzzy
+msgid "Click to change race."
+msgstr "Haga clic para ver la siguiente ciudad."
 
 msgid ""
 "'Spread' combat formation spreads the hero's units from the top to the "
