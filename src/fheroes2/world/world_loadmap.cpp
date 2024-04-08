@@ -747,6 +747,7 @@ bool World::loadResurrectionMap( const std::string & filename )
 
                 for ( size_t idx = 0; idx < source.size(); idx++ ) {
                     tileData[idx] = static_cast<uint32_t>( source[idx] );
+            }
             else if ( Maps::isJailObject( object.group, object.index ) ) {
                 assert( map.heroMetadata.find( object.id ) != map.heroMetadata.end() );
 
