@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-08 03:20+0000\n"
+"POT-Creation-Date: 2024-04-08 13:20+0000\n"
 "PO-Revision-Date: 2023-09-04 21:55+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -3785,6 +3785,10 @@ msgstr "Az aktuális térkép mentése."
 
 msgid "Quit out of the map editor."
 msgstr "Kilépés a térképszerkesztőből."
+
+#, fuzzy
+msgid "Set %{monster} Count"
+msgstr "%{monster} lövése"
 
 msgid "Objects cannot be placed outside the map."
 msgstr "Tárgyakat nem lehet a térképen kívülre helyezni."

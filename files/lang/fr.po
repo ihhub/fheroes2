@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-08 03:20+0000\n"
+"POT-Creation-Date: 2024-04-08 13:20+0000\n"
 "PO-Revision-Date: 2024-03-16 00:13+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -3851,6 +3851,10 @@ msgstr "Sauvegarder la carte actuelle."
 
 msgid "Quit out of the map editor."
 msgstr "Quitter l'éditeur de carte."
+
+#, fuzzy
+msgid "Set %{monster} Count"
+msgstr "Tirer sur %{monster}"
 
 msgid "Objects cannot be placed outside the map."
 msgstr "Les élements ne peuvent pas être placés en dehors de la carte."
