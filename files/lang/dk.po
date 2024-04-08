@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-03 04:20+0000\n"
+"POT-Creation-Date: 2024-04-08 13:20+0000\n"
 "PO-Revision-Date: 2024-03-05 13:55+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
@@ -3844,6 +3844,10 @@ msgstr "Gem nuværende kort."
 msgid "Quit out of the map editor."
 msgstr "Forlad korteditoren."
 
+#, fuzzy
+msgid "Set %{monster} Count"
+msgstr "Skyd %{monster}"
+
 msgid "Objects cannot be placed outside the map."
 msgstr "Objekter kan ikke placeres udenfor kortet."
 
@@ -7446,6 +7450,10 @@ msgstr "%{name} (Level %{level})"
 msgid "Random %{race} hero (Level %{level})"
 msgstr "%{race}en %{name} (Level %{level})"
 
+#, fuzzy
+msgid "Hero race:"
+msgstr "Helteskærm"
+
 msgid "Are you sure you want to dismiss this Hero?"
 msgstr "Er du sikker på, du vil bortvise denne helt?"
 
@@ -7475,12 +7483,16 @@ msgstr "Mana"
 msgid "View Spell Points Info"
 msgstr "Vis info om mana"
 
+msgid "Set patrol radius in tiles"
+msgstr ""
+
 #, fuzzy
 msgid "Enter hero's name"
 msgstr "Mist helten '%{name}'."
 
-msgid "Set patrol radius in tiles"
-msgstr ""
+#, fuzzy
+msgid "Click to change race."
+msgstr "Klik for at se næste by."
 
 msgid ""
 "'Spread' combat formation spreads the hero's units from the top to the "

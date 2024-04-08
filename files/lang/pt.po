@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-03 04:20+0000\n"
+"POT-Creation-Date: 2024-04-08 13:20+0000\n"
 "PO-Revision-Date: 2024-04-05 18:26-0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
@@ -3807,6 +3807,10 @@ msgstr "Salvar o mapa atual."
 msgid "Quit out of the map editor."
 msgstr "Sair do editor de mapas."
 
+#, fuzzy
+msgid "Set %{monster} Count"
+msgstr "Disparar em %{monster}"
+
 msgid "Objects cannot be placed outside the map."
 msgstr "Objetos não podem ser colocados fora do mapa."
 
@@ -7424,6 +7428,10 @@ msgstr "Herói aleatório (Nível %{level})"
 msgid "Random %{race} hero (Level %{level})"
 msgstr "Herói aleatório %{race} (Nível %{level})"
 
+#, fuzzy
+msgid "Hero race:"
+msgstr "Tela do Herói"
+
 msgid "Are you sure you want to dismiss this Hero?"
 msgstr "Você tem certeza de que deseja dispensar este Herói?"
 
@@ -7455,11 +7463,15 @@ msgstr "Definir o valor da Mana"
 msgid "View Spell Points Info"
 msgstr "Ver Informação sobre a Mana"
 
+msgid "Set patrol radius in tiles"
+msgstr "Definir raio de patrulha em ladrilhos"
+
 msgid "Enter hero's name"
 msgstr "Insira o nome do herói"
 
-msgid "Set patrol radius in tiles"
-msgstr "Definir raio de patrulha em ladrilhos"
+#, fuzzy
+msgid "Click to change race."
+msgstr "Clique para mostrar a próxima cidade."
 
 msgid ""
 "'Spread' combat formation spreads the hero's units from the top to the "
