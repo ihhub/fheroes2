@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-08 03:20+0000\n"
+"POT-Creation-Date: 2024-04-08 13:20+0000\n"
 "PO-Revision-Date: 2023-09-11 20:22+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3843,6 +3843,10 @@ msgstr "Uložiť aktuálnu mapu."
 
 msgid "Quit out of the map editor."
 msgstr "Ukončiť prácu v editore máp."
+
+#, fuzzy
+msgid "Set %{monster} Count"
+msgstr "Streľ do: %{monster}"
 
 #, fuzzy
 msgid "Objects cannot be placed outside the map."
