@@ -242,14 +242,16 @@ void ArmyBar::RedrawBackground( const fheroes2::Rect & pos, fheroes2::Image & ds
         fheroes2::Copy( backsf, 0, 0, dstsf, pos );
     }
     else {
-        fheroes2::Copy( fheroes2::AGG::GetICN( ICN::STRIP, 2 ), 0, 0, dstsf, pos );
-
         if ( can_change && !_saveLastTroop && _army->GetOccupiedSlotCount() == 0 ) {
             // If none of army's slot is set within the Editor, then a default army will be applied at the game start.
-            fheroes2::ApplyPalette( dstsf, pos.x, pos.y, dstsf, pos.x, pos.y, pos.width, pos.height, PAL::GetPalette( PAL::PaletteType::DARKENING ) );
+            fheroes2::ApplyPalette( fheroes2::AGG::GetICN( ICN::STRIP, 2 ), 0, 0, dstsf, pos.x, pos.y, pos.width, pos.height,
+                                    PAL::GetPalette( PAL::PaletteType::DARKENING ) );
 
             const fheroes2::Text text( _( "Default\ntroop" ), fheroes2::FontType::normalWhite() );
             text.drawInRoi( pos.x, pos.y + pos.height / 2 - 17, pos.width, dstsf, pos );
+        }
+        else {
+            fheroes2::Copy( fheroes2::AGG::GetICN( ICN::STRIP, 2 ), 0, 0, dstsf, pos );
         }
     }
 }

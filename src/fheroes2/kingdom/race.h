@@ -47,6 +47,11 @@ namespace Race
 
     uint8_t IndexToRace( const int index );
 
+    uint32_t getRaceIcnIndex( const int race, const bool isActivePlayer );
+
+    int getNextRace( const int race );
+    int getPreviousRace( const int race );
+
     bool isMagicalRace( const int race );
 }
 
