@@ -270,10 +270,10 @@ namespace
                     needRedraw = true;
                 }
                 else if ( objectIter->group == Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS ) {
-                    const auto & miscellaneousObjects = Maps::getObjectsByGroup( objectIter->group );
+                    const auto & objects = Maps::getObjectsByGroup( objectIter->group );
 
-                    assert( objectIter->index < miscellaneousObjects.size() );
-                    const auto objectType = miscellaneousObjects[objectIter->index].objectType;
+                    assert( objectIter->index < objects.size() );
+                    const auto objectType = objects[objectIter->index].objectType;
                     switch ( objectType ) {
                     case MP2::OBJ_EVENT:
                         assert( mapFormat.adventureMapEventMetadata.find( objectIter->id ) != mapFormat.adventureMapEventMetadata.end() );
@@ -295,10 +295,10 @@ namespace
                     needRedraw = true;
                 }
                 else if ( objectIter->group == Maps::ObjectGroup::ADVENTURE_WATER ) {
-                    const auto & waterObjects = Maps::getObjectsByGroup( objectIter->group );
+                    const auto & objects = Maps::getObjectsByGroup( objectIter->group );
 
-                    assert( objectIter->index < waterObjects.size() );
-                    const auto objectType = waterObjects[objectIter->index].objectType;
+                    assert( objectIter->index < objects.size() );
+                    const auto objectType = objects[objectIter->index].objectType;
                     if ( objectType == MP2::OBJ_BOTTLE ) {
                         assert( mapFormat.signMetadata.find( objectIter->id ) != mapFormat.signMetadata.end() );
                         mapFormat.signMetadata.erase( objectIter->id );
