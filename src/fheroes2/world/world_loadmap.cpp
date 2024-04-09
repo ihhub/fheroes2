@@ -750,7 +750,6 @@ bool World::loadResurrectionMap( const std::string & filename )
                 const int color = ( 1 << metadata[0] );
 
                 // Check the race correctness.
-                
                 assert( heroInfo.race == ( 1 << metadata[1] ) );
 
                 // Heroes can not be neutral.
