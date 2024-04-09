@@ -27,6 +27,7 @@
 #include <cstddef>
 #include <cstdint>
 #include <functional>
+#include <list>
 #include <map>
 #include <memory>
 #include <ostream>
@@ -59,6 +60,7 @@
 #include "players.h"
 #include "race.h"
 #include "rand.h"
+#include "resource.h"
 #include "serialize.h"
 #include "settings.h"
 #include "world.h"
