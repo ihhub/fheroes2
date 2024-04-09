@@ -715,7 +715,7 @@ bool World::loadResurrectionMap( const std::string & filename )
                 castleMetadataUIDs.emplace( object.id );
 #endif
 
-                const uint8_t color = ( 1 << Maps::getTownColorIndex( map, tileId, object.id ) );
+                const int color = ( 1 << Maps::getTownColorIndex( map, tileId, object.id ) );
 
                 int race = ( 1 << townObjects[object.index].metadata[0] );
                 const bool isRandom = ( race == Race::RAND );
