@@ -145,6 +145,8 @@ struct MapSign : public MapObjectSimple
 
     void LoadFromMP2( const int32_t mapIndex, const std::vector<uint8_t> & data );
 
+    void setDefaultMessage();
+
     std::string message;
 };
 

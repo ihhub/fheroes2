@@ -845,6 +845,9 @@ bool World::loadResurrectionMap( const std::string & filename )
                     MapSign * signObject = new MapSign();
                     signObject->message = std::move( signInfo.message );
                     signObject->setUIDAndIndex( static_cast<int32_t>( tileId ) );
+                    if ( signObject->message.empty() ) {
+                        signObject->setDefaultMessage();
+                    }
 
                     map_objects.add( signObject );
 
@@ -868,6 +871,8 @@ bool World::loadResurrectionMap( const std::string & filename )
 
                     sphinxObject->resources = sphinxInfo.resources;
                     sphinxObject->artifact = sphinxInfo.artifact;
+                    sphinxObject->valid = ( !sphinxObject->message.empty() && !sphinxObject->answers.empty() );
+
                     sphinxObject->setUIDAndIndex( static_cast<int32_t>( tileId ) );
 
                     map_objects.add( sphinxObject );
@@ -892,6 +897,9 @@ bool World::loadResurrectionMap( const std::string & filename )
                     MapSign * signObject = new MapSign();
                     signObject->message = std::move( signInfo.message );
                     signObject->setUIDAndIndex( static_cast<int32_t>( tileId ) );
+                    if ( signObject->message.empty() ) {
+                        signObject->setDefaultMessage();
+                    }
 
                     map_objects.add( signObject );
                 }
