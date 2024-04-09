@@ -270,7 +270,7 @@ namespace
                     needRedraw = true;
                 }
                 else if ( objectIter->group == Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS ) {
-                    const auto & miscellaneousObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_ARTIFACTS );
+                    const auto & miscellaneousObjects = Maps::getObjectsByGroup( objectIter->group );
 
                     assert( objectIter->index < miscellaneousObjects.size() );
                     const auto objectType = miscellaneousObjects[objectIter->index].objectType;
@@ -295,7 +295,7 @@ namespace
                     needRedraw = true;
                 }
                 else if ( objectIter->group == Maps::ObjectGroup::ADVENTURE_WATER ) {
-                    const auto & waterObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_WATER );
+                    const auto & waterObjects = Maps::getObjectsByGroup( objectIter->group );
 
                     assert( objectIter->index < waterObjects.size() );
                     const auto objectType = waterObjects[objectIter->index].objectType;
