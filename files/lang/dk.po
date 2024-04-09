@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-04-08 13:20+0000\n"
-"PO-Revision-Date: 2024-04-09 14:37+0200\n"
+"PO-Revision-Date: 2024-04-09 14:48+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
 "Language: da\n"
@@ -1025,7 +1025,7 @@ msgid "%{race1} %{name1} vs %{race2} %{name2}"
 msgstr "%{race1} %{name1} vs %{race2} %{name2}"
 
 msgid "Monsters"
-msgstr "Monstre"
+msgstr "Væsener"
 
 msgid "N/A"
 msgstr "I/T"
@@ -3857,7 +3857,7 @@ msgid "Objects cannot be placed outside the map."
 msgstr "Objekter kan ikke placeres udenfor kortet."
 
 msgid "Monsters cannot be placed on water."
-msgstr "Monstre kan ikke placeres på vand."
+msgstr "Væsener kan ikke placeres på vand."
 
 msgid "Choose a tile which does not contain any objects."
 msgstr "Vælg et felt, som ikke indeholder nogen objekter."
@@ -8522,16 +8522,16 @@ msgid "Eye of the Magi"
 msgstr "Magikerens øje"
 
 msgid "Random Monster - weak"
-msgstr "Tilfældigt monster - svag"
+msgstr "Tilfældigt væsen - svag"
 
 msgid "Random Monster - medium"
-msgstr "Tilfældigt monster - medium"
+msgstr "Tilfældigt væsen - medium"
 
 msgid "Random Monster - strong"
-msgstr "Tilfældigt monster - stærk"
+msgstr "Tilfældigt væsen - stærk"
 
 msgid "Random Monster - very strong"
-msgstr "Tilfældigt monster - meget stærk"
+msgstr "Tilfældigt væsen - meget stærk"
 
 msgid "Hero"
 msgstr "Helt"
@@ -8734,10 +8734,10 @@ msgid "Frozen Lake"
 msgstr "Frossen sø"
 
 msgid "Unknown Monster"
-msgstr "Ukendt monster"
+msgstr "Ukendt væsen"
 
 msgid "Unknown Monsters"
-msgstr "Ukendte monstre"
+msgstr "Ukendte væsener"
 
 msgid "Peasant"
 msgstr "Bonde"
@@ -9134,31 +9134,31 @@ msgid "Water Elementals"
 msgstr "Vand-elementaler"
 
 msgid "Random Monsters"
-msgstr "Tilfældige monstre"
+msgstr "Tilfældige væsener"
 
 msgid "Random Monster 1"
-msgstr "Tilfældigt monster 1"
+msgstr "Tilfældigt væsen 1"
 
 msgid "Random Monsters 1"
-msgstr "Tilfældige monstre 1"
+msgstr "Tilfældige væsener 1"
 
 msgid "Random Monster 2"
-msgstr "Tilfældigt monster 2"
+msgstr "Tilfældigt væsen 2"
 
 msgid "Random Monsters 2"
-msgstr "Tilfældige monstre 2"
+msgstr "Tilfældige væsener 2"
 
 msgid "Random Monster 3"
-msgstr "Tilfældigt monster 3"
+msgstr "Tilfældigt væsen 3"
 
 msgid "Random Monsters 3"
-msgstr "Tilfældige monstre 3"
+msgstr "Tilfældige væsener 3"
 
 msgid "Random Monster 4"
-msgstr "Tilfældigt monster 4"
+msgstr "Tilfældigt væsen 4"
 
 msgid "Random Monsters 4"
-msgstr "Tilfældige monstre 4"
+msgstr "Tilfældige væsener 4"
 
 msgid "Double shot"
 msgstr "Dobbeltskud"
