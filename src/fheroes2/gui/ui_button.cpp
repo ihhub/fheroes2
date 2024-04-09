@@ -36,7 +36,8 @@
 
 namespace
 {
-    fheroes2::Image resizeHeightButton( const fheroes2::Image & original, const int32_t width, const int32_t height )
+    // TODO: Replace the other resizeButton() function with this one.
+    fheroes2::Image resizeButton( const fheroes2::Image & original, const int32_t width, const int32_t height )
     {
         assert( height > 0 );
 
@@ -45,62 +46,93 @@ namespace
         output.reset();
 
         const int32_t originalWidth = original.width();
-        if ( originalWidth >= width ) {
-            fheroes2::Copy( original, 0, 0, output, 0, 0, width / 2, height );
-            const int32_t secondHalf = width - width / 2;
-            fheroes2::Copy( original, originalWidth - secondHalf, 0, output, width - secondHalf, 0, secondHalf, height );
+        const int32_t originalHeight = original.height();
+        if ( originalHeight == height && originalWidth == width ) {
+            fheroes2::Copy( original, output );
         }
+        else if ( originalHeight >= height && originalWidth >= width ) {
+            fheroes2::Copy( original, 0, 0, output, 0, 0, width / 2, height / 2 );
+            const int32_t secondHalfHeight = height - height / 2;
+            const int32_t secondHalfWidth = width - width / 2;
+            fheroes2::Copy( original, 0, originalHeight - secondHalfHeight, output, 0, height - secondHalfHeight, secondHalfWidth, secondHalfHeight );
+            fheroes2::Copy( original, originalWidth - secondHalfWidth, 0, output, width - secondHalfWidth, 0, secondHalfWidth, secondHalfHeight );
+            fheroes2::Copy( original, originalWidth - secondHalfWidth, originalHeight - secondHalfHeight, output, width - secondHalfWidth, height - secondHalfHeight,
+                            secondHalfWidth, secondHalfHeight );
+        }
+        // TODO: Add if condition for no change in height but change in width, or vice-versa, compared to original button.
         else {
             const int32_t middleWidth = originalWidth / 3;
             const int32_t overallMiddleWidth = width - middleWidth * 2;
             const int32_t middleWidthCount = overallMiddleWidth / middleWidth;
-            const int32_t middleLeftOver = overallMiddleWidth - middleWidthCount * middleWidth;
+            const int32_t middleWidthLeftOver = overallMiddleWidth - middleWidthCount * middleWidth;
 
-            fheroes2::Copy( original, 0, 0, output, 0, 0, middleWidth, height );
-            int32_t offsetX = middleWidth;
-            for ( int32_t i = 0; i < middleWidthCount; ++i ) {
-                fheroes2::Copy( original, middleWidth, 0, output, offsetX, 0, middleWidth, height );
-                offsetX += middleWidth;
-            }
-
-            if ( middleLeftOver > 0 ) {
-                fheroes2::Copy( original, middleWidth, 0, output, offsetX, 0, middleLeftOver, height );
-                offsetX += middleLeftOver;
-            }
-
-            const int32_t rightPartWidth = originalWidth - middleWidth * 2;
-            assert( offsetX + rightPartWidth == width );
-
-            fheroes2::Copy( original, originalWidth - rightPartWidth, 0, output, offsetX, 0, rightPartWidth, height );
-        }
-        const int32_t originalHeight = original.height();
-        if ( originalHeight >= height ) {
-            fheroes2::Copy( original, 0, 0, output, 0, 0, width, height / 2 );
-            const int32_t secondHalf = height - height / 2;
-            fheroes2::Copy( original, 0, originalHeight - secondHalf, output, 0, height - secondHalf, width, secondHalf );
-        }
-        else {
             const int32_t middleHeight = originalHeight / 3;
             const int32_t overallMiddleHeight = height - middleHeight * 2;
             const int32_t middleHeightCount = overallMiddleHeight / middleHeight;
-            const int32_t middleLeftOver = overallMiddleHeight - middleHeightCount * middleHeight;
+            const int32_t middleHeightLeftOver = overallMiddleHeight - middleHeightCount * middleHeight;
 
-            fheroes2::Copy( original, 0, 0, output, 0, 0, width, middleHeight );
+            fheroes2::Copy( original, 0, 0, output, 0, 0, middleWidth, middleHeight );
+
             int32_t offsetY = middleHeight;
             for ( int32_t i = 0; i < middleHeightCount; ++i ) {
-                fheroes2::Copy( original, 0, middleHeight, output, 0, offsetY, width, middleHeight );
+                fheroes2::Copy( original, 0, middleHeight, output, 0, offsetY, middleWidth, middleHeight );
                 offsetY += middleHeight;
             }
 
-            if ( middleLeftOver > 0 ) {
-                fheroes2::Copy( original, 0, middleHeight, output, 0, offsetY, width, middleLeftOver );
-                offsetY += middleLeftOver;
+            if ( middleHeightLeftOver > 0 ) {
+                fheroes2::Copy( original, 0, middleHeight, output, 0, offsetY, middleWidth, middleHeightLeftOver );
+                offsetY += middleHeightLeftOver;
             }
 
-            const int32_t rightPartWidth = originalHeight - middleHeight * 2;
-            assert( offsetY + rightPartWidth == height );
+            const int32_t leftBottomPart = originalHeight - middleHeight * 2;
 
-            fheroes2::Copy( original, 0, originalHeight - rightPartWidth, output, 0, offsetY, width, rightPartWidth );
+            fheroes2::Copy( original, 0, originalHeight - leftBottomPart, output, 0, offsetY, middleWidth, leftBottomPart );
+
+            int32_t offsetX = middleWidth;
+            for ( int32_t i = 0; i < middleWidthCount; ++i ) {
+                fheroes2::Copy( original, middleWidth, 0, output, offsetX, 0, middleWidth, middleHeight );
+                offsetX += middleWidth;
+            }
+
+            if ( middleWidthLeftOver > 0 ) {
+                fheroes2::Copy( original, middleWidth, 0, output, offsetX, 0, middleWidthLeftOver, middleHeight );
+                offsetX += middleWidthLeftOver;
+            }
+
+            const int32_t rightPartWidth = originalWidth - middleWidth * 2;
+
+            fheroes2::Copy( original, originalWidth - rightPartWidth, 0, output, offsetX, 0, rightPartWidth, middleHeight );
+
+            // TODO: Rename this variable, or better unify the for loops.
+            int32_t offsetY2 = middleHeight;
+            for ( int32_t i = 0; i < middleHeightCount; ++i ) {
+                fheroes2::Copy( original, originalWidth - rightPartWidth, middleHeight, output, offsetX, offsetY2, middleWidth, middleHeight );
+                offsetY2 += middleHeight;
+            }
+
+            if ( middleHeightLeftOver > 0 ) {
+                fheroes2::Copy( original, originalWidth - rightPartWidth, middleHeight, output, offsetX, offsetY2, middleWidth, middleHeightLeftOver );
+                offsetY2 += middleHeightLeftOver;
+            }
+
+            const int32_t rightPartHeight = originalHeight - middleHeight * 2;
+
+            fheroes2::Copy( original, originalWidth - rightPartWidth, originalHeight - rightPartHeight, output, offsetX, offsetY, rightPartWidth, rightPartHeight );
+            // TODO: Rename this variable, or better unify the for loops.
+            int32_t offsetX2 = middleWidth;
+            for ( int32_t i = 0; i < middleWidthCount; ++i ) {
+                fheroes2::Copy( original, middleWidth, originalHeight - rightPartHeight, output, offsetX2, offsetY, middleWidth, originalHeight - rightPartHeight );
+                offsetX2 += middleWidth;
+            }
+
+            if ( middleWidthLeftOver > 0 ) {
+                fheroes2::Copy( original, middleWidth, originalHeight - rightPartHeight, output, offsetX2, offsetY, middleWidthLeftOver,
+                                originalHeight - rightPartHeight );
+                offsetX2 += middleWidthLeftOver;
+            }
+
+            // Step 9 Todo: Get the button filling color according to Evil/Good interface setting and according to pressed and released state.
+            fheroes2::Fill( output, middleWidth, middleHeight, offsetX - middleWidth, offsetY - middleHeight, fheroes2::GetColorId( 216, 184, 152 ) );
         }
 
         return output;
@@ -722,13 +754,17 @@ namespace fheroes2
     void getTextAdaptedButton( Sprite & released, Sprite & pressed, const char * text, const int emptyButtonIcnID, const int buttonBackgroundIcnID )
     {
         fheroes2::FontColor buttonFont = fheroes2::FontColor::WHITE;
-        int32_t textAreaBorder = 0;
+        // TODO: Change the pairs below to fheroes2::Point or fheroes2::Size
+        int32_t textAreaXBorder = 0;
+        int32_t textAreaYBorder = 3;
         int32_t minimumTextAreaWidth = 0;
-        int32_t backgroundBorders = 0;
+        int32_t minimumTextAreaHeight = 15;
+        int32_t backgroundBordersX = 0;
+        int32_t backgroundBordersY = 7;
         fheroes2::Point releasedOffset = {};
         fheroes2::Point pressedOffset = {};
 
-        getButtonSpecificValues( emptyButtonIcnID, buttonFont, textAreaBorder, minimumTextAreaWidth, backgroundBorders, releasedOffset, pressedOffset );
+        getButtonSpecificValues( emptyButtonIcnID, buttonFont, textAreaXBorder, minimumTextAreaWidth, backgroundBordersX, releasedOffset, pressedOffset );
 
         const fheroes2::FontType releasedButtonFont{ fheroes2::FontSize::BUTTON_RELEASED, buttonFont };
 
@@ -744,18 +780,22 @@ namespace fheroes2
         const int32_t textWidth = releasedText.width( maximumTextAreaWidth );
         assert( textWidth > 0 );
 
-        const int32_t borderedTextWidth = textWidth + textAreaBorder;
+        const int32_t borderedTextWidth = textWidth + textAreaXBorder;
 
         const int32_t textAreaWidth = std::clamp( borderedTextWidth, minimumTextAreaWidth, maximumTextAreaWidth );
+        assert( textAreaWidth + backgroundBordersX > 0 );
 
-        const int32_t textHeight = releasedText.height();
+        const int32_t textHeight = releasedText.height( textAreaWidth );
         assert( textHeight > 0 );
 
-        assert( textAreaWidth + backgroundBorders > 0 );
+        const int32_t borderedTextHeight = textHeight + textAreaYBorder;
+        const int32_t maximumTextAreaHeight = 200; // Placeholder maximum height. Not sure what height is meaningful.
+        const int32_t textAreaHeight = std::clamp( borderedTextHeight, minimumTextAreaHeight, maximumTextAreaHeight );
 
-        // TODO: Make resizeButton() scale in vertical direction too, for vertical and larger buttons.
-        released = resizeHeightButton( AGG::GetICN( emptyButtonIcnID, 0 ), textAreaWidth + backgroundBorders, textHeight );
-        pressed = resizeHeightButton( AGG::GetICN( emptyButtonIcnID, 1 ), textAreaWidth + backgroundBorders, textHeight );
+        assert( textAreaHeight + backgroundBordersY > 0 );
+
+        released = resizeButton( AGG::GetICN( emptyButtonIcnID, 0 ), textAreaWidth + backgroundBordersX, textAreaHeight + backgroundBordersY );
+        pressed = resizeButton( AGG::GetICN( emptyButtonIcnID, 1 ), textAreaWidth + backgroundBordersX, textAreaHeight + backgroundBordersY );
 
         if ( buttonBackgroundIcnID != ICN::UNKNOWN ) {
             makeTransparentBackground( released, pressed, buttonBackgroundIcnID );
@@ -765,9 +805,9 @@ namespace fheroes2
         const fheroes2::Size pressedTextSize( pressedText.width( textAreaWidth ), pressedText.height( textAreaWidth ) );
 
         // The button font letters are all shifted 1 pixel to the left due to shadows, so we have to add 1 to the x position when drawing
-        // to properly center-align
-        releasedText.draw( releasedOffset.x + 1, releasedOffset.y + ( releasedText.height() - releasedTextSize.height ) / 2, textAreaWidth, released );
-        pressedText.draw( pressedOffset.x + 1, pressedOffset.y + ( pressedText.height() - pressedTextSize.height ) / 2, textAreaWidth, pressed );
+        // to properly center-align.
+        releasedText.draw( releasedOffset.x + 1, ( released.height() - releasedTextSize.height ) / 2, textAreaWidth, released );
+        pressedText.draw( pressedOffset.x + 1, ( pressed.height() - pressedTextSize.height ) / 2, textAreaWidth, pressed );
     }
 
     void makeButtonSprites( Sprite & released, Sprite & pressed, const std::string & text, const int32_t buttonWidth, const bool isEvilInterface,
