@@ -692,6 +692,8 @@ bool World::loadResurrectionMap( const std::string & filename )
     // Read and populate objects.
     const auto & townObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::KINGDOM_TOWNS );
     const auto & heroObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::KINGDOM_HEROES );
+    const auto & miscellaneousObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS );
+    const auto & waterObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_WATER );
 
 #if defined( WITH_DEBUG )
     std::set<uint32_t> standardMetadataUIDs;
@@ -740,13 +742,16 @@ bool World::loadResurrectionMap( const std::string & filename )
                 heroMetadataUIDs.emplace( object.id );
 #endif
 
+                assert( map.heroMetadata.find( object.id ) != map.heroMetadata.end() );
+
                 const auto & metadata = heroObjects[object.index].metadata;
+                auto & heroInfo = map.heroMetadata[object.id];
 
                 const int color = ( 1 << metadata[0] );
 
                 // Check the race correctness.
-                assert( map.heroMetadata.find( object.id ) != map.heroMetadata.end() );
-                assert( map.heroMetadata[object.id].race == ( 1 << metadata[1] ) );
+                
+                assert( heroInfo.race == ( 1 << metadata[1] ) );
 
                 // Heroes can not be neutral.
                 assert( color != Color::NONE );
@@ -754,19 +759,19 @@ bool World::loadResurrectionMap( const std::string & filename )
                 const Kingdom & kingdom = GetKingdom( color );
 
                 // Set race for random hero according to the kingdom's race.
-                if ( map.heroMetadata[object.id].race == Race::RAND ) {
-                    map.heroMetadata[object.id].race = static_cast<uint8_t>( kingdom.GetRace() );
+                if ( heroInfo.race == Race::RAND ) {
+                    heroInfo.race = static_cast<uint8_t>( kingdom.GetRace() );
                 }
 
                 // Check if the kingdom has exceeded the limit on hired heroes
                 if ( kingdom.AllowRecruitHero( false ) ) {
-                    Heroes * hero = GetHeroForHire( map.heroMetadata[object.id].race );
+                    Heroes * hero = GetHeroForHire( heroInfo.race );
                     if ( hero != nullptr ) {
                         hero->SetCenter( { static_cast<int32_t>( tileId ) % width, static_cast<int32_t>( tileId ) / width } );
 
                         hero->SetColor( color );
 
-                        hero->applyHeroMetadata( map.heroMetadata[object.id], false, false );
+                        hero->applyHeroMetadata( heroInfo, false, false );
                     }
                 }
             }
@@ -789,19 +794,107 @@ bool World::loadResurrectionMap( const std::string & filename )
 
                 assert( map.heroMetadata.find( object.id ) != map.heroMetadata.end() );
 
+                auto & heroInfo = map.heroMetadata[object.id];
+
                 const int color = Color::NONE;
 
-                if ( map.heroMetadata[object.id].race == Race::RAND ) {
-                    map.heroMetadata[object.id].race = static_cast<uint8_t>( Race::Rand() );
+                if ( heroInfo.race == Race::RAND ) {
+                    heroInfo.race = static_cast<uint8_t>( Race::Rand() );
                 }
 
-                Heroes * hero = GetHeroForHire( map.heroMetadata[object.id].race );
+                Heroes * hero = GetHeroForHire( heroInfo.race );
                 if ( hero != nullptr ) {
                     hero->SetCenter( { static_cast<int32_t>( tileId ) % width, static_cast<int32_t>( tileId ) / width } );
 
                     hero->SetColor( color );
 
-                    hero->applyHeroMetadata( map.heroMetadata[object.id], true, false );
+                    hero->applyHeroMetadata( heroInfo, true, false );
+                }
+            }
+            else if ( object.group == Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS ) {
+                assert( object.index < miscellaneousObjects.size() );
+
+                const auto objectType = miscellaneousObjects[object.index].objectType;
+                switch ( objectType ) {
+                case MP2::OBJ_EVENT: {
+#if defined( WITH_DEBUG )
+                    adventureMapEventMetadataUIDs.emplace( object.id );
+#endif
+                    assert( map.adventureMapEventMetadata.find( object.id ) != map.adventureMapEventMetadata.end() );
+                    auto & eventInfo = map.adventureMapEventMetadata[object.id];
+
+                    MapEvent * eventObject = new MapEvent();
+                    eventObject->resources = eventInfo.resources;
+                    eventObject->artifact = eventInfo.artifact;
+                    // TODO: change MapEvent to support map format functionality.
+                    eventObject->computer = ( eventInfo.computerPlayerColors != 0 );
+                    eventObject->colors = eventInfo.computerPlayerColors | eventInfo.humanPlayerColors;
+                    eventObject->message = std::move( eventInfo.message );
+
+                    eventObject->setUIDAndIndex( static_cast<int32_t>( tileId ) );
+                    map_objects.add( eventObject );
+
+                    break;
+                }
+                case MP2::OBJ_SIGN: {
+#if defined( WITH_DEBUG )
+                    signMetadataUIDs.emplace( object.id );
+#endif
+                    assert( map.signMetadata.find( object.id ) != map.signMetadata.end() );
+                    auto & signInfo = map.signMetadata[object.id];
+
+                    MapSign * signObject = new MapSign();
+                    signObject->message = std::move( signInfo.message );
+                    signObject->setUIDAndIndex( static_cast<int32_t>( tileId ) );
+
+                    map_objects.add( signObject );
+
+                    break;
+                }
+                case MP2::OBJ_SPHINX: {
+#if defined( WITH_DEBUG )
+                    sphinxMetadataUIDs.emplace( object.id );
+#endif
+
+                    assert( map.sphinxMetadata.find( object.id ) != map.sphinxMetadata.end() );
+                    auto & sphinxInfo = map.sphinxMetadata[object.id];
+
+                    MapSphinx * sphinxObject = new MapSphinx();
+
+                    sphinxObject->message = std::move( sphinxInfo.question );
+
+                    for ( auto & answer : sphinxInfo.answers ) {
+                        sphinxObject->answers.push_back( std::move( answer ) );
+                    }
+
+                    sphinxObject->resources = sphinxInfo.resources;
+                    sphinxObject->artifact = sphinxInfo.artifact;
+                    sphinxObject->setUIDAndIndex( static_cast<int32_t>( tileId ) );
+
+                    map_objects.add( sphinxObject );
+
+                    break;
+                }
+                default:
+                    // Other objects do not have metadata as of now.
+                    break;
+                }
+            }
+            else if ( object.group == Maps::ObjectGroup::ADVENTURE_WATER ) {
+                assert( object.index < waterObjects.size() );
+
+                if ( waterObjects[object.index].objectType == MP2::OBJ_BOTTLE ) {
+#if defined( WITH_DEBUG )
+                    signMetadataUIDs.emplace( object.id );
+#endif
+                    assert( map.signMetadata.find( object.id ) != map.signMetadata.end() );
+                    auto & signInfo = map.signMetadata[object.id];
+
+                    MapSign * signObject = new MapSign();
+                    signObject->message = std::move( signInfo.message );
+                    signObject->setUIDAndIndex( static_cast<int32_t>( tileId ) );
+
+                    map_objects.add( signObject );
                 }
             }
         }

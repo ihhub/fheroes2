@@ -205,8 +205,8 @@ namespace Maps
             heroMetadata->second.race = static_cast<uint8_t>( 1 << getObjectsByGroup( group )[index].metadata[1] );
         }
         else if ( group == ObjectGroup::KINGDOM_TOWNS ) {
-            assert( map.castleMetadata.find( uid ) == map.castleMetadata.end() );
-            map.castleMetadata.try_emplace( uid );
+            auto [metadata, isMetadataEmplaced] = map.castleMetadata.try_emplace( uid );
+            assert( isMetadataEmplaced );
         }
         else if ( isJailObject( group, index ) ) {
             auto [heroMetadata, isMetadataEmplaced] = map.heroMetadata.try_emplace( uid );
@@ -214,6 +214,46 @@ namespace Maps
 
             // Set Random race for the jailed hero by default.
             heroMetadata->second.race = Race::RAND;
+        }
+        else if ( group == ObjectGroup::MONSTERS ) {
+            auto [monsterMetadata, isMetadataEmplaced] = map.standardMetadata.try_emplace( uid );
+            assert( isMetadataEmplaced );
+        }
+        else if ( group == Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS ) {
+            const auto & objects = Maps::getObjectsByGroup( group );
+
+            assert( index < objects.size() );
+            const auto objectType = objects[index].objectType;
+
+            switch ( objectType ) {
+            case MP2::OBJ_EVENT: {
+                auto [metadata, isMetadataEmplaced] = map.adventureMapEventMetadata.try_emplace( uid );
+                assert( isMetadataEmplaced );
+                break;
+            }
+            case MP2::OBJ_SIGN: {
+                auto [metadata, isMetadataEmplaced] = map.signMetadata.try_emplace( uid );
+                assert( isMetadataEmplaced );
+                break;
+            }
+            case MP2::OBJ_SPHINX: {
+                auto [metadata, isMetadataEmplaced] = map.sphinxMetadata.try_emplace( uid );
+                assert( isMetadataEmplaced );
+                break;
+            }
+            default:
+                break;
+            }
+        }
+        else if ( group == Maps::ObjectGroup::ADVENTURE_WATER ) {
+            const auto & objects = Maps::getObjectsByGroup( group );
+
+            assert( index < objects.size() );
+            const auto objectType = objects[index].objectType;
+            if ( objectType == MP2::OBJ_BOTTLE ) {
+                auto [metadata, isMetadataEmplaced] = map.signMetadata.try_emplace( uid );
+                assert( isMetadataEmplaced );
+            }
         }
     }
 
