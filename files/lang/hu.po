@@ -3786,9 +3786,8 @@ msgstr "Az aktuális térkép mentése."
 msgid "Quit out of the map editor."
 msgstr "Kilépés a térképszerkesztőből."
 
-#, fuzzy
 msgid "Set %{monster} Count"
-msgstr "%{monster} lövése"
+msgstr "%{monster} létszám beállítása"
 
 msgid "Objects cannot be placed outside the map."
 msgstr "Tárgyakat nem lehet a térképen kívülre helyezni."
@@ -7336,9 +7335,8 @@ msgstr "Véletlenszerű hős (%{level}. szint)"
 msgid "Random %{race} hero (Level %{level})"
 msgstr "Véletlenszerű %{race} hős (%{level}. szint)"
 
-#, fuzzy
 msgid "Hero race:"
-msgstr "Hős képernyő"
+msgstr "Hős osztály:"
 
 msgid "Are you sure you want to dismiss this Hero?"
 msgstr "Biztos, hogy elbocsátod ezt a hőst?"
@@ -7376,9 +7374,8 @@ msgstr "Járőrözési sugár beállítása"
 msgid "Enter hero's name"
 msgstr "Hős nevének megadása"
 
-#, fuzzy
 msgid "Click to change race."
-msgstr "Kattints a következő város mutatásához."
+msgstr "Kattints az osztály megváltoztatásához."
 
 msgid ""
 "'Spread' combat formation spreads the hero's units from the top to the "
@@ -10934,7 +10931,7 @@ msgid "Disrupting Ray"
 msgstr "Gyengítő sugár"
 
 msgid "Reduces the defense rating of an enemy unit by three."
-msgstr "Csökkenti egy ellenséges egység védelmi osztályát hárommal."
+msgstr "Csökkenti egy ellenséges egység védelmi képességét hárommal."
 
 msgid "Damages all living (non-undead) units in the battle."
 msgstr "Az összes élő (nem élőhalott) egység a csatatéren sebződik."
