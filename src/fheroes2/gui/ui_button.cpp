@@ -112,7 +112,6 @@ namespace
 
             if ( middleHeightLeftOver > 0 ) {
                 fheroes2::Copy( original, originalWidth - rightPartWidth, middleHeight, output, offsetX, offsetY2, middleWidth, middleHeightLeftOver );
-                offsetY2 += middleHeightLeftOver;
             }
 
             const int32_t rightPartHeight = originalHeight - middleHeight * 2;
@@ -128,7 +127,6 @@ namespace
             if ( middleWidthLeftOver > 0 ) {
                 fheroes2::Copy( original, middleWidth, originalHeight - rightPartHeight, output, offsetX2, offsetY, middleWidthLeftOver,
                                 originalHeight - rightPartHeight );
-                offsetX2 += middleWidthLeftOver;
             }
 
             // Step 9 Todo: Get the button filling color according to Evil/Good interface setting and according to pressed and released state.
