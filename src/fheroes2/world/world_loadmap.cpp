@@ -693,24 +693,53 @@ bool World::loadResurrectionMap( const std::string & filename )
     const auto & townObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::KINGDOM_TOWNS );
     const auto & heroObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::KINGDOM_HEROES );
 
+#if defined( WITH_DEBUG )
+    std::set<uint32_t> standardMetadataUIDs;
+    std::set<uint32_t> castleMetadataUIDs;
+    std::set<uint32_t> heroMetadataUIDs;
+    std::set<uint32_t> sphinxMetadataUIDs;
+    std::set<uint32_t> signMetadataUIDs;
+    std::set<uint32_t> adventureMapEventMetadataUIDs;
+#endif
+
     for ( size_t tileId = 0; tileId < map.tiles.size(); ++tileId ) {
         const auto & tile = map.tiles[tileId];
 
         for ( const auto & object : tile.objects ) {
             if ( object.group == Maps::ObjectGroup::KINGDOM_TOWNS ) {
-                const int race = ( 1 << townObjects[object.index].metadata[0] );
+#if defined( WITH_DEBUG )
+                castleMetadataUIDs.emplace( object.id );
+#endif
 
-                assert( race != Race::RAND );
+                const uint8_t color = ( 1 << Maps::getTownColorIndex( map, tileId, object.id ) );
+
+                int race = ( 1 << townObjects[object.index].metadata[0] );
+                const bool isRandom = ( race == Race::RAND );
+
+                if ( isRandom ) {
+                    assert( townObjects[object.index].objectType == MP2::OBJ_RANDOM_CASTLE || townObjects[object.index].objectType == MP2::OBJ_RANDOM_TOWN );
+
+                    const Kingdom & kingdom = GetKingdom( color );
+                    race = static_cast<uint8_t>( kingdom.GetRace() );
+                }
 
                 Castle * castle = new Castle( static_cast<int32_t>( tileId ) % width, static_cast<int32_t>( tileId ) / width, race );
-                const uint8_t color = Maps::getTownColorIndex( map, tileId, object.id );
-                castle->SetColor( 1 << color );
+                castle->SetColor( color );
 
                 vec_castles.AddCastle( castle );
+
+                if ( isRandom ) {
+                    Maps::UpdateCastleSprite( castle->GetCenter(), castle->GetRace(), castle->isCastle(), true );
+                    Maps::ReplaceRandomCastleObjectId( castle->GetCenter() );
+                }
 
                 map_captureobj.Set( static_cast<int32_t>( tileId ), MP2::OBJ_CASTLE, Color::NONE );
             }
             else if ( object.group == Maps::ObjectGroup::KINGDOM_HEROES ) {
+#if defined( WITH_DEBUG )
+                heroMetadataUIDs.emplace( object.id );
+#endif
+
                 const auto & metadata = heroObjects[object.index].metadata;
 
                 const int color = ( 1 << metadata[0] );
@@ -742,6 +771,10 @@ bool World::loadResurrectionMap( const std::string & filename )
                 }
             }
             else if ( object.group == Maps::ObjectGroup::MONSTERS ) {
+#if defined( WITH_DEBUG )
+                standardMetadataUIDs.emplace( object.id );
+#endif
+
                 const std::array<int32_t, 3> & source = map.standardMetadata[object.id].metadata;
                 std::array<uint32_t, 3> & tileData = vec_tiles[static_cast<int32_t>( tileId )].metadata();
 
@@ -750,6 +783,10 @@ bool World::loadResurrectionMap( const std::string & filename )
                 }
             }
             else if ( Maps::isJailObject( object.group, object.index ) ) {
+#if defined( WITH_DEBUG )
+                heroMetadataUIDs.emplace( object.id );
+#endif
+
                 assert( map.heroMetadata.find( object.id ) != map.heroMetadata.end() );
 
                 const int color = Color::NONE;
@@ -769,6 +806,39 @@ bool World::loadResurrectionMap( const std::string & filename )
             }
         }
     }
+
+#if defined( WITH_DEBUG )
+    assert( standardMetadataUIDs.size() == map.standardMetadata.size() );
+    assert( castleMetadataUIDs.size() == map.castleMetadata.size() );
+    assert( heroMetadataUIDs.size() == map.heroMetadata.size() );
+    assert( sphinxMetadataUIDs.size() == map.sphinxMetadata.size() );
+    assert( signMetadataUIDs.size() == map.signMetadata.size() );
+    assert( adventureMapEventMetadataUIDs.size() == map.adventureMapEventMetadata.size() );
+
+    for ( const uint32_t uid : standardMetadataUIDs ) {
+        assert( map.standardMetadata.find( uid ) != map.standardMetadata.end() );
+    }
+
+    for ( const uint32_t uid : castleMetadataUIDs ) {
+        assert( map.castleMetadata.find( uid ) != map.castleMetadata.end() );
+    }
+
+    for ( const uint32_t uid : heroMetadataUIDs ) {
+        assert( map.heroMetadata.find( uid ) != map.heroMetadata.end() );
+    }
+
+    for ( const uint32_t uid : sphinxMetadataUIDs ) {
+        assert( map.sphinxMetadata.find( uid ) != map.sphinxMetadata.end() );
+    }
+
+    for ( const uint32_t uid : signMetadataUIDs ) {
+        assert( map.signMetadata.find( uid ) != map.signMetadata.end() );
+    }
+
+    for ( const uint32_t uid : adventureMapEventMetadataUIDs ) {
+        assert( map.adventureMapEventMetadata.find( uid ) != map.adventureMapEventMetadata.end() );
+    }
+#endif
 
     fixCastleNames( vec_castles );
 
