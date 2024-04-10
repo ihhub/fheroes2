@@ -719,7 +719,7 @@ bool World::loadResurrectionMap( const std::string & filename )
 
                 const int color = Color::IndexToColor( Maps::getTownColorIndex( map, tileId, object.id ) );
 
-                int race = Race::IndexToRace( townObjects[object.index].metadata[0] );
+                int race = Race::IndexToRace( static_cast<int>( townObjects[object.index].metadata[0] ) );
                 const bool isRandom = ( race == Race::RAND );
 
                 if ( isRandom ) {
@@ -760,7 +760,7 @@ bool World::loadResurrectionMap( const std::string & filename )
                 const auto & metadata = heroObjects[object.index].metadata;
                 auto & heroInfo = map.heroMetadata[object.id];
 
-                const int color = Color::IndexToColor( metadata[0] );
+                const int color = Color::IndexToColor( static_cast<int>( metadata[0] ) );
 
                 // Check the race correctness.
                 assert( heroInfo.race == Race::IndexToRace( metadata[1] ) );
