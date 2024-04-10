@@ -700,6 +700,15 @@ namespace Interface
                    : fheroes2::GameMode::CANCEL;
     }
 
+    fheroes2::GameMode EditorInterface::eventSaveMap()
+    {   
+       return Dialog::YES
+                       == fheroes2::showStandardTextMessage( "", _( "Are you sure you want to BREAK THE GAME?)" ),
+                                                             Dialog::YES | Dialog::NO )
+                   ? fheroes2::GameMode::WORLD_SAVE_GAME
+                   : fheroes2::GameMode::CANCEL;
+    }
+    
     fheroes2::GameMode EditorInterface::eventFileDialog()
     {
         const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
@@ -754,11 +763,10 @@ namespace Interface
                 }
             }
             else if ( le.MouseClickLeft( buttonSave.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::WORLD_SAVE_GAME ) ) {
-                back.restore();
-
-                fheroes2::showStandardTextMessage( _( "Warning!" ), "The Map Editor is still in development. Save function is not implemented yet.", Dialog::OK );
-
-                break;
+                if ( eventSaveMap() == fheroes2::GameMode::WORLD_SAVE_GAME ) {
+                    result = fheroes2::GameMode::WORLD_SAVE_GAME;
+                    break;
+                }
             }
             else if ( le.MouseClickLeft( buttonQuit.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_QUIT ) ) {
                 if ( EventExit() == fheroes2::GameMode::QUIT_GAME ) {

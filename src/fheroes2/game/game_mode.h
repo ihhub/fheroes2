@@ -53,6 +53,7 @@ namespace fheroes2
         COMPLETE_CAMPAIGN_SCENARIO_FROM_LOAD_FILE,
         EDITOR_MAIN_MENU,
         EDITOR_NEW_MAP,
-        EDITOR_LOAD_MAP
+        EDITOR_LOAD_MAP,
+        WORLD_SAVE_GAME
     };
 }

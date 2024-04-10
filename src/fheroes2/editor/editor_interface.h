@@ -56,6 +56,7 @@ namespace Interface
 
         static fheroes2::GameMode eventLoadMap();
         static fheroes2::GameMode eventNewMap();
+        static fheroes2::GameMode eventSaveMap();
         static fheroes2::GameMode eventFileDialog();
         void eventViewWorld();
 
