@@ -748,7 +748,7 @@ bool World::loadResurrectionMap( const std::string & filename )
                     Maps::ReplaceRandomCastleObjectId( castle->GetCenter() );
                 }
 
-                map_captureobj.Set( static_cast<int32_t>( tileId ), MP2::OBJ_CASTLE, Color::NONE );
+                map_captureobj.Set( static_cast<int32_t>( tileId ), MP2::OBJ_CASTLE, color );
             }
             else if ( object.group == Maps::ObjectGroup::KINGDOM_HEROES ) {
 #if defined( WITH_DEBUG )
