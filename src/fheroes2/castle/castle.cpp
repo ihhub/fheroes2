@@ -436,6 +436,7 @@ void Castle::loadFromResurrectionMap( const Maps::Map_Format::CastleMetadata & /
     }
     else {
         building |= BUILD_TENT;
+        SetModes( ALLOWCASTLE );
     }
 
     PostLoad();
