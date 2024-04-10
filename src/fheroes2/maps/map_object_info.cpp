@@ -4579,7 +4579,7 @@ namespace
         assert( objects.empty() );
 
         auto addTown = [&objects]( const MP2::MapObjectType mainObjectType, const uint8_t race, const uint8_t townIcnOffset, const uint8_t shadowIcnOffset,
-                                   const MP2::ObjectIcnType townIcnType, const MP2::ObjectIcnType shadowIcnType ) {
+                                   const MP2::ObjectIcnType townIcnType, const MP2::ObjectIcnType shadowIcnType, const bool isCastle ) {
             assert( MP2::isActionObject( mainObjectType ) );
 
             const MP2::MapObjectType secondaryObjectType( static_cast<MP2::MapObjectType>( mainObjectType - MP2::OBJ_ACTION_OBJECT_TYPE ) );
@@ -4622,6 +4622,10 @@ namespace
 
             object.metadata[0] = race;
 
+            if ( isCastle ) {
+                object.metadata[1] = 1;
+            }
+
             objects.emplace_back( std::move( object ) );
         };
 
@@ -4630,13 +4634,14 @@ namespace
         for ( uint8_t i = 0; i < 6 * 2; ++i ) {
             const uint8_t icnOffset = i * 16;
             const uint8_t race = i / 2;
+            const bool isCastle = ( i % 2 ) == 0;
 
-            addTown( MP2::OBJ_CASTLE, race, icnOffset, icnOffset, MP2::OBJ_ICN_TYPE_OBJNTOWN, MP2::OBJ_ICN_TYPE_OBJNTWSH );
+            addTown( MP2::OBJ_CASTLE, race, icnOffset, icnOffset, MP2::OBJ_ICN_TYPE_OBJNTOWN, MP2::OBJ_ICN_TYPE_OBJNTWSH, isCastle );
         }
 
         // Random castle/town
-        addTown( MP2::OBJ_RANDOM_CASTLE, 7, 0, 32, MP2::OBJ_ICN_TYPE_OBJNTWRD, MP2::OBJ_ICN_TYPE_OBJNTWRD );
-        addTown( MP2::OBJ_RANDOM_TOWN, 7, 16, 16 + 32, MP2::OBJ_ICN_TYPE_OBJNTWRD, MP2::OBJ_ICN_TYPE_OBJNTWRD );
+        addTown( MP2::OBJ_RANDOM_CASTLE, 7, 0, 32, MP2::OBJ_ICN_TYPE_OBJNTWRD, MP2::OBJ_ICN_TYPE_OBJNTWRD, true );
+        addTown( MP2::OBJ_RANDOM_TOWN, 7, 16, 16 + 32, MP2::OBJ_ICN_TYPE_OBJNTWRD, MP2::OBJ_ICN_TYPE_OBJNTWRD, false );
     }
 
     void populateMonsters( std::vector<Maps::ObjectInfo> & objects )

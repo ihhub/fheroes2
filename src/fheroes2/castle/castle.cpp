@@ -53,6 +53,7 @@
 #include "luck.h"
 #include "m82.h"
 #include "maps.h"
+#include "map_format_info.h"
 #include "maps_fileinfo.h"
 #include "maps_tiles.h"
 #include "morale.h"
@@ -425,6 +426,18 @@ void Castle::LoadFromMP2( const std::vector<uint8_t> & data )
     }
 
     // Skip the rest of 29 bytes.
+
+    PostLoad();
+}
+
+void Castle::loadFromResurrectionMap( const Maps::Map_Format::CastleMetadata & /*metadata*/, const bool isCastleBuilt )
+{
+    if ( isCastleBuilt ) {
+        building |= BUILD_CASTLE;
+    }
+    else {
+        building |= BUILD_TENT;
+    }
 
     PostLoad();
 }

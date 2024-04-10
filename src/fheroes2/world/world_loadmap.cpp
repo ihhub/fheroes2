@@ -714,6 +714,8 @@ bool World::loadResurrectionMap( const std::string & filename )
 #if defined( WITH_DEBUG )
                 castleMetadataUIDs.emplace( object.id );
 #endif
+                assert( map.castleMetadata.find( object.id ) != map.castleMetadata.end() );
+                auto & castleInfo = map.castleMetadata[object.id];
 
                 const int color = ( 1 << Maps::getTownColorIndex( map, tileId, object.id ) );
 
@@ -723,12 +725,21 @@ bool World::loadResurrectionMap( const std::string & filename )
                 if ( isRandom ) {
                     assert( townObjects[object.index].objectType == MP2::OBJ_RANDOM_CASTLE || townObjects[object.index].objectType == MP2::OBJ_RANDOM_TOWN );
 
-                    const Kingdom & kingdom = GetKingdom( color );
-                    race = static_cast<uint8_t>( kingdom.GetRace() );
+                    if ( ( color & Color::ALL ) == 0 ) {
+                        // This is a neutral town.
+                        race = Race::Rand();
+                    }
+                    else {
+                        const Kingdom & kingdom = GetKingdom( color );
+                        assert( kingdom.GetColor() == color );
+
+                        race = static_cast<uint8_t>( kingdom.GetRace() );
+                    }
                 }
 
                 Castle * castle = new Castle( static_cast<int32_t>( tileId ) % width, static_cast<int32_t>( tileId ) / width, race );
                 castle->SetColor( color );
+                castle->loadFromResurrectionMap( castleInfo, ( townObjects[object.index].metadata[1] != 0 ) );
 
                 vec_castles.AddCastle( castle );
 
