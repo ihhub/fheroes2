@@ -4150,7 +4150,7 @@ msgid "Toggle animation of the objects."
 msgstr "Aktivera animationen för objekten"
 
 msgid "Toggle display of objects' passability."
-msgstr "Visa objektens framkomlighet"
+msgstr "Visa objektens framkomlighet."
 
 msgid "difficulty|Easy"
 msgstr "Lätt"
@@ -5603,7 +5603,7 @@ msgid ""
 msgstr "Standardvärde"
 
 msgid "Set %{skill} Skill"
-msgstr "Ange %{skill} förmåga"
+msgstr "Ange %{skill}sförmåga"
 
 msgid "Set %{skill} base value. Right-click to reset all skills to default."
 msgstr ""
@@ -7401,7 +7401,7 @@ msgid "View Spell Points Info"
 msgstr "Visa information för besvärjelsepoäng"
 
 msgid "Set patrol radius in tiles"
-msgstr "Ange patrullradie i antal rutor."
+msgstr "Ange patrullradie i antal rutor"
 
 msgid "Enter hero's name"
 msgstr "Ange hjältens namn"
