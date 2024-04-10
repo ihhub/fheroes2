@@ -52,7 +52,6 @@
 #include "logging.h"
 #include "luck.h"
 #include "m82.h"
-#include "map_format_info.h"
 #include "maps.h"
 #include "maps_fileinfo.h"
 #include "maps_tiles.h"
