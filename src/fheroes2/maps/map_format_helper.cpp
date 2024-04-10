@@ -411,11 +411,6 @@ namespace Maps
                 }
             }
 
-            // If only color present this color cannot be used by AI.
-            if ( numberOfColorsPresent == 1 ) {
-                map.computerPlayerColors = 0;
-            }
-
             if ( !map.alliances.empty() ) {
                 // Verify that alliances are set correctly:
                 // - each alliance has at least one color
