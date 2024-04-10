@@ -717,9 +717,9 @@ bool World::loadResurrectionMap( const std::string & filename )
                 assert( map.castleMetadata.find( object.id ) != map.castleMetadata.end() );
                 auto & castleInfo = map.castleMetadata[object.id];
 
-                const int color = ( 1 << Maps::getTownColorIndex( map, tileId, object.id ) );
+                const int color = Color::IndexToColor( Maps::getTownColorIndex( map, tileId, object.id ) );
 
-                int race = ( 1 << townObjects[object.index].metadata[0] );
+                int race = Race::IndexToRace( townObjects[object.index].metadata[0] );
                 const bool isRandom = ( race == Race::RAND );
 
                 if ( isRandom ) {
@@ -744,7 +744,7 @@ bool World::loadResurrectionMap( const std::string & filename )
                 vec_castles.AddCastle( castle );
 
                 if ( isRandom ) {
-                    Maps::UpdateCastleSprite( castle->GetCenter(), castle->GetRace(), castle->isCastle(), true );
+                    Maps::UpdateCastleSprite( castle->GetCenter(), race, castle->isCastle(), true );
                     Maps::ReplaceRandomCastleObjectId( castle->GetCenter() );
                 }
 
@@ -760,10 +760,10 @@ bool World::loadResurrectionMap( const std::string & filename )
                 const auto & metadata = heroObjects[object.index].metadata;
                 auto & heroInfo = map.heroMetadata[object.id];
 
-                const int color = ( 1 << metadata[0] );
+                const int color = Color::IndexToColor( metadata[0] );
 
                 // Check the race correctness.
-                assert( heroInfo.race == ( 1 << metadata[1] ) );
+                assert( heroInfo.race == Race::IndexToRace( metadata[1] ) );
 
                 // Heroes can not be neutral.
                 assert( color != Color::NONE );

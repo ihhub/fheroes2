@@ -202,7 +202,7 @@ namespace Maps
             assert( isMetadataEmplaced );
 
             // Set race according the object metadata.
-            heroMetadata->second.race = static_cast<uint8_t>( 1 << getObjectsByGroup( group )[index].metadata[1] );
+            heroMetadata->second.race = Race::IndexToRace( getObjectsByGroup( group )[index].metadata[1] );
         }
         else if ( group == ObjectGroup::KINGDOM_TOWNS ) {
             auto [metadata, isMetadataEmplaced] = map.castleMetadata.try_emplace( uid );
