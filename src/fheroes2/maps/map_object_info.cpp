@@ -4621,10 +4621,7 @@ namespace
             object.topLevelParts.emplace_back( townIcnType, townIcnOffset + 0, fheroes2::Point{ 0, -3 }, secondaryObjectType );
 
             object.metadata[0] = race;
-
-            if ( isCastle ) {
-                object.metadata[1] = 1;
-            }
+            object.metadata[1] = ( isCastle ? 1 : 0 );
 
             objects.emplace_back( std::move( object ) );
         };
