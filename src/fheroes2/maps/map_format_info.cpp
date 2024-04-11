@@ -76,7 +76,7 @@ namespace Maps::Map_Format
     StreamBase & operator>>( StreamBase & msg, DailyEvent & eventInfo )
     {
         return msg >> eventInfo.message >> eventInfo.humanPlayerColors >> eventInfo.computerPlayerColors >> eventInfo.firstOccurrenceDay >> eventInfo.repeatPeriodInDays
-                   >> eventInfo.resources;
+               >> eventInfo.resources;
     }
 
     StreamBase & operator<<( StreamBase & msg, const StandardObjectMetadata & metadata )
