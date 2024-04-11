@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-03 04:20+0000\n"
+"POT-Creation-Date: 2024-04-08 13:20+0000\n"
 "PO-Revision-Date: 2023-09-04 21:55+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -245,6 +245,13 @@ msgid ""
 "O\n"
 "L"
 msgstr ""
+"Ő\n"
+"R\n"
+"J\n"
+"Á\n"
+"R\n"
+"A\n"
+"T"
 
 msgid ""
 "C\n"
@@ -396,11 +403,12 @@ msgstr "%{count} féle csapatod van: -%{penalty}"
 msgid "Some undead in army -1"
 msgstr "Élőhalottak a seregben -1"
 
-#, fuzzy
 msgid ""
 "Default\n"
 "troop"
-msgstr "Alapértelmezett cselekvés"
+msgstr ""
+"Alapértelmezett\n"
+"csapat"
 
 msgid "View %{name}"
 msgstr "%{name} mutatása"
@@ -3319,13 +3327,11 @@ msgstr "Kattints a virtuális billentyűzet dialógusablak megnyitásához."
 msgid "Open Virtual Keyboard"
 msgstr "Virtuális billentyűzet megnyitása"
 
-#, fuzzy
 msgid "How many creatures do you wish to move?"
-msgstr "Hány egységet szeretnél mozgatni?"
+msgstr "Hány teremtményt szeretnél mozgatni?"
 
-#, fuzzy
 msgid "Select how many units to separate into:"
-msgstr "Válaszd ki, hányfelé akarsz szétosztani:"
+msgstr "Válaszd ki, hány darabba akarsz szétosztani:"
 
 msgid "Map: "
 msgstr "Térkép: "
@@ -3779,6 +3785,10 @@ msgstr "Az aktuális térkép mentése."
 
 msgid "Quit out of the map editor."
 msgstr "Kilépés a térképszerkesztőből."
+
+#, fuzzy
+msgid "Set %{monster} Count"
+msgstr "%{monster} lövése"
 
 msgid "Objects cannot be placed outside the map."
 msgstr "Tárgyakat nem lehet a térképen kívülre helyezni."
@@ -5585,22 +5595,26 @@ msgid ""
 "Default\n"
 "value"
 msgstr ""
+"Alapértelmezett\n"
+"érték"
 
-#, fuzzy
 msgid "Set %{skill} Skill"
-msgstr "Támadóerő beállítása"
+msgstr "%{skill} képesség beállítása"
 
 msgid "Set %{skill} base value. Right-click to reset all skills to default."
 msgstr ""
+"%{skill} alapértékének beállítása. Jobb kattintásra minden képesség "
+"alapértékekre áll."
 
 msgid "View %{skill} Info"
 msgstr "%{skill} információ megtekintése"
 
-#, fuzzy
 msgid ""
 "Default\n"
 "skill"
-msgstr "Védőerő"
+msgstr ""
+"Alapértelmezett\n"
+"képesség"
 
 msgid "Keyboard|123"
 msgstr "123"
@@ -7316,49 +7330,55 @@ msgstr ""
 msgid "%{name} the %{race} (Level %{level})"
 msgstr "%{name} a %{race} (%{level}. szint)"
 
-#, fuzzy
 msgid "Random hero (Level %{level})"
-msgstr "%{name} (%{level}. szint)"
+msgstr "Véletlenszerű hős (%{level}. szint)"
+
+msgid "Random %{race} hero (Level %{level})"
+msgstr "Véletlenszerű %{race} hős (%{level}. szint)"
 
 #, fuzzy
-msgid "Random %{race} hero (Level %{level})"
-msgstr "%{name} a %{race} (%{level}. szint)"
+msgid "Hero race:"
+msgstr "Hős képernyő"
 
 msgid "Are you sure you want to dismiss this Hero?"
 msgstr "Biztos, hogy elbocsátod ezt a hőst?"
 
 msgid "Set custom Experience value. Current value is default."
 msgstr ""
+"Egyéni tapasztalati érték beállítása. A jelenlegi érték az alapbeállítás."
 
 msgid "Change Experience value. Right-click to reset to default value."
 msgstr ""
+"Tapasztalati érték megváltoztatása. Jobb kattintásra alapértékre áll be."
 
-#, fuzzy
 msgid "Set Experience value"
-msgstr "Tapasztalat"
+msgstr "Tapasztalati érték beállítása"
 
 msgid "View Experience Info"
 msgstr "Tapasztalat információ"
 
 msgid "Set custom Spell Points value. Current value is default."
 msgstr ""
+"Egyedi varázspont érték beállítása. A jelenlegi érték az alapbeállítás."
 
 msgid "Change Spell Points value. Right-click to reset to default value."
-msgstr ""
+msgstr "Varázspont érték megváltoztatása. Jobb kattintásra alapértékre áll be."
 
-#, fuzzy
 msgid "Set Spell Points value"
-msgstr "Varázspontok"
+msgstr "Varázspont érték beállítása"
 
 msgid "View Spell Points Info"
 msgstr "Varázspont információ"
 
-#, fuzzy
-msgid "Enter hero's name"
-msgstr "'%{name}' hős elvesztése."
-
 msgid "Set patrol radius in tiles"
-msgstr ""
+msgstr "Járőrözési sugár beállítása"
+
+msgid "Enter hero's name"
+msgstr "Hős nevének megadása"
+
+#, fuzzy
+msgid "Click to change race."
+msgstr "Kattints a következő város mutatásához."
 
 msgid ""
 "'Spread' combat formation spreads the hero's units from the top to the "
@@ -7400,25 +7420,34 @@ msgstr "A csataalakzat legyen 'Szoros'."
 
 msgid "Set hero's Artifacts. Right-click to reset Artifact."
 msgstr ""
+"A hős varázstárgyainak beállítása. Jobb kattintásra a varázstárgyak "
+"alaphelyzetbe állnak."
 
 msgid "Set hero's Secondary Skills. Right-click to reset skill."
 msgstr ""
+"A hős másodlagos képességeinek beállítása. Jobb kattintásra a képességek "
+"alaphelyzetbe állnak."
 
 msgid "Set hero's Army. Right-click to reset unit."
 msgstr ""
+"A hős seregének beállítása. Jobb kattintásra az egységek alaphelyzetbe "
+"állnak."
 
 msgid "Set hero's portrait. Right-click to reset to default."
-msgstr ""
+msgstr "A hős arcképének beállítása. Jobb kattintásra alaphelyzetbe áll."
 
 msgid "Click to change hero's name. Right-click to reset to default."
 msgstr ""
+"Kattints a hős nevének megváltoztatásához. Jobb kattintásra alaphelyzetbe "
+"áll."
 
 msgid "Hero is in patrol mode in %{tiles} tiles radius. Click to disable it."
 msgstr ""
+"A hős %{tiles} egység sugarú körben járőrözik. Kattints a mód "
+"kikapcsolásához."
 
-#, fuzzy
 msgid "Click to enable hero's patrol mode."
-msgstr "Kattints a szín kiválasztásához."
+msgstr "Kattints a hősök járőrözési módjának bekapcsolásához."
 
 msgid "Blood Morale"
 msgstr "Szenvedélyes morál"

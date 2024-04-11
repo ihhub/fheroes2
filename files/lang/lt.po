@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-03 04:20+0000\n"
+"POT-Creation-Date: 2024-04-08 13:20+0000\n"
 "PO-Revision-Date: 2022-09-23 16:14+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Lithuanian <lt@li.org>\n"
@@ -3632,6 +3632,10 @@ msgstr ""
 msgid "Quit out of the map editor."
 msgstr ""
 
+#, fuzzy
+msgid "Set %{monster} Count"
+msgstr "Pulti %{monster}"
+
 msgid "Objects cannot be placed outside the map."
 msgstr ""
 
@@ -6730,6 +6734,10 @@ msgstr "Atsitiktinė pilis"
 msgid "Random %{race} hero (Level %{level})"
 msgstr ""
 
+#, fuzzy
+msgid "Hero race:"
+msgstr "Greitis"
+
 msgid "Are you sure you want to dismiss this Hero?"
 msgstr ""
 
@@ -6758,11 +6766,15 @@ msgstr "Burtų galia"
 msgid "View Spell Points Info"
 msgstr ""
 
+msgid "Set patrol radius in tiles"
+msgstr ""
+
 msgid "Enter hero's name"
 msgstr ""
 
-msgid "Set patrol radius in tiles"
-msgstr ""
+#, fuzzy
+msgid "Click to change race."
+msgstr "Rodyti kitą miestą"
 
 msgid ""
 "'Spread' combat formation spreads the hero's units from the top to the "

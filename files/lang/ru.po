@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-03 04:20+0000\n"
+"POT-Creation-Date: 2024-04-08 13:20+0000\n"
 "PO-Revision-Date: 2024-03-15 21:35+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -3817,6 +3817,10 @@ msgstr "Сохранить текущую карту."
 msgid "Quit out of the map editor."
 msgstr "Выйти из редактора карт."
 
+#, fuzzy
+msgid "Set %{monster} Count"
+msgstr "Стрелять в %{monster}"
+
 msgid "Objects cannot be placed outside the map."
 msgstr "Объекты нельзя размещать за пределами карты."
 
@@ -7391,6 +7395,10 @@ msgstr "%{name} (Уровень %{level})"
 msgid "Random %{race} hero (Level %{level})"
 msgstr "%{race} %{name} (уровень %{level})"
 
+#, fuzzy
+msgid "Hero race:"
+msgstr "Экран героя"
+
 msgid "Are you sure you want to dismiss this Hero?"
 msgstr "Вы действительно хотите уволить героя?"
 
@@ -7420,12 +7428,16 @@ msgstr "Очки магии"
 msgid "View Spell Points Info"
 msgstr "Очки магии"
 
+msgid "Set patrol radius in tiles"
+msgstr ""
+
 #, fuzzy
 msgid "Enter hero's name"
 msgstr "Потерять героя по имени %{name}."
 
-msgid "Set patrol radius in tiles"
-msgstr ""
+#, fuzzy
+msgid "Click to change race."
+msgstr "Нажмите, чтобы показать следующий город."
 
 msgid ""
 "'Spread' combat formation spreads the hero's units from the top to the "

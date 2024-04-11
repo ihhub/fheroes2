@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-03 04:20+0000\n"
+"POT-Creation-Date: 2024-04-08 13:20+0000\n"
 "PO-Revision-Date: 2024-02-19 16:13+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -3782,6 +3782,10 @@ msgstr "Spara nuvarande karta."
 msgid "Quit out of the map editor."
 msgstr "Lämna kartredigeraren."
 
+#, fuzzy
+msgid "Set %{monster} Count"
+msgstr "Skjut %{monster}"
+
 msgid "Objects cannot be placed outside the map."
 msgstr "Föremål kan inte placeras utanför kartan."
 
@@ -7362,6 +7366,10 @@ msgstr "%{name} (nivå %{level})"
 msgid "Random %{race} hero (Level %{level})"
 msgstr "%{race}n %{name} (Nivå %{level})"
 
+#, fuzzy
+msgid "Hero race:"
+msgstr "Hjältevy"
+
 msgid "Are you sure you want to dismiss this Hero?"
 msgstr "Är du säker på att du vill avskeda denna Hjälte?"
 
@@ -7391,12 +7399,16 @@ msgstr "Besvärjelsepoäng"
 msgid "View Spell Points Info"
 msgstr "Visa information för besvärjelsepoäng"
 
+msgid "Set patrol radius in tiles"
+msgstr ""
+
 #, fuzzy
 msgid "Enter hero's name"
 msgstr "Förlora hjälten: %{name}."
 
-msgid "Set patrol radius in tiles"
-msgstr ""
+#, fuzzy
+msgid "Click to change race."
+msgstr "Klicka för att visa nästa stad."
 
 msgid ""
 "'Spread' combat formation spreads the hero's units from the top to the "

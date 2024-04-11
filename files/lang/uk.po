@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-03 04:20+0000\n"
-"PO-Revision-Date: 2024-04-06 16:28+0300\n"
+"POT-Creation-Date: 2024-04-08 13:20+0000\n"
+"PO-Revision-Date: 2024-04-02 09:25+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: uk\n"
@@ -3796,6 +3796,10 @@ msgstr "Збережіть поточну мапу."
 msgid "Quit out of the map editor."
 msgstr "Вийти з редактора мап."
 
+#, fuzzy
+msgid "Set %{monster} Count"
+msgstr "Зробити постріл у %{monster}"
+
 msgid "Objects cannot be placed outside the map."
 msgstr "Неможливо розмістити об'єкт поза мапою."
 
@@ -7297,6 +7301,10 @@ msgstr "%{name} (Рівень %{level})"
 msgid "Random %{race} hero (Level %{level})"
 msgstr "%{name} %{race} (Рівень %{level})"
 
+#, fuzzy
+msgid "Hero race:"
+msgstr "Вікно Героя"
+
 msgid "Are you sure you want to dismiss this Hero?"
 msgstr "Ви впевнені, що хочете звільнити цього героя?"
 
@@ -7326,11 +7334,15 @@ msgstr "Мана"
 msgid "View Spell Points Info"
 msgstr "Переглянути інформацію про очки магії"
 
+msgid "Set patrol radius in tiles"
+msgstr ""
+
 msgid "Enter hero's name"
 msgstr ""
 
-msgid "Set patrol radius in tiles"
-msgstr ""
+#, fuzzy
+msgid "Click to change race."
+msgstr "Натисніть щоб побачити наступне місто."
 
 msgid ""
 "'Spread' combat formation spreads the hero's units from the top to the "
