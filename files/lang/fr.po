@@ -4918,10 +4918,10 @@ msgid "Hot Seat"
 msgstr "Jouer à plusieurs"
 
 msgid ""
-"Play a Hot Seat game, where 2 to 4 players play around the same computer, "
+"Play a Hot Seat game, where 2 to 6 players play around the same computer, "
 "switching into the 'Hot Seat' when it is their turn."
 msgstr ""
-"Jouez à tour de rôle, où 2 à 4 joueurs jouent autour du même ordinateur, se "
+"Jouez à tour de rôle, où 2 à 6 joueurs jouent autour du même ordinateur, se "
 "passant la souris lorsque c'est leur tour."
 
 msgid "A single player game playing out a single map."
@@ -5097,7 +5097,7 @@ msgid "Setup and play a battle without loading any map."
 msgstr "Configurez et jouez une bataille sans charger de carte."
 
 msgid ""
-"Play a Hot Seat game, where 2 to 4 players play on the same device, "
+"Play a Hot Seat game, where 2 to 6 players play on the same device, "
 "switching into the 'Hot Seat' when it is their turn."
 msgstr "Jouez de 2 à 6 joueurs à tour de rôle sur le même appareil."
 

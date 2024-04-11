@@ -100,9 +100,6 @@ void MapEvent::LoadFromMP2( const int32_t index, const std::vector<uint8_t> & da
     // - string
     //    Null terminated string containing the event text.
 
-    SetIndex( index );
-    SetUID( index );
-
     StreamBuf dataStream( data );
 
     dataStream.skip( 1 );
@@ -154,6 +151,8 @@ void MapEvent::LoadFromMP2( const int32_t index, const std::vector<uint8_t> & da
     }
 
     message = dataStream.toString();
+
+    setUIDAndIndex( index );
 
     DEBUG_LOG( DBG_GAME, DBG_INFO, "Ground event at tile " << index << " has event message: " << message )
 }
@@ -264,8 +263,7 @@ void MapSphinx::LoadFromMP2( const int32_t tileIndex, const std::vector<uint8_t>
 
     valid = true;
 
-    SetIndex( tileIndex );
-    SetUID( tileIndex );
+    setUIDAndIndex( tileIndex );
 }
 
 bool MapSphinx::AnswerCorrect( const std::string & answer )
@@ -296,13 +294,18 @@ void MapSign::LoadFromMP2( const int32_t mapIndex, const std::vector<uint8_t> & 
     message = dataStream.toString();
 
     if ( message.empty() ) {
-        const std::vector<std::string> randomMessage{ _( "Next sign 50 miles." ), _( "Burma shave." ), _( "See Rock City." ), _( "This space for rent." ) };
-        message = Rand::Get( randomMessage );
+        setDefaultMessage();
     }
 
-    SetIndex( mapIndex );
-    SetUID( mapIndex );
+    setUIDAndIndex( mapIndex );
+
     DEBUG_LOG( DBG_GAME, DBG_INFO, "Sign at location " << mapIndex << " has a message: " << message )
+}
+
+void MapSign::setDefaultMessage()
+{
+    const std::vector<std::string> randomMessage{ _( "Next sign 50 miles." ), _( "Burma shave." ), _( "See Rock City." ), _( "This space for rent." ) };
+    message = Rand::Get( randomMessage );
 }
 
 StreamBase & operator<<( StreamBase & msg, const MapObjectSimple & obj )
