@@ -51,6 +51,11 @@ namespace fheroes2
     class Image;
 }
 
+namespace Maps::Map_Format
+{
+    struct CastleMetadata;
+}
+
 struct Funds;
 class HeroBase;
 class Heroes;
@@ -138,6 +143,8 @@ public:
     Castle & operator=( const Castle & ) = delete;
 
     void LoadFromMP2( const std::vector<uint8_t> & data );
+
+    void loadFromResurrectionMap( const Maps::Map_Format::CastleMetadata & metadata, const bool isCastleBuilt );
 
     Captain & GetCaptain()
     {

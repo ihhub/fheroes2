@@ -62,6 +62,12 @@ public:
         uid = v;
     }
 
+    void setUIDAndIndex( const int32_t mapIndex )
+    {
+        SetUID( mapIndex );
+        SetIndex( mapIndex );
+    }
+
 protected:
     friend StreamBase & operator<<( StreamBase & msg, const MapObjectSimple & obj );
     friend StreamBase & operator>>( StreamBase & msg, MapObjectSimple & obj );
@@ -138,6 +144,8 @@ struct MapSign : public MapObjectSimple
     }
 
     void LoadFromMP2( const int32_t mapIndex, const std::vector<uint8_t> & data );
+
+    void setDefaultMessage();
 
     std::string message;
 };
