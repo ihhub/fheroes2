@@ -412,7 +412,7 @@ int Dialog::ArmySplitTroop( uint32_t freeSlots, const uint32_t redistributeMax, 
     const int32_t bodyHeight = slotSeparationText.rows( BOXAREA_WIDTH ) * slotSeparationText.height();
 
     const int defaultYPosition = 160;
-    const int boxHeight = freeSlots > 1 ? 75 + spacer + titleHeight + bodyHeight : 45;
+    const int boxHeight = freeSlots > 1 ? 73 + spacer + titleHeight + bodyHeight : 45;
     const int boxYPosition = defaultYPosition + ( ( display.height() - display.DEFAULT_HEIGHT ) / 2 ) - boxHeight;
 
     const NonFixedFrameBox box( boxHeight, boxYPosition, true );
@@ -457,7 +457,7 @@ int Dialog::ArmySplitTroop( uint32_t freeSlots, const uint32_t redistributeMax, 
         ssp.resize( sprites[0].width(), sprites[0].height() );
         ssp.reset();
 
-        fheroes2::DrawBorder( ssp, 233 );
+        fheroes2::DrawBorder( ssp, 231 );
 
         if ( useFastSplit ) {
             ssp.setPosition( vrts[0].x, vrts[0].y );
