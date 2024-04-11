@@ -67,6 +67,18 @@ namespace Maps::Map_Format
         return msg >> tile.terrainIndex >> tile.terrainFlag >> tile.objects;
     }
 
+    StreamBase & operator<<( StreamBase & msg, const DailyEvent & eventInfo )
+    {
+        return msg << eventInfo.message << eventInfo.humanPlayerColors << eventInfo.computerPlayerColors << eventInfo.firstOccurrenceDay << eventInfo.repeatPeriodInDays
+                   << eventInfo.resources;
+    }
+
+    StreamBase & operator>>( StreamBase & msg, DailyEvent & eventInfo )
+    {
+        return msg >> eventInfo.message >> eventInfo.humanPlayerColors >> eventInfo.computerPlayerColors >> eventInfo.firstOccurrenceDay >> eventInfo.repeatPeriodInDays
+                   >> eventInfo.resources;
+    }
+
     StreamBase & operator<<( StreamBase & msg, const StandardObjectMetadata & metadata )
     {
         return msg << metadata.metadata;
@@ -160,8 +172,8 @@ namespace Maps::Map_Format
         StreamBuf compressed;
         compressed.setbigendian( true );
 
-        compressed << map.additionalInfo << map.tiles << map.standardMetadata << map.castleMetadata << map.heroMetadata << map.sphinxMetadata << map.signMetadata
-                   << map.adventureMapEventMetadata;
+        compressed << map.additionalInfo << map.tiles << map.dailyEvents << map.standardMetadata << map.castleMetadata << map.heroMetadata << map.sphinxMetadata
+                   << map.signMetadata << map.adventureMapEventMetadata;
 
         const std::vector<uint8_t> temp = Compression::compressData( compressed.data(), compressed.size() );
 
@@ -199,8 +211,8 @@ namespace Maps::Map_Format
             decompressed.putRaw( decompressedData.data(), decompressedData.size() );
         }
 
-        decompressed >> map.additionalInfo >> map.tiles >> map.standardMetadata >> map.castleMetadata >> map.heroMetadata >> map.sphinxMetadata >> map.signMetadata
-            >> map.adventureMapEventMetadata;
+        decompressed >> map.additionalInfo >> map.tiles >> map.dailyEvents >> map.standardMetadata >> map.castleMetadata >> map.heroMetadata >> map.sphinxMetadata
+            >> map.signMetadata >> map.adventureMapEventMetadata;
 
         return msg;
     }
