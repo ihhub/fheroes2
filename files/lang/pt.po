@@ -7891,7 +7891,7 @@ msgid "%{skill} regenerates one additional spell point per day to the hero."
 msgid_plural ""
 "%{skill} regenerates %{count} additional spell points per day to the hero."
 msgstr[0] ""
-"%{skill} regenera um ponto de feitiço adicional por dia para o herói."
+"%{skill} regenera um ponto de mana adicional por dia para o herói."
 msgstr[1] ""
 "%{skill} regenera %{count} pontos de mana adicionais por dia para o herói."
 
