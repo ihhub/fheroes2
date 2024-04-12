@@ -838,7 +838,11 @@ bool World::loadResurrectionMap( const std::string & filename )
                     MapEvent * eventObject = new MapEvent();
                     eventObject->resources = eventInfo.resources;
                     eventObject->artifact = eventInfo.artifact;
+
                     // TODO: change MapEvent to support map format functionality.
+                    eventInfo.humanPlayerColors = eventInfo.humanPlayerColors & map.humanPlayerColors;
+                    eventInfo.computerPlayerColors = eventInfo.computerPlayerColors & map.computerPlayerColors;
+
                     eventObject->computer = ( eventInfo.computerPlayerColors != 0 );
                     eventObject->colors = eventInfo.computerPlayerColors | eventInfo.humanPlayerColors;
                     eventObject->message = std::move( eventInfo.message );
@@ -952,6 +956,24 @@ bool World::loadResurrectionMap( const std::string & filename )
         assert( map.adventureMapEventMetadata.find( uid ) != map.adventureMapEventMetadata.end() );
     }
 #endif
+
+    // Load daily events.
+    for ( auto & event : map.dailyEvents ) {
+        auto & newEvent = vec_eventsday.emplace_back();
+
+        newEvent.message = std::move( event.message );
+
+        // TODO: modify EventDate structure for have more flexibility.
+        event.humanPlayerColors = event.humanPlayerColors & map.humanPlayerColors;
+        event.computerPlayerColors = event.computerPlayerColors & map.computerPlayerColors;
+
+        newEvent.colors = ( event.humanPlayerColors | event.computerPlayerColors );
+        newEvent.isApplicableForAIPlayers = ( event.computerPlayerColors != 0 );
+
+        newEvent.firstOccurrenceDay = event.firstOccurrenceDay;
+        newEvent.repeatPeriodInDays = event.repeatPeriodInDays;
+        newEvent.resource = event.resources;
+    }
 
     fixCastleNames( vec_castles );
 
