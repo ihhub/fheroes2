@@ -672,7 +672,8 @@ void Heroes::applyHeroMetadata( const Maps::Map_Format::HeroMetadata & heroMetad
 
                 art.SetSpell( heroMetadata.artifactMetadata[i] );
             }
-            else if ( heroMetadata.artifact[i] == Artifact::MAGIC_BOOK ) {
+
+            if ( heroMetadata.artifact[i] == Artifact::MAGIC_BOOK ) {
                 SpellBookActivate();
 
                 // Add spells to the spell book.
