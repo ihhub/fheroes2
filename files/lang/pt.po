@@ -9498,7 +9498,7 @@ msgid "Ballista of Quickness"
 msgstr "Balista da Rapidez"
 
 msgid "The %{name} gives the hero's catapult one extra shot per combat round."
-msgstr "%{name} dá à catapulta do herói um tiro extra por rodada de combate."
+msgstr "%{name} dá à catapulta do herói um tiro extra por turno de combate."
 
 msgid ""
 "Walking through the ruins of an ancient walled city, you find the instrument "
