@@ -408,6 +408,10 @@ bool Maps::FileInfo::readResurrectionMap( std::string filePath, const bool isFor
     name = std::move( map.name );
     description = std::move( map.description );
 
+    assert( ( map.availablePlayerColors & map.humanPlayerColors ) == map.humanPlayerColors );
+    assert( ( map.availablePlayerColors & map.computerPlayerColors ) == map.computerPlayerColors );
+    assert( ( map.availablePlayerColors & ( map.humanPlayerColors | map.computerPlayerColors ) ) == map.availablePlayerColors );
+
     kingdomColors = map.availablePlayerColors;
     colorsAvailableForHumans = map.humanPlayerColors;
     colorsAvailableForComp = map.computerPlayerColors;

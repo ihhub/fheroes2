@@ -269,10 +269,49 @@ namespace
                     objectIter = mapTile.objects.erase( objectIter );
                     needRedraw = true;
                 }
+                else if ( objectIter->group == Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS ) {
+                    const auto & objects = Maps::getObjectsByGroup( objectIter->group );
+
+                    assert( objectIter->index < objects.size() );
+                    const auto objectType = objects[objectIter->index].objectType;
+                    switch ( objectType ) {
+                    case MP2::OBJ_EVENT:
+                        assert( mapFormat.adventureMapEventMetadata.find( objectIter->id ) != mapFormat.adventureMapEventMetadata.end() );
+                        mapFormat.adventureMapEventMetadata.erase( objectIter->id );
+                        break;
+                    case MP2::OBJ_SIGN:
+                        assert( mapFormat.signMetadata.find( objectIter->id ) != mapFormat.signMetadata.end() );
+                        mapFormat.signMetadata.erase( objectIter->id );
+                        break;
+                    case MP2::OBJ_SPHINX:
+                        assert( mapFormat.sphinxMetadata.find( objectIter->id ) != mapFormat.sphinxMetadata.end() );
+                        mapFormat.sphinxMetadata.erase( objectIter->id );
+                        break;
+                    default:
+                        break;
+                    }
+
+                    objectIter = mapTile.objects.erase( objectIter );
+                    needRedraw = true;
+                }
+                else if ( objectIter->group == Maps::ObjectGroup::ADVENTURE_WATER ) {
+                    const auto & objects = Maps::getObjectsByGroup( objectIter->group );
+
+                    assert( objectIter->index < objects.size() );
+                    const auto objectType = objects[objectIter->index].objectType;
+                    if ( objectType == MP2::OBJ_BOTTLE ) {
+                        assert( mapFormat.signMetadata.find( objectIter->id ) != mapFormat.signMetadata.end() );
+                        mapFormat.signMetadata.erase( objectIter->id );
+                    }
+
+                    objectIter = mapTile.objects.erase( objectIter );
+                    needRedraw = true;
+                }
                 else {
                     objectIter = mapTile.objects.erase( objectIter );
                     needRedraw = true;
                 }
+
                 if ( objectsUids.empty() ) {
                     break;
                 }
