@@ -418,11 +418,78 @@ bool Maps::FileInfo::readResurrectionMap( std::string filePath, const bool isFor
 
     races = map.playerRace;
 
-    victoryConditionType = VICTORY_DEFEAT_EVERYONE;
-    compAlsoWins = true;
-    allowNormalVictory = true;
+    victoryConditionType = map.victoryConditionType;
+    compAlsoWins = map.isVictoryConditionApplicableForAI;
+    allowNormalVictory = map.allowNormalVictory;
 
-    lossConditionType = LOSS_EVERYTHING;
+    lossConditionType = map.lossConditionType;
+
+    switch ( lossConditionType ) {
+    case LOSS_EVERYTHING:
+        // No special conditions of loss.
+        // So, no metadata should exist.
+        assert( map.lossConditionMetadata.empty() );
+        break;
+    case LOSS_TOWN:
+    case LOSS_HERO:
+        // Town or hero loss metadata must include the following:
+        // - X position of the object
+        // - Y position of the object
+        // - color of the object (the color is needed to modify the game for multi-player)
+        assert( map.victoryConditionMetadata.size() == 3 );
+        lossConditionParams[0] = static_cast<uint16_t>( map.victoryConditionMetadata[0] );
+        lossConditionParams[1] = static_cast<uint16_t>( map.victoryConditionMetadata[1] );
+        assert( ( map.victoryConditionMetadata[2] & map.humanPlayerColors ) == map.victoryConditionMetadata[2] );
+        break;
+    case LOSS_OUT_OF_TIME:
+        assert( map.victoryConditionMetadata.size() == 1 );
+        lossConditionParams[0] = static_cast<uint16_t>( map.victoryConditionMetadata[0] );
+        break;
+    default:
+        // Did you add a new loss condition? Add the logic above!
+        assert( 0 );
+        break;
+    }
+
+    switch ( victoryConditionType ) {
+    case VICTORY_DEFEAT_EVERYONE:
+        // Since this is a normal victory condition.
+        // So, no metadata should exist.
+        assert( map.victoryConditionMetadata.empty() );
+        compAlsoWins = true;
+        allowNormalVictory = true;
+        break;
+    case VICTORY_CAPTURE_TOWN:
+    case VICTORY_KILL_HERO:
+        // Town or hero capture metadata must include the following:
+        // - X position of the object
+        // - Y position of the object
+        // - color of the object (the color is needed to modify the game for multi-player)
+        assert( map.victoryConditionMetadata.size() == 3 );
+        victoryConditionParams[0] = static_cast<uint16_t>( map.victoryConditionMetadata[0] );
+        victoryConditionParams[1] = static_cast<uint16_t>( map.victoryConditionMetadata[1] );
+        assert( ( map.victoryConditionMetadata[2] & map.availablePlayerColors ) == map.victoryConditionMetadata[2] );
+        break;
+    case VICTORY_OBTAIN_ARTIFACT:
+    case VICTORY_COLLECT_ENOUGH_GOLD:
+        assert( map.victoryConditionMetadata.size() == 1 );
+        victoryConditionParams[0] = static_cast<uint16_t>( map.victoryConditionMetadata[0] );
+        break;
+    case VICTORY_DEFEAT_OTHER_SIDE:
+        // As of now only 2 alliances are supported.
+        assert( map.alliances.size() == 2 );
+
+        for ( const uint8_t color : map.alliances ) {
+            assert( ( color & map.availablePlayerColors ) == color );
+        }
+
+        FillUnions( map.alliances[0], map.alliances[1] );
+        break;
+    default:
+        // Did you add a new victory condition? Add the logic for it!
+        assert( 0 );
+        break;
+    }
 
     for ( size_t i = 0; i < races.size(); ++i ) {
         if ( races[i] == Race::RAND ) {
