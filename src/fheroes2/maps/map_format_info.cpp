@@ -21,11 +21,10 @@
 #include "map_format_info.h"
 
 #include <array>
+#include <cassert>
 #include <cstddef>
 #include <memory>
 #include <type_traits>
-
-#include <assert.h>
 
 #include "army.h"
 #include "army_troop.h"
