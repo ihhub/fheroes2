@@ -255,7 +255,7 @@ namespace Interface
             ItemsIterator posItem = items.begin();
             auto itemPosIter = itemPos.begin();
 
-            const bool useCustomCountX = ( _customItemsCountInRow.size() == tableSize.height );
+            const bool useCustomCountX = ( _customItemsCountInRow.size() == static_cast<size_t>( tableSize.height ) );
 
             for ( int32_t y = 0; y < tableSize.height; ++y ) {
                 const int32_t coutX = useCustomCountX ? _customItemsCountInRow[y] : tableSize.width;
