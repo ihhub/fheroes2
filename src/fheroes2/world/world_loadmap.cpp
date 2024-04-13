@@ -991,14 +991,14 @@ bool World::loadResurrectionMap( const std::string & filename )
 
     // Verify that a capture or loss object exists.
     if ( map.lossConditionType == Maps::FileInfo::LOSS_HERO ) {
-        auto iter = hiredHeroPos.find( fheroes2::Point( map.lossConditionMetadata[0], map.lossConditionMetadata[1] ) );
+        auto iter = hiredHeroPos.find( { static_cast<int32_t>( map.lossConditionMetadata[0] ), static_cast<int32_t>( map.lossConditionMetadata[1] ) } );
         if ( iter == hiredHeroPos.end() ) {
             VERBOSE_LOG( "A hero at position [" << map.lossConditionMetadata[0] << ", " << map.lossConditionMetadata[1] << "] does not exist." )
             return false;
         }
     }
     else if ( map.lossConditionType == Maps::FileInfo::LOSS_TOWN ) {
-        Castle * castle = vec_castles.Get( fheroes2::Point( map.lossConditionMetadata[0], map.lossConditionMetadata[1] ) );
+        Castle * castle = vec_castles.Get( { static_cast<int32_t>( map.lossConditionMetadata[0] ), static_cast<int32_t>( map.lossConditionMetadata[1] ) } );
         if ( castle == nullptr ) {
             VERBOSE_LOG( "A castle at position [" << map.lossConditionMetadata[0] << ", " << map.lossConditionMetadata[1] << "] does not exist." )
             return false;
@@ -1006,14 +1006,14 @@ bool World::loadResurrectionMap( const std::string & filename )
     }
 
     if ( map.victoryConditionType == Maps::FileInfo::VICTORY_KILL_HERO ) {
-        auto iter = hiredHeroPos.find( fheroes2::Point( map.victoryConditionMetadata[0], map.victoryConditionMetadata[1] ) );
+        auto iter = hiredHeroPos.find( { static_cast<int32_t>( map.victoryConditionMetadata[0] ), static_cast<int32_t>( map.victoryConditionMetadata[1] ) } );
         if ( iter == hiredHeroPos.end() ) {
             VERBOSE_LOG( "A hero at position [" << map.victoryConditionMetadata[0] << ", " << map.victoryConditionMetadata[1] << "] does not exist." )
             return false;
         }
     }
     else if ( map.victoryConditionType == Maps::FileInfo::VICTORY_CAPTURE_TOWN ) {
-        Castle * castle = vec_castles.Get( fheroes2::Point( map.victoryConditionMetadata[0], map.victoryConditionMetadata[1] ) );
+        Castle * castle = vec_castles.Get( { static_cast<int32_t>( map.victoryConditionMetadata[0] ), static_cast<int32_t>( map.victoryConditionMetadata[1] ) } );
         if ( castle == nullptr ) {
             VERBOSE_LOG( "A castle at position [" << map.victoryConditionMetadata[0] << ", " << map.victoryConditionMetadata[1] << "] does not exist." )
             return false;
