@@ -67,6 +67,11 @@ namespace fheroes2
             return _isHidden;
         }
 
+        fheroes2::Rect getArea() const
+        {
+            return { x(), y(), width(), height() };
+        }
+
         void setPosition( int32_t x_, int32_t y_ ) override;
 
     protected:

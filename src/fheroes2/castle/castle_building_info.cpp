@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2023                                             *
+ *   Copyright (C) 2021 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -18,10 +18,11 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "castle_building_info.h"
+
 #include <algorithm>
 #include <cassert>
 
-#include "castle_building_info.h"
 #include "maps_fileinfo.h"
 #include "race.h"
 #include "translations.h"
@@ -645,6 +646,46 @@ namespace
         return nullptr;
     }
 
+    const char * getRandomBuildingName( const building_t buildingId )
+    {
+        switch ( buildingId ) {
+        case BUILD_SPEC:
+            return _( "Special" );
+        case BUILD_WEL2:
+            return _( "1st Level Grow" );
+        case DWELLING_MONSTER1:
+            return _( "Dwelling 1" );
+        case DWELLING_MONSTER2:
+            return _( "Dwelling 2" );
+        case DWELLING_UPGRADE2:
+            return _( "Upg. Dwelling 2" );
+        case DWELLING_MONSTER3:
+            return _( "Dwelling 3" );
+        case DWELLING_UPGRADE3:
+            return _( "Upg. Dwelling 3" );
+        case DWELLING_MONSTER4:
+            return _( "Dwelling 4" );
+        case DWELLING_UPGRADE4:
+            return _( "Upg. Dwelling 4" );
+        case DWELLING_MONSTER5:
+            return _( "Dwelling 6" );
+        case DWELLING_UPGRADE5:
+            return _( "Upg. Dwelling 6" );
+        case DWELLING_MONSTER6:
+            return _( "Dwelling 6" );
+        case DWELLING_UPGRADE6:
+            return _( "Upg. Dwelling 6" );
+        case DWELLING_UPGRADE7:
+            return _( "2x Upg. Dwelling 6" );
+        default:
+            break;
+        }
+
+        // Did you add a new building?
+        assert( 0 );
+        return nullptr;
+    }
+
     const char * getKnightBuildingDescription( const building_t buildingId )
     {
         switch ( buildingId ) {
@@ -732,6 +773,22 @@ namespace
             return _( "The Storm adds +2 to the power of spells of a defending spell caster." );
         case BUILD_WEL2:
             return _( "The Skull Pile increases production of Skeletons by %{count} per week." );
+        default:
+            break;
+        }
+
+        // Did you add a new building?
+        assert( 0 );
+        return nullptr;
+    }
+
+    const char * getRandomBuildingDescription( const building_t buildingId )
+    {
+        switch ( buildingId ) {
+        case BUILD_SPEC:
+            return _( "The Special building gives a race specified bonus." );
+        case BUILD_WEL2:
+            return _( "The 1st level growth building increases production of 1st level creatures per week." );
         default:
             break;
         }
@@ -834,6 +891,8 @@ namespace fheroes2
             return getWizardBuildingName( buildingId );
         case Race::NECR:
             return getNecromancerBuildingName( buildingId );
+        case Race::RAND:
+            return getRandomBuildingName( buildingId );
         default:
             break;
         }
@@ -902,6 +961,8 @@ namespace fheroes2
             return getWizardBuildingDescription( buildingId );
         case Race::NECR:
             return getNecromancerBuildingDescription( buildingId );
+        case Race::RAND:
+            return getRandomBuildingDescription( buildingId );
         default:
             break;
         }
@@ -910,6 +971,190 @@ namespace fheroes2
         assert( 0 );
 
         return nullptr;
+    }
+
+    building_t getUpgradeForBuilding( const int race, const building_t buildingId )
+    {
+        switch ( buildingId ) {
+        case BUILD_TENT:
+            return BUILD_CASTLE;
+        case BUILD_MAGEGUILD1:
+            return BUILD_MAGEGUILD2;
+        case BUILD_MAGEGUILD2:
+            return BUILD_MAGEGUILD3;
+        case BUILD_MAGEGUILD3:
+            return BUILD_MAGEGUILD4;
+        case BUILD_MAGEGUILD4:
+            return BUILD_MAGEGUILD5;
+        default:
+            break;
+        }
+
+        if ( race == Race::BARB ) {
+            switch ( buildingId ) {
+            case DWELLING_MONSTER2:
+                return DWELLING_UPGRADE2;
+            case DWELLING_MONSTER4:
+                return DWELLING_UPGRADE4;
+            case DWELLING_MONSTER5:
+                return DWELLING_UPGRADE5;
+            default:
+                break;
+            }
+        }
+        else if ( race == Race::KNGT ) {
+            switch ( buildingId ) {
+            case DWELLING_MONSTER2:
+                return DWELLING_UPGRADE2;
+            case DWELLING_MONSTER3:
+                return DWELLING_UPGRADE3;
+            case DWELLING_MONSTER4:
+                return DWELLING_UPGRADE4;
+            case DWELLING_MONSTER5:
+                return DWELLING_UPGRADE5;
+            case DWELLING_MONSTER6:
+                return DWELLING_UPGRADE6;
+            default:
+                break;
+            }
+        }
+        else if ( race == Race::NECR ) {
+            switch ( buildingId ) {
+            case DWELLING_MONSTER2:
+                return DWELLING_UPGRADE2;
+            case DWELLING_MONSTER3:
+                return DWELLING_UPGRADE3;
+            case DWELLING_MONSTER4:
+                return DWELLING_UPGRADE4;
+            case DWELLING_MONSTER5:
+                return DWELLING_UPGRADE5;
+            default:
+                break;
+            }
+        }
+        else if ( race == Race::SORC ) {
+            switch ( buildingId ) {
+            case DWELLING_MONSTER2:
+                return DWELLING_UPGRADE2;
+            case DWELLING_MONSTER3:
+                return DWELLING_UPGRADE3;
+            case DWELLING_MONSTER4:
+                return DWELLING_UPGRADE4;
+            default:
+                break;
+            }
+        }
+        else if ( race == Race::WRLK ) {
+            switch ( buildingId ) {
+            case DWELLING_MONSTER4:
+                return DWELLING_UPGRADE4;
+            case DWELLING_MONSTER6:
+                return DWELLING_UPGRADE6;
+            case DWELLING_UPGRADE6:
+                return DWELLING_UPGRADE7;
+            default:
+                break;
+            }
+        }
+        else if ( race == Race::WZRD ) {
+            switch ( buildingId ) {
+            case DWELLING_MONSTER3:
+                return DWELLING_UPGRADE3;
+            case DWELLING_MONSTER5:
+                return DWELLING_UPGRADE5;
+            case DWELLING_MONSTER6:
+                return DWELLING_UPGRADE6;
+            default:
+                break;
+            }
+        }
+        else if ( race == Race::RAND ) {
+            switch ( buildingId ) {
+            case DWELLING_MONSTER2:
+                return DWELLING_UPGRADE2;
+            case DWELLING_MONSTER3:
+                return DWELLING_UPGRADE3;
+            case DWELLING_MONSTER4:
+                return DWELLING_UPGRADE4;
+            case DWELLING_MONSTER5:
+                return DWELLING_UPGRADE5;
+            case DWELLING_MONSTER6:
+                return DWELLING_UPGRADE6;
+            case DWELLING_UPGRADE6:
+                return DWELLING_UPGRADE7;
+            default:
+                break;
+            }
+        }
+
+        return buildingId;
+    }
+
+    int getIndexBuildingSprite( const building_t build )
+    {
+        switch ( build ) {
+        case DWELLING_MONSTER1:
+            return 19;
+        case DWELLING_MONSTER2:
+            return 20;
+        case DWELLING_MONSTER3:
+            return 21;
+        case DWELLING_MONSTER4:
+            return 22;
+        case DWELLING_MONSTER5:
+            return 23;
+        case DWELLING_MONSTER6:
+            return 24;
+        case DWELLING_UPGRADE2:
+            return 25;
+        case DWELLING_UPGRADE3:
+            return 26;
+        case DWELLING_UPGRADE4:
+            return 27;
+        case DWELLING_UPGRADE5:
+            return 28;
+        case DWELLING_UPGRADE6:
+            return 29;
+        case DWELLING_UPGRADE7:
+            return 30;
+        case BUILD_MAGEGUILD1:
+        case BUILD_MAGEGUILD2:
+        case BUILD_MAGEGUILD3:
+        case BUILD_MAGEGUILD4:
+        case BUILD_MAGEGUILD5:
+            return 0;
+        case BUILD_THIEVESGUILD:
+            return 1;
+        case BUILD_SHRINE:
+        case BUILD_TAVERN:
+            return 2;
+        case BUILD_SHIPYARD:
+            return 3;
+        case BUILD_WELL:
+            return 4;
+        case BUILD_CASTLE:
+            return 6;
+        case BUILD_STATUE:
+            return 7;
+        case BUILD_LEFTTURRET:
+            return 8;
+        case BUILD_RIGHTTURRET:
+            return 9;
+        case BUILD_MARKETPLACE:
+            return 10;
+        case BUILD_WEL2:
+            return 11;
+        case BUILD_MOAT:
+            return 12;
+        case BUILD_SPEC:
+            return 13;
+        case BUILD_CAPTAIN:
+            return 15;
+        default:
+            break;
+        }
+
+        return 0;
     }
 
     std::vector<building_t> getBuildingDrawingPriorities( const int race, const GameVersion version )

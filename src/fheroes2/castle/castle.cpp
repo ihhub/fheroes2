@@ -52,6 +52,7 @@
 #include "logging.h"
 #include "luck.h"
 #include "m82.h"
+#include "map_format_info.h"
 #include "maps.h"
 #include "maps_fileinfo.h"
 #include "maps_tiles.h"
@@ -429,15 +430,15 @@ void Castle::LoadFromMP2( const std::vector<uint8_t> & data )
     PostLoad();
 }
 
-void Castle::loadFromResurrectionMap( const Maps::Map_Format::CastleMetadata & /*metadata*/, const bool isCastleBuilt )
+void Castle::loadFromResurrectionMap( const Maps::Map_Format::CastleMetadata & metadata )
 {
-    if ( isCastleBuilt ) {
-        building |= BUILD_CASTLE;
-    }
-    else {
-        building |= BUILD_TENT;
+    building = metadata.getBuiltBuildings();
+
+    if ( metadata.isCastleBuildAllowed() ) {
         SetModes( ALLOWCASTLE );
     }
+
+    Maps::Map_Format::loadArmyFromMetadata( army, metadata.defenderMonsterType, metadata.defenderMonsterCount );
 
     PostLoad();
 }
@@ -1020,11 +1021,6 @@ bool Castle::isFortificationBuild() const
 const char * Castle::GetStringBuilding( uint32_t build, int race )
 {
     return fheroes2::getBuildingName( race, static_cast<building_t>( build ) );
-}
-
-const char * Castle::GetDescriptionBuilding( uint32_t build, int race )
-{
-    return fheroes2::getBuildingDescription( race, static_cast<building_t>( build ) );
 }
 
 bool Castle::AllowBuyHero( std::string * msg ) const
@@ -2337,101 +2333,14 @@ uint32_t Castle::GetActualDwelling( const uint32_t buildId ) const
     return BUILD_NOTHING;
 }
 
-uint32_t Castle::GetUpgradeBuilding( uint32_t build ) const
+uint32_t Castle::GetUpgradeBuilding( const uint32_t buildingId ) const
 {
-    switch ( build ) {
-    case BUILD_TENT:
-        return BUILD_CASTLE;
-    case BUILD_MAGEGUILD1:
-        return BUILD_MAGEGUILD2;
-    case BUILD_MAGEGUILD2:
-        return BUILD_MAGEGUILD3;
-    case BUILD_MAGEGUILD3:
-        return BUILD_MAGEGUILD4;
-    case BUILD_MAGEGUILD4:
-        return BUILD_MAGEGUILD5;
-    default:
-        break;
+    if ( race == Race::WRLK && buildingId == DWELLING_MONSTER6 && isBuild( DWELLING_UPGRADE6 ) ) {
+        // Warlock's dwelling 6 is a special case.
+        return fheroes2::getUpgradeForBuilding( race, DWELLING_UPGRADE6 );
     }
 
-    if ( Race::BARB == race ) {
-        switch ( build ) {
-        case DWELLING_MONSTER2:
-            return DWELLING_UPGRADE2;
-        case DWELLING_MONSTER4:
-            return DWELLING_UPGRADE4;
-        case DWELLING_MONSTER5:
-            return DWELLING_UPGRADE5;
-        default:
-            break;
-        }
-    }
-    else if ( Race::KNGT == race ) {
-        switch ( build ) {
-        case DWELLING_MONSTER2:
-            return DWELLING_UPGRADE2;
-        case DWELLING_MONSTER3:
-            return DWELLING_UPGRADE3;
-        case DWELLING_MONSTER4:
-            return DWELLING_UPGRADE4;
-        case DWELLING_MONSTER5:
-            return DWELLING_UPGRADE5;
-        case DWELLING_MONSTER6:
-            return DWELLING_UPGRADE6;
-        default:
-            break;
-        }
-    }
-    else if ( Race::NECR == race ) {
-        switch ( build ) {
-        case DWELLING_MONSTER2:
-            return DWELLING_UPGRADE2;
-        case DWELLING_MONSTER3:
-            return DWELLING_UPGRADE3;
-        case DWELLING_MONSTER4:
-            return DWELLING_UPGRADE4;
-        case DWELLING_MONSTER5:
-            return DWELLING_UPGRADE5;
-        default:
-            break;
-        }
-    }
-    else if ( Race::SORC == race ) {
-        switch ( build ) {
-        case DWELLING_MONSTER2:
-            return DWELLING_UPGRADE2;
-        case DWELLING_MONSTER3:
-            return DWELLING_UPGRADE3;
-        case DWELLING_MONSTER4:
-            return DWELLING_UPGRADE4;
-        default:
-            break;
-        }
-    }
-    else if ( Race::WRLK == race ) {
-        switch ( build ) {
-        case DWELLING_MONSTER4:
-            return DWELLING_UPGRADE4;
-        case DWELLING_MONSTER6:
-            return isBuild( DWELLING_UPGRADE6 ) ? DWELLING_UPGRADE7 : DWELLING_UPGRADE6;
-        default:
-            break;
-        }
-    }
-    else if ( Race::WZRD == race ) {
-        switch ( build ) {
-        case DWELLING_MONSTER3:
-            return DWELLING_UPGRADE3;
-        case DWELLING_MONSTER5:
-            return DWELLING_UPGRADE5;
-        case DWELLING_MONSTER6:
-            return DWELLING_UPGRADE6;
-        default:
-            break;
-        }
-    }
-
-    return build;
+    return fheroes2::getUpgradeForBuilding( race, static_cast<building_t>( buildingId ) );
 }
 
 bool Castle::PredicateIsCastle( const Castle * castle )
@@ -2964,7 +2873,7 @@ std::string Castle::GetStringBuilding( uint32_t build ) const
 
 std::string Castle::GetDescriptionBuilding( uint32_t build ) const
 {
-    std::string res = GetDescriptionBuilding( build, GetRace() );
+    std::string res = fheroes2::getBuildingDescription( GetRace(), static_cast<building_t>( build ) );
 
     switch ( build ) {
     case BUILD_WELL:

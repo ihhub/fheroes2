@@ -207,6 +207,9 @@ namespace Maps
         else if ( group == ObjectGroup::KINGDOM_TOWNS ) {
             auto [metadata, isMetadataEmplaced] = map.castleMetadata.try_emplace( uid );
             assert( isMetadataEmplaced );
+
+            // Add town/castle main buildings.
+            metadata->second.addCastleTentBuilding( getObjectsByGroup( Maps::ObjectGroup::KINGDOM_TOWNS )[index].metadata[1] != 0 );
         }
         else if ( isJailObject( group, index ) ) {
             auto [heroMetadata, isMetadataEmplaced] = map.heroMetadata.try_emplace( uid );

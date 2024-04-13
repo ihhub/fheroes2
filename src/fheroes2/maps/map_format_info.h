@@ -27,6 +27,8 @@
 #include <string>
 #include <vector>
 
+#include "army.h"
+#include "castle.h"
 #include "map_object_info.h"
 #include "resource.h"
 
@@ -69,14 +71,14 @@ namespace Maps::Map_Format
         std::array<int32_t, 5> defenderMonsterType{ 0 };
         std::array<int32_t, 5> defenderMonsterCount{ 0 };
 
-        // Whether the captain is being hired in the town / castle.
-        bool isCaptainAvailable{ false };
+        // Whether the buildings are customized.
+        bool customBuildings{ false };
 
         // A list of built buildings.
-        std::vector<int32_t> builtBuildings;
+        std::vector<uint32_t> builtBuildings;
 
         // A list of buildings that cannot be built.
-        std::vector<int32_t> bannedBuildings;
+        std::vector<uint32_t> bannedBuildings;
 
         // Spells that must appear in the Magic Guild.
         std::vector<int32_t> mustHaveSpells;
@@ -86,6 +88,41 @@ namespace Maps::Map_Format
 
         // The number of monsters available to hire in dwellings. A negative value means that no change will be applied.
         std::array<int32_t, 6> availableToHireMonsterCount{ -1 };
+
+        bool isCastleBuildAllowed() const
+        {
+            return std::find( bannedBuildings.begin(), bannedBuildings.end(), BUILD_CASTLE ) == bannedBuildings.end();
+        }
+
+        bool isCastle() const
+        {
+            return std::find( builtBuildings.begin(), builtBuildings.end(), BUILD_CASTLE ) != builtBuildings.end();
+        }
+
+        void addCastleTentBuilding( const bool isCastle )
+        {
+            builtBuildings.push_back( isCastle ? BUILD_CASTLE : BUILD_TENT );
+        }
+
+        uint32_t getBuiltBuildings() const
+        {
+            return getBuildingsFromVector( builtBuildings );
+        }
+
+        uint32_t getBannedBuildings() const
+        {
+            return getBuildingsFromVector( bannedBuildings );
+        }
+
+        static uint32_t getBuildingsFromVector( const std::vector<uint32_t> & buildingsVector )
+        {
+            uint32_t buildings{ BUILD_NOTHING };
+            for ( const uint32_t building : buildingsVector ) {
+                buildings |= building;
+            }
+
+            return buildings;
+        }
     };
 
     struct HeroMetadata
@@ -264,6 +301,10 @@ namespace Maps::Map_Format
     bool loadMap( const std::string & path, MapFormat & map );
 
     bool saveMap( const std::string & path, const MapFormat & map );
+
+    // Returns false if there are no units set in metadata unitType.
+    bool loadArmyFromMetadata( Army & army, const std::array<int32_t, 5> & unitType, const std::array<int32_t, 5> & unitCount );
+    void saveArmyToMetadata( const Army & army, std::array<int32_t, 5> & unitType, std::array<int32_t, 5> & unitCount );
 
     StreamBase & operator<<( StreamBase & msg, const ObjectInfo & object );
     StreamBase & operator>>( StreamBase & msg, ObjectInfo & object );

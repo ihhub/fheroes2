@@ -144,7 +144,7 @@ public:
 
     void LoadFromMP2( const std::vector<uint8_t> & data );
 
-    void loadFromResurrectionMap( const Maps::Map_Format::CastleMetadata & metadata, const bool isCastleBuilt );
+    void loadFromResurrectionMap( const Maps::Map_Format::CastleMetadata & metadata );
 
     Captain & GetCaptain()
     {
@@ -280,11 +280,10 @@ public:
     std::string GetDescriptionBuilding( uint32_t ) const;
 
     static const char * GetStringBuilding( uint32_t, int race );
-    static const char * GetDescriptionBuilding( uint32_t, int race );
 
     static int GetICNBuilding( uint32_t, int race );
     static int GetICNBoat( int race );
-    uint32_t GetUpgradeBuilding( uint32_t ) const;
+    uint32_t GetUpgradeBuilding( const uint32_t buildingId ) const;
 
     static bool PredicateIsCastle( const Castle * );
     static bool PredicateIsTown( const Castle * );

@@ -60,7 +60,7 @@ public:
 
     const char * GetName() const;
     void SetStatusMessage( StatusBar & ) const;
-    bool IsDwelling() const;
+    static bool IsDwelling( uint32_t building );
     void Redraw() const;
     bool QueueEventProcessing( fheroes2::ButtonBase & exitButton ) const;
     bool DialogBuyBuilding( bool buttons ) const;

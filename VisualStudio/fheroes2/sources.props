@@ -85,6 +85,7 @@
     <ClCompile Include="src\fheroes2\dialog\dialog_audio.cpp" />
     <ClCompile Include="src\fheroes2\dialog\dialog_box.cpp" />
     <ClCompile Include="src\fheroes2\dialog\dialog_buyboat.cpp" />
+    <ClCompile Include="src\fheroes2\dialog\dialog_castle_details.cpp" />
     <ClCompile Include="src\fheroes2\dialog\dialog_chest.cpp" />
     <ClCompile Include="src\fheroes2\dialog\dialog_game_settings.cpp" />
     <ClCompile Include="src\fheroes2\dialog\dialog_file.cpp" />
@@ -307,6 +308,7 @@
     <ClInclude Include="src\fheroes2\castle\mageguild.h" />
     <ClInclude Include="src\fheroes2\dialog\dialog.h" />
     <ClInclude Include="src\fheroes2\dialog\dialog_audio.h" />
+    <ClInclude Include="src\fheroes2\dialog\dialog_castle_details.h" />
     <ClInclude Include="src\fheroes2\dialog\dialog_game_settings.h" />
     <ClInclude Include="src\fheroes2\dialog\dialog_graphics_settings.h" />
     <ClInclude Include="src\fheroes2\dialog\dialog_hotkeys.h" />

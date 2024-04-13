@@ -36,6 +36,7 @@
 #include "color.h"
 #include "cursor.h"
 #include "dialog.h"
+#include "dialog_castle_details.h"
 #include "dialog_selectitems.h"
 #include "editor_object_popup_window.h"
 #include "game.h"
@@ -877,6 +878,13 @@ namespace Interface
                     if ( heroNewMetadata != _mapFormat.heroMetadata[object.id] ) {
                         _mapFormat.heroMetadata[object.id] = std::move( heroNewMetadata );
                         action.commit();
+                    }
+                }
+                else if ( objectType == MP2::OBJ_CASTLE || objectType == MP2::OBJ_RANDOM_TOWN || objectType == MP2::OBJ_RANDOM_CASTLE ) {
+                    const int race = ( 1 << objectInfo.metadata[0] );
+                    auto castleMetadata = _mapFormat.castleMetadata.find( object.id );
+                    if ( castleMetadata != _mapFormat.castleMetadata.end() ) {
+                        Dialog::castleDetailsDialog( _mapFormat.castleMetadata[object.id], race );
                     }
                 }
                 else if ( object.group == Maps::ObjectGroup::MONSTERS ) {
