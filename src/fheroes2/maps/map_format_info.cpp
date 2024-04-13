@@ -304,7 +304,7 @@ namespace Maps::Map_Format
     bool loadArmyFromMetadata( Army & army, const std::array<int32_t, 5> & unitType, const std::array<int32_t, 5> & unitCount )
     {
         if ( std::all_of( unitType.begin(), unitType.end(), []( const int32_t type ) { return type == 0; } ) ) {
-            // There is no custom army set.
+            // There is no custom army.
             return false;
         }
 

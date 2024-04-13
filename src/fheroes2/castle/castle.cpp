@@ -326,26 +326,7 @@ void Castle::LoadFromMP2( const std::vector<uint8_t> & data )
         dataStream.skip( 5 );
 
         // Set default buildings.
-        building |= DWELLING_MONSTER1;
-        uint32_t dwelling2 = 0;
-        switch ( Game::getDifficulty() ) {
-        case Difficulty::EASY:
-            dwelling2 = 75;
-            break;
-        case Difficulty::NORMAL:
-            dwelling2 = 50;
-            break;
-        case Difficulty::HARD:
-            dwelling2 = 25;
-            break;
-        case Difficulty::EXPERT:
-            dwelling2 = 10;
-            break;
-        default:
-            break;
-        }
-        if ( dwelling2 && dwelling2 >= Rand::Get( 1, 100 ) )
-            building |= DWELLING_MONSTER2;
+        _setDefaultBuildings();
     }
 
     const bool customDefenders = ( dataStream.get() != 0 );
@@ -432,13 +413,25 @@ void Castle::LoadFromMP2( const std::vector<uint8_t> & data )
 
 void Castle::loadFromResurrectionMap( const Maps::Map_Format::CastleMetadata & metadata )
 {
+    modes = 0;
+
     building = metadata.getBuiltBuildings();
+
+    if ( !metadata.customBuildings ) {
+        _setDefaultBuildings();
+    }
 
     if ( metadata.isCastleBuildAllowed() ) {
         SetModes( ALLOWCASTLE );
     }
 
-    Maps::Map_Format::loadArmyFromMetadata( army, metadata.defenderMonsterType, metadata.defenderMonsterCount );
+    if ( Maps::Map_Format::loadArmyFromMetadata( army, metadata.defenderMonsterType, metadata.defenderMonsterCount ) ) {
+        SetModes( CUSTOMARMY );
+    }
+
+    if ( !metadata.customName.empty() ) {
+        name = metadata.customName;
+    }
 
     PostLoad();
 }
@@ -532,6 +525,33 @@ void Castle::PostLoad()
     // end
     DEBUG_LOG( DBG_GAME, DBG_INFO,
                ( building & BUILD_CASTLE ? "castle" : "town" ) << ": " << name << ", color: " << Color::String( GetColor() ) << ", race: " << Race::String( race ) )
+}
+
+void Castle::_setDefaultBuildings()
+{
+    building |= DWELLING_MONSTER1;
+    uint32_t dwelling2 = 0;
+
+    switch ( Game::getDifficulty() ) {
+    case Difficulty::EASY:
+        dwelling2 = 75;
+        break;
+    case Difficulty::NORMAL:
+        dwelling2 = 50;
+        break;
+    case Difficulty::HARD:
+        dwelling2 = 25;
+        break;
+    case Difficulty::EXPERT:
+        dwelling2 = 10;
+        break;
+    default:
+        break;
+    }
+
+    if ( dwelling2 && dwelling2 >= Rand::Get( 1, 100 ) ) {
+        building |= DWELLING_MONSTER2;
+    }
 }
 
 uint32_t Castle::CountBuildings() const

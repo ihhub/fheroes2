@@ -302,7 +302,7 @@ namespace Maps::Map_Format
 
     bool saveMap( const std::string & path, const MapFormat & map );
 
-    // Returns false if there are no units set in metadata unitType.
+    // Returns false if there are no custom units set in metadata.
     bool loadArmyFromMetadata( Army & army, const std::array<int32_t, 5> & unitType, const std::array<int32_t, 5> & unitCount );
     void saveArmyToMetadata( const Army & army, std::array<int32_t, 5> & unitType, std::array<int32_t, 5> & unitCount );
 
