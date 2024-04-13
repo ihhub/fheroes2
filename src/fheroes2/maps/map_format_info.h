@@ -27,11 +27,11 @@
 #include <string>
 #include <vector>
 
-#include "army.h"
 #include "castle.h"
 #include "map_object_info.h"
 #include "resource.h"
 
+class Army;
 class StreamBase;
 
 namespace Maps::Map_Format

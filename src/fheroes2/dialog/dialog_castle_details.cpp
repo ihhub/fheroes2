@@ -31,6 +31,7 @@
 #include <vector>
 
 #include "agg_image.h"
+#include "army.h"
 #include "army_bar.h"
 #include "buildinginfo.h"
 #include "castle.h"
@@ -43,9 +44,11 @@
 #include "localevent.h"
 #include "map_format_info.h"
 #include "math_base.h"
+#include "monster.h"
 #include "pal.h"
 #include "profit.h"
 #include "race.h"
+#include "resource.h"
 #include "screen.h"
 #include "settings.h"
 #include "statusbar.h"
