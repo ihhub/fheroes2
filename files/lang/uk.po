@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-04-11 06:20+0000\n"
-"PO-Revision-Date: 2024-04-02 09:25+0300\n"
+"PO-Revision-Date: 2024-04-13 08:53+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: uk\n"
@@ -247,6 +247,13 @@ msgid ""
 "O\n"
 "L"
 msgstr ""
+"П\n"
+"А\n"
+"Т\n"
+"Р\n"
+"У\n"
+"Л\n"
+"Ь"
 
 msgid ""
 "C\n"
@@ -403,7 +410,7 @@ msgstr "Наявність невмерлих в армії -1"
 msgid ""
 "Default\n"
 "troop"
-msgstr ""
+msgstr "Війська по замовчуванню"
 
 msgid "View %{name}"
 msgstr "Переглянути %{name}"
@@ -1995,7 +2002,7 @@ msgid "Cannot build %{name}. The castle is too far away from an ocean."
 msgstr "Неможливо побудувати %{name}, бо замок далеко від води."
 
 msgid "This building has been disabled."
-msgstr ""
+msgstr "Цю будівлю виведено з ладу."
 
 #, fuzzy
 msgid "Cannot afford the %{name}."
@@ -2878,7 +2885,7 @@ msgstr ""
 "Ви згодні?"
 
 msgid "(Rate: %{percent})"
-msgstr ""
+msgstr "(Ставка: %{percent})"
 
 msgid "off"
 msgstr "вимк."
@@ -3467,7 +3474,7 @@ msgid "%{mineName} appearance:"
 msgstr "%{name} %{race}"
 
 msgid "Click to select %{object} as the resource generator to be placed."
-msgstr ""
+msgstr "Тицьніть, щоб вибрати для розміщення %{object} як генератор ресурсів."
 
 msgid "Select Mountain Object:"
 msgstr "Вибрати об'єкт гора:"
@@ -3796,9 +3803,8 @@ msgstr "Збережіть поточну мапу."
 msgid "Quit out of the map editor."
 msgstr "Вийти з редактора мап."
 
-#, fuzzy
 msgid "Set %{monster} Count"
-msgstr "Зробити постріл у %{monster}"
+msgstr "Задати кількість %{monster}"
 
 msgid "Objects cannot be placed outside the map."
 msgstr "Неможливо розмістити об'єкт поза мапою."
@@ -4510,35 +4516,34 @@ msgid "hotkey|select map"
 msgstr "вибрати мапу"
 
 msgid "hotkey|select small map size"
-msgstr ""
+msgstr "вибрати мапу малого розміру"
 
 msgid "hotkey|select medium map size"
-msgstr ""
+msgstr "вибрати мапу середнього розміру"
 
 msgid "hotkey|select large map size"
-msgstr ""
+msgstr "вибрати мапу великого розміру"
 
 msgid "hotkey|select extra large map size"
-msgstr ""
+msgstr "вибрати мапу надвеликого розміру"
 
 msgid "hotkey|select all map sizes"
-msgstr ""
+msgstr "вибрати мапи усіх розмірів"
 
-#, fuzzy
 msgid "hotkey|hot seat game"
-msgstr "звичайна Гра"
+msgstr "гаряче сидіння"
 
 msgid "hotkey|battle only game"
-msgstr ""
+msgstr "лише битва"
 
 msgid "hotkey|choose the original campaign"
-msgstr ""
+msgstr "вибрати оригінальну кампанію"
 
 msgid "hotkey|choose the expansion campaign"
-msgstr ""
+msgstr "вибрати кампанію доповнення"
 
 msgid "hotkey|map editor main menu"
-msgstr ""
+msgstr "головне меню редактора карт"
 
 msgid "hotkey|new map menu"
 msgstr "нова гра"
@@ -4547,10 +4552,10 @@ msgid "hotkey|load map menu"
 msgstr "завантажити гру"
 
 msgid "hotkey|new map from scratch"
-msgstr ""
+msgstr "нова мапа з чистого аркуша"
 
 msgid "hotkey|new random map"
-msgstr ""
+msgstr "нова випадкова мапа"
 
 msgid "hotkey|undo last action"
 msgstr "відмінити останню дію"
@@ -4559,92 +4564,91 @@ msgid "hotkey|redo last action"
 msgstr "повторити останню дію"
 
 msgid "hotkey|roland campaign"
-msgstr ""
+msgstr "кампанія Роланда"
 
 msgid "hotkey|archibald campaign"
-msgstr ""
+msgstr "кампанія Арчібальда"
 
-#, fuzzy
 msgid "hotkey|price of loyalty campaign"
-msgstr "Ціна Вірності"
+msgstr "кампанія Ціна Вірності"
 
 msgid "hotkey|voyage home campaign"
-msgstr ""
+msgstr "кампанія Подорож Додому"
 
 msgid "hotkey|wizard's isle campaign"
-msgstr ""
+msgstr "кампанія Острів Чародія"
 
 msgid "hotkey|descendants campaign"
-msgstr ""
+msgstr "кампанія Нащадки"
 
 msgid "hotkey|select first campaign bonus"
-msgstr ""
+msgstr "вибрати перший бонус кампанії"
 
 msgid "hotkey|select second campaign bonus"
-msgstr ""
+msgstr "вибрати другий бонус кампанії"
 
 msgid "hotkey|select third campaign bonus"
-msgstr ""
+msgstr "вибрати тртій бонус кампанії"
 
 msgid "hotkey|view campaign intro"
-msgstr ""
+msgstr "Дивитися вступ кампанії"
 
 msgid "hotkey|select campaign difficulty"
 msgstr "Обрати складність кампанії"
 
 msgid "hotkey|restart campaign scenario"
-msgstr ""
+msgstr "перезапуск сценарію кампанії"
 
 msgid "hotkey|world map left"
-msgstr ""
+msgstr "світова мапа ліворуч"
 
 msgid "hotkey|world map right"
-msgstr ""
+msgstr "світова мапа праворуч"
 
 msgid "hotkey|world map up"
-msgstr ""
+msgstr "світова мапа вгору"
 
 msgid "hotkey|world map down"
-msgstr ""
+msgstr "світова мапа вниз"
 
 msgid "hotkey|world map up left"
-msgstr ""
+msgstr "світова мапа вгору й ліворуч"
 
 msgid "hotkey|world map up right"
-msgstr ""
+msgstr "світова мапа вгору й праворуч"
 
 msgid "hotkey|world map down left"
-msgstr ""
+msgstr "світова мапа донизу й ліворуч"
 
 msgid "hotkey|world map down right"
-msgstr ""
+msgstr "світова мапа донизу й праворуч"
 
 msgid "hotkey|save game"
-msgstr ""
+msgstr "зберегти гру"
 
 msgid "hotkey|next hero"
-msgstr ""
+msgstr "наступний герой"
 
 msgid "hotkey|change to hero under cursor"
-msgstr ""
+msgstr "перейти на героя під курсором"
 
 msgid "hotkey|start hero movement"
 msgstr "почати рух героя"
 
 msgid "hotkey|cast adventure spell"
-msgstr ""
+msgstr "накласти пригодницьке заклинання"
 
 msgid "hotkey|put hero to sleep"
-msgstr ""
+msgstr "приспати героя"
 
 msgid "hotkey|next town"
 msgstr "показати наступне місто"
 
 msgid "hotkey|end turn"
-msgstr ""
+msgstr "завершити хід"
 
 msgid "hotkey|file options"
-msgstr ""
+msgstr "параметри файлу"
 
 msgid "hotkey|adventure options"
 msgstr ""
@@ -5180,7 +5184,7 @@ msgid "Fail to win by the end of month %{month}, week %{week}, day %{day}."
 msgstr ""
 
 msgid "%{color} player has been vanquished!"
-msgstr ""
+msgstr "%{color} гравця було переможено!"
 
 msgid "Major Event!"
 msgstr ""
@@ -5201,7 +5205,7 @@ msgid "Rating %{rating}%"
 msgstr "Рейтинг %{rating}%"
 
 msgid "Click here to select which scenario to play."
-msgstr ""
+msgstr "Тицьніть сюди для вибору сценарію для гри."
 
 msgid "Scenario"
 msgstr "Сценарій"
@@ -7301,9 +7305,8 @@ msgstr "%{name} %{race} (Рівень %{level})"
 msgid "Random hero (Level %{level})"
 msgstr "%{name} (Рівень %{level})"
 
-#, fuzzy
 msgid "Random %{race} hero (Level %{level})"
-msgstr "%{name} %{race} (Рівень %{level})"
+msgstr "Випадковий %{race} герой (Рівень %{level})"
 
 #, fuzzy
 msgid "Hero race:"
@@ -7313,40 +7316,42 @@ msgid "Are you sure you want to dismiss this Hero?"
 msgstr "Ви впевнені, що хочете звільнити цього героя?"
 
 msgid "Set custom Experience value. Current value is default."
-msgstr ""
+msgstr "Задати певний обсяг досвіду. Поточна кількість за замовчуванням."
 
 msgid "Change Experience value. Right-click to reset to default value."
 msgstr ""
+"Встановити обсяг досвіду. Тицьніть правою кнопкою миші, щоб відновити "
+"значення за замовчуванням."
 
-#, fuzzy
 msgid "Set Experience value"
-msgstr "Досвід"
+msgstr "Задати кількість досвіду"
 
 msgid "View Experience Info"
 msgstr "Переглянути інформацію про досвід"
 
 msgid "Set custom Spell Points value. Current value is default."
 msgstr ""
+"Задати власну кількість очок заклинань. Поточний обсяг за замовчуванням."
 
 msgid "Change Spell Points value. Right-click to reset to default value."
 msgstr ""
+"Змінити значення очок заклинань. Тицьніть правою кнопкою миші, щоб відновити "
+"значення за замовчуванням."
 
-#, fuzzy
 msgid "Set Spell Points value"
-msgstr "Мана"
+msgstr "Задати кількість очок мани."
 
 msgid "View Spell Points Info"
 msgstr "Переглянути інформацію про очки магії"
 
 msgid "Set patrol radius in tiles"
-msgstr ""
+msgstr "Встановити радіус патрулювання в стільниках"
 
 msgid "Enter hero's name"
-msgstr ""
+msgstr "Ввести ім'я героя"
 
-#, fuzzy
 msgid "Click to change race."
-msgstr "Натисніть щоб побачити наступне місто."
+msgstr "Натисніть для зміни раси."
 
 msgid ""
 "'Spread' combat formation spreads the hero's units from the top to the "
@@ -7388,25 +7393,35 @@ msgstr "Згуртувати війська"
 
 msgid "Set hero's Artifacts. Right-click to reset Artifact."
 msgstr ""
+"Встановити артефакти героя. Тицьніть правою кнопкою миші, щоб скинути "
+"артефакт."
 
 msgid "Set hero's Secondary Skills. Right-click to reset skill."
 msgstr ""
+"Встановити вторинні навички героя. Тицьніть правою кнопкою миші, щоб скинути "
+"вміння."
 
 msgid "Set hero's Army. Right-click to reset unit."
 msgstr ""
+"Встановити армію героя. Тицьніть правою кнопкою миші, щоб скинути юніта."
 
 msgid "Set hero's portrait. Right-click to reset to default."
 msgstr ""
+"Встановити портрет героя. Клацніть правою кнопкою миші, щоб відновити "
+"значення за замовчуванням."
 
 msgid "Click to change hero's name. Right-click to reset to default."
 msgstr ""
+"Тицьніть для зміни імені героя. Тицьніть правою кнопкою миші, щоб відновити "
+"значення за замовчуванням."
 
 msgid "Hero is in patrol mode in %{tiles} tiles radius. Click to disable it."
 msgstr ""
+"Герой перебуває в режимі патрулювання в радіусі %{тайлів} сот. Тицьніть, щоб "
+"вимкнути його."
 
-#, fuzzy
 msgid "Click to enable hero's patrol mode."
-msgstr "Тицьніть щоб обрати цей колір."
+msgstr "Тицьніть для увімкнення патрулювання героєм."
 
 msgid "Blood Morale"
 msgstr "Кровожерлива"
@@ -7470,9 +7485,9 @@ msgstr "Усі істоти приєднаються до нас..."
 
 msgid "The creature will join us..."
 msgid_plural "%{count} of the creatures will join us..."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "%{count} істота приєднається до нас..."
+msgstr[1] "%{count} істоти приєднається до нас..."
+msgstr[2] "%{count} істот приєднається до нас..."
 
 msgid ""
 "\n"
@@ -8226,13 +8241,13 @@ msgid "Mine"
 msgstr "Копальня"
 
 msgid "Burma shave."
-msgstr ""
+msgstr "Здоровенькі були"
 
 msgid "Next sign 50 miles."
 msgstr "Наступний знак за 50 миль"
 
 msgid "See Rock City."
-msgstr ""
+msgstr "Нехай щастить"
 
 msgid "This space for rent."
 msgstr "Це місце для оренди."
@@ -9029,8 +9044,11 @@ msgstr "Випадкові Монстри 4"
 msgid "Double shot"
 msgstr "Подвійний постріл"
 
+# Клітина - це структурно функціональна одиниця організму. Не підходить
+# Клітка - металева конструкція або в анатомії грудна клітка тощо. Теж не підходить
+# Стільник або сота - шестигранна фігура.
 msgid "2-hex monster"
-msgstr "2-клітинний монстр"
+msgstr "2-стільниковий монстр"
 
 msgid "Double strike"
 msgstr "Подвійний удар"
@@ -9334,9 +9352,8 @@ msgstr ""
 msgid "Armored Gauntlets of Protection"
 msgstr "Броньована Рукавиця Захисту"
 
-#, fuzzy
 msgid "The %{name} increase the hero's defense skill by %{count}."
-msgstr "%{name} підвищує ваш Захист на %{count}."
+msgstr "%{name} підвищує захист героя на %{count}."
 
 msgid ""
 "You encounter the infamous Black Knight! After a grueling duel ending in a "
