@@ -3115,62 +3115,42 @@ namespace fheroes2
         uint8_t * inData = image.image();
         uint8_t * inTransform = image.transform();
 
-        uint8_t * outData = image.image();
+        fheroes2::Image outImage;
+        fheroes2::Copy( image, outImage );
+        uint8_t * outData = outImage.image();
+        uint8_t * outTransform = outImage.transform();
 
         const uint8_t center_y = static_cast<uint8_t>( std::max( 1, ( height / 2 ) - height % 2 ) );
-        const float scale = ( outsideColor - insideColor ) / static_cast<float>( center_y );
+        const float dColor = (float)( outsideColor - insideColor );
 
-        // top Half
-        for ( uint8_t top_half_y = 0; top_half_y <= center_y; top_half_y++ ) {
-            uint8_t val = static_cast<uint8_t>( insideColor + abs( center_y - top_half_y ) * scale );
-            uint8_t * th_inRowStart = inData + static_cast<ptrdiff_t>( top_half_y * width );
-            uint8_t * th_outRowStart = outData + static_cast<ptrdiff_t>( top_half_y * width );
+        for ( uint8_t row = 0; row < height; row++ ) {
+            float heightScale = static_cast<float>( abs( center_y - row ) ) / center_y;
 
-            uint8_t * th_inRowEnd = inData + static_cast<ptrdiff_t>( ( top_half_y + 1 ) * width );
-            uint8_t * th_inTrans = inTransform + static_cast<ptrdiff_t>( top_half_y * width );
+            uint8_t val = static_cast<uint8_t>( abs( insideColor + ( heightScale * dColor ) ) );
+            uint8_t * inRowStart = inData + static_cast<ptrdiff_t>( row * width );
+            uint8_t * outRowStart = outData + static_cast<ptrdiff_t>( row * width );
 
-            for ( ; th_inRowStart != th_inRowEnd; ++th_inRowStart, ++th_inTrans, ++th_outRowStart ) {
-                if ( *th_inTrans == 0 && *th_inRowStart < 21 ) {
-                    *th_outRowStart = val;
-                }
-                else if ( *th_inRowStart < std::min( insideColor, outsideColor ) ) {
-                    *th_inTrans = 1;
-                }
-            }
-        }
+            uint8_t * inRowEnd = inData + static_cast<ptrdiff_t>( ( row + 1 ) * width );
+            uint8_t * inTrans = inTransform + static_cast<ptrdiff_t>( row * width );
+            uint8_t * outTrans = outTransform + static_cast<ptrdiff_t>( row * width );
 
-        // bottom Half
-        for ( uint8_t btm_half_y = center_y; btm_half_y <= height; btm_half_y++ ) {
-            uint8_t val = static_cast<uint8_t>( insideColor + abs( center_y - btm_half_y ) * scale );
-            uint8_t * bh_inRowStart = inData + static_cast<ptrdiff_t>( btm_half_y * width );
-            uint8_t * bh_outRowStart = outData + static_cast<ptrdiff_t>( btm_half_y * width );
-
-            uint8_t * bh_inRowEnd = inData + static_cast<ptrdiff_t>( ( btm_half_y + 1 ) * width );
-            uint8_t * bh_inTrans = inTransform + static_cast<ptrdiff_t>( btm_half_y * width );
-
-            for ( ; bh_inRowStart != bh_inRowEnd; bh_inRowStart++, bh_inTrans++ ) {
-                if ( *bh_inTrans == 0 ) {
-                    if ( *bh_inRowStart < 21 ) {
-                        *bh_outRowStart = val;
+            for ( ; inRowStart != inRowEnd; ++inRowStart, ++inTrans, ++outRowStart, ++outTrans ) {
+                if ( *inTrans == 0 ) {
+                    // 21 is the pixel limit of shadows in Base white Font
+                    if ( *inRowStart < 21 ) {
+                        *outRowStart = val;
                     }
-                    else if ( *bh_inRowStart < std::min( insideColor, outsideColor ) ) {
-                        *bh_inTrans = 1;
+                    else { 
+                        *outTrans = 1;
                     }
                 }
             }
-        }
-
-        // first line is broken for unknown reason
-        uint8_t * data = outData;
-        uint8_t * transform = inTransform;
-        const uint8_t * dataEnd = data + width;
-        for ( ; data != dataEnd; ++data, ++transform ) {
-            *transform = 1;
         }
 
         for ( uint8_t i = 0; i < borderWidth; i++ ) {
-            fheroes2::Sprite cnt = CreateContour( image, borderColor );
-            Blit( cnt, image );
+            fheroes2::Sprite cnt = CreateContour( outImage, borderColor );
+            Blit( cnt, outImage );
         }
+        fheroes2::Copy( outImage, image );
     }
 }
