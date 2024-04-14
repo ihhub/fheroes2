@@ -3140,7 +3140,7 @@ namespace fheroes2
                     if ( *inRowStart < 21 ) {
                         *outRowStart = val;
                     }
-                    else { 
+                    else {
                         *outTrans = 1;
                     }
                 }
