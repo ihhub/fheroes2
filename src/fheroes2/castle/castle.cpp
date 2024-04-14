@@ -438,51 +438,71 @@ void Castle::loadFromResurrectionMap( const Maps::Map_Format::CastleMetadata & m
 
 void Castle::PostLoad()
 {
-    // dwelling pack
-    if ( building & DWELLING_MONSTER1 )
-        dwelling[0] = Monster( race, DWELLING_MONSTER1 ).GetGrown();
-    if ( building & DWELLING_MONSTER2 )
-        dwelling[1] = Monster( race, DWELLING_MONSTER2 ).GetGrown();
-    if ( building & DWELLING_UPGRADE2 )
-        dwelling[1] = Monster( race, DWELLING_UPGRADE2 ).GetGrown();
-    if ( building & DWELLING_MONSTER3 )
-        dwelling[2] = Monster( race, DWELLING_MONSTER3 ).GetGrown();
-    if ( building & DWELLING_UPGRADE3 )
-        dwelling[2] = Monster( race, DWELLING_UPGRADE3 ).GetGrown();
-    if ( building & DWELLING_MONSTER4 )
-        dwelling[3] = Monster( race, DWELLING_MONSTER4 ).GetGrown();
-    if ( building & DWELLING_UPGRADE4 )
-        dwelling[3] = Monster( race, DWELLING_UPGRADE4 ).GetGrown();
-    if ( building & DWELLING_MONSTER5 )
-        dwelling[4] = Monster( race, DWELLING_MONSTER5 ).GetGrown();
-    if ( building & DWELLING_UPGRADE5 )
-        dwelling[4] = Monster( race, DWELLING_UPGRADE5 ).GetGrown();
-    if ( building & DWELLING_MONSTER6 )
-        dwelling[5] = Monster( race, DWELLING_MONSTER6 ).GetGrown();
-    if ( building & DWELLING_UPGRADE6 )
-        dwelling[5] = Monster( race, DWELLING_UPGRADE6 ).GetGrown();
-    if ( building & DWELLING_UPGRADE7 )
-        dwelling[5] = Monster( race, DWELLING_UPGRADE7 ).GetGrown();
-
-    // fix upgrade dwelling dependent from race
+    // Fix dwelling upgrades dependent from race. (For random race towns.)
     switch ( race ) {
+    case Race::KNGT:
+        building &= ~DWELLING_UPGRADE7;
+        break;
     case Race::BARB:
-        building &= ~( DWELLING_UPGRADE3 | DWELLING_UPGRADE6 );
+        building &= ~( DWELLING_UPGRADE3 | DWELLING_UPGRADE6 | DWELLING_UPGRADE7 );
         break;
     case Race::SORC:
-        building &= ~( DWELLING_UPGRADE5 | DWELLING_UPGRADE6 );
+        building &= ~( DWELLING_UPGRADE5 | DWELLING_UPGRADE6 | DWELLING_UPGRADE7 );
         break;
     case Race::WRLK:
         building &= ~( DWELLING_UPGRADE2 | DWELLING_UPGRADE3 | DWELLING_UPGRADE5 );
         break;
     case Race::WZRD:
-        building &= ~( DWELLING_UPGRADE2 | DWELLING_UPGRADE4 );
+        building &= ~( DWELLING_UPGRADE2 | DWELLING_UPGRADE4 | DWELLING_UPGRADE7 );
         break;
     case Race::NECR:
-        building &= ~DWELLING_UPGRADE6;
+        building &= ~( DWELLING_UPGRADE6 | DWELLING_UPGRADE7 );
         break;
     default:
         break;
+    }
+
+    // Fill built dwellings with weekly growth monsters.
+    if ( building & DWELLING_MONSTER1 ) {
+        dwelling[0] = Monster( race, DWELLING_MONSTER1 ).GetGrown();
+    }
+
+    if ( building & DWELLING_UPGRADE2 ) {
+        dwelling[1] = Monster( race, DWELLING_UPGRADE2 ).GetGrown();
+    }
+    else if ( building & DWELLING_MONSTER2 ) {
+        dwelling[1] = Monster( race, DWELLING_MONSTER2 ).GetGrown();
+    }
+
+    if ( building & DWELLING_UPGRADE3 ) {
+        dwelling[2] = Monster( race, DWELLING_UPGRADE3 ).GetGrown();
+    }
+    else if ( building & DWELLING_MONSTER3 ) {
+        dwelling[2] = Monster( race, DWELLING_MONSTER3 ).GetGrown();
+    }
+
+    if ( building & DWELLING_UPGRADE4 ) {
+        dwelling[3] = Monster( race, DWELLING_UPGRADE4 ).GetGrown();
+    }
+    else if ( building & DWELLING_MONSTER4 ) {
+        dwelling[3] = Monster( race, DWELLING_MONSTER4 ).GetGrown();
+    }
+
+    if ( building & DWELLING_UPGRADE5 ) {
+        dwelling[4] = Monster( race, DWELLING_UPGRADE5 ).GetGrown();
+    }
+    else if ( building & DWELLING_MONSTER5 ) {
+        dwelling[4] = Monster( race, DWELLING_MONSTER5 ).GetGrown();
+    }
+
+    if ( building & DWELLING_UPGRADE7 ) {
+        dwelling[5] = Monster( race, DWELLING_UPGRADE7 ).GetGrown();
+    }
+    else if ( building & DWELLING_UPGRADE6 ) {
+        dwelling[5] = Monster( race, DWELLING_UPGRADE6 ).GetGrown();
+    }
+    else if ( building & DWELLING_MONSTER6 ) {
+        dwelling[5] = Monster( race, DWELLING_MONSTER6 ).GetGrown();
     }
 
     army.SetColor( GetColor() );

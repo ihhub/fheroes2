@@ -488,7 +488,7 @@ namespace Dialog
         fheroes2::Button buttonExit( dialogRoi.x + rightPartOffsetX + 50, dialogRoi.y + 430, isEvilInterface ? ICN::BUTTON_SMALL_EXIT_EVIL : ICN::BUTTON_SMALL_EXIT_GOOD,
                                      0, 1 );
         const fheroes2::Rect buttonExitArea( buttonExit.area() );
-        fheroes2::addGradientShadow( fheroes2::AGG::GetICN( ICN::BUTTON_SMALL_EXIT_GOOD, 0 ), display, buttonExitArea.getPosition(), { -5, 5 } );
+        fheroes2::addGradientShadow( fheroes2::AGG::GetICN( ICN::BUTTON_SMALL_EXIT_GOOD, 0 ), display, buttonExitArea.getPosition(), { -2, 2 } );
         buttonExit.draw();
 
         // Status bar.
