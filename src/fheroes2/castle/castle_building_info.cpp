@@ -786,7 +786,7 @@ namespace
     {
         switch ( buildingId ) {
         case BUILD_SPEC:
-            return _( "The Special building gives a race specified bonus." );
+            return _( "The Special building gives a specific bonus to the chosen castle type." );
         case BUILD_WEL2:
             return _( "The 1st level growth building increases production of 1st level creatures per week." );
         default:

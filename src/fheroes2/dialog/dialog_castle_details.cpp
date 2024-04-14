@@ -520,7 +520,7 @@ namespace Dialog
             ( buildingRestriction || le.MousePressLeft( buttonRestrictBuildingArea ) ) ? buttonRestrictBuilding.drawOnPress() : buttonRestrictBuilding.drawOnRelease();
 
             if ( le.MouseCursor( nameArea ) ) {
-                message = _( "Click to change Castle name. Right-click to reset to default." );
+                message = _( "Click to change the Castle name. Right-click to reset to default." );
 
                 bool redrawName = false;
                 if ( le.MouseClickLeft() ) {
@@ -543,7 +543,7 @@ namespace Dialog
                 }
             }
             else if ( !isCastle && le.MouseCursor( allowCastleArea ) ) {
-                message = _( "Allow building a castle in this town." );
+                message = _( "Allow to build a castle in this town." );
 
                 if ( le.MouseClickLeft() ) {
                     allowCastleSign.isHidden() ? allowCastleSign.show() : allowCastleSign.hide();
@@ -554,7 +554,7 @@ namespace Dialog
                 }
             }
             else if ( le.MouseCursor( defaultBuildingsArea ) ) {
-                message = _( "Toggle the use default buildings. Custom buildings will be reset!" );
+                message = _( "Toggle the use of default buildings. Custom buildings will be reset!" );
 
                 if ( le.MouseClickLeft() ) {
                     if ( defaultBuildingsSign.isHidden() ) {
@@ -617,7 +617,7 @@ namespace Dialog
                                 display.render( buildings[i].getArea() );
                             }
                             else {
-                                // The building properties has been changed. Uncheck the default buildings checkbox.
+                                // The building properties have been changed. Uncheck the default buildings checkbox.
                                 defaultBuildingsSign.hide();
 
                                 for ( const BuildingData & building : buildings ) {
