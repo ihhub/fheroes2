@@ -163,41 +163,8 @@ namespace
             }
 
             if ( le.MousePressRight() ) {
-                std::string description;
                 const building_t building = _getBuildindTypeForRender();
-                if ( BuildingInfo::IsDwelling( building ) ) {
-                    description = _( "The %{building} produces %{monster}." );
-                    StringReplace( description, "%{building}", Castle::GetStringBuilding( building, _race ) );
-                    if ( _race == Race::RAND ) {
-                        StringReplace( description, "%{monster}", _getRandomMonstersName( building ) );
-                    }
-                    else {
-                        StringReplaceWithLowercase( description, "%{monster}", Monster( _race, building ).GetMultiName() );
-                    }
-                }
-                else {
-                    description = fheroes2::getBuildingDescription( _race, building );
-
-                    switch ( building ) {
-                    case BUILD_WELL:
-                        StringReplace( description, "%{count}", Castle::GetGrownWell() );
-                        break;
-                    case BUILD_WEL2:
-                        StringReplace( description, "%{count}", Castle::GetGrownWel2() );
-                        break;
-                    case BUILD_CASTLE:
-                    case BUILD_STATUE:
-                    case BUILD_SPEC: {
-                        const Funds profit = ProfitConditions::FromBuilding( building, _race );
-                        StringReplace( description, "%{count}", profit.gold );
-                        break;
-                    }
-                    default:
-                        break;
-                    }
-                }
-
-                fheroes2::showStandardTextMessage( Castle::GetStringBuilding( building, _race ), std::move( description ), Dialog::ZERO );
+                fheroes2::showStandardTextMessage( Castle::GetStringBuilding( building, _race ), BuildingInfo::getBuildingDescription( _race, building ), Dialog::ZERO );
             }
 
             return false;
@@ -303,33 +270,6 @@ namespace
             }
 
             return building;
-        }
-
-        static std::string _getRandomMonstersName( const building_t building )
-        {
-            switch ( building ) {
-            case DWELLING_MONSTER1:
-                return _( "randomTownDetails|level 1 creatures" );
-            case DWELLING_MONSTER2:
-            case DWELLING_UPGRADE2:
-                return _( "randomTownDetails|level 2 creatures" );
-            case DWELLING_MONSTER3:
-            case DWELLING_UPGRADE3:
-                return _( "randomTownDetails|level 3 creatures" );
-            case DWELLING_MONSTER4:
-            case DWELLING_UPGRADE4:
-                return _( "randomTownDetails|level 4 creatures" );
-            case DWELLING_MONSTER5:
-            case DWELLING_UPGRADE5:
-                return _( "randomTownDetails|level 5 creatures" );
-            case DWELLING_MONSTER6:
-            case DWELLING_UPGRADE6:
-            case DWELLING_UPGRADE7:
-                return _( "randomTownDetails|level 6 creatures" );
-            default:
-                assert( 0 );
-                return "unknown monsters";
-            }
         }
 
         building_t _mainBuildingType{ BUILD_NOTHING };

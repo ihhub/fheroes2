@@ -214,7 +214,7 @@ BuildingInfo::BuildingInfo( const Castle & c, const building_t b )
     , area( 0, 0, 135, 70 )
     , bcond( ALLOW_BUILD )
 {
-    if ( IsDwelling( building ) )
+    if ( isDwelling( building ) )
         building = castle.GetActualDwelling( b );
 
     building = castle.isBuild( b ) ? castle.GetUpgradeBuilding( b ) : b;
@@ -229,34 +229,8 @@ BuildingInfo::BuildingInfo( const Castle & c, const building_t b )
     // generate description
     if ( BUILD_DISABLE == bcond )
         description = GetConditionDescription();
-    else if ( IsDwelling( building ) ) {
-        description = _( "The %{building} produces %{monster}." );
-        StringReplace( description, "%{building}", Castle::GetStringBuilding( building, castle.GetRace() ) );
-        StringReplaceWithLowercase( description, "%{monster}", Monster( castle.GetRace(), building ).GetMultiName() );
-    }
     else {
-        description = fheroes2::getBuildingDescription( castle.GetRace(), static_cast<building_t>( building ) );
-    }
-
-    switch ( building ) {
-    case BUILD_WELL:
-        StringReplace( description, "%{count}", Castle::GetGrownWell() );
-        break;
-
-    case BUILD_WEL2:
-        StringReplace( description, "%{count}", Castle::GetGrownWel2() );
-        break;
-
-    case BUILD_CASTLE:
-    case BUILD_STATUE:
-    case BUILD_SPEC: {
-        const Funds profit = ProfitConditions::FromBuilding( building, castle.GetRace() );
-        StringReplace( description, "%{count}", profit.gold );
-        break;
-    }
-
-    default:
-        break;
+        description = getBuildingDescription( castle.GetRace(), building );
     }
 
     // fix area for captain
@@ -273,7 +247,7 @@ void BuildingInfo::SetPos( int32_t x, int32_t y )
     area.y = y;
 }
 
-bool BuildingInfo::IsDwelling( uint32_t building )
+bool BuildingInfo::isDwelling( uint32_t building )
 {
     switch ( building ) {
     case DWELLING_MONSTER1:
@@ -293,6 +267,43 @@ bool BuildingInfo::IsDwelling( uint32_t building )
         break;
     }
     return false;
+}
+
+std::string BuildingInfo::getBuildingDescription( const int race, const uint32_t buildingId )
+{
+    std::string description;
+    if ( isDwelling( buildingId ) ) {
+        description = _( "The %{building} produces %{monster}." );
+        StringReplace( description, "%{building}", Castle::GetStringBuilding( buildingId, race ) );
+        if ( race == Race::RAND ) {
+            StringReplace( description, "%{monster}", Monster::getRandomRaceMonstersName( buildingId ) );
+        }
+        else {
+            StringReplaceWithLowercase( description, "%{monster}", Monster( race, buildingId ).GetMultiName() );
+        }
+    }
+    else {
+        description = fheroes2::getBuildingDescription( race, static_cast<building_t>( buildingId ) );
+
+        switch ( buildingId ) {
+        case BUILD_WELL:
+            StringReplace( description, "%{count}", Castle::GetGrownWell() );
+            break;
+        case BUILD_WEL2:
+            StringReplace( description, "%{count}", Castle::GetGrownWel2() );
+            break;
+        case BUILD_CASTLE:
+        case BUILD_STATUE:
+        case BUILD_SPEC: {
+            const Funds profit = ProfitConditions::FromBuilding( buildingId, race );
+            StringReplace( description, "%{count}", profit.gold );
+            break;
+        }
+        default:
+            break;
+        }
+    }
+    return description;
 }
 
 void BuildingInfo::RedrawCaptain() const
