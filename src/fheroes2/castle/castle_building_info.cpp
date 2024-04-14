@@ -1090,6 +1090,288 @@ namespace fheroes2
         return buildingId;
     }
 
+    building_t getBuildingRequirement( const int race, const building_t building )
+    {
+        uint32_t requirement = 0;
+
+        switch ( building ) {
+        case BUILD_SPEC:
+            if ( race == Race::WZRD ) {
+                requirement |= BUILD_MAGEGUILD1;
+            }
+            break;
+
+        case DWELLING_MONSTER2:
+            switch ( race ) {
+            case Race::KNGT:
+            case Race::BARB:
+            case Race::WZRD:
+            case Race::WRLK:
+            case Race::NECR:
+                requirement |= DWELLING_MONSTER1;
+                break;
+
+            case Race::SORC:
+                requirement |= DWELLING_MONSTER1;
+                requirement |= BUILD_TAVERN;
+                break;
+
+            default:
+                break;
+            }
+            break;
+
+        case DWELLING_MONSTER3:
+            switch ( race ) {
+            case Race::KNGT:
+                requirement |= DWELLING_MONSTER1;
+                requirement |= BUILD_WELL;
+                break;
+
+            case Race::BARB:
+            case Race::SORC:
+            case Race::WZRD:
+            case Race::WRLK:
+            case Race::NECR:
+                requirement |= DWELLING_MONSTER1;
+                break;
+
+            default:
+                break;
+            }
+            break;
+
+        case DWELLING_MONSTER4:
+            switch ( race ) {
+            case Race::KNGT:
+                requirement |= DWELLING_MONSTER1;
+                requirement |= BUILD_TAVERN;
+                break;
+
+            case Race::BARB:
+                requirement |= DWELLING_MONSTER1;
+                break;
+
+            case Race::SORC:
+                requirement |= DWELLING_MONSTER3;
+                requirement |= BUILD_MAGEGUILD1;
+                break;
+
+            case Race::WZRD:
+            case Race::WRLK:
+                requirement |= DWELLING_MONSTER2;
+                break;
+
+            case Race::NECR:
+                requirement |= DWELLING_MONSTER3;
+                requirement |= BUILD_THIEVESGUILD;
+                break;
+
+            default:
+                break;
+            }
+            break;
+
+        case DWELLING_MONSTER5:
+            switch ( race ) {
+            case Race::KNGT:
+            case Race::BARB:
+                requirement |= DWELLING_MONSTER2;
+                requirement |= DWELLING_MONSTER3;
+                requirement |= DWELLING_MONSTER4;
+                break;
+
+            case Race::SORC:
+                requirement |= DWELLING_MONSTER4;
+                break;
+
+            case Race::WRLK:
+                requirement |= DWELLING_MONSTER3;
+                break;
+
+            case Race::WZRD:
+                requirement |= DWELLING_MONSTER3;
+                requirement |= BUILD_MAGEGUILD1;
+                break;
+
+            case Race::NECR:
+                requirement |= DWELLING_MONSTER2;
+                requirement |= BUILD_MAGEGUILD1;
+                break;
+
+            default:
+                break;
+            }
+            break;
+
+        case DWELLING_MONSTER6:
+            switch ( race ) {
+            case Race::KNGT:
+                requirement |= DWELLING_MONSTER2;
+                requirement |= DWELLING_MONSTER3;
+                requirement |= DWELLING_MONSTER4;
+                break;
+
+            case Race::BARB:
+            case Race::SORC:
+            case Race::NECR:
+                requirement |= DWELLING_MONSTER5;
+                break;
+
+            case Race::WRLK:
+            case Race::WZRD:
+                requirement |= DWELLING_MONSTER4;
+                requirement |= DWELLING_MONSTER5;
+                break;
+
+            default:
+                break;
+            }
+            break;
+
+        case DWELLING_UPGRADE2:
+            switch ( race ) {
+            case Race::KNGT:
+            case Race::BARB:
+                requirement |= DWELLING_MONSTER2;
+                requirement |= DWELLING_MONSTER3;
+                requirement |= DWELLING_MONSTER4;
+                break;
+
+            case Race::SORC:
+                requirement |= DWELLING_MONSTER2;
+                requirement |= BUILD_WELL;
+                break;
+
+            case Race::NECR:
+                requirement |= DWELLING_MONSTER2;
+                break;
+
+            default:
+                break;
+            }
+            break;
+
+        case DWELLING_UPGRADE3:
+            switch ( race ) {
+            case Race::KNGT:
+                requirement |= DWELLING_MONSTER2;
+                requirement |= DWELLING_MONSTER3;
+                requirement |= DWELLING_MONSTER4;
+                break;
+
+            case Race::SORC:
+                requirement |= DWELLING_MONSTER3;
+                requirement |= DWELLING_MONSTER4;
+                break;
+
+            case Race::WZRD:
+                requirement |= DWELLING_MONSTER3;
+                requirement |= BUILD_WELL;
+                break;
+
+            case Race::NECR:
+                requirement |= DWELLING_MONSTER3;
+                break;
+
+            default:
+                break;
+            }
+            break;
+
+        case DWELLING_UPGRADE4:
+            switch ( race ) {
+            case Race::KNGT:
+            case Race::BARB:
+                requirement |= DWELLING_MONSTER2;
+                requirement |= DWELLING_MONSTER3;
+                requirement |= DWELLING_MONSTER4;
+                break;
+
+            case Race::SORC:
+            case Race::WRLK:
+            case Race::NECR:
+                requirement |= DWELLING_MONSTER4;
+                break;
+
+            default:
+                break;
+            }
+            break;
+
+        case DWELLING_UPGRADE5:
+            switch ( race ) {
+            case Race::KNGT:
+                requirement |= DWELLING_MONSTER5;
+                break;
+
+            case Race::BARB:
+                requirement |= DWELLING_MONSTER5;
+                break;
+
+            case Race::WZRD:
+                requirement |= BUILD_SPEC;
+                requirement |= DWELLING_MONSTER5;
+                break;
+
+            case Race::NECR:
+                requirement |= BUILD_MAGEGUILD2;
+                requirement |= DWELLING_MONSTER5;
+                break;
+
+            default:
+                break;
+            }
+            break;
+
+        case DWELLING_UPGRADE6:
+            switch ( race ) {
+            case Race::KNGT:
+                requirement |= DWELLING_MONSTER6;
+                break;
+
+            case Race::WRLK:
+            case Race::WZRD:
+                requirement |= DWELLING_MONSTER6;
+                break;
+
+            default:
+                break;
+            }
+            break;
+        case DWELLING_UPGRADE7:
+            if ( race == Race::WRLK )
+                requirement |= DWELLING_UPGRADE6;
+            break;
+
+        default:
+            break;
+        }
+
+        return static_cast<building_t>( requirement );
+    }
+
+    std::string getBuildingRequirementString( const int race, const building_t building )
+    {
+        // prepare requirement build string
+        std::string requirement;
+        const uint32_t requirementBuildingIds = fheroes2::getBuildingRequirement( race, building );
+        const char sep = '\n';
+
+        for ( uint32_t itr = 0x00000001; itr; itr <<= 1 )
+            if ( requirementBuildingIds & itr ) {
+                requirement.append( Castle::GetStringBuilding( itr, race ) );
+                requirement += sep;
+            }
+
+        // Remove the last separator.
+        if ( !requirement.empty() ) {
+            requirement.pop_back();
+        }
+
+        return requirement;
+    }
+
     int getIndexBuildingSprite( const building_t build )
     {
         switch ( build ) {

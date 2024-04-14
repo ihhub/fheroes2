@@ -266,7 +266,6 @@ public:
     }
 
     bool BuyBuilding( uint32_t );
-    uint32_t GetBuildingRequirement( uint32_t ) const;
 
     int CheckBuyBuilding( const uint32_t build ) const;
     static int GetAllBuildingStatus( const Castle & );

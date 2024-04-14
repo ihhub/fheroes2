@@ -45,15 +45,11 @@
 #include "localevent.h"
 #include "map_format_info.h"
 #include "math_base.h"
-#include "monster.h"
 #include "pal.h"
-#include "profit.h"
 #include "race.h"
-#include "resource.h"
 #include "screen.h"
 #include "settings.h"
 #include "statusbar.h"
-#include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
 #include "ui_dialog.h"
@@ -164,7 +160,17 @@ namespace
 
             if ( le.MousePressRight() ) {
                 const building_t building = _getBuildindTypeForRender();
-                fheroes2::showStandardTextMessage( Castle::GetStringBuilding( building, _race ), BuildingInfo::getBuildingDescription( _race, building ), Dialog::ZERO );
+                std::string description = BuildingInfo::getBuildingDescription( _race, building );
+                std::string requirement = fheroes2::getBuildingRequirementString( _race, building );
+
+                if ( !requirement.empty() ) {
+                    description += "\n\n";
+                    description += _( "Requires:" );
+                    description += "\n";
+                    std::move( requirement.begin(), requirement.end(), std::back_inserter( description ) );
+                }
+
+                fheroes2::showStandardTextMessage( Castle::GetStringBuilding( building, _race ), std::move( description ), Dialog::ZERO );
             }
 
             return false;

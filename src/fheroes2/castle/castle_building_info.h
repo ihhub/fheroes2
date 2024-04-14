@@ -20,6 +20,7 @@
 
 #pragma once
 
+#include <string>
 #include <vector>
 
 #include "castle.h"
@@ -37,6 +38,10 @@ namespace fheroes2
 
     // Returns the upgraded building ID for the given one or the input building if no upgrade is available.
     building_t getUpgradeForBuilding( const int race, const building_t buildingId );
+
+    building_t getBuildingRequirement( const int race, const building_t building );
+
+    std::string getBuildingRequirementString( const int race, const building_t building );
 
     int getIndexBuildingSprite( const building_t build );
 
