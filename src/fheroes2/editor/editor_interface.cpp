@@ -62,6 +62,7 @@
 #include "math_base.h"
 #include "monster.h"
 #include "mp2.h"
+#include "race.h"
 #include "render_processor.h"
 #include "screen.h"
 #include "settings.h"
@@ -881,10 +882,11 @@ namespace Interface
                     }
                 }
                 else if ( objectType == MP2::OBJ_CASTLE || objectType == MP2::OBJ_RANDOM_TOWN || objectType == MP2::OBJ_RANDOM_CASTLE ) {
-                    const int race = ( 1 << objectInfo.metadata[0] );
                     auto castleMetadata = _mapFormat.castleMetadata.find( object.id );
                     if ( castleMetadata != _mapFormat.castleMetadata.end() ) {
-                        Dialog::castleDetailsDialog( _mapFormat.castleMetadata[object.id], race );
+                        const int race = Race::IndexToRace( objectInfo.metadata[0] );
+                        const int color = Color::IndexToColor( Maps::getTownColorIndex( _mapFormat, tileIndex, object.id ) );
+                        Dialog::castleDetailsDialog( _mapFormat.castleMetadata[object.id], race, color );
                     }
                 }
                 else if ( object.group == Maps::ObjectGroup::MONSTERS ) {
@@ -1280,6 +1282,11 @@ namespace Interface
 
             if ( !setObjectOnTile( tile, groupType, type ) ) {
                 return;
+            }
+
+            // By default use random (default) army for the neutral race town/castle.
+            if ( Color::IndexToColor( color ) == Color::NONE ) {
+                _mapFormat.castleMetadata[Maps::getLastObjectUID()].setDefaultDefenderArmy();
             }
 
             // Add flags.

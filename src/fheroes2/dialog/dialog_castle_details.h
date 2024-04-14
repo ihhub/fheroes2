@@ -27,5 +27,5 @@ namespace Maps::Map_Format
 
 namespace Dialog
 {
-    void castleDetailsDialog( Maps::Map_Format::CastleMetadata & castleMetadata, const int race );
+    void castleDetailsDialog( Maps::Map_Format::CastleMetadata & castleMetadata, const int race, const int color );
 }

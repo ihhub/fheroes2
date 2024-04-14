@@ -29,6 +29,7 @@
 
 #include "castle.h"
 #include "map_object_info.h"
+#include "monster.h"
 #include "resource.h"
 
 class Army;
@@ -122,6 +123,24 @@ namespace Maps::Map_Format
             }
 
             return buildings;
+        }
+
+        // Should be used only for the neutral color player.
+        void setDefaultDefenderArmy()
+        {
+            for ( int32_t & type : defenderMonsterType ) {
+                type = Monster::RANDOM_MONSTER;
+            }
+            for ( int32_t & count : defenderMonsterCount ) {
+                count = 0;
+            }
+        }
+
+        // Returns true if all monsters are RANDOM_MONSTER and count is 0. Should be used only for the neutral color player.
+        bool isDefaultDefenderArmy() const
+        {
+            return std::all_of( defenderMonsterType.begin(), defenderMonsterType.end(), []( const int32_t type ) { return type == Monster::RANDOM_MONSTER; } )
+                   && std::all_of( defenderMonsterCount.begin(), defenderMonsterCount.end(), []( const int32_t count ) { return count == 0; } );
         }
     };
 

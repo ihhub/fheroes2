@@ -429,6 +429,11 @@ void Castle::loadFromResurrectionMap( const Maps::Map_Format::CastleMetadata & m
         SetModes( CUSTOMARMY );
     }
 
+    // Check the default Army state for the Neutral player.
+    if ( GetColor() == Color::NONE ) {
+        metadata.isDefaultDefenderArmy() ? ResetModes( CUSTOMARMY ) : SetModes( CUSTOMARMY );
+    }
+
     if ( !metadata.customName.empty() ) {
         name = metadata.customName;
     }

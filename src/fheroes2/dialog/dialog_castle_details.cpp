@@ -344,7 +344,7 @@ namespace
 
 namespace Dialog
 {
-    void castleDetailsDialog( Maps::Map_Format::CastleMetadata & castleMetadata, const int race )
+    void castleDetailsDialog( Maps::Map_Format::CastleMetadata & castleMetadata, const int race, const int color )
     {
         // setup cursor
         const CursorRestorer cursorRestorer( true, Cursor::POINTER );
@@ -427,9 +427,23 @@ namespace Dialog
         fheroes2::addGradientShadow( fheroes2::AGG::GetICN( ICN::BUTTON_RESTRICT_GOOD, 0 ), display, buttonRestrictBuildingArea.getPosition(), { -5, 5 } );
         buttonRestrictBuilding.draw();
 
+        const bool isNeutral = ( color == Color::NONE );
+
         // Castle army.
-        const fheroes2::Text armyText( _( "Castle Army" ), fheroes2::FontType::normalWhite() );
-        armyText.drawInRoi( dialogRoi.x + rightPartOffsetX + ( rightPartSizeX - armyText.width() ) / 2, dialogRoi.y + 315, display, dialogRoi );
+        dstPt.y = dialogRoi.y + 311;
+        fheroes2::MovableSprite defaultArmySign;
+        fheroes2::Rect defaultArmyArea;
+        if ( isNeutral ) {
+            defaultArmyArea = drawCheckboxBackground( defaultArmySign, _( "Default Army" ), dstPt.x, dstPt.y, isEvilInterface );
+
+            castleMetadata.isDefaultDefenderArmy() ? defaultArmySign.show() : defaultArmySign.hide();
+        }
+        else {
+            defaultArmySign.hide();
+
+            const fheroes2::Text armyText( _( "Castle Army" ), fheroes2::FontType::normalWhite() );
+            armyText.drawInRoi( dialogRoi.x + rightPartOffsetX + ( rightPartSizeX - armyText.width() ) / 2, dstPt.y + 4, display, dialogRoi );
+        }
 
         Army castleArmy;
         // Load army from metadata.
@@ -591,11 +605,36 @@ namespace Dialog
                     fheroes2::showStandardTextMessage( _( "Restrict Building Construction" ), message, Dialog::ZERO );
                 }
             }
+            else if ( isNeutral && le.MouseCursor( defaultArmyArea ) ) {
+                message = _( "Use default defenders army." );
+
+                if ( le.MouseClickLeft() ) {
+                    if ( defaultArmySign.isHidden() ) {
+                        defaultArmySign.show();
+                        castleArmy.Reset( false );
+                        armyBar.Redraw( display );
+                        display.render( dialogRoi );
+                    }
+                    else {
+                        defaultArmySign.hide();
+                        display.render( defaultArmySign.getArea() );
+                    }
+                }
+                else if ( le.MousePressRight() ) {
+                    fheroes2::showStandardTextMessage( _( "Default Army" ), message, Dialog::ZERO );
+                }
+            }
             else if ( le.MouseCursor( armyBar.GetArea() ) ) {
                 if ( armyBar.QueueEventProcessing( &message ) ) {
                     armyBar.Redraw( display );
 
-                    display.render( dialogRoi );
+                    if ( defaultArmySign.isHidden() ) {
+                        display.render( armyBar.GetArea() );
+                    }
+                    else {
+                        defaultArmySign.hide();
+                        display.render( dialogRoi );
+                    }
                 }
 
                 if ( message.empty() ) {
@@ -646,7 +685,12 @@ namespace Dialog
         }
 
         // Update army in metadata.
-        Maps::Map_Format::saveArmyToMetadata( castleArmy, castleMetadata.defenderMonsterType, castleMetadata.defenderMonsterCount );
+        if ( isNeutral && !defaultArmySign.isHidden() ) {
+            castleMetadata.setDefaultDefenderArmy();
+        }
+        else {
+            Maps::Map_Format::saveArmyToMetadata( castleArmy, castleMetadata.defenderMonsterType, castleMetadata.defenderMonsterCount );
+        }
 
         // Update buildings data.
         castleMetadata.builtBuildings.clear();
