@@ -3126,7 +3126,7 @@ namespace fheroes2
         for ( uint8_t row = 0; row < height; row++ ) {
             float heightScale = static_cast<float>( abs( center_y - row ) ) / center_y;
 
-            uint8_t val = static_cast<uint8_t>( abs( insideColor + ( heightScale * dColor ) ) );
+            uint8_t val = static_cast<uint8_t>( abs( insideColor + (int)( heightScale * dColor ) ) );
             uint8_t * inRowStart = inData + static_cast<ptrdiff_t>( row * width );
             uint8_t * outRowStart = outData + static_cast<ptrdiff_t>( row * width );
 
