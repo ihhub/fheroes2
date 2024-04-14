@@ -652,7 +652,7 @@ namespace
         case BUILD_SPEC:
             return _( "Special" );
         case BUILD_WEL2:
-            return _( "1st Level Grow" );
+            return _( "Horde Building" );
         case DWELLING_MONSTER1:
             return _( "Dwelling 1" );
         case DWELLING_MONSTER2:
@@ -788,7 +788,7 @@ namespace
         case BUILD_SPEC:
             return _( "The Special building gives a specific bonus to the chosen castle type." );
         case BUILD_WEL2:
-            return _( "The 1st level growth building increases production of 1st level creatures per week." );
+            return _( "The Horde Building increases the growth rate of the level 1 creatures by 8 per week." );
         default:
             break;
         }
