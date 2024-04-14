@@ -656,23 +656,23 @@ Castle::ConstructionDialogResult Castle::openConstructionDialog( uint32_t & dwel
         // Right click
         if ( hero1 && le.MousePressRight( rectHero1 ) ) {
             LocalEvent::GetClean();
-            hero1->OpenDialog( true, true, false, false, false );
+            hero1->OpenDialog( true, true, false, false, false, false );
 
             // Use half fade if game resolution is not 640x480.
             fheroes2::fadeInDisplay( restorer.rect(), !display.isDefaultSize() );
         }
         else if ( hero2 && le.MousePressRight( rectHero2 ) ) {
             LocalEvent::GetClean();
-            hero2->OpenDialog( true, true, false, false, false );
+            hero2->OpenDialog( true, true, false, false, false, false );
 
             // Use half fade if game resolution is not 640x480.
             fheroes2::fadeInDisplay( restorer.rect(), !display.isDefaultSize() );
         }
         else if ( le.MousePressRight( buttonNextCastleArea ) ) {
-            fheroes2::showStandardTextMessage( _( "Show next town" ), _( "Click to show next town." ), Dialog::ZERO );
+            fheroes2::showStandardTextMessage( _( "Show next town" ), _( "Click to show the next town." ), Dialog::ZERO );
         }
         else if ( le.MousePressRight( buttonPrevCastleArea ) ) {
-            fheroes2::showStandardTextMessage( _( "Show previous town" ), _( "Click to show previous town." ), Dialog::ZERO );
+            fheroes2::showStandardTextMessage( _( "Show previous town" ), _( "Click to show the previous town." ), Dialog::ZERO );
         }
 
         // status info

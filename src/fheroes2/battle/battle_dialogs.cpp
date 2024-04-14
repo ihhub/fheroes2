@@ -417,7 +417,7 @@ void Battle::DialogBattleSettings()
             action = openBattleOptionDialog( saveConfiguration );
             break;
         case DialogAction::AudioSettings:
-            Dialog::openAudioSettingsDialog( false );
+            saveConfiguration |= Dialog::openAudioSettingsDialog( false );
             action = DialogAction::Open;
             break;
         case DialogAction::HotKeys:
@@ -567,7 +567,8 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
 
     // Draw texts
     if ( !title.empty() ) {
-        const fheroes2::Text box( title, summaryTitleFont );
+        fheroes2::Text box( title, summaryTitleFont );
+        box.setUniformVerticalAlignment( false );
         box.draw( summaryRoi.x, summaryBodyOffset, summaryRoi.width, display );
         summaryBodyOffset += box.height( summaryRoi.width );
         remainingSummaryBodyHeight -= box.height( summaryRoi.width );
@@ -577,15 +578,18 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
     if ( !outcomeText.empty() ) {
         if ( !surrenderText.empty() ) {
             // Divide the main text area evenly between the two texts bodies by splitting it into 3 equal parts.
-            const fheroes2::Text upperText( surrenderText, bodyFont );
-            const fheroes2::Text lowerText( outcomeText, bodyFont );
+            fheroes2::Text upperText( surrenderText, bodyFont );
+            fheroes2::Text lowerText( outcomeText, bodyFont );
             const int32_t inbetweenSpace = ( remainingSummaryBodyHeight - upperText.height( summaryRoi.width ) - lowerText.height( summaryRoi.width ) ) / 3;
+            upperText.setUniformVerticalAlignment( false );
+            lowerText.setUniformVerticalAlignment( false );
             upperText.draw( summaryRoi.x, summaryBodyOffset + inbetweenSpace, summaryRoi.width, display );
 
             lowerText.draw( summaryRoi.x, summaryBodyOffset + upperText.height( summaryRoi.width ) + inbetweenSpace * 2, summaryRoi.width, display );
         }
         else {
-            const fheroes2::Text upperText( outcomeText, bodyFont );
+            fheroes2::Text upperText( outcomeText, bodyFont );
+            upperText.setUniformVerticalAlignment( false );
             upperText.draw( summaryRoi.x, summaryBodyOffset + remainingSummaryBodyHeight / 2 - ( upperText.height( summaryRoi.width ) / 2 ), summaryRoi.width, display );
         }
     }
@@ -935,8 +939,9 @@ int Battle::Arena::DialogBattleHero( const HeroBase & hero, const bool buttons, 
     fheroes2::Point tp{ pos_rt.x + ( pos_rt.width - text.width() ) / 2, pos_rt.y + 11 };
     text.draw( tp.x, tp.y + 2, display );
 
-    const fheroes2::Point statsTextOffset{ pos_rt.x + 148 - dialogShadow.x, pos_rt.y + 40 };
-    const int32_t maxStatsTextWidth{ 111 };
+    const int32_t letterShadowCompensation = 1;
+    const fheroes2::Point statsTextOffset{ pos_rt.x + 133 + letterShadowCompensation, pos_rt.y + 40 };
+    const int32_t maxStatsTextWidth{ 109 };
     const int32_t statsTextRowHeight{ 11 };
 
     str = _( "Attack" ) + std::string( ": " ) + std::to_string( hero.GetAttack() );
@@ -961,19 +966,23 @@ int Battle::Arena::DialogBattleHero( const HeroBase & hero, const bool buttons, 
     text.draw( tp.x, tp.y + 2, display );
     str = _( "Morale" ) + std::string( ": " ) + Morale::String( hero.GetMorale() );
     text.set( str, fheroes2::FontType::smallWhite() );
-    tp.x = statsTextOffset.x + ( maxStatsTextWidth - text.width() ) / 2;
+    tp.x = statsTextOffset.x;
     tp.y += statsTextRowHeight;
-    text.draw( tp.x, tp.y + 2, display );
+    text.setUniformVerticalAlignment( false );
+    text.draw( tp.x, tp.y + 2, maxStatsTextWidth, display );
+    tp.y += text.height( maxStatsTextWidth );
     str = _( "Luck" ) + std::string( ": " ) + Luck::String( hero.GetLuck() );
     text.set( str, fheroes2::FontType::smallWhite() );
-    tp.x = statsTextOffset.x + ( maxStatsTextWidth - text.width() ) / 2;
-    tp.y += statsTextRowHeight;
-    text.draw( tp.x, tp.y + 2, display );
+    tp.x = statsTextOffset.x;
+    text.draw( tp.x, tp.y + 2, maxStatsTextWidth, display );
+    tp.y += text.height( maxStatsTextWidth );
     str = _( "Spell Points" ) + std::string( ": " ) + std::to_string( hero.GetSpellPoints() ) + "/" + std::to_string( hero.GetMaxSpellPoints() );
     text.set( str, fheroes2::FontType::smallWhite() );
-    tp.x = statsTextOffset.x + ( maxStatsTextWidth - text.width() ) / 2;
-    tp.y += statsTextRowHeight * 2;
-    text.draw( tp.x, tp.y + 2, display );
+    tp.x = statsTextOffset.x;
+    // By default the spell points should have one line of space between it and the Luck, but if there isn't
+    // any space due to morale and luck taking up four lines, then move it down to the lowest line.
+    const int32_t compensation = ( tp.y - ( statsTextOffset.y + 88 ) ) == 0 ? 11 : 0;
+    text.draw( tp.x, statsTextOffset.y + 79 + compensation, maxStatsTextWidth, display );
 
     fheroes2::Button btnCast( pos_rt.x + 15, pos_rt.y + 148, ICN::VIEWGEN, 9, 10 );
     fheroes2::Button btnRetreat( pos_rt.x + 74, pos_rt.y + 148, ICN::VIEWGEN, 11, 12 );
@@ -1061,7 +1070,7 @@ int Battle::Arena::DialogBattleHero( const HeroBase & hero, const bool buttons, 
         if ( le.MouseClickLeft( portraitArea ) && actionHero != nullptr ) {
             LocalEvent::GetClean();
             // IMPORTANT!!! This is extremely dangerous but we have no choice with current code. Make sure that this trick doesn't allow user to modify the hero.
-            const_cast<Heroes *>( actionHero )->OpenDialog( true, true, true, true, false );
+            const_cast<Heroes *>( actionHero )->OpenDialog( true, true, true, true, false, false );
 
             // Fade-in to restore the screen after closing the hero dialog.
             fheroes2::fadeInDisplay( _interface->GetInterfaceRoi(), !display.isDefaultSize() );

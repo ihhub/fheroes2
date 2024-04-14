@@ -27,6 +27,7 @@
 #include <cassert>
 #include <cmath>
 #include <map>
+#include <optional>
 #include <utility>
 #include <vector>
 
@@ -87,7 +88,7 @@ int Game::getDifficulty()
     }
 
     // Difficulty of campaign games depends on both the difficulty of a particular campaign map and the difficulty settings set by the player
-    int difficulty = configuration.getCurrentMapInfo().difficulty;
+    int difficulty = Campaign::getCurrentScenarioDifficultyLevel().value_or( configuration.getCurrentMapInfo().difficulty );
     const int difficultyAdjustment = Campaign::CampaignSaveData::Get().getDifficulty();
 
     difficulty += difficultyAdjustment;

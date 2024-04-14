@@ -298,7 +298,7 @@ void Battle::Arena::BattleProcess( Unit & attacker, Unit & defender, int32_t tgt
         }
     }
 
-    attacker.PostAttackAction();
+    attacker.PostAttackAction( defender );
 }
 
 void Battle::Arena::moveUnit( Unit * unit, const int32_t dst )
@@ -911,19 +911,24 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForDamage( const Unit & attacker, U
     res.damage = attacker.GetDamage( defender, _randomGenerator );
 
     // Genie special attack
-    if ( attacker.GetID() == Monster::GENIE && _randomGenerator.Get( 1, 10 ) == 2 && defender.GetHitPoints() / 2 > res.damage ) {
-        // Replaces the damage, not adding to it
-        if ( defender.GetCount() == 1 ) {
-            res.damage = defender.GetHitPoints();
-        }
-        else {
-            res.damage = defender.GetHitPoints() / 2;
-        }
+    {
+        const std::vector<fheroes2::MonsterAbility> & attackerAbilities = fheroes2::getMonsterData( attacker.GetID() ).battleStats.abilities;
 
-        if ( Arena::GetInterface() ) {
-            std::string str( _n( "%{name} destroys half the enemy troops!", "%{name} destroy half the enemy troops!", attacker.GetCount() ) );
-            StringReplace( str, "%{name}", attacker.GetName() );
-            Arena::GetInterface()->SetStatus( str, true );
+        const auto abilityIter = std::find( attackerAbilities.begin(), attackerAbilities.end(), fheroes2::MonsterAbility( fheroes2::MonsterAbilityType::ENEMY_HALVING ) );
+        if ( abilityIter != attackerAbilities.end() ) {
+            const uint32_t halvingDamage = ( defender.GetCount() / 2 + defender.GetCount() % 2 ) * defender.Monster::GetHitPoints();
+            if ( halvingDamage > res.damage && _randomGenerator.Get( 1, 100 ) <= abilityIter->percentage ) {
+                // Replaces damage, not adds extra damage
+                res.damage = std::min( defender.GetHitPoints(), halvingDamage );
+
+                Interface * iface = GetInterface();
+                if ( iface ) {
+                    std::string str( _n( "%{name} destroys half the enemy troops!", "%{name} destroy half the enemy troops!", attacker.GetCount() ) );
+                    StringReplace( str, "%{name}", attacker.GetName() );
+
+                    iface->SetStatus( str, true );
+                }
+            }
         }
     }
 
@@ -959,7 +964,7 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForDamage( const Unit & attacker, U
         }
     }
     // lich cloud damage
-    else if ( attacker.isAbilityPresent( fheroes2::MonsterAbilityType::AREA_SHOT ) && !attacker.isHandFighting() ) {
+    else if ( attacker.isAbilityPresent( fheroes2::MonsterAbilityType::AREA_SHOT ) && !Unit::isHandFighting( attacker, defender ) ) {
         for ( const int32_t nearbyIdx : Board::GetAroundIndexes( dst ) ) {
             assert( Board::GetCell( nearbyIdx ) != nullptr );
 

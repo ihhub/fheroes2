@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -131,7 +131,7 @@ namespace
     void showMissingVideoFilesWindow()
     {
         fheroes2::showMessage( fheroes2::Text{ _( "Warning!" ), fheroes2::FontType::normalYellow() },
-                               fheroes2::Text{ _( "Required video files for campaign selection window are missing. "
+                               fheroes2::Text{ _( "The required video files for the campaign selection window are missing. "
                                                   "Please make sure that all necessary files are present in the system." ),
                                                fheroes2::FontType::normalWhite() },
                                Dialog::OK );
@@ -507,7 +507,7 @@ fheroes2::GameMode Game::NewNetwork()
     return fheroes2::GameMode::MAIN_MENU;
 }
 
-fheroes2::GameMode Game::NewGame()
+fheroes2::GameMode Game::NewGame( const bool isProbablyDemoVersion )
 {
     outputNewMenuInTextSupportMode();
 
@@ -548,6 +548,14 @@ fheroes2::GameMode Game::NewGame()
 
     LocalEvent & le = LocalEvent::Get();
 
+    if ( isProbablyDemoVersion ) {
+        fheroes2::showStandardTextMessage( _( "Warning!" ),
+                                           _( "fheroes2 needs data files from the original Heroes of Might and Magic II to operate. "
+                                              "You appear to be using the demo version of Heroes of Might and Magic II for this purpose. "
+                                              "Please note that only one scenario will be available in this setup." ),
+                                           Dialog::OK );
+    }
+
     while ( le.HandleEvents() ) {
         le.MousePressLeft( buttonStandardGame.area() ) ? buttonStandardGame.drawOnPress() : buttonStandardGame.drawOnRelease();
 
@@ -581,7 +589,7 @@ fheroes2::GameMode Game::NewGame()
             fheroes2::showStandardTextMessage( _( "Campaign Game" ), _( "A single player game playing through a series of maps." ), Dialog::ZERO );
         else if ( le.MousePressRight( buttonMultiGame.area() ) )
             fheroes2::showStandardTextMessage( _( "Multi-Player Game" ),
-                                               _( "A multi-player game, with several human players completing against each other on a single map." ), Dialog::ZERO );
+                                               _( "A multi-player game, with several human players competing against each other on a single map." ), Dialog::ZERO );
         else if ( le.MousePressRight( buttonBattleGame.area() ) )
             fheroes2::showStandardTextMessage( _( "Battle Only" ), _( "Setup and play a battle without loading any map." ), Dialog::ZERO );
         else if ( le.MousePressRight( buttonSettings.area() ) )
@@ -629,9 +637,10 @@ fheroes2::GameMode Game::NewMulti()
 
         // right info
         if ( le.MousePressRight( buttonHotSeat.area() ) )
-            fheroes2::showStandardTextMessage(
-                _( "Hot Seat" ), _( "Play a Hot Seat game, where 2 to 4 players play around the same computer, switching into the 'Hot Seat' when it is their turn." ),
-                Dialog::ZERO );
+            fheroes2::
+                showStandardTextMessage( _( "Hot Seat" ),
+                                         _( "Play a Hot Seat game, where 2 to 6 players play on the same device, switching into the 'Hot Seat' when it is their turn." ),
+                                         Dialog::ZERO );
         if ( le.MousePressRight( buttonCancelGame.area() ) )
             fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Cancel back to the main menu." ), Dialog::ZERO );
     }

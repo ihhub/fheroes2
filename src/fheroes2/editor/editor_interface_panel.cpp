@@ -32,8 +32,8 @@
 #include "cursor.h"
 #include "dialog.h"
 #include "dialog_selectitems.h"
-#include "dialog_system_options.h"
 #include "editor_interface.h"
+#include "editor_options.h"
 #include "gamedefs.h"
 #include "ground.h"
 #include "icn.h"
@@ -284,6 +284,51 @@ namespace Interface
         return {};
     }
 
+    std::set<Maps::ObjectGroup> EditorPanel::getEraseObjectGroups() const
+    {
+        if ( _eraseTypes == ObjectErasureType::ERASE_NONE ) {
+            return {};
+        }
+
+        std::set<Maps::ObjectGroup> objectGroups;
+
+        if ( _eraseTypes & ObjectErasureType::ERASE_LANDSCAPE ) {
+            objectGroups.insert( { Maps::ObjectGroup::LANDSCAPE_MOUNTAINS, Maps::ObjectGroup::LANDSCAPE_ROCKS, Maps::ObjectGroup::LANDSCAPE_TREES,
+                                   Maps::ObjectGroup::LANDSCAPE_WATER, Maps::ObjectGroup::LANDSCAPE_MISCELLANEOUS } );
+        }
+
+        if ( _eraseTypes & ObjectErasureType::ERASE_ADVENTURE_NON_PICKABLE ) {
+            objectGroups.insert( { Maps::ObjectGroup::ADVENTURE_DWELLINGS, Maps::ObjectGroup::ADVENTURE_MINES, Maps::ObjectGroup::ADVENTURE_POWER_UPS,
+                                   Maps::ObjectGroup::ADVENTURE_WATER, Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS } );
+        }
+
+        if ( _eraseTypes & ObjectErasureType::ERASE_TOWNS ) {
+            objectGroups.insert( Maps::ObjectGroup::KINGDOM_TOWNS );
+        }
+
+        if ( _eraseTypes & ObjectErasureType::ERASE_ADVENTURE_PICKABLE ) {
+            objectGroups.insert( { Maps::ObjectGroup::ADVENTURE_ARTIFACTS, Maps::ObjectGroup::ADVENTURE_TREASURES, Maps::ObjectGroup::ADVENTURE_WATER } );
+        }
+
+        if ( _eraseTypes & ObjectErasureType::ERASE_MONSTERS ) {
+            objectGroups.insert( Maps::ObjectGroup::MONSTERS );
+        }
+
+        if ( _eraseTypes & ObjectErasureType::ERASE_HEROES ) {
+            objectGroups.insert( Maps::ObjectGroup::KINGDOM_HEROES );
+        }
+
+        if ( _eraseTypes & ObjectErasureType::ERASE_STREAMS ) {
+            objectGroups.insert( Maps::ObjectGroup::STREAMS );
+        }
+
+        if ( _eraseTypes & ObjectErasureType::ERASE_ROADS ) {
+            objectGroups.insert( Maps::ObjectGroup::ROADS );
+        }
+
+        return objectGroups;
+    }
+
     void EditorPanel::setPos( const int32_t displayX, int32_t displayY )
     {
         int32_t offsetX = displayX;
@@ -360,11 +405,10 @@ namespace Interface
         }
 
         // Erase tool object type buttons.
-        offsetX -= 28;
-        offsetY += 20;
+        offsetY += 13;
         for ( size_t i = 0; i < _eraseButtonsRect.size(); ++i ) {
-            _eraseButtonsRect[i]
-                = { offsetX + static_cast<int32_t>( i % 4 ) * buttonStepX, offsetY + static_cast<int32_t>( i / 4 ) * buttonStepY, buttonWidth, buttonHeight };
+            _eraseButtonsRect[i] = { offsetX + static_cast<int32_t>( i % 3 ) * buttonStepX + ( i > 5 ? buttonHalfStepX : 0 ),
+                                     offsetY + static_cast<int32_t>( i / 3 ) * ( buttonStepY - ( display.height() < 500 ? 3 : 0 ) ), buttonWidth, buttonHeight };
         }
 
         displayY += _rectInstrumentPanel.height;
@@ -514,21 +558,28 @@ namespace Interface
 
             // Object type to erase buttons.
             const fheroes2::Sprite & originalPanel = fheroes2::AGG::GetICN( ICN::EDITPANL, 1 );
-            const int32_t originalArtifactsImageOffsetX{ 15 };
             const int32_t originalTownsImageOffsetX{ 44 };
             const int32_t originalMonstersImageOffsetX{ 73 };
             const int32_t originalHeroesTreasuresImageOffsetX{ 102 };
             const int32_t originalTownsMonstersHeroesOffsetY{ 68 };
             const int32_t originalArtifactsTreasresOffsetY{ 96 };
 
+            // Landscape objects icon.
             fheroes2::Copy( fheroes2::AGG::GetICN( ICN::EDITPANL, 8 ), 0, 0, display, _eraseButtonsRect[0] );
-            fheroes2::Copy( originalPanel, originalTownsImageOffsetX, originalTownsMonstersHeroesOffsetY, display, _eraseButtonsRect[1] );
-            fheroes2::Copy( originalPanel, originalMonstersImageOffsetX, originalTownsMonstersHeroesOffsetY, display, _eraseButtonsRect[2] );
-            fheroes2::Copy( originalPanel, originalHeroesTreasuresImageOffsetX, originalTownsMonstersHeroesOffsetY, display, _eraseButtonsRect[3] );
-            fheroes2::Copy( originalPanel, originalArtifactsImageOffsetX, originalArtifactsTreasresOffsetY, display, _eraseButtonsRect[4] );
-            fheroes2::Copy( fheroes2::AGG::GetICN( ICN::EDITPANL, 16 ), 0, 0, display, _eraseButtonsRect[5] );
-            fheroes2::Copy( fheroes2::AGG::GetICN( ICN::EDITPANL, 17 ), 0, 0, display, _eraseButtonsRect[6] );
-            fheroes2::Copy( originalPanel, originalHeroesTreasuresImageOffsetX, originalArtifactsTreasresOffsetY, display, _eraseButtonsRect[7] );
+            // Adventure non pickable objects icon.
+            fheroes2::Copy( fheroes2::AGG::GetICN( ICN::EDITPANL, 13 ), 0, 0, display, _eraseButtonsRect[1] );
+            // Castle objects icon.
+            fheroes2::Copy( originalPanel, originalTownsImageOffsetX, originalTownsMonstersHeroesOffsetY, display, _eraseButtonsRect[2] );
+            // Adventure pickable objects icon.
+            fheroes2::Copy( originalPanel, originalHeroesTreasuresImageOffsetX, originalArtifactsTreasresOffsetY, display, _eraseButtonsRect[3] );
+            // Monster objects icon.
+            fheroes2::Copy( originalPanel, originalMonstersImageOffsetX, originalTownsMonstersHeroesOffsetY, display, _eraseButtonsRect[4] );
+            // Hero objects icon.
+            fheroes2::Copy( originalPanel, originalHeroesTreasuresImageOffsetX, originalTownsMonstersHeroesOffsetY, display, _eraseButtonsRect[5] );
+            // Road objects icon.
+            fheroes2::Copy( fheroes2::AGG::GetICN( ICN::EDITPANL, 16 ), 0, 0, display, _eraseButtonsRect[6] );
+            // Stream objects icon.
+            fheroes2::Copy( fheroes2::AGG::GetICN( ICN::EDITPANL, 17 ), 0, 0, display, _eraseButtonsRect[7] );
 
             // Object type to erase selection marks.
             const fheroes2::Sprite & selectionMark = fheroes2::AGG::GetICN( ICN::TOWNWIND, 11 );
@@ -546,8 +597,6 @@ namespace Interface
         _buttonSpecs.draw();
         _buttonFile.draw();
         _buttonSystem.draw();
-
-        display.render( _rectInstrumentPanel );
     }
 
     int32_t EditorPanel::getSelectedObjectType() const
@@ -694,22 +743,22 @@ namespace Interface
     const char * EditorPanel::_getEraseObjectTypeName( const uint32_t eraseObjectType )
     {
         switch ( eraseObjectType ) {
-        case Maps::ObjectErasureType::TERRAIN_OBJECTS:
-            return _( "Terrain" );
-        case Maps::ObjectErasureType::CASTLES:
-            return _( "Castles" );
-        case Maps::ObjectErasureType::MONSTERS:
-            return _( "Monsters" );
-        case Maps::ObjectErasureType::HEROES:
-            return _( "Heroes" );
-        case Maps::ObjectErasureType::ARTIFACTS:
-            return _( "Artifacts" );
-        case Maps::ObjectErasureType::ROADS:
-            return _( "Roads" );
-        case Maps::ObjectErasureType::STREAMS:
-            return _( "Streams" );
-        case Maps::ObjectErasureType::TREASURES:
-            return _( "Treasures" );
+        case ObjectErasureType::ERASE_LANDSCAPE:
+            return _( "editorErasure|Landscape objects" );
+        case ObjectErasureType::ERASE_ADVENTURE_NON_PICKABLE:
+            return _( "editorErasure|Adventure non pickable objects" );
+        case ObjectErasureType::ERASE_TOWNS:
+            return _( "editorErasure|Castles" );
+        case ObjectErasureType::ERASE_ADVENTURE_PICKABLE:
+            return _( "editorErasure|Adventure pickable objects" );
+        case ObjectErasureType::ERASE_MONSTERS:
+            return _( "editorErasure|Monsters" );
+        case ObjectErasureType::ERASE_HEROES:
+            return _( "editorErasure|Heroes" );
+        case ObjectErasureType::ERASE_ROADS:
+            return _( "editorErasure|Roads" );
+        case ObjectErasureType::ERASE_STREAMS:
+            return _( "editorErasure|Streams" );
         default:
             // Have you added a new object type to erase? Add the logic above!
             assert( 0 );
@@ -1110,7 +1159,7 @@ namespace Interface
                 }
                 else if ( le.MouseLongPressLeft( _eraseButtonsRect[i] ) ) {
                     _eraseTypes = ( _eraseButtonObjectTypes[i] & _eraseTypes ) ? _eraseButtonObjectTypes[i]
-                                                                               : ( Maps::ObjectErasureType::ALL_OBJECTS & ~_eraseButtonObjectTypes[i] );
+                                                                               : ( ObjectErasureType::ERASE_ALL_OBJECTS & ~_eraseButtonObjectTypes[i] );
                     setRedraw();
                 }
             }
@@ -1141,8 +1190,7 @@ namespace Interface
             res = Interface::EditorInterface::eventFileDialog();
         }
         else if ( le.MouseClickLeft( _rectSystem ) ) {
-            // Replace this with Editor options dialog.
-            fheroes2::showSystemOptionsDialog();
+            Editor::openEditorSettings();
         }
         else if ( le.MousePressRight( _instrumentButtonsRect[Instrument::TERRAIN] ) ) {
             fheroes2::showStandardTextMessage( _( "Terrain Mode" ), _( "Used to draw the underlying grass, dirt, water, etc. on the map." ), Dialog::ZERO );

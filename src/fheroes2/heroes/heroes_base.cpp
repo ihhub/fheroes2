@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -99,16 +99,6 @@ bool HeroBase::isCaptain() const
 bool HeroBase::isHeroes() const
 {
     return GetType() == HEROES;
-}
-
-uint32_t HeroBase::GetSpellPoints() const
-{
-    return magic_point;
-}
-
-void HeroBase::SetSpellPoints( const uint32_t points )
-{
-    magic_point = points;
 }
 
 bool HeroBase::isPotentSpellcaster() const

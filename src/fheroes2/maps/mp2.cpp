@@ -60,6 +60,8 @@ namespace
         case MP2::OBJ_DUNE:
         case MP2::OBJ_LAVAPOOL:
         case MP2::OBJ_SHRUB:
+        case MP2::OBJ_SWAMPY_LAKE:
+        case MP2::OBJ_FROZEN_LAKE:
             return false;
         default:
             break;
@@ -482,6 +484,10 @@ const char * MP2::StringObject( MapObjectType objectType, const int count )
         return _( "Earth Summoning Altar" );
     case OBJ_NON_ACTION_WATER_ALTAR:
         return _( "Water Summoning Altar" );
+    case OBJ_SWAMPY_LAKE:
+        return _( "Swampy Lake" );
+    case OBJ_FROZEN_LAKE:
+        return _( "Frozen Lake" );
     default:
         // Did you add a new object type? Add the logic above!
         assert( 0 );

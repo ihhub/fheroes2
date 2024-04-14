@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -417,7 +417,7 @@ namespace Interface
 
                 return true;
             }
-            if ( le.MousePressLeft( _scrollbar.getArea() ) && ( _size() > maxItems ) ) {
+            if ( le.MousePressLeft( _scrollbar.getArea() ) || le.MousePressLeft( rtAreaItems ) ) {
                 const fheroes2::Point mousePosition = le.GetMouseCursor();
 
                 const int32_t prevScrollbarX = _scrollbar.x();
@@ -425,7 +425,33 @@ namespace Interface
 
                 UpdateScrollbarRange();
 
-                _scrollbar.moveToPos( mousePosition );
+                if ( le.MousePressLeft( _scrollbar.getArea() ) && ( _size() > maxItems ) ) {
+                    _scrollbar.moveToPos( mousePosition );
+                }
+
+                if ( le.MousePressLeft( rtAreaItems ) ) {
+                    if ( !le.isDragInProgress() ) {
+                        // Remember where has the drag started.
+                        _dragStartPos = mousePosition;
+                        le.registerDrag();
+
+                        // We have just started the drag, it might as well be a legitimate click.
+                        _lockClick = false;
+                    }
+
+                    const int delta = ( _scrollbar.isVertical() ? ( _dragStartPos.y - mousePosition.y ) : ( _dragStartPos.x - mousePosition.x ) );
+                    const int itemSize = ( _scrollbar.isVertical() ? rtAreaItems.height : rtAreaItems.width ) / maxItems;
+
+                    // We have dragged past the size of one list-item.
+                    if ( std::abs( delta ) > itemSize ) {
+                        // Scroll the list accordingly, update the drag start reference point.
+                        _scrollbar.moveToIndex( _scrollbar.currentIndex() + delta / itemSize );
+                        _dragStartPos = mousePosition;
+
+                        // Disable the leftclick on the list, so finishing the drag does not result in clicking on the list-item.
+                        _lockClick = true;
+                    }
+                }
 
                 // We don't need to render the scrollbar if it's position is not changed.
                 if ( ( _scrollbar.x() == prevScrollbarX ) && ( _scrollbar.y() == prevScrollbarY ) ) {
@@ -461,7 +487,8 @@ namespace Interface
                     if ( ActionListCursor( item, mousePos ) )
                         return true;
 
-                    if ( le.MouseClickLeft( rtAreaItems ) ) {
+                    if ( !_lockClick && le.MouseClickLeft( rtAreaItems ) ) {
+                        // This is a legitimate click and not a mouse-up on a finished drag.
                         if ( id == _currentId ) {
                             ActionListDoubleClick( item, mousePos, rtAreaItems.x, rtAreaItems.y + offsetY );
                         }
@@ -509,10 +536,12 @@ namespace Interface
         int maxItems{ 0 };
 
         fheroes2::Point ptRedraw;
+        fheroes2::Point _dragStartPos;
 
         bool useHotkeys{ true };
 
         bool _updateScrollbar{ false };
+        bool _lockClick{ false };
 
         fheroes2::TimedEventValidator _timedButtonPgUp;
         fheroes2::TimedEventValidator _timedButtonPgDn;

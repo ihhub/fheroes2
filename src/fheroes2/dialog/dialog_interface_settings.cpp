@@ -248,7 +248,7 @@ namespace
                 fheroes2::showStandardTextMessage( _( "Interface" ), _( "Toggle interface visibility." ), 0 );
             }
             else if ( le.MousePressRight( windowCursorTypeRoi ) ) {
-                fheroes2::showStandardTextMessage( _( "Mouse Cursor" ), _( "Toggle colored cursor on or off. This is only an esthetic choice." ), 0 );
+                fheroes2::showStandardTextMessage( _( "Mouse Cursor" ), _( "Toggle colored cursor on or off. This is only an aesthetic choice." ), 0 );
             }
             if ( le.MousePressRight( windowScrollSpeedRoi ) ) {
                 fheroes2::showStandardTextMessage( _( "Scroll Speed" ), _( "Sets the speed at which you scroll the window." ), 0 );
@@ -274,7 +274,7 @@ namespace
 
 namespace fheroes2
 {
-    void openInterfaceSettingsDialog( const std::function<void()> & updateUI )
+    bool openInterfaceSettingsDialog( const std::function<void()> & updateUI )
     {
         Settings & conf = Settings::Get();
 
@@ -307,12 +307,10 @@ namespace fheroes2
                 windowType = SelectedWindow::Configuration;
                 break;
             default:
-                return;
+                return saveConfiguration;
             }
         }
 
-        if ( saveConfiguration ) {
-            conf.Save( Settings::configFileName );
-        }
+        return saveConfiguration;
     }
 }

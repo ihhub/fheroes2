@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -42,7 +42,6 @@
 #include "agg.h"
 #include "agg_image.h"
 #include "audio_manager.h"
-#include "bin_info.h"
 #include "core.h"
 #include "cursor.h"
 #include "dir.h"
@@ -123,7 +122,7 @@ namespace
     void displayMissingResourceWindow()
     {
         fheroes2::Display & display = fheroes2::Display::instance();
-        const fheroes2::Image & image = CreateImageFromZlib( 290, 190, errorMessage, sizeof( errorMessage ), false );
+        const fheroes2::Image & image = Compression::CreateImageFromZlib( 290, 190, errorMessage, sizeof( errorMessage ), false );
 
         display.fill( 0 );
         fheroes2::Resize( image, display );
@@ -156,24 +155,20 @@ namespace
             const Settings & conf = Settings::Get();
 
             fheroes2::Display & display = fheroes2::Display::instance();
+            fheroes2::ResolutionInfo bestResolution{ conf.currentResolutionInfo() };
+
             if ( conf.isFirstGameRun() && System::isHandheldDevice() ) {
                 // We do not show resolution dialog for first run on handheld devices. In this case it is wise to set 'widest' resolution by default.
                 const std::vector<fheroes2::ResolutionInfo> resolutions = fheroes2::engine().getAvailableResolutions();
-                fheroes2::ResolutionInfo bestResolution{ conf.currentResolutionInfo() };
 
                 for ( const fheroes2::ResolutionInfo & info : resolutions ) {
                     if ( info.gameWidth > bestResolution.gameWidth && info.gameHeight == bestResolution.gameHeight ) {
                         bestResolution = info;
                     }
                 }
-
-                display.setResolution( bestResolution );
-            }
-            else {
-                display.setResolution( conf.currentResolutionInfo() );
             }
 
-            display.fill( 0 ); // start from a black screen
+            display.setResolution( bestResolution );
 
             fheroes2::engine().setTitle( GetCaption() );
 
@@ -195,7 +190,7 @@ namespace
             fheroes2::cursor().registerUpdater( Cursor::Refresh );
 
 #if !defined( MACOS_APP_BUNDLE )
-            const fheroes2::Image & appIcon = CreateImageFromZlib( 32, 32, iconImage, sizeof( iconImage ), true );
+            const fheroes2::Image & appIcon = Compression::CreateImageFromZlib( 32, 32, iconImage, sizeof( iconImage ), true );
             fheroes2::engine().setIcon( appIcon );
 #endif
         }
@@ -257,6 +252,19 @@ namespace
         std::unique_ptr<AGG::AGGInitializer> _aggInitializer;
         std::unique_ptr<fheroes2::h2d::H2DInitializer> _h2dInitializer;
     };
+
+    // This function checks for a possible situation when a user uses a demo version
+    // of the game. There is no 100% certain way to detect this, so assumptions are made.
+    bool isProbablyDemoVersion()
+    {
+        if ( Settings::Get().isPriceOfLoyaltySupported() ) {
+            return false;
+        }
+
+        // The demo version of the game only has 1 map.
+        const ListFiles maps = Settings::FindFiles( "maps", ".mp2", false );
+        return maps.size() == 1;
+    }
 }
 
 int main( int argc, char ** argv )
@@ -314,9 +322,6 @@ int main( int argc, char ** argv )
         fheroes2::setGamePalette( AGG::getDataFromAggFile( "KB.PAL" ) );
         fheroes2::Display::instance().changePalette( nullptr, true );
 
-        // load BIN data
-        Bin_Info::InitBinInfo();
-
         // init game data
         Game::Init();
 
@@ -333,7 +338,7 @@ int main( int argc, char ** argv )
         try {
             const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
-            Game::mainGameLoop( conf.isFirstGameRun() );
+            Game::mainGameLoop( conf.isFirstGameRun(), isProbablyDemoVersion() );
         }
         catch ( const fheroes2::InvalidDataResources & ex ) {
             ERROR_LOG( ex.what() )

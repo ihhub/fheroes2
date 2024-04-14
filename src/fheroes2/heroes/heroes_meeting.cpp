@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -195,8 +195,8 @@ private:
 class MeetingPrimarySkillsBar : public PrimarySkillsBar
 {
 public:
-    explicit MeetingPrimarySkillsBar( const Heroes * hero )
-        : PrimarySkillsBar( hero, true )
+    explicit MeetingPrimarySkillsBar( Heroes * hero )
+        : PrimarySkillsBar( hero, true, false, false )
     {}
 
     void RedrawBackground( const fheroes2::Rect &, fheroes2::Image & ) override
@@ -271,7 +271,7 @@ void Heroes::MeetingDialog( Heroes & otherHero )
     text.draw( cur_pt.x + 320 - text.width() / 2, cur_pt.y + 29, display );
 
     const int iconsH1XOffset = 34;
-    const int iconsH2XOffset = 566;
+    const int iconsH2XOffset = 571;
     const int portraitYOffset = 72;
 
     // portrait

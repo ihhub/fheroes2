@@ -173,6 +173,28 @@ int Skill::Primary::GetInitialSpell( int race )
     return ptr ? ptr->initial_spell : 0;
 }
 
+int Skill::Primary::getHeroDefaultSkillValue( const int skill, const int race )
+{
+    if ( const stats_t * ptr = GameStatic::GetSkillStats( race ) ) {
+        switch ( skill ) {
+        case ATTACK:
+            return ptr->initial_primary.attack;
+        case DEFENSE:
+            return ptr->initial_primary.defense;
+        case POWER:
+            return ptr->initial_primary.power;
+        case KNOWLEDGE:
+            return ptr->initial_primary.knowledge;
+        default:
+            // Are you sure that you are passing the correct skill type?
+            assert( 0 );
+            break;
+        }
+    }
+
+    return skill == POWER ? 1 : 0;
+}
+
 int Skill::Primary::LevelUp( int race, int level, uint32_t seed )
 {
     Rand::Queue percents( MAXPRIMARYSKILL );
@@ -258,7 +280,7 @@ std::string Skill::Primary::StringDescription( int skill, const Heroes * hero )
         break;
     case KNOWLEDGE:
         res = _(
-            " The hero's knowledge determines how many spell points the hero may have. Under normal circumstances, a hero is limited to 10 spell points per level of knowledge." );
+            "The hero's knowledge determines how many spell points the hero may have. Under normal circumstances, a hero is limited to 10 spell points per level of knowledge." );
         if ( hero )
             hero->GetKnowledge( &ext );
         break;
@@ -298,7 +320,7 @@ const char * Skill::Level::String( int level )
 
 std::string Skill::Level::StringWithBonus( const Heroes & hero, const Secondary & skill )
 {
-    const std::string levelStr = String( skill.Level() );
+    std::string levelStr = String( skill.Level() );
     if ( skill.Skill() == Skill::Secondary::NECROMANCY && Skill::GetNecromancyBonus( hero ) > 0 ) {
         return levelStr + "+" + std::to_string( Skill::GetNecromancyBonus( hero ) );
     }
@@ -496,7 +518,9 @@ std::string Skill::Secondary::GetDescription( const Heroes & hero ) const
         }
         break;
     case ARCHERY: {
-        str = _( "%{skill} increases the damage done by the hero's range attacking creatures by %{count} percent." );
+        str = _(
+            "%{skill} increases the damage done by the hero's range attacking creatures by %{count} percent, and eliminates the %{penalty} percent penalty when shooting past obstacles (e.g. castle walls)." );
+        StringReplace( str, "%{penalty}", GameStatic::getCastleWallRangedPenalty() );
         break;
     }
     case LOGISTICS: {

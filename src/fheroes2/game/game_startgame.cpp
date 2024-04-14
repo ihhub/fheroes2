@@ -307,7 +307,7 @@ void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus, const bool renderB
     int result = Dialog::ZERO;
 
     while ( it != myHeroes.end() && result != Dialog::CANCEL ) {
-        result = ( *it )->OpenDialog( false, needFade, disableDismiss, false, renderBackgroundDialog );
+        result = ( *it )->OpenDialog( false, needFade, disableDismiss, false, renderBackgroundDialog, false );
 
         if ( needFade ) {
             needFade = false;
@@ -622,6 +622,9 @@ int Interface::AdventureMap::GetCursorFocusHeroes( const Heroes & hero, const Ma
             }
 
             if ( hero.GetColor() == otherHero->GetColor() ) {
+                if ( HotKeyHoldEvent( Game::HotKeyEvent::WORLD_QUICK_SELECT_HERO ) ) {
+                    return Cursor::HEROES;
+                }
                 const int cursor = Cursor::DistanceThemes( Cursor::CURSOR_HERO_MEET, hero.getNumOfTravelDays( tile.GetIndex() ) );
 
                 return cursor != Cursor::POINTER ? cursor : Cursor::HEROES;
@@ -1119,6 +1122,16 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
             // open focus
             else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_OPEN_FOCUS ) )
                 EventOpenFocus();
+            else if ( HotKeyHoldEvent( Game::HotKeyEvent::WORLD_QUICK_SELECT_HERO ) ) {
+                const int32_t index = _gameArea.GetValidTileIdFromPoint( le.GetMouseCursor() );
+                // This tells us that this is a hero owned by the current player and that they can meet, so we switch to the helmet cursor.
+                if ( cursor.Themes() == Cursor::CURSOR_HERO_MEET ) {
+                    cursor.SetThemes( GetCursorTileIndex( index ) );
+                }
+                if ( le.MouseClickLeft() ) {
+                    EventSwitchFocusedHero( index );
+                }
+            }
         }
 
         if ( res != fheroes2::GameMode::CANCEL ) {
@@ -1137,7 +1150,7 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
             else if ( isScrollBottom( le.GetMouseCursor() ) )
                 scrollPosition |= SCROLL_BOTTOM;
 
-            if ( scrollPosition != SCROLL_NONE ) {
+            if ( scrollPosition != SCROLL_NONE && _gameArea.isFastScrollEnabled() ) {
                 if ( Game::validateAnimationDelay( Game::SCROLL_START_DELAY ) ) {
                     if ( fastScrollRepeatCount < fastScrollStartThreshold ) {
                         ++fastScrollRepeatCount;
@@ -1156,6 +1169,11 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
             fastScrollRepeatCount = 0;
         }
 
+        // Re-enable fast scroll if the cursor movement indicates the need
+        if ( !_gameArea.isFastScrollEnabled() && _gameArea.mouseIndicatesFastScroll( le.GetMouseCursor() ) ) {
+            _gameArea.setFastScrollStatus( true );
+        }
+
         const bool isHiddenInterface = conf.isHideInterfaceEnabled();
         const bool prevIsCursorOverButtons = isCursorOverButtons;
         isCursorOverButtons = false;
@@ -1170,6 +1188,12 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
                 stopHero = true;
             }
         }
+        // cursor is over the icons panel
+        else if ( ( !isHiddenInterface || conf.ShowIcons() ) && ( le.MouseCursor( iconsPanel.GetRect() ) || le.MousePressLeft( iconsPanel.GetRect() ) ) ) {
+            cursor.SetThemes( Cursor::POINTER );
+
+            iconsPanel.QueueEventProcessing();
+        }
         // cursor is over the status window
         else if ( ( !isHiddenInterface || conf.ShowStatus() ) && le.MouseCursor( _statusWindow.GetRect() ) ) {
             cursor.SetThemes( Cursor::POINTER );
@@ -1182,12 +1206,6 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
 
             res = buttonsArea.QueueEventProcessing();
             isCursorOverButtons = true;
-        }
-        // cursor is over the icons panel
-        else if ( ( !isHiddenInterface || conf.ShowIcons() ) && le.MouseCursor( iconsPanel.GetRect() ) ) {
-            cursor.SetThemes( Cursor::POINTER );
-
-            iconsPanel.QueueEventProcessing();
         }
         // cursor is over the radar
         else if ( ( !isHiddenInterface || conf.ShowRadar() ) && le.MouseCursor( _radar.GetRect() ) ) {
@@ -1406,8 +1424,9 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isload )
                 const uint32_t lostTownDays = myKingdom.GetLostTownDays();
 
                 if ( lostTownDays > Game::GetLostTownDays() ) {
-                    Game::DialogPlayers( conf.CurrentColor(), _( "Beware!" ),
-                                         _( "%{color} player, you have lost your last town. If you do not conquer another town in next week, you will be eliminated." ) );
+                    Game::DialogPlayers(
+                        conf.CurrentColor(), _( "Beware!" ),
+                        _( "%{color} player, you have lost your last town. If you do not conquer another town in the next week, you will be eliminated." ) );
                 }
                 else if ( lostTownDays == 1 ) {
                     Game::DialogPlayers( conf.CurrentColor(), _( "Defeat!" ), _( "%{color} player, your heroes abandon you, and you are banished from this land." ) );
@@ -1538,4 +1557,9 @@ void Interface::AdventureMap::mouseCursorAreaPressRight( const int32_t tileIndex
             break;
         }
     }
+}
+
+void Interface::AdventureMap::mouseCursorAreaLongPressLeft( const int32_t tileIndex )
+{
+    EventSwitchFocusedHero( tileIndex );
 }

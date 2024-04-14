@@ -4129,7 +4129,7 @@ namespace
             font[170 - 32].setPosition( font[51].x(), font[51].y() );
             updateNormalFontLetterShadow( font[170 - 32] );
 
-            // A with circonflex and generate the accent for further use.
+            // A with circumflex and generate the accent for further use.
             font[194 - 32].resize( font[33].width(), font[33].height() + 3 );
             font[194 - 32].reset();
             fheroes2::Copy( font[33], 0, 0, font[194 - 32], 0, 3, font[33].width(), font[33].height() );
@@ -4153,6 +4153,14 @@ namespace
             font[195 - 32].setPosition( font[33].x(), font[33].y() - 3 );
             updateNormalFontLetterShadow( font[195 - 32] );
 
+            // I with circumflex
+            font[206 - 32].resize( font[41].width(), font[41].height() + 3 );
+            font[206 - 32].reset();
+            fheroes2::Copy( font[41], 0, 0, font[206 - 32], 0, 3, font[41].width(), font[41].height() );
+            fheroes2::Copy( font[194 - 32], 6, 0, font[206 - 32], 1, 0, 6, 2 );
+            font[206 - 32].setPosition( font[41].x(), font[41].y() - 3 );
+            updateNormalFontLetterShadow( font[206 - 32] );
+
             // T with comma.
             font[222 - 32].resize( font[52].width(), font[52].height() + 4 );
             font[222 - 32].reset();
@@ -4169,8 +4177,8 @@ namespace
             font[186 - 32].setPosition( font[83].x(), font[83].y() );
             updateNormalFontLetterShadow( font[186 - 32] );
 
-            // a with circonflex.
-            font[226 - 32].resize( font[65].width(), font[65].height() + 4 );
+            // a with circumflex.
+            font[226 - 32].resize( font[65].width(), font[65].height() + 3 );
             font[226 - 32].reset();
             fheroes2::Copy( font[65], 0, 0, font[226 - 32], 0, 3, font[65].width(), font[65].height() );
             fheroes2::Copy( font[194 - 32], 6, 0, font[226 - 32], 2, 0, 3, 2 );
@@ -4189,6 +4197,14 @@ namespace
             fheroes2::Copy( font[65], 1, 0, font[227 - 32], 6, 1, 1, 1 );
             font[227 - 32].setPosition( font[65].x(), font[65].y() - 3 );
             updateNormalFontLetterShadow( font[227 - 32] );
+
+            // i with circumflex
+            font[238 - 32].resize( font[73].width(), font[73].height() );
+            font[238 - 32].reset();
+            fheroes2::Copy( font[73], 0, 0, font[238 - 32], 0, 0, font[73].width(), font[73].height() );
+            fheroes2::Copy( font[226 - 32], 3, 0, font[238 - 32], 1, 0, 3, 2 );
+            font[238 - 32].setPosition( font[73].x(), font[73].y() );
+            updateNormalFontLetterShadow( font[238 - 32] );
 
             // t with comma.
             font[254 - 32].resize( font[84].width(), font[84].height() + 4 );
@@ -4210,7 +4226,7 @@ namespace
             font[170 - 32].setPosition( font[51].x(), font[51].y() );
             updateSmallFontLetterShadow( font[170 - 32] );
 
-            // A with circonflex and generate the accent for further use.
+            // A with circumflex and generate the accent for further use.
             font[194 - 32].resize( font[33].width(), font[33].height() + 3 );
             font[194 - 32].reset();
             fheroes2::Copy( font[33], 0, 0, font[194 - 32], 0, 3, font[33].width(), font[33].height() );
@@ -4230,6 +4246,14 @@ namespace
             font[195 - 32].setPosition( font[33].x(), font[33].y() - 3 );
             updateSmallFontLetterShadow( font[195 - 32] );
 
+            // I with circumflex
+            font[206 - 32].resize( font[41].width(), font[41].height() + 3 );
+            font[206 - 32].reset();
+            fheroes2::Copy( font[41], 0, 0, font[206 - 32], 0, 3, font[41].width(), font[41].height() );
+            fheroes2::Copy( font[194 - 32], 4, 0, font[206 - 32], 1, 0, 3, 2 );
+            font[206 - 32].setPosition( font[41].x(), font[41].y() - 3 );
+            updateNormalFontLetterShadow( font[206 - 32] );
+
             // T with comma.
             font[222 - 32].resize( font[52].width(), font[52].height() + 4 );
             font[222 - 32].reset();
@@ -4246,8 +4270,8 @@ namespace
             font[186 - 32].setPosition( font[83].x(), font[83].y() );
             updateSmallFontLetterShadow( font[186 - 32] );
 
-            // a with circonflex.
-            font[226 - 32].resize( font[65].width(), font[65].height() + 4 );
+            // a with circumflex.
+            font[226 - 32].resize( font[65].width(), font[65].height() + 3 );
             font[226 - 32].reset();
             fheroes2::Copy( font[65], 0, 0, font[226 - 32], 0, 3, font[65].width(), font[65].height() );
             fheroes2::Copy( font[194 - 32], 4, 0, font[226 - 32], 2, 0, 3, 2 );
@@ -4261,6 +4285,14 @@ namespace
             fheroes2::Copy( font[195 - 32], 3, 0, font[227 - 32], 2, 0, 4, 2 );
             font[227 - 32].setPosition( font[65].x(), font[65].y() - 3 );
             updateSmallFontLetterShadow( font[227 - 32] );
+
+            // i with circumflex
+            font[238 - 32].resize( font[73].width(), font[73].height() + 1 );
+            font[238 - 32].reset();
+            fheroes2::Copy( font[73], 0, 0, font[238 - 32], 0, 1, font[73].width(), font[73].height() );
+            fheroes2::Copy( font[226 - 32], 2, 0, font[238 - 32], 1, 0, 3, 2 );
+            font[238 - 32].setPosition( font[73].x(), font[73].y() - 1 );
+            updateNormalFontLetterShadow( font[238 - 32] );
 
             // t with comma.
             font[254 - 32].resize( font[84].width(), font[84].height() + 4 );

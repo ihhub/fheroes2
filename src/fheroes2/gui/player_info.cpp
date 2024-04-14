@@ -42,71 +42,6 @@
 #include "ui_dialog.h"
 #include "ui_text.h"
 
-namespace
-{
-    void changeRaceToNext( Player & player )
-    {
-        switch ( player.GetRace() ) {
-        case Race::KNGT:
-            player.SetRace( Race::BARB );
-            break;
-        case Race::BARB:
-            player.SetRace( Race::SORC );
-            break;
-        case Race::SORC:
-            player.SetRace( Race::WRLK );
-            break;
-        case Race::WRLK:
-            player.SetRace( Race::WZRD );
-            break;
-        case Race::WZRD:
-            player.SetRace( Race::NECR );
-            break;
-        case Race::NECR:
-            player.SetRace( Race::RAND );
-            break;
-        case Race::RAND:
-            player.SetRace( Race::KNGT );
-            break;
-        default:
-            // Did you add a new race? Add the logic above
-            assert( 0 );
-            break;
-        }
-    }
-
-    void changeRaceToPrev( Player & player )
-    {
-        switch ( player.GetRace() ) {
-        case Race::KNGT:
-            player.SetRace( Race::RAND );
-            break;
-        case Race::BARB:
-            player.SetRace( Race::KNGT );
-            break;
-        case Race::SORC:
-            player.SetRace( Race::BARB );
-            break;
-        case Race::WRLK:
-            player.SetRace( Race::SORC );
-            break;
-        case Race::WZRD:
-            player.SetRace( Race::WRLK );
-            break;
-        case Race::NECR:
-            player.SetRace( Race::WZRD );
-            break;
-        case Race::RAND:
-            player.SetRace( Race::NECR );
-            break;
-        default:
-            // Did you add a new race? Add the logic above
-            assert( 0 );
-            break;
-        }
-    }
-}
-
 void Interface::PlayersInfo::UpdateInfo( Players & players, const fheroes2::Point & playerTypeOffset, const fheroes2::Point & classOffset )
 {
     clear();
@@ -300,40 +235,7 @@ void Interface::PlayersInfo::RedrawInfo( const bool displayInGameInfo ) const
         // 2. redraw class
         const bool isActivePlayer = displayInGameInfo ? info.player->isPlay() : mapInfo.AllowChangeRace( info.player->GetColor() );
 
-        uint32_t classIcnIndex = 0;
-        switch ( info.player->GetRace() ) {
-        case Race::KNGT:
-            classIcnIndex = isActivePlayer ? 51 : 70;
-            break;
-        case Race::BARB:
-            classIcnIndex = isActivePlayer ? 52 : 71;
-            break;
-        case Race::SORC:
-            classIcnIndex = isActivePlayer ? 53 : 72;
-            break;
-        case Race::WRLK:
-            classIcnIndex = isActivePlayer ? 54 : 73;
-            break;
-        case Race::WZRD:
-            classIcnIndex = isActivePlayer ? 55 : 74;
-            break;
-        case Race::NECR:
-            classIcnIndex = isActivePlayer ? 56 : 75;
-            break;
-        case Race::MULT:
-            classIcnIndex = isActivePlayer ? 57 : 76;
-            break;
-        case Race::RAND:
-            assert( !displayInGameInfo );
-            classIcnIndex = 58;
-            break;
-        default:
-            // Did you add a new race? Add the logic above!
-            assert( 0 );
-            continue;
-        }
-
-        const fheroes2::Sprite & classIcon = fheroes2::AGG::GetICN( ICN::NGEXTRA, classIcnIndex );
+        const fheroes2::Sprite & classIcon = fheroes2::AGG::GetICN( ICN::NGEXTRA, Race::getRaceIcnIndex( info.player->GetRace(), isActivePlayer ) );
         const fheroes2::Sprite & classIconShadow = fheroes2::AGG::GetICN( ICN::NGEXTRA, 61 );
 
         fheroes2::Blit( classIconShadow, display, info.classRoi.x - 5, info.classRoi.y + 3 );
@@ -410,12 +312,13 @@ bool Interface::PlayersInfo::QueueEventProcessing()
 
         player = getPlayerFromHandicapRoi( le.GetMouseCursor() );
         if ( player != nullptr ) {
-            fheroes2::showMessage( fheroes2::Text( _( "Handicap" ), fheroes2::FontType::normalYellow() ),
-                                   fheroes2::Text( _( "This lets you change the handicap of a particular player. Only humans may be handicapped. Handicapped players "
-                                                      "start with fewer resources and earn 15 or 30% fewer resources per turn for mild and severe handicaps, "
-                                                      "respectively." ),
-                                                   fheroes2::FontType::normalWhite() ),
-                                   Dialog::ZERO );
+            fheroes2::
+                showMessage( fheroes2::Text( _( "Handicap" ), fheroes2::FontType::normalYellow() ),
+                             fheroes2::Text( _( "This lets you change the handicap of a particular player. Only human players may have a handicap. Handicapped players "
+                                                "start with fewer resources and earn 15 or 30% fewer resources per turn for mild and severe handicaps, "
+                                                "respectively." ),
+                                             fheroes2::FontType::normalWhite() ),
+                             Dialog::ZERO );
             return true;
         }
 
@@ -425,7 +328,7 @@ bool Interface::PlayersInfo::QueueEventProcessing()
     if ( le.MouseWheelUp() ) {
         Player * player = GetFromClassClick( le.GetMouseCursor() );
         if ( player != nullptr && conf.getCurrentMapInfo().AllowChangeRace( player->GetColor() ) ) {
-            changeRaceToPrev( *player );
+            player->SetRace( Race::getPreviousRace( player->GetRace() ) );
 
             return true;
         }
@@ -436,7 +339,7 @@ bool Interface::PlayersInfo::QueueEventProcessing()
     if ( le.MouseWheelDn() ) {
         Player * player = GetFromClassClick( le.GetMouseCursor() );
         if ( player != nullptr && conf.getCurrentMapInfo().AllowChangeRace( player->GetColor() ) ) {
-            changeRaceToNext( *player );
+            player->SetRace( Race::getNextRace( player->GetRace() ) );
 
             return true;
         }
@@ -487,7 +390,7 @@ bool Interface::PlayersInfo::QueueEventProcessing()
         std::string str = _( "%{color} player" );
         StringReplace( str, "%{color}", Color::String( player->GetColor() ) );
 
-        std::string res;
+        std::string res = player->GetName();
         if ( Dialog::InputString( str, res ) && !res.empty() ) {
             player->SetName( res );
         }
@@ -497,7 +400,7 @@ bool Interface::PlayersInfo::QueueEventProcessing()
 
     player = GetFromClassClick( le.GetMouseCursor() );
     if ( player != nullptr && conf.getCurrentMapInfo().AllowChangeRace( player->GetColor() ) ) {
-        changeRaceToNext( *player );
+        player->SetRace( Race::getNextRace( player->GetRace() ) );
 
         return true;
     }
@@ -540,18 +443,19 @@ bool Interface::PlayersInfo::readOnlyEventProcessing()
         switch ( player->getHandicapStatus() ) {
         case Player::HandicapStatus::NONE:
             fheroes2::showMessage( fheroes2::Text( _( "No Handicap" ), fheroes2::FontType::normalYellow() ),
-                                   fheroes2::Text( _( "No special restrictions on start resources and earning them per turn." ), fheroes2::FontType::normalWhite() ),
+                                   fheroes2::Text( _( "No special restrictions on starting resources and resource income per turn." ),
+                                                   fheroes2::FontType::normalWhite() ),
                                    Dialog::ZERO );
             break;
         case Player::HandicapStatus::MILD:
             fheroes2::showMessage( fheroes2::Text( _( "Mild Handicap" ), fheroes2::FontType::normalYellow() ),
-                                   fheroes2::Text( _( "Mild handicapped players start with fewer resources and earn 15% fewer resources per turn." ),
+                                   fheroes2::Text( _( "Players with mild handicap start with fewer resources and earn 15% fewer resources per turn." ),
                                                    fheroes2::FontType::normalWhite() ),
                                    Dialog::ZERO );
             break;
         case Player::HandicapStatus::SEVERE:
             fheroes2::showMessage( fheroes2::Text( _( "Severe Handicap" ), fheroes2::FontType::normalYellow() ),
-                                   fheroes2::Text( _( "Severe handicapped players start with fewer resources and earn 30% fewer resources per turn." ),
+                                   fheroes2::Text( _( "Players with severe handicap start with fewer resources and earn 30% fewer resources per turn." ),
                                                    fheroes2::FontType::normalWhite() ),
                                    Dialog::ZERO );
             break;

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2023                                             *
+ *   Copyright (C) 2020 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -56,7 +56,7 @@ namespace fheroes2
             setPosition( _area.x + ( _area.width - width() ) / 2, _area.y + ( _area.height - height() ) / 2 );
         }
         else {
-            if ( _isVertical() ) {
+            if ( isVertical() ) {
                 setPosition( _area.x + ( _area.width - width() ) / 2, _area.y );
             }
             else {
@@ -103,7 +103,7 @@ namespace fheroes2
 
         Point newPosition;
 
-        if ( _isVertical() ) {
+        if ( isVertical() ) {
             newPosition.x = _area.x + roiWidth / 2;
             newPosition.y = _area.y + ( _currentIndex - _minIndex ) * roiHeight / ( _maxIndex - _minIndex );
         }
@@ -129,7 +129,7 @@ namespace fheroes2
         const int roiWidth = _area.width - width();
         const int roiHeight = _area.height - height();
 
-        if ( _isVertical() ) {
+        if ( isVertical() ) {
             const int32_t scrollbarImageMiddle = height() / 2;
             const int32_t minYPos = _area.y + scrollbarImageMiddle;
             const int32_t maxYPos = _area.y + roiHeight + scrollbarImageMiddle;

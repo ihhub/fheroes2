@@ -23,6 +23,7 @@
 #include <cstdint>
 #include <functional>
 #include <string>
+#include <utility>
 
 #include "editor_interface_panel.h"
 #include "game_mode.h"
@@ -65,6 +66,7 @@ namespace Interface
 
         void mouseCursorAreaClickLeft( const int32_t tileIndex ) override;
         void mouseCursorAreaPressRight( const int32_t tileIndex ) const override;
+        void mouseCursorAreaLongPressLeft( const int32_t /*Unused*/ ) override;
 
         void undoAction()
         {
@@ -99,9 +101,9 @@ namespace Interface
                 // Do nothing.
             }
 
-            void reset( const char * info )
+            void reset( std::string info )
             {
-                _message = info;
+                _message = std::move( info );
 
                 _interface.setRedraw( REDRAW_GAMEAREA );
 
@@ -110,10 +112,10 @@ namespace Interface
 
             bool isValid() const
             {
-                return _timer.getS() < 5 && ( _message != nullptr );
+                return _timer.getS() < 5 && !_message.empty();
             }
 
-            const char * message() const
+            std::string message() const
             {
                 return _message;
             }
@@ -121,7 +123,7 @@ namespace Interface
         private:
             EditorInterface & _interface;
 
-            const char * _message{ nullptr };
+            std::string _message;
 
             fheroes2::Time _timer;
         };
@@ -134,7 +136,7 @@ namespace Interface
             // Do nothing.
         }
 
-        void setObjectOnTile( Maps::Tiles & tile, const Maps::ObjectGroup groupType, const int32_t objectIndex );
+        bool setObjectOnTile( Maps::Tiles & tile, const Maps::ObjectGroup groupType, const int32_t objectIndex );
 
         void setObjectOnTileAsAction( Maps::Tiles & tile, const Maps::ObjectGroup groupType, const int32_t objectIndex );
 

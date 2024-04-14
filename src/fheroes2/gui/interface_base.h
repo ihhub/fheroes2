@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2023                                                    *
+ *   Copyright (C) 2024                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -53,7 +53,10 @@ namespace Interface
         // The next value is base for Map Editor interface.
         REDRAW_PANEL = 0x100,
 
-        REDRAW_ALL = 0x1FF
+        REDRAW_ALL = 0x1FF,
+
+        // This option is only for the Editor.
+        REDRAW_PASSABILITIES = 0x200
     };
 
     class BaseInterface
@@ -129,6 +132,7 @@ namespace Interface
 
         virtual void mouseCursorAreaClickLeft( const int32_t tileIndex ) = 0;
         virtual void mouseCursorAreaPressRight( const int32_t tileIndex ) const = 0;
+        virtual void mouseCursorAreaLongPressLeft( const int32_t tileIndex ) = 0;
 
         // Regenerates the game area and updates the panel positions depending on the UI settings
         virtual void reset() = 0;

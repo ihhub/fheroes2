@@ -696,6 +696,10 @@ namespace
 
         std::string getObjectName( const Maps::ObjectInfo & info ) override
         {
+            if ( info.objectType == MP2::OBJ_NONE ) {
+                return _( "Terrain object" );
+            }
+
             return MP2::StringObject( info.objectType );
         }
     };
@@ -1472,10 +1476,9 @@ void Dialog::selectMineType( int32_t & type, int32_t & color )
 
     fheroes2::ImageRestorer appearanceTextBackground( display, 0, 0, 0, 0 );
     // Mine appearance selection text.
-    auto redrawAppearanceText = [&selectedResourceType, &appearanceTextBackground, &listRoi, &display]( const Maps::ObjectInfo & info ) {
+    auto redrawAppearanceText = [&appearanceTextBackground, &listRoi, &display]( const Maps::ObjectInfo & info ) {
         std::string mineText( _( "%{mineName} appearance:" ) );
         if ( info.objectType == MP2::OBJ_MINE ) {
-            assert( selectedResourceType < 7 );
             StringReplace( mineText, "%{mineName}", Maps::GetMineName( static_cast<int>( info.metadata[0] ) ) );
         }
         else {

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-20 17:57+0000\n"
+"POT-Creation-Date: 2024-04-11 06:20+0000\n"
 "PO-Revision-Date: 2023-09-24 16:05+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Czech <cs@li.org>\n"
@@ -242,6 +242,15 @@ msgstr ""
 "T"
 
 msgid ""
+"P\n"
+"A\n"
+"T\n"
+"R\n"
+"O\n"
+"L"
+msgstr ""
+
+msgid ""
 "C\n"
 "A\n"
 "M\n"
@@ -382,13 +391,18 @@ msgstr "Legie"
 msgid "All %{race} troops +1"
 msgstr "Všechny %{race} jednotky +1"
 
-msgid "Multiple"
-msgstr "Vícero"
+msgid "NeutralRaceTroops|Neutral"
+msgstr ""
 
 msgid "Troops of %{count} alignments -%{penalty}"
 msgstr ""
 
 msgid "Some undead in army -1"
+msgstr ""
+
+msgid ""
+"Default\n"
+"troop"
 msgstr ""
 
 msgid "View %{name}"
@@ -453,9 +467,10 @@ msgid ""
 msgstr ""
 "Vedle vašeho hrdiny není žádné volné místo, kam by se dal Elementál přivolat."
 
+#, fuzzy
 msgid ""
-"The Moat reduces by -%{count} the defense skill of any unit and slows to "
-"half movement rate."
+"The Moat reduces the defense skill of troops trapped in it by %{count} and "
+"restricts their movement range."
 msgstr ""
 "Příkop redukuje obrannou sílu útočících jednotek o -%{count} a zpomaluje o "
 "polovinu jejich perimetr pohybu."
@@ -811,14 +826,18 @@ msgstr "Pruh správ"
 msgid "Shows the results of individual monster's actions."
 msgstr "Zobrazuje následky počínání jednotlivých stvůr."
 
-msgid "Are you sure you want to finish the battle in auto mode?"
-msgstr "Jsi si jist, že chceš dokončit boj v automatickém módu?"
-
 msgid "Are you sure you want to enable auto combat?"
 msgstr "Určitě chceš povolit automatický boj?"
 
-msgid "%{name} skip their turn."
-msgstr "%{name} nebudou táhnout."
+msgid "Are you sure you want to finish the battle in auto mode?"
+msgstr "Jsi si jist, že chceš dokončit boj v automatickém módu?"
+
+#, fuzzy
+msgid "The %{name} skips their turn."
+msgid_plural "The %{name} skip their turn."
+msgstr[0] "%{name} nebudou táhnout."
+msgstr[1] "%{name} nebudou táhnout."
+msgstr[2] "%{name} nebudou táhnout."
 
 msgid "%{attacker} does %{damage} damage."
 msgid_plural "%{attacker} do %{damage} damage."
@@ -853,8 +872,12 @@ msgstr[2] "%{count} %{unit} bylo oživeno."
 msgid "Moved %{monster}: from [%{src}] to [%{dst}]."
 msgstr "Přesunuto %{monster}: z [%{src}] na [%{dst}]."
 
-msgid "The %{name} resist the spell!"
-msgstr "%{name} kouzlu odolali!"
+#, fuzzy
+msgid "The %{name} resists the spell!"
+msgid_plural "The %{name} resist the spell!"
+msgstr[0] "%{name} kouzlu odolali!"
+msgstr[1] "%{name} kouzlu odolali!"
+msgstr[2] "%{name} kouzlu odolali!"
 
 msgid "%{name} casts %{spell} on the %{troop}."
 msgstr "%{name} sesílá %{spell} na %{troop}."
@@ -880,23 +903,47 @@ msgstr "%{spell} působí %{damage} škod na vybrané žijící stvoření."
 msgid "The %{spell} does %{damage} damage to all living creatures."
 msgstr "%{spell} působí %{damage} škod všem žijícím stvořením."
 
-msgid "The %{attacker}' attack blinds the %{target}!"
-msgstr "Útok %{attacker} oslepil %{target}!"
+#, fuzzy
+msgid "The %{attacker}'s attack blinds the %{target}!"
+msgid_plural "The %{attacker}' attack blinds the %{target}!"
+msgstr[0] "Útok %{attacker} oslepil %{target}!"
+msgstr[1] "Útok %{attacker} oslepil %{target}!"
+msgstr[2] "Útok %{attacker} oslepil %{target}!"
 
-msgid "The %{attacker}' gaze turns the %{target} to stone!"
-msgstr "Upřený pohled %{attacker}' proměnil %{target} na kámen!"
+#, fuzzy
+msgid "The %{attacker}'s gaze turns the %{target} to stone!"
+msgid_plural "The %{attacker}' gaze turns the %{target} to stone!"
+msgstr[0] "Upřený pohled %{attacker}' proměnil %{target} na kámen!"
+msgstr[1] "Upřený pohled %{attacker}' proměnil %{target} na kámen!"
+msgstr[2] "Upřený pohled %{attacker}' proměnil %{target} na kámen!"
 
-msgid "The %{attacker}' curse falls upon the %{target}!"
-msgstr "%{attacker} uvalili kletbu na %{target}!"
+#, fuzzy
+msgid "The %{attacker}'s curse falls upon the %{target}!"
+msgid_plural "The %{attacker}' curse falls upon the %{target}!"
+msgstr[0] "%{attacker} uvalili kletbu na %{target}!"
+msgstr[1] "%{attacker} uvalili kletbu na %{target}!"
+msgstr[2] "%{attacker} uvalili kletbu na %{target}!"
 
-msgid "The %{target} are paralyzed by the %{attacker}!"
-msgstr "%{target} jsou paralyzovaní úderem %{attacker}!"
+#, fuzzy
+msgid "The %{target} is paralyzed by the %{attacker}!"
+msgid_plural "The %{target} are paralyzed by the %{attacker}!"
+msgstr[0] "%{target} jsou paralyzovaní úderem %{attacker}!"
+msgstr[1] "%{target} jsou paralyzovaní úderem %{attacker}!"
+msgstr[2] "%{target} jsou paralyzovaní úderem %{attacker}!"
 
-msgid "The %{attacker} dispel all good spells on your %{target}!"
-msgstr "%{attacker} zrušil všechna kladná kouzla na %{target}!"
+#, fuzzy
+msgid "The %{attacker} dispels all good spells on your %{target}!"
+msgid_plural "The %{attacker} dispel all good spells on your %{target}!"
+msgstr[0] "%{attacker} zrušil všechna kladná kouzla na %{target}!"
+msgstr[1] "%{attacker} zrušil všechna kladná kouzla na %{target}!"
+msgstr[2] "%{attacker} zrušil všechna kladná kouzla na %{target}!"
 
-msgid "The %{attacker} cast %{spell} on %{target}!"
-msgstr "%{attacker} seslal %{spell} na %{target}!"
+#, fuzzy
+msgid "The %{attacker} casts %{spell} on the %{target}!"
+msgid_plural "The %{attacker} cast %{spell} on the %{target}!"
+msgstr[0] "%{attacker} seslal %{spell} na %{target}!"
+msgstr[1] "%{attacker} seslal %{spell} na %{target}!"
+msgstr[2] "%{attacker} seslal %{spell} na %{target}!"
 
 msgid "Bad luck descends on the %{attacker}."
 msgstr "%{attacker} postihlo neštěstí."
@@ -920,7 +967,8 @@ msgstr "Zrcadlová jednotka byla vytvořena."
 msgid "The mirror image is destroyed!"
 msgstr "Zrcadlová jednotka byla zničena!"
 
-msgid "Are you sure you want to interrupt the auto battle?"
+#, fuzzy
+msgid "Are you sure you want to interrupt the auto combat?"
 msgstr "Jsi si jist, že chceš přerušit automatický boj?"
 
 msgid "Error"
@@ -981,18 +1029,6 @@ msgstr ""
 
 msgid "Please select another hero."
 msgstr "Vyber jiného hrdinu."
-
-msgid "Set Attack Skill"
-msgstr "Nastav útočnou sílu"
-
-msgid "Set Defense Skill"
-msgstr "Nastav obrannou sílu"
-
-msgid "Set Power Skill"
-msgstr "Nastav sílu kouzel"
-
-msgid "Set Knowledge Skill"
-msgstr "Nastav znalosti"
 
 #, fuzzy
 msgid "%{race1} %{name1} vs %{race2} %{name2}"
@@ -1117,8 +1153,9 @@ msgstr ""
 "nepřátelských hradů a vesnic, zároveň dej pozor abys neztratil všechny "
 "vesnice škřitků najednou, jinak zvítězí náš protivník."
 
+#, fuzzy
 msgid ""
-"You will face four allied enemies in a straightforward fight for resource "
+"You will face four allied enemies in a straightforward fight for resources "
 "and treasure. Capture all of the enemy castles for victory."
 msgstr ""
 "Budeš vystaven přímému souboji o suroviny a zdroje se čtyřmi spojeneckými "
@@ -1435,9 +1472,10 @@ msgstr ""
 "končinách. Musíš ho najít do prvního dne třetího měsíce, jinak to rodině již "
 "nepomůže."
 
+#, fuzzy
 msgid ""
 "Rescue your crazy uncle Ivan. Find him before the first day of the fourth "
-"month or it will be no help to your kingdom."
+"month or it will be of no help to your kingdom."
 msgstr ""
 "Zachraň svého šíleného strýce Ivana. Musíš ho najít do prvního dne čtvrtého "
 "měsíce, jinak to Tvému království již nepomůže."
@@ -1454,9 +1492,10 @@ msgstr ""
 msgid "Retake the castle of Ivory Gates, which has fallen due to treachery."
 msgstr "Získej zpět hrad Ivory Gates, který padl kvůli zradě."
 
+#, fuzzy
 msgid ""
 "Gain the favor of the elves. They will not allow trees to be chopped down, "
-"so they will send you wood every 2 weeks. You must complete your mission "
+"so we will send you wood every 2 weeks. You must complete your mission "
 "before the first day of the seventh month, or the kingdom will surely fall."
 msgstr ""
 "Získej si přízeň elfů. Kácení stromů je v tomto kraji zakázáno, ale každé "
@@ -1576,23 +1615,27 @@ msgstr " vždy utečou před Tvými vojsky."
 msgid " will be willing to join your army."
 msgstr " se budou chtít k Tobě přidat."
 
-msgid "\"%{artifact}\" artifact will be carried over the scenario."
+#, fuzzy
+msgid "\"%{artifact}\" artifact will be carried over in the campaign."
 msgstr "\"%{artifact}\" si poneseš s sebou do další hry."
 
-msgid "The army will be carried over the scenario."
+#, fuzzy
+msgid "The army will be carried over in the campaign."
 msgstr "Armáda bude přenesena do další hry."
 
 msgid "The kingdom will have +%{count} %{resource} each day."
 msgstr "Kralovské příjmy budou vyšśí o %{count} %{resource} za den."
 
-msgid "\"%{spell}\" spell will be carried over the scenario."
+#, fuzzy
+msgid "The \"%{spell}\" spell will be carried over in the campaign."
 msgstr "\"%{spell}\" bude přeneseno do další hry."
 
-msgid "%{hero} can be hired in the scenario."
+#, fuzzy
+msgid "%{hero} can be hired during scenarios."
 msgstr "Ve hře bude možné najmout hrdinu %{hero}."
 
-msgid ""
-"%{hero} has been defeated and will not appear in the subsequent scenarios."
+#, fuzzy
+msgid "%{hero} has been defeated and will not appear in subsequent scenarios."
 msgstr "%{hero} byl poražen a už se v dalších krocích kampaně neobjeví."
 
 msgid "The dwarves recognize their allies and gladly join your forces."
@@ -1875,8 +1918,9 @@ msgstr "Pokr. Moudrost"
 msgid "campaignBonus|Expert Wisdom"
 msgstr "Exp. Moudrost"
 
+#, fuzzy
 msgid ""
-"The main hero will have \"%{artifact}\" artifact at the start of the "
+"The main hero will have the \"%{artifact}\" artifact at the start of the "
 "scenario."
 msgstr "Tvůj hlavní hrdina bude mít na zaćátku hry artefakt \"%{artifact}\"."
 
@@ -1894,15 +1938,18 @@ msgid ""
 "The main hero will have %{count} %{monster} at the start of the scenario."
 msgstr "Tvůj hlavní hrdina bude hru začínat s %{count} %{monster}."
 
+#, fuzzy
 msgid ""
-"The main hero will have \"%{spell}\" spell at the start of the scenario."
+"The main hero will have the \"%{spell}\" spell at the start of the scenario."
 msgstr "Tvůj hlavní hrdina bude umět vykouzlit \"%{spell}\" od začátku hry."
 
-msgid "The starting race of the scenario will be %{race}."
+#, fuzzy
+msgid "The starting alignment of the scenario will be %{race}."
 msgstr "Hru začneš jako člen kasty %{race}."
 
+#, fuzzy
 msgid ""
-"The main hero will have additional %{count} %{skill} at the start of the "
+"The main hero will receive a +%{count} to their %{skill} at the start of the "
 "scenario."
 msgstr ""
 "Tvůj hlavní hrdina bude navíc ovládat %{count} %{skill} od začátku hry."
@@ -1944,19 +1991,23 @@ msgstr "Nelze postavit. Dnes si zde již stavěl."
 msgid "For this action it is necessary to build a castle first."
 msgstr "Pro tuto akci bude nutné nejdříve postavit hrad."
 
-msgid "Cannot build %{name} because the castle is too far away from an ocean."
+#, fuzzy
+msgid "Cannot build %{name}. The castle is too far away from an ocean."
 msgstr "%{name} nelze postavit, protože hrad je moc daleko od moře."
 
-msgid "disable build."
-msgstr "zakázat stavění."
+msgid "This building has been disabled."
+msgstr ""
 
-msgid "Cannot afford %{name}."
+#, fuzzy
+msgid "Cannot afford the %{name}."
 msgstr "Na %{name} zatím nemáš."
 
-msgid "%{name} is already built."
+#, fuzzy
+msgid "The %{name} is already built."
 msgstr "%{name}, již dostavěno."
 
-msgid "Cannot build %{name}."
+#, fuzzy
+msgid "Cannot build the %{name}."
 msgstr "Není možné postavit %{name}"
 
 msgid "Build %{name}."
@@ -2184,7 +2235,8 @@ msgstr "Nelze najmout - ve měste se nachází hrdina."
 msgid "Cannot recruit - you have too many Heroes."
 msgstr "Nelze najmout - máš příliž mnoho hrdinů."
 
-msgid "Cannot afford a Hero"
+#, fuzzy
+msgid "Cannot afford a Hero."
 msgstr "Nemůžeš si ho dovolit"
 
 msgid "There is no room in the garrison for this army."
@@ -2652,6 +2704,14 @@ msgstr "Rozvinutá formace"
 msgid "Grouped Formation"
 msgstr "Seskupená formace"
 
+#, fuzzy
+msgid "Click to show the next town."
+msgstr "Klikni pro zobrazení následujícího města."
+
+#, fuzzy
+msgid "Click to show the previous town."
+msgstr "Klikni pro zobrazení předchozího města."
+
 msgid "Set garrison combat formation to 'Spread'"
 msgstr "Nastavit bojovou formaci pevnosti na 'Rozvinutá'"
 
@@ -2860,7 +2920,8 @@ msgstr "Nastav úroveň herních zvuků."
 msgid "Change the type of music."
 msgstr "Změň typ hudby."
 
-msgid "Toggle 3D effects of foreground sounds."
+#, fuzzy
+msgid "Toggle the 3D effect of foreground sounds."
 msgstr "Zap/Vyp 3D efekty herních zvuků."
 
 msgid "Build a new ship:"
@@ -3017,9 +3078,6 @@ msgstr "Okno"
 msgid "V-Sync"
 msgstr "V-Sync"
 
-msgid "on"
-msgstr "zap"
-
 msgid "FPS"
 msgstr "FPS"
 
@@ -3096,9 +3154,6 @@ msgstr ""
 
 msgid "Toggle interface visibility."
 msgstr ""
-
-msgid "Toggle colored cursor on or off. This is only an esthetic choice."
-msgstr "Přepnout barevný kurzor zap/vyp. Toto je jenom volba vzhledu."
 
 msgid "Sets the speed at which you scroll the window."
 msgstr ""
@@ -3295,10 +3350,10 @@ msgstr ""
 msgid "Open Virtual Keyboard"
 msgstr ""
 
-msgid "How many troops to move?"
+msgid "How many creatures do you wish to move?"
 msgstr ""
 
-msgid "Fast separation into slots:"
+msgid "Select how many units to separate into:"
 msgstr ""
 
 msgid "Map: "
@@ -3509,8 +3564,9 @@ msgstr ""
 msgid "Find a specific artifact."
 msgstr ""
 
-msgid "Your side defeats the opposing side."
-msgstr ""
+#, fuzzy
+msgid "Your side must defeat the opposing side."
+msgstr "Musíš porazit %{enemies}."
 
 msgid "Accumulate a large amount of gold."
 msgstr ""
@@ -3527,7 +3583,7 @@ msgstr ""
 msgid "N"
 msgstr ""
 
-msgid "No maps exist at that size"
+msgid "No maps exist at that size."
 msgstr ""
 
 msgid "Small Maps"
@@ -3565,7 +3621,7 @@ msgstr ""
 
 msgid ""
 "Indicates how many players total are in the scenario. Any positions not "
-"occupied by humans will be occupied by computer players."
+"occupied by human players will be occupied by computer players."
 msgstr ""
 
 msgid ""
@@ -3639,8 +3695,8 @@ msgid "Change the speed at which your heroes move on the main screen."
 msgstr ""
 
 msgid ""
-"Sets the speed that A.I. heroes move at. You can also elect not to view A.I. "
-"movement at all."
+"Sets the speed that computer heroes move at. You can also elect not to view "
+"computer movement at all."
 msgstr ""
 
 msgid "Change the interface settings of the game."
@@ -3774,6 +3830,10 @@ msgstr "Uložit aktuální hru."
 msgid "Quit out of the map editor."
 msgstr ""
 
+#, fuzzy
+msgid "Set %{monster} Count"
+msgstr "Vystřel na %{monster}"
+
 msgid "Objects cannot be placed outside the map."
 msgstr ""
 
@@ -3787,6 +3847,13 @@ msgid "Treasures cannot be placed on water."
 msgstr ""
 
 msgid "Heroes cannot be placed on water."
+msgstr ""
+
+msgid ""
+"A maximum of %{count} heroes of the same color can be placed on the map."
+msgstr ""
+
+msgid "Failed to update player information."
 msgstr ""
 
 msgid "Artifacts cannot be placed on water."
@@ -3908,12 +3975,30 @@ msgstr "Město"
 msgid "Heroes"
 msgstr "Hrdinové"
 
-msgid "Terrain"
+#, fuzzy
+msgid "editorErasure|Landscape objects"
+msgstr "Artefakt"
+
+msgid "editorErasure|Adventure non pickable objects"
 msgstr ""
 
-#, fuzzy
-msgid "Castles"
-msgstr "Hrad"
+msgid "editorErasure|Castles"
+msgstr ""
+
+msgid "editorErasure|Adventure pickable objects"
+msgstr ""
+
+msgid "editorErasure|Monsters"
+msgstr ""
+
+msgid "editorErasure|Heroes"
+msgstr ""
+
+msgid "editorErasure|Roads"
+msgstr ""
+
+msgid "editorErasure|Streams"
+msgstr ""
 
 msgid ""
 "Draws terrain in\n"
@@ -4106,6 +4191,20 @@ msgstr "Žádné mapy k dispo!"
 msgid "Warning"
 msgstr "Varování"
 
+#, fuzzy
+msgid "Animation"
+msgstr "Zabrání"
+
+#, fuzzy
+msgid "Passability"
+msgstr "Osobnost:"
+
+msgid "Toggle animation of the objects."
+msgstr ""
+
+msgid "Toggle display of objects' passability."
+msgstr ""
+
 msgid "difficulty|Easy"
 msgstr "Lehká"
 
@@ -4133,21 +4232,24 @@ msgstr "Těžká"
 msgid "Campaign Difficulty"
 msgstr "Obtížnost kampaně"
 
+#, fuzzy
 msgid ""
-"Choose this difficulty if you want to prefer game story over challenge. AI "
-"is weaker in comparison with normal difficulty."
+"Choose this difficulty to experience the game's story with less challenge. "
+"The AI will be weaker than at Normal difficulty."
 msgstr ""
 "Zvol tuto obtížnost pokud preferuješ příběh víc než výzvu. Umělá inteligence "
 "bude slabší v porovnání s nomální obtížností."
 
+#, fuzzy
 msgid ""
-"Choose this difficulty to enjoy the campaign as per the original design."
+"Choose this difficulty to experience the campaign as per the original design."
 msgstr ""
 "Zvol tuto obtížnost a vychutnej si kampaň stejně jako v originální hře."
 
+#, fuzzy
 msgid ""
-"Choose this difficulty if you want challenge. AI is stronger in comparison "
-"with normal difficulty."
+"Choose this difficulty if you want more challenge. The AI will be stronger "
+"than at Normal difficulty."
 msgstr ""
 "Zvol tuto obtížnost pokud cheš pořádnou výzvu. Umělá inteligence bude "
 "silnější v porovnání s nomální obtížností."
@@ -4178,7 +4280,8 @@ msgstr "Odstartuj vybranou hru."
 msgid "View Intro"
 msgstr "Zobraz Intro"
 
-msgid "View Intro videos for the current state of the campaign."
+#, fuzzy
+msgid "View the intro video for the current state of the campaign."
 msgstr "Zobraz Intro k aktuálnímu pokroku v kampani."
 
 #, fuzzy
@@ -4235,10 +4338,7 @@ msgstr ""
 msgid "Special Thanks to"
 msgstr ""
 
-msgid "and many other contributors!"
-msgstr ""
-
-msgid "and many-many other supporters!"
+msgid "and many-many other contributors and supporters!"
 msgstr ""
 
 msgid "Support us at"
@@ -4427,8 +4527,9 @@ msgstr ""
 msgid "hotkey|load game"
 msgstr ""
 
-msgid "hotkey|highscores"
-msgstr ""
+#, fuzzy
+msgid "hotkey|high scores"
+msgstr "Nejlepší výsledky"
 
 msgid "hotkey|credits"
 msgstr ""
@@ -4467,8 +4568,9 @@ msgstr ""
 msgid "hotkey|select all map sizes"
 msgstr ""
 
-msgid "hotkey|hotseat game"
-msgstr ""
+#, fuzzy
+msgid "hotkey|hot seat game"
+msgstr "Spusti hru jednoho nebo více hráčů."
 
 msgid "hotkey|battle only game"
 msgstr ""
@@ -4510,8 +4612,9 @@ msgstr ""
 msgid "hotkey|archibald campaign"
 msgstr ""
 
-msgid "hotkey|the price of loyalty campaign"
-msgstr ""
+#, fuzzy
+msgid "hotkey|price of loyalty campaign"
+msgstr "Zobrazit následující město"
 
 msgid "hotkey|voyage home campaign"
 msgstr ""
@@ -4572,6 +4675,10 @@ msgstr ""
 
 #, fuzzy
 msgid "hotkey|next hero"
+msgstr "Zobrazit následující město"
+
+#, fuzzy
+msgid "hotkey|change to hero under cursor"
 msgstr "Zobrazit následující město"
 
 #, fuzzy
@@ -4806,7 +4913,7 @@ msgid "Hot Seat"
 msgstr "Horké křeslo"
 
 msgid ""
-"Play a Hot Seat game, where 2 to 4 players play around the same computer, "
+"Play a Hot Seat game, where 2 to 6 players play around the same computer, "
 "switching into the 'Hot Seat' when it is their turn."
 msgstr ""
 
@@ -4842,7 +4949,7 @@ msgstr "Vítej ve hře Heroes of Might and Magic II běžící na enginu fheroes
 #, fuzzy
 msgid ""
 "Welcome to Heroes of Might and Magic II powered by the fheroes2 engine!\n"
-"Before starting the game please select a game resolution."
+"Before starting the game, please select a game resolution."
 msgstr ""
 "Vítej ve hře Heroes of Might and Magic II běžící na enginu fheroes2! Před "
 "samotným startem je potřeba nastavit rozlišení."
@@ -4902,9 +5009,10 @@ msgstr "Změň jazyk, rozlišení a další nastavení hry."
 msgid "Game Settings"
 msgstr "Nastavení Hry"
 
+#, fuzzy
 msgid ""
-"Required video files for campaign selection window are missing. Please make "
-"sure that all necessary files are present in the system."
+"The required video files for the campaign selection window are missing. "
+"Please make sure that all necessary files are present in the system."
 msgstr ""
 "Chybí potřebné video soubory pro výběr kampaně. Prosím ujistěte se, že "
 "všechny potřebné soubory jsou k dispozici."
@@ -4944,10 +5052,27 @@ msgid ""
 "in. There can be multiple guests for TCP/IP games."
 msgstr ""
 
+msgid ""
+"fheroes2 needs data files from the original Heroes of Might and Magic II to "
+"operate. You appear to be using the demo version of Heroes of Might and "
+"Magic II for this purpose. Please note that only one scenario will be "
+"available in this setup."
+msgstr ""
+
+msgid ""
+"A multi-player game, with several human players competing against each other "
+"on a single map."
+msgstr ""
+
 msgid "Battle Only"
 msgstr ""
 
 msgid "Setup and play a battle without loading any map."
+msgstr ""
+
+msgid ""
+"Play a Hot Seat game, where 2 to 6 players play on the same device, "
+"switching into the 'Hot Seat' when it is their turn."
 msgstr ""
 
 msgid "2 Players"
@@ -5075,6 +5200,9 @@ msgstr ""
 msgid "Defeat all enemy heroes and capture all enemy towns and castles."
 msgstr "Porážka všech nepřátelských hrdinů a zabrání jejich měst a hradů."
 
+msgid "Your side defeats the opposing side."
+msgstr ""
+
 msgid "Run out of time. (Fail to win by a certain point.)"
 msgstr "Vyčerpání času. (Výhra není dosažena do urč. doby.)"
 
@@ -5167,9 +5295,10 @@ msgstr "Scénář"
 msgid "Game Difficulty"
 msgstr "Obtížnost hry"
 
+#, fuzzy
 msgid ""
 "This lets you change the starting difficulty at which you will play. Higher "
-"difficulty levels start you of with fewer resources, and at the higher "
+"difficulty levels start you off with fewer resources, and at the higher "
 "settings, give extra resources to the computer."
 msgstr ""
 "Umožní Ti změnit obtížnost hry se kterou budeš hrát. Vyšší obtížnosti Ti "
@@ -5249,9 +5378,10 @@ msgstr ""
 msgid "%{color} player's turn."
 msgstr "Táhne %{color} hráč."
 
+#, fuzzy
 msgid ""
 "%{color} player, you have lost your last town. If you do not conquer another "
-"town in next week, you will be eliminated."
+"town in the next week, you will be eliminated."
 msgstr ""
 "%{color} hráči, přišel jsi o své poslední město. Pokud do týdne nedobiješ "
 "nějaké město, tak budeš vyloučen ze hry."
@@ -5340,7 +5470,8 @@ msgstr ""
 msgid "Kingdom Summary"
 msgstr "Přehled Království"
 
-msgid "View a Summary of your Kingdom."
+#, fuzzy
+msgid "View a summary of your Kingdom."
 msgstr "Zobraz přehled o svém království."
 
 msgid "Cast an adventure spell."
@@ -5349,7 +5480,8 @@ msgstr "Seslat kouzlo."
 msgid "End Turn"
 msgstr "Ukončit tah"
 
-msgid "End your turn and left the computer take its turn."
+#, fuzzy
+msgid "End your turn and let the computer take its turn."
 msgstr "Ukonči svůj tah a nech táhnout počítač."
 
 msgid "Adventure Options"
@@ -5474,10 +5606,12 @@ msgstr ""
 msgid "Handicap"
 msgstr "Hendikep"
 
+#, fuzzy
 msgid ""
-"This lets you change the handicap of a particular player. Only humans may be "
-"handicapped. Handicapped players start with fewer resources and earn 15 or "
-"30% fewer resources per turn for mild and severe handicaps, respectively."
+"This lets you change the handicap of a particular player. Only human players "
+"may have a handicap. Handicapped players start with fewer resources and earn "
+"15 or 30% fewer resources per turn for mild and severe handicaps, "
+"respectively."
 msgstr ""
 "Tímto můžete změnit hendikep pro konkrétního hráče. Pouze lidé mohou být "
 "hendikepovaní. Hendikepovaní hráči začínají s menším počtem zdrojů a "
@@ -5490,14 +5624,17 @@ msgstr "%{color} hráč"
 msgid "No Handicap"
 msgstr "Bez hendikepu"
 
-msgid "No special restrictions on start resources and earning them per turn."
+#, fuzzy
+msgid ""
+"No special restrictions on starting resources and resource income per turn."
 msgstr "Žádná omezení zdrojů při startu nebo získávání zdrojů během hry."
 
 msgid "Mild Handicap"
 msgstr "Lehký hendikep"
 
+#, fuzzy
 msgid ""
-"Mild handicapped players start with fewer resources and earn 15% fewer "
+"Players with mild handicap start with fewer resources and earn 15% fewer "
 "resources per turn."
 msgstr ""
 "Lehce hendikepovaní hráči začínají s menším počtem zdrojů a získávají o 15% "
@@ -5506,15 +5643,34 @@ msgstr ""
 msgid "Severe Handicap"
 msgstr "Těžký hendikep"
 
+#, fuzzy
 msgid ""
-"Severe handicapped players start with fewer resources and earn 30% fewer "
+"Players with severe handicap start with fewer resources and earn 30% fewer "
 "resources per turn."
 msgstr ""
 "Těžce hendikepovaní hráči začínají s menším počtem zdrojů a získávají o 30% "
 "méně zdrojů za den."
 
+msgid ""
+"Default\n"
+"value"
+msgstr ""
+
+#, fuzzy
+msgid "Set %{skill} Skill"
+msgstr "Nastav útočnou sílu"
+
+msgid "Set %{skill} base value. Right-click to reset all skills to default."
+msgstr ""
+
 msgid "View %{skill} Info"
 msgstr "Zobrazit informace o %{skill}"
+
+#, fuzzy
+msgid ""
+"Default\n"
+"skill"
+msgstr "Obranná Síla"
 
 msgid "Keyboard|123"
 msgstr ""
@@ -5602,10 +5758,10 @@ msgstr ""
 msgid ", FPS: "
 msgstr ""
 
-msgid "%{object} robber"
+msgid "shipAndGraveyard|%{object} robber"
 msgstr ""
 
-msgid "%{object} raided"
+msgid "pyramid|%{object} raided"
 msgstr ""
 
 # Heroes names section - translate not needed
@@ -6024,7 +6180,7 @@ msgid ""
 "The magical, soothing beauty of the Mermaids reaches you and your crew.\n"
 "Just for a moment, you forget your worries and bask in the beauty of the "
 "moment.\n"
-"The mermaids charms bless you with increased luck for your next combat."
+"The mermaids' charms bless you with increased luck for your next combat."
 msgstr ""
 
 msgid ""
@@ -6563,8 +6719,8 @@ msgid ""
 msgstr ""
 
 msgid ""
-"The captain sighs. \"You don't have enough money, eh?  You can't expect me "
-"to give my maps away for free!\""
+"The captain sighs. \"You don't have enough money, eh? You can't expect me to "
+"give my maps away for free!\""
 msgstr ""
 
 msgid ""
@@ -6912,6 +7068,58 @@ msgid "%{name} the %{race} (Level %{level})"
 msgstr ""
 
 #, fuzzy
+msgid "Random hero (Level %{level})"
+msgstr "%{name} (Level %{level})"
+
+#, fuzzy
+msgid "Random %{race} hero (Level %{level})"
+msgstr "%{name} (Level %{level})"
+
+#, fuzzy
+msgid "Hero race:"
+msgstr "Obrazovka hrdiny"
+
+msgid "Are you sure you want to dismiss this Hero?"
+msgstr ""
+
+msgid "Set custom Experience value. Current value is default."
+msgstr ""
+
+msgid "Change Experience value. Right-click to reset to default value."
+msgstr ""
+
+#, fuzzy
+msgid "Set Experience value"
+msgstr "Zkušenosti"
+
+msgid "View Experience Info"
+msgstr ""
+
+msgid "Set custom Spell Points value. Current value is default."
+msgstr ""
+
+msgid "Change Spell Points value. Right-click to reset to default value."
+msgstr ""
+
+#, fuzzy
+msgid "Set Spell Points value"
+msgstr "Body Kouzla"
+
+msgid "View Spell Points Info"
+msgstr ""
+
+msgid "Set patrol radius in tiles"
+msgstr ""
+
+#, fuzzy
+msgid "Enter hero's name"
+msgstr "Ztráta hrdiny: %{name}'."
+
+#, fuzzy
+msgid "Click to change race."
+msgstr "Klikni pro zobrazení následujícího města."
+
+#, fuzzy
 msgid ""
 "'Spread' combat formation spreads the hero's units from the top to the "
 "bottom of the battlefield, with at least one empty space between each unit."
@@ -6926,21 +7134,6 @@ msgid ""
 msgstr ""
 "'Seskupená' bojová formace srazí tvoje jednotky do středu bojiště na tvé "
 "straně bojiště."
-
-msgid "Are you sure you want to dismiss this Hero?"
-msgstr ""
-
-msgid "View Experience Info"
-msgstr ""
-
-msgid "View Spell Points Info"
-msgstr ""
-
-msgid "Set army combat formation to 'Spread'"
-msgstr ""
-
-msgid "Set army combat formation to 'Grouped'"
-msgstr ""
 
 msgid "Exit Hero Screen"
 msgstr ""
@@ -6961,6 +7154,34 @@ msgstr "Zobrazit předchozí město"
 #, fuzzy
 msgid "Show next hero"
 msgstr "Zobrazit následující město"
+
+msgid "Set army combat formation to 'Spread'"
+msgstr ""
+
+msgid "Set army combat formation to 'Grouped'"
+msgstr ""
+
+msgid "Set hero's Artifacts. Right-click to reset Artifact."
+msgstr ""
+
+msgid "Set hero's Secondary Skills. Right-click to reset skill."
+msgstr ""
+
+msgid "Set hero's Army. Right-click to reset unit."
+msgstr ""
+
+msgid "Set hero's portrait. Right-click to reset to default."
+msgstr ""
+
+msgid "Click to change hero's name. Right-click to reset to default."
+msgstr ""
+
+msgid "Hero is in patrol mode in %{tiles} tiles radius. Click to disable it."
+msgstr ""
+
+#, fuzzy
+msgid "Click to enable hero's patrol mode."
+msgstr "Kliknout sem pro výběr scénáře."
 
 msgid "Blood Morale"
 msgstr "Krevní morálka"
@@ -7046,7 +7267,7 @@ msgid "The hero's spell power determines the duration or power of a spell."
 msgstr ""
 
 msgid ""
-" The hero's knowledge determines how many spell points the hero may have. "
+"The hero's knowledge determines how many spell points the hero may have. "
 "Under normal circumstances, a hero is limited to 10 spell points per level "
 "of knowledge."
 msgstr ""
@@ -7238,7 +7459,8 @@ msgstr "%{skill} kompletně ruší zpomalení na nerovném terénu."
 #, fuzzy
 msgid ""
 "%{skill} increases the damage done by the hero's range attacking creatures "
-"by %{count} percent."
+"by %{count} percent, and eliminates the %{penalty} percent penalty when "
+"shooting past obstacles (e.g. castle walls)."
 msgstr ""
 "%{skill} zvyšuje škody způsobené jednotek útočících na dálku o %{count} "
 "procent."
@@ -7441,8 +7663,9 @@ msgstr "Červený"
 msgid "Experience"
 msgstr "Zkušenosti"
 
+#, fuzzy
 msgid ""
-"Experience allows your heroes to go up levels, increasing their primary and "
+"Experience allows your heroes to gain levels, increasing their primary and "
 "secondary skills."
 msgstr ""
 "Zkušenosti umožňují tvým hrdinům postupovat na vyšší úrovné a zvyšovat "
@@ -7495,7 +7718,7 @@ msgstr "Irské"
 
 #, fuzzy
 msgid ""
-"Bad luck sometimes falls on the hero's units in combat, causing their "
+"Negative luck sometimes falls on the hero's units in combat, causing their "
 "attacks to only do half damage."
 msgstr ""
 "Nízké štěstí občas dolehne na Tvoje jednotky v bitvě a zapříčíní, že jejich "
@@ -7511,7 +7734,7 @@ msgstr ""
 
 #, fuzzy
 msgid ""
-"Good luck sometimes lets the hero's units get lucky attacks (double "
+"Positive luck sometimes lets the hero's units get lucky attacks (double "
 "strength) in combat."
 msgstr ""
 "Vysoké štěstí občas způsobí šťastný úder Tvých jednotek (dvojitou silou) v "
@@ -7539,7 +7762,7 @@ msgid "morale|Blood!"
 msgstr "Krev!"
 
 #, fuzzy
-msgid "Bad morale may cause the hero's units to freeze in combat."
+msgid "Negative morale may cause the hero's units to freeze in combat."
 msgstr "Zlá morálka může způsobit, že Tvé jednotky v bitvě ztuhnou."
 
 #, fuzzy
@@ -7551,7 +7774,7 @@ msgstr ""
 "ale ani v boji neztuhnou."
 
 #, fuzzy
-msgid "Good morale may give the hero's units extra attacks in combat."
+msgid "Positive morale may give the hero's units extra attacks in combat."
 msgstr "Dobrá morálka může dát Tvým jednotkám jeden útok navíc."
 
 msgid "Knight"
@@ -8138,6 +8361,13 @@ msgstr "Oltář přivolání Země"
 
 msgid "Water Summoning Altar"
 msgstr "Oltář přivolání Vody"
+
+#, fuzzy
+msgid "Swampy Lake"
+msgstr "Bažina"
+
+msgid "Frozen Lake"
+msgstr ""
 
 msgid "Unknown Monster"
 msgstr "Neznámá stvůra"
@@ -10515,13 +10745,14 @@ msgstr ""
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
 
-#, fuzzy
-#~ msgid "Ocean object"
-#~ msgstr "Pustina"
+#~ msgid "Set Defense Skill"
+#~ msgstr "Nastav obrannou sílu"
 
-#, fuzzy
-#~ msgid "Desert Objects"
-#~ msgstr "Pouštní stan"
+#~ msgid "Set Power Skill"
+#~ msgstr "Nastav sílu kouzel"
 
-#~ msgid "vs"
-#~ msgstr "versus"
+#~ msgid "Set Knowledge Skill"
+#~ msgstr "Nastav znalosti"
+
+#~ msgid "Multiple"
+#~ msgstr "Vícero"

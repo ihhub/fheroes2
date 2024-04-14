@@ -52,8 +52,6 @@
 
 namespace
 {
-    const int32_t textOffset = 24;
-
     void SwitchMaxMinButtons( fheroes2::ButtonBase & minButton, fheroes2::ButtonBase & maxButton, uint32_t currentValue, uint32_t minimumValue )
     {
         const bool isMinValue = ( currentValue <= minimumValue );
@@ -237,9 +235,8 @@ bool Dialog::InputString( const std::string & header, std::string & res, const s
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
-    res.clear();
-    res.reserve( 48 );
-    size_t charInsertPos = 0;
+    res.reserve( charLimit == 0 ? 48 : charLimit );
+    size_t charInsertPos = res.size();
 
     const fheroes2::Text titlebox( title, fheroes2::FontType::normalYellow() );
     const fheroes2::Text textbox( header, fheroes2::FontType::normalWhite() );
@@ -254,7 +251,7 @@ bool Dialog::InputString( const std::string & header, std::string & res, const s
     const fheroes2::Rect & box_rt = box.GetArea();
 
     if ( !title.empty() ) {
-        titlebox.draw( box_rt.x + ( box_rt.width - textbox.width() ) / 2, box_rt.y + 12, BOXAREA_WIDTH, display );
+        titlebox.draw( box_rt.x, box_rt.y + 12, BOXAREA_WIDTH, display );
     }
 
     // text
@@ -266,11 +263,13 @@ bool Dialog::InputString( const std::string & header, std::string & res, const s
     dst_pt.y = box_rt.y + 10 + titleHeight + textbox.height( BOXAREA_WIDTH ) + 10;
     dst_pt.x = box_rt.x + ( box_rt.width - inputArea.width() ) / 2;
     fheroes2::Blit( inputArea, display, dst_pt.x, dst_pt.y );
-    const fheroes2::Rect text_rt( dst_pt.x, dst_pt.y, inputArea.width(), inputArea.height() );
+    fheroes2::Point inputAreaPos( 13, 1 );
+    const fheroes2::Rect textInputArea( dst_pt.x + inputAreaPos.x, dst_pt.y + inputAreaPos.y, inputArea.width() - 26, inputArea.height() - 3 );
 
-    fheroes2::Text text( "_", fheroes2::FontType::normalWhite() );
-    fheroes2::Blit( inputArea, display, text_rt.x, text_rt.y );
-    text.draw( text_rt.x + ( text_rt.width - text.width() ) / 2, text_rt.y + 3, display );
+    bool isCursorVisible = true;
+    fheroes2::Text text( insertCharToString( res, charInsertPos, isCursorVisible ? '_' : '\x7F' ), fheroes2::FontType::normalWhite() );
+    text.fitToOneRow( textInputArea.width );
+    text.drawInRoi( textInputArea.x + ( textInputArea.width - text.width() ) / 2, textInputArea.y + 2, display, textInputArea );
 
     const int okayButtonICNID = isEvilInterface ? ICN::UNIFORM_EVIL_OKAY_BUTTON : ICN::UNIFORM_GOOD_OKAY_BUTTON;
 
@@ -309,8 +308,6 @@ bool Dialog::InputString( const std::string & header, std::string & res, const s
 
     LocalEvent & le = LocalEvent::Get();
 
-    bool isCursorVisible = true;
-
     Game::AnimateResetDelay( Game::DelayType::CURSOR_BLINK_DELAY );
 
     const bool isInGameKeyboardRequired = System::isVirtualKeyboardSupported();
@@ -331,7 +328,7 @@ bool Dialog::InputString( const std::string & header, std::string & res, const s
             break;
         }
 
-        if ( le.MouseClickLeft( buttonVirtualKB.area() ) || ( isInGameKeyboardRequired && le.MouseClickLeft( text_rt ) ) ) {
+        if ( le.MouseClickLeft( buttonVirtualKB.area() ) || ( isInGameKeyboardRequired && le.MouseClickLeft( textInputArea ) ) ) {
             fheroes2::openVirtualKeyboard( res );
             if ( charLimit > 0 && res.size() > charLimit ) {
                 res.resize( charLimit );
@@ -345,9 +342,9 @@ bool Dialog::InputString( const std::string & header, std::string & res, const s
                 redraw = true;
             }
         }
-        else if ( le.MouseClickLeft( text_rt ) ) {
+        else if ( le.MouseClickLeft( textInputArea ) ) {
             charInsertPos = fheroes2::getTextInputCursorPosition( res, fheroes2::FontType::normalWhite(), charInsertPos, le.GetMouseCursor().x,
-                                                                  text_rt.x + ( text_rt.width - text.width() ) / 2 );
+                                                                  textInputArea.x + ( textInputArea.width - text.width() ) / 2 );
 
             redraw = true;
         }
@@ -380,10 +377,10 @@ bool Dialog::InputString( const std::string & header, std::string & res, const s
             }
 
             text.set( insertCharToString( res, charInsertPos, isCursorVisible ? '_' : '\x7F' ), fheroes2::FontType::normalWhite() );
-            text.fitToOneRow( inputArea.width() - textOffset );
+            text.fitToOneRow( textInputArea.width );
 
-            fheroes2::Blit( inputArea, display, text_rt.x, text_rt.y );
-            text.draw( text_rt.x + ( text_rt.width - text.width() ) / 2, text_rt.y + 3, display );
+            fheroes2::Copy( inputArea, inputAreaPos.x, inputAreaPos.y, display, textInputArea );
+            text.drawInRoi( textInputArea.x + ( textInputArea.width - text.width() ) / 2, textInputArea.y + 2, display, textInputArea );
             display.render();
         }
     }
@@ -391,7 +388,7 @@ bool Dialog::InputString( const std::string & header, std::string & res, const s
     return !res.empty();
 }
 
-int Dialog::ArmySplitTroop( uint32_t freeSlots, const uint32_t redistributeMax, uint32_t & redistributeCount, bool & useFastSplit )
+int Dialog::ArmySplitTroop( uint32_t freeSlots, const uint32_t redistributeMax, uint32_t & redistributeCount, bool & useFastSplit, const std::string & troopName )
 {
     assert( freeSlots > 0 );
 
@@ -402,9 +399,20 @@ int Dialog::ArmySplitTroop( uint32_t freeSlots, const uint32_t redistributeMax, 
 
     const uint32_t min = std::min( 1U, redistributeMax );
     const int spacer = 10;
+    const fheroes2::Text header( troopName, fheroes2::FontType::normalYellow() );
+    const int32_t headerHeight = header.height() + 6;
+
+    const std::string msg( _( "How many creatures do you wish to move?" ) );
+    fheroes2::Text titleText( msg, fheroes2::FontType::normalWhite() );
+    titleText.setUniformVerticalAlignment( false );
+    const int32_t titleHeight = headerHeight + titleText.rows( BOXAREA_WIDTH ) * titleText.height();
+
+    fheroes2::Text slotSeparationText( _( "Select how many units to separate into:" ), fheroes2::FontType::normalWhite() );
+    slotSeparationText.setUniformVerticalAlignment( false );
+    const int32_t bodyHeight = slotSeparationText.rows( BOXAREA_WIDTH ) * slotSeparationText.height();
 
     const int defaultYPosition = 160;
-    const int boxHeight = freeSlots > 1 ? 90 + spacer : 45;
+    const int boxHeight = freeSlots > 1 ? 56 + spacer + titleHeight + bodyHeight : 45;
     const int boxYPosition = defaultYPosition + ( ( display.height() - display.DEFAULT_HEIGHT ) / 2 ) - boxHeight;
 
     const NonFixedFrameBox box( boxHeight, boxYPosition, true );
@@ -412,11 +420,12 @@ int Dialog::ArmySplitTroop( uint32_t freeSlots, const uint32_t redistributeMax, 
 
     const fheroes2::Rect & pos = box.GetArea();
     const int center = pos.x + pos.width / 2;
+    const int textTopOffset = 13;
 
-    fheroes2::Text text( _( "How many troops to move?" ), fheroes2::FontType::normalWhite() );
-    text.draw( center - text.width() / 2, pos.y + 2, display );
+    header.draw( pos.x, pos.y + 2, BOXAREA_WIDTH, display );
+    titleText.draw( pos.x, pos.y + 2 + headerHeight, BOXAREA_WIDTH, display );
 
-    sel.SetPos( fheroes2::Point( pos.x + 70, pos.y + 30 ) );
+    sel.SetPos( fheroes2::Point( pos.x + 70, pos.y + textTopOffset + titleHeight ) );
     sel.Redraw();
 
     fheroes2::MovableSprite ssp;
@@ -435,11 +444,11 @@ int Dialog::ArmySplitTroop( uint32_t freeSlots, const uint32_t redistributeMax, 
 
             const int spriteWidth = sprites[i].width();
             const int offset = spriteWidth * ( 2 * static_cast<int>( i ) + 1 - static_cast<int>( freeSlots ) ) / 2;
-            vrts[i] = fheroes2::Rect( center + offset + deltaXStart + i * deltaX, pos.y + 95, spriteWidth, sprites[i].height() );
+            vrts[i] = fheroes2::Rect( center + offset + deltaXStart + static_cast<int>( i ) * deltaX, pos.y + textTopOffset + titleHeight + bodyHeight + 45, spriteWidth,
+                                      sprites[i].height() );
         }
 
-        text.set( _( "Fast separation into slots:" ), fheroes2::FontType::normalWhite() );
-        text.draw( center - text.width() / 2, pos.y + 67, display );
+        slotSeparationText.draw( pos.x, pos.y + textTopOffset + titleHeight + 37, BOXAREA_WIDTH, display );
 
         for ( uint32_t i = 0; i < freeSlots - 1; ++i ) {
             fheroes2::Blit( sprites[i], display, vrts[i].x, vrts[i].y );
@@ -459,7 +468,7 @@ int Dialog::ArmySplitTroop( uint32_t freeSlots, const uint32_t redistributeMax, 
     fheroes2::ButtonGroup btnGroups( box.GetArea(), Dialog::OK | Dialog::CANCEL );
     btnGroups.draw();
 
-    const fheroes2::Point minMaxButtonOffset( pos.x + 165, pos.y + 30 );
+    const fheroes2::Point minMaxButtonOffset( pos.x + 165, pos.y + textTopOffset + titleHeight );
     const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
     fheroes2::Button buttonMax( minMaxButtonOffset.x, minMaxButtonOffset.y, isEvilInterface ? ICN::UNIFORM_EVIL_MAX_BUTTON : ICN::UNIFORM_GOOD_MAX_BUTTON, 0, 1 );
     fheroes2::Button buttonMin( minMaxButtonOffset.x, minMaxButtonOffset.y, isEvilInterface ? ICN::UNIFORM_EVIL_MIN_BUTTON : ICN::UNIFORM_GOOD_MIN_BUTTON, 0, 1 );

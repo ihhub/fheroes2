@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2012 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -45,6 +45,7 @@
 #include "icn.h"
 #include "image.h"
 #include "interface_base.h"
+#include "interface_gamearea.h"
 #include "interface_icons.h"
 #include "interface_list.h"
 #include "kingdom.h"
@@ -158,7 +159,7 @@ struct HeroRow
         secSkillsBar->setInBetweenItemsOffset( { -1, 8 } );
         secSkillsBar->SetContent( hero->GetSecondarySkills().ToVector() );
 
-        primSkillsBar = std::make_unique<PrimarySkillsBar>( hero, true );
+        primSkillsBar = std::make_unique<PrimarySkillsBar>( hero, true, false, false );
         primSkillsBar->setTableSize( { 4, 1 } );
         primSkillsBar->setInBetweenItemsOffset( { 2, 0 } );
         primSkillsBar->SetTextOff( 20, -13 );
@@ -867,6 +868,9 @@ void Kingdom::openOverviewDialog()
 
         // Exit this dialog.
         if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() ) {
+            // Disable fast scroll for resolutions where the exit button is directly above the border.
+            Interface::AdventureMap::Get().getGameArea().setFastScrollStatus( false );
+
             // Fade-out Kingdom overview dialog.
             fheroes2::fadeOutDisplay( background.activeArea(), !isDefaultScreenSize );
             if ( isDefaultScreenSize ) {

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2011 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -25,11 +25,11 @@
 #define H2PLAYERS_H
 
 #include <cstdint>
-#include <memory>
 #include <string>
 #include <utility>
 #include <vector>
 
+#include "ai_personality.h"
 #include "bitmodes.h"
 #include "color.h"
 
@@ -38,11 +38,6 @@ class StreamBase;
 namespace Maps
 {
     struct FileInfo;
-}
-
-namespace AI
-{
-    class Base;
 }
 
 class Castle;
@@ -115,7 +110,8 @@ public:
         SEVERE, // 30% fewer resources per turn
     };
 
-    explicit Player( int col = Color::NONE );
+    explicit Player( const int col = Color::NONE );
+
     ~Player() override = default;
 
     bool isColor( int col ) const
@@ -140,7 +136,7 @@ public:
         control = ctl;
     }
 
-    void SetPlay( bool );
+    void SetPlay( const bool f );
 
     void SetFriends( int f )
     {
@@ -207,7 +203,7 @@ protected:
     int friends;
     std::string name;
     Focus focus;
-    std::shared_ptr<AI::Base> _ai;
+    AI::Personality _aiPersonality{ AI::Personality::NONE };
     HandicapStatus _handicapStatus;
 
 #if defined( WITH_DEBUG )

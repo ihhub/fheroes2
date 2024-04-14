@@ -20,6 +20,7 @@
 
 #pragma once
 
+#include <cstddef>
 #include <cstdint>
 
 namespace Maps
@@ -36,13 +37,20 @@ namespace Maps
     enum class ObjectGroup : int32_t;
 
     bool readMapInEditor( const Map_Format::MapFormat & map );
+    bool readAllTiles( const Map_Format::MapFormat & map );
 
     bool saveMapInEditor( Map_Format::MapFormat & map );
 
     void readTileTerrain( Tiles & tile, const Map_Format::TileInfo & info );
-    void readTileObject( Tiles & tile, const Map_Format::ObjectInfo & object );
+    bool readTileObject( Tiles & tile, const Map_Format::ObjectInfo & object );
 
     void writeTile( const Tiles & tile, Map_Format::TileInfo & info );
 
     void addObjectToMap( Map_Format::MapFormat & map, const int32_t tileId, const ObjectGroup group, const uint32_t index );
+
+    bool updateMapPlayers( Map_Format::MapFormat & map );
+
+    uint8_t getTownColorIndex( const Map_Format::MapFormat & map, const size_t tileIndex, const uint32_t id );
+
+    bool isJailObject( const ObjectGroup group, const uint32_t index );
 }

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -66,7 +66,19 @@ void StringReplace( std::string & dst, const char * pred, const T value )
     StringReplace( dst, pred, std::to_string( value ) );
 }
 
-int CountBits( uint32_t );
+// Returns the number of bits that are set in the number passed as an argument
+constexpr int CountBits( uint32_t val )
+{
+    int res = 0;
+
+    for ( uint32_t itr = 0x00000001; itr; itr <<= 1 ) {
+        if ( val & itr ) {
+            ++res;
+        }
+    }
+
+    return res;
+}
 
 // Returns a new text string with the inserted character in the input string at the specified position.
 std::string insertCharToString( const std::string & inputString, const size_t position, const char character );

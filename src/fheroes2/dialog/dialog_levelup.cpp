@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -170,17 +170,17 @@ int DialogSelectSecondary( const std::string & name, const int primarySkillType,
         le.MousePressLeft( button_learn2.area() ) ? button_learn2.drawOnPress() : button_learn2.drawOnRelease();
         le.MousePressLeft( button_hero.area() ) ? button_hero.drawOnPress() : button_hero.drawOnRelease();
 
-        if ( le.MouseClickLeft( button_learn1.area() ) ) {
+        if ( le.MouseClickLeft( button_learn1.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_LEFT ) ) {
             return sec1.Skill();
         }
 
-        if ( le.MouseClickLeft( button_learn2.area() ) ) {
+        if ( le.MouseClickLeft( button_learn2.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_RIGHT ) ) {
             return sec2.Skill();
         }
 
         if ( le.MouseClickLeft( button_hero.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) ) {
             LocalEvent::GetClean();
-            hero.OpenDialog( false, true, true, true, true );
+            hero.OpenDialog( false, true, true, true, true, false );
             display.render();
         }
 

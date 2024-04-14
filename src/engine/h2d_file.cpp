@@ -96,9 +96,9 @@ namespace fheroes2
         return _fileStream.getRaw( it->second.second );
     }
 
-    std::set<std::string> H2DReader::getAllFileNames() const
+    std::set<std::string, std::less<>> H2DReader::getAllFileNames() const
     {
-        std::set<std::string> names;
+        std::set<std::string, std::less<>> names;
 
         for ( const auto & value : _fileNameAndOffset ) {
             names.insert( value.first );
@@ -142,7 +142,7 @@ namespace fheroes2
         }
 
         for ( const auto & data : _fileData ) {
-            fileStream.putRaw( reinterpret_cast<const char *>( data.second.data() ), data.second.size() );
+            fileStream.putRaw( data.second.data(), data.second.size() );
         }
 
         return true;
@@ -160,7 +160,7 @@ namespace fheroes2
 
     bool H2DWriter::add( H2DReader & reader )
     {
-        const std::set<std::string> names = reader.getAllFileNames();
+        const std::set<std::string, std::less<>> names = reader.getAllFileNames();
 
         for ( const std::string & name : names ) {
             if ( !add( name, reader.getFile( name ) ) ) {
@@ -213,8 +213,8 @@ namespace fheroes2
         stream.putLE32( static_cast<uint32_t>( image.y() ) );
 
         const size_t imageSize = static_cast<size_t>( image.width() ) * static_cast<size_t>( image.height() );
-        stream.putRaw( reinterpret_cast<const char *>( image.image() ), imageSize );
-        stream.putRaw( reinterpret_cast<const char *>( image.transform() ), imageSize );
+        stream.putRaw( image.image(), imageSize );
+        stream.putRaw( image.transform(), imageSize );
 
         return writer.add( name, stream.getRaw() );
     }

@@ -36,6 +36,7 @@ class Monster
 public:
     enum
     {
+        JOIN_CONDITION_UNSET = -1,
         JOIN_CONDITION_SKIP = 0,
         JOIN_CONDITION_MONEY = 1,
         JOIN_CONDITION_FREE = 2

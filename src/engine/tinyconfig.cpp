@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -30,6 +30,7 @@
 #include <cstddef>
 #include <cstdint>
 #include <limits>
+#include <ostream>
 #include <regex>
 #include <string_view>
 #include <system_error>
@@ -37,6 +38,7 @@
 #include <utility>
 #include <vector>
 
+#include "logging.h"
 #include "serialize.h"
 #include "tools.h"
 
@@ -69,7 +71,7 @@ namespace
     }
 }
 
-TinyConfig::TinyConfig( char sep, char com )
+TinyConfig::TinyConfig( const char sep, const char com )
     : separator( sep )
     , comment( com )
 {}
@@ -77,26 +79,30 @@ TinyConfig::TinyConfig( char sep, char com )
 bool TinyConfig::Load( const std::string & cfile )
 {
     StreamFile sf;
-    if ( !sf.open( cfile, "rb" ) )
+    if ( !sf.open( cfile, "rb" ) ) {
         return false;
+    }
 
     std::vector<std::string> rows = StringSplit( sf.toString(), '\n' );
 
     for ( std::vector<std::string>::const_iterator it = rows.begin(); it != rows.end(); ++it ) {
         std::string str = StringTrim( *it );
 
-        if ( str.empty() || str[0] == comment )
+        if ( str.empty() || str[0] == comment ) {
             continue;
+        }
 
         size_t pos = str.find( separator );
-        if ( std::string::npos != pos ) {
-            std::string left( str.substr( 0, pos ) );
-            std::string right( str.substr( pos + 1, str.length() - pos - 1 ) );
+        if ( pos == std::string::npos ) {
+            continue;
+        }
 
-            left = StringTrim( left );
-            right = StringTrim( right );
+        const std::string key = ModifyKey( StringTrim( str.substr( 0, pos ) ) );
+        const std::string val = StringTrim( str.substr( pos + 1, str.length() - pos - 1 ) );
 
-            emplace( ModifyKey( left ), right );
+        const auto [dummy, inserted] = emplace( key, val );
+        if ( !inserted ) {
+            ERROR_LOG( "Duplicate key '" << key << "' was found when reading the config file " << cfile )
         }
     }
 

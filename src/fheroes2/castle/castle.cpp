@@ -429,6 +429,19 @@ void Castle::LoadFromMP2( const std::vector<uint8_t> & data )
     PostLoad();
 }
 
+void Castle::loadFromResurrectionMap( const Maps::Map_Format::CastleMetadata & /*metadata*/, const bool isCastleBuilt )
+{
+    if ( isCastleBuilt ) {
+        building |= BUILD_CASTLE;
+    }
+    else {
+        building |= BUILD_TENT;
+        SetModes( ALLOWCASTLE );
+    }
+
+    PostLoad();
+}
+
 void Castle::PostLoad()
 {
     // dwelling pack
@@ -1034,7 +1047,7 @@ bool Castle::AllowBuyHero( std::string * msg ) const
 
     if ( !myKingdom.AllowRecruitHero( true ) ) {
         if ( msg ) {
-            *msg = _( "Cannot afford a Hero" );
+            *msg = _( "Cannot afford a Hero." );
         }
         return false;
     }
@@ -2658,7 +2671,7 @@ bool Castle::BuyBoat() const
     return true;
 }
 
-void Castle::setName( const std::set<std::string> & usedNames )
+void Castle::setName( const std::set<std::string, std::less<>> & usedNames )
 {
     assert( name.empty() );
 

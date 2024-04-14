@@ -533,15 +533,10 @@ void Maps::Tiles::setTerrain( const uint16_t terrainImageIndex, const bool horiz
     _terrainFlags = ( verticalFlip ? 1 : 0 ) + ( horizontalFlip ? 2 : 0 );
 
     const int newGround = Ground::getGroundByImageIndex( terrainImageIndex );
-    const bool isNewGroundWater = ( newGround == Ground::WATER );
-    const int oldGround = GetGround();
 
-    if ( ( isNewGroundWater || oldGround == Ground::WATER ) && oldGround != newGround ) {
-        // When changing water to land and vice-versa we should remove all objects from the tile.
-        eraseOjects( *this, ObjectErasureType::ALL_OBJECTS );
-    }
+    // TODO: Remove all objects from map when changing water to land and vice-versa in both 'Map_Format' and 'tiles'.
 
-    if ( ( _isTileMarkedAsRoad || isStream() ) && !isNewGroundWater && Maps::Ground::doesTerrainImageIndexContainEmbeddedObjects( terrainImageIndex ) ) {
+    if ( ( _isTileMarkedAsRoad || isStream() ) && ( newGround != Ground::WATER ) && Maps::Ground::doesTerrainImageIndexContainEmbeddedObjects( terrainImageIndex ) ) {
         // There cannot be extra objects under the roads and streams.
         _terrainImageIndex = Ground::getRandomTerrainImageIndex( Ground::getGroundByImageIndex( terrainImageIndex ), false );
 
@@ -1325,6 +1320,15 @@ void Maps::Tiles::fixTileObjectType( Tiles & tile )
         return;
     }
 
+    // Oasis object has 2 top tiles being marked as part of bottom object layer while in reality they should be at the top level.
+    if ( originalObjectType == MP2::OBJ_NON_ACTION_OASIS && tile._mainAddon._objectIcnType == MP2::OBJ_ICN_TYPE_OBJNDSRT
+         && ( tile._mainAddon._imageIndex == 105 || tile._mainAddon._imageIndex == 106 ) ) {
+        tile._addonTopLayer.emplace_back();
+        std::swap( tile._addonTopLayer.back(), tile._mainAddon );
+
+        return;
+    }
+
     // Original Editor marks Reefs as Stones. We're fixing this issue by changing the type of the object without changing the content of a tile.
     // This is also required in order to properly calculate Reefs' passability.
     if ( originalObjectType == MP2::OBJ_ROCK && isValidReefsSprite( tile._mainAddon._objectIcnType, tile._mainAddon._imageIndex ) ) {
@@ -1860,26 +1864,22 @@ StreamBase & Maps::operator>>( StreamBase & msg, Tiles & tile )
     msg >> tile._mainAddon._imageIndex;
 
     using MainObjectTypeUnderlyingType = std::underlying_type_t<decltype( tile._mainObjectType )>;
-    static_assert( std::is_same_v<MainObjectTypeUnderlyingType, uint8_t>, "Type of _mainObjectType has been changed, check the logic below" );
+    static_assert( std::is_same_v<MainObjectTypeUnderlyingType, uint16_t>, "Type of _mainObjectType has been changed, check the logic below" );
 
-    MainObjectTypeUnderlyingType mainObjectType = MP2::OBJ_NONE;
-    msg >> mainObjectType;
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_1100_RELEASE, "Remove the logic below." );
+    if ( Game::GetVersionOfCurrentSaveFile() < FORMAT_VERSION_1100_RELEASE ) {
+        uint8_t mainObjectType = static_cast<uint8_t>( MP2::OBJ_NONE );
+        msg >> mainObjectType;
 
-    tile._mainObjectType = static_cast<MP2::MapObjectType>( mainObjectType );
-
-    msg >> tile._fogColors;
-
-    // We want to verify the size of array being present in the file.
-    std::vector<uint32_t> temp;
-    msg >> temp;
-
-    if ( tile._metadata.size() != temp.size() ) {
-        // This is a corrupted file!
-        assert( 0 );
+        tile._mainObjectType = static_cast<MP2::MapObjectType>( mainObjectType );
     }
     else {
-        std::copy_n( temp.begin(), tile._metadata.size(), tile._metadata.begin() );
+        MainObjectTypeUnderlyingType mainObjectType = MP2::OBJ_NONE;
+        msg >> mainObjectType;
+
+        tile._mainObjectType = static_cast<MP2::MapObjectType>( mainObjectType );
     }
 
-    return msg >> tile._occupantHeroId >> tile._isTileMarkedAsRoad >> tile._addonBottomLayer >> tile._addonTopLayer >> tile._mainAddon._layerType >> tile._boatOwnerColor;
+    return msg >> tile._fogColors >> tile._metadata >> tile._occupantHeroId >> tile._isTileMarkedAsRoad >> tile._addonBottomLayer >> tile._addonTopLayer
+           >> tile._mainAddon._layerType >> tile._boatOwnerColor;
 }

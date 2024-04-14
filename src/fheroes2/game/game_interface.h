@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -122,6 +122,7 @@ namespace Interface
         void EventPuzzleMaps() const;
         static fheroes2::GameMode EventScenarioInformation();
         void EventSystemDialog() const;
+        void EventSwitchFocusedHero( const int32_t tileIndex );
         void EventNextHero();
         void EventNextTown();
         fheroes2::GameMode EventHeroMovement();
@@ -147,6 +148,7 @@ namespace Interface
 
         void mouseCursorAreaClickLeft( const int32_t tileIndex ) override;
         void mouseCursorAreaPressRight( const int32_t tileIndex ) const override;
+        void mouseCursorAreaLongPressLeft( const int32_t tileIndex ) override;
 
         void updateCursor( const int32_t tileIndex ) override;
 

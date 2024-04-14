@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2022 - 2023                                             *
+ *   Copyright (C) 2022 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -99,7 +99,7 @@ namespace
     {
         const bool isVSyncEnabled = Settings::Get().isVSyncEnabled();
 
-        fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::SPANEL, isVSyncEnabled ? 18 : 19 ), _( "V-Sync" ), isVSyncEnabled ? _( "on" ) : _( "off" ),
+        fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::SPANEL, isVSyncEnabled ? 18 : 19 ), _( "V-Sync" ), isVSyncEnabled ? _( "On" ) : _( "Off" ),
                               fheroes2::UiOptionTextWidth::TWO_ELEMENTS_ROW );
     }
 
@@ -117,7 +117,7 @@ namespace
         }
         info.draw( ( image.width() - info.width() ) / 2, ( image.height() - info.height() ) / 2, image );
 
-        fheroes2::drawOption( optionRoi, image, _( "System Info" ), isSystemInfoDisplayed ? _( "on" ) : _( "off" ), fheroes2::UiOptionTextWidth::TWO_ELEMENTS_ROW );
+        fheroes2::drawOption( optionRoi, image, _( "System Info" ), isSystemInfoDisplayed ? _( "On" ) : _( "Off" ), fheroes2::UiOptionTextWidth::TWO_ELEMENTS_ROW );
     }
 
     SelectedWindow showConfigurationWindow()
@@ -221,9 +221,11 @@ namespace
 
 namespace fheroes2
 {
-    void openGraphicsSettingsDialog( const std::function<void()> & updateUI )
+    bool openGraphicsSettingsDialog( const std::function<void()> & updateUI )
     {
         Settings & conf = Settings::Get();
+
+        bool saveConfiguration = false;
 
         SelectedWindow windowType = SelectedWindow::Configuration;
         while ( windowType != SelectedWindow::Exit ) {
@@ -233,29 +235,31 @@ namespace fheroes2
                 break;
             case SelectedWindow::Resolution:
                 if ( Dialog::SelectResolution() ) {
-                    conf.Save( Settings::configFileName );
+                    saveConfiguration = true;
                 }
                 updateUI();
                 windowType = SelectedWindow::Configuration;
                 break;
             case SelectedWindow::Mode:
                 conf.setFullScreen( !conf.FullScreen() );
-                conf.Save( Settings::configFileName );
+                saveConfiguration = true;
                 windowType = SelectedWindow::Configuration;
                 break;
             case SelectedWindow::VSync:
                 conf.setVSync( !conf.isVSyncEnabled() );
-                conf.Save( Settings::configFileName );
+                saveConfiguration = true;
                 windowType = SelectedWindow::Configuration;
                 break;
             case SelectedWindow::SystemInfo:
                 conf.setSystemInfo( !conf.isSystemInfoEnabled() );
-                conf.Save( Settings::configFileName );
+                saveConfiguration = true;
                 windowType = SelectedWindow::Configuration;
                 break;
             default:
-                return;
+                return saveConfiguration;
             }
         }
+
+        return saveConfiguration;
     }
 }
