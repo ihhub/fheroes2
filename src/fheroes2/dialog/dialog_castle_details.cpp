@@ -223,12 +223,8 @@ namespace
                 fheroes2::Copy( buildingImage, 0, 0, display, buildingImageRoi );
             }
             else {
-                fheroes2::ApplyPalette( buildingImage, 0, 0, display, buildingImageRoi.x, buildingImageRoi.y, buildingImageRoi.width, buildingImageRoi.height,
-                                        PAL::GetPalette( PAL::PaletteType::DARKENING ) );
-
-                const fheroes2::Text defaultText( _( "Default building" ), fheroes2::FontType::normalWhite() );
-                defaultText.drawInRoi( buildingImageRoi.x, buildingImageRoi.y + 3 + ( buildingImageRoi.height - defaultText.height( buildingImageRoi.width ) ) / 2,
-                                       buildingImageRoi.width, display, buildingImageRoi );
+                // Apply the blur effect originally used for the Holy Shout spell.
+                fheroes2::Copy( fheroes2::CreateHolyShoutEffect( buildingImage, 2, 15 ), 0, 0, display, buildingImageRoi );
             }
 
             // Build and restrict status indicator.
@@ -271,6 +267,11 @@ namespace
                                                          true, false );
                     fheroes2::Copy( textBackground, _buildArea.width + 5, 0, display, _banArea.x + 5, _area.y + 58, _banArea.width - 5, textBackground.height() );
                 }
+            }
+
+            if ( !isNotDefault ) {
+                // Make the header darker for the default buildings.
+                fheroes2::ApplyPalette( display, _area.x + 6, _area.y + 59, display, _area.x + 6, _area.y + 59, 125, 12, PAL::GetPalette( PAL::PaletteType::DARKENING ) );
             }
 
             const fheroes2::Text buildingName( Castle::GetStringBuilding( _getBuildindTypeForRender(), _race ), fheroes2::FontType::smallWhite() );
@@ -408,7 +409,7 @@ namespace Dialog
         fheroes2::Point dstPt( dialogRoi.x + rightPartOffsetX + 10, dialogRoi.y + 130 );
         fheroes2::MovableSprite allowCastleSign;
         const fheroes2::Rect allowCastleArea
-            = isCastle ? fheroes2::Rect( 0, 0, 0, 0 ) : drawCheckboxBackground( allowCastleSign, _( "Allow castle build" ), dstPt.x, dstPt.y, isEvilInterface );
+            = isCastle ? fheroes2::Rect( 0, 0, 0, 0 ) : drawCheckboxBackground( allowCastleSign, _( "Allow Castle build" ), dstPt.x, dstPt.y, isEvilInterface );
         ( !isCastle && castleMetadata.isCastleBuildAllowed() ) ? allowCastleSign.show() : allowCastleSign.hide();
 
         // Default buildings checkbox indicator.
@@ -550,7 +551,7 @@ namespace Dialog
                     display.render( allowCastleSign.getArea() );
                 }
                 else if ( le.MousePressRight() ) {
-                    fheroes2::showStandardTextMessage( _( "Allow Castle" ), message, Dialog::ZERO );
+                    fheroes2::showStandardTextMessage( _( "Allow Castle build" ), message, Dialog::ZERO );
                 }
             }
             else if ( le.MouseCursor( defaultBuildingsArea ) ) {
