@@ -700,7 +700,7 @@ namespace Interface
                    : fheroes2::GameMode::CANCEL;
     }
 
-    fheroes2::GameMode EditorInterface::eventSaveMap()
+    fheroes2::GameMode EditorInterface::SaveMap()
     {   
        return Dialog::YES
                        == fheroes2::showStandardTextMessage( "", _( "Are you sure you want to BREAK THE GAME?)" ),
@@ -763,7 +763,7 @@ namespace Interface
                 }
             }
             else if ( le.MouseClickLeft( buttonSave.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::WORLD_SAVE_GAME ) ) {
-                if ( eventSaveMap() == fheroes2::GameMode::WORLD_SAVE_GAME ) {
+                if ( SaveMap() == fheroes2::GameMode::WORLD_SAVE_GAME ) {
                     result = fheroes2::GameMode::WORLD_SAVE_GAME;
                     break;
                 }

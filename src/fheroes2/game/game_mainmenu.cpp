@@ -190,6 +190,9 @@ void Game::mainGameLoop( bool isFirstGameRun, bool isProbablyDemoVersion )
         case fheroes2::GameMode::EDITOR_LOAD_MAP:
             result = Editor::menuLoadMap();
             break;
+        case fheroes2::GameMode::WORLD_SAVE_GAME:
+            result = Editor::menuMain();
+            break;
 
         default:
             // If this assertion blows up then you are entering an infinite loop!
