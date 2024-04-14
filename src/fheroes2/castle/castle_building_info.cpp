@@ -22,6 +22,7 @@
 
 #include <algorithm>
 #include <cassert>
+#include <cstdint>
 
 #include "maps_fileinfo.h"
 #include "race.h"
@@ -1302,9 +1303,6 @@ namespace fheroes2
         case DWELLING_UPGRADE5:
             switch ( race ) {
             case Race::KNGT:
-                requirement |= DWELLING_MONSTER5;
-                break;
-
             case Race::BARB:
                 requirement |= DWELLING_MONSTER5;
                 break;
@@ -1327,9 +1325,6 @@ namespace fheroes2
         case DWELLING_UPGRADE6:
             switch ( race ) {
             case Race::KNGT:
-                requirement |= DWELLING_MONSTER6;
-                break;
-
             case Race::WRLK:
             case Race::WZRD:
                 requirement |= DWELLING_MONSTER6;
