@@ -706,6 +706,8 @@ bool World::loadResurrectionMap( const std::string & filename )
     std::set<uint32_t> adventureMapEventMetadataUIDs;
 #endif
 
+    std::set<fheroes2::Point> hiredHeroPos;
+
     for ( size_t tileId = 0; tileId < map.tiles.size(); ++tileId ) {
         const auto & tile = map.tiles[tileId];
 
@@ -788,7 +790,15 @@ bool World::loadResurrectionMap( const std::string & filename )
                         hero->SetColor( color );
 
                         hero->applyHeroMetadata( heroInfo, false, false );
+
+                        hiredHeroPos.emplace( static_cast<int32_t>( tileId ) % width, static_cast<int32_t>( tileId ) / width );
                     }
+                    else {
+                        VERBOSE_LOG( "A hero at position " << tileId << " with UID " << object.id << " failed to be hired." )
+                    }
+                }
+                else {
+                    VERBOSE_LOG( "A hero at position " << tileId << " with UID " << object.id << " cannot be hired." )
                 }
             }
             else if ( object.group == Maps::ObjectGroup::MONSTERS ) {
@@ -801,30 +811,6 @@ bool World::loadResurrectionMap( const std::string & filename )
 
                 for ( size_t idx = 0; idx < source.size(); idx++ ) {
                     tileData[idx] = static_cast<uint32_t>( source[idx] );
-                }
-            }
-            else if ( Maps::isJailObject( object.group, object.index ) ) {
-#if defined( WITH_DEBUG )
-                heroMetadataUIDs.emplace( object.id );
-#endif
-
-                assert( map.heroMetadata.find( object.id ) != map.heroMetadata.end() );
-
-                auto & heroInfo = map.heroMetadata[object.id];
-
-                const int color = Color::NONE;
-
-                if ( heroInfo.race == Race::RAND ) {
-                    heroInfo.race = static_cast<uint8_t>( Race::Rand() );
-                }
-
-                Heroes * hero = GetHeroForHire( heroInfo.race );
-                if ( hero != nullptr ) {
-                    hero->SetCenter( { static_cast<int32_t>( tileId ) % width, static_cast<int32_t>( tileId ) / width } );
-
-                    hero->SetColor( color );
-
-                    hero->applyHeroMetadata( heroInfo, true, false );
                 }
             }
             else if ( object.group == Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS ) {
@@ -854,6 +840,34 @@ bool World::loadResurrectionMap( const std::string & filename )
                     eventObject->setUIDAndIndex( static_cast<int32_t>( tileId ) );
                     map_objects.add( eventObject );
 
+                    break;
+                }
+                case MP2::OBJ_JAIL: {
+#if defined( WITH_DEBUG )
+                    heroMetadataUIDs.emplace( object.id );
+#endif
+
+                    assert( map.heroMetadata.find( object.id ) != map.heroMetadata.end() );
+
+                    auto & heroInfo = map.heroMetadata[object.id];
+
+                    const int color = Color::NONE;
+
+                    if ( heroInfo.race == Race::RAND ) {
+                        heroInfo.race = static_cast<uint8_t>( Race::Rand() );
+                    }
+
+                    Heroes * hero = GetHeroForHire( heroInfo.race );
+                    if ( hero != nullptr ) {
+                        hero->SetCenter( { static_cast<int32_t>( tileId ) % width, static_cast<int32_t>( tileId ) / width } );
+
+                        hero->SetColor( color );
+
+                        hero->applyHeroMetadata( heroInfo, true, false );
+                    }
+                    else {
+                        VERBOSE_LOG( "A hero at position " << tileId << " with UID " << object.id << " failed to be hired." )
+                    }
                     break;
                 }
                 case MP2::OBJ_SIGN: {
@@ -977,6 +991,37 @@ bool World::loadResurrectionMap( const std::string & filename )
         newEvent.firstOccurrenceDay = event.firstOccurrenceDay;
         newEvent.repeatPeriodInDays = event.repeatPeriodInDays;
         newEvent.resource = event.resources;
+    }
+
+    // Verify that a capture or loss object exists.
+    if ( map.lossConditionType == Maps::FileInfo::LOSS_HERO ) {
+        auto iter = hiredHeroPos.find( { static_cast<int32_t>( map.lossConditionMetadata[0] ), static_cast<int32_t>( map.lossConditionMetadata[1] ) } );
+        if ( iter == hiredHeroPos.end() ) {
+            VERBOSE_LOG( "A hero at position [" << map.lossConditionMetadata[0] << ", " << map.lossConditionMetadata[1] << "] does not exist." )
+            return false;
+        }
+    }
+    else if ( map.lossConditionType == Maps::FileInfo::LOSS_TOWN ) {
+        const Castle * castle = vec_castles.Get( { static_cast<int32_t>( map.lossConditionMetadata[0] ), static_cast<int32_t>( map.lossConditionMetadata[1] ) } );
+        if ( castle == nullptr ) {
+            VERBOSE_LOG( "A castle at position [" << map.lossConditionMetadata[0] << ", " << map.lossConditionMetadata[1] << "] does not exist." )
+            return false;
+        }
+    }
+
+    if ( map.victoryConditionType == Maps::FileInfo::VICTORY_KILL_HERO ) {
+        auto iter = hiredHeroPos.find( { static_cast<int32_t>( map.victoryConditionMetadata[0] ), static_cast<int32_t>( map.victoryConditionMetadata[1] ) } );
+        if ( iter == hiredHeroPos.end() ) {
+            VERBOSE_LOG( "A hero at position [" << map.victoryConditionMetadata[0] << ", " << map.victoryConditionMetadata[1] << "] does not exist." )
+            return false;
+        }
+    }
+    else if ( map.victoryConditionType == Maps::FileInfo::VICTORY_CAPTURE_TOWN ) {
+        const Castle * castle = vec_castles.Get( { static_cast<int32_t>( map.victoryConditionMetadata[0] ), static_cast<int32_t>( map.victoryConditionMetadata[1] ) } );
+        if ( castle == nullptr ) {
+            VERBOSE_LOG( "A castle at position [" << map.victoryConditionMetadata[0] << ", " << map.victoryConditionMetadata[1] << "] does not exist." )
+            return false;
+        }
     }
 
     fixCastleNames( vec_castles );

@@ -262,10 +262,10 @@ namespace Maps::Map_Format
 
         uint8_t victoryConditionType{ 0 };
         bool isVictoryConditionApplicableForAI{ false };
-        bool allowNormalVictory{ false };
+        bool allowNormalVictory{ true };
         std::vector<uint32_t> victoryConditionMetadata;
 
-        uint8_t lossCondition{ 0 };
+        uint8_t lossConditionType{ 0 };
         std::vector<uint32_t> lossConditionMetadata;
 
         int32_t size{ 0 };
