@@ -703,7 +703,7 @@ namespace Interface
     fheroes2::GameMode EditorInterface::SaveMap()
     {   
        return Dialog::YES
-                       == fheroes2::showStandardTextMessage( "", _( "Are you sure you want to BREAK THE GAME?)" ),
+                       == fheroes2::showStandardTextMessage( "", _( "Are you sure you want to go back to the editor main menu?)" ),
                                                              Dialog::YES | Dialog::NO )
                    ? fheroes2::GameMode::WORLD_SAVE_GAME
                    : fheroes2::GameMode::CANCEL;
