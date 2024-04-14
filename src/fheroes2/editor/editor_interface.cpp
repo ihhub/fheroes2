@@ -884,7 +884,7 @@ namespace Interface
                 else if ( objectType == MP2::OBJ_CASTLE || objectType == MP2::OBJ_RANDOM_TOWN || objectType == MP2::OBJ_RANDOM_CASTLE ) {
                     auto castleMetadata = _mapFormat.castleMetadata.find( object.id );
                     if ( castleMetadata != _mapFormat.castleMetadata.end() ) {
-                        const int race = Race::IndexToRace( objectInfo.metadata[0] );
+                        const int race = Race::IndexToRace( static_cast<int>( objectInfo.metadata[0] ) );
                         const int color = Color::IndexToColor( Maps::getTownColorIndex( _mapFormat, tileIndex, object.id ) );
                         Dialog::castleDetailsDialog( _mapFormat.castleMetadata[object.id], race, color );
                     }

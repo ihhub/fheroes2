@@ -36,6 +36,7 @@
 #include "buildinginfo.h"
 #include "castle.h"
 #include "castle_building_info.h"
+#include "color.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game_hotkeys.h"
