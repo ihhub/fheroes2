@@ -224,7 +224,9 @@ namespace
             }
             else {
                 // Apply the blur effect originally used for the Holy Shout spell.
-                fheroes2::Copy( fheroes2::CreateHolyShoutEffect( buildingImage, 2, 15 ), 0, 0, display, buildingImageRoi );
+                fheroes2::Copy( fheroes2::CreateHolyShoutEffect( buildingImage, 1, 0 ), 0, 0, display, buildingImageRoi );
+                fheroes2::ApplyPalette( display, buildingImageRoi.x, buildingImageRoi.y, display, buildingImageRoi.x, buildingImageRoi.y, buildingImageRoi.width,
+                                        buildingImageRoi.height, PAL::GetPalette( PAL::PaletteType::DARKENING ) );
             }
 
             // Build and restrict status indicator.
