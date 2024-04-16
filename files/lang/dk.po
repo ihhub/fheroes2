@@ -5673,7 +5673,7 @@ msgid ""
 "Default\n"
 "value"
 msgstr ""
-"Standard\n"
+"Standard-\n"
 "værdi"
 
 msgid "Set %{skill} Skill"
