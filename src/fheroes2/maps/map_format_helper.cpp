@@ -255,6 +255,12 @@ namespace Maps
                 assert( isMetadataEmplaced );
             }
         }
+        else if ( group == Maps::ObjectGroup::ADVENTURE_ARTIFACTS ) {
+            assert( index < Maps::getObjectsByGroup( group ).size() );
+
+            auto [metadata, isMetadataEmplaced] = map.standardMetadata.try_emplace( uid );
+            assert( isMetadataEmplaced );
+        }
     }
 
     bool updateMapPlayers( Map_Format::MapFormat & map )
