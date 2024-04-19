@@ -61,6 +61,7 @@
 #include "math_base.h"
 #include "monster.h"
 #include "mp2.h"
+#include "race.h"
 #include "render_processor.h"
 #include "screen.h"
 #include "settings.h"
@@ -1062,6 +1063,12 @@ namespace Interface
 
             setObjectOnTileAsAction( tile, groupType, _editorPanel.getSelectedObjectType() );
 
+            Heroes * hero = world.GetHeroForHire( Race::IndexToRace( static_cast<int>( objectInfo.metadata[1] ) ) );
+            if ( hero ) {
+                hero->SetCenter( tilePos );
+                hero->SetColor( color );
+            }
+
             if ( !Maps::updateMapPlayers( _mapFormat ) ) {
                 _warningMessage.reset( _( "Failed to update player information." ) );
             }
@@ -1287,6 +1294,8 @@ namespace Interface
             if ( !setObjectOnTile( world.GetTiles( tile.GetIndex() + 1 ), Maps::ObjectGroup::LANDSCAPE_FLAGS, color * 2 + 1 ) ) {
                 return;
             }
+
+            world.addCastle( tile.GetIndex(), Race::IndexToRace( static_cast<int>( townObjectInfo.metadata[0] ) ), Color::IndexToColor( color ) );
 
             action.commit();
 
