@@ -1066,7 +1066,7 @@ namespace Interface
             Heroes * hero = world.GetHeroForHire( Race::IndexToRace( static_cast<int>( objectInfo.metadata[1] ) ) );
             if ( hero ) {
                 hero->SetCenter( tilePos );
-                hero->SetColor( color );
+                hero->SetColor( static_cast<int>( color ) );
             }
 
             if ( !Maps::updateMapPlayers( _mapFormat ) ) {
