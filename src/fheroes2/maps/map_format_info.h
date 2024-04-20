@@ -65,8 +65,8 @@ namespace Maps::Map_Format
         // If the name is empty a random name is going to be set by the engine.
         std::string customName;
 
-        // Defending monsters that are set in the castle. Type ( < 0 ) means not set.
-        std::array<int32_t, 5> defenderMonsterType{ -1 };
+        // Defending monsters that are set in the castle. Type ( < 0 ) means default units (for neutral race) and 0 means an empty army slot.
+        std::array<int32_t, 5> defenderMonsterType{ 0 };
         std::array<int32_t, 5> defenderMonsterCount{ 0 };
 
         // Whether the buildings are customized.
