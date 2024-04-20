@@ -56,6 +56,7 @@
 #include "logging.h"
 #include "luck.h"
 #include "m82.h"
+#include "map_format_helper.h"
 #include "map_format_info.h"
 #include "maps.h"
 #include "maps_fileinfo.h"
@@ -627,7 +628,7 @@ void Heroes::applyHeroMetadata( const Maps::Map_Format::HeroMetadata & heroMetad
         HeroBase::LoadDefaults( HeroBase::HEROES, _race );
     }
 
-    if ( !Maps::Map_Format::loadArmyFromMetadata( army, heroMetadata.armyMonsterType, heroMetadata.armyMonsterCount ) && !isEditor ) {
+    if ( !Maps::loadHeroArmy( army, heroMetadata ) && !isEditor ) {
         // Reset the army to default
         army.Reset( true );
     }
@@ -769,7 +770,7 @@ Maps::Map_Format::HeroMetadata Heroes::getHeroMetadata() const
 {
     Maps::Map_Format::HeroMetadata heroMetadata;
 
-    Maps::Map_Format::saveArmyToMetadata( army, heroMetadata.armyMonsterType, heroMetadata.armyMonsterCount );
+    Maps::saveHeroArmy( army, heroMetadata );
 
     // Hero's portrait.
     heroMetadata.customPortrait = portrait;

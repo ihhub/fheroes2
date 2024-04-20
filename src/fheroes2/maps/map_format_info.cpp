@@ -26,8 +26,6 @@
 #include <memory>
 #include <type_traits>
 
-#include "army.h"
-#include "army_troop.h"
 #include "serialize.h"
 #include "zzlib.h"
 
@@ -299,37 +297,5 @@ namespace Maps::Map_Format
         fileStream << map;
 
         return true;
-    }
-
-    bool loadArmyFromMetadata( Army & army, const std::array<int32_t, 5> & unitType, const std::array<int32_t, 5> & unitCount )
-    {
-        if ( std::all_of( unitType.begin(), unitType.end(), []( const int32_t type ) { return type == 0; } ) ) {
-            // There is no custom army.
-            return false;
-        }
-
-        std::vector<Troop> troops( unitType.size() );
-        for ( size_t i = 0; i < troops.size(); ++i ) {
-            troops[i] = Troop{ unitType[i], static_cast<uint32_t>( unitCount[i] ) };
-        }
-
-        army.Assign( troops.data(), troops.data() + troops.size() );
-
-        return true;
-    }
-
-    void saveArmyToMetadata( const Army & army, std::array<int32_t, 5> & unitType, std::array<int32_t, 5> & unitCount )
-    {
-        const size_t armySize = army.Size();
-        assert( unitType.size() == armySize );
-
-        // Update army metadata.
-        for ( size_t i = 0; i < armySize; ++i ) {
-            const Troop * troop = army.GetTroop( i );
-            assert( troop != nullptr );
-
-            unitType[i] = troop->GetID();
-            unitCount[i] = static_cast<int32_t>( troop->GetCount() );
-        }
     }
 }

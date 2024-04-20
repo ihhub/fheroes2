@@ -25,7 +25,6 @@
 #define H2MONSTER_H
 
 #include <cstdint>
-#include <string>
 
 #include "monster_info.h"
 #include "resource.h"
@@ -212,7 +211,7 @@ public:
     const char * GetName() const;
     const char * GetMultiName() const;
     const char * GetPluralName( uint32_t ) const;
-    static std::string getRandomRaceMonstersName( const uint32_t building );
+    static const char * getRandomRaceMonstersName( const uint32_t building );
 
     bool isValid() const
     {

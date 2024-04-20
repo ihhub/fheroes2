@@ -247,7 +247,7 @@ void BuildingInfo::SetPos( int32_t x, int32_t y )
     area.y = y;
 }
 
-bool BuildingInfo::isDwelling( uint32_t building )
+bool BuildingInfo::isDwelling( const uint32_t building )
 {
     switch ( building ) {
     case DWELLING_MONSTER1:

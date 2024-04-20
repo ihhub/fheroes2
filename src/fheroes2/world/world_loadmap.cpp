@@ -739,7 +739,8 @@ bool World::loadResurrectionMap( const std::string & filename )
                     }
                 }
 
-                assert( castleInfo.isCastle() == ( townObjects[object.index].metadata[1] != 0 ) );
+                assert( ( std::find( castleInfo.builtBuildings.begin(), castleInfo.builtBuildings.end(), BUILD_CASTLE ) != castleInfo.builtBuildings.end() )
+                        == ( townObjects[object.index].metadata[1] != 0 ) );
                 assert( ( std::find( castleInfo.builtBuildings.begin(), castleInfo.builtBuildings.end(), BUILD_TENT ) != castleInfo.builtBuildings.end() )
                         == ( townObjects[object.index].metadata[1] == 0 ) );
 

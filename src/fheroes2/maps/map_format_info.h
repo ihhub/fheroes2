@@ -27,12 +27,10 @@
 #include <string>
 #include <vector>
 
-#include "castle.h"
 #include "map_object_info.h"
 #include "monster.h"
 #include "resource.h"
 
-class Army;
 class StreamBase;
 
 namespace Maps::Map_Format
@@ -68,8 +66,8 @@ namespace Maps::Map_Format
         // If the name is empty a random name is going to be set by the engine.
         std::string customName;
 
-        // Defending monsters that are set in the castle. Type 0 means not set.
-        std::array<int32_t, 5> defenderMonsterType{ 0 };
+        // Defending monsters that are set in the castle. Type ( < 0 ) means not set.
+        std::array<int32_t, 5> defenderMonsterType{ -1 };
         std::array<int32_t, 5> defenderMonsterCount{ 0 };
 
         // Whether the buildings are customized.
@@ -89,59 +87,6 @@ namespace Maps::Map_Format
 
         // The number of monsters available to hire in dwellings. A negative value means that no change will be applied.
         std::array<int32_t, 6> availableToHireMonsterCount{ -1 };
-
-        bool isCastleBuildAllowed() const
-        {
-            return std::find( bannedBuildings.begin(), bannedBuildings.end(), BUILD_CASTLE ) == bannedBuildings.end();
-        }
-
-        bool isCastle() const
-        {
-            return std::find( builtBuildings.begin(), builtBuildings.end(), BUILD_CASTLE ) != builtBuildings.end();
-        }
-
-        void addCastleTentBuilding( const bool isCastle )
-        {
-            builtBuildings.push_back( isCastle ? BUILD_CASTLE : BUILD_TENT );
-        }
-
-        uint32_t getBuiltBuildings() const
-        {
-            return getBuildingsFromVector( builtBuildings );
-        }
-
-        uint32_t getBannedBuildings() const
-        {
-            return getBuildingsFromVector( bannedBuildings );
-        }
-
-        static uint32_t getBuildingsFromVector( const std::vector<uint32_t> & buildingsVector )
-        {
-            uint32_t buildings{ BUILD_NOTHING };
-            for ( const uint32_t building : buildingsVector ) {
-                buildings |= building;
-            }
-
-            return buildings;
-        }
-
-        // Should be used only for the neutral color player.
-        void setDefaultDefenderArmy()
-        {
-            for ( int32_t & type : defenderMonsterType ) {
-                type = Monster::RANDOM_MONSTER;
-            }
-            for ( int32_t & count : defenderMonsterCount ) {
-                count = 0;
-            }
-        }
-
-        // Returns true if all monsters are RANDOM_MONSTER and count is 0. Should be used only for the neutral color player.
-        bool isDefaultDefenderArmy() const
-        {
-            return std::all_of( defenderMonsterType.begin(), defenderMonsterType.end(), []( const int32_t type ) { return type == Monster::RANDOM_MONSTER; } )
-                   && std::all_of( defenderMonsterCount.begin(), defenderMonsterCount.end(), []( const int32_t count ) { return count == 0; } );
-        }
     };
 
     struct HeroMetadata
@@ -320,10 +265,6 @@ namespace Maps::Map_Format
     bool loadMap( const std::string & path, MapFormat & map );
 
     bool saveMap( const std::string & path, const MapFormat & map );
-
-    // Returns false if there are no custom units set in metadata.
-    bool loadArmyFromMetadata( Army & army, const std::array<int32_t, 5> & unitType, const std::array<int32_t, 5> & unitCount );
-    void saveArmyToMetadata( const Army & army, std::array<int32_t, 5> & unitType, std::array<int32_t, 5> & unitCount );
 
     StreamBase & operator<<( StreamBase & msg, const ObjectInfo & object );
     StreamBase & operator>>( StreamBase & msg, ObjectInfo & object );

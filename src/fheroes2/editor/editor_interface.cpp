@@ -36,8 +36,8 @@
 #include "color.h"
 #include "cursor.h"
 #include "dialog.h"
-#include "dialog_castle_details.h"
 #include "dialog_selectitems.h"
+#include "editor_castle_details_window.h"
 #include "editor_object_popup_window.h"
 #include "game.h"
 #include "game_delays.h"
@@ -882,12 +882,11 @@ namespace Interface
                     }
                 }
                 else if ( objectType == MP2::OBJ_CASTLE || objectType == MP2::OBJ_RANDOM_TOWN || objectType == MP2::OBJ_RANDOM_CASTLE ) {
-                    auto castleMetadata = _mapFormat.castleMetadata.find( object.id );
-                    if ( castleMetadata != _mapFormat.castleMetadata.end() ) {
-                        const int race = Race::IndexToRace( static_cast<int>( objectInfo.metadata[0] ) );
-                        const int color = Color::IndexToColor( Maps::getTownColorIndex( _mapFormat, tileIndex, object.id ) );
-                        Dialog::castleDetailsDialog( _mapFormat.castleMetadata[object.id], race, color );
-                    }
+                    assert( _mapFormat.castleMetadata.find( object.id ) != _mapFormat.castleMetadata.end() );
+
+                    const int race = Race::IndexToRace( static_cast<int>( objectInfo.metadata[0] ) );
+                    const int color = Color::IndexToColor( Maps::getTownColorIndex( _mapFormat, tileIndex, object.id ) );
+                    Editor::castleDetailsDialog( _mapFormat.castleMetadata[object.id], race, color );
                 }
                 else if ( object.group == Maps::ObjectGroup::MONSTERS ) {
                     uint32_t monsterCount = 0;
@@ -1286,7 +1285,7 @@ namespace Interface
 
             // By default use random (default) army for the neutral race town/castle.
             if ( Color::IndexToColor( color ) == Color::NONE ) {
-                _mapFormat.castleMetadata[Maps::getLastObjectUID()].setDefaultDefenderArmy();
+                Maps::setDefaultCastleDefenderArmy( _mapFormat.castleMetadata[Maps::getLastObjectUID()] );
             }
 
             // Add flags.

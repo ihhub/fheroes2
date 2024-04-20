@@ -18,7 +18,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "dialog_castle_details.h"
+#include "editor_castle_details_window.h"
 
 #include <algorithm>
 #include <array>
@@ -43,6 +43,7 @@
 #include "icn.h"
 #include "image.h"
 #include "localevent.h"
+#include "map_format_helper.h"
 #include "map_format_info.h"
 #include "math_base.h"
 #include "pal.h"
@@ -289,7 +290,7 @@ namespace
     };
 }
 
-namespace Dialog
+namespace Editor
 {
     void castleDetailsDialog( Maps::Map_Format::CastleMetadata & castleMetadata, const int race, const int color )
     {
@@ -352,14 +353,21 @@ namespace Dialog
                   return fheroes2::Rect( posX, posY, 23 + checkboxText.width(), checkboxBackground.height() );
               };
 
-        const bool isCastle = castleMetadata.isCastle();
+        const bool isTown = std::find( castleMetadata.builtBuildings.begin(), castleMetadata.builtBuildings.end(), BUILD_CASTLE ) == castleMetadata.builtBuildings.end();
 
         // Allow castle building checkbox.
         fheroes2::Point dstPt( dialogRoi.x + rightPartOffsetX + 10, dialogRoi.y + 130 );
         fheroes2::MovableSprite allowCastleSign;
-        const fheroes2::Rect allowCastleArea
-            = isCastle ? fheroes2::Rect( 0, 0, 0, 0 ) : drawCheckboxBackground( allowCastleSign, _( "Allow Castle build" ), dstPt.x, dstPt.y, isEvilInterface );
-        ( !isCastle && castleMetadata.isCastleBuildAllowed() ) ? allowCastleSign.show() : allowCastleSign.hide();
+        fheroes2::Rect allowCastleArea;
+        if ( isTown ) {
+            allowCastleArea = drawCheckboxBackground( allowCastleSign, _( "Allow Castle build" ), dstPt.x, dstPt.y, isEvilInterface );
+            if ( std::find( castleMetadata.bannedBuildings.begin(), castleMetadata.bannedBuildings.end(), BUILD_CASTLE ) == castleMetadata.bannedBuildings.end() ) {
+                allowCastleSign.show();
+            }
+            else {
+                allowCastleSign.hide();
+            }
+        }
 
         // Default buildings checkbox indicator.
         dstPt.y += 30;
@@ -383,7 +391,12 @@ namespace Dialog
         if ( isNeutral ) {
             defaultArmyArea = drawCheckboxBackground( defaultArmySign, _( "Default Army" ), dstPt.x, dstPt.y, isEvilInterface );
 
-            castleMetadata.isDefaultDefenderArmy() ? defaultArmySign.show() : defaultArmySign.hide();
+            if ( Maps::isDefaultCastleDefenderArmy( castleMetadata ) ) {
+                defaultArmySign.show();
+            }
+            else {
+                defaultArmySign.hide();
+            }
         }
         else {
             defaultArmySign.hide();
@@ -394,7 +407,7 @@ namespace Dialog
 
         Army castleArmy;
         // Load army from metadata.
-        Maps::Map_Format::loadArmyFromMetadata( castleArmy, castleMetadata.defenderMonsterType, castleMetadata.defenderMonsterCount );
+        Maps::loadCastleArmy( castleArmy, castleMetadata );
         ArmyBar armyBar( &castleArmy, true, false, true, false );
         armyBar.setTableSize( { 3, 2 } );
         armyBar.setCustomItemsCountInRow( { 2, 3 } );
@@ -402,8 +415,8 @@ namespace Dialog
         armyBar.setRenderingOffset( { dialogRoi.x + rightPartOffsetX + 33, dialogRoi.y + 332 } );
         armyBar.Redraw( display );
 
-        const building_t metadataBuildings = static_cast<building_t>( castleMetadata.getBuiltBuildings() );
-        const building_t metadataRestrictedBuildings = static_cast<building_t>( castleMetadata.getBannedBuildings() );
+        const building_t metadataBuildings = static_cast<building_t>( Maps::getBuildingsFromVector( castleMetadata.builtBuildings ) );
+        const building_t metadataRestrictedBuildings = static_cast<building_t>( Maps::getBuildingsFromVector( castleMetadata.bannedBuildings ) );
 
         assert( ( metadataBuildings & metadataRestrictedBuildings ) == 0 );
 
@@ -471,7 +484,7 @@ namespace Dialog
         bool buildingRestriction = false;
 
         while ( le.HandleEvents() ) {
-            le.MousePressLeft( buttonExitArea ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
+            buttonExit.drawOnState( le.MousePressLeft( buttonExitArea ) );
 
             if ( le.MouseClickLeft( buttonExitArea ) || Game::HotKeyCloseWindow() ) {
                 break;
@@ -481,7 +494,7 @@ namespace Dialog
                 buildingRestriction = !buildingRestriction;
             }
 
-            ( buildingRestriction || le.MousePressLeft( buttonRestrictBuildingArea ) ) ? buttonRestrictBuilding.drawOnPress() : buttonRestrictBuilding.drawOnRelease();
+            buttonRestrictBuilding.drawOnState( buildingRestriction || le.MousePressLeft( buttonRestrictBuildingArea ) );
 
             if ( le.MouseCursor( nameArea ) ) {
                 message = _( "Click to change the Castle name. Right-click to reset to default." );
@@ -506,7 +519,7 @@ namespace Dialog
                     display.render( nameArea );
                 }
             }
-            else if ( !isCastle && le.MouseCursor( allowCastleArea ) ) {
+            else if ( isTown && le.MouseCursor( allowCastleArea ) ) {
                 message = _( "Allow to build a castle in this town." );
 
                 if ( le.MouseClickLeft() ) {
@@ -575,13 +588,8 @@ namespace Dialog
                 if ( armyBar.QueueEventProcessing( &message ) ) {
                     armyBar.Redraw( display );
 
-                    if ( defaultArmySign.isHidden() ) {
-                        display.render( armyBar.GetArea() );
-                    }
-                    else {
-                        defaultArmySign.hide();
-                        display.render( dialogRoi );
-                    }
+                    defaultArmySign.hide();
+                    display.render( dialogRoi );
                 }
 
                 if ( message.empty() ) {
@@ -633,19 +641,20 @@ namespace Dialog
 
         // Update army in metadata.
         if ( isNeutral && !defaultArmySign.isHidden() ) {
-            castleMetadata.setDefaultDefenderArmy();
+            Maps::setDefaultCastleDefenderArmy( castleMetadata );
         }
         else {
-            Maps::Map_Format::saveArmyToMetadata( castleArmy, castleMetadata.defenderMonsterType, castleMetadata.defenderMonsterCount );
+            Maps::saveCastleArmy( castleArmy, castleMetadata );
         }
 
         // Update buildings data.
         castleMetadata.builtBuildings.clear();
         castleMetadata.bannedBuildings.clear();
 
-        castleMetadata.addCastleTentBuilding( isCastle );
+        // Build main buildings for town or castle.
+        castleMetadata.builtBuildings.push_back( isTown ? BUILD_TENT : BUILD_CASTLE );
 
-        if ( !isCastle && allowCastleSign.isHidden() ) {
+        if ( isTown && allowCastleSign.isHidden() ) {
             castleMetadata.bannedBuildings.push_back( BUILD_CASTLE );
         }
 
@@ -653,11 +662,11 @@ namespace Dialog
 
         if ( castleMetadata.customBuildings ) {
             for ( const BuildingData & building : buildings ) {
-                if ( std::vector<building_t> buildingLevels = building.getBuildLevel(); !buildingLevels.empty() ) {
-                    std::move( buildingLevels.begin(), buildingLevels.end(), std::back_inserter( castleMetadata.builtBuildings ) );
-                }
+                std::vector<building_t> buildingLevels = building.getBuildLevel();
+                std::move( buildingLevels.begin(), buildingLevels.end(), std::back_inserter( castleMetadata.builtBuildings ) );
+
                 if ( const building_t buildId = building.getRestrictLevel(); buildId != BUILD_NOTHING ) {
-                    castleMetadata.bannedBuildings.push_back( static_cast<uint32_t>( buildId ) );
+                    castleMetadata.bannedBuildings.push_back( buildId );
                 }
             }
         }

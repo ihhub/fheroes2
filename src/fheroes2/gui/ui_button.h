@@ -98,6 +98,17 @@ namespace fheroes2
         // Will draw on screen by default. Returns true in case of state change. This method calls render() internally.
         bool drawOnRelease( Display & output = Display::instance() );
 
+        // Will draw on screen by default. Returns true in case of state change. This method calls render() internally.
+        bool drawOnState( const bool isPressedState, Display & output = Display::instance() )
+        {
+            if ( isPressedState ) {
+                return drawOnPress( output );
+            }
+            else {
+                return drawOnRelease( output );
+            }
+        }
+
         Rect area() const;
 
     protected:

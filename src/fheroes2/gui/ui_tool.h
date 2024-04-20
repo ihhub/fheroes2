@@ -67,7 +67,7 @@ namespace fheroes2
             return _isHidden;
         }
 
-        fheroes2::Rect getArea() const
+        Rect getArea() const
         {
             return { x(), y(), width(), height() };
         }

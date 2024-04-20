@@ -797,7 +797,7 @@ const char * Monster::GetPluralName( uint32_t count ) const
     return count == 1 ? _( generalStats.name ) : _( generalStats.pluralName );
 }
 
-std::string Monster::getRandomRaceMonstersName( const uint32_t building )
+const char * Monster::getRandomRaceMonstersName( const uint32_t building )
 {
     switch ( building ) {
     case DWELLING_MONSTER1:
@@ -820,7 +820,7 @@ std::string Monster::getRandomRaceMonstersName( const uint32_t building )
         return _( "randomRace|level 6 creatures" );
     default:
         assert( 0 );
-        return "unknown monsters";
+        return _( "Unknown Monsters" );
     }
 }
 

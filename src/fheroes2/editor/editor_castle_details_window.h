@@ -25,7 +25,7 @@ namespace Maps::Map_Format
     struct CastleMetadata;
 }
 
-namespace Dialog
+namespace Editor
 {
     void castleDetailsDialog( Maps::Map_Format::CastleMetadata & castleMetadata, const int race, const int color );
 }

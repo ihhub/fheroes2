@@ -52,6 +52,7 @@
 #include "logging.h"
 #include "luck.h"
 #include "m82.h"
+#include "map_format_helper.h"
 #include "map_format_info.h"
 #include "maps.h"
 #include "maps_fileinfo.h"
@@ -415,23 +416,19 @@ void Castle::loadFromResurrectionMap( const Maps::Map_Format::CastleMetadata & m
 {
     modes = 0;
 
-    building = metadata.getBuiltBuildings();
+    building = Maps::getBuildingsFromVector( metadata.builtBuildings );
 
     if ( !metadata.customBuildings ) {
         _setDefaultBuildings();
     }
 
-    if ( metadata.isCastleBuildAllowed() ) {
+    if ( std::find( metadata.bannedBuildings.begin(), metadata.bannedBuildings.end(), BUILD_CASTLE ) == metadata.bannedBuildings.end() ) {
         SetModes( ALLOWCASTLE );
     }
 
-    if ( Maps::Map_Format::loadArmyFromMetadata( army, metadata.defenderMonsterType, metadata.defenderMonsterCount ) ) {
-        SetModes( CUSTOMARMY );
-    }
-
     // Check the default Army state for the Neutral player.
-    if ( GetColor() == Color::NONE ) {
-        metadata.isDefaultDefenderArmy() ? ResetModes( CUSTOMARMY ) : SetModes( CUSTOMARMY );
+    if ( Maps::loadCastleArmy( army, metadata ) ) {
+        SetModes( CUSTOMARMY );
     }
 
     if ( !metadata.customName.empty() ) {
