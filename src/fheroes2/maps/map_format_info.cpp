@@ -21,9 +21,7 @@
 #include "map_format_info.h"
 
 #include <array>
-#include <cassert>
 #include <cstddef>
-#include <memory>
 #include <type_traits>
 
 #include "serialize.h"

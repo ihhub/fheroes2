@@ -21,6 +21,7 @@
 #include "map_format_helper.h"
 
 #include <algorithm>
+#include <array>
 #include <cassert>
 #include <cstddef>
 #include <cstdint>
@@ -32,6 +33,7 @@
 
 #include "army.h"
 #include "army_troop.h"
+#include "castle.h"
 #include "color.h"
 #include "gamedefs.h"
 #include "map_format_info.h"

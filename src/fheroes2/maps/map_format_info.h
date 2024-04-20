@@ -28,7 +28,6 @@
 #include <vector>
 
 #include "map_object_info.h"
-#include "monster.h"
 #include "resource.h"
 
 class StreamBase;

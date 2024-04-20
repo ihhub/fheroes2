@@ -104,9 +104,8 @@ namespace fheroes2
             if ( isPressedState ) {
                 return drawOnPress( output );
             }
-            else {
-                return drawOnRelease( output );
-            }
+
+            return drawOnRelease( output );
         }
 
         Rect area() const;
