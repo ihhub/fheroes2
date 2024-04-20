@@ -1120,20 +1120,15 @@ namespace fheroes2
         }
     }
 
-    void ApplyVerticalGradient( fheroes2::Image & image, const uint8_t outsideColor, const uint8_t insideColor, const uint8_t borderWidth, const uint8_t borderColor )
+    void applyFontVerticalGradientAndContour( Image & image, const uint8_t outsideColor, const uint8_t insideColor, const uint8_t borderWidth, const uint8_t borderColor )
     {
-        assert( !image.singleLayer() );
+                assert( !image.singleLayer() );
 
         const int32_t height = image.height();
         const int32_t width = image.width();
 
         uint8_t * inData = image.image();
         uint8_t * inTransform = image.transform();
-
-        fheroes2::Image outImage( image );
-
-        uint8_t * outData = outImage.image();
-        uint8_t * outTransform = outImage.transform();
 
         const uint8_t centerY = static_cast<uint8_t>( std::max( 1, ( height / 2 ) - height % 2 ) );
         const uint8_t dColor = outsideColor - insideColor;
@@ -1142,31 +1137,28 @@ namespace fheroes2
             const uint8_t heightScale = ( dColor * static_cast<uint8_t>( std::abs( centerY - row ) ) ) / centerY;
 
             const uint8_t val = static_cast<uint8_t>( std::abs( insideColor + heightScale ) );
-            const uint8_t * inRowStart = inData + static_cast<ptrdiff_t>( row ) * width;
-            uint8_t * outRowStart = outData + static_cast<ptrdiff_t>( row ) * width;
+            uint8_t * inRowStart = inData + static_cast<ptrdiff_t>( row ) * width;
 
             const uint8_t * inRowEnd = inData + static_cast<ptrdiff_t>( row + 1 ) * width;
-            const uint8_t * inTrans = inTransform + static_cast<ptrdiff_t>( row ) * width;
-            uint8_t * outTrans = outTransform + static_cast<ptrdiff_t>( row ) * width;
+            uint8_t * inTrans = inTransform + static_cast<ptrdiff_t>( row ) * width;
 
-            for ( ; inRowStart != inRowEnd; ++inRowStart, ++inTrans, ++outRowStart, ++outTrans ) {
+            for ( ; inRowStart != inRowEnd; ++inRowStart, ++inTrans ) {
                 if ( *inTrans == 0 ) {
                     // 21 is the pixel limit of shadows in Base white Font
                     if ( *inRowStart < 21 ) {
-                        *outRowStart = val;
+                        *inRowStart = val;
                     }
                     else {
-                        *outTrans = 1;
+                        *inTrans = 1;
                     }
                 }
             }
         }
 
         for ( uint8_t i = 0; i < borderWidth; i++ ) {
-            fheroes2::Sprite cnt = CreateContour( outImage, borderColor );
-            Blit( cnt, outImage );
+            fheroes2::Sprite cnt = CreateContour( image, borderColor );
+            Blit( cnt, image );
         }
-        fheroes2::Copy( outImage, image );
     }
 
     void Blit( const Image & in, Image & out, const bool flip /* = false */ )

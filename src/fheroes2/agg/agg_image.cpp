@@ -2505,7 +2505,7 @@ namespace fheroes2
                     Copy( in, 0, 0, out, 3, 3, in.width(), in.height() );
                     out.setPosition( in.x() - 2, in.y() - 2 );
 
-                    ApplyVerticalGradient( out, PAL::ColorRanges::YELLOW_END + 3, PAL::ColorRanges::YELLOW_START, 1, PAL::ColorRanges::BROWN_START + 18 );
+                    applyFontVerticalGradientAndContour( out, PAL::ColorRanges::YELLOW_END + 3, PAL::ColorRanges::YELLOW_START, 1, PAL::ColorRanges::BROWN_START + 18 );
 
                     const fheroes2::Sprite contourBlack = CreateContour( out, 0 );
                     Blit( contourBlack, out );
@@ -2525,7 +2525,7 @@ namespace fheroes2
                     out.reset();
                     Copy( in, 0, 0, out, 3, 3, in.width(), in.height() );
                     out.setPosition( in.x() - 2, in.y() - 2 );
-                    ApplyVerticalGradient( out, PAL::ColorRanges::YELLOW_END - 3, PAL::ColorRanges::YELLOW_START, 1, PAL::ColorRanges::BROWN_START + 18 );
+                    applyFontVerticalGradientAndContour( out, PAL::ColorRanges::YELLOW_END - 3, PAL::ColorRanges::YELLOW_START, 1, PAL::ColorRanges::BROWN_START + 18 );
 
                     const fheroes2::Sprite contourBlack = CreateContour( out, 0 );
                     Blit( contourBlack, out );
@@ -2545,7 +2545,7 @@ namespace fheroes2
                     out.reset();
                     Copy( in, 0, 0, out, 3, 3, in.width(), in.height() );
                     out.setPosition( in.x() - 2, in.y() - 2 );
-                    ApplyVerticalGradient( out, PAL::ColorRanges::GRAY_END - 5, PAL::ColorRanges::GRAY_START, 1, PAL::ColorRanges::GRAY_END - 7 );
+                    applyFontVerticalGradientAndContour( out, PAL::ColorRanges::GRAY_END - 5, PAL::ColorRanges::GRAY_START, 1, PAL::ColorRanges::GRAY_END - 7 );
 
                     const fheroes2::Sprite contourBlack = CreateContour( out, 0 );
                     Blit( contourBlack, out );
@@ -2565,7 +2565,7 @@ namespace fheroes2
                     out.reset();
                     Copy( in, 0, 0, out, 3, 3, in.width(), in.height() );
                     out.setPosition( in.x() - 2, in.y() - 2 );
-                    ApplyVerticalGradient( out, PAL::ColorRanges::GRAY_START + 16, PAL::ColorRanges::GRAY_START, 1, PAL::ColorRanges::GRAY_END - 7 );
+                    applyFontVerticalGradientAndContour( out, PAL::ColorRanges::GRAY_START + 16, PAL::ColorRanges::GRAY_START, 1, PAL::ColorRanges::GRAY_END - 7 );
 
                     const fheroes2::Sprite contourBlack = CreateContour( out, 0 );
                     Blit( contourBlack, out );
