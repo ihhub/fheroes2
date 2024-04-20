@@ -1122,7 +1122,7 @@ namespace fheroes2
 
     void applyFontVerticalGradientAndContour( Image & image, const uint8_t outsideColor, const uint8_t insideColor, const uint8_t borderWidth, const uint8_t borderColor )
     {
-                assert( !image.singleLayer() );
+        assert( !image.singleLayer() );
 
         const int32_t height = image.height();
         const int32_t width = image.width();
