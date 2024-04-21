@@ -182,7 +182,7 @@ namespace Maps
             if ( object.group == ObjectGroup::ROADS ) {
                 if ( roadParts.empty() ) {
                     // This tile was removed. Delete the object.
-                    info.objects.erase( info.objects.begin() + objectIndex );
+                    info.objects.erase( info.objects.begin() + static_cast<std::vector<Maps::Map_Format::ObjectInfo>::difference_type>( objectIndex ) );
                     continue;
                 }
 
@@ -193,7 +193,7 @@ namespace Maps
             else if ( object.group == ObjectGroup::STREAMS ) {
                 if ( streamParts.empty() ) {
                     // This tile was removed. Delete the object.
-                    info.objects.erase( info.objects.begin() + objectIndex );
+                    info.objects.erase( info.objects.begin() + static_cast<std::vector<Maps::Map_Format::ObjectInfo>::difference_type>( objectIndex ) );
                     continue;
                 }
 
