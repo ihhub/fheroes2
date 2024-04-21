@@ -185,11 +185,10 @@ namespace Maps
                     info.objects.erase( info.objects.begin() + objectIndex );
                     continue;
                 }
-                else {
-                    object.id = roadParts.front()->_uid;
-                    object.index = roadParts.front()->_imageIndex;
-                    roadParts.pop_front();
-                }
+                
+                object.id = roadParts.front()->_uid;
+                object.index = roadParts.front()->_imageIndex;
+                roadParts.pop_front();
             }
             else if ( object.group == ObjectGroup::STREAMS ) {
                 if ( streamParts.empty() ) {
@@ -197,11 +196,10 @@ namespace Maps
                     info.objects.erase( info.objects.begin() + objectIndex );
                     continue;
                 }
-                else {
-                    object.id = streamParts.front()->_uid;
-                    object.index = streamParts.front()->_imageIndex;
-                    streamParts.pop_front();
-                }
+
+                object.id = streamParts.front()->_uid;
+                object.index = streamParts.front()->_imageIndex;
+                streamParts.pop_front();
             }
 
             ++objectIndex;

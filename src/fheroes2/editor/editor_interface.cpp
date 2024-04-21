@@ -1121,7 +1121,7 @@ namespace Interface
 
                 assert( !_mapFormat.tiles[tile.GetIndex()].objects.empty() );
 
-                auto & insertedObject = _mapFormat.tiles[tile.GetIndex()].objects.back();
+                const auto & insertedObject = _mapFormat.tiles[tile.GetIndex()].objects.back();
                 assert( insertedObject.group == groupType && insertedObject.index == static_cast<uint32_t>( objectType ) );
                 assert( _mapFormat.standardMetadata.find( insertedObject.id ) != _mapFormat.standardMetadata.end() );
 
