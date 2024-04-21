@@ -912,6 +912,30 @@ namespace Interface
                         action.commit();
                     }
                 }
+                else if ( object.group == Maps::ObjectGroup::ADVENTURE_ARTIFACTS ) {
+                    if ( objectInfo.objectType == MP2::OBJ_RANDOM_ULTIMATE_ARTIFACT ) {
+                        // TODO: add a dialog to modify Random Ultimate artifact radius.
+                    }
+                    else if ( objectInfo.objectType == MP2::OBJ_ARTIFACT && objectInfo.metadata[0] == Artifact::SPELL_SCROLL ) {
+                        // Find Spell Scroll object.
+                        assert( _mapFormat.standardMetadata.find( object.id ) != _mapFormat.standardMetadata.end() );
+
+                        const int spellId = Dialog::selectSpell( _mapFormat.standardMetadata[object.id].metadata[0], true ).GetID();
+
+                        if ( spellId == Spell::NONE ) {
+                            // We do not place the Spell Scroll artifact if the spell for it was not selected.
+                            return;
+                        }
+
+                        fheroes2::ActionCreator action( _historyManager, _mapFormat );
+
+                        _mapFormat.standardMetadata[object.id].metadata[0] = spellId;
+
+                        Maps::setSpellOnTile( tile, spellId );
+
+                        action.commit();
+                    }
+                }
             }
         }
         else if ( _editorPanel.isTerrainEdit() ) {
