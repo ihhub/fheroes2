@@ -1230,7 +1230,15 @@ namespace Interface
                 return;
             }
 
-            if ( !checkConditionForUsedTiles( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return !tileToCheck.isWater(); } ) ) {
+            assert( !objectInfo.groundLevelParts.empty() );
+            const auto & firstObjectPart = objectInfo.groundLevelParts.front();
+
+            // River deltas are only objects that can be placed on water and on land.
+            // Yes, the below code is very hacky but so far this is the best we can do.
+            if ( firstObjectPart.icnType == MP2::OBJ_ICN_TYPE_OBJNMUL2 && ( firstObjectPart.icnIndex == 2U || firstObjectPart.icnIndex == 11U ) ) {
+                // This is a river delta. Just don't check the terrain type.
+            }
+            else if ( !checkConditionForUsedTiles( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return !tileToCheck.isWater(); } ) ) {
                 _warningMessage.reset( _( "Landscape objects cannot be placed on water." ) );
                 return;
             }
