@@ -37,6 +37,7 @@
 #include "battle_arena.h"
 #include "dialog.h"
 #include "game_interface.h"
+#include "game_language.h"
 #include "interface_gamearea.h"
 #include "localevent.h"
 #include "logging.h"

@@ -32,6 +32,7 @@
 #include "dialog_language_selection.h"
 #include "editor_interface.h"
 #include "game_hotkeys.h"
+#include "game_language.h"
 #include "gamedefs.h"
 #include "icn.h"
 #include "image.h"

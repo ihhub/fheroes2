@@ -30,6 +30,7 @@
 #include "dialog_hotkeys.h"
 #include "dialog_language_selection.h"
 #include "game_hotkeys.h"
+#include "game_language.h"
 #include "game_mainmenu_ui.h"
 #include "gamedefs.h"
 #include "icn.h"

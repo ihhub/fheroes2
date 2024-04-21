@@ -22,7 +22,7 @@
 
 #include <vector>
 
-#include "ui_language.h"
+#include "game_language.h"
 
 namespace fheroes2
 {
