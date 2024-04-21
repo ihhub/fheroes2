@@ -272,6 +272,7 @@ bool BuildingInfo::isDwelling( const uint32_t building )
 std::string BuildingInfo::getBuildingDescription( const int race, const uint32_t buildingId )
 {
     std::string description;
+
     if ( isDwelling( buildingId ) ) {
         description = _( "The %{building} produces %{monster}." );
         StringReplace( description, "%{building}", Castle::GetStringBuilding( buildingId, race ) );
@@ -303,6 +304,7 @@ std::string BuildingInfo::getBuildingDescription( const int race, const uint32_t
             break;
         }
     }
+
     return description;
 }
 
