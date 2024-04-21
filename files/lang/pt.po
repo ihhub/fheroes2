@@ -8297,7 +8297,7 @@ msgid "Snow"
 msgstr "Neve"
 
 msgid "Wasteland"
-msgstr "Terreno Baldio"
+msgstr "Ermo"
 
 msgid "Beach"
 msgstr "Praia"
