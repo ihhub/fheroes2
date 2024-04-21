@@ -571,7 +571,7 @@ void Castle::_setDefaultBuildings()
         break;
     }
 
-    if ( dwelling2 && dwelling2 >= Rand::Get( 1, 100 ) ) {
+    if ( dwelling2 >= Rand::Get( 1, 100 ) ) {
         building |= DWELLING_MONSTER2;
     }
 }
