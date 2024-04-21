@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-08 13:20+0000\n"
+"POT-Creation-Date: 2024-04-21 05:05+0000\n"
 "PO-Revision-Date: 2022-09-23 16:01+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -202,6 +202,10 @@ msgstr ""
 
 msgid "TOWN"
 msgstr ""
+
+#, fuzzy
+msgid "RESTRICT"
+msgstr "НАНОВА"
 
 msgid ""
 "D\n"
@@ -2285,6 +2289,51 @@ msgstr ""
 msgid "Shrine"
 msgstr ""
 
+msgid "Special"
+msgstr ""
+
+msgid "Horde Building"
+msgstr ""
+
+#, fuzzy
+msgid "Dwelling 1"
+msgstr "Хобіты"
+
+#, fuzzy
+msgid "Dwelling 2"
+msgstr "Хобіты"
+
+#, fuzzy
+msgid "Upg. Dwelling 2"
+msgstr "Хобіты"
+
+#, fuzzy
+msgid "Dwelling 3"
+msgstr "Хобіты"
+
+#, fuzzy
+msgid "Upg. Dwelling 3"
+msgstr "Хобіты"
+
+#, fuzzy
+msgid "Dwelling 4"
+msgstr "Хобіты"
+
+#, fuzzy
+msgid "Upg. Dwelling 4"
+msgstr "Хобіты"
+
+#, fuzzy
+msgid "Dwelling 6"
+msgstr "Хобіты"
+
+#, fuzzy
+msgid "Upg. Dwelling 6"
+msgstr "Хобіты"
+
+msgid "2x Upg. Dwelling 6"
+msgstr ""
+
 msgid ""
 "The Fortifications increase the toughness of the walls, increasing the "
 "number of turns it takes to knock them down."
@@ -2329,6 +2378,14 @@ msgid "The Storm adds +2 to the power of spells of a defending spell caster."
 msgstr ""
 
 msgid "The Skull Pile increases production of Skeletons by %{count} per week."
+msgstr ""
+
+msgid "The Special building gives a specific bonus to the chosen castle type."
+msgstr ""
+
+msgid ""
+"The Horde Building increases the growth rate of the level 1 creatures by 8 "
+"per week."
 msgstr ""
 
 msgid "Thieves' Guild"
@@ -3577,6 +3634,53 @@ msgstr ""
 msgid "Best Monster:"
 msgstr ""
 
+msgid "Random Castle Name"
+msgstr ""
+
+#, fuzzy
+msgid "Allow Castle build"
+msgstr "Воблачны замак"
+
+#, fuzzy
+msgid "Default buildings"
+msgstr "Хобіты"
+
+msgid "Default Army"
+msgstr ""
+
+#, fuzzy
+msgid "Castle Army"
+msgstr "Замак"
+
+msgid "Click to change the Castle name. Right-click to reset to default."
+msgstr ""
+
+#, fuzzy
+msgid "Enter Castle name"
+msgstr "Пакінуць замак"
+
+msgid "Allow to build a castle in this town."
+msgstr ""
+
+msgid "Toggle the use of default buildings. Custom buildings will be reset!"
+msgstr ""
+
+#, fuzzy
+msgid "Default Buildings"
+msgstr "Хобіты"
+
+msgid "Toggle building construction restriction mode."
+msgstr ""
+
+msgid "Restrict Building Construction"
+msgstr ""
+
+msgid "Use default defenders army."
+msgstr ""
+
+msgid "Set custom Castle Army. Right-click to reset unit."
+msgstr ""
+
 msgid "Map filename"
 msgstr ""
 
@@ -3645,6 +3749,9 @@ msgid "Failed to update player information."
 msgstr ""
 
 msgid "Artifacts cannot be placed on water."
+msgstr ""
+
+msgid "Only one Random Ultimate Artifact can be placed on the map."
 msgstr ""
 
 msgid "Mountains cannot be placed on water."
@@ -7939,10 +8046,28 @@ msgstr ""
 msgid "Frozen Lake"
 msgstr ""
 
-msgid "Unknown Monster"
+msgid "randomRace|level 1 creatures"
+msgstr ""
+
+msgid "randomRace|level 2 creatures"
+msgstr ""
+
+msgid "randomRace|level 3 creatures"
+msgstr ""
+
+msgid "randomRace|level 4 creatures"
+msgstr ""
+
+msgid "randomRace|level 5 creatures"
+msgstr ""
+
+msgid "randomRace|level 6 creatures"
 msgstr ""
 
 msgid "Unknown Monsters"
+msgstr ""
+
+msgid "Unknown Monster"
 msgstr ""
 
 msgid "Peasant"

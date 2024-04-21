@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-11 06:20+0000\n"
+"POT-Creation-Date: 2024-04-21 05:05+0000\n"
 "PO-Revision-Date: 2024-04-02 09:25+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -210,6 +210,10 @@ msgstr "ЗАМОК"
 
 msgid "TOWN"
 msgstr "МІСТО"
+
+#, fuzzy
+msgid "RESTRICT"
+msgstr "РЕСТАРТ"
 
 msgid ""
 "D\n"
@@ -2440,6 +2444,52 @@ msgstr "Лабораторія"
 msgid "Shrine"
 msgstr "Святиня"
 
+#, fuzzy
+msgid "Special"
+msgstr "Нічого Особливого"
+
+msgid "Horde Building"
+msgstr ""
+
+#, fuzzy
+msgid "Dwelling 1"
+msgstr "Житло"
+
+#, fuzzy
+msgid "Dwelling 2"
+msgstr "Житло"
+
+#, fuzzy
+msgid "Upg. Dwelling 2"
+msgstr "Житло"
+
+#, fuzzy
+msgid "Dwelling 3"
+msgstr "Житло"
+
+#, fuzzy
+msgid "Upg. Dwelling 3"
+msgstr "Житло"
+
+#, fuzzy
+msgid "Dwelling 4"
+msgstr "Житло"
+
+#, fuzzy
+msgid "Upg. Dwelling 4"
+msgstr "Житло"
+
+#, fuzzy
+msgid "Dwelling 6"
+msgstr "Житло"
+
+#, fuzzy
+msgid "Upg. Dwelling 6"
+msgstr "Житло"
+
+msgid "2x Upg. Dwelling 6"
+msgstr ""
+
 msgid ""
 "The Fortifications increase the toughness of the walls, increasing the "
 "number of turns it takes to knock them down."
@@ -2489,6 +2539,15 @@ msgstr "Буря додає +2 до сили магії заклинателя, 
 
 msgid "The Skull Pile increases production of Skeletons by %{count} per week."
 msgstr "Купа черепів збільшує виробництво Скелетів на %{count} в тиждень."
+
+msgid "The Special building gives a specific bonus to the chosen castle type."
+msgstr ""
+
+#, fuzzy
+msgid ""
+"The Horde Building increases the growth rate of the level 1 creatures by 8 "
+"per week."
+msgstr "Колодязь підвищує приріст в усіх житлах на %{count} істот на тиждень."
 
 msgid "Thieves' Guild"
 msgstr "Гільдія Злодіїв"
@@ -3757,6 +3816,55 @@ msgstr "Особистість:"
 msgid "Best Monster:"
 msgstr "Найсильніший монстр:"
 
+#, fuzzy
+msgid "Random Castle Name"
+msgstr "Випадковий Замок"
+
+#, fuzzy
+msgid "Allow Castle build"
+msgstr "Хмарна Фортеця"
+
+#, fuzzy
+msgid "Default buildings"
+msgstr "Дії по замовчуванню"
+
+#, fuzzy
+msgid "Default Army"
+msgstr "Дії по замовчуванню"
+
+#, fuzzy
+msgid "Castle Army"
+msgstr "Замок"
+
+msgid "Click to change the Castle name. Right-click to reset to default."
+msgstr ""
+
+#, fuzzy
+msgid "Enter Castle name"
+msgstr "Вийти з Замку"
+
+msgid "Allow to build a castle in this town."
+msgstr ""
+
+msgid "Toggle the use of default buildings. Custom buildings will be reset!"
+msgstr ""
+
+#, fuzzy
+msgid "Default Buildings"
+msgstr "Дії по замовчуванню"
+
+msgid "Toggle building construction restriction mode."
+msgstr ""
+
+msgid "Restrict Building Construction"
+msgstr ""
+
+msgid "Use default defenders army."
+msgstr ""
+
+msgid "Set custom Castle Army. Right-click to reset unit."
+msgstr ""
+
 msgid "Map filename"
 msgstr "Назва файлу мапи"
 
@@ -3823,6 +3931,10 @@ msgid "Failed to update player information."
 msgstr "Не вдалося оновити інформацію по гравцю."
 
 msgid "Artifacts cannot be placed on water."
+msgstr "Артефакт не можна розмістити на воді."
+
+#, fuzzy
+msgid "Only one Random Ultimate Artifact can be placed on the map."
 msgstr "Артефакт не можна розмістити на воді."
 
 msgid "Mountains cannot be placed on water."
@@ -8600,11 +8712,29 @@ msgstr "Болотисте озеро"
 msgid "Frozen Lake"
 msgstr "Замерзле озеро"
 
-msgid "Unknown Monster"
-msgstr "Невідомий монстр"
+msgid "randomRace|level 1 creatures"
+msgstr ""
+
+msgid "randomRace|level 2 creatures"
+msgstr ""
+
+msgid "randomRace|level 3 creatures"
+msgstr ""
+
+msgid "randomRace|level 4 creatures"
+msgstr ""
+
+msgid "randomRace|level 5 creatures"
+msgstr ""
+
+msgid "randomRace|level 6 creatures"
+msgstr ""
 
 msgid "Unknown Monsters"
 msgstr "Невідомі монстри"
+
+msgid "Unknown Monster"
+msgstr "Невідомий монстр"
 
 msgid "Peasant"
 msgstr "Cелянин"

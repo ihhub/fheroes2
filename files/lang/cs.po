@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-11 06:20+0000\n"
+"POT-Creation-Date: 2024-04-21 05:05+0000\n"
 "PO-Revision-Date: 2023-09-24 16:05+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Czech <cs@li.org>\n"
@@ -210,6 +210,10 @@ msgstr ""
 
 msgid "TOWN"
 msgstr ""
+
+#, fuzzy
+msgid "RESTRICT"
+msgstr "RESTART"
 
 msgid ""
 "D\n"
@@ -2443,6 +2447,52 @@ msgstr "Laboratoř"
 msgid "Shrine"
 msgstr "Svatyně"
 
+#, fuzzy
+msgid "Special"
+msgstr "Nic zvláštního"
+
+msgid "Horde Building"
+msgstr ""
+
+#, fuzzy
+msgid "Dwelling 1"
+msgstr "Půlčíci"
+
+#, fuzzy
+msgid "Dwelling 2"
+msgstr "Půlčíci"
+
+#, fuzzy
+msgid "Upg. Dwelling 2"
+msgstr "Půlčíci"
+
+#, fuzzy
+msgid "Dwelling 3"
+msgstr "Půlčíci"
+
+#, fuzzy
+msgid "Upg. Dwelling 3"
+msgstr "Půlčíci"
+
+#, fuzzy
+msgid "Dwelling 4"
+msgstr "Půlčíci"
+
+#, fuzzy
+msgid "Upg. Dwelling 4"
+msgstr "Půlčíci"
+
+#, fuzzy
+msgid "Dwelling 6"
+msgstr "Půlčíci"
+
+#, fuzzy
+msgid "Upg. Dwelling 6"
+msgstr "Půlčíci"
+
+msgid "2x Upg. Dwelling 6"
+msgstr ""
+
 msgid ""
 "The Fortifications increase the toughness of the walls, increasing the "
 "number of turns it takes to knock them down."
@@ -2487,6 +2537,16 @@ msgstr "Bouře přidává +2 na síle kouzel obránci hradu."
 
 msgid "The Skull Pile increases production of Skeletons by %{count} per week."
 msgstr "Hromada Lebek zvyšuje produkci Kostlivců o %{count} za týden."
+
+msgid "The Special building gives a specific bonus to the chosen castle type."
+msgstr ""
+
+#, fuzzy
+msgid ""
+"The Horde Building increases the growth rate of the level 1 creatures by 8 "
+"per week."
+msgstr ""
+"Studna zvyšuje tempo růstu ve všech obydlích o %{count} stvoření za týden."
 
 msgid "Thieves' Guild"
 msgstr "Cech zlodějů"
@@ -3787,6 +3847,54 @@ msgid "Best Monster:"
 msgstr "Nejlepší Stvůra:"
 
 #, fuzzy
+msgid "Random Castle Name"
+msgstr "Náhodný hrad"
+
+#, fuzzy
+msgid "Allow Castle build"
+msgstr "Zámek Mraků"
+
+#, fuzzy
+msgid "Default buildings"
+msgstr "Půlčíci"
+
+msgid "Default Army"
+msgstr ""
+
+#, fuzzy
+msgid "Castle Army"
+msgstr "Hrad"
+
+msgid "Click to change the Castle name. Right-click to reset to default."
+msgstr ""
+
+#, fuzzy
+msgid "Enter Castle name"
+msgstr "Ztráta hrdiny: %{name}'."
+
+msgid "Allow to build a castle in this town."
+msgstr ""
+
+msgid "Toggle the use of default buildings. Custom buildings will be reset!"
+msgstr ""
+
+#, fuzzy
+msgid "Default Buildings"
+msgstr "Půlčíci"
+
+msgid "Toggle building construction restriction mode."
+msgstr ""
+
+msgid "Restrict Building Construction"
+msgstr ""
+
+msgid "Use default defenders army."
+msgstr ""
+
+msgid "Set custom Castle Army. Right-click to reset unit."
+msgstr ""
+
+#, fuzzy
 msgid "Map filename"
 msgstr ""
 "Velikost\n"
@@ -3857,6 +3965,9 @@ msgid "Failed to update player information."
 msgstr ""
 
 msgid "Artifacts cannot be placed on water."
+msgstr ""
+
+msgid "Only one Random Ultimate Artifact can be placed on the map."
 msgstr ""
 
 #, fuzzy
@@ -8369,11 +8480,29 @@ msgstr "Bažina"
 msgid "Frozen Lake"
 msgstr ""
 
-msgid "Unknown Monster"
-msgstr "Neznámá stvůra"
+msgid "randomRace|level 1 creatures"
+msgstr ""
+
+msgid "randomRace|level 2 creatures"
+msgstr ""
+
+msgid "randomRace|level 3 creatures"
+msgstr ""
+
+msgid "randomRace|level 4 creatures"
+msgstr ""
+
+msgid "randomRace|level 5 creatures"
+msgstr ""
+
+msgid "randomRace|level 6 creatures"
+msgstr ""
 
 msgid "Unknown Monsters"
 msgstr "Neznámé stvůry"
+
+msgid "Unknown Monster"
+msgstr "Neznámá stvůra"
 
 msgid "Peasant"
 msgstr "Rolník"
