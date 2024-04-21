@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-11 06:20+0000\n"
+"POT-Creation-Date: 2024-04-21 04:43+0000\n"
 "PO-Revision-Date: 2024-03-15 21:35+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -3829,6 +3829,10 @@ msgid "Failed to update player information."
 msgstr "Не удалось обновить информацию об игроке."
 
 msgid "Artifacts cannot be placed on water."
+msgstr "Артефакты нельзя размещать на воде."
+
+#, fuzzy
+msgid "Only one Random Ultimate Artifact can be placed on the map."
 msgstr "Артефакты нельзя размещать на воде."
 
 msgid "Mountains cannot be placed on water."
