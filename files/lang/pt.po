@@ -950,10 +950,10 @@ msgid "%{tower} does %{damage} damage."
 msgstr "%{tower} causa %{damage} de dano."
 
 msgid "The mirror image is created."
-msgstr "A imagem de espelho está criada."
+msgstr "A imagem espelhada foi criada."
 
 msgid "The mirror image is destroyed!"
-msgstr "A imagem de espelho está destruída!"
+msgstr "A imagem espelhada foi destruída!"
 
 msgid "Are you sure you want to interrupt the auto combat?"
 msgstr "Tem certeza de que deseja interromper o combate automático?"
@@ -11090,7 +11090,7 @@ msgstr ""
 "permanentemente."
 
 msgid "Mirror Image"
-msgstr "Imagem de Espelho"
+msgstr "Imagem Espelhada"
 
 msgid ""
 "Creates an illusionary unit that duplicates one of your existing units. This "
