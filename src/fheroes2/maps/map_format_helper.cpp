@@ -161,25 +161,58 @@ namespace Maps
 
     void writeTile( const Tiles & tile, Map_Format::TileInfo & info )
     {
-        // Roads and streams are the only objects that are needed to be saved separately.
-        // This is because modification on one tile affects all neighboring tiles as well.
-        // Check all existing objects and delete all roads and streams.
-        info.objects.erase( std::remove_if( info.objects.begin(), info.objects.end(),
-                                            []( const Maps::Map_Format::ObjectInfo & object ) {
-                                                return object.group == ObjectGroup::ROADS || object.group == ObjectGroup::STREAMS;
-                                            } ),
-                            info.objects.end() );
+        std::deque<const TilesAddon *> roadParts;
+        std::deque<const TilesAddon *> streamParts;
 
         for ( const auto & addon : tile.getBottomLayerAddons() ) {
             if ( addon._objectIcnType == MP2::OBJ_ICN_TYPE_ROAD || addon._objectIcnType == MP2::OBJ_ICN_TYPE_STREAM ) {
-                const ObjectGroup group = ( addon._objectIcnType == MP2::OBJ_ICN_TYPE_ROAD ) ? ObjectGroup::ROADS : ObjectGroup::STREAMS;
-
-                const auto & objectInfos = getObjectsByGroup( group );
-                if ( addon._imageIndex < objectInfos.size() ) {
-                    // This is the correct object.
-                    addObjectToTile( info, group, addon._imageIndex, addon._uid );
+                const bool isRoad = ( addon._objectIcnType == MP2::OBJ_ICN_TYPE_ROAD );
+                if ( isRoad ) {
+                    roadParts.push_back( &addon );
+                }
+                else {
+                    streamParts.push_back( &addon );
                 }
             }
+        }
+
+        for ( size_t objectIndex = 0; objectIndex < info.objects.size(); ) {
+            auto & object = info.objects[objectIndex];
+
+            if ( object.group == ObjectGroup::ROADS ) {
+                if ( roadParts.empty() ) {
+                    // This tile was removed. Delete the object.
+                    info.objects.erase( info.objects.begin() + objectIndex );
+                    continue;
+                }
+                else {
+                    object.id = roadParts.front()->_uid;
+                    object.index = roadParts.front()->_imageIndex;
+                    roadParts.pop_front();
+                }
+            }
+            else if ( object.group == ObjectGroup::STREAMS ) {
+                if ( streamParts.empty() ) {
+                    // This tile was removed. Delete the object.
+                    info.objects.erase( info.objects.begin() + objectIndex );
+                    continue;
+                }
+                else {
+                    object.id = streamParts.front()->_uid;
+                    object.index = streamParts.front()->_imageIndex;
+                    streamParts.pop_front();
+                }
+            }
+
+            ++objectIndex;
+        }
+
+        for ( const TilesAddon * addon : roadParts ) {
+            addObjectToTile( info, ObjectGroup::ROADS, addon->_imageIndex, addon->_uid );
+        }
+
+        for ( const TilesAddon * addon : streamParts ) {
+            addObjectToTile( info, ObjectGroup::STREAMS, addon->_imageIndex, addon->_uid );
         }
 
         info.terrainIndex = tile.getTerrainImageIndex();
