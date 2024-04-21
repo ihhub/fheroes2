@@ -307,6 +307,13 @@ namespace
                     objectIter = mapTile.objects.erase( objectIter );
                     needRedraw = true;
                 }
+                else if ( objectIter->group == Maps::ObjectGroup::ADVENTURE_ARTIFACTS ) {
+                    assert( mapFormat.standardMetadata.find( objectIter->id ) != mapFormat.standardMetadata.end() );
+                    mapFormat.standardMetadata.erase( objectIter->id );
+
+                    objectIter = mapTile.objects.erase( objectIter );
+                    needRedraw = true;
+                }
                 else {
                     objectIter = mapTile.objects.erase( objectIter );
                     needRedraw = true;
@@ -1060,14 +1067,17 @@ namespace Interface
                 return;
             }
 
-            setObjectOnTileAsAction( tile, groupType, _editorPanel.getSelectedObjectType() );
+            if ( !setObjectOnTileAsAction( tile, groupType, _editorPanel.getSelectedObjectType() ) ) {
+                return;
+            }
 
             if ( !Maps::updateMapPlayers( _mapFormat ) ) {
                 _warningMessage.reset( _( "Failed to update player information." ) );
             }
         }
         else if ( groupType == Maps::ObjectGroup::ADVENTURE_ARTIFACTS ) {
-            const auto & objectInfo = Maps::getObjectInfo( groupType, _editorPanel.getSelectedObjectType() );
+            const int32_t objectType = _editorPanel.getSelectedObjectType();
+            const auto & objectInfo = Maps::getObjectInfo( groupType, objectType );
 
             if ( !isObjectPlacementAllowed( objectInfo, tilePos ) ) {
                 _warningMessage.reset( _( "Objects cannot be placed outside the map." ) );
@@ -1084,13 +1094,20 @@ namespace Interface
                 return;
             }
 
-            const int32_t artifactType = _editorPanel.getSelectedObjectType();
-
-            const auto & artifactInfo = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_ARTIFACTS );
-            assert( artifactType >= 0 && artifactType < static_cast<int32_t>( artifactInfo.size() ) );
+            if ( objectInfo.objectType == MP2::OBJ_RANDOM_ULTIMATE_ARTIFACT ) {
+                // First of all, verify that only one Random Ultimate artifact exists on the map.
+                for ( const auto & tileInfo : _mapFormat.tiles ) {
+                    for ( const auto & object : tileInfo.objects ) {
+                        if ( groupType == object.group && static_cast<uint32_t>( objectType ) == object.index ) {
+                            _warningMessage.reset( _( "Only one Random Ultimate Artifact can be placed on the map." ) );
+                            return;
+                        }
+                    }
+                }
+            }
 
             // For each Spell Scroll artifact we select a spell.
-            if ( artifactInfo[artifactType].objectType == MP2::OBJ_ARTIFACT && artifactInfo[artifactType].metadata[0] == Artifact::SPELL_SCROLL ) {
+            if ( objectInfo.objectType == MP2::OBJ_ARTIFACT && objectInfo.metadata[0] == Artifact::SPELL_SCROLL ) {
                 const int spellId = Dialog::selectSpell( Spell::RANDOM, true ).GetID();
 
                 if ( spellId == Spell::NONE ) {
@@ -1098,11 +1115,22 @@ namespace Interface
                     return;
                 }
 
-                setObjectOnTileAsAction( tile, groupType, _editorPanel.getSelectedObjectType() );
+                if ( !setObjectOnTileAsAction( tile, groupType, objectType ) ) {
+                    return;
+                }
+
+                assert( !_mapFormat.tiles[tile.GetIndex()].objects.empty() );
+
+                const auto & insertedObject = _mapFormat.tiles[tile.GetIndex()].objects.back();
+                assert( insertedObject.group == groupType && insertedObject.index == static_cast<uint32_t>( objectType ) );
+                assert( _mapFormat.standardMetadata.find( insertedObject.id ) != _mapFormat.standardMetadata.end() );
+
+                _mapFormat.standardMetadata[insertedObject.id].metadata[0] = spellId;
+
                 Maps::setSpellOnTile( tile, spellId );
             }
             else {
-                setObjectOnTileAsAction( tile, groupType, _editorPanel.getSelectedObjectType() );
+                setObjectOnTileAsAction( tile, groupType, objectType );
             }
         }
         else if ( groupType == Maps::ObjectGroup::LANDSCAPE_MOUNTAINS ) {
@@ -1433,13 +1461,16 @@ namespace Interface
         return true;
     }
 
-    void EditorInterface::setObjectOnTileAsAction( Maps::Tiles & tile, const Maps::ObjectGroup groupType, const int32_t objectIndex )
+    bool EditorInterface::setObjectOnTileAsAction( Maps::Tiles & tile, const Maps::ObjectGroup groupType, const int32_t objectIndex )
     {
         fheroes2::ActionCreator action( _historyManager, _mapFormat );
 
         if ( setObjectOnTile( tile, groupType, objectIndex ) ) {
             action.commit();
+            return true;
         }
+
+        return false;
     }
 
     bool EditorInterface::loadMap( const std::string & filePath )
