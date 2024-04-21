@@ -185,7 +185,7 @@ namespace Maps
                     info.objects.erase( info.objects.begin() + objectIndex );
                     continue;
                 }
-                
+
                 object.id = roadParts.front()->_uid;
                 object.index = roadParts.front()->_imageIndex;
                 roadParts.pop_front();
