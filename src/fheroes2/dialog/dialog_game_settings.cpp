@@ -18,6 +18,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "dialog_game_settings.h"
+
 #include <cassert>
 #include <cstdint>
 #include <vector>
@@ -25,7 +27,6 @@
 #include "agg_image.h"
 #include "dialog.h"
 #include "dialog_audio.h"
-#include "dialog_game_settings.h"
 #include "dialog_graphics_settings.h"
 #include "dialog_hotkeys.h"
 #include "dialog_language_selection.h"
