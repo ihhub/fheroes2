@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2024                                             *
+ *   Copyright (C) 2024                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -20,12 +20,34 @@
 
 #pragma once
 
-#include <vector>
-
-#include "game_language.h"
+#include <cstdint>
 
 namespace fheroes2
 {
-    // UI window to select a language by user.
-    void selectLanguage( const std::vector<SupportedLanguage> & languages, const SupportedLanguage currentLanguage );
+    enum class SupportedLanguage : uint8_t
+    {
+        English = 0, // default language for all versions of the game.
+        French, // GOG version
+        Polish, // GOG version
+        German, // GOG version
+        Russian, // Buka and XXI Vek versions
+        Italian, // Rare version?
+        Czech, // Local release occurred in 2002 by CD Projekt
+        Spanish, // Published by Proein. Only Succession Wars
+
+        // All languages listed below are original to fheroes2.
+        Belarusian,
+        Bulgarian,
+        Danish,
+        Dutch,
+        Hungarian,
+        Norwegian,
+        Portuguese,
+        Romanian,
+        Slovak,
+        Swedish,
+        Turkish,
+        Ukrainian,
+        Vietnamese
+    };
 }

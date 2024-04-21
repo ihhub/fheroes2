@@ -26,6 +26,7 @@
 #include <memory>
 
 #include "campaign_scenariodata.h"
+#include "game_language.h"
 #include "serialize.h"
 #include "translations.h"
 #include "ui_language.h"
