@@ -1085,6 +1085,10 @@ namespace Interface
                 hero->SetCenter( tilePos );
                 hero->SetColor( Color::IndexToColor( static_cast<int>( color ) ) );
             }
+            else {
+                // How is it possible that the action was successful but no hero?
+                assert( 0 );
+            }
 
             if ( !Maps::updateMapPlayers( _mapFormat ) ) {
                 _warningMessage.reset( _( "Failed to update player information." ) );
