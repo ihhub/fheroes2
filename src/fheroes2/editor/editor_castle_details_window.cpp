@@ -168,7 +168,7 @@ namespace
                     description += "\n\n";
                     description += _( "Requires:" );
                     description += "\n";
-                    std::move( requirement.begin(), requirement.end(), std::back_inserter( description ) );
+                    description += requirement;
                 }
 
                 fheroes2::showStandardTextMessage( Castle::GetStringBuilding( building, _race ), std::move( description ), Dialog::ZERO );
