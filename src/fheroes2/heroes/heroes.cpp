@@ -56,6 +56,7 @@
 #include "logging.h"
 #include "luck.h"
 #include "m82.h"
+#include "map_format_helper.h"
 #include "map_format_info.h"
 #include "maps.h"
 #include "maps_fileinfo.h"
@@ -627,18 +628,7 @@ void Heroes::applyHeroMetadata( const Maps::Map_Format::HeroMetadata & heroMetad
         HeroBase::LoadDefaults( HeroBase::HEROES, _race );
     }
 
-    const bool doesHeroHaveCustomArmy
-        = isEditor
-          || std::any_of( heroMetadata.armyMonsterType.begin(), heroMetadata.armyMonsterType.end(), []( const int32_t monsterType ) { return monsterType != 0; } );
-    if ( doesHeroHaveCustomArmy ) {
-        std::vector<Troop> troops( heroMetadata.armyMonsterType.size() );
-        for ( size_t i = 0; i < troops.size(); ++i ) {
-            troops[i] = Troop{ heroMetadata.armyMonsterType[i], static_cast<uint32_t>( heroMetadata.armyMonsterCount[i] ) };
-        }
-
-        army.Assign( troops.data(), troops.data() + troops.size() );
-    }
-    else {
+    if ( !Maps::loadHeroArmy( army, heroMetadata ) && !isEditor ) {
         // Reset the army to default
         army.Reset( true );
     }
@@ -780,17 +770,7 @@ Maps::Map_Format::HeroMetadata Heroes::getHeroMetadata() const
 {
     Maps::Map_Format::HeroMetadata heroMetadata;
 
-    const size_t armySize = army.Size();
-    assert( heroMetadata.armyMonsterType.size() == armySize );
-
-    // Update army metadata.
-    for ( size_t i = 0; i < armySize; ++i ) {
-        const Troop * troop = army.GetTroop( i );
-        assert( troop != nullptr );
-
-        heroMetadata.armyMonsterType[i] = troop->GetID();
-        heroMetadata.armyMonsterCount[i] = static_cast<int32_t>( troop->GetCount() );
-    }
+    Maps::saveHeroArmy( army, heroMetadata );
 
     // Hero's portrait.
     heroMetadata.customPortrait = portrait;

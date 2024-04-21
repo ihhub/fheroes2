@@ -261,7 +261,10 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool openConstructionW
     fheroes2::Image surfaceHero;
 
     auto constructionDialogHandler = [this, &display, &dialogRoi, &fadeBuilding, &hero, &surfaceHero, &alphaHero]() {
-        switch ( uint32_t build = BUILD_NOTHING; openConstructionDialog( build ) ) {
+        uint32_t build = BUILD_NOTHING;
+        const Castle::ConstructionDialogResult result = openConstructionDialog( build );
+
+        switch ( result ) {
         case ConstructionDialogResult::NextConstructionWindow:
             return CastleDialogReturnValue::NextCostructionWindow;
         case ConstructionDialogResult::PrevConstructionWindow:

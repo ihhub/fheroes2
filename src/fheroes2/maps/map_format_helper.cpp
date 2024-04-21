@@ -31,8 +31,10 @@
 #include <memory>
 #include <set>
 #include <utility>
-#include <vector>
 
+#include "army.h"
+#include "army_troop.h"
+#include "castle.h"
 #include "color.h"
 #include "gamedefs.h"
 #include "map_format_info.h"
@@ -60,6 +62,32 @@ namespace
 
         const Maps::Map_Format::ObjectInfo * info{ nullptr };
     };
+
+    void loadArmyFromMetadata( Army & army, const std::array<int32_t, 5> & unitType, const std::array<int32_t, 5> & unitCount )
+    {
+        std::vector<Troop> troops( unitType.size() );
+        for ( size_t i = 0; i < troops.size(); ++i ) {
+            assert( unitType[i] >= 0 && unitCount[i] >= 0 );
+            troops[i] = Troop{ unitType[i], static_cast<uint32_t>( unitCount[i] ) };
+        }
+
+        army.Assign( troops.data(), troops.data() + troops.size() );
+    }
+
+    void saveArmyToMetadata( const Army & army, std::array<int32_t, 5> & unitType, std::array<int32_t, 5> & unitCount )
+    {
+        const size_t armySize = army.Size();
+        assert( unitType.size() == armySize );
+
+        // Update army metadata.
+        for ( size_t i = 0; i < armySize; ++i ) {
+            const Troop * troop = army.GetTroop( i );
+            assert( troop != nullptr );
+
+            unitType[i] = troop->GetID();
+            unitCount[i] = static_cast<int32_t>( troop->GetCount() );
+        }
+    }
 }
 
 namespace Maps
@@ -233,12 +261,19 @@ namespace Maps
             auto [heroMetadata, isMetadataEmplaced] = map.heroMetadata.try_emplace( uid );
             assert( isMetadataEmplaced );
 
+            const auto & objects = Maps::getObjectsByGroup( group );
+            assert( index < objects.size() );
             // Set race according the object metadata.
-            heroMetadata->second.race = Race::IndexToRace( static_cast<int>( getObjectsByGroup( group )[index].metadata[1] ) );
+            heroMetadata->second.race = Race::IndexToRace( static_cast<int>( objects[index].metadata[1] ) );
         }
         else if ( group == ObjectGroup::KINGDOM_TOWNS ) {
             auto [metadata, isMetadataEmplaced] = map.castleMetadata.try_emplace( uid );
             assert( isMetadataEmplaced );
+
+            const auto & objects = Maps::getObjectsByGroup( group );
+            assert( index < objects.size() );
+            // Add town or castle main buildings.
+            metadata->second.builtBuildings.push_back( objects[index].metadata[1] == 0 ? BUILD_TENT : BUILD_CASTLE );
         }
         else if ( isJailObject( group, index ) ) {
             auto [heroMetadata, isMetadataEmplaced] = map.heroMetadata.try_emplace( uid );
@@ -558,5 +593,61 @@ namespace Maps
     bool isJailObject( const ObjectGroup group, const uint32_t index )
     {
         return ( group == Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS && getObjectInfo( group, static_cast<int32_t>( index ) ).objectType == MP2::OBJ_JAIL );
+    }
+
+    uint32_t getBuildingsFromVector( const std::vector<uint32_t> & buildingsVector )
+    {
+        uint32_t buildings{ BUILD_NOTHING };
+        for ( const uint32_t building : buildingsVector ) {
+            buildings |= building;
+        }
+
+        return buildings;
+    }
+
+    void setDefaultCastleDefenderArmy( Map_Format::CastleMetadata & metadata )
+    {
+        for ( int32_t & type : metadata.defenderMonsterType ) {
+            type = -1;
+        }
+        for ( int32_t & count : metadata.defenderMonsterCount ) {
+            count = 0;
+        }
+    }
+
+    bool isDefaultCastleDefenderArmy( const Map_Format::CastleMetadata & metadata )
+    {
+        return std::all_of( metadata.defenderMonsterType.begin(), metadata.defenderMonsterType.end(), []( const int32_t type ) { return type < 0; } );
+    }
+
+    bool loadCastleArmy( Army & army, const Map_Format::CastleMetadata & metadata )
+    {
+        if ( isDefaultCastleDefenderArmy( metadata ) ) {
+            return false;
+        }
+
+        loadArmyFromMetadata( army, metadata.defenderMonsterType, metadata.defenderMonsterCount );
+        return true;
+    }
+
+    void saveCastleArmy( const Army & army, Map_Format::CastleMetadata & metadata )
+    {
+        saveArmyToMetadata( army, metadata.defenderMonsterType, metadata.defenderMonsterCount );
+    }
+
+    bool loadHeroArmy( Army & army, const Map_Format::HeroMetadata & metadata )
+    {
+        if ( std::all_of( metadata.armyMonsterType.begin(), metadata.armyMonsterType.end(), []( const int32_t type ) { return type <= 0; } ) ) {
+            // There is no custom army.
+            return false;
+        }
+
+        loadArmyFromMetadata( army, metadata.armyMonsterType, metadata.armyMonsterCount );
+        return true;
+    }
+
+    void saveHeroArmy( const Army & army, Map_Format::HeroMetadata & metadata )
+    {
+        saveArmyToMetadata( army, metadata.armyMonsterType, metadata.armyMonsterCount );
     }
 }

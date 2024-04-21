@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2012 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -52,6 +52,7 @@ namespace Interface
             tableSize = size;
 
             calculateRoi();
+            calculateItemsPos();
         }
 
         void SetContent( std::vector<Item> & content )
@@ -70,15 +71,18 @@ namespace Interface
         {
             renderingRoi.x = offset.x;
             renderingRoi.y = offset.y;
+
+            calculateItemsPos();
         }
 
         void setSingleItemSize( const fheroes2::Size & size )
         {
             assert( size.width > 0 && size.height > 0 );
 
-            singleItemRoi = size;
+            singleItemSize = size;
 
             calculateRoi();
+            calculateItemsPos();
         }
 
         void setInBetweenItemsOffset( const fheroes2::Size & offset )
@@ -86,11 +90,12 @@ namespace Interface
             offsetBetweenItems = offset;
 
             calculateRoi();
+            calculateItemsPos();
         }
 
         Item * GetItem( const fheroes2::Point & pt )
         {
-            ItemsIterator posItem = GetItemIter( pt );
+            const ItemsIterator posItem = GetItemIter( pt );
             return posItem != items.end() ? *posItem : nullptr;
         }
 
@@ -101,37 +106,32 @@ namespace Interface
 
         void Redraw( fheroes2::Image & output )
         {
-            fheroes2::Point itemOffset{ renderingRoi.x, renderingRoi.y };
-
-            for ( int32_t y = 0; y < tableSize.height; ++y ) {
-                for ( int32_t x = 0; x < tableSize.width; ++x ) {
-                    RedrawBackground( { itemOffset.x, itemOffset.y, singleItemRoi.width, singleItemRoi.height }, output );
-
-                    itemOffset.x += offsetBetweenItems.width + singleItemRoi.width;
-                }
-
-                itemOffset.x = renderingRoi.x;
-                itemOffset.y += offsetBetweenItems.height + singleItemRoi.height;
+            if ( tableSize.width <= 0 || tableSize.height <= 0 ) {
+                return;
             }
 
-            itemOffset = { renderingRoi.x, renderingRoi.y };
+            ItemsIterator itemIter = items.begin();
+            auto itemPosIter = itemPos.begin();
 
-            ItemsIterator itemIter = GetTopItemIter();
+            const bool useCustomCountX = ( _customItemsCountInRow.size() == static_cast<size_t>( tableSize.height ) );
 
             for ( int32_t y = 0; y < tableSize.height; ++y ) {
-                for ( int32_t x = 0; x < tableSize.width; ++x ) {
+                const int32_t coutX = useCustomCountX ? _customItemsCountInRow[y] : tableSize.width;
+                for ( int32_t x = 0; x < coutX; ++x ) {
+                    assert( itemPosIter != itemPos.end() );
+
+                    const fheroes2::Rect itemRoi{ *itemPosIter, singleItemSize };
+                    RedrawBackground( itemRoi, output );
+
+                    ++itemPosIter;
+
                     if ( itemIter == items.end() ) {
-                        return;
+                        continue;
                     }
 
-                    RedrawItemIter( itemIter, { itemOffset.x, itemOffset.y, singleItemRoi.width, singleItemRoi.height }, output );
+                    RedrawItemIter( itemIter, itemRoi, output );
                     ++itemIter;
-
-                    itemOffset.x += offsetBetweenItems.width + singleItemRoi.width;
                 }
-
-                itemOffset.x = renderingRoi.x;
-                itemOffset.y += offsetBetweenItems.height + singleItemRoi.height;
             }
         }
 
@@ -160,12 +160,29 @@ namespace Interface
             return ActionCursorItemIter( cursor, GetItemIterPos( cursor ) );
         }
 
+        void setCustomItemsCountInRow( std::vector<int32_t> itemsXCounts )
+        {
+            _customItemsCountInRow = std::move( itemsXCounts );
+
+            if ( !_customItemsCountInRow.empty() ) {
+                const int32_t maxWidth = *std::max_element( _customItemsCountInRow.begin(), _customItemsCountInRow.end() );
+                if ( tableSize.width != maxWidth ) {
+                    tableSize.width = maxWidth;
+                    calculateRoi();
+                }
+            }
+
+            calculateItemsPos();
+        }
+
     protected:
         // Since we store pointers and the number of elements do not change in a container, vector is the most efficient container to be used.
         using ItemsIterator = typename std::vector<Item *>::iterator;
         using ItemIterPos = std::pair<ItemsIterator, fheroes2::Rect>;
 
         std::vector<Item *> items;
+
+        std::vector<int32_t> _customItemsCountInRow;
 
         virtual void SetContentItems()
         {
@@ -231,39 +248,68 @@ namespace Interface
 
         ItemIterPos GetItemIterPos( const fheroes2::Point & position )
         {
-            fheroes2::Rect dstrt( renderingRoi.x, renderingRoi.y, singleItemRoi.width, singleItemRoi.height );
-            ItemsIterator posItem = GetTopItemIter();
+            if ( tableSize.width <= 0 || tableSize.height <= 0 ) {
+                return { items.end(), {} };
+            }
+
+            ItemsIterator posItem = items.begin();
+            auto itemPosIter = itemPos.begin();
+
+            const bool useCustomCountX = ( _customItemsCountInRow.size() == static_cast<size_t>( tableSize.height ) );
 
             for ( int32_t y = 0; y < tableSize.height; ++y ) {
-                for ( int32_t x = 0; x < tableSize.width; ++x ) {
+                const int32_t coutX = useCustomCountX ? _customItemsCountInRow[y] : tableSize.width;
+                for ( int32_t x = 0; x < coutX; ++x ) {
                     if ( posItem != items.end() ) {
-                        if ( dstrt & position )
-                            return ItemIterPos( posItem, dstrt );
+                        assert( itemPosIter != itemPos.end() );
+
+                        const fheroes2::Rect itemRoi( *itemPosIter, singleItemSize );
+                        if ( itemRoi & position ) {
+                            return ItemIterPos( posItem, itemRoi );
+                        }
                         ++posItem;
+                        ++itemPosIter;
                     }
-
-                    dstrt.x += offsetBetweenItems.width + singleItemRoi.width;
                 }
-
-                dstrt.x = renderingRoi.x;
-                dstrt.y += offsetBetweenItems.height + singleItemRoi.height;
             }
 
             return { items.end(), {} };
         }
 
     private:
+        void calculateItemsPos()
+        {
+            itemPos.clear();
+
+            if ( tableSize.width <= 0 || tableSize.height <= 0 ) {
+                return;
+            }
+
+            const bool useCustomCountX = ( _customItemsCountInRow.size() == static_cast<size_t>( tableSize.height ) );
+            const int32_t stepX = ( offsetBetweenItems.width + singleItemSize.width );
+            const int32_t stepY = ( offsetBetweenItems.height + singleItemSize.height );
+
+            for ( int32_t y = 0; y < tableSize.height; ++y ) {
+                const int32_t coutX = useCustomCountX ? _customItemsCountInRow[y] : tableSize.width;
+                const int32_t offsetX = useCustomCountX ? ( tableSize.width - _customItemsCountInRow[y] ) * stepX / 2 : 0;
+
+                for ( int32_t x = 0; x < coutX; ++x ) {
+                    itemPos.emplace_back( renderingRoi.x + x * stepX + offsetX, renderingRoi.y + y * stepY );
+                }
+            }
+        }
+
         void calculateRoi()
         {
             if ( tableSize.width > 0 ) {
-                renderingRoi.width = tableSize.width * singleItemRoi.width + ( tableSize.width - 1 ) * offsetBetweenItems.width;
+                renderingRoi.width = tableSize.width * singleItemSize.width + ( tableSize.width - 1 ) * offsetBetweenItems.width;
             }
             else {
                 renderingRoi.width = 0;
             }
 
             if ( tableSize.height > 0 ) {
-                renderingRoi.height = tableSize.height * singleItemRoi.height + ( tableSize.height - 1 ) * offsetBetweenItems.height;
+                renderingRoi.height = tableSize.height * singleItemSize.height + ( tableSize.height - 1 ) * offsetBetweenItems.height;
             }
             else {
                 renderingRoi.height = 0;
@@ -271,7 +317,8 @@ namespace Interface
         }
 
         fheroes2::Rect renderingRoi;
-        fheroes2::Size singleItemRoi;
+        fheroes2::Size singleItemSize;
+        std::vector<fheroes2::Point> itemPos;
         fheroes2::Size tableSize;
         fheroes2::Size offsetBetweenItems;
     };
@@ -443,7 +490,7 @@ namespace Interface
             Item * otherItemPress = other.GetItem( le.GetMousePressLeft() );
             assert( otherItemPress != nullptr );
 
-            ItemIterPos iterPos1 = ItemsBar<Item>::GetItemIterPos( cursor );
+            const ItemIterPos iterPos1 = ItemsBar<Item>::GetItemIterPos( cursor );
             if ( iterPos1.first == ItemsBar<Item>::GetEndItemIter() )
                 return false;
 
@@ -509,12 +556,12 @@ namespace Interface
 
         bool ActionCursorItemIter( const fheroes2::Point & cursor, ItemsActionBar<Item> & other )
         {
-            ItemIterPos iterPos1 = ItemsBar<Item>::GetItemIterPos( cursor );
+            const ItemIterPos iterPos1 = ItemsBar<Item>::GetItemIterPos( cursor );
             if ( iterPos1.first == ItemsBar<Item>::GetEndItemIter() ) {
                 return false;
             }
 
-            ItemIterPos iterPos2 = other.curItemPos;
+            const ItemIterPos iterPos2 = other.curItemPos;
             if ( ActionBarCursor( **iterPos1.first, **iterPos2.first ) ) {
                 return true;
             }

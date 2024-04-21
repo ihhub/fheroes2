@@ -30,6 +30,7 @@
 #include "agg_image.h"
 #include "army_troop.h"
 #include "audio_manager.h"
+#include "castle_building_info.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game_hotkeys.h"
@@ -207,80 +208,13 @@ Funds BuildingInfo::GetCost( uint32_t build, int race )
     return payment;
 }
 
-int GetIndexBuildingSprite( uint32_t build )
-{
-    switch ( build ) {
-    case DWELLING_MONSTER1:
-        return 19;
-    case DWELLING_MONSTER2:
-        return 20;
-    case DWELLING_MONSTER3:
-        return 21;
-    case DWELLING_MONSTER4:
-        return 22;
-    case DWELLING_MONSTER5:
-        return 23;
-    case DWELLING_MONSTER6:
-        return 24;
-    case DWELLING_UPGRADE2:
-        return 25;
-    case DWELLING_UPGRADE3:
-        return 26;
-    case DWELLING_UPGRADE4:
-        return 27;
-    case DWELLING_UPGRADE5:
-        return 28;
-    case DWELLING_UPGRADE6:
-        return 29;
-    case DWELLING_UPGRADE7:
-        return 30;
-    case BUILD_MAGEGUILD1:
-    case BUILD_MAGEGUILD2:
-    case BUILD_MAGEGUILD3:
-    case BUILD_MAGEGUILD4:
-    case BUILD_MAGEGUILD5:
-        return 0;
-    case BUILD_THIEVESGUILD:
-        return 1;
-    case BUILD_SHRINE:
-    case BUILD_TAVERN:
-        return 2;
-    case BUILD_SHIPYARD:
-        return 3;
-    case BUILD_WELL:
-        return 4;
-    case BUILD_CASTLE:
-        return 6;
-    case BUILD_STATUE:
-        return 7;
-    case BUILD_LEFTTURRET:
-        return 8;
-    case BUILD_RIGHTTURRET:
-        return 9;
-    case BUILD_MARKETPLACE:
-        return 10;
-    case BUILD_WEL2:
-        return 11;
-    case BUILD_MOAT:
-        return 12;
-    case BUILD_SPEC:
-        return 13;
-    case BUILD_CAPTAIN:
-        return 15;
-    default:
-        break;
-    }
-
-    return 0;
-}
-
 BuildingInfo::BuildingInfo( const Castle & c, const building_t b )
     : castle( c )
     , building( b )
     , area( 0, 0, 135, 70 )
     , bcond( ALLOW_BUILD )
 {
-    if ( IsDwelling() )
+    if ( isDwelling( building ) )
         building = castle.GetActualDwelling( b );
 
     building = castle.isBuild( b ) ? castle.GetUpgradeBuilding( b ) : b;
@@ -295,33 +229,8 @@ BuildingInfo::BuildingInfo( const Castle & c, const building_t b )
     // generate description
     if ( BUILD_DISABLE == bcond )
         description = GetConditionDescription();
-    else if ( IsDwelling() ) {
-        description = _( "The %{building} produces %{monster}." );
-        StringReplace( description, "%{building}", Castle::GetStringBuilding( building, castle.GetRace() ) );
-        StringReplaceWithLowercase( description, "%{monster}", Monster( castle.GetRace(), building ).GetMultiName() );
-    }
-    else
-        description = Castle::GetDescriptionBuilding( building, castle.GetRace() );
-
-    switch ( building ) {
-    case BUILD_WELL:
-        StringReplace( description, "%{count}", Castle::GetGrownWell() );
-        break;
-
-    case BUILD_WEL2:
-        StringReplace( description, "%{count}", Castle::GetGrownWel2() );
-        break;
-
-    case BUILD_CASTLE:
-    case BUILD_STATUE:
-    case BUILD_SPEC: {
-        const Funds profit = ProfitConditions::FromBuilding( building, castle.GetRace() );
-        StringReplace( description, "%{count}", profit.gold );
-        break;
-    }
-
-    default:
-        break;
+    else {
+        description = getBuildingDescription( castle.GetRace(), building );
     }
 
     // fix area for captain
@@ -338,7 +247,7 @@ void BuildingInfo::SetPos( int32_t x, int32_t y )
     area.y = y;
 }
 
-bool BuildingInfo::IsDwelling() const
+bool BuildingInfo::isDwelling( const uint32_t building )
 {
     switch ( building ) {
     case DWELLING_MONSTER1:
@@ -358,6 +267,45 @@ bool BuildingInfo::IsDwelling() const
         break;
     }
     return false;
+}
+
+std::string BuildingInfo::getBuildingDescription( const int race, const uint32_t buildingId )
+{
+    std::string description;
+
+    if ( isDwelling( buildingId ) ) {
+        description = _( "The %{building} produces %{monster}." );
+        StringReplace( description, "%{building}", Castle::GetStringBuilding( buildingId, race ) );
+        if ( race == Race::RAND ) {
+            StringReplace( description, "%{monster}", Monster::getRandomRaceMonstersName( buildingId ) );
+        }
+        else {
+            StringReplaceWithLowercase( description, "%{monster}", Monster( race, buildingId ).GetMultiName() );
+        }
+    }
+    else {
+        description = fheroes2::getBuildingDescription( race, static_cast<building_t>( buildingId ) );
+
+        switch ( buildingId ) {
+        case BUILD_WELL:
+            StringReplace( description, "%{count}", Castle::GetGrownWell() );
+            break;
+        case BUILD_WEL2:
+            StringReplace( description, "%{count}", Castle::GetGrownWel2() );
+            break;
+        case BUILD_CASTLE:
+        case BUILD_STATUE:
+        case BUILD_SPEC: {
+            const Funds profit = ProfitConditions::FromBuilding( buildingId, race );
+            StringReplace( description, "%{count}", profit.gold );
+            break;
+        }
+        default:
+            break;
+        }
+    }
+
+    return description;
 }
 
 void BuildingInfo::RedrawCaptain() const
@@ -400,7 +348,7 @@ void BuildingInfo::Redraw() const
     }
 
     fheroes2::Display & display = fheroes2::Display::instance();
-    const int index = GetIndexBuildingSprite( building );
+    const int index = fheroes2::getIndexBuildingSprite( static_cast<building_t>( building ) );
 
     const fheroes2::Sprite & buildingFrame = fheroes2::AGG::GetICN( ICN::BLDGXTRA, 0 );
     fheroes2::Blit( buildingFrame, display, area.x, area.y );
@@ -498,20 +446,7 @@ bool BuildingInfo::DialogBuyBuilding( bool buttons ) const
     const fheroes2::Text descriptionText( std::move( extendedDescription ), fheroes2::FontType::normalWhite() );
 
     // prepare requirement build string
-    std::string requirement;
-    const uint32_t requirementBuildingIds = castle.GetBuildingRequirement( building );
-    const char sep = '\n';
-
-    for ( uint32_t itr = 0x00000001; itr; itr <<= 1 )
-        if ( requirementBuildingIds & itr ) {
-            requirement.append( Castle::GetStringBuilding( itr, castle.GetRace() ) );
-            requirement += sep;
-        }
-
-    // Remove the last separator.
-    if ( !requirement.empty() ) {
-        requirement.pop_back();
-    }
+    std::string requirement = fheroes2::getBuildingRequirementString( castle.GetRace(), static_cast<building_t>( building ) );
 
     const bool requirementsPresent = !requirement.empty();
 
@@ -553,7 +488,8 @@ bool BuildingInfo::DialogBuyBuilding( bool buttons ) const
     fheroes2::Display & display = fheroes2::Display::instance();
     fheroes2::Blit( buildingFrame, display, pos.x, pos.y );
 
-    const fheroes2::Sprite & buildingImage = fheroes2::AGG::GetICN( ICN::Get4Building( castle.GetRace() ), GetIndexBuildingSprite( building ) );
+    const fheroes2::Sprite & buildingImage
+        = fheroes2::AGG::GetICN( ICN::Get4Building( castle.GetRace() ), fheroes2::getIndexBuildingSprite( static_cast<building_t>( building ) ) );
     pos.x = dialogRoi.x + ( dialogRoi.width - buildingImage.width() ) / 2;
     pos.y += 1;
     fheroes2::Blit( buildingImage, display, pos.x, pos.y );
