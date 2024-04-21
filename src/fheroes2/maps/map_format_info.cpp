@@ -151,16 +151,28 @@ namespace Maps::Map_Format
 
     StreamBase & operator<<( StreamBase & msg, const BaseMapFormat & map )
     {
+        using LanguageUnderlyingType = std::underlying_type_t<decltype( map.language )>;
+
         return msg << map.version << map.isCampaign << map.difficulty << map.availablePlayerColors << map.humanPlayerColors << map.computerPlayerColors << map.alliances
                    << map.playerRace << map.victoryConditionType << map.isVictoryConditionApplicableForAI << map.allowNormalVictory << map.victoryConditionMetadata
-                   << map.lossConditionType << map.lossConditionMetadata << map.size << map.name << map.description;
+                   << map.lossConditionType << map.lossConditionMetadata << map.size << static_cast<LanguageUnderlyingType>( map.language ) << map.name
+                   << map.description;
     }
 
     StreamBase & operator>>( StreamBase & msg, BaseMapFormat & map )
     {
-        return msg >> map.version >> map.isCampaign >> map.difficulty >> map.availablePlayerColors >> map.humanPlayerColors >> map.computerPlayerColors >> map.alliances
-               >> map.playerRace >> map.victoryConditionType >> map.isVictoryConditionApplicableForAI >> map.allowNormalVictory >> map.victoryConditionMetadata
-               >> map.lossConditionType >> map.lossConditionMetadata >> map.size >> map.name >> map.description;
+        msg >> map.version >> map.isCampaign >> map.difficulty >> map.availablePlayerColors >> map.humanPlayerColors >> map.computerPlayerColors >> map.alliances
+            >> map.playerRace >> map.victoryConditionType >> map.isVictoryConditionApplicableForAI >> map.allowNormalVictory >> map.victoryConditionMetadata
+            >> map.lossConditionType >> map.lossConditionMetadata >> map.size;
+
+        using LanguageUnderlyingType = std::underlying_type_t<decltype( map.language )>;
+        static_assert( std::is_same_v<LanguageUnderlyingType, uint8_t>, "Type of language has been changed, check the logic below" );
+        LanguageUnderlyingType language;
+
+        msg >> language;
+        map.language = static_cast<fheroes2::SupportedLanguage>( language );
+
+        return msg >> map.name >> map.description;
     }
 
     StreamBase & operator<<( StreamBase & msg, const MapFormat & map )

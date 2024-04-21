@@ -27,6 +27,7 @@
 #include <string>
 #include <vector>
 
+#include "game_language.h"
 #include "map_object_info.h"
 #include "resource.h"
 
@@ -232,6 +233,8 @@ namespace Maps::Map_Format
         std::vector<uint32_t> lossConditionMetadata;
 
         int32_t size{ 0 };
+
+        fheroes2::SupportedLanguage language{ fheroes2::SupportedLanguage::English };
 
         std::string name;
         std::string description;

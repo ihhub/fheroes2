@@ -332,6 +332,7 @@
     <ClInclude Include="src\fheroes2\game\game_interface.h" />
     <ClInclude Include="src\fheroes2\game\game_io.h" />
     <ClInclude Include="src\fheroes2\game\game_logo.h" />
+    <ClInclude Include="src\fheroes2\game\game_language.h" />
     <ClInclude Include="src\fheroes2\game\game_mainmenu_ui.h" />
     <ClInclude Include="src\fheroes2\game\game_mode.h" />
     <ClInclude Include="src\fheroes2\game\game_over.h" />
