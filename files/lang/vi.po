@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-11 06:20+0000\n"
+"POT-Creation-Date: 2024-04-21 05:05+0000\n"
 "PO-Revision-Date: 2024-02-20 08:49+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -205,6 +205,10 @@ msgstr "LÂU ĐÀI"
 
 msgid "TOWN"
 msgstr "THỊ TRẤN"
+
+#, fuzzy
+msgid "RESTRICT"
+msgstr "LÀM LẠI"
 
 msgid ""
 "D\n"
@@ -2445,6 +2449,48 @@ msgstr "Phòng thí nghiệm"
 msgid "Shrine"
 msgstr "Đền thờ"
 
+#, fuzzy
+msgid "Special"
+msgstr "Không có gì Đặc biệt"
+
+msgid "Horde Building"
+msgstr ""
+
+#, fuzzy
+msgid "Dwelling 1"
+msgstr "Chọn Phép:"
+
+#, fuzzy
+msgid "Dwelling 2"
+msgstr "Chọn Phép:"
+
+msgid "Upg. Dwelling 2"
+msgstr ""
+
+#, fuzzy
+msgid "Dwelling 3"
+msgstr "Chọn Phép:"
+
+msgid "Upg. Dwelling 3"
+msgstr ""
+
+#, fuzzy
+msgid "Dwelling 4"
+msgstr "Chọn Phép:"
+
+msgid "Upg. Dwelling 4"
+msgstr ""
+
+#, fuzzy
+msgid "Dwelling 6"
+msgstr "Chọn Phép:"
+
+msgid "Upg. Dwelling 6"
+msgstr ""
+
+msgid "2x Upg. Dwelling 6"
+msgstr ""
+
 msgid ""
 "The Fortifications increase the toughness of the walls, increasing the "
 "number of turns it takes to knock them down."
@@ -2495,6 +2541,17 @@ msgstr ""
 
 msgid "The Skull Pile increases production of Skeletons by %{count} per week."
 msgstr "Đống đầu lâu tăng sản lượng Xương thêm %{count} mỗi tuần."
+
+msgid "The Special building gives a specific bonus to the chosen castle type."
+msgstr ""
+
+#, fuzzy
+msgid ""
+"The Horde Building increases the growth rate of the level 1 creatures by 8 "
+"per week."
+msgstr ""
+"Giếng tăng tốc độ phát triển của tất cả các ngôi nhà thêm %{count} sinh vật "
+"mỗi tuần."
 
 msgid "Thieves' Guild"
 msgstr "Băng Cướp"
@@ -3803,6 +3860,55 @@ msgstr "Nhân cách:"
 msgid "Best Monster:"
 msgstr "Quái vật Mạnh nhất:"
 
+#, fuzzy
+msgid "Random Castle Name"
+msgstr "Ngẫu nhiên Lâu đài"
+
+#, fuzzy
+msgid "Allow Castle build"
+msgstr "Lâu đài Mây"
+
+#, fuzzy
+msgid "Default buildings"
+msgstr "Hành động Mặc định"
+
+#, fuzzy
+msgid "Default Army"
+msgstr "Hành động Mặc định"
+
+#, fuzzy
+msgid "Castle Army"
+msgstr "Lâu đài"
+
+msgid "Click to change the Castle name. Right-click to reset to default."
+msgstr ""
+
+#, fuzzy
+msgid "Enter Castle name"
+msgstr "Mất tướng: %{name}."
+
+msgid "Allow to build a castle in this town."
+msgstr ""
+
+msgid "Toggle the use of default buildings. Custom buildings will be reset!"
+msgstr ""
+
+#, fuzzy
+msgid "Default Buildings"
+msgstr "Hành động Mặc định"
+
+msgid "Toggle building construction restriction mode."
+msgstr ""
+
+msgid "Restrict Building Construction"
+msgstr ""
+
+msgid "Use default defenders army."
+msgstr ""
+
+msgid "Set custom Castle Army. Right-click to reset unit."
+msgstr ""
+
 msgid "Map filename"
 msgstr "Tệp bản đồ"
 
@@ -3869,6 +3975,10 @@ msgid "Failed to update player information."
 msgstr ""
 
 msgid "Artifacts cannot be placed on water."
+msgstr "Bảo vật không thể đặt trên nước."
+
+#, fuzzy
+msgid "Only one Random Ultimate Artifact can be placed on the map."
 msgstr "Bảo vật không thể đặt trên nước."
 
 msgid "Mountains cannot be placed on water."
@@ -8792,10 +8902,28 @@ msgstr "Đầm lầy"
 msgid "Frozen Lake"
 msgstr ""
 
-msgid "Unknown Monster"
-msgstr "Quái vật Vô danh"
+msgid "randomRace|level 1 creatures"
+msgstr ""
+
+msgid "randomRace|level 2 creatures"
+msgstr ""
+
+msgid "randomRace|level 3 creatures"
+msgstr ""
+
+msgid "randomRace|level 4 creatures"
+msgstr ""
+
+msgid "randomRace|level 5 creatures"
+msgstr ""
+
+msgid "randomRace|level 6 creatures"
+msgstr ""
 
 msgid "Unknown Monsters"
+msgstr "Quái vật Vô danh"
+
+msgid "Unknown Monster"
 msgstr "Quái vật Vô danh"
 
 msgid "Peasant"

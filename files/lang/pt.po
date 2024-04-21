@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-11 04:48+0000\n"
+"POT-Creation-Date: 2024-04-21 05:05+0000\n"
 "PO-Revision-Date: 2024-04-08 22:19-0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
@@ -206,6 +206,10 @@ msgstr "CASTELO"
 
 msgid "TOWN"
 msgstr "CIDADE"
+
+#, fuzzy
+msgid "RESTRICT"
+msgstr "REINICIAR"
 
 msgid ""
 "D\n"
@@ -2422,6 +2426,52 @@ msgstr "Laboratório"
 msgid "Shrine"
 msgstr "Santuário"
 
+#, fuzzy
+msgid "Special"
+msgstr "Nada Especial"
+
+msgid "Horde Building"
+msgstr ""
+
+#, fuzzy
+msgid "Dwelling 1"
+msgstr "Moradias"
+
+#, fuzzy
+msgid "Dwelling 2"
+msgstr "Moradias"
+
+#, fuzzy
+msgid "Upg. Dwelling 2"
+msgstr "Moradias"
+
+#, fuzzy
+msgid "Dwelling 3"
+msgstr "Moradias"
+
+#, fuzzy
+msgid "Upg. Dwelling 3"
+msgstr "Moradias"
+
+#, fuzzy
+msgid "Dwelling 4"
+msgstr "Moradias"
+
+#, fuzzy
+msgid "Upg. Dwelling 4"
+msgstr "Moradias"
+
+#, fuzzy
+msgid "Dwelling 6"
+msgstr "Moradias"
+
+#, fuzzy
+msgid "Upg. Dwelling 6"
+msgstr "Moradias"
+
+msgid "2x Upg. Dwelling 6"
+msgstr ""
+
 msgid ""
 "The Fortifications increase the toughness of the walls, increasing the "
 "number of turns it takes to knock them down."
@@ -2473,6 +2523,17 @@ msgstr ""
 msgid "The Skull Pile increases production of Skeletons by %{count} per week."
 msgstr ""
 "A Pilha de Caveiras aumenta a produção de esqueletos em %{count} por semana."
+
+msgid "The Special building gives a specific bonus to the chosen castle type."
+msgstr ""
+
+#, fuzzy
+msgid ""
+"The Horde Building increases the growth rate of the level 1 creatures by 8 "
+"per week."
+msgstr ""
+"O Poço aumenta a taxa de produção de todas as moradias em %{count} criaturas "
+"por semana."
 
 msgid "Thieves' Guild"
 msgstr "Guilda dos Ladrões"
@@ -3767,6 +3828,61 @@ msgstr "Personalidade:"
 msgid "Best Monster:"
 msgstr "Melhor Criatura:"
 
+#, fuzzy
+msgid "Random Castle Name"
+msgstr "Castelo Aleatório"
+
+#, fuzzy
+msgid "Allow Castle build"
+msgstr "Castelo Nebuloso"
+
+#, fuzzy
+msgid "Default buildings"
+msgstr "Ações Padrão"
+
+#, fuzzy
+msgid "Default Army"
+msgstr "Ações Padrão"
+
+#, fuzzy
+msgid "Castle Army"
+msgstr "Castelo"
+
+#, fuzzy
+msgid "Click to change the Castle name. Right-click to reset to default."
+msgstr ""
+"Clique para alterar o nome do herói. Clique com o botão direito para "
+"redefinir para o padrão."
+
+#, fuzzy
+msgid "Enter Castle name"
+msgstr "Insira o nome do herói"
+
+msgid "Allow to build a castle in this town."
+msgstr ""
+
+msgid "Toggle the use of default buildings. Custom buildings will be reset!"
+msgstr ""
+
+#, fuzzy
+msgid "Default Buildings"
+msgstr "Ações Padrão"
+
+msgid "Toggle building construction restriction mode."
+msgstr ""
+
+msgid "Restrict Building Construction"
+msgstr ""
+
+msgid "Use default defenders army."
+msgstr ""
+
+#, fuzzy
+msgid "Set custom Castle Army. Right-click to reset unit."
+msgstr ""
+"Definir Exército do herói. Clique com o botão direito para redefinir a "
+"unidade."
+
 msgid "Map filename"
 msgstr "Nome do arquivo de mapa"
 
@@ -3833,6 +3949,10 @@ msgid "Failed to update player information."
 msgstr "Falha ao atualizar informações do jogador."
 
 msgid "Artifacts cannot be placed on water."
+msgstr "Artefatos não podem ser colocados na água."
+
+#, fuzzy
+msgid "Only one Random Ultimate Artifact can be placed on the map."
 msgstr "Artefatos não podem ser colocados na água."
 
 msgid "Mountains cannot be placed on water."
@@ -8721,11 +8841,29 @@ msgstr "Lago Pantanoso"
 msgid "Frozen Lake"
 msgstr "Lago Congelado"
 
-msgid "Unknown Monster"
-msgstr "Monstro Desconhecido"
+msgid "randomRace|level 1 creatures"
+msgstr ""
+
+msgid "randomRace|level 2 creatures"
+msgstr ""
+
+msgid "randomRace|level 3 creatures"
+msgstr ""
+
+msgid "randomRace|level 4 creatures"
+msgstr ""
+
+msgid "randomRace|level 5 creatures"
+msgstr ""
+
+msgid "randomRace|level 6 creatures"
+msgstr ""
 
 msgid "Unknown Monsters"
 msgstr "Monstros Desconhecidos"
+
+msgid "Unknown Monster"
+msgstr "Monstro Desconhecido"
 
 msgid "Peasant"
 msgstr "Camponês"
