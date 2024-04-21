@@ -91,13 +91,13 @@ namespace Maps::Map_Format
 
     StreamBase & operator<<( StreamBase & msg, const CastleMetadata & metadata )
     {
-        return msg << metadata.customName << metadata.defenderMonsterType << metadata.defenderMonsterCount << metadata.isCaptainAvailable << metadata.builtBuildings
+        return msg << metadata.customName << metadata.defenderMonsterType << metadata.defenderMonsterCount << metadata.customBuildings << metadata.builtBuildings
                    << metadata.bannedBuildings << metadata.mustHaveSpells << metadata.bannedSpells << metadata.availableToHireMonsterCount;
     }
 
     StreamBase & operator>>( StreamBase & msg, CastleMetadata & metadata )
     {
-        return msg >> metadata.customName >> metadata.defenderMonsterType >> metadata.defenderMonsterCount >> metadata.isCaptainAvailable >> metadata.builtBuildings
+        return msg >> metadata.customName >> metadata.defenderMonsterType >> metadata.defenderMonsterCount >> metadata.customBuildings >> metadata.builtBuildings
                >> metadata.bannedBuildings >> metadata.mustHaveSpells >> metadata.bannedSpells >> metadata.availableToHireMonsterCount;
     }
 

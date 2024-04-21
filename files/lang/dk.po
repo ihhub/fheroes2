@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-08 13:20+0000\n"
+"POT-Creation-Date: 2024-04-21 05:05+0000\n"
 "PO-Revision-Date: 2024-03-05 13:55+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
@@ -205,6 +205,10 @@ msgstr "BORGE"
 
 msgid "TOWN"
 msgstr "BY"
+
+#, fuzzy
+msgid "RESTRICT"
+msgstr "OMKAMP"
 
 msgid ""
 "D\n"
@@ -2455,6 +2459,52 @@ msgstr "Laboratorium"
 msgid "Shrine"
 msgstr "Helligdom"
 
+#, fuzzy
+msgid "Special"
+msgstr "Intet særligt"
+
+msgid "Horde Building"
+msgstr ""
+
+#, fuzzy
+msgid "Dwelling 1"
+msgstr "Bosteder"
+
+#, fuzzy
+msgid "Dwelling 2"
+msgstr "Bosteder"
+
+#, fuzzy
+msgid "Upg. Dwelling 2"
+msgstr "Bosteder"
+
+#, fuzzy
+msgid "Dwelling 3"
+msgstr "Bosteder"
+
+#, fuzzy
+msgid "Upg. Dwelling 3"
+msgstr "Bosteder"
+
+#, fuzzy
+msgid "Dwelling 4"
+msgstr "Bosteder"
+
+#, fuzzy
+msgid "Upg. Dwelling 4"
+msgstr "Bosteder"
+
+#, fuzzy
+msgid "Dwelling 6"
+msgstr "Bosteder"
+
+#, fuzzy
+msgid "Upg. Dwelling 6"
+msgstr "Bosteder"
+
+msgid "2x Upg. Dwelling 6"
+msgstr ""
+
 msgid ""
 "The Fortifications increase the toughness of the walls, increasing the "
 "number of turns it takes to knock them down."
@@ -2504,6 +2554,18 @@ msgstr ""
 
 msgid "The Skull Pile increases production of Skeletons by %{count} per week."
 msgstr "Kraniebunken øger tilvæksten af skeletter med %{count} om ugen."
+
+msgid "The Special building gives a specific bonus to the chosen castle type."
+msgstr ""
+
+#, fuzzy
+msgid ""
+"The Horde Building increases the growth rate of the level 1 creatures by 8 "
+"per week."
+msgstr ""
+"Brønden øger den ugentlige tilvækst af byens bosteder med %{count}. Brønden "
+"gør det også muligt at få en oversigt over byens væsener. Du kan desuden "
+"hverve dem herfra."
 
 msgid "Thieves' Guild"
 msgstr "Tyvelaug"
@@ -3804,6 +3866,55 @@ msgstr "Personlighed:"
 msgid "Best Monster:"
 msgstr "Bedste væsen:"
 
+#, fuzzy
+msgid "Random Castle Name"
+msgstr "Tilfældig borg"
+
+#, fuzzy
+msgid "Allow Castle build"
+msgstr "Skyslot"
+
+#, fuzzy
+msgid "Default buildings"
+msgstr "Standardhandlinger"
+
+#, fuzzy
+msgid "Default Army"
+msgstr "Standardhandlinger"
+
+#, fuzzy
+msgid "Castle Army"
+msgstr "Borg"
+
+msgid "Click to change the Castle name. Right-click to reset to default."
+msgstr ""
+
+#, fuzzy
+msgid "Enter Castle name"
+msgstr "Mist helten '%{name}'."
+
+msgid "Allow to build a castle in this town."
+msgstr ""
+
+msgid "Toggle the use of default buildings. Custom buildings will be reset!"
+msgstr ""
+
+#, fuzzy
+msgid "Default Buildings"
+msgstr "Standardhandlinger"
+
+msgid "Toggle building construction restriction mode."
+msgstr ""
+
+msgid "Restrict Building Construction"
+msgstr ""
+
+msgid "Use default defenders army."
+msgstr ""
+
+msgid "Set custom Castle Army. Right-click to reset unit."
+msgstr ""
+
 msgid "Map filename"
 msgstr "Kort-filnavn"
 
@@ -3871,6 +3982,10 @@ msgid "Failed to update player information."
 msgstr "Opdatering af spilleroplysninger mislykkedes."
 
 msgid "Artifacts cannot be placed on water."
+msgstr "Artefakter kan ikke placeres på vand."
+
+#, fuzzy
+msgid "Only one Random Ultimate Artifact can be placed on the map."
 msgstr "Artefakter kan ikke placeres på vand."
 
 msgid "Mountains cannot be placed on water."
@@ -8730,11 +8845,29 @@ msgstr "Sump"
 msgid "Frozen Lake"
 msgstr ""
 
-msgid "Unknown Monster"
-msgstr "Ukendt monster"
+msgid "randomRace|level 1 creatures"
+msgstr ""
+
+msgid "randomRace|level 2 creatures"
+msgstr ""
+
+msgid "randomRace|level 3 creatures"
+msgstr ""
+
+msgid "randomRace|level 4 creatures"
+msgstr ""
+
+msgid "randomRace|level 5 creatures"
+msgstr ""
+
+msgid "randomRace|level 6 creatures"
+msgstr ""
 
 msgid "Unknown Monsters"
 msgstr "Ukendte monstre"
+
+msgid "Unknown Monster"
+msgstr "Ukendt monster"
 
 msgid "Peasant"
 msgstr "Bonde"
