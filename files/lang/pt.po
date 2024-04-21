@@ -9404,7 +9404,7 @@ msgid ""
 "After saving a young boy from a vicious pack of Wolves, you return him to "
 "his father's manor. The grateful nobleman awards you with a Medal of Courage."
 msgstr ""
-"Depois de salvar um garoto de uma matilha de lobos, você o devolve à mansão "
+"Depois de salvar um garoto de um grupo de lobos, você o devolve à mansão "
 "de seu pai. O nobre agradecido lhe concede uma Medalha da Coragem."
 
 msgid "Medal of Honor"
