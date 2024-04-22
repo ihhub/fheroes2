@@ -37,7 +37,6 @@
 #include "castle.h"
 #include "color.h"
 #include "gamedefs.h"
-#include "heroes.h"
 #include "map_format_info.h"
 #include "map_object_info.h"
 #include "maps_tiles.h"
@@ -126,32 +125,12 @@ namespace Maps
         auto sortObjects = []( const IndexedObjectInfo & left, const IndexedObjectInfo & right ) { return left.info->id < right.info->id; };
         std::multiset<IndexedObjectInfo, decltype( sortObjects )> sortedObjects( sortObjects );
 
-        const auto & townObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::KINGDOM_TOWNS );
-        const auto & heroObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::KINGDOM_HEROES );
-
         for ( size_t i = 0; i < map.tiles.size(); ++i ) {
             for ( const auto & object : map.tiles[i].objects ) {
                 IndexedObjectInfo info;
                 info.tileIndex = static_cast<int32_t>( i );
                 info.info = &object;
                 sortedObjects.emplace( info );
-
-                if ( object.group == ObjectGroup::KINGDOM_TOWNS ) {
-                    const uint8_t color = Color::IndexToColor( getTownColorIndex( map, i, object.id ) );
-                    const uint8_t race = Race::IndexToRace( static_cast<int>( townObjects[object.index].metadata[0] ) );
-
-                    world.addCastle( static_cast<int32_t>( i ), race, color );
-                }
-                else if ( object.group == Maps::ObjectGroup::KINGDOM_HEROES ) {
-                    const auto & metadata = heroObjects[object.index].metadata;
-                    const uint8_t color = Color::IndexToColor( static_cast<int>( metadata[0] ) );
-
-                    Heroes * hero = world.GetHeroForHire( static_cast<int>( metadata[1] ) );
-                    if ( hero ) {
-                        hero->SetCenter( { static_cast<int32_t>( i ) % world.w(), static_cast<int32_t>( i ) / world.w() } );
-                        hero->SetColor( color );
-                    }
-                }
             }
         }
 
