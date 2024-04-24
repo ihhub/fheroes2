@@ -415,7 +415,6 @@ namespace Maps
         }
 
         // Update map format settings based on the gathered information.
-        uint8_t numberOfColorsPresent = 0;
 
         map.availablePlayerColors = 0;
         for ( size_t i = 0; i < mainColors; ++i ) {
@@ -423,8 +422,6 @@ namespace Maps
                 assert( heroRacesPresent[i] != 0 || townRacesPresent[i] != 0 );
 
                 map.availablePlayerColors += static_cast<uint8_t>( 1 << i );
-
-                ++numberOfColorsPresent;
 
                 map.playerRace[i] &= ( heroRacesPresent[i] | townRacesPresent[i] );
 
