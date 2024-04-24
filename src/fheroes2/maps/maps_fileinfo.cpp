@@ -479,9 +479,8 @@ bool Maps::FileInfo::readResurrectionMap( std::string filePath, const bool isFor
         // As of now only 2 alliances are supported.
         assert( map.alliances.size() == 2 );
 
-        for ( const uint8_t color : map.alliances ) {
-            assert( ( color & map.availablePlayerColors ) == color );
-        }
+        assert( std::all_of( map.alliances.begin(), map.alliances.end(),
+                             [&map = std::as_const( map )]( const uint8_t color ) { return ( color & map.availablePlayerColors ) == color; } ) );
 
         FillUnions( map.alliances[0], map.alliances[1] );
         break;
