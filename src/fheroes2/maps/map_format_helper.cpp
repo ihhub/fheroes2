@@ -414,6 +414,7 @@ namespace Maps
             }
         }
 
+        // Update map format settings based on the gathered information.
         map.availablePlayerColors = 0;
         for ( size_t i = 0; i < mainColors; ++i ) {
             if ( heroColorsPresent[i] || townColorsPresent[i] ) {
