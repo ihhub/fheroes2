@@ -557,9 +557,9 @@ namespace Interface
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::EDITOR_REDO_LAST_ACTION ) ) {
                     redoAction();
                 }
-                else if ( HotKeyPressEvent( Game::HotKeyEvent::EDITOR_GAME_MAIN_MENU ) ) {
+                else if ( HotKeyPressEvent( Game::HotKeyEvent::EDITOR_TO_GAME_MAIN_MENU ) ) {
                     const int returnValue
-                        = fheroes2::showStandardTextMessage( _( "Editor" ), _( "Do you want to open game's Main Menu? All unsaved changes will be lost." ),
+                        = fheroes2::showStandardTextMessage( _( "Editor" ), _( "Do you wish to return to the game's Main Menu? All unsaved changes will be lost." ),
                                                              Dialog::YES | Dialog::NO );
 
                     if ( returnValue == Dialog::YES ) {
