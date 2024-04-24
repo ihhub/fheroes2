@@ -228,6 +228,13 @@ public:
         return vec_kingdoms.GetKingdom( color );
     }
 
+    void addCastle( int32_t index, uint8_t race, uint8_t color )
+    {
+        Castle * castle = new Castle( index % width, index / width, race );
+        castle->SetColor( color );
+        vec_castles.AddCastle( castle );
+    }
+
     // Get castle based on its tile. If the tile is not a part of a castle return nullptr.
     const Castle * getCastle( const fheroes2::Point & tilePosition ) const
     {

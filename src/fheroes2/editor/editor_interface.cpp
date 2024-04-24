@@ -37,6 +37,7 @@
 #include "cursor.h"
 #include "dialog.h"
 #include "dialog_selectitems.h"
+#include "editor_castle_details_window.h"
 #include "editor_object_popup_window.h"
 #include "game.h"
 #include "game_delays.h"
@@ -61,6 +62,7 @@
 #include "math_base.h"
 #include "monster.h"
 #include "mp2.h"
+#include "race.h"
 #include "render_processor.h"
 #include "screen.h"
 #include "settings.h"
@@ -307,6 +309,13 @@ namespace
                     objectIter = mapTile.objects.erase( objectIter );
                     needRedraw = true;
                 }
+                else if ( objectIter->group == Maps::ObjectGroup::ADVENTURE_ARTIFACTS ) {
+                    assert( mapFormat.standardMetadata.find( objectIter->id ) != mapFormat.standardMetadata.end() );
+                    mapFormat.standardMetadata.erase( objectIter->id );
+
+                    objectIter = mapTile.objects.erase( objectIter );
+                    needRedraw = true;
+                }
                 else {
                     objectIter = mapTile.objects.erase( objectIter );
                     needRedraw = true;
@@ -319,6 +328,33 @@ namespace
         }
 
         return needRedraw;
+    }
+
+    void updateWorldCastlesHeroes( const Maps::Map_Format::MapFormat & map )
+    {
+        const auto & townObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::KINGDOM_TOWNS );
+        const auto & heroObjects = Maps::getObjectsByGroup( Maps::ObjectGroup::KINGDOM_HEROES );
+
+        for ( size_t i = 0; i < map.tiles.size(); ++i ) {
+            for ( const auto & object : map.tiles[i].objects ) {
+                if ( object.group == Maps::ObjectGroup::KINGDOM_TOWNS ) {
+                    const uint8_t color = Color::IndexToColor( Maps::getTownColorIndex( map, i, object.id ) );
+                    const uint8_t race = Race::IndexToRace( static_cast<int>( townObjects[object.index].metadata[0] ) );
+
+                    world.addCastle( static_cast<int32_t>( i ), race, color );
+                }
+                else if ( object.group == Maps::ObjectGroup::KINGDOM_HEROES ) {
+                    const auto & metadata = heroObjects[object.index].metadata;
+                    const uint8_t color = Color::IndexToColor( static_cast<int>( metadata[0] ) );
+
+                    Heroes * hero = world.GetHeroForHire( static_cast<int>( metadata[1] ) );
+                    if ( hero ) {
+                        hero->SetCenter( { static_cast<int32_t>( i ) % world.w(), static_cast<int32_t>( i ) / world.w() } );
+                        hero->SetColor( color );
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -879,6 +915,13 @@ namespace Interface
                         action.commit();
                     }
                 }
+                else if ( objectType == MP2::OBJ_CASTLE || objectType == MP2::OBJ_RANDOM_TOWN || objectType == MP2::OBJ_RANDOM_CASTLE ) {
+                    assert( _mapFormat.castleMetadata.find( object.id ) != _mapFormat.castleMetadata.end() );
+
+                    const int race = Race::IndexToRace( static_cast<int>( objectInfo.metadata[0] ) );
+                    const int color = Color::IndexToColor( Maps::getTownColorIndex( _mapFormat, tileIndex, object.id ) );
+                    Editor::castleDetailsDialog( _mapFormat.castleMetadata[object.id], race, color );
+                }
                 else if ( object.group == Maps::ObjectGroup::MONSTERS ) {
                     uint32_t monsterCount = 0;
 
@@ -893,6 +936,30 @@ namespace Interface
                     fheroes2::ActionCreator action( _historyManager, _mapFormat );
                     if ( Dialog::SelectCount( str, 0, 500000, monsterCount ) ) {
                         _mapFormat.standardMetadata[object.id] = { static_cast<int32_t>( monsterCount ), 0, Monster::JOIN_CONDITION_UNSET };
+                        action.commit();
+                    }
+                }
+                else if ( object.group == Maps::ObjectGroup::ADVENTURE_ARTIFACTS ) {
+                    if ( objectInfo.objectType == MP2::OBJ_RANDOM_ULTIMATE_ARTIFACT ) {
+                        // TODO: add a dialog to modify Random Ultimate artifact radius.
+                    }
+                    else if ( objectInfo.objectType == MP2::OBJ_ARTIFACT && objectInfo.metadata[0] == Artifact::SPELL_SCROLL ) {
+                        // Find Spell Scroll object.
+                        assert( _mapFormat.standardMetadata.find( object.id ) != _mapFormat.standardMetadata.end() );
+
+                        const int spellId = Dialog::selectSpell( _mapFormat.standardMetadata[object.id].metadata[0], true ).GetID();
+
+                        if ( spellId == Spell::NONE ) {
+                            // We do not place the Spell Scroll artifact if the spell for it was not selected.
+                            return;
+                        }
+
+                        fheroes2::ActionCreator action( _historyManager, _mapFormat );
+
+                        _mapFormat.standardMetadata[object.id].metadata[0] = spellId;
+
+                        Maps::setSpellOnTile( tile, spellId );
+
                         action.commit();
                     }
                 }
@@ -1060,14 +1127,27 @@ namespace Interface
                 return;
             }
 
-            setObjectOnTileAsAction( tile, groupType, _editorPanel.getSelectedObjectType() );
+            if ( !setObjectOnTileAsAction( tile, groupType, _editorPanel.getSelectedObjectType() ) ) {
+                return;
+            }
+
+            Heroes * hero = world.GetHeroForHire( Race::IndexToRace( static_cast<int>( objectInfo.metadata[1] ) ) );
+            if ( hero ) {
+                hero->SetCenter( tilePos );
+                hero->SetColor( Color::IndexToColor( static_cast<int>( color ) ) );
+            }
+            else {
+                // How is it possible that the action was successful but no hero?
+                assert( 0 );
+            }
 
             if ( !Maps::updateMapPlayers( _mapFormat ) ) {
                 _warningMessage.reset( _( "Failed to update player information." ) );
             }
         }
         else if ( groupType == Maps::ObjectGroup::ADVENTURE_ARTIFACTS ) {
-            const auto & objectInfo = Maps::getObjectInfo( groupType, _editorPanel.getSelectedObjectType() );
+            const int32_t objectType = _editorPanel.getSelectedObjectType();
+            const auto & objectInfo = Maps::getObjectInfo( groupType, objectType );
 
             if ( !isObjectPlacementAllowed( objectInfo, tilePos ) ) {
                 _warningMessage.reset( _( "Objects cannot be placed outside the map." ) );
@@ -1084,13 +1164,20 @@ namespace Interface
                 return;
             }
 
-            const int32_t artifactType = _editorPanel.getSelectedObjectType();
-
-            const auto & artifactInfo = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_ARTIFACTS );
-            assert( artifactType >= 0 && artifactType < static_cast<int32_t>( artifactInfo.size() ) );
+            if ( objectInfo.objectType == MP2::OBJ_RANDOM_ULTIMATE_ARTIFACT ) {
+                // First of all, verify that only one Random Ultimate artifact exists on the map.
+                for ( const auto & tileInfo : _mapFormat.tiles ) {
+                    for ( const auto & object : tileInfo.objects ) {
+                        if ( groupType == object.group && static_cast<uint32_t>( objectType ) == object.index ) {
+                            _warningMessage.reset( _( "Only one Random Ultimate Artifact can be placed on the map." ) );
+                            return;
+                        }
+                    }
+                }
+            }
 
             // For each Spell Scroll artifact we select a spell.
-            if ( artifactInfo[artifactType].objectType == MP2::OBJ_ARTIFACT && artifactInfo[artifactType].metadata[0] == Artifact::SPELL_SCROLL ) {
+            if ( objectInfo.objectType == MP2::OBJ_ARTIFACT && objectInfo.metadata[0] == Artifact::SPELL_SCROLL ) {
                 const int spellId = Dialog::selectSpell( Spell::RANDOM, true ).GetID();
 
                 if ( spellId == Spell::NONE ) {
@@ -1098,11 +1185,22 @@ namespace Interface
                     return;
                 }
 
-                setObjectOnTileAsAction( tile, groupType, _editorPanel.getSelectedObjectType() );
+                if ( !setObjectOnTileAsAction( tile, groupType, objectType ) ) {
+                    return;
+                }
+
+                assert( !_mapFormat.tiles[tile.GetIndex()].objects.empty() );
+
+                const auto & insertedObject = _mapFormat.tiles[tile.GetIndex()].objects.back();
+                assert( insertedObject.group == groupType && insertedObject.index == static_cast<uint32_t>( objectType ) );
+                assert( _mapFormat.standardMetadata.find( insertedObject.id ) != _mapFormat.standardMetadata.end() );
+
+                _mapFormat.standardMetadata[insertedObject.id].metadata[0] = spellId;
+
                 Maps::setSpellOnTile( tile, spellId );
             }
             else {
-                setObjectOnTileAsAction( tile, groupType, _editorPanel.getSelectedObjectType() );
+                setObjectOnTileAsAction( tile, groupType, objectType );
             }
         }
         else if ( groupType == Maps::ObjectGroup::LANDSCAPE_MOUNTAINS ) {
@@ -1193,7 +1291,15 @@ namespace Interface
                 return;
             }
 
-            if ( !checkConditionForUsedTiles( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return !tileToCheck.isWater(); } ) ) {
+            assert( !objectInfo.groundLevelParts.empty() );
+            const auto & firstObjectPart = objectInfo.groundLevelParts.front();
+
+            // River deltas are only objects that can be placed on water and on land.
+            // Yes, the below code is very hacky but so far this is the best we can do.
+            if ( firstObjectPart.icnType == MP2::OBJ_ICN_TYPE_OBJNMUL2 && ( firstObjectPart.icnIndex == 2U || firstObjectPart.icnIndex == 11U ) ) {
+                // This is a river delta. Just don't check the terrain type.
+            }
+            else if ( !checkConditionForUsedTiles( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return !tileToCheck.isWater(); } ) ) {
                 _warningMessage.reset( _( "Landscape objects cannot be placed on water." ) );
                 return;
             }
@@ -1274,6 +1380,11 @@ namespace Interface
                 return;
             }
 
+            // By default use random (default) army for the neutral race town/castle.
+            if ( Color::IndexToColor( color ) == Color::NONE ) {
+                Maps::setDefaultCastleDefenderArmy( _mapFormat.castleMetadata[Maps::getLastObjectUID()] );
+            }
+
             // Add flags.
             assert( tile.GetIndex() > 0 && tile.GetIndex() < world.w() * world.h() - 1 );
             Maps::setLastObjectUID( objectId );
@@ -1287,6 +1398,8 @@ namespace Interface
             if ( !setObjectOnTile( world.GetTiles( tile.GetIndex() + 1 ), Maps::ObjectGroup::LANDSCAPE_FLAGS, color * 2 + 1 ) ) {
                 return;
             }
+
+            world.addCastle( tile.GetIndex(), Race::IndexToRace( static_cast<int>( townObjectInfo.metadata[0] ) ), Color::IndexToColor( color ) );
 
             action.commit();
 
@@ -1433,13 +1546,16 @@ namespace Interface
         return true;
     }
 
-    void EditorInterface::setObjectOnTileAsAction( Maps::Tiles & tile, const Maps::ObjectGroup groupType, const int32_t objectIndex )
+    bool EditorInterface::setObjectOnTileAsAction( Maps::Tiles & tile, const Maps::ObjectGroup groupType, const int32_t objectIndex )
     {
         fheroes2::ActionCreator action( _historyManager, _mapFormat );
 
         if ( setObjectOnTile( tile, groupType, objectIndex ) ) {
             action.commit();
+            return true;
         }
+
+        return false;
     }
 
     bool EditorInterface::loadMap( const std::string & filePath )
@@ -1453,6 +1569,8 @@ namespace Interface
             fheroes2::showStandardTextMessage( _( "Warning!" ), "Failed to read the map.", Dialog::OK );
             return false;
         }
+
+        updateWorldCastlesHeroes( _mapFormat );
 
         return true;
     }

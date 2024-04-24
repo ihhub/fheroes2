@@ -40,6 +40,7 @@
 #include "agg_file.h"
 #include "battle_cell.h"
 #include "exception.h"
+#include "game_language.h"
 #include "h2d.h"
 #include "icn.h"
 #include "image.h"
@@ -160,6 +161,8 @@ namespace
                                                 ICN::BUTTON_CASTLE_EVIL,
                                                 ICN::BUTTON_TOWN_GOOD,
                                                 ICN::BUTTON_TOWN_EVIL,
+                                                ICN::BUTTON_RESTRICT_GOOD,
+                                                ICN::BUTTON_RESTRICT_EVIL,
                                                 ICN::BUTTON_GUILDWELL_EXIT,
                                                 ICN::GOOD_CAMPAIGN_BUTTONS,
                                                 ICN::EVIL_CAMPAIGN_BUTTONS,
@@ -1800,6 +1803,16 @@ namespace fheroes2
 
                 break;
             }
+            case ICN::BUTTON_RESTRICT_GOOD:
+            case ICN::BUTTON_RESTRICT_EVIL: {
+                _icnVsSprite[id].resize( 2 );
+
+                getTextAdaptedButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "RESTRICT" ),
+                                      id == ICN::BUTTON_RESTRICT_EVIL ? ICN::EMPTY_EVIL_BUTTON : ICN::EMPTY_GOOD_BUTTON,
+                                      id == ICN::BUTTON_RESTRICT_EVIL ? ICN::STONEBAK_EVIL : ICN::STONEBAK );
+
+                break;
+            }
             case ICN::UNIFORM_EVIL_MAX_BUTTON:
             case ICN::UNIFORM_EVIL_MIN_BUTTON:
             case ICN::UNIFORM_GOOD_MAX_BUTTON:
@@ -2654,6 +2667,8 @@ namespace fheroes2
             case ICN::BUTTON_CASTLE_EVIL:
             case ICN::BUTTON_TOWN_GOOD:
             case ICN::BUTTON_TOWN_EVIL:
+            case ICN::BUTTON_RESTRICT_GOOD:
+            case ICN::BUTTON_RESTRICT_EVIL:
             case ICN::BUTTON_GUILDWELL_EXIT:
             case ICN::GOOD_CAMPAIGN_BUTTONS:
             case ICN::EVIL_CAMPAIGN_BUTTONS:
