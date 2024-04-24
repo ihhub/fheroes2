@@ -180,12 +180,6 @@ namespace
         return true;
     }
 
-    bool checkConditionForOccupiedTiles( const Maps::ObjectInfo & info, const fheroes2::Point & mainTilePos,
-                                         const std::function<bool( const Maps::Tiles & tile )> & condition )
-    {
-        return isConditionValid( Maps::getGroundLevelOccupiedTileOffset( info ), mainTilePos, condition );
-    }
-
     bool checkConditionForUsedTiles( const Maps::ObjectInfo & info, const fheroes2::Point & mainTilePos,
                                      const std::function<bool( const Maps::Tiles & tile )> & condition )
     {
