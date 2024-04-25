@@ -1278,6 +1278,16 @@ uint32_t World::CheckKingdomLoss( const Kingdom & kingdom ) const
     return GameOver::COND_NONE;
 }
 
+double World::getWaterPercentage() const
+{
+    return waterPercentage;
+}
+
+double World::getLandRoughness() const
+{
+    return mapRoughness;
+}
+
 uint32_t World::getDistance( const Heroes & hero, int targetIndex )
 {
     _pathfinder.reEvaluateIfNeeded( hero );

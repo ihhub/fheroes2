@@ -916,14 +916,21 @@ namespace
             }
             return 1000.0;
         }
-        case Skill::Secondary::PATHFINDING:
-            // TODO: check map composition
-            return 250.0;
-        case Skill::Secondary::NAVIGATION:
-            // TODO: check map composition
-            return 0.0;
-        case Skill::Secondary::SCOUTING:
-            return hero.getAIRole() == Heroes::Role::SCOUT ? 1250.0 : 0.0;
+        case Skill::Secondary::PATHFINDING: {
+            const double roughness = world.getLandRoughness();
+            return ( roughness > 1.25 ) ? 1000.0 : ( roughness > 1.1 ) ? 250.0 : 100.0;
+        }
+        case Skill::Secondary::NAVIGATION: {
+            const double waterPercentage = world.getWaterPercentage();
+            return ( waterPercentage > 0.6 ) ? 1000.0 : ( waterPercentage > 0.25 ) ? 100.0 : 0.0;
+        }
+        case Skill::Secondary::SCOUTING: {
+            const Heroes::Role role = hero.getAIRole();
+            if ( role == Heroes::Role::CHAMPION || role == Heroes::Role::FIGHTER ) {
+                return 0.0;
+            }
+            return hero.getAIRole() == Heroes::Role::SCOUT ? 1250.0 : 100.0;
+        }
         case Skill::Secondary::MYSTICISM:
             return hero.HaveSpellBook() ? 500.0 : 100.0;
         case Skill::Secondary::EAGLE_EYE:
@@ -2553,14 +2560,14 @@ namespace AI
         }
     }
 
-    Skill::Secondary AI::Normal::pickSecondarySkill( const Heroes & hero, const Skill::Secondary & left, const Skill::Secondary & right )
+    Skill::Secondary Normal::pickSecondarySkill( const Heroes & hero, const Skill::Secondary & left, const Skill::Secondary & right )
     {
         // heroes can get 1 or 0 skill choices depending on a level
         if ( !right.isValid() ) {
             // if both left and right are invalid returning either is fine
             return left;
         }
-        DEBUG_LOG( DBG_AI, DBG_WARN,
+        DEBUG_LOG( DBG_AI, DBG_TRACE,
                    hero.GetName() << " picking a skill: " << getSecondarySkillValue( hero, left ) << " for " << left.String( left.first ) << " and "
                                   << getSecondarySkillValue( hero, right ) << " for " << right.String( right.first ) )
 

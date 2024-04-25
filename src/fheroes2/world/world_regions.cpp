@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2023                                             *
+ *   Copyright (C) 2020 - 2024                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -18,6 +18,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "world_regions.h"
+
 #include <algorithm>
 #include <cstddef>
 #include <cstdint>
@@ -27,12 +29,12 @@
 #include <vector>
 
 #include "castle.h"
+#include "ground.h"
 #include "maps.h"
 #include "maps_tiles.h"
 #include "math_base.h"
 #include "mp2.h"
 #include "world.h"
-#include "world_regions.h"
 
 namespace
 {
@@ -200,6 +202,10 @@ void World::ComputeStaticAnalysis()
         obstacles[3].emplace_back( y, 0 ); // ground, rows
     }
 
+    int obstacleCount = 0;
+    int waterCount = 0;
+    double terrainPenalty = 0;
+
     // Find the terrain
     for ( int y = 0; y < height; ++y ) {
         const int rowIndex = y * width;
@@ -208,23 +214,31 @@ void World::ComputeStaticAnalysis()
             const Maps::Tiles & tile = vec_tiles[index];
             // If tile is blocked (mountain, trees, etc) then it's applied to both
             if ( tile.GetPassable() == 0 ) {
+                ++obstacleCount;
                 ++obstacles[0][x].second;
                 ++obstacles[1][y].second;
                 ++obstacles[2][x].second;
                 ++obstacles[3][y].second;
             }
             else if ( tile.isWater() ) {
+                ++waterCount;
                 // if it's water then ground tiles consider it an obstacle
                 ++obstacles[2][x].second;
                 ++obstacles[3][y].second;
             }
             else {
+                //  > Maps::Ground::defaultGroundPenalty
+                terrainPenalty += Maps::Ground::GetPenalty( tile, 0 );
                 // else then ground is an obstacle for water navigation
                 ++obstacles[0][x].second;
                 ++obstacles[1][y].second;
             }
         }
     }
+
+    const double passableTileCount = ( width * height ) - obstacleCount;
+    waterPercentage = waterCount / passableTileCount;
+    mapRoughness = terrainPenalty / ( ( passableTileCount - waterCount ) * Maps::Ground::defaultGroundPenalty );
 
     // sort the map rows and columns based on amount of obstacles
     for ( int i = 0; i < 4; ++i )
