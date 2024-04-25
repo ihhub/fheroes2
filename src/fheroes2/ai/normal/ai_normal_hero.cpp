@@ -870,6 +870,74 @@ namespace
         return fogDiscoveryBaseValue;
     }
 
+    double getSecondarySkillValue( const Heroes & hero, const Skill::Secondary & skill )
+    {
+        const int type = skill.Skill();
+        const int level = skill.Level();
+        if ( hero.GetLevelSkill( skill.first ) >= level ) {
+            return 0;
+        }
+
+        switch ( type ) {
+        case Skill::Secondary::WISDOM:
+            // wouldn't check castles/spell availability since high wisdom drives building priority
+            return level == Skill::Level::BASIC ? 2500.0 : 1000.0;
+        case Skill::Secondary::LOGISTICS:
+            return 1500.0;
+        case Skill::Secondary::LEADERSHIP:
+            return hero.GetArmy().AllTroopsAreUndead() ? 100.0 : 1000.0;
+        case Skill::Secondary::NECROMANCY:
+            return hero.GetArmy().AllTroopsAreUndead() ? 1000.0 : 100.0;
+        case Skill::Secondary::LUCK: {
+            const Heroes::Role role = hero.getAIRole();
+            if ( role == Heroes::Role::COURIER || role == Heroes::Role::SCOUT ) {
+                return 100.0;
+            }
+            return 500.0;
+        }
+        case Skill::Secondary::BALLISTICS: {
+            const Heroes::Role role = hero.getAIRole();
+            if ( role == Heroes::Role::COURIER || role == Heroes::Role::SCOUT ) {
+                return 100.0;
+            }
+            return hero.GetArmy().isMeleeDominantArmy() ? 1250.0 : 250.0;
+        }
+        case Skill::Secondary::ARCHERY: {
+            const Heroes::Role role = hero.getAIRole();
+            if ( role == Heroes::Role::COURIER || role == Heroes::Role::SCOUT ) {
+                return 100.0;
+            }
+            return hero.GetArmy().isMeleeDominantArmy() ? 100.0 : 500.0;
+        }
+        case Skill::Secondary::ESTATES: {
+            const Heroes::Role role = hero.getAIRole();
+            if ( role == Heroes::Role::CHAMPION || role == Heroes::Role::FIGHTER ) {
+                return 0.0;
+            }
+            return 1000.0;
+        }
+        case Skill::Secondary::PATHFINDING:
+            // TODO: check map composition
+            return 250.0;
+        case Skill::Secondary::NAVIGATION:
+            // TODO: check map composition
+            return 0.0;
+        case Skill::Secondary::SCOUTING:
+            return hero.getAIRole() == Heroes::Role::SCOUT ? 1250.0 : 0.0;
+        case Skill::Secondary::MYSTICISM:
+            return hero.HaveSpellBook() ? 500.0 : 100.0;
+        case Skill::Secondary::EAGLE_EYE:
+            return hero.HaveSpellBook() ? 250.0 : 0.0;
+        case Skill::Secondary::DIPLOMACY:
+            // discourage AI picking it up, but if it's already there prioritise leveling to save gold
+            return level == Skill::Level::BASIC ? 100.0 : 1250.0;
+        default:
+            // UNKNOWN skill can be a valid check
+            break;
+        }
+        return 0;
+    }
+
     uint32_t getTimeoutBeforeFogDiscoveryIntensification( const Heroes & hero )
     {
         switch ( hero.getAIRole() ) {
@@ -2483,6 +2551,29 @@ namespace AI
             assert( 0 );
             break;
         }
+    }
+
+    Skill::Secondary AI::Normal::pickSecondarySkill( const Heroes & hero, const Skill::Secondary & left, const Skill::Secondary & right )
+    {
+        // heroes can get 1 or 0 skill choices depending on a level
+        if ( !right.isValid() ) {
+            // if both left and right are invalid returning either is fine
+            return left;
+        }
+        DEBUG_LOG( DBG_AI, DBG_WARN,
+                   hero.GetName() << " picking a skill: " << getSecondarySkillValue( hero, left ) << " for " << left.String( left.first ) << " and "
+                                  << getSecondarySkillValue( hero, right ) << " for " << right.String( right.first ) )
+
+        const double leftValue = getSecondarySkillValue( hero, left );
+        const double rightValue = getSecondarySkillValue( hero, right );
+
+        if ( std::fabs( leftValue - rightValue ) < 0.001 ) {
+            if ( leftValue < 300.0 ) {
+                return left.Level() == Skill::Level::BASIC ? right : left;
+            }
+            return left.Level() == Skill::Level::BASIC ? left : right;
+        }
+        return leftValue > rightValue ? left : right;
     }
 
     void Normal::HeroesBeginMovement( Heroes & hero )

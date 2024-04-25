@@ -51,6 +51,11 @@ namespace Battle
     class Actions;
 }
 
+namespace Skill
+{
+    class Secondary;
+}
+
 namespace AI
 {
     enum class AIType : int
@@ -112,6 +117,7 @@ namespace AI
         virtual void battleBegins() = 0;
 
         virtual void tradingPostVisitEvent( Kingdom & kingdom ) = 0;
+        virtual Skill::Secondary pickSecondarySkill( const Heroes & hero, const Skill::Secondary & left, const Skill::Secondary & right ) = 0;
 
     protected:
         Base() = default;

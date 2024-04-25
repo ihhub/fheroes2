@@ -309,6 +309,7 @@ namespace AI
         void battleBegins() override;
 
         void tradingPostVisitEvent( Kingdom & kingdom ) override;
+        Skill::Secondary pickSecondarySkill( const Heroes & hero, const Skill::Secondary & left, const Skill::Secondary & right ) override;
 
         double getObjectValue( const Heroes & hero, const int index, const int objectType, const double valueToIgnore, const uint32_t distanceToObject ) const;
         double getTargetArmyStrength( const Maps::Tiles & tile, const MP2::MapObjectType objectType );
