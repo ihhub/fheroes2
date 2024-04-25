@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2024                                             *
+ *   Copyright (C) 2024                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -20,30 +20,12 @@
 
 #pragma once
 
-#include <string>
-#include <vector>
-
-#include "castle.h"
-#include "math_base.h"
-
-enum class GameVersion : int;
-
-namespace fheroes2
+namespace Maps::Map_Format
 {
-    Rect getCastleBuildingArea( const int race, const building_t buildingId );
+    struct CastleMetadata;
+}
 
-    const char * getBuildingName( const int race, const building_t buildingId );
-
-    const char * getBuildingDescription( const int race, const building_t buildingId );
-
-    // Returns the upgraded building ID for the given one or the input building if no upgrade is available.
-    building_t getUpgradeForBuilding( const int race, const building_t buildingId );
-
-    building_t getBuildingRequirement( const int race, const building_t building );
-
-    std::string getBuildingRequirementString( const int race, const building_t building );
-
-    int getIndexBuildingSprite( const building_t build );
-
-    std::vector<building_t> getBuildingDrawingPriorities( const int race, const GameVersion version );
+namespace Editor
+{
+    void castleDetailsDialog( Maps::Map_Format::CastleMetadata & castleMetadata, const int race, const int color );
 }

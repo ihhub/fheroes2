@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2023                                             *
+ *   Copyright (C) 2019 - 2024                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -24,6 +24,7 @@
 #include "monster.h"
 
 #include <algorithm>
+#include <cassert>
 #include <vector>
 
 #include "castle.h"
@@ -794,6 +795,33 @@ const char * Monster::GetPluralName( uint32_t count ) const
 {
     const fheroes2::MonsterGeneralStats & generalStats = fheroes2::getMonsterData( id ).generalStats;
     return count == 1 ? _( generalStats.name ) : _( generalStats.pluralName );
+}
+
+const char * Monster::getRandomRaceMonstersName( const uint32_t building )
+{
+    switch ( building ) {
+    case DWELLING_MONSTER1:
+        return _( "randomRace|level 1 creatures" );
+    case DWELLING_MONSTER2:
+    case DWELLING_UPGRADE2:
+        return _( "randomRace|level 2 creatures" );
+    case DWELLING_MONSTER3:
+    case DWELLING_UPGRADE3:
+        return _( "randomRace|level 3 creatures" );
+    case DWELLING_MONSTER4:
+    case DWELLING_UPGRADE4:
+        return _( "randomRace|level 4 creatures" );
+    case DWELLING_MONSTER5:
+    case DWELLING_UPGRADE5:
+        return _( "randomRace|level 5 creatures" );
+    case DWELLING_MONSTER6:
+    case DWELLING_UPGRADE6:
+    case DWELLING_UPGRADE7:
+        return _( "randomRace|level 6 creatures" );
+    default:
+        assert( 0 );
+        return _( "Unknown Monsters" );
+    }
 }
 
 int Monster::ICNMonh() const

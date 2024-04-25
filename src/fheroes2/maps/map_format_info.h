@@ -27,6 +27,7 @@
 #include <string>
 #include <vector>
 
+#include "game_language.h"
 #include "map_object_info.h"
 #include "resource.h"
 
@@ -65,18 +66,18 @@ namespace Maps::Map_Format
         // If the name is empty a random name is going to be set by the engine.
         std::string customName;
 
-        // Defending monsters that are set in the castle. Type 0 means not set.
+        // Defending monsters that are set in the castle. Type ( < 0 ) means default units (for neutral race) and 0 means an empty army slot.
         std::array<int32_t, 5> defenderMonsterType{ 0 };
         std::array<int32_t, 5> defenderMonsterCount{ 0 };
 
-        // Whether the captain is being hired in the town / castle.
-        bool isCaptainAvailable{ false };
+        // Whether the buildings are customized.
+        bool customBuildings{ false };
 
         // A list of built buildings.
-        std::vector<int32_t> builtBuildings;
+        std::vector<uint32_t> builtBuildings;
 
         // A list of buildings that cannot be built.
-        std::vector<int32_t> bannedBuildings;
+        std::vector<uint32_t> bannedBuildings;
 
         // Spells that must appear in the Magic Guild.
         std::vector<int32_t> mustHaveSpells;
@@ -191,6 +192,22 @@ namespace Maps::Map_Format
         Funds resources;
     };
 
+    struct DailyEvent
+    {
+        std::string message;
+
+        uint8_t humanPlayerColors{ 0 };
+
+        uint8_t computerPlayerColors{ 0 };
+
+        uint32_t firstOccurrenceDay{ 0 };
+
+        uint32_t repeatPeriodInDays{ 0 };
+
+        // Resources to be given as a reward.
+        Funds resources;
+    };
+
     struct BaseMapFormat
     {
         // TODO: change it only once the Editor is released to public and there is a need to expand map format functionality.
@@ -209,13 +226,15 @@ namespace Maps::Map_Format
 
         uint8_t victoryConditionType{ 0 };
         bool isVictoryConditionApplicableForAI{ false };
-        bool allowNormalVictory{ false };
+        bool allowNormalVictory{ true };
         std::vector<uint32_t> victoryConditionMetadata;
 
-        uint8_t lossCondition{ 0 };
+        uint8_t lossConditionType{ 0 };
         std::vector<uint32_t> lossConditionMetadata;
 
         int32_t size{ 0 };
+
+        fheroes2::SupportedLanguage language{ fheroes2::SupportedLanguage::English };
 
         std::string name;
         std::string description;
@@ -227,6 +246,8 @@ namespace Maps::Map_Format
         std::vector<uint32_t> additionalInfo;
 
         std::vector<TileInfo> tiles;
+
+        std::vector<DailyEvent> dailyEvents;
 
         // These are metadata maps in relation to object UID.
         std::map<uint32_t, StandardObjectMetadata> standardMetadata;
@@ -252,6 +273,9 @@ namespace Maps::Map_Format
 
     StreamBase & operator<<( StreamBase & msg, const TileInfo & tile );
     StreamBase & operator>>( StreamBase & msg, TileInfo & tile );
+
+    StreamBase & operator<<( StreamBase & msg, const DailyEvent & eventInfo );
+    StreamBase & operator>>( StreamBase & msg, DailyEvent & eventInfo );
 
     StreamBase & operator<<( StreamBase & msg, const StandardObjectMetadata & metadata );
     StreamBase & operator>>( StreamBase & msg, StandardObjectMetadata & metadata );

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-08 13:20+0000\n"
+"POT-Creation-Date: 2024-04-21 05:05+0000\n"
 "PO-Revision-Date: 2022-12-03 04:36+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <it@li.org>\n"
@@ -184,6 +184,9 @@ msgid "CASTLE"
 msgstr ""
 
 msgid "TOWN"
+msgstr ""
+
+msgid "RESTRICT"
 msgstr ""
 
 msgid ""
@@ -2313,6 +2316,52 @@ msgstr "Laboratorio"
 msgid "Shrine"
 msgstr "Altare Oscuro"
 
+#, fuzzy
+msgid "Special"
+msgstr "Niente particolare"
+
+msgid "Horde Building"
+msgstr ""
+
+#, fuzzy
+msgid "Dwelling 1"
+msgstr "Frombolieri"
+
+#, fuzzy
+msgid "Dwelling 2"
+msgstr "Frombolieri"
+
+#, fuzzy
+msgid "Upg. Dwelling 2"
+msgstr "Frombolieri"
+
+#, fuzzy
+msgid "Dwelling 3"
+msgstr "Frombolieri"
+
+#, fuzzy
+msgid "Upg. Dwelling 3"
+msgstr "Frombolieri"
+
+#, fuzzy
+msgid "Dwelling 4"
+msgstr "Frombolieri"
+
+#, fuzzy
+msgid "Upg. Dwelling 4"
+msgstr "Frombolieri"
+
+#, fuzzy
+msgid "Dwelling 6"
+msgstr "Frombolieri"
+
+#, fuzzy
+msgid "Upg. Dwelling 6"
+msgstr "Frombolieri"
+
+msgid "2x Upg. Dwelling 6"
+msgstr ""
+
 msgid ""
 "The Fortifications increase the toughness of the walls, increasing the "
 "number of turns it takes to knock them down."
@@ -2355,6 +2404,14 @@ msgid "The Storm adds +2 to the power of spells of a defending spell caster."
 msgstr ""
 
 msgid "The Skull Pile increases production of Skeletons by %{count} per week."
+msgstr ""
+
+msgid "The Special building gives a specific bonus to the chosen castle type."
+msgstr ""
+
+msgid ""
+"The Horde Building increases the growth rate of the level 1 creatures by 8 "
+"per week."
 msgstr ""
 
 msgid "Thieves' Guild"
@@ -3658,6 +3715,54 @@ msgid "Best Monster:"
 msgstr "Miglior Mostro:"
 
 #, fuzzy
+msgid "Random Castle Name"
+msgstr "Castello casuale"
+
+#, fuzzy
+msgid "Allow Castle build"
+msgstr "Castello Celeste"
+
+#, fuzzy
+msgid "Default buildings"
+msgstr "Frombolieri"
+
+msgid "Default Army"
+msgstr ""
+
+#, fuzzy
+msgid "Castle Army"
+msgstr "Castello"
+
+msgid "Click to change the Castle name. Right-click to reset to default."
+msgstr ""
+
+#, fuzzy
+msgid "Enter Castle name"
+msgstr "Esci dal Castello"
+
+msgid "Allow to build a castle in this town."
+msgstr ""
+
+msgid "Toggle the use of default buildings. Custom buildings will be reset!"
+msgstr ""
+
+#, fuzzy
+msgid "Default Buildings"
+msgstr "Frombolieri"
+
+msgid "Toggle building construction restriction mode."
+msgstr ""
+
+msgid "Restrict Building Construction"
+msgstr ""
+
+msgid "Use default defenders army."
+msgstr ""
+
+msgid "Set custom Castle Army. Right-click to reset unit."
+msgstr ""
+
+#, fuzzy
 msgid "Map filename"
 msgstr ""
 "Dimensioni\n"
@@ -3732,6 +3837,9 @@ msgid "Failed to update player information."
 msgstr ""
 
 msgid "Artifacts cannot be placed on water."
+msgstr ""
+
+msgid "Only one Random Ultimate Artifact can be placed on the map."
 msgstr ""
 
 msgid "Mountains cannot be placed on water."
@@ -4775,7 +4883,7 @@ msgid "Hot Seat"
 msgstr ""
 
 msgid ""
-"Play a Hot Seat game, where 2 to 4 players play around the same computer, "
+"Play a Hot Seat game, where 2 to 6 players play around the same computer, "
 "switching into the 'Hot Seat' when it is their turn."
 msgstr ""
 
@@ -4937,7 +5045,7 @@ msgid "Setup and play a battle without loading any map."
 msgstr ""
 
 msgid ""
-"Play a Hot Seat game, where 2 to 4 players play on the same device, "
+"Play a Hot Seat game, where 2 to 6 players play on the same device, "
 "switching into the 'Hot Seat' when it is their turn."
 msgstr ""
 
@@ -8137,11 +8245,29 @@ msgstr "Palude"
 msgid "Frozen Lake"
 msgstr ""
 
-msgid "Unknown Monster"
-msgstr "Mostro sconosciuto"
+msgid "randomRace|level 1 creatures"
+msgstr ""
+
+msgid "randomRace|level 2 creatures"
+msgstr ""
+
+msgid "randomRace|level 3 creatures"
+msgstr ""
+
+msgid "randomRace|level 4 creatures"
+msgstr ""
+
+msgid "randomRace|level 5 creatures"
+msgstr ""
+
+msgid "randomRace|level 6 creatures"
+msgstr ""
 
 msgid "Unknown Monsters"
 msgstr "Mostri sconosciuti"
+
+msgid "Unknown Monster"
+msgstr "Mostro sconosciuto"
 
 msgid "Peasant"
 msgstr "Burino"

@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-08 13:20+0000\n"
-"PO-Revision-Date: 2024-04-05 18:26-0300\n"
+"POT-Creation-Date: 2024-04-21 05:05+0000\n"
+"PO-Revision-Date: 2024-04-08 22:19-0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
 "Language: pt_BR\n"
@@ -206,6 +206,10 @@ msgstr "CASTELO"
 
 msgid "TOWN"
 msgstr "CIDADE"
+
+#, fuzzy
+msgid "RESTRICT"
+msgstr "REINICIAR"
 
 msgid ""
 "D\n"
@@ -943,10 +947,10 @@ msgid "Good luck shines on the %{attacker}."
 msgstr "A boa sorte recai em %{attacker}."
 
 msgid "High morale enables the %{monster} to attack again."
-msgstr "A moral alta permite outro ataque de %{monster}."
+msgstr "A moral alta permite que %{monster} ataque novamente."
 
 msgid "Low morale causes the %{monster} to freeze in panic."
-msgstr "A baixa moral congela %{monster} pro pânico."
+msgstr "A baixa moral faz com que %{monster} paralise em pânico."
 
 msgid "%{tower} does %{damage} damage."
 msgstr "%{tower} causa %{damage} de dano."
@@ -2422,12 +2426,58 @@ msgstr "Laboratório"
 msgid "Shrine"
 msgstr "Santuário"
 
+#, fuzzy
+msgid "Special"
+msgstr "Nada Especial"
+
+msgid "Horde Building"
+msgstr ""
+
+#, fuzzy
+msgid "Dwelling 1"
+msgstr "Moradias"
+
+#, fuzzy
+msgid "Dwelling 2"
+msgstr "Moradias"
+
+#, fuzzy
+msgid "Upg. Dwelling 2"
+msgstr "Moradias"
+
+#, fuzzy
+msgid "Dwelling 3"
+msgstr "Moradias"
+
+#, fuzzy
+msgid "Upg. Dwelling 3"
+msgstr "Moradias"
+
+#, fuzzy
+msgid "Dwelling 4"
+msgstr "Moradias"
+
+#, fuzzy
+msgid "Upg. Dwelling 4"
+msgstr "Moradias"
+
+#, fuzzy
+msgid "Dwelling 6"
+msgstr "Moradias"
+
+#, fuzzy
+msgid "Upg. Dwelling 6"
+msgstr "Moradias"
+
+msgid "2x Upg. Dwelling 6"
+msgstr ""
+
 msgid ""
 "The Fortifications increase the toughness of the walls, increasing the "
 "number of turns it takes to knock them down."
 msgstr ""
-"As Fortificações aumentar a resistência das paredes do castelo, aumentando o "
-"número de rodadas que leva para derrubá-los."
+"As Fortificações aumentar a resistência das muralhas do castelo, aumentando "
+"o número de rodadas que leva para derrubá-los."
 
 msgid "The Farm increases production of Peasants by %{count} per week."
 msgstr "A Fazenda aumenta a produção de Camponeses em %{count} por semana."
@@ -2473,6 +2523,17 @@ msgstr ""
 msgid "The Skull Pile increases production of Skeletons by %{count} per week."
 msgstr ""
 "A Pilha de Caveiras aumenta a produção de esqueletos em %{count} por semana."
+
+msgid "The Special building gives a specific bonus to the chosen castle type."
+msgstr ""
+
+#, fuzzy
+msgid ""
+"The Horde Building increases the growth rate of the level 1 creatures by 8 "
+"per week."
+msgstr ""
+"O Poço aumenta a taxa de produção de todas as moradias em %{count} criaturas "
+"por semana."
 
 msgid "Thieves' Guild"
 msgstr "Guilda dos Ladrões"
@@ -3767,6 +3828,61 @@ msgstr "Personalidade:"
 msgid "Best Monster:"
 msgstr "Melhor Criatura:"
 
+#, fuzzy
+msgid "Random Castle Name"
+msgstr "Castelo Aleatório"
+
+#, fuzzy
+msgid "Allow Castle build"
+msgstr "Castelo Nebuloso"
+
+#, fuzzy
+msgid "Default buildings"
+msgstr "Ações Padrão"
+
+#, fuzzy
+msgid "Default Army"
+msgstr "Ações Padrão"
+
+#, fuzzy
+msgid "Castle Army"
+msgstr "Castelo"
+
+#, fuzzy
+msgid "Click to change the Castle name. Right-click to reset to default."
+msgstr ""
+"Clique para alterar o nome do herói. Clique com o botão direito para "
+"redefinir para o padrão."
+
+#, fuzzy
+msgid "Enter Castle name"
+msgstr "Insira o nome do herói"
+
+msgid "Allow to build a castle in this town."
+msgstr ""
+
+msgid "Toggle the use of default buildings. Custom buildings will be reset!"
+msgstr ""
+
+#, fuzzy
+msgid "Default Buildings"
+msgstr "Ações Padrão"
+
+msgid "Toggle building construction restriction mode."
+msgstr ""
+
+msgid "Restrict Building Construction"
+msgstr ""
+
+msgid "Use default defenders army."
+msgstr ""
+
+#, fuzzy
+msgid "Set custom Castle Army. Right-click to reset unit."
+msgstr ""
+"Definir Exército do herói. Clique com o botão direito para redefinir a "
+"unidade."
+
 msgid "Map filename"
 msgstr "Nome do arquivo de mapa"
 
@@ -3807,9 +3923,8 @@ msgstr "Salvar o mapa atual."
 msgid "Quit out of the map editor."
 msgstr "Sair do editor de mapas."
 
-#, fuzzy
 msgid "Set %{monster} Count"
-msgstr "Disparar em %{monster}"
+msgstr "Definir Quantidade de %{monster}"
 
 msgid "Objects cannot be placed outside the map."
 msgstr "Objetos não podem ser colocados fora do mapa."
@@ -3834,6 +3949,10 @@ msgid "Failed to update player information."
 msgstr "Falha ao atualizar informações do jogador."
 
 msgid "Artifacts cannot be placed on water."
+msgstr "Artefatos não podem ser colocados na água."
+
+#, fuzzy
+msgid "Only one Random Ultimate Artifact can be placed on the map."
 msgstr "Artefatos não podem ser colocados na água."
 
 msgid "Mountains cannot be placed on water."
@@ -4864,10 +4983,10 @@ msgid "Hot Seat"
 msgstr "Jogo em Rodízio"
 
 msgid ""
-"Play a Hot Seat game, where 2 to 4 players play around the same computer, "
+"Play a Hot Seat game, where 2 to 6 players play around the same computer, "
 "switching into the 'Hot Seat' when it is their turn."
 msgstr ""
-"Jogue um 'Jogo em Rodízio' onde de 2 a 4 jogadores jogam no mesmo computador "
+"Jogue um 'Jogo em Rodízio' onde de 2 a 6 jogadores jogam no mesmo computador "
 "por turnos."
 
 msgid "A single player game playing out a single map."
@@ -5040,10 +5159,10 @@ msgid "Setup and play a battle without loading any map."
 msgstr "Configure e jogue uma batalha sem carregar nenhum mapa."
 
 msgid ""
-"Play a Hot Seat game, where 2 to 4 players play on the same device, "
+"Play a Hot Seat game, where 2 to 6 players play on the same device, "
 "switching into the 'Hot Seat' when it is their turn."
 msgstr ""
-"Jogue um 'Jogo em Rodízio' onde de 2 a 4 jogadores jogam no mesmo "
+"Jogue um 'Jogo em Rodízio' onde de 2 a 6 jogadores jogam no mesmo "
 "dispositivo por turnos."
 
 msgid "2 Players"
@@ -6382,7 +6501,7 @@ msgid ""
 "The watering hole might help again if you fought a battle first."
 msgstr ""
 "A bebida na nascente é refrescante, mas não oferece mais benefícios. A "
-"nascente pode ajudar novamente se você travar uma batalha primeiro."
+"nascente pode ajudar novamente se você voltar depois de uma batalha."
 
 msgid ""
 "A drink at the watering hole fills your troops with strength and lifts their "
@@ -7428,9 +7547,8 @@ msgstr "Herói aleatório (Nível %{level})"
 msgid "Random %{race} hero (Level %{level})"
 msgstr "Herói aleatório %{race} (Nível %{level})"
 
-#, fuzzy
 msgid "Hero race:"
-msgstr "Tela do Herói"
+msgstr "Raça do herói:"
 
 msgid "Are you sure you want to dismiss this Hero?"
 msgstr "Você tem certeza de que deseja dispensar este Herói?"
@@ -7469,9 +7587,8 @@ msgstr "Definir raio de patrulha em ladrilhos"
 msgid "Enter hero's name"
 msgstr "Insira o nome do herói"
 
-#, fuzzy
 msgid "Click to change race."
-msgstr "Clique para mostrar a próxima cidade."
+msgstr "Clique para alterar a raça."
 
 msgid ""
 "'Spread' combat formation spreads the hero's units from the top to the "
@@ -7838,7 +7955,7 @@ msgid ""
 msgstr ""
 "%{skill} aumenta o dano causado pelas criaturas de ataque à distância do "
 "herói em %{count} por cento e elimina a penalidade de %{penalty} por cento "
-"ao atirar através de obstáculos (por exemplo, paredes de castelo)."
+"ao atirar através de obstáculos (por exemplo, muralhas do castelo)."
 
 msgid "%{skill} increases the hero's movement points by %{count} percent."
 msgstr ""
@@ -7906,14 +8023,14 @@ msgid ""
 "damage to castle walls."
 msgstr ""
 "%{skill} dá aos tiros da catapulta do herói uma maior chance de acertar e "
-"causar danos às paredes do castelo."
+"causar danos às muralhas do castelo."
 
 msgid ""
 "%{skill} gives the hero's catapult an extra shot, and each shot has a "
 "greater chance to hit and do damage to castle walls."
 msgstr ""
 "%{skill} dá à catapulta do herói um tiro extra, e cada tiro tem uma maior "
-"chance de acertar e causar danos às paredes do castelo."
+"chance de acertar e causar danos às muralhas do castelo."
 
 msgid ""
 "%{skill} gives the hero's catapult an extra shot, and each shot "
@@ -8121,7 +8238,7 @@ msgid "morale|Great"
 msgstr "Ótima"
 
 msgid "morale|Blood!"
-msgstr "Sanguinária"
+msgstr "Sanguinária!"
 
 msgid "Negative morale may cause the hero's units to freeze in combat."
 msgstr ""
@@ -8132,7 +8249,7 @@ msgid ""
 "attacks or freeze in combat."
 msgstr ""
 "Moral neutra significa que as unidades do herói nunca serão abençoadas com "
-"ataques extras ou congelarão em combate."
+"ataques extras ou ficarão paralisadas durante o combate."
 
 msgid "Positive morale may give the hero's units extra attacks in combat."
 msgstr ""
@@ -8606,7 +8723,7 @@ msgid "Watering Hole"
 msgstr "Nascente de Água"
 
 msgid "Witch's Hut"
-msgstr "Cabana das Bruxas"
+msgstr "Cabana da Bruxa"
 
 msgid "Xanadu"
 msgstr "Xanadu"
@@ -8724,11 +8841,29 @@ msgstr "Lago Pantanoso"
 msgid "Frozen Lake"
 msgstr "Lago Congelado"
 
-msgid "Unknown Monster"
-msgstr "Monstro Desconhecido"
+msgid "randomRace|level 1 creatures"
+msgstr ""
+
+msgid "randomRace|level 2 creatures"
+msgstr ""
+
+msgid "randomRace|level 3 creatures"
+msgstr ""
+
+msgid "randomRace|level 4 creatures"
+msgstr ""
+
+msgid "randomRace|level 5 creatures"
+msgstr ""
+
+msgid "randomRace|level 6 creatures"
+msgstr ""
 
 msgid "Unknown Monsters"
 msgstr "Monstros Desconhecidos"
+
+msgid "Unknown Monster"
+msgstr "Monstro Desconhecido"
 
 msgid "Peasant"
 msgstr "Camponês"
@@ -9654,8 +9789,8 @@ msgid ""
 "engraved on the leather."
 msgstr ""
 "Um comerciante Nômade busca a proteção de uma tribo de Goblins. Para sua "
-"assistência, ele lhe dá um par de botas meticulosamente produzida, feitas do "
-"couro mais macio. Olhando de perto, você vê fascinantes gravuras antigas "
+"assistência, ele lhe dá um par de botas meticulosamente produzidas, feitas "
+"do couro mais macio. Olhando de perto, você vê fascinantes gravuras antigas "
 "gravadas no couro."
 
 msgid "Traveler's Boots of Mobility"
@@ -10132,7 +10267,7 @@ msgid ""
 "shooting past obstacles (e.g. castle walls)."
 msgstr ""
 "%{name} elimina a penalidade de %{count} por cento para as tropas do herói "
-"ao atirar além de obstáculos (por exemplo, paredes de castelo)."
+"ao atirar além de obstáculos (por exemplo, muralhas do castelo)."
 
 msgid ""
 "A chance meeting with a famous Archer finds you in a game of knucklebones "
@@ -10158,9 +10293,9 @@ msgid ""
 "\n"
 "a telescope."
 msgstr ""
-"Um comerciante de terras longínquas comercializa uma nova invenção de seu "
-"povo para suprimentos de viagem. Ele faz os objetos distantes parecerem mais "
-"próximos, e ele o chama de...\n"
+"Um comerciante de terras longínquas negocia com você uma nova invenção de "
+"seu povo por suprimentos de viagem. Ele faz com que objetos distantes "
+"pareçam mais próximos, e ele o chama de...\n"
 "\n"
 "Telescópio."
 
@@ -10179,7 +10314,7 @@ msgid ""
 "gratitude, he gives you a writing quill with magical properties which he "
 "says will \"help people see things your way\"."
 msgstr ""
-"Você faz uma pausa para ajudar um diplomata com um eixo quebrado a consertar "
+"Você faz uma pausa para ajudar um diplomata com um eixo quebrado a resolver "
 "seu problema. Em agradecimento, ele lhe dá uma pena de escrita com "
 "propriedades mágicas que ele diz que \"ajudará as pessoas a verem as coisas "
 "do seu jeito\"."

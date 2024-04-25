@@ -3263,6 +3263,8 @@ namespace
             object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNGRAS, 1U, fheroes2::Point{ -1, -1 }, MP2::OBJ_NON_ACTION_ABANDONED_MINE );
             object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNGRAS, 2U, fheroes2::Point{ 0, -1 }, MP2::OBJ_NON_ACTION_ABANDONED_MINE );
 
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_EXTRAOVR, 5, fheroes2::Point{ 0, 0 }, MP2::OBJ_ABANDONED_MINE, Maps::OBJECT_LAYER );
+
             objects.emplace_back( std::move( object ) );
         }
         {
@@ -3277,6 +3279,8 @@ namespace
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDIRT, 6U, fheroes2::Point{ -2, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
             object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDIRT, 2U, fheroes2::Point{ -1, -1 }, MP2::OBJ_NON_ACTION_ABANDONED_MINE );
             object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNDIRT, 3U, fheroes2::Point{ 0, -1 }, MP2::OBJ_NON_ACTION_ABANDONED_MINE );
+
+            object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_EXTRAOVR, 5, fheroes2::Point{ 0, 0 }, MP2::OBJ_ABANDONED_MINE, Maps::OBJECT_LAYER );
 
             objects.emplace_back( std::move( object ) );
         }
@@ -4579,7 +4583,7 @@ namespace
         assert( objects.empty() );
 
         auto addTown = [&objects]( const MP2::MapObjectType mainObjectType, const uint8_t race, const uint8_t townIcnOffset, const uint8_t shadowIcnOffset,
-                                   const MP2::ObjectIcnType townIcnType, const MP2::ObjectIcnType shadowIcnType ) {
+                                   const MP2::ObjectIcnType townIcnType, const MP2::ObjectIcnType shadowIcnType, const bool isCastle ) {
             assert( MP2::isActionObject( mainObjectType ) );
 
             const MP2::MapObjectType secondaryObjectType( static_cast<MP2::MapObjectType>( mainObjectType - MP2::OBJ_ACTION_OBJECT_TYPE ) );
@@ -4621,6 +4625,7 @@ namespace
             object.topLevelParts.emplace_back( townIcnType, townIcnOffset + 0, fheroes2::Point{ 0, -3 }, secondaryObjectType );
 
             object.metadata[0] = race;
+            object.metadata[1] = ( isCastle ? 1 : 0 );
 
             objects.emplace_back( std::move( object ) );
         };
@@ -4630,13 +4635,14 @@ namespace
         for ( uint8_t i = 0; i < 6 * 2; ++i ) {
             const uint8_t icnOffset = i * 16;
             const uint8_t race = i / 2;
+            const bool isCastle = ( i % 2 ) == 0;
 
-            addTown( MP2::OBJ_CASTLE, race, icnOffset, icnOffset, MP2::OBJ_ICN_TYPE_OBJNTOWN, MP2::OBJ_ICN_TYPE_OBJNTWSH );
+            addTown( MP2::OBJ_CASTLE, race, icnOffset, icnOffset, MP2::OBJ_ICN_TYPE_OBJNTOWN, MP2::OBJ_ICN_TYPE_OBJNTWSH, isCastle );
         }
 
         // Random castle/town
-        addTown( MP2::OBJ_RANDOM_CASTLE, 7, 0, 32, MP2::OBJ_ICN_TYPE_OBJNTWRD, MP2::OBJ_ICN_TYPE_OBJNTWRD );
-        addTown( MP2::OBJ_RANDOM_TOWN, 7, 16, 16 + 32, MP2::OBJ_ICN_TYPE_OBJNTWRD, MP2::OBJ_ICN_TYPE_OBJNTWRD );
+        addTown( MP2::OBJ_RANDOM_CASTLE, 7, 0, 32, MP2::OBJ_ICN_TYPE_OBJNTWRD, MP2::OBJ_ICN_TYPE_OBJNTWRD, true );
+        addTown( MP2::OBJ_RANDOM_TOWN, 7, 16, 16 + 32, MP2::OBJ_ICN_TYPE_OBJNTWRD, MP2::OBJ_ICN_TYPE_OBJNTWRD, false );
     }
 
     void populateMonsters( std::vector<Maps::ObjectInfo> & objects )
