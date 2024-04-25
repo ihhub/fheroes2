@@ -227,7 +227,6 @@ void World::ComputeStaticAnalysis()
                 ++obstacles[3][y].second;
             }
             else {
-                //  > Maps::Ground::defaultGroundPenalty
                 terrainPenalty += Maps::Ground::GetPenalty( tile, 0 );
                 // else then ground is an obstacle for water navigation
                 ++obstacles[0][x].second;
