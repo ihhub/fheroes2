@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-11 04:48+0000\n"
-"PO-Revision-Date: 2024-04-12 18:48-0300\n"
+"POT-Creation-Date: 2024-04-28 06:50+0000\n"
+"PO-Revision-Date: 2024-04-08 22:19-0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
 "Language: pt_BR\n"
@@ -204,6 +204,9 @@ msgstr "CASTELO"
 
 msgid "TOWN"
 msgstr "CIDADE"
+
+msgid "RESTRICT"
+msgstr "RESTRINGIR"
 
 msgid ""
 "D\n"
@@ -653,7 +656,7 @@ msgid "Defense"
 msgstr "Defesa"
 
 msgid "Spell Power"
-msgstr "Força Mágica"
+msgstr "Poder Mágico"
 
 msgid "Knowledge"
 msgstr "Conhecimento"
@@ -2420,6 +2423,42 @@ msgstr "Laboratório"
 msgid "Shrine"
 msgstr "Santuário"
 
+msgid "Special"
+msgstr "Especial"
+
+msgid "Horde Building"
+msgstr "Estrutura da Horda"
+
+msgid "Dwelling 1"
+msgstr "Moradia 1"
+
+msgid "Dwelling 2"
+msgstr "Moradia 2"
+
+msgid "Upg. Dwelling 2"
+msgstr "Moradia 2 Nv.2"
+
+msgid "Dwelling 3"
+msgstr "Moradia 3"
+
+msgid "Upg. Dwelling 3"
+msgstr "Moradia 3 Nv.2"
+
+msgid "Dwelling 4"
+msgstr "Moradia 4"
+
+msgid "Upg. Dwelling 4"
+msgstr "Moradia 4 Nv.2"
+
+msgid "Dwelling 6"
+msgstr "Moradia 6"
+
+msgid "Upg. Dwelling 6"
+msgstr "Moradia 6 Nv.2"
+
+msgid "2x Upg. Dwelling 6"
+msgstr "Moradia 6 Nv.3"
+
 msgid ""
 "The Fortifications increase the toughness of the walls, increasing the "
 "number of turns it takes to knock them down."
@@ -2471,6 +2510,16 @@ msgstr ""
 msgid "The Skull Pile increases production of Skeletons by %{count} per week."
 msgstr ""
 "A Pilha de Caveiras aumenta a produção de esqueletos em %{count} por semana."
+
+msgid "The Special building gives a specific bonus to the chosen castle type."
+msgstr "A estrutura Especial concede um bônus específico ao tipo de castelo escolhido"
+
+msgid ""
+"The Horde Building increases the growth rate of the level 1 creatures by 8 "
+"per week."
+msgstr ""
+"A Estrutura da Horda aumenta a taxa de crescimento das criaturas de nível 1 "
+"em 8 por semana."
 
 msgid "Thieves' Guild"
 msgstr "Guilda dos Ladrões"
@@ -2762,7 +2811,7 @@ msgid "View information on the scenario you are currently playing."
 msgstr "Ver informações sobre o cenário que você está jogando atualmente."
 
 msgid "Dig for the Ultimate Artifact."
-msgstr "Cavar em busca do Artefato Supremo enterrado."
+msgstr "Cavar em busca do Artefato Definitivo enterrado."
 
 msgid "Digging"
 msgstr "Cavar Tesouro"
@@ -3296,7 +3345,7 @@ msgid "Defense:"
 msgstr "Defesa:"
 
 msgid "Spell Power:"
-msgstr "For. Mágica:"
+msgstr "Pod. Mágico:"
 
 msgid "Knowledge:"
 msgstr "Conhecimento:"
@@ -3694,7 +3743,7 @@ msgid "Def."
 msgstr "Def."
 
 msgid "Power"
-msgstr "Força"
+msgstr "Poder"
 
 msgid "Knowl"
 msgstr "Conhec."
@@ -3765,8 +3814,59 @@ msgstr "Personalidade:"
 msgid "Best Monster:"
 msgstr "Melhor Criatura:"
 
+msgid "Random Castle Name"
+msgstr "Nome Aleatório do Castelo"
+
+msgid "Allow Castle build"
+msgstr "Permitir Construção do Castelo"
+
+msgid "Default buildings"
+msgstr "Estruturas Padrão"
+
+msgid "Default Army"
+msgstr "Exército Padrão"
+
+msgid "Castle Army"
+msgstr "Exército do Castelo"
+
+msgid "Click to change the Castle name. Right-click to reset to default."
+msgstr "Clique para alterar o nome do castelo. Clique com o botão direito para redefinir para o padrão."
+
+msgid "Enter Castle name"
+msgstr "Insira o nome do Castelo"
+
+msgid "Allow to build a castle in this town."
+msgstr "Permitir a construção de um castelo nesta cidade."
+
+msgid "Toggle the use of default buildings. Custom buildings will be reset!"
+msgstr "Alternar o uso de estruturas padrão. As estruturas personalizadas serão redefinidas!"
+
+msgid "Default Buildings"
+msgstr "Estruturas Padrão"
+
+msgid "Toggle building construction restriction mode."
+msgstr "Alternar modo de restrição de construção de estruturas."
+
+msgid "Restrict Building Construction"
+msgstr "Restringir Construção de Estruturas"
+
+msgid "Use default defenders army."
+msgstr "Usar exército de defensores padrão."
+
+msgid "Set custom Castle Army. Right-click to reset unit."
+msgstr "Definir Exército do Castelo Personalizado. Clique com o botão direito para redefinir a unidade."
+
 msgid "Map filename"
 msgstr "Nome do arquivo de mapa"
+
+msgid ""
+"Do you wish to return to the game's Main Menu? All unsaved changes will be "
+"lost."
+msgstr ""
+"Deseja retornar ao Menu Principal do jogo? Todas as alterações não salvas serão perdidas."
+
+msgid "Editor"
+msgstr "Editor"
 
 msgid ""
 "Are you sure you want to load a new map? (Any unsaved changes to the current "
@@ -3832,6 +3932,9 @@ msgstr "Falha ao atualizar informações do jogador."
 
 msgid "Artifacts cannot be placed on water."
 msgstr "Artefatos não podem ser colocados na água."
+
+msgid "Only one Random Ultimate Artifact can be placed on the map."
+msgstr "Apenas um Artefato Definitivo Aleatório pode ser colocado no mapa."
 
 msgid "Mountains cannot be placed on water."
 msgstr "Montanhas não podem ser colocadas na água."
@@ -4569,6 +4672,9 @@ msgstr "desfazer última ação"
 msgid "hotkey|redo last action"
 msgstr "refazer última ação"
 
+msgid "hotkey|open game main menu"
+msgstr "abrir menu principal do jogo"
+
 msgid "hotkey|roland campaign"
 msgstr "campanha de Roland"
 
@@ -4825,9 +4931,6 @@ msgstr "Tela da Cidade"
 
 msgid "Army Actions"
 msgstr "Ações do Exército"
-
-msgid "Editor"
-msgstr "Editor"
 
 msgid "The save file is corrupted."
 msgstr "O arquivo salvo está corrompido."
@@ -5513,7 +5616,7 @@ msgid ""
 "Searching for the Ultimate Artifact is fruitless. Your hero could not carry "
 "it even if he found it - all his artifact slots are full."
 msgstr ""
-"Procurar pelo Artefato Supremo é inútil. Seu herói não poderia carregá-lo "
+"Procurar pelo Artefato Definitivo é inútil. Seu herói não poderia carregá-lo "
 "mesmo se o encontrasse - todos os seus espaços de artefato estão cheios."
 
 msgid "Digging for artifacts requires a whole day, try again tomorrow."
@@ -7629,7 +7732,7 @@ msgstr ""
 "de cada unidade."
 
 msgid "The hero's spell power determines the duration or power of a spell."
-msgstr "A força mágica do herói determina a duração ou poder de um feitiço."
+msgstr "O poder mágico do herói determina a duração ou poder de um feitiço."
 
 msgid ""
 "The hero's knowledge determines how many spell points the hero may have. "
@@ -8718,11 +8821,29 @@ msgstr "Lago Pantanoso"
 msgid "Frozen Lake"
 msgstr "Lago Congelado"
 
-msgid "Unknown Monster"
-msgstr "Monstro Desconhecido"
+msgid "randomRace|level 1 creatures"
+msgstr "criaturas de nível 1"
+
+msgid "randomRace|level 2 creatures"
+msgstr "criaturas de nível 2"
+
+msgid "randomRace|level 3 creatures"
+msgstr "criaturas de nível 3"
+
+msgid "randomRace|level 4 creatures"
+msgstr "criaturas de nível 4"
+
+msgid "randomRace|level 5 creatures"
+msgstr "criaturas de nível 5"
+
+msgid "randomRace|level 6 creatures"
+msgstr "criaturas de nível 6"
 
 msgid "Unknown Monsters"
 msgstr "Monstros Desconhecidos"
+
+msgid "Unknown Monster"
+msgstr "Monstro Desconhecido"
 
 msgid "Peasant"
 msgstr "Camponês"
@@ -9304,7 +9425,7 @@ msgid "Ultimate Cloak of Protection"
 msgstr "Manto da Proteção Definitivo"
 
 msgid "The %{name} increases the hero's spell power by %{count}."
-msgstr "%{name} aumenta a força mágica do herói em %{count}."
+msgstr "%{name} aumenta o poder mágico do herói em %{count}."
 
 msgid "Ultimate Wand of Magic"
 msgstr "Varinha de Condão Definitiva"
@@ -9321,7 +9442,7 @@ msgstr "Escudo Definitivo"
 msgid ""
 "The %{name} increases the hero's spell power and knowledge by %{count} each."
 msgstr ""
-"%{name} aumenta a força mágica e o conhecimento do herói em %{count} cada um."
+"%{name} aumenta o poder mágico e o conhecimento do herói em %{count} cada um."
 
 msgid "Ultimate Staff"
 msgstr "Cajado Definitivo"
@@ -10463,7 +10584,7 @@ msgid ""
 "The %{name} increases the hero's spell power by %{count} but adds the undead "
 "morale penalty."
 msgstr ""
-"%{name} aumenta a força mágica do herói em %{count}, mas adiciona a "
+"%{name} aumenta o poder mágico do herói em %{count}, mas adiciona a "
 "penalidade de moral dos mortos-vivos."
 
 msgid ""
@@ -10504,7 +10625,7 @@ msgid ""
 "Elemental Storm, but decreases spell power by 2."
 msgstr ""
 "%{name} concede %{count} porcento de proteção contra o Armagedom e a "
-"Tempestade Elemental, mas diminui a força mágica em 2."
+"Tempestade Elemental, mas diminui o poder mágico em 2."
 
 msgid ""
 "A kindly Sorceress thinks that your army's defenses could use a magical "
@@ -10695,7 +10816,7 @@ msgid "Staff of Wizardry"
 msgstr "Cajado da Feitiçaria"
 
 msgid "The %{name} boosts the hero's spell power by %{count}."
-msgstr "%{name} aumenta a força mágica do herói em %{count}."
+msgstr "%{name} aumenta o poder mágico do herói em %{count}."
 
 msgid ""
 "While out scaring up game, your troops find a mysterious staff levitating "
@@ -10847,7 +10968,7 @@ msgid ""
 "%{count} HP per level of spell power."
 msgstr ""
 "Remove todos os feitiços negativos lançados sobre uma de suas unidades e "
-"restaura até %{count} PV por nível de força mágica."
+"restaura até %{count} PV por nível de poder mágico."
 
 msgid "Mass Cure"
 msgstr "Cura Coletiva"
@@ -10857,7 +10978,7 @@ msgid ""
 "%{count} HP per level of spell power, per creature."
 msgstr ""
 "Remove todos os feitiços negativos lançados sobre suas forças e restaura até "
-"%{count} PV por nível de força mágica, por criatura."
+"%{count} PV por nível de poder mágico, por criatura."
 
 msgid "Resurrect"
 msgstr "Ressuscitar"
@@ -11029,7 +11150,7 @@ msgid ""
 "%{count} times the caster's spell power."
 msgstr ""
 "Coloca uma única unidade inimiga sob seu controle se os seus pontos de vida "
-"forem inferiores a %{count} vezes a força mágica do conjurador."
+"forem inferiores a %{count} vezes o poder mágico do conjurador."
 
 msgid "Cold Ray"
 msgstr "Raio Frio"
