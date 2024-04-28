@@ -2667,7 +2667,7 @@ msgid "without artifacts."
 msgstr "sem artefatos."
 
 msgid "Recruit %{name} the %{race}"
-msgstr "Recrutar %{name} da raça %{race}"
+msgstr "Recrutar %{name} da classe %{race}"
 
 msgid ""
 "'Spread' combat formation spreads the castle's units from the top to the "
