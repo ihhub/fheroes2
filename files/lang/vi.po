@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-21 05:05+0000\n"
+"POT-Creation-Date: 2024-04-28 06:50+0000\n"
 "PO-Revision-Date: 2024-02-20 08:49+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3912,6 +3912,17 @@ msgstr ""
 msgid "Map filename"
 msgstr "Tệp bản đồ"
 
+#, fuzzy
+msgid ""
+"Do you wish to return to the game's Main Menu? All unsaved changes will be "
+"lost."
+msgstr ""
+"Ngươi có chắc chắn muốn tạo bản đồ mới không? (Mọi thay đổi chưa được lưu "
+"đối với bản đồ hiện tại sẽ bị mất.)"
+
+msgid "Editor"
+msgstr "Biên tập"
+
 msgid ""
 "Are you sure you want to load a new map? (Any unsaved changes to the current "
 "map will be lost.)"
@@ -4734,6 +4745,10 @@ msgstr "hoàn tác tác vụ cuối"
 msgid "hotkey|redo last action"
 msgstr "thực hiện lại tác vụ cuối"
 
+#, fuzzy
+msgid "hotkey|open game main menu"
+msgstr "trình đơn bản đồ mới"
+
 msgid "hotkey|roland campaign"
 msgstr "chiến dịch roland"
 
@@ -4991,9 +5006,6 @@ msgstr "Màn hình Thị trấn"
 
 msgid "Army Actions"
 msgstr "Hành động Quân đội"
-
-msgid "Editor"
-msgstr "Biên tập"
 
 msgid "The save file is corrupted."
 msgstr "File lưu bị hỏng."

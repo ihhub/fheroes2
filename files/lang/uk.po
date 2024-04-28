@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-21 05:05+0000\n"
+"POT-Creation-Date: 2024-04-28 06:50+0000\n"
 "PO-Revision-Date: 2024-04-02 09:25+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3868,6 +3868,17 @@ msgstr ""
 msgid "Map filename"
 msgstr "Назва файлу мапи"
 
+#, fuzzy
+msgid ""
+"Do you wish to return to the game's Main Menu? All unsaved changes will be "
+"lost."
+msgstr ""
+"Ви певні, що хочете створити нову мапу? (Всі незбережені зміни у поточній "
+"мапі будуть втрачені.)"
+
+msgid "Editor"
+msgstr "Редактор"
+
 msgid ""
 "Are you sure you want to load a new map? (Any unsaved changes to the current "
 "map will be lost.)"
@@ -4670,6 +4681,10 @@ msgstr "відмінити останню дію"
 msgid "hotkey|redo last action"
 msgstr "повторити останню дію"
 
+#, fuzzy
+msgid "hotkey|open game main menu"
+msgstr "нова гра"
+
 msgid "hotkey|roland campaign"
 msgstr ""
 
@@ -4927,9 +4942,6 @@ msgstr "Вікно міста"
 
 msgid "Army Actions"
 msgstr "Дії армії"
-
-msgid "Editor"
-msgstr "Редактор"
 
 msgid "The save file is corrupted."
 msgstr "Файл збереження пошкоджений."
