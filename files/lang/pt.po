@@ -3818,10 +3818,10 @@ msgid "Random Castle Name"
 msgstr "Nome Aleatório do Castelo"
 
 msgid "Allow Castle build"
-msgstr "Permitir Construção do Castelo"
+msgstr "Permitir construção do Castelo"
 
 msgid "Default buildings"
-msgstr "Estruturas Padrão"
+msgstr "Estruturas padrão"
 
 msgid "Default Army"
 msgstr "Exército Padrão"
@@ -3854,7 +3854,7 @@ msgid "Use default defenders army."
 msgstr "Usar exército de defensores padrão."
 
 msgid "Set custom Castle Army. Right-click to reset unit."
-msgstr "Definir Exército do Castelo Personalizado. Clique com o botão direito para redefinir a unidade."
+msgstr "Definir Exército do Castelo personalizado. Clique com o botão direito para redefinir a unidade."
 
 msgid "Map filename"
 msgstr "Nome do arquivo de mapa"
