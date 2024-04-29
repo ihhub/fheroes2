@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-21 05:05+0000\n"
+"POT-Creation-Date: 2024-04-28 06:50+0000\n"
 "PO-Revision-Date: 2023-09-04 21:55+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -3862,6 +3862,17 @@ msgstr ""
 msgid "Map filename"
 msgstr "Térképfájl neve"
 
+#, fuzzy
+msgid ""
+"Do you wish to return to the game's Main Menu? All unsaved changes will be "
+"lost."
+msgstr ""
+"Biztos hogy benne hogy új térképet hozol létre? (A jelenlegi térkép "
+"változtatásai el fognak veszni.)"
+
+msgid "Editor"
+msgstr "Szerkesztő"
+
 msgid ""
 "Are you sure you want to load a new map? (Any unsaved changes to the current "
 "map will be lost.)"
@@ -4663,6 +4674,10 @@ msgstr "Legutolsó cselekvés visszavonása (UNDO)"
 msgid "hotkey|redo last action"
 msgstr "Legutolsó cselekvés visszaállítása (REDO)"
 
+#, fuzzy
+msgid "hotkey|open game main menu"
+msgstr "új térkép menü"
+
 msgid "hotkey|roland campaign"
 msgstr "roland hadjárata"
 
@@ -4919,9 +4934,6 @@ msgstr "Város képernyő"
 
 msgid "Army Actions"
 msgstr "Sereg cselekvései"
-
-msgid "Editor"
-msgstr "Szerkesztő"
 
 msgid "The save file is corrupted."
 msgstr "A mentés fájl sérült."

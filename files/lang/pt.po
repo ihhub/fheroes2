@@ -3859,6 +3859,17 @@ msgstr "Definir Exército do Castelo personalizado. Clique com o botão direito 
 msgid "Map filename"
 msgstr "Nome do arquivo de mapa"
 
+#, fuzzy
+msgid ""
+"Do you wish to return to the game's Main Menu? All unsaved changes will be "
+"lost."
+msgstr ""
+"Tem certeza de que deseja criar um novo mapa? (Todas as alterações não "
+"salvas no mapa atual serão perdidas.)"
+
+msgid "Editor"
+msgstr "Editor"
+
 msgid ""
 "Do you wish to return to the game's Main Menu? All unsaved changes will be "
 "lost."

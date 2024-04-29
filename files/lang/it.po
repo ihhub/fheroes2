@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-21 05:05+0000\n"
+"POT-Creation-Date: 2024-04-28 06:50+0000\n"
 "PO-Revision-Date: 2022-12-03 04:36+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <it@li.org>\n"
@@ -3770,6 +3770,17 @@ msgstr ""
 
 #, fuzzy
 msgid ""
+"Do you wish to return to the game's Main Menu? All unsaved changes will be "
+"lost."
+msgstr ""
+"Sei sicuro di voler cominciare una nuova partita? (La partita attuale andrà "
+"perduta.)"
+
+msgid "Editor"
+msgstr ""
+
+#, fuzzy
+msgid ""
 "Are you sure you want to load a new map? (Any unsaved changes to the current "
 "map will be lost.)"
 msgstr ""
@@ -4577,6 +4588,10 @@ msgstr "Va alla città pross."
 msgid "hotkey|redo last action"
 msgstr "Va alla città pross."
 
+#, fuzzy
+msgid "hotkey|open game main menu"
+msgstr "Mostra eroe successivo"
+
 msgid "hotkey|roland campaign"
 msgstr ""
 
@@ -4847,9 +4862,6 @@ msgid "Town Screen"
 msgstr "Schermata Eroe"
 
 msgid "Army Actions"
-msgstr ""
-
-msgid "Editor"
 msgstr ""
 
 #, fuzzy
