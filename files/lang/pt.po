@@ -4672,8 +4672,9 @@ msgstr "desfazer última ação"
 msgid "hotkey|redo last action"
 msgstr "refazer última ação"
 
+#, fuzzy
 msgid "hotkey|open game main menu"
-msgstr "abrir menu principal do jogo"
+msgstr "menu novo de mapa"
 
 msgid "hotkey|roland campaign"
 msgstr "campanha de Roland"
