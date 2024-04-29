@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-21 05:05+0000\n"
+"POT-Creation-Date: 2024-04-28 06:50+0000\n"
 "PO-Revision-Date: 2022-10-25 08:52+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Dutch <nl@li.org>\n"
@@ -3774,6 +3774,14 @@ msgid "Map filename"
 msgstr ""
 
 msgid ""
+"Do you wish to return to the game's Main Menu? All unsaved changes will be "
+"lost."
+msgstr ""
+
+msgid "Editor"
+msgstr ""
+
+msgid ""
 "Are you sure you want to load a new map? (Any unsaved changes to the current "
 "map will be lost.)"
 msgstr ""
@@ -4528,6 +4536,10 @@ msgstr "Systeem instellingen aanpassen"
 msgid "hotkey|redo last action"
 msgstr "Systeem instellingen aanpassen"
 
+#, fuzzy
+msgid "hotkey|open game main menu"
+msgstr "Systeem instellingen aanpassen"
+
 msgid "hotkey|roland campaign"
 msgstr ""
 
@@ -4787,9 +4799,6 @@ msgid "Town Screen"
 msgstr "Held Scherm"
 
 msgid "Army Actions"
-msgstr ""
-
-msgid "Editor"
 msgstr ""
 
 #, fuzzy
