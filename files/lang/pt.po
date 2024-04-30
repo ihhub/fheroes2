@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-04-28 06:50+0000\n"
-"PO-Revision-Date: 2024-04-08 22:19-0300\n"
+"PO-Revision-Date: 2024-04-30 05:59-0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
 "Language: pt_BR\n"
@@ -3858,17 +3858,6 @@ msgstr "Definir Exército do Castelo personalizado. Clique com o botão direito 
 
 msgid "Map filename"
 msgstr "Nome do arquivo de mapa"
-
-#, fuzzy
-msgid ""
-"Do you wish to return to the game's Main Menu? All unsaved changes will be "
-"lost."
-msgstr ""
-"Tem certeza de que deseja criar um novo mapa? (Todas as alterações não "
-"salvas no mapa atual serão perdidas.)"
-
-msgid "Editor"
-msgstr "Editor"
 
 msgid ""
 "Do you wish to return to the game's Main Menu? All unsaved changes will be "
