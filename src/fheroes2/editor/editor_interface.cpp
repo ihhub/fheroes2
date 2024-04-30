@@ -128,7 +128,7 @@ namespace
 
     bool isActionObjectAllowed( const Maps::ObjectInfo & info, const fheroes2::Point & mainTilePos )
     {
-        // Active action object parts must be places on a tile without any other objects.
+        // Active action object parts must be placed on a tile without any other objects.
         // Only ground parts should be checked for this condition.
         for ( const auto & objectPart : info.groundLevelParts ) {
             if ( objectPart.layerType == Maps::SHADOW_LAYER || objectPart.layerType == Maps::TERRAIN_LAYER ) {
