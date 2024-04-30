@@ -1089,7 +1089,7 @@ namespace Interface
             }
 
             if ( !isActionObjectAllowed( objectInfo, tilePos ) ) {
-                _warningMessage.reset( _( "An action object must be set on a clear tile." ) );
+                _warningMessage.reset( _( "Action objects must be placed on clear tiles." ) );
                 return;
             }
 
@@ -1109,7 +1109,7 @@ namespace Interface
             }
 
             if ( !isActionObjectAllowed( objectInfo, tilePos ) ) {
-                _warningMessage.reset( _( "An action object must be set on a clear tile." ) );
+                _warningMessage.reset( _( "Action objects must be placed on clear tiles." ) );
                 return;
             }
 
@@ -1129,7 +1129,7 @@ namespace Interface
             }
 
             if ( !isActionObjectAllowed( objectInfo, tilePos ) ) {
-                _warningMessage.reset( _( "An action object must be set on a clear tile." ) );
+                _warningMessage.reset( _( "Action objects must be placed on clear tiles." ) );
                 return;
             }
 
@@ -1189,7 +1189,7 @@ namespace Interface
             }
 
             if ( !isActionObjectAllowed( objectInfo, tilePos ) ) {
-                _warningMessage.reset( _( "An action object must be set on a clear tile." ) );
+                _warningMessage.reset( _( "Action objects must be placed on clear tiles." ) );
                 return;
             }
 
@@ -1246,7 +1246,7 @@ namespace Interface
             }
 
             if ( !isActionObjectAllowed( objectInfo, tilePos ) ) {
-                _warningMessage.reset( _( "An action object must be set on a clear tile." ) );
+                _warningMessage.reset( _( "Action objects must be placed on clear tiles." ) );
                 return;
             }
 
@@ -1266,7 +1266,7 @@ namespace Interface
             }
 
             if ( !isActionObjectAllowed( objectInfo, tilePos ) ) {
-                _warningMessage.reset( _( "An action object must be set on a clear tile." ) );
+                _warningMessage.reset( _( "Action objects must be placed on clear tiles." ) );
                 return;
             }
 
@@ -1286,7 +1286,7 @@ namespace Interface
             }
 
             if ( !isActionObjectAllowed( objectInfo, tilePos ) ) {
-                _warningMessage.reset( _( "An action object must be set on a clear tile." ) );
+                _warningMessage.reset( _( "Action objects must be placed on clear tiles." ) );
                 return;
             }
 
@@ -1306,7 +1306,7 @@ namespace Interface
             }
 
             if ( !isActionObjectAllowed( objectInfo, tilePos ) ) {
-                _warningMessage.reset( _( "An action object must be set on a clear tile." ) );
+                _warningMessage.reset( _( "Action objects must be placed on clear tiles." ) );
                 return;
             }
 
@@ -1326,7 +1326,7 @@ namespace Interface
             }
 
             if ( !isActionObjectAllowed( objectInfo, tilePos ) ) {
-                _warningMessage.reset( _( "An action object must be set on a clear tile." ) );
+                _warningMessage.reset( _( "Action objects must be placed on clear tiles." ) );
                 return;
             }
 
@@ -1377,7 +1377,7 @@ namespace Interface
             }
 
             if ( !isActionObjectAllowed( townObjectInfo, tilePos ) ) {
-                _warningMessage.reset( _( "An action object must be set on a clear tile." ) );
+                _warningMessage.reset( _( "Action objects must be placed on clear tiles." ) );
                 return;
             }
 
@@ -1455,7 +1455,7 @@ namespace Interface
             }
 
             if ( !isActionObjectAllowed( objectInfo, tilePos ) ) {
-                _warningMessage.reset( _( "An action object must be set on a clear tile." ) );
+                _warningMessage.reset( _( "Action objects must be placed on clear tiles." ) );
                 return;
             }
 
@@ -1482,7 +1482,7 @@ namespace Interface
             }
 
             if ( !isActionObjectAllowed( objectInfo, tilePos ) ) {
-                _warningMessage.reset( _( "An action object must be set on a clear tile." ) );
+                _warningMessage.reset( _( "Action objects must be placed on clear tiles." ) );
                 return;
             }
 
@@ -1502,7 +1502,7 @@ namespace Interface
             }
 
             if ( !isActionObjectAllowed( objectInfo, tilePos ) ) {
-                _warningMessage.reset( _( "An action object must be set on a clear tile." ) );
+                _warningMessage.reset( _( "Action objects must be placed on clear tiles." ) );
                 return;
             }
 
@@ -1522,7 +1522,7 @@ namespace Interface
             }
 
             if ( !isActionObjectAllowed( objectInfo, tilePos ) ) {
-                _warningMessage.reset( _( "An action object must be set on a clear tile." ) );
+                _warningMessage.reset( _( "Action objects must be placed on clear tiles." ) );
                 return;
             }
 
