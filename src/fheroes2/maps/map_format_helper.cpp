@@ -283,8 +283,12 @@ namespace Maps
             heroMetadata->second.race = Race::RAND;
         }
         else if ( group == ObjectGroup::MONSTERS ) {
-            auto [monsterMetadata, isMetadataEmplaced] = map.standardMetadata.try_emplace( uid );
+            const auto [dummy, isMetadataEmplaced] = map.standardMetadata.try_emplace( uid );
             assert( isMetadataEmplaced );
+
+#ifdef NDEBUG
+            (void)isMetadataEmplaced;
+#endif
         }
         else if ( group == Maps::ObjectGroup::ADVENTURE_MISCELLANEOUS ) {
             const auto & objects = Maps::getObjectsByGroup( group );
@@ -294,18 +298,30 @@ namespace Maps
 
             switch ( objectType ) {
             case MP2::OBJ_EVENT: {
-                auto [metadata, isMetadataEmplaced] = map.adventureMapEventMetadata.try_emplace( uid );
+                const auto [dummy, isMetadataEmplaced] = map.adventureMapEventMetadata.try_emplace( uid );
                 assert( isMetadataEmplaced );
+
+#ifdef NDEBUG
+                (void)isMetadataEmplaced;
+#endif
                 break;
             }
             case MP2::OBJ_SIGN: {
-                auto [metadata, isMetadataEmplaced] = map.signMetadata.try_emplace( uid );
+                const auto [dummy, isMetadataEmplaced] = map.signMetadata.try_emplace( uid );
                 assert( isMetadataEmplaced );
+
+#ifdef NDEBUG
+                (void)isMetadataEmplaced;
+#endif
                 break;
             }
             case MP2::OBJ_SPHINX: {
-                auto [metadata, isMetadataEmplaced] = map.sphinxMetadata.try_emplace( uid );
+                const auto [dummy, isMetadataEmplaced] = map.sphinxMetadata.try_emplace( uid );
                 assert( isMetadataEmplaced );
+
+#ifdef NDEBUG
+                (void)isMetadataEmplaced;
+#endif
                 break;
             }
             default:
@@ -318,15 +334,23 @@ namespace Maps
             assert( index < objects.size() );
             const auto objectType = objects[index].objectType;
             if ( objectType == MP2::OBJ_BOTTLE ) {
-                auto [metadata, isMetadataEmplaced] = map.signMetadata.try_emplace( uid );
+                const auto [dummy, isMetadataEmplaced] = map.signMetadata.try_emplace( uid );
                 assert( isMetadataEmplaced );
+
+#ifdef NDEBUG
+                (void)isMetadataEmplaced;
+#endif
             }
         }
         else if ( group == Maps::ObjectGroup::ADVENTURE_ARTIFACTS ) {
             assert( index < Maps::getObjectsByGroup( group ).size() );
 
-            auto [metadata, isMetadataEmplaced] = map.standardMetadata.try_emplace( uid );
+            const auto [dummy, isMetadataEmplaced] = map.standardMetadata.try_emplace( uid );
             assert( isMetadataEmplaced );
+
+#ifdef NDEBUG
+            (void)isMetadataEmplaced;
+#endif
         }
     }
 
@@ -415,14 +439,12 @@ namespace Maps
         }
 
         // Update map format settings based on the gathered information.
-
         map.availablePlayerColors = 0;
         for ( size_t i = 0; i < mainColors; ++i ) {
             if ( heroColorsPresent[i] || townColorsPresent[i] ) {
                 assert( heroRacesPresent[i] != 0 || townRacesPresent[i] != 0 );
 
                 map.availablePlayerColors += static_cast<uint8_t>( 1 << i );
-
                 map.playerRace[i] &= ( heroRacesPresent[i] | townRacesPresent[i] );
 
                 if ( map.playerRace[i] == 0 ) {

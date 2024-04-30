@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-21 05:05+0000\n"
+"POT-Creation-Date: 2024-04-28 06:50+0000\n"
 "PO-Revision-Date: 2023-09-03 18:42+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3987,6 +3987,17 @@ msgstr ""
 "Kartets\n"
 "størrelse"
 
+#, fuzzy
+msgid ""
+"Do you wish to return to the game's Main Menu? All unsaved changes will be "
+"lost."
+msgstr ""
+"Er du sikker på at du ønsker å lage et nytt kart?(Alt som er ulagret i dette "
+"kartet vil gå tapt.)"
+
+msgid "Editor"
+msgstr ""
+
 msgid ""
 "Are you sure you want to load a new map? (Any unsaved changes to the current "
 "map will be lost.)"
@@ -4829,6 +4840,10 @@ msgstr "Standard handling"
 msgid "hotkey|redo last action"
 msgstr "Standard handling"
 
+#, fuzzy
+msgid "hotkey|open game main menu"
+msgstr "Menyen for nye kart"
+
 msgid "hotkey|roland campaign"
 msgstr "Rolands felttog"
 
@@ -5090,9 +5105,6 @@ msgid "Town Screen"
 msgstr "Heltevindu"
 
 msgid "Army Actions"
-msgstr ""
-
-msgid "Editor"
 msgstr ""
 
 msgid "The save file is corrupted."

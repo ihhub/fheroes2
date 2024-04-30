@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-21 05:05+0000\n"
+"POT-Creation-Date: 2024-04-28 06:50+0000\n"
 "PO-Revision-Date: 2024-03-15 21:35+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -3873,6 +3873,17 @@ msgstr ""
 msgid "Map filename"
 msgstr "Название файла карты"
 
+#, fuzzy
+msgid ""
+"Do you wish to return to the game's Main Menu? All unsaved changes will be "
+"lost."
+msgstr ""
+"Вы действительно хотите создать новую карту? (Любые несохранённые изменения "
+"данной карты будут потеряны.)"
+
+msgid "Editor"
+msgstr "Редактор"
+
 msgid ""
 "Are you sure you want to load a new map? (Any unsaved changes to the current "
 "map will be lost.)"
@@ -4676,6 +4687,10 @@ msgstr "отменить последнее действие"
 msgid "hotkey|redo last action"
 msgstr "повторить последнее действие"
 
+#, fuzzy
+msgid "hotkey|open game main menu"
+msgstr "меню новой карты"
+
 msgid "hotkey|roland campaign"
 msgstr "кампания за роланда"
 
@@ -4932,9 +4947,6 @@ msgstr "Экран города"
 
 msgid "Army Actions"
 msgstr "Действия армии"
-
-msgid "Editor"
-msgstr "Редактор"
 
 msgid "The save file is corrupted."
 msgstr "Файл сохранения повреждён."
