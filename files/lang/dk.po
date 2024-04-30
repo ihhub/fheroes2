@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-04-28 06:50+0000\n"
-"PO-Revision-Date: 2024-03-05 13:55+0100\n"
+"PO-Revision-Date: 2024-04-30 09:13+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
 "Language: da\n"
@@ -206,9 +206,8 @@ msgstr "BORGE"
 msgid "TOWN"
 msgstr "BY"
 
-#, fuzzy
 msgid "RESTRICT"
-msgstr "OMKAMP"
+msgstr "BEGRÆNS"
 
 msgid ""
 "D\n"
@@ -2467,51 +2466,41 @@ msgstr "Laboratorium"
 msgid "Shrine"
 msgstr "Helligdom"
 
-#, fuzzy
 msgid "Special"
-msgstr "Intet særligt"
+msgstr "Specialbygning"
 
 msgid "Horde Building"
-msgstr ""
+msgstr "Hordebygning"
 
-#, fuzzy
 msgid "Dwelling 1"
-msgstr "Bosteder"
+msgstr "Bosted 1"
 
-#, fuzzy
 msgid "Dwelling 2"
-msgstr "Bosteder"
+msgstr "Bosted 2"
 
-#, fuzzy
 msgid "Upg. Dwelling 2"
-msgstr "Bosteder"
+msgstr "Opg. bosted 2"
 
-#, fuzzy
 msgid "Dwelling 3"
-msgstr "Bosteder"
+msgstr "Bosted 3"
 
-#, fuzzy
 msgid "Upg. Dwelling 3"
-msgstr "Bosteder"
+msgstr "Opg. bosted 3"
 
-#, fuzzy
 msgid "Dwelling 4"
-msgstr "Bosteder"
+msgstr "Bosted 4"
 
-#, fuzzy
 msgid "Upg. Dwelling 4"
-msgstr "Bosteder"
+msgstr "Opg. bosted 4"
 
-#, fuzzy
 msgid "Dwelling 6"
-msgstr "Bosteder"
+msgstr "Bosted 6"
 
-#, fuzzy
 msgid "Upg. Dwelling 6"
-msgstr "Bosteder"
+msgstr "Opg. bosted 6"
 
 msgid "2x Upg. Dwelling 6"
-msgstr ""
+msgstr "2x opg. bosted 6"
 
 msgid ""
 "The Fortifications increase the toughness of the walls, increasing the "
@@ -2564,16 +2553,12 @@ msgid "The Skull Pile increases production of Skeletons by %{count} per week."
 msgstr "Kraniebunken øger tilvæksten af skeletter med %{count} om ugen."
 
 msgid "The Special building gives a specific bonus to the chosen castle type."
-msgstr ""
+msgstr "Specialbygningen giver en specifik bonus til den valgte borgtype."
 
-#, fuzzy
 msgid ""
 "The Horde Building increases the growth rate of the level 1 creatures by 8 "
 "per week."
-msgstr ""
-"Brønden øger den ugentlige tilvækst af byens bosteder med %{count}. Brønden "
-"gør det også muligt at få en oversigt over byens væsener. Du kan desuden "
-"hverve dem herfra."
+msgstr "hordebygningen øger tilvæksten for niveau 1 væsener med 8 per uge."
 
 msgid "Thieves' Guild"
 msgstr "Tyvelaug"
@@ -3872,65 +3857,65 @@ msgstr "Personlighed:"
 msgid "Best Monster:"
 msgstr "Bedste væsen:"
 
-#, fuzzy
 msgid "Random Castle Name"
-msgstr "Tilfældig borg"
+msgstr "Tilfældigt borgnavn"
 
-#, fuzzy
 msgid "Allow Castle build"
-msgstr "Skyslot"
+msgstr "Tillad borgbyggeri"
 
-#, fuzzy
 msgid "Default buildings"
-msgstr "Standardhandlinger"
+msgstr ""
+"Standard-\n"
+"bygninger"
 
-#, fuzzy
 msgid "Default Army"
-msgstr "Standardhandlinger"
+msgstr ""
+"Standard-\n"
+"hær"
 
-#, fuzzy
 msgid "Castle Army"
-msgstr "Borg"
+msgstr "Borghær"
 
 msgid "Click to change the Castle name. Right-click to reset to default."
-msgstr ""
+msgstr "Klik for at ændre borgnavnet. Højreklik for at nulstille til standard."
 
-#, fuzzy
 msgid "Enter Castle name"
-msgstr "Mist helten '%{name}'."
+msgstr "Skriv borgnavn"
 
 msgid "Allow to build a castle in this town."
-msgstr ""
+msgstr "Tillad borgbyggeri i denne by."
 
 msgid "Toggle the use of default buildings. Custom buildings will be reset!"
 msgstr ""
+"Skift brugen af standardbygninger. Brugerdefinerede bygninger vil blive "
+"nulstillet!"
 
-#, fuzzy
 msgid "Default Buildings"
-msgstr "Standardhandlinger"
+msgstr ""
+"Standard-\n"
+"bygninger"
 
 msgid "Toggle building construction restriction mode."
-msgstr ""
+msgstr "Skift bygningskonstruktionsbegrænsningstilstand."
 
 msgid "Restrict Building Construction"
-msgstr ""
+msgstr "Begræns bygningskonstruktion"
 
 msgid "Use default defenders army."
-msgstr ""
+msgstr "Brug standard forsvarshær."
 
 msgid "Set custom Castle Army. Right-click to reset unit."
-msgstr ""
+msgstr "Indstil brugerdefinerede borghær. Højreklik for at nulstille troppen."
 
 msgid "Map filename"
 msgstr "Kort-filnavn"
 
-#, fuzzy
 msgid ""
 "Do you wish to return to the game's Main Menu? All unsaved changes will be "
 "lost."
 msgstr ""
-"Er du sikker på, at du vil oprette et nyt kort? (Alle ikke-gemte ændringer "
-"af det nuværende kort, vil gå tabt.)"
+"Er du sikker på, at du vil tilbage til spillets hovedmenu? Alle ikke-gemte "
+"ændringer vil gå tabt."
 
 msgid "Editor"
 msgstr "Editor"
@@ -4000,9 +3985,8 @@ msgstr "Opdatering af spilleroplysninger mislykkedes."
 msgid "Artifacts cannot be placed on water."
 msgstr "Artefakter kan ikke placeres på vand."
 
-#, fuzzy
 msgid "Only one Random Ultimate Artifact can be placed on the map."
-msgstr "Artefakter kan ikke placeres på vand."
+msgstr "Kun et tilfældigt artefakt kan placeres på kortet."
 
 msgid "Mountains cannot be placed on water."
 msgstr "Bjerge kan ikke placeres på vand."
@@ -4736,9 +4720,8 @@ msgstr "Fortryd forrige handling"
 msgid "hotkey|redo last action"
 msgstr "Gentag forrige handling"
 
-#, fuzzy
 msgid "hotkey|open game main menu"
-msgstr "Nyt-kort menu"
+msgstr "Åben spillets hovedmenu"
 
 msgid "hotkey|roland campaign"
 msgstr "Felttoget: Roland"
