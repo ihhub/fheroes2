@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-21 05:05+0000\n"
+"POT-Creation-Date: 2024-05-01 11:10+0000\n"
 "PO-Revision-Date: 2024-02-19 16:13+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -3853,6 +3853,17 @@ msgstr ""
 msgid "Map filename"
 msgstr "Kartfilnamn"
 
+#, fuzzy
+msgid ""
+"Do you wish to return to the game's Main Menu? All unsaved changes will be "
+"lost."
+msgstr ""
+"Är du säker på att du vill skapa en ny karta? (Osparade ändringar för din "
+"nuvarande karta kommer försvinna.)"
+
+msgid "Editor"
+msgstr "Redigerare"
+
 msgid ""
 "Are you sure you want to load a new map? (Any unsaved changes to the current "
 "map will be lost.)"
@@ -3898,11 +3909,12 @@ msgstr "Skjut %{monster}"
 msgid "Objects cannot be placed outside the map."
 msgstr "Föremål kan inte placeras utanför kartan."
 
+#, fuzzy
+msgid "Action objects must be placed on clear tiles."
+msgstr "Havsföremål måste placeras på vatten."
+
 msgid "Monsters cannot be placed on water."
 msgstr "Varelser kan inte placeras på vatten."
-
-msgid "Choose a tile which does not contain any objects."
-msgstr "Välj en ruta som inte har några objekt."
 
 msgid "Treasures cannot be placed on water."
 msgstr "Skatter kan inte placeras på vatten."
@@ -4659,6 +4671,10 @@ msgstr "Ångra senaste åtgärden"
 msgid "hotkey|redo last action"
 msgstr "Gör om senaste åtgärden"
 
+#, fuzzy
+msgid "hotkey|open game main menu"
+msgstr "Nytt karta"
+
 msgid "hotkey|roland campaign"
 msgstr "Rolands kampanj"
 
@@ -4914,9 +4930,6 @@ msgstr "Stadsvy"
 
 msgid "Army Actions"
 msgstr "Arméåtgärder"
-
-msgid "Editor"
-msgstr "Redigerare"
 
 msgid "The save file is corrupted."
 msgstr "Sparfilen är korrupt."
@@ -11464,6 +11477,9 @@ msgstr ""
 "Den senaste versionen av spelet finns på:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Choose a tile which does not contain any objects."
+#~ msgstr "Välj en ruta som inte har några objekt."
 
 #~ msgid "Set Defense Skill"
 #~ msgstr "Ange Försvarsförmåga"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-21 05:05+0000\n"
+"POT-Creation-Date: 2024-05-01 11:10+0000\n"
 "PO-Revision-Date: 2023-12-22 00:32+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3956,6 +3956,17 @@ msgstr ""
 "Karten-\n"
 "größe"
 
+#, fuzzy
+msgid ""
+"Do you wish to return to the game's Main Menu? All unsaved changes will be "
+"lost."
+msgstr ""
+"Seid Ihr sicher, dass Ihr eine neue Karte erstellen wollt? (Alle nicht "
+"gespeicherten Änderungen an der aktuellen Karte gehen verloren)."
+
+msgid "Editor"
+msgstr "Editor"
+
 msgid ""
 "Are you sure you want to load a new map? (Any unsaved changes to the current "
 "map will be lost.)"
@@ -4002,11 +4013,12 @@ msgstr "Schieße auf %{monster}"
 msgid "Objects cannot be placed outside the map."
 msgstr "Monster können nicht auf Wasser plaziert werden."
 
-msgid "Monsters cannot be placed on water."
+#, fuzzy
+msgid "Action objects must be placed on clear tiles."
 msgstr "Monster können nicht auf Wasser plaziert werden."
 
-msgid "Choose a tile which does not contain any objects."
-msgstr "Ein Feld wählen, das keine Objekt enthält."
+msgid "Monsters cannot be placed on water."
+msgstr "Monster können nicht auf Wasser plaziert werden."
 
 #, fuzzy
 msgid "Treasures cannot be placed on water."
@@ -4804,6 +4816,10 @@ msgstr "Standardaktion"
 msgid "hotkey|redo last action"
 msgstr "Standardaktion"
 
+#, fuzzy
+msgid "hotkey|open game main menu"
+msgstr "Neue Karte Menü"
+
 msgid "hotkey|roland campaign"
 msgstr "Roland-Feldzug"
 
@@ -5066,9 +5082,6 @@ msgstr "Heldenbildschirm"
 
 msgid "Army Actions"
 msgstr ""
-
-msgid "Editor"
-msgstr "Editor"
 
 msgid "The save file is corrupted."
 msgstr "Die Speicherdatei ist beschädigt."
@@ -11884,6 +11897,9 @@ msgstr ""
 "Die neueste Version des Spiels finden Sie unter\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Choose a tile which does not contain any objects."
+#~ msgstr "Ein Feld wählen, das keine Objekt enthält."
 
 #~ msgid "Set Defense Skill"
 #~ msgstr "Verteidigung setzen"

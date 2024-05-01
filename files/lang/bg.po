@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-21 05:05+0000\n"
+"POT-Creation-Date: 2024-05-01 11:10+0000\n"
 "PO-Revision-Date: 2022-11-08 16:44+0000\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3940,6 +3940,17 @@ msgstr ""
 msgid "Map filename"
 msgstr "Размер на карта"
 
+#, fuzzy
+msgid ""
+"Do you wish to return to the game's Main Menu? All unsaved changes will be "
+"lost."
+msgstr ""
+"Сигурен ли си, че искаш да създадеш нова карта? (Всички незапазени промени в "
+"текущата карта ще бъдат загубени.)"
+
+msgid "Editor"
+msgstr "Редактор"
+
 msgid ""
 "Are you sure you want to load a new map? (Any unsaved changes to the current "
 "map will be lost.)"
@@ -3986,11 +3997,12 @@ msgstr "Застреляй %{monster}"
 msgid "Objects cannot be placed outside the map."
 msgstr "Това заклинание не може да се направи на кораб."
 
+#, fuzzy
+msgid "Action objects must be placed on clear tiles."
+msgstr "Това заклинание не може да се направи на кораб."
+
 msgid "Monsters cannot be placed on water."
 msgstr "Чудовищата не могат да се поставят върху вода."
-
-msgid "Choose a tile which does not contain any objects."
-msgstr "Избери плочка, която не съдържа никакви предмети."
 
 #, fuzzy
 msgid "Treasures cannot be placed on water."
@@ -4784,6 +4796,10 @@ msgstr "отмени последното действие"
 msgid "hotkey|redo last action"
 msgstr "повтори последното действие"
 
+#, fuzzy
+msgid "hotkey|open game main menu"
+msgstr "ново меню на карта"
+
 msgid "hotkey|roland campaign"
 msgstr "кампания на роланд"
 
@@ -5041,9 +5057,6 @@ msgstr "Екран на героя"
 
 msgid "Army Actions"
 msgstr ""
-
-msgid "Editor"
-msgstr "Редактор"
 
 msgid "The save file is corrupted."
 msgstr "Запазеният файл е повреден."
@@ -11693,6 +11706,9 @@ msgstr ""
 "Проверете най-новата версия на играта на\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Choose a tile which does not contain any objects."
+#~ msgstr "Избери плочка, която не съдържа никакви предмети."
 
 #~ msgid "Set Defense Skill"
 #~ msgstr "Задайте умение за защита"

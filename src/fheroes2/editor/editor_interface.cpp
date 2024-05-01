@@ -126,6 +126,37 @@ namespace
         return true;
     }
 
+    bool isActionObjectAllowed( const Maps::ObjectInfo & info, const fheroes2::Point & mainTilePos )
+    {
+        // Active action object parts must be placed on a tile without any other objects.
+        // Only ground parts should be checked for this condition.
+        for ( const auto & objectPart : info.groundLevelParts ) {
+            if ( objectPart.layerType == Maps::SHADOW_LAYER || objectPart.layerType == Maps::TERRAIN_LAYER ) {
+                // Shadow and terrain layer parts are ignored.
+                continue;
+            }
+
+            const fheroes2::Point pos{ mainTilePos.x + objectPart.tileOffset.x, mainTilePos.y + objectPart.tileOffset.y };
+            if ( !Maps::isValidAbsPoint( pos.x, pos.y ) ) {
+                return false;
+            }
+
+            const auto & tile = world.GetTiles( pos.x, pos.y );
+
+            if ( MP2::isActionObject( tile.GetObject() ) ) {
+                // An action already exist. We cannot allow to put anything on top of it.
+                return false;
+            }
+
+            if ( MP2::isActionObject( objectPart.objectType ) && !Maps::isClearGround( tile ) ) {
+                // We are trying to place an action object on a tile that has some other objects.
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     bool isConditionValid( const std::vector<fheroes2::Point> & offsets, const fheroes2::Point & mainTilePos,
                            const std::function<bool( const Maps::Tiles & tile )> & condition )
     {
@@ -147,12 +178,6 @@ namespace
         }
 
         return true;
-    }
-
-    bool checkConditionForOccupiedTiles( const Maps::ObjectInfo & info, const fheroes2::Point & mainTilePos,
-                                         const std::function<bool( const Maps::Tiles & tile )> & condition )
-    {
-        return isConditionValid( Maps::getGroundLevelOccupiedTileOffset( info ), mainTilePos, condition );
     }
 
     bool checkConditionForUsedTiles( const Maps::ObjectInfo & info, const fheroes2::Point & mainTilePos,
@@ -583,6 +608,15 @@ namespace Interface
                 }
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::EDITOR_REDO_LAST_ACTION ) ) {
                     redoAction();
+                }
+                else if ( HotKeyPressEvent( Game::HotKeyEvent::EDITOR_TO_GAME_MAIN_MENU ) ) {
+                    const int returnValue
+                        = fheroes2::showStandardTextMessage( _( "Editor" ), _( "Do you wish to return to the game's Main Menu? All unsaved changes will be lost." ),
+                                                             Dialog::YES | Dialog::NO );
+
+                    if ( returnValue == Dialog::YES ) {
+                        return fheroes2::GameMode::MAIN_MENU;
+                    }
                 }
             }
 
@@ -1054,13 +1088,13 @@ namespace Interface
                 return;
             }
 
-            if ( !checkConditionForUsedTiles( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return !tileToCheck.isWater(); } ) ) {
-                _warningMessage.reset( _( "Monsters cannot be placed on water." ) );
+            if ( !isActionObjectAllowed( objectInfo, tilePos ) ) {
+                _warningMessage.reset( _( "Action objects must be placed on clear tiles." ) );
                 return;
             }
 
-            if ( !checkConditionForOccupiedTiles( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return Maps::isClearGround( tileToCheck ); } ) ) {
-                _warningMessage.reset( _( "Choose a tile which does not contain any objects." ) );
+            if ( !checkConditionForUsedTiles( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return !tileToCheck.isWater(); } ) ) {
+                _warningMessage.reset( _( "Monsters cannot be placed on water." ) );
                 return;
             }
 
@@ -1074,13 +1108,13 @@ namespace Interface
                 return;
             }
 
-            if ( !checkConditionForUsedTiles( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return !tileToCheck.isWater(); } ) ) {
-                _warningMessage.reset( _( "Treasures cannot be placed on water." ) );
+            if ( !isActionObjectAllowed( objectInfo, tilePos ) ) {
+                _warningMessage.reset( _( "Action objects must be placed on clear tiles." ) );
                 return;
             }
 
-            if ( !checkConditionForOccupiedTiles( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return Maps::isClearGround( tileToCheck ); } ) ) {
-                _warningMessage.reset( _( "Choose a tile which does not contain any objects." ) );
+            if ( !checkConditionForUsedTiles( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return !tileToCheck.isWater(); } ) ) {
+                _warningMessage.reset( _( "Treasures cannot be placed on water." ) );
                 return;
             }
 
@@ -1094,13 +1128,13 @@ namespace Interface
                 return;
             }
 
-            if ( !checkConditionForUsedTiles( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return !tileToCheck.isWater(); } ) ) {
-                _warningMessage.reset( _( "Heroes cannot be placed on water." ) );
+            if ( !isActionObjectAllowed( objectInfo, tilePos ) ) {
+                _warningMessage.reset( _( "Action objects must be placed on clear tiles." ) );
                 return;
             }
 
-            if ( !checkConditionForOccupiedTiles( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return Maps::isClearGround( tileToCheck ); } ) ) {
-                _warningMessage.reset( _( "Choose a tile which does not contain any objects." ) );
+            if ( !checkConditionForUsedTiles( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return !tileToCheck.isWater(); } ) ) {
+                _warningMessage.reset( _( "Heroes cannot be placed on water." ) );
                 return;
             }
 
@@ -1154,13 +1188,13 @@ namespace Interface
                 return;
             }
 
-            if ( !checkConditionForUsedTiles( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return !tileToCheck.isWater(); } ) ) {
-                _warningMessage.reset( _( "Artifacts cannot be placed on water." ) );
+            if ( !isActionObjectAllowed( objectInfo, tilePos ) ) {
+                _warningMessage.reset( _( "Action objects must be placed on clear tiles." ) );
                 return;
             }
 
-            if ( !checkConditionForOccupiedTiles( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return Maps::isClearGround( tileToCheck ); } ) ) {
-                _warningMessage.reset( _( "Choose a tile which does not contain any objects." ) );
+            if ( !checkConditionForUsedTiles( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return !tileToCheck.isWater(); } ) ) {
+                _warningMessage.reset( _( "Artifacts cannot be placed on water." ) );
                 return;
             }
 
@@ -1211,13 +1245,13 @@ namespace Interface
                 return;
             }
 
-            if ( !checkConditionForUsedTiles( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return !tileToCheck.isWater(); } ) ) {
-                _warningMessage.reset( _( "Mountains cannot be placed on water." ) );
+            if ( !isActionObjectAllowed( objectInfo, tilePos ) ) {
+                _warningMessage.reset( _( "Action objects must be placed on clear tiles." ) );
                 return;
             }
 
-            if ( !checkConditionForOccupiedTiles( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return Maps::isClearGround( tileToCheck ); } ) ) {
-                _warningMessage.reset( _( "Choose a tile which does not contain any objects." ) );
+            if ( !checkConditionForUsedTiles( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return !tileToCheck.isWater(); } ) ) {
+                _warningMessage.reset( _( "Mountains cannot be placed on water." ) );
                 return;
             }
 
@@ -1231,13 +1265,13 @@ namespace Interface
                 return;
             }
 
-            if ( !checkConditionForUsedTiles( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return !tileToCheck.isWater(); } ) ) {
-                _warningMessage.reset( _( "Rocks cannot be placed on water." ) );
+            if ( !isActionObjectAllowed( objectInfo, tilePos ) ) {
+                _warningMessage.reset( _( "Action objects must be placed on clear tiles." ) );
                 return;
             }
 
-            if ( !checkConditionForOccupiedTiles( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return Maps::isClearGround( tileToCheck ); } ) ) {
-                _warningMessage.reset( _( "Choose a tile which does not contain any objects." ) );
+            if ( !checkConditionForUsedTiles( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return !tileToCheck.isWater(); } ) ) {
+                _warningMessage.reset( _( "Rocks cannot be placed on water." ) );
                 return;
             }
 
@@ -1251,13 +1285,13 @@ namespace Interface
                 return;
             }
 
-            if ( !checkConditionForUsedTiles( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return !tileToCheck.isWater(); } ) ) {
-                _warningMessage.reset( _( "Trees cannot be placed on water." ) );
+            if ( !isActionObjectAllowed( objectInfo, tilePos ) ) {
+                _warningMessage.reset( _( "Action objects must be placed on clear tiles." ) );
                 return;
             }
 
-            if ( !checkConditionForOccupiedTiles( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return Maps::isClearGround( tileToCheck ); } ) ) {
-                _warningMessage.reset( _( "Choose a tile which does not contain any objects." ) );
+            if ( !checkConditionForUsedTiles( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return !tileToCheck.isWater(); } ) ) {
+                _warningMessage.reset( _( "Trees cannot be placed on water." ) );
                 return;
             }
 
@@ -1271,13 +1305,13 @@ namespace Interface
                 return;
             }
 
-            if ( !checkConditionForUsedTiles( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return tileToCheck.isWater(); } ) ) {
-                _warningMessage.reset( _( "Ocean object must be placed on water." ) );
+            if ( !isActionObjectAllowed( objectInfo, tilePos ) ) {
+                _warningMessage.reset( _( "Action objects must be placed on clear tiles." ) );
                 return;
             }
 
-            if ( !checkConditionForOccupiedTiles( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return Maps::isClearGround( tileToCheck ); } ) ) {
-                _warningMessage.reset( _( "Choose a tile which does not contain any objects." ) );
+            if ( !checkConditionForUsedTiles( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return tileToCheck.isWater(); } ) ) {
+                _warningMessage.reset( _( "Ocean object must be placed on water." ) );
                 return;
             }
 
@@ -1291,6 +1325,11 @@ namespace Interface
                 return;
             }
 
+            if ( !isActionObjectAllowed( objectInfo, tilePos ) ) {
+                _warningMessage.reset( _( "Action objects must be placed on clear tiles." ) );
+                return;
+            }
+
             assert( !objectInfo.groundLevelParts.empty() );
             const auto & firstObjectPart = objectInfo.groundLevelParts.front();
 
@@ -1301,11 +1340,6 @@ namespace Interface
             }
             else if ( !checkConditionForUsedTiles( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return !tileToCheck.isWater(); } ) ) {
                 _warningMessage.reset( _( "Landscape objects cannot be placed on water." ) );
-                return;
-            }
-
-            if ( !checkConditionForOccupiedTiles( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return Maps::isClearGround( tileToCheck ); } ) ) {
-                _warningMessage.reset( _( "Choose a tile which does not contain any objects." ) );
                 return;
             }
 
@@ -1342,6 +1376,11 @@ namespace Interface
                 return;
             }
 
+            if ( !isActionObjectAllowed( townObjectInfo, tilePos ) ) {
+                _warningMessage.reset( _( "Action objects must be placed on clear tiles." ) );
+                return;
+            }
+
             if ( !checkConditionForUsedTiles( townObjectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return !tileToCheck.isWater(); } ) ) {
                 _warningMessage.reset( _( "Towns cannot be placed on water." ) );
                 return;
@@ -1349,16 +1388,6 @@ namespace Interface
 
             if ( !checkConditionForUsedTiles( basementObjectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return !tileToCheck.isWater(); } ) ) {
                 _warningMessage.reset( _( "Towns cannot be placed on water." ) );
-                return;
-            }
-
-            if ( !checkConditionForOccupiedTiles( townObjectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return Maps::isClearGround( tileToCheck ); } ) ) {
-                _warningMessage.reset( _( "Choose a tile which does not contain any objects." ) );
-                return;
-            }
-
-            if ( !checkConditionForOccupiedTiles( basementObjectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return Maps::isClearGround( tileToCheck ); } ) ) {
-                _warningMessage.reset( _( "Choose a tile which does not contain any objects." ) );
                 return;
             }
 
@@ -1425,13 +1454,13 @@ namespace Interface
                 return;
             }
 
-            if ( !checkConditionForUsedTiles( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return !tileToCheck.isWater(); } ) ) {
-                _warningMessage.reset( _( "Mines cannot be placed on water." ) );
+            if ( !isActionObjectAllowed( objectInfo, tilePos ) ) {
+                _warningMessage.reset( _( "Action objects must be placed on clear tiles." ) );
                 return;
             }
 
-            if ( !checkConditionForOccupiedTiles( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return Maps::isClearGround( tileToCheck ); } ) ) {
-                _warningMessage.reset( _( "Choose a tile which does not contain any objects." ) );
+            if ( !checkConditionForUsedTiles( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return !tileToCheck.isWater(); } ) ) {
+                _warningMessage.reset( _( "Mines cannot be placed on water." ) );
                 return;
             }
 
@@ -1452,13 +1481,13 @@ namespace Interface
                 return;
             }
 
-            if ( !checkConditionForUsedTiles( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return !tileToCheck.isWater(); } ) ) {
-                _warningMessage.reset( _( "Dwellings cannot be placed on water." ) );
+            if ( !isActionObjectAllowed( objectInfo, tilePos ) ) {
+                _warningMessage.reset( _( "Action objects must be placed on clear tiles." ) );
                 return;
             }
 
-            if ( !checkConditionForOccupiedTiles( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return Maps::isClearGround( tileToCheck ); } ) ) {
-                _warningMessage.reset( _( "Choose a tile which does not contain any objects." ) );
+            if ( !checkConditionForUsedTiles( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return !tileToCheck.isWater(); } ) ) {
+                _warningMessage.reset( _( "Dwellings cannot be placed on water." ) );
                 return;
             }
 
@@ -1472,13 +1501,13 @@ namespace Interface
                 return;
             }
 
-            if ( !checkConditionForUsedTiles( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return !tileToCheck.isWater(); } ) ) {
-                _warningMessage.reset( _( "Power-ups cannot be placed on water." ) );
+            if ( !isActionObjectAllowed( objectInfo, tilePos ) ) {
+                _warningMessage.reset( _( "Action objects must be placed on clear tiles." ) );
                 return;
             }
 
-            if ( !checkConditionForOccupiedTiles( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return Maps::isClearGround( tileToCheck ); } ) ) {
-                _warningMessage.reset( _( "Choose a tile which does not contain any objects." ) );
+            if ( !checkConditionForUsedTiles( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return !tileToCheck.isWater(); } ) ) {
+                _warningMessage.reset( _( "Power-ups cannot be placed on water." ) );
                 return;
             }
 
@@ -1492,17 +1521,21 @@ namespace Interface
                 return;
             }
 
+            if ( !isActionObjectAllowed( objectInfo, tilePos ) ) {
+                _warningMessage.reset( _( "Action objects must be placed on clear tiles." ) );
+                return;
+            }
+
             if ( !checkConditionForUsedTiles( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return !tileToCheck.isWater(); } ) ) {
                 _warningMessage.reset( _( "Adventure objects cannot be placed on water." ) );
                 return;
             }
 
-            if ( !checkConditionForOccupiedTiles( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return Maps::isClearGround( tileToCheck ); } ) ) {
-                _warningMessage.reset( _( "Choose a tile which does not contain any objects." ) );
-                return;
-            }
-
             setObjectOnTileAsAction( tile, groupType, _editorPanel.getSelectedObjectType() );
+        }
+        else {
+            // Did you add a new object group? Add the logic for it!
+            assert( 0 );
         }
     }
 

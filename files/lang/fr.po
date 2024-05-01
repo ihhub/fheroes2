@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-21 05:05+0000\n"
+"POT-Creation-Date: 2024-05-01 11:10+0000\n"
 "PO-Revision-Date: 2024-03-16 00:13+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -3924,6 +3924,18 @@ msgid "Map filename"
 msgstr "Nom du fichier pour la carte"
 
 # Needs line break to have insectile space but keep partie and ? together.
+#, fuzzy
+msgid ""
+"Do you wish to return to the game's Main Menu? All unsaved changes will be "
+"lost."
+msgstr ""
+"Voulez-vous vraiment créer une nouvelle carte ? (Toutes les modifications "
+"non enregistrées seront perdues.)"
+
+msgid "Editor"
+msgstr "Éditeur"
+
+# Needs line break to have insectile space but keep partie and ? together.
 msgid ""
 "Are you sure you want to load a new map? (Any unsaved changes to the current "
 "map will be lost.)"
@@ -3969,11 +3981,12 @@ msgstr "Tirer sur %{monster}"
 msgid "Objects cannot be placed outside the map."
 msgstr "Les élements ne peuvent pas être placés en dehors de la carte."
 
+#, fuzzy
+msgid "Action objects must be placed on clear tiles."
+msgstr "Les éléments liés à la mer doivent être placés sur l'eau."
+
 msgid "Monsters cannot be placed on water."
 msgstr "Les créatures ne peuvent pas être placées sur l'eau."
-
-msgid "Choose a tile which does not contain any objects."
-msgstr "Sélectionnez une case qui n'est pas déjà occupée."
 
 msgid "Treasures cannot be placed on water."
 msgstr "Les trésors ne peuvent pas être placés sur l'eau."
@@ -4740,6 +4753,10 @@ msgstr "Annuler la dernière action"
 msgid "hotkey|redo last action"
 msgstr "Refaire la dernière action"
 
+#, fuzzy
+msgid "hotkey|open game main menu"
+msgstr "Nouvelle carte"
+
 msgid "hotkey|roland campaign"
 msgstr "Campagne de Roland"
 
@@ -4996,9 +5013,6 @@ msgstr "Écran de ville"
 
 msgid "Army Actions"
 msgstr "Actions de l'armée"
-
-msgid "Editor"
-msgstr "Éditeur"
 
 msgid "The save file is corrupted."
 msgstr "Le fichier de sauvegarde est corrompu."
@@ -11689,6 +11703,9 @@ msgstr ""
 "Téléchargez la dernière version du jeu sur\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Choose a tile which does not contain any objects."
+#~ msgstr "Sélectionnez une case qui n'est pas déjà occupée."
 
 #~ msgid "Set Defense Skill"
 #~ msgstr "Régler Défense"
