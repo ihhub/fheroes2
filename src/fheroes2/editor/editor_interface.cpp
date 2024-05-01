@@ -30,6 +30,9 @@
 #include <string>
 #include <vector>
 
+#include <logging.h>
+#include <rand.h>
+
 #include "agg_image.h"
 #include "artifact.h"
 #include "audio_manager.h"
@@ -78,7 +81,6 @@
 #include "view_world.h"
 #include "world.h"
 #include "world_object_uid.h"
-#include <rand.h>
 
 namespace
 {
@@ -979,25 +981,44 @@ namespace Interface
         // TODO: Make proper borders restoration for low height resolutions, like for hide interface mode.
         // ViewWorld::ViewWorldWindow( 0, ViewWorldMode::ViewAll, *this );
 
+
         const int32_t width = world.w();
         const int32_t height = world.h();
 
+        // Step 0. Reset world first
+        world.generateForEditor( width );
+
+        // Step 1. Map generator configuration
         // TODO: Balanced set up only / Pyramid later
         const int playerCount = 2;
-        const double average = ( width * height ) / ( playerCount + 1 );
-        const double radius = sqrt( average / M_PI );
+
+        // Aiming for region size to be ~300 tiles in a 200-500 range
+        const double playerArea = ( width * height ) / static_cast<double>( playerCount + 1 );
+        const double regionSize = ( playerArea > 500 ) ? playerArea / 2 : playerArea;
+        // const int regionCount = static_cast<int> (( width * height ) / regionSize);
+
+        const double radius = sqrt( playerArea / M_PI );
         const int side = static_cast<int>( radius / sqrt( 2 ) );
 
+        auto indexLambda = [width, height]( int x, int y ) {
+            x = std::max( std::min( x - 1, width ), 0 );
+            y = std::max( std::min( y - 1, height ), 0 );
+            return x * width + y;
+        };
+
+        // Step 2. Determine region layout and placement
         std::vector<int> regionCenters;
-        regionCenters.push_back( ( width / 2 - 1 ) * height + height / 2 - 1 );
-        //regionCenters.push_back( 0 );
-        //regionCenters.push_back( width - 1 );
-        //regionCenters.push_back( ( width - 1 ) * height );
-        //regionCenters.push_back( width * height - 1 );
-        regionCenters.push_back( width * side + side );
-        regionCenters.push_back( width * ( width - side ) + side );
-        regionCenters.push_back( width * side + height - side );
-        regionCenters.push_back( width * ( width - side ) + height - side );
+        regionCenters.push_back( indexLambda( width / 2, height / 2 ) );
+
+        const double distance = std::min( width, height ) * 0.4;
+        const double startingAngle = Rand::Get( 360 );
+        const double offsetAngle = 360.0 / playerCount;
+        for ( int i = 0; i < playerCount; i++ ) {
+            const double radians = ( startingAngle + offsetAngle * i ) * M_PI / 180;
+            const int x = width / 2 + static_cast<int>( cos( radians ) * distance );
+            const int y = height / 2 + static_cast<int>( sin( radians ) * distance );
+            regionCenters.push_back( indexLambda( x, y ) );
+        }
 
         const uint32_t extendedWidth = width + 2;
         std::vector<MapRegionNode> data( extendedWidth * ( height + 2 ) );
@@ -1042,7 +1063,7 @@ namespace Interface
             if ( reg._id < REGION_NODE_FOUND )
                 continue;
 
-            const int terrainType = 1 << ( reg._id % 9 );
+            const int terrainType = 1 << ( reg._id % 8 );
             for ( const MapRegionNode & node : reg._nodes ) {
                 if ( cache[node.index] >= REGION_NODE_FOUND ) {
                     break;
@@ -1076,7 +1097,9 @@ namespace Interface
             if ( reg._id < REGION_NODE_FOUND )
                 continue;
 
-            const int terrainType = 1 << ( reg._id % 9 );
+            DEBUG_LOG( DBG_ENGINE, DBG_WARN, "Region #" << reg._id << " size " << reg._nodes.size() << " has " << reg._neighbours.size() << "neighbours" )
+
+            const int terrainType = 1 << ( reg._id % 8 );
             for ( const MapRegionNode & node : reg._nodes ) {
                 if ( node.type == REGION_NODE_BORDER ) {
                     Maps::setTerrainOnTiles( node.index, node.index, terrainType );
@@ -1087,6 +1110,15 @@ namespace Interface
         for ( const int tileIndex : regionCenters ) {
             Maps::updateRoadOnTile( world.GetTiles( tileIndex ), true );
         }
+
+        // set up region connectors based on frequency settings & border length
+        // generate road based paths
+        // place objects avoiding the borders
+        //
+        // make sure objects accessible before
+        // make sure paths are accessible - delete obstacles
+        // place treasures
+        // place monsters
 
         _redraw |= mapUpdateFlags;
     }
