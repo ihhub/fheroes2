@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-28 06:50+0000\n"
+"POT-Creation-Date: 2024-05-01 11:10+0000\n"
 "PO-Revision-Date: 2024-04-08 22:19-0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
@@ -3940,11 +3940,12 @@ msgstr "Definir Quantidade de %{monster}"
 msgid "Objects cannot be placed outside the map."
 msgstr "Objetos não podem ser colocados fora do mapa."
 
+#, fuzzy
+msgid "Action objects must be placed on clear tiles."
+msgstr "Objeto oceânico deve ser colocado na água."
+
 msgid "Monsters cannot be placed on water."
 msgstr "Monstros não podem ser colocados na água."
-
-msgid "Choose a tile which does not contain any objects."
-msgstr "Escolha um ladrilho que não contenha nenhum objeto."
 
 msgid "Treasures cannot be placed on water."
 msgstr "Tesouros não podem ser colocados na água."
@@ -11595,3 +11596,6 @@ msgstr ""
 "Verifique a mais nova versão do jogo em\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Choose a tile which does not contain any objects."
+#~ msgstr "Escolha um ladrilho que não contenha nenhum objeto."

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-28 06:50+0000\n"
+"POT-Creation-Date: 2024-05-01 11:10+0000\n"
 "PO-Revision-Date: 2024-03-15 21:35+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -3928,11 +3928,12 @@ msgstr "Стрелять в %{monster}"
 msgid "Objects cannot be placed outside the map."
 msgstr "Объекты нельзя размещать за пределами карты."
 
+#, fuzzy
+msgid "Action objects must be placed on clear tiles."
+msgstr "Объекты для океана можно размещать только на воде."
+
 msgid "Monsters cannot be placed on water."
 msgstr "Существ нельзя размещать на воде."
-
-msgid "Choose a tile which does not contain any objects."
-msgstr "Выберите ячейку карты, на которой нет никаких объектов."
 
 msgid "Treasures cannot be placed on water."
 msgstr "Сокровища нельзя размещать на воде."
@@ -11488,6 +11489,9 @@ msgstr ""
 "Новую версию игры можно найти на сайте:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Choose a tile which does not contain any objects."
+#~ msgstr "Выберите ячейку карты, на которой нет никаких объектов."
 
 #~ msgid "Set Defense Skill"
 #~ msgstr "Защита"
