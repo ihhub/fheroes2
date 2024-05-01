@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-28 06:50+0000\n"
+"POT-Creation-Date: 2024-05-01 11:10+0000\n"
 "PO-Revision-Date: 2024-04-02 09:25+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3922,11 +3922,12 @@ msgstr "Зробити постріл у %{monster}"
 msgid "Objects cannot be placed outside the map."
 msgstr "Неможливо розмістити об'єкт поза мапою."
 
+#, fuzzy
+msgid "Action objects must be placed on clear tiles."
+msgstr "Об'єкти океану мають бути розміщені на воді."
+
 msgid "Monsters cannot be placed on water."
 msgstr "Монстрів не можна розмістити на воді."
-
-msgid "Choose a tile which does not contain any objects."
-msgstr "Оберіть клітинку, не зайняту жодними об'єктами."
 
 msgid "Treasures cannot be placed on water."
 msgstr "Скарби неможливо розмістити на воді."
@@ -11421,6 +11422,9 @@ msgstr ""
 "Перевірити нову версію гри на\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Choose a tile which does not contain any objects."
+#~ msgstr "Оберіть клітинку, не зайняту жодними об'єктами."
 
 #~ msgid "Set Defense Skill"
 #~ msgstr "Встановити Захист"
