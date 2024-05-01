@@ -2043,7 +2043,7 @@ msgid "Baywatch"
 msgstr "Baía Vigia"
 
 msgid "Fountainhead"
-msgstr "Cabeça da Fonte"
+msgstr "Fonte Primordial"
 
 msgid "Vertigo"
 msgstr "Vertigem"
@@ -2052,7 +2052,7 @@ msgid "Wildabar"
 msgstr "Wildabar"
 
 msgid "Winterkill"
-msgstr "Morte ne Inverno"
+msgstr "Morte de Inverno"
 
 msgid "Brindamoor"
 msgstr "Brindamoor"
@@ -2163,7 +2163,7 @@ msgid "Blackburn"
 msgstr "Incêndio Negro"
 
 msgid "Blacksford"
-msgstr "Blacksford"
+msgstr "Vau Negro"
 
 msgid "Burton"
 msgstr "Burton"
@@ -2184,7 +2184,7 @@ msgid "Lombard"
 msgstr "Lombard"
 
 msgid "Timberhill"
-msgstr "Morro de Madeira"
+msgstr "Colina da Madeira"
 
 msgid "Troy"
 msgstr "Troia"
