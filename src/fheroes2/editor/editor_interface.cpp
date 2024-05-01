@@ -78,6 +78,7 @@
 #include "view_world.h"
 #include "world.h"
 #include "world_object_uid.h"
+#include <rand.h>
 
 namespace
 {
@@ -902,10 +903,192 @@ namespace Interface
         return result;
     }
 
+    enum
+    {
+        TOP = 0,
+        RIGHT = 1,
+        BOTTOM = 2,
+        LEFT = 3,
+        TOP_LEFT = 4,
+        TOP_RIGHT = 5,
+        BOTTOM_RIGHT = 6,
+        BOTTOM_LEFT = 7,
+    };
+
+    std::vector<int> GetDirectionOffsets( const int width )
+    {
+        std::vector<int> offsets( 8 );
+        offsets[TOP] = -width;
+        offsets[RIGHT] = 1;
+        offsets[BOTTOM] = width;
+        offsets[LEFT] = -1;
+        offsets[TOP_LEFT] = -width - 1;
+        offsets[TOP_RIGHT] = -width + 1;
+        offsets[BOTTOM_RIGHT] = width + 1;
+        offsets[BOTTOM_LEFT] = width - 1;
+        return offsets;
+    }
+
+    uint16_t GetDirectionBitmask( uint8_t direction, bool reflect = false )
+    {
+        return 1 << ( reflect ? ( direction + 4 ) % 8 : direction );
+    }
+
+    int ConvertExtendedIndex( int index, uint32_t width )
+    {
+        const uint32_t originalWidth = width - 2;
+        return ( index / originalWidth + 1 ) * width + ( index % originalWidth ) + 1;
+    }
+
+    void CheckAdjacentTiles( std::vector<MapRegionNode> & rawData, MapRegion & region, uint32_t rawDataWidth, const std::vector<int> & offsets )
+    {
+        const int nodeIndex = region._nodes[region._lastProcessedNode].index;
+
+        for ( uint8_t direction = 0; direction < 8; ++direction ) {
+            if ( direction > 3 && Rand::Get( 1 ) ) {
+                break;
+            }
+            const int newIndex = ConvertExtendedIndex( nodeIndex, rawDataWidth ) + offsets[direction];
+            MapRegionNode & newTile = rawData[newIndex];
+            if ( newTile.passable & GetDirectionBitmask( direction, true ) && newTile.isWater == region._isWater ) {
+                if ( newTile.type == REGION_NODE_OPEN ) {
+                    newTile.type = region._id;
+                    region._nodes.push_back( newTile );
+                }
+                else if ( newTile.type >= REGION_NODE_BORDER && newTile.type != region._id ) {
+                    region._nodes[region._lastProcessedNode].type = REGION_NODE_BORDER;
+                    region._neighbours.insert( newTile.type );
+                }
+            }
+        }
+    }
+
+    void RegionExpansion( std::vector<MapRegionNode> & rawData, uint32_t rawDataWidth, MapRegion & region, const std::vector<int> & offsets )
+    {
+        // Process only "open" nodes that exist at the start of the loop and ignore what's added
+        const size_t nodesEnd = region._nodes.size();
+
+        while ( region._lastProcessedNode < nodesEnd ) {
+            CheckAdjacentTiles( rawData, region, rawDataWidth, offsets );
+            ++region._lastProcessedNode;
+        }
+    }
+
     void EditorInterface::eventViewWorld()
     {
         // TODO: Make proper borders restoration for low height resolutions, like for hide interface mode.
-        ViewWorld::ViewWorldWindow( 0, ViewWorldMode::ViewAll, *this );
+        // ViewWorld::ViewWorldWindow( 0, ViewWorldMode::ViewAll, *this );
+
+        const int32_t width = world.w();
+        const int32_t height = world.h();
+
+        // TODO: Balanced set up only / Pyramid later
+        const int playerCount = 2;
+        const double average = ( width * height ) / ( playerCount + 1 );
+        const double radius = sqrt( average / M_PI );
+        const int side = static_cast<int>( radius / sqrt( 2 ) );
+
+        std::vector<int> regionCenters;
+        regionCenters.push_back( ( width / 2 - 1 ) * height + height / 2 - 1 );
+        //regionCenters.push_back( 0 );
+        //regionCenters.push_back( width - 1 );
+        //regionCenters.push_back( ( width - 1 ) * height );
+        //regionCenters.push_back( width * height - 1 );
+        regionCenters.push_back( width * side + side );
+        regionCenters.push_back( width * ( width - side ) + side );
+        regionCenters.push_back( width * side + height - side );
+        regionCenters.push_back( width * ( width - side ) + height - side );
+
+        const uint32_t extendedWidth = width + 2;
+        std::vector<MapRegionNode> data( extendedWidth * ( height + 2 ) );
+        for ( int y = 0; y < height; ++y ) {
+            const int rowIndex = y * width;
+            for ( int x = 0; x < width; ++x ) {
+                const int index = rowIndex + x;
+                MapRegionNode & node = data[ConvertExtendedIndex( index, extendedWidth )];
+
+                node.index = index;
+                node.passable = DIRECTION_ALL;
+                node.isWater = false;
+                node.type = REGION_NODE_OPEN;
+                node.mapObject = 0;
+            }
+        }
+
+        size_t averageRegionSize = ( static_cast<size_t>( width ) * height * 2 ) / regionCenters.size();
+        std::vector<MapRegion> mapRegions = { { REGION_NODE_BLOCKED, 0, false, 0 }, { REGION_NODE_OPEN, 0, false, 0 }, { REGION_NODE_BORDER, 0, false, 0 } };
+
+        for ( const int tileIndex : regionCenters ) {
+            const int regionID = static_cast<int>( mapRegions.size() ); // Safe to do as we can't have so many regions
+            mapRegions.emplace_back( regionID, tileIndex, false, averageRegionSize );
+            data[ConvertExtendedIndex( tileIndex, extendedWidth )].type = regionID;
+        }
+
+        // Step 7. Grow all regions one step at the time so they would compete for space
+        const std::vector<int> & offsets = GetDirectionOffsets( static_cast<int>( extendedWidth ) );
+        bool stillRoomToExpand = true;
+        while ( stillRoomToExpand ) {
+            stillRoomToExpand = false;
+            for ( size_t regionID = REGION_NODE_FOUND; regionID < mapRegions.size(); ++regionID ) {
+                MapRegion & region = mapRegions[regionID];
+                RegionExpansion( data, extendedWidth, region, offsets );
+                if ( region._lastProcessedNode != region._nodes.size() )
+                    stillRoomToExpand = true;
+            }
+        }
+
+        std::vector<int> cache( width * height );
+        for ( MapRegion & reg : mapRegions ) {
+            if ( reg._id < REGION_NODE_FOUND )
+                continue;
+
+            const int terrainType = 1 << ( reg._id % 9 );
+            for ( const MapRegionNode & node : reg._nodes ) {
+                if ( cache[node.index] >= REGION_NODE_FOUND ) {
+                    break;
+                }
+                cache[node.index] = node.type;
+
+                // connect regions through teleports
+                MapsIndexes exits;
+
+                if ( node.mapObject == MP2::OBJ_STONE_LITHS ) {
+                    exits = world.GetTeleportEndPoints( node.index );
+                }
+                else if ( node.mapObject == MP2::OBJ_WHIRLPOOL ) {
+                    exits = world.GetWhirlpoolEndPoints( node.index );
+                }
+
+                for ( const int exitIndex : exits ) {
+                    // neighbours is a set that will force the uniqueness
+                    reg._neighbours.insert( cache[exitIndex] );
+                }
+                world.GetTiles( node.index ).setTerrain( Maps::Ground::getRandomTerrainImageIndex( terrainType, true ), false, false );
+            }
+
+            // Fix missing references
+            for ( uint32_t adjacent : reg._neighbours ) {
+                mapRegions[adjacent]._neighbours.insert( reg._id );
+            }
+        }
+
+        for ( MapRegion & reg : mapRegions ) {
+            if ( reg._id < REGION_NODE_FOUND )
+                continue;
+
+            const int terrainType = 1 << ( reg._id % 9 );
+            for ( const MapRegionNode & node : reg._nodes ) {
+                if ( node.type == REGION_NODE_BORDER ) {
+                    Maps::setTerrainOnTiles( node.index, node.index, terrainType );
+                }
+            }
+        }
+
+        for ( const int tileIndex : regionCenters ) {
+            Maps::updateRoadOnTile( world.GetTiles( tileIndex ), true );
+        }
+
+        _redraw |= mapUpdateFlags;
     }
 
     void EditorInterface::mouseCursorAreaClickLeft( const int32_t tileIndex )
