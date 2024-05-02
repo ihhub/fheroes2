@@ -579,7 +579,16 @@ namespace Interface
                 }
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_SCENARIO_INFORMATION ) ) {
                     // TODO: Make the scenario info editor.
-                    Dialog::GameInfo();
+                    // Dialog::GameInfo();
+
+                    uint32_t newCount = _playerCount;
+                    if ( Dialog::SelectCount( "Pick player count", 2, 6, newCount ) ) {
+                        _playerCount = newCount;
+                    }
+                    newCount = _regionSizeLimit;
+                    if ( Dialog::SelectCount( "Limit region size", 100, 10000, newCount ) ) {
+                        _regionSizeLimit = newCount;
+                    }
                 }
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_VIEW_WORLD ) ) {
                     eventViewWorld();
@@ -990,34 +999,47 @@ namespace Interface
 
         // Step 1. Map generator configuration
         // TODO: Balanced set up only / Pyramid later
-        const int playerCount = 2;
+        const int playerCount = _playerCount;
+        const int regionSizeLimit = _regionSizeLimit;
 
         // Aiming for region size to be ~300 tiles in a 200-500 range
-        const double playerArea = ( width * height ) / static_cast<double>( playerCount + 1 );
-        const double regionSize = ( playerArea > 500 ) ? playerArea / 2 : playerArea;
-        // const int regionCount = static_cast<int> (( width * height ) / regionSize);
+        const int minimumRegionCount = playerCount + 1;
+        const int expectedRegionCount = ( width * height ) / regionSizeLimit;
+        //const double regionSize = ( playerArea > 500 ) ? playerArea / 2 : playerArea;
+        //const int expectedRegionCount = static_cast<int> (( width * height ) / regionSize);
 
-        const double radius = sqrt( playerArea / M_PI );
-        const int side = static_cast<int>( radius / sqrt( 2 ) );
+        //const double radius = sqrt( playerArea / M_PI );
+        //const int side = static_cast<int>( radius / sqrt( 2 ) );
 
-        auto indexLambda = [width, height]( int x, int y ) {
-            x = std::max( std::min( x - 1, width ), 0 );
-            y = std::max( std::min( y - 1, height ), 0 );
+        auto mapBoundsCheck = [width, height]( int x, int y ) {
+            x = std::max( std::min( x, width - 1 ), 0 );
+            y = std::max( std::min( y, height - 1 ), 0 );
             return x * width + y;
         };
 
         // Step 2. Determine region layout and placement
         std::vector<int> regionCenters;
-        regionCenters.push_back( indexLambda( width / 2, height / 2 ) );
 
-        const double distance = std::min( width, height ) * 0.4;
-        const double startingAngle = Rand::Get( 360 );
-        const double offsetAngle = 360.0 / playerCount;
-        for ( int i = 0; i < playerCount; i++ ) {
-            const double radians = ( startingAngle + offsetAngle * i ) * M_PI / 180;
-            const int x = width / 2 + static_cast<int>( cos( radians ) * distance );
-            const int y = height / 2 + static_cast<int>( sin( radians ) * distance );
-            regionCenters.push_back( indexLambda( x, y ) );
+        const int neutralRegionCount = std::max( 1, expectedRegionCount - playerCount );
+        const int innerLayer = std::min( neutralRegionCount, playerCount );
+        const int outerLayer = std::max( std::min( neutralRegionCount, innerLayer * 2 ), playerCount );
+
+        const double outerRadius = 0.2 + ( innerLayer + outerLayer ) / static_cast<double>( expectedRegionCount );
+        const double innerRadius = innerLayer == 1 ? 0 : outerRadius / 3;
+
+        const std::vector<std::pair<int, double>> mapLayers = { { innerLayer, innerRadius }, { outerLayer, outerRadius } };
+
+        const double distance = std::max( width, height ) / 2.0;
+        for ( const auto layer : mapLayers ) {
+            const double startingAngle = Rand::Get( 360 );
+            const double offsetAngle = 360.0 / layer.first;
+            for ( int i = 0; i < layer.first; i++ ) {
+                const double radians = ( startingAngle + offsetAngle * i ) * M_PI / 180;
+
+                const int x = width / 2 + static_cast<int>( cos( radians ) * distance * layer.second );
+                const int y = height / 2 + static_cast<int>( sin( radians ) * distance * layer.second );
+                regionCenters.push_back( mapBoundsCheck( x, y ) );
+            }
         }
 
         const uint32_t extendedWidth = width + 2;
@@ -1053,7 +1075,7 @@ namespace Interface
             for ( size_t regionID = REGION_NODE_FOUND; regionID < mapRegions.size(); ++regionID ) {
                 MapRegion & region = mapRegions[regionID];
                 RegionExpansion( data, extendedWidth, region, offsets );
-                if ( region._lastProcessedNode != region._nodes.size() )
+                if ( region._lastProcessedNode != region._nodes.size() && region._nodes.size() < regionSizeLimit )
                     stillRoomToExpand = true;
             }
         }

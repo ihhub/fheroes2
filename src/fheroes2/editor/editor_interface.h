@@ -147,6 +147,9 @@ namespace Interface
         int32_t _selectedTile{ -1 };
         int32_t _tileUnderCursor{ -1 };
 
+        uint32_t _playerCount = 2;
+        uint32_t _regionSizeLimit = 1000;
+
         std::function<void( const int32_t )> _cursorUpdater;
 
         fheroes2::HistoryManager _historyManager;
