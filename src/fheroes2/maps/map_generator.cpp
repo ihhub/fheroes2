@@ -18,16 +18,16 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "rand.h"
 #include "map_generator.h"
-#include "world_regions.h"
-#include "world.h"
-#include "maps_tiles_helper.h"
-#include "map_object_info.h"
-#include "map_format_helper.h"
+
 #include "logging.h"
-#include "ui_map_object.h"
+#include "map_format_helper.h"
+#include "map_object_info.h"
+#include "maps_tiles_helper.h"
 #include "race.h"
+#include "rand.h"
+#include "ui_map_object.h"
+#include "world.h"
 #include "world_object_uid.h"
 
 namespace Maps::Generator
@@ -42,6 +42,54 @@ namespace Maps::Generator
         TOP_RIGHT = 5,
         BOTTOM_RIGHT = 6,
         BOTTOM_LEFT = 7,
+    };
+
+    enum
+    {
+        REGION_NODE_BLOCKED = 0,
+        REGION_NODE_OPEN = 1,
+        REGION_NODE_BORDER = 2,
+        REGION_NODE_FOUND = 3
+    };
+
+    struct Node
+    {
+        int index = -1;
+        uint32_t type = REGION_NODE_BLOCKED;
+        uint16_t mapObject = 0;
+        uint16_t passable = 0;
+        bool isWater = false;
+
+        Node() = default;
+        explicit Node( int index_ )
+            : index( index_ )
+            , type( REGION_NODE_OPEN )
+        {}
+    };
+
+    struct Region
+    {
+    public:
+        uint32_t _id = REGION_NODE_FOUND;
+        bool _isWater = false;
+        std::set<uint32_t> _neighbours;
+        std::vector<Node> _nodes;
+        size_t _lastProcessedNode = 0;
+
+        Region() = default;
+
+        Region(int regionIndex, int mapIndex, bool water, size_t expectedSize)
+            : _id(regionIndex)
+            , _isWater(water)
+        {
+            _nodes.reserve( expectedSize );
+            _nodes.emplace_back( mapIndex );
+            _nodes[0].type = regionIndex;
+        }
+
+        size_t getNeighboursCount() const {
+            return _neighbours.size();
+        }
     };
 
     std::vector<int> GetDirectionOffsets( const int width )
@@ -69,7 +117,7 @@ namespace Maps::Generator
         return ( index / originalWidth + 1 ) * width + ( index % originalWidth ) + 1;
     }
 
-    void CheckAdjacentTiles( std::vector<MapRegionNode> & rawData, MapRegion & region, uint32_t rawDataWidth, const std::vector<int> & offsets )
+    void CheckAdjacentTiles( std::vector<Node> & rawData, Region & region, uint32_t rawDataWidth, const std::vector<int> & offsets )
     {
         const int nodeIndex = region._nodes[region._lastProcessedNode].index;
 
@@ -78,7 +126,7 @@ namespace Maps::Generator
                 break;
             }
             const int newIndex = ConvertExtendedIndex( nodeIndex, rawDataWidth ) + offsets[direction];
-            MapRegionNode & newTile = rawData[newIndex];
+            Node & newTile = rawData[newIndex];
             if ( newTile.passable & GetDirectionBitmask( direction, true ) && newTile.isWater == region._isWater ) {
                 if ( newTile.type == REGION_NODE_OPEN ) {
                     newTile.type = region._id;
@@ -92,7 +140,7 @@ namespace Maps::Generator
         }
     }
 
-    void RegionExpansion( std::vector<MapRegionNode> & rawData, uint32_t rawDataWidth, MapRegion & region, const std::vector<int> & offsets )
+    void RegionExpansion( std::vector<Node> & rawData, uint32_t rawDataWidth, Region & region, const std::vector<int> & offsets )
     {
         // Process only "open" nodes that exist at the start of the loop and ignore what's added
         const size_t nodesEnd = region._nodes.size();
@@ -102,60 +150,6 @@ namespace Maps::Generator
             ++region._lastProcessedNode;
         }
     }
-
-    bool isObjectPlacementAllowed( const Maps::ObjectInfo & info, const fheroes2::Point & mainTilePos )
-    {
-        // Run through all tile offsets and check that all objects parts can be put on the map.
-        for ( const auto & objectPart : info.groundLevelParts ) {
-            if ( objectPart.layerType == Maps::SHADOW_LAYER ) {
-                // Shadow layer parts are ignored.
-                continue;
-            }
-
-            if ( !Maps::isValidAbsPoint( mainTilePos.x + objectPart.tileOffset.x, mainTilePos.y + objectPart.tileOffset.y ) ) {
-                return false;
-            }
-        }
-
-        for ( const auto & objectPart : info.topLevelParts ) {
-            if ( !Maps::isValidAbsPoint( mainTilePos.x + objectPart.tileOffset.x, mainTilePos.y + objectPart.tileOffset.y ) ) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    bool isActionObjectAllowed( const Maps::ObjectInfo & info, const fheroes2::Point & mainTilePos )
-    {
-        // Active action object parts must be placed on a tile without any other objects.
-        // Only ground parts should be checked for this condition.
-        for ( const auto & objectPart : info.groundLevelParts ) {
-            if ( objectPart.layerType == Maps::SHADOW_LAYER || objectPart.layerType == Maps::TERRAIN_LAYER ) {
-                // Shadow and terrain layer parts are ignored.
-                continue;
-            }
-
-            const fheroes2::Point pos{ mainTilePos.x + objectPart.tileOffset.x, mainTilePos.y + objectPart.tileOffset.y };
-            if ( !Maps::isValidAbsPoint( pos.x, pos.y ) ) {
-                return false;
-            }
-
-            const auto & tile = world.GetTiles( pos.x, pos.y );
-
-            if ( MP2::isActionObject( tile.GetObject() ) ) {
-                // An action already exist. We cannot allow to put anything on top of it.
-                return false;
-            }
-
-            if ( MP2::isActionObject( objectPart.objectType ) && !Maps::isClearGround( tile ) ) {
-                // We are trying to place an action object on a tile that has some other objects.
-                return false;
-            }
-        }
-
-        return true;
-    }    
 
     bool setObjectOnTile( Maps::Map_Format::MapFormat & mapFormat, Maps::Tiles & tile, const Maps::ObjectGroup groupType, const int32_t objectIndex )
     {
@@ -175,20 +169,25 @@ namespace Maps::Generator
         return true;
     }
 
-    void generateWorld( Maps::Map_Format::MapFormat & mapFormat, const int playerCount, const int regionSizeLimit )
+    bool generateWorld( Map_Format::MapFormat & mapFormat, Configuration config )
     {
+        if ( config.playerCount < 2 || config.playerCount > 6 ) {
+            return false;
+        }
+        if ( config.regionSizeLimit < 100 ) {
+            return false;
+        }
+
         const int32_t width = world.w();
         const int32_t height = world.h();
 
-        // Step 0. Reset world first
-        world.generateForEditor( width );
-
         // Step 1. Map generator configuration
         // TODO: Balanced set up only / Pyramid later
+        const int playerCount = config.playerCount;
 
         // Aiming for region size to be ~300 tiles in a 200-500 range
         const int minimumRegionCount = playerCount + 1;
-        const int expectedRegionCount = ( width * height ) / regionSizeLimit;
+        const int expectedRegionCount = ( width * height ) / config.regionSizeLimit;
         // const double regionSize = ( playerArea > 500 ) ? playerArea / 2 : playerArea;
         // const int expectedRegionCount = static_cast<int> (( width * height ) / regionSize);
 
@@ -227,12 +226,12 @@ namespace Maps::Generator
         }
 
         const uint32_t extendedWidth = width + 2;
-        std::vector<MapRegionNode> data( extendedWidth * ( height + 2 ) );
+        std::vector<Node> data( extendedWidth * ( height + 2 ) );
         for ( int y = 0; y < height; ++y ) {
             const int rowIndex = y * width;
             for ( int x = 0; x < width; ++x ) {
                 const int index = rowIndex + x;
-                MapRegionNode & node = data[ConvertExtendedIndex( index, extendedWidth )];
+                Node & node = data[ConvertExtendedIndex( index, extendedWidth )];
 
                 node.index = index;
                 node.passable = DIRECTION_ALL;
@@ -243,7 +242,7 @@ namespace Maps::Generator
         }
 
         size_t averageRegionSize = ( static_cast<size_t>( width ) * height * 2 ) / regionCenters.size();
-        std::vector<MapRegion> mapRegions = { { REGION_NODE_BLOCKED, 0, false, 0 }, { REGION_NODE_OPEN, 0, false, 0 }, { REGION_NODE_BORDER, 0, false, 0 } };
+        std::vector<Region> mapRegions = { { REGION_NODE_BLOCKED, 0, false, 0 }, { REGION_NODE_OPEN, 0, false, 0 }, { REGION_NODE_BORDER, 0, false, 0 } };
 
         for ( const int tileIndex : regionCenters ) {
             const int regionID = static_cast<int>( mapRegions.size() ); // Safe to do as we can't have so many regions
@@ -251,15 +250,15 @@ namespace Maps::Generator
             data[ConvertExtendedIndex( tileIndex, extendedWidth )].type = regionID;
         }
 
-        // Step 7. Grow all regions one step at the time so they would compete for space
+        // Step 3. Grow all regions one step at the time so they would compete for space
         const std::vector<int> & offsets = GetDirectionOffsets( static_cast<int>( extendedWidth ) );
         bool stillRoomToExpand = true;
         while ( stillRoomToExpand ) {
             stillRoomToExpand = false;
             for ( size_t regionID = REGION_NODE_FOUND; regionID < mapRegions.size(); ++regionID ) {
-                MapRegion & region = mapRegions[regionID];
+                Region & region = mapRegions[regionID];
                 RegionExpansion( data, extendedWidth, region, offsets );
-                if ( region._lastProcessedNode != region._nodes.size() && region._nodes.size() < regionSizeLimit )
+                if ( region._lastProcessedNode != region._nodes.size() && region._nodes.size() < config.regionSizeLimit )
                     stillRoomToExpand = true;
             }
         }
@@ -288,13 +287,16 @@ namespace Maps::Generator
             return false;
         };
 
+        // Step 4. Reset world first
+        world.generateForEditor( width );
+
         std::vector<int> cache( width * height );
-        for ( MapRegion & reg : mapRegions ) {
+        for ( Region & reg : mapRegions ) {
             if ( reg._id < REGION_NODE_FOUND )
                 continue;
 
             const int terrainType = 1 << ( reg._id % 8 );
-            for ( const MapRegionNode & node : reg._nodes ) {
+            for ( const Node & node : reg._nodes ) {
                 if ( cache[node.index] >= REGION_NODE_FOUND ) {
                     break;
                 }
@@ -323,7 +325,7 @@ namespace Maps::Generator
             }
         }
 
-        for ( MapRegion & reg : mapRegions ) {
+        for ( Region & reg : mapRegions ) {
             if ( reg._id < REGION_NODE_FOUND )
                 continue;
 
@@ -335,7 +337,7 @@ namespace Maps::Generator
             int yMax = height;
 
             const int terrainType = 1 << ( reg._id % 8 );
-            for ( const MapRegionNode & node : reg._nodes ) {
+            for ( const Node & node : reg._nodes ) {
                 const int nodeX = node.index % width;
                 const int nodeY = node.index / width;
                 xMin = std::max( xMin, nodeX );
@@ -346,6 +348,10 @@ namespace Maps::Generator
                 if ( node.type == REGION_NODE_BORDER ) {
                     Maps::setTerrainOnTiles( node.index, node.index, terrainType );
                 }
+            }
+
+            if ( config.terrainOnly ) {
+                continue;
             }
 
             const int regionX = regionCenters[reg._id - 3] % width;
@@ -381,13 +387,13 @@ namespace Maps::Generator
                 Maps::setLastObjectUID( objectId );
 
                 if ( !setObjectOnTile( mapFormat, world.GetTiles( tile.GetIndex() - 1 ), Maps::ObjectGroup::LANDSCAPE_FLAGS, color * 2 ) ) {
-                    return;
+                    return false;
                 }
 
                 Maps::setLastObjectUID( objectId );
 
                 if ( !setObjectOnTile( mapFormat, world.GetTiles( tile.GetIndex() + 1 ), Maps::ObjectGroup::LANDSCAPE_FLAGS, color * 2 + 1 ) ) {
-                    return;
+                    return false;
                 }
 
                 world.addCastle( tile.GetIndex(), Race::IndexToRace( 12 ), Color::IndexToColor( color ) );
@@ -406,6 +412,10 @@ namespace Maps::Generator
             }
         }
 
+        if ( config.terrainOnly ) {
+            return true;
+        }
+
         for ( const int tileIndex : regionCenters ) {
             auto & tile = world.GetTiles( tileIndex );
             Maps::updateRoadOnTile( tile, true );
@@ -418,6 +428,7 @@ namespace Maps::Generator
         // make sure objects accessible before
         // make sure paths are accessible - delete obstacles
         // place treasures
-        // place monsters    
+        // place monsters
+        return true;
     }
 }

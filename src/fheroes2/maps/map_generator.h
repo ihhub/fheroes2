@@ -24,6 +24,13 @@ namespace Maps
 {
     namespace Generator
     {
-        void generateWorld( Map_Format::MapFormat & mapFormat, const int playerCount, const int regionSizeLimit );
+        struct Configuration
+        {
+            int playerCount = 2;
+            int regionSizeLimit = 300;
+            bool terrainOnly = true;
+        };
+
+        bool generateWorld( Map_Format::MapFormat & mapFormat, Configuration config );
     }
 }

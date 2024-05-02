@@ -29,8 +29,10 @@
 #include <utility>
 
 #include "artifact.h"
+#include "maps_tiles_helper.h"
 #include "monster.h"
 #include "resource.h"
+#include "world.h"
 
 namespace
 {
@@ -4844,6 +4846,60 @@ namespace Maps
         }
 
         return MP2::OBJ_NONE;
+    }
+
+    bool isObjectPlacementAllowed( const ObjectInfo & info, const fheroes2::Point & mainTilePos )
+    {
+        // Run through all tile offsets and check that all objects parts can be put on the map.
+        for ( const auto & objectPart : info.groundLevelParts ) {
+            if ( objectPart.layerType == Maps::SHADOW_LAYER ) {
+                // Shadow layer parts are ignored.
+                continue;
+            }
+
+            if ( !Maps::isValidAbsPoint( mainTilePos.x + objectPart.tileOffset.x, mainTilePos.y + objectPart.tileOffset.y ) ) {
+                return false;
+            }
+        }
+
+        for ( const auto & objectPart : info.topLevelParts ) {
+            if ( !Maps::isValidAbsPoint( mainTilePos.x + objectPart.tileOffset.x, mainTilePos.y + objectPart.tileOffset.y ) ) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    bool isActionObjectAllowed( const ObjectInfo & info, const fheroes2::Point & mainTilePos )
+    {
+        // Active action object parts must be placed on a tile without any other objects.
+        // Only ground parts should be checked for this condition.
+        for ( const auto & objectPart : info.groundLevelParts ) {
+            if ( objectPart.layerType == Maps::SHADOW_LAYER || objectPart.layerType == Maps::TERRAIN_LAYER ) {
+                // Shadow and terrain layer parts are ignored.
+                continue;
+            }
+
+            const fheroes2::Point pos{ mainTilePos.x + objectPart.tileOffset.x, mainTilePos.y + objectPart.tileOffset.y };
+            if ( !Maps::isValidAbsPoint( pos.x, pos.y ) ) {
+                return false;
+            }
+
+            const auto & tile = world.GetTiles( pos.x, pos.y );
+
+            if ( MP2::isActionObject( tile.GetObject() ) ) {
+                // An action already exist. We cannot allow to put anything on top of it.
+                return false;
+            }
+
+            if ( MP2::isActionObject( objectPart.objectType ) && !Maps::isClearGround( tile ) ) {
+                // We are trying to place an action object on a tile that has some other objects.
+                return false;
+            }
+        }
+
+        return true;
     }
 
     std::vector<fheroes2::Point> getGroundLevelOccupiedTileOffset( const ObjectInfo & info )

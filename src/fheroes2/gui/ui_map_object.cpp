@@ -344,7 +344,7 @@ namespace fheroes2
         assert( Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_MINES ).size() == 50 );
 
         int groundIndex = mineIndexFromGroundType( groundType );
-        
+
         switch ( resource ) {
         case Resource::ORE:
             return groundIndex * 5;
@@ -368,7 +368,7 @@ namespace fheroes2
             assert( 0 );
             break;
         }
-        
+
         return 0;
     }
 }

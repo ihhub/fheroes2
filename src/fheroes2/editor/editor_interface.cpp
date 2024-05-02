@@ -107,60 +107,6 @@ namespace
         return { startPos.x + startPos.y * worldWidth, endPos.x + endPos.y * worldWidth };
     }
 
-    bool isObjectPlacementAllowed( const Maps::ObjectInfo & info, const fheroes2::Point & mainTilePos )
-    {
-        // Run through all tile offsets and check that all objects parts can be put on the map.
-        for ( const auto & objectPart : info.groundLevelParts ) {
-            if ( objectPart.layerType == Maps::SHADOW_LAYER ) {
-                // Shadow layer parts are ignored.
-                continue;
-            }
-
-            if ( !Maps::isValidAbsPoint( mainTilePos.x + objectPart.tileOffset.x, mainTilePos.y + objectPart.tileOffset.y ) ) {
-                return false;
-            }
-        }
-
-        for ( const auto & objectPart : info.topLevelParts ) {
-            if ( !Maps::isValidAbsPoint( mainTilePos.x + objectPart.tileOffset.x, mainTilePos.y + objectPart.tileOffset.y ) ) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    bool isActionObjectAllowed( const Maps::ObjectInfo & info, const fheroes2::Point & mainTilePos )
-    {
-        // Active action object parts must be placed on a tile without any other objects.
-        // Only ground parts should be checked for this condition.
-        for ( const auto & objectPart : info.groundLevelParts ) {
-            if ( objectPart.layerType == Maps::SHADOW_LAYER || objectPart.layerType == Maps::TERRAIN_LAYER ) {
-                // Shadow and terrain layer parts are ignored.
-                continue;
-            }
-
-            const fheroes2::Point pos{ mainTilePos.x + objectPart.tileOffset.x, mainTilePos.y + objectPart.tileOffset.y };
-            if ( !Maps::isValidAbsPoint( pos.x, pos.y ) ) {
-                return false;
-            }
-
-            const auto & tile = world.GetTiles( pos.x, pos.y );
-
-            if ( MP2::isActionObject( tile.GetObject() ) ) {
-                // An action already exist. We cannot allow to put anything on top of it.
-                return false;
-            }
-
-            if ( MP2::isActionObject( objectPart.objectType ) && !Maps::isClearGround( tile ) ) {
-                // We are trying to place an action object on a tile that has some other objects.
-                return false;
-            }
-        }
-
-        return true;
-    }
-
     bool isConditionValid( const std::vector<fheroes2::Point> & offsets, const fheroes2::Point & mainTilePos,
                            const std::function<bool( const Maps::Tiles & tile )> & condition )
     {
@@ -918,15 +864,19 @@ namespace Interface
     void EditorInterface::eventViewWorld()
     {
         // TODO: Make proper borders restoration for low height resolutions, like for hide interface mode.
-        // ViewWorld::ViewWorldWindow( 0, ViewWorldMode::ViewAll, *this );        
+        // ViewWorld::ViewWorldWindow( 0, ViewWorldMode::ViewAll, *this );
 
         fheroes2::ActionCreator action( _historyManager, _mapFormat );
 
-        Maps::Generator::generateWorld( _mapFormat, _playerCount, _regionSizeLimit );
+        Maps::Generator::Configuration rmgConfig;
+        rmgConfig.playerCount = _playerCount;
+        rmgConfig.regionSizeLimit = _regionSizeLimit;
 
-        _redraw |= mapUpdateFlags;
+        if ( Maps::Generator::generateWorld( _mapFormat, rmgConfig ) ) {
+            _redraw |= mapUpdateFlags;
 
-        action.commit();
+            action.commit();
+        }
     }
 
     void EditorInterface::mouseCursorAreaClickLeft( const int32_t tileIndex )
