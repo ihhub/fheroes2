@@ -27,10 +27,8 @@
 #include <cmath>
 #include <cstddef>
 #include <cstdint>
-#include <memory>
 #include <ostream>
 #include <string>
-#include <vector>
 
 #include "agg_image.h"
 #include "audio.h"
