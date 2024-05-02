@@ -1079,14 +1079,31 @@ namespace Interface
             }
         }
 
-        auto objectPlacer = [this]( Maps::Tiles & tile, Maps::ObjectGroup groupType, int32_t type ) {
+        auto entranceCheck = []( const fheroes2::Point tilePos ) {
+            for ( int i = -2; i < 3; i++ ) {
+                if ( !Maps::isValidAbsPoint( tilePos.x + i, tilePos.y + 1 ) || !Maps::isClearGround( world.GetTiles( tilePos.x + i, tilePos.y + 1 ) ) ) {
+                    return false;
+                }
+            }
+            return true;
+        };
+
+        auto objectPlacer = [this, entranceCheck]( Maps::Tiles & tile, Maps::ObjectGroup groupType, int32_t type ) {
             const fheroes2::Point tilePos = tile.GetCenter();
             const auto & objectInfo = Maps::getObjectInfo( groupType, type );
-            if ( isObjectPlacementAllowed( objectInfo, tilePos ) && isActionObjectAllowed( objectInfo, tilePos ) ) {
-                return setObjectOnTile( tile, groupType, type );
+            if ( isObjectPlacementAllowed( objectInfo, tilePos ) && isActionObjectAllowed( objectInfo, tilePos ) && entranceCheck( tilePos ) ) {
+                // do not update passabilities after every object
+                if ( !Maps::setObjectOnTile( tile, objectInfo, true ) ) {
+                    return false;
+                }
+
+                Maps::addObjectToMap( _mapFormat, tile.GetIndex(), groupType, static_cast<uint32_t>( type ) );
+                return true;
             }
             return false;
         };
+
+        fheroes2::ActionCreator action( _historyManager, _mapFormat );
 
         std::vector<int> cache( width * height );
         for ( MapRegion & reg : mapRegions ) {
@@ -1148,13 +1165,11 @@ namespace Interface
                 }
             }
 
-            const int centerX = ( xMin + xMax ) / 2;
-            const int centerY = ( yMin + yMax ) / 2;
             const int regionX = regionCenters[reg._id - 3] % width;
             const int regionY = regionCenters[reg._id - 3] / width;
             const int castleX = std::min( std::max( ( ( xMin + xMax ) / 2 + regionX ) / 2, 4 ), width - 4 );
             const int castleY = std::min( std::max( ( ( yMin + yMax ) / 2 + regionY ) / 2, 3 ), height - 3 );
-            const int color = 0;
+            const int color = reg._id % 6;
 
             auto & tile = world.GetTiles( castleY * width + castleX );
             fheroes2::Point tilePos = tile.GetCenter();
@@ -1163,25 +1178,6 @@ namespace Interface
 
             const auto & basementInfo = Maps::getObjectInfo( Maps::ObjectGroup::LANDSCAPE_TOWN_BASEMENTS, basementId );
             const auto & castleInfo = Maps::getObjectInfo( Maps::ObjectGroup::KINGDOM_TOWNS, 12 );
-
-            //const bool isX = std::abs( centerX - castleX ) > std::abs( centerY - castleY );
-            //while ( !isObjectPlacementAllowed( castleInfo, tilePos ) ) {
-            //    if ( ( isX && castleX == centerX ) || ( !isX && castleY == centerY ) ) {
-            //        break;
-            //    }
-            //    const int diffX = centerX - castleX;
-            //    castleX += ( diffX < 0 ) ? -1 : ( diffX == 0 ) ? 0 : 1;
-
-            //    if ( !isX ) {
-            //        const int diffY = centerY - castleY;
-            //        castleY += ( diffY < 0 ) ? -1 : ( diffY == 0 ) ? 0 : 1;
-            //    }
-            //}
-            //fheroes2::Point temporary = world.GetTiles( castleY * width + castleX ).GetCenter();
-            //if ( !isObjectPlacementAllowed( castleInfo, temporary ) || !isActionObjectAllowed( castleInfo, temporary ) ) {
-            //    castleX = std::min( std::max( castleX, 4 ), width - 4 );
-            //    castleY = std::min( std::max( castleY, 3 ), height - 3 );
-            //}
 
             if ( isObjectPlacementAllowed( basementInfo, tilePos ) && isObjectPlacementAllowed( castleInfo, tilePos ) && isActionObjectAllowed( castleInfo, tilePos ) ) {
                 setObjectOnTile( tile, Maps::ObjectGroup::LANDSCAPE_TOWN_BASEMENTS, basementId );
@@ -1214,8 +1210,17 @@ namespace Interface
                 world.addCastle( tile.GetIndex(), Race::IndexToRace( 12 ), Color::IndexToColor( color ) );
             }
 
-            // objectPlacer( tile, Maps::ObjectGroup::KINGDOM_TOWNS, 12 );
-            // objectPlacer( tile, Maps::ObjectGroup::ADVENTURE_MINES, 42 );
+            const std::vector<int> resoures = { Resource::WOOD, Resource::ORE, Resource::CRYSTAL, Resource::SULFUR, Resource::GEMS, Resource::MERCURY, Resource::GOLD };
+            for ( const int resource : resoures ) {
+                for ( int tries = 0; tries < 5; tries++ ) {
+                    const auto & node = Rand::Get( reg._nodes );
+                    Maps::Tiles & mineTile = world.GetTiles( node.index );
+                    const int32_t mineType = fheroes2::getMineObjectInfoId( resource, mineTile.GetGround() );
+                    if ( node.type != REGION_NODE_BORDER && objectPlacer( mineTile, Maps::ObjectGroup::ADVENTURE_MINES, mineType ) ) {
+                        break;
+                    }
+                }
+            }
         }
 
         for ( const int tileIndex : regionCenters ) {
@@ -1233,6 +1238,8 @@ namespace Interface
         // place monsters
 
         _redraw |= mapUpdateFlags;
+
+        action.commit();
     }
 
     void EditorInterface::mouseCursorAreaClickLeft( const int32_t tileIndex )

@@ -270,4 +270,105 @@ namespace fheroes2
 
         return 0;
     }
+
+    constexpr int32_t mineIndexFromGroundType( const int groundType )
+    {
+        switch ( groundType ) {
+        case Maps::Ground::WATER:
+            // Logically Water is not allowed but let's do this.
+            assert( 0 );
+            return 0;
+        case Maps::Ground::GRASS:
+            return 1;
+        case Maps::Ground::SNOW:
+            return 2;
+        case Maps::Ground::SWAMP:
+            return 3;
+        case Maps::Ground::LAVA:
+            return 4;
+        case Maps::Ground::DESERT:
+            return 5;
+        case Maps::Ground::DIRT:
+            return 6;
+        case Maps::Ground::WASTELAND:
+            return 7;
+        case Maps::Ground::BEACH:
+            return 0;
+        default:
+            // Have you added a new ground? Add the logic above!
+            assert( 0 );
+            break;
+        }
+        return 0;
+    }
+
+    constexpr int32_t sawmillIndexFromGroundType( const int groundType )
+    {
+        switch ( groundType ) {
+        case Maps::Ground::WATER:
+            // Logically Water is not allowed but let's do this.
+            assert( 0 );
+            return 0;
+        case Maps::Ground::GRASS:
+            return 0;
+        case Maps::Ground::SNOW:
+            return 1;
+        case Maps::Ground::SWAMP:
+            return 0;
+        case Maps::Ground::LAVA:
+            return 2;
+        case Maps::Ground::DESERT:
+            return 3;
+        case Maps::Ground::DIRT:
+            return 4;
+        case Maps::Ground::WASTELAND:
+            return 5;
+        case Maps::Ground::BEACH:
+            return 3;
+        default:
+            // Have you added a new ground? Add the logic above!
+            assert( 0 );
+            break;
+        }
+        return 0;
+    }
+
+    int32_t getMineObjectInfoId( const int resource, const int groundType )
+    {
+        // 8 terrain and 5 resources
+        // 2 abandoned mines: grass & dirt
+        // Sawmills for different terrains: Grass/Swamp, Snow, Lava, Desert, Dirt, Wasteland.
+        // 2 alchemists labs: regular and snow
+
+        // if you add new mine type update this logic!
+        assert( Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_MINES ).size() == 50 );
+
+        int groundIndex = mineIndexFromGroundType( groundType );
+        
+        switch ( resource ) {
+        case Resource::ORE:
+            return groundIndex * 5;
+        case Resource::SULFUR:
+            return groundIndex * 5 + 1;
+        case Resource::CRYSTAL:
+            return groundIndex * 5 + 2;
+        case Resource::GEMS:
+            return groundIndex * 5 + 3;
+        case Resource::GOLD:
+            return groundIndex * 5 + 4;
+        case Resource::WOOD:
+            return 5 * 8 + 2 + sawmillIndexFromGroundType( groundType );
+        case Resource::MERCURY:
+            return groundType == Maps::Ground::SNOW ? 49 : 48;
+        case Resource::UNKNOWN:
+            // must be an abandoned mine
+            return groundType == Maps::Ground::GRASS ? 40 : 41;
+        default:
+            // Have you added a new resource type?!
+            assert( 0 );
+            break;
+        }
+        
+        return 0;
+    }
 }
