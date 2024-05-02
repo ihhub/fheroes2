@@ -91,6 +91,7 @@ namespace fheroes2
         void renderOkayCancelButtons( Button & buttonOk, Button & buttonCancel, const bool isEvilInterface );
 
         void applyTextBackgroundShading( const Rect & roi );
+        static void applyTextBackgroundShading( Image & output, const Rect & roi );
 
         static void renderBackgroundImage( fheroes2::Image & output, const Rect & roi, const int32_t borderOffset, const bool isEvilInterface );
 

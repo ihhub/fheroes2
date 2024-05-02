@@ -88,6 +88,14 @@ namespace fheroes2
 
     int32_t getFontHeight( const FontSize fontSize );
 
+    // Returns the character position number in the 'text' string.
+    size_t getTextInputCursorPosition( const std::string & text, const FontType & fontType, const size_t currentTextCursorPosition, const int32_t pointerCursorXOffset,
+                                       const int32_t textStartXOffset );
+
+    // Returns the character position number in the 'text' string. NOTICE: the input text should contain the cursor ('_').
+    size_t getMultilineTextInputCursorPosition( const std::string & text, const FontType & fontType, const size_t currentTextCursorPosition,
+                                                const Point & pointerCursorOffset, const Rect & textRoi );
+
     class TextBase
     {
     public:
@@ -148,7 +156,14 @@ namespace fheroes2
         friend class MultiFontText;
 
         Text() = default;
-        Text( std::string text, const FontType fontType );
+
+        Text( std::string text, const FontType fontType )
+            : _text( std::move( text ) )
+            , _fontType( fontType )
+        {
+            // Do nothing.
+        }
+
         Text( const Text & text ) = default;
         Text( Text && text ) = default;
         Text & operator=( const Text & text ) = default;
@@ -169,7 +184,11 @@ namespace fheroes2
 
         bool empty() const override;
 
-        void set( std::string text, const FontType fontType );
+        void set( std::string text, const FontType fontType )
+        {
+            _text = std::move( text );
+            _fontType = fontType;
+        }
 
         // This method modifies the underlying text and ends it with '...' if it is longer than the provided width.
         void fitToOneRow( const int32_t maxWidth );
