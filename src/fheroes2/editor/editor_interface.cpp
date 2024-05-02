@@ -403,8 +403,6 @@ namespace Interface
 
         _gameArea.SetCenterInPixels( prevCenter + fheroes2::Point( newRoi.x + newRoi.width / 2, newRoi.y + newRoi.height / 2 )
                                      - fheroes2::Point( prevRoi.x + prevRoi.width / 2, prevRoi.y + prevRoi.height / 2 ) );
-
-        _historyManager.reset();
     }
 
     void EditorInterface::redraw( const uint32_t force )
@@ -486,6 +484,8 @@ namespace Interface
         }
 
         reset();
+
+        _historyManager.reset();
 
         if ( isNewMap ) {
             _mapFormat = {};
