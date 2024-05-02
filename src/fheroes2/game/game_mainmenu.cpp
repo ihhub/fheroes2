@@ -22,6 +22,7 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <array>
 #include <cassert>
 #include <cmath>
 #include <cstddef>
@@ -298,12 +299,9 @@ fheroes2::GameMode Game::MainMenu( const bool isFirstGameRun )
 
     uint32_t lantern_frame = 0;
 
-    std::array<ButtonInfo, 6> buttons{ ButtonInfo{ NEWGAME_DEFAULT, buttonNewGame, false, false },
-                                       ButtonInfo{ LOADGAME_DEFAULT, buttonLoadGame, false, false },
-                                       ButtonInfo{ HIGHSCORES_DEFAULT, buttonHighScores, false, false },
-                                       ButtonInfo{ CREDITS_DEFAULT, buttonCredits, false, false },
-                                       ButtonInfo{ EDITOR_DEFAULT, buttonEditor, false, false },
-                                       ButtonInfo{ QUIT_DEFAULT, buttonQuit, false, false } };
+    std::array<ButtonInfo, 6> buttons{ ButtonInfo{ NEWGAME_DEFAULT, buttonNewGame, false, false },       ButtonInfo{ LOADGAME_DEFAULT, buttonLoadGame, false, false },
+                                       ButtonInfo{ HIGHSCORES_DEFAULT, buttonHighScores, false, false }, ButtonInfo{ CREDITS_DEFAULT, buttonCredits, false, false },
+                                       ButtonInfo{ EDITOR_DEFAULT, buttonEditor, false, false },         ButtonInfo{ QUIT_DEFAULT, buttonQuit, false, false } };
 
     for ( size_t i = 0; le.MouseMotion() && i < buttons.size(); ++i ) {
         const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::BTNSHNGL, buttons[i].frame );
