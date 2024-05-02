@@ -990,7 +990,6 @@ namespace Interface
         // TODO: Make proper borders restoration for low height resolutions, like for hide interface mode.
         // ViewWorld::ViewWorldWindow( 0, ViewWorldMode::ViewAll, *this );
 
-
         const int32_t width = world.w();
         const int32_t height = world.h();
 
@@ -1005,11 +1004,11 @@ namespace Interface
         // Aiming for region size to be ~300 tiles in a 200-500 range
         const int minimumRegionCount = playerCount + 1;
         const int expectedRegionCount = ( width * height ) / regionSizeLimit;
-        //const double regionSize = ( playerArea > 500 ) ? playerArea / 2 : playerArea;
-        //const int expectedRegionCount = static_cast<int> (( width * height ) / regionSize);
+        // const double regionSize = ( playerArea > 500 ) ? playerArea / 2 : playerArea;
+        // const int expectedRegionCount = static_cast<int> (( width * height ) / regionSize);
 
-        //const double radius = sqrt( playerArea / M_PI );
-        //const int side = static_cast<int>( radius / sqrt( 2 ) );
+        // const double radius = sqrt( playerArea / M_PI );
+        // const int side = static_cast<int>( radius / sqrt( 2 ) );
 
         auto mapBoundsCheck = [width, height]( int x, int y ) {
             x = std::max( std::min( x, width - 1 ), 0 );
@@ -1080,6 +1079,15 @@ namespace Interface
             }
         }
 
+        auto objectPlacer = [this]( Maps::Tiles & tile, Maps::ObjectGroup groupType, int32_t type ) {
+            const fheroes2::Point tilePos = tile.GetCenter();
+            const auto & objectInfo = Maps::getObjectInfo( groupType, type );
+            if ( isObjectPlacementAllowed( objectInfo, tilePos ) && isActionObjectAllowed( objectInfo, tilePos ) ) {
+                return setObjectOnTile( tile, groupType, type );
+            }
+            return false;
+        };
+
         std::vector<int> cache( width * height );
         for ( MapRegion & reg : mapRegions ) {
             if ( reg._id < REGION_NODE_FOUND )
@@ -1121,16 +1129,98 @@ namespace Interface
 
             DEBUG_LOG( DBG_ENGINE, DBG_WARN, "Region #" << reg._id << " size " << reg._nodes.size() << " has " << reg._neighbours.size() << "neighbours" )
 
+            int xMin = 0;
+            int xMax = width;
+            int yMin = 0;
+            int yMax = height;
+
             const int terrainType = 1 << ( reg._id % 8 );
             for ( const MapRegionNode & node : reg._nodes ) {
+                const int nodeX = node.index % width;
+                const int nodeY = node.index / width;
+                xMin = std::max( xMin, nodeX );
+                xMax = std::min( xMax, nodeX );
+                yMin = std::max( yMin, nodeY );
+                yMax = std::min( yMax, nodeY );
+
                 if ( node.type == REGION_NODE_BORDER ) {
                     Maps::setTerrainOnTiles( node.index, node.index, terrainType );
                 }
             }
+
+            const int centerX = ( xMin + xMax ) / 2;
+            const int centerY = ( yMin + yMax ) / 2;
+            const int regionX = regionCenters[reg._id - 3] % width;
+            const int regionY = regionCenters[reg._id - 3] / width;
+            const int castleX = std::min( std::max( ( ( xMin + xMax ) / 2 + regionX ) / 2, 4 ), width - 4 );
+            const int castleY = std::min( std::max( ( ( yMin + yMax ) / 2 + regionY ) / 2, 3 ), height - 3 );
+            const int color = 0;
+
+            auto & tile = world.GetTiles( castleY * width + castleX );
+            fheroes2::Point tilePos = tile.GetCenter();
+
+            const int32_t basementId = fheroes2::getTownBasementId( tile.GetGround() );
+
+            const auto & basementInfo = Maps::getObjectInfo( Maps::ObjectGroup::LANDSCAPE_TOWN_BASEMENTS, basementId );
+            const auto & castleInfo = Maps::getObjectInfo( Maps::ObjectGroup::KINGDOM_TOWNS, 12 );
+
+            //const bool isX = std::abs( centerX - castleX ) > std::abs( centerY - castleY );
+            //while ( !isObjectPlacementAllowed( castleInfo, tilePos ) ) {
+            //    if ( ( isX && castleX == centerX ) || ( !isX && castleY == centerY ) ) {
+            //        break;
+            //    }
+            //    const int diffX = centerX - castleX;
+            //    castleX += ( diffX < 0 ) ? -1 : ( diffX == 0 ) ? 0 : 1;
+
+            //    if ( !isX ) {
+            //        const int diffY = centerY - castleY;
+            //        castleY += ( diffY < 0 ) ? -1 : ( diffY == 0 ) ? 0 : 1;
+            //    }
+            //}
+            //fheroes2::Point temporary = world.GetTiles( castleY * width + castleX ).GetCenter();
+            //if ( !isObjectPlacementAllowed( castleInfo, temporary ) || !isActionObjectAllowed( castleInfo, temporary ) ) {
+            //    castleX = std::min( std::max( castleX, 4 ), width - 4 );
+            //    castleY = std::min( std::max( castleY, 3 ), height - 3 );
+            //}
+
+            if ( isObjectPlacementAllowed( basementInfo, tilePos ) && isObjectPlacementAllowed( castleInfo, tilePos ) && isActionObjectAllowed( castleInfo, tilePos ) ) {
+                setObjectOnTile( tile, Maps::ObjectGroup::LANDSCAPE_TOWN_BASEMENTS, basementId );
+
+                assert( Maps::getLastObjectUID() > 0 );
+                const uint32_t objectId = Maps::getLastObjectUID() - 1;
+
+                Maps::setLastObjectUID( objectId );
+                setObjectOnTile( tile, Maps::ObjectGroup::KINGDOM_TOWNS, 12 );
+
+                // By default use random (default) army for the neutral race town/castle.
+                if ( Color::IndexToColor( color ) == Color::NONE ) {
+                    Maps::setDefaultCastleDefenderArmy( _mapFormat.castleMetadata[Maps::getLastObjectUID()] );
+                }
+
+                // Add flags.
+                assert( tile.GetIndex() > 0 && tile.GetIndex() < world.w() * world.h() - 1 );
+                Maps::setLastObjectUID( objectId );
+
+                if ( !setObjectOnTile( world.GetTiles( tile.GetIndex() - 1 ), Maps::ObjectGroup::LANDSCAPE_FLAGS, color * 2 ) ) {
+                    return;
+                }
+
+                Maps::setLastObjectUID( objectId );
+
+                if ( !setObjectOnTile( world.GetTiles( tile.GetIndex() + 1 ), Maps::ObjectGroup::LANDSCAPE_FLAGS, color * 2 + 1 ) ) {
+                    return;
+                }
+
+                world.addCastle( tile.GetIndex(), Race::IndexToRace( 12 ), Color::IndexToColor( color ) );
+            }
+
+            // objectPlacer( tile, Maps::ObjectGroup::KINGDOM_TOWNS, 12 );
+            // objectPlacer( tile, Maps::ObjectGroup::ADVENTURE_MINES, 42 );
         }
 
         for ( const int tileIndex : regionCenters ) {
-            Maps::updateRoadOnTile( world.GetTiles( tileIndex ), true );
+            auto & tile = world.GetTiles( tileIndex );
+            Maps::updateRoadOnTile( tile, true );
         }
 
         // set up region connectors based on frequency settings & border length
