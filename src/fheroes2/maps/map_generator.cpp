@@ -32,7 +32,9 @@
 
 namespace Maps::Generator
 {
+    // ObjectInfo ObjctGroup based indicies do not match old objects
     const int COLOR_NONE_FLAG = 6;
+    const int RANDOM_CASTLE_INDEX = 12;
 
     enum
     {
@@ -127,6 +129,7 @@ namespace Maps::Generator
         const int nodeIndex = region._nodes[region._lastProcessedNode].index;
 
         for ( uint8_t direction = 0; direction < 8; ++direction ) {
+            // only check diagonal 50% of the time to get more circular distribution; randomness for uneven edges
             if ( direction > 3 && Rand::Get( 1 ) ) {
                 break;
             }
@@ -394,11 +397,12 @@ namespace Maps::Generator
                     return false;
                 }
 
-                world.addCastle( tile.GetIndex(), Race::IndexToRace( 12 ), color );
+                world.addCastle( tile.GetIndex(), Race::IndexToRace( RANDOM_CASTLE_INDEX ), color );
             }
 
             const std::vector<int> resoures = { Resource::WOOD, Resource::ORE, Resource::CRYSTAL, Resource::SULFUR, Resource::GEMS, Resource::MERCURY, Resource::GOLD };
             for ( const int resource : resoures ) {
+                // TODO: do a gradual distribution instead of guesses
                 for ( int tries = 0; tries < 5; tries++ ) {
                     const auto & node = Rand::Get( reg._nodes );
                     Maps::Tiles & mineTile = world.GetTiles( node.index );

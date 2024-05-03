@@ -526,8 +526,30 @@ namespace Interface
                 }
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_SCENARIO_INFORMATION ) ) {
                     // TODO: Make the scenario info editor.
-                    // Dialog::GameInfo();
+                    Dialog::GameInfo();
+                }
+                else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_VIEW_WORLD ) ) {
+                    eventViewWorld();
+                }
+#if defined( WITH_DEBUG )
+                else if ( HotKeyPressEvent( Game::HotKeyEvent::EDITOR_RANDOM_MAP_GENERATION ) ) {
+                    fheroes2::ActionCreator action( _historyManager, _mapFormat );
 
+                    Maps::Generator::Configuration rmgConfig;
+                    rmgConfig.playerCount = _playerCount;
+                    rmgConfig.regionSizeLimit = _regionSizeLimit;
+                    rmgConfig.terrainOnly = false;
+
+                    if ( Maps::Generator::generateWorld( _mapFormat, rmgConfig ) ) {
+                        _redraw |= mapUpdateFlags;
+
+                        action.commit();
+                    }
+                    else {
+                        _warningMessage.reset( _( "Not able to generate a map with given parameters." ) );
+                    }
+                }
+                else if ( HotKeyPressEvent( Game::HotKeyEvent::EDITOR_RANDOM_MAP_CONFIGURATION ) ) {
                     uint32_t newCount = _playerCount;
                     if ( Dialog::SelectCount( "Pick player count", 2, 6, newCount ) ) {
                         _playerCount = newCount;
@@ -537,9 +559,7 @@ namespace Interface
                         _regionSizeLimit = newCount;
                     }
                 }
-                else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_VIEW_WORLD ) ) {
-                    eventViewWorld();
-                }
+#endif
                 // map scrolling control
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_SCROLL_LEFT ) ) {
                     _gameArea.SetScroll( SCROLL_LEFT );
@@ -864,19 +884,7 @@ namespace Interface
     void EditorInterface::eventViewWorld()
     {
         // TODO: Make proper borders restoration for low height resolutions, like for hide interface mode.
-        // ViewWorld::ViewWorldWindow( 0, ViewWorldMode::ViewAll, *this );
-
-        fheroes2::ActionCreator action( _historyManager, _mapFormat );
-
-        Maps::Generator::Configuration rmgConfig;
-        rmgConfig.playerCount = _playerCount;
-        rmgConfig.regionSizeLimit = _regionSizeLimit;
-
-        if ( Maps::Generator::generateWorld( _mapFormat, rmgConfig ) ) {
-            _redraw |= mapUpdateFlags;
-
-            action.commit();
-        }
+        ViewWorld::ViewWorldWindow( 0, ViewWorldMode::ViewAll, *this );
     }
 
     void EditorInterface::mouseCursorAreaClickLeft( const int32_t tileIndex )
