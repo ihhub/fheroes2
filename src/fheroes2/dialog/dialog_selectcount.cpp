@@ -248,7 +248,7 @@ bool Dialog::InputString( std::string header, std::string & result, std::string 
 
     const fheroes2::Sprite & inputArea = fheroes2::AGG::GetICN( ( isEvilInterface ? ICN::BUYBUILD : ICN::BUYBUILE ), 3 );
 
-    const int32_t titleHeight = title.empty() ? 0 : titlebox.height( BOXAREA_WIDTH ) + 10;
+    const int32_t titleHeight = hasTitle ? titlebox.height( BOXAREA_WIDTH ) + 10 : 0;
     const int32_t keyBoardButtonExtraHeight = 20;
     const FrameBox box( 10 + titleHeight + textbox.height( BOXAREA_WIDTH ) + 10 + inputArea.height() + keyBoardButtonExtraHeight, true );
     const fheroes2::Rect & frameBoxArea = box.GetArea();

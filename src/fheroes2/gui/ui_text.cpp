@@ -604,7 +604,7 @@ namespace fheroes2
         std::deque<Point> charCount;
         getMultiRowInfo( reinterpret_cast<const uint8_t *>( text.data() ), static_cast<int32_t>( textSize ), textWidth, fontType, fontHeight, charCount, true );
 
-        if ( pointerLine >= charCount.size() ) {
+        if ( pointerLine >= static_cast<int32_t>( charCount.size() ) ) {
             // Pointer is lower than the last text line.
             return textSize;
         }
