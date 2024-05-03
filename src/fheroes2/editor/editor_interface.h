@@ -148,7 +148,7 @@ namespace Interface
         int32_t _tileUnderCursor{ -1 };
 
         uint32_t _playerCount = 2;
-        uint32_t _regionSizeLimit = 500;
+        uint32_t _regionSizeLimit = 600;
 
         std::function<void( const int32_t )> _cursorUpdater;
 

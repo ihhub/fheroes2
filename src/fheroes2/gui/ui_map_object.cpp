@@ -343,7 +343,7 @@ namespace fheroes2
         // if you add new mine type update this logic!
         assert( Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_MINES ).size() == 50 );
 
-        int groundIndex = mineIndexFromGroundType( groundType );
+        const int groundIndex = mineIndexFromGroundType( groundType );
 
         switch ( resource ) {
         case Resource::ORE:

@@ -33,7 +33,7 @@
 namespace Maps::Generator
 {
     // ObjectInfo ObjctGroup based indicies do not match old objects
-    const int COLOR_NONE_FLAG = 6;
+    const int NEUTRAL_COLOR = 6;
     const int RANDOM_CASTLE_INDEX = 12;
 
     enum
@@ -80,7 +80,7 @@ namespace Maps::Generator
         std::vector<Node> _nodes;
         size_t _sizeLimit;
         size_t _lastProcessedNode = 0;
-        int _colorIndex = COLOR_NONE_FLAG;
+        int _colorIndex = NEUTRAL_COLOR;
 
         Region() = default;
 
@@ -167,7 +167,7 @@ namespace Maps::Generator
         }
     }
 
-    bool setObjectOnTile( Maps::Map_Format::MapFormat & mapFormat, Maps::Tiles & tile, const Maps::ObjectGroup groupType, const int32_t objectIndex )
+    bool setObjectOnTile( Map_Format::MapFormat & mapFormat, Tiles & tile, const ObjectGroup groupType, const int32_t objectIndex )
     {
         const auto & objectInfo = Maps::getObjectInfo( groupType, objectIndex );
         if ( objectInfo.empty() ) {
@@ -183,6 +183,92 @@ namespace Maps::Generator
         Maps::addObjectToMap( mapFormat, tile.GetIndex(), groupType, static_cast<uint32_t>( objectIndex ) );
 
         return true;
+    }
+
+    bool entranceCheck( const fheroes2::Point tilePos )
+    {
+        for ( int i = -2; i < 3; i++ ) {
+            if ( !Maps::isValidAbsPoint( tilePos.x + i, tilePos.y + 1 ) || !Maps::isClearGround( world.GetTiles( tilePos.x + i, tilePos.y + 1 ) ) ) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    bool objectPlacer( Map_Format::MapFormat & mapFormat, Tiles & tile, ObjectGroup groupType, int32_t type )
+    {
+        const fheroes2::Point tilePos = tile.GetCenter();
+        const auto & objectInfo = Maps::getObjectInfo( groupType, type );
+        if ( isObjectPlacementAllowed( objectInfo, tilePos ) && isActionObjectAllowed( objectInfo, tilePos ) && entranceCheck( tilePos ) ) {
+            // do not update passabilities after every object
+            if ( !Maps::setObjectOnTile( tile, objectInfo, true ) ) {
+                return false;
+            }
+
+            Maps::addObjectToMap( mapFormat, tile.GetIndex(), groupType, static_cast<uint32_t>( type ) );
+            return true;
+        }
+        return false;
+    }
+
+    bool placeCastle( Map_Format::MapFormat & mapFormat, Region & region, int targetX, int targetY )
+    {
+        const int regionX = region._centerIndex % mapFormat.size;
+        const int regionY = region._centerIndex / mapFormat.size;
+        const int castleX = std::min( std::max( ( targetX + regionX ) / 2, 4 ), mapFormat.size - 4 );
+        const int castleY = std::min( std::max( ( targetY + regionY ) / 2, 3 ), mapFormat.size - 3 );
+
+        auto & tile = world.GetTiles( castleY * mapFormat.size + castleX );
+        fheroes2::Point tilePos = tile.GetCenter();
+
+        const int32_t basementId = fheroes2::getTownBasementId( tile.GetGround() );
+
+        const auto & basementInfo = Maps::getObjectInfo( Maps::ObjectGroup::LANDSCAPE_TOWN_BASEMENTS, basementId );
+        const auto & castleInfo = Maps::getObjectInfo( Maps::ObjectGroup::KINGDOM_TOWNS, RANDOM_CASTLE_INDEX );
+
+        if ( isObjectPlacementAllowed( basementInfo, tilePos ) && isObjectPlacementAllowed( castleInfo, tilePos ) && isActionObjectAllowed( castleInfo, tilePos ) ) {
+            setObjectOnTile( mapFormat, tile, Maps::ObjectGroup::LANDSCAPE_TOWN_BASEMENTS, basementId );
+
+            assert( Maps::getLastObjectUID() > 0 );
+            const uint32_t objectId = Maps::getLastObjectUID() - 1;
+
+            Maps::setLastObjectUID( objectId );
+            setObjectOnTile( mapFormat, tile, Maps::ObjectGroup::KINGDOM_TOWNS, 12 );
+
+            const uint8_t color = Color::IndexToColor( region._colorIndex );
+            // By default use random (default) army for the neutral race town/castle.
+            if ( color == Color::NONE ) {
+                Maps::setDefaultCastleDefenderArmy( mapFormat.castleMetadata[Maps::getLastObjectUID()] );
+            }
+
+            // Add flags.
+            assert( tile.GetIndex() > 0 && tile.GetIndex() < world.w() * world.h() - 1 );
+            Maps::setLastObjectUID( objectId );
+
+            if ( !setObjectOnTile( mapFormat, world.GetTiles( tile.GetIndex() - 1 ), Maps::ObjectGroup::LANDSCAPE_FLAGS, region._colorIndex * 2 ) ) {
+                return false;
+            }
+
+            Maps::setLastObjectUID( objectId );
+
+            if ( !setObjectOnTile( mapFormat, world.GetTiles( tile.GetIndex() + 1 ), Maps::ObjectGroup::LANDSCAPE_FLAGS, region._colorIndex * 2 + 1 ) ) {
+                return false;
+            }
+
+            world.addCastle( tile.GetIndex(), Race::IndexToRace( RANDOM_CASTLE_INDEX ), color );
+        }
+        return true;
+    }
+
+    bool placeMine( Map_Format::MapFormat & mapFormat, Region & region, const int resource )
+    {
+        const auto & node = Rand::Get( region._nodes );
+        Maps::Tiles & mineTile = world.GetTiles( node.index );
+        const int32_t mineType = fheroes2::getMineObjectInfoId( resource, mineTile.GetGround() );
+        if ( node.type == NodeType::OPEN && objectPlacer( mapFormat, mineTile, Maps::ObjectGroup::ADVENTURE_MINES, mineType ) ) {
+            return true;
+        }
+        return false;
     }
 
     bool generateWorld( Map_Format::MapFormat & mapFormat, Configuration config )
@@ -210,11 +296,6 @@ namespace Maps::Generator
         // Aiming for region size to be ~300 tiles in a 200-500 range
         const int minimumRegionCount = playerCount + 1;
         const int expectedRegionCount = ( width * height ) / config.regionSizeLimit;
-        // const double regionSize = ( playerArea > 500 ) ? playerArea / 2 : playerArea;
-        // const int expectedRegionCount = static_cast<int> (( width * height ) / regionSize);
-
-        // const double radius = sqrt( playerArea / M_PI );
-        // const int side = static_cast<int>( radius / sqrt( 2 ) );
 
         const uint32_t extendedWidth = width + 2;
         std::vector<Node> data( extendedWidth * ( height + 2 ) );
@@ -231,30 +312,35 @@ namespace Maps::Generator
 
         // Step 2. Determine region layout and placement
         // Insert empty region that represents map borders
-        std::vector<Region> mapRegions = { { 0, 0, COLOR_NONE_FLAG, 0 } };
+        std::vector<Region> mapRegions = { { 0, 0, NEUTRAL_COLOR, 0 } };
 
         const int neutralRegionCount = std::max( 1, expectedRegionCount - playerCount );
         const int innerLayer = std::min( neutralRegionCount, playerCount );
         const int outerLayer = std::max( std::min( neutralRegionCount, innerLayer * 2 ), playerCount );
 
-        const double outerRadius = 0.2 + ( innerLayer + outerLayer ) / static_cast<double>( expectedRegionCount );
+        const double radius = sqrt( ( innerLayer + outerLayer ) * config.regionSizeLimit / M_PI );
+        const double outerRadius = ( ( innerLayer + outerLayer ) > expectedRegionCount ) ? std::max( width, height ) * 0.47 : radius * 0.85;
         const double innerRadius = innerLayer == 1 ? 0 : outerRadius / 3;
 
         const std::vector<std::pair<int, double>> mapLayers = { { innerLayer, innerRadius }, { outerLayer, outerRadius } };
 
-        const double distance = std::max( width, height ) / 2.0;
-        for ( const auto layer : mapLayers ) {
+        for ( int layer = 0; layer < mapLayers.size(); layer++ ) {
+            const int regionCount = mapLayers[layer].first;
             const double startingAngle = Rand::Get( 360 );
-            const double offsetAngle = 360.0 / layer.first;
-            for ( int i = 0; i < layer.first; i++ ) {
+            const double offsetAngle = 360.0 / regionCount;
+            for ( int i = 0; i < regionCount; i++ ) {
                 const double radians = ( startingAngle + offsetAngle * i ) * M_PI / 180;
+                const double distance = mapLayers[layer].second;
 
-                const int x = width / 2 + static_cast<int>( cos( radians ) * distance * layer.second );
-                const int y = height / 2 + static_cast<int>( sin( radians ) * distance * layer.second );
+                const int x = width / 2 + static_cast<int>( cos( radians ) * distance );
+                const int y = height / 2 + static_cast<int>( sin( radians ) * distance );
                 const int centerTile = mapBoundsCheck( x, y );
 
-                const uint32_t regionID = static_cast<uint32_t>( mapRegions.size() ); // Safe to do as we can't have so many regions
-                mapRegions.emplace_back( regionID, centerTile, COLOR_NONE_FLAG, config.regionSizeLimit );
+                const int factor = regionCount / playerCount;
+                const int regionColor = ( layer == 1 && i % factor == 0 ) ? i / factor : NEUTRAL_COLOR;
+
+                const uint32_t regionID = static_cast<uint32_t>( mapRegions.size() );
+                mapRegions.emplace_back( regionID, centerTile, regionColor, config.regionSizeLimit );
                 data[ConvertExtendedIndex( centerTile, extendedWidth )].region = regionID;
             }
         }
@@ -273,39 +359,15 @@ namespace Maps::Generator
             }
         }
 
-        auto entranceCheck = []( const fheroes2::Point tilePos ) {
-            for ( int i = -2; i < 3; i++ ) {
-                if ( !Maps::isValidAbsPoint( tilePos.x + i, tilePos.y + 1 ) || !Maps::isClearGround( world.GetTiles( tilePos.x + i, tilePos.y + 1 ) ) ) {
-                    return false;
-                }
-            }
-            return true;
-        };
-
-        auto objectPlacer = [&mapFormat, entranceCheck]( Maps::Tiles & tile, Maps::ObjectGroup groupType, int32_t type ) {
-            const fheroes2::Point tilePos = tile.GetCenter();
-            const auto & objectInfo = Maps::getObjectInfo( groupType, type );
-            if ( isObjectPlacementAllowed( objectInfo, tilePos ) && isActionObjectAllowed( objectInfo, tilePos ) && entranceCheck( tilePos ) ) {
-                // do not update passabilities after every object
-                if ( !Maps::setObjectOnTile( tile, objectInfo, true ) ) {
-                    return false;
-                }
-
-                Maps::addObjectToMap( mapFormat, tile.GetIndex(), groupType, static_cast<uint32_t>( type ) );
-                return true;
-            }
-            return false;
-        };
-
         // Step 4. We're ready to save the result; reset the current world first
         world.generateForEditor( width );
 
-        for ( Region & reg : mapRegions ) {
-            if ( reg._id == 0 )
+        for ( Region & region : mapRegions ) {
+            if ( region._id == 0 )
                 continue;
 
-            const int terrainType = 1 << ( reg._id % 8 );
-            for ( const Node & node : reg._nodes ) {
+            const int terrainType = 1 << ( region._id % 8 );
+            for ( const Node & node : region._nodes ) {
                 // connect regions through teleports
                 MapsIndexes exits;
 
@@ -318,31 +380,31 @@ namespace Maps::Generator
 
                 for ( const int exitIndex : exits ) {
                     // neighbours is a set that will force the uniqueness
-                    reg._neighbours.insert( node.region );
+                    region._neighbours.insert( node.region );
                 }
                 world.GetTiles( node.index ).setTerrain( Maps::Ground::getRandomTerrainImageIndex( terrainType, true ), false, false );
             }
 
             // Fix missing references
-            for ( uint32_t adjacent : reg._neighbours ) {
-                mapRegions[adjacent]._neighbours.insert( reg._id );
+            for ( uint32_t adjacent : region._neighbours ) {
+                mapRegions[adjacent]._neighbours.insert( region._id );
             }
         }
 
         // Step 5. Object placement
-        for ( Region & reg : mapRegions ) {
-            if ( reg._id == 0 )
+        for ( Region & region : mapRegions ) {
+            if ( region._id == 0 )
                 continue;
 
-            DEBUG_LOG( DBG_ENGINE, DBG_WARN, "Region #" << reg._id << " size " << reg._nodes.size() << " has " << reg._neighbours.size() << "neighbours" )
+            DEBUG_LOG( DBG_ENGINE, DBG_WARN, "Region #" << region._id << " size " << region._nodes.size() << " has " << region._neighbours.size() << "neighbours" )
 
             int xMin = 0;
             int xMax = width;
             int yMin = 0;
             int yMax = height;
 
-            const int terrainType = 1 << ( reg._id % 8 );
-            for ( const Node & node : reg._nodes ) {
+            const int terrainType = 1 << ( region._id % 8 );
+            for ( const Node & node : region._nodes ) {
                 const int nodeX = node.index % width;
                 const int nodeY = node.index / width;
                 xMin = std::max( xMin, nodeX );
@@ -359,65 +421,26 @@ namespace Maps::Generator
                 continue;
             }
 
-            const int regionX = reg._centerIndex % width;
-            const int regionY = reg._centerIndex / width;
-            const int castleX = std::min( std::max( ( ( xMin + xMax ) / 2 + regionX ) / 2, 4 ), width - 4 );
-            const int castleY = std::min( std::max( ( ( yMin + yMax ) / 2 + regionY ) / 2, 3 ), height - 3 );
-
-            auto & tile = world.GetTiles( castleY * width + castleX );
-            fheroes2::Point tilePos = tile.GetCenter();
-
-            const int32_t basementId = fheroes2::getTownBasementId( tile.GetGround() );
-
-            const auto & basementInfo = Maps::getObjectInfo( Maps::ObjectGroup::LANDSCAPE_TOWN_BASEMENTS, basementId );
-            const auto & castleInfo = Maps::getObjectInfo( Maps::ObjectGroup::KINGDOM_TOWNS, 12 );
-
-            if ( isObjectPlacementAllowed( basementInfo, tilePos ) && isObjectPlacementAllowed( castleInfo, tilePos ) && isActionObjectAllowed( castleInfo, tilePos ) ) {
-                setObjectOnTile( mapFormat, tile, Maps::ObjectGroup::LANDSCAPE_TOWN_BASEMENTS, basementId );
-
-                assert( Maps::getLastObjectUID() > 0 );
-                const uint32_t objectId = Maps::getLastObjectUID() - 1;
-
-                Maps::setLastObjectUID( objectId );
-                setObjectOnTile( mapFormat, tile, Maps::ObjectGroup::KINGDOM_TOWNS, 12 );
-
-                const uint8_t color = Color::IndexToColor( reg._colorIndex );
-                // By default use random (default) army for the neutral race town/castle.
-                if ( color == Color::NONE ) {
-                    Maps::setDefaultCastleDefenderArmy( mapFormat.castleMetadata[Maps::getLastObjectUID()] );
-                }
-
-                // Add flags.
-                assert( tile.GetIndex() > 0 && tile.GetIndex() < world.w() * world.h() - 1 );
-                Maps::setLastObjectUID( objectId );
-
-                if ( !setObjectOnTile( mapFormat, world.GetTiles( tile.GetIndex() - 1 ), Maps::ObjectGroup::LANDSCAPE_FLAGS, reg._colorIndex * 2 ) ) {
-                    return false;
-                }
-
-                Maps::setLastObjectUID( objectId );
-
-                if ( !setObjectOnTile( mapFormat, world.GetTiles( tile.GetIndex() + 1 ), Maps::ObjectGroup::LANDSCAPE_FLAGS, reg._colorIndex * 2 + 1 ) ) {
-                    return false;
-                }
-
-                world.addCastle( tile.GetIndex(), Race::IndexToRace( RANDOM_CASTLE_INDEX ), color );
+            if ( region._colorIndex != NEUTRAL_COLOR && !placeCastle( mapFormat, region, ( xMin + xMax ) / 2, ( yMin + yMax ) / 2 ) ) {
+                // return early if we can't place a starting player castle
+                return false;
+            }
+            else if ( region._nodes.size() > 300 ) {
+                // place non-mandatory castles in bigger neutral regions
+                placeCastle( mapFormat, region, ( xMin + xMax ) / 2, ( yMin + yMax ) / 2 );
             }
 
             const std::vector<int> resoures = { Resource::WOOD, Resource::ORE, Resource::CRYSTAL, Resource::SULFUR, Resource::GEMS, Resource::MERCURY, Resource::GOLD };
             for ( const int resource : resoures ) {
                 // TODO: do a gradual distribution instead of guesses
                 for ( int tries = 0; tries < 5; tries++ ) {
-                    const auto & node = Rand::Get( reg._nodes );
-                    Maps::Tiles & mineTile = world.GetTiles( node.index );
-                    const int32_t mineType = fheroes2::getMineObjectInfoId( resource, mineTile.GetGround() );
-                    if ( node.type == NodeType::OPEN && objectPlacer( mineTile, Maps::ObjectGroup::ADVENTURE_MINES, mineType ) ) {
+                    if ( placeMine( mapFormat, region, resource ) ) {
                         break;
                     }
                 }
             }
 
-            Maps::updateRoadOnTile( world.GetTiles( reg._centerIndex ), true );
+            Maps::updateRoadOnTile( world.GetTiles( region._centerIndex ), true );
         }
 
         if ( config.terrainOnly ) {
