@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2024                                             *
+ *   Copyright (C) 2024                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -20,17 +20,14 @@
 #pragma once
 #include "map_format_info.h"
 
-namespace Maps
+namespace Maps::Generator
 {
-    namespace Generator
+    struct Configuration
     {
-        struct Configuration
-        {
-            int playerCount = 2;
-            int regionSizeLimit = 300;
-            bool basicOnly = true;
-        };
+        uint32_t playerCount = 2;
+        uint32_t regionSizeLimit = 300;
+        bool basicOnly = true;
+    };
 
-        bool generateWorld( Map_Format::MapFormat & mapFormat, Configuration config );
-    }
+    bool generateWorld( Map_Format::MapFormat & mapFormat, Configuration config );
 }

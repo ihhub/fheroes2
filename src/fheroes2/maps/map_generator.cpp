@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2024                                             *
+ *   Copyright (C) 2024                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -76,12 +76,12 @@ namespace Maps::Generator
     struct Region
     {
     public:
-        uint32_t _id = 0;
+        uint32_t _id{};
         int32_t _centerIndex = -1;
         std::set<uint32_t> _neighbours;
         std::vector<Node> _nodes;
-        size_t _sizeLimit;
-        size_t _lastProcessedNode = 0;
+        size_t _sizeLimit{};
+        size_t _lastProcessedNode{};
         int _colorIndex = NEUTRAL_COLOR;
         int _groundType = Ground::GRASS;
 
@@ -89,8 +89,8 @@ namespace Maps::Generator
 
         Region( uint32_t regionIndex, int32_t mapIndex, int playerColor, int ground, size_t expectedSize )
             : _id( regionIndex )
-            , _sizeLimit( expectedSize )
             , _centerIndex( mapIndex )
+            , _sizeLimit( expectedSize )
             , _colorIndex( playerColor )
             , _groundType( ground )
         {
@@ -127,7 +127,7 @@ namespace Maps::Generator
     int ConvertExtendedIndex( int index, uint32_t width )
     {
         const uint32_t originalWidth = width - 2;
-        return ( index / originalWidth + 1 ) * width + ( index % originalWidth ) + 1;
+        return static_cast<int>( ( index / originalWidth + 1 ) * width + ( index % originalWidth ) + 1 );
     }
 
     void CheckAdjacentTiles( std::vector<Node> & rawData, Region & region, uint32_t rawDataWidth, const std::vector<int> & offsets )
@@ -269,10 +269,7 @@ namespace Maps::Generator
         const auto & node = Rand::Get( region._nodes );
         Maps::Tiles & mineTile = world.GetTiles( node.index );
         const int32_t mineType = fheroes2::getMineObjectInfoId( resource, mineTile.GetGround() );
-        if ( node.type == NodeType::OPEN && objectPlacer( mapFormat, mineTile, Maps::ObjectGroup::ADVENTURE_MINES, mineType ) ) {
-            return true;
-        }
-        return false;
+        return node.type == NodeType::OPEN && objectPlacer( mapFormat, mineTile, Maps::ObjectGroup::ADVENTURE_MINES, mineType );
     }
 
     bool generateWorld( Map_Format::MapFormat & mapFormat, Configuration config )
@@ -298,11 +295,11 @@ namespace Maps::Generator
         const int playerCount = config.playerCount;
 
         // Aiming for region size to be ~300 tiles in a 200-500 range
-        const int minimumRegionCount = playerCount + 1;
+        // const int minimumRegionCount = playerCount + 1;
         const int expectedRegionCount = ( width * height ) / config.regionSizeLimit;
 
         const uint32_t extendedWidth = width + 2;
-        std::vector<Node> data( extendedWidth * ( height + 2 ) );
+        std::vector<Node> data( static_cast<size_t>( extendedWidth ) * ( height + 2 ) );
         for ( int y = 0; y < height; ++y ) {
             const int rowIndex = y * width;
             for ( int x = 0; x < width; ++x ) {
@@ -328,7 +325,7 @@ namespace Maps::Generator
 
         const std::vector<std::pair<int, double>> mapLayers = { { innerLayer, innerRadius }, { outerLayer, outerRadius } };
 
-        for ( int layer = 0; layer < mapLayers.size(); layer++ ) {
+        for ( size_t layer = 0; layer < mapLayers.size(); layer++ ) {
             const int regionCount = mapLayers[layer].first;
             const double startingAngle = Rand::Get( 360 );
             const double offsetAngle = 360.0 / regionCount;
@@ -374,20 +371,6 @@ namespace Maps::Generator
                 continue;
 
             for ( const Node & node : region._nodes ) {
-                // connect regions through teleports
-                MapsIndexes exits;
-
-                if ( node.mapObject == MP2::OBJ_STONE_LITHS ) {
-                    exits = world.GetTeleportEndPoints( node.index );
-                }
-                else if ( node.mapObject == MP2::OBJ_WHIRLPOOL ) {
-                    exits = world.GetWhirlpoolEndPoints( node.index );
-                }
-
-                for ( const int exitIndex : exits ) {
-                    // neighbours is a set that will force the uniqueness
-                    region._neighbours.insert( node.region );
-                }
                 world.GetTiles( node.index ).setTerrain( Maps::Ground::getRandomTerrainImageIndex( region._groundType, true ), false, false );
             }
 
@@ -426,7 +409,7 @@ namespace Maps::Generator
                 // return early if we can't place a starting player castle
                 return false;
             }
-            else if ( region._nodes.size() > 300 ) {
+            if ( region._nodes.size() > 300 ) {
                 // place non-mandatory castles in bigger neutral regions
                 placeCastle( mapFormat, region, ( xMin + xMax ) / 2, ( yMin + yMax ) / 2 );
             }
