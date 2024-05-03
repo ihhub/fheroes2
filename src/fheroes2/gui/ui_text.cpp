@@ -256,7 +256,8 @@ namespace
                     else {
                         if ( isSpaceChar( *data ) ) {
                             // Current character could be a space character then current line is over.
-                            offset->x = countCharacters ? lineLength : lineWidth;
+                            // For the characters count we take this space into the account.
+                            offset->x = countCharacters ? lineLength + 1 : lineWidth;
 
                             // We skip this space character.
                             ++data;
@@ -621,12 +622,14 @@ namespace fheroes2
 
         if ( maxOffsetX <= 0 ) {
             // Pointer is to the left of the text line.
-            return cursorPosition;
+            return ( cursorPosition > currentTextCursorPosition ) ? cursorPosition - 1 : cursorPosition;
         }
 
         if ( maxOffsetX > offsets[pointerLine].x ) {
             // Pointer is to the right of the text line.
-            return cursorPosition + charCount[pointerLine].x;
+            cursorPosition += charCount[pointerLine].x;
+
+            return ( cursorPosition > currentTextCursorPosition ) ? cursorPosition - 1 : cursorPosition;
         }
 
         const CharHandler charHandler( fontType );
@@ -635,7 +638,7 @@ namespace fheroes2
             const int32_t charWidth = charHandler.getWidth( static_cast<uint8_t>( text[i] ) );
             positionOffsetX += charWidth;
 
-            if ( positionOffsetX - charWidth / 2 > maxOffsetX ) {
+            if ( positionOffsetX > maxOffsetX ) {
                 // Take into account that the cursor character ('_') was added to the line.
                 return ( i > currentTextCursorPosition ) ? i - 1 : i;
             }
