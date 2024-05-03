@@ -60,10 +60,10 @@ namespace Maps::Generator
     struct Node
     {
         int index = -1;
-        NodeType type = NodeType::OPEN;
+        NodeType type = NodeType::BORDER;
         uint32_t region = 0;
         uint16_t mapObject = 0;
-        uint16_t passable = 0;
+        uint16_t passable = DIRECTION_ALL;
 
         Node() = default;
         explicit Node( int index_ )
@@ -78,13 +78,15 @@ namespace Maps::Generator
         int32_t _centerIndex = -1;
         std::set<uint32_t> _neighbours;
         std::vector<Node> _nodes;
+        size_t _sizeLimit;
         size_t _lastProcessedNode = 0;
         int _colorIndex = COLOR_NONE_FLAG;
 
         Region() = default;
 
-        Region( int regionIndex, int mapIndex, int playerColor, size_t expectedSize )
+        Region( uint32_t regionIndex, int32_t mapIndex, int playerColor, size_t expectedSize )
             : _id( regionIndex )
+            , _sizeLimit( expectedSize )
             , _centerIndex( mapIndex )
             , _colorIndex( playerColor )
         {
@@ -126,9 +128,15 @@ namespace Maps::Generator
 
     void CheckAdjacentTiles( std::vector<Node> & rawData, Region & region, uint32_t rawDataWidth, const std::vector<int> & offsets )
     {
-        const int nodeIndex = region._nodes[region._lastProcessedNode].index;
+        Node & previousNode = region._nodes[region._lastProcessedNode];
+        const int nodeIndex = previousNode.index;
 
         for ( uint8_t direction = 0; direction < 8; ++direction ) {
+            if ( region._nodes.size() > region._sizeLimit ) {
+                previousNode.type = NodeType::BORDER;
+                break;
+            }
+
             // only check diagonal 50% of the time to get more circular distribution; randomness for uneven edges
             if ( direction > 3 && Rand::Get( 1 ) ) {
                 break;
@@ -136,12 +144,12 @@ namespace Maps::Generator
             const int newIndex = ConvertExtendedIndex( nodeIndex, rawDataWidth ) + offsets[direction];
             Node & newTile = rawData[newIndex];
             if ( newTile.passable & GetDirectionBitmask( direction, true ) ) {
-                if ( newTile.region == 0 ) {
+                if ( newTile.region == 0 && newTile.type == NodeType::OPEN ) {
                     newTile.region = region._id;
                     region._nodes.push_back( newTile );
                 }
                 else if ( newTile.region != region._id ) {
-                    region._nodes[region._lastProcessedNode].type = NodeType::BORDER;
+                    previousNode.type = NodeType::BORDER;
                     region._neighbours.insert( newTile.region );
                 }
             }
@@ -189,6 +197,12 @@ namespace Maps::Generator
         const int32_t width = world.w();
         const int32_t height = world.h();
 
+        auto mapBoundsCheck = [width, height]( int x, int y ) {
+            x = std::max( std::min( x, width - 1 ), 0 );
+            y = std::max( std::min( y, height - 1 ), 0 );
+            return x * width + y;
+        };
+
         // Step 1. Map generator configuration
         // TODO: Balanced set up only / Pyramid later
         const int playerCount = config.playerCount;
@@ -202,14 +216,22 @@ namespace Maps::Generator
         // const double radius = sqrt( playerArea / M_PI );
         // const int side = static_cast<int>( radius / sqrt( 2 ) );
 
-        auto mapBoundsCheck = [width, height]( int x, int y ) {
-            x = std::max( std::min( x, width - 1 ), 0 );
-            y = std::max( std::min( y, height - 1 ), 0 );
-            return x * width + y;
-        };
+        const uint32_t extendedWidth = width + 2;
+        std::vector<Node> data( extendedWidth * ( height + 2 ) );
+        for ( int y = 0; y < height; ++y ) {
+            const int rowIndex = y * width;
+            for ( int x = 0; x < width; ++x ) {
+                const int index = rowIndex + x;
+                Node & node = data[ConvertExtendedIndex( index, extendedWidth )];
+
+                node.index = index;
+                node.type = NodeType::OPEN;
+            }
+        }
 
         // Step 2. Determine region layout and placement
-        std::vector<int> regionCenters;
+        // Insert empty region that represents map borders
+        std::vector<Region> mapRegions = { { 0, 0, COLOR_NONE_FLAG, 0 } };
 
         const int neutralRegionCount = std::max( 1, expectedRegionCount - playerCount );
         const int innerLayer = std::min( neutralRegionCount, playerCount );
@@ -229,32 +251,12 @@ namespace Maps::Generator
 
                 const int x = width / 2 + static_cast<int>( cos( radians ) * distance * layer.second );
                 const int y = height / 2 + static_cast<int>( sin( radians ) * distance * layer.second );
-                regionCenters.push_back( mapBoundsCheck( x, y ) );
+                const int centerTile = mapBoundsCheck( x, y );
+
+                const uint32_t regionID = static_cast<uint32_t>( mapRegions.size() ); // Safe to do as we can't have so many regions
+                mapRegions.emplace_back( regionID, centerTile, COLOR_NONE_FLAG, config.regionSizeLimit );
+                data[ConvertExtendedIndex( centerTile, extendedWidth )].region = regionID;
             }
-        }
-
-        const uint32_t extendedWidth = width + 2;
-        std::vector<Node> data( extendedWidth * ( height + 2 ) );
-        for ( int y = 0; y < height; ++y ) {
-            const int rowIndex = y * width;
-            for ( int x = 0; x < width; ++x ) {
-                const int index = rowIndex + x;
-                Node & node = data[ConvertExtendedIndex( index, extendedWidth )];
-
-                node.index = index;
-                node.passable = DIRECTION_ALL;
-                node.type = NodeType::OPEN;
-                node.mapObject = 0;
-            }
-        }
-
-        size_t averageRegionSize = ( static_cast<size_t>( width ) * height * 2 ) / regionCenters.size();
-        std::vector<Region> mapRegions = { { 0, 0, false, 0 } };
-
-        for ( const int tileIndex : regionCenters ) {
-            const int regionID = static_cast<int>( mapRegions.size() ); // Safe to do as we can't have so many regions
-            mapRegions.emplace_back( regionID, tileIndex, COLOR_NONE_FLAG, averageRegionSize );
-            data[ConvertExtendedIndex( tileIndex, extendedWidth )].region = regionID;
         }
 
         // Step 3. Grow all regions one step at the time so they would compete for space
@@ -262,10 +264,11 @@ namespace Maps::Generator
         bool stillRoomToExpand = true;
         while ( stillRoomToExpand ) {
             stillRoomToExpand = false;
+            // Skip the border region
             for ( size_t regionID = 1; regionID < mapRegions.size(); ++regionID ) {
                 Region & region = mapRegions[regionID];
                 RegionExpansion( data, extendedWidth, region, offsets );
-                if ( region._lastProcessedNode != region._nodes.size() && region._nodes.size() < config.regionSizeLimit )
+                if ( region._lastProcessedNode != region._nodes.size() )
                     stillRoomToExpand = true;
             }
         }
@@ -294,7 +297,7 @@ namespace Maps::Generator
             return false;
         };
 
-        // Step 4. Reset world first
+        // Step 4. We're ready to save the result; reset the current world first
         world.generateForEditor( width );
 
         for ( Region & reg : mapRegions ) {
@@ -326,6 +329,7 @@ namespace Maps::Generator
             }
         }
 
+        // Step 5. Object placement
         for ( Region & reg : mapRegions ) {
             if ( reg._id == 0 )
                 continue;
@@ -412,15 +416,12 @@ namespace Maps::Generator
                     }
                 }
             }
+
+            Maps::updateRoadOnTile( world.GetTiles( reg._centerIndex ), true );
         }
 
         if ( config.terrainOnly ) {
             return true;
-        }
-
-        for ( const int tileIndex : regionCenters ) {
-            auto & tile = world.GetTiles( tileIndex );
-            Maps::updateRoadOnTile( tile, true );
         }
 
         // set up region connectors based on frequency settings & border length
