@@ -1251,6 +1251,7 @@ namespace
             static_assert( std::is_same_v<TileImageIndexType, uint8_t>, "Type of GetObjectSpriteIndex() has been changed, check the logic below" );
 
             currentTile.setObjectSpriteIndex( static_cast<uint8_t>( partInfo.icnIndex ) );
+            currentTile.setObjectLayerType( partInfo.layerType );
         }
 
         for ( const auto & partInfo : info.topLevelParts ) {
