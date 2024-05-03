@@ -32,6 +32,8 @@
 
 namespace Maps::Generator
 {
+    const int COLOR_NONE_FLAG = 6;
+
     enum
     {
         TOP = 0,
@@ -44,50 +46,53 @@ namespace Maps::Generator
         BOTTOM_LEFT = 7,
     };
 
-    enum
+    enum class NodeType
     {
-        REGION_NODE_BLOCKED = 0,
-        REGION_NODE_OPEN = 1,
-        REGION_NODE_BORDER = 2,
-        REGION_NODE_FOUND = 3
+        OPEN,
+        BORDER,
+        ACTION,
+        OBSTACLE,
+        PATH
     };
 
     struct Node
     {
         int index = -1;
-        uint32_t type = REGION_NODE_BLOCKED;
+        NodeType type = NodeType::OPEN;
+        uint32_t region = 0;
         uint16_t mapObject = 0;
         uint16_t passable = 0;
-        bool isWater = false;
 
         Node() = default;
         explicit Node( int index_ )
             : index( index_ )
-            , type( REGION_NODE_OPEN )
         {}
     };
 
     struct Region
     {
     public:
-        uint32_t _id = REGION_NODE_FOUND;
-        bool _isWater = false;
+        uint32_t _id = 0;
+        int32_t _centerIndex = -1;
         std::set<uint32_t> _neighbours;
         std::vector<Node> _nodes;
         size_t _lastProcessedNode = 0;
+        int _colorIndex = COLOR_NONE_FLAG;
 
         Region() = default;
 
-        Region(int regionIndex, int mapIndex, bool water, size_t expectedSize)
-            : _id(regionIndex)
-            , _isWater(water)
+        Region( int regionIndex, int mapIndex, int playerColor, size_t expectedSize )
+            : _id( regionIndex )
+            , _centerIndex( mapIndex )
+            , _colorIndex( playerColor )
         {
             _nodes.reserve( expectedSize );
             _nodes.emplace_back( mapIndex );
-            _nodes[0].type = regionIndex;
+            _nodes[0].region = regionIndex;
         }
 
-        size_t getNeighboursCount() const {
+        size_t getNeighboursCount() const
+        {
             return _neighbours.size();
         }
     };
@@ -127,14 +132,14 @@ namespace Maps::Generator
             }
             const int newIndex = ConvertExtendedIndex( nodeIndex, rawDataWidth ) + offsets[direction];
             Node & newTile = rawData[newIndex];
-            if ( newTile.passable & GetDirectionBitmask( direction, true ) && newTile.isWater == region._isWater ) {
-                if ( newTile.type == REGION_NODE_OPEN ) {
-                    newTile.type = region._id;
+            if ( newTile.passable & GetDirectionBitmask( direction, true ) ) {
+                if ( newTile.region == 0 ) {
+                    newTile.region = region._id;
                     region._nodes.push_back( newTile );
                 }
-                else if ( newTile.type >= REGION_NODE_BORDER && newTile.type != region._id ) {
-                    region._nodes[region._lastProcessedNode].type = REGION_NODE_BORDER;
-                    region._neighbours.insert( newTile.type );
+                else if ( newTile.region != region._id ) {
+                    region._nodes[region._lastProcessedNode].type = NodeType::BORDER;
+                    region._neighbours.insert( newTile.region );
                 }
             }
         }
@@ -235,19 +240,18 @@ namespace Maps::Generator
 
                 node.index = index;
                 node.passable = DIRECTION_ALL;
-                node.isWater = false;
-                node.type = REGION_NODE_OPEN;
+                node.type = NodeType::OPEN;
                 node.mapObject = 0;
             }
         }
 
         size_t averageRegionSize = ( static_cast<size_t>( width ) * height * 2 ) / regionCenters.size();
-        std::vector<Region> mapRegions = { { REGION_NODE_BLOCKED, 0, false, 0 }, { REGION_NODE_OPEN, 0, false, 0 }, { REGION_NODE_BORDER, 0, false, 0 } };
+        std::vector<Region> mapRegions = { { 0, 0, false, 0 } };
 
         for ( const int tileIndex : regionCenters ) {
             const int regionID = static_cast<int>( mapRegions.size() ); // Safe to do as we can't have so many regions
-            mapRegions.emplace_back( regionID, tileIndex, false, averageRegionSize );
-            data[ConvertExtendedIndex( tileIndex, extendedWidth )].type = regionID;
+            mapRegions.emplace_back( regionID, tileIndex, COLOR_NONE_FLAG, averageRegionSize );
+            data[ConvertExtendedIndex( tileIndex, extendedWidth )].region = regionID;
         }
 
         // Step 3. Grow all regions one step at the time so they would compete for space
@@ -255,7 +259,7 @@ namespace Maps::Generator
         bool stillRoomToExpand = true;
         while ( stillRoomToExpand ) {
             stillRoomToExpand = false;
-            for ( size_t regionID = REGION_NODE_FOUND; regionID < mapRegions.size(); ++regionID ) {
+            for ( size_t regionID = 1; regionID < mapRegions.size(); ++regionID ) {
                 Region & region = mapRegions[regionID];
                 RegionExpansion( data, extendedWidth, region, offsets );
                 if ( region._lastProcessedNode != region._nodes.size() && region._nodes.size() < config.regionSizeLimit )
@@ -290,18 +294,12 @@ namespace Maps::Generator
         // Step 4. Reset world first
         world.generateForEditor( width );
 
-        std::vector<int> cache( width * height );
         for ( Region & reg : mapRegions ) {
-            if ( reg._id < REGION_NODE_FOUND )
+            if ( reg._id == 0 )
                 continue;
 
             const int terrainType = 1 << ( reg._id % 8 );
             for ( const Node & node : reg._nodes ) {
-                if ( cache[node.index] >= REGION_NODE_FOUND ) {
-                    break;
-                }
-                cache[node.index] = node.type;
-
                 // connect regions through teleports
                 MapsIndexes exits;
 
@@ -314,7 +312,7 @@ namespace Maps::Generator
 
                 for ( const int exitIndex : exits ) {
                     // neighbours is a set that will force the uniqueness
-                    reg._neighbours.insert( cache[exitIndex] );
+                    reg._neighbours.insert( node.region );
                 }
                 world.GetTiles( node.index ).setTerrain( Maps::Ground::getRandomTerrainImageIndex( terrainType, true ), false, false );
             }
@@ -326,7 +324,7 @@ namespace Maps::Generator
         }
 
         for ( Region & reg : mapRegions ) {
-            if ( reg._id < REGION_NODE_FOUND )
+            if ( reg._id == 0 )
                 continue;
 
             DEBUG_LOG( DBG_ENGINE, DBG_WARN, "Region #" << reg._id << " size " << reg._nodes.size() << " has " << reg._neighbours.size() << "neighbours" )
@@ -345,7 +343,7 @@ namespace Maps::Generator
                 yMin = std::max( yMin, nodeY );
                 yMax = std::min( yMax, nodeY );
 
-                if ( node.type == REGION_NODE_BORDER ) {
+                if ( node.type == NodeType::BORDER ) {
                     Maps::setTerrainOnTiles( node.index, node.index, terrainType );
                 }
             }
@@ -354,11 +352,10 @@ namespace Maps::Generator
                 continue;
             }
 
-            const int regionX = regionCenters[reg._id - 3] % width;
-            const int regionY = regionCenters[reg._id - 3] / width;
+            const int regionX = reg._centerIndex % width;
+            const int regionY = reg._centerIndex / width;
             const int castleX = std::min( std::max( ( ( xMin + xMax ) / 2 + regionX ) / 2, 4 ), width - 4 );
             const int castleY = std::min( std::max( ( ( yMin + yMax ) / 2 + regionY ) / 2, 3 ), height - 3 );
-            const int color = reg._id % 6;
 
             auto & tile = world.GetTiles( castleY * width + castleX );
             fheroes2::Point tilePos = tile.GetCenter();
@@ -377,8 +374,9 @@ namespace Maps::Generator
                 Maps::setLastObjectUID( objectId );
                 setObjectOnTile( mapFormat, tile, Maps::ObjectGroup::KINGDOM_TOWNS, 12 );
 
+                const uint8_t color = Color::IndexToColor( reg._colorIndex );
                 // By default use random (default) army for the neutral race town/castle.
-                if ( Color::IndexToColor( color ) == Color::NONE ) {
+                if ( color == Color::NONE ) {
                     Maps::setDefaultCastleDefenderArmy( mapFormat.castleMetadata[Maps::getLastObjectUID()] );
                 }
 
@@ -386,17 +384,17 @@ namespace Maps::Generator
                 assert( tile.GetIndex() > 0 && tile.GetIndex() < world.w() * world.h() - 1 );
                 Maps::setLastObjectUID( objectId );
 
-                if ( !setObjectOnTile( mapFormat, world.GetTiles( tile.GetIndex() - 1 ), Maps::ObjectGroup::LANDSCAPE_FLAGS, color * 2 ) ) {
+                if ( !setObjectOnTile( mapFormat, world.GetTiles( tile.GetIndex() - 1 ), Maps::ObjectGroup::LANDSCAPE_FLAGS, reg._colorIndex * 2 ) ) {
                     return false;
                 }
 
                 Maps::setLastObjectUID( objectId );
 
-                if ( !setObjectOnTile( mapFormat, world.GetTiles( tile.GetIndex() + 1 ), Maps::ObjectGroup::LANDSCAPE_FLAGS, color * 2 + 1 ) ) {
+                if ( !setObjectOnTile( mapFormat, world.GetTiles( tile.GetIndex() + 1 ), Maps::ObjectGroup::LANDSCAPE_FLAGS, reg._colorIndex * 2 + 1 ) ) {
                     return false;
                 }
 
-                world.addCastle( tile.GetIndex(), Race::IndexToRace( 12 ), Color::IndexToColor( color ) );
+                world.addCastle( tile.GetIndex(), Race::IndexToRace( 12 ), color );
             }
 
             const std::vector<int> resoures = { Resource::WOOD, Resource::ORE, Resource::CRYSTAL, Resource::SULFUR, Resource::GEMS, Resource::MERCURY, Resource::GOLD };
@@ -405,7 +403,7 @@ namespace Maps::Generator
                     const auto & node = Rand::Get( reg._nodes );
                     Maps::Tiles & mineTile = world.GetTiles( node.index );
                     const int32_t mineType = fheroes2::getMineObjectInfoId( resource, mineTile.GetGround() );
-                    if ( node.type != REGION_NODE_BORDER && objectPlacer( mineTile, Maps::ObjectGroup::ADVENTURE_MINES, mineType ) ) {
+                    if ( node.type == NodeType::OPEN && objectPlacer( mineTile, Maps::ObjectGroup::ADVENTURE_MINES, mineType ) ) {
                         break;
                     }
                 }
