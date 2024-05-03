@@ -2111,7 +2111,7 @@ namespace Maps
 
                 // Spell ID has a value of 1 bigger than in the original game.
                 Artifact tempArt( art );
-                tempArt.SetSpell( tile.metadata()[0] + 1 );
+                tempArt.SetSpell( static_cast<int>( tile.metadata()[0] ) + 1 );
 
                 const uint32_t spell = std::clamp( static_cast<uint32_t>( tempArt.getSpellId() ), static_cast<uint32_t>( Spell::FIREBALL ), static_cast<uint32_t>( Spell::SETWGUARDIAN ) );
 
