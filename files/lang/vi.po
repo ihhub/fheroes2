@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-21 05:05+0000\n"
+"POT-Creation-Date: 2024-05-01 11:10+0000\n"
 "PO-Revision-Date: 2024-02-20 08:49+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3912,6 +3912,17 @@ msgstr ""
 msgid "Map filename"
 msgstr "Tệp bản đồ"
 
+#, fuzzy
+msgid ""
+"Do you wish to return to the game's Main Menu? All unsaved changes will be "
+"lost."
+msgstr ""
+"Ngươi có chắc chắn muốn tạo bản đồ mới không? (Mọi thay đổi chưa được lưu "
+"đối với bản đồ hiện tại sẽ bị mất.)"
+
+msgid "Editor"
+msgstr "Biên tập"
+
 msgid ""
 "Are you sure you want to load a new map? (Any unsaved changes to the current "
 "map will be lost.)"
@@ -3955,11 +3966,12 @@ msgstr "Bắn %{monster}"
 msgid "Objects cannot be placed outside the map."
 msgstr "Đối tượng không thể đặt ra ngoài bản đồ."
 
+#, fuzzy
+msgid "Action objects must be placed on clear tiles."
+msgstr "Đối tượng đại dương phải đặt trên mặt nước."
+
 msgid "Monsters cannot be placed on water."
 msgstr "Quái vật không thể đặt trên nước."
-
-msgid "Choose a tile which does not contain any objects."
-msgstr "Chọn một ô mà không chứa bất kỳ đối tượng nào."
 
 msgid "Treasures cannot be placed on water."
 msgstr "Kho báu không thể đặt trên nước."
@@ -4734,6 +4746,10 @@ msgstr "hoàn tác tác vụ cuối"
 msgid "hotkey|redo last action"
 msgstr "thực hiện lại tác vụ cuối"
 
+#, fuzzy
+msgid "hotkey|open game main menu"
+msgstr "trình đơn bản đồ mới"
+
 msgid "hotkey|roland campaign"
 msgstr "chiến dịch roland"
 
@@ -4991,9 +5007,6 @@ msgstr "Màn hình Thị trấn"
 
 msgid "Army Actions"
 msgstr "Hành động Quân đội"
-
-msgid "Editor"
-msgstr "Biên tập"
 
 msgid "The save file is corrupted."
 msgstr "File lưu bị hỏng."
@@ -11709,6 +11722,9 @@ msgstr ""
 "Kiểm tra phiên bản mới nhất của trò chơi tại\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Choose a tile which does not contain any objects."
+#~ msgstr "Chọn một ô mà không chứa bất kỳ đối tượng nào."
 
 #~ msgid "Set Defense Skill"
 #~ msgstr "Chọn Kỹ năng Phòng thủ"

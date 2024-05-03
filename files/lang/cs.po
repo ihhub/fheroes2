@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-21 05:05+0000\n"
+"POT-Creation-Date: 2024-05-01 11:10+0000\n"
 "PO-Revision-Date: 2023-09-24 16:05+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Czech <cs@li.org>\n"
@@ -3902,6 +3902,15 @@ msgstr ""
 
 #, fuzzy
 msgid ""
+"Do you wish to return to the game's Main Menu? All unsaved changes will be "
+"lost."
+msgstr "Jsi si jist, že chceš načíst novou hru? (Aktuální hra bude ztracena.)"
+
+msgid "Editor"
+msgstr ""
+
+#, fuzzy
+msgid ""
 "Are you sure you want to load a new map? (Any unsaved changes to the current "
 "map will be lost.)"
 msgstr "Jsi si jist, že chceš načíst novou hru? (Aktuální hra bude ztracena.)"
@@ -3945,10 +3954,11 @@ msgstr "Vystřel na %{monster}"
 msgid "Objects cannot be placed outside the map."
 msgstr ""
 
-msgid "Monsters cannot be placed on water."
-msgstr ""
+#, fuzzy
+msgid "Action objects must be placed on clear tiles."
+msgstr "Toto město nemůže být povýšeno na hrad."
 
-msgid "Choose a tile which does not contain any objects."
+msgid "Monsters cannot be placed on water."
 msgstr ""
 
 msgid "Treasures cannot be placed on water."
@@ -4717,6 +4727,10 @@ msgstr "Zobrazit následující město"
 msgid "hotkey|redo last action"
 msgstr "Zobrazit následující město"
 
+#, fuzzy
+msgid "hotkey|open game main menu"
+msgstr "Zobrazit následující město"
+
 msgid "hotkey|roland campaign"
 msgstr ""
 
@@ -4986,9 +5000,6 @@ msgid "Town Screen"
 msgstr "Obrazovka hrdiny"
 
 msgid "Army Actions"
-msgstr ""
-
-msgid "Editor"
 msgstr ""
 
 msgid "The save file is corrupted."

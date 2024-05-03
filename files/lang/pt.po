@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-21 05:05+0000\n"
+"POT-Creation-Date: 2024-05-01 11:10+0000\n"
 "PO-Revision-Date: 2024-04-08 22:19-0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
@@ -3886,6 +3886,17 @@ msgstr ""
 msgid "Map filename"
 msgstr "Nome do arquivo de mapa"
 
+#, fuzzy
+msgid ""
+"Do you wish to return to the game's Main Menu? All unsaved changes will be "
+"lost."
+msgstr ""
+"Tem certeza de que deseja criar um novo mapa? (Todas as alterações não "
+"salvas no mapa atual serão perdidas.)"
+
+msgid "Editor"
+msgstr "Editor"
+
 msgid ""
 "Are you sure you want to load a new map? (Any unsaved changes to the current "
 "map will be lost.)"
@@ -3929,11 +3940,12 @@ msgstr "Definir Quantidade de %{monster}"
 msgid "Objects cannot be placed outside the map."
 msgstr "Objetos não podem ser colocados fora do mapa."
 
+#, fuzzy
+msgid "Action objects must be placed on clear tiles."
+msgstr "Objeto oceânico deve ser colocado na água."
+
 msgid "Monsters cannot be placed on water."
 msgstr "Monstros não podem ser colocados na água."
-
-msgid "Choose a tile which does not contain any objects."
-msgstr "Escolha um ladrilho que não contenha nenhum objeto."
 
 msgid "Treasures cannot be placed on water."
 msgstr "Tesouros não podem ser colocados na água."
@@ -4691,6 +4703,10 @@ msgstr "desfazer última ação"
 msgid "hotkey|redo last action"
 msgstr "refazer última ação"
 
+#, fuzzy
+msgid "hotkey|open game main menu"
+msgstr "menu novo de mapa"
+
 msgid "hotkey|roland campaign"
 msgstr "campanha de Roland"
 
@@ -4947,9 +4963,6 @@ msgstr "Tela da Cidade"
 
 msgid "Army Actions"
 msgstr "Ações do Exército"
-
-msgid "Editor"
-msgstr "Editor"
 
 msgid "The save file is corrupted."
 msgstr "O arquivo salvo está corrompido."
@@ -11583,3 +11596,6 @@ msgstr ""
 "Verifique a mais nova versão do jogo em\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Choose a tile which does not contain any objects."
+#~ msgstr "Escolha um ladrilho que não contenha nenhum objeto."

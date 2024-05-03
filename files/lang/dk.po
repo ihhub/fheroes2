@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-21 05:05+0000\n"
+"POT-Creation-Date: 2024-05-01 11:10+0000\n"
 "PO-Revision-Date: 2024-03-05 13:55+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
@@ -3918,6 +3918,17 @@ msgstr ""
 msgid "Map filename"
 msgstr "Kort-filnavn"
 
+#, fuzzy
+msgid ""
+"Do you wish to return to the game's Main Menu? All unsaved changes will be "
+"lost."
+msgstr ""
+"Er du sikker på, at du vil oprette et nyt kort? (Alle ikke-gemte ændringer "
+"af det nuværende kort, vil gå tabt.)"
+
+msgid "Editor"
+msgstr "Editor"
+
 msgid ""
 "Are you sure you want to load a new map? (Any unsaved changes to the current "
 "map will be lost.)"
@@ -3962,11 +3973,12 @@ msgstr "Skyd %{monster}"
 msgid "Objects cannot be placed outside the map."
 msgstr "Objekter kan ikke placeres udenfor kortet."
 
+#, fuzzy
+msgid "Action objects must be placed on clear tiles."
+msgstr "Hav-objekter må kun placeres på vand."
+
 msgid "Monsters cannot be placed on water."
 msgstr "Monstre kan ikke placeres på vand."
-
-msgid "Choose a tile which does not contain any objects."
-msgstr "Vælg et felt, som ikke indeholder nogen objekter."
 
 msgid "Treasures cannot be placed on water."
 msgstr "Skatte kan ikke placeres på vand."
@@ -4727,6 +4739,10 @@ msgstr "Fortryd forrige handling"
 msgid "hotkey|redo last action"
 msgstr "Gentag forrige handling"
 
+#, fuzzy
+msgid "hotkey|open game main menu"
+msgstr "Nyt-kort menu"
+
 msgid "hotkey|roland campaign"
 msgstr "Felttoget: Roland"
 
@@ -4983,9 +4999,6 @@ msgstr "Borg-vindue"
 
 msgid "Army Actions"
 msgstr "Hær-handlinger"
-
-msgid "Editor"
-msgstr "Editor"
 
 msgid "The save file is corrupted."
 msgstr "Det gemte spil er korrupt."
@@ -11599,6 +11612,9 @@ msgstr ""
 "Check den nyeste version af spillet på\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Choose a tile which does not contain any objects."
+#~ msgstr "Vælg et felt, som ikke indeholder nogen objekter."
 
 #~ msgid "Set Defense Skill"
 #~ msgstr "Indstil forsvarsevne"
