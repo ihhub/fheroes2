@@ -2113,7 +2113,8 @@ namespace Maps
                 Artifact tempArt( art );
                 tempArt.SetSpell( static_cast<int>( tile.metadata()[0] ) + 1 );
 
-                const uint32_t spell = std::clamp( static_cast<uint32_t>( tempArt.getSpellId() ), static_cast<uint32_t>( Spell::FIREBALL ), static_cast<uint32_t>( Spell::SETWGUARDIAN ) );
+                const uint32_t spell
+                    = std::clamp( static_cast<uint32_t>( tempArt.getSpellId() ), static_cast<uint32_t>( Spell::FIREBALL ), static_cast<uint32_t>( Spell::SETWGUARDIAN ) );
 
                 tile.metadata()[1] = spell;
                 tile.metadata()[2] = static_cast<uint32_t>( ArtifactCaptureCondition::CONTAINS_SPELL );
