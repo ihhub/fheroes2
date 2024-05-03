@@ -397,7 +397,7 @@ fheroes2::GameMode Game::MainMenu( const bool isFirstGameRun )
         else if ( le.MousePressRight( buttonNewGame.area() ) )
             fheroes2::showStandardTextMessage( _( "New Game" ), _( "Start a single or multi-player game." ), Dialog::ZERO );
         else if ( le.MousePressRight( buttonEditor.area() ) ) {
-            fheroes2::showStandardTextMessage( _( "Editor" ), _( "The Editor allows to create new and modify and existing maps for the game." ), Dialog::ZERO );
+            fheroes2::showStandardTextMessage( _( "Editor" ), _( "Create new or modify existing maps." ), Dialog::ZERO );
         }
         else if ( le.MousePressRight( settingsArea ) )
             fheroes2::showStandardTextMessage( _( "Game Settings" ), _( "Change language, resolution and settings of the game." ), Dialog::ZERO );
