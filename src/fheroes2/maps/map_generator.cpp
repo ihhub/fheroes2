@@ -35,6 +35,8 @@ namespace Maps::Generator
     // ObjectInfo ObjctGroup based indicies do not match old objects
     const int NEUTRAL_COLOR = 6;
     const int RANDOM_CASTLE_INDEX = 12;
+    const std::vector<int> playerStartingTerrain = { Ground::GRASS, Ground::DIRT, Ground::SNOW, Ground::LAVA, Ground::WASTELAND };
+    const std::vector<int> neutralTerrain = { Ground::GRASS, Ground::DIRT, Ground::SNOW, Ground::LAVA, Ground::WASTELAND, Ground::BEACH, Ground::SWAMP, Ground::DESERT };
 
     enum
     {
@@ -81,14 +83,16 @@ namespace Maps::Generator
         size_t _sizeLimit;
         size_t _lastProcessedNode = 0;
         int _colorIndex = NEUTRAL_COLOR;
+        int _groundType = Ground::GRASS;
 
         Region() = default;
 
-        Region( uint32_t regionIndex, int32_t mapIndex, int playerColor, size_t expectedSize )
+        Region( uint32_t regionIndex, int32_t mapIndex, int playerColor, int ground, size_t expectedSize )
             : _id( regionIndex )
             , _sizeLimit( expectedSize )
             , _centerIndex( mapIndex )
             , _colorIndex( playerColor )
+            , _groundType( ground )
         {
             _nodes.reserve( expectedSize );
             _nodes.emplace_back( mapIndex );
@@ -311,8 +315,8 @@ namespace Maps::Generator
         }
 
         // Step 2. Determine region layout and placement
-        // Insert empty region that represents map borders
-        std::vector<Region> mapRegions = { { 0, 0, NEUTRAL_COLOR, 0 } };
+        // Insert empty region that represents water and map edges
+        std::vector<Region> mapRegions = { { 0, 0, NEUTRAL_COLOR, Ground::WATER, 0 } };
 
         const int neutralRegionCount = std::max( 1, expectedRegionCount - playerCount );
         const int innerLayer = std::min( neutralRegionCount, playerCount );
@@ -337,10 +341,13 @@ namespace Maps::Generator
                 const int centerTile = mapBoundsCheck( x, y );
 
                 const int factor = regionCount / playerCount;
-                const int regionColor = ( layer == 1 && i % factor == 0 ) ? i / factor : NEUTRAL_COLOR;
+                const bool isPlayerRegion = layer == 1 && ( i % factor ) == 0;
+
+                const int groundType = isPlayerRegion ? Rand::Get( playerStartingTerrain ) : Rand::Get( neutralTerrain );
+                const int regionColor = isPlayerRegion ? i / factor : NEUTRAL_COLOR;
 
                 const uint32_t regionID = static_cast<uint32_t>( mapRegions.size() );
-                mapRegions.emplace_back( regionID, centerTile, regionColor, config.regionSizeLimit );
+                mapRegions.emplace_back( regionID, centerTile, regionColor, groundType, config.regionSizeLimit );
                 data[ConvertExtendedIndex( centerTile, extendedWidth )].region = regionID;
             }
         }
@@ -366,7 +373,6 @@ namespace Maps::Generator
             if ( region._id == 0 )
                 continue;
 
-            const int terrainType = 1 << ( region._id % 8 );
             for ( const Node & node : region._nodes ) {
                 // connect regions through teleports
                 MapsIndexes exits;
@@ -382,7 +388,7 @@ namespace Maps::Generator
                     // neighbours is a set that will force the uniqueness
                     region._neighbours.insert( node.region );
                 }
-                world.GetTiles( node.index ).setTerrain( Maps::Ground::getRandomTerrainImageIndex( terrainType, true ), false, false );
+                world.GetTiles( node.index ).setTerrain( Maps::Ground::getRandomTerrainImageIndex( region._groundType, true ), false, false );
             }
 
             // Fix missing references
@@ -403,7 +409,6 @@ namespace Maps::Generator
             int yMin = 0;
             int yMax = height;
 
-            const int terrainType = 1 << ( region._id % 8 );
             for ( const Node & node : region._nodes ) {
                 const int nodeX = node.index % width;
                 const int nodeY = node.index / width;
@@ -413,12 +418,8 @@ namespace Maps::Generator
                 yMax = std::min( yMax, nodeY );
 
                 if ( node.type == NodeType::BORDER ) {
-                    Maps::setTerrainOnTiles( node.index, node.index, terrainType );
+                    Maps::setTerrainOnTiles( node.index, node.index, region._groundType );
                 }
-            }
-
-            if ( config.terrainOnly ) {
-                continue;
             }
 
             if ( region._colorIndex != NEUTRAL_COLOR && !placeCastle( mapFormat, region, ( xMin + xMax ) / 2, ( yMin + yMax ) / 2 ) ) {
@@ -428,6 +429,10 @@ namespace Maps::Generator
             else if ( region._nodes.size() > 300 ) {
                 // place non-mandatory castles in bigger neutral regions
                 placeCastle( mapFormat, region, ( xMin + xMax ) / 2, ( yMin + yMax ) / 2 );
+            }
+
+            if ( config.basicOnly ) {
+                continue;
             }
 
             const std::vector<int> resoures = { Resource::WOOD, Resource::ORE, Resource::CRYSTAL, Resource::SULFUR, Resource::GEMS, Resource::MERCURY, Resource::GOLD };
@@ -441,10 +446,6 @@ namespace Maps::Generator
             }
 
             Maps::updateRoadOnTile( world.GetTiles( region._centerIndex ), true );
-        }
-
-        if ( config.terrainOnly ) {
-            return true;
         }
 
         // set up region connectors based on frequency settings & border length

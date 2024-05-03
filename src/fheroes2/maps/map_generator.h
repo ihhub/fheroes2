@@ -28,7 +28,7 @@ namespace Maps
         {
             int playerCount = 2;
             int regionSizeLimit = 300;
-            bool terrainOnly = true;
+            bool basicOnly = true;
         };
 
         bool generateWorld( Map_Format::MapFormat & mapFormat, Configuration config );

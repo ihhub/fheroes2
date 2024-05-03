@@ -538,7 +538,6 @@ namespace Interface
                     Maps::Generator::Configuration rmgConfig;
                     rmgConfig.playerCount = _playerCount;
                     rmgConfig.regionSizeLimit = _regionSizeLimit;
-                    rmgConfig.terrainOnly = false;
 
                     if ( Maps::Generator::generateWorld( _mapFormat, rmgConfig ) ) {
                         _redraw |= mapUpdateFlags;
