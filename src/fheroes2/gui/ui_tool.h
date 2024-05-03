@@ -21,12 +21,10 @@
 #pragma once
 
 #include <chrono>
-#include <cstddef>
 #include <cstdint>
 #include <deque>
 #include <functional>
 #include <memory>
-#include <string>
 #include <vector>
 
 #include "image.h"

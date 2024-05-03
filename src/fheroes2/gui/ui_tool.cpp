@@ -24,13 +24,13 @@
 #include <array>
 #include <cassert>
 #include <cmath>
+#include <cstddef>
 #include <cstdlib>
 #include <cstring>
 #include <ctime>
 #include <string>
 #include <utility>
 
-#include "agg_image.h"
 #include "cursor.h"
 #include "game_delays.h"
 #include "image_palette.h"
