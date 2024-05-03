@@ -39,6 +39,7 @@
 #include "maps_tiles.h"
 #include "math_base.h"
 #include "mp2.h"
+#include "resource.h"
 
 namespace
 {

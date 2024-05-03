@@ -30,9 +30,6 @@
 #include <string>
 #include <vector>
 
-#include <logging.h>
-#include <rand.h>
-
 #include "agg_image.h"
 #include "artifact.h"
 #include "audio_manager.h"

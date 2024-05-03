@@ -18,7 +18,11 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #pragma once
-#include "map_format_info.h"
+#include <cstdint>
+namespace Maps::Map_Format
+{
+    struct MapFormat;
+}
 
 namespace Maps::Generator
 {

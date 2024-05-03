@@ -20,12 +20,31 @@
 
 #include "map_generator.h"
 
+#include <algorithm>
+#include <cassert>
+#include <cmath>
+#include <cstddef>
+#include <map>
+#include <memory>
+#include <ostream>
+#include <set>
+#include <utility>
+#include <vector>
+
+#include "color.h"
+#include "direction.h"
+#include "ground.h"
 #include "logging.h"
 #include "map_format_helper.h"
+#include "map_format_info.h"
 #include "map_object_info.h"
+#include "maps.h"
+#include "maps_tiles.h"
 #include "maps_tiles_helper.h"
+#include "math_base.h"
 #include "race.h"
 #include "rand.h"
+#include "resource.h"
 #include "ui_map_object.h"
 #include "world.h"
 #include "world_object_uid.h"
@@ -292,11 +311,11 @@ namespace Maps::Generator
 
         // Step 1. Map generator configuration
         // TODO: Balanced set up only / Pyramid later
-        const int playerCount = config.playerCount;
+        const int playerCount = static_cast<int>( config.playerCount );
 
         // Aiming for region size to be ~300 tiles in a 200-500 range
         // const int minimumRegionCount = playerCount + 1;
-        const int expectedRegionCount = ( width * height ) / config.regionSizeLimit;
+        const int expectedRegionCount = ( width * height ) / static_cast<int>( config.regionSizeLimit );
 
         const uint32_t extendedWidth = width + 2;
         std::vector<Node> data( static_cast<size_t>( extendedWidth ) * ( height + 2 ) );
@@ -385,7 +404,7 @@ namespace Maps::Generator
             if ( region._id == 0 )
                 continue;
 
-            DEBUG_LOG( DBG_ENGINE, DBG_WARN, "Region #" << region._id << " size " << region._nodes.size() << " has " << region._neighbours.size() << "neighbours" )
+            DEBUG_LOG( DBG_ENGINE, DBG_TRACE, "Region #" << region._id << " size " << region._nodes.size() << " has " << region._neighbours.size() << "neighbours" )
 
             int xMin = 0;
             int xMax = width;
