@@ -804,6 +804,7 @@ int MP2::getActionObjectDirection( const MapObjectType objectType )
     case OBJ_BUOY:
     case OBJ_CAMPFIRE:
     case OBJ_COAST:
+    case OBJ_EVENT:
     case OBJ_FLOTSAM:
     case OBJ_GENIE_LAMP:
     case OBJ_HERO:
