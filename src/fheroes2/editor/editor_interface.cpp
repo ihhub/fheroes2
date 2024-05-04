@@ -266,6 +266,19 @@ namespace
                     assert( mapFormat.castleMetadata.find( objectId ) != mapFormat.castleMetadata.end() );
                     mapFormat.castleMetadata.erase( objectId );
 
+                    // There could be a road in front of the castle entrance. Remove it because there is no entrance to the castle anymore.
+                    const size_t bottomTileIndex = mapTileIndex + mapFormat.size;
+                    assert( bottomTileIndex < mapFormat.tiles.size() );
+                    auto & bottomTileObjects = mapFormat.tiles[bottomTileIndex].objects;
+                    const bool isRoadAtBottom
+                        = std::find_if( bottomTileObjects.begin(), bottomTileObjects.end(),
+                                        []( const Maps::Map_Format::ObjectInfo & mapObject ) { return mapObject.group == Maps::ObjectGroup::ROADS; } )
+                          != bottomTileObjects.end();
+                    if ( isRoadAtBottom ) {
+                        // TODO: Update (not remove) the road. It may be done properly only after roads handling will be moved from 'world' tiles to 'Map_Format' tiles.
+                        Maps::updateRoadOnTile( world.GetTiles( static_cast<int32_t>( bottomTileIndex ) ), false );
+                    }
+
                     needRedraw = true;
                 }
                 else if ( objectIter->group == Maps::ObjectGroup::ROADS ) {
