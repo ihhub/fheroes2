@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-28 06:50+0000\n"
+"POT-Creation-Date: 2024-05-01 11:10+0000\n"
 "PO-Revision-Date: 2023-09-04 21:55+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -3918,11 +3918,12 @@ msgstr "%{monster} lövése"
 msgid "Objects cannot be placed outside the map."
 msgstr "Tárgyakat nem lehet a térképen kívülre helyezni."
 
+#, fuzzy
+msgid "Action objects must be placed on clear tiles."
+msgstr "Tengeri objektumot vízre kell elhelyezni."
+
 msgid "Monsters cannot be placed on water."
 msgstr "Vízen nem helyezhetők el lények."
-
-msgid "Choose a tile which does not contain any objects."
-msgstr "Olyan térképpontot válassz, ahol nincsenek még tárgyak."
 
 msgid "Treasures cannot be placed on water."
 msgstr "Vízen nem helyezhetők el kincsek."
@@ -11456,6 +11457,9 @@ msgstr ""
 "Letöltheted a legújabb verziót innen:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Choose a tile which does not contain any objects."
+#~ msgstr "Olyan térképpontot válassz, ahol nincsenek még tárgyak."
 
 #~ msgid "Set Defense Skill"
 #~ msgstr "Védőerő beállítása"
