@@ -690,7 +690,10 @@ int Maps::Tiles::getOriginalPassability() const
 {
     const MP2::MapObjectType objectType = GetObject( false );
 
-    if ( MP2::isActionObject( objectType ) ) {
+    // Editor and game share the same passabilities.
+    // The only object which is hidden in the game is event.
+    // Since event has all direction passability, then using the function for the Editor is acceptable.
+    if ( MP2::isEditorActionObject( objectType ) ) {
         return MP2::getActionObjectDirection( objectType );
     }
 

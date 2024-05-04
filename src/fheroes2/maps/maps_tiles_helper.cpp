@@ -1228,7 +1228,7 @@ namespace
             assert( partInfo.objectType != MP2::OBJ_NONE );
 
             bool setObjectType = true;
-            if ( !MP2::isActionObject( partInfo.objectType ) ) {
+            if ( !MP2::isEditorActionObject( partInfo.objectType ) ) {
                 for ( const auto & addon : currentTile.getTopLayerAddons() ) {
                     const MP2::MapObjectType type = Maps::getObjectTypeByIcn( addon._objectIcnType, addon._imageIndex );
                     if ( type != MP2::OBJ_NONE ) {

@@ -4796,7 +4796,7 @@ namespace
             const auto & objects = objectData[groupType];
 
             for ( const auto & objectInfo : objects ) {
-                assert( MP2::isActionObject( objectInfo.objectType ) || objectInfo.objectType == MP2::OBJ_EVENT );
+                assert( MP2::isEditorActionObject( objectInfo.objectType ) );
             }
         }
 #endif
