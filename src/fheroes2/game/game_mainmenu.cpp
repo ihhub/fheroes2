@@ -297,9 +297,15 @@ fheroes2::GameMode Game::MainMenu( const bool isFirstGameRun )
 
     uint32_t lantern_frame = 0;
 
-    std::array<ButtonInfo, 6> buttons{ ButtonInfo{ NEWGAME_DEFAULT, buttonNewGame, false, false },       ButtonInfo{ LOADGAME_DEFAULT, buttonLoadGame, false, false },
+    const bool isPOLPresent = Game::isPriceOfLoyaltyCampaignPresent();
+
+    std::vector<ButtonInfo> buttons{ ButtonInfo{ NEWGAME_DEFAULT, buttonNewGame, false, false },       ButtonInfo{ LOADGAME_DEFAULT, buttonLoadGame, false, false },
                                        ButtonInfo{ HIGHSCORES_DEFAULT, buttonHighScores, false, false }, ButtonInfo{ CREDITS_DEFAULT, buttonCredits, false, false },
-                                       ButtonInfo{ EDITOR_DEFAULT, buttonEditor, false, false },         ButtonInfo{ QUIT_DEFAULT, buttonQuit, false, false } };
+                                       ButtonInfo{ QUIT_DEFAULT, buttonQuit, false, false } };
+
+    if ( isPOLPresent ) {
+        buttons.emplace_back( ButtonInfo{ EDITOR_DEFAULT, buttonEditor, false, false } );
+    }
 
     for ( size_t i = 0; le.MouseMotion() && i < buttons.size(); ++i ) {
         const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::BTNSHNGL, buttons[i].frame );
@@ -377,12 +383,8 @@ fheroes2::GameMode Game::MainMenu( const bool isFirstGameRun )
 
             return fheroes2::GameMode::MAIN_MENU;
         }
-        else if ( conf.isEditorEnabled() && ( HotKeyPressEvent( HotKeyEvent::EDITOR_MAIN_MENU ) || le.MouseClickLeft( buttonEditor.area() ) ) ) {
-            if ( Game::isPriceOfLoyaltyCampaignPresent() ) {
-                return fheroes2::GameMode::EDITOR_MAIN_MENU;
-            }
-
-            fheroes2::showStandardTextMessage( _( "Editor" ), _( "The Editor requires \"The Price of Loyalty\" expansion files to work." ), Dialog::OK );
+        else if ( isPOLPresent && ( HotKeyPressEvent( HotKeyEvent::EDITOR_MAIN_MENU ) || le.MouseClickLeft( buttonEditor.area() ) ) ) {
+            return fheroes2::GameMode::EDITOR_MAIN_MENU;
         }
 
         // right info
@@ -396,7 +398,7 @@ fheroes2::GameMode Game::MainMenu( const bool isFirstGameRun )
             fheroes2::showStandardTextMessage( _( "High Scores" ), _( "View the high scores screen." ), Dialog::ZERO );
         else if ( le.MousePressRight( buttonNewGame.area() ) )
             fheroes2::showStandardTextMessage( _( "New Game" ), _( "Start a single or multi-player game." ), Dialog::ZERO );
-        else if ( le.MousePressRight( buttonEditor.area() ) ) {
+        else if ( isPOLPresent && le.MousePressRight( buttonEditor.area() ) ) {
             fheroes2::showStandardTextMessage( _( "Editor" ), _( "Create new or modify existing maps." ), Dialog::ZERO );
         }
         else if ( le.MousePressRight( settingsArea ) )

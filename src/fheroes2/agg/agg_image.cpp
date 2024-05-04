@@ -3186,10 +3186,14 @@ namespace fheroes2
                         original.image()[195460] = 31;
                     }
 
-                    Sprite editorIcon;
-                    h2d::readImage( "main_menu_editor_icon.image", editorIcon );
+                    // Since we cannot access game settings from here we are checking an existance
+                    // of one of POL resources as an indicator for this version.
+                    if ( !::AGG::getDataFromAggFile( ICN::GetString( ICN::X_TRACK1 ) ).empty() ) {
+                        Sprite editorIcon;
+                        h2d::readImage( "main_menu_editor_icon.image", editorIcon );
 
-                    Blit( editorIcon, 0, 0, original, editorIcon.x(), editorIcon.y(), editorIcon.width(), editorIcon.height() );
+                        Blit( editorIcon, 0, 0, original, editorIcon.x(), editorIcon.y(), editorIcon.width(), editorIcon.height() );
+                    }
                 }
                 return true;
             case ICN::BTNSHNGL:
