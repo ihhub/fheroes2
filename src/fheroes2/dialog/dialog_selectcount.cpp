@@ -70,10 +70,10 @@ namespace
     }
 }
 
-class SelectValue : public fheroes2::Rect
+class SelectValue final : public fheroes2::Rect
 {
 public:
-    SelectValue( uint32_t min, uint32_t max, uint32_t cur, uint32_t st )
+    SelectValue( const uint32_t min, const uint32_t max, const uint32_t cur, const uint32_t st )
         : vmin( min )
         , vmax( max )
         , vcur( cur )
@@ -97,7 +97,7 @@ public:
         pos.height = 30;
     }
 
-    void SetCur( uint32_t v )
+    void setValue( const uint32_t v )
     {
         vcur = v;
     }
@@ -111,7 +111,7 @@ public:
         btnDn.setPosition( pt.x + 70, pt.y + 16 );
     }
 
-    uint32_t getCur() const
+    uint32_t getValue() const
     {
         return vcur;
     }
@@ -149,7 +149,7 @@ public:
         return false;
     }
 
-protected:
+private:
     uint32_t vmin;
     uint32_t vmax;
     uint32_t vcur;
@@ -164,66 +164,75 @@ protected:
     fheroes2::TimedEventValidator timedBtnDn;
 };
 
-bool Dialog::SelectCount( const std::string & header, uint32_t min, uint32_t max, uint32_t & cur, int step )
+bool Dialog::SelectCount( std::string header, const uint32_t min, const uint32_t max, uint32_t & selectedValue, const uint32_t step,
+                          const fheroes2::Image & backgroundImage )
 {
-    fheroes2::Display & display = fheroes2::Display::instance();
-
-    // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
-    fheroes2::Text text( header, fheroes2::FontType::normalWhite() );
-    const int spacer = 10;
+    const fheroes2::Text headerText( std::move( header ), fheroes2::FontType::normalWhite() );
+    int32_t headerOffsetY{ 10 };
+    const int32_t selectionAreaHeight{ 30 };
+    const int32_t headerHeight = headerText.height( BOXAREA_WIDTH );
+    const int32_t imageHeight = backgroundImage.height();
 
-    const FrameBox box( text.height() + spacer + 30, true );
-    SelectValue sel( min, max, cur, step );
+    const FrameBox box( headerHeight + headerOffsetY + selectionAreaHeight + imageHeight, true );
 
-    const fheroes2::Rect & pos = box.GetArea();
+    SelectValue selectionBox( min, max, selectedValue, step );
 
-    text.draw( pos.x + ( pos.width - text.width() ) / 2, pos.y + 2, display );
+    const fheroes2::Rect & windowArea = box.GetArea();
 
-    sel.SetPos( fheroes2::Point( pos.x + 80, pos.y + 30 ) );
-    sel.Redraw();
+    fheroes2::Display & display = fheroes2::Display::instance();
+    headerText.draw( windowArea.x, windowArea.y, BOXAREA_WIDTH, display );
+
+    if ( !backgroundImage.empty() ) {
+        fheroes2::Blit( backgroundImage, 0, 0, display, windowArea.x + ( windowArea.width - backgroundImage.width() ) / 2,
+                        windowArea.y + headerHeight + headerOffsetY, backgroundImage.width(), backgroundImage.height() );
+
+        headerOffsetY = headerOffsetY * 2;
+    }
+
+    selectionBox.SetPos( fheroes2::Point( windowArea.x + 80, windowArea.y + headerOffsetY + headerHeight + imageHeight ) );
+    selectionBox.Redraw();
 
     fheroes2::ButtonGroup btnGroups( box.GetArea(), Dialog::OK | Dialog::CANCEL );
     btnGroups.draw();
 
-    text.set( _( "MAX" ), fheroes2::FontType::smallWhite() );
-    const fheroes2::Rect rectMax( pos.x + 173, pos.y + 38, text.width(), text.height() );
-    text.draw( rectMax.x, rectMax.y + 2, display );
-
-    LocalEvent & le = LocalEvent::Get();
+    const fheroes2::Text mainText( _( "MAX" ), fheroes2::FontType::smallWhite() );
+    const int32_t maxAreaOffsetY{ ( 26 - mainText.height() ) / 2 };
+    const fheroes2::Rect rectMax{ windowArea.x + 176, windowArea.y + headerOffsetY + headerHeight + imageHeight + maxAreaOffsetY, mainText.width(), mainText.height() };
+    mainText.draw( rectMax.x, rectMax.y + 2, display );
 
     display.render();
 
-    // message loop
     int result = Dialog::ZERO;
+
+    LocalEvent & le = LocalEvent::Get();
     while ( result == Dialog::ZERO && le.HandleEvents() ) {
         bool redraw_count = false;
 
-        if ( fheroes2::PressIntKey( max, cur ) ) {
-            sel.SetCur( cur );
+        if ( fheroes2::PressIntKey( max, selectedValue ) ) {
+            selectionBox.setValue( selectedValue );
             redraw_count = true;
         }
 
-        // max
         if ( le.MouseClickLeft( rectMax ) ) {
-            sel.SetCur( max );
+            selectionBox.setValue( max );
             redraw_count = true;
         }
 
-        if ( sel.QueueEventProcessing() ) {
+        if ( selectionBox.QueueEventProcessing() ) {
             redraw_count = true;
         }
 
         if ( redraw_count ) {
-            sel.Redraw();
+            selectionBox.Redraw();
             display.render();
         }
 
         result = btnGroups.processEvents();
     }
 
-    cur = result == Dialog::OK ? sel.getCur() : 0;
+    selectedValue = result == Dialog::OK ? selectionBox.getValue() : 0;
 
     return result == Dialog::OK;
 }
@@ -494,19 +503,19 @@ int Dialog::ArmySplitTroop( uint32_t freeSlots, const uint32_t redistributeMax, 
         }
 
         if ( fheroes2::PressIntKey( redistributeMax, redistributeCount ) ) {
-            sel.SetCur( redistributeCount );
+            sel.setValue( redistributeCount );
             redraw_count = true;
         }
         else if ( buttonMax.isVisible() && le.MouseClickLeft( buttonMax.area() ) ) {
             le.MousePressLeft( buttonMax.area() ) ? buttonMax.drawOnPress() : buttonMax.drawOnRelease();
             redistributeCount = redistributeMax;
-            sel.SetCur( redistributeMax );
+            sel.setValue( redistributeMax );
             redraw_count = true;
         }
         else if ( buttonMin.isVisible() && le.MouseClickLeft( buttonMin.area() ) ) {
             le.MousePressLeft( buttonMin.area() ) ? buttonMin.drawOnPress() : buttonMin.drawOnRelease();
             redistributeCount = min;
-            sel.SetCur( min );
+            sel.setValue( min );
             redraw_count = true;
         }
         else if ( sel.QueueEventProcessing() ) {
@@ -524,7 +533,7 @@ int Dialog::ArmySplitTroop( uint32_t freeSlots, const uint32_t redistributeMax, 
         }
 
         if ( redraw_count ) {
-            SwitchMaxMinButtons( buttonMin, buttonMax, sel.getCur(), min );
+            SwitchMaxMinButtons( buttonMin, buttonMax, sel.getValue(), min );
             if ( !ssp.empty() ) {
                 ssp.hide();
             }
@@ -547,7 +556,7 @@ int Dialog::ArmySplitTroop( uint32_t freeSlots, const uint32_t redistributeMax, 
     int result = 0;
 
     if ( bres == Dialog::OK ) {
-        redistributeCount = sel.getCur();
+        redistributeCount = sel.getValue();
 
         if ( !ssp.isHidden() ) {
             const fheroes2::Rect rt( ssp.x(), ssp.y(), ssp.width(), ssp.height() );
