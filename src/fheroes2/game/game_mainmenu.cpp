@@ -299,9 +299,9 @@ fheroes2::GameMode Game::MainMenu( const bool isFirstGameRun )
 
     const bool isPOLPresent = Game::isPriceOfLoyaltyCampaignPresent();
 
-    std::vector<ButtonInfo> buttons{ ButtonInfo{ NEWGAME_DEFAULT, buttonNewGame, false, false },       ButtonInfo{ LOADGAME_DEFAULT, buttonLoadGame, false, false },
-                                       ButtonInfo{ HIGHSCORES_DEFAULT, buttonHighScores, false, false }, ButtonInfo{ CREDITS_DEFAULT, buttonCredits, false, false },
-                                       ButtonInfo{ QUIT_DEFAULT, buttonQuit, false, false } };
+    std::vector<ButtonInfo> buttons{ ButtonInfo{ NEWGAME_DEFAULT, buttonNewGame, false, false }, ButtonInfo{ LOADGAME_DEFAULT, buttonLoadGame, false, false },
+                                     ButtonInfo{ HIGHSCORES_DEFAULT, buttonHighScores, false, false }, ButtonInfo{ CREDITS_DEFAULT, buttonCredits, false, false },
+                                     ButtonInfo{ QUIT_DEFAULT, buttonQuit, false, false } };
 
     if ( isPOLPresent ) {
         buttons.emplace_back( ButtonInfo{ EDITOR_DEFAULT, buttonEditor, false, false } );
