@@ -26,8 +26,18 @@
 #include <utility>
 #include <vector>
 
+#include "agg_image.h"
 #include "image.h"
 #include "math_base.h"
+
+namespace
+{
+    const uint8_t lineSeparator{ '\n' };
+
+    const uint8_t invalidChar{ '?' };
+
+    const uint8_t spaceChar{ ' ' };
+}
 
 namespace fheroes2
 {
@@ -90,9 +100,52 @@ namespace fheroes2
 
     int32_t getFontHeight( const FontSize fontSize );
 
-    // Returns the character position number in the 'text' string.
-    size_t getTextInputCursorPosition( const std::string & text, const FontType & fontType, const size_t currentTextCursorPosition, const int32_t pointerCursorXOffset,
-                                       const int32_t textStartXOffset );
+    class CharHandler
+    {
+    public:
+        explicit CharHandler( const fheroes2::FontType fontType )
+            : _fontType( fontType )
+            , _charLimit( fheroes2::AGG::getCharacterLimit( fontType.size ) )
+            , _spaceCharWidth( _getSpaceCharWidth() )
+        {}
+
+        // Returns true if character is a Space character (' ').
+        static bool isSpaceChar( const uint8_t character )
+        {
+            return ( character == spaceChar );
+        }
+
+        // Returns true if character is available to render, including space (' ') and new line ('\n').
+        bool isAvailable( const uint8_t character ) const
+        {
+            return ( isSpaceChar( character ) || _isValid( character ) || character == lineSeparator );
+        }
+
+        const fheroes2::Sprite & getSprite( const uint8_t character ) const
+        {
+            return fheroes2::AGG::getChar( _isValid( character ) ? character : invalidChar, _fontType );
+        }
+
+        int32_t getWidth( const uint8_t character ) const;
+
+        int32_t getSpaceCharWidth() const
+        {
+            return _spaceCharWidth;
+        }
+
+    private:
+        // Returns true if character is valid for the current code page, excluding space (' ') and new line ('\n').
+        bool _isValid( const uint8_t character ) const
+        {
+            return character >= 0x21 && character <= _charLimit;
+        }
+
+        int32_t _getSpaceCharWidth() const;
+
+        const fheroes2::FontType _fontType;
+        const uint32_t _charLimit;
+        const int32_t _spaceCharWidth;
+    };
 
     class TextBase
     {

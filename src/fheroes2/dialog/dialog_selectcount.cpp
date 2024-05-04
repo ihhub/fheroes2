@@ -269,7 +269,9 @@ bool Dialog::inputString( std::string header, std::string & result, std::string 
     const int32_t inputAreaWidth = isMultiLine ? 224 : inputArea.width();
     const int32_t inputAreaHeight = isMultiLine ? 265 : inputArea.height();
 
-    const int32_t frameBoxHeight = 10 + titleHeight + textbox.height( BOXAREA_WIDTH ) + 10 + inputAreaHeight + keyBoardButtonExtraHeight;
+    const int32_t textboxHeight = textbox.height( BOXAREA_WIDTH );
+
+    const int32_t frameBoxHeight = 10 + titleHeight + textboxHeight + 10 + inputAreaHeight + keyBoardButtonExtraHeight;
     const FrameBox box( frameBoxHeight, true );
     const fheroes2::Rect & frameBoxArea = box.GetArea();
 
@@ -282,7 +284,7 @@ bool Dialog::inputString( std::string header, std::string & result, std::string 
     textbox.draw( frameBoxArea.x, frameBoxArea.y + 12 + titleHeight, BOXAREA_WIDTH, display );
 
     fheroes2::Point dst_pt;
-    dst_pt.y = frameBoxArea.y + 10 + titleHeight + textbox.height( BOXAREA_WIDTH ) + 10;
+    dst_pt.y = frameBoxArea.y + 10 + titleHeight + textboxHeight + 10;
     dst_pt.x = frameBoxArea.x + ( frameBoxArea.width - inputAreaWidth ) / 2;
 
     fheroes2::Rect inputAreaOffset;
@@ -383,7 +385,6 @@ bool Dialog::inputString( std::string header, std::string & result, std::string 
 
             redraw = true;
         }
-
         else if ( le.MousePressRight( buttonCancel.area() ) ) {
             fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Exit this menu without doing anything." ), Dialog::ZERO );
         }
