@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-01 11:10+0000\n"
+"POT-Creation-Date: 2024-05-04 09:09+0000\n"
 "PO-Revision-Date: 2023-12-22 00:32+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -4008,6 +4008,10 @@ msgstr "Den Karteneditor verlassen."
 #, fuzzy
 msgid "Set %{monster} Count"
 msgstr "Schieße auf %{monster}"
+
+#, fuzzy
+msgid "Set Random Ultimate Artifact Radius"
+msgstr "Zufälliges ultimatives Artefakt"
 
 #, fuzzy
 msgid "Objects cannot be placed outside the map."

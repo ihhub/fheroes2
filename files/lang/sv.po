@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-01 11:10+0000\n"
+"POT-Creation-Date: 2024-05-04 09:09+0000\n"
 "PO-Revision-Date: 2024-02-19 16:13+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -3905,6 +3905,10 @@ msgstr "Lämna kartredigeraren."
 #, fuzzy
 msgid "Set %{monster} Count"
 msgstr "Skjut %{monster}"
+
+#, fuzzy
+msgid "Set Random Ultimate Artifact Radius"
+msgstr "Slumpad Ultimat artefakt"
 
 msgid "Objects cannot be placed outside the map."
 msgstr "Föremål kan inte placeras utanför kartan."

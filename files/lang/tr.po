@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-01 11:10+0000\n"
+"POT-Creation-Date: 2024-05-04 09:09+0000\n"
 "PO-Revision-Date: 2022-10-01 20:20+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Turkish <tr@li.org>\n"
@@ -3628,6 +3628,9 @@ msgstr ""
 #, fuzzy
 msgid "Set %{monster} Count"
 msgstr "%{monster} vur"
+
+msgid "Set Random Ultimate Artifact Radius"
+msgstr ""
 
 msgid "Objects cannot be placed outside the map."
 msgstr ""
