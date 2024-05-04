@@ -148,7 +148,7 @@ namespace
                 return false;
             }
 
-            if ( MP2::isEditorActionObject( objectPart.objectType )) && !Maps::isClearGround( tile ) ) {
+            if ( MP2::isEditorActionObject( objectPart.objectType ) && !Maps::isClearGround( tile ) ) {
                 // We are trying to place an action object on a tile that has some other objects.
                 return false;
             }
