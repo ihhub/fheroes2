@@ -185,8 +185,8 @@ bool Dialog::SelectCount( std::string header, const uint32_t min, const uint32_t
     headerText.draw( windowArea.x, windowArea.y, BOXAREA_WIDTH, display );
 
     if ( !backgroundImage.empty() ) {
-        fheroes2::Blit( backgroundImage, 0, 0, display, windowArea.x + ( windowArea.width - backgroundImage.width() ) / 2,
-                        windowArea.y + headerHeight + headerOffsetY, backgroundImage.width(), backgroundImage.height() );
+        fheroes2::Blit( backgroundImage, 0, 0, display, windowArea.x + ( windowArea.width - backgroundImage.width() ) / 2, windowArea.y + headerHeight + headerOffsetY,
+                        backgroundImage.width(), backgroundImage.height() );
 
         headerOffsetY = headerOffsetY * 2;
     }
