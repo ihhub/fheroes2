@@ -3185,6 +3185,25 @@ namespace fheroes2
                         // Fix incorrect pixel at position 260x305.
                         original.image()[195460] = 31;
                     }
+
+                    // Since we cannot access game settings from here we are checking an existance
+                    // of one of POL resources as an indicator for this version.
+                    if ( !::AGG::getDataFromAggFile( ICN::GetString( ICN::X_TRACK1 ) ).empty() ) {
+                        Sprite editorIcon;
+                        h2d::readImage( "main_menu_editor_icon.image", editorIcon );
+
+                        Blit( editorIcon, 0, 0, original, editorIcon.x(), editorIcon.y(), editorIcon.width(), editorIcon.height() );
+                    }
+                }
+                return true;
+            case ICN::BTNSHNGL:
+                LoadOriginalICN( id );
+                if ( _icnVsSprite[id].size() == 20 ) {
+                    _icnVsSprite[id].resize( 23 );
+
+                    h2d::readImage( "main_menu_editor_released_button.image", _icnVsSprite[id][20] );
+                    h2d::readImage( "main_menu_editor_highlighted_button.image", _icnVsSprite[id][21] );
+                    h2d::readImage( "main_menu_editor_pressed_button.image", _icnVsSprite[id][22] );
                 }
                 return true;
             case ICN::TOWNBKG3:
