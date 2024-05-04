@@ -3623,7 +3623,7 @@ void Heroes::Action( int tileIndex )
     }
 
     const MP2::MapObjectType objectType = world.GetTiles( tileIndex ).GetObject( tileIndex != heroPosIndex );
-    if ( MP2::isActionObject( objectType, isShipMaster() ) ) {
+    if ( MP2::isInGameActionObject( objectType, isShipMaster() ) ) {
         SetModes( ACTION );
     }
 

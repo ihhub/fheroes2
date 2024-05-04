@@ -144,12 +144,12 @@ namespace
 
             const auto & tile = world.GetTiles( pos.x, pos.y );
 
-            if ( MP2::isEditorActionObject( tile.GetObject() ) ) {
+            if ( MP2::isOffGameActionObject( tile.GetObject() ) ) {
                 // An action object already exist. We cannot allow to put anything on top of it.
                 return false;
             }
 
-            if ( MP2::isEditorActionObject( objectPart.objectType ) && !Maps::isClearGround( tile ) ) {
+            if ( MP2::isOffGameActionObject( objectPart.objectType ) && !Maps::isClearGround( tile ) ) {
                 // We are trying to place an action object on a tile that has some other objects.
                 return false;
             }
@@ -925,7 +925,7 @@ namespace Interface
 
                 const MP2::MapObjectType objectType = objectInfo.groundLevelParts.front().objectType;
 
-                const bool isActionObject = MP2::isEditorActionObject( objectType );
+                const bool isActionObject = MP2::isOffGameActionObject( objectType );
                 if ( !isActionObject ) {
                     // Only action objects can have metadata.
                     continue;

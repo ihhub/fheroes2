@@ -4584,7 +4584,7 @@ namespace
 
         auto addTown = [&objects]( const MP2::MapObjectType mainObjectType, const uint8_t race, const uint8_t townIcnOffset, const uint8_t shadowIcnOffset,
                                    const MP2::ObjectIcnType townIcnType, const MP2::ObjectIcnType shadowIcnType, const bool isCastle ) {
-            assert( MP2::isActionObject( mainObjectType ) );
+            assert( MP2::isOffGameActionObject( mainObjectType ) );
 
             const MP2::MapObjectType secondaryObjectType( static_cast<MP2::MapObjectType>( mainObjectType - MP2::OBJ_ACTION_OBJECT_TYPE ) );
 
@@ -4786,7 +4786,7 @@ namespace
             const auto & objects = objectData[groupType];
 
             for ( const auto & objectInfo : objects ) {
-                assert( !MP2::isActionObject( objectInfo.objectType ) );
+                assert( !MP2::isOffGameActionObject( objectInfo.objectType ) );
             }
         }
 
@@ -4796,7 +4796,7 @@ namespace
             const auto & objects = objectData[groupType];
 
             for ( const auto & objectInfo : objects ) {
-                assert( MP2::isEditorActionObject( objectInfo.objectType ) );
+                assert( MP2::isOffGameActionObject( objectInfo.objectType ) );
             }
         }
 #endif

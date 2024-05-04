@@ -185,7 +185,7 @@ fheroes2::GameMode Interface::AdventureMap::EventHeroMovement()
         if ( hero->GetPath().isValidForMovement() && hero->MayStillMove( false, true ) ) {
             _startHeroMove( *hero );
         }
-        else if ( MP2::isActionObject( hero->getObjectTypeUnderHero(), hero->isShipMaster() ) ) {
+        else if ( MP2::isInGameActionObject( hero->getObjectTypeUnderHero(), hero->isShipMaster() ) ) {
             return EventDefaultAction();
         }
     }
@@ -486,7 +486,7 @@ fheroes2::GameMode Interface::AdventureMap::EventDefaultAction()
     Heroes * hero = GetFocusHeroes();
 
     if ( hero ) {
-        if ( MP2::isActionObject( hero->getObjectTypeUnderHero(), hero->isShipMaster() ) ) {
+        if ( MP2::isInGameActionObject( hero->getObjectTypeUnderHero(), hero->isShipMaster() ) ) {
             hero->Action( hero->GetIndex() );
 
             // The action object can alter the status of the hero (e.g. Stables or Well) or

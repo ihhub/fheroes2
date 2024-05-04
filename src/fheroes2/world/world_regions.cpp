@@ -310,7 +310,7 @@ void World::ComputeStaticAnalysis()
             node.isWater = tile.isWater();
 
             const MP2::MapObjectType objectType = tile.GetObject();
-            node.mapObject = MP2::isActionObject( objectType, node.isWater ) ? objectType : 0;
+            node.mapObject = MP2::isInGameActionObject( objectType, node.isWater ) ? objectType : 0;
             if ( node.passable != 0 ) {
                 node.type = REGION_NODE_OPEN;
             }

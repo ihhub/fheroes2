@@ -1733,7 +1733,7 @@ namespace AI
         const Maps::Tiles & tile = world.GetTiles( dst_index );
         const MP2::MapObjectType objectType = tile.GetObject( dst_index != hero.GetIndex() );
 
-        const bool isActionObject = MP2::isActionObject( objectType, hero.isShipMaster() );
+        const bool isActionObject = MP2::isInGameActionObject( objectType, hero.isShipMaster() );
         if ( isActionObject )
             hero.SetModes( Heroes::ACTION );
 

@@ -499,12 +499,12 @@ namespace MP2
     //
     // TODO: make a separate function to determine whether the object is an action object depending on its location and not
     // TODO: on where it is accessed from.
-    bool isActionObject( const MapObjectType objectType, const bool accessedFromWater );
+    bool isInGameActionObject( const MapObjectType objectType, const bool accessedFromWater );
 
     // The method checks if the object is an action object regardless of where it is accessed from.
-    bool isActionObject( const MapObjectType objectType );
+    bool isInGameActionObject( const MapObjectType objectType );
 
-    bool isEditorActionObject( const MapObjectType objectType );
+    bool isOffGameActionObject( const MapObjectType objectType );
 
     // The method checks if the object is an action object if it is accessed from water.
     bool isWaterActionObject( const MapObjectType objectType );
