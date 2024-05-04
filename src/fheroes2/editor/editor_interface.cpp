@@ -1526,7 +1526,10 @@ namespace Interface
                 return;
             }
 
-            if ( !checkConditionForUsedTiles( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return !tileToCheck.isWater(); } ) ) {
+            if ( objectInfo.objectType == MP2::OBJ_EVENT ) {
+                // Only event objects are allowed to be placed anywhere.
+            }
+            else if ( !checkConditionForUsedTiles( objectInfo, tilePos, []( const Maps::Tiles & tileToCheck ) { return !tileToCheck.isWater(); } ) ) {
                 _warningMessage.reset( _( "Adventure objects cannot be placed on water." ) );
                 return;
             }
