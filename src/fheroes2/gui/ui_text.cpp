@@ -100,8 +100,6 @@ namespace
     void getMultiRowInfo( const uint8_t * data, const int32_t size, const int32_t maxWidth, const fheroes2::FontType & fontType, const int32_t rowHeight,
                           std::deque<fheroes2::Point> & offsets, std::vector<int32_t> & charsInLine )
     {
-        // TODO: Make different functions for row info "in pixels" and "in characters".
-
         assert( data != nullptr && size > 0 && maxWidth > 0 );
 
         if ( offsets.empty() ) {
