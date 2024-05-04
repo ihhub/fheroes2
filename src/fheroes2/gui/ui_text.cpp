@@ -122,7 +122,7 @@ namespace
         int32_t lineWidth = countCharacters ? 0 : offset->x;
 
         while ( data != dataEnd ) {
-            if ( *data == lineSeparator ) {
+            if ( fheroes2::CharHandler::isLineSeparator( *data ) ) {
                 if ( lineLength > 0 ) {
                     offset->x = lineWidth;
                     lineLength = 0;
@@ -230,7 +230,7 @@ namespace
             }
 
             // TODO: remove this hack or expand it to cover more cases.
-            if ( *data == lineSeparator ) {
+            if ( fheroes2::CharHandler::isLineSeparator( *data ) ) {
                 // This should never happen as line cannot contain line separator in the middle.
                 // But due to some limitations in UI we have to deal with it.
                 // The only way is to just ignore it here.
@@ -301,7 +301,7 @@ namespace
         const int32_t yPos = y + ( rowHeight - fontHeight ) / 2;
 
         while ( data != dataEnd ) {
-            if ( *data == lineSeparator ) {
+            if ( fheroes2::CharHandler::isLineSeparator( *data ) ) {
                 // End of line. Render the current line.
                 if ( lineLength > 0 ) {
                     renderLine( data - lineLength, lineLength, x + offset->x, yPos + offset->y, maxWidth, output, imageRoi, fontType, align );
@@ -428,7 +428,7 @@ namespace
 
         const uint8_t * dataEnd = data + size;
         while ( data != dataEnd ) {
-            if ( fheroes2::CharHandler::isSpaceChar( *data ) || *data == lineSeparator ) {
+            if ( fheroes2::CharHandler::isSpaceChar( *data ) || fheroes2::CharHandler::isLineSeparator( *data ) ) {
                 // If it is the end of line ("\n") or a space (" "), then the word has ended.
                 if ( maxWidth < width ) {
                     maxWidth = width;

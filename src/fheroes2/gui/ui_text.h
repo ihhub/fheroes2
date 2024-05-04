@@ -100,6 +100,12 @@ namespace fheroes2
             , _spaceCharWidth( _getSpaceCharWidth() )
         {}
 
+        // Returns true if character is a line separator ('\n').
+        static bool isLineSeparator( const uint8_t character )
+        {
+            return ( character == '\n' );
+        }
+
         // Returns true if character is a Space character (' ').
         static bool isSpaceChar( const uint8_t character )
         {
@@ -109,16 +115,13 @@ namespace fheroes2
         // Returns true if character is available to render, including space (' ') and new line ('\n').
         bool isAvailable( const uint8_t character ) const
         {
-            const uint8_t lineSeparator{ '\n' };
-
-            return ( isSpaceChar( character ) || _isValid( character ) || character == lineSeparator );
+            return ( isSpaceChar( character ) || _isValid( character ) || isLineSeparator( character ) );
         }
 
         const fheroes2::Sprite & getSprite( const uint8_t character ) const
         {
-            const uint8_t invalidChar{ '?' };
-
-            return fheroes2::AGG::getChar( _isValid( character ) ? character : invalidChar, _fontType );
+            // Display '?' in place of the invalid character.
+            return fheroes2::AGG::getChar( _isValid( character ) ? character : '?', _fontType );
         }
 
         int32_t getWidth( const uint8_t character ) const;
