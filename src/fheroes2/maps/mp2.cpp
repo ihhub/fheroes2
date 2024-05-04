@@ -636,6 +636,11 @@ bool MP2::isActionObject( const MapObjectType objectType )
     return isObjectCanBeAction( static_cast<MapObjectType>( objectType & ~OBJ_ACTION_OBJECT_TYPE ) );
 }
 
+bool MP2::isEditorActionObject( const MapObjectType objectType )
+{
+    return ( objectType & OBJ_ACTION_OBJECT_TYPE ) == OBJ_ACTION_OBJECT_TYPE;
+}
+
 MP2::MapObjectType MP2::getBaseActionObjectType( const MapObjectType objectType )
 {
     if ( ( objectType & OBJ_ACTION_OBJECT_TYPE ) == OBJ_ACTION_OBJECT_TYPE ) {
