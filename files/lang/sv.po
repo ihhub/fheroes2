@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-04 09:09+0000\n"
+"POT-Creation-Date: 2024-05-04 12:08+0000\n"
 "PO-Revision-Date: 2024-02-19 16:13+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -5043,11 +5043,6 @@ msgstr ""
 " menyn. \n"
 "Spela på!"
 
-msgid "The Editor requires \"The Price of Loyalty\" expansion files to work."
-msgstr ""
-"Kartredigeraren kräver \"The Price of Loyalty\"-expansionens filer för att "
-"fungera."
-
 msgid "Quit Heroes of Might and Magic II and return to the operating system."
 msgstr "Avsluta Heroes of Might and Magic II och återgå till operativsystemet."
 
@@ -5062,6 +5057,10 @@ msgstr "Poänglistan"
 
 msgid "View the high scores screen."
 msgstr "Visa Poänglistan."
+
+#, fuzzy
+msgid "Create new or modify existing maps."
+msgstr "Laddar en karta."
 
 msgid "Change language, resolution and settings of the game."
 msgstr "Ändra spelets språk, upplösning och inställningar."
@@ -11481,6 +11480,12 @@ msgstr ""
 "Den senaste versionen av spelet finns på:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid ""
+#~ "The Editor requires \"The Price of Loyalty\" expansion files to work."
+#~ msgstr ""
+#~ "Kartredigeraren kräver \"The Price of Loyalty\"-expansionens filer för "
+#~ "att fungera."
 
 #~ msgid "Choose a tile which does not contain any objects."
 #~ msgstr "Välj en ruta som inte har några objekt."
