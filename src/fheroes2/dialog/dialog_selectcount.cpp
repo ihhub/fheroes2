@@ -71,7 +71,7 @@ namespace
     }
 }
 
-class SelectValue final : public fheroes2::Rect
+class SelectValue final
 {
 public:
     SelectValue( const uint32_t min, const uint32_t max, const uint32_t cur, const uint32_t st )
@@ -115,6 +115,11 @@ public:
     uint32_t getValue() const
     {
         return vcur;
+    }
+
+    const fheroes2::Rect & getArea() const
+    {
+        return pos;
     }
 
     void Redraw() const
@@ -227,13 +232,13 @@ bool Dialog::SelectCount( std::string header, const uint32_t min, const uint32_t
 
         if ( redraw_count ) {
             selectionBox.Redraw();
-            display.render();
+            display.render( selectionBox.getArea() );
         }
 
         result = btnGroups.processEvents();
     }
 
-    selectedValue = result == Dialog::OK ? selectionBox.getValue() : 0;
+    selectedValue = ( result == Dialog::OK ) ? selectionBox.getValue() : 0;
 
     return result == Dialog::OK;
 }
