@@ -288,7 +288,7 @@ bool Dialog::inputString( std::string header, std::string & result, std::string 
     bool isCursorVisible = true;
     fheroes2::Text text( insertCharToString( result, charInsertPos, isCursorVisible ? '_' : '\x7F' ), fheroes2::FontType::normalWhite() );
     if ( !isMultiLine ) {
-        text.fitToOneRow( textInputArea.width );
+        text.fitToOneRow( textInputArea.width, false );
     }
     text.drawInRoi( textInputArea.x, textInputArea.y + 2, textInputArea.width, display, textInputArea );
 
@@ -403,7 +403,7 @@ bool Dialog::inputString( std::string header, std::string & result, std::string 
             text.set( insertCharToString( result, charInsertPos, isCursorVisible ? '_' : '\x7F' ), fheroes2::FontType::normalWhite() );
 
             if ( !isMultiLine ) {
-                text.fitToOneRow( textInputArea.width );
+                text.fitToOneRow( textInputArea.width, false );
             }
 
             textBackground.restore();

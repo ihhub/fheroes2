@@ -193,7 +193,7 @@ namespace fheroes2
         }
 
         // This method modifies the underlying text and ends it with '...' if it is longer than the provided width.
-        void fitToOneRow( const int32_t maxWidth );
+        void fitToOneRow( const int32_t maxWidth, const bool ignoreSacesAtEnd = true );
 
         std::string text() const override;
 

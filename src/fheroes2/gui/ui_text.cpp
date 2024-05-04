@@ -775,7 +775,7 @@ namespace fheroes2
         return _text.empty();
     }
 
-    void Text::fitToOneRow( const int32_t maxWidth )
+    void Text::fitToOneRow( const int32_t maxWidth, const bool ignoreSacesAtEnd /* = true */ )
     {
         assert( maxWidth > 0 ); // Why is the limit less than 1?
         if ( maxWidth <= 0 ) {
@@ -787,7 +787,9 @@ namespace fheroes2
             return;
         }
 
-        const int32_t originalTextWidth = getTruncatedLineWidth( reinterpret_cast<const uint8_t *>( _text.data() ), static_cast<int32_t>( _text.size() ), _fontType );
+        const int32_t originalTextWidth
+            = ignoreSacesAtEnd ? getTruncatedLineWidth( reinterpret_cast<const uint8_t *>( _text.data() ), static_cast<int32_t>( _text.size() ), _fontType )
+                               : getLineWidth( reinterpret_cast<const uint8_t *>( _text.data() ), static_cast<int32_t>( _text.size() ), _fontType );
         if ( originalTextWidth <= maxWidth ) {
             // Nothing to do. The text is not longer than the provided maximum width.
             return;
