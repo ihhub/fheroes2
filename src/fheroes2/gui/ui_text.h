@@ -26,7 +26,6 @@
 #include <utility>
 #include <vector>
 
-#include "agg_image.h"
 #include "image.h"
 #include "math_base.h"
 
@@ -133,7 +132,7 @@ namespace fheroes2
         // Returns true if nothing to draw.
         virtual bool empty() const = 0;
 
-        // Returns full text. Multi-text class cannot return by reference hence returning by value .
+        // Returns full text. Multi-text class cannot return by reference hence returning by value.
         virtual std::string text() const = 0;
 
         void setUniformVerticalAlignment( const bool isUniform )
@@ -189,10 +188,12 @@ namespace fheroes2
         // By default it ignores spaces at the end of the text phrase.
         void fitToOneRow( const int32_t maxWidth, const bool ignoreSpacesAtTextEnd = true );
 
-        // Returns the character position number in the text.
-        size_t getTextInputCursorPosition( const size_t currentTextCursorPosition, const Point & pointerCursorOffset, const Rect & textRoi );
-
         std::string text() const override;
+
+        FontType getFontType() const
+        {
+            return _fontType;
+        }
 
     private:
         std::string _text;
@@ -254,6 +255,9 @@ namespace fheroes2
         const uint32_t _charLimit;
         const int32_t _spaceCharWidth;
     };
+
+    // Returns the character position number in the text.
+    size_t getTextInputCursorPosition( const Text & text, const size_t currentTextCursorPosition, const Point & pointerCursorOffset, const Rect & textRoi );
 
     // This function is usually useful for text generation on buttons as button font is a separate set of sprites.
     bool isFontAvailable( const std::string & text, const FontType fontType );

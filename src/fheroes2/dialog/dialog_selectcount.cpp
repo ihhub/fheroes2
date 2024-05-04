@@ -302,7 +302,8 @@ bool Dialog::inputString( std::string header, std::string & result, std::string 
     fheroes2::ImageRestorer textBackground( display, textInputArea.x, textInputArea.y, textInputArea.width, textInputArea.height );
 
     bool isCursorVisible = true;
-    fheroes2::Text text( insertCharToString( result, charInsertPos, isCursorVisible ? '_' : '\x7F' ), fheroes2::FontType::normalWhite() );
+    const fheroes2::FontType fontType( fheroes2::FontType::normalWhite() );
+    fheroes2::Text text( insertCharToString( result, charInsertPos, isCursorVisible ? '_' : '\x7F' ), fontType );
     if ( !isMultiLine ) {
         text.fitToOneRow( textInputArea.width, false );
     }
@@ -381,7 +382,7 @@ bool Dialog::inputString( std::string header, std::string & result, std::string 
             }
         }
         else if ( le.MouseClickLeft( textInputArea ) ) {
-            charInsertPos = text.getTextInputCursorPosition( charInsertPos, le.GetMouseCursor(), textInputArea );
+            charInsertPos = fheroes2::getTextInputCursorPosition( text, charInsertPos, le.GetMouseCursor(), textInputArea );
 
             redraw = true;
         }
@@ -417,7 +418,7 @@ bool Dialog::inputString( std::string header, std::string & result, std::string 
                 display.updateNextRenderRoi( buttonOk.area() );
             }
 
-            text.set( insertCharToString( result, charInsertPos, isCursorVisible ? '_' : '\x7F' ), fheroes2::FontType::normalWhite() );
+            text.set( insertCharToString( result, charInsertPos, isCursorVisible ? '_' : '\x7F' ), fontType );
 
             if ( !isMultiLine ) {
                 text.fitToOneRow( textInputArea.width, false );
