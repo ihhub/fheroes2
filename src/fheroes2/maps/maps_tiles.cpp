@@ -729,7 +729,8 @@ void Maps::Tiles::updatePassability()
     // Get object type but ignore heroes as they are "temporary" objects.
     const MP2::MapObjectType objectType = GetObject( false );
 
-    if ( !MP2::isOffGameActionObject( objectType ) && ( _mainAddon._objectIcnType != MP2::OBJ_ICN_TYPE_UNKNOWN ) && !_mainAddon.isPassabilityTransparent() && !isShadow() ) {
+    if ( !MP2::isOffGameActionObject( objectType ) && ( _mainAddon._objectIcnType != MP2::OBJ_ICN_TYPE_UNKNOWN ) && !_mainAddon.isPassabilityTransparent()
+         && !isShadow() ) {
         // This is a non-action object.
 
         if ( !Maps::isValidDirection( _index, Direction::BOTTOM ) ) {
