@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-04 09:09+0000\n"
+"POT-Creation-Date: 2024-05-04 12:08+0000\n"
 "PO-Revision-Date: 2023-09-11 20:22+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -5134,10 +5134,6 @@ msgid ""
 "Enjoy the game!"
 msgstr ""
 
-#, fuzzy
-msgid "The Editor requires \"The Price of Loyalty\" expansion files to work."
-msgstr "Jedna zo štyroch nových kampaní z rozširujúcej sady Price of Loyalty."
-
 msgid "Quit Heroes of Might and Magic II and return to the operating system."
 msgstr ""
 "Ukončiť hru Heroes of Might and Magic II a vrátiť sa do operačného systému."
@@ -5153,6 +5149,10 @@ msgstr "Najvyššie skóre"
 
 msgid "View the high scores screen."
 msgstr "Zobrazenie obrazovky s najvyššími výsledkami."
+
+#, fuzzy
+msgid "Create new or modify existing maps."
+msgstr "Načítať existujúcu mapu."
 
 msgid "Change language, resolution and settings of the game."
 msgstr "Zmena jazyka, rozlíšenia a nastavení hry."
@@ -11609,6 +11609,12 @@ msgstr ""
 "Pozri si najnovšiu verziu hry na\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#, fuzzy
+#~ msgid ""
+#~ "The Editor requires \"The Price of Loyalty\" expansion files to work."
+#~ msgstr ""
+#~ "Jedna zo štyroch nových kampaní z rozširujúcej sady Price of Loyalty."
 
 #~ msgid "Set Defense Skill"
 #~ msgstr "Zvoľ zručnosť obrany"

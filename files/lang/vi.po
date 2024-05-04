@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-04 09:09+0000\n"
+"POT-Creation-Date: 2024-05-04 12:08+0000\n"
 "PO-Revision-Date: 2024-02-20 08:49+0700\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -5120,10 +5120,6 @@ msgstr ""
 "\n"
 "Hãy thưởng thức trò chơi!"
 
-msgid "The Editor requires \"The Price of Loyalty\" expansion files to work."
-msgstr ""
-"Biên tập cần tệp bản mở rộng \"Giá của Lòng Trung thành\" để thực hiện."
-
 msgid "Quit Heroes of Might and Magic II and return to the operating system."
 msgstr "Thoát khỏi Heroes of Might and Magic II và quay lại hệ điều hành."
 
@@ -5138,6 +5134,10 @@ msgstr "Điểm Cao"
 
 msgid "View the high scores screen."
 msgstr "Xem màn hình điểm cao."
+
+#, fuzzy
+msgid "Create new or modify existing maps."
+msgstr "Tải một bản đồ đã có."
 
 msgid "Change language, resolution and settings of the game."
 msgstr "Thay đổi ngôn ngữ, độ phân giải và các cài đặt của trò chơi."
@@ -11726,6 +11726,11 @@ msgstr ""
 "Kiểm tra phiên bản mới nhất của trò chơi tại\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid ""
+#~ "The Editor requires \"The Price of Loyalty\" expansion files to work."
+#~ msgstr ""
+#~ "Biên tập cần tệp bản mở rộng \"Giá của Lòng Trung thành\" để thực hiện."
 
 #~ msgid "Choose a tile which does not contain any objects."
 #~ msgstr "Chọn một ô mà không chứa bất kỳ đối tượng nào."
