@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-27 01:17+0000\n"
+"POT-Creation-Date: 2024-05-01 11:10+0000\n"
 "PO-Revision-Date: 2024-03-05 13:55+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
@@ -206,6 +206,10 @@ msgstr "BORGE"
 msgid "TOWN"
 msgstr "BY"
 
+#, fuzzy
+msgid "RESTRICT"
+msgstr "OMKAMP"
+
 msgid ""
 "D\n"
 "I\n"
@@ -231,6 +235,15 @@ msgid ""
 msgstr ""
 "U\n"
 "D"
+
+msgid ""
+"P\n"
+"A\n"
+"T\n"
+"R\n"
+"O\n"
+"L"
+msgstr ""
 
 msgid ""
 "C\n"
@@ -381,6 +394,12 @@ msgstr "Tropper af %{count} tilknytninger -%{penalty}"
 
 msgid "Some undead in army -1"
 msgstr "Der er udøde i hæren -1"
+
+#, fuzzy
+msgid ""
+"Default\n"
+"troop"
+msgstr "Standardhandlinger"
 
 msgid "View %{name}"
 msgstr "Vis %{name}"
@@ -997,18 +1016,6 @@ msgstr "Nulstil til standardindstillinger"
 
 msgid "Please select another hero."
 msgstr "Vælg venligst en anden helt."
-
-msgid "Set Attack Skill"
-msgstr "Indstil angrebsevne"
-
-msgid "Set Defense Skill"
-msgstr "Indstil forsvarsevne"
-
-msgid "Set Power Skill"
-msgstr "Indstil magisk evne"
-
-msgid "Set Knowledge Skill"
-msgstr "Indstil kundskabsevne"
 
 msgid "%{race1} %{name1} vs %{race2} %{name2}"
 msgstr "%{race1} %{name1} vs %{race2} %{name2}"
@@ -2452,6 +2459,52 @@ msgstr "Laboratorium"
 msgid "Shrine"
 msgstr "Helligdom"
 
+#, fuzzy
+msgid "Special"
+msgstr "Intet særligt"
+
+msgid "Horde Building"
+msgstr ""
+
+#, fuzzy
+msgid "Dwelling 1"
+msgstr "Bosteder"
+
+#, fuzzy
+msgid "Dwelling 2"
+msgstr "Bosteder"
+
+#, fuzzy
+msgid "Upg. Dwelling 2"
+msgstr "Bosteder"
+
+#, fuzzy
+msgid "Dwelling 3"
+msgstr "Bosteder"
+
+#, fuzzy
+msgid "Upg. Dwelling 3"
+msgstr "Bosteder"
+
+#, fuzzy
+msgid "Dwelling 4"
+msgstr "Bosteder"
+
+#, fuzzy
+msgid "Upg. Dwelling 4"
+msgstr "Bosteder"
+
+#, fuzzy
+msgid "Dwelling 6"
+msgstr "Bosteder"
+
+#, fuzzy
+msgid "Upg. Dwelling 6"
+msgstr "Bosteder"
+
+msgid "2x Upg. Dwelling 6"
+msgstr ""
+
 msgid ""
 "The Fortifications increase the toughness of the walls, increasing the "
 "number of turns it takes to knock them down."
@@ -2501,6 +2554,18 @@ msgstr ""
 
 msgid "The Skull Pile increases production of Skeletons by %{count} per week."
 msgstr "Kraniebunken øger tilvæksten af skeletter med %{count} om ugen."
+
+msgid "The Special building gives a specific bonus to the chosen castle type."
+msgstr ""
+
+#, fuzzy
+msgid ""
+"The Horde Building increases the growth rate of the level 1 creatures by 8 "
+"per week."
+msgstr ""
+"Brønden øger den ugentlige tilvækst af byens bosteder med %{count}. Brønden "
+"gør det også muligt at få en oversigt over byens væsener. Du kan desuden "
+"hverve dem herfra."
 
 msgid "Thieves' Guild"
 msgstr "Tyvelaug"
@@ -3801,8 +3866,68 @@ msgstr "Personlighed:"
 msgid "Best Monster:"
 msgstr "Bedste væsen:"
 
+#, fuzzy
+msgid "Random Castle Name"
+msgstr "Tilfældig borg"
+
+#, fuzzy
+msgid "Allow Castle build"
+msgstr "Skyslot"
+
+#, fuzzy
+msgid "Default buildings"
+msgstr "Standardhandlinger"
+
+#, fuzzy
+msgid "Default Army"
+msgstr "Standardhandlinger"
+
+#, fuzzy
+msgid "Castle Army"
+msgstr "Borg"
+
+msgid "Click to change the Castle name. Right-click to reset to default."
+msgstr ""
+
+#, fuzzy
+msgid "Enter Castle name"
+msgstr "Mist helten '%{name}'."
+
+msgid "Allow to build a castle in this town."
+msgstr ""
+
+msgid "Toggle the use of default buildings. Custom buildings will be reset!"
+msgstr ""
+
+#, fuzzy
+msgid "Default Buildings"
+msgstr "Standardhandlinger"
+
+msgid "Toggle building construction restriction mode."
+msgstr ""
+
+msgid "Restrict Building Construction"
+msgstr ""
+
+msgid "Use default defenders army."
+msgstr ""
+
+msgid "Set custom Castle Army. Right-click to reset unit."
+msgstr ""
+
 msgid "Map filename"
 msgstr "Kort-filnavn"
+
+#, fuzzy
+msgid ""
+"Do you wish to return to the game's Main Menu? All unsaved changes will be "
+"lost."
+msgstr ""
+"Er du sikker på, at du vil oprette et nyt kort? (Alle ikke-gemte ændringer "
+"af det nuværende kort, vil gå tabt.)"
+
+msgid "Editor"
+msgstr "Editor"
 
 msgid ""
 "Are you sure you want to load a new map? (Any unsaved changes to the current "
@@ -3841,14 +3966,19 @@ msgstr "Gem nuværende kort."
 msgid "Quit out of the map editor."
 msgstr "Forlad korteditoren."
 
+#, fuzzy
+msgid "Set %{monster} Count"
+msgstr "Skyd %{monster}"
+
 msgid "Objects cannot be placed outside the map."
 msgstr "Objekter kan ikke placeres udenfor kortet."
 
+#, fuzzy
+msgid "Action objects must be placed on clear tiles."
+msgstr "Hav-objekter må kun placeres på vand."
+
 msgid "Monsters cannot be placed on water."
 msgstr "Monstre kan ikke placeres på vand."
-
-msgid "Choose a tile which does not contain any objects."
-msgstr "Vælg et felt, som ikke indeholder nogen objekter."
 
 msgid "Treasures cannot be placed on water."
 msgstr "Skatte kan ikke placeres på vand."
@@ -3864,6 +3994,10 @@ msgid "Failed to update player information."
 msgstr "Opdatering af spilleroplysninger mislykkedes."
 
 msgid "Artifacts cannot be placed on water."
+msgstr "Artefakter kan ikke placeres på vand."
+
+#, fuzzy
+msgid "Only one Random Ultimate Artifact can be placed on the map."
 msgstr "Artefakter kan ikke placeres på vand."
 
 msgid "Mountains cannot be placed on water."
@@ -4605,6 +4739,10 @@ msgstr "Fortryd forrige handling"
 msgid "hotkey|redo last action"
 msgstr "Gentag forrige handling"
 
+#, fuzzy
+msgid "hotkey|open game main menu"
+msgstr "Nyt-kort menu"
+
 msgid "hotkey|roland campaign"
 msgstr "Felttoget: Roland"
 
@@ -4862,9 +5000,6 @@ msgstr "Borg-vindue"
 msgid "Army Actions"
 msgstr "Hær-handlinger"
 
-msgid "Editor"
-msgstr "Editor"
-
 msgid "The save file is corrupted."
 msgstr "Det gemte spil er korrupt."
 
@@ -4897,10 +5032,10 @@ msgid "Hot Seat"
 msgstr "Lokalt spil"
 
 msgid ""
-"Play a Hot Seat game, where 2 to 4 players play around the same computer, "
+"Play a Hot Seat game, where 2 to 6 players play around the same computer, "
 "switching into the 'Hot Seat' when it is their turn."
 msgstr ""
-"Spil et lokalt spil, hvor 2-4 spillere skiftes til at spille sin tur på den "
+"Spil et lokalt spil, hvor 2-6 spillere skiftes til at spille sin tur på den "
 "samme enhed."
 
 msgid "A single player game playing out a single map."
@@ -5066,10 +5201,10 @@ msgid "Setup and play a battle without loading any map."
 msgstr "Opsæt og spil en kamp uden at indlæse et kort."
 
 msgid ""
-"Play a Hot Seat game, where 2 to 4 players play on the same device, "
+"Play a Hot Seat game, where 2 to 6 players play on the same device, "
 "switching into the 'Hot Seat' when it is their turn."
 msgstr ""
-"Spil et lokalt spil, hvor 2-4 spillere spiller sin tur på den samme enhed, "
+"Spil et lokalt spil, hvor 2-6 spillere spiller sin tur på den samme enhed, "
 "mens de skiftes til at sidde i \"det varme sæde\"."
 
 msgid "2 Players"
@@ -5660,8 +5795,26 @@ msgstr ""
 "Spillere med alvorligt handicap starter med færre resurser og tjener 30% "
 "færre resurser per tur."
 
+msgid ""
+"Default\n"
+"value"
+msgstr ""
+
+#, fuzzy
+msgid "Set %{skill} Skill"
+msgstr "Indstil angrebsevne"
+
+msgid "Set %{skill} base value. Right-click to reset all skills to default."
+msgstr ""
+
 msgid "View %{skill} Info"
 msgstr "Vis info om %{skill}"
+
+#, fuzzy
+msgid ""
+"Default\n"
+"skill"
+msgstr "Forsvar"
 
 msgid "Keyboard|123"
 msgstr "123"
@@ -7417,6 +7570,58 @@ msgstr ""
 msgid "%{name} the %{race} (Level %{level})"
 msgstr "%{race}en %{name} (Level %{level})"
 
+#, fuzzy
+msgid "Random hero (Level %{level})"
+msgstr "%{name} (Level %{level})"
+
+#, fuzzy
+msgid "Random %{race} hero (Level %{level})"
+msgstr "%{race}en %{name} (Level %{level})"
+
+#, fuzzy
+msgid "Hero race:"
+msgstr "Helteskærm"
+
+msgid "Are you sure you want to dismiss this Hero?"
+msgstr "Er du sikker på, du vil bortvise denne helt?"
+
+msgid "Set custom Experience value. Current value is default."
+msgstr ""
+
+msgid "Change Experience value. Right-click to reset to default value."
+msgstr ""
+
+#, fuzzy
+msgid "Set Experience value"
+msgstr "Erfaringspoint"
+
+msgid "View Experience Info"
+msgstr "Vis erfaringsinfo"
+
+msgid "Set custom Spell Points value. Current value is default."
+msgstr ""
+
+msgid "Change Spell Points value. Right-click to reset to default value."
+msgstr ""
+
+#, fuzzy
+msgid "Set Spell Points value"
+msgstr "Mana"
+
+msgid "View Spell Points Info"
+msgstr "Vis info om mana"
+
+msgid "Set patrol radius in tiles"
+msgstr ""
+
+#, fuzzy
+msgid "Enter hero's name"
+msgstr "Mist helten '%{name}'."
+
+#, fuzzy
+msgid "Click to change race."
+msgstr "Klik for at se næste by."
+
 msgid ""
 "'Spread' combat formation spreads the hero's units from the top to the "
 "bottom of the battlefield, with at least one empty space between each unit."
@@ -7430,21 +7635,6 @@ msgid ""
 msgstr ""
 "'Gruppe'-kampformation samler heltens hær i midten af deres side af "
 "slagmarken."
-
-msgid "Are you sure you want to dismiss this Hero?"
-msgstr "Er du sikker på, du vil bortvise denne helt?"
-
-msgid "View Experience Info"
-msgstr "Vis erfaringsinfo"
-
-msgid "View Spell Points Info"
-msgstr "Vis info om mana"
-
-msgid "Set army combat formation to 'Spread'"
-msgstr "Sæt hærens kampformation til 'spredt'"
-
-msgid "Set army combat formation to 'Grouped'"
-msgstr "Sæt hærens kampformation til 'grupperet'"
 
 msgid "Exit Hero Screen"
 msgstr "Forlad helteskærm"
@@ -7463,6 +7653,34 @@ msgstr "Vis forrige helt"
 
 msgid "Show next hero"
 msgstr "Vis næste helt"
+
+msgid "Set army combat formation to 'Spread'"
+msgstr "Sæt hærens kampformation til 'spredt'"
+
+msgid "Set army combat formation to 'Grouped'"
+msgstr "Sæt hærens kampformation til 'grupperet'"
+
+msgid "Set hero's Artifacts. Right-click to reset Artifact."
+msgstr ""
+
+msgid "Set hero's Secondary Skills. Right-click to reset skill."
+msgstr ""
+
+msgid "Set hero's Army. Right-click to reset unit."
+msgstr ""
+
+msgid "Set hero's portrait. Right-click to reset to default."
+msgstr ""
+
+msgid "Click to change hero's name. Right-click to reset to default."
+msgstr ""
+
+msgid "Hero is in patrol mode in %{tiles} tiles radius. Click to disable it."
+msgstr ""
+
+#, fuzzy
+msgid "Click to enable hero's patrol mode."
+msgstr "Klik for at vælge denne farve."
 
 msgid "Blood Morale"
 msgstr "Blodsmoral"
@@ -8640,11 +8858,29 @@ msgstr "Sump"
 msgid "Frozen Lake"
 msgstr ""
 
-msgid "Unknown Monster"
-msgstr "Ukendt monster"
+msgid "randomRace|level 1 creatures"
+msgstr ""
+
+msgid "randomRace|level 2 creatures"
+msgstr ""
+
+msgid "randomRace|level 3 creatures"
+msgstr ""
+
+msgid "randomRace|level 4 creatures"
+msgstr ""
+
+msgid "randomRace|level 5 creatures"
+msgstr ""
+
+msgid "randomRace|level 6 creatures"
+msgstr ""
 
 msgid "Unknown Monsters"
 msgstr "Ukendte monstre"
+
+msgid "Unknown Monster"
+msgstr "Ukendt monster"
 
 msgid "Peasant"
 msgstr "Bonde"
@@ -11376,6 +11612,18 @@ msgstr ""
 "Check den nyeste version af spillet på\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Choose a tile which does not contain any objects."
+#~ msgstr "Vælg et felt, som ikke indeholder nogen objekter."
+
+#~ msgid "Set Defense Skill"
+#~ msgstr "Indstil forsvarsevne"
+
+#~ msgid "Set Power Skill"
+#~ msgstr "Indstil magisk evne"
+
+#~ msgid "Set Knowledge Skill"
+#~ msgstr "Indstil kundskabsevne"
 
 #~ msgid "Multiple"
 #~ msgstr "Mange"

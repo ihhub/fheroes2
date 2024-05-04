@@ -89,6 +89,7 @@ namespace
         return resolutions[id];
     }
 
+#if !defined( TARGET_PS_VITA )
     bool IsLowerThanDefaultRes( const fheroes2::ResolutionInfo & value )
     {
         return value.gameWidth < fheroes2::Display::DEFAULT_WIDTH || value.gameHeight < fheroes2::Display::DEFAULT_HEIGHT;
@@ -174,6 +175,7 @@ namespace
 
         return resolutions;
     }
+#endif
 
     std::vector<uint8_t> StandardPaletteIndexes()
     {
@@ -609,7 +611,6 @@ namespace
                 resolutionSet.emplace( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT );
                 resolutionSet.emplace( VITA_ASPECT_CORRECTED_WIDTH, fheroes2::Display::DEFAULT_HEIGHT );
                 resolutionSet.emplace( VITA_FULLSCREEN_WIDTH, VITA_FULLSCREEN_HEIGHT );
-                resolutionSet = FilterResolutions( resolutionSet );
 
                 return std::vector<fheroes2::ResolutionInfo>{ resolutionSet.rbegin(), resolutionSet.rend() };
             }();

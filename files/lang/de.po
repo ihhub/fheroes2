@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-27 01:17+0000\n"
+"POT-Creation-Date: 2024-05-01 11:10+0000\n"
 "PO-Revision-Date: 2023-12-22 00:32+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -213,6 +213,10 @@ msgstr ""
 msgid "TOWN"
 msgstr ""
 
+#, fuzzy
+msgid "RESTRICT"
+msgstr "NEUSTART"
+
 msgid ""
 "D\n"
 "I\n"
@@ -228,6 +232,15 @@ msgid ""
 "X\n"
 "I\n"
 "T"
+msgstr ""
+
+msgid ""
+"P\n"
+"A\n"
+"T\n"
+"R\n"
+"O\n"
+"L"
 msgstr ""
 
 msgid ""
@@ -367,6 +380,12 @@ msgstr "Truppen aus %{count} Gattungen -%{penalty}"
 #, fuzzy
 msgid "Some undead in army -1"
 msgstr "Einige Untote in der Gruppe -1"
+
+#, fuzzy
+msgid ""
+"Default\n"
+"troop"
+msgstr "Standardaktion"
 
 msgid "View %{name}"
 msgstr "%{name} ansehen"
@@ -995,18 +1014,6 @@ msgstr ""
 
 msgid "Please select another hero."
 msgstr "Bitte wählt einen anderen Helden aus."
-
-msgid "Set Attack Skill"
-msgstr "Angriff setzen"
-
-msgid "Set Defense Skill"
-msgstr "Verteidigung setzen"
-
-msgid "Set Power Skill"
-msgstr "Zauberkraft setzen"
-
-msgid "Set Knowledge Skill"
-msgstr "Wissen setzen"
 
 #, fuzzy
 msgid "%{race1} %{name1} vs %{race2} %{name2}"
@@ -2450,6 +2457,52 @@ msgstr "Laboratorium"
 msgid "Shrine"
 msgstr "Schrein"
 
+#, fuzzy
+msgid "Special"
+msgstr "Nichts besonderes"
+
+msgid "Horde Building"
+msgstr ""
+
+#, fuzzy
+msgid "Dwelling 1"
+msgstr "Halblinge"
+
+#, fuzzy
+msgid "Dwelling 2"
+msgstr "Halblinge"
+
+#, fuzzy
+msgid "Upg. Dwelling 2"
+msgstr "Halblinge"
+
+#, fuzzy
+msgid "Dwelling 3"
+msgstr "Halblinge"
+
+#, fuzzy
+msgid "Upg. Dwelling 3"
+msgstr "Halblinge"
+
+#, fuzzy
+msgid "Dwelling 4"
+msgstr "Halblinge"
+
+#, fuzzy
+msgid "Upg. Dwelling 4"
+msgstr "Halblinge"
+
+#, fuzzy
+msgid "Dwelling 6"
+msgstr "Halblinge"
+
+#, fuzzy
+msgid "Upg. Dwelling 6"
+msgstr "Halblinge"
+
+msgid "2x Upg. Dwelling 6"
+msgstr ""
+
 msgid ""
 "The Fortifications increase the toughness of the walls, increasing the "
 "number of turns it takes to knock them down."
@@ -2505,6 +2558,17 @@ msgstr ""
 msgid "The Skull Pile increases production of Skeletons by %{count} per week."
 msgstr ""
 "Der Schädelhaufen erhöht die Produktion von Skeletten um %{count} pro Woche."
+
+msgid "The Special building gives a specific bonus to the chosen castle type."
+msgstr ""
+
+#, fuzzy
+msgid ""
+"The Horde Building increases the growth rate of the level 1 creatures by 8 "
+"per week."
+msgstr ""
+"Der Brunnen erhöht die Wachstumsrate aller Behausungen um %{count} Lebewesen "
+"pro Woche."
 
 msgid "Thieves' Guild"
 msgstr "Diebesgilde"
@@ -3838,10 +3902,70 @@ msgid "Best Monster:"
 msgstr "Bestes Monster:"
 
 #, fuzzy
+msgid "Random Castle Name"
+msgstr "Zufälliges Burg"
+
+#, fuzzy
+msgid "Allow Castle build"
+msgstr "Wolkenburg"
+
+#, fuzzy
+msgid "Default buildings"
+msgstr "Standardaktion"
+
+#, fuzzy
+msgid "Default Army"
+msgstr "Standardaktion"
+
+#, fuzzy
+msgid "Castle Army"
+msgstr "Burg"
+
+msgid "Click to change the Castle name. Right-click to reset to default."
+msgstr ""
+
+#, fuzzy
+msgid "Enter Castle name"
+msgstr "Den Helden verlieren: %{name}."
+
+msgid "Allow to build a castle in this town."
+msgstr ""
+
+msgid "Toggle the use of default buildings. Custom buildings will be reset!"
+msgstr ""
+
+#, fuzzy
+msgid "Default Buildings"
+msgstr "Standardaktion"
+
+msgid "Toggle building construction restriction mode."
+msgstr ""
+
+msgid "Restrict Building Construction"
+msgstr ""
+
+msgid "Use default defenders army."
+msgstr ""
+
+msgid "Set custom Castle Army. Right-click to reset unit."
+msgstr ""
+
+#, fuzzy
 msgid "Map filename"
 msgstr ""
 "Karten-\n"
 "größe"
+
+#, fuzzy
+msgid ""
+"Do you wish to return to the game's Main Menu? All unsaved changes will be "
+"lost."
+msgstr ""
+"Seid Ihr sicher, dass Ihr eine neue Karte erstellen wollt? (Alle nicht "
+"gespeicherten Änderungen an der aktuellen Karte gehen verloren)."
+
+msgid "Editor"
+msgstr "Editor"
 
 msgid ""
 "Are you sure you want to load a new map? (Any unsaved changes to the current "
@@ -3882,14 +4006,19 @@ msgid "Quit out of the map editor."
 msgstr "Den Karteneditor verlassen."
 
 #, fuzzy
+msgid "Set %{monster} Count"
+msgstr "Schieße auf %{monster}"
+
+#, fuzzy
 msgid "Objects cannot be placed outside the map."
+msgstr "Monster können nicht auf Wasser plaziert werden."
+
+#, fuzzy
+msgid "Action objects must be placed on clear tiles."
 msgstr "Monster können nicht auf Wasser plaziert werden."
 
 msgid "Monsters cannot be placed on water."
 msgstr "Monster können nicht auf Wasser plaziert werden."
-
-msgid "Choose a tile which does not contain any objects."
-msgstr "Ein Feld wählen, das keine Objekt enthält."
 
 #, fuzzy
 msgid "Treasures cannot be placed on water."
@@ -3907,6 +4036,10 @@ msgstr ""
 
 #, fuzzy
 msgid "Artifacts cannot be placed on water."
+msgstr "Monster können nicht auf Wasser plaziert werden."
+
+#, fuzzy
+msgid "Only one Random Ultimate Artifact can be placed on the map."
 msgstr "Monster können nicht auf Wasser plaziert werden."
 
 #, fuzzy
@@ -4683,6 +4816,10 @@ msgstr "Standardaktion"
 msgid "hotkey|redo last action"
 msgstr "Standardaktion"
 
+#, fuzzy
+msgid "hotkey|open game main menu"
+msgstr "Neue Karte Menü"
+
 msgid "hotkey|roland campaign"
 msgstr "Roland-Feldzug"
 
@@ -4946,9 +5083,6 @@ msgstr "Heldenbildschirm"
 msgid "Army Actions"
 msgstr ""
 
-msgid "Editor"
-msgstr "Editor"
-
 msgid "The save file is corrupted."
 msgstr "Die Speicherdatei ist beschädigt."
 
@@ -4982,10 +5116,10 @@ msgid "Hot Seat"
 msgstr "Heißer Stuhl"
 
 msgid ""
-"Play a Hot Seat game, where 2 to 4 players play around the same computer, "
+"Play a Hot Seat game, where 2 to 6 players play around the same computer, "
 "switching into the 'Hot Seat' when it is their turn."
 msgstr ""
-"\"Heißen Stuhl\" spielen, bei dem 2 bis 4 Spieler spielen an einem Rechner "
+"\"Heißen Stuhl\" spielen, bei dem 2 bis 6 Spieler spielen an einem Rechner "
 "abwechselnd gegeneinander."
 
 msgid "A single player game playing out a single map."
@@ -5160,10 +5294,10 @@ msgstr "Einen Schlacht einrichten und spielen, ohne eine Karte zu laden."
 
 #, fuzzy
 msgid ""
-"Play a Hot Seat game, where 2 to 4 players play on the same device, "
+"Play a Hot Seat game, where 2 to 6 players play on the same device, "
 "switching into the 'Hot Seat' when it is their turn."
 msgstr ""
-"\"Heißen Stuhl\" spielen, bei dem 2 bis 4 Spieler spielen an einem Rechner "
+"\"Heißen Stuhl\" spielen, bei dem 2 bis 6 Spieler spielen an einem Rechner "
 "abwechselnd gegeneinander."
 
 msgid "2 Players"
@@ -5779,8 +5913,26 @@ msgstr ""
 "Spieler mit einem schwerem Handicap beginnen mit weniger Ressourcen und "
 "erhalten 30% weniger Ressourcen pro Zug."
 
+msgid ""
+"Default\n"
+"value"
+msgstr ""
+
+#, fuzzy
+msgid "Set %{skill} Skill"
+msgstr "Angriff setzen"
+
+msgid "Set %{skill} base value. Right-click to reset all skills to default."
+msgstr ""
+
 msgid "View %{skill} Info"
 msgstr "Info über %{skill} anzeigen"
+
+#, fuzzy
+msgid ""
+"Default\n"
+"skill"
+msgstr "Verteidigung"
 
 msgid "Keyboard|123"
 msgstr "123"
@@ -7588,6 +7740,58 @@ msgid "%{name} the %{race} (Level %{level})"
 msgstr "%{name} (Stufe %{level} %{race})"
 
 #, fuzzy
+msgid "Random hero (Level %{level})"
+msgstr "%{name} (Stufe %{level})"
+
+#, fuzzy
+msgid "Random %{race} hero (Level %{level})"
+msgstr "%{name} (Stufe %{level} %{race})"
+
+#, fuzzy
+msgid "Hero race:"
+msgstr "Heldenbildschirm"
+
+msgid "Are you sure you want to dismiss this Hero?"
+msgstr "Seid Ihr sicher, dass Ihr diesen Helden entlassen wollt?"
+
+msgid "Set custom Experience value. Current value is default."
+msgstr ""
+
+msgid "Change Experience value. Right-click to reset to default value."
+msgstr ""
+
+#, fuzzy
+msgid "Set Experience value"
+msgstr "Erfahrung"
+
+msgid "View Experience Info"
+msgstr "Infos zur Erfahrung anzeigen"
+
+msgid "Set custom Spell Points value. Current value is default."
+msgstr ""
+
+msgid "Change Spell Points value. Right-click to reset to default value."
+msgstr ""
+
+#, fuzzy
+msgid "Set Spell Points value"
+msgstr "Zauberpunkte"
+
+msgid "View Spell Points Info"
+msgstr "Infos zu Zauberpunkten anzeigen"
+
+msgid "Set patrol radius in tiles"
+msgstr ""
+
+#, fuzzy
+msgid "Enter hero's name"
+msgstr "Den Helden verlieren: %{name}."
+
+#, fuzzy
+msgid "Click to change race."
+msgstr "Klicken um die nächste Stadt anzuzeigen."
+
+#, fuzzy
 msgid ""
 "'Spread' combat formation spreads the hero's units from the top to the "
 "bottom of the battlefield, with at least one empty space between each unit."
@@ -7602,21 +7806,6 @@ msgid ""
 msgstr ""
 "Die 'Gruppierte' Kampfformation bündelt Eure Armee in der Mitte Eurer Seite "
 "des Schlachtfelds."
-
-msgid "Are you sure you want to dismiss this Hero?"
-msgstr "Seid Ihr sicher, dass Ihr diesen Helden entlassen wollt?"
-
-msgid "View Experience Info"
-msgstr "Infos zur Erfahrung anzeigen"
-
-msgid "View Spell Points Info"
-msgstr "Infos zu Zauberpunkten anzeigen"
-
-msgid "Set army combat formation to 'Spread'"
-msgstr "Armeekampfformation auf \"Ausbreitend\" einstellen"
-
-msgid "Set army combat formation to 'Grouped'"
-msgstr "Armeekampfformation auf \"Gruppiert\" einstellen"
 
 msgid "Exit Hero Screen"
 msgstr "Heldenbildschirm verlassen"
@@ -7635,6 +7824,34 @@ msgstr "Vorherigen Helden anzeigen"
 
 msgid "Show next hero"
 msgstr "Nächsten Helden anzeigen"
+
+msgid "Set army combat formation to 'Spread'"
+msgstr "Armeekampfformation auf \"Ausbreitend\" einstellen"
+
+msgid "Set army combat formation to 'Grouped'"
+msgstr "Armeekampfformation auf \"Gruppiert\" einstellen"
+
+msgid "Set hero's Artifacts. Right-click to reset Artifact."
+msgstr ""
+
+msgid "Set hero's Secondary Skills. Right-click to reset skill."
+msgstr ""
+
+msgid "Set hero's Army. Right-click to reset unit."
+msgstr ""
+
+msgid "Set hero's portrait. Right-click to reset to default."
+msgstr ""
+
+msgid "Click to change hero's name. Right-click to reset to default."
+msgstr ""
+
+msgid "Hero is in patrol mode in %{tiles} tiles radius. Click to disable it."
+msgstr ""
+
+#, fuzzy
+msgid "Click to enable hero's patrol mode."
+msgstr "Hier klicken, um auszuwählen, welches Szenario gespielt werden soll."
 
 msgid "Blood Morale"
 msgstr "Blutmoral"
@@ -8851,11 +9068,29 @@ msgstr "Sumpf"
 msgid "Frozen Lake"
 msgstr ""
 
-msgid "Unknown Monster"
-msgstr "Unbekanntes Monster"
+msgid "randomRace|level 1 creatures"
+msgstr ""
+
+msgid "randomRace|level 2 creatures"
+msgstr ""
+
+msgid "randomRace|level 3 creatures"
+msgstr ""
+
+msgid "randomRace|level 4 creatures"
+msgstr ""
+
+msgid "randomRace|level 5 creatures"
+msgstr ""
+
+msgid "randomRace|level 6 creatures"
+msgstr ""
 
 msgid "Unknown Monsters"
 msgstr "Unbekannte Monster"
+
+msgid "Unknown Monster"
+msgstr "Unbekanntes Monster"
 
 msgid "Peasant"
 msgstr "Bauer"
@@ -11662,6 +11897,18 @@ msgstr ""
 "Die neueste Version des Spiels finden Sie unter\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Choose a tile which does not contain any objects."
+#~ msgstr "Ein Feld wählen, das keine Objekt enthält."
+
+#~ msgid "Set Defense Skill"
+#~ msgstr "Verteidigung setzen"
+
+#~ msgid "Set Power Skill"
+#~ msgstr "Zauberkraft setzen"
+
+#~ msgid "Set Knowledge Skill"
+#~ msgstr "Wissen setzen"
 
 #~ msgid "Multiple"
 #~ msgstr "Verschied"

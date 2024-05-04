@@ -325,7 +325,7 @@ namespace Dialog
             display.setResolution( selectedResolution );
 
 #if !defined( MACOS_APP_BUNDLE )
-            const fheroes2::Image & appIcon = CreateImageFromZlib( 32, 32, iconImage, sizeof( iconImage ), true );
+            const fheroes2::Image & appIcon = Compression::CreateImageFromZlib( 32, 32, iconImage, sizeof( iconImage ), true );
             fheroes2::engine().setIcon( appIcon );
 #endif
 

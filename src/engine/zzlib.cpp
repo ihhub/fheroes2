@@ -26,18 +26,21 @@
 #include <algorithm>
 #include <cstring>
 #include <ostream>
-#include <vector>
 
 #include <zconf.h>
 #include <zlib.h>
 
 #include "logging.h"
+#include "serialize.h"
 
 namespace
 {
     constexpr uint16_t FORMAT_VERSION_0 = 0;
+}
 
-    std::vector<uint8_t> zlibDecompress( const uint8_t * src, const size_t srcSize, size_t realSize = 0 )
+namespace Compression
+{
+    std::vector<uint8_t> decompressData( const uint8_t * src, const size_t srcSize, size_t realSize /* = 0 */ )
     {
         if ( src == nullptr || srcSize == 0 ) {
             return {};
@@ -100,7 +103,7 @@ namespace
         return res;
     }
 
-    std::vector<uint8_t> zlibCompress( const uint8_t * src, const size_t srcSize )
+    std::vector<uint8_t> compressData( const uint8_t * src, const size_t srcSize )
     {
         if ( src == nullptr || srcSize == 0 ) {
             return {};
@@ -131,94 +134,94 @@ namespace
 
         return res;
     }
-}
 
-bool ZStreamBuf::read( const std::string & fn, const size_t offset /* = 0 */ )
-{
-    StreamFile sf;
-    sf.setbigendian( true );
+    bool readFile( StreamBuf & output, const std::string & fn, const size_t offset /* = 0 */ )
+    {
+        StreamFile sf;
+        sf.setbigendian( true );
 
-    if ( !sf.open( fn, "rb" ) ) {
-        return false;
+        if ( !sf.open( fn, "rb" ) ) {
+            return false;
+        }
+
+        if ( offset ) {
+            sf.seek( offset );
+        }
+
+        const uint32_t rawSize = sf.get32();
+        const uint32_t zipSize = sf.get32();
+        if ( zipSize == 0 ) {
+            return false;
+        }
+
+        const uint16_t version = sf.get16();
+        if ( version != FORMAT_VERSION_0 ) {
+            return false;
+        }
+
+        sf.skip( 2 ); // Unused bytes
+
+        const std::vector<uint8_t> zip = sf.getRaw( zipSize );
+        const std::vector<uint8_t> raw = decompressData( zip.data(), zip.size(), rawSize );
+        if ( raw.size() != rawSize ) {
+            return false;
+        }
+
+        output.putRaw( raw.data(), raw.size() );
+
+        return !output.fail();
     }
 
-    if ( offset ) {
-        sf.seek( offset );
+    bool writeFile( StreamBuf & input, const std::string & fn, const bool append /* = false */ )
+    {
+        StreamFile sf;
+        sf.setbigendian( true );
+
+        if ( !sf.open( fn, append ? "ab" : "wb" ) ) {
+            return false;
+        }
+
+        const std::vector<uint8_t> zip = compressData( input.data(), input.size() );
+        if ( zip.empty() ) {
+            return false;
+        }
+
+        sf.put32( static_cast<uint32_t>( input.size() ) );
+        sf.put32( static_cast<uint32_t>( zip.size() ) );
+        sf.put16( FORMAT_VERSION_0 );
+        sf.put16( 0 ); // Unused bytes
+        sf.putRaw( zip.data(), zip.size() );
+
+        return !sf.fail();
     }
 
-    const uint32_t rawSize = sf.get32();
-    const uint32_t zipSize = sf.get32();
-    if ( zipSize == 0 ) {
-        return false;
+    fheroes2::Image CreateImageFromZlib( int32_t width, int32_t height, const uint8_t * imageData, size_t imageSize, bool doubleLayer )
+    {
+        if ( imageData == nullptr || imageSize == 0 || width <= 0 || height <= 0 ) {
+            return {};
+        }
+
+        const std::vector<uint8_t> & uncompressedData = decompressData( imageData, imageSize );
+        if ( doubleLayer && ( uncompressedData.size() & 1 ) == 1 ) {
+            return {};
+        }
+
+        const size_t uncompressedSize = doubleLayer ? uncompressedData.size() / 2 : uncompressedData.size();
+
+        if ( static_cast<size_t>( width ) * height != uncompressedSize ) {
+            return {};
+        }
+
+        fheroes2::Image out;
+        if ( !doubleLayer ) {
+            out._disableTransformLayer();
+        }
+        out.resize( width, height );
+
+        std::memcpy( out.image(), uncompressedData.data(), uncompressedSize );
+        if ( doubleLayer ) {
+            std::memcpy( out.transform(), uncompressedData.data() + uncompressedSize, uncompressedSize );
+        }
+        return out;
     }
-
-    const uint16_t version = sf.get16();
-    if ( version != FORMAT_VERSION_0 ) {
-        return false;
-    }
-
-    sf.skip( 2 ); // Unused bytes
-
-    const std::vector<uint8_t> zip = sf.getRaw( zipSize );
-    const std::vector<uint8_t> raw = zlibDecompress( zip.data(), zip.size(), rawSize );
-    if ( raw.size() != rawSize ) {
-        return false;
-    }
-
-    putRaw( reinterpret_cast<const char *>( raw.data() ), raw.size() );
-
-    return !fail();
-}
-
-bool ZStreamBuf::write( const std::string & fn, const bool append /* = false */ )
-{
-    StreamFile sf;
-    sf.setbigendian( true );
-
-    if ( !sf.open( fn, append ? "ab" : "wb" ) ) {
-        return false;
-    }
-
-    const std::vector<uint8_t> zip = zlibCompress( data(), size() );
-    if ( zip.empty() ) {
-        return false;
-    }
-
-    sf.put32( static_cast<uint32_t>( size() ) );
-    sf.put32( static_cast<uint32_t>( zip.size() ) );
-    sf.put16( FORMAT_VERSION_0 );
-    sf.put16( 0 ); // Unused bytes
-    sf.putRaw( reinterpret_cast<const char *>( zip.data() ), zip.size() );
-
-    return !sf.fail();
-}
-
-fheroes2::Image CreateImageFromZlib( int32_t width, int32_t height, const uint8_t * imageData, size_t imageSize, bool doubleLayer )
-{
-    if ( imageData == nullptr || imageSize == 0 || width <= 0 || height <= 0 ) {
-        return {};
-    }
-
-    const std::vector<uint8_t> & uncompressedData = zlibDecompress( imageData, imageSize );
-    if ( doubleLayer && ( uncompressedData.size() & 1 ) == 1 ) {
-        return {};
-    }
-
-    const size_t uncompressedSize = doubleLayer ? uncompressedData.size() / 2 : uncompressedData.size();
-
-    if ( static_cast<size_t>( width * height ) != uncompressedSize ) {
-        return {};
-    }
-
-    fheroes2::Image out;
-    if ( !doubleLayer ) {
-        out._disableTransformLayer();
-    }
-    out.resize( width, height );
-
-    std::memcpy( out.image(), uncompressedData.data(), uncompressedSize );
-    if ( doubleLayer ) {
-        std::memcpy( out.transform(), uncompressedData.data() + uncompressedSize, uncompressedSize );
-    }
-    return out;
 }
