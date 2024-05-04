@@ -94,10 +94,6 @@ namespace fheroes2
     size_t getTextInputCursorPosition( const std::string & text, const FontType & fontType, const size_t currentTextCursorPosition, const int32_t pointerCursorXOffset,
                                        const int32_t textStartXOffset );
 
-    // Returns the character position number in the 'text' string. NOTICE: the input text should contain the cursor ('_').
-    size_t getMultilineTextInputCursorPosition( const std::string & text, const FontType & fontType, const size_t currentTextCursorPosition,
-                                                const Point & pointerCursorOffset, const Rect & textRoi );
-
     class TextBase
     {
     public:
@@ -194,6 +190,9 @@ namespace fheroes2
 
         // This method modifies the underlying text and ends it with '...' if it is longer than the provided width.
         void fitToOneRow( const int32_t maxWidth, const bool ignoreSacesAtEnd = true );
+
+        // Returns the character position number in the 'text' string. NOTICE: the input text should contain the cursor ('_').
+        size_t getTextInputCursorPosition( const size_t currentTextCursorPosition, const Point & pointerCursorOffset, const Rect & textRoi );
 
         std::string text() const override;
 

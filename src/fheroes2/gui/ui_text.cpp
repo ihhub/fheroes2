@@ -582,71 +582,6 @@ namespace fheroes2
         return textSize;
     }
 
-    size_t getMultilineTextInputCursorPosition( const std::string & text, const FontType & fontType, const size_t currentTextCursorPosition,
-                                                const Point & pointerCursorOffset, const Rect & textRoi )
-    {
-        if ( text.empty() ) {
-            // The text is empty.
-            return 0;
-        }
-
-        const int32_t fontHeight = getFontHeight( fontType.size );
-        const int32_t pointerLine = ( pointerCursorOffset.y - textRoi.y ) / fontHeight;
-
-        if ( pointerLine < 0 ) {
-            // Pointer is upper than the first text line.
-            return 0;
-        }
-
-        const int32_t textWidth = Text( text, fontType ).width( textRoi.width );
-        const size_t textSize = text.size();
-
-        std::deque<Point> charCount;
-        getMultiRowInfo( reinterpret_cast<const uint8_t *>( text.data() ), static_cast<int32_t>( textSize ), textWidth, fontType, fontHeight, charCount, true );
-
-        if ( pointerLine >= static_cast<int32_t>( charCount.size() ) ) {
-            // Pointer is lower than the last text line.
-            return textSize;
-        }
-
-        size_t cursorPosition = 0;
-        for ( int32_t i = 0; i < pointerLine; ++i ) {
-            cursorPosition += charCount[i].x;
-        }
-
-        std::deque<Point> offsets;
-        getMultiRowInfo( reinterpret_cast<const uint8_t *>( text.data() ), static_cast<int32_t>( textSize ), textWidth, fontType, fontHeight, offsets, false );
-
-        int32_t positionOffsetX = 0;
-        const int32_t maxOffsetX = pointerCursorOffset.x - textRoi.x - ( textRoi.width - offsets[pointerLine].x ) / 2;
-
-        if ( maxOffsetX <= 0 ) {
-            // Pointer is to the left of the text line.
-            return ( cursorPosition > currentTextCursorPosition ) ? cursorPosition - 1 : cursorPosition;
-        }
-
-        if ( maxOffsetX > offsets[pointerLine].x ) {
-            // Pointer is to the right of the text line.
-            cursorPosition += charCount[pointerLine].x;
-
-            return ( cursorPosition > currentTextCursorPosition ) ? cursorPosition - 1 : cursorPosition;
-        }
-
-        const CharHandler charHandler( fontType );
-
-        for ( size_t i = cursorPosition; i < textSize; ++i ) {
-            const int32_t charWidth = charHandler.getWidth( static_cast<uint8_t>( text[i] ) );
-            positionOffsetX += charWidth;
-
-            if ( positionOffsetX > maxOffsetX ) {
-                // Take into account that the cursor character ('_') was added to the line.
-                return ( i > currentTextCursorPosition ) ? i - 1 : i;
-            }
-        }
-
-        return textSize;
-    }
-
     TextBase::~TextBase() = default;
 
     Text::~Text() = default;
@@ -804,6 +739,72 @@ namespace fheroes2
 
         _text.resize( maxCharacterCount );
         _text += truncatedEnding;
+    }
+
+    size_t Text::getTextInputCursorPosition( const size_t currentTextCursorPosition, const Point & pointerCursorOffset, const Rect & textRoi )
+    {
+        {
+            if ( _text.empty() ) {
+                // The text is empty.
+                return 0;
+            }
+
+            const int32_t fontHeight = getFontHeight( _fontType.size );
+            const int32_t pointerLine = ( pointerCursorOffset.y - textRoi.y ) / fontHeight;
+
+            if ( pointerLine < 0 ) {
+                // Pointer is upper than the first text line.
+                return 0;
+            }
+
+            const int32_t textWidth = width( textRoi.width );
+            const size_t textSize = _text.size();
+
+            std::deque<Point> charCount;
+            getMultiRowInfo( reinterpret_cast<const uint8_t *>( _text.data() ), static_cast<int32_t>( textSize ), textWidth, _fontType, fontHeight, charCount, true );
+
+            if ( pointerLine >= static_cast<int32_t>( charCount.size() ) ) {
+                // Pointer is lower than the last text line.
+                return textSize;
+            }
+
+            size_t cursorPosition = 0;
+            for ( int32_t i = 0; i < pointerLine; ++i ) {
+                cursorPosition += charCount[i].x;
+            }
+
+            std::deque<Point> offsets;
+            getMultiRowInfo( reinterpret_cast<const uint8_t *>( _text.data() ), static_cast<int32_t>( textSize ), textWidth, _fontType, fontHeight, offsets, false );
+
+            int32_t positionOffsetX = 0;
+            const int32_t maxOffsetX = pointerCursorOffset.x - textRoi.x - ( textRoi.width - offsets[pointerLine].x ) / 2;
+
+            if ( maxOffsetX <= 0 ) {
+                // Pointer is to the left of the text line.
+                return ( cursorPosition > currentTextCursorPosition ) ? cursorPosition - 1 : cursorPosition;
+            }
+
+            if ( maxOffsetX > offsets[pointerLine].x ) {
+                // Pointer is to the right of the text line.
+                cursorPosition += charCount[pointerLine].x;
+
+                return ( cursorPosition > currentTextCursorPosition ) ? cursorPosition - 1 : cursorPosition;
+            }
+
+            const CharHandler charHandler( _fontType );
+
+            for ( size_t i = cursorPosition; i < textSize; ++i ) {
+                const int32_t charWidth = charHandler.getWidth( static_cast<uint8_t>( _text[i] ) );
+                positionOffsetX += charWidth;
+
+                if ( positionOffsetX > maxOffsetX ) {
+                    // Take into account that the cursor character ('_') was added to the line.
+                    return ( i > currentTextCursorPosition ) ? i - 1 : i;
+                }
+            }
+
+            return textSize;
+        }
     }
 
     std::string Text::text() const

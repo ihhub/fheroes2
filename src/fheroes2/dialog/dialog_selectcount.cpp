@@ -365,10 +365,7 @@ bool Dialog::inputString( std::string header, std::string & result, std::string 
             }
         }
         else if ( le.MouseClickLeft( textInputArea ) ) {
-            // charInsertPos = fheroes2::getTextInputCursorPosition( result, fheroes2::FontType::normalWhite(), charInsertPos, le.GetMouseCursor().x,
-            //                                                      textInputArea.x + ( textInputArea.width - text.width() ) / 2 );
-            charInsertPos = fheroes2::getMultilineTextInputCursorPosition( insertCharToString( result, charInsertPos, '_' ), fheroes2::FontType::normalWhite(),
-                                                                           charInsertPos, le.GetMouseCursor(), textInputArea );
+            charInsertPos = text.getTextInputCursorPosition( charInsertPos, le.GetMouseCursor(), textInputArea );
 
             redraw = true;
         }
