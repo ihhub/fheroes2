@@ -665,7 +665,7 @@ namespace fheroes2
         const int32_t maxOffset = pointerCursorXOffset - textStartXOffset;
         const size_t textSize = text.size();
         int32_t positionOffset = 0;
-        const CharHandler charHandler( fontType );
+        const FontCharHandler charHandler( fontType );
 
         for ( size_t i = 0; i < textSize; ++i ) {
             positionOffset += charHandler.getWidth( static_cast<uint8_t>( text[i] ) );

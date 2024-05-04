@@ -91,60 +91,6 @@ namespace fheroes2
 
     int32_t getFontHeight( const FontSize fontSize );
 
-    class CharHandler
-    {
-    public:
-        explicit CharHandler( const fheroes2::FontType fontType )
-            : _fontType( fontType )
-            , _charLimit( fheroes2::AGG::getCharacterLimit( fontType.size ) )
-            , _spaceCharWidth( _getSpaceCharWidth() )
-        {}
-
-        // Returns true if character is a line separator ('\n').
-        static bool isLineSeparator( const uint8_t character )
-        {
-            return ( character == '\n' );
-        }
-
-        // Returns true if character is a Space character (' ').
-        static bool isSpaceChar( const uint8_t character )
-        {
-            return ( character == ' ' );
-        }
-
-        // Returns true if character is available to render, including space (' ') and new line ('\n').
-        bool isAvailable( const uint8_t character ) const
-        {
-            return ( isSpaceChar( character ) || _isValid( character ) || isLineSeparator( character ) );
-        }
-
-        const fheroes2::Sprite & getSprite( const uint8_t character ) const
-        {
-            // Display '?' in place of the invalid character.
-            return fheroes2::AGG::getChar( _isValid( character ) ? character : '?', _fontType );
-        }
-
-        int32_t getWidth( const uint8_t character ) const;
-
-        int32_t getSpaceCharWidth() const
-        {
-            return _spaceCharWidth;
-        }
-
-    private:
-        // Returns true if character is valid for the current code page, excluding space (' ') and new line ('\n').
-        bool _isValid( const uint8_t character ) const
-        {
-            return character >= 0x21 && character <= _charLimit;
-        }
-
-        int32_t _getSpaceCharWidth() const;
-
-        const fheroes2::FontType _fontType;
-        const uint32_t _charLimit;
-        const int32_t _spaceCharWidth;
-    };
-
     class TextBase
     {
     public:
@@ -240,9 +186,10 @@ namespace fheroes2
         }
 
         // This method modifies the underlying text and ends it with '...' if it is longer than the provided width.
-        void fitToOneRow( const int32_t maxWidth, const bool ignoreSacesAtEnd = true );
+        // By default it ignores spaces at the end of the text phrase.
+        void fitToOneRow( const int32_t maxWidth, const bool ignoreSpacesAtTextEnd = true );
 
-        // Returns the character position number in the 'text' string. NOTICE: the input text should contain the cursor ('_').
+        // Returns the character position number in the text.
         size_t getTextInputCursorPosition( const size_t currentTextCursorPosition, const Point & pointerCursorOffset, const Rect & textRoi );
 
         std::string text() const override;
@@ -278,6 +225,34 @@ namespace fheroes2
 
     private:
         std::vector<Text> _texts;
+    };
+
+    class FontCharHandler
+    {
+    public:
+        explicit FontCharHandler( const fheroes2::FontType fontType );
+
+        // Returns true if character is available to render, including space (' ') and new line ('\n').
+        bool isAvailable( const uint8_t character ) const;
+
+        const fheroes2::Sprite & getSprite( const uint8_t character ) const;
+
+        int32_t getWidth( const uint8_t character ) const;
+
+        int32_t getSpaceCharWidth() const
+        {
+            return _spaceCharWidth;
+        }
+
+    private:
+        // Returns true if character is valid for the current code page, excluding space (' ') and new line ('\n').
+        bool _isValid( const uint8_t character ) const;
+
+        int32_t _getSpaceCharWidth() const;
+
+        const fheroes2::FontType _fontType;
+        const uint32_t _charLimit;
+        const int32_t _spaceCharWidth;
     };
 
     // This function is usually useful for text generation on buttons as button font is a separate set of sprites.

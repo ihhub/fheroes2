@@ -24,17 +24,37 @@
 #include <cassert>
 #include <deque>
 #include <memory>
-#include <vector>
 
 namespace
 {
     const uint8_t hyphenChar{ '-' };
 
+    const uint8_t invalidChar{ '?' };
+
+    // Returns true if character is a line separator ('\n').
+    bool isLineSeparator( const uint8_t character )
+    {
+        return ( character == '\n' );
+    }
+
+    // Returns true if character is a Space character (' ').
+    bool isSpaceChar( const uint8_t character )
+    {
+        return ( character == ' ' );
+    }
+
+    struct TextLineInfo
+    {
+        fheroes2::Point offset;
+
+        int32_t characterCount{ 0 };
+    };
+
     int32_t getLineWidth( const uint8_t * data, const int32_t size, const fheroes2::FontType & fontType )
     {
         assert( data != nullptr && size > 0 );
 
-        const fheroes2::CharHandler charHandler( fontType );
+        const fheroes2::FontCharHandler charHandler( fontType );
 
         int32_t width = 0;
 
@@ -52,7 +72,7 @@ namespace
     {
         assert( data != nullptr && size > 0 && maxWidth > 0 );
 
-        const fheroes2::CharHandler charHandler( fontType );
+        const fheroes2::FontCharHandler charHandler( fontType );
 
         int32_t width = 0;
 
@@ -72,7 +92,7 @@ namespace
     {
         assert( data != nullptr && size > 0 );
 
-        const fheroes2::CharHandler charHandler( fontType );
+        const fheroes2::FontCharHandler charHandler( fontType );
 
         int32_t width = 0;
         int32_t spaceWidth = 0;
@@ -81,7 +101,7 @@ namespace
 
         const uint8_t * dataEnd = data + size;
         while ( data != dataEnd ) {
-            if ( fheroes2::CharHandler::isSpaceChar( *data ) ) {
+            if ( isSpaceChar( *data ) ) {
                 spaceWidth += spaceCharWidth;
             }
             else {
@@ -98,40 +118,39 @@ namespace
 
     // Returns text lines parameters (in pixels) in 'offsets': x - line widths, y - vertical line shift. And in 'charsInLine' - the number of characters on the line.
     void getMultiRowInfo( const uint8_t * data, const int32_t size, const int32_t maxWidth, const fheroes2::FontType & fontType, const int32_t rowHeight,
-                          std::deque<fheroes2::Point> & offsets, std::vector<int32_t> & charsInLine )
+                          std::deque<TextLineInfo> & textLineInfo )
     {
         assert( data != nullptr && size > 0 && maxWidth > 0 );
 
-        if ( offsets.empty() ) {
-            offsets.emplace_back();
-            charsInLine.push_back( 0 );
+        if ( textLineInfo.empty() ) {
+            textLineInfo.emplace_back();
         }
 
-        fheroes2::Point * offset = &offsets.back();
+        TextLineInfo * lineInfo = &textLineInfo.back();
 
-        const fheroes2::CharHandler charHandler( fontType );
+        const fheroes2::FontCharHandler charHandler( fontType );
 
         // We need to cut sentences not in the middle of a word but by a space or invalid characters.
         const uint8_t * dataEnd = data + size;
 
         const int32_t stepY = rowHeight;
 
-        int32_t lineLength = charsInLine.back();
+        int32_t lineLength = lineInfo->characterCount;
         int32_t lastWordLength = 0;
-        int32_t lineWidth = offset->x;
+        int32_t lineWidth = lineInfo->offset.x;
 
         while ( data != dataEnd ) {
-            if ( fheroes2::CharHandler::isLineSeparator( *data ) ) {
+            if ( isLineSeparator( *data ) ) {
                 if ( lineLength > 0 ) {
-                    offset->x = lineWidth;
+                    lineInfo->offset.x = lineWidth;
                     lineLength = 0;
                     lastWordLength = 0;
                     lineWidth = 0;
                 }
 
-                offsets.emplace_back( 0, offset->y + stepY );
-                offset = &offsets.back();
-                charsInLine.push_back( 0 );
+                textLineInfo.emplace_back();
+                lineInfo = &textLineInfo.back();
+                lineInfo->offset.y = lineInfo->offset.y + stepY;
 
                 ++data;
             }
@@ -155,15 +174,15 @@ namespace
 
                         if ( hyphenPos != data ) {
                             // The '-' symbol has been found. In this case we consider everything after it as a separate word.
-                            charsInLine.back() = lineLength - static_cast<int32_t>( data - hyphenPos ) + 1;
-                            offset->x = getLineWidth( data - lineLength, charsInLine.back(), fontType );
+                            lineInfo->characterCount = lineLength - static_cast<int32_t>( data - hyphenPos ) + 1;
+                            lineInfo->offset.x = getLineWidth( data - lineLength, lineInfo->characterCount, fontType );
                             data = hyphenPos;
                             ++data;
                         }
                         else {
-                            if ( offset->x == 0 ) {
-                                charsInLine.back() = lineLength;
-                                offset->x = lineWidth;
+                            if ( lineInfo->offset.x == 0 ) {
+                                lineInfo->characterCount = lineLength;
+                                lineInfo->offset.x = lineWidth;
                             }
                             else {
                                 // This word was not the first in the line so we can move it to the next line.
@@ -173,11 +192,11 @@ namespace
                         }
                     }
                     else {
-                        if ( fheroes2::CharHandler::isSpaceChar( *data ) ) {
+                        if ( isSpaceChar( *data ) ) {
                             // Current character could be a space character then current line is over.
                             // For the characters count we take this space into the account.
-                            charsInLine.back() = lineLength + 1;
-                            offset->x = lineWidth;
+                            lineInfo->characterCount = lineLength + 1;
+                            lineInfo->offset.x = lineWidth;
 
                             // We skip this space character.
                             ++data;
@@ -186,12 +205,12 @@ namespace
                             // Exclude last word from this line.
                             data -= lastWordLength;
 
-                            charsInLine.back() = lineLength - lastWordLength;
-                            offset->x = lineWidth - getLineWidth( data, lastWordLength, fontType );
+                            lineInfo->characterCount = lineLength - lastWordLength;
+                            lineInfo->offset.x = lineWidth - getLineWidth( data, lastWordLength, fontType );
                         }
                         else {
-                            charsInLine.back() = lineLength;
-                            offset->x = lineWidth;
+                            lineInfo->characterCount = lineLength;
+                            lineInfo->offset.x = lineWidth;
                         }
                     }
 
@@ -199,12 +218,12 @@ namespace
                     lastWordLength = 0;
                     lineWidth = 0;
 
-                    offsets.emplace_back( 0, offset->y + stepY );
-                    offset = &offsets.back();
-                    charsInLine.push_back( 0 );
+                    textLineInfo.emplace_back();
+                    lineInfo = &textLineInfo.back();
+                    lineInfo->offset.y = lineInfo->offset.y + stepY;
                 }
                 else {
-                    lastWordLength = fheroes2::CharHandler::isSpaceChar( *data ) ? 0 : ( lastWordLength + 1 );
+                    lastWordLength = isSpaceChar( *data ) ? 0 : ( lastWordLength + 1 );
 
                     ++data;
                     ++lineLength;
@@ -213,8 +232,8 @@ namespace
             }
         }
 
-        charsInLine.back() = lineLength;
-        offset->x = lineWidth;
+        lineInfo->characterCount = lineLength;
+        lineInfo->offset.x = lineWidth;
     }
 
     int32_t renderSingleLine( const uint8_t * data, const int32_t size, const int32_t x, const int32_t y, fheroes2::Image & output, const fheroes2::Rect & imageRoi,
@@ -222,7 +241,7 @@ namespace
     {
         assert( data != nullptr && size > 0 && !output.empty() );
 
-        const fheroes2::CharHandler charHandler( fontType );
+        const fheroes2::FontCharHandler charHandler( fontType );
 
         int32_t offsetX = x;
 
@@ -230,13 +249,13 @@ namespace
         const uint8_t * dataEnd = data + size;
 
         for ( ; data != dataEnd; ++data ) {
-            if ( fheroes2::CharHandler::isSpaceChar( *data ) ) {
+            if ( isSpaceChar( *data ) ) {
                 offsetX += spaceCharWidth;
                 continue;
             }
 
             // TODO: remove this hack or expand it to cover more cases.
-            if ( fheroes2::CharHandler::isLineSeparator( *data ) ) {
+            if ( isLineSeparator( *data ) ) {
                 // This should never happen as line cannot contain line separator in the middle.
                 // But due to some limitations in UI we have to deal with it.
                 // The only way is to just ignore it here.
@@ -279,11 +298,11 @@ namespace
 
     void renderMultiLine( const uint8_t * data, const int32_t size, const int32_t x, const int32_t y, const int32_t maxWidth, fheroes2::Image & output,
                           const fheroes2::Rect & imageRoi, const fheroes2::FontType & fontType, const int32_t rowHeight, const bool align,
-                          std::deque<fheroes2::Point> & offsets )
+                          std::deque<TextLineInfo> & lineInfos )
     {
         assert( data != nullptr && size > 0 && !output.empty() && maxWidth > 0 );
 
-        const fheroes2::CharHandler charHandler( fontType );
+        const fheroes2::FontCharHandler charHandler( fontType );
 
         // We need to cut sentences not in the middle of a word but by a space or invalid characters.
         const uint8_t * dataEnd = data + size;
@@ -292,39 +311,39 @@ namespace
         int32_t lastWordLength = 0;
         int32_t lineWidth = 0;
 
-        fheroes2::Point staticOffset;
-        fheroes2::Point * offset;
-        const bool hasInputOffsets = !offsets.empty();
+        TextLineInfo staticLineInfo;
+        TextLineInfo * lineInfo;
+        const bool hasInputOffsets = !lineInfos.empty();
 
         if ( hasInputOffsets ) {
-            offset = &offsets.front();
+            lineInfo = &lineInfos.front();
         }
         else {
-            offset = &staticOffset;
+            lineInfo = &staticLineInfo;
         }
 
         const int32_t fontHeight = fheroes2::getFontHeight( fontType.size );
         const int32_t yPos = y + ( rowHeight - fontHeight ) / 2;
 
         while ( data != dataEnd ) {
-            if ( fheroes2::CharHandler::isLineSeparator( *data ) ) {
+            if ( isLineSeparator( *data ) ) {
                 // End of line. Render the current line.
                 if ( lineLength > 0 ) {
-                    renderLine( data - lineLength, lineLength, x + offset->x, yPos + offset->y, maxWidth, output, imageRoi, fontType, align );
+                    renderLine( data - lineLength, lineLength, x + lineInfo->offset.x, yPos + lineInfo->offset.y, maxWidth, output, imageRoi, fontType, align );
                     lineLength = 0;
                     lastWordLength = 0;
                     lineWidth = 0;
                 }
 
                 if ( hasInputOffsets ) {
-                    offsets.pop_front();
-                    assert( !offsets.empty() );
+                    lineInfos.pop_front();
+                    assert( !lineInfos.empty() );
 
-                    offset = &offsets.front();
+                    lineInfo = &lineInfos.front();
                 }
                 else {
-                    offset->x = 0;
-                    offset->y += rowHeight;
+                    lineInfo->offset.x = 0;
+                    lineInfo->offset.y += rowHeight;
                 }
 
                 ++data;
@@ -332,7 +351,7 @@ namespace
             else {
                 const int32_t charWidth = charHandler.getWidth( *data );
 
-                if ( offset->x + lineWidth + charWidth > maxWidth ) {
+                if ( lineInfo->offset.x + lineWidth + charWidth > maxWidth ) {
                     // Current character has exceeded the maximum line width.
                     const uint8_t * line = data - lineLength;
 
@@ -352,14 +371,14 @@ namespace
                         }
 
                         if ( hyphenPos != data ) {
-                            renderLine( line, static_cast<int32_t>( hyphenPos + lineLength - data ) + 1, x + offset->x, yPos + offset->y, maxWidth, output, imageRoi,
-                                        fontType, align );
+                            renderLine( line, static_cast<int32_t>( hyphenPos + lineLength - data ) + 1, x + lineInfo->offset.x, yPos + lineInfo->offset.y, maxWidth,
+                                        output, imageRoi, fontType, align );
                             data = hyphenPos;
                             ++data;
                         }
                         else {
-                            if ( offset->x == 0 ) {
-                                renderLine( line, lineLength, x + offset->x, yPos + offset->y, maxWidth, output, imageRoi, fontType, align );
+                            if ( lineInfo->offset.x == 0 ) {
+                                renderLine( line, lineLength, x + lineInfo->offset.x, yPos + lineInfo->offset.y, maxWidth, output, imageRoi, fontType, align );
                             }
                             else {
                                 // This word was not the first in the line so we can move it to the next line.
@@ -369,16 +388,17 @@ namespace
                         }
                     }
                     else {
-                        if ( fheroes2::CharHandler::isSpaceChar( *data ) ) {
+                        if ( isSpaceChar( *data ) ) {
                             // Current character could be a space character then current line is over.
-                            renderLine( line, lineLength, x + offset->x, yPos + offset->y, maxWidth, output, imageRoi, fontType, align );
+                            renderLine( line, lineLength, x + lineInfo->offset.x, yPos + lineInfo->offset.y, maxWidth, output, imageRoi, fontType, align );
 
                             // We skip this space character.
                             ++data;
                         }
                         else {
                             // Exclude last word from this line.
-                            renderLine( line, lineLength - lastWordLength, x + offset->x, yPos + offset->y, maxWidth, output, imageRoi, fontType, align );
+                            renderLine( line, lineLength - lastWordLength, x + lineInfo->offset.x, yPos + lineInfo->offset.y, maxWidth, output, imageRoi, fontType,
+                                        align );
 
                             // Go back to the start of the word.
                             data -= lastWordLength;
@@ -390,24 +410,24 @@ namespace
                     lineWidth = 0;
 
                     if ( hasInputOffsets ) {
-                        offsets.pop_front();
-                        assert( !offsets.empty() );
+                        lineInfos.pop_front();
+                        assert( !lineInfos.empty() );
 
-                        offset = &offsets.front();
+                        lineInfo = &lineInfos.front();
                     }
                     else {
-                        offset->x = 0;
-                        offset->y += rowHeight;
+                        lineInfo->offset.x = 0;
+                        lineInfo->offset.y += rowHeight;
                     }
 
                     // This is a new line. getMultiRowInfo() function does estimations while ignoring whitespace characters at the start and end of lines.
                     // If the next line starts from a whitespace character it is important to skip it.
-                    while ( fheroes2::CharHandler::isSpaceChar( *data ) && data != dataEnd ) {
+                    while ( isSpaceChar( *data ) && data != dataEnd ) {
                         ++data;
                     }
                 }
                 else {
-                    lastWordLength = fheroes2::CharHandler::isSpaceChar( *data ) ? 0 : ( lastWordLength + 1 );
+                    lastWordLength = isSpaceChar( *data ) ? 0 : ( lastWordLength + 1 );
 
                     ++data;
                     ++lineLength;
@@ -417,8 +437,8 @@ namespace
         }
 
         if ( lineLength > 0 ) {
-            renderLine( data - lineLength, lineLength, x + offset->x, yPos + offset->y, maxWidth, output, imageRoi, fontType, align );
-            offset->x += lineWidth;
+            renderLine( data - lineLength, lineLength, x + lineInfo->offset.x, yPos + lineInfo->offset.y, maxWidth, output, imageRoi, fontType, align );
+            lineInfo->offset.x += lineWidth;
         }
     }
 
@@ -428,13 +448,13 @@ namespace
 
         int32_t maxWidth = 1;
 
-        const fheroes2::CharHandler charHandler( fontType );
+        const fheroes2::FontCharHandler charHandler( fontType );
 
         int32_t width = 0;
 
         const uint8_t * dataEnd = data + size;
         while ( data != dataEnd ) {
-            if ( fheroes2::CharHandler::isSpaceChar( *data ) || fheroes2::CharHandler::isLineSeparator( *data ) ) {
+            if ( isSpaceChar( *data ) || isLineSeparator( *data ) ) {
                 // If it is the end of line ("\n") or a space (" "), then the word has ended.
                 if ( maxWidth < width ) {
                     maxWidth = width;
@@ -477,39 +497,6 @@ namespace fheroes2
         return 0;
     }
 
-    int32_t CharHandler::getWidth( const uint8_t character ) const
-    {
-        if ( isSpaceChar( character ) ) {
-            return _spaceCharWidth;
-        }
-
-        const fheroes2::Sprite & image = getSprite( character );
-
-        assert( ( _fontType.size != fheroes2::FontSize::BUTTON_RELEASED && _fontType.size != fheroes2::FontSize::BUTTON_PRESSED && image.x() >= 0 ) || image.x() < 0 );
-
-        return image.x() + image.width();
-    }
-
-    int32_t CharHandler::_getSpaceCharWidth() const
-    {
-        switch ( _fontType.size ) {
-        case fheroes2::FontSize::SMALL:
-            return 4;
-        case fheroes2::FontSize::NORMAL:
-            return 6;
-        case fheroes2::FontSize::LARGE:
-        case fheroes2::FontSize::BUTTON_RELEASED:
-        case fheroes2::FontSize::BUTTON_PRESSED:
-            return 8;
-        default:
-            // Did you add a new font size? Please add implementation.
-            assert( 0 );
-            break;
-        }
-
-        return 0;
-    }
-
     TextBase::~TextBase() = default;
 
     Text::~Text() = default;
@@ -534,18 +521,18 @@ namespace fheroes2
 
         const int32_t fontHeight = height();
 
-        std::deque<Point> offsets;
-        std::vector<int32_t> charsInLine;
-        getMultiRowInfo( reinterpret_cast<const uint8_t *>( _text.data() ), static_cast<int32_t>( _text.size() ), maxWidth, _fontType, fontHeight, offsets, charsInLine );
+        std::deque<TextLineInfo> lineInfos;
+        getMultiRowInfo( reinterpret_cast<const uint8_t *>( _text.data() ), static_cast<int32_t>( _text.size() ), maxWidth, _fontType, fontHeight, lineInfos );
 
-        if ( offsets.size() == 1 ) {
+        if ( lineInfos.size() == 1 ) {
             // This is a single-line message.
-            return offsets.front().x;
+            return lineInfos.front().offset.x;
         }
 
         if ( !_isUniformedVerticalAlignment ) {
             // This is a multi-lined message and we try to fit as many words on every line as possible.
-            return std::max_element( offsets.begin(), offsets.end(), []( const Point & a, const Point & b ) { return a.x < b.x; } )->x;
+            return std::max_element( lineInfos.begin(), lineInfos.end(), []( const TextLineInfo & a, const TextLineInfo & b ) { return a.offset.x < b.offset.x; } )
+                ->offset.x;
         }
 
         // This is a multi-line message. Optimize it to fit the text evenly to the same number of lines.
@@ -554,12 +541,11 @@ namespace fheroes2
 
         while ( startWidth + 1 < endWidth ) {
             const int32_t currentWidth = ( endWidth + startWidth ) / 2;
-            std::deque<Point> tempOffsets;
-            charsInLine.clear();
-            getMultiRowInfo( reinterpret_cast<const uint8_t *>( _text.data() ), static_cast<int32_t>( _text.size() ), currentWidth, _fontType, fontHeight, tempOffsets,
-                             charsInLine );
+            std::deque<TextLineInfo> tempLineInfos;
+            getMultiRowInfo( reinterpret_cast<const uint8_t *>( _text.data() ), static_cast<int32_t>( _text.size() ), currentWidth, _fontType, fontHeight,
+                             tempLineInfos );
 
-            if ( tempOffsets.size() > offsets.size() ) {
+            if ( tempLineInfos.size() > lineInfos.size() ) {
                 startWidth = currentWidth;
                 continue;
             }
@@ -578,11 +564,10 @@ namespace fheroes2
 
         const int32_t fontHeight = height();
 
-        std::deque<Point> offsets;
-        std::vector<int32_t> charsInLine;
-        getMultiRowInfo( reinterpret_cast<const uint8_t *>( _text.data() ), static_cast<int32_t>( _text.size() ), maxWidth, _fontType, fontHeight, offsets, charsInLine );
+        std::deque<TextLineInfo> lineInfos;
+        getMultiRowInfo( reinterpret_cast<const uint8_t *>( _text.data() ), static_cast<int32_t>( _text.size() ), maxWidth, _fontType, fontHeight, lineInfos );
 
-        return offsets.back().y + fontHeight;
+        return lineInfos.back().offset.y + fontHeight;
     }
 
     int32_t Text::rows( const int32_t maxWidth ) const
@@ -593,11 +578,10 @@ namespace fheroes2
 
         const int32_t fontHeight = height();
 
-        std::deque<Point> offsets;
-        std::vector<int32_t> charsInLine;
-        getMultiRowInfo( reinterpret_cast<const uint8_t *>( _text.data() ), static_cast<int32_t>( _text.size() ), maxWidth, _fontType, fontHeight, offsets, charsInLine );
+        std::deque<TextLineInfo> lineInfos;
+        getMultiRowInfo( reinterpret_cast<const uint8_t *>( _text.data() ), static_cast<int32_t>( _text.size() ), maxWidth, _fontType, fontHeight, lineInfos );
 
-        return static_cast<int32_t>( charsInLine.size() );
+        return static_cast<int32_t>( lineInfos.size() );
     }
 
     void Text::drawInRoi( const int32_t x, const int32_t y, Image & output, const Rect & imageRoi ) const
@@ -632,9 +616,9 @@ namespace fheroes2
 
         const int32_t fontHeight = getFontHeight( _fontType.size );
 
-        std::deque<Point> offsets;
+        std::deque<TextLineInfo> lineInfos;
         renderMultiLine( reinterpret_cast<const uint8_t *>( _text.data() ), static_cast<int32_t>( _text.size() ), x + xOffset, y, correctedWidth, output, imageRoi,
-                         _fontType, fontHeight, true, offsets );
+                         _fontType, fontHeight, true, lineInfos );
     }
 
     bool Text::empty() const
@@ -642,7 +626,7 @@ namespace fheroes2
         return _text.empty();
     }
 
-    void Text::fitToOneRow( const int32_t maxWidth, const bool ignoreSacesAtEnd /* = true */ )
+    void Text::fitToOneRow( const int32_t maxWidth, const bool ignoreSpacesAtTextEnd /* = true */ )
     {
         assert( maxWidth > 0 ); // Why is the limit less than 1?
         if ( maxWidth <= 0 ) {
@@ -655,8 +639,8 @@ namespace fheroes2
         }
 
         const int32_t originalTextWidth
-            = ignoreSacesAtEnd ? getTruncatedLineWidth( reinterpret_cast<const uint8_t *>( _text.data() ), static_cast<int32_t>( _text.size() ), _fontType )
-                               : getLineWidth( reinterpret_cast<const uint8_t *>( _text.data() ), static_cast<int32_t>( _text.size() ), _fontType );
+            = ignoreSpacesAtTextEnd ? getTruncatedLineWidth( reinterpret_cast<const uint8_t *>( _text.data() ), static_cast<int32_t>( _text.size() ), _fontType )
+                                    : getLineWidth( reinterpret_cast<const uint8_t *>( _text.data() ), static_cast<int32_t>( _text.size() ), _fontType );
         if ( originalTextWidth <= maxWidth ) {
             // Nothing to do. The text is not longer than the provided maximum width.
             return;
@@ -693,36 +677,35 @@ namespace fheroes2
         const int32_t textWidth = width( textRoi.width );
         const size_t textSize = _text.size();
 
-        std::deque<Point> offsets;
-        std::vector<int32_t> charsInLine;
-        getMultiRowInfo( reinterpret_cast<const uint8_t *>( _text.data() ), static_cast<int32_t>( textSize ), textWidth, _fontType, fontHeight, offsets, charsInLine );
+        std::deque<TextLineInfo> lineInfos;
+        getMultiRowInfo( reinterpret_cast<const uint8_t *>( _text.data() ), static_cast<int32_t>( textSize ), textWidth, _fontType, fontHeight, lineInfos );
 
-        if ( pointerLine >= static_cast<int32_t>( charsInLine.size() ) ) {
+        if ( pointerLine >= static_cast<int32_t>( lineInfos.size() ) ) {
             // Pointer is lower than the last text line.
             return textSize;
         }
 
         size_t cursorPosition = 0;
         for ( int32_t i = 0; i < pointerLine; ++i ) {
-            cursorPosition += charsInLine[i];
+            cursorPosition += lineInfos[i].characterCount;
         }
 
         int32_t positionOffsetX = 0;
-        const int32_t maxOffsetX = pointerCursorOffset.x - textRoi.x - ( textRoi.width - offsets[pointerLine].x ) / 2;
+        const int32_t maxOffsetX = pointerCursorOffset.x - textRoi.x - ( textRoi.width - lineInfos[pointerLine].offset.x ) / 2;
 
         if ( maxOffsetX <= 0 ) {
             // Pointer is to the left of the text line.
             return ( cursorPosition > currentTextCursorPosition ) ? cursorPosition - 1 : cursorPosition;
         }
 
-        if ( maxOffsetX > offsets[pointerLine].x ) {
+        if ( maxOffsetX > lineInfos[pointerLine].offset.x ) {
             // Pointer is to the right of the text line.
-            cursorPosition += charsInLine[pointerLine];
+            cursorPosition += lineInfos[pointerLine].characterCount;
 
             return ( cursorPosition > currentTextCursorPosition ) ? cursorPosition - 1 : cursorPosition;
         }
 
-        const CharHandler charHandler( _fontType );
+        const FontCharHandler charHandler( _fontType );
 
         for ( size_t i = cursorPosition; i < textSize; ++i ) {
             const int32_t charWidth = charHandler.getWidth( static_cast<uint8_t>( _text[i] ) );
@@ -779,16 +762,15 @@ namespace fheroes2
     {
         const int32_t maxFontHeight = height();
 
-        std::deque<Point> offsets;
-        std::vector<int32_t> charsInLine;
+        std::deque<TextLineInfo> lineInfos;
         for ( const Text & text : _texts ) {
             getMultiRowInfo( reinterpret_cast<const uint8_t *>( text._text.data() ), static_cast<int32_t>( text._text.size() ), maxWidth, text._fontType, maxFontHeight,
-                             offsets, charsInLine );
+                             lineInfos );
         }
 
-        int32_t maxRowWidth = offsets.front().x;
-        for ( const Point & point : offsets ) {
-            maxRowWidth = std::max( maxRowWidth, point.x );
+        int32_t maxRowWidth = lineInfos.front().offset.x;
+        for ( const TextLineInfo & lineInfo : lineInfos ) {
+            maxRowWidth = std::max( maxRowWidth, lineInfo.offset.x );
         }
 
         return maxRowWidth;
@@ -798,13 +780,12 @@ namespace fheroes2
     {
         const int32_t maxFontHeight = height();
 
-        std::deque<Point> offsets;
-        std::vector<int32_t> charsInLine;
+        std::deque<TextLineInfo> lineInfos;
         for ( const Text & text : _texts ) {
             getMultiRowInfo( reinterpret_cast<const uint8_t *>( text._text.data() ), static_cast<int32_t>( text._text.size() ), maxWidth, text._fontType, maxFontHeight,
-                             offsets, charsInLine );
+                             lineInfos );
         }
-        return offsets.back().y + maxFontHeight;
+        return lineInfos.back().offset.y + maxFontHeight;
     }
 
     int32_t MultiFontText::rows( const int32_t maxWidth ) const
@@ -815,22 +796,21 @@ namespace fheroes2
 
         const int32_t maxFontHeight = height();
 
-        std::deque<Point> offsets;
-        std::vector<int32_t> charsInLine;
+        std::deque<TextLineInfo> lineInfos;
         for ( const Text & text : _texts ) {
             if ( text._text.empty() ) {
                 continue;
             }
 
             getMultiRowInfo( reinterpret_cast<const uint8_t *>( text._text.data() ), static_cast<int32_t>( text._text.size() ), maxWidth, text._fontType, maxFontHeight,
-                             offsets, charsInLine );
+                             lineInfos );
         }
 
-        if ( charsInLine.empty() ) {
+        if ( lineInfos.empty() ) {
             return 0;
         }
 
-        return static_cast<int32_t>( charsInLine.size() );
+        return static_cast<int32_t>( lineInfos.size() );
     }
 
     void MultiFontText::drawInRoi( const int32_t x, const int32_t y, Image & output, const Rect & imageRoi ) const
@@ -865,16 +845,15 @@ namespace fheroes2
 
         const int32_t maxFontHeight = height();
 
-        std::deque<Point> offsets;
-        std::vector<int32_t> charsInLine;
+        std::deque<TextLineInfo> lineInfos;
         for ( const Text & text : _texts ) {
             getMultiRowInfo( reinterpret_cast<const uint8_t *>( text._text.data() ), static_cast<int32_t>( text._text.size() ), maxWidth, text._fontType, maxFontHeight,
-                             offsets, charsInLine );
+                             lineInfos );
         }
 
         int32_t xOffset = 0;
         int32_t correctedWidth = maxWidth;
-        if ( offsets.size() > 1 ) {
+        if ( lineInfos.size() > 1 ) {
             if ( _isUniformedVerticalAlignment ) {
                 // This is a multi-line message. Optimize it to fit the text evenly.
                 int32_t startWidth = 1;
@@ -889,21 +868,20 @@ namespace fheroes2
                 int32_t endWidth = maxWidth;
                 while ( startWidth + 1 < endWidth ) {
                     const int32_t currentWidth = ( endWidth + startWidth ) / 2;
-                    std::deque<Point> tempOffsets;
-                    charsInLine.clear();
+                    std::deque<TextLineInfo> tempLineInfos;
                     for ( const Text & text : _texts ) {
                         getMultiRowInfo( reinterpret_cast<const uint8_t *>( text._text.data() ), static_cast<int32_t>( text._text.size() ), currentWidth, text._fontType,
-                                         maxFontHeight, tempOffsets, charsInLine );
+                                         maxFontHeight, tempLineInfos );
                     }
 
-                    if ( tempOffsets.size() > offsets.size() ) {
+                    if ( tempLineInfos.size() > lineInfos.size() ) {
                         startWidth = currentWidth;
                         continue;
                     }
 
                     correctedWidth = currentWidth;
                     endWidth = currentWidth;
-                    std::swap( offsets, tempOffsets );
+                    std::swap( lineInfos, tempLineInfos );
                 }
 
                 xOffset = ( maxWidth - correctedWidth ) / 2;
@@ -920,13 +898,13 @@ namespace fheroes2
             xOffset = ( maxWidth - correctedWidth ) / 2;
         }
 
-        for ( Point & point : offsets ) {
-            point.x = ( correctedWidth - point.x ) / 2;
+        for ( TextLineInfo & lineInfo : lineInfos ) {
+            lineInfo.offset.x = ( correctedWidth - lineInfo.offset.x ) / 2;
         }
 
         for ( const Text & text : _texts ) {
             renderMultiLine( reinterpret_cast<const uint8_t *>( text._text.data() ), static_cast<int32_t>( text._text.size() ), x + xOffset, y, correctedWidth, output,
-                             imageRoi, text._fontType, maxFontHeight, false, offsets );
+                             imageRoi, text._fontType, maxFontHeight, false, lineInfos );
         }
     }
 
@@ -946,13 +924,70 @@ namespace fheroes2
         return output;
     }
 
+    FontCharHandler::FontCharHandler( const fheroes2::FontType fontType )
+        : _fontType( fontType )
+        , _charLimit( fheroes2::AGG::getCharacterLimit( fontType.size ) )
+        , _spaceCharWidth( _getSpaceCharWidth() )
+    {
+        // Do nothing.
+    }
+
+    bool FontCharHandler::isAvailable( const uint8_t character ) const
+    {
+        return ( isSpaceChar( character ) || _isValid( character ) || isLineSeparator( character ) );
+    }
+
+    const fheroes2::Sprite & FontCharHandler::getSprite( const uint8_t character ) const
+    {
+        // Display '?' in place of the invalid character.
+        return fheroes2::AGG::getChar( _isValid( character ) ? character : invalidChar, _fontType );
+    }
+
+    int32_t FontCharHandler::getWidth( const uint8_t character ) const
+    {
+        if ( isSpaceChar( character ) ) {
+            return _spaceCharWidth;
+        }
+
+        const fheroes2::Sprite & image = getSprite( character );
+
+        assert( ( _fontType.size != fheroes2::FontSize::BUTTON_RELEASED && _fontType.size != fheroes2::FontSize::BUTTON_PRESSED && image.x() >= 0 ) || image.x() < 0 );
+
+        return image.x() + image.width();
+    }
+
+    bool FontCharHandler::_isValid( const uint8_t character ) const
+    {
+        return character >= 0x21 && character <= _charLimit;
+    }
+
+    int32_t FontCharHandler::_getSpaceCharWidth() const
+    {
+        switch ( _fontType.size ) {
+        case fheroes2::FontSize::SMALL:
+            return 4;
+        case fheroes2::FontSize::NORMAL:
+            return 6;
+        case fheroes2::FontSize::LARGE:
+        case fheroes2::FontSize::BUTTON_RELEASED:
+        case fheroes2::FontSize::BUTTON_PRESSED:
+            return 8;
+        default:
+            // Did you add a new font size? Please add implementation.
+            assert( 0 );
+            break;
+        }
+
+        return 0;
+    }
+
     bool isFontAvailable( const std::string & text, const FontType fontType )
     {
         if ( text.empty() ) {
             return true;
         }
 
-        const CharHandler charHandler( fontType );
+        const FontCharHandler charHandler( fontType );
 
         return std::all_of( text.begin(), text.end(), [&charHandler]( const int8_t character ) { return charHandler.isAvailable( character ); } );
     }
