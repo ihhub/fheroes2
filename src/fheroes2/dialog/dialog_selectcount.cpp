@@ -230,7 +230,7 @@ bool Dialog::SelectCount( const std::string & header, uint32_t min, uint32_t max
     return result == Dialog::OK;
 }
 
-bool Dialog::InputString( std::string header, std::string & result, std::string title /* = {} */, const size_t charLimit /* = 0 */ )
+bool Dialog::inputString( std::string header, std::string & result, std::string title, const size_t charLimit, const bool isMultiLine )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
 
@@ -247,11 +247,16 @@ bool Dialog::InputString( std::string header, std::string & result, std::string 
 
     const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
 
+    const int32_t titleHeight = hasTitle ? titlebox.height( BOXAREA_WIDTH ) + 10 : 0;
+    const int32_t keyBoardButtonExtraHeight = 20;
+
     const fheroes2::Sprite & inputArea = fheroes2::AGG::GetICN( ( isEvilInterface ? ICN::BUYBUILD : ICN::BUYBUILE ), 3 );
 
-    const int32_t titleHeight = hasTitle ? titlebox.height( BOXAREA_WIDTH ) + 10 : 0;
-    const int32_t keyBoardButtonExtraHeight = 20;
-    const FrameBox box( 10 + titleHeight + textbox.height( BOXAREA_WIDTH ) + 10 + inputArea.height() + keyBoardButtonExtraHeight, true );
+    const int32_t inputAreaWidth = isMultiLine ? 224 : inputArea.width();
+    const int32_t inputAreaHeight = isMultiLine ? 260 : inputArea.height();
+
+    const int32_t frameBoxHeight = 10 + titleHeight + textbox.height( BOXAREA_WIDTH ) + 10 + inputAreaHeight + keyBoardButtonExtraHeight;
+    const FrameBox box( frameBoxHeight, true );
     const fheroes2::Rect & frameBoxArea = box.GetArea();
 
     // Title text.
@@ -264,178 +269,27 @@ bool Dialog::InputString( std::string header, std::string & result, std::string 
 
     fheroes2::Point dst_pt;
     dst_pt.y = frameBoxArea.y + 10 + titleHeight + textbox.height( BOXAREA_WIDTH ) + 10;
-    dst_pt.x = frameBoxArea.x + ( frameBoxArea.width - inputArea.width() ) / 2;
-    fheroes2::Blit( inputArea, display, dst_pt.x, dst_pt.y );
-    const fheroes2::Point inputAreaPos( 13, 1 );
-    const fheroes2::Rect textInputArea( dst_pt.x + inputAreaPos.x, dst_pt.y + inputAreaPos.y, inputArea.width() - 26, inputArea.height() - 3 );
+    dst_pt.x = frameBoxArea.x + ( frameBoxArea.width - inputAreaWidth ) / 2;
 
-    bool isCursorVisible = true;
-    fheroes2::Text text( insertCharToString( result, charInsertPos, isCursorVisible ? '_' : '\x7F' ), fheroes2::FontType::normalWhite() );
-    text.fitToOneRow( textInputArea.width );
-    text.drawInRoi( textInputArea.x + ( textInputArea.width - text.width() ) / 2, textInputArea.y + 2, display, textInputArea );
-
-    const int okayButtonICNID = isEvilInterface ? ICN::UNIFORM_EVIL_OKAY_BUTTON : ICN::UNIFORM_GOOD_OKAY_BUTTON;
-
-    dst_pt.x = frameBoxArea.x;
-    dst_pt.y = frameBoxArea.y + frameBoxArea.height - fheroes2::AGG::GetICN( okayButtonICNID, 0 ).height();
-    fheroes2::Button buttonOk( dst_pt.x, dst_pt.y, okayButtonICNID, 0, 1 );
-
-    const int cancelButtonIcnID = isEvilInterface ? ICN::UNIFORM_EVIL_CANCEL_BUTTON : ICN::UNIFORM_GOOD_CANCEL_BUTTON;
-    const fheroes2::Sprite & cancelButtonIcn = fheroes2::AGG::GetICN( cancelButtonIcnID, 0 );
-
-    dst_pt.x = frameBoxArea.x + frameBoxArea.width - cancelButtonIcn.width();
-    dst_pt.y = frameBoxArea.y + frameBoxArea.height - cancelButtonIcn.height();
-    fheroes2::Button buttonCancel( dst_pt.x, dst_pt.y, cancelButtonIcnID, 0, 1 );
-
-    // Generate a button to open the Virtual Keyboard window.
-    fheroes2::Sprite releasedVirtualKB;
-    fheroes2::Sprite pressedVirtualKB;
-    const int32_t buttonVirtualKBWidth = 40;
-
-    makeButtonSprites( releasedVirtualKB, pressedVirtualKB, "...", buttonVirtualKBWidth, isEvilInterface, true );
-    // To center the button horizontally we have to take into account that actual button sprite is 10 pixels longer then the requested button width.
-    fheroes2::ButtonSprite buttonVirtualKB = makeButtonWithBackground( frameBoxArea.x + ( frameBoxArea.width - buttonVirtualKBWidth - 10 ) / 2, dst_pt.y - 30,
-                                                                       releasedVirtualKB, pressedVirtualKB, display );
-
-    if ( result.empty() ) {
-        buttonOk.disable();
+    fheroes2::Rect inputAreaOffset;
+    if ( isMultiLine ) {
+        inputAreaOffset = { 5, 5, -10, -10 };
+        fheroes2::StandardWindow::applyTextBackgroundShading( display, { dst_pt.x, dst_pt.y, inputAreaWidth, inputAreaHeight } );
     }
     else {
-        buttonOk.enable();
+        inputAreaOffset = { 13, 1, -26, -3 };
+        fheroes2::Blit( inputArea, display, dst_pt.x, dst_pt.y );
     }
-
-    buttonOk.draw();
-    buttonCancel.draw();
-    buttonVirtualKB.draw();
-
-    display.render();
-
-    LocalEvent & le = LocalEvent::Get();
-
-    Game::AnimateResetDelay( Game::DelayType::CURSOR_BLINK_DELAY );
-
-    const bool isInGameKeyboardRequired = System::isVirtualKeyboardSupported();
-
-    while ( le.HandleEvents( Game::isDelayNeeded( { Game::DelayType::CURSOR_BLINK_DELAY } ) ) ) {
-        bool redraw = false;
-
-        buttonOk.drawOnState( buttonOk.isEnabled() && le.MousePressLeft( buttonOk.area() ) );
-        buttonCancel.drawOnState( le.MousePressLeft( buttonCancel.area() ) );
-        buttonVirtualKB.drawOnState( le.MousePressLeft( buttonVirtualKB.area() ) );
-
-        if ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) || ( buttonOk.isEnabled() && le.MouseClickLeft( buttonOk.area() ) ) ) {
-            return !result.empty();
-        }
-
-        if ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) || le.MouseClickLeft( buttonCancel.area() ) ) {
-            result.clear();
-            return false;
-        }
-
-        if ( le.MouseClickLeft( buttonVirtualKB.area() ) || ( isInGameKeyboardRequired && le.MouseClickLeft( textInputArea ) ) ) {
-            fheroes2::openVirtualKeyboard( result );
-            if ( charLimit > 0 && result.size() > charLimit ) {
-                result.resize( charLimit );
-            }
-            charInsertPos = result.size();
-            redraw = true;
-        }
-        else if ( le.KeyPress() ) {
-            if ( charLimit == 0 || charLimit > result.size() || le.KeyValue() == fheroes2::Key::KEY_BACKSPACE ) {
-                charInsertPos = InsertKeySym( result, charInsertPos, le.KeyValue(), LocalEvent::getCurrentKeyModifiers() );
-                redraw = true;
-            }
-        }
-        else if ( le.MouseClickLeft( textInputArea ) ) {
-            charInsertPos = fheroes2::getTextInputCursorPosition( result, fheroes2::FontType::normalWhite(), charInsertPos, le.GetMouseCursor().x,
-                                                                  textInputArea.x + ( textInputArea.width - text.width() ) / 2 );
-
-            redraw = true;
-        }
-
-        else if ( le.MousePressRight( buttonCancel.area() ) ) {
-            fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Exit this menu without doing anything." ), Dialog::ZERO );
-        }
-        else if ( le.MousePressRight( buttonOk.area() ) ) {
-            fheroes2::showStandardTextMessage( _( "Okay" ), _( "Click to apply the entered text." ), Dialog::ZERO );
-        }
-        else if ( le.MousePressRight( buttonVirtualKB.area() ) ) {
-            fheroes2::showStandardTextMessage( _( "Open Virtual Keyboard" ), _( "Click to open the Virtual Keyboard dialog." ), Dialog::ZERO );
-        }
-
-        // Text input cursor blink.
-        if ( Game::validateAnimationDelay( Game::DelayType::CURSOR_BLINK_DELAY ) ) {
-            isCursorVisible = !isCursorVisible;
-            redraw = true;
-        }
-
-        if ( redraw ) {
-            if ( result.empty() && buttonOk.isEnabled() ) {
-                buttonOk.disable();
-                buttonOk.draw();
-            }
-
-            if ( !result.empty() && !buttonOk.isEnabled() ) {
-                buttonOk.enable();
-                buttonOk.draw();
-            }
-
-            text.set( insertCharToString( result, charInsertPos, isCursorVisible ? '_' : '\x7F' ), fheroes2::FontType::normalWhite() );
-            text.fitToOneRow( textInputArea.width );
-
-            fheroes2::Copy( inputArea, inputAreaPos.x, inputAreaPos.y, display, textInputArea );
-            text.drawInRoi( textInputArea.x + ( textInputArea.width - text.width() ) / 2, textInputArea.y + 2, display, textInputArea );
-            display.render( textInputArea );
-        }
-    }
-
-    return !result.empty();
-}
-
-bool Dialog::inputMiltilineString( std::string header, std::string & result, std::string title, const int32_t inputAreaHeight, const size_t charLimit )
-{
-    fheroes2::Display & display = fheroes2::Display::instance();
-
-    // setup cursor
-    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
-
-    if ( charLimit != 0 ) {
-        result.reserve( charLimit );
-    }
-
-    size_t charInsertPos = result.size();
-
-    const bool hasTitle = !title.empty();
-
-    const fheroes2::Text titlebox( std::move( title ), fheroes2::FontType::normalYellow() );
-    const fheroes2::Text textbox( std::move( header ), fheroes2::FontType::normalWhite() );
-
-    const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
-
-    const int32_t titleHeight = hasTitle ? titlebox.height( BOXAREA_WIDTH ) + 10 : 0;
-    const int32_t keyBoardButtonExtraHeight = 20;
-    const FrameBox box( 10 + titleHeight + textbox.height( BOXAREA_WIDTH ) + 10 + inputAreaHeight + keyBoardButtonExtraHeight, true );
-    const fheroes2::Rect & frameBoxArea = box.GetArea();
-
-    // Title text.
-    if ( hasTitle ) {
-        titlebox.draw( frameBoxArea.x, frameBoxArea.y + 12, BOXAREA_WIDTH, display );
-    }
-
-    // Header text.
-    textbox.draw( frameBoxArea.x, frameBoxArea.y + 12 + titleHeight, BOXAREA_WIDTH, display );
-
-    fheroes2::Point dst_pt;
-    dst_pt.y = frameBoxArea.y + 10 + titleHeight + textbox.height( BOXAREA_WIDTH ) + 10;
-    dst_pt.x = frameBoxArea.x + ( frameBoxArea.width - 214 ) / 2;
-
-    const fheroes2::Rect textInputArea( dst_pt.x, dst_pt.y, 214, inputAreaHeight - 3 );
-    fheroes2::StandardWindow::applyTextBackgroundShading( display, { textInputArea.x - 5, textInputArea.y - 5, textInputArea.width + 10, textInputArea.height + 10 } );
+    const fheroes2::Rect textInputArea( dst_pt.x + inputAreaOffset.x, dst_pt.y + inputAreaOffset.y, inputAreaWidth + inputAreaOffset.width,
+                                        inputAreaHeight + inputAreaOffset.height );
 
     fheroes2::ImageRestorer textBackground( display, textInputArea.x, textInputArea.y, textInputArea.width, textInputArea.height );
 
     bool isCursorVisible = true;
     fheroes2::Text text( insertCharToString( result, charInsertPos, isCursorVisible ? '_' : '\x7F' ), fheroes2::FontType::normalWhite() );
+    if ( !isMultiLine ) {
+        text.fitToOneRow( textInputArea.width );
+    }
     text.drawInRoi( textInputArea.x, textInputArea.y + 2, textInputArea.width, display, textInputArea );
 
     const int okayButtonICNID = isEvilInterface ? ICN::UNIFORM_EVIL_OKAY_BUTTON : ICN::UNIFORM_GOOD_OKAY_BUTTON;
@@ -511,6 +365,8 @@ bool Dialog::inputMiltilineString( std::string header, std::string & result, std
             }
         }
         else if ( le.MouseClickLeft( textInputArea ) ) {
+            // charInsertPos = fheroes2::getTextInputCursorPosition( result, fheroes2::FontType::normalWhite(), charInsertPos, le.GetMouseCursor().x,
+            //                                                      textInputArea.x + ( textInputArea.width - text.width() ) / 2 );
             charInsertPos = fheroes2::getMultilineTextInputCursorPosition( insertCharToString( result, charInsertPos, '_' ), fheroes2::FontType::normalWhite(),
                                                                            charInsertPos, le.GetMouseCursor(), textInputArea );
 
@@ -545,6 +401,11 @@ bool Dialog::inputMiltilineString( std::string header, std::string & result, std
             }
 
             text.set( insertCharToString( result, charInsertPos, isCursorVisible ? '_' : '\x7F' ), fheroes2::FontType::normalWhite() );
+
+            if ( !isMultiLine ) {
+                text.fitToOneRow( textInputArea.width );
+            }
+
             textBackground.restore();
             text.drawInRoi( textInputArea.x, textInputArea.y + 2, textInputArea.width, display, textInputArea );
             display.render( textInputArea );

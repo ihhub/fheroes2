@@ -3406,7 +3406,7 @@ namespace
             StringReplace( question, "%{riddle}", riddle->message );
 
             std::string answer;
-            Dialog::InputString( question, answer, title );
+            Dialog::inputString( question, answer, title, 0, false );
 
             if ( !riddle->AnswerCorrect( answer ) ) {
                 fheroes2::showStandardTextMessage(

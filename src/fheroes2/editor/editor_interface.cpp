@@ -532,7 +532,7 @@ namespace Interface
                     }
 
                     std::string fileName;
-                    if ( !Dialog::InputString( _( "Map filename" ), fileName, std::string(), 128 ) ) {
+                    if ( !Dialog::inputString( _( "Map filename" ), fileName, {}, 128, false ) ) {
                         continue;
                     }
 
@@ -938,7 +938,7 @@ namespace Interface
                     StringReplace( header, "%{object}", MP2::StringObject( objectType ) );
 
                     std::string signText = _mapFormat.signMetadata[object.id].message;
-                    if ( Dialog::inputMiltilineString( std::move( header ), signText, {}, 250, 0 ) ) {
+                    if ( Dialog::inputString( std::move( header ), signText, {}, 0, true ) ) {
                         _mapFormat.signMetadata[object.id].message = std::move( signText );
                         action.commit();
                     }

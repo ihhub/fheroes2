@@ -37,6 +37,8 @@ namespace
 
     const uint8_t spaceChar{ ' ' };
 
+    const uint8_t cursorChar{ '_' };
+
     class CharHandler
     {
     public:
@@ -573,7 +575,7 @@ namespace fheroes2
 
             // If the mouse cursor is to the right of the current text cursor position we take its width into account.
             if ( i == currentTextCursorPosition ) {
-                positionOffset += charHandler.getWidth( '_' );
+                positionOffset += charHandler.getWidth( cursorChar );
             }
         }
 
