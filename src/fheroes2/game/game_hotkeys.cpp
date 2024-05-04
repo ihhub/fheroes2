@@ -392,7 +392,13 @@ std::vector<std::pair<Game::HotKeyEvent, Game::HotKeyCategory>> Game::getAllHotK
     std::vector<std::pair<Game::HotKeyEvent, Game::HotKeyCategory>> events;
     events.reserve( hotKeyEventInfo.size() - 1 );
 
+    const bool disableEditor = !Settings::Get().isPriceOfLoyaltySupported();
+
     for ( size_t i = 1; i < hotKeyEventInfo.size(); ++i ) {
+        if ( disableEditor && hotKeyEventInfo[i].category == HotKeyCategory::EDITOR ) {
+            continue;
+        }
+
         events.emplace_back( static_cast<Game::HotKeyEvent>( i ), hotKeyEventInfo[i].category );
     }
 
