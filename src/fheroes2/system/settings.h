@@ -188,7 +188,6 @@ public:
     bool isHideInterfaceEnabled() const;
     bool isEvilInterfaceEnabled() const;
 
-    bool isEditorEnabled() const;
     bool isEditorAnimationEnabled() const;
     bool isEditorPassabilityEnabled() const;
 

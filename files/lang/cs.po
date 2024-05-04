@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-01 11:10+0000\n"
+"POT-Creation-Date: 2024-05-04 12:08+0000\n"
 "PO-Revision-Date: 2023-09-24 16:05+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Czech <cs@li.org>\n"
@@ -3951,6 +3951,10 @@ msgstr ""
 msgid "Set %{monster} Count"
 msgstr "Vystřel na %{monster}"
 
+#, fuzzy
+msgid "Set Random Ultimate Artifact Radius"
+msgstr "Náhodný Ultimátní Artefakt"
+
 msgid "Objects cannot be placed outside the map."
 msgstr ""
 
@@ -5106,10 +5110,6 @@ msgid ""
 "Enjoy the game!"
 msgstr ""
 
-#, fuzzy
-msgid "The Editor requires \"The Price of Loyalty\" expansion files to work."
-msgstr "Jedna ze čtyř nových kampaní z datadisku Price of Loyalty."
-
 msgid "Quit Heroes of Might and Magic II and return to the operating system."
 msgstr "Ukončí Heroes of Might and Magic II a vrátí se do operačního systému."
 
@@ -5124,6 +5124,9 @@ msgstr "Nejlepší výsledky"
 
 msgid "View the high scores screen."
 msgstr "Zobraz tabulku s nej. skóre."
+
+msgid "Create new or modify existing maps."
+msgstr ""
 
 msgid "Change language, resolution and settings of the game."
 msgstr "Změň jazyk, rozlišení a další nastavení hry."
@@ -10884,6 +10887,11 @@ msgstr ""
 "Nejnovější verzi hry nalezneš na\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#, fuzzy
+#~ msgid ""
+#~ "The Editor requires \"The Price of Loyalty\" expansion files to work."
+#~ msgstr "Jedna ze čtyř nových kampaní z datadisku Price of Loyalty."
 
 #~ msgid "Set Defense Skill"
 #~ msgstr "Nastav obrannou sílu"

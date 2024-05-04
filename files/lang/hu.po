@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-01 11:10+0000\n"
+"POT-Creation-Date: 2024-05-04 12:08+0000\n"
 "PO-Revision-Date: 2023-09-04 21:55+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -3915,6 +3915,10 @@ msgstr "Kilépés a térképszerkesztőből."
 msgid "Set %{monster} Count"
 msgstr "%{monster} lövése"
 
+#, fuzzy
+msgid "Set Random Ultimate Artifact Radius"
+msgstr "Véletlenszerű Szent Varázstárgy"
+
 msgid "Objects cannot be placed outside the map."
 msgstr "Tárgyakat nem lehet a térképen kívülre helyezni."
 
@@ -5042,10 +5046,6 @@ msgstr ""
 "\n"
 "Élvezetes játékot!"
 
-msgid "The Editor requires \"The Price of Loyalty\" expansion files to work."
-msgstr ""
-"A szerkesztő a \"Hűség ára\" kiegészítő fájljait igényli a működéséhez."
-
 msgid "Quit Heroes of Might and Magic II and return to the operating system."
 msgstr ""
 "Kilépés a Heroes of Might and Magic II-ből és visszatérés az operációs "
@@ -5062,6 +5062,10 @@ msgstr "Dicsőségtábla"
 
 msgid "View the high scores screen."
 msgstr "Dicsőségtábla megjelenítése."
+
+#, fuzzy
+msgid "Create new or modify existing maps."
+msgstr "Létező térkép betöltése"
 
 msgid "Change language, resolution and settings of the game."
 msgstr ""
@@ -11457,6 +11461,11 @@ msgstr ""
 "Letöltheted a legújabb verziót innen:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid ""
+#~ "The Editor requires \"The Price of Loyalty\" expansion files to work."
+#~ msgstr ""
+#~ "A szerkesztő a \"Hűség ára\" kiegészítő fájljait igényli a működéséhez."
 
 #~ msgid "Choose a tile which does not contain any objects."
 #~ msgstr "Olyan térképpontot válassz, ahol nincsenek még tárgyak."

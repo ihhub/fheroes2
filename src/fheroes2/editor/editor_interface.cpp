@@ -73,6 +73,7 @@
 #include "ui_button.h"
 #include "ui_dialog.h"
 #include "ui_map_object.h"
+#include "ui_monster.h"
 #include "ui_text.h"
 #include "ui_tool.h"
 #include "view_world.h"
@@ -964,18 +965,35 @@ namespace Interface
                         monsterCount = monsterMetadata->second.metadata[0];
                     }
 
+                    Monster tempMonster( static_cast<int>( object.index ) + 1 );
+
                     std::string str = _( "Set %{monster} Count" );
-                    StringReplace( str, "%{monster}", Monster( static_cast<int>( object.index ) + 1 ).GetName() );
+                    StringReplace( str, "%{monster}", tempMonster.GetName() );
+
+                    fheroes2::Sprite surface;
+
+                    if ( tempMonster.isValid() ) {
+                        surface = fheroes2::AGG::GetICN( ICN::STRIP, 12 );
+                        fheroes2::renderMonsterFrame( Monster( static_cast<int>( object.index ) + 1 ), surface, { 6, 6 } );
+                    }
 
                     fheroes2::ActionCreator action( _historyManager, _mapFormat );
-                    if ( Dialog::SelectCount( str, 0, 500000, monsterCount ) ) {
+                    if ( Dialog::SelectCount( str, 0, 500000, monsterCount, 1, surface ) ) {
                         _mapFormat.standardMetadata[object.id] = { static_cast<int32_t>( monsterCount ), 0, Monster::JOIN_CONDITION_UNSET };
                         action.commit();
                     }
                 }
                 else if ( object.group == Maps::ObjectGroup::ADVENTURE_ARTIFACTS ) {
                     if ( objectInfo.objectType == MP2::OBJ_RANDOM_ULTIMATE_ARTIFACT ) {
-                        // TODO: add a dialog to modify Random Ultimate artifact radius.
+                        assert( _mapFormat.standardMetadata.find( object.id ) != _mapFormat.standardMetadata.end() );
+
+                        uint32_t radius = static_cast<uint32_t>( _mapFormat.standardMetadata[object.id].metadata[0] );
+
+                        fheroes2::ActionCreator action( _historyManager, _mapFormat );
+                        if ( Dialog::SelectCount( _( "Set Random Ultimate Artifact Radius" ), 0, 100, radius ) ) {
+                            _mapFormat.standardMetadata[object.id].metadata[0] = static_cast<int32_t>( radius );
+                            action.commit();
+                        }
                     }
                     else if ( objectInfo.objectType == MP2::OBJ_ARTIFACT && objectInfo.metadata[0] == Artifact::SPELL_SCROLL ) {
                         // Find Spell Scroll object.

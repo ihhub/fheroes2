@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-01 11:10+0000\n"
+"POT-Creation-Date: 2024-05-04 12:08+0000\n"
 "PO-Revision-Date: 2024-03-05 13:55+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Danish (Denmark)\n"
@@ -3970,6 +3970,10 @@ msgstr "Forlad korteditoren."
 msgid "Set %{monster} Count"
 msgstr "Skyd %{monster}"
 
+#, fuzzy
+msgid "Set Random Ultimate Artifact Radius"
+msgstr "Tilfældigt ultimativt artefakt"
+
 msgid "Objects cannot be placed outside the map."
 msgstr "Objekter kan ikke placeres udenfor kortet."
 
@@ -5108,11 +5112,6 @@ msgstr ""
 "\n"
 "Nyd spillet!"
 
-msgid "The Editor requires \"The Price of Loyalty\" expansion files to work."
-msgstr ""
-"Editoren kræver filerne fra \"Prisen for Loyalitet\"-udvidelsen, for at "
-"virke."
-
 msgid "Quit Heroes of Might and Magic II and return to the operating system."
 msgstr ""
 "Afslut Heroes of Might and Magic II og vend tilbage til operativsystemet."
@@ -5128,6 +5127,10 @@ msgstr "Ranglister"
 
 msgid "View the high scores screen."
 msgstr "Vis skærmen for højeste score."
+
+#, fuzzy
+msgid "Create new or modify existing maps."
+msgstr "indlæs et eksisterende kort."
 
 msgid "Change language, resolution and settings of the game."
 msgstr "Skift spillets sprog, opløsning og indstillinger."
@@ -11612,6 +11615,12 @@ msgstr ""
 "Check den nyeste version af spillet på\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid ""
+#~ "The Editor requires \"The Price of Loyalty\" expansion files to work."
+#~ msgstr ""
+#~ "Editoren kræver filerne fra \"Prisen for Loyalitet\"-udvidelsen, for at "
+#~ "virke."
 
 #~ msgid "Choose a tile which does not contain any objects."
 #~ msgstr "Vælg et felt, som ikke indeholder nogen objekter."
