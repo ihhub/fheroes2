@@ -253,7 +253,7 @@ bool Dialog::inputString( std::string header, std::string & result, std::string 
     const fheroes2::Sprite & inputArea = fheroes2::AGG::GetICN( ( isEvilInterface ? ICN::BUYBUILD : ICN::BUYBUILE ), 3 );
 
     const int32_t inputAreaWidth = isMultiLine ? 224 : inputArea.width();
-    const int32_t inputAreaHeight = isMultiLine ? 260 : inputArea.height();
+    const int32_t inputAreaHeight = isMultiLine ? 265 : inputArea.height();
 
     const int32_t frameBoxHeight = 10 + titleHeight + textbox.height( BOXAREA_WIDTH ) + 10 + inputAreaHeight + keyBoardButtonExtraHeight;
     const FrameBox box( frameBoxHeight, true );
@@ -387,14 +387,19 @@ bool Dialog::inputString( std::string header, std::string & result, std::string 
         }
 
         if ( redraw ) {
+            bool redrawOkButton = false;
             if ( result.empty() && buttonOk.isEnabled() ) {
                 buttonOk.disable();
-                buttonOk.draw();
+                redrawOkButton = true;
+            }
+            else if ( !result.empty() && !buttonOk.isEnabled() ) {
+                buttonOk.enable();
+                redrawOkButton = true;
             }
 
-            if ( !result.empty() && !buttonOk.isEnabled() ) {
-                buttonOk.enable();
+            if ( redrawOkButton ) {
                 buttonOk.draw();
+                display.updateNextRenderRoi( buttonOk.area() );
             }
 
             text.set( insertCharToString( result, charInsertPos, isCursorVisible ? '_' : '\x7F' ), fheroes2::FontType::normalWhite() );
