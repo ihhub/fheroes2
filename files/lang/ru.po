@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-01 11:10+0000\n"
+"POT-Creation-Date: 2024-05-04 09:09+0000\n"
 "PO-Revision-Date: 2024-03-15 21:35+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -3924,6 +3924,10 @@ msgstr "Выйти из редактора карт."
 #, fuzzy
 msgid "Set %{monster} Count"
 msgstr "Стрелять в %{monster}"
+
+#, fuzzy
+msgid "Set Random Ultimate Artifact Radius"
+msgstr "Случайный великий артефакт"
 
 msgid "Objects cannot be placed outside the map."
 msgstr "Объекты нельзя размещать за пределами карты."
