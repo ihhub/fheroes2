@@ -29,8 +29,6 @@ namespace
 {
     const uint8_t hyphenChar{ '-' };
 
-    const uint8_t cursorChar{ '_' };
-
     int32_t getLineWidth( const uint8_t * data, const int32_t size, const fheroes2::FontType & fontType )
     {
         assert( data != nullptr && size > 0 );

@@ -30,15 +30,6 @@
 #include "image.h"
 #include "math_base.h"
 
-namespace
-{
-    const uint8_t lineSeparator{ '\n' };
-
-    const uint8_t invalidChar{ '?' };
-
-    const uint8_t spaceChar{ ' ' };
-}
-
 namespace fheroes2
 {
     enum class FontSize : uint8_t
@@ -112,17 +103,21 @@ namespace fheroes2
         // Returns true if character is a Space character (' ').
         static bool isSpaceChar( const uint8_t character )
         {
-            return ( character == spaceChar );
+            return ( character == ' ' );
         }
 
         // Returns true if character is available to render, including space (' ') and new line ('\n').
         bool isAvailable( const uint8_t character ) const
         {
+            const uint8_t lineSeparator{ '\n' };
+
             return ( isSpaceChar( character ) || _isValid( character ) || character == lineSeparator );
         }
 
         const fheroes2::Sprite & getSprite( const uint8_t character ) const
         {
+            const uint8_t invalidChar{ '?' };
+
             return fheroes2::AGG::getChar( _isValid( character ) ? character : invalidChar, _fontType );
         }
 
