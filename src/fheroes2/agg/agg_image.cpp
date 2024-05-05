@@ -438,7 +438,7 @@ namespace
         return isReleasedState ? fheroes2::GetColorId( 180, 180, 180 ) : fheroes2::GetColorId( 144, 144, 144 );
     }
 
-    const char * getSupportedText( const char * text, const fheroes2::FontType & font )
+    const char * getSupportedText( const char * text, const fheroes2::FontType font )
     {
         const char * translatedText = _( text );
         return fheroes2::isFontAvailable( translatedText, font ) ? translatedText : text;
@@ -4967,7 +4967,7 @@ namespace fheroes2
             return 0;
         }
 
-        const Sprite & getChar( const uint8_t character, const FontType & fontType )
+        const Sprite & getChar( const uint8_t character, const FontType fontType )
         {
             if ( character < 0x21 ) {
                 return errorImage;
