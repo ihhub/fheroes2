@@ -154,5 +154,7 @@ namespace Interface
         Maps::Map_Format::MapFormat _mapFormat;
 
         WarningMessage _warningMessage;
+
+        std::string _loadedFileName;
     };
 }

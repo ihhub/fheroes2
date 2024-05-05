@@ -39,6 +39,7 @@
 #include "dialog_selectitems.h"
 #include "editor_castle_details_window.h"
 #include "editor_object_popup_window.h"
+#include "editor_save_map_window.h"
 #include "game.h"
 #include "game_delays.h"
 #include "game_hotkeys.h"
@@ -491,6 +492,7 @@ namespace Interface
         if ( isNewMap ) {
             _mapFormat = {};
             Maps::saveMapInEditor( _mapFormat );
+            _loadedFileName.clear();
         }
 
         // Stop all sounds and music.
@@ -557,15 +559,29 @@ namespace Interface
                         continue;
                     }
 
-                    std::string fileName;
-                    if ( !Dialog::InputString( _( "Map filename" ), fileName, std::string(), 128 ) ) {
+                    std::string fileName = _loadedFileName;
+                    std::string mapName = _mapFormat.name;
+
+                    if ( !Editor::mapSaveSelectFile( fileName, mapName ) ) {
                         continue;
                     }
 
-                    _mapFormat.name = fileName;
-                    _mapFormat.description = "Put a real description here.";
+                    _mapFormat.name = std::move( mapName );
 
-                    if ( !Maps::Map_Format::saveMap( System::concatPath( mapDirectory, fileName + ".fh2m" ), _mapFormat ) ) {
+                    if ( _mapFormat.description.empty() ) {
+                        _mapFormat.description = "Put a real description here.";
+                    }
+
+                    std::string fullPath = System::concatPath( mapDirectory, fileName + ".fh2m" );
+
+                    if ( Maps::Map_Format::saveMap( fullPath, _mapFormat ) ) {
+                        // On some OSes like Windows, the path may contain '\' symbols. This symbol doesn't exist in the resources.
+                        // To avoid this we have to replace all '\' symbols by '/' symbols.
+                        StringReplace( fullPath, "\\", "/" );
+
+                        _warningMessage.reset( _( "Map saved to: " ) + fullPath );
+                    }
+                    else {
                         fheroes2::showStandardTextMessage( _( "Warning!" ), "Failed to save the map.", Dialog::OK );
                     }
                 }
@@ -1622,6 +1638,12 @@ namespace Interface
         }
 
         updateWorldCastlesHeroes( _mapFormat );
+
+        _loadedFileName = System::GetBasename( filePath );
+        const size_t it = _loadedFileName.rfind( '.' );
+        if ( it != std::string::npos ) {
+            _loadedFileName.resize( it );
+        }
 
         return true;
     }
