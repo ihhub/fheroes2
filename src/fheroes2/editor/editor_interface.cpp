@@ -541,56 +541,7 @@ namespace Interface
                     res = eventNewMap();
                 }
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_SAVE_GAME ) ) {
-                    const std::string dataPath = System::GetDataDirectory( "fheroes2" );
-                    if ( dataPath.empty() ) {
-                        fheroes2::showStandardTextMessage( _( "Warning!" ), "Unable to locate data directory to save the map.", Dialog::OK );
-                        continue;
-                    }
-
-                    if ( !Maps::updateMapPlayers( _mapFormat ) ) {
-                        fheroes2::showStandardTextMessage( _( "Warning!" ), "The map is corrupted.", Dialog::OK );
-                        continue;
-                    }
-
-                    const std::string mapDirectory = System::concatPath( dataPath, "maps" );
-
-                    if ( !System::IsDirectory( mapDirectory ) && !System::MakeDirectory( mapDirectory ) ) {
-                        fheroes2::showStandardTextMessage( _( "Warning!" ), "Unable to create a directory to save the map.", Dialog::OK );
-                        continue;
-                    }
-
-                    std::string fileName = _loadedFileName;
-                    std::string mapName = _mapFormat.name;
-
-                    if ( !Editor::mapSaveSelectFile( fileName, mapName ) ) {
-                        continue;
-                    }
-
-                    std::string fullPath = System::concatPath( mapDirectory, fileName + ".fh2m" );
-
-                    if ( System::IsFile( fullPath )
-                         && Dialog::NO
-                                == fheroes2::showStandardTextMessage( "", _( "Are you sure you want to overwrite the existing map?" ), Dialog::YES | Dialog::NO ) ) {
-                        continue;
-                    }
-
-                    _mapFormat.name = std::move( mapName );
-                    _loadedFileName = std::move( fileName );
-
-                    if ( _mapFormat.description.empty() ) {
-                        _mapFormat.description = "Put a real description here.";
-                    }
-
-                    if ( Maps::Map_Format::saveMap( fullPath, _mapFormat ) ) {
-                        // On some OSes like Windows, the path may contain '\' symbols. This symbol doesn't exist in the resources.
-                        // To avoid this we have to replace all '\' symbols by '/' symbols.
-                        StringReplace( fullPath, "\\", "/" );
-
-                        _warningMessage.reset( _( "Map saved to: " ) + fullPath );
-                    }
-                    else {
-                        fheroes2::showStandardTextMessage( _( "Warning!" ), "Failed to save the map.", Dialog::OK );
-                    }
+                    saveMapFile();
                 }
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_LOAD_GAME ) ) {
                     res = eventLoadMap();
@@ -889,7 +840,7 @@ namespace Interface
             else if ( le.MouseClickLeft( buttonSave.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::WORLD_SAVE_GAME ) ) {
                 back.restore();
 
-                fheroes2::showStandardTextMessage( _( "Warning!" ), "The Map Editor is still in development. Save function is not implemented yet.", Dialog::OK );
+                Get().saveMapFile();
 
                 break;
             }
@@ -1653,5 +1604,59 @@ namespace Interface
         }
 
         return true;
+    }
+
+    void EditorInterface::saveMapFile()
+    {
+        const std::string dataPath = System::GetDataDirectory( "fheroes2" );
+        if ( dataPath.empty() ) {
+            fheroes2::showStandardTextMessage( _( "Warning!" ), "Unable to locate data directory to save the map.", Dialog::OK );
+            return;
+        }
+
+        if ( !Maps::updateMapPlayers( _mapFormat ) ) {
+            fheroes2::showStandardTextMessage( _( "Warning!" ), "The map is corrupted.", Dialog::OK );
+            return;
+        }
+
+        const std::string mapDirectory = System::concatPath( dataPath, "maps" );
+
+        if ( !System::IsDirectory( mapDirectory ) && !System::MakeDirectory( mapDirectory ) ) {
+            fheroes2::showStandardTextMessage( _( "Warning!" ), "Unable to create a directory to save the map.", Dialog::OK );
+            return;
+        }
+
+        std::string fileName = _loadedFileName;
+        std::string mapName = _mapFormat.name;
+
+        if ( !Editor::mapSaveSelectFile( fileName, mapName ) ) {
+            return;
+        }
+
+        std::string fullPath = System::concatPath( mapDirectory, fileName + ".fh2m" );
+
+        if ( System::IsFile( fullPath )
+             && Dialog::NO == fheroes2::showStandardTextMessage( "", _( "Are you sure you want to overwrite the existing map?" ), Dialog::YES | Dialog::NO ) ) {
+            return;
+        }
+
+        _mapFormat.name = std::move( mapName );
+        _loadedFileName = std::move( fileName );
+
+        if ( _mapFormat.description.empty() ) {
+            _mapFormat.description = "Put a real description here.";
+        }
+
+        if ( Maps::Map_Format::saveMap( fullPath, _mapFormat ) ) {
+            // On some OSes like Windows, the path may contain '\' symbols. This symbol doesn't exist in the resources.
+            // To avoid this we have to replace all '\' symbols by '/' symbols.
+            StringReplace( fullPath, "\\", "/" );
+
+            _warningMessage.reset( _( "Map saved to: " ) + fullPath );
+
+            return;
+        }
+
+        fheroes2::showStandardTextMessage( _( "Warning!" ), "Failed to save the map.", Dialog::OK );
     }
 }
