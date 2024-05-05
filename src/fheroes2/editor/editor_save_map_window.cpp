@@ -93,7 +93,7 @@ namespace
         void ActionListPressRight( Maps::FileInfo & info ) override
         {
             // On some OSes like Windows, the path may contain '\' symbols. This symbol doesn't exist in the resources.
-            // To avoid this we have to replace all '\' symbols by '/' symbols.
+            // To avoid this we have to replace all '\' symbols with '/' symbols.
             std::string fullPath = info.filename;
 
             // TODO: Make '\' symbol in small font to properly show file path in OS familiar style.

@@ -95,7 +95,7 @@ namespace
     void mapInfo( const Maps::FileInfo & info )
     {
         // On some OSes like Windows, the path may contain '\' symbols. This symbol doesn't exist in the resources.
-        // To avoid this we have to replace all '\' symbols by '/' symbols.
+        // To avoid this we have to replace all '\' symbols with '/' symbols.
         std::string fullPath = info.filename;
         StringReplace( fullPath, "\\", "/" );
 

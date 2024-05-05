@@ -1660,7 +1660,7 @@ namespace Interface
 
         if ( Maps::Map_Format::saveMap( fullPath, _mapFormat ) ) {
             // On some OSes like Windows, the path may contain '\' symbols. This symbol doesn't exist in the resources.
-            // To avoid this we have to replace all '\' symbols by '/' symbols.
+            // To avoid this we have to replace all '\' symbols with '/' symbols.
             StringReplace( fullPath, "\\", "/" );
 
             _warningMessage.reset( _( "Map saved to: " ) + fullPath );
