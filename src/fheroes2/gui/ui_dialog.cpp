@@ -213,18 +213,15 @@ namespace fheroes2
         bool delayInEventHandling = true;
 
         while ( result == Dialog::ZERO && le.HandleEvents( delayInEventHandling ) ) {
-            if ( !isProperDialog ) {
-                if ( le.MousePressRight() ) {
-                    continue;
+            if ( isProperDialog ) {
+                elementId = 0;
+                for ( const DialogElement * element : elements ) {
+                    element->processEvents( elementOffsets[elementId] );
+                    ++elementId;
                 }
-
-                break;
             }
-
-            elementId = 0;
-            for ( const DialogElement * element : elements ) {
-                element->processEvents( elementOffsets[elementId] );
-                ++elementId;
+            else if ( !le.MousePressRight() ) {
+                break;
             }
 
             result = group.processEvents();
