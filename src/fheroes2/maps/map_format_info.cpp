@@ -185,7 +185,7 @@ namespace Maps::Map_Format
         compressed.setbigendian( true );
 
         compressed << map.additionalInfo << map.tiles << map.dailyEvents << map.standardMetadata << map.castleMetadata << map.heroMetadata << map.sphinxMetadata
-                   << map.signMetadata << map.adventureMapEventMetadata;
+                   << map.signMetadata << map.adventureMapEventMetadata << map.rumors;
 
         const std::vector<uint8_t> temp = Compression::compressData( compressed.data(), compressed.size() );
 
@@ -224,7 +224,7 @@ namespace Maps::Map_Format
         }
 
         decompressed >> map.additionalInfo >> map.tiles >> map.dailyEvents >> map.standardMetadata >> map.castleMetadata >> map.heroMetadata >> map.sphinxMetadata
-            >> map.signMetadata >> map.adventureMapEventMetadata;
+            >> map.signMetadata >> map.adventureMapEventMetadata >> map.rumors;
 
         return msg;
     }
