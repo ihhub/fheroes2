@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-05 04:32+0000\n"
+"POT-Creation-Date: 2024-05-05 10:43+0000\n"
 "PO-Revision-Date: 2023-12-22 00:32+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -4000,6 +4000,9 @@ msgstr "Speichern der aktuellen Karte."
 
 msgid "Quit out of the map editor."
 msgstr "Den Karteneditor verlassen."
+
+msgid "Input %{object} text"
+msgstr ""
 
 #, fuzzy
 msgid "Set %{monster} Count"
