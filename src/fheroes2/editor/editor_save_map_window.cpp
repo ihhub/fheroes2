@@ -249,9 +249,6 @@ namespace Editor
 
         // Prepare OKAY and CANCEL buttons and render their shadows.
         fheroes2::Button buttonOk;
-        if ( lists.empty() ) {
-            buttonOk.disable();
-        }
         fheroes2::Button buttonCancel;
 
         background.renderOkayCancelButtons( buttonOk, buttonCancel, isEvilInterface );
@@ -362,6 +359,14 @@ namespace Editor
                 isListboxSelected = false;
                 needFileNameRedraw = true;
 
+                if ( fileName.empty() ) {
+                    buttonOk.disable();
+                }
+                else {
+                    buttonOk.enable();
+                }
+                buttonOk.draw();
+
                 // Set the whole screen to redraw next time to properly restore image under the Virtual Keyboard dialog.
                 display.updateNextRenderRoi( { 0, 0, display.width(), display.height() } );
             }
@@ -370,10 +375,6 @@ namespace Editor
                 const int32_t textStartOffsetX = isTextLimit ? 8 : ( fileNameRoi.width - text.width() ) / 2;
                 charInsertPos = fheroes2::getTextInputCursorPosition( fileName, fheroes2::FontType::normalWhite(), charInsertPos, le.GetMouseCursor().x,
                                                                       fileNameRoi.x + textStartOffsetX );
-                if ( fileName.empty() ) {
-                    buttonOk.disable();
-                }
-
                 listbox.Unselect();
                 isListboxSelected = false;
                 needFileNameRedraw = true;
@@ -408,10 +409,13 @@ namespace Editor
                 if ( Dialog::YES == fheroes2::showStandardTextMessage( _( "Warning!" ), msg, Dialog::YES | Dialog::NO ) ) {
                     System::Unlink( listbox.GetCurrent().filename );
                     listbox.RemoveSelected();
-                    if ( lists.empty() || fileName.empty() ) {
-                        buttonOk.disable();
+                    if ( lists.empty() ) {
                         isListboxSelected = false;
                         fileName.clear();
+                        charInsertPos = 0;
+
+                        buttonOk.disable();
+                        buttonOk.draw();
                     }
 
                     listbox.updateScrollBarImage();
@@ -425,9 +429,11 @@ namespace Editor
                 charInsertPos = InsertKeySym( fileName, charInsertPos, le.KeyValue(), LocalEvent::getCurrentKeyModifiers() );
                 if ( fileName.empty() || mapName.empty() ) {
                     buttonOk.disable();
+                    buttonOk.draw();
                 }
                 else {
                     buttonOk.enable();
+                    buttonOk.draw();
                 }
 
                 needFileNameRedraw = true;
