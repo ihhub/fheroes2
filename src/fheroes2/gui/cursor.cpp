@@ -239,7 +239,7 @@ CursorRestorer::~CursorRestorer()
 {
     fheroes2::Cursor & cursorRenderer = fheroes2::cursor();
 
-    const bool isShown = _visible && ( cursorRenderer.isVisible() == false );
+    const bool isShown = _visible && !cursorRenderer.isVisible();
 
     cursorRenderer.show( _visible );
 
