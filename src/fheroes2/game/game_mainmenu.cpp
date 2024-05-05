@@ -78,7 +78,8 @@ namespace
         LOADGAME_DEFAULT = 5,
         HIGHSCORES_DEFAULT = 9,
         CREDITS_DEFAULT = 13,
-        QUIT_DEFAULT = 17
+        QUIT_DEFAULT = 17,
+        EDITOR_DEFAULT = 20
     };
 
     void outputMainMenuInTextSupportMode()
@@ -91,6 +92,11 @@ namespace
         COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::MAIN_MENU_HIGHSCORES ) << " to show High Scores." )
         COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::MAIN_MENU_CREDITS ) << " to show Credits." )
         COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::MAIN_MENU_SETTINGS ) << " to open Game Settings." )
+
+        if ( Game::isPriceOfLoyaltyCampaignPresent() ) {
+            COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::EDITOR_MAIN_MENU ) << " to open Editor." )
+        }
+
         COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::MAIN_MENU_QUIT ) << " or " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::DEFAULT_CANCEL )
                        << " to Quit the game." )
     }
@@ -267,6 +273,7 @@ fheroes2::GameMode Game::MainMenu( const bool isFirstGameRun )
     fheroes2::Button buttonLoadGame( 0, 0, ICN::BTNSHNGL, LOADGAME_DEFAULT, LOADGAME_DEFAULT + 2 );
     fheroes2::Button buttonHighScores( 0, 0, ICN::BTNSHNGL, HIGHSCORES_DEFAULT, HIGHSCORES_DEFAULT + 2 );
     fheroes2::Button buttonCredits( 0, 0, ICN::BTNSHNGL, CREDITS_DEFAULT, CREDITS_DEFAULT + 2 );
+    fheroes2::Button buttonEditor( 0, 0, ICN::BTNSHNGL, EDITOR_DEFAULT, EDITOR_DEFAULT + 2 );
     fheroes2::Button buttonQuit( 0, 0, ICN::BTNSHNGL, QUIT_DEFAULT, QUIT_DEFAULT + 2 );
 
     const fheroes2::Sprite & lantern10 = fheroes2::AGG::GetICN( ICN::SHNGANIM, 0 );
@@ -295,11 +302,15 @@ fheroes2::GameMode Game::MainMenu( const bool isFirstGameRun )
 
     uint32_t lantern_frame = 0;
 
-    std::vector<ButtonInfo> buttons{ { NEWGAME_DEFAULT, buttonNewGame, false, false },
-                                     { LOADGAME_DEFAULT, buttonLoadGame, false, false },
-                                     { HIGHSCORES_DEFAULT, buttonHighScores, false, false },
-                                     { CREDITS_DEFAULT, buttonCredits, false, false },
-                                     { QUIT_DEFAULT, buttonQuit, false, false } };
+    const bool isPOLPresent = Game::isPriceOfLoyaltyCampaignPresent();
+
+    std::vector<ButtonInfo> buttons{ ButtonInfo{ NEWGAME_DEFAULT, buttonNewGame, false, false }, ButtonInfo{ LOADGAME_DEFAULT, buttonLoadGame, false, false },
+                                     ButtonInfo{ HIGHSCORES_DEFAULT, buttonHighScores, false, false }, ButtonInfo{ CREDITS_DEFAULT, buttonCredits, false, false },
+                                     ButtonInfo{ QUIT_DEFAULT, buttonQuit, false, false } };
+
+    if ( isPOLPresent ) {
+        buttons.emplace_back( ButtonInfo{ EDITOR_DEFAULT, buttonEditor, false, false } );
+    }
 
     for ( size_t i = 0; le.MouseMotion() && i < buttons.size(); ++i ) {
         const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::BTNSHNGL, buttons[i].frame );
@@ -377,12 +388,8 @@ fheroes2::GameMode Game::MainMenu( const bool isFirstGameRun )
 
             return fheroes2::GameMode::MAIN_MENU;
         }
-        else if ( conf.isEditorEnabled() && HotKeyPressEvent( HotKeyEvent::EDITOR_MAIN_MENU ) ) {
-            if ( Game::isPriceOfLoyaltyCampaignPresent() ) {
-                return fheroes2::GameMode::EDITOR_MAIN_MENU;
-            }
-
-            fheroes2::showStandardTextMessage( _( "Editor" ), _( "The Editor requires \"The Price of Loyalty\" expansion files to work." ), Dialog::OK );
+        else if ( isPOLPresent && ( HotKeyPressEvent( HotKeyEvent::EDITOR_MAIN_MENU ) || le.MouseClickLeft( buttonEditor.area() ) ) ) {
+            return fheroes2::GameMode::EDITOR_MAIN_MENU;
         }
 
         // right info
@@ -396,6 +403,9 @@ fheroes2::GameMode Game::MainMenu( const bool isFirstGameRun )
             fheroes2::showStandardTextMessage( _( "High Scores" ), _( "View the high scores screen." ), Dialog::ZERO );
         else if ( le.MousePressRight( buttonNewGame.area() ) )
             fheroes2::showStandardTextMessage( _( "New Game" ), _( "Start a single or multi-player game." ), Dialog::ZERO );
+        else if ( isPOLPresent && le.MousePressRight( buttonEditor.area() ) ) {
+            fheroes2::showStandardTextMessage( _( "Editor" ), _( "Create new or modify existing maps." ), Dialog::ZERO );
+        }
         else if ( le.MousePressRight( settingsArea ) )
             fheroes2::showStandardTextMessage( _( "Game Settings" ), _( "Change language, resolution and settings of the game." ), Dialog::ZERO );
 

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-01 11:10+0000\n"
+"POT-Creation-Date: 2024-05-05 04:32+0000\n"
 "PO-Revision-Date: 2024-04-08 22:19-0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
@@ -3820,8 +3820,8 @@ msgstr "Nome Aleatório do Castelo"
 msgid "Allow Castle build"
 msgstr "Permitir construção do Castelo"
 
-msgid "Default buildings"
-msgstr "Estruturas padrão"
+msgid "Default Buildings"
+msgstr "Estruturas Padrão"
 
 msgid "Default Army"
 msgstr "Exército Padrão"
@@ -3836,16 +3836,13 @@ msgid "Enter Castle name"
 msgstr "Insira o nome do Castelo"
 
 msgid "Allow to build a castle in this town."
-msgstr "Permitir a construção de um castelo nesta cidade."
+msgstr "Permitir a construção de um castelo nessa cidade."
 
 msgid "Toggle the use of default buildings. Custom buildings will be reset!"
-msgstr "Alternar o uso de estruturas padrão. As estruturas personalizadas serão redefinidas!"
-
-msgid "Default Buildings"
-msgstr "Estruturas Padrão"
+msgstr "Alternar o uso de estruturas padrão. As estruturas personalizadas serão redefinidas"
 
 msgid "Toggle building construction restriction mode."
-msgstr "Alternar modo de restrição de construção de estruturas."
+msgstr "Alternar modo de restrição de construção de estruturas"
 
 msgid "Restrict Building Construction"
 msgstr "Restringir Construção de Estruturas"
@@ -3907,6 +3904,9 @@ msgstr "Sair do editor de mapas."
 
 msgid "Set %{monster} Count"
 msgstr "Definir Quantidade de %{monster}"
+
+msgid "Set Random Ultimate Artifact Radius"
+msgstr "Definir Raio do Artefato Definitivo Aleatório"
 
 msgid "Objects cannot be placed outside the map."
 msgstr "Objetos não podem ser colocados fora do mapa."
@@ -5039,11 +5039,6 @@ msgstr ""
 "\n"
 "Aproveite o jogo!"
 
-msgid "The Editor requires \"The Price of Loyalty\" expansion files to work."
-msgstr ""
-"O Editor requer os arquivos de expansão \"O Preço da Lealdade\" para "
-"funcionar."
-
 msgid "Quit Heroes of Might and Magic II and return to the operating system."
 msgstr ""
 "Sair do Heroes of Might and Magic II e retornar ao sistema operacional."
@@ -5059,6 +5054,9 @@ msgstr "Melhores Pontuações"
 
 msgid "View the high scores screen."
 msgstr "Ver a tela de melhores pontuações."
+
+msgid "Create new or modify existing maps."
+msgstr "Criar novos mapas ou modificar os existentes."
 
 msgid "Change language, resolution and settings of the game."
 msgstr "Muda o idioma, a resolução e as configurações do jogo."
@@ -11563,6 +11561,3 @@ msgstr ""
 "Verifique a mais nova versão do jogo em\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid "Choose a tile which does not contain any objects."
-#~ msgstr "Escolha um ladrilho que não contenha nenhum objeto."

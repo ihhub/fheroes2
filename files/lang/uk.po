@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-01 11:10+0000\n"
+"POT-Creation-Date: 2024-05-05 04:32+0000\n"
 "PO-Revision-Date: 2024-04-02 09:25+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3825,7 +3825,7 @@ msgid "Allow Castle build"
 msgstr "Хмарна Фортеця"
 
 #, fuzzy
-msgid "Default buildings"
+msgid "Default Buildings"
 msgstr "Дії по замовчуванню"
 
 #, fuzzy
@@ -3848,10 +3848,6 @@ msgstr ""
 
 msgid "Toggle the use of default buildings. Custom buildings will be reset!"
 msgstr ""
-
-#, fuzzy
-msgid "Default Buildings"
-msgstr "Дії по замовчуванню"
 
 msgid "Toggle building construction restriction mode."
 msgstr ""
@@ -3918,6 +3914,10 @@ msgstr "Вийти з редактора мап."
 #, fuzzy
 msgid "Set %{monster} Count"
 msgstr "Зробити постріл у %{monster}"
+
+#, fuzzy
+msgid "Set Random Ultimate Artifact Radius"
+msgstr "Випадковий Унікальний Артефакт"
 
 msgid "Objects cannot be placed outside the map."
 msgstr "Неможливо розмістити об'єкт поза мапою."
@@ -5051,9 +5051,6 @@ msgid ""
 "Enjoy the game!"
 msgstr ""
 
-msgid "The Editor requires \"The Price of Loyalty\" expansion files to work."
-msgstr ""
-
 msgid "Quit Heroes of Might and Magic II and return to the operating system."
 msgstr ""
 "Залишити Heroes of Might and Magic II і повернутися до операційної системи."
@@ -5069,6 +5066,10 @@ msgstr ""
 
 msgid "View the high scores screen."
 msgstr ""
+
+#, fuzzy
+msgid "Create new or modify existing maps."
+msgstr "Завантажити існуючу мапу."
 
 msgid "Change language, resolution and settings of the game."
 msgstr "Змінити мову, роздільну здатність та налаштування гри."
@@ -11422,18 +11423,3 @@ msgstr ""
 "Перевірити нову версію гри на\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid "Choose a tile which does not contain any objects."
-#~ msgstr "Оберіть клітинку, не зайняту жодними об'єктами."
-
-#~ msgid "Set Defense Skill"
-#~ msgstr "Встановити Захист"
-
-#~ msgid "Set Power Skill"
-#~ msgstr "Встановити Силу Магії"
-
-#~ msgid "Set Knowledge Skill"
-#~ msgstr "Встановити Знання"
-
-#~ msgid "Multiple"
-#~ msgstr "Різноманітні"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-01 11:10+0000\n"
+"POT-Creation-Date: 2024-05-05 04:32+0000\n"
 "PO-Revision-Date: 2023-09-03 18:42+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3941,7 +3941,7 @@ msgid "Allow Castle build"
 msgstr "Himmelslott"
 
 #, fuzzy
-msgid "Default buildings"
+msgid "Default Buildings"
 msgstr "Standard handling"
 
 #, fuzzy
@@ -3964,10 +3964,6 @@ msgstr ""
 
 msgid "Toggle the use of default buildings. Custom buildings will be reset!"
 msgstr ""
-
-#, fuzzy
-msgid "Default Buildings"
-msgstr "Standard handling"
 
 msgid "Toggle building construction restriction mode."
 msgstr ""
@@ -4037,6 +4033,10 @@ msgstr "Forlat karttegneren"
 #, fuzzy
 msgid "Set %{monster} Count"
 msgstr "Skyt på %{monster}"
+
+#, fuzzy
+msgid "Set Random Ultimate Artifact Radius"
+msgstr "Tilfeldig sjeldneste skatt"
 
 #, fuzzy
 msgid "Objects cannot be placed outside the map."
@@ -5218,11 +5218,6 @@ msgid ""
 "Enjoy the game!"
 msgstr ""
 
-#, fuzzy
-msgid "The Editor requires \"The Price of Loyalty\" expansion files to work."
-msgstr ""
-"En av de fire nye utvidelsesfelttogene fra utvidelsen Prisen for trofasthet."
-
 msgid "Quit Heroes of Might and Magic II and return to the operating system."
 msgstr ""
 "Forlat Heroes of Might and Magic II og dra tilbake til operativsystemet."
@@ -5238,6 +5233,10 @@ msgstr "Rekordtavle"
 
 msgid "View the high scores screen."
 msgstr "Vis rekordtavlen."
+
+#, fuzzy
+msgid "Create new or modify existing maps."
+msgstr "Last inn et eksisterende kart."
 
 msgid "Change language, resolution and settings of the game."
 msgstr "Endre språket, oppløsningen og andre spillinnstillinger."
@@ -11920,18 +11919,3 @@ msgstr ""
 "Finn den siste oppdateringen av spillet på\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid "Set Defense Skill"
-#~ msgstr "Spesifiser forsvarsevne"
-
-#~ msgid "Set Power Skill"
-#~ msgstr "Spesifiser kraftsevne"
-
-#~ msgid "Set Knowledge Skill"
-#~ msgstr "Spesifiser kunnskapsevne"
-
-#~ msgid "Multiple"
-#~ msgstr "Flere"
-
-#~ msgid "and many other contributors!"
-#~ msgstr "og mange andre bidragsytere!"

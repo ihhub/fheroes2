@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-01 11:10+0000\n"
+"POT-Creation-Date: 2024-05-05 04:32+0000\n"
 "PO-Revision-Date: 2024-03-16 00:13+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -3880,7 +3880,7 @@ msgid "Allow Castle build"
 msgstr "Château céleste"
 
 #, fuzzy
-msgid "Default buildings"
+msgid "Default Buildings"
 msgstr "Actions par défaut"
 
 #, fuzzy
@@ -3903,10 +3903,6 @@ msgstr ""
 
 msgid "Toggle the use of default buildings. Custom buildings will be reset!"
 msgstr ""
-
-#, fuzzy
-msgid "Default Buildings"
-msgstr "Actions par défaut"
 
 msgid "Toggle building construction restriction mode."
 msgstr ""
@@ -3977,6 +3973,10 @@ msgstr "Quitter l'éditeur de carte."
 #, fuzzy
 msgid "Set %{monster} Count"
 msgstr "Tirer sur %{monster}"
+
+#, fuzzy
+msgid "Set Random Ultimate Artifact Radius"
+msgstr "Ultime artéfact aléatoire"
 
 msgid "Objects cannot be placed outside the map."
 msgstr "Les élements ne peuvent pas être placés en dehors de la carte."
@@ -5125,11 +5125,6 @@ msgstr ""
 "\n"
 "Bon jeu !"
 
-msgid "The Editor requires \"The Price of Loyalty\" expansion files to work."
-msgstr ""
-"L'éditeur a besoin que l'extension \"The Price of Loyalty\" soit installée "
-"pour fonctionner."
-
 msgid "Quit Heroes of Might and Magic II and return to the operating system."
 msgstr ""
 "Quitter Heroes of Might and Magic II et retourner au système d'exploitation."
@@ -5145,6 +5140,10 @@ msgstr "Meilleurs scores"
 
 msgid "View the high scores screen."
 msgstr "Voir l'écran des meilleurs scores."
+
+#, fuzzy
+msgid "Create new or modify existing maps."
+msgstr "Charger une carte existante."
 
 msgid "Change language, resolution and settings of the game."
 msgstr "Changer la langue, la résolution et les paramètres du jeu."
@@ -11703,21 +11702,3 @@ msgstr ""
 "Téléchargez la dernière version du jeu sur\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid "Choose a tile which does not contain any objects."
-#~ msgstr "Sélectionnez une case qui n'est pas déjà occupée."
-
-#~ msgid "Set Defense Skill"
-#~ msgstr "Régler Défense"
-
-#~ msgid "Set Power Skill"
-#~ msgstr "Régler Puissance"
-
-#~ msgid "Set Knowledge Skill"
-#~ msgstr "Régler Connaissance"
-
-#~ msgid "Multiple"
-#~ msgstr "Multiple"
-
-#~ msgid "and many other contributors!"
-#~ msgstr "et aux nombreux autres contributeurs !"

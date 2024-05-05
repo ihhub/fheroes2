@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-01 11:10+0000\n"
+"POT-Creation-Date: 2024-05-05 04:32+0000\n"
 "PO-Revision-Date: 2022-10-01 20:20+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Turkish <tr@li.org>\n"
@@ -3546,7 +3546,7 @@ msgstr ""
 msgid "Allow Castle build"
 msgstr ""
 
-msgid "Default buildings"
+msgid "Default Buildings"
 msgstr ""
 
 msgid "Default Army"
@@ -3565,9 +3565,6 @@ msgid "Allow to build a castle in this town."
 msgstr ""
 
 msgid "Toggle the use of default buildings. Custom buildings will be reset!"
-msgstr ""
-
-msgid "Default Buildings"
 msgstr ""
 
 msgid "Toggle building construction restriction mode."
@@ -3628,6 +3625,9 @@ msgstr ""
 #, fuzzy
 msgid "Set %{monster} Count"
 msgstr "%{monster} vur"
+
+msgid "Set Random Ultimate Artifact Radius"
+msgstr ""
 
 msgid "Objects cannot be placed outside the map."
 msgstr ""
@@ -4705,9 +4705,6 @@ msgid ""
 "Enjoy the game!"
 msgstr ""
 
-msgid "The Editor requires \"The Price of Loyalty\" expansion files to work."
-msgstr ""
-
 msgid "Quit Heroes of Might and Magic II and return to the operating system."
 msgstr ""
 
@@ -4721,6 +4718,9 @@ msgid "High Scores"
 msgstr ""
 
 msgid "View the high scores screen."
+msgstr ""
+
+msgid "Create new or modify existing maps."
 msgstr ""
 
 msgid "Change language, resolution and settings of the game."
@@ -10198,15 +10198,3 @@ msgid ""
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
 msgstr ""
-
-#~ msgid "Set Defense Skill"
-#~ msgstr "Savunma Becerisini Ayarla"
-
-#~ msgid "Set Power Skill"
-#~ msgstr "Güç Becerisini Ayarla"
-
-#~ msgid "Set Knowledge Skill"
-#~ msgstr "Bilgi Becerisini Ayarla"
-
-#~ msgid "Multiple"
-#~ msgstr "Çoklu"
